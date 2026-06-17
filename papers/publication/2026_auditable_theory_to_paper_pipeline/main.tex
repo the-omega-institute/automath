@@ -1178,8 +1178,8 @@ the ordered manuscript rows are the ordered JSON records; the JSON source path
 and commit equal the manifest's original path and commit; the ordered JSON line
 ranges equal the manifest's \path{line_ranges_used}; the computed digest equals
 the manifest digest; the computed line count equals the manifest line count; and for each declared range,
-the corresponding \path{\label{...}} token occurs inside that inclusive snapshot
-interval.
+the corresponding theorem-label token named in the manifest occurs inside that
+inclusive snapshot interval.
 
 The recorded run in \path{review_bundle/source_interface_verification_run.log}
 has status \path{pass}.  Its counts are sixteen manuscript table rows, sixteen JSON
@@ -10408,8 +10408,8 @@ record with assigned pass rows.
 The script definition fixes the domain: its \path{THEOREM_ENVS} tuple contains
 exactly the five displayed names, and its begin-pattern is built from that tuple.
 The extraction loop records only occurrences of those begins in \path{main.tex},
-then searches within the matched environment for the first \path{\label{...}}
-token.  The inventory side reads only label strings from
+then searches within the matched environment for the first theorem-label token.
+The inventory side reads only label strings from
 \path{theorem_inventory.json}.  Thus the finite predicate computed by the script
 has exactly three positive clauses: every detected environment in $\mathcal E$
 has a label, the detected labels are not duplicated, and the detected label set
@@ -18988,20 +18988,29 @@ that coordinate.
 
 \begin{theorem}[Canonical Stage-A Obstruction Basis]
 \label{thm:canonical-stage-a-obstruction-basis}
-Instantiate the coordinate set \(C\) of
-Theorem~\ref{thm:finite-audit-antichain-basis} with the current manuscript's
-Stage--A certificate coordinates.  For a rejected upgrade predicate \(U\) at a
-record \(R\subseteq C\), define its completion basis by
+Fix the Stage--A rejected-upgrade coordinate universe
+\[
+C_A=C_{\mathrm{gate}}\sqcup C_{\mathrm{src}}\sqcup C_{\mathrm{art}}\sqcup
+C_{\mathrm{ext}}\sqcup C_{\mathrm{ven}}\sqcup C_{\Delta}\sqcup C_{\mathrm{ord}},
+\]
+where the seven summands respectively record gate soundness, fresh
+formal-source/axiom-purity evidence, dynamic artifact validation, external
+support, venue status, substantive theorem/proof delta, and deterministic
+overlap/submission-order clearance.  The admissible rejected public-upgrade forms
+for this theorem are exactly finite monotone predicates
+\(U:2^{C_A}\to\{\mathsf{false},\mathsf{true}\}\) whose requested upgrade reading
+is one of those seven coordinate classes or a finite conjunction of them.  For
+such a rejected upgrade predicate \(U\) at a record \(R\subseteq C_A\), define its
+completion basis by
 \[
   \mathcal B_U(R)=
-  \min_{\subseteq}\{\,D\subseteq C\setminus R:U(R\cup D)\,\}.
+  \min_{\subseteq}\{\,D\subseteq C_A\setminus R:U(R\cup D)\,\}.
 \]
 If no declared accepting completion exists, the displayed family is empty and
 \(\mathcal B_U(R)=\emptyset\); conversely, \(\mathcal B_U(R)=\emptyset\)
 means that no subset of the remaining declared coordinates accepts the upgrade.
-For the concrete Stage--A schema of this presentation package, the finite
-obstruction alphabet is exactly the following ordered seven-element set
-\(\mathcal O_A\):
+For this fixed coordinate universe, the finite obstruction alphabet is exactly
+the following ordered seven-element set \(\mathcal O_A\):
 \begin{enumerate}
 \item missing record-gate soundness;
 \item missing fresh formal-source rebuild or axiom-purity coordinate;
@@ -19023,39 +19032,41 @@ the ordered tuple of all and only the classes of its missing coordinates; its
 primary row is the first element of that tuple and its remaining elements are
 secondary rows.  No coordinate of \(D\) is unassigned, and no class outside
 \(\mathcal O_A\) can appear in \(\alpha_A(D)\).
-There are no additional Stage--A obstruction classes for this manuscript: every
-accepted public claim factors through the declared finite schema, and every
-rejected upgrade fails by omitting at least one of the seven displayed coordinate
-classes whenever a declared accepting completion exists.  Equivalently, the
-theorem classifies the bad subrecords of the
+There are no additional Stage--A obstruction classes inside the stated theorem
+domain: every admissible rejected public-upgrade form is defined over \(C_A\), and
+every nonempty missing completion lies in one of the seven disjoint summands of
+\(C_A\).  Equivalently, the theorem classifies the bad subrecords of the
 manuscript's workflow-calculus interface; it does not certify the missing
 implementation, proof-assistant, artifact, external-support, or venue facts
-themselves.
+themselves, and it makes no exhaustiveness claim for upgrade forms whose
+coordinates are not in \(C_A\).
 \end{theorem}
 
 \begin{proof}
-The declared Stage--A schema for this package separates public claim acceptance
-into the finite coordinates already isolated by the master presentation
-interface, the finite-record publication-safety certificate, the no-free-upgrade
-theorem, the four-case foreground normal form, the Stage--A issue-discharge
-normal form, the six-coordinate submission-boundary normal form, and the
-current-round local-only fixed-point classifier.  These results jointly specify
-which finite rows may support a public reading and which stronger readings are
-blocked unless an independent coordinate is supplied.  Under that schema the
-only coordinate classes relevant to a rejected Stage--A upgrade are exactly the
-seven listed in the statement.
+The statement fixes the coordinate universe before any classification is made.
+The disjoint union \(C_A\) is not inferred from examples after the fact: it is the
+finite domain of the admissible rejected-upgrade predicates quantified over here.
+The cited master presentation interface, finite-record publication-safety
+certificate, no-free-upgrade theorem, four-case foreground normal form,
+Stage--A issue-discharge normal form, six-coordinate submission-boundary normal
+form, and current-round local-only fixed-point classifier are used only to justify
+that this manuscript's public Stage--A upgrade questions are routed into the
+displayed finite domain.  Under that fixed domain the only coordinate classes
+available to a rejected Stage--A upgrade are exactly the seven summands listed in
+the statement.
 
-Let \(U\) be a rejected public upgrade at record \(R\subseteq C\).  By definition
-the only admissible completions of \(R\) inside the current paper are subsets of
-the remaining declared coordinates \(C\setminus R\).  The finite basis theorem
+Let \(U\) be an admissible rejected public upgrade at record \(R\subseteq C_A\).
+By definition of the theorem domain, the only admissible completions of \(R\)
+inside the current paper are subsets of the remaining declared coordinates
+\(C_A\setminus R\).  The finite basis theorem
 therefore gives the inclusion-minimal missing-coordinate family
 \[
   \mathcal B_U(R)=
-  \min_{\subseteq}\{\,D\subseteq C\setminus R:U(R\cup D)\,\}.
+  \min_{\subseteq}\{\,D\subseteq C_A\setminus R:U(R\cup D)\,\}.
 \]
 If the set inside the minimum is empty, then no declared coordinate completion
 accepts \(U\), and by convention the completion basis is empty.  Conversely, if
-\(\mathcal B_U(R)\) is empty while some \(D\subseteq C\setminus R\) accepted, the
+\(\mathcal B_U(R)\) is empty while some \(D\subseteq C_A\setminus R\) accepted, the
 finite nonempty family of accepting completions would have an inclusion-minimal
 member, contradiction.  Thus emptiness is exact: it records absence of any
 declared accepting completion, not a hidden eighth obstruction class.
@@ -19076,18 +19087,18 @@ coordinates.  Thus every minimal obstruction has a finite assignment record over
 \(\mathcal O_A\), and the assignment records exactly the multi-coordinate case
 rather than forcing it into a single informal class.
 
-Conversely, each displayed class is a declared coordinate class of the current
-schema.  Whenever a public upgrade requires that coordinate and the current
+Conversely, each displayed class is one summand of \(C_A\).  Whenever an
+admissible public upgrade requires a coordinate in that summand and the current
 record omits it, the singleton missing coordinate, or its inclusion-minimal
 combination with other required missing coordinates, occurs in the displayed
 minimal family.  No eighth class can occur because the family is a subset of
-\(C\setminus R\), and \(C\) has no coordinate outside the seven declared
-classes for the rejected-upgrade side of the Stage--A schema.  The assignment
-map \(\alpha_A\) is therefore total on nonempty minimal completions and has image
-inside the printed finite power set of \(\mathcal O_A\).  Since every
-accepted public claim factors through this finite schema by the cited
-publication-safety and boundary normal forms, the classification is exact.
-It is exact only at that schema level: a member of class (2), for example,
+\(C_A\setminus R\), and \(C_A\) has no summand outside the seven declared classes
+for the rejected-upgrade side of the Stage--A schema.  The assignment map
+\(\alpha_A\) is therefore total on nonempty minimal completions and has image
+inside the printed finite power set of \(\mathcal O_A\).  Since every admissible
+public-upgrade form quantified over here is a finite monotone predicate over
+\(C_A\), the classification is exact for that fixed formal universe.  It is exact
+only at that schema level: a member of class (2), for example,
 records that a fresh formal-source rebuild or axiom-purity coordinate is absent;
 it is not itself a rebuild or axiom audit.  The same coordinate-relative reading
 applies to dynamic artifact validation, external support, venue status,
@@ -19160,12 +19171,15 @@ digest recognition, meaning that the theorem extractor, theorem inventory, audit
 record, retained verifiers, overlap/submission-order verifier, and final digest
 all recognize the same required theorem package in the same current source
 state; or
-\item the current source contains the canonical accepting antichain record for
+\item the current source and synchronized support records contain the canonical accepting antichain record for
 the Stage--A acceptance predicate supplied by
 Theorems~\ref{thm:finite-audit-antichain-basis},
 \ref{thm:canonical-stage-a-obstruction-basis}, and
-\ref{thm:no-theorem-delta-nondischarge}, together with the corresponding
-corollary-level closure record.
+\ref{thm:no-theorem-delta-nondischarge}, together with a non-self-referential
+closure witness consisting of theorem extraction, inventory synchronization,
+source-interface verification, certificate-record verification, primary-claim
+verification, deterministic overlap/submission-order verification, Stage--A audit
+verification, and final-digest regeneration for those same source bytes.
 \end{enumerate}
 If neither alternative holds, \(\mathsf{stage\_a\_audit\_real\_block}\) remains
 a genuine blocker.  Prose edits, abstract edits, rephrasings,
@@ -19180,8 +19194,12 @@ Theorem~\ref{thm:finite-audit-antichain-basis}, \(A\) is equivalent to
 containment of one member of its unique finite accepting antichain
 \(\operatorname{Min}(A)\).  Therefore a current non-stale audit record clears
 \(\mathsf{stage\_a\_audit\_real\_block}\) exactly when it contains the canonical
-accepting antichain record required by the theorem package; this proves
-alternative (2) and its necessity for genuine, non-stale discharge.
+accepting antichain record required by the theorem package and the independent
+support-record coordinates named in alternative~(2).  None of those support
+coordinates is the truth of Corollary~\ref{cor:current-stage-a-closure-exactness}
+itself; they are extractor, inventory, verifier, audit, route-order, and digest
+rows.  This proves alternative (2) and its necessity for genuine, non-stale
+discharge without using the closure corollary as a premise of its own acceptance.
 
 The remaining way a previously reported block can disappear is staleness of the
 report itself.  The block is a statement about absence or non-recognition of
@@ -19223,22 +19241,25 @@ the theorem extractor sees the five labels
 \ref{thm:stage-a-real-block-discharge-completeness},\quad
 \ref{cor:current-stage-a-closure-exactness}},
 \]
-as the fixed certificate label set
+as present theorem/corollary environments with proof environments, and the four
+theorem labels
 \[
-L_A=\{
+L_A^{-}=\{
 \text{\ref{thm:finite-audit-antichain-basis}},
 \text{\ref{thm:canonical-stage-a-obstruction-basis}},
 \text{\ref{thm:no-theorem-delta-nondischarge}},
-\text{\ref{thm:stage-a-real-block-discharge-completeness}},
-\text{\ref{cor:current-stage-a-closure-exactness}}\},
+\text{\ref{thm:stage-a-real-block-discharge-completeness}}\}
 \]
-including the self-reference row
+form the fixed accepting theorem package used by the audit predicate.  The
+corollary label is checked only as an output-row member of the extracted
+five-label source package, namely
 \[
 (\text{\ref{cor:current-stage-a-closure-exactness}},
- \mathsf{corollary},\mathsf{proof\ present},L_A,
- \mathsf{closure\ criterion})
+ \mathsf{corollary},\mathsf{proof\ present},
+ \mathsf{output\ closure\ row})
 \]
-inside that finite certificate,
+after \(L_A^{-}\) and the independent verifier rows have already been recognized;
+it is not an input rule that certifies itself.  In addition,
 \path{theorem_inventory.md} and \path{theorem_inventory.json} mark those five
 labels as primary-route material, \path{stage_a_audit.json} names them as
 resolving \(\mathsf{stage\_a\_audit\_real\_block}\), the source-interface and
@@ -19254,8 +19275,9 @@ If all listed records recognize the same finite audit antichain route, then the
 current record contains the source theorem package, the synchronized inventory
 and audit rows, the source-interface and certificate-schema agreement rows, the
 primary-claim row for the antichain-basis route, the nonduplicative route-order
-row, the Stage--A audit-verifier row, the displayed self-reference row over the
-fixed label set \(L_A\), and the digest binding for those bytes.
+row, the Stage--A audit-verifier row, the non-self-referential four-theorem input
+package \(L_A^{-}\), the output corollary row, and the digest binding for those
+bytes.
 This is exactly the accepting antichain record described in
 Theorem~\ref{thm:stage-a-real-block-discharge-completeness}, so the real block
 is cleared and Stage--A closes.
@@ -19266,10 +19288,10 @@ comes from synchronized stale-block recognition or from the canonical accepting
 antichain record.  Both alternatives require source-level recognition of the
 five labelled theorem/corollary environments and agreement of the inventory,
 audit, verifier, overlap/submission-order, and final digest records on the same
-finite coordinate schema.  The self-reference in the closure corollary is
-therefore not informal self-certification; it is the displayed finite row
-asserting that the corollary label itself is one member of the already fixed set
-\(L_A\), with a proof-present coordinate and no additional acceptance rule.  By
+finite coordinate schema.  The corollary label is therefore a checked output row:
+the accepting predicate first reads \(L_A^{-}\) and the independent support
+coordinates, and only then records that this corollary environment is present
+with a proof.  It contributes no premise to the rule that accepts itself.  By
 Theorem~\ref{thm:no-theorem-delta-nondischarge}, neither a \(+0\)-character pass
 nor an inventory-only or prose-only edit can replace those records.  Hence the
 listed finite records are necessary as well as sufficient, and the closure
@@ -19314,57 +19336,73 @@ q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\}
 with product order on \(\{0,1\}^{Q}\).  The six-coordinate safe projection of a
 finite support record \(R\) is the monotone map
 \[
-\pi_Q(R)\in \{0,1\}^{Q}
+\pi_Q:{\mathcal P}(R)\longrightarrow \{0,1\}^{Q}
 \]
-whose \(q\)-coordinate is \(1\) exactly when \(R\) contains the explicit finite
-row required for that coordinate: the post-inventory theorem-ledger/digest tuple
-for \(q_{\mathrm{inv}}\), the fixed Stage--A Horn replay tuple and bounded
-record-gate-soundness upgrade row for \(q_{\mathrm{rgs}}\), a fresh
-formal-source rebuild and axiom-purity row for \(q_{\mathrm{src}}\), a dynamic
-artifact-semantic validation row for \(q_{\mathrm{art}}\), an external upload
-receipt or archive-equivalent public byte-equality locator for
-\(q_{\mathrm{ext}}\), and an upload-time venue-compliance or venue-acceptance
-row for \(q_{\mathrm{ven}}\).  No coordinate is set by filenames, absolute local
-paths, digest rows alone, theorem inventories alone, historical snapshots, or
-bounded source-interface records.
+whose value on a subrecord \(S\subseteq R\) has \(q\)-coordinate \(1\) exactly
+when \(S\) contains the explicit finite row required for that coordinate: the
+post-inventory theorem-ledger/digest tuple for \(q_{\mathrm{inv}}\), the fixed
+Stage--A Horn replay tuple and bounded record-gate-soundness upgrade row for
+\(q_{\mathrm{rgs}}\), a fresh formal-source rebuild and axiom-purity row for
+\(q_{\mathrm{src}}\), a dynamic artifact-semantic validation row for
+\(q_{\mathrm{art}}\), an external upload receipt or archive-equivalent public
+byte-equality locator for \(q_{\mathrm{ext}}\), and an upload-time
+venue-compliance or venue-acceptance row for \(q_{\mathrm{ven}}\).  No coordinate
+is set by filenames, absolute local paths, digest rows alone, theorem inventories
+alone, historical snapshots, or bounded source-interface records.  A coordinate
+audit interpretation consists of a finite poset \(L\), a monotone codomain
+projection \(\rho_Q:L\to L_Q\), and a monotone map \(I:{\mathcal P}(R)\to L\);
+its coordinate part is the actual map
+\[
+I_{\mathrm{coord}}=\rho_Q\circ I:{\mathcal P}(R)\to L_Q .
+\]
+It is called \(Q\)-fiber-invariant when
+\[
+\pi_Q(A)=\pi_Q(B)\quad\Longrightarrow\quad
+I_{\mathrm{coord}}(A)=I_{\mathrm{coord}}(B)
+\]
+for all \(A,B\subseteq R\).  This invariance is the formal content of the
+role-respecting condition for coordinate readings: non-coordinate rows may affect
+ledger detail, prose routing, or support annotations, but they cannot change the
+coordinate value after the six explicit coordinate rows are fixed.
 \end{definition}
 
 \begin{theorem}[Universal safe-projection theorem]
 \label{thm:universal-safe-projection}
-For every finite support record \(R\) and every role-respecting finite audit
-interpretation \(I:{\mathcal P}(R)\to L\), the coordinate part of \(I\) factors
-uniquely through the six-coordinate safe projection.  Equivalently, there is a
-unique monotone map \(\bar I:\pi_Q({\mathcal P}(R))\to L\) on the finite image
-poset such that
+For every finite support record \(R\) and every \(Q\)-fiber-invariant finite audit
+interpretation \(I:{\mathcal P}(R)\to L\) with coordinate projection
+\(\rho_Q:L\to L_Q\), the coordinate part \(I_{\mathrm{coord}}=\rho_Q\circ I\)
+factors uniquely through the six-coordinate safe projection.  Equivalently, there
+is a unique monotone map \(\bar I:\pi_Q({\mathcal P}(R))\to L_Q\) on the finite
+image poset such that
 \[
 I_{\mathrm{coord}}=\bar I\circ \pi_Q .
 \]
 \end{theorem}
 
 \begin{proof}
-The domain \({\mathcal P}(R)\), the coordinate cube \(\{0,1\}^{Q}\), and the
-image \(\pi_Q({\mathcal P}(R))\) are finite posets.  The safe projection is
-monotone because adding rows to a record cannot remove an explicit upgrade row.
+The domain \({\mathcal P}(R)\), the coordinate cube \(\{0,1\}^{Q}\), the codomain
+coordinate poset \(L_Q\), and the image \(\pi_Q({\mathcal P}(R))\) are finite
+posets.  The safe projection is monotone because adding rows to a record cannot
+remove an explicit upgrade row.  The map \(I_{\mathrm{coord}}=\rho_Q\circ I\) is
+monotone as the composite of monotone maps.
 
-Define \(I_{\mathrm{coord}}\) to be the part of \(I\) that depends on the six
-upgrade-coordinate readings.  If two subrecords \(A,B\subseteq R\) satisfy
-\(\pi_Q(A)=\pi_Q(B)\), then they contain exactly the same explicit coordinate
-rows.  By role respect, all remaining differences between \(A\) and \(B\) are
-public, supplement, inventory, digest, source-interface, artifact, venue, or
-support rows that do not create a coordinate unless the matching coordinate row
-is present.  Hence \(I_{\mathrm{coord}}(A)=I_{\mathrm{coord}}(B)\).  We may
-therefore set
+If two subrecords \(A,B\subseteq R\) satisfy \(\pi_Q(A)=\pi_Q(B)\), then
+\(Q\)-fiber-invariance gives \(I_{\mathrm{coord}}(A)=I_{\mathrm{coord}}(B)\).
+We may therefore set
 \[
 \bar I(v)=I_{\mathrm{coord}}(A)\quad\text{for any }A\subseteq R\text{ with }
 \pi_Q(A)=v .
 \]
-The preceding paragraph proves that this definition is independent of the chosen
-representative.  Monotonicity of \(\bar I\) follows from monotonicity of \(I\):
-if \(v\le w\) in the finite image poset, choose representatives by adding the
-coordinate rows that distinguish \(v\) from \(w\); role respect again says that
-no hidden non-coordinate row is needed.  Then the representative for \(v\) is a
-subrecord of the representative for \(w\), so \(I_{\mathrm{coord}}(v)\le
-I_{\mathrm{coord}}(w)\).  The displayed factorization holds by construction.
+The preceding sentence proves that this definition is independent of the chosen
+representative.  Monotonicity of \(\bar I\) follows from monotonicity of
+\(I_{\mathrm{coord}}\): if \(v\le w\) in the finite image poset, choose
+representatives \(A,B\subseteq R\) with \(\pi_Q(A)=v\) and \(\pi_Q(B)=w\).  Let
+\(A'\) be \(A\) together with exactly the explicit coordinate rows needed to
+obtain projection \(w\).  Then \(A\subseteq A'\), \(\pi_Q(A')=w\), and
+\(Q\)-fiber-invariance gives \(I_{\mathrm{coord}}(A')=I_{\mathrm{coord}}(B)\).
+Hence
+\(\bar I(v)=I_{\mathrm{coord}}(A)\le I_{\mathrm{coord}}(A')=\bar I(w)\).
+The displayed factorization holds by construction.
 Uniqueness is forced because every element of \(\pi_Q({\mathcal P}(R))\) is the
 projection of some subrecord of \(R\), so any factor map agreeing after
 composition with \(\pi_Q\) must take the value defined above.
@@ -19568,15 +19606,46 @@ support rows and whose head is \(q_{\mathrm{src}}\), \(q_{\mathrm{art}}\),
 venue acceptance.
 \end{definition}
 
+\begin{definition}[Finite-record coordinate semantics]
+\label{def:finite-record-coordinate-semantics}
+For a finite support record \(R\), let \(A_R\) be the finite set of typed atoms
+obtained by reading exactly the displayed typed rows of \(R\), with no implicit
+atoms added from filenames, prose descriptions, path existence, or digest
+existence alone.  A role-respecting route claim is admissible for \(R\) exactly
+when \(A_R\) contains the public, supplement, and support-surface atoms required
+for the single-route surface quotient.  The coordinate claims are admissible for
+\(R\) by the following direct row clauses:
+\begin{enumerate}
+\item \(q_{\mathrm{inv}}\) is admissible exactly when \(A_R\) contains the
+theorem-inventory atom and the matching post-inventory digest atom;
+\item bounded fixed-replay \(q_{\mathrm{rgs}}\) is admissible exactly when
+\(A_R\) contains the fixed Horn-schema atom, canonical-manifest atom,
+replay-certificate atom, replay-report atom, final-digest-pointer atom, and the
+bounded replay-upgrade atom;
+\item \(q_{\mathrm{src}}\), \(q_{\mathrm{art}}\), \(q_{\mathrm{ext}}\), and
+\(q_{\mathrm{ven}}\) are admissible exactly when \(A_R\) contains respectively
+the fresh formal-source/axiom-purity upgrade atom, dynamic artifact-semantic
+validation upgrade atom, external upload or archive-equivalent byte-equality
+upgrade atom, and upload-time venue-compliance or acceptance upgrade atom.
+\end{enumerate}
+No other coordinate or publication claim is admissible in this finite-record
+semantics.  In particular, a current digest row or local path row is evidence only
+for the atom it explicitly names; it is not a semantic source rebuild, artifact
+validator, external archive receipt, venue decision, or implementation-soundness
+row.
+\end{definition}
+
 \begin{definition}[Certified closure and rejection certificate]
 \label{def:certified-closure-rejection-certificate}
 For a finite atom set \(A\), let \(\operatorname{cl}_{\Gamma_A}(A)\) be the
 least set containing \(A\) and closed under all rules of \(\Gamma_A\).  A
-publication claim or coordinate is accepted exactly when its atom belongs to
-\(\operatorname{cl}_{\Gamma_A}(A)\).  A rejection certificate for a stronger
-claim \(c\) is a finite antichain of inclusion-minimal premise sets
-\(\Omega_A(c)\) such that adding one set from the antichain is necessary and
-sufficient, with the already accepted atoms fixed, to derive \(c\).
+compiled publication claim or coordinate is accepted by the Horn replay exactly
+when its atom belongs to \(\operatorname{cl}_{\Gamma_A}(A)\).  A rejection
+certificate for a stronger claim \(c\) is a finite antichain of
+inclusion-minimal premise sets \(\Omega_A(c)\) such that adding one set from the
+antichain is necessary and sufficient, with the already accepted atoms fixed, to
+derive \(c\).  This is the replay semantics; the independent row-level
+admissibility relation is Definition~\ref{def:finite-record-coordinate-semantics}.
 \end{definition}
 
 \paragraph{Algorithm 1: deterministic Stage-A audit closure.}
@@ -19595,29 +19664,34 @@ rule trees for that atom.
 \label{thm:horn-compilation-adequacy}
 For every finite support record \(R\) governed by this manuscript's coordinate
 schema, a six-coordinate or role-respecting publication claim is admissible in
-the manuscript's finite-record semantics if and only if its typed atom belongs to
-\(\operatorname{cl}_{\Gamma_A}(A_R)\), where \(A_R\) is the atom set compiled
-from the typed rows of \(R\).
+the finite-record semantics of
+Definition~\ref{def:finite-record-coordinate-semantics} if and only if its typed
+atom belongs to \(\operatorname{cl}_{\Gamma_A}(A_R)\), where \(A_R\) is the atom
+set compiled from the typed rows of \(R\).
 \end{theorem}
 
 \begin{proof}
 First suppose an atom is in \(\operatorname{cl}_{\Gamma_A}(A_R)\).  Induct on
 the length of its Horn derivation.  Input atoms are admissible because they are
-typed rows of \(R\).  For a rule step, Definition~\ref{def:stage-a-horn-audit-schema}
-lists only role-respecting rules: inventory plus digest derives only
-\(q_{\mathrm{inv}}\); the fixed replay tuple plus its bounded upgrade derives
-only \(q_{\mathrm{rgs}}\); and the remaining coordinates require their own
-explicit upgrade atoms.  Therefore every derived atom is permitted by the
-finite-record semantics.
+typed rows of \(R\).  For a rule step,
+Definition~\ref{def:stage-a-horn-audit-schema} lists only rules whose premises
+are the row clauses of Definition~\ref{def:finite-record-coordinate-semantics}:
+inventory plus digest derives only \(q_{\mathrm{inv}}\); the fixed replay tuple
+plus its bounded upgrade derives only \(q_{\mathrm{rgs}}\); and the remaining
+coordinates require their own explicit upgrade atoms.  Thus every derived atom
+is permitted by the independently stated finite-record semantics, rather than by
+the Horn closure merely by definition.
 
 Conversely, if a coordinate or route claim is admissible in the manuscript's
-finite-record semantics, Definition~\ref{def:six-coordinate-safe-projection}
-says that either it is the route quotient, \(q_{\mathrm{inv}}\), bounded
-\(q_{\mathrm{rgs}}\), or one of the four stronger coordinates with its explicit
-upgrade row present.  The corresponding clause of
+finite-record semantics, Definition~\ref{def:finite-record-coordinate-semantics}
+puts it in exactly one of the displayed row clauses: the route quotient,
+\(q_{\mathrm{inv}}\), bounded \(q_{\mathrm{rgs}}\), or one of the four stronger
+coordinates with its explicit upgrade row present.  The corresponding clause of
 Definition~\ref{def:stage-a-horn-audit-schema} is exactly a Horn rule deriving
 that atom from the compiled atoms of \(R\).  Hence every admissible finite-record
-claim belongs to the Horn closure.
+claim belongs to the Horn closure.  The equivalence is therefore a compilation
+adequacy theorem between a row-level semantics and a definite-rule replay, not a
+definition of admissibility by the replay procedure itself.
 \end{proof}
 
 \begin{theorem}[Deterministic certificate soundness theorem]
@@ -19648,25 +19722,44 @@ decision therefore has exactly the displayed finite support.
 \label{thm:complete-obstruction}
 For every queried stronger claim \(c\notin\operatorname{cl}_{\Gamma_A}(A)\),
 Algorithm~\ref{alg:deterministic-stage-a-audit-closure} returns a finite
-antichain of inclusion-minimal missing-premise certificates.  The antichain is
-sound, complete for \(\Gamma_A\), invariant under finite-record isomorphism, and
-empty exactly when \(c\) is accepted.
+obstruction certificate of one of two kinds.  If \(c\) has at least one declared
+derivation template in \(\Gamma_A\), the certificate is a finite antichain of
+inclusion-minimal missing-premise blocks for those templates.  If \(c\) has no
+declared derivation template in \(\Gamma_A\), the certificate is the singleton
+no-template obstruction
+\[
+\{\mathsf{no\_declared\_derivation\_template}(c)\}.
+\]
+The certificate is sound, complete for \(\Gamma_A\), invariant under finite-record
+isomorphism, and absent exactly when \(c\) is accepted.
 \end{theorem}
 
 \begin{proof}
-The schema and atom set are finite.  For a queried atom \(c\), inspect the finite
-rule trees whose heads can derive \(c\).  For each tree, remove premises already
-in the saturated closure and then delete any missing premise whose removal still
-leaves a valid missing-premise certificate.  The remaining finite sets are
+The schema and atom set are finite.  First suppose \(c\) has no rule template in
+\(\Gamma_A\) whose head is \(c\).  Since \(c\notin A\) and no rule can add \(c\),
+least Horn closure cannot derive \(c\).  The finite reason is not an empty
+missing-premise antichain; it is the no-template obstruction.  This obstruction is
+sound because adding premises for nonexistent rules cannot derive \(c\), and it is
+complete for the fixed schema because any derivation of \(c\) would have to end in
+a rule whose head is \(c\).
+
+Now suppose at least one rule tree can derive \(c\).  Inspect the finite rule
+trees whose heads can derive \(c\).  For each tree, remove premises already in the
+saturated closure and then delete any missing premise whose removal still leaves a
+valid missing-premise certificate for that tree.  The remaining finite sets are
 inclusion minimal; deleting supersets yields an antichain.  Soundness follows
-because every set in the antichain contains premises without which no rule tree
-for \(c\) is completed.  Completeness follows because any derivation of \(c\)
-must end in one of the finite rules for \(c\), and that rule tree contributes one
-of the missing-premise blocks if it is not already derivable.  Isomorphic finite
-records preserve typed atom names, rule identifiers, and membership in the
-saturated closure, so they preserve the antichain.  If \(c\) is accepted there is
-a derivation DAG and no missing-premise certificate is returned; if the antichain
-is empty, no rule tree is missing a premise, so \(c\) is in the closure.
+because every set in the antichain contains premises without which no displayed
+rule tree for \(c\) is completed.  Completeness follows because any derivation of
+\(c\) must end in one of the finite rules for \(c\), and that rule tree
+contributes one of the missing-premise blocks if it is not already derivable.
+
+Isomorphic finite records preserve typed atom names, rule identifiers, rule-head
+existence, and membership in the saturated closure, so they preserve both the
+no-template case and the missing-premise antichain case.  If \(c\) is accepted
+there is a derivation DAG and no obstruction certificate is returned.  Conversely,
+if no obstruction certificate is returned, then \(c\) is not in the no-template
+case and no declared rule tree is missing a premise; some declared rule tree is
+therefore complete, so \(c\) is in the closure.
 \end{proof}
 
 \begin{theorem}[Coordinate independence by Horn models]
@@ -20034,8 +20127,12 @@ non-admitted coordinate receives its finite obstruction root.
 For the current Stage--A replay package named by
 \path{stage_a_manifest.json}, \path{stage_a_horn_schema.json},
 \path{stage_a_horn_audit_certificate.json}, \path{stage_a_replay_report.json},
-and \path{review_bundle/FINAL_DIGESTS_SHA256.md}, the accepted coordinate vector
-is exactly
+and \path{review_bundle/FINAL_DIGESTS_SHA256.md}, assume the submitted finite
+record contains exactly the typed replay rows displayed below and no accepted
+upgrade row for fresh formal-source rebuilding, dynamic artifact semantics,
+external archive/upload equality, upload-time venue status, or whole-program
+implementation soundness.  Under that displayed record, the accepted coordinate
+vector is exactly
 \[
 q_{\mathrm{inv}}=\mathsf{true},\quad
 q_{\mathrm{rgs}}=\mathsf{true},\quad
@@ -20044,23 +20141,35 @@ q_{\mathrm{art}}=\mathsf{false},\quad
 q_{\mathrm{ext}}=\mathsf{false},\quad
 q_{\mathrm{ven}}=\mathsf{false}.
 \]
-The theorem reads the following finite submitted-byte record:
+The finite submitted-byte record used by the theorem is:
 \[
 \begin{array}{ll}
+\mathsf{manifest.path} &= \texttt{stage\_a\_manifest.json},\\
 \mathsf{manifest.digest} &=
 \texttt{34109034e0913b4691171919c0c69e4a259447429bd05a7074afedd521467696},\\
+\mathsf{schema.path} &= \texttt{stage\_a\_horn\_schema.json},\\
 \mathsf{schema.digest} &=
 \texttt{a0d9507d64193491f9b11a77d1a683440bff90fa697c66a280de9df1c2be7f9d},\\
+\mathsf{certificate.path} &= \texttt{stage\_a\_horn\_audit\_certificate.json},\\
 \mathsf{certificate.digest} &=
 \texttt{39770823781b0e0c03c1a17c0c04bd64e734cfcdeb077edd556107d32246a640},\\
+\mathsf{report.path} &= \texttt{stage\_a\_replay\_report.json},\\
 \mathsf{report.input\_atoms\_digest} &=
 \texttt{542326f0fbe786c3c65d37eb2279a5d4628da417d46c0fec1f7ee20fa0758b8d},\\
 \mathsf{report.route\_quotient\_id} &=
 \texttt{route\_cicm\_presentation\_only\_single\_surface},\\
+\mathsf{report.accepted} &=
+\texttt{qinv, qrgs, route\_quotient},\\
+\mathsf{report.rejected} &=
+\texttt{qsrc, qart, qext, qven, implementation\_soundness},\\
+\mathsf{digest.table} &= \texttt{review\_bundle/FINAL\_DIGESTS\_SHA256.md},\\
 \mathsf{report.bounded\_claim} &=
-\texttt{qrgs is accepted only for the fixed Stage-A Horn schema, canonical manifest, replay certificate, replay report, and digest-bound source bundle}.
+\texttt{fixed\_stage\_a\_replay\_only}.
 \end{array}
 \]
+The last row abbreviates the displayed boundary: \(q_{\mathrm{rgs}}\) is accepted
+only for the fixed Stage--A Horn schema, canonical manifest, replay certificate,
+replay report, and digest-bound source bundle.
 The positive \(q_{\mathrm{rgs}}\) coordinate is bounded to the fixed replay
 certificate and does not claim whole-program implementation soundness, fresh
 source-theory rebuild, artifact semantics, external archival equality, upload
@@ -20070,15 +20179,25 @@ audit unless the corresponding upgrade row is present and accepted.
 \end{theorem}
 
 \begin{proof}
-The canonical manifest declares the coordinate scope
-\(q_{\mathrm{inv}}\) positive, \(q_{\mathrm{rgs}}\) positive for fixed Stage--A
-replay only, and the four coordinates \(q_{\mathrm{src}},q_{\mathrm{art}},
-q_{\mathrm{ext}},q_{\mathrm{ven}}\) negative, under the manifest digest printed
-in the statement.  The replay report with the printed input-atom digest names
-the same accepted and rejected coordinate sets, together with derivation roots
-\(\mathsf{dag\_qinv}\), \(\mathsf{dag\_qrgs}\), and
-\(\mathsf{dag\_route}\), obstruction roots for the four rejected coordinates,
-and separating-model identifiers for those rejected coordinates.  By
+By hypothesis the finite record supplies the path and digest rows for the
+manifest, fixed Horn schema, replay certificate, replay report, and final digest
+table displayed in the statement.  These rows compile to the theorem-inventory,
+post-inventory digest, fixed-schema, canonical-manifest, replay-certificate,
+replay-report, final-digest-pointer, and bounded replay-upgrade atoms of
+Definition~\ref{def:finite-record-coordinate-semantics}.  The report row also
+lists \(q_{\mathrm{inv}}\), bounded \(q_{\mathrm{rgs}}\), and the route quotient
+as accepted, and lists \(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},
+q_{\mathrm{ven}}\) and implementation soundness as rejected.  No additional
+accepted upgrade row is among the displayed rows.
+
+The compiled atoms therefore satisfy the direct row clauses for
+\(q_{\mathrm{inv}}\), bounded \(q_{\mathrm{rgs}}\), and the route quotient, and
+fail the direct row clauses for the four stronger coordinates and
+implementation soundness.  Equivalently, the replay report with the printed
+input-atom digest names derivation roots \(\mathsf{dag\_qinv}\),
+\(\mathsf{dag\_qrgs}\), and \(\mathsf{dag\_route}\), obstruction roots for the
+four rejected coordinates, and separating-model identifiers for those rejected
+coordinates.  By
 Theorem~\ref{thm:replay-kernel-soundness}, accepted coordinates are sound for
 the fixed manifest/schema/certificate/report/digest tuple.  By
 Theorem~\ref{thm:replayable-obstruction-adequacy}, each rejected stronger
