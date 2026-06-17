@@ -5181,7 +5181,10 @@ bad subrecord of one of these five types, and deleting all other fields preserve
 the same rejection by the verifier.  This is an audit-skeleton theorem for the
 software-workshop route: it classifies finite certificate failures and makes no
 claim about theorem-proving complexity or about fresh execution of the
-underlying workflow.
+underlying workflow.  When the evidence surface is the theorem-inventory
+checker, the checker contributes only syntactic label coverage for its declared
+five environment names; it is not a theorem-dependency, proof-checking,
+scope-adequacy, audit-record coverage, or semantic-completeness result.
 \end{theorem}
 
 \begin{proof}
@@ -5866,6 +5869,13 @@ its claim kind passes, and no independent implementation-soundness,
 fresh-execution, or semantic-correctness claim about the gates is inferred unless
 the package also contains the corresponding source path, command, source state,
 environment, exit code, and log path.
+\item \emph{Independent checker boundary}: if this lemma is used without taking
+\(\mathsf{RGS}_{S}(P,L,\Gamma)\) as an assumption, the submitted package must
+instead supply a concrete checker theorem naming the exact files, commands,
+logs, parser semantics, verifier semantics, and zero-exit run that establish
+\(\mathsf{RGS}_{S}(P,L,\Gamma)\).  In the absence of that checker coordinate, the
+present statement is only the schema consequence of an already supplied
+record-gate predicate.
 \item \emph{Finite schema locality}: the dispatch table \(\Gamma\), the
 verifier \(V\), and the predicate list \(P\) are finite, and each predicate reads
 only its assigned schema block in
@@ -5955,6 +5965,9 @@ lineage rows, and evidence-level separation rows.  The promotion hypothesis
 separates active publication claims from inactive intake seeds, and the verifier
 boundary says that the object checked next is the tuple
 \((K,\ell,E,H,R,D,B)\), not an informal acceptance note.
+If an application wants to derive \(\mathsf{RGS}\) from concrete submitted bytes,
+that derivation must be supplied by the independent checker coordinate named in
+the statement.  No such derivation is hidden in this proof.
 
 For an accepted claim $c$, construct $K$ from its claim-kind field, $\ell$ from
 its declared evidence level, $E$ from its finite evidence surface, $H$ from the
@@ -10567,6 +10580,9 @@ The executable algorithm block is:
   \text{ with }\mathrm{Val}_{m}(\widehat w)=z;\\
 &&
   \text{return }\widehat w.\\
+\Phi^{\bot}_{1,m}(z):&
+  \textbf{input }z\in\mathbb N;\ \textbf{output }\mathcal F_m\cup\{\bot_m\};&
+  \text{if }z\notin V_m\text{ return }\bot_m,\text{ else return }\Phi_{1,m}(z).\\
 \textsc{Add}_{m,m'}(u,v):&
   \textbf{input }u,v\in\mathcal W_m,\ \textbf{output }\widehat w\in\mathcal F_{m'};&
   a\leftarrow\Phi_{0,m}(u),\ b\leftarrow\Phi_{0,m}(v);\\
@@ -10600,8 +10616,10 @@ is bijective.  The executable inverse and total fixed-window arithmetic are:
 \[
 \begin{array}{lll}
 \textsc{GreedyNF}(n):&
-  r\leftarrow n;\ w\leftarrow0;\ \text{while }r>0\text{ choose largest }F_k\le r;&\\
-& w_k\leftarrow1;\ r\leftarrow r-F_k;\ \text{return }w.\\
+  r\leftarrow n;\ w\leftarrow0;\ \text{scan }k\text{ downward from the largest }F_k\le n;&\\
+& \text{if }F_k\le r\text{ set }w_k\leftarrow1\text{ and }r\leftarrow r-F_k;\\
+& \text{continue to }k-2\text{ after a subtraction, otherwise to }k-1;\\
+& \text{return }w.\\
 \mathrm{Val}_m^{-1}(t):&
   \text{if }t\ge F_{m+1}\text{ return }\bot_m;&
   \text{else return }\textsc{GreedyNF}(t)\in X_m.\\
@@ -10614,7 +10632,11 @@ is bijective.  The executable inverse and total fixed-window arithmetic are:
 Thus overflow is not implicit: fixed-window calls return \(\bot_m\) exactly when
 the transported integer is at least \(F_{m+1}\).  The unbounded call chooses the
 least output window \(\omega(t)=\min\{m:t<F_{m+1}\}\) and returns
-\(\textsc{GreedyNF}(t)\in X_{\omega(t)}\).
+\(\textsc{GreedyNF}(t)\in X_{\omega(t)}\).  The fixed-window API therefore has
+two distinct modes: \(\textsc{Add}_{m,m'}\) and \(\textsc{Mul}_{m,m'}\) are
+partial-contract routines with a declared non-overflow precondition, while
+\(\textsc{Add}^{\bot}_{m}\) and \(\textsc{Mul}^{\bot}_{m}\) are total routines
+whose only overflow behaviour is the distinguished value \(\bot_m\).
 
 With ordinary integer arithmetic, all displayed procedures are total on their
 declared domains: \(\mathrm{NF}_{\infty,m}\) is total on \(\mathcal W_m\);
@@ -12142,7 +12164,12 @@ rows are recomputed.
 If any one of these conditions fails, the package still has the local
 path-verified records printed in the manuscript, but it does not have an exact
 final-digest certificate for the regenerated inventory, primary-claim, or
-upload-time venue component that failed the condition.
+upload-time venue component that failed the condition.  This theorem is a
+digest-refresh invariant only: it does not by itself make local files executable
+for a reviewer.  The executable replay coordinate is supplied only at the later
+Stage--A replay site, where the submitted archive contains the manifest, Horn
+schema, certificate, replay report, digest table, and replay script as actual
+files under \path{certificates/}.
 \end{theorem}
 
 \begin{proof}
@@ -12387,7 +12414,10 @@ or venue-state fact.  Any manuscript reading that adds one of those conclusions
 is a properly stronger reading of the theorem-inventory coordinate and is
 accepted only after the submitted surface adds the corresponding parser domain,
 semantic checker, proof checker, build log, artifact log, daemon log, or venue
-record with assigned pass rows.
+record with assigned pass rows.  In particular this theorem is the artifact
+appendix's syntactic theorem-inventory checker result, not a theorem-dependency
+checker, not a proof checker, not a scope-adequacy checker, and not an
+audit-record coverage checker.
 \end{theorem}
 
 \begin{proof}
@@ -12453,7 +12483,9 @@ bad-example obstruction for missing in-domain labels: an omitted labelled
 environment, an unlabelled in-domain environment, or a duplicate in-domain label
 is witnessed by a finite failing row printed by the extractor, and no prose
 inventory statement can remove that row without changing $M$, $J$, or the
-extractor coordinate.
+extractor coordinate.  The result remains syntactic label coverage over the five
+environment names only; proof correctness, theorem dependencies, audit-record
+coverage, and semantic completeness require separate checker coordinates.
 \end{theorem}
 
 \begin{proof}
@@ -21865,6 +21897,10 @@ It checks the SHA--256 rows in
 \path{certificates/stage_a_horn_schema.json}, validates the derivation DAGs in
 \path{certificates/stage_a_horn_audit_certificate.json}, and compares the
 result with \path{certificates/stage_a_replay_report.json}.
+The exact atom compiler used here is the submitted \path{compile_atoms} routine
+in \path{certificates/replay_stage_a_audit.py}; the replay obligation is that
+this command recomputes the displayed six-coordinate vector from the submitted
+bytes after the digest-table check succeeds.
 The four false coordinates are certified rejections of stronger readings, not
 unrecorded positive claims and not missing work inside the bounded
 CICM-presentation route.
@@ -21951,7 +21987,10 @@ that script to the submitted manifest, forward-chains the submitted Horn schema,
 validates the certificate derivation DAGs, and compares the recomputed vector
 with the submitted replay report.  These artifacts support exactly the bounded
 coordinates \(q_{\mathrm{inv}}\) and \(q_{\mathrm{rgs}}\) for this finite replay
-package.
+package.  If any one of the manifest, schema, replay certificate, replay report,
+digest table, or replay script is absent from the supplementary archive, this
+section contributes only a local/path-verified note and not the executable
+foreground vector.
 
 \begin{definition}[Canonical Stage-A byte manifest]
 \label{def:canonical-stage-a-byte-manifest}
@@ -22037,6 +22076,9 @@ rule, premise list, and conclusion for each derived node.  Its final comparison
 requires the recomputed six-coordinate vector to equal both
 \path{accepted_coordinates} in the certificate and
 \path{accepted_coordinates} in the replay report.
+Thus the displayed vector is reviewer-recomputable only through the supplied
+script and the listed artifact files; the PDF text is not itself the executable
+certificate.
 
 \begin{theorem}[Byte-to-atom determinacy]
 \label{thm:byte-to-atom-determinacy}
@@ -22647,7 +22689,10 @@ vector and not competing terminal theorem surfaces.  The mathematical
 minimal-record claim is the finite-antichain assertion proved separately in
 Theorem~\ref{thm:canonical-finite-basis-replay-foreground-exactness}; the present
 theorem fixes only the public-surface convention and the boundary imposed by the
-fixed replay schema.  In particular, this foregrounding does not promote any
+fixed replay schema.  It is therefore not an editorial claim of mathematical
+uniqueness by itself: uniqueness is asserted only after the finite public-surface
+predicate \(A_{\mathrm{fg}}\) and its coordinate order are fixed in the following
+theorem.  In particular, this foregrounding does not promote any
 support theorem to a fresh Lean/BEDC rebuild, source-theory completeness result,
 dynamic artifact-semantics result, external upload/archive result,
 venue-compliance result, venue-acceptance result, or general implementation
@@ -22766,9 +22811,13 @@ claim and the stated boundary.
 
 \begin{theorem}[Canonical finite-basis replay foreground exactness]
 \label{thm:canonical-finite-basis-replay-foreground-exactness}
-For the CICM presentation-only route, the canonical finite audit basis package
-and the replay-kernel closure form one primary theorem chain.  More precisely,
-the public foreground is exactly the following finite antichain route:
+For the CICM presentation-only route, after fixing the finite public-surface
+predicate \(A_{\mathrm{fg}}\) and the coordinate order consisting of the five-label
+audit-basis recognition, current-byte syntactic theorem-inventory label coverage,
+fixed Stage--A replay derivations, obstruction roots for the four absent upgrade
+coordinates, route quotient, and regenerated digest, the canonical finite audit
+basis package and the replay-kernel closure form one primary theorem chain.  More
+precisely, the public foreground is exactly the following finite antichain route:
 \[
 \operatorname{Min}(A_{\mathrm{fg}})=
 \left\{
@@ -22792,6 +22841,9 @@ manifest, replayable certificate, replay report, and digest bundle; no general
 record-gate implementation soundness, fresh formal-source rebuild, dynamic
 artifact semantics, external-support coordinate, venue-compliance coordinate, or
 venue-acceptance coordinate is accepted by this foreground route.
+The uniqueness claim in this theorem is therefore relative to the displayed
+finite poset and predicate \(A_{\mathrm{fg}}\), not an unconstrained editorial
+uniqueness assertion.
 \end{theorem}
 
 \begin{proof}
