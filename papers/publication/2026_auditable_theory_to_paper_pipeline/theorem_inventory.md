@@ -1,366 +1,732 @@
-﻿# Theorem Inventory
+# Theorem Inventory
 
-Stage A source-bound theorem inventory for the CICM presentation-only / mathematical software workshop route.
+Stage A theorem inventory for the CICM presentation-only / mathematical software workshop route. This file is synchronized with theorem_inventory.json and treats main.tex as the included technical supplement source; review_bundle/source_snapshots material is supporting bounded source evidence.
 
-## Summary
+## valid
 
-- Included source scanned: `main.tex` (291 labelled theorem-like environments).
-- Supporting source snapshot scanned: `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex` (36 labelled theorem-like environments).
-- Mandatory Stage A package status: present in included source with proof environments.
-- Missing in-scope theorem package results: none detected by exact label recognition.
-- TeX source edits made in this inventory stage: none.
+`True`
 
-## Mandatory Primary Route
+## In Scope Present
 
-- `thm:finite-audit-antichain-basis` -- `main.tex:18786`, Finite Audit Antichain Basis. Primary-route material; dependencies: `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`.
-- `thm:canonical-stage-a-obstruction-basis` -- `main.tex:18849`, Canonical Stage-A Obstruction Basis. Primary-route material; dependencies: `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`.
-- `thm:no-theorem-delta-nondischarge` -- `main.tex:18942`, No-Theorem-Delta Non-Discharge Theorem. Primary-route material; dependencies: `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`.
-- `thm:stage-a-real-block-discharge-completeness` -- `main.tex:18997`, Stage-A Real-Block Discharge Completeness. Primary-route material; dependencies: `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`.
-- `cor:current-stage-a-closure-exactness` -- `main.tex:19051`, Current Stage-A Closure Exactness. Primary-route material; dependencies: `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`.
+- **label:** `thm:finite-audit-antichain-basis`
 
-## Reviewer Classification
+  - **title:** Finite Audit Antichain Basis
 
-- `in_scope_present`: all labelled theorem-like environments in included `main.tex`; the five mandatory labels are primary-route material and the remaining labels are bounded support/interface material unless separately flagged.
-- `missing_in_scope_results`: empty, because the mandatory five theorem/corollary labels occur in included source with proof environments.
-- `weak_in_scope_core_results`: weak-interface maximality/compression labels are retained only as support, not as terminal Stage A closure.
-- `proof_gaps`: no proofless theorem/proposition/lemma/corollary environment was detected by the source scan; global build/reference verification remains required.
-- `supporting_appendix_or_background`: the non-included review-bundle source snapshot plus preliminary/classical finite-audit background.
-- `out_of_scope_strong_results` and `split_candidates`: Horn audit calculus, replay kernel, universal projection, and automated-discovery material that could support separate papers.
-- `naive_truncation_risks`: current-byte, refresh, replay, and fixed-point invariance surfaces requiring fold-aware byte-state descent.
+  - **location:** main.tex:18786-18814
 
-## Included Source Label Coverage
+  - **reason:** Mandatory Stage-A theorem package member present as a theorem environment with proof recognition True; it supplies the canonical finite audit basis route required by the Oracle directive.
 
-| Label | Kind | Location | Classification |
-|---|---|---:|---|
-| `prop:final-package-shape-convention` | proposition | `main.tex:269` | in-scope present |
-| `thm:nested-package-states` | theorem | `main.tex:313` | in-scope present |
-| `def:architecture-axis-map` | definition | `main.tex:396` | in-scope present |
-| `prop:architecture-axis-non-escalation` | proposition | `main.tex:435` | in-scope present |
-| `thm:presentation-compressed-interface` | theorem | `main.tex:479` | in-scope present |
-| `cor:compact-presentation-boundary-routing` | corollary | `main.tex:658` | in-scope present |
-| `thm:public-result-support-surface-rigidity` | theorem | `main.tex:737` | in-scope present |
-| `lem:source-interface-extraction-correctness` | lemma | `main.tex:1024` | in-scope present |
-| `prop:manual-source-interface-non-escalation` | proposition | `main.tex:1063` | in-scope present |
-| `prop:reviewable-source-snapshot-interface` | proposition | `main.tex:1106` | in-scope present |
-| `prop:source-interface-record-file-consistency` | proposition | `main.tex:1138` | in-scope present |
-| `thm:bounded-source-interface-maximality` | theorem | `main.tex:1205` | in-scope present |
-| `cor:downstream-imported-label-bounded-factorization` | corollary | `main.tex:1274` | in-scope present |
-| `thm:public-source-reachability-non-escalation` | theorem | `main.tex:1308` | in-scope present |
-| `cor:public-source-coordinate-exactness` | corollary | `main.tex:1362` | in-scope present |
-| `thm:source-interface-semantic-completeness-obstruction` | theorem | `main.tex:1400` | in-scope present |
-| `prop:source-interface-evidence-level-separation` | proposition | `main.tex:1458` | in-scope present |
-| `def:operational-acceptance-interface` | definition | `main.tex:1577` | in-scope present |
-| `thm:portable-six-role-interface` | theorem | `main.tex:1705` | in-scope present |
-| `prop:portable-workflow-schema-factorisation` | proposition | `main.tex:1782` | in-scope present |
-| `thm:portable-projection-dominates-local-support` | theorem | `main.tex:1839` | in-scope present |
-| `def:finite-record-projection-preorder` | definition | `main.tex:1909` | in-scope present |
-| `lem:finite-record-preorder-normal-form` | lemma | `main.tex:1925` | in-scope present |
-| `prop:portable-method-normal-form-local-pullback` | proposition | `main.tex:1968` | in-scope present |
-| `def:record-gate-soundness-external-interface` | definition | `main.tex:2146` | in-scope present |
-| `prop:record-gate-soundness-external-interface-exactness` | proposition | `main.tex:2182` | in-scope present |
-| `thm:rgs-conditional-compact-spine` | theorem | `main.tex:2226` | in-scope present |
-| `thm:current-package-rgs-instantiation-boundary` | theorem | `main.tex:2305` | in-scope present |
-| `cor:current-package-no-implicit-rgs-discharge` | corollary | `main.tex:2368` | in-scope present |
-| `def:stronger-reading-preorder` | definition | `main.tex:2411` | in-scope present |
-| `def:certificate-schema-acceptance-table` | definition | `main.tex:2439` | in-scope present |
-| `prop:finite-certificate-schema-verifier` | proposition | `main.tex:2479` | in-scope present |
-| `thm:verifier-input-output-contract` | theorem | `main.tex:2548` | in-scope present |
-| `thm:auditable-compiler-boundary-completeness` | theorem | `main.tex:2616` | in-scope present |
-| `thm:finite-verifier-normal-form` | theorem | `main.tex:2675` | in-scope present |
-| `thm:record-acceptance-exactness` | theorem | `main.tex:2759` | in-scope present |
-| `thm:finite-record-method-schema-compression` | theorem | `main.tex:2838` | in-scope present |
-| `cor:executable-schema-exactness-negative-fixture` | corollary | `main.tex:2895` | in-scope present |
-| `thm:finite-coordinate-determination-boundary` | theorem | `main.tex:2934` | in-scope present |
-| `thm:record-interface-rigidity` | theorem | `main.tex:2996` | in-scope plus truncation-risk |
-| `thm:record-gate-implementation-overclaim-obstruction` | theorem | `main.tex:3096` | in-scope present |
-| `cor:finite-record-acceptance-not-implementation-soundness` | corollary | `main.tex:3165` | in-scope present |
-| `prop:machine-readable-certificate-records` | proposition | `main.tex:3204` | in-scope present |
-| `thm:executable-record-non-escalation` | theorem | `main.tex:3306` | in-scope present |
-| `thm:executable-certificate-construction-invariant` | theorem | `main.tex:3364` | in-scope present |
-| `prop:claim-kind-dispatch` | proposition | `main.tex:3432` | in-scope present |
-| `thm:mixed-claim-projection-obstruction` | theorem | `main.tex:3453` | in-scope present |
-| `thm:finite-script-projection-contract-support` | theorem | `main.tex:3516` | in-scope present |
-| `cor:finite-script-rgs-instantiation-boundary` | corollary | `main.tex:3632` | in-scope present |
-| `thm:finite-script-record-support-maximality` | theorem | `main.tex:3643` | in-scope present |
-| `thm:assigned-gate-soundness-audit-boundary` | theorem | `main.tex:3717` | in-scope present |
-| `thm:six-coordinate-gate-implementation-soundness-skeleton` | theorem | `main.tex:3786` | in-scope present |
-| `thm:three-upgrade-coordinate-exactness` | theorem | `main.tex:3871` | in-scope present |
-| `thm:finite-certificate-obstruction-skeleton` | theorem | `main.tex:3979` | in-scope present |
-| `thm:finite-extension-budget-normal-form` | theorem | `main.tex:4080` | in-scope present |
-| `thm:finite-record-certificate-calculus-spine` | theorem | `main.tex:4167` | in-scope present |
-| `prop:publication-safety-dependency-normal-form` | proposition | `main.tex:4244` | in-scope present |
-| `thm:finite-coordinate-no-overclaim-rigidity` | theorem | `main.tex:4311` | in-scope present |
-| `prop:gate-interface-separation` | proposition | `main.tex:4421` | in-scope present |
-| `cor:human-promotion-daemon-active-track-separation` | corollary | `main.tex:4445` | in-scope present |
-| `prop:scheduler-selection-advisory` | proposition | `main.tex:4493` | in-scope present |
-| `prop:publication-safety-minimal-bad-record-witness` | proposition | `main.tex:4574` | in-scope present |
-| `lem:schema-partition-minimality` | lemma | `main.tex:4618` | in-scope present |
-| `thm:publication-safety-interface` | theorem | `main.tex:4654` | in-scope present |
-| `thm:gate-implementation-soundness-upgrade-obstruction` | theorem | `main.tex:4811` | in-scope present |
-| `thm:finite-record-certificate-rigidity` | theorem | `main.tex:4978` | in-scope present |
-| `thm:boundary-axis-non-escalation-exactness` | theorem | `main.tex:5065` | in-scope present |
-| `thm:mixed-interface-overclaim-skeleton` | theorem | `main.tex:5201` | in-scope present |
-| `thm:presentation-scoped-boundary-normal-form` | theorem | `main.tex:5307` | in-scope present |
-| `thm:five-axis-upgrade-obstruction` | theorem | `main.tex:5426` | in-scope present |
-| `thm:current-boundary-skeleton-non-gluing` | theorem | `main.tex:5536` | in-scope present |
-| `prop:certificate-constructor-bad-subrecord-extractor` | proposition | `main.tex:5675` | in-scope present |
-| `prop:publication-safety-maximality` | proposition | `main.tex:5740` | in-scope present |
-| `cor:publication-safety-current-package-instance` | corollary | `main.tex:5791` | in-scope present |
-| `cor:finite-record-gate-soundness-boundary` | corollary | `main.tex:5842` | in-scope present |
-| `thm:implementation-soundness-extension-criterion` | theorem | `main.tex:5889` | in-scope present |
-| `thm:current-package-implementation-upgrade-absence` | theorem | `main.tex:5983` | in-scope present |
-| `cor:submitted-gate-implementation-contract-dichotomy` | corollary | `main.tex:6052` | in-scope present |
-| `thm:external-interface-projection-no-free-upgrade` | theorem | `main.tex:6101` | in-scope present |
-| `prop:current-package-acceptance-certificate-ledger` | proposition | `main.tex:6210` | in-scope present |
-| `thm:current-package-certificate-exactness` | theorem | `main.tex:6327` | in-scope present |
-| `thm:manual-ledger-dependence-boundary` | theorem | `main.tex:6496` | in-scope present |
-| `cor:row-frozen-current-package-invariance` | corollary | `main.tex:6575` | in-scope present |
-| `thm:current-package-extension-coordinate-rigidity` | theorem | `main.tex:6623` | in-scope plus truncation-risk |
-| `thm:current-package-semantic-non-escalation` | theorem | `main.tex:6721` | in-scope present |
-| `thm:named-boundary-positive-coordinate-classification` | theorem | `main.tex:6793` | in-scope present |
-| `thm:stage-a-two-boundary-resolution-acceptance` | theorem | `main.tex:6903` | in-scope present |
-| `cor:current-package-path-verified-instantiation` | corollary | `main.tex:6995` | in-scope present |
-| `lem:gate-witness-criterion` | lemma | `main.tex:7113` | in-scope present |
-| `prop:path-complete-case-witnesses` | proposition | `main.tex:7138` | in-scope present |
-| `prop:review-bundle-case-snapshot-coverage` | proposition | `main.tex:7266` | in-scope present |
-| `thm:case-witness-skeleton-rigidity` | theorem | `main.tex:7325` | in-scope present |
-| `prop:presentation-case-matrix-sufficiency` | proposition | `main.tex:7401` | in-scope present |
-| `thm:four-row-case-matrix-maximality` | theorem | `main.tex:7456` | in-scope present |
-| `audit:fresh-venue-record-criterion` | proposition | `main.tex:7591` | in-scope present |
-| `thm:venue-rule-freshness-non-escalation` | theorem | `main.tex:7642` | in-scope present |
-| `cor:historical-venue-record-non-escalation` | corollary | `main.tex:7688` | in-scope present |
-| `cor:upload-time-venue-compliance-record-requirement` | corollary | `main.tex:7718` | in-scope present |
-| `prop:dated-venue-record-instantiation` | proposition | `main.tex:7767` | in-scope present |
-| `audit:venue-submission-pack-gate` | proposition | `main.tex:7818` | in-scope present |
-| `audit:submission-artifact-role-separation` | proposition | `main.tex:7889` | in-scope present |
-| `prop:formal-source-gate-instantiation` | proposition | `main.tex:7981` | in-scope present |
-| `thm:formal-source-promotion-obstruction` | theorem | `main.tex:8048` | in-scope present |
-| `thm:evidence-level-overclaim-obstruction` | theorem | `main.tex:8089` | in-scope present |
-| `thm:finite-witness-manifest-record-interface` | theorem | `main.tex:8164` | in-scope present |
-| `prop:artifact-validation-gate-unique-semantic-upgrade` | proposition | `main.tex:8288` | in-scope present |
-| `cor:artifact-semantic-validity-boundary` | corollary | `main.tex:8330` | in-scope present |
-| `thm:three-boundary-upgrade-sharpness` | theorem | `main.tex:8406` | in-scope present |
-| `thm:primary-to-support-dependency-completeness` | theorem | `main.tex:8585` | in-scope present |
-| `prop:primary-claim-row-classification` | proposition | `main.tex:8653` | in-scope present |
-| `prop:primary-inventory-freshness-criterion` | proposition | `main.tex:8718` | in-scope present |
-| `prop:primary-supplement-interface-map` | proposition | `main.tex:8791` | in-scope present |
-| `thm:exact-inclusion-support-surface-realization` | theorem | `main.tex:9039` | in-scope present |
-| `thm:public-branch-archive-equivalent-realization` | theorem | `main.tex:9083` | in-scope present |
-| `cor:submission-time-support-instantiation-test` | corollary | `main.tex:9145` | in-scope present |
-| `thm:final-support-surface-closure` | theorem | `main.tex:9199` | in-scope present |
-| `thm:workspace-final-package-reconciliation` | theorem | `main.tex:9323` | in-scope present |
-| `thm:support-surface-normal-form` | theorem | `main.tex:9416` | in-scope present |
-| `thm:support-surface-invariant-compression` | theorem | `main.tex:9483` | in-scope plus truncation-risk |
-| `thm:upload-or-archive-instantiation-boundary` | theorem | `main.tex:9548` | in-scope present |
-| `cor:upload-or-archive-instantiation-record` | corollary | `main.tex:9591` | in-scope present |
-| `prop:no-external-instantiation-from-local-bundle-records` | proposition | `main.tex:9614` | in-scope present |
-| `prop:upload-or-archive-instantiation-update-protocol` | proposition | `main.tex:9656` | in-scope present |
-| `thm:current-package-missing-coordinate-classifier` | theorem | `main.tex:9745` | in-scope present |
-| `thm:four-coordinate-local-support-closure` | theorem | `main.tex:9859` | in-scope present |
-| `cor:current-no-receipt-support-surface-non-escalation` | corollary | `main.tex:9965` | in-scope present |
-| `cor:fresh-inventory-digest-instance-this-source-state` | corollary | `main.tex:10018` | in-scope present |
-| `thm:digest-closure-refresh-criterion` | theorem | `main.tex:10050` | in-scope plus truncation-risk |
-| `thm:submission-support-refresh-rigidity` | theorem | `main.tex:10119` | in-scope plus truncation-risk |
-| `prop:primary-architectural-fallback-without-external-support` | proposition | `main.tex:10191` | in-scope present |
-| `thm:deterministic-theorem-environment-extractor-boundary` | theorem | `main.tex:10257` | in-scope present |
-| `thm:extractor-domain-exactness-non-gluing` | theorem | `main.tex:10304` | in-scope present |
-| `thm:final-byte-extractor-inventory-inclusion` | theorem | `main.tex:10365` | in-scope present |
-| `thm:theorem-inventory-proofchecker-obstruction` | theorem | `main.tex:10435` | in-scope present |
-| `prop:manual-theorem-inventory-boundary` | theorem | `main.tex:10483` | in-scope present |
-| `prop:regenerated-theorem-inventory-digest-closure` | proposition | `main.tex:10535` | in-scope present |
-| `cor:current-theorem-inventory-digest-instance` | corollary | `main.tex:10584` | in-scope present |
-| `prop:post-inventory-fixed-point-support-certificate` | proposition | `main.tex:10620` | in-scope present |
-| `thm:post-inventory-finite-record-realization` | theorem | `main.tex:10677` | in-scope present |
-| `thm:theorem-obligation-ledger-boundary` | theorem | `main.tex:10757` | in-scope present |
-| `prop:post-inventory-support-tuple-extraction-certificate` | proposition | `main.tex:10829` | in-scope present |
-| `prop:submitted-theorem-inventory-availability` | proposition | `main.tex:10871` | in-scope present |
-| `prop:submission-support-instantiation-field-normal-form` | proposition | `main.tex:10897` | in-scope present |
-| `cor:current-local-support-normal-form` | corollary | `main.tex:10953` | in-scope present |
-| `audit:review-bundle-availability-condition` | proposition | `main.tex:11008` | in-scope present |
-| `audit:case-snapshot-non-rerun-boundary` | proposition | `main.tex:11062` | in-scope present |
-| `thm:finite-row-case-evidence-closure` | theorem | `main.tex:11093` | in-scope present |
-| `cor:current-case-behaviour-evidence-criterion` | corollary | `main.tex:11149` | in-scope present |
-| `audit:command-run-boundary-inventory` | proposition | `main.tex:11209` | in-scope present |
-| `thm:post-edit-rerun-metadata-gate` | theorem | `main.tex:11302` | in-scope present |
-| `thm:final-local-support-state-reconciliation` | theorem | `main.tex:11344` | in-scope present |
-| `cor:local-support-coordinate-discharge` | corollary | `main.tex:11493` | in-scope present |
-| `thm:presentation-route-five-interface-sharpness` | theorem | `main.tex:11555` | in-scope present |
-| `thm:presentation-route-stronger-reading-classifier` | theorem | `main.tex:11703` | in-scope present |
-| `thm:end-to-end-upgrade-decomposition-obstruction` | theorem | `main.tex:11837` | in-scope present |
-| `cor:presentation-summary-non-escalation` | corollary | `main.tex:11902` | in-scope present |
-| `thm:submission-support-fixed-point-normal-form` | theorem | `main.tex:11962` | in-scope present |
-| `thm:post-inventory-support-coordinate-dichotomy` | theorem | `main.tex:12030` | in-scope present |
-| `prop:final-refreshed-coordinate-instantiation` | proposition | `main.tex:12086` | in-scope present |
-| `thm:accepted-inventory-coverage-criterion` | theorem | `main.tex:12135` | in-scope present |
-| `thm:post-inventory-package-fixed-point` | theorem | `main.tex:12209` | in-scope present |
-| `cor:current-post-inventory-realization` | corollary | `main.tex:12311` | in-scope present |
-| `thm:current-inventory-artifact-realization` | theorem | `main.tex:12348` | in-scope present |
-| `thm:current-command-result-closure` | theorem | `main.tex:12440` | in-scope present |
-| `cor:current-post-inventory-support-tuple-instantiation` | corollary | `main.tex:12486` | in-scope present |
-| `prop:current-verifier-support-realization` | proposition | `main.tex:12538` | in-scope present |
-| `cor:stable-replay-post-inventory-tuple` | corollary | `main.tex:12595` | in-scope plus truncation-risk |
-| `prop:post-inventory-freshness-obstruction` | proposition | `main.tex:12644` | in-scope present |
-| `prop:stage-a2-accepted-inventory-rerun-realization` | proposition | `main.tex:12684` | in-scope present |
-| `prop:three-coordinate-submission-support-closure` | proposition | `main.tex:12744` | in-scope present |
-| `cor:local-fixed-point-external-boundary` | corollary | `main.tex:12809` | in-scope present |
-| `prop:current-absence-external-support-surface-instantiation` | proposition | `main.tex:12860` | in-scope present |
-| `prop:final-support-coordinate-refresh-closure` | proposition | `main.tex:12917` | in-scope present |
-| `cor:manifest-required-theorem-inventory-fixed-point` | corollary | `main.tex:12976` | in-scope present |
-| `thm:four-coordinate-submission-support-skeleton` | theorem | `main.tex:13024` | in-scope present |
-| `cor:final-local-fixed-point-external-normal-form` | corollary | `main.tex:13135` | in-scope present |
-| `prop:accepted-byte-post-inventory-support-coordinate` | proposition | `main.tex:13197` | in-scope present |
-| `thm:current-package-no-free-upgrade-closure` | theorem | `main.tex:13286` | in-scope present |
-| `thm:terminal-five-coordinate-closure` | theorem | `main.tex:13435` | in-scope present |
-| `thm:five-issue-coordinate-normal-form` | theorem | `main.tex:13509` | in-scope present |
-| `prop:bounded-theorem-support-coordinate-closure` | proposition | `main.tex:13583` | in-scope present |
-| `thm:presentation-weak-interface-maximality` | theorem | `main.tex:13663` | weak/support only |
-| `cor:primary-presentation-weak-interface-compression` | corollary | `main.tex:13814` | weak/support only |
-| `cor:no-finite-record-gluing-upgrade` | corollary | `main.tex:13868` | in-scope present |
-| `thm:four-family-upgrade-obstruction-classification` | theorem | `main.tex:13908` | in-scope present |
-| `thm:certificate-reading-spine-maximality` | theorem | `main.tex:14017` | in-scope present |
-| `thm:six-role-publication-master-interface` | theorem | `main.tex:14124` | in-scope present |
-| `thm:compressed-master-boundary-classifier` | theorem | `main.tex:14273` | in-scope present |
-| `thm:presentation-route-dichotomy` | theorem | `main.tex:14397` | in-scope present |
-| `thm:five-node-dependency-spine-exactness` | theorem | `main.tex:14533` | in-scope present |
-| `thm:master-spine-support-coordinate-compression` | theorem | `main.tex:14601` | in-scope present |
-| `thm:finite-record-interface-support-boundary-classification` | theorem | `main.tex:14688` | in-scope present |
-| `thm:presentation-only-bounded-support-normal-form` | theorem | `main.tex:14795` | in-scope present |
-| `thm:compact-article-finite-record-spine-classification` | theorem | `main.tex:14893` | in-scope present |
-| `thm:presentation-route-spine-projection-overload-obstruction` | theorem | `main.tex:15031` | in-scope present |
-| `thm:four-case-foreground-support-boundary` | theorem | `main.tex:15119` | in-scope present |
-| `thm:compact-dependency-map-irredundancy` | theorem | `main.tex:15204` | in-scope present |
-| `cor:compact-five-node-presentation-consequence` | corollary | `main.tex:15320` | in-scope present |
-| `thm:submitted-support-issue-coordinate-discharge` | theorem | `main.tex:15343` | in-scope present |
-| `prop:exact-submitted-issue-coordinate-skeleton` | proposition | `main.tex:15405` | in-scope present |
-| `prop:external-coordinate-admissibility-trichotomy` | proposition | `main.tex:15481` | in-scope present |
-| `cor:manuscript-reading-boundary` | corollary | `main.tex:15565` | in-scope present |
-| `cor:local-only-artifact-support-closure` | corollary | `main.tex:15592` | in-scope present |
-| `thm:local-support-normal-form-four-live-coordinates` | theorem | `main.tex:15630` | in-scope present |
-| `cor:support-chain-closure` | corollary | `main.tex:15719` | in-scope present |
-| `thm:five-obstruction-finite-coordinate-normal-form` | theorem | `main.tex:15753` | in-scope present |
-| `cor:current-byte-closure` | corollary | `main.tex:15884` | in-scope present |
-| `thm:accepted-inventory-coordinate-realization` | theorem | `main.tex:15935` | in-scope present |
-| `prop:fresh-post-inventory-byte-closure-rerun-discharge` | proposition | `main.tex:16005` | in-scope present |
-| `prop:realized-post-inventory-verifier-digest-coordinate` | proposition | `main.tex:16061` | in-scope present |
-| `thm:current-accepted-inventory-tuple-instantiation` | theorem | `main.tex:16116` | in-scope present |
-| `cor:presentation-route-support-coordinate-normal-form` | corollary | `main.tex:16168` | in-scope present |
-| `thm:inventory-venue-coordinate-closure` | theorem | `main.tex:16252` | in-scope present |
-| `thm:four-coordinate-local-support-discharge` | theorem | `main.tex:16335` | in-scope present |
-| `thm:local-support-surface-classifier` | theorem | `main.tex:16431` | in-scope present |
-| `thm:local-support-coordinate-closure` | theorem | `main.tex:16529` | in-scope present |
-| `thm:four-blocker-coordinate-budget` | theorem | `main.tex:16586` | in-scope present |
-| `thm:canonical-local-rerun-tuple` | theorem | `main.tex:16664` | in-scope present |
-| `thm:current-byte-support-fixed-point-nonupgrade-boundary` | theorem | `main.tex:16732` | in-scope plus truncation-risk |
-| `cor:post-inventory-rerun-closure` | corollary | `main.tex:16804` | in-scope present |
-| `thm:submission-support-obstruction-skeleton` | theorem | `main.tex:16858` | in-scope present |
-| `cor:accepted-inventory-final-verifier-digest-tuple` | corollary | `main.tex:16933` | in-scope present |
-| `prop:submitted-support-locator-freshness-realization` | proposition | `main.tex:16984` | in-scope present |
-| `thm:four-live-noninstantiation-coordinates` | theorem | `main.tex:17052` | in-scope present |
-| `thm:scope-contract-three-coordinate-boundary` | theorem | `main.tex:17131` | in-scope present |
-| `thm:support-coordinate-status-discharge` | theorem | `main.tex:17288` | in-scope present |
-| `thm:post-regeneration-support-coordinate-closure` | theorem | `main.tex:17399` | in-scope plus truncation-risk |
-| `thm:five-interface-finite-skeleton-classification` | theorem | `main.tex:17491` | in-scope present |
-| `prop:local-issue-coordinate-normal-form` | proposition | `main.tex:17589` | in-scope present |
-| `thm:final-support-surface-dichotomy-inventory-exactness` | theorem | `main.tex:17674` | in-scope present |
-| `thm:terminal-local-support-acceptance-normal-form` | theorem | `main.tex:17737` | in-scope present |
-| `thm:terminal-support-coordinate-discharge` | theorem | `main.tex:17812` | in-scope present |
-| `thm:current-inventory-rerun-exactness` | theorem | `main.tex:17870` | in-scope plus truncation-risk |
-| `thm:current-package-five-coordinate-closure-criterion` | theorem | `main.tex:17948` | in-scope present |
-| `thm:five-interface-current-package-discharge-criterion` | theorem | `main.tex:18039` | in-scope present |
-| `cor:stage-a-issue-discharge-normal-form` | corollary | `main.tex:18178` | in-scope present |
-| `thm:six-coordinate-submission-boundary-normal-form` | theorem | `main.tex:18210` | in-scope present |
-| `thm:current-stage-a2-support-coordinate-realization` | theorem | `main.tex:18313` | in-scope present |
-| `cor:stage-a2-challenged-coordinate-classifier` | corollary | `main.tex:18376` | in-scope present |
-| `cor:presentation-package-five-coordinate-support-closure` | corollary | `main.tex:18444` | in-scope present |
-| `thm:finite-antichain-basis` | theorem | `main.tex:18545` | in-scope present |
-| `thm:canonical-bad-subrecord-classifier` | theorem | `main.tex:18600` | in-scope present |
-| `thm:stage-a-real-block-discharge` | theorem | `main.tex:18663` | in-scope present |
-| `cor:current-stage-a-closure-criterion` | corollary | `main.tex:18736` | in-scope present |
-| `thm:finite-audit-antichain-basis` | theorem | `main.tex:18786` | primary in-scope route |
-| `thm:canonical-stage-a-obstruction-basis` | theorem | `main.tex:18849` | primary in-scope route |
-| `thm:no-theorem-delta-nondischarge` | theorem | `main.tex:18942` | primary in-scope route |
-| `thm:stage-a-real-block-discharge-completeness` | theorem | `main.tex:18997` | primary in-scope route |
-| `cor:current-stage-a-closure-exactness` | corollary | `main.tex:19051` | primary in-scope route |
-| `def:role-respecting-finite-audit-interpretation` | definition | `main.tex:19100` | in-scope present |
-| `def:six-coordinate-safe-projection` | definition | `main.tex:19128` | in-scope present |
-| `thm:universal-safe-projection` | theorem | `main.tex:19153` | in-scope present |
-| `thm:coordinate-separation` | theorem | `main.tex:19187` | in-scope present |
-| `thm:canonical-obstruction-basis` | theorem | `main.tex:19231` | in-scope present |
-| `thm:current-byte-obstruction-certificate` | theorem | `main.tex:19258` | in-scope present |
-| `cor:referee-novelty-separation` | corollary | `main.tex:19293` | in-scope present |
-| `prop:single-route-surface` | proposition | `main.tex:19312` | in-scope present |
-| `def:typed-audit-atom` | definition | `main.tex:19342` | in-scope present |
-| `def:stage-a-horn-audit-schema` | definition | `main.tex:19357` | in-scope present |
-| `def:certified-closure-rejection-certificate` | definition | `main.tex:19385` | in-scope present |
-| `thm:horn-compilation-adequacy` | theorem | `main.tex:19408` | in-scope present |
-| `thm:deterministic-certificate-soundness` | theorem | `main.tex:19437` | in-scope present |
-| `thm:complete-obstruction` | theorem | `main.tex:19461` | in-scope present |
-| `thm:coordinate-independence-by-horn-models` | theorem | `main.tex:19486` | in-scope present |
-| `thm:verifier-adequacy-complexity` | theorem | `main.tex:19515` | in-scope present |
-| `thm:current-byte-certified-audit` | theorem | `main.tex:19540` | in-scope plus truncation-risk |
-| `cor:referee-facing-novelty-horn` | corollary | `main.tex:19571` | in-scope present |
-| `prop:non-duplication-route-quotient` | proposition | `main.tex:19592` | in-scope present |
-| `def:canonical-stage-a-byte-manifest` | definition | `main.tex:19624` | in-scope present |
-| `def:byte-to-atom-compiler` | definition | `main.tex:19642` | in-scope present |
-| `def:replayable-stage-a-certificate` | definition | `main.tex:19662` | in-scope present |
-| `thm:byte-to-atom-determinacy` | theorem | `main.tex:19693` | in-scope present |
-| `thm:replay-kernel-soundness` | theorem | `main.tex:19715` | in-scope present |
-| `thm:replay-kernel-completeness` | theorem | `main.tex:19771` | in-scope present |
-| `thm:replayable-obstruction-adequacy` | theorem | `main.tex:19791` | in-scope present |
-| `thm:current-byte-two-coordinate-audit` | theorem | `main.tex:19816` | in-scope plus truncation-risk |
-| `thm:fixed-replay-rgs-coordinate-exactness` | theorem | `main.tex:19861` | in-scope present |
-| `thm:accepted-fixed-replay-rgs-pass-row-current-package` | theorem | `main.tex:19936` | in-scope present |
-| `thm:post-qrgs-coordinate-independence` | theorem | `main.tex:20022` | in-scope present |
-| `cor:stage-a-replay-kernel-software-surface` | corollary | `main.tex:20051` | in-scope present |
-| `lem:maximal-qinv-qrgs-replay-closure` | lemma | `main.tex:20069` | in-scope present |
-| `thm:replay-kernel-foreground-closure` | theorem | `main.tex:20116` | in-scope present |
-| `thm:canonical-finite-basis-replay-foreground-exactness` | theorem | `main.tex:20231` | in-scope present |
-| `thm:cicm-public-surface-maximality` | theorem | `main.tex:20318` | in-scope present |
-| `cor:five-challenged-interfaces-replay-foreground` | corollary | `main.tex:20430` | in-scope present |
-| `thm:two-coordinate-foreground-maximality` | theorem | `main.tex:20494` | in-scope present |
-| `cor:no-implementation-upgrade-from-fixed-replay` | corollary | `main.tex:20590` | in-scope present |
-| `prop:stage-a-replay-route-quotient-preservation` | proposition | `main.tex:20647` | in-scope present |
-| `thm:current-round-local-only-fixed-point-classifier` | theorem | `main.tex:20734` | in-scope present |
-| `prop:six-challenged-coordinate-discharge-normal-form` | proposition | `main.tex:20792` | in-scope present |
-| `thm:round-eight-ordered-support-tuple-closure` | theorem | `main.tex:20879` | in-scope plus truncation-risk |
+  - **required_action:** Keep as mandatory primary-route material; synchronize inventory, audit, primary-claim, overlap/submission-order, and final digest verifiers against this exact label and title.
 
-## Supporting Snapshot Label Coverage
+  - **primary_route_status:** mandatory primary-route theorem package; exact source label recognized with proof environment
 
-| Label | Kind | Location | Classification |
-|---|---|---:|---|
-| `def:automated-discovery-certified-theory-state` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:18` | supporting snapshot, not included source |
-| `def:automated-discovery-automation-record` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:41` | supporting snapshot, not included source |
-| `def:automated-discovery-pipeline-state` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:49` | supporting snapshot, not included source |
-| `def:automated-discovery-genome-extractor` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:61` | supporting snapshot, not included source |
-| `def:automated-discovery-score-certificate` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:72` | supporting snapshot, not included source |
-| `def:automated-discovery-pipeline-transition` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:86` | supporting snapshot, not included source |
-| `def:automated-discovery-mechanical-expansion` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:102` | supporting snapshot, not included source |
-| `def:automated-discovery-genome-compression` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:110` | supporting snapshot, not included source |
-| `def:automated-discovery-genome-recombination` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:121` | supporting snapshot, not included source |
-| `def:automated-discovery-classifier-shift` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:129` | supporting snapshot, not included source |
-| `def:automated-discovery-discovery-transition` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:139` | supporting snapshot, not included source |
-| `def:automated-discovery-positive-discovery-transition` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:154` | supporting snapshot, not included source |
-| `def:automated-discovery-claim` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:170` | supporting snapshot, not included source |
-| `def:automated-discovery-claim-kinds` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:185` | supporting snapshot, not included source |
-| `def:automated-discovery-well-formed-claim` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:201` | supporting snapshot, not included source |
-| `def:automated-discovery-gate` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:212` | supporting snapshot, not included source |
-| `def:automated-discovery-gate-demotion` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:223` | supporting snapshot, not included source |
-| `thm:automated-discovery-dna-completeness-obligation` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:237` | supporting snapshot, not included source |
-| `cor:automated-discovery-statement-code-insufficient` | corollary | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:248` | supporting snapshot, not included source |
-| `thm:automated-discovery-mechanical-not-discovery` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:258` | supporting snapshot, not included source |
-| `thm:automated-discovery-compression-not-discovery` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:269` | supporting snapshot, not included source |
-| `thm:automated-discovery-certificate-ledger-required` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:280` | supporting snapshot, not included source |
-| `thm:automated-discovery-positive-implies-discovery` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:299` | supporting snapshot, not included source |
-| `thm:automated-discovery-scored-claims-public-weights` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:309` | supporting snapshot, not included source |
-| `thm:automated-discovery-gate-kind-sound` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:320` | supporting snapshot, not included source |
-| `thm:automated-discovery-demotion-soundness` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:334` | supporting snapshot, not included source |
-| `def:automated-discovery-lineage-ledger` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:351` | supporting snapshot, not included source |
-| `def:automated-discovery-lineage-consistent-claim` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:359` | supporting snapshot, not included source |
-| `thm:automated-discovery-lineage-dag` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:366` | supporting snapshot, not included source |
-| `def:automated-discovery-potential` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:377` | supporting snapshot, not included source |
-| `thm:automated-discovery-lowest-score-not-best-target` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:395` | supporting snapshot, not included source |
-| `thm:automated-discovery-selection-favours-classifier-change` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:408` | supporting snapshot, not included source |
-| `def:automated-discovery-unpaid-discovery-claim` | definition | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:423` | supporting snapshot, not included source |
-| `thm:automated-discovery-no-unpaid-discovery` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:431` | supporting snapshot, not included source |
-| `thm:automated-discovery-pipeline-safety` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:441` | supporting snapshot, not included source |
-| `thm:automated-discovery-pipeline-theorem` | theorem | `review_bundle\source_snapshots\automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:457` | supporting snapshot, not included source |
+  - **dependencies:** `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`
+
+- **label:** `thm:canonical-stage-a-obstruction-basis`
+
+  - **title:** Canonical Stage-A Obstruction Basis
+
+  - **location:** main.tex:18849-18883
+
+  - **reason:** Mandatory Stage-A theorem package member present as a theorem environment with proof recognition True; it supplies the canonical finite audit basis route required by the Oracle directive.
+
+  - **required_action:** Keep as mandatory primary-route material; synchronize inventory, audit, primary-claim, overlap/submission-order, and final digest verifiers against this exact label and title.
+
+  - **primary_route_status:** mandatory primary-route theorem package; exact source label recognized with proof environment
+
+  - **dependencies:** `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`
+
+- **label:** `thm:no-theorem-delta-nondischarge`
+
+  - **title:** No-Theorem-Delta Non-Discharge Theorem
+
+  - **location:** main.tex:18942-18955
+
+  - **reason:** Mandatory Stage-A theorem package member present as a theorem environment with proof recognition True; it supplies the canonical finite audit basis route required by the Oracle directive.
+
+  - **required_action:** Keep as mandatory primary-route material; synchronize inventory, audit, primary-claim, overlap/submission-order, and final digest verifiers against this exact label and title.
+
+  - **primary_route_status:** mandatory primary-route theorem package; exact source label recognized with proof environment
+
+  - **dependencies:** `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`
+
+- **label:** `thm:stage-a-real-block-discharge-completeness`
+
+  - **title:** Stage-A Real-Block Discharge Completeness
+
+  - **location:** main.tex:18997-19017
+
+  - **reason:** Mandatory Stage-A theorem package member present as a theorem environment with proof recognition True; it supplies the canonical finite audit basis route required by the Oracle directive.
+
+  - **required_action:** Keep as mandatory primary-route material; synchronize inventory, audit, primary-claim, overlap/submission-order, and final digest verifiers against this exact label and title.
+
+  - **primary_route_status:** mandatory primary-route theorem package; exact source label recognized with proof environment
+
+  - **dependencies:** `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`
+
+- **label:** `cor:current-stage-a-closure-exactness`
+
+  - **title:** Current Stage-A Closure Exactness
+
+  - **location:** main.tex:19051-19075
+
+  - **reason:** Mandatory Stage-A theorem package member present as a corollary environment with proof recognition True; it supplies the canonical finite audit basis route required by the Oracle directive.
+
+  - **required_action:** Keep as mandatory primary-route material; synchronize inventory, audit, primary-claim, overlap/submission-order, and final digest verifiers against this exact label and title.
+
+  - **primary_route_status:** mandatory primary-route theorem package; exact source label recognized with proof environment
+
+  - **dependencies:** `thm:presentation-compressed-interface`, `thm:publication-safety-interface`, `thm:external-interface-projection-no-free-upgrade`, `thm:four-case-foreground-support-boundary`, `cor:stage-a-issue-discharge-normal-form`, `thm:six-coordinate-submission-boundary-normal-form`, `thm:current-round-local-only-fixed-point-classifier`
+
+- **label:** `prop:final-package-shape-convention, thm:nested-package-states, def:architecture-axis-map, prop:architecture-axis-non-escalation, thm:presentation-compressed-interface, cor:compact-presentation-boundary-routing, thm:public-result-support-surface-rigidity, lem:source-interface-extraction-correctness, prop:manual-source-interface-non-escalation, prop:reviewable-source-snapshot-interface, prop:source-interface-record-file-consistency, thm:bounded-source-interface-maximality`
+
+  - **location:** main.tex:269-1237
+
+  - **reason:** Current manuscript theorem-like source coverage block 1; covers 12 labelled environments from Final package-shape convention; Nested six-row and seven-row package states; Architecture-axis map; Axis non-escalation. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `cor:downstream-imported-label-bounded-factorization, thm:public-source-reachability-non-escalation, cor:public-source-coordinate-exactness, thm:source-interface-semantic-completeness-obstruction, prop:source-interface-evidence-level-separation, def:operational-acceptance-interface, thm:portable-six-role-interface, prop:portable-workflow-schema-factorisation, thm:portable-projection-dominates-local-support, def:finite-record-projection-preorder, lem:finite-record-preorder-normal-form, prop:portable-method-normal-form-local-pullback`
+
+  - **location:** main.tex:1274-1992
+
+  - **reason:** Current manuscript theorem-like source coverage block 2; covers 12 labelled environments from Downstream imported-label use factors through bounded rows; Public-source reachability non-escalation; Public-source coordinate exactness; Source-interface semantic-completeness obstruction. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `def:record-gate-soundness-external-interface, prop:record-gate-soundness-external-interface-exactness, thm:rgs-conditional-compact-spine, thm:current-package-rgs-instantiation-boundary, cor:current-package-no-implicit-rgs-discharge, def:stronger-reading-preorder, def:certificate-schema-acceptance-table, prop:finite-certificate-schema-verifier, thm:verifier-input-output-contract, thm:auditable-compiler-boundary-completeness, thm:finite-verifier-normal-form, thm:record-acceptance-exactness`
+
+  - **location:** main.tex:2146-2784
+
+  - **reason:** Current manuscript theorem-like source coverage block 3; covers 12 labelled environments from Record-gate soundness external interface; Conditional record-gate interface equivalence and non-claim boundary; Support: accepted-RGS conditional compact-spine normal form; Current-package record-gate hypothesis boundary. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:finite-record-method-schema-compression, cor:executable-schema-exactness-negative-fixture, thm:finite-coordinate-determination-boundary, thm:record-interface-rigidity, thm:record-gate-implementation-overclaim-obstruction, cor:finite-record-acceptance-not-implementation-soundness, prop:machine-readable-certificate-records, thm:executable-record-non-escalation, thm:executable-certificate-construction-invariant, prop:claim-kind-dispatch, thm:mixed-claim-projection-obstruction, thm:finite-script-projection-contract-support`
+
+  - **location:** main.tex:2838-3563
+
+  - **reason:** Current manuscript theorem-like source coverage block 4; covers 12 labelled environments from Verifier-schema compression of the finite-record calculus; Executable schema exactness and negative fixture; Finite-coordinate determination and trust-boundary classifier; Record-interface rigidity and refresh fixed point. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `cor:finite-script-rgs-instantiation-boundary, thm:finite-script-record-support-maximality, thm:assigned-gate-soundness-audit-boundary, thm:six-coordinate-gate-implementation-soundness-skeleton, thm:three-upgrade-coordinate-exactness, thm:finite-certificate-obstruction-skeleton, thm:finite-extension-budget-normal-form, thm:finite-record-certificate-calculus-spine, prop:publication-safety-dependency-normal-form, thm:finite-coordinate-no-overclaim-rigidity, prop:gate-interface-separation, cor:human-promotion-daemon-active-track-separation`
+
+  - **location:** main.tex:3632-4463
+
+  - **reason:** Current manuscript theorem-like source coverage block 5; covers 12 labelled environments from Finite-script projection instantiation boundary; Finite-script record-support maximality; Support: assigned-gate row and pointer audit boundary; Six-coordinate obstruction and extension criterion for gate projections. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `prop:scheduler-selection-advisory, prop:publication-safety-minimal-bad-record-witness, lem:schema-partition-minimality, thm:publication-safety-interface, thm:gate-implementation-soundness-upgrade-obstruction, thm:finite-record-certificate-rigidity, thm:boundary-axis-non-escalation-exactness, thm:mixed-interface-overclaim-skeleton, thm:presentation-scoped-boundary-normal-form, thm:five-axis-upgrade-obstruction, thm:current-boundary-skeleton-non-gluing, prop:certificate-constructor-bad-subrecord-extractor`
+
+  - **location:** main.tex:4493-5703
+
+  - **reason:** Current manuscript theorem-like source coverage block 6; covers 12 labelled environments from Scheduler selection is advisory before discovery gating; Minimal bad-record witness for command-run escalation; Schema-partition minimality; Conditional finite-record publication audit interface. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `prop:publication-safety-maximality, cor:publication-safety-current-package-instance, cor:finite-record-gate-soundness-boundary, thm:implementation-soundness-extension-criterion, thm:current-package-implementation-upgrade-absence, cor:submitted-gate-implementation-contract-dichotomy, thm:external-interface-projection-no-free-upgrade, prop:current-package-acceptance-certificate-ledger, thm:current-package-certificate-exactness, thm:manual-ledger-dependence-boundary, cor:row-frozen-current-package-invariance, thm:current-package-extension-coordinate-rigidity`
+
+  - **location:** main.tex:5740-6664
+
+  - **reason:** Current manuscript theorem-like source coverage block 7; covers 12 labelled environments from Finite-record publication-safety maximality; Current-package finite-record publication-safety instance; Finite-record boundary for external gate soundness; Finite-input projection-extension criterion. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:current-package-semantic-non-escalation, thm:named-boundary-positive-coordinate-classification, thm:stage-a-two-boundary-resolution-acceptance, cor:current-package-path-verified-instantiation, lem:gate-witness-criterion, prop:path-complete-case-witnesses, prop:review-bundle-case-snapshot-coverage, thm:case-witness-skeleton-rigidity, prop:presentation-case-matrix-sufficiency, thm:four-row-case-matrix-maximality, audit:fresh-venue-record-criterion, thm:venue-rule-freshness-non-escalation`
+
+  - **location:** main.tex:6721-7658
+
+  - **reason:** Current manuscript theorem-like source coverage block 8; covers 12 labelled environments from Current-package ledger-relative semantic non-escalation; Named boundary positive-coordinate classification; Presentation-package boundary-resolution acceptance theorem; Current package path-verified ledger-relative instantiation. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `cor:historical-venue-record-non-escalation, cor:upload-time-venue-compliance-record-requirement, prop:dated-venue-record-instantiation, audit:venue-submission-pack-gate, audit:submission-artifact-role-separation, prop:formal-source-gate-instantiation, thm:formal-source-promotion-obstruction, thm:evidence-level-overclaim-obstruction, thm:finite-witness-manifest-record-interface, prop:artifact-validation-gate-unique-semantic-upgrade, cor:artifact-semantic-validity-boundary, thm:three-boundary-upgrade-sharpness`
+
+  - **location:** main.tex:7688-8461
+
+  - **reason:** Current manuscript theorem-like source coverage block 9; covers 12 labelled environments from Historical venue record non-escalation; Upload-time venue-compliance record requirement; Dated venue-record instantiation; Venue-submission pack gate. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:primary-to-support-dependency-completeness, prop:primary-claim-row-classification, prop:primary-inventory-freshness-criterion, prop:primary-supplement-interface-map, thm:exact-inclusion-support-surface-realization, thm:public-branch-archive-equivalent-realization, cor:submission-time-support-instantiation-test, thm:final-support-surface-closure, thm:workspace-final-package-reconciliation, thm:support-surface-normal-form, thm:support-surface-invariant-compression, thm:upload-or-archive-instantiation-boundary`
+
+  - **location:** main.tex:8585-9566
+
+  - **reason:** Current manuscript theorem-like source coverage block 10; covers 12 labelled environments from Primary-to-support dependency completeness; Primary-claim conditional inventory-audit classification; Primary-inventory freshness criterion; Primary--supplement interface map. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `cor:upload-or-archive-instantiation-record, prop:no-external-instantiation-from-local-bundle-records, prop:upload-or-archive-instantiation-update-protocol, thm:current-package-missing-coordinate-classifier, thm:four-coordinate-local-support-closure, cor:current-no-receipt-support-surface-non-escalation, cor:fresh-inventory-digest-instance-this-source-state, thm:digest-closure-refresh-criterion, thm:submission-support-refresh-rigidity, prop:primary-architectural-fallback-without-external-support, thm:deterministic-theorem-environment-extractor-boundary, thm:extractor-domain-exactness-non-gluing`
+
+  - **location:** main.tex:9591-10324
+
+  - **reason:** Current manuscript theorem-like source coverage block 11; covers 12 labelled environments from Upload-or-archive instantiation record; No external instantiation from local bundle records; Upload-or-archive instantiation update protocol; Current package missing-coordinate classifier. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:final-byte-extractor-inventory-inclusion, thm:theorem-inventory-proofchecker-obstruction, prop:manual-theorem-inventory-boundary, prop:regenerated-theorem-inventory-digest-closure, cor:current-theorem-inventory-digest-instance, prop:post-inventory-fixed-point-support-certificate, thm:post-inventory-finite-record-realization, thm:theorem-obligation-ledger-boundary, prop:post-inventory-support-tuple-extraction-certificate, prop:submitted-theorem-inventory-availability, prop:submission-support-instantiation-field-normal-form, cor:current-local-support-normal-form`
+
+  - **location:** main.tex:10365-10971
+
+  - **reason:** Current manuscript theorem-like source coverage block 12; covers 12 labelled environments from Final-byte extractor inventory inclusion; Theorem-inventory proof-checker obstruction; Theorem-inventory boundary; Regenerated theorem-inventory digest closure. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `audit:review-bundle-availability-condition, audit:case-snapshot-non-rerun-boundary, thm:finite-row-case-evidence-closure, cor:current-case-behaviour-evidence-criterion, audit:command-run-boundary-inventory, thm:post-edit-rerun-metadata-gate, thm:final-local-support-state-reconciliation, cor:local-support-coordinate-discharge, thm:presentation-route-five-interface-sharpness, thm:presentation-route-stronger-reading-classifier, thm:end-to-end-upgrade-decomposition-obstruction, cor:presentation-summary-non-escalation`
+
+  - **location:** main.tex:11008-11924
+
+  - **reason:** Current manuscript theorem-like source coverage block 13; covers 12 labelled environments from Review-bundle availability condition; Case-snapshot non-rerun boundary; Qualitative finite-row closure of case evidence; Current case-behaviour evidence criterion. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:submission-support-fixed-point-normal-form, thm:post-inventory-support-coordinate-dichotomy, prop:final-refreshed-coordinate-instantiation, thm:accepted-inventory-coverage-criterion, thm:post-inventory-package-fixed-point, cor:current-post-inventory-realization, thm:current-inventory-artifact-realization, thm:current-command-result-closure, cor:current-post-inventory-support-tuple-instantiation, prop:current-verifier-support-realization, cor:stable-replay-post-inventory-tuple, prop:post-inventory-freshness-obstruction`
+
+  - **location:** main.tex:11962-12658
+
+  - **reason:** Current manuscript theorem-like source coverage block 14; covers 12 labelled environments from Finite-record support-coordinate synchronization normal form; Finite-record post-inventory support-coordinate dichotomy; Final refreshed-coordinate instantiation; Accepted inventory coverage criterion. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `prop:stage-a2-accepted-inventory-rerun-realization, prop:three-coordinate-submission-support-closure, cor:local-fixed-point-external-boundary, prop:current-absence-external-support-surface-instantiation, prop:final-support-coordinate-refresh-closure, cor:manifest-required-theorem-inventory-fixed-point, thm:four-coordinate-submission-support-skeleton, cor:final-local-fixed-point-external-normal-form, prop:accepted-byte-post-inventory-support-coordinate, thm:current-package-no-free-upgrade-closure, thm:terminal-five-coordinate-closure, thm:five-issue-coordinate-normal-form`
+
+  - **location:** main.tex:12684-13540
+
+  - **reason:** Current manuscript theorem-like source coverage block 15; covers 12 labelled environments from Accepted-inventory rerun realization; Three-coordinate submission-support closure; Local fixed point and external-support boundary; Current absence of external support-surface instantiation. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `prop:bounded-theorem-support-coordinate-closure, thm:presentation-weak-interface-maximality, cor:primary-presentation-weak-interface-compression, cor:no-finite-record-gluing-upgrade, thm:four-family-upgrade-obstruction-classification, thm:certificate-reading-spine-maximality, thm:six-role-publication-master-interface, thm:compressed-master-boundary-classifier, thm:presentation-route-dichotomy, thm:five-node-dependency-spine-exactness, thm:master-spine-support-coordinate-compression, thm:finite-record-interface-support-boundary-classification`
+
+  - **location:** main.tex:13583-14744
+
+  - **reason:** Current manuscript theorem-like source coverage block 16; covers 12 labelled environments from Support-coordinate closure for bounded theorem evidence; Supplemental schema-relative weak-interface maximality; Routed presentation weak-interface compression; No finite-record gluing upgrade. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:presentation-only-bounded-support-normal-form, thm:compact-article-finite-record-spine-classification, thm:presentation-route-spine-projection-overload-obstruction, thm:four-case-foreground-support-boundary, thm:compact-dependency-map-irredundancy, cor:compact-five-node-presentation-consequence, thm:submitted-support-issue-coordinate-discharge, prop:exact-submitted-issue-coordinate-skeleton, prop:external-coordinate-admissibility-trichotomy, cor:manuscript-reading-boundary, cor:local-only-artifact-support-closure, thm:local-support-normal-form-four-live-coordinates`
+
+  - **location:** main.tex:14802-15666
+
+  - **reason:** Current manuscript theorem-like source coverage block 17; covers 12 labelled environments from Presentation-only bounded-support normal form; Support-coordinate routing for the compact article; Presentation-route spine projection and overload obstruction; Four-case foreground support-boundary normal form. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `cor:support-chain-closure, thm:five-obstruction-finite-coordinate-normal-form, cor:current-byte-closure, thm:accepted-inventory-coordinate-realization, prop:fresh-post-inventory-byte-closure-rerun-discharge, prop:realized-post-inventory-verifier-digest-coordinate, thm:current-accepted-inventory-tuple-instantiation, cor:presentation-route-support-coordinate-normal-form, thm:inventory-venue-coordinate-closure, thm:four-coordinate-local-support-discharge, thm:local-support-surface-classifier, thm:local-support-coordinate-closure`
+
+  - **location:** main.tex:15726-16558
+
+  - **reason:** Current manuscript theorem-like source coverage block 18; covers 12 labelled environments from Support-chain closure; Five-obstruction finite-coordinate normal form; Inventory-synchronized byte closure; Accepted inventory coordinate realization. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:four-blocker-coordinate-budget, thm:canonical-local-rerun-tuple, thm:current-byte-support-fixed-point-nonupgrade-boundary, cor:post-inventory-rerun-closure, thm:submission-support-obstruction-skeleton, cor:accepted-inventory-final-verifier-digest-tuple, prop:submitted-support-locator-freshness-realization, thm:four-live-noninstantiation-coordinates, thm:scope-contract-three-coordinate-boundary, thm:support-coordinate-status-discharge, thm:post-regeneration-support-coordinate-closure, thm:five-interface-finite-skeleton-classification`
+
+  - **location:** main.tex:16593-17543
+
+  - **reason:** Current manuscript theorem-like source coverage block 19; covers 12 labelled environments from Four-blocker coordinate budget; Terminal local rerun tuple; Conditional current-byte support fixed point and non-upgrade boundary; Post-inventory rerun closure. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `prop:local-issue-coordinate-normal-form, thm:final-support-surface-dichotomy-inventory-exactness, thm:terminal-local-support-acceptance-normal-form, thm:terminal-support-coordinate-discharge, thm:current-inventory-rerun-exactness, thm:current-package-five-coordinate-closure-criterion, thm:five-interface-current-package-discharge-criterion, cor:stage-a-issue-discharge-normal-form, thm:six-coordinate-submission-boundary-normal-form, thm:current-stage-a2-support-coordinate-realization, cor:stage-a2-challenged-coordinate-classifier, cor:presentation-package-five-coordinate-support-closure`
+
+  - **location:** main.tex:17596-18486
+
+  - **reason:** Current manuscript theorem-like source coverage block 20; covers 12 labelled environments from Local issue-coordinate normal form; Final support-surface dichotomy and inventory exactness; Terminal local-support acceptance normal form; Terminal support-coordinate discharge. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:finite-antichain-basis, thm:canonical-bad-subrecord-classifier, thm:stage-a-real-block-discharge, cor:current-stage-a-closure-criterion, def:role-respecting-finite-audit-interpretation, def:six-coordinate-safe-projection, thm:universal-safe-projection, thm:coordinate-separation, thm:canonical-obstruction-basis, thm:current-byte-obstruction-certificate, cor:referee-novelty-separation, prop:single-route-surface`
+
+  - **location:** main.tex:18552-19328
+
+  - **reason:** Current manuscript theorem-like source coverage block 21; covers 12 labelled environments from Finite Antichain Basis Theorem; Canonical Bad-Subrecord Classifier; Stage-A Real-Block Discharge Theorem; Preliminary Stage-A Closure Reduction. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `def:typed-audit-atom, def:stage-a-horn-audit-schema, def:certified-closure-rejection-certificate, thm:horn-compilation-adequacy, thm:deterministic-certificate-soundness, thm:complete-obstruction, thm:coordinate-independence-by-horn-models, thm:verifier-adequacy-complexity, thm:current-byte-certified-audit, cor:referee-facing-novelty-horn, prop:non-duplication-route-quotient, def:canonical-stage-a-byte-manifest`
+
+  - **location:** main.tex:19349-19647
+
+  - **reason:** Current manuscript theorem-like source coverage block 22; covers 12 labelled environments from Typed audit atom; Stage-A Horn audit schema; Certified closure and rejection certificate; Horn compilation adequacy theorem. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `def:byte-to-atom-compiler, def:replayable-stage-a-certificate, thm:byte-to-atom-determinacy, thm:replay-kernel-soundness, thm:replay-kernel-completeness, thm:replayable-obstruction-adequacy, thm:current-byte-two-coordinate-audit, thm:fixed-replay-rgs-coordinate-exactness, thm:accepted-fixed-replay-rgs-pass-row-current-package, thm:post-qrgs-coordinate-independence, cor:stage-a-replay-kernel-software-surface, lem:maximal-qinv-qrgs-replay-closure`
+
+  - **location:** main.tex:19649-20094
+
+  - **reason:** Current manuscript theorem-like source coverage block 23; covers 12 labelled environments from Byte-to-atom compiler; Replayable Stage-A certificate; Byte-to-atom determinacy; Fixed Stage--A replay-projection soundness. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+- **label:** `thm:replay-kernel-foreground-closure, thm:canonical-finite-basis-replay-foreground-exactness, thm:cicm-public-surface-maximality, cor:five-challenged-interfaces-replay-foreground, thm:two-coordinate-foreground-maximality, cor:no-implementation-upgrade-from-fixed-replay, prop:stage-a-replay-route-quotient-preservation, thm:current-round-local-only-fixed-point-classifier, prop:six-challenged-coordinate-discharge-normal-form, thm:round-eight-ordered-support-tuple-closure`
+
+  - **location:** main.tex:20123-20914
+
+  - **reason:** Current manuscript theorem-like source coverage block 24; covers 10 labelled environments from Replay-kernel foreground closure; Canonical finite-basis replay foreground exactness; CICM public-surface maximality; Five challenged interfaces under the replay foreground. These are in scope as finite-record methodology, support-boundary, audit-calculus, source-interface, replay-kernel, case-row, or closure interfaces already present in main.tex.
+
+  - **required_action:** Retain only with the manuscript's bounded finite-record reading; do not read these labels as object-language BEDC closure, proof-assistant correctness, dynamic artifact semantics, external upload/archive equality, venue acceptance, or general implementation soundness unless a separate positive coordinate is added.
+
+
+## Missing In Scope Results
+
+- **label:** `missing:post-inventory-current-rerun-record`
+
+  - **location:** theorem_inventory.json; theorem_inventory.md; review_bundle/theorem_environment_extraction_run.log; review_bundle/FINAL_DIGESTS_SHA256.md
+
+  - **reason:** This inventory write changes the byte state. The current-byte closure theorems are only current after extractor, inventory-sync, source-interface, certificate-record, primary-claim, overlap/submission-order, stage_a_audit, and final digest generation are rerun against these exact bytes.
+
+  - **required_action:** Run the Stage-A verifier sequence in the directive order before claiming final current-byte closure.
+
+- **label:** `missing:fresh-formal-source-rebuild-or-axiom-purity-coordinate`
+
+  - **location:** scope_contract.json coordinate qsrc; main.tex source-interface sections
+
+  - **reason:** The scope contract marks qsrc negative. The manuscript has bounded source-interface extraction but no fresh Lean/BEDC rebuild or axiom-purity audit row for this package state.
+
+  - **required_action:** Keep qsrc negative unless a command-result row with source state, command, environment, exit code, log path, and checked predicate is added.
+
+- **label:** `missing:dynamic-artifact-semantic-validation-coordinate`
+
+  - **location:** scope_contract.json coordinate qart; main.tex artifact-boundary sections
+
+  - **reason:** The scope contract marks qart negative. Artifact rows are manifest/path and historical-limitation evidence, not dynamic semantic validation.
+
+  - **required_action:** Keep qart negative unless evaluator contract, artifact identity, command, environment, exit code, output manifest, digest binding, and semantic predicate are supplied.
+
+- **label:** `missing:external-upload-or-archive-equivalent-coordinate`
+
+  - **location:** scope_contract.json coordinate qext; support-surface sections
+
+  - **reason:** The scope contract marks qext negative. Local review_bundle paths and digests do not instantiate a venue upload receipt or archive-equivalent public byte-equality locator.
+
+  - **required_action:** Keep qext negative until an upload receipt or public locator plus byte-equality record is added.
+
+- **label:** `missing:upload-time-venue-or-acceptance-coordinate`
+
+  - **location:** scope_contract.json coordinate qven; venue-boundary sections
+
+  - **reason:** The scope contract marks qven negative. Dated local readiness does not prove upload-time compliance, acceptance, or proceedings publication.
+
+  - **required_action:** Keep qven negative until a live upload-time venue check, unchanged-rule bridge, receipt, or decision record is supplied.
+
+
+## Weak In Scope Core Results
+
+- **label:** `thm:presentation-compressed-interface, thm:six-role-publication-master-interface, thm:publication-safety-interface`
+
+  - **location:** main.tex:479-656; main.tex:14131-14278; main.tex around publication-safety interface
+
+  - **reason:** These are core support normal forms but remain conditional on record-gate soundness and finite submitted surfaces; titles can invite an overstrong reading.
+
+  - **required_action:** Preserve the conditional finite-record wording and route them through the replay-kernel foreground theorem rather than presenting them as end-to-end implementation soundness.
+
+- **label:** `thm:concrete-finite-script-implementation-soundness, cor:finite-script-rgs-instantiation-boundary, thm:assigned-gate-soundness-audit-boundary`
+
+  - **location:** main.tex implementation-boundary block
+
+  - **reason:** Script-level statements are useful but weak relative to general gate implementation soundness; they identify finite projection contracts only.
+
+  - **required_action:** Do not strengthen without a submitted implementation-audit coordinate and executable regression evidence.
+
+- **label:** `thm:deterministic-theorem-environment-extractor-boundary, thm:theorem-inventory-proofchecker-obstruction`
+
+  - **location:** main.tex theorem-inventory interface block
+
+  - **reason:** The theorem inventory machinery gives syntactic labelled-environment coverage, not semantic proof correctness or mathematical novelty.
+
+  - **required_action:** Use the inventory as a scope and syntactic coverage certificate only.
+
+- **label:** `audit:fresh-venue-record-criterion, audit:venue-submission-pack-gate, audit:command-run-boundary-inventory`
+
+  - **location:** main.tex audit-record environments
+
+  - **reason:** Audit-labelled interfaces are structurally important but are record conditions rather than independent mathematical theorems.
+
+  - **required_action:** Cite them as finite audit records and keep proof obligations tied to command logs or dated local-readiness files.
+
+
+## Proof Gaps
+
+- **label:** `proof-gap:stale-verifier-logs-after-inventory-write`
+
+  - **location:** review_bundle/*.log; review_bundle/FINAL_DIGESTS_SHA256.md
+
+  - **reason:** Existing verifier and digest outputs predate the newly written theorem_inventory files unless rerun after this stage.
+
+  - **required_action:** Rerun the exact Stage-A sequence and regenerate final digests.
+
+- **label:** `proof-gap:manual-source-interface-extraction-completeness`
+
+  - **location:** source_interface_record.json; review_bundle/source_snapshots/*.tex; main.tex bounded source-interface block
+
+  - **reason:** Completeness of imported source rows is bounded by manual snapshot and line-range checks; it is not a proof over the external repository.
+
+  - **required_action:** Keep the manual-bounded qualifier or add fetch/compare/build audit rows for stronger source claims.
+
+- **label:** `proof-gap:proof-environment-semantics-not-machine-checked`
+
+  - **location:** main.tex theorem-like environments
+
+  - **reason:** The TeX proof environments are syntactically present, including the five mandatory labels, but Stage A does not machine-check the mathematical semantics of prose proofs.
+
+  - **required_action:** Present this as CICM/workshop finite-record methodology; require a separate formalization pass for semantic proof checking.
+
+- **label:** `proof-gap:external-support-and-venue-state-can-change`
+
+  - **location:** support-surface and venue-boundary sections
+
+  - **reason:** Negative boundary statements about absent upload/archive/venue coordinates become stale if the package is later uploaded or the venue rules change.
+
+  - **required_action:** Refresh support, archive, and venue records immediately before submission or acceptance claims.
+
+- **label:** `proof-gap:presentation-only-routing-of-supplement-heavy-chain`
+
+  - **location:** submission_abstract.tex; main.tex reader map
+
+  - **reason:** The supplement contains hundreds of finite-record interfaces; reviewers need the reader map to distinguish the mandatory theorem package and replay-kernel foreground from ledger-only safeguards.
+
+  - **required_action:** Keep the compact dependency map and avoid moving ledger-only claims into the abstract as primary novelty.
+
+
+## Supporting Appendix Or Background
+
+- **label:** `def:automated-discovery-certified-theory-state, def:automated-discovery-automation-record, def:automated-discovery-pipeline-state, def:automated-discovery-genome-extractor, def:automated-discovery-score-certificate, def:automated-discovery-pipeline-transition, def:automated-discovery-mechanical-expansion, def:automated-discovery-genome-compression, def:automated-discovery-genome-recombination, def:automated-discovery-classifier-shift, def:automated-discovery-discovery-transition, def:automated-discovery-positive-discovery-transition`
+
+  - **location:** review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:18-165
+
+  - **reason:** Bundled source-snapshot theorem-like coverage block 1; supports the manuscript as pinned historical/source-interface evidence for automated discovery pipeline states, gates, lineage, scoring, demotion, and safety, not as a second primary article theorem chain.
+
+  - **required_action:** Keep cited through the review-bundle/source-snapshot boundary; any import into the primary route needs explicit bounded source-interface rows and citation to the pinned commit/snapshot.
+
+- **label:** `def:automated-discovery-claim, def:automated-discovery-claim-kinds, def:automated-discovery-well-formed-claim, def:automated-discovery-gate, def:automated-discovery-gate-demotion, thm:automated-discovery-dna-completeness-obligation, cor:automated-discovery-statement-code-insufficient, thm:automated-discovery-mechanical-not-discovery, thm:automated-discovery-compression-not-discovery, thm:automated-discovery-certificate-ledger-required, thm:automated-discovery-positive-implies-discovery, thm:automated-discovery-scored-claims-public-weights`
+
+  - **location:** review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:170-313
+
+  - **reason:** Bundled source-snapshot theorem-like coverage block 2; supports the manuscript as pinned historical/source-interface evidence for automated discovery pipeline states, gates, lineage, scoring, demotion, and safety, not as a second primary article theorem chain.
+
+  - **required_action:** Keep cited through the review-bundle/source-snapshot boundary; any import into the primary route needs explicit bounded source-interface rows and citation to the pinned commit/snapshot.
+
+- **label:** `thm:automated-discovery-gate-kind-sound, thm:automated-discovery-demotion-soundness, def:automated-discovery-lineage-ledger, def:automated-discovery-lineage-consistent-claim, thm:automated-discovery-lineage-dag, def:automated-discovery-potential, thm:automated-discovery-lowest-score-not-best-target, thm:automated-discovery-selection-favours-classifier-change, def:automated-discovery-unpaid-discovery-claim, thm:automated-discovery-no-unpaid-discovery, thm:automated-discovery-pipeline-safety, thm:automated-discovery-pipeline-theorem`
+
+  - **location:** review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:320-464
+
+  - **reason:** Bundled source-snapshot theorem-like coverage block 3; supports the manuscript as pinned historical/source-interface evidence for automated discovery pipeline states, gates, lineage, scoring, demotion, and safety, not as a second primary article theorem chain.
+
+  - **required_action:** Keep cited through the review-bundle/source-snapshot boundary; any import into the primary route needs explicit bounded source-interface rows and citation to the pinned commit/snapshot.
+
+- **label:** `references:Lean/LeanDojo/DraftSketchProve/AFP/Isabelle/ACMArtifactBadging/repeatability/DeepSeekProver/Llemma`
+
+  - **location:** references.bib
+
+  - **reason:** Classical and contemporary background literature anchors proof-assistant infrastructure, AI theorem-proving systems, formal-library maintenance, and artifact norms; these are not new results of the paper.
+
+  - **required_action:** Use as contextual citations and verify metadata/venue formatting before final submission.
+
+- **label:** `bedc-newmath-source`
+
+  - **location:** references.bib:1; submission_abstract.tex:119-132
+
+  - **reason:** Repository citation supports the bounded public-source locator and pinned source-interface context but not whole-repository semantic closure.
+
+  - **required_action:** Tie every source claim to commit/path/snapshot boundaries; require fresh rebuild or axiom-purity coordinates for stronger claims.
+
+- **label:** `review_bundle/primary_claim_inventory.json, review_bundle/submission_interface_map.json, source_interface_record.json, review_bundle/FINAL_DIGESTS_SHA256.md`
+
+  - **location:** review_bundle/; repository root support records
+
+  - **reason:** Machine-readable support surfaces for primary-claim classification, source-interface rows, verifier logs, and final digest binding.
+
+  - **required_action:** Synchronize after inventory edits and regenerate digest before treating current-byte closure as discharged.
+
+
+## Out Of Scope Strong Results
+
+- **label:** `out-of-scope:end-to-end-gate-implementation-soundness`
+
+  - **location:** main.tex implementation-boundary and extension-criterion blocks
+
+  - **reason:** Concrete program implementation soundness is a stronger coordinate not supplied by the current package.
+
+  - **required_action:** Keep as non-claim unless a separate implementation-verification package is created.
+
+  - **candidate_title:** Verified Gate Implementations for Finite-Record Publication Pipelines
+
+  - **source_contribution:** Stage A isolates the required fields for implementation upgrades: gate identity, specification, source state, input/output records, command metadata, digest binding, and checked predicate.
+
+  - **scope_mismatch:** The present CICM route is a methodology and fixed-replay finite-record certificate, not a verified-program paper.
+
+  - **independent_paper_rationale:** A software-verification paper could prove the Python gate programs satisfy formal specifications and regression fixtures.
+
+  - **needed_to_split:** formal gate specifications, program identity and source-state manifest, positive/negative regression fixtures, reproducible command logs, proof or high-coverage implementation audit
+
+- **label:** `out-of-scope:full-BEDC-formal-source-rebuild-and-axiom-purity`
+
+  - **location:** main.tex formal-source and source-interface blocks; submission_abstract.tex positioning
+
+  - **reason:** BEDC/newmath is used as a bounded source-interface instance; full BEDC closure and fresh Lean rebuild are outside this article.
+
+  - **required_action:** Keep qsrc negative and avoid complete BEDC theory exposition.
+
+  - **candidate_title:** Audited BEDC Source Theory and Lean Verification Boundary
+
+  - **source_contribution:** Stage A separates structured BEDC source, Lean-facing markers, rebuild commands, and finite substrate witnesses.
+
+  - **scope_mismatch:** The directive explicitly excludes a complete BEDC theory paper and fresh formal-source rebuild claim.
+
+  - **independent_paper_rationale:** A dedicated BEDC audit paper could include rebuild logs, axiom audits, marker drift checks, and object-language closure statements.
+
+  - **needed_to_split:** fresh Lean/BEDC build logs, axiom-purity audit, marker drift checker, formal statement of object-language closure, source-interface comparison against this package
+
+- **label:** `out-of-scope:dynamic-Rule110-GroundCompiler-semantic-validation`
+
+  - **location:** main.tex artifact-boundary block; review_bundle/case_snapshots
+
+  - **reason:** Rule110/GroundCompiler artifacts are finite witness and limitation snapshots only.
+
+  - **required_action:** Do not add dynamic artifact semantics to the current paper.
+
+  - **candidate_title:** Dynamic Artifact Validation for Rule110 and GroundCompiler Witnesses
+
+  - **source_contribution:** Stage A identifies the artifact-validation gate: evaluator contract, artifact identity, validator source/specification, source state, command, environment, exit code, log path, output manifest, and checked semantic predicate.
+
+  - **scope_mismatch:** Dynamic artifact validation is a separate mathematical software result, while this article uses artifacts as bounded case evidence.
+
+  - **independent_paper_rationale:** A split paper could focus on reproducible evaluator semantics and witness validation.
+
+  - **needed_to_split:** validator specification, fresh evaluator reruns, artifact manifests, semantic correctness argument, independent reproducibility record
+
+- **label:** `out-of-scope:venue-acceptance-or-publication-automation-success`
+
+  - **location:** scope_contract.md; submission_abstract.tex conclusion; main.tex venue-boundary block
+
+  - **reason:** Automated journal acceptance, upload receipt, proceedings status, and venue outcome are excluded and absent.
+
+  - **required_action:** Keep all venue statements at dated local-readiness or upload-time-check boundary only.
+
+  - **candidate_title:** Route-State Governance for Automated Publication Pipelines
+
+  - **source_contribution:** Stage A separates local readiness, upload-time compliance, receipt/archive coordinates, and acceptance.
+
+  - **scope_mismatch:** The target route is presentation-only/workshop methodology, not a claim that publication automation succeeds.
+
+  - **independent_paper_rationale:** A future process paper could analyze route ledgers, uploads, rule drift, and outcomes across submissions.
+
+  - **needed_to_split:** multi-route dataset, upload receipts, venue-rule tracking, decision/outcome records, ethical and policy framing
+
+
+## Split Candidates
+
+- **label:** `split:finite-record-certificate-calculus`
+
+  - **location:** main.tex finite verifier, extension criteria, terminal normal-form, and Horn audit blocks
+
+  - **reason:** The supplement contains a reusable calculus of certificate tuples, bad subrecords, stronger readings, extension budgets, Horn replay, and non-gluing.
+
+  - **required_action:** Keep only the interfaces needed by this article; split after stabilizing abstract definitions.
+
+  - **candidate_title:** A Finite-Record Certificate Calculus for Auditable Research Claims
+
+  - **source_contribution:** Stage A finds record surfaces, dispatch tables, certificate tuples, bad subrecords, upgrade coordinates, finite antichain bases, and obstruction bases.
+
+  - **scope_mismatch:** The present article is an AI-assisted formal-mathematics audit methodology with four cases, not a general audit-calculus paper.
+
+  - **independent_paper_rationale:** The calculus could be reusable across audit domains with cleaner axioms and examples.
+
+  - **needed_to_split:** minimal abstract definitions, proofs without local path constants, external examples, comparison with certifying algorithms, separate theorem numbering
+
+- **label:** `split:Stage-A-replay-kernel-software-paper`
+
+  - **location:** main.tex certified Horn audit calculus and stage-a replay kernel blocks
+
+  - **reason:** The fixed Horn schema, byte-to-atom compiler, replayable certificate, deterministic replay report, and current-byte RGS exactness could support a software-tool paper.
+
+  - **required_action:** Keep as foreground support here but do not claim general implementation soundness.
+
+  - **candidate_title:** A Proof-Carrying Stage-A Replay Kernel for Publication-Route Audits
+
+  - **source_contribution:** Stage A identifies typed audit atoms, Horn compilation adequacy, deterministic certificate soundness, replay determinacy, replay-kernel soundness/completeness, and two-coordinate foreground maximality.
+
+  - **scope_mismatch:** The current route uses the replay kernel to support a methodology paper; a tool paper would need implementation details and evaluation.
+
+  - **independent_paper_rationale:** The kernel has enough structure for a mathematical software contribution if paired with code, tests, and UX/evaluation.
+
+  - **needed_to_split:** public implementation description, test corpus, performance and complexity data, threat model, installation/replay instructions
+
+- **label:** `split:support-surface-fixed-points-and-archive-equivalence`
+
+  - **location:** main.tex support-surface invariants and post-inventory fixed-point blocks
+
+  - **reason:** Many process results address local support, archive equivalence, digest refresh, and post-inventory fixed points.
+
+  - **required_action:** Retain as audit ledger; do not expand the primary paper around packaging theory.
+
+  - **candidate_title:** Support-Surface Fixed Points and Archive Equivalence in Reproducible Submission Packages
+
+  - **source_contribution:** Stage A identifies exact inclusion, archive locators, digest-refresh invariants, ordered verifier tuples, and local-only boundaries.
+
+  - **scope_mismatch:** This is packaging/reproducibility theory beyond the compact workshop methodology note.
+
+  - **independent_paper_rationale:** It could support a reproducible-research tooling paper with multiple package examples.
+
+  - **needed_to_split:** general support-surface model, archive-equivalence tests, digest-refresh implementation, multiple submission-package cases, comparison with artifact badging norms
+
+- **label:** `split:automated-discovery-gate-calculus`
+
+  - **location:** review_bundle/source_snapshots/automated_theory_discovery_pipeline_calculus_3fb3d6a0641767388a401883062aa522ea0b397b.tex:18-464
+
+  - **reason:** The snapshot theoremizes automated discovery gates, scoring, demotion, and lineage more fully than this presentation-route audit paper needs.
+
+  - **required_action:** Keep only as supporting source evidence here; split if a standalone discovery-gate paper is desired.
+
+  - **candidate_title:** A Finite-Record Calculus for Automated Theory-Discovery Gates
+
+  - **source_contribution:** Stage A identifies a complete source-snapshot chain for certified theory states, automation records, discovery transitions, score certificates, public weights, lineage DAGs, demotion soundness, and pipeline safety.
+
+  - **scope_mismatch:** The present article is about theory-to-paper packaging and evidence boundaries, not a full theory of discovery scoring and lineage.
+
+  - **independent_paper_rationale:** The definitions and theorem chain are coherent enough to support an independent methodological paper on discovery gating.
+
+  - **needed_to_split:** extract the calculus into a standalone manuscript, add examples beyond this local pipeline, add related work on automated discovery and claim triage, separate discovery-gate soundness from route governance
+
+
+## Irrelevant Or Remove
+
+- **label:** `irrelevant:complete-BEDC-theory-exposition`
+
+  - **location:** research_directive.md; submission_abstract.tex positioning
+
+  - **reason:** A full BEDC theory exposition is explicitly out of scope; BEDC is only the structured-source instance.
+
+  - **required_action:** Avoid adding BEDC object-theory theorems except as bounded context.
+
+- **label:** `irrelevant:general-AI-safety-or-Lean-hammer-claims`
+
+  - **location:** research_directive.md; references.bib
+
+  - **reason:** The paper is not a general AI safety paper or a new theorem-proving/hammer method.
+
+  - **required_action:** Keep related work scoped to audit methodology and proposal/evidence boundaries.
+
+- **label:** `irrelevant:automated-venue-acceptance-claims`
+
+  - **location:** scope_contract.md; submission_abstract.tex conclusion
+
+  - **reason:** Automated venue acceptance is out of scope and contradicted by qven negative status.
+
+  - **required_action:** Block wording implying acceptance, upload, or proceedings inclusion.
+
+- **label:** `irrelevant:single-primitive-universality-hierarchy-memory`
+
+  - **location:** not present in current manuscript source
+
+  - **reason:** Any EML/Zeckendorf/Richardson/Hankel-Prony hierarchy material belongs to a different paper and is not part of this route.
+
+  - **required_action:** Do not import those results into this manuscript.
+
+
+## Naive Truncation Risks
+
+- **label:** `risk:digest-current-byte-invariance-across-inventory-edits`
+
+  - **location:** theorem_inventory.json; theorem_inventory.md; review_bundle/FINAL_DIGESTS_SHA256.md
+
+  - **reason:** Post-inventory fixed points are byte-sensitive; editing inventory without regenerating logs/digests creates a stale invariant.
+
+  - **required_action:** Write inventory, rerun verifiers, regenerate digest, then assert current-byte closure.
+
+- **label:** `risk:line-range-source-interface-vs-full-source-semantics`
+
+  - **location:** main.tex bounded source-interface block; source_interface_record.json
+
+  - **reason:** Line-range extraction is stable only for recorded snapshot fields, not repository movement or semantic completeness.
+
+  - **required_action:** Attach pinned commit/snapshot/line ranges to every imported label and require fresh source audits for stronger claims.
+
+- **label:** `risk:historical-case-snapshots-vs-fresh-behavior`
+
+  - **location:** main.tex case-witness and audit-boundary blocks; review_bundle/case_snapshots
+
+  - **reason:** Historical snapshots do not prove current daemon behavior, overlap state, or artifact semantics.
+
+  - **required_action:** Require fresh command-run rows for current behavior claims.
+
+- **label:** `risk:local-support-paths-vs-external-submitted-support`
+
+  - **location:** main.tex support-surface invariants; scope_contract.json qext
+
+  - **reason:** Local paths and digests do not automatically descend to public archive or venue-upload support.
+
+  - **required_action:** Distinguish local inclusion, upload receipt, and archive-equivalent locator.
+
+- **label:** `risk:finite-witness-manifests-vs-dynamic-artifact-semantics`
+
+  - **location:** main.tex formal/artifact boundaries; scope_contract.json qart
+
+  - **reason:** Manifest rows are not invariant under evaluator changes or dynamic reruns.
+
+  - **required_action:** Keep manifest evidence separate from evaluator-contract command-run semantics.
+
+- **label:** `risk:dated-venue-readiness-vs-actual-submission-time-compliance`
+
+  - **location:** main.tex venue-boundary block; review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_*.md
+
+  - **reason:** Venue facts are time-dependent; dated readiness is not invariant at upload time.
+
+  - **required_action:** Rerun venue/bibliography checks at submission time or add an unchanged-rule bridge.
+
+
+## Journal Style Gaps
+
+- **label:** `style:two-page-CICM-presentation-fit`
+
+  - **location:** submission_abstract.tex; main.tex supplement
+
+  - **reason:** The primary artifact is coherent but the large supplement can overwhelm the presentation claim.
+
+  - **required_action:** Keep the primary article compact and route the supplement as audit evidence.
+
+- **label:** `style:bibliography-and-venue-freshness`
+
+  - **location:** references.bib; review_bundle/VENUE_BIBLIOGRAPHY_LIVE_CHECK_2026-06-13.*
+
+  - **reason:** Final submission needs live venue/bibliography verification; current checks are dated local-readiness records.
+
+  - **required_action:** Verify official route, LNCS formatting, and bibliography metadata before submission.
+
+- **label:** `style:terminology-density`
+
+  - **location:** submission_abstract.tex; main.tex overall
+
+  - **reason:** Finite-record terminology is internally defined but dense for a workshop audience.
+
+  - **required_action:** Preserve a short reader map and avoid expanding the abstract with ledger-only terms.
+
+- **label:** `style:claim-hierarchy-clarity`
+
+  - **location:** submission_abstract.tex abstract and conclusion; main.tex reader map
+
+  - **reason:** The central contribution is conditional audit methodology and fixed replay-kernel support, not complete formal verification.
+
+  - **required_action:** Repeat the conditional/non-claim boundary near the main theorem and conclusion.
+
+- **label:** `style:artifact-availability-statement`
+
+  - **location:** submission_abstract.tex positioning; review_bundle/REVIEW_BUNDLE_MANIFEST.json
+
+  - **reason:** The package relies on local supplement paths and review_bundle files.
+
+  - **required_action:** Provide final exact supplement upload, archive/branch locator, or explicit local-only bundle statement.
+
+- **label:** `style:proof-style-vs-audit-record-style`
+
+  - **location:** main.tex overall
+
+  - **reason:** Many proofs are deterministic record-unpacking arguments, which may read as over-formalized prose.
+
+  - **required_action:** Frame the supplement as an auditable ledger with formalized interfaces.
+
+
