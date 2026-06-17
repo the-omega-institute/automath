@@ -107,6 +107,30 @@ tab resumes polling without a manual refresh.
 | `/result/<id>` | GET | Poll for a completed result |
 | `/status` | GET | Inspect queue and browser-agent state |
 
+## Supervisor & Watchdog
+
+The pipeline supervisor (`pipeline_supervisor.py`) runs inside the WSL distro
+`NyxIDUbuntu2404Cli` (cwd `/mnt/d/omega/automath`) and self-respawns the inner
+`oracle_pipeline.py` loop. It does not survive its own death or a WSL shutdown,
+so a Windows Scheduled Task fires `pipeline_watchdog.sh` every 5 minutes:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/chatgpt-oracle/register_watchdog_task.ps1
+```
+
+`pipeline_watchdog.sh` is idempotent: it relaunches the supervisor only when the
+pidfile process is genuinely dead, and the supervisor's own singleton guard makes
+any double-launch a harmless no-op. Running the watchdog through `wsl.exe` also
+boots the distro if it was stopped, covering both "supervisor crashed" and "WSL
+stopped". Edit `SUPERVISOR_ARGS` in the script to change scope (e.g. `--all`
+instead of a single `--paper`). Remove the task with
+`Unregister-ScheduledTask -TaskName AutomathPipelineWatchdog -Confirm:$false`.
+
+Note: `pipeline_health.py` run from Windows/Git-Bash reports the WSL-hosted
+supervisor as `alive=false` (separate PID namespace) — a false negative. Confirm
+liveness from inside the distro: `wsl -d NyxIDUbuntu2404Cli -- pgrep -af
+pipeline_supervisor`.
+
 ## Health Check
 
 Use the read-only health summarizer when the pipeline appears idle:
