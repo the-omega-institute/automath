@@ -120,7 +120,11 @@ q_{\mathrm{ext}},q_{\mathrm{ven}}\}
 \]
 be the six-coordinate support alphabet.  The submitted Stage--A manifest rows
 are compiled only at the artifact level; the public theorem uses the finite base
-atom set \(A\) displayed below.
+atom set \(A\) displayed below.  The equality between the artifact bytes
+\artifactpath{certificates/stage_a_horn_schema.json},
+\artifactpath{certificates/stage_a_manifest.json}, and these displayed objects is
+not inferred from the PDF; it is the separate digest-bound parser/compilation
+claim of Lemma~\ref{lem:stage-a-parser-compilation}.
 \begin{center}
 \small
 \begin{tabularx}{0.94\linewidth}{@{}L{0.12\linewidth}Y@{}}
@@ -472,7 +476,8 @@ acceptance uses no first-row, last-row, priority, or majority conflict
 resolution.  Adding any extra row to an already accepted certificate destroys
 \(P_3\): if its gate name is in \(G_C\) it creates multiplicity \(2\) for that
 required gate, and if its gate name is outside \(G_C\) it creates a row outside
-the required gate set.
+the required gate set.  Thus this lemma is the local uniqueness repair for
+\(P_3\), not a coverage-only condition.
 \end{lemma}
 
 \begin{proof}
@@ -492,7 +497,9 @@ contradictory rows cannot be ignored while preserving acceptance.
 \begin{lemma}[E10 is exactly the command-run boundary clause]
 \label{lem:e10-command-boundary-b3}
 Let \(e\) be a parsed ledger entry whose evidence level is
-\(\ell=\textsf{command\mbox{-}run}\), and let \(B=e[\texttt{boundary}]\).
+\(\ell=\textsf{command\mbox{-}run}\), and let \(B=e[\texttt{boundary}]\).  Use
+the canonical field name \texttt{source\_commit}; a branch using
+\texttt{source\_state} would not be this lemma's E10 branch.
 Then
 \[
 \operatorname{NoE10}(e)
@@ -540,7 +547,11 @@ rejecting preconditions rather than accepted certificates.  Let
 relative path under the submitted paper root, is not a symlink, is a regular
 file, and is bound by an exact SHA--256 row in the submitted digest ledger.  This
 is a byte-binding predicate, not a membership predicate.  Membership is supplied
-only by the finite rows below.
+only by the finite rows below.  The theorem is reviewer-executable only together
+with the ordinary submitted files at the relative paths named in
+Tables~\ref{tab:replay-artifact-manifest}--\ref{tab:artifact-submission-checklist}
+and the SHA--256 rows printed in Table~\ref{tab:printed-sha-ledger}; the PDF text
+alone is not a replay oracle.
 
 For a parsed ledger entry with evidence surface \(E\), schema row \(\Sigma\),
 review-bundle manifest dictionary \(M\), and submitted case-row manifest \(C\),
@@ -907,7 +918,9 @@ Use the same TCB and digest table as
 Lemma~\ref{lem:stage-a-parser-compilation}.  The byte-bound replay of
 \artifactpath{certificates/stage_a_horn_schema.json} against
 \artifactpath{certificates/stage_a_manifest.json} computes the same closure as
-Theorem~\ref{thm:typed-verified-core-hierarchy}.  Consequently the executable
+Theorem~\ref{thm:typed-verified-core-hierarchy}; this corollary depends on those
+digest-bound JSON bytes, not on extracting rules or atoms from the PDF.
+Consequently the executable
 Stage--A replay accepts exactly
 \[
 \qlex=q_{\mathrm{rgs}}=\mathsf{true},\qquad
@@ -1162,7 +1175,10 @@ Use the TCB in Tables~\ref{tab:replay-tcb} and
 relative paths in Tables~\ref{tab:replay-artifact-manifest} and
 \ref{tab:artifact-submission-checklist} as ordinary non-symlink files, and
 suppose their raw bytes have the SHA--256 values printed in
-Table~\ref{tab:printed-sha-ledger}.  Then the submitted bytes parse to the
+Table~\ref{tab:printed-sha-ledger}.  This lemma is the byte-binding step missing
+from a PDF-only reading: it links the submitted bytes, not just the displayed
+path names, to the finite atoms, rules, checker predicates, and record rows
+used below.  Then the submitted bytes parse to the
 following finite objects used by Theorems~\ref{thm:typed-verified-core-hierarchy}
 and~\ref{thm:certificate-record-checker-spec}.
 \begin{enumerate}[label={\(\mathrm{B}_{\arabic*}\):}]
@@ -1691,6 +1707,9 @@ r:=n;\quad e_j:=0\text{ for all }j;\\
 
 \begin{lemma}[Executable Zeckendorf normalizer]
 \label{lem:zeckendorf-totality}
+\(\NF\) is the multi-iteration greedy algorithm displayed above: the
+\textbf{return} line is outside the \textbf{while} block, and the loop invariant
+used in the proof is the invariant stated at the start of the proof below.
 \(\NF\), \(\Val\), \(\Add\), and \(\Mul\) are total on their stated unbounded
 domains.  For each \(m\), \(\Val_m^{-1}\), \(\Add_m\), and \(\Mul_m\) are total
 as maps into \(X_m\cup\{\bot_m\}\), and they return \(\bot_m\) exactly on
