@@ -30,6 +30,7 @@ REQUIRED_DIGEST_PATHS = {
     "certificates/stage_a_horn_schema.json",
     "certificates/stage_a_horn_audit_certificate.json",
     "certificates/stage_a_replay_report.json",
+    "certificates/stage_a_replay_environment.json",
     "certificates/replay_stage_a_audit.py",
     "certificates/replay_case_rows.py",
     "certificates/case_rows_expected.json",

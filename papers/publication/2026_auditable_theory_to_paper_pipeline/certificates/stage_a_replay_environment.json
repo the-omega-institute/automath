@@ -1,0 +1,80 @@
+{
+  "schema_version": "stage-a-replay-environment-v1",
+  "descriptor_kind": "equivalent-machine-readable-replay-descriptor",
+  "purpose": "Pinned descriptor for the finite Stage-A replay commands. This descriptor is part of the submitted replay archive and is digest-bound by certificates/stage_a_digest_table.json plus the outer printed ledger.",
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "certificates/replay_stage_a_audit.py"
+      ],
+      "working_directory": "submitted-paper-root"
+    },
+    {
+      "argv": [
+        "python",
+        "certificates/replay_case_rows.py"
+      ],
+      "working_directory": "submitted-paper-root"
+    }
+  ],
+  "interpreter": {
+    "implementation": "CPython",
+    "version": "3.10.11",
+    "python_vv": "Python 3.10.11 (tags/v3.10.11:7d4cc5a, Apr 5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+    "required_standard_library_modules": [
+      "hashlib",
+      "json",
+      "os",
+      "pathlib",
+      "stat",
+      "subprocess",
+      "sys"
+    ]
+  },
+  "filesystem_contract": {
+    "root": "submitted-paper-root",
+    "path_syntax": "POSIX-style relative manifest strings with forward slashes",
+    "reject_absolute_paths": true,
+    "reject_dot_dot_segments": true,
+    "reject_backslashes": true,
+    "root_resolution": "Path(root).resolve(strict=True)",
+    "candidate_resolution": "(R / s).resolve(strict=True)",
+    "containment_test": "p.is_relative_to(R)",
+    "symlink_rejection": "reject when Path.lstat() reports a symbolic link at the final directory entry",
+    "ordinary_file_requirement": "Path.lstat() final entry must be a regular file",
+    "excluded_inputs": [
+      "network mounts",
+      "FUSE mounts",
+      "overlay filesystems",
+      "archive-mounted filesystems",
+      "mutable virtual filesystems",
+      "case-folding aliases that identify two distinct manifest strings",
+      "hard-link aliases outside the submitted root"
+    ]
+  },
+  "json_contract": {
+    "byte_decoding": "utf-8-sig",
+    "parser": "json.loads",
+    "array_order": "preserved",
+    "object_duplicate_key_policy": "last parsed value retained by CPython json",
+    "parse_failure": "reject"
+  },
+  "digest_contract": {
+    "algorithm": "sha256",
+    "implementation": "hashlib.sha256(data).hexdigest()",
+    "hex_case": "lowercase",
+    "comparison": "exact string equality"
+  },
+  "host_provenance_observed_not_normative": {
+    "observed_platform": "Windows-10-10.0.26200-SP0",
+    "observed_filesystem": "local NTFS worktree",
+    "normative_status": "provenance only; replay acceptance depends on this descriptor and byte equality, not on an unrecorded local host"
+  },
+  "non_claims": [
+    "This descriptor is not a proof of CPython correctness.",
+    "This descriptor is not a proof of operating-system or hardware correctness.",
+    "This descriptor is not a clean-machine reproducibility theorem.",
+    "This descriptor is not a container, Nix, or Guix derivation correctness theorem."
+  ]
+}
