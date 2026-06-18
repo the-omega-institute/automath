@@ -36,6 +36,9 @@
 \newcommand{\Eq}{\mathsf{Eq}}
 \newcommand{\Norm}{\mathsf{Norm}}
 \newcommand{\PointerOK}{\mathsf{PointerOK}}
+\newcommand{\ScriptOK}{\mathsf{ScriptOK}{}}
+\newcommand{\DigestOK}{\mathsf{DigestOK}{}}
+\newcommand{\ReplayOK}{\mathsf{ReplayOK}{}}
 \newcommand{\qlex}{q_{\mathrm{lex}}}
 
 \title{Publication-Coordinate Design Patterns and Finite Checkers for Generated Formal-Mathematics Artifacts}
@@ -50,13 +53,21 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 
 \begin{abstract}
 Generated formal-mathematics artifacts need a publication interface that states
-which finite records support which public claims.  We present a
-publication-coordinate design pattern and finite checker specification for a
-concrete \emph{newmath}/\emph{automath} theory-to-paper package.  The article is
-not an evaluation of tool performance, a formalization-success report, or a
-broad mathematical result; it is a finite replay and checker-boundary
-specification.  The public claim is intentionally narrow: a submitted finite
-checker/replay package accepts exactly two artifact-level coordinates.  The
+which finite records support which public claims.  We present a reusable
+publication-coordinate route schema, then instantiate it as a finite checker
+specification for a concrete \emph{newmath}/\emph{automath} theory-to-paper
+package.  The reusable part is the separation between public claim coordinates,
+digest-bound evidence surfaces, gate rows, pointer admissibility, and human
+promotion boundaries; the package-specific part is the particular finite replay
+surface checked here.  The article is not an evaluation of tool performance, a
+formalization-success report, or a broad mathematical result; it is a finite
+checker-boundary specification with a conditional replay instantiation.  The
+public claim for the current package is intentionally narrow: if the separately
+named support archive is supplied with the byte identities and stable locator
+required in Section~\ref{sec:replay-artifact-boundary}, then its finite
+checker/replay package accepts exactly two artifact-level coordinates.
+In a PDF-only submission, the same text is only the displayed finite
+specification and not an executable replay oracle.  The
 first is the public coordinate \(\qlex\), whose legacy artifact spelling is
 \(\texttt{qinv}\); it is read here only as lexical environment-token coverage
 for the artifact appendix's declared five raw \LaTeX{} environment-token names,
@@ -110,6 +121,78 @@ denotes the lexical environment-token coordinate; the submitted JSON and Horn
 files retain the byte-level legacy atom name \texttt{qinv}.  Thus exact artifact
 tables may print \texttt{qinv}, but the coordinate's public mathematical name and
 meaning are lexical, not inventory-theoretic.
+
+\paragraph{Reusable route schema.}
+The reusable design pattern is not the surrounding project history.  It is the
+following finite route from a proposed public assertion to a bounded publication
+claim:
+\begin{equation}
+\tag{RouteSchema}
+\begin{array}{c}
+\text{proposed public assertion }c\\
+\downarrow\\
+\text{claim-kind set }K\text{ and declared coordinate vector }Q_c\\
+\downarrow\\
+\text{finite evidence surface }E=(E_{\mathrm{atom}},E_{\mathrm{path}})\\
+\downarrow\\
+\text{gate rows }R\text{ with }\PointerOK(u,E,M,S)\text{ evidence pointers}\\
+\downarrow\\
+\text{human or route boundary }H\text{ and command boundary }B\\
+\downarrow\\
+\text{accepted finite predicate }\Acc_{\Gamma}(c,C)\text{ and public claim}
+\end{array}
+\end{equation}
+Each arrow is a finite projection: it either records an explicit coordinate or
+rejects a stronger reading that lacks the required coordinate.  The schema is
+therefore portable across artifact-producing projects, while every instantiated
+claim remains relative to its own manifest \(M\), submitted surface \(S\), gate
+dispatch table \(\Gamma\), and certificate record \(C=(K,\ell,E,H,R,D,B)\).  It
+does not say that a generated artifact is mathematically correct merely because a
+record exists; it says which public reading the record is allowed to support.
+
+\begin{figure}
+\centering
+\small
+\begin{tabularx}{0.96\linewidth}{@{}L{0.23\linewidth}Y@{}}
+\toprule
+Schema coordinate & Portable meaning \\ \midrule
+Public coordinate & The exact assertion being offered to the reader, such as
+lexical coverage, replayed finite closure, fresh source build, artifact-semantic
+validation, archive identity, or venue state.\\
+Evidence surface & A finite typed list of non-path atoms and digest-bound paths;
+arbitrary files under the working directory are not promoted by existence.\\
+Gate row & A deterministic pass/fail row whose pointer satisfies
+\(\PointerOK\) against the typed evidence, manifest rows, table labels, or
+submitted snapshot rows.\\
+Boundary row & A human-promotion, route, command-run, archive, or venue boundary
+that states which stronger readings are still absent.\\
+Checker result & A finite accept/reject vector for the declared coordinates,
+not a semantic theorem about unlisted artifacts or live services.\\
+\bottomrule
+\end{tabularx}
+\caption{General publication-coordinate schema used by this paper.}
+\label{fig:general-route-schema}
+\end{figure}
+
+As a non-self-referential instance, consider a separate paper whose appendix is a
+program-generated table of \(500\) small graph obstructions.  A conservative
+publication-coordinate certificate could assert only
+\[
+(\text{appendixTableLexicalCoverage},\text{tableDigestReplay})=(\mathsf{true},
+\mathsf{true})
+\]
+and leave
+\(\text{graphIsomorphismMinimality}\), \(\text{freshGeneratorRun}\), and
+\(\text{archiveUpload}\) false.  Its evidence surface would name the appendix
+\TeX{} file, the generator output CSV, a digest table for those two paths, and a
+gate row saying that every displayed obstruction row has a matching CSV row under
+the recorded SHA--256 values.  That certificate would let the article say
+``the displayed table is byte-linked to the submitted generator output''; it
+would not let the article say that the obstruction list is complete, minimal, or
+freshly regenerated unless new finite rows for those stronger coordinates were
+added.  This graph-table example is not an input to the current replay theorem;
+it illustrates the schema in Figure~\ref{fig:general-route-schema} outside the
+present package.
 
 \begin{theorem}[Self-contained finite Horn replay]
 \label{thm:typed-verified-core-hierarchy}
@@ -249,10 +332,25 @@ archive-equivalent byte-equality records.  Local files, inventory rows, and
 digest rows do not promote themselves into those coordinates.
 
 \section{Replay artifact boundary}
-The finite replay package is reviewer-executable at the artifact level.  Its
-support files are listed in Table~\ref{tab:replay-artifact-manifest}.  The
-review commands are displayed separately so their path tokens do not carry
-mathematical content.
+\label{sec:replay-artifact-boundary}
+This section separates the finite specification printed in the article from an
+executable artifact instantiation.  The PDF names the required files, digests,
+commands, and scope restrictions, but the PDF alone is not a replay oracle and
+does not contain the bytes being checked.  The replay claim is therefore
+conditional: it is instantiated only when a review package supplies every file in
+Tables~\ref{tab:replay-artifact-manifest}--\ref{tab:artifact-submission-checklist}
+as ordinary submitted files at the displayed relative paths, supplies the
+matching SHA--256 rows in Table~\ref{tab:printed-sha-ledger}, supplies a
+stable artifact locator row as specified in
+Table~\ref{tab:artifact-locator-status}, and either runs on the reference
+\texttt{python -VV}/Windows/NTFS environment in Table~\ref{tab:replay-tcb} or
+includes the container, Nix, Guix, or equivalent descriptor required there.
+Without those non-PDF files and the pinned replay-environment row, this article
+asserts only the finite checker specification and the displayed mathematical Horn
+calculation.
+
+The conditional review commands are displayed separately so their path tokens do
+not carry mathematical content.
 \begin{center}
 \small
 \begin{tabularx}{0.93\linewidth}{Y}
@@ -260,58 +358,93 @@ mathematical content.
 \artifactcmd{python}{certificates/replay_case_rows.py}
 \end{tabularx}
 \end{center}
-The first command checks the digest rows, compiles manifest bytes to typed atoms,
-forward-chains the fixed Horn schema, validates certificate DAGs, and compares
-the recomputed six-coordinate vector with the replay report.  The second command
+The first command checks the rows in the inner no-self digest table, rejects an
+attempted row for \artifactpath{certificates/stage_a_digest_table.json}, compiles
+manifest bytes to typed atoms, forward-chains the fixed Horn schema, validates
+certificate DAGs, and compares the recomputed six-coordinate vector with the
+replay report.  It does not compute the outer printed digest-table anchor in
+Table~\ref{tab:printed-sha-ledger}; that row is an archive-review condition on
+the submitted digest-table bytes.  The second command
 reconstructs the four printed historical case rows from the review bundle and
 the expected-row JSON file in Table~\ref{tab:replay-artifact-manifest}.  The
 eligible case universe is closed by the fixed compiler case set in that script:
 Newmath intake isolation, upper-fibers overlap blocking, fake-extension
 blocking, and Rule110 limitation disclosure.  A manifest row is eligible only if
 its case name is in that set, its local provenance list and submitted snapshot
-list have the same length, every snapshot path is a relative path under the
-submitted paper root, every snapshot exists, and its boundary declares
-historical or path-verified scope.  The same command also runs a negative
-control: a false fifth row claiming Rule110 dynamic semantic validation from the
-limitation snapshot is rejected by the same case-set verifier.  These commands
-check finite records only; they are not live reruns of the original pipelines.
+list have the same length, every snapshot path passes the relative-root,
+\texttt{resolve(strict=True)}, \texttt{is\_relative\_to}, ordinary-file,
+\texttt{lstat()} non-symlink, and SHA--256 checks of
+Tables~\ref{tab:replay-tcb}--\ref{tab:replay-byte-binding}, and its boundary
+declares historical or path-verified scope.  The same command also runs a
+negative control: a false fifth row claiming Rule110 dynamic semantic validation
+from the limitation snapshot is rejected by the same case-set verifier.  These
+commands check finite records only; they are not live reruns of the original
+pipelines.
 
 \subsection{Trusted computing base for replay}
 \label{subsec:replay-tcb}
 The replay theorem is conditional on a deliberately small trusted computing
-base.  The paper does not formalize this base; it names it so that the executable
-claim has a definite boundary.
+base.  The paper does not formalize this base; it names it so that any supplied
+artifact instantiation has a definite boundary.  Every row in
+Tables~\ref{tab:replay-tcb} and~\ref{tab:replay-byte-binding} is an assumption
+of the artifact-instantiated replay reading, not a theorem proved from the PDF
+or from Python source inspection.
 \begin{table}
 \caption{Trusted computing base for parser and filesystem semantics.}
 \label{tab:replay-tcb}
-\small
+\scriptsize
 \begin{tabularx}{\linewidth}{L{0.22\linewidth}Y}
 \toprule
 Component & Assumed semantics and rejection policy \\ \midrule
-Interpreter & CPython \(3.10\) or later, with the standard-library modules
-\texttt{json}, \texttt{pathlib}, \texttt{hashlib}, \texttt{subprocess},
-\texttt{sys}, and \texttt{os}.  The TCB includes those documented runtime
-semantics.  No theorem below proves Python, the host kernel, process scheduling,
+Interpreter and reference host & The reference replay environment is pinned by
+the exact \texttt{python -VV} transcript
+\(\texttt{Python 3.10.11}\),
+\(\texttt{tags/v3.10.11:7d4cc5a}\),
+\(\texttt{Apr 5 2023 00:38:17}\), and
+\(\texttt{MSC v.1929 64 bit (AMD64)}\).
+The observed host for that transcript is
+\texttt{Windows-10-10.0.26200-SP0} on a local NTFS worktree, with ordinary
+case-preserving path names and no network, FUSE, overlay, archive-mounted, or
+mutable virtual filesystem inputs.  The TCB includes CPython \(3.10.11\) and the
+standard-library modules \texttt{json}, \texttt{pathlib}, \texttt{hashlib},
+\texttt{subprocess}, \texttt{sys}, and \texttt{os} under this host path model.
+No theorem below proves Python, the host kernel, process scheduling, NTFS,
 or hardware correctness.\\
+\addlinespace
+Independent replay descriptor & A reviewer who reruns outside the reference host
+must supply an explicit environment descriptor for the submitted archive: a
+container recipe, a Nix flake/derivation, a Guix manifest, or an equivalent
+machine-readable descriptor pinning the interpreter build, operating-system
+interface, filesystem assumptions, and command working directory.  Such a
+descriptor is a reproducibility aid and a review input; it is not itself a
+clean-machine-reproducibility theorem, a Nix/Guix correctness theorem, or a
+Software Heritage archival-identity row.\\
 \addlinespace
 JSON decoding & Each JSON input is read as raw bytes, decoded as
 \texttt{utf-8-sig}, and parsed by \texttt{json.loads}.  Arrays retain file
 order; objects are the finite dictionaries returned by the parser; strings are
 Unicode strings; \texttt{null} maps to \texttt{None}; and if an object repeats a
 key, the retained value is the parser's last value for that key.  Missing files
-and parse failures reject the executable claim.\\
+and parse failures reject the artifact-instantiated claim.\\
 \addlinespace
-Filesystem root & All artifact paths are interpreted relative to the submitted
-paper root.  A path is admissible only if it is a relative POSIX-style manifest
-string, its normalized parts contain neither an absolute-root component nor
-\texttt{..}, and the resolved file lies under that root.  The finite atom
-compiler uses the normalized relative string, not a machine-specific absolute
-path.\\
+Filesystem root and normalization & All artifact paths are interpreted relative
+to the submitted paper root \(R\).  The root is first fixed as
+\texttt{Path(root).resolve(strict=True)}.  A candidate manifest string \(s\) is
+admissible only when it is a relative POSIX-style string, its parsed parts contain
+neither an absolute-root component nor \texttt{..}, and the candidate
+\texttt{p=(R / s).resolve(strict=True)} satisfies \texttt{p.is\_relative\_to(R)}
+in the Python \(3.10.11\) \texttt{pathlib} sense.  The finite atom compiler uses
+the original normalized POSIX relative string after these checks, not a
+machine-specific absolute path.\\
 \addlinespace
-Symlinks and aliases & Symlinked inputs are rejected.  The replay scripts may
-read only ordinary files under the submitted root.  Hard-link aliasing outside
-the root, case-folding aliases, network mounts, and mutable virtual filesystems
-are outside the accepted replay model.\\
+Symlinks and aliases & Symlinked inputs are rejected before reading bytes:
+for every accepted file path the parent chain is resolved under \(R\), the final
+directory entry is checked by \texttt{Path.lstat()}, and the mode must not be a
+symbolic link and must denote a regular file.  The replay scripts may read only
+ordinary non-symlink files under the submitted root.  Hard-link aliasing outside
+the root, case-folding aliases that would make two distinct manifest strings
+resolve to the same byte object, network mounts, archive mounts, and mutable
+virtual filesystems are outside the accepted replay model.\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -324,11 +457,13 @@ are outside the accepted replay model.\\
 \toprule
 Component & Assumed semantics and rejection policy \\ \midrule
 \addlinespace
-Existence and bytes & File existence means \texttt{pathlib.Path.exists()} after
-the relative-path check, followed by ordinary-file and non-symlink checks where
-the replay code reads bytes.  The bytes hashed or parsed are exactly the bytes
-returned by \texttt{Path.read\_bytes()}; there is no newline conversion, macro
-expansion, archive unpacking, or \TeX{} interpretation.\\
+Existence and bytes & File existence means successful
+\texttt{resolve(strict=True)} after the relative-root check, followed by the
+\texttt{is\_relative\_to(R)} containment test and the \texttt{lstat()} ordinary
+non-symlink file test above.  Bare \texttt{Path.exists()} is not an evidence
+predicate.  The bytes hashed or parsed are exactly the bytes returned by
+\texttt{Path.read\_bytes()} for that checked path; there is no newline
+conversion, macro expansion, archive unpacking, or \TeX{} interpretation.\\
 \addlinespace
 Digest algorithm & Every digest row means
 \texttt{hashlib.sha256(data).hexdigest()} on those raw bytes: SHA--256 over the
@@ -348,16 +483,18 @@ rejects the command-run coordinate.  The transcript is evidence only for the
 printed finite predicate of that script.\\
 \addlinespace
 PDF binding & The PDF is not used as an executable byte oracle.  The theorem
-statements bind to artifact bytes by naming the manifest rows in
-Table~\ref{tab:replay-artifact-manifest}, the TCB convention in this table, and
-the SHA--256 rows in
-\artifactpath{certificates/stage_a_digest_table.json}.  A current-byte theorem
-claim is accepted only when the replay script first hashes every required
-replay-support file named by that digest table, compares those hashes with the
-printed rows other than the non-self-binding digest-table row, and then compiles
-atoms from those same digest-checked manifest records.  Recompiling the PDF after
-any artifact-byte change does not preserve the claim unless a new digest/replay
-tuple is supplied.
+statements use a two-level manifest convention.  The inner executable manifest is
+\artifactpath{certificates/stage_a_digest_table.json}; it contains no row for
+itself and is the only digest table read by the replay script.  The outer anchor
+is the printed ledger row in Table~\ref{tab:printed-sha-ledger} giving the
+SHA--256 of that digest-table file.  A current-byte theorem claim is accepted
+only when the replay script first hashes every required replay-support file named
+by the inner no-self digest table, compares those hashes with the table rows, and
+then compiles atoms from those same digest-checked manifest records.  The outer
+printed row lets a reviewer identify the digest-table bytes supplied with the
+paper, but it is not an executable self-check and is not an additional accepted
+input atom.  Recompiling the PDF after any artifact-byte change does not preserve
+the claim unless a new digest/replay tuple is supplied.
 \\
 \bottomrule
 \end{tabularx}
@@ -384,16 +521,42 @@ certificate for a ledger claim \(c\) is a tuple
 \[
 C=(K,\ell,E,H,R,D,B),
 \]
-where \(K\subseteq\Kind\) is nonempty, \(\ell\) is an evidence level, \(E\) is a
-finite evidence surface, \(H\) is the human-promotion coordinate, \(R\) is the
-finite list of pass rows, \(D\) is the discovery-interface coordinate, and \(B\)
-is the command-boundary coordinate.  Define \(\Acc_{\Gamma}(c,C)\) by the six
+where \(K\subseteq\Kind\) is nonempty, \(\ell\) is an evidence level,
+\(E=(E_{\mathrm{atom}},E_{\mathrm{path}})\) is a typed finite evidence surface,
+\(H\) is the human-promotion coordinate, \(R\) is the finite list of pass rows,
+\(D\) is the discovery-interface coordinate, and \(B\) is the command-boundary
+coordinate.  Certificate records use exactly the evidence-level set
+\[
+\mathsf{Lev}_{\mathrm{cert}}=
+\{\textsf{path\mbox{-}verified},\textsf{command\mbox{-}run}\}.
+\]
+This two-element set is a theorem hypothesis about the certificate-record schema
+row, not a convention inferred from the artifact-pattern list.  In particular,
+strings used elsewhere as pointer-boundary patterns, including manifest tags,
+table tags, snapshot names, and historical-boundary tags, are outside
+\(\mathsf{Lev}_{\mathrm{cert}}\).
+For this theorem the certificate schema row \(\Sigma\) is part of the submitted
+checker input and is itself locked: the parsed value
+\(\Sigma[\texttt{evidence\_levels}]\) is exactly
+\(\mathsf{Lev}_{\mathrm{cert}}\).  This is separate from the schema's
+artifact-pattern vocabulary.  Strings such as
+\texttt{explicit-historical-boundary:*} are admissible only as pointer-boundary
+tokens after the checks below; they are not evidence levels and are not read by
+\(\mathsf{CommandBoundaryOK}\).  Define \(\Acc_{\Gamma}(c,C)\) by the six
 finite predicates:
 \begin{enumerate}[label={\(\mathrm{P}_{\arabic*}\):}]
 \item \(c\) has a ledger row with all required record fields and
 \(K\subseteq\Kind,\ K\ne\varnothing\).
-\item \(\ell\) is an allowed evidence level and \(E\) is a nonempty finite
-submitted evidence surface.
+\item \(\ell\in\mathsf{Lev}_{\mathrm{cert}}\), and
+\(E=(E_{\mathrm{atom}},E_{\mathrm{path}})\) is a submitted typed evidence
+surface with finite atom and path components,
+\(E_{\mathrm{atom}}\cup E_{\mathrm{path}}\ne\varnothing\), every member of
+\(E_{\mathrm{atom}}\) satisfying the non-path evidence-atom grammar, and every
+member of \(E_{\mathrm{path}}\) satisfying the relative support-path grammar.
+The two grammars are disjoint, and a string with local support-path syntax is
+rejected from \(E_{\mathrm{atom}}\).  Thus there is no untyped membership clause
+\(u\in E\) in this theorem: evidence membership means membership in one of the
+two typed components displayed here.
 \item Let \(G_C=\bigcup_{k\in K}\Gamma(k)\).  The pass rows form an exact
 finite gate graph over \(G_C\): \(R\) is a finite list; every row has a
 \texttt{gate\_name} field; the map \(r\mapsto r[\texttt{gate\_name}]\) is a
@@ -415,12 +578,17 @@ Write \(F_{\mathrm{cmd}}\) for the five required command-run field names
 \{\texttt{command},\texttt{source\_commit},\texttt{environment},
 \texttt{exit\_code},\texttt{log\_path}\}.
 \]
-The predicate \(\mathsf{CommandBoundaryOK}(\ell,B)\) is the conjunction of the
-following three typed boundary clauses:
+Relative to the same locked schema row \(\Sigma\), the command-boundary
+predicate is the conjunction of the following three typed clauses:
 \begin{enumerate}[label={\(\mathrm{B}_{\arabic*}\):}]
-\item The evidence level \(\ell\) is one of the schema levels that may carry a
-command boundary: \(\textsf{path\mbox{-}verified}\) or
-\(\textsf{command\mbox{-}run}\).
+\item The locked certificate schema has
+\(\Sigma[\texttt{evidence\_levels}]=\mathsf{Lev}_{\mathrm{cert}}\), and the
+entry level satisfies \(\ell\in\Sigma[\texttt{evidence\_levels}]\).  Thus the
+two command-boundary levels are exactly
+\(\{\textsf{path\mbox{-}verified},\textsf{command\mbox{-}run}\}\).  Historical
+case boundaries, manifest tags, wildcard-looking schema documentation strings,
+and table labels are pointer-boundary atoms only; they are never members of this
+level set, even if they occur in a schema artifact-pattern field.
 \item If \(\ell=\textsf{path\mbox{-}verified}\), then \(B\) contains
 \texttt{boundary.no\_command\_run\_assertion}.
 \item If \(\ell=\textsf{command\mbox{-}run}\), then
@@ -547,16 +715,41 @@ rejecting preconditions rather than accepted certificates.  Let
 relative path under the submitted paper root, is not a symlink, is a regular
 file, and is bound by an exact SHA--256 row in the submitted digest ledger.  This
 is a byte-binding predicate, not a membership predicate.  Membership is supplied
-only by the finite rows below.  The theorem is reviewer-executable only together
-with the ordinary submitted files at the relative paths named in
-Tables~\ref{tab:replay-artifact-manifest}--\ref{tab:artifact-submission-checklist}
-and the SHA--256 rows printed in Table~\ref{tab:printed-sha-ledger}; the PDF text
-alone is not a replay oracle.
+only by the finite rows below.  As printed in the article, the theorem is a
+finite specification claim.  It becomes an artifact-executed replay claim only
+if the ordinary submitted files at the relative paths named in
+Tables~\ref{tab:replay-artifact-manifest}--\ref{tab:artifact-submission-checklist},
+the SHA--256 rows printed in Table~\ref{tab:printed-sha-ledger}, the reference
+replay-environment row or equivalent descriptor required by
+Table~\ref{tab:replay-tcb}, and a stable artifact locator row satisfying
+Table~\ref{tab:artifact-locator-status} are all supplied outside the PDF.  The
+PDF text alone is not a replay oracle.
 
-For a parsed ledger entry with evidence surface \(E\), schema row \(\Sigma\),
+The theorem has the following three-layer reading.  First, the displayed
+mathematical checker relation is proved extensionally: every printed branch is
+an ``append an error iff the displayed predicate fails'' branch.  Second,
+statements about the current JSON records are conditional byte-instantiations:
+they require the submitted ordinary files, relative paths, SHA--256 rows, and
+JSON parsing assumptions named above.  Third, the theorem leaves open all
+implementation-conformance obligations not printed as branch predicates:
+CPython, \texttt{json}, \texttt{pathlib}, \texttt{hashlib}, host filesystem
+semantics, and any claim that a Python function follows the displayed relation.
+Those obligations are trusted or separately hypothesized; they are not proved by
+inspection in this article.
+
+For a parsed ledger entry with typed evidence surface
+\(E=(E_{\mathrm{atom}},E_{\mathrm{path}})\), schema row \(\Sigma\),
 review-bundle manifest dictionary \(M\), and submitted case-row manifest \(C\),
-write \(S=C.\texttt{case\_evidence}\) for the submitted snapshot list.  Define
-the digest-bound boundary predicates used by evidence pointers as follows.
+write \(S=C.\texttt{case\_evidence}\) for the submitted snapshot list.
+\(E_{\mathrm{atom}}\) contains only closed evidence atoms: whole-string table or
+formal labels, manifest-row tags whose key is present in \(M\), and exact
+historical-boundary tags named by an eligible submitted case row.  It does not
+contain wildcard patterns, prefixes, raw absolute paths, or raw relative support
+paths.  \(E_{\mathrm{path}}\) contains local support paths and is admissible only
+through \(\operatorname{BoundPath}\).  These two parsed lists are typed by
+disjoint grammars, so a string with relative support-path syntax cannot be
+accepted by first placing it in \(E_{\mathrm{atom}}\).  Define the digest-bound
+boundary predicates used by evidence pointers as follows.
 \[
 \begin{aligned}
 \operatorname{ManifestBoundary}(M)=
@@ -591,28 +784,38 @@ predicate
 \[
 \begin{aligned}
 \PointerOK(u,E,M,S)\Longleftrightarrow{}&
-u\in E \vee u\in \operatorname{ManifestBoundary}(M)\\
+u\in E_{\mathrm{atom}}
+\vee (u\in E_{\mathrm{path}}\wedge \operatorname{BoundPath}(u))\\
+&{}\vee u\in \operatorname{ManifestBoundary}(M)\\
 &{}\vee u\in \operatorname{TableBoundary}
 \vee u\in \operatorname{SnapshotBoundary}(S).
 \end{aligned}
 \]
-The evidence-surface membership \(u\in E\) is literal membership in the finite
-certificate evidence list, not a filesystem query; when \(u\) is intended as a
-local support path, the row that places it in \(E\) must also carry the
-corresponding digest-bound path record.  A file's existence under the submitted
-root never promotes it into evidence by itself.
+The evidence-surface membership clauses are literal membership in the typed
+finite certificate evidence lists, not filesystem queries.  A non-path evidence
+atom is admitted only through \(E_{\mathrm{atom}}\) after the closed atom grammar
+above has rejected wildcard patterns, prefixes, raw paths, and historical tags
+not named by an eligible case row.  A local support path is admitted through
+\(E_{\mathrm{path}}\) only when the same string also satisfies
+\(\operatorname{BoundPath}\).  A file's existence under the submitted root never
+promotes it into evidence by itself.
 
-For implementation bookkeeping, the displayed checker realizes these four
-sets by closed, digest-bound finite enumerations:
+For checker bookkeeping, the displayed relation realizes these four sets by
+closed, digest-bound finite enumerations:
 \begin{center}
 \scriptsize
 \begin{tabularx}{0.96\linewidth}{@{}L{0.27\linewidth}Y@{}}
 \toprule
 Boundary & Finite realization \\ \midrule
-\(E\) &
-The literal evidence-surface list after schema parsing; path-looking strings in
-this list are admissible only when the same row also supplies
-\(\operatorname{BoundPath}\) evidence.\\
+\(E_{\mathrm{atom}}\) &
+The literal non-path evidence atoms after typed schema parsing: whole-string
+table/formal labels, manifest-row tags with keys in \(M\), and exact historical
+boundary tags named by eligible case rows.  These are not path prefixes,
+wildcard patterns, evidence levels, or raw local paths.\\
+\(E_{\mathrm{path}}\) &
+The literal local-support-path evidence list after typed schema parsing; a
+member contributes to \(\PointerOK\) only if it also satisfies
+\(\operatorname{BoundPath}\).\\
 \(\operatorname{ManifestBoundary}(M)\) &
 The relative paths \(p\) named by manifest rows whose recorded
 \texttt{sha256} field equals the SHA--256 of \(\operatorname{readBytes}(p)\).\\
@@ -627,12 +830,16 @@ the same root, ordinary-file, symlink-rejection, and SHA--256 checks.\\
 \end{tabularx}
 \end{center}
 This is a finite membership test.  The grammar admits only digest-bound manifest
-entries, table or formal-label atoms already listed in the submitted table
-surface, explicit evidence-surface atoms whose row carries the required
+paths, manifest-row tags whose keys occur in \(M\), table or formal-label atoms
+already listed in the submitted table surface, exact historical-boundary tags
+declared by eligible case rows, evidence paths whose row carries the required
 digest-bound support, and submitted snapshot paths that pass the case-row
-boundary checks.  A schema value ending in \(\texttt{*}\), a tag prefix, a
-nonlisted table label, arbitrary root-relative file existence, or a path that
-merely exists on disk does not satisfy \(\PointerOK\).
+boundary checks.  A path-looking string placed in the atom component fails typed
+parsing before R4 unless it is such an exact historical-boundary token; even then
+it is a historical pointer boundary, not a command-boundary level.  A schema
+value ending in \(\texttt{*}\), a tag prefix, a nonlisted table label, arbitrary
+root-relative file existence, or a path that merely exists on disk does not
+satisfy \(\PointerOK\).
 
 The following machine-checkable formal pseudocode checker is the operative
 finite semantics for the current certificate-record inputs
@@ -665,7 +872,8 @@ Same required keys, same schema-prescribed relative path equality, and same
 digest-bound existence predicate \(\operatorname{BoundPath}\).\\
 \texttt{check\_ledger\_entries} & L1--E10 &
 Same seven-row cardinality lock, same entry-name set, same required fields, same
-claim-kind/evidence-level/list predicates, same exact gate-graph cardinalities,
+claim-kind predicate, same locked two-element certificate evidence-level set,
+same typed evidence-surface predicates, same exact gate-graph cardinalities,
 same discovery-interface parity, and same command-boundary clauses.\\
 \texttt{check\_pass\_records} & R1--R4 &
 Same pass-row required fields, same evidence-level equality, same allowed
@@ -696,9 +904,13 @@ E1 & A ledger entry lacks one of
 E2 & Its \(\texttt{claim\_kind\_set}\) is not a nonempty list.\\
 E3 & Its claim-kind set is not a subset of
 \(\texttt{schema.claim\_kind\_domain}\).\\
-E4 & Its \(\texttt{evidence\_level}\) is not in
-\(\texttt{schema.evidence\_levels}\).\\
-E5 & Its \(\texttt{evidence\_surface}\) is not a nonempty list.\\
+E4 & The byte-bound schema row does not have
+\(\texttt{schema.evidence\_levels}=\mathsf{Lev}_{\mathrm{cert}}\), or the
+entry's \(\texttt{evidence\_level}\) is not in that locked two-element set.\\
+E5 & Its \(\texttt{evidence\_surface}\) does not parse as a nonempty typed
+surface \(E=(E_{\mathrm{atom}},E_{\mathrm{path}})\) with finite components,
+closed non-path atoms in \(E_{\mathrm{atom}}\), relative support-path strings in
+\(E_{\mathrm{path}}\), and disjoint atom/path grammars.\\
 E6 & Its \(\texttt{pass\_records}\) field is not a nonempty list.\\
 E7 & The pass rows are not an exact finite gate graph over
 \(\bigcup_{k\in K}\Gamma(k)\): after rows lacking \texttt{gate\_name} are
@@ -720,8 +932,8 @@ R1 & A pass row lacks one of
 R2 & A pass row's evidence level is not the parent entry's level.\\
 R3 & A pass row's decision is not in \(\texttt{schema.pass\_decisions}\).\\
 R4 & A pass row's evidence pointer \(u\) fails
-\(\PointerOK(u,E,M,S)\) for the parsed entry evidence surface, review-bundle
-manifest, table boundary, and submitted snapshot list.\\
+\(\PointerOK(u,E,M,S)\) for the parsed typed entry evidence surface,
+review-bundle manifest, table boundary, and submitted snapshot list.\\
 S1 & The submission-interface map does not contain exactly four rows.\\
 S2 & The submission-interface ids are not exactly
 \(\{\texttt{sim1},\texttt{sim2},\texttt{sim3},\texttt{sim4}\}\).\\
@@ -738,7 +950,10 @@ The displayed checker accepts exactly when the final error list is empty.
 Consequently, on the parsed current records, the displayed checker accepts iff
 all rows satisfy \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings
 M1--M3 hold, the submission-interface locks S1--S2 hold, and the primary-claim
-locks P1--P5 hold.  It rejects iff at least one displayed branch is violated.
+locks P1--P5 hold.  This sentence is not a free-standing assertion that those
+current records have been supplied or parsed correctly; it is the conditional
+byte-bound instantiation under the artifact and TCB hypotheses above.  It
+rejects iff at least one displayed branch is violated.
 \end{theorem}
 
 \begin{proof}
@@ -750,8 +965,11 @@ branch is appended exactly on violation of \(B\).
 
 The ledger-entry branches are precisely the acceptance predicates.  E1 together
 with E2 and E3 is \(P_1\): the row has all required fields and a nonempty
-\(K\subseteq\Kind\).  E4 and E5 are \(P_2\): allowed evidence level and
-nonempty finite evidence surface.  E6, R1 restricted to the
+\(K\subseteq\Kind\).  E4 and E5 are \(P_2\): the byte-bound schema row locks the
+evidence-level vocabulary to \(\mathsf{Lev}_{\mathrm{cert}}\), the entry level is
+in that exact set, and the evidence surface is nonempty, finite, and typed.
+The historical-boundary atoms admitted by E5 are pointer tokens, not additional
+evidence levels.  E6, R1 restricted to the
 \texttt{gate\_name} field, and E7 are \(P_3\): there is a finite pass-row list,
 every row has a gate name, and the gate-name projection is a bijection onto the
 assigned gate set \(\bigcup_{k\in K}\Gamma(k)\).  Consequently a missing row,
@@ -761,18 +979,32 @@ produce a displayed error and cannot be hidden behind mere coverage.  R1--R4
 are \(P_4\): every pass row has the remaining required fields, agrees with the
 parent evidence level, has an allowed decision, and has a permitted evidence
 pointer according to the displayed finite relation
-\(\PointerOK(u,E,M,S)\).  The R4 branch is therefore an exact membership
-test in the finite union
+\(\PointerOK(u,E,M,S)\).  Here \(E\) is always the ordered typed pair
+\((E_{\mathrm{atom}},E_{\mathrm{path}})\); the proof never uses an untyped
+premise \(u\in E\).  The R4 branch is therefore an exact typed membership test in
+the finite union
 \[
-E\cup \operatorname{ManifestBoundary}(M)\cup
+\begin{aligned}
+E_{\mathrm{atom}}
+&{}\cup \{u\in E_{\mathrm{path}}:\operatorname{BoundPath}(u)\}\\
+&{}\cup \operatorname{ManifestBoundary}(M)\cup
 \operatorname{TableBoundary}\cup \operatorname{SnapshotBoundary}(S).
+\end{aligned}
 \]
-R4 appends an error iff the pointer is outside that union.  If \(u\) is a local
-support path, membership requires exact listing in \(E\) plus the digest-bound
-path record demanded by the row.  Manifest membership requires a named relative
-manifest path and equality between the printed SHA--256 field and the hash of
-the bytes read at that path.  Snapshot membership requires occurrence in an
-eligible submitted snapshot list and the same relative-root and digest checks.
+R4 appends an error iff the pointer is outside that union.  Consequently the
+equivalence
+\[
+\text{R4 passes}\quad\Longleftrightarrow\quad\PointerOK(u,E,M,S)
+\]
+is literal after expanding \(E\) as the typed pair above.  If \(u\) is a local
+support path, membership through the evidence surface requires exact listing in
+\(E_{\mathrm{path}}\) and \(\operatorname{BoundPath}(u)\).  The typed parse
+precondition forbids listing that path-looking string in \(E_{\mathrm{atom}}\),
+so atom membership cannot bypass byte binding.  Manifest membership requires a
+named relative manifest path and equality between the printed SHA--256 field and
+the hash of the bytes read at that path.  Snapshot membership requires
+occurrence in an eligible submitted snapshot list and the same relative-root and
+digest checks.
 If \(u\) is a table or formal-label atom, the whole string must be in the
 submitted \(\operatorname{TableBoundary}\).  Thus the proof uses no rule of the form
 ``pointer denotes an existing file under the root'': branch R4 appends an error
@@ -783,8 +1015,19 @@ exactly when
 Prefix matching, filesystem existence, schema wildcards, and nonlisted table or
 snapshot names all fail R4.
 E8 is \(P_5\), the
-exact discovery-interface discipline.  E4 already verifies the admissible
-evidence level part \(\mathsf{CommandBoundaryOK}.\mathrm{B}_1\).  For \(P_6\),
+exact discovery-interface discipline.  Because E4 checks the byte-bound schema
+row \(\texttt{schema.evidence\_levels}\) for equality with the certificate set
+\[
+\mathsf{Lev}_{\mathrm{cert}}=
+\{\textsf{path\mbox{-}verified},\textsf{command\mbox{-}run}\},
+\]
+and then checks \(\ell\) against that same parsed set, E4 is exactly the
+\(\mathrm{B}_1\) clause of \(\mathsf{CommandBoundaryOK}\).  It does not consult
+the schema's artifact-pattern list and does not treat historical case-boundary
+strings as levels.  Those strings are checked only through \(\PointerOK\) as
+closed pointer atoms or snapshot boundaries, so they cannot make E4 pass and
+cannot create a third command-boundary level.  For
+\(P_6\),
 branch E9 is exactly the path-verified implication
 \(\mathsf{CommandBoundaryOK}.\mathrm{B}_2\): on a path-verified row it appends
 an error precisely when the no-command-run assertion is absent, and on any other
@@ -808,17 +1051,51 @@ hold.  Conversely, if all six acceptance predicates and all row locks hold, then
 every displayed branch condition is false, no append occurs, the final error
 list is empty, and the displayed checker accepts.  This proves exact
 computation of the printed finite predicate by the displayed checker.  The
-artifact Python script is only a replay implementation of that displayed
-pseudocode, so this theorem by itself still does not assert line-by-line Python
-conformance, rerun Lean, validate artifact semantics, check venue status,
-certify upload or archive equivalence, or prove \(\RGSS(P,L,\Gamma)\).
+artifact Python script is only a submitted replay artifact whose conformance to
+that displayed pseudocode is outside this theorem, so this theorem by itself
+still does not assert line-by-line Python conformance, rerun Lean, validate
+artifact semantics, check venue status, certify upload or archive equivalence, or
+prove \(\RGSS(P,L,\Gamma)\).
 \end{proof}
 
-\subsection{Executable Horn replay kernel}
+\begin{lemma}[Admissible pointers are exactly finite promoted atoms or bytes]
+\label{lem:pointerok-exactness}
+In Theorem~\ref{thm:certificate-record-checker-spec}, for fixed parsed
+\((E_{\mathrm{atom}},E_{\mathrm{path}},M,S)\), a pointer \(u\) is accepted by R4
+if and only if \(u\) belongs to the finite union displayed in the definition of
+\(\PointerOK(u,E,M,S)\).  In particular, none of the following facts is
+sufficient for R4: \(u\) merely exists as a file under the root, \(u\) shares a
+prefix with a manifest key, \(u\) matches a schema wildcard-looking pattern, or
+\(u\) is a table, snapshot, or historical-boundary string not named by the
+corresponding finite boundary set.
+\end{lemma}
+
+\begin{proof}
+Expand the definition:
+\begin{align*}
+\PointerOK(u,E,M,S)\Longleftrightarrow{}&
+u\in E_{\mathrm{atom}}\\
+&{}\vee (u\in E_{\mathrm{path}}\wedge \operatorname{BoundPath}(u))\\
+&{}\vee u\in\operatorname{ManifestBoundary}(M)\\
+&{}\vee u\in\operatorname{TableBoundary}\\
+&{}\vee u\in\operatorname{SnapshotBoundary}(S).
+\end{align*}
+Each disjunct is finite and closed.  The atom component is literal membership
+after the closed atom grammar; the path component is literal evidence-list
+membership plus the digest-bound relative-root predicate; the manifest and
+snapshot components require named submitted rows and SHA--256 equality; and the
+table component is a finite whole-string label set.  No disjunct mentions bare
+filesystem existence, prefix closure, or wildcard expansion.  Therefore R4
+passes exactly on that finite promoted set and rejects every pointer outside it.
+\end{proof}
+
+\subsection{Conditional Horn replay kernel}
 The Stage--A replay kernel is the finite Horn system in
 \artifactpath{certificates/stage_a_horn_schema.json}.  The rules are reproduced
-in Table~\ref{tab:horn-kernel-rules} so that the replay claim is executable
-without appealing to prose.  The table applies the public renaming
+in Table~\ref{tab:horn-kernel-rules} so that the replay claim is a finite
+byte-bound specification rather than an appeal to prose.  Executing that
+specification requires the archive and locator conditions in
+Section~\ref{sec:replay-artifact-boundary}.  The table applies the public renaming
 \(\rho(\texttt{qinv})=\qlex\); the submitted JSON still contains the legacy atom
 string \texttt{qinv}.
 
@@ -912,7 +1189,7 @@ metadata are not compiler rows.  Hence the compiled atom set is exactly the
 displayed set \(A\).
 \end{proof}
 
-\begin{corollary}[Byte-bound executable Horn replay]
+\begin{corollary}[Byte-bound conditional Horn replay]
 \label{cor:byte-bound-stage-a-horn-replay}
 Use the same TCB and digest table as
 Lemma~\ref{lem:stage-a-parser-compilation}.  The byte-bound replay of
@@ -920,8 +1197,8 @@ Lemma~\ref{lem:stage-a-parser-compilation}.  The byte-bound replay of
 \artifactpath{certificates/stage_a_manifest.json} computes the same closure as
 Theorem~\ref{thm:typed-verified-core-hierarchy}; this corollary depends on those
 digest-bound JSON bytes, not on extracting rules or atoms from the PDF.
-Consequently the executable
-Stage--A replay accepts exactly
+Consequently any artifact instantiation satisfying
+Section~\ref{sec:replay-artifact-boundary} accepts exactly
 \[
 \qlex=q_{\mathrm{rgs}}=\mathsf{true},\qquad
 q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
@@ -933,15 +1210,18 @@ q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
 Lemma~\ref{lem:stage-a-parser-compilation} identifies the digest-bound parsed
 schema with the displayed Horn table and the digest-bound compiled manifest with
 the displayed atom set \(A\).  Theorem~\ref{thm:typed-verified-core-hierarchy}
-computes the closure of exactly those two finite objects.  The executable replay
-therefore has the displayed accepted-coordinate vector and no additional source,
+computes the closure of exactly those two finite objects.  A replay
+instantiation satisfying the archive and locator preconditions therefore has the
+displayed accepted-coordinate vector and no additional source,
 artifact-semantic, archive, venue, or implementation-conformance consequence.
 \end{proof}
 
-The replay script computes the least fixed point of these clauses over the atoms
-compiled from \artifactpath{certificates/stage_a_manifest.json} and verifies the
-certificate DAGs in \artifactpath{certificates/stage_a_horn_audit_certificate.json}.
-The submitted input atoms include
+Under the artifact-instantiation preconditions, the replay script computes the
+least fixed point of these clauses over the atoms compiled from
+\artifactpath{certificates/stage_a_manifest.json} and verifies the certificate
+DAGs in
+\artifactpath{certificates/stage_a_horn_audit_certificate.json}.  The specified
+input atoms include
 \(\texttt{invJson}\), \(\texttt{invMd}\), \(\texttt{finalDigest}\),
 \(\texttt{stageAHornSchema}\), \(\texttt{stageAManifest}\),
 \(\texttt{stageAHornCertificate}\), \(\texttt{stageAReplayReport}\), and
@@ -1026,8 +1306,11 @@ Replayable certificate DAGs for the accepted coordinates. \\
 Expected six-coordinate vector and replay result record. \\
 \addlinespace
 \artifactpath{certificates/stage_a_digest_table.json}\\
-Digest binding for the manifest, schema, certificate, report, replay scripts,
-case-row records, source-label scan records, and review-bundle JSON inputs.
+Inner executable digest table for the manifest, schema, certificate, report,
+replay scripts, case-row records, source-label scan records, and review-bundle
+JSON inputs.  This JSON file intentionally has no row for itself; the digest of
+this table's own bytes appears only in the outer printed ledger,
+Table~\ref{tab:printed-sha-ledger}.
 \\
 \addlinespace
 \artifactpath{certificates/replay_stage_a_audit.py}\\
@@ -1065,14 +1348,24 @@ Digest table &
 \artifactpath{certificates/stage_a_digest_table.json} is included and its
 listed SHA--256 rows match the submitted replay manifest, Horn schema, Horn
 certificate, replay reports, replay scripts, expected case rows, source-label
-scan records, and review-bundle JSON inputs.\\
+scan records, and review-bundle JSON inputs.  The table is the inner executable
+manifest and therefore contains no row for
+\artifactpath{certificates/stage_a_digest_table.json} itself.\\
 \addlinespace
-Reviewer replay commands &
+Conditional replay commands &
 \artifactcmd{python}{certificates/replay_stage_a_audit.py} and
 \artifactcmd{python}{certificates/replay_case_rows.py} are runnable from the
 paper root under the TCB in Tables~\ref{tab:replay-tcb} and
 \ref{tab:replay-byte-binding}; the claim attached to those commands is only
 finite-record replay.\\
+\addlinespace
+Replay environment descriptor &
+The archive either records the reference environment transcript
+\texttt{python -VV = Python 3.10.11 ... [MSC v.1929 64 bit (AMD64)]} together
+with the Windows/NTFS path model of Table~\ref{tab:replay-tcb}, or supplies a
+container recipe, Nix flake/derivation, Guix manifest, or equivalent descriptor
+pinning the interpreter, operating-system interface, filesystem assumptions, and
+working directory for the two replay commands.\\
 \addlinespace
 Expected case rows and negative control &
 \artifactpath{certificates/case_rows_expected.json} and
@@ -1098,12 +1391,43 @@ JSON certificate-record theorem is offered as executable artifact support.\\
 \end{table}
 
 \begin{table}
-\caption{Printed SHA--256 ledger for the submitted replay-support bytes.}
+\caption{Stable artifact-locator status for replay instantiation.}
+\label{tab:artifact-locator-status}
+\small
+\begin{tabularx}{\linewidth}{L{0.30\linewidth}Y}
+\toprule
+Locator row & Status and replay consequence \\ \midrule
+Current PDF-only article &
+No DOI, Software Heritage identifier, venue-supplied supplement identifier, or
+equivalent public immutable locator is asserted for the replay archive in this
+article.  Therefore the PDF-only object instantiates no reviewer-executable
+artifact claim; it instantiates only the finite specification printed here.\\
+\addlinespace
+Required replay instantiation &
+A replay-instantiated submission must add a stable locator row naming the exact
+archive or unpacked support tree.  Acceptable forms include a DOI-bearing
+supplement, a Software Heritage identifier for the archived source/support
+object, a venue-controlled supplement identifier, or another public immutable
+locator with an accompanying SHA--256 equality row for the archive or complete
+file list.\\
+\addlinespace
+Digest equality condition &
+The locator is evidentiary only if the located bytes unpack to the same relative
+paths and SHA--256 values as Tables~\ref{tab:replay-artifact-manifest}--%
+\ref{tab:printed-sha-ledger}.  A repository URL, local path, generated PDF, or
+manifest row without this byte-equality check is not a replay locator.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}
+\caption{Outer printed SHA--256 ledger for the submitted replay-support bytes.}
 \label{tab:printed-sha-ledger}
 \scriptsize
 \begin{tabularx}{\linewidth}{@{}Y@{}}
 \toprule
-\textbf{Relative path and SHA--256 digest} \\
+\textbf{Relative path and SHA--256 digest; the digest-table row is an outer
+printed anchor, not an inner self-row} \\
 \midrule
 \artifactpath{certificates/stage_a_manifest.json}\\
 \texttt{8722b16ce7da8a777078ab5a5fd90f71850deb3375e7b3d570d70380fe75cb9e}\\
@@ -1155,32 +1479,71 @@ JSON certificate-record theorem is offered as executable artifact support.\\
 
 Table~\ref{tab:artifact-submission-checklist} is an archive-packaging condition,
 not an additional mathematical theorem.  The complete archive condition is that
-the submitted archive contains exactly the ordinary files named in
-Tables~\ref{tab:replay-artifact-manifest} and
+the replay artifact archive, when supplied, contains exactly the ordinary files
+named in Tables~\ref{tab:replay-artifact-manifest} and
 \ref{tab:artifact-submission-checklist}, at those relative paths, together with
 the review-bundle directory entries reached by
-\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  Table~\ref{tab:printed-sha-ledger}
-prints the corresponding SHA--256 ledger.  The row for
-\artifactpath{certificates/stage_a_digest_table.json} is a printed digest of the
-digest table itself; the executable digest table intentionally does not
-self-bind.  If any listed file is omitted or its digest-bound bytes differ from
-the submitted rows, the reviewer-executable artifact support is incomplete, but
-the paper still makes no stronger source, artifact-semantic,
-archive-equivalence, or venue-status claim by default.
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}; that it records the
+reference \texttt{python -VV}/Windows/NTFS replay environment or an equivalent
+container, Nix, Guix, or machine-readable environment descriptor; and that the
+same archive is named by a stable locator row of
+Table~\ref{tab:artifact-locator-status}.  The byte binding then has two levels:
+\begin{enumerate}
+\item the submitted JSON file
+\artifactpath{certificates/stage_a_digest_table.json} is the inner executable
+manifest read by \artifactpath{certificates/replay_stage_a_audit.py}; its rows
+bind every replay-support file used by the checker except the digest-table file
+itself; and
+\item Table~\ref{tab:printed-sha-ledger} is the outer printed ledger; its row for
+\artifactpath{certificates/stage_a_digest_table.json} binds the bytes of that
+inner manifest for review and archive comparison, but is not parsed as a
+self-digest row by the executable checker.
+\end{enumerate}
+Thus the outermost digest anchor is explicit rather than informal, while the
+executable table still avoids the impossible requirement of validating the bytes
+of the file that contains the row.  If any listed file is omitted, if the
+environment descriptor or stable locator row is absent, or if the digest-bound
+bytes differ from the listed rows at the appropriate level, the
+artifact-executed replay claim is not instantiated; the paper then remains only
+the finite specification and makes no stronger source, artifact-semantic,
+archive-equivalence, clean-machine-reproducibility, or venue-status claim by
+default.
 
-\begin{lemma}[Byte binding for the submitted replay records]
+\begin{lemma}[Two-level byte binding for the submitted replay records]
 \label{lem:byte-binding-submitted-records}
 Use the TCB in Tables~\ref{tab:replay-tcb} and
-\ref{tab:replay-byte-binding}.  Suppose the submitted archive contains the
+\ref{tab:replay-byte-binding}.  Suppose a replay artifact archive contains the
 relative paths in Tables~\ref{tab:replay-artifact-manifest} and
 \ref{tab:artifact-submission-checklist} as ordinary non-symlink files, and
-suppose their raw bytes have the SHA--256 values printed in
-Table~\ref{tab:printed-sha-ledger}.  This lemma is the byte-binding step missing
-from a PDF-only reading: it links the submitted bytes, not just the displayed
-path names, to the finite atoms, rules, checker predicates, and record rows
-used below.  Then the submitted bytes parse to the
-following finite objects used by Theorems~\ref{thm:typed-verified-core-hierarchy}
-and~\ref{thm:certificate-record-checker-spec}.
+suppose their raw bytes have the SHA--256 values printed in the outer ledger,
+Table~\ref{tab:printed-sha-ledger}.  In particular, the archive contains an
+ordinary file at \artifactpath{certificates/stage_a_digest_table.json} whose
+SHA--256 is the outer printed digest-table row, and the parsed JSON rows inside
+that file contain no path equal to
+\artifactpath{certificates/stage_a_digest_table.json}.  Also suppose the archive
+is identified by a stable locator row satisfying
+Table~\ref{tab:artifact-locator-status}, and that the replay is run either in the
+reference \texttt{python -VV}/Windows/NTFS environment of
+Table~\ref{tab:replay-tcb} or under the submitted container, Nix, Guix, or
+equivalent descriptor named there.  Write
+\[
+\DigestOK_{\mathrm{stage\_a}}(P,H,A,C,R)
+\]
+for exactly this finite digest predicate: the paths are admissible ordinary
+relative paths; absolute paths, \texttt{..}, backslashes, symlinks, directories,
+missing rows, self-rows for the digest table, and SHA--256 mismatches reject;
+the digest-bound manifest, Horn schema, audit certificate, and replay report
+then parse under the JSON convention in Table~\ref{tab:replay-tcb}.  Digest
+equality is only byte identity for these finite inputs.  It is not a proof that
+any Python function implements the mathematical replay predicate.
+
+This lemma is only the byte-binding step missing from a PDF-only reading: it
+links the submitted JSON bytes, not just displayed path names, to the finite
+atoms, rules, and record rows used by
+Theorems~\ref{thm:typed-verified-core-hierarchy}
+and~\ref{thm:certificate-record-checker-spec}.  Under
+\(\DigestOK_{\mathrm{stage\_a}}(P,H,A,C,R)\), the submitted bytes parse to the
+following finite JSON objects.
 \begin{enumerate}[label={\(\mathrm{B}_{\arabic*}\):}]
 \item The bytes of \artifactpath{certificates/stage_a_manifest.json} parse to a
 manifest whose \texttt{compiler\_rows} have exactly the displayed input atoms
@@ -1217,24 +1580,6 @@ to the displayed accepted-coordinate vector
 q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
 \mathsf{false}.
 \]
-\item The bytes of \artifactpath{certificates/replay_stage_a_audit.py} implement
-exactly this finite checker predicate: validate all digest rows other than the
-self-digest row, compile atoms from the manifest rows, forward-chain the parsed
-Horn rules to a least fixed point, compare the parsed certificate DAGs and
-negative obstructions with that fixed point, and compare the recomputed
-six-coordinate vector with both the parsed certificate and parsed replay report.
-\item The bytes of \artifactpath{certificates/replay_case_rows.py} implement the
-case-row predicate printed in Table~\ref{tab:case-row-eligibility}: the case set
-is exactly the four displayed cases, every submitted snapshot path is relative
-and exists under the paper root, the reconstructed rows must equal
-\artifactpath{certificates/case_rows_expected.json}, and the false fifth Rule110
-dynamic-semantic row must be rejected.
-\item The bytes of \artifactpath{certificates/scan_tex_source_labels.py} and
-\artifactpath{certificates/static_source_label_scan.json} bind the
-\(\qlex\) scanner, whose legacy artifact atom is \texttt{qinv}, to the five
-lexical environment-token names in
-Table~\ref{tab:inventory-name-manifest} and to the stated raw-source,
-no-duplicate-label, no-stale-token predicate.
 \item The five \artifactpath{review_bundle/} JSON records in
 Table~\ref{tab:artifact-submission-checklist} are byte-bound review-bundle inputs
 for Theorem~\ref{thm:certificate-record-checker-spec}; they are not used as
@@ -1244,7 +1589,7 @@ whole-pipeline implementation soundness.
 \end{lemma}
 
 \begin{proof}
-Each hypothesis is a finite byte-equality assertion: by
+The digest hypothesis is a finite byte-equality assertion: by
 Table~\ref{tab:replay-byte-binding}, a row in
 Table~\ref{tab:printed-sha-ledger} means SHA--256 of exactly the bytes returned
 by \texttt{Path.read\_bytes()} at the named relative path.  Collision resistance
@@ -1262,25 +1607,60 @@ fields gives \(\mathrm{B}_1\)--\(\mathrm{B}_4\): the manifest's
 \(\mathrm{B}_3\); and the report's \texttt{accepted\_coordinates} field is the
 vector in \(\mathrm{B}_4\).
 
-For the Python files, the checker predicate is the control flow printed in the
-submitted source bytes.  In
-\artifactpath{certificates/replay_stage_a_audit.py}, \texttt{check\_digest\_table}
-rejects malformed rows, absolute paths, backslash paths, dot-dot paths,
-self-binding rows, mismatched SHA--256 values, and missing required rows;
-\texttt{compile\_atoms} adds exactly the manifest atoms and rejects disagreement
-with the certificate input set; \texttt{forward\_chain} iterates the parsed rule
-list until no new conclusion is added; \texttt{validate\_certificate} checks the
-two positive DAG roots and the four negative missing-premise roots; and
-\texttt{main} rejects unless the recomputed vector equals both parsed records.
-That is precisely \(\mathrm{B}_5\).  The functions
-\texttt{reconstruct\_rows} and \texttt{verify\_negative\_control} in
-\artifactpath{certificates/replay_case_rows.py} perform exactly the finite checks
-listed in \(\mathrm{B}_6\).  The scanner script and scan-output JSON are likewise
-ordinary submitted bytes whose named token list, scan domain, and stale-token
-result are the predicate in \(\mathrm{B}_7\).  Finally, the review-bundle records
-are listed and digest-bound but no Horn rule or checker branch promotes them to
-the excluded coordinates; hence \(\mathrm{B}_8\) follows from the rule table and
-the negative-coordinate argument in Theorem~\ref{thm:typed-verified-core-hierarchy}.
+Finally, the review-bundle records are listed and digest-bound but no Horn rule
+or checker branch promotes them to the excluded coordinates; hence
+\(\mathrm{B}_5\) follows from the rule table and the negative-coordinate
+argument in Theorem~\ref{thm:typed-verified-core-hierarchy}.
+\end{proof}
+
+\begin{lemma}[Specification-only script conformance for Stage--A replay]
+\label{lem:stage-a-scriptok-implies-replayok}
+Assume
+\[
+\ScriptOK_{\mathrm{stage\_a}}(P,H,A,C,R)
+\]
+for the submitted path
+\artifactpath{certificates/replay_stage_a_audit.py}.  This predicate means that
+the submitted script, when run under the TCB of Tables~\ref{tab:replay-tcb} and
+\ref{tab:replay-byte-binding}, implements exactly the finite replay predicate:
+\begin{enumerate}[label={\(\mathrm{S}_{\arabic*}\):}]
+\item it validates every row of the no-self digest table and rejects absolute
+paths, \texttt{..}, backslashes, symlinks, directories, missing rows, digest
+mismatches, and any attempted row for
+\artifactpath{certificates/stage_a_digest_table.json};
+\item it emits manifest atoms exactly from the digest-checked
+\texttt{compiler\_rows};
+\item it forward-chains the finite Horn rule set monotonically over the finite
+atom/rule universe until the least fixed point is reached;
+\item it validates positive certificate DAGs and negative missing-premise
+obstructions against that closure; and
+\item it accepts exactly when the recomputed six-coordinate vector equals the
+vectors declared in the certificate and replay report.
+\end{enumerate}
+Then
+\begin{align*}
+&\DigestOK_{\mathrm{stage\_a}}(P,H,A,C,R)\wedge
+\ScriptOK_{\mathrm{stage\_a}}(P,H,A,C,R)\\
+&\hspace{2em}\Longrightarrow
+\ReplayOK_{\mathrm{stage\_a}}(P,H,A,C,R).
+\end{align*}
+This is a hypothesis-to-consequence lemma, not an implementation theorem: the
+article does not print or formally bind the Python source blocks needed to prove
+\(\ScriptOK_{\mathrm{stage\_a}}\).
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:byte-binding-submitted-records},
+\(\DigestOK_{\mathrm{stage\_a}}(P,H,A,C,R)\) supplies exactly the digest-bound
+manifest rows, Horn clauses, certificate DAG/obstruction objects, and expected
+coordinate vector used by the finite replay predicate.  By the definition of
+\(\ScriptOK_{\mathrm{stage\_a}}\), the submitted script performs that same
+finite predicate: digest validation, atom compilation, least fixed point
+calculation, certificate and obstruction checking, and final coordinate-vector
+comparison.  Therefore a run satisfying both hypotheses accepts exactly the
+finite replay predicate on those digest-bound bytes, which is the assertion
+\(\ReplayOK_{\mathrm{stage\_a}}(P,H,A,C,R)\).  No step infers script
+conformance from SHA--256 equality alone.
 \end{proof}
 
 \begin{table}
@@ -1313,74 +1693,102 @@ shape.  This subsection is deliberately separated from the replay theorem above:
 it gives a boundary for possible semantic normalizer claims, not another
 accepted coordinate of the submitted package.
 
-Let \(\RE\) be a fixed effective Richardson source fragment: terms are generated
-by a finite grammar over the variable \(x\), rational constants, addition,
-subtraction, multiplication, composition, and the elementary functions allowed
-by Richardson's identity-undecidability theorem.  A source term \(r\in\RE\)
-denotes a partial real function \(\Sem_{\RE}(r)\) on its natural real domain.
-Write \(D(r,s)\) for the common defined domain of \(r\) and \(s\), and write
-\[
-  \Eq_{\RE}(r,s)
-  \quad\Longleftrightarrow\quad
-  \forall x\in D(r,s),\ 
-  \Sem_{\RE}(r)(x)=\Sem_{\RE}(s)(x).
-\]
-Richardson's theorem gives no algorithm deciding \(\Eq_{\RE}(r,0)\) for all
-\(r\in\RE\)~\cite{Richardson1968}; the later simplification literature records
-the same obstruction for canonical elementary simplification
-\cite{Caviness1970,Wang1974}.
+Fix the Richardson source grammar \(\RE\) in the following imported-theorem
+sense.  Its elementary expressions are generated by the variable \(x\), rational
+constants, the operations \(+,-,\times\), composition, and the named elementary
+functions appearing in the cited Richardson theorem.  Let
+\(\Eq_{\RE}(r,0)\) mean equality to zero on that theorem's own specified domain
+convention.  Thus \(\Eq_{\RE}\) is not introduced here as equality on an
+unstated or possibly empty domain; it is the identity predicate supplied by the
+source theorem itself.
 
-Let \(\TE\) be any proposed target fragment whose objects are finite strings in
-a decidable set, and let \(\Sem_{\TE}\) be its intended real-function semantics.
-A translation is a total computable map
-\(\tau:\RE\to\TE\).  It is semantics preserving when
-\[
-  \Eq_{\RE}(r,s)\quad\Longrightarrow\quad
-  \Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))
-\]
-and equality reflecting when the reverse implication holds.  A finite target
-normalizer is a total computable map \(\Norm:\TE\to\TE\) whose range is a
-decidable finite-object language and whose syntactic equality is decidable.
-It is equality-complete for \(\tau(\RE)\) when, for all \(r,s\in\RE\),
-\[
-  \Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))
-  \quad\Longleftrightarrow\quad
-  \Norm(\tau(r))=\Norm(\tau(s))
-\]
-where the equality on the right is ordinary finite-string equality.  These four
-requirements are the missing data behind any phrase such as ``Richardson
-normalizer obstruction'': the translated source fragment, the computable
-translation, the semantic equality predicate, and the decidable finite target
-objects must all be named.
+\begin{theorem}[Richardson identity undecidability input]
+\label{thm:richardson-source-input}
+For the effective elementary-expression grammar \(\RE\) just described, no
+algorithm decides \(\Eq_{\RE}(r,0)\) for all \(r\in\RE\).
+\end{theorem}
 
-\begin{lemma}[Richardson reduction against equality-reflecting finite normalizers]
+\begin{proof}
+This is the cited Richardson undecidability theorem for elementary expression
+identity~\cite{Richardson1968}, used with the theorem's own grammar and domain
+convention.  The later simplification literature records the same obstruction as
+the fundamental barrier to canonical elementary simplification
+\cite{Caviness1970,Wang1974}.  The present paper imports only this theorem
+statement; it does not derive it from the package's finite artifact rows.
+\end{proof}
+
+For a binary source comparison write
+\[
+  \Eq_{\RE}(r,s)\quad\Longleftrightarrow\quad \Eq_{\RE}(r-s,0).
+\]
+This derived predicate inherits the same domain convention from
+Theorem~\ref{thm:richardson-source-input}.  Let \(\TE\) be any proposed target
+fragment whose objects are finite strings in a decidable language, and let
+\(\Sem_{\TE}\) be its stated semantics.  Equality
+\(\Sem_{\TE}(t)=\Sem_{\TE}(u)\) denotes equality of the semantic objects in that
+stated target semantics, including whatever domain information the target
+semantics assigns.  No separate filesystem, artifact-row, or empty-domain
+convention is hidden in this equality.
+
+A translation is a total computable map \(\tau:\RE\to\TE\).  A finite target
+normalizer is a total computable map \(\Norm:\TE\to\TE\) whose outputs have
+decidable finite-string equality.  The data needed for a Richardson-normalizer
+claim are the following three exactness conditions, for all \(r,s\in\RE\):
+\[
+\begin{aligned}
+\Eq_{\RE}(r,s)&\Rightarrow
+  \Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s)),\\
+\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))&\Rightarrow
+  \Eq_{\RE}(r,s),\\
+\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))&\Longleftrightarrow
+  \Norm(\tau(r))=\Norm(\tau(s)).
+\end{aligned}
+\]
+These requirements are the missing data behind any phrase such as
+``Richardson normalizer obstruction'': the exact Richardson source theorem, the
+total computable translation, the target semantic equality, and the decidable
+finite normal forms must all be named.
+
+\begin{lemma}[Richardson reduction against identity-exact finite normalizers]
 \label{lem:richardson-normalizer-reduction}
 Suppose there are a target fragment \(\TE\), a total computable translation
 \(\tau:\RE\to\TE\), and a total computable finite target normalizer \(\Norm\)
-such that \(\tau\) is semantics preserving and equality reflecting and
-\(\Norm\) is equality-complete for \(\tau(\RE)\).  Then Richardson identity in
-\(\RE\) is decidable.  Consequently no paper-local syntax catalogue, finite
-witness list, or target normal form can be used as a semantic Richardson
-identity oracle unless it supplies one of the hypotheses above and thereby
-accepts this decidability consequence.  These are exactly the four formal data
-named in the statement: source fragment, computable translation, semantic
-equality predicate, and decidable finite target objects.
+such that, for all \(r,s\in\RE\),
+\[
+\begin{aligned}
+&\Eq_{\RE}(r,s)\Rightarrow
+  \Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s)),\\
+&\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))\Rightarrow
+  \Eq_{\RE}(r,s),\\
+&\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(s))\Longleftrightarrow
+  \Norm(\tau(r))=\Norm(\tau(s)).
+\end{aligned}
+\]
+Then there is a decision procedure for \(\Eq_{\RE}(r,0)\).  Consequently no
+paper-local syntax catalogue, finite witness list, or target normal form can be
+used as a semantic Richardson identity oracle unless it supplies these
+hypotheses and thereby accepts this decidability consequence.
 \end{lemma}
 
 \begin{proof}
-Given \(r\in\RE\), compute \(\tau(r)\), compute \(\tau(0)\), normalize both
-finite target objects, and compare the resulting finite strings.  This is an
-algorithm because \(\tau\) and \(\Norm\) are total computable and the target
-objects have decidable finite equality.  If the normalized strings are equal,
-equality-completeness gives
-\(\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(0))\), and equality reflection for
-\(\tau\) gives \(\Eq_{\RE}(r,0)\).  If the normalized strings are unequal,
-equality-completeness gives
-\(\Sem_{\TE}(\tau(r))\ne\Sem_{\TE}(\tau(0))\), and semantics preservation
-contrapositively gives \(\neg\Eq_{\RE}(r,0)\).  Thus the displayed procedure
-decides whether an arbitrary Richardson source term is identically zero, in
-contradiction to Richardson's undecidability theorem for the chosen source
-fragment.  Therefore the four hypotheses cannot simultaneously hold.
+Given \(r\in\RE\), compute the two finite target objects \(\tau(r)\) and
+\(\tau(0)\), normalize both, and compare the resulting finite strings.  This is
+an algorithm because \(\tau\) and \(\Norm\) are total computable and the target
+normal forms have decidable finite equality.
+
+If
+\(\Norm(\tau(r))=\Norm(\tau(0))\), the normalizer exactness hypothesis gives
+\(\Sem_{\TE}(\tau(r))=\Sem_{\TE}(\tau(0))\), and the semantic reflection
+hypothesis gives \(\Eq_{\RE}(r,0)\).  If the normal forms are unequal, the
+contrapositive of normalizer exactness gives
+\(\Sem_{\TE}(\tau(r))\ne\Sem_{\TE}(\tau(0))\).  The semantic preservation
+hypothesis would imply this target equality from \(\Eq_{\RE}(r,0)\), so by
+contraposition \(\neg\Eq_{\RE}(r,0)\).  Thus the displayed finite-string
+comparison decides \(\Eq_{\RE}(r,0)\) for arbitrary \(r\in\RE\), contradicting
+Theorem~\ref{thm:richardson-source-input}.  The reduction never uses equality on
+an empty common domain: the only source predicate is Richardson's own
+\(\Eq_{\RE}\), and target equality is the explicitly supplied equality of
+\(\Sem_{\TE}\)-objects.
 \end{proof}
 
 \begin{table}
@@ -1407,12 +1815,17 @@ case snapshots, and recorded verification support. \\
 \section{Related work by interface}
 The audit route is adjacent to several literatures but imports only bounded
 interfaces from them.  Table~\ref{tab:cicm-theorem-comparison} gives the
-theorem-by-theorem comparison with the closest recent CICM or CICM-workshop
-items.  Table~\ref{tab:execution-identity-comparison} separately records
+theorem-by-theorem comparison with a fixed recent CICM corpus.  For this table,
+the corpus is finite: CICM main-conference proceedings from 2021 through 2025
+and the associated CICM workshop volumes for those years, including FMM, FVPS,
+MathUI, NatFoM, OpenMath, doctoral-program, and work-in-progress proceedings
+when they are available as citable workshop records.  The table's second column
+contains only the closest items from that corpus.  The third column records
+adjacent infrastructure that is conceptually relevant but outside the CICM
+corpus.  Table~\ref{tab:execution-identity-comparison} then separately records
 independent execution and software-identity infrastructure, because those works
-are central to the byte and replay boundary even though they are not CICM
-theorem papers.  The paragraphs after the tables give the older background
-streams.
+are central to the byte and replay boundary even though they are not CICM theorem
+papers.  The paragraphs after the tables give the older background streams.
 
 The proof-carrying-code line is the closest conceptual ancestor of the replay
 surface: an artifact carries a finite object that a smaller checker can inspect
@@ -1435,62 +1848,59 @@ non-load-bearing until a deterministic gate and human promotion row make a
 finite certificate.
 
 \begin{table}
-\caption{Theorem-by-theorem comparison with recent CICM and CICM-workshop work.}
+\caption{Corpus-defined theorem-by-theorem comparison: CICM 2021--2025 plus CICM workshop volumes.}
 \label{tab:cicm-theorem-comparison}
 \scriptsize
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{0.95}
-\begin{tabularx}{\linewidth}{@{}L{0.18\linewidth}L{0.29\linewidth}L{0.18\linewidth}Y@{}}
+\begin{tabularx}{\linewidth}{@{}L{0.17\linewidth}L{0.28\linewidth}L{0.22\linewidth}Y@{}}
 \toprule
-Public result here & Closest CICM or CICM-workshop result & Prior claim type & Precise new increment here \\
+Public result here & Closest item inside the defined CICM corpus & Adjacent infrastructure outside the corpus & Precise new increment here \\
 \midrule
-Theorem~\ref{thm:typed-verified-core-hierarchy}: finite Horn replay and exact
-six-coordinate public vector &
+Theorem~\ref{thm:typed-verified-core-hierarchy}:
+finite Horn replay and exact six-coordinate public vector &
 Baanen et al., ``Growing Mathlib'' (CICM 2025, proceedings 2026)
 \cite{BaanenEtAl2026GrowingMathlib}; Yamamichi--Nakamura--Shidama, ``A Web
 Platform for Hosting the Mizar Mathematical Library'' (CICM-WS/FMM 2021)
-\cite{YamamichiEtAl2021MizarPlatform}; proof-carrying-code and foundational
-certificate traditions
+\cite{YamamichiEtAl2021MizarPlatform}. &
+Proof-carrying code and foundational proof certificates
 \cite{Necula1997PCC,Appel2001FoundationalPCC,ChihaniMillerRenaud2013FPC}. &
-Formal-library maintenance and web hosting for large mathematical corpora. &
 Adds a finite publication-coordinate projection to the proof-carrying pattern:
 the submitted Horn checker accepts exactly \(\qlex\) and
 \(q_{\mathrm{rgs}}\); source rebuild, artifact semantics, external archive, and
 venue coordinates remain false without upgrade atoms. \\
-Lemma~\ref{lem:rgs-schema-consequence} and
-Theorem~\ref{thm:certificate-record-checker-spec}: finite certificate schema
-and JSON record checker &
+Theorem~\ref{thm:certificate-record-checker-spec}:
+finite certificate schema and JSON record-checker specification &
 Bauer--Ber{\v c}i{\v c}--Devillez--Taslak, ``Incorporating a Database of
 Graphs into a Proof Assistant'' (CICM 2024) \cite{BauerEtAl2024LeanHoG}. &
-Import of curated graph data, generated certificates, and external solving into
-a proof-assistant workflow.  Artifact-badging, ReproZip, and repeatability
-work give the adjacent replay-packaging norms
+Artifact badging, ReproZip, and repeatability work
 \cite{ACM2020ArtifactBadging,ChirigatiRampinShashaFreire2016ReproZip,CollbergProebsting2016Repeatability}. &
-Turns certificates into a publication-boundary checker specification: the checker computes
-\(\Acc_{\Gamma}\) for local records and does not infer graph-data correctness,
-solver soundness, Lean rebuild success, clean-machine reproducibility, or
-artifact semantics. \\
-Replay artifact boundary and no-free-upgrade reading of deterministic gates &
-Horowitz--Karatarakis--Ren--Sanchez Ocegueda, ``Exploring Proof
-Autoformalization with Mistral on Herald'' (CICM 2025, proceedings 2026)
-\cite{HorowitzEtAl2026Herald}; LeanDojo and Lean Copilot
-\cite{YangEtAl2023LeanDojo,SongYangAnandkumar2024LeanCopilot}. &
-LLM autoformalization and Lean-facing copilot/tactic-assistance workflows. &
-Uses that work only as adjacent context for generated formal artifacts; the new
-increment here is not a model-quality or copilot-soundness claim but a finite
-rule saying that proposal, tactic, and repair artifacts are load-bearing only
-after deterministic finite gates, pass rows, and human promotion. \\
-Lemma~\ref{lem:richardson-normalizer-reduction}: Richardson-normalizer
-obstruction as a typed interface boundary &
+Turns certificates into a publication-boundary checker specification: the
+displayed checker computes \(\Acc_{\Gamma}\) for digest-bound local records and
+does not infer graph-data correctness, solver soundness, Lean rebuild success,
+clean-machine reproducibility, or artifact semantics. \\
+Lemma~\ref{lem:richardson-normalizer-reduction}:
+Richardson-normalizer obstruction as a typed interface boundary &
 Karatarakis, ``A Formalization of All Notions in the Statement of a Theorem by
 Deligne'' (CICM 2024) \cite{Karatarakis2024Deligne}. &
-Formalization of the notions appearing in a major theorem statement. &
+Classical undecidability and symbolic simplification literature
+\cite{Richardson1968,Caviness1970,Wang1974}. &
 Uses typed interfaces negatively: a Richardson-normalizer claim must display the
 source fragment, computable translation, equality semantics, finite target, and
 equality reflection; syntax rows alone are not semantic normalizers. \\
-Appendix Lemmas~\ref{lem:zeckendorf-totality}--\ref{lem:fixed-transfer} and
-Theorem~\ref{thm:declared-factorial-spike-cover}: computable Zeckendorf block
-and cover-relative obstruction &
+Corollary~\ref{cor:byte-bound-stage-a-horn-replay}:
+byte-bound conditional Horn replay for the submitted artifact rows &
+Horowitz--Karatarakis--Ren--Sanchez Ocegueda, ``Exploring Proof
+Autoformalization with Mistral on Herald'' (CICM 2025, proceedings 2026)
+\cite{HorowitzEtAl2026Herald}. &
+LeanDojo and Lean Copilot
+\cite{YangEtAl2023LeanDojo,SongYangAnandkumar2024LeanCopilot}. &
+Uses LLM/formal-assistance work only as adjacent context for generated formal
+artifacts; the increment here is a finite rule saying that proposal, tactic, and
+repair artifacts are load-bearing only after deterministic gates, pass rows, and
+human promotion. \\
+Theorem~\ref{thm:declared-factorial-spike-cover}:
+declared factorial-spike cover obstruction &
 Brinich--Johnson, ``Generating Formally Verified Quantum Fourier Transform
 Algorithms'' (CICM 2024) \cite{BrinichJohnson2024QFT};
 Bartoletti--Bonzio--Ferrara, ``Certified Algorithms for Numerical Semigroups in
@@ -1498,10 +1908,10 @@ Rocq'' (CICM 2025, proceedings 2026)
 \cite{BartolettiBonzioFerrara2026Semigroups};
 Bentkamp--Avigad, ``Verified Optimization'' (CICM-WS/FMM 2021)
 \cite{BentkampAvigad2021VerifiedOptimization}. &
-Verified algorithm generation, certified computation, or verified optimization
-reductions in proof-assistant settings. &
-Provides only total finite Zeckendorf normalization, convention transport,
-fixed-transfer growth, and a declared cover-relative obstruction; it does not
+Efficient Zeckendorf arithmetic and finite-state or transfer-sequence analysis
+\cite{AhlbachUsatineFrougnyPippenger2013,Idziaszek2020}. &
+Provides a declared cover-relative obstruction after total finite Zeckendorf
+normalization, convention transport, and fixed-transfer growth; it does not
 assert an efficient online package, certified arithmetic library, or intrinsic
 Foldm classification. \\
 \bottomrule
@@ -1526,7 +1936,11 @@ the predicate printed in the row and only after the raw bytes named by the row
 match the submitted digest convention.  That choice is not a replacement for the
 systems above.  It is a smaller publication-coordinate design pattern and finite
 checker specification for a generated formal-mathematics package; its public
-calculation is only the displayed Horn-coordinate projection.
+calculation is only the displayed Horn-coordinate projection.  Because the
+current article asserts no DOI, SWHID, venue-supplied supplement identifier, or
+equivalent immutable locator for the replay archive, the executable replay
+reading is a conditional instantiation described by
+Table~\ref{tab:artifact-locator-status}, not a property of the PDF alone.
 The row semantics deliberately avoids three stronger claims.
 First, it does not assert clean-machine reproducibility: no theorem depends on a
 fresh rebuild of Lean, Python packages, operating-system images, solver
@@ -1582,8 +1996,8 @@ needed for \(\qlex\) and \(q_{\mathrm{rgs}}\). \\
 \cite{Richardson1968,Caviness1970,Wang1974}: used only through the reduction
 interface in Lemma~\ref{lem:richardson-normalizer-reduction}.  A Richardson
 normalizer claim must name the source fragment, computable translation,
-semantic equality predicate, decidable finite target objects, and
-equality-reflecting normalizer; otherwise it is only a syntax certificate.
+non-vacuous semantic identity predicate, decidable finite target objects, and
+identity-complete normalizer; otherwise it is only a syntax certificate.
 \item EML representation and exact-real/software algebra systems: IRRAM and
 RealLib give exact-real context~\cite{Mueller2001IRRAM,Lambov2007RealLib};
 Arb, Calcium, FLINT, SageMath, and SymPy give software-algebra
@@ -1639,9 +2053,10 @@ nonzero, and no adjacent digits are both \(1\).  Its value is
 \Val(c)=\sum_k c_kF_k .
 \]
 Let \(X_{\mathrm{fin}}\) be the set of all finite normal words, and let \(X_m\)
-be the normal words supported in the window \(\{1,\ldots,m\}\).  The largest
-value in \(X_m\) is \(F_{m+1}-1\), obtained by the alternating word
-\(1010\cdots\) from the top digit down.  Thus \(\Val_m:=\Val|_{X_m}\) is a
+be the normal words supported in the window \(\{1,\ldots,m\}\).  The
+finite-window lemma below proves that the largest value in \(X_m\) is
+\(F_{m+1}-1\), that every value below \(F_{m+1}\) is reached by greedy
+normalization inside the window, and hence that \(\Val_m:=\Val|_{X_m}\) is a
 bijection
 \[
 \Val_m:X_m\longrightarrow \{0,\ldots,F_{m+1}-1\}.
@@ -1705,12 +2120,101 @@ r:=n;\quad e_j:=0\text{ for all }j;\\
 \]
 \end{quote}
 
+\begin{lemma}[Finite-window greedy bound]
+\label{lem:finite-window-greedy-bound}
+For every \(m\ge0\) and every integer \(t\) with \(0\le t<F_{m+1}\), the
+greedy normalizer \(\NF(t)\) never selects an index greater than \(m\).  Hence
+\(\NF(t)\in X_m\), \(\Val(\NF(t))=t\), and every value in
+\(\{0,\ldots,F_{m+1}-1\}\) has a representing word in \(X_m\).  Moreover every
+word in \(X_m\) has value at most \(F_{m+1}-1\); consequently
+\[
+\Val_m:X_m\longrightarrow \{0,\ldots,F_{m+1}-1\}
+\]
+is surjective, and it is injective by Zeckendorf uniqueness.
+\end{lemma}
+
+\begin{proof}
+Run the displayed greedy loop on \(t\).  After each completed iteration, let
+\(h\) be the last selected index, and before the first step put
+\(h=\infty\).  The loop invariant is the following statement:
+\[
+\begin{aligned}
+\mathrm{I}(r,e,h):\quad
+t&=r+\sum_j e_jF_j,\\
+r&\ge0,\\
+e_j&\in\{0,1\}\quad\text{for all }j,\\
+e_je_{j+1}&=0\quad\text{for all }j,\\
+r&<F_{h-1},
+\end{aligned}
+\]
+where \(F_{\infty-1}\) is read as \(+\infty\) in the initial state.  Initially
+\(r=t\), all digits of \(e\) are zero, and \(h=\infty\), so the invariant holds.
+
+Suppose an iteration chooses \(k=\max\{i:F_i\le r\}\), sets \(e_k:=1\), and
+replaces \(r\) by \(r'=r-F_k\).  Maximality gives
+\[
+F_k\le r<F_{k+1}.
+\]
+For \(k\ge2\),
+\[
+r'=r-F_k<F_{k+1}-F_k=F_{k-1},
+\]
+and for \(k=1\) the equality \(F_1=1\le r<F_2=2\) forces \(r'=0\).  Thus the
+new remainder satisfies the invariant with last selected index \(h'=k\).
+
+It remains to check that the newly written digit is not adjacent to an older
+one.  If this is the first selection, there is no older selected index.  If the
+previous last selected index was finite \(h\), the old invariant gave
+\(r<F_{h-1}\).  Together with \(F_k\le r\), this implies
+\[
+F_k<F_{h-1}.
+\]
+Since the Fibonacci sequence is strictly increasing in the indices used here,
+\(k\le h-2\).  Hence the next selected index is at most \(h-2\), so writing
+\(e_k=1\) cannot create adjacent \(1\)'s with any earlier selected digit.  The
+value identity and nonnegativity are immediate from replacing \(r\) by
+\(r-F_k\).
+
+The nonnegative integer remainder strictly decreases whenever the loop runs,
+so the loop terminates.  At termination \(r=0\), and the invariant gives
+\(\Val(\NF(t))=t\) with a finite normal word.  If \(t=0\), no index is selected.
+If \(t>0\), the first selected index \(k\) satisfies
+\[
+F_k\le t<F_{m+1}.
+\]
+Therefore \(k\le m\).  The invariant step just proved shows that after selecting
+\(k\), the next selected index, if any, is at most \(k-2\); iterating this
+argument shows that every later selected index is also at most \(m\).  Hence
+\(\NF(t)\in X_m\).  Thus, if \(0\le t<F_{m+1}\), greedy normalization produces a
+normal word in \(X_m\) whose value is \(t\).  This proves finite-window
+surjectivity of \(\Val_m\).
+
+It remains only to identify the upper edge of the window.  Let
+\[
+M_m=\max\{\Val(c):c\in X_m\}.
+\]
+Then \(M_0=0\), \(M_1=1\), and for \(m\ge2\) a maximizing word either has top
+digit \(0\), contributing at most \(M_{m-1}\), or has top digit \(1\), in which
+case normality forces digit \(m-1\) to be \(0\) and the remaining contribution
+is at most \(M_{m-2}\).  Therefore
+\[
+M_m=\max(M_{m-1},F_m+M_{m-2})=F_{m+1}-1
+\]
+by induction.  Thus every word in \(X_m\) has value in
+\(\{0,\ldots,F_{m+1}-1\}\), while the greedy construction above gives a word in
+\(X_m\) for each value in that set.  Zeckendorf uniqueness on finite normal
+words gives injectivity of \(\Val_m\).
+\end{proof}
+
 \begin{lemma}[Executable Zeckendorf normalizer]
 \label{lem:zeckendorf-totality}
 \(\NF\) is the multi-iteration greedy algorithm displayed above: the
 \textbf{return} line is outside the \textbf{while} block, and the loop invariant
 used in the proof is the invariant stated at the start of the proof below.
-\(\NF\), \(\Val\), \(\Add\), and \(\Mul\) are total on their stated unbounded
+All inputs \(c,d\) to \(\Val\), \(\Add\), \(\Mul\), \(\Add_m\), and \(\Mul_m\)
+are finite normal Zeckendorf words under the convention
+\(F_1=1,F_2=2,F_{k+2}=F_{k+1}+F_k\); the windowed inputs lie in \(X_m\).
+\(\NF\), \(\Val\), \(\Add\), and \(\Mul\) are total on these stated unbounded
 domains.  For each \(m\), \(\Val_m^{-1}\), \(\Add_m\), and \(\Mul_m\) are total
 as maps into \(X_m\cup\{\bot_m\}\), and they return \(\bot_m\) exactly on
 overflow.  When no overflow occurs,
@@ -1750,37 +2254,49 @@ normalization cost plus the ordinary integer-arithmetic cost of computing
 \end{lemma}
 
 \begin{proof}
-For \(\NF(n)\), the loop invariant after every completed iteration is
+For \(\NF(n)\), after every completed iteration let \(\ell\) be the last
+selected index, if a selection has occurred.  The loop invariant is the
+state predicate
 \[
 \begin{aligned}
-\mathrm{I}(r,e):\quad
+\mathrm{I}(r,e,\ell):\quad
 n&=r+\sum_j e_jF_j,\\
 r&\ge0,\\
-e&\text{ is a finite }0\text{-}1\text{ word with no adjacent }1\text{'s},
+e&\text{ is a finite }0\text{-}1\text{ word with no adjacent }1\text{'s},\\
+&\text{and if a last index }\ell\text{ exists, then }
+   \bigl(\ell=1\Rightarrow r=0\bigr),\\
+&\text{and if a last index }\ell\ge2\text{ exists, then }
+   r<F_{\ell-1}.
 \end{aligned}
 \]
-and every future selected index is at most two below the last selected index.
 The invariant is true initially, with \(r=n\) and all \(e_j=0\).  In one
 iteration the algorithm chooses the largest \(F_k\le r\), sets \(e_k:=1\), and
 replaces \(r\) by \(r-F_k\).  This preserves
-\(n=r+\sum_j e_jF_j\) and keeps \(r\ge0\).  After choosing \(F_k\), a later
-choice of \(F_{k-1}\) would require the old remainder to be at least
-\(F_{k-1}\), whence the old \(r\) was at least
-\(F_k+F_{k-1}=F_{k+1}\), contradicting maximality of \(F_k\).  Hence the next
-chosen index is at most \(k-2\), so no adjacent \(1\)'s are introduced.  The
-strict decrease of the nonnegative integer \(r\) proves termination.  At
-termination \(r=0\), so the invariant gives \(\Val(\NF(n))=n\).  Zeckendorf
-uniqueness gives that the returned word is the unique element of
-\(X_{\mathrm{fin}}\) with value \(n\).  The explicit \textbf{return} statement
-is outside the \textbf{while} block; no partial word is returned after the first
-subtraction.
+\(n=r+\sum_j e_jF_j\) and keeps \(r\ge0\).  Write \(r'\) for the new
+remainder.  If \(k\ge2\), maximality gives
+\[
+r<F_{k+1}=F_k+F_{k-1},
+\]
+so \(r'=r-F_k<F_{k-1}\); if \(k=1\), then \(r'=0\).  Thus the new state
+satisfies the remainder bound with last index \(k\).  If there was a previous
+last index \(\ell\), then the old state had \(r<F_{\ell-1}\), unless
+\(\ell=1\), where \(r=0\) and the loop would not run.  Hence
+\(F_k\le r<F_{\ell-1}\), which implies \(k\le\ell-2\).  The new \(1\)-digit is
+therefore separated from the previous last selected digit by at least one zero,
+and the word remains normal.  The strict decrease of the nonnegative integer
+\(r\) proves termination.  At termination \(r=0\), so the invariant gives
+\(\Val(\NF(n))=n\).  Zeckendorf uniqueness gives that the returned word is the
+unique element of \(X_{\mathrm{fin}}\) with value \(n\).  The explicit
+\textbf{return} statement is outside the \textbf{while} block; no partial word
+is returned after the first subtraction.
 
 For the finite window, the maximum-value calculation satisfies
-\(M_m=\max(M_{m-1},F_m+M_{m-2})=F_{m+1}-1\), with \(M_0=0\) and \(M_1=1\).
-Together with Zeckendorf uniqueness this gives
-\(\Val(X_m)=\{0,\ldots,F_{m+1}-1\}\).  Hence \(\Val_m^{-1}(t)\) returns
-\(\bot_m\) precisely when \(t\) is outside this range; otherwise the unbounded
-normalizer returns the unique normal word of value \(t\), necessarily supported
+\(M_m=\max(M_{m-1},F_m+M_{m-2})=F_{m+1}-1\), with \(M_0=0\) and \(M_1=1\), as
+proved in Lemma~\ref{lem:finite-window-greedy-bound}.  The same lemma supplies
+the missing surjectivity step: if \(0\le t<F_{m+1}\), then greedy never selects
+an index greater than \(m\), so \(\NF(t)\in X_m\) and \(\Val(\NF(t))=t\).  Hence
+\(\Val_m^{-1}(t)\) returns \(\bot_m\) precisely when \(t\) is outside this
+range; otherwise it returns the unique normal word of value \(t\), supported
 inside \(\{1,\ldots,m\}\).  The equations for \(\Add\), \(\Mul\), \(\Add_m\),
 and \(\Mul_m\) are then immediate from the definitions through \(\Val\), with
 the windowed equations restricted to the non-overflow branch.  For the first
