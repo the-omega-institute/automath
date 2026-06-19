@@ -567,7 +567,10 @@ Table~\ref{tab:scope-register}.  Thus \(\qrgs\) is a conditional
 bounded fixed-replay record-gate-soundness coordinate, not an unconditional
 coordinate of the digest/file-record closure.  The complete public
 positive-coordinate claim set is \(\{\qlex\}\) for \(A_{\mathrm{rec}}\), and
-\(\{\qlex,\qrgs\}\) only for \(A^{+}\).  The certificate-record
+\(\{\qlex,\qrgs\}\) only for \(A^{+}\).  The latter is not the
+unconditional current PDF-level claim; a concrete archive-replay citation of the
+positive \(\qrgs\) coordinate additionally requires \(\ArchiveOKA\),
+\(\ScriptOKstageA\), and \(\ScriptOK_{\mathrm{cert}}\).  The certificate-record
 specification is support for this interface.  Richardson obstruction,
 Zeckendorf transport, orbit/height material, and auxiliary-cover stress tests
 are non-load-bearing supplement material unless a later record adds their own
@@ -756,7 +759,7 @@ and an immutable replay root;
 contract is an ordinary file under \(R\) and its raw bytes have the printed
 SHA--256 value;
 \item inner no-self digest equality: the parsed
-\artifactpath{certificates/stage_a_digest_table.json} has no row for itself,
+\ledgerpath{certificates/stage_a_digest_table.json} has no row for itself,
 has exact finite domain, has no duplicate path row, and each inner support row is
 paired with ordinary-file byte equality under \(R\) after the same archive-format
 and no-alias guard;
@@ -764,15 +767,22 @@ and no-alias guard;
 submission-interface map, primary-claim inventory, review-bundle manifest,
 case-row manifest, and dispatch table parse to the objects used in
 Theorem~\ref{thm:certificate-record-checker-spec};
-\item environment identity: the replay-environment descriptor pins the JSON,
+  \item environment identity: the replay-environment descriptor pins the JSON,
 SHA--256, path-normalization, ordinary-file, and working-directory conventions
 used by the finite contract; and
-\item locator identity: a DOI-bearing supplement, Software Heritage object,
+  \item locator identity: a DOI-bearing supplement, Software Heritage object,
 venue-controlled supplement identifier, or equivalent immutable byte locator
 names the exact archive bytes and is paired with the byte-equality rows above.
-\end{enumerate}
-The locator identity premise is \(\LocatorOKstageA\), not
-\(\texttt{externalArchiveEquivalence}\), and therefore is not a \(\qext\)
+ \end{enumerate}
+ Equivalently, the dependency roles are: clause 1 supplies archive format and
+ alias rejection; clauses 2--3 supply outer, digest-table, and inner byte
+ equality; clause 4 supplies the parsed certificate tuple; clause 5 supplies the
+ environment descriptor; and clause 6 supplies the stable locator identity.
+The locator identity premise is
+\[
+\LocatorOKstageA,
+\]
+not \(\texttt{externalArchiveEquivalence}\), and therefore is not a \(\qext\)
 upgrade row.  If
 \begin{align*}
 &\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}},
@@ -1057,11 +1067,14 @@ reject the archive instantiation instead of becoming host-dependent cases.\\
 
 \begin{lemma}[Archive format normalization and alias rejection]
 \label{lem:archive-format-normalization}
-Let \(Z\) be a submitted replay archive and let \(P_{\mathrm{req}}\) be the
+Let \(Z\) be a submitted replay archive.  Let \(P_{\mathrm{outer}}\) be the
 finite relative-path set printed in
 Tables~\ref{tab:replay-artifact-manifest}--\ref{tab:artifact-submission-checklist}
-together with the review-bundle entries reached from
-\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}.  The predicate
+and let \(P_{\mathrm{inner}}\) be the finite path domain parsed from
+\artifactpath{certificates/stage_a_digest_table.json}.  The required set is
+\(P_{\mathrm{req}}=P_{\mathrm{outer}}\cup P_{\mathrm{inner}}\), so review-bundle and
+certificate-support entries reached only through the inner digest table receive
+the same archive-format and no-alias guard before they are read.  The predicate
 \(\ArchiveFormatOK(Z,R,P_{\mathrm{req}})\) is the following finite archive-format
 condition.
 \begin{enumerate}[label={\(\mathrm{F}_{\arabic*}\):}]
@@ -1357,6 +1370,9 @@ fails:
 \quad\Longleftrightarrow\quad
 \neg \mathrm{B}_3.
 \]
+This is only a finite record-schema test.  A command line or script name passing
+E10 is not executable evidence unless the corresponding \(\ScriptOK\) premise is
+separately supplied.
 \end{lemma}
 
 \begin{proof}
@@ -1449,8 +1465,11 @@ inventory, review-bundle manifest, case-row manifest, and dispatch table satisfy
 all displayed clauses M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 below.  The
 theorem's logical form is therefore
 \[
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\Longleftrightarrow
+\begin{aligned}
+&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\\
+&\qquad{}\Longleftrightarrow
 \text{all displayed clauses pass},
+\end{aligned}
 \]
 for every already-parsed tuple satisfying the typed grammars just stated.  No
 byte-parsing, root-normalization, or current-record byte premise is hidden in
@@ -2232,7 +2251,10 @@ Equivalently, the byte-supplied current ledger satisfies L1--L2 and every row
 satisfies E1--E10 and R1--R4 of
 Theorem~\ref{thm:certificate-record-checker-spec}.  The displayed
 Table~\ref{tab:current-ledger-instantiation} may remain as an explanatory
-rendering, but it is not the evidence object for this theorem.
+rendering, but it is not the evidence object for this theorem.  In particular,
+the theorem is specification-only with respect to named scripts and command
+lines: executable force is deferred to \(\ScriptOKstageA\) and
+\(\ScriptOK_{\mathrm{cert}}\), not obtained from path strings in the ledger.
 \end{theorem}
 
 \begin{proof}
@@ -2931,60 +2953,78 @@ not a replay locator.\\
 \begin{tabularx}{\linewidth}{@{}Y@{}}
 \toprule
 \textbf{Relative path and SHA--256 digest.  The authoritative machine-readable
-manifest is \artifactpath{certificates/stage_a_digest_table.json}; this printed
+manifest is \ledgerpath{certificates/stage_a_digest_table.json}; this printed
 table is a human audit anchor, and the digest-table row is an outer printed
-anchor, not an inner self-row} \\
+anchor, not an inner self-row.  Each digest is printed as two adjacent
+32-hex chunks} \\
 \midrule
-\artifactpath{certificates/stage_a_manifest.json}\\
-\texttt{e0bb60d1192d9c8282ddfdc6b72333e35e95eb7cadbb8e3d156b2cba534ce7d7}\\
+\ledgerpath{certificates/stage_a_manifest.json}\\
+\texttt{e0bb60d1192d9c8282ddfdc6b72333e}\\
+\texttt{35e95eb7cadbb8e3d156b2cba534ce7d7}\\
 \addlinespace
-\artifactpath{certificates/stage_a_horn_schema.json}\\
-\texttt{ff3709ccd5a9f3671224f00b9486c802993b6ee599b6f0e4646c0ecc1f3859ce}\\
+\ledgerpath{certificates/stage_a_horn_schema.json}\\
+\texttt{ff3709ccd5a9f3671224f00b9486c802}\\
+\texttt{993b6ee599b6f0e4646c0ecc1f3859ce}\\
 \addlinespace
-\artifactpath{certificates/stage_a_horn_audit_certificate.json}\\
-\texttt{942fb516617bea480e93170a5ba3a7c74e0cab421729aafc0d1c2c35defc7c7b}\\
+\ledgerpath{certificates/stage_a_horn_audit_certificate.json}\\
+\texttt{942fb516617bea480e93170a5ba3a7c7}\\
+\texttt{4e0cab421729aafc0d1c2c35defc7c7b}\\
 \addlinespace
-\artifactpath{certificates/stage_a_replay_report.json}\\
-\texttt{44ab1cbe9584e73b6c7cc7a5e8d1d238f24867fb6324de1fbd3081f80110b44d}\\
+\ledgerpath{certificates/stage_a_replay_report.json}\\
+\texttt{44ab1cbe9584e73b6c7cc7a5e8d1d238}\\
+\texttt{f24867fb6324de1fbd3081f80110b44d}\\
 \addlinespace
-\artifactpath{certificates/stage_a_replay_environment.json}\\
-\texttt{d867d6a77410c91ce5ce3463576feaf1c0c4b8b08d2e49b5387657b39e524faa}\\
+\ledgerpath{certificates/stage_a_replay_environment.json}\\
+\texttt{d867d6a77410c91ce5ce3463576feaf1}\\
+\texttt{c0c4b8b08d2e49b5387657b39e524faa}\\
 \addlinespace
-\artifactpath{certificates/stage_a_digest_table.json}\\
-\texttt{a847f7656298ecf219b8082ed7b0b46d5a27a6fb61dd4b2510557c841cfbdfb2}\\
+\ledgerpath{certificates/stage_a_digest_table.json}\\
+\texttt{a847f7656298ecf219b8082ed7b0b46d}\\
+\texttt{5a27a6fb61dd4b2510557c841cfbdfb2}\\
 \addlinespace
-\artifactpath{certificates/current_ledger_instantiation.json}\\
-\texttt{cdbf7e157bdd78136ec10fab213d38ff1fc8aacb8dad1f004f809fc885376874}\\
+\ledgerpath{certificates/current_ledger_instantiation.json}\\
+\texttt{cdbf7e157bdd78136ec10fab213d38ff}\\
+\texttt{1fc8aacb8dad1f004f809fc885376874}\\
 \addlinespace
-\artifactpath{certificates/replay_stage_a_audit.py}\\
-\texttt{c775cb2a3052d053812a1b9da83b4e1c410e6a453f5081132bd1ee4c7aef0e9d}\\
+\ledgerpath{certificates/replay_stage_a_audit.py}\\
+\texttt{c775cb2a3052d053812a1b9da83b4e1c}\\
+\texttt{410e6a453f5081132bd1ee4c7aef0e9d}\\
 \addlinespace
-\artifactpath{certificates/replay_case_rows.py}\\
-\texttt{88b7176dc0e63cbe3f8403b65e8b722be19c43489abdc1f29971c76834b826ad}\\
+\ledgerpath{certificates/replay_case_rows.py}\\
+\texttt{88b7176dc0e63cbe3f8403b65e8b722b}\\
+\texttt{e19c43489abdc1f29971c76834b826ad}\\
 \addlinespace
-\artifactpath{certificates/case_rows_expected.json}\\
-\texttt{7f39310a9106496c10c7be1139806a1ce6dfcf55be6865f4fe2c14b0abb92c97}\\
+\ledgerpath{certificates/case_rows_expected.json}\\
+\texttt{7f39310a9106496c10c7be1139806a1c}\\
+\texttt{e6dfcf55be6865f4fe2c14b0abb92c97}\\
 \addlinespace
-\artifactpath{certificates/scan_tex_source_labels.py}\\
-\texttt{585de7f0b0354db051806a7fed2dd9ac56bd75f8d18537dae4841f5e4c67ab88}\\
+\ledgerpath{certificates/scan_tex_source_labels.py}\\
+\texttt{585de7f0b0354db051806a7fed2dd9ac}\\
+\texttt{56bd75f8d18537dae4841f5e4c67ab88}\\
 \addlinespace
-\artifactpath{certificates/static_source_label_scan.json}\\
-\texttt{5684ac7452732917281ea88872c525ff5ea6c083ddd85aa009bcf1850b53927a}\\
+\ledgerpath{certificates/static_source_label_scan.json}\\
+\texttt{5684ac7452732917281ea88872c525ff}\\
+\texttt{5ea6c083ddd85aa009bcf1850b53927a}\\
 \addlinespace
-\artifactpath{review_bundle/certificate_schema.json}\\
-\texttt{47e3f2751b0177dc48e1607bac1d8c55b46cbc668dd081c71a20360e09069684}\\
+\ledgerpath{review_bundle/certificate_schema.json}\\
+\texttt{47e3f2751b0177dc48e1607bac1d8c55}\\
+\texttt{b46cbc668dd081c71a20360e09069684}\\
 \addlinespace
-\artifactpath{review_bundle/current_package_pass_records.json}\\
-\texttt{65193d0eb722914e2573abf5f04858a8c2033f92d484ab11a5707d3b8b3fa066}\\
+\ledgerpath{review_bundle/current_package_pass_records.json}\\
+\texttt{65193d0eb722914e2573abf5f04858a8}\\
+\texttt{c2033f92d484ab11a5707d3b8b3fa066}\\
 \addlinespace
-\artifactpath{review_bundle/submission_interface_map.json}\\
-\texttt{bcf46b25076ea6abafc88fd55768b1590e5b5305e6cea247be20219d833f3d1a}\\
+\ledgerpath{review_bundle/submission_interface_map.json}\\
+\texttt{bcf46b25076ea6abafc88fd55768b159}\\
+\texttt{0e5b5305e6cea247be20219d833f3d1a}\\
 \addlinespace
-\artifactpath{review_bundle/primary_claim_inventory.json}\\
-\texttt{e5c31cc92b92b50e3c736b717340d0808aa8eb16f4e23a913654a66fec0bf591}\\
+\ledgerpath{review_bundle/primary_claim_inventory.json}\\
+\texttt{e5c31cc92b92b50e3c736b717340d080}\\
+\texttt{8aa8eb16f4e23a913654a66fec0bf591}\\
 \addlinespace
-\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}\\
-\texttt{4feadd22e96bd29b2af2c6da1e3533b48ecd14ec044efaf6193bb5809d11bec4}\\
+\ledgerpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}\\
+\texttt{4feadd22e96bd29b2af2c6da1e3533b4}\\
+\texttt{8ecd14ec044efaf6193bb5809d11bec4}\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -3210,43 +3250,26 @@ Write \(\mathcal R_{\mathrm{inner}}\) for the finite support-row relation
 \(\mathrm{sha256}(\mathrm{readBytes}_{R}(p))=D_{\mathrm{inner}}(p)\).''  Define
 the camera-ready archive predicate by the wrapped display
 \begin{align*}
-\ArchiveOKA(Z)&\Longleftrightarrow
-\Bigl[
-\ArchiveFormatOK(Z,R,P_{\mathrm{req}})
-\Bigr]\\
+\ArchiveOKA(Z)\Longleftrightarrow{}&
+\ArchiveFormatOK(Z,R,P_{\mathrm{req}})\\
+&{}\land \operatorname{dom}(D_{\mathrm{outer}})=P_{\mathrm{outer}}\\
+&{}\land dt\in P_{\mathrm{outer}}\\
 &{}\land
-\Bigl[
-\operatorname{dom}(D_{\mathrm{outer}})=P_{\mathrm{outer}}
-\Bigr]\\
+   \bigl(\forall p\in P_{\mathrm{req}}:
+   \mathrm{OrdinaryFile}_{R}(p)\bigr)\\
 &{}\land
-\Bigl[
-dt\in P_{\mathrm{outer}}
-\Bigr]\\
+   \bigl(\forall p\in P_{\mathrm{outer}}:
+   \mathrm{sha256}(\mathrm{readBytes}_{R}(p))\\
+&\hspace{8em}=D_{\mathrm{outer}}(p)\bigr)\\
 &{}\land
-\Bigl[
-\forall p\in P_{\mathrm{req}}:
-\mathrm{OrdinaryFile}_{R}(p)
-\Bigr]\\
+   \bigl(T=\operatorname{parseJSON}_{\mathrm{utf8sig}}\\
+&\hspace{8em}(\mathrm{readBytes}_{R}(dt))\bigr)\\
 &{}\land
-\Bigl[
-\forall p\in P_{\mathrm{outer}}:
-\mathrm{sha256}(\mathrm{readBytes}_{R}(p))
-=D_{\mathrm{outer}}(p)
-\Bigr]\\
-&{}\land
-\Bigl[
-T=\operatorname{parseJSON}_{\mathrm{utf8sig}}
-(\mathrm{readBytes}_{R}(dt))
-\Bigr]\\
-&{}\land
-\Bigl[
-\mathrm{DigestRows}(T)=D_{\mathrm{inner}}
-\land dt\notin P_{\mathrm{inner}}
-\Bigr]\\
-&{}\land
-\mathrm{InnerDigestOK}(T,\mathcal R_{\mathrm{inner}})\\
+   \bigl(\mathrm{DigestRows}(T)=D_{\mathrm{inner}}
+   \land dt\notin P_{\mathrm{inner}}\bigr)\\
+&{}\land \mathrm{InnerDigestOK}(T,\mathcal R_{\mathrm{inner}})\\
 &{}\land \mathcal R_{\mathrm{bytes}}\\
-&{}\land \mathrm{LocatorOK}(Z,T)\\
+&{}\land \LocatorOKstageA(Z,T)\\
 &{}\land \mathrm{EnvOK}(R,E).
 \end{align*}
 Here \(\mathrm{InnerDigestOK}(T,\mathcal R_{\mathrm{inner}})\) is the mathematical
@@ -3271,7 +3294,7 @@ that the seven supplied byte records decode as \texttt{utf-8-sig} JSON, parse to
 exactly \((\Sigma,L,I,Q,M,C,\Gamma)\), and have SHA--256 values equal to their
 named rows in \(D_{\mathrm{inner}}\); if \(\Gamma\) is extracted from the schema
 file rather than stored as a separate file, the archive must still supply the
-canonical dispatch-table byte slice and its SHA--256 row.  \(\mathrm{LocatorOK}(Z,T)\)
+canonical dispatch-table byte slice and its SHA--256 row.  \(\LocatorOKstageA(Z,T)\)
 means that \(L\) is a stable public or venue-controlled locator naming the exact
 archive bytes and satisfying the Table~\ref{tab:artifact-locator-status}
 byte-equality condition; and \(\mathrm{EnvOK}(R,E)\) is the root-dependent
@@ -3452,8 +3475,8 @@ cited by the byte-binding lemma and the conditional Horn replay corollary.  That
 corollary computes the coordinate vector
 \(\{\qlex,q_{\mathrm{rgs}}\}\) because the fixed Horn schema has positive rules
 only for the lexical and bounded-replay atoms, while the four stronger
-coordinates still lack their named upgrade atoms.  Clause \(\mathrm{A}_1\) makes
-the archive format accepted; clause \(\mathrm{A}_8\) makes
+  coordinates still lack their named upgrade atoms.  Clause \(\mathrm{A}_1\)
+  supplies the archive-format guard; clause \(\mathrm{A}_8\) makes
 the located archive identical to the submitted replay surface; it does not add
 \(\texttt{externalArchiveEquivalence}\), assert external archive equivalence as
 a promoted coordinate, or add
