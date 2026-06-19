@@ -390,7 +390,9 @@ atoms, and human-scoped support atoms displayed below.  The script-conformance
 atom \(\texttt{ScriptOKstage\_a}\) is not a member of \(A_{\mathrm{rec}}\); it is
 an external branch-by-branch premise which may be adjoined to form
 \[
-A^{+}=A_{\mathrm{rec}}\cup\{\texttt{ScriptOKstage\_a}\}.
+A^{+}=A_{\mathrm{rec}}\cup\{\texttt{ScriptOKstage\_a}\};
+\qquad
+A_{\mathrm{rec}}\cap\{\texttt{ScriptOKstage\_a}\}=\varnothing.
 \]
 The equality between the artifact bytes
 \artifactpath{certificates/stage_a_horn_schema.json},
@@ -498,7 +500,8 @@ displayed rules whose conclusions lie in \(Q\).  Rule \(R1\) applies over
 \(\texttt{qinv}\).  Rule \(R3\) does not apply over \(A_{\mathrm{rec}}\), because
 one of its ten premises is the explicit TCB atom
 \(\textsf{ScriptOKstage\_a}\), and that atom is not file-derived, not
-checker-emitted, and not in \(A_{\mathrm{rec}}\).  Hence
+checker-emitted, and not in \(A_{\mathrm{rec}}\).  This missing premise is the
+only reason \(q_{\mathrm{rgs}}\) is absent from the unconditional closure.  Hence
 \[
 \operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\{\qlex\}.
 \]
@@ -929,10 +932,10 @@ a finite dictionary and that its key set contains this same finite set
 clause inspects these five command-run keys.
 \end{proof}
 
-\begin{theorem}[Pure finite schema specification for certificate-record acceptance]
+\begin{theorem}[Theorem 2a (schema): pure finite certificate-record acceptance]
 \label{thm:certificate-record-checker-spec}
 This theorem gives only the finite mathematical relation for certificate-record
-acceptance after parsing.  Its inputs are an abstract parsed tuple
+acceptance after parsing.  Its inputs are an abstract finite parsed tuple
 \[
 (\Sigma,L,I,Q,M,C,\Gamma,D)
 \]
@@ -1121,7 +1124,7 @@ root-relative file existence, or a path that merely exists on disk does not
 satisfy \(\PointerOK\).
 
 The following displayed relation is the operative finite mathematical
-design-pattern specification for the current certificate-record inputs
+design-pattern specification for any finite parsed certificate-record inputs
 \artifactpath{review_bundle/certificate_schema.json},
 \artifactpath{review_bundle/current_package_pass_records.json},
 \artifactpath{review_bundle/submission_interface_map.json},
@@ -1244,17 +1247,20 @@ conditions holds.  Consequently,
 \(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\) iff all rows satisfy
 \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
 the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
-hold.  The seven concrete rows used in this iff are precisely the entries
-\(\texttt{a1},\ldots,\texttt{a7}\) instantiated in
-Table~\ref{tab:current-ledger-instantiation}, with exact tokens supplied by
-\artifactpath{certificates/current_ledger_instantiation.json} when that file is
-supplied as bytes; their row-by-row discharge is
-Lemma~\ref{lem:current-ledger-ok}.  This is not a free-standing assertion that
-those current records have been supplied or parsed correctly, nor that
+hold.  Equivalently, for any finite parsed records satisfying the displayed
+grammars,
+\[
+\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)
+\Longleftrightarrow
+\text{clauses M1--M3, L1--E10, R1--R4, S1--S2, P1--P5 pass}.
+\]
+This schema theorem is not a free-standing assertion that the current records
+have been supplied or parsed correctly, nor that
 \artifactpath{review_bundle/verify_certificate_records.py} implements the
-relation; it is the conditional byte-bound specification under the artifact and
-TCB hypotheses above.  The relation rejects iff at least one displayed clause is
-violated.
+relation.  The current seven-row instantiation is the separate byte-bound
+Theorem~\ref{thm:current-ledger-bytes-to-acc}, and executable script conformance
+is the separate Theorem~\ref{thm:certificate-record-current-instance}.  The
+relation rejects iff at least one displayed clause is violated.
 \end{theorem}
 
 \begin{proof}
@@ -1512,49 +1518,100 @@ Boundary: \(H=\) theorem-obligation support surface; \(B=\) no command run.\\
 
 \begin{definition}[Digest-bound current-ledger bytes]
 \label{def:current-ledger-bytes-ok}
-\(\operatorname{CurrentLedgerBytesOK}(J,d)\) means that \(J\) is the ordinary
-non-symlink file \artifactpath{certificates/current_ledger_instantiation.json},
-the digest table \artifactpath{certificates/stage_a_digest_table.json} contains
-the row
+\(\operatorname{CurrentLedgerBytesOK}(R)\) means the following byte-level
+predicate.  Let
 \[
-\artifactpath{certificates/current_ledger_instantiation.json}\mapsto d,
+P_{\mathrm{cert}}=
+\left\{
+\begin{array}{l}
+\artifactpath{review_bundle/certificate_schema.json},\\
+\artifactpath{review_bundle/current_package_pass_records.json},\\
+\artifactpath{review_bundle/submission_interface_map.json},\\
+\artifactpath{review_bundle/primary_claim_inventory.json},\\
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}
+\end{array}
+\right\}.
 \]
-the SHA--256 of the raw bytes of \(J\) is \(d\), and decoding \(J\) as
-\texttt{utf-8-sig} JSON yields schema
-\texttt{current-ledger-instantiation-v1} with exactly the seven entries
-\(\texttt{a1},\ldots,\texttt{a7}\) and the atom, path, gate, discovery-interface,
-human-boundary, and command-boundary fields displayed in
-Table~\ref{tab:current-ledger-instantiation}.  The displayed PDF table is
-therefore a human-readable mirror of the byte listing, not the source from which
-byte strings are reconstructed.
+The root \(R\) contains each \(p\in P_{\mathrm{cert}}\) as an ordinary
+non-symlink file, the digest table
+\artifactpath{certificates/stage_a_digest_table.json} contains the rows
+\[
+\begin{array}{rcl}
+\artifactpath{review_bundle/certificate_schema.json}
+&\mapsto&\texttt{47e3f2751b0177dc48e1607bac1d8c55b46cbc668dd081c71a20360e09069684},\\
+\artifactpath{review_bundle/current_package_pass_records.json}
+&\mapsto&\texttt{65193d0eb722914e2573abf5f04858a8c2033f92d484ab11a5707d3b8b3fa066},\\
+\artifactpath{review_bundle/submission_interface_map.json}
+&\mapsto&\texttt{bcf46b25076ea6abafc88fd55768b1590e5b5305e6cea247be20219d833f3d1a},\\
+\artifactpath{review_bundle/primary_claim_inventory.json}
+&\mapsto&\texttt{e5c31cc92b92b50e3c736b717340d0808aa8eb16f4e23a913654a66fec0bf591},\\
+\artifactpath{review_bundle/REVIEW_BUNDLE_MANIFEST.json}
+&\mapsto&\texttt{4feadd22e96bd29b2af2c6da1e3533b48ecd14ec044efaf6193bb5809d11bec4},
+\end{array}
+\]
+and for every such row \(p\mapsto d_p\),
+\[
+\operatorname{sha256}(\operatorname{readBytes}_{R}(p))=d_p.
+\]
+Decoding those five files as \texttt{utf-8-sig} JSON yields the parsed objects
+\((\Sigma,L,I,Q,M)\), the case-row manifest \(C\) is the submitted finite
+case-row manifest used by the review bundle, and the dispatch table
+\(\Gamma=\Sigma.\texttt{gate\_dispatch}\).  Finally
+\(\operatorname{JSONOK}(\Sigma,L,I,Q,M,C)\) holds: \(L\) has ledger name
+\texttt{current\_package\_pass\_records}, evidence level
+\texttt{path-verified}, schema pointer
+\artifactpath{review_bundle/certificate_schema.json}, and exactly the seven
+entries \(\texttt{a1},\ldots,\texttt{a7}\) with the JSON fields
+\texttt{claim\_kind\_set}, \texttt{evidence\_level},
+\texttt{evidence\_surface}, \texttt{pass\_records},
+\texttt{discovery\_interface}, \texttt{human\_promotion}, and \texttt{boundary}
+parsed from \artifactpath{review_bundle/current_package_pass_records.json}.
+The canonicalization allowed inside \(\operatorname{JSONOK}\) is finite and
+listed: \(\texttt{manifest:case\_evidence[}i\texttt{]}\) is rewritten to
+\(\texttt{manifest:case\_evidence/}i\) for \(i=0,1,2,3\), and the two
+\texttt{explicit-historical-boundary:} path strings in entry \(\texttt{a3}\)
+are rewritten to
+\(\texttt{historical-boundary:newmath-finite-parts-dynamical-zeta-shifts}\)
+and
+\(\texttt{historical-boundary:auditable-theory-to-paper-pipeline-root}\).
+No prefix rule, wildcard rule, path existence rule, or other alias is available.
+Table~\ref{tab:current-ledger-instantiation} and
+\artifactpath{certificates/current_ledger_instantiation.json} are explanatory
+normalized renderings of those bytes; neither is the evidence object for the
+current-ledger theorem.
 \end{definition}
 
 \begin{lemma}[RowParseOK for the current ledger]
 \label{lem:current-ledger-row-parse-ok}
-Let \(T_{\mathrm{cur}}\) be the seven rows of
-Table~\ref{tab:current-ledger-instantiation}, and assume
+Let \(L_{\mathrm{cur}}\) be the seven entries obtained by decoding and
+canonicalizing \artifactpath{review_bundle/current_package_pass_records.json}
+under Definition~\ref{def:current-ledger-bytes-ok}, and assume
 \[
-\operatorname{CurrentLedgerBytesOK}
-(\artifactpath{certificates/current_ledger_instantiation.json},
-\texttt{cdbf7e157bdd78136ec10fab213d38ff1fc8aacb8dad1f004f809fc885376874}).
+\operatorname{CurrentLedgerBytesOK}(R).
 \]
-Let
-\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) mean that every atom printed in
-the typed evidence-surface column is a whole-string member of
-\(E_{\mathrm{atom}}\), and every path printed in that column is a whole-string
-member of \(E_{\mathrm{path}}\), for the grammars in
+Let \(\operatorname{RowParseOK}(L_{\mathrm{cur}})\) mean that every canonicalized
+non-path evidence string parsed from the JSON byte record is a whole-string
+member of \(E_{\mathrm{atom}}\), and every canonicalized local support path
+parsed from the same byte record is a whole-string member of \(E_{\mathrm{path}}\),
+for the grammars in
 Theorem~\ref{thm:certificate-record-checker-spec}.  Then
-\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) holds.  This lemma is the only
-place where Table~\ref{tab:current-ledger-instantiation} is converted into
-tokens of Theorem~\ref{thm:certificate-record-checker-spec}; without this
-row-wise parse enumeration, Lemma~\ref{lem:current-ledger-ok} has no membership
-shortcut from printed prose to \(E_{\mathrm{atom}}\) or \(E_{\mathrm{path}}\).
+\(\operatorname{RowParseOK}(L_{\mathrm{cur}})\) holds.  This lemma is the place
+where the raw JSON strings in
+\artifactpath{review_bundle/current_package_pass_records.json}, after only the
+finite canonicalizations listed in Definition~\ref{def:current-ledger-bytes-ok},
+are converted into typed tokens of
+Theorem~\ref{thm:certificate-record-checker-spec}; the printed table supplies no
+membership shortcut.
 \end{lemma}
 
 \begin{proof}
-The premise supplies the byte-level list of strings; Table~\ref{tab:current-ledger-instantiation}
-is only its readable projection.  All cases are finite whole-string checks.  The
-atom rows are:
+The premise supplies the byte-level list of strings by reading
+\artifactpath{review_bundle/current_package_pass_records.json}.  The bracketed
+manifest aliases and two explicit historical-boundary aliases are first replaced
+by the finite canonical strings listed in
+Definition~\ref{def:current-ledger-bytes-ok}; Table~\ref{tab:current-ledger-instantiation}
+is only a readable projection of the resulting parsed tuple.  All cases are
+finite whole-string checks.  The canonical atom rows are:
 \[
 \begin{array}{ll}
 \texttt{a1}:&
@@ -1594,16 +1651,17 @@ atom rows are:
 \texttt{theorem:thm:deterministic-theorem-environment-extractor-boundary}.
 \end{array}
 \]
-This finite display is the normalized token list, not a pretty-printed path
-abbreviation: brackets, absolute paths, raw prefixes such as
-\texttt{explicit-historical-boundary:}, and unlisted top-level paths are not
-being silently accepted.  The table and formal-label strings have a displayed atom prefix followed by an
+This finite display is the normalized token list computed from the JSON byte
+record, not a pretty-printed path abbreviation: brackets, absolute paths, raw
+prefixes such as \texttt{explicit-historical-boundary:}, and unlisted top-level
+paths are not being silently accepted outside the two listed canonicalizations.
+The table and formal-label strings have a displayed atom prefix followed by an
 \(\alpha\)-string.  The manifest strings have prefix \texttt{manifest:} followed
 by \(\beta\)-strings whose JSON-pointer paths are present in \(M\).  The two
 historical strings have prefix \texttt{historical-boundary:} followed by
 \(\alpha\)-strings.  Hence each listed atom is in \(E_{\mathrm{atom}}\).
 
-The path rows are:
+The canonical path rows parsed from the same JSON byte record are:
 \[
 \begin{array}{ll}
 \texttt{a1}:&
@@ -1675,7 +1733,8 @@ These four finite hypotheses mean that every evidence-path pointer has its
 \(\operatorname{BoundPath}_D\) digest row, every manifest pointer is in
 \(\operatorname{ManifestBoundary}(M)\), every snapshot pointer is in
 \(\operatorname{SnapshotBoundary}(S)\), and every table/formal-label pointer is in
-the submitted \(\operatorname{TableBoundary}\) surface.  If
+the submitted \(\operatorname{TableBoundary}\) surface; they are hypotheses of
+this lemma, not consequences of merely printing the pointer strings.  If
 \[
 \operatorname{CurrentLedgerBytesOK}
 (\artifactpath{certificates/current_ledger_instantiation.json},
@@ -1982,8 +2041,9 @@ names \texttt{freshFormalSourceUpgrade},
 \texttt{uploadTimeVenueAcceptanceUpgrade} do not occur as \texttt{atom} values
 in \texttt{compiler\_rows}; appearances in negative-boundary prose or coordinate
 metadata are not compiler rows.  Hence the compiled atom set is exactly the
-displayed file-derived set, and the conditional \(q_{\mathrm{rgs}}\) closure is
-obtained only after adjoining the separate \(\ScriptOKstageA\) premise.  The
+displayed file-derived set \(A_{\mathrm{rec}}\), not \(A^{+}\), and the
+conditional \(q_{\mathrm{rgs}}\) closure is obtained only after adjoining the
+separate \(\ScriptOKstageA\) premise.  The
 proof has inspected
 only the bound JSON records and the displayed finite projections, so it supplies
 no branch-by-branch Python conformance lemma.
@@ -2016,6 +2076,9 @@ q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=q_{\mathrm{ven}}=
 Without that branch-by-branch premise, the digest-bound bytes supply only
 \(\qlex\) from the file-derived and checker-verified atoms; they supply neither a
 positive \(q_{\mathrm{rgs}}\) coordinate nor a replay assertion by the script.
+Thus this corollary preserves the two-branch split of
+Theorem~\ref{thm:typed-verified-core-hierarchy} rather than promoting the
+conditional branch into the unconditional one.
 \end{corollary}
 
 \begin{proof}
@@ -2564,6 +2627,7 @@ the camera-ready archive predicate by the wrapped display
 \ArchiveOKA(Z)\Longleftrightarrow{}&
 \Bigl[
 \operatorname{dom}(D_{\mathrm{outer}})=P_{\mathrm{req}}
+\land dt\in P_{\mathrm{req}}
 \land
 \forall p\in P_{\mathrm{req}}:
 \mathrm{OrdinaryFile}_{R}(p)
@@ -2716,9 +2780,10 @@ normalization, containment, symlink-rejection, and printed SHA--256 hypotheses.
 Clause \(\mathrm{A}_2\) supplies the missing definitional equality
 \(T=\operatorname{parseJSON}_{\mathrm{utf8sig}}(\operatorname{readBytes}_{R}(dt))\)
 between the tuple component and the bytes at the digest-table path.  Clauses
-\(\mathrm{A}_3\) and \(\mathrm{A}_4\) supply exact inner-domain equality,
-no-self-row discipline, and digest equality for every path named by the parsed
-inner table.  Clause \(\mathrm{A}_5\) supplies raw byte records for
+\(\mathrm{A}_3\) and \(\mathrm{A}_4\) supply
+\(\mathrm{InnerDigestOK}(T,\mathcal R_{\mathrm{inner}})\): exact inner-domain
+equality, no-self-row discipline, and digest equality for every path named by
+the parsed inner table.  Clause \(\mathrm{A}_5\) supplies raw byte records for
 \(\Sigma,L,I,Q,M,C,\Gamma\), their JSON parsing into the pure schema tuple, and
 their inner-table digest bindings.  Clause \(\mathrm{A}_6\) supplies the pinned
 root-dependent execution descriptor assumed by the replay commands, including
@@ -2770,8 +2835,9 @@ about the submitted path
 Tables~\ref{tab:replay-tcb} and \ref{tab:replay-byte-binding}, the script's
 accept/reject set is exactly the finite Stage--A relation whose branches are:
 \begin{enumerate}[label={\(\mathrm{S}_{\arabic*}\):}]
-\item it validates every row of the no-self digest table and rejects absolute
-paths, \texttt{..}, backslashes, symlinks, directories, missing rows, digest
+\item it implements \(\mathrm{InnerDigestOK}(T,\mathcal R_{\mathrm{inner}})\) for
+the no-self digest table, validating every row and rejecting absolute paths,
+\texttt{..}, backslashes, symlinks, directories, missing rows, digest
 mismatches, and any attempted row for
 \artifactpath{certificates/stage_a_digest_table.json};
 \item it emits manifest atoms exactly from the digest-checked
