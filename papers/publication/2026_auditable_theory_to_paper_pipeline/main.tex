@@ -80,6 +80,18 @@
 \newcommand{\qart}{q_{\mathrm{art}}}
 \newcommand{\qext}{q_{\mathrm{ext}}}
 \newcommand{\qven}{q_{\mathrm{ven}}}
+\newcommand{\MainBytes}{\mathsf{MainBytes}}
+\newcommand{\Schema}{\mathsf{Schema}}
+\newcommand{\Ledger}{\mathsf{Ledger}}
+\newcommand{\InterfaceMap}{\mathsf{InterfaceMap}}
+\newcommand{\ClaimInventory}{\mathsf{ClaimInventory}}
+\newcommand{\ReviewManifest}{\mathsf{ReviewManifest}}
+\newcommand{\CaseManifest}{\mathsf{CaseManifest}}
+\newcommand{\Dispatch}{\mathsf{Dispatch}}
+\newcommand{\Digest}{\mathsf{Digest}}
+\newcommand{\Snapshot}{\mathsf{Snapshot}}
+\newcommand{\LocatorRow}{\mathsf{LocatorRow}}
+\newcommand{\CertTuple}{\mathcal T_{\mathrm{cert}}}
 
 \title{Publication-Coordinate Specifications for Generated Formal-Mathematics Artifacts}
 \titlerunning{Publication-Coordinate Specifications}
@@ -614,7 +626,7 @@ claim:
 \downarrow\\
 \text{finite evidence surface }E=(E_{\mathrm{atom}},E_{\mathrm{path}})\\
 \downarrow\\
-\text{gate rows }R\text{ with }\PointerOK_{B,D}(u,E,M,S)\text{ evidence pointers}\\
+\text{gate rows }R\text{ with }\PointerOK_{\CertTuple}(u,E)\text{ evidence pointers}\\
 \downarrow\\
 \text{human or route boundary }H_{\mathrm{route}}\text{ and command boundary }B\\
 \downarrow\\
@@ -624,8 +636,9 @@ claim:
 Each arrow is a finite projection: it either records an explicit coordinate or
 rejects a stronger reading that lacks the required coordinate.  The schema is
 therefore portable across artifact-producing projects, while every instantiated
-claim remains relative to its own manifest \(M\), submitted surface \(S\), gate
-dispatch table \(\Gamma\), and certificate record \(C=(K,\ell,E,H,R,D,B)\).  It
+claim remains relative to its own manifest \(\ReviewManifest\), submitted
+surface \(\mathit{Surf}\), gate dispatch table \(\Dispatch\), and certificate
+record \(C_{\mathrm{rec}}=(K,\ell,E,H_{\mathrm{route}},R,D_{\mathrm{row}},B_{\mathrm{row}})\).  It
 does not say that a generated artifact is mathematically correct merely because a
 record exists; it says which public reading the record is allowed to support.
 
@@ -655,21 +668,21 @@ presence of these keys before evaluating the pointer predicate.\\
 \(\textsf{discovery}\).  A row accepts only when its nonempty kind set is a subset
 of this finite domain.\\
 \addlinespace
-\(\operatorname{SnapshotBoundary}(S)\) & The finite set of snapshot-boundary
-strings in the parsed table \(S\).  A string is accepted only if it is an exact
-member of \(S\)'s key set and the corresponding row is marked eligible for the
+\(\operatorname{SnapshotBoundary}(\Snapshot)\) & The finite set of snapshot-boundary
+strings in the parsed table \(\Snapshot\).  A string is accepted only if it is an exact
+member of \(\Snapshot\)'s key set and the corresponding row is marked eligible for the
 current submission surface; filesystem existence is not queried.\\
 \addlinespace
 \(\mathsf{CommandBoundaryOK}.\mathrm{B}_2(e)\) & The path-verified boundary:
 entry \(e\) has no command transcript treated as evidence, every path evidence
-string is accepted by \(\operatorname{BoundPath}_{D}\), and every pass row points
-through \(\PointerOK_{B,D}\).  It accepts finite records only; it does not run a
+string is accepted by \(\operatorname{BoundPath}_{\Digest}\), and every pass row points
+through \(\PointerOK_{\CertTuple}\).  It accepts finite records only; it does not run a
 command.\\
 \addlinespace
 \(\mathsf{CommandBoundaryOK}.\mathrm{B}_3(e)\) & The command-run boundary:
 entry \(e\) has a finite command string, working-directory token, exit-status
 field, transcript pointer, and digest-bound output pointer, all accepted by
-\(\PointerOK_{B,D}\) or \(\operatorname{BoundPath}_{D}\).  It records a run row but
+\(\PointerOK_{\CertTuple}\) or \(\operatorname{BoundPath}_{\Digest}\).  It records a run row but
 still requires a separate \(\ScriptOK\) premise before script conformance becomes
 a theorem premise.\\
 \addlinespace
@@ -678,7 +691,7 @@ certificate record \(C\): every kind of \(c\) is in
 \(\operatorname{KindDomain}(\Sigma)\), the pass rows of \(C\) are in bijection with
 \(\bigcup_{k\in\operatorname{Kind}(c)}\Gamma(k)\), every decision is accepted by
 \(\Sigma.\operatorname{passDecisions}\), and every pointer satisfies
-\(\PointerOK_{B,D}\).  It is false if a required row is missing, duplicated, or
+\(\PointerOK_{\CertTuple}\).  It is false if a required row is missing, duplicated, or
 outside the dispatch table.\\
 \bottomrule
 \end{tabularx}
@@ -1083,47 +1096,54 @@ only in the supplement source after this file's first \verb|\end{document}|.
 \label{def:certificate-record-acceptance-schema}
 Let
 \[
-(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)
+\begin{aligned}
+\CertTuple=(&\MainBytes,\Schema,\Ledger,\InterfaceMap,\ClaimInventory,\\
+&\ReviewManifest,\CaseManifest,\Dispatch,\Digest,\Snapshot)
+\end{aligned}
 \]
-be a finite already-parsed tuple consisting of the submitted \path{main.tex} byte string, a certificate schema, seven-row
-current ledger, submission-interface map, primary-claim inventory, review-bundle
-manifest, case-row manifest, dispatch table, digest table, and finite snapshot
-boundary table.  Evidence strings are parsed by the following finite typed
+be a finite already-parsed tuple consisting, respectively, of the submitted
+\path{main.tex} byte string, a certificate schema, seven-row current ledger,
+submission-interface map, primary-claim inventory, review-bundle manifest,
+case-row manifest, dispatch table, digest table, and finite snapshot-boundary
+table.  These component names are part of the notation contract: the
+six-coordinate public alphabet remains \(Q\), and no component of the parsed
+certificate tuple is denoted by \(Q\), \(L\), or \(S\).  Evidence strings are
+parsed by the following finite typed
 grammar:
 \[
 \begin{array}{rcl}
 u&::=&a\mid p\mid m\mid d\mid s,\\
 a&\in&E_{\mathrm{atom}}\quad\text{(closed non-path atoms)},\\
 p&\in&E_{\mathrm{path}}\quad\text{(relative path strings)},\\
-m&\in&\operatorname{ManifestBoundary}(M),\\
-d&\in&\operatorname{TableBoundary}_{B,D},\\
-s&\in&\operatorname{SnapshotBoundary}(S).
+m&\in&\operatorname{ManifestBoundary}(\ReviewManifest),\\
+d&\in&\operatorname{TableBoundary}_{\MainBytes,\Digest},\\
+s&\in&\operatorname{SnapshotBoundary}(\Snapshot).
 \end{array}
 \]
-The path production is admissible only when \(\operatorname{BoundPath}_{D}(p)\)
+The path production is admissible only when \(\operatorname{BoundPath}_{\Digest}(p)\)
 holds; no other grammar branch uses filesystem existence.  Let
-\(\operatorname{TableBoundary}_{B,D}\) be the finite set of table and formal
+\(\operatorname{TableBoundary}_{\MainBytes,\Digest}\) be the finite set of table and formal
 label atoms emitted by the deterministic scan of the digest-bound submitted
-\path{main.tex} byte string \(B\), with no use of the rendered PDF surface.
+\path{main.tex} byte string \(\MainBytes\), with no use of the rendered PDF surface.
 The admissible-pointer predicate is
 \[
 \begin{aligned}
-\PointerOK_{B,D}(u,E,M,S)\Longleftrightarrow{}&
+\PointerOK_{\CertTuple}(u,E)\Longleftrightarrow{}&
 u\in E_{\mathrm{atom}}\\
-&{}\vee (u\in E_{\mathrm{path}}\wedge \operatorname{BoundPath}_{D}(u))\\
-&{}\vee u\in\operatorname{ManifestBoundary}(M)\\
-&{}\vee u\in\operatorname{TableBoundary}_{B,D}\\
-&{}\vee u\in\operatorname{SnapshotBoundary}(S).
+&{}\vee (u\in E_{\mathrm{path}}\wedge \operatorname{BoundPath}_{\Digest}(u))\\
+&{}\vee u\in\operatorname{ManifestBoundary}(\ReviewManifest)\\
+&{}\vee u\in\operatorname{TableBoundary}_{\MainBytes,\Digest}\\
+&{}\vee u\in\operatorname{SnapshotBoundary}(\Snapshot).
 \end{aligned}
 \]
 There is no untyped shortcut \(u\in E\) and no filesystem-existence shortcut.
-Write \(\operatorname{ReqMan}(\Sigma)\) for the finite schema-prescribed
-manifest keys, \(\operatorname{ReqPath}_{\Sigma}(k)\) for the required relative
-path at key \(k\), \(\operatorname{LedgerRows}(L)\) for the parsed ledger rows,
+Write \(\operatorname{ReqMan}(\Schema)\) for the finite schema-prescribed
+manifest keys, \(\operatorname{ReqPath}_{\Schema}(k)\) for the required relative
+path at key \(k\), \(\operatorname{LedgerRows}(\Ledger)\) for the parsed ledger rows,
 \(\operatorname{PassRows}(e)\) for the parsed pass rows of \(e\),
 \(\operatorname{Kind}(e)\) for its finite claim-kind set,
-\(\operatorname{RowsIface}(I)\) for the parsed submission-interface rows,
-\(\operatorname{RowsCase}(C)\) for the parsed case-row-manifest records,
+\(\operatorname{RowsIface}(\InterfaceMap)\) for the parsed submission-interface rows,
+\(\operatorname{RowsCase}(\CaseManifest)\) for the parsed case-row-manifest records,
 \[
 \begin{aligned}
 \operatorname{CaseNames}_{0}=\{&
@@ -1134,32 +1154,35 @@ path at key \(k\), \(\operatorname{LedgerRows}(L)\) for the parsed ledger rows,
 \textsf{Rule110DynamicSemanticValidation}\},
 \end{aligned}
 \]
-\(\operatorname{EligRows}(C)\subseteq\operatorname{RowsCase}(C)\) for the rows whose
-case name is in the first four names of \(\operatorname{CaseNames}_{0}\) and whose verifier result is
-\textsf{accepted}, \(\operatorname{HistTags}(C)\) for the finite set of
-historical-boundary tags printed by those eligible rows, and
-\(\operatorname{SnapPaths}(C)\) for the finite set of snapshot paths printed by
-those eligible rows.  The fifth row of \(C\), the Rule110 dynamic semantic
-validation negative control, is parsed into \(\operatorname{RowsCase}(C)\) but is not
-in \(\operatorname{EligRows}(C)\) and contributes no member to
-\(\operatorname{HistTags}(C)\) or \(\operatorname{SnapPaths}(C)\).  Write
-\(\operatorname{Prim}(Q)\) for the primary-claim rows.  Define the named Boolean
+\(\operatorname{EligRows}(\CaseManifest)\subseteq
+\operatorname{RowsCase}(\CaseManifest)\) for the rows whose case name is in the
+first four names of \(\operatorname{CaseNames}_{0}\) and whose verifier result is
+\textsf{accepted}, \(\operatorname{HistTags}(\CaseManifest)\) for the finite set
+of historical-boundary tags printed by those eligible rows, and
+\(\operatorname{SnapPaths}(\CaseManifest)\) for the finite set of snapshot paths
+printed by those eligible rows.  The fifth row of \(\CaseManifest\), the Rule110
+dynamic semantic validation negative control, is parsed into
+\(\operatorname{RowsCase}(\CaseManifest)\) but is not in
+\(\operatorname{EligRows}(\CaseManifest)\) and contributes no member to
+\(\operatorname{HistTags}(\CaseManifest)\) or
+\(\operatorname{SnapPaths}(\CaseManifest)\).  Write
+\(\operatorname{Prim}(\ClaimInventory)\) for the primary-claim rows.  Define the named Boolean
 predicates \(\mathrm{M}_1,\ldots,\mathrm{M}_3\),
 \(\mathrm{C}_1,\ldots,\mathrm{C}_5\),
 \(\mathrm{L}_1,\ldots,\mathrm{L}_2\), \(\mathrm{E}_1,\ldots,\mathrm{E}_{10}\),
-\(\mathrm{R}_1,\ldots,\mathrm{R}_4\), \(\mathrm{S}_1,\mathrm{S}_2\), and
+\(\mathrm{R}_1,\ldots,\mathrm{R}_4\), \(\mathrm{I}_1,\mathrm{I}_2\), and
 \(\mathrm{P}_1,\ldots,\mathrm{P}_5\) by the following displayed finite
 clauses.  The certificate predicate is exactly their conjunction:
 \[
 \begin{aligned}
-&\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&\operatorname{AcceptsCertSpec}(\CertTuple)\\
 &\quad:\Longleftrightarrow
 \bigwedge_{i=1}^{3}\mathrm{M}_i
  \wedge\bigwedge_{i=1}^{5}\mathrm{C}_i
 \wedge\bigwedge_{i=1}^{2}\mathrm{L}_i
 \wedge\bigwedge_{i=1}^{10}\mathrm{E}_i
 \wedge\bigwedge_{i=1}^{4}\mathrm{R}_i
-\wedge\bigwedge_{i=1}^{2}\mathrm{S}_i
+\wedge\bigwedge_{i=1}^{2}\mathrm{I}_i
 \wedge\bigwedge_{i=1}^{5}\mathrm{P}_i .
 \end{aligned}
 \]
@@ -1168,46 +1191,46 @@ clauses.  The certificate predicate is exactly their conjunction:
 \begin{tabularx}{\linewidth}{@{}L{0.08\linewidth}Y@{}}
 \toprule
 Clause & Predicate \\ \midrule
-\text{M1} & \(\operatorname{dom}(M)=\operatorname{ReqMan}(\Sigma)\).\\
-\text{M2} & For every \(k\in\operatorname{ReqMan}(\Sigma)\),
-\(M[k].\operatorname{path}=\operatorname{ReqPath}_{\Sigma}(k)\).\\
-\text{M3} & For every \(k\in\operatorname{ReqMan}(\Sigma)\),
-\(\operatorname{BoundPath}_{D}(M[k].\operatorname{path})\).\\[1mm]
-\text{C1} & \(\{\operatorname{name}(c):c\in\operatorname{RowsCase}(C)\}
+\text{M1} & \(\operatorname{dom}(\ReviewManifest)=\operatorname{ReqMan}(\Schema)\).\\
+\text{M2} & For every \(k\in\operatorname{ReqMan}(\Schema)\),
+\(\ReviewManifest[k].\operatorname{path}=\operatorname{ReqPath}_{\Schema}(k)\).\\
+\text{M3} & For every \(k\in\operatorname{ReqMan}(\Schema)\),
+\(\operatorname{BoundPath}_{\Digest}(\ReviewManifest[k].\operatorname{path})\).\\[1mm]
+\text{C1} & \(\{\operatorname{name}(c):c\in\operatorname{RowsCase}(\CaseManifest)\}
 =\operatorname{CaseNames}_{0}\), with
 \textsf{NewmathIntakeIsolation}, \textsf{UpperFibersOverlapBlock},
 \textsf{FakeExtensionBlock}, and \textsf{Rule110LimitationGate} marked
 \textsf{accepted}, and \textsf{Rule110DynamicSemanticValidation} marked
 \textsf{rejected}.\\
-\text{C2} & Every \(c\in\operatorname{RowsCase}(C)\) has the fields
+\text{C2} & Every \(c\in\operatorname{RowsCase}(\CaseManifest)\) has the fields
 \(\operatorname{name}(c)\), \(\operatorname{skeleton}(c)\),
 \(\operatorname{verifierResult}(c)\), \(\operatorname{boundaryKind}(c)\),
 \(\operatorname{snapshotList}(c)\), and a finite digest map for the listed
 snapshot paths.\\
-\text{C3} & \(\operatorname{EligRows}(C)=
-\{c\in\operatorname{RowsCase}(C):\operatorname{verifierResult}(c)=\textsf{accepted}\}\);
+\text{C3} & \(\operatorname{EligRows}(\CaseManifest)=
+\{c\in\operatorname{RowsCase}(\CaseManifest):\operatorname{verifierResult}(c)=\textsf{accepted}\}\);
 each eligible row has boundary kind \(\textsf{historical}\) or
 \(\textsf{path\mbox{-}verified}\), and every listed snapshot path is a POSIX
 relative path below \texttt{review\_bundle/case\_snapshots/} with no empty,
 \texttt{.}, \texttt{..}, absolute, or backslash segment.\\
-\text{C4} & \(S=\operatorname{SnapPaths}(C)\), and for every \(p\in S\), the
-digest printed for \(p\) by its eligible case row equals \(D[p]\).  No rejected
-case row contributes a snapshot path to \(S\).\\
+\text{C4} & \(\Snapshot=\operatorname{SnapPaths}(\CaseManifest)\), and for every
+\(p\in\Snapshot\), the digest printed for \(p\) by its eligible case row equals
+\(\Digest[p]\).  No rejected case row contributes a snapshot path to \(\Snapshot\).\\
 \text{C5} & The historical-boundary atom set available to
-\(\PointerOK_{B,D}\) is exactly
-\(\{\texttt{historical-boundary:}t:t\in\operatorname{HistTags}(C)\}\); no case
+\(\PointerOK_{\CertTuple}\) is exactly
+\(\{\texttt{historical-boundary:}t:t\in\operatorname{HistTags}(\CaseManifest)\}\); no case
 name, skeleton name, rejected row, or path prefix is also a boundary atom.\\[1mm]
-\text{L1} & \(|\operatorname{LedgerRows}(L)|=7\).\\
-\text{L2} & \(\{\operatorname{name}(e):e\in\operatorname{LedgerRows}(L)\}
+\text{L1} & \(|\operatorname{LedgerRows}(\Ledger)|=7\).\\
+\text{L2} & \(\{\operatorname{name}(e):e\in\operatorname{LedgerRows}(\Ledger)\}
 =\{\texttt{a1},\ldots,\texttt{a7}\}\).\\
 \text{E1} & For every \(e\),
-\(\operatorname{ReqEntryFields}(\Sigma)\subseteq\operatorname{dom}(e)\).\\
+\(\operatorname{ReqEntryFields}(\Schema)\subseteq\operatorname{dom}(e)\).\\
 \text{E2} & For every \(e\), \(\operatorname{Kind}(e)\ne\varnothing\).\\
 \text{E3} & For every \(e\),
-\(\operatorname{Kind}(e)\subseteq\operatorname{KindDomain}(\Sigma)\).\\
-\text{E4} & \(\Sigma.\operatorname{evidenceLevels}
+\(\operatorname{Kind}(e)\subseteq\operatorname{KindDomain}(\Schema)\).\\
+\text{E4} & \(\Schema.\operatorname{evidenceLevels}
 =\{\textsf{path\mbox{-}verified},\textsf{command\mbox{-}run}\}\), and for
-every \(e\), \(\operatorname{level}(e)\in\Sigma.\operatorname{evidenceLevels}\).\\
+every \(e\), \(\operatorname{level}(e)\in\Schema.\operatorname{evidenceLevels}\).\\
 \text{E5} & For every \(e\), \(\operatorname{EvidenceSurface}(e)=
 (E_{\mathrm{atom}}(e),E_{\mathrm{path}}(e))\), finite, nonempty, and typed by
 the grammar above.\\
@@ -1215,7 +1238,7 @@ the grammar above.\\
 list.\\
 \text{E7} & For every \(e\), the map
 \(r\mapsto\operatorname{gate}(r)\) is a bijection from
-\(\operatorname{PassRows}(e)\) to \(\bigcup_{k\in\operatorname{Kind}(e)}\Gamma(k)\).\\
+\(\operatorname{PassRows}(e)\) to \(\bigcup_{k\in\operatorname{Kind}(e)}\Dispatch(k)\).\\
 \text{E8} & For every \(e\), \(\operatorname{DiscoveryField}(e)\) is present iff
 \(\textsf{discovery}\in\operatorname{Kind}(e)\).\\
 \text{E9} & For every \(e\), if
@@ -1225,33 +1248,34 @@ list.\\
 \(\operatorname{level}(e)=\textsf{command\mbox{-}run}\), then
 \(\mathsf{CommandBoundaryOK}.\mathrm{B}_3(e)\).\\[1mm]
 \text{R1} & For every \(e\) and every \(r\in\operatorname{PassRows}(e)\),
-\(\operatorname{ReqPassFields}(\Sigma)\subseteq\operatorname{dom}(r)\).\\
+\(\operatorname{ReqPassFields}(\Schema)\subseteq\operatorname{dom}(r)\).\\
 \text{R2} & For every \(e\) and every \(r\in\operatorname{PassRows}(e)\),
 \(\operatorname{level}(r)=\operatorname{level}(e)\).\\
 \text{R3} & For every \(e\) and every \(r\in\operatorname{PassRows}(e)\),
-\(\operatorname{decision}(r)\in\Sigma.\operatorname{passDecisions}\).\\
+\(\operatorname{decision}(r)\in\Schema.\operatorname{passDecisions}\).\\
 \text{R4} & For every \(e\) and every \(r\in\operatorname{PassRows}(e)\),
-\(\PointerOK_{B,D}(\operatorname{pointer}(r),\operatorname{EvidenceSurface}(e),M,S)\).\\[1mm]
-\text{S1} & \(|\operatorname{RowsIface}(I)|=4\).\\
-\text{S2} & \(\{\operatorname{id}(x):x\in\operatorname{RowsIface}(I)\}
+\(\PointerOK_{\CertTuple}(\operatorname{pointer}(r),\operatorname{EvidenceSurface}(e))\).\\[1mm]
+\text{I1} & \(|\operatorname{RowsIface}(\InterfaceMap)|=4\).\\
+\text{I2} & \(\{\operatorname{id}(x):x\in\operatorname{RowsIface}(\InterfaceMap)\}
 =\{\texttt{sim1},\texttt{sim2},\texttt{sim3},\texttt{sim4}\}\).\\[1mm]
-\text{P1} & For every \(c\in\operatorname{Prim}(Q)\),
+\text{P1} & For every \(c\in\operatorname{Prim}(\ClaimInventory)\),
 \(\operatorname{DeclaredCoordinate}(c)\in\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\).\\
-\text{P2} & \(|\operatorname{Prim}(Q)|\ge 12\).\\
-\text{P3} & For every \(c\in\operatorname{Prim}(Q)\),
+\text{P2} & \(|\operatorname{Prim}(\ClaimInventory)|\ge 12\).\\
+\text{P3} & For every \(c\in\operatorname{Prim}(\ClaimInventory)\),
 \(\operatorname{claim}(c)\ne\varnothing\) and
 \(\operatorname{status}(c)\ne\varnothing\).\\
-\text{P4} & For every \(c\in\operatorname{Prim}(Q)\),
+\text{P4} & For every \(c\in\operatorname{Prim}(\ClaimInventory)\),
 \(\neg\operatorname{NonLoadBearing}(c)\) implies
 \(\operatorname{certificate}(c)\ne\varnothing\).\\
-\text{P5} & For every \(c\in\operatorname{Prim}(Q)\),
+\text{P5} & For every \(c\in\operatorname{Prim}(\ClaimInventory)\),
 \(\neg\operatorname{NonLoadBearing}(c)\) implies
 \(\operatorname{evidenceLevel}(c)\ne\varnothing\).\\
 \bottomrule
 \end{tabularx}
 \end{center}
-All quantifiers over \(e\) range over \(\operatorname{LedgerRows}(L)\).  Thus
-\(\operatorname{AcceptsCertSpec}\) is a mathematical finite relation over the stated byte string \(B\) and parsed records only; it
+All quantifiers over \(e\) range over \(\operatorname{LedgerRows}(\Ledger)\).  Thus
+\(\operatorname{AcceptsCertSpec}\) is a mathematical finite relation over the
+stated byte string \(\MainBytes\) and parsed records only; it
 does not assert JSON byte decoding, root normalization, SHA--256 equality, or
 Python-script conformance.
 \end{definition}
@@ -1260,7 +1284,7 @@ Python-script conformance.
 \label{lem:exact-gate-row-bijection}
 For every parsed ledger row \(e\), the certificate-record schema accepts the gate
 part of \(e\) if and only if the row's displayed gate records are in bijection
-with the gate set assigned to \(e\) by \(\Gamma\): every assigned gate occurs
+with the gate set assigned to \(e\) by \(\Dispatch\): every assigned gate occurs
 exactly once, no unassigned gate occurs, and no duplicate gate row is resolved by
 priority or last-writer convention.  This is a finite schema lemma only; a
 supplied executable checker may use it only under the separate
@@ -1270,7 +1294,7 @@ Theorem~\ref{thm:certificate-record-checker-spec}.
 
 \begin{proof}
 The gate clauses are finite cardinality and membership checks against the set
-\(\Gamma(e)\).  If the row passes them, each required gate key has one row and no
+\(\Dispatch(e)\).  If the row passes them, each required gate key has one row and no
 other gate key is present, giving the bijection.  Conversely, such a bijection
 satisfies the membership, uniqueness, and no-extra-row clauses by inspection.
 There is no conflict-resolution rule in the relation, so duplicates and stale
@@ -1292,9 +1316,10 @@ script output, or public coordinate atom.
 
 \begin{proof}
 The productions for non-path atoms and path strings are disjoint, and the path
-branch is additionally guarded by \(\operatorname{BoundPath}_{D}\).  The remaining
-three branches range over finite boundary sets computed from \(M\), \(D\), and
-eligible snapshot rows.  These five alternatives exhaust the displayed
+branch is additionally guarded by \(\operatorname{BoundPath}_{\Digest}\).  The remaining
+three branches range over finite boundary sets computed from
+\(\ReviewManifest\), \(\Digest\), and eligible snapshot rows.  These five
+alternatives exhaust the displayed
 \(\PointerOK\) disjunction, so an accepted pointer belongs to one of them; a
 string outside the disjunction is rejected before it can support a pass row.
 \end{proof}
@@ -1302,31 +1327,33 @@ string outside the disjunction is rejected before it can support a pass row.
 \begin{theorem}[Certificate-checker conformance contract]
 \label{thm:certificate-record-checker-spec}
 Definition~\ref{def:certificate-record-acceptance-schema} is the schema: it
-defines \(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) as the
-finite conjunction of clauses M1--M3, C1--C5, L1--E10, R1--R4, S1--S2, and P1--P5.  Let
+defines \(\operatorname{AcceptsCertSpec}(\CertTuple)\)
+as the finite conjunction of clauses M1--M3, C1--C5, L1--E10, R1--R4,
+I1--I2, and P1--P5.  Let
 \(V_{\mathrm{cert}}\) be a supplied certificate-record checker for parsed tuples.
 This theorem is a named conditional contract, not an independent verification of
 any particular program.  Assume the branch-by-branch conformance statement
 \(\ScriptOK_{\mathrm{cert}}(V_{\mathrm{cert}},\operatorname{AcceptsCertSpec})\):
 its parser is deterministic on the supplied byte strings, it rejects duplicate
 or missing required fields exactly as the schema prescribes, it computes
-\(\operatorname{ManifestBoundary}\), \(\operatorname{TableBoundary}_{B,D}\),
-\(\operatorname{SnapshotBoundary}\), \(\operatorname{BoundPath}_{D}\), and
-\(\Gamma\)'s gate sets exactly, it implements E7 as the finite gate-row bijection
+\(\operatorname{ManifestBoundary}\), \(\operatorname{TableBoundary}_{\MainBytes,\Digest}\),
+\(\operatorname{SnapshotBoundary}\), \(\operatorname{BoundPath}_{\Digest}\), and
+\(\Dispatch\)'s gate sets exactly, it implements E7 as the finite gate-row bijection
 of Lemma~\ref{lem:exact-gate-row-bijection}, it implements R4 as the five-way
 typed-pointer disjunction of Lemma~\ref{lem:typed-pointer-closure-compact}, and
 its final return value is the conjunction of the displayed finite clauses with
 no extra acceptance branch.  Then, for every parsed finite tuple,
 \[
-V_{\mathrm{cert}}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)=\mathsf{accept}
+V_{\mathrm{cert}}(\CertTuple)=\mathsf{accept}
 \quad\Longleftrightarrow\quad
-\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S).
+\operatorname{AcceptsCertSpec}(\CertTuple).
 \]
 
 The executable-instance statement is separate: only if an archive-bearing
 submission supplies ordinary digest-bound bytes and printed hashes for
-\(\Sigma,L,I,Q,M,C,\Gamma,D\), supplies the corresponding source byte string
-\(B\) and finite snapshot table \(S\), provides root normalization,
+\(\Schema,\Ledger,\InterfaceMap,\ClaimInventory,\ReviewManifest,\CaseManifest,
+\Dispatch,\Digest\), supplies the corresponding source byte string
+\(\MainBytes\) and finite snapshot table \(\Snapshot\), provides root normalization,
 ordinary-file checks, JSON decoding, and digest equality for each of those
 records, and also includes a separate proof of this
 \(\ScriptOK_{\mathrm{cert}}\) contract, may an
@@ -1542,8 +1569,8 @@ present.  In particular \(\LocatorOKstageA\) is not
 \label{thm:archive-contract-overview}
 \label{thm:replay-instantiation-archive-contract}
 Let \(Z\) be a candidate non-PDF replay archive with unpacked root \(R\), digest
-table \(T\), environment descriptor \(E\), locator row \(L\), and supplied raw
-byte records for the certificate tuple used in
+table \(T\), environment descriptor \(E\), \(\LocatorRow\), and supplied raw
+byte records for the certificate tuple \(\CertTuple\) used in
 Theorem~\ref{thm:certificate-record-checker-spec}.  Let
 \(\operatorname{InnerDigestOK}(T,R)\) mean the mathematical predicate that the
 parsed inner digest table has exact finite domain, no duplicate path row, no row
@@ -1571,9 +1598,9 @@ no-alias guard;
 \item record-byte equality: the supplied bytes for the schema, ledger,
 submission-interface map, primary-claim inventory, review-bundle manifest,
 case-row manifest, dispatch table, digest table, and snapshot table parse to the
-ten objects \((B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) used in
+ten objects of \(\CertTuple\) used in
 Theorem~\ref{thm:certificate-record-checker-spec}; the archive digest table
-\(T\) is this parsed \(D\) when read as the Stage--A digest-table object;
+\(T\) is this parsed \(\Digest\) when read as the Stage--A digest-table object;
   \item environment identity: the replay-environment descriptor pins the JSON,
 SHA--256, path-normalization, ordinary-file, and working-directory conventions
 used by the finite contract; and
@@ -1598,7 +1625,7 @@ The locator identity premise is
 not \(\texttt{externalArchiveEquivalence}\), and therefore is not a \(\qext\)
 upgrade row.  The acceptance/run-success hypotheses are separate: the parsed
 certificate tuple must satisfy
-\(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\), the certificate
+\(\operatorname{AcceptsCertSpec}(\CertTuple)\), the certificate
 script run must accept that tuple, the Stage--A replay script run must accept the
 replay report, and the archive scanner premise \(\ScanOK(B,I,J,D)\) must hold.
 Under these hypotheses
@@ -1608,7 +1635,7 @@ If
 \begin{align*}
 &\ArchiveOKA(Z)\land\FrameOKZ(Z)\land
 \ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
-&{}\land\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&{}\land\operatorname{AcceptsCertSpec}(\CertTuple)\\
 &{}\land\operatorname{CertRunAccepts}(Z)
 \land\operatorname{StageARunAccepts}(Z)\\
 &{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
@@ -2501,7 +2528,7 @@ schema object as \(\Sigma\).  Define
 parsed certificate schema, ledger, submission-interface map, primary-claim
 inventory, review-bundle manifest, case-row manifest, dispatch table, digest
 table, and snapshot-boundary table satisfy all displayed clauses M1--M3,
-C1--C5, L1--E10, R1--R4, S1--S2, and P1--P5 below.  The
+C1--C5, L1--E10, R1--R4, I1--I2, and P1--P5 below.  The
 theorem's logical form is therefore
 \[
 \begin{aligned}
@@ -2709,7 +2736,7 @@ same discovery-interface parity, and same command-boundary clauses.\\
 \texttt{check\_pass\_records} & R1--R4 &
 Same pass-row required fields, same evidence-level equality, same allowed
 decision set, and same finite pointer predicate \(\PointerOK(u,E,M,S)\).\\
-\texttt{check\_submission\_interface} & S1--S2 &
+\texttt{check\_submission\_interface} & I1--I2 &
 Same four-row cardinality and same fixed submission-interface id set.\\
 \texttt{check\_primary\_claim\_inventory} & P1--P5 &
 Same minimum-row bound, same nonempty claim/status fields, and same certificate
@@ -2800,13 +2827,13 @@ The displayed relation accepts exactly when none of the listed rejecting
 conditions holds.  Consequently,
 \(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) iff all rows satisfy
 \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
-the case-row-manifest locks C1--C5 hold, the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
+the case-row-manifest locks C1--C5 hold, the submission-interface locks I1--I2 hold, and the primary-claim locks P1--P5
 hold.  Equivalently, for any finite parsed records satisfying the displayed
 grammars,
 \[
 \operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \Longleftrightarrow
-\text{clauses M1--M3, C1--C5, L1--E10, R1--R4, S1--S2, P1--P5 pass}.
+\text{clauses M1--M3, C1--C5, L1--E10, R1--R4, I1--I2, P1--P5 pass}.
 \]
 This schema theorem is not a free-standing assertion that the current records
 have been supplied or parsed correctly, nor that
@@ -2906,7 +2933,7 @@ Thus E9 and E10 together are not an additional predicate; they are
 the two level-specific branches of \(P_6\).  L1 and L2 are the current-package
 row lock selecting the seven submitted entries; they do not strengthen
 \(\Acc_{\Gamma}\) for an individual row, but they fix the finite ledger to which
-the theorem is applied.  M1--M3, C1--C5, S1--S2, and P1--P5 are likewise the
+the theorem is applied.  M1--M3, C1--C5, I1--I2, and P1--P5 are likewise the
 manifest, case-row-manifest, submission-interface, and primary-claim row locks
 explicitly named in the statement.
 
@@ -3418,7 +3445,7 @@ submission-interface map \(I\), primary-claim inventory \(Q\), review-bundle
 manifest \(M\), case-row manifest \(C\), dispatch table \(\Gamma\), and digest
 table \(D\) is exactly the displayed mathematical relation of
 Theorem~\ref{thm:certificate-record-checker-spec}.  The theorem must prove
-branch-by-branch equivalence for M1--M3, C1--C5, L1--E10, R1--R4, S1--S2, and P1--P5,
+branch-by-branch equivalence for M1--M3, C1--C5, L1--E10, R1--R4, I1--I2, and P1--P5,
 including the typed \(\PointerOK\) rule and the archive-instantiated
 \(\operatorname{BoundPath}_D\) rule, with \(C\) and \(\Gamma\) either separately
 supplied byte records or uniquely derived from supplied byte records.  Then
@@ -3471,7 +3498,7 @@ the current parsed tuple:
 \operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S).
 \]
 Consequently the script accepts the current seven-row ledger exactly when
-M1--M3, C1--C5, L1--E10, R1--R4, S1--S2, and P1--P5 pass, and in that case
+M1--M3, C1--C5, L1--E10, R1--R4, I1--I2, and P1--P5 pass, and in that case
 Theorem~\ref{thm:current-ledger-bytes-to-acc} supplies
 \(\bigwedge_{e\in\{\texttt{a1},\ldots,\texttt{a7}\}}\Acc_\Gamma(e,C_e)\).
 Without the \(\ScriptOK_{\mathrm{cert}}\) premise this theorem has no executable
@@ -3521,7 +3548,7 @@ scope unless a separate source proof is supplied.\\
 Requires exact implementation of required-field checks, evidence-level equality,
 decision-set membership, and \(\PointerOK\); trusted/out of scope here.\\
 \addlinespace
-\texttt{check\_submission\_interface} & S1--S2 &
+\texttt{check\_submission\_interface} & I1--I2 &
 Requires exact four-row and id-set checks; trusted/out of scope here.\\
 \addlinespace
 \texttt{check\_primary\_claim\_inventory} & P1--P5 &
@@ -4551,7 +4578,6 @@ hypotheses are supplied, then
 the camera-ready replay theorem is
 \begin{align*}
 &\ArchiveOKA(Z)\land\FrameOKZ(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
-&\qquad{}\land\AtomMapOKA(Z)\\
 &\qquad{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
 &\qquad{}\land\DigestOKstageA\land\texttt{qrgsReplayUpgrade}\land
 \operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
