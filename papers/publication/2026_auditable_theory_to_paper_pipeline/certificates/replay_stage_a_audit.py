@@ -203,7 +203,7 @@ def check_record_gate_ok(schema: dict, manifest: dict, report: dict) -> None:
         "R1_inventory_closure_to_qinv",
         "R2_qinv_to_local_inventory_closed",
         "R3_replay_tuple_to_qrgs",
-        "R4_qrgs_to_bounded_record_gate_soundness",
+        "R4_qrgs_to_bounded_record_gate_adequacy",
         "R5_qsrc_upgrade_to_qsrc",
         "R6_qart_upgrade_to_qart",
         "R7a_locator_identity",

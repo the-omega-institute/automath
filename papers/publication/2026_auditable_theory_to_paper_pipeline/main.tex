@@ -66,6 +66,8 @@
 \newcommand{\ArchiveOKA}{\mathsf{ArchiveOK}_{A}}
 \newcommand{\ArchiveFormatOK}{\mathsf{ArchiveFormatOK}}
 \newcommand{\Facts}{\mathsf{Facts}}
+\newcommand{\FactMap}{\mathsf{FactMap}}
+\newcommand{\AtH}{\mathsf{At}_{H}}
 \newcommand{\ArchiveInstantiatesAplus}{\mathsf{ArchiveInstantiates}_{A^{+}}}
 \newcommand{\ReplayVector}{\mathsf{ReplayVector}}
 \newcommand{\ReplayBase}{\mathsf{ReplayBase}}
@@ -96,6 +98,9 @@
 \newcommand{\Bool}{\mathsf{Bool}}
 \newcommand{\coordAtom}{\alpha_{\mathrm{coord}}}
 \newcommand{\HornMin}{H_{\mathrm{min}}}
+\newcommand{\HHorn}{H_{\mathrm{Horn}}}
+\newcommand{\ClHHorn}{\operatorname{Cl}_{\HHorn}}
+\newcommand{\piHorn}{\pi_{\mathrm{Horn}}}
 \newcommand{\archivepresent}{\mathsf{archive\_present}}
 \newcommand{\ordinaryfilebyteeq}{\mathsf{ordinary\_file\_byte\_eq}}
 \newcommand{\digestok}{\mathsf{digest\_ok}}
@@ -287,6 +292,105 @@ predicates as follows:
 \]
 \end{definition}
 
+\begin{definition}[Finite scanner algorithm and \(\ScanOK\) predicate]
+\label{def:finite-scanner-algorithm-scanok}
+The scanner input is the finite byte tuple \((B,I,J,D)\), where \(B\) is the
+submitted \path{main.tex} byte string, \(I\) is the submitted theorem-inventory
+JSON byte string, \(J\) is the submitted theorem-inventory Markdown byte string,
+and \(D\) is the finite digest table.  The finite digest-row predicate
+\(\operatorname{DigestRow}(D,p,x,h)\) means that \(D\) contains exactly one row
+for relative path \(p\), the row binds the supplied bytes \(x\), and
+\(\operatorname{SHA256}(x)=h\).  The scanner first checks the three required
+input rows
+\[
+\operatorname{DigestRow}(D,\text{\path{main.tex}},B,h_B),\quad
+\operatorname{DigestRow}(D,\text{\path{theorem_inventory.json}},I,h_I),\quad
+\operatorname{DigestRow}(D,\text{\path{theorem_inventory.md}},J,h_J)
+\]
+for some printed hashes \(h_B,h_I,h_J\); if any row is absent, duplicated, or
+has the wrong SHA--256 value, \(\ScanOK(B,I,J,D)\) is false.
+
+If the digest rows pass, \(B\) is decoded using \texttt{utf-8-sig}.  Undecodable
+input is rejected.  Let \(\delta(B)\in\{0,3\}\) be the consumed BOM length, let
+\(X=B[\delta(B):]\), and let \(T=X.\operatorname{decode}(\texttt{utf-8})\).
+For each decoded character position \(r\) in \(T\), set
+\[
+\beta_B(r)=\delta(B)+\bigl|\operatorname{utf8}(T[0:r])\bigr|.
+\]
+Since every UTF--8 character has positive byte length, \(\beta_B\) is strictly
+increasing.  Therefore every decoded interval \([r,s)\) has a unique raw-byte
+interval \([\beta_B(r),\beta_B(s))\).
+
+The accepted environment names are exactly
+\[
+\mathcal E_{\mathrm{scan}}=
+\{\texttt{definition},\texttt{lemma},\texttt{proposition},
+\texttt{theorem},\texttt{corollary}\}.
+\]
+The scanner splits \(T\) by Python \path{str.splitlines()} while carrying each
+line's decoded start offset.  On each candidate line it applies the fixed
+regular expression
+\[
+\auditcode{\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?}
+\]
+and accepts only the first match on that line.  There is no blank between
+\auditcode{\\begin} and the left brace, starred environments are not accepted,
+and no other environment name is accepted.  If a match for environment \(e\)
+begins at decoded offset \(r\) and ends at decoded offset \(s\), the scanner
+searches forward for the first line containing the literal decoded end token
+\auditcode{\\end\{}\(e\)\auditcode{\}}; the record slice ends there, or at end
+of file if no such line is found.  It records the first decoded
+\auditcode{\\label\{...\}} in that slice, if one exists.  The next cursor is the
+line after the recorded slice, so nested or later same-slice begin tokens are not
+separate top-level scanner records.
+
+Each emitted scanner row is the finite record
+\[
+\begin{array}{@{}ll@{}}
+\texttt{token\_id}:&\text{a row identifier;}\\
+\texttt{env}:&e\in\mathcal E_{\mathrm{scan}};\\
+\texttt{decoded\_start},\texttt{decoded\_end}:&r,s;\\
+\texttt{start},\texttt{end}:&\beta_B(r),\beta_B(s);\\
+\texttt{matched\_bytes\_sha256}:&
+\operatorname{SHA256}(B[\beta_B(r):\beta_B(s)));\\
+\texttt{record\_start\_line},\texttt{record\_end\_line}:&
+\text{the finite cursor slice;}\\
+\texttt{label}:&\text{the first label in the slice, or absent.}
+\end{array}
+\]
+The interval SHA--256 check is part of row acceptance: a row is accepted only if
+its printed \texttt{start}, \texttt{end}, and
+\texttt{matched\_bytes\_sha256} fields equal the values computed above, with
+\(0\leq\texttt{start}<\texttt{end}\leq |B|\).
+
+Let \(\mathrm{Rows}_{\mathrm{scan}}(B)\) be the finite list produced by this
+algorithm.  Let \(\LabelsJSON(I)\), \(\LabelsMD(J)\), and \(\LabelsStatic(D)\)
+be the finite label sets obtained by the printed parsers for the inventory JSON,
+the inventory Markdown, and the static-source scan row named by \(D\),
+respectively.  Then
+\(\ScanOK(B,I,J,D)\) holds exactly when all digest-row checks above pass, the
+scanner rows are exactly \(\mathrm{Rows}_{\mathrm{scan}}(B)\), every row has a
+label, labels are unique, and
+\[
+\LabelsJSON(I)=\LabelsMD(J)=\LabelsStatic(D)
+\quad\text{and}\quad
+\{\texttt{label}(r):r\in\mathrm{Rows}_{\mathrm{scan}}(B)\}
+\subseteq \LabelsJSON(I).
+\]
+Finally,
+\[
+\scannerSuccess(B,\mathrm{Rows},\mathrm{Prefixes})
+\]
+is the finite wrapper predicate saying that \(\ScanOK(B,I,J,D)\) holds for some
+digest-bound \(I,J,D\), that \(\mathrm{Rows}=\mathrm{Rows}_{\mathrm{scan}}(B)\),
+and that \(\mathrm{Prefixes}\) is exactly the five accepted begin-token prefixes
+indexed by \(\mathcal E_{\mathrm{scan}}\).  Thus \(B\) supplies the decoded
+source and byte intervals, \(I\) and \(J\) supply the two inventory label sets,
+\(D\) supplies the digest rows and static-source label set, and the only Horn
+atom exported to Table~\ref{tab:minimal-finite-horn-system} is the finite
+\(\scannerSuccess\) atom.
+\end{definition}
+
 \begin{proposition}[Least-closure calculation for the minimal table]
 \label{prop:minimal-horn-least-closure}
 Let \(\HornMin\) be Table~\ref{tab:minimal-finite-horn-system}, with coordinate
@@ -349,16 +453,75 @@ interval \([\beta_B(r),\beta_B(s))\).  In particular the ASCII prefix
 multibyte characters.  All scanner rows in Table~\ref{tab:current-instance-coordinate-rows}
 are byte-indexed decoded-source rows in this sense.
 
-\[
-\boxed{\text{typed records}\Rightarrow\text{finite Horn rules}\Rightarrow
-\bigl(\varnothing,\{\qlex\},\{\qlex,\qrgs\}\bigr)}
-\]
+\begin{center}
+\small
+\begin{tabular}{@{}l@{}}
+\textbf{Finite pipeline:} typed records; finite Horn rules;\\
+coordinate projections \(\varnothing\), \(\{\qlex\}\), and
+\(\{\qlex,\qrgs\}\).
+\end{tabular}
+\end{center}
 
 \paragraph{Operative PDF record schemas and worked finite instance.}
 This paragraph is the self-contained finite slice used by the operative PDF.
 The row schemas are ordinary finite records: every required field is a key in a
 finite row, every example below is an example value of that key, and no row is
 promoted to a coordinate except through the printed Horn rules.
+The finite row universe for the worked \emph{newmath}/\emph{automath} instance is
+not prose.  It is the finite disjoint union
+\[
+\begin{aligned}
+\mathrm{Rows}_{\mathrm{cur}}
+={}&\mathrm{SourceRows}\cup\mathrm{TokenRows}\cup\mathrm{ScannerRows}
+\cup\mathrm{ManifestRows}\\
+&{}\cup\mathrm{DigestRows}\cup\mathrm{TranscriptRows}
+\cup\mathrm{LedgerRows}\cup\mathrm{PromotionRows}.
+\end{aligned}
+\]
+The exact members, including byte lengths and SHA--256 values that cannot be
+printed self-referentially inside \path{main.tex}, are the JSON rows in
+\[
+\text{\path{certificates/current_instance_projection_rows.json}}.
+\]
+That file is a finite manifest, not a new rule source: it mirrors the row
+families in Table~\ref{tab:current-instance-coordinate-rows}.  Its scanner rows
+are actual tuples
+\[
+(\texttt{token\_id},e,r,s,i,j,\operatorname{SHA256}(B[i:j]),\texttt{label}),
+\]
+where \(e\in\mathcal E_{\mathrm{scan}}\), \([r,s)\) is the decoded match
+interval, \([i,j)=[\beta_B(r),\beta_B(s))\) is the raw-byte interval, and the
+last field is the first label in the finite record slice.  Its manifest rows are
+actual tuples
+\[
+(\texttt{path},\texttt{byte\_length},\operatorname{SHA256},
+\texttt{ordinary\_file}=\texttt{true}),
+\]
+and its transcript rows are actual tuples
+\[
+(\texttt{branch},\texttt{command},\texttt{exit\_status},
+\texttt{stdout\_sha256},\texttt{stderr\_sha256}).
+\]
+Define the finite atom projection
+\[
+\operatorname{Emit}:\mathrm{Rows}_{\mathrm{cur}}\to\mathcal P(\AtH)
+\]
+by the \texttt{emit} field of that JSON file; rows without an emitted atom have
+\(\operatorname{Emit}(r)=\varnothing\).  The three bases used below are therefore
+finite functions of rows:
+\[
+\begin{aligned}
+A_{\mathrm{rec}}&=\bigcup_{r\in\mathrm{Rows}_{\mathrm{rec}}}
+\operatorname{Emit}(r),\\
+A_{\mathrm{scan}}&=A_{\mathrm{rec}}\cup\{\texttt{scanOK}\},\\
+A^{+}&=A_{\mathrm{scan}}\cup\{\ScriptOKstageA\}.
+\end{aligned}
+\]
+Here \(\mathrm{Rows}_{\mathrm{rec}}\) is the PDF-base row family named in the
+JSON manifest; \(\texttt{scanOK}\) is emitted only by scanner rows satisfying
+Definition~\ref{def:finite-scanner-algorithm-scanok}; and \(\ScriptOKstageA\)
+is an explicit promotion premise, not a consequence of a digest row or a failed
+command transcript.
 
 \begin{table}[t]
 \caption{Record schemas for the operative finite instance.}
@@ -368,19 +531,28 @@ promoted to a coordinate except through the printed Horn rules.
 \begin{tabularx}{\linewidth}{@{}L{0.21\linewidth}L{0.29\linewidth}Y@{}}
 \toprule
 Record type & Required fields & Example content \\ \midrule
-Source record & \texttt{path}, \texttt{byte\_length}, \texttt{sha256} &
-\texttt{src/main.tex}, \(n\), \(h_{\mathrm{src}}\) \\
+Source row & \texttt{row\_id}, \texttt{path}, \texttt{byte\_length},
+\texttt{sha256}, \texttt{ordinary\_file=true} &
+\texttt{SRC-1}, \texttt{main.tex}, \(n\), \(h_{\mathrm{main}}\), \texttt{true} \\
 Begin-token declaration & \texttt{token\_id}, \texttt{ascii\_prefix} &
-\texttt{env\_theorem}, bytes for \auditcode{\begin{theorem}} \\
-Scanner row & \texttt{token\_id}, \texttt{start}, \texttt{end},
-\texttt{matched\_bytes\_sha256} &
-\texttt{env\_theorem}, \([i,j)\), \(h_{\mathrm{interval}}\) \\
-Manifest row & \texttt{path}, \texttt{sha256},
-\texttt{ordinary\_file\_flag} &
-\texttt{src/main.tex}, \(h_{\mathrm{src}}\), \texttt{true} \\
-Transcript row & \texttt{branch}, \texttt{command}, \texttt{exit},
-\texttt{stdout\_sha256} &
-\texttt{check}, \texttt{make verify}, \(0\), \(h_{\mathrm{out}}\) \\
+\texttt{env\_theorem}, bytes for \auditcode{\\begin\{theorem\}} \\
+Scanner row & \texttt{token\_id}, \texttt{env}, \texttt{decoded\_start},
+\texttt{decoded\_end}, \texttt{start}, \texttt{end},
+\texttt{matched\_bytes\_sha256}, \texttt{label} &
+\texttt{SCN-004}, \texttt{lemma}, \(r\), \(s\), \(i\), \(j\),
+\(\operatorname{SHA256}(B[i:j])\), \texttt{lem:operative-raw-scan-soundness} \\
+Manifest row & \texttt{row\_id}, \texttt{path}, \texttt{byte\_length},
+\texttt{sha256}, \texttt{ordinary\_file=true} &
+\texttt{MAN-2}, \texttt{certificates/stage\_a\_manifest.json}, \(n\), \(h\),
+\texttt{true} \\
+Digest row & \texttt{row\_id}, \texttt{path}, \texttt{sha256},
+\texttt{ordinary\_file=true} &
+\texttt{DIG-4}, \texttt{certificates/stage\_a\_replay\_report.json}, \(h\),
+\texttt{true} \\
+Transcript row & \texttt{branch}, \texttt{command}, \texttt{exit\_status},
+\texttt{stdout\_sha256}, \texttt{stderr\_sha256} &
+\texttt{A\_scan}, \texttt{python certificates/stage\_a\_horn\_closure\_checker.py A\_scan},
+\(0\), \(h_{\mathrm{out}}\), \(h_{\mathrm{err}}\) \\
 Promotion row & \texttt{rule}, \texttt{premise\_rows}, \texttt{head} &
 \texttt{Rscan}, scanner row IDs, \(\mathsf{raw}\) \\
 \bottomrule
@@ -392,8 +564,8 @@ not by importing source semantics.  Let \(E_{\mathrm{pdf}}\) be the evidence
 printed in the PDF base rows, \(E_{\mathrm{scan}}\) the scanner rows satisfying
 the scanner lemma below, and \(E_{\mathrm{archive}},E_{\mathrm{digest}},
 E_{\mathrm{transcript}},E_{\mathrm{script}}\) the four archive-side finite row
-families required for replay.  The Actual closure calculation for the finite
-instance is
+families required for replay.  The closure calculation for the finite instance
+is
 \[
 \begin{array}{rcl}
 E_{\mathrm{pdf}}&\mapsto&\varnothing,\\
@@ -405,33 +577,68 @@ E_{\mathrm{digest}}\cup E_{\mathrm{transcript}}\cup E_{\mathrm{script}}
 \]
 Under \(\coordAtom\), these three coordinate sets are exactly the Horn-atom
 projections \(\varnothing\), \(\{\qlex\}\), and \(\{\qlex,\qrgs\}\).
+The notation crosswalk in Table~\ref{tab:early-notation-crosswalk} fixes the
+rule, artifact, and public-coordinate names before the concrete row table.
 
-\begin{lemma}[RawScanSoundness]
+\begin{lemma}[Byte-indexed scanner adequacy]
 \label{lem:operative-raw-scan-soundness}
-Lemma RawScanSoundness.  For every byte string \(B\), if
-\(\ScanOK(B,I,J,D)\) holds, then each accepted scanner row is generated from
-the \texttt{utf-8-sig} decoded source by the literal begin-token pattern
+For every byte string \(B\), if
+\(\ScanOK(B,I,J,D)\) holds, then the scanner rows are exactly the finite records
+defined in Definition~\ref{def:finite-scanner-algorithm-scanok}.  In
+particular, each accepted scanner row is generated from the \texttt{utf-8-sig}
+decoded source by the literal begin-token pattern
 \auditcode{\\begin\{e\}} for one of
 \(\texttt{definition},\texttt{lemma},\texttt{proposition},\texttt{theorem},
 \texttt{corollary}\), with no blank between \auditcode{\\begin} and the left
 brace.  If the decoded match has interval \([r,s)\), the reported raw interval
-is uniquely \([\beta_B(r),\beta_B(s))\).  Therefore a derived raw coordinate
-\(\qlex\) means only byte-indexed decoded begin-token witnessing.
+is uniquely \([\beta_B(r),\beta_B(s))\), and the printed
+\texttt{matched\_bytes\_sha256} field is
+\(\operatorname{SHA256}(B[\beta_B(r):\beta_B(s)))\).  Therefore a derived raw
+coordinate \(\qlex\) means only byte-indexed decoded begin-token witnessing.
 \end{lemma}
 
 \begin{proof}
-The scanner first fixes a single decoded source \(T\) from \(B\) using
-\texttt{utf-8-sig}.  The map
+Definition~\ref{def:finite-scanner-algorithm-scanok} is a finite algorithm and
+predicate: it checks digest rows for \(B,I,J\), decodes \(B\), emits the finite
+cursor list, and accepts exactly rows whose offsets and interval digests match
+the computed values.  The scanner first fixes a single decoded source \(T\) from
+\(B\) using \texttt{utf-8-sig}.  The map
 \(\beta_B(r)=\delta(B)+|\operatorname{utf8}(T[0:r])|\) is strictly increasing
 because every decoded UTF--8 character contributes a positive number of bytes.
-Thus every decoded interval has one raw byte interval.  The accepted token
-grammar is the displayed literal \auditcode{\\begin\{e\}} grammar, so the ASCII
-prefix interval has length seven and cannot be confused with
+Thus every decoded interval has one raw byte interval.  For an emitted row the
+definition explicitly sets \(\texttt{start}=\beta_B(r)\),
+\(\texttt{end}=\beta_B(s)\), and the interval digest to the SHA--256 of exactly
+that raw half-open byte slice.  The accepted token grammar is the displayed
+literal \auditcode{\\begin\{e\}} grammar, so the ASCII prefix interval has
+length seven and cannot be confused with
 \auditcode{\\begin \{e\}}, starred environments, macro-generated begins, or
-included-source tokens.  Rule \(R1\) promotes only the finite scanner-success
+included-source tokens.  Rule Rscan promotes only the finite scanner-success
 atom; it does not add \TeX{} execution, source-completeness, or proof-checking
 content.
 \end{proof}
+
+\begin{definition}[Operative Horn checker]
+\label{def:operative-horn-checker}
+For a finite Horn table \(H\), write each rule as \((P,h)\), where \(P\) is a
+finite set of body atoms and \(h\) is the head atom.  Define the one-step
+operator
+\[
+T_H(X)=X\cup\{h:(P,h)\in H\ \text{and}\ P\subseteq X\}.
+\]
+For a finite base \(A\) and coordinate query set \(Q\), the operative checker
+\(\operatorname{checker}(H,A,Q)\) is the finite procedure
+\[
+\begin{array}{@{}ll@{}}
+0.&\text{If }A\cap Q\ne\varnothing,\text{ reject the framed input.}\\
+1.&C_0:=A.\\
+2.&\text{Repeat }C_{n+1}:=T_H(C_n).\\
+3.&\text{At the first }N\text{ with }C_{N+1}=C_N,\text{ return }C_N\cap Q.
+\end{array}
+\]
+The returned set is ordered by the displayed coordinate order whenever it is
+printed as a Boolean vector.  Termination is finite because every \(C_n\) lies
+inside \(A\cup\{h:(P,h)\in H\}\), and the sequence is increasing.
+\end{definition}
 
 \begin{lemma}[Finite reference-checker soundness]
 \label{lem:operative-reference-checker-soundness}
@@ -444,16 +651,253 @@ For the paper-local reference checker for a finite Horn table \(H\), base
 \end{lemma}
 
 \begin{proof}
-The checker maintains a finite set \(C\), initially \(A\), and repeatedly adds
-the head of every rule whose finite body is included in \(C\).  Monotonicity and
-finiteness imply termination at the least fixed point of the immediate
-consequence operator for \(H\).  The checker returns exactly the elements of
-that fixed point that lie in \(Q\), which is the displayed intersection.
+Let \(C_n\) be the sequence in
+Definition~\ref{def:operative-horn-checker}.  The loop invariant is
+\[
+C_n=T_H^n(A)
+\]
+for every stage before the first fixed point.  This is induction on \(n\):
+\(C_0=A=T_H^0(A)\), and if \(C_n=T_H^n(A)\), then the loop assignment gives
+\[
+C_{n+1}=T_H(C_n)=T_H(T_H^n(A))=T_H^{n+1}(A).
+\]
+Since \(X\subseteq T_H(X)\), the sequence is increasing, and since all stages
+are contained in the finite set \(A\cup\{h:(P,h)\in H\}\), there is a least
+\(N\) with \(C_{N+1}=C_N\).  At that stage \(C_N=T_H(C_N)\), so \(C_N\) is
+closed under all rules of \(H\) and contains \(A\).  Conversely, every
+\(H\)-closed superset \(D\) of \(A\) contains all \(C_n\), again by induction:
+if \(C_n\subseteq D\), each head added by \(T_H(C_n)\) is forced into \(D\) by
+closedness.  Therefore \(C_N\) is the least \(H\)-closed superset of \(A\), i.e.
+\(C_N=\operatorname{Cl}_H(A)\).  The checker returns \(C_N\cap Q\), which is the
+displayed intersection.
 \end{proof}
 
-\begin{lemma}[ClosedWorldExactness]
+\begin{definition}[Replay notation contract]
+\label{def:replay-notation-contract}
+All replay statements in the operative manuscript use the following single
+finite namespace.
+\begin{enumerate}
+\item \(\HHorn\) is the compiled \stageAprose{} Horn system printed in the
+operative finite core: its \(Q\)-headed rules are exactly
+\[
+R1,R3,R5,R6,R7b,R8
+\]
+with the displayed bodies, and it has no hidden rule whose head lies in
+\[
+Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}.
+\]
+\item For a finite atom set \(A\), \(\operatorname{Cl}_{\HHorn}(A)\), also
+written \(\ClHHorn(A)\), is the least fixed point of the one-step operator
+\[
+T_{\HHorn}(X)=X\cup\{h:(P,h)\in\HHorn\text{ and }P\subseteq X\}.
+\]
+This is exactly the closure computed by the checker of
+Definition~\ref{def:operative-horn-checker} when \(H=\HHorn\).
+\item \(\AtH\) is the finite atom set appearing in the displayed Horn table
+\(\HHorn\):
+\[
+\AtH:=\bigcup_{(P,h)\in\HHorn}(P\cup\{h\}).
+\]
+No parser side condition, archive metadata field, or coordinate synonym is an
+atom of the replay calculation unless its name occurs in this finite set.
+\item For every finite replay record \(Z\), \(\FactMap(Z)\subseteq\AtH\) is the
+total extraction function defined by the following finite accepted-row table.
+\begin{center}
+\small
+\begin{tabularx}{0.94\linewidth}{@{}L{0.30\linewidth}Y@{}}
+\toprule
+Accepted row type in \(Z\) & Exact atoms emitted into \(\FactMap(Z)\)\\
+\midrule
+Manifest rows for the submitted ordinary files &
+\(\texttt{mainTex},\texttt{invJson},\texttt{invMd}\)\\
+\addlinespace
+Manifest rows for the Stage--A replay files &
+\(\texttt{stageAHornSchema},\texttt{stageAManifest},
+\texttt{stageAHornCertificate},\texttt{stageAReplayReport}\)\\
+\addlinespace
+Final digest row for the bound source and replay tuple &
+\(\texttt{finalDigest}\)\\
+\addlinespace
+Scanner-success row certified by \(\ScanOK(B,I,J,D)\) &
+\(\texttt{scanOK}\)\\
+\addlinespace
+Record-gate transcript row &
+\(\texttt{RecordGateOK}\)\\
+\addlinespace
+Certificate-DAG validation row &
+\(\texttt{CertDAGOK}\)\\
+\addlinespace
+Stage--A digest-validation row &
+\(\texttt{DigestOKstage\_a}\)\\
+\addlinespace
+Stage--A script-conformance row &
+\(\texttt{ScriptOKstage\_a}\)\\
+\addlinespace
+Bounded replay-upgrade row &
+\(\texttt{qrgsReplayUpgrade}\)\\
+\addlinespace
+Fresh source-rebuild certificate row &
+\(\texttt{freshFormalSourceUpgrade}\)\\
+\addlinespace
+Artifact-semantics certificate row &
+\(\texttt{dynamicArtifactSemanticUpgrade}\)\\
+\addlinespace
+External archive-equivalence certificate row &
+\(\texttt{externalArchiveEquivalence}\)\\
+\addlinespace
+Upload-time venue-acceptance certificate row &
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Rows not listed above emit \(\varnothing\).  The table is a function, not an
+inference rule: accepted rows contribute only the atoms printed in their row and
+never contribute coordinate atoms directly.
+\item \(\Facts(Z)\) denotes the full finite parsed record before this
+row-to-atom extraction.  The older notation \(\piHorn(\Facts(Z))\) means exactly
+\(\FactMap(Z)\) in this manuscript; it is retained only for cross-references to
+older theorem statements.
+\item \(\ArchiveOKA(Z)\) is the conjunction of the seven finite archive
+predicates in Definition~\ref{def:decidable-replay-premises-minimal}, plus the
+paper-local atom-map clause used by the replay instance: accepted archive rows
+emit exactly their named non-coordinate Horn atoms.
+\item \(\FrameOKZ(Z)\) is an external closed-world frame certificate for this
+same \(\HHorn\): before closure
+\(\FactMap(Z)\cap Q=\varnothing\); the list above is the complete list of
+\(Q\)-headed rules; the four upgrade premises for \(R5,R6,R7b,R8\) are absent
+from the replay base and are not derivable; \(\LocatorOKstageA\) is distinct
+from \texttt{externalArchiveEquivalence}; and coordinate truth is read only from
+\(\ClHHorn(\ReplayBase(Z))\cap Q\).
+\item The framed replay base is
+\[
+\ReplayBase(Z):=\FactMap(Z)\setminus Q .
+\]
+The subtraction is a closed-world guard, not a proof step: pre-existing
+coordinate atoms in the raw fact record are not allowed to count as publication
+coordinates.
+\item The replay vector is the characteristic vector
+\[
+\ReplayVector_i(Z)=1
+\quad\Longleftrightarrow\quad
+q_i\in\ClHHorn(\ReplayBase(Z))
+\]
+in the order \((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).
+\end{enumerate}
+Thus the symbols
+\(\HHorn,\operatorname{Cl}_{\HHorn},\AtH,\FactMap(Z),\Facts(Z),\ArchiveOKA(Z),
+\FrameOKZ(Z)\), and \(\ReplayBase(Z)\) name one connected finite replay
+calculation, not independent informal conventions.
+\end{definition}
+
+\begin{definition}[Replay base and vector convention]
+\label{def:operative-replay-base}
+For every finite replay record \(Z\), use the notation contract of
+Definition~\ref{def:replay-notation-contract}.  The framed Horn base used for
+coordinate replay is
+\[
+\ReplayBase(Z):=\FactMap(Z)\setminus Q .
+\]
+The subtraction is part of the base definition: pre-existing coordinate atoms in
+\(\FactMap(Z)\) are never counted as replay-vector entries.  For
+\(q_i\in Q\), define
+\[
+\ReplayVector_i(Z)\Longleftrightarrow
+q_i\in\ClHHorn(\ReplayBase(Z)).
+\]
+Thus the ordered tuple \(\ReplayVector(Z)\) is the characteristic vector of
+\(\ClHHorn(\ReplayBase(Z))\cap Q\) in the order
+\((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).
+\end{definition}
+
+\begin{lemma}[Frame-base equivalence]
+\label{lem:operative-frame-base-equivalence}
+For every finite replay record \(Z\),
+\[
+\ClHHorn
+(\FactMap(Z)\setminus Q)\cap Q
+=
+\ClHHorn(\ReplayBase(Z))\cap Q .
+\]
+Consequently the replay-vector formula written with
+\(\FactMap(Z)\setminus Q\) and the formula written with
+\(\ReplayBase(Z)\) have the same \(Q\)-projection.  Under
+\(\FrameOKZ(Z)\), this common projection is also the only source of coordinate
+truth; raw coordinate atoms in \(\FactMap(Z)\) and hidden \(Q\)-headed rules are
+excluded before the closure calculation.
+\end{lemma}
+
+\begin{proof}
+The two bases are equal by Definition~\ref{def:operative-replay-base}.  Applying
+the same finite Horn closure operator to equal bases gives equal closures, and
+intersecting both sides with \(Q\) preserves equality.  The final sentence is
+not an additional equality claim: it is exactly the closed-world role of
+\(\FrameOKZ(Z)\), which supplies the negative hypotheses used by
+Lemma~\ref{lem:operative-closed-world-exactness}.
+\end{proof}
+
+\begin{lemma}[Replay-premise completeness]
+\label{lem:operative-replay-premise-completeness}
+Let \(Z\) be a finite replay record and put
+\[
+P_1=\{\texttt{mainTex},\texttt{invJson},\texttt{invMd},
+\texttt{finalDigest},\texttt{scanOK}\}
+\]
+and
+\[
+\begin{aligned}
+P_3=\{&
+\texttt{stageAHornSchema},\texttt{stageAManifest},
+\texttt{stageAHornCertificate},\texttt{stageAReplayReport},
+\texttt{finalDigest},\\
+&\texttt{RecordGateOK},\texttt{CertDAGOK},
+\texttt{DigestOKstage\_a},\texttt{ScriptOKstage\_a},
+\texttt{qrgsReplayUpgrade}\}.
+\end{aligned}
+\]
+Suppose
+\[
+\begin{gathered}
+\operatorname{ReplayCertOK}(Z),\quad \ArchiveOKA(Z),\\
+\ScanOK(B,I,J,D),\quad \RecordGateOK,\quad \CertDAGOK,\\
+\DigestOKstageA,\quad \texttt{qrgsReplayUpgrade},\quad
+\texttt{ScriptOKstage\_a}.
+\end{gathered}
+\]
+Then
+\[
+P_1\cup P_3\subseteq \ReplayBase(Z).
+\]
+\end{lemma}
+
+\begin{proof}
+The statement is the explicit unpacking of the finite replay predicates, not an
+extra semantic assumption.  By the row-to-atom definition of \(\FactMap\) in
+Definition~\ref{def:replay-notation-contract}, accepted manifest rows emit
+\(\texttt{mainTex}\), \(\texttt{invJson}\), \(\texttt{invMd}\),
+\(\texttt{stageAHornSchema}\), \(\texttt{stageAManifest}\),
+\(\texttt{stageAHornCertificate}\), and
+\(\texttt{stageAReplayReport}\).  The accepted final-digest row emits
+\(\texttt{finalDigest}\).  The accepted scanner-success row supplied by
+\(\ScanOK(B,I,J,D)\) emits exactly \(\texttt{scanOK}\), by
+Lemma~\ref{lem:operative-raw-scan-soundness}.  The record-gate,
+certificate-DAG, Stage--A digest, script-conformance, and bounded replay-upgrade
+rows emit respectively \(\texttt{RecordGateOK}\), \(\texttt{CertDAGOK}\),
+\(\texttt{DigestOKstage\_a}\), \(\texttt{ScriptOKstage\_a}\), and
+\(\texttt{qrgsReplayUpgrade}\).
+
+\(\operatorname{ReplayCertOK}(Z)\) and \(\ArchiveOKA(Z)\) assert that those
+accepted rows are present in the finite replay record \(Z\) and are interpreted
+by the printed extraction table, not by an informal projection convention.
+Every atom in \(P_1\cup P_3\) is therefore an element of \(\FactMap(Z)\).  None
+of these atoms lies in the coordinate alphabet
+\(Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\).  Since
+\(\ReplayBase(Z)=\FactMap(Z)\setminus Q\), all atoms in \(P_1\cup P_3\) remain
+in \(\ReplayBase(Z)\).
+\end{proof}
+
+\begin{lemma}[Closed-world exactness]
 \label{lem:operative-closed-world-exactness}
-Lemma ClosedWorldExactness.  Let \(H\) be the printed Horn table, let
+Let \(H\) be the printed Horn table, let
 \(Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\), and let \(A\) be a finite base.
 Assume \(A\cap Q=\varnothing\), the only \(Q\)-headed rules are
 \(R1,R3,R5,R6,R7b,R8\), no rule derives the four promotion premises
@@ -475,19 +919,244 @@ enter \(Q\) are \(R1\) and \(R3\), proving both inclusion directions at the
 least fixed point.
 \end{proof}
 
-\begin{theorem}[ReplayClosure]
+\begin{lemma}[Frame-stable extra facts]
+\label{lem:operative-frame-stable-extra-facts}
+Let \(H\) be a finite Horn system with queried coordinate alphabet
+\(Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\), and let \(A\) and \(E\) be
+finite atom sets.  Let
+\[
+U=\{\texttt{freshFormalSourceUpgrade},
+\texttt{dynamicArtifactSemanticUpgrade},
+\texttt{externalArchiveEquivalence},
+\texttt{uploadTimeVenueAcceptanceUpgrade}\}.
+\]
+Assume the following frame hypotheses.
+\begin{enumerate}
+\item \((A\cup E)\cap Q=\varnothing\).
+\item The complete list of \(Q\)-headed rules of \(H\) is the printed list
+\(R1,R3,R5,R6,R7b,R8\); there is no hidden rule with head in \(Q\).
+\item \(E\cap U=\varnothing\), \(A\cap U=\varnothing\), and no rule of \(H\)
+derives an atom of \(U\).
+\item No atom of \(E\) is identified with a coordinate atom, and
+\(\LocatorOKstageA\) is not identified with
+\texttt{externalArchiveEquivalence}.
+\item Coordinate truth is read only from
+\(\operatorname{Cl}_{H}(-)\cap Q\) for this same \(H\).
+\end{enumerate}
+Then adjoining \(E\) cannot create any of the four upgrade coordinates:
+\[
+\operatorname{Cl}_{H}(A\cup E)\cap\{\qsrc,\qart,\qext,\qven\}
+=
+\operatorname{Cl}_{H}(A)\cap\{\qsrc,\qart,\qext,\qven\}.
+\]
+Moreover, the only possible difference between
+\(\operatorname{Cl}_{H}(A\cup E)\cap Q\) and
+\(\operatorname{Cl}_{H}(A)\cap Q\) is through the printed \(R1\) or \(R3\)
+bodies becoming satisfied after atoms from \(E\) are adjoined.  If \(E\) also
+contains no atom that is missing from the \(R1\) or \(R3\) body over
+\(\operatorname{Cl}_{H}(A)\), then the full coordinate projections are equal.
+\end{lemma}
+
+\begin{proof}
+The proof is by induction over the forward-chain stages.  At stage \(0\), no
+coordinate atom is present by hypothesis 1, and no upgrade premise in \(U\) is
+present by hypothesis 3.  Since no rule derives an atom of \(U\), the four
+upgrade premises remain absent at every later stage.  The printed rules
+\(R5,R6,R7b,R8\) require respectively those four premises, with \(R7b\) requiring
+\texttt{externalArchiveEquivalence} in addition to any locator atom; hypothesis
+4 prevents a locator fact or any other extra support atom from being read as
+that upgrade premise.  Thus none of \(\qsrc,\qart,\qext,\qven\) can be newly
+derived after adjoining \(E\).  Hypothesis 2 rules out any other
+\(Q\)-headed rule, and hypothesis 5 rules out reading coordinate truth from
+raw support facts rather than from the displayed closure.  Therefore the four
+upgrade-coordinate projections are stable.
+
+The only \(Q\)-headed rules not blocked by the four upgrade premises are \(R1\)
+and \(R3\).  Hence any remaining change in the \(Q\)-projection can only be that
+one of their printed bodies, unsatisfied over \(A\), becomes satisfied over
+\(A\cup E\).  If \(E\) contributes no missing body atom for \(R1\) or \(R3\),
+then those two rules have the same truth status over both closures, so the full
+\(Q\)-projections are equal.
+\end{proof}
+
+\begin{lemma}[Frame expansion for the operative replay base]
+\label{lem:operative-frame-expansion}
+Let \(Z\) be a finite replay record and put \(C_0=\ReplayBase(Z)\).  In the
+operative statements of this paper, the predicate \(\FrameOKZ(Z)\) is exactly
+the finite closed-world certificate consisting of the following clauses for the
+printed rule system \(\HHorn\).
+\begin{enumerate}
+\item \(\FactMap(Z)\cap Q=\varnothing\); hence
+\(C_0\cap Q=\varnothing\).  No pre-existing coordinate atom is contributed
+before closure or merely erased by the definition of \(\ReplayBase(Z)\).
+\item The complete list of rules in \(\HHorn\) whose heads lie in
+\(Q\) is \(R1,R3,R5,R6,R7b,R8\), with the bodies printed in the operative Horn
+table and no hidden \(Q\)-headed rule.
+\item The four non-allowed promotion premises
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent from \(C_0\).
+\item No rule in \(\HHorn\) derives any of those four promotion
+premises from archive-support, digest, locator, transcript, or script rows.
+\item \(\LocatorOKstageA\) and
+\(\texttt{externalArchiveEquivalence}\) are distinct atoms; a stable replay
+locator is not an external-archive-equivalence promotion row.
+\item Coordinate truth is evaluated only as
+\(\ClHHorn(C_0)\cap Q\), with \(C_0\) defined by
+Definition~\ref{def:operative-replay-base}.
+\end{enumerate}
+Consequently \(\FrameOKZ(Z)\) supplies every hypothesis of
+Lemma~\ref{lem:operative-closed-world-exactness} for
+\((H,A)=(\HHorn,\ReplayBase(Z))\).
+\end{lemma}
+
+\begin{proof}
+The clauses are the finite certificate-to-atom meaning of the frame predicate.
+Clause 1 is the initial-coordinate absence hypothesis of
+Lemma~\ref{lem:operative-closed-world-exactness}.  Clause 2 is the complete
+closed-world enumeration of all \(Q\)-headed rules for the exact printed rule
+system.  Clauses 3 and 4 give respectively initial absence and non-derivability
+of the four promotion premises used by \(R5,R6,R7b,R8\).  Clause 5 prevents the
+locator atom supplied by archive identity from satisfying the different
+external-equivalence premise of \(R7b\).  Clause 6 fixes the base whose closure
+is being projected, so no raw coordinate fact or external rule system can enter
+the calculation.  These are precisely the assumptions required to apply
+Lemma~\ref{lem:operative-closed-world-exactness} with
+\(A=\ReplayBase(Z)\).
+\end{proof}
+
+\paragraph{Notation block for Theorem~\ref{thm:operative-replay-closure}.}
+The theorem below uses only the following finite objects.  \(Z\) is a candidate
+replay record; \(\FactMap(Z)\subseteq\AtH\) is the finite row-to-atom extraction
+table of Definition~\ref{def:replay-notation-contract}; \(\HHorn\) is the printed
+\stageAprose{} Horn rule table; \(Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\)
+is the coordinate-atom alphabet in the displayed order; and
+\(\ClHHorn(A)=\operatorname{Cl}_{\HHorn}(A)\) is the least closure of a finite
+base \(A\) under \(\HHorn\).  The framed base is
+\[
+C_0=\ReplayBase(Z)=\FactMap(Z)\setminus Q .
+\]
+\(\ArchiveOKA(Z)\) supplies only finite archive, byte-equality, digest,
+locator, transcript, script, and atom-map premises.  \(\FrameOKZ(Z)\) supplies
+the closed-world coordinate frame expanded in
+Lemma~\ref{lem:operative-frame-expansion}; in particular it excludes initial
+coordinate atoms, hidden \(Q\)-headed rules, hidden upgrade premises, and the
+identification of \(\LocatorOKstageA\) with
+\texttt{externalArchiveEquivalence}.  \(\ReplayVector(Z)\) is the characteristic
+vector of \(\ClHHorn(C_0)\cap Q\), read through the coordinate map
+\(\coordAtom\) defined at the start of Section~1.
+
+\begin{table}[t]
+\caption{Hypothesis status for Theorem~\ref{thm:operative-replay-closure}.}
+\label{tab:replay-closure-hypothesis-status}
+\scriptsize
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{1.02}
+\begin{tabularx}{\linewidth}{@{}L{0.25\linewidth}L{0.18\linewidth}Y@{}}
+\toprule
+Theorem premise & Status class & Verifying row, artifact, or discharge route\\
+\midrule
+\(\Coord,Q,\coordAtom\), and the vector order &
+verifiable from the PDF &
+Defined in the typed-coordinate paragraph and used in the notation block above;
+sets are converted to Boolean vectors by the displayed characteristic-vector
+map.\\
+\addlinespace
+\(\HHorn\), its \(Q\)-headed rules, and \(\ClHHorn\) &
+verifiable from the PDF &
+Table~\ref{tab:minimal-finite-horn-system},
+Definition~\ref{def:operative-horn-checker}, and the printed rule slice before
+Proposition~\ref{prop:printed-horn-calculation-main}; the paper-local mirror is
+\artifactpath{certificates/stage_a_horn_schema.json}.\\
+\addlinespace
+Finite parsing conventions for \(Z\), \(\Facts(Z)\), \(\piHorn\), ordinary
+files, UTF--8-sig JSON, and SHA--256 rows &
+generically satisfied by a conforming archive/checker package &
+These are the trusted finite-record conventions named by
+Definition~\ref{def:replay-notation-contract} and
+Definition~\ref{def:decidable-replay-premises-minimal}.  They are not an
+assertion that a particular archive has been supplied.\\
+\addlinespace
+\(\ScanOK(B,I,J,D)\) and its emitted \texttt{scanOK} atom &
+verifiable for submitted bytes; open for archive-equivalent bytes until replay &
+Definition~\ref{def:finite-scanner-algorithm-scanok} gives the byte algorithm;
+SCN-1 in Table~\ref{tab:current-instance-coordinate-rows} points to
+\artifactpath{certificates/static_source_label_scan.json}.  A later archive must
+also satisfy the same byte-equality and digest rows.\\
+\addlinespace
+\(\operatorname{ReplayCertOK}(Z)\) and \(\ArchiveOKA(Z)\) &
+open until archive/replay certificate &
+The finite predicates are listed in
+Definition~\ref{def:decidable-replay-premises-minimal}: archive presence,
+ordinary-file byte equality, digest rows, no-self-digest, immutable locator,
+transcripts, scripts, and atom-map rows.  They are not asserted by the PDF-only
+object.\\
+\addlinespace
+\(\RecordGateOK\), \(\CertDAGOK\), and \(\DigestOKstageA\) &
+verifiable from the named finite rows &
+Rows TR-1--3 and DIG-4 in Table~\ref{tab:current-instance-coordinate-rows};
+the finite mirrors are
+\artifactpath{certificates/stage_a_manifest.json},
+\artifactpath{certificates/stage_a_horn_audit_certificate.json}, and
+\artifactpath{certificates/stage_a_digest_table.json}.\\
+\addlinespace
+\texttt{qrgsReplayUpgrade} and the Stage--A file atoms &
+verifiable as formal manifest atoms &
+Rows MAN-1--5 in Table~\ref{tab:current-instance-coordinate-rows} and
+\artifactpath{certificates/current_instance_projection_rows.json}.  These atoms
+name the replay rule surface only; they do not supply script conformance.\\
+\addlinespace
+\(\texttt{ScriptOKstage\_a}\) &
+open until branch-by-branch script-conformance certificate &
+Row TR-4 in Table~\ref{tab:current-instance-coordinate-rows} is the required
+TCB assumption row.  Digest rows, path strings, and parser compilation do not
+derive this atom.\\
+\addlinespace
+\(\FrameOKZ(Z)\), including absence of initial coordinates, hidden
+\(Q\)-rules, and non-allowed upgrade premises &
+open until closed-world frame certificate &
+Definition~\ref{def:replay-notation-contract} states the frame clauses and
+Lemma~\ref{lem:operative-frame-expansion} expands them into the exact
+closed-world hypotheses used by
+Lemma~\ref{lem:operative-closed-world-exactness}.\\
+\addlinespace
+\(\ReplayBase(Z)=\FactMap(Z)\setminus Q\) and the definition of
+\(\ReplayVector(Z)\) &
+finite-verifiable once \(Z\) is parsed through \(\FactMap\) &
+Definition~\ref{def:operative-replay-base} and
+Lemma~\ref{lem:operative-frame-base-equivalence}; the accepted rows themselves
+are archive-dependent and must be supplied by \(Z\).\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{theorem}[Conditional two-coordinate replay closure]
 \label{thm:operative-replay-closure}
-Theorem ReplayClosure.  If a finite replay record \(Z\) satisfies
-\(\operatorname{ReplayCertOK}(Z)\), \(\ArchiveOKA(Z)\), \(\FrameOKZ(Z)\),
+Let \(Z\) be a finite replay record interpreted under the replay notation
+contract of Definition~\ref{def:replay-notation-contract}.  Assume the following
+finite hypotheses.
+\begin{enumerate}
+\item The certificate predicates
+\(\operatorname{ReplayCertOK}(Z)\), \(\ArchiveOKA(Z)\),
 \(\ScanOK(B,I,J,D)\), \(\RecordGateOK\), \(\CertDAGOK\),
 \(\DigestOKstageA\), \(\texttt{qrgsReplayUpgrade}\), and
-\(\texttt{ScriptOKstage\_a}\), and if the replay vector is computed as
+\(\texttt{ScriptOKstage\_a}\) hold, with their compiled atoms interpreted as in
+Lemma~\ref{lem:operative-replay-premise-completeness}.
+\item \(\FrameOKZ(Z)\) holds in the expanded sense of
+Lemma~\ref{lem:operative-frame-expansion}, equivalently the closed-world clauses
+for \(\HHorn\), \(\FactMap(Z)\), and \(\ReplayBase(Z)\) listed in
+Definition~\ref{def:replay-notation-contract}.
+\item The replay base and replay vector are those of
+Definition~\ref{def:operative-replay-base}, equivalently
 \[
+\ReplayBase(Z)=\FactMap(Z)\setminus Q,
+\qquad
 \ReplayVector_i(Z)\Longleftrightarrow
-q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}
-(\pi_{\mathrm{Horn}}(\Facts(Z))\setminus Q),
+q_i\in\ClHHorn(\ReplayBase(Z)).
 \]
-then
+\end{enumerate}
+Then
 \[
 \ReplayVector(Z)=(\mathsf{true},\mathsf{true},\mathsf{false},
 \mathsf{false},\mathsf{false},\mathsf{false})
@@ -498,97 +1167,260 @@ in the order
 \end{theorem}
 
 \begin{proof}
-The \(\ScanOK\) and replay-certificate premises put the five \(R1\) premises
-and the ten \(R3\) premises in the framed replay base, so \(R1\) derives
-\(\qlex\) and \(R3\) derives \(\qrgs\).  The frame \(\FrameOKZ(Z)\) removes
-initial coordinate facts, forbids hidden \(Q\)-headed rules, keeps the four
-non-allowed promotion premises absent, and prevents identifying
-\(\LocatorOKstageA\) with \texttt{externalArchiveEquivalence}.  Applying
-Lemma~\ref{lem:operative-closed-world-exactness} gives no further coordinates.
-Mapping the two derived atoms back through \(\coordAtom\) gives exactly the
-displayed Boolean vector.
+Put \(C_0=\ReplayBase(Z)\).  By
+Lemma~\ref{lem:operative-replay-premise-completeness}, the five compiled
+premises
+\[
+\texttt{mainTex},\texttt{invJson},\texttt{invMd},\texttt{finalDigest},
+\texttt{scanOK}
+\]
+of \(R1\) are all in \(C_0\), and the ten compiled premises
+\[
+\begin{gathered}
+\texttt{stageAHornSchema},\texttt{stageAManifest},
+\texttt{stageAHornCertificate},\\
+\texttt{stageAReplayReport},\texttt{finalDigest},
+\texttt{RecordGateOK},\texttt{CertDAGOK},\\
+\texttt{DigestOKstage\_a},
+\texttt{ScriptOKstage\_a},\texttt{qrgsReplayUpgrade}
+\end{gathered}
+\]
+of \(R3\) are all in \(C_0\).  Therefore forward chaining derives
+\(\qlex\) by \(R1\) and \(\qrgs\) by \(R3\).  The frame
+\(\FrameOKZ(Z)\), expanded by Lemma~\ref{lem:operative-frame-expansion},
+supplies exactly the closed-world hypotheses of
+Lemma~\ref{lem:operative-closed-world-exactness} for
+\((H,A)=(\HHorn,C_0)\).  Therefore the only coordinate heads that
+can enter the least closure are the heads of \(R1\) and \(R3\) whose printed
+bodies are satisfied, and no further coordinate can be derived.
+Lemma~\ref{lem:operative-frame-base-equivalence} is the identity that permits the
+closure calculation written with
+\(\FactMap(Z)\setminus Q\) to be read as the
+\(\ReplayBase(Z)\) calculation.  Mapping the two derived atoms back through
+\(\coordAtom\) gives exactly the displayed Boolean vector.
 \end{proof}
 
 \begin{table}[t]
-\caption{Current \emph{newmath}/\emph{automath} instance rows used for the coordinate projection.}
-\label{tab:current-instance-coordinate-rows}
+\caption{Notation crosswalk from abstract rules to compiled \stageAprose{} rows.}
+\label{tab:early-notation-crosswalk}
 \tiny
-\setlength{\tabcolsep}{2pt}
-\begin{tabularx}{\linewidth}{@{}L{0.07\linewidth}Y@{}}
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{0.98}
+\begin{tabularx}{\linewidth}{@{}L{0.11\linewidth}L{0.21\linewidth}L{0.18\linewidth}L{0.15\linewidth}Y@{}}
 \toprule
-Row & Finite row and projection used in the closure calculation \\
+Abstract rule surface & Compiled \stageAprose{} rule row & Legacy artifact spelling & Public coordinate name & Public atom and reading \\
 \midrule
-M & Manifest row
-\artifactpath{certificates/stage_a_manifest.json}/\texttt{compiler\_rows} emits
-base atoms
-\(\texttt{mainTex},\texttt{invJson},\texttt{invMd},\texttt{finalDigest}\);
-Stage--A atoms
-\(\texttt{stageAHornSchema},\texttt{stageAManifest},
-\texttt{stageAHornCertificate},\texttt{stageAReplayReport}\); and upgrade row
-\(\texttt{qrgsReplayUpgrade}\).\\
+Rscan &
+\begin{tabular}[t]{@{}l@{}}
+\(R1\): \texttt{R1\_inventory\_}\\
+\texttt{closure\_to\_qinv}
+\end{tabular} &
+\texttt{qinv}; older prose may print \(q_{\mathrm{lex}}\) or informal
+\texttt{qraw}/\texttt{q\_raw} &
+\(\mathsf{raw}\), also named \(\rawFirstBeginTokenSubset\) in theorem prose &
+\(\qlex=q_{\mathrm{raw}}\): byte-indexed raw first-begin-token witness.  This
+is a coordinate atom only after \texttt{scanOK}; it is not the scanner-row
+predicate \(\rawBeginTokenWitness(r)\).\\
 \addlinespace
-T & Token list for \(\RawProgram\):
-\auditcode{\\begin\{definition\}},
-\auditcode{\\begin\{lemma\}},
-\auditcode{\\begin\{proposition\}},
-\auditcode{\\begin\{theorem\}},
-\auditcode{\\begin\{corollary\}}.  No blank is permitted after
-\auditcode{\\begin}; Stage--A legacy \(\texttt{qinv}\) is the public coordinate
-\(\qlex=\rawFirstBeginTokenSubset\).\\
+Rreplay &
+\begin{tabular}[t]{@{}l@{}}
+\(R3\): \texttt{R3\_replay\_}\\
+\texttt{tuple\_to\_qrgs}
+\end{tabular} &
+\texttt{qrgs} &
+\(\mathsf{qrgs}\) &
+\(\qrgs\): bounded fixed-replay record-gate adequacy under the printed archive,
+digest, certificate-DAG, transcript, upgrade, and script-conformance premises.\\
 \addlinespace
-S & Scanner rows
-\(\scannerSuccess(B,\RawRows,\RawProgram)\): \(\RawRows\) is the finite cursor
-output over current \(\artifactpath{main.tex}\) bytes after the fixed
-\texttt{utf-8-sig} decoding above; each row records environment name, label, a
-decoded source slice, and the unique raw-byte interval of the ASCII begin-token
-prefix.  The JSON/Markdown/static label sets agree.  Projection adds only
-\(\texttt{scanOK}\); the only raw-coordinate promotion rule is then
-\[
-\qlex\leftarrow\texttt{scanOK},
-\]
-so \(A_{\mathrm{scan}}=A_{\mathrm{rec}}\cup\{\texttt{scanOK}\}\) closes on
-\(\{\qlex\}=\coordAtom[\{\mathsf{raw}\}]\).  No rule has the form
-\(\rawBeginTokenWitness(r)=\rawBeginTokenWitness(r)\), and no witness predicate
-is a coordinate atom.\\
+Rsrc &
+\begin{tabular}[t]{@{}l@{}}
+\(R5\): \texttt{freshFormal}\\
+\texttt{SourceUpgrade}\\
+\(\Rightarrow\)\texttt{qsrc}
+\end{tabular} &
+\texttt{qsrc} &
+\(\mathsf{qsrc}\) &
+\(\qsrc\): fresh formal-source rebuild certificate; absent in the three
+operative branches unless the named upgrade row is supplied.\\
 \addlinespace
-D & Digest rows in
-\artifactpath{certificates/stage_a_digest_table.json}, with no inner self-row:
-\(\artifactpath{certificates/stage_a_manifest.json}\mapsto\)
-\auditcode{e0bb60d1192d9c8282ddfdc6b72333e35e95eb7cadbb8e3d156b2cba534ce7d7};
-\(\artifactpath{certificates/stage_a_horn_schema.json}\mapsto\)
-\auditcode{ff3709ccd5a9f3671224f00b9486c802993b6ee599b6f0e4646c0ecc1f3859ce};
-outer \(\artifactpath{certificates/stage_a_digest_table.json}\mapsto\)
-\auditcode{a847f7656298ecf219b8082ed7b0b46d5a27a6fb61dd4b2510557c841cfbdfb2}.
-Accepted digest rows contribute \(\texttt{finalDigest}\) and
-\(\texttt{DigestOKstage\_a}\), never a coordinate atom.\\
+Rart &
+\begin{tabular}[t]{@{}l@{}}
+\(R6\): \texttt{dynamicArtifact}\\
+\texttt{SemanticUpgrade}\\
+\(\Rightarrow\)\texttt{qart}
+\end{tabular} &
+\texttt{qart} &
+\(\mathsf{qart}\) &
+\(\qart\): dynamic artifact-semantics certificate; not implied by scanner,
+manifest, digest, or replay rows.\\
 \addlinespace
-X & Transcript/checker rows:
-\artifactpath{certificates/stage_a_horn_audit_certificate.json} contains DAG
-\(\texttt{R1\_inventory\_closure\_to\_qinv}\) with premises
-\(\texttt{mainTex},\texttt{invJson},\texttt{invMd},\texttt{finalDigest},
-\texttt{scanOK}\), and DAG \(\texttt{R3\_replay\_tuple\_to\_qrgs}\) with the ten
-\(R3\) premises.  The report
-\artifactpath{certificates/stage_a_replay_report.json} records accepted
-\(\texttt{qinv},\texttt{qrgs}\) and rejected
-\(\texttt{qsrc},\texttt{qart},\texttt{qext},\texttt{qven}\).  Under replay
-conformance these rows supply
-\(\texttt{RecordGateOK},\texttt{CertDAGOK},\texttt{ScriptOKstage\_a}\).\\
+Rext &
+\begin{tabular}[t]{@{}l@{}}
+\(R7b\): \texttt{locatorOKstageA},\\
+\texttt{externalArchive}\\
+\texttt{Equivalence}\(\Rightarrow\)\texttt{qext}
+\end{tabular} &
+\texttt{qext} &
+\(\mathsf{qext}\) &
+\(\qext\): external archive-equivalence certificate.  The auxiliary
+\texttt{locatorOKstageA} row alone is not this coordinate.\\
 \addlinespace
-L & Ledger/frame rows:
-\artifactpath{certificates/current_ledger_instantiation.json} has seven
-path-verified entries \(a1,\ldots,a7\) with
-\(\texttt{no\_command\_run\_assertion}\) boundaries.  The frame requires
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\), no hidden \(Q\)-headed
-rules, and absence of
-\(\texttt{freshFormalSourceUpgrade},\texttt{dynamicArtifactSemanticUpgrade},
-\texttt{externalArchiveEquivalence},\texttt{uploadTimeVenueAcceptanceUpgrade}\);
-\(\LocatorOKstageA\) is not identified with
-\(\texttt{externalArchiveEquivalence}\).\\
+Rven &
+\begin{tabular}[t]{@{}l@{}}
+\(R8\): \texttt{uploadTimeVenue}\\
+\texttt{AcceptanceUpgrade}\\
+\(\Rightarrow\)\texttt{qven}
+\end{tabular} &
+\texttt{qven} &
+\(\mathsf{qven}\) &
+\(\qven\): venue or upload-time acceptance certificate; dated readiness rows do
+not promote it.\\
 \bottomrule
 \end{tabularx}
 \par\smallskip
-Forward chaining these rows through \(R1,R3,R5,R6,R7b,R8\) gives the branch
-projections
+\footnotesize
+The abstract names Rscan and Rreplay are the specification-level rules in
+Table~\ref{tab:minimal-finite-horn-system}; \(R1\) and \(R3\) are their compiled
+\stageAprose{} instantiations.  Legacy spellings name serialized artifact atoms
+only.  Coordinate truth is always evaluated through
+\(\coordAtom:\Coord\to Q\) and the Boolean map \(V_E:\Coord\to\Bool\).
+\end{table}
+
+\begin{table}[t]
+\caption{Finite row slice for the current \emph{newmath}/\emph{automath} coordinate projection.}
+\label{tab:current-instance-coordinate-rows}
+\tiny
+\setlength{\tabcolsep}{1.4pt}
+\renewcommand{\arraystretch}{0.92}
+\begin{tabularx}{\linewidth}{@{}L{0.10\linewidth}L{0.16\linewidth}L{0.31\linewidth}Y@{}}
+\toprule
+Rows & Type & Exact finite rows & Atom projection \\
+\midrule
+SRC-1--4 &
+source rows &
+\artifactpath{main.tex};
+\artifactpath{theorem_inventory.json};
+\artifactpath{theorem_inventory.md};
+\artifactpath{certificates/stage_a_digest_table.json}; each row has
+\texttt{path}, \texttt{byte\_length}, \texttt{sha256}, and
+\texttt{ordinary\_file=true} in
+\artifactpath{certificates/current_instance_projection_rows.json}. &
+\(\texttt{mainTex},\texttt{invJson},\texttt{invMd},\texttt{finalDigest}\) \\
+\addlinespace
+TOK-1--5 &
+scanner token rows &
+\auditcode{\\begin\{definition\}};
+\auditcode{\\begin\{lemma\}};
+\auditcode{\\begin\{proposition\}};
+\auditcode{\\begin\{theorem\}};
+\auditcode{\\begin\{corollary\}}; fixed decoder \texttt{utf-8-sig};
+no blank after \auditcode{\\begin}. &
+No atom; these rows are the finite prefix table for the scanner-row family. \\
+\addlinespace
+SCN-001--055 &
+scanner rows &
+The exact JSON rows are
+\((\texttt{token\_id},e,r,s,i,j,\operatorname{SHA256}(B[i:j]),\texttt{label})\).
+For example, SCN-004 is the row for
+\texttt{lem:operative-raw-scan-soundness}; every row is generated by
+\(\ScanOK(\texttt{mainTexBytes},\texttt{invJsonBytes},
+\texttt{invMdBytes},\texttt{digestTable})\) and has its unique
+\(\beta_B\)-raw interval. &
+\(\texttt{scanOK}\) is emitted by the scanner-row family as a whole; then
+\(R1\) derives \(\qlex\). \\
+\addlinespace
+MAN-1--5 &
+manifest rows &
+\artifactpath{certificates/stage_a_horn_schema.json};
+\artifactpath{certificates/stage_a_manifest.json};
+\artifactpath{certificates/stage_a_horn_audit_certificate.json};
+\artifactpath{certificates/stage_a_replay_report.json};
+\artifactpath{certificates/replay_stage_a_audit.py}; each ordinary-file row
+has \texttt{path}, \texttt{byte\_length}, \texttt{sha256}, and
+\texttt{ordinary\_file=true}; the separate MAN-5 promotion row is the bounded
+\(\mathsf{qrgs}\) replay-upgrade row. &
+\(\texttt{stageAHornSchema},\texttt{stageAManifest},
+\texttt{stageAHornCertificate},\texttt{stageAReplayReport},
+\texttt{qrgsReplayUpgrade}\) \\
+\addlinespace
+DIG-1--4 &
+digest rows &
+\artifactpath{certificates/stage_a_manifest.json}\(\mapsto\)
+\auditcode{e0bb60d1192d9c8282ddfdc6b72333e35e95eb7cadbb8e3d156b2cba534ce7d7};
+\artifactpath{certificates/stage_a_horn_schema.json}\(\mapsto\)
+\auditcode{82aa7a0ae63e8757e2fea642b511e1c383d179eeb078e83f6d1112786fa409c1};
+\artifactpath{certificates/stage_a_horn_audit_certificate.json}\(\mapsto\)
+\auditcode{942fb516617bea480e93170a5ba3a7c74e0cab421729aafc0d1c2c35defc7c7b};
+\artifactpath{certificates/stage_a_replay_report.json}\(\mapsto\)
+\auditcode{44ab1cbe9584e73b6c7cc7a5e8d1d238f24867fb6324de1fbd3081f80110b44d};
+no self-row for the digest table. &
+\(\texttt{DigestOKstage\_a}\) and the already listed
+\(\texttt{finalDigest}\); no coordinate atom. \\
+\addlinespace
+TR-1 &
+transcript row &
+\texttt{branch=A\_scan}; command
+\texttt{python certificates/stage\_a\_horn\_closure\_checker.py A\_scan};
+\texttt{exit\_status=0}; stdout/stderr SHA--256 in the JSON manifest. &
+Command transcript evidence only; the DAG row below emits \(\texttt{CertDAGOK}\). \\
+\addlinespace
+TR-2 &
+transcript row &
+\texttt{branch=A\_plus}; command
+\texttt{python certificates/stage\_a\_horn\_closure\_checker.py A\_plus};
+\texttt{exit\_status=0}; stdout/stderr SHA--256 in the JSON manifest. &
+Command transcript evidence only; no coordinate atom. \\
+\addlinespace
+TR-3 &
+certificate-DAG rows &
+\(\texttt{dag\_qinv}\) applies \(R1\) to
+\(\{\texttt{mainTex},\texttt{invJson},\texttt{invMd},
+\texttt{finalDigest},\texttt{scanOK}\}\) with head \(\texttt{q\_raw}\);
+\(\texttt{dag\_qrgs}\) applies \(R3\) to the ten replay premises with head
+\(\texttt{qrgs}\). &
+\(\texttt{CertDAGOK}\); proof rows for \(R1\) and \(R3\). \\
+\addlinespace
+TR-4--5 &
+report/script rows &
+\artifactpath{certificates/stage_a_replay_report.json}: accepts
+\(\texttt{q\_raw},\texttt{qrgs}\) and rejects
+\(\texttt{qsrc},\texttt{qart},\texttt{qext},\texttt{qven}\).
+\artifactpath{certificates/replay_stage_a_audit.py}: explicit
+script-conformance premise row for \(A^{+}\), not derived from a digest. &
+\(\texttt{RecordGateOK}\) from TR-4; \(\ScriptOKstageA\) is adjoined for
+\(A^{+}\). \\
+\addlinespace
+LEG-1--7 &
+ledger rows &
+\artifactpath{certificates/current_ledger_instantiation.json} entries
+\(a1,\ldots,a7\), all at path-verified level and all with
+\(\texttt{no\_command\_run\_assertion}\). &
+No coordinate atom and no command-run atom. \\
+\addlinespace
+FR-1 &
+closed-world frame &
+Initial base disjoint from \(Q\); no hidden \(Q\)-headed rules; absent
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\),
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\);
+\(\LocatorOKstageA\neq\texttt{externalArchiveEquivalence}\). &
+Blocks \(\qsrc,\qart,\qext,\qven\); removes preloaded coordinate atoms. \\
+\bottomrule
+\end{tabularx}
+\par\smallskip
+The machine-readable mirror
+\artifactpath{certificates/current_instance_projection_rows.json} lists the same
+row identifiers, the actual 55 scanner tuples, manifest rows with
+\((\texttt{path},\texttt{byte\_length},\texttt{sha256},
+\texttt{ordinary\_file=true})\), transcript rows with
+\((\texttt{branch},\texttt{command},\texttt{exit\_status},
+\texttt{stdout\_sha256},\texttt{stderr\_sha256})\), ledger rows,
+\(\operatorname{Emit}\), and three closure branches.  It is a referee-facing
+finite manifest, not an extra Horn premise.  No row has the form
+\(\rawBeginTokenWitness(r)=\rawBeginTokenWitness(r)\), and no witness predicate
+is a coordinate atom.  Forward chaining these rows through
+\(R1,R3,R5,R6,R7b,R8\) gives the branch projections
 \[
 A_{\mathrm{rec}}\mapsto(0,0,0,0,0,0),\quad
 A_{\mathrm{scan}}\mapsto(1,0,0,0,0,0),\quad
@@ -664,9 +1496,11 @@ and archived bytes agree row by row, every printed SHA--256 digest row is exact,
 the digest table has no self-row, the locator supplies only
 \(\LocatorOKstageA\), scanner and run transcript rows are accepted, and
 branch-by-branch conformance rows are supplied for the Stage--A and certificate
-checkers.  Its closed-world frame \(\FrameOKZ(Z)\) additionally requires
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\) before closure, no hidden
-\(Q\)-concluding rule, absence of the four non-allowed upgrade premises, and no
+checkers.  Its closed-world frame \(\FrameOKZ(Z)\) additionally requires the
+clauses of Definition~\ref{def:replay-notation-contract}: in particular
+\(\FactMap(Z)\cap Q=\varnothing\) before closure, no hidden
+\(Q\)-concluding rule in \(\HHorn\), absence of the four non-allowed upgrade
+premises, and no
 identification of \(\LocatorOKstageA\) with
 \texttt{externalArchiveEquivalence}.  These are finite membership and digest
 checks, not consequences of merely printing a path.
@@ -774,22 +1608,31 @@ Proposition~\ref{prop:coordinate-statement-pdf-base}.
 conditions used below: \(\ArchiveOKA(Z)\), \(\FrameOKZ(Z)\), the checker/run
 acceptance premises, \(\RecordGateOK\), \(\CertDAGOK\), \(\DigestOKstageA\),
 \texttt{qrgsReplayUpgrade}, and \texttt{ScriptOKstage\_a}.
-\item The frame condition is closed-world for coordinates:
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\) initially; no hidden
-\(Q\)-concluding rule is available; the non-allowed promotion premises for
-\(\qsrc,\qart,\qext,\qven\) are absent; and
-\(\LocatorOKstageA\) is not identified with
+\item The frame condition is closed-world for coordinates in the expanded sense
+of Lemma~\ref{lem:operative-frame-expansion} and
+Definition~\ref{def:replay-notation-contract}: before forming
+\(C_0=\ReplayBase(Z)\), the extracted atom set
+\(\FactMap(Z)\) is disjoint from \(Q\); the printed list
+\(R1,R3,R5,R6,R7b,R8\) is the complete list of \(Q\)-concluding rules for
+\(\HHorn\); no rule derives the four non-allowed promotion premises
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\); those premises are absent from
+\(C_0\); and \(\LocatorOKstageA\) is not identified with
 \texttt{externalArchiveEquivalence}.
 \item \(\ReplayVector(Z)\) is evaluated only after applying the displayed Horn
-closure to the framed replay base; raw coordinate atoms in \(\Facts(Z)\) are not
-used as vector entries.
+closure to the framed replay base
+\(\ReplayBase(Z)=\FactMap(Z)\setminus Q\), as in
+Definition~\ref{def:operative-replay-base}; raw coordinate atoms in
+\(\FactMap(Z)\) are not used as vector entries.
 \end{enumerate}
 Then the framed replay coordinate vector is exactly
 \[
 (\qlex,\qrgs,\qsrc,\qart,\qext,\qven)=(1,1,0,0,0,0).
 \]
 Extra non-coordinate archive facts are harmless only under \(\FrameOKZ(Z)\); the
-argument does not replace \(\pi_{\mathrm{Horn}}(\Facts(Z))\) by \(A^{+}\).
+argument does not replace \(\FactMap(Z)\) by \(A^{+}\).
 \end{proposition}
 
 \begin{proof}
@@ -802,34 +1645,34 @@ C_{n+1}&=C_n\cup
 \text{ has }P\subseteq C_n\}.
 \end{aligned}
 \]
-By the frame hypothesis, \(C_0\cap Q=\varnothing\).  The replay-certificate
-hypotheses place the five \(R1\) premises, including \(\texttt{scanOK}\), in
-\(C_0\), so \(R1\) adds \(\qlex\) at the first expansion stage.  They also place
-the ten \(R3\) premises, including \(\texttt{ScriptOKstage\_a}\), in \(C_0\), so
-\(R3\) adds \(\qrgs\).  Thus
-\(\{\qlex,\qrgs\}\subseteq\operatorname{Cl}_{H_{\mathrm{Horn}}}(\ReplayBase(Z))\).
+By Definition~\ref{def:operative-replay-base} and
+Lemma~\ref{lem:operative-frame-base-equivalence}, this is exactly the same base
+and \(Q\)-projection as
+\(\ClHHorn(\FactMap(Z)\setminus Q)\).
+By Lemma~\ref{lem:operative-replay-premise-completeness}, the
+replay-certificate hypotheses place the five \(R1\) premises, including
+\(\texttt{scanOK}\), in \(C_0\), so \(R1\) adds \(\qlex\) at the first expansion
+stage.  They also place the ten \(R3\) premises, including
+\(\texttt{ScriptOKstage\_a}\), in \(C_0\), so \(R3\) adds \(\qrgs\).  Thus
+\(\{\qlex,\qrgs\}\subseteq\ClHHorn(\ReplayBase(Z))\).
 
 It remains to prove that no other coordinate enters; this is the part supplied
-by \(\FrameOKZ(Z)\), not by replacing \(\ReplayBase(Z)\) with \(A^{+}\).  We
-show by induction on \(n\) that
-\[
-C_n\cap\{\qsrc,\qart,\qext,\qven\}=\varnothing
-\]
-and that the four non-allowed promotion premises
-\(\texttt{freshFormalSourceUpgrade}\),
-\(\texttt{dynamicArtifactSemanticUpgrade}\),
-\(\texttt{externalArchiveEquivalence}\), and
-\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) remain absent.  The claim holds
-at \(n=0\) by the closed-world clauses of \(\FrameOKZ(Z)\).  In the induction
-step, F2 says the only rules whose heads are in \(Q\) are \(R1,R3,R5,R6,R7b,R8\).
-Rules \(R1\) and \(R3\) can add only \(\qlex\) and \(\qrgs\).  Rules
-\(R5,R6,R7b,R8\) require exactly the four absent promotion premises, with
-\(R7b\) requiring \(\texttt{externalArchiveEquivalence}\) in addition to any
-locator atom.  No displayed rule derives those promotion premises, and the
-frame forbids treating non-coordinate support atoms as \(\qsrc,\qart,\qext\), or
-\(\qven\).  Hence none of the four negative coordinates can be added at stage
-\(n+1\).  At the finite fixed point the \(Q\)-projection is exactly
-\(\{\qlex,\qrgs\}\), which is the displayed Boolean vector.
+by \(\FrameOKZ(Z)\), not by replacing \(\ReplayBase(Z)\) with \(A^{+}\).
+Lemma~\ref{lem:operative-frame-expansion} expands \(\FrameOKZ(Z)\) into the
+closed-world hypotheses for \((H,A)=(\HHorn,C_0)\): \(C_0\) has no initial
+coordinate atom, all \(Q\)-headed rules are listed, the four non-allowed
+promotion premises are absent, none of them is derivable, and the locator atom
+is distinct from the external-equivalence atom.  Applying
+Lemma~\ref{lem:operative-frame-stable-extra-facts} with
+\(E=C_0\setminus A^{+}\) gives the promised frame-stability statement: any
+additional archive-support atom in \(C_0\) that is neither a coordinate atom nor
+an upgrade premise cannot create \(\qsrc,\qart,\qext,\qven\), and can affect the
+projection only through the printed \(R1\) or \(R3\) bodies.  Hence
+Lemma~\ref{lem:operative-closed-world-exactness} says that the least
+\(Q\)-projection is exactly the set of satisfied \(R1\) and \(R3\) heads.  Those
+heads are \(\qlex\) and \(\qrgs\), already derived above.  At the finite fixed
+point the \(Q\)-projection is exactly \(\{\qlex,\qrgs\}\), which is the displayed
+Boolean vector.
 \end{proof}
 
 \section{Related work and boundary}
@@ -909,6 +1752,67 @@ claims.  In this paper, locator identity is not
 \texttt{externalArchiveEquivalence}; \(\qext\) stays false unless its own row is
 added, and one-command replay, clean-machine execution, venue acceptance, and
 archive equivalence remain outside the active public coordinate set. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}
+\caption{Theorem-by-theorem comparison for the active main results.}
+\label{tab:active-theorem-by-theorem-comparison}
+\scriptsize
+\setlength{\tabcolsep}{1.2pt}
+\renewcommand{\arraystretch}{0.90}
+\begin{tabularx}{\linewidth}{@{}L{0.20\linewidth}L{0.25\linewidth}L{0.22\linewidth}Y@{}}
+\toprule
+Main result in this PDF & Closest CICM/workshop or mathematical-software result & What the cited result gives & Precise increment in this paper \\
+\midrule
+Proposition~\ref{prop:coordinate-statement-pdf-base}: PDF-base vector
+\((0,0,0,0,0,0)\). &
+Baanen et al. on Mathlib maintenance and Yamamichi et al. on Mizar library
+hosting
+\cite{BaanenEtAl2026GrowingMathlib,YamamichiEtAl2021MizarPlatform}. &
+Large-library maintenance and hosted formal-library infrastructure. &
+The row here is not another library status report.  It defines a closed-world
+publication-coordinate base and proves that no coordinate is positive before
+scanner or replay premises are adjoined.  The increment is the explicit negative
+coordinate theorem for a presentation-only PDF. \\
+\addlinespace
+Proposition~\ref{prop:coordinate-statement-scanner}: scanner-success vector
+\((1,0,0,0,0,0)\). &
+sTeX semantic/active documents and CICM library/data-interface work
+\cite{KohlhaseMuellerSchaefer2021STeX,BauerEtAl2024LeanHoG}. &
+Semantic mathematical document structure or proof-assistant database imports. &
+The scanner theorem is weaker but sharper: it promotes only a byte-indexed
+decoded \auditbegintoken{} witness to \(\qlex\), using the printed
+\(\operatorname{dec}_B,\beta_B\) convention.  It deliberately does not promote
+\TeX{} semantics, source completeness, theorem-inventory coverage, or imported
+database correctness. \\
+\addlinespace
+Proposition~\ref{prop:coordinate-statement-framed-replay}: framed replay vector
+\((1,1,0,0,0,0)\). &
+Seidl on certified solver/proof objects, Proofgold persistent proof objects,
+Herald autoformalization, and LeanDojo/Lean Copilot assistance
+\cite{Seidl2023NeverTrustSolver,BrownKaliszykUrban2026Proofgold,HorowitzEtAl2026Herald,YangEtAl2023LeanDojo,SongYangAnandkumar2024LeanCopilot}. &
+Proof-object checking, persistent proof records, or automated proof assistance. &
+The increment is a finite Horn replay theorem at the publication boundary:
+archive, digest, scanner, run, frame, record-gate, certificate-DAG, and
+script-conformance rows derive \(\qlex,\qrgs\) and no stronger coordinate.  It
+does not claim solver soundness, proof-assistant correctness, or implementation
+soundness. \\
+\addlinespace
+Theorem~\ref{thm:operative-replay-closure}: operative replay closure equals
+\(\{\qlex,\qrgs\}\) under \(\operatorname{ReplayCertOK}\) and \(\FrameOKZ\). &
+CODECHECK and ReproZip independent execution, RO-Crate and BagIt packaging,
+Software Heritage identifiers, and CICM verified-algorithm papers
+\cite{EglenEtAl2021CODECHECK,ChirigatiRampinShashaFreire2016ReproZip,SoilandReyesEtAl2022ROCrate,KunzeEtAl2018BagItRFC8493,DiCosmoGruenpeterZacchiroli2020SWHID,BrinichJohnson2024QFT,BartolettiBonzioFerrara2026Semigroups}. &
+Independent computation checks, reusable research-object packages, persistent
+source identifiers, or verified algorithm artifacts. &
+The theorem here is a narrower exactness result: the framed archive facts are
+projected through the printed Horn relation, locator identity is kept distinct
+from \texttt{externalArchiveEquivalence}, and the least closure is exactly the
+two-coordinate set.  This separates finite publication replay adequacy from
+clean-machine rerun, archive equivalence, artifact semantics, venue acceptance,
+and fresh source rebuild. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -1388,7 +2292,7 @@ concatenation, the displayed bytes form the well-formed \texttt{re.compile} inpu
 used by \(\ScanOK\).
 \end{proof}
 
-\begin{lemma}[RawScanSoundness]
+\begin{lemma}[Byte-indexed begin-token witness adequacy]
 \label{thm:raw-begin-token-witness-soundness}
 For every byte string \(B\), inventory byte strings \(I,J\), and digest table
 \(D\), if \(\ScanOK(B,I,J,D)\) and \(R\) is any record emitted by the
@@ -1681,22 +2585,25 @@ Here \(v\) is ordered as
 \((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).
 \end{table}
 
-\begin{definition}[Finite Horn reference checker]
+\begin{definition}[Finite Horn reference checker instance]
 \label{def:finite-horn-reference-checker}
-For a finite Horn system \(H\), finite base \(A\), and finite coordinate set
-\(Q\), define \(\operatorname{Check}_{H,Q}(A)\) as follows.  First reject if
-\(A\cap Q\ne\varnothing\).  Otherwise set
+The mathematical checker \(\operatorname{checker}(H,A,Q)\), its one-step
+operator \(T_H\), and its finite loop sequence \(C_0,C_1,\ldots\) are those of
+Definition~\ref{def:operative-horn-checker}.  The notation used elsewhere in
+the paper is
 \[
-C_0=A,\qquad
-C_{n+1}=C_n\cup
-\{h:\text{some rule }h\leftarrow P\text{ in }H\text{ has }P\subseteq C_n\}.
+\operatorname{Check}_{H,Q}(A)=S
 \]
-Because \(H\) and \(A\) are finite, this monotone iteration reaches a first
-fixed point \(C_N=C_{N+1}\).  The checker returns
-\[
-\operatorname{Check}_{H,Q}(A)=C_N\cap Q
-\]
-in the displayed coordinate order.  The paper-local reference implementation
+exactly when \(\operatorname{checker}(H,A,Q)\) accepts and returns \(S\).  Thus
+\(\operatorname{Check}_{H,Q}(A)\) is partial only in the initial-frame sense:
+it is undefined, equivalently rejected, when the input base already contains a
+queried coordinate atom.  If it accepts, then \(C_n=T_H^n(A)\) by definition of
+the loop.  Since \(H\) and \(A\) are finite and no step can introduce an atom
+outside \(A\cup\{h:(P,h)\in H\}\), the increasing chain reaches a fixed point
+after at most \(|\{h:(P,h)\in H\}\setminus A|+1\) iterations.  The checker
+returns the \(Q\)-projection of that first finite fixed point.
+
+The paper-local reference implementation
 \artifactcmd{python}{certificates/stage_a_horn_closure_checker.py} hard-codes
 exactly the printed \(H_{\mathrm{Horn}}\), \(Q\), and the three branch bases
 \(A_{\mathrm{rec}},A^{\mathrm{scan}},A^{+}\).  Running it on all three branches
@@ -1716,25 +2623,52 @@ instantiate the archive contract.
 
 \begin{lemma}[Reference-checker soundness]
 \label{lem:finite-horn-reference-checker-soundness}
-For any finite \(H,A,Q\), if
-\(\operatorname{Check}_{H,Q}(A)=S\), then
+For any finite \(H,A,Q\), if \(\operatorname{checker}(H,A,Q)\) accepts and
+returns \(S\), equivalently if \(\operatorname{Check}_{H,Q}(A)=S\), then
 \[
 \operatorname{Cl}_{H}(A)\cap Q=S.
 \]
 \end{lemma}
 
 \begin{proof}
-The checker iteration is exactly the standard least fixed-point construction
-for finite Horn closure.  Monotonicity gives \(C_n\subseteq C_{n+1}\) for every
-\(n\), and finiteness implies termination at some \(C_N\).  By construction,
-every atom added to \(C_{n+1}\) is justified by a rule whose premises are already
-in \(C_n\), so \(C_N\subseteq \operatorname{Cl}_{H}(A)\).  Conversely, \(C_N\)
-is closed under every rule of \(H\), so the least closed superset
-\(\operatorname{Cl}_{H}(A)\) is contained in \(C_N\).  Hence
-\(C_N=\operatorname{Cl}_{H}(A)\), and projecting both sides to \(Q\) gives the
-returned set \(S\).  The initial \(A\cap Q=\varnothing\) rejection is the
-closed-world coordinate frame used by the proposition below; it prevents a
-positive coordinate from being smuggled in as an input atom.
+Let \(C_n\) be the sets generated by
+Definition~\ref{def:finite-horn-reference-checker}.  The defining loop gives
+the stage invariant
+\[
+C_n=T_H^n(A)
+\]
+for every \(n\) before termination.  This is proved by induction.  At \(n=0\),
+the checker sets \(C_0=A=T_H^0(A)\).  If \(C_n=T_H^n(A)\), then the next loop
+assignment gives
+\[
+C_{n+1}=T_H(C_n)=T_H(T_H^n(A))=T_H^{n+1}(A).
+\]
+Also \(C_n\subseteq C_{n+1}\) because \(X\subseteq T_H(X)\) for every \(X\).
+All \(C_n\) are subsets of the finite atom set
+\[
+A\cup\{h:(P,h)\in H\},
+\]
+so the increasing sequence reaches a first finite fixed point
+\(C_N=C_{N+1}\).  The stage invariant identifies this fixed point as
+\(T_H^N(A)\).
+
+It remains to identify \(C_N\) with the least Horn closure.  Since
+\(C_N=T_H(C_N)\), every rule whose body is contained in \(C_N\) has its head in
+\(C_N\); hence \(C_N\) is an \(H\)-closed superset of \(A\).  Thus
+\(\operatorname{Cl}_{H}(A)\subseteq C_N\).  Conversely, let \(D\) be any
+\(H\)-closed superset of \(A\).  A second induction using the same recurrence
+shows \(C_n\subseteq D\) for all \(n\): it is true for \(C_0=A\), and if
+\(C_n\subseteq D\), every head added by \(T_H(C_n)\) is also forced into \(D\)
+because \(D\) is closed.  Therefore \(C_N\subseteq D\) for every closed
+superset \(D\) of \(A\), in particular for \(D=\operatorname{Cl}_H(A)\).  Hence
+\[
+C_N=\operatorname{Cl}_H(A).
+\]
+The checker returns \(S=C_N\cap Q\), so
+\(\operatorname{Cl}_{H}(A)\cap Q=S\).  The initial
+\(A\cap Q=\varnothing\) rejection is the closed-world coordinate frame used by
+the proposition below; it prevents a positive coordinate from being smuggled in
+as an input atom and is not a separate Horn rule.
 \end{proof}
 
 \begin{lemma}[Closed-world Horn exclusion]
@@ -2344,30 +3278,40 @@ the following separate frame condition to control possible extra facts.  This
 frame condition is an external closed-world hypothesis at the theorem site; it
 is not derived from \(\ArchiveOKA(Z)\) or from digest/manifest domain checks.
 
-Define \(\FrameOKZ(Z)\) to be the conjunction of the following finite clauses.
-F1: \(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\).
-F2: the only Horn rules with conclusions in \(Q\) are exactly
-\(R1,R3,R5,R6,R7b,R8\).
-F3: the atoms \(\texttt{freshFormalSourceUpgrade}\),
+Define \(\FrameOKZ(Z)\) to be the conjunction of the following finite clauses,
+matching Lemma~\ref{lem:operative-frame-expansion}.
+\begin{enumerate}
+\item \(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\); hence
+\(\ReplayBase(Z)\cap Q=\varnothing\).  No coordinate atom is present before
+closure and then hidden by the subtraction defining the replay base.
+\item The complete list of Horn rules with conclusions in \(Q\) is exactly
+\(R1,R3,R5,R6,R7b,R8\), with the printed bodies and no hidden coordinate rule.
+\item The atoms \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
 \(\texttt{externalArchiveEquivalence}\), and
 \(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are not in
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\setminus Q\) unless a separate named upgrade
-derivation is supplied.
-F4: no non-coordinate atom of \(\ReplayBase(Z)\) is treated as one of
+\(\ReplayBase(Z)\) unless a separate named upgrade derivation is supplied.
+\item No rule in \(H_{\mathrm{Horn}}\) derives any of those four promotion
+premises from archive-support, digest, locator, transcript, or script rows.
+\item \(\LocatorOKstageA\) and
+\(\texttt{externalArchiveEquivalence}\) are distinct atoms; the replay locator
+does not satisfy the external-equivalence premise of \(R7b\).
+\item No non-coordinate atom of \(\ReplayBase(Z)\) is treated as one of
 \(\qsrc,\qart,\qext,\qven\).
-F5: coordinate truth is evaluated only by
+\item Coordinate truth is evaluated only by
 \(\operatorname{Cl}_{H_{\mathrm{Horn}}}(\ReplayBase(Z))\) using the displayed
 rule set.
+\end{enumerate}
 In particular, \(\FrameOKZ(Z)\) includes the pre-closure coordinate condition
 \[
 \pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing .
 \]
-Equivalently, write
+With the replay-base convention of Definition~\ref{def:operative-replay-base},
+this same framed base is
 \[
 \ReplayBase(Z)=\pi_{\mathrm{Horn}}(\Facts(Z))\setminus Q,
 \]
-and compute all coordinate bits only after Horn closure.  For \(q_i\in Q\),
+and all coordinate bits are computed only after Horn closure.  For \(q_i\in Q\),
 define
 \[
 \ReplayVector_i(Z)=
@@ -2519,10 +3463,11 @@ of them.  Hence \(A_{\mathrm{rec}}\cup\{\texttt{scanOK},
 \texttt{ScriptOKstage\_a}\}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))\) and
 \(A^{+}\subseteq\ReplayBase(Z)\).  The last assertion is not an equality claim:
 \(\ReplayBase(Z)\) may contain additional non-coordinate support atoms.  The
-needed negative information is supplied separately by \(\FrameOKZ(Z)\): F1 removes
-pre-existing coordinate atoms, F2 forbids extra \(Q\)-concluding rules, and F3
-excludes the four stronger upgrade premises unless a named upgrade derivation is
-present.  In particular \(\LocatorOKstageA\) is not
+needed negative information is supplied separately by \(\FrameOKZ(Z)\):
+Lemma~\ref{lem:operative-frame-expansion} removes pre-existing coordinate atoms,
+enumerates all \(Q\)-concluding rules, and excludes the four stronger upgrade
+premises unless a named upgrade derivation is present.  In particular
+\(\LocatorOKstageA\) is not
 \(\texttt{externalArchiveEquivalence}\).
 \end{proof}
 
@@ -2609,10 +3554,12 @@ clause 7 of \(\ArchiveOKA(Z)\), namely \(\AtomMapOKA(Z)\), emits the
 path-derived atoms of \(A_{\mathrm{rec}}\) from the exact manifest rows,
 summarized in Table~\ref{tab:path-atom-map-a}.  The external frame hypothesis
 \(\FrameOKZ(Z)\) says that
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\) initially, that no
-\(Q\)-concluding Horn rule is available except \(R1,R3,R5,R6,R7b,R8\), and that
+\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\) initially, that the
+complete list of \(Q\)-concluding Horn rules is \(R1,R3,R5,R6,R7b,R8\), that
 the non-allowed promotion premises for \(\qsrc,\qart,\qext,\qven\) are absent
-unless a named upgrade derivation supplies them.  Therefore
+and not derivable unless a named upgrade derivation supplies them, and that
+\(\LocatorOKstageA\) is distinct from
+\(\texttt{externalArchiveEquivalence}\).  Therefore
 \(\ReplayVector(Z)\) is computed from
 \(\operatorname{Cl}_{H_{\mathrm{Horn}}}(\ReplayBase(Z))\), not from raw coordinate
 atoms or hidden \(Q\)-rules.  Under these framed hypotheses,
@@ -2664,32 +3611,51 @@ Lemma~\ref{lem:archive-instantiates-aplus} gives \(A^{+}\subseteq\ReplayBase(Z)\
 Rules \(R1\) and \(R3\) therefore derive \(\qlex\) and \(\qrgs\), respectively.
 
 For the negative coordinates, do not replace \(\ReplayBase(Z)\) by the smaller
-set \(A^{+}\).  Instead use \(\FrameOKZ(Z)\).  By F2 the only rules capable of
-concluding \(\qsrc,\qart,\qext,\qven\) are \(R5,R6,R7b,R8\).  Rule \(R5\)
-requires \(\texttt{freshFormalSourceUpgrade}\), rule \(R6\) requires
-\(\texttt{dynamicArtifactSemanticUpgrade}\), rule \(R7b\) requires
-\(\texttt{externalArchiveEquivalence}\) in addition to any locator atom, and
-rule \(R8\) requires \(\texttt{uploadTimeVenueAcceptanceUpgrade}\).  By F3 these
-four premises are absent from \(\ReplayBase(Z)\) unless separately derived, and
-the theorem hypotheses supply no such named upgrade derivation.  Extra archive
-facts outside \(A^{+}\) are therefore harmless: by F4 they are not coordinate
-atoms, and by F5 they can affect coordinates only through the displayed rules.
-The locator clause supplies only \(\LocatorOKstageA\); because
-\(\texttt{externalArchiveEquivalence}\) is still absent, \(\qext\) does not
-fire.  Thus the four remaining coordinates are false and
+set \(A^{+}\).  Write \(E=\ReplayBase(Z)\setminus A^{+}\), so
+\(\ReplayBase(Z)=A^{+}\cup E\).  Lemma~\ref{lem:archive-instantiates-aplus}
+supplies \(A^{+}\subseteq\ReplayBase(Z)\), and
+Lemma~\ref{lem:operative-frame-expansion} expands \(\FrameOKZ(Z)\) into the
+closed-world facts needed for the pair
+\((H,A\cup E)=(H_{\mathrm{Horn}},\ReplayBase(Z))\): the base contains no
+coordinate atom before closure, the printed list \(R1,R3,R5,R6,R7b,R8\) is the
+complete list of \(Q\)-headed rules, the four non-allowed promotion premises
+\[
+\texttt{freshFormalSourceUpgrade},\quad
+\texttt{dynamicArtifactSemanticUpgrade},\quad
+\texttt{externalArchiveEquivalence},\quad
+\texttt{uploadTimeVenueAcceptanceUpgrade}
+\]
+are absent and not derivable, and \(\LocatorOKstageA\) is distinct from
+\texttt{externalArchiveEquivalence}.  Therefore
+Lemma~\ref{lem:operative-frame-stable-extra-facts}, applied to
+\((H,A,E)=(H_{\mathrm{Horn}},A^{+},\ReplayBase(Z)\setminus A^{+})\), says that
+the extra non-coordinate archive facts in \(E\) cannot create
+\(\qsrc,\qart,\qext,\qven\).  The only possible coordinate effects of such
+extra facts would have to pass through the printed \(R1\) or \(R3\) bodies; those
+two heads have already been derived as \(\qlex\) and \(\qrgs\).
+
+Now apply Lemma~\ref{lem:operative-closed-world-exactness} to the actual framed
+base \(A^{+}\cup E=\ReplayBase(Z)\).  It states that the least
+\(Q\)-projection is exactly the set of satisfied \(R1\) and \(R3\) heads.  Those
+heads are precisely \(\qlex\) and \(\qrgs\), because the four upgrade rules
+\(R5,R6,R7b,R8\) remain blocked by their absent promotion premises.  In
+particular, the locator clause supplies only \(\LocatorOKstageA\), not
+\texttt{externalArchiveEquivalence}, so \(\qext\) does not fire.  Thus the four
+remaining coordinates are false and
 \(\ReplayVector(Z)=(\mathsf{true},\mathsf{true},\mathsf{false},\mathsf{false},
 \mathsf{false},\mathsf{false})\).
 
 If \(\ScanOK(B,I,J,D)\) is removed, rule \(R1\)'s \(\texttt{scanOK}\) premise is
-missing from \(\ReplayBase(Z)\); because F1 gives
-\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\), no base coordinate fact can
-supply \(\qlex\), and because F2 lists all \(Q\)-concluding rules, no other rule
-concludes \(\qlex\).  If
+missing from \(\ReplayBase(Z)\).  The initial-coordinate absence clause in
+Lemma~\ref{lem:operative-frame-expansion} prevents any base coordinate fact from
+supplying \(\qlex\), and the same lemma's complete \(Q\)-headed-rule list gives
+no other rule concluding \(\qlex\).  If
 \(\ScriptOKstageA\) is removed, rule \(R3\)'s
-\(\texttt{ScriptOKstage\_a}\) premise is missing from \(\ReplayBase(Z)\); F1
-forbids a pre-existing \(\qrgs\) coordinate fact, and F2 supplies no other rule
-concluding \(\qrgs\).  If any archive clause is absent, the byte-bound replay
-surface is not identified, so only the printed conditional specification remains.
+\(\texttt{ScriptOKstage\_a}\) premise is missing from \(\ReplayBase(Z)\); the
+initial-coordinate absence clause forbids a pre-existing \(\qrgs\) coordinate
+fact, and the complete \(Q\)-headed-rule list supplies no other rule concluding
+\(\qrgs\).  If any archive clause is absent, the byte-bound replay surface is
+not identified, so only the printed conditional specification remains.
 \end{proof}
 
 \begin{table}
@@ -5619,9 +6585,9 @@ coordinate vector is computed from
 under \(\FrameOKZ(Z)\), not by substituting the smaller set \(A^{+}\) for the
 whole archive projection.  The displayed rules \(R1\) and \(R3\) fire because
 their premises are present; the four stronger coordinates remain false because
-F1 removes initial coordinate facts, F2 lists all \(Q\)-concluding rules, and F3
-keeps their named promotion atoms absent.  Clause \(\mathrm{A}_1\) supplies the
-archive-format guard; clause \(\mathrm{A}_8\) makes
+the numbered closed-world frame clauses remove initial coordinate facts, list
+all \(Q\)-concluding rules, and keep their named promotion atoms absent.  Clause
+\(\mathrm{A}_1\) supplies the archive-format guard; clause \(\mathrm{A}_8\) makes
 the located archive identical to the submitted replay surface; it does not add
 \(\texttt{externalArchiveEquivalence}\), assert external archive equivalence as
 a promoted coordinate, or add

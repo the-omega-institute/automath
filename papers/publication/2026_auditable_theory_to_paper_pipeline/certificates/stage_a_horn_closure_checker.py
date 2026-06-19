@@ -81,7 +81,7 @@ def load_printed_system() -> PrintedSystem:
             ),
             "qrgs",
         ),
-        Rule("R4", ("qrgs",), "boundedReplayRecordGateSoundness"),
+        Rule("R4", ("qrgs",), "boundedReplayRecordGateAdequacy"),
         Rule("R5", ("freshFormalSourceUpgrade",), "qsrc"),
         Rule("R6", ("dynamicArtifactSemanticUpgrade",), "qart"),
         Rule("R7a", ("stableLocator", "archiveByteEquality"), "locatorOKstageA"),
