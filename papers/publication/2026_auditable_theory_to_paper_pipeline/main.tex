@@ -702,6 +702,9 @@ is uniquely \([\beta_B(r),\beta_B(s))\), and the printed
 \texttt{matched\_bytes\_sha256} field is
 \(\operatorname{SHA256}(B[\beta_B(r):\beta_B(s)))\).  Therefore a derived raw
 coordinate \(\qlex\) means only byte-indexed decoded begin-token witnessing.
+This is the intentionally weak scanner premise used later: it is not a
+coordinate atom and it becomes relevant to \(Q\) only as one premise of the
+compiled five-premise \(R1\) rule.
 \end{lemma}
 
 \begin{proof}
@@ -1152,6 +1155,9 @@ Then
 \[
 P_1\cup P_3\subseteq \ReplayBase(Z).
 \]
+This inclusion is the only replay-base relationship asserted here; it does not
+claim that \(\ReplayBase(Z)\) is equal to \(P_1\cup P_3\) or to any smaller
+branch base.
 \end{lemma}
 
 \begin{proof}
@@ -1267,7 +1273,10 @@ C'\cap Q
 \]
 Thus the only possible difference between \(C'\cap Q\) and \(C\cap Q\) is that
 the larger closure, possibly through indirect non-coordinate derivations, newly
-completes the printed \(R1\) or \(R3\) body.  If the \(R1/R3\) body atoms are
+completes the printed \(R1\) or \(R3\) body.  The criterion is deliberately a
+closure-level criterion: it is not enough to inspect whether \(E\) itself
+contains a missing body atom, because \(E\) may enable an auxiliary
+non-coordinate derivation of such an atom.  If the \(R1/R3\) body atoms are
 closure-stable,
 \[
 C'\cap B_{13}=C\cap B_{13},
@@ -1310,6 +1319,7 @@ ordinary auxiliary rules, but if those auxiliary derivations do not change
 membership of any atom in \(B_{13}\), then neither \(B_1\) nor \(B_3\) can be
 newly completed in \(C'\).  Under the displayed \(B_{13}\)-stability equality,
 the two added sets in the formula are empty, so \(C'\cap Q=C\cap Q\).
+No equality conclusion follows merely from \(E\cap B_{13}=\varnothing\).
 \end{proof}
 
 \begin{lemma}[Frame expansion for the operative replay base]
@@ -1569,6 +1579,11 @@ be subsets of \(C_0\), the lemma gives
 \[
 \ClHHorn(C_0)\cap Q=\{\qlex,\qrgs\}.
 \]
+Here the invocation of Lemma~\ref{lem:operative-closed-world-exactness} is on
+the full replay base \(C_0\), using
+Lemma~\ref{lem:operative-replay-premise-completeness} only for the inclusions
+\(P_1\cup P_3\subseteq C_0\); it does not identify \(C_0\) with the rule-body
+union.
 No argument replaces \(C_0\) by a smaller base, and no extra non-coordinate
 archive fact is ignored: any such fact is inside the same \(C_0\) governed by
 \(\FrameOKZ(Z)\).
@@ -1878,8 +1893,14 @@ premises
 \(\operatorname{Cl}(A_{\mathrm{rec}})\).
 
 For \(A_{\mathrm{scan}}\), the only added premise is \texttt{scanOK}.  The body
-of \(R1\) is now exactly contained in \(A_{\mathrm{scan}}\), so forward chaining
-adds \(\qlex\).  Rule \(R3\) remains blocked because
+of \(R1\),
+\[
+\{\texttt{mainTex},\texttt{invJson},\texttt{invMd},
+\texttt{finalDigest},\texttt{scanOK}\},
+\]
+is now exactly contained in \(A_{\mathrm{scan}}\), since
+\(A_{\mathrm{rec}}\) already contains the first four non-scanner premises.  Thus
+forward chaining adds \(\qlex\).  Rule \(R3\) remains blocked because
 \texttt{ScriptOKstage\_a}\(\notin A_{\mathrm{scan}}\), and the four stronger
 upgrade rules remain blocked for the same closed-world reason as above.  Hence
 \(\operatorname{Cl}(A_{\mathrm{scan}})\cap Q=\{\qlex\}\).
@@ -2089,6 +2110,9 @@ replay-certificate hypotheses place the five \(R1\) premises, including
 stage.  They also place the ten \(R3\) premises, including
 \(\texttt{ScriptOKstage\_a}\), in \(C_0\), so \(R3\) adds \(\qrgs\).  Thus
 \(\{\qlex,\qrgs\}\subseteq\ClHHorn(\ReplayBase(Z))\).
+This uses only the inclusion \(P_1\cup P_3\subseteq C_0\) from
+Lemma~\ref{lem:operative-replay-premise-completeness}; the replay base may
+contain additional non-coordinate facts.
 
 It remains to prove that no other coordinate enters; this is the part supplied
 by \(\FrameOKZ(Z)\), not by replacing \(\ReplayBase(Z)\) with \(A^{+}\).
@@ -4220,7 +4244,10 @@ For the negative coordinates, do not replace \(\ReplayBase(Z)\) by the smaller
 set \(A^{+}\).  Put \(C_0=\ReplayBase(Z)\).  The inclusion
 \(A^{+}\subseteq C_0\) is used only to show that the printed \(R1\) and \(R3\)
 bodies are present in the actual replay base.  The exclusion of the other four
-coordinates comes from the frame on \(C_0\) itself.
+coordinates comes from the frame on \(C_0\) itself.  No equality is transferred
+from \(A^{+}\) to \(C_0\) by Lemma~\ref{lem:operative-frame-stable-extra-facts};
+the proof uses the positive \(A^{+}\) inclusion and then applies the
+closed-world lemma to the full base.
 Lemma~\ref{lem:operative-frame-expansion} expands \(\FrameOKZ(Z)\) into the
 closed-world facts needed for \((H,A)=(H_{\mathrm{Horn}},C_0)\): the base
 contains no coordinate atom before closure; the printed list
