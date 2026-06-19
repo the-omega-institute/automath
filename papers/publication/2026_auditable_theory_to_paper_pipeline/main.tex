@@ -764,6 +764,10 @@ A^{+}=A^{\mathrm{scan}}\cup\{\texttt{ScriptOKstage\_a}\};
 \qquad
 A^{\mathrm{scan}}\cap\{\texttt{ScriptOKstage\_a}\}=\varnothing.
 \]
+In all three branches the input side is closed-world on public coordinates:
+\(A_{\mathrm{rec}}\cap Q=A^{\mathrm{scan}}\cap Q=A^{+}\cap Q=\varnothing\).
+Thus every positive coordinate below must be produced by one of the displayed
+Horn rules, not by a pre-existing coordinate fact.
 The equality between the artifact bytes
 \artifactpath{certificates/stage_a_horn_schema.json},
 \artifactpath{certificates/stage_a_manifest.json}, and these displayed objects is
@@ -876,7 +880,9 @@ positive coordinate and gate rows.
 \begin{proof}
 This theorem is the displayed mathematical layer: \(A_{\mathrm{rec}}\),
 \(A^{\mathrm{scan}}\), \(A^{+}\), and \(H_{\mathrm{Horn}}\) are the finite sets and finite Horn
-system printed in the statement.  Forward chaining is monotone, so it is enough
+system printed in the statement.  Since the three input bases have empty
+intersection with \(Q\), coordinate membership can enter only through a displayed
+rule conclusion.  Forward chaining is monotone, so it is enough
 to inspect the displayed rules whose conclusions lie in \(Q\), namely
 \(R1,R3,R5,R6,R7b,R8\).
 
@@ -1086,7 +1092,10 @@ For every parsed ledger row \(e\), the certificate-record schema accepts the gat
 part of \(e\) if and only if the row's displayed gate records are in bijection
 with the gate set assigned to \(e\) by \(\Gamma\): every assigned gate occurs
 exactly once, no unassigned gate occurs, and no duplicate gate row is resolved by
-priority or last-writer convention.
+priority or last-writer convention.  This is a finite schema lemma only; a
+supplied executable checker may use it only under the separate
+\(\ScriptOK_{\mathrm{cert}}\) conformance premise of
+Theorem~\ref{thm:certificate-record-checker-spec}.
 \end{lemma}
 
 \begin{proof}
@@ -1106,6 +1115,9 @@ atom, a digest-bound path, a manifest-boundary pointer, a digest-table-boundary
 pointer, or an eligible snapshot-boundary path.  No other string, filesystem
 entry, prefix match, wildcard, local file existence fact, or script output can be
 used as evidence in \(\operatorname{AcceptsCertSpec}\).
+This is likewise a finite schema lemma: it classifies accepted pointer strings
+inside the printed relation and does not by itself promote any archive path,
+script output, or public coordinate atom.
 \end{lemma}
 
 \begin{proof}
@@ -1260,6 +1272,14 @@ Assume \(\ArchiveOKA(Z)\), \(\AtomMapOKA(Z)\), \(\ScanOK(B,I,J,D)\), \(\RecordGa
 \[
 A^{+}\subseteq\ReplayBase(Z).
 \]
+More explicitly,
+\[
+A_{\mathrm{rec}}\cup\{\texttt{scanOK},\texttt{ScriptOKstage\_a}\}
+\subseteq\pi_{\mathrm{Horn}}(\Facts(Z)),
+\]
+and the closed-world coordinate condition in
+Definition~\ref{def:archive-contract-predicate} places the same atoms in
+\(\ReplayBase(Z)\).
 The atoms \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
 \(\texttt{externalArchiveEquivalence}\), and
@@ -1318,7 +1338,11 @@ add a public coordinate or a stronger upgrade atom.
 
 Therefore every atom of \(A^{\mathrm{scan}}\) is in \(\ReplayBase(Z)\), and after
 adjoining the one external \(\texttt{ScriptOKstage\_a}\) atom every atom of
-\(A^{+}\) is in \(\ReplayBase(Z)\).  This proves \(A^{+}\subseteq\ReplayBase(Z)\).  The
+\(A^{+}\) is in \(\pi_{\mathrm{Horn}}(\Facts(Z))\).  None of these atoms lies in
+\(Q\), so the closed-world subtraction defining \(\ReplayBase(Z)\) removes none
+of them.  Hence \(A_{\mathrm{rec}}\cup\{\texttt{scanOK},
+\texttt{ScriptOKstage\_a}\}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))\) and
+\(A^{+}\subseteq\ReplayBase(Z)\).  The
 four stronger upgrade atoms are not consequences of archive normalization,
 byte equality, digest equality, parser conformance, or script conformance.
 They therefore remain absent from \(\ReplayBase(Z)\) unless a separate upgrade record
@@ -1402,6 +1426,9 @@ If
 \end{align*}
 \(\AtomMapOKA(Z)\) emits the path-derived atoms of \(A_{\mathrm{rec}}\) listed in
 Table~\ref{tab:path-atom-map-a}, \(\ReplayBase(Z)\cap Q=\varnothing\), and
+\(\ReplayVector(Z)\) is computed from
+\(\operatorname{Cl}_{H_{\mathrm{Horn}}}(\ReplayBase(Z))\), not from any raw
+coordinate atoms that may be presented before closure.  If
 \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
 \(\texttt{externalArchiveEquivalence}\), and
@@ -4294,8 +4321,12 @@ it defines them as the finite contract for a conditional archive-instantiated re
 For \(q_i\in Q\), the replay vector is the Horn-closure projection
 \[
 \ReplayVector_i(Z)\Longleftrightarrow
-q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\pi_{\mathrm{Horn}}(\Facts(Z))).
+q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\pi_{\mathrm{Horn}}(\Facts(Z))\setminus Q).
 \]
+Equivalently, the pre-closure archive base is closed-world on coordinates:
+\(\pi_{\mathrm{Horn}}(\Facts(Z))\cap Q=\varnothing\), or any accidental
+coordinate-row presentation is discarded before closure.  Thus no coordinate
+can be true merely because it was already present as an input fact.
 The archive-instantiation predicate
 \[
 \ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))
@@ -4312,6 +4343,7 @@ upgrade record explicitly derives them.  If those hypotheses are supplied, then
 the camera-ready replay theorem is
 \begin{align*}
 &\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
+&\qquad{}\land\AtomMapOKA(Z)\\
 &\qquad{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
 &\qquad{}\land\DigestOKstageA\land\texttt{qrgsReplayUpgrade}\land
 \operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
