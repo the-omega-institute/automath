@@ -73,8 +73,8 @@
 \newcommand{\qext}{q_{\mathrm{ext}}}
 \newcommand{\qven}{q_{\mathrm{ven}}}
 
-\title{Publication-Coordinate Design Patterns and Finite Checker Specifications for Generated Formal-Mathematics Artifacts}
-\titlerunning{Publication-Coordinate Checker Specifications}
+\title{Publication-Coordinate Specifications for Generated Formal-Mathematics Artifacts}
+\titlerunning{Publication-Coordinate Specifications}
 \author{Haobo Ma\inst{1} \and Wenlin Zhang\inst{2}}
 \authorrunning{H. Ma and W. Zhang}
 \institute{AELF PTE LTD. \email{auric@aelf.io} \and
@@ -86,7 +86,7 @@ National University of Singapore \email{e1327962@u.nus.edu}}
 \begin{abstract}
 Generated formal-mathematics artifacts need a publication interface that states
 which finite records support which public claims.  We present a reusable
-publication-coordinate route schema, then instantiate it as a finite checker
+publication-coordinate route schema, then instantiate it as a finite checker-boundary
 specification for a concrete \emph{newmath}/\emph{automath} theory-to-paper
 package.  The reusable part is the separation between public coordinates, typed
 evidence surfaces, admissible pointers, deterministic gates, and human promotion
@@ -138,7 +138,7 @@ are therefore evidence only through the printed finite relations, not through
 unproved source-code behavior.
 
 \paragraph{Audit-string typography.}
-Every path, command fragment, digest, and code identifier that is part of a
+Every path, command fragment, digest, code identifier, and literal token pattern that is part of a
 byte-level audit row is typeset as an atomic monospaced audit string, not as
 ordinary prose.  The paper uses \verb|\auditpath|, \verb|\artifactpath|, and
 \verb|\auditcode| for such strings; these wrappers disable discretionary
@@ -174,7 +174,7 @@ denotes only the raw first-begin-token subset coordinate; the submitted JSON and
 files retain the byte-level legacy atom name \auditcode{qinv}.  Thus exact artifact
 tables may print \auditcode{qinv}, and older support files may still mention
 \(q_{\mathrm{lex}}\), but the coordinate's public mathematical name and meaning
-are first raw byte-substring subset witnessing, not theorem-inventory coverage and not
+are first decoded-source substring witnessing with ASCII-token byte intervals, not theorem-inventory coverage and not
 displayed-\TeX{} semantics.
 
 \begin{table}
@@ -189,7 +189,7 @@ Public name & Artifact or local spelling & Meaning in this paper\\
 Raw first-begin-token subset coordinate: the finite
 \(\rawBeginTokenSubset\) scanner over current \auditpath{main.tex} bytes and the
 declared five literal \auditcode{\\begin\{...\}} tokens.  Its soundness
-claim is only that accepted records come from matching raw byte substrings.\\
+claim is only that accepted records come from matching decoded-source substrings with byte intervals for the ASCII begin-token prefixes.\\
 \addlinespace
 \(\qrgs\) & \auditcode{qrgs}; replay-upgrade atom &
 Bounded fixed-replay record-gate soundness coordinate for the \stageAprose{} Horn
@@ -231,29 +231,29 @@ paraphrase.\\
 \begin{table}
 \caption{Conditional hypothesis status disclosure for the public theorems.}
 \label{tab:conditional-hypothesis-status}
-\small
-\begin{tabularx}{\linewidth}{L{0.34\linewidth}Y}
+\scriptsize
+\begin{tabularx}{\linewidth}{L{0.28\linewidth}L{0.16\linewidth}L{0.13\linewidth}Y}
 \toprule
-Invoked finite object or hypothesis & Status in this PDF-only submission\\
+Invoked finite object or hypothesis & Status label & Disclosed? & Status in this PDF-only submission\\
 \midrule
 \textbf{Theorem~\ref{thm:typed-verified-core-hierarchy}.}
-Six-coordinate alphabet \(Q\) &
+Six-coordinate alphabet \(Q\) & verifiable & yes &
 The six-coordinate alphabet is printed and finite.  This is a PDF-verifiable
 mathematical convention, not an artifact-execution claim.\\
 \addlinespace
 \textbf{Theorem~\ref{thm:typed-verified-core-hierarchy}.}
 \(\qlex\) premises: main \TeX{}, inventory JSON/Markdown, final digest, and
-scanner atom &
+scanner atom & conditional/open & yes &
 These names are formal atoms in the theorem.  They import only the printed
 \(\rawBeginTokenSubset\) relation and the displayed Horn rule.  The resulting
-\(\qlex\) claim is only a raw byte-substring witness claim; it does not import
-unprinted source semantics, theorem-inventory coverage, proof checking, or
-artifact truth.\\
+\(\qlex\) claim is only a decoded-source substring witness claim; it does not
+import unprinted source semantics, theorem-inventory coverage, proof checking,
+or artifact truth.\\
 \addlinespace
 \textbf{Theorem~\ref{thm:typed-verified-core-hierarchy}.}
 \(\qrgs\) premises: Stage--A file atoms,
 \(\RecordGateOK\), \(\CertDAGOK\), \(\DigestOKstageA\),
-\(\ScriptOKstageA\), and \(\texttt{qrgsReplayUpgrade}\) &
+\(\ScriptOKstageA\), and \(\texttt{qrgsReplayUpgrade}\) & conditional/open & yes &
 The Stage--A file and finite-record atoms are formal unless archive-bound by
 Theorem~\ref{thm:replay-instantiation-archive-contract}.  The
 \(\ScriptOKstageA\) premise is open in this PDF-only submission and is never
@@ -261,25 +261,24 @@ derived from digest rows, path strings, or parser compilation.  Thus positive
 \(\qrgs\) is conditional only.\\
 \addlinespace
 \textbf{Theorem~\ref{thm:typed-verified-core-hierarchy}.}
-Rules concluding in \(Q\) &
+Rules concluding in \(Q\) & verifiable & yes &
 The displayed Horn system has no rule with conclusion in \(Q\) other than
 \(R1,R3,R5,R6,R7b,R8\).  Negative coordinates stay negative because their
-promotion premises are absent in both displayed closures.\\
+promotion premises are absent in all displayed closures.\\
 \addlinespace
 \textbf{Theorem~\ref{thm:certificate-record-checker-spec}.}
 Certificate-record TCB: UTF-8-sig JSON, \auditcode{json.loads}, relative path
-normalization, ordinary non-symlink files, and SHA--256 byte rows &
+normalization, ordinary non-symlink files, and SHA--256 byte rows & generically satisfied by a conforming archive & yes &
 These are specification-side trusted conventions.  They support a finite
 relation after parsing; they do not prove executable Python conformance or
 byte-equality for a missing archive.\\
 \addlinespace
 \textbf{Theorem~\ref{thm:certificate-record-checker-spec}.}
-Parsed certificate-record inputs &
-The theorem is stated for the finite parsed schema, ledger, interface,
-inventory, manifests, dispatch table, and digest table.  In this compact
-PDF-only article their role is schema-level: current-byte acceptance is not
-claimed, and would require the archive predicate, executable checker package,
-and separate \(\ScriptOK_{\mathrm{cert}}\) premise.\\
+Parsed certificate-record inputs & open for this PDF-only object & yes &
+The theorem is stated for the finite parsed source byte string, schema, ledger,
+interface, inventory, manifests, dispatch table, digest table, and snapshot
+boundary.  Current-byte acceptance would require the archive predicate,
+executable checker package, and separate \(\ScriptOK_{\mathrm{cert}}\) premise.\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -330,15 +329,15 @@ themselves promote any stronger coordinate.
 \toprule
 Coordinate or surface & Accepted reading and required upgrade for stronger readings\\
 \midrule
-\(\qlex\) & Public coordinate name for the raw-byte witness predicate
-\(\rawBeginTokenSubset\) on the five literal source substrings
-\path{\textbackslash begin\{definition\}},
-\path{\textbackslash begin\{lemma\}},
-\path{\textbackslash begin\{proposition\}},
-\path{\textbackslash begin\{theorem\}}, and
-\path{\textbackslash begin\{corollary\}}, with the scanner grammar specified
-below.  Its only positive theorem-level content is raw-substring soundness:
-accepted records have matching byte substrings in the decoded source.  It is not
+\(\qlex\) & Public coordinate name for the decoded-source witness predicate
+\(\rawBeginTokenSubset\) on the five exact literal token patterns
+\auditcode{\\begin\{definition\}},
+\auditcode{\\begin\{lemma\}},
+\auditcode{\\begin\{proposition\}},
+\auditcode{\\begin\{theorem\}}, and
+\auditcode{\\begin\{corollary\}}, with no blank between \auditcode{\\begin} and the left brace.
+The scanner grammar is specified below.  Its only positive theorem-level content is decoded-substring
+soundness with an induced byte interval for the ASCII begin-token prefix.  It is not
 promoted into displayed \TeX{} content, theorem-inventory coverage,
 theorem-dependency, proof-checking, source completeness, scope adequacy, audit
 completeness, or semantic completeness.\\
@@ -389,7 +388,7 @@ public coordinates unless an explicit accepted upgrade row names that coordinate
 \end{tabularx}
 \end{table}
 
-\paragraph{Byte-level \(\rawBeginTokenSubset\) scanner for \(\qlex\).}
+\paragraph{Decoded-source \(\rawBeginTokenSubset\) scanner for \(\qlex\).}
 The \(\qlex=\rawFirstBeginTokenSubset\) scanner is the following finite
 \(\rawBeginTokenSubset\) function
 of the submitted
@@ -397,7 +396,7 @@ of the submitted
 \texttt{utf-8-sig}; undecodable bytes are rejected.  It then applies Python
 \path{str.splitlines()} and processes the resulting finite line list in order.
 For each line it records at most the first match of the following copyable
-byte-level Python definition:
+decoded-line Python definition over the UTF--8-sig decoded source:
 \begin{center}
 \small
 \begin{tabular}{@{}l@{}}
@@ -434,23 +433,23 @@ label set is contained in the inventory-label set parsed from \(I\), \(J\), or
 the digest-bound static source-label scan row named by \(D\).  The predicate is
 finite because all four byte strings are finite and the regular-expression scan,
 label extraction, set-uniqueness test, and containment test are bounded by their
-lengths.  Thus \(\qlex\) accepts only through this byte-level
+lengths.  Thus \(\qlex\) accepts only through this decoded-source
 \(\ScanOK\), equivalently through the named \(\rawBeginTokenSubset\)
 predicate, not merely through the names \texttt{invJson}, \texttt{invMd}, and
 \texttt{finalDigest}.  The positive coordinate name is deliberately
-\(\rawFirstBeginTokenSubset\): it witnesses only matching first raw begin-token substrings,
+\(\rawFirstBeginTokenSubset\): it witnesses only matching first decoded begin-token substrings, with a byte interval for the ASCII token prefix,
 not theorem-inventory coverage.  The scanner never strips comments, expands macros,
 follows \path{\textbackslash input}, evaluates conditionals, balances nested
-environments, or validates proof text.  Its exact guarantee is therefore a raw
+environments, or validates proof text.  Its exact guarantee is therefore a decoded
 begin-token substring subset check: every accepted record is generated by an
-accepted byte substring matching the grammar above.  No theorem in this paper
+accepted decoded source substring matching the grammar above, and the ASCII prefix \auditcode{\\begin\{} has a determinate byte interval in \(B\).  No theorem in this paper
 identifies that substring set with displayed \TeX{} content.  Matching
 substrings in comments or inactive branches are deliberate false positives
 relative to \TeX{} execution, and macro-generated, included, nested, or
 second-same-line begin tokens are deliberate false negatives relative to
 \TeX{} execution.  Therefore
 \path{\textbackslash begin\{lemma\}\textbackslash label\{lem:x\}\textbackslash end\{lemma\}}
-is a positive one-record example; the same byte substring after a percent sign
+is a positive one-record example; the same decoded substring after a percent sign
 or inside an inactive conditional branch is still counted.  By contrast
 \path{\textbackslash begin \{lemma\}}, \path{\textbackslash begin\{remark\}},
 \path{\textbackslash begin\{lemma*\}}, macro-generated begin tokens,
@@ -494,8 +493,7 @@ used by \(\ScanOK\).
 For every byte string \(B\), inventory byte strings \(I,J\), and digest table
 \(D\), if \(\ScanOK(B,I,J,D)\) and \(R\) is any record emitted by the
 \(\rawBeginTokenSubset\) scan of the decoded \path{main.tex} byte string \(B\),
-then there is a contiguous decoded source slice \(s_R\) of \(B\), beginning at a
-raw substring
+then there is a contiguous decoded source slice \(s_R\) of the UTF--8-sig decoded string, beginning at the exact decoded token pattern
 \[
 \texttt{\textbackslash begin\{}\,
 e\,\texttt{\}}
@@ -503,11 +501,12 @@ e\,\texttt{\}}
 e\in\{\texttt{definition},\texttt{lemma},\texttt{proposition},
 \texttt{theorem},\texttt{corollary}\},
 \]
+with no blank between \texttt{\textbackslash begin} and \texttt{\{}, and the ASCII characters in that begin-token prefix correspond to a unique half-open byte interval of \(B\).  The token may be
 possibly followed by one bracketed title argument, such that \(R\)'s environment
 name, optional title, body slice, and first label field are exactly the fields
 obtained from \(s_R\) by the scanner described above.  Consequently
-\(\qlex=\rawFirstBeginTokenSubset\) is sound only as a first raw byte-substring
-subset witness: every accepted record has a matching raw source substring.
+\(\qlex=\rawFirstBeginTokenSubset\) is sound only as a first decoded-source-substring
+subset witness with an ASCII-token byte interval: every accepted record has a matching decoded source substring.
 Substrings in comments or inactive branches may be accepted, while included,
 nested, macro-generated, and second-same-line begin tokens may be missed.  The
 theorem makes no claim that \(s_R\) is active \TeX{} input, displayed theorem
@@ -521,7 +520,7 @@ By definition of \(\ScanOK(B,I,J,D)\), the bytes \(B\) decode as
 \auditpath{str.splitlines()}.  A record is emitted only when the fixed compiled
 regular expression of Lemma~\ref{lem:scanner-regex-compiles} has a match on a
 processed line.  Such a match is, by the displayed regular expression, exactly a
-literal \auditcode{\\begin\{} byte substring, one of the five listed environment
+literal decoded \auditcode{\\begin\{} token, one of the five listed environment
 names, a literal right brace, and possibly one bracketed title argument.  The
 scanner then takes the source slice from that begin line through the first later
 line containing the corresponding literal end pattern, or through end of file if
@@ -529,8 +528,8 @@ no such line exists, and assigns the first label match in that slice.  These are
 precisely the fields of \(R\).  The construction uses no \TeX{} expansion,
 comment stripping, conditional evaluation, include traversal, nesting balance,
 inventory semantics, or proof checker.  Therefore the only soundness conclusion
-available from the emitted record is existence of the stated raw source
-substring and scanner-derived fields.
+available from the emitted record is existence of the stated decoded source
+substring, the corresponding byte interval for the ASCII begin token, and scanner-derived fields.
 \end{proof}
 
 \paragraph{Public coordinate surface.}
@@ -542,7 +541,7 @@ conditional byte-bound replay reading is available only under the same explicit
 \(\ScriptOKstageA\) and certificate-script conformance premises.  That
 coordinate surface has \(\{\qlex,\qrgs\}\) only under those premises and under
 the explicit \(\ScanOK(B,I,J,D)\) scanner premise, with \(\qlex\) carrying only
-the raw-substring meaning of Theorem~\ref{thm:raw-begin-token-witness-soundness};
+the decoded-substring meaning of Theorem~\ref{thm:raw-begin-token-witness-soundness};
 the unconditional base coordinate set is empty.  The four upgrade coordinates and the support status of
 certificate-record material are recorded in Table~\ref{tab:scope-register};
 Richardson, Zeckendorf, orbit, height-transfer, and cover material is routed to
@@ -576,6 +575,61 @@ dispatch table \(\Gamma\), and certificate record \(C=(K,\ell,E,H,R,D,B)\).  It
 does not say that a generated artifact is mathematically correct merely because a
 record exists; it says which public reading the record is allowed to support.
 
+\begin{table}
+\caption{Finite schema predicates used by the route and certificate interfaces.}
+\label{tab:route-schema-predicates}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}L{0.28\linewidth}Y@{}}
+\toprule
+Predicate & Finite domain and acceptance condition \\
+\midrule
+\(\operatorname{ReqEntryFields}(\Sigma)\) & The finite schema field set required of every ledger entry:
+\(\{\texttt{id},\texttt{name},\texttt{kind},\texttt{level},\texttt{evidence},
+\texttt{passes}\}\), plus any schema-declared key in
+\(\Sigma.\operatorname{entryRequired}\).  Acceptance is set inclusion in the
+parsed row domain; no default value is inserted.\\
+\addlinespace
+\(\operatorname{ReqPassFields}(\Sigma)\) & The finite schema field set required of every pass row:
+\(\{\texttt{gate},\texttt{decision},\texttt{level},\texttt{pointer}\}\), plus any
+schema-declared key in \(\Sigma.\operatorname{passRequired}\).  Acceptance is exact
+presence of these keys before evaluating the pointer predicate.\\
+\addlinespace
+\(\operatorname{KindDomain}(\Sigma)\) & The finite set printed in
+\(\Sigma.\operatorname{kinds}\), restricted here to the route kinds
+\(\textsf{lexical}\), \(\textsf{replay}\), \(\textsf{source}\),
+\(\textsf{artifact}\), \(\textsf{archive}\), \(\textsf{venue}\), and
+\(\textsf{discovery}\).  A row accepts only when its nonempty kind set is a subset
+of this finite domain.\\
+\addlinespace
+\(\operatorname{SnapshotBoundary}(S)\) & The finite set of snapshot-boundary
+strings in the parsed table \(S\).  A string is accepted only if it is an exact
+member of \(S\)'s key set and the corresponding row is marked eligible for the
+current submission surface; filesystem existence is not queried.\\
+\addlinespace
+\(\mathsf{CommandBoundaryOK}.\mathrm{B}_2(e)\) & The path-verified boundary:
+entry \(e\) has no command transcript treated as evidence, every path evidence
+string is accepted by \(\operatorname{BoundPath}_{D}\), and every pass row points
+through \(\PointerOK_{B,D}\).  It accepts finite records only; it does not run a
+command.\\
+\addlinespace
+\(\mathsf{CommandBoundaryOK}.\mathrm{B}_3(e)\) & The command-run boundary:
+entry \(e\) has a finite command string, working-directory token, exit-status
+field, transcript pointer, and digest-bound output pointer, all accepted by
+\(\PointerOK_{B,D}\) or \(\operatorname{BoundPath}_{D}\).  It records a run row but
+still requires a separate \(\ScriptOK\) premise before script conformance becomes
+a theorem premise.\\
+\addlinespace
+\(\Acc_{\Gamma}(c,C)\) & The finite acceptance predicate for claim \(c\) with
+certificate record \(C\): every kind of \(c\) is in
+\(\operatorname{KindDomain}(\Sigma)\), the pass rows of \(C\) are in bijection with
+\(\bigcup_{k\in\operatorname{Kind}(c)}\Gamma(k)\), every decision is accepted by
+\(\Sigma.\operatorname{passDecisions}\), and every pointer satisfies
+\(\PointerOK_{B,D}\).  It is false if a required row is missing, duplicated, or
+outside the dispatch table.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \begin{figure}
 \centering
 \small
@@ -583,7 +637,7 @@ record exists; it says which public reading the record is allowed to support.
 \toprule
 Schema coordinate & Portable meaning \\ \midrule
 Public coordinate & The exact assertion being offered to the reader, such as a
-raw begin-token subset check, replayed finite closure, fresh source build,
+decoded begin-token subset check, replayed finite closure, fresh source build,
 artifact-semantic validation, archive identity, or venue state.\\
 Evidence surface & A finite typed list of non-path atoms and digest-bound paths;
 arbitrary files under the working directory are not promoted by existence.\\
@@ -806,46 +860,44 @@ positive public-coordinate and gate rows.
 This theorem is the displayed mathematical layer: \(A_{\mathrm{rec}}\),
 \(A^{\mathrm{scan}}\), \(A^{+}\), and \(H_{\mathrm{Horn}}\) are the finite sets and finite Horn
 system printed in the statement.  Forward chaining is monotone, so it is enough
-to inspect the displayed rules whose conclusions lie in \(Q\).  Rule \(R1\)
-does not apply over \(A_{\mathrm{rec}}\), because one of its five premises is
-\(\textsf{scanOK}\), and that atom is not in \(A_{\mathrm{rec}}\).  No other rule
-has conclusion \(\qlex\), so
-\[
-\operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q=\varnothing.
-\]
-If \(\ScanOK(B,I,J,D)\) holds, adjoining the formal atom \(\textsf{scanOK}\)
-forms \(A^{\mathrm{scan}}\), where all five premises of \(R1\) are present;
-hence \(\qlex\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\), with artifact
-spelling \(\texttt{qinv}\).  Rule \(R3\) still does not apply over
+to inspect the displayed rules whose conclusions lie in \(Q\), namely
+\(R1,R3,R5,R6,R7b,R8\).
+
+First consider \(\qlex\).  Rule \(R1\) is the only displayed rule concluding
+\(\qlex\).  It does not apply over \(A_{\mathrm{rec}}\), because one of its five
+premises is \(\textsf{scanOK}\), and that atom is not in
+\(A_{\mathrm{rec}}\).  If \(\ScanOK(B,I,J,D)\) holds, adjoining the formal atom
+\(\textsf{scanOK}\) forms \(A^{\mathrm{scan}}\), where all five premises of
+\(R1\) are present; hence
+\(\qlex\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\), with artifact
+spelling \(\texttt{qinv}\).
+
+Next consider \(\qrgs\).  Rule \(R3\) is the only displayed rule concluding
+\(\qrgs\).  It does not apply over either \(A_{\mathrm{rec}}\) or
 \(A^{\mathrm{scan}}\), because one of its ten premises is the explicit TCB atom
 \(\textsf{ScriptOKstage\_a}\), and that atom is not file-derived, not
-checker-emitted, and not in \(A^{\mathrm{scan}}\).  Thus
-\[
-\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\cap Q=\{\qlex\}.
-\]
-After also adjoining that single external script premise, rule \(R3\) applies
-over \(A^{+}\) because its ten premises, namely the four Stage--A file atoms,
-\(\textsf{finalDigest}\), the finite predicates
-\(\textsf{RecordGateOK}\), \(\textsf{CertDAGOK}\), and
+checker-emitted, and not in \(A^{\mathrm{scan}}\).  After adjoining that single
+external script premise, rule \(R3\) applies over \(A^{+}\) because its ten
+premises, namely the four Stage--A file atoms, \(\textsf{finalDigest}\), the
+finite predicates \(\textsf{RecordGateOK}\), \(\textsf{CertDAGOK}\), and
 \(\textsf{DigestOKstage\_a}\), the explicit TCB premise
 \(\textsf{ScriptOKstage\_a}\), and \(\textsf{qrgsReplayUpgrade}\), are in
 \(A^{+}\); hence \(\qrgs\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})\).
 
-For the negative coordinates, the only displayed rules concluding
-\(\qsrc\), \(\qart\), \(\qext\), and
-\(\qven\) are \(R5\), \(R6\), the two-step \(R7a\)--\(R7b\) path,
-and \(R8\).  Their respective missing promotion premises are
-\(\textsf{freshFormalSourceUpgrade}\),
+For the four negative coordinates, the only displayed rules concluding
+\(\qsrc\), \(\qart\), \(\qext\), and \(\qven\) are \(R5\), \(R6\), the two-step
+\(R7a\)--\(R7b\) path, and \(R8\).  Their respective missing promotion premises
+are \(\textsf{freshFormalSourceUpgrade}\),
 \(\textsf{dynamicArtifactSemanticUpgrade}\),
 \(\textsf{externalArchiveEquivalence}\) together with the replay-identity atom
 \(\textsf{locatorOKstageA}\), where \(\textsf{locatorOKstageA}\) itself requires
 \(\textsf{stableLocator}\) and \(\textsf{archiveByteEquality}\), and
-\(\textsf{uploadTimeVenueAcceptanceUpgrade}\).  None is a base atom in either
+\(\textsf{uploadTimeVenueAcceptanceUpgrade}\).  None is a base atom in
 \(A_{\mathrm{rec}}\), \(A^{\mathrm{scan}}\), or \(A^{+}\), and no displayed rule
 derives any of them.  Therefore those four premises are absent from all three
 closures, so the corresponding four support coordinates are absent as well.  The
-other rules derive only
-auxiliary atoms, not elements of \(Q\).  Thus
+other rules derive only auxiliary atoms, not elements of \(Q\).  Exhausting all
+six \(Q\)-concluding routes gives
 \[
 \begin{aligned}
 \operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q&=\varnothing,\\
@@ -855,7 +907,7 @@ auxiliary atoms, not elements of \(Q\).  Thus
 \]
 
 This proves the finite coordinate calculation and records precisely where
-\(\qlex\) and \(\qrgs\) enter: \(\qlex\) only as the raw begin-token witness
+\(\qlex\) and \(\qrgs\) enter: \(\qlex\) only as the decoded begin-token witness
 coordinate through the explicit \(\ScanOK(B,I,J,D)\) premise, and \(\qrgs\) only through the additional
 \(\ScriptOKstageA\) premise.  The support and upgrade consequences of each
 coordinate are those in Table~\ref{tab:scope-register}.  No supplement
@@ -881,9 +933,9 @@ only in the supplement source after this file's first \verb|\end{document}|.
 \label{def:certificate-record-acceptance-schema}
 Let
 \[
-(\Sigma,L,I,Q,M,C,\Gamma,D,S)
+(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \]
-be a finite already-parsed tuple consisting of a certificate schema, seven-row
+be a finite already-parsed tuple consisting of the submitted \path{main.tex} byte string, a certificate schema, seven-row
 current ledger, submission-interface map, primary-claim inventory, review-bundle
 manifest, case-row manifest, dispatch table, digest table, and finite snapshot
 boundary table.  Evidence strings are parsed by the following finite typed
@@ -929,7 +981,7 @@ predicates \(\mathrm{M}_1,\ldots,\mathrm{M}_3\),
 clauses.  The certificate predicate is exactly their conjunction:
 \[
 \begin{aligned}
-&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &\quad:\Longleftrightarrow
 \bigwedge_{i=1}^{3}\mathrm{M}_i
 \wedge\bigwedge_{i=1}^{2}\mathrm{L}_i
@@ -1003,7 +1055,7 @@ list.\\
 \end{tabularx}
 \end{center}
 All quantifiers over \(e\) range over \(\operatorname{LedgerRows}(L)\).  Thus
-\(\operatorname{AcceptsCertSpec}\) is a mathematical finite relation only; it
+\(\operatorname{AcceptsCertSpec}\) is a mathematical finite relation over the stated byte string \(B\) and parsed records only; it
 does not assert JSON byte decoding, root normalization, SHA--256 equality, or
 Python-script conformance.
 \end{definition}
@@ -1049,7 +1101,7 @@ string outside the disjunction is rejected before it can support a pass row.
 \label{thm:certificate-record-checker-spec}
 The pure schema statement is this: for every finite parsed tuple of
 Definition~\ref{def:certificate-record-acceptance-schema},
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) holds if and only
+\(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) holds if and only
 if the printed clauses M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 pass.  The
 clauses are the whole finite specification: the only non-abbreviatory uses of
 prior results are Lemma~\ref{lem:exact-gate-row-bijection} for E7's
@@ -1059,7 +1111,7 @@ assert that the current records have been supplied as operative bytes.
 
 The current-instance statement is separate: only if an archive supplies ordinary
 digest-bound bytes and printed hashes for
-\(\Sigma,L,I,Q,M,C,\Gamma,D\), supplies the corresponding finite snapshot table
+\(\Sigma,L,I,Q,M,C,\Gamma,D\), supplies the corresponding submitted source byte string \(B\) and finite snapshot table
 \(S\), and provides root normalization, ordinary-file checks, JSON decoding, and
 digest equality for each of those records, and also includes a branch-by-branch
 \(\ScriptOK_{\mathrm{cert}}\) theorem, may
@@ -1086,21 +1138,25 @@ schema theorem.
 
 \paragraph{Definition 3.1 (archive contract predicate).}
 At the theorem site below, \(\ArchiveOKA(Z)\) denotes exactly clauses 1--6 in
-the displayed archive contract.  Let \(\Facts(Z)\) be the set of Horn atoms
+the displayed archive contract.  Let \(\Facts(Z)\) be the full finite fact set
 obtained from the parsed archive records after archive normalization, byte
 equality, digest equality, parser conformance, and script conformance have been
-established.  The archive parsers may contribute non-coordinate support atoms,
-but no script-conformance predicate adds an atom to \(\Facts(Z)\) unless the
+established.  It may include archive-format facts, run-acceptance facts,
+scanner facts, digest facts, finite-checker facts, and script-conformance facts,
+so it is not claimed to be equal to \(A^{+}\).  Let
+\(\pi_{\mathrm{Horn}}(\Facts(Z))\) be the projection of this full fact set onto
+exactly the Horn atom alphabet printed in Theorem~\ref{thm:typed-verified-core-hierarchy}.  The archive parsers may contribute non-coordinate support atoms,
+but no script-conformance predicate adds its Horn atom to \(\pi_{\mathrm{Horn}}(\Facts(Z))\) unless the
 theorem hypotheses below state that the corresponding conformance premise has
 been attached.  For \(q_i\in Q\), define the replay vector as the typed Boolean
 Horn-closure projection
 \[
-\ReplayVector_i(Z)=\mathbf{1}_{q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\Facts(Z))}.
+\ReplayVector_i(Z)=\mathbf{1}_{q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\pi_{\mathrm{Horn}}(\Facts(Z)))}.
 \]
 The ordered tuple \(\ReplayVector(Z)\) is indexed as
 \((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).  Finally, abbreviate
 \[
-\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\Facts(Z).
+\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z)).
 \]
 
 \begin{lemma}[Archive instantiates the \(A^{+}\) Horn base]
@@ -1116,12 +1172,12 @@ Stage--A file atoms
 \]
 and \(\texttt{finalDigest}\).  Then \(\ArchiveInstantiatesAplus(Z)\), equivalently
 \[
-A^{+}\subseteq\Facts(Z).
+A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z)).
 \]
 The atoms \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
 \(\texttt{externalArchiveEquivalence}\), and
-\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent from \(\Facts(Z)\)
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent from \(\pi_{\mathrm{Horn}}(\Facts(Z))\)
 unless they are explicitly derived by separate upgrade records.
 \end{lemma}
 
@@ -1161,12 +1217,12 @@ The separate \(\ScriptOKstageA\) hypothesis contributes the remaining
 hypothesis justifies using the accepted parsed certificate relation; it does not
 add a public coordinate or a stronger upgrade atom.
 
-Therefore every atom of \(A^{\mathrm{scan}}\) is in \(\Facts(Z)\), and after
+Therefore every atom of \(A^{\mathrm{scan}}\) is in \(\pi_{\mathrm{Horn}}(\Facts(Z))\), and after
 adjoining the one external \(\texttt{ScriptOKstage\_a}\) atom every atom of
-\(A^{+}\) is in \(\Facts(Z)\).  This proves \(A^{+}\subseteq\Facts(Z)\).  The
+\(A^{+}\) is in \(\pi_{\mathrm{Horn}}(\Facts(Z))\).  This proves \(A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))\).  The
 four stronger upgrade atoms are not consequences of archive normalization,
 byte equality, digest equality, parser conformance, or script conformance.
-They therefore remain absent from \(\Facts(Z)\) unless a separate upgrade record
+They therefore remain absent from \(\pi_{\mathrm{Horn}}(\Facts(Z))\) unless a separate upgrade record
 explicitly derives them; in particular \(\LocatorOKstageA\) is not
 \(\texttt{externalArchiveEquivalence}\).
 \end{proof}
@@ -1204,7 +1260,7 @@ no-alias guard;
 \item record-byte equality: the supplied bytes for the schema, ledger,
 submission-interface map, primary-claim inventory, review-bundle manifest,
 case-row manifest, dispatch table, digest table, and snapshot table parse to the
-nine objects \((\Sigma,L,I,Q,M,C,\Gamma,D,S)\) used in
+ten objects \((B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) used in
 Theorem~\ref{thm:certificate-record-checker-spec}; the archive digest table
 \(T\) is this parsed \(D\) when read as the Stage--A digest-table object;
   \item environment identity: the replay-environment descriptor pins the JSON,
@@ -1225,7 +1281,7 @@ The locator identity premise is
 not \(\texttt{externalArchiveEquivalence}\), and therefore is not a \(\qext\)
 upgrade row.  The acceptance/run-success hypotheses are separate: the parsed
 certificate tuple must satisfy
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\), the certificate
+\(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\), the certificate
 script run must accept that tuple, the Stage--A replay script run must accept the
 replay report, and the archive scanner premise \(\ScanOK(B,I,J,D)\) must hold.
 Under these hypotheses
@@ -1234,7 +1290,7 @@ Theorem~\ref{thm:typed-verified-core-hierarchy}.
 If
 \begin{align*}
 &\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
-&{}\land\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&{}\land\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &{}\land\operatorname{CertRunAccepts}(Z)
 \land\operatorname{StageARunAccepts}(Z)\\
 &{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
@@ -1244,7 +1300,7 @@ the archive contains the four Stage--A file atoms and \(\texttt{finalDigest}\),
 and \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
 \(\texttt{externalArchiveEquivalence}\), and
-\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are not in \(\Facts(Z)\) unless
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are not in \(\pi_{\mathrm{Horn}}(\Facts(Z))\) unless
 explicitly derived, then
 \begin{align*}
 \ReplayVector(Z)
@@ -1275,7 +1331,7 @@ certificate acceptance hypothesis supplies the finite relation of
 Theorem~\ref{thm:certificate-record-checker-spec}; \(\operatorname{CertRunAccepts}(Z)\)
 and \(\operatorname{StageARunAccepts}(Z)\) supply the accepted finite runs, and
 the explicit \(\ScanOK(B,I,J,D)\) premise supplies the scanner atom.  Hence
-Lemma~\ref{lem:archive-instantiates-aplus} gives \(A^{+}\subseteq\Facts(Z)\).
+Lemma~\ref{lem:archive-instantiates-aplus} gives \(A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))\).
 Rules \(R1\) and \(R3\) therefore derive \(\qlex\) and \(\qrgs\), respectively.
 
 For the negative coordinates, inspect the only displayed rules with conclusions
@@ -1403,68 +1459,66 @@ no-self digest table, the environment descriptor, locator identity, and the
 explicit script-conformance premises needed by the two positive replay
 coordinates.
 
-For venue positioning, Table~\ref{tab:main-cicm-theorem-comparison} gives the
-main-PDF theorem-by-theorem comparison against the official CICM event-year
-proceedings for 2021--2025 and the citable CICM workshop records in that window
-\cite{CICM2021Proceedings,CICM2021Workshops,CICM2022Proceedings,CICM2023Proceedings,CICM2024Proceedings,CICM2025Proceedings}.
-The finite screen uses the terms \auditcode{formalization},
-\auditcode{certificate}, \auditcode{artifact}, \auditcode{LLM},
-\auditcode{library}, \auditcode{database}, and \auditcode{algorithm}.  The
-comparison is a reproducible corpus-defined positioning statement, not a claim
-about unqueried databases, later metadata changes, uncited pages, or differently
-phrased papers.  The paper-local file
-\artifactpath{certificates/cicm_search_transcript.json} is only an optional
-machine-readable mirror of this finite screen; the operative comparison appears
-in the PDF.  For CICM 2025, rows are named by event year; the bibliography
-records the Springer publication and copyright metadata.
+For venue positioning, Table~\ref{tab:main-cicm-theorem-comparison} gives a
+reproducible, corpus-defined comparison rather than a narrow keyword-only sample.
+The screened corpus is the official CICM event-year proceedings for 2021--2025
+and the citable CICM workshop records in that window
+\cite{CICM2021Proceedings,CICM2021Workshops,CICM2022Proceedings,CICM2023Proceedings,CICM2024Proceedings,CICM2025Proceedings}.  The screen retained (i) title or
+abstract hits for \auditcode{certificate}, \auditcode{certified},
+\auditcode{solver}, \auditcode{artifact}, \auditcode{replay}, \auditcode{library},
+\auditcode{maintenance}, \auditcode{blockchain}, \auditcode{database},
+\auditcode{similarity}, \auditcode{LLM}, or \auditcode{autoformalization}, and
+(ii) any proceeding item whose contribution is a checker, certificate,
+maintenance mechanism, archive/ledger mechanism, or formal-library data interface
+even if those exact words do not appear in the title.  For CICM 2025, rows are
+named by event year; the bibliography records Springer publication and copyright
+metadata.
 
 \begin{table}
-\caption{Main-PDF theorem-by-theorem comparison with CICM 2021--2025 proceedings and citable CICM workshop papers.}
+\caption{Reproducible CICM 2021--2025 comparison, retaining closest certificate, replay, maintenance, blockchain, and data-interface items.}
 \label{tab:main-cicm-theorem-comparison}
 \scriptsize
 \setlength{\tabcolsep}{1.5pt}
 \renewcommand{\arraystretch}{0.92}
-\begin{tabularx}{\linewidth}{@{}L{0.18\linewidth}L{0.29\linewidth}L{0.23\linewidth}Y@{}}
+\begin{tabularx}{\linewidth}{@{}L{0.18\linewidth}L{0.31\linewidth}L{0.22\linewidth}Y@{}}
 \toprule
 Public theorem here & Closest retained CICM/workshop items & Shared interface & Boundary and increment here \\
 \midrule
 Theorem~\ref{thm:typed-verified-core-hierarchy}: finite coordinate alphabet and
-Horn route & Baanen et al., ``Growing Mathlib'' (CICM 2025 event; Springer
-copyright 2026)~\cite{BaanenEtAl2026GrowingMathlib}; Yamamichi et al.,
-``Mizar'' web platform (CICM-WS/FMM 2021)~\cite{YamamichiEtAl2021MizarPlatform};
-Kohlhase--M{\"u}ller--Schaefer, ``sTeX'' (CICM-WS/NatFoM
-2021)~\cite{KohlhaseMuellerSchaefer2021STeX}. & Large formal libraries,
-library hosting, and semantic mathematical-document infrastructure. & The cited
-items maintain or expose mathematical knowledge objects.  The new object here is
-a publication-coordinate Horn relation with explicit positive coordinates
-\(\qlex,\qrgs\) and explicit non-upgrades for source rebuild, artifact semantics,
-external archive equivalence, and venue status. \\
+Horn route & Seidl, ``Never Trust Your Solver'' (CICM 2023)~\cite{Seidl2023NeverTrustSolver};
+Baanen et al., ``Growing Mathlib'' (CICM 2025 event)~\cite{BaanenEtAl2026GrowingMathlib};
+Huch, similarity-search maintenance (CICM 2025 event)~\cite{Huch2026SimilarityMaintenance}. &
+Solver certification, large-library maintenance, and retrieval support all route
+machine-produced or machine-maintained objects through explicit checks. & The new
+object here is not a solver certificate or library-maintenance algorithm.  It is
+a publication-coordinate Horn relation whose base closure is empty and whose
+positive coordinates require the explicit scanner and replay premises. \\
 \addlinespace
 Theorem~\ref{thm:certificate-record-checker-spec}: certificate-record acceptance
-schema & Bauer et al., ``Incorporating a Database of Graphs into a Proof
-Assistant'' (CICM 2024)~\cite{BauerEtAl2024LeanHoG}; related verified-algorithm
-records from CICM 2024 and CICM 2025
-\cite{BrinichJohnson2024QFT,BartolettiBonzioFerrara2026Semigroups}. &
-Proof-assistant external data and verified algorithm interfaces. & Those works
-connect formal systems to data or generated algorithms.  The new theorem is a
-row-admissibility specification: pointer admissibility, manifest/table/snapshot
-boundaries, row locks, and digest membership are the accepted clauses, and the
-result deliberately does not certify graph-data correctness, solver soundness,
-Lean/Rocq rebuild, or artifact semantics. \\
+schema & Bauer et al., graph database in Lean (CICM 2024)~\cite{BauerEtAl2024LeanHoG};
+Bartoletti--Bonzio--Ferrara, certified algorithms in Rocq (CICM 2025 event)~\cite{BartolettiBonzioFerrara2026Semigroups};
+Brinich--Johnson, verified QFT algorithms (CICM 2024)~\cite{BrinichJohnson2024QFT}. &
+External data, generated algorithms, and certified-computation rows require
+finite interfaces between artifacts and formal systems. & The schema here accepts
+only row admissibility: field domains, kind domains, command boundaries,
+manifest/table/snapshot pointer boundaries, and dispatch-table bijections.  It
+does not certify graph-data correctness, solver soundness, Lean/Rocq rebuild, or
+artifact semantics. \\
 \addlinespace
 Theorem~\ref{thm:replay-instantiation-archive-contract}: sufficient archive
-contract for conditional replay & Horowitz et al., ``Herald'' autoformalization
-(CICM 2025 event; Springer copyright 2026)~\cite{HorowitzEtAl2026Herald};
-Bentkamp--Avigad, ``Verified Optimization'' (CICM-WS/FMM
-2021)~\cite{BentkampAvigad2021VerifiedOptimization}; Karatarakis, Deligne
-formalization interfaces (CICM 2024)~\cite{Karatarakis2024Deligne}. & LLM proof
-assistance, proof-engineering workflows, and formalization-interface boundaries.
-& These items are closest for advisory proof generation or formalization
-workflows.  The archive theorem instead states when supplied bytes instantiate
-the finite replay surface: ordinary-file byte equality, no-self digest rows,
-environment descriptor, locator identity, and script-conformance premises.  It
-does not promote the package to proof-assistant theoremhood, fresh source
-rebuild, artifact-semantic validation, or external archival equivalence. \\
+contract for conditional replay & Brown--Kaliszyk--Urban, Proofgold blockchain
+explorer (CICM 2025 event)~\cite{BrownKaliszykUrban2026Proofgold};
+Horowitz et al., Herald autoformalization (CICM 2025 event)~\cite{HorowitzEtAl2026Herald};
+Bentkamp--Avigad, verified optimization (CICM-WS/FMM 2021)~\cite{BentkampAvigad2021VerifiedOptimization};
+Karatarakis, Deligne interface formalization (CICM 2024)~\cite{Karatarakis2024Deligne}. &
+Persistent proof-object exploration, advisory proof generation, and
+formalization workflows all depend on separating object identity from stronger
+semantic claims. & The archive theorem states only when supplied bytes
+instantiate the finite replay surface: ordinary-file byte equality, no-self
+digest rows, environment descriptor, locator identity, and script-conformance
+premises.  A DOI/SWH/blockchain-style locator alone is not
+\(\texttt{externalArchiveEquivalence}\), and no theoremhood, source rebuild,
+artifact-semantic, or venue coordinate is promoted. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -1537,7 +1591,7 @@ Those branches are not main-paper evidence and do not add public coordinates.
  \]
  for the base displayed relation.  Adjoining the explicit scanner-success
  premise gives the intermediate finite relation with \(\qlex\) positive only as a
- raw begin-token substring witness.
+ decoded begin-token substring witness.
  Adjoining the external branch-by-branch \(\ScriptOKstageA\) premise after that
  gives the conditional mathematical relation with \(q_{\mathrm{rgs}}\) positive.
  The executable reading is outside the submitted package.  The theorem states
@@ -2044,7 +2098,7 @@ clause inspects these five command-run keys.
 This theorem gives only the finite mathematical relation for certificate-record
 acceptance after parsing.  Its inputs are an abstract finite parsed tuple
 \[
-(\Sigma,L,I,Q,M,C,\Gamma,D,S)
+(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \]
 consisting of a parsed certificate schema, ledger, submission-interface map,
 primary-claim inventory, review-bundle manifest, case-row manifest, dispatch
@@ -2104,7 +2158,7 @@ names fail parsing before \(\PointerOK\) is evaluated.
 
 Let \(\Gamma\) be the finite schema dispatch table parsed from the same
 schema object as \(\Sigma\).  Define
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) to mean that the
+\(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) to mean that the
 parsed certificate schema, ledger, submission-interface map, primary-claim
 inventory, review-bundle manifest, case-row manifest, dispatch table, digest
 table, and snapshot-boundary table satisfy all displayed clauses M1--M3,
@@ -2112,7 +2166,7 @@ L1--E10, R1--R4, S1--S2, and P1--P5 below.  The
 theorem's logical form is therefore
 \[
 \begin{aligned}
-&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &\qquad{}\Longleftrightarrow
 \text{all displayed clauses pass},
 \end{aligned}
@@ -2386,13 +2440,13 @@ E5/R4 after typed pointer parsing, and cannot enlarge the two command-boundary
 levels used by \(\mathsf{CommandBoundaryOK}\).
 The displayed relation accepts exactly when none of the listed rejecting
 conditions holds.  Consequently,
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) iff all rows satisfy
+\(\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\) iff all rows satisfy
 \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
 the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
 hold.  Equivalently, for any finite parsed records satisfying the displayed
 grammars,
 \[
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)
+\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \Longleftrightarrow
 \text{clauses M1--M3, L1--E10, R1--R4, S1--S2, P1--P5 pass}.
 \]
@@ -3056,7 +3110,7 @@ the current parsed tuple:
 \artifactpath{review_bundle/verify_certificate_records.py}
 \text{ accepts }
 \Longleftrightarrow
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S).
+\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S).
 \]
 Consequently the script accepts the current seven-row ledger exactly when
 M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 pass, and in that case
@@ -3308,7 +3362,7 @@ scanner-conditional finite-object branch has
 q_{\mathrm{rgs}}=q_{\mathrm{src}}=q_{\mathrm{art}}=q_{\mathrm{ext}}=
 q_{\mathrm{ven}}=\mathsf{false},
 \]
-where \(\qlex\) has only the raw-substring meaning of
+where \(\qlex\) has only the decoded-substring meaning of
 Theorem~\ref{thm:raw-begin-token-witness-soundness};
 and any archive-located artifact instantiation satisfying
 Section~\ref{sec:replay-artifact-boundary} for the finite records and the
@@ -3377,7 +3431,7 @@ in either least fixed point.
 The source-level label and endpoint-boundary audit is a separate static scan,
 not a PDF inference.  The command
 \artifactcmd{python}{certificates/scan_tex_source_labels.py --write certificates/static_source_label_scan.json}
-lexically scans the raw bytes of \artifactpath{main.tex},
+decodes the source bytes and scans the decoded lines of \artifactpath{main.tex},
 \artifactpath{submission_abstract.tex}, and
 \artifactpath{appendix_full_technical_ledger.tex}.  It does not evaluate TeX
 conditionals, comments, includes, or macros; consequently any label in an
@@ -3423,7 +3477,7 @@ to the first later line containing \path{\textbackslash end\{e\}} or to end of
 file; the label is the first \path{\textbackslash label\{...\}} in that slice. \\
 \addlinespace
 Comment and conditional convention & Comments, macro definitions, skipped
-conditionals, and included files are not interpreted.  A matching byte substring
+conditionals, and included files are not interpreted.  A matching decoded substring
 inside a percent comment or inactive branch is counted; a token hidden behind a
 macro or \path{\textbackslash input} is not discovered. \\
 \addlinespace
@@ -4108,11 +4162,11 @@ it defines them as the finite contract for a conditional archive-instantiated re
 For \(q_i\in Q\), the replay vector is the Horn-closure projection
 \[
 \ReplayVector_i(Z)\Longleftrightarrow
-q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\Facts(Z)).
+q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\pi_{\mathrm{Horn}}(\Facts(Z))).
 \]
 The archive-instantiation predicate
 \[
-\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\Facts(Z)
+\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\pi_{\mathrm{Horn}}(\Facts(Z))
 \]
 is obtained only after the archive clauses are combined with the explicit
 \(\ScanOK\), \(\RecordGateOK\), \(\CertDAGOK\), \(\DigestOKstageA\),
@@ -4128,7 +4182,7 @@ the camera-ready replay theorem is
 &\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
 &\qquad{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
 &\qquad{}\land\DigestOKstageA\land\texttt{qrgsReplayUpgrade}\land
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+\operatorname{AcceptsCertSpec}(B,\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &\qquad{}\land\operatorname{CertRunAccepts}(Z)
 \land\operatorname{StageARunAccepts}(Z)\\
 &\qquad\Longrightarrow
@@ -4372,7 +4426,7 @@ q_{\mathrm{ven}})=(\mathsf{false},\mathsf{false},\mathsf{false},
 \]
 for the base displayed relation.  Adjoining the explicit scanner-success
 premise gives the intermediate finite relation with \(\qlex\) positive only as a
-raw begin-token substring witness.
+decoded begin-token substring witness.
 Adjoining the external branch-by-branch \(\ScriptOKstageA\) premise after that
 gives the conditional mathematical relation with \(q_{\mathrm{rgs}}\) positive.
 The executable reading is outside the submitted package.  The theorem states
@@ -4601,7 +4655,7 @@ q_{\mathrm{ven}})=(\mathsf{false},\mathsf{false},\mathsf{false},
 \]
 for the base displayed relation.  Adjoining the explicit scanner-success
 premise gives the intermediate finite relation with \(\qlex\) positive only as a
-raw begin-token substring witness.
+decoded begin-token substring witness.
 Adjoining the external branch-by-branch \(\ScriptOKstageA\) premise after that
 gives the conditional mathematical relation with \(q_{\mathrm{rgs}}\) positive.
 The executable reading is outside the submitted package.  The theorem states
@@ -5311,7 +5365,7 @@ q_{\mathrm{ven}})=(\mathsf{false},\mathsf{false},\mathsf{false},
 \]
 for the base displayed relation.  Adjoining the explicit scanner-success
 premise gives the intermediate finite relation with \(\qlex\) positive only as a
-raw begin-token substring witness.
+decoded begin-token substring witness.
 Adjoining the external branch-by-branch \(\ScriptOKstageA\) premise after that
 gives the conditional mathematical relation with \(q_{\mathrm{rgs}}\) positive.
 The executable reading is outside the submitted package.  The theorem states
