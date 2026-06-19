@@ -585,6 +585,10 @@ rule, artifact, and public-coordinate names before the concrete row table.
 For every byte string \(B\), if
 \(\ScanOK(B,I,J,D)\) holds, then the scanner rows are exactly the finite records
 defined in Definition~\ref{def:finite-scanner-algorithm-scanok}.  In
+particular, \(\ScanOK\) is only that finite predicate: UTF--8-sig decoding, the
+five accepted environment names, the recorded start/end byte offsets, and the
+SHA--256 interval checks are all part of the premise rather than informal
+scanner behaviour supplied later.  Thus, in
 particular, each accepted scanner row is generated from the \texttt{utf-8-sig}
 decoded source by the literal begin-token pattern
 \auditcode{\\begin\{e\}} for one of
@@ -648,6 +652,10 @@ For the paper-local reference checker for a finite Horn table \(H\), base
 \operatorname{checker}(H,A,Q)=S\quad\Longrightarrow\quad
 \operatorname{Cl}_{H}(A)\cap Q=S .
 \]
+Here \(\operatorname{checker}(H,A,Q)\) is exactly the finite loop of
+Definition~\ref{def:operative-horn-checker}; the lemma assumes no hidden
+implementation beyond repeatedly adjoining all displayed heads whose bodies are
+contained in the current finite set.
 \end{lemma}
 
 \begin{proof}
@@ -908,6 +916,10 @@ Assume \(A\cap Q=\varnothing\), the only \(Q\)-headed rules are
 absent from \(A\).  Then \(\operatorname{Cl}_{H}(A)\cap Q\) is exactly the set
 of heads among \(R1\) and \(R3\) whose printed bodies are contained in
 \(\operatorname{Cl}_{H}(A)\).
+For the replay theorem and the framed replay proposition, these hypotheses are
+not silent assumptions: \(\FrameOKZ(Z)\), expanded by
+Lemma~\ref{lem:operative-frame-expansion}, supplies them for
+\((H,A)=(\HHorn,\ReplayBase(Z))\).
 \end{lemma}
 
 \begin{proof}
@@ -1142,7 +1154,23 @@ finite hypotheses.
 \(\ScanOK(B,I,J,D)\), \(\RecordGateOK\), \(\CertDAGOK\),
 \(\DigestOKstageA\), \(\texttt{qrgsReplayUpgrade}\), and
 \(\texttt{ScriptOKstage\_a}\) hold, with their compiled atoms interpreted as in
-Lemma~\ref{lem:operative-replay-premise-completeness}.
+Lemma~\ref{lem:operative-replay-premise-completeness}; explicitly, the replay
+base contains the five \(R1\) premises
+\[
+\{\texttt{mainTex},\texttt{invJson},\texttt{invMd},
+\texttt{finalDigest},\texttt{scanOK}\}
+\]
+and the ten \(R3\) premises
+\[
+\begin{gathered}
+\texttt{stageAHornSchema},\texttt{stageAManifest},
+\texttt{stageAHornCertificate},\texttt{stageAReplayReport},
+\texttt{finalDigest},\\
+\texttt{RecordGateOK},\texttt{CertDAGOK},
+\texttt{DigestOKstage\_a},\texttt{ScriptOKstage\_a},
+\texttt{qrgsReplayUpgrade}.
+\end{gathered}
+\]
 \item \(\FrameOKZ(Z)\) holds in the expanded sense of
 Lemma~\ref{lem:operative-frame-expansion}, equivalently the closed-world clauses
 for \(\HHorn\), \(\FactMap(Z)\), and \(\ReplayBase(Z)\) listed in
@@ -1636,6 +1664,11 @@ argument does not replace \(\FactMap(Z)\) by \(A^{+}\).
 \end{proposition}
 
 \begin{proof}
+The framed replay base used here is the defined base
+\(\ReplayBase(Z)=\FactMap(Z)\setminus Q\).  Thus the calculation below is the
+same \(Q\)-projection as the older notation
+\(\ClHHorn(\FactMap(Z)\setminus Q)\), by
+Lemma~\ref{lem:operative-frame-base-equivalence}.
 Let
 \[
 \begin{aligned}
