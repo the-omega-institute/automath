@@ -13,10 +13,13 @@
 \def\UrlBreaks{}
 \def\UrlBigBreaks{}
 \makeatother
-\newcommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
-\newcommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
-\newcommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
+\DeclareRobustCommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
+\DeclareRobustCommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
+\DeclareRobustCommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
 \newcommand{\artifactpath}[1]{\auditpath{#1}}
+\DeclareRobustCommand{\stageAprose}{Stage--A}
+\DeclareRobustCommand{\stageApath}{\auditpath{stage_a}}
+\DeclareRobustCommand{\stageAatom}{\auditcode{stage_a}}
 \newcommand{\rawBeginTokenSubset}{\mathsf{rawBeginTokenSubset}}
 \newcommand{\rawBeginTokenWitness}{\mathsf{rawBeginTokenWitness}}
 \newcommand{\qlex}{\rawBeginTokenWitness}
@@ -99,10 +102,12 @@ The public coordinate names used below are
 \[
 (\qlex,\qrgs,\qsrc,\qart,\qext,\qven).
 \]
-The legacy artifact atom \texttt{qinv} is always the public coordinate
-\(\qlex=\rawBeginTokenWitness\), the raw begin-token substring witness.  The local atom \texttt{qrgs}
+The legacy artifact atom \auditcode{qinv} is always the public coordinate
+\(\qlex=\rawBeginTokenWitness\), the raw begin-token substring witness.  The local atom \auditcode{qrgs}
 is the public coordinate \(\qrgs\), bounded fixed-replay record-gate soundness.
-\texttt{stage\_a} in paths and JSON keys is rendered in prose as Stage--A.
+\stageApath{} in paths and JSON keys is rendered in prose as \stageAprose{}.
+The prose phrase is not an audit token: \stageApath{} has a literal underscore
+and is never read as ``stage a'' or as a hyphenated byte string.
 ``Current bytes'' means the exact ordinary-file bytes named by the manifest and
 digest table; changing any listed file requires a new digest/replay tuple.
 ``Support coordinate'' means one component of the displayed six-coordinate
@@ -111,13 +116,13 @@ ledger, path, or script name.
 
 \paragraph{Audit-string typography.}
 Path names, command fragments, digests, and code identifiers that are part of
-audit rows are printed as atomic strings.  The manuscript disables
-discretionary URL/path line breaks for \verb|\path|, \verb|\auditpath|,
-\verb|\artifactpath|, and \verb|\auditcode|, so
+audit rows are printed as atomic monospaced strings.  The manuscript uses
+\verb|\auditpath|, \verb|\artifactpath|, and \verb|\auditcode| for those tokens
+and disables discretionary URL/path breaks inside them, so
 \auditpath{certificates/stage_a_manifest.json},
-\auditpath{str.splitlines()}, and \auditcode{forward_chain} are literal strings;
-page layout never inserts a byte, blank, slash, underscore, or identifier
-character into them.
+\auditpath{str.splitlines()}, and \auditcode{forward_chain} are literal strings.
+Page layout never inserts a byte, blank, hyphen, slash, underscore, or
+identifier character into them.
 
 \paragraph{Stable audit labels.}
 The supplement assigns theorem-number-independent labels to the load-bearing

@@ -18,9 +18,12 @@
 \def\UrlBigBreaks{}
 \makeatother
 \setlist{nosep,leftmargin=*}
-\newcommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
-\newcommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
-\newcommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
+\DeclareRobustCommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
+\DeclareRobustCommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
+\DeclareRobustCommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
+\DeclareRobustCommand{\stageAprose}{Stage--A}
+\DeclareRobustCommand{\stageApath}{\auditpath{stage_a}}
+\DeclareRobustCommand{\stageAatom}{\auditcode{stage_a}}
 \newcommand{\artifactpath}[1]{\auditpath{#1}}
 \newcommand{\artifactcmd}[2]{\texttt{#1}\ \artifactpath{#2}}
 \newcommand{\ledgerpath}[1]{\begingroup\def\UrlBreaks{\do\/\do\.\do\-\do\_}\path{#1}\endgroup}
@@ -101,7 +104,7 @@ rows, replay-environment descriptor, stable locator, and the explicit
 archive bytes, executable checker, or script-conformance proof, that stronger
 reading is not part of the submitted claim.  Under those extra hypotheses only,
 the byte-bound relation has the two positive coordinates \(\qlex\) (legacy
-artifact atom \(\texttt{qinv}\), formerly printed as \(q_{\mathrm{lex}}\)) and
+artifact atom \(\auditcode{qinv}\), formerly printed as \(q_{\mathrm{lex}}\)) and
 bounded fixed-replay record-gate soundness.
 All stronger readings are collected once in the scope register
 Table~\ref{tab:scope-register}.  The paper's technical point is that generated
@@ -136,16 +139,20 @@ unproved source-code behavior.
 
 \paragraph{Audit-string typography.}
 Every path, command fragment, digest, and code identifier that is part of a
-byte-level audit row is typeset as an atomic audit string.  In particular,
-\verb|\path| and the paper macros \verb|\auditpath|, \verb|\artifactpath|, and
-\verb|\auditcode| are used with discretionary URL/path line breaks disabled.
-If the PDF line-breaks a long audit string, the break is display-only: the
-normative token is the uninterrupted monospaced string, with no inserted blank,
-hyphen, slash, or typographic replacement character.
-Thus strings such as \auditpath{certificates/stage_a_manifest.json},
+byte-level audit row is typeset as an atomic monospaced audit string, not as
+ordinary prose.  The paper uses \verb|\auditpath|, \verb|\artifactpath|, and
+\verb|\auditcode| for such strings; these wrappers disable discretionary
+URL/path breaks inside the token.  The prose name \stageAprose{} is only a
+human-readable label.  The byte string \stageApath{} is a different object:
+its underscore is literal, and the string is never to be read as ``stage a'' or
+as a hyphenated prose phrase.
+
+The normative token is the uninterrupted monospaced string shown by the source,
+with no inserted blank, hyphen, slash, line-break character, or typographic
+replacement character.  Thus \auditpath{certificates/stage_a_manifest.json},
 \auditpath{str.splitlines()}, and \auditcode{forward_chain} must be read
-literally; a line break in the surrounding prose is not an inserted byte, blank,
-underscore, slash, or identifier character.
+literally; wrapping in adjacent prose or tables is only page layout and does not
+insert bytes or change identifier characters.
 
 \paragraph{Terminology.}
 The paper uses the following four scope terms only in this finite-record sense.
@@ -164,8 +171,8 @@ digest/replay tuple before the term applies again.  These terms do not add
 evidence.  They are abbreviations for the displayed finite records, closure
 rules, and coordinate projections.  Throughout the public paper, \(\qlex\)
 denotes only the raw first-begin-token subset coordinate; the submitted JSON and Horn
-files retain the byte-level legacy atom name \texttt{qinv}.  Thus exact artifact
-tables may print \texttt{qinv}, and older support files may still mention
+files retain the byte-level legacy atom name \auditcode{qinv}.  Thus exact artifact
+tables may print \auditcode{qinv}, and older support files may still mention
 \(q_{\mathrm{lex}}\), but the coordinate's public mathematical name and meaning
 are first raw byte-substring subset witnessing, not theorem-inventory coverage and not
 displayed-\TeX{} semantics.
@@ -173,37 +180,39 @@ displayed-\TeX{} semantics.
 \begin{table}
 \caption{Notation and public names used in theorem statements.}
 \label{tab:notation-public-names}
-\small
-\begin{tabularx}{\linewidth}{L{0.24\linewidth}L{0.27\linewidth}Y}
+\footnotesize
+\begin{tabularx}{\linewidth}{L{0.30\linewidth}L{0.22\linewidth}Y}
 \toprule
 Public name & Artifact or local spelling & Meaning in this paper\\
 \midrule
-\(\qlex\) & \texttt{qinv} in legacy JSON/Horn rows; older prose \(q_{\mathrm{lex}}\) &
+\(\qlex\) & Legacy atom \auditcode{qinv}; older prose \(q_{\mathrm{lex}}\) &
 Raw first-begin-token subset coordinate: the finite
-\(\rawBeginTokenSubset\) scanner over current \path{main.tex} bytes and the
-declared five literal \path{\textbackslash begin\{...\}} tokens.  Its soundness
+\(\rawBeginTokenSubset\) scanner over current \auditpath{main.tex} bytes and the
+declared five literal \auditcode{\\begin\{...\}} tokens.  Its soundness
 claim is only that accepted records come from matching raw byte substrings.\\
 \addlinespace
-\(\qrgs\) & \texttt{qrgs} and \texttt{qrgsReplayUpgrade} &
-Bounded fixed-replay record-gate soundness coordinate for the Stage--A Horn
-schema, manifest atoms, certificate, replay report, digest rows, and named
+\(\qrgs\) & \auditcode{qrgs}; replay-upgrade atom &
+Bounded fixed-replay record-gate soundness coordinate for the \stageAprose{} Horn
+schema, manifest atoms, certificate, replay report, digest rows,
+\auditcode{qrgsReplayUpgrade}, and named
 script-conformance premise.\\
 \addlinespace
 \(\qsrc,\qart,\qext,\qven\) &
-\texttt{qsrc}, \texttt{qart}, \texttt{qext}, \texttt{qven} &
+\auditcode{qsrc}; \auditcode{qart}; \auditcode{qext}; \auditcode{qven} &
 The four absent upgrade coordinates: fresh formal-source rebuild, dynamic
 artifact semantics, external archive equivalence, and venue/upload status.\\
 \addlinespace
-\(\LocatorOKstageA\) & \texttt{locatorOKstageA} &
-Replay-identity premise for a non-PDF Stage--A archive: stable locator plus
+\(\LocatorOKstageA\) & \auditcode{locatorOKstageA} &
+Replay-identity premise for a non-PDF \stageAprose{} archive: stable locator plus
 archive byte equality.  It is not the external-archive coordinate \(\qext\).\\
 \addlinespace
-\(\ScriptOKstageA\), \(\ScriptOK_{\mathrm{cert}}\) &
-\texttt{ScriptOKstage\_a}, certificate-script conformance row &
+\(\ScriptOKstageA\);
+\(\ScriptOK_{\mathrm{cert}}\) &
+\auditcode{ScriptOKstage_a}, certificate-script conformance row &
 External branch-by-branch conformance assumptions.  Digests, path names, and
 parser compilation do not imply them.\\
 \addlinespace
-Stage--A & \path{stage_a} in file names and JSON keys &
+\stageAprose{} & \stageApath{} in file names and JSON keys &
 The fixed replay package whose manifest, Horn schema, certificate, replay
 report, digest table, and optional replay script are listed explicitly.\\
 \addlinespace
@@ -211,8 +220,8 @@ Current bytes & local ``current-byte'' shorthand &
 The exact ordinary-file byte strings named by the relevant manifest and digest
 table.  Editing any listed file requires a new digest/replay tuple.\\
 \addlinespace
-Support coordinate & six-coordinate product component &
-One component of \((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\) together with its
+Support coordinate & product component &
+One component of the six-coordinate vector together with its
 finite input rows; support ledgers do not add public coordinates by
 paraphrase.\\
 \bottomrule
@@ -480,11 +489,12 @@ concatenation, the displayed bytes form the well-formed \texttt{re.compile} inpu
 used by \(\ScanOK\).
 \end{proof}
 
-\begin{theorem}[Raw first-begin-token subset soundness]
+\begin{lemma}[RawScanSoundness]
 \label{thm:raw-begin-token-witness-soundness}
-Assume \(\ScanOK(B,I,J,D)\), and let \(R\) be any record emitted by the
-\(\rawBeginTokenSubset\) scan of the decoded \path{main.tex} byte string \(B\).
-Then there is a contiguous decoded source slice \(s_R\) of \(B\), beginning at a
+For every byte string \(B\), inventory byte strings \(I,J\), and digest table
+\(D\), if \(\ScanOK(B,I,J,D)\) and \(R\) is any record emitted by the
+\(\rawBeginTokenSubset\) scan of the decoded \path{main.tex} byte string \(B\),
+then there is a contiguous decoded source slice \(s_R\) of \(B\), beginning at a
 raw substring
 \[
 \texttt{\textbackslash begin\{}\,
@@ -503,7 +513,7 @@ nested, macro-generated, and second-same-line begin tokens may be missed.  The
 theorem makes no claim that \(s_R\) is active \TeX{} input, displayed theorem
 content, an included file record, a balanced environment, a theorem-inventory
 row, or proof-checked mathematics.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 By definition of \(\ScanOK(B,I,J,D)\), the bytes \(B\) decode as
@@ -609,6 +619,51 @@ freshly regenerated unless new finite rows for those stronger coordinates were
 added.  This graph-table example is not an input to the current replay theorem;
 it illustrates the schema in Figure~\ref{fig:general-route-schema} outside the
 present package.
+
+\begin{table}
+\caption{Five-row miniature current-instance calculation.}
+\label{tab:miniature-current-instance}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{0.08\linewidth}Y@{}}
+\toprule
+Row & Explicit atoms, gate, closure sequence, and vector \\
+\midrule
+1 & Present atoms are exactly \(\texttt{mainTex}\), \(\texttt{invJson}\),
+\(\texttt{invMd}\), and \(\texttt{finalDigest}\).  The atom
+\(\texttt{scanOK}\) is absent, so no public-coordinate rule fires and
+\(v=(0,0,0,0,0,0)\).\\
+\addlinespace
+2 & Add \(\texttt{scanOK}\).  Rule \(R1\) applies:
+\(\texttt{scanOK}\leadsto\qlex\leadsto
+\texttt{localInventoryClosed}\), so \(v=(1,0,0,0,0,0)\).\\
+\addlinespace
+3 & Add the explicit Stage--A atoms
+\(\texttt{stageAHornSchema}\), \(\texttt{stageAManifest}\),
+\(\texttt{stageAHornCertificate}\), \(\texttt{stageAReplayReport}\),
+\(\texttt{RecordGateOK}\), \(\texttt{CertDAGOK}\),
+\(\texttt{DigestOKstage\_a}\), \(\texttt{qrgsReplayUpgrade}\).
+The atom \(\texttt{ScriptOKstage\_a}\) is absent, so \(R3\) is still
+blocked and \(v=(1,0,0,0,0,0)\).\\
+\addlinespace
+4 & Add \(\texttt{ScriptOKstage\_a}\).  Rule \(R3\) applies:
+\(\texttt{ScriptOKstage\_a}\leadsto\qrgs
+\leadsto\texttt{boundedReplayRecordGateSoundness}\), so
+\(v=(1,1,0,0,0,0)\).\\
+\addlinespace
+5 & Keep the explicit negative audit: no
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), or
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\).  Thus \(R5,R6,R7b,R8\) do not
+fire.  The final conditional replay vector is \(v=(1,1,0,0,0,0)\); without row 2 the base vector is
+\(v=(0,0,0,0,0,0)\), and without row 4 the scanner-only vector is
+\(v=(1,0,0,0,0,0)\).\\
+\bottomrule
+\end{tabularx}
+\par\smallskip
+Here \(v\) is ordered as
+\((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).
+\end{table}
 
 \begin{theorem}[Self-contained conditional finite Horn closure]
 \label{thm:typed-verified-core-hierarchy}
@@ -865,12 +920,25 @@ manifest keys, \(\operatorname{ReqPath}_{\Sigma}(k)\) for the required relative
 path at key \(k\), \(\operatorname{LedgerRows}(L)\) for the parsed ledger rows,
 \(\operatorname{PassRows}(e)\) for the parsed pass rows of \(e\),
 \(\operatorname{Kind}(e)\) for its finite claim-kind set,
-\(\operatorname{Rows}(C)\) for the parsed case-row records,
-\(\operatorname{ReqCaseRows}(\Sigma)\) and
-\(\operatorname{ReqCaseFields}(\Sigma)\) for the schema-prescribed case names and
-case-row fields, and \(\operatorname{Prim}(Q)\) for the primary-claim rows.  The certificate predicate
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) is the
-conjunction of the following displayed finite clauses:
+\(\operatorname{Rows}(C)\) for the parsed case-row records, and
+\(\operatorname{Prim}(Q)\) for the primary-claim rows.  Define the named Boolean
+predicates \(\mathrm{M}_1,\ldots,\mathrm{M}_3\),
+\(\mathrm{L}_1,\ldots,\mathrm{L}_2\), \(\mathrm{E}_1,\ldots,\mathrm{E}_{10}\),
+\(\mathrm{R}_1,\ldots,\mathrm{R}_4\), \(\mathrm{S}_1,\mathrm{S}_2\), and
+\(\mathrm{P}_1,\ldots,\mathrm{P}_5\) by the following displayed finite
+clauses.  The certificate predicate is exactly their conjunction:
+\[
+\begin{aligned}
+&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&\quad:\Longleftrightarrow
+\bigwedge_{i=1}^{3}\mathrm{M}_i
+\wedge\bigwedge_{i=1}^{2}\mathrm{L}_i
+\wedge\bigwedge_{i=1}^{10}\mathrm{E}_i
+\wedge\bigwedge_{i=1}^{4}\mathrm{R}_i
+\wedge\bigwedge_{i=1}^{2}\mathrm{S}_i
+\wedge\bigwedge_{i=1}^{5}\mathrm{P}_i .
+\end{aligned}
+\]
 \begin{center}
 \scriptsize
 \begin{tabularx}{\linewidth}{@{}L{0.08\linewidth}Y@{}}
@@ -919,11 +987,6 @@ list.\\
 \text{S1} & \(|\operatorname{Rows}(I)|=4\).\\
 \text{S2} & \(\{\operatorname{id}(x):x\in\operatorname{Rows}(I)\}
 =\{\texttt{sim1},\texttt{sim2},\texttt{sim3},\texttt{sim4}\}\).\\[1mm]
-\text{C1} & \(\operatorname{dom}(C)=\operatorname{ReqCaseRows}(\Sigma)\).\\
-\text{C2} & For every \(c\in\operatorname{Rows}(C)\),
-\(\operatorname{ReqCaseFields}(\Sigma)\subseteq\operatorname{dom}(c)\).\\
-\text{C3} & For every path \(p\) occurring in a row of \(C\),
-\(\operatorname{BoundPath}_{D}(p)\).\\[1mm]
 \text{P1} & For every \(c\in\operatorname{Prim}(Q)\),
 \(\operatorname{DeclaredCoordinate}(c)\in\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}\).\\
 \text{P2} & \(|\operatorname{Prim}(Q)|\ge 12\).\\
@@ -987,7 +1050,7 @@ string outside the disjunction is rejected before it can support a pass row.
 The pure schema statement is this: for every finite parsed tuple of
 Definition~\ref{def:certificate-record-acceptance-schema},
 \(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) holds if and only
-if the printed clauses M1--M3, L1--E10, R1--R4, S1--S2, C1--C3, and P1--P5 pass.  The
+if the printed clauses M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 pass.  The
 clauses are the whole finite specification: the only non-abbreviatory uses of
 prior results are Lemma~\ref{lem:exact-gate-row-bijection} for E7's
 one-row-per-assigned-gate condition and Lemma~\ref{lem:typed-pointer-closure-compact}
@@ -1009,7 +1072,7 @@ or PDF rendering of a row is not executable evidence for the current instance.
 \begin{proof}
 Unfold Definition~\ref{def:certificate-record-acceptance-schema}.  By that
 definition, \(\operatorname{AcceptsCertSpec}\) is exactly the conjunction of the
-displayed predicates M1--M3, L1--E10, R1--R4, S1--S2, C1--C3, and P1--P5.  Hence the
+displayed predicates M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5.  Hence the
 iff with ``all printed clauses pass'' is definitional.  The only places where a
 clause name abbreviates a structural fact are E7 and R4: Lemma~\ref{lem:exact-gate-row-bijection}
 identifies E7 with exact gate-row bijection, and
@@ -1023,35 +1086,43 @@ schema theorem.
 
 \paragraph{Definition 3.1 (archive contract predicate).}
 At the theorem site below, \(\ArchiveOKA(Z)\) denotes exactly clauses 1--6 in
-the displayed archive contract.  Let \(\Facts(Z)\) denote the archive-induced
-base atom set extracted only by the displayed manifest, digest-table,
-certificate, and replay-report parsers, together with the explicitly stated
-scanner, finite-checker, digest, run-acceptance, and script-conformance
-hypotheses.  No script-conformance predicate adds an atom to \(\Facts(Z)\)
-unless the theorem hypotheses below state that the corresponding conformance
-premise has been attached.  For \(q_i\in Q\), define the replay vector as the
-typed Boolean Horn-closure projection
+the displayed archive contract.  Let \(\Facts(Z)\) be the set of Horn atoms
+obtained from the parsed archive records after archive normalization, byte
+equality, digest equality, parser conformance, and script conformance have been
+established.  The archive parsers may contribute non-coordinate support atoms,
+but no script-conformance predicate adds an atom to \(\Facts(Z)\) unless the
+theorem hypotheses below state that the corresponding conformance premise has
+been attached.  For \(q_i\in Q\), define the replay vector as the typed Boolean
+Horn-closure projection
 \[
 \ReplayVector_i(Z)=\mathbf{1}_{q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\Facts(Z))}.
 \]
 The ordered tuple \(\ReplayVector(Z)\) is indexed as
 \((\qlex,\qrgs,\qsrc,\qart,\qext,\qven)\).  Finally, abbreviate
 \[
-\ArchiveInstantiatesAplus(Z)\Longleftrightarrow \Facts(Z)=A^{+}.
+\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\Facts(Z).
 \]
 
 \begin{lemma}[Archive instantiates the \(A^{+}\) Horn base]
 \label{lem:archive-instantiates-aplus}
-Assume \(\ArchiveOKA(Z)\), \(\ScriptOKstageA\),
-\(\ScriptOK_{\mathrm{cert}}\),
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\),
-\(\operatorname{CertRunAccepts}(Z)\), and
-\(\operatorname{StageARunAccepts}(Z)\).  Assume also that the archive scanner
-premise \(\ScanOK(B,I,J,D)\) holds on the submitted main-file and inventory
-bytes.  Then \(\ArchiveInstantiatesAplus(Z)\), equivalently
+Assume \(\ArchiveOKA(Z)\), \(\ScanOK(B,I,J,D)\), \(\RecordGateOK\),
+\(\CertDAGOK\), \(\DigestOKstageA\),
+\(\texttt{qrgsReplayUpgrade}\), \(\ScriptOKstageA\), and
+\(\ScriptOK_{\mathrm{cert}}\).  Assume also that the archive contains the four
+Stage--A file atoms
 \[
-\Facts(Z)=A^{+}.
+\texttt{stageAHornSchema},\quad \texttt{stageAManifest},\quad
+\texttt{stageAHornCertificate},\quad \texttt{stageAReplayReport}
 \]
+and \(\texttt{finalDigest}\).  Then \(\ArchiveInstantiatesAplus(Z)\), equivalently
+\[
+A^{+}\subseteq\Facts(Z).
+\]
+The atoms \(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent from \(\Facts(Z)\)
+unless they are explicitly derived by separate upgrade records.
 \end{lemma}
 
 \begin{proof}
@@ -1067,16 +1138,15 @@ premises of rule \(R1\):
 \{\texttt{mainTex},\texttt{invJson},\texttt{invMd},
 \texttt{finalDigest},\texttt{scanOK}\}.
 \]
-The same archive clauses, the accepted certificate tuple, and the accepted
-certificate run contribute the non-coordinate support atoms
+The same archive clauses contribute the non-coordinate support atoms
 \[
 \{\texttt{pubAbs},\texttt{suppMain},\texttt{srcInterface},
 \texttt{caseArtifacts},\texttt{venueReadiness}\},
 \]
 which are retained as finite support rows in \(A_{\mathrm{rec}}\) but do not
-conclude any public coordinate by themselves.  The Stage--A accepted-run
-hypothesis contributes exactly the Stage--A file and checker atoms used by rule
-\(R3\):
+conclude any public coordinate by themselves.  The Stage--A file-atom premise
+and the named checker hypotheses contribute exactly the Stage--A atoms used by
+rule \(R3\):
 \[
 \begin{gathered}
 \texttt{stageAHornSchema},\texttt{stageAManifest},
@@ -1091,15 +1161,14 @@ The separate \(\ScriptOKstageA\) hypothesis contributes the remaining
 hypothesis justifies using the accepted parsed certificate relation; it does not
 add a public coordinate or a stronger upgrade atom.
 
-By definition \(\Facts(Z)\) contains no atoms except those obtained from these
-finite parsers and named hypotheses.  Therefore it contains every atom of
-\(A^{\mathrm{scan}}\) and, after adjoining the one external
-\(\texttt{ScriptOKstage\_a}\) atom, every atom of \(A^{+}\).  Conversely, none of
-the archive-format, environment, locator, or script-run premises is a source
-rebuild, artifact-semantic, external-archive-equivalence, or venue-acceptance
-promotion atom; in particular \(\LocatorOKstageA\) is not
-\(\texttt{externalArchiveEquivalence}\).  Thus no atom outside the displayed
-\(A^{+}\) base is inserted into \(\Facts(Z)\), and \(\Facts(Z)=A^{+}\).
+Therefore every atom of \(A^{\mathrm{scan}}\) is in \(\Facts(Z)\), and after
+adjoining the one external \(\texttt{ScriptOKstage\_a}\) atom every atom of
+\(A^{+}\) is in \(\Facts(Z)\).  This proves \(A^{+}\subseteq\Facts(Z)\).  The
+four stronger upgrade atoms are not consequences of archive normalization,
+byte equality, digest equality, parser conformance, or script conformance.
+They therefore remain absent from \(\Facts(Z)\) unless a separate upgrade record
+explicitly derives them; in particular \(\LocatorOKstageA\) is not
+\(\texttt{externalArchiveEquivalence}\).
 \end{proof}
 
 \begin{theorem}[Sufficient archive contract overview]
@@ -1160,8 +1229,7 @@ certificate tuple must satisfy
 script run must accept that tuple, the Stage--A replay script run must accept the
 replay report, and the archive scanner premise \(\ScanOK(B,I,J,D)\) must hold.
 Under these hypotheses
-Lemma~\ref{lem:archive-instantiates-aplus} identifies the archive fact set
-exactly with the \(A^{+}\) base of
+Lemma~\ref{lem:archive-instantiates-aplus} embeds the \(A^{+}\) base of
 Theorem~\ref{thm:typed-verified-core-hierarchy}.
 If
 \begin{align*}
@@ -1169,13 +1237,22 @@ If
 &{}\land\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &{}\land\operatorname{CertRunAccepts}(Z)
 \land\operatorname{StageARunAccepts}(Z)\\
-&{}\land\ScanOK(B,I,J,D),
+&{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
+&{}\land\DigestOKstageA\land\texttt{qrgsReplayUpgrade},
 \end{align*}
-then
+the archive contains the four Stage--A file atoms and \(\texttt{finalDigest}\),
+and \(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are not in \(\Facts(Z)\) unless
+explicitly derived, then
 \begin{align*}
 \ReplayVector(Z)
 &=(\mathsf{true},\mathsf{true},\mathsf{false},\mathsf{false},\mathsf{false},\mathsf{false}).
 \end{align*}
+Without the \(\ScanOK(B,I,J,D)\) premise, the first coordinate is not derivable
+from the displayed archive facts.  Without \(\ScriptOKstageA\), the second
+coordinate is not derivable from the displayed archive facts.
 The theorem is a sufficient-condition overview; the archive predicate it uses is
 Definition 3.1 at this site.  A PDF-only article or an unlocated local source
 tree does not instantiate a run-based replay claim; it supplies only the
@@ -1198,23 +1275,97 @@ certificate acceptance hypothesis supplies the finite relation of
 Theorem~\ref{thm:certificate-record-checker-spec}; \(\operatorname{CertRunAccepts}(Z)\)
 and \(\operatorname{StageARunAccepts}(Z)\) supply the accepted finite runs, and
 the explicit \(\ScanOK(B,I,J,D)\) premise supplies the scanner atom.  Hence
-Lemma~\ref{lem:archive-instantiates-aplus} gives
-\(\Facts(Z)=A^{+}\).  By the definition of \(\ReplayVector_i(Z)\),
-\[
-\ReplayVector_i(Z)=\mathbf{1}_{q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})}.
-\]
-Theorem~\ref{thm:typed-verified-core-hierarchy} computes this closure on the
-printed Horn system as
-\(\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})\cap Q=\{\qlex,\qrgs\}\).  Thus the
-first two coordinates are true and the four remaining coordinates are false.
-Those negative coordinates remain false because \(\Facts(Z)=A^{+}\) contains no
-promotion atoms for source rebuild, artifact semantics,
-external-archive equivalence, or venue acceptance.  The locator clause supplies
-only \(\LocatorOKstageA\); because \(\texttt{externalArchiveEquivalence}\) is
-still absent, \(\qext\) does not fire.  If any archive clause is absent, the
-byte-bound replay surface is not identified, so only the printed conditional
-specification remains.
+Lemma~\ref{lem:archive-instantiates-aplus} gives \(A^{+}\subseteq\Facts(Z)\).
+Rules \(R1\) and \(R3\) therefore derive \(\qlex\) and \(\qrgs\), respectively.
+
+For the negative coordinates, inspect the only displayed rules with conclusions
+\(\qsrc,\qart,\qext,\qven\).  Rule \(R5\) requires
+\(\texttt{freshFormalSourceUpgrade}\), rule \(R6\) requires
+\(\texttt{dynamicArtifactSemanticUpgrade}\), rule \(R7b\) requires
+\(\texttt{externalArchiveEquivalence}\) in addition to any locator atom, and
+rule \(R8\) requires \(\texttt{uploadTimeVenueAcceptanceUpgrade}\).  The theorem
+hypotheses state that these four upgrade atoms are absent unless separately
+derived, and no such derivation is among the displayed archive facts.  The
+locator clause supplies only \(\LocatorOKstageA\); because
+\(\texttt{externalArchiveEquivalence}\) is still absent, \(\qext\) does not
+fire.  Thus the four remaining coordinates are false and
+\(\ReplayVector(Z)=(\mathsf{true},\mathsf{true},\mathsf{false},\mathsf{false},
+\mathsf{false},\mathsf{false})\).
+
+If \(\ScanOK(B,I,J,D)\) is removed, rule \(R1\)'s \(\texttt{scanOK}\) premise is
+missing and no other displayed rule concludes \(\qlex\).  If
+\(\ScriptOKstageA\) is removed, rule \(R3\)'s
+\(\texttt{ScriptOKstage\_a}\) premise is missing and no other displayed rule
+concludes \(\qrgs\).  If any archive clause is absent, the byte-bound replay
+surface is not identified, so only the printed conditional specification remains.
 \end{proof}
+
+\begin{landscape}
+\begin{table}
+\caption{ASCII byte manifest for normative Stage--A replay tokens.}
+\label{tab:ascii-normative-stage-a-manifest}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}L{0.15\linewidth}L{0.22\linewidth}L{0.06\linewidth}L{0.38\linewidth}L{0.14\linewidth}@{}}
+\toprule
+Role & Exact ASCII relative path & Bytes & SHA--256 & Section reference \\
+\midrule
+Canonical atom manifest &
+\ledgerpath{certificates/stage_a_manifest.json} &
+4914 &
+\texttt{e0bb60d1192d9c8282ddfd}\\
+\texttt{c6b72333e35e95eb7cadbb8}\\
+\texttt{e3d156b2cba534ce7d7} &
+Theorem~\ref{thm:typed-verified-core-hierarchy};
+Table~\ref{tab:miniature-current-instance}\\
+\addlinespace
+Fixed Horn schema &
+\ledgerpath{certificates/stage_a_horn_schema.json} &
+4585 &
+\texttt{ff3709ccd5a9f3671224f0}\\
+\texttt{0b9486c802993b6ee599b6}\\
+\texttt{f0e4646c0ecc1f3859ce} &
+Theorem~\ref{thm:typed-verified-core-hierarchy};
+Table~\ref{tab:miniature-current-instance}\\
+\addlinespace
+Replay certificate DAGs &
+\ledgerpath{certificates/stage_a_horn_audit_certificate.json} &
+4361 &
+\texttt{942fb516617bea480e9317}\\
+\texttt{0a5ba3a7c74e0cab421729}\\
+\texttt{aafc0d1c2c35defc7c7b} &
+Theorem~\ref{thm:certificate-record-checker-spec};
+Theorem~\ref{thm:replay-instantiation-archive-contract}\\
+\addlinespace
+Expected replay vector &
+\ledgerpath{certificates/stage_a_replay_report.json} &
+981 &
+\texttt{44ab1cbe9584e73b6c7cc7}\\
+\texttt{a5e8d1d238f24867fb6324}\\
+\texttt{de1fbd3081f80110b44d} &
+Theorem~\ref{thm:typed-verified-core-hierarchy};
+Theorem~\ref{thm:replay-instantiation-archive-contract}\\
+\addlinespace
+Replay environment descriptor &
+\ledgerpath{certificates/stage_a_replay_environment.json} &
+2967 &
+\texttt{d867d6a77410c91ce5ce34}\\
+\texttt{63576feaf1c0c4b8b08d2}\\
+\texttt{e49b5387657b39e524faa} &
+Theorem~\ref{thm:replay-instantiation-archive-contract};
+Table~\ref{tab:conditional-hypothesis-status}\\
+\addlinespace
+Inner support digest table &
+\ledgerpath{certificates/stage_a_digest_table.json} &
+2747 &
+\texttt{a847f7656298ecf219b808}\\
+\texttt{2ed7b0b46d5a27a6fb61dd}\\
+\texttt{4b2510557c841cfbdfb2} &
+Theorem~\ref{thm:replay-instantiation-archive-contract};
+Table~\ref{tab:conditional-hypothesis-status}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\end{landscape}
 
 \section{Related work by interface}
 \label{sec:related-work}
@@ -3952,24 +4103,32 @@ q_i\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(\Facts(Z)).
 \]
 The archive-instantiation predicate
 \[
-\ArchiveInstantiatesAplus(Z)\Longleftrightarrow \Facts(Z)=A^{+}
+\ArchiveInstantiatesAplus(Z)\Longleftrightarrow A^{+}\subseteq\Facts(Z)
 \]
 is obtained only after the archive clauses are combined with the explicit
 \(\ScanOK\), \(\RecordGateOK\), \(\CertDAGOK\), \(\DigestOKstageA\),
-\(\texttt{qrgsReplayUpgrade}\), accepted-run, and script-conformance
-hypotheses.  If those hypotheses are supplied, then the camera-ready replay
-theorem is
+\(\texttt{qrgsReplayUpgrade}\), the four Stage--A file atoms, accepted-run, and
+script-conformance hypotheses.  The stronger upgrade atoms
+\(\texttt{freshFormalSourceUpgrade}\),
+\(\texttt{dynamicArtifactSemanticUpgrade}\),
+\(\texttt{externalArchiveEquivalence}\), and
+\(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent unless a separate
+upgrade record explicitly derives them.  If those hypotheses are supplied, then
+the camera-ready replay theorem is
 \begin{align*}
 &\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
-&\qquad{}\land\ScanOK(B,I,J,D)\land
+&\qquad{}\land\ScanOK(B,I,J,D)\land\RecordGateOK\land\CertDAGOK\\
+&\qquad{}\land\DigestOKstageA\land\texttt{qrgsReplayUpgrade}\land
 \operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &\qquad{}\land\operatorname{CertRunAccepts}(Z)
 \land\operatorname{StageARunAccepts}(Z)\\
 &\qquad\Longrightarrow
 \ReplayVector(Z)=
-(\qlex,q_{\mathrm{rgs}},\neg q_{\mathrm{src}},\neg q_{\mathrm{art}},
-\neg q_{\mathrm{ext}},\neg q_{\mathrm{ven}}).
+(\mathsf{true},\mathsf{true},\mathsf{false},\mathsf{false},
+\mathsf{false},\mathsf{false}).
 \end{align*}
+Without \(\ScanOK(B,I,J,D)\), the first coordinate is not derivable; without
+\(\ScriptOKstageA\), the second coordinate is not derivable.
 The implication is exactly the replay precondition package used by
 Lemma~\ref{lem:byte-binding-submitted-records},
 Corollary~\ref{cor:byte-bound-stage-a-horn-replay}, and
