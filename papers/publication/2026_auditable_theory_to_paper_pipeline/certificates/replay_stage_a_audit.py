@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -23,6 +24,10 @@ SCHEMA = CERT / "stage_a_horn_schema.json"
 CERTIFICATE = CERT / "stage_a_horn_audit_certificate.json"
 REPORT = CERT / "stage_a_replay_report.json"
 DIGEST_TABLE = CERT / "stage_a_digest_table.json"
+MAIN_TEX = ROOT / "main.tex"
+INVENTORY_JSON = ROOT / "theorem_inventory.json"
+INVENTORY_MD = ROOT / "theorem_inventory.md"
+STATIC_SOURCE_LABEL_SCAN = CERT / "static_source_label_scan.json"
 
 COORDINATES = ["qinv", "qrgs", "qsrc", "qart", "qext", "qven"]
 REQUIRED_DIGEST_PATHS = {
@@ -47,6 +52,31 @@ EXPECTED_NEGATIVE_UPGRADES = {
     "qart": "dynamicArtifactSemanticUpgrade",
     "qext": "externalUploadArchiveUpgrade",
     "qven": "uploadTimeVenueAcceptanceUpgrade",
+}
+ENV_PATTERN = re.compile(r"\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?")
+LABEL_PATTERN = re.compile(r"\\label\{([^}]*)\}")
+COORDINATE_RULES = {
+    "qinv": "R1_inventory_closure_to_qinv",
+    "qrgs": "R3_replay_tuple_to_qrgs",
+    "qsrc": "R5_qsrc_upgrade_to_qsrc",
+    "qart": "R6_qart_upgrade_to_qart",
+    "qext": "R7_qext_upgrade_to_qext",
+    "qven": "R8_qven_upgrade_to_qven",
+}
+EXPECTED_POSITIVE_PREMISES = {
+    "qinv": ["mainTex", "invJson", "invMd", "finalDigest", "scanOK"],
+    "qrgs": [
+        "stageAHornSchema",
+        "stageAManifest",
+        "stageAHornCertificate",
+        "stageAReplayReport",
+        "finalDigest",
+        "RecordGateOK",
+        "CertDAGOK",
+        "DigestOKstage_a",
+        "ScriptOKstage_a",
+        "qrgsReplayUpgrade",
+    ],
 }
 
 
@@ -104,6 +134,113 @@ def check_digest_table(table: dict) -> dict[str, str]:
     if missing:
         raise SystemExit(f"digest table missing rows: {missing}")
     return seen
+
+
+def inventory_labels(value: object) -> set[str]:
+    labels: set[str] = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if isinstance(key, str) and "label" in key.lower() and isinstance(child, str):
+                labels |= set(re.findall(r"\b(?:def|lem|prop|thm|cor):[A-Za-z0-9_.:-]+", child))
+            labels |= inventory_labels(child)
+    elif isinstance(value, list):
+        for child in value:
+            labels |= inventory_labels(child)
+    elif isinstance(value, str):
+        labels |= set(re.findall(r"\b(?:def|lem|prop|thm|cor):[A-Za-z0-9_.:-]+", value))
+    return labels
+
+
+def scan_tex_labels(path: Path) -> set[str]:
+    try:
+        text = path.read_bytes().decode("utf-8-sig")
+    except UnicodeDecodeError as exc:
+        raise SystemExit(f"main.tex is not utf-8-sig decodable: {exc}") from exc
+    labels: list[str] = []
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        match = ENV_PATTERN.search(line)
+        if not match:
+            continue
+        env_name = match.group(1)
+        end_pattern = f"\\end{{{env_name}}}"
+        end_index = len(lines) - 1
+        for candidate in range(index, len(lines)):
+            if end_pattern in lines[candidate]:
+                end_index = candidate
+                break
+        body = "\n".join(lines[index : end_index + 1])
+        label_match = LABEL_PATTERN.search(body)
+        if not label_match:
+            raise SystemExit(f"ScanOK failed: unlabeled {env_name} beginning on line {index + 1}")
+        labels.append(label_match.group(1))
+    if len(labels) != len(set(labels)):
+        raise SystemExit("ScanOK failed: duplicate theorem-like labels in main.tex")
+    return set(labels)
+
+
+def check_scan_ok() -> None:
+    scanned = scan_tex_labels(MAIN_TEX)
+    inventory_json = load_json(INVENTORY_JSON)
+    static_scan = load_json(STATIC_SOURCE_LABEL_SCAN)
+    inventory_text = INVENTORY_MD.read_text(encoding="utf-8-sig")
+    json_labels = inventory_labels(inventory_json)
+    scan_labels = inventory_labels(static_scan)
+    md_labels = set(re.findall(r"\\label\{([^}]*)\}|label[:= ]+([A-Za-z0-9_:\-.]+)", inventory_text))
+    flat_md_labels = {item for pair in md_labels for item in pair if item}
+    inventory = json_labels | scan_labels | flat_md_labels
+    if not scanned:
+        raise SystemExit("ScanOK failed: no theorem-like labels detected")
+    missing = sorted(scanned - inventory)
+    if missing:
+        raise SystemExit(f"ScanOK failed: labels absent from digest-bound inventory: {missing[:10]}")
+
+
+def check_record_gate_ok(schema: dict, manifest: dict, report: dict) -> None:
+    rule_ids = {rule.get("rule_id") for rule in schema.get("rules", [])}
+    expected_rule_ids = {
+        "R0_single_route_surface",
+        "R1_inventory_closure_to_qinv",
+        "R2_qinv_to_local_inventory_closed",
+        "R3_replay_tuple_to_qrgs",
+        "R4_qrgs_to_bounded_record_gate_soundness",
+        "R5_qsrc_upgrade_to_qsrc",
+        "R6_qart_upgrade_to_qart",
+        "R7_qext_upgrade_to_qext",
+        "R8_qven_upgrade_to_qven",
+        "R9_source_interface_to_bounded_source_interface",
+        "R10_case_artifacts_to_bounded_artifact_rows",
+        "R11_venue_readiness_to_dated_venue_readiness",
+        "R12_route_surface_quotient",
+    }
+    if rule_ids != expected_rule_ids:
+        raise SystemExit("RecordGateOK failed: Stage-A rule-id set mismatch")
+    atoms = [row.get("atom") for row in manifest.get("compiler_rows", [])]
+    if len(atoms) != len(set(atoms)):
+        raise SystemExit("RecordGateOK failed: duplicate manifest atoms")
+    accepted = report.get("accepted_coordinates")
+    if set(accepted) != set(COORDINATES):
+        raise SystemExit("RecordGateOK failed: report coordinate set mismatch")
+
+
+def check_schema_premises(schema: dict) -> None:
+    rules = {rule.get("conclusion"): rule for rule in schema.get("rules", [])}
+    for coordinate, rule_id in COORDINATE_RULES.items():
+        rule = rules.get(coordinate)
+        if rule is None or rule.get("rule_id") != rule_id:
+            raise SystemExit(f"RecordGateOK failed: coordinate rule missing for {coordinate}")
+    for coordinate, premises in EXPECTED_POSITIVE_PREMISES.items():
+        if rules[coordinate].get("premises") != premises:
+            raise SystemExit(f"RecordGateOK failed: premise list mismatch for {coordinate}")
+
+
+def check_scriptok_assumption(manifest: dict) -> None:
+    rows = manifest.get("compiler_rows", [])
+    matches = [row for row in rows if row.get("atom") == "ScriptOKstage_a"]
+    if len(matches) != 1 or matches[0].get("sort") != "tcb_assumption":
+        raise SystemExit("ScriptOKstage_a must be an explicit single TCB assumption row")
+    if matches[0].get("path") != "certificates/replay_stage_a_audit.py":
+        raise SystemExit("ScriptOKstage_a row must name the Stage-A replay script")
 
 
 def compile_atoms(manifest: dict, certificate: dict) -> set[str]:
@@ -195,6 +332,10 @@ def main() -> int:
     digest_table = load_json(DIGEST_TABLE)
 
     digests = check_digest_table(digest_table)
+    check_scan_ok()
+    check_record_gate_ok(schema, manifest, report)
+    check_schema_premises(schema)
+    check_scriptok_assumption(manifest)
     atoms = compile_atoms(manifest, certificate)
     closure, proof = forward_chain(schema, atoms)
     validate_certificate(certificate, closure, proof)
