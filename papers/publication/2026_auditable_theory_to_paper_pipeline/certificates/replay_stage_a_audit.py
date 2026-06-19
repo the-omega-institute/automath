@@ -28,6 +28,7 @@ MAIN_TEX = ROOT / "main.tex"
 INVENTORY_JSON = ROOT / "theorem_inventory.json"
 INVENTORY_MD = ROOT / "theorem_inventory.md"
 STATIC_SOURCE_LABEL_SCAN = CERT / "static_source_label_scan.json"
+CURRENT_INSTANCE_ROWS = CERT / "current_instance_projection_rows.json"
 
 COORDINATES = ["qinv", "qrgs", "qsrc", "qart", "qext", "qven"]
 REQUIRED_DIGEST_PATHS = {
@@ -77,6 +78,44 @@ EXPECTED_POSITIVE_PREMISES = {
         "ScriptOKstage_a",
         "qrgsReplayUpgrade",
     ],
+}
+ROW_MANIFEST_FAMILIES = [
+    "SourceRows",
+    "TokenRows",
+    "ScannerRows",
+    "ManifestRows",
+    "DigestRows",
+    "TranscriptRows",
+    "LedgerRows",
+    "PromotionRows",
+]
+ROW_MANIFEST_Q = ["q_raw", "qrgs", "qsrc", "qart", "qext", "qven"]
+ROW_MANIFEST_RULES = [
+    (["mainTex", "invJson", "invMd", "finalDigest", "scanOK"], "q_raw"),
+    (
+        [
+            "stageAHornSchema",
+            "stageAManifest",
+            "stageAHornCertificate",
+            "stageAReplayReport",
+            "finalDigest",
+            "RecordGateOK",
+            "CertDAGOK",
+            "DigestOKstage_a",
+            "ScriptOKstage_a",
+            "qrgsReplayUpgrade",
+        ],
+        "qrgs",
+    ),
+    (["freshFormalSourceUpgrade"], "qsrc"),
+    (["dynamicArtifactSemanticUpgrade"], "qart"),
+    (["locatorOKstageA", "externalArchiveEquivalence"], "qext"),
+    (["uploadTimeVenueAcceptanceUpgrade"], "qven"),
+]
+ROW_MANIFEST_EXPECTED_CLOSURES = {
+    "A_rec": [],
+    "A_scan": ["q_raw"],
+    "A_plus": ["q_raw", "qrgs"],
 }
 
 
@@ -333,7 +372,91 @@ def validate_certificate(certificate: dict, closure: set[str], proof: list[dict]
             raise SystemExit(f"certificate missing minimal obstruction for {coordinate}")
 
 
+def row_manifest_closure(atoms: set[str]) -> set[str]:
+    closure = set(atoms)
+    changed = True
+    while changed:
+        changed = False
+        for premises, conclusion in ROW_MANIFEST_RULES:
+            if all(premise in closure for premise in premises) and conclusion not in closure:
+                closure.add(conclusion)
+                changed = True
+    return closure
+
+
+def branch_atoms(row_manifest: dict, branch: str) -> set[str]:
+    emit = row_manifest.get("emit")
+    branches = row_manifest.get("branches")
+    if not isinstance(emit, dict) or not isinstance(branches, dict):
+        raise SystemExit("row manifest requires emit and branches dictionaries")
+    try:
+        row_ids = branches[{"A_rec": "Rows_rec", "A_scan": "Rows_scan", "A_plus": "Rows_plus"}[branch]]
+    except KeyError as exc:
+        raise SystemExit(f"row manifest missing branch rows for {branch}") from exc
+    atoms: set[str] = set()
+    for row_id in row_ids:
+        emitted = emit.get(row_id)
+        if not isinstance(emitted, list):
+            raise SystemExit(f"row manifest missing emit list for {row_id}")
+        atoms.update(emitted)
+    return atoms
+
+
+def verify_current_instance_projection_rows() -> dict:
+    row_manifest = load_json(CURRENT_INSTANCE_ROWS)
+    digest = sha256_file(CURRENT_INSTANCE_ROWS)
+    families = row_manifest.get("row_families")
+    rows = row_manifest.get("rows")
+    if not isinstance(families, dict) or not isinstance(rows, list):
+        raise SystemExit("row manifest must contain row_families and rows")
+    if list(families) != ROW_MANIFEST_FAMILIES:
+        raise SystemExit(
+            "row manifest family order/name mismatch: "
+            f"{list(families)} != {ROW_MANIFEST_FAMILIES}"
+        )
+    scanner_rows = families.get("ScannerRows")
+    if not isinstance(scanner_rows, list) or len(scanner_rows) != 55:
+        raise SystemExit("row manifest must contain exactly 55 ScannerRows")
+    scanner_kind_ids = [row.get("row_id") for row in rows if row.get("kind") == "scanner"]
+    if scanner_rows != scanner_kind_ids:
+        raise SystemExit("ScannerRows must be exactly the concrete scanner tuples")
+    row_ids = {row.get("row_id") for row in rows}
+    for family, ids in families.items():
+        missing = [row_id for row_id in ids if row_id not in row_ids]
+        if missing:
+            raise SystemExit(f"{family} names missing rows: {missing}")
+    factmap = set().union(*(branch_atoms(row_manifest, branch) for branch in ROW_MANIFEST_EXPECTED_CLOSURES))
+    if factmap & set(ROW_MANIFEST_Q):
+        raise SystemExit(f"FactMap unexpectedly emits coordinate atoms: {sorted(factmap & set(ROW_MANIFEST_Q))}")
+    closures: dict[str, list[str]] = {}
+    bases: dict[str, list[str]] = {}
+    for branch, expected in ROW_MANIFEST_EXPECTED_CLOSURES.items():
+        atoms = branch_atoms(row_manifest, branch)
+        bases[branch] = sorted(atoms)
+        actual = [atom for atom in ROW_MANIFEST_Q if atom in row_manifest_closure(atoms)]
+        if actual != expected:
+            raise SystemExit(f"{branch} closure mismatch: {actual} != {expected}")
+        closures[branch] = actual
+    return {
+        "command": "python certificates/replay_stage_a_audit.py --check-current-instance-rows",
+        "parse_schema": "ok",
+        "hash": digest,
+        "row_families": ROW_MANIFEST_FAMILIES,
+        "scanner_rows": len(scanner_rows),
+        "factmap_intersection_Q": [],
+        "base_atoms": bases,
+        "closures_intersection_Q": closures,
+        "status": "accepted",
+    }
+
+
 def main() -> int:
+    if len(sys.argv) == 2 and sys.argv[1] == "--check-current-instance-rows":
+        print(json.dumps(verify_current_instance_projection_rows(), indent=2, sort_keys=True))
+        return 0
+    if len(sys.argv) != 1:
+        raise SystemExit("usage: replay_stage_a_audit.py [--check-current-instance-rows]")
+
     manifest = load_json(MANIFEST)
     schema = load_json(SCHEMA)
     certificate = load_json(CERTIFICATE)
