@@ -2044,11 +2044,11 @@ clause inspects these five command-run keys.
 This theorem gives only the finite mathematical relation for certificate-record
 acceptance after parsing.  Its inputs are an abstract finite parsed tuple
 \[
-(\Sigma,L,I,Q,M,C,\Gamma,D)
+(\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \]
 consisting of a parsed certificate schema, ledger, submission-interface map,
 primary-claim inventory, review-bundle manifest, case-row manifest, dispatch
-table, and digest table.  The theorem does not assert that the current PDF
+table, digest table, and snapshot-boundary table.  The theorem does not assert that the current PDF
 contains, supplies, or reconstructs any operative JSON bytes for those objects.
 Byte decoding, root normalization, symlink rejection, and SHA--256 equality are
 preconditions of the separate artifact-instantiated theorem
@@ -2104,14 +2104,15 @@ names fail parsing before \(\PointerOK\) is evaluated.
 
 Let \(\Gamma\) be the finite schema dispatch table parsed from the same
 schema object as \(\Sigma\).  Define
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\) to mean that the
+\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) to mean that the
 parsed certificate schema, ledger, submission-interface map, primary-claim
-inventory, review-bundle manifest, case-row manifest, and dispatch table satisfy
-all displayed clauses M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 below.  The
+inventory, review-bundle manifest, case-row manifest, dispatch table, digest
+table, and snapshot-boundary table satisfy all displayed clauses M1--M3,
+L1--E10, R1--R4, S1--S2, and P1--P5 below.  The
 theorem's logical form is therefore
 \[
 \begin{aligned}
-&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\\
+&\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
 &\qquad{}\Longleftrightarrow
 \text{all displayed clauses pass},
 \end{aligned}
@@ -2123,8 +2124,7 @@ instantiation that actually provides the raw records.
 
 For a parsed ledger entry with typed evidence surface
 \(E=(E_{\mathrm{atom}},E_{\mathrm{path}})\), schema row \(\Sigma\),
-review-bundle manifest dictionary \(M\), and submitted case-row manifest \(C\),
-write \(S=C.\texttt{case\_evidence}\) for the submitted snapshot list.
+review-bundle manifest dictionary \(M\), and snapshot-boundary table \(S\).
 \(E_{\mathrm{atom}}\) contains only closed evidence atoms: whole-string table or
 formal labels, manifest-row tags whose slash-separated path is present in \(M\), and exact
 historical-boundary tags named by an eligible submitted case row.  It does not
@@ -2386,13 +2386,13 @@ E5/R4 after typed pointer parsing, and cannot enlarge the two command-boundary
 levels used by \(\mathsf{CommandBoundaryOK}\).
 The displayed relation accepts exactly when none of the listed rejecting
 conditions holds.  Consequently,
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\) iff all rows satisfy
+\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) iff all rows satisfy
 \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
 the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
 hold.  Equivalently, for any finite parsed records satisfying the displayed
 grammars,
 \[
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)
+\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \Longleftrightarrow
 \text{clauses M1--M3, L1--E10, R1--R4, S1--S2, P1--P5 pass}.
 \]
@@ -3056,7 +3056,7 @@ the current parsed tuple:
 \artifactpath{review_bundle/verify_certificate_records.py}
 \text{ accepts }
 \Longleftrightarrow
-\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma).
+\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S).
 \]
 Consequently the script accepts the current seven-row ledger exactly when
 M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5 pass, and in that case
@@ -3212,7 +3212,7 @@ file-derived and checker-verified atom component
 \begin{tabularx}{0.94\linewidth}{@{}L{0.12\linewidth}Y@{}}
 \(A_{\mathrm{rec}}=\) &
 \texttt{pubAbs}, \texttt{suppMain}, \texttt{invJson}, \texttt{invMd},
-\texttt{finalDigest}, \texttt{mainTex}, \texttt{scanOK},
+\texttt{finalDigest}, \texttt{mainTex},
 \texttt{stageAHornSchema}, \texttt{stageAManifest},
 \texttt{stageAHornCertificate}, \texttt{stageAReplayReport},
 \texttt{RecordGateOK}, \texttt{CertDAGOK}, \texttt{DigestOKstage\_a},
@@ -3221,11 +3221,13 @@ file-derived and checker-verified atom component
 \texttt{qrgsReplayUpgrade}.
 \end{tabularx}
 \end{center}
-Adding the meta-level conformance assumption \(\ScriptOKstageA\) gives the
-conditional nineteen-atom set \(A^{+}\) used for the second closure in
-Theorem~\ref{thm:typed-verified-core-hierarchy}; without that assumption the
-compiler output and the unconditional closure use only the eighteen
-file-derived and checker-verified atoms displayed above.
+This compiled set deliberately omits \texttt{scanOK}.  Adjoining the separately
+proved scanner premise \(\ScanOK(B,I,J,D)\) gives \(A^{\mathrm{scan}}\), and
+adjoining the meta-level conformance assumption \(\ScriptOKstageA\) after that
+gives the conditional set \(A^{+}\) used for the second closure in
+Theorem~\ref{thm:typed-verified-core-hierarchy}; without those assumptions the
+compiler output and the unconditional closure use only the displayed
+file-derived and checker-verified atoms.
 Here ``parser'' and ``compiler'' denote the two displayed mathematical
 projections on digest-bound JSON objects.  This lemma does not assert that the
 bytes of \artifactpath{certificates/replay_stage_a_audit.py} implement those
@@ -3258,10 +3260,11 @@ Similarly, \(\mathsf{compileManifest}\) is the finite projection that requires
 the manifest's \texttt{compiler\_rows} array and emits exactly the value of each
 row's \texttt{atom} key, in file order, after the same digest-bound relative-path
 checks.  The digest-bound manifest bytes and the associated finite record tests
-determine exactly the eighteen file-derived and checker-verified atoms displayed
-above, including \texttt{mainTex}, \texttt{scanOK}, \texttt{RecordGateOK},
+determine exactly the file-derived and checker-verified atoms displayed
+above, including \texttt{mainTex}, \texttt{RecordGateOK},
 \texttt{CertDAGOK}, \texttt{DigestOKstage\_a}, and \texttt{qrgsReplayUpgrade}.
-The meta-level atom
+The scanner atom \texttt{scanOK} is not emitted by \texttt{compiler\_rows}; it
+enters only if the separate \(\ScanOK(B,I,J,D)\) premise is adjoined.  The meta-level atom
 \texttt{ScriptOKstage\_a} is not emitted by \texttt{compiler\_rows}; when it is
 supplied as the separate conformance premise of
 Lemma~\ref{lem:stage-a-scriptok-implies-replayok}, the resulting set is the
@@ -3275,9 +3278,10 @@ names \texttt{freshFormalSourceUpgrade},
 \texttt{uploadTimeVenueAcceptanceUpgrade} do not occur as \texttt{atom} values
 in \texttt{compiler\_rows}; appearances in negative-boundary prose or coordinate
 metadata are not compiler rows.  Hence the compiled atom set is exactly the
-displayed file-derived set \(A_{\mathrm{rec}}\), not \(A^{+}\), and the
-conditional \(q_{\mathrm{rgs}}\) closure is obtained only after adjoining the
-separate \(\ScriptOKstageA\) premise.  The
+displayed file-derived set \(A_{\mathrm{rec}}\), not \(A^{\mathrm{scan}}\) or \(A^{+}\);
+the raw \(\qlex\) closure is obtained only after adjoining \(\ScanOK(B,I,J,D)\),
+and the conditional \(q_{\mathrm{rgs}}\) closure is obtained only after also
+adjoining the separate \(\ScriptOKstageA\) premise.  The
 proof has inspected
 only the bound JSON records and the displayed finite projections, so it supplies
 no branch-by-branch Python conformance lemma.
@@ -3288,11 +3292,16 @@ no branch-by-branch Python conformance lemma.
 Use the same TCB and digest table as
 Lemma~\ref{lem:stage-a-parser-compilation}.  The byte-bound mathematical
 relation for \artifactpath{certificates/stage_a_horn_schema.json} against
-\artifactpath{certificates/stage_a_manifest.json} has the two closures stated in
-Theorem~\ref{thm:typed-verified-core-hierarchy}; this corollary depends on those
+\artifactpath{certificates/stage_a_manifest.json} has the three closures stated
+in Theorem~\ref{thm:typed-verified-core-hierarchy}: the unconditional
+\(A_{\mathrm{rec}}\) closure is empty on public coordinates, the scanner-conditional
+\(A^{\mathrm{scan}}\) closure derives only \(\qlex\), and the \(A^{+}\) closure
+derives \(\qlex\) and \(q_{\mathrm{rgs}}\).  This corollary depends on those
 digest-bound JSON bytes and on the displayed finite parser/manifest projections,
 not on extracting rules or atoms from the PDF and not on the behavior of
 \artifactpath{certificates/replay_stage_a_audit.py}.  Consequently the
+unconditional byte-bound manifest branch has all six public coordinates false.
+The
 scanner-conditional finite-object branch has
 \[
 \qlex=\mathsf{true},\qquad
@@ -3313,9 +3322,9 @@ Without that branch-by-branch premise, the scanner-conditional finite objects
 supply only \(\qlex\) from the raw \(\ScanOK\) atom and the file-derived and
 checker-verified atoms; they supply neither a
 positive \(q_{\mathrm{rgs}}\) coordinate nor a replay assertion by the script.
-Thus this corollary preserves the two-branch split of
-Theorem~\ref{thm:typed-verified-core-hierarchy} rather than promoting the
-conditional branch into the unconditional one.
+Thus this corollary preserves the base, scanner-conditional, and archive-conditional
+split of Theorem~\ref{thm:typed-verified-core-hierarchy} rather than promoting
+either conditional branch into the unconditional one.
 \end{corollary}
 
 \begin{proof}
