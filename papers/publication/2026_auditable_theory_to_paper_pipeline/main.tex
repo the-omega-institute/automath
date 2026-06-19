@@ -265,12 +265,12 @@ specification: it prints the Horn rules, typed record predicates, digest
 discipline, TCB assumptions, and archive contract.  Its unconditional PDF-level
 claim is the printed finite specification and the Horn calculation
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\{\qlex\},
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q=\varnothing,
 \]
 equivalently
 \[
 (\qlex,\qrgs,\qsrc,\qart,\qext,\qven)
-=(\mathsf{true},\mathsf{false},\mathsf{false},\mathsf{false},
+=(\mathsf{false},\mathsf{false},\mathsf{false},\mathsf{false},
 \mathsf{false},\mathsf{false}).
 \]
 It does not by itself assert that a reviewer can execute the replay, because no
@@ -282,7 +282,7 @@ the external conformance premises \(\ScriptOKstageA\) and
 \(\ScriptOK_{\mathrm{cert}}\), then the conditional replay relation adjoins
 \(\ScriptOKstageA\) to obtain
 \[
-\operatorname{Cl}_{H}(A^+)\cap Q=\{\qlex,\qrgs\},
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^+)\cap Q=\{\qlex,\qrgs\},
 \]
 equivalently the conditional vector
 \[
@@ -370,8 +370,19 @@ of the submitted
 For each line it records at most the first match of the following copyable
 byte-level Python definition:
 \begin{center}
-\auditcode{BeginPat = re.compile(r"\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?")}
+\small
+\begin{tabular}{@{}l@{}}
+\auditcode{BeginPat_src = (}\\
+\auditcode{    r"\\begin\{"}\\
+\auditcode{    r"(definition|lemma|proposition|theorem|corollary)"}\\
+\auditcode{    r"\}(?:\[([^\]]*)\])?"}\\
+\auditcode{)}\\
+\auditcode{BeginPat = re.compile(BeginPat_src)}
+\end{tabular}
 \end{center}
+The source string is the displayed concatenation in order; no newline, blank,
+hyphen, indentation byte, or other hidden byte is inserted into
+\texttt{BeginPat\_src}.
 No blank may occur between \path{\textbackslash begin} and the left brace, and
 the only accepted environment names are the five displayed alternatives.  For a
 recorded begin token with name \(e\), the scanner searches from that line forward
@@ -418,20 +429,33 @@ additional accepted begin records under this scanner grammar.
 
 \begin{lemma}[Scanner regular expression is fixed]
 \label{lem:scanner-regex-compiles}
-The exact scanner definition used by \(\ScanOK\) is the byte string
-\auditcode{BeginPat = re.compile(r"\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?")};
-under Python's \texttt{re} grammar it compiles, and its optional label clause is
-the non-capturing group \auditcode{(?:\[([^\]]*)\])?} followed by a single
-capturing group for the bracket contents.
+The exact scanner source used by \(\ScanOK\) is the displayed concatenation
+\begin{center}
+\small
+\begin{tabular}{@{}l@{}}
+\auditcode{BeginPat_src = (}\\
+\auditcode{    r"\\begin\{"}\\
+\auditcode{    r"(definition|lemma|proposition|theorem|corollary)"}\\
+\auditcode{    r"\}(?:\[([^\]]*)\])?"}\\
+\auditcode{)}\\
+\auditcode{BeginPat = re.compile(BeginPat_src)}
+\end{tabular}
+\end{center}
+Here \texttt{BeginPat\_src} is the concatenation, in the displayed order, of the
+three raw Python string literals above; no newline, blank, hyphen, indentation
+byte, or other hidden byte is inserted into \texttt{BeginPat\_src}.  Under
+Python's \texttt{re} grammar it compiles, and its optional bracket-argument
+clause is the non-capturing group \auditcode{(?:\[([^\]]*)\])?} followed by a
+single capturing group for the bracket contents.
 \end{lemma}
 
 \begin{proof}
-The prefix \auditcode{r"..."} makes backslashes ordinary regular-expression
-bytes, \auditcode{\{} and \auditcode{\}} match literal braces,
-\auditcode{(definition|lemma|proposition|theorem|corollary)} is the finite
+The raw-string prefix makes backslashes ordinary regular-expression bytes, the
+brace escapes match literal braces, the middle literal is the finite
 environment-name alternative, and \auditcode{(?:} is Python's non-capturing-group
-opener.  Hence the displayed string is a well-formed \texttt{re.compile} input
-and is, by definition, the \texttt{BeginPat} used in \(\ScanOK\).
+opener.  Because the source string is exactly the displayed three-literal
+concatenation, the displayed bytes form the well-formed \texttt{re.compile} input
+used by \(\ScanOK\).
 \end{proof}
 
 \paragraph{Public theorem inventory.}
@@ -441,9 +465,9 @@ certificate-record and archive-contract theorems below.  When the non-PDF
 archive contract of Section~\ref{sec:replay-artifact-boundary} is supplied, the
 conditional byte-bound replay reading is available only under the same explicit
 \(\ScriptOKstageA\) and certificate-script conformance premises.  That
-inventory is one unconditional coordinate plus one conditional coordinate:
-\(\{\qlex,\qrgs\}\) under those premises, with the unconditional base coordinate
-\(\{\qlex\}\).  The four upgrade coordinates and the support status of
+inventory has \(\{\qlex,\qrgs\}\) only under those premises and under the explicit
+\(\ScanOK(B,I,J,D)\) scanner premise; the unconditional base coordinate set is
+empty.  The four upgrade coordinates and the support status of
 certificate-record material are recorded in Table~\ref{tab:scope-register};
 Richardson, Zeckendorf, orbit, height-transfer, and cover material is routed to
 the non-load-bearing supplement.
@@ -463,7 +487,7 @@ claim:
 \downarrow\\
 \text{gate rows }R\text{ with }\PointerOK(u,E,M,S)\text{ evidence pointers}\\
 \downarrow\\
-\text{human or route boundary }H\text{ and command boundary }B\\
+\text{human or route boundary }H_{\mathrm{route}}\text{ and command boundary }B\\
 \downarrow\\
 \text{accepted finite predicate }\Acc_{\Gamma}(c,C)\text{ and public claim}
 \end{array}
@@ -567,7 +591,8 @@ base relation.
 \end{center}
 For this theorem, the names are formal atoms and do not import any unprinted
 support ledger, source semantics, artifact semantics, or source-code
-implementation conformance.  Let \(H\) be the following finite Horn system:
+implementation conformance.  Let \(H_{\mathrm{Horn}}\) be the following finite
+Horn system:
 \begin{center}
 \small
 \begin{tabularx}{0.94\linewidth}{@{}L{0.10\linewidth}Y@{}}
@@ -606,18 +631,18 @@ R12 & \(\begin{array}[t]{@{}l@{}}
 No other Horn rule has a conclusion in \(Q\).  Then forward chaining gives the
 unconditional closure
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q
 =\varnothing.
 \]
 If the explicit scanner premise \(\ScanOK(B,I,J,D)\) holds and contributes the
 formal atom \(\texttt{scanOK}\), forward chaining gives
 \[
-\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\cap Q
 =\{\qlex\}.
 \]
 Only after also adjoining the external branch-by-branch conformance premise,
 \[
-\operatorname{Cl}_{H}(A^{+})\cap Q
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})\cap Q
 =\{\qlex,\qrgs\}.
 \]
 The latter two displays are conditional closure statements over enlarged formal
@@ -654,24 +679,24 @@ positive public-coordinate and gate rows.
 
 \begin{proof}
 This theorem is the displayed mathematical layer: \(A_{\mathrm{rec}}\),
-\(A^{\mathrm{scan}}\), \(A^{+}\), and \(H\) are the finite sets and finite Horn
+\(A^{\mathrm{scan}}\), \(A^{+}\), and \(H_{\mathrm{Horn}}\) are the finite sets and finite Horn
 system printed in the statement.  Forward chaining is monotone, so it is enough
 to inspect the displayed rules whose conclusions lie in \(Q\).  Rule \(R1\)
 does not apply over \(A_{\mathrm{rec}}\), because one of its five premises is
 \(\textsf{scanOK}\), and that atom is not in \(A_{\mathrm{rec}}\).  No other rule
 has conclusion \(\qlex\), so
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\varnothing.
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q=\varnothing.
 \]
 If \(\ScanOK(B,I,J,D)\) holds, adjoining the formal atom \(\textsf{scanOK}\)
 forms \(A^{\mathrm{scan}}\), where all five premises of \(R1\) are present;
-hence \(\qlex\in\operatorname{Cl}_{H}(A^{\mathrm{scan}})\), with artifact
+hence \(\qlex\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\), with artifact
 spelling \(\texttt{qinv}\).  Rule \(R3\) still does not apply over
 \(A^{\mathrm{scan}}\), because one of its ten premises is the explicit TCB atom
 \(\textsf{ScriptOKstage\_a}\), and that atom is not file-derived, not
 checker-emitted, and not in \(A^{\mathrm{scan}}\).  Thus
 \[
-\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q=\{\qlex\}.
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\cap Q=\{\qlex\}.
 \]
 After also adjoining that single external script premise, rule \(R3\) applies
 over \(A^{+}\) because its ten premises, namely the four Stage--A file atoms,
@@ -679,7 +704,7 @@ over \(A^{+}\) because its ten premises, namely the four Stage--A file atoms,
 \(\textsf{RecordGateOK}\), \(\textsf{CertDAGOK}\), and
 \(\textsf{DigestOKstage\_a}\), the explicit TCB premise
 \(\textsf{ScriptOKstage\_a}\), and \(\textsf{qrgsReplayUpgrade}\), are in
-\(A^{+}\); hence \(\qrgs\in\operatorname{Cl}_{H}(A^{+})\).
+\(A^{+}\); hence \(\qrgs\in\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})\).
 
 For the negative coordinates, the only displayed rules concluding
 \(\qsrc\), \(\qart\), \(\qext\), and
@@ -697,11 +722,11 @@ closures, so the corresponding four support coordinates are absent as well.  The
 other rules derive only
 auxiliary atoms, not elements of \(Q\).  Thus
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\varnothing,
-\quad
-\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q=\{\qlex\},
-\quad
-\operatorname{Cl}_{H}(A^{+})\cap Q=\{\qlex,\qrgs\}.
+\begin{aligned}
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q&=\varnothing,\\
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{\mathrm{scan}})\cap Q&=\{\qlex\},\\
+\operatorname{Cl}_{H_{\mathrm{Horn}}}(A^{+})\cap Q&=\{\qlex,\qrgs\}.
+\end{aligned}
 \]
 
 This proves the finite coordinate calculation and records precisely where
@@ -731,15 +756,25 @@ only in the supplement source after this file's first \verb|\end{document}|.
 \label{def:certificate-record-acceptance-schema}
 Let
 \[
-(\Sigma,L,I,Q,M,C,\Gamma,D)
+(\Sigma,L,I,Q,M,C,\Gamma,D,S)
 \]
 be a finite already-parsed tuple consisting of a certificate schema, seven-row
 current ledger, submission-interface map, primary-claim inventory, review-bundle
-manifest, case-row manifest, dispatch table, and digest table.  Evidence strings
-are parsed by the typed grammar summarized in Table~\ref{tab:scope-register}:
-closed non-path atoms include table/formal labels, manifest-row tags, and
-eligible historical-boundary tags; local support paths are admissible only when
-they are digest-bound relative paths.  Let
+manifest, case-row manifest, dispatch table, digest table, and finite snapshot
+boundary table.  Evidence strings are parsed by the following finite typed
+grammar:
+\[
+\begin{array}{rcl}
+u&::=&a\mid p\mid m\mid d\mid s,\\
+a&\in&E_{\mathrm{atom}}\quad\text{(closed non-path atoms)},\\
+p&\in&E_{\mathrm{path}}\quad\text{(relative path strings)},\\
+m&\in&\operatorname{ManifestBoundary}(M),\\
+d&\in&\operatorname{TableBoundary}_{B,D},\\
+s&\in&\operatorname{SnapshotBoundary}(S).
+\end{array}
+\]
+The path production is admissible only when \(\operatorname{BoundPath}_{D}(p)\)
+holds; no other grammar branch uses filesystem existence.  Let
 \(\operatorname{TableBoundary}_{B,D}\) be the finite set of table and formal
 label atoms emitted by the deterministic scan of the digest-bound submitted
 \path{main.tex} byte string \(B\), with no use of the rendered PDF surface.
@@ -755,7 +790,7 @@ u\in E_{\mathrm{atom}}\\
 \end{aligned}
 \]
 There is no untyped shortcut \(u\in E\) and no filesystem-existence shortcut.
-Define \(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D)\) to mean
+Define \(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) to mean
 that the finite tuple passes the manifest-field checks, the seven ledger-entry
 checks, the exact assigned-gate cardinality checks, the discovery-interface
 parity checks, the command-boundary checks, the pass-row checks, the
@@ -806,7 +841,7 @@ string outside the disjunction is rejected before it can support a pass row.
 \label{thm:certificate-record-checker-spec}
 The pure schema statement is this: for every finite parsed tuple of
 Definition~\ref{def:certificate-record-acceptance-schema},
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D)\) holds if and only
+\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\) holds if and only
 if the printed clause families M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5
 pass.  Equivalently, it is exactly the finite certificate-record relation
 obtained by applying the gate-row bijection of
@@ -817,9 +852,10 @@ parsed rows.  This schema theorem does not assert that the current records have
 been supplied as operative bytes.
 
 The current-instance statement is separate: only if an archive supplies ordinary
-digest-bound bytes and printed hashes for \(\Sigma,L,I,Q,M,C,\Gamma,D\), with
-root normalization, ordinary-file checks, JSON decoding, and digest equality for
-each of those records, and also includes a branch-by-branch
+digest-bound bytes and printed hashes for
+\(\Sigma,L,I,Q,M,C,\Gamma,D\), supplies the corresponding finite snapshot table
+\(S\), and provides root normalization, ordinary-file checks, JSON decoding, and
+digest equality for each of those records, and also includes a branch-by-branch
 \(\ScriptOK_{\mathrm{cert}}\) theorem, may
 \artifactpath{review_bundle/verify_certificate_records.py} be cited as accepting
 exactly the Theorem~2 schema relation on those supplied bytes.  Without those
@@ -840,6 +876,14 @@ premises needed for an artifact-instantiated script reading.  Byte parsing,
 archive root normalization, digest equality, and script conformance are
 therefore not inferred from the schema theorem.
 \end{proof}
+
+\paragraph{Definition 3.1 (archive contract predicate).}
+At the theorem site below, \(\ArchiveOKA(Z)\) denotes exactly clauses 1--6 in
+the displayed archive contract, and \(A_Z\) denotes the archive-induced base atom
+set extracted only by the displayed manifest, digest-table, certificate, and
+replay-report parsers.  No script-conformance predicate adds an atom to \(A_Z\)
+unless the theorem hypotheses below also state that the corresponding run
+accepted.
 
 \begin{theorem}[Theorem 3: sufficient archive contract overview]
 \label{thm:archive-contract-overview}
@@ -891,17 +935,26 @@ The locator identity premise is
 \LocatorOKstageA,
 \]
 not \(\texttt{externalArchiveEquivalence}\), and therefore is not a \(\qext\)
-upgrade row.  If
+upgrade row.  The acceptance/run-success hypotheses are separate: the parsed
+certificate tuple must satisfy
+\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\), the certificate
+script run must accept that tuple, the Stage--A replay script run must accept the
+replay report, and \(A_Z\) must contain exactly the atoms needed for the
+\(\qlex\) and \(\qrgs\) clauses of Theorem~\ref{thm:typed-verified-core-hierarchy}.
+If
 \begin{align*}
-&\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}},
+&\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}\\
+&{}\land\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D,S)\\
+&{}\land\operatorname{CertRunAccepts}(Z)
+\land\operatorname{StageARunAccepts}(Z,A_Z),
 \end{align*}
 then
 \begin{align*}
 \ReplayVector(Z)
 &=(\qlex,\qrgs,\neg\qsrc,\neg\qart,\neg\qext,\neg\qven).
 \end{align*}
-The theorem is a sufficient-condition overview; the detailed contract is
-Theorem~\ref{thm:replay-instantiation-archive-contract}.  A PDF-only article or
+The theorem is a sufficient-condition overview; the archive predicate it uses is
+Definition 3.1 at this site.  A PDF-only article or
 an unlocated local source tree does not instantiate this reviewer-executable
 replay claim; it supplies only the printed finite specification and this
 conditional archive contract.
@@ -917,14 +970,13 @@ that binds every nested support record without appealing to a script.  The
 record-byte clause supplies the
 parsed tuple for Theorem~\ref{thm:certificate-record-checker-spec}; the
 environment clause pins the trusted byte-reading and JSON conventions; and the
-locator clause identifies the archive as the submitted replay surface.  With
-\(\ScriptOK_{\mathrm{cert}}\), the certificate script may be cited as an
-implementation of Theorem~\ref{thm:certificate-record-checker-spec}; with
-\(\ScriptOKstageA\), the Stage--A replay script may be cited as an implementation
-of \(\operatorname{InnerDigestOK}(T,R)\) and of the fixed Horn relation in
-Theorem~\ref{thm:typed-verified-core-hierarchy}.
-The Horn closure then has positive \(\qlex\) and conditional
-\(\qrgs\), and it lacks the promotion atoms for source rebuild,
+locator clause identifies the archive as the submitted replay surface.  The
+certificate acceptance hypothesis supplies the finite relation of
+Theorem~\ref{thm:certificate-record-checker-spec}; \(\operatorname{CertRunAccepts}(Z)\)
+and \(\operatorname{StageARunAccepts}(Z,A_Z)\) supply the two positive run results.
+By Definition 3.1, \(A_Z\) is therefore the archive-induced atom set, and applying
+Theorem~\ref{thm:typed-verified-core-hierarchy} to that set gives positive
+\(\qlex\) and \(\qrgs\).  It still lacks the promotion atoms for source rebuild,
 artifact semantics, external-archive equivalence, and venue acceptance.  The
 locator clause supplies only \(\LocatorOKstageA\); because
 \(\texttt{externalArchiveEquivalence}\) is still absent, \(\qext\)
