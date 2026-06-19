@@ -866,7 +866,7 @@ a finite dictionary and that its key set contains this same finite set
 clause inspects these five command-run keys.
 \end{proof}
 
-\begin{theorem}[Design-pattern specification for certificate-record acceptance]
+\begin{theorem}[PDF-level finite route specification for certificate-record acceptance]
 \label{thm:certificate-record-checker-spec}
 This theorem gives the finite mathematical relation for certificate-record
 acceptance.  Use the TCB convention of Tables~\ref{tab:replay-tcb} and
@@ -881,12 +881,17 @@ contract of Section~\ref{sec:replay-artifact-boundary}.  Python-script
 conformance is the separate premise of
 Lemma~\ref{lem:certificate-record-scriptok-separate}.
 
-The typed string grammars used below are complete and whole-string matched.  Let
+The typed string grammars used below are the normative grammar for the finite
+route specification and are whole-string matched.  Let
 \(\alpha\) range over nonempty strings matching
 \texttt{[A-Za-z0-9\_:.-]+}, let \(\beta\) range over nonempty strings matching
 \texttt{[A-Za-z0-9\_./-]+}, and require every
 \(\beta\)-path to contain no empty segment, no \texttt{.} segment, no
-\texttt{..} segment, no leading slash, and no backslash.  Then
+\texttt{..} segment, no leading slash, and no backslash.  The current-ledger
+tokens in Table~\ref{tab:current-ledger-instantiation} use the normalized forms
+\texttt{manifest:case\_evidence/0} and
+\texttt{historical-boundary:}\(\alpha\), and the top-level support files listed
+below are explicit alternatives.  Then
 \[
 \begin{array}{rcl}
 T_{\mathrm{table}}&::=&\texttt{table:}\alpha,\\
@@ -1412,7 +1417,11 @@ the typed evidence-surface column is a whole-string member of
 \(E_{\mathrm{atom}}\), and every path printed in that column is a whole-string
 member of \(E_{\mathrm{path}}\), for the grammars in
 Theorem~\ref{thm:certificate-record-checker-spec}.  Then
-\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) holds.
+\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) holds.  This lemma is the only
+place where Table~\ref{tab:current-ledger-instantiation} is converted into
+tokens of Theorem~\ref{thm:certificate-record-checker-spec}; without this
+row-wise parse enumeration, Lemma~\ref{lem:current-ledger-ok} has no membership
+shortcut from printed prose to \(E_{\mathrm{atom}}\) or \(E_{\mathrm{path}}\).
 \end{lemma}
 
 \begin{proof}
@@ -1456,7 +1465,10 @@ All cases are finite whole-string checks.  The atom rows are:
 \texttt{theorem:thm:deterministic-theorem-environment-extractor-boundary}.
 \end{array}
 \]
-The table and formal-label strings have a displayed atom prefix followed by an
+This finite display is the normalized token list, not a pretty-printed path
+abbreviation: brackets, absolute paths, raw prefixes such as
+\texttt{explicit-historical-boundary:}, and unlisted top-level paths are not
+being silently accepted.  The table and formal-label strings have a displayed atom prefix followed by an
 \(\alpha\)-string.  The manifest strings have prefix \texttt{manifest:} followed
 by \(\beta\)-strings whose JSON-pointer paths are present in \(M\).  The two
 historical strings have prefix \texttt{historical-boundary:} followed by
@@ -1538,7 +1550,10 @@ First inspect the row keys: the table has exactly the seven entries
 \(\textsf{path\mbox{-}verified}\in\mathsf{Lev}_{\mathrm{cert}}\).  The evidence
 column separates each surface into \(E_{\mathrm{atom}}\) and \(E_{\mathrm{path}}\).
 By Lemma~\ref{lem:current-ledger-row-parse-ok}, every displayed evidence atom and
-path is a whole-string member of the corresponding typed grammar.  Thus E1--E6
+path in the normalized row list is a whole-string member of the corresponding
+typed grammar.  No broader identity is used: pretty wrapping, glyph choices, raw
+absolute-path syntax, bracketed manifest indexes, and nonlisted top-level names
+would still fail Theorem~\ref{thm:certificate-record-checker-spec}.  Thus E1--E6
 hold for every row once the byte-bound parse preconditions of the theorem hold.
 
 It remains only to check the exact gate graph, discovery parity, pointers, and
@@ -3425,8 +3440,10 @@ and its cover moment is
 \[
 C_m=\sum_{x\in X_m}b_m(x)^2=((m+1)!)^2+|X_m|-1 .
 \]
-Assume additionally that \(|X_m|\ge1\) is bounded by \(D\rho^m\) for some
-\(D,\rho>0\).  Then the declared moment sequence \((C_m)\) is not represented by
+Assume additionally that the separate source-size hypothesis
+\(|X_m|\le D\rho^m\) holds for some fixed \(D,\rho>0\).  This hypothesis is only
+the usual finite-source growth bound and is not a source of the factorial spike.
+Then the declared moment sequence \((C_m)\) is not represented by
 any fixed-field finite-state transfer sequence \(u^\top A^m v\) in the sense of
 Lemma~\ref{lem:fixed-transfer}.  This is a stress-test statement about the
 hand-declared cover data above.  It is not a certificate-admissible generated
