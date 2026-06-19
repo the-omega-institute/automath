@@ -166,7 +166,7 @@ meaning are raw lexical token scanning, not inventory-theoretic.
 Public name & Artifact or local spelling & Meaning in this paper\\
 \midrule
 \(\qlex\) & \texttt{qinv} in legacy JSON/Horn rows &
-Raw displayed-token subset coordinate: the finite
+Raw byte-token subset coordinate: the finite
 \(\rawBeginTokenSubset\) scanner over current \path{main.tex} bytes and the
 declared five literal \path{\textbackslash begin\{...\}} tokens.\\
 \addlinespace
@@ -715,14 +715,18 @@ manifest, case-row manifest, dispatch table, and digest table.  Evidence strings
 are parsed by the typed grammar summarized in Table~\ref{tab:scope-register}:
 closed non-path atoms include table/formal labels, manifest-row tags, and
 eligible historical-boundary tags; local support paths are admissible only when
-they are digest-bound relative paths.  The admissible-pointer predicate is
+they are digest-bound relative paths.  Let
+\(\operatorname{TableBoundary}_{B,D}\) be the finite set of table and formal
+label atoms emitted by the deterministic scan of the digest-bound submitted
+\path{main.tex} byte string \(B\), with no use of the rendered PDF surface.
+The admissible-pointer predicate is
 \[
 \begin{aligned}
 \PointerOK(u,E,M,S)\Longleftrightarrow{}&
 u\in E_{\mathrm{atom}}\\
 &{}\vee (u\in E_{\mathrm{path}}\wedge \operatorname{BoundPath}_{D}(u))\\
 &{}\vee u\in\operatorname{ManifestBoundary}(M)\\
-&{}\vee u\in\operatorname{TableBoundary}_{D}\\
+&{}\vee u\in\operatorname{TableBoundary}_{B,D}\\
 &{}\vee u\in\operatorname{SnapshotBoundary}(S).
 \end{aligned}
 \]
@@ -774,18 +778,29 @@ eligible snapshot rows.  These five alternatives exhaust the displayed
 string outside the disjunction is rejected before it can support a pass row.
 \end{proof}
 
-\begin{theorem}[Theorem 2: certificate-record acceptance schema]
+\begin{theorem}[Theorem 2: certificate-record acceptance schema and instance split]
 \label{thm:certificate-record-checker-spec}
-For every finite parsed tuple of
+The pure schema statement is this: for every finite parsed tuple of
 Definition~\ref{def:certificate-record-acceptance-schema},
-\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D)\) is exactly the
-finite certificate-record relation obtained by applying the gate-row bijection
-of Lemma~\ref{lem:exact-gate-row-bijection}, the typed-pointer closure of
+\(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma,D)\) holds if and only
+if the printed clause families M1--M3, L1--E10, R1--R4, S1--S2, and P1--P5
+pass.  Equivalently, it is exactly the finite certificate-record relation
+obtained by applying the gate-row bijection of
+Lemma~\ref{lem:exact-gate-row-bijection}, the typed-pointer closure of
 Lemma~\ref{lem:typed-pointer-closure-compact}, and the displayed manifest,
-ledger, command-boundary, submission-interface, and inventory clauses to each of
-the seven current rows.  A script run may be cited for this theorem only under a
-separate branch-by-branch \(\ScriptOK_{\mathrm{cert}}\) theorem proving that the
-script's accept/reject set equals this finite relation.
+ledger, command-boundary, submission-interface, and inventory clauses to the
+parsed rows.  This schema theorem does not assert that the current records have
+been supplied as operative bytes.
+
+The current-instance statement is separate: only if an archive supplies ordinary
+digest-bound bytes and printed hashes for \(\Sigma,L,I,Q,M,C,\Gamma,D\), with
+root normalization, ordinary-file checks, JSON decoding, and digest equality for
+each of those records, and also includes a branch-by-branch
+\(\ScriptOK_{\mathrm{cert}}\) theorem, may
+\artifactpath{review_bundle/verify_certificate_records.py} be cited as accepting
+exactly the Theorem~2 schema relation on those supplied bytes.  Without those
+archive and script-conformance premises, a script run, path name, JSON filename,
+or PDF rendering of a row is not executable evidence for the current instance.
 \end{theorem}
 
 \begin{proof}
@@ -793,10 +808,13 @@ Unfold Definition~\ref{def:certificate-record-acceptance-schema}.  The only
 non-definitional checks used by the row relation are the exact assignment of gate
 rows and the closure of accepted evidence pointers; these are precisely
 Lemmas~\ref{lem:exact-gate-row-bijection} and
-\ref{lem:typed-pointer-closure-compact}.  All remaining clauses are the printed
-finite manifest, ledger, command-boundary, submission-interface, and inventory
-checks.  Byte parsing and script conformance are not premises of this finite
-relation and therefore cannot be inferred from it.
+\ref{lem:typed-pointer-closure-compact}.  All remaining schema clauses are the
+printed finite manifest, ledger, command-boundary, submission-interface, and
+inventory checks, so the listed clause families give the same relation.  The
+second paragraph adds no new PDF-only conclusion: it only records the additional
+premises needed for an artifact-instantiated script reading.  Byte parsing,
+archive root normalization, digest equality, and script conformance are
+therefore not inferred from the schema theorem.
 \end{proof}
 
 \begin{theorem}[Theorem 3: sufficient archive contract overview]
@@ -805,7 +823,14 @@ relation and therefore cannot be inferred from it.
 Let \(Z\) be a candidate non-PDF replay archive with unpacked root \(R\), digest
 table \(T\), environment descriptor \(E\), locator row \(L\), and supplied raw
 byte records for the certificate tuple used in
-Theorem~\ref{thm:certificate-record-checker-spec}.  Define
+Theorem~\ref{thm:certificate-record-checker-spec}.  Let
+\(\operatorname{InnerDigestOK}(T,R)\) mean the mathematical predicate that the
+parsed inner digest table has exact finite domain, no duplicate path row, no row
+for \artifactpath{certificates/stage_a_digest_table.json}, and for every parsed
+inner path \(p\), \(R\) contains \(p\) as a unique ordinary non-symlink file
+whose raw bytes have the digest printed in \(T\).  This predicate is not checked
+by definition by any script; a script may implement it only under the separate
+\(\ScriptOKstageA\) premise.  Define
 \(\ArchiveOKA(Z)\) to be the conjunction of the following finite facts:
 \begin{enumerate}
 \item archive-format normalization and alias rejection for the union of the
@@ -819,9 +844,9 @@ contract is an ordinary file under \(R\) and its raw bytes have the printed
 SHA--256 value;
 \item inner no-self digest equality: the parsed
 \ledgerpath{certificates/stage_a_digest_table.json} has no row for itself,
-has exact finite domain, has no duplicate path row, and each inner support row is
-paired with ordinary-file byte equality under \(R\) after the same archive-format
-and no-alias guard;
+has exact finite domain, has no duplicate path row, and
+\(\operatorname{InnerDigestOK}(T,R)\) holds after the same archive-format and
+no-alias guard;
 \item record-byte equality: the supplied bytes for the schema, ledger,
 submission-interface map, primary-claim inventory, review-bundle manifest,
 case-row manifest, and dispatch table parse to the objects used in
@@ -861,16 +886,19 @@ conditional archive contract.
 \begin{proof}
 The listed clauses of \(\ArchiveOKA\) summarize the byte and identity premises
 missing from the PDF-only relation.  The archive-format clause fixes the name
-language and ordinary-file semantics before any digest is read; the outer and
-inner digest clauses bind every required byte string, including the no-self
-digest table and nested support records; the record-byte clause supplies the
+language and ordinary-file semantics before any digest is read; the outer digest
+clause binds the printed anchor; and
+\(\operatorname{InnerDigestOK}(T,R)\) is the mathematical inner-row predicate
+that binds every nested support record without appealing to a script.  The
+record-byte clause supplies the
 parsed tuple for Theorem~\ref{thm:certificate-record-checker-spec}; the
 environment clause pins the trusted byte-reading and JSON conventions; and the
 locator clause identifies the archive as the submitted replay surface.  With
 \(\ScriptOK_{\mathrm{cert}}\), the certificate script may be cited as an
 implementation of Theorem~\ref{thm:certificate-record-checker-spec}; with
 \(\ScriptOKstageA\), the Stage--A replay script may be cited as an implementation
-of the fixed Horn relation in Theorem~\ref{thm:typed-verified-core-hierarchy}.
+of \(\operatorname{InnerDigestOK}(T,R)\) and of the fixed Horn relation in
+Theorem~\ref{thm:typed-verified-core-hierarchy}.
 The Horn closure then has positive \(\qlex\) and conditional
 \(\qrgs\), and it lacks the promotion atoms for source rebuild,
 artifact semantics, external-archive equivalence, and venue acceptance.  The
