@@ -10,6 +10,10 @@
 \usepackage{xurl}
 \usepackage{lineno}
 
+\makeatletter
+\def\UrlBreaks{}
+\def\UrlBigBreaks{}
+\makeatother
 \setlist{nosep,leftmargin=*}
 \newcounter{auditrecord}
 \newenvironment{auditrecord}[1][]{%
@@ -17,6 +21,9 @@
   \par\smallskip\noindent\textbf{Audit record \theauditrecord}%
   \ifx\relax#1\relax\else\textbf{ (#1)}\fi\textbf{.}\ }{\par\smallskip}
 \newcommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
+\newcommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
+\newcommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
+\newcommand{\artifactpath}[1]{\auditpath{#1}}
 \newcommand{\qlex}{q_{\mathrm{lex}}}
 \newcommand{\PointerOK}{\mathsf{PointerOK}}
 \newcommand{\Orbit}{\mathsf{Orbit}}
@@ -79,6 +86,16 @@ bounded interface rather than restating every nonconsequence.
 The formal-source, artifact-semantic, external-support, venue, and general
 implementation-soundness coordinates remain negative until their own accepted
 upgrade rows are supplied.
+
+\paragraph{Audit-string typography.}
+Path names, command fragments, digests, and code identifiers that occur in
+audit rows are atomic strings.  This supplement disables discretionary URL/path
+line breaks for \verb|\path|, \verb|\auditpath|, \verb|\artifactpath|, and
+\verb|\auditcode|, so strings such as
+\auditpath{certificates/stage_a_manifest.json},
+\auditpath{str.splitlines()}, and \auditcode{forward_chain} are literal; page
+layout does not insert a blank, slash, underscore, or identifier character into
+them.
 
 \paragraph{Stable audit labels.}
 Theorem numbers in this supplement are navigational only.  Audit references use

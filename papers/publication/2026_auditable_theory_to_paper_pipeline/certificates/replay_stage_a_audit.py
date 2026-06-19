@@ -50,7 +50,7 @@ REQUIRED_DIGEST_PATHS = {
 EXPECTED_NEGATIVE_UPGRADES = {
     "qsrc": "freshFormalSourceUpgrade",
     "qart": "dynamicArtifactSemanticUpgrade",
-    "qext": "externalUploadArchiveUpgrade",
+    "qext": "externalArchiveEquivalence",
     "qven": "uploadTimeVenueAcceptanceUpgrade",
 }
 ENV_PATTERN = re.compile(r"\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?")
@@ -60,7 +60,7 @@ COORDINATE_RULES = {
     "qrgs": "R3_replay_tuple_to_qrgs",
     "qsrc": "R5_qsrc_upgrade_to_qsrc",
     "qart": "R6_qart_upgrade_to_qart",
-    "qext": "R7_qext_upgrade_to_qext",
+    "qext": "R7b_qext_requires_locator_and_external_equivalence",
     "qven": "R8_qven_upgrade_to_qven",
 }
 EXPECTED_POSITIVE_PREMISES = {
@@ -206,7 +206,8 @@ def check_record_gate_ok(schema: dict, manifest: dict, report: dict) -> None:
         "R4_qrgs_to_bounded_record_gate_soundness",
         "R5_qsrc_upgrade_to_qsrc",
         "R6_qart_upgrade_to_qart",
-        "R7_qext_upgrade_to_qext",
+        "R7a_locator_identity",
+        "R7b_qext_requires_locator_and_external_equivalence",
         "R8_qven_upgrade_to_qven",
         "R9_source_interface_to_bounded_source_interface",
         "R10_case_artifacts_to_bounded_artifact_rows",
@@ -232,6 +233,12 @@ def check_schema_premises(schema: dict) -> None:
     for coordinate, premises in EXPECTED_POSITIVE_PREMISES.items():
         if rules[coordinate].get("premises") != premises:
             raise SystemExit(f"RecordGateOK failed: premise list mismatch for {coordinate}")
+    locator_rule = rules.get("locatorOKstageA")
+    if locator_rule is None or locator_rule.get("premises") != ["stableLocator", "archiveByteEquality"]:
+        raise SystemExit("RecordGateOK failed: locatorOKstageA must split stableLocator from archiveByteEquality")
+    qext_rule = rules.get("qext")
+    if qext_rule is None or qext_rule.get("premises") != ["locatorOKstageA", "externalArchiveEquivalence"]:
+        raise SystemExit("RecordGateOK failed: qext must require locatorOKstageA and externalArchiveEquivalence")
 
 
 def check_scriptok_assumption(manifest: dict) -> None:
@@ -268,6 +275,8 @@ def compile_atoms(manifest: dict, certificate: dict) -> set[str]:
             "certificate input_atoms differ from manifest-compiled atoms: "
             f"manifest={sorted(atoms)}, certificate={sorted(certified_inputs)}"
         )
+    if {"stableLocator", "archiveByteEquality"} <= atoms and "externalArchiveEquivalence" in atoms:
+        raise SystemExit("qext split violated: externalArchiveEquivalence must not be a manifest atom")
     return atoms
 
 

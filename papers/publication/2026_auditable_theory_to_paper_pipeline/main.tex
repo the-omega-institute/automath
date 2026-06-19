@@ -12,9 +12,15 @@
 \usepackage{ragged2e}
 
 \emergencystretch=3em
+\makeatletter
+\def\UrlBreaks{}
+\def\UrlBigBreaks{}
+\makeatother
 \setlist{nosep,leftmargin=*}
 \newcommand{\stableid}[1]{\mbox{\normalfont\scshape #1}}
-\newcommand{\artifactpath}[1]{\begingroup\Urlmuskip=0mu plus 2mu\path{#1}\endgroup}
+\newcommand{\auditpath}[1]{\mbox{\begingroup\Urlmuskip=0mu\path{#1}\endgroup}}
+\newcommand{\auditcode}[1]{\mbox{\normalfont\ttfamily\detokenize{#1}}}
+\newcommand{\artifactpath}[1]{\auditpath{#1}}
 \newcommand{\artifactcmd}[2]{\texttt{#1}\ \artifactpath{#2}}
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
@@ -46,6 +52,8 @@
 \newcommand{\DigestOKstageA}{\mathsf{DigestOK}_{\mathrm{stage\_a}}}
 \newcommand{\ScriptOKstageA}{\mathsf{ScriptOK}_{\mathrm{stage\_a}}}
 \newcommand{\LocatorOKstageA}{\mathsf{LocatorOK}_{\mathrm{stage\_a}}}
+\newcommand{\ArchiveOKA}{\mathsf{ArchiveOK}_{A}}
+\newcommand{\ReplayVector}{\mathsf{ReplayVector}}
 \newcommand{\qlex}{q_{\mathrm{lex}}}
 
 \title{Publication-Coordinate Design Patterns and Finite Checker Specifications for Generated Formal-Mathematics Artifacts}
@@ -103,6 +111,16 @@ article does not assert that such an archive or conformance proof has been
 supplied.  Path names, command lines, generated wrappers, ledgers, digest rows,
 and script names are therefore evidence only through the printed finite
 relations, not through unproved source-code behavior.
+
+\paragraph{Audit-string typography.}
+Every path, command fragment, digest, and code identifier that is part of a
+byte-level audit row is typeset as an atomic audit string.  In particular,
+\verb|\path| and the paper macros \verb|\auditpath|, \verb|\artifactpath|, and
+\verb|\auditcode| are used with discretionary URL/path line breaks disabled.
+Thus strings such as \auditpath{certificates/stage_a_manifest.json},
+\auditpath{str.splitlines()}, and \auditcode{forward_chain} must be read
+literally; a line break in the surrounding prose is not an inserted byte, blank,
+underscore, slash, or identifier character.
 
 \paragraph{Terminology.}
 The paper uses the following four scope terms only in this finite-record sense.
@@ -177,13 +195,19 @@ accepted.\\
 false until evaluator source, input bytes, semantic predicate, command
 transcript, output manifest, and digest binding are accepted.\\
 \addlinespace
-\(q_{\mathrm{ext}}\) & External archive-equivalence coordinate.  It remains
-false until a separate human-promoted upgrade row
-\(\texttt{externalUploadArchiveUpgrade}\) is accepted.  The Stage--A replay
-identity premise \(\LocatorOKstageA\) may use a DOI-bearing supplement,
-Software Heritage object, venue-controlled supplement identifier, or equivalent
-immutable byte locator paired with byte-equality rows; that identity premise is
-not by itself a \(q_{\mathrm{ext}}\) upgrade.\\
+\(q_{\mathrm{ext}}\) & External archive-equivalence coordinate.  The locator
+split is
+\(\texttt{locatorOKstageA}\leftarrow
+\texttt{stableLocator},\texttt{archiveByteEquality}\) and
+\(\texttt{qext}\leftarrow
+\texttt{locatorOKstageA},\texttt{externalArchiveEquivalence}\).  Thus the
+Stage--A replay identity premise \(\texttt{locatorOKstageA}\) is the
+stable-locator plus archive-byte-equality condition for replay.  It may use a
+DOI-bearing supplement, Software Heritage object, venue-controlled supplement
+identifier, or equivalent immutable byte locator paired with byte-equality rows,
+but it is not by itself a \(q_{\mathrm{ext}}\) upgrade.  The second premise,
+\(\texttt{externalArchiveEquivalence}\), is the separate human-promoted
+external-support row and is absent here.\\
 \addlinespace
 \(q_{\mathrm{ven}}\) & Venue/upload status coordinate.  It remains false until a
 dated venue-controlled acceptance or upload-status row is accepted.\\
@@ -377,7 +401,10 @@ R3 & \(\begin{array}[t]{@{}l@{}}
 R4 & \(\texttt{boundedReplayRecordGateSoundness}\leftarrow\texttt{qrgs}\).\\
 R5 & \(\texttt{qsrc}\leftarrow\texttt{freshFormalSourceUpgrade}\).\\
 R6 & \(\texttt{qart}\leftarrow\texttt{dynamicArtifactSemanticUpgrade}\).\\
-R7 & \(\texttt{qext}\leftarrow\texttt{externalUploadArchiveUpgrade}\).\\
+R7a & \(\texttt{locatorOKstageA}\leftarrow
+\texttt{stableLocator},\texttt{archiveByteEquality}\).\\
+R7b & \(\texttt{qext}\leftarrow
+\texttt{locatorOKstageA},\texttt{externalArchiveEquivalence}\).\\
 R8 & \(\texttt{qven}\leftarrow\texttt{uploadTimeVenueAcceptanceUpgrade}\).\\
 R9 & \(\texttt{boundedSourceInterface}\leftarrow\texttt{srcInterface}\).\\
 R10 & \(\texttt{boundedArtifactRows}\leftarrow\texttt{caseArtifacts}\).\\
@@ -429,11 +456,13 @@ four Stage--A file atoms, \(\textsf{finalDigest}\), the finite predicates
 
 For the negative coordinates, the only displayed rules concluding
 \(q_{\mathrm{src}}\), \(q_{\mathrm{art}}\), \(q_{\mathrm{ext}}\), and
-\(q_{\mathrm{ven}}\) are \(R5\), \(R6\), \(R7\), and \(R8\).  Their respective
-premises are
+\(q_{\mathrm{ven}}\) are \(R5\), \(R6\), the two-step \(R7a\)--\(R7b\) path,
+and \(R8\).  Their respective missing promotion premises are
 \(\textsf{freshFormalSourceUpgrade}\),
 \(\textsf{dynamicArtifactSemanticUpgrade}\),
-\(\textsf{externalUploadArchiveUpgrade}\), and
+\(\textsf{externalArchiveEquivalence}\) together with the replay-identity atom
+\(\textsf{locatorOKstageA}\), where \(\textsf{locatorOKstageA}\) itself requires
+\(\textsf{stableLocator}\) and \(\textsf{archiveByteEquality}\), and
 \(\textsf{uploadTimeVenueAcceptanceUpgrade}\).  None is a base atom in \(A\),
 and no displayed rule derives any of them.  Therefore those four premises are
 absent from \(\operatorname{Cl}_{H}(A)\), so the corresponding four support
@@ -940,8 +969,8 @@ snapshot path is relative under the submitted root, every snapshot is an ordinar
 non-symlink file, its digest equals the submitted digest row, and the row
 boundary declares historical or path-verified scope.
 
-The admissible pointer predicate is exactly the digest-bound finite promotion
-predicate
+The admissible-pointer equivalence used by R4 is exactly the digest-bound finite
+promotion predicate
 \[
 \begin{aligned}
 \PointerOK(u,E,M,S)\Longleftrightarrow{}&
@@ -952,7 +981,9 @@ u\in E_{\mathrm{atom}}
 \vee u\in \operatorname{SnapshotBoundary}(S).
 \end{aligned}
 \]
-This displayed typed predicate is the entire R4 predicate.  The untyped
+This displayed typed predicate is the entire R4 predicate.  There is no further
+well-formedness, reachability, or filesystem-existence disjunct hidden outside
+this equivalence.  The untyped
 shortcut \(u\in E\) is not available in this theorem: a path-looking string that
 is not in \(E_{\mathrm{path}}\) and digest-bound by
 \(\operatorname{BoundPath}\) fails R4 even if the same bytes could be written as
@@ -1174,7 +1205,11 @@ E_{\mathrm{atom}}
 \operatorname{TableBoundary}\cup \operatorname{SnapshotBoundary}(S).
 \end{aligned}
 \]
-R4 fails iff the pointer is outside that union.  Consequently the
+R4 fails iff the pointer is outside that union.  Both directions of this
+statement are by the same five typed disjuncts: membership in
+\(E_{\mathrm{atom}}\), digest-bound membership in \(E_{\mathrm{path}}\),
+manifest-boundary membership, table-boundary membership, or snapshot-boundary
+membership.  No inclusion into a larger evidence set is used.  Consequently the
 equivalence
 \[
 \text{R4 passes}\quad\Longleftrightarrow\quad\PointerOK(u,E,M,S)
@@ -1552,7 +1587,10 @@ R3 & \(\begin{array}[t]{@{}l@{}}
 R4 & \(\texttt{boundedReplayRecordGateSoundness}\leftarrow\texttt{qrgs}\).\\
 R5 & \(\texttt{qsrc}\leftarrow\texttt{freshFormalSourceUpgrade}\).\\
 R6 & \(\texttt{qart}\leftarrow\texttt{dynamicArtifactSemanticUpgrade}\).\\
-R7 & \(\texttt{qext}\leftarrow\texttt{externalUploadArchiveUpgrade}\).\\
+R7a & \(\texttt{locatorOKstageA}\leftarrow
+\texttt{stableLocator},\texttt{archiveByteEquality}\).\\
+R7b & \(\texttt{qext}\leftarrow
+\texttt{locatorOKstageA},\texttt{externalArchiveEquivalence}\).\\
 R8 & \(\texttt{qven}\leftarrow\texttt{uploadTimeVenueAcceptanceUpgrade}\).\\
 R9 & \(\texttt{boundedSourceInterface}\leftarrow\texttt{srcInterface}\).\\
 R10 & \(\texttt{boundedArtifactRows}\leftarrow\texttt{caseArtifacts}\).\\
@@ -1573,7 +1611,8 @@ Under the TCB of Tables~\ref{tab:replay-tcb}--\ref{tab:replay-byte-binding} and
 the digest table in
 \artifactpath{certificates/stage_a_digest_table.json}, the parser of
 \artifactpath{certificates/stage_a_horn_schema.json} returns exactly the clauses
-\(R0\)--\(R12\) displayed in Table~\ref{tab:horn-kernel-rules}, and the
+\(R0\)--\(R12\) displayed in Table~\ref{tab:horn-kernel-rules}, with \(R7\)
+split into \(R7a\) and \(R7b\) for the external-support coordinate, and the
 digest-bound manifest and finite checker projections determine exactly the
 file-derived and checker-verified atom component
 \begin{center}
@@ -1615,7 +1654,7 @@ requires a top-level \texttt{rules} array and maps each object
 \(\rho(\texttt{qinv})=\qlex\) and \(\rho\) fixes every other displayed atom.  The
 renaming is only a public notation convention for the legacy artifact byte
 string; it does not add a premise or change the replay file.  The digest-bound
-schema bytes contain exactly the thirteen rule objects with identifiers
+schema bytes contain exactly the fourteen rule objects with identifiers
 \texttt{R0\_single\_route\_surface} through
 \texttt{R12\_route\_surface\_quotient}; their premise lists and conclusions are
 the clauses printed as \(R0\)--\(R12\) in Table~\ref{tab:horn-kernel-rules}, and
@@ -1637,7 +1676,8 @@ nineteen-atom set used by Theorem~\ref{thm:typed-verified-core-hierarchy}.  The
 four upgrade
 names \texttt{freshFormalSourceUpgrade},
 \texttt{dynamicArtifactSemanticUpgrade},
-\texttt{externalUploadArchiveUpgrade}, and
+\texttt{stableLocator}, \texttt{archiveByteEquality},
+\texttt{externalArchiveEquivalence}, and
 \texttt{uploadTimeVenueAcceptanceUpgrade} do not occur as \texttt{atom} values
 in \texttt{compiler\_rows}; appearances in negative-boundary prose or coordinate
 metadata are not compiler rows.  Hence the compiled atom set is exactly the
@@ -1697,7 +1737,8 @@ premise, and \(\texttt{qrgsReplayUpgrade}\), so \(\qlex\) (legacy artifact atom
 closure.  They do not include
 \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
-\(\texttt{externalUploadArchiveUpgrade}\), or
+\(\texttt{stableLocator}\), \(\texttt{archiveByteEquality}\),
+\(\texttt{locatorOKstageA}\), \(\texttt{externalArchiveEquivalence}\), or
 \(\texttt{uploadTimeVenueAcceptanceUpgrade}\), so
 \(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\) are not
 in the least fixed point.
@@ -1910,7 +1951,7 @@ locator with an accompanying SHA--256 equality row for the archive or complete
 file list.  This row is the non-coordinate replay identity premise
 \(\LocatorOKstageA\).  It is a premise for applying the replay theorem, not a
 promotion row for \(q_{\mathrm{ext}}\), \(q_{\mathrm{ven}}\), or the Horn atom
-\(\texttt{externalUploadArchiveUpgrade}\).\\
+\(\texttt{externalArchiveEquivalence}\).\\
 \addlinespace
 Digest equality condition &
 The locator is evidentiary only if the located bytes unpack to the same relative
@@ -1935,13 +1976,13 @@ table is a human audit anchor, and the digest-table row is an outer printed
 anchor, not an inner self-row} \\
 \midrule
 \artifactpath{certificates/stage_a_manifest.json}\\
-\texttt{863e7d4fe09a9f5d6e2b796f6ffd2476106e33c3b73a8b0bea6e27bbb86f4431}\\
+\texttt{e0bb60d1192d9c8282ddfdc6b72333e35e95eb7cadbb8e3d156b2cba534ce7d7}\\
 \addlinespace
 \artifactpath{certificates/stage_a_horn_schema.json}\\
-\texttt{88d851ee59d35356fe165c5e73fae479eefa31434b22fe55284b8bfb2bc801e3}\\
+\texttt{ff3709ccd5a9f3671224f00b9486c802993b6ee599b6f0e4646c0ecc1f3859ce}\\
 \addlinespace
 \artifactpath{certificates/stage_a_horn_audit_certificate.json}\\
-\texttt{209678cf57af43221f153ce65e68afcc18cd1ec1f913c562f2ab72c961454ea0}\\
+\texttt{942fb516617bea480e93170a5ba3a7c74e0cab421729aafc0d1c2c35defc7c7b}\\
 \addlinespace
 \artifactpath{certificates/stage_a_replay_report.json}\\
 \texttt{44ab1cbe9584e73b6c7cc7a5e8d1d238f24867fb6324de1fbd3081f80110b44d}\\
@@ -1950,10 +1991,10 @@ anchor, not an inner self-row} \\
 \texttt{d867d6a77410c91ce5ce3463576feaf1c0c4b8b08d2e49b5387657b39e524faa}\\
 \addlinespace
 \artifactpath{certificates/stage_a_digest_table.json}\\
-\texttt{9e06984800450743dc51c38e1f8601062a2fb7dbe929d419930e997e783e2866}\\
+\texttt{467d313ace4c80f7d918674c3684ebe7d61889f2ef00f80ee2b32a87d69601db}\\
 \addlinespace
 \artifactpath{certificates/replay_stage_a_audit.py}\\
-\texttt{92bcc0c887650a8f7914dbe5731bc3f3949a66011fd8861def2bc5171142c115}\\
+\texttt{c775cb2a3052d053812a1b9da83b4e1c410e6a453f5081132bd1ee4c7aef0e9d}\\
 \addlinespace
 \artifactpath{certificates/replay_case_rows.py}\\
 \texttt{88b7176dc0e63cbe3f8403b65e8b722be19c43489abdc1f29971c76834b826ad}\\
@@ -2092,7 +2133,7 @@ derivation DAGs for exactly \(\qlex\), represented in the JSON as
 \(q_{\mathrm{rgs}}\) by \(R3\), plus minimal missing-premise obstructions
 \(\texttt{freshFormalSourceUpgrade}\),
 \(\texttt{dynamicArtifactSemanticUpgrade}\),
-\(\texttt{externalUploadArchiveUpgrade}\), and
+\(\texttt{externalArchiveEquivalence}\), and
 \(\texttt{uploadTimeVenueAcceptanceUpgrade}\) for
 \(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\),
 respectively.
@@ -2156,8 +2197,39 @@ script.
 
 \begin{theorem}[Replay instantiation is exactly the archive contract]
 \label{thm:replay-instantiation-archive-contract}
-For this article, let \(\mathsf{ArchiveOK}_{\mathrm{stage\_a}}\) mean the
-conjunction of the following finite submission facts:
+Let \(Z=(R,T,E,L)\) be a candidate replay archive, where \(R\) is the unpacked
+paper root, \(T\) is the parsed inner digest table
+\artifactpath{certificates/stage_a_digest_table.json}, \(E\) is the replay
+environment descriptor, and \(L\) is the locator row.  Let
+\(P_{\mathrm{req}}\) be exactly the relative paths listed in
+Tables~\ref{tab:replay-artifact-manifest} and
+\ref{tab:artifact-submission-checklist}, including the outer digest-table row
+for \artifactpath{certificates/stage_a_digest_table.json}, the inner no-self
+digest table itself, the replay environment descriptor, the replay scripts, and
+the listed review-bundle manifest records.  Let \(d_p\) be the corresponding
+SHA--256 value printed in Table~\ref{tab:printed-sha-ledger}, and write
+\(\mathrm{OrdinaryFile}_{R}(p)\) and \(\mathrm{readBytes}_{R}(p)\) for the
+ordinary non-symlink file predicate and raw byte read under the TCB of
+Tables~\ref{tab:replay-tcb}--\ref{tab:replay-byte-binding}.  Define the
+camera-ready archive predicate by
+\[
+\ArchiveOKA(Z) \Longleftrightarrow
+\Bigl[
+\forall p\in P_{\mathrm{req}}:
+\mathrm{OrdinaryFile}_{R}(p)\land
+\mathrm{sha256}(\mathrm{readBytes}_{R}(p))=d_p
+\Bigr]\land
+\mathrm{NoSelfRow}(T)\land
+\mathrm{LocatorOK}(Z,T)\land
+\mathrm{EnvOK}(E).
+\]
+Here \(\mathrm{NoSelfRow}(T)\) means that \(T\) contains no row for
+\artifactpath{certificates/stage_a_digest_table.json}; \(\mathrm{LocatorOK}(Z,T)\)
+means that \(L\) is a stable public or venue-controlled locator naming the exact
+archive bytes and satisfying the Table~\ref{tab:artifact-locator-status}
+byte-equality condition; and \(\mathrm{EnvOK}(E)\) is the environment predicate
+of Table~\ref{tab:replay-tcb}.  Equivalently,
+\(\ArchiveOKA(Z)\) expands to the following finite submission facts:
 \begin{enumerate}[label={\(\mathrm{A}_{\arabic*}\):}]
 \item every relative path in
 Tables~\ref{tab:replay-artifact-manifest} and
@@ -2184,28 +2256,36 @@ and working directory for the replay commands; and
 venue-controlled supplement identifier, or equivalent immutable byte locator
 names the exact archive or unpacked support tree and is accompanied by the
 byte-equality condition in Table~\ref{tab:artifact-locator-status}; this is the
-\(\LocatorOKstageA\) replay-identity premise, not the coordinate-upgrade atom
-\(\texttt{externalUploadArchiveUpgrade}\).
+\(\LocatorOKstageA\) replay-identity premise, not the external-equivalence row
+\(\texttt{externalArchiveEquivalence}\).
 \end{enumerate}
 The present PDF-only article does not assert \(\mathrm{A}_1\)--\(\mathrm{A}_6\);
 it defines them as the finite contract for a later archive-instantiated replay.
-If all six clauses are supplied, then
-\(\mathsf{ArchiveOK}_{\mathrm{stage\_a}}\), together with the explicit
-\(\ScriptOKstageA\) premise, implies the replay preconditions used by
-Lemma~\ref{lem:byte-binding-submitted-records} and by
-Corollary~\ref{cor:byte-bound-stage-a-horn-replay}; hence an archive-instantiated
-replay would have positive coordinates \(\qlex\) and \(q_{\mathrm{rgs}}\) and
-negative coordinates
+If all six clauses are supplied, then the camera-ready replay theorem is
+\[
+\ArchiveOKA(Z)\land\ScriptOKstageA\land\ScriptOK_{\mathrm{cert}}
+\Longrightarrow
+\ReplayVector(Z)=
+(\qlex,q_{\mathrm{rgs}},\neg q_{\mathrm{src}},\neg q_{\mathrm{art}},
+\neg q_{\mathrm{ext}},\neg q_{\mathrm{ven}}).
+\]
+The implication is exactly the replay precondition package used by
+Lemma~\ref{lem:byte-binding-submitted-records},
+Corollary~\ref{cor:byte-bound-stage-a-horn-replay}, and
+Theorem~\ref{thm:certificate-record-checker-spec}.  Thus an
+archive-instantiated replay would have positive coordinates \(\qlex\) and
+\(q_{\mathrm{rgs}}\) and negative coordinates
 \(q_{\mathrm{src}},q_{\mathrm{art}},q_{\mathrm{ext}},q_{\mathrm{ven}}\).  The
-stable locator in \(\mathrm{A}_6\) is exactly \(\LocatorOKstageA\), the identity
-premise for the supplied archive.  It is not a positive external-archive or
-venue-status upgrade row.
+stable locator in \(\mathrm{A}_6\) is exactly \(\texttt{locatorOKstageA}\), the
+identity premise for the supplied archive.  It is not the separate
+\(\texttt{externalArchiveEquivalence}\) row and therefore cannot by itself fire
+\(\texttt{qext}\).
 Conversely, the PDF-only article, or a local source tree without the locator and
 byte-equality facts \(\mathrm{A}_1\)--\(\mathrm{A}_6\), does not instantiate a
 reviewer-executable artifact claim.  In that case the article retains only the
 printed finite specification, the mathematical Horn calculation, and the
 conditional statement of what an archive satisfying
-\(\mathsf{ArchiveOK}_{\mathrm{stage\_a}}\) would replay.
+\(\ArchiveOKA\) would replay.
 \end{theorem}
 
 \begin{proof}
@@ -2220,7 +2300,7 @@ ledger binds the digest-table bytes for review and archive comparison.  Clause
 \(\mathrm{A}_5\) supplies the pinned execution descriptor assumed by the replay
 commands.  The observed \texttt{python -VV}/Windows/NTFS transcript in that
 descriptor is provenance, not an independent host-specific theorem premise.
-Clause \(\mathrm{A}_6\) supplies \(\LocatorOKstageA\): the stable locator and
+Clause \(\mathrm{A}_6\) supplies \(\texttt{locatorOKstageA}\): the stable locator and
 complete byte-equality condition that turns a local support tree into an
 operative submitted artifact.
 Therefore the digest-bound JSON objects, replay scripts, expected case rows,
@@ -2231,8 +2311,8 @@ corollary computes the coordinate vector
 only for the lexical and bounded-replay atoms, while the four stronger
 coordinates still lack their named upgrade atoms.  Clause \(\mathrm{A}_6\) makes
 the located archive identical to the submitted replay surface; it does not add
-\(\texttt{externalUploadArchiveUpgrade}\), assert external archive equivalence
-as a promoted coordinate, or add
+\(\texttt{externalArchiveEquivalence}\), assert external archive equivalence as
+a promoted coordinate, or add
 \(\texttt{uploadTimeVenueAcceptanceUpgrade}\) to the Horn atom set.
 
 For the converse, inspect the same clauses.  The PDF contains printed path names,
@@ -2466,10 +2546,14 @@ The audit route is adjacent to several literatures but imports only bounded
 interfaces from them.  Table~\ref{tab:cicm-theorem-comparison} gives the
 theorem-by-theorem comparison with a fixed recent CICM corpus.  The corpus and
 screen are part of the method rather than an informal literature sample.  The
-source records are the official Springer CICM proceedings volumes for
-2021--2025, together with citable CICM workshop volumes in the same window when
-an official CEUR or proceedings record is available
+source records are the official Springer CICM proceedings volumes for event
+years 2021--2025, together with citable CICM workshop volumes in the same window
+when an official CEUR or proceedings record is available
 \cite{CICM2021Proceedings,CICM2021Workshops,CICM2022Proceedings,CICM2023Proceedings,CICM2024Proceedings,CICM2025Proceedings}.
+For CICM 2025 the event year is 2025; the Springer book record for the cited
+volume lists 2025 publication dates and 2026 copyright metadata.  The comparison
+rows therefore label CICM items by event year, while the bibliography records
+the Springer volume metadata.
 The search strings, inclusion rules, and exclusion categories are printed in
 Table~\ref{tab:cicm-corpus-protocol}, and the corresponding finite transcript is
 published as the paper-local machine-readable record
@@ -2593,7 +2677,7 @@ CODECHECK, Software Heritage, FAIR4RS, LeanDojo, and Lean Copilot. \\
 \end{table}
 
 \begin{table}
-\caption{Corpus-defined interface comparison: CICM 2021--2025 plus CICM workshop volumes.}
+\caption{Corpus-defined interface comparison: CICM event years 2021--2025 plus CICM workshop volumes.}
 \label{tab:cicm-theorem-comparison}
 \tiny
 \setlength{\tabcolsep}{1.2pt}
@@ -2603,7 +2687,7 @@ CODECHECK, Software Heritage, FAIR4RS, LeanDojo, and Lean Copilot. \\
 Scoped interface here & Closest item inside the defined CICM corpus & Adjacent infrastructure outside the corpus & No closer by stated screen & Precise new increment here \\
 \midrule
 Public Horn replay and six-coordinate vector &
-Baanen et al., ``Growing Mathlib'' (CICM 2025, proceedings 2026)
+Baanen et al., ``Growing Mathlib'' (CICM 2025 event; Springer copyright 2026)
 \cite{BaanenEtAl2026GrowingMathlib}; Yamamichi--Shigenaka--Nakash\=o--Wasaki,
 ``A Web Platform for Hosting the Mizar Mathematical Library'' (CICM-WS/FMM
 2021)~\cite{YamamichiEtAl2021MizarPlatform}; Kohlhase--M{\"u}ller--Schaefer,
@@ -2644,7 +2728,7 @@ equality reflection; syntax rows alone are not semantic normalizers and this is
 not a third public coordinate. \\
 Conditional artifact Horn replay &
 Horowitz--Karatarakis--Ren--Sanchez Ocegueda, ``Exploring Proof
-Autoformalization with Mistral on Herald'' (CICM 2025, proceedings 2026)
+Autoformalization with Mistral on Herald'' (CICM 2025 event; Springer copyright 2026)
 \cite{HorowitzEtAl2026Herald}. &
 LeanDojo and Lean Copilot
 \cite{YangEtAl2023LeanDojo,SongYangAnandkumar2024LeanCopilot}. &
@@ -2657,7 +2741,7 @@ Factorial-spike auxiliary-cover stress test &
 Brinich--Johnson, ``Generating Formally Verified Quantum Fourier Transform
 Algorithms'' (CICM 2024) \cite{BrinichJohnson2024QFT};
 Bartoletti--Bonzio--Ferrara, ``Certified Algorithms for Numerical Semigroups in
-Rocq'' (CICM 2025, proceedings 2026)
+Rocq'' (CICM 2025 event; Springer copyright 2026)
 \cite{BartolettiBonzioFerrara2026Semigroups};
 Bentkamp--Avigad, ``Verified Optimization'' (CICM-WS/FMM 2021)
 \cite{BentkampAvigad2021VerifiedOptimization}. &
