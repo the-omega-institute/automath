@@ -656,6 +656,8 @@ name, optional title, body slice, and first label field are exactly the fields
 obtained from \(s_R\) by the scanner described above.  Consequently
 \(\rawFirstBeginTokenSubset\) is sound only as a first decoded-source-substring
 subset witness with an ASCII-token byte interval: every accepted record has a matching decoded source substring.
+Later coordinate claims that cite this scanner result must cite this lemma and
+Table~\ref{tab:scope-register}, not the certificate-record theorem.
 Substrings in comments or inactive branches may be accepted, while included,
 nested, macro-generated, and second-same-line begin tokens may be missed.  This
 lemma makes no claim that \(s_R\) is active \TeX{} input, displayed theorem
@@ -1019,7 +1021,9 @@ R12 & \(\begin{array}[t]{@{}l@{}}
 No other Horn rule has a conclusion in \(Q\).  Equivalently, the reference
 checker of Definition~\ref{def:finite-horn-reference-checker}, which is sound by
 Lemma~\ref{lem:finite-horn-reference-checker-soundness}, returns exactly the
-three \(Q\)-projections displayed below.  Thus forward chaining gives the
+three \(Q\)-projections displayed below; the checker is run on precisely the
+displayed bases and rule table and rejects any base with \(A\cap Q\ne\varnothing\).
+Thus forward chaining gives the
 unconditional PDF-level closure
 \[
 \operatorname{Cl}_{H_{\mathrm{Horn}}}(A_{\mathrm{rec}})\cap Q
@@ -1114,6 +1118,9 @@ are \(\textsf{freshFormalSourceUpgrade}\),
 derives any of them.  Therefore those four premises are absent from all three
 closures, so the corresponding four support coordinates are absent as well.  The
 other rules derive only auxiliary atoms, not elements of \(Q\).
+This is a calculation in the closed printed Horn frame only: no unprinted source
+semantics, path existence, or coordinate atom is admitted as an additional
+premise.
 
 Equivalently, define the finite forward-chaining stages
 \[
@@ -1446,6 +1453,10 @@ be cited as accepting exactly the schema relation on those supplied bytes.
 Without those archive and script-conformance premises, a script run, path name,
 JSON filename, or PDF rendering of a row is not executable evidence for this
 PDF-only specification.
+In particular, the case-row clauses C1--C5 range over
+\(\operatorname{RowsCase}(\CaseManifest)\), while the interface clauses I1--I2
+range over \(\operatorname{RowsIface}(\InterfaceMap)\); no clause in this
+contract constrains case rows by reading interface rows.
 \end{theorem}
 
 \begin{proof}
@@ -1597,6 +1608,9 @@ public coordinate atom, that the only \(Q\)-concluding Horn rules are
 \(\texttt{externalArchiveEquivalence}\), and
 \(\texttt{uploadTimeVenueAcceptanceUpgrade}\) are absent from \(\ReplayBase(Z)\)
 unless they are explicitly derived by separate upgrade records.
+The lemma proves inclusion of the allowed replay base only; it does not replace
+\(\ReplayBase(Z)\) by \(A^{+}\) and does not infer absence of extra support
+facts except through the stated \(\FrameOKZ(Z)\) clauses.
 \end{lemma}
 
 \begin{proof}
@@ -2892,8 +2906,8 @@ R3 & A pass row's decision is not in \(\texttt{schema.pass\_decisions}\).\\
 R4 & A pass row's evidence pointer \(u\) fails
 \(\PointerOK(u,E,M,S)\) for the parsed typed entry evidence surface,
 review-bundle manifest, table boundary, and submitted snapshot list.\\
-S1 & The submission-interface map does not contain exactly four rows.\\
-S2 & The submission-interface ids are not exactly
+I1 & The submission-interface map does not contain exactly four rows.\\
+I2 & The submission-interface ids are not exactly
 \(\{\texttt{sim1},\texttt{sim2},\texttt{sim3},\texttt{sim4}\}\).\\
 P1 & The primary-claim inventory has fewer than \(12\) rows.\\
 P2 & A primary-claim row lacks a nonempty \(\texttt{claim}\).\\
@@ -4405,7 +4419,8 @@ script.
 Let \(Z=(R,T,E,L,B_{\mathrm{cert}})\) be a candidate replay archive, where \(R\)
 is the unpacked paper root, \(T\) is the parsed JSON value obtained from the bytes
 at \artifactpath{certificates/stage_a_digest_table.json}, \(E\) is the replay
-environment descriptor, \(L\) is the locator row, and
+environment descriptor, \(L=\LocatorRow\) is the locator row only in this
+archive theorem, and
 \[
 B_{\mathrm{cert}}=(b_{\Sigma},b_L,b_I,b_Q,b_M,b_C,b_{\Gamma})
 \]
@@ -4635,6 +4650,10 @@ license to infer \(\Gamma\) from prose: the archive must either supply that
 slice as a named byte record or give an equivalent digest-bound extraction row.
 The present PDF-only article does not assert \(\mathrm{A}_1\)--\(\mathrm{A}_8\);
 it defines them as the finite contract for a conditional archive-instantiated replay.
+This theorem also assumes the closed-world frame \(\FrameOKZ(Z)\);
+\(\ArchiveOKA(Z)\) by itself is only a byte and locator predicate and does not
+rule out pre-existing coordinate facts, hidden \(Q\)-concluding rules, or
+stronger promotion premises.
 For \(q_i\in Q\), the replay vector is the Horn-closure projection
 \[
 \ReplayVector_i(Z)\Longleftrightarrow
@@ -4730,12 +4749,15 @@ the human-promoted external-archive equivalence atom used by \(R7b\) for
 \(q_{\mathrm{ext}}\).
 Therefore the digest-bound JSON objects, replay scripts, expected case rows,
 review-bundle inputs, and environment assumptions are exactly the preconditions
-cited by the byte-binding lemma and the conditional Horn replay corollary.  That
-corollary computes the coordinate vector
-\(\{\qlex,q_{\mathrm{rgs}}\}\) because the fixed Horn schema has positive rules
-only for the lexical and bounded-replay atoms, while the four stronger
-  coordinates still lack their named upgrade atoms.  Clause \(\mathrm{A}_1\)
-  supplies the archive-format guard; clause \(\mathrm{A}_8\) makes
+cited by the byte-binding lemma and the conditional Horn replay corollary.  The
+coordinate vector is computed from
+\(\operatorname{Cl}_{H_{\mathrm{Horn}}}(\pi_{\mathrm{Horn}}(\Facts(Z))\setminus Q)\)
+under \(\FrameOKZ(Z)\), not by substituting the smaller set \(A^{+}\) for the
+whole archive projection.  The displayed rules \(R1\) and \(R3\) fire because
+their premises are present; the four stronger coordinates remain false because
+F1 removes initial coordinate facts, F2 lists all \(Q\)-concluding rules, and F3
+keeps their named promotion atoms absent.  Clause \(\mathrm{A}_1\) supplies the
+archive-format guard; clause \(\mathrm{A}_8\) makes
 the located archive identical to the submitted replay surface; it does not add
 \(\texttt{externalArchiveEquivalence}\), assert external archive equivalence as
 a promoted coordinate, or add
