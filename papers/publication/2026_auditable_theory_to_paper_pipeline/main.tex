@@ -898,7 +898,11 @@ E_{\mathrm{atom}}&::=&T_{\mathrm{table}}\mid T_{\mathrm{formal}}
 \mid T_{\mathrm{manifest}}\mid T_{\mathrm{hist}},\\
 E_{\mathrm{path}}&::=&\texttt{certificates/}\beta\mid\texttt{review\_bundle/}\beta
 \mid\texttt{submission\_abstract.tex}\mid\texttt{main.tex}
-\mid\texttt{appendix\_full\_technical\_ledger.tex}.
+\mid\texttt{appendix\_full\_technical\_ledger.tex}
+\mid\texttt{source\_interface\_record.json}
+\mid\texttt{PIPELINE.md}\mid\texttt{SOURCE\_MAP.md}
+\mid\texttt{ARTIFACT\_INVENTORY.md}
+\mid\texttt{theorem\_inventory.json}.
 \end{array}
 \]
 A manifest tag is accepted only when the \(\beta\) key is present in \(M\), a
@@ -1163,10 +1167,15 @@ conditions holds.  Consequently,
 \(\operatorname{AcceptsCertSpec}(\Sigma,L,I,Q,M,C,\Gamma)\) iff all rows satisfy
 \(P_1,\ldots,P_6\) for \(\Acc_{\Gamma}\), the manifest bindings M1--M3 hold,
 the submission-interface locks S1--S2 hold, and the primary-claim locks P1--P5
-hold.  This is not a free-standing assertion that those current records have
-been supplied or parsed correctly; it is the conditional byte-bound
-specification under the artifact and TCB hypotheses above.  The relation rejects
-iff at least one displayed clause is violated.
+hold.  The seven concrete rows used in this iff are precisely the entries
+\(\texttt{a1},\ldots,\texttt{a7}\) instantiated in
+Table~\ref{tab:current-ledger-instantiation}; their row-by-row discharge is
+Lemma~\ref{lem:current-ledger-ok}.  This is not a free-standing assertion that
+those current records have been supplied or parsed correctly, nor that
+\artifactpath{review_bundle/verify_certificate_records.py} implements the
+relation; it is the conditional byte-bound specification under the artifact and
+TCB hypotheses above.  The relation rejects iff at least one displayed clause is
+violated.
 \end{theorem}
 
 \begin{proof}
@@ -1322,19 +1331,19 @@ Paths: \artifactpath{submission_abstract.tex},
 \(H\): \artifactpath{human-promotion-marker-present}. \(B\): no command run.\\
 \texttt{a3} &
 \(\textsf{route}\); \(\ell=\textsf{path\mbox{-}verified}\) &
-Atoms: \artifactpath{manifest:case_evidence[0]},
-\artifactpath{explicit-historical-boundary:D:/omega/newmath/papers/research_reports/finite_parts_dynamical_zeta_shifts.md},
-\artifactpath{explicit-historical-boundary:D:/omega/automath/papers/publication/2026_auditable_theory_to_paper_pipeline},
+Atoms: \artifactpath{manifest:case_evidence/0},
+\artifactpath{historical-boundary:newmath-finite-parts-dynamical-zeta-shifts},
+\artifactpath{historical-boundary:auditable-theory-to-paper-pipeline-root},
 \artifactpath{table:tab:case-witnesses},
 \artifactpath{proposition:prop:path-complete-case-witnesses}.
 Paths: \artifactpath{review_bundle/case_snapshots/newmath_intake_seed_directory_manifest.json}. &
-\artifactpath{promotion}\(\mapsto\)\artifactpath{manifest:case_evidence[0]};
+\artifactpath{promotion}\(\mapsto\)\artifactpath{manifest:case_evidence/0};
 \artifactpath{overlap}\(\mapsto\)\artifactpath{table:tab:case-witnesses};
 \artifactpath{submission-state}\(\mapsto\)\artifactpath{proposition:prop:path-complete-case-witnesses}. &
 \(H\): \artifactpath{non-promotion-record}. \(B\): no command run.\\
 \texttt{a4} &
 \(\textsf{route},\textsf{submission}\); \(\ell=\textsf{path\mbox{-}verified}\) &
-Atoms: \artifactpath{manifest:case_evidence[1]},
+Atoms: \artifactpath{manifest:case_evidence/1},
 \artifactpath{table:tab:case-witnesses},
 \artifactpath{proposition:prop:path-complete-case-witnesses}.
 Paths: \artifactpath{review_bundle/case_snapshots/upper_fibers_route_directory_manifest.json},
@@ -1349,7 +1358,7 @@ Paths: \artifactpath{review_bundle/case_snapshots/upper_fibers_route_directory_m
 \(H\): \artifactpath{non-promotion-record}. \(B\): no command run.\\
 \texttt{a5} &
 \(\textsf{discovery}\); \(\ell=\textsf{path\mbox{-}verified}\) &
-Atoms: \artifactpath{manifest:case_evidence[2]},
+Atoms: \artifactpath{manifest:case_evidence/2},
 \artifactpath{table:tab:source-interface-record},
 \artifactpath{table:tab:case-witnesses},
 \artifactpath{proposition:prop:path-complete-case-witnesses},
@@ -1362,7 +1371,7 @@ Paths: \artifactpath{review_bundle/case_snapshots/fake_extension_phase_d_lint.py
 \(H\): \artifactpath{non-promotion-record}. \(B\): no command run.\\
 \texttt{a6} &
 \(\textsf{artifact}\); \(\ell=\textsf{path\mbox{-}verified}\) &
-Atoms: \artifactpath{manifest:case_evidence[3]},
+Atoms: \artifactpath{manifest:case_evidence/3},
 \artifactpath{table:tab:case-witnesses},
 \artifactpath{proposition:prop:path-complete-case-witnesses}.
 Paths: \artifactpath{review_bundle/case_snapshots/rule110_STATUS.md},
@@ -1454,7 +1463,10 @@ and their boundary column contains
 \(\mathsf{CommandBoundaryOK}.\mathrm{B}_2\), while E10 is inactive because no
 row has level \(\textsf{command\mbox{-}run}\).  Thus every row satisfies
 \(P_1,\ldots,P_6\), proving the displayed
-\(\operatorname{CurrentLedgerOK}\) assertion.
+\(\operatorname{CurrentLedgerOK}\) assertion.  This row-by-row lemma is still a
+parsed-record theorem: it does not assert that
+\artifactpath{review_bundle/verify_certificate_records.py} accepts exactly these
+rows unless the separate \(\ScriptOK_{\mathrm{cert}}\) premise is supplied.
 \end{proof}
 
 \begin{lemma}[Certificate-record script conformance is a separate premise]
@@ -1722,6 +1734,12 @@ artifact-semantic, archive, venue, or whole-implementation-conformance
 consequence.  Without \(\ScriptOKstageA\), the corollary records only the
 digest-bound file component and cannot fire rule \(R3\).
 \end{proof}
+
+This corollary has no source-code conformance branch hidden in it.  It is a
+statement about the digest-bound JSON bytes and the displayed finite
+parser/manifest projections; the optional replay by
+\artifactpath{certificates/replay_stage_a_audit.py} begins only after the
+separate \(\ScriptOKstageA\) premise is attached.
 
 The finite relation, not an unproved source-code branch, computes the least fixed
 point of these clauses over the atoms compiled or verified from
@@ -2257,7 +2275,8 @@ venue-controlled supplement identifier, or equivalent immutable byte locator
 names the exact archive or unpacked support tree and is accompanied by the
 byte-equality condition in Table~\ref{tab:artifact-locator-status}; this is the
 \(\LocatorOKstageA\) replay-identity premise, not the external-equivalence row
-\(\texttt{externalArchiveEquivalence}\).
+\(\texttt{externalArchiveEquivalence}\), and it is not a
+\(q_{\mathrm{ext}}\) upgrade row.
 \end{enumerate}
 The present PDF-only article does not assert \(\mathrm{A}_1\)--\(\mathrm{A}_6\);
 it defines them as the finite contract for a later archive-instantiated replay.
@@ -2279,7 +2298,8 @@ archive-instantiated replay would have positive coordinates \(\qlex\) and
 stable locator in \(\mathrm{A}_6\) is exactly \(\texttt{locatorOKstageA}\), the
 identity premise for the supplied archive.  It is not the separate
 \(\texttt{externalArchiveEquivalence}\) row and therefore cannot by itself fire
-\(\texttt{qext}\).
+\(\texttt{qext}\).  A positive \(q_{\mathrm{ext}}\) coordinate would require
+both \(R7a\)'s locator premise and \(R7b\)'s external-archive equivalence atom.
 Conversely, the PDF-only article, or a local source tree without the locator and
 byte-equality facts \(\mathrm{A}_1\)--\(\mathrm{A}_6\), does not instantiate a
 reviewer-executable artifact claim.  In that case the article retains only the
@@ -2300,9 +2320,11 @@ ledger binds the digest-table bytes for review and archive comparison.  Clause
 \(\mathrm{A}_5\) supplies the pinned execution descriptor assumed by the replay
 commands.  The observed \texttt{python -VV}/Windows/NTFS transcript in that
 descriptor is provenance, not an independent host-specific theorem premise.
-Clause \(\mathrm{A}_6\) supplies \(\texttt{locatorOKstageA}\): the stable locator and
-complete byte-equality condition that turns a local support tree into an
-operative submitted artifact.
+Clause \(\mathrm{A}_6\) supplies \(\texttt{locatorOKstageA}\): the stable locator
+and complete byte-equality condition that turns a local support tree into an
+operative submitted artifact.  This is a replay-identity fact only; it is not
+the human-promoted external-archive equivalence atom used by \(R7b\) for
+\(q_{\mathrm{ext}}\).
 Therefore the digest-bound JSON objects, replay scripts, expected case rows,
 review-bundle inputs, and environment assumptions are exactly the preconditions
 cited by the byte-binding lemma and the conditional Horn replay corollary.  That
@@ -3173,8 +3195,9 @@ r<F_{k+1}=F_k+F_{k-1},
 \]
 so \(r'=r-F_k<F_{k-1}\); if \(k=1\), then \(r'=0\).  Thus the new state
 satisfies the remainder bound with last index \(k\).  If there was a previous
-last index \(\ell\), then the old state had \(r<F_{\ell-1}\), unless
-\(\ell=1\), where \(r=0\) and the loop would not run.  Hence
+last index \(\ell\), then either \(\ell=1\), where the old state has \(r=0\)
+and the loop would not run, or \(\ell\ge2\), where the old state has
+\(r<F_{\ell-1}\).  Hence, in the only continuing case,
 \(F_k\le r<F_{\ell-1}\), which implies \(k\le\ell-2\).  The new \(1\)-digit is
 therefore separated from the previous last selected digit by at least one zero,
 and the word remains normal.  The strict decrease of the nonnegative integer
