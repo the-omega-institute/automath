@@ -703,10 +703,11 @@ For this theorem the certificate schema row \(\Sigma\) is part of the submitted
 checker input and is itself locked: the parsed value
 \(\Sigma[\texttt{evidence\_levels}]\) is exactly
 \(\mathsf{Lev}_{\mathrm{cert}}\).  This is separate from the schema's
-artifact-pattern vocabulary.  Strings such as
-\texttt{explicit-historical-boundary:*} are admissible only as pointer-boundary
-tokens after the checks below; they are not evidence levels and are not read by
-\(\mathsf{CommandBoundaryOK}\).  Define \(\Acc_{\Gamma}(c,C)\) by the six
+artifact-pattern vocabulary.  Schema vocabulary patterns such as
+\texttt{explicit-historical-boundary:*} are not closed evidence atoms; only
+whole-string \texttt{historical-boundary:}\(\alpha\) tokens can be admitted as
+pointer-boundary atoms after the checks below.  They are not evidence levels and
+are not read by \(\mathsf{CommandBoundaryOK}\).  Define \(\Acc_{\Gamma}(c,C)\) by the six
 finite predicates:
 \begin{enumerate}[label={\(\mathrm{P}_{\arabic*}\):}]
 \item \(c\) has a ledger row with all required record fields and
@@ -905,13 +906,15 @@ E_{\mathrm{path}}&::=&\texttt{certificates/}\beta\mid\texttt{review\_bundle/}\be
 \mid\texttt{theorem\_inventory.json}.
 \end{array}
 \]
-A manifest tag is accepted only when the \(\beta\) key is present in \(M\), a
-historical-boundary tag only when an eligible case row names the exact tag, and
-a snapshot path only when it is a \(T_{\mathrm{snapshot}}\) string in an eligible
-submitted case row.  These productions are pairwise disjoint: every atom token
+A manifest tag is accepted only when the \(\beta\) string is a slash-separated
+JSON-pointer path present in \(M\), using literal object keys and decimal list
+indices without wildcard or escape syntax; a historical-boundary tag only when an
+eligible case row names the exact tag; and a snapshot path only when it is a
+\(T_{\mathrm{snapshot}}\) string in an eligible submitted case row.  These
+productions are pairwise disjoint: every atom token
 contains a colon before any slash-bearing path position, while every path token
-starts with one of the displayed path prefixes or one of the three exact file
-names and contains no colon.  Strings with wildcards, prefixes, absolute-path
+starts with one of the displayed path prefixes or one of the displayed exact
+file names and contains no colon.  Strings with wildcards, prefixes, absolute-path
 syntax, malformed \texttt{..} segments, or unlisted table/manifest/historical
 names fail parsing before \(\PointerOK\) is evaluated.
 
@@ -936,7 +939,7 @@ For a parsed ledger entry with typed evidence surface
 review-bundle manifest dictionary \(M\), and submitted case-row manifest \(C\),
 write \(S=C.\texttt{case\_evidence}\) for the submitted snapshot list.
 \(E_{\mathrm{atom}}\) contains only closed evidence atoms: whole-string table or
-formal labels, manifest-row tags whose key is present in \(M\), and exact
+formal labels, manifest-row tags whose slash-separated path is present in \(M\), and exact
 historical-boundary tags named by an eligible submitted case row.  It does not
 contain wildcard patterns, prefixes, raw absolute paths, or raw relative support
 paths.  \(E_{\mathrm{path}}\) contains local support paths and is admissible only
@@ -1010,7 +1013,7 @@ closed, digest-bound finite enumerations:
 Boundary & Finite realization \\ \midrule
 \(E_{\mathrm{atom}}\) &
 The literal non-path evidence atoms after typed schema parsing: whole-string
-table/formal labels, manifest-row tags with keys in \(M\), and exact historical
+table/formal labels, manifest-row tags with JSON-pointer paths in \(M\), and exact historical
 boundary tags named by eligible case rows.  These are not path prefixes,
 wildcard patterns, evidence levels, or raw local paths.\\
 \(E_{\mathrm{path}}\) &
@@ -1031,7 +1034,7 @@ the same root, ordinary-file, symlink-rejection, and SHA--256 checks.\\
 \end{tabularx}
 \end{center}
 This is a finite membership test.  The grammar admits only digest-bound manifest
-paths, manifest-row tags whose keys occur in \(M\), table or formal-label atoms
+paths, manifest-row tags whose slash-separated paths occur in \(M\), table or formal-label atoms
 already listed in the submitted table surface, exact historical-boundary tags
 declared by eligible case rows, evidence paths whose row carries the required
 digest-bound support, and submitted snapshot paths that pass the case-row
@@ -1400,6 +1403,113 @@ Paths: \artifactpath{theorem_inventory.json},
 \end{longtable}
 \endgroup
 
+\begin{lemma}[RowParseOK for the current ledger]
+\label{lem:current-ledger-row-parse-ok}
+Let \(T_{\mathrm{cur}}\) be the seven rows of
+Table~\ref{tab:current-ledger-instantiation}.  Let
+\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) mean that every atom printed in
+the typed evidence-surface column is a whole-string member of
+\(E_{\mathrm{atom}}\), and every path printed in that column is a whole-string
+member of \(E_{\mathrm{path}}\), for the grammars in
+Theorem~\ref{thm:certificate-record-checker-spec}.  Then
+\(\operatorname{RowParseOK}(T_{\mathrm{cur}})\) holds.
+\end{lemma}
+
+\begin{proof}
+All cases are finite whole-string checks.  The atom rows are:
+\[
+\begin{array}{ll}
+\texttt{a1}:&
+\texttt{table:tab:source-interface-record},
+\texttt{manifest:pinned\_source\_snapshot},
+\texttt{lemma:lem:source-interface-extraction-correctness},\\
+&\texttt{proposition:prop:reviewable-source-snapshot-interface},
+\texttt{proposition:prop:source-interface-record-file-consistency};\\
+\texttt{a2}:&
+\texttt{table:tab:submission-interface-map},
+\texttt{table:tab:primary-claim-inventory},
+\texttt{proposition:prop:machine-readable-certificate-records};\\
+\texttt{a3}:&
+\texttt{manifest:case\_evidence/0},
+\texttt{historical-boundary:newmath-finite-parts-dynamical-zeta-shifts},\\
+&\texttt{historical-boundary:auditable-theory-to-paper-pipeline-root},
+\texttt{table:tab:case-witnesses},
+\texttt{proposition:prop:path-complete-case-witnesses};\\
+\texttt{a4}:&
+\texttt{manifest:case\_evidence/1},
+\texttt{table:tab:case-witnesses},
+\texttt{proposition:prop:path-complete-case-witnesses};\\
+\texttt{a5}:&
+\texttt{manifest:case\_evidence/2},
+\texttt{table:tab:source-interface-record},
+\texttt{table:tab:case-witnesses},\\
+&\texttt{proposition:prop:path-complete-case-witnesses},
+\texttt{proposition:prop:scheduler-selection-advisory};\\
+\texttt{a6}:&
+\texttt{manifest:case\_evidence/3},
+\texttt{table:tab:case-witnesses},
+\texttt{proposition:prop:path-complete-case-witnesses};\\
+\texttt{a7}:&
+\texttt{table:tab:submitted-theorem-obligation-ledger},
+\texttt{proposition:prop:manual-theorem-inventory-boundary},\\
+&\texttt{theorem:thm:theorem-obligation-ledger-boundary},
+\texttt{theorem:thm:deterministic-theorem-environment-extractor-boundary}.
+\end{array}
+\]
+The table and formal-label strings have a displayed atom prefix followed by an
+\(\alpha\)-string.  The manifest strings have prefix \texttt{manifest:} followed
+by \(\beta\)-strings whose JSON-pointer paths are present in \(M\).  The two
+historical strings have prefix \texttt{historical-boundary:} followed by
+\(\alpha\)-strings.  Hence each listed atom is in \(E_{\mathrm{atom}}\).
+
+The path rows are:
+\[
+\begin{array}{ll}
+\texttt{a1}:&
+\texttt{source\_interface\_record.json},
+\texttt{review\_bundle/source\_snapshots/automated\_theory\_discovery\_pipeline\_calculus\_3fb3d6a0641767388a401883062aa522ea0b397b.tex};\\
+\texttt{a2}:&
+\texttt{submission\_abstract.tex},
+\texttt{main.tex},
+\texttt{PIPELINE.md},
+\texttt{SOURCE\_MAP.md},
+\texttt{ARTIFACT\_INVENTORY.md},\\
+&\texttt{source\_interface\_record.json},
+\texttt{review\_bundle/REVIEW\_BUNDLE\_MANIFEST.json},
+\texttt{review\_bundle/submission\_interface\_map.json},\\
+&\texttt{review\_bundle/primary\_claim\_inventory.json},
+\texttt{review\_bundle/current\_package\_pass\_records.json};\\
+\texttt{a3}:&
+\texttt{review\_bundle/case\_snapshots/newmath\_intake\_seed\_directory\_manifest.json};\\
+\texttt{a4}:&
+\texttt{review\_bundle/case\_snapshots/upper\_fibers\_route\_directory\_manifest.json},
+\texttt{review\_bundle/case\_snapshots/upper\_fibers\_SUBMITTED},\\
+&\texttt{review\_bundle/case\_snapshots/upper\_fibers\_semantic\_overlap\_blockers.json},
+\texttt{review\_bundle/case\_snapshots/upper\_fibers\_semantic\_overlap\_blockers.md},\\
+&\texttt{review\_bundle/case\_snapshots/program\_board\_machine.md};\\
+\texttt{a5}:&
+\texttt{review\_bundle/case\_snapshots/fake\_extension\_phase\_d\_lint.py},
+\texttt{review\_bundle/case\_snapshots/fake\_extension\_artifact\_inventory.md};\\
+\texttt{a6}:&
+\texttt{review\_bundle/case\_snapshots/rule110\_STATUS.md},
+\texttt{review\_bundle/case\_snapshots/rule110\_collision\_audit\_findings.md},\\
+&\texttt{review\_bundle/case\_snapshots/rule110\_exhaustiveness\_audit\_findings.md},
+\texttt{review\_bundle/case\_snapshots/rule110\_papers\_research\_report.md};\\
+\texttt{a7}:&
+\texttt{theorem\_inventory.json},
+\texttt{review\_bundle/primary\_claim\_inventory.json},
+\texttt{review\_bundle/current\_package\_pass\_records.json},\\
+&\texttt{review\_bundle/REVIEW\_BUNDLE\_MANIFEST.json},
+\texttt{review\_bundle/theorem\_environment\_extraction\_run.log},
+\texttt{review\_bundle/extract\_theorem\_environments.py}.
+\end{array}
+\]
+The exact top-level names are displayed alternatives of \(E_{\mathrm{path}}\).
+Every remaining path starts with \texttt{review\_bundle/} followed by a nonempty
+\(\beta\)-string with no empty, \texttt{.}, or \texttt{..} segment, no leading
+slash, and no backslash.  Hence each listed path is in \(E_{\mathrm{path}}\).
+\end{proof}
+
 \begin{lemma}[CurrentLedgerOK, row by row]
 \label{lem:current-ledger-ok}
 Let \(L_{\mathrm{cur}}\) be the seven parsed entries displayed in
@@ -1427,11 +1537,9 @@ First inspect the row keys: the table has exactly the seven entries
 \(\Kind\), and every displayed level is
 \(\textsf{path\mbox{-}verified}\in\mathsf{Lev}_{\mathrm{cert}}\).  The evidence
 column separates each surface into \(E_{\mathrm{atom}}\) and \(E_{\mathrm{path}}\).
-The atom entries are whole-string table, formal-label, manifest, or historical
-boundary tokens of the grammars in Theorem~\ref{thm:certificate-record-checker-spec};
-the path entries are relative support paths in the displayed path grammar.  Thus
-E1--E6 hold for every row once the byte-bound parse preconditions of the theorem
-hold.
+By Lemma~\ref{lem:current-ledger-row-parse-ok}, every displayed evidence atom and
+path is a whole-string member of the corresponding typed grammar.  Thus E1--E6
+hold for every row once the byte-bound parse preconditions of the theorem hold.
 
 It remains only to check the exact gate graph, discovery parity, pointers, and
 level boundary for each row.  The schema dispatch assigns traceability to
