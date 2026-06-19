@@ -529,13 +529,22 @@ Q=\{\qlex,\qrgs,\qsrc,\qart,\qext,\qven\}
 be the six-coordinate support alphabet.  The submitted Stage--A manifest rows
 are compiled only at the artifact level.  The unconditional finite base atom set
 \(A_{\mathrm{rec}}\) consists only of digest-bound file atoms, finite checker
-atoms, and human-scoped support atoms displayed below.  The script-conformance
-atom \(\texttt{ScriptOKstage\_a}\) is not a member of \(A_{\mathrm{rec}}\); it is
-an external branch-by-branch premise which may be adjoined to form
+atoms, and human-scoped support atoms displayed below.  It does not contain the
+scanner-success atom \(\texttt{scanOK}\).  Instead the \(\qlex\) coordinate is
+conditional on the explicit scanner premise \(\ScanOK(B,I,J,D)\), represented in
+the Horn base by adjoining the formal atom \(\texttt{scanOK}\).  Write
 \[
-A^{+}=A_{\mathrm{rec}}\cup\{\texttt{ScriptOKstage\_a}\};
+A^{\mathrm{scan}}=A_{\mathrm{rec}}\cup\{\texttt{scanOK}\};
 \qquad
-A_{\mathrm{rec}}\cap\{\texttt{ScriptOKstage\_a}\}=\varnothing.
+A_{\mathrm{rec}}\cap\{\texttt{scanOK}\}=\varnothing.
+\]
+The script-conformance atom \(\texttt{ScriptOKstage\_a}\) is not a member of
+\(A^{\mathrm{scan}}\); it is an external branch-by-branch premise which may be
+adjoined, after the scanner premise, to form
+\[
+A^{+}=A^{\mathrm{scan}}\cup\{\texttt{ScriptOKstage\_a}\};
+\qquad
+A^{\mathrm{scan}}\cap\{\texttt{ScriptOKstage\_a}\}=\varnothing.
 \]
 The equality between the artifact bytes
 \artifactpath{certificates/stage_a_horn_schema.json},
@@ -548,7 +557,7 @@ base relation.
 \begin{tabularx}{0.94\linewidth}{@{}L{0.12\linewidth}Y@{}}
 \(A_{\mathrm{rec}}=\) &
 \texttt{pubAbs}, \texttt{suppMain}, \texttt{invJson}, \texttt{invMd},
-\texttt{finalDigest}, \texttt{mainTex}, \texttt{scanOK},
+\texttt{finalDigest}, \texttt{mainTex},
 \texttt{stageAHornSchema}, \texttt{stageAManifest},
 \texttt{stageAHornCertificate}, \texttt{stageAReplayReport},
 \texttt{RecordGateOK}, \texttt{CertDAGOK}, \texttt{DigestOKstage\_a},
@@ -595,41 +604,48 @@ R12 & \(\begin{array}[t]{@{}l@{}}
 \end{tabularx}
 \end{center}
 No other Horn rule has a conclusion in \(Q\).  Then forward chaining gives the
-two distinct closures
+unconditional closure
 \[
 \operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q
-=\{\qlex\}
+=\varnothing.
 \]
-and, only after adjoining the external branch-by-branch conformance premise,
+If the explicit scanner premise \(\ScanOK(B,I,J,D)\) holds and contributes the
+formal atom \(\texttt{scanOK}\), forward chaining gives
+\[
+\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q
+=\{\qlex\}.
+\]
+Only after also adjoining the external branch-by-branch conformance premise,
 \[
 \operatorname{Cl}_{H}(A^{+})\cap Q
 =\{\qlex,\qrgs\}.
 \]
-The second display is a conditional closure statement over the enlarged formal
-base \(A^{+}\), not an unconditional assertion that the submitted PDF has proved
-script conformance.  Equivalently, the unconditional digest/file-record relation
-has coordinate
+The latter two displays are conditional closure statements over enlarged formal
+bases, not unconditional assertions that the submitted PDF has proved scanner
+success or script conformance.  Equivalently, before the scanner premise is
+adjoined the digest/file-record relation has coordinate
 vector
 \[
-\qlex=\mathsf{true},\qquad
-\qrgs=\qsrc=\qart=\qext=\qven=\mathsf{false},
+\qlex=\qrgs=\qsrc=\qart=\qext=\qven=\mathsf{false},
 \]
-whereas the conditional relation over \(A^{+}\) has coordinate vector
+whereas the scanner-conditional relation over \(A^{\mathrm{scan}}\) has
+\(\qlex=\mathsf{true}\) and all other coordinates false, and the relation over
+\(A^{+}\) has coordinate vector
 \[
 \qlex=\qrgs=\mathsf{true},\qquad
-\qsrc=\qart=\qext=\qven=
-\mathsf{false}.
+\qsrc=\qart=\qext=\qven=\mathsf{false}.
 \]
 Here \(\qlex\) is the public name for the legacy artifact atom
 \(\texttt{qinv}\), interpreted by the scanner above and by
 Table~\ref{tab:scope-register}.  Thus \(\qrgs\) is a conditional
 bounded fixed-replay record-gate-soundness coordinate, not an unconditional
 coordinate of the digest/file-record closure.  The complete public
-positive-coordinate claim set is \(\{\qlex\}\) for \(A_{\mathrm{rec}}\), and
-\(\{\qlex,\qrgs\}\) only for \(A^{+}\).  The latter is not the
-unconditional current PDF-level claim; a concrete archive-replay citation of the
-positive \(\qrgs\) coordinate additionally requires \(\ArchiveOKA\),
-\(\ScriptOKstageA\), and \(\ScriptOK_{\mathrm{cert}}\).  The certificate-record
+positive-coordinate claim set is empty for \(A_{\mathrm{rec}}\), \(\{\qlex\}\)
+only after the explicit \(\ScanOK(B,I,J,D)\) premise, and
+\(\{\qlex,\qrgs\}\) only for \(A^{+}\).  The latter is not the unconditional
+current PDF-level claim; a concrete archive-replay citation of the positive
+\(\qrgs\) coordinate additionally requires \(\ArchiveOKA\), \(\ScriptOKstageA\),
+and \(\ScriptOK_{\mathrm{cert}}\).  The certificate-record
 specification is support for this interface.  Richardson obstruction,
 Zeckendorf transport, orbit/height material, and auxiliary-cover stress tests
 are non-load-bearing supplement material unless a later record adds their own
@@ -638,24 +654,27 @@ positive public-coordinate and gate rows.
 
 \begin{proof}
 This theorem is the displayed mathematical layer: \(A_{\mathrm{rec}}\),
-\(A^{+}\), and \(H\) are the finite sets and finite Horn system printed in the
-statement.  Forward chaining is monotone, so it is enough to inspect the
-displayed rules whose conclusions lie in \(Q\).  Rule \(R1\) applies over
-\(A_{\mathrm{rec}}\) because its five premises
-\(\textsf{mainTex}\), \(\textsf{invJson}\), \(\textsf{invMd}\),
-\(\textsf{finalDigest}\), and \(\textsf{scanOK}\) are in
-\(A_{\mathrm{rec}}\); hence
-\(\qlex\in\operatorname{Cl}_{H}(A_{\mathrm{rec}})\), with artifact spelling
-\(\texttt{qinv}\).  Rule \(R3\) does not apply over \(A_{\mathrm{rec}}\), because
-one of its ten premises is the explicit TCB atom
-\(\textsf{ScriptOKstage\_a}\), and that atom is not file-derived, not
-checker-emitted, and not in \(A_{\mathrm{rec}}\).  This missing premise is the
-only reason \(\qrgs\) is absent from the unconditional closure.  Hence
+\(A^{\mathrm{scan}}\), \(A^{+}\), and \(H\) are the finite sets and finite Horn
+system printed in the statement.  Forward chaining is monotone, so it is enough
+to inspect the displayed rules whose conclusions lie in \(Q\).  Rule \(R1\)
+does not apply over \(A_{\mathrm{rec}}\), because one of its five premises is
+\(\textsf{scanOK}\), and that atom is not in \(A_{\mathrm{rec}}\).  No other rule
+has conclusion \(\qlex\), so
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\{\qlex\}.
+\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\varnothing.
 \]
-After adjoining that single external premise, rule \(R3\) applies over \(A^{+}\)
-because its ten premises, namely the four Stage--A file atoms,
+If \(\ScanOK(B,I,J,D)\) holds, adjoining the formal atom \(\textsf{scanOK}\)
+forms \(A^{\mathrm{scan}}\), where all five premises of \(R1\) are present;
+hence \(\qlex\in\operatorname{Cl}_{H}(A^{\mathrm{scan}})\), with artifact
+spelling \(\texttt{qinv}\).  Rule \(R3\) still does not apply over
+\(A^{\mathrm{scan}}\), because one of its ten premises is the explicit TCB atom
+\(\textsf{ScriptOKstage\_a}\), and that atom is not file-derived, not
+checker-emitted, and not in \(A^{\mathrm{scan}}\).  Thus
+\[
+\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q=\{\qlex\}.
+\]
+After also adjoining that single external script premise, rule \(R3\) applies
+over \(A^{+}\) because its ten premises, namely the four Stage--A file atoms,
 \(\textsf{finalDigest}\), the finite predicates
 \(\textsf{RecordGateOK}\), \(\textsf{CertDAGOK}\), and
 \(\textsf{DigestOKstage\_a}\), the explicit TCB premise
@@ -672,17 +691,22 @@ and \(R8\).  Their respective missing promotion premises are
 \(\textsf{locatorOKstageA}\), where \(\textsf{locatorOKstageA}\) itself requires
 \(\textsf{stableLocator}\) and \(\textsf{archiveByteEquality}\), and
 \(\textsf{uploadTimeVenueAcceptanceUpgrade}\).  None is a base atom in either
-\(A_{\mathrm{rec}}\) or \(A^{+}\), and no displayed rule derives any of them.
-Therefore those four premises are absent from both closures, so the corresponding
-four support coordinates are absent as well.  The other rules derive only
+\(A_{\mathrm{rec}}\), \(A^{\mathrm{scan}}\), or \(A^{+}\), and no displayed rule
+derives any of them.  Therefore those four premises are absent from all three
+closures, so the corresponding four support coordinates are absent as well.  The
+other rules derive only
 auxiliary atoms, not elements of \(Q\).  Thus
 \[
-\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\{\qlex\},\qquad
+\operatorname{Cl}_{H}(A_{\mathrm{rec}})\cap Q=\varnothing,
+\quad
+\operatorname{Cl}_{H}(A^{\mathrm{scan}})\cap Q=\{\qlex\},
+\quad
 \operatorname{Cl}_{H}(A^{+})\cap Q=\{\qlex,\qrgs\}.
 \]
 
 This proves the finite coordinate calculation and records precisely where
-\(\qrgs\) enters: only through the additional
+\(\qlex\) and \(\qrgs\) enter: \(\qlex\) only through the explicit
+\(\ScanOK(B,I,J,D)\) premise, and \(\qrgs\) only through the additional
 \(\ScriptOKstageA\) premise.  The support and upgrade consequences of each
 coordinate are those in Table~\ref{tab:scope-register}.  No supplement
 obstruction or stress-test branch is used to derive the public coordinate
