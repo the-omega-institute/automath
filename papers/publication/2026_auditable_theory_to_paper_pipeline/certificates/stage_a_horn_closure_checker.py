@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 
-COORDINATES = ("qinv", "qrgs", "qsrc", "qart", "qext", "qven")
+COORDINATES = ("q_raw", "qrgs", "qsrc", "qart", "qext", "qven")
 
 
 class BranchBaseError(ValueError):
@@ -63,8 +63,8 @@ def load_printed_system() -> PrintedSystem:
     a_plus = a_scan | {"ScriptOKstage_a"}
     rules = (
         Rule("R0", ("pubAbs", "suppMain"), "singleRouteSurface"),
-        Rule("R1", ("mainTex", "invJson", "invMd", "finalDigest", "scanOK"), "qinv"),
-        Rule("R2", ("qinv",), "localInventoryClosed"),
+        Rule("R1", ("mainTex", "invJson", "invMd", "finalDigest", "scanOK"), "q_raw"),
+        Rule("R2", ("q_raw",), "localInventoryClosed"),
         Rule(
             "R3",
             (

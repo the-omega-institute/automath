@@ -23,11 +23,11 @@ class StageAHornClosureCheckerTests(unittest.TestCase):
         )
         self.assertEqual(
             closure_projection(self.system, "A_scan"),
-            ["qinv"],
+            ["q_raw"],
         )
         self.assertEqual(
             closure_projection(self.system, "A_plus"),
-            ["qinv", "qrgs"],
+            ["q_raw", "qrgs"],
         )
 
     def test_coordinate_atoms_are_rejected_from_base_inputs(self) -> None:
