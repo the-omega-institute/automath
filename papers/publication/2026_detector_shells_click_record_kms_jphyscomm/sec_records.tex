@@ -1533,10 +1533,17 @@ spectral density and the Fano factor across the parameter range.
 \end{figure}
 
 
-\subsection{Toeplitz principal-minor finite-inclusion formula for the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
+\subsection{Renewal principal-minor formula and boundary-reset Toeplitz specialization}\label{subsec:boundary-reset-dpp-record}
 
 The covariance and Fano formulas above are the second-cumulant shadow of a
-stronger finite-dimensional formula.  We use only the finite-inclusion convention:
+stronger finite-dimensional formula.  The determinant step is not special to
+the two-state sampled counter.  It is a renewal-process identity: once a
+stationary renewal click process has renewal masses
+\(u_n=\PP(A_n=1\mid A_0=1)\), its finite inclusion probabilities are principal
+minors of an explicit non-Hermitian Toeplitz matrix.  The sampled
+boundary-reset model enters only afterwards, by supplying the closed one-mode
+formula \(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\).  We use only the
+finite-inclusion convention:
 a point process \(\varXi\subset\mathbb Z\) is represented by a kernel \(K\) when
 \(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
 \(B\subset\mathbb Z\).  This convention is standard in the determinantal-process
@@ -1545,18 +1552,92 @@ literature, including discrete and Fredholm formulations
 recent \emph{J. Phys. A} work includes both spatial DPP examples and quantum
 sampling algorithms for determinantal/Pfaffian processes
 \cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}.  The
-increment here is narrower and record-specific: the kernel below is the exact
-Toeplitz principal-minor formula for the click set of this sampled
-boundary-reset renewal record.  The proof below is internal and does not import
-a Hermitian-kernel existence theorem.  The result is non-Hermitian and should
-be read as an exact finite-dimensional algebraic formula for this sampled
-renewal record.  In particular, the all-parameter statement is the Toeplitz
-finite-inclusion kernel for the sampled click set of this one HMM; the critical
-increment is the collapse of its strict-upper geometric transfer tail when
-\(\lambda_{\mathrm{hid}}=0\), not a classification theorem for determinantal
-processes.
+renewal lemma below is elementary and should not be read as a new DPP existence
+theorem.  The paper-specific increment is the specialization of this general
+renewal identity to the sampled boundary-reset HMM, where the strict-upper
+Toeplitz tail becomes the closed geometric transfer tail controlled by
+\(\lambda_{\mathrm{hid}}\) and collapses at the exact \(1\)-dependence rate.
 
-\begin{theorem}[Toeplitz principal-minor finite-inclusion formula]\label{thm:boundary_reset_toeplitz_dpp}
+\begin{lemma}[Stationary-renewal principal-minor finite-inclusion formula]\label{lem:renewal-principal-minor-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process whose
+click set is \(\varXi=\{n:A_n=1\}\).  Put
+\[
+\rho=\PP(A_0=1)>0,
+\qquad
+u_n=\PP(A_n=1\mid A_0=1),\quad n\ge1.
+\]
+Assume that click times are renewal times in the standard Palm sense: after
+conditioning on a click at a specified time, the future click process
+regenerates with renewal mass sequence \((u_n)_{n\ge1}\).  Define the Toeplitz
+finite-inclusion kernel
+\begin{equation}\label{eq:renewal-principal-minor-kernel-main}
+K_u(i,j)=
+\begin{cases}
+\rho, & j\le i,\\[0.4ex]
+\rho-u_{j-i}, & j>i .
+\end{cases}
+\end{equation}
+This is only a principal-minor identity for finite inclusion events.  In
+general \(K_u\) is non-Hermitian and no positive-contraction, negative-
+association, or fermionic DPP conclusion is asserted.  For every finite set
+\(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\), with the empty product interpreted as
+\(1\),
+\begin{equation}\label{eq:renewal-principal-minor-product-main}
+\PP(B\subset\varXi)
+=
+\det\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m
+=
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The renewal product formula comes first.  For
+\(B=\{i_1<\cdots<i_m\}\), stationarity gives
+\(\PP(A_{i_1}=1)=\rho\).  After conditioning on \(A_{i_r}=1\), the future
+regenerates, so the probability of a click at the next specified time
+\(i_{r+1}\), with any number of unspecified intervening clicks allowed, is the
+renewal mass \(u_{i_{r+1}-i_r}\).  Successive conditioning therefore gives
+\[
+\PP(B\subset\varXi)
+=
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\]
+
+It remains to identify this product as a determinant.  In the ordered basis
+\(i_1<\cdots<i_m\), write
+\[
+M=\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+U,
+\]
+where
+\[
+L_{rs}=\mathbf 1_{\{s\le r\}},
+\qquad
+U_{rs}=(\rho-u_{i_s-i_r})\mathbf 1_{\{s>r\}}.
+\]
+The lower triangular matrix \(L\) has determinant \(1\), and its inverse has
+entries \((L^{-1})_{rr}=1\), \((L^{-1})_{r,r-1}=-1\) for \(r\ge2\), and zero
+elsewhere.  Hence \(L^{-1}U\) is upper triangular.  Its first diagonal entry is
+\(0\), while for \(r\ge2\)
+\[
+(L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}
+=-(\rho-u_{i_r-i_{r-1}}).
+\]
+Therefore
+\[
+\det M
+=
+\rho^m\det\Bigl(I+\frac1\rho L^{-1}U\Bigr)
+=
+\rho^m\prod_{r=2}^m
+\frac{u_{i_r-i_{r-1}}}{\rho}
+=
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r},
+\]
+which proves the claimed principal-minor formula.
+\end{proof}
+
+\begin{corollary}[Boundary-reset Toeplitz principal-minor specialization]\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_dpp}
 Fix \(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\) in the stationary sampled
 one-recovery-opportunity boundary-reset model, and let
 \[
@@ -1577,7 +1658,7 @@ negative-association conclusion is used or implied. Put
 \]
 with the equal-rate value of $\lambda_{\mathrm{hid}}$ understood by continuous
 extension as in \eqref{eq:lambda-hid-main}. Throughout the displayed powers in
-this theorem, $\ell^0=1$, including when $\ell=0$.
+this corollary, $\ell^0=1$, including when $\ell=0$.
 For \(n\ge1\), write
 \[
 u_n=\PP(A_n=1\mid A_0=1).
@@ -1606,7 +1687,7 @@ with the empty product interpreted as \(1\),
 \rho\prod_{r=1}^{m-1}
 \Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr].
 \end{equation}
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 The positivity \(d>0\) is exactly \(a<\rho\) from
@@ -1627,66 +1708,19 @@ and taking the \(D\)-component gives
 \[
 u_n=\rho+\ell^{n-1}(a-\rho)=\rho-d\ell^{n-1}.
 \]
-
-We next prove the renewal inclusion formula.  If
-\(B=\{i_1<\cdots<i_m\}\), then stationarity gives
-\(\PP(A_{i_1}=1)=\rho\).  A click at any specified time resets the next interval
-to the same refractory hidden state, and Lemma~\ref{lem:renewal-gap-main}
-therefore gives regeneration at every specified click time, regardless of
-whether additional unspecified clicks occur between two specified times. Hence
-successive conditioning at \(i_1,i_2,\ldots,i_m\) yields
-\[
-\PP(B\subset\varXi)
-=
-\rho\prod_{r=1}^{m-1}\PP(A_{i_{r+1}}=1\mid A_{i_r}=1)
-=
-\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r},
-\]
-which is the right-hand product in
-\eqref{eq:boundary-reset-inclusion-product-main} after inserting
-\eqref{eq:dpp-u-n-main}.
-
-It remains to prove the determinant identity.  In the ordered basis
-\(i_1<\cdots<i_m\), write the finite matrix as
-\[
-M=\bigl[K_\Gamma(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+dU,
-\]
-where
-\[
-L_{rs}=\mathbf 1_{\{s\le r\}},
-\qquad
-U_{rs}=\ell^{i_s-i_r-1}\mathbf 1_{\{s>r\}}.
-\]
-The lower triangular matrix \(L\) has determinant \(1\), and its inverse has
-entries \((L^{-1})_{rr}=1\), \((L^{-1})_{r,r-1}=-1\) for \(r\ge2\), and zero
-elsewhere.  Thus \(L^{-1}U\) is upper triangular: its first diagonal entry is
-\(0\), while for \(r\ge2\)
-\[
-(L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}
-=-\ell^{i_r-i_{r-1}-1}.
-\]
-Therefore
-\[
-\det M
-=
-\rho^m\det\Bigl(I+\frac d\rho L^{-1}U\Bigr)
-=
-\rho^m\prod_{r=2}^m
-\Bigl[1-\frac d\rho\ell^{i_r-i_{r-1}-1}\Bigr].
-\]
-This equals
-\[
-\rho\prod_{r=1}^{m-1}\bigl[\rho-d\ell^{i_{r+1}-i_r-1}\bigr]
-=
-\rho\prod_{r=1}^{m-1}
-\Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr],
-\]
-which is the renewal inclusion formula.  Hence the Toeplitz principal-minor
-finite-inclusion formula holds for every finite \(B\).
+A click at any specified time resets the next interval to the same refractory
+hidden state, and Lemma~\ref{lem:renewal-gap-main} gives regeneration at every
+specified click time.  Thus the sampled boundary-reset click set satisfies the
+hypotheses of Lemma~\ref{lem:renewal-principal-minor-main}.  Substituting
+\(u_n=\rho-d\ell^{n-1}\) into \eqref{eq:renewal-principal-minor-kernel-main}
+gives \(K_\Gamma(i,j)=\rho\) for \(j\le i\) and
+\(K_\Gamma(i,j)=d\ell^{j-i-1}\) for \(j>i\).  The determinant and product
+formulas are then exactly \eqref{eq:renewal-principal-minor-product-main} with
+\eqref{eq:dpp-u-n-main} inserted.
 \end{proof}
 
 \begin{lemma}[Scope of the finite-inclusion representation]\label{lem:finite_inclusion_scope_main}
-The representation in Theorem~\ref{thm:boundary_reset_toeplitz_dpp} is only the
+The representation in \Cref{thm:boundary_reset_toeplitz_dpp} is only the
 finite-inclusion identity for the explicit Toeplitz kernel \(K_\Gamma\).  It
 does not assert a Hermitian positive-contraction kernel, and none of the
 standard consequences that require such a kernel--fermionic positivity,
@@ -1701,7 +1735,7 @@ K_\Gamma(i,i+1)=d=\rho-a,
 K_\Gamma(i+1,i)=\rho,
 \]
 and \(a>0\) for positive boundary-reset parameters.  Thus \(d\neq\rho\).  The
-proof of Theorem~\ref{thm:boundary_reset_toeplitz_dpp} uses only stationarity,
+proof of \Cref{thm:boundary_reset_toeplitz_dpp} uses only stationarity,
 renewal regeneration, and the resulting principal determinant identities for
 finite inclusion events.  It never proves self-adjointness, positivity, or a
 contraction bound for an operator on \(\ell^2(\mathbb Z)\).  Consequently the
@@ -1742,7 +1776,7 @@ gives
 =
 \sum_{S\subset I}(t-1)^{|S|}\PP(S\subset\varXi).
 \]
-By Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, each inclusion probability is
+By \Cref{thm:boundary_reset_toeplitz_dpp}, each inclusion probability is
 the corresponding principal determinant of \(K_\Gamma\).  The principal-minor
 expansion of \(\det(I_I+(t-1)K_{\Gamma,I})\) is the same sum, proving
 \eqref{eq:finite-window-fredholm-main}.  This is the finite-dimensional
@@ -1770,10 +1804,10 @@ Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
 \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
 \(\lambda_{\mathrm{hid}}=0\), with the convention
 \(\lambda_{\mathrm{hid}}^0=1\) inherited from
-Theorem~\ref{thm:boundary_reset_toeplitz_dpp}.  With
+\Cref{thm:boundary_reset_toeplitz_dpp}.  With
 \(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and
 \(d_c=\rho_c-a_c\), the Toeplitz kernel of
-Theorem~\ref{thm:boundary_reset_toeplitz_dpp} collapses to upper range one:
+\Cref{thm:boundary_reset_toeplitz_dpp} collapses to upper range one:
 \begin{equation}\label{eq:critical-toeplitz-range-one-main}
 K_c(i,j)=
 \begin{cases}
@@ -1792,7 +1826,7 @@ K_c^H(i,j)=
 \end{cases}
 \end{equation}
 Thus the memory threshold is exactly the zero of the upper transfer parameter
-of the all-parameter Toeplitz kernel.
+of the boundary-reset Toeplitz specialization.
 \end{corollary}
 
 \begin{proof}
@@ -1800,7 +1834,7 @@ Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_c\) as the unique positiv
 zero of \(\lambda_{\mathrm{hid}}\), and the range-one form of \(K_c\) follows by
 substituting \(\ell=0\) into
 \eqref{eq:boundary-reset-toeplitz-kernel-main}.  In the inclusion formula of
-Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, a gap of length one contributes
+\Cref{thm:boundary_reset_toeplitz_dpp}, a gap of length one contributes
 \(u_1=a_c\), while any gap of length at least two contributes \(u_n=\rho_c\).
 Consequently a contiguous cluster of \(m\) specified clicks has inclusion
 probability \(\rho_c a_c^{m-1}\), and separated contiguous clusters multiply.
@@ -1842,7 +1876,7 @@ all finite binary words is Corollary~\ref{cor:word-support-main}.  Exact
 \(1\)-dependence at \(\Gamma_c\) is the critical case of
 Theorem~\ref{thm:recovery-main}, equivalently the block factorization in
 Corollary~\ref{cor:critical_dpp_memory_phase}.  The two finite-inclusion kernels
-are supplied by Theorem~\ref{thm:boundary_reset_toeplitz_dpp} and
+are supplied by \Cref{thm:boundary_reset_toeplitz_dpp} and
 Corollary~\ref{cor:critical_dpp_memory_phase}.  Lemma~\ref{lem:survival-hazard-main}
 shows that the zero-run hazard is strictly increasing for all positive
 parameters, including \(\Gamma_c\), and Lemma~\ref{lem:hazard-obstruction-main}
@@ -1869,7 +1903,7 @@ introduced here.
 
 \begin{proof}
 Equation~\eqref{eq:dpp-upper-transfer-tail-main} is the strict-upper part of the
-kernel in Theorem~\ref{thm:boundary_reset_toeplitz_dpp}.  Lemma~\ref{lem:stationary-main}
+kernel in \Cref{thm:boundary_reset_toeplitz_dpp}.  Lemma~\ref{lem:stationary-main}
 gives \(|\lambda_{\mathrm{hid}}|<1\), so if \(\lambda_{\mathrm{hid}}\neq0\) the
 strict-upper entries form a single geometric tail controlled by that transfer
 parameter.  Lemma~\ref{lem:critical-rate-main} says that
@@ -1880,7 +1914,7 @@ is used in this transfer-tail statement.
 \end{proof}
 
 For compatibility with the critical-only terminology used in earlier discussion,
-Theorem~\ref{thm:boundary_reset_toeplitz_dpp} specializes at \(\Gamma_c\) to the
+\Cref{thm:boundary_reset_toeplitz_dpp} specializes at \(\Gamma_c\) to the
 critical finite-inclusion representation, Corollary~\ref{cor:finite_window_fredholm_word_law}
 specializes to the critical finite-window Fredholm identity, and
 Corollary~\ref{cor:critical_dpp_nonmarkov_fullsupport} is the critical
@@ -2073,7 +2107,7 @@ rate pair \(\{\Gamma_c,\kappa_{\mathrm r}\}\).
 
 \begin{proof}
 By \Cref{lem:one-dep-criterion-main}, exact \(1\)-dependence occurs exactly
-when \(\lambda_{\mathrm{hid}}=0\).  The inverse theorem identifies the visible
+when \(\lambda_{\mathrm{hid}}=0\).  \Cref{thm:toeplitz_image_inverse_duality} identifies the visible
 \(\lambda\) with \(\lambda_{\mathrm{hid}}\), so the condition is label-free.
 For \(p\ne c\), the first formula in
 \eqref{eq:symmetric-forward-coordinates-main} gives
