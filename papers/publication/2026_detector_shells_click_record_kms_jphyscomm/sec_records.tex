@@ -1,4 +1,4 @@
-\section{Classical sampled-HMM record laws before UDW-rate calibration}\label{sec:records}
+\section{Classical sampled-HMM record laws before conditional UDW-rate calibration}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
 We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
@@ -335,13 +335,13 @@ sampled repeated-interaction rule above. What remains conditional is the
 identification of the intensity $\Gamma$ with the stationary UDW response rate
 supplied by the field-facing detector calculation.
 
-\paragraph{UDW-rate calibration convention.}
+\paragraph{Conditional UDW-rate calibration convention.}
 The paper-level object introduced in the abstract and \Cref{sec:operational} is
-the \emph{UDW-rate-calibrated sampled counter}. Concretely, this means the
-sampled interval instrument of \Cref{prop:instrument-kernels-main} together
-with one later calibration step
+the \emph{classical sampled counter with conditional UDW-rate calibration}.
+Concretely, this means the sampled interval instrument of
+\Cref{prop:instrument-kernels-main} together with one later calibration step
 \[
-\Gamma=\Gamma_+(x,\Omega).
+\Gamma=R_\Omega(x)=\Gamma_+(x,\Omega).
 \]
 Section~\ref{sec:kms-shells} packages the response-side use of this convention
 in Model~A (\Cref{ass:udw-rate-calibration-main}). That assumption is the only
@@ -351,7 +351,15 @@ with internal attempt rate
 $\Gamma$, and no theorem in this section claims that general UDW measurement
 theory derives this sampled instrument or its Poisson attempt structure.
 
-The construction remains an effective measurement model in the same broad spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a first-principles AQFT derivation of detector back-action or a general solution to the locality constraints emphasized in the measurement literature \cite{Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022}. Its purpose is narrower and sufficient for the theorem chain here: it fixes the binary kernels at the classical readout layer and isolates the single closure step where the stationary UDW response is converted into the attempt intensity driving the sampled record.
+The construction remains an effective sampled-counter model in the same broad
+spirit as dead-time counter theory \cite{Muller1973,CantorTeich1975}, not a
+first-principles AQFT derivation of detector back-action or a general solution
+to the locality constraints emphasized in the measurement literature
+\cite{Sorkin1993,FewsterVerch2020,Fewster2020,PoloGomezEtAl2022}. Its purpose
+is narrower and sufficient for the theorem chain here: it fixes the binary
+kernels at the classical readout layer and isolates the single closure step
+where a supplied stationary UDW response profile is conditionally used as the
+attempt intensity driving the sampled record.
 
 All record-level conclusions below are therefore conditional only in this
 controlled sense. Once Model~A is invoked in the response sections, the later
@@ -1505,35 +1513,39 @@ spectral density and the Fano factor across the parameter range.
 \end{figure}
 
 
-\subsection{Finite-inclusion determinantal law of the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
+\subsection{Toeplitz principal-minor finite-inclusion formula for the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
 
 The covariance and Fano formulas above are the second-cumulant shadow of a
-stronger finite-dimensional law.  We use only the finite-inclusion convention:
+stronger finite-dimensional formula.  We use only the finite-inclusion convention:
 a point process \(\varXi\subset\mathbb Z\) is represented by a kernel \(K\) when
 \(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
 \(B\subset\mathbb Z\).  This convention is standard in the determinantal-process
-literature \cite{Macchi1975,Soshnikov2000,HoughKrishnapurPeresVirag2009}, and
+literature, including discrete and Fredholm formulations
+\cite{Macchi1975,ShiraiTakahashi2003,Lyons2003,Borodin2009DPP,Soshnikov2000,HoughKrishnapurPeresVirag2009}, and
 recent \emph{J. Phys. A} work includes both spatial DPP examples and quantum
 sampling algorithms for determinantal/Pfaffian processes
 \cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}.  The
 increment here is narrower and record-specific: the kernel below is the exact
-finite-inclusion kernel for the click set of this sampled boundary-reset renewal
-record.  Thus
-the proof below is internal and does not import a Hermitian-kernel existence
-theorem.  The result is non-Hermitian and should be read as an exact
-finite-dimensional formula for this sampled renewal record.  In particular, the
-all-parameter statement is the Toeplitz finite-inclusion kernel for the sampled
-click set of this one HMM; the critical increment is the collapse of its
-strict-upper geometric transfer tail when \(\lambda_{\mathrm{hid}}=0\), not a
-classification theorem for determinantal processes.
+Toeplitz principal-minor formula for the click set of this sampled
+boundary-reset renewal record.  The proof below is internal and does not import
+a Hermitian-kernel existence theorem.  The result is non-Hermitian and should
+be read as an exact finite-dimensional algebraic formula for this sampled
+renewal record.  In particular, the all-parameter statement is the Toeplitz
+finite-inclusion kernel for the sampled click set of this one HMM; the critical
+increment is the collapse of its strict-upper geometric transfer tail when
+\(\lambda_{\mathrm{hid}}=0\), not a classification theorem for determinantal
+processes.
 
-\begin{theorem}[Boundary-reset finite-inclusion determinantal representation]\label{thm:boundary_reset_toeplitz_dpp}
+\begin{theorem}[Toeplitz principal-minor finite-inclusion formula]\label{thm:boundary_reset_toeplitz_dpp}
 Fix \(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\) in the stationary sampled
 one-recovery-opportunity boundary-reset model, and let
 \[
 \varXi=\{n\in\mathbb Z:A_n=1\}
 \]
-be the click set.  Put
+be the click set. The formula below is a non-Hermitian Toeplitz
+principal-minor identity only. It does not assert that \(K_\Gamma\) is
+self-adjoint, positive, a contraction, or the kernel of a fermionic DPP, and no
+negative-association conclusion is used or implied. Put
 \[
 \rho=\PP(A_0=1),
 \qquad
@@ -1555,7 +1567,8 @@ Then \(d>0\),
 u_n=\rho+(a-\rho)\ell^{n-1}=\rho-d\ell^{n-1},
 \qquad n\ge1,
 \end{equation}
-and \(\varXi\) has the non-Hermitian Toeplitz finite-inclusion kernel
+and \(\varXi\) satisfies the non-Hermitian Toeplitz principal-minor
+finite-inclusion formula
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
@@ -1563,10 +1576,6 @@ K_\Gamma(i,j)=
 d\ell^{j-i-1}, & j>i .
 \end{cases}
 \end{equation}
-This is only a finite-inclusion determinantal representation for the sampled
-click set. It carries none of the Hermitian positive-contraction,
-negative-association, or fermionic-positivity conclusions associated with
-Hermitian DPP kernels.
 Equivalently, for every finite set \(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\),
 with the empty product interpreted as \(1\),
 \begin{equation}\label{eq:boundary-reset-inclusion-product-main}
@@ -1652,8 +1661,8 @@ This equals
 \rho\prod_{r=1}^{m-1}
 \Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr],
 \]
-which is the renewal inclusion formula.  Hence the finite-inclusion
-determinantal law holds for every finite \(B\).
+which is the renewal inclusion formula.  Hence the Toeplitz principal-minor
+finite-inclusion formula holds for every finite \(B\).
 \end{proof}
 
 \begin{lemma}[Scope of the finite-inclusion representation]\label{lem:finite_inclusion_scope_main}
@@ -1680,7 +1689,7 @@ Hermitian positive-contraction consequences familiar from fermionic
 determinantal processes are outside the scope of the theorem.
 \end{proof}
 
-\begin{corollary}[Finite-window Fredholm and word law]\label{cor:finite_window_fredholm_word_law}
+\begin{corollary}[Finite-window count and word laws from principal minors]\label{cor:finite_window_fredholm_word_law}
 For every finite set \(I\subset\mathbb Z\), let \(N_I=|\varXi\cap I|\), and let
 \(K_{\Gamma,I}\) be the restriction of \(K_\Gamma\) to \(I\times I\).  Then
 \begin{equation}\label{eq:finite-window-fredholm-main}
@@ -1716,11 +1725,14 @@ gives
 By Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, each inclusion probability is
 the corresponding principal determinant of \(K_\Gamma\).  The principal-minor
 expansion of \(\det(I_I+(t-1)K_{\Gamma,I})\) is the same sum, proving
-\eqref{eq:finite-window-fredholm-main}.  This identity shows in particular
-that the covariance and Fano formulas of Proposition~\ref{prop:spectrum-main}
-are the second-cumulant specialization of the full finite-window Fredholm law,
-even though the direct covariance proof remains the simplest physical
-diagnostic.
+\eqref{eq:finite-window-fredholm-main}.  This is the finite-dimensional
+principal-minor determinant identity sometimes called the finite-window
+Fredholm form in the DPP literature. Here it is used only as a count
+generating-function formula for the non-Hermitian Toeplitz matrix restricted
+to \(I\). This identity shows in particular that the covariance and Fano
+formulas of Proposition~\ref{prop:spectrum-main} are the second-cumulant
+specialization of the full finite-window count law, even though the direct
+covariance proof remains the simplest physical diagnostic.
 
 For the word law, start from the event \(S\subset\varXi\) and exclude all
 clicks on \(T\).  Inclusion--exclusion gives
@@ -1795,10 +1807,10 @@ determinants, matching the exact \(1\)-dependent block factorization above.
 Thus \(K_c^H\) gives the same finite-inclusion law as \(K_c\).
 \end{proof}
 
-\begin{corollary}[Critical full-support non-Markov representation package]\label{cor:critical_dpp_nonmarkov_fullsupport}
+\begin{corollary}[Critical full-support non-Markov principal-minor package]\label{cor:critical_dpp_nonmarkov_fullsupport}
 At \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), the sampled boundary-reset
 record is simultaneously a full-support renewal process, exact \(1\)-dependent,
-determinantal with the two explicit kernels \(K_c\) and \(K_c^H\) in
+represented by the two explicit finite-inclusion kernels \(K_c\) and \(K_c^H\) in
 \eqref{eq:critical-toeplitz-range-one-main}--\eqref{eq:critical-hessenberg-kernel-main},
 strictly non-Markov of every finite visible order by its strictly increasing
 zero-run hazard, and neither Bernoulli nor the Parry golden-mean law.
@@ -1809,7 +1821,7 @@ The renewal property is Lemma~\ref{lem:renewal-gap-main}, and full support of
 all finite binary words is Corollary~\ref{cor:word-support-main}.  Exact
 \(1\)-dependence at \(\Gamma_c\) is the critical case of
 Theorem~\ref{thm:recovery-main}, equivalently the block factorization in
-Corollary~\ref{cor:critical_dpp_memory_phase}.  The two determinantal kernels
+Corollary~\ref{cor:critical_dpp_memory_phase}.  The two finite-inclusion kernels
 are supplied by Theorem~\ref{thm:boundary_reset_toeplitz_dpp} and
 Corollary~\ref{cor:critical_dpp_memory_phase}.  Lemma~\ref{lem:survival-hazard-main}
 shows that the zero-run hazard is strictly increasing for all positive
@@ -1852,7 +1864,7 @@ Theorem~\ref{thm:boundary_reset_toeplitz_dpp} specializes at \(\Gamma_c\) to the
 critical finite-inclusion representation, Corollary~\ref{cor:finite_window_fredholm_word_law}
 specializes to the critical finite-window Fredholm identity, and
 Corollary~\ref{cor:critical_dpp_nonmarkov_fullsupport} is the critical
-non-Markov finite-inclusion representation package.
+non-Markov principal-minor representation package.
 
 
 \subsection{Exact inverse and rate-duality of the sampled record}\label{subsec:exact-inverse-rate-duality}
@@ -2018,9 +2030,9 @@ Stationarity and positivity give \(r_0=\rho>0\).  By definition,
 \(r_2=\PP(A_0=1)\PP(A_2=1\mid A_0=1)=r_0u_2\).  Therefore the displayed
 formulas recover \(a\), \(u_2\), and \(\lambda\).  Theorem~\ref{thm:toeplitz_image_inverse_duality}
 then recovers the unordered survival factors and rates.  Substituting those
-coordinates into the Toeplitz DPP kernel and finite-window Fredholm formulas
-gives all finite inclusion, count, and word probabilities, so no further
-visible coordinate is needed on the quotient family.
+coordinates into the Toeplitz principal-minor kernel and finite-window count
+formula gives all finite inclusion, count, and word probabilities, so no
+further visible coordinate is needed on the quotient family.
 \end{proof}
 
 \begin{corollary}[Critical self-dual inverse]\label{cor:critical_self_dual_inverse}
