@@ -1469,196 +1469,311 @@ spectral density and the Fano factor across the parameter range.
 \label{fig:spectrum-fano}
 \end{figure}
 
-\subsection{Critical determinantal structure of the memory-transition record}\label{subsec:critical-dpp-record}
 
-The exact $1$-dependence at the memory transition is stronger than a
-covariance cancellation. At that single rate the full click set has an explicit
-finite-dimensional determinantal law. This is the special Toeplitz-Hessenberg
-instance of the one-dependent determinantal phenomenon of
-Borodin--Diaconis--Fulman \cite{BorodinDiaconisFulman2010}, but the proof below
-is direct and uses only the renewal and kernel-factorization facts already
-proved for the sampled boundary-reset record.
+\subsection{Determinantal finite-dimensional law of the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
 
-\begin{theorem}[Critical determinantal record law]\label{thm:critical_dpp_record}
-Fix $\kappa_{\mathrm r},\Delta\tau>0$ and put
-$\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Let
+The covariance and Fano formulas above are the second-cumulant shadow of a
+stronger finite-dimensional law.  For determinantal point processes we use only
+the finite-inclusion convention: a point process \(\varXi\subset\mathbb Z\) has
+kernel \(K\) if \(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
+\(B\subset\mathbb Z\).  This convention is standard in the determinantal-process
+literature \cite{Macchi1975,Soshnikov2000,HoughKrishnapurPeresVirag2009}; the
+proof below is internal and does not import an existence theorem.  The result is
+non-Hermitian and should be read as an exact finite-dimensional formula for this
+sampled renewal record, not as a general fermionic positivity or negative-association
+statement.
+
+\begin{theorem}[Boundary-reset Toeplitz determinantal renewal law]\label{thm:boundary_reset_toeplitz_dpp}
+Fix \(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\) in the stationary sampled
+one-recovery-opportunity boundary-reset model, and let
 \[
 \varXi=\{n\in\mathbb Z:A_n=1\}
 \]
-be the stationary click set, and define
+be the click set.  Put
 \[
-\rho_c=\PP(A_0=1),\qquad
-a_c=\PP(A_1=1\mid A_0=1),\qquad
-d_c=\rho_c-a_c .
+\rho=\PP(A_0=1),
+\qquad
+ a=\PP(A_1=1\mid A_0=1),
+\qquad
+ d=\rho-a,
+\qquad
+ \lambda=\lambda_{\mathrm{hid}},
 \]
-Then $d_c>0$, and $\varXi$ is a translation-invariant determinantal point process
-in the following finite-inclusion sense: for every finite
-$B=\{i_1<\cdots<i_m\}\subset\mathbb Z$,
+and, for \(n\ge1\),
 \[
+u_n=\PP(A_n=1\mid A_0=1).
+\]
+Then \(d>0\),
+\begin{equation}\label{eq:dpp-u-n-main}
+u_n=\rho+(a-\rho)\lambda^{n-1}=\rho-d\lambda^{n-1},
+\qquad n\ge1,
+\end{equation}
+and \(\varXi\) is a translation-invariant determinantal point process in the
+finite-inclusion sense with non-Hermitian Toeplitz kernel
+\begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
+K_\Gamma(i,j)=
+\begin{cases}
+\rho, & j\le i,\\[0.4ex]
+d\lambda^{j-i-1}, & j>i .
+\end{cases}
+\end{equation}
+Equivalently, for every finite set \(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\),
+with the empty product interpreted as \(1\),
+\begin{equation}\label{eq:boundary-reset-inclusion-product-main}
 \PP(B\subset\varXi)
 =
-\det\bigl[K_c(i_r,i_s)\bigr]_{r,s=1}^m,
-\]
-where
-\[
-K_c(i,j)=
-\begin{cases}
--1, & j=i-1,\\
-\rho_c(-d_c)^{j-i}, & j\ge i,\\
-0, & j\le i-2 .
-\end{cases}
-\]
+\det\bigl[K_\Gamma(i_r,i_s)\bigr]_{r,s=1}^m
+=
+\rho\prod_{r=1}^{m-1}
+\Bigl[\rho+(a-\rho)\lambda^{i_{r+1}-i_r-1}\Bigr].
+\end{equation}
 \end{theorem}
 
 \begin{proof}
-At the critical rate the process is stationary by
-\Cref{lem:stationary-main} and exact $1$-dependent by
-\Cref{lem:kernel-factorization-main}. The deterministic post-click reset in
-\Cref{lem:renewal-gap-main} also implies that, conditional on a click at time
-$r$, the hidden state at the beginning of the next interval is $D$. Hence the
-probability of another click in the next interval is the single number
-$a_c$. Iterating over consecutive clicks gives, for every $\ell\ge1$,
-\begin{equation}\label{eq:critical-run-prob-main}
-\PP(A_r=A_{r+1}=\cdots=A_{r+\ell-1}=1)
-=\rho_c a_c^{\ell-1}.
-\end{equation}
-Indeed the first click has probability $\rho_c$, and after each of the first
-$\ell-1$ clicks the next interval starts from the same reset state $D$.
-Moreover $a_c<\rho_c$ by \Cref{lem:stationary-main}, so $d_c=\rho_c-a_c>0$.
-
-We next prove the determinant identity for one contiguous cluster
-$B=\{r,r+1,\dots,r+n-1\}$. By translation invariance the determinant does not
-depend on $r$; write it as $D_n$, and put $D_0=1$. In the ordered cluster
-basis, the $n\times n$ matrix has diagonal entries $\rho_c$, first subdiagonal
-entries $-1$, zero entries below the first subdiagonal, and upper entries
-$\rho_c(-d_c)^{s-r}$ at distance $s-r\ge0$. Expanding the determinant along the
-first row gives, for $n\ge1$,
-\begin{equation}\label{eq:dpp-hessenberg-rec-main}
-D_n=\sum_{m=0}^{n-1}\rho_c(-d_c)^m D_{n-1-m}.
-\end{equation}
-For the term using the column $m+1$, the intervening first-subdiagonal entries
-contribute $(-1)^m$, while the cofactor sign contributes $(-1)^m$, so their
-product is $1$; the remaining lower-right block is the same Hessenberg matrix
-of size $n-1-m$.
-
-Let $F(z)=\sum_{n\ge0}D_nz^n$. Multiplying
-\eqref{eq:dpp-hessenberg-rec-main} by $z^n$ and summing over $n\ge1$ gives
+The positivity \(d>0\) is exactly \(a<\rho\) from
+Lemma~\ref{lem:stationary-main}.  The identity for \(u_n\) is the one-mode
+conditional click computation used in Lemma~\ref{lem:covariance-transfer-main}.
+Indeed, conditioning on \(A_0=1\) fixes the hidden state at the start of the
+next interval to be refractory, so for \(n\ge1\)
 \[
-F(z)-1
+u_n=e_D^\top P^{n-1}\nu,
+\qquad
+\nu=\binom{q}{a}.
+\]
+In the notation of that lemma,
+\[
+P^{n-1}\nu=\rho\mathbf 1+\lambda^{n-1}(\nu-\rho\mathbf 1),
+\]
+and taking the \(D\)-component gives
+\[
+u_n=\rho+\lambda^{n-1}(a-\rho)=\rho-d\lambda^{n-1}.
+\]
+
+We next prove the renewal inclusion formula.  If
+\(B=\{i_1<\cdots<i_m\}\), then stationarity gives
+\(\PP(A_{i_1}=1)=\rho\).  A click at any specified time resets the next interval
+to the same refractory hidden state, and Lemma~\ref{lem:renewal-gap-main}
+therefore gives regeneration at every specified click time, regardless of
+whether additional unspecified clicks occur between two specified times. Hence
+successive conditioning at \(i_1,i_2,\ldots,i_m\) yields
+\[
+\PP(B\subset\varXi)
 =
-\rho_c z F(z)\sum_{m\ge0}(-d_c z)^m
+\rho\prod_{r=1}^{m-1}\PP(A_{i_{r+1}}=1\mid A_{i_r}=1)
 =
-\frac{\rho_c z}{1+d_c z}F(z).
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r},
+\]
+which is the right-hand product in
+\eqref{eq:boundary-reset-inclusion-product-main} after inserting
+\eqref{eq:dpp-u-n-main}.
+
+It remains to prove the determinant identity.  In the ordered basis
+\(i_1<\cdots<i_m\), write the finite matrix as
+\[
+M=\bigl[K_\Gamma(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+dU,
+\]
+where
+\[
+L_{rs}=\mathbf 1_{\{s\le r\}},
+\qquad
+U_{rs}=\lambda^{i_s-i_r-1}\mathbf 1_{\{s>r\}}.
+\]
+The lower triangular matrix \(L\) has determinant \(1\), and its inverse has
+entries \((L^{-1})_{rr}=1\), \((L^{-1})_{r,r-1}=-1\) for \(r\ge2\), and zero
+elsewhere.  Thus \(L^{-1}U\) is upper triangular: its first diagonal entry is
+\(0\), while for \(r\ge2\)
+\[
+(L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}
+=-\lambda^{i_r-i_{r-1}-1}.
 \]
 Therefore
 \[
-F(z)=\frac{1+d_c z}{1+(d_c-\rho_c)z}
-=\frac{1+d_c z}{1-a_c z}.
+\det M
+=
+\rho^m\det\Bigl(I+\frac d\rho L^{-1}U\Bigr)
+=
+\rho^m\prod_{r=2}^m
+\Bigl[1-\frac d\rho\lambda^{i_r-i_{r-1}-1}\Bigr].
 \]
-It follows that $D_1=\rho_c$ and, for $n\ge2$,
+This equals
 \[
-D_n=a_c^n+d_c a_c^{n-1}
-=(a_c+d_c)a_c^{n-1}
-=\rho_c a_c^{n-1}.
+\rho\prod_{r=1}^{m-1}\bigl[\rho-d\lambda^{i_{r+1}-i_r-1}\bigr]
+=
+\rho\prod_{r=1}^{m-1}
+\Bigl[\rho+(a-\rho)\lambda^{i_{r+1}-i_r-1}\Bigr],
 \]
-Together with the case $n=1$, this matches the contiguous-run probability
-\eqref{eq:critical-run-prob-main}.
-
-It remains to treat an arbitrary finite set
-$B=\{i_1<\cdots<i_m\}$. Decompose $B$ uniquely into maximal contiguous
-clusters
-\[
-B=C_1\cup\cdots\cup C_L,
-\]
-where successive clusters are separated by a gap of at least two, so if
-$C_\alpha$ ends at $u$ and $C_{\alpha+1}$ begins at $v$, then $v-u\ge2$. Exact
-$1$-dependence gives factorization of the inclusion event over these clusters:
-the event on one cluster and the event on the next are separated by at least
-one unobserved sample, and \Cref{lem:kernel-factorization-main} applies
-iteratively. Thus
-\[
-\PP(B\subset\varXi)=\prod_{\alpha=1}^L\PP(C_\alpha\subset\varXi).
-\]
-
-The determinant has the same factorization. In the ordering
-$i_1<\cdots<i_m$, if $i_r$ belongs to a later cluster than $i_s$, then
-$i_s\le i_r-2$ and hence $K_c(i_r,i_s)=0$. Therefore the matrix
-$[K_c(i_r,i_s)]$ is block upper triangular with diagonal blocks given by the
-contiguous-cluster matrices already evaluated. Hence its determinant is the
-product of the cluster determinants. Comparing with the preceding probability
-factorization and the one-cluster identity proves the theorem for all finite
-$B$.
+which is the renewal inclusion formula.  Hence the finite-inclusion
+determinantal law holds for every finite \(B\).
 \end{proof}
 
-The physical reading is that the detector-selected memory transition is a
-fermion-like repulsive point process at the level of the sampled click set. The
-repulsion is exact in all finite inclusion probabilities through the kernel
-$K_c$, not merely visible in the sign of
-$\operatorname{Cov}(A_0,A_1)$.
-
-\begin{corollary}[Critical finite-window Fredholm identity]\label{cor:critical_window_fredholm}
-At $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, let
-$I\subset\mathbb Z$ be a finite interval and let
-$N_I=|\varXi\cap I|$. Then
-\[
+\begin{corollary}[Finite-window Fredholm and word law]\label{cor:finite_window_fredholm_word_law}
+For every finite set \(I\subset\mathbb Z\), let \(N_I=|\varXi\cap I|\), and let
+\(K_{\Gamma,I}\) be the restriction of \(K_\Gamma\) to \(I\times I\).  Then
+\begin{equation}\label{eq:finite-window-fredholm-main}
 \EE[t^{N_I}]
 =
-\det\bigl(I_I+(t-1)K_{c,I}\bigr),
-\]
-where $K_{c,I}$ is the restriction of $K_c$ to $I\times I$ and $I_I$ is the
-identity matrix on $\ell^2(I)$.
+\det\bigl(I_I+(t-1)K_{\Gamma,I}\bigr).
+\end{equation}
+Moreover, for disjoint finite sets \(S,T\subset\mathbb Z\), the probability of
+a finite binary word with prescribed ones on \(S\) and prescribed zeros on \(T\)
+is
+\begin{equation}\label{eq:finite-word-inclusion-exclusion-main}
+\PP(A_i=1\ \forall i\in S,
+\ A_j=0\ \forall j\in T)
+=
+\sum_{C\subset T}(-1)^{|C|}
+\det K_{\Gamma,S\cup C},
+\end{equation}
+where \(\det K_{\Gamma,S\cup C}\) means the principal determinant indexed by
+\(S\cup C\), ordered increasingly, and the empty determinant is \(1\).
 \end{corollary}
 
 \begin{proof}
-For a finite set $S\subset I$, expand the product
+The product expansion
 \[
 t^{N_I}=\prod_{i\in I}\bigl(1+(t-1)\mathbf 1_{\{i\in\varXi\}}\bigr)
 \]
-and take expectations:
+gives
 \[
 \EE[t^{N_I}]
 =
 \sum_{S\subset I}(t-1)^{|S|}\PP(S\subset\varXi).
 \]
-By \Cref{thm:critical_dpp_record}, the inclusion probability is
-$\det[K_c(i,j)]_{i,j\in S}$. The principal-minor expansion of a finite
-determinant gives
-\[
-\det(I_I+(t-1)K_{c,I})
-=
-\sum_{S\subset I}(t-1)^{|S|}
-\det[K_c(i,j)]_{i,j\in S},
-\]
-which is the same expression. Thus the identity holds for every finite
-interval $I$.
+By Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, each inclusion probability is
+the corresponding principal determinant of \(K_\Gamma\).  The principal-minor
+expansion of \(\det(I_I+(t-1)K_{\Gamma,I})\) is the same sum, proving
+\eqref{eq:finite-window-fredholm-main}.  This identity shows in particular
+that the covariance and Fano formulas of Proposition~\ref{prop:spectrum-main}
+are the second-cumulant specialization of the full finite-window Fredholm law,
+even though the direct covariance proof remains the simplest physical
+diagnostic.
 
-Consequently the critical finite-window count distribution, and all its
-cumulants, are determined by the restricted kernel $K_{c,I}$. The
-sub-Poisson/Fano statement in \Cref{prop:spectrum-main} is recovered at
-$\Gamma=\Gamma_c$ as the second-cumulant specialization of this finite-window
-identity, while the elementary covariance proof there remains valid for the
-whole parameter range and is not replaced by the critical determinantal
-argument.
+For the word law, start from the event \(S\subset\varXi\) and exclude all
+clicks on \(T\).  Inclusion--exclusion gives
+\[
+\mathbf 1_{\{S\subset\varXi,\ T\cap\varXi=\varnothing\}}
+=
+\sum_{C\subset T}(-1)^{|C|}\mathbf 1_{\{S\cup C\subset\varXi\}}.
+\]
+Taking expectations and applying the finite-inclusion determinant formula gives
+\eqref{eq:finite-word-inclusion-exclusion-main}.
 \end{proof}
 
-\begin{corollary}[Critical non-Markov determinantal renewal package]\label{cor:critical_dpp_nonmarkov}
-At $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, the sampled
-boundary-reset record is simultaneously a full-support renewal process, exact
-$1$-dependent, an explicit translation-invariant determinantal point process
-with kernel $K_c$, and not an $r$-step Markov chain for any finite visible
-order $r$.
+\begin{corollary}[Critical DPP memory phase]\label{cor:critical_dpp_memory_phase}
+Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
+\(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
+\(\lambda_{\mathrm{hid}}=0\).  With
+\(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and
+\(d_c=\rho_c-a_c\), the Toeplitz kernel of
+Theorem~\ref{thm:boundary_reset_toeplitz_dpp} collapses to upper range one:
+\begin{equation}\label{eq:critical-toeplitz-range-one-main}
+K_c(i,j)=
+\begin{cases}
+\rho_c, & j\le i,\\[0.4ex]
+d_c, & j=i+1,\\[0.4ex]
+0, & j\ge i+2.
+\end{cases}
+\end{equation}
+The same critical law is also represented by the one-dependent Hessenberg kernel
+\begin{equation}\label{eq:critical-hessenberg-kernel-main}
+K_c^H(i,j)=
+\begin{cases}
+-1, & j=i-1,\\[0.4ex]
+\rho_c(-d_c)^{j-i}, & j\ge i,\\[0.4ex]
+0, & j\le i-2.
+\end{cases}
+\end{equation}
+Thus the memory threshold is exactly the zero of the upper transfer parameter
+of the all-parameter Toeplitz kernel.
 \end{corollary}
 
 \begin{proof}
-The full-support renewal property is \Cref{lem:renewal-gap-main} together with
-\Cref{cor:word-support-main}. Exact $1$-dependence at the critical rate is
-\Cref{lem:kernel-factorization-main}, equivalently the critical case of
-\Cref{thm:recovery-main}. The determinantal structure is
-\Cref{thm:critical_dpp_record}. Finally, \Cref{lem:survival-hazard-main} proves
-that the renewal hazard is strictly increasing at all positive parameters,
-including $\Gamma=\Gamma_c$, and \Cref{lem:hazard-obstruction-main} shows that
-such a full-support renewal law cannot be Markov of any finite visible order.
+Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_c\) as the unique positive
+zero of \(\lambda_{\mathrm{hid}}\), and the range-one form of \(K_c\) follows by
+substituting \(\lambda=0\) into
+\eqref{eq:boundary-reset-toeplitz-kernel-main}.  In the inclusion formula of
+Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, a gap of length one contributes
+\(u_1=a_c\), while any gap of length at least two contributes \(u_n=\rho_c\).
+Consequently a contiguous cluster of \(m\) specified clicks has inclusion
+probability \(\rho_c a_c^{m-1}\), and separated contiguous clusters multiply.
+This is the exact \(1\)-dependence factorization.
+
+It remains to verify the alternative Hessenberg determinant.  For a contiguous
+cluster \(C=\{i,i+1,\ldots,i+m-1\}\), the matrix
+\([K_c^H(r,s)]_{r,s\in C}\) has diagonal \(\rho_c\), subdiagonal \(-1\), and
+upper entries \(\rho_c(-d_c)^{s-r}\).  Starting at the first row and moving
+downward to row \(m-1\), replace row \(r\) by row \(r+d_c\,r_{r+1}\), where
+\(r_{r+1}\) denotes the next row before it has been altered.  These determinant-preserving
+row operations cancel all entries strictly above the diagonal in rows
+\(1,\ldots,m-1\) and change their diagonal entries from \(\rho_c\) to
+\(\rho_c-d_c=a_c\).  The last row keeps diagonal entry \(\rho_c\).  The resulting
+lower bidiagonal matrix has determinant \(\rho_c a_c^{m-1}\), exactly the
+contiguous-cluster inclusion probability.
+
+For a general finite \(B\), decompose \(B\) into maximal contiguous clusters.
+If a later cluster is indexed by a row and an earlier cluster by a column, then
+\(j\le i-2\) and \(K_c^H(i,j)=0\).  Therefore the matrix indexed by \(B\) is
+block upper triangular, with diagonal blocks equal to the contiguous-cluster
+matrices just evaluated.  Its determinant is the product of the cluster
+determinants, matching the exact \(1\)-dependent block factorization above.
+Thus \(K_c^H\) gives the same finite-inclusion law as \(K_c\).
 \end{proof}
+
+\begin{corollary}[Critical full-support non-Markov DPP package]\label{cor:critical_dpp_nonmarkov_fullsupport}
+At \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), the sampled boundary-reset
+record is simultaneously a full-support renewal process, exact \(1\)-dependent,
+determinantal with the two explicit kernels \(K_c\) and \(K_c^H\) in
+\eqref{eq:critical-toeplitz-range-one-main}--\eqref{eq:critical-hessenberg-kernel-main},
+strictly non-Markov of every finite visible order by its strictly increasing
+zero-run hazard, and neither Bernoulli nor the Parry golden-mean law.
+\end{corollary}
+
+\begin{proof}
+The renewal property is Lemma~\ref{lem:renewal-gap-main}, and full support of
+all finite binary words is Corollary~\ref{cor:word-support-main}.  Exact
+\(1\)-dependence at \(\Gamma_c\) is the critical case of
+Theorem~\ref{thm:recovery-main}, equivalently the block factorization in
+Corollary~\ref{cor:critical_dpp_memory_phase}.  The two determinantal kernels
+are supplied by Theorem~\ref{thm:boundary_reset_toeplitz_dpp} and
+Corollary~\ref{cor:critical_dpp_memory_phase}.  Lemma~\ref{lem:survival-hazard-main}
+shows that the zero-run hazard is strictly increasing for all positive
+parameters, including \(\Gamma_c\), and Lemma~\ref{lem:hazard-obstruction-main}
+then excludes every finite visible Markov order.  Finally,
+Corollary~\ref{cor:no-exact-main} excludes both the Bernoulli comparison law and
+the Parry golden-mean law, since the sampled boundary-reset law has full support
+and a nonconstant zero-run hazard.
+\end{proof}
+
+\begin{proposition}[DPP upper-transfer tail phase]\label{prop:dpp_tail_phase}
+For all positive \(\Gamma,\kappa_{\mathrm r},\Delta\tau\), the non-Hermitian
+Toeplitz kernel \(K_\Gamma\) has exactly one upper transfer tail:
+\begin{equation}\label{eq:dpp-upper-transfer-tail-main}
+K_\Gamma(i,j)=d\lambda_{\mathrm{hid}}^{j-i-1}
+\qquad (j>i).
+\end{equation}
+Thus, away from \(\Gamma_c\), the upper tail is geometric with transfer
+parameter \(\lambda_{\mathrm{hid}}\), while at \(\Gamma_c\) this transfer
+parameter vanishes and the upper range collapses to one.
+\end{proposition}
+
+\begin{proof}
+Equation~\eqref{eq:dpp-upper-transfer-tail-main} is the strict-upper part of the
+kernel in Theorem~\ref{thm:boundary_reset_toeplitz_dpp}.  Lemma~\ref{lem:stationary-main}
+gives \(|\lambda_{\mathrm{hid}}|<1\), so if \(\lambda_{\mathrm{hid}}\neq0\) the
+strict-upper entries form a single geometric tail controlled by that transfer
+parameter.  Lemma~\ref{lem:critical-rate-main} says that
+\(\lambda_{\mathrm{hid}}=0\) exactly at
+\(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), where the same formula leaves only
+the first strict-upper diagonal.  No Hermitian or negative-association property
+is used in this transfer-tail statement.
+\end{proof}
+
+For compatibility with the critical-only terminology used in earlier discussion,
+Theorem~\ref{thm:boundary_reset_toeplitz_dpp} specializes at \(\Gamma_c\) to the
+critical determinantal record law, Corollary~\ref{cor:finite_window_fredholm_word_law}
+specializes to the critical finite-window Fredholm identity, and
+Corollary~\ref{cor:critical_dpp_nonmarkov_fullsupport} is the critical
+non-Markov determinantal renewal package.
 
 \subsection{Finite-sample observability}\label{subsec:finite-sample}
 The response-side shell conditions are operationally meaningful only if the
