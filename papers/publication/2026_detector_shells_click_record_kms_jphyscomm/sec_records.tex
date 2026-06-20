@@ -1,4 +1,4 @@
-\section{Classical sampled-HMM record laws before conditional UDW-rate calibration}\label{sec:records}
+\section{Classical sampled-HMM record laws before response-rate calibration}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
 We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
@@ -341,9 +341,9 @@ sampled repeated-interaction rule above. What remains conditional is the
 identification of the intensity $\Gamma$ with the stationary UDW response rate
 supplied by the field-facing detector calculation.
 
-\paragraph{Conditional UDW-rate calibration convention.}
+\paragraph{Conditional response-rate calibration convention.}
 The paper-level object introduced in the abstract and \Cref{sec:operational} is
-the \emph{classical sampled counter with conditional UDW-rate calibration}.
+the \emph{classical sampled counter with conditional response calibration}.
 Concretely, this means the sampled interval instrument of
 \Cref{prop:instrument-kernels-main} together with one later calibration step
 \[
@@ -473,7 +473,8 @@ golden-mean shift \cite{Parry1964,LindMarcus1995}; its counter-specific content
 is the identification of the clock selector
 $p_\beta=\varphi^{-1}$, equivalently
 $\Gamma\Delta\tau=\log\varphi$.  That clock value is later converted to
-$\Gamma_+\Delta\tau=\log\varphi$ only under the UDW-rate calibration closure.
+$\Gamma_+\Delta\tau=\log\varphi$ only under the later response-rate calibration
+closure.
 The main mathematical work begins in the sampled boundary-reset recovery
 model, where the zero-run law has full support on $\mathbb N_0$ and hence
 every finite binary word has positive probability; the dependence threshold is
@@ -1548,15 +1549,21 @@ a point process \(\varXi\subset\mathbb Z\) is represented by a kernel \(K\) when
 \(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
 \(B\subset\mathbb Z\).  This convention is standard in the determinantal-process
 literature, including discrete and Fredholm formulations
-\cite{Macchi1975,ShiraiTakahashi2003,Lyons2003,Borodin2009DPP,Soshnikov2000,HoughKrishnapurPeresVirag2009}, and
+\cite{Macchi1975,ShiraiTakahashi2003,Lyons2003,Borodin2009DPP,Soshnikov2000,HoughKrishnapurPeresVirag2009,KuleszaTaskar2012DPP}, and
 recent \emph{J. Phys. A} work includes both spatial DPP examples and quantum
 sampling algorithms for determinantal/Pfaffian processes
 \cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}.  The
 renewal lemma below is elementary and should not be read as a new DPP existence
-theorem.  The paper-specific increment is the specialization of this general
-renewal identity to the sampled boundary-reset HMM, where the strict-upper
-Toeplitz tail becomes the closed geometric transfer tail controlled by
-\(\lambda_{\mathrm{hid}}\) and collapses at the exact \(1\)-dependence rate.
+theorem or as the construction of a canonical operator kernel.  The
+paper-specific increment is the specialization of this general renewal identity
+to the sampled boundary-reset HMM, where the strict-upper Toeplitz tail becomes
+the closed geometric transfer tail controlled by \(\lambda_{\mathrm{hid}}\) and
+collapses at the exact \(1\)-dependence rate.
+Non-Hermitian or biorthogonal determinant formulas also occur in the
+Eynard--Mehta line of finite-set determinant identities
+\cite{EynardMehta1998,BorodinRains2005EynardMehta}; those references are used
+only as comparison points for determinant algebra, not as hypotheses for the
+renewal identity below.
 
 \begin{lemma}[Stationary-renewal principal-minor finite-inclusion formula]\label{lem:renewal-principal-minor-main}
 Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process whose
@@ -1645,8 +1652,8 @@ one-recovery-opportunity boundary-reset model, and let
 \]
 be the click set. The formula below is a non-Hermitian Toeplitz
 principal-minor identity only. It does not assert that \(K_\Gamma\) is
-self-adjoint, positive, a contraction, or the kernel of a fermionic DPP, and no
-negative-association conclusion is used or implied. Put
+self-adjoint, positive, a contraction, canonical, or the kernel of a fermionic
+DPP, and no negative-association conclusion is used or implied. Put
 \[
 \rho=\PP(A_0=1),
 \qquad
@@ -1719,12 +1726,13 @@ formulas are then exactly \eqref{eq:renewal-principal-minor-product-main} with
 \eqref{eq:dpp-u-n-main} inserted.
 \end{proof}
 
-\begin{lemma}[Scope of the finite-inclusion representation]\label{lem:finite_inclusion_scope_main}
+\begin{lemma}[Finite-inclusion scope]\label{lem:finite_inclusion_scope_main}
 The representation in \Cref{thm:boundary_reset_toeplitz_dpp} is only the
 finite-inclusion identity for the explicit Toeplitz kernel \(K_\Gamma\).  It
-does not assert a Hermitian positive-contraction kernel, and none of the
-standard consequences that require such a kernel--fermionic positivity,
-projection-process structure, or negative association--is used or claimed here.
+does not assert a canonical operator kernel or a Hermitian positive-contraction
+kernel, and none of the standard consequences that require such a
+kernel--fermionic positivity, projection-process structure, or negative
+association--is used or claimed here.
 \end{lemma}
 
 \begin{proof}
@@ -1741,9 +1749,24 @@ finite inclusion events.  It never proves self-adjointness, positivity, or a
 contraction bound for an operator on \(\ell^2(\mathbb Z)\).  Consequently the
 Hermitian positive-contraction consequences familiar from fermionic
 determinantal processes are outside the scope of the theorem.
+
+This also separates the present formula from two nearby determinantal
+phenomena.  First, one-dependent determinantal processes admit special kernels
+whose finite minors encode a genuine exact-dependence law
+\cite{BorodinDiaconisFulman2010}; the critical sampled record here is instead
+obtained first from the hidden-mode factorization in
+\Cref{thm:recovery-main}, and the Toeplitz and Hessenberg matrices are later
+finite-inclusion witnesses for that already identified law.  Second, a
+Hermitian positive-contraction DPP is specified by an operator with spectrum in
+\([0,1]\), which supplies positivity, a canonical fermionic interpretation in
+the usual discrete setting, and negative-dependence properties
+\cite{ShiraiTakahashi2003,Lyons2003,Borodin2009DPP}.  No such operator is
+constructed here.  The kernels \(K_\Gamma\), \(K_c\), and \(K_c^H\) should
+therefore be read as nonunique algebraic encodings of the same finite
+inclusion probabilities, not as canonical correlation kernels.
 \end{proof}
 
-\begin{corollary}[Finite-window count and word laws from principal minors]\label{cor:finite_window_fredholm_word_law}
+\begin{corollary}[Finite-window count and word laws from finite principal minors]\label{cor:finite_window_fredholm_word_law}
 For every finite set \(I\subset\mathbb Z\), let \(N_I=|\varXi\cap I|\), and let
 \(K_{\Gamma,I}\) be the restriction of \(K_\Gamma\) to \(I\times I\).  Then
 \begin{equation}\label{eq:finite-window-fredholm-main}
@@ -1779,11 +1802,11 @@ gives
 By \Cref{thm:boundary_reset_toeplitz_dpp}, each inclusion probability is
 the corresponding principal determinant of \(K_\Gamma\).  The principal-minor
 expansion of \(\det(I_I+(t-1)K_{\Gamma,I})\) is the same sum, proving
-\eqref{eq:finite-window-fredholm-main}.  This is the finite-dimensional
-principal-minor determinant identity sometimes called the finite-window
-Fredholm form in the DPP literature. Here it is used only as a count
-generating-function formula for the non-Hermitian Toeplitz matrix restricted
-to \(I\). This identity shows in particular that the covariance and Fano
+\eqref{eq:finite-window-fredholm-main}.  This is only a finite-dimensional
+principal-minor expansion of the non-Hermitian Toeplitz matrix restricted to
+\(I\). It is used here as a count generating-function formula, not as an
+operator Fredholm determinant or a Hermitian DPP construction. This identity
+shows in particular that the covariance and Fano
 formulas of Proposition~\ref{prop:spectrum-main} are the second-cumulant
 specialization of the full finite-window count law, even though the direct
 covariance proof remains the simplest physical diagnostic.
@@ -1826,7 +1849,9 @@ K_c^H(i,j)=
 \end{cases}
 \end{equation}
 Thus the memory threshold is exactly the zero of the upper transfer parameter
-of the boundary-reset Toeplitz specialization.
+of the boundary-reset Toeplitz specialization.  The two displayed kernels are
+alternative finite-inclusion representations of the same critical law; neither
+is claimed to be a canonical Hermitian correlation kernel.
 \end{corollary}
 
 \begin{proof}
@@ -2087,6 +2112,150 @@ then recovers the unordered survival factors and rates.  Substituting those
 coordinates into the Toeplitz principal-minor kernel and finite-window count
 formula gives all finite inclusion, count, and word probabilities, so no
 further visible coordinate is needed on the quotient family.
+\end{proof}
+
+\begin{corollary}[Finite-record inverse delta map and diagonal instability]\label{cor:finite_inverse_delta_boundary_main}
+Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
+with survival factors \(p,c\in(0,1)\).  From one record
+\((A_0,\ldots,A_{N-1})\), define the empirical inclusion vector
+\[
+\widehat r_N=(\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N}),
+\qquad
+\widehat r_{0,N}=\frac1N\sum_{j=0}^{N-1}A_j,
+\]
+\[
+\widehat r_{1,N}=\frac1{N-1}\sum_{j=0}^{N-2}A_jA_{j+1},
+\qquad
+\widehat r_{2,N}=\frac1{N-2}\sum_{j=0}^{N-3}A_jA_{j+2}.
+\]
+Then, for some positive semidefinite matrix \(\Sigma_r\),
+\[
+\sqrt N\,(\widehat r_N-r)
+\Rightarrow
+\mathcal N(0,\Sigma_r),
+\qquad
+r=(r_0,r_1,r_2).
+\]
+On the open set \(r_0>0\) and \(r_1/r_0\ne r_0\), put
+\[
+a(r)=\frac{r_1}{r_0},\qquad
+u_2(r)=\frac{r_2}{r_0},\qquad
+\lambda(r)=\frac{u_2(r)-r_0}{a(r)-r_0},
+\]
+and define the symmetric-coordinate map
+\[
+\Phi(r)=(s_1(r),s_2(r))
+\]
+by
+\begin{equation}\label{eq:finite-inverse-delta-map-main}
+s_1(r)=1-a(r)+\lambda(r),
+\qquad
+s_2(r)=r_0\bigl(1-\lambda(r)\bigr)-a(r)+\lambda(r).
+\end{equation}
+At the population value, \(s_1=p+c\) and \(s_2=pc\).  Therefore
+\[
+\sqrt N\bigl(\Phi(\widehat r_N)-\Phi(r)\bigr)
+\Rightarrow
+\mathcal N\!\left(0,D\Phi(r)\Sigma_rD\Phi(r)^\top\right).
+\]
+If \(p\ne c\), equivalently
+\[
+\Delta_s:=s_1^2-4s_2>0,
+\]
+the ordered-by-size root chart
+\[
+\Psi(s_1,s_2)=
+\left(
+\frac{s_1+\sqrt{s_1^2-4s_2}}2,\,
+\frac{s_1-\sqrt{s_1^2-4s_2}}2
+\right)
+\]
+is \(C^1\) near \(\Phi(r)\).  Hence the root estimators
+\[
+(\widehat z_{+,N},\widehat z_{-,N})
+=\Psi(\Phi(\widehat r_N))
+\]
+satisfy the ordinary delta-method limit
+\[
+\sqrt N
+\begin{pmatrix}
+\widehat z_{+,N}-z_+\\
+\widehat z_{-,N}-z_-
+\end{pmatrix}
+\Rightarrow
+\mathcal N\!\left(
+0,\,
+D\Psi(\Phi(r))D\Phi(r)\Sigma_rD\Phi(r)^\top
+D\Psi(\Phi(r))^\top
+\right),
+\]
+where \(\{z_+,z_-\}=\{p,c\}\) and \(z_+>z_-\).  Applying
+\(-\Delta\tau^{-1}\log\) to these roots gives the corresponding unordered
+rate estimates.  The additional rate-map Jacobian is
+\[
+\operatorname{diag}\!\left(
+-\frac1{\Delta\tau z_+},
+-\frac1{\Delta\tau z_-}
+\right).
+\]
+
+On the diagonal \(p=c\), the discriminant vanishes:
+\(\Delta_s=0\).  The map
+\((s_1,s_2)\mapsto\{z:z^2-s_1z+s_2=0\}\) is then not differentiable in the
+ordinary Euclidean root coordinates, and the above root delta method does not
+apply.  Near this discriminant locus the root Jacobian contains powers of
+\(\Delta_s^{-1/2}=|p-c|^{-1}\), so finite-record root intervals are unstable
+as the two survival factors approach one another.  Finally, even off the
+diagonal, the chart \((z_+,z_-)\) labels roots only by numerical order; assigning
+one root to the attempt rate and the other to the recovery rate requires
+external information, exactly as in
+\Cref{prop:hidden_label_exchange_nonidentifiability}.
+\end{corollary}
+
+\begin{proof}
+The sampled law is a stationary renewal process with an exponentially decaying
+zero-run tail.  For any fixed \(t\in\RR^3\), the scalar observable
+\[
+t_0A_j+t_1A_jA_{j+1}+t_2A_jA_{j+2}
+\]
+is bounded and local.  Its Palm cycle sum depends only on adjacent zero-run
+lengths and has linear growth in those lengths.  Applying
+\Cref{lem:renewal-local-clt-main} to this observable, and using that replacing
+\(N\) by \(N-1\) or \(N-2\) in the empirical denominators changes the statistic
+by \(o_{\PP}(N^{-1/2})\), gives a one-dimensional CLT for every linear
+combination of \(\widehat r_N-r\).  The Cramer--Wold device gives the displayed
+joint CLT for some covariance matrix \(\Sigma_r\).
+
+The inequalities \(r_0>0\) and \(r_1/r_0\ne r_0\) hold at the population value:
+the first is stationarity with positive click density, and the second is
+\(a\ne\rho\) from \Cref{lem:stationary-main}.  Thus \(\Phi\) is \(C^1\) in a
+neighbourhood of the population inclusion vector, and the multivariate delta
+method gives the symmetric-coordinate limit.  The identities
+\(s_1=p+c\) and \(s_2=pc\) are exactly
+\eqref{eq:inverse-sum-main} and \eqref{eq:inverse-product-main}.
+
+When \(p\ne c\), the discriminant
+\(\Delta_s=(p-c)^2\) is strictly positive, so the ordered root map \(\Psi\) is
+\(C^1\).  A second application of the delta method gives the root limit.  The
+log-rate limit is the delta method applied once more to
+\(z\mapsto-\Delta\tau^{-1}\log z\).  If \(p=c\), then
+\(\Delta_s=0\) and \(\sqrt{s_1^2-4s_2}\) is not differentiable at the
+population point, so the ordinary Euclidean root-coordinate delta method has no
+valid derivative there.  The explicit derivative for
+\[
+z_\pm=\frac{s_1\pm\sqrt{\Delta_s}}2
+\]
+contains the factors
+\[
+\frac{\partial z_\pm}{\partial s_1}
+=\frac12\pm\frac{s_1}{2\sqrt{\Delta_s}},
+\qquad
+\frac{\partial z_\pm}{\partial s_2}
+=\mp\frac1{\sqrt{\Delta_s}},
+\]
+which also records the finite-record instability as the diagonal is approached.
+The final label statement follows from the exchange invariance in
+\Cref{thm:toeplitz_image_inverse_duality,prop:hidden_label_exchange_nonidentifiability}.
 \end{proof}
 
 \begin{corollary}[Critical self-dual inverse]\label{cor:critical_self_dual_inverse}
