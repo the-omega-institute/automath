@@ -1,4 +1,4 @@
-\section{Record laws for the sampled counter underlying the UDW-rate-calibrated model}\label{sec:records}
+\section{Classical sampled-HMM record laws before UDW-rate calibration}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
 We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
@@ -343,11 +343,11 @@ with one later calibration step
 \[
 \Gamma=\Gamma_+(x,\Omega).
 \]
-Sections~\ref{sec:kms-shells}--\ref{sec:inverse} package the response-side use
-of this convention in boxed Model~A (\Cref{ass:udw-rate-calibration-main}).
-That boxed assumption is the only place where the paper states the full
-counter-to-response contract. Here we use only the record-side half of that
-contract: the counter law is fixed first, with internal attempt rate
+Section~\ref{sec:kms-shells} packages the response-side use of this convention
+in Model~A (\Cref{ass:udw-rate-calibration-main}). That assumption is the only
+place where the paper states the counter-to-response contract. Here we use
+only the record-side half of that contract: the counter law is fixed first,
+with internal attempt rate
 $\Gamma$, and no theorem in this section claims that general UDW measurement
 theory derives this sampled instrument or its Poisson attempt structure.
 
@@ -443,9 +443,12 @@ $\Gamma=\Gamma_+(x,\Omega)$ does the classical threshold from
 $\Gamma_+(x,\Omega)\Delta\tau=\log\varphi$.
 
 \Cref{prop:ideal-main} is included only as the benchmark comparison point.
-Once the golden-mean Markov chain has been identified, the
-Perron--Frobenius matching step is standard; its counter-specific content is
-just the clock value $\Gamma\Delta\tau=\log\varphi$, later converted to
+Once the ideal one-step blanking chain has been stipulated, the
+Perron--Frobenius/Parry computation is the standard calculation for the
+golden-mean shift \cite{Parry1964,LindMarcus1995}; its counter-specific content
+is the identification of the clock selector
+$p_\beta=\varphi^{-1}$, equivalently
+$\Gamma\Delta\tau=\log\varphi$.  That clock value is later converted to
 $\Gamma_+\Delta\tau=\log\varphi$ only under the UDW-rate calibration closure.
 The main mathematical work begins in the sampled boundary-reset recovery
 model, where the zero-run law has full support on $\mathbb N_0$ and hence
@@ -484,7 +487,7 @@ In the record layer of this section, $\Gamma$ is the classical attempt rate,
 $p=e^{-\Gamma\Delta\tau}$ and $c=e^{-\kappa_{\mathrm r}\Delta\tau}$ are
 one-bin survival factors local to the sampled recovery model, and the hidden
 eigenvalue is written $\lambda_{\mathrm{hid}}$. In the response layer of
-\Cref{sec:kms-shells,sec:inverse}, we reserve $\Gamma_\pm$ for excitation and
+\Cref{sec:kms-shells}, we reserve $\Gamma_\pm$ for excitation and
 de-excitation rates, $\beta_\infty$ and $\beta_{\mathrm{loc}}$ for inverse
 temperatures, and $\lambda_c,\lambda_{\mathrm{sw}}$ for detector couplings.
 Thus $p$, $c$, and $\lambda_{\mathrm{hid}}$ never denote response-side
@@ -671,7 +674,16 @@ bq-b+ b^2
 =(p-b)\binom{q}{-b}
 =\lambda_{\mathrm{hid}} w.
 \]
-Thus the only hidden mode away from stationarity is the eigenmode $w$, and
+Thus the only hidden mode away from stationarity is the eigenmode $w$. In
+row-vector convention this is the two-state spectral decomposition
+\[
+P^r z=\rho_z\mathbf 1+\lambda_{\mathrm{hid}}^r(z-\rho_z\mathbf 1),
+\qquad
+\rho_z:=\pi z,
+\]
+for every column vector $z$ and every $r\ge0$; indeed
+$z-\rho_z\mathbf 1$ lies in the one-dimensional zero-$\pi$-mean subspace
+spanned by $w$. Applying this to $z=u$ and using
 \eqref{eq:u-centered-main} gives
 \[
 P^{n-1}u=\rho\mathbf 1+\lambda_{\mathrm{hid}}^{\,n-1}(u-\rho\mathbf 1).
@@ -776,7 +788,7 @@ Thus the visible output process is exact $1$-dependent at the memory threshold.
 \end{lemma}
 
 \begin{proof}
-By \Cref{def:record-benchmarks-main}, exact $1$-dependence compares two blocks with one unobserved sample between them; it does not condition on that intermediate sample.
+By \Cref{def:record-benchmarks-main}, exact $1$-dependence compares two blocks with one unobserved sample between them; it does not condition on that intermediate sample. We use the row-vector convention of \Cref{prop:instrument-kernels-main}: if $T_u$ is the chronological product of labelled kernels for a word $u$, then its cylinder probability from stationarity is $\pi T_u\mathbf 1$.
 
 The condition $\Gamma=\Gamma_c$ is equivalent to $\lambda_{\mathrm{hid}}=p-b=0$. Thus $b=p$ and, since $q=1-p$, the aggregate transition matrix becomes
 \[
@@ -786,7 +798,7 @@ p&q\\
 p&q
 \end{pmatrix}.
 \]
-Its stationary distribution is therefore $\pi=(p,q)$, and $P=\mathbf 1\pi$. Equivalently, the two-state stochastic matrix has eigenvalues $1$ and $0$, so the hidden state is resampled from stationarity after one unobserved interval. For output-labelled kernels, the probability of a past word $u$ and a future word $v$ separated by the unobserved sample at time $1$ has the form
+Its stationary distribution is therefore $\pi=(p,q)$, and $P=\mathbf 1\pi$. Equivalently, the two-state stochastic matrix has eigenvalues $1$ and $0$, so the hidden state is resampled from stationarity after one unobserved interval. For output-labelled kernels, summing over the unobserved sample at time $1$ inserts the aggregate matrix $P=T_0+T_1$. Hence the probability of a past word $u$ and a future word $v$ separated by that unobserved sample has the form
 \[
 \pi T_u\,P\,T_v\mathbf 1
 =
@@ -963,6 +975,11 @@ continuous intra-bin recovery kernels of
 \Cref{prop:continuous-comparator-main}. With the record-layer notation from
 Tables~\ref{tab:notation-record}--\ref{tab:notation-response}, the sampled
 boundary-reset record satisfies the following.
+When $\kappa_{\mathrm r}=\Gamma$, quotients displayed for unequal rates are
+understood by continuous extension; in particular
+$\lambda_{\mathrm{hid}}=e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau)$. Powers use
+the convention $\lambda_{\mathrm{hid}}^0=1$, including at
+$\lambda_{\mathrm{hid}}=0$.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.3em]
 \item The zero-run length law is the renewal law of
 \Cref{lem:renewal-gap-main}, hence has full support on $\mathbb N_0$ and
@@ -984,6 +1001,8 @@ h_k=
 \frac{(1-p)+\alpha(k(1-p)-p)}{1+\alpha k},
 \qquad k\ge0.
 \end{equation}
+These equal-rate formulas are the continuous extensions of the corresponding
+unequal-rate survival and hazard formulas.
 In both cases $h_{k+1}>h_k$ for every $k$, so the visible process is not an
 $r$-step Markov chain for any finite $r$.
 \item Let $\rho=\PP(A_0=1)$ and let $\lambda_{\mathrm{hid}}$ be the hidden
@@ -1068,7 +1087,7 @@ $\Gamma=\Gamma_+(x,\Omega)$ does the classical memory threshold from
 \Cref{thm:recovery-main} become the response-side equation
 $\Gamma_+(x,\Omega)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
 
-The memory-transition threshold is therefore not a softened version of the ideal Parry point. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the sampled boundary-reset recovery point is the theorem-level result, namely an exact dependence transition inside a renewal class whose zero-run law has full support and hence supports every finite binary word. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode $\lambda_{\mathrm{hid}}$ vanishes precisely at $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
+The memory-transition threshold is therefore not a softened version of the ideal Parry point, and it is not a model-free trajectory-memory inference procedure of the kind studied in recent \emph{J. Phys. A} work \cite{VollmarEtAl2024Memory}. The ideal point is a standard maximum-entropy benchmark for a restricted grammar; the sampled boundary-reset recovery point is the theorem-level result, namely an exact dependence transition inside one explicit two-state sampled HMM/renewal class whose zero-run law has full support and hence supports every finite binary word. The essential feature is the hidden-eigenvalue criterion: the nontrivial hidden mode $\lambda_{\mathrm{hid}}$ vanishes precisely at the closed critical rate $\Gamma_c$, labelled kernels factor through stationarity at that point, and away from it the lag-two covariance obstructs exact $1$-dependence. The same recovery mechanism is incompatible both with the Parry support constraint and with a Bernoulli full-support benchmark, as made explicit below. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
 
 \begin{figure}[t]
 \centering
@@ -1206,9 +1225,12 @@ Then
 \frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2\,(m-1)
 +O\!\bigl(m(\Delta\tau)^3\bigr).
 \end{equation}
-Thus, for every fixed $m$, the sampled boundary-reset recovery record
-concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$ at
-fixed physical rates.
+Thus, for every fixed $m$, the sampled boundary-reset recovery record assigns
+vanishing probability to the inadmissible length-$m$ cylinders as
+$\Delta\tau\downarrow0$ at fixed physical rates. This is only a fixed-$m$
+cylinder estimate from a union bound; no process-level convergence to the
+golden-mean law, in any topology or under any growing-window scaling, is
+asserted here.
 
 By contrast, along the exact-clock Parry scaling
 $\Gamma\Delta\tau=\log\varphi$ with fixed $\kappa_{\mathrm r}$,
@@ -1298,16 +1320,19 @@ $\PP(V_m)\le(m-1)a$.
 \end{proof}
 
 Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular
-but physically meaningful limit. It is specifically a fixed-rate short-bin
-limit: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed while
-$\Delta\tau\downarrow0$. It should not be confused with the exact-clock
-scaling $\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like
+but physically meaningful finite-window comparison. It is specifically a
+fixed-rate short-bin estimate: $\Gamma$ and $\kappa_{\mathrm r}$ are held fixed
+while $\Delta\tau\downarrow0$, and the window length $m$ is fixed before the
+limit is taken. It should not be confused with the exact-clock scaling
+$\Gamma\Delta\tau=\log\varphi$, where the excitation rate grows like
 $\Delta\tau^{-1}$ and, for fixed $\kappa_{\mathrm r}$, the adjacent-click
-probability is only $O(\Delta\tau)$. At fixed finite window length and fixed
-physical rates, inadmissible words become quadratically rare. Yet the Parry
-benchmark is still excluded at any positive sampling interval: the word $11$
-has positive probability, and the hazard remains strictly increasing, so the
-zero-run length is genuinely remembered.
+probability is only $O(\Delta\tau)$. Nor is it a statement that the full
+stationary process converges to the Parry measure or to any other
+golden-mean-shift law. At fixed finite window length and fixed physical rates,
+inadmissible words become quadratically rare. Yet the Parry benchmark is still
+excluded at any positive sampling interval: the word $11$ has positive
+probability, and the hazard remains strictly increasing, so the zero-run length
+is genuinely remembered.
 
 \subsection{Spectral density and universal antibunching}
 
@@ -1322,8 +1347,13 @@ f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
 \]
 Since the covariance sequence is explicit, so are the low-frequency noise properties.
 
-This antibunching statement is not automatic. The sampled boundary-reset
-recovery law suppresses immediate reclicks, but it could in principle still
+This antibunching statement is not automatic. Recent stochastic-trajectory
+work in \emph{J. Phys. A} analyzes waiting-time and Zeno behavior for
+continuously monitored quantum systems \cite{WallsEtAl2024StochasticTrajectoriesZeno};
+the statement here is different: after the present classical sampled
+boundary-reset record has been fixed, the one-mode covariance tail gives a
+closed Herglotz spectral density and an exact asymptotic Fano factor. The
+sampled boundary-reset recovery law suppresses immediate reclicks, but it could in principle still
 generate longer-range positive correlations and enhanced low-frequency noise.
 The explicit covariance formula shows that the opposite happens: the reset
 mechanism suppresses low-frequency fluctuations throughout the parameter range.
@@ -1470,20 +1500,29 @@ spectral density and the Fano factor across the parameter range.
 \end{figure}
 
 
-\subsection{Determinantal finite-dimensional law of the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
+\subsection{Finite-inclusion determinantal law of the boundary-reset record}\label{subsec:boundary-reset-dpp-record}
 
 The covariance and Fano formulas above are the second-cumulant shadow of a
-stronger finite-dimensional law.  For determinantal point processes we use only
-the finite-inclusion convention: a point process \(\varXi\subset\mathbb Z\) has
-kernel \(K\) if \(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
+stronger finite-dimensional law.  We use only the finite-inclusion convention:
+a point process \(\varXi\subset\mathbb Z\) is represented by a kernel \(K\) when
+\(\PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}\) for every finite
 \(B\subset\mathbb Z\).  This convention is standard in the determinantal-process
-literature \cite{Macchi1975,Soshnikov2000,HoughKrishnapurPeresVirag2009}; the
-proof below is internal and does not import an existence theorem.  The result is
-non-Hermitian and should be read as an exact finite-dimensional formula for this
-sampled renewal record, not as a general fermionic positivity or negative-association
-statement.
+literature \cite{Macchi1975,Soshnikov2000,HoughKrishnapurPeresVirag2009}, and
+recent \emph{J. Phys. A} work includes both spatial DPP examples and quantum
+sampling algorithms for determinantal/Pfaffian processes
+\cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}.  The
+increment here is narrower and record-specific: the kernel below is the exact
+finite-inclusion kernel for the click set of this sampled boundary-reset renewal
+record.  Thus
+the proof below is internal and does not import a Hermitian-kernel existence
+theorem.  The result is non-Hermitian and should be read as an exact
+finite-dimensional formula for this sampled renewal record.  In particular, the
+all-parameter statement is the Toeplitz finite-inclusion kernel for the sampled
+click set of this one HMM; the critical increment is the collapse of its
+strict-upper geometric transfer tail when \(\lambda_{\mathrm{hid}}=0\), not a
+classification theorem for determinantal processes.
 
-\begin{theorem}[Boundary-reset Toeplitz determinantal renewal law]\label{thm:boundary_reset_toeplitz_dpp}
+\begin{theorem}[Boundary-reset finite-inclusion determinantal representation]\label{thm:boundary_reset_toeplitz_dpp}
 Fix \(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\) in the stationary sampled
 one-recovery-opportunity boundary-reset model, and let
 \[
@@ -1497,24 +1536,26 @@ be the click set.  Put
 \qquad
  d=\rho-a,
 \qquad
- \lambda=\lambda_{\mathrm{hid}},
+ \ell=\lambda_{\mathrm{hid}},
 \]
-and, for \(n\ge1\),
+with the equal-rate value of $\lambda_{\mathrm{hid}}$ understood by continuous
+extension as in \eqref{eq:lambda-hid-main}. Throughout the displayed powers in
+this theorem, $\ell^0=1$, including when $\ell=0$.
+For \(n\ge1\), write
 \[
 u_n=\PP(A_n=1\mid A_0=1).
 \]
 Then \(d>0\),
 \begin{equation}\label{eq:dpp-u-n-main}
-u_n=\rho+(a-\rho)\lambda^{n-1}=\rho-d\lambda^{n-1},
+u_n=\rho+(a-\rho)\ell^{n-1}=\rho-d\ell^{n-1},
 \qquad n\ge1,
 \end{equation}
-and \(\varXi\) is a translation-invariant determinantal point process in the
-finite-inclusion sense with non-Hermitian Toeplitz kernel
+and \(\varXi\) has the non-Hermitian Toeplitz finite-inclusion kernel
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
 \rho, & j\le i,\\[0.4ex]
-d\lambda^{j-i-1}, & j>i .
+d\ell^{j-i-1}, & j>i .
 \end{cases}
 \end{equation}
 Equivalently, for every finite set \(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\),
@@ -1525,7 +1566,7 @@ with the empty product interpreted as \(1\),
 \det\bigl[K_\Gamma(i_r,i_s)\bigr]_{r,s=1}^m
 =
 \rho\prod_{r=1}^{m-1}
-\Bigl[\rho+(a-\rho)\lambda^{i_{r+1}-i_r-1}\Bigr].
+\Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr].
 \end{equation}
 \end{theorem}
 
@@ -1542,11 +1583,11 @@ u_n=e_D^\top P^{n-1}\nu,
 \]
 In the notation of that lemma,
 \[
-P^{n-1}\nu=\rho\mathbf 1+\lambda^{n-1}(\nu-\rho\mathbf 1),
+P^{n-1}\nu=\rho\mathbf 1+\ell^{n-1}(\nu-\rho\mathbf 1),
 \]
 and taking the \(D\)-component gives
 \[
-u_n=\rho+\lambda^{n-1}(a-\rho)=\rho-d\lambda^{n-1}.
+u_n=\rho+\ell^{n-1}(a-\rho)=\rho-d\ell^{n-1}.
 \]
 
 We next prove the renewal inclusion formula.  If
@@ -1576,7 +1617,7 @@ where
 \[
 L_{rs}=\mathbf 1_{\{s\le r\}},
 \qquad
-U_{rs}=\lambda^{i_s-i_r-1}\mathbf 1_{\{s>r\}}.
+U_{rs}=\ell^{i_s-i_r-1}\mathbf 1_{\{s>r\}}.
 \]
 The lower triangular matrix \(L\) has determinant \(1\), and its inverse has
 entries \((L^{-1})_{rr}=1\), \((L^{-1})_{r,r-1}=-1\) for \(r\ge2\), and zero
@@ -1584,7 +1625,7 @@ elsewhere.  Thus \(L^{-1}U\) is upper triangular: its first diagonal entry is
 \(0\), while for \(r\ge2\)
 \[
 (L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}
-=-\lambda^{i_r-i_{r-1}-1}.
+=-\ell^{i_r-i_{r-1}-1}.
 \]
 Therefore
 \[
@@ -1593,17 +1634,41 @@ Therefore
 \rho^m\det\Bigl(I+\frac d\rho L^{-1}U\Bigr)
 =
 \rho^m\prod_{r=2}^m
-\Bigl[1-\frac d\rho\lambda^{i_r-i_{r-1}-1}\Bigr].
+\Bigl[1-\frac d\rho\ell^{i_r-i_{r-1}-1}\Bigr].
 \]
 This equals
 \[
-\rho\prod_{r=1}^{m-1}\bigl[\rho-d\lambda^{i_{r+1}-i_r-1}\bigr]
+\rho\prod_{r=1}^{m-1}\bigl[\rho-d\ell^{i_{r+1}-i_r-1}\bigr]
 =
 \rho\prod_{r=1}^{m-1}
-\Bigl[\rho+(a-\rho)\lambda^{i_{r+1}-i_r-1}\Bigr],
+\Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr],
 \]
 which is the renewal inclusion formula.  Hence the finite-inclusion
 determinantal law holds for every finite \(B\).
+\end{proof}
+
+\begin{lemma}[Scope of the finite-inclusion representation]\label{lem:finite_inclusion_scope_main}
+The representation in Theorem~\ref{thm:boundary_reset_toeplitz_dpp} is only the
+finite-inclusion identity for the explicit Toeplitz kernel \(K_\Gamma\).  It
+does not assert a Hermitian positive-contraction kernel, and none of the
+standard consequences that require such a kernel--fermionic positivity,
+projection-process structure, or negative association--is used or claimed here.
+\end{lemma}
+
+\begin{proof}
+The displayed kernel is not Hermitian: for adjacent sites,
+\[
+K_\Gamma(i,i+1)=d=\rho-a,
+\qquad
+K_\Gamma(i+1,i)=\rho,
+\]
+and \(a>0\) for positive boundary-reset parameters.  Thus \(d\neq\rho\).  The
+proof of Theorem~\ref{thm:boundary_reset_toeplitz_dpp} uses only stationarity,
+renewal regeneration, and the resulting principal determinant identities for
+finite inclusion events.  It never proves self-adjointness, positivity, or a
+contraction bound for an operator on \(\ell^2(\mathbb Z)\).  Consequently the
+Hermitian positive-contraction consequences familiar from fermionic
+determinantal processes are outside the scope of the theorem.
 \end{proof}
 
 \begin{corollary}[Finite-window Fredholm and word law]\label{cor:finite_window_fredholm_word_law}
@@ -1659,10 +1724,12 @@ Taking expectations and applying the finite-inclusion determinant formula gives
 \eqref{eq:finite-word-inclusion-exclusion-main}.
 \end{proof}
 
-\begin{corollary}[Critical DPP memory phase]\label{cor:critical_dpp_memory_phase}
+\begin{corollary}[Critical kernel-collapse phase]\label{cor:critical_dpp_memory_phase}
 Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
 \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
-\(\lambda_{\mathrm{hid}}=0\).  With
+\(\lambda_{\mathrm{hid}}=0\), with the convention
+\(\lambda_{\mathrm{hid}}^0=1\) inherited from
+Theorem~\ref{thm:boundary_reset_toeplitz_dpp}.  With
 \(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and
 \(d_c=\rho_c-a_c\), the Toeplitz kernel of
 Theorem~\ref{thm:boundary_reset_toeplitz_dpp} collapses to upper range one:
@@ -1690,7 +1757,7 @@ of the all-parameter Toeplitz kernel.
 \begin{proof}
 Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_c\) as the unique positive
 zero of \(\lambda_{\mathrm{hid}}\), and the range-one form of \(K_c\) follows by
-substituting \(\lambda=0\) into
+substituting \(\ell=0\) into
 \eqref{eq:boundary-reset-toeplitz-kernel-main}.  In the inclusion formula of
 Theorem~\ref{thm:boundary_reset_toeplitz_dpp}, a gap of length one contributes
 \(u_1=a_c\), while any gap of length at least two contributes \(u_n=\rho_c\).
@@ -1719,7 +1786,7 @@ determinants, matching the exact \(1\)-dependent block factorization above.
 Thus \(K_c^H\) gives the same finite-inclusion law as \(K_c\).
 \end{proof}
 
-\begin{corollary}[Critical full-support non-Markov DPP package]\label{cor:critical_dpp_nonmarkov_fullsupport}
+\begin{corollary}[Critical full-support non-Markov representation package]\label{cor:critical_dpp_nonmarkov_fullsupport}
 At \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), the sampled boundary-reset
 record is simultaneously a full-support renewal process, exact \(1\)-dependent,
 determinantal with the two explicit kernels \(K_c\) and \(K_c^H\) in
@@ -1744,7 +1811,7 @@ the Parry golden-mean law, since the sampled boundary-reset law has full support
 and a nonconstant zero-run hazard.
 \end{proof}
 
-\begin{proposition}[DPP upper-transfer tail phase]\label{prop:dpp_tail_phase}
+\begin{proposition}[Upper-transfer tail of the finite-inclusion kernel]\label{prop:dpp_tail_phase}
 For all positive \(\Gamma,\kappa_{\mathrm r},\Delta\tau\), the non-Hermitian
 Toeplitz kernel \(K_\Gamma\) has exactly one upper transfer tail:
 \begin{equation}\label{eq:dpp-upper-transfer-tail-main}
@@ -1773,10 +1840,10 @@ is used in this transfer-tail statement.
 
 For compatibility with the critical-only terminology used in earlier discussion,
 Theorem~\ref{thm:boundary_reset_toeplitz_dpp} specializes at \(\Gamma_c\) to the
-critical determinantal record law, Corollary~\ref{cor:finite_window_fredholm_word_law}
+critical finite-inclusion representation, Corollary~\ref{cor:finite_window_fredholm_word_law}
 specializes to the critical finite-window Fredholm identity, and
 Corollary~\ref{cor:critical_dpp_nonmarkov_fullsupport} is the critical
-non-Markov determinantal renewal package.
+non-Markov finite-inclusion representation package.
 
 \subsection{Finite-sample observability}\label{subsec:finite-sample}
 The response-side shell conditions are operationally meaningful only if the
@@ -1787,6 +1854,14 @@ quantities, especially $\gamma_2=\operatorname{Cov}(A_0,A_2)$. Turning a
 threshold crossing into a shell location, or turning fixed detector settings
 into fixed-radius ratio coordinates, requires separate scan or external
 ratio-data asymptotics stated later.
+
+This finite-record problem is adjacent to recent model-free trajectory-memory
+inference \cite{VollmarEtAl2024Memory}, but the statistical object here is
+narrower and more explicit.  The record law has already been fixed, click times
+are regeneration times, and the estimator is the single lag-two covariance
+\(\widehat\gamma_2\).  The CLT below is therefore a regenerative
+\(1\)-dependent reward CLT with a model-specific variance formula, not a
+general non-Markovianity inference procedure.
 
 For a record $(A_0,\dots,A_{N-1})$, set $\widehat\rho=N^{-1}\sum_{j=0}^{N-1}A_j$. Let $C_k^{=}$ be the number of completed inter-click gaps with exactly $k$ zeros, and let $C_k^{\ge}$ be the number with at least $k$ zeros; when $C_k^{\ge}>0$, put
 \[
@@ -3532,6 +3607,11 @@ the explicit nondegeneracy check
 \[
 \tau_{2,\mathrm{br}}^2>0.
 \]
+No all-parameter analytic positivity theorem for
+$\tau_{2,\mathrm{br}}^2$ is asserted here.  For a fixed sampled-law parameter
+choice, \Cref{rem:lag-two-nondeg-main} gives the closed-form inputs and
+interval-arithmetic enclosure that certify this strict inequality before a Wald
+statistic is reported.
 Combined with \Cref{thm:recovery-main}, the mean being estimated is zero if and
 only if
 \[
@@ -3884,7 +3964,7 @@ The continuous mapping theorem therefore yields
 \]
 \end{proof}
 
-\begin{remark}[Computing the theorem's nondegeneracy criterion]\label{rem:lag-two-nondeg-main}
+\begin{remark}[Closed-form and interval certification of the nondegeneracy criterion]\label{rem:lag-two-nondeg-main}
 Theorem~\ref{thm:cycle-block-main} reduces the studentization hypothesis to the
 finite quantity \eqref{eq:tau2-explicit-main}. The needed inputs are only
 \[
@@ -3892,25 +3972,113 @@ finite quantity \eqref{eq:tau2-explicit-main}. The needed inputs are only
 \qquad m_2=\sum_{g\ge0}g^2\pi_g,
 \]
 and all are computable from the explicit zero-run law of
-\Cref{lem:renewal-gap-main}. In particular, for $\kappa_{\mathrm r}\neq\Gamma$,
-the mass function $\pi_g$ is a linear combination of $p^g$ and $c^g$, so
-$m_1,m_2,\pi_0,\pi_1$ are closed-form geometric sums; at equal rates, they are
-the corresponding continuous limits of those closed forms.
+\Cref{lem:renewal-gap-main}. For $\kappa_{\mathrm r}\neq\Gamma$, with
+$p=e^{-\Gamma\Delta\tau}$, $c=e^{-\kappa_{\mathrm r}\Delta\tau}$, and
+$q=1-p$,
+\[
+\pi_0=
+\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}
+     {\kappa_{\mathrm r}-\Gamma},
+\qquad
+\pi_1=
+\frac{\kappa_{\mathrm r}(1-p)p-\Gamma(1-c)c}
+     {\kappa_{\mathrm r}-\Gamma},
+\]
+\[
+m_1=
+\frac{\kappa_{\mathrm r}p/(1-p)-\Gamma c/(1-c)}
+     {\kappa_{\mathrm r}-\Gamma},
+\qquad
+m_2=
+\frac{\kappa_{\mathrm r}p(1+p)/(1-p)^2-\Gamma c(1+c)/(1-c)^2}
+     {\kappa_{\mathrm r}-\Gamma}.
+\]
+The remaining quantities are
+\[
+b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma},
+\qquad
+\rho=\frac{q(1-c)}{q+b},
+\qquad
+\lambda_{\mathrm{hid}}=p-b,
+\]
+\[
+\mu_2=\rho^2+\rho(a-\rho)\lambda_{\mathrm{hid}},
+\qquad
+a=\pi_0,\qquad
+\alpha=2\rho^2-\mu_2,\qquad
+\beta=\alpha-2\rho .
+\]
+At equal rates, write $\eta=\Gamma\Delta\tau=\kappa_{\mathrm r}\Delta\tau$ and
+$p=e^{-\eta}$. Then
+\[
+\pi_0=(1-p)-\eta p,
+\qquad
+\pi_1=p\bigl((1-p)+\eta(1-2p)\bigr),
+\]
+\[
+m_1=\frac{p}{1-p}+\frac{\eta p}{(1-p)^2},
+\qquad
+m_2=
+\frac{p(1+p)}{(1-p)^2}
++\frac{\eta p(1+3p)}{(1-p)^3},
+\]
+and
+\[
+b=\eta p,\qquad
+\rho=\frac{(1-p)^2}{(1-p)+\eta p},\qquad
+\lambda_{\mathrm{hid}}=p(1-\eta),
+\]
+with $\mu_2,\alpha,\beta$ then obtained from the same displayed formulas.
 
-If one evaluates $m_1$ or $m_2$ numerically by truncating at $K$, then the
-tail error is rigorously controlled by
+These identities give a finite interval certificate for any fixed detector
+setting. Use outward-rounded interval arithmetic for the input box
+$I_\Gamma\times I_\kappa\times I_{\Delta\tau}\subset(0,\infty)^3$. If
+$0\notin I_\kappa-I_\Gamma$, evaluate the distinct-rate formulas above with
+interval operations and the interval exponential, obtaining interval enclosures
+\[
+I_\rho,\ I_{\mu_2},\ I_{\pi_0},\ I_{\pi_1},\ I_{m_1},\ I_{m_2},
+\qquad
+I_\alpha=2I_\rho^2-I_{\mu_2},\quad
+I_\beta=I_\alpha-2I_\rho .
+\]
+Then enclose the sampled-law cycle variance by
+\[
+\begin{aligned}
+I_{\tau,\mathrm{br}}
+={}&
+I_\alpha^2 I_{m_2}
++2I_\alpha I_\beta I_{m_1}
++I_\beta^2
++(2I_\alpha+2I_\beta+1)I_{\pi_1}  \\
+&\quad
++(4I_\beta+1)I_{\pi_0}^2
++2I_{\pi_0}^3 .
+\end{aligned}
+\]
+If the detector setting lies on the diagonal $\kappa_{\mathrm r}=\Gamma$, use
+the equal-rate formulas with an outward-rounded interval $I_\eta$ for the common
+product $\Gamma\Delta\tau$ instead. A box that straddles the diagonal may be
+split into subboxes or evaluated from the defining integrals for $a,b$ and the
+finite geometric sums with interval remainder bounds. In every case,
+\[
+\inf I_{\tau,\mathrm{br}}>0
+\]
+is a certificate that \(\tau_{2,\mathrm{br}}^2>0\) on the box, and therefore the
+studentized statistic of \Cref{cor:boundary-reset-cycle-clt-main} is justified
+for that certified setting. If the enclosure contains zero, the computation is
+inconclusive for studentization; the theorem still gives the unstudentized CLT
+and variance-estimator consistency.
+
+Equivalently, one may evaluate $m_1$ or $m_2$ by truncating at $K$. The tail
+error is rigorously controlled by
 \[
 0\le m_1-\sum_{g=0}^K g\,\pi_g\le \sum_{g>K} g\,\pi_g,
 \qquad
 0\le m_2-\sum_{g=0}^K g^2\,\pi_g\le \sum_{g>K} g^2\,\pi_g.
 \]
 Those tail sums are again explicit from the same gap law, so
-\eqref{eq:tau2-explicit-main} can be enclosed by a finite computation before
-reporting a Wald interval. If the enclosure contains zero, or if the numerical
-precision is insufficient to certify strict positivity, the diagnostic reported
-from this theorem is the point estimate together with the variance-degeneracy
-warning; the manuscript's CLT chain does not provide a universal positive lower
-bound that would authorize a studentized statistic in that regime.
+\eqref{eq:tau2-explicit-main} can also be enclosed by a finite
+truncation-and-tail computation before reporting a Wald interval.
 \end{remark}
 
 \begin{proposition}[Finite-record diagnostics]\label{prop:finite-diagnostics-main}
@@ -4105,9 +4273,8 @@ scan-design asymptotics not proved by the single-record CLT, precisely as
 isolated by the finite-budget obstruction in
 \Cref{prop:finite-diagnostics-main}(iv) and the boundary statement in
 \Cref{rem:external-scan-root-clt-main}.
-\item The inverse and covariance formulas of Appendix~\ref{sec:inverse}
-require separate denominator-, location-, or ratio-data asymptotics such as
-\Cref{ass:ratio-data-clt-main}; they are not consequences of
+\item Any inverse or covariance-transport formula requires separate
+denominator-, location-, or ratio-data asymptotics; it is not a consequence of
 \Cref{thm:cycle-block-main}.
 \end{enumerate}
 \end{theorem}
@@ -4115,8 +4282,8 @@ require separate denominator-, location-, or ratio-data asymptotics such as
 \begin{proof}
 Items~(i)--(iii) are exactly the separation of roles established by
 \Cref{thm:cycle-block-main,prop:finite-diagnostics-main}.
-Item~(iv) is the standing scope condition recorded again at the start of
-Appendix~\ref{sec:inverse} and in \Cref{ass:ratio-data-clt-main}.
+Item~(iv) is the standing scope condition used to keep the single-record CLT
+separate from any external ratio-data or scan-data theorem.
 \end{proof}
 
 For the memory-transition readout, the primary one-record diagnostic is
