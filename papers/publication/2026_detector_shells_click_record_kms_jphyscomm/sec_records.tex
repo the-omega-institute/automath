@@ -387,9 +387,12 @@ the standard rate-ratio criterion \cite{Unruh1976,BirDav1982}.
 
 The third criterion is what this paper studies. Neither detailed balance nor Gibbs thermalization implies the Parry benchmark, and the converse implication is not asserted. The physical content is that the detector click grammar is as disordered as the dead-time constraint permits.
 
-\subsection{Ideal one-step dead time: benchmark proposition}
+\subsection{Ideal one-step dead time: standard benchmark proposition}
 
-The ideal dead-time model serves as a benchmark. A click suppresses the next one-step interval, so the visible record reduces immediately to a one-parameter Markov chain on the golden-mean shift. Writing
+The ideal dead-time model serves only as a benchmark normalization. A click
+suppresses the next one-step interval, so once this ideal counter law is
+stipulated the visible record reduces immediately to a one-parameter Markov
+chain on the golden-mean shift. Writing
 \begin{equation}\label{eq:p-beta-main}
 p_\beta=e^{-\Gamma\Delta\tau}, \qquad q_\beta=1-p_\beta,
 \end{equation}
@@ -401,16 +404,21 @@ P_\beta=
  1 & 0
 \end{pmatrix}.
 \end{equation}
-The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
+The reference law on that shift is the Parry measure, namely the unique measure
+of maximal entropy compatible with the grammar
+$11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}. The
+calculation below is the standard Perron--Frobenius/Parry calculation for this
+stipulated golden-mean chain; it is included to name the clock value used later
+as a comparison point.
 The following proposition is a theorem about a classical sampled interval
 counter whose Poisson attempt rate is later calibrated to the stationary UDW
 excitation rate. Its parameter $\Gamma$ is the counter attempt rate from the
 sampled instrument, and the later identification $\Gamma=\Gamma_+(x,\Omega)$
 is only the response-side calibration step used in Sections~4--5. In
 particular, this proposition does not derive the counter law from UDW detector
-back-action.
+back-action and is not part of the paper's new sampled-record process theory.
 
-\begin{proposition}[Exact-clock benchmark for the classical sampled counter]\label{prop:ideal-main}
+\begin{proposition}[Standard Parry benchmark for the stipulated ideal counter]\label{prop:ideal-main}
 For the ideal one-step blanking mode of the sampled classical counter, the sampled output realizes the Parry benchmark if and only if
 \begin{equation}\label{eq:parry-threshold-main}
 p_\beta=\varphi^{-1}
@@ -418,7 +426,8 @@ p_\beta=\varphi^{-1}
 \Gamma\Delta\tau=\log\varphi,
 \end{equation}
 where $\varphi=(1+\sqrt5)/2$ is the golden ratio. This threshold defines the
-exact-clock selector for the classical sampled counter.
+benchmark clock value for the stipulated ideal counter; no novelty is claimed
+for the Parry/Perron--Frobenius calculation itself.
 \end{proposition}
 
 \begin{proof}
@@ -2143,7 +2152,7 @@ batching step that removes this one-step overlap.
 Block & Role in the finite-record stack & Output carried forward \\
 \midrule
 \Cref{def:cycle-block-main,lem:cycle-one-dep-main,lem:cycle-transfer-main,lem:renewal-local-clt-main} & Auxiliary regenerative bookkeeping for the lag-two covariance reward & A stationary $1$-dependent cycle reward and the fixed-time normalization needed for one CLT \\
-\Cref{thm:cycle-block-main} & Main fixed-setting finite-record CLT & A studentized interval for the single scalar $\gamma_2=\operatorname{Cov}(A_0,A_2)$, conditional on the explicit nondegeneracy criterion \\
+\Cref{thm:cycle-block-main,lem:boundary-reset-tau-positive-main} & Main fixed-setting finite-record CLT & A studentized interval for the single scalar $\gamma_2=\operatorname{Cov}(A_0,A_2)$; for the sampled law the explicit cycle variance is analytically positive \\
 \Cref{prop:finite-diagnostics-main} & Diagnostic translation inside the classical sampled-counter model & Sign of $\gamma_2$, the deterministic memory-threshold crossing relation, and the finite-budget obstruction to scan-root inference \\
 \Cref{thm:one-record-estimates-main} & Scope closure for one observed record & The assertion that the fixed record estimates only the fixed-setting $\gamma_2$ diagnostic and not shell position, ratio coordinates, or scan roots \\
 \bottomrule
@@ -2164,8 +2173,8 @@ subsection is the fixed-setting lag-two diagnostic
 \[
 \gamma_2=\operatorname{Cov}(A_0,A_2),
 \]
-with studentization under the nondegeneracy criterion of
-\Cref{thm:cycle-block-main}.  The subsequent scan and response statements may
+with studentization justified by the sampled-law positivity lemma
+\Cref{lem:boundary-reset-tau-positive-main}.  The subsequent scan and response statements may
 use this diagnostic only through the deterministic sign and transversality
 relations of \Cref{prop:finite-diagnostics-main}; they do not acquire a
 root-$N$ shell-location, scan-root, denominator, or ratio-coordinate CLT unless
@@ -3834,20 +3843,34 @@ f(g,h)=c(g)+\mathbf 1_{\{g=0,h=0\}},
 \]
 where \(c(g)=\alpha g+\beta+\mathbf 1_{\{g=1\}}\), and
 \[
-\tau_{2,\mathrm{br}}^2=\Var(Y_1)+2\Cov(Y_1,Y_2).
+\tau_{2,\mathrm{br}}^2=\Var(Y_1)+2\operatorname{Cov}(Y_1,Y_2).
 \]
 For such a stationary \(1\)-dependent sequence, zero long-run variance forces
-a coboundary.  One way to see this is to put
-\(S_n=\sum_{j=1}^n f(G_j,G_{j+1})\).  If
-\(\tau_{2,\mathrm{br}}^2=0\), then \(\Var(S_n)\) is bounded in \(n\).  The
-Hoeffding decomposition of \(f(G_j,G_{j+1})\) with respect to the product gap
-law then cannot contain a nonzero two-variable component or a nonzero
-one-variable additive component, since either component would contribute a
-linear variance.  Hence the only possible form is a telescoping coboundary
+a coboundary.  To see this explicitly, take the Hoeffding decomposition of
+\(f(G,H)\) for two independent gap variables \(G,H\):
+\[
+f(g,h)=A(g)+B(h)+R(g,h),
+\]
+where \(\EE A(G)=\EE B(G)=0\), \(\EE[R(G,h)]=0\) for every \(h\), and
+\(\EE[R(g,H)]=0\) for every \(g\).  The mean term is absent because
+\(\EE Y_j=0\).  For \(S_n=\sum_{j=1}^n f(G_j,G_{j+1})\),
+\[
+S_n=A(G_1)+\sum_{j=2}^{n}\bigl(A+B\bigr)(G_j)+B(G_{n+1})
+     +\sum_{j=1}^{n} R(G_j,G_{j+1}).
+\]
+The two sums on the right are orthogonal to each other and to the boundary
+terms, and the degenerate variables \(R(G_j,G_{j+1})\) are themselves
+uncorrelated at distinct lags.  Hence
+\[
+\lim_{n\to\infty}\frac1n\Var(S_n)
+=\Var\bigl((A+B)(G)\bigr)+\EE R(G,H)^2 .
+\]
+Thus \(\tau_{2,\mathrm{br}}^2=0\) implies \(R=0\) and \(A+B=0\) almost surely.
+On the full support this is exactly the telescoping form
 \[
 f(g,h)=u(h)-u(g)
 \]
-on the full support of the gap law.
+with \(u=B=-A\).
 
 This alternative is impossible here.  The pairs \((0,0)\) and \((0,1)\) both
 have positive probability, and the displayed formula for \(f\) gives
@@ -3912,16 +3935,23 @@ Then the lag-two estimator from \Cref{def:cycle-block-main} satisfies
 \frac{\tau_{2,\mathrm{br}}^2}{\EE(G+1)}\right).
 \]
 The separated-batch estimator \eqref{eq:cycle-block-est-main} is consistent for
-the displayed variance, and the studentized normal limit holds precisely under
-the explicit nondegeneracy check
+the displayed variance. Moreover, by
+\Cref{lem:boundary-reset-tau-positive-main},
 \[
 \tau_{2,\mathrm{br}}^2>0.
 \]
-No all-parameter analytic positivity theorem for
-$\tau_{2,\mathrm{br}}^2$ is asserted here.  For a fixed sampled-law parameter
-choice, \Cref{rem:lag-two-nondeg-main} gives the closed-form inputs and
-interval-arithmetic enclosure that certify this strict inequality before a Wald
-statistic is reported.
+Consequently
+\[
+\PP\!\left(\widehat\sigma_{2,N}^2>0\right)\to1,
+\qquad
+\frac{\sqrt N\,(\widehat\gamma_2-\gamma_2)}{\widehat\sigma_{2,N}}
+\Rightarrow \mathcal N(0,1),
+\]
+and the usual fixed-setting Wald interval for \(\gamma_2\) is justified for all
+positive sampled-law parameters.  The closed-form and interval formulas in
+\Cref{rem:lag-two-nondeg-main} are optional numerical certificates for concrete
+detector settings, not additional hypotheses for studentization in this
+sampled-law corollary.
 Combined with \Cref{thm:recovery-main}, the mean being estimated is zero if and
 only if
 \[
@@ -3929,8 +3959,8 @@ only if
 \]
 while away from that rate its sign is the sign prescribed by the hidden-mode
 covariance phase in \Cref{thm:recovery-main}. Thus a one-record Wald diagnostic
-for the memory transition is theorem-level justified only after the sampled-law
-cycle-variance criterion \eqref{eq:tau2-boundary-reset-main} is positive.
+for the fixed-setting lag-two covariance is theorem-level justified throughout
+the sampled-law parameter space.
 \end{corollary}
 
 \begin{proof}
@@ -3952,9 +3982,9 @@ $\alpha,\beta,\pi_0,\pi_1,m_1,m_2$ appearing in
 \Cref{thm:cycle-block-main} are exactly the sampled-law constants displayed in
 the statement, and \eqref{eq:tau2-explicit-main} becomes
 \eqref{eq:tau2-boundary-reset-main}. Applying \Cref{thm:cycle-block-main} gives
-the CLT, consistency of the separated-batch variance estimator, and the
-studentized limit under the sole extra condition
-$\tau_{2,\mathrm{br}}^2>0$. Finally, the equivalence
+the CLT and consistency of the separated-batch variance estimator, and
+\Cref{lem:boundary-reset-tau-positive-main} supplies the strict positivity
+needed for the studentized limit. Finally, the equivalence
 $\gamma_2=0\iff\lambda_{\mathrm{hid}}=0\iff
 \Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and the sign phase away from the
 critical rate are precisely the covariance conclusions of
@@ -4274,7 +4304,7 @@ The continuous mapping theorem therefore yields
 \]
 \end{proof}
 
-\begin{remark}[Closed-form and interval certification of the nondegeneracy criterion]\label{rem:lag-two-nondeg-main}
+\begin{remark}[Closed-form and interval evaluation of the sampled-law variance]\label{rem:lag-two-nondeg-main}
 Theorem~\ref{thm:cycle-block-main} reduces the studentization hypothesis to the
 finite quantity \eqref{eq:tau2-explicit-main}. The needed inputs are only
 \[
@@ -4374,10 +4404,10 @@ finite geometric sums with interval remainder bounds. In every case,
 \inf I_{\tau,\mathrm{br}}>0
 \]
 is a certificate that \(\tau_{2,\mathrm{br}}^2>0\) on the box, and therefore the
-studentized statistic of \Cref{cor:boundary-reset-cycle-clt-main} is justified
-for that certified setting. If the enclosure contains zero, the computation is
-inconclusive for studentization; the theorem still gives the unstudentized CLT
-and variance-estimator consistency.
+interval computation has numerically certified what
+\Cref{lem:boundary-reset-tau-positive-main} proves analytically. If the
+enclosure contains zero, the computation is only too coarse; it is not a
+failure of the theorem-level studentization condition for the sampled law.
 
 Equivalently, one may evaluate $m_1$ or $m_2$ by truncating at $K$. The tail
 error is rigorously controlled by
@@ -4434,15 +4464,16 @@ Hence the zero of $\gamma_2$ gives the first-order scan-coordinate crossing of
 the memory transition. Interpreting that crossing as a shell statement requires
 the separate response-side range and regularity hypotheses imposed later in
 \Cref{sec:kms-shells}.
-\item If, in addition, the fixed detector setting satisfies the explicit
-nondegeneracy criterion \eqref{eq:tau2-explicit-main} from
-\Cref{thm:cycle-block-main}, equivalently
+\item The sampled-law positivity lemma
+\Cref{lem:boundary-reset-tau-positive-main} verifies the nondegeneracy
+criterion \eqref{eq:tau2-explicit-main} from \Cref{thm:cycle-block-main};
+equivalently,
 \[
-\tau_2^2>0
+\tau_{2,\mathrm{br}}^2>0
 \quad\Longleftrightarrow\quad
-\sigma_2^2>0,
+\sigma_2^2>0.
 \]
-then the studentized statistic from \Cref{thm:cycle-block-main} yields an
+Therefore the studentized statistic from \Cref{thm:cycle-block-main} yields an
 asymptotic two-sided $(1-\alpha)$ confidence interval for $\gamma_2$:
 \[
 \widehat\gamma_2\pm
@@ -4571,9 +4602,10 @@ stationary click record from that design. Then:
 \gamma_2=\operatorname{Cov}(A_0,A_2)
 \]
 and its asymptotic variance. After the nondegeneracy check from
-\Cref{thm:cycle-block-main}, equivalently the positivity of
-\eqref{eq:tau2-explicit-main}, its studentized interval is a confidence
-interval for this fixed-setting $\gamma_2$ and for no other quantity.
+\Cref{thm:cycle-block-main}, its studentized interval is a confidence interval
+for this fixed-setting $\gamma_2$ and for no other quantity.  In the sampled
+boundary-reset law studied here, that check is discharged analytically by
+\Cref{lem:boundary-reset-tau-positive-main}.
 \item \Cref{prop:finite-diagnostics-main}(ii) adds only a deterministic
 first-order scan relation: if the same detector design is embedded in a
 $C^1$ scan $s\mapsto\Gamma_+(s)$ with a transverse crossing at $s_*$, then the
@@ -4605,11 +4637,13 @@ with $\rho>0$ and $a-\rho<0$. Thus the lag-one covariance
 $\gamma_1=\rho(a-\rho)$ remains negative, and
 \Cref{prop:finite-diagnostics-main,thm:one-record-estimates-main} make the
 lag-two zero the finite-record diagnostic for the memory threshold. The
-fixed-setting confidence interval for $\gamma_2$ is available only after the
-explicit cycle-variance check \eqref{eq:tau2-explicit-main} has confirmed
-$\tau_2^2>0$ (equivalently $\sigma_2^2>0$); if the estimated cycle variance is
-numerically close to zero, the appropriate finite-record output is the sign
-diagnostic together with the point estimate, not a Wald interval. Along a
+fixed-setting confidence interval for $\gamma_2$ is available throughout the
+positive sampled-law parameter space because
+\Cref{lem:boundary-reset-tau-positive-main} proves
+\(\tau_{2,\mathrm{br}}^2>0\) analytically. If an implementation reports an
+estimated cycle variance numerically close to zero, the issue is numerical
+resolution or finite-sample instability rather than a missing theorem-level
+positivity hypothesis. Along a
 designed scan, part~(ii) gives only the first-order transversality of the scan
 crossing. Without that extra scan structure, the sign diagnostic can identify
 side information but not a unique shell location, shell confidence interval, or
@@ -4623,10 +4657,10 @@ sampling noise. These checks are not additional shell equations; they test
 whether the sampled boundary-reset recovery readout model is the right
 effective description of the observed record.
 
-Theorem~\ref{thm:cycle-block-main} supplies both the lag-two variance estimate
-and the explicit positivity criterion \eqref{eq:tau2-explicit-main} required
-before studentization. \Cref{rem:lag-two-nondeg-main} only explains how to
-compute that finite quantity in practice. Other design-specific observables
+Theorem~\ref{thm:cycle-block-main} supplies the lag-two variance estimate, and
+\Cref{lem:boundary-reset-tau-positive-main} supplies the sampled-law positivity
+needed for studentization. \Cref{rem:lag-two-nondeg-main} only explains how to
+compute or enclose that finite quantity in practice. Other design-specific observables
 still require the corresponding regenerative variance estimate or a Monte
 Carlo calibration, and no universal sample-size bound follows from the
 closed-form law alone.
