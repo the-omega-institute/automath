@@ -841,6 +841,8 @@ def _recoverable_stage_a_block_from_status(status: str) -> bool:
         "needs_human_resolution",
         "human_decision",
         "overlap needs",
+        "semantic overlap requires explicit board resolution",
+        "explicit board resolution",
         "overlap with earlier submitted",
         "earlier submitted/current",
         "prior submitted sibling",
@@ -885,10 +887,14 @@ def _paper_name_from_skipped_status(line: str) -> str:
 
 def recoverable_stage_a_blocked_papers(summary: dict[str, Any]) -> list[str]:
     papers: list[str] = []
+    sections = summary.get("board_sections", {}) or {}
     for line in summary.get("skipped_status", []) or []:
         text = str(line)
         if _recoverable_stage_a_block_from_status(text):
             name = _paper_name_from_skipped_status(text)
+            section = str(sections.get(name, "")).lower()
+            if section and "active rewrite" not in section and "retarget" not in section:
+                continue
             if name:
                 papers.append(name)
     return sorted(set(papers))
@@ -928,6 +934,7 @@ def format_discovery_summary(summary: dict[str, Any]) -> str:
         f"runnable={summary.get('runnable_count', 0)}; "
         f"status_skipped={summary.get('skipped_status_count', 0)}; "
         f"done_skipped={summary.get('skipped_done_count', 0)}; "
+        f"oracle_pending_skipped={summary.get('skipped_oracle_pending_count', 0)}; "
         "unregistered_skipped="
         f"{summary.get('skipped_unregistered_count', 0)}; "
         "assignment_skipped="
@@ -943,6 +950,10 @@ def _pipeline_discovery_summary(only: list[str] | None = None) -> dict[str, Any]
         f"paper_dirs = {only!r}; "
         "summary = oracle_pipeline.discover_paper_summary("
         "paper_dirs, respect_assignment=False, log=False); "
+        "entries = oracle_pipeline._get_board_entries(); "
+        "summary['board_sections'] = {"
+        "k: str(v.get('section', '')) for k, v in entries.items()"
+        "}; "
         "print(json.dumps(summary, ensure_ascii=True))"
     )
     proc = subprocess.run(
@@ -1053,8 +1064,10 @@ def spawn_inner_pool(parallel: int, *, target_journal: str = "",
             **_detached_popen_kwargs(),
         )
     except Exception as exc:
+        log_handle.close()
         supervisor_log(f"inner pool spawn failed: {exc}")
         return None
+    log_handle.close()
     supervisor_log(
         f"inner pool spawned pid={proc.pid} parallel={parallel} mode={mode}"
     )
@@ -1185,6 +1198,20 @@ def maybe_refill_drained_backlog(args: Any) -> None:
     cooldown_s = max(0.0, args.refill_cooldown_hours * 3600.0)
     since_refill_s = _now() - refill_last_run_ts()
     if since_refill_s >= cooldown_s:
+        try:
+            data = {}
+            if REFILL_QUEUE_PATH.exists():
+                data = json.loads(REFILL_QUEUE_PATH.read_text(encoding="utf-8"))
+                if not isinstance(data, dict):
+                    data = {}
+            data["updated_at"] = _now_iso()
+            REFILL_QUEUE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            REFILL_QUEUE_PATH.write_text(
+                json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+        except (json.JSONDecodeError, OSError) as exc:
+            supervisor_log(f"refill cooldown stamp failed: {exc}")
         if not args.refill_project_url:
             supervisor_log(refill_disabled_message())
         trigger_refill(
