@@ -521,8 +521,14 @@ A_{\mathrm{replay}}=A_{\mathrm{scan}}\cup\{&
 \]
 Assume the four promotion certificates
 \(\RsrcCert,\RartCert,\RextCert,\RvenCert\) are absent from all three bases and
-are not concluded by any rule in \(\HornMin\).  Then the least closures have
-coordinate vectors
+are not concluded by any rule in \(\HornMin\).  Also assume the two positive
+branch gates are closure-stable at the branches where they have not been
+adjoined: the scanner gate
+\(\scannerSuccess(B,\mathrm{Rows},\mathrm{Prefixes})\) is absent from
+\(A_{\emptyset}\) and is not concluded by any rule in \(\HornMin\), and the
+script-conformance gate \(\scriptsconform(A)\) is absent from
+\(A_{\emptyset}\) and \(A_{\mathrm{scan}}\) and is not concluded by any rule in
+\(\HornMin\).  Then the least closures have coordinate vectors
 \[
 A_{\emptyset}\mapsto(0,0,0,0,0,0),\qquad
 A_{\mathrm{scan}}\mapsto(1,0,0,0,0,0),\qquad
@@ -536,8 +542,10 @@ Forward chaining starts from a base disjoint from \(Q\).  Rule R0 has body
 \(\mathsf{false}\), so it never adds a coordinate.  In \(A_{\emptyset}\), no
 remaining rule body is present; the least fixed point has empty \(Q\)-projection.
 In \(A_{\mathrm{scan}}\), Rscan fires and adds \(\qlex\).  Rreplay is still
-blocked by the seven missing replay predicates, and Rsrc--Rven are blocked by
-their absent certificates, so no other coordinate can enter.  In
+blocked by the seven missing replay predicates; in particular the
+closure-stable gate \(\scriptsconform(A)\) is not present or derivable in this
+branch.  Rsrc--Rven are blocked by their absent certificates, so no other
+coordinate can enter.  In
 \(A_{\mathrm{replay}}\), Rscan again adds \(\qlex\), and every premise of
 Rreplay is now present, so \(\qrgs\) is added.  The four certificate bodies for
 Rsrc--Rven remain absent and no rule derives them.  Since Table~\ref{tab:minimal-finite-horn-system}
@@ -1439,6 +1447,12 @@ scanner-success rows emit the five atoms in \(P_1\); the Stage--A manifest,
 record-gate, certificate-DAG, Stage--A digest, script-conformance, and
 bounded-upgrade rows emit the ten atoms in \(P_3\).  The other displayed
 hypotheses validate those rows; they do not silently enlarge the emission table.
+In particular, the seven archive predicates of
+Definition~\ref{def:decidable-replay-premises-minimal} do not by themselves
+assert any accepted row in \(Z\).  Lemma use of
+\(\operatorname{ReplayCertOK}(Z)\) is exactly the row-presence claim for the
+rows named in Definition~\ref{def:replay-cert-ok}, and every atom used below is
+emitted by one of those rows.
 This inclusion is the only replay-base relationship asserted here; it does not
 claim that \(\ReplayBase(Z)\) is equal to \(P_1\cup P_3\) or to any smaller
 branch base.
@@ -1807,6 +1821,11 @@ and the ten \(R3\) premises
 \texttt{qrgsReplayUpgrade}.
 \end{gathered}
 \]
+This assumption is an instantiated-record assumption: it holds only when \(Z\)
+supplies the accepted rows of Definition~\ref{def:replay-cert-ok}.  The PDF
+schema alone, without a supplied source package or immutable archive containing
+those rows and their external digest record, does not instantiate this
+hypothesis.
 \item \(\FrameOKZ(Z)\) holds in the expanded sense of
 Lemma~\ref{lem:operative-frame-expansion}, equivalently the closed-world clauses
 for \(\HHorn\), \(\FactMap(Z)\), and \(\ReplayBase(Z)\) listed in
@@ -1870,7 +1889,10 @@ are absent from \(C_0\) and are not derivable by any rule of \(\HHorn\); and
 \(\LocatorOKstageA\) is not identified with
 \texttt{externalArchiveEquivalence}.  The allowed atom
 \texttt{qrgsReplayUpgrade} is deliberately outside this negative set: it is only
-the bounded replay premise in the \(R3\) body.  Thus
+the bounded replay premise in the \(R3\) body.  The same frame is also the
+closure-stability certificate for the positive branch gates: no hidden rule
+derives \texttt{scanOK} or \texttt{ScriptOKstage\_a} in branches where those
+atoms have not been explicitly supplied.  Thus
 Lemma~\ref{lem:operative-closed-world-exactness} applies directly to
 \((H,A)=(\HHorn,C_0)\).  Since the \(R1\) and \(R3\) bodies were already shown to
 be subsets of \(C_0\), the lemma gives
@@ -3398,6 +3420,18 @@ coordinate set \(\{\mathsf{raw}\}\) into the Boolean vector
 \((\mathsf{true},\mathsf{false},\mathsf{false},\mathsf{false},
 \mathsf{false},\mathsf{false})\).
 \end{proof}
+
+\paragraph{Theorem-level scanner warning.}
+Every use of Lemma~\ref{thm:raw-begin-token-witness-soundness} or the
+source-interface comparison below interprets \(\qlex\), serialized as
+\auditatom{qraw}, only as the \(\beginTokenScan\) result: a byte-indexed
+decoded begin-token subset witness.  The coordinate has no
+\TeX{}-tokenization, active-environment, source-completeness,
+included-file-coverage, comment-exclusion, macro-expansion,
+balanced-environment, theorem-inventory-completeness, or proof-checking content.
+Proposition~\ref{thm:typed-verified-core-hierarchy} and the later
+source-interface record comparison therefore cannot upgrade a positive
+\auditatom{qraw} atom into a semantic statement about the source.
 
 \paragraph{Public coordinate surface.}
 For this PDF-only article the public coordinate surface has one foreground
