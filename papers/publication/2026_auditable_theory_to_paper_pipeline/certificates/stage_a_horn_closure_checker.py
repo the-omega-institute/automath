@@ -16,7 +16,18 @@ from dataclasses import dataclass
 from typing import Iterable
 
 
-COORDINATES = ("q_raw", "qrgs", "qsrc", "qart", "qext", "qven")
+COORDINATES = ("qraw", "qrgs", "qsrc", "qart", "qext", "qven")
+UNSUPPORTED_PROMOTION_PREMISES = (
+    "freshFormalSourceUpgrade",
+    "dynamicArtifactSemanticUpgrade",
+    "externalArchiveEquivalence",
+    "uploadTimeVenueAcceptanceUpgrade",
+)
+BRANCH_ABSENCE_EXPECTATIONS = {
+    "A_rec": ("scanOK", "ScriptOKstage_a", *UNSUPPORTED_PROMOTION_PREMISES),
+    "A_scan": ("ScriptOKstage_a", *UNSUPPORTED_PROMOTION_PREMISES),
+    "A_plus": UNSUPPORTED_PROMOTION_PREMISES,
+}
 
 
 class BranchBaseError(ValueError):
@@ -63,8 +74,8 @@ def load_printed_system() -> PrintedSystem:
     a_plus = a_scan | {"ScriptOKstage_a"}
     rules = (
         Rule("R0", ("pubAbs", "suppMain"), "singleRouteSurface"),
-        Rule("R1", ("mainTex", "invJson", "invMd", "finalDigest", "scanOK"), "q_raw"),
-        Rule("R2", ("q_raw",), "localInventoryClosed"),
+        Rule("R1", ("mainTex", "invJson", "invMd", "finalDigest", "scanOK"), "qraw"),
+        Rule("R2", ("qraw",), "localInventoryClosed"),
         Rule(
             "R3",
             (
@@ -146,6 +157,23 @@ def closure_projection(system: PrintedSystem, branch_or_atoms: str | Iterable[st
     return [coordinate for coordinate in system.coordinates if coordinate in closure]
 
 
+def branch_stability_report(system: PrintedSystem) -> dict[str, dict[str, list[str]]]:
+    """Report closure-level absence checks used by the paper's frame theorem."""
+
+    report: dict[str, dict[str, list[str]]] = {}
+    rule_heads = {rule.conclusion for rule in system.rules}
+    for branch, expected_absent in BRANCH_ABSENCE_EXPECTATIONS.items():
+        closure = forward_closure(system.rules, system.branches[branch])
+        unexpected = sorted(atom for atom in expected_absent if atom in closure)
+        derivable_by_rule = sorted(atom for atom in expected_absent if atom in rule_heads)
+        report[branch] = {
+            "expected_absent_from_closure": list(expected_absent),
+            "unexpected_present_in_closure": unexpected,
+            "unexpected_rule_heads": derivable_by_rule,
+        }
+    return report
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -162,6 +190,11 @@ def main(argv: list[str] | None = None) -> int:
         name: closure_projection(system, name)
         for name in names
     }
+    if args.branch == "all":
+        result = {
+            "coordinate_projection": result,
+            "branch_stability": branch_stability_report(system),
+        }
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
 

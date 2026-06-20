@@ -69,11 +69,6 @@
       "path": "main.tex"
     },
     {
-      "atom": "scanOK",
-      "sort": "finite_predicate",
-      "predicate": "ScanOK(mainTexBytes, invJsonBytes, invMdBytes, digestTable)"
-    },
-    {
       "atom": "stageAHornSchema",
       "sort": "schema_file",
       "path": "certificates/stage_a_horn_schema.json"
@@ -109,11 +104,6 @@
       "path": "certificates/stage_a_digest_table.json"
     },
     {
-      "atom": "ScriptOKstage_a",
-      "sort": "tcb_assumption",
-      "path": "certificates/replay_stage_a_audit.py"
-    },
-    {
       "atom": "srcInterface",
       "sort": "source_interface_row",
       "path": "source_interface_record.json"
@@ -147,8 +137,24 @@
       "bounded_to": "fixed Stage-A Horn schema, canonical manifest, replay certificate, replay report, digest table"
     }
   ],
+  "conditional_premise_rows": [
+    {
+      "atom": "scanOK",
+      "sort": "finite_predicate",
+      "branch": "A_scan_and_A_plus",
+      "predicate": "ScanOK(mainTexBytes, invJsonBytes, invMdBytes, digestTable)",
+      "not_emitted_by": "compiler_rows"
+    },
+    {
+      "atom": "ScriptOKstage_a",
+      "sort": "tcb_assumption",
+      "branch": "A_plus_only",
+      "path": "certificates/replay_stage_a_audit.py",
+      "not_emitted_by": "compiler_rows"
+    }
+  ],
   "coordinate_scope": {
-    "qinv": "positive-local-inventory-byte-closure",
+    "qraw": "positive-local-inventory-byte-closure",
     "qrgs": "positive-fixed-stage-a-replay-only",
     "qsrc": "negative-no-fresh-formal-source-upgrade",
     "qart": "negative-no-dynamic-artifact-semantic-upgrade",

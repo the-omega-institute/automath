@@ -30,7 +30,7 @@ INVENTORY_MD = ROOT / "theorem_inventory.md"
 STATIC_SOURCE_LABEL_SCAN = CERT / "static_source_label_scan.json"
 CURRENT_INSTANCE_ROWS = CERT / "current_instance_projection_rows.json"
 
-COORDINATES = ["qinv", "qrgs", "qsrc", "qart", "qext", "qven"]
+COORDINATES = ["qraw", "qrgs", "qsrc", "qart", "qext", "qven"]
 REQUIRED_DIGEST_PATHS = {
     "certificates/stage_a_manifest.json",
     "certificates/stage_a_horn_schema.json",
@@ -57,7 +57,7 @@ EXPECTED_NEGATIVE_UPGRADES = {
 ENV_PATTERN = re.compile(r"\\begin\{(definition|lemma|proposition|theorem|corollary)\}(?:\[([^\]]*)\])?")
 LABEL_PATTERN = re.compile(r"\\label\{([^}]*)\}")
 COORDINATE_RULES = {
-    "qinv": "R1_inventory_closure_to_qinv",
+    "qraw": "R1_raw_scan_to_qraw",
     "qrgs": "R3_replay_tuple_to_qrgs",
     "qsrc": "R5_qsrc_upgrade_to_qsrc",
     "qart": "R6_qart_upgrade_to_qart",
@@ -65,7 +65,7 @@ COORDINATE_RULES = {
     "qven": "R8_qven_upgrade_to_qven",
 }
 EXPECTED_POSITIVE_PREMISES = {
-    "qinv": ["mainTex", "invJson", "invMd", "finalDigest", "scanOK"],
+    "qraw": ["mainTex", "invJson", "invMd", "finalDigest", "scanOK"],
     "qrgs": [
         "stageAHornSchema",
         "stageAManifest",
@@ -89,9 +89,9 @@ ROW_MANIFEST_FAMILIES = [
     "LedgerRows",
     "PromotionRows",
 ]
-ROW_MANIFEST_Q = ["q_raw", "qrgs", "qsrc", "qart", "qext", "qven"]
+ROW_MANIFEST_Q = ["qraw", "qrgs", "qsrc", "qart", "qext", "qven"]
 ROW_MANIFEST_RULES = [
-    (["mainTex", "invJson", "invMd", "finalDigest", "scanOK"], "q_raw"),
+    (["mainTex", "invJson", "invMd", "finalDigest", "scanOK"], "qraw"),
     (
         [
             "stageAHornSchema",
@@ -114,8 +114,8 @@ ROW_MANIFEST_RULES = [
 ]
 ROW_MANIFEST_EXPECTED_CLOSURES = {
     "A_rec": [],
-    "A_scan": ["q_raw"],
-    "A_plus": ["q_raw", "qrgs"],
+    "A_scan": ["qraw"],
+    "A_plus": ["qraw", "qrgs"],
 }
 
 
@@ -239,8 +239,8 @@ def check_record_gate_ok(schema: dict, manifest: dict, report: dict) -> None:
     rule_ids = {rule.get("rule_id") for rule in schema.get("rules", [])}
     expected_rule_ids = {
         "R0_single_route_surface",
-        "R1_inventory_closure_to_qinv",
-        "R2_qinv_to_local_inventory_closed",
+        "R1_raw_scan_to_qraw",
+        "R2_qraw_to_local_inventory_closed",
         "R3_replay_tuple_to_qrgs",
         "R4_qrgs_to_bounded_record_gate_adequacy",
         "R5_qsrc_upgrade_to_qsrc",
@@ -349,7 +349,7 @@ def forward_chain(schema: dict, atoms: set[str]) -> tuple[set[str], list[dict]]:
 
 def validate_certificate(certificate: dict, closure: set[str], proof: list[dict]) -> None:
     proof_by_conclusion = {node["conclusion"]: node for node in proof}
-    for coordinate in ["qinv", "qrgs"]:
+    for coordinate in ["qraw", "qrgs"]:
         dag = certificate.get("derivation_dags", {}).get(coordinate)
         if not dag:
             raise SystemExit(f"certificate missing derivation DAG for {coordinate}")
