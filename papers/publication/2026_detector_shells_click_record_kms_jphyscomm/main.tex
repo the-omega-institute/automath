@@ -8,6 +8,7 @@
 \usepackage{bm}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{longtable}
 \usepackage{enumitem}
 \usepackage{float}
 \usepackage{graphicx}
@@ -61,7 +62,7 @@
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\Var}{\mathrm{Var}}
 
-\title{Classical sampled-counter records: Toeplitz principal-minor laws, finite-record diagnostics, and conditional response calibration}
+\title{Classical sampled-counter records: finite-inclusion principal-minor representations, finite-record diagnostics, and conditional response calibration}
 \author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
 \and
 Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
@@ -86,12 +87,12 @@ For the sampled boundary-reset rule, the zero-run law has full support on
 \(\mathbb N_0\), the zero-run hazard is strictly increasing, and the visible
 record becomes exact \(1\)-dependent exactly at the unique rate
 \(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) where the hidden eigenvalue
-vanishes. A stationary-renewal principal-minor lemma gives the finite-inclusion
-formula, and the boundary-reset law specializes it to an explicit
-non-Hermitian Toeplitz kernel with geometric upper tail. This is only an
-algebraic family of finite principal-minor identities: it does not give a
-Hermitian positive-contraction kernel, negative association, or a fermionic
-interpretation. The Toeplitz record law also has an exact inverse: three
+vanishes. A stationary-renewal lemma gives a finite-inclusion principal-minor
+representation, and the boundary-reset law specializes it to an explicit
+non-Hermitian Toeplitz finite-inclusion matrix with geometric upper tail. This
+is only an algebraic family of finite principal-minor identities: it is not an
+operator DPP theorem, a fermionic theorem, or a negative-association theorem.
+The Toeplitz record law also has an exact inverse: three
 inclusion probabilities recover the unordered attempt/recovery rate pair,
 revealing a \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange duality and
 labelled-rate non-identifiability from one visible record. Relative to true
@@ -101,7 +102,15 @@ post-click return-to-ready leakage, whose leading orders are
 and \(\frac16\Gamma\kappa_{\mathrm r}^2(\Delta\tau)^3\) from an initially
 refractory bin.
 
-The response section is the corresponding fixed-profile level-set theorem.
+The response section is the corresponding conditional fixed-profile level-set
+corollary.  The memory target carries the inverse-theorem label warning
+throughout: for the visible sampled law
+\[
+\mu_{\Gamma,\kappa_{\mathrm r}}=\mu_{\kappa_{\mathrm r},\Gamma},
+\]
+so a visible sampled record identifies only
+\(\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}\), not the
+ordered pair.
 For a supplied positive \(C^1\) response function
 \[
 R_\Omega(x)=\lambda_{\mathrm{sw}}^2F_x(\Omega)
@@ -112,11 +121,17 @@ the record-selected targets
 \(\gamma_\varphi=\log\varphi/\Delta\tau\) and
 \(\gamma_{\mathrm{mem}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) define the
 response loci \(R_\Omega^{-1}(\gamma_\varphi)\) and
-\(R_\Omega^{-1}(\gamma_{\mathrm{mem}})\). They are called shells only at
-regular level-set points after the target is in the range of \(R_\Omega\).
+\(R_\Omega^{-1}(\gamma_{\mathrm{mem}})\) only after
+\(\kappa_{\mathrm r}\) has been independently labelled by detector
+calibration, hardware recovery measurement, or an external experimental
+protocol. Without this label, the response statement is only a quotient
+statement under
+\((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\). They are called
+shells only at regular level-set points after the target is in the range of
+\(R_\Omega\).
 \end{abstract}
 
-\noindent\textbf{Keywords:} sampled counter, hidden Markov model, Toeplitz principal-minor formula, finite-record diagnostics, conditional response calibration
+\noindent\textbf{Keywords:} sampled counter, hidden Markov model, finite-inclusion principal-minor representation, finite-record diagnostics, conditional response calibration
 
 \section{Introduction}
 
@@ -134,42 +149,112 @@ response calibration}: one sampled interval instrument whose attempt rate is
 later identified with a supplied stationary excitation profile only through the
 explicit A0 closure \(\Gamma=R_\Omega(x)=\Gamma_+(x,\Omega)\). The sampled
 counter is specified first; Assumption~A0 names the closure, and the
-fixed-response theorem applies the target-range and regularity checks.
+fixed-response corollary applies the target-range and regularity checks.
 
 This problem sits near hidden-Markov process theory, finite-dependence
 asymptotics, trajectory memory inference, dead-time counting, stationary UDW
 response theory, detector regularization, and detector-based QFT measurement
-theory, but it does not make the same claims as any of those literatures. The
-stochastic comparison classes matter for the sampled-record theorems; the
-detector and AQFT comparison classes matter only as boundary references for the
-conditional response-locus interpretation. \Cref{tab:main-jpa-comparison} is
-placed before the theorem summary because the novelty split is theorem-family
-by theorem-family rather than a single global claim.
+theory, but it does not make the same claims as any of those literatures.
+\Cref{tab:main-jpa-comparison} is therefore placed before the theorem summary
+as a sourced scope map.  Each row names the manuscript result being compared,
+gives article-level metadata for the closest prior result, states the prior
+theorem or construction used for comparison, and then records the exact
+non-overlap.  The stochastic comparison classes matter for the sampled-record
+theorems; the detector and AQFT comparison classes matter only as boundary
+references for the conditional response-locus interpretation.
 
-\begin{table}[H]
-\centering
+\begingroup
 \scriptsize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.29\textwidth}}
+\setlength{\tabcolsep}{2.5pt}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}}
+\caption{Main-text comparison by theorem family and prior theorem/construction.  The table replaces category-level claims by article metadata and exact comparison statements for the HMM/record, finite principal-minor identity, Hermitian positive-contraction DPP, fermionic determinantal process, negative association, finite-record, stochastic-trajectory, UDW-response, conditional calibration, and AQFT/local-measurement boundaries.}
+\label{tab:main-jpa-comparison}\\
 \toprule
-Manuscript theorem family & Closest comparator & Status of comparator & Scope distinction \\
+Manuscript result & Prior article metadata & Exact prior result used for comparison & Distinction from this paper \\
 \midrule
-\Cref{prop:ideal-main,thm:recovery-main,lem:one-dep-criterion-main,prop:spectrum-main}: record-HMM and renewal law & No close recent \emph{J. Phys. A} theorem comparator for this exact sampled two-state boundary-reset HMM; the ideal row uses the standard Parry/Perron--Frobenius benchmark \cite{Parry1964,LindMarcus1995}. & Standard symbolic-dynamics benchmark & The increment is the stipulated classical sampled-counter law itself: full support, increasing zero-run hazard, exact hidden-eigenvalue criterion for \(1\)-dependence, closed covariance tail, and Fano law. It is not derived from a microscopic quantum trajectory model. \\
-\addlinespace
-\Cref{lem:one-dep-criterion-main,thm:recovery-main,cor:critical_dpp_memory_phase,cor:critical_dpp_nonmarkov_fullsupport}: critical exact-\(1\)-dependence and determinant encoding & Borodin--Diaconis--Fulman construct one-dependent determinantal processes; Lyons--Steif characterize stationary regenerative determinantal processes through Toeplitz/Fourier data, and Klenke gives ladder-spanning-tree examples whose rungs are stationary renewal or higher-order regenerative determinantal processes \cite{BorodinDiaconisFulman2010,LyonsSteif2003,Klenke2017Ladder}. & Closest non-JPA determinantal/regenerative comparison & Those works are genuine determinantal-process constructions or characterizations. Here exact \(1\)-dependence is first proved from the sampled HMM hidden eigenmode; the later Toeplitz/Hessenberg matrices are finite-inclusion witnesses for that already fixed renewal law. No Hermitian positive-contraction, negative-association, or fermionic conclusion is asserted. \\
-\addlinespace
-\Cref{thm:recovery-main,thm:sampled-finite-record-main,prop:cycle-block-est-all-main,thm:one-record-estimates-main}: memory threshold and finite-record diagnostics & Vollmar \emph{et al.} infer memory in conformational dynamics without imposing this sampled counter \cite{VollmarEtAl2024Memory}. & Recent \emph{J. Phys. A}; \url{https://doi.org/10.1088/1751-8121/ad6d1e} & The comparator is model-free and empirical-trajectory facing. Here the model is fixed first, and the results are exact formulas for \(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), the lag-two covariance CLT, and a fixed-setting studentized interval for one sampled-counter law. \\
-\addlinespace
-\Cref{prop:instrument-kernels-main,prop:continuous-comparator-main,lem:renewal-gap-main,prop:spectrum-main,prop:finite-diagnostics-main}: stochastic-record formulas & Walls--Schachter--Qian--Ford study stochastic quantum trajectories and Zeno behavior; De Bruyne--Majumdar--Schehr construct constrained run-and-tumble trajectories \cite{WallsEtAl2024StochasticTrajectoriesZeno,DeBruyneMajumdarSchehr2021RunTumbleTrajectories}. & Recent \emph{J. Phys. A}; \url{https://doi.org/10.1088/1751-8121/ad3ab4}; \url{https://doi.org/10.1088/1751-8121/ac1d8e} & Those papers analyze continuous-time quantum or conditioned trajectory ensembles. The present theorems analyze a discrete sampled interval instrument and prove its renewal law, boundary-reset/continuous-comparator difference, spectral density, Fano factor, and finite-record diagnostics. \\
-\addlinespace
-\Cref{lem:renewal-principal-minor-main,thm:boundary_reset_toeplitz_dpp,cor:finite_window_fredholm_word_law,prop:dpp_tail_phase}: principal-minor law & Matsui--Katori--Shirai study hyperuniformity for a Heisenberg-family DPP; Bardenet--Fanuel--Feller study quantum sampling of determinantal and Pfaffian point processes \cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}. & Recent \emph{J. Phys. A}; \url{https://doi.org/10.1088/1751-8121/abecaa}; \url{https://doi.org/10.1088/1751-8121/ad1b75} & The JPA DPP papers concern spatial ensembles, number variance, hyperuniformity, and sampling algorithms. The determinant identity used here is a stationary-renewal principal-minor formula, then a non-Hermitian Toeplitz specialization for the boundary-reset click set; it makes no Hermitian DPP claim. \\
-\addlinespace
-\Cref{thm:response-locus-main}: conditional response/AQFT boundary & Tjoa--Gray clarify the joint interacting Hilbert-space status of the UDW model; Kasprzak--Tjoa study field-mediated quantum-information transmission \cite{TjoaGray2024UDWJointHilbert,KasprzakTjoa2025Transmission}. & Recent \emph{J. Phys. A}; \url{https://doi.org/10.1088/1751-8121/ad6365}; \url{https://doi.org/10.1088/1751-8121/adb66b} & The response theorem is only level-set algebra after a positive \(C^1\) calibrated response profile and the A0 closure \(\Gamma=R_\Omega(x)\) have been fixed. It is not a new UDW Hilbert-space, detector back-action, communication, or AQFT measurement theorem. \\
+\endfirsthead
+\toprule
+Manuscript result & Prior article metadata & Exact prior result used for comparison & Distinction from this paper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{Continued on next page}\\
+\endfoot
 \bottomrule
-\end{tabular}
-\caption{Main-text comparison by theorem family. The rows separate the sampled record-HMM result, the one-dependent/regenerative determinantal comparison nearest the critical point, memory-inference work, stochastic-trajectory work, DPP-adjacent principal-minor formulas, and UDW/AQFT detector boundaries.}
-\label{tab:main-jpa-comparison}
-\end{table}
+\endlastfoot
+\Cref{prop:ideal-main}: ideal one-step blanking benchmark &
+Parry, ``Intrinsic Markov chains'', \emph{Trans. Amer. Math. Soc.} \textbf{112}(1), 55--66 (1964), and the standard finite-state presentation in Lind--Marcus \cite{Parry1964,LindMarcus1995}. &
+Parry's Perron--Frobenius construction gives the intrinsic Markov measure of maximal entropy for an irreducible finite topological Markov chain; for the golden-mean adjacency matrix this gives transition weight \(p_\beta=\varphi^{-1}\) and entropy \(\log\varphi\). &
+The ideal row is only the standard symbolic-dynamics clock benchmark \(\Gamma\Delta\tau=\log\varphi\).  It is not the sampled boundary-reset theorem and is not claimed as a new HMM result. \\
+\addlinespace
+\Cref{thm:recovery-main,lem:one-dep-criterion-main,prop:spectrum-main}: sampled two-state boundary-reset HMM, renewal law, covariance tail, and \(1\)-dependence threshold &
+Blackwell, ``The entropy of functions of finite-state Markov chains'', First Prague Conference, pp. 13--20 (1957); Baum--Petrie, ``Statistical inference for probabilistic functions of finite state Markov chains'', \emph{Ann. Math. Statist.} \textbf{37}(6), 1554--1563 (1966), DOI \url{https://doi.org/10.1214/aoms/1177699147} \cite{Blackwell1957,BaumPetrie1966}. &
+The prior HMM literature treats observed processes obtained as functions, or probabilistic functions, of finite-state Markov chains and develops entropy/inference theory for that general class.  It does not single out the sampled boundary-reset transition matrices \(T_0,T_1\), the click-conditioned renewal mass \(u_n\), or a hidden-eigenvalue zero as an exact finite-dependence criterion. &
+This paper fixes one explicit sampled interval instrument and proves full support, increasing zero-run hazard, \(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\), \(\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\), and exact \(1\)-dependence exactly at \(\lambda_{\mathrm{hid}}=0\).  It is a closed-form record law, not a general HMM estimation theorem. \\
+\addlinespace
+\Cref{lem:one-dep-criterion-main}: critical exact \(1\)-dependence and one-dependent determinantal comparison &
+Borodin--Diaconis--Fulman, ``On adding a list of numbers (and other one-dependent determinantal processes)'', \emph{Bull. Amer. Math. Soc. (N.S.)} \textbf{47}(4), 639--670 (2010), DOI \url{https://doi.org/10.1090/S0273-0979-2010-01306-9} \cite{BorodinDiaconisFulman2010}. &
+Their Theorem 4.1 states that a stationary one-dependent binary process with \(a_i=\PP(X_1=\cdots=X_{i-1}=1)\), \(a_1=1\), has every binary word probability equal to a Toeplitz determinant built from the \(a_i\)'s; Corollary 4.3 states that such a process is determinantal with translation-invariant kernel generated by \(\sum_{n\in\mathbb Z}k(n)z^n=-1/\sum_{j\ge1}a_jz^j\). &
+Those are genuine one-dependent determinantal-process results.  Here one-dependence is first obtained only at the sampled-HMM critical rate, and the determinant statements below are finite-inclusion witnesses for the already fixed renewal law rather than an application of their canonical one-dependent kernel construction. \\
+\addlinespace
+\Cref{lem:renewal-principal-minor-main,thm:boundary_reset_toeplitz_finite_inclusion,cor:finite_window_principal_minor_word_law}: finite principal-minor identity for a renewal record &
+Macchi, ``The coincidence approach to stochastic point processes'', \emph{Adv. Appl. Probab.} \textbf{7}(1), 83--122 (1975); Borodin, ``Determinantal point processes'', in \emph{The Oxford Handbook of Random Matrix Theory}, pp. 231--249 (2011) \cite{Macchi1975,Borodin2009DPP}. &
+Classical DPP theory identifies point processes whose finite inclusion probabilities are determinants of a correlation kernel, usually with additional consistency and operator hypotheses. &
+The lemma here starts instead from an arbitrary stationary renewal process and proves the finite identity \(\PP(B\subset\Xi)=\det[K_u(i,j)]_{i,j\in B}\) with a generally non-Hermitian finite matrix \(K_u\).  The boundary-reset corollary only substitutes \(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\).  This finite principal-minor identity is not, by itself, a Hermitian positive-contraction DPP, a fermionic process, or a negative-association theorem. \\
+\addlinespace
+\Cref{lem:finite_inclusion_scope_main,prop:finite_inclusion_tail_phase}: Hermitian positive-contraction DPP comparison &
+Lyons--Steif, ``Stationary determinantal processes: phase multiplicity, Bernoullicity, entropy, and domination'', \emph{Duke Math. J.} \textbf{120}(3), 515--575 (2003), DOI \url{https://doi.org/10.1215/S0012-7094-03-12032-6}; Klenke, ``The random spanning tree on ladder-like graphs'', arXiv:1704.00182 \cite{LyonsSteif2003,Klenke2017Ladder}. &
+Lyons--Steif Lemma 2.4 gives the Hermitian translation-invariant DPP correlations \(\PP_f[\eta(e_1)=\cdots=\eta(e_k)=1]=\det[\widehat f(e_j-e_i)]\), and Proposition 2.10 states that, in one dimension, \(f\) is the reciprocal of a trigonometric polynomial of degree at most \(n\) iff \(P_f\) regenerates after \(n\) successive \(1\)'s.  Klenke gives ladder-graph spanning-tree examples whose rung sets are stationary renewal or higher-order regenerative determinantal processes. &
+Those results use a Hermitian positive-contraction kernel or a regenerative determinantal construction with an operator-level interpretation.  The present \(K_u\) and \(K_\Gamma\) are finite inclusion matrices depending on the ordered finite set; no Fourier symbol \(0\le f\le1\), positive contraction on \(\ell^2\), or canonical Hermitian correlation kernel is constructed. \\
+\addlinespace
+\Cref{lem:finite_inclusion_scope_main}: fermionic determinantal-process boundary &
+Shirai--Takahashi, ``Random point fields associated with certain Fredholm determinants I: fermion, Poisson and boson point processes'', \emph{J. Funct. Anal.} \textbf{205}(2), 414--463 (2003); Soshnikov, ``Determinantal random point fields'', \emph{Russian Math. Surveys} \textbf{55}(5), 923--975 (2000) \cite{ShiraiTakahashi2003,Soshnikov2000}. &
+Those works develop determinantal random point fields associated with Fredholm determinants, including the fermion case and its operator-kernel structure. &
+This paper constructs no CAR/quasi-free state, Fredholm determinant process, or fermionic correlation operator.  Its determinant is a finite algebraic encoding of renewal inclusion probabilities only. \\
+\addlinespace
+\Cref{lem:finite_inclusion_scope_main}: negative-association boundary &
+Lyons, ``Determinantal probability measures'', \emph{Publ. Math. Inst. Hautes \'Etudes Sci.} \textbf{98}, 167--212 (2003); Borodin, ``Determinantal point processes'', in \emph{The Oxford Handbook of Random Matrix Theory}, pp. 231--249 (2011) \cite{Lyons2003,Borodin2009DPP}. &
+Lyons proves negative association for determinantal probability measures under the appropriate Hermitian positive-contraction hypotheses, and Borodin's survey records the standard DPP framework in which such negative-dependence properties are discussed. &
+No negative association is asserted or used here.  The sampled record has explicit covariance signs from the hidden eigenmode; those signs are not promoted to a global negative-dependence theorem. \\
+\addlinespace
+\Cref{thm:sampled-finite-record-main,prop:cycle-block-est-all-main,thm:one-record-estimates-main}: fixed-setting finite-record estimator for \(\gamma_2=\operatorname{Cov}(A_0,A_2)\) &
+Vollmar \emph{et al.}, ``Model-free inference of memory in conformational dynamics of a multi-domain protein'', \emph{J. Phys. A: Math. Theor.} \textbf{57}(36), 365001 (2024), DOI \url{https://doi.org/10.1088/1751-8121/ad6d1e} \cite{VollmarEtAl2024Memory}. &
+Vollmar \emph{et al.} provide a model-free trajectory-facing inference procedure for memory in biomolecular conformational dynamics rather than a fixed sampled-counter likelihood or renewal law. &
+The finite-record theorem here is deliberately narrower: it estimates the lag-two covariance at one fixed sampled-counter setting using the all-complete-cycle regenerative estimator and its variance.  It does not scan over response locations and is not a general model-free memory-inference method. \\
+\addlinespace
+\Cref{prop:instrument-kernels-main,prop:continuous-comparator-main,lem:renewal-gap-main}: sampled interval instrument versus continuous recovery/trajectory work &
+Walls--Schachter--Qian--Ford, ``Stochastic quantum trajectories demonstrate the quantum Zeno effect in open spin 1/2, spin 1 and spin 3/2 systems'', \emph{J. Phys. A: Math. Theor.} \textbf{57}(17), 175301 (2024), DOI \url{https://doi.org/10.1088/1751-8121/ad3ab4}; De Bruyne--Majumdar--Schehr, ``Generating constrained run-and-tumble trajectories'', \emph{J. Phys. A: Math. Theor.} \textbf{54}(38), 385004 (2021), DOI \url{https://doi.org/10.1088/1751-8121/ac1d8e} \cite{WallsEtAl2024StochasticTrajectoriesZeno,DeBruyneMajumdarSchehr2021RunTumbleTrajectories}. &
+Those papers construct and analyze continuous-time quantum or conditioned trajectory ensembles, including Zeno behavior or constrained path generation. &
+The present results are discrete sampled-record formulas for one stipulated interval instrument.  The continuous-comparator proposition is only a local difference calculation showing the omitted post-click recovery leakage, not a quantum-trajectory construction. \\
+\addlinespace
+\Cref{thm:boundary_reset_toeplitz_finite_inclusion}: recent \emph{J. Phys. A} DPP/Pfaffian comparison &
+Matsui--Katori--Shirai, ``Local number variances and hyperuniformity of the Heisenberg family of determinantal point processes'', \emph{J. Phys. A: Math. Theor.} \textbf{54}(16), 165201 (2021), DOI \url{https://doi.org/10.1088/1751-8121/abecaa}; Bardenet--Fanuel--Feller, ``On sampling determinantal and Pfaffian point processes on a quantum computer'', \emph{J. Phys. A: Math. Theor.} \textbf{57}(5), 055202 (2024), DOI \url{https://doi.org/10.1088/1751-8121/ad1b75} \cite{MatsuiKatoriShirai2021HeisenbergDPP,BardenetFanuelFeller2024SamplingDPP}. &
+Matsui--Katori--Shirai analyze local number variance and hyperuniformity in a spatial Heisenberg-family DPP.  Bardenet--Fanuel--Feller give quantum algorithms for sampling determinantal and Pfaffian point processes. &
+The manuscript's determinant identity is a finite-inclusion principal-minor formula for the click set of one renewal record.  It has no spatial hyperuniformity claim, no Pfaffian sampling algorithm, and no operator-DPP sampling problem. \\
+\addlinespace
+\Cref{cor:conditional-calibration-bridge-main,thm:response-locus-main}: conditional rate calibration only &
+Krantz--Parks, \emph{The Implicit Function Theorem: History, Theory, and Applications}, Birkh\"auser (2002); standard stationary response references below \cite{KrantzParks2002,LoukoSatz2006,LoukoSatz2008}. &
+The mathematical step used by the paper is the ordinary range check and regular-level-set theorem for one supplied scalar function \(R_\Omega\). &
+This is a conditional calibration theorem: A0 supplies \(\Gamma=R_\Omega(x)=\Gamma_+(x,\Omega)\), and the record target becomes a level set.  It is distinct from a UDW detector-response derivation, a detector measurement model, or an AQFT local measurement scheme. \\
+\addlinespace
+\Cref{prop:stationary-udw-response-main}: cited UDW detector-response input &
+Louko--Satz, ``How often does the Unruh--DeWitt detector click? Regularisation by a spatial profile'', \emph{Class. Quantum Grav.} \textbf{23}(22), 6321--6343 (2006), DOI \url{https://doi.org/10.1088/0264-9381/23/22/015}; Louko--Satz, ``Transition rate of the Unruh--DeWitt detector in curved spacetime'', \emph{Class. Quantum Grav.} \textbf{25}(5), 055012 (2008), DOI \url{https://doi.org/10.1088/0264-9381/25/5/055012} \cite{LoukoSatz2006,LoukoSatz2008}. &
+These works derive and regularize UDW transition rates from detector-field response theory.  In the stationary convention used here, the response input is assumed as \(F_x(\Omega)=\int e^{-i\Omega s}W_x(s)\,ds\), with \(R_\Omega(x)=\lambda_{\mathrm{sw}}^2F_x(\Omega)\) after the switching limit and regularity hypotheses. &
+This paper cites that UDW response theorem only to fix the optional calibration convention and Fourier sign.  It does not derive \(W_x\), the switching limit, or the sampled binary HMM from UDW dynamics. \\
+\addlinespace
+\Cref{thm:response-locus-main}: AQFT local-measurement scheme boundary &
+Sorkin, ``Impossible measurements on quantum fields'', in \emph{Directions in General Relativity}, vol. 2, pp. 293--305 (1993); Fewster--Verch, ``Quantum fields and local measurements'', \emph{Commun. Math. Phys.} \textbf{378}(2), 851--889 (2020); Fewster, ``A generally covariant measurement scheme for quantum field theory in curved spacetimes'', pp. 253--268 (2020) \cite{Sorkin1993,FewsterVerch2020,Fewster2020}. &
+These works address locality, covariance, induced observables, and measurement schemes for QFT, including the Sorkin-type locality problem and a generally covariant AQFT scheme. &
+The response section is not an AQFT measurement construction.  It starts only after a scalar response profile has been supplied and performs level-set algebra for record-selected target rates. \\
+\addlinespace
+\Cref{thm:response-locus-main}: detector-based measurement-model boundary &
+Polo-G\'omez--Garay--Mart\'in-Mart\'inez, ``A detector-based measurement theory for quantum field theory'', \emph{Phys. Rev. D} \textbf{105}(6), 065003 (2022); Pranzini--Keski-Vakkuri, ``Detector-based measurements for QFT: Two issues and an algebraic QFT proposal'', \emph{Phys. Rev. D} \textbf{111}(4), 045016 (2025); Tjoa--Gray, ``The Unruh--DeWitt model and its joint interacting Hilbert space'', \emph{J. Phys. A: Math. Theor.} \textbf{57}(32), 325301 (2024) \cite{PoloGomezEtAl2022,PranziniKeskiVakkuri2025AQFT,TjoaGray2024UDWJointHilbert}. &
+These papers construct or analyze detector-based QFT measurement frameworks and the Hilbert-space status of UDW-type couplings. &
+No detector back-action theorem, induced observable, or joint interacting Hilbert-space model is proved here.  The sampled binary record is stipulated at the classical readout layer and only conditionally calibrated to a response rate. \\
+\end{longtable}
+\endgroup
 
 The answer has two layers. The first layer is record theory, with the new
 mathematics concentrated in the sampled boundary-reset law. In the ideal
@@ -181,28 +266,35 @@ Its zero-run hazard is strictly increasing, every finite binary word remains
 admissible, and the visible record becomes exact $1$-dependent exactly when
 the hidden eigenvalue vanishes, at the unique rate
 $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. A general renewal
-principal-minor lemma gives the finite-inclusion determinant identity, and the
-boundary-reset law supplies the explicit non-Hermitian Toeplitz specialization
-with geometric strict-upper tail; this is not a Hermitian positive-contraction
-DPP theorem. At
+principal-minor lemma gives the finite-inclusion principal-minor representation,
+and the boundary-reset law supplies the explicit non-Hermitian Toeplitz
+specialization with geometric strict-upper tail; this is not an operator DPP,
+fermionic, or negative-association theorem. At
 $\Gamma_c$ its transfer parameter vanishes, giving exact $1$-dependence
 without finite visible Markov order. The Toeplitz record law also has an exact
 inverse: three inclusion probabilities recover the unordered attempt/recovery
 rate pair, revealing a $\Gamma\leftrightarrow\kappa_{\mathrm r}$ exchange
 duality and a labelled-rate non-identifiability from one visible record. The
+labelled recovery rate used by the later memory response locus is therefore an
+independent calibration input, not something recovered with a label by the
+inverse theorem. The
 memory threshold is therefore not an entropy benchmark but an exact dependence
 transition inside a renewal family that still supports the full binary
 grammar.
 
 After these two record thresholds are fixed, Section~4 keeps only the short
-fixed-response theorem for the calibrated stationary response profile
+fixed-response corollary for the calibrated stationary response profile
 \[
 R_\Omega(x)=\lambda_{\mathrm{sw}}^2\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}.
 \]
 For one calibrated response function, the ideal and memory target equations
-define two response loci, and the theorem explains that they are called shells
+define two response loci, and the corollary explains that they are called shells
 only after the range check and the regularity condition \(dR_\Omega\neq 0\) are
-verified. The longer homogeneous quotient, near-horizon,
+verified. The memory target uses
+\(\gamma_{\mathrm{mem}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) only after
+\(\kappa_{\mathrm r}\) has been independently labelled or calibrated; without
+that input, the record theorem gives only the unordered critical rate pair and
+no labelled memory shell claim. The longer homogeneous quotient, near-horizon,
 fixed-radius inverse/sensitivity, and admissibility statements are not part of
 the main article; they are split-candidate conditional response-model algebra
 requiring their own stable-system, external-data, and comparison assumptions,
@@ -225,13 +317,16 @@ exact-clock Parry benchmark for the ideal counter, and carry the main
 sampled-boundary-reset theorem chain for the memory-transition threshold and
 its operational signatures.
 \Cref{sec:kms-shells} then states Assumption~A0 and the short fixed-response
-theorem for one stationary response function. Longer homogeneous,
+corollary for one stationary response function. Longer homogeneous,
 near-horizon, fixed-radius, Schwarzschild, external-ratio, and residual-graph
 developments are outside the submitted theorem chain.
 To reduce the symbol load before the technical record and response
-calculations, Tables~\ref{tab:notation-record}--\ref{tab:notation-response}
-split the recurring notation into record and response layers for
-Sections~\ref{sec:records} and~\ref{sec:kms-shells}.
+calculations, Table~\ref{tab:notation-global} separates the recurring symbols
+by layer: sampled-model parameters, Palm-renewal quantities, finite
+principal-minor kernels, and response-calibration objects.  The same table is
+also referenced later as Tables~\ref{tab:notation-record}
+and~\ref{tab:notation-response} when the discussion is restricted to the
+record or response side.
 
 \section{Classical sampled-counter setting and record-level observables}\label{sec:operational}
 
@@ -275,7 +370,16 @@ separate calibration closure has been imposed.
 It is useful to keep the construction in three logically separate steps.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item A counter model determines a stationary word law and a record-level benchmark: the Parry law in the ideal case, exact $1$-dependence in the sampled boundary-reset case.
-\item For the two models studied here, that benchmark is first equivalent to a scalar internal counter-rate condition, respectively $\Gamma\Delta\tau=\log\varphi$ and $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Under the paper's calibration closure $\Gamma=\Gamma_+$, these become $\Gamma_+\Delta\tau=\log\varphi$ and $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+\item For the two models studied here, that benchmark is first equivalent to a scalar internal counter-rate condition, respectively $\Gamma\Delta\tau=\log\varphi$ and $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.  The memory condition is labelled only after the recovery rate has been independently identified: the inverse theorem gives
+\[
+\mu_{\Gamma,\kappa_{\mathrm r}}=\mu_{\kappa_{\mathrm r},\Gamma}
+\quad\text{and hence only}\quad
+\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}.
+\]
+Under the paper's calibration closure $\Gamma=\Gamma_+$, the two conditions
+therefore become $\Gamma_+\Delta\tau=\log\varphi$ and, with that external
+\(\kappa_{\mathrm r}\) label, $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$; without it the memory statement is made on the quotient by
+$(\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)$.
 \item Substitution of the specified static KMS response then turns those rate conditions into level-set equations for the detector response.
 \end{enumerate}
 Thus the response loci are model level sets whose constants are selected by
@@ -292,7 +396,7 @@ The two detector regimes studied in this work are illustrated schematically in \
   arr/.style={-Latex, thick}
 ]
 \node[box] (ideal) at (0,1.8) {Ideal one-step dead time\\[2pt] golden-mean grammar\\[2pt] Parry benchmark at $\Gamma_+\Delta\tau=\log\varphi$};
-\node[box] (finite) at (6.2,1.8) {Sampled one-recovery\\[2pt] boundary-reset renewal law\\[2pt] finite-inclusion determinant};
+\node[box] (finite) at (6.2,1.8) {Sampled one-recovery\\[2pt] boundary-reset renewal law\\[2pt] finite-inclusion principal minors};
 \node[widebox] (kms) at (3.1,-0.2) {Static KMS response\\[2pt] $\displaystyle \Gamma_+(x,\Omega)=\lambda_{\mathrm{sw}}^2\,
 \frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}$};
 \node[outbox] (phi) at (0,-2.1) {$\Sigma_{\varphi}$\\ ideal-benchmark response locus};
@@ -302,7 +406,7 @@ The two detector regimes studied in this work are illustrated schematically in \
 \draw[arr] ($(kms.south west)+(1.0,0)$) -- (phi.north);
 \draw[arr] ($(kms.south east)+(-1.0,0)$) -- (mem.north);
 \end{tikzpicture}
-\caption{Two record-level thresholds and their conditional lift to calibrated response loci. The exact-clock selector is tied to the Parry benchmark in the ideal model, while the memory selector is tied to the critical exact-$1$-dependent Toeplitz principal-minor law in the sampled boundary-reset renewal record. In a specified static KMS response model, both thresholds define response-model level sets, and these become shells only at regular level-set points.}
+\caption{Two record-level thresholds and their conditional lift to calibrated response loci. The exact-clock selector is tied to the Parry benchmark in the ideal model, while the memory selector is tied to the critical exact-$1$-dependent finite-inclusion principal-minor representation in the sampled boundary-reset renewal record. In a specified static KMS response model, both thresholds define response-model level sets, and these become shells only at regular level-set points.}
 \label{fig:scheme}
 \end{figure}
 
@@ -316,7 +420,7 @@ The two detector regimes studied in this work are illustrated schematically in \
 Regime & Output law & Distinguished threshold & Finite-record signature \\
 \midrule
 Ideal dead time & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
-Sampled one-recovery-opportunity boundary reset & Renewal process with infinite symbolic memory; zero-run law supported on all $k\ge0$, hence every finite binary word is allowed; non-Hermitian Toeplitz principal-minor formula for the click set & $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Exact finite-window principal-minor count formula at threshold; covariance/Fano laws as cumulant signatures \\
+Sampled one-recovery-opportunity boundary reset & Renewal process with infinite symbolic memory; zero-run law supported on all $k\ge0$, hence every finite binary word is allowed; non-Hermitian Toeplitz finite-inclusion principal-minor representation for the click set, with no operator DPP, fermionic, or negative-association claim & With independently labelled \(\kappa_{\mathrm r}\), $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$; otherwise only the quotient under \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\) is identified & Exact finite-window principal-minor count formula at threshold; covariance/Fano laws as cumulant signatures \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -324,42 +428,72 @@ Sampled one-recovery-opportunity boundary reset & Renewal process with infinite 
 \begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{4pt}
-\caption{Record-layer notation used repeatedly in Section~\ref{sec:records}.}
+\setlength{\tabcolsep}{3pt}
+\caption{Global notation separated by role.  The same glyph is not meant to
+carry data across rows: for example the internal record rate \(\Gamma\), the
+response rates \(\Gamma_\pm\), the response map \(R_\Omega\), and the finite
+matrices \(K_u,K_\Gamma,K_c\) live in different layers.}
+\label{tab:notation-global}
 \label{tab:notation-record}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.64\textwidth}}
-\toprule
-Symbol & Meaning \\
-\midrule
-$\Gamma$ & Classical attempt rate of the sampled counter before the closure $\Gamma=\Gamma_+(x,\Omega)$ is imposed. \\
-$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Unique critical rate at which the sampled boundary-reset record becomes exact $1$-dependent. \\
-$p,\ q,\ a,\ b,\ c$ & One-bin kernel parameters: $p=e^{-\Gamma\Delta\tau}$, $q=1-p$, $c=e^{-\kappa_{\mathrm r}\Delta\tau}$, and $a,b$ are the refractory-bin click/no-click probabilities after one recovery opportunity. \\
-$\rho$ & Stationary click density $\PP(A_0=1)$. \\
-$\lambda_{\mathrm{hid}}$ & Hidden-mode eigenvalue $p-b$ governing the geometric covariance tail. \\
-$g_k,\ S_k,\ h_k$ & Zero-run law, survival tail, and hazard of the renewal record after a click. \\
-$\varXi,\ \rho_c,\ a_c,\ d_c,\ K_c$ & Critical click set, click density, adjacent-click conditional probability, repulsion gap $d_c=\rho_c-a_c$, and Toeplitz-Hessenberg finite-inclusion kernel at $\Gamma=\Gamma_c$. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\small
-\setlength{\tabcolsep}{4pt}
-\caption{Response-layer notation used in Section~\ref{sec:kms-shells}.}
 \label{tab:notation-response}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.64\textwidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.55\textwidth}}
 \toprule
-Symbol & Meaning \\
+Layer & Symbols & Meaning and scope \\
 \midrule
-$\Gamma_\pm(x,\Omega)$ & Excitation/de-excitation rates of the stationary UDW detector at gap $\Omega$. \\
-$\gamma_\varphi,\ \gamma_{\mathrm{mem}}$ & Record-selected response targets $\log\varphi/\Delta\tau$ and $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. \\
-$\lambda_c,\ \lambda_{\mathrm{sw}}$ & Bare detector coupling and switched effective coupling, with $\lambda_{\mathrm{sw}}^2=\lambda_c^2\|\chi\|_2^2$ for the fixed switching convention. \\
-$\mathcal S_x(\Omega),\ \mathcal S(\Omega)$ & One-gap spectral weight and its homogeneous specialization. \\
-$R_\Omega(x)$ & Fixed calibrated response function $\lambda_{\mathrm{sw}}^2\mathcal S_x(\Omega)/(e^{\beta_\infty N(x)\Omega}-1)$. \\
-$\beta_\infty,\ \beta_{\mathrm{loc}}(x)$ & Global KMS inverse temperature and local Tolman inverse temperature $\beta_{\mathrm{loc}}(x)=\beta_\infty N(x)$. \\
-$N(x)$ & Static lapse function. In the homogeneous specialization the response loci become lapse level sets. \\
-$A$ & Common positive homogeneous amplitude $A=\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)$ entering both source equations. \\
+Sampled-model parameters &
+\(\Delta\tau,\ \Gamma,\ \kappa_{\mathrm r}\) &
+Sampling time, classical attempt rate, and recovery rate of the stipulated
+sampled counter.  Bare \(\Gamma\) is a record-side parameter until the separate
+calibration closure \(\Gamma=R_\Omega(x)=\Gamma_+(x,\Omega)\) is imposed. \\
+\addlinespace[0.25ex]
+Sampled-model parameters &
+\(p,\ q,\ c,\ a,\ b,\ \lambda_{\mathrm{hid}}\) &
+One-bin quantities local to the hidden Markov model:
+\(p=e^{-\Gamma\Delta\tau}\), \(q=1-p\),
+\(c=e^{-\kappa_{\mathrm r}\Delta\tau}\), \(a,b\) are the
+one-recovery-opportunity click/no-click probabilities, and
+\(\lambda_{\mathrm{hid}}=p-b\) is the hidden transfer eigenvalue.  None of these
+symbols denotes a response-side object. \\
+\addlinespace[0.25ex]
+Palm-renewal quantities &
+\(\varXi,\ \rho,\ u_n,\ g_k,\ S_k,\ h_k\) &
+Click set, stationary click density, Palm renewal mass
+\(u_n=\PP(n\in\varXi\mid0\in\varXi)\), zero-run probability, zero-run survival
+tail, and zero-run hazard.  Here \(u_n\) is not a vector, an eigenfunction, or a
+finite-kernel entry; it is a scalar Palm conditional probability. \\
+\addlinespace[0.25ex]
+Finite principal-minor kernels &
+\(K_u,\ K_\Gamma,\ K_c,\ K_c^H,\ d\) &
+Finite-inclusion matrices whose principal minors encode inclusion
+probabilities.  \(K_u\) is the general renewal matrix, \(K_\Gamma\) its
+boundary-reset Toeplitz specialization, \(K_c\) and \(K_c^H\) are critical
+finite-inclusion witnesses, and \(d=\rho-a\).  These matrices are not canonical
+Hermitian positive-contraction DPP kernels. \\
+\addlinespace[0.25ex]
+Response-calibration objects &
+\begin{tabular}[t]{@{}l@{}}
+\(\Gamma_\pm(x,\Omega),\ R_\Omega(x)\)\\
+\(\gamma_\varphi,\ \gamma_{\mathrm{mem}}\)
+\end{tabular} &
+Excitation/de-excitation rates, the chosen scalar calibrated response map, and
+the record-selected target rates
+\(\gamma_\varphi=\log\varphi/\Delta\tau\) and
+\(\gamma_{\mathrm{mem}}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  The memory
+target is labelled only after independent recovery calibration; a visible
+record alone identifies only the unordered survival factors, not which one is
+the recovery factor. These enter only after Model~A supplies the closure from
+the record rate to the response profile. \\
+\addlinespace[0.25ex]
+Response-calibration objects &
+\begin{tabular}[t]{@{}l@{}}
+\(\lambda_c,\ \lambda_{\mathrm{sw}},\ F_x(\omega)\)\\
+\(\mathcal S_x(\Omega),\ \beta_\infty,\ \beta_{\mathrm{loc}}(x)\)\\
+\(N(x),\ A\)
+\end{tabular} &
+Bare and switched couplings, stationary Fourier density, one-gap spectral
+weight, global and local inverse temperatures, lapse, and homogeneous amplitude
+\(A=\lambda_{\mathrm{sw}}^2\mathcal S(\Omega)\).  The symbol \(A\) here is an
+amplitude, distinct from the click variables \(A_n\). \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -374,15 +508,15 @@ The sampled boundary-reset theorem is the main mathematical result: one
 classical sampled counter law produces a full-support renewal record with
 strictly increasing hazard, universal antibunching, a unique exact
 \(1\)-dependence threshold at the zero of the hidden eigenmode, a
-non-Hermitian Toeplitz principal-minor count formula, a closed Fano law, and a
-three-inclusion inverse with
+non-Hermitian Toeplitz finite-inclusion principal-minor representation, a closed
+Fano law, and a three-inclusion inverse with
 \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange duality. The ideal Parry
 point remains the benchmark comparison rather than the main theorem.
 
-The response theorem is the fixed-profile consequence of those record-selected
-target rates under A0. It turns the two scalar rates into level sets of one
-supplied \(C^1\) response function and calls them shells only after the range
-and regularity checks. The theorem-family comparison in
+The response corollary is the fixed-profile consequence of those
+record-selected target rates under A0. It turns the two scalar rates into level
+sets of one supplied \(C^1\) response function and calls them shells only after
+the range and regularity checks. The theorem-family comparison in
 \Cref{tab:main-jpa-comparison} records how this sampled-counter theorem chain
 differs from record-HMM, one-dependent/regenerative determinantal, DPP,
 stochastic-trajectory, memory-inference, and UDW/AQFT detector results.
