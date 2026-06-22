@@ -78,7 +78,7 @@ Public source link:
 Title:
 
 ```text
-Auditable Theory-to-Paper Pipelines for AI-Assisted Formal Mathematics
+Publication-Coordinate Audit Interfaces for AI-Assisted Formal-Mathematics Pipelines
 ```
 
 Authors:
