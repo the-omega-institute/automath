@@ -347,30 +347,58 @@ def _load_board_entries() -> dict[str, dict]:
     Expected row format (backtick-wrapped dir name):
       | `dir_name` | journal | status | reroute |
 
-    Returns {dir_name: {"journal": str, "status": str, "reroute": str}}.
+    Returns {dir_name: {"journal": str, "status": str, "reroute": str,
+    "section": str}}.
     """
-    result: dict[str, dict] = {}
+    def parse_rows(text: str) -> dict[str, dict]:
+        parsed: dict[str, dict] = {}
+        section = ""
+        for line in text.splitlines():
+            heading = re.match(r"^\s*##+\s+(.+?)\s*$", line)
+            if heading:
+                section = heading.group(1).strip()
+                continue
+            m = re.match(
+                r"\|\s*`([^`]+)`\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|",
+                line,
+            )
+            if not m:
+                continue
+            dir_name = m.group(1).strip()
+            journal = m.group(2).strip()
+            status = m.group(3).strip()
+            reroute = m.group(4).strip()
+            parsed[dir_name] = {
+                "journal": journal,
+                "status": status,
+                "reroute": reroute,
+                "section": section,
+            }
+        return parsed
+
     board_path = _board_source_path()
     if not board_path.exists():
-        return result
+        return {}
     try:
         text = board_path.read_text(encoding="utf-8")
     except Exception:
-        return result
+        return {}
 
-    for m in re.finditer(
-        r"\|\s*`([^`]+)`\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|",
-        text,
-    ):
-        dir_name = m.group(1).strip()
-        journal = m.group(2).strip()
-        status = m.group(3).strip()
-        reroute = m.group(4).strip()
-        result[dir_name] = {
-            "journal": journal,
-            "status": status,
-            "reroute": reroute,
-        }
+    result = parse_rows(text)
+
+    # PROGRAM_BOARD_MACHINE.md is deliberately flat so automation can update a
+    # stable table. Scheduling still needs the human board section boundary.
+    if board_path == PROGRAM_BOARD_MACHINE and PROGRAM_BOARD.exists():
+        try:
+            human_entries = parse_rows(
+                PROGRAM_BOARD.read_text(encoding="utf-8")
+            )
+        except Exception:
+            human_entries = {}
+        for dir_name, entry in result.items():
+            human_section = human_entries.get(dir_name, {}).get("section", "")
+            if human_section:
+                entry["section"] = human_section
     return result
 
 
@@ -460,6 +488,9 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
         return True
     if not entry:
         return False
+    section = str(entry.get("section", "")).lower()
+    if section and "active rewrite" not in section and "retarget" not in section:
+        return True
     status = str(entry.get("status", ""))
     route_text = " ".join(
         str(entry.get(key, "")) for key in ("status", "reroute", "notes")
@@ -475,6 +506,8 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
     status_lower = status.lower()
     if status_lower.startswith("a-ready") or status_lower.startswith("stage a ready"):
         return False
+    if section and ("active rewrite" in section or "retarget" in section):
+        return False
     archive_text = " ".join(
         str(entry.get(key, "")) for key in ("journal", "notes", "reroute")
     ).lower()
@@ -485,6 +518,101 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
         "\u5f52\u6863",
         "parked",
     ))
+
+
+def _state_has_hard_stage_a_block(state: Optional[PaperState]) -> bool:
+    if not state:
+        return False
+    status_text = " ".join(
+        str(getattr(state, key, "") or "")
+        for key in ("error", "block_reason")
+    )
+    if not status_text:
+        return False
+    if "stage a blocked" not in status_text.lower():
+        return False
+    return not is_recoverable_stage_a_block_status(status_text)
+
+
+def _pending_nyxid_oracle_prompts_for_paper(paper_name: str) -> list[Path]:
+    """Return NyxID prompt files for this paper that do not have a result yet.
+
+    NyxID ask is synchronous from the pipeline process' perspective, but while
+    the browser worker is thinking the only durable local marker is
+    `<task>.prompt.txt`.  If the supervisor or inner process restarts during
+    that window, discovery must treat the paper as Oracle-in-flight instead of
+    re-running the same Stage A/C gate and submitting duplicate ChatGPT work.
+    """
+    if ORACLE_BACKEND != "nyxid":
+        return []
+    try:
+        runtime = _nyxid_runtime_dir()
+    except Exception:
+        return []
+    if not runtime.exists():
+        return []
+    pending: list[Path] = []
+    for prompt_path in runtime.glob(f"*{paper_name}*.prompt.txt"):
+        result_name = prompt_path.name[: -len(".prompt.txt")] + ".json"
+        result_path = prompt_path.with_name(result_name)
+        if not result_path.exists():
+            pending.append(prompt_path)
+            continue
+        try:
+            record = json.loads(result_path.read_text(encoding="utf-8"))
+            status = str(record.get("status", "")).lower()
+        except Exception:
+            record = {}
+            status = ""
+        if status not in {"completed", "failed", "cancelled", "canceled"}:
+            remote_task_id = str(record.get("remote_task_id") or "").strip()
+            if remote_task_id:
+                data, error = _nyxid_fetch_result(remote_task_id, timeout=30)
+                response = _nyxid_response_from_result(data) if not error else ""
+                remote_status = str(data.get("status") or "").lower()
+                if response:
+                    record.update({
+                        "status": "completed",
+                        "response": response,
+                        "conversation_id": data.get("conversation_id") or record.get("conversation_id", ""),
+                        "chatgpt_url": data.get("chatgpt_url") or data.get("url") or record.get("chatgpt_url", ""),
+                        "nyxid": data,
+                    })
+                    result_path.write_text(
+                        json.dumps(record, ensure_ascii=False, indent=2),
+                        encoding="utf-8",
+                    )
+                    _save_oracle_done(result_path.stem, response, {
+                        "timestamp": datetime.now().isoformat(),
+                        "response_length": len(response),
+                        "conversation_id": record.get("conversation_id", ""),
+                        "chatgpt_url": record.get("chatgpt_url", ""),
+                        "mode": "nyxid_cdp_discovery_recovery",
+                        "remote_task_id": remote_task_id,
+                    })
+                    try:
+                        prompt_path.unlink()
+                    except FileNotFoundError:
+                        pass
+                    continue
+                if remote_status in {"failed", "cancelled", "canceled", "error"}:
+                    record.update({
+                        "status": "cancelled" if remote_status in {"cancelled", "canceled"} else "failed",
+                        "response": "",
+                        "error": data.get("error") or data.get("message") or error or "NyxID Oracle task failed",
+                        "nyxid": data,
+                    })
+                    result_path.write_text(
+                        json.dumps(record, ensure_ascii=False, indent=2),
+                        encoding="utf-8",
+                    )
+                    try:
+                        prompt_path.unlink()
+                    except FileNotFoundError:
+                        pass
+                    continue
+            pending.append(prompt_path)
+    return pending
 
 
 def _board_entry_stage_c_extra_rounds(entry: Optional[dict]) -> int:
@@ -1317,6 +1445,8 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
 
 def run_cmd(cmd: list[str], *, cwd: Optional[Path] = None,
             timeout: int = 300) -> subprocess.CompletedProcess:
+    if cmd and cmd[0] == "git":
+        cmd = ["git", "-c", f"safe.directory={REPO_ROOT.as_posix()}"] + cmd[1:]
     return subprocess.run(
         cmd, cwd=str(cwd or REPO_ROOT),
         capture_output=True, text=True, timeout=timeout,
@@ -1439,6 +1569,49 @@ def _powershell_file_path(path: Path) -> str:
     return raw
 
 
+def _nyxid_result_command(remote_task_id: str) -> list[str]:
+    return [
+        "powershell.exe", "-NoProfile", "-NonInteractive",
+        "-ExecutionPolicy", "Bypass",
+        "-File", _powershell_file_path(NYXID_ORACLE_WRAPPER),
+        "oracle", "result", remote_task_id,
+        "--output", "json",
+    ]
+
+
+def _nyxid_fetch_result(remote_task_id: str,
+                        *,
+                        run=None,
+                        timeout: int = 120) -> tuple[dict, str]:
+    if run is None:
+        run = subprocess.run
+    try:
+        proc = run(
+            _nyxid_result_command(remote_task_id),
+            cwd=str(REPO_ROOT),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        waited = exc.timeout if exc.timeout is not None else timeout
+        return {}, f"NyxID Oracle result command timed out after {waited} seconds"
+    if proc.returncode != 0:
+        return {}, command_failure_summary(proc)
+    return _extract_nyxid_json(proc.stdout), ""
+
+
+def _nyxid_response_from_result(data: dict) -> str:
+    return (
+        data.get("response")
+        or data.get("answer")
+        or data.get("result")
+        or ""
+    )
+
+
 def _save_oracle_done(task_id: str, response: str, metadata: dict) -> None:
     done = SCRIPT_DIR / "oracle" / "done"
     done.mkdir(parents=True, exist_ok=True)
@@ -1458,7 +1631,14 @@ def _nyxid_submit_and_wait(task_id: str, prompt: str,
     prompt_path = _nyxid_prompt_path(task_id)
     prompt_path.write_text(prompt, encoding="utf-8")
 
-    def run_submit(conv_id: Optional[str], followup: bool) -> subprocess.CompletedProcess:
+    def write_record(record: dict) -> None:
+        _nyxid_record_path(task_id).write_text(
+            json.dumps(record, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def run_submit(conv_id: Optional[str],
+                   followup: bool) -> subprocess.CompletedProcess:
         cmd = [
             "powershell.exe", "-NoProfile", "-NonInteractive",
             "-ExecutionPolicy", "Bypass",
@@ -1468,7 +1648,7 @@ def _nyxid_submit_and_wait(task_id: str, prompt: str,
             "--model", model,
             "--tag", task_id,
             "--client-ref", task_id,
-            "--wait", str(timeout),
+            "--no-wait",
             "--output", "json",
         ]
         if pdf_path and pdf_path.exists():
@@ -1488,65 +1668,149 @@ def _nyxid_submit_and_wait(task_id: str, prompt: str,
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=timeout + 120,
+            timeout=120,
         )
 
-    recovered_from_stale_conversation = False
-    proc = run_submit(conversation_id, is_followup)
-    if proc.returncode != 0 and conversation_id and _nyxid_session_not_found(
-        f"{proc.stdout}\n{proc.stderr}"
-    ):
-        logger.warning(
-            "NyxID Oracle conversation expired for %s (%s); retrying as fresh task",
-            task_id,
-            conversation_id[:16],
-        )
-        recovered_from_stale_conversation = True
-        proc = run_submit("", False)
+    try:
+        recovered_from_stale_conversation = False
+        proc = run_submit(conversation_id, is_followup)
+        if proc.returncode != 0 and conversation_id and _nyxid_session_not_found(
+            f"{proc.stdout}\n{proc.stderr}"
+        ):
+            logger.warning(
+                "NyxID Oracle conversation expired for %s (%s); retrying as fresh task",
+                task_id,
+                conversation_id[:16],
+            )
+            recovered_from_stale_conversation = True
+            proc = run_submit("", False)
 
-    if proc.returncode != 0:
-        error = command_failure_summary(proc)
-        logger.error(f"NyxID Oracle failed: {error}")
-        record = {"status": "failed", "task_id": task_id, "response": "", "error": error}
-    else:
-        data = _extract_nyxid_json(proc.stdout)
-        response = (
-            data.get("response")
-            or data.get("answer")
-            or data.get("result")
-        )
-        if not response:
-            logger.error("NyxID Oracle returned no JSON response field")
-        record = {
-            "status": "completed" if response else "failed",
-            "task_id": task_id,
-            "response": response,
-            "conversation_id": data.get("conversation_id") or data.get("conversation") or "",
-            "chatgpt_url": data.get("chatgpt_url") or data.get("url") or "",
-            "nyxid": data,
-        }
-        if recovered_from_stale_conversation:
-            record["recovered_from_stale_conversation"] = conversation_id
-        if not response:
-            record["error"] = command_failure_summary(proc)
-        if response:
-            metadata = {
-                "timestamp": datetime.now().isoformat(),
-                "model": model,
-                "prompt_length": len(prompt),
-                "response_length": len(response),
-                "conversation_id": record["conversation_id"],
-                "chatgpt_url": record["chatgpt_url"],
-                "mode": "nyxid_cdp",
+        if proc.returncode != 0:
+            error = command_failure_summary(proc)
+            logger.error(f"NyxID Oracle failed: {error}")
+            record = {"status": "failed", "task_id": task_id, "response": "", "error": error}
+        else:
+            data = _extract_nyxid_json(proc.stdout)
+            remote_task_id = str(data.get("task_id") or "").strip()
+            if not remote_task_id:
+                logger.error("NyxID Oracle returned no task_id")
+                record = {
+                    "status": "failed",
+                    "task_id": task_id,
+                    "response": "",
+                    "error": command_failure_summary(proc),
+                    "nyxid": data,
+                }
+            else:
+                record = {
+                    "status": data.get("status") or "submitted",
+                    "task_id": task_id,
+                    "remote_task_id": remote_task_id,
+                    "response": "",
+                    "conversation_id": data.get("conversation_id") or data.get("conversation") or "",
+                    "chatgpt_url": data.get("chatgpt_url") or data.get("url") or "",
+                    "nyxid": data,
+                }
+                if recovered_from_stale_conversation:
+                    record["recovered_from_stale_conversation"] = conversation_id
+                write_record(record)
+
+                deadline = time.monotonic() + max(1, timeout)
+                while True:
+                    result_data, error = _nyxid_fetch_result(remote_task_id)
+                    if error:
+                        logger.warning(f"NyxID Oracle result poll failed: {error}")
+                        if time.monotonic() >= deadline:
+                            record.update({
+                                "status": "submitted",
+                                "response": "",
+                                "error": (
+                                    "NyxID Oracle result poll timed out; "
+                                    f"remote task still recoverable as {remote_task_id}"
+                                ),
+                            })
+                            break
+                        time.sleep(10)
+                        continue
+
+                    response = _nyxid_response_from_result(result_data)
+                    remote_status = str(result_data.get("status") or "").lower()
+                    if response:
+                        record = {
+                            "status": "completed",
+                            "task_id": task_id,
+                            "remote_task_id": remote_task_id,
+                            "response": response,
+                            "conversation_id": result_data.get("conversation_id") or record.get("conversation_id", ""),
+                            "chatgpt_url": result_data.get("chatgpt_url") or result_data.get("url") or record.get("chatgpt_url", ""),
+                            "nyxid": result_data,
+                        }
+                        if recovered_from_stale_conversation:
+                            record["recovered_from_stale_conversation"] = conversation_id
+                        break
+                    if remote_status in {"failed", "cancelled", "canceled", "error"}:
+                        record.update({
+                            "status": "failed",
+                            "response": "",
+                            "error": result_data.get("error") or result_data.get("message") or "NyxID Oracle task failed",
+                            "nyxid": result_data,
+                        })
+                        break
+                    record.update({
+                        "status": remote_status or "submitted",
+                        "nyxid": result_data,
+                    })
+                    write_record(record)
+                    if time.monotonic() >= deadline:
+                        record.update({
+                            "status": "submitted",
+                            "response": "",
+                            "error": (
+                                "NyxID Oracle wait timed out locally; "
+                                f"remote task still recoverable as {remote_task_id}"
+                            ),
+                        })
+                        break
+                    time.sleep(10)
+
+            response = record.get("response") or ""
+            record = {
+                **record,
+                "status": "completed" if response else record.get("status", "failed"),
             }
-            if pdf_path:
-                metadata["pdf"] = str(pdf_path)
-            _save_oracle_done(task_id, response, metadata)
+            if response:
+                metadata = {
+                    "timestamp": datetime.now().isoformat(),
+                    "model": model,
+                    "prompt_length": len(prompt),
+                    "response_length": len(response),
+                    "conversation_id": record["conversation_id"],
+                    "chatgpt_url": record["chatgpt_url"],
+                    "mode": "nyxid_cdp",
+                }
+                if pdf_path:
+                    metadata["pdf"] = str(pdf_path)
+                _save_oracle_done(task_id, response, metadata)
+    except subprocess.TimeoutExpired as exc:
+        waited = exc.timeout if exc.timeout is not None else timeout + 120
+        error = f"NyxID Oracle command timed out after {waited} seconds"
+        logger.error(f"NyxID Oracle failed: {error}")
+        record = {
+            "status": "submitted",
+            "task_id": task_id,
+            "response": "",
+            "error": error,
+        }
+    finally:
+        if "record" in locals() and record.get("status") in {
+            "completed", "failed", "cancelled", "canceled",
+        }:
+            try:
+                prompt_path.unlink()
+            except FileNotFoundError:
+                pass
 
-    _nyxid_record_path(task_id).write_text(
-        json.dumps(record, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    write_record(record)
     return record
 
 
@@ -1819,8 +2083,11 @@ def _commit_message(*parts: str) -> str:
     return "\n\n".join(body)
 
 
-def git_stage(paper_path: Path, *, tag: str = "") -> bool:
+def git_stage(paper_path: Path, *, tag: str = "", dry_run: bool = False) -> bool:
     """Stage submission source changes under paper_path."""
+    if dry_run:
+        logger.info(f"{tag} [DRY RUN] skip git stage")
+        return False
     with git_repo_lock():
         _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
@@ -1829,11 +2096,15 @@ def git_stage(paper_path: Path, *, tag: str = "") -> bool:
         return bool(staged.stdout.strip())
 
 
-def git_commit(paper_path: Path, msg: str, *, tag: str = "") -> str:
+def git_commit(paper_path: Path, msg: str, *, tag: str = "",
+               dry_run: bool = False) -> str:
     """Commit submission source changes under paper_path. Thread-safe.
 
     Commit message includes a diff summary showing what actually changed.
     """
+    if dry_run:
+        logger.info(f"{tag} [DRY RUN] skip git commit: {msg[:80]}")
+        return ""
     with git_repo_lock():
         _restore_tracked_non_source_changes(paper_path, tag=tag)
         _add_paper_only(paper_path)
@@ -2015,9 +2286,81 @@ def oracle_poll_record(task_id: str, timeout: int = 300) -> dict:
     """
     if ORACLE_BACKEND == "nyxid":
         path = _nyxid_record_path(task_id)
+        record = {"status": "timeout", "task_id": task_id, "response": ""}
         if path.exists():
-            return json.loads(path.read_text(encoding="utf-8"))
-        return {"status": "timeout", "task_id": task_id, "response": ""}
+            try:
+                record = json.loads(path.read_text(encoding="utf-8"))
+            except Exception:
+                record = {"status": "timeout", "task_id": task_id, "response": ""}
+            if record.get("status") in {"completed", "failed", "cancelled", "canceled"}:
+                return record
+        remote_task_id = str(record.get("remote_task_id") or "").strip()
+        if not remote_task_id:
+            return record
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            data, error = _nyxid_fetch_result(remote_task_id)
+            if error:
+                record["error"] = error
+                path.write_text(
+                    json.dumps(record, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                time.sleep(3)
+                continue
+            response = _nyxid_response_from_result(data)
+            remote_status = str(data.get("status") or "").lower()
+            if response:
+                record.update({
+                    "status": "completed",
+                    "response": response,
+                    "conversation_id": data.get("conversation_id") or record.get("conversation_id", ""),
+                    "chatgpt_url": data.get("chatgpt_url") or data.get("url") or record.get("chatgpt_url", ""),
+                    "nyxid": data,
+                })
+                _save_oracle_done(task_id, response, {
+                    "timestamp": datetime.now().isoformat(),
+                    "response_length": len(response),
+                    "conversation_id": record.get("conversation_id", ""),
+                    "chatgpt_url": record.get("chatgpt_url", ""),
+                    "mode": "nyxid_cdp_result_recovery",
+                    "remote_task_id": remote_task_id,
+                })
+                try:
+                    _nyxid_prompt_path(task_id).unlink()
+                except FileNotFoundError:
+                    pass
+                path.write_text(
+                    json.dumps(record, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                return record
+            if remote_status in {"failed", "cancelled", "canceled", "error"}:
+                record.update({
+                    "status": "cancelled" if remote_status in {"cancelled", "canceled"} else "failed",
+                    "response": "",
+                    "error": data.get("error") or data.get("message") or "NyxID Oracle task failed",
+                    "nyxid": data,
+                })
+                try:
+                    _nyxid_prompt_path(task_id).unlink()
+                except FileNotFoundError:
+                    pass
+                path.write_text(
+                    json.dumps(record, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                return record
+            record.update({
+                "status": remote_status or record.get("status", "submitted"),
+                "nyxid": data,
+            })
+            path.write_text(
+                json.dumps(record, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            time.sleep(3)
+        return record
     deadline = time.time() + timeout
     while time.time() < deadline:
         try:
@@ -3066,6 +3409,48 @@ def compile_pdf(paper_path: Path, *, dry_run: bool = False) -> Optional[Path]:
                      "main.tex"], cwd=paper_path, timeout=120)
     pdf = paper_path / "main.pdf"
     return pdf if pdf.exists() else None
+
+
+def compile_latex_document(paper_path: Path, tex_name: str,
+                           *, dry_run: bool = False) -> Optional[Path]:
+    """Compile a named top-level TeX file and return its PDF path."""
+    tex_path = paper_path / tex_name
+    pdf_path = paper_path / f"{Path(tex_name).stem}.pdf"
+    if dry_run:
+        return pdf_path
+    if not tex_path.exists():
+        logger.warning(f"Named TeX source missing: {tex_path}")
+        return None
+
+    tectonic = find_latex_tool("tectonic")
+    if tectonic:
+        run_cmd([tectonic, "--keep-logs", "-Z", "continue-on-errors", tex_name],
+                cwd=paper_path, timeout=300)
+        if pdf_path.exists():
+            return pdf_path
+
+    content = tex_path.read_text(encoding="utf-8", errors="replace")
+    compiler_name = ("xelatex" if any(k in content for k in ("xeCJK", "ctex", "fontspec"))
+                     else "pdflatex")
+    compiler = find_latex_tool(compiler_name)
+    if not compiler:
+        logger.warning(f"No LaTeX compiler found ({compiler_name} missing, "
+                       f"tectonic missing) - skip PDF")
+        return pdf_path if pdf_path.exists() else None
+
+    stem = Path(tex_name).stem
+    for _ in range(2):
+        run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
+                 tex_name], cwd=paper_path, timeout=120)
+    has_bib = ((paper_path / "references.bib").exists()
+               or (paper_path / "references_local.bib").exists())
+    bibtex = find_latex_tool("bibtex")
+    if has_bib and bibtex:
+        run_cmd([bibtex, stem], cwd=paper_path, timeout=60)
+        for _ in range(2):
+            run_cmd([compiler, "-interaction=nonstopmode", "-halt-on-error",
+                     tex_name], cwd=paper_path, timeout=120)
+    return pdf_path if pdf_path.exists() else None
 
 
 def latex_toolchain_available(*, requires_xelatex: bool = False) -> bool:
@@ -5090,6 +5475,133 @@ def build_oracle_review_prompt(target_journal: str,
         """)
         return f"{preamble}\n{prompt}"
     return prompt
+
+
+def build_cicm_short_review_prompt() -> str:
+    return textwrap.dedent("""\
+        === CICM PRESENTATION-ONLY SHORT-PAPER REVIEW ===
+        Review only `submission_abstract.pdf` as the operative CICM manuscript.
+        Do not review `main.pdf` as the operative manuscript; if a long paper or
+        supplement is mentioned, treat it only as non-operative support context.
+
+        Venue route: CICM 2026 presentation-only / mathematical software
+        workshop. The intended submission format is 2 pages plus bibliography,
+        light-weight review, not a Springer proceedings paper.
+
+        Your first visible characters must be the verdict line, with no preamble,
+        UI text, thinking summary, salutation, or markdown fence before it:
+          Overall verdict: <Accept|Minor revision|Major revision|Reject>
+
+        Judge acceptance for the presentation-only route, not for a full journal
+        article. Do not require the two-page PDF to embed the full JSON manifest
+        or every executable artifact. It is acceptable for archive/source-package
+        material to live in a supplement if the PDF states the boundary clearly.
+
+        Report:
+        1. Whether the short paper is acceptable as a CICM presentation-only paper.
+        2. Any blockers specific to the short paper's two-page claim boundary.
+        3. Any supplement/source-link issues that must be fixed before EasyChair.
+        4. A concise action list for final human submission, if Accept or Minor.
+    """)
+
+
+def record_cicm_short_review_queue(paper_path: Path, task_id: str,
+                                   pdf_path: Path, verdict: str,
+                                   response: str = "") -> None:
+    queue_path = paper_path / "CICM_SHORT_REVIEW_QUEUE.json"
+    existing: list[dict] = []
+    if queue_path.exists():
+        try:
+            loaded = json.loads(queue_path.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                existing = loaded
+        except Exception:
+            existing = []
+    entry = {
+        "task_id": task_id,
+        "created_at": datetime.now().isoformat(),
+        "paper": paper_path.name,
+        "route": "cicm_presentation_only_short_review",
+        "tex": "submission_abstract.tex",
+        "pdf": str(pdf_path),
+        "verdict": verdict,
+        "response_excerpt": (response or "")[:2000],
+    }
+    existing.append(entry)
+    queue_path.write_text(
+        json.dumps(existing, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
+def latex_output_page_count(paper_path: Path, tex_name: str) -> Optional[int]:
+    log_path = paper_path / f"{Path(tex_name).stem}.log"
+    if not log_path.exists():
+        return None
+    text = log_path.read_text(encoding="utf-8", errors="replace")
+    matches = re.findall(r"Output written on .*?\((\d+) pages?", text)
+    if not matches:
+        return None
+    try:
+        return int(matches[-1])
+    except ValueError:
+        return None
+
+
+def run_cicm_short_review(paper_path: Path, *, oracle_timeout: int,
+                          dry_run: bool = False) -> tuple[bool, str, str]:
+    paper_path = Path(paper_path)
+    pdf_path = compile_latex_document(
+        paper_path, "submission_abstract.tex", dry_run=dry_run)
+    if not pdf_path or not pdf_path.exists():
+        return False, "compile_fail", ""
+
+    page_count = latex_output_page_count(paper_path, "submission_abstract.tex")
+    if page_count is not None and page_count > 4:
+        task_id = f"review_{paper_path.name}_CICM_short_blocked_{time.time_ns()}"
+        detail = (
+            f"submission_abstract.pdf is {page_count} pages; CICM "
+            "presentation-only route needs 2 pages plus bibliography before "
+            "fresh Oracle review."
+        )
+        record_cicm_short_review_queue(
+            paper_path, task_id, pdf_path, "needs_shortening", detail)
+        return False, "needs_shortening", detail
+
+    task_id = f"review_{paper_path.name}_CICM_short_fresh_{time.time_ns()}"
+    prompt = build_cicm_short_review_prompt()
+    if dry_run:
+        response = "Overall verdict: Minor revision\n(dry run)"
+        verdict = extract_verdict(response) or "minor revision"
+        record_cicm_short_review_queue(paper_path, task_id, pdf_path,
+                                       verdict, response)
+        return True, verdict, response
+
+    if not oracle_submit(
+        task_id, prompt, pdf_path,
+        context_mode="cicm_short_fresh_review",
+        agent_role="cicm_short_review",
+        conversation_id="",
+        is_followup=False,
+    ):
+        record_cicm_short_review_queue(
+            paper_path, task_id, pdf_path, "infra_fail", "")
+        return False, "infra_fail", ""
+
+    raw = oracle_poll(task_id, timeout=oracle_timeout)
+    if raw == ORACLE_CANCELLED_RESPONSE:
+        verdict = "cancelled"
+        response = ""
+    elif is_oracle_response_valid(raw):
+        verdict = extract_verdict(raw) or "unknown"
+        response = raw
+    else:
+        verdict = "timeout" if not raw else "invalid_response"
+        response = raw or ""
+
+    record_cicm_short_review_queue(
+        paper_path, task_id, pdf_path, verdict, response)
+    return verdict in ("accept", "minor revision"), verdict, response
 
 
 def build_oracle_re_review_prompt(target_journal: str) -> str:
@@ -8664,6 +9176,40 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
     return False, "timeout", ""
 
 
+def _latest_stage_b_fresh_verdict(state: PaperState) -> str:
+    for event in reversed(getattr(state, "history", []) or []):
+        if not isinstance(event, dict):
+            continue
+        if event.get("stage") == "B" and event.get("action") == "fresh_eval":
+            verdict = str(event.get("verdict", "") or "").strip()
+            if verdict:
+                return verdict
+    return "?"
+
+
+def _mark_stage_b_round_cap_stuck(state: PaperState, tag: str) -> None:
+    last_deepen_v = state.stage_b_verdicts[-1] if state.stage_b_verdicts else "?"
+    last_fresh_v = _latest_stage_b_fresh_verdict(state)
+    logger.error(
+        f"{tag} {MAX_STAGE_B_ROUNDS} rounds without fresh Oracle acceptance "
+        f"(deepen={last_deepen_v}, fresh={last_fresh_v}). Halting - needs human review."
+    )
+    state.stage_b_passed = False
+    state.block_reason = "B_STUCK_MAX_ROUNDS_FRESH_EVAL"
+    state.error = (
+        f"Stage B stuck: max {MAX_STAGE_B_ROUNDS} rounds; "
+        f"deepen Oracle={last_deepen_v}; "
+        f"fresh first-look={last_fresh_v}; needs human review"
+    )
+    update_program_board(
+        state.paper_name,
+        "B-STUCK",
+        f"deepen={last_deepen_v}, fresh={last_fresh_v}, "
+        f"{state.stage_b_rounds} rounds - needs human review",
+    )
+    save_state(state)
+
+
 def build_stage_c_followup_prompt(fix_summary: str,
                                   target_journal: str,
                                   open_ledger: str = "") -> str:
@@ -9053,7 +9599,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             h_compile = git_commit(
                 paper_path,
                 f"stage-B R{rnd}: repair compilation before Oracle review",
-                tag=tag)
+                tag=tag, dry_run=dry_run)
             if h_compile:
                 state.log_event("B", "compile_repair", round_num=rnd,
                                 committed=True, commit_hash=h_compile)
@@ -9064,7 +9610,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 return False
         if pdf:
             state.pdf_path = str(pdf)
-        git_stage(paper_path, tag=tag)  # B1 intermediate, tag=tag)
+        git_stage(paper_path, tag=tag, dry_run=dry_run)  # B1 intermediate
         state.log_event("B", "compile_pdf", round_num=rnd,
                         committed=False, commit_hash="")
         save_state(state)
@@ -9296,6 +9842,11 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 state, rnd=rnd, oracle_timeout=oracle_timeout,
                 dry_run=dry_run, tag=tag, safe_name=safe_name,
             )
+            if fresh_verdict != "infra_fail":
+                state.log_event("B", "fresh_eval", round_num=rnd,
+                                verdict=fresh_verdict,
+                                detail="fresh first-look review")
+                save_state(state)
             if fresh_verdict in ("accept", "minor revision", "major revision",
                                  "reject"):
                 state.stage_b_fresh_eval_pending = max(
@@ -9328,7 +9879,8 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                             f"fresh first-look={fresh_verdict.upper()}")
                 git_commit(paper_path,
                            f"Stage B ({fresh_verdict} via fresh-eval, {rnd}R): "
-                           f"Oracle review passed", tag=tag)
+                           f"Oracle review passed", tag=tag,
+                           dry_run=dry_run)
                 update_program_board(state.paper_name, "B-DONE",
                                      f"Oracle: deepen={verdict}, fresh={fresh_verdict}, {rnd} rounds")
                 state.stage_b_rounds = rnd
@@ -9652,7 +10204,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             return False
         h_b4 = git_commit(paper_path,
                           f"stage-B R{rnd}: codex referee fixes",
-                          tag=tag)
+                          tag=tag, dry_run=dry_run)
         state.stage_b_rounds = rnd
         state.log_event("B", "codex_fix", round_num=rnd,
                         committed=bool(h_b4), commit_hash=h_b4,
@@ -9734,7 +10286,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     h_targeted = git_commit(
                         paper_path,
                         f"stage-B R{rnd}: codex targeted re-fix for missed locations",
-                        tag=tag)
+                        tag=tag, dry_run=dry_run)
                     if h_targeted:
                         second_scope = _verify_fix_diff_scope(
                             state, issues, h_targeted, paper_path)
@@ -9776,12 +10328,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
         logger.info(f"{tag} Round {rnd}/{MAX_STAGE_B_ROUNDS} complete, "
                     f"looping for re-review")
 
-    last_v = state.stage_b_verdicts[-1] if state.stage_b_verdicts else "?"
-    logger.error(f"{tag} {MAX_STAGE_B_ROUNDS} rounds without Oracle acceptance "
-                 f"(last verdict: {last_v}). Halting — needs human review.")
-    update_program_board(state.paper_name, "B-STUCK",
-                         f"Oracle: {last_v}, {state.stage_b_rounds} rounds — needs human review")
-    save_state(state)
+    _mark_stage_b_round_cap_stuck(state, tag)
     return False
 
 
@@ -9851,7 +10398,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             h_compile = git_commit(
                 paper_path,
                 f"stage-C R{rnd}: repair compilation before final review",
-                tag=tag)
+                tag=tag, dry_run=dry_run)
             if h_compile:
                 state.log_event("C", "compile_repair", round_num=rnd,
                                 committed=True, commit_hash=h_compile)
@@ -10066,7 +10613,8 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
                         "deepen Oracle + fresh Oracle + Codex approved")
             git_commit(paper_path,
                        f"Stage C (joint pass, {rnd}R): "
-                       "deepen Oracle, fresh Oracle, and Codex approved", tag=tag)
+                       "deepen Oracle, fresh Oracle, and Codex approved",
+                       tag=tag, dry_run=dry_run)
             update_program_board(state.paper_name, "C-DONE",
                                  "Oracle deepen+fresh accept and Codex "
                                  f"submit, {rnd} rounds")
@@ -10121,7 +10669,7 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
             return False
         h_c3 = git_commit(paper_path,
                           f"stage-C R{rnd}: codex joint final-review fixes",
-                          tag=tag)
+                          tag=tag, dry_run=dry_run)
         state.stage_c_last_fix_summary = (
             "revised the manuscript to address the open Stage C issue "
             f"ledger and round {rnd} final-gate blockers"
@@ -11236,12 +11784,15 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
             "candidate_count": len(paper_dirs),
             "runnable_count": len(paper_dirs),
             "papers": paper_dirs,
+            "board_sections": {},
             "skipped_status": [],
             "skipped_done": [],
+            "skipped_oracle_pending": [],
             "skipped_unregistered": [],
             "skipped_assignment": [],
             "skipped_status_count": 0,
             "skipped_done_count": 0,
+            "skipped_oracle_pending_count": 0,
             "skipped_unregistered_count": 0,
             "skipped_assignment_count": 0,
         }
@@ -11251,6 +11802,7 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
     papers = []
     skipped_status = []
     skipped_done = []
+    skipped_oracle_pending = []
     skipped_unreg = []
     skipped_assignment = []
     candidate_count = 0
@@ -11270,8 +11822,21 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
                     continue
 
                 state = load_state(d.name)
+                if _state_has_hard_stage_a_block(state):
+                    skipped_status.append(
+                        f"  {d.name}: {state.error or state.block_reason}"
+                    )
+                    continue
                 if state and state.current_stage == "DONE":
                     skipped_done.append(d.name)
+                    continue
+
+                pending_nyxid = _pending_nyxid_oracle_prompts_for_paper(d.name)
+                if pending_nyxid:
+                    skipped_oracle_pending.append(
+                        f"  {d.name}: NyxID Oracle pending "
+                        f"({pending_nyxid[0].name})"
+                    )
                     continue
 
                 # 2. Board registration filter
@@ -11290,12 +11855,19 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
         "candidate_count": candidate_count,
         "runnable_count": len(papers),
         "papers": papers,
+        "board_sections": {
+            name: str(entry.get("section", ""))
+            for name, entry in board.items()
+            if entry.get("section")
+        },
         "skipped_status": skipped_status,
         "skipped_done": skipped_done,
+        "skipped_oracle_pending": skipped_oracle_pending,
         "skipped_unregistered": skipped_unreg,
         "skipped_assignment": skipped_assignment,
         "skipped_status_count": len(skipped_status),
         "skipped_done_count": len(skipped_done),
+        "skipped_oracle_pending_count": len(skipped_oracle_pending),
         "skipped_unregistered_count": len(skipped_unreg),
         "skipped_assignment_count": len(skipped_assignment),
     }
@@ -11308,6 +11880,10 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
         logger.info(
             f"Pipeline state DONE filter skipped {len(skipped_done)} papers:\n"
             + "\n".join(f"  {n}" for n in skipped_done))
+    if log and skipped_oracle_pending:
+        logger.info(
+            f"NyxID Oracle pending filter skipped {len(skipped_oracle_pending)} papers:\n"
+            + "\n".join(skipped_oracle_pending))
     if log and skipped_unreg:
         logger.warning(
             f"Unregistered in PROGRAM_BOARD.md (skipped, add row to process):\n"
@@ -11790,6 +12366,8 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
               oracle_pipeline.py --new --outline notes.md --target-journal "JEMS"
               # Review existing paper:
               oracle_pipeline.py --paper theory/2026_xxx/ --target-journal "Adv. Math."
+              # CICM presentation-only short-paper fresh review:
+              oracle_pipeline.py --cicm-short-review --paper papers/publication/2026_auditable_theory_to_paper_pipeline
               # Push all current drafts through A/B only:
               oracle_pipeline.py --all --parallel 2 --no-claude --stop-after B
               # All papers, parallel:
@@ -11848,6 +12426,10 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
                         help="Compact per-paper progress table")
     parser.add_argument("--review-index", action="store_true",
                         help="Correlate Oracle reviews with fix commits")
+    parser.add_argument("--cicm-short-review", action="store_true",
+                        help=("Submit submission_abstract.pdf for a CICM "
+                              "presentation-only fresh review; does not run "
+                              "the ordinary main.pdf Stage B loop"))
     parser.add_argument("--reset", type=str, metavar="PAPER_NAME")
     parser.add_argument("--no-assign", action="store_true",
                         help="Ignore machine assignment, process all papers")
@@ -11886,6 +12468,22 @@ def main(*, continuous_sleep_seconds: float = 300) -> int:
     ORACLE_ENABLED = not args.no_oracle
     if args.no_oracle and not args.dry_run:
         logger.warning("Oracle disabled by --no-oracle; local Codex-only mode")
+
+    if args.cicm_short_review:
+        if not args.paper or len(args.paper) != 1:
+            print("--cicm-short-review requires exactly one --paper", file=sys.stderr)
+            return 1
+        if ORACLE_ENABLED and not args.dry_run and not oracle_server_alive():
+            logger.warning("Oracle server not running - CICM short review will fail")
+        ok, verdict, response = run_cicm_short_review(
+            Path(args.paper[0]),
+            oracle_timeout=args.oracle_timeout,
+            dry_run=args.dry_run,
+        )
+        print(f"CICM short review verdict: {verdict}")
+        if response:
+            print(response[:4000])
+        return 0 if ok else 1
 
     # ── New-paper mode ─────────────────────────────────────────
     if args.new:

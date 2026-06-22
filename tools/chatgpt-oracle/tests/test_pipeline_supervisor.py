@@ -29,6 +29,178 @@ import pipeline_supervisor  # noqa: E402
 
 
 class SupervisorHelpersTests(unittest.TestCase):
+    def test_run_cmd_marks_repo_safe_for_git_commands(self):
+        completed = oracle_pipeline.subprocess.CompletedProcess(
+            ["git"], 0, stdout="", stderr=""
+        )
+
+        with mock.patch.object(
+            oracle_pipeline.subprocess, "run", return_value=completed
+        ) as run:
+            oracle_pipeline.run_cmd(["git", "add", "--", "paper/main.tex"])
+
+        called_cmd = run.call_args.args[0]
+        self.assertEqual(called_cmd[0], "git")
+        self.assertEqual(called_cmd[1], "-c")
+        self.assertEqual(
+            called_cmd[2],
+            f"safe.directory={oracle_pipeline.REPO_ROOT.as_posix()}",
+        )
+        self.assertEqual(called_cmd[3:], ["add", "--", "paper/main.tex"])
+
+    def test_run_cmd_leaves_non_git_commands_unchanged(self):
+        completed = oracle_pipeline.subprocess.CompletedProcess(
+            ["echo"], 0, stdout="", stderr=""
+        )
+
+        with mock.patch.object(
+            oracle_pipeline.subprocess, "run", return_value=completed
+        ) as run:
+            oracle_pipeline.run_cmd(["echo", "ok"])
+
+        self.assertEqual(run.call_args.args[0], ["echo", "ok"])
+
+    def test_git_stage_dry_run_does_not_touch_git(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "paper"
+            paper.mkdir()
+            (paper / "main.tex").write_text("changed", encoding="utf-8")
+
+            with mock.patch.object(oracle_pipeline, "run_cmd") as run:
+                staged = oracle_pipeline.git_stage(paper, dry_run=True)
+
+        self.assertFalse(staged)
+        run.assert_not_called()
+
+    def test_git_commit_dry_run_does_not_touch_git(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "paper"
+            paper.mkdir()
+            (paper / "main.tex").write_text("changed", encoding="utf-8")
+
+            with mock.patch.object(oracle_pipeline, "run_cmd") as run:
+                commit_hash = oracle_pipeline.git_commit(
+                    paper, "stage-C R1: dry run", dry_run=True
+                )
+
+        self.assertEqual(commit_hash, "")
+        run.assert_not_called()
+
+    def test_stage_b_round_cap_records_deepen_and_fresh_verdicts(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir="papers/publication/2026_b_stuck",
+            paper_name="2026_b_stuck",
+            target_journal="Example Workshop",
+            current_stage="B",
+            stage_b_rounds=oracle_pipeline.MAX_STAGE_B_ROUNDS,
+            stage_b_verdicts=["accept"],
+        )
+        state.log_event(
+            "B",
+            "fresh_eval",
+            round_num=oracle_pipeline.MAX_STAGE_B_ROUNDS,
+            verdict="major revision",
+            detail="fresh first-look did not accept",
+        )
+
+        with mock.patch.object(oracle_pipeline, "save_state") as save, \
+             mock.patch.object(oracle_pipeline, "update_program_board") as board:
+            oracle_pipeline._mark_stage_b_round_cap_stuck(state, "[2026_b_stuck|B]")
+
+        self.assertFalse(state.stage_b_passed)
+        self.assertEqual(state.block_reason, "B_STUCK_MAX_ROUNDS_FRESH_EVAL")
+        self.assertIn("deepen Oracle=accept", state.error)
+        self.assertIn("fresh first-look=major revision", state.error)
+        board.assert_called_once_with(
+            "2026_b_stuck",
+            "B-STUCK",
+            "deepen=accept, fresh=major revision, 20 rounds - needs human review",
+        )
+        save.assert_called_once_with(state)
+
+    def test_cicm_short_review_submits_submission_abstract_not_main_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "2026_auditable_theory_to_paper_pipeline"
+            paper.mkdir()
+            short_pdf = paper / "submission_abstract.pdf"
+            main_pdf = paper / "main.pdf"
+            (paper / "submission_abstract.tex").write_text(
+                r"\documentclass{article}\begin{document}short\end{document}",
+                encoding="utf-8",
+            )
+            short_pdf.write_bytes(b"%PDF short")
+            main_pdf.write_bytes(b"%PDF long")
+
+            submitted: dict[str, object] = {}
+
+            def fake_submit(task_id, prompt, pdf_path=None, **kwargs):
+                submitted["task_id"] = task_id
+                submitted["prompt"] = prompt
+                submitted["pdf_path"] = pdf_path
+                submitted["kwargs"] = kwargs
+                return True
+
+            with mock.patch.object(
+                oracle_pipeline, "compile_latex_document", return_value=short_pdf
+            ) as compile_doc, mock.patch.object(
+                oracle_pipeline, "oracle_submit", side_effect=fake_submit
+            ), mock.patch.object(
+                oracle_pipeline, "oracle_poll",
+                return_value=(
+                    "Overall verdict: Minor revision\n"
+                    "Ready for presentation-only route after minor metadata checks. "
+                    * 80
+                ),
+            ), mock.patch.object(
+                oracle_pipeline, "record_cicm_short_review_queue", return_value=None
+            ):
+                ok, verdict, response = oracle_pipeline.run_cicm_short_review(
+                    paper,
+                    oracle_timeout=5,
+                    dry_run=False,
+                )
+
+        self.assertTrue(ok)
+        self.assertEqual(verdict, "minor revision")
+        self.assertIn("ready for presentation-only", response.lower())
+        compile_doc.assert_called_once_with(paper, "submission_abstract.tex", dry_run=False)
+        self.assertEqual(submitted["pdf_path"], short_pdf)
+        self.assertNotEqual(submitted["pdf_path"], main_pdf)
+        prompt = str(submitted["prompt"])
+        self.assertIn("Review only `submission_abstract.pdf`", prompt)
+        self.assertIn("Do not review `main.pdf` as the operative manuscript", prompt)
+        self.assertIn("2 pages plus bibliography", prompt)
+
+    def test_cicm_short_review_does_not_submit_obviously_too_long_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "2026_auditable_theory_to_paper_pipeline"
+            paper.mkdir()
+            short_pdf = paper / "submission_abstract.pdf"
+            short_pdf.write_bytes(b"%PDF short")
+            (paper / "submission_abstract.log").write_text(
+                "Output written on submission_abstract.pdf (11 pages, 410034 bytes).\n",
+                encoding="utf-8",
+            )
+
+            with mock.patch.object(
+                oracle_pipeline, "compile_latex_document", return_value=short_pdf
+            ), mock.patch.object(
+                oracle_pipeline, "oracle_submit", return_value=True
+            ) as submit, mock.patch.object(
+                oracle_pipeline, "record_cicm_short_review_queue", return_value=None
+            ) as queue:
+                ok, verdict, response = oracle_pipeline.run_cicm_short_review(
+                    paper,
+                    oracle_timeout=5,
+                    dry_run=False,
+                )
+
+        self.assertFalse(ok)
+        self.assertEqual(verdict, "needs_shortening")
+        self.assertIn("11 pages", response)
+        submit.assert_not_called()
+        queue.assert_called_once()
+
     def test_health_report_distinguishes_active_local_worker_from_backlog(self):
         import pipeline_health
 
@@ -103,13 +275,25 @@ class SupervisorHelpersTests(unittest.TestCase):
                         },
                     }),
                 )
+            if "result" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd,
+                    0,
+                    stdout=json.dumps({
+                        "status": "completed",
+                        "response": response,
+                        "conversation_id": "conv_fresh",
+                        "chatgpt_url": "https://chatgpt.com/c/conv_fresh",
+                    }),
+                    stderr="",
+                )
             return subprocess.CompletedProcess(
                 cmd,
                 0,
                 stdout=json.dumps({
-                    "response": response,
+                    "task_id": "remote_fresh",
+                    "status": "queued",
                     "conversation_id": "conv_fresh",
-                    "chatgpt_url": "https://chatgpt.com/c/conv_fresh",
                 }),
                 stderr="",
             )
@@ -135,10 +319,95 @@ class SupervisorHelpersTests(unittest.TestCase):
         self.assertEqual(record["status"], "completed")
         self.assertEqual(record["response"], response)
         self.assertEqual(record["conversation_id"], "conv_fresh")
-        self.assertEqual(len(calls), 2)
+        self.assertEqual(len(calls), 3)
         self.assertIn("--conversation", calls[0])
         self.assertNotIn("--conversation", calls[1])
         self.assertIn("--new-conversation", calls[1])
+        self.assertIn("result", calls[2])
+
+    def test_nyxid_submit_timeout_records_recoverable_pending_prompt(self):
+        def fake_run(cmd, **kwargs):
+            raise subprocess.TimeoutExpired(cmd=cmd, timeout=kwargs["timeout"])
+
+        with tempfile.TemporaryDirectory(prefix="nyxid_timeout_") as tmp:
+            old_runtime = oracle_pipeline._nyxid_runtime_dir
+            try:
+                oracle_pipeline._nyxid_runtime_dir = lambda: Path(tmp)
+                with mock.patch.object(oracle_pipeline.subprocess, "run", fake_run):
+                    record = oracle_pipeline._nyxid_submit_and_wait(
+                        "timeout_task",
+                        "review this paper",
+                        timeout=30,
+                    )
+            finally:
+                oracle_pipeline._nyxid_runtime_dir = old_runtime
+
+            record_path = Path(tmp) / "timeout_task.json"
+            prompt_path = Path(tmp) / "timeout_task.prompt.txt"
+            stored = json.loads(record_path.read_text(encoding="utf-8"))
+            prompt_exists = prompt_path.exists()
+
+        self.assertEqual(record["status"], "submitted")
+        self.assertEqual(stored["status"], "submitted")
+        self.assertIn("timed out", stored["error"].lower())
+        self.assertTrue(prompt_exists)
+
+    def test_nyxid_submit_no_wait_polls_remote_result_and_clears_prompt(self):
+        response = "Overall verdict: Minor revision\n" + ("Detailed referee response. " * 100)
+        calls = []
+
+        def fake_run(cmd, **kwargs):
+            calls.append(cmd)
+            if "result" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd,
+                    0,
+                    stdout=json.dumps({
+                        "status": "completed",
+                        "response": response,
+                        "conversation_id": "conv_remote",
+                        "chatgpt_url": "https://chatgpt.com/c/conv_remote",
+                    }),
+                    stderr="",
+                )
+            return subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout=json.dumps({
+                    "task_id": "remote_123",
+                    "status": "dispatched",
+                    "conversation_id": "conv_remote",
+                    "deduplicated": True,
+                }),
+                stderr="",
+            )
+
+        with tempfile.TemporaryDirectory(prefix="nyxid_no_wait_") as tmp:
+            old_runtime = oracle_pipeline._nyxid_runtime_dir
+            old_done = oracle_pipeline._save_oracle_done
+            try:
+                oracle_pipeline._nyxid_runtime_dir = lambda: Path(tmp)
+                oracle_pipeline._save_oracle_done = lambda *args, **kwargs: None
+                with mock.patch.object(oracle_pipeline.subprocess, "run", fake_run):
+                    record = oracle_pipeline._nyxid_submit_and_wait(
+                        "remote_task",
+                        "review this paper",
+                        timeout=30,
+                    )
+            finally:
+                oracle_pipeline._nyxid_runtime_dir = old_runtime
+                oracle_pipeline._save_oracle_done = old_done
+
+            stored = json.loads((Path(tmp) / "remote_task.json").read_text(encoding="utf-8"))
+            prompt_path = Path(tmp) / "remote_task.prompt.txt"
+
+        self.assertEqual(record["status"], "completed")
+        self.assertEqual(record["remote_task_id"], "remote_123")
+        self.assertEqual(record["response"], response)
+        self.assertEqual(stored["status"], "completed")
+        self.assertIn("--no-wait", calls[0])
+        self.assertIn("result", calls[1])
+        self.assertFalse(prompt_path.exists())
 
     def test_oracle_server_rejects_reasoning_chrome_fragments(self):
         self.assertTrue(oracle_server._is_extraction_failure_response(
@@ -373,6 +642,10 @@ class SupervisorHelpersTests(unittest.TestCase):
 
     def test_watchdog_requests_inner_restart_for_recoverable_stage_a_blocks(self):
         summary = {
+            "board_sections": {
+                "2026_hard": "Active Rewrite / Retarget",
+                "2026_soft": "Active Rewrite / Retarget",
+            },
             "skipped_status": [
                 "  2026_hard: A-BLOCKED (overlap deferred; wait for prior submitted sibling feedback)",
                 "  2026_soft: A-BLOCKED (A2 fake extension: no new theorems; manual theorem-deepening required)",
@@ -394,6 +667,10 @@ class SupervisorHelpersTests(unittest.TestCase):
 
     def test_watchdog_ignores_oracle_terminal_stage_a_blocks(self):
         summary = {
+            "board_sections": {
+                "2026_parked": "Active Rewrite / Retarget",
+                "2026_human": "Active Rewrite / Retarget",
+            },
             "skipped_status": [
                 "  2026_parked: A-BLOCKED (Oracle escalation parked: no independent theorem package remains)",
                 "  2026_human: A-BLOCKED (Oracle escalation human_decision: choose merge route)",
@@ -403,6 +680,82 @@ class SupervisorHelpersTests(unittest.TestCase):
         self.assertEqual(
             pipeline_supervisor.recoverable_stage_a_blocked_papers(summary),
             [],
+        )
+
+    def test_watchdog_ignores_recoverable_text_outside_active_rewrite_section(self):
+        summary = {
+            "board_sections": {
+                "2026_soft_elsewhere": "Parked / Overlap / Do Not Process Independently",
+            },
+            "skipped_status": [
+                "  2026_soft_elsewhere: A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6))",
+            ],
+        }
+
+        self.assertEqual(
+            pipeline_supervisor.recoverable_stage_a_blocked_papers(summary),
+            [],
+        )
+
+    def test_watchdog_ignores_semantic_overlap_hard_stage_a_blocks(self):
+        summary = {
+            "board_sections": {
+                "2026_semantic_overlap": "Active Rewrite / Retarget",
+            },
+            "skipped_status": [
+                "  2026_semantic_overlap: A-BLOCKED (semantic overlap requires explicit board resolution before this paper can advance)",
+            ],
+        }
+
+        self.assertEqual(
+            pipeline_supervisor.recoverable_stage_a_blocked_papers(summary),
+            [],
+        )
+
+    def test_discover_summary_includes_board_sections_for_watchdog_filtering(self):
+        with tempfile.TemporaryDirectory(prefix="discover_sections_") as tmp:
+            root = Path(tmp)
+            pub = root / "papers" / "publication"
+            paper = pub / "2026_soft_elsewhere"
+            paper.mkdir(parents=True)
+            (paper / "main.tex").write_text("\\title{Soft}\\begin{document}x\\end{document}", encoding="utf-8")
+            board = pub / "PROGRAM_BOARD.md"
+            board.write_text(
+                "\n".join([
+                    "## Parked / Overlap / Do Not Process Independently",
+                    "",
+                    "| 目录 | 目标期刊 | 状态 | 改投记录 |",
+                    "|------|---------|------|---------|",
+                    "| `2026_soft_elsewhere` | ETDS | A-BLOCKED (max Stage A rounds exhausted; final audit failed) | parked |",
+                ]),
+                encoding="utf-8",
+            )
+
+            old_pub = oracle_pipeline.PAPERS_PUB_DIR
+            old_board = oracle_pipeline.PROGRAM_BOARD
+            old_machine = oracle_pipeline.PROGRAM_BOARD_MACHINE
+            old_entries = oracle_pipeline._board_entries
+            old_entries_mtime = oracle_pipeline._board_entries_mtime
+            try:
+                oracle_pipeline.PAPERS_PUB_DIR = pub
+                oracle_pipeline.PROGRAM_BOARD = board
+                oracle_pipeline.PROGRAM_BOARD_MACHINE = pub / "PROGRAM_BOARD_MACHINE.md"
+                oracle_pipeline._board_entries = None
+                oracle_pipeline._board_entries_mtime = None
+                summary = oracle_pipeline.discover_paper_summary(
+                    respect_assignment=False,
+                    log=False,
+                )
+            finally:
+                oracle_pipeline.PAPERS_PUB_DIR = old_pub
+                oracle_pipeline.PROGRAM_BOARD = old_board
+                oracle_pipeline.PROGRAM_BOARD_MACHINE = old_machine
+                oracle_pipeline._board_entries = old_entries
+                oracle_pipeline._board_entries_mtime = old_entries_mtime
+
+        self.assertEqual(
+            summary["board_sections"]["2026_soft_elsewhere"],
+            "Parked / Overlap / Do Not Process Independently",
         )
 
     def test_stage_c_round_cap_requires_explicit_extra_round_override(self):
@@ -1490,6 +1843,245 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             "submitted_2026_old_rj_archive" in item
             for item in summary["skipped_status"]
         ))
+
+    def test_discovery_only_runs_recoverable_a_block_from_active_rewrite_section(self):
+        active = self._write_paper("2026_active_rewrite", "Active rewrite.")
+        parked = self._write_paper("2026_parked_overlap", "Parked overlap.")
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_rewrite` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | rerun Stage A |",
+                "",
+                "## Parked / Overlap / Do Not Process Independently",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_parked_overlap` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | wait for board decision |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            "\n".join([
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_rewrite` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | rerun Stage A |",
+                "| `2026_parked_overlap` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | wait for board decision |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertIn(str(active), summary["papers"])
+        self.assertNotIn(str(parked), summary["papers"])
+        self.assertTrue(any(
+            "2026_parked_overlap" in item
+            for item in summary["skipped_status"]
+        ))
+
+    def test_discovery_skips_active_rewrite_with_hard_stage_a_state_block(self):
+        paper = self._write_paper("2026_active_hard_block", "Active but hard blocked.")
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_hard_block` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | rerun Stage A |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        oracle_pipeline.STATE_DIR.mkdir(parents=True, exist_ok=True)
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="A",
+        )
+        state.error = (
+            "Stage A blocked: semantic overlap requires explicit board "
+            "resolution before this paper can advance"
+        )
+        oracle_pipeline.save_state(state)
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertEqual(summary["papers"], [])
+        self.assertTrue(any(
+            "2026_active_hard_block" in item
+            for item in summary["skipped_status"]
+        ))
+
+    def test_discovery_skips_active_rewrite_with_pending_nyxid_oracle_prompt(self):
+        paper = self._write_paper(
+            "2026_active_oracle_pending",
+            "Active rewrite with Oracle in flight.",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_oracle_pending` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | rerun Stage A |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        runtime = self.root / "nyxid_runtime"
+        runtime.mkdir()
+        (
+            runtime
+            / "stage_a_escalate_2026_active_oracle_pending_123.prompt.txt"
+        ).write_text("pending review", encoding="utf-8")
+
+        with mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "nyxid"), \
+             mock.patch.object(oracle_pipeline, "_nyxid_runtime_dir", return_value=runtime):
+            summary = oracle_pipeline.discover_paper_summary(
+                respect_assignment=False
+            )
+
+        self.assertNotIn(str(paper), summary["papers"])
+        self.assertEqual(summary["skipped_oracle_pending_count"], 1)
+        self.assertTrue(any(
+            "2026_active_oracle_pending" in item
+            for item in summary["skipped_oracle_pending"]
+        ))
+
+    def test_discovery_treats_nonterminal_nyxid_record_as_pending(self):
+        paper = self._write_paper(
+            "2026_active_oracle_dispatched",
+            "Active rewrite with dispatched Oracle work.",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_oracle_dispatched` | Test J. | A-READY | run |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        runtime = self.root / "nyxid_runtime"
+        runtime.mkdir()
+        task = "review_2026_active_oracle_dispatched_123"
+        (runtime / f"{task}.prompt.txt").write_text("pending review", encoding="utf-8")
+        (runtime / f"{task}.json").write_text(
+            json.dumps({"status": "dispatched", "remote_task_id": "remote_123"}),
+            encoding="utf-8",
+        )
+
+        with mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "nyxid"), \
+             mock.patch.object(oracle_pipeline, "_nyxid_runtime_dir", return_value=runtime):
+            summary = oracle_pipeline.discover_paper_summary(
+                respect_assignment=False
+            )
+
+        self.assertNotIn(str(paper), summary["papers"])
+        self.assertEqual(summary["skipped_oracle_pending_count"], 1)
+        self.assertTrue(any(
+            "2026_active_oracle_dispatched" in item
+            for item in summary["skipped_oracle_pending"]
+        ))
+
+    def test_discovery_recovers_completed_nyxid_result_and_unblocks_paper(self):
+        paper = self._write_paper(
+            "2026_active_oracle_recovered",
+            "Active rewrite with recoverable Oracle result.",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_oracle_recovered` | Test J. | A-READY | run |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        runtime = self.root / "nyxid_runtime"
+        runtime.mkdir()
+        task = "review_2026_active_oracle_recovered_123"
+        (runtime / f"{task}.prompt.txt").write_text("pending review", encoding="utf-8")
+        (runtime / f"{task}.json").write_text(
+            json.dumps({"status": "dispatched", "remote_task_id": "remote_123"}),
+            encoding="utf-8",
+        )
+        response = "Overall verdict: Accept\n" + ("Recovered remote result. " * 100)
+
+        with mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "nyxid"), \
+             mock.patch.object(oracle_pipeline, "_nyxid_runtime_dir", return_value=runtime), \
+             mock.patch.object(
+                 oracle_pipeline,
+                 "_nyxid_fetch_result",
+                 return_value=({"status": "completed", "response": response}, ""),
+             ), \
+             mock.patch.object(oracle_pipeline, "_save_oracle_done", return_value=None):
+            summary = oracle_pipeline.discover_paper_summary(
+                respect_assignment=False
+            )
+
+        stored = json.loads((runtime / f"{task}.json").read_text(encoding="utf-8"))
+        self.assertIn(str(paper), summary["papers"])
+        self.assertEqual(summary["skipped_oracle_pending_count"], 0)
+        self.assertEqual(stored["status"], "completed")
+        self.assertEqual(stored["response"], response)
+        self.assertFalse((runtime / f"{task}.prompt.txt").exists())
+
+    def test_active_rewrite_route_is_not_skipped_by_parked_legacy_note(self):
+        active = self._write_paper("2026_active_with_parked_history", "Active rewrite.")
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_with_parked_history` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | prior rejected route is parked; rerun this active route |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            "\n".join([
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_with_parked_history` | Test J. | A-BLOCKED (max Stage A rounds exhausted; final audit failed (score=6)) | prior rejected route is parked; rerun this active route |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertEqual(summary["papers"], [str(active)])
 
     def test_semantic_overlap_blocks_unresolved_submitted_sibling(self):
         current = self._write_paper("2026_current_overlap", """
