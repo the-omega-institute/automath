@@ -493,18 +493,92 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
   prime, this congruence says \(N(k+h)\equiv0\pmod p\).
 \end{proof}
 
-\begin{definition}[Total prime-factor count and divisibility antichains]
+\begin{definition}[Prime-factor counts and divisibility antichains]
   \label{def:Omega-total-prime-factor-count}
   For \(n\ge2\), write
   \(n=\prod_p p^{a_p}\). We put
   \[
+    \omega(n):=\#\{p:a_p>0\},
+    \qquad
     \Omega(n):=\sum_p a_p,
   \]
-  the total number of prime factors of \(n\), counted with
-  multiplicity. We also put \(\Omega(1)=0\). A set
+  where \(\omega(n)\) is the number of distinct rational prime
+  divisors of \(n\), and \(\Omega(n)\) is the total number of prime
+  factors of \(n\), counted with multiplicity. We also put
+  \(\omega(1)=\Omega(1)=0\). Then
+  \[
+    \omega(n)\le \Omega(n)
+  \]
+  for every \(n\ge1\). A set
   \(S\subseteq\NN_{\ge1}\) is a divisibility antichain if no two
   distinct elements \(a,b\in S\) satisfy \(a\mid b\).
 \end{definition}
+
+\begin{theorem}[Coprime-quotient Zeckendorf pumping]
+  \label{thm:coprime-quotient-zeckendorf-pumping}
+  Let \(L\subseteq\mathcal Z\) be recognized by an \(n\)-state
+  deterministic finite automaton. If \(w\in L\), \(\abs w\ge n\), and
+  \(\val(w)\ge2\), then there are accepted words
+  \[
+    w_0=w,\ w_1,\ w_2,\ldots
+  \]
+  with strictly increasing Zeckendorf lengths and values
+  \(N_i:=\val(w_i)\) such that, for every \(i\ge0\),
+  \[
+    N_{i+1}=N_iQ_i,\qquad Q_i>1,\qquad Q_i\equiv1\pmod {N_i}.
+  \]
+  In particular \(\gcd(Q_i,N_i)=1\) for every \(i\).
+\end{theorem}
+
+\begin{proof}
+  Let \(\mathcal A\) be an \(n\)-state DFA recognizing \(L\). Since
+  \(\mathcal A\) accepts \(w\) and \(\abs w\ge n\), the usual pumping
+  argument gives a factorization \(w=xyz\) with \(\abs y>0\) and
+  \(xy^kz\in L\) for every \(k\ge0\). Put
+  \[
+    k_0=1,\qquad w_i=xy^{k_i}z,\qquad
+    N_i=\val(w_i).
+  \]
+  Thus \(w_0=w\) and \(N_0=\val(w)\ge2\). Suppose \(k_i\) has been
+  defined and \(N_i\ge2\). Let
+  \[
+    h_i=
+    \operatorname{ord}_{\operatorname{GL}_3(\ZZ/N_i^2\ZZ)}(M_y)
+  \]
+  be the order of the nonempty middle-block matrix modulo \(N_i^2\),
+  which is defined by
+  \Cref{lem:zeckendorf-unimodular-block-action}. Set
+  \[
+    k_{i+1}=k_i+h_i .
+  \]
+  Applying \Cref{lem:zeckendorf-pumping-congruence} with
+  \(q=N_i^2\) gives
+  \[
+    N_{i+1}
+      =\val(xy^{k_{i+1}}z)
+      \equiv \val(xy^{k_i}z)
+      =N_i
+      \pmod {N_i^2}.
+  \]
+  Hence there is an integer \(t_i\) with
+  \[
+    N_{i+1}=N_i+N_i^2t_i=N_i(1+N_it_i).
+  \]
+  Since \(h_i\ge1\) and \(\abs y>0\), we have \(k_{i+1}>k_i\), and
+  the length of \(xy^{k_{i+1}}z\) is strictly larger than the length
+  of \(xy^{k_i}z\). Both words lie in \(L\subseteq\mathcal Z\), hence
+  are canonical Zeckendorf words. The canonical words of length \(m\)
+  represent exactly the interval \([F_{m+1},F_{m+2})\), and these
+  intervals are strictly ordered by length. Therefore
+  \(N_{i+1}>N_i\). It follows from the displayed formula that
+  \(t_i\ge1\).
+
+  Put \(Q_i=1+N_it_i\). Then \(N_{i+1}=N_iQ_i\),
+  \(Q_i>1\), and \(Q_i\equiv1\pmod {N_i}\). The last congruence gives
+  \(\gcd(Q_i,N_i)=1\). The strict growth also gives
+  \(N_{i+1}\ge N_i\ge2\), so the recursive construction continues
+  indefinitely. This proves the theorem.
+\end{proof}
 
 \begin{theorem}[Zeckendorf divisibility-chain pumping]
   \label{thm:zeckendorf-divisibility-chain-pumping}
@@ -523,51 +597,57 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 \end{theorem}
 
 \begin{proof}
-  Let \(\mathcal A\) be an \(n\)-state DFA recognizing \(L\). Since
-  \(\mathcal A\) accepts \(w\) and \(\abs w\ge n\), the usual pumping
-  argument gives a factorization \(w=xyz\) with \(\abs y>0\) and
-  \(xy^kz\in L\) for every \(k\ge0\). Put \(k_0=1\), \(w_i=xy^{k_i}z\),
-  and
+  This is the immediate divisibility part of
+  \Cref{thm:coprime-quotient-zeckendorf-pumping}: there
+  \(N_{i+1}=N_iQ_i\) with \(Q_i>1\), so \(N_i\) strictly divides
+  \(N_{i+1}\).
+\end{proof}
+
+\begin{corollary}[New rational primes in every infinite regular Zeckendorf language]
+  \label{cor:new-rational-primes-in-every-infinite-regular-zeckendorf-language}
+  If \(L\subseteq\mathcal Z\) is infinite and regular, then \(L\)
+  contains accepted words \(w_0,w_1,\ldots\) such that, with
+  \(N_i=\val(w_i)\), the set of rational prime divisors of \(N_i\)
+  strictly increases at every step. More precisely, in the chain of
+  \Cref{thm:coprime-quotient-zeckendorf-pumping}, every quotient
+  \(Q_i=N_{i+1}/N_i\) has a prime divisor that divides no earlier
+  \(N_j\), \(0\le j\le i\). Hence infinitely many distinct rational
+  primes divide values occurring in \(L\).
+\end{corollary}
+
+\begin{proof}
+  Let an \(n\)-state DFA recognize \(L\). Since \(L\) is infinite, it
+  contains words of arbitrarily large length; all but at most one have
+  value at least \(2\). Choose \(w\in L\) with \(\abs w\ge n\) and
+  \(\val(w)\ge2\), and apply
+  \Cref{thm:coprime-quotient-zeckendorf-pumping}. For each \(i\),
+  \(Q_i>1\), so choose a prime \(p_i\mid Q_i\). Since
+  \(Q_i\equiv1\pmod {N_i}\), we have \(\gcd(Q_i,N_i)=1\). Moreover
+  \(N_j\mid N_i\) for every \(j\le i\), because the values form a
+  divisibility chain. Thus \(p_i\) divides none of
+  \(N_0,\ldots,N_i\). But \(p_i\mid N_{i+1}=N_iQ_i\), so the prime
+  divisor set strictly increases from \(N_i\) to \(N_{i+1}\). Iterating
+  gives infinitely many distinct rational prime divisors among the
+  accepted values.
+\end{proof}
+
+\begin{corollary}[Unbounded distinct prime divisors]
+  \label{cor:unbounded-distinct-prime-divisors}
+  If \(L\subseteq\mathcal Z\) is infinite and regular, then
   \[
-    N_i:=\val(w_i)=\val(xy^{k_i}z).
+    \sup_{w\in L}\omega(\val(w))=\infty .
   \]
-  We now define \(k_i\) recursively. Suppose \(k_i\) has been defined.
-  Since \(N_i\ge N_0=\val(w)\ge2\) will follow from the strict-growth
-  step below, the order
+\end{corollary}
+
+\begin{proof}
+  In the sequence supplied by
+  \Cref{cor:new-rational-primes-in-every-infinite-regular-zeckendorf-language},
+  each step introduces at least one rational prime divisor not present
+  earlier. Hence
   \[
-    h_i=\operatorname{ord}_{\operatorname{GL}_3(\ZZ/N_i\ZZ)}(M_y)
+    \omega(\val(w_i))\ge \omega(\val(w_0))+i
   \]
-  is defined by \Cref{lem:zeckendorf-unimodular-block-action}. Set
-  \[
-    k_{i+1}=k_i+h_i .
-  \]
-  Applying \Cref{lem:zeckendorf-pumping-congruence} with \(q=N_i\)
-  gives
-  \[
-    \val(xy^{k_{i+1}}z)
-      \equiv \val(xy^{k_i}z)
-      \equiv 0 \pmod {N_i}.
-  \]
-  Thus
-  \[
-    \val(xy^{k_i}z)\mid \val(xy^{k_{i+1}}z).
-  \]
-  Because \(h_i\ge1\) and \(\abs y>0\), we have
-  \(k_{i+1}>k_i\) and hence
-  \[
-    \abs{xy^{k_{i+1}}z}>\abs{xy^{k_i}z}.
-  \]
-  Each pumped word belongs to \(L\subseteq\mathcal Z\), so each is a
-  canonical Zeckendorf word. Canonical Zeckendorf words of length \(m\)
-  represent exactly \([F_{m+1},F_{m+2})\), and these intervals are
-  strictly ordered by length. Hence
-  \[
-    \val(xy^{k_{i+1}}z)>\val(xy^{k_i}z).
-  \]
-  The divisibility is therefore strict. This also proves inductively
-  that all \(N_i\ge N_0\ge2\), so the recursion never leaves the range
-  where the order \(h_i\) is defined. Taking \(w_i=xy^{k_i}z\) gives
-  the required infinite strict divisibility chain in \(L\).
+  for every \(i\), and the displayed supremum is infinite.
 \end{proof}
 
 \begin{corollary}[Unbounded prime-factor count in infinite regular Zeckendorf languages]
@@ -579,23 +659,9 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 \end{corollary}
 
 \begin{proof}
-  Let an \(n\)-state DFA recognize \(L\). Since \(L\) is infinite, it
-  contains words of arbitrarily large length, and since
-  \(w\mapsto\val(w)\) maps \(\mathcal Z\) bijectively to
-  \(\NN_{\ge1}\), all but at most one of these words have value at
-  least \(2\). Choose \(w\in L\) with \(\abs w\ge n\) and
-  \(\val(w)\ge2\). By
-  \Cref{thm:zeckendorf-divisibility-chain-pumping}, there is a chain
-  \(w_0,w_1,\ldots\) in \(L\) with
-  \(N_i:=\val(w_i)\) strictly dividing \(N_{i+1}\). Write
-  \(N_{i+1}=N_i c_i\). Strict divisibility gives \(c_i\ge2\), hence
-  \[
-    \Omega(N_{i+1})
-      =\Omega(N_i)+\Omega(c_i)
-      \ge \Omega(N_i)+1.
-  \]
-  Therefore \(\Omega(N_i)\ge\Omega(N_0)+i\), and the displayed
-  supremum is infinite.
+  This follows from
+  \Cref{cor:unbounded-distinct-prime-divisors} and the inequality
+  \(\omega(n)\le\Omega(n)\).
 \end{proof}
 
 \begin{corollary}[Divisibility-antichain obstruction]
@@ -613,6 +679,48 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
   antichain hypothesis.
 \end{proof}
 
+\begin{corollary}[Bounded-distinct-prime Zeckendorf languages are REG-immune]
+  \label{cor:bounded-distinct-prime-zeckendorf-languages-reg-immune}
+  For every fixed \(K\ge1\), the language
+  \[
+    \mathcal B_K
+      :=\{w\in\mathcal Z:\omega(\val(w))\le K\}
+  \]
+  is infinite and contains no infinite regular sublanguage.
+\end{corollary}
+
+\begin{proof}
+  The language \(\mathcal B_K\) is infinite because it contains the
+  Zeckendorf representations of all primes. If \(L\) were an infinite
+  regular sublanguage of \(\mathcal B_K\), then
+  \(\omega(\val(w))\le K\) for every \(w\in L\), contradicting
+  \Cref{cor:unbounded-distinct-prime-divisors}.
+\end{proof}
+
+\begin{corollary}[Finite-prime-support Zeckendorf languages are REG-immune]
+  \label{cor:finite-prime-support-zeckendorf-languages-reg-immune}
+  Let \(S\) be a finite set of rational primes and put
+  \[
+    \mathcal Z_S
+      :=\{w\in\mathcal Z:
+          \text{every prime divisor of }\val(w)\text{ lies in }S\}.
+  \]
+  Then \(\mathcal Z_S\) contains no infinite regular sublanguage. If
+  \(S\neq\emptyset\), then \(\mathcal Z_S\) is infinite, and therefore
+  it is REG-immune.
+\end{corollary}
+
+\begin{proof}
+  Every value represented in \(\mathcal Z_S\) has at most \(\abs S\)
+  distinct prime divisors. Thus any infinite regular sublanguage of
+  \(\mathcal Z_S\) would contradict
+  \Cref{cor:unbounded-distinct-prime-divisors}. If \(S\neq\emptyset\),
+  choose \(p\in S\). For every \(a\ge0\), the integer \(p^a\) has all
+  its prime divisors in \(S\), and its canonical Zeckendorf
+  representation belongs to \(\mathcal Z_S\). These values are
+  distinct, so \(\mathcal Z_S\) is infinite.
+\end{proof}
+
 \begin{corollary}[Bounded almost-prime Zeckendorf languages are REG-immune]
   \label{cor:bounded-almost-prime-zeckendorf-languages-reg-immune}
   For every fixed \(K\ge1\), the language
@@ -625,10 +733,12 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 
 \begin{proof}
   The language \(\mathcal A_K\) is infinite because it contains the
-  Zeckendorf representations of all primes. Suppose that \(L\) were an
-  infinite regular sublanguage of \(\mathcal A_K\). Then
-  \(\Omega(\val(w))\le K\) for every \(w\in L\), contradicting
-  \Cref{cor:unbounded-prime-factor-count-in-infinite-regular-zeckendorf-languages}.
+  Zeckendorf representations of all primes. Since
+  \(\omega(n)\le\Omega(n)\), we have
+  \(\mathcal A_K\subseteq\mathcal B_K\). Hence an infinite regular
+  sublanguage of \(\mathcal A_K\) would be an infinite regular
+  sublanguage of \(\mathcal B_K\), contradicting
+  \Cref{cor:bounded-distinct-prime-zeckendorf-languages-reg-immune}.
 \end{proof}
 
 \begin{corollary}[Zeckendorf-Sch\"utzenberger regular immunity]
@@ -644,14 +754,16 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 \end{corollary}
 
 \begin{proof}
-  Distinct primes form a divisibility antichain. Hence the finiteness
-  assertion follows from
-  \Cref{cor:divisibility-antichain-obstruction}. The quantitative
-  statement follows directly from
-  \Cref{thm:zeckendorf-divisibility-chain-pumping}: an accepted word
-  of length at least \(n\) has prime value at least \(2\), and the
-  theorem would produce two accepted values in which one strictly
-  divides the other, impossible for distinct primes.
+  Since prime values have exactly one distinct prime divisor, the
+  finiteness assertion follows from
+  \Cref{cor:bounded-distinct-prime-zeckendorf-languages-reg-immune}
+  with \(K=1\). For the quantitative statement, suppose an \(n\)-state
+  DFA accepting such an \(L\) accepted a word \(w\) with \(\abs w\ge n\).
+  Then \(\val(w)\) is prime, hence at least \(2\). By
+  \Cref{thm:coprime-quotient-zeckendorf-pumping}, \(L\) would contain
+  accepted values \(N_0\) and \(N_1=N_0Q_0\) with \(Q_0>1\), so
+  \(N_1\) is composite. This contradicts the assumption that
+  \(\val(L)\) is contained in the primes.
 \end{proof}
 
 \begin{corollary}[Infinite regular Zeckendorf languages contain composites]
@@ -665,10 +777,10 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 
 \begin{proof}
   By
-  \Cref{cor:unbounded-prime-factor-count-in-infinite-regular-zeckendorf-languages},
-  the set of values \(\Omega(\val(w))\) is unbounded on \(L\). In
+  \Cref{cor:unbounded-distinct-prime-divisors},
+  the set of values \(\omega(\val(w))\) is unbounded on \(L\). In
   particular, infinitely many accepted words have
-  \(\Omega(\val(w))\ge2\), and their values are composite.
+  \(\omega(\val(w))\ge2\), and their values are composite.
 \end{proof}
 
 \begin{corollary}[The Zeckendorf prime language is REG-immune]
@@ -686,9 +798,10 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
   Euclid's theorem and the bijection \(w\mapsto\val(w)\) from
   \(\mathcal Z\) to \(\NN_{\ge1}\) show that
   \(\mathcal P_{\mathcal Z}\) is infinite. If it contained an infinite
-  regular sublanguage \(L\), then \(L\subseteq\mathcal Z\) and
-  \(\val(L)\) would consist only of primes, contradicting
-  \Cref{thm:zeckendorf-schutzenberger-regular-immunity}.
+  regular sublanguage \(L\), then every value in \(L\) would have
+  exactly one distinct prime divisor, contradicting
+  \Cref{cor:bounded-distinct-prime-zeckendorf-languages-reg-immune}
+  with \(K=1\).
 \end{proof}
 
 For a deterministic automaton \(\mathcal A\) over the Zeckendorf digit
@@ -982,7 +1095,6 @@ the standard references cited in \Cref{subsec:prior-work}.
   regular language, hence regular itself, contradicting
   \Cref{cor:zeckendorf-prime-language-not-regular}.
 \end{remark}
-
 
 
 
