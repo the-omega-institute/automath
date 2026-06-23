@@ -2,122 +2,101 @@
 \section{Poisson Smoothing and Entropy Asymptotics}%
 \label{sec:entropy-asymptotics}
 
-\subsection*{Hypotheses for the entropy asymptotics}
+\subsection*{Theorem map and hypotheses}\label{sec:entropy-theorem-map}
 
-\paragraph{Local hypotheses.}
 Throughout this section we write
 $\Delta:=\gamma-\bar\gamma$ and
 $\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)$ whenever it exists.  The
-assumptions are local:
-\begin{itemize}[leftmargin=*]
-\item Proposition~\ref{prop:poisson-second-order} uses the mean, variance,
-and finite centred fourth moment through a direct Taylor expansion of
-$R_\varepsilon$.
-\item Theorem~\ref{thm:poisson-kl-even-orders} uses a finite centred
-$(2N+\eta)$th absolute moment, the density remainder, and Cayley parity.
-Corollary~\ref{cor:uniform-moment-ball-entropy-remainder} gives the uniform
-version on centred $(2N+\eta)$-moment balls.
-\item Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}
-uses the same finite mode calculus at order four and a finite centred
-fifth absolute moment to recover $(\sigma^2,\mu_3,\mu_4)$ from phase
-Fourier coefficients.
-\item Theorem~\ref{thm:finite-grid-poisson-moment-recovery} gives finite-grid,
-finite-time recovery from exact phase samples.  It uses
-Proposition~\ref{prop:finite-grid-coefficient-recovery} to remove aliasing for
-the truncated finite mode polynomial and the uniform order-five remainder to
-quantify the residual large-time error.
-\item Corollary~\ref{cor:poisson-kl-eighth} is proved directly from the
-seventh-moment mode remainder.  Its coefficients use the formal mode algebra;
-the $N=4$ finite-moment theorem and compact-support analytic theorem give the
-same notation only under their stronger hypotheses.
-The displayed coefficient arithmetic uses Lemma~\ref{lem:mode-parity-vanish}
-and Appendix~\ref{app:entropy-integrals}.
-\item Proposition~\ref{prop:eighth-order-finite-phase-verification} uses
-the finite Fourier support of the Cayley--Chebyshev modes and the
-finite-grid aliasing formula to compute the coefficient integrals
-through order~$t^{-8}$ exactly on any phase grid $\mu_N$ with
-$N\ge9$.
-\item Theorems~\ref{thm:poisson-defect-ladder}
-and~\ref{thm:poisson-defect-amplification}, together with
-Corollary~\ref{cor:poisson-two-point-defect-rigidity}, use the same finite
-centred seventh absolute moment hypothesis and the explicit coefficients from
-Corollary~\ref{cor:poisson-kl-eighth}.
-\item The fourth-moment identity \eqref{eq:defect-sixth-fourth-moment} and
-coupling estimate \eqref{eq:fourth-moment-algebraic-coupling} use only the
-mean, variance, and finite centred fourth moment; they define the standalone
-algebraic defect $\Delta_6^{(4)}(\nu)$.
-\item Theorem~\ref{thm:poisson-defect-stability} is a coefficient-level
-seventh-moment theorem for the sixth-order asymptotic defect, and
-Corollary~\ref{cor:poisson-finite-time-defect-stability} gives the large-time
-version using the order-nine remainder in Corollary~\ref{cor:poisson-kl-eighth}.
-Both use the mean, variance, and finite centred seventh absolute moment; only
-then does Lemma~\ref{lem:seventh-moment-bridge} identify
-$\Delta_6^{(4)}(\nu)$ with the genuine $t^{-6}$ entropy defect.
-Corollary~\ref{cor:uniform-finite-time-defect-stability} is the uniform version
-on variance-fixed seventh-moment shells.
-\end{itemize}
-The appendix is used only to evaluate the displayed $t^{-6}$ and $t^{-8}$
-coefficients in Corollary~\ref{cor:poisson-kl-eighth}.  Below, the
-fourth-moment identity is kept as the algebraic polynomial
-$\Delta_6^{(4)}$ until the seventh-moment bridge gives it entropy-asymptotic
-meaning.  Law-dependent and shell-uniform finite-time constants are separated
-in the corresponding corollaries.
+following map is the single reference point for the hypotheses used by the
+entropy results.
 
-\paragraph{Section guide.}
-This section first fixes the Cayley--Poisson normalization and the formal
-coefficient algebra, then proves the finite-moment entropy asymptotics and the
-seventh-moment eighth-order defect formulas, and finally derives
-coefficient-level and finite-time stability.  The results are used in the
-following order.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-\item \emph{Normalization tier.}
-Subsection~\ref{subsec:cayley-entropy} fixes the entropy identity,
-the low-order Poisson comparison, and the Cayley--Chebyshev mode expansion.
-These results depend only on the Poisson kernel identities and finite Taylor
-expansions stated there.
-\item \emph{Algebraic tier.}
-Subsection~\ref{subsec:all-order-coefficient-calculus} is algebraic.
-The universal formal polynomials $A_k^{\rm form}$ and the mode integrals
-$I(n_1,\ldots,n_r)$ are defined before any law is evaluated or any
-asymptotic limit is taken; their odd-order cancellation follows from the
-parity of the modes.  Proposition~\ref{prop:universal-entropy-coefficient-evaluation}
-then evaluates those polynomials at a law only when the required moments
-exist.
-\item \emph{Analytic tier.}
-Subsection~\ref{subsec:finite-moment-entropy} is the finite-moment passage
-step.  Under the finite centred moment hypotheses appearing in
-Lemma~\ref{lem:entropy-uniform-remainder} and
-Theorem~\ref{thm:finite-moment-entropy-remainder}, the evaluated algebraic
-coefficient $A_k(\nu)$ is the actual coefficient of the large-time Poisson
-relative entropy expansion.
-\item \emph{Defect tier.}
-Subsection~\ref{subsec:eighth-order-defects} is a specialization of
-the preceding descent.  Corollary~\ref{cor:poisson-kl-eighth} supplies the
-sixth- and eighth-order entropy jet under a finite centred seventh moment,
-using the formal coefficient algebra only for notation and coefficient
-identification.  Corollary~\ref{cor:eighth-order-jet-factorization} factors that
-jet through the centred moment jet of order six,
-Proposition~\ref{prop:eighth-order-finite-phase-verification} checks the
-required finite Fourier integrals on phase grids below the aliasing threshold,
-and Theorems~\ref{thm:poisson-defect-ladder}
-and~\ref{thm:poisson-defect-amplification} use only those explicit
-coefficients to prove the defect ladder and the two-point extremal
-amplification statement.
-\item \emph{Stability tier.}
-Subsection~\ref{subsec:fourth-moment-stability} is downstream of the
-defect formulas.  The symbols $C_6^{(4)}$ and $\Delta_6^{(4)}$ are only
-fourth-moment algebraic polynomials until Lemma~\ref{lem:seventh-moment-bridge}
-places them under the seventh-moment entropy expansion.  Only after that
-bridge does Theorem~\ref{thm:poisson-defect-stability} become a stability
-theorem for the genuine sixth-order entropy defect, and
-Corollary~\ref{cor:poisson-finite-time-defect-stability} becomes its
-finite-time consequence.  Corollary~\ref{cor:uniform-finite-time-defect-stability}
-is the corresponding controlled-class consequence, obtained by bounding the
-same constants uniformly on a fixed variance and seventh-moment shell.
-\end{enumerate}
-Thus the coefficient algebra, finite-moment remainders, finite-grid
-verification, defect identities, and stability consequences have distinct
-hypotheses and are used in this order.  In particular, finite grids do not
-replace the asymptotic passage, and the fourth-moment polynomial is not treated
-as an entropy coefficient before the seventh-moment bridge.
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{p{0.22\linewidth}|p{0.23\linewidth}|p{0.25\linewidth}|p{0.22\linewidth}}
+result or tier & role & hypotheses & output used later\\ \hline
+Proposition~\ref{prop:poisson-second-order} and
+Subsection~\ref{subsec:cayley-entropy} &
+normalization and low-order comparison &
+finite mean, variance, and finite centred fourth moment for the displayed
+Taylor calculation &
+the entropy identity, low-order comparison, and Cayley--Chebyshev modes\\
+\hline
+Theorem~\ref{thm:universal-entropy-coefficients} and
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} &
+formal coefficient algebra &
+none beyond the bounded Cayley--Chebyshev modes and finite Cauchy-weighted
+mode integrals &
+formal polynomials \(A_k^{\rm form}\), odd parity cancellation, and exact
+mode-integral evaluation\\
+\hline
+Proposition~\ref{prop:universal-entropy-coefficient-evaluation} &
+finite-moment evaluation of the formal algebra &
+existence of the centred moments that occur in the coefficient being
+evaluated &
+law-level numbers \(A_k(\nu)\) when those moments exist\\
+\hline
+Theorem~\ref{thm:poisson-kl-even-orders},
+Theorem~\ref{thm:finite-moment-entropy-remainder}, and
+Corollary~\ref{cor:uniform-moment-ball-entropy-remainder} &
+first main entropy package &
+finite centred \((2N+\eta)\)th absolute moment; the uniform corollary also
+fixes a centred \((2N+\eta)\)-moment ball &
+actual large-time coefficients through \(t^{-2N}\), fixed-law constants, and
+moment-ball-uniform constants\\
+\hline
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes} and
+Theorem~\ref{thm:finite-grid-poisson-moment-recovery} &
+finite phase recovery checks &
+finite centred fifth absolute moment for the order-four phase recovery;
+finite grids above the stated aliasing threshold for exact truncated
+coefficient recovery &
+recovery of \((\sigma^2,\mu_3,\mu_4)\) and finite-time residual estimates\\
+\hline
+Theorem~\ref{thm:analytic-compact-support-interchange} &
+analytic strengthening of the same coefficient calculus &
+compact support of the centred law &
+absolutely convergent entropy series with coefficients \(A_k(\nu)\)\\
+\hline
+Theorem~\ref{thm:poisson-kl-eighth},
+Corollary~\ref{cor:eighth-order-jet-factorization}, and
+Proposition~\ref{prop:eighth-order-finite-phase-verification} &
+second main entropy package &
+finite centred seventh absolute moment; phase verification uses grids
+\(\mu_N\) with \(N\ge9\) &
+the \(t^{-4}\), \(t^{-6}\), and \(t^{-8}\) jet, the \(O(t^{-9})\) remainder,
+and exact verification of the printed mode integrals\\
+\hline
+Corollaries~\ref{thm:poisson-defect-ladder},
+\ref{thm:poisson-defect-amplification}, and
+\ref{cor:poisson-two-point-defect-rigidity} &
+defect consequences &
+positive variance and finite centred seventh absolute moment &
+non-negative defect coordinates, strict eighth-order amplification, and the
+two-point equality case\\
+\hline
+Lemma~\ref{lem:fourth-moment-algebraic-coupling} and
+Lemma~\ref{lem:seventh-moment-bridge} &
+bridge from algebraic fourth-moment defect to entropy defect &
+finite centred fourth moment for the algebraic estimate; positive variance
+and finite centred seventh absolute moment for the bridge &
+identification of \(\Delta_6^{(4)}(\nu)\) with the genuine sixth-order entropy
+defect \(\Delta_6(\nu)\)\\
+\hline
+Corollaries~\ref{thm:poisson-defect-stability},
+\ref{cor:poisson-finite-time-defect-stability}, and
+\ref{cor:uniform-finite-time-defect-stability} &
+coefficient and finite-time stability &
+positive variance and finite centred seventh absolute moment; the uniform
+finite-time version fixes \(\sigma\) and a seventh-moment shell &
+coefficient-level \(W_2\) control, fixed-law finite-time control, and
+shell-uniform finite-time constants
+\end{tabular}
+\end{center}
+
+The appendix is used to evaluate the displayed \(t^{-6}\) and \(t^{-8}\)
+coefficients in Theorem~\ref{thm:poisson-kl-eighth}.  The section follows the
+order of the table: normalization, formal algebra, finite-moment entropy
+passage, seventh-moment eighth-order jet, and stability consequences.
 

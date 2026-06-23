@@ -17,26 +17,72 @@ so that \(\partial_tP_t=LP_t\).  All principal-value identities below are
 proved first with the displayed cutoff calculus and then passed to the stated
 domains.
 
-The domain argument has three parts.  Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
-proves the generator and bilinear identities with spatial cutoffs and supplies
-the integrable majorants needed as the cutoff radius tends to infinity.
-Lemma~\ref{lem:doob-bregman-domain-bounds} gives absolute continuity in time
-and the a.e. chain-rule identity on every compact time interval.  Finally,
-Lemma~\ref{lem:compact-range-phi-approximation} passes from smooth convex
-entropies to the stated range-local $C^{1,1}$ class.  The nonlocal Bregman
-formula below is therefore interpreted through these cutoff, differentiability,
-and approximation steps.
+The dissipation proof is split into its algebraic and analytic components.
+Lemma~\ref{lem:doob-bregman-algebra} is purely algebraic and records the
+two-point Bregman rearrangement used in the entropy derivative.  Only after
+that identity is isolated do we address domains:
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} proves the generator and bilinear
+identities with spatial cutoffs and supplies the integrable majorants needed as
+the cutoff radius tends to infinity,
+Proposition~\ref{prop:smooth-compact-doob-bregman} proves the identity in the
+smooth compactly supported quotient class, and
+Proposition~\ref{prop:doob-bregman-domain-closure} is the separate
+domain-closure step for the Poisson quotient and the range-local $C^{1,1}$
+entropy class.  The KL tail identity is then stated on its own in
+Corollary~\ref{cor:poisson-kl-doob-bregman-tail}.
 
-The new point in this section is the application of the Doob transform to the
-Poisson comparison quotient used in the entropy theorem: for the same pair
-$(h_t,g_t)$, the entropy derivative is expressed by a symmetric Bregman form
-whose tail coefficients match the Cayley--Chebyshev coefficients from
-Section~\ref{sec:entropy-asymptotics}.  The principal-value generator,
-cutoff integration by parts, and convex-entropy approximation are standard
-analytic tools; they are included here only to make the domain passage for the
-nonlocal identity explicit.  Thus this section supplies a dissipation
-interpretation of the already established coefficient calculus, not an
-independent entropy-asymptotic route.
+This section is auxiliary to the finite-moment entropy theorem.  Its role is
+to apply the Doob transform to the same Poisson comparison quotient used in
+Section~\ref{sec:entropy-asymptotics}: for the pair $(h_t,g_t)$, the entropy
+derivative is expressed by a symmetric Bregman form whose tail coefficients
+match the already defined Cayley--Chebyshev coefficients.  The
+principal-value generator, cutoff integration by parts, and convex-entropy
+approximation are standard analytic tools; they are included only to make the
+domain passage for the nonlocal identity explicit.  Thus this section supplies
+a dissipation interpretation of the coefficient calculus, not a fourth main
+theorem package and not an independent entropy-asymptotic route.
+
+\begin{lemma}[Two-point Bregman algebra for the Doob derivative]%
+\label{lem:doob-bregman-algebra}
+Let $g_x,g_y>0$ and $u_x,u_y>0$.  Let
+$\Phi\in C^1((0,\infty))$, set
+\[
+G(u):=\Phi(u)-u\Phi'(u),
+\qquad
+D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b),
+\]
+and abbreviate $\Phi'(u_x)-\Phi'(u_y)$ by the literal difference of the two
+one-sided entries.  Then
+\begin{equation}\label{eq:doob-bregman-algebra}
+\begin{split}
+&(g_xu_x-g_yu_y)\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)
+ +(g_x-g_y)\bigl(G(u_x)-G(u_y)\bigr)
+\\
+&\qquad
+=g_xD_\Phi(u_x,u_y)+g_yD_\Phi(u_y,u_x).
+\end{split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Collect the $g_x$ and $g_y$ coefficients separately.  The coefficient of
+$g_x$ on the left of \eqref{eq:doob-bregman-algebra} is
+\[
+u_x\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)+G(u_x)-G(u_y).
+\]
+Substituting $G(u)=\Phi(u)-u\Phi'(u)$ gives
+\[
+\Phi(u_x)-\Phi(u_y)-\Phi'(u_y)(u_x-u_y)
+=D_\Phi(u_x,u_y).
+\]
+The coefficient of $g_y$ is
+\[
+-u_y\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)-G(u_x)+G(u_y)
+=\Phi(u_y)-\Phi(u_x)-\Phi'(u_x)(u_y-u_x)
+=D_\Phi(u_y,u_x).
+\]
+This proves the identity.  No analytic domain assertion enters this step.
+\end{proof}
 
 \begin{lemma}[Cutoff justification for the Cauchy Doob calculus]%
 \label{lem:cauchy-doob-cutoff-calculus}
@@ -311,9 +357,9 @@ the functions $\Phi_\varepsilon'$ have a common Lipschitz constant on~$J$, and
 |D_{\Phi_\varepsilon}(\alpha,\beta)-D_\Phi(\alpha,\beta)|\longrightarrow0.
 \]
 Consequently the entropy functionals and the Bregman dissipation integrands in
-Theorem~\ref{thm:poisson-doob-phi-entropy} may be obtained as limits from the
-same formulas for the smooth convex functions $\Phi_\varepsilon$, with the
-same compact-range majorants on every time interval $[a,b]$.
+Proposition~\ref{prop:doob-bregman-domain-closure} may be obtained as limits
+from the same formulas for the smooth convex functions $\Phi_\varepsilon$,
+with the same compact-range majorants on every time interval $[a,b]$.
 \end{lemma}
 
 \begin{proof}
@@ -348,6 +394,77 @@ $0\le D_{\Phi_\varepsilon}(u_t(x),u_t(y))
 puts $u_t$ in~$J$.  Since $\int g_t=1$, dominated convergence applies to the
 one-variable entropy integrals and to the two-variable Bregman dissipation
 integrals.  This proves the limiting assertion.
+\end{proof}
+
+\begin{proposition}[Smooth compactly supported Doob--Bregman identity]%
+\label{prop:smooth-compact-doob-bregman}
+Let $t\mapsto g_t$ be a positive $C^1$ curve of smooth densities on an open
+time interval, and let $t\mapsto u_t$ be a positive $C^1$ curve of smooth
+functions such that $u_t-1\in C_c^\infty(\RR)$ for each $t$, with one compact
+support and one compact quotient range on compact time intervals.  Put
+$h_t=g_tu_t$ and assume
+\[
+\partial_t h_t=Lh_t,\qquad \partial_tg_t=Lg_t,
+\]
+with all integrations below absolutely convergent; for instance this holds
+after replacing the noncompact tests in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
+by fixed spatial cutoffs.  Let $\Phi\in C^2((0,\infty))$ with $\Phi(1)=0$.
+Then
+\[
+\mathcal H_\Phi(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x
+\]
+is $C^1$, and
+\begin{equation}\label{eq:smooth-compact-phi-entropy-dissipation}
+-\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\frac{1}{2\pi}\iint_{\RR^2}
+\frac{
+g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Because $u_t-1$ has compact support and $\Phi(1)=0$, the entropy integrand is
+supported where $u_t\ne1$.  Differentiating under the integral and using
+$h_t=g_tu_t$ gives
+\[
+\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\int_{\RR}\Phi'(u_t)\,Lh_t\,\dd x
++
+\int_{\RR}\bigl(\Phi(u_t)-u_t\Phi'(u_t)\bigr)Lg_t\,\dd x .
+\]
+The functions $\Phi'(u_t)-\Phi'(1)$ and
+$Q_\Phi(u_t)-Q_\Phi(1)$ are smooth and compactly supported, and constants do
+not change the bilinear form.  The constant pairings with $Lh_t$ and $Lg_t$
+vanish because the generator preserves total mass.  Applying the compactly
+supported Cauchy bilinear identity
+\[
+\int_{\RR}qLp\,\dd x
+=-\frac{1}{2\pi}\iint_{\RR^2}
+\frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
+\]
+first with $p=h_t=g_tu_t$, $q=\Phi'(u_t)$, and then with
+$p=g_t$, $q=Q_\Phi(u_t)$, where
+$Q_\Phi(s)=\Phi(s)-s\Phi'(s)$.  Thus
+\[
+\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=-\frac{1}{2\pi}\iint_{\RR^2}\frac{E_t(x,y)}{(x-y)^2}\dd x\dd y,
+\]
+where, with $u_x=u_t(x)$, $u_y=u_t(y)$, $g_x=g_t(x)$, and $g_y=g_t(y)$,
+\[
+E_t(x,y)
+=(g_xu_x-g_yu_y)\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)
+ +(g_x-g_y)\bigl(Q_\Phi(u_x)-Q_\Phi(u_y)\bigr).
+\]
+Lemma~\ref{lem:doob-bregman-algebra} rewrites this exactly as
+\[
+E_t(x,y)=g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x)).
+\]
+Substitution gives \eqref{eq:smooth-compact-phi-entropy-dissipation}.
 \end{proof}
 
 \begin{lemma}[Doob--Bregman domain bounds]%
@@ -516,11 +633,11 @@ tends to zero.
 
 The next theorem gives the Poisson-quotient mechanism for the comparison pair
 $h_t=P_t*\nu$ and $g_t=P_t(\cdot-\bar\gamma)$.  It puts the quotient
-$u_t=h_t/g_t$ under the non-autonomous Doob generator and identifies the
-resulting entropy dissipation with the constants and domains tied to this
-Poisson observation channel.
+$u_t=h_t/g_t$ under the non-autonomous Doob generator.  The entropy
+dissipation is then stated separately as a domain-closure proposition, and the
+KL tail identity as a final corollary.
 
-\begin{theorem}[Non-autonomous Doob transform and $\Phi$-entropy dissipation]\label{thm:poisson-doob-phi-entropy}
+\begin{theorem}[Non-autonomous Doob transform]\label{thm:poisson-doob-phi-entropy}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
 finite centred second moment.  For $t>0$ define
 \[
@@ -542,15 +659,8 @@ be the one-dimensional Cauchy generator, and set
 \end{equation}
 For the displayed formulae below the domain of \(\mathcal L_t\) is the class
 of bounded \(C^2\) functions with bounded first and second derivatives; the
-Green identity is asserted on \(C_c^\infty(\RR)\), and the entropy identity is
-obtained by the cutoff limits in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.
-For the entropy identity we use the finite centred second moment for the
-Poisson quotient, the compact-in-time quotient range from
-Lemma~\ref{lem:doob-range-bregman-integrability}, range-local $C^{1,1}$ control
-of the convex entropy, and cutoff convergence from
-Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.  The general $\Phi$ statement
-records these domain assumptions; the later coefficient and rigidity arguments
-use only the KL specialization $\Phi(s)=s\log s$ in part~\textup{(iv)}.
+Green identity is asserted on \(C_c^\infty(\RR)\).  The cutoff interpretation
+is the one fixed in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.
 Then the following assertions hold.
 \begin{enumerate}[label=(\roman*)]
 \item
@@ -583,62 +693,6 @@ Then the following assertions hold.
       &\qquad\qquad\times
       \bigl(f(x)-f(y)\bigr)\bigl(\psi(x)-\psi(y)\bigr)\dd x\dd y.
       \end{split}
-      \end{equation}
-\item
-      Let $\Phi:(0,\infty)\to\RR$ be convex, of class $C^1$, with
-      range-local $C^{1,1}$ control in the sense that $\Phi'$ is
-      Lipschitz on every compact subinterval of $(0,\infty)$, and assume
-      $\Phi(1)=0$.  Define
-      \[
-      \mathcal H_\Phi(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x.
-      \]
-      Then $\mathcal H_\Phi(t)<\infty$ for every $t>0$,
-      $t\mapsto\mathcal H_\Phi(t)$ is absolutely continuous on compact
-      subintervals of $(0,\infty)$, the double integral below is finite
-      for every $t>0$, and the identity below holds for a.e. $t$ on every
-      compact subinterval of $(0,\infty)$.  The right side is interpreted as
-      the finite cutoff-limit integral justified by
-      Lemmas~\ref{lem:cauchy-doob-cutoff-calculus} and
-      \ref{lem:doob-range-bregman-integrability}; the four domain checks are
-      recorded together in
-      Lemma~\ref{lem:doob-bregman-domain-bounds}.  Moreover
-      Lemma~\ref{lem:compact-range-phi-approximation} supplies the only
-      approximation passage from smooth convex entropies to this range-local
-      $C^{1,1}$ class.  Consequently
-      \begin{equation}\label{eq:phi-entropy-dissipation}
-      -\frac{\dd}{\dd t}\mathcal H_\Phi(t)
-      =
-      \frac{1}{2\pi}\iint_{\RR^2}
-      \frac{
-      g_t(x)D_\Phi(u_t(x),u_t(y))
-      +g_t(y)D_\Phi(u_t(y),u_t(x))}
-      {(x-y)^2}\dd x\dd y,
-      \end{equation}
-      where
-      \[
-      D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b)
-      \qquad(a,b>0).
-      \]
-      In particular, $t\mapsto\mathcal H_\Phi(t)$ is nonincreasing.
-\item
-      For $\Phi(s)=s\log s$ on $(0,\infty)$ one has
-      \[
-      \mathcal H_\Phi(t)=D_{\mathrm{KL}}(h_t\|g_t),
-      \]
-      and
-      \begin{equation}\label{eq:relative-entropy-integrated-dissipation}
-      D_{\mathrm{KL}}(h_t\|g_t)
-      =
-      \int_t^\infty \mathcal I_\nu(s)\dd s,
-      \end{equation}
-      where
-      \begin{equation}\label{eq:relative-entropy-dissipation-rate}
-      \mathcal I_\nu(s)
-      :=
-      \frac{1}{\pi}\iint_{\RR^2}
-      \frac{g_s(x)\Lambda(u_s(x),u_s(y))}{(x-y)^2}\dd x\dd y,
-      \qquad
-      \Lambda(a,b):=a\log\frac{a}{b}-a+b.
       \end{equation}
 \end{enumerate}
 \end{theorem}
@@ -718,16 +772,64 @@ Lemma~\ref{lem:cauchy-doob-cutoff-calculus} justify using
 \]
 Interchanging $x$ and $y$ in the same integral and averaging the two
 representations gives \eqref{eq:doob-green-identity}.
+\end{proof}
 
-Fix a compact interval $[a,b]\subset(0,\infty)$.  Lemma~\ref{lem:doob-range-bregman-integrability}
-places the full range of $u_t$, $t\in[a,b]$, in a compact subinterval of
-$(0,\infty)$, proves $\mathcal H_\Phi(t)<\infty$, and gives the uniform
-Bregman double-integral bound \eqref{eq:doob-bregman-integrability-bound}.
-Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
-also gives uniform $L^1$ bounds for $\partial_th_t$ and $\partial_tg_t$;
-therefore $t\mapsto h_t$ and $t\mapsto g_t$ are absolutely continuous as
-$L^1$-valued maps on $[a,b]$.  Since $u_t$ remains in a compact interval
-and $\Phi'$ is Lipschitz there, the chain rule for
+\begin{proposition}[Domain closure of the Doob--Bregman identity]%
+\label{prop:doob-bregman-domain-closure}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
+finite centred second moment, and use the notation of
+Theorem~\ref{thm:poisson-doob-phi-entropy}.  Let
+$\Phi:(0,\infty)\to\RR$ be convex, of class $C^1$, with range-local
+$C^{1,1}$ control in the sense that $\Phi'$ is Lipschitz on every compact
+subinterval of $(0,\infty)$, and assume $\Phi(1)=0$.  Define
+\[
+\mathcal H_\Phi(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x .
+\]
+Then $\mathcal H_\Phi(t)<\infty$ for every $t>0$,
+$t\mapsto\mathcal H_\Phi(t)$ is absolutely continuous on compact
+subintervals of $(0,\infty)$, the double integral below is finite for every
+$t>0$, and for a.e. $t>0$,
+\begin{equation}\label{eq:phi-entropy-dissipation}
+-\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\frac{1}{2\pi}\iint_{\RR^2}
+\frac{
+g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y,
+\end{equation}
+where
+\[
+D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b)
+\qquad(a,b>0).
+\]
+The right side is the finite cutoff-limit integral fixed by
+Lemmas~\ref{lem:cauchy-doob-cutoff-calculus},
+\ref{lem:doob-range-bregman-integrability}, and
+\ref{lem:doob-bregman-domain-bounds}.  In particular
+$t\mapsto\mathcal H_\Phi(t)$ is nonincreasing.
+\end{proposition}
+
+\begin{proof}
+Fix $[a,b]\subset(0,\infty)$.  Lemma~\ref{lem:doob-range-bregman-integrability}
+places $u_t(\RR)$, $t\in[a,b]$, in a compact subinterval of $(0,\infty)$,
+proves $\mathcal H_\Phi(t)<\infty$, and gives the uniform Bregman
+double-integral bound \eqref{eq:doob-bregman-integrability-bound}.
+The closure argument below deliberately separates the proof into three
+steps.  First,
+Proposition~\ref{prop:smooth-compact-doob-bregman} proves the formula for
+smooth compactly supported quotients, with
+Lemma~\ref{lem:doob-bregman-algebra} as the only nontrivial algebraic
+identity.  Second, the cutoff estimates of
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} pass the bilinear forms from
+compactly supported tests to the Poisson quotient.  Third, the compact-range
+approximation of Lemma~\ref{lem:compact-range-phi-approximation} passes from
+smooth convex entropies to the stated range-local $C^{1,1}$ class.
+
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} gives uniform $L^1$ bounds for
+$\partial_th_t$ and $\partial_tg_t$, so $t\mapsto h_t$ and $t\mapsto g_t$ are
+absolutely continuous as $L^1$-valued maps on $[a,b]$.  Since the quotient
+range is compact and $\Phi'$ is Lipschitz there, the chain rule for
 $g\Phi(h/g)$ gives $\mathcal H_\Phi\in AC([a,b])$ and, for a.e. $t$,
 \[
 \frac{\dd}{\dd t}\mathcal H_\Phi(t)
@@ -736,87 +838,94 @@ $g\Phi(h/g)$ gives $\mathcal H_\Phi\in AC([a,b])$ and, for a.e. $t$,
 +
 \int_{\RR}\bigl(\Phi(u_t)-u_t\Phi'(u_t)\bigr)\partial_tg_t\dd x.
 \]
-Substituting $\partial_th_t=L(u_tg_t)$ and $\partial_tg_t=Lg_t$, and then
-applying the cutoff bilinear identity
-\eqref{eq:cutoff-cauchy-bilinear} with the bounded Lipschitz test
-functions $\Phi'(u_t)$ and $\Phi(u_t)-u_t\Phi'(u_t)$, gives
+Substituting $\partial_th_t=L(u_tg_t)$ and $\partial_tg_t=Lg_t$, and applying
+the cutoff bilinear identity \eqref{eq:cutoff-cauchy-bilinear} with the
+bounded Lipschitz tests $\Phi'(u_t)$ and
+$\Phi(u_t)-u_t\Phi'(u_t)$, gives the cutoff-limit version of the smooth
+identity in Proposition~\ref{prop:smooth-compact-doob-bregman}.  The algebraic
+step in that passage is precisely Lemma~\ref{lem:doob-bregman-algebra}, with
 \[
-\frac{\dd}{\dd t}\mathcal H_\Phi(t)
-=
--\frac{1}{2\pi}\iint_{\RR^2}
-\frac{E_t(x,y)}{(x-y)^2}\dd x\dd y,
+u_x=u_t(x),\qquad u_y=u_t(y),\qquad g_x=g_t(x),\qquad g_y=g_t(y).
 \]
-where
-\begin{align*}
-E_t(x,y)
-&:=
-\bigl(u_t(x)g_t(x)-u_t(y)g_t(y)\bigr)
-\bigl(\Phi'(u_t(x))-\Phi'(u_t(y))\bigr)
-\\
-&\quad
-+\bigl(g_t(x)-g_t(y)\bigr)
-\Bigl(
-\Phi(u_t(x))-u_t(x)\Phi'(u_t(x))
--\Phi(u_t(y))+u_t(y)\Phi'(u_t(y))
-\Bigr).
-\end{align*}
-Set
-\[
-a:=u_t(x),
-\qquad
-b:=u_t(y),
-\qquad
-g_x:=g_t(x),
-\qquad
-g_y:=g_t(y).
-\]
-A direct rearrangement yields
-\[
-E_t(x,y)
-=g_x\bigl(\Phi(a)-\Phi(b)-\Phi'(b)(a-b)\bigr)
-+g_y\bigl(\Phi(b)-\Phi(a)-\Phi'(a)(b-a)\bigr),
-\]
-that is,
-\[
-E_t(x,y)=g_t(x)D_\Phi(u_t(x),u_t(y))
-+g_t(y)D_\Phi(u_t(y),u_t(x)).
-\]
-Substituting this identity proves
-\eqref{eq:phi-entropy-dissipation} for the stated range-local class.  The
-cutoff convergence, absolute convergence, time differentiability, and
-$C^{1,1}$ approximation passage used in this paragraph are precisely the four
-parts of Lemma~\ref{lem:doob-bregman-domain-bounds}.  In
-particular one may first prove the chain-rule step for the smooth convex
-approximants $\Phi_\varepsilon$ supplied by
-Lemma~\ref{lem:compact-range-phi-approximation}; their derivatives have a
-common Lipschitz constant on the compact quotient range, so all cutoff and
-Bregman majorants above are independent of~$\varepsilon$, and dominated
-convergence lets $\varepsilon\downarrow0$ in both sides.  This isolates the
-only approximation used for noncompact quotients.  Convexity of~$\Phi$ gives
-$D_\Phi\ge 0$, so $\mathcal H_\Phi$ is nonincreasing.  Since the choice
-of $[a,b]$ was arbitrary, part~(iii) follows.
+Thus the cutoff limit is the Bregman integral in
+\eqref{eq:phi-entropy-dissipation}.
 
-For part~(iv), if $\Phi(s)=s\log s$, then
+The remaining passages are exactly the closure statements in
+Lemma~\ref{lem:doob-bregman-domain-bounds}.  The cutoff convergence is
+controlled by the near-diagonal and far-field majorants of
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus}; absolute convergence is the
+bound \eqref{eq:doob-bregman-integrability-bound}; and the passage from smooth
+convex entropies to the present range-local $C^{1,1}$ class uses the
+approximants $\Phi_\varepsilon$ of
+Lemma~\ref{lem:compact-range-phi-approximation}.  Their first derivatives have
+a common Lipschitz constant on the compact quotient range, so the same
+one-variable and Bregman majorants dominate both sides and dominated
+convergence lets $\varepsilon\downarrow0$.  Convexity gives
+$D_\Phi\ge0$, hence monotonicity.  Since $[a,b]$ was arbitrary, the proposition
+follows.
+\end{proof}
+
+\begin{corollary}[KL Doob--Bregman tail identity]%
+\label{cor:poisson-kl-doob-bregman-tail}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
+centred second moment, and use the notation of
+Theorem~\ref{thm:poisson-doob-phi-entropy}.  Define
+\begin{equation}\label{eq:relative-entropy-dissipation-rate}
+\mathcal I_\nu(s)
+:=
+\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_s(x)\Lambda(u_s(x),u_s(y))}{(x-y)^2}\dd x\dd y,
+\qquad
+\Lambda(a,b):=a\log\frac{a}{b}-a+b.
+\end{equation}
+Then, for every $t>0$,
+\begin{equation}\label{eq:relative-entropy-integrated-dissipation}
+D_{\mathrm{KL}}(h_t\|g_t)
+=
+\int_t^\infty \mathcal I_\nu(s)\dd s.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+For $\Phi(s)=s\log s$,
 \[
 \mathcal H_\Phi(t)
 =\int_{\RR}g_t(x)u_t(x)\log u_t(x)\dd x
 =D_{\mathrm{KL}}(h_t\|g_t).
 \]
 The corresponding Bregman divergence is exactly
-$D_\Phi(a,b)=\Lambda(a,b)$.  Hence
-\eqref{eq:relative-entropy-dissipation-rate} is the specialization of
-\eqref{eq:phi-entropy-dissipation}.  Lemma~\ref{lem:poisson-second-moment-kl-decay}
-gives $D_{\mathrm{KL}}(h_t\|g_t)\to0$ under the same finite-second-moment
-hypothesis as the theorem.  Integrating the derivative identity from $t$ to
-$\infty$ proves
+$D_\Phi(a,b)=\Lambda(a,b)$.  Therefore
+\eqref{eq:phi-entropy-dissipation} gives, for a.e. $s>0$,
+\[
+-\frac{\dd}{\dd s}D_{\mathrm{KL}}(h_s\|g_s)
+=
+\frac{1}{2\pi}\iint_{\RR^2}
+\frac{g_s(x)\Lambda(u_s(x),u_s(y))
+      +g_s(y)\Lambda(u_s(y),u_s(x))}
+{(x-y)^2}\dd x\dd y .
+\]
+The second summand equals the first after interchanging $x$ and $y$; the
+kernel is symmetric and Lemma~\ref{lem:doob-bregman-domain-bounds} supplies the
+absolute integrability needed for this change of variables.  Thus the
+right-hand side is precisely $\mathcal I_\nu(s)$ as defined in
+\eqref{eq:relative-entropy-dissipation-rate}.  Lemma~\ref{lem:poisson-second-moment-kl-decay}
+gives $D_{\mathrm{KL}}(h_T\|g_T)\to0$ under the same finite-second-moment
+hypothesis as this corollary.  Since the entropy is absolutely continuous on
+compact time intervals, integrating the a.e. identity over $[t,T]$ gives
+\[
+D_{\mathrm{KL}}(h_t\|g_t)-D_{\mathrm{KL}}(h_T\|g_T)
+=\int_t^T\mathcal I_\nu(s)\dd s .
+\]
+Letting $T\to\infty$ proves
 \eqref{eq:relative-entropy-integrated-dissipation}.
 \end{proof}
 
 \begin{corollary}[Rigidity of the Poisson comparison quotient]%
 \label{cor:poisson-doob-rigidity}
 Let $\nu$ have mean $\bar\gamma$ and finite centred second moment, and use
-the notation of Theorem~\ref{thm:poisson-doob-phi-entropy} with
-$\Phi(s)=s\log s$.  The following assertions are equivalent:
+the notation of Theorem~\ref{thm:poisson-doob-phi-entropy} and
+Corollary~\ref{cor:poisson-kl-doob-bregman-tail}.  The following assertions
+are equivalent:
 \begin{enumerate}[label=(\roman*)]
 \item $\nu=\delta_{\bar\gamma}$;
 \item $D_{\mathrm{KL}}(h_t\|g_t)=0$ for some $t>0$;
@@ -827,9 +936,9 @@ $\Phi(s)=s\log s$.  The following assertions are equivalent:
 \end{enumerate}
 Thus the Doob--Bregman identity is used here, through its KL specialization, as
 a rigidity and coefficient comparison device for the Poisson quotient.  The
-broader $\Phi$ theorem supplies the cutoff and domain justification for that
-specialization; the paper does not use it as a new sharp log-Sobolev or log-HLS
-inequality.
+broader $\Phi$ domain-closure proposition supplies the cutoff and domain
+justification for that specialization; the paper does not use it as a new sharp
+log-Sobolev or log-HLS inequality.
 \end{corollary}
 
 \begin{proof}
@@ -907,11 +1016,14 @@ other nonlocal semigroups is asserted here.
 \end{corollary}
 
 \begin{proof}
-Theorem~\ref{thm:poisson-doob-phi-entropy} with $\Phi(s)=s\log s$ gives
+Corollary~\ref{cor:poisson-kl-doob-bregman-tail} gives
 the exact tail identity
 \[
 D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty\mathcal I_\nu(s)\dd s.
 \]
+This identity is the only use of the Doob--Bregman calculus in the coefficient
+recovery below; all coefficient asymptotics enter through the Poisson entropy
+expansion already proved in Section~\ref{sec:entropy-asymptotics}.
 The finite-moment expansion in
 Theorem~\ref{thm:finite-moment-entropy-remainder} gives, for each fixed
 $M\le N$,
