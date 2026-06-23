@@ -15,7 +15,11 @@ exact model \((r,P)\) is known.
 \subsection{One-Scale Shell Recognition}\label{subsec:one-scale-shell-recognition}
 
 \begin{corollary}[One-scale transport identity under the unit-circle zero hypothesis]\label{cor:leyang-transport-identity}
-In the setting of Theorem \ref{thm:pullback-factorization}, assume that \(K\subseteq\CC\), that every zero \(z_j\) of \(P\) satisfies \(|z_j|=1\), and that \(r\in\RR_{>0}\). Then for every \(z\in\CC^\times\),
+In the setting of Theorem \ref{thm:pullback-factorization}, assume that \(K\subseteq\CC\), that every zero \(z_j\) of \(P\) satisfies \(|z_j|=1\), and that \(r\in\RR_{>0}\).  Write \(P(z)=a_n\prod_{j=1}^{n}(z-z_j)\), and use the root-normalized reciprocal
+\[
+P^\vee(u)=a_n^{-1}u^nP(1/u)=\prod_{j=1}^{n}(1-u z_j).
+\]
+Then for every \(z\in\CC^\times\),
 \[
 Q_r\!\bigl(J_r(z)\bigr)=a_n^{-1}r^n\,P(z)\,P\!\bigl(r^{-2}z^{-1}\bigr).
 \]
@@ -27,9 +31,11 @@ By Theorem \ref{thm:pullback-factorization},
 \[
 r^n z^n\,Q_r\!\bigl(J_r(z)\bigr)=P(z)\,P^{\vee}(r^2 z).
 \]
-Since \(P^{\vee}(u)=a_n^{-1}u^nP(1/u)\), substituting \(u=r^2 z\) gives
+Using the displayed reciprocal normalization and the roots of \(P\),
 \[
-P^{\vee}(r^2 z)=a_n^{-1}r^{2n}z^n P(r^{-2}z^{-1}).
+P^{\vee}(r^2 z)
+=\prod_{j=1}^{n}(1-r^2zz_j)
+=a_n^{-1}r^{2n}z^n P(r^{-2}z^{-1}).
 \]
 Cancelling the common factor \(z^n\) yields the claim.
 \end{proof}
@@ -263,7 +269,7 @@ the same output divisor, while distinct edge-label multisets represent
 distinct candidate source divisors.
 \end{definition}
 
-\begin{theorem}[Exact two-scale matching inverse]\label{thm:two-scale-matching-inverse}
+\begin{theorem}[Exact two-scale matching inverse from exact complete coefficient vectors]\label{thm:two-scale-matching-inverse}
 Let \(r,s>1\) be distinct and let \(Q_r,Q_s\in\CC[w]\) be degree-\(n\)
 polynomials with nonzero leading coefficients.  Let
 \(\widehat Q_r,\widehat Q_s\) be their monic normalizations, and form
@@ -409,22 +415,34 @@ common scalar gives exactly the observed full polynomials \(Q_r\) and
 \(Q_s\).  This proves the fully normalized equivalence.
 \end{proof}
 
-\begin{corollary}[Generic two-scale injectivity]\label{cor:generic-two-scale-injectivity}
+\begin{corollary}[Generic squarefree two-scale injectivity]\label{cor:generic-two-scale-injectivity}
 Fix \(r,s>1\) with \(r\ne s\), and let
 \[
 P(z)=\prod_{i=1}^{n}(z-z_i)
 \]
-be monic with nonzero constant term.  Assume first that the source is
-squarefree and that, for all \(i\ne j\), none of the three resonance
-relations
+be monic with nonzero constant term.  Assume the following explicit
+generic squarefree nonresonance hypothesis:
+\[
+\tag{\(\mathrm{GS}_{r,s}\)}
+z_i\ne z_j
+\quad\text{and}\quad
+z_i z_j\ne r^{-2},\quad
+z_i z_j\ne s^{-2},\quad
+z_j\ne \left(\frac r s\right)^2 z_i
+\qquad (i\ne j).
+\]
+Equivalently, the ordered source coordinate
+\((z_1,\dots,z_n)\in(\CC^\times)^n\) lies outside the finite union of
+the squarefree diagonals \(z_i=z_j\) and the algebraic hypersurfaces
 \[
 z_i z_j=r^{-2},
 \qquad
 z_i z_j=s^{-2},
 \qquad
 z_j=\left(\frac r s\right)^2 z_i
+\qquad (i\ne j).
 \]
-holds.  Then the graph
+Then the graph
 \(\Gamma_{r,s}(Q_r(P),Q_s(P))\) has the diagonal perfect matching as
 its unique perfect matching.  Consequently the two monic transported
 coefficient vectors determine the source zero divisor uniquely, and
@@ -433,16 +451,6 @@ normalization by
 \[
 a_0=(-1)^n\prod_{i=1}^{n}z_i .
 \]
-
-For squarefree sources the failure locus of this generic injectivity
-criterion is the finite union of the displayed algebraic hypersurfaces
-over \(1\le i<j\le n\), with the two ordered equations
-\(z_j=(r/s)^2z_i\) and \(z_i=(r/s)^2z_j\) included by varying the
-ordered pair.  If repeated roots are allowed, the copied vertices may
-carry multiplicities; the same matching theorem remains exact, but
-uniqueness must be read as uniqueness of copied perfect matchings
-modulo the indistinguishability of equal roots, and repeated-root
-coincidences form the additional caveat \(z_i=z_j\).
 \end{corollary}
 
 \begin{proof}
@@ -510,14 +518,77 @@ are the only possible perfect matching.
 The uniqueness of the recovered source divisor now follows from
 Theorem \ref{thm:two-scale-matching-inverse}.  The formula for the
 full scalar is the product normalization in the same theorem.  The
-exceptional set is finite because there are finitely many ordered pairs
-\((i,j)\) with \(i\ne j\), and each displayed equation is algebraic in
-the source coordinates.  The repeated-root caveat is exactly the
-failure of the squarefree hypothesis: the candidate graph still has
-copied vertices and Theorem \ref{thm:two-scale-matching-inverse}
-continues to classify all matchings, but equal labels can create
-multiple copied matchings representing the same divisor.
+exceptional set is the displayed finite union of algebraic
+hypersurfaces because there are finitely many ordered pairs
+\((i,j)\) with \(i\ne j\).
 \end{proof}
+
+\begin{corollary}[Two-scale nonresonance common fiber]\label{cor:two-scale-nonresonance-common-fiber}
+Let \(r,s>1\) be distinct, and let
+\[
+P(z)=\prod_{i=1}^{n}(z-z_i)
+\]
+be squarefree with nonzero constant term.  Suppose that for all
+distinct \(i,j\),
+\[
+z_i z_j\ne r^{-2},\qquad
+z_i z_j\ne s^{-2},\qquad
+z_j\ne \left(\frac r s\right)^2 z_i .
+\]
+Then the common inverse fiber determined by the two transported
+divisors at the scales \(r\) and \(s\) consists of the original source
+divisor \(\sum_i[z_i]\) only.
+\end{corollary}
+
+\begin{proof}
+At scale \(r\), a transported root coming from \(z_i\) has exactly the
+two possible one-scale lifts
+\[
+z_i,\qquad r^{-2}/z_i .
+\]
+At scale \(s\), a transported root coming from \(z_j\) has exactly the
+two possible one-scale lifts
+\[
+z_j,\qquad s^{-2}/z_j .
+\]
+Thus a false matching between an \(r\)-transported root indexed by
+\(i\) and an \(s\)-transported root indexed by \(j\ne i\) can occur
+only if these two two-point lift sets intersect.  The four possible
+intersections give
+\[
+z_i=z_j,\qquad z_i z_j=s^{-2},\qquad
+z_i z_j=r^{-2},\qquad
+z_j=\left(\frac r s\right)^2z_i .
+\]
+Squarefreeness excludes the first equality, and the hypotheses exclude
+the other three.  Hence the perfect-matching graph of Definition
+\ref{def:two-scale-candidate-graph} has no off-diagonal edge.  Its
+identity matching is therefore the unique perfect matching, and Theorem
+\ref{thm:two-scale-matching-inverse} identifies the common inverse
+fiber with the original source divisor.
+\end{proof}
+
+\begin{remark}[Repeated roots and nongeneric fibers]\label{rem:two-scale-repeated-root-caveat}
+Corollary \ref{cor:generic-two-scale-injectivity} is deliberately a
+squarefree generic statement.  If repeated roots are allowed, the
+copied vertices in Definition \ref{def:two-scale-candidate-graph} may
+carry multiplicities; Theorem \ref{thm:two-scale-matching-inverse}
+still classifies the exact common fiber, but uniqueness must be read
+as uniqueness of copied perfect matchings modulo the
+indistinguishability of equal transported labels.  Repeated-source
+coincidences are precisely the additional nongeneric diagonals
+\(z_i=z_j\).  For squarefree sources, no other genericity assumption
+is hidden: the only excluded off-diagonal two-scale resonances are
+the three displayed hypersurface families
+\[
+z_i z_j=r^{-2},\qquad
+z_i z_j=s^{-2},\qquad
+z_j=\left(\frac r s\right)^2z_i
+\qquad (i\ne j),
+\]
+with the reverse ordered equation obtained by interchanging \(i\) and
+\(j\).
+\end{remark}
 
 \begin{corollary}[Dihedral common-fiber normal form]\label{cor:dihedral-common-fiber}
 Let \(r,s>1\) be distinct, and put
@@ -672,21 +743,43 @@ The observed object at \(r_i\) is the ordered coefficient vector \((A_0(r_i),\do
 The observed object at \(r_i\) is a nonzero scalar multiple \(\lambda_i(A_0(r_i),\dots,A_n(r_i))\), where \(\lambda_i\ne0\) may depend on \(i\).  Dividing by the leading entry \(\lambda_i a_0\ne0\) gives the monic transport \(\widetilde Q_{r_i}=a_0^{-1}Q_{r_i}\); one then interpolates \(\widetilde A_k(r)\), recovers \(e_k\) from its top Laurent coefficient, and recovers \(a_0=[r^n]\widetilde A_n(r)\).
 \item \emph{Complete-vector requirement.}
 The theorem below uses only the complete coefficient vectors just
-described.  Point values, moments, noisy observations, and truncated
-coefficient lists would require a separate exact conversion to such
-vectors before the algebraic inverse theorem applies.
+described.  Point samples, noisy samples, moments, and truncated
+coefficient windows would require a separate exact conversion to such
+full coefficient vectors before the algebraic inverse theorem applies.
 \end{enumerate}
+\medskip
+\noindent\fbox{\begin{minipage}{0.94\linewidth}
+\textbf{Excluded observation models.}
+No point samples, noisy samples, moments, or truncated coefficient
+windows are inverse data for the theorems below unless a separate
+exact procedure first converts them to the full ordered coefficient
+vectors in \textup{(i)} or \textup{(ii)}.
+\end{minipage}}
+\medskip
+
 Thus the projective normalization is well defined exactly because the observed object is the complete ordered coefficient vector of a transported degree-\(n\) zero divisor, whose leading entry is nonzero.  This normalization is formalized in Lemma \ref{lem:full-monic-multiscale-normalization}.
 \end{definition}
 
-\begin{theorem}[Exact algebraic polynomial-transport inverse theorem from exact complete coefficient vectors]\label{thm:algebraic-mahler-transport-inverse}
+\begin{theorem}[Exact complete-coefficient-vector inverse theorem]\label{thm:algebraic-mahler-transport-inverse}
 Let \(n\ge1\), and let \(P(z)=\prod_{j=1}^{n}(z-z_j)\) be monic with \(z_1\cdots z_n\ne0\).  For each \(r>1\), let \(Q_r\) be the Joukowsky transport polynomial from Definition \ref{def:reciprocal-transport-normalization}, so
 \[
 Q_r(w)=\sum_{k=0}^{n}A_k(r)w^{n-k},
 \qquad
 A_0(r)=a_0=(-1)^n z_1\cdots z_n\ne0.
 \]
-Assume the exact data are complete coefficient-vector data in one of the two reconstruction models of Definition \ref{def:transport-coefficient-observations}: either the full ordered coefficient vectors \((A_0(r_i),\dots,A_n(r_i))\), or projective ordered coefficient vectors that are first normalized to the monic vectors of \(a_0^{-1}Q_{r_i}\) by dividing by their nonzero leading entries.  No inverse assertion in this theorem is made from partial coefficient lists, point evaluations, moments, finite samples of a measure, or noisy data unless those observations have first been converted exactly into one of these complete coefficient-vector inputs.  The multiscale sharpness assertion in this theorem is only a sharpness statement for unrestricted parity-supported Laurent coefficient interpolation, not a lower-bound claim for source recovery in every algebraically constrained source class.  Then the following inverse statements hold.
+Assume the exact data are complete coefficient-vector data in one of the two reconstruction models of Definition \ref{def:transport-coefficient-observations}: either the full ordered coefficient vectors \((A_0(r_i),\dots,A_n(r_i))\), or projective ordered coefficient vectors that are first normalized to the monic vectors of \(a_0^{-1}Q_{r_i}\) by dividing by their nonzero leading entries.
+
+\medskip
+\noindent\fbox{\begin{minipage}{0.94\linewidth}
+\textbf{Excluded observation models.}
+No point samples, noisy samples, moments, or truncated coefficient
+windows are input to this inverse theorem unless those observations
+have first been converted exactly into one of the full coefficient
+vectors of Definition \ref{def:transport-coefficient-observations}.
+\end{minipage}}
+\medskip
+
+The multiscale sharpness assertion in this theorem is only a sharpness statement for unrestricted parity-supported Laurent coefficient interpolation, not a lower-bound claim for source recovery in every algebraically constrained source class.  Then the following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item \leavevmode\par\noindent\textbf{Multiscale Laurent interpolation.}
 
@@ -836,7 +929,7 @@ Rouch\'e's theorem on \(|z|=R\) gives the same number of zeros for \(\widetilde 
 \end{proof}
 
 The next theorem is the core annular-divisor stability interface used in the inverse section.  It supplies the analytic perturbation step that is later coupled to the exact capacity scale and the exact unit-circle shell factorization in the fixed-scale recognition statements.  The result is local: exact recognition from complete coefficient-vector data first supplies the model pair \((r,P)\); after that model and the separating contours are fixed, the number \(\Delta(r,P;\rho_-,\rho_+)\) gives a Rouch\'e radius inside which the annular divisor persists.  The analytic input is Rouch\'e's theorem in its usual zero-counting form for a contour and its interior \citep[pp.~152--153]{Ahlfors1979}.  The unperturbed polynomial
-\(S_r(z)=z^nQ_r(J_r(z))\) has one zero shell on \(|z|=r^{-2}\) and one on \(|z|=1\).  The inner contour \(\Gamma_-\) surrounds the reflected shell, the middle contour \(\Gamma_+\) separates it from the unit-circle shell, and the outer contour \(\Gamma_0\) encloses both shells while preventing degree loss at infinity.  A perturbation whose pullback is smaller than the displayed Rouch\'e envelope on these three contours therefore preserves the annular divisor in \(\rho_+<|z|<\rho_+^{-1}\); this divisor is the contour-selected source factor associated with the perturbed transported polynomial and is not intrinsic before \((r,P,\rho_-,\rho_+)\) are fixed.
+\(S_r(z)=z^nQ_r(J_r(z))\) has one zero shell on \(|z|=r^{-2}\) and one on \(|z|=1\).  The inner contour \(\Gamma_-\) surrounds the reflected shell, the middle contour \(\Gamma_+\) separates it from the unit-circle shell, and the outer contour \(\Gamma_0\) encloses both shells while preventing degree loss at infinity.  A perturbation whose pullback is smaller than the displayed Rouch\'e envelope on these three contours therefore preserves the annular divisor in \(\rho_+<|z|<\rho_+^{-1}\); this divisor is the contour-selected annular factor associated with the perturbed transported polynomial and is not intrinsic before \((r,P,\rho_-,\rho_+)\) are fixed.
 
 \begin{theorem}[Core quantitative annular-divisor Rouch\'e stability]\label{thm:quantitative-annular-rouche-stability}
 Let \(P\in\CC[z]\) be a monic polynomial of degree \(n\ge1\), all of whose zeros lie on \(\TT\), let \(r>1\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}, and define
@@ -876,7 +969,7 @@ P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P).
 \]
 It is the unique contour-selected annular factor associated with \(\widetilde Q\) after the model \((r,P)\) and contours \((\rho_-,\rho_+)\) have been fixed.  For \(\widetilde Q=Q_r\) this factor is exactly \(P\).
 
-The contour-selected factor is quantitatively stable in the following local sense.  Write the zero divisor of \(P\) as \(\sum_{a\in Z(P)}m_a[a]\), where \(Z(P)\) is the finite set of distinct zeros.  Let \(U_a\) \((a\in Z(P))\) be pairwise disjoint Jordan domains whose closures lie in \(\rho_+<|z|<\rho_+^{-1}\), with \(a\in U_a\) and with no zero of \(P\) other than \(a\) in \(U_a\).  Put
+The contour-selected annular factor is quantitatively stable in the following local sense.  Write the zero divisor of \(P\) as \(\sum_{a\in Z(P)}m_a[a]\), where \(Z(P)\) is the finite set of distinct zeros.  Let \(U_a\) \((a\in Z(P))\) be pairwise disjoint Jordan domains whose closures lie in \(\rho_+<|z|<\rho_+^{-1}\), with \(a\in U_a\) and with no zero of \(P\) other than \(a\) in \(U_a\).  Put
 \[
 \Delta_{\mathcal U}(r,P)
 :=\frac12\min_{a\in Z(P)}\inf_{z\in\partial U_a}|S_r(z)|>0.
@@ -925,25 +1018,38 @@ Retain the hypotheses and notation of Theorem \ref{thm:quantitative-annular-rouc
 \[
 Q_r(w)=\sum_{\ell=0}^{n}b_\ell w^\ell,
 \qquad
-\widehat Q(w)=\sum_{\ell=0}^{n}\widehat b_\ell w^\ell,
+\widetilde Q(w)=\sum_{\ell=0}^{n}\widetilde b_\ell w^\ell,
 \]
-allowing \(\widehat b_n=0\) if \(\deg\widehat Q<n\).  Put
+allowing \(\widetilde b_n=0\) if \(\deg\widetilde Q<n\).  Put
 \[
-\mathfrak B_n(r;\rho_-,\rho_+)
+B_n(r;\rho_-,\rho_+)
 :=
 \max_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
 |z|^n\sum_{\ell=0}^{n}|J_r(z)|^\ell.
 \]
 If the coefficient errors satisfy
 \[
-\max_{0\le \ell\le n}|\widehat b_\ell-b_\ell|
+\max_{0\le \ell\le n}|\widetilde b_\ell-b_\ell|
 <
-\frac{\Delta(r,P;\rho_-,\rho_+)}{\mathfrak B_n(r;\rho_-,\rho_+)},
+\frac{\Delta(r,P;\rho_-,\rho_+)}{B_n(r;\rho_-,\rho_+)},
 \]
-then \(\widehat S(z):=z^n\widehat Q(J_r(z))\) satisfies the Rouch\'e envelope in Theorem \ref{thm:quantitative-annular-rouche-stability}.  Consequently, after the model \((r,P)\) and contours \((\rho_-,\rho_+)\) have been fixed, \(\widehat Q\) has the unique contour-selected annular factor \(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widehat Q;r,P)\) of degree \(n\); for \(\widehat Q=Q_r\) this factor is exactly \(P\).  More generally, the same conclusion holds under the weighted \(\ell^1\) coefficient condition
+then, with \(\widetilde S(z):=z^n\widetilde Q(J_r(z))\),
+\[
+\sup_{\Gamma_-\cup\Gamma_+\cup\Gamma_0}
+\left|z^n\widetilde Q(J_r(z))-S_r(z)\right|
+<\Delta(r,P;\rho_-,\rho_+).
+\]
+Consequently \(\widetilde S\) satisfies the Rouch\'e envelope in Theorem
+\ref{thm:quantitative-annular-rouche-stability}.  The associated
+factor is the contour-selected annular factor associated with
+\((\widetilde Q;r,P,\rho_-,\rho_+)\), namely
+\(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P)\), and it has
+degree \(n\); for \(\widetilde Q=Q_r\) this factor is exactly \(P\).
+More generally, the same conclusion holds under the weighted \(\ell^1\)
+coefficient condition
 \[
 \max_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
-|z|^n\sum_{\ell=0}^{n}|\widehat b_\ell-b_\ell|\,|J_r(z)|^\ell
+|z|^n\sum_{\ell=0}^{n}|\widetilde b_\ell-b_\ell|\,|J_r(z)|^\ell
 <\Delta(r,P;\rho_-,\rho_+).
 \]
 \end{corollary}
@@ -951,16 +1057,19 @@ then \(\widehat S(z):=z^n\widehat Q(J_r(z))\) satisfies the Rouch\'e envelope in
 \begin{proof}
 For each point of the three contours,
 \[
-\left|z^n\widehat Q(J_r(z))-S_r(z)\right|
+\left|z^n\widetilde Q(J_r(z))-S_r(z)\right|
 =
-\left|z^n\sum_{\ell=0}^{n}(\widehat b_\ell-b_\ell)J_r(z)^\ell\right|
+\left|z^n\sum_{\ell=0}^{n}(\widetilde b_\ell-b_\ell)J_r(z)^\ell\right|
 \le
-|z|^n\sum_{\ell=0}^{n}|\widehat b_\ell-b_\ell|\,|J_r(z)|^\ell.
+|z|^n\sum_{\ell=0}^{n}|\widetilde b_\ell-b_\ell|\,|J_r(z)|^\ell.
 \]
 The weighted \(\ell^1\) hypothesis is exactly the assertion that the right side is uniformly smaller than \(\Delta(r,P;\rho_-,\rho_+)\).  The simpler maximum-coefficient hypothesis implies it because the last display is at most
 \[
-\max_{0\le \ell\le n}|\widehat b_\ell-b_\ell|\,
-\mathfrak B_n(r;\rho_-,\rho_+).
+\max_{0\le \ell\le n}|\widetilde b_\ell-b_\ell|\,
+B_n(r;\rho_-,\rho_+).
 \]
-Thus the contour hypothesis of Theorem \ref{thm:quantitative-annular-rouche-stability} holds with \(\widetilde Q=\widehat Q\), and the announced annular factor statement follows from that theorem.
+Taking the supremum over the three contours gives the displayed usable
+perturbation bound.  Thus the contour hypothesis of Theorem
+\ref{thm:quantitative-annular-rouche-stability} holds, and the announced
+contour-selected annular factor statement follows from that theorem.
 \end{proof}
