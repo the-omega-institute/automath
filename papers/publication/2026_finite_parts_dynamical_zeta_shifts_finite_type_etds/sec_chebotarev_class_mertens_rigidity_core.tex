@@ -10,408 +10,120 @@ strict-gap theorem below is the single computational chart obtained from
 singularity is the scalar trivial triple and the exponent becomes
 \(|C|/|G|\).
 
-\begin{theorem}[Strict-gap coordinate chart and obstruction norm]
-  \label{thm:class-product-determinant-rigidity}
-  \label{prop:class-product-downstream-coordinate-status}
-  \label{cor:class-product-hyperplane-stability}
-  \label{cor:class-product-stability-scalar-independence}
-  \label{prop:class-product-fixed-coordinate-equivalence}
-  \label{thm:class-product-minimal-obstruction-skeleton}
-  \label{cor:class-product-minimal-obstruction-skeleton}
-  \label{cor:class-product-artin-obstruction-recovery}
-  \label{cor:class-product-artin-obstruction-readout}
-  \label{thm:main-iii-certificate-chain}
-  \label{thm:adams-obstruction-class-product}
-  \label{cor:adams-obstruction-bound}
-  \label{cor:adams-obstruction-budget}
-  \label{cor:class-product-constant-rigidity}
-  \label{cor:class-euler-product-determinant-evaluation}
-  \label{prop:classical-layer-adams-corrected-constant-separation}
-  Assume the hypotheses of \Cref{cor:strict-gap-specialization}, equivalently
-  the strict-gap hypotheses used in
-  \Cref{thm:class-mertens-explicit,thm:class-euler-product-mertens}.  The input
-  data for this coordinate-readout statement are the strict specialization
-  \(\mathfrak D_{\mathrm{strict}}(A,\tau;G)\) of
-  \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\): the character table of
-  \(G\), the class-power maps, the determinant polynomials, the scalar product
-  normalisation \(C(A)\), the strict branch tags, the verified gap
-  \(\eta<\lambda\), and the finite Adams coefficient tensors
-  \(a_{\varrho,\pi}^{(m)}\).  All non-trivial Perron-boundary multiplicities
-  are zero in this specialization.  No peripheral semisimplicity certificate is
-  used in this strict-gap chart: the only deleted boundary singularity is the
-  scalar trivial triple, and the non-trivial \(rm=1\) terms are ordinary Abel
-  boundary values because their spectral radii are \(<\lambda\).  The
-  determinant and trace identities below therefore use only the determinant
-  polynomials and algebraic multiplicities already encoded in
-  \(\mathfrak D_{\mathrm{strict}}\); possible peripheral Jordan structure would
-  matter only in the larger renormalized Perron-boundary package where
-  non-trivial \(\Gamma_\pi\) are allowed.  For every
-  non-trivial \(\varrho\in\Irr(G)\), define the determinant coordinate
-  \begin{equation}\label{eq:class-product-rigidity-determinant-coordinate}
-    \mathfrak D_\varrho:=
-    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+\noindent\textbf{Hypotheses B: Perron-boundary coordinate input.}
+For the theorem below the following data and conventions are fixed.
+\begin{enumerate}[label=\textup{(B\arabic*)},leftmargin=*]
+  \item \(A\) is the primitive adjacency matrix of the finite directed
+  multigraph under consideration, its Perron root satisfies \(\lambda>1\),
+  \(G\) is a finite group, and \(\tau:E_A\to G\) is the fixed edge cocycle.
+  For each \(\pi\in\Irr(G)\), \(A_\pi\) denotes the corresponding twisted
+  adjacency matrix and \(P_\pi(z)=\det(I-zA_\pi)\).
+
+  \item The finite character-theoretic input consists of the character table
+  of \(G\), the class-power maps \(C\mapsto C^m\), and the Adams coefficients
+  \(a_{\rho,\pi}^{(m)}\) defined by
+  \[
+    \psi^m\chi_\rho=\sum_{\pi\in\Irr(G)}a_{\rho,\pi}^{(m)}\chi_\pi .
+  \]
+
+  \item The Perron-boundary spectral input is, for every \(\pi\in\Irr(G)\),
+  \[
+    \Gamma_\pi=\{\zeta\in\TT:\lambda\zeta\in\spec(A_\pi)\},\qquad
+    m_{\pi,\zeta}=\operatorname{algmult}_{A_\pi}(\lambda\zeta),\qquad
+    s_\pi=m_{\pi,1},
+  \]
+  with \(s_\pi=0\) when \(1\notin\Gamma_\pi\).  After deleting these
+  peripheral eigenvalues, put
+  \[
+    \Lambda_\perp
+    =
+    \max\{|\alpha|:\alpha\in\spec(A_\pi),\ \pi\in\Irr(G),\
+      |\alpha|<\lambda\},
+    \qquad
+    \Lambda_\partial=\max\{\Lambda_\perp,\lambda^{1/2}\},
+  \]
+  with \(\Lambda_\perp=0\) if the displayed set is empty.  The boundary
+  theorem requires \(\Lambda_\partial<\lambda\).  In the strict-gap
+  specialization used by the theorem below this is equivalent to
+  \(s_{\mathbf1}=1\), \(s_\rho=0\) for \(\rho\ne\mathbf1\),
+  \(\Gamma_\rho=\varnothing\) for \(\rho\ne\mathbf1\), and the verified
+  twisted gap \(\eta<\lambda\).
+
+  \item The branch and scalar normalisations are part of the input.  Let
+  \(\Log_0\) be the determinant-logarithm germ normalised to vanish at
+  \(z=0\), continued along the Abel path for boundary evaluations, and let
+  \(n_\partial\) denote the positive scalar/product logarithm convention.  The
+  scalar strict-gap normalisation is
+  \[
+    \alpha_A:=\gamma+\log C(A).
+  \]
+  Equivalently, in the notation of
+  \Cref{def:peripheral-peter-weyl-data}, the fixed finite record is
+  \(D_{\partial}^{\mathrm{ren}}\) of
+  \eqref{eq:perron-boundary-renormalized-data-local}; the strict chart uses
+  its specialization
+  \(D_{\mathrm{strict}}(A,\tau;G)\).
+
+  \item Every determinant layer used below is derived from the preceding data,
+  not supplied as an additional constant.  With
+  \[
+    P_\pi(t/\lambda)=
+      \prod_{\zeta\in\Gamma_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
+      Q_{\partial,\pi}(t),
+    \qquad Q_{\partial,\pi}(1)\ne0,
+  \]
+  define, for \(k\ge1\),
+  \begin{equation}\label{eq:hyp-b-renormalized-determinant-layer}
+    B_{k,\pi}^{\mathrm{ren}}
+    =
+    \begin{cases}
+      \displaystyle
+      -\sum_{\substack{\zeta\in\Gamma_\pi\\\zeta\ne1}}
+        m_{\pi,\zeta}\Log_0(1-\zeta)
+      -\Log_0 Q_{\partial,\pi}(1), & k=1,\\[1.2em]
+      \displaystyle
+      \Log_0\det(I-\lambda^{-k}A_\pi)^{-1}, & k\ge2.
+    \end{cases}
+  \end{equation}
+  In the strict-gap theorem the notation \(\mathcal L_{k,\pi}\) means this
+  layer with the scalar singular pair \((k,\pi)=(1,\mathbf1)\) deleted before
+  any endpoint value is chosen.  Thus non-trivial \(k=1\) terms are regular
+  Abel boundary values, while all \(k\ge2\) terms, including scalar terms
+  created by Adams powers, are interior determinant logarithms.
+
+  \item The computational output attached to these hypotheses is the finite
+  truncation chart in
+  \Cref{cor:assembled-adams-frobenius-product-formula}: for \(M\ge1\),
+  \[
+    F^{(M)}_\rho
+    =
+    \sum_{\substack{r,m\ge1\\rm\le M}}
+      \frac{\mu(m)}{rm}
       \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
-        a_{\varrho,\pi}^{(m)}
-        \mathcal L_{rm,\pi}.
-  \end{equation}
-  The logarithms are interpreted by the strict-gap specialization of
-  \Cref{def:perron-boundary-logarithm-convention}.  Then the determinant
-  coordinates are exactly the fixed-label Perron values,
-  \begin{equation}\label{eq:class-product-rigidity-d-equals-f}
-    \mathfrak D_\varrho=F_\varrho(\lambda^{-1})
-    \qquad(\varrho\ne\mathbf1),
-  \end{equation}
-  and the series in
-  \eqref{eq:class-product-rigidity-determinant-coordinate} is absolutely
-  convergent after the finitely many regular \(rm=1\) non-trivial boundary
-  terms have been separated.  Put
-  \(\alpha_A:=\gamma+\log C(A)\), and let \((K_C)_{C\subset G}\) be the
-  Frobenius-class Euler-product constants of
-  \Cref{thm:class-euler-product-mertens}.  Define the normalised logarithmic
-  product vector
-  \begin{equation}\label{eq:class-product-log-vector}
-    H_K(C):=-\frac{|G|}{|C|}\log K_C-\alpha_A .
-  \end{equation}
-  Then
-  \begin{equation}\label{eq:class-product-normalisation-constraint}
-    \prod_{C\subset G}K_C=\exp(-\alpha_A),
-    \qquad
-    \sum_{C\subset G}\frac{|C|}{|G|}H_K(C)=0,
-  \end{equation}
-  and the non-trivial Peter--Weyl coordinates of this zero-mean vector are
-  exactly the determinant coordinates:
-  \begin{equation}\label{eq:class-product-fourier-coordinates}
-    H_K(C)=
-    \sum_{\varrho\ne\mathbf1}
-      \chi_\varrho^\ast(C)\mathfrak D_\varrho,
-    \qquad
-    \sum_{C\subset G}\frac{|C|}{|G|}H_K(C)\chi_\pi(C)
-    =\mathfrak D_\pi.
-  \end{equation}
-  Equivalently, the constants themselves are recovered by the finite
-  determinant-coordinate formula
-  \begin{equation}\label{eq:class-product-rigidity-product-formula}
-    K_C=
-    \exp\!\left(
-      -\frac{|C|}{|G|}
-      \left(
-        \alpha_A+
-        \sum_{\varrho\ne\mathbf1}
-          \chi_\varrho^\ast(C)\mathfrak D_\varrho
-      \right)
-    \right),
-  \end{equation}
-  In particular,
-  \begin{equation}\label{eq:class-product-parseval}
-    \sum_{C\subset G}\frac{|C|}{|G|}|H_K(C)|^2
-    =
-    \sum_{\varrho\ne\mathbf1}|\mathfrak D_\varrho|^2.
-  \end{equation}
-  Moreover this is a complete description of the finite logarithmic chart
-  obtained after \Cref{thm:class-euler-product-mertens} has supplied the
-  constants.  Let
-  \[
-    \mathcal H_G:=
-    \left\{H\text{ a real class function}:
-      \sum_C\frac{|C|}{|G|}H(C)=0\right\}
+        a_{\rho,\pi}^{(m)}\,\mathcal L_{rm,\pi}
   \]
-  and let \(\mathcal D_G^{\mathbb R}\) be its non-trivial Fourier-coordinate
-  space, namely the set of vectors \((d_\varrho)_{\varrho\ne\mathbf1}\) for
-  which
-  \(C\mapsto\sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)d_\varrho\) belongs
-  to \(\mathcal H_G\).  For the fixed scalar \(\alpha_A\), let
-  \[
-    \mathscr K_{\alpha_A}:=
-    \left\{(L_C)_C:
-      L_C>0,\quad
-      C\longmapsto -\frac{|G|}{|C|}\log L_C-\alpha_A\in\mathcal H_G
-    \right\}.
-  \]
-  The finite Fourier map
-  \begin{equation}\label{eq:class-product-rigidity-chart-map}
-    (d_\varrho)_{\varrho\ne\mathbf1}
-    \longmapsto
-    \left(
-      \exp\!\left(
-        -\frac{|C|}{|G|}
-        \left(
-          \alpha_A+
-          \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)d_\varrho
-        \right)
-      \right)
-    \right)_{C\subset G}
-  \end{equation}
-  is a bijection from \(\mathcal D_G^{\mathbb R}\) onto
-  \(\mathscr K_{\alpha_A}\).  Its inverse is
-  \begin{equation}\label{eq:class-product-rigidity-chart-inverse}
-    (L_C)_C\longmapsto
-    \left(
-      \sum_C\frac{|C|}{|G|}
-      \left(-\frac{|G|}{|C|}\log L_C-\alpha_A\right)
-      \chi_\pi(C)
-    \right)_{\pi\ne\mathbf1}.
-  \end{equation}
-  The corresponding Peter--Weyl coordinate record on \(\mathcal H_G\),
-  \begin{equation}\label{eq:fixed-coordinate-support-peter-weyl-record}
-    H\longmapsto
-    \left(
-      \sum_C\frac{|C|}{|G|}H(C)\chi_\varrho(C)
-    \right)_{\varrho\ne\mathbf1},
-  \end{equation}
-  is isometric.  Hence, if \(q\) is the number of conjugacy classes and
-  \(R:\mathcal H_G\to W\) is any real linear record in this fixed chart with
-  \(R(H)=R(H')\Rightarrow \mathcal K_{\alpha_A}(H)=\mathcal K_{\alpha_A}(H')\),
-  then
-  \begin{equation}\label{eq:fixed-coordinate-support-rank-bound}
-    \operatorname{rank}R\ge\dim\mathcal H_G=q-1.
-  \end{equation}
-  The Peter--Weyl record attains this bound, and a non-injective record leaves
-  an affine kernel line of distinct positive product vectors with the same
-  record.
-  Hence the only scalar-normalised relations among the class-product
-  constants inside this fixed chart are the single weighted product constraint
-  and the ordinary conjugacy-pair reality conditions imposed by class
-  functions; no further determinant-independent relation is hidden in the
-  Corollary~D product coordinates.
-  Thus \((K_C)_{C\subset G}\) is determined by precisely the determinant
-  coordinates \((\mathfrak D_\varrho)_{\varrho\ne\mathbf1}\) and the scalar
-  normalisation \(C(A)\).  Conversely, the positive constant vector
-  \((K_C)_{C\subset G}\), together with \(C(A)\), recovers every
-  non-trivial determinant coordinate by the inverse formula in
-  \eqref{eq:class-product-fourier-coordinates}.  Consequently two finite
-  extensions with the same scalar normalisation, character table, Adams
-  tensors, branch tags, and twisted determinant polynomials have the same
-  Adams-corrected Frobenius-class product constants.  This is a coordinate
-  readout only in this finite determinant-coordinate chart with the stated
-  branch and scalar normalisation:
-  it does not assert invariance under arbitrary presentations, covers, folds,
-  gauge changes, or conjugacies of the cocycle \(\tau\) or of the skew product.
-  The same downstream chart gives the sharp finite obstruction budget for
-  replacing the strict-gap determinant-coordinate vector.  If
-  \(b=(b_\varrho)_{\varrho\ne\mathbf1}\in\mathcal D_G^{\mathbb R}\) is any
-  branch-compatible replacement vector and
-  \[
-    K_C(b):=
-    \exp\!\left(
-      -\frac{|C|}{|G|}
-      \left(
-        \alpha_A+
-        \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)b_\varrho
-      \right)
-    \right),
-  \]
-  then the normalized classwise error
-  \begin{equation}\label{eq:classical-layer-replacement-error}
-    E_b(C):=-\frac{|G|}{|C|}\log\frac{K_C}{K_C(b)}
-    =
-    \sum_{\varrho\ne\mathbf1}
-      \chi_\varrho^\ast(C)(\mathfrak D_\varrho-b_\varrho)
-  \end{equation}
-  has non-trivial Fourier coordinates
-  \(\mathfrak D_\varrho-b_\varrho\) and satisfies
-  \begin{equation}\label{eq:class-product-rigidity-replacement-parseval}
-    \sum_{C\subset G}\frac{|C|}{|G|}|E_b(C)|^2
-    =
-    \sum_{\varrho\ne\mathbf1}|\mathfrak D_\varrho-b_\varrho|^2 .
-  \end{equation}
-  Consequently a replacement vector can give all strict-gap product constants
-  only when it equals the Adams-corrected determinant vector, and if
-  \(\delta^2:=\sum_{\varrho\ne\mathbf1}|\mathfrak D_\varrho-b_\varrho|^2>0\),
-  then at least one Frobenius class has
-  \begin{equation}\label{eq:class-product-rigidity-class-lower-bound}
-    \left|\frac{|G|}{|C|}\log\frac{K_C}{K_C(b)}\right|
-    \ge \delta .
-  \end{equation}
-  Equivalently, any class-uniform normalized logarithmic error bound
-  \(\abs{E_b(C)}\le\epsilon\) for all classes forces
-  \(\sum_{\varrho\ne\mathbf1}|\mathfrak D_\varrho-b_\varrho|^2\le\epsilon^2\).
-  In particular, for the periodic Artin replacement
-  \(b_\varrho=\mathcal L_\varrho(\lambda^{-1})\), whenever these Artin
-  logarithms are regular at \(\lambda^{-1}\), the normalized error
-  \(\mathcal E(C):=E_b(C)\) satisfies
-  \begin{equation}\label{eq:adams-obstruction-bound-zero-mean}
-    \sum_C\frac{|C|}{|G|}\mathcal E(C)=0,\qquad
-    F_\pi(\lambda^{-1})-\mathcal L_\pi(\lambda^{-1})
-    =
-    \sum_C\frac{|C|}{|G|}\mathcal E(C)\chi_\pi(C),
-  \end{equation}
-  and
-  \begin{equation}\label{eq:adams-obstruction-bound-forward}
-    \mathcal E(C)=
-    \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)
-    \bigl(F_\varrho(\lambda^{-1})
-      -\mathcal L_\varrho(\lambda^{-1})\bigr).
-  \end{equation}
-  Equivalently, with \(K_C^{\mathrm{Art}}\) denoting the product constants
-  obtained from the same formula by substituting
-  \(\mathcal L_\varrho(\lambda^{-1})\) for \(F_\varrho(\lambda^{-1})\),
-  \begin{equation}\label{eq:adams-obstruction-ratio}
-    \log\frac{K_C}{K_C^{\mathrm{Art}}}
-    =
-    -\frac{|C|}{|G|}
-    \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)
-    \bigl(F_\varrho(\lambda^{-1})
-      -\mathcal L_\varrho(\lambda^{-1})\bigr),
-  \end{equation}
-  and the ordinary Artin substitution gives all class-product constants if and
-  only if the class function
-  \begin{equation}\label{eq:adams-obstruction-class-function}
-    C\longmapsto
-    \frac{|C|}{|G|}
-    \sum_{\varrho\ne\mathbf1}\chi_\varrho^\ast(C)
-    \bigl(F_\varrho(\lambda^{-1})
-      -\mathcal L_\varrho(\lambda^{-1})\bigr)
-  \end{equation}
-  vanishes identically.  If
-  \(\Delta^2=\sum_{\varrho\ne\mathbf1}
-  |F_\varrho(\lambda^{-1})-\mathcal L_\varrho(\lambda^{-1})|^2\), then some
-  conjugacy class satisfies
-  \begin{equation}\label{eq:adams-obstruction-bound-sup-lower-bound}
-    \left|
-      \frac{|G|}{|C|}
-      \log\frac{K_C}{K_C^{\mathrm{Art}}}
-    \right|\ge\Delta .
-  \end{equation}
-  Consequently any certified lower bound \(\Delta\ge\delta\) gives
-  \begin{equation}\label{eq:adams-obstruction-bound-lower-bound}
-    \left|
-      \frac{|G|}{|C|}
-      \log\frac{K_C}{K_C^{\mathrm{Art}}}
-    \right|\ge\delta
-  \end{equation}
-  for at least one conjugacy class.
-\end{theorem}
+  is substituted into the finite Fourier product formula, and the resulting
+  \(K_C^{(M)}\) converges to \(K_C\) with the explicit divisor-tail bound
+  stated in that corollary.
+\end{enumerate}
 
-\begin{proof}
-  The determinant identity
-  \eqref{eq:class-product-rigidity-d-equals-f}, including the local deletion
-  of \((1,1,\mathbf1)\), the Abel-boundary convention for non-trivial
-  \(rm=1\) terms, the ordinary interior evaluation for \(rm\ge2\), and the
-  absolute convergence of the remaining tail, is exactly
-  \Cref{prop:fixed-label-determinant-perron}.  Hence the numbers
-  \(\mathfrak D_\varrho\) are fixed by the stated branch-normalized
-  determinant-coordinate data, not by the determinant polynomials alone.
-
-  The leading product exponent and the existence of the positive constants
-  are exactly \Cref{thm:class-euler-product-mertens}; the comparison with the
-  existing product literature is stated in \Cref{prop:class-product-comparison}.
-  The character formula \eqref{eq:class-euler-product-k-f} expresses
-  \((K_C)_C\) in terms of \(C(A)\) and the non-trivial values
-  \(F_\varrho(\lambda^{-1})\).  Replacing those values by
-  \(\mathfrak D_\varrho\) using
-  \eqref{eq:class-product-rigidity-d-equals-f}, and then taking logarithms in
-  the positive real branch fixed by \Cref{thm:class-euler-product-mertens},
-  gives the first identity in \eqref{eq:class-product-fourier-coordinates}.
-  Averaging this identity over conjugacy classes with weights \(|C|/|G|\)
-  gives the second identity in
-  \eqref{eq:class-product-normalisation-constraint}, because every
-  non-trivial irreducible character is orthogonal to the trivial character.
-  Multiplying the definition of \(H_K\) by \(|C|/|G|\) and summing over
-  classes then gives the product constraint in
-  \eqref{eq:class-product-normalisation-constraint}.  The inverse Fourier
-  identity in \eqref{eq:class-product-fourier-coordinates} and the Parseval
-  identity \eqref{eq:class-product-parseval} are the standard Hermitian
-  character orthogonality relations for the zero-mean class-function space.
-
-  Solving the definition \eqref{eq:class-product-log-vector} for \(K_C\) and
-  substituting the first identity in
-  \eqref{eq:class-product-fourier-coordinates} gives
-  \eqref{eq:class-product-rigidity-product-formula}.  The same calculation
-  proves the classification map
-  \eqref{eq:class-product-rigidity-chart-map}: starting from a non-trivial
-  Fourier vector in the real class-function form gives a zero-mean class
-  function by Fourier inversion, exponentiation gives positive constants, and
-  the weighted product is \(\exp(-\alpha_A)\) because the zero-mean condition
-  cancels the non-scalar summand in the logarithmic product.  Conversely, a
-  vector in \(\mathscr K_{\alpha_A}\) gives the zero-mean logarithmic class
-  function appearing in \eqref{eq:class-product-rigidity-chart-inverse}, and
-  Hermitian character orthogonality recovers exactly its non-trivial Fourier
-  coordinates.  These two constructions are inverse to each other, and
-  Parseval gives the stated isometry; the only constraints are therefore the
-  weighted product condition and the conjugacy-pair reality condition for a
-  real class function.
-
-  This proves that the product vector is determined by the listed scalar
-  normalisation, character table, Adams tensors, branch tags, and twisted
-  determinant polynomials.
-  Conversely, if the positive constants and \(C(A)\) are known, then
-  \eqref{eq:class-product-log-vector} constructs \(H_K\), and the inverse
-  Hermitian Fourier formula in \eqref{eq:class-product-fourier-coordinates}
-  recovers each \(\mathfrak D_\pi\).  The final equal-data assertion follows
-  by applying the same displayed formulae to the two systems.  No step uses
-  any presentation, cover, fold, gauge, or cocycle-conjugacy invariant beyond
-  these fixed coordinates, which proves the asserted scope of the coordinate-inversion
-  statement.
-
-  It remains to prove the obstruction-budget assertion.  The vector
-  \(b\in\mathcal D_G^{\mathbb R}\) defines, by the same chart map, a positive
-  product vector with the same scalar normalisation.  Subtracting the logarithm
-  of its \(C\)-coordinate from the true logarithm in
-  \eqref{eq:class-product-rigidity-product-formula} gives the exact class
-  function
-  \[
-    E_b(C)=
-    \sum_{\varrho\ne\mathbf1}
-      \chi_\varrho^\ast(C)(\mathfrak D_\varrho-b_\varrho).
-  \]
-  Since both \((\mathfrak D_\varrho)\) and \(b\) lie in the real non-trivial
-  class-function coordinate space, this is a real zero-mean class function.
-  Applying the same Hermitian character Parseval identity used above gives
-  \eqref{eq:class-product-rigidity-replacement-parseval}.  Equality of all
-  constants is equivalent, in the positive logarithm branch, to \(E_b(C)=0\) for
-  every class; by Parseval this is equivalent to
-  \(b_\varrho=\mathfrak D_\varrho\) for every non-trivial \(\varrho\).  Finally,
-  the weights \(|C|/|G|\) are positive and sum to one, so if every class had
-  \(|E_b(C)|<\delta\), the weighted square average in
-  \eqref{eq:class-product-rigidity-replacement-parseval} would be strictly less
-  than \(\delta^2\), contradicting the definition of \(\delta\).  This proves
-  \eqref{eq:class-product-rigidity-class-lower-bound}; the uniform-error
-  implication is the same Parseval identity with
-  \(\sum_C |C|/|G|=1\).
-\end{proof}
-
-\begin{corollary}[Artin-obstruction corollary in the strict-gap chart]
-  \label{cor:strict-gap-artin-obstruction-corollary}
-  Under the hypotheses of \Cref{thm:class-product-determinant-rigidity},
-  the obstruction to replacing the fixed-label determinant coordinates by the
-  regular periodic Artin logarithms is exactly the Peter--Weyl difference
-  vector
-  \[
-    \bigl(F_\varrho(\lambda^{-1})
-      -\mathcal L_\varrho(\lambda^{-1})\bigr)_{\varrho\ne\mathbf1}.
-  \]
-  Equivalently, the Artin-substituted product constants agree with the true
-  strict-gap constants for every conjugacy class if and only if this vector is
-  zero.  When it is non-zero, its squared norm gives the Parseval obstruction
-  budget in \eqref{eq:class-product-rigidity-replacement-parseval}, and the
-  classwise logarithmic ratio is \eqref{eq:adams-obstruction-ratio}.
-\end{corollary}
-
-\begin{proof}
-  This is the specialization of the replacement-vector clause in
-  \Cref{thm:class-product-determinant-rigidity} to
-  \(b_\varrho=\mathcal L_\varrho(\lambda^{-1})\).  The ratio formula is
-  \eqref{eq:adams-obstruction-ratio}; equality of all constants is equivalent,
-  by \eqref{eq:class-product-rigidity-replacement-parseval}, to vanishing of
-  every non-trivial Fourier coordinate of the replacement error.
-\end{proof}
-
-Thus every downstream product-coordinate statement in this strict-gap chart is
-the single finite Fourier equivalence of
-\Cref{thm:class-product-determinant-rigidity}: after the scalar normalisation
-\(\alpha_A=\gamma+\log C(A)\) and the positive branch are fixed,
+The strict-gap coordinate chart, rank statement, finite Fourier inverse,
+Parseval replacement-vector identity, and Artin-substitution obstruction are
+all clauses of the consolidated product-coordinate readout
+\Cref{thm:class-product-determinant-rigidity}.  In the strict-gap
+specialization, after the scalar normalisation
+\(\alpha_A=\gamma+\log C(A)\) and the positive branch are fixed, the chart is
 \[
   H_K(C)=-\frac{|G|}{|C|}\log K_C-\alpha_A
   =
   \sum_{\varrho\ne\mathbf1}
     \chi_\varrho^\ast(C)F_\varrho(\lambda^{-1}).
 \]
-The hyperplane parametrisation, inverse formula, stability identity, rank
-bound, replacement obstruction, and truncation formula are all the chart,
-inverse, determinant-evaluation, and Parseval parts of that theorem.  No
-further orbit-counting asymptotic, branch choice, product constant, or
+The hyperplane parametrisation, inverse formula, determinant evaluation,
+rank bound, replacement obstruction, and Artin comparison are therefore
+standard finite character orthogonality consequences of that single corollary;
+no additional orbit-counting asymptotic, branch choice, product constant, or
 cocycle-invariance assertion is introduced here.
-
 \begin{corollary}[Coordinate readout and finite-determinant truncation]
   \label{cor:assembled-adams-frobenius-product-formula}
   \label{cor:assembled-adams-frobenius-product-package}
