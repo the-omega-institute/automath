@@ -13,32 +13,127 @@ loop-character diagnostic feeds \Cref{cor:strict-gap-specialization} and the old
 computational formulas
 \Cref{thm:class-mertens-explicit,thm:class-euler-product-mertens}.
 
+\begin{lemma}[Equality in the Hilbert-space triangle inequality]
+  \label{lem:hilbert-triangle-equality}
+  Let \(x_1,\ldots,x_q\) be non-zero vectors in a Hilbert space.  If
+  \[
+    \left\|\sum_{a=1}^q x_a\right\|=\sum_{a=1}^q\|x_a\|,
+  \]
+  then there is a unit vector \(\xi\) and positive real numbers
+  \(c_1,\ldots,c_q\) such that \(x_a=c_a\xi\) for every \(a\).
+\end{lemma}
+
+\begin{proof}
+  Set \(s:=\sum_a x_a\).  The hypothesis and non-zeroness of the \(x_a\)'s
+  imply \(s\neq0\).  For every \(a\),
+  \[
+    \operatorname{Re}\langle x_a,s\rangle\le \|x_a\|\,\|s\|,
+  \]
+  and summing these inequalities gives equality:
+  \[
+    \sum_a\operatorname{Re}\langle x_a,s\rangle
+    =
+    \operatorname{Re}\langle s,s\rangle
+    =
+    \|s\|^2
+    =
+    \|s\|\sum_a\|x_a\|.
+  \]
+  Hence equality holds in the real-part Cauchy inequality for every \(a\).
+  Each \(x_a\) is therefore a non-negative real multiple of \(s\), and the
+  multiple is positive because \(x_a\neq0\).  Taking
+  \(\xi=s/\|s\|\) proves the claim.
+\end{proof}
+
+\begin{lemma}[Equality in the edgewise domination step]
+  \label{lem:edgewise-domination-equality}
+  Let \(V_\varrho\) carry its unitary Hilbert norm.  Suppose
+  \(v=(v_i)_{i\in V}\in\CC^V\otimes V_\varrho\) and
+  \(\alpha\in\CC\), \(|\alpha|=\lambda\), satisfy the column equations
+  \[
+    \alpha v_i=\sum_{e:i\to j}\varrho(\tau(e))v_j
+    \qquad(i\in V),
+  \]
+  and put \(u_i:=\norm{v_i}\).  If the domination argument gives
+  \[
+    \lambda u_i
+    =
+    \left\|\sum_{e:i\to j}\varrho(\tau(e))v_j\right\|
+    =
+    \sum_{e:i\to j}\norm{v_j}
+    =
+    (Au)_i
+    \qquad(i\in V),
+  \]
+  with all \(u_i>0\), then for each fixed initial vertex \(i\) every
+  individual outgoing edge summand
+  \[
+    x_e:=\varrho(\tau(e))v_{t(e)}
+    \qquad(e:i\to t(e))
+  \]
+  is a positive real multiple of one common vector.  The assertion is
+  edgewise: parallel edges and distinct edges with the same terminal vertex
+  are separate summands.  More precisely, if
+  \(y_i:=\alpha v_i/(\lambda u_i)\), then \(y_i\) is a unit vector and
+  \[
+    \varrho(\tau(e))v_j=u_j y_i
+    \qquad(e:i\to j).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Fix \(i\) and list the outgoing edges with multiplicity as
+  \(e_1,\ldots,e_q\).  Put
+  \(x_a:=\varrho(\tau(e_a))v_{t(e_a)}\).  Since \(\varrho\) is unitary and
+  \(u_{t(e_a)}>0\), each \(x_a\) is non-zero and
+  \(\|x_a\|=u_{t(e_a)}\).  The displayed equality is exactly
+  \[
+    \left\|\sum_{a=1}^q x_a\right\|=\sum_{a=1}^q\|x_a\|.
+  \]
+  By \Cref{lem:hilbert-triangle-equality}, all of these edge summands are
+  positive real multiples of one unit vector.  Since
+  \(s:=\sum_a x_a=\alpha v_i\), the common unit vector is \(s/\|s\|\).  Also
+  \[
+    \sum_{e:i\to j}u_j=(Au)_i=\lambda u_i
+    \quad\text{and}\quad
+    s=\alpha v_i,
+  \]
+  so
+  \(y_i=s/\|s\|=\alpha v_i/(\lambda u_i)\), and the norm of the \(e:i\to j\)
+  summand gives \(x_e=u_j y_i\).  The enumeration was by edge, so the
+  conclusion includes parallel edges and repeated terminal vertices.
+\end{proof}
+
 \begin{proposition}[Finite line-field certificate at the Perron boundary]
   \label{thm:eta-gap-rigidity}
   Fix the finite directed graph with primitive adjacency matrix \(A\), the
   fixed finite-group cocycle \(\tau\), and the associated twisted matrices
   \(A_\varrho\) from \eqref{eq:twisted-matrix-def}.  Let
   \(\varrho:G\to U(V_\varrho)\) be an irreducible unitary representation.
-  Then
-  \[
-    \rho(A_\varrho)=\lambda
-  \]
-  denotes spectral-radius equality for the row-vector twisted matrix from
-  \eqref{eq:twisted-matrix-def}. For the line-field formulation define
-  the column block operator \(A_\varrho^{\mathrm{col}}\) on
+  For the line-field formulation define the column block operator
+  \(A_\varrho^{\mathrm{col}}\) on
   \(\CC^V\otimes V_\varrho\) by
   \[
     (A_\varrho^{\mathrm{col}} w)_i
     =
     \sum_{e:i\to j}\varrho(\tau(e))w_j .
   \]
-  The operator \(A_\varrho^{\mathrm{col}}\) is the transpose-dual block
-  realisation of the row operator used in
-  \Cref{prop:kernel-peter-weyl-block-diagonalisation,prop:twisted-spectral-radius-bound}; in particular it has the same
-  characteristic polynomial and the same spectral radius as
-  \(A_\varrho\). The equality above is therefore equivalent to
-  \(\rho(A_\varrho^{\mathrm{col}})=\lambda\), and this latter column
-  convention is used in the displayed line-field equation below.
+  First record the convention change explicitly.  The row-vector twisted
+  matrix \(A_\varrho\) from \eqref{eq:twisted-matrix-def} and
+  \(A_\varrho^{\mathrm{col}}\) are transpose-dual finite matrices; hence
+  \[
+    \det(tI-A_\varrho^{\mathrm{col}})
+    =
+    \det(tI-A_\varrho).
+  \]
+  Thus switching between the row and column conventions does not change the
+  characteristic polynomial or the spectral radius.  In particular,
+  \[
+    \rho(A_\varrho)=\lambda
+    \quad\Longleftrightarrow\quad
+    \rho(A_\varrho^{\mathrm{col}})=\lambda .
+  \]
+  The displayed line-field equation below uses this latter column convention.
   Thus \(\rho(A_\varrho)=\lambda\) if and only if there exist
   \(\omega\in\TT\) and unit vectors
   \(\xi_i\in V_\varrho\), indexed by the vertices \(i\in V\), such that
@@ -84,7 +179,17 @@ computational formulas
   We use \(A_\varrho^{\mathrm{col}}\) throughout the proof. The statement
   has already identified its spectral radius with that of the row
   operator \(A_\varrho\), so no spectral assertion changes under this
-  convention.
+  convention.  Concretely, the determinant block
+  \(A_\varrho=(\sum_{e:i\to j}\varrho(\tau(e)))_{ij}\) is the block matrix
+  used in the trace and determinant formulas.  Its row-vector realization
+  and the column operator \(A_\varrho^{\mathrm{col}}\) above are
+  transpose-dual finite matrices, hence have the same characteristic
+  polynomial.  Under the unitary Hilbert identification of a row vector
+  with its adjoint column vector, an eigenvalue phase is conjugated; thus a
+  row-boundary phase \(\omega\) corresponds to the column-boundary phase
+  \(\overline\omega\).  Since the criterion records only membership in
+  \(\TT\) and spectral radius \(\lambda\), this harmless conjugation is the
+  only row/column change.
 
   Assume first that \(\rho(A_\varrho)=\lambda\). Since
   \(A_\varrho^{\mathrm{col}}\) is finite dimensional, some eigenvalue
@@ -123,37 +228,12 @@ computational formulas
   \(i\in V\).
 
   Equality in the triangle inequality now holds in every vertex equation.
-  In particular no cancellation can occur at a Perron-boundary channel: the
-  equality forced by the positive left Perron vector promotes the norm
-  inequality to equality for each individual outgoing edge summand below.
-  Fix a vertex \(i\) and list the outgoing edges with multiplicity, including
-  parallel edges and edges with the same terminal vertex, as
-  \(e_1,
-  \ldots,e_q\).  Put
-  \(x_a:=\varrho(\tau(e_a))v_{t(e_a)}\).  Each \(x_a\) is non-zero because
-  \(u_{t(e_a)}>0\), and
-  \[
-    \left\|\sum_{a=1}^q x_a\right\|=
-    \sum_{a=1}^q\|x_a\| .
-  \]
-  The Hilbert-space equality case gives the conclusion for every summand in
-  this list, not merely for every terminal vertex: equality in Cauchy's
-  inequality for
-  \(\langle x_a,\sum_bx_b\rangle\) forces each \(x_a\) to be a non-negative
-  real multiple of the same vector \(\sum_bx_b\), and the positivity of
-  \(\|x_a\|=u_{t(e_a)}\) excludes zero multiples.  Thus there is a unit
-  vector \(y_i\) such that
-  \(\varrho(\tau(e))v_j=u_jy_i\) for every outgoing edge \(e:i\to j\), with
-  repeated terminal vertices treated as separate summands. Since their sum is
-  \(\alpha v_i\) and \(Au=\lambda u\),
-  \[
-    \alpha v_i
-    =\sum_{e:i\to j}u_jy_i
-    =\lambda u_i y_i,
-  \]
-  so \(y_i=\alpha v_i/(\lambda u_i)\).  Thus the phase is not chosen
-  separately for each edge; it is the single eigenvalue phase
-  \(\omega:=\alpha/\lambda\), and
+  Applying \Cref{lem:edgewise-domination-equality} shows that this is an
+  equality for the list of outgoing edges with multiplicity, not only after
+  grouping by terminal vertex.  Thus no cancellation can occur at a
+  Perron-boundary channel, parallel edges are controlled separately, and the
+  phase is not chosen separately for each edge; it is the single eigenvalue
+  phase \(\omega:=\alpha/\lambda\).  Hence
   \[
     \varrho(\tau(e))v_j
     =

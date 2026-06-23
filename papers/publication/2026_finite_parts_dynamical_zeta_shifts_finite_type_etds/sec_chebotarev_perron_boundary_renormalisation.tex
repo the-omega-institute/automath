@@ -44,22 +44,81 @@ determinant, and product steps of the single boundary theorem.
   \Cref{thm:primitive-peter-weyl-trace}.
 
   The spectral entries \(\Gamma_\pi\) and \(m_{\pi,\zeta}\) are not by
-  themselves a branch convention for boundary logarithms.  The
-  renormalized boundary-coordinate input used below is the finite package
-  \[
-    \bigl(\{P_\pi\}_{\pi\in\Irr(G)},\lambda,
-      \{\Gamma_\pi\}_{\pi\in\Irr(G)},
+  themselves a branch convention for boundary logarithms.  Write
+  \(P_\pi(z)=\det(I-zA_\pi)\), let \(\Log_0\) denote the determinant-logarithm
+  germ normalized to be \(0\) at \(z=0\), and put
+  \(s_\pi:=m_{\pi,1}\), with \(s_\pi=0\) if \(1\notin\Gamma_\pi\).
+  For every \(\pi\in\Irr(G)\) and \(k\ge1\), define the branch-normalized
+  determinant layer
+  \begin{equation}\label{eq:perron-boundary-renormalized-b-data}
+    \mathcal B_{k,\pi}^{\mathrm{ren}}:=
+    \begin{cases}
+      \displaystyle
+      \lim_{t\uparrow1}
+      \left(
+        \Log_0\det(I-t\lambda^{-1}A_\pi)^{-1}
+        +s_\pi\log(1-t)
+      \right), & k=1,\\[1.2em]
+      \displaystyle
+      \Log_0\det(I-\lambda^{-k}A_\pi)^{-1}, & k\ge2.
+    \end{cases}
+  \end{equation}
+  For \(k=1\), \(\Log_0\) is continued only along the Abel path
+  \(0\le t<1\); for \(k\ge2\), the evaluation is an ordinary interior-disc
+  value.  The renormalized boundary-coordinate input used below is the finite
+  package
+  \begin{equation}\label{eq:perron-boundary-renormalized-data-local}
+  \begin{aligned}
+    D_{\partial}^{\mathrm{ren}}
+    :=
+    \bigl(&G,\operatorname{Pow}_m,\{P_\pi\}_{\pi\in\Irr(G)},\lambda,\\
+      &\{\Gamma_\pi\}_{\pi\in\Irr(G)},
       \{m_{\pi,\zeta}\}_{\zeta\in\Gamma_\pi,\ \pi\in\Irr(G)},
-      \mathfrak b_{\partial}^{\mathrm{ren}},
-      \mathfrak n_\partial\bigr),
-  \]
-  where \(P_\pi(z)=\det(I-zA_\pi)\),
-  \(\mathfrak b_{\partial}^{\mathrm{ren}}\) records the Abel branch at
-  \(k=1\) and the interior determinant-logarithm branches at \(k\ge2\), and
-  \(\mathfrak n_\partial\) fixes the positive scalar/product logarithm
-  normalization.  Thus later ``finite determinant'' statements refer to this
-  branch-normalized coordinate package, not to the determinant polynomials
-  alone.
+      \{s_\pi\}_{\pi\in\Irr(G)},
+      \{\mathcal B_{1,\pi}^{\mathrm{ren}}\}_{\pi\in\Irr(G)},\\
+      &\Log_0,n_\partial\bigr).
+  \end{aligned}
+  \end{equation}
+  Here \(\operatorname{Pow}_m\) records the conjugacy-class power maps used to
+  compute the Adams coefficients \(a_{\rho,\pi}^{(m)}\), the values
+  \(\mathcal B_{1,\pi}^{\mathrm{ren}}\) record the reduced Abel boundary
+  logarithms, \(\Log_0\) fixes all interior determinant-logarithm branches, and
+  \(n_\partial\) is the positive scalar/product logarithm normalization used
+  when exponentiating the product constants.  Thus later ``finite
+  determinant'' statements refer to this branch-normalized coordinate package,
+  not to the determinant polynomials alone.
+\end{definition}
+
+\begin{definition}[Boundary logarithm convention]
+  \label{def:perron-boundary-logarithm-convention}
+  Fix the peripheral data of
+  \Cref{def:peripheral-peter-weyl-data} and write
+  \(P_\pi(z)=\det(I-zA_\pi)\).  All determinant logarithms below are the
+  normalized germs \(\Log_0\) at \(z=0\), continued only along the indicated
+  Abel path or evaluated at an interior point.  For \(k\ge1\) and
+  \(\pi\in\Irr(G)\), the boundary logarithm is the value
+  \(\mathcal B_{k,\pi}^{\mathrm{ren}}\) defined in
+  \eqref{eq:perron-boundary-renormalized-b-data}.
+  Thus every \(k=1\) Perron-boundary block is read as a reduced Abel finite
+  part: exactly the \(s_\pi=m_{\pi,1}\) copies of the non-oscillatory factor
+  \(1-t\) are cancelled, while the remaining peripheral factors
+  \(1-t\zeta\), \(\zeta\ne1\), are evaluated on the Abel branch reached from
+  the origin.  Every \(k\ge2\) term is an ordinary interior-disc logarithm.
+  The positive scalar/product logarithm normalization used when exponentiating
+  product constants is the separate datum \(n_\partial\) in
+  \(D_{\partial}^{\mathrm{ren}}\).
+
+  In the strict-gap specialization, where
+  \(s_{\mathbf1}=1\), \(s_\pi=0\) for \(\pi\ne\mathbf1\), and no non-trivial
+  block has a Perron-boundary eigenvalue, the singular scalar boundary value
+  \(\mathcal B_{1,\mathbf1}^{\mathrm{ren}}\) is not used in non-trivial
+  fixed-label coordinates.  For those coordinates we write
+  \(\mathcal L_{k,\pi}:=\mathcal B_{k,\pi}^{\mathrm{ren}}\) except that the
+  triple \((k,\pi)=(1,\mathbf1)\), equivalently
+  \((r,m,\pi)=(1,1,\mathbf1)\), is deleted before any endpoint value is
+  chosen.  Non-trivial \(k=1\) terms are Abel boundary values and all
+  \(k\ge2\) terms, including scalar terms created by Adams powers, remain
+  ordinary interior determinant logarithms.
 \end{definition}
 
 \begin{lemma}[Finite-cover peripheral expansion and optional certificate]
@@ -148,18 +207,12 @@ determinant, and product steps of the single boundary theorem.
   \eqref{eq:finite-cover-peripheral-trace-expansion}.
 \end{proof}
 
-\begin{theorem}[Perron-boundary determinant and product theorem]
-  \label{thm:perron-boundary-determinant-product}
-  \label{thm:peripheral-primitive-channel-asymptotic}
-  \label{thm:renormalized-class-mertens}
-  \label{thm:renormalized-fixed-label-determinant}
-  \label{thm:renormalized-frobenius-product}
+\begin{proposition}[Primitive-channel estimate at the Perron boundary]
+  \label{prop:peripheral-primitive-channel-asymptotic-component}
   Under the peripheral algebraic multiplicity hypotheses of
   \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
-  the following assertions hold.
-  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-  \item For every irreducible \(\varrho\in\Irr(G)\),
-  \begin{equation}\label{eq:peripheral-primitive-channel-asymptotic}
+  every irreducible \(\varrho\in\Irr(G)\) satisfies
+  \begin{equation}\label{eq:peripheral-primitive-channel-asymptotic-component}
     \pi_{n,\varrho}(A,\tau)
     =
     \frac{\lambda^n}{n}
@@ -167,99 +220,10 @@ determinant, and product steps of the single boundary theorem.
     +
     O\!\left(\frac{\Lambda_\partial^n}{n}\right).
   \end{equation}
-  \item The renormalized primitive-channel finite part
-  \[
-    R_\varrho:=
-    \lim_{t\uparrow1}
-      \left(\Pi_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
-  \]
-  exists.  For every conjugacy class \(C\subset G\),
-  \[
-    \delta_C=
-    \frac{|C|}{|G|}
-      \sum_{\varrho\in\Irr(G)}\chi_\varrho^\ast(C)s_\varrho
-  \]
-  and
-  \begin{equation}\label{eq:perron-boundary-main-class-mertens}
-    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
-    =
-    \delta_C\log N+M_C^{\mathrm{ren}}+O(N^{-1}),
-    \qquad
-    M_C^{\mathrm{ren}}=
-    \frac{|C|}{|G|}
-      \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho^\ast(C)(s_\varrho\gamma+R_\varrho).
-  \end{equation}
-  These constants are real in the class sums, with
-  \(\delta_C\ge0\), by
-  \Cref{lem:renormalized-reality-positivity}.
-  \item The reduced fixed-label Euler transform
-  \[
-    F_\varrho^{\mathrm{ren}}
-    =
-    \lim_{t\uparrow1}
-      \left(F_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
-  \]
-  exists and is evaluated by
-  \begin{equation}\label{eq:perron-boundary-main-fixed-label}
-    F_\varrho^{\mathrm{ren}}
-    =
-    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
-      \sum_{\pi\in\Irr(G)}
-        a_{\varrho,\pi}^{(m)}
-        \mathcal B_{rm,\pi}^{\mathrm{ren}},
-  \end{equation}
-  where \(k=1\) terms are reduced Perron-boundary finite parts and
-  \(k\ge2\) terms are ordinary interior determinant logarithms, as in
-  \eqref{eq:renormalized-fixed-label-determinant}.
-  \item The Frobenius-class Euler product
-  \[
-    P_C(N):=
-    \prod_{\substack{\gamma\in\cP:\ |\gamma|\le N\\
-      \tau(\gamma)\in C}}
-      (1-\lambda^{-|\gamma|})
-  \]
-  satisfies
-  \begin{equation}\label{eq:renormalized-frobenius-product}
-    P_C(N)=K_C^{\mathrm{ren}}N^{-\delta_C}\bigl(1+O(N^{-1})\bigr),
-  \end{equation}
-  with
-  \begin{equation}\label{eq:renormalized-frobenius-product-constant}
-    K_C^{\mathrm{ren}}
-    :=
-    \exp\!\left(
-      -\frac{|C|}{|G|}
-        \sum_{\varrho\in\Irr(G)}
-          \chi_\varrho^\ast(C)
-          \bigl(s_\varrho\gamma+F_\varrho^{\mathrm{ren}}\bigr)
-    \right).
-  \end{equation}
-  The exponential is taken of a real number and
-  \(K_C^{\mathrm{ren}}>0\), by
-  \Cref{lem:renormalized-reality-positivity}.
-  Thus \(\delta_C\) is the non-oscillatory Perron-boundary density, not
-  necessarily \(|C|/|G|\).
-  \end{enumerate}
-\end{theorem}
-
-\begin{proof}
-  The four assertions are the four proof components immediately below:
-  the primitive-channel estimate, the renormalized class-Mertens summation,
-  the reduced fixed-label determinant evaluation, and the product-tail
-  passage.  They use the same finite boundary datum and branch convention, so
-  together they prove one Perron-boundary theorem rather than independent
-  asymptotic packages.
-\end{proof}
-
-\begin{proposition}[Primitive-channel component of the boundary theorem]
-  \label{prop:peripheral-primitive-channel-asymptotic-component}
-  Under the peripheral algebraic multiplicity hypotheses of
-  \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
-  every irreducible \(\varrho\in\Irr(G)\) satisfies
-  \eqref{eq:peripheral-primitive-channel-asymptotic}.  More explicitly, the
-  \(m=1\) term in the Adams--M\"obius trace formula gives the displayed
-  peripheral sum and the interior \(O(\Lambda_\perp^n/n)\) remainder, while
-  the full \(m>1\) divisor correction is
+  More explicitly, the \(m=1\) term in the Adams--M\"obius trace formula
+  gives the displayed peripheral sum and the interior
+  \(O(\Lambda_\perp^n/n)\) remainder, while the full \(m>1\) divisor
+  correction is
   \[
     \frac{1}{n}\sum_{\substack{m\mid n\\m>1}}\mu(m)
       \sum_{\pi\in\Irr(G)}
@@ -302,10 +266,10 @@ determinant, and product steps of the single boundary theorem.
     =O(\lambda^{n/2}).
   \]
   This proves the divisor-loss estimate and hence
-  \eqref{eq:peripheral-primitive-channel-asymptotic}.
+  \eqref{eq:peripheral-primitive-channel-asymptotic-component}.
 \end{proof}
 
-\begin{proposition}[Class-Mertens component of the boundary theorem]
+\begin{proposition}[Class-Mertens finite part at the Perron boundary]
   \label{prop:renormalized-class-mertens-component}
   Assume the Perron-boundary algebraic multiplicity data above.  For every
   \(\varrho\in\Irr(G)\), define
@@ -383,15 +347,24 @@ determinant, and product steps of the single boundary theorem.
 \end{proposition}
 
 \begin{proof}
-  By \Cref{thm:peripheral-primitive-channel-asymptotic}, after subtracting
-  the peripheral terms
+  This proof uses only the primitive-channel estimate of
+  \Cref{prop:peripheral-primitive-channel-asymptotic-component}, not the
+  consolidated theorem stated below.  Define
+  \begin{equation}\label{eq:renormalized-channel-error-b}
+    b_{\varrho,n}:=
+    \lambda^{-n}\pi_{n,\varrho}(A,\tau)
+    -\frac1n
+      \sum_{\zeta\in\Gamma_\varrho}
+        m_{\varrho,\zeta}\zeta^n .
+  \end{equation}
+  By \Cref{prop:peripheral-primitive-channel-asymptotic-component},
   \[
-    \sum_{\zeta\in\Gamma_\varrho}m_{\varrho,\zeta}\frac{\lambda^n\zeta^n}{n},
+    |b_{\varrho,n}|
+    \le
+    C\frac{(\Lambda_\partial/\lambda)^n}{n}.
   \]
-  the remaining coefficients are
-  \(O(\Lambda_\partial^n/n)\).  Dividing by \(\lambda^n\) gives an
-  absolutely summable correction because
-  \(\Lambda_\partial/\lambda<1\).  Thus
+  Hence \(\sum_{n\ge1}|b_{\varrho,n}|<\infty\), because
+  \(\Lambda_\partial/\lambda<1\).  Therefore, for \(0\le t<1\),
   \[
     \Pi_\varrho(t\lambda^{-1})
     =
@@ -406,15 +379,19 @@ determinant, and product steps of the single boundary theorem.
   \(\sum_{n\ge1}\zeta^n t^n/n\to-\Log(1-\zeta)\) exists in the branch
   reached from the origin along \(0\le t<1\).  This proves existence of
   \(R_\varrho\) and the expression
-  \eqref{eq:renormalized-primitive-channel-constant}.  The same
-  decomposition of partial sums gives
+  \eqref{eq:renormalized-primitive-channel-constant}, with the interior
+  correction explicitly given by
+  \[
+    R_{\varrho,\perp}=\sum_{n\ge1}b_{\varrho,n}.
+  \]
+  The same decomposition of partial sums gives
   \eqref{eq:renormalized-channel-partial-sum}; Dirichlet summation gives
   \(\sum_{n>N}\zeta^n/n=O(N^{-1})\) for \(\zeta\ne1\), and the interior tail
   is geometric with size \(O(\Lambda_\partial^N/(N\lambda^N))\).
 
   Apply the class decomposition
   \eqref{eq:class-primitive-coefficients} and substitute
-  \Cref{thm:peripheral-primitive-channel-asymptotic}.  The finite character
+  \Cref{prop:peripheral-primitive-channel-asymptotic-component}.  The finite character
   sum gives the pointwise expansion
   \eqref{eq:renormalized-class-pointwise-expansion}; the coefficient of
   the non-oscillatory harmonic term is exactly
@@ -427,22 +404,24 @@ determinant, and product steps of the single boundary theorem.
   \eqref{eq:renormalized-class-mertens-log}.
 \end{proof}
 
-\begin{proposition}[Fixed-label determinant component of the boundary theorem]
+\begin{remark}[Fixed-label determinant component of the boundary theorem]
   \label{prop:renormalized-fixed-label-determinant-component}
-  Assume the Perron-boundary algebraic multiplicity data above.  For
+  Assume the Perron-boundary algebraic multiplicity data above and fix
+  \(D_{\partial}^{\mathrm{ren}}\) from
+  \eqref{eq:perron-boundary-renormalized-data-local}.  For
   \(\pi\in\Irr(G)\), define the reduced boundary determinant logarithm
   \begin{equation}\label{eq:renormalized-reduced-boundary-log}
-    \mathcal B_\pi^{\mathrm{ren}}
+    \mathcal B_{1,\pi}^{\mathrm{ren}}
     :=
     \lim_{t\uparrow1}
       \left(
-        \Log\det(I-t\lambda^{-1}A_\pi)^{-1}
+        \Log_0\det(I-t\lambda^{-1}A_\pi)^{-1}
         +s_\pi\log(1-t)
       \right).
   \end{equation}
   Equivalently,
   \[
-    \mathcal B_\pi^{\mathrm{ren}}
+    \mathcal B_{1,\pi}^{\mathrm{ren}}
     =
     -\sum_{\substack{\zeta\in\Gamma_\pi\\\zeta\ne1}}
       m_{\pi,\zeta}\Log(1-\zeta)
@@ -457,7 +436,9 @@ determinant, and product steps of the single boundary theorem.
   \((1-t)^{s_\pi}\); if \(1\notin\Gamma_\pi\), it is the ordinary Abel
   boundary value with the non-real peripheral factors retained.
 
-  For every \(\varrho\in\Irr(G)\), define
+  This is the \(k=1\) instance of
+  \Cref{def:perron-boundary-logarithm-convention}.  For every
+  \(\varrho\in\Irr(G)\), define
   \begin{equation}\label{eq:renormalized-fixed-label-def}
     F_\varrho^{\mathrm{ren}}
     :=
@@ -474,26 +455,25 @@ determinant, and product steps of the single boundary theorem.
         a_{\varrho,\pi}^{(m)}\,
         \mathcal B_{rm,\pi}^{\mathrm{ren}},
   \end{equation}
-  where
-  \[
-    \mathcal B_{k,\pi}^{\mathrm{ren}}:=
-    \begin{cases}
-      \mathcal B_\pi^{\mathrm{ren}}, & k=1,\\[3pt]
-      \Log\det(I-\lambda^{-k}A_\pi)^{-1}, & k\ge2.
-    \end{cases}
-  \]
+  where the values \(\mathcal B_{rm,\pi}^{\mathrm{ren}}\) are those of
+  \Cref{def:perron-boundary-logarithm-convention}.  Thus
+  \(\mathcal B_{1,\pi}^{\mathrm{ren}}\),
+  \(\mathcal B_{k,\pi}^{\mathrm{ren}}\), and
+  \(n_\partial\) are part of the branch-normalized input
+  \(D_{\partial}^{\mathrm{ren}}\): the determinant polynomial supplies the
+  factors, while the recorded branches and scalar normalization specify the
+  logarithmic values used below.
   Equivalently, the branch-normalized algorithm is:
   factor \(P_\pi(t/\lambda)\), isolate the factors
   \((1-t\zeta)^{m_{\pi,\zeta}}\) with \(\zeta\in\Gamma_\pi\), cancel the
   \(s_\pi=m_{\pi,1}\) copies of \(1-t\), take the Abel limit along
-  \(0\le t<1\) using the recorded branch of
-  \(\mathfrak b_{\partial}^{\mathrm{ren}}\), and use the ordinary germ value
-  of \(\Log P_\pi(\lambda^{-k})^{-1}\) for \(k\ge2\).  Thus every \(k=1\)
+  \(0\le t<1\) using the recorded \(\Log_0\) branch, and use the ordinary
+  germ value of \(\Log_0 P_\pi(\lambda^{-k})^{-1}\) for \(k\ge2\).  Thus every \(k=1\)
   Perron-boundary block is evaluated by its reduced finite part, every
   \(k\ge2\) term remains an ordinary interior determinant logarithm, and the
   scalar/product normalization is supplied separately by
-  \(\mathfrak n_\partial\).
-\end{proposition}
+  \(n_\partial\).
+\end{remark}
 
 \begin{proof}
   The determinant logarithm decomposes spectrally as
@@ -529,7 +509,7 @@ determinant, and product steps of the single boundary theorem.
   coefficient is \(a_{\varrho,\pi}^{(1)}=\delta_{\varrho\pi}\), so the
   logarithmic singular coefficient is exactly \(s_\varrho\log(1-t)\).
   Adding this term converts the whole \(rm=1\) boundary contribution into
-  \(\mathcal B_\varrho^{\mathrm{ren}}\).  Every \(rm\ge2\) term is inside
+  \(\mathcal B_{1,\varrho}^{\mathrm{ren}}\).  Every \(rm\ge2\) term is inside
   the Perron disc because
   \(\rho(\lambda^{-rm}A_\pi)\le\lambda^{1-rm}<1\).  The \(rm\ge2\) tail is
   dominated directly from the finite-dimensional spectral-radius bound
@@ -568,6 +548,8 @@ determinant, and product steps of the single boundary theorem.
   \(C\subset G\), the sums defining
   \(\delta_C\), \(M_C^{\mathrm{ren}}\), and \(K_C^{\mathrm{ren}}\) are real,
   \(\delta_C\ge0\), and \(K_C^{\mathrm{ren}}>0\).
+  The conjugations are taken with the boundary logarithm convention of
+  \Cref{def:perron-boundary-logarithm-convention}.
 \end{lemma}
 
 \begin{proof}
@@ -629,10 +611,10 @@ determinant, and product steps of the single boundary theorem.
   \(K_C^{\mathrm{ren}}=\exp(\log K_C^{\mathrm{ren}})>0\).
 \end{proof}
 
-\begin{proposition}[Product component of the boundary theorem]
+\begin{remark}[Product component of the boundary theorem]
   \label{prop:renormalized-frobenius-product-component}
-  Under the hypotheses of
-  \Cref{thm:perron-boundary-determinant-product},
+  Under the peripheral algebraic multiplicity hypotheses of
+  \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
   the Frobenius-class Euler product
   \[
     P_C(N):=
@@ -660,7 +642,7 @@ determinant, and product steps of the single boundary theorem.
   \Cref{lem:renormalized-reality-positivity}.
   The exponent \(\delta_C\) is therefore the actual logarithmic density of
   the non-oscillatory Perron boundary, not necessarily \(|C|/|G|\).
-\end{proposition}
+\end{remark}
 
 \begin{proof}
   Taking logarithms gives
@@ -699,7 +681,123 @@ determinant, and product steps of the single boundary theorem.
   By \Cref{lem:renormalized-reality-positivity}, the exponent and constant
   term are real and \(K_C^{\mathrm{ren}}>0\).  Exponentiating with
   \Cref{lem:class-product-log-to-product-error} proves
-  \eqref{eq:renormalized-frobenius-product}.
+  \eqref{eq:renormalized-frobenius-product-component}.
+\end{proof}
+
+\begin{theorem}[Perron-boundary determinant and product theorem]
+  \label{thm:perron-boundary-determinant-product}
+  \label{thm:peripheral-primitive-channel-asymptotic}
+  \label{thm:renormalized-class-mertens}
+  \label{thm:renormalized-fixed-label-determinant}
+  \label{thm:renormalized-frobenius-product}
+  Under the peripheral algebraic multiplicity hypotheses of
+  \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
+  and for the fixed branch-normalized boundary datum
+  \(D_{\partial}^{\mathrm{ren}}\) of
+  \eqref{eq:perron-boundary-renormalized-data-local},
+  the following assertions hold.
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+  \item For every irreducible \(\varrho\in\Irr(G)\),
+  \begin{equation}\label{eq:peripheral-primitive-channel-asymptotic}
+    \pi_{n,\varrho}(A,\tau)
+    =
+    \frac{\lambda^n}{n}
+      \sum_{\zeta\in\Gamma_\varrho}m_{\varrho,\zeta}\zeta^n
+    +
+    O\!\left(\frac{\Lambda_\partial^n}{n}\right).
+  \end{equation}
+  \item The renormalized primitive-channel finite part
+  \[
+    R_\varrho:=
+    \lim_{t\uparrow1}
+      \left(\Pi_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
+  \]
+  exists.  For every conjugacy class \(C\subset G\),
+  \[
+    \delta_C=
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}\chi_\varrho^\ast(C)s_\varrho
+  \]
+  and
+  \begin{equation}\label{eq:perron-boundary-main-class-mertens}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \delta_C\log N+M_C^{\mathrm{ren}}+O(N^{-1}),
+    \qquad
+    M_C^{\mathrm{ren}}=
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)(s_\varrho\gamma+R_\varrho).
+  \end{equation}
+  These constants are real in the class sums, with
+  \(\delta_C\ge0\), by
+  \Cref{lem:renormalized-reality-positivity}.
+  \item The reduced fixed-label Euler transform
+  \[
+    F_\varrho^{\mathrm{ren}}
+    =
+    \lim_{t\uparrow1}
+      \left(F_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
+  \]
+  exists and is evaluated by
+  \begin{equation}\label{eq:perron-boundary-main-fixed-label}
+    F_\varrho^{\mathrm{ren}}
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        \mathcal B_{rm,\pi}^{\mathrm{ren}},
+  \end{equation}
+  where \(k=1\) terms are reduced Perron-boundary finite parts and
+  \(k\ge2\) terms are ordinary interior determinant logarithms, as in
+  \eqref{eq:renormalized-fixed-label-determinant}; these are the
+  \(\mathcal B_{k,\pi}^{\mathrm{ren}}\) values specified by
+  \(D_{\partial}^{\mathrm{ren}}\).
+  \item The Frobenius-class Euler product
+  \[
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP:\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      (1-\lambda^{-|\gamma|})
+  \]
+  satisfies
+  \begin{equation}\label{eq:renormalized-frobenius-product}
+    P_C(N)=K_C^{\mathrm{ren}}N^{-\delta_C}\bigl(1+O(N^{-1})\bigr),
+  \end{equation}
+  with
+  \begin{equation}\label{eq:renormalized-frobenius-product-constant}
+    K_C^{\mathrm{ren}}
+    :=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+        \sum_{\varrho\in\Irr(G)}
+          \chi_\varrho^\ast(C)
+          \bigl(s_\varrho\gamma+F_\varrho^{\mathrm{ren}}\bigr)
+    \right).
+  \end{equation}
+  The exponential is taken of a real number and
+  \(K_C^{\mathrm{ren}}>0\), by
+  \Cref{lem:renormalized-reality-positivity}.
+  Thus \(\delta_C\) is the non-oscillatory Perron-boundary density, not
+  necessarily \(|C|/|G|\).
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  The primitive-channel estimate is recorded with proof in
+  \Cref{prop:peripheral-primitive-channel-asymptotic-component}.  The
+  existence of \(R_\varrho\), the class density, and the summatory class
+  Mertens expansion are recorded in
+  \Cref{prop:renormalized-class-mertens-component}.  The reduced
+  fixed-label determinant formula is recorded in
+  \Cref{prop:renormalized-fixed-label-determinant-component}.  The product
+  asymptotic and positivity of the product constant are recorded in
+  \Cref{prop:renormalized-frobenius-product-component}.  These four
+  component derivations use the same \(D_{\partial}^{\mathrm{ren}}\) data,
+  including the boundary logarithm convention of
+  \Cref{def:perron-boundary-logarithm-convention} and
+  \(n_\partial\), so together they prove the single
+  Perron-boundary theorem.
 \end{proof}
 
 \begin{corollary}[Product-coordinate readout]
@@ -714,13 +812,21 @@ determinant, and product steps of the single boundary theorem.
     -\frac{|G|}{|C|}\log K_C^{\mathrm{ren}}
     \qquad(C\subset G).
   \end{equation}
-  Then
+  Then the product constants determine the shifted fixed-label coordinates:
   \begin{equation}\label{eq:renormalized-coordinate-forward}
     H_C^{\mathrm{ren}}
     =
     \sum_{\pi\in\Irr(G)}
       \chi_\pi^\ast(C)\bigl(s_\pi\gamma+F_\pi^{\mathrm{ren}}\bigr)
     \qquad(C\subset G).
+  \end{equation}
+  The exponent profile determines the boundary multiplicities by the
+  finite Fourier inversion
+  \begin{equation}\label{eq:renormalized-coordinate-s-inverse}
+    s_\pi
+    =
+    \sum_{C\subset G}\delta_C\chi_\pi(C)
+    \qquad(\pi\in\Irr(G)).
   \end{equation}
   Conversely, for every \(\pi\in\Irr(G)\),
   \begin{equation}\label{eq:renormalized-coordinate-inverse}
@@ -741,9 +847,11 @@ determinant, and product steps of the single boundary theorem.
         a_{\pi,\sigma}^{(m)}\,
         \mathcal B_{rm,\sigma}^{\mathrm{ren}}.
   \]
-  Thus the renormalized Frobenius-product constants, after the positive
-  logarithm is fixed, are equivalent to the full renormalized Peter--Weyl
-  fixed-label determinant vector.
+  Thus \((K_C^{\mathrm{ren}})_C\), after the positive logarithm is fixed,
+  together with \((\delta_C)_C\), equivalently with \((s_\pi)_\pi\), recovers
+  the full renormalized Peter--Weyl fixed-label determinant vector.  The
+  positive product constants alone recover only the shifted coordinates
+  \(s_\pi\gamma+F_\pi^{\mathrm{ren}}\).
 \end{corollary}
 
 \begin{proof}
@@ -757,16 +865,40 @@ determinant, and product steps of the single boundary theorem.
         \bigl(s_\pi\gamma+F_\pi^{\mathrm{ren}}\bigr).
   \]
   Multiplying by \(-|G|/|C|\) proves
-  \eqref{eq:renormalized-coordinate-forward}.  The irreducible characters are
+  \eqref{eq:renormalized-coordinate-forward}.  Similarly, the definition of
+  \(\delta_C\) in
+  \Cref{thm:perron-boundary-determinant-product} gives
+  \[
+    \frac{|G|}{|C|}\delta_C
+    =
+    \sum_{\sigma\in\Irr(G)}\chi_\sigma^\ast(C)s_\sigma .
+  \]
+  The irreducible characters are
   an orthonormal basis of the class functions for
   \[
     \langle U,V\rangle_G
     =
     \sum_{C\subset G}\frac{|C|}{|G|}U(C)\overline{V(C)}.
   \]
-  Taking the \(\pi\)-Fourier coefficient of the class function
+  We use the convention fixed after \eqref{eq:class-function-fourier}:
+  the forward basis in the displayed class profiles is
+  \(C\mapsto\chi_\sigma^\ast(C)\), and its Hermitian coefficient is
+  recovered by pairing with the same basis vector.  Written out, the
+  conjugate in the second slot is
+  \(\overline{\chi_\pi^\ast(C)}=\chi_\pi(C)\).  Hence the
+  \(\pi\)-coordinate of the last display is
+  \[
+    \sum_C\frac{|C|}{|G|}
+      \frac{|G|}{|C|}\delta_C\,\chi_\pi(C)
+    =
+    s_\pi,
+  \]
+  which is \eqref{eq:renormalized-coordinate-s-inverse}.
+  The same Hermitian recovery applied to
   \(C\mapsto H_C^{\mathrm{ren}}\) in
-  \eqref{eq:renormalized-coordinate-forward} gives
+  \eqref{eq:renormalized-coordinate-forward} gives, again with
+  \(\chi_\pi(C)=\overline{\chi_\pi^\ast(C)}\) coming from the second
+  slot,
   \[
     \sum_C\frac{|C|}{|G|}
       H_C^{\mathrm{ren}}\chi_\pi(C)
@@ -792,7 +924,7 @@ determinant, and product steps of the single boundary theorem.
   \(F_\varrho(\lambda^{-1})\), the scalar reduced finite part is
   \(\gamma+\log C(A)\), and
   \Cref{thm:perron-boundary-determinant-product}
-  reduce exactly to the strict-gap class Mertens theorem
+  reduces exactly to the strict-gap class Mertens theorem
   \Cref{thm:class-mertens-explicit}, the determinant readout
   \Cref{prop:fixed-label-determinant-perron}, and the product formula
   \Cref{thm:class-euler-product-mertens}.
