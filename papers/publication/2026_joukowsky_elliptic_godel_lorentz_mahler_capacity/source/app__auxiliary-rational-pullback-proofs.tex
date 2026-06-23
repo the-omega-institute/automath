@@ -1,10 +1,43 @@
-\section{Auxiliary Rational-Pullback Proofs}\label{app:auxiliary-rational-pullbacks}
+\section{Auxiliary Rational-Pullback Interface and Proofs}\label{app:auxiliary-rational-pullbacks}
 
-This appendix contains the routine proof infrastructure for the rational-pullback interface in Section~\ref{subsec:auxiliary-rational-pullbacks}.  These arguments justify the lower-truncated kernel notation and the diagonal, branch, and equal-value collision terminology used before the degree-two Joukowsky specialization.
+This appendix contains the routine rational-map infrastructure used by the Joukowsky boundary reduction in Section~\ref{sec:rational-capacity}.  The statements are standard lower-truncated kernel and pushforward facts: nonpolarity of rational images, equality of pullback and pushforward energies, compact-fiber measurable selection, and the finite collision skeleton for \(R=A/B\).  They justify the lower-truncated kernel notation and the diagonal, branch, and equal-value collision terminology used before the degree-two Joukowsky specialization.
+
+\subsection{Auxiliary Lower-Truncated Rational Pullback Interface}\label{subsec:auxiliary-rational-pullbacks}
+
+For compact nonpolar plane sets, logarithmic capacity is the variational supremum of the lower-truncated energy \(I\), and the supremum is attained by a unique equilibrium measure; see the compact-set equilibrium discussion in \citet[Chap.~5, pp.~105--107]{Ransford1995}, or equivalently the classical Frostman equilibrium theorem in Tsuji's terminology \citep[Chap.~III, Secs.~15--17]{Tsuji1959}.  The set-theoretic inputs needed for the rational pullback interface are nonpolarity of rational images, equality of lower-truncated pullback and pushforward energies, and a compact-fiber Borel selector.
+
+These results are only a lower-truncated kernel interface.  They say how the single extended kernel \(\log|R(z)-R(t)|\) may be written using the divided difference \(\Psi_R\), and they identify the diagonal, branch, and off-diagonal equal-value collision sets.  The capacity statement in this layer is the classical variational formula applied after pushforward,
+\[
+\log\operatorname{cap}(R(K))=
+\sup_{\mu\in\mathcal P(K)} I(R_\ast\mu),
+\]
+with equality precisely when \(R_\ast\mu\) is the equilibrium measure of \(R(K)\).  No later argument treats this as an independent rational-capacity theorem; all capacity, Fourier, and Blaschke conclusions in the main text use the Joukowsky specialization.
+
+\begin{lemma}[Nonpolarity is preserved by nonconstant rational images]\label{lem:nonpolar-rational-image}
+Let \(K\subset\CC\) be compact and nonpolar, and let \(R\) be a nonconstant rational map with no pole on \(K\).  Then \(R(K)\) is compact and nonpolar.
+\end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:nonpolar-rational-image}]
 Compactness follows from continuity of \(R\) on \(K\).  Suppose, for a contradiction, that \(R(K)\) is polar.  By the subharmonic characterization of polar sets, in the form complementary to Cartan's theorem \citep[Thm.~3.5.1, p.~65]{Ransford1995}, there is a subharmonic function \(u\not\equiv -\infty\) on a neighbourhood \(V\) of \(R(K)\) such that \(u=-\infty\) on \(R(K)\).  Since \(R\) has no pole on \(K\) and is continuous there, choose an open neighbourhood \(U\) of \(K\), with no component on which \(R\) is constant after discarding components disjoint from \(K\) if necessary, such that \(R\) is holomorphic on \(U\) and \(R(U)\subset V\).  The composition \(u\circ R\) is subharmonic on \(U\) unless it is identically \(-\infty\) on a connected component.  On no component meeting \(K\) can it be identically \(-\infty\): otherwise the open mapping theorem would force \(u\equiv -\infty\) on a nonempty open subset of the domain of \(u\), hence everywhere on the relevant component, contrary to the choice of \(u\).  Thus \(u\circ R\) is a genuine subharmonic function on a neighbourhood of \(K\) and equals \(-\infty\) on \(K\).  This makes \(K\) polar, contradicting the hypothesis.
 \end{proof}
+
+\begin{lemma}[Extended pullback energy equals pushforward energy]\label{lem:extended-pullback-energy-equals-pushforward-energy}
+Let \(X\) be a compact metric space, let \(F:X\to\CC\) be continuous, and let \(\mu\in\mathcal P(X)\).  Define
+\[
+L_F(x,y):=
+\begin{cases}
+\log|F(x)-F(y)|,&F(x)\ne F(y),\\
+-\infty,&F(x)=F(y),
+\end{cases}
+\]
+and let \(\nu=F_\ast\mu\).  If both logarithmic integrals are interpreted by lower truncation, namely as the limit of the kernels \(\max\{\log|\cdot|,-M\}\) as \(M\to\infty\), then
+\[
+\iint_{X\times X}L_F(x,y)\,\dd\mu(x)\dd\mu(y)
+=
+\iint_{F(X)\times F(X)}\log|u-v|\,\dd\nu(u)\dd\nu(v)
+\]
+as an identity in \([-\infty,\infty)\).  In particular the left-hand side is greater than \(-\infty\) if and only if the pushforward logarithmic energy is greater than \(-\infty\).
+\end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:extended-pullback-energy-equals-pushforward-energy}]
 For \(M>0\), put \(h_M(u,v)=\max\{\log|u-v|,-M\}\).  This is a bounded Borel function on the compact set \(F(X)\times F(X)\), with the value \(-M\) on the diagonal.  Since \((F\times F)_\ast(\mu\times\mu)=\nu\times\nu\),
@@ -16,6 +49,14 @@ For \(M>0\), put \(h_M(u,v)=\max\{\log|u-v|,-M\}\).  This is a bounded Borel fun
 As \(M\to\infty\), the kernels \(h_M\) decrease pointwise to the extended logarithmic kernel \(\log|u-v|\), with value \(-\infty\) on the diagonal.  The image \(F(X)\) is compact, so these kernels are bounded above uniformly.  Applying monotone convergence to a fixed upper bound minus the two sides gives equality of the lower-truncated limits.  The final equivalence is the same identity read in the extended real line.
 \end{proof}
 
+\begin{lemma}[Compact-fiber Borel selection]\label{lem:compact-fiber-borel-selection}
+Let \(X\) and \(Y\) be compact metric spaces, equipped with their standard Borel structures, and let \(G\subset X\times Y\) be closed with every vertical section
+\[
+G_x:=\{y\in Y:(x,y)\in G\}
+\]
+nonempty.  Then there is a standard-Borel measurable map \(s:X\to Y\) such that \((x,s(x))\in G\) for every \(x\in X\).  Consequently, for every Borel probability measure \(\nu\) on \(X\), the pushforward \(s_\ast\nu\) is a Borel probability measure on \(Y\).
+\end{lemma}
+
 \begin{proof}[Proof of Lemma~\ref{lem:compact-fiber-borel-selection}]
 This is the compact-valued measurable-selection theorem, equivalently the closed-section uniformization theorem for standard Borel spaces \citep[Theorem~18.13]{Kechris1995}.  For completeness we recall why the hypotheses match that theorem.  Compact metric spaces are Polish and carry their standard Borel structures.  Since \(G\) is closed in \(X\times Y\), its graph is Borel, and for every closed set \(F\subset Y\) the set
 \[
@@ -23,6 +64,24 @@ This is the compact-valued measurable-selection theorem, equivalently the closed
 \]
 is the projection of the compact set \(G\cap(X\times F)\), hence compact and therefore Borel.  Thus \(x\mapsto G_x\) is a Borel multifunction with nonempty compact values.  The measurable-selection theorem gives a Borel selector \(s:X\to Y\) with \(s(x)\in G_x\) for every \(x\in X\), which is precisely \((x,s(x))\in G\).  Since \(s\) is Borel between standard Borel spaces, the image measure \(s_\ast\nu\) is defined on the Borel \(\sigma\)-algebra of \(Y\) and is a probability measure whenever \(\nu\) is one.
 \end{proof}
+
+\begin{lemma}[Bounded-term separation for lower-truncated kernels]\label{lem:lower-truncated-bounded-term-separation}
+Let \(X\) be a compact metric space, let \(L:X\times X\to[-\infty,M]\) be an upper-bounded Borel kernel, and let \(b:X\times X\to\RR\) be bounded and Borel.  For \(N>0\) put
+\[
+L_N:=\max\{L,-N\},
+\qquad
+(L+b)_N:=\max\{L+b,-N\}.
+\]
+Then for every \(\mu\in\mathcal P(X)\),
+\[
+\lim_{N\to\infty}\iint (L+b)_N\,\dd\mu\dd\mu
+=
+\lim_{N\to\infty}\iint L_N\,\dd\mu\dd\mu
++
+\iint b\,\dd\mu\dd\mu
+\]
+as an identity in \([-\infty,\infty)\).  In particular, a symbolic decomposition of a logarithmic pullback kernel into a singular part plus bounded pole terms is legitimate only after lower truncation has been applied to the single extended kernel, and it preserves the distinction between finite and \(-\infty\) energy.
+\end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:lower-truncated-bounded-term-separation}]
 Let \(C=\|b\|_\infty\).  For \(N>C\),
@@ -41,6 +100,29 @@ For almost every point, \(T_N(L+b)-T_N(L)\to b\).  Dominated convergence gives
 which is the asserted identity in the finite case.  Since \(b\) is bounded, the same argument also proves that adding \(b\) cannot turn a finite lower-truncated integral into \(-\infty\), or remove a \(-\infty\) singular-energy contribution.
 \end{proof}
 
+\begin{lemma}[Divided-difference kernel for rational pullbacks]\label{lem:rational-divided-difference-kernel}
+Let \(R=A/B\) be a rational map with coprime \(A,B\in\CC[z]\), and set
+\[
+\Phi_R(z,t):=A(z)B(t)-A(t)B(z).
+\]
+Then \(\Phi_R\) is divisible by \(z-t\) in \(\CC[z,t]\).  The quotient
+\[
+\Psi_R(z,t):=\frac{\Phi_R(z,t)}{z-t}
+\]
+is therefore a polynomial in the two variables and has diagonal value
+\[
+\Psi_R(z,z)=A'(z)B(z)-A(z)B'(z).
+\]
+If \(K\subset\CC\) is compact and \(B\ne0\) on \(K\), then, as lower-truncated extended kernels on \(K\times K\),
+\[
+\log|R(z)-R(t)|
+=
+\log|z-t|+\log|\Psi_R(z,t)|-
+\log|B(z)|-\log|B(t)|,
+\]
+where the right-hand side is notation for the single extended kernel obtained from the rational identity, not an ordinary sum of independently defined logarithms on the collision or branch set.  Thus both sides take the value \(-\infty\) exactly on \(R(z)=R(t)\), and the finite continuous pole terms \(-\log|B(z)|-\log|B(t)|\) may be separated before integration only by the rule of Lemma \ref{lem:lower-truncated-bounded-term-separation}.  Consequently, for every \(\mu\in\mathcal P(K)\), the lower-truncated integral of the displayed pullback kernel is finite if and only if \(R_\ast\mu\) has finite logarithmic energy.
+\end{lemma}
+
 \begin{proof}[Proof of Lemma~\ref{lem:rational-divided-difference-kernel}]
 The polynomial \(\Phi_R\) vanishes identically on the diagonal \(z=t\).  Dividing \(\Phi_R\) by \(z-t\), viewed as a monic polynomial in \(z\) with coefficients in \(\CC[t]\), leaves a remainder depending only on \(t\); evaluating at \(z=t\) shows that this remainder is zero.  Hence \(\Psi_R\in\CC[z,t]\).  Taking the limit as \(t\to z\), equivalently differentiating \(\Phi_R(z,t)\) in the second variable and accounting for the denominator \(z-t\), gives
 \[
@@ -53,6 +135,45 @@ R(z)-R(t)=\frac{A(z)B(t)-A(t)B(z)}{B(z)B(t)}
 \]
 Taking logarithmic absolute values gives the asserted identity away from the collision set.  On the collision set the factor \((z-t)\Psi_R(z,t)\) vanishes and the logarithmic kernel is \(-\infty\); the two terms involving \(B\) remain bounded and continuous on \(K\), because \(B\) has no zeros there.  Thus the equality holds for the single lower-truncated extended kernel, and Lemma \ref{lem:lower-truncated-bounded-term-separation} is exactly the permitted separation of the bounded pole terms from the singular collision terms.  Applying Lemma \ref{lem:extended-pullback-energy-equals-pushforward-energy} to the continuous map \(R:K\to R(K)\) proves the final equivalence of finite energies.
 \end{proof}
+
+\begin{proposition}[Auxiliary lower-truncated pullback-kernel interface]\label{prop:general-rational-image-capacity-pullback}
+Let \(R=A/B\) be a nonconstant rational map, with coprime polynomials \(A,B\in\CC[z]\), and let \(K\subset\CC\) be compact and nonpolar with \(B\ne0\) on \(K\).  All compact sets in this statement, in particular \(K\) and \(R(K)\), are viewed as compact metric spaces with their standard Borel structures.  Put
+\[
+\Psi_R(z,t):=\frac{A(z)B(t)-A(t)B(z)}{z-t}\qquad (z\ne t),
+\]
+and extend this polynomial to the diagonal by
+\[
+\Psi_R(z,z)=A'(z)B(z)-A(z)B'(z).
+\]
+For a Borel probability measure \(\mu\) on \(K\), define the pullback energy by
+\[
+\mathcal E_R(\mu):=\iint_{K\times K}
+\Bigl(\log|z-t|+\log|\Psi_R(z,t)|-\log|B(z)|-\log|B(t)|\Bigr)
+\,\dd\mu(z)\dd\mu(t),
+\]
+where the displayed parenthesis is not a termwise definition of separate singular integrals.  It denotes the single extended kernel \(\log|R(z)-R(t)|\) supplied by Lemma \ref{lem:rational-divided-difference-kernel}, and the integral is the monotone limit of that one kernel truncated below.  In particular, the singular factor \(\log|\Psi_R|\) is never integrated by itself before truncation: near branch or equal-value collisions it is part of the single logarithm of \((z-t)\Psi_R(z,t)/(B(z)B(t))\), and only the bounded continuous pole terms \(-\log|B(z)|-\log|B(t)|\) may be separated after the lower-truncated limit, by Lemma \ref{lem:lower-truncated-bounded-term-separation}.  Equivalently, throughout the extended real line,
+\[
+\mathcal E_R(\mu)=I(R_\ast\mu),
+\]
+where \(I\) denotes lower-truncated logarithmic energy on \(R(K)\).  Thus \(\mathcal E_R(\mu)>-\infty\) exactly when \(R_\ast\mu\) has finite logarithmic energy.  Then
+\[
+\boxed{\;
+\log\operatorname{cap}(R(K))
+=\sup_{\mu\in\mathcal P(K)}\mathcal E_R(\mu)
+=\sup_{\mu\in\mathcal P(K)}I(R_\ast\mu),
+\;}
+\]
+Moreover the maximizers are exactly the lifts whose pushforward is the equilibrium measure \(\nu_{R(K)}\) of \(R(K)\):
+\[
+\mathcal E_R(\mu)=\log\operatorname{cap}(R(K))
+\quad\Longleftrightarrow\quad
+R_\ast\mu=\nu_{R(K)}.
+\]
+Every lift satisfying this pushforward condition has finite pullback energy by Lemma \ref{lem:rational-divided-difference-kernel}, since \(\nu_{R(K)}\) has finite logarithmic energy.
+In particular \(R(K)\) is compact and nonpolar, its equilibrium measure exists, and at least one maximizing lift exists.
+
+The singular sets in the formula have the following explicit interpretation.  The factor \(z-t\) records the ordinary diagonal collision.  The diagonal zeros \(\Psi_R(z,z)=0\) are precisely the finite critical points of \(R\) in the source plane, and their images are the corresponding finite branch values.  The off-diagonal equation \(\Psi_R(z,t)=0\), with \(z\ne t\), is the equal-value collision relation \(R(z)=R(t)\) between two distinct source points.  Equivalently, in local coordinates \(u=z-z_0\), \(v=t-z_0\), an ordinary noncritical diagonal has \(R(z)-R(t)\) equal to \(u-v\) times a holomorphic unit, a critical point of local degree \(e\ge2\) has \(R(z)-R(t)=(u-v)H(u,v)\), where \(H\) has leading homogeneous part a nonzero scalar multiple of \(u^{e-1}+u^{e-2}v+\cdots+v^{e-1}\), and an off-diagonal collision at \((z_0,t_0)\), \(z_0\ne t_0\), is exactly a zero of the remaining factor \(\Psi_R\).  Each of these sets contributes the value \(-\infty\) to the pullback kernel, and any lift with finite pushforward energy gives them zero \(\mu\times\mu\)-mass.
+\end{proposition}
 
 \begin{proof}[Proof of Proposition~\ref{prop:general-rational-image-capacity-pullback}]
 The image \(R(K)\) is compact and nonpolar by Lemma \ref{lem:nonpolar-rational-image}.  Hence its equilibrium measure \(\nu_{R(K)}\) exists and satisfies
@@ -79,6 +200,26 @@ R'(z)=\frac{\Psi_R(z,z)}{B(z)^2}.
 Thus \(z=t\) gives the ordinary diagonal collision, diagonal zeros of \(\Psi_R\) are precisely finite critical points, and off-diagonal zeros of \(\Psi_R\) are precisely distinct equal-value collisions.  The local normal forms in the final sentence are the three alternatives of Lemma \ref{lem:rational-local-collision-classification}.  Since finite-energy of \(R_\ast\mu\) is equivalent to \(\mathcal E_R(\mu)>-\infty\), any admissible lift assigns zero \(\mu\times\mu\)-mass to every subset on which the displayed pullback kernel is \(-\infty\).
 \end{proof}
 
+\begin{corollary}[Finite collision skeleton of the rational pullback]\label{cor:finite-collision-skeleton-rational-pullback}
+In the setting of Proposition \ref{prop:general-rational-image-capacity-pullback}, let
+\[
+d:=\max\{\deg A,\deg B\},
+\]
+the degree of the induced nonconstant map on \(\mathbb P^1\).  For every \(z\in K\), the fiber
+\[
+\{t\in K:R(t)=R(z)\}
+\]
+is finite of cardinal at most \(d\).  More precisely, if \(e_z\) is the local degree of \(R\) at \(z\), then \(t=z\) occurs in the equation
+\[
+A(z)B(t)-A(t)B(z)=0
+\]
+with multiplicity \(e_z\), and the off-diagonal collision points in \(K\) have total multiplicity at most \(d-e_z\).  Thus the singular locus of the pullback kernel on \(K\times K\) is the finite-degree algebraic collision skeleton
+\[
+\{(z,t)\in K^2:z=t\}\cup\{(z,t)\in K^2:\Psi_R(z,t)=0\},
+\]
+whose vertical sections are finite.  Every admissible finite-energy lift in Proposition \ref{prop:general-rational-image-capacity-pullback} assigns this skeleton zero \(\mu\times\mu\)-mass.
+\end{corollary}
+
 \begin{proof}[Proof of Corollary~\ref{cor:finite-collision-skeleton-rational-pullback}]
 Fix \(z\in K\).  Since \(B(z)\ne0\), the equation \(R(t)=R(z)\) on points with \(B(t)\ne0\) is equivalent to
 \[
@@ -96,6 +237,59 @@ R(t)-R(z)=(t-z)^{e_z}U(t),\qquad U(z)\ne0,
 \]
 so \(t=z\) is a zero of \(F_z\) of multiplicity \(e_z\).  The remaining roots, counted with multiplicity, account for all off-diagonal equal-value collisions and have total multiplicity at most \(d-e_z\).  Dividing by \(z-t\) gives the stated description in terms of \(\Psi_R\), with the diagonal retaining precisely the ramification multiplicity beyond the ordinary logarithmic collision.  The final zero-mass assertion is the last assertion of Proposition \ref{prop:general-rational-image-capacity-pullback} applied to this finite-degree skeleton.
 \end{proof}
+
+\begin{theorem}[Auxiliary degree-two pullback-kernel specialization]\label{thm:degree-two-rational-image-capacity}
+Let \(R=A/B\) be a rational map of degree two on \(\mathbb P^1\), with coprime \(A,B\in\CC[z]\), and let \(K\subset\CC\) be compact and nonpolar with \(B\ne0\) on \(K\).  Put
+\[
+\Psi_R(z,t):=\frac{A(z)B(t)-A(t)B(z)}{z-t},
+\qquad
+\Psi_R(z,z)=A'(z)B(z)-A(z)B'(z).
+\]
+Then \(R(K)\) is compact and nonpolar, and
+\[
+\begin{aligned}
+\log\operatorname{cap}(R(K))
+&=
+\sup_{\mu\in\mathcal P(K)}\iint_{K\times K}
+\Bigl(\log|z-t|+\log|\Psi_R(z,t)| \\
+&\hspace{3.5cm}{}-
+\log|B(z)|-\log|B(t)|\Bigr)
+\,\dd\mu(z)\dd\mu(t),
+\end{aligned}
+\]
+where the parenthesis denotes the single lower-truncated pullback kernel \(\log|R(z)-R(t)|\), equivalently the extended energy \(I(R_\ast\mu)\).  Measures for which this value is \(-\infty\) are included in the supremum but cannot maximize it, and the maximizers are exactly the lifts of the equilibrium measure of \(R(K)\):
+\[
+\mathcal E_R(\mu)=\log\operatorname{cap}(R(K))
+\quad\Longleftrightarrow\quad
+R_\ast\mu=\nu_{R(K)}.
+\]
+The collision skeleton is degree two in the following precise sense.  For each \(z\in K\), the section
+\[
+\{t\in K:R(t)=R(z)\}
+\]
+has cardinal at most two.  If \(e_z\in\{1,2\}\) is the local degree of \(R\) at \(z\), then the diagonal point \(t=z\) occurs with multiplicity \(e_z\), and all off-diagonal equal-value collisions in \(K\) have total multiplicity at most \(2-e_z\).  Thus a noncritical source point has at most one off-diagonal partner, while a critical source point has none after multiplicity is counted; the only singularities of the pullback kernel are the ordinary diagonal collision, diagonal branch points \(\Psi_R(z,z)=0\), and this possible single off-diagonal equal-value partner.
+\end{theorem}
+
+\begin{proof}
+The variational identity, the existence of maximizing lifts, and the characterization of all maximizers are Proposition \ref{prop:general-rational-image-capacity-pullback} applied to the present rational map.  Since the degree of \(R\) on \(\mathbb P^1\) is two, the integer \(d\) in Corollary \ref{cor:finite-collision-skeleton-rational-pullback} is \(2\).  That corollary gives, for each fixed \(z\in K\), a finite fiber of total multiplicity at most two; it also identifies the diagonal multiplicity with the local degree \(e_z\) and bounds the remaining off-diagonal multiplicity by \(2-e_z\).  The final description of the singularities is the degree-two specialization of the branch and collision interpretation in Proposition \ref{prop:general-rational-image-capacity-pullback}, together with the local alternatives of Lemma \ref{lem:rational-local-collision-classification}.  This proves the auxiliary degree-two interface.  The later capacity normalization, Fourier deficit, and Blaschke-lift classification are not consequences of a general rational-map theorem alone; they enter only after the explicit Joukowsky specialization in the main text.
+\end{proof}
+
+\begin{lemma}[Local collision classification for the rational pullback kernel]\label{lem:rational-local-collision-classification}
+Let \(R=A/B\) be as in Proposition \ref{prop:general-rational-image-capacity-pullback}, and let \(z_0,t_0\in\CC\) with \(B(z_0)B(t_0)\ne0\).  The singular part of the local pullback kernel near \((z_0,t_0)\) is exhausted by the following three cases.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item If \(z_0=t_0\) and \(R'(z_0)\ne0\), then in a local coordinate \(u=z-z_0\), \(v=t-z_0\),
+\[
+R(z)-R(t)=(u-v)U(u,v)
+\]
+with \(U(0,0)\ne0\).  Hence the only singular term is the ordinary logarithmic collision \(\log|z-t|\).
+\item If \(z_0=t_0\) and \(R\) has local degree \(e\ge2\) at \(z_0\), then
+\[
+R(z)-R(t)=(u-v)H(u,v)
+\]
+where \(H\) has leading homogeneous part a nonzero scalar multiple of \(u^{e-1}+u^{e-2}v+\cdots+v^{e-1}\).  Thus \(z_0\) is a finite critical point, \(R(z_0)\) is the corresponding finite branch value, and the diagonal value \(\Psi_R(z_0,z_0)=0\) records exactly the nontrivial ramification factor beyond the ordinary collision.
+\item If \(z_0\ne t_0\), then \(R(z_0)=R(t_0)\) if and only if \(\Psi_R(z_0,t_0)=0\).  In this case the singularity is an off-diagonal equal-value collision and is not a ramification statement unless one of the two source points is separately critical.
+\end{enumerate}
+\end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:rational-local-collision-classification}]
 Because \(B(z_0)\ne0\), the rational map is holomorphic near \(z_0\).  If \(z_0=t_0\), choose a local coordinate \(u=z-z_0\) and write

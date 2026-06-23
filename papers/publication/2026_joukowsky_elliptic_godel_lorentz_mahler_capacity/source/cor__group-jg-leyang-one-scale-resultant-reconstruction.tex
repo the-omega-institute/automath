@@ -207,14 +207,25 @@ monic normalizations.  The vertices of the two-scale candidate graph
 \[
 \Gamma_{r,s}(Q_r,Q_s)
 \]
-are copied root vertices: the left vertex multiset consists of the
-roots \(\alpha\) of \(\widehat Q_r\), counted with multiplicity, and
-the right vertex multiset consists of the roots \(\beta\) of
-\(\widehat Q_s\), counted with multiplicity.  Put
+are copied root vertices.  Explicitly, write the root divisor of
+\(\widehat Q_r\) as \(\sum_{\alpha}m_r(\alpha)[\alpha]\) and the root
+divisor of \(\widehat Q_s\) as
+\(\sum_{\beta}m_s(\beta)[\beta]\).  The left vertices are the labelled
+copies
+\[
+L_r=\{(\alpha,i):\widehat Q_r(\alpha)=0,\ 1\le i\le m_r(\alpha)\},
+\]
+and the right vertices are the labelled copies
+\[
+R_s=\{(\beta,j):\widehat Q_s(\beta)=0,\ 1\le j\le m_s(\beta)\}.
+\]
+Thus repeated transported roots are not collapsed before the matching
+step; only their copy labels record multiplicity.  Put
 \[
 \Delta_{r,s}:=\frac r s-\frac s r .
 \]
-For each copied pair \((\alpha,\beta)\) define
+For each copied pair \((\alpha,i)\in L_r\) and
+\((\beta,j)\in R_s\), define
 \[
 x(\alpha,\beta):=
 \frac{\alpha/s-\beta/r}{\Delta_{r,s}},
@@ -222,17 +233,34 @@ x(\alpha,\beta):=
 y(\alpha,\beta):=
 \frac{r\beta-s\alpha}{\Delta_{r,s}}.
 \]
-An edge is drawn between the copied vertices \(\alpha\) and \(\beta\)
-exactly when
+An edge is drawn between the copied vertices \((\alpha,i)\) and
+\((\beta,j)\) exactly when
 \[
 x(\alpha,\beta)y(\alpha,\beta)=1.
 \]
+Equivalently, the nonsingular two-scale linear system has recovered
+coordinates \((x,y)\) that are mutual inverses, so the pair
+\((\alpha,\beta)\) can come from a single nonzero source root.  Thus
+the edge condition is a compatibility condition for the two recovered
+coordinates, not an additional algebraic assumption on a source that
+has already been found.
 That edge is labelled by the candidate source root
 \[
 x=x(\alpha,\beta).
 \]
 A perfect matching of \(\Gamma_{r,s}(Q_r,Q_s)\) means a set of \(n\)
 edges covering every copied left and right root vertex exactly once.
+The algorithmic output of the graph construction is the multiset
+\[
+\left\{\sum_{e\in M}[x_e]:
+  M\text{ is a perfect matching of }\Gamma_{r,s}(Q_r,Q_s)\right\},
+\]
+with the final multiset of divisors taken modulo permutations of the
+copy labels over each fixed transported value \(\alpha\) and \(\beta\).
+Consequently two copied perfect matchings that differ only by
+renumbering equal vertices \((\alpha,i)\) or \((\beta,j)\) represent
+the same output divisor, while distinct edge-label multisets represent
+distinct candidate source divisors.
 \end{definition}
 
 \begin{theorem}[Exact two-scale matching inverse]\label{thm:two-scale-matching-inverse}
@@ -249,9 +277,12 @@ divisors whose monic transports are \(\widehat Q_r\) and
 D_M:=\sum_{e\in M}[x_e]
 \]
 obtained from perfect matchings \(M\) of
-\(\Gamma_{r,s}(Q_r,Q_s)\), where \(x_e\) is the edge label.  For such
-a matching the full transport scalar recovered from the source divisor
-is
+\(\Gamma_{r,s}(Q_r,Q_s)\), where \(x_e\) is the edge label.  These
+divisors are listed with the output convention of Definition
+\ref{def:two-scale-candidate-graph}: copied matchings are quotiented
+by permutations of equal transported root labels before the final
+candidate divisor multiset is recorded.  For such a matching the full
+transport scalar recovered from the source divisor is
 \[
 a_0(M)=(-1)^n\prod_{e\in M}x_e .
 \]
@@ -260,7 +291,10 @@ Equivalently, the monic source polynomial
 P_M(z)=\prod_{e\in M}(z-x_e)
 \]
 has nonzero constant term and has monic transports
-\(\widehat Q_r,\widehat Q_s\).
+\(\widehat Q_r,\widehat Q_s\).  In this monic-normalized statement
+there is no further scalar constraint: covering every copied root
+vertex once already makes the transported root multisets agree at both
+scales.
 
 For fully normalized transported data, a monic polynomial \(P\) with
 nonzero constant term has transported polynomials exactly \(Q_r\) and
@@ -305,7 +339,12 @@ u=\frac{r\beta-s\alpha}{\Delta_{r,s}}.
 \]
 Thus the two displayed quantities in Definition
 \ref{def:two-scale-candidate-graph} are forced to be \(z\) and
-\(z^{-1}\), and in particular their product is \(1\).
+\(z^{-1}\), and in particular their product is \(1\).  Conversely,
+for any transported pair \((\alpha,\beta)\), the same Cramer formulas
+are the only possible values of a source coordinate and its inverse;
+therefore the condition \(x(\alpha,\beta)y(\alpha,\beta)=1\) is
+exactly the condition that the recovered coordinates are
+\((z,z^{-1})\) for the single source root \(z=x(\alpha,\beta)\).
 
 Now assume that \(P(z)=\prod_{j=1}^{n}(z-z_j)\), with every
 \(z_j\ne0\), has monic transports \(\widehat Q_r,\widehat Q_s\).  The
@@ -326,9 +365,12 @@ a perfect matching whose divisor is the zero divisor of \(P\).
 Conversely let \(M\) be a perfect matching of
 \(\Gamma_{r,s}(Q_r,Q_s)\), and write its edge labels as \(x_e\).  Since
 each edge satisfies \(x_ey_e=1\), no \(x_e\) is zero and
-\(y_e=x_e^{-1}\).  If the edge \(e\) joins copied vertices
-\(\alpha_e\) and \(\beta_e\), the definitions of \(x_e,y_e\) are the
-solution of the same nonsingular linear system, so substitution back
+\(y_e=x_e^{-1}\).  Thus every edge contributes a well-defined nonzero
+linear source root.  If the edge \(e\) joins copied vertices
+\((\alpha_e,i_e)\) and \((\beta_e,j_e)\), the definitions of
+\(x_e,y_e\) use only the underlying transported values
+\(\alpha_e,\beta_e\) and solve the same nonsingular linear system, so
+substitution back
 gives
 \[
 \alpha_e=rx_e+r^{-1}x_e^{-1},
@@ -640,11 +682,11 @@ Q_r(w)=\sum_{k=0}^{n}A_k(r)w^{n-k},
 \qquad
 A_0(r)=a_0=(-1)^n z_1\cdots z_n\ne0.
 \]
-Assume the exact data are complete coefficient-vector data in one of the two reconstruction models of Definition \ref{def:transport-coefficient-observations}: either the full ordered coefficient vectors \((A_0(r_i),\dots,A_n(r_i))\), or projective ordered coefficient vectors that are first normalized to the monic vectors of \(a_0^{-1}Q_{r_i}\) by dividing by their nonzero leading entries.  Then the following inverse statements hold.
+Assume the exact data are complete coefficient-vector data in one of the two reconstruction models of Definition \ref{def:transport-coefficient-observations}: either the full ordered coefficient vectors \((A_0(r_i),\dots,A_n(r_i))\), or projective ordered coefficient vectors that are first normalized to the monic vectors of \(a_0^{-1}Q_{r_i}\) by dividing by their nonzero leading entries.  No inverse assertion in this theorem is made from partial coefficient lists, point evaluations, moments, finite samples of a measure, or noisy data unless those observations have first been converted exactly into one of these complete coefficient-vector inputs.  The multiscale sharpness assertion in this theorem is only a sharpness statement for unrestricted parity-supported Laurent coefficient interpolation, not a lower-bound claim for source recovery in every algebraically constrained source class.  Then the following inverse statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item \leavevmode\par\noindent\textbf{Multiscale Laurent interpolation.}
 
-  If \(r_0,\dots,r_n>1\) are distinct and exact complete coefficient-vector data are observed at these scales, then \(P\) is reconstructed uniquely by the full or monic normalization algorithm of Lemma \ref{lem:full-monic-multiscale-normalization}.  Equivalently, the coefficient \(A_k(r)\) of \(w^{n-k}\) lies in the parity-supported Laurent span \(r^k,r^{k-2},\dots,r^{-k}\), and its top Laurent coefficient recovers \((-1)^ka_0e_k(z_1,\dots,z_n)\) in the full normalization and \((-1)^ke_k(z_1,\dots,z_n)\) in the monic normalization.  The uniform budget \(n+1\) is sufficient and is sharp for unrestricted parity-supported Laurent coefficient interpolation; no stronger lower bound is asserted for every algebraically constrained subfamily of source polynomials.
+  If \(r_0,\dots,r_n>1\) are distinct and exact complete coefficient-vector data are observed at these scales, then \(P\) is reconstructed uniquely by the full or monic normalization algorithm of Lemma \ref{lem:full-monic-multiscale-normalization}.  Equivalently, the coefficient \(A_k(r)\) of \(w^{n-k}\) lies in the parity-supported Laurent span \(r^k,r^{k-2},\dots,r^{-k}\), and its top Laurent coefficient recovers \((-1)^ka_0e_k(z_1,\dots,z_n)\) in the full normalization and \((-1)^ke_k(z_1,\dots,z_n)\) in the monic normalization.  The uniform budget \(n+1\) is sufficient for this coefficient-vector inverse and is sharp for coefficient interpolation, not claimed sharp for every algebraically constrained source class.
 
   \item \textbf{One-scale resonance fibers.}  Fix one scale \(r>1\), and let \(\tau_r(z)=r^{-2}/z\).  The full one-scale fiber, including repeated roots, overlapping reflected pairs, and the fixed critical points \(z=\pm r^{-1}\), is the \(\tau_r\)-orbit matching set described in Lemma \ref{lem:one-scale-orbit-fiber-matching}: a competitor must preserve the total multiplicity on every \(\tau_r\)-orbit and must preserve the product of all source roots.  Equivalently, on each two-point orbit \(O=\{x,\tau_r(x)\}\) with total multiplicity \(N_O\), a competitor chooses an integer \(c_O\in\{0,\dots,N_O\}\) as the multiplicity at \(x\), while a one-point fixed orbit \(x=\tau_r(x)\) has no choice.  These choices are allowed exactly when
   \[
@@ -705,11 +747,11 @@ This number is sharp for that unrestricted vector space, because evaluation at o
 \end{remark}
 
 \begin{theorem}[Exact one-scale unit-circle zero inverse theorem from an exact complete coefficient vector]\label{thm:leyang-single-scale-reconstruction}
-Fix an exact real number \(r>1\).  Let \(\mathcal L\) be the class of all monic polynomials \(P\in\CC[z]\) of positive degree with every zero on \(\TT\), counted with multiplicity.  For \(P\in\mathcal L\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}.  Then the one-scale transport map
+Fix an exact real number \(r>1\).  Let \(\mathcal L\) be the class of all monic polynomials \(P\in\CC[z]\) of positive degree with every zero on \(\TT\), counted with multiplicity.  For \(P\in\mathcal L\), let \(Q_r(P)\), known as a complete exact coefficient vector, be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}.  Then the one-scale transport map
 \[
-\mathcal T_r:\ P\longmapsto Q_r
+\mathcal T_r:\ P\longmapsto Q_r(P)
 \]
-is injective on \(\mathcal L\), and the original source is recovered from \((r,Q_r)\) by the shell selection of Proposition \ref{prop:exact-shell-reconstruction}.
+is injective on \(\mathcal L\), and the original source is recovered from the exact pair \((r,Q_r(P))\) by the shell selection of Proposition \ref{prop:exact-shell-reconstruction}.  The unit-circle hypothesis \(P\in\mathcal L\) is essential to this one-scale collapse; outside it, the complete one-scale fiber is the finite orbit-redistribution fiber described in Theorem \ref{thm:algebraic-mahler-transport-inverse}\textup{(ii)}.
 \end{theorem}
 
 \begin{proof}
@@ -730,7 +772,7 @@ Consequently the annular shell selection below is not an additional hypothesis: 
 The first sentence is exactly the fiber classification in Theorem \ref{thm:algebraic-mahler-transport-inverse}\textup{(ii)}.  The same theorem, part \textup{(iii)}, proves that if the original divisor lies on \(\TT\), then no nontrivial redistribution inside the reflected orbits can both preserve the transport polynomial and keep the source-root product required by the normalization; hence the only unit-circle divisor in the fiber is \(D\) itself.  In the separated simple-root case the reflected choices are indexed by subsets \(S\).  If \(S\ne\varnothing\), then \(|\prod_{j\in S}z_j^2|=1\), whereas \(|r^{-2|S|}|=r^{-2|S|}<1\), so the resonance equation cannot hold.  The shell-selection statement is Corollary \ref{cor:leyang-annular-shell-projection}: any radius \(\rho\) with \(r^{-2}<\rho<1\) separates the forced outer unit-circle roots from their reflected inner partners, so the unique outer monic factor is precisely \(P\).
 \end{proof}
 
-\begin{corollary}[Annular shell projection]\label{cor:leyang-annular-shell-projection}
+\begin{corollary}[Annular shell projection for exact unit-circle data]\label{cor:leyang-annular-shell-projection}
 Under the hypotheses of Theorem \ref{thm:leyang-single-scale-reconstruction}, let \(\rho\) be any real number satisfying
 \[
 r^{-2}<\rho<1.
@@ -786,7 +828,7 @@ Rouch\'e's theorem on \(|z|=R\) gives the same number of zeros for \(\widetilde 
 \end{proof}
 
 The next theorem is the core annular-divisor stability interface used in the inverse section.  It supplies the analytic perturbation step that is later coupled to the exact capacity scale and the exact unit-circle shell factorization in the fixed-scale recognition statements.  The result is local: exact recognition from complete coefficient-vector data first supplies the model pair \((r,P)\); after that model and the separating contours are fixed, the number \(\Delta(r,P;\rho_-,\rho_+)\) gives a Rouch\'e radius inside which the annular divisor persists.  The analytic input is Rouch\'e's theorem in its usual zero-counting form for a contour and its interior \citep[pp.~152--153]{Ahlfors1979}.  The unperturbed polynomial
-\(S_r(z)=z^nQ_r(J_r(z))\) has one zero shell on \(|z|=r^{-2}\) and one on \(|z|=1\).  The inner contour \(\Gamma_-\) surrounds the reflected shell, the middle contour \(\Gamma_+\) separates it from the unit-circle shell, and the outer contour \(\Gamma_0\) encloses both shells while preventing degree loss at infinity.  A perturbation whose pullback is smaller than the displayed Rouch\'e envelope on these three contours therefore preserves the annular divisor in \(\rho_+<|z|<\rho_+^{-1}\); this divisor is the canonical source factor associated with the perturbed transported polynomial.
+\(S_r(z)=z^nQ_r(J_r(z))\) has one zero shell on \(|z|=r^{-2}\) and one on \(|z|=1\).  The inner contour \(\Gamma_-\) surrounds the reflected shell, the middle contour \(\Gamma_+\) separates it from the unit-circle shell, and the outer contour \(\Gamma_0\) encloses both shells while preventing degree loss at infinity.  A perturbation whose pullback is smaller than the displayed Rouch\'e envelope on these three contours therefore preserves the annular divisor in \(\rho_+<|z|<\rho_+^{-1}\); this divisor is the contour-selected source factor associated with the perturbed transported polynomial and is not intrinsic before \((r,P,\rho_-,\rho_+)\) are fixed.
 
 \begin{theorem}[Core quantitative annular-divisor Rouch\'e stability]\label{thm:quantitative-annular-rouche-stability}
 Let \(P\in\CC[z]\) be a monic polynomial of degree \(n\ge1\), all of whose zeros lie on \(\TT\), let \(r>1\), let \(Q_r\) be its transport polynomial from Definition \ref{def:reciprocal-transport-normalization}, and define
@@ -820,9 +862,13 @@ then \(\widetilde S(z):=z^n\widetilde Q(J_r(z))\) is in fact a degree-\(2n\) pol
 \[
 \rho_+<|z|<\rho_+^{-1}
 \]
-and no zeros on any of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\).  The monic degree-\(n\) polynomial formed from the zeros in \(\rho_+<|z|<\rho_+^{-1}\) is the unique canonical annular factor associated with \(\widetilde Q\).  For \(\widetilde Q=Q_r\) this factor is exactly \(P\).
+and no zeros on any of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\).  The monic degree-\(n\) polynomial formed from the zeros in \(\rho_+<|z|<\rho_+^{-1}\) is denoted
+\[
+P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P).
+\]
+It is the unique contour-selected annular factor associated with \(\widetilde Q\) after the model \((r,P)\) and contours \((\rho_-,\rho_+)\) have been fixed.  For \(\widetilde Q=Q_r\) this factor is exactly \(P\).
 
-The canonical factor is quantitatively stable in the following local sense.  Write the zero divisor of \(P\) as \(\sum_{a\in Z(P)}m_a[a]\), where \(Z(P)\) is the finite set of distinct zeros.  Let \(U_a\) \((a\in Z(P))\) be pairwise disjoint Jordan domains whose closures lie in \(\rho_+<|z|<\rho_+^{-1}\), with \(a\in U_a\) and with no zero of \(P\) other than \(a\) in \(U_a\).  Put
+The contour-selected factor is quantitatively stable in the following local sense.  Write the zero divisor of \(P\) as \(\sum_{a\in Z(P)}m_a[a]\), where \(Z(P)\) is the finite set of distinct zeros.  Let \(U_a\) \((a\in Z(P))\) be pairwise disjoint Jordan domains whose closures lie in \(\rho_+<|z|<\rho_+^{-1}\), with \(a\in U_a\) and with no zero of \(P\) other than \(a\) in \(U_a\).  Put
 \[
 \Delta_{\mathcal U}(r,P)
 :=\frac12\min_{a\in Z(P)}\inf_{z\in\partial U_a}|S_r(z)|>0.
@@ -832,11 +878,11 @@ If, in addition,
 \sup_{z\in\bigcup_{a\in Z(P)}\partial U_a}
 \left|z^n\widetilde Q(J_r(z))-S_r(z)\right|<\Delta_{\mathcal U}(r,P),
 \]
-then the canonical annular factor \(\widetilde P_{\rm ann}(z)=\prod_{j=1}^{n}(z-\widetilde z_j)\) has exactly \(m_a\) zeros in each \(U_a\).  Consequently, if the domains are chosen so that \(U_a\subset\{|z-a|<\eta\}\) for all \(a\in Z(P)\), then the zeros can be labelled against the zeros \(z_1,\dots,z_n\) of \(P\) so that \(|\widetilde z_j-z_j|<\eta\) for every \(j\).  Writing
+then \(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P)(z)=\prod_{j=1}^{n}(z-\widetilde z_j)\) has exactly \(m_a\) zeros in each \(U_a\).  Consequently, if the domains are chosen so that \(U_a\subset\{|z-a|<\eta\}\) for all \(a\in Z(P)\), then the zeros can be labelled against the zeros \(z_1,\dots,z_n\) of \(P\) so that \(|\widetilde z_j-z_j|<\eta\) for every \(j\).  Writing
 \[
 P(z)=z^n+\sum_{k=1}^{n}p_k z^{n-k},
 \qquad
-\widetilde P_{\rm ann}(z)=z^n+\sum_{k=1}^{n}\widetilde p_k z^{n-k},
+P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P)(z)=z^n+\sum_{k=1}^{n}\widetilde p_k z^{n-k},
 \]
 one has the explicit coefficient estimate
 \[
@@ -848,9 +894,9 @@ After the model \((r,P)\) and the three contours have been selected, the theorem
 \end{theorem}
 
 \begin{proof}
-The zeros of \(S_r\) are on \(|z|=r^{-2}\) and \(|z|=1\), so none of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\) meets the zero set.  Hence the three infima in the definition of \(\Delta\) are positive.  On each contour the perturbation is strictly smaller than \(|S_r|\), so Rouch\'e's theorem implies that \(\widetilde S\) and \(S_r\) have the same number of zeros in the disks bounded by these contours.  The outer contour case is exactly Lemma \ref{lem:outer-rouche-prevents-degree-loss} with \(R=\rho_+^{-1}\), since all zeros of \(S_r\) lie in \(|z|<\rho_+^{-1}\); therefore \(\widetilde S\) is degree \(2n\) and the count on \(\Gamma_0\) is a finite zero count rather than a count with missing zeros at infinity.  Thus \(\widetilde S\) has \(n\) zeros in \(|z|<\rho_-\), \(n\) zeros in \(|z|<\rho_+\), and \(2n\) zeros in \(|z|<\rho_+^{-1}\).  Therefore no zeros lie in \(\rho_-<|z|<\rho_+\), and exactly \(n\) zeros lie in \(\rho_+<|z|<\rho_+^{-1}\).  A finite zero divisor determines a unique monic polynomial, so those \(n\) annular zeros define a unique canonical annular factor.  In the unperturbed case the annular zeros are precisely the zeros of \(P\).
+The zeros of \(S_r\) are on \(|z|=r^{-2}\) and \(|z|=1\), so none of \(\Gamma_-\), \(\Gamma_+\), or \(\Gamma_0\) meets the zero set.  Hence the three infima in the definition of \(\Delta\) are positive.  On each contour the perturbation is strictly smaller than \(|S_r|\), so Rouch\'e's theorem implies that \(\widetilde S\) and \(S_r\) have the same number of zeros in the disks bounded by these contours.  The outer contour case is exactly Lemma \ref{lem:outer-rouche-prevents-degree-loss} with \(R=\rho_+^{-1}\), since all zeros of \(S_r\) lie in \(|z|<\rho_+^{-1}\); therefore \(\widetilde S\) is degree \(2n\) and the count on \(\Gamma_0\) is a finite zero count rather than a count with missing zeros at infinity.  Thus \(\widetilde S\) has \(n\) zeros in \(|z|<\rho_-\), \(n\) zeros in \(|z|<\rho_+\), and \(2n\) zeros in \(|z|<\rho_+^{-1}\).  Therefore no zeros lie in \(\rho_-<|z|<\rho_+\), and exactly \(n\) zeros lie in \(\rho_+<|z|<\rho_+^{-1}\).  A finite zero divisor determines a unique monic polynomial, so those \(n\) annular zeros define the unique contour-selected annular factor \(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P)\).  In the unperturbed case the annular zeros are precisely the zeros of \(P\).
 
-For the local stability statement, the boundaries \(\partial U_a\) are compact and avoid the zero set of \(S_r\), while each \(U_a\) contains exactly the multiplicity \(m_a\) zero of \(S_r\) at \(a\).  Hence \(\Delta_{\mathcal U}(r,P)>0\).  The additional perturbation bound and Rouch\'e's theorem on every \(\partial U_a\) show that \(\widetilde S\) has exactly \(m_a\) zeros in \(U_a\), counted with multiplicity.  These zeros are among the annular zeros already selected, because every \(\overline{U_a}\) lies inside \(\rho_+<|z|<\rho_+^{-1}\), and their total number is \(\sum_a m_a=n\); therefore they are precisely the zeros of \(\widetilde P_{\rm ann}\).  If \(U_a\subset\{|z-a|<\eta\}\), label the \(m_a\) zeros in \(U_a\) against the \(m_a\) copies of the zero \(a\) of \(P\).  This gives \(|\widetilde z_j-z_j|<\eta\).  Since \(|z_j|=1\), the labelled zeros satisfy \(|\widetilde z_j|\le1+\eta\).  For each subset \(I\) of cardinality \(k\), the telescoping identity gives
+For the local stability statement, the boundaries \(\partial U_a\) are compact and avoid the zero set of \(S_r\), while each \(U_a\) contains exactly the multiplicity \(m_a\) zero of \(S_r\) at \(a\).  Hence \(\Delta_{\mathcal U}(r,P)>0\).  The additional perturbation bound and Rouch\'e's theorem on every \(\partial U_a\) show that \(\widetilde S\) has exactly \(m_a\) zeros in \(U_a\), counted with multiplicity.  These zeros are among the annular zeros already selected, because every \(\overline{U_a}\) lies inside \(\rho_+<|z|<\rho_+^{-1}\), and their total number is \(\sum_a m_a=n\); therefore they are precisely the zeros of \(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widetilde Q;r,P)\).  If \(U_a\subset\{|z-a|<\eta\}\), label the \(m_a\) zeros in \(U_a\) against the \(m_a\) copies of the zero \(a\) of \(P\).  This gives \(|\widetilde z_j-z_j|<\eta\).  Since \(|z_j|=1\), the labelled zeros satisfy \(|\widetilde z_j|\le1+\eta\).  For each subset \(I\) of cardinality \(k\), the telescoping identity gives
 \[
 \left|\prod_{j\in I}\widetilde z_j-
 \prod_{j\in I}z_j\right|
@@ -886,7 +932,7 @@ If the coefficient errors satisfy
 <
 \frac{\Delta(r,P;\rho_-,\rho_+)}{\mathfrak B_n(r;\rho_-,\rho_+)},
 \]
-then \(\widehat S(z):=z^n\widehat Q(J_r(z))\) satisfies the Rouch\'e envelope in Theorem \ref{thm:quantitative-annular-rouche-stability}.  Consequently \(\widehat Q\) has a unique canonical annular factor of degree \(n\), and for \(\widehat Q=Q_r\) this factor is exactly \(P\).  More generally, the same conclusion holds under the weighted \(\ell^1\) coefficient condition
+then \(\widehat S(z):=z^n\widehat Q(J_r(z))\) satisfies the Rouch\'e envelope in Theorem \ref{thm:quantitative-annular-rouche-stability}.  Consequently, after the model \((r,P)\) and contours \((\rho_-,\rho_+)\) have been fixed, \(\widehat Q\) has the unique contour-selected annular factor \(P_{\mathrm{ann}}^{\rho_-,\rho_+}(\widehat Q;r,P)\) of degree \(n\); for \(\widehat Q=Q_r\) this factor is exactly \(P\).  More generally, the same conclusion holds under the weighted \(\ell^1\) coefficient condition
 \[
 \max_{z\in\Gamma_-\cup\Gamma_+\cup\Gamma_0}
 |z|^n\sum_{\ell=0}^{n}|\widehat b_\ell-b_\ell|\,|J_r(z)|^\ell
