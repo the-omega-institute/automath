@@ -210,12 +210,52 @@ $256$.
 
 \section{Doob--Bregman domain closure}\label{app:doob-bregman-domain}
 
-This appendix contains the analytic domain argument behind
-Corollary~\ref{cor:poisson-kl-doob-bregman-tail}.  The main text isolates the
-algebraic two-point identity in Lemma~\ref{lem:doob-bregman-algebra}; the
-statements below supply the cutoff limits, compact quotient range, and
-range-local convex approximation needed to apply that algebra to the Poisson
-comparison quotient.
+This appendix contains the Doob-transform and domain-closure material behind
+the KL tail identity, Theorem~\ref{thm:poisson-kl-doob-tail}.  The main text
+uses only the specialization \(\Phi(s)=s\log s\).  The statements below record
+the algebraic two-point identity, cutoff limits, compact quotient range, and
+range-local convex approximation needed for the full Doob--Bregman identity.
+
+\begin{lemma}[Two-point Bregman algebra for the Doob derivative]%
+\label{lem:doob-bregman-algebra}
+Let $g_x,g_y>0$ and $u_x,u_y>0$.  Let
+$\Phi\in C^1((0,\infty))$, set
+\[
+G(u):=\Phi(u)-u\Phi'(u),
+\qquad
+D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b).
+\]
+Then
+\begin{equation}\label{eq:doob-bregman-algebra}
+\begin{split}
+&(g_xu_x-g_yu_y)\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)
+ +(g_x-g_y)\bigl(G(u_x)-G(u_y)\bigr)
+\\
+&\qquad
+=g_xD_\Phi(u_x,u_y)+g_yD_\Phi(u_y,u_x).
+\end{split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Collect the $g_x$ and $g_y$ coefficients separately.  The coefficient of
+$g_x$ on the left of \eqref{eq:doob-bregman-algebra} is
+\[
+u_x\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)+G(u_x)-G(u_y).
+\]
+Substituting $G(u)=\Phi(u)-u\Phi'(u)$ gives
+\[
+\Phi(u_x)-\Phi(u_y)-\Phi'(u_y)(u_x-u_y)
+=D_\Phi(u_x,u_y).
+\]
+The coefficient of $g_y$ is
+\[
+-u_y\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)-G(u_x)+G(u_y)
+=\Phi(u_y)-\Phi(u_x)-\Phi'(u_x)(u_y-u_x)
+=D_\Phi(u_y,u_x).
+\]
+This proves the identity.  No analytic domain assertion enters this step.
+\end{proof}
 
 \begin{lemma}[Cutoff justification for the Cauchy Doob calculus]%
 \label{lem:cauchy-doob-cutoff-calculus}
@@ -366,6 +406,153 @@ The integrand has a finite principal-value limit because near $y=x$ the
 linear part contributes an odd kernel and the remaining term is bounded,
 while away from $x$ it is integrable.  Letting $\rho\downarrow0$ gives
 \eqref{eq:cutoff-doob-product-rule}.
+\end{proof}
+
+\begin{theorem}[Non-autonomous Doob transform]%
+\label{thm:poisson-doob-phi-entropy}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
+finite centred second moment.  For $t>0$ define
+\[
+h_t:=P_t*\nu,
+\qquad
+g_t(x):=P_t(x-\bar\gamma),
+\qquad
+u_t(x):=\frac{h_t(x)}{g_t(x)}.
+\]
+Let
+\[
+(Lf)(x):=\frac{1}{\pi}\operatorname{p.v.}\int_{\RR}
+\frac{f(y)-f(x)}{(x-y)^2}\dd y
+\]
+be the one-dimensional Cauchy generator, and set
+\begin{equation}\label{eq:doob-generator-definition}
+(\mathcal L_t f)(x)
+:=\frac{1}{g_t(x)}\bigl(L(g_tf)(x)-f(x)Lg_t(x)\bigr).
+\end{equation}
+For the displayed formulae below the domain of \(\mathcal L_t\) is the class
+of bounded \(C^2\) functions with bounded first and second derivatives; the
+Green identity is asserted on \(C_c^\infty(\RR)\).  The cutoff interpretation
+is the one fixed in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.  Then the
+following assertions hold.
+\begin{enumerate}[label=(\roman*)]
+\item
+      The function $u_t$ is bounded and belongs to $C^\infty(\RR)$ for
+      every $t>0$.  More precisely, for every $a>0$ and every $t\ge a$,
+      \[
+      \frac{1}{2(1+\mu_2/a^2)}
+      \le u_t(x)\le
+      2+\frac{2\mu_2}{a^2},
+      \qquad
+      \mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma).
+      \]
+      Moreover,
+      \begin{equation}\label{eq:quotient-flow-equation}
+      \partial_tu_t=\mathcal L_tu_t
+      \qquad\text{on }\RR\times(0,\infty),
+      \end{equation}
+      and \eqref{eq:doob-generator-definition} may be written explicitly
+      as
+      \begin{equation}\label{eq:doob-generator-kernel}
+      (\mathcal L_tf)(x)
+      =\frac{1}{\pi g_t(x)}\operatorname{p.v.}\int_{\RR}
+      \frac{g_t(y)\bigl(f(y)-f(x)\bigr)}{(x-y)^2}\dd y.
+      \end{equation}
+\item
+      For every $f,\psi\in C_c^\infty(\RR)$ one has the weighted Green
+      identity
+      \begin{equation}\label{eq:doob-green-identity}
+      \begin{split}
+      \int_{\RR}f(x)(\mathcal L_t\psi)(x)\,g_t(x)^2\dd x
+      &=
+      -\frac{1}{2\pi}
+      \iint_{\RR^2}
+      \frac{g_t(x)g_t(y)}{(x-y)^2}
+      \\
+      &\qquad\qquad\times
+      \bigl(f(x)-f(y)\bigr)\bigl(\psi(x)-\psi(y)\bigr)\dd x\dd y.
+      \end{split}
+      \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For $t>0$ the functions $h_t$ and $g_t$ are positive and belong to
+$C^\infty(\RR)$, because they are obtained by convolving the smooth
+Poisson kernel with a probability measure.  Write
+$\Delta=\gamma-\bar\gamma$, $x=\bar\gamma+ty$, and
+$\varepsilon=\Delta/t$.  Then
+\[
+u_t(x)=\int_{\RR}R_{\Delta/t}(y)\dd\nu(\gamma),
+\qquad
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2}.
+\]
+The elementary estimate
+\[
+1+y^2=1+\bigl((y-\varepsilon)+\varepsilon\bigr)^2
+\le 2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2
+\]
+gives
+\[
+0<R_\varepsilon(y)\le 2+2\varepsilon^2
+\qquad(y,\varepsilon\in\RR),
+\]
+and therefore
+\[
+0<u_t(x)\le 2+\frac{2\mu_2}{t^2},
+\qquad
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma).
+\]
+Likewise,
+\[
+1+(y-\varepsilon)^2
+\le 2\bigl(1+y^2\bigr)+2\varepsilon^2
+\le 2(1+\varepsilon^2)(1+y^2),
+\]
+so
+\[
+R_\varepsilon(y)\ge \frac{1}{2(1+\varepsilon^2)}
+\qquad(y,\varepsilon\in\RR).
+\]
+Hence
+\[
+u_t(x)\ge \frac12\int_{\RR}\frac{1}{1+(\Delta/t)^2}\dd\nu(\gamma)
+\ge \frac{1}{2(1+\mu_2/t^2)},
+\]
+where the last inequality follows from Jensen's inequality applied to the
+convex function $s\mapsto(1+s)^{-1}$ on $[0,\infty)$.  Thus $u_t$ is
+bounded for every fixed $t>0$.
+
+By Proposition~\ref{prop:poisson-semigroup-law},
+$\partial_t h_t=-|D|h_t$ and $\partial_t g_t=-|D|g_t$.  The cutoff
+calculus of Lemma~\ref{lem:cauchy-doob-cutoff-calculus} identifies these
+derivatives with $Lh_t$ and $Lg_t$ in the principal-value sense and permits
+the product-rule passage below.  Since $h_t=u_tg_t$ and $g_t(x)>0$,
+\[
+\partial_tu_t(x)
+=\frac{Lh_t(x)-u_t(x)Lg_t(x)}{g_t(x)}.
+\]
+Substituting $h_t=u_tg_t$ in
+\eqref{eq:cutoff-doob-product-rule} yields
+\[
+\partial_tu_t(x)
+=\frac{1}{\pi g_t(x)}\operatorname{p.v.}\int_{\RR}
+\frac{g_t(y)\bigl(u_t(y)-u_t(x)\bigr)}{(x-y)^2}\dd y.
+\]
+This is \eqref{eq:quotient-flow-equation} and proves
+\eqref{eq:doob-generator-kernel}; part~\textup{(i)} follows.
+
+For part~\textup{(ii)}, let $f,\psi\in C_c^\infty(\RR)$.  The truncated
+integrals in Lemma~\ref{lem:cauchy-doob-cutoff-calculus} justify using
+\eqref{eq:doob-generator-kernel} under the outer integral, and hence
+\[
+\int_{\RR}f(x)(\mathcal L_t\psi)(x)\,g_t(x)^2\dd x
+=
+\frac{1}{\pi}\iint_{\RR^2}
+\frac{f(x)g_t(x)g_t(y)\bigl(\psi(y)-\psi(x)\bigr)}
+{(x-y)^2}\dd x\dd y.
+\]
+Interchanging $x$ and $y$ in the same integral and averaging the two
+representations gives \eqref{eq:doob-green-identity}.
 \end{proof}
 
 \begin{lemma}[Compact quotient range and Bregman integrability]%

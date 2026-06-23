@@ -1,4 +1,4 @@
-\subsection{Hardy splitting and the auxiliary lattice projection}
+\subsection{Hardy splitting and the integer-orbit projection}
 
 \begin{proposition}[Classical Hardy splitting of the Poisson strip model]%
 \label{prop:poisson-hardy-splitting}
@@ -98,48 +98,56 @@ which proves \eqref{eq:hardy-splitting-kernels}.  Adding the two kernels
 on the real axis yields \eqref{eq:hardy-splitting-real-kernel}.
 \end{proof}
 
-We next record the only auxiliary scaled-lattice calculation used later.  Its
-purpose is not to introduce a separate sampling theory, but to derive the
-closed Poisson weight and orthogonal projection formula that will be specialized
-immediately to the integer orbit; the reconstruction result used in the paper is
-the integer specialization in
-Corollary~\ref{cor:integer-orbit-projection}, the quotient
-Proposition~\ref{prop:integer-orbit-scoped-quotient}, and the Poisson
-observation theorem which follows them.  The general principal
-shift-invariant-space mechanism is the background framework
-\cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}; in the present
-model both the periodized weight and the projector can be written in closed
-form.
+We next record the integer-orbit projection theorem used later.  This is the
+only lattice projection needed for the observation-channel result.  We do not
+introduce a variable spacing: throughout this subsection the lattice is
+\(\ZZ\).  The calculation fixes the periodized Poisson weight, the symbol
+\(\sigma\), and the orthogonal projection onto the closed span of the integer
+kernel orbit.
 
-\begin{lemma}[Auxiliary \(h\ZZ\) calculation for the integer orbit]%
+\begin{lemma}[Integer projection for the Poisson strip kernel]%
 \label{lem:auxiliary-uniform-lattice-projection}
-Let $h>0$.  This auxiliary statement is used in the sequel only through its
-integer specialization $h=1$, which gives the projection and quotient package
-for the Poisson observation channel.  Set
+Set
 \[
-I_h:=\Bigl[-\frac{\pi}{h},\frac{\pi}{h}\Bigr],
+I:=[-\pi,\pi],
 \qquad
-\Sigma_h(\xi):=\sum_{m\in\ZZ}e^{-2\abs{\xi+2\pi m/h}}
-\qquad(\xi\in I_h).
+\Sigma_1(\theta):=\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}}
+\qquad(\theta\in I).
 \]
-Then
+For
+\[
+K(a,b):=\frac{2}{4+(a-b)^2},
+\qquad k(x):=K(x,0),
+\]
+one has
+\[
+\widehat k(\xi)=\pi e^{-2\abs{\xi}},
+\]
+and hence the integer Toeplitz symbol is
+\begin{equation}\label{eq:integer-projection-poisson-symbol}
+\sigma(\theta):=\sum_{n\in\ZZ}K(n,0)e^{-\ii n\theta}
+=\pi\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}}
+=\pi\frac{\cosh(2(\pi-\abs{\theta}))}{\sinh(2\pi)}
+\qquad(\theta\in I).
+\end{equation}
+Equivalently,
 \begin{equation}\label{eq:lattice-periodized-weight}
-\Sigma_h(\xi)
-=\frac{\cosh(2(\pi/h-\abs{\xi}))}{\sinh(2\pi/h)}
-\qquad(\xi\in I_h).
+\Sigma_1(\theta)
+=\frac{\cosh(2(\pi-\abs{\theta}))}{\sinh(2\pi)}
+\qquad(\theta\in I).
 \end{equation}
 Define
 \[
-\mathcal H_K(h\ZZ)
+\mathcal H_K(\ZZ)
 :=
-\overline{\operatorname{span}}\{K(\cdot,hn):n\in\ZZ\}
+\overline{\operatorname{span}}\{K(\cdot,n):n\in\ZZ\}
 \subset\mathcal H_K
 \]
 and
 \[
-\mathcal N_h
+\mathcal N_{\ZZ}
 :=
-\{f\in\mathcal H_K:\ f(hn)=0\ \text{for every }n\in\ZZ\}.
+\{f\in\mathcal H_K:\ f(n)=0\ \text{for every }n\in\ZZ\}.
 \]
 For $f\in\mathcal H_K$ write
 \[
@@ -148,83 +156,91 @@ q_f(\xi):=e^{2\abs{\xi}}\widehat f(\xi).
 Then the following hold.
 \begin{enumerate}[label=(\roman*)]
 \item
-      One has $f\in\mathcal H_K(h\ZZ)$ if and only if $q_f$ is
-      $2\pi/h$-periodic and
+      One has $f\in\mathcal H_K(\ZZ)$ if and only if $q_f$ is
+      $2\pi$-periodic and
       \[
-      \int_{I_h}\Sigma_h(\xi)\abs{q_f(\xi)}^2\dd\xi<\infty.
+      \int_I\Sigma_1(\theta)\abs{q_f(\theta)}^2\dd\theta<\infty.
       \]
       In that case,
       \begin{equation}\label{eq:lattice-subspace-norm}
       \|f\|_{\mathcal H_K}^2
-      =\frac{1}{2\pi^2}\int_{I_h}\Sigma_h(\xi)\abs{q_f(\xi)}^2\dd\xi.
+      =\frac{1}{2\pi^2}\int_I\Sigma_1(\theta)\abs{q_f(\theta)}^2\dd\theta.
       \end{equation}
 \item
-      The orthogonal complement of~$\mathcal H_K(h\ZZ)$ is exactly
-      $\mathcal N_h$, and
+      The orthogonal complement of~$\mathcal H_K(\ZZ)$ is exactly
+      $\mathcal N_{\ZZ}$, and
       \begin{equation}\label{eq:lattice-alias-cancellation}
-      f\in\mathcal N_h
+      f\in\mathcal N_{\ZZ}
       \iff
-      \sum_{m\in\ZZ}\widehat f\!\left(\xi+\frac{2\pi m}{h}\right)=0
-      \quad\text{for a.e. }\xi\in I_h.
+      \sum_{m\in\ZZ}\widehat f(\theta+2\pi m)=0
+      \quad\text{for a.e. }\theta\in I.
       \end{equation}
       Consequently,
       \[
-      \mathcal H_K=\mathcal H_K(h\ZZ)\oplus \mathcal N_h
+      \mathcal H_K=\mathcal H_K(\ZZ)\oplus \mathcal N_{\ZZ}
       \]
       orthogonally.
 \item
-      Let $\Pi_h:\mathcal H_K\to\mathcal H_K(h\ZZ)$ denote the orthogonal
-      projection.  Then, for almost every $\xi\in I_h$, the series
+      Let $\Pi_{\ZZ}:\mathcal H_K\to\mathcal H_K(\ZZ)$ denote the
+      orthogonal projection.  Then, for almost every $\theta\in I$, the
+      series
       \[
-      \sum_{m\in\ZZ}\widehat f\!\left(\xi+\frac{2\pi m}{h}\right)
+      \sum_{m\in\ZZ}\widehat f(\theta+2\pi m)
       \]
       converges absolutely and
       \begin{equation}\label{eq:lattice-alias-projection}
-      q_{\Pi_hf}(\xi)
+      q_{\Pi_{\ZZ}f}(\theta)
       =\frac{\displaystyle\sum_{m\in\ZZ}
-      \widehat f\!\left(\xi+\frac{2\pi m}{h}\right)}
-      {\Sigma_h(\xi)},
+      \widehat f(\theta+2\pi m)}
+      {\Sigma_1(\theta)},
       \end{equation}
-      with $q_{\Pi_hf}$ extended $2\pi/h$-periodically to~$\RR$.
+      equivalently
+      \begin{equation}\label{eq:integer-orbit-projection-symbol}
+      q_{\Pi_{\ZZ}f}(\theta)
+      =
+      \frac{\displaystyle\sum_{m\in\ZZ}\widehat f(\theta+2\pi m)}
+      {\displaystyle\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}},
+      \qquad -\pi\le\theta\le\pi,
+      \end{equation}
+      with $q_{\Pi_{\ZZ}f}$ extended $2\pi$-periodically to~$\RR$.
       Equivalently,
       \[
-      \widehat{\Pi_hf}(\xi)=e^{-2\abs{\xi}}q_{\Pi_hf}(\xi)
+      \widehat{\Pi_{\ZZ}f}(\xi)=e^{-2\abs{\xi}}q_{\Pi_{\ZZ}f}(\xi)
       \qquad\text{for a.e. }\xi\in\RR.
       \]
       Moreover,
       \begin{equation}\label{eq:lattice-projection-norm}
-      \|\Pi_hf\|_{\mathcal H_K}^2
-      =\frac{1}{2\pi^2}\int_{I_h}
+      \|\Pi_{\ZZ}f\|_{\mathcal H_K}^2
+      =\frac{1}{2\pi^2}\int_I
       \frac{\left|\sum_{m\in\ZZ}
-      \widehat f\!\left(\xi+\frac{2\pi m}{h}\right)\right|^2}
-      {\Sigma_h(\xi)}\,\dd\xi,
+      \widehat f(\theta+2\pi m)\right|^2}
+      {\Sigma_1(\theta)}\,\dd\theta,
       \end{equation}
-      and $\Pi_hf$ is the unique element of~$\mathcal H_K(h\ZZ)$
+      and $\Pi_{\ZZ}f$ is the unique element of~$\mathcal H_K(\ZZ)$
       satisfying
       \[
-      (\Pi_hf)(hn)=f(hn)
+      (\Pi_{\ZZ}f)(n)=f(n)
       \qquad(n\in\ZZ).
       \]
 \item
-      The $h\ZZ$ samples determine exactly the projection $\Pi_hf$ and no
-      finer ambient datum: for $f,g\in\mathcal H_K$,
+      The integer samples determine exactly the projection $\Pi_{\ZZ}f$ and
+      no finer ambient datum: for $f,g\in\mathcal H_K$,
       \begin{equation}\label{eq:uniform-lattice-quotient-rigidity}
-      f(hn)=g(hn)\quad(n\in\ZZ)
+      f(n)=g(n)\quad(n\in\ZZ)
       \qquad\Longleftrightarrow\qquad
-      \Pi_hf=\Pi_hg .
+      \Pi_{\ZZ}f=\Pi_{\ZZ}g .
       \end{equation}
       Equivalently,
       \[
-      \mathcal H_K/\mathcal N_h\longrightarrow\mathcal H_K(h\ZZ),
+      \mathcal H_K/\mathcal N_{\ZZ}\longrightarrow\mathcal H_K(\ZZ),
       \qquad
-      f+\mathcal N_h\longmapsto\Pi_hf,
+      f+\mathcal N_{\ZZ}\longmapsto\Pi_{\ZZ}f,
       \]
       is a well-defined isometric Hilbert-space isomorphism.  Thus full
-      reconstruction from the $h\ZZ$ orbit holds for a given
-      $f\in\mathcal H_K$ if and only if $f\in\mathcal H_K(h\ZZ)$.
+      reconstruction from the integer orbit holds for a given
+      $f\in\mathcal H_K$ if and only if $f\in\mathcal H_K(\ZZ)$.
 \item
-      At the only specialization used below, namely $h=1$, put
-      $\Pi_{\ZZ}:=\Pi_1$.  Any reconstruction rule
+      Any reconstruction rule
       \[
       \mathcal R:\mathcal H_K\longrightarrow \mathcal H_K(\ZZ)
       \]
@@ -233,429 +249,189 @@ Then the following hold.
       \[
       \mathcal Rf=\Pi_{\ZZ}f\qquad(f\in\mathcal H_K).
       \]
-      Thus the auxiliary $h\ZZ$ fiberization contributes to the paper only
-      through the integer projection and its quotient; the Poisson-specific
-      main-chain inputs are the integer symbol in
-      Proposition~\ref{prop:poisson-lattice-symbol} and the observation-channel
-      theorem, Theorem~\ref{thm:poisson-observation-lattice-sampling}.
-\item
-      The observation-channel consequence used below is exactly the
-      integer-orbit projection obtained from the specialization $h=1$; no
-      shifted-lattice, noninteger-lattice, or scaled-channel reconstruction
-      theorem is asserted from the auxiliary parameter~$h$.
+      Thus the integer orbit has a single possible ambient reconstruction:
+      the orthogonal projection.
 \end{enumerate}
 \end{lemma}
 
-Only the specialization $h=1$ is used in the Poisson observation-channel
-theorems below.  The parameter $h$ is retained in
-Lemma~\ref{lem:auxiliary-uniform-lattice-projection} as a compact derivation of
-the unshifted integer-orbit projection theorem.  The reconstruction result
-used in the sequel is the integer-orbit projection and quotient theorem,
-sharpened by the Poisson-specific symbol and observation-channel results below.
-
 \begin{proof}
-Let
+The transform identity
+\(\widehat k(\xi)=\pi e^{-2\abs{\xi}}\) is the standard Fourier transform
+of \(2/(4+x^2)\) in the convention of this paper.  Poisson summation gives
 \[
-a:=\frac{2\pi}{h}.
+\sum_{n\in\ZZ}K(n,0)e^{-\ii n\theta}
+=\sum_{m\in\ZZ}\widehat k(\theta+2\pi m)
+=\pi\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}},
 \]
-For $\xi\in I_h$ one has $\abs{\xi}\le a/2$, so
+which is the first equality in \eqref{eq:integer-projection-poisson-symbol}.
+For $\theta\in I$,
 \begin{align*}
-\Sigma_h(\xi)
-&=e^{-2\abs{\xi}}
-+\sum_{m=1}^{\infty}e^{-2(\abs{\xi}+ma)}
-+\sum_{m=1}^{\infty}e^{-2(ma-\abs{\xi})} \\
-&=\frac{e^{-2\abs{\xi}}+e^{-2a}e^{2\abs{\xi}}}{1-e^{-2a}}
-=\frac{\cosh(a-2\abs{\xi})}{\sinh a},
+\Sigma_1(\theta)
+&=e^{-2\abs{\theta}}
++\sum_{m=1}^{\infty}e^{-2(\abs{\theta}+2\pi m)}
++\sum_{m=1}^{\infty}e^{-2(2\pi m-\abs{\theta})} \\
+&=\frac{e^{-2\abs{\theta}}+e^{-4\pi}e^{2\abs{\theta}}}{1-e^{-4\pi}}
+=\frac{\cosh(2(\pi-\abs{\theta}))}{\sinh(2\pi)},
 \end{align*}
-which is \eqref{eq:lattice-periodized-weight}.
+which gives both \eqref{eq:integer-projection-poisson-symbol} and
+\eqref{eq:lattice-periodized-weight}.
 
 If
 \[
-F=\sum_{n=-N}^{N}c_nK(\cdot,hn),
+F=\sum_{n=-N}^{N}c_nK(\cdot,n),
 \]
 then
 \[
-\widehat F(\xi)=\pi e^{-2\abs{\xi}}\sum_{n=-N}^{N}c_ne^{-\ii hn\xi},
+\widehat F(\xi)=\pi e^{-2\abs{\xi}}\sum_{n=-N}^{N}c_ne^{-\ii n\xi},
 \]
 hence
 \[
-q_F(\xi)=\pi\sum_{n=-N}^{N}c_ne^{-\ii hn\xi},
+q_F(\xi)=\pi\sum_{n=-N}^{N}c_ne^{-\ii n\xi},
 \]
-which is $a$-periodic.  Using the norm formula from
+which is $2\pi$-periodic.  Using the norm formula from
 Proposition~\ref{prop:gram-space-poisson-image} and partitioning~$\RR$
-into the translates $I_h+ma$ gives
+into the translates $I+2\pi m$ gives
 \[
 \|F\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{I_h}
-\sum_{m\in\ZZ}e^{-2\abs{\xi+ma}}\abs{q_F(\xi)}^2\dd\xi
-=\frac{1}{2\pi^2}\int_{I_h}\Sigma_h(\xi)\abs{q_F(\xi)}^2\dd\xi.
+=\frac{1}{2\pi^2}\int_I
+\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}}\abs{q_F(\theta)}^2\dd\theta
+=\frac{1}{2\pi^2}\int_I\Sigma_1(\theta)\abs{q_F(\theta)}^2\dd\theta.
 \]
 Passing to the closure proves one direction of~(i).
 
-Conversely, let $q$ be $a$-periodic with
+Conversely, let $q$ be $2\pi$-periodic with
 \[
-\int_{I_h}\Sigma_h(\xi)\abs{q(\xi)}^2\dd\xi<\infty.
+\int_I\Sigma_1(\theta)\abs{q(\theta)}^2\dd\theta<\infty.
 \]
-Since $\Sigma_h$ is continuous and strictly positive on the compact
-interval~$I_h$, the spaces
-$L^2(I_h,\Sigma_h(\xi)\dd\xi)$ and $L^2(I_h,\dd\xi)$ coincide with
+Since $\Sigma_1$ is continuous and strictly positive on the compact
+interval~$I$, the spaces
+$L^2(I,\Sigma_1(\theta)\dd\theta)$ and $L^2(I,\dd\theta)$ coincide with
 equivalent norms.  The trigonometric polynomials
 \[
-\sum_{n=-N}^{N}d_ne^{-\ii hn\xi}
+\sum_{n=-N}^{N}d_ne^{-\ii n\theta}
 \]
-are therefore dense in $L^2(I_h,\Sigma_h(\xi)\dd\xi)$.  Choose such a
+are therefore dense in $L^2(I,\Sigma_1(\theta)\dd\theta)$.  Choose such a
 sequence $p_N$ with $p_N\to \pi^{-1}q$ in that weighted norm, and define
-$F_N\in\mathcal H_K(h\ZZ)$ by
+$F_N\in\mathcal H_K(\ZZ)$ by
 \[
-F_N:=\sum_{n=-N}^{N}d_nK(\cdot,hn).
+F_N:=\sum_{n=-N}^{N}d_nK(\cdot,n).
 \]
 Then $q_{F_N}=\pi p_N$, so the preceding norm identity gives
 \[
 \|F_N-F_M\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{I_h}\Sigma_h(\xi)
-\abs{q_{F_N}(\xi)-q_{F_M}(\xi)}^2\dd\xi.
+=\frac{1}{2\pi^2}\int_I\Sigma_1(\theta)
+\abs{q_{F_N}(\theta)-q_{F_M}(\theta)}^2\dd\theta.
 \]
 Hence $(F_N)$ is Cauchy in~$\mathcal H_K$ and converges to some
-$F\in\mathcal H_K(h\ZZ)$ with $q_F=q$.  This proves~(i).
+$F\in\mathcal H_K(\ZZ)$ with $q_F=q$.  This proves~(i).
 
-For every $f\in\mathcal H_K$ and almost every $\xi\in I_h$,
+For every $f\in\mathcal H_K$ and almost every $\theta\in I$,
 Cauchy--Schwarz gives
 \[
-\sum_{m\in\ZZ}\abs{\widehat f(\xi+ma)}
+\sum_{m\in\ZZ}\abs{\widehat f(\theta+2\pi m)}
 \le
-\Sigma_h(\xi)^{1/2}
+\Sigma_1(\theta)^{1/2}
 \left(
-\sum_{m\in\ZZ}e^{2\abs{\xi+ma}}
-\abs{\widehat f(\xi+ma)}^2
+\sum_{m\in\ZZ}e^{2\abs{\theta+2\pi m}}
+\abs{\widehat f(\theta+2\pi m)}^2
 \right)^{1/2},
 \]
-so the alias sum is absolutely convergent for almost every~$\xi$.
+so the alias sum is absolutely convergent for almost every~$\theta$.
 
-If $g\in\mathcal H_K(h\ZZ)$, then by~(i) its profile $q_g$ is
-$a$-periodic.  Using the Fourier norm formula again,
+If $g\in\mathcal H_K(\ZZ)$, then by~(i) its profile $q_g$ is
+$2\pi$-periodic.  Using the Fourier norm formula again,
 \begin{align*}
 \langle f,g\rangle_{\mathcal H_K}
 &=
-\frac{1}{2\pi^2}\int_{I_h}
-\sum_{m\in\ZZ}e^{-2\abs{\xi+ma}}q_f(\xi+ma)\,
-\overline{q_g(\xi)}\dd\xi \\
+\frac{1}{2\pi^2}\int_I
+\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}}q_f(\theta+2\pi m)\,
+\overline{q_g(\theta)}\dd\theta \\
 &=
-\frac{1}{2\pi^2}\int_{I_h}
+\frac{1}{2\pi^2}\int_I
 \left(
-\sum_{m\in\ZZ}\widehat f(\xi+ma)
-\right)\overline{q_g(\xi)}\dd\xi.
+\sum_{m\in\ZZ}\widehat f(\theta+2\pi m)
+\right)\overline{q_g(\theta)}\dd\theta.
 \end{align*}
 Since the periodic profiles $q_g$ form a dense subspace of
-$L^2(I_h,\Sigma_h(\xi)\dd\xi)$ and $\Sigma_h$ is bounded above and below
-on~$I_h$, the same set is dense in $L^2(I_h,\dd\xi)$.  Therefore
-$f\perp\mathcal H_K(h\ZZ)$ if and only if the alias sum in
-\eqref{eq:lattice-alias-cancellation} vanishes almost everywhere on~$I_h$.
+$L^2(I,\Sigma_1(\theta)\dd\theta)$ and $\Sigma_1$ is bounded above and below
+on~$I$, the same set is dense in $L^2(I,\dd\theta)$.  Therefore
+$f\perp\mathcal H_K(\ZZ)$ if and only if the alias sum in
+\eqref{eq:lattice-alias-cancellation} vanishes almost everywhere on~$I$.
 
 By the reproducing property,
 \[
-f(hn)=\langle f,K(\cdot,hn)\rangle_{\mathcal H_K}
+f(n)=\langle f,K(\cdot,n)\rangle_{\mathcal H_K}
 \qquad(n\in\ZZ),
 \]
-and the closed linear span of the kernel sections $K(\cdot,hn)$ is
-exactly $\mathcal H_K(h\ZZ)$.  Consequently,
+and the closed linear span of the kernel sections $K(\cdot,n)$ is
+exactly $\mathcal H_K(\ZZ)$.  Consequently,
 \[
-f\in\mathcal N_h
+f\in\mathcal N_{\ZZ}
 \iff
-f\perp\mathcal H_K(h\ZZ).
+f\perp\mathcal H_K(\ZZ).
 \]
 This proves~(ii).
 
-Let $g\in\mathcal H_K(h\ZZ)$ and write $q_g$ for its periodic profile.
+Let $g\in\mathcal H_K(\ZZ)$ and write $q_g$ for its periodic profile.
 Then
 \[
 \|f-g\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{I_h}
-\sum_{m\in\ZZ}e^{-2\abs{\xi+ma}}
-\abs{q_f(\xi+ma)-q_g(\xi)}^2\dd\xi.
+=\frac{1}{2\pi^2}\int_I
+\sum_{m\in\ZZ}e^{-2\abs{\theta+2\pi m}}
+\abs{q_f(\theta+2\pi m)-q_g(\theta)}^2\dd\theta.
 \]
-For each $\xi\in I_h$, the integrand is minimized when $q_g(\xi)$ is the
-weighted average of the fiber values $q_f(\xi+ma)$ with weights
-$e^{-2\abs{\xi+ma}}$.  Since
+For each $\theta\in I$, the integrand is minimized when $q_g(\theta)$ is the
+weighted average of the fiber values $q_f(\theta+2\pi m)$ with weights
+$e^{-2\abs{\theta+2\pi m}}$.  Since
 \[
-e^{-2\abs{\xi+ma}}q_f(\xi+ma)=\widehat f(\xi+ma),
+e^{-2\abs{\theta+2\pi m}}q_f(\theta+2\pi m)
+=\widehat f(\theta+2\pi m),
 \]
 the minimizing profile is exactly the one in
 \eqref{eq:lattice-alias-projection}.  This proves the projection formula.
+Since \(\Sigma_1(\theta)=\sum_m e^{-2\abs{\theta+2\pi m}}\), this is also
+\eqref{eq:integer-orbit-projection-symbol}.
 Substituting the minimizing value into the norm identity gives
 \eqref{eq:lattice-projection-norm}.  Finally,
 \[
-f-\Pi_hf\in\mathcal N_h
+f-\Pi_{\ZZ}f\in\mathcal N_{\ZZ}
 \]
-by~(ii), so $(\Pi_hf)(hn)=f(hn)$ for every $n\in\ZZ$.  If
-$G\in\mathcal H_K(h\ZZ)$ satisfies $G(hn)=f(hn)$ for all $n$, then
-$G-\Pi_hf\in\mathcal H_K(h\ZZ)\cap\mathcal N_h=\{0\}$, hence
-$G=\Pi_hf$.  This proves~(iii).
+by~(ii), so $(\Pi_{\ZZ}f)(n)=f(n)$ for every $n\in\ZZ$.  If
+$G\in\mathcal H_K(\ZZ)$ satisfies $G(n)=f(n)$ for all $n$, then
+$G-\Pi_{\ZZ}f\in\mathcal H_K(\ZZ)\cap\mathcal N_{\ZZ}=\{0\}$, hence
+$G=\Pi_{\ZZ}f$.  This proves~(iii).
 
 It remains to identify the quotient determined by the samples.  The forward
 implication in \eqref{eq:uniform-lattice-quotient-rigidity} follows because
-equal $h\ZZ$ samples give $f-g\in\mathcal N_h$, and by~(ii) this is the
-orthogonal complement of $\mathcal H_K(h\ZZ)$, so the two orthogonal
+equal integer samples give $f-g\in\mathcal N_{\ZZ}$, and by~(ii) this is the
+orthogonal complement of $\mathcal H_K(\ZZ)$, so the two orthogonal
 projections coincide.  The reverse implication follows from~(iii), since
-$\Pi_hf$ and $\Pi_hg$ interpolate respectively the samples of $f$ and~$g$.
+$\Pi_{\ZZ}f$ and $\Pi_{\ZZ}g$ interpolate respectively the samples of
+$f$ and~$g$.
 The displayed quotient map is well defined because adding an element of
-$\mathcal N_h=\mathcal H_K(h\ZZ)^\perp$ does not change the projection.  It is
-surjective by applying it to $F+\mathcal N_h$ with $F\in\mathcal H_K(h\ZZ)$,
+$\mathcal N_{\ZZ}=\mathcal H_K(\ZZ)^\perp$ does not change the projection.  It is
+surjective by applying it to $F+\mathcal N_{\ZZ}$ with $F\in\mathcal H_K(\ZZ)$,
 injective by \eqref{eq:uniform-lattice-quotient-rigidity}, and isometric by
 the orthogonal decomposition
 \[
-\|f+\mathcal N_h\|_{\mathcal H_K/\mathcal N_h}
-=\inf_{u\in\mathcal N_h}\|\Pi_hf+(f-\Pi_hf)+u\|_{\mathcal H_K}
-=\|\Pi_hf\|_{\mathcal H_K}.
+\|f+\mathcal N_{\ZZ}\|_{\mathcal H_K/\mathcal N_{\ZZ}}
+=\inf_{u\in\mathcal N_{\ZZ}}
+\|\Pi_{\ZZ}f+(f-\Pi_{\ZZ}f)+u\|_{\mathcal H_K}
+=\|\Pi_{\ZZ}f\|_{\mathcal H_K}.
 \]
-  Finally, full reconstruction means $f$ equals the unique lattice-subspace
-  interpolant $\Pi_hf$, and this is equivalent to
-  $f\in\mathcal H_K(h\ZZ)$.  This proves~(iv).
+Finally, full reconstruction means $f$ equals the unique lattice-subspace
+interpolant $\Pi_{\ZZ}f$, and this is equivalent to
+$f\in\mathcal H_K(\ZZ)$.  This proves~(iv).
 
-For~(v), set $h=1$ in~(iv).  If $\mathcal R$ depends only on the integer
-samples, then $f$ and $\Pi_{\ZZ}f$ have the same samples by~(iii), so
+For~(v), if $\mathcal R$ depends only on the integer samples, then $f$ and
+$\Pi_{\ZZ}f$ have the same samples by~(iii), so
 \[
 \mathcal Rf=\mathcal R(\Pi_{\ZZ}f).
 \]
 Since $\Pi_{\ZZ}f\in\mathcal H_K(\ZZ)$ and $\mathcal R$ is exact on that
 subspace, the right-hand side is $\Pi_{\ZZ}f$.  Hence
-$\mathcal R=\Pi_{\ZZ}$.  The final sentence records precisely this dependence
-of the later integer-orbit theorems on the present auxiliary calculation.
+$\mathcal R=\Pi_{\ZZ}$.  The final sentence records precisely the
+integer-orbit input used by the later observation theorem.
 This proves~(v).
-
-For~(vi), the assertions above have been stated and proved for the closed
-unshifted family $h\ZZ$ only, and the later Poisson channel uses only $h=1$.
-\end{proof}
-
-\begin{corollary}[Integer-orbit projection for the Poisson symbol]%
-\label{cor:integer-orbit-projection}
-For the integer lattice $h=1$, let
-\[
-\Pi_{\ZZ}:=\Pi_1,
-\qquad
-\mathcal N_{\ZZ}:=\{f\in\mathcal H_K:\ f(n)=0\text{ for every }n\in\ZZ\}.
-\]
-Then
-\[
-\mathcal H_K=\mathcal H_K(\ZZ)\oplus\mathcal N_{\ZZ}
-\]
-orthogonally, and $\Pi_{\ZZ}f$ is the unique element of
-$\mathcal H_K(\ZZ)$ satisfying
-\[
-(\Pi_{\ZZ}f)(n)=f(n)\qquad(n\in\ZZ).
-\]
-If $q_f(\xi):=e^{2|\xi|}\widehat f(\xi)$, then for almost every
-$\theta\in[-\pi,\pi]$,
-\begin{equation}\label{eq:integer-orbit-projection-symbol}
-q_{\Pi_{\ZZ}f}(\theta)
-=
-\frac{\displaystyle\sum_{m\in\ZZ}\widehat f(\theta+2\pi m)}
-{\displaystyle\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}}
-=
-\frac{\pi\displaystyle\sum_{m\in\ZZ}\widehat f(\theta+2\pi m)}
-{\sigma(\theta)},
-\end{equation}
-extended $2\pi$-periodically, where the Poisson symbol is exactly
-\[
-\sigma(\theta)=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}
-\qquad(-\pi\le \theta\le \pi).
-\]
-Thus the only lattice specialization used in
-Theorem~\ref{thm:poisson-observation-lattice-sampling} is the integer-orbit
-projection with this explicit Poisson symbol.
-Moreover, for every $f\in\mathcal H_K$, the integer sample sequence
-$(f(n))_{n\in\ZZ}$ determines exactly the projection $\Pi_{\ZZ}f$: it is
-the unique element of $\mathcal H_K(\ZZ)$ with those integer samples, and
-\[
-f-\Pi_{\ZZ}f\in\mathcal N_{\ZZ}.
-\]
-Consequently the integer orbit determines the full function $f$ if and only
-if $f\in\mathcal H_K(\ZZ)$.
-\end{corollary}
-
-\begin{proof}
-The first two assertions are Lemma~\ref{lem:auxiliary-uniform-lattice-projection}
-with $h=1$.  In the notation of that proposition,
-\[
-\Sigma_1(\theta)=\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}
-\qquad(-\pi\le\theta\le\pi).
-\]
-Multiplying the closed form \eqref{eq:lattice-periodized-weight} for
-$\Sigma_1$ by~$\pi$ gives the stated Poisson symbol
-\[
-\sigma(\theta):=\pi\Sigma_1(\theta)
-=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}.
-\]
-Substituting $h=1$ in the projection formula
-\eqref{eq:lattice-alias-projection} and replacing $\Sigma_1$ by
-$\sigma/\pi$ gives \eqref{eq:integer-orbit-projection-symbol}.  The final
-sentence records the dependence of
-Theorem~\ref{thm:poisson-observation-lattice-sampling} on this integer
-case.  The uniqueness assertion and the residual inclusion are the last
-part of Lemma~\ref{lem:auxiliary-uniform-lattice-projection} with $h=1$.  If
-$f\in\mathcal H_K(\ZZ)$, then $\Pi_{\ZZ}f=f$, so the integer orbit recovers
-the full function.  Conversely, if the integer orbit recovers $f$ as an
-element of the reconstruction space $\mathcal H_K(\ZZ)$, then
-$f=\Pi_{\ZZ}f\in\mathcal H_K(\ZZ)$.
-\end{proof}
-
-\begin{proposition}[Integer orbit is the lattice interface used below]%
-\label{prop:integer-orbit-lattice-interface}
-The lattice input to the observation-channel theorem is exactly the following
-integer-orbit package:
-\[
-\Pi_{\ZZ}:\mathcal H_K\to\mathcal H_K(\ZZ),
-\qquad
-\sigma(\theta)=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
-\qquad
--\pi\le\theta\le\pi,
-\]
-together with the quotient identity
-\[
-f(n)=g(n)\ (n\in\ZZ)
-\quad\Longleftrightarrow\quad
-\Pi_{\ZZ}f=\Pi_{\ZZ}g .
-\]
-Equivalently,
-\[
-\mathcal H_K/\mathcal N_{\ZZ}\longrightarrow\mathcal H_K(\ZZ),
-\qquad
-f+\mathcal N_{\ZZ}\longmapsto\Pi_{\ZZ}f,
-\]
-is the Hilbert-space quotient determined by the integer evaluations.  Hence
-integer samples determine exactly the lattice projection, and they determine
-the full ambient function $f\in\mathcal H_K$ if and only if
-$f\in\mathcal H_K(\ZZ)$.
-The general $h\ZZ$ auxiliary lemma,
-Lemma~\ref{lem:auxiliary-uniform-lattice-projection}, supplies only this
-integer package.  The Poisson-specific symbol
-Proposition~\ref{prop:poisson-lattice-symbol}, the standard imported
-sampling consequences recorded immediately after that proposition, and the observation-channel
-theorem, Theorem~\ref{thm:poisson-observation-lattice-sampling}, are the
-main-chain lattice inputs.
-\end{proposition}
-
-\begin{proof}
-Setting $h=1$ in Lemma~\ref{lem:auxiliary-uniform-lattice-projection} gives the
-orthogonal projection $\Pi_{\ZZ}$, the null space of functions vanishing on
-the integer orbit, and the quotient identity.  The same specialization gives
-\[
-\Sigma_1(\theta)=\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}
-=\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}.
-\]
-Because the RKHS kernel satisfies
-\[
-K(a,b)=\frac{2}{4+(a-b)^2}=\pi P_2(a-b),
-\]
-the Toeplitz Gram symbol for the integer kernel sections is
-\(\sigma(\theta)=\pi\Sigma_1(\theta)\), which is exactly the closed symbol
-computed independently in Proposition~\ref{prop:poisson-lattice-symbol}.
-The quotient map is well defined and isometric by the orthogonal
-decomposition
-\[
-\mathcal H_K=\mathcal H_K(\ZZ)\oplus\mathcal N_{\ZZ}
-\]
-from the same specialization.  The quotient identity shows that two functions
-have the same integer data exactly when they have the same image under this
-map.  Thus integer samples determine no finer datum in the ambient space than
-$\Pi_{\ZZ}f$, and $\Pi_{\ZZ}f=f$ is equivalent to
-$f\in\mathcal H_K(\ZZ)$.
-The sampling and cardinal statements below use only this positive symbol and
-the integer closed span $\mathcal H_K(\ZZ)$, through the standard imported
-criterion and Corollary~\ref{cor:poisson-cardinal-reconstruction}.  Finally,
-Theorem~\ref{thm:poisson-observation-lattice-sampling} applies the same
-projection to the RKHS observation profile
-  \(F_t=\mathcal U\mathfrak d_t\).  Thus the auxiliary
-  $h\ZZ$ calculation enters only through the integer package displayed above.
-\end{proof}
-
-\begin{corollary}[Integer-orbit reconstruction rigidity]%
-\label{cor:integer-orbit-reconstruction-rigidity}
-Let $Y$ be a set, and let $\mathcal R:\mathcal H_K\to Y$ be any rule whose
-value depends only on the integer orbit, in the sense that
-\[
-f(n)=g(n)\quad(n\in\ZZ)\qquad\Longrightarrow\qquad
-\mathcal R(f)=\mathcal R(g).
-\]
-Then $\mathcal R$ factors uniquely through the integer projection
-$\Pi_{\ZZ}$:
-\[
-\mathcal R=\widetilde{\mathcal R}\circ\Pi_{\ZZ}
-\qquad\text{for a unique }\widetilde{\mathcal R}:\mathcal H_K(\ZZ)\to Y.
-\]
-In particular, if a reconstruction map
-$\mathcal R:\mathcal H_K\to\mathcal H_K(\ZZ)$ depends only on integer samples
-and is exact on the lattice subspace, meaning
-$\mathcal R(F)=F$ for every $F\in\mathcal H_K(\ZZ)$, then
-$\mathcal R=\Pi_{\ZZ}$.  Thus the integer-orbit analysis in this paper has a
-single possible ambient reconstruction: the lattice projection.
-\end{corollary}
-
-\begin{proof}
-Define
-$\widetilde{\mathcal R}(F):=\mathcal R(F)$ for
-$F\in\mathcal H_K(\ZZ)$.  For any $f\in\mathcal H_K$,
-Corollary~\ref{cor:integer-orbit-projection} gives
-$(\Pi_{\ZZ}f)(n)=f(n)$ for every $n\in\ZZ$.  Since $\mathcal R$ depends only
-on these samples, $\mathcal R(f)=\mathcal R(\Pi_{\ZZ}f)$, proving the stated
-factorization.  Uniqueness follows because $\Pi_{\ZZ}$ is onto
-$\mathcal H_K(\ZZ)$.
-
-If $\mathcal R$ takes values in $\mathcal H_K(\ZZ)$ and is exact on
-$\mathcal H_K(\ZZ)$, then
-\[
-\mathcal R(f)=\mathcal R(\Pi_{\ZZ}f)=\Pi_{\ZZ}f
-\]
-for every $f\in\mathcal H_K$.  Hence $\mathcal R=\Pi_{\ZZ}$.
-\end{proof}
-
-\begin{proposition}[Integer orbit and reconstruction quotient]%
-\label{prop:integer-orbit-scoped-quotient}
-The integer samples define exactly the quotient of $\mathcal H_K$ by the
-nullspace $\mathcal N_{\ZZ}$ and no finer reconstruction on the ambient RKHS.
-More precisely, for $f,g\in\mathcal H_K$,
-\[
-f(n)=g(n)\quad(n\in\ZZ)
-\qquad\Longleftrightarrow\qquad
-\Pi_{\ZZ}f=\Pi_{\ZZ}g .
-\]
-Equivalently, the map
-\[
-\mathcal H_K/\mathcal N_{\ZZ}\longrightarrow \mathcal H_K(\ZZ),
-\qquad
-f+\mathcal N_{\ZZ}\longmapsto \Pi_{\ZZ}f,
-\]
-is a well-defined isometric Hilbert-space isomorphism.  Therefore any
-integer-orbit reconstruction from these samples factors uniquely through
-$\Pi_{\ZZ}$ as in
-Corollary~\ref{cor:integer-orbit-reconstruction-rigidity}; it reconstructs
-the full ambient function if and only if that function already lies in
-$\mathcal H_K(\ZZ)$.
-\end{proposition}
-
-\begin{proof}
-By Corollary~\ref{cor:integer-orbit-projection},
-$f-\Pi_{\ZZ}f\in\mathcal N_{\ZZ}$ and $\Pi_{\ZZ}f$ has the same integer
-samples as~$f$.  Hence if $\Pi_{\ZZ}f=\Pi_{\ZZ}g$, then $f$ and $g$ have the
-same integer samples.  Conversely, if $f(n)=g(n)$ for every $n\in\ZZ$, then
-$f-g\in\mathcal N_{\ZZ}$.  Since
-\[
-\mathcal H_K=\mathcal H_K(\ZZ)\oplus\mathcal N_{\ZZ}
-\]
-orthogonally, the projection of $f-g$ onto $\mathcal H_K(\ZZ)$ is zero, so
-$\Pi_{\ZZ}f=\Pi_{\ZZ}g$.
-
-The displayed map is well defined because changing $f$ by an element of
-$\mathcal N_{\ZZ}=\mathcal H_K(\ZZ)^\perp$ does not change its orthogonal
-projection.  It is injective by the first paragraph, surjective because every
-$F\in\mathcal H_K(\ZZ)$ is the image of its own coset, and isometric for the
-quotient norm because the orthogonal decomposition gives
-\[
-\|f+\mathcal N_{\ZZ}\|_{\mathcal H_K/\mathcal N_{\ZZ}}
-=\inf_{u\in\mathcal N_{\ZZ}}\|\Pi_{\ZZ}f+(f-\Pi_{\ZZ}f)+u\|_{\mathcal H_K}
-=\|\Pi_{\ZZ}f\|_{\mathcal H_K}.
-\]
-Thus the only data-dependent object determined by integer samples in the
-ambient RKHS is the projection $\Pi_{\ZZ}f$.  Full reconstruction is therefore
-equivalent to $f=\Pi_{\ZZ}f$, namely to $f\in\mathcal H_K(\ZZ)$.
 \end{proof}
 

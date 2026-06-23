@@ -309,7 +309,9 @@ This subsection defines the coefficient algebra.  The display
 \eqref{eq:universal-entropy-coefficient} is formal, and
 Proposition~\ref{prop:universal-entropy-coefficient-evaluation} evaluates it
 only when the required moments exist.  The finite Fourier theorem then reduces
-the mode integrals to exact Laurent or root-of-unity calculations.
+the mode integrals to exact Laurent constant-coefficient extractions.  The
+root-of-unity version is recorded only as the appendix certificate mechanism
+in Appendix~\ref{sec:finite-phase-sampling}.
 
 The coefficient calculus is universal once the Cayley--Chebyshev modes have
 been fixed.  For integers $r\ge2$ and $n_1,\dots,n_r\ge2$ define the
@@ -343,9 +345,12 @@ for the resulting finite-moment evaluation.
 The phrase ``moments through order~$k$'' is only a uniform sufficient
 convention: a particular polynomial $A_k^{\rm form}$ may be evaluated as soon
 as the moments that actually occur in it exist.  In particular the printed
-$A_8^{\rm form}$ below involves only $\mu_2,\ldots,\mu_6$, which is why the
-seventh-moment eighth-order bridge can use the notation $A_8(\nu)$ without
-invoking the finite-$(8+\eta)$ theorem.
+$A_8^{\rm form}$ below involves only $\mu_2,\ldots,\mu_6$.  To keep the
+hypothesis regimes separate, the all-order finite-moment expansion below uses
+$A_8(\nu)$ only when it is obtained from the finite-$(8+\eta)$ theorem, while
+the seventh-moment theorem denotes its actual $t^{-8}$ entropy coefficient by
+$C_8^{(7)}(\nu)$ and proves the compatibility with the formal evaluation
+separately.
 
 \begin{theorem}[Universal entropy coefficient package]%
 \label{thm:universal-entropy-coefficients}
@@ -474,20 +479,10 @@ Consequently, for every $r\ge2$ and $n_1,\dots,n_r\ge1$,
 I(n_1,\dots,n_r)
 =\bigl[z^0\bigr]\prod_{a=1}^{r}Q_{n_a}(z),
 \end{equation}
-where $[z^0]$ denotes constant Laurent coefficient.  Equivalently, if
-$M>n_1+\cdots+n_r$, then
-\begin{equation}\label{eq:mode-integral-root-of-unity-algorithm}
-I(n_1,\dots,n_r)
-=\frac1M\sum_{\zeta\in\mu_M}\prod_{a=1}^{r}Q_{n_a}(\zeta).
-\end{equation}
-The strict inequality $M>n_1+\cdots+n_r$ is the aliasing barrier: the
-Laurent support of $\prod_{a=1}^rQ_{n_a}$ is contained in
-$[-(n_1+\cdots+n_r),n_1+\cdots+n_r]$, so no nonzero exponent can be congruent
-to zero modulo~$M$ under the root-of-unity average.
-Thus every formal universal coefficient $A_k^{\rm form}$, and every evaluated
-coefficient $A_k(\nu)$ when the required moments exist, is obtained by
-finitely many Laurent-polynomial multiplications and constant-coefficient
-extractions.
+where $[z^0]$ denotes constant Laurent coefficient.  Thus every formal
+universal coefficient $A_k^{\rm form}$, and every evaluated coefficient
+$A_k(\nu)$ when the required moments exist, is obtained by finitely many
+Laurent-polynomial multiplications and constant-coefficient extractions.
 \end{theorem}
 
 \begin{proof}
@@ -508,14 +503,9 @@ The change of variables $y=\tan\theta$ gives
 \]
 and $z=e^{2\ii\theta}$ pushes $\dd\theta/\pi$ to normalized Haar measure
 on~$\TT$.  Hence $I(n_1,\dots,n_r)$ is the Haar integral of the Laurent
-polynomial $\prod_a Q_{n_a}$, which is its constant coefficient.  The
-support of $Q_n$ is contained in $\{-n,\dots,-1,1,\dots,n\}$; therefore
-the product has Fourier support contained in
-$\{-(n_1+\cdots+n_r),\dots,n_1+\cdots+n_r\}$.  Averaging over the $M$th
-roots of unity with $M>n_1+\cdots+n_r$ kills every nonzero exponent in this
-support and keeps the constant coefficient, proving
-\eqref{eq:mode-integral-root-of-unity-algorithm}.  The last assertion
-follows by substituting \eqref{eq:mode-integral-constant-term} into
+polynomial $\prod_a Q_{n_a}$, which is its constant coefficient.  The last
+assertion follows by substituting
+\eqref{eq:mode-integral-constant-term} into
 \eqref{eq:universal-entropy-coefficient}.
 \end{proof}
 
@@ -808,12 +798,12 @@ u_5(y)=\frac{6y^5-20y^3+6y}{(1+y^2)^5},
 u_6(y)=\frac{7y^6-35y^4+21y^2-1}{(1+y^2)^6}.
 \end{equation}
 
+The trigonometric coefficients below are ordinary Haar-Fourier coefficients of
+the circle characters in the Cayley phase coordinate.  Appendix
 Propositions~\ref{prop:phase-coordinate-identification}
-and~\ref{prop:finite-grid-coefficient-recovery} give the phase-recovery link
-with the finite sampling block: the trigonometric coefficients below are
-Haar-Fourier coefficients of the same circle characters sampled on the
-root-of-unity grids~$\mathcal G_N$, and the finite-grid recovery has the aliasing
-bound \eqref{eq:finite-grid-aliasing-bound}.
+and~\ref{prop:finite-grid-coefficient-recovery} record how the same
+coefficients can be checked from root-of-unity grids, with the aliasing bound
+\eqref{eq:finite-grid-aliasing-bound}.
 
 \begin{proposition}[Poisson--Cauchy moment inversion by phase modes]%
 \label{prop:poisson-cauchy-moment-inversion-by-phase-modes}
@@ -938,111 +928,11 @@ Subtracting the two cosine coefficients and multiplying by the displayed
 powers of~$t$ proves the three inversion formulas.
 \end{proof}
 
-The preceding proposition is a continuum phase-coefficient inversion.  The
-finite-grid version below separates the exact alias-free part from the
-large-time error; this is the additional estimate needed before the phase
-coefficients can be read from finitely many exact samples.
-
-\begin{theorem}[Finite-grid finite-time moment recovery]%
-\label{thm:finite-grid-poisson-moment-recovery}
-Let $\nu$ satisfy the hypotheses of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-and let $F_t$ be the corresponding phase profile.  Let $L\ge9$ be odd.
-For each $\zeta\in\mu_L$, let
-$\theta_\zeta\in(-\pi/2,\pi/2)$ be the unique angle with
-$\zeta=e^{2\ii\theta_\zeta}$, and set, for $k\ge1$,
-\begin{align*}
-\widehat F_{t,L}(k)
-&:=\frac1L\sum_{\zeta\in\mu_L}
-F_t(\theta_\zeta)\zeta^{-k},\\
-\mathcal C_{k,L}(t)&:=2\operatorname{Re}\widehat F_{t,L}(k),
-\qquad
-\mathcal S_{k,L}(t):=-2\operatorname{Im}\widehat F_{t,L}(k).
-\end{align*}
-Then there are constants $C_{\nu},T_{\nu}>0$ such that, for all
-$t\ge T_{\nu}$,
-\begin{align}
-\left|
-\mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)
-+\frac{\sigma^2}{2t^2}
-\right|
-&\le C_{\nu}t^{-5},\label{eq:finite-grid-sigma-recovery}\\
-\left|
-\mathcal S_{3,L}(t)+\frac{\mu_3}{4t^3}
-\right|
-&\le C_{\nu}t^{-5},\label{eq:finite-grid-mu-three-recovery}\\
-\left|
-\mathcal C_{4,L}(t)-\frac{\mu_4}{8t^4}
-\right|
-&\le C_{\nu}t^{-5}.\label{eq:finite-grid-mu-four-recovery}
-\end{align}
-Consequently the same fixed finite phase grid recovers the moment
-coordinates in the large-time limit:
-\[
-\sigma^2=\lim_{t\to\infty}
--2t^2\bigl(\mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)\bigr),
-\qquad
-\mu_3=\lim_{t\to\infty}-4t^3\mathcal S_{3,L}(t),
-\]
-\[
-\mu_4=\lim_{t\to\infty}8t^4\mathcal C_{4,L}(t),
-\]
-with finite-time errors respectively $O(t^{-3})$, $O(t^{-2})$, and
-$O(t^{-1})$ after the displayed renormalizations.  These are deterministic
-estimates for exact phase samples.
-\end{theorem}
-
-\begin{proof}
-The proof of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-using Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} at order~$4$,
-gives constants $C_0,T_0>0$ such that for $t\ge T_0$
-\[
-F_t(\theta)=Q_t(\theta)+r_t(\theta),
-\qquad
-\sup_{-\pi/2<\theta<\pi/2}|r_t(\theta)|\le C_0t^{-5},
-\]
-where
-\[
-Q_t(\theta)
-:=\frac{\sigma^2}{t^2}u_2(\tan\theta)
-+\frac{\mu_3}{t^3}u_3(\tan\theta)
-+\frac{\mu_4}{t^4}u_4(\tan\theta).
-\]
-By the finite Fourier formulas displayed in the proof of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-$Q_t$ is a Laurent polynomial in $z=e^{2\ii\theta}$ with Fourier support
-contained in $\{-4,\ldots,4\}$.  For $k=1,3,4$, the shifted polynomial
-$z^{-k}Q_t(z)$ has support contained in $\{-8,\ldots,8\}$.  Since
-$L\ge9$, Proposition~\ref{prop:finite-grid-coefficient-recovery} applies
-with no aliasing to the $Q_t$ part of each coefficient.  The parity and
-orthogonality computation in the preceding proposition therefore gives
-\[
-\mathcal C_{1,L}^{Q}(t)-\mathcal C_{4,L}^{Q}(t)
-=-\frac{\sigma^2}{2t^2},
-\qquad
-\mathcal S_{3,L}^{Q}(t)=-\frac{\mu_3}{4t^3},
-\qquad
-\mathcal C_{4,L}^{Q}(t)=\frac{\mu_4}{8t^4},
-\]
-where the superscript indicates the same finite-grid recovery applied to
-$Q_t$.
-
-For the remainder, the discrete averaging formula gives
-\[
-\left|\frac1L\sum_{\zeta\in\mu_L}
-r_t(\theta_\zeta)\zeta^{-k}\right|
-\le C_0t^{-5}
-\qquad(k\ge1).
-\]
-Thus the corresponding cosine and sine recovery errors are at most
-$2C_0t^{-5}$, and the difference
-$\mathcal C_{1,L}-\mathcal C_{4,L}$ has error at most $4C_0t^{-5}$.
-Increasing the constant to one number $C_\nu$ proves
-\eqref{eq:finite-grid-sigma-recovery}--\eqref{eq:finite-grid-mu-four-recovery}.
-Multiplication by $2t^2$, $4t^3$, and $8t^4$ gives the final
-renormalized error orders and the three limits.
-\end{proof}
+The corresponding finite-grid readout is recorded in
+Appendix~\ref{sec:finite-phase-sampling},
+Theorem~\ref{thm:finite-grid-poisson-moment-recovery}.  It is an exact
+sampling certificate for these phase coefficients, not an additional step in
+the entropy expansion.
 
 \begin{lemma}[Mode parity cancellation]\label{lem:mode-parity-vanish}
 For integers $n_1,\dots,n_k\ge 1$ let
