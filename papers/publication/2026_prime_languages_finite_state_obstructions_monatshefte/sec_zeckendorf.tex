@@ -493,7 +493,145 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
   prime, this congruence says \(N(k+h)\equiv0\pmod p\).
 \end{proof}
 
-\begin{theorem}[Zeckendorf-Sch\"utzenberger regular immunity]
+\begin{definition}[Total prime-factor count and divisibility antichains]
+  \label{def:Omega-total-prime-factor-count}
+  For \(n\ge2\), write
+  \(n=\prod_p p^{a_p}\). We put
+  \[
+    \Omega(n):=\sum_p a_p,
+  \]
+  the total number of prime factors of \(n\), counted with
+  multiplicity. We also put \(\Omega(1)=0\). A set
+  \(S\subseteq\NN_{\ge1}\) is a divisibility antichain if no two
+  distinct elements \(a,b\in S\) satisfy \(a\mid b\).
+\end{definition}
+
+\begin{theorem}[Zeckendorf divisibility-chain pumping]
+  \label{thm:zeckendorf-divisibility-chain-pumping}
+  Let \(L\subseteq\mathcal Z\) be recognized by an \(n\)-state
+  deterministic finite automaton. If \(w\in L\), \(\abs w\ge n\), and
+  \(\val(w)\ge2\), then there are words
+  \[
+    w_0=w,\ w_1,\ w_2,\ldots
+  \]
+  in \(L\) such that the Zeckendorf lengths \(\abs{w_i}\) are strictly
+  increasing and
+  \[
+    \val(w_i)\ \text{strictly divides}\ \val(w_{i+1})
+  \]
+  for every \(i\ge0\).
+\end{theorem}
+
+\begin{proof}
+  Let \(\mathcal A\) be an \(n\)-state DFA recognizing \(L\). Since
+  \(\mathcal A\) accepts \(w\) and \(\abs w\ge n\), the usual pumping
+  argument gives a factorization \(w=xyz\) with \(\abs y>0\) and
+  \(xy^kz\in L\) for every \(k\ge0\). Put \(k_0=1\), \(w_i=xy^{k_i}z\),
+  and
+  \[
+    N_i:=\val(w_i)=\val(xy^{k_i}z).
+  \]
+  We now define \(k_i\) recursively. Suppose \(k_i\) has been defined.
+  Since \(N_i\ge N_0=\val(w)\ge2\) will follow from the strict-growth
+  step below, the order
+  \[
+    h_i=\operatorname{ord}_{\operatorname{GL}_3(\ZZ/N_i\ZZ)}(M_y)
+  \]
+  is defined by \Cref{lem:zeckendorf-unimodular-block-action}. Set
+  \[
+    k_{i+1}=k_i+h_i .
+  \]
+  Applying \Cref{lem:zeckendorf-pumping-congruence} with \(q=N_i\)
+  gives
+  \[
+    \val(xy^{k_{i+1}}z)
+      \equiv \val(xy^{k_i}z)
+      \equiv 0 \pmod {N_i}.
+  \]
+  Thus
+  \[
+    \val(xy^{k_i}z)\mid \val(xy^{k_{i+1}}z).
+  \]
+  Because \(h_i\ge1\) and \(\abs y>0\), we have
+  \(k_{i+1}>k_i\) and hence
+  \[
+    \abs{xy^{k_{i+1}}z}>\abs{xy^{k_i}z}.
+  \]
+  Each pumped word belongs to \(L\subseteq\mathcal Z\), so each is a
+  canonical Zeckendorf word. Canonical Zeckendorf words of length \(m\)
+  represent exactly \([F_{m+1},F_{m+2})\), and these intervals are
+  strictly ordered by length. Hence
+  \[
+    \val(xy^{k_{i+1}}z)>\val(xy^{k_i}z).
+  \]
+  The divisibility is therefore strict. This also proves inductively
+  that all \(N_i\ge N_0\ge2\), so the recursion never leaves the range
+  where the order \(h_i\) is defined. Taking \(w_i=xy^{k_i}z\) gives
+  the required infinite strict divisibility chain in \(L\).
+\end{proof}
+
+\begin{corollary}[Unbounded prime-factor count in infinite regular Zeckendorf languages]
+  \label{cor:unbounded-prime-factor-count-in-infinite-regular-zeckendorf-languages}
+  If \(L\subseteq\mathcal Z\) is infinite and regular, then
+  \[
+    \sup_{w\in L}\Omega(\val(w))=\infty .
+  \]
+\end{corollary}
+
+\begin{proof}
+  Let an \(n\)-state DFA recognize \(L\). Since \(L\) is infinite, it
+  contains words of arbitrarily large length, and since
+  \(w\mapsto\val(w)\) maps \(\mathcal Z\) bijectively to
+  \(\NN_{\ge1}\), all but at most one of these words have value at
+  least \(2\). Choose \(w\in L\) with \(\abs w\ge n\) and
+  \(\val(w)\ge2\). By
+  \Cref{thm:zeckendorf-divisibility-chain-pumping}, there is a chain
+  \(w_0,w_1,\ldots\) in \(L\) with
+  \(N_i:=\val(w_i)\) strictly dividing \(N_{i+1}\). Write
+  \(N_{i+1}=N_i c_i\). Strict divisibility gives \(c_i\ge2\), hence
+  \[
+    \Omega(N_{i+1})
+      =\Omega(N_i)+\Omega(c_i)
+      \ge \Omega(N_i)+1.
+  \]
+  Therefore \(\Omega(N_i)\ge\Omega(N_0)+i\), and the displayed
+  supremum is infinite.
+\end{proof}
+
+\begin{corollary}[Divisibility-antichain obstruction]
+  \label{cor:divisibility-antichain-obstruction}
+  If \(L\subseteq\mathcal Z\) is regular and \(\val(L)\) is a
+  divisibility antichain, then \(L\) is finite.
+\end{corollary}
+
+\begin{proof}
+  If \(L\) were infinite, then it would contain an accepted word
+  \(w\) of length at least the number of states in a DFA for \(L\) and
+  with \(\val(w)\ge2\). The
+  divisibility-chain theorem would produce \(w_0,w_1\in L\) with
+  \(\val(w_0)\) strictly dividing \(\val(w_1)\), contradicting the
+  antichain hypothesis.
+\end{proof}
+
+\begin{corollary}[Bounded almost-prime Zeckendorf languages are REG-immune]
+  \label{cor:bounded-almost-prime-zeckendorf-languages-reg-immune}
+  For every fixed \(K\ge1\), the language
+  \[
+    \mathcal A_K
+      :=\{w\in\mathcal Z:\Omega(\val(w))\le K\}
+  \]
+  is infinite and contains no infinite regular sublanguage.
+\end{corollary}
+
+\begin{proof}
+  The language \(\mathcal A_K\) is infinite because it contains the
+  Zeckendorf representations of all primes. Suppose that \(L\) were an
+  infinite regular sublanguage of \(\mathcal A_K\). Then
+  \(\Omega(\val(w))\le K\) for every \(w\in L\), contradicting
+  \Cref{cor:unbounded-prime-factor-count-in-infinite-regular-zeckendorf-languages}.
+\end{proof}
+
+\begin{corollary}[Zeckendorf-Sch\"utzenberger regular immunity]
   \label{thm:zeckendorf-schutzenberger-regular-immunity}
   Let \(L\subseteq\mathcal Z\) be regular. If
   \[
@@ -503,37 +641,17 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
   quantitatively, if an \(n\)-state deterministic finite automaton
   recognizes such an \(L\), then no word of length at least \(n\) is
   accepted.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-  Let \(\mathcal A\) be an \(n\)-state DFA recognizing \(L\), and
-  suppose for contradiction that \(\mathcal A\) accepts a word
-  \(w\in L\) with \(\abs w\ge n\). The usual DFA pumping argument gives
-  a factorization \(w=xyz\) such that \(\abs y>0\) and
-  \(xy^kz\in L\) for every \(k\ge0\). Since \(L\subseteq\mathcal Z\),
-  every pumped word \(xy^kz\) is still a canonical Zeckendorf word.
-
-  Put \(p=\val(w)=\val(xyz)\). By hypothesis, \(p\) is prime. Let \(h\)
-  be the order of \(M_y\) in
-  \(\operatorname{GL}_3(\ZZ/p\ZZ)\), which exists by
-  \Cref{lem:zeckendorf-unimodular-block-action} because this group is
-  finite. Applying
-  \Cref{lem:zeckendorf-pumping-congruence} with \(k=1\) gives
-  \[
-    \val(xy^{1+h}z)\equiv \val(xyz)=p\equiv0\pmod p.
-  \]
-  The word \(xy^{1+h}z\) is accepted. Its length is strictly larger
-  than \(\abs w\), because \(h\ge1\) and \(\abs y>0\). Canonical
-  Zeckendorf words of length \(m\) represent exactly the interval
-  \([F_{m+1},F_{m+2})\); therefore increasing the canonical length
-  strictly increases the value. Hence
-  \[
-    \val(xy^{1+h}z)>p.
-  \]
-  We have found an accepted word whose value is strictly larger than
-  \(p\) and divisible by \(p\), so its value is composite. This
-  contradicts the assumption \(\val(L)\subseteq\{\text{primes}\}\).
-  Thus no accepted word has length at least \(n\), and \(L\) is finite.
+  Distinct primes form a divisibility antichain. Hence the finiteness
+  assertion follows from
+  \Cref{cor:divisibility-antichain-obstruction}. The quantitative
+  statement follows directly from
+  \Cref{thm:zeckendorf-divisibility-chain-pumping}: an accepted word
+  of length at least \(n\) has prime value at least \(2\), and the
+  theorem would produce two accepted values in which one strictly
+  divides the other, impossible for distinct primes.
 \end{proof}
 
 \begin{corollary}[Infinite regular Zeckendorf languages contain composites]
@@ -546,12 +664,11 @@ representations, but adapted to the LSD-first Zeckendorf evaluation.
 \end{corollary}
 
 \begin{proof}
-  If \(L\) contained only finitely many composite-valued words, remove
-  those words and, if present, the unique word of value \(1\). The
-  remaining language is still regular, is still infinite, and is a
-  sublanguage of \(\mathcal Z\) whose values are all prime. This
-  contradicts
-  \Cref{thm:zeckendorf-schutzenberger-regular-immunity}.
+  By
+  \Cref{cor:unbounded-prime-factor-count-in-infinite-regular-zeckendorf-languages},
+  the set of values \(\Omega(\val(w))\) is unbounded on \(L\). In
+  particular, infinitely many accepted words have
+  \(\Omega(\val(w))\ge2\), and their values are composite.
 \end{proof}
 
 \begin{corollary}[The Zeckendorf prime language is REG-immune]
@@ -865,7 +982,6 @@ the standard references cited in \Cref{subsec:prior-work}.
   regular language, hence regular itself, contradicting
   \Cref{cor:zeckendorf-prime-language-not-regular}.
 \end{remark}
-
 
 
 
