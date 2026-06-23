@@ -1,0 +1,1081 @@
+\subsection{Normalization and Cayley--Poisson coordinates}
+\label{subsec:entropy-normalization-package}
+
+\subsubsection{Entropy in Cayley coordinates}
+\label{subsec:cayley-entropy}
+
+The logarithmic Jacobian of the Cayley coordinate is
+\begin{equation}\label{eq:precision-potential}
+\mathcal P(x):=-\log J(x),\qquad
+J(x):=\upsilon'(x)=\frac{1}{\pi(1+x^{2})},
+\end{equation}
+equivalently,
+\begin{equation}\label{eq:precision-potential-expanded}
+\mathcal P(x)=\log\pi+\log(1+x^{2}).
+\end{equation}
+
+\begin{theorem}[Entropy identity in Cayley coordinates]%
+\label{thm:cayley-entropy-identity}
+Let $X$ be a real-valued random variable with density $f_X$ such that
+$h_{\mathrm{diff}}(X)>-\infty$ and $\EE[\mathcal P(X)]<\infty$.  Set
+$U:=\upsilon(X)\in\UU$.  Then
+\begin{equation}\label{eq:cayley-entropy-identity}
+h_{\mathrm{diff}}(X)
+=h_{\mathrm{diff}}(U)+\EE[\mathcal P(X)].
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The density of $U$ is
+\[
+f_U(u)=f_X(\tan(\pi u))\,\pi(1+\tan^2(\pi u)).
+\]
+The standard change-of-variables formula for differential entropy
+\cite[Chapter~9]{CoverThomas2006} gives
+\[
+h_{\mathrm{diff}}(X)
+=h_{\mathrm{diff}}(U)+\EE\!\left[\log\frac{1}{\abs{\upsilon'(X)}}\right]
+=h_{\mathrm{diff}}(U)+\EE[\mathcal P(X)].
+\]
+\end{proof}
+
+\subsubsection{Poisson smoothing}
+
+For $t>0$ and $x\in\RR$ define
+\begin{equation}\label{eq:poisson-kernel}
+P_t(x):=\frac{1}{\pi}\frac{t}{x^{2}+t^{2}}.
+\end{equation}
+
+\begin{proposition}[Basic identities for the Poisson kernels]%
+\label{prop:poisson-identities}
+For $s,t>0$ one has
+\begin{equation}\label{eq:poisson-basic}
+P_t(x)=\frac{1}{t}P_1\!\left(\frac{x}{t}\right),
+\qquad
+\widehat{P_t}(\xi)=e^{-t\abs{\xi}},
+\qquad
+P_t*P_s=P_{t+s}.
+\end{equation}
+In particular,
+\[
+\mu=P_1(x)\dd x,
+\qquad
+P_t*\mu=P_{t+1}.
+\]
+\end{proposition}
+
+\begin{proof}
+The scaling identity is immediate from the definition.  The Fourier
+transform of~$P_1$ is $e^{-\abs{\xi}}$
+\cite[Chapter~III]{Stein1971}; scaling yields
+$\widehat{P_t}(\xi)=e^{-t\abs{\xi}}$.  The convolution law follows by
+multiplying Fourier transforms.
+\end{proof}
+
+\begin{proposition}[Standard facts on the Poisson semigroup]%
+\label{prop:poisson-semigroup-law}
+For $1\le p\le\infty$ and $t>0$ define
+$T_t f:=P_t*f$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\item $\|T_t f\|_{L^p(\RR)}\le \|f\|_{L^p(\RR)}$ for every $f\in L^p$;
+\item $T_{t+s}=T_tT_s$ for all $s,t>0$;
+\item for $1\le p<\infty$, $T_t f\to f$ in $L^p(\RR)$ as $t\downarrow 0$;
+\item on $L^2(\RR)$, $\widehat{T_t f}(\xi)=e^{-t\abs{\xi}}\widehat f(\xi)$
+      and the generator is $-|D|$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Since $\int_{\RR}P_t(x)\dd x=1$ and $P_t\ge 0$, Young's inequality gives
+(i).  The semigroup law is Proposition~\ref{prop:poisson-identities}.
+Strong continuity for $1\le p<\infty$ follows because $\{P_t\}_{t>0}$ is
+an approximate identity.  The $L^2$-multiplier statement is exactly
+\eqref{eq:poisson-basic}; the generator follows from
+\[
+\frac{e^{-t\abs{\xi}}-1}{t}\longrightarrow -\abs{\xi}
+\qquad(t\downarrow 0)
+\]
+in the Fourier representation.
+\end{proof}
+
+\begin{remark}
+The preceding proposition is standard and is included only to fix the
+normalization of the Poisson kernel and of the generator $-|D|$ used in
+the sequel; see, for example, the usual Poisson-integral and semigroup
+formulations in \cite[Chapter~III]{Stein1971} and
+\cite[Chapter~17]{Grafakos2014}.
+\end{remark}
+
+\subsubsection{Large-time comparison with a translated Poisson profile}
+
+\begin{proposition}[Second-order approximation]%
+\label{prop:poisson-second-order}
+Let $\nu$ be a probability measure on~$\RR$ with mean
+\[
+\bar\gamma:=\int_{\RR}\gamma\dd\nu(\gamma),
+\]
+variance
+\[
+\sigma^{2}:=\int_{\RR}(\gamma-\bar\gamma)^{2}\dd\nu(\gamma),
+\]
+and finite centred fourth moment.  Define
+\[
+h_t:=P_t*\nu,
+\qquad
+g_t(x):=P_t(x-\bar\gamma).
+\]
+Let
+\[
+U(y):=\frac{3y^{2}-1}{(1+y^{2})^{2}}.
+\]
+Then there exists a constant $C_\nu>0$ such that for every $t\ge 1$,
+\begin{equation}\label{eq:poisson-profile}
+\sup_{x\in\RR}\left|
+\frac{h_t(x)}{g_t(x)}
+-1
+-\frac{\sigma^{2}}{t^{2}}U\!\left(\frac{x-\bar\gamma}{t}\right)
+\right|
+\le \frac{C_\nu}{t^{3}}.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:poisson-l1-rate}
+\|h_t-g_t\|_{L^{1}(\RR)}=O(t^{-2}),
+\qquad
+\|h_t-g_t\|_{L^\infty(\RR)}=O(t^{-3}).
+\end{equation}
+Moreover,
+\begin{equation}\label{eq:poisson-kl-rate}
+D_{\mathrm{KL}}(h_t\|g_t)=O(t^{-4}).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Write $\Delta:=\gamma-\bar\gamma$ and $x=\bar\gamma+ty$.  Then
+\[
+\frac{P_t(x-\gamma)}{g_t(x)}
+=\frac{1+y^{2}}{1+(y-\Delta/t)^{2}}.
+\]
+Set $\varepsilon:=\Delta/t$.  A direct algebraic computation gives the
+exact identity
+\begin{align*}
+\frac{1+y^{2}}{1+(y-\varepsilon)^{2}}
+&=1+\frac{2y}{1+y^{2}}\varepsilon
++\frac{3y^{2}-1}{(1+y^{2})^{2}}\varepsilon^{2} \\
+&\quad
++\frac{4y(y^{2}-1)\varepsilon^{3}-(3y^{2}-1)\varepsilon^{4}}
+{(1+y^{2})^{2}(1+(y-\varepsilon)^{2})}.
+\end{align*}
+Since
+\[
+\frac{4\abs{y}\abs{y^{2}-1}}{(1+y^{2})^{2}}\le 2,
+\qquad
+\frac{\abs{3y^{2}-1}}{(1+y^{2})^{2}}\le 1,
+\]
+the remainder is bounded by $2\abs{\varepsilon}^{3}+\abs{\varepsilon}^{4}$
+uniformly in~$y$.  Taking expectation and using $\EE[\Delta]=0$ yields
+\[
+\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}
+=1+\frac{\sigma^{2}}{t^{2}}U(y)+R_t(y),
+\]
+with
+\[
+\sup_{y\in\RR}\abs{R_t(y)}
+\le \frac{2\EE[\abs{\Delta}^{3}]+\EE[\abs{\Delta}^{4}]}{t^{3}}
+\]
+for $t\ge 1$.  This proves \eqref{eq:poisson-profile}.
+
+The function~$U$ is bounded, so
+$\sup_x\abs{h_t(x)/g_t(x)-1}=O(t^{-2})$.  Since $\int_{\RR}g_t=1$,
+\[
+\|h_t-g_t\|_{L^1}
+\le \sup_{x}\abs{\frac{h_t(x)}{g_t(x)}-1}\int_{\RR}g_t(x)\dd x
+=O(t^{-2}).
+\]
+Also $\|g_t\|_{L^\infty}=1/(\pi t)$, so
+\[
+\|h_t-g_t\|_{L^\infty}
+\le \|g_t\|_{L^\infty}\sup_{x}\abs{\frac{h_t(x)}{g_t(x)}-1}
+=O(t^{-3}).
+\]
+Let
+\[
+\delta_t(x):=\frac{h_t(x)}{g_t(x)}-1.
+\]
+The bound \eqref{eq:poisson-profile} implies that
+$\|\delta_t\|_{L^\infty}=O(t^{-2})$, so for large $t$ one has
+$\|\delta_t\|_{L^\infty}\le 1/2$.  Since
+$\int g_t\delta_t\dd x=\int(h_t-g_t)\dd x=0$ and
+\[
+(1+s)\log(1+s)-s\le 2s^{2}
+\qquad(\abs{s}\le 1/2),
+\]
+it follows that
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}g_t(x)\bigl((1+\delta_t(x))\log(1+\delta_t(x))-\delta_t(x)\bigr)\dd x
+\le 2\|\delta_t\|_{L^\infty}^{2}.
+\]
+Hence \eqref{eq:poisson-kl-rate} holds.
+\end{proof}
+
+\subsection{Cayley--Chebyshev modes and all-order coefficient calculus}
+\label{subsec:entropy-coefficient-package}
+
+\subsubsection{Cayley--Chebyshev mode calculus}
+
+The first two results of this subsection are algebraic:
+Theorem~\ref{thm:cayley-chebyshev-mode} and
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} compute the
+Cauchy--Haar mode integrals and the formal polynomials $A_k^{\rm form}$.
+Theorems~\ref{thm:finite-moment-density-remainder},
+\ref{thm:poisson-kl-even-orders}, and
+\ref{thm:finite-moment-entropy-remainder} then identify the evaluated
+polynomials with Poisson entropy coefficients under the finite centred
+$(2N+\eta)$th absolute moment hypothesis, with fixed-law constants.  The
+compact-support theorem below gives a separate analytic-interchange statement,
+while Corollary~\ref{cor:poisson-kl-eighth} and the subsequent defect and
+stability results use the resulting coefficient calculus at the first
+nontrivial orders.
+
+For $\varepsilon\in\RR$ and $y\in\RR$ set
+\begin{equation}\label{eq:cayley-comparison-kernel}
+R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2}.
+\end{equation}
+For fixed $y$, the Taylor expansion of $R_\varepsilon(y)$ at
+$\varepsilon=0$ defines coefficients $u_n(y)$ through
+\begin{equation}\label{eq:cayley-mode-series}
+R_\varepsilon(y)=\sum_{n=0}^{\infty}u_n(y)\varepsilon^n,
+\qquad
+|\varepsilon|<\sqrt{1+y^2}.
+\end{equation}
+
+\begin{theorem}[Cayley--Chebyshev mode formula]%
+\label{thm:cayley-chebyshev-mode}
+Let $U_n$ denote the Chebyshev polynomials of the second kind.  If
+$y=\tan\theta$ with $\theta\in(-\pi/2,\pi/2)$, then for every $n\ge 0$,
+\begin{equation}\label{eq:cayley-chebyshev-mode}
+u_n(\tan\theta)=\cos^n\theta\,U_n(\sin\theta).
+\end{equation}
+For $n\ge 1$ this is equivalent to
+\begin{equation}\label{eq:cayley-chebyshev-trig}
+u_n(\tan\theta)
+=\cos^{n-1}\theta\,
+\sin\!\Bigl((n+1)\Bigl(\frac{\pi}{2}-\theta\Bigr)\Bigr).
+\end{equation}
+Consequently
+\begin{equation}\label{eq:cayley-mode-parity}
+u_n(-y)=(-1)^n u_n(y)
+\qquad(n\ge 0).
+\end{equation}
+Moreover, for every integer $m\ge 1$,
+\begin{equation}\label{eq:cayley-mode-even-fourier}
+u_{2m}(\tan\theta)
+=(-1)^m 2^{-(2m-1)}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}\cos(2(j+1)\theta),
+\end{equation}
+and for every integer $m\ge 0$,
+\begin{equation}\label{eq:cayley-mode-odd-fourier}
+u_{2m+1}(\tan\theta)
+=(-1)^m 2^{-2m}
+\sum_{j=0}^{2m}\binom{2m}{j}\sin(2(j+1)\theta).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+With $y=\tan\theta$ one has
+\[
+R_\varepsilon(\tan\theta)
+=\frac{1}{1-2(\varepsilon\cos\theta)\sin\theta+(\varepsilon\cos\theta)^2}.
+\]
+The Chebyshev generating function
+\[
+\sum_{n=0}^{\infty}U_n(x)r^n=\frac{1}{1-2xr+r^2}
+\]
+\cite[Chapters~1 and~5]{MasonHandscomb2002}
+therefore yields \eqref{eq:cayley-chebyshev-mode} with
+$x=\sin\theta$ and $r=\varepsilon\cos\theta$.  Since
+\[
+U_n(\sin\theta)
+=\frac{\sin((n+1)(\pi/2-\theta))}{\cos\theta},
+\]
+formula \eqref{eq:cayley-chebyshev-trig} follows for $n\ge 1$.  The
+parity relation \eqref{eq:cayley-mode-parity} is immediate from
+\eqref{eq:cayley-chebyshev-trig}.
+
+For the finite Fourier expansions, write
+\[
+u_{2m}(\tan\theta)=(-1)^m\cos^{2m-1}\theta\,\cos((2m+1)\theta),
+\]
+\[
+u_{2m+1}(\tan\theta)=(-1)^m\cos^{2m}\theta\,\sin((2m+2)\theta),
+\]
+and use
+\[
+1+e^{2\ii\theta}=2e^{\ii\theta}\cos\theta.
+\]
+Taking real and imaginary parts after the binomial expansion gives
+\eqref{eq:cayley-mode-even-fourier} and
+\eqref{eq:cayley-mode-odd-fourier}.
+\end{proof}
+
+\subsubsection{All-order coefficient calculus}%
+\label{subsec:all-order-coefficient-calculus}
+
+This subsection concerns the coefficient algebra.  The display
+\eqref{eq:universal-entropy-coefficient} defines a formal expression;
+Proposition~\ref{prop:universal-entropy-coefficient-evaluation} evaluates it
+only when the required moments exist; and the finite Fourier theorem later in
+the subsection reduces the required mode integrals to exact Laurent or
+root-of-unity calculations.  Finite-moment entropy remainders and analytic
+interchange enter in the following subsection with their separate hypotheses.
+
+The coefficient calculus is universal once the Cayley--Chebyshev modes have
+been fixed.  For integers $r\ge2$ and $n_1,\dots,n_r\ge2$ define the
+Cauchy-weighted mode integral
+\begin{equation}\label{eq:mode-integral-definition}
+I(n_1,\dots,n_r):=I_{n_1,\dots,n_r}:=
+\int_{\RR}u_{n_1}(y)\cdots u_{n_r}(y)\,\omega(\dd y),
+\qquad
+\omega(\dd y):=\frac{\dd y}{\pi(1+y^2)}.
+\end{equation}
+Everything in this block is finite algebra.  The modes $u_n$, their Laurent
+polynomials $Q_n$, the integrals $I(n_1,\ldots,n_r)$, and the formal
+coefficient polynomials $A_k^{\rm form}$ are defined before any asymptotic
+truncation is taken and before any measure-level moments are evaluated.
+The finite-moment density and entropy remainders enter only in
+Subsection~\ref{subsec:finite-moment-entropy}, where this algebraic
+polynomial is identified with the actual large-time entropy polynomial.
+For $k\ge0$ let
+$\mathcal P_k:=\QQ[\mathfrak m_2,\ldots,\mathfrak m_k]$, with the convention
+$\mathcal P_0=\mathcal P_1=\QQ$.  In this formal polynomial algebra set
+\begin{equation}\label{eq:universal-entropy-coefficient}
+A_k^{\rm form}:=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\dots,n_r\ge2\\ n_1+\cdots+n_r=k}}
+\mathfrak m_{n_1}\cdots\mathfrak m_{n_r}\,I(n_1,\dots,n_r),
+\end{equation}
+with the convention that an empty sum is zero.  Thus
+$A_0^{\rm form}=A_1^{\rm form}=A_2^{\rm form}=A_3^{\rm form}=0$.  If a
+probability measure $\nu$ has mean $\bar\gamma$ and centred moments
+$\mu_n=\int(\gamma-\bar\gamma)^n\dd\nu$ through order~$k$, we write
+\begin{equation}\label{eq:universal-entropy-coefficient-evaluation}
+A_k(\nu):={\rm ev}_{\nu,k}(A_k^{\rm form}),
+\qquad
+{\rm ev}_{\nu,k}(\mathfrak m_n)=\mu_n,
+\end{equation}
+for the resulting finite-moment evaluation.
+The phrase ``moments through order~$k$'' is only a uniform sufficient
+convention: a particular polynomial $A_k^{\rm form}$ may be evaluated as soon
+as the moments that actually occur in it exist.  In particular the printed
+$A_8^{\rm form}$ below involves only $\mu_2,\ldots,\mu_6$, which is why the
+seventh-moment eighth-order bridge can use the notation $A_8(\nu)$ without
+invoking the finite-$(8+\eta)$ theorem.
+
+\begin{theorem}[Universal entropy coefficient package]%
+\label{thm:universal-entropy-coefficients}
+Let $k\ge0$.  In the completed formal Laurent algebra
+$\mathcal P_k[[t^{-1}]]$, truncate every product after collecting total
+$t$-degree at most~$k$.  If
+\[
+\delta^{\rm form}_t(y)=\sum_{n=2}^{k}\mathfrak m_n u_n(y)t^{-n},
+\]
+then the coefficient of $t^{-k}$ in the formal expression
+\[
+\int_{\RR}\bigl((1+\delta^{\rm form}_t)\log(1+\delta^{\rm form}_t)
+-\delta^{\rm form}_t\bigr)\,\dd\omega
+\]
+is precisely $A_k^{\rm form}$ in
+\eqref{eq:universal-entropy-coefficient}.  Moreover, if $\nu$ is a
+probability measure on~$\RR$ with mean $\bar\gamma$ and centred moments
+$\mu_n=\int(\gamma-\bar\gamma)^n\dd\nu$ through order~$k$, then the evaluated
+coefficient defined by \eqref{eq:universal-entropy-coefficient-evaluation} is
+the explicit finite polynomial
+\begin{equation}\label{eq:universal-coefficient-theorem-evaluated}
+A_k(\nu)
+=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\dots,n_r\ge2\\ n_1+\cdots+n_r=k}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\dots,n_r),
+\end{equation}
+and is equivalently the coefficient of $t^{-k}$ in
+\begin{equation}\label{eq:universal-coefficient-theorem-generating}
+\int_{\RR}
+\left(
+\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}
+\right)\dd\omega,
+\end{equation}
+after formal truncation at total $t$-degree~$k$.  Finally,
+\begin{equation}\label{eq:universal-odd-coefficients-vanish}
+A_k^{\rm form}=0\qquad\text{whenever }k\text{ is odd}.
+\end{equation}
+Consequently $A_k(\nu)=0$ for odd~$k$ whenever the moments required to evaluate
+$A_k(\nu)$ exist.
+\end{theorem}
+
+\begin{proof}
+The Taylor series
+\[
+(1+s)\log(1+s)-s
+=\sum_{r=2}^{\infty}\frac{(-1)^r}{r(r-1)}s^r
+\]
+has no constant or linear term.  In the formal substitution for
+$\delta_t^{\rm form}$, a monomial in the $r$th power has the form
+\[
+\mathfrak m_{n_1}\cdots\mathfrak m_{n_r}
+u_{n_1}(y)\cdots u_{n_r}(y)t^{-(n_1+\cdots+n_r)},
+\qquad n_j\ge2.
+\]
+For fixed total degree~$k$ there are only finitely many such monomials, and
+necessarily $2\le r\le\lfloor k/2\rfloor$.  Integrating the degree-$k$ part
+against~$\omega$ gives exactly \eqref{eq:universal-entropy-coefficient}.
+Evaluation by ${\rm ev}_{\nu,k}$ is a homomorphism from the finite polynomial
+algebra $\mathcal P_k$ to~$\RR$.  Applying it to
+\eqref{eq:universal-entropy-coefficient} gives
+\eqref{eq:universal-coefficient-theorem-evaluated}, and applying it
+coefficient-by-coefficient to the finite truncated formal generating identity
+gives \eqref{eq:universal-coefficient-theorem-generating}.  This evaluation
+uses only the centred moments through order~$k$.
+
+It remains to prove the odd cancellation.  By
+\eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$, while
+$\omega(\dd y)$ is even.  Hence the integrand in
+$I(n_1,\dots,n_r)$ is odd whenever $n_1+\cdots+n_r$ is odd, and then the
+integral vanishes.  Every summand in $A_k^{\rm form}$ has total index~$k$, so
+all summands vanish when $k$ is odd.  Evaluating this formal identity gives
+the asserted odd vanishing of $A_k(\nu)$.
+\end{proof}
+
+\begin{proposition}[Universal entropy coefficients: finite-moment layer]%
+\label{prop:universal-entropy-coefficient-evaluation}
+Let $k\ge0$, and let $\nu$ be a probability measure on~$\RR$ with mean
+$\bar\gamma$ and centred moments through order~$k$.  Then the quantity
+$A_k(\nu)$ in \eqref{eq:universal-entropy-coefficient-evaluation} is a finite
+polynomial in the actual centred moments of~$\nu$ and in the universal mode
+integrals \eqref{eq:mode-integral-definition}.  If $k$ is odd, then
+$A_k(\nu)=0$.  No measure-level value of $A_k(\nu)$ is asserted when the
+required moments do not exist.
+\end{proposition}
+
+\begin{proof}
+Evaluation by ${\rm ev}_{\nu,k}$ is a homomorphism from the finite polynomial
+algebra $\mathcal P_k$ to~$\RR$.  Applying it to the identity of
+Theorem~\ref{thm:universal-entropy-coefficients} gives exactly
+\eqref{eq:universal-entropy-coefficient-evaluation}.  The odd cancellation is
+the image of \eqref{eq:universal-odd-coefficients-vanish} under the same
+evaluation map.
+\end{proof}
+
+\begin{corollary}[Universal coefficient formula]%
+\label{cor:universal-entropy-coefficient-package}
+Let $k\ge0$, and let $\nu$ be a probability measure on~$\RR$ with mean
+$\bar\gamma$ and centred moments
+$\mu_n=\int(\gamma-\bar\gamma)^n\dd\nu$ through order~$k$.  Then the formal
+identity of Theorem~\ref{thm:universal-entropy-coefficients} and the
+evaluation rule of Proposition~\ref{prop:universal-entropy-coefficient-evaluation}
+define the same coefficient: $A_k(\nu)$ is exactly
+\begin{equation}\label{eq:universal-coefficient-package-evaluated}
+A_k(\nu)
+=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\dots,n_r\ge2\\ n_1+\cdots+n_r=k}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\dots,n_r),
+\end{equation}
+and the same number is the coefficient of $t^{-k}$ in the evaluated finite
+formal expression
+\begin{equation}\label{eq:universal-coefficient-package-generating}
+\int_{\RR}
+\left(
+\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mu_n\,u_n(y)t^{-n}
+\right)\dd\omega,
+\end{equation}
+after formal truncation at total $t$-degree~$k$.  In particular
+$A_k(\nu)=0$ for odd~$k$.
+\end{corollary}
+
+\begin{proof}
+The polynomial $A_k^{\rm form}$ is a finite sum in the algebra
+$\mathcal P_k$, and ${\rm ev}_{\nu,k}$ is the homomorphism sending
+$\mathfrak m_n$ to~$\mu_n$.  Applying this homomorphism to
+\eqref{eq:universal-entropy-coefficient} gives
+\eqref{eq:universal-coefficient-package-evaluated}.  Applying the same
+homomorphism coefficient-by-coefficient to the finite $t^{-k}$ part of the
+formal identity in Theorem~\ref{thm:universal-entropy-coefficients} gives
+\eqref{eq:universal-coefficient-package-generating}.  Finally,
+\eqref{eq:universal-odd-coefficients-vanish} evaluates to
+$A_k(\nu)=0$ whenever $k$ is odd.
+\end{proof}
+
+Theorem~\ref{thm:universal-entropy-coefficients} gives the formal coefficient
+identity for the entropy asymptotics, and
+Proposition~\ref{prop:universal-entropy-coefficient-evaluation} gives its
+finite-moment evaluation.  In this paper the asserted large-time expansion is
+always the finite-moment statement of Theorem~\ref{thm:poisson-kl-even-orders},
+together with the remainder theorem below; the formal coefficient identity is
+used there through Corollary~\ref{cor:universal-entropy-coefficient-package}
+to identify the finite polynomial that the density and entropy remainders
+justify.  Lemma~\ref{lem:coefficient-regime-separation} records the
+formal, evaluated, analytic, and finite-moment meanings of this convention.
+
+\begin{theorem}[Finite Fourier algorithm for mode integrals]%
+\label{thm:finite-fourier-mode-integral-algorithm}
+For each $n\ge1$ define a Laurent polynomial $Q_n$ on the unit circle by
+\begin{equation}\label{eq:mode-laurent-polynomial-definition}
+Q_n(e^{2\ii\theta}):=u_n(\tan\theta),
+\qquad -\pi/2<\theta<\pi/2.
+\end{equation}
+Explicitly, for $m\ge1$ and $m\ge0$, respectively,
+\begin{equation}\label{eq:mode-laurent-even}
+Q_{2m}(z)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+\end{equation}
+and
+\begin{equation}\label{eq:mode-laurent-odd}
+Q_{2m+1}(z)=(-1)^m\frac{2^{-2m}}{2\ii}
+\sum_{j=0}^{2m}\binom{2m}{j}
+\bigl(z^{j+1}-z^{-(j+1)}\bigr).
+\end{equation}
+Consequently, for every $r\ge2$ and $n_1,\dots,n_r\ge1$,
+\begin{equation}\label{eq:mode-integral-constant-term}
+I(n_1,\dots,n_r)
+=\bigl[z^0\bigr]\prod_{a=1}^{r}Q_{n_a}(z),
+\end{equation}
+where $[z^0]$ denotes constant Laurent coefficient.  Equivalently, if
+$M>n_1+\cdots+n_r$, then
+\begin{equation}\label{eq:mode-integral-root-of-unity-algorithm}
+I(n_1,\dots,n_r)
+=\frac1M\sum_{\zeta\in\mu_M}\prod_{a=1}^{r}Q_{n_a}(\zeta).
+\end{equation}
+The strict inequality $M>n_1+\cdots+n_r$ is the aliasing barrier: the
+Laurent support of $\prod_{a=1}^rQ_{n_a}$ is contained in
+$[-(n_1+\cdots+n_r),n_1+\cdots+n_r]$, so no nonzero exponent can be congruent
+to zero modulo~$M$ under the root-of-unity average.
+Thus every formal universal coefficient $A_k^{\rm form}$, and every evaluated
+coefficient $A_k(\nu)$ when the required moments exist, is obtained by
+finitely many Laurent-polynomial multiplications and constant-coefficient
+extractions.
+\end{theorem}
+
+\begin{proof}
+Equations \eqref{eq:mode-laurent-even} and \eqref{eq:mode-laurent-odd} are
+exactly the finite Fourier formulas
+\eqref{eq:cayley-mode-even-fourier} and
+\eqref{eq:cayley-mode-odd-fourier} after writing
+$z=e^{2\ii\theta}$,
+\[
+\cos(2\ell\theta)=\frac{z^\ell+z^{-\ell}}2,
+\qquad
+\sin(2\ell\theta)=\frac{z^\ell-z^{-\ell}}{2\ii}.
+\]
+The change of variables $y=\tan\theta$ gives
+\[
+\omega(\dd y)=\frac{\dd\theta}{\pi}
+\qquad(-\pi/2<\theta<\pi/2),
+\]
+and $z=e^{2\ii\theta}$ pushes $\dd\theta/\pi$ to normalized Haar measure
+on~$\TT$.  Hence $I(n_1,\dots,n_r)$ is the Haar integral of the Laurent
+polynomial $\prod_a Q_{n_a}$, which is its constant coefficient.  The
+support of $Q_n$ is contained in $\{-n,\dots,-1,1,\dots,n\}$; therefore
+the product has Fourier support contained in
+$\{-(n_1+\cdots+n_r),\dots,n_1+\cdots+n_r\}$.  Averaging over the $M$th
+roots of unity with $M>n_1+\cdots+n_r$ kills every nonzero exponent in this
+support and keeps the constant coefficient, proving
+\eqref{eq:mode-integral-root-of-unity-algorithm}.  The last assertion
+follows by substituting \eqref{eq:mode-integral-constant-term} into
+\eqref{eq:universal-entropy-coefficient}.
+\end{proof}
+
+\begin{corollary}[Below-barrier finite grids for the eighth-order jet]%
+\label{cor:below-barrier-finite-grid-eighth-jet}
+Let $L\ge9$.  For every product of Cayley modes appearing in the
+coefficient extraction of Corollary~\ref{cor:poisson-kl-eighth} through
+order~$t^{-8}$, and also for the odd total-index products whose integrals
+give the discarded $t^{-5}$ and $t^{-7}$ coefficients, the Haar integral is
+computed exactly by the root-of-unity average on~$\mu_L$.  Equivalently,
+for every tuple $(n_1,\ldots,n_r)$ in this coefficient jet one has
+\[
+I(n_1,\ldots,n_r)
+=\frac1L\sum_{\zeta\in\mu_L}\prod_{a=1}^rQ_{n_a}(\zeta),
+\]
+with no aliasing correction.  Hence the coefficients of $t^{-4}$, $t^{-6}$,
+and $t^{-8}$ in Corollary~\ref{cor:poisson-kl-eighth} are recovered from exact
+finite-grid constant-coefficient extraction below the Fourier-degree barrier;
+the grid calculation is exact finite Fourier extraction, not numerical
+approximation.
+\end{corollary}
+
+\begin{proof}
+The coefficient jet through order~$t^{-8}$ is assembled from products of
+the modes $u_n$ whose total index $n_1+\cdots+n_r$ is at most~$8$: at the
+even orders these are
+\[
+u_2^2,\quad
+u_2u_4,\ u_3^2,\ u_2^3,\quad
+u_2u_6,\ u_3u_5,\ u_4^2,\ u_2^2u_4,\ u_2u_3^2,\ u_2^4,
+\]
+and the odd orders use the analogous total-index $5$ and~$7$ products.
+Applying
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} with
+$M=L\ge9$ gives $L>n_1+\cdots+n_r$ for every such tuple, so the
+root-of-unity average kills all nonzero Laurent exponents in the product
+and keeps exactly the constant coefficient.  Substituting these exact
+integrals into the universal coefficient formula
+\eqref{eq:universal-entropy-coefficient} gives the displayed eighth-order
+coefficient arithmetic in Corollary~\ref{cor:poisson-kl-eighth}.  The odd
+products have zero Haar integral by Lemma~\ref{lem:mode-parity-vanish}, and
+the same below-barrier average computes that zero exactly.
+\end{proof}
+
+\begin{proposition}[Finite mode truncations]%
+\label{prop:cayley-mode-remainder}
+For every integer $N\ge 1$ there exists a rational function
+$v_N:\RR^2\to\RR$, bounded on~$\RR^2$, such that
+\begin{equation}\label{eq:cayley-mode-remainder}
+R_\varepsilon(y)
+=\sum_{n=0}^{N}u_n(y)\varepsilon^n+\varepsilon^{N+1}v_N(y,\varepsilon)
+\qquad(y,\varepsilon\in\RR).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For every $x$ and $r$ one has the finite Chebyshev-sum identity
+\[
+\sum_{n=0}^{N}U_n(x)r^n
+=\frac{1-r^{N+1}U_{N+1}(x)+r^{N+2}U_N(x)}{1-2xr+r^2}.
+\]
+\cite[Chapter~5]{MasonHandscomb2002}
+Substituting $x=\sin\theta$ and $r=\varepsilon\cos\theta$ gives
+\eqref{eq:cayley-mode-remainder} with
+\[
+v_N(\tan\theta,\varepsilon)
+=\frac{\cos^{N+1}\theta\,U_{N+1}(\sin\theta)
+-\varepsilon\cos^{N+2}\theta\,U_N(\sin\theta)}
+{1-2(\varepsilon\cos\theta)\sin\theta+(\varepsilon\cos\theta)^2}.
+\]
+Equivalently, since
+\[
+1-2(\varepsilon\cos\theta)\sin\theta
+   +(\varepsilon\cos\theta)^2
+=\frac{1+(\tan\theta-\varepsilon)^2}{1+\tan^2\theta},
+\]
+we have
+\[
+v_N(y,\varepsilon)
+=\frac{(1+y^2)u_{N+1}(y)-\varepsilon u_N(y)}
+       {1+(y-\varepsilon)^2},
+\]
+so $v_N$ is rational in $(y,\varepsilon)$.
+
+It remains to prove boundedness.  Put
+$c=\cos\theta$, $s=\sin\theta$, and $d=\tan\theta-\varepsilon$.  Then
+$\varepsilon c=s-dc$, and the preceding trigonometric formula becomes
+\[
+v_N(\tan\theta,\varepsilon)
+=\frac{c^{N-1}\bigl(U_{N+1}(s)-sU_N(s)+dc\,U_N(s)\bigr)}
+       {1+d^2}.
+\]
+For $|s|\le1$, the polynomials $U_N$ and $U_{N+1}$ are bounded by
+constants depending only on~$N$.  Since $N\ge1$, $|c|^{N-1}\le1$, and
+\[
+\frac{|d|\,|c|^N}{1+d^2}\le \frac{|d|}{1+d^2}\le \frac12,
+\]
+the right-hand side is bounded uniformly in $\theta$ and~$\varepsilon$.
+This proves that $v_N$ is bounded on~$\RR^2$.
+\end{proof}
+
+\begin{lemma}[Tail-uniform Cayley mode remainder]%
+\label{lem:tail-uniform-cayley-mode-remainder}
+Let $N\ge1$, let $X$ be a real random variable with
+$\EE|X|^{N+1}<\infty$, and let
+\[
+\mathcal R_{N,t}(y):=
+\EE\!\left[
+R_{X/t}(y)-\sum_{n=0}^{N}u_n(y)\frac{X^n}{t^n}
+\right]
+\qquad(t>0).
+\]
+Then there is a constant $M_N<\infty$, depending only on~$N$, such that
+\begin{equation}\label{eq:tail-uniform-cayley-mode-remainder}
+\sup_{y\in\RR}|\mathcal R_{N,t}(y)|
+\;+\;\|\mathcal R_{N,t}\|_{L^1(\omega)}
+\le
+M_N\,\EE|X|^{N+1}\,t^{-(N+1)},
+\end{equation}
+where $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$.  Thus the remainder is
+uniform in the phase variable after integration over the full, unbounded
+tail of~$X$.
+\end{lemma}
+
+\begin{proof}
+By Proposition~\ref{prop:cayley-mode-remainder},
+\[
+R_{X/t}(y)-\sum_{n=0}^{N}u_n(y)\frac{X^n}{t^n}
+=\frac{X^{N+1}}{t^{N+1}}v_N(y,X/t)
+\]
+for every $y$ and every value of~$X$.  Let
+$M_N:=\|v_N\|_{L^\infty(\RR^2)}$.  Taking expectations gives
+\[
+|\mathcal R_{N,t}(y)|
+\le M_N\,\EE|X|^{N+1}\,t^{-(N+1)}
+\qquad(y\in\RR).
+\]
+This is the asserted uniform estimate.  Since $\omega$ is a probability
+measure, the same bound also gives the displayed $L^1(\omega)$ estimate.
+\end{proof}
+
+\begin{theorem}[Finite-moment density remainder]%
+\label{thm:finite-moment-density-remainder}
+Let $L\ge2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
+on~$\RR$ with mean $\bar\gamma$ and finite centred $(L+\eta)$th absolute
+moment.  Put
+$\Delta=\gamma-\bar\gamma$,
+$\mu_n=\int\Delta^n\dd\nu(\gamma)$, and
+\[
+\delta_t(\bar\gamma+ty):=\frac{(P_t*\nu)(\bar\gamma+ty)}
+{P_t(ty)}-1.
+\]
+Let
+\[
+B_L:=\max_{0\le n\le L}\|u_n\|_\infty,
+\qquad
+V_L:=\|v_L\|_\infty,
+\qquad
+C_L:=\max\{V_L,\,6+(L+1)B_L\}.
+\]
+Then \eqref{eq:finite-moment-density-remainder} holds with
+$C_{\nu,L,\eta}=2C_L\EE|\Delta|^{L+\eta}$.  Moreover, with
+\[
+S_{\nu,L,\eta}:=
+B_L\sum_{n=2}^{L}|\mu_n|+C_{\nu,L,\eta},
+\qquad
+T_{\nu,L,\eta}:=\max\{1,(2S_{\nu,L,\eta})^{1/2}\},
+\]
+one has
+\begin{equation}\label{eq:finite-moment-density-remainder}
+\delta_t(\bar\gamma+ty)
+=\sum_{n=2}^{L}\mu_n u_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\sup_y|\rho_{L,t}(y)|+\|\rho_{L,t}\|_{L^1(\omega)}
+\le C_{\nu,L,\eta}t^{-(L+\eta)},
+\end{equation}
+and
+\begin{equation}\label{eq:finite-moment-density-smallness}
+\sup_y|\delta_t(\bar\gamma+ty)|\le S_{\nu,L,\eta}t^{-2},
+\qquad t\ge1,
+\end{equation}
+with $\sup_y|\delta_t(\bar\gamma+ty)|\le1/2$ for
+$t\ge T_{\nu,L,\eta}$.
+\end{theorem}
+
+\begin{proof}
+With $x=\bar\gamma+ty$ and $g_t(x)=P_t(x-\bar\gamma)=P_t(ty)$,
+\[
+\frac{(P_t*\nu)(x)}{g_t(x)}
+=\int_{\RR}R_{\Delta/t}(y)\dd\nu(\gamma).
+\]
+For $|\varepsilon|\le1$, Proposition~\ref{prop:cayley-mode-remainder} and
+the boundedness of $v_L$ give
+\[
+\left|R_\varepsilon(y)-\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+    \le V_L |\varepsilon|^{L+1}
+    \le V_L |\varepsilon|^{L+\eta}.
+\]
+For $|\varepsilon|>1$, write $y=z+\varepsilon$.  Then
+\[
+R_\varepsilon(y)=\frac{1+(z+\varepsilon)^2}{1+z^2}
+\le 3(1+\varepsilon^2)
+\le 6|\varepsilon|^{L+\eta},
+\]
+uniformly in~$z$, because $L+\eta\ge2$.  Also
+\[
+\left|\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le (L+1)B_L|\varepsilon|^L
+\le (L+1)B_L|\varepsilon|^{L+\eta}.
+\]
+Thus the pointwise remainder is bounded by
+$C_L|\varepsilon|^{L+\eta}$ uniformly in~$y$.
+Taking $\varepsilon=\Delta/t$ and expectations yields the displayed
+$t^{-(L+\eta)}$ bound in both $L^\infty$ and $L^1(\omega)$, since $\omega$
+has total mass one.  Since $\mu_0=1$ and $\mu_1=0$, subtracting the
+constant term gives \eqref{eq:finite-moment-density-remainder}.  Each
+$u_n$ is bounded by Theorem~\ref{thm:cayley-chebyshev-mode}; hence the
+finite sum begins at order~$t^{-2}$.  The displayed definition of
+$S_{\nu,L,\eta}$ therefore gives
+\eqref{eq:finite-moment-density-smallness}, because $L+\eta\ge2$ and
+$t\ge1$.  The displayed choice of $T_{\nu,L,\eta}$ gives the final
+smallness assertion.
+\end{proof}
+
+For later use we record the first modes explicitly:
+\begin{equation}\label{eq:cayley-first-modes}
+u_2(y)=\frac{3y^2-1}{(1+y^2)^2},
+\qquad
+u_3(y)=\frac{4y(y^2-1)}{(1+y^2)^3},
+\qquad
+u_4(y)=\frac{5y^4-10y^2+1}{(1+y^2)^4},
+\end{equation}
+\begin{equation}\label{eq:cayley-next-modes}
+u_5(y)=\frac{6y^5-20y^3+6y}{(1+y^2)^5},
+\qquad
+u_6(y)=\frac{7y^6-35y^4+21y^2-1}{(1+y^2)^6}.
+\end{equation}
+
+Propositions~\ref{prop:phase-coordinate-identification}
+and~\ref{prop:finite-grid-coefficient-recovery} give the phase-recovery link
+with the finite sampling block: the trigonometric coefficients below are
+Haar-Fourier coefficients of the same circle characters sampled on the
+root-of-unity grids~$\mu_N$, and the finite-grid recovery has the aliasing
+bound \eqref{eq:finite-grid-aliasing-bound}.
+
+\begin{proposition}[Poisson--Cauchy moment inversion by phase modes]%
+\label{prop:poisson-cauchy-moment-inversion-by-phase-modes}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
+finite centred fifth absolute moment.  Put
+\[
+\Delta:=\gamma-\bar\gamma,\qquad
+\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma),\qquad
+\sigma^2:=\mu_2,
+\]
+and let $h_t:=P_t*\nu$ and $g_t(x):=P_t(x-\bar\gamma)$.  For
+$\theta\in(-\pi/2,\pi/2)$ define the phase profile
+\[
+F_t(\theta):=
+\frac{h_t(\bar\gamma+t\tan\theta)}
+     {g_t(\bar\gamma+t\tan\theta)}-1.
+\]
+For $k\ge1$ set
+\[
+\mathcal C_k(t):=
+2\int_{-\pi/2}^{\pi/2}F_t(\theta)\cos(2k\theta)\,\frac{\dd\theta}{\pi},
+\qquad
+\mathcal S_k(t):=
+2\int_{-\pi/2}^{\pi/2}F_t(\theta)\sin(2k\theta)\,\frac{\dd\theta}{\pi}.
+\]
+Then
+\[
+\sigma^2=\lim_{t\to\infty}-2t^2\bigl(\mathcal C_1(t)-\mathcal C_4(t)\bigr),
+\qquad
+\mu_3=\lim_{t\to\infty}-4t^3\mathcal S_3(t),
+\qquad
+\mu_4=\lim_{t\to\infty}8t^4\mathcal C_4(t).
+\]
+More precisely,
+\[
+\mathcal C_1(t)-\mathcal C_4(t)
+=-\frac{\sigma^2}{2t^2}+O(t^{-5}),\qquad
+\mathcal S_3(t)=-\frac{\mu_3}{4t^3}+O(t^{-5}),
+\qquad
+\mathcal C_4(t)=\frac{\mu_4}{8t^4}+O(t^{-5}).
+\]
+The $O(t^{-5})$ term in the middle estimate is an actual fifth-order
+remainder: when the fifth centred moment is finite it contains the
+$\sin(6\theta)$ coefficient of $u_5$, and no coefficient-free cancellation at
+order $t^{-5}$ is asserted.
+\end{proposition}
+
+\begin{proof}
+Write $y=\tan\theta$.  For $x=\bar\gamma+ty$ one has
+\[
+\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
+=\frac{1+y^2}{1+(y-\Delta/t)^2}
+=R_{\Delta/t}(y).
+\]
+Therefore
+\[
+F_t(\theta)=\int_{\RR}\bigl(R_{\Delta/t}(\tan\theta)-1\bigr)
+\,\dd\nu(\gamma).
+\]
+Proposition~\ref{prop:cayley-mode-remainder} gives the pointwise
+order-four identity
+\[
+R_{\Delta/t}(y)-1
+=\sum_{n=1}^{4}u_n(y)\frac{\Delta^n}{t^n}
++\frac{\Delta^5}{t^5}v_4(y,\Delta/t).
+\]
+Taking $\nu$-expectations and using $\mu_1=0$ gives, uniformly in
+$\theta$,
+\[
+F_t(\theta)
+=\frac{\sigma^2}{t^2}u_2(\tan\theta)
++\frac{\mu_3}{t^3}u_3(\tan\theta)
++\frac{\mu_4}{t^4}u_4(\tan\theta)
++O(t^{-5}).
+\]
+The finite fifth absolute moment is used only through
+Lemma~\ref{lem:tail-uniform-cayley-mode-remainder}, with $X=\Delta$ and
+truncation order~$4$, to bound the last expectation uniformly.
+Thus the $O(t^{-5})$ term has not been discarded coefficientwise; it is the
+full order-five tail produced by $v_4$.  If one instead expands through
+$u_5$, the formula
+\[
+u_5(\tan\theta)=\frac1{16}\bigl(\sin2\theta+4\sin4\theta
++6\sin6\theta+4\sin8\theta+\sin10\theta\bigr)
+\]
+shows explicitly that the $\mathcal S_3$ channel has a fifth-order
+contribution $3\mu_5/(8t^5)$ whenever $\mu_5$ is finite; the proposition uses
+only the leading coefficient needed for the moment limit.
+
+The first three nonconstant modes have the finite phase-Fourier
+expansions
+\[
+u_2(\tan\theta)=-\frac12\bigl(\cos2\theta+\cos4\theta\bigr),
+\]
+\[
+u_3(\tan\theta)
+=-\frac14\bigl(\sin2\theta+2\sin4\theta+\sin6\theta\bigr),
+\]
+\[
+u_4(\tan\theta)
+=\frac18\bigl(\cos2\theta+3\cos4\theta+3\cos6\theta+\cos8\theta\bigr),
+\]
+which are the cases $n=2,3,4$ of
+Theorem~\ref{thm:cayley-chebyshev-mode}.  The functions
+$\cos(2k\theta)$ and $\sin(2k\theta)$ are orthogonal on
+$(-\pi/2,\pi/2)$, and the prefactor $2/\pi$ in the definitions of
+$\mathcal C_k$ and $\mathcal S_k$ extracts the corresponding coefficient.
+Thus the preceding uniform expansion gives
+\[
+\mathcal C_1(t)
+=-\frac{\sigma^2}{2t^2}+\frac{\mu_4}{8t^4}+O(t^{-5}),
+\qquad
+\mathcal C_4(t)=\frac{\mu_4}{8t^4}+O(t^{-5}),
+\]
+and
+\[
+\mathcal S_3(t)=-\frac{\mu_3}{4t^3}+O(t^{-5}).
+\]
+The last displayed remainder includes the possible fifth-order sine-mode
+contribution just identified.
+Subtracting the two cosine coefficients and multiplying by the displayed
+powers of~$t$ proves the three inversion formulas.
+\end{proof}
+
+The preceding proposition is a continuum phase-coefficient inversion.  The
+finite-grid version below separates the exact alias-free part from the
+large-time error; this is the additional estimate needed before the phase
+coefficients can be read from finitely many exact samples.
+
+\begin{theorem}[Finite-grid finite-time moment recovery]%
+\label{thm:finite-grid-poisson-moment-recovery}
+Let $\nu$ satisfy the hypotheses of
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
+and let $F_t$ be the corresponding phase profile.  Let $L\ge9$ be odd.
+For each $\zeta\in\mu_L$, let
+$\theta_\zeta\in(-\pi/2,\pi/2)$ be the unique angle with
+$\zeta=e^{2\ii\theta_\zeta}$, and set, for $k\ge1$,
+\begin{align*}
+\widehat F_{t,L}(k)
+&:=\frac1L\sum_{\zeta\in\mu_L}
+F_t(\theta_\zeta)\zeta^{-k},\\
+\mathcal C_{k,L}(t)&:=2\operatorname{Re}\widehat F_{t,L}(k),
+\qquad
+\mathcal S_{k,L}(t):=-2\operatorname{Im}\widehat F_{t,L}(k).
+\end{align*}
+Then there are constants $C_{\nu},T_{\nu}>0$ such that, for all
+$t\ge T_{\nu}$,
+\begin{align}
+\left|
+\mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)
++\frac{\sigma^2}{2t^2}
+\right|
+&\le C_{\nu}t^{-5},\label{eq:finite-grid-sigma-recovery}\\
+\left|
+\mathcal S_{3,L}(t)+\frac{\mu_3}{4t^3}
+\right|
+&\le C_{\nu}t^{-5},\label{eq:finite-grid-mu-three-recovery}\\
+\left|
+\mathcal C_{4,L}(t)-\frac{\mu_4}{8t^4}
+\right|
+&\le C_{\nu}t^{-5}.\label{eq:finite-grid-mu-four-recovery}
+\end{align}
+Consequently the same fixed finite phase grid recovers the moment
+coordinates in the large-time limit:
+\[
+\sigma^2=\lim_{t\to\infty}
+-2t^2\bigl(\mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)\bigr),
+\qquad
+\mu_3=\lim_{t\to\infty}-4t^3\mathcal S_{3,L}(t),
+\]
+\[
+\mu_4=\lim_{t\to\infty}8t^4\mathcal C_{4,L}(t),
+\]
+with finite-time errors respectively $O(t^{-3})$, $O(t^{-2})$, and
+$O(t^{-1})$ after the displayed renormalizations.  These are deterministic
+estimates for exact phase samples.
+\end{theorem}
+
+\begin{proof}
+The proof of
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
+using Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} at order~$4$,
+gives constants $C_0,T_0>0$ such that for $t\ge T_0$
+\[
+F_t(\theta)=Q_t(\theta)+r_t(\theta),
+\qquad
+\sup_{-\pi/2<\theta<\pi/2}|r_t(\theta)|\le C_0t^{-5},
+\]
+where
+\[
+Q_t(\theta)
+:=\frac{\sigma^2}{t^2}u_2(\tan\theta)
++\frac{\mu_3}{t^3}u_3(\tan\theta)
++\frac{\mu_4}{t^4}u_4(\tan\theta).
+\]
+By the finite Fourier formulas displayed in the proof of
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
+$Q_t$ is a Laurent polynomial in $z=e^{2\ii\theta}$ with Fourier support
+contained in $\{-4,\ldots,4\}$.  For $k=1,3,4$, the shifted polynomial
+$z^{-k}Q_t(z)$ has support contained in $\{-8,\ldots,8\}$.  Since
+$L\ge9$, Proposition~\ref{prop:finite-grid-coefficient-recovery} applies
+with no aliasing to the $Q_t$ part of each coefficient.  The parity and
+orthogonality computation in the preceding proposition therefore gives
+\[
+\mathcal C_{1,L}^{Q}(t)-\mathcal C_{4,L}^{Q}(t)
+=-\frac{\sigma^2}{2t^2},
+\qquad
+\mathcal S_{3,L}^{Q}(t)=-\frac{\mu_3}{4t^3},
+\qquad
+\mathcal C_{4,L}^{Q}(t)=\frac{\mu_4}{8t^4},
+\]
+where the superscript indicates the same finite-grid recovery applied to
+$Q_t$.
+
+For the remainder, the discrete averaging formula gives
+\[
+\left|\frac1L\sum_{\zeta\in\mu_L}
+r_t(\theta_\zeta)\zeta^{-k}\right|
+\le C_0t^{-5}
+\qquad(k\ge1).
+\]
+Thus the corresponding cosine and sine recovery errors are at most
+$2C_0t^{-5}$, and the difference
+$\mathcal C_{1,L}-\mathcal C_{4,L}$ has error at most $4C_0t^{-5}$.
+Increasing the constant to one number $C_\nu$ proves
+\eqref{eq:finite-grid-sigma-recovery}--\eqref{eq:finite-grid-mu-four-recovery}.
+Multiplication by $2t^2$, $4t^3$, and $8t^4$ gives the final
+renormalized error orders and the three limits.
+\end{proof}
+
+\begin{lemma}[Mode parity cancellation]\label{lem:mode-parity-vanish}
+For integers $n_1,\dots,n_k\ge 1$ let
+\[
+I_{n_1,\dots,n_k}:=
+\int_{\RR}
+\frac{u_{n_1}(y)\cdots u_{n_k}(y)}{\pi(1+y^2)}\,\dd y.
+\]
+Then $I_{n_1,\dots,n_k}=0$ whenever $n_1+\cdots+n_k$ is odd.
+\end{lemma}
+
+\begin{proof}
+From \eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$ for every
+$n\ge1$, while $(1+y^2)^{-1}$ is even.  Hence the integrand is odd if
+$n_1+\cdots+n_k$ is odd, so the integral vanishes.
+\end{proof}
+
