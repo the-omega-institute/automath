@@ -9,13 +9,59 @@ order $2N$.
 First the density ratio is written as a finite mode polynomial plus an
 $L^\infty\cap L^1(\omega)$ error.  Then
 $\Phi(z)=(1+z)\log(1+z)-z$ is expanded only through degree~$N$, because the
-density perturbation begins at order $t^{-2}$.  Products containing at least
-one density error keep the $O(t^{-(2N+\eta)})$ $L^1(\omega)$ size, while the
-discarded Taylor tail is $O(t^{-(2N+2)})$.  The former constant is inherited
-from the finite density remainder and the finite mode bounds; the latter is
-controlled by the eventual $t^{-2}$ bound for the density perturbation.  After
-integration, the remaining finite polynomial is exactly the universal
-coefficient polynomial.
+density perturbation begins at order $t^{-2}$.  Thus a product containing one
+density error also contains the entropy quadratic order and is two powers
+smaller than the density error itself; products with more density-error
+factors are smaller still.  The displayed two-scale constants below are
+convenience envelopes for this sharper product hierarchy and for the
+high-degree finite-mode tail.  After integration, the remaining finite
+polynomial is exactly the universal coefficient polynomial.
+
+\begin{lemma}[Product hierarchy for the density remainder]%
+\label{lem:density-remainder-product-hierarchy}
+Let $p>2$, $2\le r$, and let $A,\rho$ be measurable functions satisfying
+\[
+\|A\|_{L^\infty(\RR)}\le M t^{-2},
+\qquad
+\|\rho\|_{L^\infty(\RR)}+\|\rho\|_{L^1(\omega)}
+\le C t^{-p}
+\]
+for some $t\ge1$.  Then
+\begin{equation}\label{eq:density-remainder-product-hierarchy}
+\|(A+\rho)^r-A^r\|_{L^1(\omega)}
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+M^{r-\ell}C^\ell
+t^{-\{\ell p+2(r-\ell)\}} .
+\end{equation}
+In particular, since $p>2$,
+\begin{equation}\label{eq:density-remainder-product-envelope}
+\|(A+\rho)^r-A^r\|_{L^1(\omega)}
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+M^{r-\ell}C^\ell
+t^{-(p+2)} .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Expand
+\[
+(A+\rho)^r-A^r
+=\sum_{\ell=1}^r\binom r\ell A^{r-\ell}\rho^\ell .
+\]
+For a fixed $\ell$, put one factor of $\rho$ in $L^1(\omega)$ and all other
+factors in $L^\infty$.  This gives
+\[
+\|A^{r-\ell}\rho^\ell\|_{L^1(\omega)}
+\le
+M^{r-\ell}C^\ell
+t^{-2(r-\ell)}t^{-\ell p},
+\]
+which is \eqref{eq:density-remainder-product-hierarchy}.  The exponent
+$\ell p+2(r-\ell)$ is minimized at $\ell=1$ and $r=2$ when $p>2$ and
+$r\ge2$, giving the envelope \eqref{eq:density-remainder-product-envelope}.
+\end{proof}
 
 \begin{proposition}[Finite-moment density-to-entropy transfer]%
 \label{prop:density-to-entropy-descent}%
@@ -72,11 +118,12 @@ and, for every $t\ge\max\{1,T\}$,
 =\sum_{m=4}^{2N}\mathcal A_m(\mu,u)t^{-m}
 +\mathcal E_{N,t}.
 \end{equation}
-The remainder is explicitly controlled by
+The remainder is controlled by the finite computable bound
 \begin{equation}\label{eq:density-to-entropy-descent-remainder}
 |\mathcal E_{N,t}|
 \le
-\bigl(\mathfrak P_N(C_\rho,M_A)+\mathfrak Q_N(\mu,u)\bigr)t^{-(2N+\eta)}
+\mathfrak P_N(C_\rho,M_A)t^{-(2N+\eta+2)}
++\mathfrak Q_N(\mu,u)t^{-(2N+1)}
 +2S^{N+1}t^{-(2N+2)},
 \end{equation}
 where
@@ -103,10 +150,21 @@ $(2N+\eta)$-moment input is used only before this proposition, to produce
 \eqref{eq:density-to-entropy-descent-density} and the
 $L^\infty\cap L^1(\omega)$ bound
 \eqref{eq:density-to-entropy-descent-hypotheses}.  Inside the transfer,
-products containing one $\rho_t$ keep the density order
-$t^{-(2N+\eta)}$, monomials of total degree larger than $2N$ are absorbed at
-the same order, and the only separate loss is the Taylor tail
-$t^{-(2N+2)}$.
+Lemma~\ref{lem:density-remainder-product-hierarchy} shows that every product
+containing at least one $\rho_t$ is in fact $O(t^{-(2N+\eta+2)})$ after the
+entropy quadratic order is used.  The term
+$\mathfrak Q_N(\mu,u)t^{-(2N+1)}$ is not a density-remainder loss: it is the
+finite high-degree tail of the retained mode polynomial.  Since
+$0<\eta\le1$, the coarser envelope
+\begin{equation}\label{eq:density-to-entropy-convenience-envelope}
+|\mathcal E_{N,t}|
+\le
+\bigl(\mathfrak P_N(C_\rho,M_A)+\mathfrak Q_N(\mu,u)\bigr)t^{-(2N+\eta)}
++2S^{N+1}t^{-(2N+2)}
+\end{equation}
+also follows for $t\ge1$.  Later displayed constants using
+$C_{N,\eta}^{\rm dens}$ are this convenience envelope, not sharp product
+constants.
 
 In the Poisson finite-moment application of
 Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$, where
@@ -122,10 +180,19 @@ C_{N,\eta}^{\rm dens}(\nu)
 \qquad
 C_{N,\eta}^{\rm Tay}(\nu)=2S_{\nu,2N,\eta}^{N+1}.
 \end{equation}
+The sharper fixed-law bound supplied by
+\eqref{eq:density-to-entropy-descent-remainder} is
+\begin{equation}\label{eq:explicit-entropy-constant-sharp-bound}
+\mathfrak P_N(C_{\nu,2N,\eta},M_A)t^{-(2N+\eta+2)}
++\mathfrak Q_N(\mu,u)t^{-(2N+1)}
++C_{N,\eta}^{\rm Tay}(\nu)t^{-(2N+2)}.
+\end{equation}
 These are finite expressions in the density-remainder constant from
 Theorem~\ref{thm:finite-moment-density-remainder}, the moments through order
 $2N$, and the finite mode-product integrals.  If one wants a purely numerical
-envelope, Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives
+envelope, or the coarser two-term form
+\eqref{eq:density-to-entropy-convenience-envelope},
+Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives
 $\|u_n\|_\infty\le n+1$ and hence
 \[
 \|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}
@@ -158,21 +225,17 @@ $\Phi(\delta_t)\in L^1(\omega)$ and
 \|R_{N+1}(\delta_t)\|_{L^1(\omega)}
 \le2S^{N+1}t^{-(2N+2)}.
 \]
-For each $2\le r\le N$,
-\[
-\delta_t^r-A_t^r
-=\sum_{\ell=1}^r\binom r\ell A_t^{r-\ell}\rho_t^\ell .
-\]
-Putting one $\rho_t$ factor in $L^1(\omega)$ and all remaining factors in
-$L^\infty$ gives, for $t\ge1$,
+For each $2\le r\le N$, apply
+Lemma~\ref{lem:density-remainder-product-hierarchy} with
+$p=2N+\eta$, $M=M_A$, and $C=C_\rho$.  Since $2N+\eta>2$, this gives
 \[
 \|\delta_t^r-A_t^r\|_{L^1(\omega)}
 \le
 \sum_{\ell=1}^{r}\binom r\ell
-M_A^{r-\ell}C_\rho^\ell t^{-(2N+\eta)}.
+M_A^{r-\ell}C_\rho^\ell t^{-(2N+\eta+2)}.
 \]
 After multiplication by $1/(r(r-1))$ and summation in $r$, this gives the
-$\mathfrak P_N$ part of the remainder.
+$\mathfrak P_N(C_\rho,M_A)t^{-(2N+\eta+2)}$ part of the sharper remainder.
 
 It remains only to expand the finite polynomial $A_t^r$.  The exact identity
 \[
@@ -186,10 +249,8 @@ n_1+\cdots+n_r=m}}
 splits into the retained part $m\le2N$ and the discarded part $m>2N$.  The
 retained part, summed over $2\le r\le N$ with Taylor coefficients, is exactly
 $\sum_{m=4}^{2N}\mathcal A_m(\mu,u)t^{-m}$.  The discarded part is bounded in
-absolute value by $\mathfrak Q_N(\mu,u)t^{-(2N+1)}$, and since
-$0<\eta\le1$ and $t\ge1$ this is at most
-$\mathfrak Q_N(\mu,u)t^{-(2N+\eta)}$.  Combining this high-degree polynomial
-tail with the product error and the Taylor tail proves
+absolute value by $\mathfrak Q_N(\mu,u)t^{-(2N+1)}$.  Combining this
+high-degree polynomial tail with the product error and the Taylor tail proves
 \eqref{eq:density-to-entropy-descent-expansion} and
 \eqref{eq:density-to-entropy-descent-remainder}.
 \end{proof}
@@ -331,7 +392,7 @@ $\overline C_{N,\eta,M}^{\rm Tay}$.  All constants are therefore controlled
 by the displayed finite formulas in $N,\eta,M$ alone.
 \end{proof}
 
-\begin{theorem}[All-order finite-moment Poisson entropy expansion]%
+\begin{theorem}[Arbitrary finite-order finite-moment Poisson entropy expansion]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge 2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
 on~$\RR$ with mean $\bar\gamma$ and finite centred $(2N+\eta)$th absolute
@@ -347,7 +408,7 @@ h_t:=P_t*\nu,
 \qquad
 g_t(x):=P_t(x-\bar\gamma).
 \]
-No positive-variance hypothesis is imposed in this all-order finite-moment
+No positive-variance hypothesis is imposed in this finite-order finite-moment
 statement; when the variance is zero the displayed coefficients vanish and
 $h_t=g_t$.
 Then the finite-moment evaluations $A_k(\nu)$ defined in
@@ -383,9 +444,11 @@ Proposition~\ref{prop:density-to-entropy-descent}: after writing
 \(\delta_t=A_t+\rho_t\), one has
 \(\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}
 \le C t^{-(2N+\eta)}\) and
-\(\|\delta_t\|_\infty\le S t^{-2}\), so the two displayed losses are
-respectively the density-remainder loss \(t^{-(2N+\eta)}\) and the Taylor-tail
-loss \(t^{-(2N+2)}\).
+\(\|\delta_t\|_\infty\le S t^{-2}\).  In the sharper bound
+\eqref{eq:density-to-entropy-descent-remainder}, mixed products containing
+the density remainder are \(O(t^{-(2N+\eta+2)})\).  The theorem displays the
+coarser two-term envelope \eqref{eq:density-to-entropy-convenience-envelope}
+because it is the form used for law-uniform constants.
 Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
@@ -458,11 +521,13 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \sum_{m=2k}^{2N}\frac{1}{t^m}
 \sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
 \mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k} \\
-&\qquad +O(t^{-(2N+\eta)})+O(t^{-(2N+2)}),
+&\qquad +O(t^{-(2N+\eta+2)})+O(t^{-(2N+1)})
++O(t^{-(2N+2)}),
 \end{align*}
 where $I_{n_1,\dots,n_k}=I(n_1,\dots,n_k)$ is the mode integral from
-\eqref{eq:mode-integral-definition}.  The two error terms are exactly the
-density-remainder and Taylor-tail terms in
+\eqref{eq:mode-integral-definition}.  The three error terms are,
+respectively, the mixed density-remainder products, the high-degree finite-mode
+tail, and the Taylor tail from
 \eqref{eq:density-to-entropy-descent-remainder}.  Comparing the coefficient of
 $t^{-m}$ with the evaluated formal polynomial
 \eqref{eq:universal-entropy-coefficient-evaluation} gives $A_m(\nu)$.
@@ -474,12 +539,11 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{r=2}^{N} A_{2r}(\nu)\,t^{-2r}+o(t^{-2N}),
 \]
 with the sharper displayed remainder before the final $o(t^{-2N})$ notation.
-Proposition~\ref{prop:density-to-entropy-descent} identifies the constants in
-the last two error terms with the finite expressions in
-\eqref{eq:explicit-entropy-constant-bound}; substituting
+The convenience envelope
+\eqref{eq:density-to-entropy-convenience-envelope} gives
+\eqref{eq:poisson-kl-even-orders-explicit-remainder}; substituting
 Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives the closed
-numerical envelopes for all mode norms and moment-ball thresholds.  This gives
-\eqref{eq:poisson-kl-even-orders-explicit-remainder} and proves
+numerical envelopes for all mode norms and moment-ball thresholds.  This proves
 \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
@@ -525,7 +589,7 @@ constants $C_{N,\eta}^{\rm dens}(\nu)$ and $C_{N,\eta}^{\rm Tay}(\nu)$ from
 $T_{N,\eta}^{\rm ent}(\nu)$, all given by closed formulas in $N,\eta,M$.
 Choose
 $C_{N,\eta,M}^{\rm dens}$, $C_{N,\eta,M}^{\rm Tay}$, and
-$T_{N,\eta,M}^{\rm ent}$ to be those dominating constants.  The explicit
+$T_{N,\eta,M}^{\rm ent}$ to be those dominating constants.  The finite computable
 remainder estimate in Theorem~\ref{thm:poisson-kl-even-orders}, with these
 larger constants substituted, gives
 \eqref{eq:uniform-moment-ball-entropy-remainder} for every law in the moment
@@ -576,9 +640,11 @@ C_{N,\eta}^{\rm dens}(\nu)
 =\mathfrak P_N(C_{\nu,2N,\eta},M_A)+\mathfrak Q_N(\mu,u),
 \]
 as recorded in \eqref{eq:explicit-entropy-constant-bound}.  The term
-$\mathfrak P_N(C_{\nu,2N,\eta},M_A)$ is the loss from products containing one
-density remainder, and $\mathfrak Q_N$ is the finite high-degree mode-product
-tail.
+$\mathfrak P_N(C_{\nu,2N,\eta},M_A)$ multiplies
+$t^{-(2N+\eta+2)}$ in the sharper product estimate
+\eqref{eq:explicit-entropy-constant-sharp-bound}; it is folded into
+$C_{N,\eta}^{\rm dens}(\nu)t^{-(2N+\eta)}$ only in the convenience envelope.
+The term $\mathfrak Q_N$ is the finite high-degree mode-product tail.
 The second constant is
 $C_{N,\eta}^{\rm Tay}(\nu)=2S_{\nu,2N,\eta}^{N+1}$, the Taylor remainder
 after the smallness threshold $\|\delta_t\|_\infty\le1/2$ has been imposed.
