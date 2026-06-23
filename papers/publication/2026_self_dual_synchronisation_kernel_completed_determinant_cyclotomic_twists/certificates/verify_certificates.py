@@ -30,8 +30,8 @@ from sage.all import (
     identity_matrix,
     matrix,
     pi,
-    sage_version,
 )
+from sage.env import SAGE_VERSION as sage_version
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -67,7 +67,12 @@ def sturm_count(poly, left, right):
     if poly.is_zero():
         raise ValueError("zero polynomial has no finite Sturm count")
     f = poly.squarefree_part()
-    seq = f.sturm_sequence()
+    seq = [f, f.derivative()]
+    while not seq[-1].is_zero():
+        rem = -(seq[-2] % seq[-1])
+        if rem.is_zero():
+            break
+        seq.append(rem)
     left_signs = [_sign(p(left)) for p in seq]
     right_signs = [_sign(p(right)) for p in seq]
     return _variations(left_signs) - _variations(right_signs)
@@ -161,21 +166,21 @@ def main():
         [0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
         [0, u, u, 0, 0, 0, 0, u, 0, 0],
     ])
-    Delta = (identity_matrix(R, 10) - z * B).det().expand()
+    Delta = (identity_matrix(R, 10) - z * B).det()
     Delta_closed = (
         1 - (1 + u) * z - 5 * u * z**2 + 3 * u * (1 + u) * z**3
         - u * (u**2 - 3 * u + 1) * z**4
         + u * (u**3 - 3 * u**2 - 3 * u + 1) * z**5
         + u**2 * (u**2 + u + 1) * z**6
     )
-    record("determinant_difference", (Delta - Delta_closed).expand())
+    record("determinant_difference", Delta - Delta_closed)
     record("determinant_at_u_1", Delta_closed.subs(u=1).factor())
 
     L = LaurentPolynomialRing(QQ, names=("u", "z"))
     ul, zl = L.gens()
     DeltaL = L(str(Delta_closed))
-    dual = DeltaL(ul * zl, 1 / ul)
-    record("self_duality_difference", (dual - DeltaL).expand())
+    dual = DeltaL(1 / ul, ul * zl)
+    record("self_duality_difference", dual - DeltaL)
 
     S = PolynomialRing(QQ, names=("w", "s"))
     w, s = S.gens()
@@ -212,12 +217,16 @@ def main():
     f319 = R19(H(s=3))
     record("mod19_s3_gcd_factor", (gcd(f319, f319.derivative()), f319.factor()))
 
-    U = PolynomialRing(QQ, names=("t", "a1", "a2", "a3", "a4", "a5", "a6"))
-    t, a1, a2, a3, a4, a5, a6 = U.gens()
-    HU = U(str(H))
+    U = PolynomialRing(QQ, names=("w", "s", "t", "a1", "a2", "a3", "a4", "a5", "a6"))
+    wu, su, t, a1, a2, a3, a4, a5, a6 = U.gens()
+    HU = (
+        1 - su * wu - 5 * wu**2 + 3 * su * wu**3
+        + (5 - su**2) * wu**4 + (su**3 - 6 * su) * wu**5
+        + (su**2 - 1) * wu**6
+    )
     ws = QQ(1) / 3 + a1 * t + a2 * t**2 + a3 * t**3 + a4 * t**4 + a5 * t**5 + a6 * t**6
-    series = HU(w=ws, s=2 + t)
-    coeffs = [series.monomial_coefficient(t**n) for n in range(1, 7)]
+    series = HU.subs({wu: ws, su: 2 + t})
+    coeffs = [series.coefficient({t: n}) for n in range(1, 7)]
     sol = {}
     solved = []
     for n, a in enumerate([a1, a2, a3, a4, a5, a6], start=1):
@@ -234,7 +243,7 @@ def main():
     wv = QQ(1) / 3
     for j, (_, val, _) in enumerate(solved, start=1):
         wv += QQ(val) * tv**j
-    rho_series = (1 / wv).power_series(V, 7).truncate(7)
+    rho_series = V(wv).inverse_mod(tv**7)
     record("rho_series_in_t", rho_series)
     record("rho_series_in_delta", rho_series(-tv))
 
@@ -279,6 +288,7 @@ def main():
     sq = Q.gen()
     endpoint_radius = QQ(1) / 2
     separation_radius = QQ(101) / 300
+    central_radius = QQ(167) / 500
     endpoint_left = QQ(199) / 100
     endpoint_right = QQ(2)
     central_left = -endpoint_left
@@ -295,10 +305,12 @@ def main():
         )
     )
     central_ok = no_circle_crossings(
-        separation_radius, central_left, central_right
+        central_radius, central_left, central_right
     )
     record("m0_endpoint_threshold", 2 * cos(pi / 32).n(80) > QQ(199) / 100)
+    record("endpoint_beta_at_m0_check", H(w=central_radius, s=2 * cos(pi / 33)).n(80) < 0)
     record("endpoint_interval_certificate", endpoint_ok)
+    record("central_lower_bound_radius", central_radius)
     record("central_interval_certificate", central_ok)
 
 

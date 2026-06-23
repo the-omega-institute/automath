@@ -94,9 +94,10 @@ Run from the paper directory with
 \]
 The script prints the SageMath version, Python version, SHA-256
 checksums of the paper sources and certificate script, and the symbolic
-outputs used below. The reference run used SageMath~10.2; the endpoint
-recurrence was independently cross-checked in Mathematica~14.0, but no
-Mathematica output is needed to verify the paper.
+outputs used below. Reference runs used SageMath~10.2 and SageMath~10.7;
+the endpoint recurrence was independently cross-checked in
+Mathematica~14.0, but no Mathematica output is needed to verify the
+paper.
 
 \begin{center}
 \small
@@ -438,7 +439,7 @@ gcd(f319, f319.derivative()), factor(f319)
     \]
     Together with the symmetry \(\lambda(-\alpha)=\lambda(\alpha)\),
     this verifies that the displayed values \(\rho_m\) are obtained from
-    the slices \(\alpha=\pm s_m\). Numerically, SageMath~10.2 evaluates
+    the slices \(\alpha=\pm s_m\). Numerically, SageMath evaluates
     the roots in the complex field with \(100\) bits of precision; the
     values of \(\rho_m=1/\lambda(s_m)\) in the table are rounded to
     \(12\) digits after the decimal point, and the absolute errors are
@@ -477,15 +478,13 @@ interval, and
     boxes in the displayed ranges after clearing denominators in the
     real and imaginary parts of
     \(\widehat\Delta(x+iy,s)\). The certificate summary keys are:
-\[
-      \texttt{endpoint\_interval\_certificate: true},
-      \qquad
-      \texttt{central\_interval\_certificate: true},
-\]
-and
-\[
-      \texttt{finite\_m\_branch\_selection\_4\_to\_31: true}.
-\]
+\begin{verbatim}
+endpoint_interval_certificate: true
+endpoint_beta_at_m0_check: true
+central_lower_bound_radius: 167/500
+central_interval_certificate: true
+finite_m_branch_selection_4_to_31: true
+\end{verbatim}
     These are independent algebraic certificates: the interval
     inequalities are not inferred from floating point approximations,
     while the decimal table below is printed only for orientation.
@@ -495,11 +494,13 @@ and
     for the source package prints the following identifying lines before
     the detailed symbolic output:
 \begin{verbatim}
-sage_version: 10.2
-python_version: 3.11
+sage_version: 10.7
+python_version: 3.11.15
 sha256 main.tex: <64 hex digits>
 sha256 certificates/verify_certificates.py: <64 hex digits>
 endpoint_interval_certificate: true
+endpoint_beta_at_m0_check: true
+central_lower_bound_radius: 167/500
 central_interval_certificate: true
 finite_m_branch_selection_4_to_31: true
 \end{verbatim}
@@ -539,6 +540,8 @@ for m in [4, 6, 8, 10]:
 
 # The interval certificate used in the proof has summary keys:
 #   endpoint_interval_certificate: true
+#   endpoint_beta_at_m0_check: true
+#   central_lower_bound_radius: 167/500
 #   central_interval_certificate: true
 #   finite_m_branch_selection_4_to_31: true
 \end{verbatim}
@@ -635,3 +638,23 @@ H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
 # solve successively for a1,...,a6, then invert 1/w to order 6
 \end{verbatim}
 \end{enumerate}
+
+\section*{Disclosure statement}
+The authors report that there are no competing interests to declare.
+
+\section*{Funding}
+This research received no specific grant from any funding agency in the
+public, commercial, or not-for-profit sectors.
+
+\section*{Data availability statement}
+No external datasets were generated or analysed in this study.  The
+SageMath verification script and the certificate transcript used to
+check the symbolic computations are included with the submission
+materials.
+
+\section*{Use of generative AI}
+During manuscript preparation the authors used generative-AI tools as
+editing and reproducibility assistants, including for wording review,
+SageMath compatibility diagnostics, and certificate-script reruns.  The
+mathematical statements, proofs, computations, and final manuscript
+content were reviewed and approved by the authors.
