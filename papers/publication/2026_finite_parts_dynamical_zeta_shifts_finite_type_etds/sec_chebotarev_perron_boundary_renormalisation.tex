@@ -1,12 +1,13 @@
 \subsubsection{Perron-boundary Adams--M\"obius renormalisation}
 \label{subsubsec:perron-boundary-adams-mobius-renormalisation}
 
-The primary product theorem in this subsection is the Perron-boundary
-renormalized package.  It does not assume the strict twisted gap: it keeps all
-peripheral phases \(\lambda\zeta\), subtracts only the logarithmic part coming
-from \(\zeta=1\), and evaluates the remaining constants by reduced determinant
-finite parts.  The later strict-gap formulas are the specialization obtained
-when the only Perron-boundary collision is the scalar trivial block.
+This subsection contains the Perron-boundary theorem used in the rest of the
+paper.  It does not assume the strict twisted gap: it keeps all peripheral
+phases \(\lambda\zeta\), subtracts only the logarithmic part coming from
+\(\zeta=1\), and evaluates the constants by reduced determinant finite parts.
+The proof is split into four labelled components, but these components are
+not separate theorem spines; they are the primitive-channel, class-Mertens,
+determinant, and product steps of the single boundary theorem.
 
 \begin{definition}[Peripheral Peter--Weyl data]
   \label{def:peripheral-peter-weyl-data}
@@ -18,9 +19,11 @@ when the only Perron-boundary collision is the scalar trivial block.
   \]
   For \(\zeta\in\Gamma_\pi\), let
   \(m_{\pi,\zeta}\) be the algebraic multiplicity of
-  \(\lambda\zeta\) in \(A_\pi\); equivalently, under the semisimplicity
-  certificate below, \(m_{\pi,\zeta}\) is the trace of the spectral
-  projection at \(\lambda\zeta\).  Put
+  \(\lambda\zeta\) in \(A_\pi\); equivalently,
+  \(m_{\pi,\zeta}\) is the rank, or trace, of the Riesz spectral
+  projection onto the generalized \(\lambda\zeta\)-eigenspace.  The
+  optional semisimplicity certificate below further identifies this
+  generalized eigenspace with the ordinary eigenspace.  Put
   \[
     s_\pi:=m_{\pi,1},
   \]
@@ -39,43 +42,62 @@ when the only Perron-boundary collision is the scalar trivial block.
   The term \(\lambda^{1/2}\) is the same Adams--M\"obius divisor-loss scale
   that appears when the \(m>1\) divisors are bounded in
   \Cref{thm:primitive-peter-weyl-trace}.
+
+  The spectral entries \(\Gamma_\pi\) and \(m_{\pi,\zeta}\) are not by
+  themselves a branch convention for boundary logarithms.  The
+  renormalized boundary-coordinate input used below is the finite package
+  \[
+    \bigl(\{P_\pi\}_{\pi\in\Irr(G)},\lambda,
+      \{\Gamma_\pi\}_{\pi\in\Irr(G)},
+      \{m_{\pi,\zeta}\}_{\zeta\in\Gamma_\pi,\ \pi\in\Irr(G)},
+      \mathfrak b_{\partial}^{\mathrm{ren}},
+      \mathfrak n_\partial\bigr),
+  \]
+  where \(P_\pi(z)=\det(I-zA_\pi)\),
+  \(\mathfrak b_{\partial}^{\mathrm{ren}}\) records the Abel branch at
+  \(k=1\) and the interior determinant-logarithm branches at \(k\ge2\), and
+  \(\mathfrak n_\partial\) fixes the positive scalar/product logarithm
+  normalization.  Thus later ``finite determinant'' statements refer to this
+  branch-normalized coordinate package, not to the determinant polynomials
+  alone.
 \end{definition}
 
-\begin{lemma}[Finite-cover peripheral expansion and certificate]
+\begin{lemma}[Finite-cover peripheral expansion and optional certificate]
   \label{lem:finite-cover-peripheral-expansion}
   Let \(\widetilde A\) be the finite skew-product adjacency matrix attached
-  to \(\tau\).  Assume the following finite Perron-boundary certificate:
-  for every \(\pi\in\Irr(G)\) and every \(\zeta\in\Gamma_\pi\), the spectral
-  projection of \(A_\pi\) at \(\lambda\zeta\) has rank \(m_{\pi,\zeta}\), or
-  equivalently the minimal polynomial of \(A_\pi\) has no repeated factor at
-  \(x-\lambda\zeta\).  This direct twisted-block certificate may be checked
-  from the finite skew-product matrix \(\widetilde A\) after its Frobenius
-  normal form has no nilpotent coupling between same-radius peripheral
-  components; the proof below uses only the stated blockwise certificate.
-  Concretely, from the finite matrices \(A_\pi\) one checks the certificate
-  by the following finite algebraic tests over the splitting field of the
-  characteristic polynomials:
+  to \(\tau\).  Suppose the peripheral algebraic data of
+  \Cref{def:peripheral-peter-weyl-data} have been computed: for each
+  \(\pi\), the list \(\Gamma_\pi\) consists of the roots
+  \(\lambda\zeta\) of \(\det(xI-A_\pi)\) on the circle \(|x|=\lambda\),
+  \(m_{\pi,\zeta}\) is the algebraic multiplicity of that root, and
+  \(\Lambda_\perp<\lambda\) is the maximum modulus of the remaining roots
+  (or \(0\) if there are none).  These algebraic data are obtained by the
+  finite tests
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
     \item compute the roots \(\alpha\) of
-    \(\det(xI-A_\pi)\) with \(|\alpha|=\lambda\), write
-    \(\alpha=\lambda\zeta\), and record
-    \(\Gamma_\pi\) and the algebraic multiplicity \(m_{\pi,\zeta}\);
-    \item verify
-    \[
-      \dim\ker(A_\pi-\lambda\zeta I)=m_{\pi,\zeta}
-    \]
-    for every recorded peripheral root, equivalently verify that the local
-    factor of the minimal polynomial at \(x=\lambda\zeta\) is
-    \(x-\lambda\zeta\);
+      \(\det(xI-A_\pi)\) with \(|\alpha|=\lambda\), write
+      \(\alpha=\lambda\zeta\), and record
+      \(\Gamma_\pi\) and the algebraic multiplicity \(m_{\pi,\zeta}\);
     \item set \(\Lambda_\perp\) to the maximum modulus of all remaining
     roots, or to \(0\) if there are none, and check
     \(\Lambda_\perp<\lambda\).
   \end{enumerate}
-  These tests use only determinants, exact kernel ranks, and finite
-  algebraic comparison of moduli; no limiting orbit counts enter the
-  certificate.
+  These tests use only determinants and finite algebraic comparison of
+  moduli; no limiting orbit counts enter.
+  If one also wants the stronger semisimplicity certificate
+  \(\mathfrak s_\partial\), one adds the finite rank test
+  \[
+    \dim\ker(A_\pi-\lambda\zeta I)=m_{\pi,\zeta}
+  \]
+  for every recorded peripheral root, equivalently that the local factor of
+  the minimal polynomial at \(x=\lambda\zeta\) is \(x-\lambda\zeta\).  This
+  additional certificate may be checked from the finite skew-product matrix
+  \(\widetilde A\) after its Frobenius normal form has no nilpotent coupling
+  between same-radius peripheral components.  The determinant and trace
+  identities below use the algebraic multiplicities recorded above.
 
-  Under this certificate, for every \(\pi\in\Irr(G)\),
+  Under the peripheral algebraic multiplicity data above, for every
+  \(\pi\in\Irr(G)\),
   \begin{equation}\label{eq:finite-cover-peripheral-trace-expansion}
     \Tr(A_\pi^n)=
     \lambda^n\sum_{\zeta\in\Gamma_\pi}m_{\pi,\zeta}\zeta^n
@@ -84,7 +106,7 @@ when the only Perron-boundary collision is the scalar trivial block.
   \end{equation}
   with a constant depending only on the finite determinant model.  In
   particular all peripheral contributions are finite root-of-unity phases
-  inherited from the finite cover, and the remainder is strictly below
+  inherited from the finite cover, and the trace remainder is strictly below
   modulus \(\lambda\).
 \end{lemma}
 
@@ -99,26 +121,44 @@ when the only Perron-boundary collision is the scalar trivial block.
   Perron--Frobenius cyclic theorem gives a finite cyclic peripheral set
   \(\lambda\zeta\), with \(\zeta\) a root of unity.  Components with smaller
   spectral radius contribute only eigenvalues of modulus \(<\lambda\).  The
-  direct certificate in the statement rules out higher Jordan blocks for the
-  twisted Peter--Weyl pieces at these peripheral values, which is the only
-  semisimplicity input used below.
+  optional semisimplicity certificate in the statement would rule out higher
+  Jordan blocks for the twisted Peter--Weyl pieces at these peripheral
+  values, but the trace identity itself does not require this.
 
-  Fix \(\pi\).  Put \(A_\pi\) in Jordan normal form.  The certified
-  semisimplicity makes every Jordan block at an eigenvalue
-  \(\lambda\zeta\) a \(1\times1\) block, so those blocks contribute exactly
-  \(m_{\pi,\zeta}(\lambda\zeta)^n\) to \(\Tr(A_\pi^n)\).  Every remaining
-  eigenvalue has modulus at most \(\Lambda_\perp\).  Since there are only
-  finitely many blocks, the sum of the remaining powers is
+  Fix \(\pi\).  Put \(A_\pi\) in Jordan normal form.  If the optional
+  semisimplicity certificate is present, every peripheral Jordan block is
+  \(1\times1\).
+  Without it, a Jordan block \(J=\lambda\zeta I+N\) of size \(d\) still
+  satisfies
+  \[
+    \Tr(J^n)
+    =
+    \Tr\left(\sum_{a=0}^{d-1}\binom na(\lambda\zeta)^{n-a}N^a\right)
+    =
+    d(\lambda\zeta)^n,
+  \]
+  because \(N^a\) is nilpotent, and hence has trace \(0\), for \(a\ge1\).
+  Thus the total contribution of all Jordan blocks at \(\lambda\zeta\) is
+  \(m_{\pi,\zeta}(\lambda\zeta)^n\), with \(m_{\pi,\zeta}\) the algebraic
+  multiplicity.  Every remaining eigenvalue has modulus at most
+  \(\Lambda_\perp\).  Applying the same trace calculation to the finitely
+  many non-peripheral Jordan blocks, the sum of the remaining powers is
   \(O(\Lambda_\perp^n)\), with the convention that the term is zero if
   \(\Lambda_\perp=0\).  This proves
   \eqref{eq:finite-cover-peripheral-trace-expansion}.
 \end{proof}
 
-\begin{theorem}[Peripheral primitive-channel asymptotic]
+\begin{theorem}[Perron-boundary determinant and product theorem]
+  \label{thm:perron-boundary-determinant-product}
   \label{thm:peripheral-primitive-channel-asymptotic}
-  Under the hypotheses and certificate of
+  \label{thm:renormalized-class-mertens}
+  \label{thm:renormalized-fixed-label-determinant}
+  \label{thm:renormalized-frobenius-product}
+  Under the peripheral algebraic multiplicity hypotheses of
   \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
-  every irreducible \(\varrho\in\Irr(G)\) satisfies
+  the following assertions hold.
+  \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+  \item For every irreducible \(\varrho\in\Irr(G)\),
   \begin{equation}\label{eq:peripheral-primitive-channel-asymptotic}
     \pi_{n,\varrho}(A,\tau)
     =
@@ -127,10 +167,99 @@ when the only Perron-boundary collision is the scalar trivial block.
     +
     O\!\left(\frac{\Lambda_\partial^n}{n}\right).
   \end{equation}
-  More explicitly, the \(m=1\) term in the Adams--M\"obius trace formula
-  gives the displayed peripheral sum and the interior
-  \(O(\Lambda_\perp^n/n)\) remainder, while the full \(m>1\) divisor
-  correction is
+  \item The renormalized primitive-channel finite part
+  \[
+    R_\varrho:=
+    \lim_{t\uparrow1}
+      \left(\Pi_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
+  \]
+  exists.  For every conjugacy class \(C\subset G\),
+  \[
+    \delta_C=
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}\chi_\varrho^\ast(C)s_\varrho
+  \]
+  and
+  \begin{equation}\label{eq:perron-boundary-main-class-mertens}
+    \sum_{n\le N}\frac{p_{n,C}}{\lambda^n}
+    =
+    \delta_C\log N+M_C^{\mathrm{ren}}+O(N^{-1}),
+    \qquad
+    M_C^{\mathrm{ren}}=
+    \frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)(s_\varrho\gamma+R_\varrho).
+  \end{equation}
+  These constants are real in the class sums, with
+  \(\delta_C\ge0\), by
+  \Cref{lem:renormalized-reality-positivity}.
+  \item The reduced fixed-label Euler transform
+  \[
+    F_\varrho^{\mathrm{ren}}
+    =
+    \lim_{t\uparrow1}
+      \left(F_\varrho(t\lambda^{-1})+s_\varrho\log(1-t)\right)
+  \]
+  exists and is evaluated by
+  \begin{equation}\label{eq:perron-boundary-main-fixed-label}
+    F_\varrho^{\mathrm{ren}}
+    =
+    \sum_{r,m\ge1}\frac{\mu(m)}{rm}
+      \sum_{\pi\in\Irr(G)}
+        a_{\varrho,\pi}^{(m)}
+        \mathcal B_{rm,\pi}^{\mathrm{ren}},
+  \end{equation}
+  where \(k=1\) terms are reduced Perron-boundary finite parts and
+  \(k\ge2\) terms are ordinary interior determinant logarithms, as in
+  \eqref{eq:renormalized-fixed-label-determinant}.
+  \item The Frobenius-class Euler product
+  \[
+    P_C(N):=
+    \prod_{\substack{\gamma\in\cP:\ |\gamma|\le N\\
+      \tau(\gamma)\in C}}
+      (1-\lambda^{-|\gamma|})
+  \]
+  satisfies
+  \begin{equation}\label{eq:renormalized-frobenius-product}
+    P_C(N)=K_C^{\mathrm{ren}}N^{-\delta_C}\bigl(1+O(N^{-1})\bigr),
+  \end{equation}
+  with
+  \begin{equation}\label{eq:renormalized-frobenius-product-constant}
+    K_C^{\mathrm{ren}}
+    :=
+    \exp\!\left(
+      -\frac{|C|}{|G|}
+        \sum_{\varrho\in\Irr(G)}
+          \chi_\varrho^\ast(C)
+          \bigl(s_\varrho\gamma+F_\varrho^{\mathrm{ren}}\bigr)
+    \right).
+  \end{equation}
+  The exponential is taken of a real number and
+  \(K_C^{\mathrm{ren}}>0\), by
+  \Cref{lem:renormalized-reality-positivity}.
+  Thus \(\delta_C\) is the non-oscillatory Perron-boundary density, not
+  necessarily \(|C|/|G|\).
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  The four assertions are the four proof components immediately below:
+  the primitive-channel estimate, the renormalized class-Mertens summation,
+  the reduced fixed-label determinant evaluation, and the product-tail
+  passage.  They use the same finite boundary datum and branch convention, so
+  together they prove one Perron-boundary theorem rather than independent
+  asymptotic packages.
+\end{proof}
+
+\begin{proposition}[Primitive-channel component of the boundary theorem]
+  \label{prop:peripheral-primitive-channel-asymptotic-component}
+  Under the peripheral algebraic multiplicity hypotheses of
+  \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion},
+  every irreducible \(\varrho\in\Irr(G)\) satisfies
+  \eqref{eq:peripheral-primitive-channel-asymptotic}.  More explicitly, the
+  \(m=1\) term in the Adams--M\"obius trace formula gives the displayed
+  peripheral sum and the interior \(O(\Lambda_\perp^n/n)\) remainder, while
+  the full \(m>1\) divisor correction is
   \[
     \frac{1}{n}\sum_{\substack{m\mid n\\m>1}}\mu(m)
       \sum_{\pi\in\Irr(G)}
@@ -138,7 +267,7 @@ when the only Perron-boundary collision is the scalar trivial block.
     =
     O\!\left(\frac{\lambda^{n/2}}{n}\right).
   \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
   Start from the coefficient formula
@@ -176,9 +305,9 @@ when the only Perron-boundary collision is the scalar trivial block.
   \eqref{eq:peripheral-primitive-channel-asymptotic}.
 \end{proof}
 
-\begin{theorem}[Renormalized class Mertens theorem]
-  \label{thm:renormalized-class-mertens}
-  Assume the Perron-boundary data and certificate above.  For every
+\begin{proposition}[Class-Mertens component of the boundary theorem]
+  \label{prop:renormalized-class-mertens-component}
+  Assume the Perron-boundary algebraic multiplicity data above.  For every
   \(\varrho\in\Irr(G)\), define
   \begin{equation}\label{eq:renormalized-primitive-channel-finite-part}
     R_\varrho:=
@@ -248,7 +377,10 @@ when the only Perron-boundary collision is the scalar trivial block.
       \sum_{\varrho\in\Irr(G)}
         \chi_\varrho^\ast(C)(s_\varrho\gamma+R_\varrho).
   \end{equation}
-\end{theorem}
+  The exponent \(\delta_C\) is non-negative, and the displayed
+  \(M_C^{\mathrm{ren}}\) is real, by
+  \Cref{lem:renormalized-reality-positivity}.
+\end{proposition}
 
 \begin{proof}
   By \Cref{thm:peripheral-primitive-channel-asymptotic}, after subtracting
@@ -295,9 +427,9 @@ when the only Perron-boundary collision is the scalar trivial block.
   \eqref{eq:renormalized-class-mertens-log}.
 \end{proof}
 
-\begin{theorem}[Renormalized fixed-label determinant formula]
-  \label{thm:renormalized-fixed-label-determinant}
-  Assume the Perron-boundary data and certificate above.  For
+\begin{proposition}[Fixed-label determinant component of the boundary theorem]
+  \label{prop:renormalized-fixed-label-determinant-component}
+  Assume the Perron-boundary algebraic multiplicity data above.  For
   \(\pi\in\Irr(G)\), define the reduced boundary determinant logarithm
   \begin{equation}\label{eq:renormalized-reduced-boundary-log}
     \mathcal B_\pi^{\mathrm{ren}}
@@ -350,10 +482,18 @@ when the only Perron-boundary collision is the scalar trivial block.
       \Log\det(I-\lambda^{-k}A_\pi)^{-1}, & k\ge2.
     \end{cases}
   \]
-  Thus every \(k=1\) Perron-boundary block is evaluated by its reduced
-  finite part, and every \(k\ge2\) term remains an ordinary interior
-  determinant logarithm.
-\end{theorem}
+  Equivalently, the branch-normalized algorithm is:
+  factor \(P_\pi(t/\lambda)\), isolate the factors
+  \((1-t\zeta)^{m_{\pi,\zeta}}\) with \(\zeta\in\Gamma_\pi\), cancel the
+  \(s_\pi=m_{\pi,1}\) copies of \(1-t\), take the Abel limit along
+  \(0\le t<1\) using the recorded branch of
+  \(\mathfrak b_{\partial}^{\mathrm{ren}}\), and use the ordinary germ value
+  of \(\Log P_\pi(\lambda^{-k})^{-1}\) for \(k\ge2\).  Thus every \(k=1\)
+  Perron-boundary block is evaluated by its reduced finite part, every
+  \(k\ge2\) term remains an ordinary interior determinant logarithm, and the
+  scalar/product normalization is supplied separately by
+  \(\mathfrak n_\partial\).
+\end{proposition}
 
 \begin{proof}
   The determinant logarithm decomposes spectrally as
@@ -365,7 +505,10 @@ when the only Perron-boundary collision is the scalar trivial block.
     +H_\pi(t),
   \]
   where \(H_\pi(t)\) is analytic at \(t=1\), because all non-peripheral
-  eigenvalues satisfy \(|\alpha|<\lambda\).  Adding
+  eigenvalues satisfy \(|\alpha|<\lambda\).  This factorisation uses only
+  the characteristic polynomial, so the exponents are algebraic
+  multiplicities; nilpotent parts of peripheral Jordan blocks do not change
+  the determinant factors.  Adding
   \(s_\pi\log(1-t)\) cancels precisely the \(\zeta=1\) logarithm, while
   the \(\zeta\ne1\) terms have finite Abel limits.  This proves
   \eqref{eq:renormalized-reduced-boundary-log}.
@@ -411,10 +554,85 @@ when the only Perron-boundary collision is the scalar trivial block.
   \eqref{eq:renormalized-fixed-label-determinant}.
 \end{proof}
 
-\begin{theorem}[Renormalized Frobenius-class product theorem]
-  \label{thm:renormalized-frobenius-product}
+\begin{lemma}[Contragredient reality and product positivity]
+  \label{lem:renormalized-reality-positivity}
+  Under the Perron-boundary algebraic multiplicity data above, the renormalized
+  coordinates satisfy
+  \[
+    s_{\varrho^\vee}=s_\varrho,\qquad
+    R_{\varrho^\vee}=\overline{R_\varrho},\qquad
+    F_{\varrho^\vee}^{\mathrm{ren}}
+      =\overline{F_\varrho^{\mathrm{ren}}}
+  \]
+  for every \(\varrho\in\Irr(G)\).  Consequently, for every conjugacy class
+  \(C\subset G\), the sums defining
+  \(\delta_C\), \(M_C^{\mathrm{ren}}\), and \(K_C^{\mathrm{ren}}\) are real,
+  \(\delta_C\ge0\), and \(K_C^{\mathrm{ren}}>0\).
+\end{lemma}
+
+\begin{proof}
+  Choose the unitary model used in \eqref{eq:twisted-matrix-def}.  The
+  contragredient block is obtained by conjugating each matrix coefficient:
+  \(A_{\varrho^\vee}\) is entrywise conjugate to \(A_\varrho\), after the
+  canonical identification \(V_{\varrho^\vee}=\overline{V_\varrho}\).
+  Hence the peripheral spectrum and algebraic multiplicities are conjugate:
+  if \(\lambda\zeta\) occurs in \(A_\varrho\) with multiplicity
+  \(m_{\varrho,\zeta}\), then
+  \(\lambda\overline\zeta\) occurs in \(A_{\varrho^\vee}\) with the same
+  multiplicity.  In particular
+  \(s_{\varrho^\vee}=m_{\varrho^\vee,1}=m_{\varrho,1}=s_\varrho\).
+
+  For \(0<t<1\), the primitive trace series has real coefficients paired by
+  contragredients:
+  \[
+    \Pi_{\varrho^\vee}(t\lambda^{-1})
+    =
+    \overline{\Pi_\varrho(t\lambda^{-1})}.
+  \]
+  Since \(s_{\varrho^\vee}=s_\varrho\) and \(\log(1-t)\) is real on the Abel
+  path, taking the reduced finite-part limit in
+  \eqref{eq:renormalized-primitive-channel-finite-part} gives
+  \(R_{\varrho^\vee}=\overline{R_\varrho}\).  The same argument applies to
+  the fixed-label Euler transform:
+  \(F_{\varrho^\vee}(t\lambda^{-1})
+  =\overline{F_\varrho(t\lambda^{-1})}\) for \(0<t<1\), and the defining
+  finite-part limit \eqref{eq:renormalized-fixed-label-def} gives
+  \(F_{\varrho^\vee}^{\mathrm{ren}}
+  =\overline{F_\varrho^{\mathrm{ren}}}\).
+
+  The Hermitian class coefficient also conjugates under duality:
+  \[
+    \chi_{\varrho^\vee}^\ast(C)
+    =
+    \overline{\chi_\varrho^\ast(C)}.
+  \]
+  Thus each non-self-dual pair
+  \(\{\varrho,\varrho^\vee\}\) contributes twice the real part to the sums
+  defining \(\delta_C\), \(M_C^{\mathrm{ren}}\), and
+  \(\log K_C^{\mathrm{ren}}\), while a self-dual summand is real by the same
+  identities.  This proves the asserted reality.
+
+  It remains to record the signs.  For every \(N\),
+  \(\sum_{n\le N}p_{n,C}\lambda^{-n}\ge0\).  Divide
+  \eqref{eq:renormalized-class-mertens-log} by \(\log N\) and let
+  \(N\to\infty\); the bounded constant and \(O(N^{-1})\) terms vanish, so
+  \(\delta_C\ge0\).  Finally,
+  \[
+    \log K_C^{\mathrm{ren}}
+    =
+    -\frac{|C|}{|G|}
+      \sum_{\varrho\in\Irr(G)}
+        \chi_\varrho^\ast(C)
+        \bigl(s_\varrho\gamma+F_\varrho^{\mathrm{ren}}\bigr)
+  \]
+  is real by the preceding paragraph.  Therefore
+  \(K_C^{\mathrm{ren}}=\exp(\log K_C^{\mathrm{ren}})>0\).
+\end{proof}
+
+\begin{proposition}[Product component of the boundary theorem]
+  \label{prop:renormalized-frobenius-product-component}
   Under the hypotheses of
-  \Cref{thm:renormalized-class-mertens,thm:renormalized-fixed-label-determinant},
+  \Cref{thm:perron-boundary-determinant-product},
   the Frobenius-class Euler product
   \[
     P_C(N):=
@@ -423,12 +641,12 @@ when the only Perron-boundary collision is the scalar trivial block.
       (1-\lambda^{-|\gamma|})
   \]
   satisfies
-  \begin{equation}\label{eq:renormalized-frobenius-product}
+  \begin{equation}\label{eq:renormalized-frobenius-product-component}
     P_C(N)=K_C^{\mathrm{ren}}N^{-\delta_C}\bigl(1+O(N^{-1})\bigr),
   \end{equation}
   where \(\delta_C\) is defined in
   \eqref{eq:renormalized-class-density} and
-  \begin{equation}\label{eq:renormalized-frobenius-product-constant}
+  \begin{equation}\label{eq:renormalized-frobenius-product-constant-component}
     K_C^{\mathrm{ren}}
     :=
     \exp\!\left(
@@ -438,9 +656,11 @@ when the only Perron-boundary collision is the scalar trivial block.
           \bigl(s_\varrho\gamma+F_\varrho^{\mathrm{ren}}\bigr)
     \right).
   \end{equation}
+  The constant is positive by
+  \Cref{lem:renormalized-reality-positivity}.
   The exponent \(\delta_C\) is therefore the actual logarithmic density of
   the non-oscillatory Perron boundary, not necessarily \(|C|/|G|\).
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
   Taking logarithms gives
@@ -464,7 +684,7 @@ when the only Perron-boundary collision is the scalar trivial block.
       \sum_{r\ge2}\frac{\Pi_\varrho(\lambda^{-r})}{r}.
   \]
   Adding the \(r=1\) renormalized channel constants from
-  \Cref{thm:renormalized-class-mertens} gives precisely
+  \Cref{prop:renormalized-class-mertens-component} gives precisely
   \(F_\varrho^{\mathrm{ren}}\).  Hence
   \[
     \log P_C(N)
@@ -476,19 +696,17 @@ when the only Perron-boundary collision is the scalar trivial block.
         (s_\varrho\gamma+F_\varrho^{\mathrm{ren}})
     +O(N^{-1}).
   \]
-  The left-hand side is the logarithm of a positive real Euler product for
-  each finite \(N\).  The class indicator is real, and the Peter--Weyl terms
-  in the finite sums occur in contragredient conjugate pairs; hence
-  \(\delta_C\) and the constant term are real.  Exponentiating with
+  By \Cref{lem:renormalized-reality-positivity}, the exponent and constant
+  term are real and \(K_C^{\mathrm{ren}}>0\).  Exponentiating with
   \Cref{lem:class-product-log-to-product-error} proves
-  \eqref{eq:renormalized-frobenius-product} and gives
-  \(K_C^{\mathrm{ren}}>0\).
+  \eqref{eq:renormalized-frobenius-product}.
 \end{proof}
 
-\begin{theorem}[Renormalized coordinate readout for Frobenius products]
+\begin{corollary}[Product-coordinate readout]
   \label{thm:renormalized-coordinate-readout}
+  \label{cor:renormalized-coordinate-readout}
   Under the hypotheses of
-  \Cref{thm:renormalized-frobenius-product}, define the positive-branch
+  \Cref{thm:perron-boundary-determinant-product}, define the positive-branch
   logarithmic class profile
   \begin{equation}\label{eq:renormalized-coordinate-profile}
     H_C^{\mathrm{ren}}
@@ -514,7 +732,7 @@ when the only Perron-boundary collision is the scalar trivial block.
   \end{equation}
   The coordinate \(F_\pi^{\mathrm{ren}}\) appearing here is exactly the
   reduced Adams--M\"obius determinant finite part of
-  \Cref{thm:renormalized-fixed-label-determinant}, namely
+  \Cref{prop:renormalized-fixed-label-determinant-component}, namely
   \[
     F_\pi^{\mathrm{ren}}
     =
@@ -526,7 +744,7 @@ when the only Perron-boundary collision is the scalar trivial block.
   Thus the renormalized Frobenius-product constants, after the positive
   logarithm is fixed, are equivalent to the full renormalized Peter--Weyl
   fixed-label determinant vector.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
   Formula \eqref{eq:renormalized-frobenius-product-constant} gives
@@ -556,7 +774,7 @@ when the only Perron-boundary collision is the scalar trivial block.
     s_\pi\gamma+F_\pi^{\mathrm{ren}},
   \]
   which is \eqref{eq:renormalized-coordinate-inverse}.  Finally,
-  \Cref{thm:renormalized-fixed-label-determinant} is precisely the reduced
+  \Cref{prop:renormalized-fixed-label-determinant-component} is precisely the reduced
   boundary determinant evaluation of \(F_\pi^{\mathrm{ren}}\); substituting
   \eqref{eq:renormalized-fixed-label-determinant} gives the displayed
   Adams--M\"obius reduced determinant expression.  No input beyond finite
@@ -573,7 +791,7 @@ when the only Perron-boundary collision is the scalar trivial block.
   \(F_\varrho^{\mathrm{ren}}\) are the ordinary strict-gap values
   \(F_\varrho(\lambda^{-1})\), the scalar reduced finite part is
   \(\gamma+\log C(A)\), and
-  \Cref{thm:renormalized-class-mertens,thm:renormalized-fixed-label-determinant,thm:renormalized-frobenius-product}
+  \Cref{thm:perron-boundary-determinant-product}
   reduce exactly to the strict-gap class Mertens theorem
   \Cref{thm:class-mertens-explicit}, the determinant readout
   \Cref{prop:fixed-label-determinant-perron}, and the product formula
@@ -595,7 +813,16 @@ when the only Perron-boundary collision is the scalar trivial block.
   statement.
 \end{proof}
 
-\begin{corollary}[Canonical cyclic-lift boundary]
+\subsubsection{Examples and obstruction tests}
+\label{subsubsec:perron-boundary-examples}
+
+The following examples and tests illustrate the boundary theorem and the
+coordinate readout.  The cyclic lift is a finite boundary instance of
+\Cref{thm:perron-boundary-determinant-product}, and the Artin-substitution
+test is obtained by comparing two coordinate vectors in
+\Cref{cor:renormalized-coordinate-readout}.
+
+\begin{remark}[Canonical cyclic-lift boundary]
   \label{cor:canonical-cyclic-lift-boundary}
   Let \(G=\ZZ/q\ZZ\), let every edge have cocycle label \(1\), and let
   \(\chi_j(1)=\omega_q^j\).  Then
@@ -609,7 +836,7 @@ when the only Perron-boundary collision is the scalar trivial block.
     \delta_C=\frac1q .
   \]
   Consequently the canonical cyclic lift is a genuine Perron-boundary case
-  of \Cref{thm:renormalized-frobenius-product}: its constants are obtained
+  of \Cref{thm:perron-boundary-determinant-product}: its constants are obtained
   from the \(q\) root-of-unity reduced determinant layers
   \[
     \mathcal B_{\chi_j}^{\mathrm{ren}}
@@ -620,7 +847,7 @@ when the only Perron-boundary collision is the scalar trivial block.
   \]
   together with the ordinary \(k\ge2\) interior determinant logarithms in
   \eqref{eq:renormalized-fixed-label-determinant}.
-\end{corollary}
+\end{remark}
 
 \begin{proof}
   Since every edge label is \(1\in\ZZ/q\ZZ\), twisting by \(\chi_j\)
@@ -633,13 +860,13 @@ when the only Perron-boundary collision is the scalar trivial block.
   \(|C|/|G|=1/q\) and only \(\chi_0\) contributes to the sum defining
   \(\delta_C\); hence \(\delta_C=1/q\).  The determinant-layer statement is
   now exactly the \(k=1\) part of
-  \Cref{thm:renormalized-fixed-label-determinant}; all \(k\ge2\) terms lie
+  \Cref{prop:renormalized-fixed-label-determinant-component}; all \(k\ge2\) terms lie
   inside the Perron disc and are unchanged.
 \end{proof}
 
-\begin{theorem}[Renormalized Artin-substitution obstruction]
+\begin{remark}[Renormalized Artin-substitution obstruction]
   \label{thm:renormalized-artin-obstruction}
-  Under the Perron-boundary certificate above, define
+  Under the Perron-boundary algebraic multiplicity data above, define
   \[
     \mathcal L_\varrho^{\mathrm{ren}}
     :=
@@ -648,7 +875,7 @@ when the only Perron-boundary collision is the scalar trivial block.
       +s_\varrho\log(1-t)\right),
   \]
   using the same reduced finite-part convention as in
-  \Cref{thm:renormalized-fixed-label-determinant}.  Let
+  \Cref{prop:renormalized-fixed-label-determinant-component}.  Let
   \(K_C^{\mathrm{Art,ren}}\) be the constants obtained from
   \eqref{eq:renormalized-frobenius-product-constant} after replacing
   every \(F_\varrho^{\mathrm{ren}}\) by
@@ -671,7 +898,7 @@ when the only Perron-boundary collision is the scalar trivial block.
     \mathcal L_\varrho^{\mathrm{ren}}
     \qquad(\varrho\ne\mathbf1).
   \]
-\end{theorem}
+\end{remark}
 
 \begin{proof}
   The logarithmic ratio is obtained by subtracting the two defining
