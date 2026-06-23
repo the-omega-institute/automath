@@ -208,12 +208,575 @@ which is the displayed formula after putting all terms over the denominator
 $256$.
 \end{proof}
 
+\section{Doob--Bregman domain closure}\label{app:doob-bregman-domain}
+
+This appendix contains the analytic domain argument behind
+Corollary~\ref{cor:poisson-kl-doob-bregman-tail}.  The main text isolates the
+algebraic two-point identity in Lemma~\ref{lem:doob-bregman-algebra}; the
+statements below supply the cutoff limits, compact quotient range, and
+range-local convex approximation needed to apply that algebra to the Poisson
+comparison quotient.
+
+\begin{lemma}[Cutoff justification for the Cauchy Doob calculus]%
+\label{lem:cauchy-doob-cutoff-calculus}
+Let $[a,b]\subset(0,\infty)$ and let $\nu$ have finite centred second
+moment.  For $t\in[a,b]$ put $h_t=P_t*\nu$, $g_t=P_t(\cdot-
+\bar\gamma)$, and $u_t=h_t/g_t$.  Then the following assertions hold
+uniformly for $t\in[a,b]$.
+\begin{enumerate}[label=(\roman*)]
+\item
+      The functions $u_t$ and $\partial_xu_t$ are bounded.  Moreover
+      $h_t,g_t,\partial_xh_t,\partial_xg_t,\partial_th_t,\partial_tg_t$
+      belong to $L^1(\RR)$, and
+      \[
+      \partial_th_t=Lh_t,
+      \qquad
+      \partial_tg_t=Lg_t
+      \]
+      pointwise, where $L$ is the principal-value Cauchy generator.
+\item
+      If $q$ is a bounded Lipschitz function and
+      $p\in\{h_t,g_t\}$, then the bilinear Cauchy form
+      \[
+      \mathcal E(p,q)
+      :=\frac{1}{2\pi}\iint_{\RR^2}
+      \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
+      \]
+      is absolutely convergent and
+      \begin{equation}\label{eq:cutoff-cauchy-bilinear}
+      \int_{\RR}q(x)Lp(x)\dd x=-\mathcal E(p,q).
+      \end{equation}
+      The identity is obtained as the limit of the compactly supported
+      identities with $q$ replaced by $\chi_Rq$, where
+      $\chi_R(x)=\chi(x/R)$, $\chi\in C_c^\infty(\RR)$,
+      $\chi\equiv1$ on $[-1,1]$.  This fixes the domain convention used in
+      the theorem: the left side is the $L^1$ pairing with the
+      principal-value generator, and the right side is the absolutely
+      convergent cutoff limit.
+\item
+      If $f$ is bounded $C^2$ with bounded first and second derivatives,
+      in particular if $f=u_t$, then, with the same principal-value
+      normalization,
+      \begin{equation}\label{eq:cutoff-doob-product-rule}
+      L(g_tf)(x)-f(x)Lg_t(x)
+      =\frac1\pi\operatorname{p.v.}\int_{\RR}
+      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
+      \end{equation}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Write $x=\bar\gamma+ty$ and $\varepsilon=(\gamma-\bar\gamma)/t$.  The
+quotient kernel
+\[
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2}
+\]
+satisfies, for $j=0,1,2$, bounds of the form
+\[
+\sup_{y\in\RR}|\partial_y^jR_\varepsilon(y)|\le C_j(1+\varepsilon^2).
+\]
+Indeed, after differentiating, the numerator has degree at most two in
+$(y-\varepsilon)$ and coefficients bounded by a constant multiple of
+$1+\varepsilon^2$, while the denominator has degree at least the numerator
+degree.  Integrating these estimates against~$\nu$ gives the asserted
+uniform bounds for $u_t$ and $\partial_xu_t$ on $[a,b]$.
+
+The $L^1$ assertions follow from convolution and scaling:
+\[
+\|\partial_xP_t\|_1\le C_a,
+\qquad
+\|\partial_tP_t\|_1\le C_a
+\qquad(a\le t\le b).
+\]
+The identity $\partial_tP_t=LP_t$ is the one-dimensional Cauchy-semigroup
+generator identity in the principal-value normalization used here
+\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017}.  Convolution with
+the finite measure~$\nu$ and dominated convergence give
+$\partial_th_t=Lh_t$; the same argument with the point mass at
+$\bar\gamma$ gives $\partial_tg_t=Lg_t$.
+
+For the bilinear identity, first take $q\in C_c^\infty(\RR)$.  The usual
+principal-value formula for the Cauchy generator and symmetrization give
+\eqref{eq:cutoff-cauchy-bilinear}.  The same compactly supported identity
+holds for compactly supported Lipschitz tests by mollifying them and using the
+estimates below.  For bounded Lipschitz $q$, replace it by
+$q_R=\chi_Rq$, $R\ge1$.  Then
+\[
+\|q_R\|_\infty\le \|q\|_\infty,
+\qquad
+\|q_R\|_{\operatorname{Lip}}
+\le \|q\|_{\operatorname{Lip}}+\|\chi'\|_\infty\|q\|_\infty,
+\]
+so the cutoff family has bounds independent of~$R$.  Since
+$p,\partial_xp\in L^1(\RR)$ and $q$ is bounded and Lipschitz, the near
+diagonal part satisfies, uniformly in~$R$,
+\[
+\iint_{|x-y|<1}
+\frac{|p(x)-p(y)|\,|q_R(x)-q_R(y)|}{|x-y|^2}\dd x\dd y
+\le 2\|q_R\|_{\operatorname{Lip}}\|\partial_xp\|_1,
+\]
+because
+$p(x)-p(y)=\int_0^1p'(y+s(x-y))(x-y)\dd s$.  The far part satisfies,
+again uniformly in~$R$,
+\[
+\iint_{|x-y|\ge1}
+\frac{|p(x)-p(y)|\,|q_R(x)-q_R(y)|}{|x-y|^2}\dd x\dd y
+\le 8\|q\|_\infty\|p\|_1,
+\]
+since
+$\int_{|x-y|\ge1}|x-y|^{-2}\dd y=2$ and the same estimate holds after
+interchanging $x$ and~$y$.  It remains to show that the cutoff error tends to
+zero.  Put $e_R:=q_R-q$.  Then $e_R=0$ on $[-R,R]$,
+$\|e_R\|_\infty\le2\|q\|_\infty$, and
+$\|e_R\|_{\operatorname{Lip}}\le
+\|q\|_{\operatorname{Lip}}+\|\chi'\|_\infty\|q\|_\infty$.  For the near
+diagonal contribution, $e_R(x)-e_R(y)\ne0$ and $|x-y|<1$ imply that the line
+segment between $x$ and~$y$ lies in $\{|z|>R-1\}$.  Therefore
+\[
+\iint_{|x-y|<1}
+\frac{|p(x)-p(y)|\,|e_R(x)-e_R(y)|}{|x-y|^2}\dd x\dd y
+\le C_q\int_{|z|>R-1}|p'(z)|\dd z\longrightarrow0.
+\]
+For the far contribution, using $|e_R(z)|\le2\|q\|_\infty\mathbf 1_{|z|>R}$
+gives a sum of four terms.  The two terms in which the same variable carries
+both $p$ and $e_R$ are bounded by
+$4\|q\|_\infty\int_{|z|>R}|p(z)|\dd z$.  The cross terms are bounded by
+\[
+2\|q\|_\infty\int_{\RR}|p(x)|
+\int_{\substack{|y|>R\\ |x-y|\ge1}}\frac{\dd y}{|x-y|^2}\dd x,
+\]
+and the analogous expression with $x$ and~$y$ interchanged; the inner integral
+is bounded by~$2$ and tends to zero for each fixed outer variable, so dominated
+convergence and $p\in L^1$ make the cross terms vanish.  Hence the bilinear
+forms with $q_R$ converge to the form with~$q$.  On the one-variable side,
+\[
+|e_R(x)Lp(x)|\le 2\|q\|_\infty |Lp(x)|,
+\qquad Lp=\partial_tp\in L^1(\RR),
+\]
+and $e_RLp\to0$ pointwise.  Hence the cutoff identities pass to the limit and
+prove \eqref{eq:cutoff-cauchy-bilinear} for bounded Lipschitz~$q$.
+
+Finally apply the principal-value formula to $g_tf$ and to $g_t$.  In the
+truncated integrals over $|x-y|>\rho$ the difference is exactly
+\[
+\frac1\pi\int_{|x-y|>\rho}
+\frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
+\]
+The integrand has a finite principal-value limit because near $y=x$ the
+linear part contributes an odd kernel and the remaining term is bounded,
+while away from $x$ it is integrable.  Letting $\rho\downarrow0$ gives
+\eqref{eq:cutoff-doob-product-rule}.
+\end{proof}
+
+\begin{lemma}[Compact quotient range and Bregman integrability]%
+\label{lem:doob-range-bregman-integrability}
+Let $[a,b]\subset(0,\infty)$ and let $\nu$ be a probability measure
+on~$\RR$ with mean~$\bar\gamma$ and finite centred second moment
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma).
+\]
+Put $h_t=P_t*\nu$, $g_t=P_t(\cdot-\bar\gamma)$, and
+$u_t=h_t/g_t$.  Then, for every $t\in[a,b]$ and every $x\in\RR$,
+\begin{equation}\label{eq:doob-compact-range-bound}
+\frac{1}{2(1+\mu_2/a^2)}
+\le u_t(x)\le
+2+\frac{2\mu_2}{a^2}.
+\end{equation}
+Moreover $u_t$ is uniformly Lipschitz in $x$ on
+$\RR\times[a,b]$.  Consequently, if
+$\Phi:(0,\infty)\to\RR$ is convex, of class $C^1$, and $\Phi'$ is
+Lipschitz on compact subintervals of $(0,\infty)$, then there is a
+constant $C_{\Phi,a,b}<\infty$ such that, for all $t\in[a,b]$ and
+$x,y\in\RR$,
+\begin{equation}\label{eq:doob-bregman-pointwise-bound}
+0\le D_\Phi(u_t(x),u_t(y))
+\le C_{\Phi,a,b}\min\{|x-y|^2,1\}.
+\end{equation}
+In particular
+\begin{equation}\label{eq:doob-bregman-integrability-bound}
+\sup_{t\in[a,b]}
+\iint_{\RR^2}
+\frac{
+g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y<\infty,
+\end{equation}
+and $\int_{\RR}g_t(x)|\Phi(u_t(x))|\dd x<\infty$ for every
+$t\in[a,b]$.
+\end{lemma}
+
+\begin{proof}
+Write $\Delta=\gamma-\bar\gamma$ and $y=(x-\bar\gamma)/t$.  Since
+\[
+\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
+=R_{\Delta/t}(y),
+\qquad
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2},
+\]
+we have $u_t(x)=\int R_{\Delta/t}(y)\dd\nu(\gamma)$.  The elementary
+inequality
+\[
+1+y^2\le 2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2
+\]
+gives $R_\varepsilon(y)\le2+2\varepsilon^2$, hence
+\[
+u_t(x)\le 2+2\mu_2/t^2\le 2+2\mu_2/a^2 .
+\]
+Conversely,
+\[
+1+(y-\varepsilon)^2
+\le2(1+y^2)+2\varepsilon^2
+\le2(1+\varepsilon^2)(1+y^2),
+\]
+so $R_\varepsilon(y)\ge[2(1+\varepsilon^2)]^{-1}$.  Therefore
+\[
+u_t(x)
+\ge \frac12\int_{\RR}\frac{1}{1+(\Delta/t)^2}\dd\nu(\gamma)
+\ge \frac{1}{2(1+\mu_2/t^2)}
+\ge \frac{1}{2(1+\mu_2/a^2)},
+\]
+where the middle inequality is Jensen's inequality for the convex
+function $s\mapsto(1+s)^{-1}$ on $[0,\infty)$.  This proves
+\eqref{eq:doob-compact-range-bound}.
+
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} gives a constant
+$L_{a,b}$ such that $|\partial_xu_t(x)|\le L_{a,b}$ for
+$t\in[a,b]$.  Let
+\[
+m_{a,b}:=\frac{1}{2(1+\mu_2/a^2)},
+\qquad
+M_{a,b}:=2+\frac{2\mu_2}{a^2}.
+\]
+If $\Phi'$ has Lipschitz constant $L_\Phi$ on
+$[m_{a,b},M_{a,b}]$, then the integral form of the Bregman remainder gives
+\[
+0\le D_\Phi(\alpha,\beta)\le \frac{L_\Phi}{2}|\alpha-\beta|^2
+\qquad(m_{a,b}\le\alpha,\beta\le M_{a,b}).
+\]
+Combining this with the Lipschitz bound for $u_t$ and with the trivial
+bound $|u_t(x)-u_t(y)|\le M_{a,b}-m_{a,b}$ proves
+\eqref{eq:doob-bregman-pointwise-bound}.
+
+Dividing \eqref{eq:doob-bregman-pointwise-bound} by $(x-y)^2$ gives the
+majorant $C_{\Phi,a,b}\min\{1,|x-y|^{-2}\}$.  Since
+\[
+\int_{\RR}\min\{1,|x-y|^{-2}\}\dd y<\infty
+\]
+with a value independent of~$x$, and since $\int g_t=1$, the first term
+in \eqref{eq:doob-bregman-integrability-bound} is bounded uniformly in
+$t\in[a,b]$; the second term is identical after exchanging $x$ and~$y$.
+Finally, \eqref{eq:doob-compact-range-bound} puts $u_t$ in a compact
+subinterval of $(0,\infty)$, so $\Phi$ is bounded on the range and
+$\int g_t|\Phi(u_t)|\le\sup_{[m_{a,b},M_{a,b}]}|\Phi|$.
+\end{proof}
+
+\begin{lemma}[Compact-range approximation for range-local $C^{1,1}$ entropies]%
+\label{lem:compact-range-phi-approximation}
+Let $[a,b]\subset(0,\infty)$, and let $h_t$, $g_t$, and $u_t=h_t/g_t$ be as
+in Lemma~\ref{lem:doob-range-bregman-integrability}.  Let
+$J=[m_{a,b},M_{a,b}]$ be the compact interval from its proof.  If
+$\Phi:(0,\infty)\to\RR$ is convex, $C^1$, and $\Phi'$ is Lipschitz on compact
+subintervals of $(0,\infty)$, then there are convex functions
+$\Phi_\varepsilon\in C^\infty((0,\infty))$, defined for all sufficiently small
+$\varepsilon>0$, such that
+\[
+\sup_{s\in J}|\Phi_\varepsilon(s)-\Phi(s)|
++\sup_{s\in J}|\Phi_\varepsilon'(s)-\Phi'(s)|\longrightarrow0,
+\]
+the functions $\Phi_\varepsilon'$ have a common Lipschitz constant on~$J$, and
+\[
+\sup_{\alpha,\beta\in J}
+|D_{\Phi_\varepsilon}(\alpha,\beta)-D_\Phi(\alpha,\beta)|\longrightarrow0.
+\]
+Consequently the entropy functionals and the Bregman dissipation integrands in
+Proposition~\ref{prop:doob-bregman-domain-closure} may be obtained as limits
+from the same formulas for the smooth convex functions $\Phi_\varepsilon$,
+with the same compact-range majorants on every time interval $[a,b]$.
+\end{lemma}
+
+\begin{proof}
+Choose an open interval $J_*$ with compact closure in $(0,\infty)$ and
+$J\subset J_*$.  Since $\Phi$ is convex and $C^1$, $\Phi'$ is nondecreasing;
+by hypothesis it has some Lipschitz constant $L_*$ on~$J_*$.  Extend
+$\Phi'|_{J_*}$ to a globally defined nondecreasing Lipschitz function
+$\Psi$ on~$\RR$ with Lipschitz constant $L_*$, for instance by continuing it
+linearly with slope~$0$ outside $J_*$.  Let $\rho_\varepsilon$ be a standard
+nonnegative even mollifier and set
+$\Psi_\varepsilon=\rho_\varepsilon*\Psi$.  For $\varepsilon$ smaller than the
+distance from $J$ to $\RR\setminus J_*$, the functions
+$\Psi_\varepsilon$ are smooth, nondecreasing, have Lipschitz constant at most
+$L_*$ on~$J$, and converge uniformly to $\Phi'$ on~$J$.
+Define
+\[
+\Phi_\varepsilon(s):=\Phi(1)+\int_1^s\Psi_\varepsilon(r)\dd r,
+\]
+after any smooth convex extension away from $J_*$ if necessary.  Then
+$\Phi_\varepsilon$ is smooth and convex on $(0,\infty)$, and the displayed
+uniform convergence of $\Phi_\varepsilon$ and $\Phi_\varepsilon'$ on~$J$
+follows by integrating the uniform convergence of the derivatives on the
+compact interval.  The Bregman convergence is immediate from
+\[
+|D_{\Phi_\varepsilon}(\alpha,\beta)-D_\Phi(\alpha,\beta)|
+\le 2\sup_J|\Phi_\varepsilon-\Phi|
+ +(M_{a,b}-m_{a,b})\sup_J|\Phi_\varepsilon'-\Phi'|.
+\]
+Lemma~\ref{lem:doob-range-bregman-integrability} gives the common bound
+$0\le D_{\Phi_\varepsilon}(u_t(x),u_t(y))
+\le C\min\{|x-y|^2,1\}$ with $C$ independent of~$\varepsilon$, and it also
+puts $u_t$ in~$J$.  Since $\int g_t=1$, dominated convergence applies to the
+one-variable entropy integrals and to the two-variable Bregman dissipation
+integrals.  This proves the limiting assertion.
+\end{proof}
+
+\begin{proposition}[Smooth compactly supported Doob--Bregman identity]%
+\label{prop:smooth-compact-doob-bregman}
+Let $t\mapsto g_t$ be a positive $C^1$ curve of smooth densities on an open
+time interval, and let $t\mapsto u_t$ be a positive $C^1$ curve of smooth
+functions such that $u_t-1\in C_c^\infty(\RR)$ for each $t$, with one compact
+support and one compact quotient range on compact time intervals.  Put
+$h_t=g_tu_t$ and assume
+\[
+\partial_t h_t=Lh_t,\qquad \partial_tg_t=Lg_t,
+\]
+with all integrations below absolutely convergent; for instance this holds
+after replacing the noncompact tests in Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
+by fixed spatial cutoffs.  Let $\Phi\in C^2((0,\infty))$ with $\Phi(1)=0$.
+Then
+\[
+\mathcal H_\Phi(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x
+\]
+is $C^1$, and
+\begin{equation}\label{eq:smooth-compact-phi-entropy-dissipation}
+-\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\frac{1}{2\pi}\iint_{\RR^2}
+\frac{
+g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Because $u_t-1$ has compact support and $\Phi(1)=0$, the entropy integrand is
+supported where $u_t\ne1$.  Differentiating under the integral and using
+$h_t=g_tu_t$ gives
+\[
+\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\int_{\RR}\Phi'(u_t)\,Lh_t\,\dd x
++
+\int_{\RR}\bigl(\Phi(u_t)-u_t\Phi'(u_t)\bigr)Lg_t\,\dd x .
+\]
+The functions $\Phi'(u_t)-\Phi'(1)$ and
+$Q_\Phi(u_t)-Q_\Phi(1)$ are smooth and compactly supported, and constants do
+not change the bilinear form.  The constant pairings with $Lh_t$ and $Lg_t$
+vanish because the generator preserves total mass.  Applying the compactly
+supported Cauchy bilinear identity
+\[
+\int_{\RR}qLp\,\dd x
+=-\frac{1}{2\pi}\iint_{\RR^2}
+\frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
+\]
+first with $p=h_t=g_tu_t$, $q=\Phi'(u_t)$, and then with
+$p=g_t$, $q=Q_\Phi(u_t)$, where
+$Q_\Phi(s)=\Phi(s)-s\Phi'(s)$.  Thus
+\[
+\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=-\frac{1}{2\pi}\iint_{\RR^2}\frac{E_t(x,y)}{(x-y)^2}\dd x\dd y,
+\]
+where, with $u_x=u_t(x)$, $u_y=u_t(y)$, $g_x=g_t(x)$, and $g_y=g_t(y)$,
+\[
+E_t(x,y)
+=(g_xu_x-g_yu_y)\bigl(\Phi'(u_x)-\Phi'(u_y)\bigr)
+ +(g_x-g_y)\bigl(Q_\Phi(u_x)-Q_\Phi(u_y)\bigr).
+\]
+Lemma~\ref{lem:doob-bregman-algebra} rewrites this exactly as
+\[
+E_t(x,y)=g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x)).
+\]
+Substitution gives \eqref{eq:smooth-compact-phi-entropy-dissipation}.
+\end{proof}
+
+\begin{lemma}[Doob--Bregman domain bounds]%
+\label{lem:doob-bregman-domain-bounds}
+Let $[a,b]\subset(0,\infty)$, let $\nu$ have finite centred second moment, and
+use the notation
+\[
+h_t=P_t*\nu,
+\qquad
+g_t=P_t(\cdot-\bar\gamma),
+\qquad
+u_t=h_t/g_t .
+\]
+Let $\Phi$ be convex on $(0,\infty)$ and assume that, on every compact
+subinterval of $(0,\infty)$, $\Phi$ is $C^1$ and $\Phi'$ is Lipschitz.  Then,
+uniformly for $t\in[a,b]$, the following analytic bounds hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The principal-value identities for $Lh_t$, $Lg_t$, and
+$L(g_tu_t)-u_tLg_t$ are the limits of the cutoff identities in
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus}; the associated bilinear Cauchy
+forms are absolutely convergent.
+\item The quotient range $u_t(\RR)$ is contained in one compact interval
+$J_{a,b}\Subset(0,\infty)$, and the Bregman integrand
+\[
+\frac{g_t(x)D_\Phi(u_t(x),u_t(y))
+      +g_t(y)D_\Phi(u_t(y),u_t(x))}{(x-y)^2}
+\]
+is absolutely integrable on $\RR^2$, with a bound independent of
+$t\in[a,b]$.
+\item The map
+\[
+t\longmapsto \mathcal H_\Phi(t):=
+\int_{\RR}g_t(x)\Phi(u_t(x))\dd x
+\]
+is absolutely continuous on $[a,b]$, and its derivative is obtained by
+first proving the identity for the cutoff bilinear forms and then letting the
+cutoff radius tend to infinity.
+\item The passage from smooth convex entropies to the above range-local
+$C^{1,1}$ class is justified by the approximants
+$\Phi_\varepsilon$ of Lemma~\ref{lem:compact-range-phi-approximation}; on
+$J_{a,b}$ the entropies, first derivatives, and Bregman divergences converge
+under the same integrable majorants as in~\textup{(ii)}.
+\end{enumerate}
+Consequently the dissipation formula
+\eqref{eq:phi-entropy-dissipation} is a domain statement in the stated
+principal-value normalization, not a formal application of a nonlocal product
+rule.
+\end{lemma}
+
+\begin{proof}
+Part (i) is exactly Lemma~\ref{lem:cauchy-doob-cutoff-calculus}.  That lemma
+first proves the compactly supported Cauchy-generator identities, then replaces
+the test function by $\chi_Rq$ and passes to the limit using the near-diagonal
+estimate controlled by $\partial_xp\in L^1$ and the far-field estimate
+controlled by $p\in L^1$.  Thus the limiting forms are absolutely convergent
+and fix the principal-value convention used here.
+
+Lemma~\ref{lem:doob-range-bregman-integrability} proves the compact quotient
+range and the bound \eqref{eq:doob-bregman-integrability-bound}.  Its proof
+uses the integral form of the Bregman remainder on the compact range, so
+$D_\Phi(a,b)\le C_{a,b}|a-b|^2$ there, and the cutoff energy estimate for
+$u_t$ supplies the two-variable majorant.  This gives (ii).
+
+For (iii), Lemma~\ref{lem:cauchy-doob-cutoff-calculus} gives uniform
+$L^1$ bounds for $\partial_th_t$ and $\partial_tg_t$ on $[a,b]$; hence
+$t\mapsto h_t$ and $t\mapsto g_t$ are absolutely continuous as $L^1$-valued
+maps.  On the compact quotient range, $\Phi$ and $\Phi'$ are bounded and
+$\Phi'$ is Lipschitz, so the Nemytskii chain rule in $L^1$ gives absolute
+continuity of $\mathcal H_\Phi$.  Applying the cutoff identity from part (i) to
+the bounded Lipschitz tests $\Phi'(u_t)$ and
+$\Phi(u_t)-u_t\Phi'(u_t)$ gives the displayed derivative at the cutoff level;
+the absolute majorants from parts (i) and (ii) justify passage to the limit in
+the cutoff radius.
+
+Finally, Lemma~\ref{lem:compact-range-phi-approximation} constructs smooth
+convex $\Phi_\varepsilon$ that agree with $\Phi$ to first order on the compact
+range in the limit and have uniformly bounded second derivatives there.  The
+one-variable entropy terms are dominated by $g_t$ times a constant, and the
+two-variable Bregman terms are dominated by the majorant from (ii).  Dominated
+convergence therefore passes the smooth identity to the range-local
+$C^{1,1}$ entropy.  This proves all four assertions.
+\end{proof}
+
+\begin{proposition}[Domain closure of the Doob--Bregman identity]%
+\label{prop:doob-bregman-domain-closure}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and
+finite centred second moment, and use the notation of
+Theorem~\ref{thm:poisson-doob-phi-entropy}.  Let
+$\Phi:(0,\infty)\to\RR$ be convex, of class $C^1$, with range-local
+$C^{1,1}$ control in the sense that $\Phi'$ is Lipschitz on every compact
+subinterval of $(0,\infty)$, and assume $\Phi(1)=0$.  Define
+\[
+\mathcal H_\Phi(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x .
+\]
+Then $\mathcal H_\Phi(t)<\infty$ for every $t>0$,
+$t\mapsto\mathcal H_\Phi(t)$ is absolutely continuous on compact
+subintervals of $(0,\infty)$, the double integral below is finite for every
+$t>0$, and for a.e. $t>0$,
+\begin{equation}\label{eq:phi-entropy-dissipation}
+-\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\frac{1}{2\pi}\iint_{\RR^2}
+\frac{
+g_t(x)D_\Phi(u_t(x),u_t(y))
++g_t(y)D_\Phi(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y,
+\end{equation}
+where
+\[
+D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b)
+\qquad(a,b>0).
+\]
+The right side is the finite cutoff-limit integral fixed by
+Lemmas~\ref{lem:cauchy-doob-cutoff-calculus},
+\ref{lem:doob-range-bregman-integrability}, and
+\ref{lem:doob-bregman-domain-bounds}.  In particular
+$t\mapsto\mathcal H_\Phi(t)$ is nonincreasing.
+\end{proposition}
+
+\begin{proof}
+Fix $[a,b]\subset(0,\infty)$.  Lemma~\ref{lem:doob-range-bregman-integrability}
+places $u_t(\RR)$, $t\in[a,b]$, in a compact subinterval of $(0,\infty)$,
+proves $\mathcal H_\Phi(t)<\infty$, and gives the uniform Bregman
+double-integral bound \eqref{eq:doob-bregman-integrability-bound}.
+The closure argument below deliberately separates the proof into three
+steps.  First,
+Proposition~\ref{prop:smooth-compact-doob-bregman} proves the formula for
+smooth compactly supported quotients, with
+Lemma~\ref{lem:doob-bregman-algebra} as the only nontrivial algebraic
+identity.  Second, the cutoff estimates of
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} pass the bilinear forms from
+compactly supported tests to the Poisson quotient.  Third, the compact-range
+approximation of Lemma~\ref{lem:compact-range-phi-approximation} passes from
+smooth convex entropies to the stated range-local $C^{1,1}$ class.
+
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} gives uniform $L^1$ bounds for
+$\partial_th_t$ and $\partial_tg_t$, so $t\mapsto h_t$ and $t\mapsto g_t$ are
+absolutely continuous as $L^1$-valued maps on $[a,b]$.  Since the quotient
+range is compact and $\Phi'$ is Lipschitz there, the chain rule for
+$g\Phi(h/g)$ gives $\mathcal H_\Phi\in AC([a,b])$ and, for a.e. $t$,
+\[
+\frac{\dd}{\dd t}\mathcal H_\Phi(t)
+=
+\int_{\RR}\Phi'(u_t)\,\partial_th_t\dd x
++
+\int_{\RR}\bigl(\Phi(u_t)-u_t\Phi'(u_t)\bigr)\partial_tg_t\dd x.
+\]
+Substituting $\partial_th_t=L(u_tg_t)$ and $\partial_tg_t=Lg_t$, and applying
+the cutoff bilinear identity \eqref{eq:cutoff-cauchy-bilinear} with the
+bounded Lipschitz tests $\Phi'(u_t)$ and
+$\Phi(u_t)-u_t\Phi'(u_t)$, gives the cutoff-limit version of the smooth
+identity in Proposition~\ref{prop:smooth-compact-doob-bregman}.  The algebraic
+step in that passage is precisely Lemma~\ref{lem:doob-bregman-algebra}, with
+\[
+u_x=u_t(x),\qquad u_y=u_t(y),\qquad g_x=g_t(x),\qquad g_y=g_t(y).
+\]
+Thus the cutoff limit is the Bregman integral in
+\eqref{eq:phi-entropy-dissipation}.
+
+The remaining passages are exactly the closure statements in
+Lemma~\ref{lem:doob-bregman-domain-bounds}.  The cutoff convergence is
+controlled by the near-diagonal and far-field majorants of
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus}; absolute convergence is the
+bound \eqref{eq:doob-bregman-integrability-bound}; and the passage from smooth
+convex entropies to the present range-local $C^{1,1}$ class uses the
+approximants $\Phi_\varepsilon$ of
+Lemma~\ref{lem:compact-range-phi-approximation}.  Their first derivatives have
+a common Lipschitz constant on the compact quotient range, so the same
+one-variable and Bregman majorants dominate both sides and dominated
+convergence lets $\varepsilon\downarrow0$.  Convexity gives
+$D_\Phi\ge0$, hence monotonicity.  Since $[a,b]$ was arbitrary, the proposition
+follows.
+\end{proof}
+
 \section{Background principal-symbol criterion}\label{app:background-symbol-criterion}
 
 This appendix records the standard Fourier proof of
 Lemma~\ref{lem:imported-principal-symbol-sampling}.  The argument is the
 usual principal-symbol proof for a Toeplitz Gram orbit, in the sense of the
-shift-invariant-space and frame criteria cited in Section~\ref{sec:strip-lattice};
+shift-invariant-space and frame criteria cited in Appendix~\ref{sec:strip-lattice};
 it supplies the background principal-symbol argument in the notation used here.
 
 \begin{proof}[Proof of the background criterion]
