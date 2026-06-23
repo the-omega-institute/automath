@@ -104,36 +104,74 @@ computational formulas
   conclusion includes parallel edges and repeated terminal vertices.
 \end{proof}
 
+\begin{lemma}[Column convention and the determinant block]
+  \label{lem:eta-gap-column-determinant-convention}
+  Fix an irreducible unitary representation \(\varrho\).  Let
+  \(A_\varrho\) denote the row-vector block matrix from
+  \eqref{eq:twisted-matrix-def}, which is the matrix used in all trace and
+  determinant expressions.  For the line-field argument define
+  \[
+    \mathcal A_\varrho:=A_\varrho^{\mathrm{col}}
+  \]
+  as the column block operator on
+  \(\CC^V\otimes V_\varrho\) by
+  \[
+    (\mathcal A_\varrho w)_i
+    =
+    \sum_{e:i\to j}\varrho(\tau(e))w_j .
+  \]
+  Then \(\mathcal A_\varrho=A_\varrho^{\mathrm{col}}\) and the determinant block
+  \(A_\varrho\) have the same characteristic polynomial.  Consequently
+  \[
+    \det(tI-\mathcal A_\varrho)
+    =
+    \det(tI-A_\varrho),
+    \qquad
+    \rho(\mathcal A_\varrho)=\rho(A_\varrho),
+  \]
+  and the boundary poles of
+  \(\det(I-zA_\varrho)^{-1}\) are exactly the boundary eigenvalues of
+  \(\mathcal A_\varrho\) written through this common polynomial.
+\end{lemma}
+
+\begin{proof}
+  Put
+  \(M_{ij}:=\sum_{e:i\to j}\varrho(\tau(e))\).  Choose a basis of
+  \(V_\varrho\).  The column operator above has block matrix
+  \((M_{ij})_{i,j}\).  The determinant convention treats an element as a
+  row family \(x=(x_i)_i\) and multiplies on the right:
+  \[
+    (xA_\varrho)_j=\sum_i x_iM_{ij}.
+  \]
+  If the row blocks are vectorized as columns by ordinary transpose, then
+  this row action is represented by the full transpose of the column block
+  matrix \((M_{ij})_{i,j}\), namely the block matrix with \((j,i)\)-block
+  \(M_{ij}^{\mathsf T}\).  Thus no edge is reversed and no label is
+  inverted: the same edge \(e:i\to j\) contributes the same linear map
+  \(\varrho(\tau(e))\), and only the outside row-versus-column
+  realization is transposed.  A finite matrix and its transpose have the
+  same characteristic polynomial, so the displayed determinant and
+  spectral-radius identities follow.  Substituting \(t=z^{-1}\), or
+  equivalently comparing the common polynomial
+  \(\det(I-z\,\cdot)\), gives the statement about determinant poles.
+\end{proof}
+
 \begin{proposition}[Finite line-field certificate at the Perron boundary]
   \label{thm:eta-gap-rigidity}
   Fix the finite directed graph with primitive adjacency matrix \(A\), the
   fixed finite-group cocycle \(\tau\), and the associated twisted matrices
   \(A_\varrho\) from \eqref{eq:twisted-matrix-def}.  Let
   \(\varrho:G\to U(V_\varrho)\) be an irreducible unitary representation.
-  For the line-field formulation define the column block operator
-  \(A_\varrho^{\mathrm{col}}\) on
-  \(\CC^V\otimes V_\varrho\) by
+  Throughout this proposition the line-field equations use the column block
+  convention
   \[
-    (A_\varrho^{\mathrm{col}} w)_i
+    (\mathcal A_\varrho w)_i
     =
     \sum_{e:i\to j}\varrho(\tau(e))w_j .
   \]
-  First record the convention change explicitly.  The row-vector twisted
-  matrix \(A_\varrho\) from \eqref{eq:twisted-matrix-def} and
-  \(A_\varrho^{\mathrm{col}}\) are transpose-dual finite matrices; hence
-  \[
-    \det(tI-A_\varrho^{\mathrm{col}})
-    =
-    \det(tI-A_\varrho).
-  \]
-  Thus switching between the row and column conventions does not change the
-  characteristic polynomial or the spectral radius.  In particular,
-  \[
-    \rho(A_\varrho)=\lambda
-    \quad\Longleftrightarrow\quad
-    \rho(A_\varrho^{\mathrm{col}})=\lambda .
-  \]
-  The displayed line-field equation below uses this latter column convention.
+  By \Cref{lem:eta-gap-column-determinant-convention}, this has the same
+  characteristic polynomial and spectral radius as the determinant block
+  \(A_\varrho\).
   Thus \(\rho(A_\varrho)=\lambda\) if and only if there exist
   \(\omega\in\TT\) and unit vectors
   \(\xi_i\in V_\varrho\), indexed by the vertices \(i\in V\), such that
@@ -142,14 +180,6 @@ computational formulas
     \qquad
     \text{for every admissible edge } e:i\to j.
   \end{equation}
-  In row form, equality at the Perron boundary is expressed by
-  row unit vectors \(\zeta_i\) satisfying
-  \[
-    \zeta_i\varrho(\tau(e))=\omega\,\zeta_j
-    \qquad(e:i\to j),
-  \]
-  after replacing \(\omega\) by the corresponding unit scalar if one
-  passes between row vectors and adjoint column vectors.
   Whenever \eqref{eq:eta-gap-line-field} holds, every closed path
   \(\gamma\) of length \(n\) based at \(i\) satisfies
   \begin{equation}\label{eq:eta-gap-loop-character}
@@ -176,29 +206,21 @@ computational formulas
 \end{proposition}
 
 \begin{proof}
-  We use \(A_\varrho^{\mathrm{col}}\) throughout the proof. The statement
-  has already identified its spectral radius with that of the row
-  operator \(A_\varrho\), so no spectral assertion changes under this
-  convention.  Concretely, the determinant block
-  \(A_\varrho=(\sum_{e:i\to j}\varrho(\tau(e)))_{ij}\) is the block matrix
-  used in the trace and determinant formulas.  Its row-vector realization
-  and the column operator \(A_\varrho^{\mathrm{col}}\) above are
-  transpose-dual finite matrices, hence have the same characteristic
-  polynomial.  Under the unitary Hilbert identification of a row vector
-  with its adjoint column vector, an eigenvalue phase is conjugated; thus a
-  row-boundary phase \(\omega\) corresponds to the column-boundary phase
-  \(\overline\omega\).  Since the criterion records only membership in
-  \(\TT\) and spectral radius \(\lambda\), this harmless conjugation is the
-  only row/column change.
+  We use \(\mathcal A_\varrho=A_\varrho^{\mathrm{col}}\) throughout the proof. The statement
+  has already identified its spectral radius with that of the determinant
+  block \(A_\varrho\) by
+  \Cref{lem:eta-gap-column-determinant-convention}, so no spectral
+  assertion changes under this convention.
 
   Assume first that \(\rho(A_\varrho)=\lambda\). Since
-  \(A_\varrho^{\mathrm{col}}\) is finite dimensional, some eigenvalue
-  \(\alpha\in\spec(A_\varrho^{\mathrm{col}})\) satisfies
+  \(\mathcal A_\varrho\) is finite dimensional, some eigenvalue
+  \(\alpha\in\spec(\mathcal A_\varrho)\) satisfies
   \(|\alpha|=\lambda\). Let
   \(v=(v_i)_{i\in V}\in \CC^V\otimes V_\varrho\) be a corresponding
   eigenvector, so
   \[
-    \alpha v_i=\sum_{e:i\to j}\varrho(\tau(e))v_j
+    \alpha v_i=(\mathcal A_\varrho v)_i
+    =\sum_{e:i\to j}\varrho(\tau(e))v_j
     \qquad (i\in V).
   \]
   Set \(u_i:=\norm{v_i}\). Then
@@ -228,6 +250,14 @@ computational formulas
   \(i\in V\).
 
   Equality in the triangle inequality now holds in every vertex equation.
+  Explicitly, for each \(i\),
+  \[
+    \lambda\norm{v_i}
+    =
+    \left\|\sum_{e:i\to j}\varrho(\tau(e))v_j\right\|
+    =
+    \sum_{e:i\to j}\norm{v_j}.
+  \]
   Applying \Cref{lem:edgewise-domination-equality} shows that this is an
   equality for the list of outgoing edges with multiplicity, not only after
   grouping by terminal vertex.  Thus no cancellation can occur at a
@@ -241,7 +271,12 @@ computational formulas
     \qquad
     \text{for every admissible edge } e:i\to j.
   \]
-  Write \(\xi_i:=v_i/u_i\in V_\varrho\). Dividing by \(u_j\) yields
+  Write \(\eta_i:=v_i/u_i\in V_\varrho\). Dividing by \(u_j\) yields
+  \[
+    \varrho(\tau(e))\eta_j=\omega\eta_i,
+    \qquad e:i\to j,
+  \]
+  with unit vectors \(\eta_i\).  Renaming \(\eta_i\) as \(\xi_i\) gives
   \eqref{eq:eta-gap-line-field}.
 
   Conversely, assume that \eqref{eq:eta-gap-line-field} holds. Let
@@ -249,7 +284,7 @@ computational formulas
   \(Ah=\lambda h\). Define \(w=(w_i)_{i\in V}\) by
   \(w_i:=h_i\xi_i\). Then
   \begin{align*}
-    (A_\varrho^{\mathrm{col}} w)_i
+    (\mathcal A_\varrho w)_i
     &=
     \sum_{e:i\to j}\varrho(\tau(e))w_j \\
     &=
@@ -261,8 +296,8 @@ computational formulas
     &=
     \omega\lambda w_i.
   \end{align*}
-  Thus \(\omega\lambda\in\spec(A_\varrho^{\mathrm{col}})\), so
-  \(\rho(A_\varrho^{\mathrm{col}})\ge \lambda\), equivalently
+  Thus \(\omega\lambda\in\spec(\mathcal A_\varrho)\), so
+  \(\rho(\mathcal A_\varrho)\ge \lambda\), equivalently
   \(\rho(A_\varrho)\ge \lambda\). On the other hand,
   \Cref{prop:twisted-spectral-radius-bound} gives
   \(\rho(A_\varrho)\le \lambda\). Hence
@@ -457,8 +492,9 @@ computational formulas
   If the strict gap fails, then there are a non-trivial irreducible
   representation \(\varrho\), a phase \(\omega\in\TT\), and a boundary line
   field satisfying \eqref{eq:eta-gap-line-field}.  Moreover
-  \(\omega\lambda\in\spec(A_\varrho)\), so the non-trivial determinant
-  factor \(\det(I-zA_\varrho)^{-1}\) has a pole at
+  \(\omega\lambda\) is a zero of the common characteristic polynomial from
+  \Cref{lem:eta-gap-column-determinant-convention}, so the non-trivial
+  determinant factor \(\det(I-zA_\varrho)^{-1}\) has a pole at
   \(z=(\omega\lambda)^{-1}\) on the Perron circle.  Thus the finite-state
   certificate of \Cref{prop:eta-gap-finite-state-certificate} is a necessary
   and sufficient verification gate for the ordinary Perron-point constants in
@@ -512,8 +548,9 @@ computational formulas
   \(\omega\) and a boundary line field satisfying
   \eqref{eq:eta-gap-line-field}; the converse half of its proof constructs
   an eigenvector of the column realization with eigenvalue
-  \(\omega\lambda\).  The row and column realizations have the same spectrum,
-  so \(\omega\lambda\in\spec(A_\varrho)\).  Hence
+  \(\omega\lambda\).  By
+  \Cref{lem:eta-gap-column-determinant-convention}, this is a zero of the
+  determinant block's characteristic polynomial.  Hence
   \(\det(I-zA_\varrho)=0\) at \(z=(\omega\lambda)^{-1}\), and the reciprocal
   determinant has a boundary pole.  This is precisely the obstruction
   detected by \Cref{prop:eta-gap-finite-state-certificate}.

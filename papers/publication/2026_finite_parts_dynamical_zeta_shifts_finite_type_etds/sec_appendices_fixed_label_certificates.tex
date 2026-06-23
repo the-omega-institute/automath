@@ -1,186 +1,98 @@
-\section{Appendix: exact rational enclosure data for the \texorpdfstring{\(S_3\)}{S3} example}
+\section{Appendix: local finite enclosure interface for the \texorpdfstring{\(S_3\)}{S3} witness}
 \label{app:fixed-label-local-certificates}
 
-This appendix gives the exact rational enclosure data used only for the local
-\(S_3\) determinant calculation and the strict-gap specialization of
-\Cref{thm:perron-boundary-determinant-product}
-in that model.  The main text imports just the four numerical inequalities
-\[
-  \Pi_\varepsilon(1/2)\in(-342/1000,-341/1000),\quad
-  \Pi_{\varrho_{\mathrm{std}}}(1/2)\in(-719/1000,-718/1000),
-\]
-and
-\[
-  F_\varepsilon(1/2)\in(-381/1000,-380/1000),\quad
-  F_{\varrho_{\mathrm{std}}}(1/2)\in(-923/1000,-922/1000),
-\]
-as recorded in \Cref{cor:s3-displayed-rational-certificate-windows}.  The
-finite algebraic model data, branch-tagged logarithm enclosures, rational tail
-bounds, and branch--tail enclosure data below explain how those inequalities are
-checked by exact arithmetic.  They are finite interval-enclosure data for this
-example, not extra analytic input for the Perron-boundary product theorem.
+This appendix records the local interface between the fixed-label finite-part
+algorithm and the compact \(S_3\) certificate of
+\Cref{app:s3-log-certificates}.  It is support material only: the main text
+imports the four rational inequalities collected in
+\Cref{cor:s3-displayed-rational-certificate-windows}, and the determinant
+model itself is already displayed in
+\Cref{prop:s3-example-channels,prop:s3-example-primitive-channels}.
 
 \begin{lemma}[Local rational enclosure data for fixed labels]\label{prop:fixed-label-rational-certificate-record}
 \label{prop:fixed-label-finite-io-certificate-summary}
   Assume the hypotheses of \Cref{thm:class-mertens-explicit}.  Fix a
   non-trivial \(\varrho\in\Irr(G)\), a tolerance \(\epsilon>0\), and a
   truncation level \(M\) satisfying
-  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice}.  The enclosure obtained from
-  \Cref{prop:fixed-label-perron-finite-algorithm} is reproduced by the following
-  finite algebraic data and rational inequalities:
+  \eqref{eq:fixed-label-perron-finite-algorithm-tail-choice}.  The enclosure
+  produced by \Cref{prop:fixed-label-perron-finite-algorithm} is reproduced by
+  the following finite data:
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-    \item the list of triples \((r,m,\pi)\) with \(rm\le M\), with the scalar
-      Perron triple \((1,1,\mathbf1)\) deleted exactly as in
+    \item the finite list of triples \((r,m,\pi)\) with \(rm\le M\), with the
+      scalar Perron triple \((1,1,\mathbf1)\) deleted as in
       \Cref{lem:fixed-label-singular-triple-deletion};
-    \item the Adams coefficients \(a_{\varrho,
-      \pi}^{(m)}=\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\), written from
-      the finite character table and class-power table;
-    \item for every listed triple, a branch tag specifying either the Abel
-      non-trivial Perron branch \((rm=1,\pi\ne\mathbf1)\) or the ordinary germ
-      value inside the Perron disc \((rm\ge2)\), together with a rational
-      rectangular interval enclosure for
+    \item the Adams coefficients
+      \(a_{\varrho,\pi}^{(m)}
+      =\langle\psi^m\chi_\varrho,\chi_\pi\rangle_G\), computed from the
+      character table and class-power table;
+    \item for every remaining triple, the branch tag specifying either the
+      Abel non-trivial Perron branch \((rm=1,\pi\ne\mathbf1)\) or the ordinary
+      germ value inside the Perron disc \((rm\ge2)\), together with a rational
+      rectangular enclosure for
       \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\);
-    \item two rational error bounds \(R_M\) and \(R_{\mathrm{num}}\): the
-      tail bound \(R_M\) is verified either directly from
-      \eqref{eq:fixed-label-perron-finite-algorithm-error} or from the
-      rational envelope \eqref{eq:fixed-label-rational-tail-envelope}, and
-      \(R_{\mathrm{num}}\) is verified from the finite interval-propagation
-      bound \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.
+    \item rational bounds \(R_M\) and \(R_{\mathrm{num}}\) for the discarded
+      analytic tail and finite interval-propagation error.
   \end{enumerate}
-  These four kinds of quantities, checked by exact algebraic comparison
-  and rational interval arithmetic, produce a rational rectangular interval
-  \(I_M\subset\CC\) enclosing the finite sum \(F_\varrho^{(M)}\) and verifies
-  the inclusion
+  These data verify the rational inclusion
   \begin{equation}\label{eq:fixed-label-certificate-interface-inclusion}
     F_\varrho(\lambda^{-1})
     \in
-    I_M+
-    \left\{w\in\CC:
-      \abs{w}\le R_M+R_{\mathrm{num}}\right\},
+    I_M+\{w\in\CC:\abs{w}\le R_M+R_{\mathrm{num}}\},
   \end{equation}
-  where all sides of \(I_M\) and both radii are rational.  Thus the displayed
-  finite calculation gives an exact rational enclosure for the constant
-  used in
-  \Cref{prop:fixed-label-perron-finite-algorithm,cor:class-product-constant-rigidity}.
+  where \(I_M\) is the rational rectangular interval obtained by signed
+  interval summation over the listed triples.
 \end{lemma}
 
 \begin{proof}
-  The first two entries are finite because the set
-  \(\{(r,m):rm\le M\}\) and \(\Irr(G)\) are finite, and because the Adams
-  coefficients are finite character-table inner products.  The deleted scalar
-  triple is exactly the omitted term in
-  \Cref{lem:fixed-label-singular-triple-deletion,prop:fixed-label-perron-finite-algorithm};
-  its coefficient is zero for \(\varrho\ne\mathbf1\), so no finite enclosure
-  assigns a finite value, finite part, or endpoint branch to the singular scalar
-  logarithm.
-
-  For each remaining triple, the branch tag is one of the two cases already
-  proved in item \textup{(d)} of
-  \Cref{prop:fixed-label-perron-finite-algorithm}: either the non-trivial
-  Abel branch at \(rm=1\), made regular by the strict twisted gap, or the
-  ordinary logarithmic germ at \(rm\ge2\), where
-  \(\rho(\lambda^{-rm}A_\pi)<1\).  Thus every tagged interval encloses a
-  uniquely specified logarithm.  Multiplying the rational rectangular
-  intervals by the verified coefficients \(\mu(m)a_{\varrho,\pi}^{(m)}/(rm)\),
-  enclosing each algebraic product by exact comparison in a rational rectangle,
-  and summing those rectangles gives a rational rectangular interval \(I_M\)
-  which contains the stated finite truncation.  Its excess radius is at most
-  \(R_{\mathrm{num}}\) by the triangle inequality used in
-  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  The discarded
-  terms with \(rm>M\) have total absolute value at most the rational number
-  \(R_M\), either because the enclosure data compare \(R_M\) with the algebraic
-  tail in \eqref{eq:fixed-label-perron-finite-algorithm-error}, or because it
-  records rational \(\theta,Q_\varrho\) satisfying
-  \eqref{eq:fixed-label-rational-tail-envelope} and
-  \(R_M\ge Q_\varrho\theta^{M+1}/(1-\theta)\).  All these checks are finite
-  algebraic or rational inequalities.  Adding the two independent radii proves
-  \eqref{eq:fixed-label-certificate-interface-inclusion}.  Finally,
-  \Cref{cor:class-product-constant-rigidity} applies finite Fourier inversion
-  to the verified fixed-label Perron vector, so the same finite rational data
-  enclose the product constants without introducing a new analytic premise.
+  Finiteness of the triple list and of the Adams coefficients is immediate
+  from \(rm\le M\), the finite group \(G\), and the finite character table.  The
+  deleted scalar triple is exactly the singular term omitted in
+  \Cref{lem:fixed-label-singular-triple-deletion,prop:fixed-label-perron-finite-algorithm}.
+  Each non-deleted branch tag is one of the two branches already specified in
+  \Cref{prop:fixed-label-perron-finite-algorithm}: the strict twisted gap makes
+  the non-trivial \(rm=1\) Abel branch regular, and \(rm\ge2\) lies strictly
+  inside the Perron disc.  Signed interval summation gives \(I_M\), and the two
+  rational radii are exactly the bounds in
+  \eqref{eq:fixed-label-perron-finite-algorithm-error} and
+  \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}.  This proves
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.
 \end{proof}
 
-
-\begin{lemma}[Local branch--tail enclosure normal form for the fixed-label example]\label{prop:fixed-label-certificate-normal-form}
+\begin{lemma}[Local branch--tail normal form for the fixed-label example]\label{prop:fixed-label-certificate-normal-form}
 \label{prop:fixed-label-product-certificate-record}
 \label{prop:fixed-label-product-enclosure-check}
 \label{prop:fixed-label-five-field-rational-record}
-  For the strict-gap fixed-label enclosures used in the \(S_3\) example, the
-  finite enclosure has the following entries for each non-trivial
-  \(\varrho\in\Irr(G)\).  The notation is the general notation of
-  \Cref{prop:fixed-label-perron-finite-algorithm}, but the role of this
-  proposition is local: it gives the branch and tail data needed to check
-  the displayed example, not a general data format.
+  For the strict-gap fixed-label enclosures used in the \(S_3\) witness, the
+  finite record has five fields:
   \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-    \item the determinant model
-      \((D_\pi(z))_{\pi\in\Irr(G)}\), the Perron root \(\lambda\), the twisted
-      verified gap inequality \(\eta<\lambda\), the character table, and the
-      class-power maps;
-    \item rational tail data \(C_\varrho,Q_\varrho,\theta,M\) satisfying the
-      majorant hypothesis of \Cref{lem:fixed-label-perron-double-majorant},
-      \(\lambda^{-1}<\theta<1\), \(C_\varrho\lambda<Q_\varrho\), and
+    \item the determinant model \((D_\pi(z))_{\pi\in\Irr(G)}\), the Perron root
+      \(\lambda\), the verified gap \(\eta<\lambda\), the character table, and
+      the class-power maps;
+    \item rational majorant data \(C_\varrho,Q_\varrho,\theta,M\) satisfying
+      \(\lambda^{-1}<\theta<1\) and the tail condition
       \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice};
-    \item the finite window of all triples \((r,m,\pi)\) with \(rm\le M\), with
-      only \((1,1,\mathbf1)\) deleted, and all Adams coefficients
-      \(a_{\varrho,\pi}^{(m)}\) in that window;
-    \item for every non-deleted listed triple, a branch tag and a rational
-      rectangular enclosure for
-      \(\Log\det(I-\lambda^{-rm}A_\pi)^{-1}\), using the Abel tag for
-      \((rm=1,\pi\ne\mathbf1)\) and the ordinary Perron-disc tag for
-      \(rm\ge2\);
-    \item the rational finite-propagation radius obtained from
-      \eqref{eq:fixed-label-perron-finite-algorithm-roundoff}, and the rational
-      tail radius \(R_{M,\varrho}=Q_\varrho\theta^{M+1}/(1-\theta)\).
+    \item the finite list of triples \((r,m,\pi)\) with \(rm\le M\), the
+      scalar Perron triple deleted, and the Adams coefficients on that list;
+    \item the branch tag and rational determinant-logarithm enclosure for each
+      non-deleted triple;
+    \item the rational finite-propagation radius and the rational tail radius
+      \(R_{M,\varrho}=Q_\varrho\theta^{M+1}/(1-\theta)\).
   \end{enumerate}
-  These entries determine a disc
-  \[
-    I_\varrho+
-    \{w\in\CC:|w|\le R_{M,\varrho}+R_{\mathrm{num},\varrho}\}
-  \]
-  containing \(F_\varrho(\lambda^{-1})\), where \(I_\varrho\) is the interval
-  evaluation of the finite sum
-  \eqref{eq:fixed-label-perron-finite-algorithm-truncation}.  Thus
-  checking the concrete enclosure used here reduces to recomputing the finite
-  character-table sums, applying the recorded branch tags, clearing
-  denominators in the logarithm and tail inequalities, and comparing the
-  resulting integers.  Applying these
-  enclosures for all non-trivial \(\varrho\) and then the Fourier formula
-  \eqref{eq:class-product-fourier-coordinates} gives rational enclosures for all
-  Frobenius-class product constants \((K_C)_C\).
+  These fields give the inclusion \eqref{eq:fixed-label-certificate-interface-inclusion}
+  for each non-trivial \(\varrho\).  Applying the finite character-table
+  Fourier formula \eqref{eq:class-product-fourier-coordinates} then gives the
+  corresponding rational enclosures for the Frobenius-class product constants
+  \((K_C)_C\).
 \end{lemma}
 
 \begin{proof}
-  The model field is finite because the group has finitely many irreducible
-  representations and conjugacy classes, and because each twisted determinant
-  is a finite polynomial.  The tail field is finite and checkable by algebraic
-  comparison: \(C_\varrho\) is a verified majorant from
-  \Cref{lem:fixed-label-perron-double-majorant}, the inequalities for
-  \(Q_\varrho\) and \(\theta\) are rational/algebraic comparisons, and
-  \eqref{eq:fixed-label-perron-finite-algorithm-rational-tail-choice} is a
-  rational inequality.  By \Cref{prop:fixed-label-perron-finite-algorithm},
-  this tail field gives the analytic error bound
-  \eqref{eq:fixed-label-perron-finite-algorithm-error} through the rational
-  envelope \eqref{eq:fixed-label-rational-tail-envelope}.
-
-  For the finite window, the Adams coefficients are recomputed from the finite
-  character-table inner product
-  \eqref{eq:fixed-label-algorithm-adams-coefficients}.  The branch field is
-  exactly the two-branch convention of
-  \Cref{prop:fixed-label-perron-finite-algorithm}: the strict twisted gap makes
-  every non-trivial \(rm=1\) Abel determinant regular at the boundary, while
-  \(rm\ge2\) lies inside the Perron disc.  Signed interval summation over this
-  finite window gives \(I_\varrho\).  Enlarging by the finite-propagation radius
-  of \eqref{eq:fixed-label-perron-finite-algorithm-roundoff} and by
-  \(R_{M,\varrho}\) contains the exact value by the triangle inequality and by
-  the tail estimate already proved.  This proves the stated enclosure.
-
-  The enclosure procedure of \Cref{prop:fixed-label-perron-finite-algorithm}
-  uses no further analytic datum in this application: it uses the same
-  determinant model, Adams coefficients, deleted-triple convention, branch
-  convention, finite truncation, determinant-logarithm enclosures, and the sum
-  of one tail error and one finite interval-propagation error.  Finally,
-  \Cref{cor:class-product-constant-rigidity} expresses the normalized product
-  logarithms by the finite character-table Fourier transform
-  \eqref{eq:class-product-fourier-coordinates}; exponentiating the resulting real
-  intervals gives the stated enclosures for the positive constants \(K_C\).
+  This is \Cref{prop:fixed-label-rational-certificate-record} specialized to
+  the determinant model and branch choices of the \(S_3\) example.  The first
+  four fields determine the finite interval sum \(I_\varrho\); the fifth field
+  supplies the two rational radii.  The inclusion follows from
+  \eqref{eq:fixed-label-certificate-interface-inclusion}.  The passage from
+  the fixed-label vector to the class-product constants is the finite
+  Peter--Weyl readout
+  \eqref{eq:class-product-fourier-coordinates}; no additional analytic
+  estimate is introduced at that stage.
 \end{proof}

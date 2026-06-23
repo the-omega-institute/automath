@@ -1,167 +1,78 @@
-\section[Exact rational verification for the S3 example]{Exact
+\section[Compact rational verification for the S3 example]{Compact
   rational verification for the \texorpdfstring{$S_3$}{S3}
   example}
 \label{app:s3-log-certificates}
 
-This appendix gives the finite rational arithmetic for the \(S_3\) obstruction used in
-\Cref{thm:adams-obstruction-class-product,prop:s3-naive-artin-obstruction}.
-The main text uses only the coarse rational non-vanishing windows from
-\Cref{lem:s3-example-perron-certificates}; the pages below display the exact
-finite truncations, tail estimates, and interval enclosures that certify those
-windows.  The material is not a catalogue of finite-group examples and not a
-general finite-verification theory for arbitrary finite groups.  Each displayed
-certificate is stated as an exact rational record: after denominators are
-cleared, verification reduces to integer comparisons and to the listed rational
-logarithm enclosures.  No analytic statement in the paper relies on a
-floating-point calculation or on an unrecorded numerical oracle.
+This appendix is the reproducibility record for the four rational windows used
+by the \(S_3\) obstruction in \Cref{sec:shadows}.  The finite matrices and
+determinant polynomials are displayed in the main text and in
+\Cref{prop:s3-example-channels}; the appendix records only the rational
+logarithm brackets, finite endpoints, tail radii, and denominator-cleared
+comparisons that certify the four inequalities.  Expanded term-by-term rational
+fractions are ancillary in
+\texttt{certificates/s3\_log\_certificates.py} and
+\texttt{certificates/s3\_log\_certificates.cert}.
 
-\begin{lemma}[Compact rational verification record for the \(S_3\) example]
+\begin{remark}[Compact rational verification record for the \(S_3\) example]
 \label{prop:s3-compact-rational-verification-record}
-  The four rational windows used in the obstruction and product-constant chain
-  are checked by the following finite rational data.  The underlying model is the
-  full two-shift matrix
-  \(
-    A=\begin{psmallmatrix}1&1\\1&1\end{psmallmatrix}
-  \)
-  with the edge labels in \eqref{eq:s3-example-edge-labels}.  The exact twisted
-  blocks are
+  For every rational logarithm argument \(q>1\), put
   \[
-    A_\varepsilon=\begin{pmatrix}-1&1\\-1&1\end{pmatrix},
-    \qquad
-    A_{\varrho_{\mathrm{std}}}=
-    \begin{pmatrix}
-      \frac12&\frac32&1&0\\
-      \frac12&-\frac12&0&1\\
-      -1&0&-\frac12&-\frac32\\
-      0&1&\frac12&-\frac12
-    \end{pmatrix},
+    u_q:=\frac{q-1}{q+1},\qquad
+    L_3(q):=2\sum_{j=0}^{3}\frac{u_q^{2j+1}}{2j+1},
   \]
-  and their determinant polynomials are
-  \(
-    \det(I-zA)=1-2z,
-    \det(I-zA_\varepsilon)=1,
-    \det(I-zA_{\varrho_{\mathrm{std}}})=1+z
-  \).
-  Each row records the mathematical input, branch convention, finite
-  truncation, rational tail, finite lower endpoint, finite upper endpoint, and
-  denominator-cleared positivity checks; no floating-point datum or unrecorded
-  limiting enumeration is part of the certificate.
+  and
+  \[
+    U_3(q):=L_3(q)+\frac{2u_q^9}{9(1-u_q^2)}.
+  \]
+  Then
+  \begin{equation}\label{eq:s3-log-lower-upper-bounds}
+    L_3(q)<\log q<U_3(q).
+  \end{equation}
+  The four rational windows used in the paper are certified by the following
+  finite data:
   \begin{center}
-  \tiny
-  \begin{tabular}{@{}L{0.14\textwidth}L{0.15\textwidth}L{0.15\textwidth}L{0.12\textwidth}L{0.28\textwidth}@{}}
+  \scriptsize
+  \begin{tabular}{@{}L{0.16\textwidth}L{0.18\textwidth}L{0.18\textwidth}L{0.12\textwidth}L{0.28\textwidth}@{}}
     \toprule
-    \textbf{Coordinate} & \textbf{finite lower endpoint} &
+    \textbf{quantity} & \textbf{finite lower endpoint} &
     \textbf{finite upper endpoint} & \textbf{tail radius} &
     \textbf{cleared-denominator positivity checks}\\
     \midrule
     \(\Pi_\varepsilon(1/2)\) &
-      \(E_7^-\) from
-      \eqref{eq:s3-example-e7-r15-endpoints} &
-      \(E_7^+\) from
-      \eqref{eq:s3-example-e7-r15-endpoints} &
+      \(E_7^-\) in \eqref{eq:s3-example-e7-r15-endpoints} &
+      \(E_7^+\) in \eqref{eq:s3-example-e7-r15-endpoints} &
       \(1/1105920\) &
       \(E_7^- -1/1105920+342/1000>1/10^6\);
       \(-341/1000-(E_7^+ +1/1105920)>1/10^7\).\\[1.0ex]
     \(\Pi_{\varrho_{\mathrm{std}}}(1/2)\) &
-      \(R_{15}^-\) from
-      \eqref{eq:s3-example-e7-r15-endpoints} &
-      \(R_{15}^+\) from
-      \eqref{eq:s3-example-e7-r15-endpoints} &
+      \(R_{15}^-\) in \eqref{eq:s3-example-e7-r15-endpoints} &
+      \(R_{15}^+\) in \eqref{eq:s3-example-e7-r15-endpoints} &
       \(9/524288\) &
       \(R_{15}^- -9/524288+719/1000>1/10^7\);
       \(-718/1000-(R_{15}^+ +9/524288)>1/10^7\).\\[1.0ex]
     \(F_\varepsilon(1/2)\) &
-      \(Q_8^-\) from
-      \eqref{eq:s3-q8-endpoint-values} &
-      \(Q_8^+\) from
-      \eqref{eq:s3-q8-endpoint-values} &
+      \(Q_8^-\) in \eqref{eq:s3-q8-endpoint-values} &
+      \(Q_8^+\) in \eqref{eq:s3-q8-endpoint-values} &
       \(B_\varepsilon=1/(2^{35}-8)\) &
       \(Q_8^- -B_\varepsilon+381/1000>1/10^6\);
-      \(-380/1000-(Q_8^+ +B_\varepsilon)>9/10^4\).\\[1.0ex]
+      \(-380/1000-Q_8^+>8/10^4\).\\[1.0ex]
     \(F_{\varrho_{\mathrm{std}}}(1/2)\) &
-      \(S_{32}^-\) from
-      \eqref{eq:s3-s32-endpoint-values} &
-      \(S_{32}^+\) from
-      \eqref{eq:s3-s32-endpoint-values} &
+      \(S_{32}^-\) in \eqref{eq:s3-s32-endpoint-values} &
+      \(S_{32}^+\) in \eqref{eq:s3-s32-endpoint-values} &
       \(B_{\mathrm{std}}=(5/33)2^{-32}\) &
       \(S_{32}^- -B_{\mathrm{std}}+923/1000>7/10^4\);
       \(-922/1000-(S_{32}^+ +B_{\mathrm{std}})>2/10^4\).\\
     \bottomrule
   \end{tabular}
   \end{center}
-  The finite endpoints in the first two rows are formed from the positive real
-  logarithm branch and the primitive truncations \(r=1,3,5,7\) for
-  \(E_7\), respectively squarefree \(m\le15\) for \(R_{15}\).  The fixed-label
-  rows use the Adams--M\"obius coefficients after deleting the scalar Perron
-  triple; boundary terms carry the Abel branch tag and all \(rm\ge2\) terms
-  carry the interior branch tag.
-  The first two rows supply the coarse Perron-channel windows used in
-  \Cref{lem:s3-example-perron-certificates}.  The last two rows are valid
-  fixed-label enclosures in the sense of
-  \Cref{prop:fixed-label-branch-tail-record,cor:main-iii-branch-tail-enclosure}
-  and therefore supply the \(S_3\) input to
-  \Cref{thm:class-euler-product-mertens,thm:main-iii-certificate-chain}.
-  Equivalently, the verification consists of the displayed rational endpoints,
-  rational tails, finite Adams coefficients, and integer numerator tests
-  obtained after clearing denominators in the cited inequalities.
-For every rational logarithm argument \(q>1\), the endpoints
-  \(L_3(q)\) and \(U_3(q)\) are rational and enclose \(\log q\) by
-  \eqref{eq:s3-log-lower-upper-bounds}.  Multiplying by a positive rational
-  coefficient preserves the endpoint order, while multiplying by a negative
-  coefficient reverses it.  Thus each finite signed sum in the table has a
-  rational lower endpoint and a rational upper endpoint obtained by the stated
-  deterministic endpoint-selection rule.
-
-  The truncation and tail entries in the first two rows are exactly
-  \eqref{eq:s3-example-epsilon-tail-certificate} and
-  \eqref{eq:s3-example-rho-tail-certificate}; the proof of
-  \Cref{lem:appendix-s3-sharp-certificates} shows that adding those rational
-  radii to the finite intervals places \(\Pi_\varepsilon(1/2)\) and
-  \(\Pi_{\varrho_{\mathrm{std}}}(1/2)\) in the displayed windows.  For the last two rows,
-  \Cref{lem:appendix-s3-f-level-certificates} gives the fixed-label finite
-  sums, the deleted scalar Perron convention, the listed Adams coefficients,
-  and the rational tails \(B_\varepsilon\) and \(B_{\mathrm{std}}\).  The denominator-cleared
-  inequalities in that lemma place the resulting rational intervals in the two
-  fixed-label output windows.
-
-  Finally, the fixed-label branch and deletion data in the last two rows are
-  precisely the legal branch--tail record of
-  \Cref{prop:fixed-label-branch-tail-record}: the singular scalar triple is not
-  evaluated, every remaining boundary term has the Abel tag, and every
-  \(rm\ge2\) term is an interior determinant logarithm.  Applying
-  \Cref{cor:main-iii-branch-tail-enclosure} then propagates these two verified
-  fixed-label windows through the finite Hermitian Fourier transform to the
-  strict-gap product constants obtained from
-  \Cref{thm:renormalized-frobenius-product,cor:strict-gap-specialization}.
-  Hence the table is a finite exact-arithmetic check for the displayed \(S_3\)
-  example.
-\end{lemma}
-
-\begin{proof}
-  The table specifies a finite list of rational logarithm arguments, rational
-  coefficients, branch tags, and rational tail radii.  For each listed rational
-  argument \(q>1\), \Cref{lem:appendix-s3-sharp-certificates} proves the
-  rational enclosure \(L_3(q)<\log q<U_3(q)\).  Multiplication by a positive
-  rational coefficient preserves the order of the endpoints, and multiplication
-  by a negative rational coefficient reverses it.  Thus the endpoint-selection
-  rule in the table gives rational lower and upper endpoints for each of the
-  four finite truncations.
-
-  For \(\Pi_\varepsilon(1/2)\) and \(\Pi_{\varrho_{\mathrm{std}}}(1/2)\), the tails are exactly the
-  rational radii in
-  \eqref{eq:s3-example-epsilon-tail-certificate} and
-  \eqref{eq:s3-example-rho-tail-certificate}.  For
-  \(F_\varepsilon(1/2)\) and \(F_{\varrho_{\mathrm{std}}}(1/2)\), the tails and the deleted scalar
-  Perron convention are exactly those proved in
-  \Cref{lem:appendix-s3-f-level-certificates}.  Enlarging the four finite
-  rational intervals by those printed rational radii therefore contains the
-  exact four target values.  The final comparisons with the displayed output
-  windows are rational inequalities; clearing positive denominators gives the
-  positive margins printed in
-  \Cref{lem:appendix-s3-sharp-certificates,lem:appendix-s3-f-level-certificates}.
-  Hence the finite table verifies the four certified windows by exact rational
-  arithmetic.
-\end{proof}
+  All entries are rational.  The endpoint rule is deterministic: a positive
+  coefficient uses \(L_3(q)\) in a lower endpoint and \(U_3(q)\) in an upper
+  endpoint, while a negative coefficient uses the opposite choices.  Clearing
+  positive denominators in the four final comparisons gives the positive
+  integer checks summarized in the rightmost column.  The two lemmas below
+  prove the logarithm enclosure, the four tail estimates, and the resulting
+  interval inclusions.
+\end{remark}
 
 \begin{lemma}[Exact rational bounds for the \(S_3\)-channels]
   \label{lem:appendix-s3-sharp-certificates}
@@ -199,8 +110,8 @@ For every rational logarithm argument \(q>1\), the endpoints
     +\frac17\log\frac{129}{128} \\
     &+\frac1{10}\log\frac{512\cdot 1024}{511\cdot 1025}
     +\frac1{11}\log\frac{2049}{2048}
-    +\frac1{13}\log\frac{8193}{8192} \\
-    &+\frac1{14}\log\frac{8192\cdot 16384}{8191\cdot 16385}
+    +\frac1{13}\log\frac{8193}{8192}
+    +\frac1{14}\log\frac{8192\cdot 16384}{8191\cdot 16385}
     +\frac1{15}\log\frac{16384}{16383},
   \end{aligned}
   \]
@@ -208,7 +119,48 @@ For every rational logarithm argument \(q>1\), the endpoints
   \begin{equation}\label{eq:s3-example-rho-tail-certificate}
     \abs{\Theta_{\mathrm{std}}}\le \frac{9}{524288}.
   \end{equation}
-  Consequently,
+  With \(L_3,U_3\) from \eqref{eq:s3-log-lower-upper-bounds}, set
+  \begin{equation}\label{eq:s3-example-e7-r15-endpoints}
+  \begin{gathered}
+  \begin{aligned}
+    E_7^-
+    &:=
+    -\frac12\,U_3(2)
+    +\frac16\,L_3(32/31)
+    +\frac1{10}\,L_3(512/511)
+    +\frac1{14}\,L_3(8192/8191),\\
+    E_7^+
+    &:=
+    -\frac12\,L_3(2)
+    +\frac16\,U_3(32/31)
+    +\frac1{10}\,U_3(512/511)
+    +\frac1{14}\,U_3(8192/8191),
+  \end{aligned}\\[0.5ex]
+  \begin{aligned}
+    R_{15}^-
+    &:=
+    -U_3(3/2)-\frac12\,U_3(8/5)-\frac13\,U_3(4/3)
+    +\frac15\,L_3(33/32)+\frac13\,L_3(32/31)\\
+    &\quad+\frac17\,L_3(129/128)
+    +\frac1{10}\,L_3(524288/523775)
+    +\frac1{11}\,L_3(2049/2048)\\
+    &\quad+\frac1{13}\,L_3(8193/8192)
+    +\frac1{14}\,L_3(134217728/134209535)
+    +\frac1{15}\,L_3(16384/16383),\\
+    R_{15}^+
+    &:=
+    -L_3(3/2)-\frac12\,L_3(8/5)-\frac13\,L_3(4/3)
+    +\frac15\,U_3(33/32)+\frac13\,U_3(32/31)\\
+    &\quad+\frac17\,U_3(129/128)
+    +\frac1{10}\,U_3(524288/523775)
+    +\frac1{11}\,U_3(2049/2048)\\
+    &\quad+\frac1{13}\,U_3(8193/8192)
+    +\frac1{14}\,U_3(134217728/134209535)
+    +\frac1{15}\,U_3(16384/16383).
+  \end{aligned}
+  \end{gathered}
+  \end{equation}
+  Then
   \begin{equation}\label{eq:s3-example-certified-intervals-sharp}
     -\frac{341079}{10^6}-\frac{1}{1105920}
     <\Pi_\varepsilon(1/2)<
@@ -220,210 +172,54 @@ For every rational logarithm argument \(q>1\), the endpoints
     <\Pi_{\varrho_{\mathrm{std}}}(1/2)<
     -\frac{718351}{10^6}+\frac{9}{524288}.
   \end{equation}
-  Hence the coarse windows of
-  \Cref{lem:s3-example-perron-certificates} follow.
+  Hence
+  \[
+    -\frac{342}{1000}<\Pi_\varepsilon(1/2)<-\frac{341}{1000},
+    \qquad
+    -\frac{719}{1000}<\Pi_{\varrho_{\mathrm{std}}}(1/2)<-\frac{718}{1000}.
+  \]
 \end{lemma}
 
 \begin{proof}
-  The expression for \(E_7\) is obtained from
-  \eqref{eq:s3-example-pi-eps} by retaining the odd indices
-  \(r=1,3,5,7\). For the tail, put
-  \(x_r=2^{1-2r}\). Since \(r\ge 9\) implies \(x_r\le 2^{-17}\),
-  \[
-    -\log(1-x_r)\le \frac{x_r}{1-x_r}\le 2x_r.
-  \]
-  Therefore
+  The formulas for \(E_7\) and \(R_{15}\) are the truncations of
+  \eqref{eq:s3-example-pi-eps} and \eqref{eq:s3-example-pi-rho}.  For the sign
+  tail, with \(x_r=2^{1-2r}\) and odd \(r\ge9\),
+  \(-\log(1-x_r)\le 2x_r\), giving
   \[
     \abs{\Theta_\varepsilon}
-    \le
-    \sum_{\substack{r\ge 9\\ r\ \mathrm{odd}}}\frac{2^{1-2r}}{r}
-    \le
-    \frac19\sum_{j\ge 0}2^{1-2(9+2j)}
-    =
-    \frac{1}{1105920}.
+    \le \frac19\sum_{j\ge0}2^{1-2(9+2j)}
+    =\frac1{1105920}.
   \]
-
-  The expression for \(R_{15}\) is obtained from
-  \eqref{eq:s3-example-pi-rho} by retaining the squarefree indices
-  \(m\le 15\). For \(m\ge 16\), set \(y_m=2^{1-m}\). Then
-  \(y_m\le 2^{-15}\), and
-  \[
-    \log(1-y_m)^{-1}\le 2y_m,
-    \qquad
-    \log(1+2^{-m})\le 2^{-m}.
-  \]
-  Since \(0\le \alpha(m)\le 2\) and \(0\le \beta(m)\le 1\), this gives
+  For the standard tail, with \(m\ge16\),
+  \(\log(1-2^{1-m})^{-1}\le 2^{2-m}\),
+  \(\log(1+2^{-m})\le 2^{-m}\), \(0\le\alpha(m)\le2\), and
+  \(0\le\beta(m)\le1\), giving
   \[
     \abs{\Theta_{\mathrm{std}}}
-    \le
-    \sum_{m\ge 16}\frac{9\,2^{-m}}{m}
-    \le
-    \frac{9}{16}\sum_{m\ge 16}2^{-m}
-    =
-    \frac{9}{524288}.
+    \le\sum_{m\ge16}\frac{9\,2^{-m}}{m}
+    \le \frac9{524288}.
   \]
-
-  For each rational \(q>1\) appearing in \(E_7\) or \(R_{15}\), put
-  \[
-    u_q:=\frac{q-1}{q+1},
-    \qquad
-    L_3(q):=2\sum_{j=0}^{3}\frac{u_q^{2j+1}}{2j+1},
-  \]
-  and
-  \[
-    U_3(q):=L_3(q)+\frac{2u_q^9}{9(1-u_q^2)}.
-  \]
-  Since
-  \[
-    \log q
-    =
-    2\sum_{j\ge 0}\frac{u_q^{2j+1}}{2j+1}
-    =
-    L_3(q)+2\sum_{j\ge 4}\frac{u_q^{2j+1}}{2j+1},
-  \]
-  the tail is positive and satisfies
-  \[
-    0<\log q-L_3(q)
-    <
-    \frac{2u_q^9}{9}\sum_{j\ge 0}u_q^{2j}
-    =
-    \frac{2u_q^9}{9(1-u_q^2)}.
-  \]
-  Therefore
-  \begin{equation}\label{eq:s3-log-lower-upper-bounds}
-    L_3(q)<\log q<U_3(q).
-  \end{equation}
-  Equivalently, for every real coefficient \(c\),
-  \[
-    c>0:\qquad cL_3(q)<c\log q<cU_3(q),
-  \]
-  and
-  \[
-    c<0:\qquad cU_3(q)<c\log q<cL_3(q).
-  \]
-  Applying these inequalities termwise gives exact rational endpoints
-  \begin{equation}\label{eq:s3-example-e7-r15-endpoints}
-  \begin{gathered}
-  \begin{aligned}
-    E_7^-
-    :={}&
-    -\frac12\,U_3(2)
-    +\frac16\,L_3(32/31)
-    +\frac1{10}\,L_3(512/511) \\
-    &+\frac1{14}\,L_3(8192/8191), \\
-    E_7^+
-    :={}&
-    -\frac12\,L_3(2)
-    +\frac16\,U_3(32/31)
-    +\frac1{10}\,U_3(512/511) \\
-    &+\frac1{14}\,U_3(8192/8191),
-  \end{aligned}
-  \\[0.5ex]
-  \begin{aligned}
-    R_{15}^-
-    :={}&
-    -U_3(3/2)
-    -\frac12\,U_3(8/5)
-    -\frac13\,U_3(4/3)
-    +\frac15\,L_3(33/32)
-    +\frac13\,L_3(32/31) \\
-    &+\frac17\,L_3(129/128)
-    +\frac1{10}\,L_3(524288/523775)
-    +\frac1{11}\,L_3(2049/2048) \\
-    &+\frac1{13}\,L_3(8193/8192)
-    +\frac1{14}\,L_3(134217728/134209535) \\
-    &+\frac1{15}\,L_3(16384/16383), \\
-    R_{15}^+
-    :={}&
-    -L_3(3/2)
-    -\frac12\,L_3(8/5)
-    -\frac13\,L_3(4/3)
-    +\frac15\,U_3(33/32)
-    +\frac13\,U_3(32/31) \\
-    &+\frac17\,U_3(129/128)
-    +\frac1{10}\,U_3(524288/523775)
-    +\frac1{11}\,U_3(2049/2048) \\
-    &+\frac1{13}\,U_3(8193/8192)
-    +\frac1{14}\,U_3(134217728/134209535) \\
-    &+\frac1{15}\,U_3(16384/16383).
-  \end{aligned}
-  \end{gathered}
-  \end{equation}
-  Then \(E_7^-<E_7<E_7^+\) and \(R_{15}^-<R_{15}<R_{15}^+\). Since
-  every \(L_3(q)\) and \(U_3(q)\) is rational, the displayed formulas
-  are an exact rational interval verification. Expanding them and
-  subtracting the claimed decimal rational endpoints gives positive
-  rational margins. Clearing the positive denominators in the rational
-  formulas for \(E_7^\pm\) and \(R_{15}^\pm\) gives the following
-  exact lower bounds for those margins:
-  \[
-  \begin{array}{c|c|c}
-    \text{comparison} & \text{exact positive margin} & \text{rational lower bound} \\
-    \hline
-    E_7^-+\frac{341079}{10^6} & >0 & >\frac{94363}{10^{11}}\\
-    -\frac{341071}{10^6}-E_7^+ & >0 & >\frac{35281}{5\cdot10^{10}}\\
-    R_{15}^-+\frac{718352}{10^6} & >0 & >\frac{2693}{25\cdot10^{9}}\\
-    -\frac{718351}{10^6}-R_{15}^+ & >0 & >\frac{1}{2\cdot10^{12}}.
-  \end{array}
-  \]
-  The rightmost column is only a compact way to print the exact
-  integer comparisons after denominators have been cleared; no decimal
-  approximation is used in the proof of the signs.  Explicitly, each entry in
-  the middle column is the difference of two rational numbers obtained by
-  substituting the printed \(L_3/U_3\) endpoints into the displayed finite
-  logarithmic sum; multiplying by the least common positive denominator gives
-  the positive integer certified by the lower bound in the rightmost column.
-  Therefore
+  The endpoint definitions in \eqref{eq:s3-example-e7-r15-endpoints} and
+  \eqref{eq:s3-log-lower-upper-bounds} give
+  \(E_7^-<E_7<E_7^+\) and \(R_{15}^-<R_{15}<R_{15}^+\).  The exact
+  denominator-cleared checks are
   \begin{equation}\label{eq:s3-example-finite-sum-windows}
     \begin{aligned}
       -\frac{341079}{10^6}
-      &<E_7^-<E_7<E_7^+<-\frac{341071}{10^6}, \\
+      &<E_7^-<E_7<E_7^+<-\frac{341071}{10^6},\\
       -\frac{718352}{10^6}
       &<R_{15}^-<R_{15}<R_{15}^+<-\frac{718351}{10^6}.
     \end{aligned}
   \end{equation}
-  In particular, still by exact rational arithmetic,
-  \[
-    E_7^+ +\frac1{1105920}<-\frac{341}{1000},
-    \qquad
-    R_{15}^+ +\frac9{524288}<-\frac{718}{1000},
-  \]
-  while
-  \[
-    -\frac{342}{1000}<E_7^- -\frac1{1105920},
-    \qquad
-    -\frac{719}{1000}<R_{15}^- -\frac9{524288}.
-  \]
-  Combining these finite-sum bounds with
-  \eqref{eq:s3-example-epsilon-tail-certificate} and
-  \eqref{eq:s3-example-rho-tail-certificate} gives
-  \eqref{eq:s3-example-certified-intervals-sharp} and
-  \eqref{eq:s3-example-certified-intervals-sharp-rho}. These sharp
-  intervals lie respectively in
-  \[
-    \left(-\frac{342}{1000},-\frac{341}{1000}\right)
-    \qquad\text{and}\qquad
-    \left(-\frac{719}{1000},-\frac{718}{1000}\right),
-  \]
-  which is exactly the certification quoted in
-  \Cref{lem:s3-example-perron-certificates}.
+  Together with the two tail radii and the positivity checks in
+  \Cref{prop:s3-compact-rational-verification-record}, this proves the sharp
+  and coarse intervals.
 \end{proof}
 
 \begin{lemma}[Exact rational bounds for the \(S_3\) product-level fixed-label values]\label{lem:appendix-s3-f-level-certificates}
-  In the \(S_3\)-example of \Cref{sec:shadows}, the product-level
-  obstruction coordinates in \Cref{thm:class-euler-product-mertens} are
-  verified by the printed rational inequalities below.  The finite record
-  consists only of rational logarithm brackets, rational coefficients, rational
-  tail bounds, and the final cleared-denominator comparisons.  In particular,
-  these are windows for the Adams-corrected fixed-label Euler transform
-  entering \Cref{thm:main-iii-certificate-chain}, not windows for the periodic
-  Artin logarithm: the coefficients below come from the finite power maps
-  \(g\mapsto g^m\), the Adams tensors, and the deletion of the singular scalar
-  Perron triple before the boundary value is read.  Thus the rational
-  inequalities certify the finite-state mechanism that creates the product
-  obstruction, rather than a numerical approximation to a classical leading
-  Mertens term.  In particular,
-  the following interval inclusions are verified inside the article:
+  In the \(S_3\)-example of \Cref{sec:shadows}, the Adams-corrected
+  fixed-label Euler-transform coordinates entering
+  \Cref{thm:class-euler-product-mertens} satisfy
   \begin{equation}\label{eq:s3-f-epsilon-appendix-window}
     -\frac{381}{1000}<F_\varepsilon(1/2)<-\frac{380}{1000},
   \end{equation}
@@ -434,21 +230,6 @@ For every rational logarithm argument \(q>1\), the endpoints
 \end{lemma}
 
 \begin{proof}
-  For rational \(q>1\), we use the same rational logarithm bounds as in
-  \Cref{lem:appendix-s3-sharp-certificates}:
-  \[
-    L_3(q)<\log q<U_3(q),
-  \]
-  where
-  \[
-    L_3(q)=2\sum_{j=0}^{3}\frac{u_q^{2j+1}}{2j+1},
-    \qquad
-    U_3(q)=L_3(q)+\frac{2u_q^9}{9(1-u_q^2)},
-    \qquad
-    u_q=\frac{q-1}{q+1}.
-  \]
-  Thus all endpoints below are rational numbers.
-
   From \eqref{eq:s3-example-pi-eps},
   \[
     F_\varepsilon(1/2)
@@ -459,63 +240,25 @@ For every rational logarithm argument \(q>1\), the endpoints
   \[
     Q_8:=-\frac12\log2-\frac14\log\frac87
       -\frac18\log\frac{128}{127}
-      -\frac1{16}\log\frac{32768}{32767}.
+      -\frac1{16}\log\frac{32768}{32767},
+    \qquad
+    B_\varepsilon:=\frac1{2^{35}-8}.
   \]
-  The remaining terms are negative, and, since
-  \(-\log(1-x)\le2x\) for \(0<x\le2^{-31}\), their absolute value is at
-  most
-  \[
-    B_\varepsilon:=\frac{1}{16}\,2^{-31}\frac{1}{1-2^{-32}}.
-  \]
-  Termwise substitution of \(L_3\) and \(U_3\), with inequalities reversed
-  on negative coefficients, gives rational numbers
-  \[
+  The remaining terms have absolute value at most \(B_\varepsilon\).  Define
+  \begin{equation}\label{eq:s3-q8-endpoint-values}
   \begin{aligned}
     Q_8^- &:=-\frac12U_3(2)-\frac14U_3(8/7)
       -\frac18U_3(128/127)-\frac1{16}U_3(32768/32767),\\
     Q_8^+ &:=-\frac12L_3(2)-\frac14L_3(8/7)
-      -\frac18L_3(128/127)-\frac1{16}L_3(32768/32767),
+      -\frac18L_3(128/127)-\frac1{16}L_3(32768/32767).
   \end{aligned}
-  \]
-  with
-  \[
-    Q_8^- - B_\varepsilon < F_\varepsilon(1/2)<Q_8^+.
-  \]
-  The rational endpoint values used here are
-  \begin{equation}\label{eq:s3-q8-endpoint-values}
-  \begin{array}{c|c}
-    \text{endpoint} & \text{exact rational value}\\
-    \hline
-    Q_8^- &
-    -\dfrac{77669633184570530219883191591202892933297454719}
-      {203890011879382796622109825339358911119360000000}\\[1ex]
-    Q_8^+ &
-    -\dfrac{13843924721083839036686064834355526}
-      {36342196007488170547184558429765625}\\[1ex]
-    B_\varepsilon & \dfrac{1}{34359738360}.
-  \end{array}
   \end{equation}
-  Clearing denominators in these rational expressions gives the positive
-  margins
-  \[
-  \begin{array}{c|c|c}
-    \text{comparison} & \text{exact positive margin} &
-      \text{rational lower bound}\\
-    \hline
-    Q_8^- -B_\varepsilon +\frac{381}{1000} & >0 & >\frac{1}{10^6}\\
-    -\frac{380}{1000}-Q_8^+ & >0 & >\frac{9}{10^4}.
-  \end{array}
-  \]
-  Hence
-  \[
-    -\frac{381}{1000}<Q_8^- - B_\varepsilon,
-    \qquad
-    Q_8^+<-\frac{380}{1000},
-  \]
-  proving \eqref{eq:s3-f-epsilon-appendix-window}.
+  Hence \(Q_8^- -B_\varepsilon<F_\varepsilon(1/2)<Q_8^+\).
+  The denominator-cleared checks in
+  \Cref{prop:s3-compact-rational-verification-record} give
+  \eqref{eq:s3-f-epsilon-appendix-window}.
 
-  For the standard representation, combine
-  \eqref{eq:s3-example-pi-rho} with the fixed-label transform. Grouping by
+  For the standard representation, grouping the fixed-label transform by
   \(k=rm\) gives
   \[
     F_{\varrho_{\mathrm{std}}}(1/2)=
@@ -525,13 +268,10 @@ For every rational logarithm argument \(q>1\), the endpoints
         -B_k\log(1+2^{-k})
       \right),
   \]
-  where the first logarithm is absent for \(k=1\), and
-  \[
-    A_k:=\sum_{m\mid k}\mu(m)\alpha(m),
-    \qquad
-    B_k:=\sum_{m\mid k}\mu(m)\beta(m).
-  \]
-  The only non-zero pairs with \(k\le32\) are
+  where the first logarithm is absent for \(k=1\),
+  \(A_k=\sum_{m\mid k}\mu(m)\alpha(m)\), and
+  \(B_k=\sum_{m\mid k}\mu(m)\beta(m)\).  The only non-zero pairs with
+  \(k\le32\) are
   \[
   \begin{array}{c|ccccccccc}
     k&1&2&3&4&8&9&16&27&32\\ \hline
@@ -539,21 +279,11 @@ For every rational logarithm argument \(q>1\), the endpoints
     B_k&1&0&1&0&0&1&0&1&0.
   \end{array}
   \]
-  Let \(S_{32}\) be the corresponding finite sum. For \(k\ge33\), the
-  elementary bounds \(\abs{A_k}\le2\), \(\abs{B_k}\le1\),
+  For \(k\ge33\), the bounds \(\abs{A_k}\le2\), \(\abs{B_k}\le1\),
   \(\log(1-2^{1-k})^{-1}\le2^{2-k}\), and
-  \(\log(1+2^{-k})\le2^{-k}\) give the rational tail bound
-  \[
-    B_{\mathrm{std}}:=\frac{5}{33}\,2^{-32}.
-  \]
-  Applying the same \(L_3/U_3\) interval substitution to the finitely many
-  logarithms in \(S_{32}\) gives the rational endpoints
-  \(S_{32}^-<S_{32}<S_{32}^+\)
-  and hence
-  \[
-    S_{32}^- -B_{\mathrm{std}} < F_{\varrho_{\mathrm{std}}}(1/2)<S_{32}^+ +B_{\mathrm{std}}.
-  \]
-  The exact endpoint values are the following rational finite sums:
+  \(\log(1+2^{-k})\le2^{-k}\) give
+  \(B_{\mathrm{std}}=(5/33)2^{-32}\).  If \(S_{32}\) is the finite sum over
+  the displayed \(k\)'s, define rational endpoints by
   \begin{equation}\label{eq:s3-s32-endpoint-values}
   \begin{aligned}
     S_{32}^-&:=\sum_{\nu=1}^{12}c_\nu U_3(q_\nu),
@@ -563,81 +293,36 @@ For every rational logarithm argument \(q>1\), the endpoints
     B_{\mathrm{std}}&:=\frac{5}{141733920768},
   \end{aligned}
   \end{equation}
-  where the \(q_\nu\) and \(c_\nu\) are listed in the next two displayed
-  arrays.  Since all \(c_\nu\) are negative and all \(L_3(q_\nu),U_3(q_\nu)\)
-  are rational, these are exact rational lower and upper endpoints.
-  The verification is completely rational at this point.  For reference,
-  the finitely many logarithmic arguments entering \(S_{32}\) are
+  where
   \[
-  \begin{array}{ccc}
-    3/2, & 2, & 4/3,\\
-    9/8, & 8/7, & 128/127,\\
-    256/255, & 513/512, & 32768/32767,\\
-    67108864/67108863, & 134217729/134217728, &
+  \begin{array}{cccc}
+    q_\nu:\;
+    3/2,&2,&4/3,&9/8,\\
+    8/7,&128/127,&256/255,&513/512,\\
+    32768/32767,&67108864/67108863,&134217729/134217728,&
     2147483648/2147483647,
   \end{array}
   \]
-  with coefficients respectively
+  and
   \[
-    -1,
-    -\frac12,
-    -\frac13,
-    -\frac13,
-    -\frac14,
-    -\frac18,
-    -\frac19,
-    -\frac19,
-    -\frac1{16},
-    -\frac1{27},
-    -\frac1{27},
-    -\frac1{32}.
+    c_\nu:\;
+    -1,\ -\frac12,\ -\frac13,\ -\frac13,\ -\frac14,\ -\frac18,\
+    -\frac19,\ -\frac19,\ -\frac1{16},\ -\frac1{27},\
+    -\frac1{27},\ -\frac1{32}.
   \]
-  These displayed rational bounds are the rational check used here: for
-  each term one inserts the lower or upper endpoint according to the sign of
-  the rational coefficient, sums the resulting rational numbers, and then
-  compares the final rational endpoints with the rational thresholds stated
-  below.  No decimal approximation is used, and the main text depends only on
-  the displayed rational endpoints, coefficients, and inequalities.
-  Substituting \(L_3\) or \(U_3\) according to the sign of these
-  coefficients and adding the rational tail \(B_{\mathrm{std}}\), denominator
-  clearing gives the explicit positive checks
-  \[
-  \begin{aligned}
-    10^6\left(S_{32}^- -B_{\mathrm{std}} +\frac{923}{1000}\right) &> 789,\\
-    10^6\left(-\frac{922}{1000}-(S_{32}^+ +B_{\mathrm{std}})\right) &> 204.
-  \end{aligned}
-  \]
-  Equivalently, the two margins are larger than \(789/10^6\) and
-  \(204/10^6\). They are obtained by clearing the positive denominators in
-  the displayed rational logarithmic arguments: after every signed coefficient
-  has selected the appropriate \(L_3\) or \(U_3\) endpoint, the two final
-  comparisons are differences of rational numbers, and multiplying by their
-  common positive denominators gives positive integers.  Thus the interval
-  check is contained in these rational inequalities. The shorter numerical
-  consequences are
-  \[
-  \begin{array}{c|c|c}
-    \text{comparison} & \text{exact positive margin} &
-      \text{rational lower bound}\\
-    \hline
-    S_{32}^- -B_{\mathrm{std}} +\frac{923}{1000} & >0 & >\frac{7}{10^4}\\
-    -\frac{922}{1000}-(S_{32}^+ +B_{\mathrm{std}}) & >0 & >\frac{2}{10^4}.
-  \end{array}
-  \]
-  Therefore
-  \[
-    -\frac{923}{1000}<S_{32}^- -B_{\mathrm{std}},
-    \qquad
-    S_{32}^+ +B_{\mathrm{std}}<-\frac{922}{1000},
-  \]
-  proving \eqref{eq:s3-f-rho-appendix-window}.
+  All coefficients are negative, so \(U_3\) gives the lower endpoint and
+  \(L_3\) the upper endpoint.  Therefore
+  \(S_{32}^- -B_{\mathrm{std}}<F_{\varrho_{\mathrm{std}}}(1/2)
+  <S_{32}^+ +B_{\mathrm{std}}\).  The two denominator-cleared comparisons in
+  \Cref{prop:s3-compact-rational-verification-record} prove
+  \eqref{eq:s3-f-rho-appendix-window}.
 \end{proof}
 
 \begin{lemma}[Displayed rational interval windows]
   \label{cor:s3-displayed-rational-certificate-windows}
-  The rational logarithm brackets, finite truncation levels, and tail bounds
-  printed in \Cref{lem:appendix-s3-sharp-certificates,lem:appendix-s3-f-level-certificates}
-  imply exactly the four coarse windows used in the main text:
+  The rational logarithm brackets, finite endpoints, and tail bounds printed in
+  \Cref{prop:s3-compact-rational-verification-record} imply exactly the four
+  coarse windows used in the main text:
   \[
     -\frac{342}{1000}<\Pi_\varepsilon(1/2)<-\frac{341}{1000},
     \qquad
@@ -649,112 +334,28 @@ For every rational logarithm argument \(q>1\), the endpoints
     \qquad
     -\frac{923}{1000}<F_{\varrho_{\mathrm{std}}}(1/2)<-\frac{922}{1000}.
   \]
-  In particular the \(S_3\) example gives an exact rational verification of
-  the primitive-channel windows \(\Pi_\varepsilon,\Pi_{\varrho_{\mathrm{std}}}\) and for the
-  Adams-corrected fixed-label product windows \(F_\varepsilon,F_{\varrho_{\mathrm{std}}}\), not an
-  undocumented floating-point approximation.
+  Thus the \(S_3\) example gives an exact rational verification of both the
+  primitive-channel windows and the Adams-corrected fixed-label product
+  windows.
 \end{lemma}
 
 \begin{proof}
-  For \(\Pi_\varepsilon(1/2)\),
-  \Cref{lem:appendix-s3-sharp-certificates} gives
-  \[
-    -\frac{341079}{10^6}-\frac{1}{1105920}
-    <\Pi_\varepsilon(1/2)<
-    -\frac{341071}{10^6}+\frac{1}{1105920}.
-  \]
-  The left endpoint is greater than \(-342/1000\) because
-  \[
-    \frac{342}{1000}-\frac{341079}{10^6}-\frac{1}{1105920}>0,
-  \]
-  and the right endpoint is less than \(-341/1000\) because
-  \[
-    \frac{341071}{10^6}-\frac{1}{1105920}-\frac{341}{1000}>0.
-  \]
-  The same lemma gives
-  \[
-    -\frac{718352}{10^6}-\frac{9}{524288}
-    <\Pi_{\varrho_{\mathrm{std}}}(1/2)<
-    -\frac{718351}{10^6}+\frac{9}{524288},
-  \]
-  and the rational inequalities
-  \[
-    \frac{719}{1000}-\frac{718352}{10^6}-\frac{9}{524288}>0,
-    \qquad
-    \frac{718351}{10^6}-\frac{9}{524288}-\frac{718}{1000}>0
-  \]
-  place this interval inside
-  \((-719/1000,-718/1000)\).
-
-  For the fixed-label coordinates,
-  \Cref{lem:appendix-s3-f-level-certificates} proves directly, by the printed
-  denominator-cleared comparisons, that
-  \[
-    -\frac{381}{1000}<Q_8^- -B_\varepsilon
-    <F_\varepsilon(1/2)<Q_8^+<-\frac{380}{1000}
-  \]
-  and
-  \[
-    -\frac{923}{1000}<S_{32}^- -B_{\mathrm{std}}
-    <F_{\varrho_{\mathrm{std}}}(1/2)<S_{32}^+ +B_{\mathrm{std}}<-\frac{922}{1000}.
-  \]
-  These implications use only the displayed rational endpoints
-  \(Q_8^\pm,S_{32}^\pm\), the printed rational tails
-  \(B_\varepsilon,B_{\mathrm{std}}\), and the stated positive rational margins.  Hence all
-  four main-text windows follow from exact rational interval arithmetic.
+  This is the collection of the two primitive windows from
+  \Cref{lem:appendix-s3-sharp-certificates} and the two fixed-label windows
+  from \Cref{lem:appendix-s3-f-level-certificates}.  Each strict inclusion is
+  one of the rational comparisons in the compact certificate table.
 \end{proof}
 
 \begin{remark}[Finite exact-arithmetic reproducibility]
 \label{prop:s3-finite-exact-arithmetic-reproducibility}
-  The mathematical verification in this appendix is the displayed rational
-  arithmetic in
-  \Cref{lem:appendix-s3-sharp-certificates,lem:appendix-s3-f-level-certificates}.
-  No ancillary program, data file, or floating-point computation is part of the
-  certificate needed to verify the four windows in the article.  The complete
-  certificate consists of the rational logarithm brackets \(L_3(q)<\log q<U_3(q)\),
-  the signed rational coefficients in the finite sums \(E_7\), \(R_{15}\),
-  \(Q_8\), and \(S_{32}\), the rational tail bounds displayed in
-  \eqref{eq:s3-example-epsilon-tail-certificate},
-  \eqref{eq:s3-example-rho-tail-certificate} and in
-  \Cref{lem:appendix-s3-f-level-certificates}, and the printed
-  cleared-denominator margin inequalities.
-
-  The following finite rational procedure reproduces the four displayed
-  certificate windows without floating-point input: compute every rational
-  endpoint \(L_3(q)\le\log q\le U_3(q)\) for the rational logarithm arguments
-  occurring in \(E_7\), \(R_{15}\), \(Q_8\), and \(S_{32}\); select the lower
-  endpoint for each positive signed coefficient and the upper endpoint for each
-  negative signed coefficient when forming a lower bound, with the opposite
-  selections for the upper bound; add the rational tails
-  \(1/1105920\), \(9/524288\), \(B_\varepsilon\), and \(B_{\mathrm{std}}\); and clear
-  positive denominators in the four final comparisons with the printed
-  rational windows.  This procedure verifies exactly the inclusions in
-  \Cref{cor:s3-displayed-rational-certificate-windows}.
-  For every rational argument \(q>1\),
-  \Cref{lem:appendix-s3-sharp-certificates} proves
-  \(L_3(q)<\log q<U_3(q)\) by the positive remainder of the series for
-  \(2\operatorname{arctanh}((q-1)/(q+1))\).  Therefore multiplication by a
-  positive rational coefficient preserves the order of the interval and
-  multiplication by a negative rational coefficient reverses it.  Applying this
-  rule term-by-term to the finite signed sums defining
-  \(E_7\), \(R_{15}\), \(Q_8\), and \(S_{32}\) gives rational lower and upper
-  endpoints for those four finite sums.  The remaining primitive and
-  fixed-label tails are the rational quantities displayed in
-  \eqref{eq:s3-example-epsilon-tail-certificate},
-  \eqref{eq:s3-example-rho-tail-certificate}, and in the definitions of
-  \(B_\varepsilon\) and \(B_{\mathrm{std}}\) in
-  \Cref{lem:appendix-s3-f-level-certificates}.  Adding these rational tails
-  enlarges the four finite-sum intervals by rational amounts and hence still
-  gives rational intervals.
-
-  The last step is purely algebraic.  Each assertion that one of these rational
-  intervals lies in its printed window is an inequality between rational
-  numbers; multiplying by the product of the positive denominators is an
-  equivalent integer comparison.  The required positive margins are displayed in
-  the proofs of
-  \Cref{lem:appendix-s3-sharp-certificates,lem:appendix-s3-f-level-certificates}
-  for \(\Pi_\varepsilon(1/2)\), \(\Pi_{\varrho_{\mathrm{std}}}(1/2)\),
-  \(F_\varepsilon(1/2)\), and \(F_{\varrho_{\mathrm{std}}}(1/2)\).  Consequently the finite rational
-  procedure recovers exactly the four windows collected in
-  \Cref{cor:s3-displayed-rational-certificate-windows}.
+  The article-level certificate consists of the formulas for \(L_3(q)\) and
+  \(U_3(q)\), the finite signed endpoint sums
+  \(E_7^\pm,R_{15}^\pm,Q_8^\pm,S_{32}^\pm\), the four rational tail radii, and
+  the denominator-cleared positivity checks in
+  \Cref{prop:s3-compact-rational-verification-record}.  This is sufficient to
+  verify the four windows by hand using only rational arithmetic.  The ancillary
+  files \texttt{certificates/s3\_log\_certificates.py} and
+  \texttt{certificates/s3\_log\_certificates.cert} serialize the expanded
+  term-by-term fractions and reproduce the same checks; they are
+  reproducibility aids, not additional analytic hypotheses.
 \end{remark}
