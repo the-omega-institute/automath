@@ -398,6 +398,182 @@ LSD-first order.
   \(F_1=F_2=1\).
 \end{proof}
 
+\subsection{Regular immunity of the Zeckendorf prime language}
+\label{subsec:zeckendorf-regular-immunity}
+
+The preceding slice estimates use the prime number theorem. The next
+argument is different: it is a PNT-free pumping obstruction in the
+spirit of Sch\"utzenberger's finite-state obstruction for base
+representations, but adapted to the LSD-first Zeckendorf evaluation.
+
+\begin{lemma}[Unimodular Zeckendorf block action]
+  \label{lem:zeckendorf-unimodular-block-action}
+  After reading a prefix of length \(r\) in LSD-first order, put
+  \[
+    V_r:=
+    \begin{pmatrix}
+      N_r\\ F_{r+1}\\ F_{r+2}
+    \end{pmatrix},
+    \qquad
+    N_r=\sum_{j=1}^r x_jF_{j+1}.
+  \]
+  The initial vector is \(V_0=(0,F_1,F_2)^t=(0,1,1)^t\). Reading one
+  further digit \(\varepsilon\in\{0,1\}\) sends \(V_r\) to
+  \(D_\varepsilon V_r\), where
+  \[
+    D_\varepsilon:=
+    \begin{pmatrix}
+      1&0&\varepsilon\\
+      0&0&1\\
+      0&1&1
+    \end{pmatrix},
+    \qquad
+    \det D_\varepsilon=-1.
+  \]
+  Hence, for a word \(y=y_1\cdots y_\ell\), the block action
+  \[
+    M_y:=D_{y_\ell}\cdots D_{y_1}
+  \]
+  has determinant \((-1)^\ell\). In particular, if \(\ell>0\), then
+  the reduction of \(M_y\) belongs to
+  \(\operatorname{GL}_3(\ZZ/q\ZZ)\) for every \(q\ge2\).
+\end{lemma}
+
+\begin{proof}
+  If the next digit is \(\varepsilon\), then it occupies position
+  \(r+1\) and contributes \(\varepsilon F_{r+2}\) to the value. Thus
+  \[
+    N_{r+1}=N_r+\varepsilon F_{r+2},\qquad
+    F_{r+2}=F_{r+2},\qquad
+    F_{r+3}=F_{r+1}+F_{r+2}.
+  \]
+  These three identities are exactly
+  \(V_{r+1}=D_\varepsilon V_r\). Expanding the determinant along the
+  first row gives
+  \[
+    \det D_\varepsilon
+    =\det\begin{pmatrix}0&1\\1&1\end{pmatrix}
+     +\varepsilon\det\begin{pmatrix}0&0\\0&1\end{pmatrix}
+    =-1.
+  \]
+  Multiplicativity of the determinant gives
+  \(\det M_y=(-1)^\ell\). Since \(\pm1\) is a unit modulo every
+  \(q\ge2\), the reduction of \(M_y\) is invertible over
+  \(\ZZ/q\ZZ\).
+\end{proof}
+
+\begin{lemma}[Zeckendorf pumping congruence]
+  \label{lem:zeckendorf-pumping-congruence}
+  Let \(x,y,z\in\{0,1\}^\ast\) with \(\abs y>0\), and put
+  \[
+    N(k):=\val(xy^kz)
+  \]
+  whenever the displayed word is read in LSD-first order. If \(q\ge2\)
+  and \(h\) is the order of \(M_y\) in
+  \(\operatorname{GL}_3(\ZZ/q\ZZ)\), then
+  \[
+    N(k+h)\equiv N(k)\pmod q
+  \]
+  for every \(k\ge0\). In particular, if \(p=N(k)\) is prime, then
+  \(N(k+h)\) is divisible by \(p\).
+\end{lemma}
+
+\begin{proof}
+  Let \(v_0=(0,1,1)^t\). By
+  \Cref{lem:zeckendorf-unimodular-block-action}, concatenation of
+  LSD-first blocks gives
+  \[
+    N(k)=
+    e_1^t\,M_zM_y^kM_xv_0,
+  \]
+  where \(e_1=(1,0,0)^t\). Since \(M_y^h\equiv I\pmod q\), we have
+  \(M_y^{k+h}\equiv M_y^k\pmod q\). Multiplying on the left by
+  \(M_z\), on the right by \(M_xv_0\), and taking the first coordinate
+  gives the congruence for \(N(k+h)\) and \(N(k)\). If \(q=p=N(k)\) is
+  prime, this congruence says \(N(k+h)\equiv0\pmod p\).
+\end{proof}
+
+\begin{theorem}[Zeckendorf-Sch\"utzenberger regular immunity]
+  \label{thm:zeckendorf-schutzenberger-regular-immunity}
+  Let \(L\subseteq\mathcal Z\) be regular. If
+  \[
+    \val(L):=\{\val(w):w\in L\}
+  \]
+  is contained in the set of prime numbers, then \(L\) is finite. More
+  quantitatively, if an \(n\)-state deterministic finite automaton
+  recognizes such an \(L\), then no word of length at least \(n\) is
+  accepted.
+\end{theorem}
+
+\begin{proof}
+  Let \(\mathcal A\) be an \(n\)-state DFA recognizing \(L\), and
+  suppose for contradiction that \(\mathcal A\) accepts a word
+  \(w\in L\) with \(\abs w\ge n\). The usual DFA pumping argument gives
+  a factorization \(w=xyz\) such that \(\abs y>0\) and
+  \(xy^kz\in L\) for every \(k\ge0\). Since \(L\subseteq\mathcal Z\),
+  every pumped word \(xy^kz\) is still a canonical Zeckendorf word.
+
+  Put \(p=\val(w)=\val(xyz)\). By hypothesis, \(p\) is prime. Let \(h\)
+  be the order of \(M_y\) in
+  \(\operatorname{GL}_3(\ZZ/p\ZZ)\), which exists by
+  \Cref{lem:zeckendorf-unimodular-block-action} because this group is
+  finite. Applying
+  \Cref{lem:zeckendorf-pumping-congruence} with \(k=1\) gives
+  \[
+    \val(xy^{1+h}z)\equiv \val(xyz)=p\equiv0\pmod p.
+  \]
+  The word \(xy^{1+h}z\) is accepted. Its length is strictly larger
+  than \(\abs w\), because \(h\ge1\) and \(\abs y>0\). Canonical
+  Zeckendorf words of length \(m\) represent exactly the interval
+  \([F_{m+1},F_{m+2})\); therefore increasing the canonical length
+  strictly increases the value. Hence
+  \[
+    \val(xy^{1+h}z)>p.
+  \]
+  We have found an accepted word whose value is strictly larger than
+  \(p\) and divisible by \(p\), so its value is composite. This
+  contradicts the assumption \(\val(L)\subseteq\{\text{primes}\}\).
+  Thus no accepted word has length at least \(n\), and \(L\) is finite.
+\end{proof}
+
+\begin{corollary}[Infinite regular Zeckendorf languages contain composites]
+  \label{cor:regular-zeckendorf-languages-contain-composites}
+  Every infinite regular language \(L\subseteq\mathcal Z\) contains
+  infinitely many words whose Zeckendorf values are composite.
+  Equivalently, no fixed DFA can generate infinitely many canonical
+  Zeckendorf primes without also generating infinitely many composite
+  values.
+\end{corollary}
+
+\begin{proof}
+  If \(L\) contained only finitely many composite-valued words, remove
+  those words and, if present, the unique word of value \(1\). The
+  remaining language is still regular, is still infinite, and is a
+  sublanguage of \(\mathcal Z\) whose values are all prime. This
+  contradicts
+  \Cref{thm:zeckendorf-schutzenberger-regular-immunity}.
+\end{proof}
+
+\begin{corollary}[The Zeckendorf prime language is REG-immune]
+  \label{cor:zeckendorf-prime-language-reg-immune}
+  The language
+  \[
+    \mathcal P_{\mathcal Z}
+    =\{w\in\mathcal Z:\val(w)\text{ is prime}\}
+  \]
+  is REG-immune: it is infinite and contains no infinite regular
+  sublanguage.
+\end{corollary}
+
+\begin{proof}
+  Euclid's theorem and the bijection \(w\mapsto\val(w)\) from
+  \(\mathcal Z\) to \(\NN_{\ge1}\) show that
+  \(\mathcal P_{\mathcal Z}\) is infinite. If it contained an infinite
+  regular sublanguage \(L\), then \(L\subseteq\mathcal Z\) and
+  \(\val(L)\) would consist only of primes, contradicting
+  \Cref{thm:zeckendorf-schutzenberger-regular-immunity}.
+\end{proof}
+
 For a deterministic automaton \(\mathcal A\) over the Zeckendorf digit
 alphabet, write
 \[
@@ -650,42 +826,24 @@ denominator is nonzero.
 
 \begin{corollary}[Prime Zeckendorf language is not regular]
   \label{cor:zeckendorf-prime-language-not-regular}
-  Let
-  \[
-    \mathcal P_{\mathcal Z}
-    :=\{\mathrm{Zeck}(p)\in\mathcal Z:p\text{ prime}\},
-  \]
-  where \(\mathrm{Zeck}(n)\) denotes the canonical Zeckendorf
-  representation of \(n\). Then \(\mathcal P_{\mathcal Z}\) is not a
-  regular language.
+  The prime Zeckendorf language \(\mathcal P_{\mathcal Z}\) is not
+  regular.
 \end{corollary}
 
-This corollary should be read as a fixed-slice consequence of the
-finite-budget obstruction above. It gives a self-contained proof in the
-LSD-first Zeckendorf presentation used here, rather than a new abstract
-numeration-system recognizability theorem. General results relating
+This corollary is now an immediate consequence of the stronger
+PNT-free regular-immunity theorem. The preceding
+\Cref{prop:zeckendorf-regular-slice-rigidity} remains useful as a
+separate slice-scale obstruction: it explains why the exact
+prime-slice cardinalities cannot be reproduced by a regular
+sublanguage on all large lengths. General results relating
 \(S\)-recognizability, \(S\)-automaticity, and morphic predicates in
-abstract numeration systems include Maes--Rigo
-\cite{MaesRigo2002} and the standard references cited in
-\Cref{subsec:prior-work}.
+abstract numeration systems include Maes--Rigo \cite{MaesRigo2002} and
+the standard references cited in \Cref{subsec:prior-work}.
 
 \begin{proof}
-  Suppose that \(\mathcal P_{\mathcal Z}\) were regular. Applying
-  \Cref{prop:zeckendorf-regular-slice-rigidity} to
-  \(L=\mathcal P_{\mathcal Z}\) gives a period \(D_Z\) such that on every
-  residue class modulo \(D_Z\) the ratio
-  \[
-    \frac{\abs{\mathcal P_{\mathcal Z}\cap\mathcal Z_m}}
-         {\abs{\mathcal P_m^{(\mathrm Z)}}}
-  \]
-  either tends to \(0\) or tends to \(+\infty\). But by definition
-  \(\mathcal P_{\mathcal Z}\cap\mathcal Z_m=\mathcal P_m^{(\mathrm Z)}\)
-  for every \(m\). The displayed ratio is therefore identically \(1\),
-  whereas \Cref{prop:zeckendorf-regular-slice-rigidity}, itself an
-  application of the background density theorem
-  \Cref{thm:parry-density} and the prime-count estimate
-  \Cref{lem:zeck-prime-count}, forces the ratio on each residue class
-  either to vanish or to diverge. This is a contradiction.
+  This follows at once from
+  \Cref{cor:zeckendorf-prime-language-reg-immune}, since an infinite
+  regular language is an infinite regular sublanguage of itself.
 \end{proof}
 
 \begin{remark}[Sofic corollary]
@@ -707,8 +865,6 @@ abstract numeration systems include Maes--Rigo
   regular language, hence regular itself, contradicting
   \Cref{cor:zeckendorf-prime-language-not-regular}.
 \end{remark}
-
-
 
 
 
