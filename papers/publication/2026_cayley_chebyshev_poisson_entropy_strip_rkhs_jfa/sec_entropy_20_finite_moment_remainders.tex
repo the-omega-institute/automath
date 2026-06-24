@@ -452,9 +452,11 @@ because it is the form used for law-uniform constants.
 Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
+
 \begin{proof}
 Apply Theorem~\ref{thm:finite-moment-density-remainder} with $L=2N$.
-With $x=\bar\gamma+ty$ one has
+We first fix the normalization in the rescaled variable.  For
+$x=\bar\gamma+ty$,
 \[
 \frac{P_t(x-\gamma)}{g_t(x)}
 =
@@ -463,35 +465,40 @@ With $x=\bar\gamma+ty$ one has
 \frac{1+y^2}{1+(y-\Delta/t)^2}
 =R_{\Delta/t}(y),
 \]
-and therefore
+where $\Delta=\gamma-\bar\gamma$.  Hence the density quotient in the
+Cauchy scale is the function
 \[
-\delta_t(x):=\frac{h_t(x)}{g_t(x)}-1
+\widetilde\delta_t(y)
+:=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
 =\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\dd\nu(\gamma).
 \]
-The finite-density theorem is exactly the integrated version of the finite
-Cayley expansion of \(R_{\varepsilon}\) with \(\varepsilon=\Delta/t\), using
-the centred \((2N+\eta)\)-moment to control the large-\(|\Delta|\) tail.  In
-that expansion the constant \(n=0\) term has already cancelled in
-\(R_{\Delta/t}-1\), and the \(n=1\) term integrates to zero because
-\(\mu_1=\int\Delta\,d\nu=0\).  Thus the finite-mode part starts at order
-\(t^{-2}\).
-The finite-moment density remainder gives
+This is the same normalization as
+\eqref{eq:cayley-comparison-kernel} and as the Laurent polynomials
+\eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}; no reciprocal
+kernel or extra factor of \(1+y^2\) is being introduced.
+
+The finite-density theorem is precisely the integrated finite Cayley
+expansion of \(R_{\varepsilon}\) at \(\varepsilon=\Delta/t\), with the
+centred \((2N+\eta)\)-moment controlling the large-\(|\Delta|\) tail.  The
+constant \(n=0\) term cancels in \(R_{\Delta/t}-1\), and the \(n=1\) term
+integrates to zero because \(\mu_1=\int\Delta\,\dd\nu=0\).  Thus the
+finite-mode part begins at order \(t^{-2}\).  In the notation of the
+density-to-entropy proposition,
 \[
 A_{N,t}(y):=\sum_{n=2}^{2N}\mu_n\,u_n(y)t^{-n},
-\qquad
-\delta_t(\bar\gamma+ty)=A_{N,t}(y)+\rho_{N,t}(y),
 \]
-with
+and Theorem~\ref{thm:finite-moment-density-remainder} gives
 \[
+\widetilde\delta_t(y)=A_{N,t}(y)+\rho_{N,t}(y),\qquad
 \|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
 =O(t^{-(2N+\eta)})
 \]
-and $\|\delta_t\|_\infty=O(t^{-2})$.  This is the exact transfer form
+and \(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  This is the exact transfer form
 required by Proposition~\ref{prop:density-to-entropy-descent}: the finite
 \((2N+\eta)\)-moment assumption is used to obtain
 \(\|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
 \le C_\rho t^{-(2N+\eta)}\), while the centered density ratio supplies
-\(\|\delta_t\|_\infty\le S t^{-2}\).
+\(\|\widetilde\delta_t\|_\infty\le S t^{-2}\).
 
 Fix constants $C_\rho$, $M_A$, and $S$ so that,
 for all larger $t$,
@@ -499,7 +506,7 @@ for all larger $t$,
 \|\rho_{N,t}\|_\infty+\|\rho_{N,t}\|_{L^1(\omega)}
 \le C_\rho t^{-(2N+\eta)},\qquad
 \|A_{N,t}\|_\infty\le M_A t^{-2},\qquad
-\|\delta_t\|_\infty\le \min\{1/2,S t^{-2}\}.
+\|\widetilde\delta_t\|_\infty\le \min\{1/2,S t^{-2}\}.
 \]
 Here $C_\rho$ is the constant $C_{\nu,2N,\eta}$ supplied by
 Theorem~\ref{thm:finite-moment-density-remainder}, and one may take
@@ -512,9 +519,24 @@ specified law~$\nu$, on $N$ and~$\eta$, and on the listed universal mode
 bounds; no class-uniform constant is used in this proof.
 
 Proposition~\ref{prop:density-to-entropy-descent} now applies with
-$A_t=A_{N,t}$ and $\rho_t=\rho_{N,t}$.  Since
-$g_t(\bar\gamma+ty)\,\dd(\bar\gamma+ty)=\omega(\dd y)$, it gives the
-auditable density-to-entropy descent
+$\delta_t=\widetilde\delta_t$, $A_t=A_{N,t}$, and
+$\rho_t=\rho_{N,t}$.  The change of variables is also normalized by the same
+Cauchy law:
+\[
+g_t(\bar\gamma+ty)\,\dd(\bar\gamma+ty)
+=P_t(ty)\,t\,\dd y
+=\frac{\dd y}{\pi(1+y^2)}
+=\omega(\dd y).
+\]
+Since \(\int g_t(\widetilde\delta_t\circ((\,\cdot-\bar\gamma)/t))\,\dd x=0\),
+the KL entropy is
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\widetilde\delta_t(y))\,\omega(\dd y),
+\qquad
+\Phi(s)=(1+s)\log(1+s)-s.
+\]
+The proposition therefore gives the auditable density-to-entropy descent
 \begin{align*}
 D_{\mathrm{KL}}(h_t\|g_t)
 &=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
@@ -528,8 +550,13 @@ where $I_{n_1,\dots,n_k}=I(n_1,\dots,n_k)$ is the mode integral from
 \eqref{eq:mode-integral-definition}.  The three error terms are,
 respectively, the mixed density-remainder products, the high-degree finite-mode
 tail, and the Taylor tail from
-\eqref{eq:density-to-entropy-descent-remainder}.  Comparing the coefficient of
-$t^{-m}$ with the evaluated formal polynomial
+\eqref{eq:density-to-entropy-descent-remainder}.  The first of these is
+strictly smaller than the density remainder itself because every occurrence
+of \(\rho_{N,t}\) appears inside a Taylor product of degree at least two, and
+the other factor is \(O(t^{-2})\).  This is the quadratic-start mechanism
+recorded in Lemma~\ref{lem:density-remainder-product-hierarchy}.
+
+Comparing the coefficient of $t^{-m}$ with the evaluated formal polynomial
 \eqref{eq:universal-entropy-coefficient-evaluation} gives $A_m(\nu)$.
 The parity part of Theorem~\ref{thm:universal-entropy-coefficients} gives
 $A_m(\nu)=0$ for odd~$m$, so only even powers remain.  Reindexing $m=2r$
@@ -545,6 +572,122 @@ The convenience envelope
 Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives the closed
 numerical envelopes for all mode norms and moment-ball thresholds.  This proves
 \eqref{eq:poisson-kl-even-orders}.
+\end{proof}
+
+\begin{corollary}[Constant ledger for the finite-moment entropy expansion]%
+\label{cor:finite-moment-entropy-constant-ledger}
+Under the hypotheses of Theorem~\ref{thm:poisson-kl-even-orders}, all
+constants in the fixed-law estimate may be chosen as follows.  Put
+\[
+p:=2N+\eta .
+\]
+Let
+\[
+C_\rho:=2C_{2N}\EE|\Delta|^p,
+\qquad
+M_A:=\sum_{n=2}^{2N}|\mu_n|\,\|u_n\|_\infty,
+\]
+where \(C_{2N}\) is the finite density constant from
+Theorem~\ref{thm:finite-moment-density-remainder}.  Define
+\[
+P_N(C_\rho,M_A):=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell M_A^{r-\ell}C_\rho^\ell ,
+\]
+and
+\[
+Q_N(\mu,u):=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{m=2N+1}^{2Nr}
+\sum_{\substack{2\le n_1,\ldots,n_r\le2N\\
+n_1+\cdots+n_r=m}}
+|\mu_{n_1}\cdots\mu_{n_r}|\,
+\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)} .
+\]
+Finally set
+\[
+S:=S_{\nu,2N,\eta}
+=B_{2N}\sum_{n=2}^{2N}|\mu_n|+C_\rho,
+\qquad
+T:=T_{N,\eta}^{\rm ent}(\nu)
+=\max\{1,(2S)^{1/2}\}.
+\]
+Here \(B_{2N}\) is the finite mode-size constant from
+Theorem~\ref{thm:finite-moment-density-remainder}.
+Then, for every \(t\ge T\),
+\begin{align}
+\label{eq:finite-moment-entropy-ledger-estimate}
+\left|
+D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+-\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
+\right|
+&\le
+\{P_N(C_\rho,M_A)+Q_N(\mu,u)\}t^{-(2N+\eta)}
+\notag\\
+&\qquad
++2S^{N+1}t^{-(2N+2)} .
+\end{align}
+The sharper three-term estimate behind this convenience envelope is
+\[
+\begin{aligned}
+&P_N(C_\rho,M_A)t^{-(2N+\eta+2)}
++Q_N(\mu,u)t^{-(2N+1)}
++2S^{N+1}t^{-(2N+2)} .
+\end{aligned}
+\]
+For a centred \(p\)-moment ball
+\(\EE|\Delta|^p\le M\), the same ledger is made uniform by replacing
+\[
+C_\rho,\ S,\ M_A,\ P_N(C_\rho,M_A),\ Q_N(\mu,u),\ 2S^{N+1},\ T
+\]
+with the closed finite dominating constants
+\[
+\overline C_{N,\eta,M}^{\rho},\quad
+\overline S_{N,\eta,M},\quad
+\overline M_{A,N,\eta,M},\quad
+\overline{\mathfrak P}_{N,\eta,M},\quad
+\overline{\mathfrak Q}_{N,\eta,M},\quad
+\overline C_{N,\eta,M}^{\rm Tay},\quad
+\overline T_{N,\eta,M}^{\rm ent}
+\]
+from Lemma~\ref{lem:moment-ball-uniform-constant-domination}.  In particular
+\(\|u_n\|_\infty\le n+1\) and
+\(\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}
+\le\prod_j(n_j+1)\) give a version involving no unspecified mode norms.
+\end{corollary}
+
+\begin{proof}
+The displayed value of \(C_\rho\) is exactly \(C_{\nu,2N,\eta}\), obtained by
+applying Theorem~\ref{thm:finite-moment-density-remainder} with \(L=2N\).
+The same density theorem gives
+\[
+S_{\nu,2N,\eta}
+=B_{2N}\sum_{n=2}^{2N}|\mu_n|+C_\rho,
+\qquad
+T_{\nu,2N,\eta}=\max\{1,(2S)^{1/2}\}.
+\]
+Since \(T_{N,\eta}^{\rm ent}(\nu)=\max\{1,T_{\nu,2N,\eta}\}\), this is the
+displayed threshold \(T\).  With this density input,
+Proposition~\ref{prop:density-to-entropy-descent} identifies
+\[
+\mathfrak P_N(C_\rho,M_A)=P_N(C_\rho,M_A),
+\qquad
+\mathfrak Q_N(\mu,u)=Q_N(\mu,u),
+\qquad
+C_{N,\eta}^{\rm Tay}(\nu)=2S^{N+1},
+\]
+and gives the sharper three-term remainder.  Since \(0<\eta\le1\) and
+\(t\ge1\),
+\begin{align*}
+P_N(C_\rho,M_A)t^{-(2N+\eta+2)}
++Q_N(\mu,u)t^{-(2N+1)}
+&\le
+\{P_N(C_\rho,M_A)+Q_N(\mu,u)\}t^{-(2N+\eta)},
+\end{align*}
+This gives \eqref{eq:finite-moment-entropy-ledger-estimate}.  The
+moment-ball replacement is Lemma~\ref{lem:moment-ball-uniform-constant-domination},
+together with the closed mode bound from
+Lemma~\ref{lem:closed-cayley-mode-constant-envelopes}.
 \end{proof}
 
 \begin{corollary}[Uniform finite-moment entropy remainder on moment balls]%

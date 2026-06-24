@@ -100,11 +100,23 @@ because $(1+s)\log(1+s)-s\le2s^2$ for $|s|\le1/2$.  The right-hand side
 tends to zero.
 \end{proof}
 
-\begin{theorem}[KL Doob tail identity]%
+\begin{theorem}[KL Doob tail identity with cutoff domain closure]%
 \label{thm:poisson-kl-doob-tail}
 \label{cor:poisson-kl-doob-bregman-tail}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
-centred second moment.  Then
+centred second moment
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma)<\infty .
+\]
+Let
+\[
+\Phi(s):=s\log s,\qquad
+D_\Phi(a,b):=\Phi(a)-\Phi(b)-\Phi'(b)(a-b)
+=a\log\frac{a}{b}-a+b .
+\]
+Then the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The quotient satisfies the Doob equation
 \begin{equation}\label{eq:quotient-flow-equation-main-kl}
 \partial_tu_t=L_tu_t,
 \qquad
@@ -112,7 +124,58 @@ centred second moment.  Then
 \operatorname{p.v.}\int_{\RR}
 \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
 \end{equation}
-Moreover, for a.e. $t>0$,
+The principal values are understood in the Cauchy-generator normalization
+fixed above.
+
+\item For every compact time interval $[a,b]\subset(0,\infty)$ there are
+constants
+\[
+0<m_{a,\nu}\le M_{a,\nu}<\infty,\qquad L_{a,b,\nu}<\infty ,
+\]
+such that, for all $t\in[a,b]$,
+\begin{equation}\label{eq:kl-main-compact-quotient-range}
+0<m_{a,\nu}\le u_t(x)\le M_{a,\nu}<\infty,
+\qquad
+\|\partial_xu_t\|_\infty\le L_{a,b,\nu}.
+\end{equation}
+One may take
+\[
+m_{a,\nu}=\frac{1}{2(1+\mu_2/a^2)},\qquad
+M_{a,\nu}=2+\frac{2\mu_2}{a^2}.
+\]
+Consequently $\Phi(u_t)$, $\Phi'(u_t)$, and
+$D_\Phi(u_t(x),u_t(y))$ are evaluated only on the compact subinterval
+$[m_{a,\nu},M_{a,\nu}]\Subset(0,\infty)$ for $t\in[a,b]$.
+Moreover $Lh_t,Lg_t\in L^1(\RR)$ uniformly on $[a,b]$, and
+\[
+t\longmapsto D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}g_t(x)u_t(x)\log u_t(x)\dd x
+\]
+is absolutely continuous on $[a,b]$.
+
+\item Let $\chi\in C_c^\infty(\RR)$ satisfy $\chi\equiv1$ on $[-1,1]$ and
+put $\chi_R(x)=\chi(x/R)$.  For a.e. $t>0$, the derivative of
+$D_{\mathrm{KL}}(h_t\|g_t)$ is obtained as the cutoff limit
+\begin{align}
+-\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
+&=
+\lim_{R\to\infty}
+\left[
+-\int_{\RR}\chi_R(x)\bigl(1+\log u_t(x)\bigr)Lh_t(x)\dd x
++\int_{\RR}\chi_R(x)u_t(x)Lg_t(x)\dd x
+\right].
+\label{eq:kl-main-cutoff-derivative}
+\end{align}
+The limit in \eqref{eq:kl-main-cutoff-derivative} is finite and equals the
+cutoff Bregman limit
+\begin{align}
+\lim_{R\to\infty}
+\frac{1}{\pi}\iint_{\RR^2}
+\chi_R(x)\chi_R(y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+\label{eq:kl-main-cutoff-bregman-limit}
+\end{align}
+which is absolutely convergent after the cutoff is removed.  Equivalently,
 \begin{equation}\label{eq:relative-entropy-dissipation-rate}
 -\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
 =
@@ -121,8 +184,13 @@ Moreover, for a.e. $t>0$,
 \end{equation}
 where
 \[
-\Lambda(a,b):=a\log\frac{a}{b}-a+b .
+\Lambda(a,b):=a\log\frac{a}{b}-a+b=D_\Phi(a,b).
 \]
+The double integral in
+\eqref{eq:relative-entropy-dissipation-rate} is the cutoff limit
+\eqref{eq:kl-main-cutoff-bregman-limit}, established by the domain-closure
+calculus in Appendix~\ref{app:doob-bregman-domain}; the identity is not a
+formal product-rule computation on a nonlocal operator.
 Consequently, if
 \[
 I_\nu(s):=
@@ -133,14 +201,44 @@ then, for every $t>0$,
 \begin{equation}\label{eq:relative-entropy-integrated-dissipation}
 D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \end{equation}
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
 The quotient equation is Theorem~\ref{thm:poisson-doob-phi-entropy}
 specialized to the Poisson pair $(h_t,g_t)$; its kernel form is
-\eqref{eq:doob-generator-kernel}.  For the dissipation identity take
-\(\Phi(s)=s\log s\) in
-Proposition~\ref{prop:doob-bregman-domain-closure}.  Then
+\eqref{eq:doob-generator-kernel}.  This proves \textup{(i)}.
+
+Fix $[a,b]\subset(0,\infty)$.  The compact range
+\(m_{a,\nu}\le u_t\le M_{a,\nu}\) is exactly
+\eqref{eq:doob-compact-range-bound}.  Lemma~\ref{lem:cauchy-doob-cutoff-calculus}
+gives the constant \(L_{a,b,\nu}\) in
+\eqref{eq:kl-main-compact-quotient-range} and the uniform $L^1$ bounds for
+$Lh_t=\partial_th_t$ and $Lg_t=\partial_tg_t$.  On the compact interval
+\[
+J_{a,b}:=
+\left[
+\frac{1}{2(1+\mu_2/a^2)},
+2+\frac{2\mu_2}{a^2}
+\right]\Subset(0,\infty),
+\]
+the functions $s\mapsto s\log s$, $s\mapsto1+\log s$, and $s\mapsto -s$ are
+bounded or Lipschitz as needed.  The $L^1$ chain rule for
+$g_t\Phi(h_t/g_t)$ with $\Phi(s)=s\log s$ therefore gives local absolute
+continuity and, for a.e. $t\in[a,b]$,
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
+=
+\int_{\RR}\bigl(1+\log u_t\bigr)Lh_t\dd x
+-\int_{\RR}u_tLg_t\dd x .
+\]
+The one-variable integrals are first interpreted with the spatial cutoff
+$\chi_R$ and then passed to the limit, using the cutoff convention and
+majorants of Lemma~\ref{lem:cauchy-doob-cutoff-calculus}; this proves
+\eqref{eq:kl-main-cutoff-derivative}.  The same cutoff passage applied to the
+bounded Lipschitz tests $1+\log u_t$ and $-u_t$ gives the symmetric
+Doob--Bregman form of the derivative.  In the notation of
+Proposition~\ref{prop:doob-bregman-domain-closure},
 \[
 \mathcal H_\Phi(t)
 =\int_{\RR}g_t(x)u_t(x)\log u_t(x)\dd x
@@ -150,19 +248,31 @@ and the associated Bregman divergence is
 \[
 D_\Phi(a,b)=a\log(a/b)-a+b=\Lambda(a,b).
 \]
-The proposition gives
+Thus the cutoff limit first gives
 \[
 -\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
 =
+\lim_{R\to\infty}
 \frac{1}{2\pi}\iint_{\RR^2}
+\chi_R(x)\chi_R(y)
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))
       +g_t(y)\Lambda(u_t(y),u_t(x))}
 {(x-y)^2}\dd x\dd y .
 \]
-The second summand equals the first after interchanging $x$ and $y$; the
-absolute integrability needed for this change of variables is part of
-Proposition~\ref{prop:doob-bregman-domain-closure}.  This proves
-\eqref{eq:relative-entropy-dissipation-rate}.  Finally
+The compact-range estimate and Lipschitz bound imply
+\[
+0\le \Lambda(u_t(x),u_t(y))\le C_{a,b}\min\{|x-y|^2,1\},
+\]
+so the double integral is absolutely convergent by
+\eqref{eq:doob-bregman-integrability-bound}.  The second summand is therefore
+equal to the first after interchanging $x$ and $y$ at the cutoff level and
+then letting $R\to\infty$.  This proves
+\eqref{eq:kl-main-cutoff-bregman-limit} and
+\eqref{eq:relative-entropy-dissipation-rate} as a.e. identities obtained by
+the cutoff limit \eqref{eq:kl-main-cutoff-derivative}.  Since $[a,b]$ was
+arbitrary, the assertion holds locally on $(0,\infty)$.
+
+Finally
 Lemma~\ref{lem:poisson-second-moment-kl-decay} gives
 $D_{\mathrm{KL}}(h_T\|g_T)\to0$.  Integrating the a.e. identity over $[t,T]$
 and letting $T\to\infty$ gives

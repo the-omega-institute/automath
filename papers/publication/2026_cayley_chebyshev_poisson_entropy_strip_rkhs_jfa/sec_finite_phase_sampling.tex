@@ -7,12 +7,15 @@
 The Cayley chart isolates the circle as the visible phase coordinate.  This
 appendix is auxiliary to the finite-moment entropy and eighth-order defect
 packages.  It records the root-of-unity averaging mechanism used to check
-Cayley Fourier coefficients and the printed low-order mode integrals.  The
+Cayley Fourier coefficients and the normalized low-order mode integrals.  The
 entropy asymptotics in Section~\ref{sec:entropy-asymptotics} use the
 constant-coefficient extraction of
 Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}; finite phase grids
-are only an exact certificate device for the same Laurent polynomials below
-the aliasing barrier.
+are only an exact check for the same Laurent polynomials below the aliasing
+barrier.  In particular, the grid check uses the Laurent normalization
+\(\cos(2r\theta)=(z^r+z^{-r})/2\) and
+\(\sin(2r\theta)=(z^r-z^{-r})/(2\ii)\) already fixed in
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
 
 \begin{definition}[Finite phase grids]\label{def:finite-phase-grid}
 For an integer $N\ge1$ set
@@ -180,7 +183,31 @@ Multiplication by $2t^2$, $4t^3$, and $8t^4$ gives the final
 renormalized error orders and the three limits.
 \end{proof}
 
-\begin{proposition}[Appendix finite-phase eighth-order coefficient check]%
+\paragraph{Normalization check before the finite-phase audit.}
+The finite-phase audit below uses the same phase normalization as the
+Cayley density expansion.  At the base point \(y=0\),
+\[
+R_\varepsilon(0)=\frac{1}{1+\varepsilon^2}
+=1-\varepsilon^2+O(\varepsilon^4),
+\]
+so the second density mode satisfies \(u_2(0)=-1\).  Equivalently, with
+\(Q_2(e^{2\ii\theta})=u_2(\tan\theta)\), the point \(y=0\) corresponds to
+\(\theta=0\) and \(z=1\), hence
+\[
+Q_2(1)=u_2(0)=-1.
+\]
+This fixes the factor in the Laurent representative
+\[
+Q_2(z)=-\frac14(z+z^{-1}+z^2+z^{-2}),
+\]
+whose value at \(z=1\) is \(-1\); a normalization with an extra factor of
+\(1/2\) would already fail this one-point check.
+
+Since \(u_2(0)=-1\) and \(z=e^{2i\theta}=1\) at \(\theta=0\), any printed
+Laurent representative must satisfy \(Q_2(1)=-1\).  This fixes the factor
+\(1/4\) in \(Q_2\) and prevents the factor-two aliasing error.
+
+\begin{proposition}[Finite-phase check of the normalized eighth-order audit]%
 \label{prop:eighth-order-finite-phase-verification}
 Let $n_1,\dots,n_k\ge2$ and put
 \[
@@ -246,16 +273,24 @@ Then
 \]
 and
 \[
+\mathfrak Q_L([2,2])=\frac14,\qquad
+\mathfrak Q_L([2,4])=-\frac18,\qquad
+\mathfrak Q_L([3,3])=\frac{3}{16}.
+\]
+In fact the same alias-free grid average gives the full constant-term table
+in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  Consequently
+\[
 \mathcal A_{4,L}=\frac{\sigma^4}{8},\qquad
 \mathcal A_{6,L}=C_6,\qquad
 \mathcal A_{8,L}=C_8^{(7)}(\nu),
 \]
-where $C_6$ and $C_8^{(7)}(\nu)$ are the displayed $t^{-6}$ and $t^{-8}$
-entropy coefficients in Theorem~\ref{thm:poisson-kl-eighth}.  Hence the finite
-phase grid is only an exact coefficient-checking device for the printed
-eighth-order entropy jet and the constant-term calculation in
-Section~\ref{sec:entropy-asymptotics}; it is not a conceptual ingredient of
-the entropy expansion.
+where $C_6$ and $C_8^{(7)}(\nu)$ are the $t^{-6}$ and $t^{-8}$ coefficients
+in Theorem~\ref{thm:poisson-kl-eighth}, computed with the Laurent
+normalization displayed in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
+Thus the finite phase grid checks exactly the same normalized mode-product
+integrals as the main Laurent audit.  It does not certify any alternative
+Laurent transcription and is not a conceptual ingredient of the entropy
+expansion.
 \end{proposition}
 
 \begin{proof}
@@ -326,6 +361,12 @@ Lemma~\ref{lem:eighth-order-coefficient-arithmetic} identifies these three
 integrals with $\sigma^4/8$, $C_6$, and $C_8^{(7)}(\nu)$; the supporting
 weighted trigonometric identities are collected in
 Appendix~\ref{app:entropy-integrals}.
+The displayed certificate values
+\(\mathfrak Q_L([2,2])=1/4\), \(\mathfrak Q_L([2,4])=-1/8\), and
+\(\mathfrak Q_L([3,3])=3/16\) are therefore exactly the first Laurent
+constant coefficients of the corrected audit in
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic}, not a second printed
+mode convention.
 \end{proof}
 
 \begin{proposition}[Finite-grid coefficient recovery and aliasing]%
