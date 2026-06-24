@@ -484,11 +484,10 @@ $\overline C_{N,\eta,M}^{\rm Tay}$.  All constants are therefore controlled
 by the displayed finite formulas in $N,\eta,M$ alone.
 \end{proof}
 
-\begin{theorem}[Positive-margin finite-moment Poisson entropy expansion]%
+\begin{theorem}[Exact-threshold coefficient theorem for Poisson entropy]%
 \label{thm:poisson-kl-even-orders}
-Let $N\ge2$, let \(0<\eta\le1\), and let $\nu$ be a probability measure
-on~$\RR$ with mean $\bar\gamma$ and finite centred
-\((2N-2+\eta)\)th absolute moment.  Set
+Let $N\ge2$ and let $\nu$ be a probability measure on~$\RR$ with mean
+$\bar\gamma$ and finite centred \((2N-2)\)th absolute moment.  Set
 \[
 \Delta:=\gamma-\bar\gamma,
 \qquad
@@ -513,16 +512,16 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \end{equation}
 Every entropy monomial contributing to \(A_{2N}^{\rm form}\) has at least
 two density factors and therefore involves centred moments only through
-order \(2N-2\).  The positive tail margin \(\eta\) is what makes the omitted
-density modes harmless in the entropy product hierarchy:
-with \(L=2N-2\), the density remainder is
-\(O(t^{-(L+\eta)})\), while every entropy term containing it also contains at
-least one retained density factor of size \(O(t^{-2})\).  Thus the first
-discarded density-remainder contribution is \(O(t^{-(2N+\eta)})\), and no
-coefficient through order \(t^{-2N}\) is changed.  The quantitative version
-of this statement is
-Corollary~\ref{cor:optimized-retained-order-entropy-bridge}; the stronger
-\((2N+\eta)\)-moment ledgers in
+order \(2N-2\).  This is the exact fixed-law moment threshold for the
+universal coefficient through order \(t^{-2N}\): with \(L=2N-2\), the
+finite \(L\)th absolute moment gives an
+\(L^\infty\cap L^1(\omega)\) density remainder \(o(t^{-L})\), and every
+entropy term containing that remainder also contains the quadratic entropy
+scale.  Thus the first discarded density-remainder contribution is
+\(o(t^{-(L+2)})=o(t^{-2N})\), and no coefficient through order \(t^{-2N}\)
+is changed.  The next theorem supplies explicit
+rates and constants when a finite \((2N-2+\eta)\)-moment is available; the
+stronger \((2N+\eta)\)-moment ledgers in
 Corollaries~\ref{cor:finite-moment-entropy-constant-ledger} and
 \ref{cor:uniform-moment-ball-entropy-remainder} are convenient sufficient
 forms.
@@ -533,7 +532,7 @@ Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \begin{proof}
 Put
 \[
-L:=2N-2,\qquad p:=L+\eta=2N-2+\eta .
+L:=2N-2 .
 \]
 We first fix the normalization in the rescaled variable.  For
 $x=\bar\gamma+ty$,
@@ -557,18 +556,18 @@ This is the same normalization as
 \eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}; no reciprocal
 kernel or extra factor of \(1+y^2\) is being introduced.
 
-Apply Theorem~\ref{thm:finite-moment-density-remainder} with this value of
+Apply Lemma~\ref{lem:exact-moment-density-truncation} with this value of
 \(L\).  The constant \(n=0\) term cancels in \(R_{\Delta/t}-1\), and the
 \(n=1\) term integrates to zero because \(\mu_1=\int\Delta\,\dd\nu=0\).
 Thus the finite-mode part begins at order \(t^{-2}\).  Put
 \[
 d_t(y):=\sum_{n=2}^{L}\mu_n\,u_n(y)t^{-n}.
 \]
-The density remainder estimate gives
+The exact-threshold density remainder gives
 \[
 \widetilde\delta_t(y)=d_t(y)+\rho_t(y),\qquad
 \|\rho_t\|_{\infty}+\|\rho_t\|_{L^1(\omega)}
-\le C_{\nu,L,\eta}t^{-p},
+=o(t^{-L}),
 \]
 and \(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  The finite sum \(d_t\) is
 also \(O(t^{-2})\) uniformly.
@@ -601,9 +600,16 @@ The Taylor tail contributes \(O(t^{-2N-2})\) after integration.  For each
 \(L^1(\omega)\) and all other factors in \(L^\infty\), gives
 \[
 \|\widetilde\delta_t^r-d_t^r\|_{L^1(\omega)}
-=O(t^{-p})O(t^{-2})=O(t^{-(2N+\eta)}).
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+O(t^{-2(r-\ell)})\,o(t^{-L\ell}).
 \]
-Thus all density-remainder products are \(o(t^{-2N})\).  Expanding the
+For \(\ell=1\) this is
+\(o(t^{-(L+2(r-1))})\), whose largest possible order occurs at \(r=2\) and
+is \(o(t^{-(L+2)})=o(t^{-2N})\).  For \(\ell\ge2\), it is
+\(o(t^{-2L})\), and since \(L=2N-2\ge2\) one has \(2L\ge L+2=2N\).
+Thus all density-remainder products are \(o(t^{-2N})\).
+Expanding the
 finite powers of \(d_t\) gives
 \begin{align*}
 D_{\mathrm{KL}}(h_t\|g_t)
@@ -630,6 +636,192 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{r=2}^{N} A_{2r}(\nu)\,t^{-2r}+o(t^{-2N}),
 \]
 which proves \eqref{eq:poisson-kl-even-orders}.
+\end{proof}
+
+\begin{theorem}[Positive-margin quantitative retained-order theorem]%
+\label{thm:positive-margin-retained-order-entropy}
+Let \(N\ge2\), let \(0<\eta\le1\), and let \(\nu\) be a probability
+measure on \(\RR\) with mean \(\bar\gamma\) and finite centred
+\((2N-2+\eta)\)th absolute moment.  Put
+\[
+L:=2N-2,\qquad p:=L+\eta,\qquad
+\Delta:=\gamma-\bar\gamma,
+\]
+and truncate the density expansion at the retained order \(L\):
+\[
+d_t(y):=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}.
+\]
+Let \(C_L\) and \(B_L\) be the finite constants from
+Theorem~\ref{thm:finite-moment-density-remainder}, and set
+\[
+C_\rho:=2C_L\EE|\Delta|^p,\qquad
+M_A:=\sum_{n=2}^{L}|\mu_n|\,\|u_n\|_\infty,\qquad
+S:=B_L\sum_{n=2}^{L}|\mu_n|+C_\rho .
+\]
+Define the density-remainder product constant
+\[
+C_{\nu,N,\eta}:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell
+M_A^{r-\ell}C_\rho^\ell ,
+\]
+the finite retained-mode tail
+\[
+Q_{\nu,N}:=
+\sum_{r=2}^{N}\frac{1}{r(r-1)}
+\sum_{m=2N+1}^{Lr}
+\sum_{\substack{2\le n_1,\ldots,n_r\le L\\
+n_1+\cdots+n_r=m}}
+|\mu_{n_1}\cdots\mu_{n_r}|\,
+\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)} ,
+\]
+with the convention that an empty sum is zero, and
+\[
+C'_{\nu,N}:=2S^{N+1},\qquad T_{\nu,N,\eta}:=\max\{1,(2S)^{1/2}\}.
+\]
+Then, for every \(t\ge T_{\nu,N,\eta}\),
+\begin{equation}\label{eq:positive-margin-retained-order-theorem}
+\left|
+D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+-\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
+\right|
+\le
+C_{\nu,N,\eta}t^{-(2N+\eta)}
++Q_{\nu,N}t^{-(2N+1)}
++C'_{\nu,N}t^{-(2N+2)} .
+\end{equation}
+Thus the coefficient theorem uses only the exact
+\((2N-2)\)-moment threshold, while the positive margin supplies a
+quantitative remainder for the same retained density modes
+\(u_2,\ldots,u_{2N-2}\).
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:finite-moment-density-remainder}, applied with
+truncation \(L=2N-2\), gives in the Cauchy scale
+\[
+\widetilde\delta_t(y)=d_t(y)+\rho_t(y),\qquad
+\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}
+\le C_\rho t^{-p},
+\]
+and \(\|\widetilde\delta_t\|_\infty\le S t^{-2}\).  Increasing the lower
+threshold to \(T_{\nu,N,\eta}\) gives
+\(\|\widetilde\delta_t\|_\infty\le1/2\), so
+\[
+\Phi(z)=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}z^r+O(z^{N+1})
+\qquad(|z|\le1/2).
+\]
+The Taylor tail is bounded by \(C'_{\nu,N}t^{-(2N+2)}\).
+
+For each \(2\le r\le N\), Lemma~\ref{lem:density-remainder-product-hierarchy}
+with \(p=L+\eta\), \(A=d_t\), and \(\rho=\rho_t\) shows that all products
+containing at least one density remainder are bounded by
+\[
+\sum_{\ell=1}^{r}\binom r\ell M_A^{r-\ell}C_\rho^\ell
+t^{-(p+2)}
+=
+\sum_{\ell=1}^{r}\binom r\ell M_A^{r-\ell}C_\rho^\ell
+t^{-(2N+\eta)}.
+\]
+After summing the Taylor coefficients in \(r\), this is the
+\(C_{\nu,N,\eta}t^{-(2N+\eta)}\) term.
+
+The purely finite part \(d_t^r\) has retained total degrees \(m\le2N\) and a
+finite high-degree tail \(m\ge2N+1\).  The latter is exactly bounded by
+\(Q_{\nu,N}t^{-(2N+1)}\).  If an entropy monomial has total degree
+\(m\le2N\), at least two factors occur and every index is at least \(2\);
+therefore no individual index can exceed \(2N-2=L\).  Hence truncating the
+density expansion at \(L\) removes no coefficient \(A_m(\nu)\) with
+\(m\le2N\).  The parity theorem removes the odd retained coefficients, and
+\eqref{eq:positive-margin-retained-order-theorem} follows.
+\end{proof}
+
+\begin{proposition}[Sharpness of the moment threshold]%
+\label{prop:poisson-kl-moment-threshold-sharpness}
+Fix \(N\ge2\) and put \(L=2N-2\).  The moment hypothesis in
+Theorem~\ref{thm:poisson-kl-even-orders} cannot be lowered for a universal
+coefficient theorem with the same \(A_{2N}\).
+
+For \(N=2\), the leading coefficient is
+\[
+A_4(\nu)=\frac18\mu_2^2,
+\]
+so a universal statement through order \(t^{-4}\) must at least make the
+variance finite.  For \(N\ge3\), the degree-\(2N\) formal coefficient has the
+nonzero top-moment term
+\begin{equation}\label{eq:top-moment-coefficient-sharpness}
+A_{2N}^{\rm form}
+=\kappa_N\,\mathfrak m_2\mathfrak m_{2N-2}
+P_N(\mathfrak m_2,\ldots,\mathfrak m_{2N-3}),
+\qquad
+\kappa_N=(-1)^N(N-1)2^{-2N+2}\ne0,
+\end{equation}
+where \(P_N\) involves no \(\mathfrak m_{2N-2}\).  Hence the coefficient
+through order \(t^{-2N}\) is not determined by moments below order
+\(2N-2\).
+
+Moreover, for every \(q<L\) there is a centred symmetric probability law
+with finite \(q\)th absolute moment and infinite \(L\)th absolute moment.
+For such a law the top coefficient in
+\eqref{eq:top-moment-coefficient-sharpness} is not a finite number.  Thus no
+fixed-law theorem that keeps the same universal coefficient \(A_{2N}\) can
+replace the finite \(L\)th absolute moment by a strictly weaker moment
+assumption.
+\end{proposition}
+
+\begin{proof}
+The case \(N=2\) is the first line of the coefficient audit:
+\[
+A_4(\nu)=\frac12\mu_2^2 I(2,2)
+=\frac12\mu_2^2\cdot\frac14
+=\frac18\mu_2^2 .
+\]
+Assume \(N\ge3\).  In the formal coefficient
+\eqref{eq:universal-entropy-coefficient}, a monomial containing
+\(\mathfrak m_L\) and contributing to total degree \(L+2=2N\) must have
+exactly two density factors, with indices \(2\) and \(L\).  All other
+entropy monomials either have total degree different from \(2N\) or involve
+only moments of order at most \(L-1\).  Since the quadratic Taylor
+coefficient is \(1/2\) and the ordered pairs \((2,L)\) and \((L,2)\) both
+occur, the coefficient of \(\mathfrak m_2\mathfrak m_L\) is \(I(2,L)\).
+
+Write \(L=2m\), so \(m=N-1\).  From
+\eqref{eq:mode-laurent-even},
+\[
+Q_{2m}(z)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+\]
+while \(Q_2(z)=-(z+z^{-1}+z^2+z^{-2})/4\).  Therefore only the
+exponents \(\pm1\) and \(\pm2\) of \(Q_{2m}\) enter \(I(2,2m)\), and
+\[
+\begin{aligned}
+I(2,2m)
+&=[z^0]Q_2Q_{2m}  \\
+&=-\frac12\,(-1)^m2^{-2m}
+\left\{\binom{2m-1}{0}+\binom{2m-1}{1}\right\}  \\
+&=(-1)^{m+1}m\,2^{-2m}
+=(-1)^N(N-1)2^{-2N+2}.
+\end{aligned}
+\]
+This proves \eqref{eq:top-moment-coefficient-sharpness}.
+
+For the counterexample assertion, choose a symmetric probability density on
+\(|x|\ge e\) proportional to
+\[
+\frac{1}{|x|^{L+1}\log |x|}
+\]
+and put any remaining mass symmetrically on a bounded interval so that the
+total mass is one.  The law is centred by symmetry.  For every \(q<L\),
+\(\int |x|^q\,\dd\nu(x)<\infty\), because the tail integral is dominated by
+\(\int_e^\infty x^{q-L-1}\dd x\).  At order \(L\), however,
+\[
+\int |x|^L\,\dd\nu(x)
+\asymp \int_e^\infty \frac{\dd x}{x\log x}
+=\infty .
+\]
+Thus the moment required by the nonzero top term of \(A_{2N}\) is genuinely
+absent although every lower absolute moment is finite.
 \end{proof}
 
 \begin{corollary}[Consolidated constants for the finite-moment entropy expansion]%
@@ -739,7 +931,7 @@ together with the closed mode bound from
 Lemma~\ref{lem:closed-cayley-mode-constant-envelopes}.
 \end{proof}
 
-\begin{corollary}[Positive-margin retained-order entropy bridge]%
+\begin{corollary}[Positive-margin retained-order entropy bridge, optimized notation]%
 \label{cor:optimized-retained-order-entropy-bridge}
 Let \(N\ge2\), let \(0<\eta\le1\), and let \(\nu\) be a probability
 measure on \(\RR\) with mean \(\bar\gamma\) and finite centred
@@ -796,6 +988,14 @@ P_N^{\rm opt}(C_\rho^{\rm opt},M_A^{\rm opt})\,t^{-(2N+\eta)}
 {}+Q_N^{\rm opt}(\mu,u)\,t^{-(2N+1)}
 +2(S^{\rm opt})^{N+1}t^{-(2N+2)} .
 \end{align}
+This is exactly Theorem~\ref{thm:positive-margin-retained-order-entropy}
+written in the optimized notation used later for the \(N=4\) coefficient
+audit:
+\[
+C_{\nu,N,\eta}=P_N^{\rm opt},\qquad
+Q_{\nu,N}=Q_N^{\rm opt},\qquad
+C'_{\nu,N}=2(S^{\rm opt})^{N+1}.
+\]
 Consequently,
 \begin{equation}\label{eq:optimized-retained-order-entropy-envelope}
 \left|
@@ -832,9 +1032,9 @@ P_N^{\rm opt}+Q_N^{\rm opt}+2(S^{\rm opt})^{N+1}
   Thus the order-nine constant used below is not an additional analytic
   input: it is exactly the optimized envelope obtained from the three explicit
   quantities \(P_4^{\rm opt}\), \(Q_4^{\rm opt}\), and \(S^{\rm opt}\) above.
-  The fixed-law coefficient identity and this rate are the \(N=4,\eta=1\)
-  specialization of Theorem~\ref{thm:poisson-kl-even-orders} and the
-  positive-margin envelope above.
+  The fixed-law coefficient identity is the \(N=4\) specialization of
+  Theorem~\ref{thm:poisson-kl-even-orders}; the displayed rate is the
+  \(N=4,\eta=1\) specialization of the positive-margin envelope above.
 \end{corollary}
 
 \begin{proof}
@@ -932,13 +1132,10 @@ ball.  The coefficients are still the evaluated moment polynomials of the
 individual law, so only the remainder constants and threshold are made uniform.
 \end{proof}
 
-\begin{theorem}[Finite-moment entropy remainder]%
+\begin{theorem}[Exact-threshold finite-moment entropy remainder]%
 \label{thm:finite-moment-entropy-remainder}
-Let \(N\ge2\), let \(0<\eta\le1\), and let \(\nu\) be a probability measure
-on \(\RR\) with mean \(\bar\gamma\) and finite centred
-\((2N+\eta)\)th absolute moment.  This is the convenient stronger-moment
-remainder version of Theorem~\ref{thm:poisson-kl-even-orders}: it keeps the
-same retained coefficients and records a simple fixed-law power ledger.  Put
+Let \(N\ge2\), and let \(\nu\) be a probability measure on \(\RR\) with mean
+\(\bar\gamma\) and finite centred \((2N-2)\)th absolute moment.  Put
 \[
 \mathcal R_N(t;\nu)
 :=D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
@@ -946,54 +1143,62 @@ same retained coefficients and records a simple fixed-law power ledger.  Put
 \]
 Then
 \[
-\mathcal R_N(t;\nu)
-=O(t^{-(2N+\eta)})+O(t^{-(2N+2)})
-\qquad(t\to\infty),
+\mathcal R_N(t;\nu)=o(t^{-2N})
+\qquad(t\to\infty).
 \]
-with the fixed-law constants recorded in
-\eqref{eq:finite-moment-entropy-ledger-estimate} of
-Corollary~\ref{cor:finite-moment-entropy-constant-ledger}: the constants multiplying
-$t^{-(2N+\eta)}$ and $t^{-(2N+2)}$ are the finite expressions in
-Proposition~\ref{prop:density-to-entropy-descent}, depending on the specified
-law~$\nu$, $N$, $\eta$, and the finite mode-product constants, which are
-numerically dominated by
-Lemma~\ref{lem:closed-cayley-mode-constant-envelopes},
-and in particular $\mathcal R_N(t;\nu)=o(t^{-2N})$.
 Equivalently, after the universal even coefficient polynomial is subtracted,
-the finite centred $(2N+\eta)$th absolute moment hypothesis leaves no further
-contribution at any order $t^{-k}$ with $k\le 2N$.
+the exact centred \((2N-2)\)th absolute moment hypothesis leaves no further
+contribution at any order \(t^{-k}\) with \(k\le2N\).
+
+If, in addition, \(0<\eta\le1\) and the centred
+\((2N-2+\eta)\)th absolute moment is finite, the same retained expansion has
+the theorem-level positive-margin quantitative ledger
+\eqref{eq:positive-margin-retained-order-theorem} of
+Theorem~\ref{thm:positive-margin-retained-order-entropy}.  The optimized
+notation used in the \(N=4\) coefficient audit is recorded in
+Corollary~\ref{cor:optimized-retained-order-entropy-bridge}.  Under the still
+stronger centred \((2N+\eta)\)th absolute moment, the convenience constants and
+uniform moment-ball version are those of
+Corollaries~\ref{cor:finite-moment-entropy-constant-ledger} and
+\ref{cor:uniform-moment-ball-entropy-remainder}.  These \(+\eta\) assumptions
+are used only to turn the little-oh remainder into explicit fixed-law or
+uniform \(O\)-bounds; they are not part of the coefficient theorem.
 \end{theorem}
 
 \begin{proof}
-Corollary~\ref{cor:finite-moment-entropy-constant-ledger} gives
-\eqref{eq:finite-moment-entropy-ledger-estimate}, hence in particular
+This is precisely Theorem~\ref{thm:poisson-kl-even-orders} with the odd
+coefficients suppressed by parity.  That theorem is proved from
+Lemma~\ref{lem:exact-moment-density-truncation} with
+\(L=2N-2\).  The density remainder is only
+\(o(t^{-(2N-2)})\), but every entropy contribution containing it has at least
+one further density factor, and the retained density perturbation starts at
+order \(t^{-2}\).  Hence all such products are \(o(t^{-2N})\).  No omitted
+density mode can enter a retained entropy monomial, because an entropy
+monomial of total degree at most \(2N\) has at least two mode indices, each at
+least \(2\), so each individual retained index is at most \(2N-2\).
+Consequently
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
-=\sum_{k=4}^{2N}A_k(\nu)t^{-k}
-+O(t^{-(2N+\eta)})+O(t^{-(2N+2)}),
+=\sum_{k=4}^{2N}A_k(\nu)t^{-k}+o(t^{-2N}),
 \]
-with the stated two separate dependencies.
-The first constant is exactly
-\[
-C_{N,\eta}^{\rm dens}(\nu)
-=\mathfrak P_N(C_{\nu,2N,\eta},M_A)+\mathfrak Q_N(\mu,u),
-\]
-as recorded in \eqref{eq:explicit-entropy-constant-bound}.  The term
-$\mathfrak P_N(C_{\nu,2N,\eta},M_A)$ multiplies
-$t^{-(2N+\eta+2)}$ in the refined product estimate
-\eqref{eq:explicit-entropy-constant-refined-bound}; it is folded into
-$C_{N,\eta}^{\rm dens}(\nu)t^{-(2N+\eta)}$ only in the convenience envelope.
-The term $\mathfrak Q_N$ is the finite high-degree mode-product tail.
-The second constant is
-$C_{N,\eta}^{\rm Tay}(\nu)=2S_{\nu,2N,\eta}^{N+1}$, the Taylor remainder
-after the smallness threshold $\|\delta_t\|_\infty\le1/2$ has been imposed.
-By the parity conclusion in the same theorem, $A_k(\nu)=0$ for every odd
-$k\le2N$, while the smallest possible coefficient is $A_4$ because all mode
-indices in \eqref{eq:universal-entropy-coefficient} are at least~$2$ and the
-entropy series starts with quadratic powers.  Hence the displayed polynomial
-is exactly $\sum_{m=2}^N A_{2m}(\nu)t^{-2m}$.  Subtracting it gives the stated
-remainder bound, and the assumptions $0<\eta\le1$ and $N\ge2$ imply both
-$t^{-(2N+\eta)}=o(t^{-2N})$ and $t^{-(2N+2)}=o(t^{-2N})$.
+and parity gives
+\(\sum_{k=4}^{2N}A_k(\nu)t^{-k}
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}\).
+Subtracting this polynomial gives the stated exact-threshold remainder.
+
+The quantitative assertion with the same retained modes is
+Theorem~\ref{thm:positive-margin-retained-order-entropy}.  There the extra
+\(\eta\) moment improves the density remainder, truncated at \(L=2N-2\), to an
+explicit
+\(O(t^{-(2N-2+\eta)})\) bound, so products containing the density remainder
+are bounded at order \(t^{-(2N+\eta)}\).  Corollary
+~\ref{cor:optimized-retained-order-entropy-bridge} only rewrites those
+constants in the notation used later.  The stronger
+\((2N+\eta)\)-moment ledger instead retains density modes through \(2N\) and
+records the convenience constants in
+\eqref{eq:finite-moment-entropy-ledger-estimate}; the moment-ball corollary
+dominates those constants uniformly.  These estimates refine the exact
+little-oh conclusion but are not needed for it.
 \end{proof}
 
 \begin{theorem}[Analytic compact-support interchange]%
@@ -1073,37 +1278,13 @@ expression in
 
 \medskip
 \noindent\textbf{Notation for the eighth-order layer.}
-The next two subsections use the following notation convention.  The point of
-the convention is to keep the formal coefficient, the actual coefficient under
-a seventh-moment hypothesis, and the fourth-moment algebraic defect in
-separate regimes.
-\begin{center}
-\begin{tabular}{p{0.24\textwidth}p{0.68\textwidth}}
-\hline
-Symbol & Meaning \\
-\hline
-\(A^{\mathrm{form}}_8\) &
-Universal formal degree-eight entropy polynomial in the formal centred
-moments.  It is not itself a law-dependent asymptotic coefficient. \\
-\(A_8(\nu)\) &
-The \(t^{-8}\) coefficient name supplied by the general finite-order
-expansion after evaluation at a law \(\nu\), in the \(N=4,\eta=1\) regime. \\
-\(C_8^{(7)}(\nu)\) &
-The same actual \(t^{-8}\) coefficient in the seventh-moment audit:
-\(C_8^{(7)}(\nu)=A_8(\nu)
-={\rm ev}_{\nu,8}(A^{\mathrm{form}}_8)\).
-The superscript \((7)\) records the finite centred seventh absolute moment
-hypothesis used to obtain the \(O_\nu(t^{-9})\) remainder. \\
-\(C_8\) &
-Not used as a standing notation in the sequel; the full
-\(C_8^{(7)}(\nu)\) notation is retained when the eighth coefficient is meant.\\
-\(\Delta_6^{(4)}(\nu)\) &
-Fourth-moment algebraic polynomial defined before any sixth-order entropy
-coefficient is invoked.  The superscript \((4)\) is part of the notation. \\
-\(\Delta_6(\nu)\) &
-Unsuperscripted entropy defect introduced only after the seventh-moment
-bridge identifies the sixth-order entropy coefficient with the
-fourth-moment polynomial. \\
-\hline
-\end{tabular}
-\end{center}
+The next two subsections use only two names for the eighth-order object:
+\(A^{\mathrm{form}}_8\) is the universal formal polynomial in the formal
+centred moments, and \(A_8(\nu)\) is its evaluated law-level entropy
+coefficient once the \(N=4\) finite-moment theorem applies.  A finite centred
+seventh absolute moment is a hypothesis on the quantitative remainder, not a
+superscript in the coefficient.  Likewise, the sixth-order algebraic
+polynomial below is denoted \(C_6(\nu)\), and
+\(\Delta_6(\nu):=-7\sigma^6/64-C_6(\nu)\) denotes its associated elementary
+defect; theorem statements will say explicitly when these polynomial
+quantities are being used as entropy coefficients.

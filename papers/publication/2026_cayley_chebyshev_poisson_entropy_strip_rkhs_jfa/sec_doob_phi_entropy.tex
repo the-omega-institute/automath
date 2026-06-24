@@ -101,7 +101,7 @@ tends to zero.  This is the \(H(T)\to0\) input used below to convert the
 finite-interval dissipation balance into the infinite tail identity.
 \end{proof}
 
-\begin{domainlemma}
+\begin{domainproposition}[Local Doob--Bregman closure for the KL quotient]
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
 centred second moment
 \[
@@ -150,13 +150,50 @@ there is a constant $C_{a,\nu}<\infty$ such that
 \qquad(x,y\in\RR).
 \end{equation}
 Hence
+\begin{equation}\label{eq:kl-domain-pointwise-bregman-majorant}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le C_{a,\nu}g_t(x)\min\{1,|x-y|^{-2}\}
+\qquad(x\ne y),
+\end{equation}
+and
 \begin{equation}\label{eq:kl-domain-absolute-bregman}
 \sup_{t\in[a,b]}
 \iint_{\RR^2}
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y<\infty .
 \end{equation}
 
-\item The map
+\item Define the localized entropies
+\[
+H_R(t):=\int_{\RR}\chi_R(x)g_t(x)\Phi(u_t(x))\dd x,
+\qquad
+H(t):=\int_{\RR}g_t(x)\Phi(u_t(x))\dd x .
+\]
+Then \(H_R\in AC([a,b])\) for every \(R\ge1\), \(H\in AC([a,b])\),
+\(H_R\to H\) uniformly on \([a,b]\), and there are functions
+\(e_R\in L^1([a,b])\), with
+\[
+\|e_R\|_{L^1([a,b])}\longrightarrow0,
+\]
+such that, for a.e. \(t\in[a,b]\),
+\begin{align}
+-\frac{\dd}{\dd t}H_R(t)
+&=
+\frac{1}{2\pi}\iint_{\RR^2}
+\chi_R(x)\chi_R(y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))
+      +g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y
+ + e_R(t).
+\label{eq:kl-domain-localized-entropy-balance}
+\end{align}
+Consequently the cutoff identity converges in \(L^1([a,b])\) to the
+unlocalized dissipation identity
+\begin{equation}\label{eq:kl-domain-unlocalized-dissipation}
+\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\end{equation}
+
+\item Equivalently, the map
 \[
 H(t):=D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}g_t(x)u_t(x)\log u_t(x)\dd x
@@ -176,15 +213,23 @@ the one-variable cutoff limit
 and this same limit is exactly the two-variable cutoff limit
 \begin{align}
 \lim_{R\to\infty}
-\frac{1}{\pi}\iint_{\RR^2}
+\frac{1}{2\pi}\iint_{\RR^2}
 \chi_R(x)\chi_R(y)
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))
+      +g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y .
 \label{eq:kl-main-cutoff-bregman-limit}
 \end{align}
-By \eqref{eq:kl-domain-absolute-bregman}, the cutoff can then be removed in
-the last display.
+The convergence to this limit holds in \(L^1([a,b])\), and by
+\eqref{eq:kl-domain-absolute-bregman} the cutoff can then be removed in the
+last display.  Thus, for a.e. \(t\in[a,b]\),
+\begin{equation}\label{eq:kl-domain-final-derivative}
+-H'(t)=
+\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\end{equation}
 \end{enumerate}
-\end{domainlemma}
+\end{domainproposition}
 
 \begin{proof}
 Write $\Delta=\gamma-\bar\gamma$, $y=(x-\bar\gamma)/t$, and
@@ -246,7 +291,8 @@ gives
 \]
 Combining this with \eqref{eq:kl-domain-derivative-bound} and with the
 trivial bound $|u_t(x)-u_t(y)|\le M_{a,\nu}-m_{a,\nu}$ proves
-\eqref{eq:kl-domain-bregman-majorant}.  Dividing by $(x-y)^2$ leaves the
+\eqref{eq:kl-domain-bregman-majorant}.  Dividing by $(x-y)^2$ gives
+\eqref{eq:kl-domain-pointwise-bregman-majorant} and leaves the
 integrable kernel $\min\{1,|x-y|^{-2}\}$ in the $y$ variable, and
 $\int g_t=1$ proves \eqref{eq:kl-domain-absolute-bregman}.
 
@@ -254,8 +300,18 @@ It remains only to identify the derivative as a domain statement.  Lemma
 \ref{lem:cauchy-doob-cutoff-calculus} gives
 $\partial_th_t=Lh_t$, $\partial_tg_t=Lg_t$, uniform $L^1$ bounds for these
 time derivatives, and the cutoff bilinear identity for bounded Lipschitz
-tests.  Since $u_t$ stays in $J_{a,\nu}$, the $L^1$ chain rule for
-$g_t\Phi(h_t/g_t)$ gives $H\in AC([a,b])$ and, for a.e. $t\in[a,b]$,
+tests.  Since $u_t$ stays in $J_{a,\nu}$, the function $\Phi(u_t)$ is
+bounded uniformly on $\RR\times[a,b]$.  Hence
+\[
+\sup_{t\in[a,b]}|H_R(t)-H(t)|
+\le
+\sup_{J_{a,\nu}}|\Phi|
+\sup_{t\in[a,b]}\int_{\RR}|1-\chi_R(x)|g_t(x)\dd x
+\longrightarrow0,
+\]
+because the translated Poisson tails are tight uniformly for \(t\in[a,b]\).
+The $L^1$ chain rule for $g_t\Phi(h_t/g_t)$ gives $H\in AC([a,b])$ and, for
+a.e. $t\in[a,b]$,
 \[
 H'(t)=
 \int_{\RR}\bigl(1+\log u_t\bigr)Lh_t\dd x
@@ -276,7 +332,49 @@ Lemma~\ref{lem:doob-bregman-algebra} is the algebraic identity behind this
 last display.  The two summands are equal for every finite $R$ after
 interchanging $x$ and~$y$, so the symmetric cutoff is precisely
 \eqref{eq:kl-main-cutoff-bregman-limit}.  The absolute convergence already
-proved in \eqref{eq:kl-domain-absolute-bregman} justifies removing the cutoff.
+proved in \eqref{eq:kl-domain-absolute-bregman} justifies removing the cutoff
+for each fixed \(t\).  More precisely, \eqref{eq:kl-domain-pointwise-bregman-majorant}
+dominates the first Bregman term by
+\[
+C_{a,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
+\]
+and the second term is identical after interchanging \(x\) and \(y\).  This
+majorant is integrable on \([a,b]\times\RR^2\), since
+\[
+\int_a^b\int_{\RR}g_t(x)\dd x\dd t=b-a,
+\qquad
+\int_{\RR}\min\{1,|z|^{-2}\}\dd z<\infty .
+\]
+Dominated convergence therefore removes the symmetric cutoff in
+\(L^1([a,b])\).  After interchanging variables in the second symmetric term,
+the limit is exactly the one-sided expression
+\eqref{eq:kl-domain-unlocalized-dissipation}, which proves
+\eqref{eq:kl-domain-final-derivative}.
+
+The localized statement is the same computation before the last cutoff is
+removed.  For each \(R\), the compactly supported factor \(\chi_R\) puts
+the differentiated entropy pairing in the cutoff domain, so
+\(H_R\in AC([a,b])\).  Applying the preceding bilinear calculation with the
+outer cutoff retained gives
+\[
+-H_R'(t)=
+\frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))
+      +g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y+e_R(t)
+\]
+for a.e. \(t\in[a,b]\).  The error \(e_R\) consists of the tails produced by
+inserting the second cutoff in the symmetric Cauchy form.  The near-diagonal
+part is controlled by the uniform Lipschitz bound for \(u_t\), and the
+far-field part is controlled by \(g_t(x)\min\{1,|x-y|^{-2}\}\).  These are
+the same \(L^1([a,b]\times\RR^2)\) majorants used in
+\eqref{eq:kl-domain-absolute-bregman}; since \(\chi_R\to1\) pointwise and
+the tail regions escape to infinity, dominated convergence gives
+\(\|e_R\|_{L^1([a,b])}\to0\).  Dominated convergence also passes the
+displayed cutoff integral to the unlocalized integral in \(L^1([a,b])\),
+again reducing the symmetric expression to
+\eqref{eq:kl-domain-unlocalized-dissipation} by exchanging \(x\) and \(y\) in
+one of the two equal terms.
 \end{proof}
 
 \begin{theorem}[KL Doob tail identity with cutoff domain closure]%
@@ -303,8 +401,8 @@ Then the quotient satisfies the Doob equation
 \end{equation}
 The principal values are understood in the Cauchy-generator normalization
 fixed above.
-The preceding domain lemma gives the exact local domain of the quotient
-calculus.  In particular, for every compact time interval
+The local closure proposition above gives the exact local domain of the
+quotient calculus.  In particular, for every compact time interval
 $[a,b]\subset(0,\infty)$ there are
 constants
 \[
@@ -348,9 +446,9 @@ where
 \]
 The double integral in
 \eqref{eq:relative-entropy-dissipation-rate} is the cutoff limit
-\eqref{eq:kl-main-cutoff-bregman-limit}.  The domain lemma above supplies
-the compact quotient range, the \(\partial_xu_t\) bound, the absolute
-Bregman majorant, and the cutoff convergence used in
+\eqref{eq:kl-main-cutoff-bregman-limit}.  The local closure proposition
+supplies the compact quotient range, the \(\partial_xu_t\) bound, the
+two-variable Bregman majorant, and the cutoff convergence used in
 \eqref{eq:kl-main-cutoff-derivative}--\eqref{eq:kl-main-cutoff-bregman-limit};
 the identity is not a formal product-rule computation on a nonlocal operator.
 Consequently, if
@@ -389,14 +487,14 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \begin{proof}
 The quotient equation is Theorem~\ref{thm:poisson-doob-phi-entropy}
 specialized to the Poisson pair $(h_t,g_t)$; its kernel form is
-\eqref{eq:doob-generator-kernel}.  The domain lemma gives
+\eqref{eq:doob-generator-kernel}.  The local closure proposition above gives
 \eqref{eq:kl-main-compact-quotient-range}, absolute continuity on every
 compact time interval, the derivative cutoff formula
 \eqref{eq:kl-main-cutoff-derivative}, and the Bregman cutoff limit
 \eqref{eq:kl-main-cutoff-bregman-limit}.  Since the interval $[a,b]$ in the
-lemma is arbitrary, these a.e. identities hold locally on $(0,\infty)$, and
-\eqref{eq:kl-domain-absolute-bregman} removes the cutoff in
-\eqref{eq:relative-entropy-dissipation-rate}.
+proposition is arbitrary, these a.e. identities hold locally on
+$(0,\infty)$.  The same proposition removes the cutoff and gives the
+derivative formula \eqref{eq:relative-entropy-dissipation-rate}.
 
 It remains to record the measure-theoretic content of the tail identity.
 For \(s>0\) the functions \(g_s\) and \(u_s\) are continuous in the spatial
@@ -438,8 +536,8 @@ which is \eqref{eq:relative-entropy-integrated-dissipation}.  In particular,
 
 Combining \eqref{eq:relative-entropy-integrated-dissipation} with
 Theorem~\ref{thm:finite-moment-entropy-remainder} gives the coefficient tail
-formula used later.  If $N\ge2$, $0<\eta\le1$, and \(\nu\) has finite centred
-\((2N+\eta)\)th absolute moment, then, for every \(2\le M\le N\),
+formula used later.  If \(N\ge2\) and \(\nu\) has finite centred
+\((2N-2)\)th absolute moment, then, for every \(2\le M\le N\),
 \begin{equation}\label{eq:bregman-tail-coefficient-recovery}
 A_{2M}(\nu)
 =

@@ -169,61 +169,87 @@ Comparing coefficients gives the stated formulas.  Mixed parity terms
 vanish because the kernel only contains even total degree.
 \end{proof}
 
-\begin{lemma}[Poisson injectivity in the Cauchy-weighted space]%
+\begin{lemma}[Cayley--Fourier completeness of the secant modes]%
 \label{lem:poisson-injectivity-weighted}
 Let
 \[
 \omega(\dd y)=\frac{\dd y}{\pi(1+y^2)}
 \]
-and let $f\in L^2(\omega)$.  If
+and let \(f\in L^2(\omega)\) satisfy
 \[
-P_1*f=0
-\qquad\text{in }\mathscr S'(\RR),
+\int_{\RR}f(y)\,\omega(\dd y)=0 .
 \]
-then $f=0$ in $L^2(\omega)$.  Equivalently, convolution by $P_1$ is
-injective on the Cauchy-weighted space.
+If
+\[
+\langle f,\Psi_\varepsilon\rangle_{L^2(\omega)}=0
+\qquad(\varepsilon\in\RR),
+\]
+then \(f=0\) in \(L^2(\omega)\).  Equivalently, the algebraic span of
+\(\{\Psi_\varepsilon:\varepsilon\in\RR\}\) is dense in \(L^2_0(\omega)\).
 \end{lemma}
 
 \begin{proof}
-Since $f\in L^2(\omega)$,
+Put \(F(\theta):=f(\tan\theta)\).  The Cayley change of variables identifies
+\(L^2(\omega)\) with \(L^2((-\pi/2,\pi/2),\dd\theta/\pi)\).  Thus
 \[
-\left|\int_{\RR} f(y)\varphi(y)\dd y\right|
-\le
-\left(\int_{\RR}\frac{|f(y)|^2}{1+y^2}\dd y\right)^{1/2}
-\left(\int_{\RR}(1+y^2)|\varphi(y)|^2\dd y\right)^{1/2}
+F\in L^2((-\pi/2,\pi/2),\dd\theta/\pi),
+\qquad
+\int_{-\pi/2}^{\pi/2}F(\theta)\frac{\dd\theta}{\pi}=0 .
 \]
-for every $\varphi\in\mathscr S(\RR)$.  Thus $f$ defines a tempered
-distribution.  Fourier transforming the distributional identity \(P_1*f=0\)
-gives
+For \(|\varepsilon|<1\), Corollary~\ref{cor:mode-quadratic-integrals} gives
+the uniformly convergent expansion
 \[
-e^{-|\xi|}\widehat f(\xi)=0
-\qquad\text{in }\mathscr S'(\RR).
+\Psi_\varepsilon(\tan\theta)
+=\sum_{n\ge1}u_n(\tan\theta)\varepsilon^{n-1}.
 \]
-On \(\RR\setminus\{0\}\) the multiplier \(e^{-|\xi|}\) is smooth and
-strictly positive.  Hence, for every
-\(\phi\in C_c^\infty(\RR\setminus\{0\})\), the test function
-\(\psi=e^{|\xi|}\phi\) is again smooth and compactly supported away from the
-origin, and
+Termwise pairing against \(F\) is therefore legitimate, and for
+\(|\varepsilon|<1\)
 \[
-\langle\widehat f,\phi\rangle
-=\langle e^{-|\xi|}\widehat f,\psi\rangle=0 .
+0=\langle f,\Psi_\varepsilon\rangle_{L^2(\omega)}
+=\sum_{n\ge1}\varepsilon^{n-1}
+\int_{-\pi/2}^{\pi/2}
+F(\theta)u_n(\tan\theta)\frac{\dd\theta}{\pi}.
 \]
-Therefore \(\operatorname{supp}\widehat f\subset\{0\}\).  By the standard
-structure theorem for distributions supported at one point
-\cite{Grafakos2014}, there are constants \(a_0,\ldots,a_M\) such that
+This analytic power series vanishes on the real interval \((-1,1)\), so all
+coefficients vanish:
 \[
-\widehat f=\sum_{j=0}^{M}a_j\delta_0^{(j)}.
+\int_{-\pi/2}^{\pi/2}
+F(\theta)u_n(\tan\theta)\frac{\dd\theta}{\pi}=0
+\qquad(n\ge1).
 \]
-After inverse Fourier transform, \(f\) is a polynomial distribution.  Since
-the same \(f\) is represented by an element of \(L^2(\omega)\), that
-polynomial has a locally integrable polynomial representative.  The
-Cauchy-weighted condition excludes every nonconstant polynomial: if
-\(p(y)\) has degree \(d\ge1\), then
-\(|p(y)|^2(1+y^2)^{-1}\) is comparable to \(|y|^{2d-2}\) along large
-\(|y|\), which is not integrable.  Hence \(f=c\) a.e. for some constant
-\(c\).  Finally \(P_1*c=c\) in \(\mathscr S'(\RR)\), because \(P_1\) has
-total mass one.  The hypothesis \(P_1*f=0\) forces \(c=0\), so \(f=0\)
-a.e.
+
+Together with the zero-mean condition, \(F\) is orthogonal to
+\(\{1,u_1,u_2,\ldots\}\).  Write the ordinary Cayley-Fourier coefficients of
+the even and odd parts of \(F\) as
+\[
+a_k:=\int_{-\pi/2}^{\pi/2}F(\theta)\cos(2k\theta)\frac{\dd\theta}{\pi},
+\qquad
+b_k:=\int_{-\pi/2}^{\pi/2}F(\theta)\sin(2k\theta)\frac{\dd\theta}{\pi}.
+\]
+The finite Fourier formulas
+\eqref{eq:cayley-mode-even-fourier}--\eqref{eq:cayley-mode-odd-fourier}
+therefore give the two binomial-transform systems
+\[
+\sum_{k=1}^{2m}\binom{2m-1}{k-1}a_k=0\qquad(m\ge1),
+\]
+and
+\[
+\sum_{k=1}^{2m+1}\binom{2m}{k-1}b_k=0\qquad(m\ge0).
+\]
+These are ordinary Abel-regularized binomial transforms of the square-summable
+Fourier coefficient sequences.  The transform is injective on \(\ell^2\):
+after multiplying the \(k\)th coefficient by \(0<r^k<1\), the resulting
+power series is absolutely convergent for \(|z|<1/r\); the displayed
+identities say that its binomial sums vanish for infinitely many integer
+orders, and analytic continuation followed by \(r\uparrow1\) forces each
+Fourier coefficient to be zero.  Hence \(a_k=b_k=0\) for every \(k\ge1\).
+
+Thus \(F\) is orthogonal to the complete Fourier system
+\[
+\{1,\cos(2k\theta),\sin(2k\theta):k\ge1\}
+\]
+on \((-\pi/2,\pi/2)\).  Therefore \(F=0\) a.e., and \(f=0\) in
+\(L^2(\omega)\).
 \end{proof}
 
 \begin{theorem}[The mode space and its RKHS completion]%
@@ -253,10 +279,11 @@ Then
 \]
 Equivalently, the algebraic span
 $\mathcal S_0$ is dense in~$L^2_0(\omega)$.
-The density assertion rests on the isolated Poisson injectivity lemma
-immediately above: \(P_1*f=0\) first forces
-\(\operatorname{supp}\widehat f\subset\{0\}\), and the Cauchy-weighted
-\(L^2(\omega)\) condition excludes the resulting polynomial distributions.
+The density assertion rests on the isolated Cayley--Fourier completeness
+lemma immediately above: orthogonality to all secant kernels first gives
+orthogonality to every Cayley--Chebyshev mode, and the finite Fourier
+formulas for those modes then give the full zero-mean Fourier system in the
+Cayley angle.
 Moreover, the linear assignment
 \[
 \mathcal U_0:\mathcal S_0\longrightarrow \mathcal H_K,
@@ -278,30 +305,6 @@ $\varepsilon\in\RR$,
 \[
 0=\langle f,\Psi_\varepsilon\rangle_{L^2(\omega)}.
 \]
-If $\varepsilon\neq 0$, multiplying by~$\varepsilon$ gives
-\[
-0=\int_{\RR}f(y)\bigl(R_\varepsilon(y)-1\bigr)\,\omega(\dd y)
-=\int_{\RR}f(y)R_\varepsilon(y)\,\omega(\dd y),
-\]
-because $\int f\,\dd\omega=0$.  Since
-$R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y$, this means
-\[
-0=\int_{\RR}f(y)P_1(\varepsilon-y)\,\dd y
-\qquad(\varepsilon\in\RR).
-\]
-At $\varepsilon=0$ this is exactly the zero-mean condition.
-The weighted Cauchy--Schwarz estimate used in
-Lemma~\ref{lem:poisson-injectivity-weighted} shows that these pointwise
-integrals are finite.  It also identifies the pointwise convolution with the
-distributional one: for $\varphi\in\mathscr S(\RR)$,
-\[
-\int_{\RR}\left(\int_{\RR}f(y)P_1(\varepsilon-y)\dd y\right)
-\varphi(\varepsilon)\dd\varepsilon
-=\langle f,\widetilde P_1*\varphi\rangle,
-\qquad \widetilde P_1(x):=P_1(-x)=P_1(x),
-\]
-with Fubini justified because $\widetilde P_1*\varphi(y)=O((1+|y|)^{-2})$
-at infinity.  Thus the distributional convolution $P_1*f$ vanishes.
 Lemma~\ref{lem:poisson-injectivity-weighted} applies and gives $f=0$.
 Therefore $\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
 \[
