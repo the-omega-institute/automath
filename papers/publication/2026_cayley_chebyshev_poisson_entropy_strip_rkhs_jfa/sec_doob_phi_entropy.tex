@@ -16,7 +16,14 @@ The Cauchy generator is normalized by
 so that \(\partial_tP_t=LP_t\).  This section records only the
 KL-specialized consequence of the Doob transform.  The range-local
 \(C^{1,1}\) convex-entropy closure used to justify the differentiated identity
-is in Appendix~\ref{app:doob-bregman-domain}.
+is in Appendix~\ref{app:doob-bregman-domain}.  The surrounding literature on
+nonlocal and discrete entropy-gradient structures includes the finite-chain
+entropy convexity theory of Erbar--Maas~\cite{ErbarMaas2012RicciMarkov},
+Maas~\cite{Maas2011EntropyMarkov}, Mielke~\cite{Mielke2013EntropyMarkov},
+and Erbar's jump-process entropy gradient flows
+\cite{Erbar2014JumpEntropy}.  The identity below is not a curvature statement
+in those metric structures; it is the Cauchy Doob quotient's cutoff-closed
+Bregman dissipation formula.
 
 \begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
 \label{lem:poisson-second-moment-kl-decay}
@@ -101,7 +108,96 @@ tends to zero.  This is the \(H(T)\to0\) input used below to convert the
 finite-interval dissipation balance into the infinite tail identity.
 \end{proof}
 
-\begin{domainproposition}[Local Doob--Bregman closure for the KL quotient]
+\begin{lemma}[Explicit Poisson quotient-kernel calculus]%
+\label{lem:explicit-poisson-quotient-kernel-calculus}
+For
+\[
+R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2}
+\qquad(y,\varepsilon\in\RR)
+\]
+put \(w=y-\varepsilon\).  Then
+\begin{align}
+R_\varepsilon(y)
+&=1+\frac{2\varepsilon w+\varepsilon^2}{1+w^2},
+\label{eq:explicit-R-eps-zero}\\
+\partial_yR_\varepsilon(y)
+&=
+\frac{2\varepsilon(1-w^2)-2\varepsilon^2w}{(1+w^2)^2},
+\label{eq:explicit-R-eps-first}\\
+\partial_y^2R_\varepsilon(y)
+&=
+\frac{4\varepsilon w(w^2-3)+2\varepsilon^2(3w^2-1)}
+     {(1+w^2)^3}.
+\label{eq:explicit-R-eps-second}
+\end{align}
+Moreover
+\begin{equation}\label{eq:explicit-R-eps-size-bounds}
+0<R_\varepsilon(y)\le 2(1+\varepsilon^2),
+\qquad
+R_\varepsilon(y)\ge\frac{1}{2(1+\varepsilon^2)},
+\end{equation}
+and the derivative bounds
+\begin{equation}\label{eq:explicit-R-eps-derivative-bounds}
+|\partial_yR_\varepsilon(y)|\le 3(1+\varepsilon^2),
+\qquad
+|\partial_y^2R_\varepsilon(y)|\le 16(1+\varepsilon^2)
+\end{equation}
+hold uniformly in \(y,\varepsilon\).
+\end{lemma}
+
+\begin{proof}
+The identity \(y=w+\varepsilon\) gives
+\[
+1+y^2=1+(w+\varepsilon)^2
+=(1+w^2)+2\varepsilon w+\varepsilon^2,
+\]
+which proves \eqref{eq:explicit-R-eps-zero}.  Differentiating with respect
+to \(y\), equivalently with respect to \(w\), gives
+\[
+\partial_yR_\varepsilon(y)
+=\frac{2\varepsilon(1+w^2)-(2\varepsilon w+\varepsilon^2)2w}
+       {(1+w^2)^2}
+=\frac{2\varepsilon(1-w^2)-2\varepsilon^2w}{(1+w^2)^2},
+\]
+and one further differentiation gives
+\eqref{eq:explicit-R-eps-second}.
+
+The upper bound in \eqref{eq:explicit-R-eps-size-bounds} follows from
+\[
+1+y^2\le 2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2,
+\]
+and the lower bound from
+\[
+1+(y-\varepsilon)^2
+\le2(1+\varepsilon^2)(1+y^2).
+\]
+For the first derivative, use
+\[
+\frac{|1-w^2|}{(1+w^2)^2}\le1,
+\qquad
+\frac{|w|}{(1+w^2)^2}\le1,
+\qquad
+2|\varepsilon|\le1+\varepsilon^2,
+\]
+in \eqref{eq:explicit-R-eps-first}; this gives
+\(|\partial_yR_\varepsilon|\le3(1+\varepsilon^2)\).  For the second
+derivative, \eqref{eq:explicit-R-eps-second} and the elementary bounds
+\[
+\frac{|w|^3}{(1+w^2)^3}\le1,\quad
+\frac{|w|}{(1+w^2)^3}\le1,\quad
+\frac{w^2}{(1+w^2)^3}\le1,\quad
+\frac{1}{(1+w^2)^3}\le1
+\]
+give
+\[
+|\partial_y^2R_\varepsilon(y)|
+\le16|\varepsilon|+8\varepsilon^2
+\le16(1+\varepsilon^2).
+\]
+\end{proof}
+
+\begin{proposition}[Local Doob--Bregman domain closure for the KL quotient]%
+\label{prop:kl-local-doob-bregman-domain-closure}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
 centred second moment
 \[
@@ -111,9 +207,13 @@ Let $[a,b]\subset(0,\infty)$, set
 \[
 h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t,
 \]
-and let $\chi\in C_c^\infty(\RR)$ satisfy $\chi\equiv1$ on $[-1,1]$,
+and let $\chi\in C_c^\infty(\RR)$ satisfy \(0\le\chi\le1\),
+\(\chi\equiv1\) on $[-1,1]$,
 $\chi_R(x)=\chi(x/R)$.  Then the following facts hold uniformly for
-$t\in[a,b]$.
+$t\in[a,b]$.  In particular, this single proposition supplies the compact
+quotient range, the two-variable Bregman majorant, the cutoff convergence
+from the noncompact tests \(1+\log u_t\) and \(u_t\), and the unlocalized
+derivative formula used in Theorem~\ref{thm:poisson-kl-doob-tail}.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
 \item The quotient range is the explicit compact interval
 \begin{equation}\label{eq:kl-domain-compact-range}
@@ -229,7 +329,7 @@ last display.  Thus, for a.e. \(t\in[a,b]\),
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
 \end{equation}
 \end{enumerate}
-\end{domainproposition}
+\end{proposition}
 
 \begin{proof}
 Write $\Delta=\gamma-\bar\gamma$, $y=(x-\bar\gamma)/t$, and
@@ -240,18 +340,9 @@ Then
 \[
 u_t(x)=\int_{\RR}R_{\Delta/t}(y)\dd\nu(\gamma).
 \]
-The inequalities
+Lemma~\ref{lem:explicit-poisson-quotient-kernel-calculus} gives
 \[
-1+y^2\le2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2
-\]
-and
-\[
-1+(y-\varepsilon)^2
-\le2(1+\varepsilon^2)(1+y^2)
-\]
-give
-\[
-R_\varepsilon(y)\le2+2\varepsilon^2,
+R_\varepsilon(y)\le2(1+\varepsilon^2),
 \qquad
 R_\varepsilon(y)\ge\frac{1}{2(1+\varepsilon^2)}.
 \]
@@ -264,23 +355,20 @@ uses Jensen's inequality for the convex function $s\mapsto(1+s)^{-1}$:
 \frac{1}{1+\mu_2/t^2}.
 \]
 
-For the derivative bound, differentiating the quotient kernel gives
-\[
-\partial_yR_\varepsilon(y)
-=
-\frac{2y}{1+(y-\varepsilon)^2}
--\frac{2(1+y^2)(y-\varepsilon)}
-       {(1+(y-\varepsilon)^2)^2}.
-\]
-Putting $w=y-\varepsilon$ and using $|y|\le |w|+|\varepsilon|$ and
-$1+y^2\le2(1+w^2)+2\varepsilon^2$ yields
+For the derivative bound, the explicit first derivative estimate
+\eqref{eq:explicit-R-eps-derivative-bounds} gives
 \[
 |\partial_yR_\varepsilon(y)|
-\le 5(1+\varepsilon^2)
+\le3(1+\varepsilon^2)
 \qquad(y,\varepsilon\in\RR).
 \]
 Since $\partial_x=t^{-1}\partial_y$ and $t\ge a$, integration against~$\nu$
-proves \eqref{eq:kl-domain-derivative-bound}.
+proves the slightly sharper bound
+\[
+\|\partial_xu_t\|_\infty
+\le\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right),
+\]
+which implies \eqref{eq:kl-domain-derivative-bound}.
 
 On the compact interval $J_{a,\nu}$ the function
 $s\mapsto1+\log s$ is Lipschitz, so the integral form of the Bregman remainder
@@ -333,48 +421,98 @@ last display.  The two summands are equal for every finite $R$ after
 interchanging $x$ and~$y$, so the symmetric cutoff is precisely
 \eqref{eq:kl-main-cutoff-bregman-limit}.  The absolute convergence already
 proved in \eqref{eq:kl-domain-absolute-bregman} justifies removing the cutoff
-for each fixed \(t\).  More precisely, \eqref{eq:kl-domain-pointwise-bregman-majorant}
-dominates the first Bregman term by
+for each fixed \(t\), and the cutoff convergence is explicit.  For the first
+Bregman term set
 \[
-C_{a,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
+K_t(x,y):=
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\qquad(x\ne y).
 \]
-and the second term is identical after interchanging \(x\) and \(y\).  This
-majorant is integrable on \([a,b]\times\RR^2\), since
+On the near diagonal \(|x-y|<1\),
+\eqref{eq:kl-domain-bregman-majorant} gives
+\begin{equation}\label{eq:kl-cutoff-near-majorant}
+0\le K_t(x,y)\le C_{a,\nu}g_t(x)\mathbf{1}_{\{|x-y|<1\}},
+\end{equation}
+and on the far field \(|x-y|\ge1\),
+\eqref{eq:kl-domain-pointwise-bregman-majorant} gives
+\begin{equation}\label{eq:kl-cutoff-far-majorant}
+0\le K_t(x,y)\le
+C_{a,\nu}g_t(x)|x-y|^{-2}\mathbf{1}_{\{|x-y|\ge1\}} .
+\end{equation}
+Both majorants are in \(L^1([a,b]\times\RR^2)\), since
 \[
-\int_a^b\int_{\RR}g_t(x)\dd x\dd t=b-a,
-\qquad
-\int_{\RR}\min\{1,|z|^{-2}\}\dd z<\infty .
+\int_a^b\int_{\RR}g_t(x)\dd x\dd t=b-a,\qquad
+\int_{|z|<1}\dd z=2,\qquad
+\int_{|z|\ge1}|z|^{-2}\dd z=2 .
 \]
-Dominated convergence therefore removes the symmetric cutoff in
+The second Bregman term has the same two estimates after interchanging
+\(x\) and \(y\).  Because \(0\le\chi_R\le1\) and
+\(\chi_R(x)\chi_R(y)\to1\) pointwise, dominated convergence with the
+near-diagonal majorant \eqref{eq:kl-cutoff-near-majorant} and the far-field
+majorant \eqref{eq:kl-cutoff-far-majorant} removes the symmetric cutoff in
 \(L^1([a,b])\).  After interchanging variables in the second symmetric term,
 the limit is exactly the one-sided expression
 \eqref{eq:kl-domain-unlocalized-dissipation}, which proves
 \eqref{eq:kl-domain-final-derivative}.
 
-The localized statement is the same computation before the last cutoff is
-removed.  For each \(R\), the compactly supported factor \(\chi_R\) puts
-the differentiated entropy pairing in the cutoff domain, so
-\(H_R\in AC([a,b])\).  Applying the preceding bilinear calculation with the
-outer cutoff retained gives
+It remains to record the localized identity with its error term.  For each
+\(R\), the compactly supported factor \(\chi_R\) puts the differentiated
+entropy pairing in the cutoff domain, so \(H_R\in AC([a,b])\) and, for a.e.
+\(t\),
 \[
--H_R'(t)=
-\frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
+H_R'(t)=
+\int_{\RR}\chi_R(x)(1+\log u_t(x))Lh_t(x)\dd x
+-\int_{\RR}\chi_R(x)u_t(x)Lg_t(x)\dd x .
+\]
+Since \(1+\log u_t\) and \(u_t\) are bounded on
+\(\RR\times[a,b]\),
+\[
+|H_R'(t)-H'(t)|
+\le C_{a,\nu}\int_{\RR}|1-\chi_R(x)|
+\bigl(|Lh_t(x)|+|Lg_t(x)|\bigr)\dd x .
+\]
+The right side tends to zero in \(L^1([a,b])\).  Indeed,
+\(Lh_t=\partial_th_t\), \(Lg_t=\partial_tg_t\), and Fubini gives, for
+\(p_t=h_t\) or \(p_t=g_t\),
+\[
+\int_a^b\int_{\RR}|1-\chi_R(x)|\,|Lp_t(x)|\dd x\dd t\longrightarrow0,
+\]
+because \(|1-\chi_R(x)|\to0\) pointwise and the dominating functions are
+\(\int_a^b|\partial_tP_t(x-\gamma)|\dd t\) integrated against the finite
+measure \(\nu\), or the corresponding point mass at \(\bar\gamma\); their
+total \(x\)-integral is bounded by
+\((b-a)\sup_{a\le t\le b}\|\partial_tP_t\|_1<\infty\).
+
+Define \(e_R(t)\) by moving the symmetric cutoff integral to the other side
+of \eqref{eq:kl-domain-localized-entropy-balance}.  Then
+\[
+\begin{split}
+\|e_R\|_{L^1([a,b])}
+&\le
+\|H_R'-H'\|_{L^1([a,b])}
+\\
+&\quad+
+\left\|
+\frac{1}{2\pi}\iint_{\RR^2}(1-\chi_R(x)\chi_R(y))
+\mathcal K_t(x,y)\,\dd x\dd y
+\right\|_{L^1_t},
+\end{split}
+\]
+where
+\[
+\mathcal K_t(x,y):=
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))
       +g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y+e_R(t)
+{(x-y)^2}.
 \]
-for a.e. \(t\in[a,b]\).  The error \(e_R\) consists of the tails produced by
-inserting the second cutoff in the symmetric Cauchy form.  The near-diagonal
-part is controlled by the uniform Lipschitz bound for \(u_t\), and the
-far-field part is controlled by \(g_t(x)\min\{1,|x-y|^{-2}\}\).  These are
-the same \(L^1([a,b]\times\RR^2)\) majorants used in
-\eqref{eq:kl-domain-absolute-bregman}; since \(\chi_R\to1\) pointwise and
-the tail regions escape to infinity, dominated convergence gives
-\(\|e_R\|_{L^1([a,b])}\to0\).  Dominated convergence also passes the
-displayed cutoff integral to the unlocalized integral in \(L^1([a,b])\),
-again reducing the symmetric expression to
-\eqref{eq:kl-domain-unlocalized-dissipation} by exchanging \(x\) and \(y\) in
-one of the two equal terms.
+The first term has just been shown to vanish.  The second term vanishes by
+dominated convergence using exactly the near-diagonal majorant
+\eqref{eq:kl-cutoff-near-majorant} and the far-field majorant
+\eqref{eq:kl-cutoff-far-majorant}, together with the identical estimates for
+the \(g_t(y)\Lambda(u_t(y),u_t(x))\) term after exchanging variables.  This
+proves \(\|e_R\|_{L^1([a,b])}\to0\), the localized balance
+\eqref{eq:kl-domain-localized-entropy-balance}, and the \(L^1\) convergence
+of the displayed cutoff integral to the unlocalized dissipation.
 \end{proof}
 
 \begin{theorem}[KL Doob tail identity with cutoff domain closure]%
@@ -401,8 +539,8 @@ Then the quotient satisfies the Doob equation
 \end{equation}
 The principal values are understood in the Cauchy-generator normalization
 fixed above.
-The local closure proposition above gives the exact local domain of the
-quotient calculus.  In particular, for every compact time interval
+Proposition~\ref{prop:kl-local-doob-bregman-domain-closure} gives the exact
+local domain of the quotient calculus.  In particular, for every compact time interval
 $[a,b]\subset(0,\infty)$ there are
 constants
 \[
@@ -446,7 +584,8 @@ where
 \]
 The double integral in
 \eqref{eq:relative-entropy-dissipation-rate} is the cutoff limit
-\eqref{eq:kl-main-cutoff-bregman-limit}.  The local closure proposition
+\eqref{eq:kl-main-cutoff-bregman-limit}.
+Proposition~\ref{prop:kl-local-doob-bregman-domain-closure}
 supplies the compact quotient range, the \(\partial_xu_t\) bound, the
 two-variable Bregman majorant, and the cutoff convergence used in
 \eqref{eq:kl-main-cutoff-derivative}--\eqref{eq:kl-main-cutoff-bregman-limit};
@@ -487,7 +626,8 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \begin{proof}
 The quotient equation is Theorem~\ref{thm:poisson-doob-phi-entropy}
 specialized to the Poisson pair $(h_t,g_t)$; its kernel form is
-\eqref{eq:doob-generator-kernel}.  The local closure proposition above gives
+\eqref{eq:doob-generator-kernel}.
+Proposition~\ref{prop:kl-local-doob-bregman-domain-closure} gives
 \eqref{eq:kl-main-compact-quotient-range}, absolute continuity on every
 compact time interval, the derivative cutoff formula
 \eqref{eq:kl-main-cutoff-derivative}, and the Bregman cutoff limit
