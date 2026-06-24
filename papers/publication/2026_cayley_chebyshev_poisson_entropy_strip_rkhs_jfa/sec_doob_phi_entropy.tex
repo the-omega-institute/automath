@@ -302,7 +302,9 @@ Then the quotient satisfies the Doob equation
 \end{equation}
 The principal values are understood in the Cauchy-generator normalization
 fixed above.
-For every compact time interval $[a,b]\subset(0,\infty)$ there are
+The preceding domain lemma gives the exact local domain of the quotient
+calculus.  In particular, for every compact time interval
+$[a,b]\subset(0,\infty)$ there are
 constants
 \[
 0<m_{a,\nu}\le M_{a,\nu}<\infty,\qquad L_{a,b,\nu}<\infty ,
@@ -345,16 +347,39 @@ where
 \]
 The double integral in
 \eqref{eq:relative-entropy-dissipation-rate} is the cutoff limit
-\eqref{eq:kl-main-cutoff-bregman-limit}, established by the domain-closure
-calculus in Appendix~\ref{app:doob-bregman-domain}; the identity is not a
-formal product-rule computation on a nonlocal operator.
+\eqref{eq:kl-main-cutoff-bregman-limit}.  The domain lemma above supplies
+the compact quotient range, the \(\partial_xu_t\) bound, the absolute
+Bregman majorant, and the cutoff convergence used in
+\eqref{eq:kl-main-cutoff-derivative}--\eqref{eq:kl-main-cutoff-bregman-limit};
+the identity is not a formal product-rule computation on a nonlocal operator.
 Consequently, if
 \[
 I_\nu(s):=
 \frac{1}{\pi}\iint_{\RR^2}
 \frac{g_s(x)\Lambda(u_s(x),u_s(y))}{(x-y)^2}\dd x\dd y,
 \]
-then, for every $t>0$,
+then \(I_\nu\) is a measurable finite function on \((0,\infty)\) and
+\(I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\).  More precisely, for every
+\(0<a<b<\infty\),
+\begin{equation}\label{eq:relative-entropy-local-integrability}
+I_\nu\in L^1(a,b),
+\end{equation}
+and, with
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t),
+\]
+\begin{equation}\label{eq:relative-entropy-finite-interval-balance}
+D_{\mathrm{KL}}(h_b\|g_b)-D_{\mathrm{KL}}(h_a\|g_a)
+=-\int_a^b I_\nu(s)\dd s .
+\end{equation}
+Since Lemma~\ref{lem:poisson-second-moment-kl-decay} gives
+\(D_{\mathrm{KL}}(h_T\|g_T)\to0\), this finite-interval identity implies
+for every \(t>0\)
+\begin{equation}\label{eq:relative-entropy-tail-integrability}
+\int_t^\infty I_\nu(s)\dd s
+=D_{\mathrm{KL}}(h_t\|g_t)<\infty .
+\end{equation}
+Equivalently,
 \begin{equation}\label{eq:relative-entropy-integrated-dissipation}
 D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \end{equation}
@@ -372,11 +397,39 @@ lemma is arbitrary, these a.e. identities hold locally on $(0,\infty)$, and
 \eqref{eq:kl-domain-absolute-bregman} removes the cutoff in
 \eqref{eq:relative-entropy-dissipation-rate}.
 
-Finally
-Lemma~\ref{lem:poisson-second-moment-kl-decay} gives
-$D_{\mathrm{KL}}(h_T\|g_T)\to0$.  Integrating the a.e. identity over $[t,T]$
-and letting $T\to\infty$ gives
-\eqref{eq:relative-entropy-integrated-dissipation}.
+It remains to record the measure-theoretic content of the tail identity.
+For \(s>0\) the functions \(g_s\) and \(u_s\) are continuous in the spatial
+variables and continuous in \(s\), while \(\Lambda\) is continuous on
+\((0,\infty)^2\).  Hence the nonnegative integrand defining \(I_\nu(s)\) is
+Borel on \((0,\infty)\times\RR^2\).  Tonelli's theorem gives measurability of
+\(s\mapsto I_\nu(s)\), and the local absolute-convergence estimate
+\eqref{eq:kl-domain-absolute-bregman} makes it finite for every \(s>0\).
+Set
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t).
+\]
+On each compact interval \([a,b]\subset(0,\infty)\), the preceding paragraph
+gives \(H\in AC([a,b])\) and
+\[
+H'(s)=-I_\nu(s)
+\]
+for a.e. \(s\in[a,b]\).  Therefore \(I_\nu\in L^1([a,b])\) and the
+fundamental theorem for absolutely continuous functions gives
+\[
+H(b)-H(a)=\int_a^b H'(s)\dd s
+=-\int_a^b I_\nu(s)\dd s .
+\]
+Thus \(I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\).  Taking \(a=t\) and
+\(b=T\) gives
+\[
+\int_t^T I_\nu(s)\dd s=H(t)-H(T).
+\]
+Lemma~\ref{lem:poisson-second-moment-kl-decay} gives \(H(T)\to0\) as
+\(T\to\infty\).  Since \(I_\nu\ge0\), monotone convergence yields
+\[
+\int_t^\infty I_\nu(s)\dd s=H(t),
+\]
+which is \eqref{eq:relative-entropy-integrated-dissipation}.
 \end{proof}
 
 Combining \eqref{eq:relative-entropy-integrated-dissipation} with

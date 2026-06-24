@@ -63,6 +63,98 @@ $\ell p+2(r-\ell)$ is minimized at $\ell=1$ and $r=2$ when $p>2$ and
 $r\ge2$, giving the envelope \eqref{eq:density-remainder-product-envelope}.
 \end{proof}
 
+\begin{lemma}[Exact-moment density truncation with little-oh remainder]%
+\label{lem:exact-moment-density-truncation}
+Let \(L\ge2\), and let \(\nu\) be a probability measure on \(\RR\) with
+mean \(\bar\gamma\) and finite centred \(L\)th absolute moment.  Put
+\(\Delta=\gamma-\bar\gamma\) and
+\[
+\delta_t(\bar\gamma+ty)
+:=
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}-1 .
+\]
+Define
+\[
+\rho_{L,t}(y):=
+\int_{\RR}\left(
+R_{\Delta/t}(y)-\sum_{n=0}^{L}u_n(y)(\Delta/t)^n
+\right)\dd\nu(\gamma).
+\]
+Then, with \(\mu_n=\int\Delta^n\dd\nu(\gamma)\) for \(0\le n\le L\),
+\begin{equation}\label{eq:exact-moment-density-truncation}
+\delta_t(\bar\gamma+ty)
+=
+\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_{\infty}+\|\rho_{L,t}\|_{L^1(\omega)}=o(t^{-L}).
+\end{equation}
+Moreover \(\sup_y|\delta_t(\bar\gamma+ty)|=O(t^{-2})\).
+\end{lemma}
+
+\begin{proof}
+The quotient normalization is the one used throughout this section:
+\[
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}
+=\int_{\RR}R_{\Delta/t}(y)\dd\nu(\gamma).
+\]
+We prove the \(L^\infty\) and \(L^1(\omega)\) remainders by the same split.
+On \(|\Delta|\le t\), Proposition~\ref{prop:cayley-mode-remainder} gives the
+exact finite Taylor remainder
+\[
+R_{\Delta/t}(y)-\sum_{n=0}^{L}u_n(y)(\Delta/t)^n
+=\left(\frac{\Delta}{t}\right)^{L+1}v_L(y,\Delta/t).
+\]
+With \(V_L=\|v_L\|_\infty<\infty\), uniformly in \(y\),
+\[
+\left|
+\int_{|\Delta|\le t}\left(
+R_{\Delta/t}(y)-\sum_{n=0}^{L}u_n(y)(\Delta/t)^n
+\right)\dd\nu
+\right|
+\le
+V_Lt^{-L}\EE\!\left[
+|\Delta|^L\frac{|\Delta|}{t}\mathbf1_{\{|\Delta|\le t\}}
+\right].
+\]
+The expectation tends to zero by dominated convergence, since the multiplier
+\((|\Delta|/t)\mathbf1_{\{|\Delta|\le t\}}\) is bounded by \(1\) and converges
+pointwise to \(0\).
+
+On \(|\Delta|>t\), put \(\varepsilon=\Delta/t\).  The large-\(\varepsilon\)
+estimate used in Theorem~\ref{thm:finite-moment-density-remainder} gives,
+for \(L\ge2\),
+\[
+R_{\varepsilon}(y)\le 3(1+\varepsilon^2)\le6|\varepsilon|^L,
+\qquad
+\left|\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le (L+1)B_L|\varepsilon|^L
+\]
+whenever \(|\varepsilon|>1\), where
+\(B_L=\max_{0\le n\le L}\|u_n\|_\infty\).  Hence, uniformly in \(y\),
+\[
+\left|
+\int_{|\Delta|>t}\left(
+R_{\Delta/t}(y)-\sum_{n=0}^{L}u_n(y)(\Delta/t)^n
+\right)\dd\nu
+\right|
+\le
+\{6+(L+1)B_L\}t^{-L}\EE[
+|\Delta|^L\mathbf1_{\{|\Delta|>t\}}],
+\]
+which is \(o(t^{-L})\).  Combining the two pieces gives
+\(\|\rho_{L,t}\|_\infty=o(t^{-L})\).  Since \(\omega\) is a probability
+measure and the same pointwise majorants dominate the \(y\)-integral, the
+identical estimates give \(\|\rho_{L,t}\|_{L^1(\omega)}=o(t^{-L})\).
+
+The constant term cancels and the \(n=1\) term integrates to zero because
+\(\mu_1=0\), giving \eqref{eq:exact-moment-density-truncation}.
+
+Finally, Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} with \(N=1\)
+applies because \(L\ge2\) implies \(\EE|\Delta|^2<\infty\).  Since
+\(\mu_1=0\), it gives
+\(\sup_y|\delta_t(\bar\gamma+ty)|=O(t^{-2})\).
+\end{proof}
+
 \begin{proposition}[Finite-moment density-to-entropy transfer]%
 \label{prop:density-to-entropy-descent}%
 \label{lem:density-to-entropy-domination}%
@@ -392,11 +484,11 @@ $\overline C_{N,\eta,M}^{\rm Tay}$.  All constants are therefore controlled
 by the displayed finite formulas in $N,\eta,M$ alone.
 \end{proof}
 
-\begin{theorem}[Sharp retained-order finite-moment Poisson entropy expansion]%
+\begin{theorem}[Sharp positive-margin finite-moment Poisson entropy expansion]%
 \label{thm:poisson-kl-even-orders}
-Let $N\ge 2$, let $0<\eta\le1$, and let $\nu$ be a probability measure
-on~$\RR$ with mean $\bar\gamma$ and finite centred $(2N-2+\eta)$th absolute
-moment.  Set
+Let $N\ge2$, let \(0<\eta\le1\), and let $\nu$ be a probability measure
+on~$\RR$ with mean $\bar\gamma$ and finite centred
+\((2N-2+\eta)\)th absolute moment.  Set
 \[
 \Delta:=\gamma-\bar\gamma,
 \qquad
@@ -419,22 +511,30 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-This is the sharp retained-order hypothesis for the coefficient expansion:
-the theorem assumes only a finite centred \((2N-2+\eta)\)th absolute moment,
-not a finite \((2N+\eta)\)th moment.  Every entropy monomial contributing to
-\(A_{2N}^{\rm form}\) has at least two density factors and therefore involves
-centred moments only through order \(2N-2\).  The additional \(\eta\) controls
-the density tail and makes the discarded entropy terms \(o(t^{-2N})\).  The
-stronger finite \((2N+\eta)\)-moment hypothesis is used only for the
-convenient explicit fixed-law and moment-ball remainder ledgers recorded in
+Every entropy monomial contributing to \(A_{2N}^{\rm form}\) has at least
+two density factors and therefore involves centred moments only through
+order \(2N-2\).  The positive tail margin \(\eta\) is what makes the omitted
+density modes harmless in the entropy product hierarchy:
+with \(L=2N-2\), the density remainder is
+\(O(t^{-(L+\eta)})\), while every entropy term containing it also contains at
+least one retained density factor of size \(O(t^{-2})\).  Thus the first
+discarded density-remainder contribution is \(O(t^{-(2N+\eta)})\), and no
+coefficient through order \(t^{-2N}\) is changed.  The quantitative version
+of this statement is
+Corollary~\ref{cor:optimized-retained-order-entropy-bridge}; the stronger
+\((2N+\eta)\)-moment ledgers in
 Corollaries~\ref{cor:finite-moment-entropy-constant-ledger} and
-\ref{cor:uniform-moment-ball-entropy-remainder}.
+\ref{cor:uniform-moment-ball-entropy-remainder} are convenient sufficient
+forms.
 Equivalently, no odd power occurs in the expansion through order~$t^{-2N}$.
 \end{theorem}
 
 
 \begin{proof}
-Apply Theorem~\ref{thm:finite-moment-density-remainder} with \(L=2N-2\).
+Put
+\[
+L:=2N-2,\qquad p:=L+\eta=2N-2+\eta .
+\]
 We first fix the normalization in the rescaled variable.  For
 $x=\bar\gamma+ty$,
 \[
@@ -457,20 +557,18 @@ This is the same normalization as
 \eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}; no reciprocal
 kernel or extra factor of \(1+y^2\) is being introduced.
 
-The finite-density theorem is precisely the integrated finite Cayley
-expansion of \(R_{\varepsilon}\) at \(\varepsilon=\Delta/t\), with the
-centred \((2N-2+\eta)\)-moment controlling the large-\(|\Delta|\) tail.  The
-constant \(n=0\) term cancels in \(R_{\Delta/t}-1\), and the \(n=1\) term
-integrates to zero because \(\mu_1=\int\Delta\,\dd\nu=0\).  Thus the
-finite-mode part begins at order \(t^{-2}\).  Put
+Apply Theorem~\ref{thm:finite-moment-density-remainder} with this value of
+\(L\).  The constant \(n=0\) term cancels in \(R_{\Delta/t}-1\), and the
+\(n=1\) term integrates to zero because \(\mu_1=\int\Delta\,\dd\nu=0\).
+Thus the finite-mode part begins at order \(t^{-2}\).  Put
 \[
-d_t(y):=\sum_{n=2}^{2N-2}\mu_n\,u_n(y)t^{-n}.
+d_t(y):=\sum_{n=2}^{L}\mu_n\,u_n(y)t^{-n}.
 \]
-Theorem~\ref{thm:finite-moment-density-remainder} gives
+The density remainder estimate gives
 \[
 \widetilde\delta_t(y)=d_t(y)+\rho_t(y),\qquad
-\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}
-=O(t^{-(2N-2+\eta)})
+\|\rho_t\|_{\infty}+\|\rho_t\|_{L^1(\omega)}
+\le C_{\nu,L,\eta}t^{-p},
 \]
 and \(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  The finite sum \(d_t\) is
 also \(O(t^{-2})\) uniformly.
@@ -503,8 +601,7 @@ The Taylor tail contributes \(O(t^{-2N-2})\) after integration.  For each
 \(L^1(\omega)\) and all other factors in \(L^\infty\), gives
 \[
 \|\widetilde\delta_t^r-d_t^r\|_{L^1(\omega)}
-=O(t^{-2}t^{-(2N-2+\eta)})+O(t^{-2(2N-2+\eta)})
-=O(t^{-(2N+\eta)}).
+=O(t^{-p})O(t^{-2})=O(t^{-(2N+\eta)}).
 \]
 Thus all density-remainder products are \(o(t^{-2N})\).  Expanding the
 finite powers of \(d_t\) gives
@@ -642,7 +739,7 @@ together with the closed mode bound from
 Lemma~\ref{lem:closed-cayley-mode-constant-envelopes}.
 \end{proof}
 
-\begin{corollary}[Optimized retained-order entropy bridge]%
+\begin{corollary}[Positive-margin retained-order entropy bridge]%
 \label{cor:optimized-retained-order-entropy-bridge}
 Let \(N\ge2\), let \(0<\eta\le1\), and let \(\nu\) be a probability
 measure on \(\RR\) with mean \(\bar\gamma\) and finite centred
@@ -710,9 +807,32 @@ D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
 P_N^{\rm opt}+Q_N^{\rm opt}+2(S^{\rm opt})^{N+1}
 \bigr\}t^{-(2N+\eta)}
 \end{equation}
-for \(t\ge T^{\rm opt}\).  In particular, \(N=4\) and \(\eta=1\) give an
-\(O_\nu(t^{-9})\) eighth-order entropy expansion under the sharp finite
-centred seventh absolute moment hypothesis.
+  for \(t\ge T^{\rm opt}\).
+
+  In the specialization \(N=4\), \(\eta=1\), assume
+  \(\EE|\Delta|^7<\infty\), set \(L=6\), and write
+  \[
+  B_{\nu,8}:=
+  P_4^{\rm opt}(C_\rho^{\rm opt},M_A^{\rm opt})
+  +Q_4^{\rm opt}(\mu,u)
+  +2(S^{\rm opt})^5,
+  \qquad
+  T_{\nu,8}:=T^{\rm opt}.
+  \]
+  Then, for every \(t\ge T_{\nu,8}\),
+  \begin{equation}\label{eq:optimized-n4-seventh-envelope}
+  \left|
+  D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+  -A_4(\nu)t^{-4}-A_6(\nu)t^{-6}-A_8(\nu)t^{-8}
+  \right|
+  \le B_{\nu,8}t^{-9}.
+  \end{equation}
+  Thus the order-nine constant used below is not an additional analytic
+  input: it is exactly the optimized envelope obtained from the three explicit
+  quantities \(P_4^{\rm opt}\), \(Q_4^{\rm opt}\), and \(S^{\rm opt}\) above.
+  The fixed-law coefficient identity and this rate are the \(N=4,\eta=1\)
+  specialization of Theorem~\ref{thm:poisson-kl-even-orders} and the
+  positive-margin envelope above.
 \end{corollary}
 
 \begin{proof}
@@ -814,9 +934,9 @@ individual law, so only the remainder constants and threshold are made uniform.
 \label{thm:finite-moment-entropy-remainder}
 Let \(N\ge2\), let \(0<\eta\le1\), and let \(\nu\) be a probability measure
 on \(\RR\) with mean \(\bar\gamma\) and finite centred
-\((2N+\eta)\)th absolute moment.  This is the convenient sufficient
-remainder version of Theorem~\ref{thm:poisson-kl-even-orders}, not the sharp
-retained-coefficient moment hypothesis.  Put
+\((2N+\eta)\)th absolute moment.  This is the convenient stronger-moment
+remainder version of Theorem~\ref{thm:poisson-kl-even-orders}: it keeps the
+same retained coefficients and records a simple fixed-law power ledger.  Put
 \[
 \mathcal R_N(t;\nu)
 :=D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))

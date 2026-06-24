@@ -161,6 +161,52 @@ $f-g$ vanishes on all integers exactly when $f-g\perp\mathcal H_K(\ZZ)$.
 This is equivalent to $\Pi_{\ZZ}f=\Pi_{\ZZ}g$.
 \end{proof}
 
+\begin{observationprofilelemma}
+Let $\nu$ be a probability measure on $\RR$ with finite mean $\bar\gamma$,
+let \(t>0\), and set
+\[
+\Delta:=\gamma-\bar\gamma,\qquad
+\mu_t:=\operatorname{Law}(\Delta/t).
+\]
+Define the finite signed measure
+\[
+\lambda_t(\dd s):=s\,\mu_t(\dd s).
+\]
+For the Poisson observation channel \(F_t\) of
+Theorem~\ref{thm:poisson-observation-lattice-sampling}, with Fourier
+convention \(\widehat\lambda_t(\xi)=\int_{\RR}e^{-\ii s\xi}\dd\lambda_t(s)\),
+\begin{equation}\label{eq:observation-profile-fourier-inversion}
+q_{F_t}(\xi)=\pi\widehat{\lambda_t}(\xi).
+\end{equation}
+Consequently \(q_{F_t}\) determines \(\lambda_t\) by Fourier uniqueness for
+finite signed measures.  It determines \(\mu_t\) on \(\RR\setminus\{0\}\) by
+\begin{equation}\label{eq:observation-profile-offzero-recovery}
+\mu_t(B)=\int_B s^{-1}\dd\lambda_t(s),
+\qquad 0\notin\overline B,
+\end{equation}
+and then determines the remaining atom by
+\begin{equation}\label{eq:observation-profile-zero-atom-recovery}
+\mu_t(\{0\})=1-\mu_t(\RR\setminus\{0\}).
+\end{equation}
+\end{observationprofilelemma}
+
+\begin{proof}
+The identity follows from
+\[
+\frac{\pi}{t}\int_{\RR}\Delta e^{-\ii\Delta\xi/t}\dd\nu(\gamma)
+=\pi\int_{\RR}s e^{-\ii s\xi}\dd\mu_t(s).
+\]
+The right-hand side is \(\pi\widehat{\lambda_t}(\xi)\).  Since
+\(\lambda_t\) has finite total variation, its Fourier transform determines
+\(\lambda_t\) uniquely.  Formula
+\eqref{eq:observation-profile-offzero-recovery} is division of the signed
+measure \(\lambda_t=s\mu_t\) by the bounded continuous function \(s\) on sets
+bounded away from zero.  A monotone exhaustion of \(\RR\setminus\{0\}\)
+recovers the whole off-zero restriction of \(\mu_t\), and
+\eqref{eq:observation-profile-zero-atom-recovery} uses
+\(\mu_t(\RR)=1\).
+\end{proof}
+
 \begin{theorem}[Integer-orbit projection of Poisson observation channels]%
 \label{thm:poisson-observation-lattice-sampling}
 \label{prop:poisson-law-lattice-periodicity}
@@ -169,6 +215,8 @@ let $t>0$, and let $\mathfrak d_t$ be the centred fluctuation profile from
 Theorem~\ref{thm:poisson-channel-rkhs}.  Put
 \[
 \Delta:=\gamma-\bar\gamma,
+\qquad
+\mu_t:=\operatorname{Law}(\Delta/t),
 \qquad
 F_t:=\mathcal U\mathfrak d_t\in\mathcal H_K .
 \]
@@ -180,8 +228,9 @@ F_t(n)
 K\!\left(n,\frac{\Delta}{t}\right)\dd\nu(\gamma),
 \qquad n\in\ZZ .
 \end{equation}
-They recover $\Pi_{\ZZ}F_t$ and only $\Pi_{\ZZ}F_t$ among ambient
-$\mathcal H_K$ data.  More explicitly, if
+These integer samples recover $\Pi_{\ZZ}F_t$ and only $\Pi_{\ZZ}F_t$ among
+ambient $\mathcal H_K$ data; without an additional periodicity condition they
+do not determine the full channel $F_t$.  More explicitly, if
 \[
 q_{F_t}(\xi):=e^{2|\xi|}\widehat F_t(\xi),
 \]
@@ -193,13 +242,17 @@ q_{F_t}(\xi)
 \qquad\text{for a.e. }\xi,
 \end{equation}
 and the projection is obtained by inserting $\widehat F_t$ into
-\eqref{eq:integer-orbit-projection-symbol}.  The samples recover the full
-channel $F_t$ exactly if and only if
+\eqref{eq:integer-orbit-projection-symbol}.  If the full profile $q_{F_t}$
+is known, the observation-profile inversion lemma recovers the full scaled
+centred law \(\mu_t\).  This law recovery is a separate Fourier-inversion
+step and is not a consequence of integer samples alone.
+
+The integer samples recover the full channel $F_t$ exactly if and only if
 \[
 F_t\in\mathcal H_K(\ZZ)
 \]
-if and only if $Q_t$ is $2\pi$-periodic.  This is equivalent to the law-side
-lattice condition
+if and only if \(q_{F_t}=Q_t\) is $2\pi$-periodic.  Equivalently,
+\(\mu_t\) is supported on \(\ZZ\), i.e. the law-side lattice condition
 \begin{equation}\label{eq:poisson-law-side-lattice-support}
 \nu\bigl(\{\gamma\in\RR:\gamma-\bar\gamma\in t\ZZ\}\bigr)=1 .
 \end{equation}
@@ -241,8 +294,9 @@ $2\pi$-periodic representative.  The representative $Q_t$ is continuous by
 dominated convergence and the finite first moment hypothesis, so a.e.
 periodicity is the same as everywhere periodicity.
 
-It remains to translate the periodicity into the law-side condition.  Let
-$\mu$ be the law of $\Delta/t$ and set $\lambda(\dd s):=s\,\mu(\dd s)$.
+It remains to translate full-channel recovery into the law-side lattice
+condition.  Let $\mu$ be the law of $\Delta/t$ and set
+$\lambda(\dd s):=s\,\mu(\dd s)$.
 The periodicity of $Q_t$ is equivalent to
 \[
 \widehat\lambda(\xi+2\pi)=\widehat\lambda(\xi)
