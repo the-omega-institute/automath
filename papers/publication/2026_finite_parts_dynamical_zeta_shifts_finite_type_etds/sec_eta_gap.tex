@@ -390,13 +390,17 @@ computational formulas
     \]
     has no solution.
   \item The Perron-circle certificate returns \(\mathsf{Pass}\).  This
-    certificate computes \(\chi_{\widetilde A}\), removes the distinguished factor
+    certificate is stated first in the integral skew-product model.  It
+    computes the integer polynomial
+    \(\chi_{\widetilde A}(t)\in\ZZ[t]\), removes the distinguished factor
     \(t-\lambda\), isolates the finitely many remaining algebraic roots in
-    disjoint rational boxes, and verifies by exact algebraic comparison that
+    disjoint rational boxes in the splitting field of
+    \(\chi_{\widetilde A}\), and verifies by exact algebraic comparison that
     every remaining root has modulus strictly smaller than \(\lambda\).  If
-    one of these comparisons fails, the certificate returns \(\mathsf{Fail}\) and the
-    failed root box identifies a non-trivial boundary block through the
-    Peter--Weyl decomposition.
+    one of these comparisons fails, the certificate returns
+    \(\mathsf{Fail}\).  A block-level audit may then locate the failed root
+    inside a non-trivial Peter--Weyl block, but this localization is not part
+    of the primary pass certificate.
   \end{enumerate}
   Consequently the Perron-point assumptions in
   \Cref{thm:class-mertens-explicit,thm:class-euler-product-mertens} are
@@ -442,17 +446,31 @@ computational formulas
   attained. Therefore the strict gap fails exactly when one of these
   finite systems has a solution.
 
-  Item~\rm(iv) is the same criterion written as a finite certificate.
-  The matrices are finite, hence \(\chi_{\widetilde A}\) and the quotient
-  \(q=\chi_{\widetilde A}/(t-\lambda)\) are finite algebraic data.  A finite
-  root-isolation record for \(q\) consists of disjoint rational boxes, each
-  carrying its root multiplicity, together with exact sign comparisons for
-  \(|\alpha|^2<\lambda^2\).  Such comparisons are finite algebraic
-  comparisons.  Therefore the certificate returns \(\mathsf{Pass}\) exactly when item
-  \rm(ii) holds.  If it returns \(\mathsf{Fail}\), item \rm(ii) fails; by the
-  already proved equivalence with \rm(i) and \rm(iii), the failed peripheral
-  root lies in a non-trivial Peter--Weyl block and is represented by a
-  boundary line field.
+  Item~\rm(iv) is the same criterion written as a finite certificate in the
+  integer skew-product model.  The matrix \(\widetilde A\) has entries in
+  \(\ZZ_{\ge0}\), hence \(\chi_{\widetilde A}\in\ZZ[t]\).  The Perron root
+  \(\lambda\) is the simple Perron root of the base primitive matrix \(A\);
+  exact comparison may be made in the number field
+  \(\QQ(\lambda,\alpha)\), where \(\alpha\) is the root being tested, or
+  equivalently by a square-free factor/root-isolation record for
+  \(\chi_{\widetilde A}(t)/(t-\lambda)\).  Such a record consists of
+  isolating rational boxes, their multiplicities, and exact sign
+  comparisons for
+  \[
+    \lambda^2-\alpha\overline{\alpha}>0 .
+  \]
+  This is a finite algebraic comparison; no numerical choice of a
+  representation model enters.  Therefore the certificate returns
+  \(\mathsf{Pass}\) exactly when item~\rm(ii) holds.  If it returns
+  \(\mathsf{Fail}\), item~\rm(ii) fails; by the already proved equivalence
+  with \rm(i) and \rm(iii), some non-trivial channel has a boundary line
+  field.  If one wants to identify the failed channel explicitly, one may
+  refine the certificate by computing the Peter--Weyl blocks over a
+  cyclotomic field containing the representation matrices, factoring the
+  block characteristic polynomials there, and checking the same root
+  inclusion and rank/eigenspace tests exactly.  This optional refinement is
+  a localization of the integral skew-product certificate, not a replacement
+  for it.
 
   The final assertion is a substitution of this certificate into the
   hypotheses of
@@ -466,6 +484,44 @@ computational formulas
   the tests fail, the relevant replacement is not another strict endpoint
   value but the Perron-boundary renormalization package with its finite
   algebraic multiplicity and branch data.
+\end{proof}
+
+\begin{lemma}[Exact block models for optional localization]
+  \label{lem:eta-gap-exact-block-models}
+  The strict-gap certificate of
+  \Cref{prop:eta-gap-finite-state-certificate} is independent of any chosen
+  matrix model for the irreducible representations.  If a computation uses
+  Peter--Weyl blocks rather than the integer skew-product matrix, the exact
+  algebraic model is fixed as follows.  Let \(e_G\) be the exponent of \(G\).
+  Every finite-group representation may be realized over the cyclotomic field
+  \(K=\QQ(\zeta_{e_G})\).  Choose matrices
+  \(\pi(g)\in\operatorname{GL}_{d_\pi}(K)\) for all \(g\in G\), form
+  \(A_\pi\) over \(K\), and compare eigenvalues after a specified embedding
+  \(K\hookrightarrow\CC\).  Peripheral membership, algebraic multiplicity,
+  and semisimplicity are then finite exact tests:
+  factor \(\det(tI-A_\pi)\) over \(K\), isolate the roots of each factor under
+  the chosen embedding, compare \(|\alpha|\) with \(\lambda\) in the compositum
+  \(K(\lambda,\alpha,\overline\alpha)\), and, when needed, compute
+  \(\dim_K\ker(A_\pi-\alpha I)\) by exact rank over \(K(\alpha)\).  Equivalent
+  nonunitary matrices may be used for these determinant and rank tests, while
+  the line-field domination argument itself is read in a unitarized equivalent
+  Hilbert model.
+\end{lemma}
+
+\begin{proof}
+  The field-of-definition statement is the standard finite-group fact that
+  the values and matrix entries of a complete set of irreducible
+  representations may be taken in a cyclotomic field of exponent dividing
+  \(e_G\).  Passing from one equivalent model to another conjugates every
+  block \(A_\pi\), so characteristic polynomials, algebraic multiplicities,
+  eigenspace dimensions, and rank tests are unchanged after extension of
+  scalars.  Exact root isolation and the sign of
+  \(\lambda^2-\alpha\overline\alpha\) are algebraic questions in the displayed
+  compositum.  Finally, because \(G\) is finite, every complex representation
+  is equivalent to a unitary one by averaging an inner product over \(G\).
+  Thus nonunitary equivalent matrices are legitimate for exact determinant
+  computations, whereas the norm-equality proof in
+  \Cref{thm:eta-gap-rigidity} uses the corresponding unitary model.
 \end{proof}
 
 \begin{proposition}[Perron-point separation for the strict-gap specialization]

@@ -24,9 +24,9 @@ strict exclusion of non-trivial boundary channels:
 \Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion}
 record the peripheral sets \(\Gamma_\pi\), multiplicities
 \(m_{\pi,\zeta}\), logarithmic ranks \(s_\pi\), the exceptional lists
-\(\Lambda_\perp\) and \(\Lambda_\partial\), reduced finite-part branches,
-and, when one wants it, the finite semisimplicity certificate for the
-twisted boundary blocks.
+\(\Lambda_\perp\) and \(\Lambda_\partial\), the Abel branch families
+\(\Log_{\pi,\zeta}\) and \(\Log_{\partial,\pi}\), and, when one wants it,
+the finite semisimplicity certificate for the twisted boundary blocks.
 These data form the renormalized tuple
 \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\) in
 \eqref{eq:perron-boundary-data-tuple}.  The clean inequality
@@ -452,8 +452,9 @@ The following objects form the preliminary finite-state support data used
   \eqref{eq:renormalized-finite-data-tuple}, which additionally records
   \(\Gamma_\pi\), \(m_{\pi,\zeta}\), \(s_\pi\),
   \(\Lambda_\perp\), \(\Lambda_\partial\), optional finite semisimplicity
-  checks, reduced determinant finite-part branch tags, and scalar
-  normalization.  Consequently the preliminary data determine the formal
+  checks, and reduced determinant finite-part branches.  Scalar/product
+  logarithms are the ordinary real logarithm only after positivity has been
+  proved.  Consequently the preliminary data determine the formal
   open-disc traces and primitive coefficients, while the full renormalized
   datum determines the boundary quantities
   \(\delta_C\), \(M_C^{\mathrm{ren}}\),
@@ -494,9 +495,10 @@ The following objects form the preliminary finite-state support data used
   the resulting finite traces, labels, characters, and determinant
   polynomials.  Boundary evaluations at \(z=\lambda^{-1}\), however, are
   not determined by determinant polynomials alone as branch-free data:
-  they require the peripheral lists with algebraic multiplicities, reduced
-  finite-part branch tags, and scalar normalization recorded in
-  \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\).  With those
+  they require the peripheral lists with algebraic multiplicities and the
+  reduced Abel/interior branch convention recorded in
+  \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\).  Product constants
+  then use the real logarithm on \(\mathbb R_{>0}\) after positivity.  With those
   additions, \Cref{prop:finite-data-main-chain-closure} determines
   the renormalized boundary constants.  Imposing \(\eta<\lambda\) simply
   collapses this datum to the ordinary strict-gap endpoint chart.
@@ -665,8 +667,8 @@ matrix \(M\). & The Greek letter \(\rho(\cdot)\) is never an irreducible
 representation.\\
 \(\varrho,\pi,\kappa\in\Irr(G)\) & Irreducible unitary representations of
 the finite group \(G\). & We reserve \(\varrho,\pi,\kappa\) for
-representation labels.  The symbol \(\pi_{n,\varrho}\) below is a primitive
-coefficient, not a representation named \(\pi\).\\
+representation labels; primitive Peter--Weyl coefficients use the separate
+symbol \(c_{n,\varrho}\).\\
 \(A_\varrho\) & The twisted transition block
 \((A_\varrho)_{ij}=\sum_{e:i\to j}\varrho(\tau(e))\). & Its traces are
 periodic fixed-point sums in the \(\varrho\)-channel; its determinant
@@ -675,11 +677,12 @@ polynomial is \(P_\varrho(z)=\det(I-zA_\varrho)\).\\
 \(\chi_\varrho^\ast(C)=\overline{\chi_\varrho(C)}=\chi_\varrho(C^{-1})\). &
 Forward class expansions use \(\chi_\varrho^\ast(C)\); inverse Fourier
 recovery pairs with the unconjugated \(\chi_\pi(C)\).\\
-\(\psi^m\phi\), \(a_{\varrho,\pi}^{(m)}\) & Adams operation
+\(\psi^m\phi\), \(a_{\varrho,\pi}^{(m)}\), \(\operatorname{Pow}_G\) & Adams operation
 \((\psi^m\phi)(g)=\phi(g^m)\), and
 \(\psi^m\chi_\varrho=\sum_\pi a_{\varrho,\pi}^{(m)}\chi_\pi\). & The
 finite input is the character table together with the conjugacy-class power
-maps \(C\mapsto C^m\).\\
+maps \(\operatorname{Pow}_G=\{C\mapsto C^a:0\le a<\exp(G)\}\); all \(m\)
+are reduced modulo \(\exp(G)\).\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -709,13 +712,13 @@ after passing from fixed points to these classes.\\
 \(\sum_{\gamma\in\cP}\phi(\tau(\gamma))z^{|\gamma|}\). & Adams--M\"obius
 inversion recovers it from the periodic logarithms:
 \(\Pi_\phi(z)=\sum_{m\ge1}\mu(m)\mathcal L_{\psi^m\phi}(z^m)/m\).\\
-\(\pi_{n,\varrho}(A,\tau)\) & Coefficient of \(\Pi_{\chi_\varrho}\):
+\(c_{n,\varrho}(A,\tau)\) & Coefficient of \(\Pi_{\chi_\varrho}\):
 \(\sum_{|\gamma|=n}\chi_\varrho(\tau(\gamma))\). & Its coefficient formula is
 \(\frac1n\sum_{m\mid n}\mu(m)\sum_\pi a_{\varrho,\pi}^{(m)}
 \Tr(A_\pi^{n/m})\).\\
 \(p_{n,C}\) & Number of primitive length-\(n\) orbits whose label lies in
 the conjugacy class \(C\). & It is recovered from the primitive channels by
-\((|C|/|G|)\sum_\varrho\chi_\varrho^\ast(C)\pi_{n,\varrho}\).\\
+\((|C|/|G|)\sum_\varrho\chi_\varrho^\ast(C)c_{n,\varrho}\).\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -738,12 +741,21 @@ non-oscillatory logarithmic term.\\
 \(D_{\partial}^{\mathrm{ren}}\) or
 \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\) & Branch-normalized
 Perron-boundary input tuple. & It consists of \(G\), the power maps,
-\(\{P_\pi\}\), \(\lambda\), the peripheral factorizations, \(\Gamma_\pi\),
-\(m_{\pi,\zeta}\), \(s_\pi\), \(\Log_0\), and \(n_\partial\).  It is larger
-than the determinant polynomials alone.\\
-\(n_\partial\) & Positive scalar/product logarithm normalization. & This
-fixes the real logarithm branch used when the product constants are
-exponentiated.\\
+\(\{P_\pi\}\), \(\lambda\), \(\Gamma_\pi\), \(m_{\pi,\zeta}\), and the branch
+families \(\{\Log_{\pi,\zeta}\}\), \(\{\Log_{\partial,\pi}\}\).  The factor
+\(Q_{\partial,\pi}\) is defined by
+\(P_\pi(t/\lambda)=\prod_{\zeta\in\Gamma_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
+Q_{\partial,\pi}(t)\), \(Q_{\partial,\pi}(1)\ne0\).  The power-map component means the finite table
+\(\operatorname{Pow}_G\) modulo \(\exp(G)\), not an infinite list.  It is
+larger than the determinant polynomials alone.\\
+\(\Log_{\pi,\zeta}\), \(\Log_{\partial,\pi}\) & Boundary logarithm branches. &
+For \(0\le t<1\), \(\Log_{\pi,\zeta}(1-t\zeta)\) is the unique continuous
+branch with value \(0\) at \(t=0\).  The value
+\(\Log_{\partial,\pi}Q_{\partial,\pi}(1)\) is obtained by continuing
+\(\Log Q_{\partial,\pi}(t)\), normalized at \(0\), along the same segment.
+For \(k\ge2\), use the interior power-series value
+\(\Log_0P_\pi(\lambda^{-k})^{-1}\).  Product constants use the real logarithm
+on \(\mathbb R_{>0}\) after positivity, not a separate boundary datum.\\
 \(B_{k,\pi}^{\mathrm{ren}}\) & Derived determinant-logarithm layer. & For
 \(k=1\), subtract \(s_\pi\log(1-t)\) before taking the Abel finite part; for
 \(k\ge2\), use \(\Log_0\det(I-\lambda^{-k}A_\pi)^{-1}\).\\

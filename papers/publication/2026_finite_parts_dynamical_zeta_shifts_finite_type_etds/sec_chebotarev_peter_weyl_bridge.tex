@@ -7,9 +7,9 @@ from the twisted determinants.
 For \(\varrho\in\Irr(G)\), define
 \begin{equation}\label{eq:primitive-peter-weyl-series}
   \Pi_\varrho(z):=\Pi_{\chi_\varrho}(z)
-  =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)z^n,
+  =\sum_{n\ge 1}c_{n,\varrho}(A,\tau)z^n,
   \qquad
-  \pi_{n,\varrho}(A,\tau)
+  c_{n,\varrho}(A,\tau)
   :=\sum_{\substack{\gamma\in\cP\\ |\gamma|=n}}
     \chi_\varrho(\tau(\gamma)).
 \end{equation}
@@ -88,34 +88,46 @@ on conjugacy classes, or equivalently the Adams operations on \(R(G)\).
   \(\exp D_\pi=P_\pi^{-1}\). The finite determinant data are the
   polynomials \(P_\pi\), or equivalently the matrices \(A_\pi\); the
   logarithmic branches are these normalized germs derived from them.
-  The open-disc primitive coefficients below are determined by
+  Let \(e_G=\exp(G)\).  The open-disc primitive coefficients below are
+  determined by the finite table
   \[
-    (G,\mathrm{Pow}_m,\{P_\pi(z)=\det(I-zA_\pi)\}_\pi).
+    (G,\mathrm{Pow}_G,\{P_\pi(z)=\det(I-zA_\pi)\}_\pi),
+    \qquad
+    \mathrm{Pow}_G:=\{C\mapsto C^a:0\le a<e_G\}.
   \]
   At Perron-boundary points the determinant polynomials alone are not the
   data.  The branch-sensitive renormalized boundary tuple is a finite recipe:
   \begin{equation}\label{eq:perron-boundary-data-tuple}
     \begin{aligned}
-    D_{\partial}^{\mathrm{ren}}
+    D_{\partial}^{\mathrm{ren}}(A,\tau;G)
     \quad\text{or}\quad
     \mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)
     :=
-    \Bigl(&G,\mathrm{Pow}_m,\{P_\pi(z)\}_{\pi\in\Irr(G)},\lambda,\\
-      &\{P_\pi(t/\lambda)=
-        \prod_{\zeta\in\Gamma_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
-        Q_{\partial,\pi}(t)\}_\pi,\\
-      &\{\Gamma_\pi\}_\pi,\{m_{\pi,\zeta}\}_{\pi,\zeta},\{s_\pi\}_\pi,
-        \Log_0,n_\partial\Bigr).
+    \Bigl(&G,\mathrm{Pow}_G,\{P_\pi(z)\}_{\pi\in\Irr(G)},\lambda,\\
+      &\{\Gamma_\pi\}_\pi,\{m_{\pi,\zeta}\}_{\pi,\zeta},
+        \{\Log_{\pi,\zeta}\}_{\pi,\zeta},
+        \{\Log_{\partial,\pi}\}_{\pi}\Bigr).
     \end{aligned}
   \end{equation}
-  where \(\mathrm{Pow}_m\) records the class-power maps used in the Adams
-  coefficients, the displayed factorisations identify the peripheral factors
-  and the finite \(Q_{\partial,\pi}\), \(\Log_0\) is the determinant-logarithm
-  germ normalized at \(0\) and continued by the stated Abel/interior rule, and
-  \(n_\partial\) records the scalar/product logarithm normalization.  The
-  reduced values \(B_{k,\pi}^{\mathrm{ren}}\) are then computed from this
-  tuple by \eqref{eq:perron-boundary-renormalized-b-data}; they are not
-  independent boundary entries.  The auxiliary quantities
+  where \(\mathrm{Pow}_G\) records the class-power maps modulo \(e_G\) used in
+  all Adams coefficients.  For each \(\pi\), the factorization
+  \[
+    P_\pi(t/\lambda)=
+    \prod_{\zeta\in\Gamma_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
+      Q_{\partial,\pi}(t),
+    \qquad Q_{\partial,\pi}(1)\ne0,
+  \]
+  defines the finite factor \(Q_{\partial,\pi}\).  The branches
+  \(\Log_{\pi,\zeta}(1-t\zeta)\) are the unique continuous branches on
+  \(0\le t<1\) with value \(0\) at \(t=0\), and
+  \(\Log_{\partial,\pi}Q_{\partial,\pi}(1)\) is obtained by continuing
+  \(\Log Q_{\partial,\pi}(t)\), normalized at \(0\), along that segment.  For
+  \(k\ge2\) the determinant layer is the ordinary power-series branch
+  \(\Log_0P_\pi(\lambda^{-k})^{-1}\).  Product constants use the real logarithm on
+  \(\mathbb R_{>0}\) after the positivity lemma, not an additional tuple
+  entry.  The reduced values \(B_{k,\pi}^{\mathrm{ren}}\) are then computed
+  from this tuple by \eqref{eq:perron-boundary-renormalized-b-data}; they are
+  not independent boundary entries.  The auxiliary quantities
   \(\Lambda_\perp\), \(\Lambda_\partial\), and the optional semisimplicity
   certificate \(\mathfrak s_\partial\) are finite verification data for
   estimates and Jordan structure; they are not substitutes for the boundary
@@ -201,7 +213,7 @@ enters Main Theorem~A.
   Theorem~A.  It is not a separate structural theorem about the extension.
   For every \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
   \begin{equation}\label{eq:primitive-peter-weyl-trace}
-    \pi_{n,\varrho}(A,\tau)
+    c_{n,\varrho}(A,\tau)
     =
     \frac{1}{n}\sum_{m\mid n}\mu(m)
       \sum_{\pi\in\Irr(G)}
@@ -230,9 +242,9 @@ enters Main Theorem~A.
   precisely, the finite character table of \(G\), the Adams coefficients
   \(a_{\varrho,\pi}^{(m)}\), and the twisted trace sequences
   \(\{\Tr(A_\pi^k):k\ge1,\ \pi\in\Irr(G)\}\) determine every primitive
-  Peter--Weyl coefficient \(\pi_{n,\varrho}(A,\tau)\). Equivalently, for
+  Peter--Weyl coefficient \(c_{n,\varrho}(A,\tau)\). Equivalently, for
   every \(\varrho\in\Irr(G)\), the series \(\Pi_\varrho(z)
-  =\sum_{n\ge1}\pi_{n,\varrho}(A,\tau)z^n\) is determined by the finite
+  =\sum_{n\ge1}c_{n,\varrho}(A,\tau)z^n\) is determined by the finite
   twisted determinant family \(\{\det(I-zA_\pi):\pi\in\Irr(G)\}\) and the
   power-map action on conjugacy classes.
 \end{corollary}
@@ -247,7 +259,7 @@ enters Main Theorem~A.
   equivalently by the coefficients of the finite polynomial
   \(\det(I-zA_\pi)\). Substitution in
   \eqref{eq:primitive-peter-weyl-trace} determines each coefficient
-  \(\pi_{n,\varrho}(A,\tau)\), and therefore determines the whole series
+  \(c_{n,\varrho}(A,\tau)\), and therefore determines the whole series
   \(\Pi_\varrho(z)\). The determinant-series formulation is the same
   statement before coefficient extraction, namely
   \Cref{cor:primitive-peter-weyl-determinant}.
@@ -287,7 +299,7 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,c_{n,\varrho}(A,\tau).
   \end{equation}
 \end{proposition}
 
@@ -336,11 +348,11 @@ but it does not add a new independent main theorem.
     =
     \frac{|C|}{|G|}
       \sum_{\varrho\in\Irr(G)}
-        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,c_{n,\varrho}(A,\tau).
   \]
   Substituting the primitive Peter--Weyl trace formula
   \eqref{eq:primitive-peter-weyl-trace} for each channel
-  \(\pi_{n,\varrho}(A,\tau)\) gives
+  \(c_{n,\varrho}(A,\tau)\) gives
   \eqref{eq:class-artin-mobius-trace}.
 
   The Adams coefficients are determined by the finite character table and
@@ -402,7 +414,7 @@ the trivial Perron-channel contribution.
     \frac{|C|}{|G|}p_n(A)
     +\frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}
-        \chi_\varrho^\ast(C)\,\pi_{n,\varrho}(A,\tau).
+        \chi_\varrho^\ast(C)\,c_{n,\varrho}(A,\tau).
   \]
 \end{lemma}
 
@@ -410,14 +422,14 @@ the trivial Perron-channel contribution.
   Separate the trivial representation from
   \eqref{eq:class-primitive-coefficients}. Since
   \(\chi_{\mathbf 1}^\ast(C)=1\) and
-  \(\pi_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
+  \(c_{n,\mathbf 1}(A,\tau)=p_n(A)\), the displayed identity follows.
 \end{proof}
 
 \begin{lemma}[Non-trivial Peter--Weyl channel bound]
   \label{lem:nontrivial-peter-weyl-channel-bound}
   For every non-trivial \(\varrho\in\Irr(G)\) and every \(n\ge 1\),
   \[
-    \abs{\pi_{n,\varrho}(A,\tau)}
+    \abs{c_{n,\varrho}(A,\tau)}
     \le
     \frac{|V|\,\dim\varrho\,\eta^n}{n}
     +\frac{|V|\,\dim\varrho}{n}
@@ -426,7 +438,7 @@ the trivial Perron-channel contribution.
   \]
   and therefore
   \[
-    \abs{\pi_{n,\varrho}(A,\tau)}
+    \abs{c_{n,\varrho}(A,\tau)}
     \le
     \frac{|V|\,\dim\varrho\,\eta^n}{n}
     +\frac{|V|\,\dim\varrho}{n}
@@ -435,7 +447,7 @@ the trivial Perron-channel contribution.
   \]
   In particular,
   \[
-    \pi_{n,\varrho}(A,\tau)
+    c_{n,\varrho}(A,\tau)
     =O\!\left(\frac{\max\{\eta^n,\lambda^{n/2}\}}{n}\right).
   \]
 \end{lemma}
@@ -472,7 +484,7 @@ the trivial Perron-channel contribution.
 
   By \Cref{thm:primitive-peter-weyl-trace},
   \[
-    \pi_{n,\varrho}(A,\tau)
+    c_{n,\varrho}(A,\tau)
     =
     \frac{1}{n}\Tr(A_\varrho^n)
     +\frac{1}{n}
@@ -514,7 +526,7 @@ the trivial Perron-channel contribution.
   \(\varrho\in\Irr(G)\), the series
   \[
     \Pi_\varrho(\lambda^{-1})
-    =\sum_{n\ge 1}\pi_{n,\varrho}(A,\tau)\lambda^{-n}
+    =\sum_{n\ge 1}c_{n,\varrho}(A,\tau)\lambda^{-n}
   \]
   converges absolutely.
 \end{lemma}
@@ -526,7 +538,7 @@ the trivial Perron-channel contribution.
   \]
   By \Cref{lem:nontrivial-peter-weyl-channel-bound},
   \[
-    \abs{\pi_{n,\varrho}(A,\tau)}\lambda^{-n}
+    \abs{c_{n,\varrho}(A,\tau)}\lambda^{-n}
     =O\!\left(\frac{\vartheta^n}{n}\right),
   \]
   and the series \(\sum_{n\ge 1}\vartheta^n/n\) converges.
