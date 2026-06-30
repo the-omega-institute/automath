@@ -14,10 +14,14 @@ positives; see `../SUBSTRATE_NOTES.md`).
 | `sample200_final.json` | sample_200 | **160 / 200** | **CURRENT** (fixed solver) |
 | `hard2_final.json` / `hard2_recheck.json` | hard2 | **65 / 200** | **CURRENT** (fixed solver) |
 
+Broken intermediate official-runner snapshots are preserved for audit under
+`superseded/`, so the non-authoritative byte evidence remains on disk with explicit
+labels.
+
 Only the authoritative `*_final` (and `hard2_recheck`) snapshots are committed here. The
-intermediate broken-version snapshots (the earlier arithmetic-op attempt: sample_200 156
-without `PYTHONDONTWRITEBYTECODE`, hard2 23 with `DISALLOWED_DECLARATIONS`, hard1 17) are
-**not** committed — the full regression-and-fix story is written up in `../SUBSTRATE_NOTES.md`.
+intermediate broken-version snapshots are kept under `superseded/` with reason-coded
+filenames but are **not** authoritative — the full regression-and-fix story is written up
+in `../SUBSTRATE_NOTES.md`.
 
 ## How they were produced
 

@@ -24,6 +24,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import coefficient_analysis
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESULTS_PATH = SCRIPT_DIR / "linear_magma_results.json"
@@ -76,6 +78,7 @@ BASELINE_PRIMES_LE_200 = [
     197,
     199,
 ]
+SELECTED_PRIME_ALLOWLIST = frozenset({2, 3, 5, 7, 11, 13, 17, 19, 89, 233})
 
 
 Term = tuple[Any, ...]
@@ -288,7 +291,34 @@ def run_gh_content(path: str) -> tuple[str | None, str | None]:
 
 
 def load_equations() -> tuple[list[Equation], dict[str, Any]]:
+    try:
+        local = [
+            parse_equation(item.number, item.text.replace("<>", "D"))
+            for item in coefficient_analysis.generate_equations()
+        ]
+        if len(local) == 4694:
+            return local, {
+                "source": "local:coefficient_analysis.generate_equations",
+                "synthetic_fallback": False,
+                "attempts": [
+                    {
+                        "path": "coefficient_analysis.generate_equations",
+                        "ok": True,
+                        "equation_count": len(local),
+                    }
+                ],
+            }
+    except Exception as exc:  # noqa: BLE001
+        local_error = str(exc)
+    else:
+        local_error = "local generator did not return 4694 equations"
+
     attempts = []
+    attempts.append({
+        "path": "coefficient_analysis.generate_equations",
+        "ok": False,
+        "error": local_error,
+    })
     for path in (
         "data/equations.txt",
         "equational_theories/Equations.lean",
@@ -477,14 +507,52 @@ def equation_catalog(equations: list[Equation]) -> list[dict[str, Any]]:
     ]
 
 
+def parse_selected_primes(value: str) -> list[int]:
+    primes: list[int] = []
+    for item in value.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        try:
+            prime = int(item)
+        except ValueError as exc:
+            raise argparse.ArgumentTypeError(
+                f"selected prime {item!r} is not an integer"
+            ) from exc
+        if prime not in SELECTED_PRIME_ALLOWLIST:
+            allowed = ",".join(str(item) for item in sorted(SELECTED_PRIME_ALLOWLIST))
+            raise argparse.ArgumentTypeError(
+                f"selected prime {prime} is not allowlisted; allowed primes: {allowed}"
+            )
+        primes.append(prime)
+    if not primes:
+        raise argparse.ArgumentTypeError("selected primes must not be empty")
+    return primes
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        "--out",
+        dest="output",
+        type=Path,
+        default=RESULTS_PATH,
+        help="JSON file to write; defaults beside this script.",
+    )
+    parser.add_argument("--selected-primes", type=parse_selected_primes, default=[])
+    parser.add_argument("--max-vars-selected", type=int, default=2)
     parser.add_argument("--max-vars-p13", type=int, default=None)
     parser.add_argument("--max-vars-p89", type=int, default=4)
     parser.add_argument("--max-vars-p233", type=int, default=2)
     parser.add_argument("--max-vars-baseline", type=int, default=2)
     parser.add_argument("--pattern-detail-limit", type=int, default=20)
     parser.add_argument("--novel-pair-limit", type=int, default=5000)
+    parser.add_argument(
+        "--baseline-primes",
+        default=",".join(str(item) for item in BASELINE_PRIMES_LE_200),
+        help="comma-separated baseline primes for anti-implication comparison",
+    )
     parser.add_argument("--bruteforce-sanity-max-vars", type=int, default=2)
     parser.add_argument("--bruteforce-sanity-coefficients", type=int, default=20)
     return parser.parse_args()
@@ -492,22 +560,34 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    SCRIPT_DIR.mkdir(parents=True, exist_ok=True)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     equations, source_info = load_equations()
     print(f"Loaded {len(equations)} equations from {source_info['source']}")
     if source_info["synthetic_fallback"]:
         print("GitHub equation fetch failed; using synthetic standard magma laws.")
 
     run_started = time.strftime("%Y-%m-%dT%H:%M:%S%z")
-    prime_configs = {
-        13: args.max_vars_p13,
-        89: args.max_vars_p89,
-        233: args.max_vars_p233,
-    }
+    selected_prime_set = set(args.selected_primes)
+    prime_configs: dict[int, int | None] = {}
+    for p in args.selected_primes:
+        prime_configs[p] = args.max_vars_selected
+    for p, max_vars in (
+        (13, args.max_vars_p13),
+        (89, args.max_vars_p89),
+        (233, args.max_vars_p233),
+    ):
+        if p in selected_prime_set:
+            continue
+        if max_vars == 0:
+            prime_configs.pop(p, None)
+            continue
+        prime_configs.setdefault(p, max_vars)
 
     selected_prime_results: dict[str, Any] = {}
     selected_patterns: dict[int, set[tuple[int, ...]]] = {}
     for p, max_vars in prime_configs.items():
+        if max_vars == 0:
+            continue
         result, patterns = run_prime(p, equations, max_vars, args.pattern_detail_limit)
         selected_prime_results[str(p)] = result
         selected_patterns[p] = patterns
@@ -522,17 +602,21 @@ def main() -> int:
     baseline_patterns: dict[int, set[tuple[int, ...]]] = {}
     baseline_anti: set[tuple[int, int]] = set()
     baseline_start = time.perf_counter()
-    for p in BASELINE_PRIMES_LE_200:
-        result, patterns = run_prime(p, equations, args.max_vars_baseline, 0)
-        baseline_patterns[p] = patterns
-        baseline_anti.update(anti_implications_from_patterns(patterns, novelty_ids))
-        print(
-            f"baseline p={p}: {result['distinct_satisfaction_patterns']} patterns, "
-            f"{len(baseline_anti)} cumulative anti-implications"
-        )
+    baseline_primes = [int(item) for item in args.baseline_primes.split(",") if item.strip()]
+    if args.max_vars_baseline != 0:
+        for p in baseline_primes:
+            result, patterns = run_prime(p, equations, args.max_vars_baseline, 0)
+            baseline_patterns[p] = patterns
+            baseline_anti.update(anti_implications_from_patterns(patterns, novelty_ids))
+            print(
+                f"baseline p={p}: {result['distinct_satisfaction_patterns']} patterns, "
+                f"{len(baseline_anti)} cumulative anti-implications"
+            )
 
-    p233_patterns_for_novelty = selected_patterns[233]
-    if args.max_vars_p233 != args.max_vars_baseline:
+    p233_patterns_for_novelty = selected_patterns.get(233)
+    if args.max_vars_baseline == 0:
+        p233_patterns_for_novelty = set()
+    elif p233_patterns_for_novelty is None or args.max_vars_p233 != args.max_vars_baseline:
         _, p233_patterns_for_novelty = run_prime(233, equations, args.max_vars_baseline, 0)
     p233_anti = anti_implications_from_patterns(p233_patterns_for_novelty, novelty_ids)
     novel_pairs = sorted(p233_anti - baseline_anti)
@@ -567,7 +651,7 @@ def main() -> int:
         "equations": equation_catalog(equations),
         "selected_prime_results": selected_prime_results,
         "baseline": {
-            "primes": BASELINE_PRIMES_LE_200,
+            "primes": baseline_primes,
             "max_variables": args.max_vars_baseline,
             "equations_checked": len(novelty_equations),
             "distinct_patterns_by_prime": {
@@ -590,8 +674,8 @@ def main() -> int:
         "bruteforce_sanity": sanity,
     }
 
-    RESULTS_PATH.write_text(json.dumps(results, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(f"Wrote {RESULTS_PATH}")
+    args.output.write_text(json.dumps(results, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"Wrote {args.output}")
     print(
         "p=233 novelty: "
         f"{len(novel_pairs)} anti-implications not achieved by baseline primes <= 200 "
