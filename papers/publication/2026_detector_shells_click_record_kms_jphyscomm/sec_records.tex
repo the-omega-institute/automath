@@ -35,7 +35,8 @@ $\PP(A_n=i,H_{n+1}=Y\mid H_n=X)$, matrix products are read in
 chronological order, and a word $u=u_0\cdots u_{m-1}$ has
 $T_u=T_{u_0}\cdots T_{u_{m-1}}$ and stationary cylinder probability
 $\pi T_u\mathbf 1$. This is the convention used for every word
-probability below.
+probability below; no determinant, trace, or cancellation identity is used to
+define these sampled labelled kernels.
 Repeating this interval instrument with fresh independent copies of $(N,S)$ at each sample produces a time-homogeneous hidden Markov chain on $\{R,D\}$ with output-labelled kernels
 \begin{equation}\label{eq:t0-t1-main}
 T_0=
@@ -622,7 +623,24 @@ Since $T_1\mathbf 1=(1-p,a)^\top$, substitution gives
 \[
 g_k=(1-p)b\frac{p^k-c^k}{p-c}+ac^k .
 \]
-Using the closed forms for $a$ and $b$ reduces this expression to~\eqref{eq:gap-closed-main}. Full support is also visible directly from the kernel path: after a click the detector may remain refractory through $k$ zero-labelled intervals and then recover and click during the next one, an event with positive probability for all positive parameters.
+Using the closed forms
+\[
+b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma},
+\qquad
+a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}
+        {\kappa_{\mathrm r}-\Gamma}
+\]
+reduces this expression to~\eqref{eq:gap-closed-main}. Thus the gap law is the
+direct lower-triangular labelled-kernel calculation
+\[
+g_k=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
+        {\kappa_{\mathrm r}-\Gamma},
+\]
+with no determinant or cancellation identity entering the derivation. Full
+support is also visible directly from the kernel path: after a click the
+detector may remain refractory through $k$ zero-labelled intervals and then
+recover and click during the next one, an event with positive probability for
+all positive parameters.
 \end{proof}
 
 \begin{corollary}[Support of finite binary words]\label{cor:word-support-main}
@@ -1169,6 +1187,9 @@ a-\rho=-\frac{b(q-a)}{q+b}<0,
 \]
 hence every lag-$n$ covariance with $n\ge2$ has the sign of
 $-\lambda_{\mathrm{hid}}^{\,n-1}$.
+This is a conditional hidden-state calculation after the post-click reset to
+\(D\); it is not inferred from the finite-principal-minor bookkeeping of
+Block~III.
 
 For item~(iv), \Cref{lem:critical-rate-main} gives the unique positive zero
 $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ of $\lambda_{\mathrm{hid}}$ and the
@@ -1507,6 +1528,8 @@ In particular \(f(0)>0\), and the boundary-reset recovery record satisfies
 \(g^{(2)}(1)=a/\rho<1\), this is the
 precise sense in which the sampled renewal record has classical
 discrete-time antibunching/sub-Poisson count noise.
+The strict lower bound is the renewal-count identity
+\(F=\Var(G+1)/\EE(G+1)^2\) plus the full support of the gap law.
 This proposition is only the covariance-tail consequence of
 \Cref{thm:recovery-main}; it introduces no separate renewal spectral theorem
 and no detector-response or shell statement.  Classical renewal-noise examples
@@ -2522,7 +2545,9 @@ N(\widehat s_N-s')^\top\widehat\Sigma_{s,N}^{+}(\widehat s_N-s')
 should be read only as a conservative full-plane fallback in the singular case,
 not as the exact limiting confidence calibration and not as an assertion that
 unestimable directions have been regularized.
-The associated label-free root region is the image
+The associated label-free root region is the image of this rank-aware
+symmetric-coordinate region, not of a Moore--Penrose quadratic form with an
+unqualified fixed \(\chi^2_2\) cutoff:
 \begin{equation}\label{eq:unordered-root-confidence-region-main}
 \mathcal C_{\{p,c\},N}(1-\alpha)
 =
@@ -3600,7 +3625,8 @@ The observed-window indexing needed for these batched rewards is exactly
 \Cref{lem:all-cycle-lag-two-windows-main}: it proves
 \(R_N^{\mathrm{all}}\le J_N-2\), hence every terminal lag-two term in a batched
 cycle lies inside \(A_0,\ldots,A_{N-1}\).
-Then:
+The finite-record CLT estimates only this fixed-setting \(\gamma_2\); no
+scan-root or response-locus confidence set is proved in this theorem. Then:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item The resulting CLT estimates only the fixed-setting covariance
 \[
