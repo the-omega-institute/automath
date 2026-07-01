@@ -4,7 +4,7 @@ This section contains the four main theorem blocks of the article.  Propositions
 lemmas, corollaries, and remarks are retained where they make the proof
 self-contained, but they are not independent theorem families.  Blocks I and II
 are the sampled model/gap law and exact \(1\)-dependence diagnostics; Block III
-is the renewal-product finite-minor encoding and quotient inverse; Block
+is the renewal finite-principal-minor encoding and quotient inverse; Block
 IV is the fixed-record lag-two covariance CLT.  Conditional response-calibration
 statements are deferred to the appendix.
 
@@ -1430,9 +1430,8 @@ is genuinely remembered.
 
 \subsection{Spectral density and classical sub-Poisson count noise}
 
-The boundary-reset recovery renewal law has a second operational consequence,
-independent of the shell geometry but directly relevant to finite counting
-data. The statement in this subsection is a classical discrete-time
+The boundary-reset recovery renewal law has a second operational consequence
+directly relevant to finite counting data. The statement in this subsection is a classical discrete-time
 count-statistics statement for the already specified sampled renewal record,
 not a quantum-optical measurement theorem.  For this binary record we use the
 discrete normalized conditional intensity
@@ -1489,18 +1488,23 @@ and $f$ is strictly increasing on $[0,\pi]$. If
 \[
 N_N=\sum_{n=0}^{N-1}A_n,
 \]
-then
+and \(G\) denotes one zero-run gap from Lemma~\ref{lem:renewal-gap-main}, then
 \begin{equation}\label{eq:fano-main}
+0
+<
 F:=
 \lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
 =
 \frac{f(0)}{\rho}
 =
+\frac{\Var(G+1)}{\EE(G+1)^2}
+=
 1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}
 <1.
 \end{equation}
-Hence the boundary-reset recovery record is strictly sub-Poissonian throughout
-the parameter range.  Together with \(g^{(2)}(1)=a/\rho<1\), this is the
+In particular \(f(0)>0\), and the boundary-reset recovery record satisfies
+\(0<F<1\) throughout the parameter range. Together with
+\(g^{(2)}(1)=a/\rho<1\), this is the
 precise sense in which the sampled renewal record has classical
 discrete-time antibunching/sub-Poisson count noise.
 This proposition is only the covariance-tail consequence of
@@ -1563,10 +1567,67 @@ the weights $(1-n/N)\mathbf 1_{n<N}$ yields
 1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
 \]
 Evaluating~\eqref{eq:spectrum-main} at $\theta=0$ shows that this limit is
-$f(0)/\rho$. Since $f$ is the spectral density of the stationary covariance
-sequence, the Herglotz theorem gives $f(\theta)\ge0$ for every $\theta$, hence
-the limit is nonnegative. The denominator is positive and $a-\rho<0$, so the
-limit is strictly less than $1$.
+$f(0)/\rho$.
+
+It remains to record why the lower bound is strict, not merely
+nonnegative. Let \(G\) be one inter-click zero-run length from the stationary
+renewal law of Lemma~\ref{lem:renewal-gap-main}, and write \(L=G+1\) for the
+interarrival time between consecutive clicks.  Then \(\mu=\EE L=1/\rho\) and
+\(\sigma_L^2=\Var L<\infty\).  For the ordinary delayed renewal process with
+i.i.d. complete interarrival times \(L_1,L_2,\ldots\), put
+\(S_k=L_1+\cdots+L_k\) and
+\[
+M_N=\max\{k:S_k\le N\}.
+\]
+The renewal CLT gives
+\[
+\frac{S_k-k\mu}{\sqrt{k}}\Rightarrow N(0,\sigma_L^2),
+\]
+and the standard inversion of this CLT at time \(N\) gives
+\[
+\frac{M_N-N/\mu}{\sqrt{N}}
+\Rightarrow
+N\!\left(0,\frac{\sigma_L^2}{\mu^3}\right).
+\]
+Equivalently,
+\[
+\lim_{N\to\infty}\frac{\Var M_N}{N}
+=
+\frac{\sigma_L^2}{\mu^3}.
+\]
+The stationary renewal count \(N_N=\sum_{n=0}^{N-1}A_n\) differs from \(M_N\)
+only by the initial size-biased residual cycle and the terminal incomplete
+cycle.  These boundary contributions have uniformly bounded second moments
+because the present gap law has an exponential tail, so they do not change the
+variance per unit time.  Hence the stationary renewal-count variance identity
+is
+\[
+\lim_{N\to\infty}\frac{\Var N_N}{N}
+=
+\frac{\Var L}{(\EE L)^3}.
+\]
+Dividing by the stationary mean density
+\[
+\lim_{N\to\infty}\frac{\EE N_N}{N}=\rho=\frac1{\EE L}
+\]
+gives the Fano identity
+\[
+\lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
+=
+\frac{\Var L}{(\EE L)^2}
+=
+\frac{\Var(G+1)}{\EE(G+1)^2}.
+\]
+Here \(0<\EE L<\infty\), because the gap law is a finite exponential-tail law,
+and \(\Var L>0\), because Lemma~\ref{lem:renewal-gap-main} gives full support
+on \(\mathbb N_0\), so the interarrival law is not concentrated at one value.
+Thus \(F>0\). Since \(\rho>0\), this also gives \(f(0)=\rho F>0\). The
+denominator in the covariance expression is positive and \(a-\rho<0\), so
+\[
+F=1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}<1-\rho<1.
+\]
+Combining the renewal-count identity with the covariance calculation proves
+\(0<F<1\).
 \end{proof}
 
 Operationally, the memory-transition crossing can therefore be probed by more
@@ -1589,13 +1650,14 @@ the separate scan-design input stated later in
 bookkeeping are collected in Appendix~\ref{app:record-figure-reproduction}.
 
 
-\subsection{Block III: renewal-product finite-inclusion encoding}\label{subsec:boundary-reset-finite-inclusion-record}
+\subsection{Block III: renewal finite-principal-minor bookkeeping}\label{subsec:boundary-reset-finite-inclusion-record}
 
 The covariance and Fano formulas above are second-cumulant consequences of the
 renewal law.  The finite determinant formulas in this block add no separate
-stochastic-process theorem: they are a finite algebraic encoding of the
-stationary renewal product, a point-process inclusion probability determined by
-the Palm renewal masses \cite{CoxIsham1980,DaleyVereJones2003,Asmussen2003},
+stochastic-process theorem and no DPP theorem: they are finite algebraic
+bookkeeping for the stationary renewal product, a point-process inclusion
+probability determined by the Palm renewal masses
+\cite{CoxIsham1980,DaleyVereJones2003,Asmussen2003},
 \[
 \PP(\{i_1<\cdots<i_m\}\subset\varXi)
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
@@ -1603,11 +1665,12 @@ the Palm renewal masses \cite{CoxIsham1980,DaleyVereJones2003,Asmussen2003},
 The sampled boundary-reset model enters only by supplying the one-mode renewal
 mass \(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\).  Thus the strict-upper
 Toeplitz tail below is the renewal product written in matrix form, not an
-additional correlation-kernel input.
-The name used here and below is therefore renewal-product finite-minor
-encoding; any DPP terminology appears only as a boundary comparison.
+additional correlation-kernel input.  The name used here and below is therefore
+renewal finite-principal-minor bookkeeping; any DPP terminology appears only as
+a boundary comparison or in the explicit warning that this is not a DPP
+correlation kernel.
 
-\paragraph{Renewal-product finite-minor convention and non-uniqueness.}
+\paragraph{Renewal finite-principal-minor convention and non-uniqueness.}
 A displayed matrix \(K\) encodes a point process \(\varXi\subset\mathbb Z\) in
 this subsection only in the following finite sense:
 \[
@@ -1623,8 +1686,8 @@ matrix, then for every \(B\subset I\),
 =\det(K_B).
 \]
 Thus diagonal gauge changes preserve all finite inclusion probabilities.  In
-this paper \(K_\Gamma\) is only one chosen representative of the
-renewal-product finite-minor encoding.  It is not used as a Hermitian
+this paper \(K_\Gamma\) is only one chosen representative of the renewal
+finite-principal-minor bookkeeping.  It is not used as a Hermitian
 positive-contraction structure, Fredholm determinant, CAR/quasi-free state, or
 negative-association theorem.  The following references are used only as
 boundary comparisons with operator and nonsymmetric DPP theory
@@ -1632,14 +1695,18 @@ boundary comparisons with operator and nonsymmetric DPP theory
 
 \phantomsection\label{lem:principal_minor_gauge_nonuniqueness_main}
 The diagonal-conjugation calculation in the preceding paragraph is the only
-gauge fact used below: a renewal-product finite-minor encoding is nonunique and is not
-an operator kernel without additional consistency and positivity structure.
+gauge fact used below: renewal finite-principal-minor bookkeeping is nonunique
+and is not an operator kernel without additional consistency and positivity
+structure.
 
-\begin{proposition}[Renewal-product finite-minor encoding]\label{lem:renewal-principal-minor-main}\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_finite_inclusion}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
+\begin{proposition}[Renewal finite-principal-minor bookkeeping; not a DPP kernel]\label{lem:renewal-principal-minor-main}\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_finite_inclusion}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
 This is the single determinant statement used in the paper: its finite
 principal minors are exactly equivalent to the renewal product below, and all
 finite-window count and word laws are obtained from that product by finite
-inclusion--exclusion.
+inclusion--exclusion.  The matrices displayed in this proposition are finite
+principal-minor representatives only; the proposition does not assert a
+determinantal point process, an operator correlation kernel, or nonsymmetric-DPP
+admissibility.
 Let \(\varXi\subset\mathbb Z\) be a stationary renewal point process with
 intensity
 \[
@@ -1683,7 +1750,7 @@ u_n=\PP(A_n=1\mid A_0=1)
 =\rho-d\ell^{n-1}.
 \end{equation}
 Substitution in \eqref{eq:renewal-principal-minor-kernel-main} gives the
-non-Hermitian Toeplitz representative
+Toeplitz finite-principal-minor representative
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
@@ -1782,7 +1849,7 @@ inclusion--exclusion:
 \sum_{C\subset T}(-1)^{|C|}\mathbf 1_{\{S\cup C\subset\varXi\}}.
 \]
 All determinants in this proof are finite restrictions of the displayed
-non-Hermitian representative.
+Toeplitz finite-principal-minor representative.
 \end{proof}
 
 \noindent\fbox{%
@@ -1803,7 +1870,8 @@ or equivalently the nonnegativity of the corresponding principal-minor
 inclusion--exclusion transform.  Infinite-volume DPPs require further
 consistency and operator or nonsymmetric-kernel admissibility hypotheses.  The
 matrices \(K_\Gamma,K_c,K_c^H\) below are used only as algebraic
-finite-minor representatives of the renewal product already proved above.}}
+finite-principal-minor representatives of the renewal product already proved
+above.}}
 
 \paragraph{Equivalence to the renewal product.}
 \Cref{lem:renewal-principal-minor-main} is used only through the identity
@@ -1862,7 +1930,7 @@ convention for \(B=\varnothing\),
 \end{equation}
 At \(\Gamma_c\), the sampled boundary-reset record is therefore a full-support
 renewal process, exact \(1\)-dependent, represented by the two explicit
-finite-minor matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
+finite-principal-minor matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
 every finite visible order by its increasing zero-run hazard, and neither
 Bernoulli nor the Parry golden-mean law.  This corollary uses only the
 renewal-product equivalence in \Cref{lem:renewal-principal-minor-main}.
@@ -1905,7 +1973,7 @@ and Remark~\ref{cor:no-exact-main} excludes the Bernoulli and Parry laws.
 
 \subsection{Block III continued: exact inverse and rate-duality of the sampled record}\label{subsec:exact-inverse-rate-duality}
 
-The Toeplitz renewal-product finite-minor encoding is not only a forward formula.  At fixed
+The Toeplitz renewal finite-principal-minor bookkeeping is not only a forward formula.  At fixed
 sampling interval it also gives an exact inverse for the visible family, up to
 the intrinsic exchange of the two hidden survival factors.
 
@@ -2060,7 +2128,7 @@ a=1-p+p\log p,
 \end{equation}
 which are the same limits obtained from the equal-rate kernels.
 
-Therefore the Toeplitz renewal-product finite-minor encoding \(K_\Gamma\) in
+Therefore the Toeplitz renewal finite-principal-minor bookkeeping \(K_\Gamma\) in
 \Cref{thm:boundary_reset_toeplitz_finite_inclusion}, and hence every finite inclusion,
 count, and word probability in
 \Cref{cor:finite_window_principal_minor_word_law}, depends on the labelled rates only
@@ -2110,7 +2178,7 @@ Stationarity and positivity give \(r_0=\rho>0\).  By definition,
 \(r_2=\PP(A_0=1)\PP(A_2=1\mid A_0=1)=r_0u_2\).  Therefore the displayed
 formulas recover \(a\), \(u_2\), and \(\lambda\).  Theorem~\ref{thm:toeplitz_image_inverse_duality}
 then recovers the unordered survival factors and rates.  Substituting those
-coordinates into the Toeplitz renewal-product finite-minor encoding and finite-window count
+coordinates into the Toeplitz renewal finite-principal-minor bookkeeping and finite-window count
 formula gives all finite inclusion, count, and word probabilities, so no
 further visible coordinate is needed on the quotient family.
 \end{proof}
@@ -2259,21 +2327,24 @@ so the same CLT holds for \(\widehat r_N\).
 It remains to prove consistency of the matrix estimator.  First replace
 \(\widehat X_{n,N}\) in the definition of
 \(\widehat V_{j,N}^{\mathrm{all}}\) by the population-centered \(X_n\), and
-call the resulting oracle batch sums \(C_{r,N}^{\circ,\mathrm{all}}\).  For any
-fixed \(t\in\RR^3\), applying
-\Cref{thm:finite-lag-renewal-reward-main} to the scalar stationary
-\(1\)-dependent sequence \(t^\top V_j\) and its separated all-cycle batches gives
+call the resulting oracle batch sums \(C_{r,N}^{\circ,\mathrm{all}}\).  The
+vector rewards \(V_j\) are stationary, mean zero, and \(1\)-dependent, and each
+coordinate has linear growth in the adjacent gap pair \((G_j,G_{j+1})\).  The
+matrix form of \Cref{lem:separated-batch-qdependent-main}, with \(d=3\) and
+\(q=1\), therefore gives directly
 \[
 \frac{1}{\bar L_N^{\mathrm{all}}\,b_N\,(M_N^{\mathrm{all}}-1)}
 \sum_{r=1}^{M_N^{\mathrm{all}}}
-\bigl(t^\top C_{r,N}^{\circ,\mathrm{all}}
-      -t^\top \bar C_N^{\circ,\mathrm{all}}\bigr)^2
+(C_{r,N}^{\circ,\mathrm{all}}-\bar C_N^{\circ,\mathrm{all}})
+(C_{r,N}^{\circ,\mathrm{all}}-\bar C_N^{\circ,\mathrm{all}})^\top
 \to
-t^\top\Sigma_r t
+\Sigma_r
 \]
-in probability.  Taking \(t=e_i\) and \(t=e_i+e_j\) for coordinate vectors
-recovers every matrix entry by polarization, so the oracle matrix estimator
-converges to \(\Sigma_r\).
+in probability.  This invocation includes the fourth-moment triangular-array
+bound for the separated vector batches, the renewal law of large numbers for
+the random number \(M_N^{\mathrm{all}}\) of all-complete-cycle batches, and the
+deletion of the stationary initial and terminal incomplete cycles together
+with the terminal unbatched remainder.
 
 For plug-in centering, the vector CLT already proved gives
 \[
@@ -2293,8 +2364,8 @@ C\delta_N
 \sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
 (\tau_{j+1}-\tau_j).
 \]
-The plug-in perturbation bound in
-\Cref{thm:finite-lag-renewal-reward-main} gives
+The plug-in perturbation part of
+\Cref{lem:separated-batch-qdependent-main} gives
 \[
 \frac1{M_N^{\mathrm{all}}b_N}
 \sum_{r=1}^{M_N^{\mathrm{all}}}\|\Delta_{r,N}\|^2
@@ -2388,29 +2459,77 @@ D\Phi(\widehat r_N)^\top
 \]
 on the event that \(\widehat r_N\) lies in the displayed open set, with any
 fixed positive semidefinite fallback value off that event.  It converges in
-probability to \(\Sigma_s\).
-For \(0<\alpha<1\), a valid large-sample confidence region in the regular
-symmetric coordinates is therefore
+probability to \(\Sigma_s\).  The rank of this limiting covariance is part of
+the inferential statement, not a harmless convention hidden inside the
+Moore--Penrose inverse.  Put
+\[
+r_s=\operatorname{rank}\Sigma_s,\qquad
+E_s=\operatorname{range}\Sigma_s .
+\]
+If \(\Sigma_s\) is positive definite, then, on events whose probabilities tend
+to one, \(\widehat\Sigma_{s,N}\) is invertible and
+\begin{equation}\label{eq:symmetric-coordinate-full-rank-wald-main}
+N(\widehat s_N-s)^\top
+\widehat\Sigma_{s,N}^{-1}
+(\widehat s_N-s)
+\Rightarrow\chi^2_2 .
+\end{equation}
+Thus the usual \(\chi^2_{2,1-\alpha}\) ellipsoid is a full-rank large-sample
+confidence region.
+
+If instead \(r_s=\operatorname{rank}\Sigma_s<2\), the exact limiting quadratic
+form lives only on the estimable subspace \(E_s\) and has \(\chi^2_{r_s}\), not
+\(\chi^2_2\), calibration.  Suppose that the rank is consistently identified by
+a pre-specified covariance rule: with probability tending to one,
+\[
+\operatorname{rank}\widehat\Sigma_{s,N}=r_s,
+\qquad
+\widehat\Sigma_{s,N}^{+}\to\Sigma_s^+,
+\qquad
+\widehat\Pi_{s,N}:=\widehat\Sigma_{s,N}\widehat\Sigma_{s,N}^{+}
+\to \Pi_s,
+\]
+where \(\Pi_s\) is the Euclidean projection onto \(E_s\).  Then the
+rank-aware large-sample confidence region in the symmetric coordinates is
 \begin{equation}\label{eq:symmetric-coordinate-confidence-region-main}
-\mathcal C_{s,N}(1-\alpha)
+\mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)
 =
 \left\{
-s\in\RR^2:
-N(\widehat s_N-s)^\top
+s'\in\RR^2:
+\begin{array}{l}
+N(\widehat s_N-s')^\top
 \widehat\Sigma_{s,N}^{+}
-(\widehat s_N-s)
-\le \chi^2_{2,1-\alpha}
-\right\},
+(\widehat s_N-s')
+\le \chi^2_{r_s,1-\alpha},\\[2mm]
+(I-\widehat\Sigma_{s,N}\widehat\Sigma_{s,N}^{+})(\widehat s_N-s')=0
+\end{array}
+\right\}.
 \end{equation}
-where \(+\) denotes the Moore--Penrose inverse.  The associated label-free root
-region is the image
+Equivalently, once \(r_s\) has been consistently identified, the statistic is
+tested only after restricting the displacement \(\widehat s_N-s'\) to the
+estimated estimable subspace.  With the convention that \(r_s=0\) gives the
+singleton constraint \(\widehat s_N=s'\) and no positive-dimensional Wald
+calibration, \(\mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)\) has
+asymptotic coverage \(1-\alpha\).
+
+If \(\Sigma_s\) is singular but no structural rank calculation or
+rank-consistent truncation is supplied, the Moore--Penrose quadratic inequality
+with the two-degree cutoff,
+\[
+N(\widehat s_N-s')^\top\widehat\Sigma_{s,N}^{+}(\widehat s_N-s')
+\le \chi^2_{2,1-\alpha},
+\]
+should be read only as a conservative full-plane fallback in the singular case,
+not as the exact limiting confidence calibration and not as an assertion that
+unestimable directions have been regularized.
+The associated label-free root region is the image
 \begin{equation}\label{eq:unordered-root-confidence-region-main}
 \mathcal C_{\{p,c\},N}(1-\alpha)
 =
 \left\{
 \{z_1,z_2\}\subset(0,1):
 z_1+z_2=s_1,\ z_1z_2=s_2,\ 
-s=(s_1,s_2)\in \mathcal C_{s,N}(1-\alpha)
+s=(s_1,s_2)\in \mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)
 \right\}.
 \end{equation}
 This construction remains the finite-record inverse statement even at the
@@ -2520,6 +2639,51 @@ Since \(\widehat r_N\to r\) in probability, the event that
 \(\widehat r_N\) lies in the open set has probability tending to one; the
 covariance-estimator consistency for \(\Phi(\widehat r_N)\) follows from the
 continuity of \(D\Phi\) and Slutsky's theorem.
+For the Wald calibration, first suppose \(\Sigma_s\) is positive definite.
+Then matrix inversion is continuous at \(\Sigma_s\), so
+\(\widehat\Sigma_{s,N}^{-1}\to\Sigma_s^{-1}\) in probability on the event of
+invertibility, whose probability tends to one.  Slutsky's theorem applied to
+\(\sqrt N(\widehat s_N-s)\Rightarrow N(0,\Sigma_s)\) gives
+\eqref{eq:symmetric-coordinate-full-rank-wald-main}.
+
+If \(r_s<2\), write a spectral decomposition
+\[
+\Sigma_s=U
+\begin{pmatrix}
+\Lambda_r&0\\
+0&0
+\end{pmatrix}
+U^\top,
+\qquad
+\Lambda_r=\operatorname{diag}(\lambda_1,\ldots,\lambda_{r_s}),\quad
+\lambda_i>0 .
+\]
+The Gaussian limit is supported on \(E_s=\operatorname{range}\Sigma_s\); in
+these coordinates it has the form
+\[
+U^\top Z=(\Lambda_r^{1/2}\xi,0),\qquad
+\xi\sim N(0,I_{r_s}).
+\]
+Under the stated rank-consistency assumption,
+\(\widehat\Sigma_{s,N}^{+}\to\Sigma_s^+\) and the estimated projection
+\(\widehat\Pi_{s,N}=\widehat\Sigma_{s,N}\widehat\Sigma_{s,N}^{+}\) converges to
+\(\Pi_s\).  Hence Slutsky's theorem gives
+\[
+N(\widehat s_N-s)^\top\widehat\Sigma_{s,N}^{+}(\widehat s_N-s)
+\Rightarrow
+\xi^\top\xi
+=\chi^2_{r_s}.
+\]
+The additional constraint
+\((I-\widehat\Pi_{s,N})(\widehat s_N-s')=0\) in
+\eqref{eq:symmetric-coordinate-confidence-region-main} restricts candidate
+parameters to the estimated affine estimable subspace through \(\widehat s_N\);
+for the true \(s\), the left side converges to
+\((I-\Pi_s)Z=0\) in probability.  This proves the rank-aware coverage
+statement.  Without consistent rank identification, the two-degree cutoff can
+only be interpreted as a conservative larger cutoff for the scalar quadratic
+form in singular cases; it is not the exact \(\chi^2_{r_s}\) limit and it does
+not by itself impose the missing subspace constraint.
 
 Under \Cref{ass:separated-roots-main}, the discriminant
 \(\Delta_s=(p-c)^2\) is bounded away from zero at the population point.  Hence
