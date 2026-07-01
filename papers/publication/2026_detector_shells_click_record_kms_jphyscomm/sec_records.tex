@@ -10,6 +10,8 @@ statements are deferred to the appendix.
 
 \subsection{Block I: measurement protocol, sampled model, and gap law}
 We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
+In this proposition \(\Gamma\) is a stipulated classical counter parameter; no
+UDW response profile, measurement law, or response locus is derived here.
 
 \begin{proposition}[Sampled one-recovery-opportunity boundary-reset instrument and labelled kernels]\label{prop:instrument-kernels-main}
 Fix a sampling interval of length $\Delta\tau$ and a rate parameter $\Gamma>0$.
@@ -581,7 +583,8 @@ a<\rho<q=1-p .
 \end{equation}
 The hidden transition matrix $P$ has strictly positive entries and is therefore primitive. Its nontrivial eigenvalue $\lambda_{\mathrm{hid}}=p-b$ satisfies $|\lambda_{\mathrm{hid}}|<1$.
 This lemma supplies the stationary density, the inequality \(a<\rho\), and the
-hidden-mode contraction used in \Cref{thm:recovery-main}.
+hidden-mode contraction used in \Cref{thm:recovery-main}; it is a record-layer
+calculation for the sampled kernels of \Cref{prop:instrument-kernels-main}.
 \end{lemma}
 
 \begin{proof}
@@ -951,7 +954,9 @@ The following theorem is the main record-level theorem for the classical
 sampled hidden Markov model fixed by the interval instrument above. Its
 Poisson parameter $\Gamma$ is the internal attempt rate in
 \Cref{prop:instrument-kernels-main}; no response-side calibration is used in
-the statement or proof. The proof uses exactly the local renewal,
+the statement or proof, and the exact-dependence threshold is a property of
+this sampled-counter law before any response-level interpretation. The proof
+uses exactly the local renewal,
 stationary-law, covariance-transfer, hazard, and finite-dependence inputs
 proved in
 \Cref{lem:renewal-gap-main,lem:stationary-main,lem:covariance-transfer-main,lem:critical-rate-main,lem:survival-hazard-main,lem:hazard-obstruction-main,lem:kernel-factorization-main,lem:one-dep-criterion-main}.
@@ -1680,6 +1685,10 @@ gauge fact used below: a finite-principal-minor encoding is nonunique and is not
 an operator kernel without additional consistency and positivity structure.
 
 \begin{proposition}[Renewal product and boundary-reset finite-inclusion encoding]\label{lem:renewal-principal-minor-main}\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_finite_inclusion}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
+This is the single determinant statement used in the paper: its finite
+principal minors are exactly equivalent to the renewal product below, and all
+finite-window count and word laws are obtained from that product by finite
+inclusion--exclusion.
 Let \(\varXi\subset\mathbb Z\) be a stationary renewal point process with
 intensity
 \[
@@ -1886,7 +1895,9 @@ At \(\Gamma_c\), the sampled boundary-reset record is therefore a full-support
 renewal process, exact \(1\)-dependent, represented by the two explicit
 finite-principal-minor matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
 every finite visible order by its increasing zero-run hazard, and neither
-Bernoulli nor the Parry golden-mean law.
+Bernoulli nor the Parry golden-mean law.  This corollary uses no additional
+determinantal-process structure beyond the renewal-product equivalence in
+\Cref{lem:renewal-principal-minor-main}.
 \end{corollary}
 
 \begin{proof}
@@ -2118,6 +2129,11 @@ the unordered survival factors \(\{p,c\}\).  Thus the unordered rates
 \Cref{thm:boundary_reset_toeplitz_finite_inclusion,cor:finite_window_principal_minor_word_law}
 reconstruct every finite inclusion probability, count law, and finite word
 probability.
+This corollary is a population quotient-coordinate statement.  The finite-record
+vector CLT and feasible separated-batch covariance estimator for
+\((\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N})\) are supplied in
+\Cref{prop:three-coordinate-vector-batch-main}, and the delta map is applied
+only after that covariance input is available.
 \end{corollary}
 
 \begin{proof}
@@ -2554,7 +2570,10 @@ Consequently any labelled memory target
 \(R_\Omega(x)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) requires an external
 recovery-rate label; without that label it is only a response statement on the
 quotient by
-\((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\).
+\((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\).  This is the
+local non-identifiability qualification for the quotient inverse: finite-record
+covariance estimation for the three inverse coordinates is instead stated in
+\Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main}.
 \end{proposition}
 
 \begin{proof}
@@ -2885,6 +2904,9 @@ $G_j$ gives finite moments of every order for $L_j$ and hence for $Y_j$.
 \end{proof}
 
 \begin{lemma}[Random-index transfer for stationary $1$-dependent rewards]\label{lem:anscombe-one-dep-main}
+Current numbering places the finite-record inverse delta corollary earlier, as
+\Cref{cor:finite_inverse_delta_boundary_main}; this lemma is only the
+random-index transfer used later by the all-complete-cycle batch estimator.
 Let $(Y_j)_{j\ge1}$ be stationary and $1$-dependent, with $\EE Y_1=0$ and
 $Y_1\in L^2$, and suppose that for some $\tau^2\ge0$ one has
 \[
@@ -4611,7 +4633,9 @@ L_{j,N}^{\mathrm{all}},
 =\sum_{n=\tau_j}^{\tau_{j+1}-1}\widehat Z_{n,N},
 \]
 where \Cref{lem:all-cycle-lag-two-windows-main} ensures that even the terminal
-lag-two term in each batched complete cycle lies in the observed record.  Define
+lag-two term in each batched complete cycle lies in the observed record.  Thus
+every batched \(\widehat Y_{j,N}^{\mathrm{all}}\) is formed only from recorded
+symbols \(A_0,\ldots,A_{N-1}\), with no unobserved terminal window.  Define
 the separated batch sums, omitting one cycle reward between adjacent batches, by
 \[
 \widehat B_{r,N}^{\mathrm{all}}
@@ -5418,6 +5442,10 @@ b_N=\max\{1,\lfloor N^{1/3}\rfloor\},
 only complete click-to-click cycles are batched, one cycle reward is omitted
 between adjacent batches, and the initial prefix, terminal suffix, and final
 incomplete batch of fewer than \(b_N+1\) complete cycles are boundary remainders.
+The observed-window indexing needed for these batched rewards is exactly
+\Cref{lem:all-cycle-lag-two-windows-main}: it proves
+\(R_N^{\mathrm{all}}\le J_N-2\), hence every terminal lag-two term in a batched
+cycle lies inside \(A_0,\ldots,A_{N-1}\).
 Then:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item The resulting CLT estimates only the fixed-setting covariance
