@@ -1791,9 +1791,11 @@ Then
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}
 =\PP(B\subset\varXi).
 \end{equation}
-Therefore \(K_u\) is an admissible nonsymmetric determinantal correlation
-kernel in the finite-dimensional discrete inclusion-probability sense.  Since
-the point process \(\varXi\) has already been constructed, the finite exact
+Thus \(K_u\) is a renewal principal-minor representative of the already
+constructed finite-dimensional inclusion law.  Since the point process
+\(\varXi\) has already been constructed, admissibility is inherited from that
+renewal law and its finite inclusion probabilities, not proved from
+nonsymmetric-kernel conditions.  The finite exact
 probabilities
 \begin{equation}\label{eq:finite-exact-configuration-probabilities-main}
 P_I(\varXi\cap I=S)
@@ -1801,7 +1803,9 @@ P_I(\varXi\cap I=S)
 \end{equation}
 are nonnegative and consistent.  No Hermitian positive-contraction
 representation, no canonical operator kernel on \(\ell^2(\mathbb Z)\), no
-negative association, no hyperuniformity, and no Fredholm theory is claimed.
+negative association, no hyperuniformity, no DPP sampling theorem, no
+standalone nonsymmetric-DPP well-definedness theorem, and no Fredholm theory is
+claimed.
 \end{lemma}
 
 \begin{proof}
@@ -2539,8 +2543,20 @@ D\Phi(\widehat r_N)^\top
 on the event that \(\widehat r_N\) lies in the displayed open set, with any
 fixed positive semidefinite fallback value off that event.  It converges in
 probability to \(\Sigma_s\).
-Assume, for the Wald display in the symmetric coordinates, that
-\(\Sigma_s\) is nonsingular.  Then
+Let \(k_s=\operatorname{rank}\Sigma_s\).  If \(k_s>0\), let
+\(Q_s\in\mathbb R^{2\times k_s}\) have orthonormal columns spanning
+\(\operatorname{range}\Sigma_s\), and put
+\(\Sigma_{s,+}=Q_s^\top\Sigma_sQ_s\).  Then \(\Sigma_{s,+}\) is nonsingular
+and the rank-adaptive population Wald statistic satisfies
+\begin{equation}\label{eq:symmetric-coordinate-rank-adaptive-wald-main}
+N(Q_s^\top(\widehat s_N-s))^\top
+\Sigma_{s,+}^{-1}
+Q_s^\top(\widehat s_N-s)
+\Rightarrow\chi^2_{k_s}.
+\end{equation}
+If \(k_s=0\), then \(\sqrt N(\widehat s_N-s)\Rightarrow0\) and no positive
+dimensional Wald ellipsoid is asserted.  In the full-rank special case
+\(k_s=2\), this gives
 \begin{equation}\label{eq:symmetric-coordinate-full-rank-wald-main}
 N(\widehat s_N-s)^\top
 \widehat\Sigma_{s,N}^{-1}
@@ -2584,7 +2600,12 @@ C_{\{p,c\},N}(1-\alpha)
 \right\}.
 \end{equation}
 This is a feasible root-set image, not a labelled root covariance statement at
-the exchange diagonal.
+the exchange diagonal.  If the feasible estimate of \(\Sigma_s\) is singular
+or numerically rank deficient, the rank-adaptive statistic
+\eqref{eq:symmetric-coordinate-rank-adaptive-wald-main}, with the rank and
+range estimated by a prespecified spectral tolerance, replaces the displayed
+full-rank ellipsoid; the full-rank region above should be used only when the
+estimated two-dimensional covariance is nonsingular.
 
 If \Cref{ass:separated-roots-main} holds, then
 \[
@@ -2690,8 +2711,14 @@ Since \(\widehat r_N\to r\) in probability, the event that
 \(\widehat r_N\) lies in the open set has probability tending to one; the
 covariance-estimator consistency for \(\Phi(\widehat r_N)\) follows from the
 continuity of \(D\Phi\) and Slutsky's theorem.
-When \(\Sigma_s\) is nonsingular, the ordinary multivariate Wald theorem and
-the consistency of \(\widehat\Sigma_{s,N}\) give
+Let \(k_s=\operatorname{rank}\Sigma_s\).  If \(k_s>0\), projection onto the
+range of \(\Sigma_s\) gives a \(k_s\)-dimensional nonsingular normal limit with
+covariance \(\Sigma_{s,+}=Q_s^\top\Sigma_sQ_s\), so the ordinary Wald theorem
+in that range gives
+\eqref{eq:symmetric-coordinate-rank-adaptive-wald-main}.  If \(k_s=0\), the
+limit covariance is zero and the displayed CLT degenerates to
+\(\sqrt N(\widehat s_N-s)\Rightarrow0\).  When \(k_s=2\), Slutsky's theorem and
+the consistency of \(\widehat\Sigma_{s,N}\) give the full-rank special case
 \eqref{eq:symmetric-coordinate-full-rank-wald-main}.  Intersecting the
 ellipsoid with \(\mathcal F\) enforces the exact feasible polynomial image
 of two survival factors in \((0,1)\).  The unordered root region is then the
