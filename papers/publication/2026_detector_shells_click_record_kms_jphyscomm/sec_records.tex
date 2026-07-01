@@ -949,19 +949,15 @@ and direct subtraction gives the displayed positive increment.
 
 The following theorem is the main record-level theorem for the classical
 sampled hidden Markov model fixed by the interval instrument above. Its
-Poisson parameter $\Gamma$ is still the internal
-attempt rate of the sampled instrument from
-\Cref{prop:instrument-kernels-main}. The response-side identification
-\[
-\Gamma=\Gamma_+(x,\Omega)=R_\Omega(x)
-\]
-is not used here and is deferred to the later calibration step in
-Section~\ref{sec:kms-shells} and the later abstract calibrated toy-model
-appendices. Accordingly, the theorem is only a theorem about that classical
-sampled HMM and not a theorem deriving the boundary-reset counter law from UDW
-detector back-action. The covariance phase below is fixed by the hidden
-eigenmode calculation in Lemma~\ref{lem:covariance-transfer-main}; a click
-resets the next hidden state to $D$, so the lag $n$ covariance carries
+Poisson parameter $\Gamma$ is the internal attempt rate in
+\Cref{prop:instrument-kernels-main}; no response-side calibration is used in
+the statement or proof. The proof uses exactly the local renewal,
+stationary-law, covariance-transfer, hazard, and finite-dependence inputs
+proved in
+\Cref{lem:renewal-gap-main,lem:stationary-main,lem:covariance-transfer-main,lem:critical-rate-main,lem:survival-hazard-main,lem:hazard-obstruction-main,lem:kernel-factorization-main,lem:one-dep-criterion-main}.
+In particular, the covariance phase is fixed by
+Lemma~\ref{lem:covariance-transfer-main}: a click resets the next hidden state
+to $D$, so the lag $n$ covariance carries
 $\lambda_{\mathrm{hid}}^{\,n-1}$, including the lag-one value
 $\lambda_{\mathrm{hid}}^0=1$.
 
@@ -1233,6 +1229,30 @@ plot
 \[
 F=1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
 \]
+Equivalently, the following 15-line Python fragment is a machine-readable
+generator for the quantities used in \Cref{fig:hazard-cov,fig:spectrum-fano};
+it assumes \(\exp,\cos\) from Python's \texttt{math} module and
+\texttt{brentq} from \texttt{scipy.optimize}.  Here \(k\) denotes
+\(\kappa_{\mathrm r}\) and \(j\) denotes the zero-run index.
+\begingroup\scriptsize
+\begin{verbatim}
+def abc(G,k,d):
+ p,c=exp(-G*d),exp(-k*d); q=1-p
+ if abs(G-k)<1e-12: a,b,L=1-(1+G*d)*p,G*d*p,p*(1-G*d)
+ else: a,b,L=(k*(1-p)-G*(1-c))/(k-G),k*(p-c)/(k-G),(k*c-G*p)/(k-G)
+ return p,c,q,a,b,L,q*(1-c)/(q+b)
+def Gamma_c(k,d):
+ H=lambda G: ((k*exp(-k*d)-G*exp(-G*d))/(k-G)
+              if abs(G-k)>1e-12 else exp(-k*d)*(1-k*d))
+ return brentq(H,1e-14,100*max(k,1/d,1.0))
+def h_k(j,G,k,d):
+ p,c,q,a,b,L,r=abc(G,k,d); A=G*d
+ return 1-p*(1+A*(j+1))/(1+A*j) if abs(G-k)<1e-12 else (k*(1-p)*p**j-G*(1-c)*c**j)/(k*p**j-G*c**j)
+def f(t,G,k,d):
+ p,c,q,a,b,L,r=abc(G,k,d); return r*(1-r)+2*r*(a-r)*(cos(t)-L)/(1-2*L*cos(t)+L*L)
+def F(G,k,d): return f(0.0,G,k,d)/abc(G,k,d)[6]
+\end{verbatim}
+\endgroup
 
 \begin{remark}[No exact Parry or Bernoulli law at positive sampling interval]\label{cor:no-exact-main}
 For every positive choice of
@@ -1616,183 +1636,102 @@ from the code-level formulas \(p=e^{-\Gamma\Delta\tau}\),
 \(\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}\).
 
 
-\subsection{Block III: finite-inclusion principal-minor representation and boundary-reset Toeplitz specialization}\label{subsec:boundary-reset-finite-inclusion-record}
+\subsection{Block III: renewal-product finite-inclusion encoding}\label{subsec:boundary-reset-finite-inclusion-record}
 
-The covariance and Fano formulas above are the second-cumulant shadow of a
-stronger finite-dimensional formula.  The principal-minor step is not special
-to the two-state sampled counter.  It is a renewal-process identity: once a
-stationary renewal click process has renewal masses
-\(u_n=\PP(n\in\varXi\mid 0\in\varXi)\), its finite inclusion probabilities
-admit an explicit finite-inclusion principal-minor representation by a generally
-non-Hermitian matrix.  The sampled boundary-reset model enters only afterwards, by supplying
-the closed one-mode formula
-\(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\).  We use only the following
-finite-inclusion convention: a point process \(\varXi\subset\mathbb Z\) is
-encoded by a displayed matrix \(K\) when
+The covariance and Fano formulas above are second-cumulant consequences of the
+renewal law.  The determinant formulas in this block add no separate
+determinantal-process theorem: they are a finite algebraic encoding of the
+stationary renewal product
+\[
+\PP(\{i_1<\cdots<i_m\}\subset\varXi)
+=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\]
+The sampled boundary-reset model enters only by supplying the one-mode renewal
+mass \(u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\).  Thus the strict-upper
+Toeplitz tail below is the renewal product written in matrix form; it is not an
+operator DPP kernel, a fermionic correlation kernel, or a negative-association
+input.
+
+\paragraph{Finite-principal-minor convention and non-uniqueness.}
+A displayed matrix \(K\) encodes a point process \(\varXi\subset\mathbb Z\) in
+this subsection only in the following finite sense:
 \[
 \PP(B\subset\varXi)=\det[K(i,j)]_{i,j\in B}
 \]
-for every finite \(B\subset\mathbb Z\), with the determinant taken on that
-finite restriction.  The model-specific specialization below merely inserts
-the sampled boundary-reset renewal mass into this identity, so the strict-upper
-Toeplitz tail becomes the closed geometric transfer tail controlled by
-\(\lambda_{\mathrm{hid}}\) and collapses at the exact \(1\)-dependence rate.
-
-\paragraph{Terminology and non-uniqueness.}
-The matrix \(K\) in this subsection is a finite-inclusion principal-minor
-encoding only: its principal minors give inclusion probabilities on finite
-subsets. Such an encoding is not unique, and it need not be Hermitian, positive,
-contractive, or canonical as an operator on \(\ell^2(\mathbb Z)\). Thus the
-words ``matrix'' and ``determinant'' below refer to finite restrictions unless
-explicitly stated otherwise.  They do not carry the usual operator-DPP or
-fermionic consequences, and no negative-association theorem is being claimed;
-those extra operator hypotheses are not proved or used here.
-
-\begin{lemma}[Principal-minor gauge nonuniqueness]\label{lem:principal_minor_gauge_nonuniqueness_main}
-Let \(I\) be finite, let \(K_I\) be any finite matrix whose principal minors
-encode inclusion probabilities on \(I\), and let \(D_I\) be any invertible
-diagonal matrix indexed by \(I\).  Then \(D_IK_ID_I^{-1}\) has the same
-principal minors as \(K_I\).  Hence a principal-minor encoding is nonunique and
-is not an operator kernel without additional consistency and positivity
-structure.
-\end{lemma}
-
-\begin{proof}
-For each \(B\subset I\), write \(D_B\) for the restriction of \(D_I\) to the
-coordinates in \(B\).  Then
+for each finite \(B\subset\mathbb Z\), with the determinant taken on that finite
+restriction.  Such an encoding is noncanonical.  If \(I\) is finite, \(K_I\) has
+the prescribed principal minors on \(I\), and \(D_I\) is any invertible diagonal
+matrix, then for every \(B\subset I\),
 \[
 \det\bigl[(D_IK_ID_I^{-1})_B\bigr]
 =\det(D_B)\det(K_B)\det(D_B^{-1})
 =\det(K_B).
 \]
-Thus even after all principal minors on a fixed finite window are specified,
-diagonal conjugation leaves a whole gauge family of finite-inclusion
-principal-minor representatives.  This algebraic freedom is independent of, and
-weaker than, the extra positivity and consistency requirements used in operator
-determinantal point process theory.
-\end{proof}
+Thus diagonal gauge changes preserve all finite inclusion probabilities.  In
+this paper \(K_\Gamma\) is only one chosen finite-principal-minor representative;
+no Hermitian positive-contraction structure, Fredholm determinant, CAR/quasi-free
+state, or negative-association theorem is proved or used.  This distinction is
+standard in comparison with operator and nonsymmetric DPP theory
+\cite{Macchi1975,Soshnikov2000,ShiraiTakahashi2003,Lyons2003,Borodin2009DPP,HoughKrishnapurPeresVirag2009,KuleszaTaskar2012DPP,BorodinRains2005EynardMehta,Lytvynov2013JHermitianDPP,Brunel2018SignedDPP,GartrellEtAl2019NonsymmetricDPP,GartrellEtAl2021ScalableNonsymmetricDPP,HanEtAl2022SamplingNonsymmetricDPP,Poinas2026NonsymmetricDPP}.
 
-\begin{lemma}[Stationary-renewal finite-inclusion principal-minor representation; no operator DPP, fermionic, or negative-association claim]\label{lem:renewal-principal-minor-main}
+\phantomsection\label{lem:principal_minor_gauge_nonuniqueness_main}
+The diagonal-conjugation calculation in the preceding paragraph is the only
+gauge fact used below: a finite-principal-minor encoding is nonunique and is not
+an operator kernel without additional consistency and positivity structure.
+
+\begin{proposition}[Renewal product and boundary-reset finite-inclusion encoding]\label{lem:renewal-principal-minor-main}\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_finite_inclusion}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
 Let \(\varXi\subset\mathbb Z\) be a stationary renewal point process with
 intensity
 \[
-\rho=\PP(0\in\varXi)>0,
-\qquad
+\rho=\PP(0\in\varXi)>0,\qquad
 u_n=\PP(n\in\varXi\mid 0\in\varXi),\quad n\ge1.
 \]
-Define
+For every finite set \(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\), with the empty
+product interpreted as \(1\),
+\begin{equation}\label{eq:renewal-inclusion-product-main}
+\PP(B\subset\varXi)
+=
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\end{equation}
+Equivalently, the finite matrix
 \begin{equation}\label{eq:renewal-principal-minor-kernel-main}
 K_u(i,j)=
 \begin{cases}
 \rho, & j\le i,\\[0.4ex]
-\rho-u_{j-i}, & j>i .
+\rho-u_{j-i}, & j>i
 \end{cases}
 \end{equation}
-The displayed matrix is only a finite-inclusion principal-minor representation of inclusion events.
-In general \(K_u\) is non-Hermitian, noncanonical, and not an operator on
-\(\ell^2(\mathbb Z)\) with DPP, positive-contraction, negative-association, or
-fermionic consequences.  For every finite set
-\(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\), with the empty product interpreted
-as \(1\),
+is an algebraic principal-minor encoding of the same renewal product:
 \begin{equation}\label{eq:renewal-principal-minor-product-main}
-\PP(B\subset\varXi)
-=
 \det\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m
 =
 \rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
-\end{lemma}
 
-\begin{proof}
-The renewal product formula comes first.  For
-\(B=\{i_1<\cdots<i_m\}\), stationarity gives
-\(\PP(i_1\in\varXi)=\rho\).  After conditioning on \(i_r\in\varXi\), the future
-regenerates, so the probability of a click at the next specified time
-\(i_{r+1}\), with any number of unspecified intervening clicks allowed, is the
-renewal mass \(u_{i_{r+1}-i_r}\).  Successive conditioning therefore gives
+For the stationary sampled one-recovery-opportunity boundary-reset model, put
 \[
-\PP(B\subset\varXi)
-=
-\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\varXi=\{n\in\mathbb Z:A_n=1\},\qquad
+d=\rho-a,\qquad \ell=\lambda_{\mathrm{hid}},
 \]
-
-It remains to identify this product as a determinant.  In the ordered basis
-\(i_1<\cdots<i_m\), write
-\[
-M=\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+U,
-\]
-where
-\[
-L_{rs}=\mathbf 1_{\{s\le r\}},
-\qquad
-U_{rs}=(\rho-u_{i_s-i_r})\mathbf 1_{\{s>r\}}.
-\]
-The lower triangular matrix \(L\) has determinant \(1\), and its inverse has
-entries \((L^{-1})_{rr}=1\), \((L^{-1})_{r,r-1}=-1\) for \(r\ge2\), and zero
-elsewhere.  Hence \(L^{-1}U\) is upper triangular.  Its first diagonal entry is
-\(0\), while for \(r\ge2\)
-\[
-(L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}
-=-(\rho-u_{i_r-i_{r-1}}).
-\]
-Therefore
-\[
-\det M
-=
-\rho^m\det\Bigl(I+\frac1\rho L^{-1}U\Bigr)
-=
-\rho^m\prod_{r=2}^m
-\left(1-\frac{\rho-u_{i_r-i_{r-1}}}{\rho}\right)
-=
-\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r},
-\]
-which proves the claimed principal-minor formula.
-\end{proof}
-
-\begin{corollary}[Boundary-reset Toeplitz finite-inclusion principal-minor representation; no operator DPP, fermionic, or negative-association claim]\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{thm:boundary_reset_toeplitz_finite_inclusion}
-Fix \(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\) in the stationary sampled
-one-recovery-opportunity boundary-reset model, and let
-\[
-\varXi=\{n\in\mathbb Z:A_n=1\}
-\]
-be the click set. The formula below is a non-Hermitian Toeplitz finite-inclusion
-principal-minor representation only. It does not assert that \(K_\Gamma\) is a
-self-adjoint positive contraction, canonical, an operator DPP kernel, or the
-kernel of a fermionic process, and no negative-association conclusion is used
-or implied. In this paper \(K_\Gamma\) is only one chosen
-finite-principal-minor representative. Put
-\[
-\rho=\PP(A_0=1),
-\qquad
- a=\PP(A_1=1\mid A_0=1),
-\qquad
- d=\rho-a,
-\qquad
- \ell=\lambda_{\mathrm{hid}},
-\]
-with the equal-rate value of $\lambda_{\mathrm{hid}}$ understood by continuous
-extension as in \eqref{eq:lambda-hid-main}. Throughout the displayed powers in
-this corollary, $\ell^0=1$, including when $\ell=0$.
-For \(n\ge1\), write
-\[
-u_n=\PP(A_n=1\mid A_0=1).
-\]
-Then \(d>0\),
+where \(a=\PP(A_1=1\mid A_0=1)\), the equal-rate value of
+\(\lambda_{\mathrm{hid}}\) is understood by continuous extension as in
+\eqref{eq:lambda-hid-main}, and \(\ell^0=1\), including when \(\ell=0\).
+Then \(d>0\) and, for \(n\ge1\),
 \begin{equation}\label{eq:finite-inclusion-u-n-main}
-u_n=\rho+(a-\rho)\ell^{n-1}=\rho-d\ell^{n-1},
-\qquad n\ge1,
+u_n=\PP(A_n=1\mid A_0=1)
+=\rho+(a-\rho)\ell^{n-1}
+=\rho-d\ell^{n-1}.
 \end{equation}
-and \(\varXi\) satisfies the non-Hermitian Toeplitz principal-minor
-finite-inclusion formula
+Substitution in \eqref{eq:renewal-principal-minor-kernel-main} gives the
+non-Hermitian Toeplitz representative
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
 \rho, & j\le i,\\[0.4ex]
-d\ell^{j-i-1}, & j>i .
+d\ell^{j-i-1}, & j>i ,
 \end{cases}
 \end{equation}
-Equivalently, for every finite set \(B=\{i_1<\cdots<i_m\}\subset\mathbb Z\),
-with the empty product interpreted as \(1\),
+and therefore, for \(B=\{i_1<\cdots<i_m\}\),
 \begin{equation}\label{eq:boundary-reset-inclusion-product-main}
 \PP(B\subset\varXi)
 =
@@ -1801,333 +1740,188 @@ with the empty product interpreted as \(1\),
 \rho\prod_{r=1}^{m-1}
 \Bigl[\rho+(a-\rho)\ell^{i_{r+1}-i_r-1}\Bigr].
 \end{equation}
-\end{corollary}
+The strict-upper entries have the single transfer tail
+\begin{equation}\label{eq:finite-inclusion-upper-transfer-tail-main}
+K_\Gamma(i,j)=d\lambda_{\mathrm{hid}}^{j-i-1}\qquad (j>i).
+\end{equation}
 
-\begin{proof}
-The positivity \(d>0\) is exactly \(a<\rho\) from
-Lemma~\ref{lem:stationary-main}.  The identity for \(u_n\) is the one-mode
-conditional click computation used in Lemma~\ref{lem:covariance-transfer-main}.
-Indeed, conditioning on \(A_0=1\) fixes the hidden state at the start of the
-next interval to be refractory, so for \(n\ge1\)
-\[
-u_n=e_D^\top P^{n-1}\nu,
-\qquad
-\nu=\binom{q}{a}.
-\]
-In the notation of that lemma,
-\[
-P^{n-1}\nu=\rho\mathbf 1+\ell^{n-1}(\nu-\rho\mathbf 1),
-\]
-and taking the \(D\)-component gives
-\[
-u_n=\rho+\ell^{n-1}(a-\rho)=\rho-d\ell^{n-1}.
-\]
-A click at any specified time resets the next interval to the same refractory
-hidden state, and Lemma~\ref{lem:renewal-gap-main} gives regeneration at every
-specified click time.  Thus the sampled boundary-reset click set satisfies the
-hypotheses of Lemma~\ref{lem:renewal-principal-minor-main}.  Substituting
-\(u_n=\rho-d\ell^{n-1}\) into \eqref{eq:renewal-principal-minor-kernel-main}
-gives \(K_\Gamma(i,j)=\rho\) for \(j\le i\) and
-\(K_\Gamma(i,j)=d\ell^{j-i-1}\) for \(j>i\).  The determinant and product
-formulas are then exactly \eqref{eq:renewal-principal-minor-product-main} with
-\eqref{eq:finite-inclusion-u-n-main} inserted.
-\end{proof}
-
-\begin{remark}[Scope relative to determinantal-process terminology]\label{rem:finite_inclusion_dpp_scope_main}
-The representation in
-\Cref{lem:renewal-principal-minor-main,cor:boundary_reset_toeplitz_renewal_specialization}
-is only a finite-inclusion principal-minor identity.  It uses stationarity, renewal
-regeneration, and finite determinants.  It does not construct a self-adjoint
-positive contraction on \(\ell^2(\mathbb Z)\), a Fourier symbol
-\(0\le f\le1\), a CAR/quasi-free state, a Fredholm determinant process, or a
-fermionic correlation operator
-\cite{Macchi1975,ShiraiTakahashi2003,Lyons2003,Borodin2009DPP,Soshnikov2000,HoughKrishnapurPeresVirag2009,KuleszaTaskar2012DPP}.
-Accordingly, the standard DPP consequences that require those hypotheses,
-including projection-process structure and negative association, are not used
-or claimed here \cite{Lyons2003,Borodin2009DPP}.  Nearby one-dependent and
-regenerative determinantal constructions
-\cite{BorodinDiaconisFulman2010,LyonsSteif2003,Klenke2017Ladder} are comparison
-points only: in this paper the critical exact-\(1\)-dependent law is obtained
-first from the sampled hidden-mode factorization in \Cref{thm:recovery-main},
-and the Toeplitz and Hessenberg matrices are nonunique finite-inclusion
-principal-minor representations of that already identified renewal law.
-\end{remark}
-
-\begin{corollary}[Finite-window count and word laws from finite-inclusion principal minors; no operator DPP, fermionic, or negative-association claim]\label{cor:finite_window_principal_minor_word_law}
-For every finite set \(I\subset\mathbb Z\), let \(N_I=|\varXi\cap I|\), and let
-\(K_{\Gamma,I}\) be the finite restriction of \(K_\Gamma\) to \(I\times I\).
-Then
+Finally, for every finite \(I\subset\mathbb Z\), if
+\(N_I=|\varXi\cap I|\) and \(K_{\Gamma,I}\) is the finite restriction of
+\(K_\Gamma\) to \(I\times I\), then
 \begin{equation}\label{eq:finite-window-count-generating-main}
 \EE[t^{N_I}]
 =
 \det\bigl(I_I+(t-1)K_{\Gamma,I}\bigr).
 \end{equation}
-Moreover, for disjoint finite sets \(S,T\subset\mathbb Z\), the probability of
-a finite binary word with prescribed ones on \(S\) and prescribed zeros on \(T\)
-is
+For disjoint finite sets \(S,T\subset\mathbb Z\),
 \begin{equation}\label{eq:finite-word-inclusion-exclusion-main}
-\PP(A_i=1\ \forall i\in S,
-\ A_j=0\ \forall j\in T)
+\PP(A_i=1\ \forall i\in S,\ A_j=0\ \forall j\in T)
 =
-\sum_{C\subset T}(-1)^{|C|}
-\det K_{\Gamma,S\cup C},
+\sum_{C\subset T}(-1)^{|C|}\det K_{\Gamma,S\cup C},
 \end{equation}
-where \(\det K_{\Gamma,S\cup C}\) means the principal determinant indexed by
-\(S\cup C\), ordered increasingly, and the empty determinant is \(1\).
-Both formulas are finite-dimensional inclusion identities for the displayed
-non-Hermitian matrix. They do not assert an operator Fredholm determinant, an
-operator DPP, a fermionic process, or negative association.
-\end{corollary}
+where the determinant is the principal determinant indexed by \(S\cup C\),
+ordered increasingly, and the empty determinant is \(1\).
+\end{proposition}
 
 \begin{proof}
-The product expansion
+For \(B=\{i_1<\cdots<i_m\}\), stationarity gives
+\(\PP(i_1\in\varXi)=\rho\).  After conditioning on \(i_r\in\varXi\), the future
+regenerates, so the probability of a click at the next specified time
+\(i_{r+1}\), with any number of unspecified intervening clicks allowed, is
+\(u_{i_{r+1}-i_r}\).  Successive conditioning gives
+\eqref{eq:renewal-inclusion-product-main}.
+
+To rewrite this product as a determinant, set
+\[
+M=\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+U,\qquad
+L_{rs}=\mathbf 1_{\{s\le r\}},\quad
+U_{rs}=(\rho-u_{i_s-i_r})\mathbf 1_{\{s>r\}}.
+\]
+The lower triangular matrix \(L\) has determinant \(1\), and \(L^{-1}\) has
+diagonal entries \(1\), subdiagonal entries \(-1\), and all other entries zero.
+Thus \(L^{-1}U\) is upper triangular, with first diagonal entry \(0\) and, for
+\(r\ge2\),
+\[
+(L^{-1}U)_{rr}=U_{rr}-U_{r-1,r}=-(\rho-u_{i_r-i_{r-1}}).
+\]
+Hence
+\[
+\det M
+=
+\rho^m\prod_{r=2}^m
+\left(1-\frac{\rho-u_{i_r-i_{r-1}}}{\rho}\right)
+=
+\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\]
+This proves the equivalence of the renewal product and the principal-minor
+encoding.
+
+For the boundary-reset specialization, \(d>0\) is \(a<\rho\) from
+Lemma~\ref{lem:stationary-main}.  Conditioning on \(A_0=1\) fixes the hidden
+state at the start of the next interval to be refractory, and the one-mode
+calculation from Lemma~\ref{lem:covariance-transfer-main} gives
+\[
+u_n=e_D^\top P^{n-1}\binom{q}{a}
+=\rho+\ell^{n-1}(a-\rho).
+\]
+Every specified click resets the next interval to the same refractory hidden
+state, so Lemma~\ref{lem:renewal-gap-main} supplies the renewal hypothesis.
+Substituting this \(u_n\) into \(K_u\) gives \(K_\Gamma\), its transfer tail,
+and the product formula \eqref{eq:boundary-reset-inclusion-product-main}.
+
+The count identity is the finite product expansion
 \[
 t^{N_I}=\prod_{i\in I}\bigl(1+(t-1)\mathbf 1_{\{i\in\varXi\}}\bigr)
 \]
-gives
-\[
-\EE[t^{N_I}]
-=
-\sum_{S\subset I}(t-1)^{|S|}\PP(S\subset\varXi).
-\]
-By \Cref{thm:boundary_reset_toeplitz_finite_inclusion}, each inclusion probability is
-the corresponding principal determinant of \(K_\Gamma\).  The principal-minor
-expansion of \(\det(I_I+(t-1)K_{\Gamma,I})\) is the same sum, proving
-\eqref{eq:finite-window-count-generating-main}.  This is only a finite-dimensional
-principal-minor expansion of the non-Hermitian Toeplitz matrix restricted to
-\(I\). It is used here as a count generating-function formula, not as an
-operator Fredholm determinant, an operator DPP theorem, a fermionic theorem, or
-a negative-association theorem. This identity
-shows in particular that the covariance and Fano
-formulas of Proposition~\ref{prop:spectrum-main} are the second-cumulant
-specialization of the full finite-window count law, even though the direct
-covariance proof remains the simplest physical diagnostic.
-
-For the word law, start from the event \(S\subset\varXi\) and exclude all
-clicks on \(T\).  Inclusion--exclusion gives
+together with the principal-minor expansion of
+\(\det(I_I+(t-1)K_{\Gamma,I})\).  The word law follows from
+inclusion--exclusion:
 \[
 \mathbf 1_{\{S\subset\varXi,\ T\cap\varXi=\varnothing\}}
 =
 \sum_{C\subset T}(-1)^{|C|}\mathbf 1_{\{S\cup C\subset\varXi\}}.
 \]
-Taking expectations and applying the finite-inclusion principal-minor formula gives
-\eqref{eq:finite-word-inclusion-exclusion-main}.
+All determinants in this proof are finite restrictions of the displayed
+non-Hermitian representative.
 \end{proof}
 
-\begin{lemma}[Critical finite-set cluster factorization]\label{lem:critical-cluster-factorization-main}
-Let \(\rho_c>a_c>0\) and \(d_c=\rho_c-a_c\).  Define two matrices on
-\(\mathbb Z\) by
+\paragraph{Equivalence to the renewal product.}
+\Cref{lem:renewal-principal-minor-main} is used only through the identity
 \[
-K_c^T(i,j)=
-\begin{cases}
-\rho_c, & j\le i,\\[0.4ex]
-d_c, & j=i+1,\\[0.4ex]
-0, & j\ge i+2,
-\end{cases}
-\qquad
-K_c^H(i,j)=
-\begin{cases}
--1, & j=i-1,\\[0.4ex]
-\rho_c(-d_c)^{j-i}, & j\ge i,\\[0.4ex]
-0, & j\le i-2.
-\end{cases}
+\det[K_\Gamma(i,j)]_{i,j\in B}
+=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \]
-Let \(B\subset\mathbb Z\) be finite.  For \(B=\varnothing\), take \(J=0\) and no
-clusters; both determinants and the empty product are interpreted as \(1\).
-For \(B\neq\varnothing\), write its decomposition into maximal contiguous
-clusters as
-\[
-B=C_1\sqcup\cdots\sqcup C_J,\qquad
-C_\alpha=\{s_\alpha,s_\alpha+1,\ldots,s_\alpha+m_\alpha-1\},
-\]
-where \(s_{\alpha+1}-(s_\alpha+m_\alpha-1)\ge2\).  Then, with rows and
-columns ordered increasingly,
-\begin{equation}\label{eq:critical-cluster-factorization-main}
-\det [K_c^T(i,j)]_{i,j\in B}
-=
-\det [K_c^H(i,j)]_{i,j\in B}
-=
-\prod_{\alpha=1}^J \rho_c a_c^{m_\alpha-1}
-=
-\rho_c^J a_c^{|B|-J}.
-\end{equation}
-Consequently, if a stationary click process has critical renewal masses
-\(u_1=a_c\) and \(u_n=\rho_c\) for \(n\ge2\), then
-\[
-\PP(B\subset\varXi)=\prod_{\alpha=1}^J \rho_c a_c^{m_\alpha-1}.
-\]
-\end{lemma}
+Consequently every finite-window count or word formula above can be derived
+directly from the renewal product followed by finite inclusion--exclusion.  The
+determinant notation is a compact bookkeeping device for those algebraic
+expansions, not an additional source of stochastic structure.  Standard DPP
+consequences that depend on Hermitian positive contractions, \(J\)-Hermitian
+operator structure, or nonsymmetric-kernel well-definedness criteria are outside
+the claims made here
+\cite{Lyons2003,Borodin2009DPP,Lytvynov2013JHermitianDPP,Brunel2018SignedDPP,GartrellEtAl2019NonsymmetricDPP,GartrellEtAl2021ScalableNonsymmetricDPP,HanEtAl2022SamplingNonsymmetricDPP,Poinas2026NonsymmetricDPP}.
 
-\begin{proof}
-For \(B=\varnothing\), the determinant convention and
-\(\PP(\varnothing\subset\varXi)=1\) give the claim.  Assume henceforth that
-\(B\neq\varnothing\).  The renewal statement follows directly from the product formula in
-Lemma~\ref{lem:renewal-principal-minor-main}.  In the ordered set
-\(B=\{i_1<\cdots<i_m\}\), the leading specified click contributes
-\(\rho_c\).  A gap \(i_{r+1}-i_r=1\) occurs exactly inside one cluster and
-contributes \(u_1=a_c\).  A gap between two consecutive clusters is at least
-two and contributes \(u_{i_{r+1}-i_r}=\rho_c\).  Hence the product is
-\[
-\rho_c\, a_c^{\sum_\alpha(m_\alpha-1)}\,\rho_c^{J-1}
-=\prod_{\alpha=1}^J \rho_c a_c^{m_\alpha-1}.
-\]
-
-It remains to prove the two determinant factorizations.  First consider one
-contiguous cluster \(C=\{s,s+1,\ldots,s+m-1\}\).  The Toeplitz block
-\([K_c^T(i,j)]_{i,j\in C}\) has entries \(\rho_c\) on and below the diagonal,
-\(d_c\) on the first superdiagonal, and \(0\) above it.  Apply the
-determinant-preserving column operations
-\[
-C_r\leftarrow C_r-C_{r+1},\qquad r=1,2,\ldots,m-1,
-\]
-using column \(C_{r+1}\) before it has been altered.  The resulting matrix is
-upper triangular, with diagonal entries
-\[
-a_c,\ldots,a_c,\rho_c .
-\]
-Thus the Toeplitz contiguous-cluster determinant is
-\(\rho_c a_c^{m-1}\).
-Equivalently, after transposing the same block, processing rows from top to
-bottom by
-\[
-R_r\leftarrow R_r-R_{r+1},\qquad r=1,2,\ldots,m-1,
-\]
-using row \(R_{r+1}\) before it has been altered, gives the same determinant
-and the same diagonal entries \(a_c,\ldots,a_c,\rho_c\).
-
-For the Hessenberg block \([K_c^H(i,j)]_{i,j\in C}\), the diagonal entries are
-\(\rho_c\), the subdiagonal entries are \(-1\), and the strict upper entries
-are \(\rho_c(-d_c)^{j-i}\).  Starting at the first row and moving down to row
-\(m-1\), replace row \(r\) by row \(r+d_c\,r_{r+1}\), where \(r_{r+1}\)
-denotes the next row before it has been altered.  These operations preserve
-the determinant, cancel all entries strictly above the diagonal in rows
-\(1,\ldots,m-1\), and change those diagonal entries from \(\rho_c\) to
-\(\rho_c-d_c=a_c\).  The last row keeps diagonal entry \(\rho_c\).  The
-resulting lower bidiagonal block again has determinant \(\rho_c a_c^{m-1}\).
-
-For arbitrary \(B\), order the rows and columns by the increasing clusters
-\(C_1,\ldots,C_J\).  In the Toeplitz matrix, if a row belongs to an earlier
-cluster and a column belongs to a later cluster, then the forward gap is at
-least two, so the corresponding strict-upper entry is \(0\).  Hence the
-Toeplitz matrix is block lower triangular, with diagonal blocks equal to the
-contiguous-cluster Toeplitz blocks just evaluated.  In the Hessenberg matrix,
-if a row belongs to a later cluster and a column belongs to an earlier cluster,
-then \(j\le i-2\), so the corresponding entry is \(0\).  Hence the Hessenberg
-matrix is block upper triangular, with diagonal blocks equal to the
-contiguous-cluster Hessenberg blocks just evaluated.  Both determinants
-therefore factor over clusters, giving
-\eqref{eq:critical-cluster-factorization-main}.
-\end{proof}
-
-\begin{corollary}[Critical finite-inclusion principal-minor collapse; no operator DPP, fermionic, or negative-association claim]\label{cor:critical_finite_inclusion_memory_phase}
+\begin{corollary}[Critical finite-inclusion collapse and memory package]\label{lem:critical-cluster-factorization-main}\label{cor:critical_finite_inclusion_memory_phase}\label{cor:critical_principal_minor_nonmarkov_fullsupport}
 Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
 \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
-\(\lambda_{\mathrm{hid}}=0\), with the convention
-\(\lambda_{\mathrm{hid}}^0=1\) inherited from
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion}.  With
-\(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and
-\(d_c=\rho_c-a_c\), the Toeplitz finite-inclusion principal-minor representation of
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion} collapses to upper range one:
+\(\lambda_{\mathrm{hid}}=0\).  With
+\(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and \(d_c=\rho_c-a_c\), the
+Toeplitz representative in \Cref{thm:boundary_reset_toeplitz_finite_inclusion}
+collapses to upper range one:
 \begin{equation}\label{eq:critical-toeplitz-range-one-main}
 K_c(i,j)=
 \begin{cases}
 \rho_c, & j\le i,\\[0.4ex]
 d_c, & j=i+1,\\[0.4ex]
-0, & j\ge i+2.
+0, & j\ge i+2 .
 \end{cases}
 \end{equation}
-The same critical law is also encoded by the one-dependent Hessenberg matrix
+The same critical law is also encoded, at the level of finite principal minors,
+by the Hessenberg representative
 \begin{equation}\label{eq:critical-hessenberg-kernel-main}
 K_c^H(i,j)=
 \begin{cases}
 -1, & j=i-1,\\[0.4ex]
 \rho_c(-d_c)^{j-i}, & j\ge i,\\[0.4ex]
-0, & j\le i-2.
+0, & j\le i-2 .
 \end{cases}
 \end{equation}
-Thus the memory threshold is exactly the zero of the upper transfer parameter
-of the boundary-reset Toeplitz specialization.  The two displayed matrices are
-alternative finite-inclusion principal-minor representations of the same
-critical law; neither is claimed to be a canonical Hermitian correlation
-kernel, an operator DPP kernel, a fermionic kernel, or a negative-association
-theorem.
+If \(B\subset\mathbb Z\) is finite and its nonempty case decomposes into
+maximal contiguous clusters
+\[
+B=C_1\sqcup\cdots\sqcup C_J,\qquad
+C_\alpha=\{s_\alpha,s_\alpha+1,\ldots,s_\alpha+m_\alpha-1\},
+\]
+then, with rows and columns ordered increasingly and with the empty product
+convention for \(B=\varnothing\),
+\begin{equation}\label{eq:critical-cluster-factorization-main}
+\det [K_c(i,j)]_{i,j\in B}
+=
+\det [K_c^H(i,j)]_{i,j\in B}
+=
+\prod_{\alpha=1}^J\rho_c a_c^{m_\alpha-1}
+=
+\rho_c^J a_c^{|B|-J}.
+\end{equation}
+At \(\Gamma_c\), the sampled boundary-reset record is therefore a full-support
+renewal process, exact \(1\)-dependent, represented by the two explicit
+finite-principal-minor matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
+every finite visible order by its increasing zero-run hazard, and neither
+Bernoulli nor the Parry golden-mean law.
 \end{corollary}
 
 \begin{proof}
 Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_c\) as the unique positive
-zero of \(\lambda_{\mathrm{hid}}\), and the range-one form of \(K_c\) follows by
-substituting \(\ell=0\) into
-\eqref{eq:boundary-reset-toeplitz-kernel-main}.  At this critical point,
+zero of \(\lambda_{\mathrm{hid}}\), so \eqref{eq:critical-toeplitz-range-one-main}
+is \eqref{eq:boundary-reset-toeplitz-kernel-main} with \(\ell=0\).  Then
 \eqref{eq:finite-inclusion-u-n-main} gives \(u_1=a_c\) and \(u_n=\rho_c\) for
-\(n\ge2\).  Applying
-Lemma~\ref{lem:critical-cluster-factorization-main} with
-\(K_c^T=K_c\) proves, for every finite \(B\), both the cluster product for
-\(\PP(B\subset\varXi)\) and the block-factorized Toeplitz determinant.  The
-same lemma proves that the displayed Hessenberg matrix \(K_c^H\) has the same
-principal minors on every finite \(B\).  Therefore \(K_c\) and \(K_c^H\) are
-two finite-inclusion principal-minor encodings of the same critical renewal
-law.
+\(n\ge2\).  The renewal product in
+\Cref{lem:renewal-principal-minor-main} immediately gives the cluster product:
+inside a contiguous cluster each adjacent specified gap contributes \(a_c\),
+and each gap between distinct clusters contributes \(\rho_c\).
+
+It remains only to check that the two displayed critical matrices have that
+same finite product as their principal determinant.  For one contiguous cluster
+\(C=\{s,\ldots,s+m-1\}\), the \(K_c\) block has \(\rho_c\) on and below the
+diagonal, \(d_c\) on the first superdiagonal, and zero above it.  The column
+operations \(C_r\leftarrow C_r-C_{r+1}\), \(r=1,\ldots,m-1\), make the block
+upper triangular with diagonal entries \(a_c,\ldots,a_c,\rho_c\).  The
+\(K_c^H\) block has diagonal entries \(\rho_c\), subdiagonal entries \(-1\),
+and strict upper entries \(\rho_c(-d_c)^{j-i}\).  Processing rows downward by
+adding \(d_c\) times the next unaltered row cancels the strict upper entries in
+rows \(1,\ldots,m-1\) and changes their diagonal entries to
+\(\rho_c-d_c=a_c\), leaving the last diagonal entry \(\rho_c\).  Both cluster
+blocks therefore have determinant \(\rho_c a_c^{m-1}\).
+
+For arbitrary \(B\), the \(K_c\) matrix is block lower triangular across the
+ordered clusters because strict-upper entries vanish at gaps at least two, and
+the \(K_c^H\) matrix is block upper triangular because entries below the
+subdiagonal vanish across such gaps.  Multiplying the cluster determinants gives
+\eqref{eq:critical-cluster-factorization-main}.  Full support is
+Corollary~\ref{cor:word-support-main}; exact \(1\)-dependence is
+Theorem~\ref{thm:recovery-main}; non-Markovness follows from
+Lemma~\ref{lem:survival-hazard-main} and Lemma~\ref{lem:hazard-obstruction-main};
+and Remark~\ref{cor:no-exact-main} excludes the Bernoulli and Parry laws.
 \end{proof}
-
-\begin{corollary}[Critical finite-inclusion principal-minor package; no operator DPP, fermionic, or negative-association claim]\label{cor:critical_principal_minor_nonmarkov_fullsupport}
-At \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), the sampled boundary-reset
-record is simultaneously a full-support renewal process, exact \(1\)-dependent,
-represented by the two explicit finite-inclusion principal-minor matrices
-\(K_c\) and \(K_c^H\) in
-\eqref{eq:critical-toeplitz-range-one-main}--\eqref{eq:critical-hessenberg-kernel-main},
-strictly non-Markov of every finite visible order by its strictly increasing
-zero-run hazard, and neither Bernoulli nor the Parry golden-mean law.
-\end{corollary}
-
-\begin{proof}
-The renewal property is Lemma~\ref{lem:renewal-gap-main}, and full support of
-all finite binary words is Corollary~\ref{cor:word-support-main}.  Exact
-\(1\)-dependence at \(\Gamma_c\) is the critical case of
-Theorem~\ref{thm:recovery-main}, equivalently the block factorization in
-Corollary~\ref{cor:critical_finite_inclusion_memory_phase}.  The two finite-inclusion matrices
-are supplied by \Cref{thm:boundary_reset_toeplitz_finite_inclusion} and
-Corollary~\ref{cor:critical_finite_inclusion_memory_phase}.  Lemma~\ref{lem:survival-hazard-main}
-shows that the zero-run hazard is strictly increasing for all positive
-parameters, including \(\Gamma_c\), and Lemma~\ref{lem:hazard-obstruction-main}
-then excludes every finite visible Markov order.  Finally,
-Remark~\ref{cor:no-exact-main} excludes both the Bernoulli comparison law and
-the Parry golden-mean law, since the sampled boundary-reset law has full support
-and a nonconstant zero-run hazard.
-\end{proof}
-
-\begin{remark}[Upper-transfer tail of the finite-inclusion principal-minor matrix]\label{prop:finite_inclusion_tail_phase}
-For all positive \(\Gamma,\kappa_{\mathrm r},\Delta\tau\), the non-Hermitian
-Toeplitz finite-inclusion matrix \(K_\Gamma\) has exactly one upper transfer tail:
-\begin{equation}\label{eq:finite-inclusion-upper-transfer-tail-main}
-K_\Gamma(i,j)=d\lambda_{\mathrm{hid}}^{j-i-1}
-\qquad (j>i).
-\end{equation}
-Thus, away from \(\Gamma_c\), the upper tail is geometric with transfer
-parameter \(\lambda_{\mathrm{hid}}\), while at \(\Gamma_c\) this transfer
-parameter vanishes and the upper range collapses to one. This is only the
-transfer statement for the single stationary boundary-reset HMM fixed in this
-paper; no higher-dependence or nonstationary sampled-counter family is
-introduced here.
-\end{remark}
-
-\begin{proof}
-Equation~\eqref{eq:finite-inclusion-upper-transfer-tail-main} is the strict-upper part of the
-finite-inclusion principal-minor representation in \Cref{thm:boundary_reset_toeplitz_finite_inclusion}.  Lemma~\ref{lem:stationary-main}
-gives \(|\lambda_{\mathrm{hid}}|<1\), so if \(\lambda_{\mathrm{hid}}\neq0\) the
-strict-upper entries form a single geometric tail controlled by that transfer
-parameter.  Lemma~\ref{lem:critical-rate-main} says that
-\(\lambda_{\mathrm{hid}}=0\) exactly at
-\(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), where the same formula leaves only
-the first strict-upper diagonal.  No Hermitian or negative-association property
-is used in this transfer-tail statement.
-\end{proof}
-
-For compatibility with the critical-only terminology used in earlier discussion,
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion} specializes at \(\Gamma_c\) to the
-critical finite-inclusion representation, Corollary~\ref{cor:finite_window_principal_minor_word_law}
-specializes to the critical finite-window principal-minor count identity, and
-Corollary~\ref{cor:critical_principal_minor_nonmarkov_fullsupport} is the critical
-non-Markov principal-minor representation package.
 
 
 \subsection{Block III continued: exact inverse and rate-duality of the sampled record}\label{subsec:exact-inverse-rate-duality}
@@ -2337,6 +2131,198 @@ formula gives all finite inclusion, count, and word probabilities, so no
 further visible coordinate is needed on the quotient family.
 \end{proof}
 
+\begin{proposition}[Finite-record covariance estimator for the three quotient coordinates]\label{prop:three-coordinate-vector-batch-main}
+Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
+with survival factors \(p,c\in(0,1)\).  Let
+\[
+r=(r_0,r_1,r_2)^\top
+\]
+be the three inclusion coordinates in
+\Cref{cor:three_inclusion_complete_coordinates}.  In the stationary two-sided
+record define the centered local vector
+\[
+X_n=
+\begin{pmatrix}
+A_n-r_0\\
+A_nA_{n+1}-r_1\\
+A_nA_{n+2}-r_2
+\end{pmatrix}.
+\]
+In the Palm law started from a click at time \(0\), let
+\[
+0=T_0<T_1<T_2<\cdots,\qquad L_j=T_{j+1}-T_j,
+\]
+and set the vector cycle rewards
+\[
+V_j=\sum_{n=T_j}^{T_{j+1}-1}X_n,\qquad j\ge1.
+\]
+Then \((V_j)_{j\ge1}\) is stationary and \(1\)-dependent, has finite moments
+of every order, and
+\[
+\EE V_1=0.
+\]
+Put
+\begin{equation}\label{eq:three-coordinate-covariance-main}
+\Sigma_r=
+\frac{
+\Var(V_1)+\operatorname{Cov}(V_1,V_2)
++\operatorname{Cov}(V_2,V_1)}
+{\EE L_1},
+\end{equation}
+where vector covariances are matrices,
+\(\operatorname{Cov}(U,W)=\EE[UW^\top]-\EE U\,\EE W^\top\).  For the empirical
+coordinate vector
+\[
+\widehat r_N=(\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N})^\top
+\]
+defined in \Cref{cor:finite_inverse_delta_boundary_main},
+\[
+\sqrt N\,(\widehat r_N-r)\Rightarrow \mathcal N(0,\Sigma_r).
+\]
+
+Moreover \(\Sigma_r\) has a feasible all-complete-cycle separated-batch
+estimator from the same record.  Let
+\[
+0\le \tau_1<\cdots<\tau_{J_N}\le N-1
+\]
+be the observed click times, choose \(b_N\in\mathbb N\) with
+\[
+b_N\to\infty,\qquad b_N/N\to0,
+\]
+and set
+\[
+M_N^{\mathrm{all}}=
+\left\lfloor\frac{J_N-1}{b_N+1}\right\rfloor,\qquad
+R_N^{\mathrm{all}}=
+\begin{cases}
+M_N^{\mathrm{all}}b_N+(M_N^{\mathrm{all}}-1),&M_N^{\mathrm{all}}\ge1,\\
+0,&M_N^{\mathrm{all}}=0.
+\end{cases}
+\]
+On \(\{M_N^{\mathrm{all}}<2\}\), set
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}=0\).  On
+\(\{M_N^{\mathrm{all}}\ge2\}\), define
+\[
+\bar L_N^{\mathrm{all}}
+=
+\frac1{R_N^{\mathrm{all}}}\sum_{j=1}^{R_N^{\mathrm{all}}}
+(\tau_{j+1}-\tau_j),
+\]
+\[
+\widehat X_{n,N}=
+\begin{pmatrix}
+A_n-\widehat r_{0,N}\\
+A_nA_{n+1}-\widehat r_{1,N}\\
+A_nA_{n+2}-\widehat r_{2,N}
+\end{pmatrix},
+\qquad
+\widehat V_{j,N}^{\mathrm{all}}
+=
+\sum_{n=\tau_j}^{\tau_{j+1}-1}\widehat X_{n,N},
+\quad
+1\le j\le R_N^{\mathrm{all}}.
+\]
+The definition of \(R_N^{\mathrm{all}}\) leaves at least one later complete
+cycle after the last batched cycle, so every displayed lag-two term is observed.
+Define the separated vector batch sums
+\[
+\widehat C_{r,N}^{\mathrm{all}}
+=
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
+\widehat V_{j,N}^{\mathrm{all}},
+\qquad 1\le r\le M_N^{\mathrm{all}},
+\]
+their mean
+\[
+\bar C_N^{\mathrm{all}}
+=
+\frac1{M_N^{\mathrm{all}}}\sum_{r=1}^{M_N^{\mathrm{all}}}
+\widehat C_{r,N}^{\mathrm{all}},
+\]
+and the matrix estimator
+\begin{equation}\label{eq:three-coordinate-batch-estimator-main}
+\widehat\Sigma_{r,N}^{\mathrm{all}}
+=
+\frac{1}{\bar L_N^{\mathrm{all}}\,b_N\,(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+(\widehat C_{r,N}^{\mathrm{all}}-\bar C_N^{\mathrm{all}})
+(\widehat C_{r,N}^{\mathrm{all}}-\bar C_N^{\mathrm{all}})^\top .
+\end{equation}
+Then
+\[
+\widehat\Sigma_{r,N}^{\mathrm{all}}\to\Sigma_r
+\qquad\text{in probability.}
+\]
+\end{proposition}
+
+\begin{proof}
+For any fixed \(t\in\RR^3\), the scalar observable
+\[
+t^\top X_n
+=t_0(A_n-r_0)+t_1(A_nA_{n+1}-r_1)+t_2(A_nA_{n+2}-r_2)
+\]
+is bounded, local, and centered in the stationary law.  Its Palm cycle sum is
+\(t^\top V_j\).  The terminal lag-two inspection across the next click makes
+this cycle sum depend only on the adjacent zero-run pair \((G_j,G_{j+1})\),
+with linear growth in that pair.  Hence
+\Cref{lem:renewal-local-clt-main} applies to \(t^\top X_n\).  The Cramer--Wold
+device gives a vector CLT for the \(N^{-1}\)-averages of
+\((A_n,A_nA_{n+1},A_nA_{n+2})^\top\), with covariance matrix
+\eqref{eq:three-coordinate-covariance-main}.  Replacing these common
+denominators by \(N,N-1,N-2\) changes the three coordinates by \(O(N^{-1})\),
+so the same CLT holds for \(\widehat r_N\).
+
+It remains to prove consistency of the matrix estimator.  First replace
+\(\widehat X_{n,N}\) in the definition of
+\(\widehat V_{j,N}^{\mathrm{all}}\) by the population-centered \(X_n\), and
+call the resulting oracle batch sums \(C_{r,N}^{\circ,\mathrm{all}}\).  For any
+fixed \(t\in\RR^3\), applying
+\Cref{lem:batch-var-random-count-main} to the scalar stationary
+\(1\)-dependent sequence \(t^\top V_j\) gives
+\[
+\frac{1}{\bar L_N^{\mathrm{all}}\,b_N\,(M_N^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_N^{\mathrm{all}}}
+\bigl(t^\top C_{r,N}^{\circ,\mathrm{all}}
+      -t^\top \bar C_N^{\circ,\mathrm{all}}\bigr)^2
+\to
+t^\top\Sigma_r t
+\]
+in probability.  Taking \(t=e_i\) and \(t=e_i+e_j\) for coordinate vectors
+recovers every matrix entry by polarization, so the oracle matrix estimator
+converges to \(\Sigma_r\).
+
+For plug-in centering, the vector CLT already proved gives
+\[
+\delta_N:=\|\widehat r_N-r\|=O_{\PP}(N^{-1/2}).
+\]
+Since every coordinate of \(X_n-\widehat X_{n,N}\) is bounded in absolute value
+by \(\delta_N\), there is a deterministic constant \(C\) such that the batch
+perturbations
+\[
+\Delta_{r,N}:=\widehat C_{r,N}^{\mathrm{all}}-C_{r,N}^{\circ,\mathrm{all}}
+\]
+satisfy
+\[
+\|\Delta_{r,N}\|
+\le
+C\delta_N
+\sum_{j=(r-1)(b_N+1)+1}^{(r-1)(b_N+1)+b_N}
+(\tau_{j+1}-\tau_j).
+\]
+The same random-index renewal bound used in the proof of
+\Cref{prop:finite-record-variance-estimator-main} gives
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}\|\Delta_{r,N}\|^2
+=O_{\PP}(\delta_N^2b_N)
+=O_{\PP}(b_N/N)
+=o_{\PP}(1).
+\]
+After centering the batches, Cauchy--Schwarz shows that the difference between
+the plug-in and oracle matrix estimators is \(o_{\PP}(1)\) entrywise.  This
+proves \eqref{eq:three-coordinate-batch-estimator-main}.
+\end{proof}
+
 \begin{corollary}[Finite-record inverse delta map and diagonal instability]\label{cor:finite_inverse_delta_boundary_main}
 Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
 with survival factors \(p,c\in(0,1)\).  From one record
@@ -2359,6 +2345,11 @@ Then, for some positive semidefinite matrix \(\Sigma_r\),
 \qquad
 r=(r_0,r_1,r_2).
 \]
+Here \(\Sigma_r\) is the regenerative covariance matrix in
+\eqref{eq:three-coordinate-covariance-main}, and the feasible separated-batch
+matrix estimator
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}\) in
+\eqref{eq:three-coordinate-batch-estimator-main} is consistent for it.
 On the open set \(r_0>0\) and \(r_1/r_0\ne r_0\), put
 \[
 a(r)=\frac{r_1}{r_0},\qquad
@@ -2381,6 +2372,17 @@ At the population value, \(s_1=p+c\) and \(s_2=pc\).  Therefore
 \Rightarrow
 \mathcal N\!\left(0,D\Phi(r)\Sigma_rD\Phi(r)^\top\right).
 \]
+The corresponding feasible covariance estimator is
+\[
+\widehat\Sigma_{\Phi,N}
+=
+D\Phi(\widehat r_N)\,
+\widehat\Sigma_{r,N}^{\mathrm{all}}\,
+D\Phi(\widehat r_N)^\top
+\]
+on the event that \(\widehat r_N\) lies in the displayed open set, with any
+fixed positive semidefinite fallback value off that event.  It converges in
+probability to \(D\Phi(r)\Sigma_rD\Phi(r)^\top\).
 If \(p\ne c\), equivalently
 \[
 \Delta_s:=s_1^2-4s_2>0,
@@ -2421,6 +2423,11 @@ rate estimates.  The additional rate-map Jacobian is
 -\frac1{\Delta\tau z_-}
 \right).
 \]
+Off the diagonal, feasible root and rate covariance estimators are obtained by
+substituting \(\widehat r_N\) and
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}\) in the two displayed Jacobian
+sandwiches.  They are consistent on every compact subregion with
+\(\Delta_s>0\).
 
 On the diagonal \(p=c\), the discriminant vanishes:
 \(\Delta_s=0\).  The map
@@ -2447,7 +2454,10 @@ lengths and has linear growth in those lengths.  Applying
 \(N\) by \(N-1\) or \(N-2\) in the empirical denominators changes the statistic
 by \(o_{\PP}(N^{-1/2})\), gives a one-dimensional CLT for every linear
 combination of \(\widehat r_N-r\).  The Cramer--Wold device gives the displayed
-joint CLT for some covariance matrix \(\Sigma_r\).
+joint CLT with the covariance matrix \(\Sigma_r\) identified in
+\Cref{prop:three-coordinate-vector-batch-main}.  The same proposition gives
+the separated-batch consistency of
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}\).
 
 The inequalities \(r_0>0\) and \(r_1/r_0\ne r_0\) hold at the population value:
 the first is stationarity with positive click density, and the second is
@@ -2456,6 +2466,10 @@ neighbourhood of the population inclusion vector, and the multivariate delta
 method gives the symmetric-coordinate limit.  The identities
 \(s_1=p+c\) and \(s_2=pc\) are exactly
 \eqref{eq:inverse-sum-main} and \eqref{eq:inverse-product-main}.
+Since \(\widehat r_N\to r\) in probability, the event that
+\(\widehat r_N\) lies in the open set has probability tending to one; the
+covariance-estimator consistency for \(\Phi(\widehat r_N)\) follows from the
+continuity of \(D\Phi\) and Slutsky's theorem.
 
 When \(p\ne c\), the discriminant
 \(\Delta_s=(p-c)^2\) is strictly positive, so the ordered root map \(\Psi\) is
@@ -2600,6 +2614,27 @@ one-cycle observable: the terminal lag-two window in one cycle uses the first
 symbol of the next cycle. The correct finite-record construction is therefore a
 cycle decomposition with a stationary $1$-dependent reward sequence and a
 batching step that removes this one-step overlap.
+
+The variance-estimation device is a specialized batch-means construction, not a
+new general simulation-output theorem.  Classical steady-state output analysis
+uses batch means, overlapping batch means, spaced batch means, and standardized
+time-series estimators to estimate the time-average variance constant, with
+both the batch length and the number of batches diverging; see, for example,
+Glynn--Whitt on asymptotic-variance estimation by batch means, Damerdji on
+strong and mean-square consistency of batch-means-type variance estimators, and
+subsequent large-sample and survey treatments
+\cite{GlynnWhitt1991BatchMeans,Damerdji1994StrongConsistency,Damerdji1995MeanSquareConsistency,ChienGoldsmanMelamed1997BatchMeans,AlexopoulosGoldsman2004Batch}.
+What is paper-specific here is the regenerative geometry of the sampled
+counter.  The regeneration times are observed clicks, the reward attached to a
+click-to-click cycle is the complete lag-two covariance contribution for that
+cycle, and adjacent rewards are exactly \(1\)-dependent because a terminal
+lag-two window reaches into the next cycle.  The separated-batch estimator
+therefore deliberately omits one complete-cycle reward between neighboring
+batches; this omission kills the one-dependence before the usual batch-variance
+argument is applied.  The remaining technical work below is only the
+finite-record bookkeeping for this model: plug-in centering stability and
+transfer from the deterministic Palm proof device to the observed
+all-complete-cycle random batch count.
 
 \begin{proposition}[Finite-record dependency map and narrow diagnostic closure]\label{prop:finite-record-map-main}
 For the stationary boundary-reset record of \Cref{thm:recovery-main}, the
@@ -2781,9 +2816,11 @@ On the event $\{M_N^{\mathrm{all}}\ge1\}$ one has
 \[
 0\le (J_N-1)-R_N^{\mathrm{all}}<b_N+1,
 \]
-this practical estimator uses every complete cycle except the unavoidable
+so this practical estimator uses every complete cycle except the unavoidable
 terminal remainder left after grouping the observed cycles into separated
-batches.
+batches.  The last batched cycle is not the last observed complete cycle:
+\(R_N^{\mathrm{all}}\le J_N-2\), so its terminal lag-two summand may inspect the
+next complete cycle but never leaves the recorded word.
 \end{definition}
 
 \begin{lemma}[Lag-two cycle decomposition and one-dependence]\label{lem:cycle-one-dep-main}
@@ -3881,6 +3918,19 @@ Then
 +(4\beta+1)\pi_0^2
 +2\pi_0^3.
 \end{equation}
+Equivalently, the displayed expression is obtained by expanding
+\[
+\EE Y_1^2
+=\alpha^2m_2+2\alpha\beta m_1+\beta^2
++(2\alpha+2\beta+1)\pi_1+(2\beta+1)\pi_0^2,
+\]
+\[
+\EE(Y_1Y_2)=\beta\pi_0^2+\pi_0^3,
+\qquad
+\EE Y_1=0,
+\]
+and then using
+\(\tau_2^2=\EE Y_1^2+2\EE(Y_1Y_2)\).
 Then
 \begin{equation}\label{eq:sigma2-main}
 \sigma_2^2=
@@ -4373,6 +4423,74 @@ make \(u(h)-u(g)\) independent of \(h\), so \(u\) is constant on
 case is excluded, and \(\tau_{2,\mathrm{br}}^2>0\).
 \end{proof}
 
+\begin{lemma}[Observed lag-two windows in the all-complete-cycle batches]\label{lem:all-cycle-lag-two-windows-main}
+Let
+\[
+0\le \tau_1<\cdots<\tau_{J_N}\le N-1
+\]
+be the observed click times in a record of length \(N\).  For an integer
+\(b_N\ge1\), set
+\[
+M_N^{\mathrm{all}}
+=\left\lfloor\frac{J_N-1}{b_N+1}\right\rfloor,
+\qquad
+R_N^{\mathrm{all}}=
+\begin{cases}
+M_N^{\mathrm{all}}b_N+(M_N^{\mathrm{all}}-1),& M_N^{\mathrm{all}}\ge1,\\
+0,& M_N^{\mathrm{all}}=0.
+\end{cases}
+\]
+with the convention \(M_N^{\mathrm{all}}=R_N^{\mathrm{all}}=0\) when
+\(J_N=0\).
+On \(\{M_N^{\mathrm{all}}\ge1\}\),
+\[
+R_N^{\mathrm{all}}\le J_N-2.
+\]
+Consequently, for every cycle index \(j\le R_N^{\mathrm{all}}\) and every
+\(n\in\{\tau_j,\ldots,\tau_{j+1}-1\}\), the lag-two window used in
+\(\widehat Z_{n,N}\) is observed:
+\[
+n+2\le N-1.
+\]
+More explicitly, the potentially problematic terminal term has
+\(n=\tau_{j+1}-1\) and inspects \(A_{\tau_{j+1}+1}\).  Since
+\(j+2\le J_N\), the following complete cycle and its closing click
+\(\tau_{j+2}\) are observed, and
+\[
+\tau_{j+1}+1\le \tau_{j+2}\le N-1.
+\]
+In particular every summand appearing in the batched rewards
+\(\widehat Y_{j,N}^{\mathrm{all}}\), and hence in
+\(\widehat B_{r,N}^{\mathrm{all}}\), is a function only of the recorded symbols
+\(A_0,\ldots,A_{N-1}\).
+\end{lemma}
+
+\begin{proof}
+If \(M_N^{\mathrm{all}}\ge1\), then
+\[
+R_N^{\mathrm{all}}
+=M_N^{\mathrm{all}}(b_N+1)-1.
+\]
+The definition of the floor gives
+\[
+M_N^{\mathrm{all}}(b_N+1)\le J_N-1,
+\]
+and therefore \(R_N^{\mathrm{all}}\le J_N-2\).  Now fix
+\(j\le R_N^{\mathrm{all}}\) and
+\(n\in\{\tau_j,\ldots,\tau_{j+1}-1\}\).  The preceding inequality gives
+\(j+1\le J_N-1\) and \(j+2\le J_N\).  In particular the complete cycle after
+\(\tau_{j+1}\) is still part of the observed click list.  Since the click times
+are strictly increasing integers and \(\tau_{J_N}\le N-1\),
+\[
+\tau_{j+1}+1\le \tau_{j+2}\le \tau_{J_N}\le N-1.
+\]
+Hence
+\[
+n+2\le(\tau_{j+1}-1)+2=\tau_{j+1}+1\le N-1,
+\]
+as claimed.
+\end{proof}
+
 \begin{theorem}[Self-contained finite-record lag-two covariance CLT for the sampled boundary-reset record]\label{cor:boundary-reset-cycle-clt-main}\label{thm:sampled-finite-record-main}
 Fix one detector setting
 \[
@@ -4492,8 +4610,8 @@ L_{j,N}^{\mathrm{all}},
 \widehat Y_{j,N}^{\mathrm{all}}
 =\sum_{n=\tau_j}^{\tau_{j+1}-1}\widehat Z_{n,N},
 \]
-where the terminal lag-two term in a complete cycle may inspect symbols in the
-following complete cycle when those symbols lie in the observed record.  Define
+where \Cref{lem:all-cycle-lag-two-windows-main} ensures that even the terminal
+lag-two term in each batched complete cycle lies in the observed record.  Define
 the separated batch sums, omitting one cycle reward between adjacent batches, by
 \[
 \widehat B_{r,N}^{\mathrm{all}}
@@ -5327,10 +5445,14 @@ isolated by the finite-budget obstruction in
 \item In particular, no confidence set for the memory response locus
 \(\Sigma_{\rm mem}\) follows from these data unless an additional scan or
 localization theorem supplies the missing root-location asymptotics.
-\item Any inverse, covariance-transport, denominator-normalized, location, or
-ratio-coordinate confidence statement requires separate denominator-, location-,
-or ratio-data asymptotics; it is not a consequence of
-\Cref{thm:sampled-finite-record-main}.
+\item The visible-law quotient inverse is a separate record-side calculation:
+\Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main}
+give a regenerative covariance estimator and delta method for the unordered
+survival factors \(\{p,c\}\), off the diagonal \(p=c\).  That statement still
+does not label one root as the attempt rate, and it does not supply
+denominator-normalized, response-location, scan-root, or shell-confidence
+asymptotics.  Those require separate denominator-, location-, ratio-, or
+scan-data input.
 \end{enumerate}
 \end{theorem}
 
