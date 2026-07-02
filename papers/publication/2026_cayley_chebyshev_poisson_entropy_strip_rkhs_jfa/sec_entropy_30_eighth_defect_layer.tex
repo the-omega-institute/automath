@@ -68,6 +68,45 @@ Q_2Q_3^2 & -\frac{9}{128} \\
 Q_2^4 & \frac{9}{64}
 \end{array}
 \]
+The only odd total-degree products appearing before the even-power
+projection are
+\[
+B_5=a_2a_3,\qquad
+B_7=a_2a_5+a_3a_4-\frac12a_2^2a_3 .
+\]
+Their constant Laurent coefficients vanish:
+\[
+\begin{array}{c|c}
+\text{product} & [z^0] \\
+\hline
+Q_2Q_3 & 0\\
+Q_2Q_5 & 0\\
+Q_3Q_4 & 0\\
+Q_2^2Q_3 & 0
+\end{array}
+\]
+These four zeros are the complete list needed to remove \(B_5\) and \(B_7\)
+from the entropy coefficient extraction through order eight.
+Equivalently, these entries are the constant terms
+\[
+I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
+\]
+for the displayed \(Q_2,\ldots,Q_6\).  The paper-local exact rational
+certificate
+\[
+\texttt{certificates/eighth\_order\_laurent\_certificate.py}
+\]
+constructs the same Laurent polynomials from
+\eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}, performs the
+finite convolution over \(\QQ\), and prints precisely the nonzero and
+vanishing tables above.  The same certificate includes the normalization and
+two-point arithmetic checks
+\[
+Q_2(1)=-1,\qquad
+A_6(\rho_\sigma)=-\frac{7\sigma^6}{64},\qquad
+A_8(\rho_\sigma)=\frac{23\sigma^8}{256},
+\]
+where \(\rho_\sigma=\tfrac12(\delta_{-\sigma}+\delta_\sigma)\).
 Set \(a_j=\mu_j u_j\) for \(2\le j\le6\), with
 \(\mu_2=\sigma^2\), and
 \[
@@ -140,17 +179,26 @@ B_5=a_2a_3,\qquad
 B_7=a_2a_5+a_3a_4-\frac12a_2^2a_3
 \]
 have zero \(\omega\)-integral by Lemma~\ref{lem:mode-parity-vanish}.  Hence
-using the displayed Laurent polynomials,
+using the displayed Laurent polynomials the coefficient extraction is
+contained in the following three checkable lines:
 \[
-\int_{\RR}B_4\,\dd\omega=\frac{\sigma^4}{8},\qquad
-\int_{\RR}B_6\,\dd\omega
+A_4=\frac12\mu_2^2I(2,2)=\frac{\sigma^4}{8},
+\]
+\[
+A_6=\mu_2\mu_4I(2,4)+\frac12\mu_3^2I(3,3)
+-\frac16\mu_2^3I(2,2,2)
 =\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
 \]
-and
 \[
-\int_{\RR}B_8\,\dd\omega
-=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
+\begin{aligned}
+A_8={}&\mu_2\mu_6I(2,6)+\mu_3\mu_5I(3,5)
++\frac12\mu_4^2I(4,4)\\
+&-\frac12\mu_2^2\mu_4I(2,2,4)
+-\frac12\mu_2\mu_3^2I(2,3,3)
++\frac1{12}\mu_2^4I(2,2,2,2)\\
+={}&\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
 +12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
+\end{aligned}
 \]
 \end{lemma}
 
@@ -183,11 +231,7 @@ If \(Q_j(z)=\sum_k q_{j,k}z^k\), the extraction is the finite convolution
 [z^0]Q_{n_1}\cdots Q_{n_r}
 =\sum_{k_1+\cdots+k_r=0}q_{n_1,k_1}\cdots q_{n_r,k_r}.
 \]
-The following certificate lists every zero-sum convolution used in
-\(B_4\), \(B_6\), and \(B_8\).  Write
-\(\operatorname{Sym}(v)\) for the set of distinct permutations of the
-tuple \(v\).  The coefficient weights are read from the displayed
-\(Q_2,\ldots,Q_6\):
+The coefficient weights are read from the displayed \(Q_2,\ldots,Q_6\):
 \[
 \begin{gathered}
 q_{2,\pm1}=q_{2,\pm2}=-\frac14,\qquad
@@ -197,83 +241,58 @@ q_{5,\pm m}=\mp\ii\,\frac{(1,4,6,4,1)_m}{32}\quad(1\le m\le5),\\
 q_{6,\pm m}=-\frac{(1,5,10,10,5,1)_m}{64}\quad(1\le m\le6).
 \end{gathered}
 \]
-For the products with two factors, the zero-sum exponent pairs and their
-weighted sums are
+The exact rational certificate mentioned in the statement evaluates this
+finite convolution for all products that can enter \(B_4\), \(B_6\), and
+\(B_8\), and for the odd products \(B_5\) and \(B_7\) that must vanish after
+integration:
 \[
 \begin{array}{c|c|c}
-\text{product} & \{(k_1,k_2):k_1+k_2=0\} & [z^0] \\
+\text{entropy order} & \text{mode product} & [z^0]\text{ of the product} \\
 \hline
-Q_2^2 &
-\{(-2,2),(-1,1),(1,-1),(2,-2)\} &
-4\cdot\frac1{16}=\frac14 \\
-Q_2Q_4 &
-\{(-2,2),(-1,1),(1,-1),(2,-2)\} &
--\frac{3+1+1+3}{64}=-\frac18 \\
-Q_3^2 &
-\begin{gathered}
-\{(-3,3),(-2,2),(-1,1),\\
-(1,-1),(2,-2),(3,-3)\}
-\end{gathered}
-&
-\frac{1+4+1+1+4+1}{64}=\frac3{16} \\
-Q_2Q_6 &
-\{(-2,2),(-1,1),(1,-1),(2,-2)\} &
-\frac{5+1+1+5}{256}=\frac3{64} \\
-Q_3Q_5 &
-\begin{gathered}
-\{(-3,3),(-2,2),(-1,1),\\
-(1,-1),(2,-2),(3,-3)\}
-\end{gathered}
-&
--\frac{6+8+1+1+8+6}{256}=-\frac{15}{128} \\
-Q_4^2 &
-\begin{gathered}
-\{(-4,4),(-3,3),(-2,2),(-1,1),\\
-(1,-1),(2,-2),(3,-3),(4,-4)\}
-\end{gathered}
-&
-\frac{1+9+9+1+1+9+9+1}{256}=\frac5{32}.
+4 & Q_2^2 & \frac14\\
+6 & Q_2Q_4 & -\frac18\\
+6 & Q_3^2 & \frac{3}{16}\\
+6 & Q_2^3 & -\frac{3}{32}\\
+8 & Q_2Q_6 & \frac{3}{64}\\
+8 & Q_3Q_5 & -\frac{15}{128}\\
+8 & Q_4^2 & \frac{5}{32}\\
+8 & Q_2^2Q_4 & \frac{3}{32}\\
+8 & Q_2Q_3^2 & -\frac{9}{128}\\
+8 & Q_2^4 & \frac{9}{64}
 \end{array}
 \]
-For the products with three and four factors, the complete zero-sum
-tuple sets are as follows.  For \(Q_2^3\),
 \[
-\begin{gathered}
-Z_{222}:=\operatorname{Sym}(-2,1,1)\cup\operatorname{Sym}(2,-1,-1),\\
-[z^0]Q_2^3=6\left(-\frac1{64}\right)=-\frac3{32}.
-\end{gathered}
+\begin{array}{c|c|c}
+\text{entropy order} & \text{mode product} & [z^0]\text{ of the product} \\
+\hline
+5 & Q_2Q_3 & 0\\
+7 & Q_2Q_5 & 0\\
+7 & Q_3Q_4 & 0\\
+7 & Q_2^2Q_3 & 0
+\end{array}
 \]
-For \(Q_2^2Q_4\),
+Because all coefficients are rational except for the explicit odd-mode factor
+\(1/\ii\), and because the only odd modes used here occur in pairs, every
+listed constant term lies in \(\QQ\).  The script records this convention by
+factoring out \(1/\ii\) from odd \(Q_n\) and inserting the sign
+\((1/\ii)^2=-1\) in the odd--odd products.  This is exactly the convention in
+the displayed Laurent polynomials.  The zero rows follow from the same
+convolution formula; equivalently, each listed product contains an odd number
+of odd modes and is odd under \(y\mapsto-y\), so its Cauchy-weighted integral
+has no constant Laurent term.
+
+As a normalization check, the displayed \(Q_2\) gives \(Q_2(1)=-1\), agreeing
+with \(u_2(0)=-1\).  For the symmetric two-point law
+\(\rho_\sigma\), the centred moments satisfy
+\(\mu_2=\sigma^2\), \(\mu_3=\mu_5=0\), \(\mu_4=\sigma^4\), and
+\(\mu_6=\sigma^6\).  Substitution into the sixth- and eighth-order moment
+polynomials therefore gives
 \[
-\begin{gathered}
-Z_{224}:=\{(-2,-2,4),(2,2,-4)\}\\
-\cup\{(-2,-1,3),(-1,-2,3),(1,2,-3),(2,1,-3)\}\\
-\cup\{(-2,1,1),(1,-2,1),(-1,2,-1),(2,-1,-1)\}\\
-\cup\{(-1,-1,2),(1,1,-2)\},\\
-[z^0]Q_2^2Q_4=\frac{2+12+4+6}{256}=\frac3{32}.
-\end{gathered}
-\]
-For \(Q_2Q_3^2\),
-\[
-\begin{gathered}
-Z_{233}:=\{(-2,-1,3),(-2,1,1),(-2,3,-1)\}\\
-\cup\{(-1,-2,3),(-1,-1,2),(-1,2,-1),(-1,3,-2)\}\\
-\cup\{(1,-3,2),(1,-2,1),(1,1,-2),(1,2,-3)\}\\
-\cup\{(2,-3,1),(2,-1,-1),(2,1,-3)\},\\
-[z^0]Q_2Q_3^2
-=\frac{-1+1-1-2-2-2-2}{256}
-+\frac{-2-2-2-2-1+1-1}{256}
-=-\frac9{128}.
-\end{gathered}
-\]
-For \(Q_2^4\),
-\[
-\begin{gathered}
-Z_{2222}:=\operatorname{Sym}(-2,-2,2,2)\cup
-\operatorname{Sym}(-1,-1,1,1)\\
-\cup\,\operatorname{Sym}(-2,-1,1,2),\\
-[z^0]Q_2^4=\frac{6+6+24}{256}=\frac9{64}.
-\end{gathered}
+A_6(\rho_\sigma)=\frac{1-8}{64}\sigma^6
+=-\frac{7\sigma^6}{64},
+\qquad
+A_8(\rho_\sigma)=\frac{3-12+12+20}{256}\sigma^8
+=\frac{23\sigma^8}{256}.
 \]
 These entries are exactly the mode integrals displayed in the statement.
 Substituting them into \(B_4\), \(B_6\), and \(B_8\) gives

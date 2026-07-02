@@ -20,19 +20,23 @@ closed-form parametric Cauchy divergence formulae: Chyzak--Nielsen compute
 the Kullback--Leibler divergence between two Cauchy distributions
 \cite{ChyzakNielsen2019CauchyKL}, and Nielsen--Okamura compute
 \(f\)-divergences between Cauchy laws \cite{NielsenOkamura2023Cauchy}.
-The object studied here is different.  The Cauchy law is used as the
-Haar/Poisson normalization in which the smoothed comparison
-\(D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))\) has a finite-moment
-large-time coefficient expansion.  Thus the present coefficients are not
-closed forms for a parametric Cauchy--Cauchy divergence; they are
-coefficient-level entropy jets for the matched Poisson/Cauchy relative
-entropy of an arbitrary input law with finite moments.
+The object studied here is different and deliberately narrower.  The Cauchy
+law is used as the Haar/Poisson normalization for the single matched
+functional
+\[
+D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma)).
+\]
+The coefficients below are therefore not closed forms for a parametric
+Cauchy--Cauchy divergence, and they are not general heat-kernel profile
+coefficients.  They are coefficient-level entropy jets for this fixed-law
+Poisson smoothing comparison, evaluated from finitely many centred moments of
+the input law.
 
 \subsection*{Main results}
 
-The first main result is the finite-moment entropy expansion.  For every
-\(N\ge2\), if a probability law~\(\nu\) has mean
-$\bar\gamma$ and finite centred $(2N-2)$th absolute moment, then
+The first main result is the finite-moment entropy expansion for precisely
+this matched KL functional.  For every \(N\ge2\), if a probability law~\(\nu\)
+has mean $\bar\gamma$ and finite centred $(2N-2)$th absolute moment, then
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
@@ -51,9 +55,10 @@ Those coefficients define the defect coordinates used in
 Corollary~\ref{cor:coefficient-defect-coupling}, which bounds the
 fixed-variance moment defect in \(W_2\).  The finite-time version,
 Theorem~\ref{thm:finite-time-poisson-entropy-stability}, is an a posteriori
-oracle estimate: its fixed-law statement uses supplied data
-\(A_8^{\rm ent}(\nu),B_{\nu,8},T_{\nu,8}\), while the controlled-shell
-statement is the single-observation version with constants fixed in advance.
+conditional estimate: its fixed-law statement uses one entropy observation
+plus supplied data \(A_8^{\rm ent}(\nu),B_{\nu,8},T_{\nu,8}\), while the
+controlled-shell statement uses one entropy observation plus constants fixed
+in advance on the shell.
 The theorem-by-theorem hypotheses, constant regimes, and downstream outputs
 are summarized before the entropy proofs in
 Subsection~\ref{sec:entropy-theorem-map}.
@@ -62,8 +67,9 @@ Three supporting tools keep the argument checkable without changing this
 hierarchy.  Finite root-of-unity sampling verifies the Laurent coefficient
 arithmetic; the KL Doob-tail section gives the dissipation-tail
 representation \(D_{\mathrm{KL}}=\int_t^\infty I_\nu(s)\dd s\); and the
-secant/strip RKHS material gives Hilbert coordinates for the Poisson
-observation channel.
+short optional observation appendix records how full profile data, or exact
+lattice integer data, can supply the finite moment jet used by the entropy
+layer.
 
 \subsection*{Cayley coefficient mechanism}
 
@@ -97,62 +103,61 @@ explicit degree barrier.  The finite-grid moment recovery theorem and the
 eighth-order finite-phase verification check the normalized Laurent
 constant terms after the analytic asymptotic framework has been established.
 
-\subsection*{Observation channel and strip RKHS}
+\subsection*{Optional observation data}
 
-The observation material gives Hilbert coordinates for a Poisson channel.  The
-secant family
-\[
-\Psi_\varepsilon(y):=\frac{R_\varepsilon(y)-1}{\varepsilon}
-\]
-has Gram kernel
-\[
-K(a,b)=\frac{2}{4+(a-b)^2}.
-\]
-Theorem~\ref{thm:mode-gram-kernel} computes this kernel, and
-Theorem~\ref{thm:mode-space-rkhs} identifies the closed secant span with
-$L^2_0(\omega)$ and its RKHS completion.  These results are the Hilbert
-coordinate system for the appendix projection theorem.
+The entropy expansion and defect theorems are moment theorems.  Their proofs
+do not require a strip RKHS or a sampling theorem.  Appendix~\ref{sec:strip-lattice}
+therefore keeps only the observation interface needed to explain how the
+moment jet \((\mu_2,\ldots,\mu_6)\) may be supplied from external Poisson
+observation data.
 
-The scalar centred observation functions in
-Proposition~\ref{prop:poisson-central-two-channel} recover the centred law
-from the central Poisson trace and its derivative by Laplace uniqueness and
-characteristic-function inversion.  Theorem~\ref{thm:poisson-channel-rkhs}
-then places the centred fluctuation profile inside the secant RKHS and
-identifies the observation values as evaluation functionals.
-Appendix~\ref{sec:strip-lattice} transports this RKHS into the Poisson strip
-space
-$\sqrt{\pi}\,e^{-|D|}L^2(\RR)$ and records the integer-orbit projection
-formula.  The resulting observation theorem is a projection theorem: integer
-data recover exactly \(\Pi_{\ZZ}F_t\).  The same theorem translates full
-channel recovery into a law-side lattice condition: for the observation time
-\(t\), integer data recover \(F_t\) itself exactly when
-\(q_{F_t}(\xi)=e^{2|\xi|}\widehat F_t(\xi)\) is \(2\pi\)-periodic,
-equivalently when the centred law is supported on \(t\ZZ\).  When the full
-profile \(q_{F_t}\) is available, a separate Fourier-inversion lemma recovers
-the signed measure \(s\,\mu_t(\dd s)\), hence the scaled centred law
-\(\mu_t\) away from zero and then its atom at zero by total mass.
-The observation-to-entropy interface is
-Theorem~\ref{thm:observation-entropy-interface}: the entropy-defect layer uses
-only the centred moment jet \((\mu_2,\ldots,\mu_6)\), which is supplied by the
-full profile, or by integer samples only in the exact lattice-recovery case.
-The projected data \(\Pi_{\ZZ}F_t\) alone are not used to infer
+At a fixed observation time \(t_0\), write
+\[
+\mu_{t_0}:=\operatorname{Law}((\gamma-\bar\gamma)/t_0),
+\qquad
+q_{t_0}(\xi)=\pi\int_{\RR}s e^{-\ii s\xi}\mu_{t_0}(\dd s).
+\]
+Full knowledge of \(q_{t_0}\) determines the finite signed measure
+\(s\,\mu_{t_0}(\dd s)\) by Fourier uniqueness, hence determines
+\(\mu_{t_0}\) away from zero and the atom at zero by total mass.  The same
+appendix records the exact integer-lattice alternative: integer observations
+against the kernel \(K(a,b)=2/(4+(a-b)^2)\) recover the full scaled law only
+when
+\[
+\nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1 .
+\]
+Under that condition a positive discrete symbol inverts the integer
+convolution.  Without the lattice condition, integer data are auxiliary
+projection data only and are not used to infer
 \(C_6^{\rm ent}\), \(A_8^{\rm ent}\), or the defect coordinates.
 
 \subsection*{Theorem-level comparison with adjacent work}
 
 The positioning references are not proof inputs.  Theorem~\ref{thm:poisson-kl-even-orders}
-is closest in spirit to entropic-asymptotic work such as
-Bobkov--G{\"o}tze \cite{BobkovGotzeEsscher2025}, but it differs from CLT and
-Esscher-transform results because the law is fixed and the time parameter is
-Poisson smoothing.  Corollary~\ref{cor:coefficient-defect-coupling} and
+should be read against three adjacent literatures.  Classical and fractional
+heat large-time expansions extract moment-corrected kernel profiles for
+evolving PDE solutions
+\cite{DuoandikoetxeaZuazua1992,EscobedoZuazua1991,KarchSchonbek2001,IshigeKawakami2012,IshigeKawakamiMichihisa2017,AnkerPapageorgiouZhang2023HeatSymmetricSpaces,Papageorgiou2024FractionalLargeTime},
+while the standard extension-method references
+\cite{CaffarelliSilvestre2007,StingaTorrea2010} belong to the fractional
+operator background rather than to the proof inputs.
+Entropic stable-law and CLT asymptotics study convolution powers, normalized
+sums, or Esscher-transformed sums
+\cite{BobkovChistyakovGotze2013,BobkovChistyakovGotzeEdgeworth2013,BobkovChistyakovGotzeBerryEsseen2014,BobkovGotzeEsscher2025}.
+Parametric Cauchy divergence formulae compute closed forms between members of
+a finite-dimensional family \cite{ChyzakNielsen2019CauchyKL,NielsenOkamura2023Cauchy}.
+The present theorem is narrower than all three: it gives the finite-moment
+large-time coefficient expansion of the single fixed-law functional
+\(D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))\), with the comparison profile
+matched to the mean of the input law.  Corollary~\ref{cor:coefficient-defect-coupling} and
 Theorem~\ref{thm:finite-time-poisson-entropy-stability} are
 coefficient-defect estimates, not functional-inequality stability theorems
-of the log-Sobolev or log-HLS type.  The RKHS and lattice-observation
-theorems are sampling/projection results for the Poisson secant channel, not
-shift-invariant Gaussian sampling theorems.  Appendix~\ref{app:theorem-level-comparison}
+of the log-Sobolev or log-HLS type.  The optional lattice-observation theorem
+only explains one source of the finite moment inputs and is not a proof input
+for the entropy asymptotics.  Appendix~\ref{app:theorem-level-comparison}
 contains the theorem-by-theorem comparison table with DOI and arXiv data and
 keeps recent JFA comparators separate from older foundational and non-JFA
-background.
+background, including the Beurling--Landau density line for sampling.
 
 \subsection*{Organization}
 
@@ -166,10 +171,9 @@ the finite-moment entropy expansion and the seventh-moment eighth-order
 defect layer, followed by the coefficient-level and finite-time
 moment-defect \(W_2\) consequences.  Section~\ref{sec:doob-phi-entropy}
 records the KL dissipation-tail identity for the same Poisson comparison
-quotient.  Appendix~\ref{sec:gram-space} constructs the secant Gram space and
-proves the centred Poisson reconstruction statement.  Appendix~\ref{sec:strip-lattice}
-identifies the strip RKHS and proves the integer-orbit observation projection
-theorem.  Appendix~\ref{app:theorem-level-comparison} gives the detailed
+quotient.  Appendix~\ref{sec:strip-lattice} records the optional
+observation-to-moment interface and the exact integer-lattice recovery
+statement.  Appendix~\ref{app:theorem-level-comparison} gives the detailed
 theorem-level comparison table.  Appendix~\ref{app:entropy-integrals}
 records the weighted trigonometric integrals and coefficient arithmetic used
 in the eighth-order expansion.  Appendix~\ref{sec:finite-phase-sampling}

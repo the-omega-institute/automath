@@ -1,435 +1,189 @@
-% sec_strip_lattice.tex -- integer-orbit projection for the observation channel
-\section{Integer-Orbit Projection for the Strip RKHS}%
+% sec_strip_lattice.tex -- optional observation data for entropy inputs
+\section{Optional Observation Data for Moment Inputs}%
 \label{sec:strip-lattice}
 
-This appendix records only the strip facts needed by the observation channel
-from Theorem~\ref{thm:poisson-channel-rkhs}.  The kernel is
-\[
-K(a,b):=\frac{2}{4+(a-b)^2}=\pi P_2(a-b),
-\qquad a,b\in\RR,
-\]
-and $\mathcal H_K$ denotes its complex reproducing-kernel Hilbert space.  With
-the Fourier convention of this paper,
-\[
-\langle f,g\rangle_{\mathcal H_K}
-=\frac{1}{2\pi^2}\int_{\RR}e^{2|\xi|}\widehat f(\xi)
-\overline{\widehat g(\xi)}\,\dd\xi,
-\]
-so $\mathcal H_K$ is the Poisson image space
-\[
-\mathcal H_K
-=\left\{f:\int_{\RR}e^{2|\xi|}|\widehat f(\xi)|^2\dd\xi<\infty\right\}
-\]
-with this norm.  This is the standard translation-invariant RKHS
-realization of a positive definite kernel, since
-\[
-\widehat{K(\cdot,0)}(\xi)=\pi e^{-2|\xi|}.
-\]
-Every $f\in\mathcal H_K$ extends holomorphically to the strip
-$\{z\in\CC:|\Im z|<1\}$, but the lattice argument below uses only the real-line
-Fourier model and the reproducing property.
+The entropy theorems in Section~\ref{sec:entropy-asymptotics} are proved from
+centred moments.  They do not use a reproducing-kernel Hilbert-space
+construction.  This short appendix records only the optional observation
+interface needed to explain one way in which the moment jet
+\((\mu_2,\ldots,\mu_6)\) can be supplied.
 
-The entropy interface is isolated in
-Theorem~\ref{thm:observation-entropy-interface}.  The entropy-defect results
-use only a finite centred moment jet.  The strip observation channel supplies
-that jet when the full profile is available, either directly or from integer
-samples in the exact lattice case.  Integer samples without the lattice
-condition are projection data only and are not used below as coefficient or
-defect data.  The projection theorem in this appendix is not used to prove the
-entropy coefficient identities; it is a companion observation-channel
-interface for translating separately supplied full-profile data into the
-moment inputs that those identities require.
-
-\begin{lemma}[Integer projection for the Poisson strip kernel]%
-\label{lem:auxiliary-uniform-lattice-projection}
-\label{prop:poisson-lattice-symbol}
-Let
-\[
-\mathcal H_K(\ZZ)
-:=
-\overline{\operatorname{span}}\{K(\cdot,n):n\in\ZZ\}
-\subset\mathcal H_K
-\]
-and set
-\[
-\Sigma_1(\theta):=\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|},
-\qquad -\pi\le\theta\le\pi .
-\]
-Then
-\begin{equation}\label{eq:lattice-symbol}
-\sigma(\theta):=\sum_{n\in\ZZ}K(n,0)e^{-\ii n\theta}
-=\pi\Sigma_1(\theta)
-=\pi\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}
-\qquad(-\pi\le\theta\le\pi).
-\end{equation}
-Moreover, if
-\[
-q_f(\xi):=e^{2|\xi|}\widehat f(\xi),
-\]
-then $f\in\mathcal H_K(\ZZ)$ if and only if $q_f$ has a $2\pi$-periodic
-representative satisfying
-\[
-\int_{-\pi}^{\pi}\Sigma_1(\theta)|q_f(\theta)|^2\,\dd\theta<\infty.
-\]
-In that case
-\begin{equation}\label{eq:lattice-subspace-norm}
-\|f\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{-\pi}^{\pi}
-\Sigma_1(\theta)|q_f(\theta)|^2\,\dd\theta .
-\end{equation}
-Let $\Pi_{\ZZ}$ be the orthogonal projection of $\mathcal H_K$ onto
-$\mathcal H_K(\ZZ)$.  For every $f\in\mathcal H_K$,
-\begin{equation}\label{eq:integer-orbit-projection-symbol}
-q_{\Pi_{\ZZ}f}(\theta)
-=
-\frac{\displaystyle\sum_{m\in\ZZ}\widehat f(\theta+2\pi m)}
-{\displaystyle\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}},
-\qquad -\pi\le\theta\le\pi,
-\end{equation}
-extended $2\pi$-periodically.  The alias sum is absolutely convergent for
-almost every $\theta$, and
-\[
-\widehat{\Pi_{\ZZ}f}(\xi)
-=e^{-2|\xi|}q_{\Pi_{\ZZ}f}(\xi).
-\]
-The integer samples determine precisely this projection:
-\[
-f(n)=g(n)\quad(n\in\ZZ)
-\qquad\Longleftrightarrow\qquad
-\Pi_{\ZZ}f=\Pi_{\ZZ}g .
-\]
-\end{lemma}
-
-\begin{proof}
-Poisson summation applied to $k(x)=K(x,0)$ gives
-\[
-\sigma(\theta)
-=\sum_{m\in\ZZ}\widehat k(\theta+2\pi m)
-=\pi\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}.
-\]
-For $|\theta|\le\pi$ the last series is
-\[
-e^{-2|\theta|}
-+\sum_{m=1}^\infty e^{-2(|\theta|+2\pi m)}
-+\sum_{m=1}^\infty e^{-2(2\pi m-|\theta|)}
-=\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
-\]
-which proves \eqref{eq:lattice-symbol}.
-
-If $F=\sum_{|n|\le N}c_nK(\cdot,n)$, then
-\[
-\widehat F(\xi)=\pi e^{-2|\xi|}\sum_{|n|\le N}c_ne^{-\ii n\xi},
-\qquad
-q_F(\xi)=\pi\sum_{|n|\le N}c_ne^{-\ii n\xi}.
-\]
-Thus $q_F$ is $2\pi$-periodic, and the norm formula follows by partitioning
-$\RR$ into the translates $[-\pi,\pi]+2\pi m$:
-\[
-\|F\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{-\pi}^{\pi}
-\Sigma_1(\theta)|q_F(\theta)|^2\,\dd\theta.
-\]
-Taking closures proves one implication.  Conversely, if $q$ is periodic with
-finite weighted norm, trigonometric polynomials are dense in the equivalent
-space $L^2([-\pi,\pi],\Sigma_1(\theta)\dd\theta)$, because $\Sigma_1$ is
-continuous and strictly positive.  Approximating $q/\pi$ by such polynomials
-and using the displayed norm identity gives an element of
-$\mathcal H_K(\ZZ)$ with profile $q$.  This proves the characterization of
-$\mathcal H_K(\ZZ)$ and \eqref{eq:lattice-subspace-norm}.
-
-For $f\in\mathcal H_K$, Cauchy--Schwarz gives, for almost every
-$\theta\in[-\pi,\pi]$,
-\[
-\sum_{m\in\ZZ}|\widehat f(\theta+2\pi m)|
-\le
-\Sigma_1(\theta)^{1/2}
-\left(\sum_{m\in\ZZ}e^{2|\theta+2\pi m|}
-|\widehat f(\theta+2\pi m)|^2\right)^{1/2}.
-\]
-Hence the alias sum in \eqref{eq:integer-orbit-projection-symbol} is defined
-almost everywhere.  For $g\in\mathcal H_K(\ZZ)$, with periodic profile $q_g$,
-the norm formula on the fibers gives
-\[
-\|f-g\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{-\pi}^{\pi}
-\sum_{m\in\ZZ}e^{-2|\theta+2\pi m|}
-|q_f(\theta+2\pi m)-q_g(\theta)|^2\,\dd\theta.
-\]
-For each fiber, this quadratic expression is minimized by the weighted
-average
-\[
-q_g(\theta)
-=\frac{\sum_m e^{-2|\theta+2\pi m|}q_f(\theta+2\pi m)}
-{\Sigma_1(\theta)}
-=\frac{\sum_m\widehat f(\theta+2\pi m)}{\Sigma_1(\theta)}.
-\]
-This is the profile of the orthogonal projection and proves
-\eqref{eq:integer-orbit-projection-symbol}.
-
-Finally, the reproducing property gives $f(n)=\langle f,K(\cdot,n)\rangle$.
-Since $\mathcal H_K(\ZZ)$ is the closed span of these kernel sections,
-$f-g$ vanishes on all integers exactly when $f-g\perp\mathcal H_K(\ZZ)$.
-This is equivalent to $\Pi_{\ZZ}f=\Pi_{\ZZ}g$.
-\end{proof}
-
-\begin{observationprofilelemma}
-\label{lem:observation-profile-law-inversion}
-Let $\nu$ be a probability measure on $\RR$ with finite mean $\bar\gamma$,
-let \(t>0\), and set
+Fix \(t_0>0\), put
 \[
 \Delta:=\gamma-\bar\gamma,\qquad
-\mu_t:=\operatorname{Law}(\Delta/t).
+\mu_{t_0}:=\operatorname{Law}(\Delta/t_0),
 \]
-Define the finite signed measure
+and define the signed finite measure
 \[
-\lambda_t(\dd s):=s\,\mu_t(\dd s).
+\lambda_{t_0}(\dd s):=s\,\mu_{t_0}(\dd s).
 \]
-For the Poisson observation channel \(F_t\) of
-Theorem~\ref{thm:poisson-observation-lattice-sampling}, with Fourier
-convention \(\widehat\lambda_t(\xi)=\int_{\RR}e^{-\ii s\xi}\dd\lambda_t(s)\),
-\begin{equation}\label{eq:observation-profile-fourier-inversion}
-q_{F_t}(\xi)=\pi\widehat{\lambda_t}(\xi).
+The continuous observation profile used below is
+\begin{equation}\label{eq:observation-profile-definition}
+q_{t_0}(\xi):=
+\pi\int_{\RR}s e^{-\ii s\xi}\,\mu_{t_0}(\dd s)
+=\pi\widehat{\lambda_{t_0}}(\xi).
 \end{equation}
-Consequently \(q_{F_t}\) determines \(\lambda_t\) by Fourier uniqueness for
-finite signed measures.  It determines \(\mu_t\) on \(\RR\setminus\{0\}\) by
-\begin{equation}\label{eq:observation-profile-offzero-recovery}
-\mu_t(B)=\int_B s^{-1}\dd\lambda_t(s),
-\qquad 0\notin\overline B,
-\end{equation}
-and then determines the remaining atom by
-\begin{equation}\label{eq:observation-profile-zero-atom-recovery}
-\mu_t(\{0\})=1-\mu_t(\RR\setminus\{0\}).
-\end{equation}
-Thus full knowledge of \(q_{F_t}\) determines the signed measure
-\(s\,\mu_t(\dd s)\) and then the full scaled centred law \(\mu_t\); this is a
-measure-inversion statement, separate from any integer-sampling statement.
-\end{observationprofilelemma}
+Thus full knowledge of \(q_{t_0}\) is exactly full knowledge of the Fourier
+transform of \(\pi\lambda_{t_0}\).
 
-\begin{proof}
-The identity follows from
-\[
-\frac{\pi}{t}\int_{\RR}\Delta e^{-\ii\Delta\xi/t}\dd\nu(\gamma)
-=\pi\int_{\RR}s e^{-\ii s\xi}\dd\mu_t(s).
-\]
-The right-hand side is \(\pi\widehat{\lambda_t}(\xi)\).  Since
-\(\lambda_t\) has finite total variation, its Fourier transform determines
-\(\lambda_t\) uniquely.  Formula
-\eqref{eq:observation-profile-offzero-recovery} is division of the signed
-measure \(\lambda_t=s\mu_t\) by the bounded continuous function \(s\) on sets
-bounded away from zero.  A monotone exhaustion of \(\RR\setminus\{0\}\)
-recovers the whole off-zero restriction of \(\mu_t\), and
-\eqref{eq:observation-profile-zero-atom-recovery} uses
-\(\mu_t(\RR)=1\).
-\end{proof}
-
-\begin{theorem}[Poisson observation-channel interface]%
+\begin{theorem}[Exact lattice recovery from integer observations]%
 \label{thm:poisson-observation-lattice-sampling}
 \label{prop:poisson-law-lattice-periodicity}
-Let $\nu$ be a probability measure on $\RR$ with finite mean $\bar\gamma$,
-let $t>0$, and put
-\[
-\Delta:=\gamma-\bar\gamma,
-\qquad
-\mu_t:=\operatorname{Law}(\Delta/t).
-\]
-Let
-\[
-h_t:=P_t*\nu,\qquad g_t(x):=P_t(x-\bar\gamma).
-\]
-Define
-\[
-d_t(y):=
-\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1 .
-\]
-Then \(d_t\in L^2_0(\omega)\).  Writing \(U:=\mathcal U\), the unitary
-\(U:L^2_0(\omega)\to\mathcal H_K\) gives
-\[
-F_t:=Ud_t\in\mathcal H_K,
-\]
-and
-\begin{equation}\label{eq:poisson-law-side-q-profile}
-q_{F_t}(\xi):=e^{2|\xi|}\widehat F_t(\xi)
-=\pi\int_{\RR}s e^{-\ii s\xi}\,\mu_t(\dd s)
-\qquad\text{for a.e. }\xi .
+Let \(\nu\) have finite centred first absolute moment and fix \(t_0>0\).
+Assume the centred scaled law is supported on the integer lattice,
+\begin{equation}\label{eq:poisson-law-side-lattice-support}
+\nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1 .
 \end{equation}
-Equivalently, if \(\mathfrak d_t\) denotes the centred fluctuation profile of
-Theorem~\ref{thm:poisson-channel-rkhs}, then \(d_t=\mathfrak d_t\) and
-the integer observation samples are
-\begin{equation}\label{eq:poisson-observation-integer-samples}
-F_t(n)
-=\langle d_t,\Psi_n\rangle_{L^2(\omega)}
-=\frac1t\int_{\RR}\Delta\,
-K\!\left(n,\frac{\Delta}{t}\right)\dd\nu(\gamma),
+Let \(p_m:=\mu_{t_0}(\{m\})\) and define the integer observation sequence
+\begin{equation}\label{eq:integer-observation-samples}
+a_n:=
+\int_{\ZZ} s\,K(n,s)\,\mu_{t_0}(\dd s),
+\qquad
+K(a,b):=\frac{2}{4+(a-b)^2},
 \qquad n\in\ZZ .
 \end{equation}
-The recovery conclusions are as follows.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-\item The integer samples recover \(\Pi_{\ZZ}F_t\) and only
-\(\Pi_{\ZZ}F_t\) among ambient \(\mathcal H_K\) data.
-\item They recover \(F_t\) exactly if and only if
-\(\mu_t\) is supported on \(\ZZ\), equivalently
-\begin{equation}\label{eq:poisson-law-side-lattice-support}
-\nu\bigl(\{\gamma\in\RR:\gamma-\bar\gamma\in t\ZZ\}\bigr)=1 .
-\end{equation}
-\item Once the full profile \(q_{F_t}\) is known, the separate
-Observation-profile inversion lemma recovers the full scaled centred law
-\(\mu_t\).
-\end{enumerate}
-The projection is obtained by inserting $\widehat F_t$ into
-\eqref{eq:integer-orbit-projection-symbol}.
-
-The integer samples recover the full channel $F_t$ exactly if and only if
+Then the sequence \((a_n)_{n\in\ZZ}\) determines the signed lattice masses
 \[
-F_t\in\mathcal H_K(\ZZ)
+b_m:=m p_m\qquad(m\in\ZZ),
 \]
-if and only if \(q_{F_t}\) has a $2\pi$-periodic representative.
-In this exact-recovery case,
-\begin{equation}\label{eq:poisson-law-side-lattice-norm}
-\|F_t\|_{\mathcal H_K}^2
-=\frac{1}{2\pi^2}\int_{-\pi}^{\pi}
-\Sigma_1(\theta)|q_{F_t}(\theta)|^2\,\dd\theta .
+hence determines \(\mu_{t_0}\) by
+\[
+p_m=\frac{b_m}{m}\quad(m\ne0),
+\qquad
+p_0=1-\sum_{m\ne0}p_m .
+\]
+More explicitly, with
+\[
+A(\theta):=\sum_{n\in\ZZ}a_ne^{-\ii n\theta},
+\qquad
+B(\theta):=\sum_{m\in\ZZ}b_me^{-\ii m\theta},
+\]
+one has
+\begin{equation}\label{eq:lattice-symbol}
+A(\theta)=\sigma(\theta)B(\theta),\qquad
+\sigma(\theta):=\sum_{k\in\ZZ}\frac{2}{4+k^2}e^{-\ii k\theta}
+=\pi\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}
 \end{equation}
-Finally, if the full profile \(q_{F_t}\) is available, whether from the
-lattice-periodic integer data above or by any other observation of the full
-channel, Lemma~\ref{lem:observation-profile-law-inversion} recovers
-\(s\,\mu_t(\dd s)\), then \(\mu_t\) on \(\RR\setminus\{0\}\), and finally
-\(\mu_t(\{0\})\) from total mass.
+for \(-\pi\le\theta\le\pi\).  Since \(\sigma(\theta)>0\), the recovery is
+\[
+B(\theta)=\frac{A(\theta)}{\sigma(\theta)},\qquad
+b_m=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+\frac{A(\theta)}{\sigma(\theta)}e^{\ii m\theta}\dd\theta .
+\]
+Conversely, if the integer samples recover the full profile
+\eqref{eq:observation-profile-definition} through this integer-orbit
+convolution mechanism, then \(q_{t_0}\) is \(2\pi\)-periodic, equivalently
+\(\mu_{t_0}\) is supported on \(\ZZ\), which is
+\eqref{eq:poisson-law-side-lattice-support}.
 \end{theorem}
 
 \begin{proof}
-Theorem~\ref{thm:poisson-channel-rkhs} gives
+Under \eqref{eq:poisson-law-side-lattice-support}, finite first absolute
+moment gives \((b_m)\in\ell^1(\ZZ)\).  Since
+\(\sum_{k\in\ZZ}2/(4+k^2)<\infty\), the samples are the absolutely convergent
+discrete convolution
 \[
-F_t(a)=\frac1t\int_{\RR}\Delta
-K\!\left(a,\frac{\Delta}{t}\right)\dd\nu(\gamma).
+a_n=\sum_{m\in\ZZ}b_m\,\frac{2}{4+(n-m)^2}.
 \]
-It also gives \(d_t=\mathfrak d_t\in L^2_0(\omega)\) and
-\(F_t=\mathcal Ud_t\).  Taking $a=n$ and using
-\(\mathcal U\Psi_n=K(\cdot,n)\) gives
-\eqref{eq:poisson-observation-integer-samples}.  By
-Lemma~\ref{lem:auxiliary-uniform-lattice-projection}, the integer samples of
-an ambient function in $\mathcal H_K$ determine exactly its orthogonal
-projection onto $\mathcal H_K(\ZZ)$; applying this to $F_t$ proves the
-projection assertion.
+Taking Fourier series on \(\TT\) gives \(A=\sigma B\).  The computation of
+\(\sigma\) is Poisson summation applied to \(x\mapsto2/(4+x^2)=\pi P_2(x)\):
+\[
+\sigma(\theta)
+=\pi\sum_{\ell\in\ZZ}e^{-2|\theta+2\pi\ell|}
+=\pi\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
+\qquad -\pi\le\theta\le\pi.
+\]
+The displayed formula is strictly positive, so \(B=A/\sigma\) and its Fourier
+coefficients recover \(b_m\).  Division by \(m\) recovers all off-zero masses,
+and total mass recovers \(p_0\).
 
-The Fourier transform of the kernel in the first variable is
+For the converse, exact recovery through the integer-orbit convolution means
+that the recovered profile is the Fourier series of the lattice signed
+measure \(\sum_m b_m\delta_m\), hence is \(2\pi\)-periodic.  By
+\eqref{eq:observation-profile-definition}, periodicity says that the finite
+signed measure
 \[
-\widehat{K(\cdot,b)}(\xi)=\pi e^{-2|\xi|}e^{-\ii b\xi}.
+(e^{-\ii2\pi s}-1)s\,\mu_{t_0}(\dd s)
 \]
-Taking the Fourier transform under the Bochner integral for $F_t$ gives
-\[
-\widehat F_t(\xi)
-=\frac{\pi}{t}e^{-2|\xi|}
-\int_{\RR}\Delta e^{-\ii\Delta\xi/t}\dd\nu(\gamma),
-\]
-which is \eqref{eq:poisson-law-side-q-profile}.
-
-By the lemma, $F_t\in\mathcal H_K(\ZZ)$ if and only if $q_{F_t}$ has a
-$2\pi$-periodic representative.  The displayed representative is continuous
-by dominated convergence and the finite first moment hypothesis, so a.e.
-periodicity is the same as everywhere periodicity for this representative.
-
-It remains to translate full-channel recovery into the law-side lattice
-condition.  Let \(\mu=\mu_t\) be the law of \(\Delta/t\) and set
-\(\lambda(\dd s):=s\,\mu(\dd s)\).
-The periodicity of \(q_{F_t}\) is equivalent to
-\[
-\widehat\lambda(\xi+2\pi)=\widehat\lambda(\xi)
-\qquad(\xi\in\RR).
-\]
-Thus the finite signed measure $(e^{-\ii2\pi s}-1)\lambda(\dd s)$ has
-identically zero Fourier transform.  Uniqueness of Fourier transforms of
-finite measures implies
-\[
-(e^{-\ii2\pi s}-1)s\,\mu(\dd s)=0.
-\]
-Hence $\mu$ is supported on $\ZZ$; the point $s=0$ is already in $\ZZ$.
-This is exactly \eqref{eq:poisson-law-side-lattice-support}.  Conversely, if
-$\Delta/t\in\ZZ$ almost surely, then $e^{-\ii2\pi\Delta/t}=1$ almost surely,
-so \(q_{F_t}\) is $2\pi$-periodic.  The norm formula is then
-\eqref{eq:lattice-subspace-norm} applied to $f=F_t$.
-
-The final law-recovery assertion is precisely
-Lemma~\ref{lem:observation-profile-law-inversion}: full channel knowledge gives
-the full profile \(q_{F_t}\), which gives \(\lambda=s\mu_t\) by Fourier
-uniqueness, gives \(\mu_t\) off zero by division by \(s\), and gives the atom at
-zero from \(\mu_t(\RR)=1\).
+has zero Fourier transform.  Fourier uniqueness for finite signed measures
+therefore gives
+\((e^{-\ii2\pi s}-1)s\,\mu_{t_0}(\dd s)=0\), so the off-zero part of
+\(\mu_{t_0}\) is supported on \(\ZZ\); the remaining point \(0\) is already in
+\(\ZZ\).
 \end{proof}
 
 \begin{theorem}[Observation-to-entropy coefficient interface]%
 \label{thm:observation-entropy-interface}
 Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar\gamma\),
 positive variance \(\sigma^2\), and finite centred sixth absolute moment.
-Fix \(t_0>0\), put
-\[
-\Delta:=\gamma-\bar\gamma,\qquad
-\mu_{t_0}:=\operatorname{Law}(\Delta/t_0),
-\]
-and let \(F_{t_0}\) be the Poisson observation channel from
-Theorem~\ref{thm:poisson-observation-lattice-sampling}.
-
-The following observation data determine the centred moment jet
+Fix \(t_0>0\) and define \(\mu_{t_0}\) and \(q_{t_0}\) by
+\eqref{eq:observation-profile-definition}.  The following observation data
+determine the centred moment jet
 \((\mu_2,\ldots,\mu_6)\), where
-\(\mu_j=\int_{\RR}\Delta^j\,\dd\nu(\gamma)\):
+\(\mu_j=\int_{\RR}(\gamma-\bar\gamma)^j\dd\nu(\gamma)\):
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-\item the full continuous profile
-\(q_{F_{t_0}}(\xi)=e^{2|\xi|}\widehat F_{t_0}(\xi)\) on \(\RR\);
-\item the integer samples \((F_{t_0}(n))_{n\in\ZZ}\), but only together with
-the exact-recovery condition
-\[
-\nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1 .
-\]
+\item the full continuous profile \(q_{t_0}(\xi)\) on \(\RR\);
+\item the integer samples \((a_n)_{n\in\ZZ}\) from
+      \eqref{eq:integer-observation-samples}, but only together with the
+      exact lattice condition
+      \[
+      \nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1 .
+      \]
 \end{enumerate}
 In either case the moments are recovered from the scaled law by
 \begin{equation}\label{eq:observation-interface-moments}
-\mu_j=t_0^j\int_{\RR}s^j\,\dd\mu_{t_0}(s),
+\mu_j=t_0^j\int_{\RR}s^j\,\mu_{t_0}(\dd s),
 \qquad 2\le j\le6.
 \end{equation}
 Consequently these observation data determine the coefficient quantities used
-later in the entropy-defect results:
+in the eighth-order entropy-defect layer,
 \[
 C_6^{\rm ent}(\nu),\qquad A_8^{\rm ent}(\nu),\qquad
 \Delta_6^{\rm ent}(\nu),\qquad \Delta_8^{\rm ent}(\nu),
 \]
-as defined and identified in Theorem~\ref{thm:poisson-kl-eighth} and in the
-defect corollaries of Section~\ref{subsec:eighth-order-defects}.
+as defined in Theorem~\ref{thm:poisson-kl-eighth} and in the defect
+corollaries of Section~\ref{subsec:eighth-order-defects}.
 
-If only the integer samples \((F_{t_0}(n))_{n\in\ZZ}\) are given without the
-lattice-support condition, the data determine only the projection
-\(\Pi_{\ZZ}F_{t_0}\).  No entropy-defect theorem in this paper uses
-\(\Pi_{\ZZ}F_{t_0}\) alone to infer the centred moment jet, the coefficients
-\(C_6^{\rm ent}\), \(A_8^{\rm ent}\), or the defects.  The finite-time
-oracle estimate in
-Theorem~\ref{thm:finite-time-poisson-entropy-stability} also requires its
-separate eighth-order remainder inputs
-\(B_{\nu,8}\) and \(T_{\nu,8}\), or their shell-uniform replacements; these
-are not supplied by integer projection data alone.
+Integer samples without the lattice-support condition do not supply this
+moment jet.  They are projection data for the auxiliary observation channel,
+not inputs to Theorems~\ref{thm:poisson-kl-even-orders},
+\ref{thm:poisson-kl-eighth}, or
+\ref{thm:finite-time-poisson-entropy-stability}.  The finite-time
+sixth-defect estimate still requires its separate eighth-order inputs
+\(A_8^{\rm ent}(\nu)\), \(B_{\nu,8}\), and \(T_{\nu,8}\), or their
+shell-uniform replacements fixed in advance.
 \end{theorem}
 
 \begin{proof}
-Full profile data determine \(\mu_{t_0}\) by
-Lemma~\ref{lem:observation-profile-law-inversion}: first recover the signed
-measure \(s\,\mu_{t_0}(\dd s)\), then divide by \(s\) off the origin, and
-finally recover the atom at the origin from total mass.  Since \(\nu\) has a
-finite centred sixth absolute moment, the moments in
-\eqref{eq:observation-interface-moments} are finite and give precisely the
-centred moments of \(\nu\) through order six.
+Full profile data determine \(\lambda_{t_0}\) by Fourier uniqueness for
+finite signed measures, since \(q_{t_0}=\pi\widehat{\lambda_{t_0}}\).  On any
+Borel set bounded away from zero,
+\[
+\mu_{t_0}(B)=\int_B s^{-1}\lambda_{t_0}(\dd s).
+\]
+A monotone exhaustion of \(\RR\setminus\{0\}\) recovers the off-zero
+restriction of \(\mu_{t_0}\), and
+\[
+\mu_{t_0}(\{0\})=1-\mu_{t_0}(\RR\setminus\{0\})
+\]
+recovers the atom at the origin.  Thus the full profile determines
+\(\mu_{t_0}\).  If the integer samples are accompanied by the lattice-support
+condition, Theorem~\ref{thm:poisson-observation-lattice-sampling} recovers the
+same scaled law directly.
 
-If integer samples are accompanied by the lattice-support condition, then
-Theorem~\ref{thm:poisson-observation-lattice-sampling} says that the
-integer-orbit reconstruction is the full channel \(F_{t_0}\).  This reduces
-the second data set to the full-profile case.
-
-The formulas for \(C_6^{\rm ent}\) and \(A_8^{\rm ent}\) in
+The finite sixth absolute moment makes the moments in
+\eqref{eq:observation-interface-moments} finite, and the scaling identity
+\(\Delta=t_0s\) gives precisely the centred moments of \(\nu\) through order
+six.  The formulas for \(C_6^{\rm ent}\) and \(A_8^{\rm ent}\) in
 Theorem~\ref{thm:poisson-kl-eighth} are polynomials in
 \(\mu_2,\ldots,\mu_6\), and the defect variables in
 Corollaries~\ref{thm:poisson-defect-ladder}--%
-\ref{thm:poisson-defect-amplification} are defined from those identified
+\ref{thm:poisson-defect-amplification} are defined from these identified
 entropy coefficients and \(\sigma^2=\mu_2\).  Hence the recovered moment jet
-determines exactly the listed entropy-defect quantities.
+determines exactly the listed coefficient and defect quantities.
 
-Without the lattice-support condition, the projection theorem gives only
-\(\Pi_{\ZZ}F_{t_0}\).  The theorem therefore makes no coefficient-recovery
-assertion from such projected data.  The statement about the finite-time
-oracle inputs is the input separation made in
+Without the lattice condition, the integer data are not identified with the
+full profile \(q_{t_0}\), so no coefficient-recovery statement follows.  The
+final assertion is the input separation stated in
 Theorem~\ref{thm:finite-time-poisson-entropy-stability}.
 \end{proof}

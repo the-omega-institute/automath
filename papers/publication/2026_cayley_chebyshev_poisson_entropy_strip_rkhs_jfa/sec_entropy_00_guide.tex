@@ -2,100 +2,108 @@
 \section{Poisson Smoothing and Entropy Asymptotics}%
 \label{sec:entropy-asymptotics}
 
-\subsection*{Guide to hypotheses and outputs}\label{sec:entropy-theorem-map}
+\subsection*{Guide to hypotheses}\label{sec:entropy-theorem-map}
 
 Throughout this section we write
-$\Delta:=\gamma-\bar\gamma$ and
-$\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)$ whenever it exists.  The
-following table is the reference point for the hypotheses used by the entropy
-results.  It also centralizes the stronger-moment constant regimes and the
-finite-time oracle inputs so that the introduction and later corollaries do
-not restate the same caveats.
+\[
+\Delta:=\gamma-\bar\gamma,\qquad
+\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)
+\]
+whenever the moment exists.  The list below is only a theorem-by-theorem
+assumption map.  It separates coefficient identities, remainder estimates,
+finite observation inputs, and downstream \(W_2\) consequences.  The constants
+used to turn the finite-time statements into fixed-law or controlled-shell
+estimates are recorded in Appendix~\ref{app:finite-time-defect-estimates}.
 
-\begin{center}
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{p{0.24\linewidth}|p{0.32\linewidth}|p{0.34\linewidth}}
-result & hypotheses & output used later\\ \hline
-Theorems~\ref{thm:universal-entropy-coefficients},
-\ref{thm:finite-fourier-mode-integral-algorithm}, and
-Proposition~\ref{prop:universal-entropy-coefficient-evaluation} &
-existence of the centred moments being evaluated &
-formal polynomials \(A_k^{\rm form}\), law-level coefficients \(A_k(\nu)\),
-odd parity cancellation, and exact constant-coefficient mode-integral
-evaluation\\
-\hline
-Theorem~\ref{thm:poisson-kl-even-orders},
-Theorem~\ref{thm:finite-moment-entropy-remainder}, and
-Theorem~\ref{thm:positive-margin-retained-order-entropy},
-Corollary~\ref{cor:uniform-moment-ball-entropy-remainder} &
-finite centred \((2N-2)\)th absolute moment for
-Theorems~\ref{thm:poisson-kl-even-orders} and
-\ref{thm:finite-moment-entropy-remainder}; finite centred
-\((2N-2+\eta)\)th absolute moment only for the positive-margin retained-order
-remainder estimate; finite centred \((2N+\eta)\)th absolute moment for the convenience
-constant estimate; the uniform corollary fixes a centred \((2N+\eta)\)-moment
-ball &
-actual large-time coefficients through \(t^{-2N}\), sharpness of the moment
-threshold for the universal coefficient \(A_{2N}\), the retained-polynomial
-\(o(t^{-2N})\) remainder, plus
-stronger-moment fixed-law constants and moment-ball-uniform constants\\
-\hline
+\begin{enumerate}[label=\textup{(\arabic*)}, leftmargin=*]
+\item
+The coefficient-algebra statements,
+Theorem~\ref{thm:universal-entropy-coefficients},
+Proposition~\ref{prop:universal-entropy-coefficient-evaluation}, and
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}, assume only the
+existence of the centred moments that occur in the displayed coefficient being
+formed.  They produce the formal entropy polynomials, the law-level
+coefficients after moment substitution, the parity cancellation of odd
+orders, and the Laurent constant-term rule for the mode integrals.
+
+\item
+The finite-moment entropy hierarchy,
+Theorem~\ref{thm:poisson-kl-even-orders}, has three labelled parts.  Part
+\textup{(E)} is the exact-threshold coefficient theorem under a finite
+centred \((2N-2)\)th absolute moment and gives the retained-polynomial
+\(o(t^{-2N})\) expansion.  Part \textup{(PM)} assumes the positive margin
+\((2N-2+\eta)\) and gives the fixed-law quantitative retained-order estimate.
+Part \textup{(MB)} assumes a \((2N+\eta)\)-moment shell and gives the
+moment-ball uniform estimate.  The later statements
+Theorem~\ref{thm:finite-moment-entropy-remainder},
+Theorem~\ref{thm:positive-margin-retained-order-entropy}, and
+Corollary~\ref{cor:uniform-moment-ball-entropy-remainder} are only
+reformulations or constant dictionaries for these three parts, not separate
+moment hierarchies.  The companion sharpness assertion is about the
+exact-threshold coefficient \(A_{2N}\): without the \((2N-2)\) moment
+assumption the universal coefficient \(A_{2N}\) is not forced.
+
+\item
+The observation-channel results,
 Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes} and
-Theorem~\ref{thm:finite-grid-poisson-moment-recovery} &
-finite centred fifth absolute moment for the order-four phase recovery;
-finite grids above the stated aliasing threshold for exact truncated
-coefficient recovery &
-recovery of \((\sigma^2,\mu_3,\mu_4)\) and finite-time residual estimates\\
-\hline
-Theorem~\ref{thm:analytic-compact-support-interchange} &
-compact support of the centred law &
-absolutely convergent entropy series with coefficients \(A_k(\nu)\)\\
-\hline
-Theorems~\ref{thm:poisson-kl-eighth} and
-\ref{thm:poisson-kl-eighth-seventh-remainder},
-Corollary~\ref{cor:eighth-order-jet-factorization}, and
-Proposition~\ref{prop:eighth-order-finite-phase-verification} &
-finite centred sixth absolute moment for the coefficient identity; finite
-centred seventh absolute moment for the \(O(t^{-9})\) quantitative remainder;
-the appendix phase verification uses grids \(\mathcal G_N\) with \(N\ge9\) &
-the \(t^{-4}\), \(t^{-6}\), and \(t^{-8}\) jet under the sharp \(N=4\)
-threshold, the seventh-moment \(O(t^{-9})\) remainder, and appendix
-verification of the normalized mode integrals\\
-\hline
+Theorem~\ref{thm:finite-grid-poisson-moment-recovery}, are not entropy
+remainder theorems.  The fourth-order phase recovery assumes a finite centred
+fifth absolute moment, while the finite-grid theorem assumes grids above the
+stated aliasing threshold.  Their output is recovery of the truncated
+moment data, such as \((\sigma^2,\mu_3,\mu_4)\), together with the stated
+finite-time residual estimates.
+
+\item
+The compact-support interchange theorem,
+Theorem~\ref{thm:analytic-compact-support-interchange}, assumes compact
+support of the centred law.  It gives the absolutely convergent entropy series
+and justifies termwise coefficient extraction in that stronger analytic
+regime.
+
+\item
+The explicit eighth-order coefficient theorem,
+Theorem~\ref{thm:poisson-kl-eighth}, assumes a finite centred sixth absolute
+moment.  The seventh-moment remainder theorem,
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}, assumes a finite
+centred seventh absolute moment in order to obtain the \(O(t^{-9})\)
+remainder.  Corollary~\ref{cor:eighth-order-jet-factorization} uses the same
+coefficient identity, and
+Proposition~\ref{prop:eighth-order-finite-phase-verification} gives the
+finite-phase verification of the normalized mode integrals on grids
+\(\mathcal G_N\) with \(N\ge9\).
+
+\item
+The coefficient-defect consequences,
 Corollaries~\ref{thm:poisson-defect-ladder},
 \ref{thm:poisson-defect-amplification}, and
-\ref{cor:poisson-two-point-defect-rigidity} &
-positive variance and finite centred sixth absolute moment &
-non-negative defect coordinates, strict eighth-order amplification, and the
-two-point equality case\\
-\hline
+\ref{cor:poisson-two-point-defect-rigidity}, assume positive variance and the
+finite centred sixth absolute moment needed for the eighth-order coefficient
+identity.  They produce the non-negative defect coordinates, strict
+eighth-order amplification, and the equality case for the symmetric two-point
+law.
+
+\item
+The algebraic \(W_2\) layer,
 Lemma~\ref{lem:fourth-moment-algebraic-coupling},
-Lemma~\ref{lem:seventh-moment-bridge},
-Corollary~\ref{cor:coefficient-defect-coupling}, and
-Theorem~\ref{thm:finite-time-poisson-entropy-stability} &
-positive variance and finite centred fourth moment for the coefficient
-identity and algebraic \(W_2\) estimate; finite centred seventh absolute
-moment only for the finite-time \(O(t^{-9})\) estimate &
-identification of \(\Delta_6^{\rm alg}(\nu)\) with the genuine
-sixth-order entropy defect \(\Delta_6^{\rm ent}(\nu)\), a
-coefficient-level \(W_2\) estimate for closeness
-to the symmetric two-point law, and an a posteriori finite-time oracle bound:
-given law-specific data
-\(A_8^{\rm ent}(\nu),B_{\nu,8},T_{\nu,8}\), or controlled-shell replacements
-fixed in advance, one observed renormalized entropy statistic bounds the same
-defect
-\end{tabular}
-\end{center}
+Lemma~\ref{lem:seventh-moment-bridge}, and
+Corollary~\ref{cor:coefficient-defect-coupling}, assumes positive variance
+and a finite centred fourth moment for the coefficient-level estimate.  The
+seventh-moment bridge is invoked only when the finite-time entropy remainder
+is also being used.
 
-The appendix is used to evaluate the displayed \(t^{-6}\) and \(t^{-8}\)
-coefficients in Theorem~\ref{thm:poisson-kl-eighth} and the quantitative
-remainder in Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}.  The section follows the
-order of the table: normalization, formal algebra, finite-moment entropy
-passage, \(N=4\) sixth-moment coefficient computation, seventh-moment quantitative
-remainder, and
-coefficient-level plus finite-time moment-defect \(W_2\) consequences.
-Appendix~\ref{app:finite-time-defect-estimates} contains the
-constant-dependence regimes and the uniform controlled-shell estimate.
+\item
+The finite-time stability theorem,
+Theorem~\ref{thm:finite-time-poisson-entropy-stability}, takes as inputs the
+law-specific eighth-order coefficient and seventh-moment remainder data in
+its displayed conditional expansion.  Thus the finite-time statement uses one
+entropy observation plus preassigned eighth-order data.  The observation
+contributes only the statistic \(\mathfrak D_t^{(6)}(\nu)\); it does not
+determine those input constants.  The controlled-shell version fixes the
+relevant seventh-moment shell and shell-uniform constants in advance, as
+detailed in Appendix~\ref{app:finite-time-defect-estimates}.
+\end{enumerate}
 
+The section follows this order: normalization and formal coefficient algebra,
+finite-moment entropy transfer, the explicit \(N=4\) sixth-moment coefficient
+calculation, the seventh-moment quantitative remainder, and finally the
+coefficient-level and finite-time \(W_2\) consequences.
