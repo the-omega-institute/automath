@@ -2,120 +2,97 @@
 \section{Poisson Smoothing and Entropy Asymptotics}%
 \label{sec:entropy-asymptotics}
 
-\subsection*{Guide to hypotheses}\label{sec:entropy-theorem-map}
+\subsection*{Operative theorem package}\label{sec:entropy-theorem-map}
 
 Throughout this section we write
 \[
 X_c:=\gamma-\bar\gamma,\qquad
 \mu_n:=\int_{\RR}X_c^n\,\dd\nu(\gamma)
 \]
-whenever the moment exists.  The list below is only a theorem-by-theorem
-assumption map.  It separates coefficient identities, remainder estimates,
-moment inputs, and downstream \(W_2\) consequences.  The constants used to
-turn the finite-time statements into fixed-law or controlled-shell estimates
-are recorded in Appendix~\ref{app:finite-time-defect-estimates}.
-Section~\ref{sec:strip-lattice} is only a final auxiliary-data remark:
-root-of-unity grids can check finite Laurent arithmetic after the fact, a
-full continuous profile supplies moments by differentiation, and integer
-lattice samples do so only with an exact lattice-support certificate.
+whenever the moment exists.  The section is organized around the following
+two operative assertions; the later named theorems are corollaries or
+quantitative variants of them.
 
-\begin{enumerate}[label=\textup{(\arabic*)}, leftmargin=*]
-\item
-The multidimensional Poisson entropy-jet theorem,
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets}, is the analytic
-finite-moment expansion for the radial Poisson kernel on \(\RR^d\).  It uses
-tensor moments through order \(L\) to identify the entropy coefficients
-through order \(L+2\), provided \(L\ge\max\{2,d+1\}\).  The one-dimensional
-Cayley--Chebyshev coefficient calculus below gives an explicit Laurent
-evaluation of this general mechanism in the scalar case.
+\medskip
+\noindent\textbf{Theorem A: density quotient.}
+Let \(L\ge2\), and assume \(\EE|X_c|^L<\infty\).  With
+\(\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y\), the Cauchy-scale density
+quotient has the exact-threshold expansion
+\begin{equation}\label{eq:guide-theorem-a-density-quotient}
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}-1
+=
+\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\end{equation}
+where
+\begin{equation}\label{eq:guide-theorem-a-density-remainder}
+\|\rho_{L,t}\|_\infty+\|\rho_{L,t}\|_{L^1(\omega)}=o(t^{-L}).
+\end{equation}
+The quotient identity behind this statement is
+\[
+\frac{P_t(\bar\gamma+ty-\gamma)}{P_t(ty)}
+=\frac{1+y^2}{1+(y-X_c/t)^2}.
+\]
+Thus the constant mode cancels because the quotient is compared with \(1\),
+and the linear mode cancels because \(X_c\) is centred.  In the body this is
+proved as Lemma~\ref{lem:exact-moment-density-truncation}; the
+Cayley--Chebyshev modes \(u_n\), the formal coefficient algebra, and the
+Laurent constant-term rule are developed in
+Theorems~\ref{thm:universal-entropy-coefficients} and
+\ref{thm:finite-fourier-mode-integral-algorithm}.
 
-\item
-The coefficient-algebra statements,
-Theorem~\ref{thm:universal-entropy-coefficients},
-Proposition~\ref{prop:universal-entropy-coefficient-evaluation}, and
-Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}, assume only the
-existence of the centred moments that occur in the displayed coefficient being
-formed.  They produce the formal entropy polynomials, the law-level
-coefficients after moment substitution, the parity cancellation of odd
-orders, and the Laurent constant-term rule for the mode integrals.
+\medskip
+\noindent\textbf{Theorem B: entropy transfer.}
+Suppose that the expansion in Theorem A holds and put
+\[
+d_t(y):=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}.
+\]
+Then, with
+\[
+I(n_1,\ldots,n_r):=
+\int_{\RR}u_{n_1}(y)\cdots u_{n_r}(y)\,\omega(\dd y),
+\]
+one has
+\begin{equation}\label{eq:guide-theorem-b-entropy-transfer}
+\begin{split}
+D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+&=
+\sum_{m=4}^{L+2}
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=m\\ 2\le n_j\le L}}
+\mu_{n_1}\cdots\mu_{n_r} \\
+&\qquad\qquad\qquad\qquad
+{}\times I(n_1,\ldots,n_r)t^{-m}
++o(t^{-(L+2)}).
+\end{split}
+\end{equation}
+The proof is the finite Taylor expansion of
+\(\Phi(s)=(1+s)\log(1+s)-s\) after the change of variables
+\(P_t(ty)t\,\dd y=\omega(\dd y)\).  Since \(\Phi(s)\) begins with
+\(s^2/2\), a density error \(o(t^{-L})\) first appears in entropy multiplied
+by the \(t^{-2}\) density scale, giving \(o(t^{-(L+2)})\).  This transfer is
+isolated in Lemma~\ref{lem:exact-moment-entropy-transfer} and
+Lemma~\ref{prop:exact-threshold-poisson-entropy-transfer}.
 
-\item
-The finite-moment entropy hierarchy,
-Theorem~\ref{thm:poisson-kl-even-orders}, has three labelled parts.  Part
-\textup{(E)} is the exact-threshold coefficient theorem under a finite
-centred \((2N-2)\)th absolute moment and gives the retained-polynomial
-\(o(t^{-2N})\) expansion.  Part \textup{(PM)} assumes the positive margin
-\((2N-2+\eta)\) and gives the fixed-law quantitative retained-order estimate.
-Part \textup{(MB)} assumes a \((2N+\eta)\)-moment shell and gives the
-moment-ball uniform estimate.  The retained-polynomial form and the
-fixed-law, optimized, and moment-ball constants collected in
-\S\ref{subsubsec:finite-moment-constants-variants} are the constant
-dictionaries for these three parts.  The companion threshold assertion is
-algebraic and concerns only the displayed universal coefficient \(A_{2N}\).
+\medskip
+\noindent\textbf{Corollaries and quantitative margins.}
+Setting \(L=2N-2\) in Theorems A and B gives the exact-threshold hierarchy
+Theorem~\ref{thm:poisson-kl-even-orders}.  Setting \(L=6\) gives the explicit
+eighth-order coefficient layer and the finite seventh-moment remainder,
+Theorems~\ref{thm:poisson-kl-eighth}--\ref{thm:poisson-kl-eighth-seventh-remainder}.
+The positive-margin, moment-ball, stronger-truncation, optimized \(N=4\),
+fixed-law, and controlled-shell estimates are not part of the exact-threshold
+statement; their constants are collected in
+Appendices~\ref{subsubsec:finite-moment-constants-variants} and
+\ref{app:finite-time-defect-estimates}.  The finite-time theorem
+Theorem~\ref{thm:finite-time-poisson-entropy-stability} is a conditional
+certified-shell consequence: bounds on \(A_8\) and on the remainder are fixed
+before the measured KL statistic is used.
 
-\item
-The phase-mode moment interface,
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}, is an
-optional way to read the first nontrivial centred moments from the continuous
-phase profile.  It assumes a finite centred fifth absolute moment and
-recovers the truncated moment data
-\((\sigma^2,\mu_3,\mu_4)\) with the stated finite-time residual estimates.
-Finite root-of-unity averages are mentioned only in the final auxiliary-data
-remark as an exact certificate for already finite Laurent polynomials; they
-are not hypotheses in the entropy expansion.
-
-\item
-The compact-support interchange theorem,
-Theorem~\ref{thm:analytic-compact-support-interchange}, assumes compact
-support of the centred law.  It gives the absolutely convergent entropy series
-and justifies termwise coefficient extraction in that stronger analytic
-regime.
-
-\item
-The explicit eighth-order coefficient theorem,
-Theorem~\ref{thm:poisson-kl-eighth}, assumes a finite centred sixth absolute
-moment.  The seventh-moment remainder theorem,
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}, assumes a finite
-centred seventh absolute moment in order to obtain the \(O(t^{-9})\)
-remainder.  Corollary~\ref{cor:eighth-order-jet-factorization} uses the same
-coefficient identity.  The normalized mode integrals are evaluated in the
-main coefficient lemmas by Laurent constant-term extraction.
-
-\item
-The coefficient-defect consequences,
-Corollaries~\ref{thm:poisson-defect-ladder},
-\ref{thm:poisson-defect-amplification}, and
-\ref{cor:poisson-two-point-defect-rigidity}, assume positive variance and the
-finite centred sixth absolute moment needed for the eighth-order coefficient
-identity.  They produce the non-negative defect coordinates, strict
-eighth-order amplification, and the equality case for the symmetric two-point
-law.
-
-\item
-The algebraic \(W_2\) layer,
-Lemma~\ref{lem:fourth-moment-algebraic-coupling},
-Lemma~\ref{lem:seventh-moment-bridge}, and
-Corollary~\ref{cor:coefficient-defect-coupling}, assumes positive variance
-and a finite centred fourth moment for the coefficient-level estimate.  The
-seventh-moment bridge is invoked only when the finite-time entropy remainder
-is also being used.
-
-\item
-The primary finite-time coefficient-defect theorem,
-Theorem~\ref{thm:finite-time-poisson-entropy-stability}, is the
-controlled-shell statement.  It first fixes a variance-and-seventh-moment
-shell and computes the shell constants
-\(C_{\sigma,M}^{(8)},B_{\sigma,M}^{(8)},T_{\sigma,M}^{(8)}\) by displayed
-finite formulas depending only on \((\sigma,M)\); only after this shell has
-been fixed does one insert the measured KL value through
-\(\mathfrak D_t^{(6)}(\nu)\).  The fixed-law oracle form,
-Theorem~\ref{thm:oracle-finite-time-poisson-entropy-stability}, is a separate
-subsidiary statement using supplied \(A_8,B,T\).  In both forms, the
-coefficient and remainder constants are inputs fixed before the measured KL
-value is inserted.
-\end{enumerate}
-
-The section follows this order: normalization and formal coefficient algebra,
-finite-moment entropy transfer, the explicit \(N=4\) sixth-moment coefficient
-calculation, the seventh-moment quantitative remainder, and finally the
-coefficient-level and finite-time \(W_2\) consequences.
+The multidimensional radial Poisson analogue,
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets}, repeats the same
+two-step structure with tensor density layers
+\(D_j^{(d)}(y;\nu)\).  Its odd coefficients vanish by parity, its first
+nonzero layers are displayed immediately after the theorem, and
+Theorem~\ref{thm:multidim-leading-positive-defect} gives the coercive
+all-dimensional leading covariance defect.

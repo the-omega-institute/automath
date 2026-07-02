@@ -53,6 +53,18 @@ n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
 6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
 \end{array}
 \]
+Equivalently, for \(0<|k|\le n\),
+\[
+q_{n,k}=\lambda_n\varepsilon_n(k)\binom{n-1}{|k|-1},
+\qquad
+\begin{array}{c|ccccc}
+n&2&3&4&5&6\\
+\hline
+\lambda_n&-\frac14&\frac{\ii}{8}&\frac1{16}&-\frac{\ii}{32}&-\frac1{64},
+\end{array}
+\]
+where \(\varepsilon_n(k)=1\) for even \(n\), while
+\(\varepsilon_n(k)=\operatorname{sgn} k\) for odd \(n\).
 \end{lemma}
 
 \begin{proof}
@@ -83,6 +95,22 @@ mode integral is the constant Laurent coefficient
 \[
 I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
 =\sum_{k_1+\cdots+k_r=0}q_{n_1,k_1}\cdots q_{n_r,k_r}.
+\]
+Here and below the coefficient convention is the one fixed in
+Lemma~\ref{lem:n4-normalized-laurent-representatives}:
+\[
+q_{2m,-k}=q_{2m,k},\qquad
+q_{2m+1,-k}=-q_{2m+1,k}=\overline{q_{2m+1,k}},
+\qquad k>0.
+\]
+Thus the signs in products involving odd modes are part of the Laurent
+coefficient vector, not an additional conjugation convention.  For example,
+the full row \(Q_3Q_5\) is
+\[
+I(3,5)
+=2\sum_{k=1}^3q_{3,k}q_{5,-k}
+=-\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
+=-\frac{15}{128}.
 \]
 The complete list needed for the even entropy coefficients and the intervening
 odd cancellations is
@@ -120,17 +148,55 @@ coefficient substitution below.
 The constant-term identity is exactly
 Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  It reduces every
 entry to a finite zero-sum convolution of the coefficient vectors in
-Lemma~\ref{lem:n4-normalized-laurent-representatives}.
-
-For binary products one pairs exponents \(k\) and \(-k\).  For \(Q_2^3\)
-there are six ordered zero-sum triples, each contributing \(-1/64\).  For
-\(Q_2^2Q_4\), the ordered pairs from \(Q_2^2\) have sums with absolute values
-\(1,2,3,4\), giving the grouped numerator \(4+6+12+2\) over \(256\).  For
-\(Q_2Q_3^2\), the total contribution for each \(Q_2\)-exponent \(k=\pm1\) is
-\(-8/256\), and for each \(k=\pm2\) is \(-1/256\).  For \(Q_2^4\) there are
-thirty-six ordered zero-sum quadruples, each contributing \(1/256\).  The
-signs in the odd--odd rows come from the displayed Laurent coefficients,
-equivalently from \(\ii^2=-1\).
+Lemma~\ref{lem:n4-normalized-laurent-representatives}.  For a row
+\(\mathbf n=(n_1,\ldots,n_r)\), write
+\[
+\mathcal K(\mathbf n)
+:=\{(k_1,\ldots,k_r):0<|k_j|\le n_j,\ k_1+\cdots+k_r=0\}.
+\]
+Using the coefficient-vector formula in
+Lemma~\ref{lem:n4-normalized-laurent-representatives}, the constant term is
+\begin{equation}\label{eq:eighth-order-finite-convolution-certificate}
+I(\mathbf n)
+=\Bigl(\prod_{j=1}^r\lambda_{n_j}\Bigr)
+\sum_{\mathbf k\in\mathcal K(\mathbf n)}
+\prod_{j=1}^r
+\varepsilon_{n_j}(k_j)\binom{n_j-1}{|k_j|-1}.
+\end{equation}
+Thus each row is the product of a displayed scalar
+\(\prod_j\lambda_{n_j}\) and a signed integer convolution.  The complete
+finite certificate for the rows used through order eight is
+\[
+\begin{array}{c|c|c|c|c}
+\mathbf n & |\mathcal K(\mathbf n)|&
+\displaystyle\sum_{\mathcal K(\mathbf n)}
+\prod_j\varepsilon_{n_j}(k_j)\binom{n_j-1}{|k_j|-1}
+&\prod_j\lambda_{n_j}&I(\mathbf n)\\
+\hline
+(2,2)&4&4&\frac1{16}&\frac14\\
+(2,3)&4&0&-\frac{\ii}{32}&0\\
+(2,4)&4&8&-\frac1{64}&-\frac18\\
+(3,3)&6&-12&-\frac1{64}&\frac{3}{16}\\
+(2,2,2)&6&6&-\frac1{64}&-\frac{3}{32}\\
+(2,5)&4&0&\frac{\ii}{128}&0\\
+(3,4)&6&0&\frac{\ii}{128}&0\\
+(2,2,3)&10&0&\frac{\ii}{128}&0\\
+(2,6)&4&12&\frac1{256}&\frac{3}{64}\\
+(3,5)&6&-30&\frac1{256}&-\frac{15}{128}\\
+(4,4)&8&40&\frac1{256}&\frac{5}{32}\\
+(2,2,4)&12&24&\frac1{256}&\frac{3}{32}\\
+(2,3,3)&14&-18&\frac1{256}&-\frac{9}{128}\\
+(2,2,2,2)&36&36&\frac1{256}&\frac{9}{64}.
+\end{array}
+\]
+For example, the row \((2,2,4)\) sums over the twelve ordered triples in
+\(\mathcal K(2,2,4)\); their signed binomial weights add to \(24\), and
+\(\lambda_2^2\lambda_4=1/256\).  The row \((2,3,3)\) sums over fourteen
+ordered triples; the two odd factors contribute the signs
+\(\operatorname{sgn}(k_2)\operatorname{sgn}(k_3)\), so the signed binomial
+sum is \(-18\) and the scalar product is again \(1/256\).  Formula
+\eqref{eq:eighth-order-finite-convolution-certificate} gives the other rows
+by the same finite enumeration.
 
 The zero rows are the complete list of odd total-degree products appearing
 before the even-power projection:
@@ -138,8 +204,9 @@ before the even-power projection:
 B_5=a_2a_3,\qquad
 B_7=a_2a_5+a_3a_4-\frac12a_2^2a_3 .
 \]
-They also vanish by parity, because each listed product contains an odd
-number of odd modes and is odd under \(y\mapsto-y\).
+The table proves their zero constant terms directly.  They also vanish by
+parity, because each listed product contains an odd number of odd modes and is
+odd under \(y\mapsto-y\).
 \end{proof}
 
 \begin{lemma}[Substitution into \(A_4\), \(A_6\), and \(A_8\)]%
@@ -231,7 +298,7 @@ A_6(\rho_\sigma)=\frac{1-8}{64}\sigma^6
 A_8(\rho_\sigma)=\frac{3-12+12+20}{256}\sigma^8
 =\frac{23\sigma^8}{256}.
 \]
-These are sanity checks on the arithmetic, not additional inputs to the
+These identities are sanity checks on the arithmetic for the already stated
 coefficient-identification theorem.
 \end{remark}
 
@@ -611,8 +678,8 @@ Section~\ref{sec:strip-lattice} records the optional finite-phase check for
 the same normalized Laurent products and constant terms displayed in
 Lemmas~\ref{lem:n4-normalized-laurent-representatives} and
 \ref{lem:eighth-order-coefficient-arithmetic}.  That check uses the same
-trigonometric/Laurent normalization as the coefficient computation above but
-is not part of the entropy proof.
+trigonometric/Laurent normalization as the coefficient computation above and
+serves as an auxiliary arithmetic verification.
 
 The next defect corollaries use
 \(A_6(\nu)\) and \(A_8(\nu)\) from the

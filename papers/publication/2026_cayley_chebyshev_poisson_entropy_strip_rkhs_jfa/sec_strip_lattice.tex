@@ -36,30 +36,78 @@ and, for the finite-time remainder theorem, the corresponding seventh
 absolute moment bound fixed before the KL value is inserted.
 
 An exact way to supply the finite jet is a full continuous Poisson observation
-profile at a fixed time.  For \(t_0>0\), write
+profile at a fixed time, but the profile is only invoked after the needed
+moment hypotheses have been fixed.  For \(t_0>0\), write
 \[
-  \kappa_{t_0}:=\operatorname{Law}((\gamma-\bar\gamma)/t_0)
+  \kappa_{t_0}:=\operatorname{Law}((\gamma-\bar\gamma)/t_0).
 \]
-and
+If \(\nu\) has a finite first centred absolute moment, then
+\[
+  \lambda_{t_0}(\dd s):=s\,\kappa_{t_0}(\dd s)
+\]
+is a finite signed measure.  Only under this hypothesis do we define the
+continuous observation profile
 \begin{equation}\label{eq:observation-profile-definition}
   q_{t_0}(\xi):=
+  \pi\int_{\RR} e^{-\ii s\xi}\,\lambda_{t_0}(\dd s)
+  =
   \pi\int_{\RR}s e^{-\ii s\xi}\,\kappa_{t_0}(\dd s).
 \end{equation}
-Then \(q_{t_0}\) is the Fourier transform of the finite signed measure
-\(\pi s\,\kappa_{t_0}(\dd s)\).  Fourier uniqueness determines
-\(\kappa_{t_0}\) away from the origin; the atom at the origin is then fixed by
-total mass.  Whenever the sixth centred absolute moment is finite,
-differentiation at the origin gives the direct moment formulas
+Thus \(q_{t_0}=\pi\widehat{\lambda_{t_0}}\), with a genuine finite signed
+measure on the right.  Full knowledge of \(q_{t_0}\) determines
+\(\lambda_{t_0}\) by Fourier uniqueness.  On Borel sets not containing the
+origin it then determines
+\[
+  \kappa_{t_0}(B)=\int_B s^{-1}\lambda_{t_0}(\dd s),
+\]
+and the remaining atom at the origin is fixed by total mass.
+
+\begin{proposition}[Observation profile and the finite moment jet]%
+\label{prop:observation-profile-finite-jet}
+Fix \(t_0>0\).  Assume that \(\nu\) has a finite sixth centred absolute
+moment and define \(\kappa_{t_0}\), \(\lambda_{t_0}\), and \(q_{t_0}\) as
+above.  Then \(q_{t_0}\in C^5(\RR)\), and, for \(2\le j\le6\),
 \begin{equation}\label{eq:observation-interface-full-profile-moments}
   \mu_j
   =
   t_0^j\,\frac{\ii^{\,j-1}}{\pi}\,
-  q_{t_0}^{(j-1)}(0),
-  \qquad 2\le j\le6 .
+  q_{t_0}^{(j-1)}(0).
 \end{equation}
-These are the only observation-to-moment formulas needed for the coefficient
-quantities \(A_6(\nu)\), \(A_8(\nu)\), \(\Delta_6(\nu)\), and
-\(\Delta_8(\nu)\).
+Consequently a full continuous profile at time \(t_0\), together with the
+finite sixth centred absolute moment hypothesis, supplies exactly the
+centred moment jet needed for \(A_6(\nu)\), \(A_8(\nu)\), \(\Delta_6(\nu)\),
+and \(\Delta_8(\nu)\).
+\end{proposition}
+
+\begin{proof}
+The sixth centred absolute moment gives
+\[
+  \int_{\RR}\abs{s}^6\,\kappa_{t_0}(\dd s)
+  =
+  t_0^{-6}\int_{\RR}\abs{\gamma-\bar\gamma}^6\,\nu(\dd\gamma)
+  <\infty .
+\]
+In particular \(\lambda_{t_0}=s\,\kappa_{t_0}\) is a finite signed measure.
+For \(0\le r\le5\), the function \(s\mapsto s^r e^{-\ii s\xi}\) is
+integrable with respect to \(\lambda_{t_0}\), uniformly for \(\xi\) in
+compact sets after domination by \(\abs{s}^{r+1}\).  Differentiation under
+the integral therefore gives
+\[
+  q_{t_0}^{(r)}(\xi)
+  =
+  \pi(-\ii)^r\int_{\RR}s^{r+1}e^{-\ii s\xi}\,\kappa_{t_0}(\dd s),
+  \qquad 0\le r\le5 .
+\]
+Setting \(r=j-1\) and \(\xi=0\) yields
+\[
+  q_{t_0}^{(j-1)}(0)
+  =
+  \pi(-\ii)^{j-1}\int_{\RR}s^j\,\kappa_{t_0}(\dd s).
+\]
+Since \(s=(\gamma-\bar\gamma)/t_0\), the last integral is
+\(t_0^{-j}\mu_j\).  Multiplying by \(t_0^j\ii^{j-1}/\pi\) proves
+\eqref{eq:observation-interface-full-profile-moments}.
+\end{proof}
 
 There is also a purely exact, non-generic lattice certificate.  If, in
 addition to integer-orbit samples, one already knows the support condition
@@ -76,9 +124,8 @@ the positive symbol
 \]
 This recovers the lattice masses and hence the same moment jet.  Without the
 displayed support condition, the integer samples are only projection data and
-do not reconstruct the full observation profile.  For that reason the
-lattice calculation is kept outside the entropy argument.  The separate
+do not reconstruct the full observation profile.  For that support-restricted
+reason the lattice calculation is kept outside the entropy argument.  The separate
 supplementary note
 \texttt{observation\_lattice\_reconstruction\_note.tex} contains the longer
-integer-lattice reconstruction statement; it is not part of the main paper
-and supplies no step in the entropy proof.
+integer-lattice reconstruction statement.
