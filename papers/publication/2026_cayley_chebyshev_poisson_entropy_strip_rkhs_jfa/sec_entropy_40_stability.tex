@@ -291,9 +291,17 @@ The \(O((\Delta_6)^{1/4})\) statement for fixed \(\sigma\)
 follows immediately from the displayed estimate.
 \end{proof}
 
-\begin{theorem}[Controlled-shell finite-time bound with explicit shell constants]%
+\begin{theorem}[Conditional certified-shell finite-time sixth-defect estimate]%
 \label{thm:finite-time-poisson-entropy-stability}
-Fix \(\sigma>0\) and \(M>0\), and set
+Fix \(\sigma>0\) and \(M>0\).  The theorem is conditional on the
+variance-and-seventh-moment shell
+\[
+\mathcal S_{\sigma,M}:=
+\left\{\nu:\ \mu_2(\nu)=\sigma^2,\quad
+\EE_\nu|\gamma-\bar\gamma|^7\le M\right\}.
+\]
+The constants below are part of the certificate and are fixed before any KL
+value is inserted.  Set
 \[
 \mathcal M_{\sigma,M}^{(8)}
 :=3\sigma^2+\sum_{n=3}^{6}(n+1)M^{n/7},
@@ -338,13 +346,7 @@ T_{\sigma,M}^{(8)}
 These are finite, directly checkable constants depending only on
 \(\sigma\) and \(M\).  They are chosen before any entropy observation is
 inserted.
-On the controlled shell
-\[
-\mathcal S_{\sigma,M}:=
-\left\{\nu:\ \mu_2(\nu)=\sigma^2,\quad
-\EE_\nu|\gamma-\bar\gamma|^7\le M\right\},
-\]
-they dominate the fixed-law seventh-moment constants \(B_{\nu,8}\) and
+On the controlled shell they dominate the fixed-law seventh-moment constants \(B_{\nu,8}\) and
 \(T_{\nu,8}\) from
 Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}.  Define also the
 explicit eighth-coefficient shell bound
@@ -356,11 +358,11 @@ C_{\sigma,M}^{(8)}
 +21\sigma^2M^{6/7}+50M^{8/7}
 \right).
 \end{equation}
-Thus the theorem's finite-time input data are \(\sigma\), \(M\), \(t\), and the
-single measured value \(D_{\mathrm{KL}}(h_t\|g_t)\), with
+Thus the theorem's finite-time certificate is the shell datum
+\((\sigma,M)\), together with the displayed constants
 \(C_{\sigma,M}^{(8)}\), \(B_{\sigma,M}^{(8)}\), and
-\(T_{\sigma,M}^{(8)}\) already fixed by the displayed formulas before that
-measured value is used.
+\(T_{\sigma,M}^{(8)}\).  This certificate is fixed before any KL value is
+inserted.
 Let \(\nu\in\mathcal S_{\sigma,M}\).  Put
 \[
 h_t:=P_t*\nu,\qquad g_t(x):=P_t(x-\bar\gamma),
@@ -383,7 +385,24 @@ t^6\left(
 -D_{\mathrm{KL}}(h_t\|g_t)
 \right).
 \end{equation}
-Then, for every \(t\ge T_{\sigma,M}^{(8)}\),
+For every \(t\ge T_{\sigma,M}^{(8)}\), the certified shell supplies numbers
+\(A_8(\nu)\) and \(E_\nu(t)\) with
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{A_6(\nu)}{t^6}
++\frac{A_8(\nu)}{t^8}
++E_\nu(t),
+\qquad
+|A_8(\nu)|\le C_{\sigma,M}^{(8)},\quad
+|E_\nu(t)|\le B_{\sigma,M}^{(8)}t^{-9}.
+\]
+The statistic is therefore governed first by the exact certified-shell identity
+\begin{equation}\label{eq:main-certified-shell-sixth-identity}
+\mathfrak D_t^{(6)}(\nu)
+=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E_\nu(t),
+\end{equation}
+and only then by the bound
 \begin{equation}\label{eq:main-finite-time-defect-estimate}
 0\le\Delta_6(\nu)
 \le
@@ -424,18 +443,23 @@ W_2(\nu_c,\rho_\sigma)
 +8\,\sigma^{-2}(3\varepsilon)^{1/2}.
 \]
 
+Without a certified bound for the eighth coefficient \(A_8(\nu)\) and for the
+remainder \(E_\nu(t)\), the single value
+\(\mathfrak D_t^{(6)}(\nu)\) gives no bound on \(\Delta_6(\nu)\).
 \end{theorem}
 
 \begin{remark}
 The observable inputs for \(\mathfrak D_t^{(6)}(\nu)\) are
-\(D_{\mathrm{KL}}(h_t\|g_t)\), \(t\), and \(\sigma^2\).  The shell constants
+\(D_{\mathrm{KL}}(h_t\|g_t)\), \(t\), and \(\sigma^2\).  They define only the
+finite-time statistic.  The shell constants
 \(C_{\sigma,M}^{(8)}\), \(B_{\sigma,M}^{(8)}\), and
 \(T_{\sigma,M}^{(8)}\) are the displayed finite functions of the
 variance-and-seventh-moment shell
 before the KL value at time \(t\) is inserted into
-\(\mathfrak D_t^{(6)}(\nu)\).  The theorem therefore gives a finite-time
-estimate from a measured statistic only after the controlled shell
-\((\sigma,M)\) has been fixed.
+\(\mathfrak D_t^{(6)}(\nu)\).  The theorem is therefore not a
+one-observation stability theorem: the measured KL value is used only after
+the controlled shell \((\sigma,M)\) has certified the possible sizes of
+\(A_8(\nu)\) and \(E_\nu(t)\).
 \end{remark}
 
 \begin{proof}
@@ -470,18 +494,7 @@ T_{\nu,8}\le T_{\sigma,M}^{(8)}.
 \]
 Therefore the quantitative expansion holds for
 every \(t\ge T_{\sigma,M}^{(8)}\) with
-\(|E_\nu(t)|\le B_{\sigma,M}^{(8)}t^{-9}\).  Substitution into
-\eqref{eq:main-finite-time-sixth-deficit} gives
-\[
-\begin{aligned}
-\mathfrak D_t^{(6)}(\nu)
-&=-\frac{7}{64}\sigma^6-A_6(\nu)
--\frac{A_8(\nu)}{t^2}-t^6E_\nu(t)\\
-&=\Delta_6(\nu)
--\frac{A_8(\nu)}{t^2}-t^6E_\nu(t).
-\end{aligned}
-\]
-It remains to bound \(A_8(\nu)\) uniformly on the shell.  By
+\(|E_\nu(t)|\le B_{\sigma,M}^{(8)}t^{-9}\).  By
 Theorem~\ref{thm:poisson-kl-eighth},
 \[
 A_8(\nu)
@@ -498,7 +511,10 @@ because \(\EE|X_c|^7\le M\).  Therefore
 \le C_{\sigma,M}^{(8)}
 \]
 with \(C_{\sigma,M}^{(8)}\) as in
-\eqref{eq:main-controlled-shell-c8}.  Combining these estimates yields
+\eqref{eq:main-controlled-shell-c8}.  Substitution into
+\eqref{eq:main-finite-time-sixth-deficit} gives the identity
+\eqref{eq:main-certified-shell-sixth-identity}.  Combining this identity with
+the certified bounds for \(A_8(\nu)\) and \(E_\nu(t)\) yields
 \[
 0\le \Delta_6(\nu)
 \le
@@ -520,6 +536,14 @@ proves
 \eqref{eq:main-finite-time-w2-stability}, and the
 \(\varepsilon\)-form is immediate.
 \end{proof}
+
+The algebra behind the oracle finite-time form is the identity
+\begin{equation}\label{eq:oracle-sixth-deficit-identity-before-theorem}
+\mathfrak D_t^{(6)}(\nu)
+=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E_\nu(t).
+\end{equation}
+The conclusion requires a certified bound on \(|A_8|\) and
+\(|E_\nu(t)|\); a single KL value at one time does not supply those bounds.
 
 \begin{theorem}[Oracle finite-time bound from oracle/shell eighth-order expansion data]%
 \label{thm:oracle-finite-time-poisson-entropy-stability}
