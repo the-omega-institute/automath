@@ -10,10 +10,12 @@ statements are deferred to the appendix.
 
 \subsection{Block I: measurement protocol, sampled model, and gap law}
 We formulate the readout layer as a classical sampled interval instrument. The field-facing UDW detector core supplies a stationary excitation intensity, while the counter contributes one hidden readiness bit and a binary ancilla that records only whether at least one ready-state excitation attempt occurred before the next sampling time. Each proper-time interval therefore uses a fresh ancilla and then coarse-grains the within-bin history to a single symbol $A_n\in\{0,1\}$. The hidden state passed to the next interval is again just ready $R$ or refractory $D$, so the sampled record is a two-state hidden Markov model.
-In this proposition \(\Gamma\) is a stipulated classical counter parameter; no
-UDW response profile, measurement law, or response locus is derived here.
-The only bridge to a continuous recovery comparison is the model-validity bound
-stated up front in \Cref{prop:finite-window-continuous-comparator-main}.
+Throughout this section \(\Gamma\) is the stipulated counter parameter.  The
+only bridge to a continuous recovery comparison is the fixed-window
+model-validity bound stated up front in
+\Cref{prop:finite-window-continuous-comparator-main}, with the
+finite-window-only restriction made formal in
+\Cref{cor:finite-window-only-comparator-main}.
 
 \begin{proposition}[Sampled one-recovery-opportunity boundary-reset instrument and labelled kernels]\label{prop:instrument-kernels-main}
 Fix a sampling interval of length $\Delta\tau$ and a rate parameter $\Gamma>0$.
@@ -125,7 +127,11 @@ The continuous intra-bin comparator, the positive post-click leakage entries
 that the sampled model kills, and the finite-window total-variation bound are
 stated before the theorem chain in \Cref{subsec:model-validity-boundary}.  Thus
 the exact renewal, determinant, inverse, and CLT statements below are theorems
-about the sampled kernels, not about the comparator itself.
+about the sampled kernels, not about the comparator itself.  By
+\Cref{cor:finite-window-only-comparator-main}, no stationary law, spectral
+density, Fano limit, finite-record CLT, or other infinite-record conclusion is
+transferred to the comparator unless a separate growing-window perturbation
+theorem is supplied; none is used in this section.
 
 
 \subsection{Three detector criteria and the Parry benchmark}\label{subsec:thermality-notions}
@@ -756,12 +762,7 @@ and direct subtraction gives the displayed positive increment.
 
 The following theorem is the accepted record-side result of the paper: a
 classical sampled-record theorem for the hidden Markov law fixed by the
-interval instrument above. Its Poisson parameter $\Gamma$ is the internal
-attempt rate in \Cref{prop:instrument-kernels-main}; no response profile,
-response locus, or external calibration is used in the statement or proof.
-The exact-dependence threshold is a property of this sampled-counter law
-before any optional response-level interpretation. The proof
-uses exactly the local renewal,
+interval instrument above. The proof uses exactly the local renewal,
 stationary-law, covariance-transfer, hazard, and finite-dependence inputs
 proved in
 \Cref{lem:renewal-gap-main,lem:stationary-main,lem:covariance-transfer-main,lem:critical-rate-main,lem:survival-hazard-main,lem:hazard-obstruction-main,lem:kernel-factorization-main,lem:one-dep-criterion-main}.
@@ -788,8 +789,6 @@ conditional identity
 \PP(A_n=1\mid A_0=1)
 =\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
 \]
-No determinant-kernel or response-calibration statement is an input to the
-renewal-law, covariance, hazard, or exact-\(1\)-dependence conclusions below.
 
 \noindent\fbox{\begin{minipage}{0.96\linewidth}
 \textbf{Boxed convention for all equal-rate and critical formulas.}
@@ -839,7 +838,10 @@ equivalently $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. More
 explicitly, this theorem is for the sampled one-recovery-opportunity
 boundary-reset kernels of \Cref{prop:instrument-kernels-main}, not the
 continuous intra-bin recovery kernels of
-\Cref{prop:continuous-comparator-main}. With the record-layer notation from
+\Cref{prop:continuous-comparator-main}.  The fixed-window comparison in
+\Cref{prop:continuous-comparator-main} and
+\Cref{cor:finite-window-only-comparator-main} is not an input to any
+stationary, spectral, or CLT conclusion in this theorem. With the record-layer notation from
 Table~\ref{tab:notation-global}, the sampled boundary-reset record satisfies
 the following, using the boxed equal-rate and critical conventions above.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.3em]
@@ -908,8 +910,46 @@ the strict increment $h_{k+1}-h_k>0$ in both regimes. Because the gap law has
 full support, \Cref{lem:hazard-obstruction-main} then excludes every finite
 visible Markov order.
 
-For item~(iii), \Cref{lem:covariance-transfer-main} gives
-\eqref{eq:cov-main}. More explicitly,
+For item~(iii), the covariance transfer is the hidden-mode calculation in
+\Cref{lem:covariance-transfer-main}.  To make the normalization explicit, put
+\[
+P=\begin{pmatrix}p&q\\ b&1-b\end{pmatrix},
+\qquad
+u=T_1\mathbf 1=\binom q a,
+\qquad
+\pi=\left(\frac b{q+b},\frac q{q+b}\right).
+\]
+Then \(\rho=\pi u=q(1-c)/(q+b)\), and
+\[
+q-\rho=\frac{q(q-a)}{q+b},
+\qquad
+a-\rho=-\frac{b(q-a)}{q+b},
+\qquad
+u-\rho\mathbf 1
+=\frac{q-a}{q+b}\binom q{-b}.
+\]
+Moreover
+\[
+P\binom q{-b}
+=
+\binom{pq-qb}{bq-b(1-b)}
+=(p-b)\binom q{-b}
+=\lambda_{\mathrm{hid}}\binom q{-b}.
+\]
+Thus
+\[
+P^{n-1}u
+=
+\rho\mathbf 1
++\lambda_{\mathrm{hid}}^{\,n-1}(u-\rho\mathbf 1).
+\]
+Since a click at time \(0\) resets the hidden state at the next interval to
+\(D\), the \(D\)-component gives
+\[
+\PP(A_n=1\mid A_0=1)
+=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
+\]
+Equivalently,
 \[
 \PP(A_0=1,A_n=1)
 =\rho\bigl[\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}\bigr],
@@ -990,11 +1030,10 @@ hidden mode $\lambda_{\mathrm{hid}}$ vanishes precisely at the closed critical
 rate $\Gamma_c$, labelled kernels factor through stationarity at that point,
 and away from it the lag-two covariance obstructs exact $1$-dependence. The
 same recovery mechanism is incompatible both with the Parry support constraint
-and with a Bernoulli full-support benchmark, as made explicit below. For
-orientation, the formula sanity plot in \Cref{fig:hazard-cov} displays \(h_k\) and the normalized covariance
-at \(\kappa_{\mathrm r}=5\), \(\Delta\tau=0.3\), and
-\(\Gamma\in\{1.2,\Gamma_c,3.2\}\); the figure and reproduction details are kept
-in Appendix~\ref{app:record-figure-reproduction}.
+and with a Bernoulli full-support benchmark, as made explicit below.  Any
+record-side plots are only deterministic evaluations of these closed formulas
+and are kept with the supplementary numerical bookkeeping rather than used as
+evidence in the theorem chain.
 
 \begin{remark}[No exact Parry or Bernoulli law at positive sampling interval]\label{cor:no-exact-main}
 For every positive choice of
@@ -1202,8 +1241,8 @@ is genuinely remembered.
 
 The boundary-reset recovery renewal law has a second operational consequence
 directly relevant to finite counting data. This is a classical discrete-time
-count-statistics statement for the already specified sampled renewal record, in
-the sense fixed in \Cref{subsec:scope-nonclaims}.  For this binary record we use the
+count-statistics statement for the already specified sampled renewal record.
+For this binary record we use the
 discrete normalized conditional intensity
 \[
 g^{(2)}(n)
@@ -1234,6 +1273,9 @@ Since the covariance sequence is explicit, so are the low-frequency noise proper
 This count-noise conclusion is not automatic.  After the present classical
 sampled boundary-reset record has been fixed, the one-mode covariance tail
 gives a closed Herglotz spectral density and an exact asymptotic Fano factor.
+Both are infinite-record consequences of the sampled stationary renewal law
+alone, not consequences of the fixed-window continuous-comparator estimate in
+\Cref{prop:finite-window-continuous-comparator-main}.
 The sampled boundary-reset recovery law suppresses immediate reclicks, but it
 could in principle still generate longer-range positive correlations and
 enhanced low-frequency noise.  The explicit covariance formula shows that the
@@ -1281,7 +1323,11 @@ The strict lower bound is the renewal-count identity
 This proposition is only the covariance-tail consequence of
 \Cref{thm:recovery-main}; it introduces no separate renewal spectral theorem,
 dead-time-correction estimator, detector-response statement, or response
-level-set statement.  Classical renewal-noise examples such as fractal renewal processes
+level-set statement.  It also does not assert the same spectral density or Fano
+limit for the continuous intra-bin comparator; by
+\Cref{cor:finite-window-only-comparator-main}, such a transfer would require a
+separate perturbation theorem, including control of the growing record length.
+Classical renewal-noise examples such as fractal renewal processes
 \cite{LowenTeich1993FractalRenewal} are useful comparators: here the proved
 exponential covariance tail gives strict low-frequency suppression rather than
 \(1/f\)-type behavior.
@@ -1410,16 +1456,9 @@ while the whole renewal class keeps \(g^{(2)}(1)<1\), strictly increasing
 spectral density on \([0,\pi]\), and a sub-Poisson Fano limit.  These are
 closed-form properties of the sampled renewal law.  The finite-record theorem
 below estimates only the fixed-setting value of \(\gamma_2\) and its variance;
-it is not a multi-setting root-location or response-level-set inference
-theorem. The
-formula sanity plot in \Cref{fig:spectrum-fano} uses \(p=e^{-\Gamma\Delta\tau}\),
-\(c=e^{-\kappa_{\mathrm r}\Delta\tau}\), \(f(\theta)\) from
-\eqref{eq:spectrum-main}, and \(F=f(0)/\rho\); the plotted parameter values are
-\(\kappa_{\mathrm r}\Delta\tau=1.5\),
-\(\Gamma\Delta\tau\in\{0.3,0.6,1.0\}\) for the spectral panel and
-\(\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}\),
-\(\Gamma\Delta\tau\in[0.1,2.0]\) for the Fano panel. The figure and plotting
-bookkeeping are collected in Appendix~\ref{app:record-figure-reproduction}.
+it is not a scan theorem.  The deterministic plots of \(h_k\), the covariance
+profile, \(f(\theta)\), and \(F=f(0)/\rho\) are supplementary formula checks
+only; they are not simulations, fits, or evidence for the theorem statements.
 
 
 \subsection{Block III: renewal principal-minor encoding of inclusions}\label{subsec:boundary-reset-finite-inclusion-record}
@@ -1442,17 +1481,9 @@ explicit scalar sequence
 finite algebraic encoding of that renewal product
 \cite{CoxIsham1980,DaleyVereJones2003,Asmussen2003}.
 
-\begin{theorem}[Renewal principal-minor encoding]\label{lem:renewal-principal-minor-main}\label{thm:boundary_reset_toeplitz_finite_inclusion}
-Let \(\varXi\) be a stationary renewal process on \(\mathbb Z\) with intensity
-\(\rho>0\) and Palm renewal masses
-\[
-u_n=\PP(n\in\varXi\mid0\in\varXi),\qquad n\ge1 .
-\]
-For finite nonempty \(B=\{i_1<\cdots<i_m\}\),
-\begin{equation}\label{eq:renewal-inclusion-product-main}
-\PP(B\subset\varXi)=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
-\end{equation}
-Define
+\begin{proposition}[Finite LU principal-minor identity]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
+Let \(\rho>0\) and let \(u_n\) be any scalar sequence indexed by \(n\ge1\).
+Define \(K_u=K_u^{(\rho)}\) by
 \begin{equation}\label{eq:renewal-principal-minor-kernel-main}
 K_u(i,j)=
 \begin{cases}
@@ -1460,33 +1491,30 @@ K_u(i,j)=
 \rho-u_{j-i}, & j>i .
 \end{cases}
 \end{equation}
-Then
+For \(B=\{i_1<\cdots<i_m\}\), set
+\(K_B=[K_u(i_r,i_s)]_{r,s=1}^m\).  Then
 \begin{equation}\label{eq:renewal-principal-minor-product-main}
-\det\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m
-=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}
-=\PP(B\subset\varXi).
+\det K_B=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
-For \(B=\varnothing\), the corresponding empty determinant is \(1\).  The
-finite exact probabilities on a finite \(I\subset\mathbb Z\) are then recovered
-by finite inclusion--exclusion:
-\begin{equation}\label{eq:finite-exact-configuration-probabilities-main}
-P_I(\varXi\cap I=S)
-=\sum_{C\subset I\setminus S}(-1)^{|C|}\det K_{S\cup C}
-\end{equation}
-for \(S\subset I\), with the empty determinant equal to \(1\).
-\end{theorem}
+\end{proposition}
 
-\begin{proof}
-For \(B=\{i_1<\cdots<i_m\}\), stationarity gives
-\(\PP(i_1\in\varXi)=\rho\).  After conditioning on \(i_r\in\varXi\), the future
-regenerates, so the probability of a click at the next specified time
-\(i_{r+1}\), with any number of unspecified intervening clicks allowed, is
-\(u_{i_{r+1}-i_r}\).  Successive conditioning gives
-\eqref{eq:renewal-inclusion-product-main}.
+\begin{remark}[Not a DPP theorem]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
+\Cref{prop:renewal-principal-minor-lu-main} is only a finite LU identity and,
+when \(u_n\) is a Palm renewal mass sequence, an algebraic representative for
+inclusion products of a renewal law that has already been constructed.  Its
+admissibility is inherited from those renewal probabilities and finite
+inclusion--exclusion, not proved from separate kernel conditions.  On any
+finite \(I\), diagonal conjugation \(K_I\mapsto D_IK_ID_I^{-1}\) leaves all
+principal minors unchanged, so the representative is noncanonical.  No
+Hermitian positive-contraction kernel, canonical operator kernel, negative
+association, hyperuniformity, DPP sampling theorem, nonsymmetric-DPP
+well-definedness theorem, or Fredholm theorem is claimed.
+\end{remark}
 
-The determinant identity is one LU calculation.  Put
+\begin{proof}[Proof of \Cref{prop:renewal-principal-minor-lu-main}]
+This is one LU calculation.  Put
 \[
-K_B=\bigl[K_u(i_r,i_s)\bigr]_{r,s=1}^m=\rho L+U,\qquad
+K_B=\rho L+U,\qquad
 L_{rs}=\mathbf 1_{\{s\le r\}},\qquad
 U_{rs}=(\rho-u_{i_s-i_r})\mathbf 1_{\{s>r\}}.
 \]
@@ -1503,8 +1531,40 @@ As \(\det L=1\),
 \det K_B=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \]
 This proves the determinant identity.
+\end{proof}
 
-The exact configuration formula is finite inclusion--exclusion:
+\begin{corollary}[Renewal inclusion and finite word law]\label{cor:renewal-principal-minor-word-law-main}
+Let \(\varXi\) be a stationary renewal process on \(\mathbb Z\) with intensity
+\(\rho>0\) and Palm renewal masses
+\[
+u_n=\PP(n\in\varXi\mid0\in\varXi),\qquad n\ge1 .
+\]
+For finite nonempty \(B=\{i_1<\cdots<i_m\}\),
+\begin{equation}\label{eq:renewal-inclusion-product-main}
+\PP(B\subset\varXi)=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}
+=\det K_B,
+\end{equation}
+where \(K_B=[K_u(i_r,i_s)]_{r,s=1}^m\) is the finite matrix from
+\Cref{prop:renewal-principal-minor-lu-main}.  For \(B=\varnothing\), the empty
+determinant is \(1\).  For every finite \(I\subset\mathbb Z\), exact
+configuration probabilities are recovered by finite inclusion--exclusion:
+\begin{equation}\label{eq:finite-exact-configuration-probabilities-main}
+P_I(\varXi\cap I=S)
+=\sum_{C\subset I\setminus S}(-1)^{|C|}\det K_{S\cup C},
+\qquad S\subset I .
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+For \(B=\{i_1<\cdots<i_m\}\), stationarity gives
+\(\PP(i_1\in\varXi)=\rho\).  After conditioning on \(i_r\in\varXi\), the future
+regenerates, so the probability of a click at the next specified time
+\(i_{r+1}\), with any number of unspecified intervening clicks allowed, is
+\(u_{i_{r+1}-i_r}\).  Successive conditioning gives the renewal inclusion
+product, and \Cref{prop:renewal-principal-minor-lu-main} identifies that product
+with \(\det K_B\).
+
+The exact configuration formula is the finite inclusion--exclusion identity
 \[
 \mathbf 1_{\{\varXi\cap I=S\}}
 =
@@ -1516,18 +1576,6 @@ Substituting the already proved inclusion determinants gives
 are the probabilities of the stationary renewal process, so their
 nonnegativity and consistency come from the renewal law itself.
 \end{proof}
-
-\begin{remark}[Not a DPP theorem]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
-The matrix \(K_u\) is only a finite principal-minor representative of the
-already constructed renewal law.  Its admissibility is inherited from the
-renewal probabilities and finite inclusion--exclusion, not proved from separate
-kernel conditions.  On any finite \(I\), diagonal conjugation
-\(K_I\mapsto D_IK_ID_I^{-1}\) leaves all principal minors unchanged, so the
-representative is noncanonical.  No Hermitian positive-contraction kernel,
-canonical operator kernel, negative association, hyperuniformity, DPP sampling
-theorem, nonsymmetric-DPP well-definedness theorem, or Fredholm theorem is
-claimed.
-\end{remark}
 
 \paragraph{Boundary-reset specialization and finite word law.}
 \phantomsection\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
@@ -1545,8 +1593,9 @@ u_n=\PP(A_n=1\mid A_0=1)
 =\rho+(a-\rho)\ell^{n-1}
 =\rho-d\ell^{n-1}.
 \end{equation}
-Substitution in \Cref{lem:renewal-principal-minor-main} gives the Toeplitz
-finite-principal-minor representative
+Substitution in
+\Cref{prop:renewal-principal-minor-lu-main,cor:renewal-principal-minor-word-law-main}
+gives the Toeplitz finite-principal-minor representative
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
@@ -1590,7 +1639,8 @@ u_n=e_D^\top P^{n-1}\binom{q}{a}
 =\rho+\ell^{n-1}(a-\rho).
 \]
 Every specified click resets the next interval to the same refractory hidden
-state, so the renewal product in \Cref{lem:renewal-principal-minor-main}
+state, so the renewal product in
+\Cref{cor:renewal-principal-minor-word-law-main}
 applies.  Substituting this \(u_n\) into \(K_u\) gives \(K_\Gamma\), its
 transfer tail, and the product formula
 \eqref{eq:boundary-reset-inclusion-product-main}.
@@ -1601,11 +1651,12 @@ t^{N_I}=\prod_{i\in I}\bigl(1+(t-1)\mathbf 1_{\{i\in\varXi\}}\bigr)
 \]
 together with the principal-minor expansion of
 \(\det(I_I+(t-1)K_{\Gamma,I})\).  The word law is the same finite
-inclusion--exclusion calculation as in \Cref{lem:renewal-principal-minor-main},
-with \(I=S\cup T\).
+inclusion--exclusion calculation as in
+\Cref{cor:renewal-principal-minor-word-law-main}, with \(I=S\cup T\).
 
 \paragraph{Equivalence to the renewal product.}
-\Cref{lem:renewal-principal-minor-main} is used only through the identity
+\Cref{prop:renewal-principal-minor-lu-main} is used only through the finite LU
+identity
 \[
 \det[K_\Gamma(i,j)]_{i,j\in B}
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
@@ -1621,7 +1672,7 @@ Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
 \(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
 \(\lambda_{\mathrm{hid}}=0\).  With
 \(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and \(d_c=\rho_c-a_c\), the
-Toeplitz representative in \Cref{thm:boundary_reset_toeplitz_finite_inclusion}
+Toeplitz representative above
 collapses to upper range one:
 \begin{equation}\label{eq:critical-toeplitz-range-one-main}
 K_c(i,j)=
@@ -1669,7 +1720,8 @@ zero of \(\lambda_{\mathrm{hid}}\), so \eqref{eq:critical-toeplitz-range-one-mai
 is \eqref{eq:boundary-reset-toeplitz-kernel-main} with \(\ell=0\).  Then
 \eqref{eq:finite-inclusion-u-n-main} gives \(u_1=a_c\) and \(u_n=\rho_c\) for
 \(n\ge2\).  The renewal product in
-\Cref{lem:renewal-principal-minor-main} immediately gives the cluster product:
+\Cref{cor:renewal-principal-minor-word-law-main} immediately gives the cluster
+product:
 inside a contiguous cluster each adjacent specified gap contributes \(a_c\),
 and each gap between distinct clusters contributes \(\rho_c\).
 
@@ -1711,12 +1763,11 @@ criteria and Heller's finite-process characterization
 \cite{BlackwellKoopmans1957,Gilbert1959,Dharmadhikari1963Functions,Dharmadhikari1963Sufficient,Heller1965}.
 Recent model-free memory and weak-memory work addresses broader inference or
 memory-reduction questions \cite{VollmarEtAl2024Memory,MeyerBrandner2026WeakMemory}.
-The theorem below has the fixed-family quotient scope stated in
-\Cref{subsec:scope-nonclaims}: the hidden state space, sampling rule, and
-two-parameter labelled kernel family \eqref{eq:t0-t1-main} are fixed in
-advance, and the visible process recovers only the unordered survival pair.
-Its increment is the explicit three-inclusion quotient inverse through the
-symmetric coordinates \(p+c,pc\), together with the sharp
+The theorem below is a fixed-family quotient inverse: the hidden state space,
+sampling rule, and two-parameter labelled kernel family \eqref{eq:t0-t1-main}
+are fixed in advance, and the visible process recovers only the unordered
+survival pair.  Its increment is the explicit three-inclusion quotient inverse
+through the symmetric coordinates \(p+c,pc\), together with the sharp
 \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) label non-identifiability for this
 fixed sampled family.
 
@@ -1780,9 +1831,8 @@ and the unordered rate pair is
 \left\{-\Delta\tau^{-1}\log p,
 -\Delta\tau^{-1}\log c\right\}.
 \]
-This is not hidden-kernel identifiability; it is visible-law quotient
-identifiability for this fixed finite-Markov-function family, in the sense of
-\Cref{subsec:scope-nonclaims}.  The inverse is restricted to the feasible
+This is visible-law quotient identifiability for this fixed
+finite-Markov-function family.  The inverse is restricted to the feasible
 symmetric-coordinate image
 \begin{equation}\label{eq:population-feasible-symmetric-coordinate-region-main}
 \mathcal F
@@ -1806,8 +1856,9 @@ separated-root event.
 \begin{proof}
 All quantities in the first line of the inverse are finite-dimensional visible
 probabilities.  By \Cref{lem:stationary-main}, \(a<\rho\), so the denominator
-in the definition of \(\lambda\) is nonzero.  The finite-inclusion formula in
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion} gives, equivalently through the
+in the definition of \(\lambda\) is nonzero.  The renewal inclusion product,
+or equivalently its finite LU representative from
+\Cref{prop:renewal-principal-minor-lu-main}, gives through the
 covariance transfer formula \eqref{eq:cov-transfer-main},
 \[
 \PP(A_0=1,A_2=1)
@@ -1874,7 +1925,7 @@ a=1-p+p\log p,
 which are the same limits obtained from the equal-rate kernels.
 
 Therefore the renewal determinant \(K_\Gamma\) obtained from
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion}, and hence every finite
+\Cref{prop:renewal-principal-minor-lu-main}, and hence every finite
 inclusion, count, and word probability given by
 \eqref{eq:finite-window-count-generating-main} and
 \eqref{eq:finite-word-inclusion-exclusion-main}, depends on the labelled rates only
@@ -1908,7 +1959,7 @@ and the two roots of \eqref{eq:inverse-quadratic-main}, with \(\rho=r_0\), are
 the unordered survival factors \(\{p,c\}\).  Thus the unordered rates
 \(\{-\Delta\tau^{-1}\log p,-\Delta\tau^{-1}\log c\}\) are reconstructed from
 \((r_0,r_1,r_2)\), and once these are known
-\Cref{thm:boundary_reset_toeplitz_finite_inclusion} and
+\Cref{prop:renewal-principal-minor-lu-main} and
 \eqref{eq:finite-window-count-generating-main} and
 \eqref{eq:finite-word-inclusion-exclusion-main}
 reconstruct every finite inclusion probability, count law, and finite word
@@ -2140,6 +2191,90 @@ the plug-in and oracle matrix estimators is \(o_{\PP}(1)\) entrywise.  This
 proves \eqref{eq:three-coordinate-batch-estimator-main}.
 \end{proof}
 
+\begin{lemma}[Concrete rate for the complete-cycle covariance estimator]\label{lem:three-coordinate-batch-rate-main}
+In the setting of
+\Cref{prop:three-coordinate-vector-batch-main}, choose
+\[
+b_N=\max\{1,\lfloor N^{1/3}\rfloor\}.
+\]
+Then the feasible separated-batch covariance estimator satisfies
+\begin{equation}\label{eq:three-coordinate-batch-rate-main}
+\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\end{equation}
+Consequently, at every population point where the map \(\Phi\) is \(C^1\),
+the symmetric-coordinate covariance estimator used in
+\Cref{cor:finite_inverse_delta_boundary_main} satisfies
+\begin{equation}\label{eq:symmetric-coordinate-batch-rate-main}
+\|\widehat\Sigma_{s,N}-\Sigma_s\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\end{equation}
+Thus every deterministic tolerance \(t_N\downarrow0\) with
+\[
+N^{-1/3}/t_N\to0
+\]
+is rate-certified for the rank rule in
+\eqref{eq:rank-tolerance-condition-main}; for example \(t_N=N^{-1/4}\) is an
+admissible deterministic choice.
+\end{lemma}
+
+\begin{proof}
+Use the notation from the proof of
+\Cref{prop:three-coordinate-vector-batch-main}.  For oracle batch sums set
+\[
+X_{r,N}=b_N^{-1/2}C_{r,N}^{\circ,\mathrm{all}} .
+\]
+The separated batches are independent after the one omitted cycle, and the
+fourth-moment estimate in
+\Cref{lem:separated-batch-qdependent-main} gives
+\(\sup_N\EE\|X_{1,N}\|^4<\infty\).  Therefore each matrix entry of the sample
+second moment has stochastic error \(O_{\PP}((M_N^{\mathrm{all}})^{-1/2})\).
+The finite-block covariance bias is the usual missing-lag edge term:
+\[
+\frac1{b_N}\EE C_{1,N}^{\circ,\mathrm{all}}
+(C_{1,N}^{\circ,\mathrm{all}})^\top-\Gamma_Y
+=O(b_N^{-1}),
+\]
+with \(\Gamma_Y\) the cycle-reward long-run covariance matrix.  Also
+\(\bar L_N^{\mathrm{all}}-\EE L_1=O_{\PP}(N^{-1/2})\).  Since
+\[
+M_N^{\mathrm{all}}\asymp_{\PP}N/b_N,
+\]
+the oracle normalized matrix estimator has error
+\[
+O_{\PP}\bigl((N/b_N)^{-1/2}\bigr)+O(b_N^{-1})+O_{\PP}(N^{-1/2}).
+\]
+For \(b_N=\lfloor N^{1/3}\rfloor\) this is \(O_{\PP}(N^{-1/3})\).
+
+The plug-in centering perturbation in the proof of
+\Cref{prop:three-coordinate-vector-batch-main} has
+\(\delta_N=\|\widehat r_N-r\|=O_{\PP}(N^{-1/2})\) and obeys
+\[
+\frac1{M_N^{\mathrm{all}}b_N}
+\sum_{r=1}^{M_N^{\mathrm{all}}}\|\Delta_{r,N}\|^2
+=O_{\PP}(b_N/N).
+\]
+The cross term between oracle and plug-in batch sums is therefore
+\(O_{\PP}((b_N/N)^{1/2})=O_{\PP}(N^{-1/3})\) after the same normalization, and
+the pure plug-in quadratic term is \(O_{\PP}(b_N/N)=O_{\PP}(N^{-2/3})\).
+This proves \eqref{eq:three-coordinate-batch-rate-main}.
+
+At a \(C^1\) point of \(\Phi\),
+\[
+\widehat\Sigma_{s,N}
+=D\Phi(\widehat r_N)\widehat\Sigma_{r,N}^{\mathrm{all}}
+D\Phi(\widehat r_N)^\top
+\]
+as in the symmetric-coordinate delta method.
+Since \(D\Phi(\widehat r_N)-D\Phi(r)=O_{\PP}(N^{-1/2})\) and
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}=O_{\PP}(1)\), the Jacobian plug-in
+contributes only \(O_{\PP}(N^{-1/2})\), while
+\eqref{eq:three-coordinate-batch-rate-main} contributes \(O_{\PP}(N^{-1/3})\).
+This proves \eqref{eq:symmetric-coordinate-batch-rate-main}.  Dividing that
+rate by any deterministic \(t_N\) satisfying \(N^{-1/3}/t_N\to0\) gives
+\eqref{eq:rank-tolerance-condition-main}.
+\end{proof}
+
 \begin{assumption}[Separated roots for finite-record root and rate inference]\label{ass:separated-roots-main}
 For ordinary root-coordinate and rate-coordinate inference from a finite
 record, the population survival factors are assumed separated from the exchange
@@ -2156,7 +2291,7 @@ and it is not needed for the finite-record delta method in the symmetric
 coordinates \((s_1,s_2)\).
 \end{assumption}
 
-\begin{corollary}[Finite-record symmetric-coordinate inverse delta map]\label{cor:finite_inverse_delta_boundary_main}
+\begin{corollary}[Finite-record projected symmetric-coordinate inverse]\label{cor:finite_inverse_delta_boundary_main}
 Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
 with survival factors \(p,c\in(0,1)\).  From one record
 \((A_0,\ldots,A_{N-1})\), use the empirical inclusion vector
@@ -2190,15 +2325,66 @@ s_1(r)=1-a(r)+\lambda(r),
 \qquad
 s_2(r)=r_0\bigl(1-\lambda(r)\bigr)-a(r)+\lambda(r).
 \end{equation}
-At the population value, \(s_1=p+c\) and \(s_2=pc\).  Therefore
+At the population value, \(s_1=p+c\) and \(s_2=pc\).  The finite-record
+estimator used for inference is the projected feasible symmetric-coordinate
+estimator, not the raw value \(\Phi(\widehat r_N)\).  Let
+\begin{equation}\label{eq:symmetric-feasible-image-main}
+F
+=
+\{(x+y,xy):0\le x\le1,\ 0\le y\le1\}
+=
+\left\{
+(s_1,s_2):
+\Delta=s_1^2-4s_2\ge0,\quad
+0\le\frac{s_1\pm\sqrt\Delta}{2}\le1
+\right\}.
+\end{equation}
+This compact set is the closed symmetric-coordinate image of the two survival
+factors.  The strict sampled-counter model has \(0<p,c<1\).  Its
+two-dimensional feasible interior is the separated-root part
 \[
-\widehat s_N:=\Phi(\widehat r_N),\qquad
+F^{\circ}_{\rm sep}
+=
+\{(x+y,xy):0<x<1,\ 0<y<1,\ x\ne y\},
+\]
+whereas the exchange diagonal is
+\[
+F_{\rm ex}
+=
+\{(2z,z^2):0<z<1\}.
+\]
+For \(y\in\mathbb R^2\), define the canonical Euclidean projection
+\begin{equation}\label{eq:canonical-symmetric-projection-main}
+\Pi_F(y)
+=
+\operatorname*{lex\,min}
+\arg\min_{v\in F}\|y-v\|_2 ,
+\end{equation}
+where the lexicographic rule is used only to break possible ties among nearest
+points.  On the event that \(\widehat r_N\) lies in the displayed open set of
+\(\Phi\), set \(\widehat s_N^{\rm raw}=\Phi(\widehat r_N)\); off that event, set
+\(\widehat s_N^{\rm raw}\) equal to any fixed deterministic vector in
+\(\mathbb R^2\).  The reported symmetric-coordinate estimator is
+\begin{equation}\label{eq:projected-symmetric-estimator-main}
+\widetilde s_N:=\Pi_F(\widehat s_N^{\rm raw}).
+\end{equation}
+On the event whose probability tends to one, the raw delta estimate satisfies
+\[
+\widehat s_N^{\rm raw}=\Phi(\widehat r_N),\qquad
 s:=\Phi(r),\qquad
 \Sigma_s:=D\Phi(r)\Sigma_rD\Phi(r)^\top
 \]
-satisfy the symmetric-coordinate central limit theorem
+and the symmetric-coordinate central limit theorem
 \[
-\sqrt N\,(\widehat s_N-s)
+\sqrt N\,(\widehat s_N^{\rm raw}-s)
+\Rightarrow
+\mathcal N(0,\Sigma_s).
+\]
+If \(s\in F^{\circ}_{\rm sep}\), then
+\[
+\PP(\widetilde s_N=\widehat s_N^{\rm raw})\to1,
+\qquad
+\sqrt N\,(\widetilde s_N-s)
 \Rightarrow
 \mathcal N(0,\Sigma_s).
 \]
@@ -2213,8 +2399,9 @@ D\Phi(\widehat r_N)^\top
 on the event that \(\widehat r_N\) lies in the displayed open set, with any
 fixed positive semidefinite fallback value off that event.  It converges in
 probability to \(\Sigma_s\).
-The clean two-dimensional Wald statement requires a full-rank covariance
-assumption.  If
+The feasible two-dimensional Wald statement proved from the separated-batch
+estimator is the full-rank interior statement.  If \(s\in F^{\circ}_{\rm sep}\)
+and
 \begin{equation}\label{eq:symmetric-coordinate-full-rank-assumption-main}
 \lambda_{\min}(\Sigma_s)\ge\sigma_0>0,
 \end{equation}
@@ -2227,9 +2414,9 @@ then Weyl's inequality and
 \]
 On that event \(\widehat\Sigma_{s,N}\) is invertible, and
 \begin{equation}\label{eq:symmetric-coordinate-full-rank-wald-main}
-N(\widehat s_N-s)^\top
+N(\widetilde s_N-s)^\top
 \widehat\Sigma_{s,N}^{-1}
-(\widehat s_N-s)
+(\widetilde s_N-s)
 \Rightarrow\chi^2_2 .
 \end{equation}
 The corresponding feasible symmetric-coordinate confidence region is
@@ -2238,29 +2425,20 @@ The corresponding feasible symmetric-coordinate confidence region is
 =
 \left\{
 s'\in\mathcal F:
-N(\widehat s_N-s')^\top
+N(\widetilde s_N-s')^\top
 \widehat\Sigma_{s,N}^{-1}
-(\widehat s_N-s')
+(\widetilde s_N-s')
 \le \chi^2_{2,1-\alpha}
 \right\},
 \end{equation}
-where
-\[
-\mathcal F
-=
-\left\{
-(s_1,s_2):
-0<s_2<1,\quad
-0<s_1<2,\quad
-\Delta=s_1^2-4s_2\ge0,\quad
-0<\frac{s_1\pm\sqrt\Delta}{2}<1
-\right\}.
-\]
+where \(\mathcal F=F\).  Since the true \(s\) is in
+\(F^{\circ}_{\rm sep}\), replacing \(F\) by the strict image
+\(\{(x+y,xy):0<x,y<1\}\) gives the same asymptotic coverage.
 
-If \eqref{eq:symmetric-coordinate-full-rank-assumption-main} is not imposed,
-the theorem-level alternative is rank-adaptive and requires a prespecified
-spectral tolerance.  Let \(k_s=\operatorname{rank}\Sigma_s\).  If \(k_s>0\),
-assume the nonzero spectrum is separated from zero:
+If the full-rank condition is not imposed but \(s\in F^{\circ}_{\rm sep}\),
+the unconditional conclusion is only the following population range statement.
+Let \(k_s=\operatorname{rank}\Sigma_s\).  If \(k_s>0\), assume the nonzero
+spectrum is separated from zero:
 \begin{equation}\label{eq:symmetric-coordinate-rank-gap-main}
 \lambda_{k_s}(\Sigma_s)\ge\sigma_0>0,
 \end{equation}
@@ -2269,22 +2447,35 @@ and let \(Q_s\in\mathbb R^{2\times k_s}\) have orthonormal columns spanning
 \(\Sigma_{s,+}=Q_s^\top\Sigma_sQ_s\).  Then \(\Sigma_{s,+}\) is nonsingular and
 the population range-Wald statistic satisfies
 \begin{equation}\label{eq:symmetric-coordinate-rank-adaptive-wald-main}
-N(Q_s^\top(\widehat s_N-s))^\top
+N(Q_s^\top(\widetilde s_N-s))^\top
 \Sigma_{s,+}^{-1}
-Q_s^\top(\widehat s_N-s)
+Q_s^\top(\widetilde s_N-s)
 \Rightarrow\chi^2_{k_s}.
 \end{equation}
-If \(k_s=0\), then \(\sqrt N(\widehat s_N-s)\Rightarrow0\), and no positive
+If \(k_s=0\), then \(\sqrt N(\widetilde s_N-s)\Rightarrow0\), and no positive
 dimensional Wald ellipsoid is asserted.
 
-For the feasible rank-adaptive implementation, choose before inspecting the
-record a deterministic spectral tolerance \(t_N\downarrow0\) satisfying
+The separated-batch proof above gives consistency of
+\(\widehat\Sigma_{s,N}\), and
+\Cref{lem:three-coordinate-batch-rate-main} gives the explicit rate
+\(O_{\PP}(N^{-1/3})\) when
+\(b_N=\max\{1,\lfloor N^{1/3}\rfloor\}\).  Thus the rank selector is feasible
+only after such a deterministic batch rule and a deterministic spectral
+tolerance have been fixed in advance.  More generally, a rank-adaptive
+implementation is a rate-certified statement: before inspecting the record one
+must have an external deterministic spectral tolerance \(t_N\downarrow0\) and
+a proof, simulation-calibrated certificate, or other design-specific bound
+guaranteeing
 \begin{equation}\label{eq:rank-tolerance-condition-main}
 \frac{\|\widehat\Sigma_{s,N}-\Sigma_s\|_{\operatorname{op}}}{t_N}
 \xrightarrow{\PP}0 .
 \end{equation}
-The sequence \(t_N\) is part of the covariance-estimation rule; it is not chosen
-from the realized eigenvalue plot.  Let \(\widehat Q_{s,N}\) contain the
+For the concrete complete-cycle rule above, \(t_N=N^{-1/4}\) is one admissible
+choice.  In all cases the sequence \(t_N\) is a rate-certificate input fixed
+before seeing the data; it is not chosen from the realized eigenvalue plot and
+is not supplied by mere consistency of the separated-batch covariance
+estimator.  If such a certificate is available,
+let \(\widehat Q_{s,N}\) contain the
 eigenvectors of \(\widehat\Sigma_{s,N}\) with eigenvalues larger than \(t_N\),
 let \(\widehat k_{s,N}\) be their number, and set
 \[
@@ -2300,21 +2491,21 @@ Then
 Q_sQ_s^\top
 \]
 in operator norm, with the zero projector understood when \(k_s=0\).  If
-\(k_s>0\), the feasible rank-adaptive Wald statistic
+\(k_s>0\), the certified rank-adaptive Wald statistic
 \[
-N\bigl(\widehat Q_{s,N}^{\top}(\widehat s_N-s)\bigr)^\top
+N\bigl(\widehat Q_{s,N}^{\top}(\widetilde s_N-s)\bigr)^\top
 \widehat\Sigma_{s,+,N}^{-1}
-\widehat Q_{s,N}^{\top}(\widehat s_N-s)
+\widehat Q_{s,N}^{\top}(\widetilde s_N-s)
 \]
-converges to \(\chi^2_{k_s}\).  The feasible confidence set is
+converges to \(\chi^2_{k_s}\).  The corresponding certified confidence set is
 \begin{equation}\label{eq:symmetric-coordinate-rank-adaptive-confidence-region-main}
 \mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)
 =
 \left\{
 s'\in\mathcal F:
-N\bigl(\widehat Q_{s,N}^{\top}(\widehat s_N-s')\bigr)^\top
+N\bigl(\widehat Q_{s,N}^{\top}(\widetilde s_N-s')\bigr)^\top
 \widehat\Sigma_{s,+,N}^{-1}
-\widehat Q_{s,N}^{\top}(\widehat s_N-s')
+\widehat Q_{s,N}^{\top}(\widetilde s_N-s')
 \le \chi^2_{\widehat k_{s,N},1-\alpha}
 \right\}.
 \end{equation}
@@ -2323,10 +2514,10 @@ Consequently, for \(k_s>0\),
 \PP\!\left(s\in\mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)\right)
 \to1-\alpha .
 \]
-If \(\widehat k_{s,N}=0\), the rank-adaptive procedure reports the degenerate
+If \(\widehat k_{s,N}=0\), the certified rank-adaptive procedure reports the degenerate
 zero-rank case rather than a positive-dimensional ellipsoid; when \(k_s=0\),
 this occurs with probability tending to one.  The label-free root-set image of
-the theorem-level confidence set is
+the certified symmetric-coordinate confidence set is
 \begin{equation}\label{eq:unordered-root-confidence-region-main}
 C_{\{p,c\},N}^{\operatorname{rank}}(1-\alpha)
 =
@@ -2339,8 +2530,16 @@ C_{\{p,c\},N}^{\operatorname{rank}}(1-\alpha)
 \right\}.
 \end{equation}
 This is a feasible root-set image, not a labelled root covariance statement at
-the exchange diagonal.  In the special case \(k_s=2\), the rank-adaptive
-statement reduces to the full-rank Wald ellipsoid above.
+the exchange diagonal.  The data-feasible rank-adaptive confidence set is
+asserted only under the deterministic rate certificate
+\eqref{eq:rank-tolerance-condition-main}; in particular,
+\Cref{lem:three-coordinate-batch-rate-main} supplies such a certificate for
+\(b_N=\max\{1,\lfloor N^{1/3}\rfloor\}\) and \(t_N=N^{-1/4}\).  Without a
+deterministic certificate of this kind, the paper asserts only the full-rank
+feasible Wald region and the population range-Wald limit
+\eqref{eq:symmetric-coordinate-rank-adaptive-wald-main}, not a data-chosen
+rank-adaptive confidence set.  In the special case \(k_s=2\), any certified
+rank-adaptive statement reduces to the full-rank Wald ellipsoid above.
 
 If \Cref{ass:separated-roots-main} holds, then
 \[
@@ -2354,10 +2553,10 @@ record.  For example, with the separation constant \(\eta\) fixed in
 \mathcal E_{N,\eta}^{\operatorname{root}}
 =
 \left\{
-\widehat s_N\in\mathcal F,\quad
+\widetilde s_N\in F,\quad
 \widehat\Delta_{s,N}
 :=
-\widehat s_{1,N}^{\,2}-4\widehat s_{2,N}
+\widetilde s_{1,N}^{\,2}-4\widetilde s_{2,N}
 \ge \eta^2/4
 \right\}.
 \end{equation}
@@ -2374,7 +2573,7 @@ separated-root hypothesis, the ordered-by-size root chart
 is \(C^1\) near \(\Phi(r)\).  Hence the root estimators
 \[
 (\widehat z_{+,N},\widehat z_{-,N})
-=\Psi(\Phi(\widehat r_N))
+=\Psi(\widetilde s_N)
 \]
 satisfy the ordinary delta-method limit
 \[
@@ -2405,13 +2604,43 @@ substituting \(\widehat r_N\) and
 sandwiches.  They are consistent on every separated-root subregion with
 \(\Delta_s\ge\eta^2>0\).
 
-On the diagonal \(p=c\), the discriminant vanishes:
-\(\Delta_s=0\).  The map
-\((s_1,s_2)\mapsto\{z:z^2-s_1z+s_2=0\}\) is then not differentiable in the
-ordinary Euclidean root coordinates, and the above root delta method does not
-apply.  Near this discriminant locus the root Jacobian contains powers of
+On the exchange diagonal \(p=c=z\in(0,1)\), the discriminant vanishes:
+\(\Delta_s=0\), and the preceding interior first-order equivalence is not
+asserted.  The projected estimator is still canonical and feasible.  If
+\(Z\sim\mathcal N(0,\Sigma_s)\), then the local tangent cone of \(F\) at
+\((2z,z^2)\) is the half-space
+\[
+T_zF=\{(h_1,h_2):h_2\le z h_1\},
+\]
+and the projected estimator has the boundary local limit
+\begin{equation}\label{eq:exchange-diagonal-projection-limit-main}
+\sqrt N\,(\widetilde s_N-s)
+\Rightarrow
+\Pi_{T_zF}(Z),
+\end{equation}
+where \(\Pi_{T_zF}\) is Euclidean projection onto this closed half-space.
+Thus \(\widetilde s_N\in F\) for every record and
+\(\|\widetilde s_N-s\|=O_{\PP}(N^{-1/2})\), but the limit in
+\eqref{eq:exchange-diagonal-projection-limit-main} is generally not the
+unconstrained Gaussian \(Z\).  The map
+\((s_1,s_2)\mapsto\{z:z^2-s_1z+s_2=0\}\) is not differentiable in ordinary
+Euclidean root coordinates at this point, and the above root delta method does
+not apply.  Near the discriminant locus the root Jacobian contains powers of
 \(\Delta_s^{-1/2}=|p-c|^{-1}\), so finite-record root intervals are unstable
-as the two survival factors approach one another.  Finally, even off the
+as the two survival factors approach one another.  More precisely, if
+\(H=\Pi_{T_zF}(Z)\), then the unordered roots of the projected
+symmetric-coordinate polynomial obey
+\[
+z_{\pm,N}
+=
+z+\frac{H_1}{2\sqrt N}
+\pm N^{-1/4}\sqrt{(zH_1-H_2)_+}
+{}+
+o_{\PP}(N^{-1/4}).
+\]
+The diagonal therefore has a boundary projection law in symmetric coordinates
+and a nonstandard root-splitting scale, not a labelled root/rate covariance
+matrix.  Finally, even off the
 diagonal, the chart \((z_+,z_-)\) labels roots only by numerical order; assigning
 one root to the attempt rate and the other to the recovery rate requires
 external information, exactly as in
@@ -2447,6 +2676,46 @@ Since \(\widehat r_N\to r\) in probability, the event that
 covariance-estimator consistency for \(\Phi(\widehat r_N)\) follows from the
 continuity of \(D\Phi\) and Slutsky's theorem.
 
+The set \(F\) in \eqref{eq:symmetric-feasible-image-main} is compact, so the
+nearest-point set in \eqref{eq:canonical-symmetric-projection-main} is always
+nonempty, and the lexicographic tie-break makes \(\Pi_F\) single-valued.  If
+\(s\in F^{\circ}_{\rm sep}\), then \(s\) has a positive Euclidean distance
+from the complement of the feasible chart used by the root map.  Since
+\(\widehat s_N^{\rm raw}\to s\) in probability, the raw estimator belongs to
+that same open feasible neighbourhood with probability tending to one.  On
+this event \(\Pi_F(\widehat s_N^{\rm raw})=\widehat s_N^{\rm raw}\), which
+proves the first-order equivalence and transfers the raw symmetric-coordinate
+CLT to \(\widetilde s_N\).
+
+At an exchange-diagonal point \(s=(2z,z^2)\), a perturbation
+\((2z,z^2)+t(h_1,h_2)\) is feasible to first order exactly when its
+discriminant satisfies
+\[
+(2z+th_1)^2-4(z^2+th_2)
+=4t(zh_1-h_2)+O(t^2)\ge0
+\]
+for small positive \(t\).  Hence the closed Bouligand tangent cone of \(F\) at
+\(s\) is the half-space \(T_zF=\{h_2\le zh_1\}\).  The standard local limit theorem for metric
+projections onto a closed set with this tangent cone gives
+\[
+\sqrt N(\Pi_F(s+Z_N/\sqrt N)-s)\Rightarrow\Pi_{T_zF}(Z)
+\]
+whenever \(Z_N\Rightarrow Z\); applying this with
+\(Z_N=\sqrt N(\widehat s_N^{\rm raw}-s)\) gives
+\eqref{eq:exchange-diagonal-projection-limit-main}.  The displayed
+root-splitting expansion follows from
+\[
+s_{1,N}=2z+H_1/\sqrt N+o_{\PP}(N^{-1/2}),\qquad
+s_{2,N}=z^2+H_2/\sqrt N+o_{\PP}(N^{-1/2}),
+\]
+because the discriminant is
+\[
+s_{1,N}^2-4s_{2,N}
+=4(zH_1-H_2)N^{-1/2}+o_{\PP}(N^{-1/2}),
+\]
+and feasibility of the projection makes the leading positive part
+\((zH_1-H_2)_+\) the relevant term.
+
 Under the full-rank assumption
 \(\lambda_{\min}(\Sigma_s)\ge\sigma_0>0\), Weyl's inequality gives
 \[
@@ -2467,16 +2736,16 @@ covariance \(\Sigma_{s,+}=Q_s^\top\Sigma_sQ_s\), so the ordinary Wald theorem
 in that range gives
 \eqref{eq:symmetric-coordinate-rank-adaptive-wald-main}.  If \(k_s=0\), the
 limit covariance is zero and the displayed CLT degenerates to
-\(\sqrt N(\widehat s_N-s)\Rightarrow0\).
+\(\sqrt N(\widetilde s_N-s)\Rightarrow0\).
 
-It remains to justify that the feasible spectral rule really estimates the
-rank and range under the prespecified tolerance condition.  Let the eigenvalues
+It remains only for the conditional rank-adaptive clause to justify that a
+spectral rule with the certified tolerance estimates the rank and range.  Let the eigenvalues
 of \(\Sigma_s\) be
 \[
 \lambda_1(\Sigma_s)\ge\lambda_2(\Sigma_s)\ge0,
 \]
 with the convention that the positive eigenvalues are absent when \(k_s=0\).
-For \(k_s>0\), the rank-adaptive hypothesis gives
+For \(k_s>0\), the nonzero-eigenvalue separation gives
 \(\lambda_{k_s}(\Sigma_s)\ge\sigma_0>0\).  Weyl's inequality gives, for
 \(j=1,2\),
 \[
@@ -2516,9 +2785,9 @@ that \(\widehat Q_{s,N}^\top Q_s\to1\) in probability; the Wald quadratic is
 unchanged by this sign choice.  The projector consistency and the fixed CLT
 then imply
 \[
-\widehat Q_{s,N}^{\top}\sqrt N(\widehat s_N-s)
+\widehat Q_{s,N}^{\top}\sqrt N(\widetilde s_N-s)
 =
-Q_s^\top\sqrt N(\widehat s_N-s)+o_{\PP}(1)
+Q_s^\top\sqrt N(\widetilde s_N-s)+o_{\PP}(1)
 \Rightarrow
 \mathcal N(0,\Sigma_{s,+}).
 \]
@@ -2530,19 +2799,20 @@ Also
 Q_s^\top\Sigma_sQ_s=\Sigma_{s,+}
 \]
 in probability, and the scalar limit \(\Sigma_{s,+}\) is positive.  Slutsky's
-theorem gives the feasible rank-one Wald limit.  When \(k_s=2\), the rank rule
+theorem gives the certified rank-one Wald limit.  When \(k_s=2\), the rank rule
 retains the full two-dimensional space with probability tending to one, and
 the statistic equals
 \[
-N(\widehat s_N-s)^\top\widehat\Sigma_{s,N}^{-1}(\widehat s_N-s)
+N(\widetilde s_N-s)^\top\widehat\Sigma_{s,N}^{-1}(\widetilde s_N-s)
 \]
 on that event; ordinary Slutsky's theorem with
 \(\widehat\Sigma_{s,N}\to\Sigma_s\) and \(\Sigma_s\) nonsingular gives
 \eqref{eq:symmetric-coordinate-full-rank-wald-main}.  These two cases prove
-the feasible rank-adaptive Wald limit and hence the stated coverage of
+the certified rank-adaptive Wald limit and hence the stated coverage of
 \(\mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)\).  Intersecting the
-ellipsoid with \(\mathcal F\) enforces the exact feasible polynomial image
-of two survival factors in \((0,1)\).  The unordered root region is then the
+ellipsoid with \(\mathcal F\) enforces the exact polynomial image
+of two survival factors in \([0,1]\).  In the present strict record model the
+population roots lie in \((0,1)\).  The unordered root region is then the
 algebraic image of that feasible symmetric-coordinate region.
 
 Under \Cref{ass:separated-roots-main}, the discriminant
@@ -2628,8 +2898,8 @@ survival pair and all finite word laws:
 \{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}.
 \]
 This is the local non-identifiability qualification for the quotient inverse.
-The conditional response use of a labelled memory target is stated only in
-\Cref{ass:udw-rate-calibration-main,cor:conditional-calibration-bridge-main}.
+The conditional response use of a labelled memory target is stated only in the
+A0 and regular-level-set paragraphs of \Cref{sec:kms-shells}.
 Finite-record covariance estimation for the three inverse coordinates is
 instead stated in
 \Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main}.
@@ -2662,8 +2932,7 @@ the sampled boundary-reset law, one stationary record estimates
 \gamma_2=\operatorname{Cov}(A_0,A_2)
 \]
 and supplies a studentized interval using the all-complete-cycle separated-batch
-estimator.  The multi-setting scan, response-level-set, and fixed-radius
-ratio boundaries are those in \Cref{subsec:scope-nonclaims}.
+estimator.
 
 This is adjacent to recent model-free trajectory-memory and weak-memory
 inference work
@@ -2721,7 +2990,7 @@ with studentization justified for the sampled law by
 is the all-complete-cycle estimator \eqref{eq:cycle-block-est-all-main}; the
 finite-lag theorem in Appendix~\ref{app:renewal-reward-proof-package} and the
 deterministic-prefix estimator are proof machinery.  Scan and response uses of
-\(\gamma_2\) remain under \Cref{subsec:scope-nonclaims}.
+\(\gamma_2\) require separate inputs.
 \end{proposition}
 
 \begin{proof}
@@ -2736,8 +3005,7 @@ other parameter.
 \Cref{prop:finite-diagnostics-main} then translates the population value of
   \(\gamma_2\) inside the already proved boundary-reset model: its sign detects
   the side of the memory transition, while a supplied one-parameter population
-  curve gives only the displayed deterministic derivative identity, under the
-  scope boundaries in \Cref{subsec:scope-nonclaims}.
+  curve gives only the displayed deterministic derivative identity.
 \end{proof}
 
 \paragraph{Proof-package location.}
@@ -2752,6 +3020,95 @@ of large numbers for the random all-complete-cycle batch count.  The main text
 keeps only the sampled-law inputs needed for the theorem statement: the strict
 positivity of the sampled-law cycle variance, the observed-window indexing
 lemma, and the all-complete-cycle finite-record theorem.
+
+\begin{lemma}[Finite-start burn-in transfer for the primitive hidden chain]\label{lem:finite-start-burnin-main}
+Fix positive sampled boundary-reset parameters and let
+\[
+P=T_0+T_1=
+\begin{pmatrix}
+p&q\\
+b&1-b
+\end{pmatrix},
+\qquad q=1-p,
+\]
+with stationary hidden row distribution \(\pi\) and nontrivial eigenvalue
+\(\lambda_{\mathrm{hid}}=p-b\).  Let \(\mathsf P_\alpha\) denote the one-sided
+sampled hidden Markov law started from an arbitrary hidden distribution
+\(\alpha\) at time \(0\), and let \(\mathsf P_\pi\) denote the corresponding
+stationary one-sided law.  For every burn-in length \(L\ge0\) and every suffix
+length \(m\ge1\),
+\begin{equation}\label{eq:finite-start-suffix-tv-main}
+\left\|
+\mathsf P_\alpha\{(A_L,\ldots,A_{L+m-1})\in\cdot\}
+-
+\mathsf P_\pi\{(A_0,\ldots,A_{m-1})\in\cdot\}
+\right\|_{\mathrm{TV}}
+\le
+\|\alpha P^L-\pi\|_{\mathrm{TV}}
+\le
+|\lambda_{\mathrm{hid}}|^L .
+\end{equation}
+Consequently, if \(L_N\to\infty\) and
+\[
+L_N=o(\sqrt N),
+\qquad
+n_N=N-L_N,
+\]
+then any statistic \(S_{n_N}\) computed only from the post-burn-in suffix
+\[
+(A_{L_N},\ldots,A_{N-1})
+\]
+has the following transfer property: if the stationary length-\(n_N\) version
+of the statistic converges in distribution to a law \(\mathcal L\), then the
+post-burn-in finite-start version also converges in distribution to
+\(\mathcal L\).  The same implication holds for convergence in probability to
+constants.  In particular the joint CLTs and separated-batch covariance
+consistency statements in
+\Cref{prop:three-coordinate-vector-batch-main,thm:sampled-finite-record-main}
+transfer to post-burn-in finite-start records with the same limiting covariance
+matrices.  The normalizations \(\sqrt{n_N}\) and \(\sqrt N\) are equivalent.
+\end{lemma}
+
+\begin{proof}
+Because \(P\) is a primitive two-state stochastic matrix,
+\Cref{lem:stationary-main} gives \(|\lambda_{\mathrm{hid}}|<1\).  On the
+one-dimensional subspace of row vectors with total mass zero, right
+multiplication by \(P\) is multiplication by \(\lambda_{\mathrm{hid}}\).
+Hence
+\[
+\alpha P^L-\pi=(\alpha-\pi)P^L
+=\lambda_{\mathrm{hid}}^L(\alpha-\pi),
+\]
+and therefore
+\[
+\|\alpha P^L-\pi\|_{\mathrm{TV}}
+=|\lambda_{\mathrm{hid}}|^L\|\alpha-\pi\|_{\mathrm{TV}}
+\le |\lambda_{\mathrm{hid}}|^L .
+\]
+
+Condition on the hidden state at time \(L\).  The law of the future visible
+suffix of length \(m\) is obtained by applying the same Markov kernel
+\[
+K_m(h,\cdot)
+=\mathsf P\{(A_0,\ldots,A_{m-1})\in\cdot\mid H_0=h\},
+\qquad h\in\{R,D\},
+\]
+to the hidden distribution at the suffix start.  Total variation distance
+contracts under Markov kernels, so the visible suffix distance is bounded by
+\(\|\alpha P^L-\pi\|_{\mathrm{TV}}\).  This proves
+\eqref{eq:finite-start-suffix-tv-main}.  The bound is uniform in the suffix
+length \(m\).
+
+Now let \(L=L_N\) and \(m=n_N\).  Since \(L_N\to\infty\),
+\(|\lambda_{\mathrm{hid}}|^{L_N}\to0\), so the laws of all post-burn-in
+statistics and their stationary length-\(n_N\) counterparts are contiguous in
+total variation in the elementary sense that expectations of bounded
+test functions differ by \(o(1)\).  Hence every stationary weak limit transfers
+to the finite-start suffix.  The condition \(L_N=o(\sqrt N)\) implies
+\(n_N/N\to1\), and therefore
+\(\sqrt N/\sqrt{n_N}\to1\); Slutsky's theorem makes the two root normalizations
+interchangeable.  This proves the CLT and covariance-estimator transfer.
+\end{proof}
 
 \begin{lemma}[Observed lag-two windows in the all-complete-cycle batches]\label{lem:all-cycle-lag-two-windows-main}
 Let
@@ -2823,8 +3180,10 @@ as claimed.
 
 \begin{theorem}[Compact all-complete-cycle renewal-reward input]\label{thm:compact-all-cycle-renewal-reward-main}
 Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal record whose click
-times are regeneration times.  In the Palm law started from a click at time
-\(0\), write
+times are regeneration times.  This is the stationary-window probability input;
+finite-start sampled boundary-reset records are first reduced to this case by
+the burn-in transfer in \Cref{lem:finite-start-burnin-main}.  In the Palm law
+started from a click at time \(0\), write
 \[
 0=T_0<T_1<T_2<\cdots,\qquad L_j=T_{j+1}-T_j,\qquad G_j=L_j-1,
 \]
@@ -2948,8 +3307,10 @@ Fix one detector setting
 in the sampled one-recovery-opportunity boundary-reset kernels
 \eqref{eq:t0-t1-main}, and let
 $(A_j)_{j\in\mathbb Z}$ be the stationary visible record for this fixed setting.
-The finite-record scope is the fixed-setting one in
-\Cref{subsec:scope-nonclaims}. Define
+If the physical record is started from an
+arbitrary hidden distribution rather than the stationary hidden law, the
+post-burn-in version below applies after discarding \(L_N\to\infty\) samples
+with \(L_N=o(\sqrt N)\).  Define
 \[
 \rho=\EE A_0,
 \qquad
@@ -3135,6 +3496,29 @@ while away from that rate its sign is the sign prescribed by the hidden-mode
 covariance phase in \Cref{thm:recovery-main}. Thus a one-record Wald diagnostic
 for the fixed-setting lag-two covariance is theorem-level justified throughout
 the sampled-law parameter space.
+
+The same CLT and studentized limit hold for a finite-start record.  More
+precisely, start the hidden chain at any distribution \(\alpha\), choose
+\[
+L_N\to\infty,\qquad L_N=o(\sqrt N),\qquad n_N=N-L_N,
+\]
+discard \(A_0,\ldots,A_{L_N-1}\), and apply the displayed definitions to the
+suffix
+\[
+A_{L_N},\ldots,A_{N-1}
+\]
+with \(n_N\) in place of \(N\) and suffix-relative indices.  Then
+\[
+\sqrt{n_N}\,
+(\widehat\gamma_{2,N}^{\operatorname{burn}}-\gamma_2)
+\Rightarrow
+\mathcal N\!\left(0,
+\frac{\tau_{2,\mathrm{br}}^2}{\EE(G+1)}\right),
+\]
+the corresponding all-complete-cycle variance estimator is consistent for the
+same variance, and the studentized statistic converges to
+\(\mathcal N(0,1)\).  Since \(n_N/N\to1\), the same statements hold with
+\(\sqrt N\) replacing \(\sqrt{n_N}\).
 \end{theorem}
 
 \begin{proof}
@@ -3250,6 +3634,16 @@ $\gamma_2=0\iff\lambda_{\mathrm{hid}}=0\iff
 critical rate are precisely the covariance conclusions of
 \Cref{thm:recovery-main}. This proves the claimed fixed-setting application of
 the generic cycle CLT to the sampled boundary-reset law.
+
+For a finite-start record, \Cref{lem:finite-start-burnin-main} compares the
+entire post-burn-in suffix law with the stationary one-sided suffix law in
+total variation by at most \(|\lambda_{\mathrm{hid}}|^{L_N}\).  The lag-two
+covariance statistic and the all-complete-cycle variance estimator are
+measurable functions of that suffix.  Therefore the stationary CLT, variance
+consistency, positivity-in-probability, and studentized limit just proved
+transfer to the finite-start suffix.  The condition \(L_N=o(\sqrt N)\) gives
+\(\sqrt N/\sqrt{n_N}\to1\), so changing the root normalization from
+\(\sqrt{n_N}\) to \(\sqrt N\) is another Slutsky step.
 \end{proof}
 
 \begin{proposition}[Finite-record variance estimator as a specialization of the finite-lag theorem]\label{prop:finite-record-variance-estimator-main}\label{prop:cycle-block-est-all-main}
@@ -3415,6 +3809,13 @@ $n$, and $B$, the estimators $\widehat h_k$, $\widehat\gamma_n$, and the
 empirical block Fano factor converge almost surely to the corresponding
 population quantities as $N\to\infty$; for $\widehat h_k$, the denominator is
 eventually nonzero almost surely because the zero-run law has full support.
+If the hidden chain is instead started from an arbitrary initial distribution,
+discard any deterministic burn-in \(L_N\to\infty\) with \(L_N=o(\sqrt N)\) and
+compute the same fixed-lag and all-complete-cycle lag-two statistics on the
+suffix \(A_{L_N},\ldots,A_{N-1}\).  The post-burn-in lag-two CLT,
+studentized interval, and consistency statements below are then unchanged by
+\Cref{lem:finite-start-burnin-main}; the population quantities remain those of
+the stationary law for the fixed detector setting.
 Moreover:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda_{\mathrm{hid}}$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
@@ -3451,11 +3852,33 @@ $(1-\alpha)$ confidence interval for $\gamma_2$:
 \widehat\gamma_2\pm
 z_{1-\alpha/2}\frac{\widehat\sigma_{2,N}^{\mathrm{all}}}{\sqrt N}.
 \]
+For a finite-start record, the same display is read after replacing
+\(N\), \(\widehat\gamma_2\), and
+\(\widehat\sigma_{2,N}^{\mathrm{all}}\) by their post-burn-in suffix versions
+with \(n_N=N-L_N\); equivalently one may keep \(\sqrt N\) because
+\(n_N/N\to1\).
 This interval is a fixed-setting statement: it applies to $\gamma_2$ at the
-chosen detector design.  Without a separately stated multi-setting design with
-independent records at neighboring settings, mesh and replication assumptions,
-a slope-estimation rule, and its own joint CLT, no crossing-point estimator,
-response-level-set confidence set, or spatial-location confidence set follows.
+chosen detector design.  A scan-root theorem would be a different theorem.  It
+would require, at minimum, a design such as
+\[
+s_i=s_*+h_Nx_i,\qquad h_N\to0,
+\]
+independent records of lengths \(N_i\), a joint CLT for the estimators at those
+settings, a local expansion
+\[
+\gamma_2(s)=\gamma_2'(s_*)(s-s_*)+O((s-s_*)^2),
+\qquad \gamma_2'(s_*)\ne0,
+\]
+and balance conditions for the chosen local estimator, for example
+\[
+N_{\rm eff}^{1/2}h_N^2\to0,
+\qquad
+N_{\rm eff}^{1/2}h_N\to\infty
+\]
+in the standard local-linear scaling.  No such scan design, slope-estimation
+rule, or joint scan CLT is assumed or proved here.  Hence no crossing-point
+estimator, response-level-set confidence set, or spatial-location confidence
+set follows.
 \end{enumerate}
 \end{proposition}
 
@@ -3548,16 +3971,26 @@ Fix one sampled boundary-reset detector design
 \[
 (\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3
 \]
-and observe one stationary click record
-\((A_0,\ldots,A_{N-1})\) from that design.  Form the full-record centered
-lag-two covariance \(\widehat\gamma_2\) and the all-complete-cycle separated
-batch estimator \(\widehat\sigma_{2,N}^{\mathrm{all},2}\) exactly as in
-\Cref{thm:sampled-finite-record-main}: the batch size is
+and observe one click record \((A_0,\ldots,A_{N-1})\) from that design.  If the
+hidden chain is stationary, use the full record.  If it is started from an
+arbitrary initial hidden distribution, first choose and discard a deterministic
+burn-in
+\[
+L_N\to\infty,\qquad L_N=o(\sqrt N),
+\qquad n_N=N-L_N,
+\]
+and use the suffix \(A_{L_N},\ldots,A_{N-1}\).  Form the centered lag-two
+covariance \(\widehat\gamma_2\) and the all-complete-cycle separated batch
+estimator \(\widehat\sigma_{2,N}^{\mathrm{all},2}\) exactly as in
+\Cref{thm:sampled-finite-record-main}, with \(N\) replaced by \(n_N\) in the
+finite-start suffix case.  In the stationary full-record case one may take
 \[
 b_N=\max\{1,\lfloor N^{1/3}\rfloor\},
 \qquad b_N\to\infty,\qquad b_N/N\to0,
 \]
-only complete click-to-click cycles are batched, one cycle reward is omitted
+and in the finite-start suffix case the same formula is used with \(n_N\) in
+place of \(N\).
+Only complete click-to-click cycles are batched, one cycle reward is omitted
 between adjacent batches, and the initial prefix, terminal suffix, and final
 incomplete batch of fewer than \(b_N+1\) complete cycles are boundary remainders.
 The observed-window indexing needed for these batched rewards is exactly
@@ -3579,12 +4012,19 @@ confidence interval for this fixed-setting $\gamma_2$ and for no other quantity.
 In the sampled boundary-reset law studied here, nondegeneracy is discharged
 analytically by \Cref{lem:boundary-reset-tau-positive-main}, so
 \(\widehat\sigma_{2,N}^{\mathrm{all},2}>0\) with probability tending to one.
+For finite-start records the same statement applies to the burn-in suffix by
+\Cref{lem:finite-start-burnin-main}; \(n_N/N\to1\) makes the choice of
+\(\sqrt{n_N}\) or \(\sqrt N\) asymptotically immaterial.
 \item \Cref{prop:finite-diagnostics-main}(ii) adds only a fixed-family
 population simplicity statement for the zero of \(\gamma_2\) as a function of
 \(\Gamma\).  It is not a scan-data theorem and contains no crossing-point
-estimator.
-\item Response-locus, denominator-normalized, and ratio-data asymptotics require
-the external inputs isolated in \Cref{subsec:scope-nonclaims}.
+estimator.  In particular, it assumes no design
+\(s_i=s_*+h_Nx_i\), no independent neighboring-setting records, no local-linear
+root estimator, no scan balance conditions such as
+\(N_{\rm eff}^{1/2}h_N^2\to0\) and
+\(N_{\rm eff}^{1/2}h_N\to\infty\), and no joint CLT across settings.
+\item Response-locus, denominator-normalized, and ratio-data asymptotics
+require separate calibrated response or ratio-data inputs.
 \item The visible-law quotient inverse is a separate record-side calculation:
 \Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main}
 give a regenerative covariance estimator and delta method for the unordered

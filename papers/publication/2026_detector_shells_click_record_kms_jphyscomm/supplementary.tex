@@ -139,7 +139,7 @@ On the response side, the conditional response-locus corollary is compared with
 stationary UDW response and local-measurement theory
 \cite{LoukoSatz2006,LoukoSatz2008,FewsterJuarezLouko2016,FewsterVerch2020,GisinEtAl2024ImpossibleMeasurements,PoloGomezEtAl2022,PapageorgiouFraser2024LocalMeasurement,PranziniKeskiVakkuri2025AQFT,Oeckl2025CausalMeasurement}.
 The scope distinction is the one in \Cref{tab:main-jpa-comparison}: the
-determinant theorem is finite-minor algebra rather than a DPP theorem, the
+determinant calculation is finite-minor algebra rather than a DPP theorem, the
 inverse theorem is fixed-family quotient identifiability rather than generic
 HMM identifiability, and the response corollary is a fixed-profile level-set
 statement rather than a detector measurement theorem.
@@ -929,6 +929,118 @@ reproducing
 directly from those formulas. Throughout, use a
 root-solve tolerance of $10^{-12}$ and round displayed table entries to six
 decimal places.
+
+\subsubsection*{Record formula sanity plots}\label{app:record-figure-reproduction}
+
+The two record-side figures in this supplement are formula sanity plots:
+deterministic evaluations of closed expressions proved in the main theorem
+chain.  They are not simulations, fits, or independent numerical validation.
+For \Cref{fig:hazard-cov}, use \(\kappa_{\mathrm r}=5\),
+\(\Delta\tau=0.3\), and
+\(\Gamma\in\{1.2,\Gamma_c(5,0.3),3.2\}\), with \(h_k\) from
+\eqref{eq:hazard-main} and
+\[
+\frac{\operatorname{Cov}(A_0,A_n)}
+     {|\operatorname{Cov}(A_0,A_1)|}
+=\frac{\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}}
+       {|\rho(a-\rho)|}.
+\]
+For \Cref{fig:spectrum-fano}, use \(f(\theta)\) from
+\eqref{eq:spectrum-main} and \(F=f(0)/\rho\).  The spectral panel uses
+\(\kappa_{\mathrm r}\Delta\tau=1.5\) and
+\(\Gamma\Delta\tau\in\{0.3,0.6,1.0\}\).  The Fano panel uses
+\(\Gamma\Delta\tau\in[0.1,2.0]\) and
+\(\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}\).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0
+]
+\nextgroupplot[
+  xlabel={$k$},
+  ylabel={$h_k$},
+  ymin=0.12,
+  ymax=0.64,
+  xtick={0,2,4,6,8},
+  legend pos=south east
+]
+\addplot[color=blue!70!black, mark=*] coordinates {(0,0.1525) (1,0.2629) (2,0.2904) (3,0.2986) (4,0.3011) (5,0.3019) (6,0.3022) (7,0.3023) (8,0.3023)};
+\addplot[color=orange!80!black, mark=square*] coordinates {(0,0.2420) (1,0.3995) (2,0.4408) (3,0.4554) (4,0.4612) (5,0.4635) (6,0.4645) (7,0.4649) (8,0.4650)};
+\addplot[color=red!75!black, mark=triangle*] coordinates {(0,0.3331) (1,0.5221) (2,0.5727) (3,0.5939) (4,0.6044) (5,0.6099) (6,0.6130) (7,0.6147) (8,0.6157)};
+\legend{$\Gamma=1.2$,$\Gamma=\Gamma_c$,$\Gamma=3.2$}
+
+\nextgroupplot[
+  xlabel={$n$},
+  ylabel={$\operatorname{Cov}(A_0,A_n)/|\operatorname{Cov}(A_0,A_1)|$},
+  ymin=-1.05,
+  ymax=0.10,
+  xtick={1,2,3,4,5,6,7,8},
+  legend pos=north east
+]
+\addplot[color=blue!70!black, mark=*] coordinates {(1,-1.0000) (2,-0.0733) (3,-0.0054) (4,-0.0004) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\addplot[color=orange!80!black, mark=square*] coordinates {(1,-1.0000) (2,0.0000) (3,0.0000) (4,0.0000) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\addplot[color=red!75!black, mark=triangle*] coordinates {(1,-1.0000) (2,0.0609) (3,-0.0037) (4,0.0002) (5,0.0000) (6,0.0000) (7,0.0000) (8,0.0000)};
+\legend{$\Gamma=1.2$,$\Gamma=\Gamma_c$,$\Gamma=3.2$}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Formula sanity plot for the sampled boundary-reset recovery record with $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$). Equivalently, the dimensionless parameters are $\kappa_{\mathrm r}\Delta\tau=1.5$ and $\Gamma\Delta\tau\in\{0.36,\Gamma_c\Delta\tau\approx0.627,0.96\}$; panel~(a) is the closed-form conditional click probability $h_k$, while panel~(b) is the closed-form covariance $\operatorname{Cov}(A_0,A_n)$ normalized by $|\operatorname{Cov}(A_0,A_1)|$. The curves are deterministic evaluations of \eqref{eq:hazard-main} and \eqref{eq:cov-main}, not simulations or validation data.}
+\label{fig:hazard-cov}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.5cm},
+  width=0.44\textwidth,
+  height=0.30\textwidth,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\footnotesize, draw=none, fill=none},
+  every axis plot/.append style={line width=0.95pt},
+  xmin=0
+]
+\nextgroupplot[
+  xlabel={$\theta$},
+  ylabel={$f(\theta)$},
+  ymin=0.12,
+  ymax=0.38,
+  xtick={0,1.5708,3.1416},
+  xticklabels={$0$,$\pi/2$,$\pi$},
+  legend pos=north west
+]
+\addplot[color=blue!70!black] coordinates {(0.0000,0.1275) (0.2618,0.1295) (0.5236,0.1353) (0.7854,0.1441) (1.0472,0.1546) (1.3090,0.1658) (1.5708,0.1766) (1.8326,0.1865) (2.0944,0.1949) (2.3562,0.2016) (2.6180,0.2065) (2.8798,0.2094) (3.1416,0.2104)};
+\addplot[color=orange!80!black] coordinates {(0.0000,0.1442) (0.2618,0.1471) (0.5236,0.1556) (0.7854,0.1692) (1.0472,0.1867) (1.3090,0.2071) (1.5708,0.2288) (1.8326,0.2504) (2.0944,0.2703) (2.3562,0.2874) (2.6180,0.3004) (2.8798,0.3086) (3.1416,0.3114)};
+\addplot[color=red!75!black] coordinates {(0.0000,0.1466) (0.2618,0.1495) (0.5236,0.1580) (0.7854,0.1720) (1.0472,0.1910) (1.3090,0.2144) (1.5708,0.2413) (1.8326,0.2700) (2.0944,0.2986) (2.3562,0.3248) (2.6180,0.3461) (2.8798,0.3599) (3.1416,0.3647)};
+\legend{$\Gamma\Delta\tau=0.3$,$\Gamma\Delta\tau=0.6$,$\Gamma\Delta\tau=1.0$}
+
+\nextgroupplot[
+  xlabel={$\Gamma\Delta\tau$},
+  ylabel={$F$},
+  ymin=0.20,
+  ymax=1.02,
+  xtick={0,0.5,1.0,1.5,2.0},
+  legend pos=north east
+]
+\addplot[dashed, black] coordinates {(0.1,1.0) (2.0,1.0)};
+\addplot[color=blue!70!black] coordinates {(0.100,0.6661) (0.200,0.5170) (0.300,0.4464) (0.400,0.4131) (0.501,0.3988) (0.600,0.3948) (0.700,0.3963) (0.800,0.4008) (0.900,0.4069) (1.000,0.4139) (1.100,0.4212) (1.200,0.4285) (1.300,0.4357) (1.400,0.4427) (1.500,0.4494) (1.600,0.4557) (1.700,0.4618) (1.800,0.4675) (1.900,0.4729) (2.000,0.4780)};
+\addplot[color=orange!80!black] coordinates {(0.100,0.7643) (0.200,0.6172) (0.300,0.5216) (0.400,0.4576) (0.500,0.4139) (0.600,0.3836) (0.700,0.3623) (0.800,0.3474) (0.900,0.3370) (1.001,0.3297) (1.100,0.3248) (1.200,0.3217) (1.300,0.3197) (1.400,0.3187) (1.500,0.3184) (1.600,0.3186) (1.700,0.3191) (1.800,0.3200) (1.900,0.3210) (2.000,0.3222)};
+\addplot[color=red!75!black] coordinates {(0.100,0.8061) (0.200,0.6709) (0.300,0.5739) (0.400,0.5027) (0.500,0.4494) (0.600,0.4088) (0.700,0.3775) (0.800,0.3530) (0.900,0.3338) (1.000,0.3184) (1.100,0.3060) (1.200,0.2960) (1.300,0.2879) (1.400,0.2812) (1.501,0.2757) (1.600,0.2712) (1.700,0.2673) (1.800,0.2641) (1.900,0.2614) (2.000,0.2591)};
+\legend{Poisson level,$\kappa_{\mathrm r}\Delta\tau=0.5$,$\kappa_{\mathrm r}\Delta\tau=1.0$,$\kappa_{\mathrm r}\Delta\tau=1.5$}
+\end{groupplot}
+\end{tikzpicture}
+\caption{Formula sanity plot for the closed count-noise expressions of the sampled renewal record. In panel~(a), $\kappa_{\mathrm r}\Delta\tau=1.5$ and $\Gamma\Delta\tau\in\{0.3,0.6,1.0\}$; in panel~(b), the horizontal axis is $\Gamma\Delta\tau$ and the three curves have $\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}$. The plotted quantities are the dimensionless covariance spectral density $f(\theta)$ per sample in panel~(a) and the Fano factor $F=f(0)/\rho$, i.e. asymptotic variance normalized by the stationary mean count, in panel~(b). These curves are deterministic evaluations of \eqref{eq:spectrum-main} and \(F=f(0)/\rho\), not simulations or validation data.}
+\label{fig:spectrum-fano}
+\end{figure}
 
 \paragraph{Step 1: solve the critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.}
 Given positive $\kappa_{\mathrm r}$ and $\Delta\tau$, set
