@@ -1,9 +1,8 @@
-\section{Four-block record theorem chain before response-rate calibration}\label{sec:records}
+\section{Four-block record theorem chain}\label{sec:records}
 
-This section contains the four record-side theorem blocks listed in
-\Cref{tab:four-main-blocks}.  The global theorem boundary is fixed once in
-\Cref{subsec:scope-nonclaims}; here we use that boundary and prove the sampled
-kernel, renewal, inverse, and fixed-record statements.
+This section proves the four theorem blocks listed in
+\Cref{tab:four-main-blocks}: the sampled kernels, renewal law, inverse
+statements, and fixed-record results.
 
 \subsection{Block I: measurement protocol, sampled model, and gap law}
 We formulate the readout layer as a classical sampled interval instrument.  A
@@ -41,7 +40,7 @@ Repeating this interval instrument with fresh independent copies of $(N,S)$ at e
 T_0=
 \begin{pmatrix}
  p & 0 \\
- b & c
+ b & s
 \end{pmatrix},
 \qquad
 T_1=
@@ -54,19 +53,19 @@ where
 \begin{equation}\label{eq:p-c-main}
 p=e^{-\Gamma\Delta\tau},
 \qquad
-c=e^{-\kappa_{\mathrm r}\Delta\tau},
+s=e^{-\kappa_{\mathrm r}\Delta\tau},
 \end{equation}
 and
 \begin{equation}\label{eq:a-b-main}
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr,
 \qquad
-b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}e^{-\Gamma(\Delta\tau-r)}\,dr.
 \end{equation}
 When $\kappa_{\mathrm r}\neq\Gamma$, these become
 \[
-a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}{\kappa_{\mathrm r}-\Gamma},
+a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-s)}{\kappa_{\mathrm r}-\Gamma},
 \qquad
-b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma}.
+b=\frac{\kappa_{\mathrm r}(p-s)}{\kappa_{\mathrm r}-\Gamma}.
 \]
 \end{proposition}
 
@@ -84,24 +83,24 @@ This gives the first row of each labelled kernel.
 From the refractory state, there are three disjoint possibilities. No
 recovery before the sample time has probability
 \[
-\PP_D(S>\Delta\tau)=e^{-\kappa_{\mathrm r}\Delta\tau}=c,
+\PP_D(S>\Delta\tau)=e^{-\kappa_{\mathrm r}\Delta\tau}=s,
 \]
 which contributes the $(D,D)$ entry of $T_0$. If recovery occurs at
-$s\in[0,\Delta\tau]$ and no attempt follows before the end of the bin, then
+$r\in[0,\Delta\tau]$ and no attempt follows before the end of the bin, then
 $A_n=0$ and $H_{n+1}=R$; integrating the conditional probability
-$e^{-\Gamma(\Delta\tau-s)}$ against the recovery density gives
+$e^{-\Gamma(\Delta\tau-r)}$ against the recovery density gives
 \[
 \PP_D(A_n=0,H_{n+1}=R)
-=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
-e^{-\Gamma(\Delta\tau-s)}\,ds=b.
+=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+e^{-\Gamma(\Delta\tau-r)}\,dr=b.
 \]
-If recovery occurs at $s\le\Delta\tau$ and at least one attempt occurs in
-$(s,\Delta\tau]$, then the thresholded ancilla outputs one visible click and
+If recovery occurs at $r\le\Delta\tau$ and at least one attempt occurs in
+$(r,\Delta\tau]$, then the thresholded ancilla outputs one visible click and
 the post-click reset gives $H_{n+1}=D$. The corresponding probability is
 \[
 \PP_D(A_n=1,H_{n+1}=D)
-=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
-\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds=a.
+=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr=a.
 \]
 These are exactly the second rows of $T_0$ and $T_1$. Because each interval
 uses fresh independent copies of the Poisson attempt process, recovery clock,
@@ -114,8 +113,7 @@ the thresholded interval instrument itself.
 This is the \emph{sampled one-recovery-opportunity boundary-reset} instrument:
 a bin beginning in \(D\) allows one recovery opportunity before the sampling
 boundary, but any click resets the hidden state passed to the next bin to
-\(D\).  The fixed-window comparison with continuous intra-bin recovery is
-confined to \Cref{subsec:model-validity-boundary,cor:finite-window-only-comparator-main}.
+\(D\).
 
 
 \subsection{Reference criteria and the Parry record benchmark}\label{subsec:thermality-notions}
@@ -136,13 +134,11 @@ the standard rate-ratio criterion \cite{Unruh1976,BirDav1982}.
 \end{enumerate}
 \end{definition}
 
-The third criterion is what this paper studies in the classical sampled
-record. Neither detailed balance nor Gibbs thermalization implies the Parry
-benchmark, and the converse implication is not asserted. The record-level
-content is that the click grammar is as disordered as the stipulated dead-time
+The third criterion is the record benchmark used for the classical sampled
+record: the click grammar is as disordered as the stipulated dead-time
 constraint permits.
 
-\subsection{Ideal one-step dead time: standard benchmark proposition}
+\subsection{Ideal one-step dead time: standard benchmark lemma}
 
 The ideal dead-time model serves only as a benchmark normalization. A click
 suppresses the next one-step interval, so once this ideal counter law is
@@ -161,11 +157,11 @@ P_\beta=
 \end{equation}
 The reference law on that shift is the Parry measure, namely the unique measure
 of maximal entropy compatible with the grammar
-$11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}. The
-calculation below is the standard Perron--Frobenius/Parry calculation for this
-stipulated golden-mean chain; it is included to name the clock value used later
-as a comparison point.
-\begin{proposition}[Standard Parry benchmark for the stipulated ideal counter]\label{prop:ideal-main}
+$11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}. The next
+lemma records the resulting clock normalization; the Perron--Frobenius
+calculation is the standard golden-mean computation of
+\cite{Parry1964,LindMarcus1995}.
+\begin{lemma}[Standard Parry benchmark for the stipulated ideal counter]\label{prop:ideal-main}
 For the ideal one-step blanking mode of the sampled classical counter, the sampled output realizes the Parry benchmark if and only if
 \begin{equation}\label{eq:parry-threshold-main}
 p_\beta=\varphi^{-1}
@@ -173,42 +169,23 @@ p_\beta=\varphi^{-1}
 \Gamma\Delta\tau=\log\varphi,
 \end{equation}
 where $\varphi=(1+\sqrt5)/2$ is the golden ratio. This threshold defines the
-benchmark clock value for the stipulated ideal counter.  The
-Parry/Perron--Frobenius calculation itself is used here only to fix the later
-comparison rate and not as a new identifiability or response theorem.
-\end{proposition}
+benchmark clock value for the stipulated ideal counter.
+\end{lemma}
 
 \begin{proof}
-After a click the counter is refractory for the whole next sampling interval, so $P_\beta(1,1)=0$ and the word $11$ is forbidden. After a zero the counter is ready at the next interval, and the Poisson no-excitation probability during one interval is $p_\beta=e^{-\Gamma\Delta\tau}$. Thus
-\[
-P_\beta(0,0)=p_\beta,\qquad P_\beta(0,1)=1-p_\beta,\qquad P_\beta(1,0)=1,
-\]
-which is~\eqref{eq:golden-mean-main}.
-
-Let
-\[
-A=\begin{pmatrix}1&1\\1&0\end{pmatrix}
-\]
-be the adjacency matrix of the golden-mean shift, with states ordered as $(0,1)$. Its Perron eigenvalue is $\varphi$, and a positive right Perron vector is $r=(\varphi,1)^\top$. The Parry transition matrix is
-\[
-P^{\mathrm P}_{ij}=\frac{A_{ij}r_j}{\varphi r_i},
-\]
-so
-\[
-P^{\mathrm P}(0,0)=\varphi^{-1},\qquad
-P^{\mathrm P}(0,1)=\varphi^{-2},\qquad
-P^{\mathrm P}(1,0)=1 .
-\]
-The counter law and the Parry law have the same support and each has only the single free transition probability out of state $0$. Therefore they coincide if and only if $p_\beta=\varphi^{-1}$. Since $p_\beta=e^{-\Gamma\Delta\tau}$, this is equivalent to $\Gamma\Delta\tau=\log\varphi$.
+For the golden-mean adjacency matrix $A=\bigl(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\bigr)$, the standard Parry transition matrix has
+$P^{\mathrm P}(0,0)=\varphi^{-1}$ and $P^{\mathrm P}(1,0)=1$
+\cite{Parry1964,LindMarcus1995}. The stipulated counter chain
+\eqref{eq:golden-mean-main} has the same support and the same forced
+transition out of state $1$, so equality with the Parry law is equivalent to
+$p_\beta=P^{\mathrm P}(0,0)=\varphi^{-1}$. Using
+$p_\beta=e^{-\Gamma\Delta\tau}$ gives
+$\Gamma\Delta\tau=\log\varphi$.
 \end{proof}
 
-\Cref{prop:ideal-main} is included only as the benchmark comparison point.
-Once the ideal one-step blanking chain has been stipulated, the
-Perron--Frobenius/Parry computation is the standard calculation for the
-golden-mean shift \cite{Parry1964,LindMarcus1995}; its counter-specific content
-is the identification of the clock selector
-$p_\beta=\varphi^{-1}$, equivalently
-$\Gamma\Delta\tau=\log\varphi$.
+\Cref{prop:ideal-main} is included only as the benchmark comparison point; its
+counter-specific content is the identification of the clock selector
+$p_\beta=\varphi^{-1}$, equivalently $\Gamma\Delta\tau=\log\varphi$.
 The main mathematical work begins in the sampled boundary-reset recovery
 model, where the zero-run law has full support on $\mathbb N_0$ and hence
 every finite binary word has positive probability; the dependence threshold is
@@ -225,31 +202,27 @@ rate of the sampled counter. Only when the closure
 $\Gamma=\Gamma_+$ is invoked later do we identify it with the stationary UDW
 excitation rate $\Gamma_+$. Define
 \begin{equation}\label{eq:p-c-recall-main}
-p=e^{-\Gamma\Delta\tau}, \qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
+p=e^{-\Gamma\Delta\tau}, \qquad s=e^{-\kappa_{\mathrm r}\Delta\tau},
 \end{equation}
 and
 \begin{equation}\label{eq:a-b-recall-main}
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr,
 \qquad
-b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}e^{-\Gamma(\Delta\tau-r)}\,dr.
 \end{equation}
 When $\kappa_{\mathrm r}\neq\Gamma$, these integrals evaluate to
-$a=[\kappa_{\mathrm r}(1-p)-\Gamma(1-c)]/(\kappa_{\mathrm r}-\Gamma)$
+$a=[\kappa_{\mathrm r}(1-p)-\Gamma(1-s)]/(\kappa_{\mathrm r}-\Gamma)$
 and
-$b=\kappa_{\mathrm r}(p-c)/(\kappa_{\mathrm r}-\Gamma)$.
-For brevity, later references to the ``boundary-reset recovery'' record always
-mean this sampled one-recovery-opportunity model, not a continuous-time
-alternating renewal detector with repeated recovery and reclicking inside one
-sampling bin.
+$b=\kappa_{\mathrm r}(p-s)/(\kappa_{\mathrm r}-\Gamma)$.
+For brevity, later references to the ``boundary-reset recovery'' record mean
+this sampled one-recovery-opportunity model.
 \begin{remark}[Notation convention for the record and response layers]\label{rem:notation-layers-main}
 In the record layer of this section, $\Gamma$ is the classical attempt rate,
-$p=e^{-\Gamma\Delta\tau}$ and $c=e^{-\kappa_{\mathrm r}\Delta\tau}$ are
+$p=e^{-\Gamma\Delta\tau}$ and $s=e^{-\kappa_{\mathrm r}\Delta\tau}$ are
 one-bin survival factors local to the sampled recovery model, and the hidden
-eigenvalue is written $\lambda_{\mathrm{hid}}$. In the response layer of
-\Cref{sec:kms-shells}, response rates, inverse temperatures, and detector
-couplings are introduced locally. Thus $p$, $c$, and
-$\lambda_{\mathrm{hid}}$ never denote response-side quantities, while bare
-$\Gamma$ appears only before the closure $\Gamma=\Gamma_+$ is imposed.
+eigenvalue is written $\lambda_{\mathrm{hid}}$. Response rates, inverse
+temperatures, and detector couplings are introduced only in
+\Cref{sec:kms-shells}.
 \end{remark}
 Put $q=1-p$. The aggregate hidden transition matrix is
 \[
@@ -259,7 +232,7 @@ P=
  b & 1-b
 \end{pmatrix},
 \]
-where $a+b=1-c$. By \Cref{prop:instrument-kernels-main}, the output-labelled kernels are exactly the matrices in \eqref{eq:t0-t1-main}.
+where $a+b=1-s$. By \Cref{prop:instrument-kernels-main}, the output-labelled kernels are exactly the matrices in \eqref{eq:t0-t1-main}.
 The nontrivial eigenvalue of the two-state stochastic matrix $P$ is
 \begin{equation}\label{eq:lambda-hid-main}
 \lambda_{\mathrm{hid}}=p-b=
@@ -270,7 +243,7 @@ away from the equal-rate diagonal.
 
 \begin{lemma}[Equal-rate and critical notation]\label{lem:equal-rate-critical-convention-main}
 Every unequal-rate quotient in the sampled boundary-reset theorem chain is
-read on the diagonal \(\kappa_{\mathrm r}=\Gamma\), equivalently \(p=c\), by
+read on the diagonal \(\kappa_{\mathrm r}=\Gamma\), equivalently \(p=s\), by
 continuous extension from \(\kappa_{\mathrm r}\ne\Gamma\).  In particular,
 \eqref{eq:lambda-hid-main} means
 \[
@@ -313,7 +286,7 @@ If $G$ is the number of consecutive zeros after a click and before the next clic
 where $e_D=(0,1)^\top$ and $\mathbf 1=(1,1)^\top$. If $\kappa_{\mathrm r}\neq\Gamma$, then
 \begin{equation}\label{eq:gap-closed-main}
 g_k=
-\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}{\kappa_{\mathrm r}-\Gamma},
 \qquad k\ge0.
 \end{equation}
 In particular $g_k>0$ for every $k$, so the sampled boundary-reset recovery record has full support on zero-run lengths.
@@ -323,29 +296,29 @@ This lemma supplies the renewal and positive gap-law input used for the full-sup
 \begin{proof}
 After a click, the counter is refractory at the start of the next sampling interval independently of the earlier history. The hidden two-state chain is Markov and the post-click hidden state is deterministic, so click times are regeneration times. A gap of length $k$ consists of $k$ output-$0$ transitions followed by one output-$1$ transition, which gives~\eqref{eq:gap-main}.
 
-For $\kappa_{\mathrm r}\neq\Gamma$, the matrix $T_0$ is lower triangular with distinct diagonal entries $p$ and $c$:
+For $\kappa_{\mathrm r}\neq\Gamma$, the matrix $T_0$ is lower triangular with distinct diagonal entries $p$ and $s$:
 \[
 T_0^k=
 \begin{pmatrix}
 p^k & 0\\[3pt]
-b\,\dfrac{p^k-c^k}{p-c} & c^k
+b\,\dfrac{p^k-s^k}{p-s} & s^k
 \end{pmatrix}.
 \]
 Since $T_1\mathbf 1=(1-p,a)^\top$, substitution gives
 \[
-g_k=(1-p)b\frac{p^k-c^k}{p-c}+ac^k .
+g_k=(1-p)b\frac{p^k-s^k}{p-s}+as^k .
 \]
 Using the closed forms
 \[
-b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma},
+b=\frac{\kappa_{\mathrm r}(p-s)}{\kappa_{\mathrm r}-\Gamma},
 \qquad
-a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}
+a=\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-s)}
         {\kappa_{\mathrm r}-\Gamma}
 \]
 reduces this expression to~\eqref{eq:gap-closed-main}. Thus the gap law is the
 direct lower-triangular labelled-kernel calculation
 \[
-g_k=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
+g_k=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}
         {\kappa_{\mathrm r}-\Gamma},
 \]
 with no determinant or cancellation identity entering the derivation. Full
@@ -394,7 +367,7 @@ The stationary click density is
 \begin{equation}\label{eq:rho-main}
 \rho=\PP(A_0=1)
 =\pi_R q+\pi_D a
-=\frac{q(1-c)}{q+b}.
+=\frac{q(1-s)}{q+b}.
 \end{equation}
 Moreover
 \begin{equation}\label{eq:rho-bounds-main}
@@ -404,30 +377,29 @@ The hidden transition matrix $P$ has strictly positive entries and is therefore 
 This lemma supplies the stationary density, the inequality \(a<\rho\), and the
 hidden-mode contraction used in \Cref{thm:recovery-main}; it is a record-layer
 calculation for the sampled kernels of \Cref{prop:instrument-kernels-main}.
-In particular the click-probability column used in later covariance formulas is
-\(u=T_1\mathbf 1=(q,a)^\top\), not a response-side object.  The displayed
-identities are the only stationary-law inputs used later in the covariance
-phase calculation: \(\rho=\pi u\), \(a-\rho<0\), and the contraction of the
-single hidden eigenmode.
+The displayed identities are the stationary-law inputs used later in the
+covariance phase calculation: the click-probability column
+\(u=T_1\mathbf 1=(q,a)^\top\), \(\rho=\pi u\), \(a-\rho<0\), and the
+contraction of the single hidden eigenmode.
 \end{lemma}
 
 \begin{proof}
 The stationary balance equation is $\pi_R q=\pi_D b$, and normalization gives the displayed $\pi$. Since a refractory detector must first recover before it can click, its one-step click probability is strictly smaller than the ready-state click probability: indeed
 \[
-a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}
-\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr
 < (1-e^{-\Gamma\Delta\tau})\int_0^{\Delta\tau}
-\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\,ds
+\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}\,dr
 <q .
 \]
-Using $a+b=1-c$ gives~\eqref{eq:rho-main}. Moreover,
+Using $a+b=1-s$ gives~\eqref{eq:rho-main}. Moreover,
 \[
 \rho-a=\frac{b(q-a)}{q+b}>0,
 \qquad
 q-\rho=\frac{q(q-a)}{q+b}>0,
 \]
 which proves~\eqref{eq:rho-bounds-main}.
-Finally, $p,q,b$ are positive and $1-b=c+a>0$, so every entry of $P$ is positive. Thus $P$ is primitive. The Perron root is $1$, and the only other eigenvalue of a primitive two-state stochastic matrix has modulus strictly less than one; here that eigenvalue is $p-b=\lambda_{\mathrm{hid}}$.
+Finally, $p,q,b$ are positive and $1-b=s+a>0$, so every entry of $P$ is positive. Thus $P$ is primitive. The Perron root is $1$, and the only other eigenvalue of a primitive two-state stochastic matrix has modulus strictly less than one; here that eigenvalue is $p-b=\lambda_{\mathrm{hid}}$.
 \end{proof}
 
 \begin{lemma}[Covariance transfer through the hidden mode]\label{lem:covariance-transfer-main}
@@ -443,10 +415,9 @@ Equivalently,
 \qquad n\ge1 .
 \]
 In particular the sign of every covariance beyond lag one is controlled only by the hidden eigenvalue $\lambda_{\mathrm{hid}}$.
-This lemma supplies the covariance formula used in \Cref{thm:recovery-main};
-no response-side calibration is used.  The formula is a conditional hidden-state
-calculation after the post-click reset to \(D\); it is not obtained from the
-finite-principal-minor determinant representation in Block~III.
+This lemma supplies the covariance formula used in \Cref{thm:recovery-main}.
+The formula is a conditional hidden-state calculation after the post-click
+reset to \(D\).
 \end{lemma}
 
 \begin{proof}
@@ -485,9 +456,9 @@ u-\rho\mathbf 1
 \frac{q-a}{q+b}
 \binom{q}{-b}.
 \end{equation}
-This displayed identity is the only centering identity used below: the
-click-probability column is \(u=(q,a)^\top\), so the \(D\)-component is
-\(a-\rho=-b(q-a)/(q+b)\), not an independent response-kernel entry.
+This displayed identity is the centering identity used below: the
+click-probability column is \(u=(q,a)^\top\), and the \(D\)-component is
+\(a-\rho=-b(q-a)/(q+b)\).
 Set
 \[
 w=\binom{q}{-b}.
@@ -552,44 +523,44 @@ sampled dead-time hidden-Markov/renewal law whose exact-$1$-dependence point is
 computable and is reached without flattening the renewal hazard.
 
 \begin{lemma}[Critical-rate uniqueness and covariance phase]\label{lem:critical-rate-main}
-For fixed $\kappa_{\mathrm r},\Delta\tau>0$, the equation $\lambda_{\mathrm{hid}}(\Gamma)=0$, with $\lambda_{\mathrm{hid}}$ defined by~\eqref{eq:lambda-hid-main}, has exactly one positive solution. This solution, denoted $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, is characterized by
+For fixed $\kappa_{\mathrm r},\Delta\tau>0$, the equation $\lambda_{\mathrm{hid}}(\Gamma)=0$, with $\lambda_{\mathrm{hid}}$ defined by~\eqref{eq:lambda-hid-main}, has exactly one positive solution. This solution, denoted $\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$, is characterized by
 \begin{equation}\label{eq:gamma-c-main}
 \Delta\tau=
-\frac{\log\kappa_{\mathrm r}-\log\Gamma_c}{\kappa_{\mathrm r}-\Gamma_c},
+\frac{\log\kappa_{\mathrm r}-\log\Gamma_{\mathrm{crit}}}{\kappa_{\mathrm r}-\Gamma_{\mathrm{crit}}},
 \end{equation}
-with the quotient interpreted by continuity when $\Gamma_c=\kappa_{\mathrm r}$. Moreover
+with the quotient interpreted by continuity when $\Gamma_{\mathrm{crit}}=\kappa_{\mathrm r}$. Moreover
 \[
-\lambda_{\mathrm{hid}}(\Gamma)>0\quad\text{for }0<\Gamma<\Gamma_c,
+\lambda_{\mathrm{hid}}(\Gamma)>0\quad\text{for }0<\Gamma<\Gamma_{\mathrm{crit}},
 \qquad
-\lambda_{\mathrm{hid}}(\Gamma)<0\quad\text{for }\Gamma>\Gamma_c .
+\lambda_{\mathrm{hid}}(\Gamma)<0\quad\text{for }\Gamma>\Gamma_{\mathrm{crit}} .
 \]
 This lemma supplies the unique critical point and covariance-phase input used
 in \Cref{thm:recovery-main}.
 \end{lemma}
 
 \begin{proof}
-Put $s=\kappa_{\mathrm r}\Delta\tau$ and $x=\Gamma/\kappa_{\mathrm r}$. Away from $x=1$,
+Put \(\sigma=\kappa_{\mathrm r}\Delta\tau\) and \(x=\Gamma/\kappa_{\mathrm r}\). Away from \(x=1\),
 \[
 \lambda_{\mathrm{hid}}(\Gamma)
 =
-\frac{e^{-s}-x e^{-sx}}{1-x}.
+\frac{e^{-\sigma}-x e^{-\sigma x}}{1-x}.
 \]
 Thus $\lambda_{\mathrm{hid}}=0$ is equivalent to
 \[
-H_s(x):=\log x-s(x-1)=0.
+H_\sigma(x):=\log x-\sigma(x-1)=0.
 \]
-The root $x=1$ is the removable root introduced by multiplying through the quotient; in the equal-rate limit $\lambda_{\mathrm{hid}}=e^{-s}(1-s)$, so $x=1$ is critical only when $s=1$.
+The root $x=1$ is the removable root introduced by multiplying through the quotient; in the equal-rate limit $\lambda_{\mathrm{hid}}=e^{-\sigma}(1-\sigma)$, so $x=1$ is critical only when $\sigma=1$.
 
 We now locate the non-removable root and the sign of $\lambda_{\mathrm{hid}}$. Since
 \[
-e^{-s}-x e^{-sx}
-=e^{-s}\bigl(1-e^{H_s(x)}\bigr),
+e^{-\sigma}-x e^{-\sigma x}
+=e^{-\sigma}\bigl(1-e^{H_\sigma(x)}\bigr),
 \]
-the numerator has the opposite sign from $H_s(x)$. Also
-$H_s'(x)=x^{-1}-s$ and $H_s''(x)=-x^{-2}<0$.
-If $0<s<1$, then $H_s$ is strictly increasing on $(0,1]$, so $H_s<0$ on $(0,1)$. On $(1,\infty)$ it first becomes positive and, by strict concavity and $H_s(x)\to-\infty$ as $x\to\infty$, crosses zero exactly once at a point $x_c>1$. Therefore $\lambda_{\mathrm{hid}}>0$ for $0<x<x_c$ and $\lambda_{\mathrm{hid}}<0$ for $x>x_c$.
+the numerator has the opposite sign from $H_\sigma(x)$. Also
+$H_\sigma'(x)=x^{-1}-\sigma$ and $H_\sigma''(x)=-x^{-2}<0$.
+If $0<\sigma<1$, then $H_\sigma$ is strictly increasing on $(0,1]$, so $H_\sigma<0$ on $(0,1)$. On $(1,\infty)$ it first becomes positive and, by strict concavity and $H_\sigma(x)\to-\infty$ as $x\to\infty$, crosses zero exactly once at a point $x_c>1$. Therefore $\lambda_{\mathrm{hid}}>0$ for $0<x<x_c$ and $\lambda_{\mathrm{hid}}<0$ for $x>x_c$.
 
-If $s>1$, then $H_s$ is strictly decreasing on $[1,\infty)$, so $H_s<0$ for $x>1$. On $(0,1)$ the maximum occurs at $x=1/s$, where $H_s(1/s)=s-1-\log s>0$, while $H_s(x)\to-\infty$ as $x\downarrow0$; strict concavity gives exactly one zero $x_c\in(0,1)$. Again the quotient formula shows $\lambda_{\mathrm{hid}}>0$ for $0<x<x_c$ and $\lambda_{\mathrm{hid}}<0$ for $x>x_c$. Finally, when $s=1$, the inequality $\log x\le x-1$ gives $H_1(x)\le0$ with equality only at $x=1$, and the equal-rate limit gives the single critical point $x_c=1$. Rewriting $H_s(x_c)=0$ in the original variables gives~\eqref{eq:gamma-c-main}.
+If $\sigma>1$, then $H_\sigma$ is strictly decreasing on $[1,\infty)$, so $H_\sigma<0$ for $x>1$. On $(0,1)$ the maximum occurs at $x=1/\sigma$, where $H_\sigma(1/\sigma)=\sigma-1-\log \sigma>0$, while $H_\sigma(x)\to-\infty$ as $x\downarrow0$; strict concavity gives exactly one zero $x_c\in(0,1)$. Again the quotient formula shows $\lambda_{\mathrm{hid}}>0$ for $0<x<x_c$ and $\lambda_{\mathrm{hid}}<0$ for $x>x_c$. Finally, when $\sigma=1$, the inequality $\log x\le x-1$ gives $H_1(x)\le0$ with equality only at $x=1$, and the equal-rate limit gives the single critical point $x_c=1$. Rewriting $H_\sigma(x_c)=0$ in the original variables gives~\eqref{eq:gamma-c-main}.
 \end{proof}
 
 \begin{lemma}[Hazard obstruction to finite symbolic memory]\label{lem:hazard-obstruction-main}
@@ -607,7 +578,7 @@ Condition on a past ending with a click followed by $k$ zeros. For $k\ge r$, the
 \end{proof}
 
 \begin{lemma}[Kernel factorization at the memory threshold]\label{lem:kernel-factorization-main}
-At $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$, let $\pi$ be the stationary row distribution of the aggregate hidden transition matrix $P=T_0+T_1$. Then
+At $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$, let $\pi$ be the stationary row distribution of the aggregate hidden transition matrix $P=T_0+T_1$. Then
 \[
 P=\mathbf 1\,\pi .
 \]
@@ -626,7 +597,7 @@ covariance-cancellation argument.
 \begin{proof}
 By \Cref{def:record-benchmarks-main}, exact $1$-dependence compares two blocks with one unobserved sample between them; it does not condition on that intermediate sample. We use the row-vector convention of \Cref{prop:instrument-kernels-main}: if $T_u$ is the chronological product of labelled kernels for a word $u$, then its cylinder probability from stationarity is $\pi T_u\mathbf 1$.
 
-The condition $\Gamma=\Gamma_c$ is equivalent to $\lambda_{\mathrm{hid}}=p-b=0$. Thus $b=p$ and, since $q=1-p$, the aggregate transition matrix becomes
+The condition $\Gamma=\Gamma_{\mathrm{crit}}$ is equivalent to $\lambda_{\mathrm{hid}}=p-b=0$. Thus $b=p$ and, since $q=1-p$, the aggregate transition matrix becomes
 \[
 P=
 \begin{pmatrix}
@@ -648,7 +619,7 @@ where $T_u$ and $T_v$ denote the ordered products of the labelled kernels for th
 \begin{lemma}[Exact \texorpdfstring{$1$}{1}-dependence criterion]\label{lem:one-dep-criterion-main}
 For positive boundary-reset recovery parameters, the stationary visible record is exact $1$-dependent if and only if $\lambda_{\mathrm{hid}}=0$. Equivalently,
 \[
-\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
+\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau).
 \]
 \end{lemma}
 
@@ -657,10 +628,10 @@ If $\lambda_{\mathrm{hid}}=0$, Lemma~\ref{lem:kernel-factorization-main} gives e
 \[
 \operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}} .
 \]
-Here $\rho>0$ and $a-\rho<0$ by Lemma~\ref{lem:stationary-main}, so the displayed covariance is nonzero. Exact $1$-dependence would make $A_0$ and $A_2$ independent and hence uncorrelated, a contradiction. Lemma~\ref{lem:critical-rate-main} identifies the unique positive solution of $\lambda_{\mathrm{hid}}=0$ as $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+Here $\rho>0$ and $a-\rho<0$ by Lemma~\ref{lem:stationary-main}, so the displayed covariance is nonzero. Exact $1$-dependence would make $A_0$ and $A_2$ independent and hence uncorrelated, a contradiction. Lemma~\ref{lem:critical-rate-main} identifies the unique positive solution of $\lambda_{\mathrm{hid}}=0$ as $\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$.
 \end{proof}
 
-At the critical rate $\Gamma=\Gamma_c$, exact $1$-dependence and nonconstant
+At the critical rate $\Gamma=\Gamma_{\mathrm{crit}}$, exact $1$-dependence and nonconstant
 renewal hazard coexist in a concrete way. The factorization in
 Lemma~\ref{lem:kernel-factorization-main} gives
 \[
@@ -676,7 +647,7 @@ and \Cref{lem:survival-hazard-main} shows that $h_{k+1}>h_k$. Thus exact
 $1$-dependence removes dependence across a skipped sample, whereas finite
 Markov order would require the next-click probability after a long zero run to
 stabilize, which the strictly increasing hazard forbids even at
-$\Gamma=\Gamma_c$.
+$\Gamma=\Gamma_{\mathrm{crit}}$.
 
 The converse direction in Lemma~\ref{lem:one-dep-criterion-main} uses covariance only as an obstruction: if the process were exact $1$-dependent, then $A_0$ and $A_2$ would be independent and hence uncorrelated. Independence at the critical rate itself is supplied by the rank-one labelled-kernel factorization, not by covariance cancellation alone.
 
@@ -688,22 +659,22 @@ S_k=\PP(G\ge k),\qquad h_k=\PP(G=k\mid G\ge k)=\frac{g_k}{S_k}.
 If $\kappa_{\mathrm r}\neq\Gamma$, then
 \begin{equation}\label{eq:survival-tail-main}
 S_k=
-\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}{\kappa_{\mathrm r}-\Gamma},
+\frac{\kappa_{\mathrm r}p^k-\Gamma s^k}{\kappa_{\mathrm r}-\Gamma},
 \qquad k\ge0,
 \end{equation}
 and
 \[
 h_k=
-\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
-     {\kappa_{\mathrm r}p^k-\Gamma c^k}.
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}
+     {\kappa_{\mathrm r}p^k-\Gamma s^k}.
 \]
 Moreover
 \begin{equation}\label{eq:hazard-increment-main}
 h_{k+1}-h_k
 =
-\frac{\kappa_{\mathrm r}\Gamma(p-c)^2p^kc^k}
-{(\kappa_{\mathrm r}p^k-\Gamma c^k)
-(\kappa_{\mathrm r}p^{k+1}-\Gamma c^{k+1})}
+\frac{\kappa_{\mathrm r}\Gamma(p-s)^2p^ks^k}
+{(\kappa_{\mathrm r}p^k-\Gamma s^k)
+(\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1})}
 >0 .
 \end{equation}
 If $\kappa_{\mathrm r}=\Gamma$, writing $\alpha=\Gamma\Delta\tau$ and
@@ -727,24 +698,24 @@ Lemma~\ref{lem:renewal-gap-main} over $j\ge k$ gives
 \begin{aligned}
 S_k
 &=\sum_{j\ge k}
-\frac{\kappa_{\mathrm r}(1-p)p^j-\Gamma(1-c)c^j}
+\frac{\kappa_{\mathrm r}(1-p)p^j-\Gamma(1-s)s^j}
      {\kappa_{\mathrm r}-\Gamma}  \\
 &=
 \frac{\kappa_{\mathrm r}(1-p)p^k/(1-p)
-      -\Gamma(1-c)c^k/(1-c)}
+      -\Gamma(1-s)s^k/(1-s)}
      {\kappa_{\mathrm r}-\Gamma}
 =
-\frac{\kappa_{\mathrm r}p^k-\Gamma c^k}
+\frac{\kappa_{\mathrm r}p^k-\Gamma s^k}
      {\kappa_{\mathrm r}-\Gamma}.
 \end{aligned}
 \]
 Since $S_k$ is a survival probability, $S_k>0$ for every $k$. Hence
-$\kappa_{\mathrm r}p^k-\Gamma c^k$ is nonzero and has the sign of
+$\kappa_{\mathrm r}p^k-\Gamma s^k$ is nonzero and has the sign of
 $\kappa_{\mathrm r}-\Gamma$. Dividing $g_k$ by $S_k$ gives
 \[
 h_k=
-\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
-     {\kappa_{\mathrm r}p^k-\Gamma c^k}.
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}
+     {\kappa_{\mathrm r}p^k-\Gamma s^k}.
 \]
 For monotonicity it is cleaner to use the survival ratio:
 \[
@@ -759,10 +730,10 @@ Substitution of~\eqref{eq:survival-tail-main} gives the exact determinant
 \[
 S_{k+1}^2-S_kS_{k+2}
 =
-\frac{\kappa_{\mathrm r}\Gamma p^kc^k(p-c)^2}
+\frac{\kappa_{\mathrm r}\Gamma p^ks^k(p-s)^2}
      {(\kappa_{\mathrm r}-\Gamma)^2}.
 \]
-The numerator is strictly positive because $p\neq c$ when
+The numerator is strictly positive because $p\neq s$ when
 $\kappa_{\mathrm r}\neq\Gamma$, and $S_kS_{k+1}>0$. Cancelling the common
 factor $(\kappa_{\mathrm r}-\Gamma)^2$ yields
 \eqref{eq:hazard-increment-main}, which is strictly positive.
@@ -821,7 +792,6 @@ from \(u=T_1\mathbf1=(q,a)^\top\) and
 u-\rho\mathbf1=\frac{q-a}{q+b}\binom q{-b},\qquad
 P\binom q{-b}=(p-b)\binom q{-b}.
 \]
-It is not a transfer from the continuous intra-bin comparator.
 The record is exact $1$-dependent if and only if
 \[
 \lambda_{\mathrm{hid}}
@@ -830,18 +800,17 @@ The record is exact $1$-dependent if and only if
 {\kappa_{\mathrm r}-\Gamma}
 =0,
 \]
-equivalently $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. More
-explicitly, this theorem is for the sampled one-recovery-opportunity
-boundary-reset kernels of \Cref{prop:instrument-kernels-main}, not the
-continuous intra-bin recovery kernels of
-\Cref{prop:continuous-comparator-main}.  The fixed-window comparison in
-\Cref{prop:continuous-comparator-main} and
-\Cref{cor:finite-window-only-comparator-main} is not an input to any
-stationary, spectral, or CLT conclusion in this theorem.  With the
+equivalently $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$.  With the
 record-layer notation from Table~\ref{tab:notation-global}, and with the
 equal-rate and critical conventions of
 \Cref{lem:equal-rate-critical-convention-main}, the sampled boundary-reset
 record satisfies the following.
+All stationary, covariance, exact-dependence, spectral, Fano-factor, inverse,
+and fixed-record CLT consequences of this theorem are consequences of the
+sampled kernels \(T_0,T_1\).  The continuous intra-bin comparator in
+\Cref{app:fixed-window-comparator} gives only a fixed-cylinder
+total-variation comparison and does not transfer these infinite-record
+conclusions to that comparator.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.3em]
 \item The zero-run length law is the renewal law of
 \Cref{lem:renewal-gap-main}, hence has full support on $\mathbb N_0$ and
@@ -850,8 +819,8 @@ word.
 \item If $\kappa_{\mathrm r}\neq\Gamma$, then the click hazard after $k$ zeros is
 \begin{equation}\label{eq:hazard-main}
 h_k=
-\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
-     {\kappa_{\mathrm r}p^k-\Gamma c^k},
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}
+     {\kappa_{\mathrm r}p^k-\Gamma s^k},
 \qquad k\ge0.
 \end{equation}
 If $\kappa_{\mathrm r}=\Gamma$, write $\alpha=\Gamma\Delta\tau$ and
@@ -883,16 +852,16 @@ because a click at time \(0\) resets the next hidden state to \(D\), and hence
 Thus every covariance beyond lag one is carried by the single hidden mode
 $\lambda_{\mathrm{hid}}$.
 \item There is a unique critical rate
-$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)>0$, characterized by
+$\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)>0$, characterized by
 \eqref{eq:gamma-c-main}, and the sampled record is exact $1$-dependent if and
-only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. At the threshold,
+only if $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$. At the threshold,
 \[
 \operatorname{Cov}(A_0,A_n)=0\quad(n\ge2),
 \qquad
 \operatorname{Cov}(A_0,A_1)<0.
 \]
-For $0<\Gamma<\Gamma_c$, all lag-$n$ covariances are negative; for
-$\Gamma>\Gamma_c$, the lag-one covariance remains negative and the signs for
+For $0<\Gamma<\Gamma_{\mathrm{crit}}$, all lag-$n$ covariances are negative; for
+$\Gamma>\Gamma_{\mathrm{crit}}$, the lag-one covariance remains negative and the signs for
 $n\ge2$ alternate with the lag.
 \end{enumerate}
 \end{theorem}
@@ -918,7 +887,7 @@ u=T_1\mathbf 1=\binom q a,
 \qquad
 \pi=\left(\frac b{q+b},\frac q{q+b}\right).
 \]
-Then \(\rho=\pi u=q(1-c)/(q+b)\), and
+Then \(\rho=\pi u=q(1-s)/(q+b)\), and
 \[
 q-\rho=\frac{q(q-a)}{q+b},
 \qquad
@@ -964,20 +933,20 @@ a-\rho=-\frac{b(q-a)}{q+b}<0,
 hence every lag-$n$ covariance with $n\ge2$ has the sign of
 $-\lambda_{\mathrm{hid}}^{\,n-1}$.
 This is a conditional hidden-state calculation after the post-click reset to
-\(D\); it is not inferred from the finite-principal-minor bookkeeping of
+\(D\); it is not inferred from the renewal LU determinant bookkeeping of
 Block~III.
 
 For item~(iv), \Cref{lem:critical-rate-main} gives the unique positive zero
-$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ of $\lambda_{\mathrm{hid}}$ and the
+$\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$ of $\lambda_{\mathrm{hid}}$ and the
 sign change of $\lambda_{\mathrm{hid}}$ across that point. Since
 $\rho(a-\rho)<0$, the lag-one covariance is always negative, while the sign of
 every covariance with $n\ge2$ is determined by the sign of
 $\lambda_{\mathrm{hid}}^{\,n-1}$. Therefore the lag-$n$ covariances vanish for
-$n\ge2$ at $\Gamma=\Gamma_c$, remain negative for $0<\Gamma<\Gamma_c$, and
-alternate in sign for $\Gamma>\Gamma_c$.
+$n\ge2$ at $\Gamma=\Gamma_{\mathrm{crit}}$, remain negative for $0<\Gamma<\Gamma_{\mathrm{crit}}$, and
+alternate in sign for $\Gamma>\Gamma_{\mathrm{crit}}$.
 
 It remains to identify the exact-$1$-dependence point itself. If
-$\Gamma=\Gamma_c$, then $\lambda_{\mathrm{hid}}=0$, so
+$\Gamma=\Gamma_{\mathrm{crit}}$, then $\lambda_{\mathrm{hid}}=0$, so
 \Cref{lem:kernel-factorization-main} gives the rank-one identity
 $P=\mathbf 1\pi$ and hence exact $1$-dependence by labelled-kernel
 factorization. Conversely, if the visible process were exact $1$-dependent,
@@ -987,7 +956,7 @@ then $A_0$ and $A_2$ would be independent and therefore uncorrelated. Applying
 0=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}}.
 \]
 Because $\rho(a-\rho)\neq0$, one must have $\lambda_{\mathrm{hid}}=0$, hence
-$\Gamma=\Gamma_c$ by \Cref{lem:critical-rate-main}. Thus covariance is used
+$\Gamma=\Gamma_{\mathrm{crit}}$ by \Cref{lem:critical-rate-main}. Thus covariance is used
 only for the converse obstruction; exact independence at the threshold comes
 from the rank-one kernel factorization, not from covariance cancellation alone.
 
@@ -1016,29 +985,27 @@ The proof dependencies are therefore exactly
 \]
 \end{proof}
 
-The memory-transition threshold is therefore not a softened version of the
-ideal Parry point, and it is not a model-free trajectory-memory or weak-memory
-inference procedure of the kind studied in recent \emph{J. Phys. A} work
-\cite{VollmarEtAl2024Memory,MeyerBrandner2026WeakMemory}. The ideal point is a
-standard maximum-entropy benchmark for a restricted grammar; the sampled
-boundary-reset recovery point is the theorem-level result, namely an exact
-dependence transition inside one explicit two-state sampled HMM/renewal class
-whose zero-run law has full support and hence supports every finite binary
-word. The essential feature is the hidden-eigenvalue criterion: the nontrivial
-hidden mode $\lambda_{\mathrm{hid}}$ vanishes precisely at the closed critical
-rate $\Gamma_c$, labelled kernels factor through stationarity at that point,
-and away from it the lag-two covariance obstructs exact $1$-dependence. The
-same recovery mechanism is incompatible both with the Parry support constraint
-and with a Bernoulli full-support benchmark, as made explicit below.  Any
-record-side plots are only deterministic evaluations of these closed formulas
-and are kept with the supplementary numerical bookkeeping rather than used as
-evidence in the theorem chain.
+The ideal Parry point is a standard maximum-entropy benchmark for a restricted
+grammar.  The sampled boundary-reset recovery point is an exact dependence
+transition inside one explicit two-state sampled HMM/renewal class whose
+zero-run law has full support and hence supports every finite binary word; this
+places it alongside, rather than inside, recent model-free trajectory-memory
+and weak-memory inference work
+\cite{VollmarEtAl2024Memory,MeyerBrandner2026WeakMemory}. The essential
+feature is the hidden-eigenvalue criterion: the nontrivial hidden mode
+\(\lambda_{\mathrm{hid}}\) vanishes precisely at the closed critical rate
+\(\Gamma_{\mathrm{crit}}\), labelled kernels factor through stationarity at
+that point, and away from it the lag-two covariance obstructs exact
+\(1\)-dependence.  The same recovery mechanism is incompatible both with the
+Parry support constraint and with a Bernoulli full-support benchmark, as made
+explicit below.  Record-side plots are deterministic evaluations of these
+closed formulas and are kept with the supplementary numerical bookkeeping.
 
 \begin{remark}[No exact Parry or Bernoulli law at positive sampling interval]\label{cor:no-exact-main}
 For every positive choice of
 $\Gamma,\kappa_{\mathrm r},\Delta\tau$, the sampled boundary-reset recovery
 model does not realize the Parry benchmark of
-Proposition~\ref{prop:ideal-main}. The same stationary record is also never
+Lemma~\ref{prop:ideal-main}. The same stationary record is also never
 Bernoulli.
 \end{remark}
 
@@ -1056,7 +1023,7 @@ every positive parameter choice in the sampled boundary-reset recovery model,
 excluding that possibility as well.
 \end{proof}
 
-\begin{remark}[Equal-rate limit and Lambert $W$ expression for $\Gamma_c$]\label{rem:edge-cases}
+\begin{remark}[Equal-rate limit and Lambert $W$ expression for $\Gamma_{\mathrm{crit}}$]\label{rem:edge-cases}
 In the equal-rate limit $\kappa_{\mathrm r}\to\Gamma$, the closed gap formula~\eqref{eq:gap-closed-main} is $0/0$; l'H\^opital's rule in $\kappa_{\mathrm r}$ yields
 \[
 g_k\big|_{\kappa_{\mathrm r}=\Gamma}
@@ -1072,19 +1039,19 @@ subtraction there gives
 \]
 Thus the equal-rate case retains the same strictly increasing hazard and the same obstruction to finite symbolic memory.
 
-The critical rate $\Gamma_c$ is defined implicitly by~\eqref{eq:gamma-c-main}. Setting $s=\kappa_{\mathrm r}\Delta\tau$ and $x=\Gamma_c/\kappa_{\mathrm r}$, that equation is equivalent, for $x\neq1$, to
+The critical rate $\Gamma_{\mathrm{crit}}$ is defined implicitly by~\eqref{eq:gamma-c-main}. Setting \(\sigma=\kappa_{\mathrm r}\Delta\tau\) and \(x=\Gamma_{\mathrm{crit}}/\kappa_{\mathrm r}\), that equation is equivalent, for \(x\neq1\), to
 \[
-\log x=s(x-1),
+\log x=\sigma(x-1),
 \qquad\text{or equivalently}\qquad
-x e^{-sx}=e^{-s}.
+x e^{-\sigma x}=e^{-\sigma}.
 \]
 Thus
 \[
-(-sx)e^{-sx}=-s e^{-s},
+(-\sigma x)e^{-\sigma x}=-\sigma e^{-\sigma},
 \]
 and the nontrivial solution is
 \[
-\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)
 =
 -\frac{1}{\Delta\tau}\,
 W_k\!\left(-\kappa_{\mathrm r}\Delta\tau\,e^{-\kappa_{\mathrm r}\Delta\tau}\right),
@@ -1093,11 +1060,11 @@ where
 \[
 k=
 \begin{cases}
--1, & 0<s<1,\\
-0, & s>1.
+-1, & 0<\sigma<1,\\
+0, & \sigma>1.
 \end{cases}
 \]
-The excluded branch gives $W(-s e^{-s})=-s$, hence the removable root $x=1$, which solves the multiplied equation but not the original quotient equation unless $s=1$. At $s=1$ both real branches meet at $W(-e^{-1})=-1$ and the unique solution is $\Gamma_c=\kappa_{\mathrm r}$.
+The excluded branch gives $W(-\sigma e^{-\sigma})=-\sigma$, hence the removable root $x=1$, which solves the multiplied equation but not the original quotient equation unless $\sigma=1$. At $\sigma=1$ both real branches meet at $W(-e^{-1})=-1$ and the unique solution is $\Gamma_{\mathrm{crit}}=\kappa_{\mathrm r}$.
 \end{remark}
 
 \subsection{Soft approach to the ideal grammar}
@@ -1269,12 +1236,10 @@ f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
 \]
 Since the covariance sequence is explicit, so are the low-frequency noise properties.
 
-This count-noise conclusion is not automatic.  After the present classical
-sampled boundary-reset record has been fixed, the one-mode covariance tail
-gives a closed Herglotz spectral density and an exact asymptotic Fano factor.
-Both are infinite-record consequences of the sampled stationary renewal law
-alone, not consequences of the fixed-window continuous-comparator estimate in
-\Cref{prop:finite-window-continuous-comparator-main}.
+After the sampled boundary-reset record has been fixed, the one-mode covariance
+tail gives a closed Herglotz spectral density and an exact asymptotic Fano
+factor. Both are infinite-record consequences of the sampled stationary renewal
+law and the stationary renewal-count variance lemma below.
 The sampled boundary-reset recovery law suppresses immediate reclicks, but it
 could in principle still generate longer-range positive correlations and
 enhanced low-frequency noise.  The explicit covariance formula shows that the
@@ -1390,13 +1355,6 @@ precise sense in which the sampled renewal record has classical
 discrete-time antibunching/sub-Poisson count noise.
 The strict lower bound is the renewal-count identity
 \(F=\Var(G+1)/\EE(G+1)^2\) plus the full support of the gap law.
-This proposition is only the covariance-tail consequence of
-\Cref{thm:recovery-main}; it introduces no separate renewal spectral theorem,
-dead-time-correction estimator, detector-response statement, or response
-level-set statement.  It also does not assert the same spectral density or Fano
-limit for the continuous intra-bin comparator; by
-\Cref{cor:finite-window-only-comparator-main}, such a transfer would require a
-separate perturbation theorem, including control of the growing record length.
 Classical renewal-noise examples such as fractal renewal processes
 \cite{LowenTeich1993FractalRenewal} are useful comparators: here the proved
 exponential covariance tail gives strict low-frequency suppression rather than
@@ -1497,13 +1455,14 @@ deterministic plots of \(h_k\), the covariance profile, \(f(\theta)\), and
 \(F=f(0)/\rho\) are supplementary formula checks.
 
 
-\subsection{Block III: renewal principal-minor encoding of inclusions}\label{subsec:boundary-reset-finite-inclusion-record}
+\subsection{Block III: renewal LU determinant representatives of inclusions}\label{subsec:boundary-reset-finite-inclusion-record}
 
 The covariance and Fano formulas above are second-cumulant consequences of the
-renewal law.  The determinant calculation in this block is a renewal
-principal-minor encoding: a finite algebraic representative for
-stationary-renewal inclusion products whose probabilities have already been
-constructed.
+renewal law.  All probabilities in this block are constructed first from
+renewal products and finite inclusion--exclusion.  The displayed determinants
+enter only afterward as renewal LU determinant representatives: finite
+algebraic representatives for stationary-renewal inclusion products whose
+probabilities have already been constructed.
 For a stationary renewal click set \(\varXi\) with intensity \(\rho\) and Palm
 renewal masses \(u_n=\PP(n\in\varXi\mid0\in\varXi)\), the inclusion probability
 of ordered sites is
@@ -1517,7 +1476,7 @@ explicit scalar sequence
 finite algebraic encoding of that renewal product
 \cite{CoxIsham1980,DaleyVereJones2003,Asmussen2003}.
 
-\begin{proposition}[Finite LU principal-minor identity, not a DPP kernel]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
+\begin{proposition}[Renewal LU determinant representative identity]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
 Let \(\rho>0\) and let \(u_n\) be any scalar sequence indexed by \(n\ge1\).
 Define \(K_u=K_u^{(\rho)}\) by
 \begin{equation}\label{eq:renewal-principal-minor-kernel-main}
@@ -1532,15 +1491,12 @@ For \(B=\{i_1<\cdots<i_m\}\), set
 \begin{equation}\label{eq:renewal-principal-minor-product-main}
 \det K_B=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
-This statement is only the LU identity for the finite matrix \(K_B\).  The
-matrix \(K_u\) is not introduced as a DPP kernel: no Hermitian
-positive-contraction condition, and no nonsymmetric-DPP admissibility
-condition, is checked.  When \(u_n\) comes from a renewal law, finite
-probabilistic admissibility is inherited from that law and finite
-inclusion--exclusion, not from kernel admissibility.
+This statement is the LU identity for the finite matrix \(K_B\).  When \(u_n\)
+comes from a renewal law, finite probabilistic admissibility is inherited from
+that law and finite inclusion--exclusion.
 \end{proposition}
 
-\begin{remark}[Not a DPP theorem]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
+\begin{remark}[Renewal LU determinant representative language]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
 \Cref{prop:renewal-principal-minor-lu-main} is only a finite LU identity and,
 when \(u_n\) is a Palm renewal mass sequence, an algebraic representative for
 inclusion products of a renewal law that has already been constructed.  Its
@@ -1636,7 +1592,7 @@ u_n=\PP(A_n=1\mid A_0=1)
 \end{equation}
 Substitution in
 \Cref{prop:renewal-principal-minor-lu-main,cor:renewal-principal-minor-word-law-main}
-gives the Toeplitz finite-principal-minor representative
+gives the Toeplitz renewal LU determinant representative
 \begin{equation}\label{eq:boundary-reset-toeplitz-kernel-main}
 K_\Gamma(i,j)=
 \begin{cases}
@@ -1705,18 +1661,18 @@ identity
 \det[K_\Gamma(i,j)]_{i,j\in B}
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \]
-Consequently every finite-window count or word formula above can be derived
-directly from the renewal product followed by finite inclusion--exclusion.  The
-determinant notation is a compact bookkeeping device for those algebraic
-expansions.
+Consequently every finite-window count or word formula above is first obtained
+from the renewal product followed by finite inclusion--exclusion.  The renewal
+LU determinant representative is only a compact bookkeeping device for those
+already constructed algebraic expansions.
 
 \paragraph{Critical finite-inclusion collapse and memory package.}
 \phantomsection\label{lem:critical-cluster-factorization-main}\label{cor:critical_finite_inclusion_memory_phase}\label{cor:critical_principal_minor_nonmarkov_fullsupport}
 Fix \(\kappa_{\mathrm r},\Delta\tau>0\) and put
-\(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Then
+\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\).  Then
 \(\lambda_{\mathrm{hid}}=0\).  With
-\(\rho_c=\rho(\Gamma_c)\), \(a_c=a(\Gamma_c)\), and \(d_c=\rho_c-a_c\), the
-Toeplitz representative above
+\(\rho_c=\rho(\Gamma_{\mathrm{crit}})\), \(a_c=a(\Gamma_{\mathrm{crit}})\), and \(d_c=\rho_c-a_c\), the
+Toeplitz renewal LU determinant representative above
 collapses to upper range one:
 \begin{equation}\label{eq:critical-toeplitz-range-one-main}
 K_c(i,j)=
@@ -1727,7 +1683,7 @@ d_c, & j=i+1,\\[0.4ex]
 \end{cases}
 \end{equation}
 The same critical law is also encoded, at the level of finite principal minors,
-by the Hessenberg representative
+by the Hessenberg renewal LU determinant representative
 \begin{equation}\label{eq:critical-hessenberg-kernel-main}
 K_c^H(i,j)=
 \begin{cases}
@@ -1753,13 +1709,13 @@ convention for \(B=\varnothing\),
 =
 \rho_c^J a_c^{|B|-J}.
 \end{equation}
-At \(\Gamma_c\), the sampled boundary-reset record is therefore a full-support
+At \(\Gamma_{\mathrm{crit}}\), the sampled boundary-reset record is therefore a full-support
 renewal process, exact \(1\)-dependent, represented by the two explicit
-finite-principal-minor matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
+renewal LU determinant matrices \(K_c\) and \(K_c^H\), strictly non-Markov of
 every finite visible order by its increasing zero-run hazard, and neither
 Bernoulli nor the Parry golden-mean law.
 
-Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_c\) as the unique positive
+Lemma~\ref{lem:critical-rate-main} identifies \(\Gamma_{\mathrm{crit}}\) as the unique positive
 zero of \(\lambda_{\mathrm{hid}}\), so \eqref{eq:critical-toeplitz-range-one-main}
 is \eqref{eq:boundary-reset-toeplitz-kernel-main} with \(\ell=0\).  Then
 \eqref{eq:finite-inclusion-u-n-main} gives \(u_1=a_c\) and \(u_n=\rho_c\) for
@@ -1807,12 +1763,12 @@ criteria and Heller's finite-process characterization
 \cite{BlackwellKoopmans1957,Gilbert1959,Dharmadhikari1963Functions,Dharmadhikari1963Sufficient,Heller1965}.
 Recent model-free memory and weak-memory work addresses broader inference or
 memory-reduction questions \cite{VollmarEtAl2024Memory,MeyerBrandner2026WeakMemory}.
-The inverse material is deliberately split into three levels.  The first level
-is the population quotient statement below: the full visible law determines
-only the unordered survival-factor pair.  The second level, stated later in
+The inverse material is split into three levels.  The first level is the
+population quotient statement below: the full visible law determines only the
+unordered survival-factor pair.  The second level, stated later in
 \Cref{cor:finite_inverse_delta_boundary_main}, is finite-record inference for
-the symmetric coordinates \((p+c,pc)\) and their feasible projection.  The
-third level, stated only after those two record-side facts, is an optional
+the symmetric coordinates \((p+s,ps)\) and their feasible projection.  The
+third level, stated after those two record-side facts, is an optional
 externally labelled rate chart in
 \Cref{cor:critical_self_dual_inverse,prop:hidden_label_exchange_nonidentifiability}.
 
@@ -1821,14 +1777,14 @@ externally labelled rate chart in
 \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
 \textbf{Box 1. Population quotient inverse.}
 In the fixed sampled boundary-reset family and at fixed \(\Delta\tau\), the
-visible law \(\mu_{p,c}\) determines the elementary symmetric coordinates
+visible law \(\mu_{p,s}\) determines the elementary symmetric coordinates
 \[
-s_1=p+c,\qquad s_2=pc,
+s_1=p+s,\qquad s_2=ps,
 \]
-and hence the unordered set \(\{p,c\}\).  It does not label which root is the
+and hence the unordered set \(\{p,s\}\).  It does not label which root is the
 attempt survival \(e^{-\Gamma\Delta\tau}\) and which root is the recovery
 survival \(e^{-\kappa_{\mathrm r}\Delta\tau}\).  Equivalently, the population
-inverse is a map to the quotient by \((p,c)\sim(c,p)\), or
+inverse is a map to the quotient by \((p,s)\sim(s,p)\), or
 \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\) in rate
 notation.  No finite-record covariance, root splitting, or external response
 calibration is part of this box.
@@ -1836,38 +1792,39 @@ calibration is part of this box.
 \medskip
 
 \begin{theorem}[Visible-law quotient identifiability]\label{thm:toeplitz_image_inverse_duality}
-Fix \(\Delta\tau>0\), and write \(\mu_{p,c}\) for the stationary visible law
+Fix \(\Delta\tau>0\), and write \(\mu_{p,s}\) for the stationary visible law
 of the sampled one-recovery-opportunity boundary-reset record with survival
 factors
 \[
 p=e^{-\Gamma\Delta\tau},
 \qquad
-c=e^{-\kappa\Delta\tau}.
+s=e^{-\kappa_{\mathrm r}\Delta\tau}.
 \]
 The map
 \[
-(p,c)\in(0,1)^2\longmapsto \mu_{p,c}
+(p,s)\in(0,1)^2\longmapsto \mu_{p,s}
 \]
-factors through the quotient \((p,c)\sim(c,p)\) and is injective on that
+factors through the quotient \((p,s)\sim(s,p)\) and is injective on that
 quotient.  Equivalently, in labelled rate notation,
 \[
-\mu_{\Gamma,\kappa}=\mu_{\Gamma',\kappa'}
+\mu_{\Gamma,\kappa_{\mathrm r}}=\mu_{\Gamma',\kappa_{\mathrm r}'}
 \quad\Longleftrightarrow\quad
-\{e^{-\Gamma\Delta\tau},e^{-\kappa\Delta\tau}\}
+\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}
 =
-\{e^{-\Gamma'\Delta\tau},e^{-\kappa'\Delta\tau}\}.
+\{e^{-\Gamma'\Delta\tau},e^{-\kappa_{\mathrm r}'\Delta\tau}\}.
 \]
 In particular,
 \begin{equation}\label{eq:visible-law-exchange-main}
-\mu_{\Gamma,\kappa}=\mu_{\kappa,\Gamma}.
+\mu_{\Gamma,\kappa_{\mathrm r}}=\mu_{\kappa_{\mathrm r},\Gamma}.
 \end{equation}
 Thus a visible sampled record identifies only the unordered survival set
 \[
-\{e^{-\Gamma\Delta\tau},e^{-\kappa\Delta\tau}\},
+\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\},
 \]
-not the ordered pair \((\Gamma,\kappa)\). Equivalently, the labelled rate map
-is exactly two-to-one off the diagonal \(\Gamma=\kappa\), and becomes
-one-to-one after quotienting by the exchange \(\Gamma\leftrightarrow\kappa\).
+not the ordered pair \((\Gamma,\kappa_{\mathrm r})\). Equivalently, the
+labelled rate map is exactly two-to-one off the diagonal
+\(\Gamma=\kappa_{\mathrm r}\), and becomes one-to-one after quotienting by the
+exchange \(\Gamma\leftrightarrow\kappa_{\mathrm r}\).
 The quotient inverse is explicit: from the visible law define
 \[
 \rho=\PP(A_0=1),
@@ -1882,22 +1839,21 @@ and
 \]
 Set
 \[
-s_1=p+c=1-a+\lambda,
+s_1=p+s=1-a+\lambda,
 \qquad
-s_2=pc=\rho(1-\lambda)-a+\lambda.
+s_2=ps=\rho(1-\lambda)-a+\lambda.
 \]
-Then \(\{p,c\}\) is the root set of
+Then \(\{p,s\}\) is the root set of
 \begin{equation}\label{eq:inverse-quadratic-main}
 z^2-s_1z+s_2=0,
 \end{equation}
 and the unordered rate pair is
 \[
 \left\{-\Delta\tau^{-1}\log p,
--\Delta\tau^{-1}\log c\right\}.
+-\Delta\tau^{-1}\log s\right\}.
 \]
-This is exactly the population quotient inverse summarized in Box~1: it is
-visible-law quotient identifiability for this fixed finite-Markov-function
-family.  The inverse is restricted to the feasible
+This is exactly the population quotient inverse summarized in Box~1.  The
+inverse is restricted to the feasible
 symmetric-coordinate image
 \begin{equation}\label{eq:population-feasible-symmetric-coordinate-region-main}
 \mathcal F
@@ -1913,16 +1869,14 @@ symmetric-coordinate image
 where both signs are required to satisfy the displayed root inequality.
 Equivalently,
 \(\mathcal F=\{(z_1+z_2,z_1z_2):z_1,z_2\in(0,1)\}\), including the exchange
-diagonal.  This theorem stops at the unordered population quotient.  It does
-not assert finite-sample root covariance or labelled recovery of
-\((\Gamma,\kappa)\).
+diagonal.
 \end{theorem}
 
 \begin{proof}
 All quantities in the first line of the inverse are finite-dimensional visible
 probabilities.  By \Cref{lem:stationary-main}, \(a<\rho\), so the denominator
 in the definition of \(\lambda\) is nonzero.  The renewal inclusion product,
-or equivalently its finite LU representative from
+or equivalently its renewal LU determinant representative from
 \Cref{prop:renewal-principal-minor-lu-main}, gives through the
 covariance transfer formula \eqref{eq:cov-transfer-main},
 \[
@@ -1937,49 +1891,49 @@ Put \(q=1-p\).  The labelled-kernel identities in
 \[
 b=p-\lambda,
 \qquad
-a+b=1-c,
+a+b=1-s,
 \qquad
 q+b=1-\lambda,
 \qquad
-\rho=\frac{q(1-c)}{q+b}.
+\rho=\frac{q(1-s)}{q+b}.
 \]
 The first two identities imply
 \begin{equation}\label{eq:inverse-sum-main}
-p+c=1-a+\lambda.
+p+s=1-a+\lambda.
 \end{equation}
 The last two identities imply
 \[
-\rho(1-\lambda)=q(1-c)=(1-p)(1-c).
+\rho(1-\lambda)=q(1-s)=(1-p)(1-s).
 \]
 Combining this with \eqref{eq:inverse-sum-main} gives
 \begin{equation}\label{eq:inverse-product-main}
-pc=\rho(1-\lambda)-a+\lambda.
+ps=\rho(1-\lambda)-a+\lambda.
 \end{equation}
-Thus the visible law recovers the elementary symmetric functions \(p+c\) and
-\(pc\), so \(p\) and \(c\) are the two roots of
+Thus the visible law recovers the elementary symmetric functions \(p+s\) and
+\(ps\), so \(p\) and \(s\) are the two roots of
 \eqref{eq:inverse-quadratic-main}.  Since they came from positive rates, both
 roots lie in \((0,1)\), and the unordered rate pair follows by applying
 \(-\Delta\tau^{-1}\log\) to the two roots.
 
 It remains to prove the converse and the claimed exchange invariance.  Let
-\(L_p=\log p\) and \(L_c=\log c\).  For \(p\ne c\), the forward coordinates can
+\(L_p=\log p\) and \(L_s=\log s\).  For \(p\ne s\), the forward coordinates can
 be written as
 \begin{equation}\label{eq:symmetric-forward-coordinates-main}
 \lambda
-=\frac{pL_p-cL_c}{L_p-L_c},
+=\frac{pL_p-sL_s}{L_p-L_s},
 \qquad
 a=
-\frac{(1-c)L_p-(1-p)L_c}{L_p-L_c},
+\frac{(1-s)L_p-(1-p)L_s}{L_p-L_s},
 \qquad
-\rho=\frac{(1-p)(1-c)}{1-\lambda}.
+\rho=\frac{(1-p)(1-s)}{1-\lambda}.
 \end{equation}
 Indeed the first identity is \(\lambda=p-b\) after substituting
 \(\Gamma=-\Delta\tau^{-1}L_p\) and
-\(\kappa=-\Delta\tau^{-1}L_c\) in the formula for \(b\), the second is
-\(a=1-c-b\), and the third is the stationary density formula with
+\(\kappa_{\mathrm r}=-\Delta\tau^{-1}L_s\) in the formula for \(b\), the second is
+\(a=1-s-b\), and the third is the stationary density formula with
 \(q+b=1-\lambda\).  Each expression in
 \eqref{eq:symmetric-forward-coordinates-main} is unchanged by exchanging
-\(p\) and \(c\).  On the diagonal, the continuous limits are
+\(p\) and \(s\).  On the diagonal, the continuous limits are
 \begin{equation}\label{eq:symmetric-forward-diagonal-main}
 \lambda=p(1+\log p),
 \qquad
@@ -1989,18 +1943,19 @@ a=1-p+p\log p,
 \end{equation}
 which are the same limits obtained from the equal-rate kernels.
 
-Therefore the renewal determinant \(K_\Gamma\) obtained from
+Therefore the renewal LU determinant representative \(K_\Gamma\) obtained from
 \Cref{prop:renewal-principal-minor-lu-main}, and hence every finite
 inclusion, count, and word probability given by
 \eqref{eq:finite-window-count-generating-main} and
 \eqref{eq:finite-word-inclusion-exclusion-main}, depends on the labelled rates only
-through the unordered pair \(\{p,c\}\).  Equal unordered survival pairs give the
+through the unordered pair \(\{p,s\}\).  Equal unordered survival pairs give the
 same visible law.  Conversely, equal visible laws give the same
 \(\rho,a,u_2\), hence the same \(\lambda\), the same quadratic
-\eqref{eq:inverse-quadratic-main}, and the same unordered pair \(\{p,c\}\).
-The map from \((\Gamma,\kappa)\) to \((p,c)\) is one-to-one in labelled
-coordinates, so only the exchange \(\Gamma\leftrightarrow\kappa\) remains, with
-no exchange ambiguity on the diagonal.
+\eqref{eq:inverse-quadratic-main}, and the same unordered pair \(\{p,s\}\).
+The map from \((\Gamma,\kappa_{\mathrm r})\) to \((p,s)\) is one-to-one in
+labelled coordinates, so only the exchange
+\(\Gamma\leftrightarrow\kappa_{\mathrm r}\) remains, with no exchange ambiguity
+on the diagonal.
 \end{proof}
 
 \begin{corollary}[Three inclusion probabilities are complete quotient coordinates]\label{cor:three_inclusion_complete_coordinates}
@@ -2021,8 +1976,8 @@ u_2=\frac{r_2}{r_0},
 \lambda=\frac{u_2-r_0}{a-r_0},
 \]
 and the two roots of \eqref{eq:inverse-quadratic-main}, with \(\rho=r_0\), are
-the unordered survival factors \(\{p,c\}\).  Thus the unordered rates
-\(\{-\Delta\tau^{-1}\log p,-\Delta\tau^{-1}\log c\}\) are reconstructed from
+the unordered survival factors \(\{p,s\}\).  Thus the unordered rates
+\(\{-\Delta\tau^{-1}\log p,-\Delta\tau^{-1}\log s\}\) are reconstructed from
 \((r_0,r_1,r_2)\), and once these are known
 \Cref{prop:renewal-principal-minor-lu-main} and
 \eqref{eq:finite-window-count-generating-main} and
@@ -2042,7 +1997,7 @@ Stationarity and positivity give \(r_0=\rho>0\).  By definition,
 \(r_2=\PP(A_0=1)\PP(A_2=1\mid A_0=1)=r_0u_2\).  Therefore the displayed
 formulas recover \(a\), \(u_2\), and \(\lambda\).  Theorem~\ref{thm:toeplitz_image_inverse_duality}
 then recovers the unordered survival factors and rates.  Substituting those
-coordinates into the renewal determinant and finite-window count formulas gives
+coordinates into the renewal LU determinant representative and finite-window count formulas gives
 all finite inclusion, count, and word probabilities, so no
 further visible coordinate is needed on the quotient family.
 \end{proof}
@@ -2061,9 +2016,266 @@ vector by
 \widehat r_{2,N}=\frac1{N-2}\sum_{j=0}^{N-3}A_jA_{j+2}.
 \]
 
+\begin{theorem}[Finite-record renewal probability input]\label{thm:finite-record-renewal-probability-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary renewal indicator process whose
+click times are regeneration times.  In the Palm law started from a click at
+time \(0\), write
+\[
+0=T_0<T_1<T_2<\cdots,\qquad L_j=T_{j+1}-T_j,\qquad G_j=L_j-1,
+\]
+and assume the i.i.d. gap law satisfies
+\[
+\PP(G_1\ge k)\le C e^{-\eta k}\qquad(k\ge0).
+\]
+Let \((Z_n)\) be a bounded stationary local observable with
+\(\EE_{\mathrm{stat}}Z_0=0\).  Suppose its Palm cycle rewards
+\[
+Y_j=\sum_{n=T_j}^{T_{j+1}-1} Z_n
+\]
+have, for a fixed \(q\ge0\), the adjacent-gap form
+\[
+Y_j=f(G_j,\ldots,G_{j+q}),\qquad
+|f(g_0,\ldots,g_q)|
+\le C_f\left(1+\sum_{i=0}^q g_i\right).
+\]
+Put
+\[
+\mu_L=\EE L_1,\qquad
+\tau_q^2=\Var(Y_1)+2\sum_{h=1}^q\operatorname{Cov}(Y_1,Y_{1+h}).
+\]
+Then
+\[
+\frac1{\sqrt N}\sum_{n=0}^{N-1}Z_n
+\Rightarrow
+\mathcal N\!\left(0,\frac{\tau_q^2}{\mu_L}\right).
+\]
+
+Let \(0\le\tau_1<\cdots<\tau_{J_N}\le N-1\) be the observed click times in
+the record window.  Choose deterministic batch lengths
+\[
+b_N\to\infty,\qquad b_N/N\to0,
+\]
+and form batches from \(b_N\) complete cycle rewards, omitting \(q\) complete
+cycle rewards between neighboring batches.  Equivalently, with
+\(b_N+q=b_N\) when \(q=0\), set
+\[
+M_{N,q}^{\mathrm{all}}
+=\left\lfloor\frac{J_N-1}{b_N+q}\right\rfloor,\qquad
+R_{N,q}^{\mathrm{all}}
+=M_{N,q}^{\mathrm{all}}b_N+(M_{N,q}^{\mathrm{all}}-1)q,
+\]
+with value \(0\) when \(M_{N,q}^{\mathrm{all}}=0\).  The prefix before the
+first observed click, the suffix after the last observed click, and the
+terminal remainder of fewer than \(b_N+q\) complete cycles are omitted.  For
+\(1\le r\le M_{N,q}^{\mathrm{all}}\), define the population-centered separated
+batch sums
+\[
+B_{r,N}^{\circ,\mathrm{all}}
+=
+\sum_{j=(r-1)(b_N+q)+1}^{(r-1)(b_N+q)+b_N}
+Y_j^{\circ,\mathrm{all}} .
+\]
+If the local windows needed for every included reward are contained in
+\(A_0,\ldots,A_{N-1}\), then
+\[
+\frac{1}{\bar L_{N,q}^{\mathrm{all}}\,b_N\,
+(M_{N,q}^{\mathrm{all}}-1)}
+\sum_{r=1}^{M_{N,q}^{\mathrm{all}}}
+\bigl(B_{r,N}^{\circ,\mathrm{all}}-\bar B_N^{\circ,\mathrm{all}}\bigr)^2
+\to
+\frac{\tau_q^2}{\mu_L}
+\qquad\text{in probability},
+\]
+with the estimator defined arbitrarily on the event
+\(\{M_{N,q}^{\mathrm{all}}<2\}\), whose probability tends to zero.  The same
+limit holds for feasible rewards \(\widehat Y_{j,N}\) if, uniformly over the
+batched complete cycles,
+\[
+|\widehat Y_{j,N}-Y_{j,N}^{\circ,\mathrm{all}}|
+\le C\,\delta_N\,(\tau_{j+1}-\tau_j),
+\qquad
+\delta_N=O_{\PP}(N^{-1/2}).
+\]
+The random complete-cycle counts also satisfy
+\[
+\frac{M_{N,q}^{\mathrm{all}}b_N}{N}\to\frac1{\mu_L},
+\qquad
+\frac{R_{N,q}^{\mathrm{all}}}{N}\to\frac1{\mu_L}.
+\]
+\end{theorem}
+
+\begin{proof}
+The exponential gap tail gives moments of every order for the cycle lengths
+and, by the displayed linear bound, for the cycle rewards.  The reward
+sequence is stationary and \(q\)-dependent because it is a function of
+\((G_j,\ldots,G_{j+q})\) and the gaps are i.i.d.  The root-\(N\) CLT is
+\Cref{thm:finite-lag-renewal-reward-main}: its proof imports the
+\(m\)-dependent CLT through \Cref{lem:regenerative-qdependent-clt-main},
+uses the renewal law \(K_N/N\to1/\mu_L\), and applies the finite-dependent
+Anscombe transfer.  The stationary initial and terminal boundary cycles are
+negligible at root-\(N\) scale by \Cref{lem:renewal-index-prelim-main}(i).
+
+The random complete-cycle count and the displayed limits for
+\(M_{N,q}^{\mathrm{all}}\) and \(R_{N,q}^{\mathrm{all}}\) are
+\Cref{lem:renewal-index-prelim-main}(iii).  The separated-batch covariance
+law, including the terminal-remainder deletion and the plug-in perturbation
+bound, is \Cref{lem:separated-batch-qdependent-main}.  The only additional
+condition in the finite-record statement is measurability from the observed
+symbols; once the stated local-window condition holds, all included rewards
+are functions of \(A_0,\ldots,A_{N-1}\).
+\end{proof}
+
+\begin{theorem}[Finite-record inference theorem]\label{thm:finite-record-inference-audit-main}
+Fix one sampled boundary-reset setting with \(\Delta\tau>0\) and survival
+factors \(p,s\in(0,1)\).  Let \(A_0,\ldots,A_{N-1}\) be either:
+\[
+\text{\emph{(S)}}\quad
+\text{a stationary window of the sampled visible renewal record,}
+\]
+or
+\[
+\text{\emph{(B)}}\quad
+\text{a finite-start record after discarding a deterministic burn-in }
+L_N\to\infty,\quad L_N=o(\sqrt N),
+\]
+in which case every occurrence of \(N\) below is replaced by the suffix length
+\(n_N=N-L_N\) and suffix-relative indices are used.  In the Palm law started
+from a click at time \(0\), write
+\[
+0=T_0<T_1<T_2<\cdots,\qquad L_j=T_{j+1}-T_j,\qquad G_j=L_j-1 .
+\]
+The sampled renewal law has an exponential gap tail:
+\[
+\PP(G_1\ge k)\le C e^{-\eta k}\qquad(k\ge0).
+\]
+Let
+\[
+0\le\tau_1<\cdots<\tau_{J_N}\le N-1
+\]
+be the observed click times in the stationary window, or the suffix-relative
+observed click times in the burn-in case.  For every finite-record batch
+estimator used in this paper the following construction is part of the
+statistic, not an optional proof device.
+
+\begin{enumerate}
+\item Choose a deterministic batch length
+\[
+b_N\to\infty,\qquad b_N/N\to0 .
+\]
+For the certified rank-adaptive symmetric-coordinate procedure use the
+specific rule
+\[
+b_N=\max\{1,\lfloor N^{1/3}\rfloor\},\qquad t_N=N^{-1/4}.
+\]
+\item If the cycle reward is \(q\)-dependent in adjacent complete cycles, form
+only all-complete-cycle batches and omit \(q\) complete-cycle rewards between
+neighboring batches:
+\[
+M_{N,q}^{\mathrm{all}}
+=\left\lfloor\frac{J_N-1}{b_N+q}\right\rfloor,\qquad
+R_{N,q}^{\mathrm{all}}
+=M_{N,q}^{\mathrm{all}}b_N+(M_{N,q}^{\mathrm{all}}-1)q ,
+\]
+with \(b_N+q=b_N\) when \(q=0\) and value \(0\) if
+\(M_{N,q}^{\mathrm{all}}=0\).  The prefix before the first observed click, the
+suffix after the last observed click, and the terminal remainder of fewer than
+\(b_N+q\) complete cycles are boundary remainders and are not batched.
+\item Every local window entering an included reward must be contained in the
+observed record.  For the lag-two rewards and for
+\((\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N})\), this observed-window
+condition is exactly the all-cycle index rule
+\[
+M_N^{\mathrm{all}}=\left\lfloor\frac{J_N-1}{b_N+1}\right\rfloor,
+\qquad
+R_N^{\mathrm{all}}=M_N^{\mathrm{all}}b_N+(M_N^{\mathrm{all}}-1),
+\]
+because \Cref{lem:all-cycle-lag-two-windows-main} gives
+\(R_N^{\mathrm{all}}\le J_N-2\).
+\item Feasible rewards may replace population-centered rewards only through a
+plug-in centering error
+\[
+\delta_N=O_{\PP}(N^{-1/2}),\qquad
+\|\widehat Y_{j,N}-Y_j^{\circ,\mathrm{all}}\|
+\le C\,\delta_N\,(\tau_{j+1}-\tau_j)
+\]
+uniformly over the batched complete cycles.
+\end{enumerate}
+
+Under these conditions the random complete-cycle count satisfies
+\[
+\frac{M_{N,q}^{\mathrm{all}}b_N}{N}\to\frac1{\EE L_1},\qquad
+\frac{R_{N,q}^{\mathrm{all}}}{N}\to\frac1{\EE L_1},\qquad
+\PP(M_{N,q}^{\mathrm{all}}<2)\to0,
+\]
+and the all-complete-cycle separated-batch covariance estimator is consistent
+for the regenerative long-run covariance of the corresponding \(q\)-dependent
+cycle reward.
+
+Consequently the empirical inclusion vector in
+\eqref{eq:empirical-three-inclusion-vector-main} satisfies
+\[
+\sqrt N(\widehat r_N-r)\Rightarrow\mathcal N(0,\Sigma_r),
+\qquad
+\widehat\Sigma_{r,N}^{\mathrm{all}}\to\Sigma_r
+\quad\text{in probability,}
+\]
+with \(\Sigma_r\) given by \eqref{eq:three-coordinate-covariance-main}.  The
+projected symmetric-coordinate estimator
+\[
+\widetilde s_N
+=
+\Pi_F\{\Phi(\widehat r_N)\}
+\]
+has the delta-method, projection, exchange-diagonal root-splitting, full-rank
+Wald, and certified rank-adaptive Wald limits stated in
+\Cref{cor:finite_inverse_delta_boundary_main}.  The certified rank selector is
+tied to the deterministic rule \(b_N=\max\{1,\lfloor N^{1/3}\rfloor\}\),
+\(t_N=N^{-1/4}\), for which
+\[
+\|\widehat\Sigma_{s,N}-\Sigma_s\|_{\operatorname{op}}=O_{\PP}(N^{-1/3}),
+\qquad
+\|\widehat\Sigma_{s,N}-\Sigma_s\|_{\operatorname{op}}/t_N\to0
+\]
+in probability.
+
+For the fixed-setting lag-two covariance statistic, the reward is the
+\(q=1\) reward isolated in \Cref{lem:lag-two-reward-main}:
+\[
+Y_j=f(G_j,G_{j+1}),\qquad \EE Y_j=0,
+\]
+so the CLT, the all-complete-cycle variance estimator, and the studentized
+fixed-setting Wald interval in \Cref{thm:sampled-finite-record-main} apply
+under the same stationarity or burn-in, observed-window, batch-growth, and
+plug-in-centering assumptions.
+\end{theorem}
+
+\begin{proof}
+\Cref{thm:recovery-main,lem:renewal-gap-main} identify the fixed-setting
+visible record as a renewal process whose click times are regeneration times,
+and the explicit zero-run formulas give the exponential gap tail.  In the
+finite-start case, \Cref{lem:finite-start-burnin-main} transfers every
+suffix statistic above to the stationary one-sided law in total variation.
+
+The single probability input for the complete-cycle CLT and variance
+construction is \Cref{thm:finite-record-renewal-probability-main}.  Applied
+to the three bounded local observables
+\((A_n,A_nA_{n+1},A_nA_{n+2})\), and using the observed-window rule stated in
+the theorem, it gives \Cref{prop:three-coordinate-vector-batch-main}.  The map
+\(\Phi\), projection onto \(F\), exchange-diagonal local projection, and Wald
+rank statements are then the delta-method and constrained-projection
+conclusions proved in \Cref{cor:finite_inverse_delta_boundary_main}, with
+the operator-norm rate supplied by
+\Cref{lem:three-coordinate-batch-rate-main}.  For lag two,
+\Cref{lem:all-cycle-lag-two-windows-main} verifies the observed-window
+condition and \Cref{lem:lag-two-reward-main} gives centering, exact
+\(1\)-dependence, and the displayed variance, so
+\Cref{thm:sampled-finite-record-main} is the \(q=1\) specialization of the
+same finite-record theorem.
+\end{proof}
+
 \begin{proposition}[Finite-record covariance estimator for the three quotient coordinates]\label{prop:three-coordinate-vector-batch-main}
 Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
-with survival factors \(p,c\in(0,1)\).  Let
+with survival factors \(p,s\in(0,1)\).  Let
 \[
 r=(r_0,r_1,r_2)^\top
 \]
@@ -2183,6 +2395,12 @@ Then
 \widehat\Sigma_{r,N}^{\mathrm{all}}\to\Sigma_r
 \qquad\text{in probability.}
 \]
+This proposition is the three-coordinate \(q=1\) specialization of the
+finite-record inference theorem in
+\Cref{thm:finite-record-inference-audit-main}: the displayed complete-cycle
+batch rule is the observed-window rule, the omitted cycle separates the
+one-dependent rewards, and the plug-in centering error is
+\(O_{\PP}(N^{-1/2})\).
 \end{proposition}
 
 \begin{proof}
@@ -2350,9 +2568,9 @@ For ordinary root-coordinate and rate-coordinate inference from a finite
 record, the population survival factors are assumed separated from the exchange
 diagonal: there is a constant \(\eta>0\) such that
 \[
-|p-c|\ge \eta,
+|p-s|\ge \eta,
 \qquad\text{equivalently}\qquad
-\Delta_s=(p-c)^2\ge \eta^2 .
+\Delta_s=(p-s)^2\ge \eta^2 .
 \]
 This is an inferential regularity hypothesis only.  It is not needed for the
 population quotient inverse in
@@ -2360,6 +2578,150 @@ population quotient inverse in
 and it is not needed for the finite-record delta method in the symmetric
 coordinates \((s_1,s_2)\).
 \end{assumption}
+
+\begin{lemma}[Local projection at the exchange diagonal]\label{lem:local-projection-exchange-diagonal-main}
+Let
+\[
+F=\{(x+y,xy):0\le x\le1,\ 0\le y\le1\}
+\]
+and fix \(s=(2z,z^2)\) with \(0<z<1\).  There is a neighbourhood \(U\) of
+\(s\) on which the Euclidean nearest point in \(F\) is unique; hence the
+lexicographic convention in \eqref{eq:canonical-symmetric-projection-main} is
+inactive on \(U\).  Equivalently, after shrinking \(U\) to a ball
+\(B_\varepsilon(s)\), the nearest-point projection onto \(F\) is
+single-valued on \(B_\varepsilon(s)\).  In the local coordinates
+\[
+v=s+\frac{h}{\sqrt N},
+\]
+for \(h\) in a fixed compact set and \(N\) large enough that
+\(v\in B_\varepsilon(s)\), feasibility is exactly
+\begin{equation}\label{eq:diagonal-scaled-feasible-main}
+h_2\le zh_1+\frac{h_1^2}{4\sqrt N}.
+\end{equation}
+Consequently the scaled feasible sets converge locally to the tangent
+half-space
+\[
+T_zF=\{h\in\mathbb R^2:h_2\le zh_1\}.
+\]
+Moreover, if \(t_n\downarrow0\),
+\[
+y_n=s+t_nw_n+o(t_n),\qquad w_n\to w,
+\]
+and \(y_n\in U\), then
+\begin{equation}\label{eq:local-projection-diagonal-derivative-main}
+\frac{\Pi_F(y_n)-s}{t_n}\longrightarrow
+\Pi_{T_zF}(w).
+\end{equation}
+Consequently, for random \(y_N=s+N^{-1/2}Z_N+o_{\PP}(N^{-1/2})\) with
+\(Z_N\Rightarrow Z\),
+\[
+\sqrt N\,(\Pi_F(y_N)-s)\Rightarrow \Pi_{T_zF}(Z).
+\]
+\end{lemma}
+
+\begin{proof}
+Choose \(\varepsilon>0\) with
+\([z-3\varepsilon,z+3\varepsilon]\subset(0,1)\).  In a sufficiently small
+neighbourhood \(V\) of \(s\), the endpoint constraints \(0\le x,y\le1\) are
+inactive and
+\[
+F\cap V=\{(v_1,v_2)\in V:v_2\le v_1^2/4\}.
+\]
+Therefore, for \(v=s+h/\sqrt N\in V\),
+\[
+z^2+\frac{h_2}{\sqrt N}
+\le
+\frac14\left(2z+\frac{h_1}{\sqrt N}\right)^2
+=z^2+\frac{zh_1}{\sqrt N}+\frac{h_1^2}{4N},
+\]
+which is exactly \eqref{eq:diagonal-scaled-feasible-main}.  The same identity
+shows local Hausdorff convergence on compact \(h\)-sets to \(T_zF\).
+The local boundary is the parabola
+\[
+\gamma(u)=(2u,u^2),\qquad u\in I:=(z-2\varepsilon,z+2\varepsilon),
+\]
+and an outward normal, not normalized, is \(n(u)=(-u,1)\).  The map
+\[
+\Theta(u,\lambda)=\gamma(u)+\lambda n(u)
+\]
+has Jacobian determinant
+\[
+\det\bigl(\gamma'(z),n(z)\bigr)=2(1+z^2)>0
+\]
+at \((z,0)\).  After shrinking \(I\) and \(V\), the inverse function theorem
+therefore gives a diffeomorphism from
+\((z-\varepsilon,z+\varepsilon)\times(-\varepsilon,\varepsilon)\) onto a
+neighbourhood \(U\subset V\) of \(s\).  Thus every \(y\in U\) has unique normal
+coordinates
+\[
+y=\gamma(u)+\lambda n(u).
+\]
+For \(|\lambda|\) small,
+\[
+y_2-y_1^2/4
+=\lambda(1+u^2)-\lambda^2u^2/4,
+\]
+so the sign of \(\lambda\) is the local feasible-side sign.  If
+\(\lambda\le0\), then \(y\in F\) and the unique nearest point is \(y\) itself.
+
+It remains to treat \(\lambda>0\).  A nearest point from an exterior point
+cannot lie in the interior of \(F\), because a small move from such an interior
+point toward \(y\) remains feasible and strictly decreases the distance.  Also,
+after shrinking \(U\), every point of \(F\setminus V\) has distance bounded
+away from \(s\), whereas the candidate boundary point \(\gamma(u)\) is
+\(O(\|y-s\|)\) from \(y\); hence no global nearest point lies in
+\(F\setminus V\).  The minimization is therefore over the local boundary
+segment.  For \(r\in I\) put
+\[
+q_{u,\lambda}(r)=\|\gamma(u)+\lambda n(u)-\gamma(r)\|^2 .
+\]
+Since \(n(u)\cdot\gamma'(u)=0\), \(q'_{u,\lambda}(u)=0\).  On the chosen
+neighbourhood,
+\[
+q''_{u,\lambda}(r)
+=2\|\gamma'(r)\|^2
+-2(\gamma(u)+\lambda n(u)-\gamma(r))\cdot\gamma''(r)
+>0,
+\]
+because the first term is bounded below by a positive constant and the second
+term is uniformly small.  Hence \(q_{u,\lambda}\) is strictly convex on the
+local segment, and its unique minimizer is \(r=u\).  Thus the nearest point is
+unique and equals \(\gamma(u)\) for \(\lambda>0\).
+Taking a Euclidean ball \(B_\varepsilon(s)\subset U\) gives the stated
+single-valued projection neighbourhood.
+
+Now let \(y_n=s+t_nw_n+o(t_n)\), \(w_n\to w\), and write
+\(y_n=\gamma(u_n)+\lambda_n n(u_n)\).  Set
+\(a_n=(u_n-z)/t_n\) and \(b_n=\lambda_n/t_n\).  Expanding the normal
+coordinates at \((z,0)\) gives
+\[
+w_n+o(1)
+=a_n(2,2z)+b_n(-z,1)+o(|a_n|+|b_n|).
+\]
+Thus \((a_n,b_n)\) is bounded and
+\[
+b_n\longrightarrow b:=\frac{w_2-zw_1}{1+z^2}.
+\]
+If eventually \(\lambda_n\le0\), then \(\Pi_F(y_n)=y_n\) and the scaled
+projection tends to \(w\).  This is exactly \(\Pi_{T_zF}(w)\) when \(b\le0\).
+If \(\lambda_n>0\) along a subsequence, then
+\(\Pi_F(y_n)=\gamma(u_n)\), and
+\[
+\frac{\gamma(u_n)-s}{t_n}
+\to w-b(-z,1).
+\]
+When \(b>0\) this is the Euclidean projection of \(w\) onto the boundary line
+\(h_2=zh_1\); when \(b=0\) it is again \(w\).  Hence every subsequential limit
+is
+\[
+\Pi_{T_zF}(w)
+=w-\frac{(w_2-zw_1)_+}{1+z^2}(-z,1),
+\]
+which proves \eqref{eq:local-projection-diagonal-derivative-main}.  The same
+expansion is uniform for \(w\) in compact sets, because the inverse map
+\(\Theta^{-1}\) is \(C^1\).  The stated random convergence follows from this
+uniform compact convergence and the continuous mapping theorem.
+\end{proof}
 
 \begin{lemma}[Projection and root splitting at the exchange diagonal]\label{lem:exchange-diagonal-projection-main}
 Let
@@ -2409,74 +2771,17 @@ N^{1/4}(z_{+,N}-z,\ z_{-,N}-z)
 -\sqrt{zH_1-H_2}
 \right).
 \]
-Thus the exchange diagonal has a half-space projection law in the symmetric
-coordinates and an \(N^{-1/4}\) unordered-root splitting scale.  It does not
-have an ordinary labelled root covariance matrix.
+Thus the exchange diagonal first has the half-space projection law in the
+symmetric coordinates; only after that projection theorem is applied do the
+projected roots acquire the \(N^{-1/4}\) unordered splitting scale.  It does
+not have an ordinary labelled root covariance matrix.
 \end{lemma}
 
 \begin{proof}
-Only a neighbourhood of \(s\) matters.  Choose \(\varepsilon>0\) so small that
-\(z-\varepsilon>0\) and \(z+\varepsilon<1\).  In a sufficiently small
-neighbourhood of \(s\), the root bounds \(0\le x,y\le1\) are inactive and
-\[
-F=\{(v_1,v_2): v_2\le v_1^2/4\}.
-\]
-Indeed, for roots in \((0,1)\) the image condition is exactly nonnegative
-discriminant, \(v_1^2-4v_2\ge0\), or \(v_2\le v_1^2/4\).
-
-For scaled local coordinates \(v=s+h/\sqrt N\), this local feasible condition
-becomes
-\[
-z^2+\frac{h_2}{\sqrt N}
-\le
-\frac{(2z+h_1/\sqrt N)^2}{4}
-=
-z^2+\frac{z h_1}{\sqrt N}+\frac{h_1^2}{4N},
-\]
-or
-\[
-h_2\le zh_1+\frac{h_1^2}{4\sqrt N}.
-\]
-Thus on every bounded set the scaled feasible sets
-\[
-F_N:=\{\sqrt N(v-s):v\in F\}
-\]
-converge to the closed half-space
-\[
-T_zF=\{h:h_2\le zh_1\}
-\]
-in the local Painleve--Kuratowski sense.  This is the concrete tangent-cone
-calculation; it is also the special case of the projection/delta-method
-asymptotics for constrained estimators and metric projections developed by
-Shapiro and by Geyer
-\cite{Shapiro1987MetricProjection,Geyer1994ConstrainedM,SelfLiang1987}.
-
-The projection is local at root-\(N\) scale.  Since \(s\in F\),
-\[
-\|\Pi_F(y_N)-y_N\|
-\le
-\|s-y_N\|
-=O_{\PP}(N^{-1/2}),
-\]
-and hence
-\[
-\sqrt N\,(\Pi_F(y_N)-s)=O_{\PP}(1).
-\]
-On events whose probabilities tend to one, both \(Z_N\) and the scaled
-projection lie in a fixed compact set.  On such a compact set the objectives
-\[
-h\mapsto \|Z_N-h\|^2,\qquad h\in F_N,
-\]
-converge to the half-space projection problem
-\[
-h\mapsto \|Z-h\|^2,\qquad h\in T_zF.
-\]
-Because projection onto a closed convex half-space is unique, the argmin
-convergence theorem for these local projection problems gives
-\[
-\sqrt N\,(\Pi_F(y_N)-s)\Rightarrow \Pi_{T_zF}(Z).
-\]
-Equivalently, using the normal \(a=(-z,1)\), this limiting projection is
+\Cref{lem:local-projection-exchange-diagonal-main} gives the asserted
+single-valued local projection and the half-space limit
+\eqref{eq:exchange-diagonal-projection-limit-main}.  Equivalently, using the
+normal \(a=(-z,1)\),
 \[
 \Pi_{T_zF}(w)
 =
@@ -2529,7 +2834,7 @@ From one finite stationary record, the empirical coordinates
 \((\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N})\) give a CLT and a
 complete-cycle covariance estimator for the symmetric-coordinate estimator
 \[
-\widehat s_N^{\rm raw}=\Phi(\widehat r_N)\approx(p+c,pc).
+\widehat s_N^{\rm raw}=\Phi(\widehat r_N)\approx(p+s,ps).
 \]
 The reported estimator is the feasible projection
 \(\widetilde s_N=\Pi_F(\widehat s_N^{\rm raw})\) onto the closed
@@ -2545,7 +2850,7 @@ and unordered roots; it does not assign a root to the recovery label.
 
 \begin{corollary}[Finite-record projected symmetric-coordinate inverse]\label{cor:finite_inverse_delta_boundary_main}
 Fix \(\Delta\tau>0\), and let the sampled boundary-reset record be stationary
-with survival factors \(p,c\in(0,1)\).  From one record
+with survival factors \(p,s\in(0,1)\).  From one record
 \((A_0,\ldots,A_{N-1})\), use the empirical inclusion vector
 \(\widehat r_N\) in \eqref{eq:empirical-three-inclusion-vector-main}.
 Then, for some positive semidefinite matrix \(\Sigma_r\),
@@ -2561,6 +2866,10 @@ Here \(\Sigma_r\) is the regenerative covariance matrix in
 matrix estimator
 \(\widehat\Sigma_{r,N}^{\mathrm{all}}\) in
 \eqref{eq:three-coordinate-batch-estimator-main} is consistent for it.
+The stationarity or burn-in alternative, complete-cycle count, observed-window
+condition, separated-batch construction, plug-in centering, and certified
+rank-adaptive covariance rule are exactly those collected in
+\Cref{thm:finite-record-inference-audit-main}.
 On the open set \(r_0>0\) and \(r_1/r_0\ne r_0\), put
 \[
 a(r)=\frac{r_1}{r_0},\qquad
@@ -2577,7 +2886,7 @@ s_1(r)=1-a(r)+\lambda(r),
 \qquad
 s_2(r)=r_0\bigl(1-\lambda(r)\bigr)-a(r)+\lambda(r).
 \end{equation}
-At the population value, \(s_1=p+c\) and \(s_2=pc\).  This is the finite-record
+At the population value, \(s_1=p+s\) and \(s_2=ps\).  This is the finite-record
 counterpart of Box~1 in symmetric coordinates: the finite-record estimator used
 for inference is the projected feasible symmetric-coordinate estimator, not a
 labelled rate estimator and not the raw value \(\Phi(\widehat r_N)\).  Let
@@ -2593,7 +2902,7 @@ F
 \right\}.
 \end{equation}
 This compact set is the closed symmetric-coordinate image of the two survival
-factors.  The strict sampled-counter model has \(0<p,c<1\).  Its
+factors.  The strict sampled-counter model has \(0<p,s<1\).  Its
 two-dimensional feasible interior is the separated-root part
 \[
 F^{\circ}_{\rm sep}
@@ -2780,7 +3089,7 @@ zero-rank case rather than a positive-dimensional ellipsoid; when \(k_s=0\),
 this occurs with probability tending to one.  The label-free root-set image of
 the certified symmetric-coordinate confidence set is
 \begin{equation}\label{eq:unordered-root-confidence-region-main}
-C_{\{p,c\},N}^{\operatorname{rank}}(1-\alpha)
+C_{\{p,s\},N}^{\operatorname{rank}}(1-\alpha)
 =
 \left\{
 \left\{
@@ -2790,8 +3099,8 @@ C_{\{p,c\},N}^{\operatorname{rank}}(1-\alpha)
 (s_1,s_2)\in\mathcal C_{s,N}^{\operatorname{rank}}(1-\alpha)
 \right\}.
 \end{equation}
-This is a feasible root-set image, not a labelled root covariance statement at
-the exchange diagonal.  The certified rank-adaptive statement is tied to the
+This is the feasible root-set image at the exchange diagonal.  The certified
+rank-adaptive statement is tied to the
 specific deterministic rule
 \eqref{eq:concrete-rank-tolerance-main} and the proved operator-norm rate
 \eqref{eq:rank-tolerance-condition-main}.  Alternative data-dependent
@@ -2828,7 +3137,7 @@ such a burn-in transfer.
 
 If \Cref{ass:separated-roots-main} holds, then
 \[
-\Delta_s:=s_1^2-4s_2=(p-c)^2\ge\eta^2>0,
+\Delta_s:=s_1^2-4s_2=(p-s)^2\ge\eta^2>0,
 \]
 and an ordinary ordered-root covariance calculation should be reported only
 after a feasibility-and-separation event has been fixed before inspecting the
@@ -2874,7 +3183,7 @@ D\Psi(\Phi(r))D\Phi(r)\Sigma_rD\Phi(r)^\top
 D\Psi(\Phi(r))^\top
 \right),
 \]
-where \(\{z_+,z_-\}=\{p,c\}\) and \(z_+>z_-\).  Applying
+where \(\{z_+,z_-\}=\{p,s\}\) and \(z_+>z_-\).  Applying
 \(-\Delta\tau^{-1}\log\) to these roots gives the corresponding unordered
 rate estimates.  The additional rate-map Jacobian is
 \[
@@ -2889,7 +3198,7 @@ substituting \(\widehat r_N\) and
 sandwiches.  They are consistent on every separated-root subregion with
 \(\Delta_s\ge\eta^2>0\).
 
-On the exchange diagonal \(p=c=z\in(0,1)\), the discriminant vanishes:
+On the exchange diagonal \(p=s=z\in(0,1)\), the discriminant vanishes:
 \(\Delta_s=0\), and the preceding interior first-order equivalence is not
 asserted.  The projected estimator is still canonical and feasible.
 \Cref{lem:exchange-diagonal-projection-main}, applied with
@@ -2903,7 +3212,7 @@ is generally not the unconstrained Gaussian \(Z\).  The map
 \((s_1,s_2)\mapsto\{z:z^2-s_1z+s_2=0\}\) is not differentiable in ordinary
 Euclidean root coordinates at this point, and the above root delta method does
 not apply.  Near the discriminant locus the root Jacobian contains powers of
-\(\Delta_s^{-1/2}=|p-c|^{-1}\), so finite-record root intervals are unstable
+\(\Delta_s^{-1/2}=|p-s|^{-1}\), so finite-record root intervals are unstable
 as the two survival factors approach one another.  The diagonal therefore has
 a boundary projection law in symmetric coordinates and a nonstandard
 \(N^{-1/4}\) root-splitting scale, not a labelled root/rate covariance matrix.
@@ -2936,7 +3245,7 @@ the first is stationarity with positive click density, and the second is
 \(a\ne\rho\) from \Cref{lem:stationary-main}.  Thus \(\Phi\) is \(C^1\) in a
 neighbourhood of the population inclusion vector, and the multivariate delta
 method gives the symmetric-coordinate limit.  The identities
-\(s_1=p+c\) and \(s_2=pc\) are exactly
+\(s_1=p+s\) and \(s_2=ps\) are exactly
 \eqref{eq:inverse-sum-main} and \eqref{eq:inverse-product-main}.
 Since \(\widehat r_N\to r\) in probability, the event that
 \(\widehat r_N\) lies in the open set has probability tending to one; the
@@ -3061,13 +3370,13 @@ population roots lie in \((0,1)\).  The unordered root region is then the
 algebraic image of that feasible symmetric-coordinate region.
 
 Under \Cref{ass:separated-roots-main}, the discriminant
-\(\Delta_s=(p-c)^2\) is bounded away from zero at the population point.  Hence
+\(\Delta_s=(p-s)^2\) is bounded away from zero at the population point.  Hence
 the ordered root map \(\Psi\) is \(C^1\) on a neighbourhood of \(\Phi(r)\), and
 with probability tending to one the empirical symmetric-coordinate vector lies
 in that neighbourhood.  A second application of the delta method gives the root
 limit.  The log-rate limit is the delta method applied once more to
 \(z\mapsto-\Delta\tau^{-1}\log z\); since \(z_\pm\in(0,1)\), the logarithm is
-smooth at both population roots.  If \(p=c\), then \(\Delta_s=0\) and
+smooth at both population roots.  If \(p=s\), then \(\Delta_s=0\) and
 \(\sqrt{s_1^2-4s_2}\) is not differentiable at the population point, so the
 ordinary Euclidean root-coordinate delta method has no valid derivative there.
 The explicit derivative for
@@ -3104,12 +3413,12 @@ only a Slutsky factor tending to one.
 \noindent\fbox{%
 \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
 \textbf{Box 3. Optional externally labelled rate chart.}
-After Box~1 has produced \(\{p,c\}\), an ordered rate chart is available only
+After Box~1 has produced \(\{p,s\}\), an ordered rate chart is available only
 if an external protocol identifies which survival factor is the recovery
-factor \(c=e^{-\kappa_{\mathrm r}\Delta\tau}\).  With that extra label, the
+factor \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\).  With that extra label, the
 other factor is read as \(p=e^{-\Gamma\Delta\tau}\) and the critical
 self-dual condition becomes the usual labelled equation
-\(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  Without that external
+\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\).  Without that external
 label the visible law remains invariant under
 \((\Gamma,\kappa_{\mathrm r})\leftrightarrow(\kappa_{\mathrm r},\Gamma)\), so
 all critical and inverse statements must be read on the quotient.  This box is
@@ -3122,14 +3431,14 @@ identifiability theorem from the visible record.
 The exact-\(1\)-dependence transition is the label-free self-dual level
 \(\lambda=0\).  Off the diagonal, this is equivalent to
 \begin{equation}\label{eq:self-dual-critical-main}
-p\log p=c\log c,
+p\log p=s\log s,
 \end{equation}
 and the continuous diagonal interpretation gives the single diagonal critical
-point \(p=c=e^{-1}\).  Off the diagonal, the two survival factors lie on
+point \(p=s=e^{-1}\).  Off the diagonal, the two survival factors lie on
 opposite sides of \(e^{-1}\).  The following labelled reading is exactly the
 optional chart in Box~3: if
 \(\kappa_{\mathrm r}\) is externally known, this reduces to the unique labelled
-rate \(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) of
+rate \(\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) of
 \Cref{lem:critical-rate-main}.  This labelled notation is meaningful only after
 detector calibration, hardware recovery measurement, or another external
 experimental protocol has supplied the recovery label.  If
@@ -3144,19 +3453,19 @@ be read on the quotient by
 By \Cref{lem:one-dep-criterion-main}, exact \(1\)-dependence occurs exactly
 when \(\lambda_{\mathrm{hid}}=0\).  \Cref{thm:toeplitz_image_inverse_duality} identifies the visible
 \(\lambda\) with \(\lambda_{\mathrm{hid}}\), so the condition is label-free.
-For \(p\ne c\), the first formula in
+For \(p\ne s\), the first formula in
 \eqref{eq:symmetric-forward-coordinates-main} gives
-\(\lambda=0\) if and only if \(p\log p=c\log c\).  On the diagonal,
+\(\lambda=0\) if and only if \(p\log p=s\log s\).  On the diagonal,
 \eqref{eq:symmetric-forward-diagonal-main} gives
 \(\lambda=p(1+\log p)\), hence the unique diagonal critical point is
 \(p=e^{-1}\).
 
 The function \(f(x)=x\log x\) decreases on \((0,e^{-1})\), increases on
 \((e^{-1},1)\), and has its unique minimum at \(e^{-1}\).  Therefore two
-distinct solutions of \(f(p)=f(c)\) must lie on opposite sides of \(e^{-1}\).
-When the recovery rate is externally labelled, \(c=e^{-\kappa_{\mathrm r}\Delta\tau}\)
+distinct solutions of \(f(p)=f(s)\) must lie on opposite sides of \(e^{-1}\).
+When the recovery rate is externally labelled, \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\)
 is fixed and \Cref{lem:critical-rate-main} supplies the unique labelled
-attempt rate \(\Gamma_c\).  Without that external label, the visible inverse
+attempt rate \(\Gamma_{\mathrm{crit}}\).  Without that external label, the visible inverse
 recovers only the unordered pair of survival factors, and therefore only the
 unordered pair of critical rates.
 \end{proof}
@@ -3184,14 +3493,14 @@ instead stated in
 
 \begin{proof}
 The labelled kernels in \eqref{eq:t0-t1-main} contain the entries
-\(p=e^{-\Gamma\Delta\tau}\), \(c=e^{-\kappa_{\mathrm r}\Delta\tau}\), and the
+\(p=e^{-\Gamma\Delta\tau}\), \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\), and the
 refractory-to-ready no-click probability \(b\).  If
-\(\Gamma\ne\kappa_{\mathrm r}\), then \(p\ne c\), so exchanging the two rates
+\(\Gamma\ne\kappa_{\mathrm r}\), then \(p\ne s\), so exchanging the two rates
 interchanges the two survival factors and changes at least the \((R,R)\) and
 \((D,D)\) entries of \(T_0\).  Hence the hidden labelled kernels are different.
 
 By \Cref{thm:toeplitz_image_inverse_duality}, however, the full visible law
-depends only on the unordered pair \(\{p,c\}\).  The exchanged HMM therefore has
+depends only on the unordered pair \(\{p,s\}\).  The exchanged HMM therefore has
 the same finite inclusion probabilities, and by
 \eqref{eq:finite-window-count-generating-main} and
 \eqref{eq:finite-word-inclusion-exclusion-main}
@@ -3697,6 +4006,10 @@ Fix one detector setting
 in the sampled one-recovery-opportunity boundary-reset kernels
 \eqref{eq:t0-t1-main}, and let
 $(A_j)_{j\in\mathbb Z}$ be the stationary visible record for this fixed setting.
+This theorem is the lag-two \(q=1\) specialization of the finite-record
+inference theorem in \Cref{thm:finite-record-inference-audit-main}; the
+present statement keeps the explicit sampled-law mean, variance, and
+studentized interval formulas.
 If the physical record is started from an
 arbitrary hidden distribution rather than the stationary hidden law, the
 post-burn-in version below applies after discarding \(L_N\to\infty\) samples
@@ -3882,7 +4195,7 @@ centering step.
 Combined with \Cref{thm:recovery-main}, the mean being estimated is zero if and
 only if
 \[
-\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
+\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau),
 \]
 while away from that rate its sign is the sign prescribed by the hidden-mode
 covariance phase in \Cref{thm:recovery-main}. Thus a one-record Wald diagnostic
@@ -3922,8 +4235,8 @@ process is stationary, its observed click times are regeneration times by
 \Cref{lem:renewal-gap-main}, and the zero-run law is exactly
 $(\pi_g)_{g\ge0}$. Its tail is exponential. Indeed, when
 $\kappa_{\mathrm r}\neq\Gamma$, \eqref{eq:gap-closed-main} and
-$0<p,c<1$ bound $\PP(G=k)$ by a constant times
-$\max\{p,c\}^k$; in the equal-rate case
+$0<p,s<1$ bound $\PP(G=k)$ by a constant times
+$\max\{p,s\}^k$; in the equal-rate case
 \eqref{eq:equal-rate-survival-hazard-main} gives
 $\PP(G\ge k)=p^k(1+\Gamma\Delta\tau\,k)$, which is again exponentially bounded.
 
@@ -3962,7 +4275,7 @@ variance estimator under the sole batch assumptions \(b_N\to\infty\) and
 \(b_N/N\to0\).  \Cref{lem:boundary-reset-tau-positive-main} supplies the
 strict positivity needed for the studentized limit. Finally, the equivalence
 $\gamma_2=0\iff\lambda_{\mathrm{hid}}=0\iff
-\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and the sign phase away from the
+\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$ and the sign phase away from the
 critical rate are precisely the covariance conclusions of
 \Cref{thm:recovery-main}. This proves the claimed fixed-setting application of
 the generic cycle CLT to the sampled boundary-reset law.
@@ -4026,31 +4339,31 @@ finite quantity \eqref{eq:tau2-explicit-main}. The needed inputs are only
 \]
 and all are computable from the explicit zero-run law of
 \Cref{lem:renewal-gap-main}. For $\kappa_{\mathrm r}\neq\Gamma$, with
-$p=e^{-\Gamma\Delta\tau}$, $c=e^{-\kappa_{\mathrm r}\Delta\tau}$, and
+$p=e^{-\Gamma\Delta\tau}$, $s=e^{-\kappa_{\mathrm r}\Delta\tau}$, and
 $q=1-p$,
 \[
 \pi_0=
-\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-c)}
+\frac{\kappa_{\mathrm r}(1-p)-\Gamma(1-s)}
      {\kappa_{\mathrm r}-\Gamma},
 \qquad
 \pi_1=
-\frac{\kappa_{\mathrm r}(1-p)p-\Gamma(1-c)c}
+\frac{\kappa_{\mathrm r}(1-p)p-\Gamma(1-s)s}
      {\kappa_{\mathrm r}-\Gamma},
 \]
 \[
 m_1=
-\frac{\kappa_{\mathrm r}p/(1-p)-\Gamma c/(1-c)}
+\frac{\kappa_{\mathrm r}p/(1-p)-\Gamma s/(1-s)}
      {\kappa_{\mathrm r}-\Gamma},
 \qquad
 m_2=
-\frac{\kappa_{\mathrm r}p(1+p)/(1-p)^2-\Gamma c(1+c)/(1-c)^2}
+\frac{\kappa_{\mathrm r}p(1+p)/(1-p)^2-\Gamma s(1+s)/(1-s)^2}
      {\kappa_{\mathrm r}-\Gamma}.
 \]
 The remaining quantities are
 \[
-b=\frac{\kappa_{\mathrm r}(p-c)}{\kappa_{\mathrm r}-\Gamma},
+b=\frac{\kappa_{\mathrm r}(p-s)}{\kappa_{\mathrm r}-\Gamma},
 \qquad
-\rho=\frac{q(1-c)}{q+b},
+\rho=\frac{q(1-s)}{q+b},
 \qquad
 \lambda_{\mathrm{hid}}=p-b,
 \]
@@ -4085,8 +4398,8 @@ with $\mu_2,\alpha,\beta$ then obtained from the same displayed formulas.
 
 These identities give a finite interval certificate for any fixed detector
 setting. Use outward-rounded interval arithmetic for the input box
-$I_\Gamma\times I_\kappa\times I_{\Delta\tau}\subset(0,\infty)^3$. If
-$0\notin I_\kappa-I_\Gamma$, evaluate the distinct-rate formulas above with
+$I_\Gamma\times I_{\kappa_{\mathrm r}}\times I_{\Delta\tau}\subset(0,\infty)^3$. If
+$0\notin I_{\kappa_{\mathrm r}}-I_\Gamma$, evaluate the distinct-rate formulas above with
 interval operations and the interval exponential, obtaining interval enclosures
 \[
 I_\rho,\ I_{\mu_2},\ I_{\pi_0},\ I_{\pi_1},\ I_{m_1},\ I_{m_2},
@@ -4150,22 +4463,22 @@ studentized interval, and consistency statements below are then unchanged by
 the stationary law for the fixed detector setting.
 Moreover:
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
-\item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda_{\mathrm{hid}}$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+\item The sign of $\gamma_2=\operatorname{Cov}(A_0,A_2)$ is the opposite of the sign of $\lambda_{\mathrm{hid}}$, and $\gamma_2=0$ if and only if $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$.
 \item The zero of the fixed-design population diagnostic is simple as a
 function of the attempt rate \(\Gamma\) with
 \((\kappa_{\mathrm r},\Delta\tau)\) held fixed:
 \[
 \frac{\partial}{\partial\Gamma}
-\lambda_{\mathrm{hid}}(\Gamma_c)\neq0,
+\lambda_{\mathrm{hid}}(\Gamma_{\mathrm{crit}})\neq0,
 \qquad
 \frac{\partial}{\partial\Gamma}
-\gamma_2(\Gamma_c)
+\gamma_2(\Gamma_{\mathrm{crit}})
 =
 \rho_c(a_c-\rho_c)
-\frac{\partial}{\partial\Gamma}\lambda_{\mathrm{hid}}(\Gamma_c)
+\frac{\partial}{\partial\Gamma}\lambda_{\mathrm{hid}}(\Gamma_{\mathrm{crit}})
 \neq0 .
 \]
-Here \(\rho_c=\rho(\Gamma_c)>0\), \(a_c=a(\Gamma_c)\), and
+Here \(\rho_c=\rho(\Gamma_{\mathrm{crit}})>0\), \(a_c=a(\Gamma_{\mathrm{crit}})\), and
 \(a_c-\rho_c<0\).  This is a population derivative inside the single
 sampled-counter family.
 \item The sampled-law positivity lemma
@@ -4211,13 +4524,13 @@ in the standard local-linear scaling.
 \end{proposition}
 
 \begin{proof}
-The click times are regeneration times by Lemma~\ref{lem:renewal-gap-main}, and the zero-run law has exponential tails because it is a finite linear combination of $p^k$ and $c^k$ with $0<p,c<1$; the equal-rate limit has the same exponential tail with a polynomial prefactor. Standard renewal-reward strong laws therefore give almost-sure convergence of fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block counting statistics \cite{Asmussen2003}. For $\widehat h_k$, the completed gaps are i.i.d.; since $\PP(G\ge k)>0$, the denominator count diverges almost surely.
+The click times are regeneration times by Lemma~\ref{lem:renewal-gap-main}, and the zero-run law has exponential tails because it is a finite linear combination of $p^k$ and $s^k$ with $0<p,s<1$; the equal-rate limit has the same exponential tail with a polynomial prefactor. Standard renewal-reward strong laws therefore give almost-sure convergence of fixed-gap empirical hazards, fixed-lag covariance estimators, and fixed-block counting statistics \cite{Asmussen2003}. For $\widehat h_k$, the completed gaps are i.i.d.; since $\PP(G\ge k)>0$, the denominator count diverges almost surely.
 
 For the sign statement, \Cref{thm:recovery-main} gives
 \[
 \gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}} .
 \]
-Lemma~\ref{lem:stationary-main} gives $\rho>0$ and $a-\rho<0$, so $\gamma_2$ has the opposite sign from $\lambda_{\mathrm{hid}}$. Lemma~\ref{lem:critical-rate-main} says that $\lambda_{\mathrm{hid}}$ has the unique zero $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and changes sign there, proving (i).
+Lemma~\ref{lem:stationary-main} gives $\rho>0$ and $a-\rho<0$, so $\gamma_2$ has the opposite sign from $\lambda_{\mathrm{hid}}$. Lemma~\ref{lem:critical-rate-main} says that $\lambda_{\mathrm{hid}}$ has the unique zero $\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$ and changes sign there, proving (i).
 
 For (ii), write $s_0=\kappa_{\mathrm r}\Delta\tau$ and
 $x=\Gamma/\kappa_{\mathrm r}$. Away from $x=1$,
@@ -4226,17 +4539,17 @@ $x=\Gamma/\kappa_{\mathrm r}$. Away from $x=1$,
 \qquad
 H_{s_0}(x)=\log x-s_0(x-1).
 \]
-If $s_0\neq1$, then the critical point $x_c=\Gamma_c/\kappa_{\mathrm r}$ is not $1$, and it cannot satisfy $H_{s_0}'(x_c)=0$: otherwise $x_c=1/s_0$, but then
+If $s_0\neq1$, then the critical point $x_c=\Gamma_{\mathrm{crit}}/\kappa_{\mathrm r}$ is not $1$, and it cannot satisfy $H_{s_0}'(x_c)=0$: otherwise $x_c=1/s_0$, but then
 \[
 H_{s_0}(1/s_0)=s_0-1-\log s_0>0,
 \]
 contradicting $H_{s_0}(x_c)=0$. Hence $H_{s_0}'(x_c)\neq0$, so differentiation of the displayed quotient gives
 \[
-\lambda_{\mathrm{hid}}'(\Gamma_c)=
+\lambda_{\mathrm{hid}}'(\Gamma_{\mathrm{crit}})=
 -\frac{e^{-s_0}H_{s_0}'(x_c)}{\kappa_{\mathrm r}(1-x_c)}
 \neq0.
 \]
-If $s_0=1$, then $\Gamma_c=\kappa_{\mathrm r}$. Here
+If $s_0=1$, then $\Gamma_{\mathrm{crit}}=\kappa_{\mathrm r}$. Here
 $s_0=\kappa_{\mathrm r}\Delta\tau$ is held fixed while $\Gamma$ varies, so this
 derivative is not the derivative of the diagonal equal-rate family
 $\Gamma\mapsto e^{-\Gamma\Delta\tau}(1-\Gamma\Delta\tau)$. Instead one must
@@ -4266,26 +4579,26 @@ Since $1-x=-\delta$, we obtain
 \]
 so
 \[
-\lambda_{\mathrm{hid}}'(\Gamma_c)
+\lambda_{\mathrm{hid}}'(\Gamma_{\mathrm{crit}})
 =-\frac{e^{-1}}{2\kappa_{\mathrm r}}\neq0.
 \]
 Thus, when $s_0=1$ and $\Gamma$ increases through
-$\Gamma_c=\kappa_{\mathrm r}$, the hidden mode decreases through zero:
-$\lambda_{\mathrm{hid}}>0$ for $\Gamma<\Gamma_c$ and
-$\lambda_{\mathrm{hid}}<0$ for $\Gamma>\Gamma_c$. Since
+$\Gamma_{\mathrm{crit}}=\kappa_{\mathrm r}$, the hidden mode decreases through zero:
+$\lambda_{\mathrm{hid}}>0$ for $\Gamma<\Gamma_{\mathrm{crit}}$ and
+$\lambda_{\mathrm{hid}}<0$ for $\Gamma>\Gamma_{\mathrm{crit}}$. Since
 $\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}$ with $\rho(a-\rho)<0$, the
 lag-two covariance increases through zero instead:
-$\gamma_2<0$ for $\Gamma<\Gamma_c$ and $\gamma_2>0$ for $\Gamma>\Gamma_c$.
-Therefore $\lambda_{\mathrm{hid}}$ has a simple zero at $\Gamma_c$ for every
+$\gamma_2<0$ for $\Gamma<\Gamma_{\mathrm{crit}}$ and $\gamma_2>0$ for $\Gamma>\Gamma_{\mathrm{crit}}$.
+Therefore $\lambda_{\mathrm{hid}}$ has a simple zero at $\Gamma_{\mathrm{crit}}$ for every
 fixed $(\kappa_{\mathrm r},\Delta\tau)$.
 The derivative of
 \(\gamma_2(\Gamma)=\rho(\Gamma)(a(\Gamma)-\rho(\Gamma))
-\lambda_{\mathrm{hid}}(\Gamma)\) at \(\Gamma_c\) is therefore just the
-prefactor times \(\lambda_{\mathrm{hid}}'(\Gamma_c)\), because the derivative
+\lambda_{\mathrm{hid}}(\Gamma)\) at \(\Gamma_{\mathrm{crit}}\) is therefore just the
+prefactor times \(\lambda_{\mathrm{hid}}'(\Gamma_{\mathrm{crit}})\), because the derivative
 of the prefactor is multiplied by
-\(\lambda_{\mathrm{hid}}(\Gamma_c)=0\).  Since
+\(\lambda_{\mathrm{hid}}(\Gamma_{\mathrm{crit}})=0\).  Since
 \(\rho_c>0\), \(a_c-\rho_c<0\), and
-\(\lambda_{\mathrm{hid}}'(\Gamma_c)\neq0\), this derivative is nonzero.  This
+\(\lambda_{\mathrm{hid}}'(\Gamma_{\mathrm{crit}})\neq0\), this derivative is nonzero.  This
 proves the fixed-family population simplicity statement in part~(ii).
 Item (iii) is the fixed-setting studentized confidence interval from
 \Cref{thm:sampled-finite-record-main}.  The explicit positivity check
@@ -4350,7 +4663,7 @@ data model.
 \item The visible-law quotient inverse is a separate record-side calculation:
 \Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main}
 give a regenerative covariance estimator and delta method for the unordered
-survival factors \(\{p,c\}\), off the diagonal \(p=c\).  That statement still
+survival factors \(\{p,s\}\), off the diagonal \(p=s\).  That statement still
 does not label one root as the attempt rate.
 \end{enumerate}
 \end{theorem}
@@ -4381,9 +4694,8 @@ The same data should also pass two consistency checks: the empirical hazards
 $\widehat h_k$ should increase over the reliable range of observed gaps, and
 the lag profile should be compatible with the one-mode form
 $\widehat\gamma_n\approx \widehat\gamma_1\widehat\lambda_{\mathrm{hid}}^{\,n-1}$ away from
-sampling noise. These checks are not additional response-level equations; they test
-whether the sampled boundary-reset recovery readout model is the right
-effective description of the observed record.
+sampling noise. These checks test whether the sampled boundary-reset recovery
+readout model is the right effective description of the observed record.
 
 \Cref{thm:sampled-finite-record-main} supplies the lag-two variance estimate,
 and \Cref{lem:boundary-reset-tau-positive-main} supplies the sampled-law
@@ -4398,7 +4710,7 @@ finite-sample test is different because the benchmark is a Markov law on a
 restricted support.
 
 \begin{proposition}[Exact-clock finite-record diagnostic]\label{prop:ideal-diagnostics-main}
-Assume the ideal one-step blanking model of Proposition~\ref{prop:ideal-main}, with transition parameter $p\in(0,1)$ and $q=1-p$. Then
+Assume the ideal one-step blanking model of Lemma~\ref{prop:ideal-main}, with transition parameter $p\in(0,1)$ and $q=1-p$. Then
 \[
 \PP(A_j=1,A_{j+1}=1)=0\qquad(j\in\mathbb Z).
 \]

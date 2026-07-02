@@ -60,7 +60,7 @@
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\Var}{\mathrm{Var}}
 
-\title{Classical sampled HMM renewal laws for binary counter records: exact dependence, principal-minor encoding, and fixed-record inference}
+\title{Classical sampled HMM renewal laws for binary counter records: exact dependence, renewal LU determinant representatives, and fixed-record inference}
 \author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
 \and
 Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
@@ -73,11 +73,13 @@ Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{ma
 
 \noindent\fbox{%
 \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
-\textbf{Theorem boundary.}
-All theorems in this paper are theorems about a classical sampled hidden
-Markov renewal law.  The inputs are the labelled stochastic kernels
+\textbf{Global theorem boundary.}
+This boxed statement is the paper's scope boundary; individual theorem
+statements below are to be read under it and do not repeat it.  The main
+theorems are theorems about a classical sampled hidden Markov renewal law.
+The inputs are the labelled stochastic kernels
 \[
-T_0=\begin{pmatrix}p&0\\ b&c\end{pmatrix},
+T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
 \qquad
 T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix},
 \]
@@ -103,13 +105,14 @@ recovery rate \(\kappa_{\mathrm r}\): its zero-run law has full support on
 covariance has the hidden-eigenvalue tail
 \(\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\).
 The visible record is exact \(1\)-dependent exactly at the unique rate
-\(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\) where
+\(\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) where
 \(\lambda_{\mathrm{hid}}=0\).
 
-A stationary-renewal lemma gives a renewal principal-minor encoding for the
-click set, and the boundary-reset law specializes it to an explicit
-Toeplitz matrix with
-\(\det K_B=\rho\prod_r u_{i_{r+1}-i_r}\). The same principal-minor record law has a quotient inverse:
+A stationary-renewal lemma first constructs click-set probabilities from
+renewal products and finite inclusion--exclusion.  The resulting finite
+algebra can then be written as a renewal LU determinant representative, and
+the boundary-reset law specializes it to an explicit Toeplitz matrix with
+\(\det K_B=\rho\prod_r u_{i_{r+1}-i_r}\). The same renewal record law has a quotient inverse:
 three inclusion probabilities recover the symmetric coordinates, and hence at
 the population level the unordered survival-factor pair
 \(\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}\), equivalently
@@ -123,7 +126,7 @@ part then proves a fixed-setting lag-two covariance CLT and a complete-cycle
 variance estimator for \(\gamma_2\) in this sampled-counter law.
 \end{abstract}
 
-\noindent\textbf{Keywords:} classical sampled HMM, renewal process, exact \(1\)-dependence, renewal principal-minor encoding, finite-record diagnostics
+\noindent\textbf{Keywords:} classical sampled HMM, renewal process, exact \(1\)-dependence, renewal LU determinant representative, finite-record diagnostics
 
 \section{Introduction}
 
@@ -134,29 +137,25 @@ process has grammar, waiting-time, dependence, covariance, and counting-noise
 observables that are invisible in a rate-only summary. The paper-level object
 is therefore the sampled record itself: one stipulated interval instrument, its
 stationary binary law, its dependence threshold, its renewal-product
-principal-minor encoding, its quotient inverse, and its fixed-record lag-two
+renewal LU determinant representative, its quotient inverse, and its fixed-record lag-two
 covariance estimator.
 
 Transition rates, detailed balance, and Tolman redshift remain the standard
 observables used to characterize Unruh and Hawking thermality
-\cite{Tolman1930,TolmanEhrenfest1930,Unruh1976,DeWitt1979,BirDav1982,Takagi1986,CrispinoHiguchiMatsas2008,LoukoSatz2006,LoukoSatz2008},
-but they are not inputs to the sampled-counter theorem. They enter only in the
-external calibration section, after the classical record law has already
-selected scalar target rates.
+\cite{Tolman1930,TolmanEhrenfest1930,Unruh1976,DeWitt1979,BirDav1982,Takagi1986,CrispinoHiguchiMatsas2008,LoukoSatz2006,LoukoSatz2008}.
+The optional calibration section evaluates the record-selected scalar target
+rates against one supplied response profile.
 
 The main text below is organized as four record-side theorem blocks, followed by
 the theorem-by-theorem comparison in \Cref{sec:theorem-led-comparison}.
 
-\subsection{Main theorem and scope boundary}\label{subsec:main-theorem-boundary}\label{subsec:scope-nonclaims}
+\subsection{Main record theorem}\label{subsec:main-theorem-boundary}\label{subsec:scope-nonclaims}
 
-The theorem boundary is part of the statement of the paper and will not be
-repeated inside each theorem block.  The main theorem is a theorem about the
-following two labelled stochastic kernels and their visible binary process.
 For fixed
 \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and the sampled
 boundary-reset kernels
 \[
-T_0=\begin{pmatrix}p&0\\ b&c\end{pmatrix},
+T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
 \qquad
 T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix},
 \]
@@ -168,24 +167,10 @@ increasing hazard \(h_k\), covariance
 \]
 and exact \(1\)-dependence if and only if
 \(\lambda_{\mathrm{hid}}=0\), equivalently
-\(\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\).  This is the main record
-theorem.  Every renewal, covariance, finite-principal-minor, inverse, and
+\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\).  This is the main record
+theorem.  Every renewal, covariance, renewal-LU-determinant, inverse, and
 fixed-record CLT statement in the main theorem chain is a consequence of
 \(T_0,T_1\) and the associated stationary hidden Markov law.
-
-Second, \(\Gamma\) is a record-side parameter until a separate calibration
-supplies one positive \(C^1\) response profile and an external
-\(\kappa_{\mathrm r}\) label.  Only then may the scalar record condition be
-translated into
-\[
-\Gamma=R_\Omega(x),\qquad
-R_\Omega(x)=\Gamma_c(\kappa_{\mathrm r},\Delta\tau).
-\]
-The regular-level-set theorem then supplies only a local codimension-one
-hypersurface at regular points of that supplied function.  The theorem chain
-does not use any microscopic detector dynamics, labelled hidden-kernel
-recovery, scan-root design, response-level inference, or determinant-kernel
-admissibility theorem.
 
 The submitted theorem chain has four main blocks, listed in
 \Cref{tab:four-main-blocks}.  Lemmas, corollaries, and proof devices are
@@ -203,7 +188,7 @@ intra-bin comparison.
 \begin{assumption}[Killed-leakage sampled-boundary regime]\label{ass:killed-leakage-boundary-reset-main}
 The record theorem chain is stated for the sampled boundary-reset kernels
 \[
-T_0=\begin{pmatrix}p&0\\ b&c\end{pmatrix},
+T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
 \qquad
 T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix}.
 \]
@@ -213,15 +198,17 @@ the next sampling boundary:
 T_1(R,R)=T_1(D,R)=0 .
 \]
 The positive post-click return-to-ready leakage present under true continuous
-intra-bin recovery is therefore killed by the sampled boundary convention.  This
-is a theorem-level model assumption, not a consequence of a continuous detector
-evolution.
+intra-bin recovery is therefore killed by the sampled boundary convention.
+Thus every stationary, spectral, Fano-factor, inverse, and CLT theorem below is
+about these sampled kernels, while the continuous intra-bin comparator is used
+only for the fixed-cylinder estimate isolated in
+\Cref{app:fixed-window-comparator}.
 \end{assumption}
 
 \subsection{Four theorem blocks}\label{subsec:four-theorem-blocks}
 
-The single scope boundary in \Cref{subsec:scope-nonclaims} applies to all four
-blocks in \Cref{tab:four-main-blocks}.
+The four blocks in \Cref{tab:four-main-blocks} are the theorem-level
+contributions of the paper.
 
 \begin{table}[H]
 \centering
@@ -243,20 +230,22 @@ covariance tail for the classical sampled HMM. \\
 II. Exact \(1\)-dependence and diagnostics &
 \Cref{lem:one-dep-criterion-main,prop:spectrum-main,prop:finite-diagnostics-main} &
 Identifies the unique hidden-eigenvalue zero
-\(\Gamma_c(\kappa_{\mathrm r},\Delta\tau)\), its covariance/Fano signatures,
+\(\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\), its covariance/Fano signatures,
 and the fixed-record diagnostics. \\
 \addlinespace
-III. Renewal principal-minor encoding and inverse &
+III. Renewal LU determinant representative and inverse &
 \Cref{prop:renewal-principal-minor-lu-main,thm:toeplitz_image_inverse_duality} &
 Uses one finite LU identity as algebraic bookkeeping for renewal inclusion
-products and proves the quotient inverse.  The finite matrices are
-representatives of already constructed inclusion products, while the inverse
+products and proves the quotient inverse.  The finite matrices are renewal LU
+determinant representatives of already constructed inclusion products, while the inverse
 recovers only the unordered attempt/recovery pair. \\
 \addlinespace
 IV. Fixed-record CLT &
-\Cref{thm:sampled-finite-record-main,thm:one-record-estimates-main} &
-Proves a self-contained fixed-setting lag-two covariance CLT and
-all-complete-cycle variance estimator for one stationary record. \\
+\Cref{thm:finite-record-inference-audit-main,thm:sampled-finite-record-main,thm:one-record-estimates-main} &
+Collects the stationarity/burn-in, exponential-tail, observed-window,
+all-complete-cycle batching, plug-in centering, and rank-adaptive covariance
+assumptions, then proves the fixed-setting lag-two covariance CLT and
+one-record variance estimator. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -306,7 +295,7 @@ rate $\Gamma$.
 It is useful to keep the record construction in two logically separate steps.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.2em]
 \item A counter model determines a stationary word law and a record-level benchmark: the Parry law in the ideal case, exact $1$-dependence in the sampled boundary-reset case.
-\item For the two models studied here, that benchmark is first equivalent to a scalar internal counter-rate condition, respectively $\Gamma\Delta\tau=\log\varphi$ and $\Gamma=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.  The memory condition is labelled only after the recovery rate has been independently identified: the inverse theorem gives
+\item For the two models studied here, that benchmark is first equivalent to a scalar internal counter-rate condition, respectively $\Gamma\Delta\tau=\log\varphi$ and $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$.  The memory condition is labelled only after the recovery rate has been independently identified: the inverse theorem gives
 \[
 \mu_{\Gamma,\kappa_{\mathrm r}}=\mu_{\kappa_{\mathrm r},\Gamma}
 \quad\text{and hence only}\quad
@@ -318,8 +307,8 @@ $(\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)$.
 After these record statements are complete, the optional calibration note may
 evaluate a supplied scalar profile \(R_\Omega\) at the selected constants.
 
-The two detector regimes studied in this work have intrinsically different
-record thresholds. The ideal model imposes a hard symbolic grammar, so its
+The two counter readout regimes studied in this work have intrinsically
+different record thresholds. The ideal model imposes a hard symbolic grammar, so its
 distinguished value is the entropy benchmark on the golden-mean shift. The
 sampled one-recovery-opportunity boundary-reset model instead produces a
 full-support renewal law, so its distinguished value is the exact
@@ -328,14 +317,14 @@ full-support renewal law, so its distinguished value is the exact
 \begin{table}[H]
 \centering
 \small
-\caption{Record-level observables that distinguish the two detector regimes.}
+\caption{Record-level observables that distinguish the two counter readout regimes.}
 \label{tab:signatures}
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth}}
 \toprule
 Regime & Output law & Distinguished threshold & Finite-record signature \\
 \midrule
 Ideal dead time & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
-Sampled one-recovery-opportunity boundary reset & Renewal process with infinite symbolic memory; zero-run law supported on all $k\ge0$, hence every finite binary word is allowed; renewal principal-minor encoding for the click set & With independently labelled \(\kappa_{\mathrm r}\), $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$; otherwise only the quotient under \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\) is identified & Exact finite-window count formula at threshold; covariance/Fano laws as cumulant signatures \\
+Sampled one-recovery-opportunity boundary reset & Renewal process with infinite symbolic memory; zero-run law supported on all $k\ge0$, hence every finite binary word is allowed; renewal LU determinant representative for the click set & With independently labelled \(\kappa_{\mathrm r}\), $\Gamma_+=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$; otherwise only the quotient under \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\) is identified & Exact finite-window count formula at threshold; covariance/Fano laws as cumulant signatures \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -359,27 +348,27 @@ sampled counter.  Bare \(\Gamma\) is a record-side parameter until the separate
 calibration closure \(\Gamma=R_\Omega(x)=\Gamma_+(x,\Omega)\) is imposed. \\
 \addlinespace[0.25ex]
 Sampled-model local quantities &
-\(p,\ q,\ c,\ a,\ b\) &
+\(p,\ q,\ s,\ a,\ b\) &
 One-bin quantities local to the hidden Markov model:
 \(p=e^{-\Gamma\Delta\tau}\), \(q=1-p\),
-\(c=e^{-\kappa_{\mathrm r}\Delta\tau}\), \(a,b\) are the
+\(s=e^{-\kappa_{\mathrm r}\Delta\tau}\), \(a,b\) are the
 one-recovery-opportunity click/no-click probabilities.  The hidden transfer
 eigenvalue is defined only where it is used in \Cref{sec:records}. \\
 \addlinespace[0.25ex]
 Palm-renewal quantities &
 \(\varXi,\ \rho,\ u_n,\ g_k,\ S_k,\ h_k\) &
-Click set, stationary click density, Palm renewal mass
+Click set, stationary click density, scalar Palm renewal mass
 \(u_n=\PP(n\in\varXi\mid0\in\varXi)\), zero-run probability, zero-run survival
-tail, and zero-run hazard.  Here \(u_n\) is not a vector, an eigenfunction, or a
-finite-kernel entry; it is a scalar Palm conditional probability. \\
+tail, and zero-run hazard. \\
 \addlinespace[0.25ex]
-Renewal principal-minor encoding &
+Renewal LU determinant representative &
 \(K_u,\ K_\Gamma,\ d\) &
-Finite matrices whose principal minors encode inclusion
-probabilities.  \(K_u\) is the general renewal matrix, \(K_\Gamma\) its
-boundary-reset Toeplitz specialization, and \(d=\rho-a\).  Critical
-finite-principal-minor witnesses are introduced locally at the critical
-theorem.  Their non-DPP boundary is fixed in
+Finite matrices whose determinants represent renewal inclusion products after
+those probabilities have already been constructed by renewal conditioning and
+finite inclusion--exclusion.  \(K_u\) is the general renewal matrix,
+\(K_\Gamma\) its boundary-reset Toeplitz specialization, and \(d=\rho-a\).
+Critical renewal LU witnesses are introduced locally at the critical theorem.
+Their non-DPP boundary is fixed in
 \Cref{subsec:scope-nonclaims,rem:finite-determinant-language-main}. \\
 \bottomrule
 \end{tabular}
@@ -389,7 +378,7 @@ theorem.  Their non-DPP boundary is fixed in
 Fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and the sampled
 boundary-reset kernels
 \[
-T_0=\begin{pmatrix}p&0\\ b&c\end{pmatrix},
+T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
 \qquad
 T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix}.
 \]
@@ -412,7 +401,7 @@ classical sampled counter law produces a full-support renewal record with
 strictly increasing hazard, suppressed adjacent-click conditional probability,
 classical sub-Poisson count noise, a unique exact \(1\)-dependence threshold at
 the zero of the hidden eigenmode, a Toeplitz renewal
-finite-principal-minor encoding, a closed Fano law, and a three-inclusion inverse with
+renewal LU determinant representative, a closed Fano law, and a three-inclusion inverse with
 \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange duality. The ideal Parry
 point remains the benchmark comparison rather than the main theorem.
 
@@ -423,143 +412,236 @@ memory-inference results, and UDW or AQFT detector theorems.
 
 \section{Theorem-Block Comparison}\label{sec:theorem-led-comparison}
 
-\Cref{tab:main-jpa-comparison} is organized theorem by theorem.  Each row names
-one proved statement of the present paper, the closest recent comparison
-theorem family, and the precise difference in hypotheses or conclusion.  The
-comparators are deliberately recent where the subject has moved recently:
-weak-memory reduction for discrete dynamics, model-free trajectory-memory
-inference, finite-kernel determinantal-process admissibility and sampling,
-renewal-index CLTs, photon-counting dead-time and quantum-trajectory noise
-models, and detector-measurement or AQFT measurement theorems.  Older
-foundational inputs are cited locally where they are used in proofs, but the
-table also records the older reference when it is the closest theorem-level
-comparison.
+\Cref{tab:main-jpa-comparison} is organized as a theorem comparison, not as a
+topic survey.  Each row separates the prior assumptions, the prior conclusion,
+the submitted assumptions, and the strict non-implication or novel increment.
+The comparison is intentionally asymmetric: the cited papers prove different
+theorems under different assumptions, while the submitted theorem chain is a
+classical sampled-HMM renewal theorem for the stipulated boundary-reset
+kernels.  Recent memory, weak-memory/coarse-graining, finite-DPP,
+renewal-CLT, dead-time-noise, and detector-measurement results are included
+explicitly; older foundational inputs are cited locally where they are used in
+proofs.
 
 \begingroup
 \scriptsize
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.12}
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.26\textwidth} >{\raggedright\arraybackslash}p{0.28\textwidth} >{\raggedright\arraybackslash}p{0.20\textwidth}}
-\caption{Theorem-chain comparison with recent adjacent results.  The four main
-record-side theorem blocks are compared by proved statement.}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth}}
+\caption{Theorem-level comparison with adjacent memory, coarse-graining, DPP,
+renewal-CLT, dead-time-noise, and detector-measurement results.}
 \label{tab:main-jpa-comparison}\\
 \toprule
-Proved statement & This paper's theorem-level conclusion & Recent comparator and its theorem scope & Difference in hypotheses or conclusion \\
+Prior theorem assumptions & Prior theorem conclusion & Submitted theorem assumptions & Strict non-implication or increment \\
 \midrule
 \endfirsthead
-\caption[]{Theorem-chain comparison by proved statement (continued).}\\
+\caption[]{Theorem-level comparison by comparator theorem (continued).}\\
 \toprule
-Proved statement & This paper's theorem-level conclusion & Recent comparator and its theorem scope & Difference in hypotheses or conclusion \\
+Prior theorem assumptions & Prior theorem conclusion & Submitted theorem assumptions & Strict non-implication or increment \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\Cref{thm:recovery-main}(i)--(ii): sampled HMM renewal and hazard law &
-The stipulated sampled boundary-reset kernels \(T_0,T_1\) define a two-state
-hidden Markov law whose visible click set is stationary renewal, has full word
-support, has a closed zero-run law, and has strictly increasing zero-run hazard
-\(\PP(G=k\mid G\ge k)\). &
-Vollmar et al. \cite{VollmarEtAl2024Memory} give a recent
-\emph{J. Phys. A} model-free memory-inference theorem for observed
-single-molecule trajectories.  Meyer--Brandner
-\cite{MeyerBrandner2026WeakMemory} give a weak-memory reduction theorem for
-linear discrete dynamics, first circulated as the 2025 Brandner-group preprint
-and now published in PRL.  Detector-measurement work such as
+Vollmar et al. observe single-molecule trajectories and infer memory directly
+from trajectory statistics, without committing to a two-state sampled HMM
+\cite{VollmarEtAl2024Memory}. &
+They obtain model-free memory detection and memory-duration estimates for the
+observed coordinate. &
+\Cref{prop:instrument-kernels-main,lem:renewal-gap-main,thm:recovery-main}
+assume the submitted sampled one-recovery-opportunity boundary-reset kernels
+\(T_0,T_1\) with positive \(\Gamma,\kappa_{\mathrm r},\Delta\tau\). &
+Model-free memory inference does not imply the submitted closed renewal law
+\[
+g_k=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}{\kappa_{\mathrm r}-\Gamma},
+\]
+the full-support word law, the increasing hazard, or the exact hidden-mode
+criterion \(\lambda_{\mathrm{hid}}=0\). \\
+\addlinespace
+Autonomous linear nonlocal evolution equations arise after eliminating
+inaccessible variables; the memory kernel is in a quantified weak-memory
+regime in Brandner's weak-memory theorem and companion framework
+\cite{Brandner2025WeakMemoryPRL,Brandner2025WeakMemoryPRE}. &
+There is a local time-independent approximation, with explicit error bounds and
+a perturbative construction, that becomes asymptotically faithful in the stated
+weak-memory regime. &
+\Cref{thm:recovery-main,lem:one-dep-criterion-main} assume an exact discrete
+sampled record from the boundary-reset HMM, not a perturbative weak-memory
+closure. &
+The weak-memory approximation theorem does not construct the visible sampled
+law, prove renewal structure, compute the zero-run hazard, or identify the
+exact finite-dependence surface \(\lambda_{\mathrm{hid}}=0\). \\
+\addlinespace
+The starting point is a higher-order linear discrete evolution with weak memory
+from hidden degrees of freedom; the theorem works on an intermediate time scale
+and keeps the same visible state space \cite{MeyerBrandner2026WeakMemory}. &
+The higher-order dynamics admit a unique first-order counterpart in the
+specified weak-memory regime. &
+The submitted theorem assumes the exact sampled HMM kernels and computes the
+stationary visible binary renewal law and hidden-mode covariance tail. &
+Meyer--Brandner reduce weak-memory discrete dynamics under linear weak-memory
+assumptions; they do not give \(\operatorname{Cov}(A_0,A_n)=
+\rho(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\), the condition
+\(\lambda_{\mathrm{hid}}=0\), or the non-Markov visible \(1\)-dependent
+threshold law.  Together with the preceding rows, this isolates the precise
+increment: a solvable sampled-HMM renewal family with closed gap law and exact
+hidden-eigenvalue criterion. \\
+\addlinespace
+Quantitative coarse-graining for Markov chains
+\cite{HilderSharma2024CoarseGraining} and the out-of-equilibrium
+coarse-graining review \cite{Schilling2022CoarseGrained} assume a
+continuous-time Markov chain projected onto coarse variables, with analytic
+conditions controlling the effective coarse dynamics. &
+They prove approximation or information-retention results for the projected
+dynamics, with quantitative error bounds in the stated regime. &
+The submitted theorem fixes a concrete sampled HMM with killed post-click
+boundary leakage and studies its exact binary record law. &
+Projected-dynamics approximation does not imply the exact renewal property of
+the binary record, the two-rate gap law, or the exchange-quotient inverse for
+\(\{\Gamma,\kappa_{\mathrm r}\}\). \\
+\addlinespace
+Pitman--You assume a stationary \(1\)-dependent counting process and analyze
+it through run and bivariate generating functions \cite{PitmanYou2021}. &
+They characterize and compute features of stationary \(1\)-dependent counting
+processes. &
+\Cref{lem:one-dep-criterion-main,thm:recovery-main} assume only the submitted
+sampled boundary-reset kernels and derive when the visible renewal record is
+\(1\)-dependent. &
+The prior theorem assumes finite dependence.  The submitted result derives it
+and proves the iff condition \(\lambda_{\mathrm{hid}}=0\), while the hazard
+remains nonconstant and the visible law remains non-Markov of finite order. \\
+\addlinespace
+Kirchhoff et al. model a photon-counting lidar system with hardware dead time
+and dynamic-range/noise correction objectives
+\cite{KirchhoffEtAl2025Deadtime}. &
+They derive and validate a dead-time noise and correction model for that
+measurement system. &
+\Cref{prop:spectrum-main} assumes the stationary renewal record already
+derived from the submitted sampled HMM. &
+The detector-noise model is not a stationary renewal theorem for these
+kernels.  It does not derive the one-mode covariance tail, the Herglotz
+spectral density, or the strict sub-Poisson Fano factor
+\(F=\Var(G+1)/\EE(G+1)^2\). \\
+\addlinespace
+Lowen--Teich choose heavy-tail or fractal renewal laws designed to produce
+long-range renewal noise \cite{LowenTeich1993FractalRenewal}. &
+They obtain \(1/f\)-type renewal noise in the heavy-tail regime. &
+The submitted theorem assumes the exponentially-tailed two-rate sampled
+counter gap law. &
+Heavy-tail renewal-noise theorems do not imply the rational spectral density,
+the exponential covariance tail, or the closed sub-Poisson Fano law of the
+submitted two-rate renewal record. \\
+\addlinespace
+Matsui--Katori--Shirai assume a genuine determinantal point process with its
+operator kernel \cite{MatsuiKatoriShirai2021HeisenbergDPP}. &
+They prove number-variance and hyperuniformity formulas for that DPP family. &
+\Cref{prop:renewal-principal-minor-lu-main} assumes renewal inclusion
+probabilities already constructed from the sampled-HMM renewal law. &
+The submitted matrices are renewal LU determinant representatives, not
+positive-contraction DPP kernels.  DPP hyperuniformity or sampling theorems do
+not imply the renewal determinant bookkeeping identity here. \\
+\addlinespace
+Bardenet--Fanuel--Feller assume a Hermitian finite DPP kernel for finite
+DPP/Pfaffian sampling, while Poinas assumes candidate nonsymmetric kernels
+whose principal minors satisfy DPP admissibility conditions
+\cite{BardenetFanuelFeller2024SamplingDPP,Poinas2026NonsymmetricDPP}. &
+They give finite DPP/Pfaffian sampling procedures and admissibility criteria
+for nonsymmetric DPP kernels. &
+The submitted LU identity assumes only the renewal inclusion products of the
+sampled visible law. &
+DPP admissibility, DPP sampling, and Pfaffian structure are deliberately absent.
+The increment is a finite determinant representative for an already proved
+renewal law, with the non-DPP boundary stated explicitly. \\
+\addlinespace
+Generic HMM identifiability theorems impose generic rank, emission,
+transition, or sufficient-observation conditions for finite-state or
+nonparametric HMMs \cite{AllmanMatiasRhodes2009,GassiatCleynenRobin2016,
+AlexandrovichHolzmannLeister2016}. &
+They identify or estimate model parameters generically, up to hidden-state
+symmetries, from sufficiently long observation laws. &
+\Cref{thm:toeplitz_image_inverse_duality,cor:three_inclusion_complete_coordinates}
+assume the submitted exchange-symmetric two-rate visible law and use
+\((r_0,r_1,r_2)\). &
+Generic HMM identifiability does not give labelled recovery here.  The
+submitted theorem proves exactly the quotient statement: \(p+s\) and \(ps\)
+are identifiable, while \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) remains an
+external-label ambiguity. \\
+\addlinespace
+Janson's renewal random-index CLT and the classical Hoeffding--Robbins and
+Diananda \(m\)-dependent CLT assume renewal indices or centered stationary
+finite-dependent sequences with moment conditions
+\cite{Janson2024RenewalCLT,HoeffdingRobbins1948,Diananda1955}. &
+They provide generic Gaussian limits for renewal-indexed or \(m\)-dependent
+sums. &
+\Cref{thm:finite-record-renewal-probability-main,thm:finite-record-inference-audit-main,thm:sampled-finite-record-main}
+assume the submitted stationary renewal record, exponential gap tail, bounded
+local centered observable, all-complete-cycle separated batches, and feasible
+plug-in centering. &
+The probability CLTs supply machinery, not the model-specific theorem: the
+lag-two reward
+\(Y_j=\alpha G_j+\beta+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\),
+its centering, exact one-gap dependence, variance formula, and symmetric-root
+projection are submitted increments. \\
+\addlinespace
+Regenerative and batch-means covariance-estimation results assume regenerative
+cycles or batch means under conditions ensuring covariance consistency
+\cite{GlynnWhitt1991BatchMeans,HendersonGlynn2001Regenerative,
+VatsFlegalJones2019Multivariate}. &
+They justify general simulation-output variance estimation and multivariate
+asymptotics. &
+The submitted finite-record theorem assumes observed click-to-click cycles of
+the sampled renewal record, all-complete-cycle batches, \(b_N\to\infty\),
+\(b_N/N\to0\), and the certified \(b_N=\lfloor N^{1/3}\rfloor\),
+\(t_N=N^{-1/4}\) rule for rank-adaptive inference. &
+General batch-means theory does not identify the observed cycles of this
+record, prove the separated observed-window construction, or supply the finite
+symmetric-coordinate and root-boundary delta statements. \\
+\addlinespace
+Continuous intra-bin recovery and quantum-trajectory comparators, including
+quantum Zeno trajectory analyses, assume continuous evolution inside the
+observation interval or a monitored open quantum system
+\cite{WallsEtAl2024StochasticTrajectoriesZeno}. &
+They analyze the corresponding continuous-time or monitored quantum trajectory
+behaviour. &
+\Cref{prop:model-validity-boundary-main,cor:finite-window-only-comparator-main}
+state only a fixed-cylinder comparison; the main theorems assume the sampled
+boundary-reset kernels. &
+The comparator does not transfer stationary renewal, spectral, Fano, inverse,
+or CLT conclusions to growing windows.  It is a fixed-window boundary check,
+not an alternative proof of the submitted record theorem. \\
+\addlinespace
+Detector click and detector-based measurement theorems
+assume UDW-type detector-field couplings, localized field models, continuous
+interactions, repeated measurements, path-integral detector models, or a joint
+interacting Hilbert space
 \cite{TjoaEtAl2023click,PoloGomezEtAl2022,PranziniEtAl2024,
-PercheLocalized2023,PoloGomezMartinMartinez2024,TjoaGray2024UDWJointHilbert}
-instead proves microscopic click, field-measurement, repeated-measurement,
-localized-detector, continuous-interaction, or joint-Hilbert-space statements. &
-Those results infer or reduce memory in general trajectory/dynamical settings.
-The detector papers prove different microscopic dynamics.  Here the sampled
-interval instrument is stipulated, the hidden kernels are fixed in advance, and
-the theorem computes the exact renewal gap law, full support, and monotone
-hazard for this two-rate sampled counter rather than deriving detector clicks,
-producing a model-free memory test, or giving an effective Markov reduction. \\
+PercheLocalized2023,PoloGomezMartinMartinez2024,Torres2024PathIntegral,
+TjoaGray2024UDWJointHilbert}. &
+Their conclusions concern microscopic click mechanisms, detector-based QFT
+measurements, repeated-measurement effects, localized-detector constructions,
+or Hilbert-space structure. &
+The submitted main theorem is a classical sampled-record theorem after
+\(T_0,T_1\) are stipulated; response calibration is separated into the
+conditional response-locus theorem. &
+Detector/field theorems do not imply the two-rate renewal law, the
+hidden-eigenvalue threshold, or the external response-locus calibration.
+Conversely, the submitted theorem does not claim a microscopic detector
+response theorem. \\
 \addlinespace
-\Cref{thm:recovery-main}(iii)--(iv): covariance and exact \(1\)-dependence &
-For the same renewal law,
-\(\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda_{\mathrm{hid}}^{n-1}\);
-exact \(1\)-dependence holds iff \(\lambda_{\mathrm{hid}}=0\), and the
-threshold law is not first-order Markov. &
-Pitman--You \cite{PitmanYou2021} analyze stationary \(1\)-dependent counting
-processes through run and bivariate generating functions.  Meyer--Brandner
-\cite{MeyerBrandner2026WeakMemory} identify when higher-order discrete memory
-can be reduced to a first-order description on intermediate time scales. &
-It gives an exact codimension-one rate condition,
-\(\lambda_{\mathrm{hid}}=0\), at which this specified sampled HMM becomes
-\(1\)-dependent while remaining non-Markov as a visible binary chain. \\
-\addlinespace
-\Cref{prop:spectrum-main}: spectral density and Fano factor &
-The same covariance tail gives a closed Herglotz spectral density, a strictly
-sub-Poisson asymptotic Fano factor \(0<F<1\), and the renewal-count identity
-\(F=\Var(G+1)/\EE(G+1)^2\). &
-Kirchhoff et al. \cite{KirchhoffEtAl2025Deadtime} give a recent applied
-dead-time-noise model for photon-counting lidar, with correction/noise
-predictions tied to physical counting hardware.  Quantum-trajectory Zeno
-analyses such as Walls et al. \cite{WallsEtAl2024StochasticTrajectoriesZeno}
-study monitored open quantum systems rather than this classical sampled
-renewal law.  Classic renewal-noise results such as Lowen--Teich
-\cite{LowenTeich1993FractalRenewal} cover very different heavy-tail or fractal
-regimes. &
-It is an exact spectral calculation for the exponential one-mode covariance
-tail already proved for the sampled boundary-reset record. \\
-\addlinespace
-\Cref{prop:renewal-principal-minor-lu-main}: renewal principal-minor encoding &
-For every finite \(B=\{i_1<\cdots<i_m\}\), the LU lemma gives
-\(\det K_B=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}\); when \(u_n\) is the Palm
-renewal mass sequence this equals the renewal inclusion product already proved
-for the click set. &
-Recent determinantal-process work in and near this journal treats genuine DPP
-objects: Matsui--Katori--Shirai \cite{MatsuiKatoriShirai2021HeisenbergDPP}
-prove number-variance and hyperuniformity formulas for a Heisenberg-family
-DPP, Bardenet--Fanuel--Feller
-\cite{BardenetFanuelFeller2024SamplingDPP} analyze finite DPP and Pfaffian
-sampling on a quantum computer, and Poinas \cite{Poinas2026NonsymmetricDPP}
-gives a recent nonsymmetric-kernel DPP admissibility comparison. &
-The matrices are finite algebraic representatives of a renewal law already
-constructed from the sampled HMM.  The result is therefore a principal-minor
-encoding only: no positive-contraction, operator-kernel, hyperuniformity,
-sampling, or nonsymmetric-DPP admissibility condition is checked. \\
-\addlinespace
-\Cref{thm:toeplitz_image_inverse_duality}: quotient inverse &
-Three visible inclusion coordinates recover \(p+c\) and \(pc\), hence only the
-unordered pair
-\(\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}\), with exact
-\(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange duality. &
-Meyer--Brandner \cite{MeyerBrandner2026WeakMemory} give a recent weak-memory
-discrete-time comparison in which memory structure is not this two-coordinate
-quotient inverse, and model-free HMM identifiability results
-\cite{AllmanMatiasRhodes2009,GassiatCleynenRobin2016,
-AlexandrovichHolzmannLeister2016} treat different labelled or generic
-identifiability problems. &
-The result is a population-level inverse for this two-parameter visible law on
-the exchange quotient.  It stops at symmetric coordinates and proves the label
-obstruction. \\
-\addlinespace
-\Cref{prop:three-coordinate-vector-batch-main,cor:finite_inverse_delta_boundary_main,thm:sampled-finite-record-main}: fixed-record CLT and projected inverse inference &
-For one fixed setting, the lag-two covariance estimator has a regenerative CLT;
-the separated-batch variance estimator is complete-cycle based; the projected
-feasible full-rank symmetric-coordinate inverse for \((p+c,pc)\) gives a
-\(\chi^2_2\) Wald limit in the separated interior; root and log-rate charts are
-optional delta-method consequences only after a prespecified separated-root
-condition.  The complete-cycle rule
-\(b_N=\lfloor N^{1/3}\rfloor\) gives the rate certificate needed for the
-deterministic rank tolerance \(t_N=N^{-1/4}\). &
-Janson \cite{Janson2024RenewalCLT} gives a recent renewal random-index CLT.
-Hoeffding--Robbins and Diananda
-\cite{HoeffdingRobbins1948,Diananda1955} are the classical finite-dependent
-CLT inputs used here, and Serfozo-style regenerative formulations
-\cite{Serfozo2009} give the renewal random-index viewpoint.  Regenerative and
-batch-means covariance estimation is compared with
-Glynn--Whitt \cite{GlynnWhitt1991BatchMeans}, Henderson--Glynn
-\cite{HendersonGlynn2001Regenerative}, and the modern multivariate
-batch-means treatment of Vats--Flegal--Jones
-\cite{VatsFlegalJones2019Multivariate}. &
-The regenerative objects are observed click-to-click cycles of this sampled
-record, and the lag-two reward is \(1\)-dependent across adjacent cycles.  The
-paper adds the model-specific reward identity, projection onto the feasible
-symmetric-coordinate set, boundary-root rate statement, and separated
-complete-cycle variance estimator. \\
+Local/AQFT measurement and state-update frameworks assume algebraic or local
+measurement hypotheses for quantum fields, causal state updates, or
+detector-induced state updates
+\cite{FewsterVerch2020,PapageorgiouFraser2024LocalMeasurement,
+GisinEtAl2024ImpossibleMeasurements,Oeckl2025CausalMeasurement,Jubb2022,
+PoloGomezPercheMartinMartinez2025StateUpdates,
+BalasubramanianKeskiVakkuriPranzini2025AdSCFTUpdates}. &
+They provide measurement schemes, causality/state-update results, or causal
+spectral-measurement constructions for QFT. &
+\Cref{thm:response-locus-main} assumes an externally supplied positive
+\(C^1\) scalar response profile \(R_\Omega\), an external recovery-rate label,
+the range condition \(\gamma\in R_\Omega(U)\), and \(dR_\Omega\ne0\). &
+AQFT measurement theorems do not supply the scalar profile or regular
+level-set hypotheses.  The submitted response statement is only the conditional
+inverse-image consequence after external calibration data are supplied. \\
 \end{longtable}
 \endgroup
 
@@ -567,7 +649,11 @@ complete-cycle variance estimator. \\
 After the record theorem has selected a scalar rate, an externally supplied
 positive \(C^1\) response profile \(R_\Omega\), an external
 \(\kappa_{\mathrm r}\) label, and the closure \(\Gamma=R_\Omega(x)\) translate
-the rate equation into an ordinary regular level set.  Recent
+the rate equation only into the conditional inverse image
+\(R_\Omega^{-1}(\gamma)\).  The range condition
+\(\gamma\in R_\Omega(U)\) and the regularity condition \(dR_\Omega\ne0\) are
+part of the conditional theorem in \Cref{thm:response-locus-main}; without
+them the paper asserts no geometric conclusion.  Recent
 detector-measurement and AQFT measurement results prove genuinely different
 field/detector statements: click mechanisms for UDW detectors
 \cite{TjoaEtAl2023click}, detector-based QFT measurements
@@ -586,7 +672,8 @@ effects \cite{PranziniEtAl2024}, and recent local-temperature or stationary
 spacetime response comparators
 \cite{MistryPinzul2024DiamondTemp,Bunney2024StationaryTraj,
 Klein2026RotatingBH}.
-The appendix note uses the calibrated profile only as input.
+The appendix note uses the calibrated profile only as input and does not
+derive, estimate, or localize that profile.
 
 \paragraph{Appendix fixed-window comparator.}
 It compares the sampled killed-leakage kernels with a continuous intra-bin
@@ -610,7 +697,7 @@ infinite-record approximation theorem, nor a Fano-factor or CLT transfer.
 Put
 \[
 x=\Gamma\Delta\tau,\qquad y=\kappa_{\mathrm r}\Delta\tau,\qquad
-p=e^{-x},\qquad c=e^{-y},
+p=e^{-x},\qquad s=e^{-y},
 \]
 and
 \[
@@ -772,9 +859,9 @@ cylinder functional.
 This appendix contains one reusable finite-lag renewal-reward theorem.  It
 combines the renewal CLT, stationary-window boundary control, random complete
 cycle counts, plug-in centering, and separated-batch variance consistency used
-by the finite-record theorem.  The result is proof machinery for the sampled
-boundary-reset theorem, not an additional statistical output of the paper.  The
-regenerative CLT input is classical: finite-dependent CLTs go back to
+by the finite-record theorem.  It is the proof package for Block~IV of the
+sampled boundary-reset theorem.  The regenerative CLT input is classical:
+finite-dependent CLTs go back to
 Hoeffding--Robbins and Diananda
 \cite{HoeffdingRobbins1948,Diananda1955}, while regenerative-increment CLTs
 and their renewal random-index form are standard in the Serfozo/Janson
@@ -1448,7 +1535,7 @@ covariance, spectrum, and Fano-factor plots are kept in the supplementary
 material as deterministic formula sanity checks.  They are not simulations,
 fits, validation data, or evidence for the theorem statements.  The displayed
 formulas give the paper-local recipe for solving
-$\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ and regenerating those supplementary
+$\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$ and regenerating those supplementary
 checks.
 
 \clearpage
