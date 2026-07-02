@@ -491,6 +491,113 @@ $\overline C_{N,\eta,M}^{\rm Tay}$.  All constants are therefore controlled
 by the displayed finite formulas in $N,\eta,M$ alone.
 \end{proof}
 
+\phantomsection\label{lem:exact-moment-entropy-transfer}
+\begin{unnumberedlemma}[Exact-moment entropy transfer]
+Let \(L\ge2\), let \(\omega\) be a probability measure, and let
+\[
+\delta_t=d_t+\rho_t,
+\qquad
+d_t(y):=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n},
+\]
+where \(u_2,\ldots,u_L\) are bounded measurable functions.  Assume that
+\[
+\|d_t\|_\infty=O(t^{-2}),\qquad
+\|\delta_t\|_\infty=O(t^{-2}),\qquad
+\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}=o(t^{-L}).
+\]
+For
+\[
+\Phi(s)=(1+s)\log(1+s)-s,
+\]
+one has
+\begin{equation}\label{eq:exact-moment-entropy-transfer}
+\int \Phi(\delta_t)\,\dd\omega
+=
+\sum_{m=4}^{L+2}
+\left[
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1,\ldots,n_r\ge2\\
+n_1+\cdots+n_r=m}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\ldots,n_r)
+\right]t^{-m}
++o(t^{-(L+2)}),
+\end{equation}
+where
+\[
+I(n_1,\ldots,n_r):=\int u_{n_1}(y)\cdots u_{n_r}(y)\,\dd\omega(y).
+\]
+Here only indices \(2\le n_j\le L\) can occur in the displayed coefficient
+range.  In particular, when the \(u_n\) are the Cayley--Chebyshev modes and
+the \(\mu_n\) are centred moments, the displayed coefficients are the
+finite-moment evaluations \(A_m(\nu)\) for \(4\le m\le L+2\).
+\end{unnumberedlemma}
+
+\begin{proof}
+Choose \(T\) so large that \(\|\delta_t\|_\infty\le1/2\) for \(t\ge T\).
+For such \(t\),
+\[
+\Phi(s)=
+\sum_{r=2}^{\lfloor (L+2)/2\rfloor}
+\frac{(-1)^r}{r(r-1)}s^r
++O(|s|^{\lfloor (L+2)/2\rfloor+1})
+\qquad(|s|\le1/2).
+\]
+Since \(\|\delta_t\|_\infty=O(t^{-2})\) and \(\omega\) is a probability
+measure, the Taylor tail contributes
+\[
+O\!\left(t^{-2(\lfloor (L+2)/2\rfloor+1)}\right)=o(t^{-(L+2)}),
+\]
+because the exponent is at least \(L+3\) when \(L\) is odd and \(L+4\) when
+\(L\) is even.
+
+Fix \(2\le r\le\lfloor (L+2)/2\rfloor\).  In the binomial expansion of
+\((d_t+\rho_t)^r-d_t^r\), every mixed term with \(1\le\ell\le r\) factors of
+\(\rho_t\) satisfies the key \(L^\infty\)-\(L^1(\omega)\) placement
+\begin{equation}\label{eq:exact-transfer-product-placement}
+\|d_t^{\,r-\ell}\rho_t^\ell\|_{L^1(\omega)}
+\le
+\|d_t\|_\infty^{r-\ell}
+\|\rho_t\|_\infty^{\ell-1}
+\|\rho_t\|_{L^1(\omega)} .
+\end{equation}
+Thus
+\[
+\|d_t^{\,r-\ell}\rho_t^\ell\|_{L^1(\omega)}
+=O(t^{-2(r-\ell)})\,o(t^{-L\ell}).
+\]
+For \(\ell=1\) the worst retained Taylor degree is \(r=2\), and this gives
+\[
+O(t^{-2(r-1)})\,o(t^{-L})=o(t^{-(L+2r-2)})
+=o(t^{-(L+2)}).
+\]
+For \(\ell\ge2\) the same bound is smaller: if \(r=\ell\), it is
+\(o(t^{-L\ell})=o(t^{-(L+2)})\), while if \(r>\ell\) it contains the
+additional factor \(t^{-2(r-\ell)}\); here \(L\ge2\).  Hence
+\[
+\|\delta_t^r-d_t^r\|_{L^1(\omega)}=o(t^{-(L+2)})
+\]
+for each retained Taylor degree \(r\).
+
+The pure \(d_t\)-terms give the finite polynomial.  For every retained \(r\),
+\[
+\int d_t(y)^r\,\dd\omega(y)
+=
+\sum_{m=2r}^{Lr}t^{-m}
+\sum_{\substack{2\le n_1,\ldots,n_r\le L\\
+n_1+\cdots+n_r=m}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\ldots,n_r).
+\]
+Terms with \(m>L+2\) are \(O(t^{-(L+3)})\), hence are absorbed in the
+little-oh remainder.  Summing the retained pure terms with the Taylor
+coefficients gives \eqref{eq:exact-moment-entropy-transfer}.  Finally, no
+mode \(u_{L+1}\) can enter any coefficient of total degree \(m\le L+2\),
+because every entropy monomial has at least two factors and every index is at
+least \(2\); an index \(L+1\) would force total degree at least \(L+3\).
+For the Cayley--Chebyshev modes this is precisely the finite-moment
+coefficient evaluation \eqref{eq:universal-entropy-coefficient-evaluation}.
+\end{proof}
+
 \begin{theorem}[Sharp-order universal coefficient theorem for Poisson entropy]%
 \label{thm:poisson-kl-even-orders}
 Let $N\ge2$ and let $\nu$ be a probability measure on~$\RR$ with mean
@@ -605,55 +712,17 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \Phi(s)=(1+s)\log(1+s)-s.
 \]
 
-Choose \(T\) so large that
-\(\|\widetilde\delta_t\|_\infty\le1/2\) for \(t\ge T\).  For such \(t\),
+The hypotheses of the
+\hyperref[lem:exact-moment-entropy-transfer]{exact-moment entropy transfer
+lemma} are therefore satisfied with this \(L=2N-2\).  It gives
 \[
-\Phi(s)=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}s^r+O(s^{N+1})
-\qquad(|s|\le1/2).
-\]
-The Taylor tail contributes \(O(t^{-2N-2})\) after integration.  For each
-\(2\le r\le N\), the binomial expansion of
-\((d_t+\rho_t)^r-d_t^r\), with one \(\rho_t\) factor placed in
-\(L^1(\omega)\) and all other factors in \(L^\infty\), gives the same
-product placement as Lemma~\ref{lem:density-remainder-product-hierarchy}:
-\[
-\|d_t^{\,r-\ell}\rho_t^\ell\|_{L^1(\omega)}
-\le
-\|d_t\|_\infty^{r-\ell}\|\rho_t\|_\infty^{\ell-1}
-\|\rho_t\|_{L^1(\omega)}
-\qquad(1\le \ell\le r),
-\]
-and therefore
-\[
-\|\widetilde\delta_t^r-d_t^r\|_{L^1(\omega)}
-\le
-\sum_{\ell=1}^{r}\binom r\ell
-O(t^{-2(r-\ell)})\,o(t^{-L\ell}).
-\]
-For \(\ell=1\) this is
-\(o(t^{-(L+2(r-1))})\), whose largest possible order occurs at \(r=2\) and
-is \(o(t^{-(L+2)})=o(t^{-2N})\).  For \(\ell\ge2\), it is
-\(o(t^{-2L})\), and since \(L=2N-2\ge2\) one has \(2L\ge L+2=2N\).
-Thus all density-remainder products are \(o(t^{-2N})\).
-Expanding the
-finite powers of \(d_t\) gives
-\begin{align*}
 D_{\mathrm{KL}}(h_t\|g_t)
-&=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
-\sum_{m=2k}^{2N}\frac{1}{t^m}
-\sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
-\mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k} \\
-&\qquad +o(t^{-2N}),
-\end{align*}
-where $I_{n_1,\dots,n_k}=I(n_1,\dots,n_k)$ is the mode integral from
-\eqref{eq:mode-integral-definition}.  No omitted density mode can contribute
-to a retained term: if \(n_1+\cdots+n_k=m\le2N\), \(k\ge2\), and all
-\(n_j\ge2\), then every \(n_j\le2N-2\), which is the highest mode retained in
-\(d_t\).  Terms in \(d_t^k\) of total degree \(m>2N\) start at
-\(t^{-(2N+1)}\) and are included in the \(o(t^{-2N})\) remainder.
-
-Comparing the coefficient of $t^{-m}$ with the evaluated formal polynomial
-\eqref{eq:universal-entropy-coefficient-evaluation} gives $A_m(\nu)$.
+=\sum_{m=4}^{2N}A_m(\nu)t^{-m}+o(t^{-2N}).
+\]
+Here the transfer lemma also explains why no omitted density mode can
+contribute to a retained entropy coefficient: an entropy monomial of total
+degree \(m\le2N\) has at least two mode indices, all at least \(2\), hence each
+individual index is at most \(m-2\le2N-2\).
 The parity part of Theorem~\ref{thm:universal-entropy-coefficients} gives
 $A_m(\nu)=0$ for odd~$m$, so only even powers remain.  Reindexing $m=2r$
 gives
@@ -1059,9 +1128,9 @@ P_N^{\rm opt}+Q_N^{\rm opt}+2(S^{\rm opt})^{N+1}
   \begin{equation}\label{eq:optimized-n4-seventh-envelope}
   \left|
   D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
-  -A_4^{\rm ent}(\nu)t^{-4}
-  -A_6^{\rm ent}(\nu)t^{-6}
-  -A_8^{\rm ent}(\nu)t^{-8}
+  -A_4(\nu)t^{-4}
+  -A_6(\nu)t^{-6}
+  -A_8(\nu)t^{-8}
   \right|
   \le B_{\nu,8}t^{-9}.
   \end{equation}
@@ -1320,18 +1389,11 @@ expression in
 \end{proof}
 
 \medskip
-\noindent\textbf{Notation for the eighth-order layer.}
-Before the sharp-order coefficient theorem is invoked, the displayed
-moment polynomials are denoted
-\(C_6^{\rm alg}(\nu)\), \(A_8^{\rm alg}(\nu)\),
-\(\Delta_6^{\rm alg}(\nu)\), and
-\(\Delta_8^{\rm alg}(\nu)\).  The coefficient-identification statements then
-define \(C_6^{\rm ent}(\nu)\) and \(A_8^{\rm ent}(\nu)\) as the genuine
-large-time entropy coefficients and prove equality with the algebraic
-polynomials under the stated finite-moment hypotheses.  After such an
-identification has been stated inside a theorem or corollary, this paper
-continues to use the explicit superscripts \(C_6^{\rm ent}\),
-\(A_8^{\rm ent}\), \(\Delta_6^{\rm ent}\), and \(\Delta_8^{\rm ent}\) in
-statements that rely on genuine entropy-coefficient status.
-A finite centred seventh absolute moment is a hypothesis on the quantitative
-\(O(t^{-9})\) remainder, not a separate coefficient symbol.
+\noindent\textbf{Notation for the next layer.}
+Up to this point the entropy expansion uses only the universal coefficient
+names \(A_{2m}(\nu)\).  The auxiliary symbol \(C_6\), the algebraic/entropy
+superscripts, and the defect coordinates are fixed only after the explicit
+\(N=4\) Laurent computation in
+Theorem~\ref{thm:poisson-kl-eighth}.  A finite centred seventh absolute
+moment is a hypothesis on the quantitative \(O(t^{-9})\) remainder, not a
+separate coefficient symbol.
