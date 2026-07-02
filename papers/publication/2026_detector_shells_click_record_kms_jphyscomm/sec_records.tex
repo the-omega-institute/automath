@@ -346,15 +346,40 @@ In all cases \(h_{k+1}>h_k\).
 \begin{proof}
 Summing \eqref{eq:gap-closed-main} over \(j\ge k\) gives
 \eqref{eq:survival-tail-main}, and \(h_k=g_k/S_k\) gives
-\eqref{eq:hazard-main}.  The equal-rate display is the continuous limit.  A
-direct subtraction gives
+\eqref{eq:hazard-main}.  The equal-rate display is the continuous limit.
+For the unequal-rate case, a direct subtraction gives
 \[
 h_{k+1}-h_k
 =\frac{\Gamma\kappa_{\mathrm r}(p-s)^2p^ks^k}
         {(\kappa_{\mathrm r}p^k-\Gamma s^k)
          (\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1})}
 \]
-in the unequal-rate case, with the positive continuous equal-rate limit.
+and the denominator has positive product sign.  Indeed
+\[
+\kappa_{\mathrm r}p^m-\Gamma s^m
+=(\kappa_{\mathrm r}-\Gamma)S_m,\qquad m=k,k+1,
+\]
+by \eqref{eq:survival-tail-main}.  Since \(S_m=\PP(G\ge m)>0\), both factors
+have the sign of \(\kappa_{\mathrm r}-\Gamma\): they are both positive when
+\(\kappa_{\mathrm r}>\Gamma\) and both negative when
+\(\kappa_{\mathrm r}<\Gamma\).  Their product is therefore
+\((\kappa_{\mathrm r}-\Gamma)^2S_kS_{k+1}>0\).  The numerator is also
+positive because \(\Gamma,\kappa_{\mathrm r}>0\), \(p,s\in(0,1)\), and
+\(p\ne s\) in the unequal-rate case.
+
+On the equal-rate diagonal, write
+\(y=\Gamma\Delta\tau=\kappa_{\mathrm r}\Delta\tau\) and
+\(p=e^{-y}\).  The displayed equal-rate hazard can be rewritten as
+\[
+h_k
+=1-p-\frac{y p}{1+y k}.
+\]
+Thus
+\[
+h_{k+1}-h_k
+=yp\left(\frac1{1+yk}-\frac1{1+y(k+1)}\right)
+=\frac{y^2p}{(1+yk)(1+y(k+1))}>0.
+\]
 \end{proof}
 
 \begin{theorem}[Classical killed-leakage sampled-boundary record theorem for the one-recovery-opportunity hidden Markov model]\label{thm:recovery-main}
@@ -369,8 +394,8 @@ is a full-support renewal process.  Its zero-run law is
 \]
 It is exact \(1\)-dependent iff
 \(\lambda_{\mathrm{hid}}=0\), equivalently
-\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\).  Away from
-that point it is not a finite-order Markov chain.
+\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\).  In all
+parameter cases it is not a finite-order Markov chain.
 \end{theorem}
 
 \begin{proof}
@@ -380,6 +405,78 @@ strict monotonicity are \Cref{lem:survival-hazard-main}; together with
 \Cref{lem:hazard-obstruction-main} they exclude every finite visible Markov
 order.  The covariance formula is \Cref{lem:covariance-transfer-main}, and
 the exact \(1\)-dependence criterion is \Cref{lem:one-dep-criterion-main}.
+\end{proof}
+
+\begin{lemma}[Discrete renewal count-variance identity]\label{lem:discrete-renewal-fano-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process on the
+sample lattice, with click epochs separated by i.i.d. integer cycle lengths
+\(L_j\ge1\), mean \(\mu=\EE L_j<\infty\), variance
+\(\sigma_L^2=\Var(L_j)<\infty\), and exponentially decaying tails.  For
+\(N_m=\sum_{n=0}^{m-1}A_n\),
+\begin{equation}\label{eq:discrete-renewal-fano-identity-main}
+\lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
+=\frac{\sigma_L^2}{\mu^2}.
+\end{equation}
+If, in addition, the autocovariances are summable and \(f(0)\) denotes the
+zero-frequency spectral density
+\(\operatorname{Cov}(A_0,A_0)+2\sum_{h\ge1}\operatorname{Cov}(A_0,A_h)\),
+then the same limit equals \(f(0)/\rho\), where \(\rho=\EE A_0=1/\mu\).
+\end{lemma}
+
+\begin{proof}
+Work first in Palm coordinates with a click at the left endpoint and write
+\(S_k=L_1+\cdots+L_k\) and
+\(K_m=\max\{k:S_k\le m\}\).  The stationary count \(N_m\) differs from the
+corresponding Palm count only through the initial delayed cycle and the
+terminal residual cycle.  The stationary residual cycle has the size-biased
+cycle tail, which is still exponentially decaying, and the maximum of the
+complete cycles intersecting \([0,m)\) is \(O_{\PP}(\log m)\).  Hence this
+endpoint replacement changes \(m^{-1/2}(N_m-\EE N_m)\) by \(o_{\PP}(1)\), and
+the squared normalized family is uniformly integrable.
+
+At the renewal stopping index,
+\[
+S_{K_m}\le m<S_{K_m+1}.
+\]
+Thus, with \(W_j=L_j-\mu\),
+\[
+\mu\left(K_m-\frac m\mu\right)
+=-\sum_{j=1}^{K_m}W_j+O_{\PP}(\log m).
+\]
+Since \(K_m/m\to1/\mu\) and the partial sums of the centered i.i.d. sequence
+\((W_j)\) satisfy the usual random-time-change estimate,
+\[
+\sum_{j=1}^{K_m}W_j
+=\sum_{j=1}^{\lfloor m/\mu\rfloor}W_j+o_{\PP}(\sqrt m).
+\]
+Therefore
+\[
+\frac{K_m-m/\mu}{\sqrt m}
+=-\frac1\mu\,
+\frac{\sum_{j=1}^{\lfloor m/\mu\rfloor}W_j}{\sqrt m}
++o_{\PP}(1),
+\]
+and uniform integrability yields
+\[
+\frac{\Var(N_m)}m
+\longrightarrow
+\frac{\sigma_L^2}{\mu^3}.
+\]
+Stationarity gives \(\EE N_m=m\rho=m/\mu\), which proves
+\eqref{eq:discrete-renewal-fano-identity-main}.
+
+For the spectral form, stationarity gives the exact sampled-window identity
+\[
+\Var(N_m)=
+m\gamma_0+2\sum_{h=1}^{m-1}(m-h)\gamma_h,\qquad
+\gamma_h=\operatorname{Cov}(A_0,A_h).
+\]
+Summability of \((\gamma_h)\) implies
+\[
+\frac{\Var(N_m)}m\longrightarrow
+\gamma_0+2\sum_{h\ge1}\gamma_h=f(0).
+\]
+Dividing by \(\EE N_m/m=\rho\) gives the equivalent limit \(f(0)/\rho\).
 \end{proof}
 
 \begin{proposition}[Spectral density and classical sub-Poisson count noise for the killed-leakage sampled-boundary renewal record]\label{prop:spectrum-main}
@@ -394,7 +491,7 @@ f(\theta)=
 If \(N_m=\sum_{n=0}^{m-1}A_n\), then
 \begin{equation}\label{eq:fano-main}
 \lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
-=\frac{\Var(G+1)}{\EE(G+1)^2}
+=\frac{\Var(G+1)}{\bigl(\EE(G+1)\bigr)^2}
 =1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}<1,
 \end{equation}
 with \(G\) distributed as in \Cref{lem:renewal-gap-main}.
@@ -429,15 +526,15 @@ and taking real parts gives
 \]
 This includes the exact \(1\)-dependent case
 \(\lambda_{\mathrm{hid}}=0\), where only the adjacent covariance contributes.
-The Fano expression is the standard stationary renewal-count variance formula
-for cycle length \(L=G+1\):
+For this sampled count convention,
+\Cref{lem:discrete-renewal-fano-main} gives, with \(L=G+1\),
 \[
 \lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
-=\frac{\Var(L)}{\EE L^2}.
+=\frac{\Var(L)}{(\EE L)^2}.
 \]
-Equivalently, since \(\rho=1/\EE L\) for the stationary renewal record, this
-limit is \(f(0)/\rho\).  Evaluating the displayed spectral density at
-\(\theta=0\) gives
+The same lemma identifies this renewal-count limit with \(f(0)/\rho\), since
+\(\rho=1/\EE L\) for the stationary renewal record.  Evaluating the displayed
+spectral density at \(\theta=0\) gives
 \[
 \frac{f(0)}{\rho}
 =1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
@@ -475,7 +572,7 @@ variance theory is added for the chosen empirical hazard or block-count
 functional.
 \end{remark}
 
-\subsection{Renewal LU representative and quotient inverse}
+\subsection{Renewal LU product determinant and quotient inverse}
 
 In Markovian-arrival-process language, the pair \((T_0,T_1)\) in
 \eqref{eq:t0-t1-main} is a constrained two-state discrete-time MAP:
@@ -492,36 +589,43 @@ sampled killed-leakage D-MAP(2) subfamily, the renewal formulas reduce the
 observable law to the explicit quotient coordinates \((p+s,ps)\), so the
 visible law identifies the unordered pair \(\{p,s\}\) and no label beyond it.
 
-\begin{lemma}[Renewal LU determinant representative for inclusion products]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
-Let \(u_n\) be a scalar sequence and \(\rho>0\).  Define
-\begin{equation}\label{eq:renewal-principal-minor-kernel-main}
-K_u(i,j)=
+\begin{lemma}[Renewal LU product determinant for inclusion products]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
+Let \(u_n\) be a scalar sequence and \(\rho>0\).  For a nonempty finite
+ordered set \(B=\{i_1<\cdots<i_m\}\), define the finite matrix
+\begin{equation}\label{eq:renewal-lu-product-matrix-main}
+M_u(B)_{rs}=
 \begin{cases}
-\rho,&j\le i,\\
-\rho-u_{j-i},&j>i.
+\rho,&s\le r,\\
+\rho-u_{i_s-i_r},&s>r,
 \end{cases}
+\qquad 1\le r,s\le m,
 \end{equation}
-For \(B=\{i_1<\cdots<i_m\}\),
-\begin{equation}\label{eq:renewal-principal-minor-product-main}
-\det[K_u(i_r,i_s)]_{r,s=1}^m
+and set \(D_u(\varnothing)=1\).  Its renewal LU product determinant is
+\begin{equation}\label{eq:renewal-lu-product-determinant-main}
+D_u(B):=\det M_u(B)
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-Write \(K_B=\rho L+U\), where \(L_{rs}=\mathbf1_{\{s\le r\}}\) and
-\(U_{rs}=(\rho-u_{i_s-i_r})\mathbf1_{\{s>r\}}\).  Then
-\(L^{-1}\) has diagonal \(1\) and subdiagonal \(-1\), so
-\(K_B=L(\rho I+L^{-1}U)\), and the second factor is upper triangular with
-diagonal \(\rho,u_{i_2-i_1},\ldots,u_{i_m-i_{m-1}}\).
+Write \(M_u(B)=\rho L+U\), where \(L_{rs}=\mathbf1_{\{s\le r\}}\) and
+\(U_{rs}=(\rho-u_{i_s-i_r})\mathbf1_{\{s>r\}}\).  Then \(L\) is unit lower
+triangular, \(L^{-1}\) has diagonal \(1\) and subdiagonal \(-1\), and
+\[
+M_u(B)=L(\rho I+L^{-1}U).
+\]
+The second factor is upper triangular with diagonal
+\(\rho,u_{i_2-i_1},\ldots,u_{i_m-i_{m-1}}\).  Taking determinants gives the
+displayed product.
 \end{proof}
 
 \begin{remark}[DPP comparison and noncanonical determinant language]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
-\Cref{prop:renewal-principal-minor-lu-main} is only a finite renewal LU
-determinant representative for inclusion products already constructed by
-renewal conditioning and finite inclusion-exclusion.  It is noncanonical
-under finite diagonal conjugation and is not asserted to be a Hermitian,
-positive-contraction, operator, nonsymmetric, or sampling DPP kernel.
+\Cref{prop:renewal-principal-minor-lu-main} is only a renewal LU product
+determinant for inclusion products already constructed by renewal conditioning
+and finite inclusion-exclusion.  It is a set-indexed finite determinant
+bookkeeping device, not a canonical point-process correlation object.  No
+Hermitian, positive-contraction, operator, nonsymmetric, or sampling DPP
+structure is asserted for \(M_u(B)\) or \(D_u(B)\).
 \end{remark}
 
 \begin{corollary}[Renewal inclusion and finite word law]\label{cor:renewal-principal-minor-word-law-main}
@@ -530,13 +634,13 @@ renewal masses \(u_n=\PP(n\in\varXi\mid0\in\varXi)\),
 \begin{equation}\label{eq:renewal-inclusion-product-main}
 \PP(\{i_1<\cdots<i_m\}\subset\varXi)
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}
-=\det K_B.
+=D_u(\{i_1,\ldots,i_m\}).
 \end{equation}
 Exact finite configuration probabilities follow by finite
 inclusion-exclusion:
 \begin{equation}\label{eq:finite-exact-configuration-probabilities-main}
 \PP(\varXi\cap I=S)
-=\sum_{C\subset I\setminus S}(-1)^{|C|}\det K_{S\cup C}.
+=\sum_{C\subset I\setminus S}(-1)^{|C|}D_u(S\cup C).
 \end{equation}
 \end{corollary}
 
@@ -547,14 +651,16 @@ u_n=\PP(A_n=1\mid A_0=1)
 =\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},
 \qquad n\ge1.
 \end{equation}
-Thus the renewal LU representative \(K_\Gamma\) is obtained from
-\eqref{eq:renewal-principal-minor-kernel-main} by this \(u_n\), and finite
-word laws are given by \eqref{eq:finite-exact-configuration-probabilities-main}.
+Thus the boundary-reset renewal LU product determinants \(D_\Gamma(B)\) are
+obtained from \eqref{eq:renewal-lu-product-matrix-main} and
+\eqref{eq:renewal-lu-product-determinant-main} by this \(u_n\), and finite word
+laws are given by \eqref{eq:finite-exact-configuration-probabilities-main}.
 \end{proposition}
 
 \begin{proof}
-The formula for \(u_n\) is \Cref{lem:covariance-transfer-main}; the determinant
-and word formulas are \Cref{prop:renewal-principal-minor-lu-main,cor:renewal-principal-minor-word-law-main}.
+The formula for \(u_n\) is \Cref{lem:covariance-transfer-main}; the renewal LU
+product determinant and word formulas are
+\Cref{prop:renewal-principal-minor-lu-main,cor:renewal-principal-minor-word-law-main}.
 \end{proof}
 
 \begin{theorem}[Killed-leakage sampled D-MAP visible-law quotient]\label{thm:toeplitz_image_inverse_duality}
@@ -647,6 +753,156 @@ therefore all finite-dimensional distributions.
 
 \subsection{Finite-record inference and the exchange diagonal}
 
+\begin{definition}[Cycle-index inclusion estimator]\label{def:cycle-index-inclusion-estimator-main}
+For a finite observed record \(A_0,\ldots,A_{N-1}\), write the complete click
+epochs in the observed window as
+\[
+\tau_0<\tau_1<\cdots,\qquad K_N=\max\{k:\tau_k<N\},
+\]
+and set \(L_j=\tau_{j+1}-\tau_j\) whenever both endpoints are observed.  For
+\(m=0,1,2\), put
+\[
+X_n^{(m)}=A_nA_{n+m},\qquad X_n^{(0)}=A_n,
+\]
+and define the complete-cycle uncentered reward
+\[
+U_j^{(m)}=\sum_{n=\tau_j}^{\tau_{j+1}-1}X_n^{(m)}.
+\]
+The admissible all-complete-cycle index set is
+\[
+\begin{aligned}
+J_{m,N}
+=\{0\le j\le K_N-m-1:\;&
+\tau_j,\tau_{j+1}\in[0,N-1],\\
+&\text{and every }n+m\text{ entering }U_j^{(m)}
+\text{ lies in }[0,N-1]\}.
+\end{aligned}
+\]
+The cycle-index estimator of the three inclusion coordinates
+\[
+r=(r_0,r_1,r_2)=(\PP(A_0=1),\PP(A_0=A_1=1),\PP(A_0=A_2=1))
+\]
+is
+\[
+\widehat r_N^{\mathrm{cyc}}
+=\bigl(\widehat r_{0,N}^{\mathrm{cyc}},
+\widehat r_{1,N}^{\mathrm{cyc}},
+\widehat r_{2,N}^{\mathrm{cyc}}\bigr)^\top,\qquad
+\widehat r_{m,N}^{\mathrm{cyc}}
+=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)} .
+\]
+For covariance estimation the three coordinates are evaluated on the common
+complete-cycle set \(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\).  With plug-in
+centering, the vector reward used in the separated batches is
+\[
+\widehat Y_j=
+\bigl(U_j^{(0)}-\widehat r_{0,N}^{\mathrm{cyc}}L_j,\,
+U_j^{(1)}-\widehat r_{1,N}^{\mathrm{cyc}}L_j,\,
+U_j^{(2)}-\widehat r_{2,N}^{\mathrm{cyc}}L_j\bigr)^\top .
+\]
+\end{definition}
+
+\begin{lemma}[Calendar-stopped triangular-array batch covariance]\label{lem:calendar-stopped-batch-cov-main}
+Let \((Y_j,L_j)_{j\in\mathbb Z}\) be a stationary cycle sequence with
+\(\EE Y_0=0\), \(\mu=\EE L_0\in(0,\infty)\), exponentially decaying tails for
+\(L_0\), and \(Y_j=f(G_j,\ldots,G_{j+q})\), where the gaps \(G_j\) are i.i.d.
+and
+\[
+|f(g_0,\ldots,g_q)|\le C_f\left(1+\sum_{i=0}^qg_i\right).
+\]
+Let \(b_N\to\infty\), \(b_N/N\to0\), \(d_N=b_N+q\), and set
+\[
+C_{\ell,N}=\sum_{j=(\ell-1)d_N}^{(\ell-1)d_N+b_N-1}Y_j,\qquad
+V_{\ell,N}=b_N^{-1/2}C_{\ell,N}.
+\]
+Then \((V_{\ell,N})_{\ell\ge1}\) are independent within each row,
+\(\sup_{\ell,N}\EE\|V_{\ell,N}\|^4<\infty\), and
+\[
+\EE[V_{\ell,N}V_{\ell,N}^{\top}]\longrightarrow
+\mathcal T_q:=\Var(Y_0)+2\sum_{h=1}^q\operatorname{Cov}(Y_0,Y_h).
+\]
+Let \(R_N\) be any positive integer-valued random variable, possibly depending
+on the same gaps and rewards, such that
+\[
+n_N:=\left\lfloor\frac{N}{\mu d_N}\right\rfloor\to\infty,\qquad
+\frac{R_N}{n_N}\to1\quad\text{in probability}.
+\]
+On the event \(R_N\ge2\), define
+\[
+S_N(R_N)=
+\frac1{R_N-1}\sum_{\ell=1}^{R_N}
+(V_{\ell,N}-\bar V_{R_N,N})(V_{\ell,N}-\bar V_{R_N,N})^{\top},
+\qquad
+\bar V_{R_N,N}=R_N^{-1}\sum_{\ell=1}^{R_N}V_{\ell,N}.
+\]
+Then \(S_N(R_N)\to\mathcal T_q\) in probability.  Consequently, if
+\(K_N=\max\{k:\tau_k<N\}\) and \(R_N=M_N\) is the number of all-complete-cycle
+batches selected before the calendar time \(N\), with
+\(\bar C_N=M_N^{-1}\sum_{\ell=1}^{M_N}C_{\ell,N}\), then
+\[
+\frac{K_N}{N}\,\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^{\top}
+\longrightarrow \frac{\mathcal T_q}{\mu}
+\]
+in probability.
+\end{lemma}
+
+\begin{proof}
+The separation by \(q\) omitted cycle rewards makes the gap sets entering
+distinct \(C_{\ell,N}\)'s disjoint, so the row variables \(V_{\ell,N}\) are
+independent.  The displayed growth bound and the exponential gap tail give the
+uniform fourth-moment bound after the \(b_N^{-1/2}\) normalization.  Since
+\((Y_j)\) is \(q\)-dependent,
+\[
+\frac1{b_N}\Var(C_{\ell,N})
+=\Var(Y_0)+2\sum_{h=1}^q\left(1-\frac{h}{b_N}\right)
+\operatorname{Cov}(Y_0,Y_h)\to\mathcal T_q .
+\]
+Thus the deterministic-prefix sample second moment and mean satisfy, for every
+deterministic \(m_N\to\infty\),
+\[
+\frac1{m_N}\sum_{\ell=1}^{m_N}V_{\ell,N}V_{\ell,N}^{\top}\to\mathcal T_q,
+\qquad
+\frac1{m_N}\sum_{\ell=1}^{m_N}V_{\ell,N}\to0
+\]
+in probability, by the triangular-array weak law for independent rows with
+uniformly bounded second moments.
+
+It remains only to justify that a calendar-stopped prefix cannot change this
+limit.  Fix \(\varepsilon>0\) and restrict to the event
+\((1-\varepsilon)n_N\le R_N\le(1+\varepsilon)n_N\).  For the second-moment
+average, the difference between the \(R_N\)-prefix and the \(n_N\)-prefix is
+bounded by the change in the normalizing factor times
+\(n_N^{-1}\sum_{\ell\le n_N}\|V_{\ell,N}V_{\ell,N}^{\top}\|\), plus the
+normalized sum of the at most \(\lceil\varepsilon n_N\rceil+1\) possible
+additional or deleted endpoint terms.  Taking expectations and using
+\(\sup_{\ell,N}\EE\|V_{\ell,N}\|^2<\infty\) makes this bound
+\(O(\varepsilon)+o(1)\).  For the empirical mean, Kolmogorov's maximal
+inequality applied componentwise to the independent row variables gives
+\[
+\frac1{n_N}\max_{m\le2n_N}\left\|\sum_{\ell=1}^{m}V_{\ell,N}\right\|
+\to0
+\]
+in probability, because the total row variance up to \(2n_N\) is \(O(n_N)\).
+Hence \(R_N^{-1}\sum_{\ell\le R_N}V_{\ell,N}\to0\) in probability on the same
+event.  Letting first \(N\to\infty\) and then \(\varepsilon\downarrow0\)
+proves \(S_N(R_N)\to\mathcal T_q\), even though \(R_N\) may be a function of
+the same rewards.
+
+For the renewal calendar stop, the renewal law gives \(K_N/N\to1/\mu\) in
+probability.  The endpoint convention defining \(J_N\) removes only the
+initial incomplete cycle, the terminal incomplete cycle, \(O(q)\) local
+look-ahead cycles, and one unfinished terminal batch of length less than
+\(d_N\).  Thus \(M_Nd_N=K_N+O_{\PP}(d_N+\log N+q)\).  Since \(d_N=o(N)\), this
+implies
+\[
+\frac{M_N}{N/(\mu d_N)}\to1
+\]
+in probability.  The preceding random-prefix result applied with
+\(R_N=M_N\), together with \(K_N/N\to1/\mu\), yields the displayed
+calendar-time covariance limit.
+\end{proof}
+
 \begin{theorem}[Finite-record inference theorem for the killed-leakage sampled-boundary setting]\label{thm:finite-record-inference-audit-main}
 Let \((A_n)\) be either a stationary sampled boundary-reset renewal record or
 a finite-start record after discarding a deterministic burn-in
@@ -698,18 +954,10 @@ long-run covariance, and the empirical averages satisfy the corresponding
 \(\sqrt N\) CLT.  The same construction and conclusion apply componentwise, and
 hence by Cramer--Wold, to vector rewards.
 
-For the three inclusion coordinates \(\widehat r_N\), this gives
-\[
-\sqrt N(\widehat r_N-r)\Rightarrow\mathcal N(0,\Sigma_r),
-\qquad
-\widehat\Sigma_{r,N}^{\mathrm{all}}\to\Sigma_r
-\quad\text{in probability}.
-\]
-With any threshold \(t_N\downarrow0\) satisfying
-\(\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
-=o_{\PP}(t_N)\), the projected symmetric-coordinate estimator has the
-delta-method, rank-adaptive, and exchange-diagonal projection limits stated
-below.
+Model-specific inclusion-coordinate estimators are obtained by applying this
+general renewal-reward theorem to the cycle-index rewards of
+\Cref{def:cycle-index-inclusion-estimator-main}; that specialization is stated
+separately in \Cref{prop:three-coordinate-vector-batch-main}.
 \end{theorem}
 
 \begin{proof}
@@ -738,22 +986,18 @@ vanishes in probability.  This proves the regenerative CLT with covariance
 \(\tau_q^2/\EE L\).
 
 For the covariance estimator, the separation by \(q\) omitted rewards makes
-\((B_{\ell,N})_{\ell\ge1}\) independent.  Moreover
-\[
-\frac1{b_N}\Var(B_{\ell,N})\to\tau_q^2,
-\]
-because only \(O(q)\) endpoint covariance terms are missing from a length
-\(b_N\) block.  The exponential moment bound gives uniformly bounded fourth
-moments for \(B_{\ell,N}/\sqrt{b_N}\).  Since
-\[
-M_N\sim \frac{N}{\EE L\,(b_N+q)}\to\infty ,
-\]
-the ordinary sample covariance of the independent batch sums, divided by
-\(b_N\), converges in probability to \(\tau_q^2\).  The prefactor
-\(K_N/N\to1/\EE L\) gives the calendar-time covariance.  Discarding the terminal
-partial batch removes at most \(b_N+q+O_{\PP}(\log N)\) complete-cycle rewards;
-this affects the estimator only through the fact that \(M_N\to\infty\), not
-through the statistic's CLT.
+\((B_{\ell,N})_{\ell\ge1}\) independent within each triangular row, but the
+number \(M_N\) of used batches is calendar-stopped and is a function of the
+same cycle lengths and rewards.  Thus one may not treat
+\(\{B_{\ell,N}:1\le\ell\le M_N\}\) as an ordinary independent sample with an
+external sample size.  \Cref{lem:calendar-stopped-batch-cov-main} applies with
+\(\mu=\EE L\), \(R_N=M_N\), and \(\mathcal T_q=\tau_q^2\).  It first proves the
+deterministic cycle-index triangular-array sample covariance limit and then
+controls the replacement of the deterministic prefix
+\(\lfloor N/(\EE L\,(b_N+q))\rfloor\) by the random all-complete-cycle prefix.
+The endpoint convention changes \(M_N\) by only \(o_{\PP}(N/(b_N+q))\), so the
+random-prefix covariance, multiplied by \(K_N/N\to1/\EE L\), converges to the
+calendar-time covariance \(\tau_q^2/\EE L\).
 
 For plug-in centering, a used batch error has size
 \[
@@ -770,36 +1014,18 @@ burn-in contributes \(L_N=o(\sqrt N)\) to the centered \(\sqrt N\) scale.
 \end{proof}
 
 \begin{proposition}[Finite-record covariance estimator for the three quotient coordinates]\label{prop:three-coordinate-vector-batch-main}
-Use the complete click epochs \(\tau_j\) and cycle lengths \(L_j\) from
-\Cref{thm:finite-record-inference-audit-main}.
-For \(m=0,1,2\), put \(X_n^{(m)}=A_nA_{n+m}\), with
-\(X_n^{(0)}=A_n\), and define the complete-cycle uncentered reward
-\[
-U_j^{(m)}=\sum_{n=\tau_j}^{\tau_{j+1}-1}X_n^{(m)}.
-\]
-Only \(j\)'s for which the \(m\)-step look-ahead lies inside the observed
-record are used.  The cycle-index estimator is
-\[
-\widehat r_{m,N}^{\mathrm{cyc}}
-=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)},\qquad m=0,1,2,
-\]
-where \(J_{m,N}\) is the corresponding all-complete-cycle index set.  Equivalently,
-the centered cycle reward is
+Use the cycle-index estimator of
+\Cref{def:cycle-index-inclusion-estimator-main}.  Its population centered
+cycle reward is
 \[
 Y_j^{(m)}=U_j^{(m)}-r_mL_j,\qquad
 r_m=\PP(A_0=A_m=1),
 \]
 and \(Y_j^{(m)}=f_m(G_j,\ldots,G_{j+m})\) with
 \(|f_m|\le C_m(1+\sum_{i=0}^mG_{j+i})\).  For covariance estimation use the
-common index set \(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\) and plug-in centered
-vector rewards
-\[
-\widehat Y_j=
-\bigl(U_j^{(0)}-\widehat r_{0,N}^{\mathrm{cyc}}L_j,\,
-U_j^{(1)}-\widehat r_{1,N}^{\mathrm{cyc}}L_j,\,
-U_j^{(2)}-\widehat r_{2,N}^{\mathrm{cyc}}L_j\bigr)^\top
-\]
-in \eqref{eq:all-cycle-batch-cov-main}.  For
+common index set \(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\) and the plug-in
+centered vector rewards \(\widehat Y_j\) defined there in
+\eqref{eq:all-cycle-batch-cov-main}.  For
 \[
 \widehat r_N=(\widehat r_{0,N},\widehat r_{1,N},\widehat r_{2,N})^\top,
 \]
@@ -807,31 +1033,155 @@ where \(\widehat r_{m,N}\) denotes this cycle-index estimator up to the
 negligible endpoint convention, the coordinates estimate
 \((\rho,\rho a,\rho u_2)\).  The CLT and all-complete-cycle covariance
 consistency in \Cref{thm:finite-record-inference-audit-main} hold with limiting
-matrix \(\Sigma_r\).
-\end{proposition}
-
-\begin{lemma}[Rank-threshold condition for the complete-cycle covariance estimator]\label{lem:three-coordinate-batch-rate-main}
-Let \(t_N\downarrow0\) satisfy
+matrix \(\Sigma_r\).  If \(b_N=\lfloor N^{1/3}\rfloor\), then the covariance
+estimator satisfies
 \[
 \|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
-=o_{\PP}(t_N).
+=O_{\PP}(N^{-1/3}).
 \]
-Then the same condition holds for the symmetric-coordinate sandwich covariance
-wherever the map below is \(C^1\).  The spectral rule that keeps empirical
-eigenvalues larger than \(t_N\) and discards the rest consistently recovers the
-rank of the limiting covariance.
+Consequently any deterministic threshold \(t_N=N^{-\alpha}\) with
+\(0<\alpha<1/3\), for instance \(t_N=N^{-1/4}\), is admissible for the
+rank-adaptive projected symmetric-coordinate estimator used below.
+\end{proposition}
+
+\begin{proof}
+Inside the half-open cycle
+\([\tau_j,\tau_{j+1})\), the only click time is \(\tau_j\).  Thus
+\(U_j^{(m)}\) counts the times in that cycle whose \(m\)-step look-ahead is
+also a click, with the endpoint convention in
+\Cref{def:cycle-index-inclusion-estimator-main} ensuring that every such
+look-ahead is observed.  For \(m=0,1,2\), the reward is a measurable function
+of the finite gap block \((G_j,\ldots,G_{j+m})\), and
+\[
+|Y_j^{(m)}|
+\le 1+r_mL_j
+\le 1+L_j
+\le 2+G_j .
+\]
+Hence the vector reward
+\((Y_j^{(0)},Y_j^{(1)},Y_j^{(2)})^\top\) satisfies the hypotheses of
+\Cref{thm:finite-record-inference-audit-main} with \(q=2\).
+
+The Palm renewal identity gives
+\(\EE U_j^{(m)}=r_m\EE L_j\), because summing \(X_n^{(m)}\) over one renewal
+cycle and dividing by the mean cycle length recovers the stationary calendar
+probability \(\PP(A_0=A_m=1)\).  Therefore the displayed \(Y_j^{(m)}\)'s are
+centered.  The complete-cycle convention omits only the initial incomplete
+cycle, the terminal incomplete cycle, and the bounded look-ahead margin; by
+the exponential gap tail their total contribution is
+\(O_{\PP}(\log N)=o_{\PP}(\sqrt N)\).  Consequently
+\[
+\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
+=\frac1{\sqrt N}\sum_{j\in J_N}
+\bigl(Y_j^{(0)},Y_j^{(1)},Y_j^{(2)}\bigr)^\top
++o_{\PP}(1),
+\]
+with the same endpoint estimate coordinatewise when \(J_{m,N}\) is used
+instead of the common set \(J_N\).  Applying
+\Cref{thm:finite-record-inference-audit-main} componentwise and then by
+Cramer--Wold gives the multivariate CLT.
+
+The separated all-complete-cycle covariance estimator is exactly
+\eqref{eq:all-cycle-batch-cov-main} applied to this vector reward.  Since the
+CLT just proved gives
+\(\widehat r_{m,N}^{\mathrm{cyc}}-r_m=O_{\PP}(N^{-1/2})\), the plug-in
+centered rewards in \Cref{def:cycle-index-inclusion-estimator-main} satisfy
+the theorem's plug-in condition with
+\(\Delta_N=O_{\PP}(N^{-1/2})\) coordinatewise.  Hence
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}\to\Sigma_r\) in probability.
+The final threshold and projected-coordinate conclusions are then precisely
+\Cref{lem:three-coordinate-batch-rate-main,cor:finite_inverse_delta_boundary_main}.
+\end{proof}
+
+\begin{lemma}[Separated-batch covariance rate and deterministic rank threshold]\label{lem:three-coordinate-batch-rate-main}
+Under the hypotheses of
+\Cref{prop:three-coordinate-vector-batch-main}, with fixed look-ahead
+\(q=2\), let the all-complete-cycle separated-batch covariance estimator be
+\(\widehat\Sigma_{r,N}^{\mathrm{all}}\).  For a general batch length
+\(b_N\to\infty\), \(b_N/N\to0\),
+\[
+\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+In particular, for the deterministic choice \(b_N=\lfloor N^{1/3}\rfloor\),
+\[
+\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\]
+Thus any deterministic threshold
+\[
+t_N=N^{-\alpha},\qquad 0<\alpha<1/3,
+\]
+and in particular \(t_N=N^{-1/4}\), satisfies
+\(\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=o_{\PP}(t_N)\).  The same rate holds for the symmetric-coordinate sandwich
+covariance wherever the map below is \(C^1\).  The spectral rule that keeps
+empirical eigenvalues larger than \(t_N\) and discards the rest consistently
+recovers the rank of the limiting covariance.
 \end{lemma}
 
 \begin{proof}
+First use true centering and a deterministic cycle prefix
+\(n_N=\lfloor N/(\mu(b_N+q))\rfloor\).  With
+\[
+V_{\ell,N}=b_N^{-1/2}\sum_{j=(\ell-1)(b_N+q)}^{(\ell-1)(b_N+q)+b_N-1}Y_j,
+\]
+the rows are independent and have uniformly bounded fourth moments by
+\Cref{lem:calendar-stopped-batch-cov-main}.  Hence the empirical second moment
+of \(V_{\ell,N}\) differs from its expectation by
+\(O_{\PP}(n_N^{-1/2})=O_{\PP}(\sqrt{b_N/N})\), and the empirical-mean
+subtraction contributes only \(O_{\PP}(n_N^{-1})\).  Since the reward sequence
+is \(q\)-dependent with fixed \(q\),
+\[
+\EE[V_{\ell,N}V_{\ell,N}^{\top}]
+=
+\Var(Y_0)+2\sum_{h=1}^q\left(1-\frac{h}{b_N}\right)
+\operatorname{Cov}(Y_0,Y_h),
+\]
+so the finite-batch bias relative to
+\(\mathcal T_q=\Var(Y_0)+2\sum_{h=1}^q\operatorname{Cov}(Y_0,Y_h)\) is
+\(O(b_N^{-1})\).
+
+The observed all-complete-cycle prefix has the same rate.  The renewal CLT and
+the exponential gap tail give
+\(K_N=N/\mu+O_{\PP}(\sqrt N)\) and
+\(M_N(b_N+q)=K_N+O_{\PP}(b_N+\log N)\).  Replacing \(n_N\) by \(M_N\) therefore
+changes the normalized second-moment and mean terms by
+\[
+O_{\PP}\left(N^{-1/2}+\frac{b_N}{N}+\frac{\log N}{N}\right)
+=O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right),
+\]
+using the same maximal-inequality argument as in
+\Cref{lem:calendar-stopped-batch-cov-main}.  The factor \(K_N/N\) differs from
+\(1/\mu\) by \(O_{\PP}(N^{-1/2})\), which is again absorbed by
+\(\sqrt{b_N/N}\).  The endpoint cycles omitted by the all-complete-cycle
+convention have total length \(O_{\PP}(b_N+\log N)\), giving no larger
+calendar-time contribution.
+
+It remains to check plug-in centering.  In each used batch,
+\[
+\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)
+=\Delta_N\sum_{j\in I_{\ell,N}}L_j,
+\qquad
+\Delta_N=O_{\PP}(N^{-1/2})
+\]
+coordinatewise.  Since \(\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(b_N)\) uniformly in
+the empirical average, the covariance cross term after the \(1/b_N\)
+normalization is \(O_{\PP}(\sqrt{b_N/N})\), and the square term is
+\(O_{\PP}(b_N/N)\).  Combining the sampling fluctuation, finite-batch bias,
+calendar stopping, endpoint, and plug-in terms proves the displayed operator
+norm rate for the fixed three-dimensional vector.
+
 On a compact neighbourhood where \(\Phi\) is \(C^1\), the sample Jacobian
 \(D\Phi(\widehat r_N)\) is bounded and converges in probability to \(D\Phi(r)\).
 Therefore
 \[
 D\Phi(\widehat r_N)\widehat\Sigma_{r,N}^{\mathrm{all}}
 D\Phi(\widehat r_N)^\top-D\Phi(r)\Sigma_rD\Phi(r)^\top
-=o_{\PP}(t_N)
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
 \]
-whenever the displayed condition holds for \(\widehat\Sigma_{r,N}^{\mathrm{all}}\).
+For \(b_N=\lfloor N^{1/3}\rfloor\) and \(t_N=N^{-\alpha}\) with
+\(0<\alpha<1/3\), this difference is \(o_{\PP}(t_N)\).
 Weyl's eigenvalue inequality then separates every positive population
 eigenvalue from zero and sends every zero population eigenvalue below \(t_N\)
 with probability tending to one.
@@ -979,19 +1329,108 @@ At separated roots the projection is asymptotically inactive; at
 \Cref{lem:exchange-diagonal-projection-main}.
 \end{theorem}
 
+\begin{corollary}[Exchange-diagonal projected-Gaussian confidence set]\label{cor:exchange-diagonal-projected-gaussian-confidence-main}
+Assume the hypotheses of
+\Cref{cor:finite_inverse_delta_boundary_main} and suppose the population
+symmetric coordinate is on the exchange diagonal,
+\[
+s=s_z=(2z,z^2),\qquad 0<z<1.
+\]
+Let \(H_z=T_{s_z}F=\{h\in\RR^2:h_2\le zh_1\}\), let
+\(\widehat\Sigma_{s,N}\to\Sigma_s\) be the feasible sandwich covariance from
+\Cref{lem:three-coordinate-batch-rate-main}, and let
+\(\widehat\Sigma_{s,N}^{+}\) denote the Moore--Penrose inverse after the same
+deterministic spectral truncation used for rank adaptation.  For a candidate
+diagonal point \(s_z\), define
+\begin{equation}\label{eq:boundary-projected-statistic-main}
+Q_N(z)=
+N(\widetilde s_N-s_z)^\top\widehat\Sigma_{s,N}^{+}
+(\widetilde s_N-s_z).
+\end{equation}
+Let \(c_{1-\alpha,N}(z)\) be the conditional \((1-\alpha)\)-quantile of
+\[
+Q_N^\ast(z)=
+\Pi_{H_z}(Z_N^\ast)^\top\widehat\Sigma_{s,N}^{+}\Pi_{H_z}(Z_N^\ast),
+\qquad
+Z_N^\ast\mid A_0,\ldots,A_{N-1}\sim
+\mathcal N(0,\widehat\Sigma_{s,N}),
+\]
+where the projection is ordinary Euclidean projection onto the half-space
+\(H_z\).  Equivalently, \(c_{1-\alpha,N}(z)\) is obtained by a parametric
+Gaussian bootstrap: draw many \(Z_N^\ast\)'s from
+\(\mathcal N(0,\widehat\Sigma_{s,N})\), project each draw onto \(H_z\), and
+take the empirical quantile of \(Q_N^\ast(z)\).  Then the diagonal
+confidence set
+\begin{equation}\label{eq:boundary-projected-confidence-set-main}
+\mathcal C_{1-\alpha,N}^{\mathrm{diag}}
+=
+\{(2z,z^2):0<z<1,\ Q_N(z)\le c_{1-\alpha,N}(z)\}
+\end{equation}
+has asymptotic coverage at least \(1-\alpha\) at every exchange-diagonal
+population point for which the limiting quantile is a continuity point.  If
+\(\Sigma_s\) is nonsingular on the span used by the rank truncation, the
+coverage is exact in the usual first-order sense:
+\[
+\PP_s\{s\in\mathcal C_{1-\alpha,N}^{\mathrm{diag}}\}
+\longrightarrow 1-\alpha .
+\]
+\end{corollary}
+
+\begin{proof}
+\Cref{lem:exchange-diagonal-projection-main} gives
+\[
+\sqrt N(\widetilde s_N-s_z)\Rightarrow \Pi_{H_z}(Z),
+\qquad
+Z\sim\mathcal N(0,\Sigma_s).
+\]
+The covariance consistency and the deterministic rank threshold in
+\Cref{lem:three-coordinate-batch-rate-main} give
+\(\widehat\Sigma_{s,N}^{+}\to\Sigma_s^{+}\) on the retained limiting range.
+Hence
+\[
+Q_N(z)\Rightarrow
+Q(z):=\Pi_{H_z}(Z)^\top\Sigma_s^{+}\Pi_{H_z}(Z).
+\]
+Conditionally on the record,
+\(Z_N^\ast\sim\mathcal N(0,\widehat\Sigma_{s,N})\) converges weakly in
+probability to \(Z\sim\mathcal N(0,\Sigma_s)\).  Projection onto the closed
+convex half-space \(H_z\) is continuous and one-Lipschitz, and the quadratic
+form with the truncated inverse converges on the retained range.  Therefore
+the conditional distribution of \(Q_N^\ast(z)\) converges in probability to
+the distribution of \(Q(z)\).  At continuity points of the limiting quantile,
+the conditional quantile \(c_{1-\alpha,N}(z)\) converges in probability to the
+corresponding quantile of \(Q(z)\).  Inverting the statistic gives
+\eqref{eq:boundary-projected-confidence-set-main} and the displayed coverage
+statement.  In singular cases the same inversion is conservative on directions
+discarded by the rank truncation, which gives the stated at-least coverage.
+\end{proof}
+
 \begin{corollary}[Projected symmetric-coordinate confidence reporting]\label{cor:projected-symmetric-wald-main}
 Use \(\widetilde s_N\) and the feasible sandwich covariance
 \(\widehat\Sigma_{s,N}\).  If the population point has separated roots and
-\(\lambda_{\min}(\Sigma_s)>0\), then
+\(\lambda_{\min}(\Sigma_s)>0\), the ordinary interior Wald statistic is valid:
 \[
 N(\widetilde s_N-s)^\top\widehat\Sigma_{s,N}^{-1}
 (\widetilde s_N-s)\Rightarrow\chi^2_2 .
 \]
-If the covariance has rank \(r\), any threshold \(t_N\downarrow0\) satisfying
-the condition in \Cref{lem:three-coordinate-batch-rate-main} gives the
-corresponding rank-\(r\) Wald statistic.  At the exchange diagonal, confidence
-reporting is in projected symmetric coordinates using the half-space limit; no
-labelled root/rate covariance is asserted.
+If the covariance has rank \(r\), choose
+\(b_N=\lfloor N^{1/3}\rfloor\) and any deterministic threshold
+\(t_N=N^{-\alpha}\) with \(0<\alpha<1/3\), for instance
+\(t_N=N^{-1/4}\).  Then the spectral truncation in
+\Cref{lem:three-coordinate-batch-rate-main} gives the corresponding rank-\(r\)
+interior Wald statistic.  This chi-square statement is only an interior
+separated-root statement.  At an exchange-diagonal point
+\((2z,z^2)\), the confidence procedure is instead the projected-Gaussian
+half-space inversion of
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  Thus the
+reported boundary set is
+\[
+\{(2z,z^2):Q_N(z)\le c_{1-\alpha,N}(z)\},
+\]
+with \(Q_N(z)\) and \(c_{1-\alpha,N}(z)\) defined in
+\eqref{eq:boundary-projected-statistic-main}--\eqref{eq:boundary-projected-confidence-set-main}.
+No labelled root/rate covariance or ordinary chi-square boundary limit is
+asserted.
 \end{corollary}
 
 \begin{corollary}[Optional separated-root root and rate chart]\label{cor:finite-separated-root-rate-chart-main}
@@ -1059,20 +1498,159 @@ The same conclusion holds after the finite-start burn-in in
 \Cref{thm:finite-record-inference-audit-main}.
 \end{theorem}
 
+\begin{proof}
+Write the click epochs as \(\tau_j\), put
+\(L_j=\tau_{j+1}-\tau_j=G_j+1\), and decompose the calendar sum into complete
+cycles.  By the definition of the Palm reward,
+\[
+Y_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n
+\]
+after the finitely many endpoint terms needed by the \(q\)-cycle look-ahead
+have been assigned to adjacent cycles.  The record segment not covered by
+complete observed cycles consists of an initial incomplete cycle, a terminal
+incomplete cycle, and at most \(q\) additional look-ahead cycles.  Since the
+gap tail is exponential,
+\(\max_{0\le j\le cN}L_j=O_{\PP}(\log N)\) for each fixed \(c\); hence those
+endpoint contributions are \(O_{\PP}(\log N)=o_{\PP}(\sqrt N)\).  Therefore
+\[
+\sum_{n=0}^{N-1}Z_n
+=\sum_{j=0}^{K_N-q-1}Y_j+o_{\PP}(\sqrt N),
+\qquad
+K_N=\max\{k:\tau_k<N\}.
+\]
+
+The variables \(Y_j=f(G_j,\ldots,G_{j+q})\) are centered and \(q\)-dependent,
+because the gaps are i.i.d. and disjoint gap blocks are independent once their
+cycle indices are more than \(q\) apart.  The displayed growth bound and the
+exponential tail give a finite second moment.  The ordinary CLT for centered
+\(q\)-dependent sequences gives, for deterministic \(m\to\infty\),
+\[
+\frac1{\sqrt m}\sum_{j=0}^{m-1}Y_j
+\Rightarrow
+\mathcal N(0,\tau_q^2),
+\qquad
+\tau_q^2=\Var(Y_1)+2\sum_{h=1}^q\operatorname{Cov}(Y_1,Y_{1+h}).
+\]
+The renewal law gives \(K_N/N\to1/\EE L\), where \(L=G+1\).  Anscombe's
+random-index theorem, or the equivalent maximal inequality for
+\(q\)-dependent partial sums, then replaces \(m\) by \(K_N-q\) and yields
+\[
+\frac1{\sqrt N}\sum_{n=0}^{N-1}Z_n
+\Rightarrow
+\mathcal N\left(0,\frac{\tau_q^2}{\EE L}\right).
+\]
+
+For the variance estimator, form cycle-index batches of length \(b_N\) and
+leave \(q\) rewards between consecutive batches.  The omitted rewards make the
+gap blocks used by different batches disjoint, so the batch sums are
+independent within each triangular row.  Their normalized second moments
+converge to \(\tau_q^2\) by the same \(q\)-dependent covariance calculation.
+The number of all-complete-cycle batches is calendar-stopped, but
+\Cref{lem:calendar-stopped-batch-cov-main} proves that replacing the
+deterministic prefix by this random all-complete-cycle prefix changes the
+sample covariance by \(o_{\PP}(1)\).  Multiplication by \(K_N/N\to1/\EE L\)
+therefore gives consistency for the calendar-time variance
+\(\tau_q^2/\EE L\).  The finite-start burn-in case is the final assertion of
+\Cref{thm:finite-record-inference-audit-main}: after discarding
+\(L_N\to\infty\), \(L_N=o(\sqrt N)\), the remaining initial-law error and the
+deleted deterministic prefix are negligible on the \(\sqrt N\) scale.
+\end{proof}
+
 \begin{lemma}[Observed lag-two windows in the all-complete-cycle batches]\label{lem:all-cycle-lag-two-windows-main}
 For lag-two rewards, using all-complete-cycle batches and leaving one complete
 cycle after the last batched cycle ensures every term \(A_nA_{n+2}\) used by
 the statistic is observed.
 \end{lemma}
 
+\begin{proof}
+If \(n\in[\tau_j,\tau_{j+1}-1]\), then \(A_{n+2}\) is determined by the
+click pattern up to time \(\tau_{j+1}+1\).  This time lies no later than the
+end of cycle \(j+1\): if \(G_j\ge1\), then \(\tau_{j+1}+1\le\tau_{j+2}\);
+if \(G_j=0\), then the cycle \(j\) interval contains only \(n=\tau_j\), and
+\(A_{\tau_j+2}\) is determined by whether \(G_{j+1}=0\).  Thus every lag-two
+term assigned to cycle \(j\) is determined by \(G_j\) and \(G_{j+1}\).  The
+all-complete-cycle convention uses only batched indices for which cycle
+\(j+1\) is complete and, at the terminal edge, leaves one complete cycle after
+the last batched cycle.  Hence no term \(A_nA_{n+2}\) in a used batch reaches
+outside the observed record.
+\end{proof}
+
 \begin{lemma}[Lag-two reward identity, centering, and one-gap dependence]\label{lem:lag-two-reward-main}
 For \(Z_n=(A_n-\rho)(A_{n+2}-\rho)-\gamma_2\), the Palm cycle reward has the
-form \(Y_j=f(G_j,G_{j+1})\), is centered, and is \(1\)-dependent in the cycle
+explicit form
+\begin{equation}\label{eq:lag-two-cycle-reward-main}
+Y_j=f(G_j,G_{j+1}),
+\end{equation}
+where
+\[
+f(g,h)=
+\mathbf1_{\{g=1\}}+\mathbf1_{\{g=0,\ h=0\}}
+-\rho\bigl(1+\mathbf1_{\{g\ge1\}}+\mathbf1_{\{h=0\}}\bigr)
++(\rho^2-\gamma_2)(g+1).
+\]
+In particular \(\EE Y_j=0\), and \((Y_j)\) is \(1\)-dependent in the cycle
 index.
 \end{lemma}
 
+\begin{proof}
+Work in Palm coordinates with \(\tau_j=0\).  The cycle \(j\) contains the
+times \(0,1,\ldots,G_j\), the next click is at \(G_j+1\), and the following
+click is at \(G_j+G_{j+1}+2\).  Hence
+\[
+\sum_{n=0}^{G_j}A_n=1,
+\]
+while the shifted count in the same cycle is
+\[
+\sum_{n=0}^{G_j}A_{n+2}
+=\mathbf1_{\{G_j\ge1\}}+\mathbf1_{\{G_{j+1}=0\}}.
+\]
+The lag-two product count is nonzero only when the click at the cycle start
+is followed by another click exactly two sampled steps later:
+\[
+\sum_{n=0}^{G_j}A_nA_{n+2}
+=\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,\ G_{j+1}=0\}}.
+\]
+Summing
+\((A_n-\rho)(A_{n+2}-\rho)-\gamma_2\) over the cycle therefore gives
+\[
+\begin{aligned}
+Y_j
+&=\sum_{n=0}^{G_j}A_nA_{n+2}
+-\rho\sum_{n=0}^{G_j}A_n
+-\rho\sum_{n=0}^{G_j}A_{n+2}
++(\rho^2-\gamma_2)(G_j+1)  \\
+&=f(G_j,G_{j+1}),
+\end{aligned}
+\]
+which is \eqref{eq:lag-two-cycle-reward-main}.
+
+The centering is not an additional assumption.  The stationary renewal record
+has \(\EE[(A_0-\rho)(A_2-\rho)-\gamma_2]=0\), and Palm inversion gives
+\[
+\EE Y_j
+=\EE L\,
+\EE\bigl[(A_0-\rho)(A_2-\rho)-\gamma_2\bigr]
+=0.
+\]
+Finally, \(Y_j\) is a function only of the adjacent pair
+\((G_j,G_{j+1})\).  If \(|j-k|>1\), the pairs
+\((G_j,G_{j+1})\) and \((G_k,G_{k+1})\) are disjoint functions of i.i.d. gaps,
+so \(Y_j\) and \(Y_k\) are independent.  Thus the reward sequence is
+\(1\)-dependent.
+\end{proof}
+
 \begin{corollary}[Killed-leakage sampled-boundary fixed-setting lag-two covariance CLT]\label{cor:boundary-reset-cycle-clt-main}\label{thm:sampled-finite-record-main}
 For one fixed sampled boundary-reset setting,
+define the observed complete-cycle lag-two covariance estimator by
+\[
+\widehat\gamma_{2,N}
+=\frac1N\sum_{j\in J_{2,N}}\sum_{n=\tau_j}^{\tau_{j+1}-1}
+(A_n-\widehat\rho_N)(A_{n+2}-\widehat\rho_N),
+\qquad
+\widehat\rho_N=\frac1N\sum_{n=0}^{N-1}A_n,
+\]
+where \(J_{2,N}\) contains exactly those all-complete-cycle indices for which
+the lag-two windows lie in the observed record.  Then
 \[
 \sqrt N(\widehat\gamma_{2,N}-\gamma_2)
 \Rightarrow \mathcal N(0,\sigma_{\gamma_2}^2),
@@ -1090,10 +1668,32 @@ nondegenerate studentized interval is asserted.
 \end{corollary}
 
 \begin{proof}
-\Cref{lem:lag-two-reward-main} puts the statistic in the \(q=1\) case of
-\Cref{thm:finite-lag-renewal-reward-main}; \Cref{lem:all-cycle-lag-two-windows-main}
-checks the observed-window condition.  The final sentence is the standard
-nondegenerate-variance consequence of the same covariance consistency.
+\Cref{lem:lag-two-reward-main} identifies the complete-cycle reward for the
+true-centered statistic as a centered \(1\)-dependent reward, and
+\Cref{lem:all-cycle-lag-two-windows-main} verifies that every lag-two term
+used by \(J_{2,N}\) is observed.  Thus the \(q=1\) case of
+\Cref{thm:finite-lag-renewal-reward-main} applies with
+\[
+\sigma_{\gamma_2}^2
+=\frac{\Var(Y_0)+2\operatorname{Cov}(Y_0,Y_1)}{\EE(G+1)}.
+\]
+Replacing \(\rho\) by \(\widehat\rho_N\) in the displayed estimator changes
+the true-centered average by
+\[
+-(\widehat\rho_N-\rho)\frac1N
+\sum_{j\in J_{2,N}}\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\bigl((A_n-\rho)+(A_{n+2}-\rho)\bigr)
++(\widehat\rho_N-\rho)^2\frac1N\sum_{j\in J_{2,N}}L_j .
+\]
+The first factor \(\widehat\rho_N-\rho\) is \(O_{\PP}(N^{-1/2})\), the
+centered average in the middle is \(O_{\PP}(N^{-1/2})\), and
+\(N^{-1}\sum_{j\in J_{2,N}}L_j=O_{\PP}(1)\).  Hence the plug-in replacement is
+\(o_{\PP}(N^{-1/2})\).  The CLT therefore has the same variance as the
+true-centered reward.  The separated-batch consistency is the \(q=1\) batch
+conclusion of \Cref{thm:finite-lag-renewal-reward-main}.  Studentization
+requires the stated additional nondegeneracy
+\(\sigma_{\gamma_2}^2>0\); otherwise the Gaussian limit is degenerate and no
+nondegenerate studentized interval follows.
 \end{proof}
 
 \begin{theorem}[What one killed-leakage sampled-boundary fixed record estimates]\label{thm:one-record-estimates-main}
