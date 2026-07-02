@@ -2,23 +2,21 @@
 \section{Finite Phase Sampling Checks for Cayley Coefficients}%
 \label{sec:finite-phase-sampling}
 
-\subsection{Root-of-unity grids}
-
-The Cayley chart isolates the circle as the visible phase coordinate.  This
-appendix records the root-of-unity averaging mechanism used as a finite
-verification layer for Cayley Fourier coefficients and the normalized
-low-order mode integrals.  It is not an input to the finite-moment entropy
-hierarchy: the entropy asymptotics in
-Section~\ref{sec:entropy-asymptotics} use the constant-coefficient extraction
-of Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}; the grid
-calculus below evaluates the same Laurent polynomials below the aliasing
-barrier.  In particular, the grid calculation uses the Laurent normalization
-\(\cos(2r\theta)=(z^r+z^{-r})/2\) and
-\(\sin(2r\theta)=(z^r-z^{-r})/(2\ii)\) already fixed in
-Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
+This appendix records the finite-grid interface used only as a verification
+and optional data-input layer.  The entropy asymptotics in
+Section~\ref{sec:entropy-asymptotics} do not depend on finite grids: they use
+the quotient expansion, finite-moment transfer, and Laurent constant-term
+extraction in
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  The statements
+below say that the same Laurent constants can be recovered exactly from
+root-of-unity grids whenever the Fourier support lies below the aliasing
+barrier.  All routine eighth-order arithmetic is therefore kept in the main
+coefficient lemmas,
+Lemmas~\ref{lem:n4-normalized-laurent-representatives} and
+\ref{lem:eighth-order-coefficient-arithmetic}, rather than repeated here.
 
 \begin{definition}[Finite phase grids]\label{def:finite-phase-grid}
-For an integer $N\ge1$ set
+For an integer \(N\ge1\), set
 \[
 \mathcal G_N:=\{z\in\TT:\ z^N=1\}.
 \]
@@ -31,18 +29,15 @@ Let
 z(\theta):=\iota(\tan\theta)=e^{2\ii\theta}
 \qquad\bigl(-\pi/2<\theta<\pi/2\bigr).
 \]
-Then the analytic phase modes used in
-Theorem~\ref{thm:cayley-chebyshev-mode} are the real and imaginary parts
-of the circle characters:
+Then
 \[
 \cos(2k\theta)=\operatorname{Re} z(\theta)^k,
 \qquad
 \sin(2k\theta)=\operatorname{Im} z(\theta)^k
 \qquad(k\ge1).
 \]
-If $K<N$, then normalized averaging over the same phase grid
-$\mathcal G_N$ agrees with Haar averaging on every trigonometric monomial of
-Fourier degree at most~$K$:
+If \(K<N\), then normalized averaging over \(\mathcal G_N\) agrees with Haar
+averaging on every character \(z^\ell\) with \(|\ell|\le K\):
 \[
 \frac1N\sum_{\zeta\in\mathcal G_N}\zeta^\ell
 =\int_{\TT} z^\ell\,\dd m_{\TT}(z)
@@ -52,52 +47,87 @@ Fourier degree at most~$K$:
 0,& 0<|\ell|\le K.
 \end{cases}
 \]
-Consequently, the finite phase averages used to check the entropy
-coefficients are ordinary circle-character averages for the same Cayley phase
-coordinate whose analytic Fourier characters drive the main constant-term
-calculus.
 \end{proposition}
 
 \begin{proof}
-The identity $z(\theta)=e^{2\ii\theta}$ follows immediately from
-\eqref{eq:cayley-embed} with $x=\tan\theta$.  Taking real and imaginary
-parts of $z(\theta)^k=e^{2k\ii\theta}$ gives the displayed formulas for
-$\cos(2k\theta)$ and $\sin(2k\theta)$.
+The identity \(z(\theta)=e^{2\ii\theta}\) is the Cayley formula
+\eqref{eq:cayley-embed} with \(x=\tan\theta\).  The trigonometric identities
+are its real and imaginary parts.  The grid average is the finite geometric
+sum; below the scale \(N\), no nonzero exponent is divisible by \(N\).  Haar
+averaging has the same values on characters.
+\end{proof}
 
-For the grid average, the geometric sum gives
+\begin{proposition}[Finite-grid coefficient recovery and aliasing]%
+\label{prop:finite-grid-coefficient-recovery}
+Let \(f\) be continuous on \(\TT\) with absolutely convergent Fourier series
 \[
-\frac1N\sum_{\zeta\in\mathcal G_N}\zeta^\ell
-=
-\begin{cases}
-1,& N\mid \ell,\\
-0,& N\nmid \ell.
-\end{cases}
+f(z)=\sum_{m\in\ZZ}\widehat f(m)z^m,
+\qquad
+\sum_{m\in\ZZ}|\widehat f(m)|<\infty,
 \]
-If $0<|\ell|\le K<N$, then $N\nmid\ell$, while the case $\ell=0$ gives
-one.  The Haar integral of the character $z^\ell$ has the same value for
-these $\ell$.  Since any monomial $z^m\overline z^{\,n}$ equals
-$z^{m-n}$, the assertion covers all monomials with
-$0\le m,n\le K$.
+where
+\[
+\widehat f(m):=\int_{\TT}f(z)z^{-m}\,\dd m_{\TT}(z).
+\]
+For \(N\ge1\) and \(k\in\ZZ\) define
+\[
+\widehat f_N(k):=\frac1N\sum_{\zeta\in\mathcal G_N}f(\zeta)\zeta^{-k}.
+\]
+Then
+\begin{equation}\label{eq:finite-grid-aliasing}
+\widehat f_N(k)=\sum_{q\in\ZZ}\widehat f(k+qN),
+\end{equation}
+and hence
+\begin{equation}\label{eq:finite-grid-aliasing-bound}
+\bigl|\widehat f_N(k)-\widehat f(k)\bigr|
+\le
+\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
+\end{equation}
+In particular, if the Fourier support of \(z^{-k}f\) is contained in
+\(\{-K,\ldots,K\}\) with \(K<N\), then \(\widehat f_N(k)=\widehat f(k)\).
+For a real phase profile \(F(\theta)=f(e^{2\ii\theta})\), the corresponding
+cosine and sine coefficient recoveries satisfy
+\[
+|\mathcal C_{k,N}(F)-\mathcal C_k(F)|
++|\mathcal S_{k,N}(F)-\mathcal S_k(F)|
+\le
+4\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
+\]
+\end{proposition}
+
+\begin{proof}
+Termwise averaging gives
+\[
+\widehat f_N(k)
+=\sum_{m\in\ZZ}\widehat f(m)
+\left(\frac1N\sum_{\zeta\in\mathcal G_N}\zeta^{m-k}\right).
+\]
+The inner average is one exactly when \(m-k\in N\ZZ\), proving
+\eqref{eq:finite-grid-aliasing}; the bound follows by removing the
+\(q=0\) term.  The exact-recovery statement is the case where the remaining
+aliased coefficients vanish.  The last estimate is the same bound applied to
+the real and imaginary parts of the phase Fourier coefficient.
 \end{proof}
 
 \begin{theorem}[Finite-grid finite-time moment recovery]%
 \label{thm:finite-grid-poisson-moment-recovery}
-Let $\nu$ satisfy the hypotheses of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-and let $F_t$ be the corresponding phase profile.  Let $L\ge9$ be odd.
-For each $\zeta\in\mu_L$, let
-$\theta_\zeta\in(-\pi/2,\pi/2)$ be the unique angle with
-$\zeta=e^{2\ii\theta_\zeta}$, and set, for $k\ge1$,
-\begin{align*}
-\widehat F_{t,L}(k)
-&:=\frac1L\sum_{\zeta\in\mu_L}
-F_t(\theta_\zeta)\zeta^{-k},\\
-\mathcal C_{k,L}(t)&:=2\operatorname{Re}\widehat F_{t,L}(k),
+Let \(\nu\) satisfy the hypotheses of
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}, and
+let \(F_t\) be the corresponding phase profile.  Let \(L\ge9\) be odd.  For
+each \(\zeta\in\mathcal G_L\), let
+\(\theta_\zeta\in(-\pi/2,\pi/2)\) be the unique angle with
+\(\zeta=e^{2\ii\theta_\zeta}\), and set
+\[
+\widehat F_{t,L}(k):=\frac1L\sum_{\zeta\in\mathcal G_L}
+F_t(\theta_\zeta)\zeta^{-k},
+\]
+\[
+\mathcal C_{k,L}(t):=2\operatorname{Re}\widehat F_{t,L}(k),
 \qquad
 \mathcal S_{k,L}(t):=-2\operatorname{Im}\widehat F_{t,L}(k).
-\end{align*}
-Then there are constants $C_{\nu},T_{\nu}>0$ such that, for all
-$t\ge T_{\nu}$,
+\]
+Then there are constants \(C_\nu,T_\nu>0\) such that, for all
+\(t\ge T_\nu\),
 \begin{align}
 \left|
 \mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)
@@ -113,400 +143,105 @@ $t\ge T_{\nu}$,
 \right|
 &\le C_{\nu}t^{-5}.\label{eq:finite-grid-mu-four-recovery}
 \end{align}
-Consequently the same fixed finite phase grid recovers the moment
-coordinates in the large-time limit:
+Consequently
 \[
 \sigma^2=\lim_{t\to\infty}
 -2t^2\bigl(\mathcal C_{1,L}(t)-\mathcal C_{4,L}(t)\bigr),
-\qquad
+\quad
 \mu_3=\lim_{t\to\infty}-4t^3\mathcal S_{3,L}(t),
+\quad
+\mu_4=\lim_{t\to\infty}8t^4\mathcal C_{4,L}(t).
 \]
-\[
-\mu_4=\lim_{t\to\infty}8t^4\mathcal C_{4,L}(t),
-\]
-with finite-time errors respectively $O(t^{-3})$, $O(t^{-2})$, and
-$O(t^{-1})$ after the displayed renormalizations.  These are deterministic
-estimates for exact phase samples.
 \end{theorem}
 
 \begin{proof}
 The proof of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-using Lemma~\ref{lem:tail-uniform-cayley-mode-remainder} at order~$4$,
-gives constants $C_0,T_0>0$ such that for $t\ge T_0$
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes} gives
 \[
-F_t(\theta)=Q_t(\theta)+r_t(\theta),
-\qquad
-\sup_{-\pi/2<\theta<\pi/2}|r_t(\theta)|\le C_0t^{-5},
-\]
-where
-\[
-Q_t(\theta)
-:=\frac{\sigma^2}{t^2}u_2(\tan\theta)
+F_t(\theta)=
+\frac{\sigma^2}{t^2}u_2(\tan\theta)
 +\frac{\mu_3}{t^3}u_3(\tan\theta)
-+\frac{\mu_4}{t^4}u_4(\tan\theta).
++\frac{\mu_4}{t^4}u_4(\tan\theta)+O_\nu(t^{-5})
 \]
-By the finite Fourier formulas displayed in the proof of
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes},
-$Q_t$ is a Laurent polynomial in $z=e^{2\ii\theta}$ with Fourier support
-contained in $\{-4,\ldots,4\}$.  For $k=1,3,4$, the shifted polynomial
-$z^{-k}Q_t(z)$ has support contained in $\{-8,\ldots,8\}$.  Since
-$L\ge9$, Proposition~\ref{prop:finite-grid-coefficient-recovery} applies
-with no aliasing to the $Q_t$ part of each coefficient.  The parity and
-orthogonality computation in
-Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}
-therefore gives
-\[
-\mathcal C_{1,L}^{Q}(t)-\mathcal C_{4,L}^{Q}(t)
-=-\frac{\sigma^2}{2t^2},
-\qquad
-\mathcal S_{3,L}^{Q}(t)=-\frac{\mu_3}{4t^3},
-\qquad
-\mathcal C_{4,L}^{Q}(t)=\frac{\mu_4}{8t^4},
-\]
-where the superscript indicates the same finite-grid recovery applied to
-$Q_t$.
-
-For the remainder, the discrete averaging formula gives
-\[
-\left|\frac1L\sum_{\zeta\in\mu_L}
-r_t(\theta_\zeta)\zeta^{-k}\right|
-\le C_0t^{-5}
-\qquad(k\ge1).
-\]
-Thus the corresponding cosine and sine recovery errors are at most
-$2C_0t^{-5}$, and the difference
-$\mathcal C_{1,L}-\mathcal C_{4,L}$ has error at most $4C_0t^{-5}$.
-Increasing the constant to one number $C_\nu$ proves
-\eqref{eq:finite-grid-sigma-recovery}--\eqref{eq:finite-grid-mu-four-recovery}.
-Multiplication by $2t^2$, $4t^3$, and $8t^4$ gives the final
-renormalized error orders and the three limits.
-\end{proof}
-
-\paragraph{Normalization check before the finite-phase computation.}
-The finite-phase computation below uses the same phase normalization as the
-Cayley density expansion.  At the base point \(y=0\),
-\[
-R_\varepsilon(0)=\frac{1}{1+\varepsilon^2}
-=1-\varepsilon^2+O(\varepsilon^4),
-\]
-so the second density mode satisfies \(u_2(0)=-1\).  Since \(u_2(0)=-1\)
-and \(z=e^{2\ii\theta}=1\) at \(\theta=0\), the Laurent representative
-used in the finite-phase calculation must satisfy \(Q_2(1)=-1\).  This
-normalization fixes the factor \(1/4\) in \(Q_2\) and guards against a
-factor-two aliasing error:
-\[
-Q_2(z)=-\frac14(z+z^{-1}+z^2+z^{-2}),
-\]
-whose value at \(z=1\) is \(-1\).  A normalization with an extra factor of
-\(1/2\) would already fail this one-point check.
-
-\begin{proposition}[Finite-phase check of the normalized eighth-order coefficient computation]%
-\label{prop:eighth-order-finite-phase-verification}
-Let $n_1,\dots,n_k\ge2$ and put
-\[
-m:=n_1+\cdots+n_k.
-\]
-Define the circle function $P_{n_1,\dots,n_k}$ by
-\[
-P_{n_1,\dots,n_k}(e^{2\ii\theta})
-:=\prod_{j=1}^{k}u_{n_j}(\tan\theta),
-\qquad -\pi/2<\theta<\pi/2.
-\]
-Then $P_{n_1,\dots,n_k}$ is a Laurent polynomial in the circle variable
-$z=e^{2\ii\theta}$ with Fourier support contained in
-$\{-m,\dots,m\}$.  Hence, for every integer $L>m$,
-\begin{equation}\label{eq:finite-grid-mode-product-verification}
-\int_{\RR}
-\prod_{j=1}^{k}u_{n_j}(y)\,
-\frac{\dd y}{\pi(1+y^2)}
-=
-\frac1L\sum_{\zeta\in\mu_L}P_{n_1,\dots,n_k}(\zeta).
-\end{equation}
-In particular, any phase grid $\mu_L$ with $L\ge9$ exactly computes all
-mode-product integrals entering the coefficients of
-Theorem~\ref{thm:poisson-kl-eighth} through order~$t^{-8}$, including the
-odd-order cancellations at orders $t^{-5}$ and $t^{-7}$.
-
-More explicitly, for $L\ge9$ define the exact phase functional
-\[
-\mathfrak Q_L[F]:=\frac1L\sum_{\zeta\in\mu_L}F(\zeta)
-\]
-on Laurent polynomials of Fourier degree at most~$8$.  With
-$P_{\mathbf n}:=P_{n_1,\dots,n_k}$ and with
-\[
-\sigma^2=\mu_2,\qquad
-[\mathbf n]=P_{\mathbf n},
-\]
-put
-\begin{align*}
-\mathcal A_{4,L}
-&:=\frac12\mu_2^2\,\mathfrak Q_L([2,2]),\\
-\mathcal A_{5,L}
-&:=\mu_2\mu_3\,\mathfrak Q_L([2,3]),\\
-\mathcal A_{6,L}
-&:=\mu_2\mu_4\,\mathfrak Q_L([2,4])
-  +\frac12\mu_3^2\,\mathfrak Q_L([3,3])
-  -\frac16\mu_2^3\,\mathfrak Q_L([2,2,2]),\\
-\mathcal A_{7,L}
-&:=\mu_2\mu_5\,\mathfrak Q_L([2,5])
-  +\mu_3\mu_4\,\mathfrak Q_L([3,4])
-  -\frac12\mu_2^2\mu_3\,\mathfrak Q_L([2,2,3]),\\
-\mathcal A_{8,L}
-&:=\mu_2\mu_6\,\mathfrak Q_L([2,6])
-  +\mu_3\mu_5\,\mathfrak Q_L([3,5])
-  +\frac12\mu_4^2\,\mathfrak Q_L([4,4])\\
-&\qquad
-  -\frac12\mu_2^2\mu_4\,\mathfrak Q_L([2,2,4])
-  -\frac12\mu_2\mu_3^2\,\mathfrak Q_L([2,3,3])
-  +\frac1{12}\mu_2^4\,\mathfrak Q_L([2,2,2,2]).
-\end{align*}
-Then
-\[
-\mathcal A_{5,L}=\mathcal A_{7,L}=0,
-\]
-and
-\[
-\mathfrak Q_L([2,2])=\frac14,\qquad
-\mathfrak Q_L([2,4])=-\frac18,\qquad
-\mathfrak Q_L([3,3])=\frac{3}{16}.
-\]
-In fact the same alias-free grid average gives the full constant-term table of
-Lemma~\ref{lem:eighth-order-coefficient-arithmetic}:
-\[
-\begin{gathered}
-\mathfrak Q_L([2,2,2])=-\frac{3}{32},\qquad
-\mathfrak Q_L([2,6])=\frac{3}{64},\qquad
-\mathfrak Q_L([3,5])=-\frac{15}{128},\\
-\mathfrak Q_L([4,4])=\frac{5}{32},\qquad
-\mathfrak Q_L([2,2,4])=\frac{3}{32},\qquad
-\mathfrak Q_L([2,3,3])=-\frac{9}{128},\\
-\mathfrak Q_L([2,2,2,2])=\frac{9}{64}.
-\end{gathered}
-\]
-These values are computed from the Laurent representatives \(Q_2,\ldots,Q_6\)
-displayed in Lemma~\ref{lem:eighth-order-coefficient-arithmetic} with the
-normalization fixed by \(Q_2(1)=u_2(0)=-1\).
-Consequently
-\[
-\mathcal A_{4,L}=\frac{\sigma^4}{8},\qquad
-\mathcal A_{6,L}=A_6(\nu),\qquad
-\mathcal A_{8,L}=A_8(\nu),
-\]
-and Theorem~\ref{thm:poisson-kl-eighth} identifies these moment polynomials
-with the \(t^{-6}\) and \(t^{-8}\) entropy coefficients.  The additional
-seventh-moment remainder theorem,
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} gives a quantitative
-remainder for these same coefficients, all computed with the Laurent
-normalization displayed in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
-Thus the finite phase grid evaluates exactly the same normalized mode-product
-integrals as the main Laurent computation.
-\end{proposition}
-
-\begin{proof}
-By the finite Fourier formulas
-\eqref{eq:cayley-mode-even-fourier} and
-\eqref{eq:cayley-mode-odd-fourier}, each function
-$u_n(\tan\theta)$ is a finite linear combination of
-$z^r$ and $z^{-r}$ with $1\le r\le n$.  Multiplying the $k$ expansions
-shows that $P_{n_1,\dots,n_k}$ is a Laurent polynomial whose exponents lie
-between $-m$ and $m$.
-
-The change of variables $y=\tan\theta$ gives
-\[
-\frac{\dd y}{\pi(1+y^2)}=\frac{\dd\theta}{\pi},
-\]
-and $z=e^{2\ii\theta}$ pushes $\dd\theta/\pi$ on
-$(-\pi/2,\pi/2)$ to normalized Haar measure on~$\TT$.  Therefore the
-left-hand side of \eqref{eq:finite-grid-mode-product-verification} is the
-constant Fourier coefficient of $P_{n_1,\dots,n_k}$.  If $L>m$, no
-nonzero exponent in the support interval $\{-m,\dots,m\}$ is divisible
-by~$L$.  The character average over $\mu_L$ is thus $1$ on the constant
-term and $0$ on every other term, which proves
-\eqref{eq:finite-grid-mode-product-verification}.
-
-This is the finite-phase specialization of
-Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} to the products
-needed by Theorem~\ref{thm:poisson-kl-eighth}.  That theorem uses only
-mode products whose total index is at most~$8$:
-\[
-u_2^2,\quad
-u_2u_4,\ u_3^2,\ u_2^3,\quad
-u_2u_6,\ u_3u_5,\ u_4^2,\ u_2^2u_4,\ u_2u_3^2,\ u_2^4,
-\]
-together with the odd-total-index products that form the discarded
-$t^{-5}$ and $t^{-7}$ coefficients.  Taking $L\ge9$ puts all these
-products below the aliasing barrier.  The same exact grid identity
-therefore recovers the displayed even coefficients and also computes the
-zero odd coefficients, since their Haar integrals vanish by
-Lemma~\ref{lem:mode-parity-vanish}.
-
-It remains only to match the displayed grid formulas with the entropy
-coefficients.  Lemma~\ref{lem:eighth-order-coefficient-arithmetic} computes the
-finite Taylor polynomial
-\[
-\frac12d_t^2-\frac16d_t^3+\frac1{12}d_t^4
-\]
-has coefficient functions
-\begin{align*}
-B_4&=\frac12a_2^2,&
-B_5&=a_2a_3,\\
-B_6&=a_2a_4+\frac12a_3^2-\frac16a_2^3,&
-B_7&=a_2a_5+a_3a_4-\frac12a_2^2a_3,\\
-B_8&=a_2a_6+a_3a_5+\frac12a_4^2
--\frac12a_2^2a_4-\frac12a_2a_3^2+\frac1{12}a_2^4,
-\end{align*}
-where $a_j=\mu_j u_j$ for $2\le j\le6$ and $\mu_2=\sigma^2$.  Replacing each
-Cauchy integral of a mode product in these five expressions by the exact
-root-of-unity average \eqref{eq:finite-grid-mode-product-verification} gives
-precisely the five quantities
-$\mathcal A_{4,L},\ldots,\mathcal A_{8,L}$.  The odd quantities vanish by the
-same parity lemma, and the even quantities are the integrals
-\[
-\int_{\RR}B_4\,\dd\omega,\qquad
-\int_{\RR}B_6\,\dd\omega,\qquad
-\int_{\RR}B_8\,\dd\omega.
-\]
-Lemma~\ref{lem:eighth-order-coefficient-arithmetic} identifies these three
-integrals with \(\sigma^4/8\), \(A_6(\nu)\), and
-\(A_8(\nu)\); the supporting
-weighted trigonometric identities are collected in
-Appendix~\ref{app:entropy-integrals}.
-The displayed grid values
-\[
-\mathfrak Q_L([2,2])=\frac14,\qquad
-\mathfrak Q_L([2,4])=-\frac18,\qquad
-\mathfrak Q_L([3,3])=\frac{3}{16},
-\]
-and the subsequent values through
-\(\mathfrak Q_L([2,2,2,2])=9/64\) are therefore exactly the Laurent
-constant coefficients of the coefficient computation in
-Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  This completes the
-finite-grid verification of the Laurent constants.
-\end{proof}
-
-\begin{proposition}[Finite-grid coefficient recovery and aliasing]%
-\label{prop:finite-grid-coefficient-recovery}
-Let $f$ be a continuous function on~$\TT$ with absolutely convergent
-Fourier series
-\[
-f(z)=\sum_{m\in\ZZ}\widehat f(m)z^m,
-\qquad
-\sum_{m\in\ZZ}|\widehat f(m)|<\infty,
-\]
-where
-\[
-\widehat f(m):=\int_{\TT}f(z)z^{-m}\,\dd m_{\TT}(z).
-\]
-For $N\ge1$ and $k\in\ZZ$ define the finite phase-grid coefficient recovery
-\[
-\widehat f_N(k):=\frac1N\sum_{\zeta\in\mathcal G_N}f(\zeta)\zeta^{-k}.
-\]
-Then
-\begin{equation}\label{eq:finite-grid-aliasing}
-\widehat f_N(k)=\sum_{q\in\ZZ}\widehat f(k+qN),
-\end{equation}
-and hence
-\begin{equation}\label{eq:finite-grid-aliasing-bound}
-\bigl|\widehat f_N(k)-\widehat f(k)\bigr|
-\le
-\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
-\end{equation}
-In particular, if $K<N$ and
-\[
-\widehat f(m)=0\qquad\text{whenever } |m-k|>K,
-\]
-then the Fourier support of $z^{-k}f(z)$ lies below the grid scale and the
-recovery is exact:
-\[
-\widehat f_N(k)=\widehat f(k).
-\]
-For a real phase profile $F(\theta)=f(e^{2\ii\theta})$ on
-$(-\pi/2,\pi/2)$, put
-\[
-\mathcal C_k(F):=2\operatorname{Re}\widehat f(k),
-\qquad
-\mathcal S_k(F):=-2\operatorname{Im}\widehat f(k),
-\]
-and define $\mathcal C_{k,N}(F),\mathcal S_{k,N}(F)$ by the same formulas
-with $\widehat f_N(k)$ in place of $\widehat f(k)$.  Then
-\[
-|\mathcal C_{k,N}(F)-\mathcal C_k(F)|
-+|\mathcal S_{k,N}(F)-\mathcal S_k(F)|
-\le
-4\sum_{\substack{q\in\ZZ\\q\ne0}}\bigl|\widehat f(k+qN)\bigr|.
-\]
-Thus finite phase grids recover the phase-Fourier coefficients used later
-in Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes}
-exactly for finite mode polynomials below the explicit $K<N$ barrier, and
-with only the displayed aliasing tail for general absolutely summable
-profiles.
-\end{proposition}
-
-\begin{proof}
-The absolute convergence assumption permits termwise averaging:
-\[
-\widehat f_N(k)
-=\sum_{m\in\ZZ}\widehat f(m)
-\left(\frac1N\sum_{\zeta\in\mathcal G_N}\zeta^{m-k}\right).
-\]
-The inner average is $1$ when $m-k$ is divisible by~$N$ and is $0$
-otherwise.  This proves \eqref{eq:finite-grid-aliasing}.  Removing the
-$q=0$ term and applying the triangle inequality gives
-\eqref{eq:finite-grid-aliasing-bound}.
-
-If the Fourier support of $z^{-k}f$ is contained in $\{-K,\dots,K\}$, then
-$\widehat f(k+qN)=0$ for every $q\ne0$, because
-$|k+qN-k|=|q|N\ge N>K$.  The exact recovery follows.
-
-Finally,
-\[
-\int_{-\pi/2}^{\pi/2}F(\theta)e^{-2\ii k\theta}\,\frac{\dd\theta}{\pi}
-=\widehat f(k),
-\]
-so for real $F$ the cosine and sine coefficients are
-$2\operatorname{Re}\widehat f(k)$ and $-2\operatorname{Im}\widehat f(k)$.
-The same identities with the grid coefficient give the finite recoveries, and
-the two displayed coefficient bounds follow from
-\eqref{eq:finite-grid-aliasing-bound}.
+uniformly in \(\theta\).  The polynomial part has phase Fourier support in
+\(\{-4,\ldots,4\}\).  After multiplication by \(z^{-k}\) for
+\(k=1,3,4\), the support lies in \(\{-8,\ldots,8\}\), so
+Proposition~\ref{prop:finite-grid-coefficient-recovery} is exact for
+\(L\ge9\).  Applying the coefficient identities already computed in
+Proposition~\ref{prop:poisson-cauchy-moment-inversion-by-phase-modes} and
+bounding the grid average of the uniform remainder gives the three displayed
+estimates.
 \end{proof}
 
 \begin{corollary}[Alias-free Cayley mode-product averaging]%
 \label{cor:alias-free-cayley-mode-product-quadrature}
-Let $Q(z)=\sum_{|m|\le K}a_m z^m$ be a Laurent polynomial on~$\TT$.
-If $K<N$, then the finite phase grid computes its Haar integral exactly:
+Let \(Q(z)=\sum_{|m|\le K}a_mz^m\) be a Laurent polynomial on \(\TT\).  If
+\(K<N\), then
 \[
 \int_{\TT}Q(z)\,\dd m_{\TT}(z)
 =\frac1N\sum_{\zeta\in\mathcal G_N}Q(\zeta)=a_0.
 \]
-Consequently, whenever a finite product of Cayley--Chebyshev phase modes is
-written, through the coordinate $z=e^{2\ii\theta}$ of
-Proposition~\ref{prop:phase-coordinate-identification}, as a Laurent
-polynomial with Fourier support contained in $\{-K,\ldots,K\}$, every
-Cauchy-weighted integral of that product is recovered exactly from the same
-grid~$\mathcal G_N$ for all $N>K$.  In particular, this alias-free extraction is
-the finite phase interface used in
-Proposition~\ref{prop:eighth-order-finite-phase-verification}.
+Consequently every Cauchy-weighted integral of a finite product of
+Cayley--Chebyshev modes is recovered exactly from \(\mathcal G_N\) once its
+phase Laurent support is contained in \(\{-K,\ldots,K\}\) with \(K<N\).
 \end{corollary}
 
 \begin{proof}
-Apply Proposition~\ref{prop:finite-grid-coefficient-recovery} with
-$f=Q$ and $k=0$.  Since $Q$ has Fourier support in $[-K,K]$ and $K<N$, the
-aliasing sum contains no term other than the constant coefficient, and hence
-\[
-\frac1N\sum_{\zeta\in\mathcal G_N}Q(\zeta)=\widehat Q_N(0)=\widehat Q(0)=a_0.
-\]
-The Haar integral is also $\widehat Q(0)$ by the definition of Fourier
-coefficients on~$\TT$.
+Apply Proposition~\ref{prop:finite-grid-coefficient-recovery} with \(k=0\).
+The last sentence follows from the Haar-pullback identity
+\eqref{eq:weighted-integral} and the phase identification above.
+\end{proof}
 
-For a product of Cayley--Chebyshev phase modes, set $z=e^{2\ii\theta}$.
-Proposition~\ref{prop:phase-coordinate-identification} identifies the
-trigonometric factors in the $\theta$ variable with circle characters in
-$z$.  The Haar-pullback formula
-\eqref{eq:weighted-integral} then identifies the corresponding
-Cauchy-weighted line integral with the Haar integral of the resulting
-Laurent polynomial.  The first part therefore gives exact recovery from
-$\mathcal G_N$ whenever the displayed support bound is below the grid scale.  The
-last sentence is precisely the support-barrier condition verified later for
-the eighth-order mode products.
+\begin{proposition}[Finite-phase check of the normalized eighth-order coefficient computation]%
+\label{prop:eighth-order-finite-phase-verification}
+Let \(n_1,\ldots,n_k\ge2\), put \(m=n_1+\cdots+n_k\), and define
+\[
+P_{n_1,\ldots,n_k}(e^{2\ii\theta})
+:=\prod_{j=1}^{k}u_{n_j}(\tan\theta).
+\]
+Then \(P_{n_1,\ldots,n_k}\) is a Laurent polynomial with Fourier support in
+\(\{-m,\ldots,m\}\).  Hence, for every integer \(L>m\),
+\begin{equation}\label{eq:finite-grid-mode-product-verification}
+\int_{\RR}\prod_{j=1}^{k}u_{n_j}(y)\,
+\frac{\dd y}{\pi(1+y^2)}
+=
+\frac1L\sum_{\zeta\in\mathcal G_L}P_{n_1,\ldots,n_k}(\zeta).
+\end{equation}
+In particular, every grid \(\mathcal G_L\) with \(L\ge9\) exactly checks all
+mode-product integrals entering the \(t^{-4}\), \(t^{-6}\), and \(t^{-8}\)
+coefficients in Theorem~\ref{thm:poisson-kl-eighth}, including the
+odd-order cancellations through order \(t^{-8}\).  With the Laurent
+normalization
+\[
+Q_2(z)=-\frac14(z+z^{-1}+z^2+z^{-2}),
+\]
+one has \(Q_2(1)=u_2(0)=-1\); this fixes the phase normalization used by the
+coefficient table.  The resulting grid averages are exactly the constant
+terms listed in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}, and
+therefore yield
+\[
+\mathcal A_{4,L}=\frac{\sigma^4}{8},\qquad
+\mathcal A_{6,L}=A_6(\nu),\qquad
+\mathcal A_{8,L}=A_8(\nu)
+\]
+for the formal eighth-order coefficient expressions of
+Theorem~\ref{thm:poisson-kl-eighth}.
+\end{proposition}
+
+\begin{proof}
+The finite Fourier formulas
+\eqref{eq:cayley-mode-even-fourier} and
+\eqref{eq:cayley-mode-odd-fourier} show that \(u_n(\tan\theta)\) has phase
+support in \(\{-n,\ldots,n\}\), so products have the displayed support.
+The change of variables \(y=\tan\theta\), followed by
+\(z=e^{2\ii\theta}\), identifies the Cauchy-weighted line integral with the
+Haar constant coefficient on \(\TT\).  Corollary
+\ref{cor:alias-free-cayley-mode-product-quadrature} then proves
+\eqref{eq:finite-grid-mode-product-verification}.  For the eighth-order
+products the total index is at most \(8\), so \(L\ge9\) is alias-free.
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic} already evaluates the
+same constant terms in Laurent form, and
+Lemma~\ref{lem:n4-entropy-coefficient-substitution} substitutes them into the
+entropy coefficients.  This gives the displayed coefficient identities
+without repeating the finite arithmetic.
 \end{proof}

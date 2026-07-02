@@ -166,8 +166,8 @@ applies because \(L\ge2\) implies \(\EE|X_c|^2<\infty\).  Since
 \(\sup_y|\delta_t(\bar\gamma+ty)|=O(t^{-2})\).
 This is the density-level input used by the exact-moment entropy-transfer
 lemma below when Theorem~\ref{thm:poisson-kl-even-orders} identifies the
-universal moment-polynomial coefficient \(A_{2N}\) at its sharp moment
-threshold.
+universal moment-polynomial coefficient \(A_{2N}\) at the moment threshold
+where the displayed coefficient polynomial is evaluable.
 \end{proof}
 
 \begin{proposition}[Finite-moment density-to-entropy transfer]%
@@ -650,6 +650,126 @@ threshold is the threshold for identifying the universal coefficient
 with a one-dimensional Laurent extraction layer that makes the \(N=4\)
 coefficients explicit.
 
+\begin{unnumberedlemma}[Uniform radial Poisson Taylor remainder]
+Let \(d\ge1\), put \(a=(d+1)/2\), and, for \(y,z\in\RR^d\), set
+\[
+F_y(z):=
+\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
+\]
+For a multiindex \(\alpha\in\NN_0^d\), define
+\[
+U_\alpha^{(d)}(y):=\frac{1}{\alpha!}\,\partial_z^\alpha F_y(0).
+\]
+If \(L\ge d+1\), then there is a constant \(C_{d,L}<\infty\) such that
+\begin{equation}\label{eq:multidim-uniform-taylor-remainder-bound}
+\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}\Bigl(
+|z|^{L+1}\mathbf1_{\{|z|\le1\}}
++|z|^L\mathbf1_{\{|z|>1\}}
+\Bigr)
+\end{equation}
+for all \(y,z\in\RR^d\).  Moreover
+\[
+\sup_{y\in\RR^d}|U_\alpha^{(d)}(y)|<\infty
+\qquad (|\alpha|\le L).
+\]
+Consequently, if \(X\) is an \(\RR^d\)-valued random vector with
+\(\EE|X|^L<\infty\), \(\Omega_d\) is any probability measure on \(\RR^d\),
+and
+\[
+r_t(y):=\EE\left[
+F_y(X/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X/t)^\alpha
+\right],
+\]
+then
+\begin{equation}\label{eq:multidim-uniform-density-remainder-consequence}
+\|r_t\|_{L^\infty(\RR^d)}
++\|r_t\|_{L^1(\Omega_d)}
+=o(t^{-L}).
+\end{equation}
+\end{unnumberedlemma}
+
+\begin{proof}
+For each multiindex \(\beta\), repeated differentiation gives the sharper
+structure
+\begin{equation}\label{eq:multidim-poisson-derivative-structure}
+D_z^\beta F_y(w)
+=(1+|y|^2)^a
+\frac{P_\beta(y-w)}{(1+|y-w|^2)^{a+|\beta|}},
+\end{equation}
+where \(P_\beta\) is a polynomial, depending only on \(d\) and \(\beta\),
+of degree at most \(|\beta|\).  Indeed, \(D_{z_j}=-D_{\xi_j}\) for
+\(\xi=y-w\), and differentiating \((1+|\xi|^2)^{-b}\) once raises the
+denominator exponent by one and multiplies by a polynomial of degree at most
+one more.  If \(|w|\le1\) and \(|y|>2\), then \(|y-w|\ge |y|/2\), and
+\[
+|D_z^\beta F_y(w)|
+\le
+C_{d,\beta}
+(1+|y|^2)^a
+\frac{(1+|y|)^{|\beta|}}{(1+|y|^2)^{a+|\beta|}}
+\le C_{d,\beta}.
+\]
+On \(|y|\le2\), the same derivative is bounded by compactness because
+\(1+|y-w|^2\ge1\).  Hence, for every fixed \(L\),
+\[
+\sup_{\substack{y\in\RR^d\\ |w|\le1\\ |\beta|=L+1}}
+|\partial_z^\beta F_y(w)|<\infty .
+\]
+The multivariable Taylor formula with integral remainder at \(z=0\) then
+gives the first term on the right-hand side of
+\eqref{eq:multidim-uniform-taylor-remainder-bound} when \(|z|\le1\).
+Taking \(w=0\) in the preceding derivative bound, with
+\(|\beta|\le L\), also gives the asserted boundedness of
+\(U_\alpha^{(d)}\).
+
+For the large-\(z\) bound, split according to whether
+\(|y-z|\le |z|/2\).  If \(|y-z|\le |z|/2\), then \(|y|\le3|z|/2\), and
+\[
+F_y(z)\le (1+|y|^2)^a\le C_d|z|^{d+1}
+\qquad(|z|>1).
+\]
+On the complementary region \(|y-z|>|z|/2\), the elementary inequality
+\[
+1+|y|^2
+\le
+2(1+|z|^2)(1+|y-z|^2),
+\]
+which follows from \(|y|\le |y-z|+|z|\).  Therefore
+\[
+F_y(z)\le C_d(1+|z|^2)^a\le C_d'|z|^{d+1}
+\qquad (|z|>1),
+\]
+also on the complement.  Since \(L\ge d+1\), this is bounded by
+\(C_{d,L}|z|^L\).  The boundedness of the coefficients gives, for
+\(|z|>1\),
+\[
+\left|\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha\right|
+\le C_{d,L}\sum_{k=0}^L |z|^k
+\le C_{d,L}'|z|^L.
+\]
+Combining the two estimates proves
+\eqref{eq:multidim-uniform-taylor-remainder-bound}.
+
+With \(z=X/t\), the bound just proved gives, uniformly in \(y\),
+\[
+|r_t(y)|
+\le
+C_{d,L}t^{-L}\EE\left[
+|X|^L\frac{|X|}{t}\mathbf1_{\{|X|\le t\}}
++|X|^L\mathbf1_{\{|X|>t\}}
+\right].
+\]
+The first expectation is \(o(1)\) by dominated convergence, and the second is
+\(o(1)\) by integrability of \(|X|^L\).  This proves the
+\(L^\infty\)-part of
+\eqref{eq:multidim-uniform-density-remainder-consequence}.  The
+\(L^1(\Omega_d)\)-part follows from the same uniform bound because
+\(\Omega_d\) is a probability measure.
+\end{proof}
+
 \begin{theorem}[Multidimensional finite-moment Poisson entropy jets]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Let \(d\ge1\), let
@@ -733,55 +853,12 @@ D_{\rm KL}(h_t\|g_t)
 \Phi(s)=(1+s)\log(1+s)-s.
 \]
 
-We first obtain the finite density expansion.  Let
-\[
-F_y(z):=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
-\]
-For every fixed \(L\), Taylor's formula at \(z=0\) gives, for \(|z|\le1\),
-\[
-F_y(z)=\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
-+\sum_{|\alpha|=L}z^\alpha R_{\alpha,L}(y,z),
-\]
-where the remainders may be written as integrals of \((L+1)\)st derivatives of
-\(F_y(sz)\) over \(0\le s\le1\).  Each derivative has the form
-\[
-(1+|y|^2)^a
-\frac{P_{\beta}(y-z)}{(1+|y-z|^2)^{a+|\beta|}},
-\qquad |\beta|\le L+1,
-\]
-for a polynomial \(P_\beta\) of degree at most \(|\beta|\).  When \(|z|\le1\)
-these derivative kernels are uniformly bounded in \((y,z)\): on \(|y|\le2\)
-this is compactness, and on \(|y|>2\) one has \(|y-sz|\ge |y|/2\) for
-\(0\le s\le1\).  Hence the Taylor remainder is bounded by
-\(C_{d,L}|z|^{L+1}\) on \(|z|\le1\).
-
-For \(|z|>1\), the direct growth bound
-\[
-F_y(z)\le C_d(1+|z|)^{d+1}
-\]
-follows by splitting into \(|y-z|\le |z|/2\) and its complement.  Since
-\(L\ge d+1\), this is at most \(C_{d,L}|z|^L\).  The finite Taylor polynomial
-is also \(O_{d,L}(|z|^L)\), because every coefficient \(U_\alpha^{(d)}\) with
-\(|\alpha|\le L\) is a rational function with at most polynomial growth
-cancelled by the denominator powers in the Taylor derivative.  Consequently
-\begin{equation}\label{eq:multidim-density-tail-bound}
-\left|F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha\right|
-\le C_{d,L}|z|^L\,\min\{|z|,1\}+C_{d,L}|z|^L\mathbf1_{\{|z|>1\}},
-\end{equation}
-uniformly in \(y\).  The same estimate holds after integration in \(y\)
-against \(\Omega_d\), because \(\Omega_d\) is a probability measure and the
-displayed bound is uniform.
-
-With \(z=X_c/t\), the part \(|X_c|\le t\) is
-\[
-t^{-L}\EE\!\left[|X_c|^L\frac{|X_c|}{t}\mathbf1_{\{|X_c|\le t\}}\right]
-=o(t^{-L})
-\]
-by dominated convergence, and the part \(|X_c|>t\) is
-\[
-O\!\left(t^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]\right)=o(t^{-L}).
-\]
-Thus
+We first obtain the finite density expansion.  Apply
+the uniform radial Poisson Taylor lemma with \(X=X_c\).
+Its uniform Taylor-remainder consequence gives the error term below in both
+\(L^\infty(\RR^d)\) and \(L^1(\Omega_d)\).  Since
+\(U_0^{(d)}=1\) and the first-order terms integrate to zero against the
+centred variable \(X_c\), we get
 \begin{equation}\label{eq:multidim-density-expansion}
 \widetilde\delta_t(y)
 =\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
@@ -791,9 +868,16 @@ Thus
 \end{equation}
 The terms of orders \(0\) and \(1\) cancel because \(\nu\) has total mass one
 and mean zero in the centred variable.
+The proof of \eqref{eq:multidim-density-expansion} is exactly the tail split
+in the Taylor lemma, with \(z=X_c/t\): the region \(|X_c|\le t\) gives the
+integrable factor
+\(|X_c|^L(|X_c|/t)\), while \(|X_c|>t\) gives the finite \(L\)th-moment tail.
 
 The finite sum in \eqref{eq:multidim-density-expansion} starts at order
-\(t^{-2}\), and the same bound with \(L=2\) gives
+\(t^{-2}\).  The boundedness of the retained \(U_\alpha^{(d)}\)'s from
+the uniform radial Poisson Taylor lemma, the finiteness of
+the moments \(\mu_\alpha\) with \(|\alpha|\le L\), and
+\(\|\rho_{L,t}\|_\infty=o(t^{-L})\) give
 \(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  For large \(t\),
 \(|\widetilde\delta_t|\le1/2\), so the Taylor expansion of \(\Phi\) may be
 used through degree \(\lfloor (L+2)/2\rfloor\).  Products containing at least
@@ -839,12 +923,13 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=2}^{N}A_{2m}^{\rm alg}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-This exact-threshold statement is sharp for identification of the universal
-moment-polynomial coefficient \(A_{2N}\).  More precisely, the lower-moment
-obstruction in
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} shows that the
-same universal polynomial coefficient is not determined under any strictly
-weaker moment hypothesis.
+This exact-threshold statement identifies the universal moment-polynomial
+coefficient \(A_{2N}\) at the first moment level at which that displayed
+polynomial is evaluable.  More precisely, the lower-moment obstruction in
+Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} is algebraic: the
+same universal polynomial coefficient is not determined from strictly lower
+moment data alone.  This is not an analytic lower-bound claim about all
+possible entropy asymptotics under other tail hypotheses.
 After this identification we also write \(A_k^{\rm ent}(\nu)=A_k^{\rm alg}(\nu)\)
 for these retained coefficients.
 Equivalently, \(A_{2m-1}^{\rm ent}(\nu)=0\) for every retained odd order
@@ -1083,9 +1168,9 @@ law-dependent constants and the smallness threshold by finite formulas in
 
 Theorem~\ref{thm:poisson-kl-even-orders} is the finite-moment hierarchy.  The
 material in this subsection only fixes shorthand constants and common
-remainder forms used later.  The sharpness proposition below is kept numbered
-because it is the companion lower-bound statement for the exact moment
-threshold.
+remainder forms used later.  The coefficient-threshold proposition below is
+kept numbered because it records the algebraic lower-moment obstruction for
+the displayed universal polynomial coefficient.
 
 \paragraph{Retained-polynomial form.}%
 \phantomsection\label{thm:finite-moment-entropy-remainder}
@@ -1159,13 +1244,15 @@ T_{\nu,N,\eta}=T^{\rm opt}.
 The retained density modes are \(u_2,\ldots,u_{2N-2}\), the same modes used
 in the exact-threshold coefficient identity.
 
-\begin{proposition}[Sharpness of the moment threshold for this universal moment-polynomial coefficient]%
+\begin{proposition}[Algebraic threshold for the universal moment-polynomial coefficient]%
 \label{prop:poisson-kl-moment-threshold-sharpness}
-Fix \(N\ge2\) and put \(L=2N-2\).  For this universal moment-polynomial
-coefficient, the moment hypothesis in
-Theorem~\ref{thm:poisson-kl-even-orders} cannot be lowered for a universal
-coefficient theorem with the same evaluated algebraic polynomial
-\(A_{2N}^{\rm alg}\).
+Fix \(N\ge2\) and put \(L=2N-2\).  The obstruction below is only a
+coefficient-identification obstruction for the universal moment polynomial
+\(A_{2N}^{\rm alg}\) in Theorem~\ref{thm:poisson-kl-even-orders}.  It says
+that this specific polynomial coefficient cannot be determined from moments
+below order \(L\).  It is not a sharp analytic lower bound for every possible
+entropy asymptotic: a different renormalized, tail-dependent, or
+nonuniversal coefficient under weaker hypotheses is not excluded here.
 
 For \(N=2\), the leading coefficient is
 \[
@@ -1190,8 +1277,8 @@ with finite \(q\)th absolute moment and infinite \(L\)th absolute moment.
 For such a law the top universal moment-polynomial coefficient in
 \eqref{eq:top-moment-coefficient-sharpness} is not a finite number.  Thus no
 fixed-law theorem that keeps the same universal polynomial coefficient
-\(A_{2N}^{\rm alg}\) can replace the finite \(L\)th absolute moment by a
-strictly weaker moment assumption.
+\(A_{2N}^{\rm alg}\) can identify that coefficient from strictly lower
+absolute moments alone.
 \end{proposition}
 
 \begin{proof}
@@ -1245,8 +1332,9 @@ total mass is one.  The law is centred by symmetry.  For every \(q<L\),
 \asymp \int_e^\infty \frac{\dd x}{x\log x}
 =\infty .
 \]
-Thus the moment required by the nonzero top term of \(A_{2N}\) is genuinely
-absent although every lower absolute moment is finite.
+Thus the moment required to evaluate the nonzero top term of the displayed
+universal polynomial \(A_{2N}^{\rm alg}\) is genuinely absent although every
+lower absolute moment is finite.
 \end{proof}
 
 \paragraph{Stronger \(2N+\eta\) truncation.}%

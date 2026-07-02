@@ -102,6 +102,169 @@ because $(1+s)\log(1+s)-s\le2s^2$ for $|s|\le1/2$.  The right-hand side
 tends to zero.
 \end{proof}
 
+\begin{lemma}[KL quotient domain lemma on compact time intervals]%
+\label{lem:kl-main-compact-domain}
+Let \(\nu\) be a probability measure on~\(\RR\) with mean~\(\bar\gamma\) and
+finite centred second moment
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma).
+\]
+Fix \(0<a<b<\infty\), and put
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
+\]
+For
+\[
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta
+\qquad(\alpha,\beta>0)
+\]
+the following assertions hold uniformly for \(t\in[a,b]\).
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item With \(X_c=\gamma-\bar\gamma\), \(y=(x-\bar\gamma)/t\), and
+\[
+R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2},
+\]
+one has the exact quotient formula
+\begin{equation}\label{eq:kl-main-domain-quotient-formula}
+u_t(x)=\int_{\RR}R_{X_c/t}\!\left(\frac{x-\bar\gamma}{t}\right)
+\dd\nu(\gamma).
+\end{equation}
+Moreover
+\begin{equation}\label{eq:kl-main-domain-quotient-range}
+\frac{1}{2(1+\mu_2/a^2)}
+\le u_t(x)\le
+2+\frac{2\mu_2}{a^2}
+\qquad(x\in\RR).
+\end{equation}
+\item The quotient is Lipschitz in the space variable on
+\(\RR\times[a,b]\).  More explicitly,
+\begin{equation}\label{eq:kl-main-domain-quotient-lipschitz}
+|\partial_xu_t(x)|
+\le
+\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right)
+\qquad(x\in\RR,\ t\in[a,b]).
+\end{equation}
+\item There is a finite constant \(C_{a,b,\nu}\) such that, for \(x\ne y\),
+\begin{equation}\label{eq:kl-main-domain-bregman-majorant}
+0\le
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
+\end{equation}
+and the same estimate holds after exchanging \(x\) and \(y\).  Consequently
+the one-sided and symmetrized Bregman kernels are integrable on
+\([a,b]\times\RR^2\).
+\item If \(\chi_R(x)=\chi(x/R)\), where
+\(\chi\in C_c^\infty(\RR)\), \(0\le\chi\le1\), and
+\(\chi\equiv1\) on \([-1,1]\), then
+\begin{align}
+&\int_a^b\left|
+\iint_{\RR^2}(1-\chi_R(x)\chi_R(y))
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+\right|\dd t\longrightarrow0,
+\label{eq:kl-main-product-cutoff-one-sided}
+\\
+&\int_a^b\left|
+\iint_{\RR^2}(1-\chi_R(x)\chi_R(y))
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y
+\right|\dd t\longrightarrow0 .
+\label{eq:kl-main-product-cutoff-symmetric}
+\end{align}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The quotient identity follows by writing \(x=\bar\gamma+ty\):
+\[
+\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
+=\frac{t^2+(x-\bar\gamma)^2}{t^2+(x-\gamma)^2}
+=\frac{1+y^2}{1+(y-X_c/t)^2}.
+\]
+The elementary inequalities
+\[
+1+y^2\le2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2
+\]
+and
+\[
+1+(y-\varepsilon)^2
+\le2(1+\varepsilon^2)(1+y^2)
+\]
+give
+\[
+R_\varepsilon(y)\le2(1+\varepsilon^2),
+\qquad
+R_\varepsilon(y)\ge\frac{1}{2(1+\varepsilon^2)}.
+\]
+Integrating the upper bound with \(\varepsilon=X_c/t\) gives
+\(u_t(x)\le2+2\mu_2/a^2\).  For the lower bound,
+\[
+u_t(x)\ge
+\frac12\int_{\RR}\frac{1}{1+(X_c/t)^2}\dd\nu(\gamma)
+\ge\frac{1}{2(1+\mu_2/t^2)}
+\ge\frac{1}{2(1+\mu_2/a^2)},
+\]
+where the middle step is Jensen's inequality for
+\(s\mapsto(1+s)^{-1}\) on \([0,\infty)\).
+
+For the Lipschitz bound, put \(w=y-\varepsilon\).  Direct differentiation gives
+\[
+\partial_yR_\varepsilon(y)
+=\frac{2\varepsilon(1-w^2)-2\varepsilon^2w}{(1+w^2)^2},
+\]
+and hence
+\[
+|\partial_yR_\varepsilon(y)|\le3(1+\varepsilon^2)
+\qquad(y,\varepsilon\in\RR).
+\]
+Since \(\partial_x=t^{-1}\partial_y\), integration in \(\gamma\) gives
+\eqref{eq:kl-main-domain-quotient-lipschitz}.
+
+Let
+\[
+m_{a,b}:=\frac{1}{2(1+\mu_2/a^2)},\qquad
+M_{a,b}:=2+\frac{2\mu_2}{a^2},
+\qquad
+L_{a,b}:=\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right).
+\]
+On the compact interval \([m_{a,b},M_{a,b}]\), the second derivative of
+\(s\log s\) is bounded by \(m_{a,b}^{-1}\).  Therefore the integral remainder
+formula for the Bregman divergence gives
+\[
+0\le\Lambda(\alpha,\beta)\le
+\frac{1}{2m_{a,b}}|\alpha-\beta|^2
+\qquad(m_{a,b}\le\alpha,\beta\le M_{a,b}).
+\]
+Together with
+\[
+|u_t(x)-u_t(y)|\le L_{a,b}|x-y|,
+\qquad
+|u_t(x)-u_t(y)|\le M_{a,b}-m_{a,b},
+\]
+this yields
+\[
+0\le\Lambda(u_t(x),u_t(y))
+\le C_{a,b,\nu}\min\{|x-y|^2,1\}.
+\]
+Dividing by \((x-y)^2\) proves
+\eqref{eq:kl-main-domain-bregman-majorant}; the exchanged estimate is the
+same argument with \(x\) and \(y\) interchanged.  The majorants are integrable
+because \(\int_{\RR}g_t=1\),
+\(\int_{|z|<1}\dd z<\infty\), and
+\(\int_{|z|\ge1}|z|^{-2}\dd z<\infty\).
+
+The product-cutoff convergence now follows by dominated convergence from the
+same majorant.  For fixed \(t,x,y\), the factor
+\(1-\chi_R(x)\chi_R(y)\) tends to zero.  The right side of
+\eqref{eq:kl-main-domain-bregman-majorant} is an
+\(L^1([a,b]\times\RR^2)\) dominator for the one-sided kernel, and the sum of
+that dominator with its exchanged-variable analogue dominates the symmetrized
+kernel.  This proves
+\eqref{eq:kl-main-product-cutoff-one-sided} and
+\eqref{eq:kl-main-product-cutoff-symmetric}.
+\end{proof}
+
 \begin{theorem}[KL quotient domain theorem]%
 \label{thm:kl-local-doob-bregman-domain-closure}
 \label{prop:kl-local-doob-bregman-domain-closure}
@@ -157,21 +320,34 @@ g_t(x)\Lambda(u_t(x),u_t(y))
 \end{theorem}
 
 \begin{proof}
-This is the KL specialization of
-Proposition~\ref{prop:doob-bregman-domain-closure} with
-\(\Phi(s)=s\log s\).  The Bregman divergence of this \(\Phi\) is precisely
+Lemma~\ref{lem:kl-main-compact-domain} supplies the compact quotient range,
+the Lipschitz bound, the Bregman majorant
+\eqref{eq:kl-domain-pointwise-bregman-majorant}, and the product-cutoff
+convergence in \eqref{eq:kl-main-cutoff-bregman-limit}.  What remains is the
+principal-value differentiation in the normalization of \(L\).  That is the
+KL case \(\Phi(s)=s\log s\) of
+Proposition~\ref{prop:doob-bregman-domain-closure}; its proof uses the
+cutoff Cauchy Green identity and the localized cutoff commutator estimates of
+Appendix~\ref{app:doob-bregman-domain}.  For this \(\Phi\),
 \[
 D_\Phi(\alpha,\beta)
 =\alpha\log(\alpha/\beta)-\alpha+\beta=\Lambda(\alpha,\beta).
 \]
-Proposition~\ref{prop:doob-bregman-domain-closure} gives absolute
-continuity of \(H=\mathcal H_\Phi\), the compact quotient range, the
-Lipschitz bound, the majorant \eqref{eq:kl-domain-pointwise-bregman-majorant},
-and \(L^1([a,b])\) convergence of the product-cutoff Bregman forms.  Since
-the two terms in the symmetric Bregman form are equal after exchanging
-\(x\) and \(y\), the factor \(1/(2\pi)\) in
-\eqref{eq:phi-entropy-dissipation} becomes the one-sided factor \(1/\pi\),
-which is \eqref{eq:kl-domain-final-derivative}.
+The proposition gives \(H\in AC([a,b])\) and, at the cutoff level,
+\[
+-H'(t)=
+\lim_{R\to\infty}
+\frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y
+\]
+for a.e. \(t\in[a,b]\), with convergence in \(L^1([a,b])\).  The product
+cutoff is removed by Lemma~\ref{lem:kl-main-compact-domain}.  Finally, the
+two terms in the symmetric Bregman integral have the same value after
+exchanging \(x\) and \(y\); hence the factor \(1/(2\pi)\) becomes \(1/\pi\),
+which gives \eqref{eq:kl-domain-final-derivative}.
 \end{proof}
 
 \begin{proposition}[Domain inputs for the KL tail identity]%
