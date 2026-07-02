@@ -42,14 +42,14 @@ D_{\mathrm{KL}}(h_t\|g_t)\longrightarrow0
 \end{lemma}
 
 \begin{proof}
-Write $\Delta=\gamma-\bar\gamma$ and $x=\bar\gamma+ty$.  Since
+Write $X_c=\gamma-\bar\gamma$ and $x=\bar\gamma+ty$.  Since
 $g_t(\bar\gamma+ty)=(\pi t)^{-1}(1+y^2)^{-1}$,
 \[
 u_t(\bar\gamma+ty):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}
-=\int_{\RR}\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(\gamma).
+=\int_{\RR}\frac{1+y^2}{1+(y-X_c/t)^2}\dd\nu(\gamma).
 \]
 For $A>0$ decompose $\nu=\nu_A+\nu_A^c$ according to
-$|\Delta|\le A$ and $|\Delta|>A$.  The elementary kernel bound
+$|X_c|\le A$ and $|X_c|>A$.  The elementary kernel bound
 \begin{equation}\label{eq:second-moment-kl-kernel-bound}
 \frac{1+y^2}{1+(y-\varepsilon)^2}
 \le 2(1+\varepsilon^2)
@@ -57,18 +57,18 @@ $|\Delta|\le A$ and $|\Delta|>A$.  The elementary kernel bound
 \end{equation}
 implies
 \[
-0\le u_{t,A}^c(y):=\int_{|\Delta|>A}
-\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(\gamma)
-\le 2\int_{|\Delta|>A}\left(1+\frac{\Delta^2}{t^2}\right)\dd\nu(\gamma).
+0\le u_{t,A}^c(y):=\int_{|X_c|>A}
+\frac{1+y^2}{1+(y-X_c/t)^2}\dd\nu(\gamma)
+\le 2\int_{|X_c|>A}\left(1+\frac{X_c^2}{t^2}\right)\dd\nu(\gamma).
 \]
 Hence, for $t\ge1$,
 \begin{equation}\label{eq:second-moment-kl-tail-sup}
 \sup_y u_{t,A}^c(y)
-\le 2\nu(|\Delta|>A)+2\int_{|\Delta|>A}\Delta^2\dd\nu.
+\le 2\nu(|X_c|>A)+2\int_{|X_c|>A}X_c^2\dd\nu.
 \end{equation}
 
-The bounded part has total mass $m_A:=\nu(|\Delta|\le A)$ and first centred
-moment $b_A:=\int_{|\Delta|\le A}\Delta\dd\nu$.  The exact expansion
+The bounded part has total mass $m_A:=\nu(|X_c|\le A)$ and first centred
+moment $b_A:=\int_{|X_c|\le A}X_c\dd\nu$.  The exact expansion
 \[
 \frac{1+y^2}{1+(y-\varepsilon)^2}
 =1+\frac{2y}{1+y^2}\varepsilon
@@ -77,21 +77,21 @@ moment $b_A:=\int_{|\Delta|\le A}\Delta\dd\nu$.  The exact expansion
 \]
 shows that, for each fixed $A$,
 \begin{equation}\label{eq:bounded-truncated-quotient-limit}
-u_{t,A}(y):=\int_{|\Delta|\le A}
-\frac{1+y^2}{1+(y-\Delta/t)^2}\dd\nu(\gamma)
+u_{t,A}(y):=\int_{|X_c|\le A}
+\frac{1+y^2}{1+(y-X_c/t)^2}\dd\nu(\gamma)
 =m_A+\frac{2yb_A}{t(1+y^2)}+O_A(t^{-2})
 \end{equation}
 uniformly in~$y$.  Since
-$b_A=-\int_{|\Delta|>A}\Delta\dd\nu$, Cauchy--Schwarz gives
+$b_A=-\int_{|X_c|>A}X_c\dd\nu$, Cauchy--Schwarz gives
 \[
-|b_A|\le \left(\int_{|\Delta|>A}\Delta^2\dd\nu\right)^{1/2}.
+|b_A|\le \left(\int_{|X_c|>A}X_c^2\dd\nu\right)^{1/2}.
 \]
 Combining this with
 \eqref{eq:second-moment-kl-tail-sup} and
 \eqref{eq:bounded-truncated-quotient-limit} yields
 \[
 \limsup_{t\to\infty}\|u_t-1\|_{L^\infty(\RR)}
-\le 1-m_A+2\nu(|\Delta|>A)+2\int_{|\Delta|>A}\Delta^2\dd\nu.
+\le 1-m_A+2\nu(|X_c|>A)+2\int_{|X_c|>A}X_c^2\dd\nu.
 \]
 Letting $A\to\infty$ gives $\|u_t-1\|_\infty\to0$.
 
@@ -258,7 +258,13 @@ Jensen step recorded in the proof of that lemma.  With
 applies on \([a,b]\).  It gives \(H_R\in AC([a,b])\), uniform convergence
 \(H_R\to H\), the \(L^1([a,b])\)-vanishing cutoff error in
 \eqref{eq:kl-domain-localized-entropy-balance}, and the unlocalized
-Doob--Bregman derivative identity.  The displayed one-variable cutoff formula
+Doob--Bregman derivative identity.  The cutoff error is not a formal
+remainder: in the notation of
+Lemma~\ref{lem:doob-bregman-cutoff-commutator}, specialized to
+\(\Phi(s)=s\log s\), it is the explicit near/far commutator
+\eqref{eq:phi-cutoff-commutator-error-formula}, and
+\eqref{eq:phi-cutoff-commutator-l1-vanishing} gives its
+\(L^1([a,b])\)-decay.  The displayed one-variable cutoff formula
 \eqref{eq:kl-main-cutoff-derivative} is the same cutoff convention fixed in
 Lemma~\ref{lem:cauchy-doob-cutoff-calculus}, applied to the bounded Lipschitz
 tests \(1+\log u_t\) and \(u_t\).  The Bregman cutoff limit
@@ -453,8 +459,9 @@ Lemma~\ref{lem:poisson-second-moment-kl-decay} gives \(H(T)\to0\) as
 which is \eqref{eq:relative-entropy-integrated-dissipation}.
 \end{proof}
 
-Combining \eqref{eq:relative-entropy-integrated-dissipation} with
-Theorem~\ref{thm:finite-moment-entropy-remainder} gives the coefficient tail
+Combining \eqref{eq:relative-entropy-integrated-dissipation} with the
+retained-polynomial form in
+\S\ref{subsubsec:finite-moment-constants-variants} gives the coefficient tail
 formula used later.  This use is downstream only: neither the KL Doob-tail
 identity nor the domain closure in Appendix~\ref{app:doob-bregman-domain} is
 an input to the proof of the coefficient expansion
@@ -469,6 +476,8 @@ A_{2M}(\nu)
 -\sum_{m=2}^{M-1}A_{2m}(\nu)t^{-2m}
 \right),
 \end{equation}
-with the sum interpreted as zero when \(M=2\).  This is exactly the expansion
-of Theorem~\ref{thm:finite-moment-entropy-remainder} rewritten through the KL
+with the sum interpreted as zero when \(M=2\).  This is exactly part
+\textup{(E)} of Theorem~\ref{thm:poisson-kl-even-orders}, in the
+retained-polynomial form of
+\S\ref{subsubsec:finite-moment-constants-variants}, rewritten through the KL
 tail identity; it is not a second proof of those coefficients.

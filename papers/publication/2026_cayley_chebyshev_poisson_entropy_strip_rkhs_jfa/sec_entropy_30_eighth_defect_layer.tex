@@ -1,10 +1,11 @@
 \subsection{Eighth-order defect layer extracted from the finite-order coefficient calculus}%
 \label{subsec:eighth-order-defects}
 
-The analytic input for the eighth-order coefficient identity is the
-sharp-order universal coefficient theorem with \(N=4\), which identifies the
-universal polynomial coefficient \(A_8\) under a finite centred sixth absolute
-moment.  The displayed quantitative \(O_\nu(t^{-9})\) remainder uses
+The analytic input for the eighth-order coefficient identity is
+Theorem~\ref{thm:poisson-kl-even-orders} with \(N=4\), sharp for
+identification of the universal moment-polynomial coefficient \(A_8\) under a
+finite centred sixth absolute moment.  The displayed quantitative
+\(O_\nu(t^{-9})\) remainder uses
 the positive-margin retained-order theorem with \(N=4\) and \(\eta=1\),
 and therefore assumes a finite centred seventh absolute moment.
 
@@ -39,34 +40,44 @@ Thus the relevant Laurent supports are
 S_j:=\operatorname{supp} Q_j=\{\pm1,\ldots,\pm j\},
 \qquad 2\le j\le6.
 \]
-The required constant Laurent coefficients are the following two blocks.
-In particular, the sixth-order entries are
-\([z^0]Q_3^2=3/16\) and \([z^0]Q_2^3=-3/32\).
-These are the Laurent constants used below in \(B_6\) and \(B_8\); no
-additional root-of-unity normalization or trigonometric half-factor enters.
-The first block is the fourth- and sixth-order arithmetic:
+Writing \(Q_n(z)=\sum_{k=-n}^nq_{n,k}z^k\), \(q_{n,0}=0\), the coefficient
+vectors on positive exponents are
 \[
-\begin{array}{c|c}
-\text{product} & [z^0] \\
+\begin{array}{c|c|c}
+n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
 \hline
-Q_2^2 & \frac14 \\
-Q_2Q_4 & -\frac18 \\
-Q_3^2 & \frac{3}{16} \\
-Q_2^3 & -\frac{3}{32}
+2 & -\frac14(1,1) & q_{2,m}\\
+3 & \frac{\ii}{8}(1,2,1) & -q_{3,m}\\
+4 & \frac1{16}(1,3,3,1) & q_{4,m}\\
+5 & -\frac{\ii}{32}(1,4,6,4,1) & -q_{5,m}\\
+6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
 \end{array}
 \]
-The second block is the eighth-order arithmetic:
+Equivalently,
 \[
-\begin{array}{c|c}
-\text{product} & [z^0] \\
-\hline
-Q_2Q_6 & \frac{3}{64} \\
-Q_3Q_5 & -\frac{15}{128} \\
-Q_4^2 & \frac{5}{32} \\
-Q_2^2Q_4 & \frac{3}{32} \\
-Q_2Q_3^2 & -\frac{9}{128} \\
-Q_2^4 & \frac{9}{64}
-\end{array}
+I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
+=\sum_{k_1+\cdots+k_r=0}q_{n_1,k_1}\cdots q_{n_r,k_r}.
+\]
+The nonzero zero-sum convolutions entering \(B_6\) are
+\[
+\begin{aligned}
+I(2,4)&=-\frac{3+1+1+3}{64}=-\frac18,\\
+I(3,3)&=\frac{2(1^2+2^2+1^2)}{64}=\frac{3}{16},\\
+I(2,2,2)&=-\frac{6}{64}=-\frac{3}{32}.
+\end{aligned}
+\]
+The nonzero zero-sum convolutions entering \(B_8\) are
+\[
+\begin{aligned}
+I(2,6)&=\frac{5+1+1+5}{256}=\frac{3}{64},\\
+I(3,5)&=-\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
+       =-\frac{15}{128},\\
+I(4,4)&=\frac{2(1^2+3^2+3^2+1^2)}{256}=\frac{5}{32},\\
+I(2,2,4)&=\frac{4+6+12+2}{256}=\frac{3}{32},\\
+I(2,3,3)&=2\left(-\frac{8}{256}\right)
+          +2\left(-\frac{1}{256}\right)=-\frac{9}{128},\\
+I(2,2,2,2)&=\frac{36}{256}=\frac{9}{64}.
+\end{aligned}
 \]
 The only odd total-degree products appearing before the even-power
 projection are
@@ -87,20 +98,7 @@ Q_2^2Q_3 & 0
 \]
 These four zeros are the complete list needed to remove \(B_5\) and \(B_7\)
 from the entropy coefficient extraction through order eight.
-Equivalently, these entries are the constant terms
-\[
-I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
-\]
-for the displayed \(Q_2,\ldots,Q_6\).  The paper-local exact rational
-certificate
-\[
-\texttt{certificates/eighth\_order\_laurent\_certificate.py}
-\]
-constructs the same Laurent polynomials from
-\eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}, performs the
-finite convolution over \(\QQ\), and prints precisely the nonzero and
-vanishing tables above.  The same certificate includes the normalization and
-two-point arithmetic checks
+The normalization and two-point arithmetic checks are
 \[
 Q_2(1)=-1,\qquad
 A_6(\rho_\sigma)=-\frac{7\sigma^6}{64},\qquad
@@ -241,26 +239,36 @@ q_{5,\pm m}=\mp\ii\,\frac{(1,4,6,4,1)_m}{32}\quad(1\le m\le5),\\
 q_{6,\pm m}=-\frac{(1,5,10,10,5,1)_m}{64}\quad(1\le m\le6).
 \end{gathered}
 \]
-The exact rational certificate mentioned in the statement evaluates this
-finite convolution for all products that can enter \(B_4\), \(B_6\), and
-\(B_8\), and for the odd products \(B_5\) and \(B_7\) that must vanish after
-integration:
+The displayed finite sums are obtained directly from this convolution.  For
+the binary products one pairs exponents \(k\) and \(-k\).  For \(Q_2^3\) there
+are six ordered zero-sum triples, each contributing \(-1/64\).  For
+\(Q_2^2Q_4\) the ordered pairs from \(Q_2^2\) have sums with absolute values
+\(1,2,3,4\), giving the grouped numerator \(4+6+12+2\) over \(256\).  For
+\(Q_2Q_3^2\), the total contribution for each \(Q_2\)-exponent \(k=\pm1\) is
+\(-8/256\), and for each \(k=\pm2\) is \(-1/256\).  For \(Q_2^4\) there are
+thirty-six ordered zero-sum quadruples, each contributing \(1/256\).  Thus the
+complete nonzero product list used by \(B_4\), \(B_6\), and \(B_8\) is
 \[
 \begin{array}{c|c|c}
-\text{entropy order} & \text{mode product} & [z^0]\text{ of the product} \\
+\text{entropy order} & \text{mode product} &
+\text{zero-sum convolution} \\
 \hline
-4 & Q_2^2 & \frac14\\
-6 & Q_2Q_4 & -\frac18\\
-6 & Q_3^2 & \frac{3}{16}\\
-6 & Q_2^3 & -\frac{3}{32}\\
-8 & Q_2Q_6 & \frac{3}{64}\\
-8 & Q_3Q_5 & -\frac{15}{128}\\
-8 & Q_4^2 & \frac{5}{32}\\
-8 & Q_2^2Q_4 & \frac{3}{32}\\
-8 & Q_2Q_3^2 & -\frac{9}{128}\\
-8 & Q_2^4 & \frac{9}{64}
+4 & Q_2^2 & \frac{4}{16}=\frac14\\
+6 & Q_2Q_4 & -\frac{3+1+1+3}{64}=-\frac18\\
+6 & Q_3^2 & \frac{2(1^2+2^2+1^2)}{64}=\frac{3}{16}\\
+6 & Q_2^3 & -\frac{6}{64}=-\frac{3}{32}\\
+8 & Q_2Q_6 & \frac{5+1+1+5}{256}=\frac{3}{64}\\
+8 & Q_3Q_5 & -\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
+       =-\frac{15}{128}\\
+8 & Q_4^2 & \frac{2(1^2+3^2+3^2+1^2)}{256}=\frac{5}{32}\\
+8 & Q_2^2Q_4 & \frac{4+6+12+2}{256}=\frac{3}{32}\\
+8 & Q_2Q_3^2 & -\frac{2\cdot8+2\cdot1}{256}=-\frac{9}{128}\\
+8 & Q_2^4 & \frac{36}{256}=\frac{9}{64}
 \end{array}
 \]
+Here the signs in the odd--odd rows are those of the displayed Laurent
+coefficients, equivalently \(\ii^2=-1\).
+The odd products that form \(B_5\) and \(B_7\) give
 \[
 \begin{array}{c|c|c}
 \text{entropy order} & \text{mode product} & [z^0]\text{ of the product} \\
@@ -271,15 +279,9 @@ integration:
 7 & Q_2^2Q_3 & 0
 \end{array}
 \]
-Because all coefficients are rational except for the explicit odd-mode factor
-\(1/\ii\), and because the only odd modes used here occur in pairs, every
-listed constant term lies in \(\QQ\).  The script records this convention by
-factoring out \(1/\ii\) from odd \(Q_n\) and inserting the sign
-\((1/\ii)^2=-1\) in the odd--odd products.  This is exactly the convention in
-the displayed Laurent polynomials.  The zero rows follow from the same
-convolution formula; equivalently, each listed product contains an odd number
-of odd modes and is odd under \(y\mapsto-y\), so its Cauchy-weighted integral
-has no constant Laurent term.
+The zero rows follow from the same convolution formula; equivalently, each
+listed product contains an odd number of odd modes and is odd under
+\(y\mapsto-y\), so its Cauchy-weighted integral has no constant Laurent term.
 
 As a normalization check, the displayed \(Q_2\) gives \(Q_2(1)=-1\), agreeing
 with \(u_2(0)=-1\).  For the symmetric two-point law
@@ -379,9 +381,9 @@ Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
 variance $\sigma^2>0$, and finite centred sixth absolute moment.  Then,
 with
 \[
-\Delta:=\gamma-\bar\gamma,
+X_c:=\gamma-\bar\gamma,
 \qquad
-\mu_n:=\int_{\RR}\Delta^n\dd\nu(\gamma),
+\mu_n:=\int_{\RR}X_c^n\dd\nu(\gamma),
 \]
 and
 \[
@@ -423,24 +425,43 @@ sixth-order defect notation is
 \qquad
 \Delta_6^{\rm ent}(\nu):=-\frac{7}{64}\sigma^6-C_6^{\rm ent}(\nu).
 \]
-This is the sharp threshold for the universal polynomial coefficient
-\(A_8^{\rm alg}\), and does not rule out lower-moment, truncated,
+This is the sharp threshold for identification of the universal
+moment-polynomial coefficient \(A_8^{\rm alg}\), and does not rule out
+lower-moment, truncated,
 renormalized, or law-dependent eighth-order statements with different
 terminal data.
 These coefficients use the Laurent normalization of
 \(Q_2,\ldots,Q_6\) displayed in
-Lemma~\ref{lem:eighth-order-coefficient-arithmetic}; that lemma also lists the
-supports and every zero-sum convolution entering \(B_4\), \(B_6\), and
-\(B_8\).  In particular
-\([z^0]Q_2^2=1/4\), \([z^0]Q_3^2=3/16\), and
-\([z^0]Q_2^3=-3/32\), consistent with
-\(Q_2(1)=u_2(0)=-1\) and with the displayed \(B_6\) row.  The exact rational
-certificate named in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}
-recomputes the Laurent products \(I(n_1,\ldots,n_r)=[z^0]\prod_jQ_{n_j}\)
-over \(\QQ\) and includes the two-point sanity checks
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  The theorem-level
+substitution is the finite calculation
 \[
-A_6(\rho_\sigma)=-\frac{7\sigma^6}{64},
-\qquad
+\begin{aligned}
+A_6(\nu)
+&=\mu_2\mu_4\left(-\frac18\right)
+  +\frac12\mu_3^2\left(\frac{3}{16}\right)
+  -\frac16\mu_2^3\left(-\frac{3}{32}\right)\\
+&=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
+\end{aligned}
+\]
+and
+\[
+\begin{aligned}
+A_8(\nu)
+&=\mu_2\mu_6\left(\frac{3}{64}\right)
+  +\mu_3\mu_5\left(-\frac{15}{128}\right)
+  +\frac12\mu_4^2\left(\frac{5}{32}\right)\\
+&\quad
+  -\frac12\mu_2^2\mu_4\left(\frac{3}{32}\right)
+  -\frac12\mu_2\mu_3^2\left(-\frac{9}{128}\right)
+  +\frac1{12}\mu_2^4\left(\frac{9}{64}\right)\\
+&=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
++12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
+\end{aligned}
+\]
+The same finite table gives the normalization checks
+\[
+Q_2(1)=u_2(0)=-1,\qquad
+A_6(\rho_\sigma)=-\frac{7\sigma^6}{64},\qquad
 A_8(\rho_\sigma)=\frac{23\sigma^8}{256}.
 \]
 With these coefficients one has, as $t\to\infty$,
@@ -547,8 +568,8 @@ B_{\nu,8}
 \qquad
 T_{\nu,8}=T^{\rm opt},
 \]
-where the optimized quantities are those in
-Corollary~\ref{cor:optimized-retained-order-entropy-bridge} with
+where the optimized quantities are those in the optimized retained-order
+paragraph of \S\ref{subsubsec:finite-moment-constants-variants} with
 \(N=4\), \(L=6\), and \(\eta=1\).  Then for every \(t\ge T_{\nu,8}\),
 \begin{equation}\label{eq:poisson-kl-eighth-remainder}
 \begin{split}
@@ -562,8 +583,8 @@ Corollary~\ref{cor:optimized-retained-order-entropy-bridge} with
 \le B_{\nu,8}t^{-9}.
 \end{split}
 \end{equation}
-Equivalently, the sharp-order expansion \eqref{eq:poisson-kl-eighth}
-improves in this positive-margin regime to
+Equivalently, the coefficient-identifying expansion
+\eqref{eq:poisson-kl-eighth} improves in this positive-margin regime to
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\frac{\sigma^4}{8t^4}
@@ -574,10 +595,11 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \end{theorem}
 
 \begin{remark}
-The finite centred sixth absolute moment is the \(N=4\) sharp-order hypothesis
-\(2N-2=6\) for the universal coefficient \(A_8\).  The seventh moment is used
-only in Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for the
-quantitative \(O(t^{-9})\) remainder.
+The finite centred sixth absolute moment is the \(N=4\) hypothesis
+\(2N-2=6\), sharp for identification of the universal moment-polynomial
+coefficient \(A_8\).  The seventh moment is used only in
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for the quantitative
+\(O(t^{-9})\) remainder.
 \end{remark}
 
 \begin{proof}
@@ -585,7 +607,7 @@ The finite centred seventh absolute moment implies the finite centred sixth
 absolute moment needed for Theorem~\ref{thm:poisson-kl-eighth}, so the
 coefficient identity is already available.  The same seventh moment is the
 \(N=4,\eta=1\) positive-margin hypothesis \(2N-2+\eta=7\) in
-Corollary~\ref{cor:optimized-retained-order-entropy-bridge}.  Its specialized
+\S\ref{subsubsec:finite-moment-constants-variants}.  The specialized
 estimate \eqref{eq:optimized-n4-seventh-envelope} is exactly
 \eqref{eq:poisson-kl-eighth-remainder} with the displayed definitions of
 \(B_{\nu,8}\) and \(T_{\nu,8}\).
