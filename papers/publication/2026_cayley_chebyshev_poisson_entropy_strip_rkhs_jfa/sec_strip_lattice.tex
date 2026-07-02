@@ -1,12 +1,11 @@
-% sec_strip_lattice.tex -- optional observation data for entropy inputs
-\section{Optional Observation Data for Moment Inputs}%
+% sec_strip_lattice.tex -- optional exact observation data for moment inputs
+\section{Optional Exact Observation Data for Moment Inputs}%
 \label{sec:strip-lattice}
 
 The entropy theorems in Section~\ref{sec:entropy-asymptotics} are proved from
-centred moments.  They do not use a reproducing-kernel Hilbert-space
-construction.  This short appendix records only the optional observation
-interface needed to explain one way in which the moment jet
-\((\mu_2,\ldots,\mu_6)\) can be supplied.
+centred moments.  This appendix records exact external data from which the
+finite centred moment jet \((\mu_2,\ldots,\mu_6)\) may be supplied before the
+entropy theorems are invoked.
 
 Fix \(t_0>0\), put
 \[
@@ -24,7 +23,14 @@ q_{t_0}(\xi):=
 =\pi\widehat{\lambda_{t_0}}(\xi).
 \end{equation}
 Thus full knowledge of \(q_{t_0}\) is exactly full knowledge of the Fourier
-transform of \(\pi\lambda_{t_0}\).
+transform of \(\pi\lambda_{t_0}\).  When the corresponding moments are finite,
+the full profile gives them directly by differentiation at the origin:
+\begin{equation}\label{eq:full-profile-moment-derivatives}
+  \int_{\RR}s^j\,\kappa_{t_0}(\dd s)
+  =
+  \frac{\ii^{\,j-1}}{\pi}\,q_{t_0}^{(j-1)}(0),
+  \qquad j\ge1.
+\end{equation}
 
 \begin{theorem}[Exact lattice recovery from integer observations]%
 \label{thm:poisson-observation-lattice-sampling}
@@ -115,12 +121,12 @@ therefore gives
 \(\ZZ\).
 \end{proof}
 
-\begin{theorem}[Observation-to-entropy coefficient interface]%
+\begin{theorem}[Optional exact moment recovery from profile or lattice data]%
 \label{thm:observation-entropy-interface}
 Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar\gamma\),
 positive variance \(\sigma^2\), and finite centred sixth absolute moment.
 Fix \(t_0>0\) and define \(\kappa_{t_0}\) and \(q_{t_0}\) by
-\eqref{eq:observation-profile-definition}.  The following observation data
+\eqref{eq:observation-profile-definition}.  The following exact data
 determine the centred moment jet
 \((\mu_2,\ldots,\mu_6)\), where
 \(\mu_j=\int_{\RR}(\gamma-\bar\gamma)^j\dd\nu(\gamma)\):
@@ -133,7 +139,25 @@ determine the centred moment jet
       \nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1 .
       \]
 \end{enumerate}
-In either case the moments are recovered from the scaled law by
+For full profile data, the direct formula is
+\begin{equation}\label{eq:observation-interface-full-profile-moments}
+\mu_j
+=
+t_0^j\,\frac{\ii^{\,j-1}}{\pi}\,
+q_{t_0}^{(j-1)}(0),
+\qquad 2\le j\le6.
+\end{equation}
+For exact lattice data, first recover \(b_m=mp_m\) by
+Theorem~\ref{thm:poisson-observation-lattice-sampling}; then
+\begin{equation}\label{eq:observation-interface-lattice-moments}
+\mu_j
+=
+t_0^j\sum_{m\in\ZZ}m^j p_m
+=
+t_0^j\sum_{m\ne0}m^{j-1}b_m,
+\qquad 2\le j\le6.
+\end{equation}
+Equivalently, in either case the moments are recovered from the scaled law by
 \begin{equation}\label{eq:observation-interface-moments}
 \mu_j=t_0^j\int_{\RR}s^j\,\kappa_{t_0}(\dd s),
 \qquad 2\le j\le6.
@@ -141,20 +165,18 @@ In either case the moments are recovered from the scaled law by
 Consequently these observation data determine the coefficient quantities used
 in the eighth-order entropy-defect layer,
 \[
-C_6^{\rm ent}(\nu),\qquad A_8^{\rm ent}(\nu),\qquad
-\Delta_6^{\rm ent}(\nu),\qquad \Delta_8^{\rm ent}(\nu),
+A_6(\nu),\qquad A_8(\nu),\qquad
+\Delta_6(\nu),\qquad \Delta_8(\nu),
 \]
 as defined in Theorem~\ref{thm:poisson-kl-eighth} and in the defect
 corollaries of Section~\ref{subsec:eighth-order-defects}.
 
-Integer samples without the lattice-support condition do not supply this
-moment jet.  They are projection data for the auxiliary observation channel,
-not inputs to Theorems~\ref{thm:poisson-kl-even-orders},
-\ref{thm:poisson-kl-eighth}, or
-\ref{thm:finite-time-poisson-entropy-stability}.  The finite-time
-sixth-defect estimate still requires its separate eighth-order inputs
-\(A_8^{\rm ent}(\nu)\), \(B_{\nu,8}\), and \(T_{\nu,8}\), or their
-shell-uniform replacements fixed in advance.
+Integer samples are used through this reconstruction mechanism under the
+lattice-support condition.  The controlled-shell finite-time estimate fixes
+the shell constants \(C_{\sigma,M}^{(8)}\), \(B_{\sigma,M}^{(8)}\), and
+\(T_{\sigma,M}^{(8)}\) in advance.  The fixed-law oracle variant,
+Theorem~\ref{thm:oracle-finite-time-poisson-entropy-stability}, instead uses
+separately supplied \(A_8(\nu)\), \(B_{\nu,8}\), and \(T_{\nu,8}\).
 \end{theorem}
 
 \begin{proof}
@@ -170,14 +192,35 @@ restriction of \(\kappa_{t_0}\), and
 \kappa_{t_0}(\{0\})=1-\kappa_{t_0}(\RR\setminus\{0\})
 \]
 recovers the atom at the origin.  Thus the full profile determines
-\(\kappa_{t_0}\).  If the integer samples are accompanied by the lattice-support
-condition, Theorem~\ref{thm:poisson-observation-lattice-sampling} recovers the
-same scaled law directly.
+\(\kappa_{t_0}\).  Since \(\nu\) has a finite centred sixth absolute moment,
+the signed measure \(s\,\kappa_{t_0}(\dd s)\) has finite moments through order
+five.  Differentiating \eqref{eq:observation-profile-definition} at the
+origin gives
+\[
+q_{t_0}^{(j-1)}(0)
+=\pi(-\ii)^{j-1}\int_{\RR}s^j\,\kappa_{t_0}(\dd s),
+\qquad 2\le j\le6,
+\]
+which is \eqref{eq:observation-interface-full-profile-moments} after
+rescaling by \(t_0^j\).
+
+If the integer samples are accompanied by the lattice-support condition,
+Theorem~\ref{thm:poisson-observation-lattice-sampling} recovers the same
+scaled law directly.  With \(p_m=\kappa_{t_0}(\{m\})\) and \(b_m=mp_m\),
+absolute convergence of the sums in
+\eqref{eq:observation-interface-lattice-moments} follows from the sixth
+absolute moment, and
+\[
+\int_{\RR}s^j\,\kappa_{t_0}(\dd s)
+=\sum_{m\in\ZZ}m^j p_m
+=\sum_{m\ne0}m^{j-1}b_m,
+\qquad 2\le j\le6 .
+\]
 
 The finite sixth absolute moment makes the moments in
 \eqref{eq:observation-interface-moments} finite, and the scaling identity
 \(X_c=t_0s\) gives precisely the centred moments of \(\nu\) through order
-six.  The formulas for \(C_6^{\rm ent}\) and \(A_8^{\rm ent}\) in
+six.  The formulas for \(A_6\) and \(A_8\) in
 Theorem~\ref{thm:poisson-kl-eighth} are polynomials in
 \(\mu_2,\ldots,\mu_6\), and the defect variables in
 Corollaries~\ref{thm:poisson-defect-ladder}--%
@@ -185,8 +228,9 @@ Corollaries~\ref{thm:poisson-defect-ladder}--%
 entropy coefficients and \(\sigma^2=\mu_2\).  Hence the recovered moment jet
 determines exactly the listed coefficient and defect quantities.
 
-Without the lattice condition, the integer data are not identified with the
-full profile \(q_{t_0}\), so no coefficient-recovery statement follows.  The
-final assertion is the input separation stated in
-Theorem~\ref{thm:finite-time-poisson-entropy-stability}.
+For this convolutional reconstruction formula to represent the full
+continuous profile, the scaled law must be supported on \(\ZZ\).  The final
+assertion is the input separation stated in
+Theorems~\ref{thm:finite-time-poisson-entropy-stability} and
+\ref{thm:oracle-finite-time-poisson-entropy-stability}.
 \end{proof}

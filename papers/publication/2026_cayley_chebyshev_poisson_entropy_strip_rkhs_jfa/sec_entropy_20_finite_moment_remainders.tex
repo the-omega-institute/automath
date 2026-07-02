@@ -96,8 +96,7 @@ In particular, when \(L=2N-2\), this is exactly the little-oh density input
 used by Lemma~\ref{lem:exact-moment-entropy-transfer} in
 Theorem~\ref{thm:poisson-kl-even-orders} for the universal polynomial
 coefficient \(A_{2N}^{\rm alg}\); the same \(O(t^{-2})\) bound gives the
-smallness threshold for the entropy Taylor expansion.  No positive-margin
-moment or alternative lower-moment expansion is being assumed in this lemma.
+smallness threshold for the entropy Taylor expansion.
 \end{lemma}
 
 \begin{proof}
@@ -303,12 +302,10 @@ $\|u_n\|_\infty\le n+1$ and hence
 \|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}
 \le\prod_{j=1}^{r}(n_j+1).
 \]
-The proposition records usable bounds for each specified law; it does not
-assert sharpness or uniform control over a moment class.  The exact-threshold
-identification of the sharp universal moment-polynomial coefficient
-\(A_{2N}\) in Theorem~\ref{thm:poisson-kl-even-orders} does not use this
-positive-margin estimate; it uses the standalone exact-moment transfer lemma
-stated immediately before that theorem.
+The proposition records usable bounds for each specified law.  The
+exact-threshold identification of the universal moment-polynomial coefficient
+\(A_{2N}\) in Theorem~\ref{thm:poisson-kl-even-orders} uses the standalone
+exact-moment transfer lemma stated immediately before that theorem.
 \end{proposition}
 
 \begin{proof}
@@ -617,10 +614,9 @@ finite-moment coefficient evaluation
 \eqref{eq:universal-entropy-coefficient-evaluation}.
 \end{proof}
 
-Before stating the coefficient theorem, we spell out the scope of the
-asymptotic claim.  The law \(\nu\) is not iterated or normalized; it remains
-fixed, and only the Poisson time \(t\) tends to infinity in the scalar
-functional
+Before stating the coefficient theorem, recall the scope fixed in the
+introduction.  The law \(\nu\) remains fixed, and the Poisson time \(t\) tends
+to infinity in the scalar functional
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma)).
 \]
@@ -630,25 +626,187 @@ kernel
 \cite{DuoandikoetxeaZuazua1992,EscobedoZuazua1991,KarchSchonbek2001,IshigeKawakami2012,IshigeKawakamiMichihisa2017,AnkerPapageorgiouZhang2023HeatSymmetricSpaces,Papageorgiou2024FractionalLargeTime}.
 Extension-method papers for the fractional Laplacian
 \cite{CaffarelliSilvestre2007,StingaTorrea2010} fix a standard route from
-nonlocal operators to local degenerate problems, but they are background for
-normalization and analogy only: no extension problem is used in the proof
-below.
+nonlocal operators to local degenerate problems and provide normalization
+background.
 Stable-law entropy expansions and recent JFA entropic CLT work concern
 convolution powers, normalized sums, or Esscher-transformed sums
 \cite{BobkovChistyakovGotze2013,BobkovChistyakovGotzeEdgeworth2013,BobkovChistyakovGotzeBerryEsseen2014,BobkovGotzeEsscher2025}.
-The theorem below is not a replacement for those theories.  Its assertion is
-only for the fixed-law Poisson comparison
+The theorems below treat fixed-law Poisson comparisons
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma)),
 \]
-after the mean-matched Cauchy normalization.  Within that functional, the
-Cayley--Chebyshev quotient
+and its radial \(d\)-dimensional analogue, after the mean-matched Poisson
+normalization.  The first theorem records the finite-moment entropy jet in
+all dimensions for the radial Poisson kernel.  The following scalar theorem
+then evaluates the one-dimensional coefficients explicitly.  Within that
+scalar functional, the Cayley--Chebyshev quotient
 \((1+y^2)/(1+(y-X_c/t)^2)\) makes every retained entropy coefficient a
 finite polynomial in centred moments, and the exact \((2N-2)\)-moment
 threshold is the threshold for identifying the universal coefficient
-\(A_{2N}\).  The increment is computational and coefficient-level: explicit
-finite Laurent extraction for arbitrary fixed input laws under Poisson
-smoothing.
+\(A_{2N}\).  The increment is a finite-moment Poisson entropy-jet theorem,
+with a one-dimensional Laurent extraction layer that makes the \(N=4\)
+coefficients explicit.
+
+\begin{theorem}[Multidimensional finite-moment Poisson entropy jets]%
+\label{thm:multidimensional-poisson-entropy-jets}
+Let \(d\ge1\), let
+\[
+P_t^{(d)}(x):=c_d\,\frac{t}{(t^2+|x|^2)^{(d+1)/2}},
+\qquad x\in\RR^d,\ t>0,
+\]
+be the radial Poisson kernel on \(\RR^d\), normalized to integrate to one.
+Let \(\nu\) be a probability measure on \(\RR^d\) with mean
+\(\bar\gamma\), put \(X_c:=\gamma-\bar\gamma\), and set
+\[
+h_t:=P_t^{(d)}*\nu,\qquad
+g_t(x):=P_t^{(d)}(x-\bar\gamma).
+\]
+Fix an integer \(L\ge\max\{2,d+1\}\), and assume
+\(\EE|X_c|^L<\infty\).  For multiindices \(\alpha\in\NN_0^d\), write
+\[
+\mu_\alpha:=\EE[X_c^\alpha]\quad(|\alpha|\le L).
+\]
+Let
+\[
+\Omega_d(\dd y):=P_1^{(d)}(y)\dd y
+\]
+and define the universal functions \(U_\alpha^{(d)}\) by the Taylor expansion
+at \(z=0\)
+\begin{equation}\label{eq:multidim-poisson-ratio-taylor}
+\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}
+=\sum_{\alpha\in\NN_0^d}U_\alpha^{(d)}(y)z^\alpha .
+\end{equation}
+For \(4\le m\le L+2\), define
+\begin{equation}\label{eq:multidim-entropy-coefficient}
+\mathcal A_m^{(d)}(\nu):=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{|\alpha_1|,\ldots,|\alpha_r|\ge2\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+|\alpha_j|\le L}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^rU_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\end{equation}
+Then
+\begin{equation}\label{eq:multidim-poisson-entropy-jet}
+D_{\rm KL}(h_t\|g_t)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)})
+\qquad(t\to\infty).
+\end{equation}
+The coefficients in \eqref{eq:multidim-entropy-coefficient} are finite and
+universal: they depend on \(d\), \(m\), and the centred tensor moments
+\(\{\mu_\alpha:2\le|\alpha|\le m-2\}\), but not on any higher moment of
+\(\nu\).  In particular a contribution of total entropy degree \(m\) cannot
+contain a tensor moment of order above \(m-2\).
+\end{theorem}
+
+\begin{proof}
+Write \(a=(d+1)/2\).  For \(x=\bar\gamma+ty\),
+\[
+\frac{P_t^{(d)}(x-\gamma)}{g_t(x)}
+=
+\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^a
+=
+\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a.
+\]
+Thus the density quotient in the scale \(\Omega_d\) is
+\[
+\widetilde\delta_t(y)
+:=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+=\EE\!\left[
+\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a-1
+\right].
+\]
+The change of variables gives
+\[
+g_t(\bar\gamma+ty)t^d\dd y=P_1^{(d)}(y)\dd y=\Omega_d(\dd y),
+\]
+and therefore
+\[
+D_{\rm KL}(h_t\|g_t)
+=\int_{\RR^d}\Phi(\widetilde\delta_t(y))\,\Omega_d(\dd y),
+\qquad
+\Phi(s)=(1+s)\log(1+s)-s.
+\]
+
+We first obtain the finite density expansion.  Let
+\[
+F_y(z):=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
+\]
+For every fixed \(L\), Taylor's formula at \(z=0\) gives, for \(|z|\le1\),
+\[
+F_y(z)=\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
++\sum_{|\alpha|=L}z^\alpha R_{\alpha,L}(y,z),
+\]
+where the remainders may be written as integrals of \((L+1)\)st derivatives of
+\(F_y(sz)\) over \(0\le s\le1\).  Each derivative has the form
+\[
+(1+|y|^2)^a
+\frac{P_{\beta}(y-z)}{(1+|y-z|^2)^{a+|\beta|}},
+\qquad |\beta|\le L+1,
+\]
+for a polynomial \(P_\beta\) of degree at most \(|\beta|\).  When \(|z|\le1\)
+these derivative kernels are uniformly bounded in \((y,z)\): on \(|y|\le2\)
+this is compactness, and on \(|y|>2\) one has \(|y-sz|\ge |y|/2\) for
+\(0\le s\le1\).  Hence the Taylor remainder is bounded by
+\(C_{d,L}|z|^{L+1}\) on \(|z|\le1\).
+
+For \(|z|>1\), the direct growth bound
+\[
+F_y(z)\le C_d(1+|z|)^{d+1}
+\]
+follows by splitting into \(|y-z|\le |z|/2\) and its complement.  Since
+\(L\ge d+1\), this is at most \(C_{d,L}|z|^L\).  The finite Taylor polynomial
+is also \(O_{d,L}(|z|^L)\), because every coefficient \(U_\alpha^{(d)}\) with
+\(|\alpha|\le L\) is a rational function with at most polynomial growth
+cancelled by the denominator powers in the Taylor derivative.  Consequently
+\begin{equation}\label{eq:multidim-density-tail-bound}
+\left|F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha\right|
+\le C_{d,L}|z|^L\,\min\{|z|,1\}+C_{d,L}|z|^L\mathbf1_{\{|z|>1\}},
+\end{equation}
+uniformly in \(y\).  The same estimate holds after integration in \(y\)
+against \(\Omega_d\), because \(\Omega_d\) is a probability measure and the
+displayed bound is uniform.
+
+With \(z=X_c/t\), the part \(|X_c|\le t\) is
+\[
+t^{-L}\EE\!\left[|X_c|^L\frac{|X_c|}{t}\mathbf1_{\{|X_c|\le t\}}\right]
+=o(t^{-L})
+\]
+by dominated convergence, and the part \(|X_c|>t\) is
+\[
+O\!\left(t^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]\right)=o(t^{-L}).
+\]
+Thus
+\begin{equation}\label{eq:multidim-density-expansion}
+\widetilde\delta_t(y)
+=\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
++\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_\infty+\|\rho_{L,t}\|_{L^1(\Omega_d)}=o(t^{-L}).
+\end{equation}
+The terms of orders \(0\) and \(1\) cancel because \(\nu\) has total mass one
+and mean zero in the centred variable.
+
+The finite sum in \eqref{eq:multidim-density-expansion} starts at order
+\(t^{-2}\), and the same bound with \(L=2\) gives
+\(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  For large \(t\),
+\(|\widetilde\delta_t|\le1/2\), so the Taylor expansion of \(\Phi\) may be
+used through degree \(\lfloor (L+2)/2\rfloor\).  Products containing at least
+one \(\rho_{L,t}\) are
+\[
+o(t^{-L})\,O(t^{-2(r-1)})=o(t^{-(L+2)})
+\]
+in \(L^1(\Omega_d)\), uniformly for each retained Taylor degree \(r\ge2\).
+The Taylor tail is \(O(t^{-2q})\) with
+\(q=\lfloor (L+2)/2\rfloor+1\), hence \(o(t^{-(L+2)})\).  Multiplying the
+finite density polynomial and retaining total tensor degree \(m\le L+2\)
+gives exactly \eqref{eq:multidim-entropy-coefficient}, proving
+\eqref{eq:multidim-poisson-entropy-jet}.  Since every entropy monomial has
+at least two density factors, each individual multiindex in a total degree
+\(m\) contribution has length at most \(m-2\).
+\end{proof}
 
 \begin{theorem}[Finite-moment entropy hierarchy for Poisson entropy]%
 \label{thm:poisson-kl-even-orders}
@@ -679,17 +837,11 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \qquad(t\to\infty).
 \end{equation}
 This exact-threshold statement is sharp for identification of the universal
-moment-polynomial coefficient \(A_{2N}\).  It is not a claim that every
-lower-moment asymptotic description is impossible.
+moment-polynomial coefficient \(A_{2N}\).
 After this identification we also write \(A_k^{\rm ent}(\nu)=A_k^{\rm alg}(\nu)\)
 for these retained coefficients.
 Equivalently, \(A_{2m-1}^{\rm ent}(\nu)=0\) for every retained odd order
 \(2m-1\le 2N\).
-The threshold assertion is sharp for identification of the universal
-moment-polynomial coefficient \(A_{2N}^{\rm alg}\) identified here; it does
-not exclude lower-moment,
-law-dependent, truncated, or renormalized expansions with different terminal
-data.
 
 \textup{(PM) Positive-margin retained order.}
 Assume, in addition, that \(0<\eta\le1\) and that \(\nu\) has finite centred
@@ -782,10 +934,8 @@ No positive-variance hypothesis is imposed in
 Theorem~\ref{thm:poisson-kl-even-orders}; when the variance is zero the
 displayed coefficients vanish and \(h_t=g_t\).
 The coefficient theorem is at the exact fixed-law threshold for the universal
-moment-polynomial coefficient \(A_{2N}\).  This does not exclude
-lower-moment, law-dependent, truncated, or renormalized expansions; it says
-that the displayed universal polynomial \(A_{2N}\) is the coefficient
-identified at this threshold.  Every entropy monomial
+moment-polynomial coefficient \(A_{2N}\).  The displayed universal polynomial
+\(A_{2N}\) is the coefficient identified at this threshold.  Every entropy monomial
 contributing to \(A_{2N}^{\rm form}\) has at least two density factors, hence
 uses centred moments only through order \(2N-2\).  With \(L=2N-2\), the finite
 \(L\)th absolute moment gives an \(L^\infty\cap L^1(\omega)\) density
@@ -926,9 +1076,9 @@ law-dependent constants and the smallness threshold by finite formulas in
 
 Theorem~\ref{thm:poisson-kl-even-orders} is the finite-moment hierarchy.  The
 material in this subsection only fixes shorthand constants and common
-remainder forms used later; it is not a separate sequence of corollaries.
-The sharpness proposition below is kept numbered because it is the companion
-lower-bound statement for the exact moment threshold, not a constant variant.
+remainder forms used later.  The sharpness proposition below is kept numbered
+because it is the companion lower-bound statement for the exact moment
+threshold.
 
 \paragraph{Retained-polynomial form.}%
 \phantomsection\label{thm:finite-moment-entropy-remainder}
@@ -1034,10 +1184,7 @@ For such a law the top universal moment-polynomial coefficient in
 \eqref{eq:top-moment-coefficient-sharpness} is not a finite number.  Thus no
 fixed-law theorem that keeps the same universal polynomial coefficient
 \(A_{2N}^{\rm alg}\) can replace the finite \(L\)th absolute moment by a
-strictly weaker moment assumption.  This statement is only a sharpness
-statement for that universal moment-polynomial coefficient; it does not rule
-out alternative truncated, renormalized, or distribution-dependent expansions
-below the threshold.
+strictly weaker moment assumption.
 \end{proposition}
 
 \begin{proof}
@@ -1235,15 +1382,43 @@ P_N^{\rm opt}+Q_N^{\rm opt}+2(S^{\rm opt})^{N+1}
   In the specialization \(N=4\), \(\eta=1\), assume
   \(\EE|X_c|^7<\infty\), set \(L=6\), and write
   \[
-  B_{\nu,8}:=
-  P_4^{\rm opt}(C_\rho^{\rm opt},M_A^{\rm opt})
-  +Q_4^{\rm opt}(\mu,u)
-  +2(S^{\rm opt})^5,
-  \qquad
-  T_{\nu,8}:=T^{\rm opt}.
+  M_7(\nu):=\EE|X_c|^7,\qquad
+  \mathcal M_{\nu,8}:=\sum_{n=2}^{6}(n+1)|\mu_n|,
   \]
-  Here \(P_4^{\rm opt}\), \(Q_4^{\rm opt}\), and \(S^{\rm opt}\) are the
-  preceding optimized quantities with \(N=4\), \(L=6\), and \(\eta=1\).
+  \[
+  \mathcal C_{\nu,8}:=110M_7(\nu),\qquad
+  \mathcal S_{\nu,8}:=7\sum_{n=2}^{6}|\mu_n|+110M_7(\nu).
+  \]
+  The closed N=4 density-remainder product and retained-mode tail constants
+  are
+  \[
+  \mathcal P_{\nu,8}:=
+  \sum_{r=2}^{4}\frac{1}{r(r-1)}
+  \sum_{\ell=1}^{r}\binom r\ell
+  \mathcal M_{\nu,8}^{\,r-\ell}\mathcal C_{\nu,8}^{\,\ell}
+  \]
+  and
+  \[
+  \mathcal Q_{\nu,8}:=
+  \sum_{r=2}^{4}\frac{1}{r(r-1)}
+  \sum_{m=9}^{6r}
+  \sum_{\substack{2\le n_1,\ldots,n_r\le6\\
+  n_1+\cdots+n_r=m}}
+  \prod_{j=1}^{r}\bigl((n_j+1)|\mu_{n_j}|\bigr),
+  \]
+  with empty sums interpreted as zero.  Set
+  \[
+  B_{\nu,8}:=\mathcal P_{\nu,8}+\mathcal Q_{\nu,8}
+  +2\mathcal S_{\nu,8}^{5},
+  \qquad
+  T_{\nu,8}:=\max\{1,(2\mathcal S_{\nu,8})^{1/2}\}.
+  \]
+  These are closed bounds in terms of the centred moments through order
+  \(6\) and the seventh absolute centred moment.  They are obtained from the
+  preceding optimized quantities by applying
+  Lemma~\ref{lem:closed-cayley-mode-constant-envelopes}: for \(L=6\),
+  \(B_6\le7\), \(C_6\le55\), \(C_{\nu,6,1}\le110M_7(\nu)\), and
+  \(\|u_n\|_\infty\le n+1\).
   Then, for every \(t\ge T_{\nu,8}\),
   \begin{equation}\label{eq:optimized-n4-seventh-envelope}
   \left|
@@ -1254,13 +1429,13 @@ P_N^{\rm opt}+Q_N^{\rm opt}+2(S^{\rm opt})^{N+1}
   \right|
   \le B_{\nu,8}t^{-9}.
   \end{equation}
-  Thus the order-nine constant used below is not an additional analytic
-  input: it is exactly the optimized envelope obtained from the three explicit
-  quantities \(P_4^{\rm opt}\), \(Q_4^{\rm opt}\), and \(S^{\rm opt}\) above.
+  Thus the order-nine constant used below is dominated by the displayed
+  closed envelope and can be checked directly from the law's moment data
+  through order seven.
   The fixed-law coefficient identity is the \(N=4\) specialization of
   Theorem~\ref{thm:poisson-kl-even-orders}; after the explicit coefficient computation in
   Theorem~\ref{thm:poisson-kl-eighth}, the displayed
-  \(A_8^{\rm ent}(\nu)\) is the actual \(t^{-8}\) entropy coefficient.  The displayed rate is the
+  \(A_8(\nu)\) is the actual \(t^{-8}\) entropy coefficient.  The displayed rate is the
   \(N=4,\eta=1\) specialization of the positive-margin envelope
   above.
 
@@ -1358,9 +1533,8 @@ expression in
 \medskip
 \noindent\textbf{Notation for the next layer.}
 Up to this point the entropy expansion uses only the universal coefficient
-names \(A_{2m}(\nu)\).  The auxiliary symbol \(C_6\), the algebraic/entropy
-superscripts, and the defect coordinates are fixed only after the explicit
-\(N=4\) Laurent computation in
-Theorem~\ref{thm:poisson-kl-eighth}.  A finite centred seventh absolute
-moment is a hypothesis on the quantitative \(O(t^{-9})\) remainder, not a
-separate coefficient symbol.
+names \(A_{2m}(\nu)\).  The next subsection begins with a single notation
+block for the explicit \(N=4\) layer, fixing \(A_6,A_8,\Delta_6,\Delta_8\)
+before the coefficient-identification theorem is stated.  A finite centred
+seventh absolute moment is a hypothesis on the quantitative \(O(t^{-9})\)
+remainder.
