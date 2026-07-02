@@ -429,7 +429,7 @@ covariance $\gamma_2=\operatorname{Cov}(A_0,A_2)$ and its variance; for the
 sampled boundary-reset law, a coboundary argument proves the cycle variance is
 strictly positive for all positive parameters, so the fixed-setting
 studentized Wald interval is not conditional on a numerical positivity check.
-\Cref{tab:main-jpa-comparison} gives the foundation-first novelty comparison.
+\Cref{tab:main-jpa-comparison} gives the foundation-first theorem comparison.
 
 The paper is organized accordingly. \Cref{sec:operational} and
 \Cref{sec:records} define the record-level observables, record the standard
@@ -616,28 +616,26 @@ sampled-counter theorem chain differs from record-HMM,
 one-dependent/regenerative determinant formulas, stochastic-trajectory,
 memory-inference, and UDW/AQFT detector results.
 
-\section{Novelty by Theorem Block and Non-Theorem Boundary}\label{sec:theorem-led-comparison}
+\section{Theorem-Block Comparison and Non-Theorem Boundary}\label{sec:theorem-led-comparison}
 
-\Cref{tab:main-jpa-comparison} records the paper's comparison-local novelty as
-theorem-level content, not as a list of topics or as a priority claim against
-all classical foundations.  Each row has three separate roles: the second
-column names the theorem proved in this paper, the third column names the
-closest recent comparison class, and the fourth column states the mathematical
-ingredient not supplied by that comparison class in the stated fixed-record
-setting.  Classical foundations remain cited in the proofs, where they are
-used.
+\Cref{tab:main-jpa-comparison} is a theorem-chain comparison, not a priority
+table.  Each row has three separate roles: the second column names the theorem
+proved in this paper, the third column names the closest recent comparison
+class, and the fourth column states the precise mathematical ingredient used in
+this paper's fixed-record theorem chain.  Classical foundations remain cited in
+the proofs, where they are used.
 
 \begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\caption{Comparison-local novelty by theorem block.  Each row names the theorem
-proved in this paper, the closest recent comparison class, and the specific
-theorem-chain ingredient supplied here in the stated fixed-record setting.}
+\caption{Theorem-chain comparison by block.  Each row names the theorem proved
+in this paper, the closest recent comparison class, and the specific
+mathematical ingredient used here in the stated fixed-record setting.}
 \label{tab:main-jpa-comparison}
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.15\textwidth} >{\raggedright\arraybackslash}p{0.28\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}}
 \toprule
-Block & Theorem proved here & Closest recent class & Comparison-local theorem-chain ingredient \\
+Block & Theorem proved here & Closest recent class & Theorem-chain ingredient in this paper \\
 \midrule
 I. Sampled HMM renewal law &
 The stipulated sampled boundary-reset kernels define a two-state hidden Markov
@@ -752,81 +750,10 @@ spectral grid is
 \(\kappa_{\mathrm r}\Delta\tau\in\{0.5,1.0,1.5\}\).  All four panels are
 therefore determined by the displayed formulas and grids.
 
-The following paper-local script is the exact numerical recipe used to generate
-the coordinate tables.  It solves the non-removable branch of
-\(\Gamma_c\), evaluates the hazard, covariance, spectrum, and Fano formulas,
-and prints the grids used in the two record figures.
-\begin{verbatim}
-import math
-
-def gamma_c(kappa, dtau):
-    s = kappa * dtau
-    if abs(s - 1.0) < 1e-13:
-        return kappa
-    def H(x):
-        return math.log(x) - s * (x - 1.0)
-    if s < 1.0:
-        lo, hi = 1.0 + 1e-12, 2.0
-        while H(hi) > 0.0:
-            hi *= 2.0
-    else:
-        lo, hi = 1e-12, 1.0 - 1e-12
-        while H(lo) > 0.0:
-            lo *= 0.5
-    for _ in range(120):
-        mid = 0.5 * (lo + hi)
-        if H(mid) > 0.0:
-            lo = mid
-        else:
-            hi = mid
-    return kappa * 0.5 * (lo + hi)
-
-def params(G, k, dt):
-    p, c = math.exp(-G*dt), math.exp(-k*dt)
-    if abs(k - G) < 1e-12:
-        alpha = G*dt
-        a = 1 - p * (1 + alpha)
-        b = alpha * p
-        lam = p * (1 - alpha)
-    else:
-        a = 1 - (k*math.exp(-G*dt) - G*math.exp(-k*dt))/(k-G)
-        b = k * (math.exp(-G*dt) - math.exp(-k*dt))/(k-G)
-        lam = (k*math.exp(-k*dt) - G*math.exp(-G*dt))/(k-G)
-    q = 1 - p
-    rho = (b*q + q*a) / (q + b)
-    return p, c, a, b, lam, rho
-
-def hazard(G, k, dt, n):
-    p, c, a, b, lam, rho = params(G, k, dt)
-    if abs(k - G) < 1e-12:
-        alpha = G*dt
-        return ((1-p) + alpha*(n*(1-p)-p)) / (1 + alpha*n)
-    return (k*(1-p)*p**n - G*(1-c)*c**n) / (k*p**n - G*c**n)
-
-def cov(G, k, dt, n):
-    p, c, a, b, lam, rho = params(G, k, dt)
-    return rho * (a - rho) * lam**(n-1)
-
-def spectrum(G, k, dt, theta):
-    p, c, a, b, lam, rho = params(G, k, dt)
-    den = 1 - 2*lam*math.cos(theta) + lam*lam
-    return rho*(1-rho) + 2*rho*(a-rho)*(math.cos(theta)-lam)/den
-
-def fano(G, k, dt):
-    return spectrum(G, k, dt, 0.0) / params(G, k, dt)[5]
-
-dt, kappa = 0.3, 5.0
-Gc = gamma_c(kappa, dt)
-print("hazard/covariance grid", [(G, [hazard(G,kappa,dt,i) for i in range(9)],
-                                  [cov(G,kappa,dt,n)/abs(cov(G,kappa,dt,1))
-                                   for n in range(1,9)])
-                                 for G in (1.2, Gc, 3.2)])
-print("spectrum grid", [(gd, [spectrum(gd,1.5,1.0,j*math.pi/12)
-                              for j in range(13)])
-                        for gd in (0.3, 0.6, 1.0)])
-print("fano grid", [(kd, [(m/10, fano(m/10,kd,1.0)) for m in range(1,21)])
-                    for kd in (0.5, 1.0, 1.5)])
-\end{verbatim}
+The code-heavy reproduction recipe is kept with the supplementary material,
+where it is separated from the main theorem narrative.  The main manuscript
+records only the closed formulas, grids, and plotted values needed to identify
+the two formula sanity plots.
 
 \begin{figure}[t]
 \centering
