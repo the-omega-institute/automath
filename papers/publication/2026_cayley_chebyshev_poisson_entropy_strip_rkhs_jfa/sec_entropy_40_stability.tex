@@ -10,16 +10,18 @@ with \(N=3\), so the same fourth-moment hypothesis identifies these
 polynomials as the genuine \(t^{-6}\) entropy coefficient and its two-point
 defect.  No
 seventh moment is used in this coefficient-defect
-\(W_2\) estimate.  The second layer is a finite-time estimate theorem: it
-uses the eighth-order remainder to bound the coefficient defect from a
-large-time entropy observation together with the fixed-law moment data
-\(A_8^{\rm ent}(\nu),B_{\nu,8},T_{\nu,8}\).  Here
+\(W_2\) estimate.  The second layer is an a posteriori finite-time oracle
+bound: it uses the eighth-order remainder to bound the coefficient defect from
+the observed renormalized entropy statistic together with supplied
+eighth-order expansion data \(A_8,B,T\).  Under the seventh-moment remainder
+theorem one may take \(A_8=A_8^{\rm ent}(\nu)\),
+\(B=B_{\nu,8}\), and \(T=T_{\nu,8}\).  Here
 \(A_8^{\rm ent}(\nu)=A_8^{\rm alg}(\nu)\) is the sixth-moment polynomial already identified as the
 eighth entropy coefficient, while \(B_{\nu,8}\) and
 \(T_{\nu,8}\) are the seventh-moment remainder constant and threshold
 supplied by the optimized positive-margin theorem.  Thus the fixed-law
-statement is a conditional coefficient-defect estimate, not a claim that these moment-side
-quantities are read from one entropy number.  The shell-uniform
+statement is an oracle coefficient-defect estimate, not a claim that these
+quantities are read from the observed entropy value.  The shell-uniform
 single-observation version is stated in
 Theorem~\ref{thm:finite-time-poisson-entropy-stability} immediately after the
 fixed-law estimate and is recorded again in
@@ -326,35 +328,29 @@ follows immediately from the displayed estimate.
 \begin{theorem}[Oracle finite-time coefficient-defect estimate]%
 \label{thm:finite-time-poisson-entropy-stability}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$, variance
-$\sigma^2>0$, and finite centred seventh absolute moment.  Put
+\(\sigma^2>0\), and finite centred fourth absolute moment.  Put
 \[
 h_t:=P_t*\nu,\qquad g_t(x):=P_t(x-\bar\gamma),
 \]
 let \(\nu_c\) be the centred law of \(\gamma-\bar\gamma\), and let
 \(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\).  Let
-\(C_6^{\rm ent}(\nu)\) and \(A_8^{\rm ent}(\nu)\) be the entropy coefficients
-identified by Theorem~\ref{thm:poisson-kl-eighth}; thus
-\[
-C_6^{\rm ent}(\nu)=C_6^{\rm alg}(\nu),
-\qquad
-A_8^{\rm ent}(\nu)=A_8^{\rm alg}(\nu),
-\]
-where
-\[
-C_6^{\rm alg}(\nu)=
-\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
-\]
-\[
-A_8^{\rm alg}(\nu)=
-\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
-+12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
-\]
-Only after this coefficient identification set
+\(C_6^{\rm ent}(\nu)\) be the sixth-order entropy coefficient identified by
+Theorem~\ref{thm:poisson-kl-even-orders} with \(N=3\), and set
 \[
 \Delta_6^{\rm ent}(\nu)
 :=-\frac{7}{64}\sigma^6-C_6^{\rm ent}(\nu).
 \]
-Define the finite-time sixth-order entropy statistic
+Assume that for some supplied constants \(A_8\in\RR\), \(B\ge0\), and \(T>0\),
+\begin{equation}\label{eq:main-oracle-eighth-expansion}
+D_{\mathrm{KL}}(h_t\|g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{C_6^{\rm ent}(\nu)}{t^6}
++\frac{A_8}{t^8}
++E(t),
+\qquad
+|E(t)|\le Bt^{-9}
+\end{equation}
+for every \(t\ge T\).  Define the finite-time sixth-order entropy statistic
 \begin{equation}\label{eq:main-finite-time-sixth-deficit}
 \mathfrak D_t^{(6)}(\nu)
 :=
@@ -364,31 +360,15 @@ t^6\left(
 -D_{\mathrm{KL}}(h_t\|g_t)
 \right).
 \end{equation}
-This statistic is observable from \(D_{\mathrm{KL}}(h_t\|g_t)\), \(t\), and
-\(\sigma^2\).  The quantities \(A_8^{\rm ent}(\nu)\), \(B_{\nu,8}\), and
-\(T_{\nu,8}\) below are separate law-specific oracle inputs, not consequences
-of that single entropy observation.
-
-\begin{enumerate}[label=\textup{(\alph*)},leftmargin=*]
-\item \emph{Fixed-law oracle estimate.}
-Suppose the following fixed-law data are supplied:
-\[
-A_8^{\rm ent}(\nu),\qquad B_{\nu,8},\qquad T_{\nu,8}.
-\]
-Assume that \(B_{\nu,8},T_{\nu,8}\) are fixed-law constants for which the
-eighth-order remainder estimate \eqref{eq:poisson-kl-eighth-remainder} holds;
-for instance, the constants from
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}, equivalently from
-Corollary~\ref{cor:optimized-retained-order-entropy-bridge} with
-\(N=4,\eta=1\), have this property.  Then, for every \(t\ge T_{\nu,8}\),
+Then, for every \(t\ge T\),
 \begin{equation}\label{eq:main-finite-time-defect-estimate}
 \left|
 \Delta_6^{\rm ent}(\nu)-\mathfrak D_t^{(6)}(\nu)
--\frac{A_8^{\rm ent}(\nu)}{t^2}
+-\frac{A_8}{t^2}
 \right|
-\le B_{\nu,8}t^{-3}.
+\le Bt^{-3}.
 \end{equation}
-Consequently, for every \(t\ge T_{\nu,8}\),
+Consequently, for every \(t\ge T\),
 \begin{equation}\label{eq:main-finite-time-w2-stability}
 W_2(\nu_c,\rho_\sigma)
 \le
@@ -399,28 +379,35 @@ where
 \[
 \mathcal A_t
 :=
-\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
-+|A_8^{\rm ent}(\nu)|t^{-2}
-+B_{\nu,8}t^{-3}.
+\bigl|\mathfrak D_t^{(6)}(\nu)+A_8t^{-2}\bigr|
++Bt^{-3}.
 \]
 
-\item \emph{Shell-uniform oracle estimate.}
-Fix numbers \(\sigma>0\) and \(M<\infty\), and suppose one is supplied with
-constants
+In particular, if
+\[
+\bigl|\mathfrak D_t^{(6)}(\nu)+A_8t^{-2}\bigr|
+\le \varepsilon,
+\qquad
+Bt^{-3}\le\varepsilon,
+\]
+then
+\[
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}(2\varepsilon)^{1/4}
++8\,\sigma^{-2}(2\varepsilon)^{1/2}.
+\]
+
+Moreover, on a controlled seventh-moment shell with \(\mu_2=\sigma^2\) and
+\(\EE|\gamma-\bar\gamma|^7\le M\), one may use the seventh-moment remainder
+theorem to supply \(A_8=A_8^{\rm ent}(\nu)\), \(B=B_{\nu,8}\), and
+\(T=T_{\nu,8}\).  If shell constants
 \[
 C_{\sigma,M}^{(8)},\qquad B_{\sigma,M}^{(8)},\qquad
 T_{\sigma,M}^{(8)}
 \]
-valid for all laws with variance \(\sigma^2\) and
-\(\EE|\gamma-\bar\gamma|^7\le M\), with
-\[
-|A_8^{\rm ent}(\nu)|\le C_{\sigma,M}^{(8)},\qquad
-B_{\nu,8}\le B_{\sigma,M}^{(8)},\qquad
-T_{\nu,8}\le T_{\sigma,M}^{(8)}
-\]
-on that class.  Then, for every such law and every
-\(t\ge T_{\sigma,M}^{(8)}\), the entropy observation at time \(t\), together
-with these supplied shell constants, gives the uniform estimate
+dominate \(|A_8^{\rm ent}(\nu)|\), \(B_{\nu,8}\), and \(T_{\nu,8}\) on that
+class, then for every \(t\ge T_{\sigma,M}^{(8)}\),
 \[
 W_2(\nu_c,\rho_\sigma)
 \le
@@ -433,81 +420,37 @@ where
 \bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
 +C_{\sigma,M}^{(8)}t^{-2}+B_{\sigma,M}^{(8)}t^{-3}.
 \]
-
-One may take \(C_{\sigma,M}^{(8)}\) at least as large as the explicit
-polynomial shell bound
+One may take \(C_{\sigma,M}^{(8)}\) at least as large as
 \begin{equation}\label{eq:explicit-A8-shell-bound-main}
-C_{\sigma,M}^{(8)}
-\ge
 \frac{1}{256}\left(
 3\sigma^8+12\sigma^4M^{4/7}
 +21\sigma^2M^{6/7}+50M^{8/7}
 \right).
 \end{equation}
-Indeed, on the shell \(\mu_2=\sigma^2\) and
-\(\EE|\Delta|^7\le M\), Lyapunov's inequality gives
-\(|\mu_j|\le M^{j/7}\) for \(3\le j\le6\), and insertion in the displayed
-polynomial for \(A_8^{\rm alg}\) gives
-\eqref{eq:explicit-A8-shell-bound-main}.  The equality
-\(A_8^{\rm ent}=A_8^{\rm alg}\) is the coefficient-identification theorem,
-not an inference from the finite-time entropy observation.
-\end{enumerate}
-
-In particular, if the finite-time entropy observation and the supplied
-coefficient \(A_8^{\rm ent}(\nu)\) give
-\[
-\bigl|\mathfrak D_t^{(6)}(\nu)+A_8^{\rm ent}(\nu)t^{-2}\bigr|
-\le \varepsilon,
-\]
-and if the supplied remainder bound obeys
-\(B_{\nu,8}t^{-3}\le\varepsilon\), then
-\[
-W_2(\nu_c,\rho_\sigma)
-\le
-4\,\sigma^{-1/2}(2\varepsilon)^{1/4}
-+8\,\sigma^{-2}(2\varepsilon)^{1/2}.
-\]
 \end{theorem}
 
 \begin{remark}
-The fixed-law estimate is conditional on the displayed moment-side data.  The
-entropy observation determines \(\mathfrak D_t^{(6)}(\nu)\) once
-\(\bar\gamma\), \(\sigma^2\), and \(t\) are known, but it does not determine
-\(A_8^{\rm ent}(\nu)\), \(B_{\nu,8}\), or \(T_{\nu,8}\) without additional
-moment information.  The shell-uniform part is the version in which a single
-entropy observation is combined with supplied constants
-\(C_{\sigma,M}^{(8)}\), \(B_{\sigma,M}^{(8)}\), and
-\(T_{\sigma,M}^{(8)}\) for a controlled seventh-moment shell.  Any other
-a priori bounds that supply these quantities give the same conclusion.
-The final \(\varepsilon\)-hypothesis is equivalent to saying that the
-finite-time entropy lies within \(\varepsilon t^{-6}\) of the two-point
-sixth-order model after the displayed \(A_8^{\rm ent}(\nu)t^{-8}\)
-correction.
+The observable inputs for \(\mathfrak D_t^{(6)}(\nu)\) are
+\(D_{\mathrm{KL}}(h_t\|g_t)\), \(t\), and \(\sigma^2\).  The constants
+\(A_8,B,T\) in \eqref{eq:main-oracle-eighth-expansion} are separate
+law-specific oracle inputs, not consequences of the observed entropy value.
+In the shell version, \(A_8^{\rm ent}=A_8^{\rm alg}\) is supplied by the
+coefficient-identification theorem, and the bounds for \(B_{\nu,8}\) and
+\(T_{\nu,8}\) come from the positive-margin seventh-moment remainder theorem.
 \end{remark}
 
 \begin{proof}
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} gives, for
-\(t\ge T_{\nu,8}\),
+Substitution of \eqref{eq:main-oracle-eighth-expansion} into
+\eqref{eq:main-finite-time-sixth-deficit} gives, for \(t\ge T\),
 \[
-D_{\mathrm{KL}}(h_t\|g_t)
-=\frac{\sigma^4}{8t^4}
-+\frac{C_6^{\rm ent}(\nu)}{t^6}
-+\frac{A_8^{\rm ent}(\nu)}{t^8}
-+E_{\nu,8}(t),
-\qquad
-|E_{\nu,8}(t)|\le B_{\nu,8}t^{-9}.
-\]
-Substitution into \eqref{eq:main-finite-time-sixth-deficit} gives
-\[
+\begin{aligned}
 \mathfrak D_t^{(6)}(\nu)
-=-\frac{7}{64}\sigma^6-C_6^{\rm ent}(\nu)
--\frac{A_8^{\rm ent}(\nu)}{t^2}
--t^6E_{\nu,8}(t)
-=\Delta_6^{\rm ent}(\nu)
--\frac{A_8^{\rm ent}(\nu)}{t^2}
--t^6E_{\nu,8}(t),
+&=-\frac{7}{64}\sigma^6-C_6^{\rm ent}(\nu)
+-\frac{A_8}{t^2}-t^6E(t)\\
+&=\Delta_6^{\rm ent}(\nu)-\frac{A_8}{t^2}-t^6E(t).
+\end{aligned}
 \]
-which proves \eqref{eq:main-finite-time-defect-estimate}.  By
+This proves \eqref{eq:main-finite-time-defect-estimate}.  By
 Corollary~\ref{cor:coefficient-defect-coupling},
 \(\Delta_6^{\rm ent}(\nu)\ge0\) and
 \[
@@ -516,24 +459,25 @@ W_2(\nu_c,\rho_\sigma)
 4\,\sigma^{-1/2}\Delta_6^{\rm ent}(\nu)^{1/4}
 +8\,\sigma^{-2}\Delta_6^{\rm ent}(\nu)^{1/2}.
 \]
-The finite-time estimate implies
-\(0\le\Delta_6^{\rm ent}(\nu)\le\mathcal A_t\).  Inserting this bound
-into the coefficient-defect coupling proves
-\eqref{eq:main-finite-time-w2-stability}.  The final displayed
-\(\varepsilon\)-form is the special case
+The finite-time estimate gives
 \[
-\bigl|\mathfrak D_t^{(6)}(\nu)+A_8^{\rm ent}(\nu)t^{-2}\bigr|
-\le\varepsilon,
-\qquad
-B_{\nu,8}t^{-3}\le\varepsilon .
+0\le \Delta_6^{\rm ent}(\nu)
+\le \bigl|\mathfrak D_t^{(6)}(\nu)+A_8t^{-2}\bigr|+Bt^{-3}.
 \]
-The shell-uniform estimate is exactly
-the same substitution after replacing the fixed-law quantities
-\(|A_8^{\rm ent}(\nu)|\), \(B_{\nu,8}\), and \(T_{\nu,8}\) by any shell constants
-\(C_{\sigma,M}^{(8)}\), \(B_{\sigma,M}^{(8)}\), and
-\(T_{\sigma,M}^{(8)}\) that dominate them on the controlled class.  The
-appendix proves that such constants exist on every fixed variance and
-seventh-moment shell.
+Inserting this bound into the coefficient-defect coupling proves
+\eqref{eq:main-finite-time-w2-stability}, and the
+\(\varepsilon\)-form is immediate.
+
+For the shell statement, Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}
+supplies \eqref{eq:main-oracle-eighth-expansion} with
+\(A_8=A_8^{\rm ent}(\nu)\), \(B=B_{\nu,8}\), and \(T=T_{\nu,8}\).
+Replacing \(|A_8^{\rm ent}(\nu)|\), \(B_{\nu,8}\), and \(T_{\nu,8}\) by
+dominating shell constants gives the displayed uniform estimate.  On the
+shell \(\mu_2=\sigma^2\) and \(\EE|\Delta|^7\le M\), Lyapunov's inequality
+gives \(|\mu_j|\le M^{j/7}\) for \(3\le j\le6\), and insertion in the
+polynomial for \(A_8^{\rm alg}\) gives the bound
+\eqref{eq:explicit-A8-shell-bound-main}.  The appendix records the
+corresponding shell bounds for \(B_{\nu,8}\) and \(T_{\nu,8}\).
 \end{proof}
 
 Appendix~\ref{app:finite-time-defect-estimates} records the constant-dependence
