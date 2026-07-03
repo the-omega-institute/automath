@@ -56,18 +56,23 @@ n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
 6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
 \end{array}
 \]
-Equivalently, for \(0<|k|\le n\),
+Equivalently, the all-sign coefficient convention is the single formula
+\begin{equation}\label{eq:n4-laurent-all-sign-coefficients}
+q_{n,k}=
+\lambda_n\operatorname{sgn}(k)^{\,n\bmod 2}
+\binom{n-1}{|k|-1}
+\qquad(0<|k|\le n),
+\end{equation}
+with \(q_{n,0}=0\) and \(q_{n,k}=0\) for \(|k|>n\), where
 \[
-q_{n,k}=\lambda_n\varepsilon_n(k)\binom{n-1}{|k|-1},
-\qquad
 \begin{array}{c|ccccc}
 n&2&3&4&5&6\\
 \hline
-\lambda_n&-\frac14&\frac{\ii}{8}&\frac1{16}&-\frac{\ii}{32}&-\frac1{64},
+\lambda_n&-\frac14&\frac{\ii}{8}&\frac1{16}&-\frac{\ii}{32}&-\frac1{64}.
 \end{array}
 \]
-where \(\varepsilon_n(k)=1\) for even \(n\), while
-\(\varepsilon_n(k)=\operatorname{sgn} k\) for odd \(n\).
+Thus the negative-exponent sign for odd \(n\) is already part of
+\(q_{n,k}\); it is not a later conjugation rule.
 \end{lemma}
 
 \begin{proof}
@@ -93,18 +98,8 @@ Before reading the constant-term table, the computation should be interpreted
 as the following finite convolution algorithm.  For
 \(\mathbf n=(n_1,\ldots,n_r)\), first form the Laurent coefficient vectors
 from Lemma~\ref{lem:n4-normalized-laurent-representatives}: \(q_{n,0}=0\),
-on positive exponents
-\[
-q_{n,k}=\lambda_n\varepsilon_n(k)\binom{n-1}{k-1}
-\qquad(1\le k\le n),
-\]
-and then extend them by the exact sign convention
-\[
-\begin{aligned}
-q_{2m,-k}&=q_{2m,k}\qquad(k>0),\\
-q_{2m+1,-k}&=-q_{2m+1,k}=\overline{q_{2m+1,k}}\qquad(k>0).
-\end{aligned}
-\]
+and for every nonzero exponent use the all-sign formula
+\eqref{eq:n4-laurent-all-sign-coefficients}.
 The integral is the zero-sum ordered convolution
 \begin{equation}\label{eq:eighth-order-pretable-convolution-algorithm}
 I(n_1,\ldots,n_r)
@@ -114,7 +109,7 @@ q_{n_1,k_1}\cdots q_{n_r,k_r}.
 Equivalently, the computation is: enumerate all ordered exponent tuples in
 the displayed finite support with total exponent zero, multiply the already
 signed Laurent coefficients, and add.  No conjugation is applied beyond the
-odd-mode extension just displayed.
+signs already contained in \eqref{eq:n4-laurent-all-sign-coefficients}.
 
 \begin{lemma}[Complete constant-term table through order eight]%
 \label{lem:eighth-order-coefficient-arithmetic}
@@ -126,14 +121,8 @@ mode integral is the constant Laurent coefficient
 I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
 =\sum_{k_1+\cdots+k_r=0}q_{n_1,k_1}\cdots q_{n_r,k_r}.
 \]
-Here and below the coefficient convention is the one fixed in
-Lemma~\ref{lem:n4-normalized-laurent-representatives}:
-\[
-\begin{aligned}
-q_{2m,-k}&=q_{2m,k}\qquad(k>0),\\
-q_{2m+1,-k}&=-q_{2m+1,k}=\overline{q_{2m+1,k}}\qquad(k>0).
-\end{aligned}
-\]
+Here and below the coefficient convention is the all-sign formula
+\eqref{eq:n4-laurent-all-sign-coefficients}.
 Thus the signs in products involving odd modes are part of the Laurent
 coefficient vector, not an additional conjugation convention.  For example,
 the full row \(Q_3Q_5\) is
@@ -225,21 +214,14 @@ finite certificate for the rows used through order eight is
   so every entry is reproducible from the displayed coefficient vectors without
   any further cancellation convention.
   The proof does not rely on an undisplayed computation: the coefficient
-  vectors and the zero-sum convolution sums needed below are the displayed
-  finite certificate.  The submitted source package also includes the
-  paper-local supplementary script
-  \[
-  \texttt{certificates/eighth\_order\_laurent\_certificate.py}
-  \]
-  as an independent exact-rational reproducibility check for this table.  Run
-  from the paper root with standard Python, it reconstructs \(Q_2,\ldots,Q_6\)
-  from
-  \eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}, asserts the
-  positive-exponent coefficient vectors in
-  Lemma~\ref{lem:n4-normalized-laurent-representatives}, enumerates every
-  \(\mathcal K(\mathbf n)\) row displayed above, and checks the tuple counts,
-  signed integer convolutions, scalar products \(\prod_j\lambda_{n_j}\), and
-  final constant terms through total order eight.
+  vectors in Lemma~\ref{lem:n4-normalized-laurent-representatives}, the
+  finite zero-sum rule
+  \eqref{eq:eighth-order-finite-convolution-certificate}, and the displayed
+  rows above are the complete exact certificate used by the subsequent
+  substitutions.  Rechecking a row requires only finite Laurent arithmetic:
+  reconstruct the signed coefficient vector of each \(Q_{n_j}\), list the
+  ordered integer tuples in \(\mathcal K(\mathbf n)\), sum the indicated signed
+  binomial products, and multiply by \(\prod_j\lambda_{n_j}\).
   For example, the row \((2,2,4)\) sums over the twelve ordered triples in
   \(\mathcal K(2,2,4)\); their signed binomial weights add to \(24\), and
   \(\lambda_2^2\lambda_4=1/256\).  The row \((2,3,3)\) sums over fourteen
