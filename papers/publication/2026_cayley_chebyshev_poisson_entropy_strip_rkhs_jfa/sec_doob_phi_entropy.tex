@@ -262,7 +262,7 @@ limit with the distributional generator pairing and proves
 the stated uniform version.
 \end{proof}
 
-\begin{proposition}[Principal-value pairing and quotient domain for the KL tail]%
+\begin{lemma}[Principal-value pairing and quotient domain for the KL tail]%
 \label{prop:kl-tail-cutoff-inputs}
 \label{thm:kl-local-doob-bregman-domain-closure}
 \label{prop:kl-local-doob-bregman-domain-closure}
@@ -343,29 +343,40 @@ there is \(C_{a,b,\nu}<\infty\) such that, for \(x\ne y\),
 \le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
 \end{equation}
 and the same estimate holds after exchanging \(x\) and \(y\).
-\item \(H\in AC([a,b])\), the function
-\[
-I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
-\]
-belongs to \(L^1([a,b])\), and
-\begin{equation}\label{eq:kl-tail-input-unlocalized}
-H'(t)=-I_\nu(t)\qquad\text{for a.e. }t\in[a,b].
+\item The Bregman majorant is integrable uniformly in time:
+\begin{equation}\label{eq:kl-consolidated-bregman-l1-dominator}
+C_{a,b,\nu}
+\left(g_t(x)+g_t(y)\right)\min\{1,|x-y|^{-2}\}
+\in L^1([a,b]\times\RR^2),
 \end{equation}
-Equivalently, if \(\chi\in C_c^\infty(\RR)\), \(0\le\chi\le1\), and
-\(\chi\equiv1\) on \([-1,1]\), then for a.e. \(t\in[a,b]\), with
-convergence in \(L^1([a,b])\),
-\begin{equation}\label{eq:kl-main-generator-domain-cutoff-identity}
--H'(t)=
-\lim_{R\to\infty}
-\frac{1}{2\pi}\iint_{\RR^2}\chi(x/R)\chi(y/R)
+and it dominates the symmetrized kernel
+\[
 \frac{
 g_t(x)\Lambda(u_t(x),u_t(y))
 +g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y .
+{(x-y)^2}.
+\]
+Consequently the one-sided and symmetrized Bregman double integrals below are
+finite, and the annular cutoffs may be removed by dominated convergence in
+\(L^1([a,b])\).
+\item The entropy path is absolutely continuous and satisfies the quotient
+domain identity.  Namely \(H\in AC([a,b])\), the functions
+\(\log u_t\) and \(u_t\) are admissible bounded-Lipschitz tests in the
+principal-value pairing, and, for a.e. \(t\in[a,b]\),
+\begin{equation}\label{eq:kl-chain-rule-before-pairing}
+H'(t)=
+\int_{\RR}\log u_t(x)\,\partial_th_t(x)\dd x
+-\int_{\RR}(u_t(x)-1)\,\partial_tg_t(x)\dd x .
 \end{equation}
+Moreover
+\begin{equation}\label{eq:kl-tail-input-unlocalized}
+H'(t)=-I_\nu(t),\qquad
+I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
+\end{equation}
+and \(I_\nu\in L^1([a,b])\).
 \end{enumerate}
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 The generator-domain assertions in (i) are exactly
@@ -396,34 +407,94 @@ interval, the second derivative of \(s\log s\) is bounded; hence
 Lipschitz bound and with the bounded quotient range gives
 \(\Lambda(u_t(x),u_t(y))\le C\min\{|x-y|^2,1\}\), proving
 \eqref{eq:kl-consolidated-bregman-majorant}.  The same estimate with
-\((x,y)\) exchanged gives an \(L^1([a,b]\times\RR^2)\) dominator for the
-symmetrized Bregman kernel and also proves the product-cutoff convergence in
-\eqref{eq:kl-main-generator-domain-cutoff-identity}.
-
-It remains to identify the derivative.  Since \(h,g,\partial_th,\partial_tg\)
-are \(L^1\) on \([a,b]\times\RR\), and \(u_t\) stays in a fixed compact
-subinterval of \((0,\infty)\), the ordinary chain rule along
-\((h_t(x),g_t(x))\), followed by Fubini, gives
+\((x,y)\) exchanged dominates the symmetrized kernel.  Since
+\(\int_{\RR}g_t(x)\dd x=1\) for every \(t>0\), the right-hand side of
+\eqref{eq:kl-consolidated-bregman-l1-dominator} has finite
+\([a,b]\times\RR^2\) integral:
 \[
-H'(t)=\int_{\RR}(\log u_t+1)\partial_th_t\dd x
--\int_{\RR}u_t\partial_tg_t\dd x
-\quad\text{for a.e. }t.
+\int_a^b\iint_{\RR^2}
+g_t(x)\min\{1,|x-y|^{-2}\}\dd x\dd y\dd t
+\le (b-a)\int_{\RR}\min\{1,|z|^{-2}\}\dd z<\infty,
 \]
-The mass terms vanish, and \eqref{eq:kl-consolidated-pv-pairing} applies to
-\((p,q)=(h_t,\log u_t)\) and \((g_t,u_t)\).  For finite annuli this yields
+and the term with \(g_t(y)\) is identical.  This proves (v), including the
+cutoff convergence by dominated convergence.
+
+The quotient bounds in part \textup{(iii)}
+place \(u_t\) in a fixed compact interval \(J\Subset(0,\infty)\) and give a
+uniform Lipschitz bound on \(u_t\).  Therefore both \(u_t\) and \(\log u_t\)
+are uniformly bounded and Lipschitz on \([a,b]\times\RR\), so the
+bounded-Lipschitz principal-value pairing
+\eqref{eq:kl-consolidated-pv-pairing} applies to
+\((p,q)=(h_t,\log u_t)\) and to \((p,q)=(g_t,u_t)\).
+
+First prove the one-variable chain rule.  Set
+\[
+F(h,g):=h\log(h/g)=g\,\Phi(h/g),\qquad \Phi(r)=r\log r .
+\]
+On the closed quotient cone \(\{g>0,\ h/g\in J\}\), the partial derivatives
+\[
+\partial_hF(h,g)=\log(h/g)+1,\qquad
+\partial_gF(h,g)=-h/g
+\]
+are bounded.  For \(t\in[a,b]\), the functions
+\(h_t,g_t,\partial_th_t,\partial_tg_t\) lie in \(L^1(\RR)\), uniformly on
+compact time intervals, because they are Poisson smoothings of finite
+measures.  Thus \(t\mapsto F(h_t,g_t)\) is absolutely continuous as an
+\(L^1(\RR)\)-valued map, and integration in \(x\) gives \(H\in AC([a,b])\)
+with
+\[
+H'(t)=
+\int_{\RR}(\log u_t+1)\partial_th_t\dd x
+-\int_{\RR}u_t\,\partial_tg_t\dd x
+\quad\text{for a.e. }t .
+\]
+Since \(\int\partial_th_t=\int\partial_tg_t=0\), this is
+\eqref{eq:kl-chain-rule-before-pairing}.
+
+Apply \eqref{eq:kl-consolidated-pv-pairing} to the two terms in
+\eqref{eq:kl-chain-rule-before-pairing}.  The constants in the tests do not
+matter in the bilinear forms.  For fixed
+\((x,y)\), abbreviate
+\[
+g_x=g_t(x),\quad g_y=g_t(y),\quad u_x=u_t(x),\quad u_y=u_t(y),
+\quad h_x=g_xu_x,\quad h_y=g_yu_y .
+\]
+A direct expansion gives the exact two-point algebra
+\[
+(h_x-h_y)(\log u_x-\log u_y)-(g_x-g_y)(u_x-u_y)
+=g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x).
+\]
+Therefore
 \[
 -H'(t)=\lim_{R\to\infty}\frac{1}{2\pi}\iint_{\Omega_R}
-\frac{(h_x-h_y)(\log u_x-\log u_y)-(g_x-g_y)(u_x-u_y)}
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
 {(x-y)^2}\dd x\dd y .
 \]
-With \(h=gu\), the numerator equals
+
+It remains only to pass from annuli to the full-space Bregman integral.
+Part \textup{(v)}
+gives the explicit \(L^1([a,b]\times\RR^2)\) dominator
 \[
-g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x).
+C_{a,b,\nu}\left(g_t(x)+g_t(y)\right)\min\{1,|x-y|^{-2}\}.
 \]
-Dominated convergence using \eqref{eq:kl-consolidated-bregman-majorant} gives
-the full-space product-cutoff identity.  The two one-sided terms have the same
-full integral after exchanging \(x\) and \(y\), so the symmetrized factor
-\(1/(2\pi)\) becomes \(1/\pi\), proving \(H'=-I_\nu\).
+It dominates the symmetrized Bregman kernel, independently of the annulus
+parameter.  The indicators of \(\Omega_R\) converge pointwise to one.
+Dominated convergence therefore gives the full-space Bregman limit.
+
+Finally, the two one-sided full integrals coincide after exchanging \(x\) and
+\(y\):
+\[
+\iint_{\RR^2}
+\frac{g_t(y)\Lambda(u_t(y),u_t(x))}{(x-y)^2}\dd x\dd y
+=
+\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\]
+The symmetrized factor \(1/(2\pi)\) is therefore the one-sided factor
+\(1/\pi\).  This proves \(I_\nu\in L^1([a,b])\) and
+\eqref{eq:kl-tail-input-unlocalized}.
 \end{proof}
 
 \noindent
@@ -458,10 +529,10 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 
 \begin{proof}
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
-\([a,b]\subset(0,\infty)\), Proposition~\ref{prop:kl-tail-cutoff-inputs}
-gives the principal-value quotient-domain identity \(H'(s)=-I_\nu(s)\) for
-a.e. \(s\in[a,b]\), with \(I_\nu\in L^1([a,b])\).  Hence, for
-\(0<t<T\),
+\([a,b]\subset(0,\infty)\),
+Lemma~\ref{prop:kl-tail-cutoff-inputs} gives \(H\in AC([a,b])\),
+\(I_\nu\in L^1([a,b])\), and \(H'(s)=-I_\nu(s)\) for a.e.
+\(s\in[a,b]\).  Hence, for \(0<t<T\),
 \[
 \int_t^T I_\nu(s)\dd s=H(t)-H(T).
 \]
