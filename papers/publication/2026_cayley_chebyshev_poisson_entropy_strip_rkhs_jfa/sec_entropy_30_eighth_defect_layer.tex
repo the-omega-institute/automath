@@ -224,12 +224,16 @@ finite certificate for the rows used through order eight is
   tuples enumerated by \eqref{eq:eighth-order-finite-convolution-certificate},
   so every entry is reproducible from the displayed coefficient vectors without
   any further cancellation convention.
-  The paper-local script
+  The proof does not rely on an undisplayed computation: the coefficient
+  vectors and the zero-sum convolution sums needed below are the displayed
+  finite certificate.  The submitted source package also includes the
+  paper-local supplementary script
   \[
   \texttt{certificates/eighth\_order\_laurent\_certificate.py}
   \]
-  is an independent exact-rational certificate for this table: it reconstructs
-  \(Q_2,\ldots,Q_6\) from
+  as an independent exact-rational reproducibility check for this table.  Run
+  from the paper root with standard Python, it reconstructs \(Q_2,\ldots,Q_6\)
+  from
   \eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}, asserts the
   positive-exponent coefficient vectors in
   Lemma~\ref{lem:n4-normalized-laurent-representatives}, enumerates every
@@ -560,16 +564,113 @@ computed values into the \(N=4\) universal-coefficient expansion proves
 post-identification notation are definitions.
 \end{proof}
 
+\begin{definition}[\(N=4,\eta=1\) retained-order constants]
+\label{def:n4-finite-time-constant-dictionary}
+Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar\gamma\),
+centred moments \(\mu_n=\EE(\gamma-\bar\gamma)^n\), and finite
+\[
+M_7(\nu):=\EE|\gamma-\bar\gamma|^7 .
+\]
+For the retained density order \(L=6\), set
+\[
+\mathcal M_{\nu,8}:=\sum_{n=2}^{6}(n+1)|\mu_n|,
+\qquad
+\mathcal C_{\nu,8}:=110M_7(\nu),
+\]
+\[
+\mathcal S_{\nu,8}:=7\sum_{n=2}^{6}|\mu_n|+110M_7(\nu).
+\]
+Define
+\[
+\mathcal P_{\nu,8}:=
+\sum_{r=2}^{4}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell
+\mathcal M_{\nu,8}^{\,r-\ell}\mathcal C_{\nu,8}^{\,\ell}
+\]
+and
+\[
+\mathcal Q_{\nu,8}:=
+\sum_{r=2}^{4}\frac{1}{r(r-1)}
+\sum_{m=9}^{6r}
+\sum_{\substack{2\le n_1,\ldots,n_r\le6\\
+n_1+\cdots+n_r=m}}
+\prod_{j=1}^{r}\bigl((n_j+1)|\mu_{n_j}|\bigr),
+\]
+where an empty inner sum is zero.  The fixed-law order-nine remainder and
+threshold constants used in
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} are
+\begin{equation}\label{eq:dictionary-fixed-law-n4-constants}
+B_{\nu,8}:=\mathcal P_{\nu,8}+\mathcal Q_{\nu,8}
++2\mathcal S_{\nu,8}^{5},
+\qquad
+T_{\nu,8}:=\max\{1,(2\mathcal S_{\nu,8})^{1/2}\}.
+\end{equation}
+
+For the controlled shell \(\mu_2=\sigma^2\),
+\(\EE|\gamma-\bar\gamma|^7\le M\), \(M\ge\sigma^7\), write
+\(\widehat M=M/\sigma^7\).  For \(u\ge1\), set
+\[
+\mathcal M^{(8)}(u)
+:=3+\sum_{n=3}^{6}(n+1)u^{n/7},
+\qquad
+\mathcal R^{(8)}(u):=110u,
+\]
+\[
+\mathcal S^{(8)}(u)
+:=7\left(1+\sum_{n=3}^{6}u^{n/7}\right)+110u .
+\]
+Define
+\[
+\mathcal P^{(8)}(u):=
+\sum_{r=2}^{4}\frac{1}{r(r-1)}
+\sum_{\ell=1}^{r}\binom r\ell
+\bigl(\mathcal M^{(8)}(u)\bigr)^{r-\ell}
+\bigl(\mathcal R^{(8)}(u)\bigr)^\ell
+\]
+and
+\[
+\mathcal Q^{(8)}(u):=
+\sum_{r=2}^{4}\frac{1}{r(r-1)}
+\sum_{m=9}^{6r}
+\sum_{\substack{2\le n_1,\ldots,n_r\le6\\
+n_1+\cdots+n_r=m}}
+\prod_{j=1}^{r}(n_j+1)\,\Lambda_{n_j}(u),
+\]
+with
+\[
+\Lambda_2(u):=1,\qquad
+\Lambda_n(u):=u^{n/7}\quad(3\le n\le6).
+\]
+The normalized controlled-shell functions are
+\begin{equation}\label{eq:dictionary-normalized-shell-functions}
+\begin{aligned}
+C(u)
+&:=\frac{1}{256}\left(
+3+12u^{4/7}+21u^{6/7}+50u^{8/7}
+\right),\\
+B(u)
+&:=\mathcal P^{(8)}(u)+\mathcal Q^{(8)}(u)
++2\bigl(\mathcal S^{(8)}(u)\bigr)^5,\\
+T(u)
+&:=\max\{1,\bigl(2\mathcal S^{(8)}(u)\bigr)^{1/2}\}.
+\end{aligned}
+\end{equation}
+Their dimensional scale restores are
+\begin{equation}\label{eq:dictionary-controlled-shell-c8}
+C_{\sigma,M}^{(8)}:=\sigma^8C(\widehat M),\qquad
+B_{\sigma,M}^{(8)}:=\sigma^9B(\widehat M),\qquad
+T_{\sigma,M}^{(8)}:=\sigma T(\widehat M).
+\end{equation}
+\end{definition}
+
 \begin{theorem}[Quantitative \(N=4\) remainder under the seventh moment]%
 \label{thm:poisson-kl-eighth-seventh-remainder}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
 variance $\sigma^2>0$, and finite centred seventh absolute moment.  Use the
 notation of Theorem~\ref{thm:poisson-kl-eighth}; in particular
-\(A_6(\nu)\) and \(A_8(\nu)\) are the
-identified entropy coefficients there.
-Let \(B_{\nu,8}\) and \(T_{\nu,8}\) be the fixed-law constants from the
-constant dictionary, Definition~\ref{def:n4-finite-time-constant-dictionary}.
-Then for every
+\(A_6(\nu)\) and \(A_8(\nu)\) are the identified entropy coefficients there.
+Let \(B_{\nu,8}\) and \(T_{\nu,8}\) be the explicit constants in
+\eqref{eq:dictionary-fixed-law-n4-constants}.  Then for every
 \(t\ge T_{\nu,8}\),
 \begin{equation}\label{eq:poisson-kl-eighth-remainder}
 \begin{split}
@@ -610,17 +711,25 @@ lattice reconstruction input is used in the entropy theorem chain.
 The finite centred seventh absolute moment implies the finite centred sixth
 absolute moment needed for Theorem~\ref{thm:poisson-kl-eighth}, so the
 coefficient identity is already available.  The same seventh moment is the
-\(N=4,\eta=1\) positive-margin hypothesis \(2N-2+\eta=7\) in
-\S\ref{subsubsec:finite-moment-constants-variants}.
-Definition~\ref{def:n4-finite-time-constant-dictionary} records the closed
-majorants of the optimized \(N=4\) constants: it applies
-Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} to dominate the
-density remainder, retained-mode tail, and smallness threshold by
-\(B_{\nu,8}\) and \(T_{\nu,8}\).
-The specialized estimate
-\eqref{eq:optimized-n4-seventh-envelope} therefore implies
-\eqref{eq:poisson-kl-eighth-remainder} with the displayed closed choices of
-\(B_{\nu,8}\) and \(T_{\nu,8}\).
+\(N=4,\eta=1\) retained-order hypothesis \(2N-2+\eta=7\) in
+Proposition~\ref{prop:density-to-entropy-descent}.  In that proposition
+\(L=6\), \(p=7\), \(C_\rho=2C_6M_7(\nu)\), and
+\[
+M_A=\sum_{n=2}^{6}|\mu_n|\,\|u_n\|_\infty,\qquad
+S=B_6\sum_{n=2}^{6}|\mu_n|+2C_6M_7(\nu).
+\]
+Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives
+\(B_6\le7\), \(C_6\le55\), and \(\|u_n\|_\infty\le n+1\); hence
+\[
+C_\rho\le\mathcal C_{\nu,8},\qquad
+M_A\le\mathcal M_{\nu,8},\qquad
+S\le\mathcal S_{\nu,8}.
+\]
+The finite retained-mode tail in Proposition~\ref{prop:density-to-entropy-descent}
+is bounded by \(\mathcal Q_{\nu,8}\).  Substituting these three displayed
+majorants in \eqref{eq:explicit-entropy-constant-bound} with \(N=4\) and
+\(\eta=1\) gives exactly
+\eqref{eq:poisson-kl-eighth-remainder}.
 \end{proof}
 
 \begin{corollary}[Moment-jet factorization of the eighth-order coefficients]%
@@ -708,11 +817,12 @@ threshold if necessary, gives the stated
 \(O_{\nu,\widetilde\nu}(t^{-9})\) difference.
 \end{proof}
 
-The optional root-of-unity check in Appendix~\ref{sec:strip-lattice} uses the
-same trigonometric/Laurent normalization as
-Lemmas~\ref{lem:n4-normalized-laurent-representatives} and
-\ref{lem:eighth-order-coefficient-arithmetic}; it is only an auxiliary
-arithmetic verification.
+The same trigonometric/Laurent normalization also gives an optional
+root-of-unity check: any grid larger than the Laurent support recovers the
+zero Fourier coefficient exactly.  This is only an auxiliary arithmetic
+verification of Lemmas~\ref{lem:n4-normalized-laurent-representatives} and
+\ref{lem:eighth-order-coefficient-arithmetic}; it is not an input to the
+entropy theorem.
 
 The next defect corollaries use
 \(A_6(\nu)\) and \(A_8(\nu)\) from the

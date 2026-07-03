@@ -14,11 +14,21 @@ The Cauchy generator is normalized by
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,
 \]
 so that \(\partial_tP_t=LP_t\).  This section records the KL-specialized
-Doob--Bregman dissipation identity and its coefficient consequence.  In
-conceptual terms it is the Cauchy-generator, relative-entropy specialization
-of the polarized Hardy--Stein/Sobolev--Bregman identities for Markov
-semigroups: the convex function is \(\Phi(r)=r\log r\), the two-point
-co-divergence is
+Doob--Bregman dissipation identity and its coefficient consequence.  Its
+literature frame is the Hardy--Stein/Bregman chain rather than sampling or
+transport theory.  The classical local identity is the
+chain-rule/Green-formula Hardy--Stein identity for the Laplacian
+\cite[pp.~86--88]{Stein1970SingularIntegrals}; the convex-divergence
+language starts with Bregman's construction~\cite{Bregman1967}.  For jump
+semigroups, the nonlocal Hardy--Stein identity and Sobolev--Bregman forms were
+developed in
+\cite{BanuelosBogdanLuks2016HardyStein,
+BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas,
+Gutowski2023HardySteinPureJump,GutowskiKwasnicki2025BeurlingDenySobolevBregman}.
+In conceptual terms, the present identity is the Cauchy-generator,
+relative-entropy specialization of the polarized Hardy--Stein/Sobolev--Bregman
+identities for Markov semigroups: the convex function is
+\(\Phi(r)=r\log r\), the two-point co-divergence is
 \(\Lambda(\alpha,\beta)=\alpha\log(\alpha/\beta)-\alpha+\beta\), and the
 reference density is the moving Poisson profile \(g_t\).  The general
 polarized Bregman framework is due to
@@ -384,7 +394,7 @@ kernel.  This proves
 \eqref{eq:kl-main-product-cutoff-symmetric}.
 \end{proof}
 
-\begin{theorem}[KL quotient domain theorem]%
+\begin{theorem}[Direct cutoff KL quotient dissipation theorem]%
 \label{thm:kl-local-doob-bregman-domain-closure}
 \label{prop:kl-local-doob-bregman-domain-closure}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
@@ -422,8 +432,25 @@ uniformly Lipschitz on \(\RR\times[a,b]\).  Hence there is
 \le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
 \end{equation}
 and the same bound holds after exchanging \(x\) and \(y\).  The identity
-\eqref{eq:kl-domain-final-derivative} is the \(L^1([a,b])\) limit of the
-standard product-cutoff identities; with
+\eqref{eq:kl-domain-final-derivative} is obtained directly from the symmetric
+truncated Cauchy kernels.  More precisely, if
+\[
+\Omega_R:=\{(x,y)\in\RR^2:\ R^{-1}<|x-y|<R\},
+\qquad R>1,
+\]
+then, for a.e. \(t\in[a,b]\),
+\begin{align}
+-H'(t)
+&=
+\lim_{R\to\infty}
+\frac{1}{2\pi}\iint_{\Omega_R}
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y .
+\label{eq:kl-main-annular-bregman-limit}
+\end{align}
+The convergence holds in \(L^1([a,b])\).  Equivalently, with
 \(\chi_R(x)=\chi(x/R)\), \(0\le\chi\le1\), \(\chi\equiv1\) on \([-1,1]\),
 \begin{align}
 -H'(t)
@@ -442,18 +469,126 @@ g_t(x)\Lambda(u_t(x),u_t(y))
 Lemma~\ref{lem:kl-main-compact-domain} supplies the compact quotient range,
 the Lipschitz bound, the Bregman majorant
 \eqref{eq:kl-domain-pointwise-bregman-majorant}, and the product-cutoff
-convergence in \eqref{eq:kl-main-cutoff-bregman-limit}.  These are precisely
-the quotient-domain hypotheses needed to apply the polarized
-Hardy--Stein/Bregman identity of
-Bogdan--Gutowski--Pietruska-Pa{\l}uba in the KL specialization, with the
-Cauchy generator normalized by
-\(\widehat{Lf}(\xi)=-|\xi|\widehat f(\xi)\).  The cited identity gives the
-cutoff formula \eqref{eq:kl-main-cutoff-bregman-limit} for a.e.
-\(t\in[a,b]\), with convergence in \(L^1([a,b])\).  The product cutoff is
-removed by Lemma~\ref{lem:kl-main-compact-domain}.  Finally, the two terms in
-the symmetric Bregman integral have the same value after exchanging \(x\) and
-\(y\); hence the factor \(1/(2\pi)\) becomes \(1/\pi\), which gives
-\eqref{eq:kl-domain-final-derivative}.
+convergence.  It remains to prove the derivative identity itself without
+appealing to an abstract Hardy--Stein theorem.
+
+First note the elementary regularity used below.  Since
+\(\partial_tP_t,\partial_xP_t\in L^1(\RR)\) uniformly for \(t\in[a,b]\),
+the functions \(h,g,\partial_th,\partial_tg\) belong to
+\(L^1([a,b]\times\RR)\), and \(t\mapsto h_t(x)\), \(t\mapsto g_t(x)\) are
+absolutely continuous for every \(x\).  The bounded-range chain rule,
+Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule}, gives
+\(H\in AC([a,b])\) and, for a.e. \(t\in[a,b]\),
+\begin{equation}\label{eq:kl-direct-chain-rule-start}
+H'(t)=
+\int_{\RR}(\log u_t+1)\,\partial_th_t\,\dd x
+-\int_{\RR}u_t\,\partial_tg_t\,\dd x .
+\end{equation}
+The Poisson semigroup normalization gives
+\(\partial_th_t=Lh_t\) and \(\partial_tg_t=Lg_t\), with
+\[
+(Lp)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
+\frac{p(y)-p(x)}{(x-y)^2}\dd y .
+\]
+For \(R>1\) set
+\[
+(L_Rp)(x):=\frac1\pi\int_{R^{-1}<|x-y|<R}
+\frac{p(y)-p(x)}{(x-y)^2}\dd y .
+\]
+This is the symmetric truncated Cauchy kernel.  If
+\(p\in\{h_t,g_t\}\) and \(q\in\{\log u_t,u_t\}\), then \(q\) is bounded and
+Lipschitz, while \(p,\partial_xp\in L^1(\RR)\).  Hence
+\begin{equation}\label{eq:kl-direct-truncated-pairing}
+\int_{\RR}q(x)\partial_tp(x)\dd x
+=
+\lim_{R\to\infty}\int_{\RR}q(x)L_Rp(x)\dd x
+\end{equation}
+for the four pairings used in \eqref{eq:kl-direct-chain-rule-start}.  Indeed,
+for finite \(R\), Fubini and the symmetry of the annulus give
+\begin{equation}\label{eq:kl-direct-symmetric-bilinear}
+\int_{\RR}q(x)L_Rp(x)\dd x
+=
+-\frac{1}{2\pi}\iint_{\Omega_R}
+\frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
+\end{equation}
+The right side has an \(R\)-independent absolute majorant after the usual
+near/far split: near the diagonal,
+\[
+\int_{\RR}|p(x+z)-p(x)|\,\dd x\le |z|\,\|\partial_xp\|_1,
+\qquad
+|q(x+z)-q(x)|\le \operatorname{Lip}(q)|z|,
+\]
+and away from the diagonal one uses \(|q(x)-q(y)|\le2\|q\|_\infty\) and
+\(p\in L^1\).  This proves the convergence of the bilinear forms as
+\(R\to\infty\), and the limit is the distributional pairing with
+\(\partial_tp=Lp\) obtained from the Fourier multiplier
+\(-|\xi|\) for the Poisson semigroup.
+
+Using \(\int_{\RR}L_Rh_t\,\dd x=\int_{\RR}L_Rg_t\,\dd x=0\), which follows
+from the same symmetry, define
+\[
+\mathcal D_R(t):=
+-\int_{\RR}\log u_t(x)\,L_Rh_t(x)\dd x
++\int_{\RR}u_t(x)\,L_Rg_t(x)\dd x .
+\]
+By \eqref{eq:kl-direct-chain-rule-start} and
+\eqref{eq:kl-direct-truncated-pairing},
+\begin{equation}\label{eq:kl-direct-Hprime-as-truncated-limit}
+-H'(t)=\lim_{R\to\infty}\mathcal D_R(t)
+\qquad\text{for a.e. }t\in[a,b].
+\end{equation}
+For each fixed finite \(R\), the Bregman algebra is exact before any limit is
+taken.  Applying \eqref{eq:kl-direct-symmetric-bilinear} first with
+\((p,q)=(h_t,\log u_t)\) and then with \((p,q)=(g_t,u_t)\) gives
+\[
+\mathcal D_R(t)
+=
+\frac{1}{2\pi}\iint_{\Omega_R}
+\frac{
+(h_t(x)-h_t(y))(\log u_t(x)-\log u_t(y))
+-(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
+{(x-y)^2}\dd x\dd y .
+\]
+Writing \(h_t=g_tu_t\), and abbreviating
+\[
+g_x=g_t(x),\quad g_y=g_t(y),\quad
+u_x=u_t(x),\quad u_y=u_t(y),
+\]
+the numerator is
+\[
+(g_xu_x-g_yu_y)(\log u_x-\log u_y)
+-(g_x-g_y)(u_x-u_y).
+\]
+Collecting the \(g_x\)- and \(g_y\)-coefficients separately yields
+\begin{align*}
+&g_x\{u_x\log(u_x/u_y)-u_x+u_y\}
++g_y\{u_y\log(u_y/u_x)-u_y+u_x\} \\
+&\qquad =
+g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x).
+\end{align*}
+Thus
+\[
+\mathcal D_R(t)
+=
+\frac{1}{2\pi}\iint_{\Omega_R}
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\dd x\dd y ,
+\]
+which proves the finite-truncation Bregman identity before passing
+\(R\to\infty\).
+
+The majorant \eqref{eq:kl-domain-pointwise-bregman-majorant} and its
+exchanged-variable version dominate the last integrand in
+\(L^1([a,b]\times\RR^2)\).  Dominated convergence therefore gives the
+\(L^1([a,b])\) limit \eqref{eq:kl-main-annular-bregman-limit}.  Since the two
+one-sided Bregman terms have the same full-space integral after exchanging
+\(x\) and \(y\), the factor \(1/(2\pi)\) becomes \(1/\pi\), proving
+\eqref{eq:kl-domain-final-derivative}.  The product-cutoff formula
+\eqref{eq:kl-main-cutoff-bregman-limit} follows from the same dominated
+convergence and the product-cutoff convergence already recorded in
+Lemma~\ref{lem:kl-main-compact-domain}.
 \end{proof}
 
 \begin{lemma}[Generator convention and cutoff domain for the KL Doob identity]%
@@ -543,12 +678,25 @@ Cauchy-semigroup normalization used in
 Proposition~\ref{prop:poisson-semigroup-law}: \(\widehat{P_t}(\xi)=
 e^{-t|\xi|}\), hence \(\partial_tP_t=-|D|P_t\).  The principal-value
 normalization is the standard Cauchy generator normalization, for example in
-\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017}.  With the compact
-range and majorant from Lemma~\ref{lem:kl-main-compact-domain}, the localized
-and cutoff forms in (i)--(iv) are the KL instance of the polarized
-Hardy--Stein/Bregman identity cited above; the bounded-range \(L^1\) chain
-rule, Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule}, gives absolute
-continuity of \(H\).
+\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017}.  The identities in
+(i) follow from the Fourier multiplier formula and the fact that
+\(\partial_tP_t,\partial_xP_t\in L^1(\RR)\) on compact time intervals.  The
+truncated-kernel computation in the proof of
+Theorem~\ref{thm:kl-local-doob-bregman-domain-closure} proves the bilinear
+pairing in (ii) and the cutoff derivative identity in (iv).  For (iii), write
+the two principal values with the same symmetric truncation
+\(R^{-1}<|x-y|<R\).  Their difference is exactly
+\[
+\frac1\pi\int_{R^{-1}<|x-y|<R}
+\frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y ,
+\]
+and the limit exists because \(f\) has bounded first and second derivatives
+and \(g_t\) is smooth with Cauchy decay.  This gives the stated Doob
+principal-value formula.  The bounded-range \(L^1\) chain rule,
+Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule}, gives absolute continuity
+of \(H\), while Lemma~\ref{lem:kl-main-compact-domain} supplies the Bregman
+majorants needed to pass the symmetric truncations and product cutoffs to the
+limit.
 \end{proof}
 
 \begin{proposition}[Domain inputs for the KL tail identity]%
@@ -612,11 +760,8 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \end{theorem}
 
 \begin{proof}
-This is the KL specialization of the polarized Hardy--Stein identity in the
-moving Cauchy Doob quotient.  The only domain point not supplied by the
-abstract Markov-semigroup formulation is the principal-value/cutoff
-realization of the nonlocal generator for \(g_t^{-1}h_t\), recorded in
-Proposition~\ref{prop:kl-tail-cutoff-inputs}.
+The derivative input is the direct cutoff identity for the moving Cauchy Doob
+quotient, recorded in Proposition~\ref{prop:kl-tail-cutoff-inputs}.
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  Proposition~\ref{prop:kl-tail-cutoff-inputs}
 gives \(H'(s)=-I_\nu(s)\) for a.e. \(s>0\) and
 \(I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\).  Thus, for \(0<t<T\),

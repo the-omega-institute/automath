@@ -1,146 +1,54 @@
-% sec_strip_lattice.tex -- optional auxiliary-data appendix
-\section{Optional auxiliary data interfaces}%
+% sec_strip_lattice.tex -- supplementary note, not input by main.tex
+\section{Supplementary note on optional auxiliary data}%
 \label{sec:strip-lattice}
 
-The entropy expansion, the coefficient-defect identities, the Doob-tail
-identity, and the finite-time stability estimate are moment and coefficient
-theorems.  This detachable appendix records two optional interfaces for
-readers who want an external check or source for finite data already assumed
-in the entropy theorems: finite phase checks of Laurent arithmetic and
-full-profile moment supply.
+This note is deliberately not input by the compiled manuscript.  The entropy
+expansion, coefficient-defect identities, Doob-tail identity, and finite-time
+stability estimate use only the centred moment jet and the displayed Laurent
+constant-term table.  Optional observation interfaces are therefore kept as
+supplementary source material rather than as another theorem layer in the
+paper.
 
-First, the Laurent constant terms in the coefficient calculation can be
-checked by finite phase averages.  If
-\(Q(z)=\sum_{|m|\le K}a_mz^m\) is one of the Laurent polynomials obtained
-from a finite product of Cayley modes and \(N>K\), then
-\[
-  a_0=\int_{\TT}Q(z)\,\dd m_{\TT}(z)
-      =\frac1N\sum_{\zeta^N=1}Q(\zeta).
-\]
-Thus any root-of-unity grid above the Fourier-support barrier gives an exact
-certificate for the displayed Laurent arithmetic.  For the
-eighth-order layer, the largest total mode index is \(8\), so grids
-\(\{\zeta:\zeta^N=1\}\) with \(N\ge9\) exactly check all constant terms used
-in Lemmas~\ref{lem:n4-normalized-laurent-representatives},
-\ref{lem:eighth-order-coefficient-arithmetic}, and
-\ref{lem:n4-entropy-coefficient-substitution}.
-For a machine-checkable exact-rational version of the same finite arithmetic,
-the supplementary script
+For finite Laurent arithmetic, the compiled text already records the complete
+coefficient vectors and zero-sum convolution sums in
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  The paper-local script
 \[
 \texttt{certificates/eighth\_order\_laurent\_certificate.py}
 \]
-reconstructs the coefficient vectors \(q_{n,k}\), lists the positive-exponent
-vectors for \(Q_2,\ldots,Q_6\), enumerates all zero-sum convolution rows
-through total order eight, and verifies the two rows whose signs are most
-sensitive in the \(A_8\) formula:
+is an exact-rational reproducibility check for the same table.  It
+reconstructs \(Q_2,\ldots,Q_6\), enumerates every zero-sum row through total
+order eight, and checks in particular the two sign-sensitive rows
 \[
 I(3,5)=-\frac{15}{128},\qquad
 I(2,3,3)=-\frac{9}{128}.
 \]
 
-Second, if moment data are supplied from an external observation channel, the
-only input passed to the entropy layer is the centred jet
+If an external observation channel is used only to supply moments, the entropy
+layer needs no sampling theorem.  It needs the finite centred jet
 \[
-  \mu_j=\int_{\RR}(\gamma-\bar\gamma)^j\,\dd\nu(\gamma),
-  \qquad 2\le j\le6,
+\mu_j=\int_{\RR}(\gamma-\bar\gamma)^j\,\dd\nu(\gamma),
+\qquad 2\le j\le6,
 \]
-and, for the finite-time remainder theorem, the corresponding seventh
-absolute moment bound fixed before the KL value is inserted.
-
-The optional direct full-profile moment-supply interface assumes full continuous
-knowledge of the law-side Fourier profile at a fixed time, after the needed
-moment hypotheses have been fixed.  For \(t_0>0\), write
+and, for the quantitative seventh-moment remainder, the corresponding seventh
+absolute moment bound.  One possible full-profile route is the following
+Fourier identity.  For fixed \(t_0>0\), let
+\(\kappa_{t_0}=\operatorname{Law}((\gamma-\bar\gamma)/t_0)\) and
+\(\lambda_{t_0}(\dd s)=s\,\kappa_{t_0}(\dd s)\).  If the sixth centred
+absolute moment is finite, then
 \[
-  \kappa_{t_0}:=\operatorname{Law}((\gamma-\bar\gamma)/t_0).
+q_{t_0}(\xi)=\pi\int_{\RR}e^{-\ii s\xi}\lambda_{t_0}(\dd s)
 \]
-If \(\nu\) has a finite first centred absolute moment, then
+has five derivatives at the origin and
 \[
-  \lambda_{t_0}(\dd s):=s\,\kappa_{t_0}(\dd s)
+\mu_j=t_0^j\,\frac{\ii^{\,j-1}}{\pi}\,q_{t_0}^{(j-1)}(0),
+\qquad 2\le j\le6.
 \]
-is a finite signed measure.  Only under this hypothesis do we define the
-continuous full profile
-\begin{equation}\label{eq:observation-profile-definition}
-  q_{t_0}(\xi):=
-  \pi\int_{\RR} e^{-\ii s\xi}\,\lambda_{t_0}(\dd s)
-  =
-  \pi\int_{\RR}s e^{-\ii s\xi}\,\kappa_{t_0}(\dd s).
-\end{equation}
-Thus \(q_{t_0}=\pi\widehat{\lambda_{t_0}}\), with a genuine finite signed
-measure on the right.  Full knowledge of \(q_{t_0}\) determines
-\(\lambda_{t_0}\) by Fourier uniqueness.  On Borel sets not containing the
-origin it then determines
+This is only a moment-supply identity.  Integer samples give the same jet only
+under an additional exact support condition
+\(\nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1\), where the convolution symbol
 \[
-  \kappa_{t_0}(B)=\int_B s^{-1}\lambda_{t_0}(\dd s),
+\sum_{k\in\ZZ}\frac{2}{4+k^2}e^{-\ii k\theta}
+=\pi\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)}
 \]
-and the remaining atom at the origin is fixed by total mass.
-
-\begin{proposition}[Full-profile moment-supply interface]%
-\label{prop:observation-profile-finite-jet}
-Fix \(t_0>0\).  Assume that \(\nu\) has a finite sixth centred absolute
-moment and define \(\kappa_{t_0}\), \(\lambda_{t_0}\), and \(q_{t_0}\) as
-above.  Then \(q_{t_0}\in C^5(\RR)\), and, for \(2\le j\le6\),
-\begin{equation}\label{eq:observation-interface-full-profile-moments}
-  \mu_j
-  =
-  t_0^j\,\frac{\ii^{\,j-1}}{\pi}\,
-  q_{t_0}^{(j-1)}(0).
-\end{equation}
-Consequently a full continuous profile at time \(t_0\), together with the
-finite sixth centred absolute moment hypothesis, supplies exactly the
-centred moment jet needed for \(A_6(\nu)\), \(A_8(\nu)\), \(\Delta_6(\nu)\),
-and \(\Delta_8(\nu)\).  This is a full-profile assertion about the continuous
-Fourier transform of the finite signed measure
-\(\lambda_{t_0}=s\,\kappa_{t_0}\); finite or lattice samples do not supply
-the input unless the separate support-restricted lattice hypothesis below is
-also imposed.
-\end{proposition}
-
-\begin{proof}
-The sixth centred absolute moment gives
-\[
-  \int_{\RR}\abs{s}^6\,\kappa_{t_0}(\dd s)
-  =
-  t_0^{-6}\int_{\RR}\abs{\gamma-\bar\gamma}^6\,\nu(\dd\gamma)
-  <\infty .
-\]
-In particular \(\lambda_{t_0}=s\,\kappa_{t_0}\) is a finite signed measure.
-For \(0\le r\le5\), the function \(s\mapsto s^r e^{-\ii s\xi}\) is
-integrable with respect to \(\lambda_{t_0}\), uniformly for \(\xi\) in
-compact sets after domination by \(\abs{s}^{r+1}\).  Differentiation under
-the integral therefore gives
-\[
-  q_{t_0}^{(r)}(\xi)
-  =
-  \pi(-\ii)^r\int_{\RR}s^{r+1}e^{-\ii s\xi}\,\kappa_{t_0}(\dd s),
-  \qquad 0\le r\le5 .
-\]
-Setting \(r=j-1\) and \(\xi=0\) yields
-\[
-  q_{t_0}^{(j-1)}(0)
-  =
-  \pi(-\ii)^{j-1}\int_{\RR}s^j\,\kappa_{t_0}(\dd s).
-\]
-Since \(s=(\gamma-\bar\gamma)/t_0\), the last integral is
-\(t_0^{-j}\mu_j\).  Multiplying by \(t_0^j\ii^{j-1}/\pi\) proves
-\eqref{eq:observation-interface-full-profile-moments}.
-\end{proof}
-
-There is also a purely exact, non-generic lattice certificate.  If, in
-addition to integer-orbit samples, one already knows the support condition
-\[
-  \nu\{\gamma:\gamma-\bar\gamma\in t_0\ZZ\}=1,
-\]
-then the integer convolution with \(K(a,b)=2/(4+(a-b)^2)\) can be inverted by
-the positive symbol
-\[
-  \sum_{k\in\ZZ}\frac{2}{4+k^2}e^{-\ii k\theta}
-  =
-  \pi\frac{\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
-  \qquad -\pi\le\theta\le\pi .
-\]
-This recovers the lattice masses and hence the same moment jet.  This lattice
-route is deliberately support-restricted and non-generic: without the
-displayed support condition, the integer samples are only projection data and
-do not reconstruct the full continuous profile required by the full-profile
-moment-supply interface.  For that reason the lattice calculation is kept in
-this optional appendix and outside the entropy argument.
+is positive and hence invertible.  Without that support condition, integer
+samples are projection data and are not an input to the entropy theorem chain.

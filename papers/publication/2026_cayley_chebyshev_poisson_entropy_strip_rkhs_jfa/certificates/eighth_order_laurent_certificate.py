@@ -1,5 +1,10 @@
 """Exact Laurent certificate for the N=4 Poisson entropy coefficients.
 
+This file is part of the paper's submitted supplementary source package.  The
+manuscript displays the coefficient vectors and zero-sum convolution sums used
+in the proof; this script is an exact-rational reproducibility check for those
+displayed finite data.
+
 Run from the paper root with
 
     python certificates/eighth_order_laurent_certificate.py
