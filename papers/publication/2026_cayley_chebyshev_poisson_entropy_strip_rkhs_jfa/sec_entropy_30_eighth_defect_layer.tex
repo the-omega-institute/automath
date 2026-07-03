@@ -3,18 +3,20 @@
 
 The analytic input for the eighth-order coefficient identity is
 Theorem~\ref{thm:poisson-kl-even-orders} with \(N=4\).  The finite centred
-sixth absolute moment is the algebraic threshold for evaluating the displayed
-universal moment-polynomial coefficient \(A_8\).  The displayed quantitative
-\(O_\nu(t^{-9})\) remainder uses
+sixth absolute moment is the coefficient-evaluation threshold for the
+displayed universal moment-polynomial coefficient \(A_8\).  This evaluability
+statement is algebraic and does not rule out separate lower-tail asymptotic
+analyses outside the displayed universal polynomial.  The displayed
+quantitative \(O_\nu(t^{-9})\) remainder uses
 the positive-margin retained-order theorem with \(N=4\) and \(\eta=1\),
 and therefore assumes a finite centred seventh absolute moment.
 
-The notation below first fixes the moment-polynomial quantities
-\(A_6^{\mathrm{mom}},A_8^{\mathrm{mom}},
-\Delta_6^{\mathrm{mom}},\Delta_8^{\mathrm{mom}}\).  The subsequent
-self-contained coefficient theorem then identifies the corresponding
-entropy coefficients and introduces the unsuperscripted notation used later
-in the defect layer.
+The coefficient notation is the one fixed in
+Table~\ref{tab:coefficient-notation}.  In this subsection \(A_6,A_8\) are
+first computed as explicit finite moment polynomials.  The subsequent
+self-contained coefficient theorem is the single point where those evaluated
+polynomials are identified with the corresponding entropy coefficients; the
+same unsuperscripted notation is then used throughout the defect layer.
 
 \begin{lemma}[Normalized Laurent representatives through order six]%
 \label{lem:n4-normalized-laurent-representatives}
@@ -43,20 +45,8 @@ Thus the relevant Laurent supports are
 S_j:=\operatorname{supp} Q_j=\{\pm1,\ldots,\pm j\},
 \qquad 2\le j\le6.
 \]
-Writing \(Q_n(z)=\sum_{k=-n}^nq_{n,k}z^k\), \(q_{n,0}=0\), the coefficient
-vectors are, on positive exponents,
-\[
-\begin{array}{c|c|c}
-n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
-\hline
-2 & -\frac14(1,1) & q_{2,m}\\
-3 & \frac{\ii}{8}(1,2,1) & -q_{3,m}\\
-4 & \frac1{16}(1,3,3,1) & q_{4,m}\\
-5 & -\frac{\ii}{32}(1,4,6,4,1) & -q_{5,m}\\
-6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
-\end{array}
-\]
-Equivalently, the all-sign coefficient convention is the single formula
+Writing \(Q_n(z)=\sum_{k=-n}^nq_{n,k}z^k\), the all-sign coefficient
+convention is the single formula
 \begin{equation}\label{eq:n4-laurent-all-sign-coefficients}
 q_{n,k}=
 \lambda_n\operatorname{sgn}(k)^{\,n\bmod 2}
@@ -72,7 +62,19 @@ n&2&3&4&5&6\\
 \end{array}
 \]
 Thus the negative-exponent sign for odd \(n\) is already part of
-\(q_{n,k}\); it is not a later conjugation rule.
+\(q_{n,k}\); it is not a later conjugation rule.  The same convention gives
+the following coefficient vectors on positive exponents:
+\[
+\begin{array}{c|c|c}
+n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
+\hline
+2 & -\frac14(1,1) & q_{2,m}\\
+3 & \frac{\ii}{8}(1,2,1) & -q_{3,m}\\
+4 & \frac1{16}(1,3,3,1) & q_{4,m}\\
+5 & -\frac{\ii}{32}(1,4,6,4,1) & -q_{5,m}\\
+6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
+\end{array}
+\]
 \end{lemma}
 
 \begin{proof}
@@ -95,21 +97,26 @@ forms.
 \end{proof}
 
 Before reading the constant-term table, the computation should be interpreted
-as the following finite convolution algorithm.  For
-\(\mathbf n=(n_1,\ldots,n_r)\), first form the Laurent coefficient vectors
-from Lemma~\ref{lem:n4-normalized-laurent-representatives}: \(q_{n,0}=0\),
-and for every nonzero exponent use the all-sign formula
-\eqref{eq:n4-laurent-all-sign-coefficients}.
-The integral is the zero-sum ordered convolution
+as the following deterministic finite certificate.  For
+\(\mathbf n=(n_1,\ldots,n_r)\), first form the all-sign Laurent coefficient
+vectors from Lemma~\ref{lem:n4-normalized-laurent-representatives} using
+\eqref{eq:n4-laurent-all-sign-coefficients}.  The Cauchy mode integral is the
+zero-sum convolution
 \begin{equation}\label{eq:eighth-order-pretable-convolution-algorithm}
 I(n_1,\ldots,n_r)
 =\sum_{\substack{k_1+\cdots+k_r=0\\0<|k_j|\le n_j}}
 q_{n_1,k_1}\cdots q_{n_r,k_r}.
 \end{equation}
-Equivalently, the computation is: enumerate all ordered exponent tuples in
-the displayed finite support with total exponent zero, multiply the already
-signed Laurent coefficients, and add.  No conjugation is applied beyond the
-signs already contained in \eqref{eq:n4-laurent-all-sign-coefficients}.
+Equivalently, this finite sum may be evaluated by the recurrence
+\begin{equation}\label{eq:eighth-order-constant-term-recurrence}
+C_0(s)=\mathbf 1_{\{s=0\}},\qquad
+C_j(s)=\sum_{0<|k|\le n_j}q_{n_j,k}\,C_{j-1}(s-k)
+\quad(1\le j\le r),\qquad I(n_1,\ldots,n_r)=C_r(0).
+\end{equation}
+This all-sign convolution formula is the exact certificate used below: it is
+finite, ordered, and uses only the displayed rational or rational-imaginary
+coefficients.  No conjugation is applied beyond the signs already contained
+in \eqref{eq:n4-laurent-all-sign-coefficients}.
 
 \begin{lemma}[Complete constant-term table through order eight]%
 \label{lem:eighth-order-coefficient-arithmetic}
@@ -124,13 +131,39 @@ I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
 Here and below the coefficient convention is the all-sign formula
 \eqref{eq:n4-laurent-all-sign-coefficients}.
 Thus the signs in products involving odd modes are part of the Laurent
-coefficient vector, not an additional conjugation convention.  For example,
-the full row \(Q_3Q_5\) is
+coefficient vector, not an additional conjugation convention.  The two
+sign-sensitive eighth-order rows are displayed before the full table.  For
+\(Q_3Q_5\), the zero-sum pairs are \((k,-k)\), \(k=\pm1,\pm2,\pm3\).  Since
+both factors are odd modes, the sign is already contained in the all-sign
+coefficients, and
 \[
+\begin{aligned}
 I(3,5)
-=2\sum_{k=1}^3q_{3,k}q_{5,-k}
-=-\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
+&=2\sum_{k=1}^{3}q_{3,k}q_{5,-k} \\
+&=-\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
 =-\frac{15}{128}.
+\end{aligned}
+\]
+For \(Q_2Q_3^2\), first convolve the two \(Q_3\) coefficient vectors.  The
+fourteen zero-sum triples are grouped by \(k_2+k_3=-k_1\) with
+\(k_1\in\{\pm1,\pm2\}\):
+\[
+\begin{array}{c|c|c}
+k_1 & (k_2,k_3) & \sum
+\operatorname{sgn}(k_2)\operatorname{sgn}(k_3)
+\binom{2}{|k_2|-1}\binom{2}{|k_3|-1}\\
+\hline
+ 1 & (-3,2),(-2,1),(1,-2),(2,-3) & -8\\
+-1 & (-2,3),(-1,2),(2,-1),(3,-2) & -8\\
+ 2 & (-3,1),(-1,-1),(1,-3) & -1\\
+-2 & (-1,3),(1,1),(3,-1) & -1 .
+\end{array}
+\]
+Because the \(Q_2\) binomial weight is \(1\) for \(k_1=\pm1,\pm2\),
+the signed convolution is \(-18\), while
+\(\lambda_2\lambda_3^2=1/256\).  Hence the explicit all-sign check is
+\[
+I(2,3,3)=-\frac{18}{256}=-\frac9{128}.
 \]
 The complete list needed for the even entropy coefficients and the intervening
 odd cancellations is
@@ -210,26 +243,27 @@ finite certificate for the rows used through order eight is
 \end{array}
   \]
   The column \(|\mathcal K(\mathbf n)|\) gives the number of zero-sum ordered
-  tuples enumerated by \eqref{eq:eighth-order-finite-convolution-certificate},
-  so every entry is reproducible from the displayed coefficient vectors without
-  any further cancellation convention.
-  The proof does not rely on an undisplayed computation: the coefficient
-  vectors in Lemma~\ref{lem:n4-normalized-laurent-representatives}, the
-  finite zero-sum rule
+  tuples enumerated by
+  \eqref{eq:eighth-order-constant-term-recurrence}--%
+  \eqref{eq:eighth-order-finite-convolution-certificate}, so every entry is
+  reproducible from the displayed coefficient vectors without any further
+  cancellation convention.  The proof does not rely on an undisplayed
+  computation: the coefficient vectors in
+  Lemma~\ref{lem:n4-normalized-laurent-representatives}, the recurrence
+  \eqref{eq:eighth-order-constant-term-recurrence}, the finite zero-sum rule
   \eqref{eq:eighth-order-finite-convolution-certificate}, and the displayed
-  rows above are the complete exact certificate used by the subsequent
+  row data above are the complete exact certificate used by the subsequent
   substitutions.  Rechecking a row requires only finite Laurent arithmetic:
-  reconstruct the signed coefficient vector of each \(Q_{n_j}\), list the
+  reconstruct the signed coefficient vector of each \(Q_{n_j}\), iterate
+  \eqref{eq:eighth-order-constant-term-recurrence}, or equivalently list the
   ordered integer tuples in \(\mathcal K(\mathbf n)\), sum the indicated signed
-  binomial products, and multiply by \(\prod_j\lambda_{n_j}\).
-  For example, the row \((2,2,4)\) sums over the twelve ordered triples in
-  \(\mathcal K(2,2,4)\); their signed binomial weights add to \(24\), and
-  \(\lambda_2^2\lambda_4=1/256\).  The row \((2,3,3)\) sums over fourteen
-  ordered triples; the two odd factors contribute the signs
-\(\operatorname{sgn}(k_2)\operatorname{sgn}(k_3)\), so the signed binomial
-sum is \(-18\) and the scalar product is again \(1/256\).  Formula
-\eqref{eq:eighth-order-finite-convolution-certificate} gives the other rows
-by the same finite enumeration.
+  binomial products, and multiply by \(\prod_j\lambda_{n_j}\).  The worked
+  rows \(I(3,5)\) and \(I(2,3,3)\) above show explicitly where the odd-mode
+  signs enter.  For example, the row \((2,2,4)\) sums over the twelve ordered
+  triples in \(\mathcal K(2,2,4)\); their signed binomial weights add to
+  \(24\), and \(\lambda_2^2\lambda_4=1/256\).  Formula
+  \eqref{eq:eighth-order-finite-convolution-certificate} gives the other rows
+  by the same finite enumeration.
 
 The zero rows are the complete list of odd total-degree products appearing
 before the even-power projection:
@@ -242,7 +276,7 @@ parity, because each listed product contains an odd number of odd modes and is
 odd under \(y\mapsto-y\).
 \end{proof}
 
-\begin{lemma}[Substitution into \(A_4\), \(A_6^{\mathrm{mom}}\), and \(A_8^{\mathrm{mom}}\)]%
+\begin{lemma}[Substitution into \(A_4\), \(A_6\), and \(A_8\)]%
 \label{lem:n4-entropy-coefficient-substitution}
 Let \(a_j=\mu_j u_j\) for \(2\le j\le6\), with \(\mu_2=\sigma^2\), and set
 \[
@@ -267,13 +301,13 @@ are
 A_4=\frac12\mu_2^2I(2,2)=\frac{\sigma^4}{8},
 \]
 \[
-A_6^{\mathrm{mom}}=\mu_2\mu_4I(2,4)+\frac12\mu_3^2I(3,3)
+A_6=\mu_2\mu_4I(2,4)+\frac12\mu_3^2I(3,3)
 -\frac16\mu_2^3I(2,2,2)
 =\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
 \]
 \[
 \begin{aligned}
-A_8^{\mathrm{mom}}={}&\mu_2\mu_6I(2,6)+\mu_3\mu_5I(3,5)
+A_8={}&\mu_2\mu_6I(2,6)+\mu_3\mu_5I(3,5)
 +\frac12\mu_4^2I(4,4)\\
 &-\frac12\mu_2^2\mu_4I(2,2,4)
 -\frac12\mu_2\mu_3^2I(2,3,3)
@@ -310,7 +344,7 @@ displayed \(B\)-polynomials.  The \(t^{-5}\) and \(t^{-7}\) terms have zero
 integral by the zero rows in
 Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  Substituting the
 constant terms from that lemma gives the displayed formulas for
-\(A_4,A_6^{\mathrm{mom}},A_8^{\mathrm{mom}}\).
+\(A_4,A_6,A_8\).
 \end{proof}
 
 \begin{remark}[Normalization and two-point checks]
@@ -325,10 +359,10 @@ agreeing with \(u_2(0)=-1\).  For the symmetric two-point law
 \(\mu_6=\sigma^6\).  Substitution into
 Lemma~\ref{lem:n4-entropy-coefficient-substitution} gives
 \[
-A_6^{\mathrm{mom}}(\rho_\sigma)=\frac{1-8}{64}\sigma^6
+A_6(\rho_\sigma)=\frac{1-8}{64}\sigma^6
 =-\frac{7\sigma^6}{64},
 \qquad
-A_8^{\mathrm{mom}}(\rho_\sigma)=\frac{3-12+12+20}{256}\sigma^8
+A_8(\rho_\sigma)=\frac{3-12+12+20}{256}\sigma^8
 =\frac{23\sigma^8}{256}.
 \]
 These identities are sanity checks on the arithmetic for the already stated
@@ -344,28 +378,26 @@ For a centred moment jet
 \]
 define the purely algebraic moment polynomials
 \begin{align}
-A_6^{\mathrm{mom}}(\nu)
+A_6(\nu)
 &:=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
 \label{eq:n4-notation-a6}\\
-A_8^{\mathrm{mom}}(\nu)
+A_8(\nu)
 &:=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
 +12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256},
 \label{eq:n4-notation-a8}\\
-\Delta_6^{\mathrm{mom}}(\nu)
-&:=-\frac{7}{64}\sigma^6-A_6^{\mathrm{mom}}(\nu),
+\Delta_6(\nu)
+&:=-\frac{7}{64}\sigma^6-A_6(\nu),
 \label{eq:n4-notation-delta6}\\
-\Delta_8^{\mathrm{mom}}(\nu)
-&:=A_8^{\mathrm{mom}}(\nu)-\frac{23}{256}\sigma^8.
+\Delta_8(\nu)
+&:=A_8(\nu)-\frac{23}{256}\sigma^8.
 \label{eq:n4-notation-delta8}
 \end{align}
 These four quantities use only the displayed finite moment jet and carry no
 entropy-coefficient assertion by themselves.  The next theorem is the sole
-identification step in this subsection: it states exactly when the entropy
-coefficients \(A_6^{\mathrm{ent}}\) and \(A_8^{\mathrm{ent}}\) equal these
-moment polynomials.  After that theorem, in statements whose hypotheses
-include the required coefficient identification, we drop the superscript and
-write \(A_6,A_8,\Delta_6,\Delta_8\) for the identified entropy coefficients
-and their two-point defects.
+identification step in this subsection: under the stated fourth- and
+sixth-moment hypotheses, the already defined \(A_6\) and \(A_8\) are the
+large-time entropy coefficients, and \(\Delta_6,\Delta_8\) are their
+two-point defects.
 
 \begin{lemma}[Eighth coefficient polynomial before coefficient identification]%
 \label{lem:formal-seventh-eighth-coefficient}
@@ -374,12 +406,12 @@ The universal degree-eight coefficient polynomial involves only
 \(\nu\) is the polynomial fixed in
 \eqref{eq:n4-notation-a8}:
 \begin{equation}\label{eq:formal-eighth-evaluated-polynomial}
-A_8^{\mathrm{mom}}(\nu)
+A_8(\nu)
 :=
 \frac{3\mu_2^4-12\mu_2^2\mu_4+9\mu_2\mu_3^2
 +12\mu_2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
 \end{equation}
-At this stage \(A_8^{\mathrm{mom}}(\nu)\) is only a moment polynomial; its
+At this stage \(A_8(\nu)\) is only a moment polynomial; its
 entropy-coefficient status is supplied by
 Theorem~\ref{thm:poisson-kl-eighth}.
 \end{lemma}
@@ -410,7 +442,7 @@ which is exactly \eqref{eq:formal-eighth-evaluated-polynomial} after
 substitution of the listed mode integrals.
 
 Thus the displayed finite computation identifies the evaluated polynomial
-\(A_8^{\mathrm{mom}}(\nu)\).  No entropy-coefficient status is asserted in
+\(A_8(\nu)\).  No entropy-coefficient status is asserted in
 this lemma.
 \end{proof}
 
@@ -425,12 +457,12 @@ X_c:=\gamma-\bar\gamma,
 \]
 whenever the displayed moment exists, define
 \[
-A_6^{\mathrm{mom}}(\nu)
+A_6(\nu)
 :=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
 \]
 When the moments through order six exist, define
 \[
-A_8^{\mathrm{mom}}(\nu)
+A_8(\nu)
 :=
 \frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
 +12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
@@ -448,46 +480,37 @@ entropy coefficient exists and
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\frac{\sigma^4}{8t^4}
-+\frac{A_6^{\mathrm{ent}}(\nu)}{t^6}
-+o(t^{-6}),
-\qquad
-A_6^{\mathrm{ent}}(\nu)=A_6^{\mathrm{mom}}(\nu).
++\frac{A_6(\nu)}{t^6}
++o(t^{-6}).
 \]
+Here \(A_6(\nu)\) is the \(t^{-6}\) entropy coefficient.
 
 \textup{(ii) Eighth coefficient.}
-If \(\nu\) has finite centred sixth absolute moment, then the \(t^{-8}\)
-entropy coefficient exists,
-\[
-A_8^{\mathrm{ent}}(\nu)=A_8^{\mathrm{mom}}(\nu),
-\]
-and the expansion is
+If \(\nu\) has finite centred sixth absolute moment, then \(A_8(\nu)\) is the
+\(t^{-8}\) entropy coefficient, and the expansion is
 \begin{equation}\label{eq:poisson-kl-eighth}
 \begin{split}
 D_{\mathrm{KL}}(h_t\|g_t)
 =\frac{\sigma^4}{8t^4}
-+\frac{A_6^{\mathrm{ent}}(\nu)}{t^6}
++\frac{A_6(\nu)}{t^6}
 \\
 \quad
-+\frac{A_8^{\mathrm{ent}}(\nu)}{t^8}
++\frac{A_8(\nu)}{t^8}
 +o(t^{-8}).
 \end{split}
 \end{equation}
-In this case \(A_6^{\mathrm{ent}}(\nu)=A_6^{\mathrm{mom}}(\nu)\) as well.
+In this case \(A_6(\nu)\) is also the \(t^{-6}\) entropy coefficient.
 The associated entropy-coefficient defects are
 \[
-\Delta_6^{\mathrm{ent}}(\nu)
-:=-\frac{7}{64}\sigma^6-A_6^{\mathrm{ent}}(\nu),
+\Delta_6(\nu)
+:=-\frac{7}{64}\sigma^6-A_6(\nu),
 \qquad
-\Delta_8^{\mathrm{ent}}(\nu)
-:=A_8^{\mathrm{ent}}(\nu)-\frac{23}{256}\sigma^8.
+\Delta_8(\nu)
+:=A_8(\nu)-\frac{23}{256}\sigma^8.
 \]
-After this identification, the abbreviated notation
-\[
-A_j(\nu):=A_j^{\mathrm{ent}}(\nu)\quad(j=6,8),
-\qquad
-\Delta_j(\nu):=\Delta_j^{\mathrm{ent}}(\nu)\quad(j=6,8)
-\]
-is used throughout the subsequent sixth/eighth-order defect layer.
+These are the same unsuperscripted quantities defined in
+\eqref{eq:n4-notation-a6}--\eqref{eq:n4-notation-delta8}, now with their
+entropy-coefficient status established under the hypotheses above.
 
 These coefficients use the Laurent normalization of
 \(Q_2,\ldots,Q_6\) displayed in
@@ -496,44 +519,42 @@ table in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}, and the
 coefficient substitution in
 Lemma~\ref{lem:n4-entropy-coefficient-substitution}.  The normalization and
 symmetric two-point checks are recorded in the preceding remark.  The finite
-centred sixth absolute moment is the algebraic threshold for evaluating the
+centred sixth absolute moment is the coefficient-evaluation threshold for the
 displayed universal moment-polynomial coefficient
-\(A_8^{\mathrm{mom}}\).
+\(A_8\).
 \end{theorem}
 
-\paragraph{Threshold note.}
-This theorem separates moment-polynomial notation from entropy-coefficient
-identification.  The fourth moment identifies \(A_6^{\mathrm{ent}}\) with
-\(A_6^{\mathrm{mom}}\), while the sixth moment identifies
-\(A_8^{\mathrm{ent}}\) with \(A_8^{\mathrm{mom}}\) and supplies the
-coefficient ladder through \(t^{-8}\) with an \(o(t^{-8})\) remainder.  The
-seventh moment is used only later, in
+\paragraph{Coefficient-evaluation note.}
+This theorem separates the moment-polynomial display from entropy-coefficient
+identification.  The fourth moment identifies \(A_6\) as the \(t^{-6}\)
+coefficient, while the sixth moment identifies \(A_8\) as the \(t^{-8}\)
+coefficient and supplies the coefficient ladder through \(t^{-8}\) with an
+\(o(t^{-8})\) remainder.  The seventh moment is used only later, in
 Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}, to make the finite-time
 \(O(t^{-9})\) remainder quantitative.
 
 \begin{proof}
 For part \textup{(i)}, the finite centred fourth absolute moment is the
 \(2N-2\) hypothesis of Theorem~\ref{thm:poisson-kl-even-orders} with
-\(N=3\).  That theorem identifies the retained algebraic coefficient
-\(A_6^{\rm alg}(\nu)\) with the entropy coefficient
-\(A_6^{\mathrm{ent}}(\nu)\).  Lemma~\ref{lem:n4-entropy-coefficient-substitution}
+\(N=3\).  That theorem identifies the retained evaluated coefficient
+\(A_6(\nu)\) with the entropy coefficient.  Lemma~\ref{lem:n4-entropy-coefficient-substitution}
 evaluates the same retained universal coefficient as
 \[
 A_4(\nu)=\frac{\sigma^4}{8},\qquad
-A_6^{\mathrm{mom}}(\nu)
+A_6(\nu)
 =\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
 \]
 This proves the sixth-order expansion and
-\(A_6^{\mathrm{ent}}=A_6^{\mathrm{mom}}\).
+the displayed formula for \(A_6\).
 
 For part \textup{(ii)}, the finite centred sixth absolute moment is the
 \(2N-2\) hypothesis of Theorem~\ref{thm:poisson-kl-even-orders} with
 \(N=4\).  It gives the asymptotic identity through order \(t^{-8}\) with
-remainder \(o(t^{-8})\), and identifies the retained algebraic coefficients
+remainder \(o(t^{-8})\), and identifies the retained evaluated coefficients
 with entropy coefficients.  Lemma~\ref{lem:n4-entropy-coefficient-substitution}
 evaluates the degree-eight retained coefficient as
 \[
-A_8^{\mathrm{mom}}(\nu)
+A_8(\nu)
 =\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
 +12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
 \]
@@ -542,8 +563,9 @@ Lemma~\ref{lem:mode-parity-vanish}, or equivalently by the parity statement
 in Theorem~\ref{thm:universal-entropy-coefficients}.  Substituting these
 computed values into the \(N=4\) universal-coefficient expansion proves
 \eqref{eq:poisson-kl-eighth}.  The displayed definitions of
-\(\Delta_6^{\mathrm{ent}}\), \(\Delta_8^{\mathrm{ent}}\), and the abbreviated
-post-identification notation are definitions.
+\(\Delta_6\) and \(\Delta_8\) are the defect definitions from
+\eqref{eq:n4-notation-delta6}--\eqref{eq:n4-notation-delta8}, now used with
+the identified entropy coefficients.
 \end{proof}
 
 \begin{definition}[\(N=4,\eta=1\) retained-order constants]
@@ -679,8 +701,8 @@ D_{\mathrm{KL}}(h_t\|g_t)
 
 \begin{remark}
 The finite centred sixth absolute moment is the \(N=4\) hypothesis
-\(2N-2=6\), the algebraic threshold for evaluating the displayed universal
-moment-polynomial coefficient \(A_8^{\mathrm{mom}}\).  The seventh moment enters
+\(2N-2=6\), the coefficient-evaluation threshold for the displayed universal
+moment-polynomial coefficient \(A_8\).  The seventh moment enters
 Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for the quantitative
 \(O(t^{-9})\) remainder.
 

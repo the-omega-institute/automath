@@ -23,11 +23,16 @@ language starts with Bregman's construction~\cite{Bregman1967}.  For jump
 semigroups, the nonlocal Hardy--Stein identity and Sobolev--Bregman forms were
 developed in
 \cite{BanuelosBogdanLuks2016HardyStein,
+BanuelosKim2019HardySteinNonsymmetric,
 BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas,
 Gutowski2023HardySteinPureJump,GutowskiKwasnicki2025BeurlingDenySobolevBregman}.
-In conceptual terms, the present identity is the Cauchy-generator,
-relative-entropy specialization of the polarized Hardy--Stein/Sobolev--Bregman
-identities for Markov semigroups: the convex function is
+The Beurling--Deny Sobolev--Bregman formula of
+Gutowski--Kwa\'snicki is cited here in its published
+\emph{Nonlinear Analysis} form, with DOI and arXiv identifier recorded in the
+bibliography.  In conceptual terms, the present identity is the
+Cauchy-generator, relative-entropy specialization of the polarized
+Hardy--Stein/Sobolev--Bregman identities for Markov semigroups: the convex
+function is
 \(\Phi(r)=r\log r\), the two-point co-divergence is
 \(\Lambda(\alpha,\beta)=\alpha\log(\alpha/\beta)-\alpha+\beta\), and the
 reference density is the moving Poisson profile \(g_t\).  The general
@@ -127,435 +132,141 @@ because $(1+s)\log(1+s)-s\le2s^2$ for $|s|\le1/2$.  The right-hand side
 tends to zero.
 \end{proof}
 
-\begin{lemma}[Truncated Cauchy generator convergence in \(L^1\)]%
-\label{lem:cauchy-truncated-generator-l1-domain}
-Let \(\mu\) be a finite signed Borel measure on \(\RR\), let
-\(0<a<b<\infty\), and put \(p_t=P_t*\mu\).  For \(R>1\) define
+\begin{lemma}[\(L^1\) Cauchy generator domain for Poisson smoothings]%
+\label{lem:poisson-cauchy-generator-l1-domain}
+Let \(0<a<b<\infty\), let \(\mu\) be a finite signed Borel measure on
+\(\RR\), and set \(p_t=P_t*\mu\).  For \(R>1\) define
 \[
-(L_Rf)(x):=\frac1\pi\int_{R^{-1}<|x-y|<R}
-\frac{f(y)-f(x)}{(x-y)^2}\dd y .
+(L_Rp)(x):=\frac1\pi\int_{R^{-1}<|z|<R}
+\frac{p(x+z)-p(x)}{z^2}\dd z .
 \]
 Then
-\begin{equation}\label{eq:cauchy-truncated-generator-l1-convergence}
+\begin{equation}\label{eq:poisson-cauchy-generator-l1-domain}
 \sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_{L^1(\RR)}
-\longrightarrow0
-\qquad(R\to\infty).
+\longrightarrow0\qquad(R\to\infty).
 \end{equation}
-Consequently, for every bounded measurable \(q\),
-\begin{equation}\label{eq:cauchy-truncated-generator-bounded-pairing}
+Consequently, if \(q_t\) is uniformly bounded on
+\([a,b]\times\RR\), then
+\begin{equation}\label{eq:poisson-cauchy-generator-bounded-pairing}
+\sup_{t\in[a,b]}\left|
+\int_{\RR}q_tL_Rp_t\,\dd x
+-\int_{\RR}q_t\,\partial_tp_t\,\dd x
+\right|\longrightarrow0 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The Cauchy kernel is translation invariant, hence
+\[
+L_R(P_t*\mu)-\partial_t(P_t*\mu)
+=(L_RP_t-\partial_tP_t)*\mu .
+\]
+Young's inequality reduces \eqref{eq:poisson-cauchy-generator-l1-domain} to
+the case \(\mu=\delta_0\), up to the factor \(\|\mu\|_{\mathrm{TV}}\).  For
+the Poisson kernel, \(\widehat P_t(\xi)=e^{-t|\xi|}\), and therefore the
+principal-value Cauchy generator \(L\) satisfies \(LP_t=\partial_tP_t\).
+Thus \(L_RP_t-\partial_tP_t\) is the sum of the omitted near-zero and
+far-field parts of the principal-value integral.
+
+For the near-zero part, the symmetric annulus cancels the odd linear term:
+for each \(z\),
+\[
+P_t(x+z)-P_t(x)=z\,\partial_xP_t(x)
++z^2\int_0^1(1-\theta)\partial_x^2P_t(x+\theta z)\dd\theta .
+\]
+After integration over \(|z|<R^{-1}\), the \(z\,\partial_xP_t(x)\) term
+vanishes.  Hence
+\[
+\left\|\frac1\pi\int_{|z|<R^{-1}}
+\frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z\right\|_1
+\le \frac{2}{\pi R}\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1 .
+\]
+The supremum is finite because \(t\ge a>0\).  For the far-field part,
+\[
+\left\|\frac1\pi\int_{|z|>R}
+\frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z\right\|_1
+\le \frac{2\|P_t\|_1}{\pi}\int_{|z|>R}\frac{\dd z}{z^2}
+=\frac{4}{\pi R}.
+\]
+Both bounds are uniform for \(t\in[a,b]\), proving
+\eqref{eq:poisson-cauchy-generator-l1-domain}.  The pairing convergence
+\eqref{eq:poisson-cauchy-generator-bounded-pairing} follows by multiplying by
+\(\sup_{t,x}|q_t(x)|\).
+\end{proof}
+
+\begin{lemma}[Bounded-Lipschitz cutoff pairing for Poisson smoothings]%
+\label{lem:bounded-lipschitz-cauchy-cutoff-pairing}
+Let \(0<a<b<\infty\), let \(p_t=P_t*\mu\) with \(\mu\) a finite signed
+Borel measure, and define \(L_R\) as in
+Lemma~\ref{lem:poisson-cauchy-generator-l1-domain}.  If \(q\) is bounded and
+Lipschitz on \(\RR\), then, for every \(t\in[a,b]\),
+\begin{equation}\label{eq:bounded-lipschitz-cauchy-cutoff-pairing}
 \int_{\RR}q(x)\partial_tp_t(x)\dd x
-=
-\lim_{R\to\infty}\int_{\RR}q(x)L_Rp_t(x)\dd x ,
+=-\frac{1}{2\pi}\lim_{R\to\infty}
+\iint_{\Omega_R}
+\frac{(p_t(x)-p_t(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y ,
 \end{equation}
-and the convergence is uniform for families of \(q\)'s with a common
-\(L^\infty\) bound.
+where \(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\).  The truncated bilinear forms
+are absolutely convergent.  If \(q_t\) is a family with uniformly bounded
+\(\|q_t\|_\infty+\operatorname{Lip}(q_t)\) on \([a,b]\), the same convergence
+is uniform for \(t\in[a,b]\).
 \end{lemma}
 
 \begin{proof}
-It is enough to prove the kernel estimate
+Write \(B_R(p,q)\) for the double integral in
+\eqref{eq:bounded-lipschitz-cauchy-cutoff-pairing}.  For a Poisson smoothing
+\(p=p_t\) one has \(p,\partial_xp\in L^1(\RR)\), uniformly for
+\(t\in[a,b]\).  In the variable \(z=y-x\),
 \[
-\sup_{t\in[a,b]}\|L_RP_t-\partial_tP_t\|_1\to0 .
+\iint_{\Omega_R}
+\left|\frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\right|\dd x\dd y
 \]
-Indeed, \(L_R\), \(\partial_t\), and convolution commute, so Minkowski's
-inequality gives
+is bounded by
 \[
-\|L_R(P_t*\mu)-\partial_t(P_t*\mu)\|_1
-\le |\mu|(\RR)\,\|L_RP_t-\partial_tP_t\|_1 .
+\int_{|z|<1}
+\frac{\|p(\cdot+z)-p\|_1\operatorname{Lip}(q)|z|}{z^2}\dd z
++4\|p\|_1\|q\|_\infty\int_{|z|\ge1}\frac{\dd z}{z^2}.
 \]
+Since \(\|p(\cdot+z)-p\|_1\le |z|\|\partial_xp\|_1\), this gives absolute
+convergence, with a bound depending only on the displayed uniform norms on a
+compact time interval.
 
-For the Poisson kernel, \(\partial_tP_t=LP_t\), where
+For \(q\in C_c^\infty(\RR)\), Fubini on the finite annulus gives
 \[
-(Lf)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
-\frac{f(y)-f(x)}{(x-y)^2}\dd y .
+\int_{\RR}q\,L_Rp\,\dd x=-\frac1{2\pi}B_R(p,q).
 \]
-Write \(z=y-x\).  The difference between \(LP_t\) and \(L_RP_t\) is the sum
-of a near-diagonal omitted principal-value part and a far-tail omitted part.
-For the near part the symmetric principal value cancels the linear term:
+For a bounded Lipschitz \(q\), choose an even mollifier \(\rho_\varepsilon\)
+and a cutoff \(\chi\in C_c^\infty(\RR)\) with \(\chi=1\) on \([-1,1]\), and
+put
 \[
-\int_{\varepsilon<|z|<R^{-1}}
-\frac{P_t(x+z)-P_t(x)}{z^2}\dd z
-=
-\int_{\varepsilon<|z|<R^{-1}}
-\frac{P_t(x+z)-P_t(x)-z\,\partial_xP_t(x)}{z^2}\dd z .
+q_{S,\varepsilon}:=\rho_\varepsilon*(\chi(\,\cdot\,/S)q).
 \]
-After letting \(\varepsilon\downarrow0\), Taylor's formula in \(L^1\) gives
+The functions \(q_{S,\varepsilon}\) are smooth and compactly supported,
+bounded uniformly by \(\|q\|_\infty\), and have Lipschitz constants bounded in
+terms of \(\operatorname{Lip}(q)\), \(\|q\|_\infty\), and \(\chi\), but not
+\(\varepsilon\).  The majorant above therefore permits
+\(\varepsilon\downarrow0\) and then \(S\to\infty\) in the bilinear side.  The
+same two limits on the single integral side follow from
+\(L_Rp\in L^1_{\mathrm{loc}}\) on each fixed annulus and from the far-field
+bound already used above.  Hence the finite-annulus identity holds for the
+bounded Lipschitz test \(q\).
+
+Finally, Lemma~\ref{lem:poisson-cauchy-generator-l1-domain} gives
 \[
-\left\|
-\int_{|z|<R^{-1}}
-\frac{P_t(\cdot+z)-P_t(\cdot)-z\,\partial_xP_t}{z^2}\dd z
-\right\|_1
-\le
-\int_{|z|<R^{-1}}\frac{|z|^2\|\partial_x^2P_t\|_1}{2z^2}\dd z
-\le C_aR^{-1}.
+\int q\,L_Rp_t\dd x\longrightarrow \int q\,\partial_tp_t\dd x
 \]
-For the far part,
-\[
-\left\|
-\int_{|z|>R}\frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z
-\right\|_1
-\le
-2\|P_t\|_1\int_{|z|>R}\frac{\dd z}{z^2}
-=4R^{-1}.
-\]
-Here \(\|P_t\|_1=1\) and
-\(\sup_{t\in[a,b]}\|\partial_x^2P_t\|_1<\infty\).  These two estimates prove
-\eqref{eq:cauchy-truncated-generator-l1-convergence}.  Pairing with bounded
-\(q\) then follows from
-\[
-\left|\int q(L_Rp_t-\partial_tp_t)\right|
-\le \|q\|_\infty\|L_Rp_t-\partial_tp_t\|_1 .
-\]
+in the sense of the \(L^1\) generator-domain limit, because multiplication by
+a bounded \(q\) is continuous on \(L^1\).  This identifies the cutoff bilinear
+limit with the distributional generator pairing and proves
+\eqref{eq:bounded-lipschitz-cauchy-cutoff-pairing}.  The same estimates give
+the stated uniform version.
 \end{proof}
 
-\begin{lemma}[Cutoff pairing for bounded Lipschitz test functions]%
-\label{lem:cauchy-bounded-lipschitz-cutoff-pairing}
-Let \(p\in W^{1,1}(\RR)\cap L^1(\RR)\), and let \(q\) be bounded and
-Lipschitz on \(\RR\).  Assume also that \(L_Rp\to Lp\) in \(L^1(\RR)\) for
-some \(L^1\)-function \(Lp\), where
-\[
-(L_Rp)(x):=\frac1\pi\int_{R^{-1}<|x-y|<R}
-\frac{p(y)-p(x)}{(x-y)^2}\dd y .
-\]
-For \(R>1\) set
-\[
-\Omega_R:=\{(x,y)\in\RR^2:\ R^{-1}<|x-y|<R\}.
-\]
-Then the truncated bilinear form
-  \[
-  B_R(p,q):=
-  \iint_{\Omega_R}
-   \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
-   \]
-is absolutely convergent.  If
-\begin{equation}\label{eq:cauchy-bl-finite-truncation-pairing}
-\int_{\RR}q(x)L_Rp(x)\dd x
-=-\frac{1}{2\pi}B_R(p,q).
-\end{equation}
-Moreover,
-\begin{equation}\label{eq:cauchy-bl-principal-value-pairing}
-\int_{\RR}q(x)Lp(x)\dd x
-=
--\frac{1}{2\pi}
-\lim_{R\to\infty}B_R(p,q),
-\end{equation}
-where the limit exists as the limit of absolutely convergent truncated
-integrals.  Equivalently, the right side is the distributional action of
-the principal-value Cauchy generator after cutoff/mollifier closure: for any
-\(\chi\in C_c^\infty(\RR)\), \(0\le\chi\le1\), \(\chi\equiv1\) on
-\([-1,1]\), and \(\chi_S(x)=\chi(x/S)\),
-\begin{equation}\label{eq:cauchy-bl-cutoff-mollifier-pairing}
-\int_{\RR}qLp
-=
-\lim_{S\to\infty}\lim_{R\to\infty}
-\int_{\RR}\chi_S(x)q(x)L_Rp(x)\dd x ,
-\end{equation}
-and the inner finite-\(R\) identity is the compactly supported
-symmetrization with \(q\) replaced by \(\chi_Sq\).  More concretely, if
-\(\rho_\varepsilon\) is a standard mollifier and
-\(q_{S,\varepsilon}:=\rho_\varepsilon*(\chi_Sq)\), then for fixed \(S\)
-\begin{equation}\label{eq:cauchy-bl-mollifier-approximation}
-\int_{\RR}\chi_Sq\,Lp
-=\lim_{\varepsilon\downarrow0}\int_{\RR}q_{S,\varepsilon}\,Lp
-=-\frac{1}{2\pi}\lim_{\varepsilon\downarrow0}\lim_{R\to\infty}
-B_R(p,q_{S,\varepsilon}),
-\end{equation}
-and \eqref{eq:cauchy-bl-principal-value-pairing} follows by
-\(S\to\infty\).  Thus the principal-value pairing with bounded Lipschitz
-tests is not an additional integration-by-parts rule; it is exactly the
-cutoff/mollifier closure of the compactly supported smooth bilinear identity,
-represented by the \(L^1\)-limit \(Lp\).
-\end{lemma}
-
-\begin{proof}
-The near and far estimates are uniform in the truncation parameters.  With
-\(z=y-x\),
-\[
-\int_{\RR}|p(x+z)-p(x)|\dd x\le |z|\,\|p'\|_1
-\]
-and
-\[
-|q(x+z)-q(x)|\le \operatorname{Lip}(q)|z|.
-\]
-Hence the contribution from \(0<|z|<1\) is bounded by
-\[
-2\operatorname{Lip}(q)\|p'\|_1 .
-\]
-For \(|z|\ge1\),
-\[
-\int_{\RR}|p(x+z)-p(x)|\,|q(x+z)-q(x)|\dd x
-\le4\|q\|_\infty\|p\|_1,
-\]
-and integration against \(|z|^{-2}\dd z\) is finite.  Thus \(B_R(p,q)\) is
-absolutely convergent, with a bound independent of \(R\).
-
-For fixed finite \(R\), first assume \(q\in C_c^\infty(\RR)\).  The preceding
-absolute-convergence estimate justifies Fubini on \(\Omega_R\), and the change
-\((x,y)\mapsto(y,x)\) gives
-\[
-\int q(x)L_Rp(x)\dd x
-=
-\frac1\pi\iint_{\Omega_R}
-\frac{q(x)(p(y)-p(x))}{(x-y)^2}\dd x\dd y
-=-\frac{1}{2\pi}B_R(p,q).
-\]
-For compactly supported Lipschitz \(q\), choose a standard mollifier
-\(\rho_\varepsilon\) and set \(q_\varepsilon=\rho_\varepsilon*q\).  After
-multiplying by a fixed smooth cutoff which is one on the support of \(q\)
-enlarged by one, these are compactly supported smooth tests, converge to
-\(q\) uniformly, and have uniformly bounded \(L^\infty\) and Lipschitz
-norms.  For fixed \(R\), the diagonal is removed by
-\(|x-y|>R^{-1}\), and the compact-support/mollifier approximation may be
-passed through the annular integral by dominated convergence.  Equivalently,
-one may use the displayed near/far majorant, which is independent of
-\(\varepsilon\).  Therefore
-\[
-B_R(p,q_\varepsilon)\to B_R(p,q),
-\qquad
-\int q_\varepsilon L_Rp\to \int qL_Rp
-\]
-for each finite \(R\), and the compactly supported smooth identity passes to
-compactly supported Lipschitz tests.
-
-For a general bounded Lipschitz \(q\), take the compactly supported Lipschitz
-cutoffs \(\chi_Sq\), with \(\|\chi_S\|_\infty\le1\) and
-\(\|\chi_S'\|_\infty\le \|\chi'\|_\infty\).  The same identity holds for
-\(\chi_Sq\).  As \(S\to\infty\),
-\[
-\int \chi_Sq\,L_Rp\to\int q\,L_Rp
-\]
-because \(L_Rp\in L^1\) for finite \(R\), while
-\[
-B_R(p,\chi_Sq)\to B_R(p,q)
-\]
-by dominated convergence on \(\Omega_R\), using the same near/far majorant
-above and \(|\chi_S(x)q(x)-\chi_S(y)q(y)|
-\le C_{\chi,q}\min\{|x-y|,1\}\), uniformly in \(S\).  This proves
-\eqref{eq:cauchy-bl-finite-truncation-pairing}.
-
-We now identify the limiting pairing with the distributional pairing obtained
-from compactly supported smooth tests.  Fix \(S\).  The function \(\chi_Sq\)
-is compactly supported and Lipschitz.  Let
-\(q_{S,\varepsilon}=\rho_\varepsilon*(\chi_Sq)\).  After multiplying by a
-smooth cutoff which is one on the support of \(\chi_Sq\) enlarged by one,
-\(q_{S,\varepsilon}\in C_c^\infty(\RR)\), and
-\[
-q_{S,\varepsilon}\to\chi_Sq
-\quad\text{uniformly,}\qquad
-\sup_{\varepsilon}\bigl(
-\|q_{S,\varepsilon}\|_\infty+\operatorname{Lip}(q_{S,\varepsilon})\bigr)
-<\infty
-\]
-for fixed \(S\), with the evident bound depending on \(q\) and \(\chi_S\).
-Since \(Lp\in L^1(\RR)\), this gives
-\[
-\int q_{S,\varepsilon}Lp\to\int \chi_Sq\,Lp .
-\]
-For each \(\varepsilon>0\), the compactly supported smooth bilinear identity
-gives, and the assumed \(L^1\)-convergence \(L_Rp\to Lp\) justifies passing to,
-\[
-\int q_{S,\varepsilon}Lp
-=\lim_{R\to\infty}\int q_{S,\varepsilon}L_Rp
-=-\frac1{2\pi}\lim_{R\to\infty}B_R(p,q_{S,\varepsilon}).
-\]
-Letting \(\varepsilon\downarrow0\) proves
-\eqref{eq:cauchy-bl-mollifier-approximation}.  To make the distributional
-identification explicit, define on \(C_c^\infty(\RR)\)
-\[
-T_p(\varphi):=\lim_{R\to\infty}\int_{\RR}\varphi L_Rp .
-\]
-The \(L^1\)-convergence \(L_Rp\to Lp\) gives
-\(T_p(\varphi)=\int\varphi Lp\), while the compactly supported smooth
-symmetrization gives
-\[
-T_p(\varphi)=-\frac1{2\pi}\lim_{R\to\infty}B_R(p,\varphi).
-\]
-Thus \eqref{eq:cauchy-bl-mollifier-approximation} is precisely the extension
-of the distributional pairing \(\langle T_p,\chi_Sq\rangle\) from
-\(C_c^\infty\) tests to the compactly supported Lipschitz test \(\chi_Sq\).
-
-It remains only to remove the spatial cutoff.  Since \(|\chi_Sq|\le
-\|q\|_\infty\) and \(Lp\in L^1\),
-\[
-\int \chi_Sq\,Lp\to\int q\,Lp .
-\]
-Also, for each finite \(R\), the preceding cutoff argument gives
-\[
-\int \chi_Sq\,L_Rp=-\frac1{2\pi}B_R(p,\chi_Sq)
-\quad\text{and}\quad
-\int q\,L_Rp=-\frac1{2\pi}B_R(p,q),
-\]
-with \(B_R(p,\chi_Sq)\to B_R(p,q)\) by the same near/far majorant used above.
-Finally, boundedness of \(q\) and \(L_Rp\to Lp\) in \(L^1\) give
-\[
-\int qL_Rp\to\int qLp .
-\]
-Combining this with the finite-truncation identity proves
-\eqref{eq:cauchy-bl-principal-value-pairing}.  Keeping \(\chi_Sq\) until the
-last line and then letting \(S\to\infty\) gives
-\eqref{eq:cauchy-bl-cutoff-mollifier-pairing}.  Thus the right side of
-\eqref{eq:cauchy-bl-principal-value-pairing} is not a formal nonlocal
-integration by parts; it is the cutoff/mollifier closure of the compactly
-supported smooth bilinear identity and equals the distributional pairing
-\(\langle Lp,q\rangle=\int q\,Lp\) for the \(L^1\) principal-value
-representative.
-\end{proof}
-
-\begin{corollary}[Poisson-domain pairing with bounded Lipschitz tests]%
-\label{cor:poisson-domain-bounded-lipschitz-pairing}
-Let \(\mu\) be a finite signed Borel measure on \(\RR\), let
-\(0<a<b<\infty\), and put \(p_t=P_t*\mu\).  Suppose
-\(\{q_t:t\in[a,b]\}\) is bounded in \(L^\infty(\RR)\) and in the Lipschitz
-seminorm.  Then, for every \(t\in[a,b]\),
-\begin{equation}\label{eq:poisson-domain-bl-pairing-limit}
-\int_{\RR}q_t(x)\partial_tp_t(x)\dd x
-=
-\lim_{R\to\infty}\int_{\RR}q_t(x)L_Rp_t(x)\dd x
-=
--\frac{1}{2\pi}\lim_{R\to\infty}B_R(p_t,q_t),
-\end{equation}
-where \(L_R\), \(\Omega_R\), and \(B_R\) are those of
-Lemma~\ref{lem:cauchy-bounded-lipschitz-cutoff-pairing}.  The first limit is
-uniform on \([a,b]\) for any such family with a common \(L^\infty\) bound.
-The last equality is the cutoff/mollifier closure of the compactly supported
-smooth bilinear identity: if \(\chi_S(x)=\chi(x/S)\) and
-\(q_{t,S,\varepsilon}=\rho_\varepsilon*(\chi_Sq_t)\), then
-\[
-\int q_t\,\partial_tp_t
-=
-\lim_{S\to\infty}\lim_{\varepsilon\downarrow0}\lim_{R\to\infty}
-\int q_{t,S,\varepsilon}\,L_Rp_t
-=
--\frac1{2\pi}
-\lim_{S\to\infty}\lim_{\varepsilon\downarrow0}\lim_{R\to\infty}
-B_R(p_t,q_{t,S,\varepsilon}).
-\]
-\end{corollary}
-
-\begin{proof}
-Lemma~\ref{lem:cauchy-truncated-generator-l1-domain} gives
-\[
-\sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_1\to0 .
-\]
-Pairing with \(q_t\) therefore gives the first equality in
-\eqref{eq:poisson-domain-bl-pairing-limit}, uniformly for a common
-\(L^\infty\) bound.  For fixed \(t\), the Poisson density satisfies
-\(p_t,\partial_xp_t\in L^1(\RR)\), and the same lemma identifies
-\(Lp_t=\partial_tp_t\) as the \(L^1\) principal-value representative.
-Lemma~\ref{lem:cauchy-bounded-lipschitz-cutoff-pairing}, applied to
-\((p,q)=(p_t,q_t)\), then gives the finite-annulus identity
-\(\int q_tL_Rp_t=-(2\pi)^{-1}B_R(p_t,q_t)\), the existence of the
-bilinear limit, and its identification with the distributional pairing
-obtained by first testing against compactly supported smooth
-\(q_{t,S,\varepsilon}\), then letting
-\(\varepsilon\downarrow0\) and \(S\to\infty\).
-\end{proof}
-
-\begin{lemma}[\(L^1\) chain rule for bounded KL quotients]%
-\label{lem:l1-bounded-kl-quotient-chain-rule}
-Let \((X,\mathcal A,\mu)\) be a sigma-finite measure space, let
-\(I=[a,b]\), and let \(h,g:I\times X\to(0,\infty)\) be measurable
-functions such that, for a.e. \(x\), the maps \(t\mapsto h_t(x)\) and
-\(t\mapsto g_t(x)\) are absolutely continuous on \(I\).  Assume
-\[
-h,g,\partial_th,\partial_tg\in L^1(I\times X),
-\qquad
-0<m\le \frac{h_t(x)}{g_t(x)}\le M<\infty
-\]
-for a.e. \((t,x)\).  Define \(u_t:=h_t/g_t\) and
-\[
-F(r,s):=r\log(r/s),\qquad
-A(r,s):=\log(r/s)+1,\qquad
-B(r,s):=-r/s .
-\]
-Equivalently, on the cone \(s>0\), \(m\le r/s\le M\),
-\[
-\partial_h\!\left[h\log(h/g)\right]=\log(h/g)+1,
-\qquad
-\partial_g\!\left[h\log(h/g)\right]=-h/g .
-\]
-Then
-\[
-H(t):=\int_X F(h_t(x),g_t(x))\,\dd\mu(x)
-\]
-is absolutely continuous on \(I\), and, for a.e. \(t\in I\),
-\begin{equation}\label{eq:l1-bounded-quotient-chain-rule}
-\begin{split}
-H'(t)
-&=
-\int_X
-\bigl(\log u_t(x)+1\bigr)\,\partial_th_t(x)
-\dd\mu(x)\\
-&\quad+
-\int_X
--u_t(x)\,\partial_tg_t(x)\dd\mu(x).
-\end{split}
-\end{equation}
-Moreover, if \(0\le\eta_R\le1\) are measurable cutoffs, then
-\[
-H_R(t):=\int_X \eta_R(x)F(h_t(x),g_t(x))\,\dd\mu(x)
-\]
-is absolutely continuous and satisfies the same derivative formula with
-the factor \(\eta_R(x)\) inserted in both integrals.  If, in addition,
-\(\sup_{t\in I}\int_X(1-\eta_R)g_t\,\dd\mu\to0\), then
-\[
-\sup_{t\in I}|H_R(t)-H(t)|\longrightarrow0 .
-\]
-\end{lemma}
-
-\begin{proof}
-On the compact interval \([m,M]\), the functions
-\[
-s\mapsto s\log s,\qquad s\mapsto \log s+1,\qquad s\mapsto -s
-\]
-are bounded.  Hence there is \(C_{m,M}<\infty\) such that, whenever
-\(m\le r/s\le M\),
-\begin{equation}\label{eq:l1-chain-rule-pointwise-majorants}
-|F(r,s)|\le C_{m,M}s,\qquad
-|A(r,s)|+|B(r,s)|\le C_{m,M}.
-\end{equation}
-The first bound makes \(F(h_t,g_t)\) integrable for a.e. \(t\).
-
-For a.e. \(x\), the scalar curve
-\(t\mapsto (h_t(x),g_t(x))\) is absolutely continuous and remains in the
-closed cone \(\{(r,s):s>0,\ m\le r/s\le M\}\).  Along this curve the
-ordinary one-dimensional chain rule gives, for a.e. \(t\),
-\[
-\frac{\dd}{\dd t}F(h_t(x),g_t(x))
-=
-A(h_t(x),g_t(x))\,\partial_th_t(x)
-+B(h_t(x),g_t(x))\,\partial_tg_t(x).
-\]
-The right side is dominated on \(I\times X\) by
-\[
-C_{m,M}\bigl(|\partial_th_t(x)|+|\partial_tg_t(x)|\bigr),
-\]
-which is integrable by hypothesis.  Therefore Fubini's theorem gives, for
-\(a\le s<t\le b\),
-\[
-H(t)-H(s)
-=
-\int_s^t\int_X
-\bigl(\log u_\tau+1\bigr)\partial_\tau h_\tau
--u_\tau\partial_\tau g_\tau
-\dd\mu\,\dd\tau .
-\]
-This proves absolute continuity and the derivative formula
-\eqref{eq:l1-bounded-quotient-chain-rule}.  In particular the absolute
-continuity of \(t\mapsto\int h_t\log(h_t/g_t)\,\dd\mu\) follows only from
-the \(L^1\)-absolute continuity of \(h_t\) and \(g_t\) together with the
-bounded quotient range; no nonlocal cutoff argument is used at this stage.
-Multiplication by a fixed cutoff \(0\le\eta_R\le1\) preserves the same
-majorant, so the localized formula follows identically.  Finally,
-\[
-|H_R(t)-H(t)|
-\le C_{m,M}\int_X(1-\eta_R)g_t\,\dd\mu,
-\]
-and the stated uniform convergence follows from the assumed tail
-condition.
-\end{proof}
-
-\begin{lemma}[KL quotient domain lemma on compact time intervals]%
-\label{lem:kl-main-compact-domain}
+\begin{proposition}[Principal-value pairing and quotient domain for the KL tail]%
+\label{prop:kl-tail-cutoff-inputs}
+\label{thm:kl-local-doob-bregman-domain-closure}
+\label{prop:kl-local-doob-bregman-domain-closure}
+\label{lem:kl-main-generator-convention-domain}
 Let \(\nu\) be a probability measure on~\(\RR\) with mean~\(\bar\gamma\) and
 finite centred second moment
 \[
@@ -563,516 +274,156 @@ finite centred second moment
 \]
 Fix \(0<a<b<\infty\), and put
 \[
-h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
-\]
-For
-\[
-\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta
-\qquad(\alpha,\beta>0)
-\]
-the following assertions hold uniformly for \(t\in[a,b]\).
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-\item With \(X_c=\gamma-\bar\gamma\), \(y=(x-\bar\gamma)/t\), and
-\[
-R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2},
-\]
-one has the exact quotient formula
-\begin{equation}\label{eq:kl-main-domain-quotient-formula}
-u_t(x)=\int_{\RR}R_{X_c/t}\!\left(\frac{x-\bar\gamma}{t}\right)
-\dd\nu(\gamma).
-\end{equation}
-Moreover
-\begin{equation}\label{eq:kl-main-domain-quotient-range}
-\frac{1}{2(1+\mu_2/a^2)}
-\le u_t(x)\le
-2+\frac{2\mu_2}{a^2}
-\qquad(x\in\RR).
-\end{equation}
-\item The quotient is Lipschitz in the space variable on
-\(\RR\times[a,b]\).  More explicitly,
-\begin{equation}\label{eq:kl-main-domain-quotient-lipschitz}
-|\partial_xu_t(x)|
-\le
-\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right)
-\qquad(x\in\RR,\ t\in[a,b]).
-\end{equation}
-\item There is a finite constant \(C_{a,b,\nu}\) such that, for \(x\ne y\),
-\begin{equation}\label{eq:kl-main-domain-bregman-majorant}
-0\le
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
-\le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
-\end{equation}
-and the same estimate holds after exchanging \(x\) and \(y\).  Consequently
-the one-sided and symmetrized Bregman kernels are integrable on
-\([a,b]\times\RR^2\).
-\item If \(\chi_R(x)=\chi(x/R)\), where
-\(\chi\in C_c^\infty(\RR)\), \(0\le\chi\le1\), and
-\(\chi\equiv1\) on \([-1,1]\), then
-\begin{align}
-&\int_a^b\left|
-\iint_{\RR^2}(1-\chi_R(x)\chi_R(y))
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
-\right|\dd t\longrightarrow0,
-\label{eq:kl-main-product-cutoff-one-sided}
-\\
-&\int_a^b\left|
-\iint_{\RR^2}(1-\chi_R(x)\chi_R(y))
-\frac{
-g_t(x)\Lambda(u_t(x),u_t(y))
-+g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y
-\right|\dd t\longrightarrow0 .
-\label{eq:kl-main-product-cutoff-symmetric}
-\end{align}
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-The quotient identity follows by writing \(x=\bar\gamma+ty\):
-\[
-\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
-=\frac{t^2+(x-\bar\gamma)^2}{t^2+(x-\gamma)^2}
-=\frac{1+y^2}{1+(y-X_c/t)^2}.
-\]
-The elementary inequalities
-\[
-1+y^2\le2\bigl(1+(y-\varepsilon)^2\bigr)+2\varepsilon^2
-\]
-and
-\[
-1+(y-\varepsilon)^2
-\le2(1+\varepsilon^2)(1+y^2)
-\]
-give
-\[
-R_\varepsilon(y)\le2(1+\varepsilon^2),
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t,
 \qquad
-R_\varepsilon(y)\ge\frac{1}{2(1+\varepsilon^2)}.
+H(t)=D_{\mathrm{KL}}(h_t\|g_t).
 \]
-Integrating the upper bound with \(\varepsilon=X_c/t\) gives
-\(u_t(x)\le2+2\mu_2/a^2\).  For the lower bound,
-\[
-u_t(x)\ge
-\frac12\int_{\RR}\frac{1}{1+(X_c/t)^2}\dd\nu(\gamma)
-\ge\frac{1}{2(1+\mu_2/t^2)}
-\ge\frac{1}{2(1+\mu_2/a^2)},
-\]
-where the middle step is Jensen's inequality for
-\(s\mapsto(1+s)^{-1}\) on \([0,\infty)\).
-
-For the Lipschitz bound, put \(w=y-\varepsilon\).  Direct differentiation gives
-\[
-\partial_yR_\varepsilon(y)
-=\frac{2\varepsilon(1-w^2)-2\varepsilon^2w}{(1+w^2)^2},
-\]
-and hence
-\[
-|\partial_yR_\varepsilon(y)|\le3(1+\varepsilon^2)
-\qquad(y,\varepsilon\in\RR).
-\]
-Since \(\partial_x=t^{-1}\partial_y\), integration in \(\gamma\) gives
-\eqref{eq:kl-main-domain-quotient-lipschitz}.
-
-Let
-\[
-m_{a,b}:=\frac{1}{2(1+\mu_2/a^2)},\qquad
-M_{a,b}:=2+\frac{2\mu_2}{a^2},
-\qquad
-L_{a,b}:=\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right).
-\]
-On the compact interval \([m_{a,b},M_{a,b}]\), the second derivative of
-\(s\log s\) is bounded by \(m_{a,b}^{-1}\).  Therefore the integral remainder
-formula for the Bregman divergence gives
-\[
-0\le\Lambda(\alpha,\beta)\le
-\frac{1}{2m_{a,b}}|\alpha-\beta|^2
-\qquad(m_{a,b}\le\alpha,\beta\le M_{a,b}).
-\]
-Together with
-\[
-|u_t(x)-u_t(y)|\le L_{a,b}|x-y|,
-\qquad
-|u_t(x)-u_t(y)|\le M_{a,b}-m_{a,b},
-\]
-this yields
-\[
-0\le\Lambda(u_t(x),u_t(y))
-\le C_{a,b,\nu}\min\{|x-y|^2,1\}.
-\]
-Dividing by \((x-y)^2\) proves
-\eqref{eq:kl-main-domain-bregman-majorant}; the exchanged estimate is the
-same argument with \(x\) and \(y\) interchanged.  The majorants are integrable
-because \(\int_{\RR}g_t=1\),
-\(\int_{|z|<1}\dd z<\infty\), and
-\(\int_{|z|\ge1}|z|^{-2}\dd z<\infty\).
-
-The product-cutoff convergence now follows by dominated convergence from the
-same majorant.  For fixed \(t,x,y\), the factor
-\(1-\chi_R(x)\chi_R(y)\) tends to zero.  The right side of
-\eqref{eq:kl-main-domain-bregman-majorant} is an
-\(L^1([a,b]\times\RR^2)\) dominator for the one-sided kernel, and the sum of
-that dominator with its exchanged-variable analogue dominates the symmetrized
-kernel.  This proves
-\eqref{eq:kl-main-product-cutoff-one-sided} and
-\eqref{eq:kl-main-product-cutoff-symmetric}.
-\end{proof}
-
-\begin{theorem}[Direct cutoff KL quotient dissipation theorem]%
-\label{thm:kl-local-doob-bregman-domain-closure}
-\label{prop:kl-local-doob-bregman-domain-closure}
-Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
-centred second moment.  Let \(0<a<b<\infty\), and use
-\[
-h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
-\]
-Set
-\[
-\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta
-\qquad(\alpha,\beta>0)
-\]
-and
-\[
-H(t):=D_{\mathrm{KL}}(h_t\|g_t).
-\]
-Then \(H\in AC([a,b])\), the Bregman integral
-\[
-\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
-\]
-is finite for a.e. \(t\in[a,b]\) and belongs to \(L^1([a,b])\), and
-\begin{equation}\label{eq:kl-domain-final-derivative}
--H'(t)=
-\frac{1}{\pi}\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
-\qquad\text{for a.e. }t\in[a,b].
-\end{equation}
-More explicitly, the quotient is bounded away from \(0\) and infinity and is
-uniformly Lipschitz on \(\RR\times[a,b]\).  Hence there is
-\(C_{a,b,\nu}<\infty\) such that, for \(x\ne y\),
-\begin{equation}\label{eq:kl-domain-pointwise-bregman-majorant}
-0\le
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
-\le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
-\end{equation}
-and the same bound holds after exchanging \(x\) and \(y\).  The identity
-\eqref{eq:kl-domain-final-derivative} is obtained directly from the symmetric
-truncated Cauchy kernels.  More precisely, if
-\[
-\Omega_R:=\{(x,y)\in\RR^2:\ R^{-1}<|x-y|<R\},
-\qquad R>1,
-\]
-then, for a.e. \(t\in[a,b]\),
-\begin{align}
--H'(t)
-&=
-\lim_{R\to\infty}
-\frac{1}{2\pi}\iint_{\Omega_R}
-\frac{
-g_t(x)\Lambda(u_t(x),u_t(y))
-+g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y .
-\label{eq:kl-main-annular-bregman-limit}
-\end{align}
-The convergence holds in \(L^1([a,b])\).  Equivalently, with
-\(\chi_R(x)=\chi(x/R)\), \(0\le\chi\le1\), \(\chi\equiv1\) on \([-1,1]\),
-\begin{align}
--H'(t)
-&=
-\lim_{R\to\infty}
-\frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
-\frac{
-g_t(x)\Lambda(u_t(x),u_t(y))
-+g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y .
-\label{eq:kl-main-cutoff-bregman-limit}
-\end{align}
-\end{theorem}
-
-\begin{proof}
-Lemma~\ref{lem:kl-main-compact-domain} supplies the compact quotient range,
-the Lipschitz bound, the Bregman majorant
-\eqref{eq:kl-domain-pointwise-bregman-majorant}, and the product-cutoff
-convergence.  It remains to prove the derivative identity itself without
-appealing to an abstract Hardy--Stein theorem.
-
-First note the elementary regularity used below.  Since
-\(\partial_tP_t,\partial_xP_t\in L^1(\RR)\) uniformly for \(t\in[a,b]\),
-the functions \(h,g,\partial_th,\partial_tg\) belong to
-\(L^1([a,b]\times\RR)\), and \(t\mapsto h_t(x)\), \(t\mapsto g_t(x)\) are
-absolutely continuous for every \(x\).  The bounded-range chain rule,
-Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule}, gives
-\(H\in AC([a,b])\) and, for a.e. \(t\in[a,b]\),
-\begin{equation}\label{eq:kl-direct-chain-rule-start}
-H'(t)=
-\int_{\RR}(\log u_t+1)\,\partial_th_t\,\dd x
--\int_{\RR}u_t\,\partial_tg_t\,\dd x .
-\end{equation}
-The Poisson semigroup normalization gives
-\(\partial_th_t=Lh_t\) and \(\partial_tg_t=Lg_t\), with
-\[
-(Lp)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
-\frac{p(y)-p(x)}{(x-y)^2}\dd y .
-\]
-For \(R>1\) set
+For \(R>1\) define the symmetric Cauchy cutoff
 \[
 (L_Rp)(x):=\frac1\pi\int_{R^{-1}<|x-y|<R}
-\frac{p(y)-p(x)}{(x-y)^2}\dd y .
+\frac{p(y)-p(x)}{(x-y)^2}\dd y ,
+\qquad
+\Omega_R:=\{(x,y):R^{-1}<|x-y|<R\}.
 \]
-This is the symmetric truncated Cauchy kernel.  If
-  \(p\in\{h_t,g_t\}\) and \(q\in\{\log u_t,u_t\}\), then \(q\) is bounded and
-  Lipschitz uniformly on \([a,b]\), while \(p,\partial_xp\in L^1(\RR)\).
-  Hence
-\begin{equation}\label{eq:kl-direct-truncated-pairing}
+Then the following facts hold on the fixed compact time interval \([a,b]\).
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The generator convention is
+\[
+(Lf)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
+\frac{f(y)-f(x)}{(x-y)^2}\dd y,\qquad \widehat{Lf}(\xi)=-|\xi|\widehat f(\xi),
+\]
+so \(\partial_tP_t=LP_t\).  If \(p_t=P_t*\mu\), where \(\mu\) is a finite
+signed Borel measure, Lemma~\ref{lem:poisson-cauchy-generator-l1-domain} gives
+\begin{equation}\label{eq:kl-consolidated-generator-l1}
+\sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_{L^1(\RR)}\longrightarrow0
+\qquad(R\to\infty).
+\end{equation}
+Consequently every uniformly bounded family \(q_t\) satisfies
+\begin{equation}\label{eq:kl-consolidated-bounded-pairing}
+\sup_{t\in[a,b]}\left|
+\int_{\RR}q_t L_Rp_t-\int_{\RR}q_t\,\partial_tp_t
+\right|\longrightarrow0 .
+\end{equation}
+\item For \(p\in\{h_t,g_t\}\) and for every bounded Lipschitz \(q\),
+\begin{equation}\label{eq:kl-consolidated-pv-pairing}
 \int_{\RR}q(x)\partial_tp(x)\dd x
 =
-\lim_{R\to\infty}\int_{\RR}q(x)L_Rp(x)\dd x
-\end{equation}
-for the four pairings used in \eqref{eq:kl-direct-chain-rule-start}.  This is
-exactly Corollary~\ref{cor:poisson-domain-bounded-lipschitz-pairing}, applied
-to \(\mu=\nu\) for \(h_t\) and to \(\mu=\delta_{\bar\gamma}\) for \(g_t\).
-Thus the passage from \(L_Rp\) to \(\partial_tp\) is an
-\(L^1\)-generator-domain limit, uniform for \(t\in[a,b]\), and not a
-separate distributional assertion.
-
-For finite \(R\), Lemma~\ref{lem:cauchy-bounded-lipschitz-cutoff-pairing}
-gives the required bilinear identity
-\begin{equation}\label{eq:kl-direct-symmetric-bilinear}
-\int_{\RR}q(x)L_Rp(x)\dd x
-=
--\frac{1}{2\pi}\iint_{\Omega_R}
+-\frac{1}{2\pi}\lim_{R\to\infty}
+\iint_{\Omega_R}
 \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
 \end{equation}
-For these non-compact tests the equality is obtained by the explicit
-cutoff/mollifier closure in
-Corollary~\ref{cor:poisson-domain-bounded-lipschitz-pairing}: first prove the
-compactly supported smooth identity for
-\(q_{S,\varepsilon}=\rho_\varepsilon*(\chi_Sq)\), then let
-\(R\to\infty\), \(\varepsilon\downarrow0\), and finally \(S\to\infty\).
-On \(C_c^\infty\) tests the limiting distribution
-\(\varphi\mapsto\lim_{R\to\infty}\int\varphi L_Rp\) is
-\(\varphi\mapsto\int\varphi\,\partial_tp\) by the \(L^1\) convergence of
-Lemma~\ref{lem:cauchy-truncated-generator-l1-domain}.  The bounded Lipschitz
-test is reached by the same near/far majorant used in
-Lemma~\ref{lem:cauchy-bounded-lipschitz-cutoff-pairing}.  Hence
-\eqref{eq:kl-direct-symmetric-bilinear} represents the actual pairing
-\(\int q\,\partial_tp\), after the annular limit, for the four pairings in
-the chain rule.
-
-Using \(\int_{\RR}L_Rh_t\,\dd x=\int_{\RR}L_Rg_t\,\dd x=0\), which follows
-from the same symmetry, define
+The truncated bilinear forms are absolutely convergent, and the displayed
+pairing is the bounded-Lipschitz cutoff closure from
+Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}.
+\item The quotient domain is explicit.  With
+\(X_c=\gamma-\bar\gamma\), \(z=(x-\bar\gamma)/t\), and
 \[
-\mathcal D_R(t):=
--\int_{\RR}\log u_t(x)\,L_Rh_t(x)\dd x
-+\int_{\RR}u_t(x)\,L_Rg_t(x)\dd x .
+R_\varepsilon(z):=\frac{1+z^2}{1+(z-\varepsilon)^2},
 \]
-By \eqref{eq:kl-direct-chain-rule-start} and
-\eqref{eq:kl-direct-truncated-pairing},
-\begin{equation}\label{eq:kl-direct-Hprime-as-truncated-limit}
--H'(t)=\lim_{R\to\infty}\mathcal D_R(t)
-\qquad\text{for a.e. }t\in[a,b].
+one has
+\[
+u_t(x)=\int_{\RR}R_{X_c/t}\!\left(\frac{x-\bar\gamma}{t}\right)\dd\nu(\gamma),
+\]
+and
+\[
+\frac{1}{2(1+\mu_2/a^2)}
+\le u_t(x)\le 2+\frac{2\mu_2}{a^2},
+\qquad
+|\partial_xu_t(x)|\le
+\frac{3}{a}\left(1+\frac{\mu_2}{a^2}\right).
+\]
+\item With
+\[
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta ,
+\]
+there is \(C_{a,b,\nu}<\infty\) such that, for \(x\ne y\),
+\begin{equation}\label{eq:kl-consolidated-bregman-majorant}
+0\le
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le C_{a,b,\nu}g_t(x)\min\{1,|x-y|^{-2}\},
 \end{equation}
-For each fixed finite \(R\), the Bregman algebra is exact before any limit is
-taken.  Applying \eqref{eq:kl-direct-symmetric-bilinear} first with
-\((p,q)=(h_t,\log u_t)\) and then with \((p,q)=(g_t,u_t)\) gives
+and the same estimate holds after exchanging \(x\) and \(y\).
+\item \(H\in AC([a,b])\), the function
 \[
-\mathcal D_R(t)
-=
-\frac{1}{2\pi}\iint_{\Omega_R}
-\frac{
-(h_t(x)-h_t(y))(\log u_t(x)-\log u_t(y))
--(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
-{(x-y)^2}\dd x\dd y .
+I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
 \]
-Writing \(h_t=g_tu_t\), and abbreviating
-\[
-g_x=g_t(x),\quad g_y=g_t(y),\quad
-u_x=u_t(x),\quad u_y=u_t(y),
-\]
-the numerator is
-\[
-(g_xu_x-g_yu_y)(\log u_x-\log u_y)
--(g_x-g_y)(u_x-u_y).
-\]
-Collecting the \(g_x\)- and \(g_y\)-coefficients separately yields
-\begin{align*}
-&g_x\{u_x\log(u_x/u_y)-u_x+u_y\}
-+g_y\{u_y\log(u_y/u_x)-u_y+u_x\} \\
-&\qquad =
-g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x).
-\end{align*}
-Thus
-\[
-\mathcal D_R(t)
-=
-\frac{1}{2\pi}\iint_{\Omega_R}
+belongs to \(L^1([a,b])\), and
+\begin{equation}\label{eq:kl-tail-input-unlocalized}
+H'(t)=-I_\nu(t)\qquad\text{for a.e. }t\in[a,b].
+\end{equation}
+Equivalently, if \(\chi\in C_c^\infty(\RR)\), \(0\le\chi\le1\), and
+\(\chi\equiv1\) on \([-1,1]\), then for a.e. \(t\in[a,b]\), with
+convergence in \(L^1([a,b])\),
+\begin{equation}\label{eq:kl-main-generator-domain-cutoff-identity}
+-H'(t)=
+\lim_{R\to\infty}
+\frac{1}{2\pi}\iint_{\RR^2}\chi(x/R)\chi(y/R)
 \frac{
 g_t(x)\Lambda(u_t(x),u_t(y))
 +g_t(y)\Lambda(u_t(y),u_t(x))}
-{(x-y)^2}\dd x\dd y ,
-\]
-which proves the finite-truncation Bregman identity before passing
-\(R\to\infty\).
-
-The majorant \eqref{eq:kl-domain-pointwise-bregman-majorant}, together with
-its exchanged-variable version, dominates the last integrand in
-\(L^1([a,b]\times\RR^2)\).  Dominated convergence gives the \(L^1([a,b])\)
-limit \eqref{eq:kl-main-annular-bregman-limit}.  The two one-sided Bregman
-terms have the same full-space integral after exchanging \(x\) and \(y\);
-hence the factor \(1/(2\pi)\) becomes \(1/\pi\), proving
-\eqref{eq:kl-domain-final-derivative}.  The product-cutoff formula
-\eqref{eq:kl-main-cutoff-bregman-limit} follows from the same dominated
-convergence and the product-cutoff convergence already recorded in
-Lemma~\ref{lem:kl-main-compact-domain}; here the cutoff radius is independent
-of the annular generator parameter already sent to infinity in
-\eqref{eq:kl-main-annular-bregman-limit}.
-\end{proof}
-
-\begin{lemma}[Generator convention and cutoff domain for the KL Doob identity]%
-\label{lem:kl-main-generator-convention-domain}
-Use the Fourier transform convention
-\[
-\widehat f(\xi)=\int_{\RR}e^{-\ii x\xi}f(x)\dd x .
-\]
-For Schwartz \(f\), the principal-value operator
-\[
-(Lf)(x):=\frac1\pi\operatorname{p.v.}\int_{\RR}
-\frac{f(y)-f(x)}{(x-y)^2}\dd y
-\]
-satisfies
-\begin{equation}\label{eq:kl-main-generator-fourier-sign}
-\widehat{Lf}(\xi)=-|\xi|\,\widehat f(\xi).
+{(x-y)^2}\dd x\dd y .
 \end{equation}
-Consequently \(L=-|D|\) and \(\partial_tP_t=LP_t\).
-
-Let \(\nu\) have finite centred second moment, let \(0<a<b<\infty\), and set
-\[
-h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
-\]
-On \([a,b]\) the following domain convention is in force.
-\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
-\item
-      The identities
-      \[
-      \partial_th_t=Lh_t,\qquad \partial_tg_t=Lg_t
-      \]
-      hold as \(L^1(\RR)\) principal-value identities.
-\item
-      If \(p\in\{h_t,g_t\}\) and \(q\) is bounded Lipschitz, then
-      \[
-      \int_{\RR}q(x)Lp(x)\dd x
-      =
-      -\frac{1}{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
-      \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
-      \]
-      Here \(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\).
-      This is not a formal integration by parts: the right side is the
-      limit of absolutely convergent truncated forms.  The compactly
-      supported identity is proved first for smooth tests, then for
-      Lipschitz tests by mollification, and finally for bounded Lipschitz
-      \(q\) by replacing \(q\) with \(\chi_Sq\) and letting
-      \(S\to\infty\), as in
-      \eqref{eq:cauchy-bl-cutoff-mollifier-pairing} and
-      \eqref{eq:cauchy-bl-mollifier-approximation}.  Thus the displayed
-      pairing is exactly the distributional pairing
-      \(\langle Lp,q\rangle=\int q\,Lp\) for the \(L^1\) principal-value
-      representative \(Lp\), obtained by cutoff/mollifier closure of the
-      compactly supported smooth identity.
-\item
-      For bounded \(C^2\) functions \(f\) with bounded first and second
-      derivatives,
-      \[
-      L(g_tf)(x)-f(x)Lg_t(x)
-      =
-      \frac1\pi\operatorname{p.v.}\int_{\RR}
-      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
-      \]
-      Thus the Doob generator used below is
-      \[
-      (\mathcal L_tf)(x)
-      :=
-      \frac{L(g_tf)(x)-f(x)Lg_t(x)}{g_t(x)}
-      =
-      \frac{1}{\pi g_t(x)}\operatorname{p.v.}\int_{\RR}
-      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y ,
-      \]
-      on this principal-value domain.
-\item
-      For
-      \[
-      H(t)=D_{\mathrm{KL}}(h_t\|g_t),\qquad
-      \Lambda(\alpha,\beta)
-      =\alpha\log(\alpha/\beta)-\alpha+\beta ,
-      \]
-      the \(L^1\) chain rule gives \(H\in AC([a,b])\), and the nonlocal
-      derivative is always interpreted through the product-cutoff identity
-      \begin{equation}\label{eq:kl-main-generator-domain-cutoff-identity}
-      -H'(t)=
-      \lim_{R\to\infty}
-      \frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
-      \frac{
-      g_t(x)\Lambda(u_t(x),u_t(y))
-      +g_t(y)\Lambda(u_t(y),u_t(x))}
-      {(x-y)^2}\dd x\dd y
-      \end{equation}
-      for a.e. \(t\in[a,b]\), with convergence in \(L^1([a,b])\).
 \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-The Fourier sign in \eqref{eq:kl-main-generator-fourier-sign} is the
-Cauchy-semigroup normalization used in
-Proposition~\ref{prop:poisson-semigroup-law}: \(\widehat{P_t}(\xi)=
-e^{-t|\xi|}\), hence \(\partial_tP_t=-|D|P_t\).  The principal-value
-normalization is the standard Cauchy generator normalization, for example in
-\cite[Definition~2.2 and Proposition~2.4]{Kwasnicki2017}.  The identities in
-(i) follow from the Fourier multiplier formula and the fact that
-\(\partial_tP_t,\partial_xP_t\in L^1(\RR)\) on compact time intervals.  The
-truncated-kernel computation in the proof of
-Theorem~\ref{thm:kl-local-doob-bregman-domain-closure} proves the bilinear
-pairing in (ii) and the cutoff derivative identity in (iv).  For (iii), write
-the two principal values with the same symmetric truncation
-\(R^{-1}<|x-y|<R\).  Their difference is exactly
-\[
-\frac1\pi\int_{R^{-1}<|x-y|<R}
-\frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y ,
-\]
-and the limit exists because \(f\) has bounded first and second derivatives
-and \(g_t\) is smooth with Cauchy decay.  This gives the stated Doob
-principal-value formula.  The bounded-range \(L^1\) chain rule,
-Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule}, gives absolute continuity
-of \(H\), while Lemma~\ref{lem:kl-main-compact-domain} supplies the Bregman
-majorants needed to pass the symmetric truncations and product cutoffs to the
-limit.
-\end{proof}
-
-\begin{proposition}[Domain inputs for the KL tail identity]%
-\label{prop:kl-tail-cutoff-inputs}
-Under the hypotheses and notation of
-Theorem~\ref{thm:kl-local-doob-bregman-domain-closure}, define
-\[
-H(t):=D_{\mathrm{KL}}(h_t\|g_t),
-\qquad
-I_\nu(t):=
-\frac{1}{\pi}\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
-\]
-Then \(I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\), \(H\in AC_{\mathrm{loc}}(0,\infty)\),
-and
-\begin{equation}\label{eq:kl-tail-input-unlocalized}
-H'(t)=-I_\nu(t)
-\qquad\text{for a.e. }t>0.
-\end{equation}
-The principal-value sign and domain are those of
-Lemma~\ref{lem:kl-main-generator-convention-domain}; in particular the same
-identity is first obtained as the product-cutoff limit
-\eqref{eq:kl-main-generator-domain-cutoff-identity}, and no formal nonlocal
-product rule is used.
 \end{proposition}
 
 \begin{proof}
-Apply Theorem~\ref{thm:kl-local-doob-bregman-domain-closure} and
-Lemma~\ref{lem:kl-main-generator-convention-domain} on each compact interval
-\([a,b]\subset(0,\infty)\).
+The generator-domain assertions in (i) are exactly
+Lemma~\ref{lem:poisson-cauchy-generator-l1-domain}, with the sign convention
+fixed by \(\widehat{P_t}(\xi)=e^{-t|\xi|}\).  Part (ii) is
+Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}, applied at the fixed
+time \(t\) to \(p=h_t\) and \(p=g_t\).
+
+The quotient formula follows by writing \(x=\bar\gamma+tz\).  The elementary
+bounds
+\[
+R_\varepsilon(z)\le2(1+\varepsilon^2),\qquad
+R_\varepsilon(z)\ge\frac{1}{2(1+\varepsilon^2)}
+\]
+give the displayed upper and lower bounds after integration, the lower bound
+using Jensen's inequality for \(s\mapsto(1+s)^{-1}\).  Differentiating gives
+\[
+\partial_zR_\varepsilon(z)
+=\frac{2\varepsilon(1-w^2)-2\varepsilon^2w}{(1+w^2)^2},
+\qquad w=z-\varepsilon,
+\]
+so \(|\partial_zR_\varepsilon(z)|\le3(1+\varepsilon^2)\), and the Lipschitz
+bound follows from \(\partial_x=t^{-1}\partial_z\).
+
+The quotient range is a compact subinterval of \((0,\infty)\).  On that
+interval, the second derivative of \(s\log s\) is bounded; hence
+\(\Lambda(\alpha,\beta)\le C|\alpha-\beta|^2\).  Combining this with the
+Lipschitz bound and with the bounded quotient range gives
+\(\Lambda(u_t(x),u_t(y))\le C\min\{|x-y|^2,1\}\), proving
+\eqref{eq:kl-consolidated-bregman-majorant}.  The same estimate with
+\((x,y)\) exchanged gives an \(L^1([a,b]\times\RR^2)\) dominator for the
+symmetrized Bregman kernel and also proves the product-cutoff convergence in
+\eqref{eq:kl-main-generator-domain-cutoff-identity}.
+
+It remains to identify the derivative.  Since \(h,g,\partial_th,\partial_tg\)
+are \(L^1\) on \([a,b]\times\RR\), and \(u_t\) stays in a fixed compact
+subinterval of \((0,\infty)\), the ordinary chain rule along
+\((h_t(x),g_t(x))\), followed by Fubini, gives
+\[
+H'(t)=\int_{\RR}(\log u_t+1)\partial_th_t\dd x
+-\int_{\RR}u_t\partial_tg_t\dd x
+\quad\text{for a.e. }t.
+\]
+The mass terms vanish, and \eqref{eq:kl-consolidated-pv-pairing} applies to
+\((p,q)=(h_t,\log u_t)\) and \((g_t,u_t)\).  For finite annuli this yields
+\[
+-H'(t)=\lim_{R\to\infty}\frac{1}{2\pi}\iint_{\Omega_R}
+\frac{(h_x-h_y)(\log u_x-\log u_y)-(g_x-g_y)(u_x-u_y)}
+{(x-y)^2}\dd x\dd y .
+\]
+With \(h=gu\), the numerator equals
+\[
+g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x).
+\]
+Dominated convergence using \eqref{eq:kl-consolidated-bregman-majorant} gives
+the full-space product-cutoff identity.  The two one-sided terms have the same
+full integral after exchanging \(x\) and \(y\), so the symmetrized factor
+\(1/(2\pi)\) becomes \(1/\pi\), proving \(H'=-I_\nu\).
 \end{proof}
 
 \noindent
@@ -1106,11 +457,11 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \end{theorem}
 
 \begin{proof}
-The derivative input is the direct cutoff identity for the moving Cauchy Doob
-quotient, recorded in Proposition~\ref{prop:kl-tail-cutoff-inputs}.
-Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  Proposition~\ref{prop:kl-tail-cutoff-inputs}
-gives \(H'(s)=-I_\nu(s)\) for a.e. \(s>0\) and
-\(I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\).  Thus, for \(0<t<T\),
+Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
+\([a,b]\subset(0,\infty)\), Proposition~\ref{prop:kl-tail-cutoff-inputs}
+gives the principal-value quotient-domain identity \(H'(s)=-I_\nu(s)\) for
+a.e. \(s\in[a,b]\), with \(I_\nu\in L^1([a,b])\).  Hence, for
+\(0<t<T\),
 \[
 \int_t^T I_\nu(s)\dd s=H(t)-H(T).
 \]

@@ -2,16 +2,15 @@
 \label{subsec:fourth-moment-stability}
 
 This subsection records the sixth-order coefficient defect.  Its fourth-moment
-algebra begins with the moment polynomial \(A_6^{\mathrm{mom}}\) from
+algebra begins with the evaluated polynomial \(A_6\) from
 \eqref{eq:n4-notation-a6}; after the sixth-coefficient identification in
 Theorem~\ref{thm:poisson-kl-eighth}, this same polynomial is the genuine
-\(t^{-6}\) entropy coefficient \(A_6(\nu)\), and
-\(\Delta_6(\nu)\) is its two-point defect.
-The finite-time estimates at the end of the subsection are
-applications/bookkeeping: after \(A_8\) and the \(O(t^{-9})\) remainder have
-been bounded, the displayed sixth-defect identity converts a finite-time KL
-statistic into a bound for \(\Delta_6\), and then the coefficient-defect
-coupling below gives the \(W_2\) estimate.
+\(t^{-6}\) entropy coefficient, and \(\Delta_6(\nu)\) is its two-point defect.
+The finite-time certificate at the end of the subsection is only conditional
+bookkeeping: after \(A_8\) and the \(O(t^{-9})\) remainder have been bounded
+independently of the measured KL value, the displayed sixth-defect identity
+converts that measured value into a conditional bound for \(\Delta_6\), and
+then the coefficient-defect coupling below gives the \(W_2\) estimate.
 
 \paragraph{Fourth-moment algebra.}
 
@@ -26,10 +25,10 @@ A_6(\nu):=
 \Delta_6(\nu):=
 -\frac{7}{64}\sigma^6-A_6(\nu).
 \]
-These are the \(A_6^{\mathrm{mom}}\) and
-\(\Delta_6^{\mathrm{mom}}\) quantities from
+These are the quantities from
 \eqref{eq:n4-notation-a6}--\eqref{eq:n4-notation-delta6}, used here only as
-fourth-moment polynomials with local unsuperscripted names.  On $(\RR,\nu)$ set
+fourth-moment polynomials until the coefficient identification is invoked.
+On $(\RR,\nu)$ set
 \begin{align*}
 X&:=\frac{\gamma-\bar\gamma}{\sigma},
 &
@@ -200,7 +199,7 @@ estimate.
 
 \begin{proof}
 The finite fourth absolute moment is precisely the \(N=3\) hypothesis in
-Theorem~\ref{thm:poisson-kl-even-orders}; it is the algebraic threshold for
+Theorem~\ref{thm:poisson-kl-even-orders}; it is the coefficient-evaluation threshold for
 evaluating the displayed universal moment-polynomial coefficient \(A_6\).
 That theorem gives
 \[
@@ -291,15 +290,17 @@ The \(O((\Delta_6)^{1/4})\) statement for fixed \(\sigma\)
 follows immediately from the displayed estimate.
 \end{proof}
 
-\subsection{Finite-time applications and bookkeeping}
+\subsection{Conditional finite-time certificate bookkeeping}
 \label{subsec:finite-time-bookkeeping}
 
-The finite-time statements are deterministic consequences of the coefficient
-and remainder estimates already proved.  Once the eighth coefficient and the
-order-nine remainder are bounded, the statistic
-\(\mathfrak D_t^{(6)}(\nu)\) determines \(\Delta_6(\nu)\) up to the two
-explicit error terms \(A_8(\nu)t^{-2}\) and \(t^6E(t)\); the
-coefficient-defect coupling corollary then gives the \(W_2\) estimate.
+The finite-time statement below is an algorithmic conditional certificate.
+Its inputs are ordered deliberately.  First one fixes a controlled
+seventh-moment shell and precomputes shell constants for \(A_8\) and the
+order-nine remainder.  Only after those certificate data have been fixed is a
+KL value inserted into the scalar statistic.  The measured KL value therefore
+does not certify the shell, \(A_8\), or the remainder bound; it is only the
+last numerical input in the deterministic identity
+\(\mathfrak D_t^{(6)}=\Delta_6-A_8t^{-2}-t^6E(t)\).
 
 Let \(\nu\) have mean \(\bar\gamma\), variance \(\sigma^2>0\), and finite
 centred fourth absolute moment.  Put
@@ -311,31 +312,45 @@ Theorem~\ref{thm:poisson-kl-even-orders} with \(N=3\), and set
 \[
 \Delta_6(\nu):=-\frac{7}{64}\sigma^6-A_6(\nu).
 \]
-The finite-time sixth-order entropy statistic is
-\begin{equation}\label{eq:main-finite-time-sixth-deficit}
-\mathfrak D_t^{(6)}(\nu)
-:=
-t^6\left(
-\frac{\sigma^4}{8t^4}
--\frac{7\sigma^6}{64t^6}
--D_{\mathrm{KL}}(h_t\|g_t)
-\right).
-\end{equation}
-\begin{theorem}[Certified finite-time data and controlled-shell specialization]%
-\label{thm:oracle-finite-time-poisson-entropy-stability}
-Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$, variance
-\(\sigma^2>0\), and finite centred fourth absolute moment.  Let
-\(h_t\), \(g_t\), \(A_6(\nu)\), \(\Delta_6(\nu)\), and
-\(\mathfrak D_t^{(6)}(\nu)\) be as above.  Let
-\(\nu_c\) be the centred law of \(\gamma-\bar\gamma\), and let
+
+\begin{theorem}[Finite-time sixth-defect certificate algorithm on a controlled seventh-moment shell]%
+\label{lem:controlled-shell-conditional-certificate}
+\label{thm:finite-time-poisson-entropy-stability}
+\label{cor:controlled-shell-finite-time-oracle}
+The following algorithm is valid for every input tuple
+\[
+(\sigma,M,t,\nu,\mathsf K_t)
+\]
+with \(\sigma>0\), \(M\ge\sigma^7\), \(t>0\), and with \(\nu\) a probability
+law on~\(\RR\) whose centred variable \(X_c=\gamma-\bar\gamma\) satisfies
+\[
+\mu_2=\EE X_c^2=\sigma^2,\qquad \EE|X_c|^7\le M .
+\]
+Here
+\[
+\mathsf K_t=D_{\mathrm{KL}}(h_t\|g_t)
+\]
+is the observed KL value to be inserted after the shell constants have been
+fixed.  Let \(h_t\), \(g_t\), \(A_6(\nu)\), \(\Delta_6(\nu)\), and
+\(\nu_c\) be as above, and let
 \(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\).
 
-Fix \(C\ge0\), \(B\ge0\), and \(T>0\) before observing any value of
-\(D_{\mathrm{KL}}(h_t\|g_t)\) to be inserted into
-\(\mathfrak D_t^{(6)}(\nu)\).  Assume that there are a number
-\(A_8(\nu)\in\RR\) and an error function \(E(t)\), certified independently of
-the observed finite-time KL value, such that
-\begin{equation}\label{eq:main-oracle-eighth-expansion}
+\textup{Precompute, before using \(\mathsf K_t\).}  Put
+\(\widehat M:=M/\sigma^7\) and set
+\[
+C=C_{\sigma,M}^{(8)}:=\sigma^8C(\widehat M),\qquad
+B=B_{\sigma,M}^{(8)}:=\sigma^9B(\widehat M),\qquad
+T=T_{\sigma,M}^{(8)}:=\sigma T(\widehat M),
+\]
+where \(C,B,T\) on the right are the normalized functions in
+Definition~\ref{def:n4-finite-time-constant-dictionary}.  These constants
+depend only on the declared shell \((\sigma,M)\), not on the observed value
+\(\mathsf K_t\).
+
+\textup{Validity certificate for the precomputation.}  On the declared shell,
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}, after rescaling,
+supplies \(A_8(\nu)\) and a remainder \(E(t)\) such that
+\begin{equation}\label{eq:main-controlled-shell-eighth-expansion}
 D_{\mathrm{KL}}(h_t\|g_t)
 =\frac{\sigma^4}{8t^4}
 +\frac{A_6(\nu)}{t^6}
@@ -345,81 +360,33 @@ D_{\mathrm{KL}}(h_t\|g_t)
 |A_8(\nu)|\le C,\qquad
 |E(t)|\le Bt^{-9}
 \end{equation}
-for every \(t\ge T\).  Define \(\mathfrak D_t^{(6)}(\nu)\) by
-\eqref{eq:main-finite-time-sixth-deficit}.  Then, after these certificate
-data have been fixed, the observed value of
-\(D_{\mathrm{KL}}(h_t\|g_t)\) supplies only
-\(\mathfrak D_t^{(6)}(\nu)\), and for every \(t\ge T\),
+for every \(t\ge T\).
+
+\textup{Compute, only when \(t\ge T\).}  Insert the observed KL value
+\(\mathsf K_t\) only through the sixth-order statistic
+\begin{equation}\label{eq:main-finite-time-sixth-deficit}
+\mathfrak D_t^{(6)}(\nu)
+:=
+t^6\left(
+\frac{\sigma^4}{8t^4}
+-\frac{7\sigma^6}{64t^6}
+-\mathsf K_t
+\right).
+\end{equation}
+
+With these preassigned certificate inputs, for every
+\(t\ge T\),
 \begin{equation}\label{eq:main-certified-shell-sixth-identity}
 \mathfrak D_t^{(6)}(\nu)
-=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t),
+=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t).
 \end{equation}
-and hence
-\begin{equation}\label{eq:main-oracle-finite-time-defect-estimate}
-0\le \Delta_6(\nu)
-\le
-\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|+Ct^{-2}+Bt^{-3}.
-\end{equation}
-Consequently, for every \(t\ge T\),
-\begin{equation}\label{eq:main-oracle-finite-time-w2-stability}
-W_2(\nu_c,\rho_\sigma)
-\le
-4\,\sigma^{-1/2}\mathcal A_{t,C,B}^{1/4}
-+8\,\sigma^{-2}\mathcal A_{t,C,B}^{1/2},
-\end{equation}
-where
-\[
-\mathcal A_{t,C,B}
-:=
-\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|+Ct^{-2}+Bt^{-3}.
-\]
-
-In particular, if
-\[
-\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
-\le \varepsilon,
-\qquad
-Ct^{-2}\le\varepsilon,
-\qquad
-Bt^{-3}\le\varepsilon,
-\]
-then
-\[
-W_2(\nu_c,\rho_\sigma)
-\le
-4\,\sigma^{-1/2}(3\varepsilon)^{1/4}
-+8\,\sigma^{-2}(3\varepsilon)^{1/2}.
-\]
-
-\medskip
-
-If, in addition, \(M\ge\sigma^7\) and
-\[
-\nu\in\mathcal S_{\sigma,M}:=
-\left\{\lambda:\ \mu_2(\lambda)=\sigma^2,\quad
-\EE_\lambda|\gamma-\bar\gamma|^7\le M\right\},
-\]
-then the preceding certified hypotheses hold uniformly on this shell with
-\[
-\widehat M:=M/\sigma^7,\qquad
-C=C_{\sigma,M}^{(8)},\qquad
-B=B_{\sigma,M}^{(8)},\qquad
-T=T_{\sigma,M}^{(8)},
-\]
-where the controlled-shell scale restores from
-Definition~\ref{def:n4-finite-time-constant-dictionary} are
-\begin{equation}\label{eq:main-controlled-shell-scaling}
-C_{\sigma,M}^{(8)}:=\sigma^8C(\widehat M),\qquad
-B_{\sigma,M}^{(8)}:=\sigma^9B(\widehat M),\qquad
-T_{\sigma,M}^{(8)}:=\sigma T(\widehat M).
-\end{equation}
-Consequently, for every \(t\ge T_{\sigma,M}^{(8)}\),
+Consequently,
 \begin{equation}\label{eq:main-finite-time-defect-estimate}
 0\le\Delta_6(\nu)
 \le
 \bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
-+C_{\sigma,M}^{(8)}t^{-2}
-+B_{\sigma,M}^{(8)}t^{-3},
++Ct^{-2}
++Bt^{-3},
 \end{equation}
 and
 \begin{equation}\label{eq:main-finite-time-w2-stability}
@@ -433,14 +400,39 @@ where
 \mathcal A_t
 :=
 \bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
-+C_{\sigma,M}^{(8)}t^{-2}
-+B_{\sigma,M}^{(8)}t^{-3}.
++Ct^{-2}
++Bt^{-3}.
+\]
+In particular, if
+\[
+\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|\le\varepsilon,\qquad
+Ct^{-2}\le\varepsilon,\qquad
+Bt^{-3}\le\varepsilon,
+\]
+then
+\[
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}(3\varepsilon)^{1/4}
++8\,\sigma^{-2}(3\varepsilon)^{1/2}.
 \]
 \end{theorem}
 
 \begin{proof}
-Substitution of \eqref{eq:main-oracle-eighth-expansion} into
-\eqref{eq:main-finite-time-sixth-deficit} gives, for \(t\ge T\),
+The condition \(M\ge\sigma^7\) is necessary for nonemptiness by Lyapunov's
+inequality.  For \(X=(\gamma-\bar\gamma)/\sigma\), the law of \(X\) has mean
+zero, variance one, and \(\EE|X|^7\le\widehat M\).  Applying
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} to this normalized law
+and restoring scale gives
+\[
+C_{\sigma,M}^{(8)}=\sigma^8C(\widehat M),\qquad
+B_{\sigma,M}^{(8)}=\sigma^9B(\widehat M),\qquad
+T_{\sigma,M}^{(8)}=\sigma T(\widehat M),
+\]
+as recorded in \eqref{eq:dictionary-controlled-shell-c8}, and gives
+\eqref{eq:main-controlled-shell-eighth-expansion}.  Substitution into
+\eqref{eq:main-finite-time-sixth-deficit} gives, for
+\(t\ge T\),
 \[
 \begin{aligned}
 \mathfrak D_t^{(6)}(\nu)
@@ -449,18 +441,18 @@ Substitution of \eqref{eq:main-oracle-eighth-expansion} into
 &=\Delta_6(\nu)-\frac{A_8(\nu)}{t^2}-t^6E(t).
 \end{aligned}
 \]
-Hence
+This is \eqref{eq:main-certified-shell-sixth-identity}.  Hence
 \[
 0\le \Delta_6(\nu)
 \le
 \bigl|\mathfrak D_t^{(6)}(\nu)\bigr|
 +|A_8(\nu)|t^{-2}+Bt^{-3}
 \le
-\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|+Ct^{-2}+Bt^{-3},
+\mathcal A_t,
 \]
 where the non-negativity is Corollary~\ref{cor:coefficient-defect-coupling}.
-This proves \eqref{eq:main-oracle-finite-time-defect-estimate}.  The same
-corollary also gives
+This proves \eqref{eq:main-finite-time-defect-estimate}.  The same corollary
+also gives
 \[
 W_2(\nu_c,\rho_\sigma)
 \le
@@ -468,39 +460,39 @@ W_2(\nu_c,\rho_\sigma)
 +8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
 \]
 Inserting the preceding bound for \(\Delta_6(\nu)\) proves
-\eqref{eq:main-oracle-finite-time-w2-stability}, and the
-\(\varepsilon\)-form is immediate.
+\eqref{eq:main-finite-time-w2-stability}, and the \(\varepsilon\)-form is
+immediate.
+\end{proof}
 
-Put \(\widehat M=M/\sigma^7\).  The condition \(M\ge\sigma^7\) is necessary
-for nonemptiness by Lyapunov's inequality.  For
-\(X=(\gamma-\bar\gamma)/\sigma\), the law of \(X\) has mean zero, variance
-one, and \(\EE|X|^7\le\widehat M\).  Applying
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} to this normalized law
-and restoring scale gives the certified data with
+\begin{remark}[Fixed-law conditional certificate bookkeeping]%
+\label{rem:fixed-law-finite-time-certificate}
+The same algebra applies to one fixed law outside a controlled seventh-moment
+shell only after independent certificate data have been supplied.  Namely, if
+\(C,B,T\), \(A_8(\nu)\), and \(E(t)\) are fixed before observing the KL value
+and satisfy
 \[
-C_{\sigma,M}^{(8)}=\sigma^8C(\widehat M),\qquad
-B_{\sigma,M}^{(8)}=\sigma^9B(\widehat M),\qquad
-T_{\sigma,M}^{(8)}=\sigma T(\widehat M),
+D_{\mathrm{KL}}(h_t\|g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{A_6(\nu)}{t^6}
++\frac{A_8(\nu)}{t^8}
++E(t),
+\qquad
+|A_8(\nu)|\le C,\qquad |E(t)|\le Bt^{-9}
 \]
-as recorded in \eqref{eq:dictionary-controlled-shell-c8}.  The conclusion is
-the certified-data estimate just proved with these three constants.
-\end{proof}
-
-\begin{corollary}[Controlled-shell specialization of the certified theorem]%
-\label{thm:finite-time-poisson-entropy-stability}
-\label{cor:controlled-shell-finite-time-oracle}
-Under the controlled-shell hypotheses in the final clause of
-Theorem~\ref{thm:oracle-finite-time-poisson-entropy-stability}, the
-specialized estimates are exactly
-\eqref{eq:main-finite-time-defect-estimate} and
-\eqref{eq:main-finite-time-w2-stability}, with the scale restores
-\eqref{eq:main-controlled-shell-scaling}.
-\end{corollary}
-
-\begin{proof}
-This is the controlled-shell clause of
-Theorem~\ref{thm:oracle-finite-time-poisson-entropy-stability}.
-\end{proof}
+for \(t\ge T\), then the proof above, with
+\((C_{\sigma,M}^{(8)},B_{\sigma,M}^{(8)},T_{\sigma,M}^{(8)})\) replaced by
+\((C,B,T)\), gives
+\[
+0\le\Delta_6(\nu)
+\le
+\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|+Ct^{-2}+Bt^{-3}
+\]
+and the same \(W_2\) estimate with
+\(\mathcal A_{t,C,B}:=
+|\mathfrak D_t^{(6)}(\nu)|+Ct^{-2}+Bt^{-3}\).  This fixed-law statement is
+conditional certificate bookkeeping; the observed finite-time KL value does
+not certify \(C\), \(B\), \(T\), \(A_8\), or the remainder bound.
+\end{remark}
 
 Appendix~\ref{app:finite-time-defect-estimates} records the constant-regime
 bookkeeping and checks that the explicit shell formulas used here dominate
