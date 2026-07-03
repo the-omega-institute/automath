@@ -262,17 +262,23 @@ limit with the distributional generator pairing and proves
 the stated uniform version.
 \end{proof}
 
-\begin{lemma}[Principal-value pairing and quotient domain for the KL tail]%
+\noindent
+The following lemma is the consolidated domain verification used in the KL
+tail identity.  It packages the cutoff generator convergence, the
+bounded-Lipschitz Green formula, the quotient range, and the Bregman
+domination in one place, with all constants uniform on a fixed compact time
+interval.
+
+\begin{lemma}[Quotient domain and cutoff calculus]%
+\label{thm:kl-domain-verification}
+\label{lem:kl-tail-chain-rule-cutoff-passage}
 \label{prop:kl-tail-cutoff-inputs}
 \label{thm:kl-local-doob-bregman-domain-closure}
 \label{prop:kl-local-doob-bregman-domain-closure}
 \label{lem:kl-main-generator-convention-domain}
-Let \(\nu\) be a probability measure on~\(\RR\) with mean~\(\bar\gamma\) and
-finite centred second moment
-\[
-\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma).
-\]
-Fix \(0<a<b<\infty\), and put
+Let \(0<a<b<\infty\), let \(\nu\) be a probability measure on~\(\RR\) with
+mean~\(\bar\gamma\), put \(X_c=\gamma-\bar\gamma\), assume
+\(\EE|X_c|^2<\infty\), and put
 \[
 h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t,
 \qquad
@@ -285,7 +291,32 @@ For \(R>1\) define the symmetric Cauchy cutoff
 \qquad
 \Omega_R:=\{(x,y):R^{-1}<|x-y|<R\}.
 \]
-Then the following facts hold on the fixed compact time interval \([a,b]\).
+Then there exist \(0<m<M<\infty\) and \(L<\infty\) such that
+\[
+m\le u_t(x)\le M,\qquad |u_t(x)-u_t(y)|\le L|x-y|
+\]
+for \(t\in[a,b]\).  Moreover, for \(p_t=P_t*\mu\) with finite signed
+\(\mu\),
+\[
+\sup_{t\in[a,b]}\|L_Rp_t-\partial_t p_t\|_1\to0,
+\]
+and for bounded Lipschitz \(q_t\),
+\[
+\int q_t\partial_t p_t =
+-\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\,dx\,dy .
+\]
+Finally, with
+\[
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta ,
+\]
+\[
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le Cg_t(x)\min\{1,|x-y|^{-2}\}.
+\]
+
+More precisely, the following facts hold on the fixed compact time interval
+\([a,b]\).
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
 \item The generator convention is
 \[
@@ -293,7 +324,7 @@ Then the following facts hold on the fixed compact time interval \([a,b]\).
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,\qquad \widehat{Lf}(\xi)=-|\xi|\widehat f(\xi),
 \]
 so \(\partial_tP_t=LP_t\).  If \(p_t=P_t*\mu\), where \(\mu\) is a finite
-signed Borel measure, Lemma~\ref{lem:poisson-cauchy-generator-l1-domain} gives
+signed Borel measure, then
 \begin{equation}\label{eq:kl-consolidated-generator-l1}
 \sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_{L^1(\RR)}\longrightarrow0
 \qquad(R\to\infty).
@@ -313,10 +344,13 @@ Consequently every uniformly bounded family \(q_t\) satisfies
 \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
 \end{equation}
 The truncated bilinear forms are absolutely convergent, and the displayed
-pairing is the bounded-Lipschitz cutoff closure from
-Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}.
+pairing is the bounded-Lipschitz cutoff closure of the same
+principal-value generator.
 \item The quotient domain is explicit.  With
 \(X_c=\gamma-\bar\gamma\), \(z=(x-\bar\gamma)/t\), and
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma),
+\]
 \[
 R_\varepsilon(z):=\frac{1+z^2}{1+(z-\varepsilon)^2},
 \]
@@ -379,11 +413,48 @@ and \(I_\nu\in L^1([a,b])\).
 \end{lemma}
 
 \begin{proof}
-The generator-domain assertions in (i) are exactly
-Lemma~\ref{lem:poisson-cauchy-generator-l1-domain}, with the sign convention
-fixed by \(\widehat{P_t}(\xi)=e^{-t|\xi|}\).  Part (ii) is
-Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}, applied at the fixed
-time \(t\) to \(p=h_t\) and \(p=g_t\).
+The Fourier transform of the Poisson kernel is
+\(\widehat P_t(\xi)=e^{-t|\xi|}\), hence
+\(\partial_tP_t=LP_t\) for the displayed principal-value normalization.  If
+\(p_t=P_t*\mu\), translation invariance gives
+\[
+L_Rp_t-\partial_tp_t=(L_RP_t-\partial_tP_t)*\mu .
+\]
+It is therefore enough to control the omitted parts of the principal-value
+formula for \(P_t\).  The near-diagonal term is estimated by Taylor expansion:
+the odd first-order term cancels on the symmetric interval and
+\[
+\left\|\frac1\pi\int_{|z|<R^{-1}}
+\frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z\right\|_1
+\le \frac{2}{\pi R}\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1 .
+\]
+The far-field term satisfies
+\[
+\left\|\frac1\pi\int_{|z|>R}
+\frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z\right\|_1
+\le \frac{4}{\pi R}.
+\]
+After convolution with \(\mu\), these two estimates prove
+\eqref{eq:kl-consolidated-generator-l1}; multiplication by
+\(\sup_{t,x}|q_t(x)|\) gives
+\eqref{eq:kl-consolidated-bounded-pairing}.
+
+For the bounded-Lipschitz cutoff formula, write \(B_R(p,q)\) for the double
+integral in \eqref{eq:kl-consolidated-pv-pairing}.  On a finite annulus,
+Fubini and symmetry give \(\int q\,L_Rp=-B_R(p,q)/(2\pi)\) first for
+\(q\in C_c^\infty\).  The extension to bounded Lipschitz \(q\) uses the
+absolute bound
+\[
+\int_{|z|<1}
+\frac{\|p(\cdot+z)-p\|_1\operatorname{Lip}(q)|z|}{z^2}\dd z
++4\|p\|_1\|q\|_\infty\int_{|z|\ge1}\frac{\dd z}{z^2}<\infty,
+\]
+with \(\|p(\cdot+z)-p\|_1\le |z|\|\partial_xp\|_1\), followed by standard
+mollifier and spatial cutoff approximation.  Finally
+\eqref{eq:kl-consolidated-generator-l1} identifies the annular limit with
+\(\int q\,\partial_tp\).  This proves the stated principal-value pairing for
+\(p=h_t\) and \(p=g_t\), uniformly on \([a,b]\) whenever the bounded and
+Lipschitz norms of \(q\) are uniform.
 
 The quotient formula follows by writing \(x=\bar\gamma+tz\).  The elementary
 bounds
@@ -498,14 +569,12 @@ The symmetrized factor \(1/(2\pi)\) is therefore the one-sided factor
 \end{proof}
 
 \noindent
-The next theorem is the KL/Cauchy quotient specialization of the
-Sobolev--Bregman/Hardy--Stein identity for jump semigroups.  The polarized
-Hardy--Stein theorem of Bogdan--Gutowski--Pietruska-Pa{\l}uba
-\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein} supplies the
-abstract Bregman co-divergence mechanism.  What is verified here is the
-quotient-domain input for \(u_t=h_t/g_t\) in the principal-value Cauchy
-normalization, followed by the entropy-tail representation for the same
-quotient used in the coefficient expansion.
+The KL tail identity is now a short consequence of
+Lemma~\ref{thm:kl-domain-verification} and the large-time KL decay from
+Lemma~\ref{lem:poisson-second-moment-kl-decay}.  The theorem is the
+Cauchy/KL specialization of the Sobolev--Bregman/Hardy--Stein mechanism for
+jump semigroups, with the quotient-domain input verified above for the moving
+Poisson profile \(g_t\).
 
 \begin{theorem}[Cauchy/KL Hardy--Stein tail identity]%
 \label{thm:poisson-kl-doob-tail}
@@ -530,7 +599,7 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \begin{proof}
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
 \([a,b]\subset(0,\infty)\),
-Lemma~\ref{prop:kl-tail-cutoff-inputs} gives \(H\in AC([a,b])\),
+Lemma~\ref{thm:kl-domain-verification} gives \(H\in AC([a,b])\),
 \(I_\nu\in L^1([a,b])\), and \(H'(s)=-I_\nu(s)\) for a.e.
 \(s\in[a,b]\).  Hence, for \(0<t<T\),
 \[

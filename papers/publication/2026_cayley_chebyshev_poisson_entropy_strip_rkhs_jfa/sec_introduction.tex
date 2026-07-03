@@ -20,24 +20,57 @@ Poisson scale.
 
 \subsection*{Main theorem statements}
 
-\textbf{Radial Poisson entropy jets.}
+The next five theorem statements are the theorem-level map of the paper.
+They are stated with their operative assumptions and coefficients; proof
+mechanisms, comparisons, finite-time consequences, and nonclaims follow after
+the theorem block.  The multidimensional coefficients are denoted
+\(\mathcal A_m^{(d)}(\nu)\) throughout; the one-dimensional coefficients use
+the unsuperscripted symbols \(A_k(\nu)\).
+
+\begin{theorem}[Multidimensional fixed-law Poisson entropy jet]%
+\label{thm:intro-multidimensional-jet}
 Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\) be an integer, and let
-\(\nu\) be a probability measure on \(\RR^d\) with finite centred \(L\)th
-absolute moment.  Theorems~\ref{thm:multidimensional-density-quotient} and
-\ref{thm:multidimensional-poisson-entropy-jets} prove the quotient expansion
-for \(P_t^{(d)}*\nu/P_t^{(d)}(\cdot-\bar\gamma)\) and its nonlinear transfer
-to the matched KL expansion
+\(\nu\) be a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and
+finite centred \(L\)th absolute moment.  Then
 \[
 D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
 +o(t^{-(L+2)}),
 \]
-with the coefficients given by finite tensor-moment integrals of the Taylor
-modes of
+where \(\mathcal A_m^{(d)}\) is given by the tensor formula
 \[
-\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{|\alpha_1|,\ldots,|\alpha_r|\ge2\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+|\alpha_j|\le L}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^rU_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
 \]
-The leading coefficient has the positive decomposition
+Here \(U_\alpha^{(d)}\) are the Taylor modes of
+\[
+\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2},
+\qquad
+\mu_\alpha=\EE[X_c^\alpha],
+\]
+and \(\Omega_d=P_1^{(d)}(y)\dd y\).  Equivalently, the radial Poisson quotient
+\((P_t^{(d)}*\nu)/P_t^{(d)}(\cdot-\bar\gamma)\) has the finite-moment
+Taylor-mode expansion of
+Theorem~\ref{thm:multidimensional-density-quotient}, and
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} transfers it through
+the KL integrand.
+\end{theorem}
+
+\begin{theorem}[Leading multidimensional covariance coefficient]%
+\label{thm:intro-multidimensional-leading-coefficient}
+Under the hypotheses of Theorem~\ref{thm:intro-multidimensional-jet}, let
+\[
+\Sigma=\EE[X_cX_c^{\mathsf T}],
+\qquad
+\Sigma_0=\Sigma-d^{-1}(\operatorname{tr}\Sigma)I_d .
+\]
+Then the leading coefficient in the multidimensional Poisson KL jet is
 \begin{equation}\label{eq:intro-multidim-leading}
 \mathcal A_4^{(d)}(\nu)
 =
@@ -54,30 +87,52 @@ c_d^{\rm tr}=
 \frac{3(d+1)(d+3)}
 {4(d+5)(d+7)}.
 \]
-Here \(\Sigma\) is the centred covariance matrix and
-\(\Sigma_0=\Sigma-d^{-1}(\operatorname{tr}\Sigma)I_d\).  This is
-Theorem~\ref{thm:multidim-leading-positive-defect}.
+This is Theorem~\ref{thm:multidim-leading-positive-defect}.  The formula is
+positive and vanishes exactly when \(\Sigma=0\).  In dimensions \(d\ge2\),
+the assumption \(L\ge d+1\) remains part of the theorem; the coefficient
+formula itself depends only on covariance, but this paper does not assert a
+finite-covariance-only leading asymptotic.
+\end{theorem}
 
-\textbf{One-dimensional finite-moment entropy transfer.}
-For \(d=1\), write \(X_c=\gamma-\bar\gamma\) and
-\(\mu_n=\int X_c^n\,\dd\nu(\gamma)\) when the moment exists.  For every
-\(N\ge2\), Theorem~\ref{thm:poisson-kl-even-orders} proves that a finite
-centred \((2N-2)\)th absolute moment gives
+\begin{theorem}[One-dimensional finite-moment coefficient hierarchy]%
+\label{thm:intro-one-dimensional-universal-expansion}
+Let \(N\ge2\), let \(\nu\) be a probability measure on \(\RR\) with mean
+\(\bar\gamma\), and assume that \(X_c=\gamma-\bar\gamma\) has finite
+\((2N-2)\)th absolute moment.  Put
+\[
+h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),\qquad
+\mu_n=\int X_c^n\,\dd\nu(\gamma).
+\]
+Then
 \begin{equation}\label{eq:intro-one-dimensional-transfer}
 D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma)\bigr)
 =
 \sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
 \end{equation}
-The coefficients are the evaluations of universal moment polynomials obtained
-from the Cayley mode integrals; all retained odd coefficients vanish.
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} identifies the
-top-moment term in the displayed universal coefficient \(A_{2N}\), so the
-centred \((2N-2)\)nd moment is exactly the evaluation threshold for that
-coefficient polynomial.
+Each \(A_{2m}\) is the finite-moment evaluation of a universal polynomial in
+the centred moments, computed by the Cayley mode integrals in
+Theorem~\ref{thm:universal-entropy-coefficients}; all retained odd
+coefficients vanish.  More explicitly, for \(4\le k\le2N\),
+\[
+A_k(\nu)=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\2\le n_j\le 2N-2}}
+\mu_{n_1}\cdots\mu_{n_r}
+\int_{\RR}u_{n_1}\cdots u_{n_r}\,\dd\omega .
+\]
+This is Theorem~\ref{thm:poisson-kl-even-orders}.  The displayed top
+coefficient \(A_{2N}\) is evaluable exactly at the centred
+\((2N-2)\)nd-moment level as a universal polynomial; the polynomial threshold
+is isolated in
+Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
+\end{theorem}
 
-\textbf{Explicit sixth/eighth-order layer.}
-Assume now that \(\nu\) has variance \(\sigma^2>0\).  When the centred moments
-through order six exist, Theorem~\ref{thm:poisson-kl-eighth} identifies
+\begin{theorem}[Explicit \(N=4\) sixth/eighth coefficient layer]%
+\label{thm:intro-explicit-n4-layer}
+Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar\gamma\),
+variance \(\sigma^2>0\), and finite centred sixth absolute moment.  Then
+Theorem~\ref{thm:poisson-kl-eighth} identifies
 \[
 D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma)\bigr)
 =
@@ -98,39 +153,68 @@ A_8(\nu)
 \frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
 +12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
 \]
-The computation uses the explicit Laurent representatives
+If the centred seventh absolute moment is finite, then
+Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} improves the last
+remainder to \(O(t^{-9})\).  The coefficient computation is reproducible
+from the explicit Laurent representatives
 \[
 Q_n(w)=\sum_{1\le |k|\le n}q_{n,k}w^k,\qquad
 q_{n,k}=\lambda_n\,\operatorname{sgn}(k)^{\,n\bmod 2}
 \binom{n-1}{|k|-1}
 \]
 from Lemma~\ref{lem:n4-normalized-laurent-representatives}, together with the
-zero-sum convolution rule for Laurent constant terms.  Under one additional
-centred absolute moment, Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}
-upgrades the last remainder to \(O(t^{-9})\).
+zero-sum convolution rule for Laurent constant terms.
+\end{theorem}
 
-\textbf{Defects, finite-time certificates, and the KL tail identity.}
-The explicit \(N=4\) layer defines the sixth/eighth-order defect coordinates.
-Corollary~\ref{cor:coefficient-defect-coupling} converts the fixed-variance
-sixth defect into a \(W_2\) bound.  Theorem~\ref{thm:finite-time-poisson-entropy-stability}
-is a conditional certificate statement: after the controlled
-seventh-moment shell has fixed bounds for \(A_8\) and the order-nine
-remainder, the identity
+\begin{theorem}[KL Hardy--Stein tail identity]%
+\label{thm:intro-kl-tail-identity}
+Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar\gamma\) and
+finite centred second moment.  For
 \[
-\mathfrak D_t^{(6)}(\nu)=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t)
+h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),\qquad u_t=h_t/g_t,
 \]
-gives finite-time bounds from the subsequently inserted KL observation and
-its independent error radius.  Finally,
-Theorem~\ref{thm:poisson-kl-doob-tail} proves the Cauchy/KL Hardy--Stein
-tail representation
+define
+\[
+I_\nu(t)=
+\frac1\pi\iint_{\RR^2}
+\frac{g_t(x)\left(
+u_t(x)\log\frac{u_t(x)}{u_t(y)}-u_t(x)+u_t(y)
+\right)}
+{(x-y)^2}\dd x\dd y .
+\]
+Then \(I_\nu\in L^1_{\rm loc}(0,\infty)\) and
 \[
 D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma)\bigr)
 =\int_t^\infty I_\nu(s)\dd s,
 \]
-and Proposition~\ref{prop:dissipation-tail-coefficient-expansion} transfers
-the coefficient expansion to the dissipation tail.
+for every \(t>0\).  This is Theorem~\ref{thm:poisson-kl-doob-tail}; the
+quotient-domain chain rule and cutoff passage are proved in
+Lemma~\ref{lem:kl-tail-chain-rule-cutoff-passage}.  Consequently
+Proposition~\ref{prop:dissipation-tail-coefficient-expansion} transfers the
+coefficient expansion to the dissipation tail.
+\end{theorem}
 
-\textbf{What is not claimed.}
+\subsection*{Defect and finite-time consequences}
+
+\begin{corollary}[Coefficient defect stability]%
+\label{cor:intro-defect-certificate}
+In the setting of Theorem~\ref{thm:intro-explicit-n4-layer}, the explicit
+\(N=4\) coefficients define the sixth-order defect
+\[
+\Delta_6(\nu)=-\frac{7}{64}\sigma^6-A_6(\nu).
+\]
+Corollary~\ref{cor:coefficient-defect-coupling} converts this fixed-variance
+defect into a \(W_2\) bound against
+\(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\).  If a finite-time KL
+value is used, Appendix
+Lemma~\ref{lem:controlled-shell-conditional-certificate} propagates the
+resulting deterministic error only after the shell constants, the
+eighth-order coefficient bound, the remainder bound, and the observation
+error radius have been supplied independently.
+\end{corollary}
+
+\subsection*{Scope and nonclaims}
+
 The results above concern the fixed-law matched Poisson KL functional
 \eqref{eq:intro-main-functional}.  They are not normalized-sum entropy
 asymptotics, parametric Cauchy-family divergence formulae, or
@@ -261,11 +345,11 @@ expansions, or flow limits.\\
 Theorem~\ref{thm:poisson-kl-even-orders}
 & Fixed-law Poisson KL asymptotics, separated from entropic CLT asymptotics
 \cite{CarlenSoffer1991,BobkovChistyakovGotze2013,
-BobkovGotzeEsscher2025}
+BobkovGotzeRenyi2025,BobkovGotzeEsscher2025}
 & The probability law \(\nu\) is fixed and only the Poisson scale \(t\)
 diverges.  The theorem gives universal moment-polynomial coefficients for
-the matched Cauchy KL functional, not a normalized-sum, Esscher-transform, or
-stable-law relative-entropy limit.\\
+the matched Cauchy KL functional, not a normalized-sum R\'enyi,
+Esscher-transform, or stable-law relative-entropy limit.\\
 \hline
 Theorem~\ref{thm:poisson-kl-eighth} and
 Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}
@@ -279,8 +363,9 @@ linear profile coefficients \(M_\alpha\partial^\alpha p_t\) and not
 closed-form divergences inside a finite-dimensional Cauchy family.\\
 \hline
 Corollary~\ref{cor:coefficient-defect-coupling} and
-Theorem~\ref{thm:finite-time-poisson-entropy-stability}
-& Conditional fixed-time bookkeeping, separated from recent JFA
+Appendix Lemma~\ref{lem:controlled-shell-conditional-certificate}
+& Coefficient-level stability and conditional fixed-time bookkeeping,
+separated from recent JFA
 functional-inequality stability theorems and from heavy-tail Cauchy
 functional inequalities
 \cite{ChenLuTang2023LogSobolevStability,
@@ -321,12 +406,12 @@ Section~\ref{sec:preliminaries} fixes notation.  Sections~\ref{sec:cayley-gate}
 and~\ref{sec:haar-pullback} record the Cayley and Haar-pullback
 normalizations.  Section~\ref{sec:entropy-asymptotics} proves the
 multidimensional entropy jets, the one-dimensional coefficient hierarchy, the
-explicit sixth/eighth-order layer, the defect consequences, and the
-conditional finite-time certificate lemma.  Section~\ref{sec:doob-phi-entropy}
+explicit sixth/eighth-order layer, and the defect consequences.
+Section~\ref{sec:doob-phi-entropy}
 proves the KL Hardy--Stein tail identity and the dissipation-tail coefficient
 expansion.  Appendix~\ref{app:related-work-scope} gives related-work context;
 Appendix~\ref{app:entropy-integrals} records the weighted trigonometric
 integrals and Laurent arithmetic; Appendix~\ref{app:haar-pullback-uniqueness}
 records the endpoint-normalized Cayley uniqueness statement; and
 Appendix~\ref{app:finite-time-defect-estimates} records the constant regimes
-used by the finite-time certificate.
+and deterministic error-propagation lemma used by the finite-time certificate.
