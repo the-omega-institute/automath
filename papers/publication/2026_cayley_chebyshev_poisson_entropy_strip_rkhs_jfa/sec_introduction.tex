@@ -22,12 +22,13 @@ Poisson scale.
 
 The next five theorem statements are the theorem-level map of the paper.
 They are stated with their operative assumptions and coefficients; proof
-mechanisms, comparisons, and finite-time consequences follow after the theorem
-block.  The multidimensional coefficients are denoted
+mechanisms and comparisons follow after the theorem block, while conditional
+finite-time post-processing is separated into
+Appendix~\ref{app:conditional-post-processing}.  The multidimensional coefficients are denoted
 \(\mathcal A_m^{(d)}(\nu)\) throughout; the one-dimensional coefficients use
 the unsuperscripted symbols \(A_k(\nu)\).
 
-\begin{theorem}[Multidimensional fixed-law Poisson entropy jet]%
+\begin{theorem}[Multidimensional finite-\(L\) Poisson entropy jet, \(L\ge d+1\)]%
 \label{thm:intro-multidimensional-jet}
 Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\) be an integer, and let
 \(\nu\) be a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and
@@ -62,15 +63,21 @@ Theorem~\ref{thm:multidimensional-poisson-entropy-jets} transfers it through
 the KL integrand.
 \end{theorem}
 
-\begin{theorem}[Leading multidimensional covariance coefficient]%
+\begin{theorem}[Multidimensional leading covariance coefficient]%
 \label{thm:intro-multidimensional-leading-coefficient}
-Under the hypotheses of Theorem~\ref{thm:intro-multidimensional-jet}, let
+Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
+finite centred second moment.  Put
+\[
+X_c=\gamma-\bar\gamma,
+\]
+where \(\bar\gamma=\int_{\RR^d}\gamma\,\dd\nu(\gamma)\), and let
 \[
 \Sigma=\EE[X_cX_c^{\mathsf T}],
 \qquad
 \Sigma_0=\Sigma-d^{-1}(\operatorname{tr}\Sigma)I_d .
 \]
-Then the leading coefficient in the multidimensional Poisson KL jet is
+Then the quadratic covariance layer of the multidimensional Poisson KL
+expansion is
 \begin{equation}\label{eq:intro-multidim-leading}
 \mathcal A_4^{(d)}(\nu)
 =
@@ -87,12 +94,33 @@ c_d^{\rm tr}=
 \frac{3(d+1)(d+3)}
 {4(d+5)(d+7)}.
 \]
-This is Theorem~\ref{thm:multidim-leading-positive-defect}.  The formula is
-positive and vanishes exactly when \(\Sigma=0\).  In dimensions \(d\ge2\),
-the assumption \(L\ge d+1\) remains part of the theorem: the displayed
-covariance expression is the leading coefficient inside the finite-\(L\)
-Poisson jet of Theorem~\ref{thm:intro-multidimensional-jet}.
+This is Theorem~\ref{thm:multidim-leading-positive-defect}.  The coefficient
+formula assumes only \(\EE|X_c|^2<\infty\); it depends on no higher tensor
+moments.  When the stronger finite-\(L\) hypotheses of
+Theorem~\ref{thm:intro-multidimensional-jet} also hold, the same
+\(\mathcal A_4^{(d)}(\nu)\) is the leading \(t^{-4}\) coefficient in the
+displayed multidimensional KL jet.  The formula is positive and vanishes
+exactly when \(\Sigma=0\).
 \end{theorem}
+
+\begin{remark}[Multidimensional hypothesis barrier]
+Theorems~\ref{thm:intro-multidimensional-jet} and
+\ref{thm:intro-multidimensional-leading-coefficient} have different
+hypothesis levels.  The finite-\(L\) theorem supplies a full entropy jet and
+uses the dimension-dependent quotient-remainder hypothesis.  The leading
+covariance theorem computes the quadratic coefficient under finite covariance
+alone.  Thus a full finite jet is not inferred from \(\EE|X_c|^2<\infty\),
+but the displayed \(t^{-4}\) covariance coefficient is a covariance-only
+coefficient identity.
+\end{remark}
+
+Before the one-dimensional hierarchy is stated, we fix the scope of its
+moment hypothesis.  Finite \(2N-2\) moment is the first level at which the
+displayed universal polynomial \(A_{2N}\) is evaluable; no sharp analytic
+threshold is claimed.  In particular, the theorem identifies the fixed
+Cayley--Chebyshev moment-polynomial coefficient and does not exclude
+tail-dependent, renormalized, truncated, or subsequential entropy asymptotics
+under weaker moment hypotheses.
 
 \begin{theorem}[One-dimensional finite-moment coefficient hierarchy]%
 \label{thm:intro-one-dimensional-universal-expansion}
@@ -123,10 +151,13 @@ A_k(\nu)=
 \]
 This is Theorem~\ref{thm:poisson-kl-even-orders}.  The displayed top
 coefficient \(A_{2N}\) is evaluable at the centred
-\((2N-2)\)nd-moment level as a universal polynomial; this is the
-coefficient-evaluation threshold for the displayed universal polynomial,
-as isolated in
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
+\((2N-2)\)nd-moment level as a universal polynomial.  This is the first
+level at which the displayed universal polynomial \(A_{2N}\) is evaluable;
+no sharp analytic threshold is claimed.  The algebraic obstruction to
+evaluating this same polynomial from lower moments is isolated in
+Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}, while
+Proposition~\ref{prop:coefficient-evaluation-not-analytic-necessity} records
+the separate analytic scope.
 \end{theorem}
 
 \begin{theorem}[Explicit \(N=4\) sixth/eighth coefficient layer]%
@@ -197,7 +228,7 @@ Proposition~\ref{prop:dissipation-tail-coefficient-expansion} transfers the
 coefficient expansion to the dissipation tail.
 \end{theorem}
 
-\subsection*{Defect and finite-time consequences}
+\subsection*{Coefficient defect consequence}
 
 \begin{corollary}[Coefficient defect stability]%
 \label{cor:intro-defect-certificate}
@@ -208,23 +239,22 @@ In the setting of Theorem~\ref{thm:intro-explicit-n4-layer}, the explicit
 \]
 Corollary~\ref{cor:coefficient-defect-coupling} converts this fixed-variance
 defect into a \(W_2\) bound against
-  \(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\).
-  Corollary~\ref{cor:finite-time-defect-bookkeeping} gives the deterministic
-  finite-time propagation: a KL value may be inserted only after the
-  eighth-order coefficient bound, the remainder bound, and the error radius
-  have been supplied independently.
+  \(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\).  This is a
+  coefficient-level statement: no finite-time KL value, eighth-order
+  remainder bound, or approximation radius is part of the corollary.
 \end{corollary}
 
 \subsection*{Scope and nonclaims}
 
 The results above concern the fixed-law matched Poisson KL functional
-\eqref{eq:intro-main-functional}.  Every theorem-level threshold statement
-above is a coefficient-evaluation threshold for the displayed universal
-polynomial in that theorem;
+\eqref{eq:intro-main-functional}.  Whenever a theorem names a first moment
+level, it is naming the first level at which the displayed universal
+moment-polynomial coefficient in that theorem is evaluable, not an analytic
+tail threshold for all possible entropy asymptotics;
 Proposition~\ref{prop:coefficient-evaluation-not-analytic-necessity} records
-the corresponding analytic scope.  The finite-time estimates are conditional
-bookkeeping after independent coefficient and remainder bounds have already
-  been fixed.
+the corresponding analytic scope.  Appendix~\ref{app:conditional-post-processing}
+contains only conditional bookkeeping after independent coefficient and
+remainder bounds have already been fixed.
 
 \subsection*{Cayley coefficient mechanism}
 
@@ -269,84 +299,68 @@ unless explicitly used in the Hardy--Stein row.
 \scriptsize
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{p{0.16\textwidth}p{0.22\textwidth}p{0.29\textwidth}p{0.23\textwidth}}
+\begin{tabular}{p{0.13\textwidth}p{0.16\textwidth}p{0.17\textwidth}p{0.15\textwidth}p{0.17\textwidth}p{0.15\textwidth}}
 \hline
-Present theorem & Prior theorem compared & Object, hypotheses, and topology/divergence & Coefficient or identity absent from the prior theorem\\
+Prior theorem & Object & Hypotheses & Norm/divergence & Present coefficient or identity & Why not implied\\
 \hline
-Theorems~\ref{thm:multidimensional-density-quotient}--\ref{thm:multidim-leading-positive-defect}
-& Main large-time profile theorems of
-Anker--Papageorgiou--Zhang and Crismale--De~Luca--Kubin--Ninno--Ponsiglione
-\cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces,
-CrismaleDeLucaKubinNinnoPonsiglione2023}
-& Evolved heat/fractional-flow profiles under integrability, moment, or
-energy hypotheses; output is a density/profile asymptotic or flow limit in
-the natural profile norm, not a relative-entropy expansion.
-& No fixed-law radial Poisson quotient, no KL transfer in
-\(\int\Phi(\delta_t)\dd\Omega_d\), and no covariance coefficient
-\(\mathcal A_4^{(d)}
-=c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
-+c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2\).\\
+Anker--Papageorgiou--Zhang, JFA 2023
+\cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces}
+& Heat flow on noncompact symmetric spaces
+& Heat-kernel moment/integrability assumptions in that geometry
+& Large-time profile norm
+& Theorems~\ref{thm:multidimensional-density-quotient},
+\ref{thm:multidimensional-poisson-entropy-jets}
+& Different semigroup and geometry; no fixed-law radial Poisson quotient or
+KL transfer \(\int\Phi(\delta_t)\dd\Omega_d\).\\
 \hline
-Theorem~\ref{thm:poisson-kl-even-orders}
-& Bobkov--G{\"o}tze's Esscher-transform CLT theorem, with their
-R\'enyi-divergence CLT theorems as the adjacent comparison
+Crismale--De~Luca--Kubin--Ninno--Ponsiglione, JFA 2023
+\cite{CrismaleDeLucaKubinNinnoPonsiglione2023}
+& Fractional heat-flow variational limits
+& Energy/integrability assumptions for \(s\)-fractional flow limits
+& Variational convergence
+& Theorem~\ref{thm:multidim-leading-positive-defect}
+& A variational \(s\)-limit does not identify the Poisson KL covariance
+coefficient \(\mathcal A_4^{(d)}\).\\
+\hline
+Bobkov--G{\"o}tze, JFA 2025
 \cite{BobkovGotzeEsscher2025}
-& Changing normalized-sum laws; hypotheses are transform or divergence
-conditions for CLT convergence; topology is entropy/R\'enyi divergence or the
-Esscher criterion for normal approximation.
-& No fixed input law with only Poisson scale \(t\to\infty\), no matched Cauchy
-KL functional, and no universal polynomial coefficients
-\(A_{2m}(\nu)\) obtained from Cayley zero modes.\\
+& Normalized sums and Esscher transforms
+& Transform conditions for the CLT comparison
+& Esscher/entropy criterion
+& Theorem~\ref{thm:poisson-kl-even-orders}
+& Changing Gaussian comparison law; no fixed-law Cauchy KL coefficients
+\(A_{2m}(\nu)\).\\
 \hline
-Theorem~\ref{thm:poisson-kl-eighth} and
-Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder}
-& Chyzak--Nielsen, Nielsen--Okamura, Bouhlel--Rousseau, and Verd{\'u} on
-parametric Cauchy information formulae
-\cite{ChyzakNielsen2019CauchyKL,NielsenOkamura2023Cauchy,
-BouhlelRousseau2022MultivariateCauchyKL,Verdu2023Cauchy}
-& Two members of a finite-dimensional Cauchy family; output is a closed-form
-\(f\)-divergence or KL formula between parametric Cauchy laws.
-& No nonparametric \(P_t*\nu\), no sixth/eighth fixed-law coefficients
-\(A_6,A_8\), and no coefficient-evaluation threshold for the displayed
-universal polynomial arising from zero-mode Laurent products created by
-\(\Phi\).\\
+Chen--Lu--Tang, JFA 2023
+\cite{ChenLuTang2023LogSobolevStability}
+& Log-Sobolev/Moser--Onofri stability on the sphere
+& Normalized conformal/spherical inequality setting
+& Deficit controls distance to extremizers
+& Corollary~\ref{cor:coefficient-defect-coupling}
+& An inequality deficit is not the fixed-law \(A_6\) coefficient or its
+two-point-law reduction.\\
 \hline
-Corollary~\ref{cor:coefficient-defect-coupling} and
-Corollary~\ref{cor:finite-time-defect-bookkeeping}
-& JFA stability theorems of Chen--Lu--Tang, Brigati--Dolbeault--Simonov, and
-Carlen
-\cite{ChenLuTang2023LogSobolevStability,
-BrigatiDolbeaultSimonov2024LogSobolev,Carlen2025LogHLS}
-& Deficits in log-Sobolev, Moser--Onofri, log-HLS, or related functional
-inequalities; topology is distance to an extremizer manifold in the theorem's
-own norm/transport metric.
-& No coefficient defect
-\(\Delta_6=-7\sigma^6/64-A_6\), and no conditional finite-time propagation
-requiring independently supplied \(A_8\), remainder, threshold, and error
-radius.\\
+Brigati--Dolbeault--Simonov, JFA 2024
+\cite{BrigatiDolbeaultSimonov2024LogSobolev}
+& Log-Sobolev deficit
+& Normalized functional-inequality stability setting
+& Distance to extremizers
+& Corollary~\ref{cor:coefficient-defect-coupling}
+& The deficit is not \(\Delta_6=-7\sigma^6/64-A_6\) and gives no two-point
+\(W_2\) coefficient modulus.\\
 \hline
-Theorem~\ref{thm:poisson-kl-doob-tail}
-& Bogdan--Gutowski--Pietruska-Pa{\l}uba's polarized Hardy--Stein theorem,
-with Ba{\~n}uelos--Bogdan--Luks and Ba{\~n}uelos--Kim as predecessors
-\cite{BanuelosBogdanLuks2016HardyStein,
-BanuelosKim2019HardySteinNonsymmetric,
-BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}
-& General two-point Bregman/Hardy--Stein disintegration for semigroups or
-jump forms under function-domain hypotheses.
-& No moving matched Poisson quotient
-\(u_t=(P_t*\nu)/P_t(\cdot-\bar\gamma)\), no quotient-domain cutoff passage,
-and no exact tail identity
-\(D_{\rm KL}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s\) tied to the same
-Cayley coefficients.\\
+Bogdan--Gutowski--Pietruska-Pa{\l}uba, JFA 2025
+\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}
+& General polarized Hardy--Stein identity
+& Abstract function-domain assumptions
+& Two-point Bregman energy
+& Theorem~\ref{thm:poisson-kl-doob-tail}
+& Does not supply the moving quotient cutoff or
+\(D_{\rm KL}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s\).\\
 \hline
 \end{tabular}
 \endgroup
 \end{center}
-
-The strip-RKHS and integer-orbit sampling constructions are separate from this
-entropy theorem map; they are not inputs to the moment hypotheses, nonlinear
-KL transfer, Hardy--Stein tail identity, or Laurent coefficient
-identifications.
 
 \subsection*{Organization}
 
@@ -354,13 +368,14 @@ Section~\ref{sec:preliminaries} fixes notation.  Sections~\ref{sec:cayley-gate}
 and~\ref{sec:haar-pullback} record the Cayley and Haar-pullback
 normalizations.  Section~\ref{sec:entropy-asymptotics} proves the
 multidimensional entropy jets, the one-dimensional coefficient hierarchy, the
-explicit sixth/eighth-order layer, and the defect consequences.
+explicit sixth/eighth-order layer, and the coefficient-defect consequence.
 Section~\ref{sec:doob-phi-entropy}
 proves the KL Hardy--Stein tail identity and the dissipation-tail coefficient
 expansion.  Appendix~\ref{app:related-work-scope} gives related-work context;
 Appendix~\ref{app:entropy-integrals} records the weighted trigonometric
-integrals and Laurent arithmetic; Appendix~\ref{app:haar-pullback-uniqueness}
+normalization behind the Laurent arithmetic;
+Appendix~\ref{app:haar-pullback-uniqueness}
 records the endpoint-normalized Cayley uniqueness statement; and
-Corollary~\ref{cor:finite-time-defect-bookkeeping} records the deterministic
+Appendix~\ref{app:conditional-post-processing} records the conditional
 finite-time error propagation used after the coefficient and remainder
 constants have been fixed.

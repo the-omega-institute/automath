@@ -15,8 +15,7 @@ The Cauchy generator is normalized by
 \]
 so that \(\partial_tP_t=LP_t\).  This section records the KL-specialized
 Doob--Bregman dissipation identity and its coefficient consequence.  Its
-literature frame is the Hardy--Stein/Bregman chain rather than sampling or
-transport theory.  The classical local identity is the
+literature frame is the Hardy--Stein/Bregman chain.  The classical local identity is the
 chain-rule/Green-formula Hardy--Stein identity for the Laplacian
 \cite[pp.~86--88]{Stein1970SingularIntegrals}; the convex-divergence
 language starts with Bregman's construction~\cite{Bregman1967}.  For jump
@@ -477,6 +476,114 @@ and the term with \(g_t(y)\) is identical.  This proves (v), including the
 cutoff convergence by dominated convergence.
 \end{proof}
 
+\begin{lemma}[\(L^1\)-absolute-continuity chain rule for the Poisson KL path]%
+\label{lem:poisson-kl-l1-ac-chain-rule}
+Let \(0<a<b<\infty\), let \(\mu\) be a finite signed Borel measure on
+\(\RR\), and put \(p_t=P_t*\mu\).  Then
+\[
+t\longmapsto p_t,\qquad
+t\longmapsto \partial_tp_t
+\]
+are absolutely continuous maps from \([a,b]\) into \(L^1(\RR)\).  In
+particular, for
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t,
+\]
+the four maps
+\[
+t\mapsto h_t,\qquad t\mapsto g_t,\qquad
+t\mapsto\partial_th_t,\qquad t\mapsto\partial_tg_t
+\]
+are locally \(L^1\)-absolutely continuous on \((0,\infty)\).
+
+Assume in addition that, on \([a,b]\),
+\[
+0<m\le u_t(x)\le M<\infty
+\qquad\text{for a.e. }(t,x)\in[a,b]\times\RR .
+\]
+Then
+\[
+H(t):=\int_{\RR}h_t(x)\log\frac{h_t(x)}{g_t(x)}\dd x
+\]
+is absolutely continuous on \([a,b]\), and for a.e. \(t\in[a,b]\),
+\begin{equation}\label{eq:poisson-kl-l1-chain-rule}
+H'(t)=
+\int_{\RR}\log u_t(x)\,\partial_th_t(x)\dd x
+-\int_{\RR}(u_t(x)-1)\,\partial_tg_t(x)\dd x .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The Poisson kernel has the scaling form
+\[
+P_t(x)=t^{-1}P_1(x/t),
+\]
+and, for \(k=0,1,2\),
+\[
+\partial_t^kP_t(x)=t^{-k-1}Q_k(x/t)
+\]
+with \(Q_k\) a rational function satisfying
+\(|Q_k(y)|\le C_k(1+|y|)^{-2}\).  Hence \(Q_k\in L^1(\RR)\), and
+\(t\mapsto\partial_t^kP_t\) is continuous as an \(L^1(\RR)\)-valued function
+on every compact subinterval of \((0,\infty)\).  The Bochner fundamental
+theorem of calculus gives, for \(s,t\in[a,b]\),
+\[
+\partial_\tau^kP_\tau\big|_{\tau=t}
+-\partial_\tau^kP_\tau\big|_{\tau=s}
+=\int_s^t\partial_r^{k+1}P_r\,\dd r
+\quad\text{in }L^1(\RR),\qquad k=0,1 .
+\]
+Convolution with a finite signed measure is bounded on \(L^1\), so the same
+identities hold for \(p_t=P_t*\mu\).  This proves the asserted
+\(L^1\)-absolute continuity of \(p_t\) and \(\partial_tp_t\), and applying it
+to \(\mu=\nu\) and to the point mass \(\delta_{\bar\gamma}\) gives the four
+Poisson paths in the statement.
+
+It remains to justify differentiating the entropy integral.  Set
+\[
+F(r,s):=r\log(r/s),\qquad r,s>0 .
+\]
+On the closed quotient cone \(m\le r/s\le M\),
+\[
+\partial_rF(r,s)=\log(r/s)+1,\qquad
+\partial_sF(r,s)=-r/s
+\]
+are bounded.  Thus
+\[
+|F(r,s)|\le C_{m,M}s,\qquad
+|\partial_rF(r,s)|+|\partial_sF(r,s)|\le C_{m,M}
+\]
+throughout the cone.  The first estimate makes \(H(t)\) finite, since
+\(\int g_t=1\).  For each fixed \(x\), the scalar functions
+\(t\mapsto h_t(x)\) and \(t\mapsto g_t(x)\) are absolutely continuous: their
+time derivatives are obtained by differentiating the Poisson kernel under
+the finite measure.  Therefore the ordinary one-variable chain rule gives
+for a.e. \(t\), pointwise in \(x\),
+\[
+\frac{\dd}{\dd t}F(h_t(x),g_t(x))
+=\bigl(\log u_t(x)+1\bigr)\partial_th_t(x)
+-u_t(x)\partial_tg_t(x).
+\]
+The right-hand side is dominated in \(L^1([a,b]\times\RR)\) by
+\[
+C_{m,M}\bigl(|\partial_th_t(x)|+|\partial_tg_t(x)|\bigr),
+\]
+because the first part of the proof gives uniform \(L^1\) bounds for
+\(\partial_th_t\) and \(\partial_tg_t\) on \([a,b]\).  Fubini's theorem then
+gives absolute continuity of \(H\) and the differentiated formula
+\[
+H'(t)=
+\int_{\RR}(\log u_t+1)\partial_th_t\dd x
+-\int_{\RR}u_t\,\partial_tg_t\dd x
+\quad\text{for a.e. }t .
+\]
+Finally, \(\int h_t=\int g_t=1\) for all \(t\).  Since
+\(t\mapsto h_t\) and \(t\mapsto g_t\) are \(L^1\)-absolutely continuous,
+differentiating these mass identities gives
+\(\int\partial_th_t=\int\partial_tg_t=0\) for a.e. \(t\).  Substituting this
+into the previous display yields \eqref{eq:poisson-kl-l1-chain-rule}.
+\end{proof}
+
 \begin{proposition}[Self-contained Cauchy/KL Hardy--Stein identity]%
 \label{prop:self-contained-cauchy-kl-hardystein}
 Let \(0<a<b<\infty\).  Let
@@ -535,31 +642,10 @@ The quotient bounds place \(u_t\) in a fixed compact interval
 Therefore both \(u_t\) and \(\log u_t\) are uniformly bounded and Lipschitz on
 \([a,b]\times\RR\), and the assumed cutoff pairing
 \eqref{eq:self-contained-cauchy-kl-pairing} applies to
-\((h_t,\log u_t)\) and \((g_t,u_t)\).
-
-First prove the one-variable chain rule.  Set
-\[
-F(h,g):=h\log(h/g)=g\,\Phi(h/g),\qquad \Phi(r)=r\log r .
-\]
-On the closed quotient cone \(\{g>0,\ h/g\in J\}\), the partial derivatives
-\[
-\partial_hF(h,g)=\log(h/g)+1,\qquad
-\partial_gF(h,g)=-h/g
-\]
-are bounded.  For \(t\in[a,b]\), the functions
-\(h_t,g_t,\partial_th_t,\partial_tg_t\) lie in \(L^1(\RR)\), uniformly on
-compact time intervals, because they are Poisson smoothings of finite
-measures.  Thus \(t\mapsto F(h_t,g_t)\) is absolutely continuous as an
-\(L^1(\RR)\)-valued map, and integration in \(x\) gives \(H\in AC([a,b])\)
-with
-\[
-H'(t)=
-\int_{\RR}(\log u_t+1)\partial_th_t\dd x
--\int_{\RR}u_t\,\partial_tg_t\dd x
-\quad\text{for a.e. }t .
-\]
-Since \(\int\partial_th_t=\int\partial_tg_t=0\), this is
-\eqref{eq:kl-chain-rule-before-pairing}.
+\((h_t,\log u_t)\) and \((g_t,u_t)\).  Lemma~
+\ref{lem:poisson-kl-l1-ac-chain-rule} gives \(H\in AC([a,b])\), the local
+\(L^1\)-absolute continuity of \(h_t,g_t,\partial_th_t,\partial_tg_t\), and
+the quotient chain rule \eqref{eq:kl-chain-rule-before-pairing}.
 
 Apply \eqref{eq:self-contained-cauchy-kl-pairing} to the two terms in
 \eqref{eq:kl-chain-rule-before-pairing}.  The constants in the tests do not

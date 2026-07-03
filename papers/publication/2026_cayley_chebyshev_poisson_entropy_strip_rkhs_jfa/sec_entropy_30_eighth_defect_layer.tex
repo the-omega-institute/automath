@@ -3,10 +3,11 @@
 
 The analytic input for the eighth-order coefficient identity is
 Theorem~\ref{thm:poisson-kl-even-orders} with \(N=4\).  The finite centred
-sixth absolute moment is the coefficient-evaluation threshold for the
-displayed universal moment-polynomial coefficient \(A_8\).  This evaluability
-statement is algebraic and does not rule out separate lower-tail asymptotic
-analyses outside the displayed universal polynomial.  The displayed
+sixth absolute moment is the first level at which the displayed universal
+moment-polynomial coefficient \(A_8\) is evaluable; no sharp analytic
+threshold is claimed.  This evaluability statement is algebraic and does not
+rule out separate lower-tail asymptotic analyses outside the displayed
+universal polynomial.  The displayed
 quantitative \(O_\nu(t^{-9})\) remainder uses
 the positive-margin retained-order theorem with \(N=4\) and \(\eta=1\),
 and therefore assumes a finite centred seventh absolute moment.
@@ -25,7 +26,7 @@ Let \(\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y\), let
 \eqref{eq:mode-integral-definition}, and define \(Q_n\) by
 \eqref{eq:mode-laurent-polynomial-definition}.  For the modes needed through
 order eight, use the Laurent normalization summarized in
-Table~\ref{tab:cayley-phase-normalization}, namely
+Table~\ref{tab:coefficient-notation}, namely
 \(\cos(2\ell\theta)=(z^\ell+z^{-\ell})/2\) and
 \(\sin(2\ell\theta)=(z^\ell-z^{-\ell})/(2\ii)\).  Then
 \begin{align*}
@@ -62,19 +63,8 @@ n&2&3&4&5&6\\
 \end{array}
 \]
 Thus the negative-exponent sign for odd \(n\) is already part of
-\(q_{n,k}\); it is not a later conjugation rule.  The same convention gives
-the following coefficient vectors on positive exponents:
-\[
-\begin{array}{c|c|c}
-n & (q_{n,1},\ldots,q_{n,n}) & q_{n,-m}\ (1\le m\le n)\\
-\hline
-2 & -\frac14(1,1) & q_{2,m}\\
-3 & \frac{\ii}{8}(1,2,1) & -q_{3,m}\\
-4 & \frac1{16}(1,3,3,1) & q_{4,m}\\
-5 & -\frac{\ii}{32}(1,4,6,4,1) & -q_{5,m}\\
-6 & -\frac1{64}(1,5,10,10,5,1) & q_{6,m}.
-\end{array}
-\]
+\(q_{n,k}\); it is not a later conjugation rule.  The positive-exponent
+vectors are the ones already fixed in Table~\ref{tab:coefficient-notation}.
 \end{lemma}
 
 \begin{proof}
@@ -96,256 +86,139 @@ The remaining rows follow in the same way from the displayed finite Fourier
 forms.
 \end{proof}
 
-Before reading the constant-term table, the computation should be interpreted
-as the following deterministic finite certificate.  For
-\(\mathbf n=(n_1,\ldots,n_r)\), first form the all-sign Laurent coefficient
-vectors from Lemma~\ref{lem:n4-normalized-laurent-representatives} using
-\eqref{eq:n4-laurent-all-sign-coefficients}.  The Cauchy mode integral is the
-zero-sum convolution
-\begin{equation}\label{eq:eighth-order-pretable-convolution-algorithm}
-I(n_1,\ldots,n_r)
-=\sum_{\substack{k_1+\cdots+k_r=0\\0<|k_j|\le n_j}}
-q_{n_1,k_1}\cdots q_{n_r,k_r}.
-\end{equation}
-Equivalently, this finite sum may be evaluated by the recurrence
+The constant-term arithmetic is used only through total order eight, and is
+therefore a finite Laurent certificate.  The coefficient convention is always
+the all-sign formula \eqref{eq:n4-laurent-all-sign-coefficients}; in
+particular, the signs of negative exponents in odd modes are already present
+in \(q_{n,k}\) and no later conjugation rule is applied.
+
+\begin{lemma}[Laurent constant-term certificate through order eight]%
+\label{lem:eighth-order-coefficient-arithmetic}
+Use the Laurent representatives of
+Lemma~\ref{lem:n4-normalized-laurent-representatives}.  For
+\(\mathbf n=(n_1,\ldots,n_r)\), define
+\[
+\mathcal K(\mathbf n)
+:=\{(k_1,\ldots,k_r):0<|k_j|\le n_j,\ k_1+\cdots+k_r=0\}
+\]
+and
+\[
+S(\mathbf n):=
+\sum_{\mathbf k\in\mathcal K(\mathbf n)}
+\prod_{j=1}^r
+\operatorname{sgn}(k_j)^{\,n_j\bmod 2}
+\binom{n_j-1}{|k_j|-1}.
+\]
+Equivalently, the same constant term \(I(\mathbf n)\) is produced directly
+from the Laurent coefficients by the recurrence
 \begin{equation}\label{eq:eighth-order-constant-term-recurrence}
 C_0(s)=\mathbf 1_{\{s=0\}},\qquad
 C_j(s)=\sum_{0<|k|\le n_j}q_{n_j,k}\,C_{j-1}(s-k)
-\quad(1\le j\le r),\qquad I(n_1,\ldots,n_r)=C_r(0).
+\quad(1\le j\le r),\qquad I(\mathbf n)=C_r(0).
 \end{equation}
-This all-sign convolution formula is the exact certificate used below: it is
-finite, ordered, and uses only the displayed rational or rational-imaginary
-coefficients.  No conjugation is applied beyond the signs already contained
-in \eqref{eq:n4-laurent-all-sign-coefficients}.
-The proof below uses only this recurrence, the all-sign coefficient formula
-\eqref{eq:n4-laurent-all-sign-coefficients}, and the displayed hand
-convolutions in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  In
-particular, the six constant terms entering \(A_8\) are verified explicitly
-before the coefficient substitution is made.
-
-\begin{lemma}[Complete constant-term table through order eight]%
-\label{lem:eighth-order-coefficient-arithmetic}
-Use the Laurent representatives of
-Lemma~\ref{lem:n4-normalized-laurent-representatives}.  For every product
-which can enter the entropy expansion through total order eight, the Cauchy
-mode integral is the constant Laurent coefficient
+Then
+\begin{equation}\label{eq:eighth-order-finite-convolution-certificate}
+I(\mathbf n)=[z^0]\prod_{j=1}^rQ_{n_j}(z)
+=\Bigl(\prod_{j=1}^r\lambda_{n_j}\Bigr)S(\mathbf n),
+\end{equation}
+and the complete list of constant terms used through order eight is
 \[
-I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z)
-=\sum_{k_1+\cdots+k_r=0}q_{n_1,k_1}\cdots q_{n_r,k_r}.
-\]
-Here and below the coefficient convention is the all-sign formula
-\eqref{eq:n4-laurent-all-sign-coefficients}.
-Thus the signs in products involving odd modes are part of the Laurent
-coefficient vector, not an additional conjugation convention.  The two
-sign-sensitive eighth-order rows are displayed before the full table.  For
-\(Q_3Q_5\), the zero-sum pairs are \((k,-k)\), \(k=\pm1,\pm2,\pm3\).  Since
-both factors are odd modes, the sign is already contained in the all-sign
-coefficients, and
-\[
-\begin{aligned}
-I(3,5)
-&=2\sum_{k=1}^{3}q_{3,k}q_{5,-k} \\
-&=-\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}
-=-\frac{15}{128}.
-\end{aligned}
-\]
-For \(Q_2Q_3^2\), first convolve the two \(Q_3\) coefficient vectors.  The
-fourteen zero-sum triples are grouped by \(k_2+k_3=-k_1\) with
-\(k_1\in\{\pm1,\pm2\}\):
-\[
-\begin{array}{c|c|c}
-k_1 & (k_2,k_3) & \sum
-\operatorname{sgn}(k_2)\operatorname{sgn}(k_3)
-\binom{2}{|k_2|-1}\binom{2}{|k_3|-1}\\
+\begin{array}{c|c|c|c|c|c}
+\text{order}&\mathbf n&|\mathcal K(\mathbf n)|&S(\mathbf n)
+&\prod_j\lambda_{n_j}&I(\mathbf n)\\
 \hline
- 1 & (-3,2),(-2,1),(1,-2),(2,-3) & -8\\
--1 & (-2,3),(-1,2),(2,-1),(3,-2) & -8\\
- 2 & (-3,1),(-1,-1),(1,-3) & -1\\
--2 & (-1,3),(1,1),(3,-1) & -1 .
+4&(2,2)&4&4&\frac1{16}&\frac14\\
+\hline
+5&(2,3)&4&0&-\frac{\ii}{32}&0\\
+\hline
+6&(2,4)&4&8&-\frac1{64}&-\frac18\\
+6&(3,3)&6&-12&-\frac1{64}&\frac{3}{16}\\
+6&(2,2,2)&6&6&-\frac1{64}&-\frac{3}{32}\\
+\hline
+7&(2,5)&4&0&\frac{\ii}{128}&0\\
+7&(3,4)&6&0&\frac{\ii}{128}&0\\
+7&(2,2,3)&10&0&\frac{\ii}{128}&0\\
+\hline
+8&(2,6)&4&12&\frac1{256}&\frac{3}{64}\\
+8&(3,5)&6&-30&\frac1{256}&-\frac{15}{128}\\
+8&(4,4)&8&40&\frac1{256}&\frac5{32}\\
+8&(2,2,4)&12&24&\frac1{256}&\frac3{32}\\
+8&(2,3,3)&14&-18&\frac1{256}&-\frac9{128}\\
+8&(2,2,2,2)&36&36&\frac1{256}&\frac9{64}.
 \end{array}
 \]
-Because the \(Q_2\) binomial weight is \(1\) for \(k_1=\pm1,\pm2\),
-the signed convolution is \(-18\), while
-\(\lambda_2\lambda_3^2=1/256\).  Hence the explicit all-sign check is
-\[
-I(2,3,3)=-\frac{18}{256}=-\frac9{128}.
-\]
-The complete list needed for the even entropy coefficients and the intervening
-odd cancellations is
-\[
-\begin{array}{c|c|c}
-\text{total order} & \text{product} & [z^0]\text{ of the product} \\
-\hline
-4 & Q_2^2 & \frac{4}{16}=\frac14\\
-\hline
-5 & Q_2Q_3 & 0\\
-\hline
-6 & Q_2Q_4 & -\frac{3+1+1+3}{64}=-\frac18\\
-6 & Q_3^2 & \frac{2(1^2+2^2+1^2)}{64}=\frac{3}{16}\\
-6 & Q_2^3 & -\frac{6}{64}=-\frac{3}{32}\\
-\hline
-7 & Q_2Q_5 & 0\\
-7 & Q_3Q_4 & 0\\
-7 & Q_2^2Q_3 & 0\\
-\hline
-8 & Q_2Q_6 & \frac{5+1+1+5}{256}=\frac{3}{64}\\
-8 & Q_3Q_5 &
--\frac{2(1\cdot1+2\cdot4+1\cdot6)}{256}=-\frac{15}{128}\\
-8 & Q_4^2 & \frac{2(1^2+3^2+3^2+1^2)}{256}=\frac{5}{32}\\
-8 & Q_2^2Q_4 & \frac{4+6+12+2}{256}=\frac{3}{32}\\
-8 & Q_2Q_3^2 & -\frac{2\cdot8+2\cdot1}{256}=-\frac{9}{128}\\
-8 & Q_2^4 & \frac{36}{256}=\frac{9}{64}.
-\end{array}
-\]
-Here \(I(2,3,3)\) denotes the row \(Q_2Q_3^2\), and similarly for the
-other products.  These values are the only constant terms used in the
-coefficient substitution below.  The six eighth-order rows used in \(A_8\)
-are checked, with numerator, denominator, and sign separated, as follows.
-Let
-\[
-b_n(m):=\binom{n-1}{m-1}\qquad(1\le m\le n).
-\]
-For rows with two factors, the zero-sum condition gives pairs
-\((k,-k)\), and the all-sign convention gives
-\[
-\begin{array}{c|c|c|c|c}
-\mathbf n & \text{signed integer sum} & \prod_j\lambda_{n_j}
-& \operatorname{sgn}(I) & |I|\\
-\hline
-(2,6)&
-2\{b_2(1)b_6(1)+b_2(2)b_6(2)\}=12
-&\frac1{256}&+&\frac3{64}\\
-(3,5)&
--2\{b_3(1)b_5(1)+b_3(2)b_5(2)+b_3(3)b_5(3)\}=-30
-&\frac1{256}&-&\frac{15}{128}\\
-(4,4)&
-2\sum_{m=1}^4 b_4(m)^2=40
-&\frac1{256}&+&\frac5{32}.
-\end{array}
-\]
-For the three rows with at least three factors, grouping by the first
-factor(s) gives the following finite integer checks:
-\[
-\begin{array}{c|c|c|c|c}
-\mathbf n & \text{grouped signed integer sum} & \prod_j\lambda_{n_j}
-& \operatorname{sgn}(I) & |I|\\
-\hline
-(2,2,4)&
-\displaystyle
-4b_4(1)+2b_4(2)+4b_4(3)+2b_4(4)=24
-&\frac1{256}&+&\frac3{32}\\[0.7em]
-(2,3,3)&
-\displaystyle
-(-8)+(-8)+(-1)+(-1)=-18
-&\frac1{256}&-&\frac9{128}\\[0.7em]
-(2,2,2,2)&
-\displaystyle
-\binom42+\binom42+4!=36
-&\frac1{256}&+&\frac9{64}.
-\end{array}
-\]
-The row \(I(2,3,3)\) uses the four grouped sums displayed above the main
-table.  In the \(Q_2^2Q_4\) row the coefficients
-\((4,2,4,2)\) are the counts of ordered \(Q_2^2\) exponent pairs with
-\(|k_1+k_2|=1,2,3,4\), respectively.  In the \(Q_2^4\) row the three terms
-count two \(+1\)'s and two \(-1\)'s, two \(+2\)'s and two \(-2\)'s, and one
-exponent of each of \(+1,-1,+2,-2\).
 \end{lemma}
 
 \begin{proof}
-The constant-term identity is exactly
-Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  It reduces every
-entry to a finite zero-sum convolution of the coefficient vectors in
-Lemma~\ref{lem:n4-normalized-laurent-representatives}.  For a row
-\(\mathbf n=(n_1,\ldots,n_r)\), write
-\[
-\mathcal K(\mathbf n)
-:=\{(k_1,\ldots,k_r):0<|k_j|\le n_j,\ k_1+\cdots+k_r=0\}.
-\]
-Using the coefficient-vector formula in
-Lemma~\ref{lem:n4-normalized-laurent-representatives}, the constant term is
-\begin{equation}\label{eq:eighth-order-finite-convolution-certificate}
-I(\mathbf n)
-=\Bigl(\prod_{j=1}^r\lambda_{n_j}\Bigr)
-\sum_{\mathbf k\in\mathcal K(\mathbf n)}
-\prod_{j=1}^r
-\varepsilon_{n_j}(k_j)\binom{n_j-1}{|k_j|-1}.
-\end{equation}
-Thus each row is the product of a displayed scalar
-\(\prod_j\lambda_{n_j}\) and a signed integer convolution.  The complete
-finite certificate for the rows used through order eight is
-\[
-\begin{array}{c|c|c|c|c}
-\mathbf n & |\mathcal K(\mathbf n)|&
-\displaystyle\sum_{\mathcal K(\mathbf n)}
-\prod_j\varepsilon_{n_j}(k_j)\binom{n_j-1}{|k_j|-1}
-&\prod_j\lambda_{n_j}&I(\mathbf n)\\
-\hline
-(2,2)&4&4&\frac1{16}&\frac14\\
-(2,3)&4&0&-\frac{\ii}{32}&0\\
-(2,4)&4&8&-\frac1{64}&-\frac18\\
-(3,3)&6&-12&-\frac1{64}&\frac{3}{16}\\
-(2,2,2)&6&6&-\frac1{64}&-\frac{3}{32}\\
-(2,5)&4&0&\frac{\ii}{128}&0\\
-(3,4)&6&0&\frac{\ii}{128}&0\\
-(2,2,3)&10&0&\frac{\ii}{128}&0\\
-(2,6)&4&12&\frac1{256}&\frac{3}{64}\\
-(3,5)&6&-30&\frac1{256}&-\frac{15}{128}\\
-(4,4)&8&40&\frac1{256}&\frac{5}{32}\\
-(2,2,4)&12&24&\frac1{256}&\frac{3}{32}\\
-(2,3,3)&14&-18&\frac1{256}&-\frac{9}{128}\\
-(2,2,2,2)&36&36&\frac1{256}&\frac{9}{64}.
-\end{array}
-  \]
-  The six rows that enter \(B_8\), and hence \(A_8\), are the following
-  exact convolution data.  Here \(S(\mathbf n)\) denotes the signed integer
-  convolution in \eqref{eq:eighth-order-finite-convolution-certificate}, and
-  the last three columns give \(I(\mathbf n)=\operatorname{sgn}(I)N/D\) with
-  \(N,D>0\).
-  \[
-\begin{array}{c|c|c|c|c|c|c}
-\mathbf n&|\mathcal K(\mathbf n)|&S(\mathbf n)&\prod_j\lambda_{n_j}
-&\operatorname{sgn}(I)&N&D\\
-\hline
-(2,6)&4&12&\frac1{256}&+&3&64\\
-(3,5)&6&-30&\frac1{256}&-&15&128\\
-(4,4)&8&40&\frac1{256}&+&5&32\\
-(2,2,4)&12&24&\frac1{256}&+&3&32\\
-(2,3,3)&14&-18&\frac1{256}&-&9&128\\
-(2,2,2,2)&36&36&\frac1{256}&+&9&64 .
-\end{array}
-  \]
-  Equivalently, these rows read
-  \(I(2,6)=3/64\), \(I(3,5)=-15/128\), \(I(4,4)=5/32\),
-  \(I(2,2,4)=3/32\), \(I(2,3,3)=-9/128\), and
-  \(I(2,2,2,2)=9/64\).
-  The column \(|\mathcal K(\mathbf n)|\) gives the number of zero-sum ordered
-  tuples enumerated by
-  \eqref{eq:eighth-order-constant-term-recurrence}--%
-  \eqref{eq:eighth-order-finite-convolution-certificate}, so every entry is
-  obtained from the displayed coefficient vectors without any further
-  cancellation convention.  The proof is entirely finite Laurent arithmetic:
-  the coefficient vectors in
-  Lemma~\ref{lem:n4-normalized-laurent-representatives}, the recurrence
-  \eqref{eq:eighth-order-constant-term-recurrence}, the finite zero-sum rule
-  \eqref{eq:eighth-order-finite-convolution-certificate}, and the displayed
-  row data above are the complete exact certificate used by the subsequent
-  substitutions.  The worked rows \(I(3,5)\) and \(I(2,3,3)\) above show
-  explicitly where the odd-mode signs enter.  The grouped checks for
-  \((2,6)\), \((3,5)\), \((4,4)\), \((2,2,4)\), \((2,3,3)\), and
-  \((2,2,2,2)\) give the numerator, denominator, and sign of every row used
-  in \(A_8\).
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} identifies each
+Cauchy mode integral with the zero Laurent coefficient of the corresponding
+product.  Substituting
+\eqref{eq:n4-laurent-all-sign-coefficients} gives
+\eqref{eq:eighth-order-finite-convolution-certificate}; the recurrence
+\eqref{eq:eighth-order-constant-term-recurrence} is the same convolution
+performed one factor at a time.  Thus the table is obtained by finite
+enumeration of \(\mathcal K(\mathbf n)\) using the displayed coefficient
+vectors.  The sign-sensitive entries \(S(3,5)=-30\) and
+\(S(2,3,3)=-18\) are included in the table, so the negative values
+\(I(3,5)=-15/128\) and \(I(2,3,3)=-9/128\) follow from the same all-sign
+rule as the other rows.
 
-The zero rows are the complete list of odd total-degree products appearing
-before the even-power projection:
+The three zero rows are the complete list of odd total-degree products
+appearing before the even-power projection:
 \[
 B_5=a_2a_3,\qquad
 B_7=a_2a_5+a_3a_4-\frac12a_2^2a_3 .
 \]
-The table proves their zero constant terms directly.  They also vanish by
-parity, because each listed product contains an odd number of odd modes and is
-odd under \(y\mapsto-y\).
+The table gives their zero constant terms directly; equivalently they vanish
+by parity, because each contains an odd number of odd modes and is odd under
+\(y\mapsto-y\).
 \end{proof}
+
+Before the moment substitution, we record the six order-eight constant-term
+checks in a form that can be verified by hand.  Write
+\(b_n(j)=\binom{n-1}{j-1}\).  For even modes the all-sign weight is
+\(b_n(|k|)\); for odd modes it is
+\(\operatorname{sgn}(k)b_n(|k|)\).  Therefore
+\[
+\begin{array}{c|l|c}
+\mathbf n & \text{direct check for }S(\mathbf n) & S(\mathbf n)\\
+\hline
+(2,6)
+&2\{b_2(1)b_6(1)+b_2(2)b_6(2)\}=2(1+5)&12\\[0.2em]
+(3,5)
+&-2\{b_3(1)b_5(1)+b_3(2)b_5(2)+b_3(3)b_5(3)\}
+=-2(1+8+6)&-30\\[0.2em]
+(4,4)
+&2\{1^2+3^2+3^2+1^2\}&40\\[0.2em]
+(2,2,4)
+&2\{b_4(2)+2b_4(3)+b_4(4)\}+4b_4(1)
+=2(3+6+1)+4&24\\[0.2em]
+(2,3,3)
+&C(-1)+C(-2)+C(1)+C(2),\quad
+C(\pm1)=-8,\ C(\pm2)=-1&-18\\[0.2em]
+(2,2,2,2)
+&\frac{4!}{2!\,2!}+\frac{4!}{1!\,1!\,1!\,1!}
++\frac{4!}{2!\,2!}&36.
+\end{array}
+\]
+Here
+\[
+C(s)=
+\sum_{\substack{k+\ell=s\\0<|k|,|\ell|\le3}}
+\operatorname{sgn}(k)\operatorname{sgn}(\ell)
+b_3(|k|)b_3(|\ell|)
+\]
+is the signed two-\(Q_3\) convolution used in the \((2,3,3)\) row.  Since
+\(\prod_j\lambda_{n_j}=1/256\) in all six order-eight rows, these checks give
+\[
+\begin{gathered}
+I(2,6)=\frac3{64},\quad I(3,5)=-\frac{15}{128},\quad
+I(4,4)=\frac5{32},\\
+I(2,2,4)=\frac3{32},\quad
+I(2,3,3)=-\frac9{128},\quad
+I(2,2,2,2)=\frac9{64}.
+\end{gathered}
+\]
 
 \begin{lemma}[Substitution into \(A_4\), \(A_6\), and \(A_8\)]%
 \label{lem:n4-entropy-coefficient-substitution}
@@ -590,9 +463,9 @@ table in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}, and the
 coefficient substitution in
 Lemma~\ref{lem:n4-entropy-coefficient-substitution}.  The normalization and
 symmetric two-point checks are recorded in the preceding remark.  The finite
-centred sixth absolute moment is the coefficient-evaluation threshold for the
-displayed universal moment-polynomial coefficient
-\(A_8\).
+centred sixth absolute moment is the first level at which the displayed
+universal moment-polynomial coefficient \(A_8\) is evaluable; no sharp
+analytic threshold is claimed.
 \end{theorem}
 
 \paragraph{Coefficient-evaluation note.}
@@ -739,7 +612,8 @@ T_{\sigma,M}^{(8)}:=\sigma T(\widehat M).
 \end{definition}
 
 The following table separates the constant regimes for the eighth-order
-remainder and the deterministic finite-time sixth-defect bookkeeping.
+remainder and the appendix-only deterministic finite-time sixth-defect
+bookkeeping.
 \phantomsection\label{tab:n4-constant-regimes}
 
 \begingroup
@@ -780,9 +654,9 @@ Independently supplied \(C,B,T\), a value \(A_8(\nu)\), and a remainder
 \(E(t)\) satisfying
 \(|A_8(\nu)|\le C\), \(|E(t)|\le Bt^{-9}\) for \(t\ge T\). &
 \(C,B,T\). &
-  External bounds used in
-  Corollary~\ref{cor:finite-time-defect-bookkeeping}; the inserted KL value
-  does not certify these constants or its own error radius.\\[0.7em]
+  External bounds used only in the conditional post-processing of
+  Appendix~\ref{app:conditional-post-processing}; the inserted KL value does
+  not certify these constants or its own error radius.\\[0.7em]
 Controlled shell, normalized &
 Variance-one laws with \(\EE|X|^7\le u\), \(u\ge1\). &
 \(C(u),B(u),T(u)\) from
@@ -795,8 +669,8 @@ Controlled shell, dimensional &
 \(C_{\sigma,M}^{(8)},B_{\sigma,M}^{(8)},T_{\sigma,M}^{(8)}\) from
 \eqref{eq:dictionary-controlled-shell-c8}. &
   The shell constants used in
-  Corollary~\ref{cor:finite-time-defect-bookkeeping}; they are fixed before
-  \(K_t^{\rm obs}\) and \(\eta_t\) enter, and depend only on
+  Appendix~\ref{app:conditional-post-processing}; they are fixed before
+  \(K_t^{\rm app}\) and \(\eta_t\) enter, and depend only on
   \((\sigma,M)\).\\
 \end{longtable}
 \endgroup
@@ -835,14 +709,16 @@ D_{\mathrm{KL}}(h_t\|g_t)
 
 \begin{remark}
 The finite centred sixth absolute moment is the \(N=4\) hypothesis
-\(2N-2=6\), the coefficient-evaluation threshold for the displayed universal
-moment-polynomial coefficient \(A_8\).  The seventh moment enters
+\(2N-2=6\).  It is the first level at which the displayed universal
+moment-polynomial coefficient \(A_8\) is evaluable; no sharp analytic
+threshold is claimed.  The seventh moment enters
 Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for the quantitative
 \(O(t^{-9})\) remainder.
 
 The entropy proof uses the centred moment jet and, for the quantitative
-remainder, the seventh absolute moment bound directly.  No observation or
-lattice reconstruction input is used in the entropy theorem chain.
+remainder, the seventh absolute moment bound directly.  No finite-grid,
+lattice-reconstruction, or finite-time approximation input is used in the
+entropy theorem chain.
 \end{remark}
 
 \begin{proof}
