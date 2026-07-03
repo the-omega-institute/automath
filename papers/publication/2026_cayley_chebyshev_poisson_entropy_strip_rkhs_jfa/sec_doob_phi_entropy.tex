@@ -450,6 +450,100 @@ exchanging \(x\) and \(y\); hence the factor \(1/(2\pi)\) becomes \(1/\pi\),
 which gives \eqref{eq:kl-domain-final-derivative}.
 \end{proof}
 
+\begin{lemma}[Generator convention and cutoff domain for the KL Doob identity]%
+\label{lem:kl-main-generator-convention-domain}
+Use the Fourier transform convention
+\[
+\widehat f(\xi)=\int_{\RR}e^{-\ii x\xi}f(x)\dd x .
+\]
+For Schwartz \(f\), the principal-value operator
+\[
+(Lf)(x):=\frac1\pi\operatorname{p.v.}\int_{\RR}
+\frac{f(y)-f(x)}{(x-y)^2}\dd y
+\]
+satisfies
+\begin{equation}\label{eq:kl-main-generator-fourier-sign}
+\widehat{Lf}(\xi)=-|\xi|\,\widehat f(\xi).
+\end{equation}
+Consequently \(L=-|D|\) and \(\partial_tP_t=LP_t\).
+
+Let \(\nu\) have finite centred second moment, let \(0<a<b<\infty\), and set
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
+\]
+On \([a,b]\) the following domain convention is in force.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item
+      The identities
+      \[
+      \partial_th_t=Lh_t,\qquad \partial_tg_t=Lg_t
+      \]
+      hold as \(L^1(\RR)\) principal-value identities.
+\item
+      If \(p\in\{h_t,g_t\}\) and \(q\) is bounded Lipschitz, then
+      \[
+      \int_{\RR}q(x)Lp(x)\dd x
+      =
+      -\frac{1}{2\pi}\iint_{\RR^2}
+      \frac{(p(x)-p(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
+      \]
+      This is not a formal integration by parts: the right side is the
+      absolutely convergent limit of the compactly supported identities with
+      \(q\) replaced by \(\chi_Rq\).
+\item
+      For bounded \(C^2\) functions \(f\) with bounded first and second
+      derivatives,
+      \[
+      L(g_tf)(x)-f(x)Lg_t(x)
+      =
+      \frac1\pi\operatorname{p.v.}\int_{\RR}
+      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y .
+      \]
+      Thus the Doob generator used below is
+      \[
+      (\mathcal L_tf)(x)
+      :=
+      \frac{L(g_tf)(x)-f(x)Lg_t(x)}{g_t(x)}
+      =
+      \frac{1}{\pi g_t(x)}\operatorname{p.v.}\int_{\RR}
+      \frac{g_t(y)(f(y)-f(x))}{(x-y)^2}\dd y ,
+      \]
+      on this principal-value domain.
+\item
+      For
+      \[
+      H(t)=D_{\mathrm{KL}}(h_t\|g_t),\qquad
+      \Lambda(\alpha,\beta)
+      =\alpha\log(\alpha/\beta)-\alpha+\beta ,
+      \]
+      the \(L^1\) chain rule gives \(H\in AC([a,b])\), and the nonlocal
+      derivative is always interpreted through the product-cutoff identity
+      \begin{equation}\label{eq:kl-main-generator-domain-cutoff-identity}
+      -H'(t)=
+      \lim_{R\to\infty}
+      \frac{1}{2\pi}\iint_{\RR^2}\chi_R(x)\chi_R(y)
+      \frac{
+      g_t(x)\Lambda(u_t(x),u_t(y))
+      +g_t(y)\Lambda(u_t(y),u_t(x))}
+      {(x-y)^2}\dd x\dd y
+      \end{equation}
+      for a.e. \(t\in[a,b]\), with convergence in \(L^1([a,b])\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The Fourier sign in \eqref{eq:kl-main-generator-fourier-sign} is the
+Cauchy-semigroup normalization used in
+Proposition~\ref{prop:poisson-semigroup-law}: \(\widehat{P_t}(\xi)=
+e^{-t|\xi|}\), hence \(\partial_tP_t=-|D|P_t\).  With this sign convention,
+Lemma~\ref{lem:cauchy-doob-cutoff-calculus} proves the \(L^1\)
+principal-value identities, the cutoff bilinear identity, and the Doob
+product formula.  Proposition~\ref{prop:kl-appendix-cutoff-domain-identity}
+then combines these principal-value identities with the bounded-range
+\(L^1\) KL chain rule, Lemma~\ref{lem:l1-bounded-kl-quotient-chain-rule},
+and gives \eqref{eq:kl-main-generator-domain-cutoff-identity}.
+\end{proof}
+
 \begin{proposition}[Domain inputs for the KL tail identity]%
 \label{prop:kl-tail-cutoff-inputs}
 Under the hypotheses and notation of
@@ -467,14 +561,17 @@ and
 H'(t)=-I_\nu(t)
 \qquad\text{for a.e. }t>0.
 \end{equation}
-The same identity is obtained as the principal-value, product-cutoff limit
-fixed in Appendix~\ref{app:doob-bregman-domain}; no formal nonlocal product
-rule is used.
+The principal-value sign and domain are those of
+Lemma~\ref{lem:kl-main-generator-convention-domain}; in particular the same
+identity is first obtained as the product-cutoff limit
+\eqref{eq:kl-main-generator-domain-cutoff-identity}, and no formal nonlocal
+product rule is used.
 \end{proposition}
 
 \begin{proof}
-Apply Theorem~\ref{thm:kl-local-doob-bregman-domain-closure} on each compact
-interval \([a,b]\subset(0,\infty)\).
+Apply Theorem~\ref{thm:kl-local-doob-bregman-domain-closure} and
+Lemma~\ref{lem:kl-main-generator-convention-domain} on each compact interval
+\([a,b]\subset(0,\infty)\).
 \end{proof}
 
 \begin{theorem}[KL Doob tail identity]%
@@ -548,15 +645,14 @@ Thus the averaged dissipation on a multiplicative window satisfies
 \end{equation}
 If, in addition, \(0<\eta\le1\) and the centred
 \((2N-2+\eta)\)th absolute moment is finite, then the error terms above have
-the corresponding positive-margin bounds obtained by applying part
-\textup{(PM)} of Theorem~\ref{thm:poisson-kl-even-orders} at \(t\) and
-\(\lambda t\).
+the corresponding positive-margin bounds obtained by applying
+\eqref{eq:positive-margin-retained-order-theorem} at \(t\) and \(\lambda t\).
 \end{proposition}
 
 \begin{proof}
 The tail identity \eqref{eq:relative-entropy-integrated-dissipation} identifies
-\(\int_t^\infty I_\nu\) with \(D_{\mathrm{KL}}(h_t\|g_t)\).  Applying part
-\textup{(E)} of Theorem~\ref{thm:poisson-kl-even-orders} gives
+\(\int_t^\infty I_\nu\) with \(D_{\mathrm{KL}}(h_t\|g_t)\).  Applying
+Theorem~\ref{thm:poisson-kl-even-orders} gives
 \eqref{eq:bregman-tail-coefficient-expansion} and hence the coefficient
 recovery formula \eqref{eq:bregman-tail-coefficient-recovery}.
 
@@ -571,8 +667,8 @@ coefficient of \(t^{-2m}\) is
 \(A_{2m}(\nu)-A_{2m}(\nu)\lambda^{-2m}\), which gives
 \eqref{eq:bregman-finite-window-coefficients}; division by
 \((\lambda-1)t\) gives \eqref{eq:bregman-window-average-coefficients}.
-The positive-margin assertion follows from the explicit remainder estimate in
-Theorem~\ref{thm:poisson-kl-even-orders}\textup{(PM)} for \(H(t)\) and
+The positive-margin assertion follows from the explicit remainder estimate
+\eqref{eq:positive-margin-retained-order-theorem} for \(H(t)\) and
 \(H(\lambda t)\).  The coefficient theorem controls the entropy tail and
 therefore its exact tail-window averages; a differentiated pointwise expansion
 for \(I_\nu(t)\) would require additional regularity beyond the finite-moment
