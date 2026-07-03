@@ -6,12 +6,12 @@ algebra begins with the evaluated polynomial \(A_6\) from
 \eqref{eq:n4-notation-a6}; after the sixth-coefficient identification in
 Theorem~\ref{thm:poisson-kl-eighth}, this same polynomial is the genuine
 \(t^{-6}\) entropy coefficient, and \(\Delta_6(\nu)\) is its two-point defect.
-The finite-time certificate at the end of the subsection is only conditional
+The finite-time estimate at the end of the subsection is only conditional
 bookkeeping: after \(A_8\) and the \(O(t^{-9})\) remainder have been bounded
-independently of the observed KL value, the displayed sixth-defect identity
-converts that observation, together with its certified error radius, into a
-conditional bound for \(\Delta_6\), and then the coefficient-defect coupling
-below gives the \(W_2\) estimate.
+independently of the inserted KL value, the displayed sixth-defect identity
+converts that input, together with its error radius, into a conditional bound
+for \(\Delta_6\), and then the coefficient-defect coupling below gives the
+\(W_2\) estimate.
 
 \paragraph{Fourth-moment algebra.}
 
@@ -98,73 +98,13 @@ $\nu_c=\rho_\sigma$.
 \end{lemma}
 
 \begin{proof}
-All random variables below live on $(\RR,\nu)$.  Set
-\[
-X:=\frac{\gamma-\bar\gamma}{\sigma},
-\qquad
-\beta_3:=\EE[X^3],
-\qquad
-Q_2:=X^2-1-\beta_3X,
-\qquad
-\kappa:=\|Q_2\|_{L^2(\nu)}^2 .
-\]
-By \eqref{eq:defect-sixth-fourth-moment},
-\begin{equation}\label{eq:algebraic-coupling-delta-six}
-\Delta_6(\nu)
-=\frac{\sigma^6}{32}\beta_3^2+\frac{\sigma^6}{8}\kappa .
-\end{equation}
-Define
-\[
-Y:=\mathbf{1}_{\{X\ge 0\}}-\mathbf{1}_{\{X<0\}}\in\{-1,1\}.
-\]
-For every real $x$, with $\operatorname{sgn}(0)=1$,
-\[
-|x-\operatorname{sgn}(x)|\le |x^2-1|.
-\]
-Therefore
-\[
-\EE[(X-Y)^2]\le \EE[(X^2-1)^2].
-\]
-The decomposition $X^2-1=\beta_3X+Q_2$ is orthogonal in $L^2(\nu)$ because
-\[
-\EE[XQ_2]=\EE[X^3]-\EE[X]-\beta_3\EE[X^2]=0.
-\]
-Thus
-\[
-\EE[(X^2-1)^2]
-=\beta_3^2+\kappa
-\le 2\beta_3^2+8\kappa
-=\frac{64}{\sigma^6}\Delta_6(\nu),
-\]
-where the last equality is \eqref{eq:algebraic-coupling-delta-six}.  Since
-$\EE[X]=0$,
-\[
-|\EE[Y]|=|\EE[Y-X]|
-\le \EE[|Y-X|]
-\le \EE[(Y-X)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
-\]
-Let $Z$ be a symmetric Rademacher random variable.  If
-$p=\mathbb P(Y=1)$, then $\EE[Y]=2p-1$ and the optimal transport between
-$\mathcal L(Y)$ and the symmetric law on $\{-1,1\}$ moves
-$|p-1/2|$ mass across distance~$2$.  Hence
-\[
-W_2(\mathcal L(Y),\mathcal L(Z))^2
-=4|p-1/2|=2|\EE[Y]|
-\le \frac{16}{\sigma^3}\Delta_6(\nu)^{1/2}.
-\]
-Also
-\[
-W_2(\mathcal L(X),\mathcal L(Y))
-\le \EE[(X-Y)^2]^{1/2}
-\le \frac{8}{\sigma^3}\Delta_6(\nu)^{1/2}.
-\]
-The laws satisfy $\nu_c=\mathcal L(\sigma X)$ and
-$\rho_\sigma=\mathcal L(\sigma Z)$.  Taking square roots in the preceding
-$W_2$ bound, then using scaling and the triangle inequality, gives
-\eqref{eq:fourth-moment-algebraic-coupling}.
-The zero statement follows from
-Lemma~\ref{lem:fourth-moment-algebraic-defect}.
+The non-negativity and the zero characterization are those of
+Lemma~\ref{lem:fourth-moment-algebraic-defect}.  The transport estimate is
+the elementary sign-coupling argument proved in
+Appendix~\ref{app:fourth-moment-coupling-proof}; it uses only the identity
+\eqref{eq:defect-sixth-fourth-moment}, the pointwise inequality
+\(|x-\operatorname{sgn}x|\le |x^2-1|\), and the optimal coupling of a biased
+Rademacher law with the symmetric Rademacher law.
 \end{proof}
 
 \begin{remark}[Algebraic layer]
@@ -266,7 +206,7 @@ closeness to the symmetric two-point law.  The numerical constants $4$ and
 $8$ are universal.  At this coefficient level the only non-universal
 parameters displayed in the \(W_2\) modulus are the variance scale $\sigma$
 and the coefficient defect \(\Delta_6(\nu)\) itself; no finite-time remainder
-constant, observed KL value, or eighth-order input is involved.
+constant, inserted KL value, or eighth-order input is involved.
 In particular, for fixed $\sigma$,
 \[
 W_2(\nu_c,\rho_\sigma)=O\!\bigl(\Delta_6(\nu)^{1/4}\bigr)
@@ -291,18 +231,174 @@ The \(O((\Delta_6)^{1/4})\) statement for fixed \(\sigma\)
 follows immediately from the displayed estimate.
 \end{proof}
 
-\subsection{Appendix-level finite-time certificate bookkeeping}
-\label{subsec:finite-time-bookkeeping}
-
-The preceding coefficient result is the stability theorem: it converts the
-sixth-order coefficient defect \(\Delta_6(\nu)\) into a \(W_2\) estimate
-against the symmetric two-point law.  A finite-time KL number can be used only
-after separate coefficient and remainder certificates have already been fixed.
-Appendix~\ref{app:finite-time-defect-estimates} records this deterministic
-error propagation as Lemma~\ref{lem:controlled-shell-conditional-certificate}.
-The lemma is not an additional entropy asymptotic; it is bookkeeping for the
-identity
+\begin{corollary}[Deterministic finite-time sixth-defect certificate]%
+\label{cor:finite-time-defect-bookkeeping}
+\label{lem:controlled-shell-conditional-certificate}
+\label{thm:finite-time-poisson-entropy-stability}
+\label{rem:fixed-law-finite-time-certificate}
+Let \(\nu\) be a probability measure on~\(\RR\) with mean~\(\bar\gamma\),
+variance \(\sigma^2>0\), and finite centred fourth absolute moment.  Let
 \[
-\mathfrak D_t^{(6)}(\nu)=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t)
+h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),
+\qquad
+\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma),
 \]
-with a separately certified observation error.
+and let \(A_6(\nu)\) be the sixth-order entropy coefficient from
+Theorem~\ref{thm:poisson-kl-even-orders}.  Set
+\[
+\Delta_6(\nu):=-\frac{7}{64}\sigma^6-A_6(\nu).
+\]
+Fix \(t>0\).  Assume that deterministic numbers \(C,B,T\), a coefficient
+value \(A_8(\nu)\), and a remainder \(E(t)\) have been fixed so that
+\(t\ge T\) and
+\begin{equation}\label{eq:main-controlled-shell-eighth-expansion}
+D_{\mathrm{KL}}(h_t\|g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{A_6(\nu)}{t^6}
++\frac{A_8(\nu)}{t^8}
++E(t),
+\qquad
+|A_8(\nu)|\le C,\qquad |E(t)|\le Bt^{-9}.
+\end{equation}
+Let \(K_t^{\rm obs}\) be a deterministic observed value with independent
+error radius \(\eta_t\ge0\):
+\begin{equation}\label{eq:observed-kl-error-certificate}
+\bigl|K_t^{\rm obs}-D_{\mathrm{KL}}(h_t\|g_t)\bigr|\le \eta_t .
+\end{equation}
+Define
+\begin{equation}\label{eq:main-finite-time-sixth-deficit}
+D_t^{(6),\mathrm{obs}}
+:=
+t^6\left(
+\frac{\sigma^4}{8t^4}
+-\frac{7\sigma^6}{64t^6}
+-K_t^{\rm obs}
+\right)
+\end{equation}
+and
+\begin{equation}\label{eq:main-exact-finite-time-sixth-deficit}
+\mathfrak D_t^{(6)}(\nu)
+:=
+t^6\left(
+\frac{\sigma^4}{8t^4}
+-\frac{7\sigma^6}{64t^6}
+-D_{\mathrm{KL}}(h_t\|g_t)
+\right).
+\end{equation}
+Then
+\begin{equation}\label{eq:main-certified-shell-sixth-identity}
+\mathfrak D_t^{(6)}(\nu)
+=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t),
+\end{equation}
+and
+\begin{equation}\label{eq:main-finite-time-defect-estimate}
+0\le\Delta_6(\nu)
+\le
+\bigl|D_t^{(6),\mathrm{obs}}\bigr|
++t^6\eta_t
++Ct^{-2}
++Bt^{-3}.
+\end{equation}
+Consequently, for the centred law \(\nu_c\) of \(\gamma-\bar\gamma\),
+\begin{equation}\label{eq:main-finite-time-w2-stability}
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}\mathcal A_t^{1/4}
++8\,\sigma^{-2}\mathcal A_t^{1/2},
+\end{equation}
+where
+\[
+\mathcal A_t
+:=
+\bigl|D_t^{(6),\mathrm{obs}}\bigr|
++t^6\eta_t
++Ct^{-2}
++Bt^{-3}.
+\]
+In particular, if each summand in \(\mathcal A_t\) is bounded by
+\(\varepsilon\), then
+\[
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}(4\varepsilon)^{1/4}
++8\,\sigma^{-2}(4\varepsilon)^{1/2}.
+\]
+
+The number \(K_t^{\rm obs}\) and the error bound
+\eqref{eq:observed-kl-error-certificate} are only inputs to
+\eqref{eq:main-finite-time-defect-estimate}; they do not supply the constants
+\(C,B,T\), the coefficient \(A_8(\nu)\), the remainder \(E(t)\), the bound
+\(|E(t)|\le Bt^{-9}\), or the radius \(\eta_t\).
+\end{corollary}
+
+\begin{proof}
+The coefficient-level estimate is Corollary~\ref{cor:coefficient-defect-coupling}.
+Substituting \eqref{eq:main-controlled-shell-eighth-expansion} into
+\eqref{eq:main-exact-finite-time-sixth-deficit} gives
+\[
+\begin{aligned}
+\mathfrak D_t^{(6)}(\nu)
+&=-\frac{7}{64}\sigma^6-A_6(\nu)
+-A_8(\nu)t^{-2}-t^6E(t)\\
+&=\Delta_6(\nu)-A_8(\nu)t^{-2}-t^6E(t),
+\end{aligned}
+\]
+which is \eqref{eq:main-certified-shell-sixth-identity}.  Since
+\(\Delta_6(\nu)\ge0\),
+\[
+0\le \Delta_6(\nu)
+\le
+\bigl|\mathfrak D_t^{(6)}(\nu)\bigr|+Ct^{-2}+Bt^{-3}.
+\]
+The deterministic input \eqref{eq:observed-kl-error-certificate} gives
+\[
+\bigl|\mathfrak D_t^{(6)}(\nu)-D_t^{(6),\mathrm{obs}}\bigr|
+=t^6\bigl|K_t^{\rm obs}-D_{\mathrm{KL}}(h_t\|g_t)\bigr|
+\le t^6\eta_t,
+\]
+and hence \eqref{eq:main-finite-time-defect-estimate}.  Applying the
+\(W_2\) bound in Corollary~\ref{cor:coefficient-defect-coupling} with this
+upper bound for \(\Delta_6(\nu)\) proves
+\eqref{eq:main-finite-time-w2-stability}.
+\end{proof}
+
+\begin{corollary}[Controlled-shell constants for the finite-time certificate]%
+\label{cor:controlled-shell-finite-time-oracle}
+\label{cor:defect-stability-constant-regimes}
+\label{cor:uniform-finite-time-defect-stability}
+Assume, in addition to the hypotheses of
+Corollary~\ref{cor:finite-time-defect-bookkeeping}, that
+\[
+\mu_2=\sigma^2,\qquad \EE|X_c|^7\le M,\qquad M\ge\sigma^7.
+\]
+Let \(\widehat M=M/\sigma^7\), and take
+\[
+C=C_{\sigma,M}^{(8)}=\sigma^8C(\widehat M),\qquad
+B=B_{\sigma,M}^{(8)}=\sigma^9B(\widehat M),\qquad
+T=T_{\sigma,M}^{(8)}=\sigma T(\widehat M)
+\]
+from Definition~\ref{def:n4-finite-time-constant-dictionary}.  If
+\(t\ge T_{\sigma,M}^{(8)}\) and
+\eqref{eq:observed-kl-error-certificate} holds, then
+\begin{equation}\label{eq:uniform-finite-time-defect-shell}
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}\mathcal A_t^{1/4}
++8\,\sigma^{-2}\mathcal A_t^{1/2},
+\qquad
+\mathcal A_t=
+\bigl|D_t^{(6),\mathrm{obs}}\bigr|+t^6\eta_t
++C_{\sigma,M}^{(8)}t^{-2}+B_{\sigma,M}^{(8)}t^{-3}.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Normalize \(X=(\gamma-\bar\gamma)/\sigma\).  Then
+\(\EE X=0\), \(\EE X^2=1\), and
+\(\EE|X|^7\le\widehat M=M/\sigma^7\).  The
+\(N=4,\eta=1\) remainder theorem
+\ref{thm:poisson-kl-eighth-seventh-remainder}, with the constants recorded in
+Definition~\ref{def:n4-finite-time-constant-dictionary}, supplies
+\eqref{eq:main-controlled-shell-eighth-expansion} after restoring the powers
+of \(\sigma\).  The preceding argument then gives the displayed shell form.
+\end{proof}

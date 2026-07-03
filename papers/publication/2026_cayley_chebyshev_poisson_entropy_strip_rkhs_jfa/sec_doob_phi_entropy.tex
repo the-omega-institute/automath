@@ -37,18 +37,16 @@ function is
 \(\Lambda(\alpha,\beta)=\alpha\log(\alpha/\beta)-\alpha+\beta\), and the
 reference density is the moving Poisson profile \(g_t\).  The general
 polarized Bregman framework is due to
-Bogdan--Gutowski--Pietruska-Pa{\l}uba~\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein};
-the quotient-domain verification below is the extra point needed here,
-because the Cauchy generator is used through its principal-value
-normalization and through the time-dependent Doob transform
-\(f\mapsto g_t^{-1}(L(g_tf)-fLg_t)\).
+Bogdan--Gutowski--Pietruska-Pa{\l}uba~\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.
+The proof below does not import an abstract Hardy--Stein theorem.  Instead
+Lemma~\ref{thm:kl-domain-verification} proves the quotient bounds, cutoff
+Cauchy Green formula, and Bregman dominator for the moving profile, and the
+standalone local proposition below then derives the identity
+\(H'(t)=-I_\nu(t)\) directly from those inputs.
 The coefficient expansion itself is proved in
 Theorem~\ref{thm:poisson-kl-even-orders} by the Cayley quotient-mode Taylor
 calculus; the Doob identity below supplies an equivalent dissipation-tail
 representation after that coefficient theorem is known.
-The main argument uses the KL case: the bounded quotient range, Bregman
-majorant, and cutoff limits below justify that identity for the moving Poisson
-Doob quotient.
 
 \begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
 \label{lem:poisson-second-moment-kl-decay}
@@ -394,25 +392,9 @@ g_t(x)\Lambda(u_t(x),u_t(y))
 +g_t(y)\Lambda(u_t(y),u_t(x))}
 {(x-y)^2}.
 \]
-Consequently the one-sided and symmetrized Bregman double integrals below are
-finite, and the annular cutoffs may be removed by dominated convergence in
+Consequently the one-sided and symmetrized Bregman double integrals are
+finite, and annular cutoffs may be removed by dominated convergence in
 \(L^1([a,b])\).
-\item The entropy path is absolutely continuous and satisfies the quotient
-domain identity.  Namely \(H\in AC([a,b])\), the functions
-\(\log u_t\) and \(u_t\) are admissible bounded-Lipschitz tests in the
-principal-value pairing, and, for a.e. \(t\in[a,b]\),
-\begin{equation}\label{eq:kl-chain-rule-before-pairing}
-H'(t)=
-\int_{\RR}\log u_t(x)\,\partial_th_t(x)\dd x
--\int_{\RR}(u_t(x)-1)\,\partial_tg_t(x)\dd x .
-\end{equation}
-Moreover
-\begin{equation}\label{eq:kl-tail-input-unlocalized}
-H'(t)=-I_\nu(t),\qquad
-I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
-\end{equation}
-and \(I_\nu\in L^1([a,b])\).
 \end{enumerate}
 \end{lemma}
 
@@ -493,14 +475,67 @@ g_t(x)\min\{1,|x-y|^{-2}\}\dd x\dd y\dd t
 \]
 and the term with \(g_t(y)\) is identical.  This proves (v), including the
 cutoff convergence by dominated convergence.
+\end{proof}
 
-The quotient bounds in part \textup{(iii)}
-place \(u_t\) in a fixed compact interval \(J\Subset(0,\infty)\) and give a
-uniform Lipschitz bound on \(u_t\).  Therefore both \(u_t\) and \(\log u_t\)
-are uniformly bounded and Lipschitz on \([a,b]\times\RR\), so the
-bounded-Lipschitz principal-value pairing
-\eqref{eq:kl-consolidated-pv-pairing} applies to
-\((p,q)=(h_t,\log u_t)\) and to \((p,q)=(g_t,u_t)\).
+\begin{proposition}[Self-contained Cauchy/KL Hardy--Stein identity]%
+\label{prop:self-contained-cauchy-kl-hardystein}
+Let \(0<a<b<\infty\).  Let
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t
+\]
+on \(t\in[a,b]\), where \(\nu\) is a probability measure with finite mean
+\(\bar\gamma\).  Suppose that, on every compact subinterval of \([a,b]\),
+\(u_t\) is bounded above, bounded away from zero, and Lipschitz in \(x\),
+with constants independent of \(t\).  Suppose also that the cutoff Cauchy
+generator pairing
+\[
+\Omega_R:=\{(x,y):R^{-1}<|x-y|<R\},
+\qquad
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta
+\]
+satisfies
+\begin{equation}\label{eq:self-contained-cauchy-kl-pairing}
+\int_{\RR}q_t(x)\partial_t p_t(x)\dd x
+=
+-\frac{1}{2\pi}\lim_{R\to\infty}
+\iint_{\Omega_R}
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y
+\end{equation}
+holds, uniformly on compact \(t\)-intervals, for
+\((p_t,q_t)=(h_t,\log u_t)\) and \((p_t,q_t)=(g_t,u_t)\), and that the
+symmetrized Bregman kernels are dominated by an \(L^1_{\rm loc}\) function of
+\((t,x,y)\) so that the cutoffs may be removed by dominated convergence.
+Set
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t)
+\]
+and
+\[
+I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\]
+Then \(H\in AC([a,b])\), \(I_\nu\in L^1([a,b])\), and, for a.e.
+\(t\in[a,b]\),
+\begin{equation}\label{eq:kl-tail-input-unlocalized}
+H'(t)=-I_\nu(t).
+\end{equation}
+Equivalently, before applying the Cauchy Green formula, the entropy path
+satisfies the one-variable quotient chain rule
+\begin{equation}\label{eq:kl-chain-rule-before-pairing}
+H'(t)=
+\int_{\RR}\log u_t(x)\,\partial_th_t(x)\dd x
+-\int_{\RR}(u_t(x)-1)\,\partial_tg_t(x)\dd x
+\end{equation}
+for a.e. \(t\in[a,b]\).
+\end{proposition}
+
+\begin{proof}
+The quotient bounds place \(u_t\) in a fixed compact interval
+\(J\Subset(0,\infty)\) and give a uniform Lipschitz bound on \(u_t\).
+Therefore both \(u_t\) and \(\log u_t\) are uniformly bounded and Lipschitz on
+\([a,b]\times\RR\), and the assumed cutoff pairing
+\eqref{eq:self-contained-cauchy-kl-pairing} applies to
+\((h_t,\log u_t)\) and \((g_t,u_t)\).
 
 First prove the one-variable chain rule.  Set
 \[
@@ -526,7 +561,7 @@ H'(t)=
 Since \(\int\partial_th_t=\int\partial_tg_t=0\), this is
 \eqref{eq:kl-chain-rule-before-pairing}.
 
-Apply \eqref{eq:kl-consolidated-pv-pairing} to the two terms in
+Apply \eqref{eq:self-contained-cauchy-kl-pairing} to the two terms in
 \eqref{eq:kl-chain-rule-before-pairing}.  The constants in the tests do not
 matter in the bilinear forms.  For fixed
 \((x,y)\), abbreviate
@@ -548,15 +583,8 @@ g_t(x)\Lambda(u_t(x),u_t(y))
 {(x-y)^2}\dd x\dd y .
 \]
 
-It remains only to pass from annuli to the full-space Bregman integral.
-Part \textup{(v)}
-gives the explicit \(L^1([a,b]\times\RR^2)\) dominator
-\[
-C_{a,b,\nu}\left(g_t(x)+g_t(y)\right)\min\{1,|x-y|^{-2}\}.
-\]
-It dominates the symmetrized Bregman kernel, independently of the annulus
-parameter.  The indicators of \(\Omega_R\) converge pointwise to one.
-Dominated convergence therefore gives the full-space Bregman limit.
+The assumed \(L^1_{\rm loc}\) Bregman dominator permits the passage from
+annuli to the full-space Bregman integral by dominated convergence.
 
 Finally, the two one-sided full integrals coincide after exchanging \(x\) and
 \(y\):
@@ -574,11 +602,13 @@ The symmetrized factor \(1/(2\pi)\) is therefore the one-sided factor
 
 \noindent
 The KL tail identity is now a short consequence of
-Lemma~\ref{thm:kl-domain-verification} and the large-time KL decay from
-Lemma~\ref{lem:poisson-second-moment-kl-decay}.  The theorem is the
-Cauchy/KL specialization of the Sobolev--Bregman/Hardy--Stein mechanism for
-jump semigroups, with the quotient-domain input verified above for the moving
-Poisson profile \(g_t\).
+Proposition~\ref{prop:self-contained-cauchy-kl-hardystein}, the quotient and
+cutoff admissibility supplied by Lemma~\ref{thm:kl-domain-verification}, and
+the large-time KL decay from Lemma~\ref{lem:poisson-second-moment-kl-decay}.
+The surrounding
+Hardy--Stein/Sobolev--Bregman theory explains why this is the natural
+dissipation, but the derivative identity used here is the standalone Cauchy
+quotient proposition just proved.
 
 \begin{theorem}[Cauchy/KL Hardy--Stein tail identity]%
 \label{thm:poisson-kl-doob-tail}
@@ -603,7 +633,10 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 \begin{proof}
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
 \([a,b]\subset(0,\infty)\),
-Lemma~\ref{thm:kl-domain-verification} gives \(H\in AC([a,b])\),
+Lemma~\ref{thm:kl-domain-verification} verifies the quotient bounds, the
+cutoff generator pairing, and the \(L^1\) Bregman dominator required by
+Proposition~\ref{prop:self-contained-cauchy-kl-hardystein}.  That proposition
+therefore gives \(H\in AC([a,b])\),
 \(I_\nu\in L^1([a,b])\), and \(H'(s)=-I_\nu(s)\) for a.e.
 \(s\in[a,b]\).  Hence, for \(0<t<T\),
 \[

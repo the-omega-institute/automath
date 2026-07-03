@@ -117,34 +117,11 @@ This all-sign convolution formula is the exact certificate used below: it is
 finite, ordered, and uses only the displayed rational or rational-imaginary
 coefficients.  No conjugation is applied beyond the signs already contained
 in \eqref{eq:n4-laurent-all-sign-coefficients}.
-For reproducibility, the recurrence in
-\eqref{eq:eighth-order-constant-term-recurrence} can be implemented literally
-as the following finite dictionary convolution:
-\begin{quote}\small
-\begin{verbatim}
-constant_term(n[1..r]):
-    C = {0: 1}
-    for j = 1..r:
-        D = {}
-        for (s,a) in C:
-            for k in {-n[j],..., -1, 1,..., n[j]}:
-                q = lambda[n[j]] * sign(k)^(n[j] mod 2)
-                    * binom(n[j]-1, abs(k)-1)
-                D[s+k] = D.get(s+k,0) + a*q
-        C = D
-    return C.get(0,0)
-\end{verbatim}
-\end{quote}
-The returned value is \(I(n_1,\ldots,n_r)\).  The loop ranges are finite and
-bounded by the displayed supports \(S_j=\{\pm1,\ldots,\pm j\}\), so the
-algorithm is an exact audit recipe for every row of the table.
-The proof below uses only this displayed finite recurrence and the displayed
-coefficient vectors; no external computation is a proof input.  For
-independent finite reproducibility, the paper-local scripts
-\path{certificates/laurent_recurrence_minicheck.py} and
-\path{certificates/eighth_order_laurent_certificate.py} replay the same
-recurrence with exact rational arithmetic, check every row through total order
-eight, and assert the two-point \(A_6,A_8\) sanity checks.
+The proof below uses only this recurrence, the all-sign coefficient formula
+\eqref{eq:n4-laurent-all-sign-coefficients}, and the displayed hand
+convolutions in Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.  In
+particular, the six constant terms entering \(A_8\) are verified explicitly
+before the coefficient substitution is made.
 
 \begin{lemma}[Complete constant-term table through order eight]%
 \label{lem:eighth-order-coefficient-arithmetic}
@@ -222,7 +199,57 @@ odd cancellations is
 \]
 Here \(I(2,3,3)\) denotes the row \(Q_2Q_3^2\), and similarly for the
 other products.  These values are the only constant terms used in the
-coefficient substitution below.
+coefficient substitution below.  The six eighth-order rows used in \(A_8\)
+are checked, with numerator, denominator, and sign separated, as follows.
+Let
+\[
+b_n(m):=\binom{n-1}{m-1}\qquad(1\le m\le n).
+\]
+For rows with two factors, the zero-sum condition gives pairs
+\((k,-k)\), and the all-sign convention gives
+\[
+\begin{array}{c|c|c|c|c}
+\mathbf n & \text{signed integer sum} & \prod_j\lambda_{n_j}
+& \operatorname{sgn}(I) & |I|\\
+\hline
+(2,6)&
+2\{b_2(1)b_6(1)+b_2(2)b_6(2)\}=12
+&\frac1{256}&+&\frac3{64}\\
+(3,5)&
+-2\{b_3(1)b_5(1)+b_3(2)b_5(2)+b_3(3)b_5(3)\}=-30
+&\frac1{256}&-&\frac{15}{128}\\
+(4,4)&
+2\sum_{m=1}^4 b_4(m)^2=40
+&\frac1{256}&+&\frac5{32}.
+\end{array}
+\]
+For the three rows with at least three factors, grouping by the first
+factor(s) gives the following finite integer checks:
+\[
+\begin{array}{c|c|c|c|c}
+\mathbf n & \text{grouped signed integer sum} & \prod_j\lambda_{n_j}
+& \operatorname{sgn}(I) & |I|\\
+\hline
+(2,2,4)&
+\displaystyle
+4b_4(1)+2b_4(2)+4b_4(3)+2b_4(4)=24
+&\frac1{256}&+&\frac3{32}\\[0.7em]
+(2,3,3)&
+\displaystyle
+(-8)+(-8)+(-1)+(-1)=-18
+&\frac1{256}&-&\frac9{128}\\[0.7em]
+(2,2,2,2)&
+\displaystyle
+\binom42+\binom42+4!=36
+&\frac1{256}&+&\frac9{64}.
+\end{array}
+\]
+The row \(I(2,3,3)\) uses the four grouped sums displayed above the main
+table.  In the \(Q_2^2Q_4\) row the coefficients
+\((4,2,4,2)\) are the counts of ordered \(Q_2^2\) exponent pairs with
+\(|k_1+k_2|=1,2,3,4\), respectively.  In the \(Q_2^4\) row the three terms
+count two \(+1\)'s and two \(-1\)'s, two \(+2\)'s and two \(-2\)'s, and one
+exponent of each of \(+1,-1,+2,-2\).
 \end{lemma}
 
 \begin{proof}
@@ -296,24 +323,18 @@ finite certificate for the rows used through order eight is
   tuples enumerated by
   \eqref{eq:eighth-order-constant-term-recurrence}--%
   \eqref{eq:eighth-order-finite-convolution-certificate}, so every entry is
-  reproducible from the displayed coefficient vectors without any further
-  cancellation convention.  The proof does not rely on an undisplayed
-  computation: the coefficient vectors in
+  obtained from the displayed coefficient vectors without any further
+  cancellation convention.  The proof is entirely finite Laurent arithmetic:
+  the coefficient vectors in
   Lemma~\ref{lem:n4-normalized-laurent-representatives}, the recurrence
   \eqref{eq:eighth-order-constant-term-recurrence}, the finite zero-sum rule
   \eqref{eq:eighth-order-finite-convolution-certificate}, and the displayed
   row data above are the complete exact certificate used by the subsequent
-  substitutions.  Rechecking a row requires only finite Laurent arithmetic:
-  reconstruct the signed coefficient vector of each \(Q_{n_j}\), iterate
-  \eqref{eq:eighth-order-constant-term-recurrence}, or equivalently list the
-  ordered integer tuples in \(\mathcal K(\mathbf n)\), sum the indicated signed
-  binomial products, and multiply by \(\prod_j\lambda_{n_j}\).  The worked
-  rows \(I(3,5)\) and \(I(2,3,3)\) above show explicitly where the odd-mode
-  signs enter.  For example, the row \((2,2,4)\) sums over the twelve ordered
-  triples in \(\mathcal K(2,2,4)\); their signed binomial weights add to
-  \(24\), and \(\lambda_2^2\lambda_4=1/256\).  Formula
-  \eqref{eq:eighth-order-finite-convolution-certificate} gives the other rows
-  by the same finite enumeration.
+  substitutions.  The worked rows \(I(3,5)\) and \(I(2,3,3)\) above show
+  explicitly where the odd-mode signs enter.  The grouped checks for
+  \((2,6)\), \((3,5)\), \((4,4)\), \((2,2,4)\), \((2,3,3)\), and
+  \((2,2,2,2)\) give the numerator, denominator, and sign of every row used
+  in \(A_8\).
 
 The zero rows are the complete list of odd total-degree products appearing
 before the even-power projection:
@@ -717,16 +738,22 @@ T_{\sigma,M}^{(8)}:=\sigma T(\widehat M).
 \end{equation}
 \end{definition}
 
-\begin{longtable}{p{0.16\textwidth}p{0.24\textwidth}p{0.18\textwidth}p{0.28\textwidth}}
-\caption{\(N=4,\eta=1\) constant regimes for the eighth-order remainder and
-finite-time sixth-defect certificates.}\label{tab:n4-constant-regimes}\\
+The following table separates the constant regimes for the eighth-order
+remainder and the deterministic finite-time sixth-defect bookkeeping.
+\phantomsection\label{tab:n4-constant-regimes}
+
+\begingroup
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\tabcolsep}{2pt}
+\begin{longtable}{p{0.15\textwidth}p{0.23\textwidth}p{0.16\textwidth}p{0.28\textwidth}}
 \hline
-\textbf{Regime} & \textbf{Inputs fixed before the KL statistic} &
+\textbf{Regime} & \textbf{Inputs fixed before the KL value} &
 \textbf{Constants} & \textbf{Role and dependence}\\
 \hline
 \endfirsthead
 \hline
-\textbf{Regime} & \textbf{Inputs fixed before the KL statistic} &
+\textbf{Regime} & \textbf{Inputs fixed before the KL value} &
 \textbf{Constants} & \textbf{Role and dependence}\\
 \hline
 \endhead
@@ -737,8 +764,9 @@ Coefficient-level \(W_2\) defect &
 \(\Delta_6\). &
 \(4\) and \(8\). &
 Universal algebraic constants in
-Corollary~\ref{cor:coefficient-defect-coupling}; no finite-time entropy
-remainder, \(A_8\) bound, threshold, observation, or error radius is used.\\[0.7em]
+  Corollary~\ref{cor:coefficient-defect-coupling}; no finite-time entropy
+  remainder, \(A_8\) bound, threshold, inserted KL value, or error radius is
+  used.\\[0.7em]
 Fixed-law quantitative remainder &
 One fixed law with finite centred seventh absolute moment, hence fixed
 \(\mu_2,\ldots,\mu_6\) and \(M_7(\nu)\). &
@@ -747,14 +775,14 @@ One fixed law with finite centred seventh absolute moment, hence fixed
 Law-dependent constants giving the order-nine estimate
 in Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for
 \(t\ge T_{\nu,8}\).\\[0.7em]
-Fixed-law conditional certificate &
+Fixed-law conditional inputs &
 Independently supplied \(C,B,T\), a value \(A_8(\nu)\), and a remainder
 \(E(t)\) satisfying
 \(|A_8(\nu)|\le C\), \(|E(t)|\le Bt^{-9}\) for \(t\ge T\). &
 \(C,B,T\). &
-External certificate data used in
-Remark~\ref{rem:fixed-law-finite-time-certificate}; the observed KL value
-does not certify these constants or its own error radius.\\[0.7em]
+  External bounds used in
+  Corollary~\ref{cor:finite-time-defect-bookkeeping}; the inserted KL value
+  does not certify these constants or its own error radius.\\[0.7em]
 Controlled shell, normalized &
 Variance-one laws with \(\EE|X|^7\le u\), \(u\ge1\). &
 \(C(u),B(u),T(u)\) from
@@ -766,11 +794,12 @@ Controlled shell, dimensional &
 \(\EE|X_c|^7\le M\), with \(\widehat M=M/\sigma^7\). &
 \(C_{\sigma,M}^{(8)},B_{\sigma,M}^{(8)},T_{\sigma,M}^{(8)}\) from
 \eqref{eq:dictionary-controlled-shell-c8}. &
-The shell constants used in
-Appendix Lemma~\ref{lem:controlled-shell-conditional-certificate}; they are fixed
-before \(K_t^{\mathrm{obs}}\) and \(\eta_t\) enter the statistic, and
-depend only on \((\sigma,M)\).\\
+  The shell constants used in
+  Corollary~\ref{cor:finite-time-defect-bookkeeping}; they are fixed before
+  \(K_t^{\rm obs}\) and \(\eta_t\) enter, and depend only on
+  \((\sigma,M)\).\\
 \end{longtable}
+\endgroup
 
 \begin{theorem}[Quantitative \(N=4\) remainder under the seventh moment]%
 \label{thm:poisson-kl-eighth-seventh-remainder}
