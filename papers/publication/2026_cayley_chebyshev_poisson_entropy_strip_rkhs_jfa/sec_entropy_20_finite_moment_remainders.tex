@@ -554,8 +554,12 @@ Extension-method papers for the fractional Laplacian
 nonlocal operators to local degenerate problems and provide normalization
 background.
 Stable-law entropy expansions and recent JFA entropic CLT work concern
-convolution powers, normalized sums, or Esscher-transformed sums
-\cite{BobkovChistyakovGotze2013,BobkovChistyakovGotzeEdgeworth2013,BobkovChistyakovGotzeBerryEsseen2014,BobkovGotzeRenyi2025,BobkovGotzeEsscher2025}.
+convolution powers, normalized sums, R\'enyi-divergence CLT comparison, or
+Esscher-transformed sums
+\cite{BobkovChistyakovGotze2013,BobkovChistyakovGotzeEdgeworth2013,
+BobkovChistyakovGotzeBerryEsseen2014,
+BobkovGotzeRenyiSurvey2025,BobkovGotzeRenyi2025,
+BobkovGotzeEsscher2025}.
 The theorems below treat fixed-law Poisson comparisons
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma)),
@@ -739,23 +743,10 @@ t^{-L}\EE\!\left[
 which is exactly the finite \(L\)th absolute-moment input used in
 \eqref{eq:multidim-uniform-density-remainder-consequence}.
 
-Consequently the leading multidimensional asymptotic proved in this paper is
-\[
-D_{\rm KL}(P_t^{(d)}*\nu\|P_t^{(d)}(\cdot-\bar\gamma))
-=\mathcal A_4^{(d)}(\nu)t^{-4}+o(t^{-4})
-\]
-under \((\mathrm{MPJ}_{d,L})\), not under finite covariance alone when
-\(d\ge2\).  The finite-covariance statement
-\[
-\EE|X_c|^2<\infty
-\quad\Longrightarrow\quad
-D_{\rm KL}(P_t^{(d)}*\nu\|P_t^{(d)}(\cdot-\bar\gamma))
-=\mathcal A_4^{(d)}(\nu)t^{-4}+o(t^{-4})
-\]
-is not proved here for \(d\ge2\).  Proving that implication would require a
-different leading-term argument, for example an \(L^2(\Omega_d)\) or
-truncation method in the joint variables \((y,X_c)\) that avoids the global
-\(L^\infty_y\) quotient bound used below.
+Thus the multidimensional entropy statements below are packaged as
+finite-\(L\) jet theorems.  The coefficient calculation in
+Theorem~\ref{thm:multidim-leading-positive-defect} then evaluates the leading
+layer inside this jet framework.
 \end{lemma}
 
 \begin{proposition}[Large-translation obstruction for the quotient method]%
@@ -928,6 +919,107 @@ the region \(|X_c|\le t\) gives the integrable factor
 \(|X_c|^L(|X_c|/t)\), while \(|X_c|>t\) gives the finite \(L\)th-moment tail.
 \end{proof}
 
+\begin{lemma}[Standalone multidimensional density-to-entropy transfer]%
+\label{lem:multidim-density-to-entropy-transfer}
+Let \((S,\Omega)\) be a probability space, let \(L\ge2\), and let
+\(D_2,\ldots,D_L\in L^\infty(\Omega)\).  Suppose that, for all sufficiently
+large \(t\),
+\[
+\delta_t=\sum_{j=2}^{L}D_jt^{-j}+\rho_t,
+\]
+where
+\[
+\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\Omega)}=o(t^{-L})
+\]
+and
+\[
+\|\delta_t\|_\infty=O(t^{-2}).
+\]
+Then, for
+\[
+\Phi(s)=(1+s)\log(1+s)-s,
+\]
+\begin{equation}\label{eq:abstract-multidim-transfer-coefficients}
+\mathfrak A_m(D_2,\ldots,D_L)
+:=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{2\le j_1,\ldots,j_r\le L\\
+j_1+\cdots+j_r=m}}
+\int_S D_{j_1}\cdots D_{j_r}\,\dd\Omega
+\end{equation}
+one has
+\begin{equation}\label{eq:abstract-multidim-transfer-expansion}
+\int_S\Phi(\delta_t)\,\dd\Omega
+=
+\sum_{m=4}^{L+2}\mathfrak A_m(D_2,\ldots,D_L)t^{-m}
++o(t^{-(L+2)}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+B_t:=\sum_{j=2}^{L}D_jt^{-j}.
+\]
+Since the \(D_j\)'s are bounded and \(\Omega\) has total mass one,
+\(\|B_t\|_\infty=O(t^{-2})\), and every finite product appearing in
+\eqref{eq:abstract-multidim-transfer-coefficients} belongs to
+\(L^1(\Omega)\).  The assumed smallness of \(\delta_t\) gives
+\(|\delta_t|\le1/2\) for large \(t\).  Let
+\[
+R:=\left\lfloor\frac{L+2}{2}\right\rfloor .
+\]
+For \(|s|\le1/2\),
+\[
+\Phi(s)=\sum_{r=2}^{R}\frac{(-1)^r}{r(r-1)}s^r+O(|s|^{R+1}).
+\]
+Because \(\|\delta_t\|_\infty=O(t^{-2})\), the Taylor tail has
+\[
+\int_SO(|\delta_t|^{R+1})\,\dd\Omega
+=O(t^{-2(R+1)})=o(t^{-(L+2)}).
+\]
+
+It remains to replace \(\delta_t^r\) by \(B_t^r\), for \(2\le r\le R\).  In
+\[
+\delta_t^r-B_t^r=(B_t+\rho_t)^r-B_t^r
+\]
+each summand contains at least one factor \(\rho_t\).  Hence, using one
+\(\rho_t\) in \(L^1(\Omega)\) and all other factors in \(L^\infty\),
+\[
+\|\delta_t^r-B_t^r\|_{L^1(\Omega)}
+\le
+\sum_{\ell=1}^{r}\binom r\ell
+\|B_t\|_\infty^{r-\ell}
+\|\rho_t\|_\infty^{\ell-1}
+\|\rho_t\|_{L^1(\Omega)}
+=o(t^{-L}t^{-2(r-1)}).
+\]
+Since \(r\ge2\), this is \(o(t^{-(L+2)})\).  Therefore
+\[
+\int_S\Phi(\delta_t)\,\dd\Omega
+=
+\sum_{r=2}^{R}\frac{(-1)^r}{r(r-1)}
+\int_SB_t^r\,\dd\Omega
++o(t^{-(L+2)}).
+\]
+
+Finally expand the finite polynomial:
+\[
+\int_SB_t^r\,\dd\Omega
+=
+\sum_{m=2r}^{Lr}t^{-m}
+\sum_{\substack{2\le j_1,\ldots,j_r\le L\\
+j_1+\cdots+j_r=m}}
+\int_SD_{j_1}\cdots D_{j_r}\,\dd\Omega .
+\]
+The terms with \(m\le L+2\), summed over \(2\le r\le R\), give exactly the
+coefficients in \eqref{eq:abstract-multidim-transfer-coefficients}.  The
+remaining finite terms have integer exponents \(m\ge L+3\), hence contribute
+\(O(t^{-(L+3)})=o(t^{-(L+2)})\).  This proves
+\eqref{eq:abstract-multidim-transfer-expansion}.
+\end{proof}
+
 \begin{theorem}[Multidimensional entropy transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Assume the hypotheses and notation of
@@ -987,17 +1079,14 @@ Lemma~\ref{lem:multidim-uniform-radial-poisson-taylor}, the
 finiteness of the moments \(\mu_\alpha\) with \(|\alpha|\le L\), and
 \(\|\rho_{L,t}\|_\infty=o(t^{-L})\) give
 \(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  For large \(t\),
-\(|\widetilde\delta_t|\le1/2\), so the Taylor expansion of \(\Phi\) may be
-used through degree \(\lfloor (L+2)/2\rfloor\).  Products containing at least
-one \(\rho_{L,t}\) are
-\[
-o(t^{-L})\,O(t^{-2(r-1)})=o(t^{-(L+2)})
-\]
-in \(L^1(\Omega_d)\), uniformly for each retained Taylor degree \(r\ge2\).
-The Taylor tail is \(O(t^{-2q})\) with
-\(q=\lfloor (L+2)/2\rfloor+1\), hence \(o(t^{-(L+2)})\).  Multiplying the
-finite density polynomial and retaining total tensor degree \(m\le L+2\)
-gives exactly \eqref{eq:multidim-entropy-coefficient-layers}, proving
+\(\widetilde\delta_t\) satisfies the hypotheses of
+Lemma~\ref{lem:multidim-density-to-entropy-transfer} with
+\(D_j=D_j^{(d)}(\,\cdot\,;\nu)\) and \(\rho_t=\rho_{L,t}\).  The abstract
+coefficients
+\(\mathfrak A_m(D_2^{(d)},\ldots,D_L^{(d)})\) in
+\eqref{eq:abstract-multidim-transfer-coefficients} are precisely the
+\(\mathcal A_m^{(d)}(\nu)\) defined in
+\eqref{eq:multidim-entropy-coefficient-layers}.  The lemma therefore proves
 \eqref{eq:multidim-poisson-entropy-jet}.
 \end{proof}
 
@@ -1145,31 +1234,34 @@ with the entries of \(A\), and then using \(\operatorname{tr}A=0\).
 
 \begin{theorem}[Leading coefficient under the multidimensional Poisson-jet hypothesis]%
 \label{thm:multidim-leading-positive-defect}
-Let \(d\ge1\), let \(L\) be an integer, and let \(\nu\) be a probability
-measure on \(\RR^d\) such that \((\nu,d,L)\) satisfies
-\((\mathrm{MPJ}_{d,L})\).  Let
+Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\) be an integer, and let \(\nu\) be a
+probability measure on \(\RR^d\) with finite barycentre
+\(\bar\gamma=\int_{\RR^d}\gamma\,\dd\nu(\gamma)\).  Put
 \(X_c=\gamma-\bar\gamma\), and let
 \[
 \Sigma:=\EE[X_cX_c^{\mathsf T}]
 \]
-be the centred covariance matrix.  Put
+be the centred covariance matrix.  Assume explicitly that
+\[
+\EE |X_c|^L<\infty ,
+\]
+so that \((\nu,d,L)\) satisfies the full multidimensional Poisson-jet
+hypothesis \((\mathrm{MPJ}_{d,L})\).  This finite-\(L\) jet hypothesis is part
+of the asymptotic assertion below; the theorem is not a finite-covariance-only
+statement.  Put
 \[
 \Sigma_0:=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d .
 \]
-Then, under this full multidimensional jet hypothesis, the leading
-\(t^{-4}\) coefficient in
+Then the multidimensional entropy jet supplied by
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} has leading
+\(t^{-4}\) term
 \[
 D_{\rm KL}(P_t^{(d)}*\nu\|P_t^{(d)}(\cdot-\bar\gamma))
 =\mathcal A_4^{(d)}(\nu)t^{-4}+o(t^{-4})
 \]
-has the explicit positive decomposition below.  This is not a theorem under
-finite covariance alone; the displayed coefficient depends only on covariance,
-but the asymptotic statement here is obtained from the full multidimensional
-jet theorem and therefore uses \((\mathrm{MPJ}_{d,L})\).
-The assertion is an asymptotic theorem under \(({\rm MPJ}_{d,L})\).
-Although \(\mathcal A_4^{(d)}\) depends only on \(\Sigma\), the proof uses
-\(\EE|X_c|^L<\infty\) with \(L\ge d+1\).  For \(d\ge2\), no theorem under
-\(\EE|X_c|^2<\infty\) alone is claimed.
+under the displayed assumptions \(L\ge\max\{2,d+1\}\) and
+\(\EE|X_c|^L<\infty\).  Its coefficient has the explicit positive
+decomposition below.
 \begin{equation}\label{eq:multidim-leading-positive-defect}
 \mathcal A_4^{(d)}(\nu)
 =
@@ -1186,6 +1278,13 @@ c_d^{\rm tr}:=
 \frac{3(d+1)(d+3)}
 {4(d+5)(d+7)} .
 \end{equation}
+Although \(\mathcal A_4^{(d)}\) depends only on \(\Sigma\), the asymptotic
+statement just displayed is proved only inside the full
+\((\mathrm{MPJ}_{d,L})\) framework: the proof uses the whole condition
+\(L\ge d+1\) together with \(\EE|X_c|^L<\infty\).  For \(d\ge2\), no theorem
+under \(\EE|X_c|^2<\infty\) alone is claimed or used.  The displayed formula is
+therefore a leading coefficient in the finite-\(L\) jet, not a separate
+covariance-only entropy asymptotic.
 Both constants are strictly positive.  Consequently
 \(\mathcal A_4^{(d)}(\nu)\ge0\), and
 \(\mathcal A_4^{(d)}(\nu)=0\) if and only if
@@ -1195,25 +1294,14 @@ coefficient, and the whole matched comparison, is zero.  In dimension \(d=1\)
 this gives
 \(\mathcal A_4^{(1)}(\nu)=\mu_2^2/8\), the leading coefficient in
 Theorem~\ref{thm:poisson-kl-even-orders}.
-For \(d\ge2\), the proved multidimensional leading \(\mathcal A_4^{(d)}\)
-asymptotic
-is not a finite-covariance-only theorem.  It is a consequence of
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets} under
-\((\mathrm{MPJ}_{d,L})\), and therefore uses, in particular, the finite
-centred moment condition \(\EE|X_c|^{d+1}<\infty\).  The limitation is
-analytic rather than algebraic: the covariance formula
-\eqref{eq:multidim-leading-positive-defect} only involves \(\Sigma\), but the
+The analytic role of the dimension-dependent moment hypothesis is isolated in
+Lemma~\ref{lem:multidim-threshold-proof-interface} and
+Proposition~\ref{prop:multidim-large-translation-obstruction}: the
 quotient-remainder proof must dominate translated peaks before the nonlinear
-entropy transfer is applied.  Proposition~\ref{prop:multidim-large-translation-obstruction}
-shows that this peak has \(L^\infty\) size \(|z|^{d+1}\), and even its
-\(L^2(\Omega_d)\) size is \(|z|^{(d+1)/2}\).  Thus the present argument does
-not supply a covariance-only leading theorem by replacing the uniform quotient
-norm by an \(L^2(\Omega_d)\) norm.  Whether a different method can prove the
-same all-dimensional leading coefficient under finite covariance alone is left
-open.
-The radial beta-prime integrals and the traceless spherical fourth moment
-used to obtain the two displayed constants are recorded immediately before
-this theorem.
+entropy transfer is applied, and those peaks have \(L^\infty\) size
+\(|z|^{d+1}\) and \(L^2(\Omega_d)\) size \(|z|^{(d+1)/2}\).  The radial
+beta-prime integrals and the traceless spherical fourth moment used to obtain
+the two displayed constants are recorded immediately before this theorem.
 \end{theorem}
 
 \begin{proof}
@@ -1498,7 +1586,7 @@ The parity part of Theorem~\ref{thm:universal-entropy-coefficients} gives
 \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
-\subsubsection{Thresholds and nonclaims}%
+\subsubsection{Coefficient thresholds and analytic scope}%
 \label{subsubsec:finite-moment-threshold-nonclaims}
 
 The preceding theorem is the exact coefficient-evaluation statement.
@@ -1549,9 +1637,9 @@ so a universal statement through order \(t^{-4}\) must at least make the
 variance finite.
 This proposition is adjacent to Theorem~\ref{thm:poisson-kl-even-orders}
 to record the evaluability threshold for the displayed universal polynomial
-coefficient.  It is not a converse analytic theorem about tail-dependent,
-truncated, renormalized, subsequential, or otherwise non-polynomial
-large-time entropy asymptotics under weaker assumptions.
+coefficient.  Tail-dependent, truncated, renormalized, subsequential, or
+otherwise non-polynomial large-time entropy asymptotics under weaker
+assumptions are separate analytic questions.
 \end{proposition}
 
 \begin{proof}
@@ -1610,7 +1698,7 @@ universal polynomial \(A_{2N}\) is genuinely absent although every
 lower absolute moment is finite.
 \end{proof}
 
-\begin{proposition}[Scope of polynomial evaluability: no claim against weaker-tail asymptotics]%
+\begin{proposition}[Scope of polynomial evaluability]%
 \label{prop:coefficient-evaluation-not-analytic-necessity}
 Fix \(N\ge2\) and set \(L=2N-2\).  The phrase
 ``coefficient-evaluation threshold'' in
@@ -1625,15 +1713,13 @@ polynomial is a finite number for every law with finite centred \(L\)th
 absolute moment, and its top term cannot be evaluated from centred moments of
 orders at most \(L-1\) alone.
 
-\textup{(ii)}  It is not an analytic impossibility theorem.  In particular,
-it does not assert that the entropy functional
+\textup{(ii)}  This is an algebraic, not analytic, threshold.  Tail-dependent
+questions for the entropy functional
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
 \]
-has no lower-tail, tail-dependent, subsequential, renormalized, or otherwise
-non-polynomial asymptotic description when the centred \(L\)th absolute moment
-is infinite.  Such statements are outside the universal moment-polynomial
-calculus used here and would require separate tail analysis.
+outside the universal moment-polynomial calculus require separate tail
+analysis when the centred \(L\)th absolute moment is infinite.
 \end{proposition}
 
 \begin{proof}
@@ -1665,7 +1751,7 @@ density-remainder contribution is therefore \(o(t^{-(L+2)})=o(t^{-2N})\).
 The lower-moment obstruction is precisely the coefficient-evaluation
 obstruction of Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness};
 Proposition~\ref{prop:coefficient-evaluation-not-analytic-necessity} records
-the corresponding analytic nonclaim.  The \(+\eta\) moment
+the corresponding analytic scope.  The \(+\eta\) moment
 hypotheses in Appendix~\ref{subsubsec:finite-moment-constants-variants} are
 used only for quantitative remainders and thresholds.
 \end{remark}

@@ -138,13 +138,13 @@ constant_term(n[1..r]):
 The returned value is \(I(n_1,\ldots,n_r)\).  The loop ranges are finite and
 bounded by the displayed supports \(S_j=\{\pm1,\ldots,\pm j\}\), so the
 algorithm is an exact audit recipe for every row of the table.
-The ancillary paper-local script
-\texttt{certificates/laurent\_recurrence\_minicheck.py} is a compact
-standard-library Python replay of this recurrence.  It reconstructs the
-all-sign coefficients \(q_{n,k}\), iterates the dictionary recurrence above
-with exact rational arithmetic, prints the ordered zero-sum counts and signed
-integer convolutions, and asserts the constant terms in the table below.  Thus
-the displayed hand table is not the only reproducibility artifact.
+The proof below uses only this displayed finite recurrence and the displayed
+coefficient vectors; no external computation is a proof input.  For
+independent finite reproducibility, the paper-local scripts
+\path{certificates/laurent_recurrence_minicheck.py} and
+\path{certificates/eighth_order_laurent_certificate.py} replay the same
+recurrence with exact rational arithmetic, check every row through total order
+eight, and assert the two-point \(A_6,A_8\) sanity checks.
 
 \begin{lemma}[Complete constant-term table through order eight]%
 \label{lem:eighth-order-coefficient-arithmetic}
@@ -270,6 +270,28 @@ finite certificate for the rows used through order eight is
 (2,2,2,2)&36&36&\frac1{256}&\frac{9}{64}.
 \end{array}
   \]
+  The six rows that enter \(B_8\), and hence \(A_8\), are the following
+  exact convolution data.  Here \(S(\mathbf n)\) denotes the signed integer
+  convolution in \eqref{eq:eighth-order-finite-convolution-certificate}, and
+  the last three columns give \(I(\mathbf n)=\operatorname{sgn}(I)N/D\) with
+  \(N,D>0\).
+  \[
+\begin{array}{c|c|c|c|c|c|c}
+\mathbf n&|\mathcal K(\mathbf n)|&S(\mathbf n)&\prod_j\lambda_{n_j}
+&\operatorname{sgn}(I)&N&D\\
+\hline
+(2,6)&4&12&\frac1{256}&+&3&64\\
+(3,5)&6&-30&\frac1{256}&-&15&128\\
+(4,4)&8&40&\frac1{256}&+&5&32\\
+(2,2,4)&12&24&\frac1{256}&+&3&32\\
+(2,3,3)&14&-18&\frac1{256}&-&9&128\\
+(2,2,2,2)&36&36&\frac1{256}&+&9&64 .
+\end{array}
+  \]
+  Equivalently, these rows read
+  \(I(2,6)=3/64\), \(I(3,5)=-15/128\), \(I(4,4)=5/32\),
+  \(I(2,2,4)=3/32\), \(I(2,3,3)=-9/128\), and
+  \(I(2,2,2,2)=9/64\).
   The column \(|\mathcal K(\mathbf n)|\) gives the number of zero-sum ordered
   tuples enumerated by
   \eqref{eq:eighth-order-constant-term-recurrence}--%
