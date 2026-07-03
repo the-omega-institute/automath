@@ -219,15 +219,27 @@ finite certificate for the rows used through order eight is
 (2,3,3)&14&-18&\frac1{256}&-\frac{9}{128}\\
 (2,2,2,2)&36&36&\frac1{256}&\frac{9}{64}.
 \end{array}
-\]
-The column \(|\mathcal K(\mathbf n)|\) gives the number of zero-sum ordered
-tuples enumerated by \eqref{eq:eighth-order-finite-convolution-certificate},
-so every entry is reproducible from the displayed coefficient vectors without
-any further cancellation convention.
-For example, the row \((2,2,4)\) sums over the twelve ordered triples in
-\(\mathcal K(2,2,4)\); their signed binomial weights add to \(24\), and
-\(\lambda_2^2\lambda_4=1/256\).  The row \((2,3,3)\) sums over fourteen
-ordered triples; the two odd factors contribute the signs
+  \]
+  The column \(|\mathcal K(\mathbf n)|\) gives the number of zero-sum ordered
+  tuples enumerated by \eqref{eq:eighth-order-finite-convolution-certificate},
+  so every entry is reproducible from the displayed coefficient vectors without
+  any further cancellation convention.
+  The paper-local script
+  \[
+  \texttt{certificates/eighth\_order\_laurent\_certificate.py}
+  \]
+  is an independent exact-rational certificate for this table: it reconstructs
+  \(Q_2,\ldots,Q_6\) from
+  \eqref{eq:mode-laurent-even}--\eqref{eq:mode-laurent-odd}, asserts the
+  positive-exponent coefficient vectors in
+  Lemma~\ref{lem:n4-normalized-laurent-representatives}, enumerates every
+  \(\mathcal K(\mathbf n)\) row displayed above, and checks the tuple counts,
+  signed integer convolutions, scalar products \(\prod_j\lambda_{n_j}\), and
+  final constant terms through total order eight.
+  For example, the row \((2,2,4)\) sums over the twelve ordered triples in
+  \(\mathcal K(2,2,4)\); their signed binomial weights add to \(24\), and
+  \(\lambda_2^2\lambda_4=1/256\).  The row \((2,3,3)\) sums over fourteen
+  ordered triples; the two odd factors contribute the signs
 \(\operatorname{sgn}(k_2)\operatorname{sgn}(k_3)\), so the signed binomial
 sum is \(-18\) and the scalar product is again \(1/256\).  Formula
 \eqref{eq:eighth-order-finite-convolution-certificate} gives the other rows
@@ -555,48 +567,9 @@ variance $\sigma^2>0$, and finite centred seventh absolute moment.  Use the
 notation of Theorem~\ref{thm:poisson-kl-eighth}; in particular
 \(A_6(\nu)\) and \(A_8(\nu)\) are the
 identified entropy coefficients there.
-Let
-\[
-M_7(\nu):=\int_{\RR}|X_c|^7\,\dd\nu(\gamma),
-\qquad
-\mathcal M_{\nu,8}:=\sum_{n=2}^{6}(n+1)|\mu_n|,
-\]
-\[
-\mathcal C_{\nu,8}:=110\,M_7(\nu),
-\qquad
-\mathcal S_{\nu,8}:=7\sum_{n=2}^{6}|\mu_n|+110\,M_7(\nu).
-\]
-Define the two explicit finite sums
-\[
-\mathcal P_{\nu,8}:=
-\sum_{r=2}^{4}\frac{1}{r(r-1)}
-\sum_{\ell=1}^{r}\binom r\ell
-\mathcal M_{\nu,8}^{\,r-\ell}\mathcal C_{\nu,8}^{\,\ell}
-\]
-and
-\[
-\mathcal Q_{\nu,8}:=
-\sum_{r=2}^{4}\frac{1}{r(r-1)}
-\sum_{m=9}^{6r}
-\sum_{\substack{2\le n_1,\ldots,n_r\le6\\
-n_1+\cdots+n_r=m}}
-\prod_{j=1}^{r}\bigl((n_j+1)|\mu_{n_j}|\bigr),
-\]
-with the convention that an empty inner sum is zero.  Finally set
-\[
-B_{\nu,8}:=\mathcal P_{\nu,8}+\mathcal Q_{\nu,8}
-+2\mathcal S_{\nu,8}^{5},
-\qquad
-T_{\nu,8}:=\max\{1,(2\mathcal S_{\nu,8})^{1/2}\}.
-\]
-These constants are directly computable from the centred moments
-\(\mu_2,\ldots,\mu_6\) and the seventh absolute moment \(M_7(\nu)\);
-the numerical values \(7\) and \(110\) are the \(L=6\) closed mode and
-density envelopes from
-Lemma~\ref{lem:closed-cayley-mode-constant-envelopes}.  No optimized
-intermediate constants \(P^{\rm opt}\), \(Q^{\rm opt}\), \(S^{\rm opt}\) are
-inputs in this theorem; \(B_{\nu,8}\) and \(T_{\nu,8}\) are the displayed
-finite functions of this moment data.  Then for every
+Let \(B_{\nu,8}\) and \(T_{\nu,8}\) be the fixed-law constants from the
+constant dictionary, Definition~\ref{def:n4-finite-time-constant-dictionary}.
+Then for every
 \(t\ge T_{\nu,8}\),
 \begin{equation}\label{eq:poisson-kl-eighth-remainder}
 \begin{split}
@@ -629,11 +602,8 @@ Theorem~\ref{thm:poisson-kl-eighth-seventh-remainder} for the quantitative
 \(O(t^{-9})\) remainder.
 
 The entropy proof uses the centred moment jet and, for the quantitative
-remainder, the seventh absolute moment bound directly.  Appendix~\ref{sec:strip-lattice}
-records only auxiliary interfaces: exact root-of-unity checks for the finite
-Laurent arithmetic, a full-profile moment-supply formula, and a non-generic
-support-restricted lattice certificate.  None of those observation interfaces
-is an input to the entropy theorem chain.
+remainder, the seventh absolute moment bound directly.  No observation or
+lattice reconstruction input is used in the entropy theorem chain.
 \end{remark}
 
 \begin{proof}
@@ -642,33 +612,11 @@ absolute moment needed for Theorem~\ref{thm:poisson-kl-eighth}, so the
 coefficient identity is already available.  The same seventh moment is the
 \(N=4,\eta=1\) positive-margin hypothesis \(2N-2+\eta=7\) in
 \S\ref{subsubsec:finite-moment-constants-variants}.
-Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} gives, for \(L=6\),
-\[
-B_6\le 7,\qquad C_6\le55,\qquad
-C_{\nu,6,1}=2C_6M_7(\nu)\le110M_7(\nu)=\mathcal C_{\nu,8}.
-\]
-It also gives \(\|u_n\|_\infty\le n+1\), hence
-\[
-M_A^{\rm opt}\le\mathcal M_{\nu,8},
-\qquad
-S^{\rm opt}\le\mathcal S_{\nu,8},
-\qquad
-T^{\rm opt}\le T_{\nu,8}.
-\]
-For the retained-mode tail,
-\[
-\|u_{n_1}\cdots u_{n_r}\|_{L^1(\omega)}
-\le \prod_{j=1}^{r}\|u_{n_j}\|_\infty
-\le \prod_{j=1}^{r}(n_j+1),
-\]
-because \(\omega\) is a probability measure, so
-\(Q_4^{\rm opt}(\mu,u)\le\mathcal Q_{\nu,8}\).  The same substitutions give
-\[
-P_4^{\rm opt}(C_\rho^{\rm opt},M_A^{\rm opt})
-\le\mathcal P_{\nu,8},
-\qquad
-2(S^{\rm opt})^5\le2\mathcal S_{\nu,8}^5 .
-\]
+Definition~\ref{def:n4-finite-time-constant-dictionary} records the closed
+majorants of the optimized \(N=4\) constants: it applies
+Lemma~\ref{lem:closed-cayley-mode-constant-envelopes} to dominate the
+density remainder, retained-mode tail, and smallness threshold by
+\(B_{\nu,8}\) and \(T_{\nu,8}\).
 The specialized estimate
 \eqref{eq:optimized-n4-seventh-envelope} therefore implies
 \eqref{eq:poisson-kl-eighth-remainder} with the displayed closed choices of
@@ -760,12 +708,11 @@ threshold if necessary, gives the stated
 \(O_{\nu,\widetilde\nu}(t^{-9})\) difference.
 \end{proof}
 
-Appendix~\ref{sec:strip-lattice} records the optional finite-phase check for
-the same normalized Laurent products and constant terms displayed in
+The optional root-of-unity check in Appendix~\ref{sec:strip-lattice} uses the
+same trigonometric/Laurent normalization as
 Lemmas~\ref{lem:n4-normalized-laurent-representatives} and
-\ref{lem:eighth-order-coefficient-arithmetic}.  That check uses the same
-trigonometric/Laurent normalization as the coefficient computation above and
-serves as an auxiliary arithmetic verification.
+\ref{lem:eighth-order-coefficient-arithmetic}; it is only an auxiliary
+arithmetic verification.
 
 The next defect corollaries use
 \(A_6(\nu)\) and \(A_8(\nu)\) from the

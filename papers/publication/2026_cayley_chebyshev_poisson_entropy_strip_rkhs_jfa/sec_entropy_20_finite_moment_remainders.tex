@@ -802,22 +802,39 @@ The first expectation is \(o(1)\) by dominated convergence, and the second is
 \(\Omega_d\) is a probability measure.
 \end{proof}
 
-\begin{theorem}[Multidimensional density quotient expansion and entropy jets]%
-\label{thm:multidimensional-poisson-entropy-jets}
+\medskip
+\noindent\textbf{Multidimensional radial Poisson jet hypothesis
+\((\mathrm{MPJ}_{d,L})\).}
+For \(d\ge1\) and an integer \(L\), say that \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\) if
+\[
+L\ge\max\{2,d+1\},\qquad
+\bar\gamma=\int_{\RR^d}\gamma\,\dd\nu(\gamma)\ \text{exists},\qquad
+\EE|\gamma-\bar\gamma|^L<\infty .
+\]
+The condition \(L\ge d+1\) is part of the analytic hypothesis, not a
+notational convention: it is exactly what makes the large-translation bound
+in \eqref{eq:multidim-uniform-taylor-remainder-bound} integrable after
+averaging over \(X_c/t\).
+\medskip
+
+\begin{theorem}[Multidimensional density quotient expansion]%
+\label{thm:multidimensional-density-quotient}
 Let \(d\ge1\), let
 \[
 P_t^{(d)}(x):=c_d\,\frac{t}{(t^2+|x|^2)^{(d+1)/2}},
 \qquad x\in\RR^d,\ t>0,
 \]
 be the radial Poisson kernel on \(\RR^d\), normalized to integrate to one.
-Let \(\nu\) be a probability measure on \(\RR^d\) with mean
-\(\bar\gamma\), put \(X_c:=\gamma-\bar\gamma\), and set
+Let \(\nu\) be a probability measure on \(\RR^d\).  Fix an integer \(L\)
+such that \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\), and put
+\(X_c:=\gamma-\bar\gamma\).  Set
 \[
 h_t:=P_t^{(d)}*\nu,\qquad
 g_t(x):=P_t^{(d)}(x-\bar\gamma).
 \]
-Fix an integer \(L\ge\max\{2,d+1\}\), and assume
-\(\EE|X_c|^L<\infty\).  For multiindices \(\alpha\in\NN_0^d\), write
+For multiindices \(\alpha\in\NN_0^d\), write
 \[
 \mu_\alpha:=\EE[X_c^\alpha]\quad(|\alpha|\le L).
 \]
@@ -831,8 +848,15 @@ at \(z=0\)
 \left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}
 =\sum_{\alpha\in\NN_0^d}U_\alpha^{(d)}(y)z^\alpha .
 \end{equation}
-For \(2\le j\le L\), group the centred tensor moments of homogeneous order
-\(j\) into the density layer
+Then, for \(x=\bar\gamma+ty\), the Cauchy-scale density quotient satisfies
+\begin{equation}\label{eq:multidim-density-expansion}
+\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+=\sum_{j=2}^{L}D_j^{(d)}(y;\nu)t^{-j}
++\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_\infty+\|\rho_{L,t}\|_{L^1(\Omega_d)}=o(t^{-L}),
+\end{equation}
+where, for \(2\le j\le L\),
 \begin{equation}\label{eq:multidim-density-layers}
 D_j^{(d)}(y;\nu):=
 \sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
@@ -842,19 +866,44 @@ The preceding uniform radial Poisson Taylor lemma supplies, uniformly in
 \eqref{eq:multidim-uniform-taylor-remainder-bound} and its
 \(L^\infty\cap L^1(\Omega_d)\) integrated consequence
 \eqref{eq:multidim-uniform-density-remainder-consequence}; these are the only
-large-\(z\) and density-remainder estimates used below.
-For \(4\le m\le L+2\), define
-\begin{equation}\label{eq:multidim-entropy-coefficient}
-\mathcal A_m^{(d)}(\nu):=
-\sum_{r=2}^{\lfloor m/2\rfloor}
-\frac{(-1)^r}{r(r-1)}
-\sum_{\substack{|\alpha_1|,\ldots,|\alpha_r|\ge2\\
-|\alpha_1|+\cdots+|\alpha_r|=m\\
-|\alpha_j|\le L}}
-\mu_{\alpha_1}\cdots\mu_{\alpha_r}
-\int_{\RR^d}\prod_{j=1}^rU_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
-\end{equation}
-Equivalently,
+large-\(z\) and density-remainder estimates used here.
+\end{theorem}
+
+\begin{proof}
+Write \(a=(d+1)/2\).  For \(x=\bar\gamma+ty\),
+\[
+\frac{P_t^{(d)}(x-\gamma)}{g_t(x)}
+=
+\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^a
+=
+\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a.
+\]
+Thus
+\[
+\widetilde\delta_t(y)
+:=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+=\EE\!\left[
+\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a-1
+\right].
+\]
+Apply the uniform radial Poisson Taylor lemma with \(X=X_c\).  Its uniform
+Taylor-remainder consequence gives the error term below in both
+\(L^\infty(\RR^d)\) and \(L^1(\Omega_d)\).  Since \(U_0^{(d)}=1\) and the
+first-order terms integrate to zero against the centred variable \(X_c\), we
+obtain \eqref{eq:multidim-density-expansion}.  The proof of the stated
+remainder is exactly the tail split in the Taylor lemma, with \(z=X_c/t\):
+the region \(|X_c|\le t\) gives the integrable factor
+\(|X_c|^L(|X_c|/t)\), while \(|X_c|>t\) gives the finite \(L\)th-moment tail.
+\end{proof}
+
+\begin{theorem}[Multidimensional entropy transfer]%
+\label{thm:multidimensional-poisson-entropy-jets}
+Assume the hypotheses and notation of
+Theorem~\ref{thm:multidimensional-density-quotient}.  Thus
+\((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\), \(h_t=P_t^{(d)}*\nu\),
+\(g_t(x)=P_t^{(d)}(x-\bar\gamma)\), and the density layers
+\(D_j^{(d)}\) are those in \eqref{eq:multidim-density-layers}.  For
+\(4\le m\le L+2\), define \(\mathcal A_m^{(d)}(\nu)\) by
 \begin{equation}\label{eq:multidim-entropy-coefficient-layers}
 \mathcal A_m^{(d)}(\nu)=
 \sum_{r=2}^{\lfloor m/2\rfloor}
@@ -871,16 +920,90 @@ D_{\rm KL}(h_t\|g_t)
 +o(t^{-(L+2)})
 \qquad(t\to\infty).
 \end{equation}
-The odd coefficients vanish:
+\end{theorem}
+
+\begin{proof}
+The change of variables gives
+\[
+g_t(\bar\gamma+ty)t^d\dd y=P_1^{(d)}(y)\dd y=\Omega_d(\dd y),
+\]
+and therefore, with
+\(\widetilde\delta_t(y)=h_t(\bar\gamma+ty)/g_t(\bar\gamma+ty)-1\),
+\[
+D_{\rm KL}(h_t\|g_t)
+=\int_{\RR^d}\Phi(\widetilde\delta_t(y))\,\Omega_d(\dd y),
+\qquad
+\Phi(s)=(1+s)\log(1+s)-s.
+\]
+By Theorem~\ref{thm:multidimensional-density-quotient},
+\[
+\widetilde\delta_t(y)
+=\sum_{j=2}^{L}D_j^{(d)}(y;\nu)t^{-j}
++\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_\infty+\|\rho_{L,t}\|_{L^1(\Omega_d)}=o(t^{-L}).
+\]
+The finite sum starts at order \(t^{-2}\).  The boundedness of the retained
+\(U_\alpha^{(d)}\)'s from the uniform radial Poisson Taylor lemma, the
+finiteness of the moments \(\mu_\alpha\) with \(|\alpha|\le L\), and
+\(\|\rho_{L,t}\|_\infty=o(t^{-L})\) give
+\(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  For large \(t\),
+\(|\widetilde\delta_t|\le1/2\), so the Taylor expansion of \(\Phi\) may be
+used through degree \(\lfloor (L+2)/2\rfloor\).  Products containing at least
+one \(\rho_{L,t}\) are
+\[
+o(t^{-L})\,O(t^{-2(r-1)})=o(t^{-(L+2)})
+\]
+in \(L^1(\Omega_d)\), uniformly for each retained Taylor degree \(r\ge2\).
+The Taylor tail is \(O(t^{-2q})\) with
+\(q=\lfloor (L+2)/2\rfloor+1\), hence \(o(t^{-(L+2)})\).  Multiplying the
+finite density polynomial and retaining total tensor degree \(m\le L+2\)
+gives exactly \eqref{eq:multidim-entropy-coefficient-layers}, proving
+\eqref{eq:multidim-poisson-entropy-jet}.
+\end{proof}
+
+\begin{corollary}[Multidimensional coefficient formula]%
+\label{cor:multidim-coefficient-formula}
+Assume the hypotheses and notation of
+Theorem~\ref{thm:multidimensional-density-quotient}.  For \(4\le m\le L+2\),
+the coefficient in Theorem~\ref{thm:multidimensional-poisson-entropy-jets}
+is equivalently
+\begin{equation}\label{eq:multidim-entropy-coefficient}
+\mathcal A_m^{(d)}(\nu):=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{|\alpha_1|,\ldots,|\alpha_r|\ge2\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+|\alpha_j|\le L}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^rU_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\end{equation}
+The coefficient is finite and universal: it depends on \(d\), \(m\), and the
+centred tensor moments
+\(\{\mu_\alpha:2\le|\alpha|\le m-2\}\), but not on any higher moment of
+\(\nu\).  In particular a contribution of total entropy degree \(m\) cannot
+contain a tensor moment of order above \(m-2\).
+\end{corollary}
+
+\begin{proof}
+Substitute the density-layer definition
+\eqref{eq:multidim-density-layers} into
+\eqref{eq:multidim-entropy-coefficient-layers} and collect multiindices by
+homogeneous degree.  Since every entropy monomial has at least two density
+factors, each individual multiindex in a total degree \(m\) contribution has
+length at most \(m-2\).
+\end{proof}
+
+\begin{unnumberedlemma}[Multidimensional parity and low-order display]
+Assume the hypotheses and notation of
+Theorems~\ref{thm:multidimensional-density-quotient} and
+\ref{thm:multidimensional-poisson-entropy-jets}.  Then all odd entropy
+coefficients vanish:
 \begin{equation}\label{eq:multidim-odd-parity-cancellation}
 \mathcal A_{2q+1}^{(d)}(\nu)=0
 \qquad(2q+1\le L+2).
 \end{equation}
-This cancellation is immediate from
-\(F_{-y}(z)=F_y(-z)\), hence
-\(U_\alpha^{(d)}(-y)=(-1)^{|\alpha|}U_\alpha^{(d)}(y)\), together with the
-evenness of \(\Omega_d\).
-The first potentially nonzero coefficients are therefore
+The first potentially nonzero coefficients are
 \begin{align}
 \mathcal A_4^{(d)}
 &=\frac12\int_{\RR^d}D_2^2\,\dd\Omega_d,
@@ -902,98 +1025,27 @@ The first potentially nonzero coefficients are therefore
 \label{eq:multidim-first-coeff-a8}
 \end{align}
 with the convention that a displayed term containing \(D_j\) is omitted when
-\(j>L\).  Here and below in this theorem \(D_j=D_j^{(d)}(\,\cdot\,;\nu)\).
-The coefficients in \eqref{eq:multidim-entropy-coefficient} are finite and
-universal: they depend on \(d\), \(m\), and the centred tensor moments
-\(\{\mu_\alpha:2\le|\alpha|\le m-2\}\), but not on any higher moment of
-\(\nu\).  In particular a contribution of total entropy degree \(m\) cannot
-contain a tensor moment of order above \(m-2\).  The leading term is
-coercive in the covariance: Theorem~\ref{thm:multidim-leading-positive-defect}
-gives an explicit positive decomposition of \(\mathcal A_4^{(d)}\), so
+\(j>L\).  Here \(D_j=D_j^{(d)}(\,\cdot\,;\nu)\).
+
+The leading term is coercive in the covariance:
+Theorem~\ref{thm:multidim-leading-positive-defect} gives an explicit positive
+decomposition of \(\mathcal A_4^{(d)}\), so
 \(\mathcal A_4^{(d)}\ge0\) and equality holds exactly for zero covariance.
 No fixed sign is asserted for the higher even coefficients; the formulas
 \eqref{eq:multidim-first-coeff-a6}--\eqref{eq:multidim-first-coeff-a8}
 display the alternating Bregman-Taylor contributions that destroy a general
-positivity statement beyond the leading quadratic layer.  The tensor-moment
-order \(m-2\) is the top order that can enter the universal coefficient
-\(\mathcal A_m^{(d)}\), and for even \(m\) it enters only through the
-quadratic-layer pairing \(\int D_2D_{m-2}\,\dd\Omega_d\).  This is the
-algebraic sharpness statement for the displayed universal coefficient; the
-detected part of the top tensor is the component paired with \(D_2\).
-\end{theorem}
+positivity statement beyond the leading quadratic layer.
 
-\begin{proof}
-Write \(a=(d+1)/2\).  For \(x=\bar\gamma+ty\),
-\[
-\frac{P_t^{(d)}(x-\gamma)}{g_t(x)}
-=
-\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^a
-=
-\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a.
-\]
-Thus the density quotient in the scale \(\Omega_d\) is
-\[
-\widetilde\delta_t(y)
-:=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
-=\EE\!\left[
-\left(\frac{1+|y|^2}{1+|y-X_c/t|^2}\right)^a-1
-\right].
-\]
-The change of variables gives
-\[
-g_t(\bar\gamma+ty)t^d\dd y=P_1^{(d)}(y)\dd y=\Omega_d(\dd y),
-\]
-and therefore
-\[
-D_{\rm KL}(h_t\|g_t)
-=\int_{\RR^d}\Phi(\widetilde\delta_t(y))\,\Omega_d(\dd y),
-\qquad
-\Phi(s)=(1+s)\log(1+s)-s.
-\]
+For even \(m\), the tensor-moment order \(m-2\) enters the universal
+coefficient \(\mathcal A_m^{(d)}\) only through the quadratic-layer pairing
+\(\int D_2D_{m-2}\,\dd\Omega_d\).  This is the algebraic sharpness statement
+for the displayed universal coefficient; the detected part of the top tensor
+is the component paired with \(D_2\).
+\end{unnumberedlemma}
 
-We first obtain the finite density expansion.  Apply
-the uniform radial Poisson Taylor lemma with \(X=X_c\).
-Its uniform Taylor-remainder consequence gives the error term below in both
-\(L^\infty(\RR^d)\) and \(L^1(\Omega_d)\).  Since
-\(U_0^{(d)}=1\) and the first-order terms integrate to zero against the
-centred variable \(X_c\), we get
-\begin{equation}\label{eq:multidim-density-expansion}
-\widetilde\delta_t(y)
-=\sum_{j=2}^{L}D_j^{(d)}(y;\nu)t^{-j}
-+\rho_{L,t}(y),
-\qquad
-\|\rho_{L,t}\|_\infty+\|\rho_{L,t}\|_{L^1(\Omega_d)}=o(t^{-L}).
-\end{equation}
-The terms of orders \(0\) and \(1\) cancel because \(\nu\) has total mass one
-and mean zero in the centred variable.
-The proof of \eqref{eq:multidim-density-expansion} is exactly the tail split
-in the Taylor lemma, with \(z=X_c/t\): the region \(|X_c|\le t\) gives the
-integrable factor
-\(|X_c|^L(|X_c|/t)\), while \(|X_c|>t\) gives the finite \(L\)th-moment tail.
-
-The finite sum in \eqref{eq:multidim-density-expansion} starts at order
-\(t^{-2}\).  The boundedness of the retained \(U_\alpha^{(d)}\)'s from
-the uniform radial Poisson Taylor lemma, the finiteness of
-the moments \(\mu_\alpha\) with \(|\alpha|\le L\), and
-\(\|\rho_{L,t}\|_\infty=o(t^{-L})\) give
-\(\|\widetilde\delta_t\|_\infty=O(t^{-2})\).  For large \(t\),
-\(|\widetilde\delta_t|\le1/2\), so the Taylor expansion of \(\Phi\) may be
-used through degree \(\lfloor (L+2)/2\rfloor\).  Products containing at least
-one \(\rho_{L,t}\) are
-\[
-o(t^{-L})\,O(t^{-2(r-1)})=o(t^{-(L+2)})
-\]
-in \(L^1(\Omega_d)\), uniformly for each retained Taylor degree \(r\ge2\).
-The Taylor tail is \(O(t^{-2q})\) with
-\(q=\lfloor (L+2)/2\rfloor+1\), hence \(o(t^{-(L+2)})\).  Multiplying the
-finite density polynomial and retaining total tensor degree \(m\le L+2\)
-gives exactly \eqref{eq:multidim-entropy-coefficient}, proving
-\eqref{eq:multidim-poisson-entropy-jet}.  Since every entropy monomial has
-at least two density factors, each individual multiindex in a total degree
-\(m\) contribution has length at most \(m-2\).
-
-It remains only to record the parity and the displayed low-order formulas.
-The identity \(F_{-y}(z)=F_y(-z)\) implies
+\begin{proof}[Proof of the parity and low-order display]
+The identity \(F_{-y}(z)=F_y(-z)\) in
+\eqref{eq:multidim-poisson-ratio-taylor} implies
 \[
 U_\alpha^{(d)}(-y)=(-1)^{|\alpha|}U_\alpha^{(d)}(y),
 \qquad
@@ -1011,47 +1063,7 @@ For even \(m\), the only compositions containing a part \(m-2\) are
 density layers of order at most \(m-3\).
 \end{proof}
 
-\begin{proposition}[First multidimensional entropy layers and odd cancellation]%
-\label{prop:multidim-first-entropy-layers-parity}
-In the notation of
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets}, put
-\[
-D_j(y)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
-\]
-If \(L\ge4\), then
-\begin{equation}\label{eq:multidim-kl-through-six-proposition}
-D_{\rm KL}(h_t\|g_t)
-=
-\frac12t^{-4}\int_{\RR^d}D_2^2\,\dd\Omega_d
-+t^{-6}\left(
-\int_{\RR^d}D_2D_4\,\dd\Omega_d
-+\frac12\int_{\RR^d}D_3^2\,\dd\Omega_d
--\frac16\int_{\RR^d}D_2^3\,\dd\Omega_d
-\right)
-+o(t^{-6}).
-\end{equation}
-Moreover, all odd entropy coefficients in the multidimensional jet vanish:
-\[
-\mathcal A_{2q+1}^{(d)}(\nu)=0.
-\]
-\end{proposition}
-
-\begin{proof}
-The expansion \eqref{eq:multidim-kl-through-six-proposition} is the
-\(m=4\) and \(m=6\) part of
-\eqref{eq:multidim-poisson-entropy-jet}, equivalently
-\eqref{eq:multidim-first-coeff-a4} and
-\eqref{eq:multidim-first-coeff-a6}.  For parity,
-\[
-F_{-y}(z)=F_y(-z)\quad\Rightarrow\quad
-U_\alpha^{(d)}(-y)=(-1)^{|\alpha|}U_\alpha^{(d)}(y),
-\]
-while \(\Omega_d\) is even.  Hence every coefficient of odd total degree is
-the integral of an odd function and is zero.
-\end{proof}
-
-\begin{lemma}[Radial beta-prime and spherical fourth moments]%
-\label{lem:radial-beta-prime-spherical-fourth-moments}
+\begin{proof}[Moment identities used in Theorem~\ref{thm:multidim-leading-positive-defect}]
 Let \(Y\) have density \(\Omega_d(\dd y)=P_1^{(d)}(y)\dd y\), set
 \(R=|Y|^2\), and put
 \[
@@ -1069,7 +1081,9 @@ and \(A\) is a real symmetric traceless \(d\times d\) matrix, then
 \EE_\Theta\bigl[(\Theta^{\mathsf T}A\Theta)^2\bigr]
 =\frac{2}{d(d+2)}\|A\|_{\rm HS}^2 .
 \]
-Equivalently, the radial beta-prime form is
+Indeed, since \(\Omega_d\) is radial, the polar decomposition
+\(Y=\sqrt R\,\Theta\) has \(\Theta\) uniform on the sphere, independent of
+\(R\), and
 \begin{equation}\label{eq:radial-beta-prime-moments}
 \EE\frac{R^k}{(1+R)^4}
 =
@@ -1077,57 +1091,24 @@ Equivalently, the radial beta-prime form is
 {B\bigl(d/2,\,1/2\bigr)}
 \qquad(k=0,1,2).
 \end{equation}
-These are exactly the beta-prime and spherical fourth-moment inputs used in
-Theorem~\ref{thm:multidim-leading-positive-defect}.
-\end{lemma}
-
-\begin{proof}
-Since
-\[
-\Omega_d(\dd y)=c_d(1+|y|^2)^{-(d+1)/2}\dd y
-\]
-is radial, the polar decomposition \(Y=\sqrt R\,\Theta\) has \(\Theta\)
-uniform on the sphere, independent of \(R\).  With \(r=|y|^2\), the radial
-Jacobian gives
-\[
-\mathbb P(R\in\dd r)
-=\frac{1}{B(d/2,1/2)}\,r^{d/2-1}(1+r)^{-(d+1)/2}\dd r .
-\]
-Thus \(R\) has the beta-prime law with parameters \((d/2,1/2)\), and for
-\(k=0,1,2\),
-\[
-\EE\frac{R^k}{(1+R)^4}
-=\frac{1}{B(d/2,1/2)}
-\int_0^\infty r^{d/2+k-1}(1+r)^{-(d+9)/2}\dd r .
-\]
-The last integral is
-\(B(d/2+k,9/2-k)\), proving
-\eqref{eq:radial-beta-prime-moments}.  Expanding the beta functions by
-\(B(x,y)=\Gamma(x)\Gamma(y)/\Gamma(x+y)\) gives the three displayed rational
-moments with denominator \(D_d\).
-
-For the angular moment, rotational invariance implies
+Expanding the beta functions gives the three displayed rational moments.
+The angular identity follows by contracting
 \[
 \EE_\Theta[\Theta_i\Theta_j\Theta_k\Theta_l]
 =\frac{\delta_{ij}\delta_{kl}
 +\delta_{ik}\delta_{jl}
-+\delta_{il}\delta_{jk}}{d(d+2)} .
++\delta_{il}\delta_{jk}}{d(d+2)}
 \]
-Contracting this identity with the entries of a symmetric matrix \(A\)
-gives
-\[
-\EE_\Theta[(\Theta^{\mathsf T}A\Theta)^2]
-=\frac{(\operatorname{tr}A)^2+2\operatorname{tr}(A^2)}{d(d+2)} .
-\]
-When \(\operatorname{tr}A=0\), this is
-the displayed traceless identity.
+with the entries of \(A\), and then using \(\operatorname{tr}A=0\).
 \end{proof}
+
 
 \begin{theorem}[All-dimensional leading coefficient and covariance defect]%
 \label{thm:multidim-leading-positive-defect}
-Let the hypotheses of
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets} hold with
-\(L\ge\max\{2,d+1\}\), and let
+Let \(d\ge1\), let \(L\) be an integer, and let \(\nu\) be a probability
+measure on \(\RR^d\) such that \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\).  Let
+\(X_c=\gamma-\bar\gamma\), and let
 \[
 \Sigma:=\EE[X_cX_c^{\mathsf T}]
 \]
@@ -1135,7 +1116,8 @@ be the centred covariance matrix.  Put
 \[
 \Sigma_0:=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d .
 \]
-Then, under this finite-moment hypothesis, the first nonzero entropy coefficient in
+Then, under this full multidimensional jet hypothesis, the first nonzero
+entropy coefficient in
 \[
 D_{\rm KL}(P_t^{(d)}*\nu\|P_t^{(d)}(\cdot-\bar\gamma))
 =\mathcal A_4^{(d)}(\nu)t^{-4}+o(t^{-4})
@@ -1164,18 +1146,20 @@ Both constants are strictly positive.  Consequently
 \(\mathcal A_4^{(1)}(\nu)=\mu_2^2/8\), the leading coefficient in
 Theorem~\ref{thm:poisson-kl-even-orders}.
 For \(d\ge2\), the proved multidimensional leading \(A_4^{(d)}\) asymptotic
-is not a finite-covariance-only theorem: it uses the same
-\(L\ge d+1\) hypothesis from
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets}, in particular the
-finite centred moment condition \(\EE|X_c|^{d+1}<\infty\).
+is not a finite-covariance-only theorem: it is a consequence of
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} under
+\((\mathrm{MPJ}_{d,L})\), and therefore uses, in particular, the finite
+centred moment condition \(\EE|X_c|^{d+1}<\infty\).
 The radial beta-prime integrals and the traceless spherical fourth moment
-used to obtain the two displayed constants are isolated in
-Lemma~\ref{lem:radial-beta-prime-spherical-fourth-moments}.
+used to obtain the two displayed constants are recorded immediately before
+this theorem.
 \end{theorem}
 
 \begin{proof}
-The multidimensional entropy-jet theorem identifies the \(t^{-4}\)
-coefficient as
+The only analytic asymptotic input is
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets}, applied under the
+full hypothesis \((\mathrm{MPJ}_{d,L})\).  That theorem identifies the
+\(t^{-4}\) coefficient as
 \[
 \mathcal A_4^{(d)}(\nu)
 =\frac12\int_{\RR^d} b_\Sigma(y)^2\,\Omega_d(\dd y),
@@ -1242,8 +1226,8 @@ and therefore
 \]
 
 It remains to compute the two constants.  Let \(R=|Y|^2\) for
-\(Y\sim\Omega_d\).  Lemma~\ref{lem:radial-beta-prime-spherical-fourth-moments}
-gives
+\(Y\sim\Omega_d\).  The beta-prime moments in
+\eqref{eq:radial-beta-prime-moments} give
 \[
 \begin{split}
 \EE\frac{(3R-d)^2}{(1+R)^4}
@@ -1268,9 +1252,9 @@ The isotropic contribution to \(\frac12\int b_\Sigma^2\dd\Omega_d\) is
 \]
 
 For the traceless part, use the independent polar decomposition
-\(Y=\sqrt R\,\Theta\).  The spherical fourth-moment identity in
-Lemma~\ref{lem:radial-beta-prime-spherical-fourth-moments}, applied to the
-traceless matrix \(\Sigma_0\), and the \(k=2\) radial moment give
+\(Y=\sqrt R\,\Theta\).  The spherical fourth-moment identity recorded above,
+applied to the traceless matrix \(\Sigma_0\), and the \(k=2\) radial moment
+give
 \[
 \begin{split}
 \int_{\RR^d}
@@ -1563,20 +1547,9 @@ A_4(\nu)=\frac18\mu_2^2,
 so a universal statement through order \(t^{-4}\) must at least make the
 variance finite.
 This proposition is adjacent to Theorem~\ref{thm:poisson-kl-even-orders}
-only to record the algebraic threshold for identifying the displayed
-universal coefficient; it is not a universal analytic lower-bound theorem
-under weaker tails.
+to record the algebraic threshold for identifying the displayed universal
+coefficient, with the nonclaim stated in the introduction's scope paragraph.
 \end{proposition}
-
-\begin{remark}[Algebraic threshold]
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} is an algebraic
-statement about the displayed universal moment polynomial.  It is not a sharp
-analytic lower bound for every possible entropy asymptotic: a different
-renormalized, tail-dependent, or nonuniversal coefficient under weaker
-hypotheses is not excluded here.  This is an algebraic
-coefficient-identification obstruction, not a universal analytic lower-bound
-theorem under weaker tails.
-\end{remark}
 
 \begin{proof}
 The case \(N=2\) is the first line of the coefficient computation:
@@ -1634,13 +1607,6 @@ universal polynomial \(A_{2N}^{\rm alg}\) is genuinely absent although every
 lower absolute moment is finite.
 \end{proof}
 
-\noindent
-Theorem~\ref{thm:poisson-kl-even-orders} is the exact coefficient
-identification statement.  The algebraic obstruction in
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} refers only to
-that displayed universal polynomial: it is not an analytic lower-bound theorem
-excluding every possible weaker-tail asymptotic.
-
 \begin{remark}[Moment threshold and quantitative margins]
 No positive-variance hypothesis is imposed in
 Theorem~\ref{thm:poisson-kl-even-orders}; when the variance is zero the
@@ -1655,13 +1621,11 @@ uses centred moments only through order \(2N-2\).  With \(L=2N-2\), the finite
 remainder \(o(t^{-L})\), and every entropy term containing that remainder also
 contains the quadratic entropy scale.  The first discarded
 density-remainder contribution is therefore \(o(t^{-(L+2)})=o(t^{-2N})\).
-The lower-moment obstruction in
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} is algebraic: the
-same universal polynomial coefficient is not determined from strictly lower
-moment data alone.  This is not an analytic lower-bound claim about all
-possible entropy asymptotics under other tail hypotheses.  The \(+\eta\)
-moment hypotheses in Appendix~\ref{subsubsec:finite-moment-constants-variants}
-are used only for quantitative remainders and thresholds.
+The lower-moment obstruction is precisely the algebraic obstruction of
+Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}; the introduction's
+scope paragraph records the corresponding nonclaim.  The \(+\eta\) moment
+hypotheses in Appendix~\ref{subsubsec:finite-moment-constants-variants} are
+used only for quantitative remainders and thresholds.
 \end{remark}
 
 
