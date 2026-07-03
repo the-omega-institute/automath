@@ -46,11 +46,78 @@ to Lebesgue measure, its differential entropy is
 h_{\mathrm{diff}}(X):=-\int_{\RR}f_X(x)\log f_X(x)\dd x,
 \]
 whenever the integral is well defined.  If $f$ and $g$ are probability
-density functions on~$\RR$ and $f\log(f/g)\in L^1(\RR)$, the
-Kullback--Leibler divergence \cite{KullbackLeibler1951,CoverThomas2006} is
+density functions on~$\RR$, the Kullback--Leibler divergence
+\cite{KullbackLeibler1951,CoverThomas2006} is used throughout as an
+extended nonnegative functional.  Precisely, if \(f\not\ll g\), then
 \[
-D_{\mathrm{KL}}(f\|g):=\int_{\RR}f(x)\log\frac{f(x)}{g(x)}\dd x.
+D_{\mathrm{KL}}(f\|g):=+\infty .
 \]
+If \(f\ll g\), write \(u=f/g\) on \(\{g>0\}\) and set \(u=1\) on
+\(\{g=0\}\).  Then
+\begin{equation}\label{eq:extended-kl-definition}
+D_{\mathrm{KL}}(f\|g)
+:=\int_{\RR}\{u(x)\log u(x)-u(x)+1\}\,g(x)\dd x
+\in[0,\infty],
+\end{equation}
+with the convention \(0\log0=0\).  Equivalently, when
+\(f\log(f/g)\) is integrable in the ordinary sense, this equals
+\[
+\int_{\RR}f(x)\log\frac{f(x)}{g(x)}\dd x .
+\]
+Thus the symbol \(D_{\mathrm{KL}}\) never presupposes finiteness.  In the
+applications below \(g\) is a positive Poisson density, so absolute
+continuity is automatic; under finite centred second moment
+Lemma~\ref{lem:finite-time-poisson-kl-finite} gives
+\(D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))<\infty\) for every
+\(t>0\).  Without that finite-variance hypothesis, all KL statements are
+read in the extended interval \([0,\infty]\).
+
+\begin{lemma}[Finite-time Poisson KL under finite variance]%
+\label{lem:finite-time-poisson-kl-finite}
+Let \(\nu\) be a probability measure on~\(\RR\) with mean \(\bar\gamma\) and
+finite centred second moment.  Define
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{t^2+x^2},\qquad
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
+\]
+For every compact interval \(0<a<b<\infty\), the quotient \(u_t\) is bounded
+above and below by positive constants uniformly for
+\((t,x)\in[a,b]\times\RR\).  Consequently
+\[
+D_{\mathrm{KL}}(h_t\|g_t)<\infty\qquad(t>0).
+\]
+\end{lemma}
+
+\begin{proof}
+Write \(X_c=\gamma-\bar\gamma\), \(z=(x-\bar\gamma)/t\), and
+\[
+R_\varepsilon(z):=\frac{1+z^2}{1+(z-\varepsilon)^2}.
+\]
+Then
+\[
+u_t(x)=\int_{\RR}R_{X_c/t}(z)\,\dd\nu(\gamma).
+\]
+The elementary inequalities
+\[
+R_\varepsilon(z)\le 2(1+\varepsilon^2),
+\qquad
+R_\varepsilon(z)\ge \frac{1}{2(1+\varepsilon^2)}
+\]
+give, with \(\mu_2=\EE X_c^2\),
+\[
+\frac{1}{2(1+\mu_2/a^2)}
+\le u_t(x)\le 2+\frac{2\mu_2}{a^2}
+\qquad (t\in[a,b],\ x\in\RR),
+\]
+where the lower bound uses Jensen's inequality for
+\(s\mapsto(1+s)^{-1}\).  Fix \(t>0\) and choose \(a<t<b\).  If
+\(m\le u_t\le M\), then
+\[
+0\le D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}u_t(x)\log u_t(x)\,g_t(x)\dd x
+\le M\max\{|\log m|,|\log M|\}<\infty .
+\]
+\end{proof}
 We shall repeatedly use the elementary identity
 \[
 \int_{\RR}(f-g)\dd x=0
