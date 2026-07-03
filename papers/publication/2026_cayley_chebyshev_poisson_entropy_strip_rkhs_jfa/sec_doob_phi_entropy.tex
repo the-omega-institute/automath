@@ -14,9 +14,11 @@ The Cauchy generator is normalized by
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,
 \]
 so that \(\partial_tP_t=LP_t\).  This section records the KL-specialized
-Doob--Bregman dissipation identity and its coefficient consequence.  Its
-literature frame is the Hardy--Stein/Bregman chain.  The classical local identity is the
-chain-rule/Green-formula Hardy--Stein identity for the Laplacian
+application of the Hardy--Stein/Bregman dissipation identity to the moving
+Poisson quotient \(u_t=h_t/g_t\), and then records the coefficient consequence.
+The Bregman identity itself belongs to the Hardy--Stein/Bregman chain.  The
+classical local identity is the chain-rule/Green-formula Hardy--Stein identity
+for the Laplacian
 \cite[pp.~86--88]{Stein1970SingularIntegrals}; the convex-divergence
 language starts with Bregman's construction~\cite{Bregman1967}.  For jump
 semigroups, the nonlocal Hardy--Stein identity and Sobolev--Bregman forms were
@@ -37,11 +39,15 @@ function is
 reference density is the moving Poisson profile \(g_t\).  The general
 polarized Bregman framework is due to
 Bogdan--Gutowski--Pietruska-Pa{\l}uba~\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.
-The proof below does not import an abstract Hardy--Stein theorem.  Instead
-Lemma~\ref{thm:kl-domain-verification} proves the quotient bounds, cutoff
-Cauchy Green formula, and Bregman dominator for the moving profile, and the
-standalone local proposition below then derives the identity
-\(H'(t)=-I_\nu(t)\) directly from those inputs.
+The contribution here is not a new abstract Bregman identity.  The new
+verification is that the nonstationary Cauchy pair
+\((h_t,g_t)=(P_t*\nu,P_t(\cdot-\bar\gamma))\) lies in the quotient domain
+needed to apply the polarized identity: Lemma~\ref{thm:kl-domain-verification}
+proves the quotient bounds, cutoff Cauchy Green formula, and Bregman
+dominator for this moving profile.  Proposition~
+\ref{prop:self-contained-cauchy-kl-hardystein} then spells out the resulting
+KL/Cauchy specialization from these domain inputs and the standard two-point
+Bregman algebra.
 The coefficient expansion itself is proved in
 Theorem~\ref{thm:poisson-kl-even-orders} by the Cayley quotient-mode Taylor
 calculus; the Doob identity below supplies an equivalent dissipation-tail
@@ -550,27 +556,48 @@ On the closed quotient cone \(m\le r/s\le M\),
 \]
 are bounded.  Thus
 \[
-|F(r,s)|\le C_{m,M}s,\qquad
+|F(r,s)|\le C_{m,M}s,
+\]
+and the mean-value theorem on the same cone gives
+\[
+|F(r_1,s_1)-F(r_0,s_0)|
+\le C_{m,M}(|r_1-r_0|+|s_1-s_0|)
+\]
+whenever both pairs lie in the cone.  Hence \(H(t)\) is finite and, for
+\(s<t\) in \([a,b]\),
+\[
+|H(t)-H(s)|
+\le C_{m,M}\bigl(\|h_t-h_s\|_1+\|g_t-g_s\|_1\bigr).
+\]
+Since \(t\mapsto h_t\) and \(t\mapsto g_t\) are \(L^1\)-absolutely
+continuous, this already proves \(H\in AC([a,b])\).
+
+For the derivative formula, the partial derivatives satisfy
+\[
 |\partial_rF(r,s)|+|\partial_sF(r,s)|\le C_{m,M}
 \]
-throughout the cone.  The first estimate makes \(H(t)\) finite, since
-\(\int g_t=1\).  For each fixed \(x\), the scalar functions
-\(t\mapsto h_t(x)\) and \(t\mapsto g_t(x)\) are absolutely continuous: their
-time derivatives are obtained by differentiating the Poisson kernel under
-the finite measure.  Therefore the ordinary one-variable chain rule gives
-for a.e. \(t\), pointwise in \(x\),
+throughout the cone.  For each fixed \(x\), the scalar functions
+\(t\mapsto h_t(x)\) and \(t\mapsto g_t(x)\) are absolutely continuous on
+\([a,b]\): their time derivatives are obtained by differentiating the
+Poisson kernel under the finite measure, and the derivative majorants are
+integrable on \([a,b]\times\RR\).  Therefore the ordinary one-variable chain
+rule gives, for a.e. \(t\) and a.e. \(x\),
 \[
 \frac{\dd}{\dd t}F(h_t(x),g_t(x))
 =\bigl(\log u_t(x)+1\bigr)\partial_th_t(x)
 -u_t(x)\partial_tg_t(x).
 \]
-The right-hand side is dominated in \(L^1([a,b]\times\RR)\) by
+The right-hand side belongs to \(L^1([a,b]\times\RR)\), with bound
 \[
 C_{m,M}\bigl(|\partial_th_t(x)|+|\partial_tg_t(x)|\bigr),
 \]
-because the first part of the proof gives uniform \(L^1\) bounds for
-\(\partial_th_t\) and \(\partial_tg_t\) on \([a,b]\).  Fubini's theorem then
-gives absolute continuity of \(H\) and the differentiated formula
+because the first part of the proof gives
+\[
+\int_a^b\|\partial_th_t\|_1\dd t
++\int_a^b\|\partial_tg_t\|_1\dd t<\infty .
+\]
+Integrating the scalar chain rule over \(x\), and using Fubini together with
+the preceding \(L^1([a,b]\times\RR)\) bound, gives
 \[
 H'(t)=
 \int_{\RR}(\log u_t+1)\partial_th_t\dd x
@@ -584,7 +611,7 @@ differentiating these mass identities gives
 into the previous display yields \eqref{eq:poisson-kl-l1-chain-rule}.
 \end{proof}
 
-\begin{proposition}[Self-contained Cauchy/KL Hardy--Stein identity]%
+\begin{proposition}[Cauchy/KL quotient-domain application]%
 \label{prop:self-contained-cauchy-kl-hardystein}
 Let \(0<a<b<\infty\).  Let
 \[
@@ -621,7 +648,10 @@ and
 I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
 \]
-Then \(H\in AC([a,b])\), \(I_\nu\in L^1([a,b])\), and, for a.e.
+Assume the polarized Hardy--Stein/Sobolev--Bregman identity is applied in this
+KL/Cauchy quotient domain, equivalently with the two-point Bregman algebra
+displayed in the proof below.  Then \(H\in AC([a,b])\),
+\(I_\nu\in L^1([a,b])\), and, for a.e.
 \(t\in[a,b]\),
 \begin{equation}\label{eq:kl-tail-input-unlocalized}
 H'(t)=-I_\nu(t).
@@ -637,6 +667,11 @@ for a.e. \(t\in[a,b]\).
 \end{proposition}
 
 \begin{proof}
+The analytic identity used here is the KL specialization of the general
+polarized Hardy--Stein/Bregman formula.  We record the verification in the
+present notation because the admissibility of the moving quotient
+\(h_t/g_t\), rather than the Bregman algebra, is the point needed later.
+
 The quotient bounds place \(u_t\) in a fixed compact interval
 \(J\Subset(0,\infty)\) and give a uniform Lipschitz bound on \(u_t\).
 Therefore both \(u_t\) and \(\log u_t\) are uniformly bounded and Lipschitz on
@@ -687,16 +722,16 @@ The symmetrized factor \(1/(2\pi)\) is therefore the one-sided factor
 \end{proof}
 
 \noindent
-The KL tail identity is now a short consequence of
-Proposition~\ref{prop:self-contained-cauchy-kl-hardystein}, the quotient and
-cutoff admissibility supplied by Lemma~\ref{thm:kl-domain-verification}, and
-the large-time KL decay from Lemma~\ref{lem:poisson-second-moment-kl-decay}.
-The surrounding
-Hardy--Stein/Sobolev--Bregman theory explains why this is the natural
-dissipation, but the derivative identity used here is the standalone Cauchy
-quotient proposition just proved.
+The KL tail identity is therefore a corollary of the polarized
+Hardy--Stein/Sobolev--Bregman identity after the quotient-domain verification
+above.  The standard Bregman identity supplies the differential equality
+\(H'(t)=-I_\nu(t)\); Lemma~\ref{thm:kl-domain-verification} is the paper's
+new input, because it verifies the moving Poisson quotient, the cutoff Cauchy
+pairing, and the \(L^1\) Bregman dominator required for this particular
+profile.  Lemma~\ref{lem:poisson-second-moment-kl-decay} then converts the
+differential identity into a tail formula.
 
-\begin{theorem}[Cauchy/KL Hardy--Stein tail identity]%
+\begin{theorem}[Poisson quotient tail corollary of Hardy--Stein]%
 \label{thm:poisson-kl-doob-tail}
 \label{cor:poisson-kl-doob-bregman-tail}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
@@ -706,7 +741,7 @@ I_\nu(s):=
 \frac{1}{\pi}\iint_{\RR^2}
 \frac{
 g_s(x)\left(
-u_s(x)\log\frac{u_s(x)}{u_s(y)}-u_s(x)+u_s(y)
+u_s(x)\log\!\bigl(u_s(x)/u_s(y)\bigr)-u_s(x)+u_s(y)
 \right)}
 {(x-y)^2}\dd x\dd y .
 \]
@@ -721,6 +756,7 @@ Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
 \([a,b]\subset(0,\infty)\),
 Lemma~\ref{thm:kl-domain-verification} verifies the quotient bounds, the
 cutoff generator pairing, and the \(L^1\) Bregman dominator required by
+the KL/Cauchy application of the polarized Hardy--Stein identity in
 Proposition~\ref{prop:self-contained-cauchy-kl-hardystein}.  That proposition
 therefore gives \(H\in AC([a,b])\),
 \(I_\nu\in L^1([a,b])\), and \(H'(s)=-I_\nu(s)\) for a.e.
@@ -733,7 +769,123 @@ Lemma~\ref{lem:poisson-second-moment-kl-decay} gives \(H(T)\to0\) as
 \eqref{eq:relative-entropy-integrated-dissipation}.
 \end{proof}
 
-\begin{proposition}[Dissipation-tail coefficient expansion]%
+\begin{lemma}[Differentiated quotient remainder gives pointwise dissipation]%
+\label{lem:differentiated-quotient-remainder-pointwise-dissipation}
+Let \(N\ge2\), put \(L=2N-2\), and suppose that for \(x=\bar\gamma+ty\)
+the quotient perturbation
+\[
+\delta_t(y):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1
+\]
+has an expansion
+\begin{equation}\label{eq:differentiated-quotient-remainder-input}
+\delta_t(y)=d_t(y)+\rho_{L,t}(y),
+\qquad
+d_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n},
+\end{equation}
+with
+\begin{equation}\label{eq:differentiated-quotient-remainder-bound}
+\|\rho_{L,t}\|_{L^\infty}
+\|\rho_{L,t}\|_{L^1(\omega)}
+=o(t^{-L}),
+\qquad
+\|t\partial_t\rho_{L,t}\|_{L^\infty}
+\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
+=o(t^{-L}).
+\end{equation}
+Assume also that the KL tail identity
+\eqref{eq:relative-entropy-integrated-dissipation} holds for the same
+quotient path.  Then
+\begin{equation}\label{eq:pointwise-dissipation-asymptotic}
+I_\nu(t)=
+\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+\Phi(s):=(1+s)\log(1+s)-s.
+\]
+For large \(t\), \(\|\delta_t\|_\infty+\|d_t\|_\infty=O(t^{-2})\).  The
+entropy can be written in the fixed \(y\)-variable as
+\[
+H(t)=D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y).
+\]
+The \(L^1\)-chain rule in Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}
+justifies differentiating \(H\), and the present strengthened hypotheses
+also allow the following direct fixed-measure differentiation:
+\[
+H'(t)=\int_{\RR}\log(1+\delta_t(y))\,\partial_t\delta_t(y)\,\omega(\dd y)
+\]
+for a.e. \(t\), with the right side determining the absolutely continuous
+representative.  Since
+\[
+\partial_td_t(y)=\sum_{n=2}^{L}(-n)\mu_nu_n(y)t^{-(n+1)}
+\]
+and the \(u_n\)'s are bounded finite modes,
+\(\|d_t\|_\infty=O(t^{-2})\) and
+\(\|\partial_td_t\|_\infty=O(t^{-3})\).
+
+We compare the derivative of the exact entropy with the derivative of the
+finite polynomial entropy obtained from \(d_t\).  Because
+\(\log(1+s)\) is Lipschitz on \(|s|\le1/2\),
+\[
+\begin{aligned}
+&\left|
+\int \log(1+\delta_t)\partial_t\delta_t\,\dd\omega
+-\int \log(1+d_t)\partial_td_t\,\dd\omega
+\right|\\
+&\quad\le
+C\|d_t\|_\infty\|\partial_t\rho_{L,t}\|_{L^1(\omega)}
++C\|\rho_{L,t}\|_{L^1(\omega)}\|\partial_td_t\|_\infty
++C\|\rho_{L,t}\|_\infty\|\partial_t\rho_{L,t}\|_{L^1(\omega)} .
+\end{aligned}
+\]
+Using \eqref{eq:differentiated-quotient-remainder-bound}, this is
+\[
+O(t^{-2})o(t^{-L-1})+O(t^{-3})o(t^{-L})
++o(t^{-L})o(t^{-L-1})
+=o(t^{-(L+3)})=o(t^{-(2N+1)}).
+\]
+
+It remains to differentiate the finite-mode contribution.  The Taylor series
+for \(\Phi\) and the bound \(d_t=O(t^{-2})\) give, after differentiation,
+\[
+\int \log(1+d_t)\partial_td_t\,\dd\omega
+=
+\frac{\dd}{\dd t}
+\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
++o(t^{-(2N+1)}).
+\]
+Terms with \(r>N\) have derivative \(O(t^{-(2N+1)})\) or smaller, and the
+finite retained polynomial may be differentiated term by term.  By the
+definition of the universal coefficients,
+\[
+\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
+=
+\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
++O(t^{-(2N+1)}),
+\]
+where the displayed even coefficients are the retained terms through degree
+\(2N\); odd retained degrees vanish by the Cayley parity already proved in
+Theorem~\ref{thm:universal-entropy-coefficients}.  Therefore
+\[
+H'(t)=
+-\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\]
+Finally \(H'(t)=-I_\nu(t)\) for a.e. \(t\) by the Hardy--Stein tail identity.
+The same compact-interval quotient bounds and Bregman majorant used in
+Lemma~\ref{thm:kl-domain-verification} give continuity of \(t\mapsto I_\nu(t)\)
+by dominated convergence, while the differentiated quotient hypotheses give
+continuity of the displayed formula for \(H'(t)\).  Since these continuous
+functions agree a.e., they agree for every sufficiently large \(t\).  This
+proves \eqref{eq:pointwise-dissipation-asymptotic}.
+\end{proof}
+
+\begin{proposition}[Dissipation-tail coefficient transfer]%
 \label{prop:dissipation-tail-coefficient-expansion}
 Let \(N\ge2\), and assume that \(\nu\) has finite centred
 \((2N-2)\)th absolute moment.  Then the KL dissipation tail has the same
@@ -774,9 +926,20 @@ If, in addition, \(0<\eta\le1\) and the centred
 \((2N-2+\eta)\)th absolute moment is finite, then the error terms above have
 the corresponding positive-margin bounds obtained by applying
 \eqref{eq:positive-margin-retained-order-theorem} at \(t\) and \(\lambda t\).
+
+If the stronger differentiated quotient remainder assumptions
+\eqref{eq:differentiated-quotient-remainder-input}--
+\eqref{eq:differentiated-quotient-remainder-bound} hold, then the averaged
+window statement upgrades to the pointwise dissipation asymptotic
+\[
+I_\nu(t)=
+\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\]
 \end{proposition}
 
 \begin{proof}
+This is a coefficient transfer, not an additional Hardy--Stein theorem.
 The tail identity \eqref{eq:relative-entropy-integrated-dissipation} identifies
 \(\int_t^\infty I_\nu\) with \(D_{\mathrm{KL}}(h_t\|g_t)\).  Applying
 Theorem~\ref{thm:poisson-kl-even-orders} gives
@@ -796,8 +959,10 @@ coefficient of \(t^{-2m}\) is
 \((\lambda-1)t\) gives \eqref{eq:bregman-window-average-coefficients}.
 The positive-margin assertion follows from the explicit remainder estimate
 \eqref{eq:positive-margin-retained-order-theorem} for \(H(t)\) and
-\(H(\lambda t)\).  The coefficient theorem controls the entropy tail and
-therefore its exact tail-window averages; a differentiated pointwise expansion
-for \(I_\nu(t)\) would require additional regularity beyond the finite-moment
-hierarchy.
+\(H(\lambda t)\).  The final pointwise assertion is exactly
+Lemma~\ref{lem:differentiated-quotient-remainder-pointwise-dissipation}.
+Without the differentiated quotient-remainder hypothesis in that lemma, the
+finite-moment coefficient theorem controls the entropy tail and therefore
+its exact tail-window averages, but no pointwise asymptotic for \(I_\nu(t)\)
+is asserted.
 \end{proof}
