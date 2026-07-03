@@ -25,6 +25,66 @@ normalized arc length is \((2\pi)^{-1}\alpha'(x)\dd x\).  Therefore
 case follows by applying the same argument to \(\overline\varphi\).
 \end{proof}
 
+\section{Remarks and nonclaims}
+\label{app:remarks-nonclaims}
+
+This appendix records scope statements that are deliberately kept outside the
+introductory theorem block.
+
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item The paper studies the fixed-law matched Poisson KL functional
+\[
+  D_{\rm KL}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma)\bigr),
+\]
+and its multidimensional radial analogue.  The input law is fixed as
+\(t\to\infty\); it is not a normalized-sum or changing-law CLT problem.
+
+\item The one-dimensional finite-moment hierarchy is a
+coefficient-evaluability hierarchy for the displayed universal polynomials.
+The finite \((2N-2)\)nd absolute moment is the first level at which the
+polynomial \(A_{2N}\) can be evaluated from the finite moment jet used in
+Theorem~\ref{thm:poisson-kl-even-orders}.  This is separate from the analytic
+tail threshold proved for the leading scale: by
+Theorem~\ref{thm:sharp-leading-kl-variance-threshold}, finite centred
+variance is necessary and sufficient for a finite \(t^{-4}\) matched-Poisson
+KL coefficient.
+
+\item Missing top moments can create non-polynomial tail layers rather than
+lower-moment evaluations of the same polynomial.  For \(N\ge3\),
+Proposition~\ref{prop:log-tail-counterexample-top-moment} gives symmetric
+power-tail laws where the missing \(A_{2N}\) layer is replaced by a
+tail-dependent \(t^{-2N}\log t\) contribution; the \(N=2\) infinite-variance
+borderline has the larger \(t^{-4}(\log t)^2\) scale.
+
+\item The multidimensional covariance formula
+Proposition~\ref{prop:multidim-formal-covariance-layer} is a covariance-only
+quadratic-layer identity.  It does not assert a KL asymptotic under finite
+covariance alone.  The leading multidimensional KL coefficient follows only
+when the finite-\(L\) quotient-remainder hypothesis of
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} is available; the
+condition \(L\ge d+1\) is the large-translation integrability requirement in
+that quotient theorem.
+
+\item The proof of Theorem~\ref{thm:poisson-kl-doob-tail} is an explicit
+Cauchy quotient computation: the \(L^1\) KL chain rule, cutoff Green identity,
+bounded quotient range, Bregman domination, and tail limit are checked in
+Section~\ref{sec:doob-phi-entropy}.  The theorem does not rely on an
+unverified external specialization of a Hardy--Stein identity.
+
+\item The defect corollary is a coefficient-level statement.  It uses the
+finite fourth absolute moment needed to identify \(A_6\), assumes
+\(\sigma^2>0\) only for the normalized defect formulation, and does not use a
+finite-time KL value, eighth-order remainder bound, sixth absolute moment, or
+approximation radius.
+
+\item Conditional finite-time post-processing is not part of the main proof
+architecture.  It may be used only after the relevant coefficient,
+undifferentiated remainder, differentiated remainder, and numerical error
+inputs have been supplied independently.  Such bookkeeping is isolated in
+Appendix~\ref{app:conditional-post-processing} and in supplementary source
+files; it is not an inference from a single finite-time KL value.
+\end{enumerate}
+
 \section{Related work and theorem map}%
 \label{app:related-work-scope}
 
@@ -40,8 +100,9 @@ Sobolev--Bregman papers supply the abstract Bregman identity used in
 Section~\ref{sec:doob-phi-entropy}.  Stability and transport papers concern
 functional-inequality deficits or transport estimates.  None of these sources
 contains the fixed input-law Cauchy quotient, the Cayley--Chebyshev
-coefficient algebra, the borderline \(t^{-2N}\log t\) power-tail layer, or
-the finite Laurent constant-term evaluation used here.
+coefficient algebra, the \(N\ge3\) borderline \(t^{-2N}\log t\) power-tail
+layer, the \(N=2\) borderline \(t^{-4}(\log t)^2\) infinite-variance layer,
+or the finite Laurent constant-term evaluation used here.
 
 \section{Weighted trigonometric normalization}%
 \label{app:entropy-integrals}
@@ -67,3 +128,120 @@ constant terms:
 The finite order-eight arithmetic used in
 Theorem~\ref{thm:poisson-kl-eighth} is the table in
 Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
+
+\section{Conditional post-processing}
+\label{app:conditional-post-processing}
+
+This appendix contains statements that are not consequences of the
+finite-moment quotient theorem alone.  In particular,
+Lemma~\ref{lem:exact-moment-density-truncation} proves
+\(\rho_{L,t}=o(t^{-L})\) in \(L^\infty\cap L^1(\omega)\), but it does not
+prove a corresponding estimate for \(t\partial_t\rho_{L,t}\).  The following
+pointwise dissipation expansion is therefore conditional: it may be used only
+after the differentiated quotient remainder has been established by some
+additional regularity or tail input.
+
+\begin{lemma}[Conditional differentiated-remainder pointwise dissipation]%
+\label{lem:differentiated-quotient-remainder-pointwise-dissipation}
+Let \(N\ge2\), put \(L=2N-2\), and set
+\[
+h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),\qquad
+\delta_t(y):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1 .
+\]
+Assume that the KL tail identity
+\eqref{eq:relative-entropy-integrated-dissipation} holds for the same
+quotient path.  Assume also that
+\[
+\delta_t(y)=d_t(y)+\rho_{L,t}(y),
+\qquad
+d_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n},
+\]
+and that the undifferentiated and differentiated remainders satisfy
+\begin{equation}\label{eq:differentiated-quotient-remainder-bound}
+\|\rho_{L,t}\|_{L^\infty}
++\|\rho_{L,t}\|_{L^1(\omega)}
+=o(t^{-L}),
+\qquad
+\|t\partial_t\rho_{L,t}\|_{L^\infty}
++\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
+=o(t^{-L}).
+\end{equation}
+Then the pointwise dissipation has the asymptotic expansion
+\begin{equation}\label{eq:pointwise-dissipation-asymptotic}
+I_\nu(t)=
+\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put \(\Phi(s)=(1+s)\log(1+s)-s\).  For large \(t\),
+\(\|\delta_t\|_\infty+\|d_t\|_\infty=O(t^{-2})\), and
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y).
+\]
+The \(L^1\)-chain rule of Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}
+identifies the absolutely continuous representative of the derivative as
+\[
+H'(t)=\int_{\RR}\log(1+\delta_t(y))\,\partial_t\delta_t(y)\,\omega(\dd y)
+\]
+for a.e. \(t\).  Since
+\[
+\partial_td_t(y)=\sum_{n=2}^{L}(-n)\mu_nu_n(y)t^{-(n+1)},
+\]
+the finite modes give \(\|d_t\|_\infty=O(t^{-2})\) and
+\(\|\partial_td_t\|_\infty=O(t^{-3})\).  Because \(\log(1+s)\) is Lipschitz
+on \(|s|\le1/2\),
+\[
+\begin{aligned}
+&\left|
+\int \log(1+\delta_t)\partial_t\delta_t\,\dd\omega
+-\int \log(1+d_t)\partial_td_t\,\dd\omega
+\right|\\
+&\quad\le
+C\|d_t\|_\infty\|\partial_t\rho_{L,t}\|_{L^1(\omega)}
++C\|\rho_{L,t}\|_{L^1(\omega)}\|\partial_td_t\|_\infty
++C\|\rho_{L,t}\|_\infty\|\partial_t\rho_{L,t}\|_{L^1(\omega)} .
+\end{aligned}
+\]
+The conditional bound \eqref{eq:differentiated-quotient-remainder-bound}
+therefore makes this error
+\[
+O(t^{-2})o(t^{-L-1})+O(t^{-3})o(t^{-L})
++o(t^{-L})o(t^{-L-1})
+=o(t^{-(L+3)})=o(t^{-(2N+1)}).
+\]
+
+It remains to differentiate the finite-mode entropy.  The Taylor series for
+\(\Phi\) and the bound \(d_t=O(t^{-2})\) give
+\[
+\int \log(1+d_t)\partial_td_t\,\dd\omega
+=
+\frac{\dd}{\dd t}
+\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
++o(t^{-(2N+1)}).
+\]
+The retained polynomial may be differentiated term by term.  By the
+definition of the universal coefficients and the parity cancellation proved
+in Theorem~\ref{thm:universal-entropy-coefficients},
+\[
+\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
+=
+\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
++O(t^{-(2N+1)}).
+\]
+Hence
+\[
+H'(t)=
+-\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\]
+Finally \(H'(t)=-I_\nu(t)\) for a.e. \(t\) by
+Theorem~\ref{thm:poisson-kl-doob-tail}.  The quotient-domain bounds in
+Lemma~\ref{thm:kl-domain-verification} give continuity of \(t\mapsto I_\nu(t)\)
+by dominated convergence, while the differentiated quotient hypotheses give
+continuity of the displayed asymptotic derivative.  The two continuous
+representatives agree a.e.; hence they agree for every sufficiently large
+\(t\), proving \eqref{eq:pointwise-dissipation-asymptotic}.
+\end{proof}

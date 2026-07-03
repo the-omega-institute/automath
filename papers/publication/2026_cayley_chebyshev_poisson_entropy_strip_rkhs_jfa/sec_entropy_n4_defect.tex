@@ -143,6 +143,86 @@ in Theorem~\ref{thm:poisson-kl-even-orders} then gives an entropy remainder
 of order \(O_\nu(t^{-9})\).
 \end{proof}
 
+\begin{unnumberedlemma}[Normalized sign--Rademacher coupling]
+Let \(X\) be a real random variable with \(\EE X=0\), \(\EE X^2=1\), and
+\(\EE X^4<\infty\).  Put
+\[
+\beta_3=\EE X^3,\qquad
+Q_2=X^2-1-\beta_3X,\qquad
+\kappa=\EE Q_2^2,\qquad
+\eta=\frac{\beta_3^2}{32}+\frac{\kappa}{8}.
+\]
+For \(\rho_1=\frac12(\delta_{-1}+\delta_1)\),
+\begin{equation}\label{eq:normalized-sign-rademacher-coupling}
+W_2(\mathcal L(X),\rho_1)
+\le 4\eta^{1/4}+8\eta^{1/2}.
+\end{equation}
+\end{unnumberedlemma}
+
+\begin{proof}
+First record the defect size which is seen by the sign map.  Expanding
+\(Q_2^2\) and using \(\EE X=0\), \(\EE X^2=1\), and
+\(\EE X^3=\beta_3\) gives
+\[
+\kappa
+=\EE[(X^2-1-\beta_3X)^2]
+=\EE[(X^2-1)^2]-\beta_3^2.
+\]
+Thus, with
+\[
+M:=\EE[(X^2-1)^2]=\kappa+\beta_3^2,
+\]
+one has
+\begin{equation}\label{eq:sign-defect-size-bound}
+M\le 32\eta .
+\end{equation}
+
+Let \(S=1\) on \(\{X\ge0\}\) and \(S=-1\) on \(\{X<0\}\), and let
+\(r_p=\mathcal L(S)=p\delta_1+(1-p)\delta_{-1}\).  For every real \(x\),
+with this convention at \(x=0\),
+\[
+|x-\operatorname{sgn}x|\le |x^2-1|;
+\]
+indeed \(|x^2-1|=|x-1|(x+1)\) for \(x\ge0\), and
+\(|x^2-1|=|x+1|(1-x)\) for \(x<0\).  Coupling \(X\) and \(S\) on the same
+probability space therefore gives
+\begin{equation}\label{eq:couple-x-to-sign}
+W_2(\mathcal L(X),r_p)
+\le \bigl(\EE|X-S|^2\bigr)^{1/2}
+\le M^{1/2}.
+\end{equation}
+
+It remains to couple the biased sign law to the symmetric Rademacher law.
+On the two-point set \(\{-1,1\}\) the optimal quadratic transport moves the
+excess mass \(|p-\frac12|\) across distance \(2\), hence
+\[
+W_2(r_p,\rho_1)^2=4\left|p-\frac12\right|.
+\]
+Since \(\EE X=0\),
+\[
+2p-1=\EE S=\EE(S-X),
+\]
+and Cauchy--Schwarz together with \eqref{eq:couple-x-to-sign} gives
+\[
+\left|p-\frac12\right|
+\le \frac12\EE|S-X|
+\le \frac12 M^{1/2}.
+\]
+Consequently
+\begin{equation}\label{eq:couple-biased-sign-to-symmetric}
+W_2(r_p,\rho_1)\le \sqrt2\,M^{1/4}.
+\end{equation}
+The triangle inequality, followed by \eqref{eq:sign-defect-size-bound}, now
+yields
+\[
+W_2(\mathcal L(X),\rho_1)
+\le M^{1/2}+\sqrt2\,M^{1/4}
+\le \sqrt{32}\,\eta^{1/2}+\sqrt2\,32^{1/4}\eta^{1/4}.
+\]
+Finally \(\sqrt{32}<8\) and \(\sqrt2\,32^{1/4}=2^{7/4}<4\), proving
+\eqref{eq:normalized-sign-rademacher-coupling}.
+\end{proof}
+
 \begin{corollary}[Coefficient-defect coupling corollary]%
 \label{cor:coefficient-defect-coupling}
 Let \(\nu\) have mean \(\bar\gamma\), variance \(\sigma^2>0\), and finite
@@ -166,16 +246,39 @@ finite-time KL value, or post-processing constant is used in this corollary.
 \end{corollary}
 
 \begin{proof}
-With \(X=(\gamma-\bar\gamma)/\sigma\), \(\beta_3=\EE X^3\), and
-\(Q_2=X^2-1-\beta_3X\),
+With \(X=(\gamma-\bar\gamma)/\sigma\), \(\beta_3=\EE X^3\),
+\(\beta_4=\EE X^4\), and \(Q_2=X^2-1-\beta_3X\),
+\[
+\|Q_2\|_2^2
+=\EE[(X^2-1-\beta_3X)^2]
+=\beta_4-1-\beta_3^2 .
+\]
+Since \(\mu_3=\sigma^3\beta_3\) and \(\mu_4=\sigma^4\beta_4\), the definition
+of \(\Delta_6\) becomes
 \[
 \Delta_6(\nu)=\frac{\sigma^6}{32}\beta_3^2
 +\frac{\sigma^6}{8}\|Q_2\|_2^2.
 \]
-Thus \(\Delta_6\ge0\), and \(\Delta_6=0\) forces \(X^2=1\) a.s. and
-\(\EE X=0\), hence the symmetric two-point law.  The displayed \(W_2\) bound
-is the elementary sign coupling
-\(|x-\operatorname{sgn}x|\le |x^2-1|\), followed by coupling a biased
-Rademacher law to the symmetric one.
+Thus \(\Delta_6(\nu)=\sigma^6\eta\) for the normalized defect \(\eta\) above.
+Because quadratic Wasserstein distance is homogeneous under dilation,
+\[
+W_2(\nu_c,\rho_\sigma)
+=\sigma\,W_2(\mathcal L(X),\rho_1)
+\]
+and the preceding normalized sign--Rademacher coupling lemma gives
+\[
+\sigma\,W_2(\mathcal L(X),\rho_1)
+\le \sigma\{4\eta^{1/4}+8\eta^{1/2}\},
+\]
+which is exactly
+\[
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}\Delta_6(\nu)^{1/4}
++8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
+\]
+The same identity gives \(\Delta_6\ge0\).  If \(\Delta_6=0\), then
+\(\beta_3=0\) and \(Q_2=0\) almost surely, so \(X^2=1\) almost surely; with
+\(\EE X=0\), this forces \(X=\pm1\) with equal probabilities.  Hence
+\(\nu_c=\rho_\sigma\).  The converse follows by direct substitution.
 \end{proof}
-

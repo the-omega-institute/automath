@@ -26,8 +26,21 @@ The Taylor coefficients at \(\varepsilon=0\) are denoted by \(u_n\):
 R_\varepsilon(y)=\sum_{n=0}^{L}u_n(y)\varepsilon^n
  +\varepsilon^{L+1}v_L(y,\varepsilon)
 \]
-at each fixed finite order \(L\), with \(v_L\) bounded on
-\(\RR\times\RR\).
+for \(|\varepsilon|\le1\).  The finite-order estimate used below is the
+following two-region form: for every \(L\ge2\) there is a constant \(C_L\)
+such that, uniformly in \(y\in\RR\),
+\begin{equation}\label{eq:one-dimensional-two-region-taylor-remainder}
+\left|R_\varepsilon(y)-\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le C_L
+\begin{cases}
+|\varepsilon|^{L+1},& |\varepsilon|\le1,\\
+|\varepsilon|^L,& |\varepsilon|>1.
+\end{cases}
+\end{equation}
+Indeed, the first line follows from the finite Taylor remainder above with
+\(\sup_{y,|\varepsilon|\le1}|v_L(y,\varepsilon)|<\infty\); the second follows
+from \(R_\varepsilon(y)\le3(1+\varepsilon^2)\le6|\varepsilon|^L\) and the
+boundedness of \(u_0,\ldots,u_L\).
 
 \begin{table}[t]
 \caption{Coefficient notation and Cayley phase convention used in the entropy core.}
@@ -211,18 +224,19 @@ For \(x=\bar\gamma+ty\),
 =R_{X_c/t}(y).
 \]
 Subtract the Taylor polynomial in \(X_c/t\) through order \(L\).  On
-\(|X_c|\le t\), the bounded remainder gives
+\(|X_c|\le t\), the small-translation part of
+\eqref{eq:one-dimensional-two-region-taylor-remainder} gives
 \[
-t^{-L}\EE\!\left[|X_c|^L(|X_c|/t)\mathbf1_{\{|X_c|\le t\}}\right]
+C_Lt^{-L}\EE\!\left[|X_c|^L(|X_c|/t)\mathbf1_{\{|X_c|\le t\}}\right]
 =o(t^{-L}).
 \]
-On \(|X_c|>t\), the elementary bounds
+On \(|X_c|>t\), the large-translation part gives
 \[
-|R_{X_c/t}(y)|+\sum_{n=0}^{L}|u_n(y)||X_c/t|^n
-\le C_L|X_c/t|^L
+\left|R_{X_c/t}(y)-\sum_{n=0}^{L}u_n(y)(X_c/t)^n\right|
+\le C_L|X_c/t|^L,
 \]
-give \(t^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]=o(t^{-L})\).  The same
-estimates prove both the \(L^\infty\) and \(L^1(\omega)\) bounds.  The
+and hence \(C_Lt^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]=o(t^{-L})\).  The same
+uniform estimates prove both the \(L^\infty\) and \(L^1(\omega)\) bounds.  The
 \(n=0\) term is removed by subtracting \(1\), and the \(n=1\) term vanishes
 because \(\EE X_c=0\).  The \(O(t^{-2})\) bound follows from the same split
 with \(L=2\).
@@ -346,25 +360,177 @@ nonzero coefficient.  Symmetric atomic laws with finite moments below
 can define the same universal coefficient on the full class.
 \end{proof}
 
-\begin{proposition}[Heavy-tail replacement at the missing top moment]%
+\begin{proposition}[Logarithmic heavy-tail replacement at the missing top moment]%
 \label{prop:log-tail-counterexample-top-moment}
-There are symmetric centred laws with finite moments below \(2N-2\) and
-infinite \((2N-2)\)nd moment for which the retained polynomial layer
-\(A_{2N}t^{-2N}\) is replaced by a tail-dependent contribution of order
-\(t^{-2N}\log t\).  Thus the failure of the top moment is an analytic
-tail-regime phenomenon, not an alternative evaluation of the same universal
-polynomial.
+Let \(N\ge3\), put \(p=2N-2\), and let \(\nu\) be symmetric with a density
+which is a compactly supported modification near the origin of the exact
+borderline tail
+\[
+f(x)=c|x|^{-(p+1)}
+\qquad (|x|\ge R)
+\]
+for some \(R>0\).
+Then \(\nu\) is centred,
+\[
+\EE|X|^q<\infty\quad(q<p),\qquad \EE|X|^p=\infty ,
+\]
+and
+\[
+\EE\!\left[X^p\mathbf1_{\{|X|\le t\}}\right]=2c\log t+O(1).
+\]
+With \(H(t)=D_{\mathrm{KL}}(P_t*\nu\|P_t)\),
+\begin{equation}\label{eq:core-log-tail-counterexample-asymptotic}
+H(t)=\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
+    +2c\,\kappa_N\,\mu_2\,t^{-2N}\log t
+    +o(t^{-2N}\log t),
+\end{equation}
+where
+\[
+\kappa_N=I(2,p)=(-1)^N(N-1)2^{-2N+2}\ne0
+\]
+is the coefficient of the monomial
+\(\mathfrak m_2\mathfrak m_{2N-2}\) in
+Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
+Thus the failure of the top moment is an analytic tail-regime phenomenon:
+the missing \(A_{2N}t^{-2N}\) polynomial layer is replaced, for this explicit
+regularly varying law, by the displayed tail-dependent logarithmic layer.
+The case \(N=2\) is excluded from this statement.
 \end{proposition}
 
 \begin{proof}
-Take a symmetric law whose tail is regularly varying at the borderline order
-\(2N-2\).  In the quotient identity \(R_{X_c/t}(y)\), the quadratic entropy
-term involving the \(u_2\)-projection and the truncated
-\((2N-2)\)-moment accumulates like \(\log t\).  The lower moments give the
-usual lower-order polynomial terms, while the missing top moment supplies the
-borderline logarithmic contribution.  This is the standard truncated-moment
-calculation for regularly varying tails applied to the exact Cauchy quotient
-above.
+The moment assertions are immediate from the compact core and
+\[
+2c\int_R^\infty x^q x^{-p-1}\,\dd x<\infty
+\quad\Longleftrightarrow\quad q<p.
+\]
+Symmetry gives the centring.  The truncated top moment is
+\[
+\EE\!\left[X^p\mathbf1_{\{|X|\le t\}}\right]
+=O(1)+2c\int_R^t x^{-1}\,\dd x
+=2c\log t+O(1).
+\]
+
+For \(x=ty\), write
+\[
+\Delta_t(y)=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1
+=\int_{\RR}\{R_{x/t}(y)-1\}f(x)\dd x .
+\]
+The Taylor expansion of \(R_\varepsilon(y)\) gives, uniformly in \(y\),
+\[
+R_{x/t}(y)-1=\sum_{n=1}^{p}u_n(y)(x/t)^n
+             +O(|x/t|^{p+1})\qquad(|x|\le t),
+\]
+and the elementary quotient bound
+\(|R_\varepsilon(y)-1|\le C(1+\varepsilon^2)\) controls \(|x|>t\).
+Splitting the integral into the compact core \(|x|<R\), the truncated tail
+\(R\le |x|\le t\), and the far tail \(|x|>t\) gives
+\[
+\Delta_t(y)=\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
+            +2c\,u_p(y)t^{-p}\log t+\varepsilon_t(y),
+\]
+with
+\(\|\varepsilon_t\|_\infty+\|\varepsilon_t\|_{L^1(\omega)}\le Ct^{-p}\).
+Indeed, for \(n<p\),
+\[
+t^{-n}\int_{|x|>t}|x|^n c|x|^{-p-1}\dd x=O(t^{-p}),
+\]
+whereas the missing top mode contributes
+\[
+t^{-p}u_p(y)\int_{R\le |x|\le t}x^pc|x|^{-p-1}\dd x
+=2c\,u_p(y)t^{-p}\log t+O(t^{-p}).
+\]
+The Taylor remainder on \(R\le |x|\le t\) is
+\[
+O\!\left(t^{-(p+1)}\int_R^{t}x^{p+1}cx^{-p-1}\dd x\right)
+=O(t^{-p}),
+\]
+and the large-tail quotient bound gives
+\[
+\int_{|x|>t}|R_{x/t}(y)-1|f(x)\dd x
+\le C\int_t^\infty (1+x^2/t^2)x^{-p-1}\dd x=O(t^{-p}),
+\]
+using \(p\ge4\).
+
+Put
+\[
+A_t(y)=\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n},\qquad
+B_t(y)=2c\,u_p(y)t^{-p}\log t .
+\]
+Since \(\|A_t\|_\infty=O(t^{-2})\), \(\|B_t\|_\infty=O(t^{-p}\log t)\), and
+\(\Delta_t=A_t+B_t+\varepsilon_t\), the entropy identity
+\[
+H(t)=\int_{\RR}\Phi(\Delta_t)\,\dd\omega,\qquad
+\Phi(s)=(1+s)\log(1+s)-s,
+\]
+may be expanded to degree \(N\).  Terms containing \(\varepsilon_t\) are
+\(O(t^{-2}t^{-p})=O(t^{-2N})\) after integration, and terms containing
+\(B_t\) nonlinearly are \(O(t^{-(p+4)}\log t)+O(t^{-2p}(\log t)^2)
+=o(t^{-2N}\log t)\), because \(p\ge4\).  Hence the only logarithmic contribution
+at order \(t^{-2N}\log t\) is the quadratic cross term
+\[
+\int_{\RR}\mu_2u_2(y)t^{-2}\,2c\,u_p(y)t^{-p}\log t\,\omega(\dd y)
+=2c\mu_2I(2,p)t^{-2N}\log t .
+\]
+The pure \(A_t\) terms through total order \(2N-2\) are exactly
+\(\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}\), and the remaining pure \(A_t\) terms
+are \(O(t^{-2N})=o(t^{-2N}\log t)\).
+
+It remains only to identify the coefficient.  Writing \(p=2m\),
+\(m=N-1\), the Laurent formula
+\eqref{eq:mode-laurent-polynomial-definition}, together with
+\(Q_2(z)=-(z+z^{-1}+z^2+z^{-2})/4\), gives
+\[
+I(2,2m)=[z^0]Q_2Q_{2m}
+=-\frac12(-1)^m2^{-2m}\!\left\{\binom{2m-1}{0}
+  \binom{2m-1}{1}\right\}
+=(-1)^N(N-1)2^{-2N+2}.
+\]
+Substitution proves \eqref{eq:core-log-tail-counterexample-asymptotic}.
+
+The same conclusion remains valid if the exact tail is replaced by
+\(f(x)=c|x|^{-p-1}+r(x)\) outside a compact set with
+\(\int_R^t x^p r(x)\,\dd x=O(1)\); this is the quantitative form of the
+asymptotic tail condition needed for the displayed \(O(1)\) truncated-moment
+error.
+\end{proof}
+
+\begin{proposition}[The \(N=2\) borderline infinite-variance layer]
+Let \(c>0\) satisfy \(c\mathrm e^{-2}<1\), and let \(\nu\) be the symmetric
+probability law with density
+\[
+f(x)=\frac{1-c\mathrm e^{-2}}{2}\mathbf1_{\{|x|\le1\}}
+      +c|x|^{-3}\mathbf1_{\{|x|\ge \mathrm e\}} .
+\]
+Then \(\nu\) has finite mean and infinite variance, and
+\[
+\EE\!\left[X^2\mathbf1_{\{|X|\le t\}}\right]\sim 2c\log t,
+\]
+while
+\[
+D_{\mathrm{KL}}(P_t*\nu\|P_t)
+=\frac{c^2}{2}\,t^{-4}(\log t)^2+O(t^{-4}\log t).
+\]
+Thus the borderline \(N=2\) law is not a \(t^{-4}\log t\) replacement; its
+leading layer is \(t^{-4}(\log t)^2\), in agreement with the variance
+threshold theorem below.
+\end{proposition}
+
+\begin{proof}
+The same truncation computation with \(L=2\) gives
+\[
+\Delta_t(y)=2c\,u_2(y)t^{-2}\log t+O(t^{-2})
+\]
+in \(L^\infty\cap L^1(\omega)\).  Since
+\(\|\Delta_t\|_\infty=O(t^{-2}\log t)\),
+\[
+D_{\mathrm{KL}}(P_t*\nu\|P_t)
+=\frac12\int_{\RR}\Delta_t(y)^2\,\omega(\dd y)+O(t^{-6}(\log t)^3).
+\]
+Using \(I(2,2)=\int u_2^2\,\dd\omega=1/4\), the quadratic term is
+\[
+\frac12(2c)^2I(2,2)t^{-4}(\log t)^2+O(t^{-4}\log t)
+=\frac{c^2}{2}t^{-4}(\log t)^2+O(t^{-4}\log t).
+\]
 \end{proof}
 
 \subsection{Sharp leading threshold}
@@ -509,36 +675,324 @@ F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
 \]
 Let \(U_\alpha^{(d)}\) be the Taylor coefficients of \(F_y(z)\) at \(z=0\).
 
+\begin{lemma}[Local multidimensional quotient--Taylor remainder]%
+\label{lem:local-multidim-quotient-taylor-remainder}
+Let \(d\ge1\), and let
+\[
+F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
+\]
+For a multiindex \(\alpha\), put
+\[
+U_\alpha^{(d)}(y)=\frac1{\alpha!}\partial_z^\alpha F_y(0).
+\]
+For each integer \(L\ge2\) there is a constant \(C_{d,L}<\infty\) such that
+\begin{equation}\label{eq:local-multidim-coefficient-bound}
+\sup_{y\in\RR^d}|U_\alpha^{(d)}(y)|\le C_{d,L}
+\qquad (|\alpha|\le L),
+\end{equation}
+and
+\begin{equation}\label{eq:local-multidim-taylor-remainder}
+\sup_{y\in\RR^d}\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}|z|^{L+1}
+\qquad (|z|\le1).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put \(a=(d+1)/2\).  For each multiindex \(\beta\), repeated
+differentiation in \(z\) gives
+\begin{equation}\label{eq:local-multidim-derivative-structure}
+\partial_z^\beta F_y(w)
+=(1+|y|^2)^a
+\frac{P_\beta(y-w)}{(1+|y-w|^2)^{a+|\beta|}},
+\end{equation}
+where \(P_\beta\) is a polynomial of degree at most \(|\beta|\), depending
+only on \(d\) and \(\beta\).  Indeed, \(z\)-differentiation is
+\(-\xi\)-differentiation for \(\xi=y-z\), and each differentiation of
+\((1+|\xi|^2)^{-b}\) raises the denominator exponent by one and multiplies
+by a polynomial whose degree increases by at most one.
+
+If \(|w|\le1\) and \(|y|>2\), then \(|y-w|\ge |y|/2\), and
+\[
+|\partial_z^\beta F_y(w)|
+\le C_{d,\beta}
+(1+|y|^2)^a
+\frac{(1+|y|)^{|\beta|}}{(1+|y|^2)^{a+|\beta|}}
+\le C_{d,\beta}.
+\]
+If \(|y|\le2\), the same derivative is bounded uniformly for \(|w|\le1\)
+because the denominator in \eqref{eq:local-multidim-derivative-structure}
+is at least \(1\).  Thus
+\[
+\sup_{\substack{y\in\RR^d,\ |w|\le1\\ |\beta|\le L+1}}
+|\partial_z^\beta F_y(w)|<\infty .
+\]
+Taking \(w=0\) and \(|\beta|\le L\) proves
+\eqref{eq:local-multidim-coefficient-bound}.  The multivariable Taylor
+formula at \(z=0\), with integral remainder and the displayed derivative
+bound for \(|\beta|=L+1\), gives
+\eqref{eq:local-multidim-taylor-remainder}.
+\end{proof}
+
+\medskip
+\noindent\textbf{Multidimensional radial Poisson jet hypothesis
+\((\mathrm{MPJ}_{d,L})\).}
+For \(d\ge1\) and an integer \(L\), we say that \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\) when \(L\ge\max\{2,d+1\}\), the mean
+\(\bar\gamma\) exists, the centred tensor moments
+\[
+\mu_\alpha=\int_{\RR^d}(\gamma-\bar\gamma)^\alpha\,\dd\nu(\gamma)
+\qquad(2\le|\alpha|\le L)
+\]
+exist, and the scaled quotient has the jet
+\begin{equation}\label{eq:mpj-dl-definition}
+\begin{aligned}
+(\mathrm{MPJ}_{d,L}):\qquad
+\delta_t^{(d)}(y)
+&=
+\sum_{2\le|\alpha|\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
++\rho_{L,t}^{(d)}(y),\\
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+&=o(t^{-L}),\qquad
+\|\delta_t^{(d)}\|_\infty=O(t^{-2}).
+\end{aligned}
+\end{equation}
+where
+\[
+\delta_t^{(d)}(y):=
+\frac{(P_t^{(d)}*\nu)(\bar\gamma+ty)}
+{P_t^{(d)}(ty)}-1 .
+\]
+This displayed quotient expansion is the hypothesis used by the entropy
+transfer below.  Lemma~\ref{lem:multidim-quotient-remainder} is proved first;
+then Theorem~\ref{thm:multidimensional-density-quotient} proves that finite
+centred \(L\)th absolute moment implies \((\mathrm{MPJ}_{d,L})\).
+
+\begin{lemma}[Global multidimensional quotient remainder]\label{lem:multidim-quotient-remainder}
+Let \(d\ge1\), \(a=(d+1)/2\), and
+\[
+F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
+\]
+For a multiindex \(\alpha\), put
+\[
+U_\alpha^{(d)}(y)=\frac1{\alpha!}\partial_z^\alpha F_y(0).
+\]
+If \(L\ge d+1\), then there is a constant \(C_{d,L}<\infty\) such that
+\begin{equation}\label{eq:multidim-coefficient-bound}
+\sup_{y\in\RR^d}|U_\alpha^{(d)}(y)|\le C_{d,L}
+\qquad (|\alpha|\le L),
+\end{equation}
+\begin{equation}\label{eq:multidim-small-translation-remainder}
+\sup_{y\in\RR^d}\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}|z|^{L+1}
+\qquad (|z|\le1),
+\end{equation}
+and
+\begin{equation}\label{eq:multidim-large-translation-remainder}
+\sup_{y\in\RR^d}\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}|z|^{L}
+\qquad (|z|>1).
+\end{equation}
+Equivalently, for all \(y,z\),
+\begin{equation}\label{eq:multidim-global-translation-remainder}
+\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}\left(
+|z|^{L+1}{\bf1}_{\{|z|\le1\}}
+{}
++{}|z|^L{\bf1}_{\{|z|>1\}}
+\right).
+\end{equation}
+Consequently, if \(X\) is an \(\RR^d\)-valued random vector with
+\(\EE|X|^L<\infty\), \(\Omega_d\) is the Cauchy probability measure above,
+and
+\[
+r_t(y):=\EE\left[
+F_y(X/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X/t)^\alpha
+\right],
+\]
+then
+\begin{equation}\label{eq:multidim-integrated-remainder-bound}
+\|r_t\|_{L^\infty(\RR^d)}+\|r_t\|_{L^1(\Omega_d)}
+\le C_{d,L}t^{-L}\EE\left[
+|X|^L\frac{|X|}{t}{\bf1}_{\{|X|\le t\}}
+{}
++{}|X|^L{\bf1}_{\{|X|>t\}}
+\right]=o(t^{-L}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The coefficient bound \eqref{eq:multidim-coefficient-bound} and the
+small-translation remainder
+\eqref{eq:multidim-small-translation-remainder} are exactly
+Lemma~\ref{lem:local-multidim-quotient-taylor-remainder}.
+
+It remains to handle large translations.  Fix \(|z|>1\).  First suppose
+\(|y-z|\le |z|/2\).  Then \(|y|\le3|z|/2\), and hence
+\[
+F_y(z)\le (1+|y|^2)^a\le C_d|z|^{d+1}.
+\]
+On the complementary region \(|y-z|>|z|/2\), the elementary estimate
+\[
+1+|y|^2
+\le 2(1+|y-z|^2+|z|^2)
+\le 2(1+|z|^2)(1+|y-z|^2)
+\]
+gives
+\[
+F_y(z)
+\le 2^a(1+|z|^2)^a
+\le C_d|z|^{d+1}
+\qquad(|z|>1).
+\]
+Thus, uniformly in \(y\),
+\[
+\sup_y F_y(z)\le C_d|z|^{d+1}\le C_{d,L}|z|^L
+\qquad(|z|>1),
+\]
+where the last inequality is precisely where \(L\ge d+1\) is used.  The
+coefficient bound from the local lemma gives, again uniformly in \(y\),
+\[
+\sum_{|\alpha|\le L}|U_\alpha^{(d)}(y)|\,|z|^{|\alpha|}
+\le C_{d,L}\sum_{k=0}^{L}|z|^k
+\le C_{d,L}'|z|^L
+\qquad(|z|>1).
+\]
+Consequently
+\[
+\sup_y\left(
+|F_y(z)|
++\sum_{|\alpha|\le L}|U_\alpha^{(d)}(y)|\,|z|^{|\alpha|}
+\right)
+\le C_{d,L}|z|^L
+\qquad(|z|>1),
+\]
+which proves \eqref{eq:multidim-large-translation-remainder}.  Combining
+this estimate with the small-translation remainder proves the global form
+\eqref{eq:multidim-global-translation-remainder}.
+
+Set \(z=X/t\) in \eqref{eq:multidim-global-translation-remainder}.  Taking
+expectations gives the pointwise bound, uniform in \(y\),
+\[
+|r_t(y)|
+\le
+C_{d,L}\left[
+t^{-(L+1)}
+\EE\!\left(|X|^{L+1}{\bf1}_{\{|X|\le t\}}\right)
++t^{-L}
+\EE\!\left(|X|^L{\bf1}_{\{|X|>t\}}\right)
+\right].
+\]
+Equivalently,
+\[
+t^{-(L+1)}
+\EE\!\left(|X|^{L+1}{\bf1}_{\{|X|\le t\}}\right)
+=
+t^{-L}
+\EE\!\left[
+|X|^L\frac{|X|}{t}{\bf1}_{\{|X|\le t\}}
+\right]
+=o(t^{-L}),
+\]
+because \((|X|/t){\bf1}_{\{|X|\le t\}}\le1\) and converges pointwise to
+zero, while \(|X|^L\) is integrable.  Also
+\[
+t^{-L}\EE\!\left(|X|^L{\bf1}_{\{|X|>t\}}\right)=o(t^{-L})
+\]
+by the absolute continuity of the integral for the integrable function
+\(|X|^L\).  These two estimates are independent of \(y\), and therefore give
+the \(L^\infty\) part of \eqref{eq:multidim-integrated-remainder-bound}.
+The \(L^1(\Omega_d)\) part follows from the same uniform bound because
+\(\Omega_d\) is a probability measure.
+\end{proof}
+
 \begin{theorem}[Finite-\(L\) multidimensional density quotient expansion]%
 \label{thm:multidimensional-density-quotient}
-Let \(L\ge\max\{2,d+1\}\), and assume \(\nu\) has mean \(\bar\gamma\) and
-finite centred \(L\)th absolute moment.  Then, for
+Let \(L\ge\max\{2,d+1\}\), and let \(\nu\) be a probability measure on
+\(\RR^d\) with mean \(\bar\gamma\) and finite centred \(L\)th absolute
+moment.  Put \(X_c=\gamma-\bar\gamma\) and
+\[
+\mu_\alpha=\int_{\RR^d}X_c^\alpha\,\dd\nu(\gamma)
+\qquad(|\alpha|\le L).
+\]
+Then, for
 \[
 \delta_t^{(d)}(y):=
 \frac{(P_t^{(d)}*\nu)(\bar\gamma+ty)}
 {P_t^{(d)}(ty)}-1,
 \]
-\[
+\begin{equation}\label{eq:multidim-density-quotient-expansion-main}
 \delta_t^{(d)}(y)=
 \sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
 +\rho_{L,t}^{(d)}(y),
 \qquad
 \|\rho_{L,t}^{(d)}\|_\infty+
 \|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}).
-\]
+\end{equation}
+Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).
+In particular, \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).
 \end{theorem}
 
 \begin{proof}
-The proof is the same tail split as
-Lemma~\ref{lem:exact-moment-density-truncation}, applied to
-\(F_y(X_c/t)\).  The condition \(L\ge d+1\) is the quotient-remainder
-domination level for large translated peaks in the radial Poisson kernel.
+For \(x=\bar\gamma+ty\),
+\[
+\frac{P_t^{(d)}(x-\gamma)}{P_t^{(d)}(x-\bar\gamma)}
+=
+\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^{(d+1)/2}
+=F_y(X_c/t).
+\]
+Thus
+\[
+\delta_t^{(d)}(y)=\int_{\RR^d}\{F_y(X_c/t)-1\}\,\dd\nu(\gamma).
+\]
+Subtract the Taylor polynomial through order \(L\).  By
+Lemma~\ref{lem:multidim-quotient-remainder}, the remainder
+\[
+\rho_{L,t}^{(d)}(y):=
+\int_{\RR^d}\left\{
+F_y(X_c/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X_c/t)^\alpha
+\right\}\dd\nu(\gamma)
+\]
+satisfies
+\[
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+\le C_{d,L}t^{-L}\EE\left[
+|X_c|^L\frac{|X_c|}{t}{\bf1}_{\{|X_c|\le t\}}
+{}
++{}|X_c|^L{\bf1}_{\{|X_c|>t\}}
+\right]
+=o(t^{-L}).
+\]
+This is the explicit \(L^\infty\cap L^1(\Omega_d)\) tail split.  The
+\(|X_c|\le t\) region is controlled by the uniform Taylor remainder
+\(O(|X_c/t|^{L+1})\); the tail region \(|X_c|>t\) is controlled by the
+large-translation bound \(O(|X_c/t|^L)\), which is where \(L\ge d+1\) enters.
+
+The constant term equals \(1\) and is removed by the definition of
+\(\delta_t^{(d)}\).  The first-order Taylor layer is
+\[
+\sum_{|\alpha|=1}\mu_\alpha U_\alpha^{(d)}(y)t^{-1}=0
+\]
+because \(\nu\) is centred.  The remaining Taylor terms give
+\eqref{eq:multidim-density-quotient-expansion-main}.  Finally,
+\eqref{eq:multidim-coefficient-bound} and the displayed expansion give
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})+o(t^{-L})=O(t^{-2})\).
 \end{proof}
 
 \begin{theorem}[Finite-\(L\) multidimensional entropy jet]%
 \label{thm:multidimensional-poisson-entropy-jets}
-Under the hypotheses of
-Theorem~\ref{thm:multidimensional-density-quotient},
+Assume that \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).  Then
 \[
 D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
@@ -558,12 +1012,55 @@ U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
 \end{theorem}
 
 \begin{proof}
-Insert the quotient expansion from
-Theorem~\ref{thm:multidimensional-density-quotient} into
-\(\Phi(s)=(1+s)\log(1+s)-s\).  Since the centred density perturbation starts
-at order \(t^{-2}\), every mixed product containing one density remainder is
-two powers smaller than that remainder, exactly as in the proof of
-Theorem~\ref{thm:poisson-kl-even-orders}.
+Write
+\[
+D_j^{(d)}(y)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y),\qquad
+d_t(y)=\sum_{j=2}^{L}D_j^{(d)}(y)t^{-j}.
+\]
+\((\mathrm{MPJ}_{d,L})\) gives
+\[
+\delta_t^{(d)}=d_t+\rho_{L,t}^{(d)},\qquad
+\|d_t\|_\infty=O(t^{-2}),\qquad
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}),
+\]
+and also \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Since
+\[
+P_t^{(d)}(ty)t^d\,\dd y=P_1^{(d)}(y)\dd y=\Omega_d(\dd y)
+\]
+and both densities have total mass one,
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y),
+\]
+where \(\Phi(s)=(1+s)\log(1+s)-s\).
+
+Let \(R=\lfloor(L+2)/2\rfloor+1\).  For large \(t\), \(\|\delta_t^{(d)}\|_\infty\)
+is small and
+\[
+\Phi(\delta_t^{(d)})
+=\sum_{r=2}^{R}\frac{(-1)^r}{r(r-1)}(\delta_t^{(d)})^r
++O(|\delta_t^{(d)}|^{R+1}).
+\]
+The Taylor tail integrates to \(O(t^{-2(R+1)})=o(t^{-(L+2)})\).  For
+\(2\le r\le R\),
+\[
+\|(\delta_t^{(d)})^r-d_t^r\|_{L^1(\Omega_d)}
+\le C_r\sum_{\ell=1}^{r}
+\|d_t\|_\infty^{r-\ell}
+\|\rho_{L,t}^{(d)}\|_\infty^{\ell-1}
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+=o(t^{-(L+2)}),
+\]
+with worst layer \(\ell=1,r=2\), namely
+\(O(t^{-2})o(t^{-L})\).  Therefore only the pure powers of the finite
+polynomial \(d_t\) contribute through order \(L+2\).  Collecting the
+coefficient of \(t^{-m}\) in
+\[
+\sum_{r=2}^{R}\frac{(-1)^r}{r(r-1)}d_t(y)^r
+\]
+gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
+all omitted layers are \(o(t^{-(L+2)})\).
 \end{proof}
 
 \begin{proposition}[Formal covariance layer under finite covariance]%
@@ -602,6 +1099,16 @@ c_d^{\rm tr}=
 \end{equation}
 This is a covariance-layer identity only.  Under finite covariance alone no
 KL asymptotic is asserted.
+Two immediate checks are
+\[
+d=1:\qquad \Sigma_0=0,\qquad c_1^{\rm iso}=\frac18,\qquad
+A_{4,\mathrm{quad}}^{(1)}(\nu)=\frac{(\operatorname{tr}\Sigma)^2}{8},
+\]
+and, for an isotropic covariance \(\Sigma=\tau I_d\),
+\[
+\Sigma_0=0,\qquad
+A_{4,\mathrm{quad}}^{(d)}(\nu)=c_d^{\rm iso}d^2\tau^2 .
+\]
 \end{proposition}
 
 \begin{proof}
@@ -622,28 +1129,84 @@ a\tau\frac{3|y|^2-d}{(1+|y|^2)^2}
 +a(d+3)\frac{y^{\mathsf T}\Sigma_0y}{(1+|y|^2)^2}.
 \]
 The mixed integral vanishes by rotational symmetry.  The remaining constants
-come from the beta-prime radial moments
+come from the radial beta-prime moments
 \[
 \EE\frac{R^k}{(1+R)^4}
 =
-\frac{\Gamma(d/2+k)\Gamma((d+1)/2+4-k)}
-{\Gamma(d/2)\Gamma((d+1)/2+4)}
+\frac{B\bigl(d/2+k,\,1/2+4-k\bigr)}
+{B\bigl(d/2,\,1/2\bigr)}
 \qquad(k=0,1,2)
 \]
-for \(R=|Y|^2\), \(Y\sim\Omega_d\), and from
+for \(R=|Y|^2\), \(Y\sim\Omega_d\).  Equivalently,
+\[
+\EE\frac{R^k}{(1+R)^4}
+=
+\frac{\Gamma(d/2+k)\Gamma(9/2-k)}
+{\Gamma(d/2)\Gamma(1/2)}
+\frac{\Gamma((d+1)/2)}{\Gamma((d+9)/2)} .
+\]
+Thus, with \(D_d=(d+1)(d+3)(d+5)(d+7)\),
+\[
+\EE\frac{1}{(1+R)^4}=\frac{105}{D_d},\qquad
+\EE\frac{R}{(1+R)^4}=\frac{15d}{D_d},\qquad
+\EE\frac{R^2}{(1+R)^4}=\frac{3d(d+2)}{D_d}.
+\]
+For \(d=1\), the first value is \(35/128\), matching the one-dimensional
+Cauchy normalization.  The angular factor is
 \[
 \EE_\Theta[(\Theta^{\mathsf T}\Sigma_0\Theta)^2]
 =\frac{2}{d(d+2)}\|\Sigma_0\|_{\rm HS}^2 .
 \]
-Substitution gives \eqref{eq:multidim-leading-positive-constants}.  The
-constants are positive, so the layer vanishes exactly when \(\Sigma=0\).
+Consequently
+\[
+\begin{aligned}
+\EE\frac{(3R-d)^2}{(1+R)^4}
+&=
+9\EE\frac{R^2}{(1+R)^4}
+-6d\EE\frac{R}{(1+R)^4}
++d^2\EE\frac1{(1+R)^4} \\
+&=
+\frac{6d(7d+9)}
+{(d+1)(d+3)(d+5)(d+7)} .
+\end{aligned}
+\]
+The isotropic contribution to \(\frac12\int b_\Sigma^2\,\dd\Omega_d\) is
+\[
+\begin{aligned}
+\frac12 a^2\frac{(\operatorname{tr}\Sigma)^2}{d^2}
+\EE\frac{(3R-d)^2}{(1+R)^4}
+&=
+\frac{3(d+1)(7d+9)}
+{4d(d+3)(d+5)(d+7)}
+(\operatorname{tr}\Sigma)^2 .
+\end{aligned}
+\]
+For the traceless part,
+\[
+\begin{aligned}
+\int_{\RR^d}
+\frac{(y^{\mathsf T}\Sigma_0y)^2}{(1+|y|^2)^4}\,\Omega_d(\dd y)
+&=
+\EE\frac{R^2}{(1+R)^4}\,
+\EE_\Theta[(\Theta^{\mathsf T}\Sigma_0\Theta)^2] \\
+&=
+\frac{6}{(d+1)(d+3)(d+5)(d+7)}
+\|\Sigma_0\|_{\rm HS}^2 .
+\end{aligned}
+\]
+Multiplication by \(\frac12a^2(d+3)^2\) gives
+\[
+\frac{3(d+1)(d+3)}{4(d+5)(d+7)}
+\|\Sigma_0\|_{\rm HS}^2 .
+\]
+This proves \eqref{eq:multidim-leading-positive-constants}.  The constants are
+positive, so the layer vanishes exactly when \(\Sigma=0\).
 \end{proof}
 
 \begin{corollary}[Leading KL coefficient under \((\mathrm{MPJ}_{d,L})\)]%
 \label{cor:multidim-leading-kl-coefficient}
-If \(L\ge\max\{2,d+1\}\) and \((\nu,d,L)\) satisfies the finite-jet
-hypotheses of Theorems~\ref{thm:multidimensional-density-quotient} and
-\ref{thm:multidimensional-poisson-entropy-jets}, then
+Let \(d\ge1\) and let \(L\) be an integer.  If \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\), then
 \[
 D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 =A_{4,\mathrm{quad}}^{(d)}(\nu)t^{-4}+o(t^{-4}).
@@ -654,5 +1217,10 @@ D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 The entropy jet identifies the first nonzero retained layer as
 \(\frac12\int b_\Sigma^2\,\dd\Omega_d\), and
 Proposition~\ref{prop:multidim-formal-covariance-layer} computes that
-integral.  The finite-jet hypotheses are not weakened.
+integral.  The hypothesis \((\mathrm{MPJ}_{d,L})\) is exactly the quotient
+hypothesis needed by Theorem~\ref{thm:multidimensional-poisson-entropy-jets};
+Theorem~\ref{thm:multidimensional-density-quotient} is the preceding
+finite-moment result which proves that hypothesis.  The covariance-layer
+calculation itself remains the separate finite-second-moment identity of
+Proposition~\ref{prop:multidim-formal-covariance-layer}.
 \end{proof}
