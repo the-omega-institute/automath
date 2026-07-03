@@ -6,8 +6,10 @@ This section contains only the entropy coefficient mechanism, the
 multidimensional covariance calculation, the leading one-dimensional threshold,
 and the coefficient-defect consequence.  Quantitative constant envelopes,
 finite-grid substitutions, moment-shell dictionaries, and conditional
-finite-time post-processing are not used in the proofs below; they are kept in
-the supplementary source files.
+finite-time post-processing are not used in the proofs below.  The only
+post-processing retained in the article is the conditional appendix statement,
+which assumes its numerical and remainder inputs explicitly and is not needed
+for the theorem hierarchy in this section.
 
 \subsection{Cayley modes and coefficient algebra}
 
@@ -305,20 +307,133 @@ coefficients are exactly \eqref{eq:coefficient-identification-transfer-expansion
 and odd total orders vanish by Theorem~\ref{thm:universal-entropy-coefficients}.
 \end{proof}
 
-\begin{remark}[Positive-margin remainder anchor]
+\begin{lemma}[Positive-margin quotient remainder and entropy transfer]
+\label{lem:positive-margin-quotient-remainder}
 \label{rem:positive-margin-retained-order}
-If the hypothesis of Theorem~\ref{thm:poisson-kl-even-orders} is strengthened
-to \(\EE|X_c|^{2N-2+\eta}<\infty\) for some \(0<\eta\le1\), the same
-density split gives a retained expansion with a positive-margin remainder:
+Let \(L\ge2\), \(0<\eta\le1\), and let \(\nu\) have mean
+\(\bar\gamma\) and finite centred \((L+\eta)\)th absolute moment.  With
+\[
+\delta_t(y):=
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}-1
+\]
+there is a remainder \(\rho_{L,t}^{(\eta)}\) such that
+\begin{equation}\label{eq:positive-margin-density-remainder}
+\delta_t(y)=
+\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}^{(\eta)}(y),
+\qquad
+\|\rho_{L,t}^{(\eta)}\|_{\infty}
++\|\rho_{L,t}^{(\eta)}\|_{L^1(\omega)}
+=O_\nu(t^{-(L+\eta)}).
+\end{equation}
+Moreover \(\|\delta_t\|_\infty=O_\nu(t^{-2})\).
+
+Consequently, if \(N\ge2\), \(L=2N-2\), and
+\(\EE|X_c|^{2N-2+\eta}<\infty\), then
 \begin{equation}\label{eq:positive-margin-retained-order-theorem}
 D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
 +O_\nu(t^{-(2N+\eta)}).
 \end{equation}
-This equation is used only as a finite-window coefficient-transfer input in
-Section~\ref{sec:doob-phi-entropy}; the explicit constants and threshold
-variants are supplementary bookkeeping.
-\end{remark}
+\end{lemma}
+
+\begin{proof}
+The quotient identity is
+\[
+\frac{P_t(\bar\gamma+ty-\gamma)}{P_t(ty)}
+=R_{X_c/t}(y).
+\]
+Subtract the Taylor polynomial
+\(\sum_{n=0}^{L}u_n(y)(X_c/t)^n\) and split the expectation into
+\(|X_c|\le t\) and \(|X_c|>t\).
+
+On \(|X_c|\le t\), the first line of
+\eqref{eq:one-dimensional-two-region-taylor-remainder} gives, uniformly in
+\(y\),
+\[
+\left|
+\EE\!\left[
+\left(R_{X_c/t}(y)-\sum_{n=0}^{L}u_n(y)(X_c/t)^n\right)
+\mathbf1_{\{|X_c|\le t\}}
+\right]\right|
+\le
+C_Lt^{-(L+1)}
+\EE\!\left[|X_c|^{L+1}\mathbf1_{\{|X_c|\le t\}}\right].
+\]
+Because \(0<\eta\le1\), the last term is bounded by
+\[
+C_Lt^{-(L+\eta)}
+\EE\!\left[
+|X_c|^{L+\eta}
+\left(\frac{|X_c|}{t}\right)^{1-\eta}
+\mathbf1_{\{|X_c|\le t\}}
+\right]
+\le
+C_L\EE|X_c|^{L+\eta}\,t^{-(L+\eta)} .
+\]
+
+On \(|X_c|>t\), the second line of
+\eqref{eq:one-dimensional-two-region-taylor-remainder} gives
+\[
+\left|
+\EE\!\left[
+\left(R_{X_c/t}(y)-\sum_{n=0}^{L}u_n(y)(X_c/t)^n\right)
+\mathbf1_{\{|X_c|>t\}}
+\right]\right|
+\le
+C_Lt^{-L}\EE\!\left[|X_c|^L\mathbf1_{\{|X_c|>t\}}\right].
+\]
+Since \(|X_c|>t\) implies
+\(|X_c|^L\le t^{-\eta}|X_c|^{L+\eta}\), this is also
+\[
+O_\nu(t^{-(L+\eta)}).
+\]
+The same uniform bounds give the \(L^1(\omega)\) estimate because
+\(\omega\) is a probability measure.  The \(n=0\) term cancels in
+\(\delta_t\), and the \(n=1\) term vanishes after integration against
+\(\nu\) because \(\EE X_c=0\).  This proves
+\eqref{eq:positive-margin-density-remainder}.  The bound
+\(\|\delta_t\|_\infty=O_\nu(t^{-2})\) follows from
+Lemma~\ref{lem:exact-moment-density-truncation}, since
+\(\EE|X_c|^{L+\eta}<\infty\) and \(L\ge2\).
+
+Now put \(L=2N-2\) and
+\[
+d_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}.
+\]
+As in the proof of Theorem~\ref{thm:poisson-kl-even-orders},
+\[
+D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y),
+\qquad
+\Phi(s)=(1+s)\log(1+s)-s .
+\]
+For all large \(t\), \(\|\delta_t\|_\infty\le1/2\), so
+\[
+\Phi(\delta_t)=
+\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
++O_\nu(|\delta_t|^{N+1}).
+\]
+The Taylor tail contributes \(O_\nu(t^{-2N-2})\), which is
+\(O_\nu(t^{-(2N+\eta)})\).  For \(2\le r\le N\), the product expansion gives
+\[
+\|\delta_t^r-d_t^r\|_{L^1(\omega)}
+\le
+C_{r,\nu}\sum_{\ell=1}^{r}
+t^{-2(r-\ell)}
+\|\rho_{L,t}^{(\eta)}\|_\infty^{\ell-1}
+\|\rho_{L,t}^{(\eta)}\|_{L^1(\omega)}
+\]
+\[
+\le
+C_{r,\nu}\sum_{\ell=1}^{r}
+t^{-2(r-\ell)}t^{-(L+\eta)\ell}
+=O_\nu(t^{-(L+\eta+2)}).
+\]
+Since \(L+\eta+2=2N+\eta\), every term containing the quotient remainder is
+of the asserted order.  The pure powers of \(d_t\) have the same retained
+coefficients as in Theorem~\ref{thm:poisson-kl-even-orders}, and this proves
+\eqref{eq:positive-margin-retained-order-theorem}.
+\end{proof}
 
 \medskip
 \phantomsection\label{par:coefficient-evaluability-scope}
@@ -360,17 +475,25 @@ nonzero coefficient.  Symmetric atomic laws with finite moments below
 can define the same universal coefficient on the full class.
 \end{proof}
 
+The logarithmic replacement layers below are the fixed-law Cauchy-smoothing
+counterpart of a common borderline phenomenon in entropy asymptotics: at the
+critical moment exponent the missing polynomial coefficient is replaced by a
+tail-dependent logarithmic scale, rather than by a lower-order moment
+polynomial.
+
 \begin{proposition}[Logarithmic heavy-tail replacement at the missing top moment]%
 \label{prop:log-tail-counterexample-top-moment}
-Let \(N\ge3\), put \(p=2N-2\), and let \(\nu\) be symmetric with a density
-which is a compactly supported modification near the origin of the exact
-borderline tail
+Let \(N\ge3\), put \(p=2N-2\), and choose \(R>0\) and \(c>0\) such that
 \[
-f(x)=c|x|^{-(p+1)}
-\qquad (|x|\ge R)
+  \frac{2c}{pR^p}<1 .
 \]
-for some \(R>0\).
-Then \(\nu\) is centred,
+Let \(g\) be any symmetric nonnegative compactly supported integrable
+function on \((-R,R)\) with total mass \(1-2c/(pR^p)\), and define the symmetric
+probability density
+\begin{equation}\label{eq:normalized-borderline-tail-density}
+  f(x)=g(x)+c|x|^{-(p+1)}\mathbf1_{\{|x|\ge R\}} .
+\end{equation}
+Let \(\nu\) be the law with density \(f\).  Then \(\nu\) is centred,
 \[
 \EE|X|^q<\infty\quad(q<p),\qquad \EE|X|^p=\infty ,
 \]
@@ -388,7 +511,8 @@ where
 \[
 \kappa_N=I(2,p)=(-1)^N(N-1)2^{-2N+2}\ne0
 \]
-is the coefficient of the monomial
+is the quadratic cross coefficient, equivalently the coefficient of the
+monomial
 \(\mathfrak m_2\mathfrak m_{2N-2}\) in
 Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
 Thus the failure of the top moment is an analytic tail-regime phenomenon:
@@ -398,12 +522,22 @@ The case \(N=2\) is excluded from this statement.
 \end{proposition}
 
 \begin{proof}
-The moment assertions are immediate from the compact core and
+The mass condition makes \eqref{eq:normalized-borderline-tail-density} a
+probability density:
+\[
+  \int_{\RR}f(x)\,\dd x
+  =\left(1-\frac{2c}{pR^p}\right)
+    +2c\int_R^\infty x^{-p-1}\,\dd x
+  =1 .
+\]
+The compact core is symmetric and nonnegative by construction, the tail is
+symmetric, and therefore \(\nu\) is centred.  The moment assertions are
+immediate from compact support of \(g\) and
 \[
 2c\int_R^\infty x^q x^{-p-1}\,\dd x<\infty
 \quad\Longleftrightarrow\quad q<p.
 \]
-Symmetry gives the centring.  The truncated top moment is
+The truncated top moment is
 \[
 \EE\!\left[X^p\mathbf1_{\{|X|\le t\}}\right]
 =O(1)+2c\int_R^t x^{-1}\,\dd x
@@ -487,11 +621,37 @@ I(2,2m)=[z^0]Q_2Q_{2m}
 \]
 Substitution proves \eqref{eq:core-log-tail-counterexample-asymptotic}.
 
-The same conclusion remains valid if the exact tail is replaced by
-\(f(x)=c|x|^{-p-1}+r(x)\) outside a compact set with
-\(\int_R^t x^p r(x)\,\dd x=O(1)\); this is the quantitative form of the
-asymptotic tail condition needed for the displayed \(O(1)\) truncated-moment
-error.
+The same conclusion remains valid under the following perturbative tail
+replacement.  Let
+\[
+  f(x)=g(x)+\bigl(c|x|^{-p-1}+r(x)\bigr)\mathbf1_{\{|x|\ge R\}},
+\]
+where \(r\) is even and integrable on \(\{|x|>R\}\), the displayed density is
+nonnegative, and the total mass is normalized to one.  Assume, in addition,
+that the perturbation has the lower moments needed for the retained
+coefficients,
+\[
+  \int_{|x|\ge R}|x|^q|r(x)|\,\dd x<\infty
+  \qquad(0\le q<p),
+\]
+that it does not change the logarithmic top truncated moment,
+\[
+  \int_{R\le |x|\le t}|x|^p r(x)\,\dd x=O(1),
+\]
+and that the two estimates used in the quotient-remainder split hold:
+\[
+  t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x=O(t^{-p}),
+  \qquad
+  \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x=O(t^{-p}).
+\]
+The proof above uses no other perturbative information.  Evenness preserves
+the centering and removes odd tail modes, normalization keeps \(f\) a
+probability density, the lower absolute moments define the coefficients
+\(A_{2m}\) with \(m<N\), the signed truncated-\(p\)-moment condition keeps
+\(\EE[X^p\mathbf1_{\{|X|\le t\}}]=2c\log t+O(1)\), the local
+\((p+1)\)-weighted estimate controls the Taylor remainder on
+\(R\le |x|\le t\), and the last display is exactly the uniform far-tail
+quotient bound used for \(|x|>t\).
 \end{proof}
 
 \begin{proposition}[The \(N=2\) borderline infinite-variance layer]
@@ -1010,6 +1170,16 @@ where
 U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
 \]
 \end{theorem}
+
+\paragraph{Remark.}
+The coefficient formula includes the multidimensional parity cancellation:
+\(U_\alpha^{(d)}(-y)=(-1)^{|\alpha|}U_\alpha^{(d)}(y)\), while
+\(\Omega_d\) is even.  Hence every summand of \(\mathcal A_m^{(d)}\) with
+odd total order \(m\) integrates to zero, so all retained odd layers vanish.
+For \(d=1\), \(\Sigma_0=0\), \(\operatorname{tr}\Sigma=\mu_2\), and the
+quadratic layer below gives \(c_1^{\rm iso}=1/8\); therefore
+\(\mathcal A_4^{(1)}=A_4=\mu_2^2/8\), matching the one-dimensional
+Cayley--Chebyshev coefficient.
 
 \begin{proof}
 Write
