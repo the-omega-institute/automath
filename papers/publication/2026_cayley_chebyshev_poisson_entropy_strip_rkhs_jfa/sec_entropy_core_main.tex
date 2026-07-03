@@ -1,0 +1,658 @@
+% sec_entropy_core_main.tex -- compact main entropy core
+\section{Poisson Smoothing and Entropy Asymptotics}%
+\label{sec:entropy-asymptotics}
+
+This section contains only the entropy coefficient mechanism, the
+multidimensional covariance calculation, the leading one-dimensional threshold,
+and the coefficient-defect consequence.  Quantitative constant envelopes,
+finite-grid substitutions, moment-shell dictionaries, and conditional
+finite-time post-processing are not used in the proofs below; they are kept in
+the supplementary source files.
+
+\subsection{Cayley modes and coefficient algebra}
+
+Throughout the one-dimensional part,
+\[
+  \omega(\dd y)=\frac{\dd y}{\pi(1+y^2)},\qquad
+  X_c=\gamma-\bar\gamma,\qquad
+  \mu_n=\int_{\RR}X_c^n\,\dd\nu(\gamma)
+\]
+whenever the moment exists.  For \(y\in\RR\) and \(\varepsilon\in\RR\), set
+\[
+R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2}.
+\]
+The Taylor coefficients at \(\varepsilon=0\) are denoted by \(u_n\):
+\[
+R_\varepsilon(y)=\sum_{n=0}^{L}u_n(y)\varepsilon^n
+ +\varepsilon^{L+1}v_L(y,\varepsilon)
+\]
+at each fixed finite order \(L\), with \(v_L\) bounded on
+\(\RR\times\RR\).
+
+\begin{table}[t]
+\caption{Coefficient notation and Cayley phase convention used in the entropy core.}
+\label{tab:coefficient-notation}
+\centering
+\begin{tabular}{p{0.25\textwidth}p{0.64\textwidth}}
+\hline
+Symbol & Meaning \\
+\hline
+\(\theta\) & Half-angle Cayley coordinate, \(y=\tan\theta\),
+\(-\pi/2<\theta<\pi/2\).\\
+\(z\) & Laurent phase \(z=e^{2\ii\theta}\).  Thus
+\(\cos(2k\theta)\) and \(\sin(2k\theta)\) are \(z^{\pm k}\) modes.\\
+\(\omega\) & Cauchy probability measure
+\(\dd y/(\pi(1+y^2))=\dd\theta/\pi\), pushed to Haar measure by
+\(z=e^{2\ii\theta}\).\\
+\(Q_n\) & Laurent polynomial satisfying
+\(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).\\
+\(A_k^{\rm form}\) & Universal coefficient polynomial before a law is inserted.\\
+\(A_k(\nu)\) & Evaluation of \(A_k^{\rm form}\) at the centred moments of
+\(\nu\), and, after Theorem~\ref{thm:poisson-kl-even-orders}, the
+corresponding KL coefficient.\\
+\(\mathcal A_m^{(d)}(\nu)\) & Multidimensional retained entropy coefficient.\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[Cayley--Chebyshev mode formula]%
+\label{thm:cayley-chebyshev-mode}
+Let \(U_n\) be the Chebyshev polynomial of the second kind.  If
+\(y=\tan\theta\), then
+\begin{equation}\label{eq:cayley-chebyshev-mode}
+u_n(\tan\theta)=\cos^n\theta\,U_n(\sin\theta).
+\end{equation}
+Equivalently, for \(n\ge1\),
+\[
+u_n(\tan\theta)=
+\cos^{n-1}\theta\,
+\sin\!\left((n+1)\left(\frac{\pi}{2}-\theta\right)\right),
+\]
+and therefore
+\begin{equation}\label{eq:cayley-mode-parity}
+u_n(-y)=(-1)^nu_n(y).
+\end{equation}
+Moreover, for \(m\ge1\) and \(m\ge0\), respectively,
+\[
+u_{2m}(\tan\theta)=(-1)^m2^{-(2m-1)}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}\cos(2(j+1)\theta),
+\]
+\[
+u_{2m+1}(\tan\theta)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m}\binom{2m}{j}\sin(2(j+1)\theta).
+\]
+\end{theorem}
+
+\begin{proof}
+With \(y=\tan\theta\),
+\[
+R_\varepsilon(\tan\theta)
+=\{1-2(\varepsilon\cos\theta)\sin\theta
++(\varepsilon\cos\theta)^2\}^{-1}.
+\]
+The generating function
+\(\sum_{n\ge0}U_n(x)r^n=(1-2xr+r^2)^{-1}\)
+\cite[Chapters~1 and~5]{MasonHandscomb2002} gives
+\eqref{eq:cayley-chebyshev-mode}.  The trigonometric form follows from the
+standard identity for \(U_n(\sin\theta)\), and parity is immediate.  The
+finite Fourier formula is obtained from
+\(1+e^{2\ii\theta}=2e^{\ii\theta}\cos\theta\) after taking real and imaginary
+parts.
+\end{proof}
+
+For \(r\ge2\) and \(n_j\ge2\), define
+\begin{equation}\label{eq:mode-integral-definition}
+I(n_1,\ldots,n_r):=
+\int_{\RR}u_{n_1}(y)\cdots u_{n_r}(y)\,\omega(\dd y).
+\end{equation}
+In the formal polynomial algebra
+\(\QQ[\mathfrak m_2,\ldots,\mathfrak m_k]\), put
+\begin{equation}\label{eq:universal-entropy-coefficient}
+A_k^{\rm form}:=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\ n_j\ge2}}
+\mathfrak m_{n_1}\cdots\mathfrak m_{n_r}\,I(n_1,\ldots,n_r).
+\end{equation}
+When the required centred moments exist,
+\begin{equation}\label{eq:universal-entropy-coefficient-evaluation}
+A_k(\nu):=\operatorname{ev}_{\nu,k}(A_k^{\rm form}),
+\qquad
+\operatorname{ev}_{\nu,k}(\mathfrak m_n)=\mu_n .
+\end{equation}
+
+\begin{theorem}[Universal entropy coefficients]%
+\label{thm:universal-entropy-coefficients}
+The coefficient of \(t^{-k}\) in the formal expression
+\[
+\int_{\RR}\left\{
+\left(1+\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}
+\right\}\omega(\dd y)
+\]
+is \(A_k^{\rm form}\).  If the moments needed in
+\eqref{eq:universal-entropy-coefficient} exist for \(\nu\), then
+\[
+A_k(\nu)=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\ n_j\ge2}}
+\mu_{n_1}\cdots\mu_{n_r}\,I(n_1,\ldots,n_r).
+\]
+All odd formal coefficients vanish.
+\end{theorem}
+
+\begin{proof}
+Use
+\[
+(1+s)\log(1+s)-s=\sum_{r=2}^{\infty}\frac{(-1)^r}{r(r-1)}s^r.
+\]
+The coefficient of total degree \(k\) is finite and is exactly
+\eqref{eq:universal-entropy-coefficient}.  If \(k\) is odd, then each mode
+product in the coefficient has odd total parity by
+\eqref{eq:cayley-mode-parity}, hence integrates to zero against the even
+measure \(\omega\).
+\end{proof}
+
+\begin{theorem}[Finite Fourier algorithm for mode integrals]%
+\label{thm:finite-fourier-mode-integral-algorithm}
+Define \(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).  Then
+\begin{equation}\label{eq:mode-laurent-polynomial-definition}
+Q_{2m}(z)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+\end{equation}
+and
+\[
+Q_{2m+1}(z)=(-1)^m\frac{2^{-2m}}{2\ii}
+\sum_{j=0}^{2m}\binom{2m}{j}
+\bigl(z^{j+1}-z^{-(j+1)}\bigr).
+\]
+Consequently
+\begin{equation}\label{eq:mode-integral-constant-term}
+I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The formulas are the finite Fourier identities of
+Theorem~\ref{thm:cayley-chebyshev-mode} after using
+\(\cos(2\ell\theta)=(z^\ell+z^{-\ell})/2\) and
+\(\sin(2\ell\theta)=(z^\ell-z^{-\ell})/(2\ii)\).  Since
+\(\omega(\dd y)=\dd\theta/\pi\), the map \(z=e^{2\ii\theta}\) sends the
+integral to Haar integration on \(\TT\), hence to constant-term extraction.
+\end{proof}
+
+\subsection{One-dimensional coefficient theorem}
+
+\begin{lemma}[Exact-moment density truncation]%
+\label{lem:exact-moment-density-truncation}
+\label{thm:finite-moment-density-remainder}
+Let \(L\ge2\), and let \(\nu\) have mean \(\bar\gamma\) and finite centred
+\(L\)th absolute moment.  For
+\[
+\delta_t(y):=
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}-1
+\]
+one has
+\begin{equation}\label{eq:exact-moment-density-truncation}
+\delta_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_{\infty}+\|\rho_{L,t}\|_{L^1(\omega)}=o(t^{-L}).
+\end{equation}
+Also \(\|\delta_t\|_\infty=O(t^{-2})\).
+\end{lemma}
+
+\begin{proof}
+For \(x=\bar\gamma+ty\),
+\[
+\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
+=R_{X_c/t}(y).
+\]
+Subtract the Taylor polynomial in \(X_c/t\) through order \(L\).  On
+\(|X_c|\le t\), the bounded remainder gives
+\[
+t^{-L}\EE\!\left[|X_c|^L(|X_c|/t)\mathbf1_{\{|X_c|\le t\}}\right]
+=o(t^{-L}).
+\]
+On \(|X_c|>t\), the elementary bounds
+\[
+|R_{X_c/t}(y)|+\sum_{n=0}^{L}|u_n(y)||X_c/t|^n
+\le C_L|X_c/t|^L
+\]
+give \(t^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]=o(t^{-L})\).  The same
+estimates prove both the \(L^\infty\) and \(L^1(\omega)\) bounds.  The
+\(n=0\) term is removed by subtracting \(1\), and the \(n=1\) term vanishes
+because \(\EE X_c=0\).  The \(O(t^{-2})\) bound follows from the same split
+with \(L=2\).
+\end{proof}
+
+\begin{theorem}[Finite-moment Poisson entropy transfer and coefficient formula]%
+\label{thm:poisson-kl-even-orders}
+\label{prop:coefficient-identification-poisson-entropy-transfer}
+\label{prop:density-to-entropy-descent}
+Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) have mean \(\bar\gamma\) and
+finite centred \(L\)th absolute moment.  With
+\[
+h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),
+\]
+\begin{equation}\label{eq:poisson-kl-even-orders}
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
+\end{equation}
+For \(4\le k\le2N\),
+\begin{equation}\label{eq:coefficient-identification-transfer-expansion}
+A_k(\nu)=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\2\le n_j\le2N-2}}
+\mu_{n_1}\cdots\mu_{n_r}
+\int_{\RR}u_{n_1}\cdots u_{n_r}\,\dd\omega .
+\end{equation}
+All retained odd \(A_k\) vanish.
+\end{theorem}
+
+\begin{proof}
+Write \(\delta_t=d_t+\rho_t\), where
+\[
+d_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}.
+\]
+Lemma~\ref{lem:exact-moment-density-truncation} gives
+\(\|d_t\|_\infty=O(t^{-2})\) and
+\(\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}=o(t^{-L})\).  Since
+\[
+g_t(\bar\gamma+ty)t\,\dd y=\omega(\dd y),
+\]
+and \(\int\delta_t\,\dd\omega=0\),
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y),
+\qquad
+\Phi(s)=(1+s)\log(1+s)-s .
+\]
+For large \(t\),
+\[
+\Phi(\delta_t)=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r
++O(|\delta_t|^{N+1}).
+\]
+The Taylor tail is \(O(t^{-2N-2})\).  For \(2\le r\le N\),
+\[
+\|\delta_t^r-d_t^r\|_{L^1(\omega)}
+\le C_r\sum_{\ell=1}^{r}
+\|d_t\|_\infty^{r-\ell}
+\|\rho_t\|_\infty^{\ell-1}
+\|\rho_t\|_{L^1(\omega)}
+=o(t^{-(L+2)}).
+\]
+The worst term is \(r=2,\ell=1\), namely \(O(t^{-2})o(t^{-L})\).  Since
+\(L+2=2N\), only pure powers of \(d_t\) remain at the retained order.  Their
+coefficients are exactly \eqref{eq:coefficient-identification-transfer-expansion},
+and odd total orders vanish by Theorem~\ref{thm:universal-entropy-coefficients}.
+\end{proof}
+
+\begin{remark}[Positive-margin remainder anchor]
+\label{rem:positive-margin-retained-order}
+If the hypothesis of Theorem~\ref{thm:poisson-kl-even-orders} is strengthened
+to \(\EE|X_c|^{2N-2+\eta}<\infty\) for some \(0<\eta\le1\), the same
+density split gives a retained expansion with a positive-margin remainder:
+\begin{equation}\label{eq:positive-margin-retained-order-theorem}
+D_{\mathrm{KL}}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
++O_\nu(t^{-(2N+\eta)}).
+\end{equation}
+This equation is used only as a finite-window coefficient-transfer input in
+Section~\ref{sec:doob-phi-entropy}; the explicit constants and threshold
+variants are supplementary bookkeeping.
+\end{remark}
+
+\medskip
+\phantomsection\label{par:coefficient-evaluability-scope}
+\noindent\fbox{%
+\begin{minipage}{0.94\linewidth}
+\textbf{Scope of the finite-moment hierarchy.}
+The finite \((2N-2)\)-moment hypothesis in
+Theorem~\ref{thm:poisson-kl-even-orders} is the first level at which the
+displayed universal polynomial \(A_{2N}\) can be evaluated from a fixed finite
+moment jet.  It is not asserted here to be a sharp analytic tail threshold
+for every possible non-polynomial asymptotic regime.  The only analytic
+if-and-only-if tail threshold proved in this paper is the leading variance
+threshold, Theorem~\ref{thm:sharp-leading-kl-variance-threshold}.
+\end{minipage}}
+\medskip
+
+\begin{proposition}[First evaluability level for the top coefficient]%
+\label{prop:poisson-kl-moment-threshold-sharpness}
+\label{prop:analytic-first-evaluability-obstruction}
+For \(N\ge3\), the universal top coefficient \(A_{2N}^{\rm form}\) contains
+the nonzero monomial
+\[
+\kappa_N\,\mathfrak m_2\mathfrak m_{2N-2},
+\qquad
+\kappa_N=(-1)^N(N-1)2^{-2N+2}\ne0 .
+\]
+Consequently the displayed universal polynomial \(A_{2N}\) cannot be
+evaluated from centred moments of order at most \(2N-3\) on the full class of
+laws.
+\end{proposition}
+
+\begin{proof}
+The monomial comes from the quadratic term
+\(\frac12\int d_t^2\,\dd\omega\), using one \(u_2\) factor and one
+\(u_{2N-2}\) factor.  Constant-term extraction from
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} gives the displayed
+nonzero coefficient.  Symmetric atomic laws with finite moments below
+\(2N-2\) and infinite \((2N-2)\)nd moment show that no lower-moment polynomial
+can define the same universal coefficient on the full class.
+\end{proof}
+
+\begin{proposition}[Heavy-tail replacement at the missing top moment]%
+\label{prop:log-tail-counterexample-top-moment}
+There are symmetric centred laws with finite moments below \(2N-2\) and
+infinite \((2N-2)\)nd moment for which the retained polynomial layer
+\(A_{2N}t^{-2N}\) is replaced by a tail-dependent contribution of order
+\(t^{-2N}\log t\).  Thus the failure of the top moment is an analytic
+tail-regime phenomenon, not an alternative evaluation of the same universal
+polynomial.
+\end{proposition}
+
+\begin{proof}
+Take a symmetric law whose tail is regularly varying at the borderline order
+\(2N-2\).  In the quotient identity \(R_{X_c/t}(y)\), the quadratic entropy
+term involving the \(u_2\)-projection and the truncated
+\((2N-2)\)-moment accumulates like \(\log t\).  The lower moments give the
+usual lower-order polynomial terms, while the missing top moment supplies the
+borderline logarithmic contribution.  This is the standard truncated-moment
+calculation for regularly varying tails applied to the exact Cauchy quotient
+above.
+\end{proof}
+
+\subsection{Sharp leading threshold}
+
+\begin{lemma}[Second-mode transform of a Cauchy translate]%
+\label{lem:second-mode-cauchy-translate-transform}
+For \(\varepsilon\in\RR\),
+\[
+\int_{\RR}u_2(y)\{R_\varepsilon(y)-1\}\,\omega(\dd y)
+=\frac{4\varepsilon^2}{(4+\varepsilon^2)^2}.
+\]
+\end{lemma}
+
+\begin{proof}
+Since \(\int_{\RR}u_2\,\dd\omega=0\), it is enough to compute
+\[
+\int_{\RR}u_2(y)R_\varepsilon(y)\,\omega(\dd y).
+\]
+Using
+\[
+u_2(y)=\frac{3y^2-1}{(1+y^2)^2},
+\qquad
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2},
+\]
+this integral is
+\[
+\frac1\pi\int_{\RR} f_\varepsilon(y)\,\dd y,\qquad
+f_\varepsilon(y):=
+\frac{3y^2-1}{(1+y^2)^2(1+(y-\varepsilon)^2)} .
+\]
+For \(\varepsilon=0\), the integrand is
+\((3y^2-1)/(1+y^2)^3\), whose integral is zero after the substitution
+\(y=\tan\theta\).  Assume \(\varepsilon\ne0\), and write
+\[
+F_\varepsilon(z)=
+\frac{3z^2-1}
+{(z-\ii)^2(z+\ii)^2(z-\varepsilon-\ii)(z-\varepsilon+\ii)} .
+\]
+Closing the contour in the upper half-plane gives the order-two pole
+\(z=\ii\) and the order-one pole \(z=\varepsilon+\ii\).  Since
+\(F_\varepsilon(z)=O(|z|^{-4})\),
+\[
+\frac1\pi\int_{\RR}f_\varepsilon(y)\,\dd y
+=2\ii\left(
+\operatorname{Res}_{z=\ii}F_\varepsilon
++\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+\right).
+\]
+The simple pole gives
+\[
+\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+=-\frac{\ii(3\varepsilon^2+6\ii\varepsilon-4)}
+{2\varepsilon^2(\varepsilon+2\ii)^2}.
+\]
+For the double pole,
+\[
+\begin{aligned}
+\operatorname{Res}_{z=\ii}F_\varepsilon
+&=
+\left.
+\frac{\dd}{\dd z}
+\frac{3z^2-1}
+{(z+\ii)^2(z-\varepsilon-\ii)(z-\varepsilon+\ii)}
+\right|_{z=\ii} \\
+&=-\frac{\ii(\varepsilon^2+2\ii\varepsilon+4)}
+{2\varepsilon^2(\varepsilon-2\ii)^2}.
+\end{aligned}
+\]
+Adding the residues cancels the apparent \(\varepsilon^{-2}\) singularity:
+\[
+\operatorname{Res}_{z=\ii}F_\varepsilon
++\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+=-\frac{2\ii\varepsilon^2}{(4+\varepsilon^2)^2}.
+\]
+Therefore
+\[
+\frac1\pi\int_{\RR} f_\varepsilon(y)\,\dd y
+=\frac{4\varepsilon^2}{(4+\varepsilon^2)^2}.
+\]
+This proves the claim.
+\end{proof}
+
+\begin{theorem}[Sharp analytic variance threshold for the leading KL coefficient]%
+\label{thm:sharp-leading-kl-variance-threshold}
+Let \(\nu\) have finite mean \(\bar\gamma\), and put
+\[
+H(t)=D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma)).
+\]
+Then
+\[
+\EE X_c^2<\infty
+\quad\Longleftrightarrow\quad
+\limsup_{t\to\infty}t^4H(t)<\infty .
+\]
+When the variance is finite,
+\[
+\lim_{t\to\infty}t^4H(t)=\frac{(\EE X_c^2)^2}{8},
+\]
+and when the variance is infinite,
+\[
+\lim_{t\to\infty}t^4H(t)=+\infty .
+\]
+\end{theorem}
+
+\begin{proof}
+Finite variance is Theorem~\ref{thm:poisson-kl-even-orders} with \(N=2\).
+For the converse, Csisz{\'a}r--Pinsker
+\cite{Pinsker1964,Csiszar1967,BolleyVillani2005} and
+\(\|u_2\|_\infty\le1\) give
+\[
+2H(t)\ge
+\left|
+\int_{\RR}u_2(y)\delta_t(y)\,\omega(\dd y)
+\right|^2 .
+\]
+By Lemma~\ref{lem:second-mode-cauchy-translate-transform}, the projection is
+\[
+B(t)=\EE\!\left[\frac{4(X_c/t)^2}{(4+(X_c/t)^2)^2}\right]\ge0.
+\]
+Hence \(t^4H(t)\ge\frac12\{t^2B(t)\}^2\).  For fixed \(M\),
+\[
+t^2B(t)\ge
+\frac{4}{(4+(M/t)^2)^2}
+\EE[X_c^2\mathbf1_{\{|X_c|\le M\}}],
+\]
+and the right side tends to
+\(\frac14\EE[X_c^2\mathbf1_{\{|X_c|\le M\}}]\).  Letting
+\(M\to\infty\) proves divergence when the variance is infinite.
+\end{proof}
+
+\subsection{Multidimensional quotient jet and covariance layer}
+
+For \(d\ge1\), let
+\[
+P_t^{(d)}(x)=c_d\,\frac{t}{(t^2+|x|^2)^{(d+1)/2}},
+\qquad
+\Omega_d(\dd y)=P_1^{(d)}(y)\dd y.
+\]
+For \(z\in\RR^d\), write
+\[
+F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
+\]
+Let \(U_\alpha^{(d)}\) be the Taylor coefficients of \(F_y(z)\) at \(z=0\).
+
+\begin{theorem}[Finite-\(L\) multidimensional density quotient expansion]%
+\label{thm:multidimensional-density-quotient}
+Let \(L\ge\max\{2,d+1\}\), and assume \(\nu\) has mean \(\bar\gamma\) and
+finite centred \(L\)th absolute moment.  Then, for
+\[
+\delta_t^{(d)}(y):=
+\frac{(P_t^{(d)}*\nu)(\bar\gamma+ty)}
+{P_t^{(d)}(ty)}-1,
+\]
+\[
+\delta_t^{(d)}(y)=
+\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
++\rho_{L,t}^{(d)}(y),
+\qquad
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}).
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is the same tail split as
+Lemma~\ref{lem:exact-moment-density-truncation}, applied to
+\(F_y(X_c/t)\).  The condition \(L\ge d+1\) is the quotient-remainder
+domination level for large translated peaks in the radial Poisson kernel.
+\end{proof}
+
+\begin{theorem}[Finite-\(L\) multidimensional entropy jet]%
+\label{thm:multidimensional-poisson-entropy-jets}
+Under the hypotheses of
+Theorem~\ref{thm:multidimensional-density-quotient},
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where
+\[
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{|\alpha_1|+\cdots+|\alpha_r|=m\\
+2\le|\alpha_j|\le L}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\]
+\end{theorem}
+
+\begin{proof}
+Insert the quotient expansion from
+Theorem~\ref{thm:multidimensional-density-quotient} into
+\(\Phi(s)=(1+s)\log(1+s)-s\).  Since the centred density perturbation starts
+at order \(t^{-2}\), every mixed product containing one density remainder is
+two powers smaller than that remainder, exactly as in the proof of
+Theorem~\ref{thm:poisson-kl-even-orders}.
+\end{proof}
+
+\begin{proposition}[Formal covariance layer under finite covariance]%
+\label{prop:multidim-formal-covariance-layer}
+\label{thm:multidim-leading-positive-defect}
+Let \(\nu\) be a probability measure on \(\RR^d\) with finite centred second
+moment.  Put
+\[
+\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad
+\Sigma_0=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d.
+\]
+The degree-two centred density mode is
+\begin{equation}\label{eq:multidim-leading-theorem-density-mode}
+b_\Sigma(y)=
+\frac{d+1}{2}\left(
+-\frac{\operatorname{tr}\Sigma}{1+|y|^2}
++\frac{(d+3)y^{\mathsf T}\Sigma y}{(1+|y|^2)^2}
+\right).
+\end{equation}
+Its formal quadratic KL layer is
+\begin{equation}\label{eq:multidim-leading-positive-defect}
+A_{4,\mathrm{quad}}^{(d)}(\nu)
+:=\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y)
+=c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
++c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2,
+\end{equation}
+with
+\begin{equation}\label{eq:multidim-leading-positive-constants}
+c_d^{\rm iso}=
+\frac{3(d+1)(7d+9)}
+{4d(d+3)(d+5)(d+7)},
+\qquad
+c_d^{\rm tr}=
+\frac{3(d+1)(d+3)}
+{4(d+5)(d+7)} .
+\end{equation}
+This is a covariance-layer identity only.  Under finite covariance alone no
+KL asymptotic is asserted.
+\end{proposition}
+
+\begin{proof}
+Let \(a=(d+1)/2\) and \(A=1+|y|^2\).  The degree-two homogeneous part of
+\[
+\left(1+\frac{-2y\cdot z+|z|^2}{A}\right)^{-a}
+\]
+is
+\[
+a\left(-\frac{|z|^2}{A}
++\frac{(d+3)(y\cdot z)^2}{A^2}\right).
+\]
+Averaging with \(z=X_c/t\) gives \(b_\Sigma\).  Decompose
+\(\Sigma=\tau I_d+\Sigma_0\), \(\tau=d^{-1}\operatorname{tr}\Sigma\).  Then
+\[
+b_\Sigma(y)=
+a\tau\frac{3|y|^2-d}{(1+|y|^2)^2}
++a(d+3)\frac{y^{\mathsf T}\Sigma_0y}{(1+|y|^2)^2}.
+\]
+The mixed integral vanishes by rotational symmetry.  The remaining constants
+come from the beta-prime radial moments
+\[
+\EE\frac{R^k}{(1+R)^4}
+=
+\frac{\Gamma(d/2+k)\Gamma((d+1)/2+4-k)}
+{\Gamma(d/2)\Gamma((d+1)/2+4)}
+\qquad(k=0,1,2)
+\]
+for \(R=|Y|^2\), \(Y\sim\Omega_d\), and from
+\[
+\EE_\Theta[(\Theta^{\mathsf T}\Sigma_0\Theta)^2]
+=\frac{2}{d(d+2)}\|\Sigma_0\|_{\rm HS}^2 .
+\]
+Substitution gives \eqref{eq:multidim-leading-positive-constants}.  The
+constants are positive, so the layer vanishes exactly when \(\Sigma=0\).
+\end{proof}
+
+\begin{corollary}[Leading KL coefficient under \((\mathrm{MPJ}_{d,L})\)]%
+\label{cor:multidim-leading-kl-coefficient}
+If \(L\ge\max\{2,d+1\}\) and \((\nu,d,L)\) satisfies the finite-jet
+hypotheses of Theorems~\ref{thm:multidimensional-density-quotient} and
+\ref{thm:multidimensional-poisson-entropy-jets}, then
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+=A_{4,\mathrm{quad}}^{(d)}(\nu)t^{-4}+o(t^{-4}).
+\]
+\end{corollary}
+
+\begin{proof}
+The entropy jet identifies the first nonzero retained layer as
+\(\frac12\int b_\Sigma^2\,\dd\Omega_d\), and
+Proposition~\ref{prop:multidim-formal-covariance-layer} computes that
+integral.  The finite-jet hypotheses are not weakened.
+\end{proof}

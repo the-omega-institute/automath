@@ -1298,6 +1298,17 @@ c_d^{\rm tr}:=
 \frac{3(d+1)(d+3)}
 {4(d+5)(d+7)} .
 \end{equation}
+Two immediate checks are
+\[
+d=1:\qquad \Sigma_0=0,\qquad c_1^{\rm iso}=\frac18,\qquad
+A_{4,\mathrm{quad}}^{(1)}(\nu)=\frac{(\operatorname{tr}\Sigma)^2}{8},
+\]
+and, for an isotropic covariance \(\Sigma=\tau I_d\),
+\[
+\Sigma_0=0,\qquad
+A_{4,\mathrm{quad}}^{(d)}(\nu)
+=c_d^{\rm iso}d^2\tau^2 .
+\]
 This identity assumes only \(\EE|X_c|^2<\infty\) and is a covariance-layer
 calculation, not a finite-covariance asymptotic theorem for the KL divergence.
 Under finite covariance alone, no full KL asymptotic is asserted.
@@ -1515,11 +1526,12 @@ Theorem~\ref{thm:multidimensional-poisson-entropy-jets}; no part of this
 corollary weakens its hypotheses.
 \end{proof}
 
-\begin{theorem}[Poisson entropy transfer for the finite-moment universal polynomial]%
+\begin{theorem}[Finite-moment Poisson entropy transfer and coefficient formula]%
 \label{thm:poisson-kl-even-orders}
 \label{prop:coefficient-identification-poisson-entropy-transfer}
-Let $N\ge2$ and let $\nu$ be a probability measure on~$\RR$ with mean
-$\bar\gamma$.  Set
+Let \(N\ge2\), put \(L:=2N-2\), and let \(\nu\) be a probability measure
+on~\(\RR\) with mean \(\bar\gamma\) and finite centred \(L\)th absolute
+moment.  Set
 \[
 X_c:=\gamma-\bar\gamma,
 \qquad
@@ -1531,24 +1543,41 @@ h_t:=P_t*\nu,
 \qquad
 g_t(x):=P_t(x-\bar\gamma).
 \]
-For each retained \(k\), write \(A_k(\nu)\) for the finite-moment evaluation
-of \(A_k^{\rm form}\) in \eqref{eq:universal-entropy-coefficient-evaluation}.
+For \(x=\bar\gamma+ty\), define
+\[
+\delta_t(y):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1 .
+\]
+Then the finite-moment mechanism is the following.
 
-\textup{(E) Universal-polynomial evaluability level.}
-If \(\nu\) has finite centred \((2N-2)\)th absolute moment, then the
-evaluated universal polynomials are the genuine large-time entropy
-coefficients through
-order \(t^{-2N}\):
+\textup{(a) Density quotient.}
+The exact Cauchy quotient expansion of
+Lemma~\ref{lem:exact-moment-density-truncation} gives
+\[
+\delta_t(y)
+=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_t(y),
+\qquad
+\|\rho_t\|_\infty+\|\rho_t\|_{L^1(\omega)}=o(t^{-L}),
+\]
+where \(\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y\) and the linear mode is
+absent because \(X_c\) is centred.
+
+\textup{(b) Finite \(\Phi\)-transfer.}
+With \(\Phi(s)=(1+s)\log(1+s)-s\),
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y),
+\]
+and this identity transfers the density expansion to an entropy expansion
+through order \(t^{-2N}\):
 \begin{equation}\label{eq:poisson-kl-even-orders}
 D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{k=4}^{2N}A_k(\nu)t^{-k}+o(t^{-2N})
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
 \qquad(t\to\infty).
 \end{equation}
-Equivalently, \(A_{2m-1}(\nu)=0\) for every retained odd order
-\(2m-1\le 2N\), and the remaining even \(A_{2m}(\nu)\) are the entropy
-coefficients identified in the expansion above.
-Equivalently, for \(4\le m\le2N\),
+
+\textup{(c) Coefficient formula.}
+For \(4\le m\le2N\),
 \begin{equation}\label{eq:coefficient-identification-transfer-expansion}
 A_m(\nu)=
 \sum_{r=2}^{\lfloor m/2\rfloor}
@@ -1564,6 +1593,7 @@ Cayley quotient coefficients from
 =\sum_{n=0}^{\infty}u_n(y)\varepsilon^n .
 \]
 The formula is finite because every \(n_j\le m-2\le2N-2\).
+The parity theorem gives \(A_m(\nu)=0\) for retained odd \(m\).
 \end{theorem}
 
 \medskip
@@ -1573,15 +1603,15 @@ The formula is finite because every \(n_j\le m-2\le2N-2\).
 \textbf{Scope of the finite-moment hierarchy.}
 In Theorem~\ref{thm:poisson-kl-even-orders}, ``finite
 \((2N-2)\)-moment level'' means the first level at which the displayed
-universal moment polynomial \(A_{2N}\) in
-\eqref{eq:coefficient-identification-transfer-expansion} is a finite,
-law-independent coefficient.  This is a coefficient-evaluability statement,
-not a sharp analytic tail threshold for every possible entropy asymptotic.
-The only analytic iff threshold proved here is the leading variance theorem,
-Theorem~\ref{thm:sharp-leading-kl-variance-threshold}.  Below the
-\((2N-2)\)-moment level, the same fixed polynomial cannot be recovered from
-lower moments alone; separate tail analysis may instead produce
-tail-dependent, truncated, renormalized, or subsequential large-time behavior.
+universal polynomial \(A_{2N}\) in
+\eqref{eq:coefficient-identification-transfer-expansion} is a finite
+law-independent coefficient.  Propositions
+\ref{prop:analytic-first-evaluability-obstruction}--%
+\ref{prop:log-tail-counterexample-top-moment} give the complete scope
+discussion: the lower-moment obstruction, the nonzero top-moment monomial,
+and a concrete lower-moment tail regime.  The only analytic iff tail
+threshold proved here is the leading variance theorem,
+Theorem~\ref{thm:sharp-leading-kl-variance-threshold}.
 \end{minipage}}
 \medskip
 
@@ -1686,18 +1716,11 @@ The parity part of Theorem~\ref{thm:universal-entropy-coefficients} gives
 \end{proof}
 
 \subsubsection{Coefficient evaluability and analytic scope}%
-\label{subsubsec:finite-moment-threshold-nonclaims}
+\label{subsubsec:finite-moment-threshold-scope}
 
-The \hyperref[par:coefficient-evaluability-scope]{boxed scope paragraph} fixes
-the scope of the finite-moment hierarchy.  The next propositions supply the
-two supporting facts: an atomic lower-moment obstruction, the nonzero
-top-moment monomial, and an explicit power-tail entropy asymptotic in which
-the missing top moment changes the \(t^{-2N}\) layer into a tail-dependent
-logarithmic term.
-Quantitative positive-margin and moment-ball estimates are constant-regime
-consequences of the same density-to-entropy calculation and are recorded in
-Appendix~\ref{subsubsec:finite-moment-constants-variants}, where their
-constants are needed.
+The three propositions below are the scope discussion for
+Theorem~\ref{thm:poisson-kl-even-orders}.  They are ordered from obstruction
+to exact coefficient mechanism to a concrete analytic lower-moment regime.
 
 \begin{proposition}[Analytic obstruction to lower-moment replacement]%
 \label{prop:analytic-first-evaluability-obstruction}
@@ -1767,15 +1790,10 @@ of orders below \(L\), which are also finite for this law.
 
 \begin{proposition}[First evaluability level for the universal moment polynomial]%
 \label{prop:poisson-kl-moment-threshold-sharpness}
-Let \(L=2N-2\).  The obstruction below is the
-coefficient-evaluation obstruction for the universal moment polynomial
-\(A_{2N}\) in Theorem~\ref{thm:poisson-kl-even-orders}.  It says
-that this specific polynomial coefficient cannot be determined from moments
-strictly below order \(L\), that is, from centred moments of orders at most
-\(2N-3\).
-
-For \(N\ge3\), the degree-\(2N\) formal coefficient has the nonzero
-top-moment term
+Let \(N\ge2\) and \(L=2N-2\).
+For \(N=2\), \(A_4(\nu)=\mu_2^2/8\).  For \(N\ge3\), the universal
+polynomial \(A_{2N}\) in Theorem~\ref{thm:poisson-kl-even-orders} has an
+unavoidable top-moment term:
 \begin{equation}\label{eq:top-moment-coefficient-sharpness}
 A_{2N}^{\rm form}
 =\kappa_N\,\mathfrak m_2\mathfrak m_{2N-2}
@@ -1783,25 +1801,10 @@ A_{2N}^{\rm form}
 \qquad
 \kappa_N=(-1)^N(N-1)2^{-2N+2}\ne0,
 \end{equation}
-where \(P_N\) involves no \(\mathfrak m_{2N-2}\).  Hence this universal
-moment-polynomial coefficient through order \(t^{-2N}\) cannot be evaluated
-from centred moments of orders at most \(2N-3\) alone.  The centred
-\((2N-2)\)nd moment is the first top moment needed for the displayed
-universal coefficient.  The assertion is only at the coefficient-polynomial
-level.
-The analytic lower-moment obstruction for actual laws is recorded separately
-in Proposition~\ref{prop:analytic-first-evaluability-obstruction}.
-
-The endpoint \(N=2\) is the leading coefficient
-\[
-A_4(\nu)=\frac18\mu_2^2,
-\]
-so a universal statement through order \(t^{-4}\) must at least make the
-variance finite.
-Together with the boxed scope paragraph after
-Theorem~\ref{thm:poisson-kl-even-orders}, this records the lower-moment
-obstruction for the displayed polynomial coefficient.  The next proposition
-gives a concrete tail-dependent asymptotic at the same scale.
+where \(P_N\) involves no \(\mathfrak m_{2N-2}\).  Hence the displayed
+universal coefficient through order \(t^{-2N}\) cannot be evaluated from
+centred moments of orders at most \(2N-3\) alone; the centred
+\((2N-2)\)nd moment is the first top moment needed for this polynomial.
 \end{proposition}
 
 \begin{proof}
@@ -1841,6 +1844,105 @@ I(2,2m)
 \]
 This proves \eqref{eq:top-moment-coefficient-sharpness}.
 
+\end{proof}
+
+\begin{lemma}[Borderline power-tail quotient expansion]%
+\label{lem:borderline-power-tail-quotient-expansion}
+Let \(N\ge3\), put \(L=2N-2\), and let \(\nu\) be a symmetric probability
+law on \(\RR\) with density
+\[
+f(x)=c|x|^{-L-1}\mathbf1_{\{|x|\ge \mathrm e\}}+f_0(x),
+\]
+where \(c>0\) and \(f_0\) is a bounded symmetric density supported in
+\(\{|x|\le \mathrm e\}\).  Put
+\[
+\delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1
+=\int_{\RR}\{R_{x/t}(y)-1\}f(x)\dd x,
+\qquad
+R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2}.
+\]
+For \(2\le n\le L-1\), write
+\(\mu_n=\int x^n f(x)\dd x\).  Then, as \(t\to\infty\),
+\begin{equation}\label{eq:borderline-power-tail-quotient-expansion}
+\delta_t(y)=
+\sum_{n=2}^{L-1}\mu_nu_n(y)t^{-n}
++2c\,u_L(y)t^{-L}\log t+\varepsilon_t(y),
+\end{equation}
+with
+\begin{equation}\label{eq:borderline-power-tail-quotient-remainder}
+\|\varepsilon_t\|_\infty+\|\varepsilon_t\|_{L^1(\omega)}
+\le C t^{-L}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+It is enough to consider \(t\ge \mathrm e\).  All estimates below are
+uniform in \(y\); since \(\omega\) is a probability measure and the same
+pointwise majorants are used, they also give the stated \(L^1(\omega)\)
+bounds.  On \(|x|\le t\), Proposition~\ref{prop:cayley-mode-remainder} gives
+\[
+R_{x/t}(y)-1
+=\sum_{n=1}^{L}u_n(y)(x/t)^n+(x/t)^{L+1}v_L(y,x/t),
+\qquad \|v_L\|_\infty<\infty .
+\]
+
+\emph{The core \(|X|\le\mathrm e\).}
+The core contributes its finite moments to the modes \(n<L\).  Its \(n=L\)
+mode is
+\[
+t^{-L}u_L(y)\int_{|x|\le\mathrm e}x^Lf_0(x)\dd x=O(t^{-L}),
+\]
+and is absorbed into \(\varepsilon_t\).  Odd core modes vanish by symmetry,
+and the \(n=0\) and \(n=1\) quotient modes are absent because the quotient is
+compared with \(1\) and the law is centred.
+
+\emph{The truncated power tail \(\mathrm e<|X|\le t\).}
+For \(2\le n<L\), replacing the truncated tail moment by the full tail moment
+costs
+\[
+t^{-n}\int_{|x|>t}|x|^n c|x|^{-L-1}\dd x
+\le C t^{-n}\int_t^\infty x^{n-L-1}\dd x
+=O(t^{-L}).
+\]
+Thus the core plus truncated tail gives the full moments
+\(\mu_nu_n(y)t^{-n}\) for \(2\le n\le L-1\), up to an \(O(t^{-L})\) error.
+For the missing top mode,
+\[
+t^{-L}u_L(y)\int_{\mathrm e<|x|\le t}x^L c|x|^{-L-1}\dd x
+=2c\,u_L(y)t^{-L}\int_{\mathrm e}^{t}\frac{\dd x}{x}
+=2c\,u_L(y)t^{-L}\log t+O(t^{-L}).
+\]
+
+\emph{The large tail \(|X|>t\).}
+The quotient bound used in
+Lemma~\ref{lem:exact-moment-density-truncation},
+\[
+|R_\varepsilon(y)-1|\le C(1+\varepsilon^2),
+\]
+and \(L\ge4\) give
+\[
+\int_{|x|>t}|R_{x/t}(y)-1|f(x)\dd x
+\le C\left\{\int_t^\infty x^{-L-1}\dd x
++t^{-2}\int_t^\infty x^{1-L}\dd x\right\}
+=O(t^{-L}).
+\]
+The part of the displayed expansion already assigned to the omitted large
+tail is also \(O(t^{-L})\), because for \(2\le n<L\)
+\[
+t^{-n}\int_{|x|>t}|x|^n f(x)\dd x=O(t^{-L}).
+\]
+
+\emph{The Taylor remainder.}
+The remainder on \(|x|\le\mathrm e\) is \(O(t^{-(L+1)})\).  On
+\(\mathrm e<|x|\le t\),
+\[
+t^{-(L+1)}\int_{\mathrm e<|x|\le t}|x|^{L+1}c|x|^{-L-1}\dd x
+\le C t^{-(L+1)}\int_{\mathrm e}^{t}\dd x
+=O(t^{-L}).
+\]
+Combining the four estimates proves
+\eqref{eq:borderline-power-tail-quotient-expansion} and
+\eqref{eq:borderline-power-tail-quotient-remainder}.
 \end{proof}
 
 \begin{proposition}[Logarithmic heavy-tail change at the missing top moment]%
@@ -1908,88 +2010,126 @@ which is finite exactly when \(q<L\), while the \(q=L\) integral is
 law is centred by symmetry and has positive variance because it is not
 concentrated at the origin.
 
-Write \(x=ty\),
-\[
-\delta_t(ty):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1
-=\EE\{R_{X/t}(y)-1\},
-\qquad
-R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2}.
-\]
-We first isolate the only logarithmic density contribution.  Put
+Set
 \[
 A_t(y):=\sum_{n=2}^{L-1}\mu_nu_n(y)t^{-n}.
 \]
-Then
+With
+\[
+B_t(y):=2c\,u_L(y)t^{-L}\log t,
+\]
+\[
+\Delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,
+\]
+Lemma~\ref{lem:borderline-power-tail-quotient-expansion}, applied with
+\[
+f_0(x)=\frac{1-2c\,\mathrm e^{-L}/L}{2}\mathbf1_{\{|x|\le1\}},
+\]
+gives
 \begin{equation}\label{eq:log-tail-density-expansion}
-\delta_t(ty)
-=A_t(y)+2c\,u_L(y)t^{-L}\log t+\varepsilon_t(y),
-\qquad
-\|\varepsilon_t\|_\infty+\|\varepsilon_t\|_{L^1(\omega)}=O(t^{-L}).
+\Delta_t(y)
+=A_t(y)+B_t(y)+\varepsilon_t(y)
 \end{equation}
-Indeed, on \(|X|\le t\), the finite Cayley expansion gives
+where
 \[
-R_{X/t}(y)-1
-=\sum_{n=1}^{L}u_n(y)(X/t)^n+O_L(|X/t|^{L+1})
+\|\varepsilon_t\|_\infty+\|\varepsilon_t\|_{L^1(\omega)}=O(t^{-L}).
 \]
-uniformly in \(y\).  Symmetry removes the odd modes.  For \(n<L\), replacing
-the truncated moment \(\EE[X^n\mathbf1_{\{|X|\le t\}}]\) by the full moment
-\(\mu_n\) changes the density by
+Moreover
 \[
-O\!\left(t^{-n}\int_t^\infty x^n x^{-L-1}\dd x\right)=O(t^{-L}).
+\|A_t\|_\infty=O(t^{-2}),\qquad
+\|B_t\|_\infty+\|B_t\|_{L^1(\omega)}=O(t^{-L}\log t).
 \]
-For \(n=L\),
-\[
-t^{-L}\EE[X^L\mathbf1_{\{|X|\le t\}}]
-=2c\,t^{-L}\log t+O(t^{-L}).
-\]
-The Taylor remainder over \(\mathrm e\le |X|\le t\) is
-\[
-O\!\left(t^{-(L+1)}\int_{\mathrm e}^{t}x^{L+1}x^{-L-1}\dd x\right)
-=O(t^{-L}),
-\]
-and the bounded core contributes only \(O(t^{-L})\) at the \(L\)th mode.
-Finally, on \(|X|>t\), we do not subtract an \(L\)th Taylor monomial.
-Instead the quotient itself is estimated by the large-\(\varepsilon\) bound
-used in Lemma~\ref{lem:exact-moment-density-truncation}:
-\[
-|R_{X/t}(y)-1|\le C(1+|X/t|^2).
-\]
-Because \(L\ge4\),
-\[
-\EE\mathbf1_{\{|X|>t\}}
-+t^{-2}\EE[X^2\mathbf1_{\{|X|>t\}}]
-=O(t^{-L}),
-\]
-so the whole large-tail contribution is \(O(t^{-L})\).  The identical
-pointwise majorants give both the \(L^\infty\) and \(L^1(\omega)\) parts of
-\eqref{eq:log-tail-density-expansion}.
 
 Since \(\mu_2<\infty\), Lemma~\ref{lem:exact-moment-density-truncation} with
-\(L=2\) gives \(\|\delta_t\|_\infty=O(t^{-2})\).  Therefore
+\(L=2\) gives \(\|\Delta_t\|_\infty=O(t^{-2})\).  Therefore
 \[
-\Phi(\delta_t)
-=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\delta_t^r+O(t^{-2N-2})
+\Phi(\Delta_t)
+=\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\Delta_t^r+O(t^{-2N-2})
 \]
-in \(L^1(\omega)\).  The contribution obtained by replacing
-\(\delta_t\) with \(A_t\) is exactly the universal coefficient expansion
-through order \(2N-2\), namely \(S_{N-1}(t)\), plus an \(O(t^{-2N})\)
-remainder coming from finite products of total degree \(2N\) that do not use
-the missing \(L\)th moment.
+in \(L^1(\omega)\).  This is the Taylor-remainder error; after integration it
+is \(O(t^{-2N-2})\).
 
-It remains to identify the logarithmic term.  In the entropy Taylor
-polynomial, the component
+We now separate the polynomial, logarithmic, and nonlinear entropy errors in
+the Taylor polynomial.  First, the pure \(A_t\) contribution is
 \[
-B_t(y):=2c\,u_L(y)t^{-L}\log t
+\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}
+\int_{\RR}A_t(y)^r\,\omega(\dd y)
+=S_{N-1}(t)+O(t^{-2N}).
 \]
-from \eqref{eq:log-tail-density-expansion} can contribute at order
-\(t^{-2N}\log t=t^{-(L+2)}\log t\) only through the quadratic term and only
-against the leading density mode \(\mu_2u_2t^{-2}\).  All other products
-containing \(B_t\) have total density degree at least \(L+3\), or contain
-\(\varepsilon_t\) and are \(O(t^{-2N})\).  Since the quadratic Taylor
-coefficient is \(1/2\), the two cross terms combine to
+Indeed the law is symmetric, so \(A_t\) contains only even mode degrees below
+\(L\); the retained pure products of total degree at most \(L=2N-2\) are
+exactly the universal coefficients in \(S_{N-1}\), and every remaining pure
+\(A_t\) product has total degree at least \(L+2=2N\).
+
+Next consider all terms containing the density error \(\varepsilon_t\).  For
+the quadratic part,
+\[
+\|A_t\varepsilon_t\|_{L^1(\omega)}
+=O(t^{-2})O(t^{-L})=O(t^{-(L+2)}),
+\]
+\[
+\|B_t\varepsilon_t\|_{L^1(\omega)}
+\le \|B_t\|_\infty\|\varepsilon_t\|_{L^1(\omega)}
+=O(t^{-2L}\log t)=O(t^{-(L+2)}),
+\]
+and
+\[
+\|\varepsilon_t^2\|_{L^1(\omega)}
+\le \|\varepsilon_t\|_\infty\|\varepsilon_t\|_{L^1(\omega)}
+=O(t^{-2L})=O(t^{-(L+2)}).
+\]
+For every Taylor degree \(r\ge3\), the part of
+\(\Delta_t^r-(A_t+B_t)^r\) containing \(\varepsilon_t\) is bounded by
+\[
+C_r\|\Delta_t\|_\infty^{r-1}\|\varepsilon_t\|_{L^1(\omega)}
+=O(t^{-2(r-1)}t^{-L})
+=O(t^{-(L+4)})
+=O(t^{-(L+2)}).
+\]
+
+Now consider terms containing \(B_t\) but no \(\varepsilon_t\).  In the
+quadratic part,
+\[
+\frac12\int_{\RR}\{(A_t+B_t)^2-A_t^2\}\,\omega(\dd y)
+=\int_{\RR}A_tB_t\,\dd\omega+\frac12\int_{\RR}B_t^2\,\dd\omega .
+\]
+The component of \(A_tB_t\) coming from \(A_t-\mu_2u_2t^{-2}\) is
+\[
+O(t^{-4})\,O(t^{-L}\log t)=O(t^{-(L+4)}\log t)=O(t^{-(L+2)}),
+\]
+and
+\[
+\int_{\RR}B_t^2\,\dd\omega=O(t^{-2L}(\log t)^2)=O(t^{-(L+2)}).
+\]
+Thus the only logarithmic term at order \(t^{-(L+2)}\log t\) is
 \[
 \int_{\RR}\mu_2u_2(y)t^{-2}\,B_t(y)\,\omega(\dd y)
 =2c\,\mu_2\,I(2,L)t^{-2N}\log t .
+\]
+Finally, for \(r\ge3\), every term of \((A_t+B_t)^r-A_t^r\) has at least one
+\(B_t\) factor and at least two further density factors.  Since
+\(\|A_t+B_t\|_\infty=O(t^{-2})\),
+\[
+C_r\|A_t+B_t\|_\infty^{r-1}\|B_t\|_{L^1(\omega)}
+=O(t^{-2(r-1)}t^{-L}\log t)
+=O(t^{-(L+4)}\log t)
+=O(t^{-(L+2)}).
+\]
+
+Equivalently, with \(A_2(y):=\mu_2u_2(y)t^{-2}\), the preceding estimates are
+the \(L^1(\omega)\) expansion
+\begin{equation}\label{eq:phi-borderline-log-linearization}
+\Phi(A_t+B_t+\varepsilon_t)
+=\Phi(A_t)+A_2B_t+O(t^{-2N}).
+\end{equation}
+All terms in the \(O(t^{-2N})\) remainder are uniform after integration; the
+only term carrying \(t^{-2N}\log t\) is \(A_2B_t\).
+
+Combining the Taylor remainder, the pure-polynomial remainder, the
+\(\varepsilon_t\)-terms, the nonlinear \(B_t\)-terms, and the quadratic
+logarithmic cross term gives
+\[
+H(t)=S_{N-1}(t)+2c\,\mu_2 I(2,L)t^{-2N}\log t+O(t^{-2N}).
 \]
 The value \(I(2,L)=\kappa_N\) was computed in
 \eqref{eq:top-moment-coefficient-sharpness}.  This proves
@@ -2035,10 +2175,50 @@ the left side is
 \frac1\pi\int_{\RR}
 \frac{3y^2-1}{(1+y^2)^2(1+(y-\varepsilon)^2)}\,\dd y .
 \]
-For \(\varepsilon=0\) the value is \(0\) by the Fourier representation of
-\(u_2\).  For arbitrary \(\varepsilon\), the same rational integral is
-evaluated by residues at \(y=\ii\) and \(y=\varepsilon+\ii\), or
-equivalently by partial fractions; the result is exactly
+For \(\varepsilon=0\) the integrand is
+\((3y^2-1)/(1+y^2)^3\), whose integral is zero, for instance by the
+substitution \(y=\tan\theta\).  Assume next that \(\varepsilon\ne0\), and set
+\[
+F_\varepsilon(z):=
+\frac{3z^2-1}
+{(z-\ii)^2(z+\ii)^2(z-\varepsilon-\ii)(z-\varepsilon+\ii)} .
+\]
+This rational function is \(O(|z|^{-4})\), so closing the contour in the
+upper half-plane gives
+\[
+\frac1\pi\int_{\RR}
+\frac{3y^2-1}{(1+y^2)^2(1+(y-\varepsilon)^2)}\,\dd y
+=
+2\ii\left\{
+\operatorname{Res}_{z=\ii}F_\varepsilon
++\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+\right\}.
+\]
+The simple pole at \(z=\varepsilon+\ii\) gives
+\[
+\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+=-\frac{\ii(3\varepsilon^2+6\ii\varepsilon-4)}
+{2\varepsilon^2(\varepsilon+2\ii)^2}.
+\]
+At the double pole \(z=\ii\),
+\[
+\operatorname{Res}_{z=\ii}F_\varepsilon
+=
+\left.
+\frac{\dd}{\dd z}
+\frac{3z^2-1}
+{(z+\ii)^2(z-\varepsilon-\ii)(z-\varepsilon+\ii)}
+\right|_{z=\ii}
+=-\frac{\ii(\varepsilon^2+2\ii\varepsilon+4)}
+{2\varepsilon^2(\varepsilon-2\ii)^2}.
+\]
+Adding the two displayed residues yields the cancellation
+\[
+\operatorname{Res}_{z=\ii}F_\varepsilon
++\operatorname{Res}_{z=\varepsilon+\ii}F_\varepsilon
+=-\frac{2\ii\varepsilon^2}{(4+\varepsilon^2)^2}.
+\]
+Therefore
 \[
 \frac1\pi\int_{\RR}
 \frac{3y^2-1}{(1+y^2)^2(1+(y-\varepsilon)^2)}\,\dd y
@@ -2085,7 +2265,8 @@ Assume now that \(\EE X_c^2=\infty\).  Write \(x=\bar\gamma+ty\) and
 \[
 \delta_t(\bar\gamma+ty)=h_t(\bar\gamma+ty)/g_t(\bar\gamma+ty)-1 .
 \]
-The Csiszar--Pinsker inequality in the form
+The Csisz{\'a}r--Pinsker inequality
+\cite{Pinsker1964,Csiszar1967,BolleyVillani2005} in the form
 \[
 2H(t)\ge \left(\int_{\RR}|h_t-g_t|\,\dd x\right)^2
 \]

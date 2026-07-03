@@ -13,9 +13,9 @@ The Cauchy generator is normalized by
 (Lf)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,
 \]
-so that \(\partial_tP_t=LP_t\).  This section records the KL-specialized
-application of the Hardy--Stein/Bregman dissipation identity to the moving
-Poisson quotient \(u_t=h_t/g_t\), and then records the coefficient consequence.
+so that \(\partial_tP_t=LP_t\).  This section proves the KL-specialized
+two-point Bregman dissipation identity for the moving Poisson quotient
+\(u_t=h_t/g_t\), and then records the coefficient consequence.
 The Bregman identity itself belongs to the Hardy--Stein/Bregman chain.  The
 classical local identity is the chain-rule/Green-formula Hardy--Stein identity
 for the Laplacian
@@ -45,9 +45,9 @@ verification is that the nonstationary Cauchy pair
 needed to apply the polarized identity: Lemma~\ref{thm:kl-domain-verification}
 proves the quotient bounds, cutoff Cauchy Green formula, and Bregman
 dominator for this moving profile.  Proposition~
-\ref{prop:self-contained-cauchy-kl-hardystein} then spells out the resulting
-KL/Cauchy specialization from these domain inputs and the standard two-point
-Bregman algebra.
+\ref{prop:self-contained-cauchy-kl-hardystein} then derives the KL/Cauchy
+specialization directly from these domain inputs by the two-pair Green
+calculation and the pointwise logarithmic Bregman identity.
 The coefficient expansion itself is proved in
 Theorem~\ref{thm:poisson-kl-even-orders} by the Cayley quotient-mode Taylor
 calculus; the Doob identity below supplies an equivalent dissipation-tail
@@ -611,15 +611,18 @@ differentiating these mass identities gives
 into the previous display yields \eqref{eq:poisson-kl-l1-chain-rule}.
 \end{proof}
 
-\begin{theorem}[External Cauchy/KL Hardy--Stein input]%
+\begin{theorem}[Cauchy/KL logarithmic Bregman quotient calculation]%
 \label{thm:external-cauchy-kl-hardystein-input}
-The following is the one-dimensional Cauchy, logarithmic-Bregman
-specialization of the polarized Hardy--Stein differential formula of
+The following is the one-dimensional Cauchy, logarithmic-Bregman specialization
+of the polarized Hardy--Stein/Sobolev--Bregman framework.  The abstract
+versions are due to
 Bogdan--Gutowski--Pietruska-Pa{\l}uba
 \cite[Theorem~4.1 and formula~(D.3)]{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein},
 with the jump-form normalization supplied by the Sobolev--Bregman
 Beurling--Deny formula
-\cite[Theorem~1.1]{GutowskiKwasnicki2025BeurlingDenySobolevBregman}.
+\cite[Theorem~1.1]{GutowskiKwasnicki2025BeurlingDenySobolevBregman}; the
+statement below records the exact hypotheses and the elementary algebra used
+in the present Poisson quotient.
 Let \(0<a<b<\infty\).  Let \(p_t\) and \(r_t\) be positive probability
 densities on \(\RR\).  Put \(v_t=p_t/r_t\) and suppose that the following
 five hypotheses hold on \([a,b]\).
@@ -697,29 +700,65 @@ K'(t)=-I(t)\qquad\text{for a.e. }t\in[a,b].
 \end{theorem}
 
 \begin{proof}
-The cited polarized Hardy--Stein formula gives the differential
-disintegration once the generator-domain, quotient, cutoff, and integrability
-hypotheses above are available.  The Cauchy kernel in
-\eqref{eq:external-cauchy-generator-normalization} is the symmetric jump
-kernel \(J(x,y)=\pi^{-1}|x-y|^{-2}\) in the Beurling--Deny
-Sobolev--Bregman formula; the factor \(1/2\) in the symmetric jump form is
-cancelled after the two polarized orientations are added.  Substituting the
-convex logarithmic Bregman function \(\Lambda\) in the scalar pair
-\((p_t,r_t)\), and then using \eqref{eq:external-kl-chain-rule} and
-\eqref{eq:external-cutoff-pairing}, gives
+Fix a time for which the chain rule and the two cutoff pairings hold, write
+\[
+a=v_t(x),\qquad b=v_t(y),\qquad \rho_x=r_t(x),\qquad \rho_y=r_t(y),
+\]
+and put \(p_t=r_tv_t\).  By \eqref{eq:external-kl-chain-rule} and the mass
+identity for \(r_t\),
+\[
+K'(t)=\int_{\RR}\log v_t\,\partial_tp_t
+      -\int_{\RR}v_t\,\partial_tr_t .
+\]
+Applying \eqref{eq:external-cutoff-pairing} first to
+\((s_t,q_t)=(p_t,\log v_t)\) and then to
+\((s_t,q_t)=(r_t,v_t)\) gives
+\[
+\begin{aligned}
+K'(t)
+&=-\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{(p_t(x)-p_t(y))(\log v_t(x)-\log v_t(y))}
+{(x-y)^2}\dd x\dd y\\
+&\quad+\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{(r_t(x)-r_t(y))(v_t(x)-v_t(y))}
+{(x-y)^2}\dd x\dd y .
+\end{aligned}
+\]
+The numerator in the difference of the two Green forms is
+\[
+\begin{aligned}
+&(\rho_xa-\rho_yb)(\log a-\log b)-(\rho_x-\rho_y)(a-b)\\
+&\qquad
+=\rho_x\left(a\log\frac ab-a+b\right)
+ +\rho_y\left(b\log\frac ba-b+a\right)\\
+&\qquad
+=r_t(x)\Lambda(v_t(x),v_t(y))
+ +r_t(y)\Lambda(v_t(y),v_t(x)).
+\end{aligned}
+\]
+Thus
 \[
 -K'(t)=\frac{1}{2\pi}\iint_{\RR^2}
 \frac{r_t(x)\Lambda(v_t(x),v_t(y))
 +r_t(y)\Lambda(v_t(y),v_t(x))}
 {(x-y)^2}\dd x\dd y .
 \]
-The \(L^1\) majorant in \textup{(HS5)} justifies the passage from annular
-cutoffs to the full-space integral.  Exchanging \(x\) and \(y\) in the second
-term turns the symmetrized factor \(1/(2\pi)\) into the displayed one-sided
-factor \(1/\pi\), proving \eqref{eq:external-cauchy-kl-hardystein-input}.
+Here \textup{(HS5)} justifies combining the two annular limits and then
+removing the cutoffs by dominated convergence.  Finally,
+\[
+\iint_{\RR^2}
+\frac{r_t(y)\Lambda(v_t(y),v_t(x))}{(x-y)^2}\dd x\dd y
+=
+\iint_{\RR^2}
+\frac{r_t(x)\Lambda(v_t(x),v_t(y))}{(x-y)^2}\dd x\dd y
+\]
+after exchanging \(x\) and \(y\).  Therefore the symmetric coefficient
+\(1/(2\pi)\) becomes the one-sided coefficient \(1/\pi\), proving
+\eqref{eq:external-cauchy-kl-hardystein-input}.  The same majorant gives
+\(I\in L^1([a,b])\).
 \end{proof}
 
-\begin{proposition}[Poisson quotient application of the external theorem]%
+\begin{proposition}[Poisson quotient logarithmic Bregman calculation]%
 \label{prop:self-contained-cauchy-kl-hardystein}
 Let \(0<a<b<\infty\).  Let
 \[
@@ -739,10 +778,8 @@ and
 I_\nu(t):=\frac{1}{\pi}\iint_{\RR^2}
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
 \]
-Then the external Cauchy/KL Hardy--Stein theorem,
-Theorem~\ref{thm:external-cauchy-kl-hardystein-input}, applies to this
-moving Poisson quotient.  Hence \(H\in AC([a,b])\),
-\(I_\nu\in L^1([a,b])\), and, for a.e. \(t\in[a,b]\),
+Then \(H\in AC([a,b])\), \(I_\nu\in L^1([a,b])\), and, for a.e.
+\(t\in[a,b]\),
 \begin{equation}\label{eq:kl-tail-input-unlocalized}
 H'(t)=-I_\nu(t).
 \end{equation}
@@ -757,54 +794,111 @@ for a.e. \(t\in[a,b]\).
 \end{proposition}
 
 \begin{proof}
-We verify, in the notation of
-Theorem~\ref{thm:external-cauchy-kl-hardystein-input}, each hypothesis needed
-to use the external Hardy--Stein input with
+Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule} gives \(H\in AC([a,b])\) and the
+one-variable quotient chain rule \eqref{eq:kl-chain-rule-before-pairing}.
+The hypotheses of the quoted Cauchy/KL Bregman theorem
+\ref{thm:external-cauchy-kl-hardystein-input} are verified as follows.
+Lemma~\ref{thm:kl-domain-verification}\textup{(i)} gives the generator
+normalization and the \(L^1\)-trajectory identities
+\(\partial_th_t=Lh_t\), \(\partial_tg_t=Lg_t\), which is \textup{(HS1)}.
+Lemma~\ref{thm:kl-domain-verification}\textup{(iii)} gives the compact
+positive quotient range and the uniform Lipschitz bound for \(u_t\); since
+\(\log\) is smooth on that compact range, both \(u_t\) and \(\log u_t\) are
+bounded Lipschitz tests, giving \textup{(HS2)}.  The chain rule just cited is
+\textup{(HS3)}.  Lemma~\ref{thm:kl-domain-verification}\textup{(ii)} gives
+the two cutoff generator pairings required in \textup{(HS4)}, applied to
+\((s_t,q_t)=(h_t,\log u_t)=(g_tu_t,\log u_t)\) and
+\((s_t,q_t)=(g_t,u_t)\).  Finally,
+Lemma~\ref{thm:kl-domain-verification}\textup{(iv)}--\textup{(v)} gives the
+integrable logarithmic-Bregman dominator and the cutoff removal in
+\textup{(HS5)}.
+
+Fix a time \(t\) outside the null set where the chain rule or cutoff pairings
+may fail, and set
 \[
-(p_t,r_t,v_t,K)=(h_t,g_t,u_t,H).
+h:=h_t=g_tu_t,\qquad g:=g_t,\qquad u:=u_t .
 \]
-Hypothesis \textup{(HS1)} is exactly Lemma~\ref{thm:kl-domain-verification}
-\textup{(i)}: it fixes the generator normalization
-\(\widehat L(\xi)=-|\xi|\), proves the \(L^1\) generator convergence
-\eqref{eq:kl-consolidated-generator-l1}, and hence gives
-\(\partial_th_t=Lh_t\), \(\partial_tg_t=Lg_t\) in the \(L^1\)-trajectory
-sense.  The \(L^1\)-absolute continuity of the two trajectories is recorded
-in Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}.
-
-Hypothesis \textup{(HS2)} is Lemma~\ref{thm:kl-domain-verification}
-\textup{(iii)}: the moving quotient \(u_t=h_t/g_t\) stays in a compact
-subinterval of \((0,\infty)\) and has a uniform Lipschitz constant on
-\([a,b]\).  Hence \(u_t\) and \(\log u_t\) are legitimate bounded-Lipschitz
-tests for the cutoff pairing.  Hypothesis \textup{(HS3)} is precisely the
-\(L^1\)-chain rule of Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}, which gives
-\(H\in AC([a,b])\) and
-\eqref{eq:kl-chain-rule-before-pairing}.
-
-Hypothesis \textup{(HS4)} is Lemma~\ref{thm:kl-domain-verification}
-\textup{(ii)}, applied to the two bounded-Lipschitz tests
-\((h_t,\log u_t)\) and \((g_t,u_t)\).  Hypothesis \textup{(HS5)} is
-Lemma~\ref{thm:kl-domain-verification} \textup{(iv)}--\textup{(v)}, which
-gives the full \(L^1([a,b]\times\RR^2)\) Bregman majorant and therefore the
-cutoff removal by dominated convergence.
-
-All assumptions of Theorem~\ref{thm:external-cauchy-kl-hardystein-input} are
-therefore verified.  Its conclusion gives \(I_\nu\in L^1([a,b])\) and
-\eqref{eq:kl-tail-input-unlocalized}.  The displayed chain rule
-\eqref{eq:kl-chain-rule-before-pairing} is the \textup{(HS3)} identity from
-Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}.
+The chain rule \eqref{eq:kl-chain-rule-before-pairing}, together with
+\(\partial_th=Lh\), \(\partial_tg=Lg\), and \(\int Lg=0\), gives
+\[
+H'(t)=\int_{\RR}\log u(x)\,Lh(x)\dd x
+      -\int_{\RR}(u(x)-1)Lg(x)\dd x .
+\]
+Apply the cutoff Green formula \eqref{eq:kl-consolidated-pv-pairing} to the
+two pairs
+\[
+(s,q)=(h,\log u)=(gu,\log u),
+\qquad
+(s,q)=(g,u).
+\]
+For the symmetric annulus \(\Omega_R=\{R^{-1}<|x-y|<R\}\), this gives
+\[
+\begin{aligned}
+H'(t)
+&=-\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{(g(x)u(x)-g(y)u(y))
+      (\log u(x)-\log u(y))}
+{(x-y)^2}\dd x\dd y\\
+&\quad+\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{(g(x)-g(y))(u(x)-u(y))}
+{(x-y)^2}\dd x\dd y .
+\end{aligned}
+\]
+Writing
+\[
+a=u(x),\qquad b=u(y),\qquad G_x=g(x),\qquad G_y=g(y),
+\]
+the numerator in the difference of the two Green forms is
+\[
+\begin{aligned}
+&(G_xa-G_yb)(\log a-\log b)-(G_x-G_y)(a-b)\\
+&\qquad
+=G_x\left(a\log\frac ab-a+b\right)
+ +G_y\left(b\log\frac ba-b+a\right)\\
+&\qquad
+=g(x)\Lambda(u(x),u(y))
+ +g(y)\Lambda(u(y),u(x)).
+\end{aligned}
+\]
+Hence the preceding two-pair identity becomes
+\[
+-H'(t)=\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
+\frac{
+g(x)\Lambda(u(x),u(y))
++g(y)\Lambda(u(y),u(x))}
+{(x-y)^2}\dd x\dd y .
+\]
+The Bregman majorant from Lemma~\ref{thm:kl-domain-verification}
+\textup{(iv)}--\textup{(v)} removes the cutoff and shows that the resulting
+double integral is in \(L^1([a,b])\).  Finally, exchanging \(x\) and \(y\) in
+the second Bregman orientation gives
+\[
+\iint_{\RR^2}
+\frac{g(y)\Lambda(u(y),u(x))}{(x-y)^2}\dd x\dd y
+=
+\iint_{\RR^2}
+\frac{g(x)\Lambda(u(x),u(y))}{(x-y)^2}\dd x\dd y .
+\]
+Thus the symmetric coefficient \(1/(2\pi)\) converts to the one-sided
+coefficient \(1/\pi\), namely
+\[
+-H'(t)=\frac1\pi\iint_{\RR^2}
+\frac{g(x)\Lambda(u(x),u(y))}{(x-y)^2}\dd x\dd y
+=I_\nu(t).
+\]
+This proves \eqref{eq:kl-tail-input-unlocalized}, and the displayed chain
+rule was already obtained from Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule}.
 \end{proof}
 
 \noindent
-The KL tail identity is therefore a corollary of the polarized
-Hardy--Stein/Sobolev--Bregman identity after the quotient-domain verification
-above.  The standard Bregman identity supplies the differential equality
-\(H'(t)=-I_\nu(t)\); Lemma~\ref{thm:kl-domain-verification} is the paper's
-new input, because it verifies the moving Poisson quotient, the cutoff Cauchy
-pairing, and the \(L^1\) Bregman dominator required for this particular
-profile.  Lemma~\ref{lem:poisson-second-moment-kl-decay} then converts the
-differential identity into a tail formula.
+The KL tail identity is therefore proved from the quotient-domain
+verification above and the explicit moving-profile calculation: the two Green
+pairings are \((g_tu_t,\log u_t)\) and \((g_t,u_t)\), the pointwise identity
+turns their difference into the logarithmic Bregman kernel, and the majorant
+removes the cutoff.  Lemma~\ref{lem:poisson-second-moment-kl-decay} then
+converts the differential identity into a tail formula.
 
-\begin{theorem}[Poisson quotient tail corollary of Hardy--Stein]%
+\begin{theorem}[Poisson quotient KL tail identity]%
 \label{thm:poisson-kl-doob-tail}
 \label{cor:poisson-kl-doob-bregman-tail}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
@@ -828,8 +922,7 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty I_\nu(s)\dd s.
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  On every compact interval
 \([a,b]\subset(0,\infty)\),
 Lemma~\ref{thm:kl-domain-verification} verifies the quotient bounds, the
-cutoff generator pairing, and the \(L^1\) Bregman dominator required by
-the KL/Cauchy application of the polarized Hardy--Stein identity in
+cutoff generator pairing, and the \(L^1\) Bregman dominator used in
 Proposition~\ref{prop:self-contained-cauchy-kl-hardystein}.  That proposition
 therefore gives \(H\in AC([a,b])\),
 \(I_\nu\in L^1([a,b])\), and \(H'(s)=-I_\nu(s)\) for a.e.

@@ -1,0 +1,181 @@
+% sec_entropy_n4_defect.tex -- explicit N=4 constants and coefficient defect
+\subsection{Explicit sixth/eighth layer and defect consequence}
+
+\begin{lemma}[Normalized Laurent representatives through order six]%
+\label{lem:n4-normalized-laurent-representatives}
+For \(2\le n\le6\), write \(Q_n(z)=\sum q_{n,k}z^k\).  Then \(q_{n,0}=0\)
+and, for \(0<|k|\le n\),
+\[
+q_{n,k}=
+\lambda_n\operatorname{sgn}(k)^{\,n\bmod2}
+\binom{n-1}{|k|-1},
+\]
+where
+\[
+\lambda_2=-\frac14,\quad
+\lambda_3=\frac{\ii}{8},\quad
+\lambda_4=\frac1{16},\quad
+\lambda_5=-\frac{\ii}{32},\quad
+\lambda_6=-\frac1{64}.
+\]
+\end{lemma}
+
+\begin{proof}
+This is Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} written out
+for \(n=2,\ldots,6\), including the Laurent factors \(1/2\) and \(1/(2\ii)\).
+\end{proof}
+
+\begin{lemma}[Laurent constant-term certificate through order eight]%
+\label{lem:eighth-order-coefficient-arithmetic}
+\label{eq:eighth-order-constant-term-recurrence}
+For the mode products entering \(A_4,A_6,A_8\), the required integrals are
+\[
+\begin{array}{c|c}
+\mathbf n&I(\mathbf n)\\
+\hline
+(2,2)&1/4\\
+(2,4)&-1/8\\
+(3,3)&3/16\\
+(2,2,2)&-3/32\\
+(2,6)&3/64\\
+(3,5)&-15/128\\
+(4,4)&5/32\\
+(2,2,4)&3/32\\
+(2,3,3)&-9/128\\
+(2,2,2,2)&9/64 .
+\end{array}
+\]
+Odd total-order entries through order eight vanish.
+\end{lemma}
+
+\begin{proof}
+Apply the constant-term rule
+\eqref{eq:mode-integral-constant-term} to the Laurent representatives in
+Lemma~\ref{lem:n4-normalized-laurent-representatives}.  The displayed table
+is the finite zero-sum convolution of the listed coefficient vectors.
+\end{proof}
+
+\begin{lemma}[Substitution into \(A_4,A_6,A_8\)]%
+\label{lem:n4-entropy-coefficient-substitution}
+For \(\mu_2=\sigma^2\),
+\[
+A_4=\frac{\sigma^4}{8},
+\qquad
+A_6=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
+\]
+and
+\[
+A_8=
+\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
++12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put \(d_t=t^{-2}a_2+\cdots+t^{-6}a_6\), \(a_j=\mu_ju_j\), and use
+\[
+\Phi(s)=\frac12s^2-\frac16s^3+\frac1{12}s^4+O(s^5).
+\]
+The \(t^{-4},t^{-6},t^{-8}\) polynomial layers are
+\[
+\frac12a_2^2,\qquad
+a_2a_4+\frac12a_3^2-\frac16a_2^3,
+\]
+and
+\[
+a_2a_6+a_3a_5+\frac12a_4^2
+-\frac12a_2^2a_4-\frac12a_2a_3^2+\frac1{12}a_2^4.
+\]
+Substitute the constant terms from
+Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
+\end{proof}
+
+\begin{theorem}[Self-contained sixth/eighth coefficient identification]%
+\label{thm:poisson-kl-eighth}
+Let \(\nu\) have mean \(\bar\gamma\) and finite variance
+\(\sigma^2\ge0\).
+If \(\nu\) has finite centred fourth absolute moment, then
+\[
+D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\frac{\sigma^4}{8t^4}
++\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64t^6}
++o(t^{-6}).
+\]
+If \(\nu\) has finite centred sixth absolute moment, then
+\begin{equation}\label{eq:poisson-kl-eighth}
+D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\frac{\sigma^4}{8t^4}+\frac{A_6(\nu)}{t^6}
++\frac{A_8(\nu)}{t^8}+o(t^{-8}),
+\end{equation}
+where \(A_6,A_8\) are the polynomials in
+Lemma~\ref{lem:n4-entropy-coefficient-substitution}.
+When \(\sigma^2=0\), these are the trivial exact identities for the point
+mass \(\delta_{\bar\gamma}\).  Positive variance is not a hypothesis for raw
+coefficient identification; it is imposed only in normalized defect
+statements, such as Corollary~\ref{cor:coefficient-defect-coupling}, where
+\(\rho_\sigma\) and powers of \(\sigma^{-1}\) are used.
+\end{theorem}
+
+\begin{proof}
+If \(\sigma^2=0\), then \(\nu=\delta_{\bar\gamma}\),
+\(P_t*\nu=P_t(\cdot-\bar\gamma)\), and every centred moment in the displayed
+polynomials is zero, so both formulas are exact.  Assume now
+\(\sigma^2>0\).
+Use Theorem~\ref{thm:poisson-kl-even-orders} with \(N=3\) for the sixth
+coefficient and \(N=4\) for the eighth coefficient.  The finite Laurent
+substitution is Lemma~\ref{lem:n4-entropy-coefficient-substitution}.
+\end{proof}
+
+\begin{theorem}[Quantitative \(N=4\) remainder under the seventh moment]%
+\label{thm:poisson-kl-eighth-seventh-remainder}
+If, in addition, the centred seventh absolute moment is finite, then
+\[
+D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))
+=\frac{\sigma^4}{8t^4}+\frac{A_6(\nu)}{t^6}
++\frac{A_8(\nu)}{t^8}+O_\nu(t^{-9}).
+\]
+\end{theorem}
+
+\begin{proof}
+The positive one-moment margin gives the retained density remainder
+\(O_\nu(t^{-7})\) at density order \(L=6\).  The same product estimate used
+in Theorem~\ref{thm:poisson-kl-even-orders} then gives an entropy remainder
+of order \(O_\nu(t^{-9})\).
+\end{proof}
+
+\begin{corollary}[Coefficient-defect coupling corollary]%
+\label{cor:coefficient-defect-coupling}
+Let \(\nu\) have mean \(\bar\gamma\), variance \(\sigma^2>0\), and finite
+centred fourth absolute moment.  Define
+\[
+\Delta_6(\nu)=
+-\frac{7}{64}\sigma^6
+-\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
+\]
+For the centred law \(\nu_c\) and
+\(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\),
+\[
+W_2(\nu_c,\rho_\sigma)
+\le
+4\,\sigma^{-1/2}\Delta_6(\nu)^{1/4}
++8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
+\]
+Moreover \(\Delta_6(\nu)\ge0\), and equality holds if and only if
+\(\nu_c=\rho_\sigma\).  No sixth moment, eighth-order coefficient,
+finite-time KL value, or post-processing constant is used in this corollary.
+\end{corollary}
+
+\begin{proof}
+With \(X=(\gamma-\bar\gamma)/\sigma\), \(\beta_3=\EE X^3\), and
+\(Q_2=X^2-1-\beta_3X\),
+\[
+\Delta_6(\nu)=\frac{\sigma^6}{32}\beta_3^2
++\frac{\sigma^6}{8}\|Q_2\|_2^2.
+\]
+Thus \(\Delta_6\ge0\), and \(\Delta_6=0\) forces \(X^2=1\) a.s. and
+\(\EE X=0\), hence the symmetric two-point law.  The displayed \(W_2\) bound
+is the elementary sign coupling
+\(|x-\operatorname{sgn}x|\le |x^2-1|\), followed by coupling a biased
+Rademacher law to the symmetric one.
+\end{proof}
+
