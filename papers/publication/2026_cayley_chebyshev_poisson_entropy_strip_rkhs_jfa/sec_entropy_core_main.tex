@@ -2,14 +2,14 @@
 \section{Poisson Smoothing and Entropy Asymptotics}%
 \label{sec:entropy-asymptotics}
 
-This section contains only the entropy coefficient mechanism, the
-multidimensional covariance calculation, the leading one-dimensional threshold,
-and the coefficient-defect consequence.  Quantitative constant envelopes,
-finite-grid substitutions, moment-shell dictionaries, and conditional
-finite-time post-processing are not used in the proofs below.  The only
-post-processing retained in the article is the conditional appendix statement,
-which assumes its numerical and remainder inputs explicitly and is not needed
-for the theorem hierarchy in this section.
+This section contains the entropy coefficient mechanism, the multidimensional
+covariance calculation, the leading one-dimensional threshold, and the
+coefficient-defect consequence.  The proofs below are internal to the stated
+lemmas and theorems; they do not require auxiliary finite-grid data or
+external certificate files.  The only finite-time post-processing retained in
+the article is the conditional appendix statement, which assumes its numerical
+and remainder inputs explicitly and is not needed for the theorem hierarchy in
+this section.
 
 \subsection{Cayley modes and coefficient algebra}
 
@@ -203,7 +203,6 @@ integral to Haar integration on \(\TT\), hence to constant-term extraction.
 
 \begin{lemma}[Exact-moment density truncation]%
 \label{lem:exact-moment-density-truncation}
-\label{thm:finite-moment-density-remainder}
 Let \(L\ge2\), and let \(\nu\) have mean \(\bar\gamma\) and finite centred
 \(L\)th absolute moment.  For
 \[
@@ -240,8 +239,12 @@ On \(|X_c|>t\), the large-translation part gives
 and hence \(C_Lt^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]=o(t^{-L})\).  The same
 uniform estimates prove both the \(L^\infty\) and \(L^1(\omega)\) bounds.  The
 \(n=0\) term is removed by subtracting \(1\), and the \(n=1\) term vanishes
-because \(\EE X_c=0\).  The \(O(t^{-2})\) bound follows from the same split
-with \(L=2\).
+because \(\EE X_c=0\).  The \(O(t^{-2})\) bound follows by applying the two
+displayed estimates with \(L=2\): the small-translation part is bounded by
+\(Ct^{-2}\EE[|X_c|^2\mathbf1_{\{|X_c|\le t\}}]\), and the
+large-translation part by
+\(Ct^{-2}\EE[|X_c|^2\mathbf1_{\{|X_c|>t\}}]\).  These two bounds are
+uniform in \(y\) and hence also hold in \(L^1(\omega)\).
 \end{proof}
 
 \begin{theorem}[Finite-moment Poisson entropy transfer and coefficient formula]%
@@ -326,6 +329,9 @@ there is a remainder \(\rho_{L,t}^{(\eta)}\) such that
 =O_\nu(t^{-(L+\eta)}).
 \end{equation}
 Moreover \(\|\delta_t\|_\infty=O_\nu(t^{-2})\).
+The constant in the first estimate depends only on \(L,\eta\), the fixed
+Cayley-mode envelopes, and \(\EE|X_c|^{L+\eta}\); in particular, no
+\((L+1)\)st moment is used.
 
 Consequently, if \(N\ge2\), \(L=2N-2\), and
 \(\EE|X_c|^{2N-2+\eta}<\infty\), then
@@ -344,7 +350,8 @@ The quotient identity is
 \]
 Subtract the Taylor polynomial
 \(\sum_{n=0}^{L}u_n(y)(X_c/t)^n\) and split the expectation into
-\(|X_c|\le t\) and \(|X_c|>t\).
+\(|X_c|\le t\) and \(|X_c|>t\).  Both sides of the split are estimated by the
+same \(L+\eta\) moment.
 
 On \(|X_c|\le t\), the first line of
 \eqref{eq:one-dimensional-two-region-taylor-remainder} gives, uniformly in
@@ -359,7 +366,7 @@ On \(|X_c|\le t\), the first line of
 C_Lt^{-(L+1)}
 \EE\!\left[|X_c|^{L+1}\mathbf1_{\{|X_c|\le t\}}\right].
 \]
-Because \(0<\eta\le1\), the last term is bounded by
+Because \(0<\eta\le1\) and \(|X_c|\le t\), the last term is bounded by
 \[
 C_Lt^{-(L+\eta)}
 \EE\!\left[
@@ -450,6 +457,57 @@ threshold, Theorem~\ref{thm:sharp-leading-kl-variance-threshold}.
 \end{minipage}}
 \medskip
 
+\begin{lemma}[Lower moments do not identify the next even moment]%
+\label{lem:lower-moment-realizability-obstruction}
+Let \(L\ge4\) be even.  There exist two centred symmetric compactly
+supported probability laws \(\nu_+\) and \(\nu_-\) on \(\RR\) such that
+\[
+  \int x^j\,\nu_+(\dd x)=\int x^j\,\nu_-(\dd x)
+  \qquad(0\le j\le L-1),
+\]
+but
+\[
+  \int x^L\,\nu_+(\dd x)\ne \int x^L\,\nu_-(\dd x).
+\]
+In particular, even within compactly supported centred symmetric laws, the
+moment vector through order \(L-1\) does not determine the \(L\)th centred
+moment.
+\end{lemma}
+
+\begin{proof}
+Set \(x_i=i-L/2\), \(0\le i\le L\), and define the signed measure
+\[
+  \sigma=\sum_{i=0}^{L}(-1)^{L-i}\binom{L}{i}\delta_{x_i}.
+\]
+This is the \(L\)th finite-difference functional translated by \(L/2\).
+Hence, for every polynomial \(p\) of degree \(<L\),
+\[
+  \int p(x)\,\sigma(\dd x)
+  =\sum_{i=0}^{L}(-1)^{L-i}\binom{L}{i}p(i-L/2)=0,
+\]
+whereas
+\[
+  \int x^L\,\sigma(\dd x)=L!\ne0 .
+\]
+Because \(L\) is even, the coefficient at \(x_i\) equals the coefficient at
+\(-x_i=x_{L-i}\); thus \(\sigma\) is symmetric and has total mass zero.
+
+Let
+\[
+  \lambda=\frac1{L+1}\sum_{i=0}^{L}\delta_{x_i}.
+\]
+Choose \(\varepsilon>0\) so small that all weights of
+\(\lambda\pm\varepsilon\sigma\) are nonnegative, and put
+\(\nu_\pm=\lambda\pm\varepsilon\sigma\).  Since \(\sigma(\RR)=0\), these are
+probability laws.  They are symmetric, hence centred.  The moment identities
+up to order \(L-1\) follow from the annihilation of lower-degree
+polynomials by \(\sigma\), while their \(L\)th moments differ by
+\[
+  \int x^L\,\nu_+(\dd x)-\int x^L\,\nu_-(\dd x)
+  =2\varepsilon L!\ne0 .
+\]
+\end{proof}
+
 \begin{proposition}[First evaluability level for the top coefficient]%
 \label{prop:poisson-kl-moment-threshold-sharpness}
 \label{prop:analytic-first-evaluability-obstruction}
@@ -460,19 +518,66 @@ the nonzero monomial
 \qquad
 \kappa_N=(-1)^N(N-1)2^{-2N+2}\ne0 .
 \]
-Consequently the displayed universal polynomial \(A_{2N}\) cannot be
-evaluated from centred moments of order at most \(2N-3\) on the full class of
-laws.
+More precisely, with \(L=2N-2\),
+\[
+  A_{2N}^{\rm form}
+  =\kappa_N\,\mathfrak m_2\mathfrak m_L
+  +P_N(\mathfrak m_2,\ldots,\mathfrak m_{L-1}),
+\]
+where \(P_N\) involves no \(\mathfrak m_L\).  Consequently the displayed
+universal polynomial \(A_{2N}\) cannot be evaluated from centred moments of
+order at most \(2N-3\) on the full class of laws; two compactly supported
+centred symmetric laws can have the same such lower moments but different
+values of \(A_{2N}\).
 \end{proposition}
 
 \begin{proof}
-The monomial comes from the quadratic term
-\(\frac12\int d_t^2\,\dd\omega\), using one \(u_2\) factor and one
-\(u_{2N-2}\) factor.  Constant-term extraction from
-Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} gives the displayed
-nonzero coefficient.  Symmetric atomic laws with finite moments below
-\(2N-2\) and infinite \((2N-2)\)nd moment show that no lower-moment polynomial
-can define the same universal coefficient on the full class.
+Put \(L=2N-2\).  In the formal coefficient
+\eqref{eq:universal-entropy-coefficient}, a term involving
+\(\mathfrak m_L\) and contributing to total order \(2N=L+2\) must come from
+the quadratic part of
+\((1+s)\log(1+s)-s\), with the ordered index pairs \((2,L)\) and \((L,2)\).
+All terms with three or more factors have total index at least \(2+2+2\) and,
+if one factor is \(L\), total index at least \(L+4> L+2\).  Therefore
+\[
+  A_{2N}^{\rm form}
+  =I(2,L)\,\mathfrak m_2\mathfrak m_L
+  +P_N(\mathfrak m_2,\ldots,\mathfrak m_{L-1}).
+\]
+Writing \(L=2m\), the constant-term formula
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} gives
+\[
+Q_{2m}(z)=(-1)^m2^{-2m}
+\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+\]
+and \(Q_2(z)=-(z+z^{-1}+z^2+z^{-2})/4\).  Hence only the exponents
+\(\pm1\) and \(\pm2\) of \(Q_{2m}\) contribute to \(I(2,2m)\), and
+\[
+\begin{aligned}
+I(2,2m)
+&=[z^0]Q_2Q_{2m}  \\
+&=-\frac12\,(-1)^m2^{-2m}
+\left\{\binom{2m-1}{0}+\binom{2m-1}{1}\right\}  \\
+&=(-1)^{m+1}m\,2^{-2m}
+=(-1)^N(N-1)2^{-2N+2}.
+\end{aligned}
+\]
+This proves the displayed top-moment coefficient.
+
+It remains to justify the stated lower-moment non-identifiability.  Apply
+Lemma~\ref{lem:lower-moment-realizability-obstruction} with this
+\(L=2N-2\).  The resulting compactly supported symmetric laws \(\nu_+\) and
+\(\nu_-\) have the same centred moments through order \(L-1\), in particular
+the same positive second moment, but they have different \(L\)th centred
+moments.  Since
+\[
+  A_{2N}(\nu_+)-A_{2N}(\nu_-)
+  =\kappa_N\,\mu_2\{\mu_L(\nu_+)-\mu_L(\nu_-)\}
+  \ne0,
+\]
+no rule depending only on centred moments of orders at most \(L-1=2N-3\)
+can evaluate \(A_{2N}\) on the full class of laws.
 \end{proof}
 
 The logarithmic replacement layers below are the fixed-law Cauchy-smoothing
@@ -616,7 +721,7 @@ It remains only to identify the coefficient.  Writing \(p=2m\),
 \[
 I(2,2m)=[z^0]Q_2Q_{2m}
 =-\frac12(-1)^m2^{-2m}\!\left\{\binom{2m-1}{0}
-  \binom{2m-1}{1}\right\}
+  +\binom{2m-1}{1}\right\}
 =(-1)^N(N-1)2^{-2N+2}.
 \]
 Substitution proves \eqref{eq:core-log-tail-counterexample-asymptotic}.
@@ -654,6 +759,138 @@ probability density, the lower absolute moments define the coefficients
 quotient bound used for \(|x|>t\).
 \end{proof}
 
+\begin{lemma}[Symmetric \(p=2\) quotient tail split]
+\label{lem:symmetric-p2-far-tail-quotient}
+Let
+\[
+  S_a(y):=R_a(y)+R_{-a}(y)-2 .
+\]
+There is a universal constant \(C<\infty\) such that, for all \(t\ge \mathrm e\),
+\begin{equation}\label{eq:symmetric-p2-far-tail-quotient}
+  \left\|
+  \int_t^\infty S_{x/t}(y)\,x^{-3}\,\dd x
+  \right\|_{L^\infty(\RR)}
+  +
+  \left\|
+  \int_t^\infty S_{x/t}(y)\,x^{-3}\,\dd x
+  \right\|_{L^1(\omega)}
+  \le Ct^{-2}.
+\end{equation}
+Equivalently, for each fixed \(c_0\),
+\[
+\sup_y\left|
+c_0t^{-2}\int_1^\infty
+\{R_\varepsilon(y)+R_{-\varepsilon}(y)-2\}\varepsilon^{-3}\,\dd\varepsilon
+\right|
++\int_{\RR}\left|
+c_0t^{-2}\int_1^\infty
+\{R_\varepsilon(y)+R_{-\varepsilon}(y)-2\}\varepsilon^{-3}\,\dd\varepsilon
+\right|\omega(\dd y)
+\le C(c_0)t^{-2}.
+\]
+Moreover, if \(R\ge1\), then as \(t\to\infty\)
+\begin{equation}\label{eq:symmetric-p2-full-tail-split}
+\int_R^\infty S_{x/t}(y)x^{-3}\,\dd x
+=2u_2(y)t^{-2}\log t+O(t^{-2})
+\end{equation}
+in \(L^\infty(\RR)\cap L^1(\omega)\), with the constant depending on \(R\)
+but not on \(y\) or \(t\).
+\end{lemma}
+
+\begin{proof}
+First prove the far-tail estimate.  After the change of variables \(a=x/t\),
+the integral over \(x>t\) is
+\[
+  t^{-2}\int_1^\infty S_a(y)a^{-3}\,\dd a .
+\]
+It is therefore enough to prove a uniform bound in \(y\) for the last
+integral.  Pairing the two translates before estimating is essential: the
+unpaired estimate with \((1+x^2/t^2)x^{-3}\) would produce the divergent
+\(\int_t^\infty x^{-1}\dd x\).  With
+\(A=1+y^2+a^2\),
+\[
+\begin{aligned}
+R_a(y)+R_{-a}(y)-2
+&=(1+y^2)\left(\frac1{A-2ay}+\frac1{A+2ay}\right)-2  \\
+&=
+\frac{2a^2(3y^2-1-a^2)}
+     {\{1+(y-a)^2\}\{1+(y+a)^2\}} .
+\end{aligned}
+\]
+Thus, writing \(Y=|y|\),
+\[
+ |S_a(y)|a^{-3}
+ \le
+ \frac{2(a^2+3Y^2+1)}
+      {a\{1+(a-Y)^2\}\{1+(a+Y)^2\}}
+ \le
+ \frac{C}{a\{1+(a-Y)^2\}},
+\]
+because \(a^2+3Y^2+1\le C\{1+(a+Y)^2\}\).
+If \(Y\le2\), then
+\[
+  \int_1^\infty \frac{\dd a}{a\{1+(a-Y)^2\}}
+  \le
+  \int_1^\infty \frac{\dd a}{1+(a-2)^2}<\infty .
+\]
+If \(Y>2\), split the integral over
+\[
+[1,Y/2],\qquad
+[Y/2,2Y]\cap\{|a-Y|>1\},\qquad
+\{|a-Y|\le1\},\qquad
+[2Y,\infty).
+\]
+On the first interval \(|a-Y|\ge Y/2\), so the contribution is
+\[
+  O\!\left(Y^{-2}\int_1^{Y/2}a^{-1}\dd a\right)
+  =O(Y^{-2}\log Y).
+\]
+On the middle interval \(a\asymp Y\) and \(|a-Y|>1\), whence
+\[
+  \int_{[Y/2,2Y]\cap\{|a-Y|>1\}}
+  \frac{\dd a}{a\{1+(a-Y)^2\}}
+  \le \frac{C}{Y}\int_{|u|>1}\frac{\dd u}{1+u^2}
+  =O(Y^{-1}).
+\]
+On the local interval \(|a-Y|\le1\),
+\[
+  \int_{|a-Y|\le1}
+  \frac{\dd a}{a\{1+(a-Y)^2\}}
+  \le \frac{C}{Y}\int_{-1}^{1}\frac{\dd u}{1+u^2}
+  =O(Y^{-1}).
+\]
+This local \(O(Y^{-1})\) term is also \(L^1(\omega)\), since
+\(\omega(\dd y)\asymp Y^{-2}\dd Y\) for \(Y>2\).  Finally, on
+\([2Y,\infty)\), \(|a-Y|\ge a/2\), so the contribution is
+\[
+  O\!\left(\int_{2Y}^{\infty}a^{-3}\dd a\right)=O(Y^{-2}).
+\]
+These four bounds are uniform in \(Y\).  Hence
+\[
+  \sup_{y\in\RR}\int_1^\infty |S_a(y)|a^{-3}\,\dd a<\infty .
+\]
+This gives the \(L^\infty\) estimate in
+\eqref{eq:symmetric-p2-far-tail-quotient}; the \(L^1(\omega)\) estimate
+follows because \(\omega\) is a probability measure.
+
+It remains to record the logarithmic near-tail part.  For \(R\le x\le t\),
+Taylor expansion through order \(3\), paired at \(x\) and \(-x\), cancels the
+odd modes and yields
+\[
+S_{x/t}(y)=2u_2(y)(x/t)^2+O((x/t)^4)
+\qquad(0\le x/t\le1),
+\]
+uniformly in \(y\).  Therefore
+\[
+\int_R^t S_{x/t}(y)x^{-3}\,\dd x
+=2u_2(y)t^{-2}\int_R^t x^{-1}\,\dd x
++O\!\left(t^{-4}\int_R^t x\,\dd x\right)
+=2u_2(y)t^{-2}\log t+O(t^{-2}).
+\]
+Adding \eqref{eq:symmetric-p2-far-tail-quotient} gives
+\eqref{eq:symmetric-p2-full-tail-split}.
+\end{proof}
+
 \begin{proposition}[The \(N=2\) borderline infinite-variance layer]
 Let \(c>0\) satisfy \(c\mathrm e^{-2}<1\), and let \(\nu\) be the symmetric
 probability law with density
@@ -676,17 +913,64 @@ threshold theorem below.
 \end{proposition}
 
 \begin{proof}
-The same truncation computation with \(L=2\) gives
+The law is symmetric.  Its absolute first moment is finite, while its second
+moment is infinite, since
 \[
-\Delta_t(y)=2c\,u_2(y)t^{-2}\log t+O(t^{-2})
+  2c\int_{\mathrm e}^{\infty}x^{-2}\,\dd x<\infty,
+  \qquad
+  2c\int_{\mathrm e}^{\infty}x^{-1}\,\dd x=\infty .
 \]
-in \(L^\infty\cap L^1(\omega)\).  Since
+The truncated second moment is
+\[
+  \EE[X^2\mathbf1_{\{|X|\le t\}}]
+  =O(1)+2c\int_{\mathrm e}^{t}x^{-1}\,\dd x
+  \sim 2c\log t .
+\]
+
+For \(t\ge \mathrm e\), put
+\[
+  \Delta_t(y)=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1 .
+\]
+We prove the quotient expansion
+\begin{equation}\label{eq:n2-borderline-quotient-expansion}
+\Delta_t(y)=2c\,u_2(y)t^{-2}\log t+E_t(y),
+\qquad
+\|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-2})
+\end{equation}
+in \(L^\infty\cap L^1(\omega)\).
+
+The compact core \(|x|\le1\) has bounded support and is symmetric.  Expanding
+the paired expression \(R_{x/t}(y)+R_{-x/t}(y)-2\) through order \(3\) gives a
+contribution
+\[
+  t^{-2}u_2(y)
+  \int_{|x|\le1}x^2\,\frac{1-c\mathrm e^{-2}}{2}\,\dd x
+  +O(t^{-4}),
+\]
+uniformly in \(y\), which is part of \(E_t\).  For the tail, symmetry gives
+\[
+  c\int_{\mathrm e}^{\infty}
+  \{R_{x/t}(y)+R_{-x/t}(y)-2\}x^{-3}\,\dd x .
+\]
+Lemma~\ref{lem:symmetric-p2-far-tail-quotient}, with \(R=\mathrm e\), gives
+the full tail contribution
+\[
+  2c\,u_2(y)t^{-2}\log t+O(t^{-2})
+\]
+in both \(L^\infty\) and \(L^1(\omega)\).  The pairing in that lemma is the
+separate \(p=2\) tail argument: the unpaired far-tail quotient bound would be
+too crude for the infinite-variance layer.
+This proves \eqref{eq:n2-borderline-quotient-expansion}.
+
+Since
 \(\|\Delta_t\|_\infty=O(t^{-2}\log t)\),
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t)
 =\frac12\int_{\RR}\Delta_t(y)^2\,\omega(\dd y)+O(t^{-6}(\log t)^3).
 \]
-Using \(I(2,2)=\int u_2^2\,\dd\omega=1/4\), the quadratic term is
+Using \(I(2,2)=\int u_2^2\,\dd\omega=1/4\), and using
+\(\|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-2})\) for the cross and error
+terms, the quadratic term is
 \[
 \frac12(2c)^2I(2,2)t^{-4}(\log t)^2+O(t^{-4}\log t)
 =\frac{c^2}{2}t^{-4}(\log t)^2+O(t^{-4}\log t).
@@ -835,8 +1119,7 @@ F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
 \]
 Let \(U_\alpha^{(d)}\) be the Taylor coefficients of \(F_y(z)\) at \(z=0\).
 
-\begin{lemma}[Local multidimensional quotient--Taylor remainder]%
-\label{lem:local-multidim-quotient-taylor-remainder}
+\begin{unnumberedlemma}[Local multidimensional quotient--Taylor remainder]
 Let \(d\ge1\), and let
 \[
 F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
@@ -858,7 +1141,7 @@ F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
 \le C_{d,L}|z|^{L+1}
 \qquad (|z|\le1).
 \end{equation}
-\end{lemma}
+\end{unnumberedlemma}
 
 \begin{proof}
 Put \(a=(d+1)/2\).  For each multiindex \(\beta\), repeated
@@ -928,11 +1211,11 @@ where
 {P_t^{(d)}(ty)}-1 .
 \]
 This displayed quotient expansion is the hypothesis used by the entropy
-transfer below.  Lemma~\ref{lem:multidim-quotient-remainder} is proved first;
+transfer below.  The global quotient-remainder estimate is proved first;
 then Theorem~\ref{thm:multidimensional-density-quotient} proves that finite
 centred \(L\)th absolute moment implies \((\mathrm{MPJ}_{d,L})\).
 
-\begin{lemma}[Global multidimensional quotient remainder]\label{lem:multidim-quotient-remainder}
+\begin{unnumberedlemma}[Global multidimensional quotient remainder]
 Let \(d\ge1\), \(a=(d+1)/2\), and
 \[
 F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
@@ -989,13 +1272,13 @@ then
 +{}|X|^L{\bf1}_{\{|X|>t\}}
 \right]=o(t^{-L}).
 \end{equation}
-\end{lemma}
+\end{unnumberedlemma}
 
 \begin{proof}
 The coefficient bound \eqref{eq:multidim-coefficient-bound} and the
 small-translation remainder
-\eqref{eq:multidim-small-translation-remainder} are exactly
-Lemma~\ref{lem:local-multidim-quotient-taylor-remainder}.
+\eqref{eq:multidim-small-translation-remainder} are exactly the local
+multidimensional quotient--Taylor estimate above.
 
 It remains to handle large translations.  Fix \(|z|>1\).  First suppose
 \(|y-z|\le |z|/2\).  Then \(|y|\le3|z|/2\), and hence
@@ -1076,7 +1359,7 @@ The \(L^1(\Omega_d)\) part follows from the same uniform bound because
 \(\Omega_d\) is a probability measure.
 \end{proof}
 
-\begin{theorem}[Finite-\(L\) multidimensional density quotient expansion]%
+\begin{theorem}[Finite centred \(L\)-absolute moment implies \((\mathrm{MPJ}_{d,L})\)]%
 \label{thm:multidimensional-density-quotient}
 Let \(L\ge\max\{2,d+1\}\), and let \(\nu\) be a probability measure on
 \(\RR^d\) with mean \(\bar\gamma\) and finite centred \(L\)th absolute
@@ -1115,8 +1398,8 @@ Thus
 \[
 \delta_t^{(d)}(y)=\int_{\RR^d}\{F_y(X_c/t)-1\}\,\dd\nu(\gamma).
 \]
-Subtract the Taylor polynomial through order \(L\).  By
-Lemma~\ref{lem:multidim-quotient-remainder}, the remainder
+Subtract the Taylor polynomial through order \(L\).  By the global
+multidimensional quotient-remainder estimate above, the remainder
 \[
 \rho_{L,t}^{(d)}(y):=
 \int_{\RR^d}\left\{
@@ -1150,7 +1433,7 @@ because \(\nu\) is centred.  The remaining Taylor terms give
 \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})+o(t^{-L})=O(t^{-2})\).
 \end{proof}
 
-\begin{theorem}[Finite-\(L\) multidimensional entropy jet]%
+\begin{theorem}[\((\mathrm{MPJ}_{d,L})\) entropy transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Assume that \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).  Then
 \[
@@ -1231,6 +1514,40 @@ coefficient of \(t^{-m}\) in
 \]
 gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
 all omitted layers are \(o(t^{-(L+2)})\).
+\end{proof}
+
+\begin{corollary}[Finite-moment multidimensional entropy jet]\label{cor:multidim-finite-moment-entropy-jet}
+Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\), and let \(\nu\) be a probability
+measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred \(L\)th
+absolute moment.  Then
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where
+\[
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{|\alpha_1|+\cdots+|\alpha_r|=m\\
+2\le|\alpha_j|\le L}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\]
+Equivalently, the finite-moment entropy statement is the composition of
+the finite-moment quotient expansion
+Theorem~\ref{thm:multidimensional-density-quotient}, which gives
+\((\mathrm{MPJ}_{d,L})\), and the entropy-transfer theorem
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets}.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
+centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\).
+Applying Theorem~\ref{thm:multidimensional-poisson-entropy-jets} gives the
+displayed entropy expansion and coefficient formula.
 \end{proof}
 
 \begin{proposition}[Formal covariance layer under finite covariance]%
