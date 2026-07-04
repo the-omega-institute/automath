@@ -757,21 +757,92 @@ Lemma~\ref{lem:poisson-second-moment-kl-decay}.  The passage to
 \([t,\infty)\) below uses only these two facts and monotone convergence; it
 does not use any additional cancellation in the singular double integral.
 
+\begin{unnumberedlemma}[Annular construction of the Bregman dissipation]
+Let \(\nu\) be a probability measure on~\(\RR\) with mean \(\bar\gamma\)
+and finite centred second moment, and keep
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t .
+\]
+For \(t>0\) and \(R>1\), set
+\[
+\mathcal I_{\nu,R}(t):=
+\frac1\pi\iint_{\{R^{-1}<|x-y|<R\}}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
+\qquad
+\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta .
+\]
+Then the limit
+\[
+\mathcal I_\nu(t):=\lim_{R\to\infty}\mathcal I_{\nu,R}(t)
+\]
+exists in \([0,\infty)\), is independent of the annular exhaustion, and is a
+measurable locally integrable function on \((0,\infty)\).  Equivalently,
+\[
+\mathcal I_\nu(t)=\frac1\pi\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+\]
+as a Lebesgue integral of the nonnegative kernel, with the diagonal value
+ignored.
+\end{unnumberedlemma}
+
+\begin{proof}
+Put
+\[
+\Phi(t,x,y):=
+\begin{cases}
+\displaystyle
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2},&x\ne y,\\[1.2ex]
+0,&x=y .
+\end{cases}
+\]
+The Poisson kernels are continuous and strictly positive, hence
+\((t,x,y)\mapsto\Phi(t,x,y)\) is Borel measurable and nonnegative.  For fixed
+\(t\), the annuli
+\(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\) increase to
+\(\RR^2\setminus\{x=y\}\).  Therefore
+\(\mathcal I_{\nu,R}(t)\) is increasing in \(R\), and monotone convergence
+gives
+\[
+\lim_{R\to\infty}\mathcal I_{\nu,R}(t)
+=\frac1\pi\iint_{\RR^2}\Phi(t,x,y)\dd x\dd y .
+\]
+The same argument shows that every cofinal annular exhaustion gives this
+same value.  More generally, if \(0\le\chi_n\le1\) are measurable cutoffs
+which vanish near the diagonal and at spatial infinity and satisfy
+\(\chi_n(x,y)\to1\) for \(x\ne y\), then
+\(\iint \chi_n\Phi(t,\cdot,\cdot)\to\iint\Phi(t,\cdot,\cdot)\) by dominated
+convergence on each compact time window, using the majorant below.  Thus the
+definition is cutoff-independent.
+
+Measurability follows from the representation
+\[
+\mathcal I_\nu(t)=\sup_{n\ge2}\frac1\pi\iint_{\Omega_n}\Phi(t,x,y)\dd x\dd y,
+\]
+because each finite-annulus integral is measurable by Tonelli.  Finally fix
+\(0<a<b<\infty\).  The one-sided estimate
+\eqref{eq:domain-theorem-one-sided-bregman-majorant} from the compact-window
+domain theorem gives, for \(t\in[a,b]\),
+\[
+0\le \Phi(t,x,y)\le
+C_{a,b,\nu}g_t(x)
+\bigl(\mathbf1_{\{|x-y|<1\}}+|x-y|^{-2}\mathbf1_{\{|x-y|\ge1\}}\bigr).
+\]
+The right-hand side has integral \(4C_{a,b,\nu}\) over \(\RR^2\), uniformly
+in \(t\in[a,b]\).  Hence
+\[
+\int_a^b\mathcal I_\nu(t)\dd t
+\le \frac{4C_{a,b,\nu}}{\pi}(b-a)<\infty,
+\]
+which proves local integrability and, in particular, finiteness for every
+\(t\in[a,b]\).
+\end{proof}
+
 \begin{theorem}[Poisson quotient KL tail identity]%
 \label{thm:poisson-kl-doob-tail}
 \label{cor:poisson-kl-doob-bregman-tail}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$ and finite
-centred second moment.  Define
-\[
-\mathcal I_\nu(s):=
-\frac{1}{\pi}\iint_{\RR^2}
-\frac{
-g_s(x)\left(
-u_s(x)\log\!\bigl(u_s(x)/u_s(y)\bigr)-u_s(x)+u_s(y)
-\right)}
-{(x-y)^2}\dd x\dd y .
-\]
-Then \(\mathcal I_\nu\in L^1_{\mathrm{loc}}(0,\infty)\), and for every \(t>0\),
+centred second moment, and let \(\mathcal I_\nu\) be the locally integrable
+Bregman dissipation constructed above.  Then, for every \(t>0\),
 \begin{equation}\label{eq:relative-entropy-integrated-dissipation}
 D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\dd s.
 \end{equation}
