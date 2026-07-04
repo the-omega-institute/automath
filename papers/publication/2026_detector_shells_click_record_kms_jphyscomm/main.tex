@@ -50,7 +50,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{algorithmiclemma}{Algorithmic Lemma}[section]
+\newtheorem{algorithmiclemma}[theorem]{Algorithmic Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -106,10 +106,11 @@ For finite records, a single complete-cycle protocol fixes the batch length,
 thresholds, covariance estimator, projection rule, and chart-retention rule
 before proving the inclusion-coordinate CLT, the quotient-inverse delta method,
 and the projected Gaussian limit on the exchange diagonal.  The diagonal
-confidence construction is pointwise in the true common survival factor \(z\),
-conditional on the retained covariance rank and its zero-quantile exceptions;
-it is not a uniform-in-\(z\) diagonal band and is not a standard
-chi-square/Wald set.  Under the finite-record inference scope fixed in the
+confidence construction is pointwise in the true common survival factor \(z\):
+the main theorem gives a conservative buffered lower-coverage statement, while
+exact \(1-\alpha\) coverage is only the separate retained-rank,
+nonzero-quantile corollary.  It is not a uniform-in-\(z\) diagonal band and is
+not a standard chi-square/Wald set.  Under the finite-record inference scope fixed in the
 introduction, the only fully studentized scalar confidence interval proved here is for
 \(\gamma_2=\operatorname{Cov}(A_0,A_2)\); hazard, spectrum, and Fano formulas
 are population identities, and no generic scalar studentization is proved.
@@ -329,7 +330,7 @@ tool used later is separately numbered as
 \Cref{thm:finite-record-inference-audit-main,thm:finite-record-covariance-main,thm:toeplitz_image_inverse_duality,cor:finite_inverse_delta_boundary_main,prop:finite-record-threshold-projection-rule-main}. \\
 \addlinespace
 \Cref{thm:finite-record-exchange-diagonal-main} &
-\Cref{thm:finite-record-inference-audit-main,thm:finite-record-covariance-main,lem:local-projection-exchange-diagonal-main,lem:exchange-diagonal-projection-main,lem:conditional-monte-carlo-quantile-main,cor:exchange-diagonal-projected-gaussian-confidence-main,cor:exchange-diagonal-common-rate-confidence-main}. \\
+\Cref{thm:finite-record-inference-audit-main,thm:finite-record-covariance-main,lem:dmap-diagonal-covariance-alternatives-main,lem:exchange-diagonal-local-reach-before-main,lem:local-projection-exchange-diagonal-main,lem:exchange-diagonal-projection-main,lem:conditional-monte-carlo-quantile-main,cor:exchange-diagonal-projected-gaussian-confidence-main,cor:exchange-diagonal-common-rate-confidence-main}. \\
 \addlinespace
 \Cref{cor:finite-record-lag-two-studentized-main} &
 \Cref{thm:finite-lag-renewal-reward-main,thm:finite-lag-separated-batch-main,lem:lag-two-reward-main,lem:row-column-coboundary-criterion-main,lem:lag-two-variance-nondegenerate-main,lem:trimmed-shifted-click-centering-main,lem:fixed-low-cycle-event-main}. \\
@@ -337,16 +338,26 @@ tool used later is separately numbered as
 \end{tabular}
 \end{table}
 
-\begin{table}[H]
-\centering
+\begingroup
 \small
 \setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth}}
 \caption{Three main theorems and supporting result groups.}
-\label{tab:four-main-blocks}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth}}
+\label{tab:four-main-blocks}\\
 \toprule
 Group & Result & Role \\
 \midrule
+\endfirsthead
+\caption[]{Three main theorems and supporting result groups (continued).}\\
+\toprule
+Group & Result & Role \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\emph{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
 Main Theorem 1: record law &
 \Cref{thm:main-record-wrapper} &
 States the constrained D-MAP record theorem: the labelled kernels
@@ -400,16 +411,18 @@ survival-factor pair and unordered numerical rate set.  Ordered labelled-rate
 Wald reporting is a separate side-data corollary, not a visible-record
 estimand. \\
 \addlinespace
-Main Theorem 3C: exchange-diagonal projected Gaussian limit &
+Main Theorem 3C: exchange-diagonal projected Gaussian conservative limit &
 \Cref{thm:finite-record-exchange-diagonal-main} &
-Gives only the exchange-diagonal projected-Gaussian limit and the common-rate
-push-forward \(z\mapsto-\log z/\Delta\tau\), with the pointwise retained-rank
-and zero-quantile qualifications stated in the theorem.  The fully studentized
+Uses the preceding local-reach lemma
+\Cref{lem:exchange-diagonal-local-reach-before-main}; gives only the
+exchange-diagonal projected-Gaussian limit and the common-rate push-forward
+\(z\mapsto-\log z/\Delta\tau\), with conservative buffered coverage as the
+theorem-level report.  Exact \(1-\alpha\) coverage is the separate conditional
+corollary under the retained-rank, nonzero-quantile alternatives.  The fully studentized
 lag-two covariance interval is \(\Cref{cor:finite-record-lag-two-studentized-main}\),
 not a generic scalar-Wald claim. \\
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}
+\endgroup
 
 \Cref{tab:classical-baselines-comparison,tab:recent-venue-comparison} give,
 respectively, the classical baseline comparison and the strict
@@ -495,7 +508,7 @@ is the exact \(1\)-dependence threshold where the hidden eigenmode vanishes.
 \toprule
 Regime & Output law & Distinguished threshold & Finite-record signature \\
 \midrule
-Ideal blanking law & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
+Ideal blanking law & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
 Constrained D-MAP of \Cref{ass:constrained-dmap-record-main} & Renewal process with infinite symbolic memory; zero-run law supported on all \(k\ge0\), hence every finite binary word is allowed; renewal inclusion products determine marked-set and word probabilities & Quotient threshold \(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) modulo \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\); labelled only under \hyperref[par:inference-scope-main]{the inference-scope paragraph} & Exact finite-window count variance at the \(1\)-dependence threshold; higher count laws from the finite-window generating polynomial; covariance, hazard, and Fano formulas for this D-MAP record law, with finite-record reporting governed by \hyperref[par:inference-scope-main]{the inference-scope paragraph} \\
 \bottomrule
 \end{tabular}
@@ -689,23 +702,66 @@ record, coarse-graining, and memory-inference papers.
 
 \section{Theorem-by-Theorem Comparison}\label{sec:theorem-led-comparison}
 
-The comparison is split deliberately into three categories:
-\[
-\begin{array}{l}
-\text{Strict 2021-07-04 to 2026-07-04 comparators},\\
-\text{Older mathematical baselines},\\
-\text{Near-miss recent probability comparators}.
-\end{array}
-\]
-The strict recent category answers the venue-facing last-five-years question in
-\Cref{tab:recent-venue-comparison}.  The older-baseline category records the
-mathematical ancestry in \Cref{tab:classical-baselines-comparison}: functions
-of finite Markov chains, lumpability, MAP/phase-type representation theory,
-renewal limit theory, and standardized-time-series covariance estimation.  The
-near-miss category is kept in prose, because its closest item falls just outside
-the strict submission-date window.  To keep the comparison readable under a
-numeric bibliography style, each table row names one closest comparator only;
-the surrounding prose lists secondary comparators.
+The comparison separates three different baselines that should not be merged:
+exact binary-renewal laws, visible-transition/partial-observation physics, and
+asymptotic inference machinery.  \Cref{tab:baseline-class-separation} gives the
+classification used by the detailed theorem-indexed tables.  The strict
+2021-07-04--2026-07-04 venue comparison appears in
+\Cref{tab:recent-venue-comparison}; the older mathematical ancestry appears in
+\Cref{tab:classical-baselines-comparison}; the near-miss probability comparator
+is kept in prose because it falls just outside the strict submission-date
+window.  To keep the comparison readable under a numeric bibliography style,
+each detailed table row names one closest comparator only; the surrounding
+prose lists secondary comparators.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.14}
+\caption{Baseline classes kept separate throughout the comparison.  The
+submitted results use all three classes, but no single class is treated as a
+substitute for the others.}
+\label{tab:baseline-class-separation}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.23\textwidth}
+>{\raggedright\arraybackslash}p{0.27\textwidth}
+>{\raggedright\arraybackslash}p{0.39\textwidth}}
+\toprule
+Baseline class & Main references & Role in the comparison \\
+\midrule
+Exact binary renewal laws &
+Zamparo 2022 \cite{Zamparo2022RenewalBinary}. &
+This is the closest baseline for stationary binary sequences generated from a
+renewal set and for autocorrelation/inverse-autocorrelation questions.  The
+present paper does not claim binary-renewal theory in general; it derives the
+specific killed-leakage D-MAP gap law, hidden-mode tail, and quotient inverse. \\
+\addlinespace
+Visible-transition and partial-observation physics &
+Harunari--Dutta--Polettini--Rold\'an 2022,
+van der Meer--Ertel--Seifert 2022, and
+Maier--Seifert--van der Meer 2025
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+VanDerMeerErtelSeifert2022TransitionWTD,
+MaierSeifertVanderMeer2025HiddenPaths}. &
+These are the closest physics-facing comparators for inference from visible
+transitions, transition-based waiting times, and hidden paths under partial
+observation.  They motivate the observed-record setting, but they do not prove
+the exact binary renewal law or the three-inclusion quotient inverse for this
+two-state constrained D-MAP. \\
+\addlinespace
+Asymptotic inference machinery &
+Janson 2024, Flegal--Jones 2010, Glynn--Whitt 1991, and
+Glynn--Iglehart 1990
+\cite{Janson2024RenewalCLT,FlegalJones2010BatchMeansSpectral,
+GlynnWhitt1991BatchMeans,GlynnIglehart1990STS}. &
+These papers supply renewal-CLT and simulation-output covariance-estimation
+baselines.  The present finite-record theorem verifies the concrete
+complete-cycle reward array, separated all-complete-cycle batching, plug-in
+centering perturbation, quotient delta method, and diagonal projected-Gaussian
+reporting rule for the constrained D-MAP record. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Binary-renewal baseline.}
 If \(\Xi\) is a stationary delayed renewal set, then
@@ -794,6 +850,7 @@ representation, often up to state permutation and under rank or positivity
 hypotheses, can be identified from blocks or moments of a finite-alphabet
 process
 \cite{BaumPetrie1966,Petrie1969HMM,
+Rabiner1989HMMTutorial,EphraimMerhav2002HiddenMarkovProcesses,
 AllmanMatiasRhodes2009HMMIdentifiability,
 HsuKakadeZhang2012SpectralHMM,AnandkumarHsuKakade2012MomentsHMM}.
 MAP representation theory asks a related arrival-process question and shows
@@ -811,12 +868,36 @@ realization among weakly equivalent representations, and it assigns
 \((\Gamma,\kappa_{\mathrm r})\) labels only after the separate branch convention
 of \Cref{conv:branch-map-labelled-rates-main}.
 
+\paragraph{Visible-transition and coarse-grained thermodynamic inference.}
+For a physics--mathematics reader, the closest recent physics comparators are
+not generic HMM/MAP identifiability theorems alone.  Harunari--Dutta--Polettini--
+Rold\'an infer dynamical and thermodynamic information from statistics of a few
+visible transitions in an underlying Markov process
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions}.  Hartich--Godec
+analyze emergent memory and kinetic hysteresis after coarse observation of
+strongly driven networks \cite{HartichGodec2021EmergentMemory}.  Together with
+transition-based waiting-time and snippet statistics
+\cite{VanDerMeerErtelSeifert2022TransitionWTD,
+VanDerMeerDeguntherSeifert2023Snippets}, these papers are closer in physical
+motivation to the present record-inference problem than broad HMM tutorials:
+they ask what is inferable from observed events, transition records, or
+coarse-grained histories when part of the Markov network is hidden.  The
+difference is the theorem target.  The present paper does not infer entropy
+production, hidden topology, or coarse-grained thermodynamic forces.  It fixes
+one killed-leakage D-MAP family, proves its exact binary renewal law, and
+recovers the exchange quotient of its two survival roots from three visible
+inclusion probabilities.  Thus the physics comparators explain why the visible
+record is the right object, while the older HMM/MAP and renewal references
+explain the mathematical representation and inverse baselines.
+
 For Main Theorem~3A--3C the closest comparator is Glynn--Iglehart's
 standardized-time-series covariance estimator; secondary inference baselines
-are Baum--Petrie, Baum--Petrie--Soules--Weiss, Asmussen--Glynn, Whitt's renewal
-approximation setting, and Janson's renewal CLT
+are Baum--Petrie, Baum--Petrie--Soules--Weiss, the batch-means literature,
+Asmussen--Glynn, Whitt's renewal approximation setting, and Janson's renewal CLT
 \cite{BaumPetrie1966,BaumEtAl1970Maximization,AsmussenGlynn2007,
-Whitt1982RenewalApproximation,Janson2024RenewalCLT}.
+GlynnWhitt1991BatchMeans,AlexopoulosGoldsman2004Batch,
+FlegalJones2010BatchMeansSpectral,Whitt1982RenewalApproximation,
+Janson2024RenewalCLT}.
 
 \begin{table}[H]
 \centering
@@ -860,8 +941,9 @@ visible finite-word law or arrival statistics unless a representation chart or
 quotient is fixed. &
 Two-state MAP nonidentifiability
 \cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability}; generic HMM
-identifiability and spectral/moment baselines include
-\cite{AllmanMatiasRhodes2009HMMIdentifiability,
+identifiability, tutorial, and spectral/moment baselines include
+\cite{Rabiner1989HMMTutorial,EphraimMerhav2002HiddenMarkovProcesses,
+AllmanMatiasRhodes2009HMMIdentifiability,
 HsuKakadeZhang2012SpectralHMM,AnandkumarHsuKakade2012MomentsHMM}. &
 The theorem proves the exact visible-law inverse appropriate to this binary
 record: three inclusion coordinates with \(D=r_1-r_0^2\ne0\) identify only
@@ -870,7 +952,7 @@ record: three inclusion coordinates with \(D=r_1-r_0^2\ne0\) identify only
 labelled-rate convention; at \(p=s\) only the common diagonal rate is valid. \\
 \addlinespace
 Main Theorem 3A: inclusion CLT; Main Theorem 3B: quotient delta method;
-Main Theorem 3C: exchange-diagonal projected Gaussian limit.
+Main Theorem 3C: exchange-diagonal projected Gaussian conservative limit.
 \Cref{thm:finite-record-inference-audit-main,thm:finite-record-quotient-delta-main,thm:finite-record-exchange-diagonal-main}. &
 Inference for probabilistic functions of finite Markov chains, renewal CLTs,
 regenerative simulation analysis, and standardized-time-series covariance
@@ -881,8 +963,10 @@ For complete cycles of the same unlabelled binary renewal record, the split
 theorems verify the exponential-tail regenerative hypotheses, prove the
 inclusion-coordinate CLT, carry the quotient-inverse delta method, fix the
 deterministic retained-rank reporting rule, and give the exchange-diagonal
-projected common-rate set.  The only fully studentized scalar interval is the
-separate lag-two corollary for \(\gamma_2\).  These results do not correct
+projected common-rate set with conservative buffered coverage; exact
+diagonal coverage is only the retained-rank, nonzero-quantile conditional
+corollary.  The only fully studentized scalar interval is the separate
+lag-two corollary for \(\gamma_2\).  These results do not correct
 missed transitions, compensate blackouts, or prove a general semi-Markov
 large-deviation principle. \\
 \bottomrule
@@ -903,16 +987,22 @@ rows, the row says so explicitly and uses the strict-window paper only as the
 closest recent neighbouring problem, not as the mathematical baseline for the
 theorem.
 
-Secondary recent applied comparators are kept in prose rather than in table
-cells.  Projected observation and coarse-graining context includes Markov-state
-holography, constrained HMM reconstruction, blurred-transition inference,
-transition-based waiting-time inference, snippet statistics, imperfect
+The closest strict-window physics comparators are now placed in the table when
+they match the theorem slice.  Harunari--Dutta--Polettini--Rold\'an's visible
+transition statistics and van der Meer--Ertel--Seifert's transition-based
+waiting-time inference are the relevant recent neighbours for observable-event
+and finite-record inference
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+VanDerMeerErtelSeifert2022TransitionWTD}.  Hartich--Godec's 2021 emergent-memory
+work is the relevant coarse-grained-memory neighbour just inside the five-year
+window \cite{HartichGodec2021EmergentMemory}.  Additional projected-observation
+and coarse-graining context includes Markov-state holography, constrained HMM
+reconstruction, blurred-transition inference, snippet statistics, imperfect
 observations, faulty coarse graining, stroboscopic measurements, and blackout
 models
 \cite{ZhaoMakarovGodec2025MarkovStateHolography,
 TancrediEtAl2024ConstrainedHMM,ErtelSeifert2024BlurredTransitions,
-VanDerMeerErtelSeifert2022TransitionWTD,VanDerMeerDeguntherSeifert2023Snippets,
-FritzErtelSeifert2025ImperfectObservations,
+VanDerMeerDeguntherSeifert2023Snippets,FritzErtelSeifert2025ImperfectObservations,
 VanDerMeerSaito2025FaultyCoarseGraining,BauerSeifertVanderMeer2025Stroboscopic,
 MaierHaslerSeifert2026Blackouts}.  Recent memory papers by Vollmar and
 coauthors, Zhao--Hartich--Godec, Loos--Godec, Brandner, Meyer--Brandner, and
@@ -932,11 +1022,15 @@ because it is mathematically closer to the count-record part of
 \Cref{thm:main-record-wrapper}
 than the physics-memory comparators.
 
-\begin{table}[H]
-\centering
+\begingroup
 \scriptsize
 \setlength{\tabcolsep}{1.8pt}
 \renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.13\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}
+>{\raggedright\arraybackslash}p{0.18\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}
+>{\raggedright\arraybackslash}p{0.19\textwidth}}
 \caption{Theorem-indexed recent venue comparison for the strict 2021-07-04
 through 2026-07-04 window.  The rows are one-to-one with the submitted theorem
 statements \Cref{thm:main-record-wrapper},
@@ -945,15 +1039,22 @@ statements \Cref{thm:main-record-wrapper},
 coarse-graining papers are not used as substitutes for theorem-level
 mathematical comparators; older theorem-level baselines are named only in the
 separate baseline column and are not counted as strict-window comparators.}
-\label{tab:recent-venue-comparison}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.13\textwidth}
->{\raggedright\arraybackslash}p{0.20\textwidth}
->{\raggedright\arraybackslash}p{0.18\textwidth}
->{\raggedright\arraybackslash}p{0.20\textwidth}
->{\raggedright\arraybackslash}p{0.19\textwidth}}
+\label{tab:recent-venue-comparison}\\
 \toprule
 Submitted theorem slice & Strict-window comparator status & Outside-window theorem-level baseline & Comparator result & Increment proved here \\
 \midrule
+\endfirsthead
+\caption[]{Theorem-indexed recent venue comparison for the strict 2021-07-04
+through 2026-07-04 window (continued).}\\
+\toprule
+Submitted theorem slice & Strict-window comparator status & Outside-window theorem-level baseline & Comparator result & Increment proved here \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
 Main Theorem 1: record law
 \Cref{thm:main-record-wrapper}. &
 Zamparo 2022 \cite{Zamparo2022RenewalBinary}. &
@@ -971,28 +1072,42 @@ conclusion, and the two-root quotient inverse used in Main Theorem~2. \\
 \addlinespace
 Main Theorem 2: quotient inverse
 \Cref{thm:toeplitz_image_inverse_duality}. &
+Visible-transition and MAP-representation neighbours:
+Harunari--Dutta--Polettini--Rold\'an 2022 and
 Asanjarani--Nazarathy 2022
-\cite{AsanjaraniNazarathy2022MAP}. &
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+AsanjaraniNazarathy2022MAP}; these are not substitutes for the quotient
+inverse. &
 MAP2 nonidentifiability and weak-equivalence baselines
 \cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability,
 RamirezCoboLillo2012WeakEquivalentMAP}; generic HMM identifiability and
 spectral/moment identification baselines
-\cite{AllmanMatiasRhodes2009HMMIdentifiability,
+\cite{Rabiner1989HMMTutorial,EphraimMerhav2002HiddenMarkovProcesses,
+AllmanMatiasRhodes2009HMMIdentifiability,
 HsuKakadeZhang2012SpectralHMM,AnandkumarHsuKakade2012MomentsHMM}. &
-The recent paper surveys stationary MAP representation results and open
-problems, including nonunique hidden representations; the HMM papers identify
-hidden representations under their own genericity, rank, or moment hypotheses,
-not this D-MAP quotient. &
+Harunari--Dutta--Polettini--Rold\'an use visible transition statistics to infer
+dynamical, thermodynamic, and network information under partial observation.
+Asanjarani--Nazarathy survey stationary MAP representation results and open
+problems, including nonunique hidden representations.  The HMM papers identify
+hidden representations under their own tutorial, genericity, rank, or moment
+hypotheses, not this D-MAP quotient. &
 For this constrained D-MAP(2), three visible inclusion probabilities with
 \(D=r_1-r_0^2\ne0\) identify exactly the symmetric quotient
 \((p+s,ps)\), not a labelled ordered pair. \\
 \addlinespace
 Main Theorem 3A: inclusion CLT
 \Cref{thm:finite-record-inference-audit-main}. &
-Janson 2024 \cite{Janson2024RenewalCLT}. &
+Janson 2024 and recent visible-transition/transition-based waiting-time
+neighbours
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+VanDerMeerErtelSeifert2022TransitionWTD,Janson2024RenewalCLT}. &
 Regenerative simulation and standardized-time-series covariance theory
-\cite{AsmussenGlynn2007,GlynnIglehart1990STS}. &
-The strict-window comparator proves a renewal CLT at the process level. &
+\cite{AsmussenGlynn2007,GlynnIglehart1990STS,GlynnWhitt1991BatchMeans,
+AlexopoulosGoldsman2004Batch,FlegalJones2010BatchMeansSpectral}. &
+The visible-transition and waiting-time papers infer physical information from
+observed event statistics; Janson proves a renewal CLT at the process level.
+The batch-means and standardized-time-series papers supply the covariance
+estimation baseline. &
 The theorem verifies the concrete cycle rewards for the inclusion vector,
 states \(b_N,t_N,\varepsilon_N,\eta_N,\delta_N\), and proves covariance
 consistency for the separated complete-cycle batches used by the finite-record
@@ -1000,14 +1115,16 @@ protocol. \\
 \addlinespace
 Main Theorem 3B: quotient delta method
 \Cref{thm:finite-record-quotient-delta-main}. &
-No strict-window theorem-level comparator gives a delta method for the explicit exchange
-quotient for this two-root record inverse. &
+Visible-transition and coarse-grained-memory comparators
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+HartichGodec2021EmergentMemory}. &
 Classical delta method for smooth finite-dimensional transforms, combined with
 the MAP nonidentifiability baselines cited above. &
 Recent hidden-path and stroboscopic papers
 \cite{MaierSeifertVanderMeer2025HiddenPaths,
 BauerSeifertVanderMeer2025Stroboscopic} infer hidden Markov paths or generators
-under different observation models. &
+under different observation models; Hartich--Godec show how memory and
+hysteresis emerge after coarse observation of driven networks. &
 The theorem transports the inclusion-coordinate CLT through the explicit
 quotient inverse \(\Phi(r)=(p+s,ps)\), yielding the symmetric coordinate and
 unordered root/rate set.  Labelled \((\Gamma,\kappa_{\mathrm r})\) Wald
@@ -1015,7 +1132,7 @@ inference is stated only in a separate side-data corollary with a deterministic
 oracle branch map, or with an estimated map whose oracle-agreement probability
 tends to one. \\
 \addlinespace
-Main Theorem 3C: exchange-diagonal projected Gaussian limit
+Main Theorem 3C: exchange-diagonal projected Gaussian conservative limit
 \Cref{thm:finite-record-exchange-diagonal-main}. &
 No strict-window theorem-level comparator is used as a proxy for the
 directionally differentiable projection theorem. &
@@ -1026,11 +1143,12 @@ Fang--Santos gives the relevant directionally differentiable inference warning
 and limit theory \cite{FangSantos2019DirectionalDifferentiability}; recent
 memory papers do not replace it. &
 The theorem simulates the limiting projected Gaussian law for the cone
-\(\{h_2\le z h_1\}\) at \(p=s=z\), rather than using an ordinary bootstrap or a
-smooth labelled-root delta method. \\
-\bottomrule
-\end{tabular}
-\end{table}
+\(\{h_2\le z h_1\}\) at \(p=s=z\), uses conservative buffered coverage as the
+main diagonal report, and keeps exact coverage as a conditional retained-rank
+corollary rather than using an ordinary bootstrap or a smooth labelled-root
+delta method. \\
+\end{longtable}
+\endgroup
 
 \paragraph{Supplementary fixed-window comparator.}
 The fixed-window continuous intra-bin recovery comparator is given in the
