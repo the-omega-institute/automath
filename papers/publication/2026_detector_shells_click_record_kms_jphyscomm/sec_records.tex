@@ -109,7 +109,7 @@ and throughout the sampled-kernel algebra
 \[
 q=1-p .
 \]
-and the hidden eigenvalue is
+The hidden eigenvalue is
 \begin{equation}\label{eq:lambda-hid-main}
 \lambda_{\mathrm{hid}}
 =p-b
@@ -171,15 +171,11 @@ For later audits, the equal-rate diagonal
 summarized by the single dictionary
 \begin{equation}\label{eq:equal-rate-dictionary-main}
 \begin{aligned}
-a&=1-(1+y)p,
-&
-b&=yp,
-&
-\lambda_{\mathrm{hid}}&=p-b=(1-y)p,\\
-g_k&=p^k\bigl((1-p)(1+yk)-yp\bigr),
-&
-S_k&=\PP(G\ge k)=p^k(1+yk),
-&
+a&=1-(1+y)p,&
+b&=yp,\\
+\lambda_{\mathrm{hid}}&=p-b=(1-y)p,&
+S_k&=\PP(G\ge k)=p^k(1+yk),\\
+g_k&=p^k\bigl((1-p)(1+yk)-yp\bigr),&
 h_k&=\frac{(1-p)+y(k(1-p)-p)}{1+yk},
 \qquad k\ge0 .
 \end{aligned}
@@ -206,7 +202,20 @@ After a click the next hidden state is \(D\), independently of the earlier
 record.  Thus a gap of \(k\) zeros followed by a click has probability
 \eqref{eq:gap-main}.  Since \(T_0\) is lower triangular,
 \[
-e_D^\top T_0^kT_1\mathbf1=b\sum_{j=0}^{k-1}s^jp^{k-1-j}(1-p)+s^ka,
+\textstyle\sum_{j=0}^{k-1}s^jp^{k-1-j}=0\quad(k=0),
+\]
+with the displayed sum interpreted as empty when \(k=0\), and
+\[
+T_0^k=
+\begin{pmatrix}
+p^k&0\\
+b\textstyle\sum_{j=0}^{k-1}s^jp^{k-1-j}&s^k
+\end{pmatrix}.
+\]
+Therefore
+\[
+e_D^\top T_0^kT_1\mathbf1
+=b(1-p)\textstyle\sum_{j=0}^{k-1}s^jp^{k-1-j}+as^k,
 \]
 which reduces to \eqref{eq:gap-closed-main}; the equal-rate case is the
 continuous limit.  All terms are probabilities of disjoint paths, so they are
@@ -515,7 +524,13 @@ Then \((A_n)\) is a full-support renewal process.  Its zero-run law is
 \eqref{eq:gap-main}-\eqref{eq:gap-closed-main}, where
 \eqref{eq:gap-closed-main} is used for \(\kappa_{\mathrm r}\ne\Gamma\) and
 every expression containing \((\kappa_{\mathrm r}-\Gamma)^{-1}\) is
-interpreted by its continuous equal-rate limit on the diagonal.  Its hazard is
+interpreted by its continuous equal-rate limit on the diagonal.  Explicitly,
+when \(\Gamma=\kappa_{\mathrm r}\), \(y=\Gamma\Delta\tau\), and
+\(p=s=e^{-y}\), the diagonal dictionary for this theorem is
+\eqref{eq:equal-rate-dictionary-main}.  The covariance, finite-record CLT,
+batch-covariance, and inverse-delta assertions later in this section use this
+same continuous substitution on the equal-rate diagonal; no separate fallback
+law is introduced.  Its hazard is
 \eqref{eq:hazard-main} with the equal-rate convention
 \eqref{eq:equal-rate-survival-hazard-main}, and its covariance is
 \[
@@ -773,7 +788,7 @@ finite word formula is the ordinary inclusion-exclusion identity over the
 unprescribed click sites \(I\setminus S\).
 \end{proof}
 
-\begin{lemma}[Determinant notation for renewal inclusion products]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
+\begin{lemma}[LU determinant shorthand for renewal products]\label{prop:renewal-principal-minor-lu-main}\label{lem:renewal-principal-minor-main}
 Let \(\varXi\) be a stationary renewal set on \(\mathbb Z\) with intensity
 \(\rho\) and Palm renewal masses
 \(u_n=\PP(n\in\varXi\mid0\in\varXi)\).  For
@@ -793,13 +808,14 @@ M_{rs}=
 \qquad 1\le r,s\le m,
 \end{equation}
 and set \(D(\varnothing)=1\).  Then elementary LU elimination gives the
-determinant notation
+LU determinant shorthand
 \begin{equation}\label{eq:renewal-lu-product-determinant-main}
 D(B):=\det M
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
-Thus \(D(B)=\PP(B\subset\varXi)\) for the renewal set; no determinantal
-process structure is being introduced.
+Thus \(D(B)=\PP(B\subset\varXi)\) for the renewal set.  This is only a
+compact rewriting of the renewal product, not a determinantal-process
+assertion or construction.
 \end{lemma}
 
 \begin{proof}
@@ -815,11 +831,11 @@ The second factor is upper triangular with diagonal
 displayed product.
 \end{proof}
 
-\begin{remark}[Noncanonical determinant language]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
-\Cref{prop:renewal-principal-minor-lu-main} does not make a determinant
+\begin{remark}[Noncanonical LU shorthand]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
+\Cref{prop:renewal-principal-minor-lu-main} does not make a determinantal
 process assertion.  The mathematical content is the renewal inclusion product
 already supplied by renewal conditioning; \(M(B)\) and \(D(B)\) are a
-set-indexed finite notation for that product.  No Hermitian,
+set-indexed LU shorthand for that product.  No Hermitian,
 positive-contraction, operator, nonsymmetric, or sampling point-process kernel
 structure is asserted for \(M(B)\) or \(D(B)\).
 \end{remark}
@@ -838,8 +854,8 @@ u_n=\PP(A_n=1\mid A_0=1)
 \qquad n\ge1.
 \end{equation}
 Thus the boundary-reset renewal inclusion products are obtained from
-\eqref{eq:renewal-inclusion-product-main} by this \(u_n\).  The determinant
-notation \(D_\Gamma(B)\) is obtained from
+\eqref{eq:renewal-inclusion-product-main} by this \(u_n\).  The LU determinant
+shorthand \(D_\Gamma(B)\) is obtained from
 \eqref{eq:renewal-lu-product-matrix-main} and
 \eqref{eq:renewal-lu-product-determinant-main} after the inclusion product is
 known, and finite word laws are given by
@@ -848,7 +864,7 @@ known, and finite word laws are given by
 
 \begin{proof}
 The formula for \(u_n\) is \Cref{lem:covariance-transfer-main}; the renewal
-inclusion product, determinant notation, and word formulas are
+inclusion product, LU determinant shorthand, and word formulas are
 \Cref{prop:renewal-principal-minor-lu-main,cor:renewal-principal-minor-word-law-main}.
 \end{proof}
 
@@ -1275,9 +1291,13 @@ inequality plus Slutsky's theorem on the limiting range of
 For a finite observed record \(A_0,\ldots,A_{N-1}\), write the complete click
 epochs in the observed window as
 \[
-\tau_0<\tau_1<\cdots,\qquad K_N=\max\{k:\tau_k<N\},
+\tau_0<\tau_1<\cdots<\tau_{K_N},\qquad K_N=\max\{k:\tau_k<N\}.
 \]
-and set \(L_j=\tau_{j+1}-\tau_j\) whenever both endpoints are observed.  For
+If the observed window contains no click, set \(K_N=-1\) and every
+all-complete-cycle index set below to the empty set.  Thus \(K_N+1\) is the
+number of observed clicks, and \(K_N\) is one less than the number of click
+epochs from which complete observed cycles can be formed.  Set
+\(L_j=\tau_{j+1}-\tau_j\) whenever both endpoints are observed.  For
 \(m=0,1,2\), put
 \[
 X_n^{(m)}=A_nA_{n+m},\qquad X_n^{(0)}=A_n,
@@ -1309,6 +1329,10 @@ is
 \widehat r_{m,N}^{\mathrm{cyc}}
 =\frac1N\sum_{j\in J_{m,N}}U_j^{(m)} .
 \]
+Empty sums are \(0\).  Hence the estimator is a total finite-record statistic:
+on records with too few observed clicks, or with no admissible terminal
+look-ahead cycles for the requested lag, the corresponding coordinate is
+defined to be \(0\).
 For covariance estimation the three coordinates are evaluated on the common
 complete-cycle set \(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\).  With plug-in
 centering, the vector reward used in the separated batches is
@@ -1633,20 +1657,21 @@ Then
 T_N\Rightarrow T:=X^\top\Sigma^+X,
 \]
 and the conditional law of \(T_N^\ast\) converges weakly in probability to
-the law of \(T\).  Consequently, if \(c_{1-\alpha,N}^\ast\) is the lower
+the law of \(T\).  Consequently, if \(c_{1-\alpha,N}^{\ast,-}\) is the lower
 conditional \((1-\alpha)\)-quantile of \(T_N^\ast\) and the limiting quantile
 \[
 c_{1-\alpha}:=\inf\{c:\PP(T\le c)\ge1-\alpha\}
 \]
 is a continuity point of the distribution function of \(T\), then
 \[
-c_{1-\alpha,N}^\ast\to c_{1-\alpha}
+c_{1-\alpha,N}^{\ast,-}\to c_{1-\alpha}
 \quad\text{in probability}.
 \]
 If in addition \(\PP(T\le c_{1-\alpha})=1-\alpha\), then
 \[
-\PP\{T_N\le c_{1-\alpha,N}^\ast\}\to1-\alpha .
+\PP\{T_N\le c_{1-\alpha,N}^{\ast,-}\}\to1-\alpha .
 \]
+
 \end{lemma}
 
 \begin{proof}
@@ -1689,7 +1714,82 @@ record.  This is conditional weak convergence in probability.  The quantile
 conclusion is the standard consequence of weak convergence at a continuity
 point of the limiting distribution function; the final coverage statement
 then follows from the convergence of \(T_N\) and the random quantile
-\(c_{1-\alpha,N}^\ast\).
+\(c_{1-\alpha,N}^{\ast,-}\).
+\end{proof}
+
+\begin{theorem}[Projected-Gaussian continuity and rank degeneracy]\label{thm:projected-gaussian-continuity-degeneracy-main}
+Fix \(0<z<1\), put
+\[
+n_z=(-z,1)^\top,\qquad H_z=\{h:n_z^\top h\le0\},
+\]
+and let
+\[
+T_z=(\Pi_{H_z}Z)^\top\Sigma^+\Pi_{H_z}Z,
+\qquad Z\sim\mathcal N(0,\Sigma),
+\]
+where \(\Sigma\) is a nonnegative definite \(2\times2\) matrix.  Then the
+distribution of \(T_z\) is continuous in the following cases:
+\[
+\operatorname{rank}\Sigma=2,
+\qquad\text{or}\qquad
+\operatorname{rank}\Sigma=1
+\text{ and }
+\operatorname{Range}\Sigma\ne \operatorname{span}\{n_z\}.
+\]
+If \(\operatorname{rank}\Sigma=1\) and
+\(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), then
+\[
+\PP(T_z=0)=\frac12
+\]
+and \(T_z\) has no atom on \((0,\infty)\).  If \(\Sigma=0\), then
+\(T_z=0\) almost surely.  Consequently the continuity condition in
+\Cref{lem:projected-gaussian-bootstrap-halfspace-main} is automatic except
+for the zero covariance case and for the rank-one case in which the retained
+Gaussian direction is normal to the exchange-diagonal tangent half-space; in
+that rank-one normal case the only possible discontinuity is at the zero
+quantile.
+\end{theorem}
+
+\begin{proof}
+If \(\Sigma=0\), the assertion is immediate.  Suppose first that
+\(\operatorname{rank}\Sigma=2\).  The Gaussian law has a Lebesgue density on
+\(\RR^2\).  On \(H_z\), the statistic is the nonzero quadratic form
+\(u^\top\Sigma^+u\).  On \(H_z^c\), the projection is the linear map
+\[
+L_z u=u-\frac{n_z^\top u}{\|n_z\|^2}n_z
+\]
+onto the boundary line \(n_z^\top h=0\), and the statistic is the quadratic
+form \(u^\top L_z^\top\Sigma^+L_z u\), not identically zero on that half-plane.
+For each fixed \(c\), the level set of either nonzero quadratic polynomial has
+Lebesgue measure zero.  Hence \(\PP(T_z=c)=0\) for every \(c\).
+
+Now let \(\operatorname{rank}\Sigma=1\).  Write
+\(\Sigma=\lambda vv^\top\), where \(\lambda>0\) and \(\|v\|=1\).  Then
+\(Z=\xi v\), with \(\xi\sim\mathcal N(0,\lambda)\), and
+\[
+\Sigma^+=\lambda^{-1}vv^\top .
+\]
+If \(n_z^\top v=0\), the line
+\(\operatorname{span}\{v\}\) lies in the boundary of \(H_z\), so
+\(T_z=\xi^2/\lambda\), which has a continuous \(\chi^2_1\) law.  If
+\(n_z^\top v\ne0\), one half-line is already in \(H_z\), where again
+\(T_z=\xi^2/\lambda\).  On the other half-line,
+\[
+\Pi_{H_z}(\xi v)=
+\xi\left(v-\frac{n_z^\top v}{\|n_z\|^2}n_z\right).
+\]
+The corresponding coefficient in the seminorm \(\Sigma^+\) is
+\[
+\lambda^{-1}
+\left\{v^\top\left(v-\frac{n_z^\top v}{\|n_z\|^2}n_z\right)\right\}^2 .
+\]
+This coefficient is positive unless \(v\) is parallel to \(n_z\).  Therefore,
+when \(\operatorname{Range}\Sigma\ne\operatorname{span}\{n_z\}\), \(T_z\) is
+a two-sided mixture of positive multiples of \(\xi^2\) and has no atoms.  When
+\(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), the outside
+half-line projects to the origin and contributes mass \(1/2\) at zero, while
+the inside half-line contributes a continuous positive component.  This proves
+the rank-one alternatives.
 \end{proof}
 
 \begin{theorem}[Finite-record regenerative CLT for the killed-leakage sampled-boundary record]\label{thm:finite-record-inference-audit-main}\label{prop:three-coordinate-vector-batch-main}
@@ -1718,8 +1818,20 @@ These killed-leakage labelled kernels satisfy \(T_1(R,R)=T_1(D,R)=0\),
 \(0<p,s<1\), \(a>0\), \(b>0\), and \(a+b=1-s\).  Equal-rate formulas are
 understood by continuous limits when \(\Gamma=\kappa_{\mathrm r}\).  Let
 \((A_n)\) be the stationary visible binary process generated by these kernels,
-observed either in stationarity or after discarding a deterministic finite-start
-burn-in \(L_N\to\infty\), \(L_N=o(\sqrt N)\).  Assume the following conditions.
+or use the following finite-start protocol.  Fix an arbitrary hidden initial
+law \(\alpha\) on \(\{R,D\}\).  Generate the hidden-output chain from
+\(H_0\sim\alpha\) for \(L_N+N\) sampled intervals, where \(L_N\) is
+deterministic, \(L_N\to\infty\), and \(L_N=o(\sqrt N)\).  Discard the first
+\(L_N\) intervals and reindex the retained post-burn-in record by
+\[
+A^{(N)}_n=A_{L_N+n},\qquad 0\le n<N .
+\]
+Thus \(N\) denotes the retained post-burn-in length, not the total generated
+length.  The complete-cycle indices \(J_N\), \(K_N\), and all endpoint
+conventions below are then formed from the retained block \([0,N)\) after this
+reindexing.  No total-generated-length convention is used in the estimator
+definitions in this theorem.
+Assume the following conditions.
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.4em,itemsep=0.2em]
 \item The gap law has an exponential moment:
 \[
@@ -1738,9 +1850,11 @@ with
 \le C_f\left(1+\sum_{i=0}^{q_{\rm lag}}g_i\right).
 \]
 \end{enumerate}
-Write \(K_N=\max\{k:\tau_k<N\}\) for the number of complete observed cycles
-and use only all-complete-cycle indices \(J_N\) for which every local window
-entering \(Y_j\) is observed.  Then
+Write \(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed,
+so \(K_N+1\) is the observed click count.  Use only all-complete-cycle
+indices \(J_N\) for which every local window entering \(Y_j\) is observed, and
+use the empty-sum convention on records with too few complete cycles or missing
+terminal look-ahead cycles.  Then
 \[
 \sqrt N\,\widehat\theta_N
 \Rightarrow
@@ -1776,8 +1890,10 @@ Then
 \sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
 \Rightarrow \mathcal N(0,\Sigma_r),
 \]
-where the all-complete-cycle endpoint convention changes the exact calendar
-sum only by \(o_{\PP}(\sqrt N)\).
+where the estimator is the total finite-record statistic from
+\Cref{def:cycle-index-inclusion-estimator-main}; the all-complete-cycle
+endpoint convention changes the exact calendar sum only by
+\(o_{\PP}(\sqrt N)\).
 \end{theorem}
 
 \begin{proof}
@@ -1800,6 +1916,11 @@ m^{-1/2}\sum_{j=0}^{m-1}Y_j
 \Rightarrow \mathcal N(0,\mathcal T_{q_{\rm lag}})
 \]
 for deterministic \(m\to\infty\).  The renewal law gives \(K_N/N\to1/\mu\).
+For each fixed \(C\), \Cref{lem:fixed-low-cycle-event-main} gives
+\(\PP(K_N<C)\to0\), and the same holds after the fixed endpoint and
+look-ahead deletions defining \(J_N\).  Hence the empty-sum fallback
+convention is used only on an event of vanishing probability in all fixed
+look-ahead statistics considered here.
 If \(m_N=\lfloor N/\mu\rfloor\), then
 \(|K_N-m_N|=O_{\PP}(\sqrt N)\); the variance of the extra centered
 \(q_{\rm lag}\)-dependent partial sum is \(O_{\PP}(|K_N-m_N|)\), so divided by
@@ -1843,10 +1964,86 @@ The growth bound required above follows from
 Hence the regenerative CLT applies with \(d_{\rm rew}=3\) and
 \(q_{\rm lag}=1\).
 
-The finite-start case follows because the hidden chain is primitive.  After
-discarding \(L_N\to\infty\), its law is \(o(1)\) in total variation from
-stationarity, and deleting \(L_N=o(\sqrt N)\) deterministic observations is
-negligible on the centered \(\sqrt N\) scale.
+It remains only to justify the finite-start protocol.  Let
+\(\mathsf P_{\alpha,L}^{(N)}\) be the law of the
+retained visible word \((A_L,\ldots,A_{L+N-1})\) when the hidden chain starts
+from \(\alpha\), and let \(\mathsf P_{\pi}^{(N)}\) be the corresponding
+stationary word law.  The hidden transition matrix
+\[
+P=T_0+T_1=
+\begin{pmatrix}p&1-p\\ b&1-b\end{pmatrix}
+\]
+is primitive, has stationary law \(\pi\) from \Cref{lem:stationary-main}, and has second
+eigenvalue \(\lambda_{\mathrm{hid}}=p-b\), with
+\(|\lambda_{\mathrm{hid}}|<1\) by \Cref{lem:hidden-mode-contraction-main}.
+For any signed row vector \(v\) with total mass zero,
+\(vP^L=\lambda_{\mathrm{hid}}^L v\).  Hence, for
+\(\theta=(1+|\lambda_{\mathrm{hid}}|)/2\in(0,1)\), there is a finite constant
+\(C\) such that, uniformly in \(\alpha\) and \(L\ge0\),
+\[
+\|\alpha P^L-\pi\|_{\mathrm{TV}}\le C\theta^L .
+\]
+The visible future word is obtained from the hidden state at time \(L\) by a
+Markov kernel, so total variation contracts:
+\begin{equation}\label{eq:finite-start-tv-main}
+\bigl\|\mathsf P_{\alpha,L}^{(N)}-\mathsf P_{\pi}^{(N)}
+\bigr\|_{\mathrm{TV}}
+\le C\theta^L ,
+\qquad N\ge1 .
+\end{equation}
+With \(L=L_N\), this tends to zero.  Equivalently, by maximal coupling one can
+construct the finite-start retained word and a stationary retained word on one
+space so that they agree with probability \(1-o(1)\).  On the agreement event
+every complete-cycle statistic formed from the reindexed retained block has
+the stationary law.  On the complement, whose probability is \(o(1)\), the
+distributional contribution is bounded by the coupling failure probability.
+Thus every stationary weak limit and covariance conclusion above transfers to
+the finite-start post-burn-in record with retained sample size \(N\).
+\end{proof}
+
+\begin{lemma}[Uniform block average with exponential moments]\label{lem:uniform-calendar-block-length-main}
+Let \(L_0,L_1,\ldots\) be i.i.d. nonnegative random variables with
+\(\EE e^{\eta L_0}<\infty\) for some \(\eta>0\).  Let
+\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\).  For each \(N\), let
+\(I_{\ell,N}\) be intervals of \(b_N\) consecutive indices, and suppose the
+number \(M_N\) of intervals used by the statistic satisfies
+\(M_N=O_{\PP}(N/b_N)\).  Then
+\begin{equation}\label{eq:uniform-calendar-block-length-main}
+\max_{1\le \ell\le M_N}
+\frac1{b_N}\sum_{j\in I_{\ell,N}}L_j
+=O_{\PP}(1).
+\end{equation}
+The maximum over an empty index set is interpreted as \(0\).
+\end{lemma}
+
+\begin{proof}
+Fix \(c<\infty\) such that
+\(\PP(M_N\le cN/b_N)\to1\) along a high-probability subsequence; the final
+bound follows by taking \(c\) large in the definition of
+\(O_{\PP}(N/b_N)\).  For \(x>\EE L_0\), the Cramer--Chernoff rate
+\[
+I(x)=\sup_{0<\theta\le\eta}
+\{\theta x-\log \EE e^{\theta L_0}\}
+\]
+is positive after increasing \(x\) if necessary.  Chernoff's bound gives,
+uniformly over all intervals of length \(b_N\),
+\[
+\PP\left(\sum_{j\in I_{\ell,N}}L_j\ge xb_N\right)
+\le e^{-b_NI(x)} .
+\]
+Therefore
+\[
+\PP\left(
+\max_{1\le\ell\le \lceil cN/b_N\rceil}
+\sum_{j\in I_{\ell,N}}L_j\ge xb_N
+\right)
+\le
+\left\lceil\frac{cN}{b_N}\right\rceil e^{-b_NI(x)}
+\longrightarrow0,
+\]
+because \(b_N=N^{\beta+o(1)}\) and hence \(b_N\gg\log N\).  Combining this
+union bound with \(\PP(M_N>cN/b_N)\) proves
+\eqref{eq:uniform-calendar-block-length-main}.
 \end{proof}
 
 \begin{theorem}[All-complete-cycle separated-batch covariance estimator]\label{lem:three-coordinate-batch-rate-main}
@@ -1885,22 +2082,30 @@ L_j=G_j+1,\qquad
 \]
 componentwise in the vector case.
 
-Write \(K_N=\max\{k:\tau_k<N\}\), put \(d_N=b_N+q_{\rm lag}\), and use only
-all-complete-cycle indices \(J_N\) for which every local window entering
-\(Y_j\) is observed.  Let
+Write \(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed,
+put \(d_N=b_N+q_{\rm lag}\), and use only all-complete-cycle indices \(J_N\)
+for which every local window entering \(Y_j\) is observed.  Let
 \[
 M_N=\max\{m\ge0: (m-1)d_N+b_N-1\in J_N\},
 \qquad
 I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\}.
 \]
+If the displayed set is empty, set \(M_N=0\).
 For \(B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j\) and
-\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\), define on
-\(\{M_N\ge2\}\)
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) on \(\{M_N\ge1\}\),
+define
 \begin{equation}\label{eq:all-cycle-batch-cov-main}
 \widehat\Sigma_N^{\mathrm{all}}
-=\frac{K_N}{N}\,
+=
+\begin{cases}
+\displaystyle
+\frac{K_N}{N}\,
 \frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top .
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top,
+&M_N\ge2,\\[1.1ex]
+0_{d_{\rm rew}\times d_{\rm rew}},
+&M_N<2 .
+\end{cases}
 \end{equation}
 Then \(M_N\ge2\) with probability tending to one and
 \[
@@ -1960,7 +2165,12 @@ so the finite-batch bias relative to \(\mathcal T_{q_{\rm lag}}\) is
 \(O(b_N^{-1})\).
 
 The random number \(M_N\) of used batches is determined by the same gaps and
-rewards.  \Cref{lem:calendar-stopped-batch-cov-main}, applied with
+rewards.  Since \(K_N/N\to1/\mu\) and \(d_N/N\to0\), the event \(M_N<2\)
+has probability tending to zero; on that event
+\eqref{eq:all-cycle-batch-cov-main} uses its zero-matrix fallback.  The
+fixed low-cycle events \(\{K_N<C\}\), including the finitely many endpoint and
+look-ahead deletions, are negligible by
+\Cref{lem:fixed-low-cycle-event-main}.  \Cref{lem:calendar-stopped-batch-cov-main}, applied with
 \(R_N=M_N\) and \(d_N=b_N+q_{\rm lag}\), gives directly
 \[
 \|\widehat\Sigma_N^{\mathrm{all}}-\Sigma\|_{\operatorname{op}}
@@ -1972,18 +2182,80 @@ cycles omitted by the all-complete-cycle rule, the random-prefix change in the
 empirical second moment, and the empirical-mean subtraction.  No independence
 between \(M_N\) and the batch sums is assumed.
 
-It remains to control the plug-in replacement.  In each used batch,
+It remains to control the plug-in replacement on the event \(M_N\ge2\).  In
+each used batch,
 \[
 \sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)
 =\Delta_N\sum_{j\in I_{\ell,N}}L_j .
 \]
-Because \(b_N^{-1}\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(1)\) uniformly in the
-empirical average and \(\Delta_N=O_{\PP}(N^{-1/2})\), the cross term in the
-sample covariance after the \(1/b_N\) normalization is
-\(O_{\PP}(\sqrt{b_N/N})\), and the square term is \(O_{\PP}(b_N/N)\).  These
-terms are no larger than the already displayed rate when
-\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\).  Substituting this batch length
-therefore gives
+Write
+\[
+S_{\ell,N}=\sum_{j\in I_{\ell,N}}L_j,\qquad
+P_{\ell,N}=\Delta_NS_{\ell,N},\qquad
+\bar P_N=M_N^{-1}\sum_{\ell=1}^{M_N}P_{\ell,N}.
+\]
+The calendar-stopped batch count above satisfies
+\(M_N=O_{\PP}(N/d_N)\), so
+\Cref{lem:uniform-calendar-block-length-main} gives
+\[
+\max_{\ell\le M_N}\frac{S_{\ell,N}}{b_N}=O_{\PP}(1).
+\]
+Consequently
+\[
+\max_{\ell\le M_N}\|P_{\ell,N}\|
+=O_{\PP}(b_NN^{-1/2}),
+\qquad
+\|\bar P_N\|=O_{\PP}(b_NN^{-1/2}).
+\]
+Let \(\widetilde B_{\ell,N}=B_{\ell,N}+P_{\ell,N}\) and
+\(\bar{\widetilde B}_N=M_N^{-1}\sum_{\ell=1}^{M_N}\widetilde B_{\ell,N}\).
+The plug-in covariance differs from the true-centered covariance by the two
+cross terms
+\[
+\mathcal C_N
+:=
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(B_{\ell,N}-\bar B_N)(P_{\ell,N}-\bar P_N)^\top
+\quad\text{and}\quad
+\mathcal C_N^\top
+\]
+and the square term
+\[
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(P_{\ell,N}-\bar P_N)(P_{\ell,N}-\bar P_N)^\top .
+\]
+Put
+\[
+Q_{B,N}:=\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|^2,
+\]
+and define \(Q_{P,N}\) by the same expression with \(P_{\ell,N}\) in place of
+\(B_{\ell,N}\).  Cauchy's inequality gives
+\[
+\|\mathcal C_N\|_{\operatorname{op}}\le Q_{B,N}^{1/2}Q_{P,N}^{1/2}.
+\]
+The already proved true-centered covariance bound gives
+\[
+Q_{B,N}=O_{\PP}(1).
+\]
+Also \(Q_{P,N}^{1/2}=O_{\PP}(\sqrt{b_N/N})\), because
+\(K_N/N=O_{\PP}(1)\) and
+\[
+\max_{\ell\le M_N}\|P_{\ell,N}-\bar P_N\|
+=O_{\PP}(b_NN^{-1/2}).
+\]
+Thus
+each cross term is \(O_{\PP}(\sqrt{b_N/N})\).  The square term is bounded by
+\[
+O_{\PP}(1)\cdot b_N^{-1}\max_{\ell\le M_N}
+\|P_{\ell,N}-\bar P_N\|^2
+=O_{\PP}(b_N/N).
+\]
+Since \(b_N/N\le\sqrt{b_N/N}\) for \(b_N\le N\), these plug-in terms are no
+larger than the already displayed batch rate.  Substituting
+\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), therefore gives
 \[
 O_{\PP}\left(N^{-\beta}+N^{-(1-\beta)/2}\right).
 \]
@@ -2133,6 +2405,12 @@ unordered sampled survival factors satisfy \(p=s=z\),
 Z\sim\mathcal N(0,\Sigma_{\sigma}),\qquad
 H_z=\{h\in\RR^2:h_2\le zh_1\}.
 \]
+Define the limiting projected statistic and its lower quantile by
+\[
+T_z=(\Pi_{H_z}Z)^\top\Sigma_\sigma^+(\Pi_{H_z}Z),
+\qquad
+c_{1-\alpha}(z)=\inf\{c:\PP(T_z\le c)\ge1-\alpha\}.
+\]
 Thus ordinary chi-square reporting is asserted only at separated interior
 points and only on the nondegenerate retained covariance range.  At a true
 exchange-diagonal point the usable boundary confidence construction is the
@@ -2145,7 +2423,8 @@ Q_N(z)=
 N(\widetilde\sigma_N-\sigma_z)^\top\widehat\Sigma_{\sigma,N}^{+}
 (\widetilde\sigma_N-\sigma_z),
 \end{equation}
-and take \(c_{1-\alpha,N}(z)\) as the lower conditional \((1-\alpha)\)-quantile
+and take \(c^{-}_{1-\alpha,N}(z)\) as the lower conditional
+\((1-\alpha)\)-quantile
 of
 \[
 \Pi_{H_z}(Z_N^\ast)^\top\widehat\Sigma_{\sigma,N}^{+}\Pi_{H_z}(Z_N^\ast),
@@ -2155,11 +2434,33 @@ Z_N^\ast\mid A_0,\ldots,A_{N-1}\sim
 \]
 The diagonal set
 \begin{equation}\label{eq:boundary-projected-confidence-set-main}
-\{(2z,z^2):0<z<1,\ Q_N(z)\le c_{1-\alpha,N}(z)\}
+\{(2z,z^2):0<z<1,\ Q_N(z)\le c^{-}_{1-\alpha,N}(z)\}
 \end{equation}
 has first-order projected-Gaussian coverage at the true diagonal point
-\((2z,z^2)\) whenever the limiting projected statistic has a continuous
-\((1-\alpha)\)-quantile.
+\((2z,z^2)\) whenever
+\[
+\PP\{T_z\le c_{1-\alpha}(z)\}=1-\alpha .
+\]
+The quantile \(c^{-}_{1-\alpha,N}(z)\) converges in probability to
+\(c_{1-\alpha}(z)\) at every continuity point of the distribution function of
+\(T_z\).  The exact equality condition above is automatic if
+\(\operatorname{rank}\Sigma_\sigma=2\), and also if
+\(\operatorname{rank}\Sigma_\sigma=1\) but
+\(\operatorname{Range}\Sigma_\sigma\ne\operatorname{span}\{(-z,1)^\top\}\).
+If \(\operatorname{rank}\Sigma_\sigma=1\) and
+\(\operatorname{Range}\Sigma_\sigma=\operatorname{span}\{(-z,1)^\top\}\), then
+\(T_z\) has a single atom of mass \(1/2\) at zero and no atom on
+\((0,\infty)\).  Consequently the exact first-order statement holds for
+levels with \(1-\alpha>1/2\), whose limiting quantile is positive.  For
+\(1-\alpha\le1/2\) in that rank-one normal case, and in the zero-covariance
+case \(\Sigma_\sigma=0\), the theorem asserts the projected-Gaussian limit and
+conservative reporting only, not exact equality to \(1-\alpha\).  A
+conservative fallback in those zero-quantile subcases is to report the
+degenerate limit together with a fixed positive critical buffer
+\(\varepsilon\); then
+\(\liminf_{N\to\infty}\PP\{Q_N(z)\le\varepsilon\}=1\), hence the displayed
+diagonal set with \(c^{-}_{1-\alpha,N}(z)\) replaced by \(\varepsilon\) has
+limiting coverage at least \(1-\alpha\).
 
 Studentized scalar intervals are claimed only under a nondegenerate limiting
 studentization variance.  For the lag-two covariance interval below,
@@ -2177,8 +2478,14 @@ exactly
 \Cref{lem:projected-gaussian-bootstrap-halfspace-main}, applied with
 \(X_N=\sqrt N(\widetilde\sigma_N-\sigma_z)\), \(z_N=z\), and
 \(\widehat\Sigma_N=\widehat\Sigma_{\sigma,N}\), gives the conditional
-projected-Gaussian quantile convergence and the displayed boundary coverage
-claim.  Scalar studentization divides by a consistent positive variance
+projected-Gaussian quantile convergence at continuity points.  The continuity
+and degeneracy alternatives are exactly those of
+\Cref{thm:projected-gaussian-continuity-degeneracy-main} with
+\(\Sigma=\Sigma_\sigma\).  In the exceptional zero-quantile cases, the
+limiting statistic has an atom at zero (or is identically zero), so the
+displayed procedure is not reported as an exact-level interval; using a
+fixed positive critical buffer gives the conservative statement recorded
+above.  Scalar studentization divides by a consistent positive variance
 estimate; hence it is asserted only when the limiting variance is
 nondegenerate.
 \end{proof}
@@ -2389,14 +2696,21 @@ I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
 B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j,
 \]
 and \(M_N\) the number of all-complete-cycle batches selected before calendar
-time \(N\), define
+time \(N\), with \(M_N=0\) when no such batch exists.  Define
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) on
+\(\{M_N\ge1\}\), and set
 \[
 \widehat\Sigma_N^{\rm batch}
-=\frac{K_N}{N}\,
+=
+\begin{cases}
+\displaystyle
+\frac{K_N}{N}\,
 \frac1{b_N(M_N-1)}
 \sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top,
-\qquad
-\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}.
+&M_N\ge2,\\[1.1ex]
+0_{d_{\rm rew}\times d_{\rm rew}},
+&M_N<2 .
+\end{cases}
 \]
 Then \(M_N\ge2\) with probability tending to one and
 \begin{equation}\label{eq:finite-lag-separated-batch-rate-main}
@@ -2432,7 +2746,12 @@ hypothesis in \Cref{lem:calendar-stopped-batch-cov-main}.  That lemma gives
 including the random calendar-stopped value of \(M_N\), the endpoint cycles
 omitted by the all-complete-cycle rule, and the sample-mean subtraction.  The
 formula \(b_N=\lfloor N^\beta\rfloor\) implies \(b_N\to\infty\) and
-\(b_N/N\to0\), so \(M_N\ge2\) with probability tending to one.
+\(b_N/N\to0\), so \(M_N\ge2\) with probability tending to one.  On the
+complementary event the definition uses the zero-matrix fallback, and that
+branch does not affect the probability limit.  For every fixed \(C\), the
+underlying low-cycle event \(\{K_N<C\}\), with any fixed endpoint or
+look-ahead deletion, has vanishing probability by
+\Cref{lem:fixed-low-cycle-event-main}.
 \end{proof}
 
 \begin{lemma}[Observed lag-two windows in the all-complete-cycle batches]\label{lem:all-cycle-lag-two-windows-main}
@@ -2607,11 +2926,8 @@ E_{ij}=f(i,j)-R_i-C_j+M
 has zero conditional mean in each coordinate.  Orthogonality of the Hoeffding
 components for the product gap law gives
 \[
-\begin{aligned}
 \EE(Y_0^2)+2\EE(Y_0Y_1)
-&=\EE E_{G_0,G_1}^2
-  +\EE\bigl(R_{G_0}+C_{G_0}-2M\bigr)^2,
-\end{aligned}
+=\EE E_{G_0,G_1}^2+\EE\bigl(R_{G_0}+C_{G_0}-2M\bigr)^2,
 \]
 which is \eqref{eq:lag-two-variance-squares-main}.  Thus the variance can
 vanish only if both square terms vanish.  Because the gap law has full support,
@@ -2692,6 +3008,36 @@ observed all-complete-cycle set; the finitely many discrepancies between these
 sets are endpoint cycles, hence contribute only \(O_{\PP}(\log N)\) before
 division by \(N\).  A fixed finite linear combination of
 \(O_{\PP}(N^{-1/2})\) terms is again \(O_{\PP}(N^{-1/2})\).
+\end{proof}
+
+\begin{lemma}[Fixed low-cycle events vanish]\label{lem:fixed-low-cycle-event-main}
+Let \((A_n)_{n\in\mathbb Z}\) be the stationary visible renewal record above,
+with click density \(\rho>0\).  Let
+\[
+K_N=\max\{k:\tau_k<N\},
+\]
+with the convention \(K_N=-1\) if no click is observed in \([0,N)\).  For every
+fixed integer \(C\ge0\),
+\[
+\PP(K_N<C)\longrightarrow0 .
+\]
+The same conclusion holds after deleting any fixed number of initial,
+terminal, look-back, or look-ahead complete cycles from the observed
+complete-cycle list.
+\end{lemma}
+
+\begin{proof}
+The number of observed clicks is
+\[
+R_N=\sum_{n=0}^{N-1}A_n .
+\]
+By stationarity and ergodicity of the renewal indicator,
+\(R_N/N\to\rho\) almost surely.  Since \(K_N+1=R_N\) under the convention above,
+the event \(\{K_N<C\}\) is the event \(\{R_N\le C\}\), which is contained in
+\(\{R_N/N\le \rho/2\}\) for all sufficiently large \(N\).  Its probability
+therefore tends to \(0\).  If a fixed number \(c\) of endpoint or look-ahead
+cycles is removed, the corresponding low-admissible-cycle event is contained
+in \(\{K_N<C+c\}\), and the first part applies.
 \end{proof}
 
 \begin{corollary}[Killed-leakage sampled-boundary fixed-setting lag-two covariance CLT]\label{cor:boundary-reset-cycle-clt-main}\label{thm:sampled-finite-record-main}
