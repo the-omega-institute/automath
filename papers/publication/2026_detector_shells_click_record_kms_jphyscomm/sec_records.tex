@@ -54,8 +54,8 @@ with continuous equal-rate limits.  The labelled-kernel convention is
 \((T_i)_{XY}=\PP(A_n=i,H_{n+1}=Y\mid H_n=X)\), and word probabilities are
 \(\pi T_{u_0}\cdots T_{u_{m-1}}\mathbf1\) from the stationary hidden law.
 This is exactly the constrained D-MAP of
-\Cref{ass:constrained-dmap-record-main}; the rate names are only the
-parametrization labels fixed there and do not add a physical derivation.
+\Cref{ass:constrained-dmap-record-main}; its interpretation is fixed by the
+model contract in \hyperref[par:model-contract-main]{the model-contract paragraph}.
 \end{proposition}
 
 \begin{proof}
@@ -264,9 +264,8 @@ zero runs between clicks, extending at the two ends if needed.
 
 \subsection{Exact dependence, hazard, and count diagnostics}
 
-The hazard and Fano diagnostics in this subsection are population only unless
-separately studentized.  The separate fixed-record studentization supplied later
-in this section is only for the lag-two covariance statistic.
+The hazard, Fano, and low-lag formulas in this subsection have the inferential
+status fixed in \hyperref[par:inference-scope-main]{the inference-scope paragraph}.
 
 \begin{lemma}[Stationary hidden law]\label{lem:stationary-main}
 For \(P=T_0+T_1=\begin{psmallmatrix}p&q\\ b&1-b\end{psmallmatrix}\), the
@@ -395,7 +394,7 @@ Thus \(\lambda_{\mathrm{hid}}=p-b>-1\).  Hence
 \(\sum_{n\ge1}|\lambda_{\mathrm{hid}}|^{n-1}<\infty\).
 \end{proof}
 
-\begin{unnumberedlemma}[Finite hidden-start path-space contraction]
+\begin{lemma}[Finite hidden-start path-space contraction]\label{lem:finite-hidden-start-path-contraction-main}
 Fix one positive constrained D-MAP setting and put \(P=T_0+T_1\).  Let
 \(\pi\) be the stationary hidden law.  For a hidden initial law \(\nu\), let
 \(\PP_\nu\) denote the one-sided hidden/visible law started from \(H_0\sim\nu\),
@@ -427,7 +426,7 @@ and \(S_N\) is any measurable statistic of the retained visible word
 \((A_{L_N},\ldots,A_{L_N+N-1})\), then every stationary-start convergence in
 distribution, convergence in probability, or event-probability limit for
 \(S_N\) transfers unchanged to the finite hidden start.
-\end{unnumberedlemma}
+\end{lemma}
 
 \begin{proof}
 For a word \(w=(w_0,\ldots,w_{N-1})\), write
@@ -1001,13 +1000,10 @@ critical-rate convention of \eqref{eq:gamma-crit-piecewise-main}.
 
 The hazard curve, the closed Fano factor, and the finite-record plots derived
 from \Cref{lem:survival-hazard-main,prop:spectrum-main} are population formula
-checks for the stipulated D-MAP law.  In this manuscript they are not
-studentized fixed-setting long-record procedures.  The only diagnostic here with a complete
-finite-record studentization theorem is the lag-two covariance statistic in
-\Cref{cor:boundary-reset-cycle-clt-main}; hazard and Fano diagnostics should
-therefore be read only as consistency checks unless a separate long-run
-variance theory is added for the chosen empirical hazard or block-count
-functional.
+checks for the stipulated D-MAP law.  Their finite-record reporting status is
+the one stated in \hyperref[par:inference-scope-main]{the inference-scope paragraph}; the lag-two covariance
+studentization itself is proved later in
+\Cref{cor:boundary-reset-cycle-clt-main}.
 \end{remark}
 
 \subsection{Renewal inclusion products and quotient inverse}
@@ -1237,13 +1233,13 @@ separated labelled rates, or else the additional branch-classification error
 must be counted separately; this paper proves no distributional approximation
 for an incorrectly classified branch.  In this paper, no deterministic oracle
 map and no high-probability correctness event for an estimated map means no
-separated labelled rates.  Without such a supplied map, every separated
-labelled-rate statement below is only a statement about the unordered rate set
+separated labelled rates.  Without such a supplied map, the reportable
+separated-root object is only the unordered rate set
 \[
 \left\{-\frac{\log z_1}{\Delta\tau},
       -\frac{\log z_2}{\Delta\tau}\right\}
 \]
-or equivalently about the symmetric coordinates \((p+s,ps)\).  On the exchange
+or equivalently the symmetric coordinates \((p+s,ps)\).  On the exchange
 diagonal \(\sigma=(2z,z^2)\), \(0<z<1\), the two entries coincide and the
 common numerical rate \(-\log z/\Delta\tau\) is an invariant visible-law
 estimand; what fails there is only the separated ordered-branch chart.}
@@ -1399,12 +1395,28 @@ the quotient itself contains the common numerical rate, as made explicit in
 Work in the stable quotient domain of
 \Cref{thm:toeplitz_image_inverse_duality}.  The following deterministic
 procedure reconstructs the complete stationary visible renewal law from the
-three inclusion coordinates.  It applies verbatim to the population triple
-\(r=(r_0,r_1,r_2)\); for finite records, first replace \(r\) by an estimated
-triple \(\widehat r\) and stop if the displayed domain tests fail.
+population three-inclusion coordinates
+\[
+r=(r_0,r_1,r_2)
+=\bigl(\PP(A_0=1),\PP(A_0=A_1=1),\PP(A_0=A_2=1)\bigr).
+\]
+It is a population reconstruction lemma only.  A finite empirical triple
+\(\widehat r\) must not be substituted directly into the final inclusion
+product: after sampling error and feasible-set projection, the empirical
+single-site intensity \(\widehat r_0\) need not equal the stationary renewal
+intensity implied by the recovered root pair.  The finite-record protocol below
+therefore either withholds complete-law reporting or first projects onto the
+full renewal-consistency graph
+\[
+\mathcal M_{\rm ren}
+=\{(\rho_*(\sigma),\sigma):\sigma\in F\},
+\qquad
+F=\{(x+y,xy):0\le x,y\le1\},
+\]
+before forming word probabilities.
 
 \begin{enumerate}
-\item Estimate or specify the three inclusion coordinates
+\item Start from the population three inclusion coordinates
 \[
 r_0=\PP(A_0=1),\qquad
 r_1=\PP(A_0=A_1=1),\qquad
@@ -1436,15 +1448,9 @@ For the constrained D-MAP population,
 \{z_1,z_2\}
 =\{ \text{roots of } z^2-\sigma_1z+\sigma_2=0\}.
 \]
-Only this unordered pair is a visible-law object.  If a finite-record estimate
-puts the quadratic outside the feasible set
-\[
-F=\{(x+y,xy):0\le x,y\le1\},
-\]
-equivalently the set characterized in
-\eqref{eq:feasible-symmetric-coordinate-set-main}, one must project or
-withhold root reporting as in the finite-record protocol below; the population
-constrained D-MAP point lies in \(F\).
+Only this unordered pair is a visible-law object.  At the population
+constrained D-MAP point, \(\sigma\) lies in the feasible set \(F\) equivalently
+characterized in \eqref{eq:feasible-symmetric-coordinate-set-main}.
 
 \item Recover the Palm zero-run gap law.  Put
 \(\theta_i=-\log z_i\).  If \(z_1\ne z_2\), set
@@ -1477,12 +1483,23 @@ u_n=\sum_{j\ge1}\PP\bigl((G_1+1)+\cdots+(G_j+1)=n\bigr),
 where the sum is finite because each cycle length \(G_i+1\) is at least
 \(1\).
 
+\item Compute the stationary renewal intensity from the same gap law,
+\begin{equation}\label{eq:algorithmic-rho-star-main}
+\rho_*(\sigma)
+=\frac{1}{\EE(G+1)}
+=\left(1+\sum_{k\ge0}k\,g_k\right)^{-1}.
+\end{equation}
+At the population input produced by the constrained D-MAP, this value equals
+the original inclusion coordinate \(r_0\).  This equality is a conclusion of
+the population model, not a license to combine a noisy finite-record
+\(\widehat r_0\) with a separately projected root pair.
+
 \item Apply the renewal inclusion product and then finite
 inclusion--exclusion.  For every nonempty
 \(B=\{i_1<\cdots<i_m\}\),
 \begin{equation}\label{eq:algorithmic-reconstruction-inclusion-main}
 \PP(B\subset\varXi)
-=r_0\prod_{\ell=1}^{m-1}u_{i_{\ell+1}-i_\ell},
+=\rho_*(\sigma)\prod_{\ell=1}^{m-1}u_{i_{\ell+1}-i_\ell},
 \end{equation}
 with the empty-set inclusion probability equal to \(1\).  For every finite
 window \(I\) and word \(S\subset I\),
@@ -1515,7 +1532,10 @@ unequal-root formula is the symmetric dimensionless gap law
 limit.  Given this gap law, the visible process is the stationary renewal
 process supplied by \Cref{lem:renewal-gap-main}.  Step~5 is the renewal
 equation for Palm return probabilities, written as a finite convolution sum at
-fixed time \(n\).  Finally, Step~6 is
+fixed time \(n\).  The stationary renewal intensity in Step~6 is
+\(1/\EE(G+1)\); for the constrained D-MAP population this equals
+\(\PP(A_0=1)=r_0\) by stationarity of the renewal process already identified
+in \Cref{lem:renewal-gap-main}.  Finally, Step~7 is
 \Cref{cor:renewal-principal-minor-word-law-main}: first multiply Palm renewal
 masses to obtain marked-set inclusions, then use finite inclusion--exclusion
 over the unprescribed sites.  These operations determine every finite word
@@ -1697,7 +1717,7 @@ ordering is immaterial, and \Cref{lem:diagonal-common-rate-main} records the
 identified common-rate vector.
 \end{proof}
 
-\begin{lemma}[Separated-root labelled-rate delta method]\label{lem:separated-root-rate-delta-main}
+\begin{lemma}[Separated-root labelled-rate differential]\label{lem:separated-root-rate-delta-main}
 Let \(r=(r_0,r_1,r_2)\) lie in the population inverse domain of
 \Cref{thm:toeplitz_image_inverse_duality}, let
 \[
@@ -1777,62 +1797,16 @@ D\Phi_2
 \end{align}
 where \(\lambda_i=\partial\lambda/\partial r_i\).
 
-Consequently, if
+Thus the labelled-rate chart has covariance push-forward
 \[
-\sqrt N(\widehat r_N-r)\Rightarrow \mathcal N(0,\Sigma_r),
-\qquad
-\widehat\Sigma_{r,N}\to\Sigma_r
-\quad\text{in probability},
-\]
-and \(\widehat r_N\) remains in the same separated-root chart with probability
-tending to one, then
-\[
-\sqrt N\{(\widehat p_N,\widehat s_N)-(p,s)\}
-\Rightarrow
-\mathcal N(0,\Sigma_{\mathrm{root}}),
-\qquad
-\Sigma_{\mathrm{root}}
-=J_{\mathrm{root}}\,\Sigma_{\sigma}\,J_{\mathrm{root}}^\top,
-\]
-\[
-\sqrt N\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
--(\Gamma,\kappa_{\mathrm r})\}
-\Rightarrow
-\mathcal N(0,\Sigma_{\Gamma,\kappa}),
-\qquad
 \Sigma_{\Gamma,\kappa}
-=J_{\Gamma,\kappa}(r)\,\Sigma_r\,J_{\Gamma,\kappa}(r)^\top,
+=J_{\Gamma,\kappa}(r)\,\Sigma_r\,J_{\Gamma,\kappa}(r)^\top
 \]
-where \(\Sigma_{\sigma}=J_\Phi(r)\Sigma_rJ_\Phi(r)^\top\).  The plug-in covariance
-estimators obtained by replacing \(r,\Sigma_r,p,s\) with their separated-chart
-estimates are consistent.
-
-For retained-rank Wald reporting in the labelled rate chart, let
-\(k=\operatorname{rank}\Sigma_{\Gamma,\kappa}\).  If the thresholded covariance
-\(\widehat\Sigma_{\Gamma,\kappa,N}\) satisfies
-\[
-\|\widehat\Sigma_{\Gamma,\kappa,N}-\Sigma_{\Gamma,\kappa}\|_{\operatorname{op}}
-=o_{\PP}(t_N),\qquad t_N\downarrow0,
-\]
-then the threshold retains exactly the \(k\) positive limiting eigenvalues
-with probability tending to one, and
-\[
-N\,
-\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
--(\Gamma,\kappa_{\mathrm r})\}^{\top}
-\widehat\Sigma_{\Gamma,\kappa,N}^{+}
-\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
--(\Gamma,\kappa_{\mathrm r})\}
-\Rightarrow \chi_k^2 .
-\]
-This separated labelled-rate conclusion is conditional on
-\Cref{conv:branch-map-labelled-rates-main}.  If the branch labels are supplied
-by an estimated map \(\widehat{\mathcal B}_N\), the conclusion is asserted
-only on the additional event
-\(\PP(\widehat{\mathcal B}_N=\mathcal B\text{ on the retained separated-root
-neighbourhood})\to1\), as formalized in
-the estimated-map reduction following
-\Cref{conv:branch-map-labelled-rates-main}.
+whenever a separate side-data hypothesis supplies a valid ordered chart and a
+Gaussian limit for \(\widehat r_N\).  The visible record alone supplies only
+the symmetric input \(J_\Phi(r)\) and the unordered roots; the ordered
+labelled-rate stochastic statement is
+\Cref{cor:side-data-labelled-rate-wald-main}.
 \end{lemma}
 
 \begin{proof}
@@ -1856,24 +1830,22 @@ the ordinary derivative of
 \Phi_2=r_0-a+(1-r_0)\lambda .
 \]
 All denominators are bounded away from zero on the stated neighbourhood, so
-the maps and plug-in Jacobians are continuous there.  The two Gaussian limits
-are then the multivariate delta method, and covariance consistency follows by
-continuous mapping.  The retained-rank statement is Weyl's eigenvalue
-inequality plus Slutsky's theorem on the limiting range of
-\(\Sigma_{\Gamma,\kappa}\).
+the maps and plug-in Jacobians are continuous there.  The displayed covariance
+push-forward is only the Jacobian sandwich for this externally supplied chart;
+the probability limit and Wald statistic are stated separately in
+\Cref{cor:side-data-labelled-rate-wald-main}.
 \end{proof}
 
 \subsection{Finite-record inference and the exchange diagonal}
 
-This subsection is organized by inferential status.  First come generic
-regenerative and batching tools, which apply to any bounded finite-window
-observable of the renewal record.  The constrained D-MAP model is then verified
-against those hypotheses.  The inclusion-coordinate CLT and its covariance
-estimator follow next.  The inverse statements are delta-method chart
-statements for identifiable symmetric coordinates, with labelled rates only on
-an externally supplied separated-root branch.  The only fully studentized
-finite-record confidence interval in this paper is the scalar lag-two interval
-in \Cref{cor:boundary-reset-cycle-clt-main}.
+This subsection is organized by the inference scope in
+\hyperref[par:inference-scope-main]{the inference-scope paragraph}.  First come generic regenerative and batching
+tools, which apply to any bounded finite-window observable of the renewal
+record.  The constrained D-MAP model is then verified against those hypotheses.
+The inclusion-coordinate CLT and its covariance estimator follow next.  The
+inverse statements are delta-method chart statements for identifiable
+symmetric coordinates, with labelled rates only on a retained separated-root
+branch satisfying \Cref{conv:branch-map-labelled-rates-main}.
 
 \begin{assumption}[Standing fixed constrained D-MAP record]\label{ass:fixed-sampled-boundary-record-main}
 All D-MAP finite-record statements in this subsection and in
@@ -2994,17 +2966,18 @@ then the random-index replacement in
 \Cref{prop:generic-complete-cycle-regenerative-clt-main} gives the displayed
 Gaussian limit with covariance \(T_1^{(r)}/\mu\).
 
-For a finite hidden start, apply the finite hidden-start path-space contraction
-lemma with \(L=L_N\).  The retained cycle-index estimator, the retained
-complete-cycle count, and the retained cycle-sum approximation are measurable
-functions of the retained visible \(N\)-word.  Hence their joint law under the
-finite-start protocol differs from the stationary-start retained-word law by
-at most \(C\theta^{L_N}\to0\) in total variation, uniformly in \(N\).  The
-stationary \(o_{\PP}(1)\) reduction, the convergence \(K_N/N\to1/\mu\), and
-the Gaussian limit therefore transfer to the finite-start retained block.
+For a finite hidden start, apply
+\Cref{lem:finite-hidden-start-path-contraction-main} with \(L=L_N\).  The
+retained cycle-index estimator, the retained complete-cycle count, and the
+retained cycle-sum approximation are measurable functions of the retained
+visible \(N\)-word.  Hence their joint law under the finite-start protocol
+differs from the stationary-start retained-word law by at most
+\(C\theta^{L_N}\to0\) in total variation, uniformly in \(N\).  The stationary
+\(o_{\PP}(1)\) reduction, the convergence \(K_N/N\to1/\mu\), and the Gaussian
+limit therefore transfer to the finite-start retained block.
 \end{proof}
 
-\begin{unnumberedlemma}[Separated-batch covariance estimator]
+\begin{lemma}[Separated-batch covariance estimator]\label{lem:separated-batch-covariance-estimator-main}
 Let \((G_j)_{j\in\mathbb Z}\) be the stationary Palm gap sequence from
 \Cref{ass:fixed-sampled-boundary-record-main}, put \(L_j=G_j+1\), and let
 \[
@@ -3048,7 +3021,7 @@ rather than the auxiliary zero matrix.
 The same conclusion holds after replacing \(Y_j\) by plug-in centered rewards
 whose centering error is \(O_{\PP}(N^{-1/2})\) and whose batch perturbations
 satisfy \Cref{eq:plugin-centering-batch-perturb-main}.
-\end{unnumberedlemma}
+\end{lemma}
 
 \begin{proof}
 This is \Cref{lem:calendar-stopped-batch-cov-main} with \(m_{\rm dep}=1\) and
@@ -3060,259 +3033,11 @@ are already included in that lemma, so no independence between \(M_N\) and the
 batch sums is assumed.
 \end{proof}
 
-\addtocounter{theorem}{-2}
-\begingroup
-\renewcommand{\thetheorem}{\thesection.\arabic{theorem}A}
-\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}A}
-\begin{theorem}[Main Theorem 3A: inclusion CLT]\label{thm:finite-record-inference-audit-main}\label{prop:three-coordinate-vector-batch-main}
-Under Assumption~\ref{ass:fixed-sampled-boundary-record-main}, use the
-finite-record protocol and covariance estimator fixed after the proofs.  In
-that protocol
-\[
-b_N=\lfloor N^{1/3}\rfloor,\qquad
-t_N=N^{-1/4},\qquad
-\varepsilon_N=N^{-1/4},\qquad
-\eta_N=N^{-1/8},\qquad
-\delta_N=N^{-1/8}.
-\]
-From the retained visible word form the complete-cycle inclusion estimator
-\[
-\widehat r_{m,N}^{\mathrm{cyc}}
-=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)},\qquad m=0,1,2,
-\]
-with the empty-sum convention in
-\Cref{def:cycle-index-inclusion-estimator-main}, and write
-\(\widehat r_N^{\mathrm{cyc}}
-=(\widehat r_{0,N}^{\mathrm{cyc}},
-  \widehat r_{1,N}^{\mathrm{cyc}},
-  \widehat r_{2,N}^{\mathrm{cyc}})^\top\).  Let
-\[
-r=(r_0,r_1,r_2)^\top,\qquad r_m=\PP(A_0=A_m=1).
-\]
-In Palm cycle coordinates put
-\[
-U_j=
-\bigl(1,\mathbf1_{\{G_j=0\}},
-\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
-\qquad
-L_j=G_j+1,\qquad
-Y_j=U_j-rL_j .
-\]
-Then
-\[
-\EE Y_j=0,\qquad (Y_j)\text{ is \(1\)-dependent},
-\]
-and
-\[
-\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
-=\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1).
-\]
-
-Consequently
-\[
-\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
-\Rightarrow \mathcal N(0,\Sigma_r),
-\]
-where
-\[
-\Sigma_r=\frac1\mu\left\{\operatorname{Var}(Y_0)
-+\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0)\right\},
-\qquad \mu=\EE L_0 .
-\]
-The separated-batch estimator \(\widehat\Sigma_{r,N}\) in Algorithm~1 obeys
-\[
-\|\widehat\Sigma_{r,N}-\Sigma_r\|_{\operatorname{op}}
-=O_{\PP}(N^{-1/3}).
-\]
-\end{theorem}
-\endgroup
-
-\addtocounter{theorem}{-1}
-\begingroup
-\renewcommand{\thetheorem}{\thesection.\arabic{theorem}B}
-\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}B}
-\begin{theorem}[Main Theorem 3B: quotient delta method]\label{thm:finite-record-quotient-delta-main}
-Use the finite-record protocol, thresholds, covariance estimator, projection
-rule, and chart-retention rule fixed after the proofs.  Assume the population
-inverse is in the stable quotient chart
-\[
-r_0>0,\qquad D=r_1-r_0^2\ne0,
-\]
-and define only the quotient map
-\[
-\Phi(r)=\left(1-\frac{r_1}{r_0}+\lambda,\;
-r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
-\qquad
-\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
-\]
-Then
-\[
-\sqrt N\{\Phi(\widehat r_N^{\mathrm{cyc}})-\Phi(r)\}
-\Rightarrow
-\mathcal N(0,\Sigma_\sigma),
-\qquad
-\Sigma_\sigma=D\Phi(r)\Sigma_rD\Phi(r)^\top.
-\]
-For the constrained D-MAP population, \(\Phi(r)=(p+s,ps)\).  This theorem is
-only a quotient delta method.  It contains no stochastic theorem for learning
-the branch map.  Separated labelled-rate reporting after this
-quotient step is conditional on the deterministic oracle branch map
-\(\mathcal B\) of \Cref{conv:branch-map-labelled-rates-main}.  If a calibration
-or side-data estimator \(\widehat{\mathcal B}_N\) is used instead, the same
-labelled-rate Gaussian and Wald conclusions require the additional assumption
-\[
-\PP\{\widehat{\mathcal B}_N=\mathcal B
-\text{ on the retained separated-root neighbourhood}\}\to1,
-\]
-and otherwise the theorem asserts only the quotient coordinates and unordered
-rate set.
-\end{theorem}
-\endgroup
-
-\addtocounter{theorem}{-1}
-\begingroup
-\renewcommand{\thetheorem}{\thesection.\arabic{theorem}C}
-\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}C}
-\begin{theorem}[Main Theorem 3C: exchange-diagonal projected Gaussian limit]\label{thm:finite-record-exchange-diagonal-main}
-Use the finite-record protocol, thresholds, covariance estimator, projection
-rule, and chart-retention rule fixed after the proofs.  At a population
-exchange-diagonal point
-\(\sigma_z=(2z,z^2)\), \(0<z<1\), the separated-root labelled-rate chart is
-not used.  Instead
-\[
-\sqrt N(\widetilde\sigma_N-\sigma_z)
-\Rightarrow
-\Pi_{H_z}(Z),\qquad
-Z\sim\mathcal N(0,\Sigma_\sigma),\qquad
-H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
-\]
-The local projection behind this boundary limit is, for every fixed
-\(h\in\mathbb R^2\),
-\[
-N^{1/2}\bigl(\Pi_F(\sigma_z+h/\sqrt N)-\sigma_z\bigr)
-\longrightarrow
-\Pi_{\{u\in\mathbb R^2:u_2\le zu_1\}}h,
-\]
-where \(\Pi_F\) is the ordinary Euclidean projection onto \(F\), single-valued
-near \(\sigma_z\).  The finite-record diagonal coverage rule is the set
-\[
-C^{\mathrm{diag}}_{\sigma,N}
-:=\{(2z,z^2):0<z<1,\ Q_N(z)\le c^{-}_{1-\alpha,N}(z)\},
-\]
-where \(Q_N\) uses the \(t_N\)-thresholded pseudoinverse and
-\(c^{-}_{1-\alpha,N}(z)\) is the ideal conditional quantile of the limiting
-projected Gaussian half-space statistic with plug-in covariance.
-
-The coverage assertion in this theorem is not an ordinary Wald or
-chi-square assertion.  It is made under the following retained-rank and
-quantile conditions, which are part of the theorem.  Let
-\[
-T_z=(\Pi_{H_z}Z)^\top\Sigma_\sigma^+\Pi_{H_z}Z,\qquad
-c_{1-\alpha}(z)=\inf\{c:\PP(T_z\le c)\ge1-\alpha\}.
-\]
-The covariance rank is the population rank of \(\Sigma_\sigma\), while the
-finite-record statistic uses exactly the empirical rank retained above the
-threshold \(t_N\).  The retained empirical range must converge to the
-population range, which is guaranteed here by
-\[
-\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma\|_{\operatorname{op}}
-=o_{\PP}(t_N).
-\]
-Exact first-order equality
-\[
-\PP\{(2z,z^2)\in C^{\mathrm{diag}}_{\sigma,N}\}\to1-\alpha
-\]
-is asserted only when \(c_{1-\alpha}(z)\) is a continuity point and
-\(\PP\{T_z\le c_{1-\alpha}(z)\}=1-\alpha\).  This is automatic for
-\(\operatorname{rank}\Sigma_\sigma=2\), and also for
-\(\operatorname{rank}\Sigma_\sigma=1\) when
-\(\operatorname{Range}\Sigma_\sigma\ne\operatorname{span}\{(-z,1)^\top\}\).
-If \(\operatorname{rank}\Sigma_\sigma=1\) and
-\(\operatorname{Range}\Sigma_\sigma=\operatorname{span}\{(-z,1)^\top\}\),
-then \(T_z\) has mass \(1/2\) at zero; the exact-level statement is asserted
-only for levels \(1-\alpha>1/2\), where the limiting lower quantile is
-positive.  For \(1-\alpha\le1/2\) in that rank-one normal case, and when
-\(\Sigma_\sigma=0\), the theorem asserts the projected-Gaussian limit and
-the conservative positive-buffer fallback only, not exact equality to
-\(1-\alpha\).
-
-Algorithm~3 produces a finite conditional Monte Carlo approximation
-\(\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)\) to the ideal conditional
-quantile.  Its simulation error is separate from the record limit: for fixed
-\(N\), conditional on the record, the DKW and local-quantile bound in
-\Cref{lem:conditional-monte-carlo-quantile-main} give an explicit
-finite-\(R_N^{\mathrm{MC}}\) error bound.  The coverage statement itself uses
-the ideal conditional quantile \(c^{-}_{1-\alpha,N}(z)\); replacing it by the
-order statistic from Algorithm~3 adds only the stated conditional Monte Carlo
-error.
-Pushing the diagonal set forward by
-\[
-z\longmapsto -\frac{\log z}{\Delta\tau}
-\]
-gives the finite-record confidence set for the identified common numerical
-rate \(\gamma_{\rm diag}\), equivalently for the invariant ordered quotient
-pair \((\gamma_{\rm diag},\gamma_{\rm diag})\).  The coverage event is
-identical before and after this push-forward.  All coverage statements for
-\(C^{\mathrm{diag}}_{\sigma,N}\) and \(C^{\mathrm{diag}}_{\gamma,N}\) are
-pointwise in the true \(z\); no uniform coverage over \(z\in(0,1)\) is claimed.
-\end{theorem}
-\endgroup
-
-\begin{proof}[Proof of \Cref{thm:finite-record-inference-audit-main}]
-\Cref{lem:killed-leakage-gap-exponential-moment-main} verifies the
-exponential renewal tail.  The stationary CLT for
-\(\widehat r_N^{\mathrm{cyc}}\), including Palm centering, one-gap dependence,
-the \(O_{\PP}(\log N)\) endpoint replacement, the renewal random-index
-replacement, and the covariance scale \(\Sigma_r=T_1^{(r)}/\mu\), is the
-reduction in \Cref{lem:three-inclusion-clt-reduction-main}.  The same lemma
-also gives the finite-start transfer, using the finite hidden-start
-path-space total-variation estimate; all complete-cycle indices are formed
-inside the retained visible word, so no estimator definition changes after
-burn-in.
-
-For covariance estimation, use the common complete-cycle set \(J_N\) and the
-plug-in rewards \(\widehat Y_j\) in
-\Cref{def:cycle-index-inclusion-estimator-main}.  The CLT gives
-\(\widehat r_N^{\mathrm{cyc}}-r=O_{\PP}(N^{-1/2})\), hence
-\(\widehat Y_j-Y_j=-(\widehat r_N^{\mathrm{cyc}}-r)L_j\).  The hypotheses of
-\Cref{lem:three-coordinate-batch-rate-main} hold with \(m_{\rm dep}=1\), and
-the all-complete-cycle separated-batch estimator gives
-\[
-\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
-=O_{\PP}\left(N^{-1/3}\right),
-\]
-which is \(o_{\PP}(t_N)\) for \(t_N=N^{-1/4}\).
-\end{proof}
-
-\begin{proof}[Proof of \Cref{thm:finite-record-quotient-delta-main}]
-Apply the symmetric-coordinate inverse delta method in
-\Cref{cor:finite_inverse_delta_boundary_main} together with the total
-finite-record rule in
-\Cref{prop:finite-record-threshold-projection-rule-main}.  The denominator
-thresholds vanish, so on every stable quotient neighbourhood the fallback is
-not used with probability tending to one.  Projection onto \(F\) is locally
-identity at separated interior points, and the sandwich covariance follows by
-continuous mapping.  The labelled-rate chart is kept outside this quotient
-delta-method theorem and is retained only under the external branch convention
-\Cref{conv:branch-map-labelled-rates-main}.
-\end{proof}
-
-\begin{proof}[Proof of \Cref{thm:finite-record-exchange-diagonal-main}]
-The projected half-space limit and the retained-rank simulated
-critical value are
-\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  The
-push-forward confidence set and the equality of coverage events are precisely
-\Cref{cor:exchange-diagonal-common-rate-confidence-main}.  The separated-root
-chart is excluded because on the diagonal the root map has denominator
-\(p-s=0\), although the common diagonal numerical rate remains identified.
-\end{proof}
-
-\paragraph{Finite-record algorithms after the proofs.}
+\paragraph{Finite-record protocol and algorithms for the main theorems.}
 \phantomsection\label{alg:all-complete-cycle-separated-batch-main}
 The operational rules used by
 \Cref{thm:finite-record-inference-audit-main,thm:finite-record-quotient-delta-main,thm:finite-record-exchange-diagonal-main}
-are the following fixed finite-record protocol.
-
+are fixed before the theorem statements.  The deterministic thresholds are
 \begin{equation}\label{prot:finite-record-main}
 b_N=\lfloor N^{1/3}\rfloor,\qquad
 t_N=N^{-1/4},\qquad
@@ -3340,23 +3065,13 @@ The separated-batch covariance rate is \(N^{-1/3}\), the retained-rank
 threshold is larger than the covariance-estimation error, and
 \(N^{1/2}\delta_N^2=N^{1/4}\to\infty\).  In the exceptional rank-one diagonal
 calibration use the deterministic angle threshold \(a_N=N^{-1/8}\), so
-\(t_N/a_N\to0\).  At separated roots, if the deterministic oracle branch map
-\(\mathcal B\) is unique on the projected roots and the
-discriminant/end-point thresholds are retained, the labelled-rate estimator
-obeys
-\[
-\sqrt N\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
--(\Gamma,\kappa_{\mathrm r})\}
-\Rightarrow
-\mathcal N(0,J_{\Gamma,\kappa}\Sigma_rJ_{\Gamma,\kappa}^{\top}).
-\]
-If the protocol instead uses an estimated branch map
-\(\widehat{\mathcal B}_N\), this display is asserted only under the oracle
-agreement event of the estimated-map reduction following
-\Cref{conv:branch-map-labelled-rates-main}.  No
-labelled-rate conclusion is asserted without root separation and either the
-deterministic oracle branch map or an explicit high-probability correctness
-statement for the estimated map.
+\(t_N/a_N\to0\).  The main finite-record inference below stops at visible-law
+coordinates: \(r\), the symmetric quotient coordinate \((p+s,ps)\), the
+unordered root and rate sets obtained from that coordinate, and, on the
+exchange diagonal, the common numerical rate.  Separated labelled rates are not
+finite-record estimands of the visible record alone.  Their Gaussian and Wald
+limits are isolated later in \Cref{cor:side-data-labelled-rate-wald-main},
+where an external side-data model supplies the missing branch label.
 
 \medskip
 \noindent\fbox{\begin{minipage}{0.965\textwidth}
@@ -3502,6 +3217,349 @@ then this displayed ratio bounds the conditional Monte Carlo quantile error
 with conditional probability at least \(1-\delta_{\mathrm{MC}}\).  This is a
 finite simulation guarantee and is not part of the record asymptotic limit.
 \end{minipage}}
+
+\addtocounter{theorem}{-2}
+\begingroup
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}A}
+\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}A}
+\begin{theorem}[Main Theorem 3A: inclusion CLT]\label{thm:finite-record-inference-audit-main}\label{prop:three-coordinate-vector-batch-main}
+Under Assumption~\ref{ass:fixed-sampled-boundary-record-main}, use the
+finite-record protocol, reporting event \(\mathcal E_N\), and covariance
+estimator fixed immediately before this theorem.  At every stable quotient
+population point, \(\PP(\mathcal E_N^c)\to0\).
+From the retained visible word form the complete-cycle inclusion estimator
+\[
+\widehat r_{m,N}^{\mathrm{cyc}}
+=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)},\qquad m=0,1,2,
+\]
+with the empty-sum convention in
+\Cref{def:cycle-index-inclusion-estimator-main}, and write
+\(\widehat r_N^{\mathrm{cyc}}
+=(\widehat r_{0,N}^{\mathrm{cyc}},
+  \widehat r_{1,N}^{\mathrm{cyc}},
+  \widehat r_{2,N}^{\mathrm{cyc}})^\top\).  Let
+\[
+r=(r_0,r_1,r_2)^\top,\qquad r_m=\PP(A_0=A_m=1).
+\]
+In Palm cycle coordinates put
+\[
+U_j=
+\bigl(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
+\qquad
+L_j=G_j+1,\qquad
+Y_j=U_j-rL_j .
+\]
+Then
+\[
+\EE Y_j=0,\qquad (Y_j)\text{ is \(1\)-dependent},
+\]
+and
+\[
+\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
+=\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1).
+\]
+
+Consequently
+\[
+\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)
+\Rightarrow \mathcal N(0,\Sigma_r),
+\]
+where
+\[
+\Sigma_r=\frac1\mu\left\{\operatorname{Var}(Y_0)
++\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0)\right\},
+\qquad \mu=\EE L_0 .
+\]
+The separated-batch estimator \(\widehat\Sigma_{r,N}\) in Algorithm~1 obeys
+\[
+\|\widehat\Sigma_{r,N}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\]
+\end{theorem}
+\endgroup
+
+\addtocounter{theorem}{-1}
+\begingroup
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}B}
+\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}B}
+\begin{theorem}[Main Theorem 3B: quotient delta method]\label{thm:finite-record-quotient-delta-main}
+Use the preceding finite-record protocol, thresholds, covariance estimator,
+projection rule, and chart-retention rule.  Assume the population
+inverse is in the stable quotient chart
+\[
+r_0>0,\qquad D=r_1-r_0^2\ne0,
+\]
+and define only the quotient map
+\[
+\Phi(r)=\left(1-\frac{r_1}{r_0}+\lambda,\;
+r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
+\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+Then
+\[
+\sqrt N\{\Phi(\widehat r_N^{\mathrm{cyc}})-\Phi(r)\}
+\Rightarrow
+\mathcal N(0,\Sigma_\sigma),
+\qquad
+\Sigma_\sigma=D\Phi(r)\Sigma_rD\Phi(r)^\top.
+\]
+For the constrained D-MAP population, \(\Phi(r)=(p+s,ps)\).  If
+\(\Delta_\sigma=\sigma_1^2-4\sigma_2>0\), the polynomial
+\(z^2-\sigma_1z+\sigma_2\) identifies the unordered survival-factor set
+\(\{p,s\}\), and hence the unordered numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},-\frac{\log s}{\Delta\tau}\right\}.
+\]
+This theorem contains no stochastic theorem for learning a branch map and no
+Wald statement for an ordered labelled vector
+\((\Gamma,\kappa_{\mathrm r})\).  Ordered labelled-rate inference is a separate
+side-data conclusion, stated in
+\Cref{cor:side-data-labelled-rate-wald-main}.
+\end{theorem}
+\endgroup
+
+\addtocounter{theorem}{-1}
+\begin{lemma}[Local reach and tie-broken projection at the exchange diagonal]\label{lem:exchange-diagonal-local-reach-before-main}
+Let
+\[
+F=\{(x+y,xy):0\le x,y\le1\},\qquad
+\sigma_z=(2z,z^2),\quad 0<z<1.
+\]
+There is an \(\varepsilon_z>0\) such that Euclidean projection onto the full
+feasible set \(F\) is single-valued on \(B_{\varepsilon_z}(\sigma_z)\).  On
+this ball the deterministic global tie-broken projection
+\(\Pi_F^{\rm tb}\) of
+\Cref{lem:feasible-set-computable-projection-main} agrees with that unique
+ordinary projection, and with the unique local projection onto the hypograph
+of the parabola \(\xi_2=\xi_1^2/4\) near \(\sigma_z\).
+
+Consequently, if \(Y_N=\sigma_z+O_{\PP}(N^{-1/2})\), then
+\[
+\PP\{Y_N\in B_{\varepsilon_z}(\sigma_z)\}\to1
+\]
+and, with probability tending to one,
+\[
+\Pi_F^{\rm tb}(Y_N)=\Pi_F(Y_N)=\Pi_{F,z}^{\rm loc}(Y_N),
+\]
+where \(\Pi_{F,z}^{\rm loc}\) denotes the unique nearest point inside the
+local tubular neighbourhood of the exchange arc.  In the same neighbourhood,
+for every fixed \(h\in\mathbb R^2\),
+\[
+N^{1/2}\{\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\}
+\longrightarrow
+\Pi_{H_z}h,\qquad H_z=\{u:u_2\le zu_1\}.
+\]
+\end{lemma}
+
+\begin{proof}
+Choose \(\delta>0\) so small that \(2z-\delta>0\), \(2z+\delta<2\), and the
+box-boundary pieces of \(F\) other than the exchange parabola are outside
+\(B_\delta(\sigma_z)\).  By
+\Cref{lem:feasible-set-computable-projection-main}, after possibly shrinking
+\(\delta\),
+\[
+F\cap B_\delta(\sigma_z)
+=\{(\xi_1,\xi_2)\in B_\delta(\sigma_z):\xi_2\le \xi_1^2/4\}.
+\]
+The boundary arc
+\(\Gamma_z=\{(t,t^2/4): |t-2z|<\delta\}\) is \(C^2\), hence has a positive
+local tubular radius.  Inside this tube the nearest point on \(\Gamma_z\) is
+unique, and points on the hypograph side are already feasible.  Since the
+closed remote set \(F\setminus B_\delta(\sigma_z)\) has positive distance from
+a smaller ball about \(\sigma_z\), one can choose
+\(\varepsilon_z>0\) so that no remote feasible point can tie the local nearest
+point for any \(v\in B_{\varepsilon_z}(\sigma_z)\).  Thus projection onto the
+full, globally nonconvex set \(F\) is single-valued on this ball.  The
+tie-broken map \(\Pi_F^{\rm tb}\) is a nearest-point selection; where the
+nearest point is unique, its tie-break is inactive, giving the displayed
+agreement.
+
+The probability statement follows immediately from
+\(\|Y_N-\sigma_z\|=O_{\PP}(N^{-1/2})\).  For
+\(v=\sigma_z+h/\sqrt N\), the local feasibility inequality is
+\[
+z^2+\frac{h_2}{\sqrt N}
+\le
+\frac{(2z+h_1/\sqrt N)^2}{4},
+\]
+or
+\[
+h_2\le zh_1+\frac{h_1^2}{4\sqrt N}.
+\]
+Thus the scaled local feasible sets converge on bounded \(h\)-sets to the
+closed half-space \(H_z=\{h:h_2\le zh_1\}\).  Shapiro's boundary projection
+differentiability theorem for sets with positive local reach
+\cite{Shapiro1987MetricProjection}, equivalently elementary
+Painleve--Kuratowski convergence to the closed convex half-space with unique
+nearest points, gives the directional projection limit.  The preceding
+global--local agreement transfers this limit from the local projection to
+\(\Pi_F^{\rm tb}\).
+\end{proof}
+
+\addtocounter{theorem}{-1}
+\begingroup
+\renewcommand{\thetheorem}{\thesection.\arabic{theorem}C}
+\renewcommand{\theHtheorem}{\thesection.\arabic{theorem}C}
+\begin{theorem}[Main Theorem 3C: exchange-diagonal projected Gaussian limit]\label{thm:finite-record-exchange-diagonal-main}
+Use the preceding finite-record protocol, thresholds, covariance estimator,
+projection rule, and chart-retention rule.  At a population
+exchange-diagonal point
+\(\sigma_z=(2z,z^2)\), \(0<z<1\), the separated-root labelled-rate chart is
+not used.  Let \(Y_N=\widehat\sigma^{\rm raw}_N\) be the raw symmetric
+coordinate entering the projected estimator
+\(\widetilde\sigma_N=\Pi_F^{\rm tb}(Y_N)\).  By
+\Cref{lem:exchange-diagonal-local-reach-before-main},
+\[
+\PP\{Y_N\in B_{\varepsilon_z}(\sigma_z),
+\Pi_F^{\rm tb}(Y_N)=\Pi_F(Y_N)=\Pi_{F,z}^{\rm loc}(Y_N)\}\to1,
+\]
+so the global tie-broken projection used by the finite-record protocol agrees
+with the unique local projection with probability tending to one.  Therefore
+\[
+\sqrt N(\widetilde\sigma_N-\sigma_z)
+\Rightarrow
+\Pi_{H_z}(Z),\qquad
+Z\sim\mathcal N(0,\Sigma_\sigma),\qquad
+H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
+\]
+The local projection behind this boundary limit is, for every fixed
+\(h\in\mathbb R^2\),
+\[
+N^{1/2}\bigl(\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\bigr)
+\longrightarrow
+\Pi_{\{u\in\mathbb R^2:u_2\le zu_1\}}h,
+\]
+with the same limit for the ordinary projection \(\Pi_F\) on the local
+single-valued neighbourhood.  The finite-record diagonal coverage rule is the
+set
+\[
+C^{\mathrm{diag}}_{\sigma,N}
+:=\{(2z,z^2):0<z<1,\ Q_N(z)\le c^{-}_{1-\alpha,N}(z)\},
+\]
+where \(Q_N\) uses the \(t_N\)-thresholded pseudoinverse and
+\(c^{-}_{1-\alpha,N}(z)\) is the ideal conditional quantile of the limiting
+projected Gaussian half-space statistic with plug-in covariance.
+
+The coverage assertion in this theorem is not an ordinary Wald or
+chi-square assertion.  It is made under the following retained-rank and
+quantile conditions, which are part of the theorem.  Let
+\[
+T_z=(\Pi_{H_z}Z)^\top\Sigma_\sigma^+\Pi_{H_z}Z,\qquad
+c_{1-\alpha}(z)=\inf\{c:\PP(T_z\le c)\ge1-\alpha\}.
+\]
+The covariance rank is the population rank of \(\Sigma_\sigma\), while the
+finite-record statistic uses exactly the empirical rank retained above the
+threshold \(t_N\).  The retained empirical range must converge to the
+population range, which is guaranteed here by
+\[
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma\|_{\operatorname{op}}
+=o_{\PP}(t_N).
+\]
+Exact first-order equality
+\[
+\PP\{(2z,z^2)\in C^{\mathrm{diag}}_{\sigma,N}\}\to1-\alpha
+\]
+is asserted only when \(c_{1-\alpha}(z)\) is a continuity point and
+\(\PP\{T_z\le c_{1-\alpha}(z)\}=1-\alpha\).  This is automatic for
+\(\operatorname{rank}\Sigma_\sigma=2\), and also for
+\(\operatorname{rank}\Sigma_\sigma=1\) when
+\(\operatorname{Range}\Sigma_\sigma\ne\operatorname{span}\{(-z,1)^\top\}\).
+If \(\operatorname{rank}\Sigma_\sigma=1\) and
+\(\operatorname{Range}\Sigma_\sigma=\operatorname{span}\{(-z,1)^\top\}\),
+then \(T_z\) has mass \(1/2\) at zero; the exact-level statement is asserted
+only for levels \(1-\alpha>1/2\), where the limiting lower quantile is
+positive.  For \(1-\alpha\le1/2\) in that rank-one normal case, and when
+\(\Sigma_\sigma=0\), the theorem asserts the projected-Gaussian limit and
+the conservative positive-buffer fallback only, not exact equality to
+\(1-\alpha\).
+
+Algorithm~3 produces a finite conditional Monte Carlo approximation
+\(\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)\) to the ideal conditional
+quantile.  Its simulation error is separate from the record limit: coverage
+is for the ideal conditional quantile; replacing it by
+\(R_N^{\mathrm{MC}}\) draws adds the DKW error of
+\Cref{lem:conditional-monte-carlo-quantile-main}.  More explicitly, for fixed
+\(N\) and conditionally on the record, if a simulation tolerance
+\(\delta_{\mathrm{MC}}\in(0,1)\) is declared and the conditional quantile is
+locally separated with modulus \(m_N\) on radius \(\eta_N\), then
+\Cref{lem:conditional-monte-carlo-quantile-main} gives the finite simulation
+bound
+\[
+\left|\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)
+-c^{-}_{1-\alpha,N}(z)\right|
+\le
+\frac{2\sqrt{\log(2/\delta_{\mathrm{MC}})/
+        (2R_N^{\mathrm{MC}})}+(R_N^{\mathrm{MC}})^{-1}}{m_N}
+\]
+with conditional probability at least \(1-\delta_{\mathrm{MC}}\), whenever
+the displayed right-hand side is at most \(\eta_N\).  Thus a finite
+\(R_N^{\mathrm{MC}}\) implementation changes the theorem only by this
+conditional Monte Carlo tolerance; the asymptotic record-coverage statement
+itself uses \(c^{-}_{1-\alpha,N}(z)\).
+Pushing the diagonal set forward by
+\[
+z\longmapsto -\frac{\log z}{\Delta\tau}
+\]
+gives the finite-record confidence set for the identified common numerical
+rate \(\gamma_{\rm diag}\), equivalently for the invariant ordered quotient
+pair \((\gamma_{\rm diag},\gamma_{\rm diag})\).  The coverage event is
+identical before and after this push-forward.  All coverage statements for
+\(C^{\mathrm{diag}}_{\sigma,N}\) and \(C^{\mathrm{diag}}_{\gamma,N}\) are
+pointwise in the true \(z\); no uniform coverage over \(z\in(0,1)\) is claimed.
+\end{theorem}
+\endgroup
+
+\begin{proof}[Proof of \Cref{thm:finite-record-inference-audit-main}]
+\Cref{lem:killed-leakage-gap-exponential-moment-main} verifies the
+exponential renewal tail.  The stationary CLT for
+\(\widehat r_N^{\mathrm{cyc}}\), including Palm centering, one-gap dependence,
+the \(O_{\PP}(\log N)\) endpoint replacement, the renewal random-index
+replacement, and the covariance scale \(\Sigma_r=T_1^{(r)}/\mu\), is the
+reduction in \Cref{lem:three-inclusion-clt-reduction-main}.  The same lemma
+also gives the finite-start transfer, using the finite hidden-start
+path-space total-variation estimate
+\(\Cref{lem:finite-hidden-start-path-contraction-main}\); all complete-cycle
+indices are formed inside the retained visible word, so no estimator
+definition changes after burn-in.
+
+For covariance estimation, use the common complete-cycle set \(J_N\) and the
+plug-in rewards \(\widehat Y_j\) in
+\Cref{def:cycle-index-inclusion-estimator-main}.  The CLT gives
+\(\widehat r_N^{\mathrm{cyc}}-r=O_{\PP}(N^{-1/2})\), hence
+\(\widehat Y_j-Y_j=-(\widehat r_N^{\mathrm{cyc}}-r)L_j\).  The hypotheses of
+\Cref{lem:three-coordinate-batch-rate-main} hold with \(m_{\rm dep}=1\), and
+the all-complete-cycle separated-batch estimator gives
+\[
+\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(N^{-1/3}\right),
+\]
+which is \(o_{\PP}(t_N)\) for \(t_N=N^{-1/4}\).
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:finite-record-quotient-delta-main}]
+Apply the symmetric-coordinate inverse delta method in
+\Cref{cor:finite_inverse_delta_boundary_main} together with the total
+finite-record rule in
+\Cref{prop:finite-record-threshold-projection-rule-main}.  The denominator
+thresholds vanish, so on every stable quotient neighbourhood the fallback is
+not used with probability tending to one.  Projection onto \(F\) is locally
+identity at separated interior points, and the sandwich covariance follows by
+continuous mapping.  The labelled-rate chart is kept outside this quotient
+delta-method theorem and is retained only under the external branch convention
+\Cref{conv:branch-map-labelled-rates-main}.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:finite-record-exchange-diagonal-main}]
+The projected half-space limit and the retained-rank simulated
+critical value are
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  The
+push-forward confidence set and the equality of coverage events are precisely
+\Cref{cor:exchange-diagonal-common-rate-confidence-main}.  The separated-root
+chart is excluded because on the diagonal the root map has denominator
+\(p-s=0\), although the common diagonal numerical rate remains identified.
+\end{proof}
 
 \begin{corollary}[Lag-two studentized scalar interval]\label{cor:finite-record-lag-two-studentized-main}
 Use the same retained post-burn-in record and complete-cycle convention as in
@@ -4115,6 +4173,177 @@ rule is well-defined for every finite record, while bad finite records do not
 produce misleading inferential output.
 \end{proof}
 
+\begin{corollary}[Side-data labelled-rate delta method and Wald statistic]\label{cor:side-data-labelled-rate-wald-main}
+Work under the fixed finite-record experiment and reporting gate
+\(\mathcal E_N\).  Suppose the quotient population point is separated:
+\[
+\Delta_\sigma=(p-s)^2>0,\qquad p,s\in(0,1),
+\]
+and suppose the visible-record estimator satisfies the inclusion CLT and
+covariance rate used in \Cref{thm:finite-record-inference-audit-main}:
+\[
+\sqrt N(\widehat r_N-r)\Rightarrow \mathcal N(0,\Sigma_r),\qquad
+\|\widehat\Sigma_{r,N}^{\mathrm{all}}-\Sigma_r\|_{\operatorname{op}}
+=o_{\PP}(t_N)
+\]
+for the retained-rank threshold \(t_N\).  Add one of the following side-data
+hypotheses, neither of which is a consequence of the visible record:
+
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.35em]
+\item A deterministic oracle branch map \(\mathcal B\) is fixed on a
+neighbourhood of the unordered root set and orders the two roots as the
+attempt and recovery branches.
+\item A calibration or side-data estimator \(\widehat{\mathcal B}_N\) is used
+only on an event \(\mathcal C_N\) such that
+\[
+\PP(\mathcal C_N)\to1,\qquad
+\mathcal C_N\subseteq
+\{\widehat{\mathcal B}_N=\mathcal B
+\text{ on the retained separated-root neighbourhood}\}.
+\]
+\end{enumerate}
+
+Then, on \(\mathcal E_N\) and on the corresponding side-data retained chart,
+the ordered labelled-rate estimator
+\[
+(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
+=\left(-\frac{\log\widehat p_N}{\Delta\tau},
+       -\frac{\log\widehat s_N}{\Delta\tau}\right)
+\]
+satisfies
+\[
+\sqrt N\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
+-(\Gamma,\kappa_{\mathrm r})\}
+\Rightarrow
+\mathcal N(0,\Sigma_{\Gamma,\kappa}),
+\qquad
+\Sigma_{\Gamma,\kappa}
+=J_{\Gamma,\kappa}(r)\Sigma_rJ_{\Gamma,\kappa}(r)^\top .
+\]
+With
+\[
+\widehat\Sigma_{\Gamma,\kappa,N}
+=\widehat J_{\Gamma,\kappa,N}\widehat\Sigma_{r,N}^{\mathrm{all}}
+\widehat J_{\Gamma,\kappa,N}^{\top},
+\]
+where \(\widehat J_{\Gamma,\kappa,N}\) is
+\eqref{eq:inclusion-to-rate-jacobian-main} evaluated on the retained labelled
+chart, the covariance is consistent at the same operator-norm scale.  If
+\[
+\|\widehat\Sigma_{\Gamma,\kappa,N}
+-\Sigma_{\Gamma,\kappa}\|_{\operatorname{op}}=o_{\PP}(t_N),
+\]
+then the thresholded retained-rank Wald statistic converges to
+\(\chi_k^2\), \(k=\operatorname{rank}\Sigma_{\Gamma,\kappa}\).  No labelled-rate
+conclusion is asserted on \(\Delta_\sigma=0\), without an oracle map, or for an
+estimated branch map outside the high-probability agreement event.
+\end{corollary}
+
+\begin{proof}
+On a separated-root neighbourhood the oracle branch map fixes one \(C^1\)
+ordering of the two roots, and
+\Cref{lem:separated-root-rate-delta-main} gives the root and rate Jacobians.
+The complete-cycle reporting gate has probability tending to one at the stable
+population point, and the separated discriminant/end-point thresholds are
+eventually retained.  The multivariate delta method therefore gives the
+displayed Gaussian limit.  If an estimated map is used, the event
+\(\mathcal C_N\) makes the estimated-map estimator identical to the oracle-map
+estimator with probability tending to one, so the same limit follows by the
+standard high-probability replacement argument.  The covariance consistency is
+the same continuous-mapping argument applied to the plug-in Jacobian on the
+retained separated chart.  Finally, Weyl's eigenvalue inequality retains
+exactly the positive limiting covariance eigenvalues above the threshold
+\(t_N\), and Slutsky's theorem gives the retained-rank \(\chi_k^2\) limit.
+\end{proof}
+
+\begin{proposition}[Finite-record complete-law reporting is renewal-consistent]\label{prop:finite-record-complete-law-renewal-consistency-main}
+Use the finite-record reporting gate \(\mathcal E_N\), the raw inverse map
+\(\Phi\), the feasible symmetric-coordinate projection \(\Pi_F^{\rm tb}\), and
+the thresholds of
+\Cref{prop:finite-record-threshold-projection-rule-main}.  A finite-record
+complete-law report is formed only on \(\mathcal E_N\) and only when the
+inverse denominators are retained:
+\[
+\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,\qquad
+|\widehat r_{1,N}^{\mathrm{cyc}}
+-(\widehat r_{0,N}^{\mathrm{cyc}})^2|\ge\varepsilon_N .
+\]
+On that event compute
+\[
+\widetilde\sigma_N
+=\Pi_F^{\rm tb}\{\Phi(\widehat r_N^{\mathrm{cyc}})\}.
+\]
+Then compute the projected root pair from
+\[
+z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0,
+\]
+and withhold complete-law probabilities if either projected root lies outside
+\([\eta_N,1-\eta_N]\).  On the retained interior-root event, compute the
+projected gap law \(\widetilde g_{k,N}\) by the formulas in
+\Cref{lem:algorithmic-complete-law-reconstruction-main}, the projected Palm
+renewal masses \(\widetilde u_{n,N}\), and the projected stationary renewal
+intensity
+\[
+\widetilde\rho_N
+=\rho_*(\widetilde\sigma_N)
+=\left(1+\sum_{k\ge0}k\,\widetilde g_{k,N}\right)^{-1}.
+\]
+The finite-record inclusion product for a nonempty
+\(B=\{i_1<\cdots<i_m\}\) is then
+\begin{equation}\label{eq:finite-record-renewal-consistent-inclusions-main}
+\widetilde\PP_N(B\subset\varXi)
+=\widetilde\rho_N
+ \prod_{\ell=1}^{m-1}\widetilde u_{i_{\ell+1}-i_\ell,N},
+\end{equation}
+with the empty-set value \(1\), and finite words are obtained from
+\eqref{eq:finite-record-renewal-consistent-inclusions-main} by the same
+finite inclusion--exclusion formula as
+\eqref{eq:algorithmic-reconstruction-word-main}.  If the reporting gate or
+the denominator or interior-root tests fail, no finite-record complete-law
+probabilities are reported.
+
+Thus the complete-law finite-record object is a point on the full
+renewal-consistency manifold
+\[
+\mathcal M_{\rm ren}
+=\{(\rho_*(\sigma),\sigma):\sigma\in F\}.
+\]
+The raw empirical intensity \(\widehat r_{0,N}^{\mathrm{cyc}}\) is used to
+construct the inverse coordinate and to test denominator stability, but it is
+not inserted as the renewal intensity after the root coordinate has been
+projected.  Consequently the reported finite word probabilities cannot mix a
+noisy single-site estimate with a different projected renewal gap law.
+At any separated interior population point, the projection is locally
+eventually inactive with probability tending to one, so
+\(\widetilde\sigma_N\to\Phi(r)\),
+\(\widetilde\rho_N\to r_0\), and each fixed-window reported word probability
+converges in probability to its population value.
+\end{proposition}
+
+\begin{proof}
+The construction first projects the symmetric root coordinate into \(F\), and
+the interior-root retention test keeps only roots in \((0,1)\).  On that
+retained event the quotient-root formulas give a single renewal gap law.  The
+intensity \(\widetilde\rho_N\) is then defined from that same gap law by the
+renewal identity \(1/\EE(G+1)\).  Therefore
+\((\widetilde\rho_N,\widetilde\sigma_N)\) lies on
+\(\mathcal M_{\rm ren}\), and the inclusion products are exactly the renewal
+products for the projected finite-record renewal law.  The non-reporting
+branches are the same retained-record and denominator branches already fixed
+in \Cref{prop:finite-record-threshold-projection-rule-main}.
+
+At a separated interior population point, the inverse denominators are bounded
+away from zero and \(\Phi(r)\) lies in the relative interior of \(F\).  The
+complete-cycle inclusion estimator is consistent by
+\Cref{thm:finite-record-inference-audit-main}; hence
+\(\Phi(\widehat r_N^{\mathrm{cyc}})\to\Phi(r)\) in probability and
+\(\Pi_F^{\rm tb}\) is eventually the identity with probability tending to
+one.  The roots, gap probabilities for any fixed finite range, renewal masses
+for any fixed finite range, and \(\rho_*(\sigma)\) are continuous on this
+separated interior chart.  The displayed fixed-window convergence follows by
+finite products and finite inclusion--exclusion.
+\end{proof}
+
 \begin{proposition}[Symmetric-coordinate inverse delta method]\label{cor:finite_inverse_delta_boundary_main}\label{cor:finite-separated-root-rate-chart-main}
 Work under \Cref{ass:fixed-sampled-boundary-record-main}, and let
 \(\widehat r_N\) be the all-complete-cycle inclusion estimator from
@@ -4137,46 +4366,11 @@ population point lies in a stability neighbourhood where \(r_0\) and
 The same limit holds with \(\Phi(\widehat r_N)\) replaced by
 \(\widetilde\sigma_N\) at separated interior points of \(F\), and the sandwich
 \(\widehat\Sigma_{\sigma,N}\) is consistent there.  For the constrained D-MAP
-population, \(\Phi(r)=(p+s,ps)\).
-
-If, in addition, \(\Delta_\sigma=(p-s)^2>0\) and the deterministic oracle
-branch map \(\mathcal B\) supplies the separated-root labels as in
-\Cref{prop:population-separated-root-labelled-chart-main}, then the retained
-event in \Cref{prop:finite-record-threshold-projection-rule-main} has
-probability tending to one.  The same assertion holds for an estimated branch
-map \(\widehat{\mathcal B}_N\) only under the additional agreement condition
-of the estimated-map reduction following
-\Cref{conv:branch-map-labelled-rates-main}.  On that retained chart, with
-\(J_{\Gamma,\kappa}\) as in \Cref{lem:separated-root-rate-delta-main},
-\[
-\sqrt N\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
--(\Gamma,\kappa_{\mathrm r})\}
-\Rightarrow
-\mathcal N(0,\Sigma_{\Gamma,\kappa}),
-\qquad
-\Sigma_{\Gamma,\kappa}
-=J_{\Gamma,\kappa}(r)\Sigma_rJ_{\Gamma,\kappa}(r)^\top .
-\]
-The plug-in covariance
-\[
-\widehat\Sigma_{\Gamma,\kappa,N}
-=\widehat J_{\Gamma,\kappa,N}
-\,\widehat\Sigma_{r,N}^{\mathrm{all}}\,
-\widehat J_{\Gamma,\kappa,N}^{\top}
-\]
-is formed only on the retained separated-root event, where
-\(\widehat J_{\Gamma,\kappa,N}\) denotes the formula
-\eqref{eq:inclusion-to-rate-jacobian-main} with \(r,p,s\) replaced by
-\(\widehat r_N,\widehat p_N,\widehat s_N\).  It is then consistent with the
-same operator-norm rate.  If a deterministic rank threshold \(t_N\)
-satisfies
-\(\|\widehat\Sigma_{\Gamma,\kappa,N}-\Sigma_{\Gamma,\kappa}\|_{\operatorname{op}}
-=o_{\PP}(t_N)\), then the separated labelled-rate retained-rank Wald statistic
-converges to \(\chi_k^2\), \(k=\operatorname{rank}\Sigma_{\Gamma,\kappa}\).
-The separated labelled-rate interval is asserted only under
-\Cref{conv:branch-map-labelled-rates-main}; if the branch map is estimated, it
-is asserted only after adding the high-probability oracle-agreement condition,
-and no extra branch-classification uncertainty is otherwise propagated.
+population, \(\Phi(r)=(p+s,ps)\).  If \(\Delta_\sigma=(p-s)^2>0\), the roots are
+recovered as an unordered pair and the finite-record rule may report the
+unordered numerical rate set.  The ordered labelled-rate chart is not part of
+this proposition; it requires the separate side-data hypotheses in
+\Cref{cor:side-data-labelled-rate-wald-main}.
 If \(\Delta_\sigma=0\), then
 \(\widehat\Delta_{\sigma,N}=O_{\PP}(N^{-1/2})\), so the reporting rule of
 \Cref{prop:finite-record-threshold-projection-rule-main} with
@@ -4199,18 +4393,9 @@ asymptotically inactive.  Since
 \(\widehat\Delta_{\sigma,N}\to\Delta_\sigma>0\) and \(\delta_N^2\to0\), the
 discriminant threshold is eventually passed.  The empirical projected roots
 converge to the two distinct population roots in \((0,1)\), so the endpoint
-threshold is eventually passed, and the deterministic oracle branch map assigns
-the roots uniquely with probability tending to one.  If an estimated branch map
-is used, the estimated-map reduction following
-\Cref{conv:branch-map-labelled-rates-main} supplies the same conclusion only
-on its high-probability oracle-agreement event.  Thus chart
-retention is asymptotically certain under the stated branch-map hypothesis.
-The labelled-root and labelled-rate limits then follow from
-\Cref{lem:separated-root-rate-delta-main} by continuous mapping on the
-externally supplied retained chart.  The plug-in covariance formula follows by
-the same continuous mapping, and the retained-rank Wald statement is Weyl's
-eigenvalue inequality plus Slutsky's theorem on the limiting range of
-\(\Sigma_{\Gamma,\kappa}\).  At \(\Delta_\sigma=0\), the projected-coordinate
+threshold is eventually passed, but the proof stops at the unordered root set
+because no statistic of the visible record chooses the branch label.  At
+\(\Delta_\sigma=0\), the projected-coordinate
 limit in \Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}
 implies \(\widehat\Delta_{\sigma,N}=O_{\PP}(N^{-1/2})\), so the stated
 threshold condition makes the no-label decision occur with probability tending
@@ -4223,7 +4408,7 @@ Assume the all-complete-cycle inclusion CLT and covariance consistency from
 \Cref{thm:finite-record-inference-audit-main,lem:three-coordinate-batch-rate-main},
 and form
 \[
-\widetilde\sigma_N=\Pi_F(\Phi(\widehat r_N)),\qquad
+\widetilde\sigma_N=\Pi_F^{\rm tb}(\Phi(\widehat r_N)),\qquad
 F=\{(x+y,xy):0\le x,y\le1\}.
 \]
 This corollary asserts only the following pointwise, rank-conditional coverage
@@ -4238,6 +4423,10 @@ statistic except at separated nondegenerate interior points covered by the
 preceding retained-chart theorem.
 At this exchange-diagonal point, where the
 unordered sampled survival factors satisfy \(p=s=z\),
+the raw symmetric coordinate is in the local single-valued projection
+neighbourhood with probability tending to one, and
+\(\Pi_F^{\rm tb}\) agrees there with the unique ordinary and local
+projections by \Cref{lem:exchange-diagonal-local-reach-before-main}.  Hence
 \[
 \sqrt N(\widetilde\sigma_N-\sigma_z)
 \Rightarrow
@@ -4441,16 +4630,20 @@ is asserted.
 
 \begin{proof}
 At \(\sigma_z=(2z,z^2)\), the local projection and half-space limit are
-exactly
-\Cref{lem:local-projection-exchange-diagonal-main,lem:exchange-diagonal-projection-main}.
-The first result is the metric-projection directional derivative at the
-boundary, in the sense of Shapiro's projection differentiability theorem
-\cite{Shapiro1987MetricProjection}; the second is the constrained-estimator
-limit obtained by applying that derivative to the symmetric-coordinate CLT, as
-in the projected Gaussian limits for constrained \(M\)-estimators
-\cite{Geyer1994ConstrainedM}.  Since this map is directionally but not
-classically differentiable at the exchange diagonal, the calibration follows
-the directionally differentiable inference framework of
+given before the theorem by
+\Cref{lem:exchange-diagonal-local-reach-before-main}.  In particular, the
+globally defined tie-broken projection used by the reporting rule agrees with
+the unique local projection with probability tending to one.  The same
+directional derivative is restated in
+\Cref{lem:local-projection-exchange-diagonal-main,lem:exchange-diagonal-projection-main}
+for the later root-splitting discussion.  This is the metric-projection
+directional derivative at the boundary, in the sense of Shapiro's projection
+differentiability theorem \cite{Shapiro1987MetricProjection}, and the
+constrained-estimator limit obtained by applying that derivative to the
+symmetric-coordinate CLT, as in projected Gaussian limits for constrained
+\(M\)-estimators \cite{Geyer1994ConstrainedM}.  Since this map is
+directionally but not classically differentiable at the exchange diagonal, the
+calibration follows the directionally differentiable inference framework of
 \cite{FangSantos2019DirectionalDifferentiability}.
 \Cref{lem:projected-gaussian-bootstrap-halfspace-main}, applied with
 \(X_N=\sqrt N(\widetilde\sigma_N-\sigma_z)\), \(z_N=z\), and
@@ -4783,11 +4976,10 @@ random-index theorem, or the equivalent maximal inequality for
 \mathcal N\left(0,\frac{\mathcal T_{m_{\rm dep}}}{\EE L}\right).
 \]
 
-The finite-start burn-in case follows from the finite hidden-start path-space
-contraction stated before \Cref{lem:kernel-factorization-main}: the statistic
-is formed from the retained post-burn-in block of length \(N\), and
-\(L_N\to\infty\) makes the initial-law discrepancy \(C\theta^{L_N}\) vanish in
-total variation.
+The finite-start burn-in case follows from
+\Cref{lem:finite-hidden-start-path-contraction-main}: the statistic is formed
+from the retained post-burn-in block of length \(N\), and \(L_N\to\infty\)
+makes the initial-law discrepancy \(C\theta^{L_N}\) vanish in total variation.
 \end{proof}
 
 \begin{lemma}[Finite-lag separated-batch covariance]\label{thm:finite-lag-separated-batch-main}\label{lem:batch-var-random-count-main}
@@ -4948,7 +5140,7 @@ so \(Y_j\) and \(Y_k\) are independent.  Thus the reward sequence is
 \(1\)-dependent.
 \end{proof}
 
-\begin{sublemma}[Hoeffding row--column decomposition and coboundary zero criterion]
+\begin{lemma}[Hoeffding row--column decomposition and coboundary zero criterion]\label{lem:row-column-coboundary-criterion-main}
 Let \(G_0,G_1,G_2\) be i.i.d. with a full-support law \(g\) on
 \(\mathbb N_0\).  Let \(f:\mathbb N_0^2\to\RR\) have
 \(\EE f(G_0,G_1)^2<\infty\), and put
@@ -4973,7 +5165,7 @@ left-hand side is zero if and only if there is a sequence
 \begin{equation}\label{eq:row-column-zero-coboundary-main}
 f(i,j)-M=u_i-u_j,\qquad i,j\ge0 .
 \end{equation}
-\end{sublemma}
+\end{lemma}
 
 \begin{proof}
 The residual has zero conditional mean in each coordinate:
@@ -5099,9 +5291,9 @@ which is exactly \eqref{eq:lag-two-probabilistic-variance-main} and
 
 It remains to make the nondegeneracy explicit rather than implicit.  The
 unconditional mean \(M=\EE f(G_0,G_1)\) is zero, because \(\EE Y_j=0\), but
-we keep it in the displayed row--column formula.  Applying the row--column
-sublemma above gives
-\eqref{eq:lag-two-variance-squares-main}.  The same sublemma also states the
+we keep it in the displayed row--column formula.  Applying
+\Cref{lem:row-column-coboundary-criterion-main} gives
+\eqref{eq:lag-two-variance-squares-main}.  The same lemma also states the
 only way the variance can vanish: because the gap law has full support, there
 would have to be a sequence \((u_i)\) such that
 \[
