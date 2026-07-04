@@ -182,18 +182,64 @@ Then the all-sign coefficient convention gives
 I(\mathbf n)=[z^0]\prod_{j=1}^rQ_{n_j}(z)
 =\Lambda(\mathbf n)S(\mathbf n).
 \]
-Equivalently, this is the recurrence
-\eqref{eq:eighth-order-constant-term-recurrence}; in pseudocode:
+
+\begin{lemma}[Deterministic exact Laurent recurrence]%
+\label{lem:appendix-d-deterministic-laurent-recurrence}
+Let \(\mathbf n=(n_1,\ldots,n_r)\) be any finite row of positive integers.
+Define finitely supported maps \(C_j:\ZZ\to\QQ[\ii]\) by
 \[
-\begin{array}{l}
-\texttt{C = \{0:1\};}\\
-\texttt{for n in row:}\\
-\qquad \texttt{for s in supp(C), for k in \{-n,...,-1,1,...,n\}:}\\
-\qquad\qquad \texttt{D[s+k] += C[s] * q[n,k];}\\
-\qquad \texttt{C = D;}\\
-\texttt{return C.get(0,0).}
-\end{array}
+C_0(s)=\mathbf 1_{\{s=0\}},\qquad
+C_j(s)=\sum_{0<|k|\le n_j}
+2^{-n_j}(-\ii)^{n_j}\operatorname{sgn}(k)^{\,n_j\bmod2}
+\binom{n_j-1}{|k|-1}\,C_{j-1}(s-k).
 \]
+Then
+\[
+  C_r(0)=[z^0]\prod_{j=1}^r Q_{n_j}(z)=I(\mathbf n).
+\]
+In particular \(C_r(0)\in\QQ\).  More explicitly,
+\[
+C_r(0)=
+\prod_{j=1}^r\lambda_{n_j}
+\sum_{\mathbf k\in\mathcal K(\mathbf n)}
+\prod_{j=1}^r
+\operatorname{sgn}(k_j)^{\,n_j\bmod2}
+\binom{n_j-1}{|k_j|-1}.
+\]
+The recurrence is deterministic and terminates after at most
+\(\prod_{j=1}^r(2n_j)\) rational Gaussian-integer operations.
+\end{lemma}
+
+\begin{proof}
+The coefficient formula \eqref{eq:mode-laurent-coefficients} says that
+multiplication by \(Q_{n_j}\) sends a coefficient array \(C_{j-1}\) to the
+convolution array displayed above.  Induction on \(j\) gives
+\[
+  C_j(s)=[z^s]\prod_{a=1}^jQ_{n_a}(z),
+\]
+and hence \(C_r(0)\) is the desired constant term.  Expanding the last
+coefficient and collecting the common factor
+\(\prod_j\lambda_{n_j}\) gives the stated zero-sum formula.
+
+The value is rational because the constant term is the Haar integral of the
+real-valued product
+\(\prod_j u_{n_j}(\tan\theta)\), by
+Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  Equivalently,
+when \(\sum_j n_j\) is odd, the integrand is odd and the value is zero; when
+\(\sum_j n_j\) is even, \(\prod_j\lambda_{n_j}\) is real and the zero-sum
+integer convolution is an integer.
+\end{proof}
+
+The paper-local script
+\[
+\texttt{certificates/laurent\_recurrence\_minicheck.py}
+\]
+is the exact-rational executable form of
+Lemma~\ref{lem:appendix-d-deterministic-laurent-recurrence}.  With no
+arguments it replays the order-eight rows below; with arguments such as
+\(\texttt{2 6}\) or \(\texttt{2,3,3}\) it returns the exact constant term
+for the requested row.
+
 For the mode products entering \(A_4,A_6,A_8\), the finite zero-sum
 convolution is:
 \[

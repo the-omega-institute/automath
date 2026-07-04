@@ -8,7 +8,7 @@ coefficient-defect consequence.  The proofs below are internal to the stated
 lemmas and theorems; they do not require auxiliary finite-grid data or
 external certificate files.  Pointwise dissipation asymptotics are not part of
 this coefficient hierarchy; the only retained statement in that direction is
-the short differentiated-remainder remark following
+the short differentiated-remainder remark immediately before
 Proposition~\ref{prop:dissipation-tail-coefficient-expansion}.
 
 \subsection*{Entropy proof architecture and hypotheses}
@@ -763,13 +763,13 @@ can evaluate \(A_{2N}\) on the full class of laws.
 \end{proof}
 
 The next theorem is deliberately a theorem about displayed symmetric
-power-tail examples, not a regular-variation theorem.  Its first case is a
-conditional transfer statement from a quotient expansion to an entropy
+power-tail examples, not a broad regular-variation theorem.  Its first case is
+a conditional transfer statement from a quotient expansion to an entropy
 expansion; the remaining cases are the explicit power-tail classes for which
-the quotient hypotheses are verified here.  No regularly varying theorem is
-claimed without the quotient controls stated below.  In particular, the
-separate slowly varying corollary assumes its quotient-scale controls
-explicitly.
+the quotient hypotheses are verified here.  The later slowly varying
+borderline corollary is also restricted to one monotone slowly varying density
+class, where Lemma~\ref{lem:slowly-varying-quotient-controls} proves the
+needed quotient-scale controls.
 
 \begin{theorem}[Explicit symmetric power-tail examples]%
 \label{thm:tail-replacements-proved-here}
@@ -1446,12 +1446,141 @@ written out as the quotient controls.  The displayed conclusion is therefore
 Theorem~\ref{thm:exact-perturbative-power-tail-log-replacement}.
 \end{proof}
 
-\begin{corollary}[Conditional slowly varying borderline tail]%
+\begin{lemma}[Slow variation supplies the quotient controls]%
+\label{lem:slowly-varying-quotient-controls}
+Let \(p\ge4\), \(R>0\), and \(c>0\).  Let \(L\) be eventually positive,
+eventually monotone, and slowly varying on \([R,\infty)\).  Put
+\[
+  \mathcal M_L(t):=\int_R^t\frac{L(s)}s\,\dd s,
+\]
+and assume \(\mathcal M_L(t)\to\infty\).  Then, as \(t\to\infty\),
+\begin{equation}\label{eq:slowly-varying-top-moment-growth}
+  L(t)=o(\mathcal M_L(t)),\qquad
+  \mathcal M_L(t)=o(t^\alpha)\quad\text{for every }\alpha>0 .
+\end{equation}
+Moreover, for every \(0\le n<p\), Karamata's theorem gives the sharper
+tail equivalent
+\begin{equation}\label{eq:slowly-varying-karamata-tail-equivalent}
+t^{-n}\int_t^\infty x^{n-p-1}L(x)\,\dd x
+\sim \frac{1}{p-n}t^{-p}L(t)
+=o(t^{-p}\mathcal M_L(t)),
+\end{equation}
+and hence
+\begin{equation}\label{eq:slowly-varying-lower-potter-control}
+t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x
+=o(t^{-p}\mathcal M_L(t)),
+\end{equation}
+and, with \(r_t(x):=c x^{-p-1}\{L(x)-L(t)\}\) on \(R\le x\le t\),
+\begin{equation}\label{eq:slowly-varying-local-potter-control}
+t^{-(p+1)}\int_R^t x^{p+1}|r_t(x)|\,\dd x
+=o(t^{-p}\mathcal M_L(t)),
+\end{equation}
+while
+\begin{equation}\label{eq:slowly-varying-far-potter-control}
+\int_t^\infty\left(1+\frac{x^2}{t^2}\right)
+c x^{-p-1}L(x)\,\dd x
+=O(t^{-p}L(t))=o(t^{-p}\mathcal M_L(t)).
+\end{equation}
+Finally, eventual monotonicity and Karamata's theorem imply
+\begin{equation}\label{eq:slowly-varying-local-karamata-control}
+t^{-(p+1)}\int_R^t |L(x)-L(t)|\,\dd x
+\le
+t^{-(p+1)}\left(\int_R^t L(x)\,\dd x+tL(t)\right)
+=O(t^{-p}L(t))
+=o(t^{-p}\mathcal M_L(t)).
+\end{equation}
+For \(0\le n<p\), the lower tail moment
+\(\int_R^\infty x^{n-p-1}L(x)\,\dd x\) is finite.
+\end{lemma}
+
+\begin{proof}
+We use only standard consequences of slow variation, recorded here at the
+scales needed in the quotient argument.  Finite initial intervals do not affect
+any of the asymptotic estimates, so we may increase \(R\) once so that \(L\) is
+positive and monotone on \([R,\infty)\).  Potter's estimate says that, for
+each \(\delta>0\), after this enlargement there is a constant \(C_\delta\) such
+that, for \(x,t\ge R\),
+\begin{equation}\label{eq:potter-bound-used-locally}
+  \frac{L(x)}{L(t)}
+  \le C_\delta\max\{(x/t)^\delta,(t/x)^\delta\}.
+\end{equation}
+This estimate is a consequence of the uniform convergence theorem for slowly
+varying functions and is not an additional hypothesis.
+
+First we compare \(L(t)\) with \(\mathcal M_L(t)\).  Fix \(A>1\).  By the
+uniform convergence theorem, \(L(tu)/L(t)\to1\) uniformly for
+\(u\in[1/A,1]\).  Hence, for \(t\) large,
+\[
+  \mathcal M_L(t)\ge\int_{t/A}^{t}\frac{L(s)}s\,\dd s
+  \ge \frac12L(t)\log A .
+\]
+Since \(A\) is arbitrary and \(\mathcal M_L(t)\to\infty\), this gives
+\(L(t)=o(\mathcal M_L(t))\).  Taking
+\(\delta=\alpha/2\) in \eqref{eq:potter-bound-used-locally} with \(t=R\)
+gives \(L(s)\le C_\alpha s^{\alpha/2}\) for large \(s\), and therefore
+\[
+  \mathcal M_L(t)\le C_\alpha\int_R^t s^{\alpha/2-1}\,\dd s
+  =O(t^{\alpha/2})=o(t^\alpha).
+\]
+This proves \eqref{eq:slowly-varying-top-moment-growth}.
+
+Let \(0\le n<p\) and set \(\beta=p-n>0\).  Choose
+\(0<\delta<\beta\).  For \(x\ge t\), Potter's estimate gives
+\[
+  L(x)\le C_\delta L(t)(x/t)^\delta .
+\]
+Thus
+\[
+\begin{aligned}
+t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x
+&\le C t^{-n}L(t)t^{-\delta}
+   \int_t^\infty x^{-\beta-1+\delta}\,\dd x  \\
+&\le C_{\beta,\delta}t^{-p}L(t)
+ =o(t^{-p}\mathcal M_L(t)).
+\end{aligned}
+\]
+The exact equivalent in
+\eqref{eq:slowly-varying-karamata-tail-equivalent} is the standard Karamata
+tail theorem applied to the regularly varying function
+\(x\mapsto x^{n-p-1}L(x)\), whose index is less than \(-1\).
+The same estimate with \(t=R\), or equivalently Potter with
+\(\delta<\beta\), gives
+\(\int_R^\infty x^{n-p-1}L(x)\,\dd x<\infty\).
+
+For the local Taylor remainder, eventual monotonicity and Karamata's theorem
+give \(\int_R^tL(x)\,\dd x=O(tL(t))\).  Consequently
+\[
+\begin{aligned}
+t^{-(p+1)}\int_R^t x^{p+1}|r_t(x)|\,\dd x
+&=ct^{-(p+1)}\int_R^t |L(x)-L(t)|\,\dd x  \\
+&\le Ct^{-(p+1)}\left(\int_R^t L(x)\,\dd x+tL(t)\right)  \\
+&=O(t^{-p}L(t))
+ =o(t^{-p}\mathcal M_L(t)).
+\end{aligned}
+\]
+This is also the displayed control
+\eqref{eq:slowly-varying-local-karamata-control}.
+
+Finally, applying
+\eqref{eq:slowly-varying-karamata-tail-equivalent} with \(n=0\) and \(n=2\)
+gives
+\[
+  \int_t^\infty x^{-p-1}L(x)\,\dd x
+  \sim \frac1p t^{-p}L(t),
+  \qquad
+  t^{-2}\int_t^\infty x^{1-p}L(x)\,\dd x
+  \sim \frac1{p-2}t^{-p}L(t).
+\]
+Together with \(L(t)=o(\mathcal M_L(t))\), this proves
+\eqref{eq:slowly-varying-far-potter-control}.
+\end{proof}
+
+\begin{corollary}[Slowly varying borderline tail]%
 \label{cor:conditional-slowly-varying-borderline-tail}
 Let \(N\ge3\), put \(p=2N-2\), and let \(R>0\), \(c>0\).  Let \(L\) be
-slowly varying, eventually monotone, and nonnegative on \([R,\infty)\), and
-let \(g\) be a symmetric nonnegative integrable function supported in
-\((-R,R)\).  Suppose
+slowly varying, eventually positive, eventually monotone, and nonnegative on
+\([R,\infty)\), and let \(g\) be a symmetric nonnegative integrable function
+supported in \((-R,R)\).  Suppose
 \[
   f(x)=g(x)+c|x|^{-p-1}L(|x|)\mathbf1_{\{|x|\ge R\}}
 \]
@@ -1460,27 +1589,9 @@ symmetric probability law.  Put
 \[
 M_p(t):=\int_{|x|\le t}x^pf(x)\,\dd x
        =\int_{|x|<R}x^pg(x)\,\dd x
-        +2c\int_R^t\frac{L(s)}s\,\dd s .
+         +2c\int_R^t\frac{L(s)}s\,\dd s .
 \]
-Assume
-\begin{equation}\label{eq:slowly-varying-top-moment-growth}
-  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}),\qquad L(t)=o(M_p(t)).
-\end{equation}
-Finally assume the following Potter-type tail controls, stated exactly at the
-scale used by the quotient expansion.  For \(R\le x\le t\), write
-\[
-  r_t(x):=c x^{-p-1}\{L(x)-L(t)\}.
-\]
-\begin{align}
-t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x
-&=o(t^{-p}M_p(t))
-\qquad(0\le n<p),\label{eq:slowly-varying-lower-potter-control}\\
-t^{-(p+1)}\int_R^t x^{p+1}|r_t(x)|\,\dd x
-&=o(t^{-p}M_p(t)),\label{eq:slowly-varying-local-potter-control}\\
-\int_t^\infty\left(1+\frac{x^2}{t^2}\right)
-c x^{-p-1}L(x)\,\dd x
-&=o(t^{-p}M_p(t)).\label{eq:slowly-varying-far-potter-control}
-\end{align}
+Assume only that \(M_p(t)\to\infty\).
 Then, with
 \[
   \Delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,
@@ -1508,23 +1619,33 @@ where
 
 \begin{proof}
 The law is symmetric, hence centred, and all odd moments below vanish.  The
-compact core has all moments.  For \(0\le n<p\), Potter's bound for the
-slowly varying function \(L\) gives, after enlarging \(R\) if necessary,
-\(L(x)\le C_{n}x^{(p-n)/2}\) on \([R,\infty)\).  Hence
+compact core has all moments.  Since
 \[
-  \int_R^\infty x^{n-p-1}L(x)\,\dd x
-  \le C_n\int_R^\infty x^{(n-p)/2-1}\,\dd x<\infty .
+  M_p(t)=O(1)+2c\,\mathcal M_L(t),
+  \qquad
+  \mathcal M_L(t):=\int_R^t\frac{L(s)}s\,\dd s,
 \]
-Thus the lower moments \(\mu_n\) exist.  Moreover the lower-moment tail
-replacement satisfies
+the assumption \(M_p(t)\to\infty\) is equivalent to
+\(\mathcal M_L(t)\to\infty\).  Lemma~\ref{lem:slowly-varying-quotient-controls}
+therefore gives
+\[
+  L(t)=o(M_p(t)),\qquad M_p(t)=o(t^{p-2}),
+\]
+as well as the three quotient-scale estimates below with \(M_p(t)\) in place
+of \(\mathcal M_L(t)\).  It also gives the finiteness of the lower tail
+moments, so \(\mu_n=\int x^nf(x)\,\dd x\) exists for \(0\le n<p\).
+The lower-moment tail replacement is
 \begin{equation}\label{eq:slowly-varying-lower-moment-tail-replacement}
   t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x=o(t^{-p}M_p(t)),
   \qquad 0\le n<p.
 \end{equation}
-This is exactly \eqref{eq:slowly-varying-lower-potter-control}.
 
-The hypothesis \eqref{eq:slowly-varying-local-potter-control} is precisely
-the local Taylor-remainder control
+For \(R\le x\le t\), write
+\[
+  r_t(x):=c x^{-p-1}\{L(x)-L(t)\}.
+\]
+The local Taylor-remainder control supplied by
+Lemma~\ref{lem:slowly-varying-quotient-controls} is
 \begin{equation}\label{eq:slowly-varying-local-taylor-bound}
 t^{-(p+1)}\int_R^t x^{p+1}|r_t(x)|\,\dd x
 =o(t^{-p}M_p(t)).
@@ -1567,8 +1688,8 @@ the truncated lower moments by the full lower moments costs
 is \(u_p(y)t^{-p}M_p(t)+O(t^{-p})\), hence has the asserted leading form.
 Finally the far tail is \eqref{eq:slowly-varying-far-tail-bound}.  These
 estimates prove \eqref{eq:slowly-varying-quotient-expansion}.  The growth
-assumptions \eqref{eq:slowly-varying-top-moment-growth} and the quotient
-expansion verify
+conclusions supplied by Lemma~\ref{lem:slowly-varying-quotient-controls} and
+the quotient expansion verify
 \eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error},
 so Theorem~\ref{thm:tail-replacements-proved-here}\textup{(a)} gives
 \eqref{eq:slowly-varying-entropy-expansion}.
@@ -2250,7 +2371,7 @@ probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies
 \[
 \delta_t^{(d)}(y)=
 \sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
-\rho_{L,t}^{(d)}(y),
++\rho_{L,t}^{(d)}(y),
 \]
 with
 \[
@@ -2479,13 +2600,22 @@ D_{\rm KL}(h_t\|g_t)
 =Q_d(\Sigma)t^{-4}+o(t^{-4}),
 \]
 and this leading coefficient is nonnegative and vanishes exactly when
-\(\Sigma=0\).  This theorem is only the finite-moment consequence of the two
-preceding layers: finite centred \(L\)-moment supplies
-\((\mathrm{MPJ}_{d,L})\), and \((\mathrm{MPJ}_{d,L})\) supplies the entropy
-jet.  The finite-covariance calculation in
-Proposition~\ref{prop:multidim-formal-covariance-layer} is only the
-algebraic contraction used to identify \(Q_d(\Sigma)\) in
-\eqref{eq:multidim-finite-moment-leading-coefficient}.
+\(\Sigma=0\).
+
+Logically this theorem is only the composition of the three separated
+statements above and below:
+\[
+\hbox{finite \(L\)-moment}
+\stackrel{\text{Prop.~B}}{\Longrightarrow}
+(\mathrm{MPJ}_{d,L})
+\stackrel{\text{Prop.~A}}{\Longrightarrow}
+\hbox{KL coefficient jet},
+\qquad
+\hbox{Prop.~C evaluates }Q_d(\Sigma).
+\]
+Thus the finite-covariance formula for \(Q_d(\Sigma)\) is not, by itself,
+an assertion of the KL leading asymptotic; the quotient jet supplied here by
+the finite \(L\)-moment hypothesis is the analytic input.
 \end{theorem}
 
 \noindent
@@ -2627,14 +2757,24 @@ c_d^{\rm tr}=
 appearing in Proposition~\ref{prop:multidim-formal-covariance-layer}.
 \end{remark}
 
-\subsubsection*{Algebraic covariance layer and its asymptotic use}
+\subsubsection*{Algebraic covariance layer and its asymptotic use}\leavevmode\par\smallskip
+
+\noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\textbf{Finite-covariance warning.}
+Finite covariance alone is not used here to prove
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+=Q_d(\Sigma)t^{-4}+o(t^{-4});
+\]
+the quotient jet is required.
+\end{minipage}}
+
+\medskip
 
 The next proposition evaluates the finite quadratic form determined by the
-degree-two density mode.  It is not a theorem about the large-\(t\) behaviour
-of \(D_{\rm KL}(P_t^{(d)}*\nu\|P_t^{(d)}(\cdot-\bar\gamma))\): finite
-covariance supplies the matrix \(\Sigma\), but the KL asymptotic also needs
-the quotient remainder stated in \((\mathrm{MPJ}_{d,L})\), with
-\(L\in\mathbb N\) and \(L\ge d+1\).
+degree-two density mode.  Corollary~\ref{cor:multidim-leading-kl-coefficient}
+is the separate statement where this algebraic layer is used as the leading
+KL coefficient after \((\mathrm{MPJ}_{d,L})\) has been assumed.
 
 \begin{proposition}[Proposition C: covariance algebra under finite covariance]%
 \label{prop:multidim-formal-covariance-layer}
@@ -2675,18 +2815,9 @@ c_d^{\rm tr}=
 \frac{3(d+1)(d+3)}
 {4(d+5)(d+7)} .
 \end{equation}
-This proposition asserts only the identity
-\eqref{eq:multidim-leading-positive-defect}.  It does not assert the
-asymptotic formula
-\[
-D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
-=Q_d(\Sigma)t^{-4}+o(t^{-4}).
-\]
-Finite covariance alone identifies the quadratic form below; the present
-proof of the KL asymptotic uses the stronger quotient-jet hypothesis
-\((\mathrm{MPJ}_{d,L})\), supplied here by finite centred \(L\)-moment with
-integer \(L\ge d+1\).  That KL statement is
-Corollary~\ref{cor:multidim-leading-kl-coefficient} below.
+This proposition asserts the identity
+\eqref{eq:multidim-leading-positive-defect}; the KL use of this identity is
+isolated in Corollary~\ref{cor:multidim-leading-kl-coefficient}.
 Two immediate checks are
 \[
 d=1:\qquad \Sigma_0=0,\qquad c_1^{\rm iso}=\frac18,\qquad
@@ -2890,12 +3021,8 @@ Proposition~\ref{thm:multidimensional-density-quotient}: finite centred
 The entropy jet identifies the first nonzero retained layer as
 \(\frac12\int b_\Sigma^2\,\dd\Omega_d\), and
 Proposition~\ref{prop:multidim-formal-covariance-layer} computes that
-integral.  The hypothesis \((\mathrm{MPJ}_{d,L})\) is exactly the quotient
-hypothesis needed by Proposition~\ref{thm:multidimensional-poisson-entropy-jets};
-Proposition~\ref{thm:multidimensional-density-quotient} is the separate
-finite-moment result which proves that hypothesis from the stated sufficient
-moment condition.  The covariance-layer calculation itself remains only the
-finite-second-moment identity of
-Proposition~\ref{prop:multidim-formal-covariance-layer}; this corollary is
-the step that supplies the missing quotient-to-KL asymptotic input.
+integral.  The hypothesis \((\mathrm{MPJ}_{d,L})\) is the input to
+Proposition~\ref{thm:multidimensional-poisson-entropy-jets}; Proposition~\ref{thm:multidimensional-density-quotient}
+is the separate finite-moment result which proves that hypothesis from the
+stated sufficient moment condition.
 \end{proof}

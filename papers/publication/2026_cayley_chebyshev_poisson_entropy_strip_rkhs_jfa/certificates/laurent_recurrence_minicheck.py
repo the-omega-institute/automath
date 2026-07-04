@@ -1,16 +1,20 @@
-"""Minimal exact replay of the eighth-order Laurent recurrence.
+"""Minimal exact replay of the Laurent constant-term recurrence.
 
 Run from the paper root:
 
     python certificates/laurent_recurrence_minicheck.py
+    python certificates/laurent_recurrence_minicheck.py 2 6
+    python certificates/laurent_recurrence_minicheck.py 2,3,3
 
-This is a compact independent audit of recurrence (3.87) in the manuscript:
-it builds the all-sign Laurent coefficients q_{n,k}, iterates the finite
-dictionary recurrence for C_j(s), and checks the constant terms used through
+This is a compact independent audit of the deterministic recurrence in the
+manuscript: it builds the all-sign Laurent coefficients q_{n,k}, iterates the
+finite dictionary recurrence for C_j(s), and returns exact constant terms for
+arbitrary requested rows.  With no row argument it checks the rows used through
 total order eight.  It uses only Python standard-library exact rational
 arithmetic.
 """
 
+import argparse
 from collections import defaultdict
 from fractions import Fraction as F
 from math import comb
@@ -81,14 +85,55 @@ def integer_recurrence(row, weight):
 
 def fmt(z):
     re, im = z
-    return str(re) if im == 0 else f"{re}+{im}i"
+    if im == 0:
+        return str(re)
+    if re == 0:
+        return f"{im}i"
+    sign = "+" if im > 0 else "-"
+    return f"{re}{sign}{abs(im)}i"
 
 
-for row in ROWS:
+def parse_rows(raw_rows):
+    if not raw_rows:
+        return []
+    if len(raw_rows) == 1 and "," in raw_rows[0]:
+        return [tuple(int(part) for part in raw_rows[0].split(",") if part)]
+    return [tuple(int(part) for part in raw_rows)]
+
+
+def print_row(row):
     value = constant_term(row)
-    assert value == EXPECTED[row], f"{row}: got {value}, expected {EXPECTED[row]}"
     count = integer_recurrence(row, lambda n, k: 1)
     signed = integer_recurrence(row, lambda n, k: eps(n, k) * comb(n - 1, abs(k) - 1))
     print(f"{row!s:14s} |K|={count:2d} signed={signed:3d} I={fmt(value)}")
 
-print("All Laurent recurrence rows through total order eight verified exactly.")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Exact rational Laurent constant-term recurrence."
+    )
+    parser.add_argument(
+        "row",
+        nargs="*",
+        help="row as space-separated integers, or one comma-separated row such as 2,3,3",
+    )
+    args = parser.parse_args()
+    requested = parse_rows(args.row)
+
+    if requested:
+        for row in requested:
+            if not row or any(n <= 0 for n in row):
+                raise SystemExit(f"invalid row: {row}")
+            print_row(row)
+        return
+
+    for row in ROWS:
+        value = constant_term(row)
+        assert value == EXPECTED[row], f"{row}: got {value}, expected {EXPECTED[row]}"
+        print_row(row)
+
+    print("All Laurent recurrence rows through total order eight verified exactly.")
+
+
+if __name__ == "__main__":
+    main()
