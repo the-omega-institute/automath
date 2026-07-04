@@ -141,6 +141,25 @@ Theorem~\ref{thm:intro-sharp-leading-threshold} treats one fixed law under
 Poisson smoothing.  Johnson--Samworth is especially relevant as the stable
 Mallows comparator, but it does not address a fixed-law KL quotient.\\
 \hline
+De Bruijn--Stam and moving-reference relative entropy
+\cite{DeBruijn1953,Stam1959,Blachman1965,Barron1986,JohnsonBarron2004,
+MadimanBarron2007,Verdu2010Mismatched,
+HirataNemotoYoshida2012RelativeEntropy,Yoshida2017RelativeEntropyDiffusion}
+&
+Entropy differentiation under Gaussian smoothing, entropy-power/Fisher
+information inequalities, and relative-entropy identities where the
+comparison density evolves under a compatible flow.
+&
+Heat-flow or diffusion time, usually with local Fisher information or its
+diffusion analogue as the dissipation.
+&
+Theorem~\ref{thm:intro-kl-tail-identity} is the matched Poisson counterpart:
+both \(P_t*\nu\) and \(P_t(\cdot-\bar\gamma)\) move with the Cauchy scale,
+and the dissipation is the nonlocal two-point Bregman form \(I_\nu(t)\).
+The theorem's extra work is the direct annular cutoff verification for
+\(u_t=(P_t*\nu)/P_t(\cdot-\bar\gamma)\), followed by the exact tail identity
+for the fixed-law KL functional.\\
+\hline
 Fractional-Laplacian and extension-method calculus
 \cite{CaffarelliSilvestre2007,StingaTorrea2010,Kwasnicki2017}
 &
@@ -222,197 +241,3 @@ constant terms:
 The finite order-eight arithmetic used in
 Theorem~\ref{thm:poisson-kl-eighth} is the table in
 Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
-
-\subsection{Optional differentiated-remainder consequence}
-\label{app:conditional-post-processing}
-
-This final subsection is optional bookkeeping.  It is not used in the proof of
-the coefficient theorems.  The finite-moment quotient theorem gives
-\(\rho_{L,t}=o(t^{-L})\) in \(L^\infty\cap L^1(\omega)\), but it does not give
-a corresponding estimate for \(t\partial_t\rho_{L,t}\).  The conclusion below
-therefore applies only after that differentiated remainder has been supplied
-by an additional regularity or tail argument.  The next proposition records
-one concrete class where this extra hypothesis is automatic: compactly
-supported laws with analytic moment expansion in the Cayley parameter.
-
-\begin{proposition}[Compact support gives differentiated remainders]%
-\label{prop:compact-support-differentiated-remainder}
-Let \(\nu\) be a probability measure with mean \(\bar\gamma\), and assume
-\(|X_c|\le M\) almost surely, where \(X_c=\gamma-\bar\gamma\).  Fix
-\(N\ge2\) and put \(L=2N-2\).  Then, for all \(t>2M\),
-\[
-\delta_t(y):=\frac{(P_t*\nu)(\bar\gamma+ty)}
-{P_t(ty)}-1
-=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
-\qquad
-\mu_n=\EE X_c^n,
-\]
-where
-\[
-\|\rho_{L,t}\|_{L^\infty}
-+\|\rho_{L,t}\|_{L^1(\omega)}
-=O_\nu(t^{-(L+1)})
-\]
-and
-\[
-\|t\partial_t\rho_{L,t}\|_{L^\infty}
-+\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
-=O_\nu(t^{-(L+1)}).
-\]
-In particular the differentiated-remainder hypothesis
-\eqref{eq:differentiated-quotient-remainder-bound} holds for this class.
-\end{proposition}
-
-\begin{proof}
-For \(x=\bar\gamma+ty\),
-\[
-\frac{P_t(x-\gamma)}{P_t(x-\bar\gamma)}
-=R_{X_c/t}(y).
-\]
-Since \(t>2M\), \(|X_c|/t\le1/2\).  The generating function in
-Theorem~\ref{thm:cayley-chebyshev-mode} gives the absolutely and uniformly
-convergent series
-\[
-R_{X_c/t}(y)=\sum_{n=0}^{\infty}u_n(y)(X_c/t)^n .
-\]
-The bound \(\|u_n\|_\infty\le n+1\), which follows from the same
-Cayley--Chebyshev formula, gives the uniform majorant
-\[
-\sum_{n=0}^{\infty}(n+1)(M/t)^n<\infty .
-\]
-Thus expectation may be interchanged with the series.  The \(n=0\) term is
-removed by subtracting \(1\), and the \(n=1\) term vanishes because
-\(\EE X_c=0\).  Hence
-\[
-\rho_{L,t}(y)=\sum_{n=L+1}^{\infty}\mu_nu_n(y)t^{-n}.
-\]
-The same majorant gives
-\[
-\|\rho_{L,t}\|_{L^\infty}
-+\|\rho_{L,t}\|_{L^1(\omega)}
-\le
-2\sum_{n=L+1}^{\infty}(n+1)M^nt^{-n}
-=O_\nu(t^{-(L+1)}),
-\]
-because \(\omega\) is a probability measure.  The differentiated series is
-also uniformly summable:
-\[
-t\partial_t\rho_{L,t}(y)
-=-\sum_{n=L+1}^{\infty}n\,\mu_nu_n(y)t^{-n},
-\]
-and
-\[
-\|t\partial_t\rho_{L,t}\|_{L^\infty}
-+\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
-\le
-2\sum_{n=L+1}^{\infty}n(n+1)M^nt^{-n}
-=O_\nu(t^{-(L+1)}).
-\]
-Since \(t^{-(L+1)}=o(t^{-L})\), the displayed conditional hypothesis follows.
-\end{proof}
-
-\begin{lemma}[Conditional differentiated-remainder a.e. dissipation]%
-\label{lem:differentiated-quotient-remainder-ae-dissipation}
-Let \(N\ge2\), put \(L=2N-2\), and set
-\[
-h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),\qquad
-\delta_t(y):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1 .
-\]
-Assume that the KL tail identity
-\eqref{eq:relative-entropy-integrated-dissipation} holds for the same
-quotient path.  Assume also that
-\[
-\delta_t(y)=d_t(y)+\rho_{L,t}(y),
-\qquad
-d_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n},
-\]
-and that the undifferentiated and differentiated remainders satisfy, for
-a.e. sufficiently large \(t\),
-\begin{equation}\label{eq:differentiated-quotient-remainder-bound}
-\|\rho_{L,t}\|_{L^\infty}
-+\|\rho_{L,t}\|_{L^1(\omega)}
-=o(t^{-L}),
-\qquad
-\|t\partial_t\rho_{L,t}\|_{L^\infty}
-+\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
-=o(t^{-L}).
-\end{equation}
-Then, for a.e. \(t\to\infty\), the dissipation has the asymptotic expansion
-\begin{equation}\label{eq:ae-dissipation-asymptotic}
-I_\nu(t)=
-\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
-+o(t^{-(2N+1)}).
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-Put \(\Phi(s)=(1+s)\log(1+s)-s\).  For a.e. sufficiently large \(t\),
-\(\|\delta_t\|_\infty+\|d_t\|_\infty=O(t^{-2})\), and
-\[
-H(t):=D_{\mathrm{KL}}(h_t\|g_t)
-=\int_{\RR}\Phi(\delta_t(y))\,\omega(\dd y).
-\]
-The \(L^1\)-chain rule of Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule} gives
-\[
-H'(t)=\int_{\RR}\log(1+\delta_t(y))\,\partial_t\delta_t(y)\,\omega(\dd y)
-\]
-on the intersection of the corresponding full-measure set with the set where
-\eqref{eq:differentiated-quotient-remainder-bound} holds.  Since
-\(\partial_td_t=\sum_{n=2}^{L}(-n)\mu_nu_nt^{-(n+1)}\), one has
-\(\|d_t\|_\infty=O(t^{-2})\) and
-\(\|\partial_td_t\|_\infty=O(t^{-3})\).  The Lipschitz bound for
-\(\log(1+s)\) on \(|s|\le1/2\), together with
-\eqref{eq:differentiated-quotient-remainder-bound}, gives
-\[
-\int \log(1+\delta_t)\partial_t\delta_t\,\dd\omega
-=
-\int \log(1+d_t)\partial_td_t\,\dd\omega
-+o(t^{-(L+3)}).
-\]
-Here \(L+3=2N+1\).  The finite-mode term is differentiated directly: the
-Taylor series for \(\Phi\), the bound \(d_t=O(t^{-2})\), and the parity
-cancellation in Theorem~\ref{thm:universal-entropy-coefficients} give
-\[
-\int \log(1+d_t)\partial_td_t\,\dd\omega
-=
-\frac{\dd}{\dd t}
-\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
-+o(t^{-(2N+1)}).
-\]
-By the definition of the universal coefficients,
-\[
-\int_{\RR}\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}d_t(y)^r\,\omega(\dd y)
-=
-\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}
-+O(t^{-(2N+1)}).
-\]
-Hence
-\[
-H'(t)=
--\sum_{m=2}^{N}2m\,A_{2m}(\nu)t^{-(2m+1)}
-+o(t^{-(2N+1)}).
-\]
-Finally \(H'(t)=-I_\nu(t)\) a.e. by
-Theorem~\ref{thm:poisson-kl-doob-tail}.  Removing the union of the relevant
-null sets proves \eqref{eq:ae-dissipation-asymptotic}.  No continuity of
-\(I_\nu\) or of \(t\partial_t\rho_{L,t}\) is used or concluded.
-\end{proof}
-
-\begin{remark}[When the a.e. conclusion becomes pointwise]
-The lemma deliberately stops at an a.e.-in-time conclusion.  A pointwise
-large-time statement requires extra regularity turning the differentiated
-calculation into an identity between continuous representatives.  For example,
-it is enough to assume that
-\[
-t\mapsto \rho_{L,t},\qquad t\mapsto t\partial_t\rho_{L,t}
-\]
-are continuous as maps into
-\(L^\infty(\omega)\cap L^1(\omega)\), and that on each compact
-multiplicative window \([T,2T]\) the differentiated remainders are dominated
-by an \(L^\infty(\omega)\cap L^1(\omega)\) majorant of order \(T^{-L}\)
-compatible with \eqref{eq:differentiated-quotient-remainder-bound}.  Then
-dominated convergence gives continuity of \(I_\nu(t)\) and of the finite-mode
-derivative expression, so the a.e. identity extends to all sufficiently large
-\(t\).  These assumptions are not consequences of the finite-moment quotient
-theorem.
-\end{remark}

@@ -13,14 +13,54 @@ The Cauchy generator is normalized by
 (Lf)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,
 \]
-so that \(\partial_tP_t=LP_t\).  This section proves, in the Cauchy
-normalization displayed above, the KL-specialized two-point Bregman
-dissipation identity for the moving Poisson quotient \(u_t=h_t/g_t\), and
-then records the coefficient consequence.
-The calculation belongs to the Hardy--Stein/Bregman lineage.  The classical
-local identity is the chain-rule/Green-formula Hardy--Stein identity for the
-Laplacian \cite[pp.~86--88]{Stein1970SingularIntegrals}; the
-convex-divergence language starts with Bregman's
+so that \(\partial_tP_t=LP_t\).  This section proves Theorem~\ref{thm:intro-kl-tail-identity}
+in the Cauchy normalization displayed above, namely the KL-specialized
+two-point Bregman dissipation identity for the moving Poisson quotient
+\(u_t=h_t/g_t\), and then records the coefficient consequence.  The statement
+is a de Bruijn-type relative-entropy dissipation formula, so the literature
+baseline is broader than the Hardy--Stein references alone.  The classical
+local starting point is de Bruijn's heat-flow identity and the associated
+Fisher-information/entropy-power line
+\cite{DeBruijn1953,Stam1959,Blachman1965,Barron1986,
+JohnsonBarron2004,MadimanBarron2007}.  In that baseline, entropy along a
+Gaussian smoothing flow differentiates to Fisher information, and Stam's
+inequality turns the same identity into the entropy-power monotonicity
+framework.  Theorem~\ref{thm:intro-kl-tail-identity} plays the analogous
+role here only after replacing the heat semigroup by the Cauchy semigroup and
+replacing Fisher information by the nonlocal two-point Bregman form
+\(I_\nu(t)\).
+
+Relative-entropy versions with a reference density moving under the same
+Gaussian or diffusion flow appear in
+\cite{Verdu2010Mismatched,HirataNemotoYoshida2012RelativeEntropy,
+Yoshida2017RelativeEntropyDiffusion}.  These works explain the correct
+``moving reference'' comparison: the reference is not frozen while the
+smoothed law evolves.  In the present theorem the moving pair is instead the
+matched Poisson pair
+\[
+(h_t,g_t)=\bigl(P_t*\nu,P_t(\cdot-\bar\gamma)\bigr),
+\]
+and the proof must check the quotient \(u_t=h_t/g_t\) directly against the
+Cauchy generator's singular kernel.  Entropy-dissipation identities with
+stationary or self-similar references are also standard in the entropy-method
+literature, for example
+\cite{CarrilloJungelMarkowichToscaniUnterreiter2001EntropyDissipation,
+CarrilloToscani2000PorousMedium,DolbeaultToscani2011FastDiffusion,
+GentilImbert2008LevyFokkerPlanckPhi,Chafai2004PhiEntropies,
+BolleyGentil2010PhiEntropy,Erbar2014JumpEntropy}.  Thus the novelty here is
+not the existence of an entropy-dissipation principle.  The new input is the
+Cauchy-kernel version for
+\[
+(h_t,g_t)=\bigl(P_t*\nu,P_t(\cdot-\bar\gamma)\bigr),
+\]
+where the reference is the matched translated Poisson profile and where the
+domain step is verified directly for the quotient \(u_t=h_t/g_t\) by the
+annular Cauchy cutoff estimates below.
+
+The calculation also belongs to the Hardy--Stein/Bregman lineage.  The
+classical local identity is the chain-rule/Green-formula Hardy--Stein
+identity for the Laplacian \cite[pp.~86--88]{Stein1970SingularIntegrals};
+the convex-divergence language starts with Bregman's
 construction~\cite{Bregman1967}.  For jump semigroups, the nonlocal
 Hardy--Stein identity and Sobolev--Bregman forms were developed in
 \cite{BanuelosBogdanLuks2016HardyStein,
@@ -36,7 +76,8 @@ Hardy--Stein/Sobolev--Bregman identities for Markov semigroups: the convex
 function is
 \(\Phi(r)=r\log r\), the two-point co-divergence is
 \(\Lambda(\alpha,\beta)=\alpha\log(\alpha/\beta)-\alpha+\beta\), and the
-reference density is the moving Poisson profile \(g_t\).  The general
+reference density is the moving Poisson profile \(g_t\), matched by the
+translation \(\bar\gamma\).  The general
 polarized Bregman framework is due to
 Bogdan--Gutowski--Pietruska-Pa{\l}uba~\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.
 No abstract theorem is imported as a black box in the proof below.  The
@@ -716,7 +757,30 @@ The positive-margin assertion follows from the explicit remainder estimate
 \begin{remark}[No pointwise conclusion from finite moments alone]
 Proposition~\ref{prop:dissipation-tail-coefficient-expansion} gives only
 tail integrals and fixed-window averages.  Pointwise asymptotics for
-\(I_\nu(t)\) require extra differentiated remainder input; the precise
-conditional result is isolated in
-Subsection~\ref{app:conditional-post-processing}.
+\(I_\nu(t)\) require extra differentiated remainder input and are not a
+consequence of the finite-moment quotient theorem alone.  For example, if the
+centred law is compactly supported, say \(|\gamma-\bar\gamma|\le M\), then for
+each fixed retained order \(L\) and all \(t>2M\) the Cayley generating function
+gives the uniformly convergent expansion, with
+\(\mu_n=\EE(\gamma-\bar\gamma)^n\),
+\[
+\frac{(P_t*\nu)(\bar\gamma+ty)}{P_t(ty)}-1
+=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\rho_{L,t}=\sum_{n>L}\mu_nu_n(y)t^{-n}.
+\]
+The same uniform majorant gives
+\[
+\begin{aligned}
+\|\rho_{L,t}\|_{L^\infty}
++\|\rho_{L,t}\|_{L^1(\omega)}
++\|t\partial_t\rho_{L,t}\|_{L^\infty}
++\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
+=O_\nu(t^{-(L+1)}).
+\end{aligned}
+\]
+Under such an additional differentiated remainder bound, one may differentiate
+the finite quotient expansion and combine it with
+\eqref{eq:relative-entropy-integrated-dissipation}; this auxiliary observation
+is not part of the coefficient hierarchy proved here.
 \end{remark}
