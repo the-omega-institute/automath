@@ -1,5 +1,7 @@
 % sec_entropy_n4_defect.tex -- explicit N=4 constants and coefficient defect
-\subsection{Explicit sixth/eighth layer and defect consequence}
+\subsection{Explicit coefficient layer through order eight and coefficient-defect coupling}
+\label{subsec:coefficient-defect-coupling}
+\label{subsec:fourth-moment-stability}
 
 \begin{lemma}[Normalized Laurent representatives through order six]%
 \label{lem:n4-normalized-laurent-representatives}
@@ -25,10 +27,55 @@ This is Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} written out
 for \(n=2,\ldots,6\), including the Laurent factors \(1/2\) and \(1/(2\ii)\).
 \end{proof}
 
+The Laurent arithmetic below is reproducible from the coefficient-extraction
+recipe in Theorem~\ref{thm:finite-fourier-mode-integral-algorithm}.  Namely
+\[
+Q_{2m}(z)=(-1)^m2^{-2m}\sum_{j=0}^{2m-1}\binom{2m-1}{j}
+\left(z^{j+1}+z^{-(j+1)}\right),
+\]
+\[
+Q_{2m+1}(z)=\frac{(-1)^m2^{-2m}}{2\ii}
+\sum_{j=0}^{2m}\binom{2m}{j}
+\left(z^{j+1}-z^{-(j+1)}\right),
+\]
+and
+\[
+I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^rQ_{n_j}(z).
+\]
+For example, the sixth-order rows used in the \(A_6\) substitution are
+\[
+I(2,4)=[z^0]Q_2Q_4=-\frac18,\qquad
+I(2,2,2)=[z^0]Q_2^3=-\frac{3}{32}.
+\]
+
 \begin{lemma}[Laurent constant-term certificate through order eight]%
 \label{lem:eighth-order-coefficient-arithmetic}
-\label{eq:eighth-order-constant-term-recurrence}
-For the mode products entering \(A_4,A_6,A_8\), the required integrals are
+For \(\mathbf n=(n_1,\ldots,n_r)\), put
+\[
+\mathcal K(\mathbf n)
+:=\{(k_1,\ldots,k_r):0<|k_j|\le n_j,\ k_1+\cdots+k_r=0\}.
+\]
+Equivalently, if \(Q_n(z)=\sum_k q_{n,k}z^k\), the constant term
+\(I(\mathbf n)=[z^0]\prod_{j=1}^r Q_{n_j}(z)\) is obtained by the finite
+recurrence
+\begin{equation}\label{eq:eighth-order-constant-term-recurrence}
+C_0(s)=\mathbf 1_{\{s=0\}},\qquad
+C_j(s)=\sum_{0<|k|\le n_j}q_{n_j,k}\,C_{j-1}(s-k),
+\quad I(\mathbf n)=C_r(0).
+\end{equation}
+In pseudocode:
+\[
+\begin{array}{l}
+\texttt{C = \{0:1\};}\\
+\texttt{for n in row:}\\
+\qquad \texttt{for s in supp(C), for k in \{-n,...,-1,1,...,n\}:}\\
+\qquad\qquad \texttt{D[s+k] += C[s] * q[n,k];}\\
+\qquad \texttt{C = D;}\\
+\texttt{return C.get(0,0).}
+\end{array}
+\]
+For the mode products entering \(A_4,A_6,A_8\), this recurrence gives the
+required integrals
 \[
 \begin{array}{c|c}
 \mathbf n&I(\mathbf n)\\
@@ -52,7 +99,30 @@ Odd total-order entries through order eight vanish.
 Apply the constant-term rule
 \eqref{eq:mode-integral-constant-term} to the Laurent representatives in
 Lemma~\ref{lem:n4-normalized-laurent-representatives}.  The displayed table
-is the finite zero-sum convolution of the listed coefficient vectors.
+is the finite zero-sum convolution of the listed coefficient vectors, carried
+out by \eqref{eq:eighth-order-constant-term-recurrence}.  The paper-local
+script
+\[
+\texttt{python certificates/eighth\_order\_laurent\_certificate.py}
+\]
+replays the same recurrence using exact rational arithmetic and asserts, in
+one pass, the displayed table together with the substitutions
+\[
+\begin{aligned}
+A_4&=\frac12\mu_2^2I(2,2)=\frac{\sigma^4}{8},\\
+A_6&=\mu_2\mu_4I(2,4)+\frac12\mu_3^2I(3,3)
+-\frac16\mu_2^3I(2,2,2)
+=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},\\
+A_8&=\mu_2\mu_6I(2,6)+\mu_3\mu_5I(3,5)
++\frac12\mu_4^2I(4,4)
+-\frac12\mu_2^2\mu_4I(2,2,4)\\
+&\hspace{2.5em}
+-\frac12\mu_2\mu_3^2I(2,3,3)
++\frac1{12}\mu_2^4I(2,2,2,2)\\
+&=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
++12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
+\end{aligned}
+\]
 \end{proof}
 
 \begin{lemma}[Substitution into \(A_4,A_6,A_8\)]%
@@ -90,7 +160,7 @@ Substitute the constant terms from
 Lemma~\ref{lem:eighth-order-coefficient-arithmetic}.
 \end{proof}
 
-\begin{theorem}[Self-contained sixth/eighth coefficient identification]%
+\begin{theorem}[Self-contained coefficient identification through order eight]%
 \label{thm:poisson-kl-eighth}
 Let \(\nu\) have mean \(\bar\gamma\) and finite variance
 \(\sigma^2\ge0\).
@@ -114,6 +184,10 @@ mass \(\delta_{\bar\gamma}\).  Positive variance is not a hypothesis for raw
 coefficient identification; it is imposed only in normalized defect
 statements, such as Corollary~\ref{cor:coefficient-defect-coupling}, where
 \(\rho_\sigma\) and powers of \(\sigma^{-1}\) are used.
+No eighth-order defect variable is defined or used in this theorem: \(A_8\)
+is identified only as the \(t^{-8}\) entropy coefficient.  The sole
+coefficient-defect consequence in this subsection is the sixth-order
+\(\Delta_6\) coupling in Corollary~\ref{cor:coefficient-defect-coupling}.
 \end{theorem}
 
 \begin{proof}
@@ -253,6 +327,8 @@ the sixth-order coefficient defect attached to \(A_6(\nu)\) is
 \end{equation}
 Here \(\|Q_2\|_2^2=\EE_\nu Q_2^2\), with \(Q_2\) evaluated on the normalized
 centred variable \(X\).
+This normalized identity is the algebraic input for the following
+moment-coupling statement.
 
 \begin{corollary}[Coefficient-defect coupling]%
 \label{cor:coefficient-defect-coupling}

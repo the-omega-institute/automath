@@ -11,6 +11,87 @@ the article is the conditional appendix statement, which assumes its numerical
 and remainder inputs explicitly and is not needed for the theorem hierarchy in
 this section.
 
+\subsection*{Entropy proof architecture and hypothesis-status table}
+\label{sec:entropy-theorem-map}
+
+The hypotheses used below are separated by theorem rather than inferred from
+neighbouring statements.  Table~\ref{tab:entropy-hypothesis-status} is a
+status disclosure map: every entry is either an assumption made in the
+displayed theorem, a sufficient condition proved later, or a convention fixed
+in the preliminaries.  In particular, finite covariance in several dimensions
+is only enough to evaluate the algebraic quadratic layer; it is not enough by
+itself to make that layer a KL asymptotic.
+
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{p{0.25\linewidth}p{0.31\linewidth}p{0.20\linewidth}p{0.16\linewidth}}
+\caption{Hypothesis status disclosure for the entropy results.}
+\label{tab:entropy-hypothesis-status}\\
+\hline
+Hypothesis or convention & Used in & Status & Disclosure location\\
+\hline
+\endfirsthead
+\hline
+Hypothesis or convention & Used in & Status & Disclosure location\\
+\hline
+\endhead
+\(\nu\) is a probability law on \(\RR\) or \(\RR^d\) & All entropy theorems
+and corollaries & Assumed in each statement & Theorem statements below and
+in the introduction\\
+\hline
+Finite mean and matched barycentre \(\bar\gamma\) & One-dimensional matched
+quotient, KL threshold, Doob-tail identity, and multidimensional jets &
+Assumed where the matched translate is used & Theorem statements below\\
+\hline
+Finite centred \((2N-2)\)th absolute moment & The
+one-dimensional coefficient hierarchy through \(A_{2N}\) & Assumed; exactly
+the moment level needed to evaluate the displayed polynomial coefficients &
+Theorem~\ref{thm:poisson-kl-even-orders} and the paragraph after it\\
+\hline
+Finite centred variance & Finite side of the sharp \(t^{-4}\) threshold and
+the Doob-tail identity & Assumed in those statements; finite-time KL
+finiteness is stated separately & Theorems
+\ref{thm:sharp-leading-kl-variance-threshold} and
+\ref{thm:poisson-kl-doob-tail}\\
+\hline
+Infinite centred variance & Divergence side of the sharp \(t^{-4}\) threshold
+& Interpreted in the extended KL sense & Theorem
+\ref{thm:sharp-leading-kl-variance-threshold}\\
+\hline
+Extended KL convention & Every KL statement, including possible
+\(+\infty\) values & Definition fixed in the preliminaries & Definition
+\eqref{eq:extended-kl-definition}\\
+\hline
+Explicit symmetric power-tail density & Logarithmic replacement
+Proposition~\ref{prop:log-tail-counterexample-top-moment},
+Corollary~\ref{cor:perturbative-power-tail-log-replacement}, and
+Proposition~\ref{prop:n2-borderline-infinite-variance-layer} & Proved only
+for the displayed class and its stated perturbative variant, with a separate
+conditional transfer proposition & The tail-replacement subsection below\\
+\hline
+\((\mathrm{MPJ}_{d,L})\) quotient jet & Multidimensional entropy transfer and
+the leading multidimensional KL coefficient & Abstract hypothesis for the
+transfer theorem; finite centred \(L\)th absolute moment is a proved
+sufficient condition & Definition~\eqref{eq:mpj-dl-definition},
+Theorems~\ref{thm:multidimensional-density-quotient} and
+\ref{thm:multidimensional-poisson-entropy-jets}\\
+\hline
+Finite covariance in \(\RR^d\) & Evaluation of
+\(A_{4,\mathrm{quad}}^{(d)}\) & Algebraic coefficient calculation only; not a
+KL asymptotic without \((\mathrm{MPJ}_{d,L})\) & Proposition
+\ref{prop:multidim-formal-covariance-layer} and Corollary
+\ref{cor:multidim-leading-kl-coefficient}\\
+\hline
+Fourth centred absolute moment at fixed positive variance & The
+coefficient-defect coupling tied to \(A_6\) & Moment-coupling lemma after the
+\(A_6\) coefficient has been identified; not an optimizer-stability theorem &
+Corollary~\ref{cor:coefficient-defect-coupling}\\
+\hline
+\end{longtable}
+\endgroup
+
 \subsection{Cayley modes and coefficient algebra}
 
 Throughout the one-dimensional part,
@@ -251,8 +332,9 @@ uniform in \(y\) and hence also hold in \(L^1(\omega)\).
 \label{thm:poisson-kl-even-orders}
 \label{prop:coefficient-identification-poisson-entropy-transfer}
 \label{prop:density-to-entropy-descent}
-Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) have mean \(\bar\gamma\) and
-finite centred \(L\)th absolute moment.  With
+Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) be a probability law on
+\(\RR\) with finite mean \(\bar\gamma\) and finite centred \(L\)th absolute
+moment.  With
 \[
 h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),
 \]
@@ -269,7 +351,9 @@ A_k(\nu)=
 \mu_{n_1}\cdots\mu_{n_r}
 \int_{\RR}u_{n_1}\cdots u_{n_r}\,\dd\omega .
 \end{equation}
-All retained odd \(A_k\) vanish.
+All retained odd \(A_k\) vanish.  Thus the displayed finite centred
+\((2N-2)\)th absolute moment is the moment level used to evaluate
+\(A_{2N}\); no lower-moment rule for \(A_{2N}\) is asserted.
 \end{theorem}
 
 \begin{proof}
@@ -922,38 +1006,77 @@ H(t)=
 \]
 Substituting \(M_p(t)=2c\log t+O(1)\) proves
 \eqref{eq:core-log-tail-counterexample-asymptotic}.
+\end{proof}
 
-The same conclusion remains valid under the following perturbative tail
-replacement.  Let
+\begin{corollary}[Perturbative power-tail logarithmic replacement]%
+\label{cor:perturbative-power-tail-log-replacement}
+Let \(N\ge3\), put \(p=2N-2\), and let \(R>0\), \(c>0\).  Let \(g\) be a
+symmetric nonnegative integrable function supported in \((-R,R)\), and let
+\(r\) be an even integrable function on \(\{|x|>R\}\).  Suppose that the
+displayed density
 \[
   f(x)=g(x)+\bigl(c|x|^{-p-1}+r(x)\bigr)\mathbf1_{\{|x|\ge R\}},
 \]
-where \(r\) is even and integrable on \(\{|x|>R\}\), the displayed density is
-nonnegative, and the total mass is normalized to one.  Assume, in addition,
-that the perturbation has the lower moments needed for the retained
-coefficients,
-\[
+is nonnegative and normalized to have mass one.  Assume that the perturbation
+has the lower moments needed for the retained coefficients,
+\begin{equation}\label{eq:perturbative-power-tail-lower-moments}
   \int_{|x|\ge R}|x|^q|r(x)|\,\dd x<\infty
   \qquad(0\le q<p),
-\]
-that it does not change the logarithmic top truncated moment,
-\[
+\end{equation}
+does not change the logarithmic top truncated moment,
+\begin{equation}\label{eq:perturbative-power-tail-top-moment}
   \int_{R\le |x|\le t}|x|^p r(x)\,\dd x=O(1),
-\]
-and that the two estimates used in the quotient-remainder split hold:
-\[
+\end{equation}
+and satisfies the two quotient-remainder estimates
+\begin{equation}\label{eq:perturbative-power-tail-local-remainder}
   t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x=O(t^{-p}),
-  \qquad
+\end{equation}
+and
+\begin{equation}\label{eq:perturbative-power-tail-far-remainder}
   \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x=O(t^{-p}).
+\end{equation}
+Let \(\nu\) be the law with density \(f\), put
+\[
+  H(t)=D_{\mathrm{KL}}(P_t*\nu\|P_t),
 \]
-The proof above uses no other perturbative information.  Evenness preserves
-the centering and removes odd tail modes, normalization keeps \(f\) a
-probability density, the lower absolute moments define the coefficients
-\(A_{2m}\) with \(m<N\), the signed truncated-\(p\)-moment condition keeps
-\(\EE[X^p\mathbf1_{\{|X|\le t\}}]=2c\log t+O(1)\), the local
-\((p+1)\)-weighted estimate controls the Taylor remainder on
-\(R\le |x|\le t\), and the last display is exactly the uniform far-tail
-quotient bound used for \(|x|>t\).
+and let \(\mu_2=\int x^2f(x)\,\dd x\).  Then \(\nu\) is centred, has finite
+absolute moments of every order \(q<p\), and
+\[
+  \EE\!\left[X^p\mathbf1_{\{|X|\le t\}}\right]=2c\log t+O(1).
+\]
+Moreover
+\[
+H(t)=\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
+    +2c\,\kappa_N\,\mu_2\,t^{-2N}\log t
+    +o(t^{-2N}\log t),
+\]
+where
+\[
+  \kappa_N=(-1)^N(N-1)2^{-2N+2}.
+\]
+\end{corollary}
+
+\begin{proof}
+The proof of Proposition~\ref{prop:log-tail-counterexample-top-moment} uses
+no other perturbative information.  Evenness preserves the centering and
+removes odd tail modes, normalization keeps \(f\) a probability density, and
+\eqref{eq:perturbative-power-tail-lower-moments} gives the lower absolute
+moments that define the coefficients \(A_{2m}\) with \(m<N\).  The signed
+truncated-\(p\)-moment condition
+\eqref{eq:perturbative-power-tail-top-moment} keeps
+\[
+  \EE[X^p\mathbf1_{\{|X|\le t\}}]=2c\log t+O(1).
+\]
+The local weighted estimate
+\eqref{eq:perturbative-power-tail-local-remainder} controls the Taylor
+remainder on \(R\le |x|\le t\), and
+\eqref{eq:perturbative-power-tail-far-remainder} is exactly the uniform
+far-tail quotient bound used for \(|x|>t\).  Hence the quotient expansion has
+the same form as in Lemma~\ref{lem:borderline-exact-power-tail-quotient-expansion},
+with an \(O(t^{-p})\) perturbative error in
+\(L^\infty(\RR)\cap L^1(\omega)\).  Applying
+Proposition~\ref{prop:conditional-truncated-top-moment-replacement} with
+\(M_p(t)=2c\log t+O(1)\) gives the stated KL expansion.
 \end{proof}
 
 \begin{lemma}[Symmetric \(p=2\) quotient tail split]
@@ -1449,8 +1572,9 @@ bound for \(|\beta|=L+1\), gives
 \noindent\textbf{Multidimensional radial Poisson jet hypothesis
 \((\mathrm{MPJ}_{d,L})\).}
 For \(d\ge1\) and an integer \(L\), we say that \((\nu,d,L)\) satisfies
-\((\mathrm{MPJ}_{d,L})\) when \(L\ge\max\{2,d+1\}\), the mean
-\(\bar\gamma\) exists, the centred tensor moments
+\((\mathrm{MPJ}_{d,L})\) when \(\nu\) is a probability law on \(\RR^d\),
+\(L\ge\max\{2,d+1\}\), the mean \(\bar\gamma\) exists, the centred tensor
+moments
 \[
 \mu_\alpha=\int_{\RR^d}(\gamma-\bar\gamma)^\alpha\,\dd\nu(\gamma)
 \qquad(2\le|\alpha|\le L)
@@ -1706,7 +1830,8 @@ because \(\nu\) is centred.  The remaining Taylor terms give
 
 \begin{theorem}[\((\mathrm{MPJ}_{d,L})\) entropy transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
-Assume that \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).  Then
+Let \(\nu\) be a probability law on \(\RR^d\), and assume that
+\((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).  Then
 \[
 D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
@@ -1793,12 +1918,29 @@ gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
 all omitted layers are \(o(t^{-(L+2)})\).
 \end{proof}
 
-\begin{corollary}[Finite-moment multidimensional entropy jet]\label{cor:multidim-finite-moment-entropy-jet}
+\begin{theorem}[Finite-moment multidimensional Poisson KL asymptotic]%
+\label{thm:multidim-finite-moment-poisson-kl-asymptotic}%
+\label{cor:multidim-finite-moment-entropy-jet}
 Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\), and let \(\nu\) be a probability
 measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred \(L\)th
-absolute moment.  Then
+absolute moment.  Put
 \[
-D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+h_t=P_t^{(d)}*\nu,\qquad
+g_t=P_t^{(d)}(\cdot-\bar\gamma),\qquad
+X_c=\gamma-\bar\gamma,
+\]
+write
+\[
+\mu_\alpha=\EE[X_c^\alpha]\qquad(|\alpha|\le L),
+\]
+and let
+\[
+\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad
+\Sigma_0=\Sigma-d^{-1}(\operatorname{tr}\Sigma)I_d .
+\]
+Then the matched Poisson KL divergence has the finite-moment expansion
+\[
+D_{\rm KL}(h_t\|g_t)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
 +o(t^{-(L+2)}),
 \]
@@ -1813,19 +1955,42 @@ where
 \int_{\RR^d}\prod_{j=1}^r
 U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
 \]
-Equivalently, the finite-moment entropy statement is the composition of
-the finite-moment quotient expansion
-Theorem~\ref{thm:multidimensional-density-quotient}, which gives
-\((\mathrm{MPJ}_{d,L})\), and the entropy-transfer theorem
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets}.
-\end{corollary}
+The leading coefficient is the covariance quadratic form
+\begin{equation}\label{eq:multidim-finite-moment-leading-coefficient}
+\mathcal A_4^{(d)}(\nu)
+=A_{4,\mathrm{quad}}^{(d)}(\nu)
+=
+c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
++c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2,
+\end{equation}
+where
+\[
+c_d^{\rm iso}=
+\frac{3(d+1)(7d+9)}
+{4d(d+3)(d+5)(d+7)},
+\qquad
+c_d^{\rm tr}=
+\frac{3(d+1)(d+3)}
+{4(d+5)(d+7)} .
+\]
+In particular,
+\[
+D_{\rm KL}(h_t\|g_t)
+=A_{4,\mathrm{quad}}^{(d)}(\nu)t^{-4}+o(t^{-4}),
+\]
+and this leading coefficient is nonnegative and vanishes exactly when
+\(\Sigma=0\).  The finite-covariance calculation in
+Proposition~\ref{prop:multidim-formal-covariance-layer} is only the
+algebraic contraction used to identify the coefficient in
+\eqref{eq:multidim-finite-moment-leading-coefficient}; the present finite
+\(L\)-moment theorem supplies the quotient remainder and entropy transfer
+which make it an asymptotic KL statement.
+\end{theorem}
 
-\begin{proof}
-Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
-centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\).
-Applying Theorem~\ref{thm:multidimensional-poisson-entropy-jets} gives the
-displayed entropy expansion and coefficient formula.
-\end{proof}
+\noindent
+The proof of
+Theorem~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic} uses the
+following finite-covariance contraction as its algebraic last step.
 
 \begin{lemma}[Radial--angular contractions for the Cauchy weight]%
 \label{lem:radial-angular-contractions}
@@ -2121,7 +2286,42 @@ This proves \eqref{eq:multidim-leading-positive-constants}.  The constants are
 positive, so the layer vanishes exactly when \(\Sigma=0\).
 \end{proof}
 
-\begin{corollary}[Leading KL coefficient under the finite-jet hypothesis]%
+\begin{proof}[Proof of Theorem~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic}]
+Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
+centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\).
+Applying Theorem~\ref{thm:multidimensional-poisson-entropy-jets} gives the
+displayed entropy expansion and coefficient formula.  The \(m=4\) term in
+that formula has only \(r=2\) and two degree-two density factors.  Write
+\[
+D_j^{(d)}(y;\nu)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
+\]
+Then
+\[
+\mathcal A_4^{(d)}(\nu)
+=\frac12\int_{\RR^d}D_2^{(d)}(y;\nu)^2\,\Omega_d(\dd y).
+\]
+For centred data the degree-two density layer is the covariance mode
+\[
+D_2^{(d)}(y;\nu)=
+\frac{d+1}{2}\left(
+-\frac{\operatorname{tr}\Sigma}{1+|y|^2}
++\frac{(d+3)y^{\mathsf T}\Sigma y}{(1+|y|^2)^2}
+\right)=b_\Sigma(y).
+\]
+Proposition~\ref{prop:multidim-formal-covariance-layer} computes this
+finite-covariance contraction:
+\[
+\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y)
+=
+c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
++c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2.
+\]
+The two constants are positive, and since \(\Sigma\) is positive
+semidefinite the displayed quadratic form vanishes exactly when
+\(\Sigma=0\).
+\end{proof}
+
+\begin{corollary}[Leading multidimensional KL coefficient under \((\mathrm{MPJ}_{d,L})\)]%
 \label{cor:multidim-leading-kl-coefficient}
 Let \(d\ge1\), let \(L\ge\max\{2,d+1\}\), and assume that
 \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).  Let

@@ -212,6 +212,85 @@ def a8_two_point() -> Fraction:
     return Fraction(3, 256) + Fraction(-12, 256) + Fraction(12, 256) + Fraction(20, 256)
 
 
+Monomial = Tuple[int, int, int, int, int]
+Polynomial = Dict[Monomial, Fraction]
+
+
+def poly_term(coefficient: Fraction, exponents: Monomial) -> Polynomial:
+    return {} if coefficient == 0 else {exponents: coefficient}
+
+
+def poly_add(*polynomials: Polynomial) -> Polynomial:
+    out: Polynomial = {}
+    for polynomial in polynomials:
+        for monomial, coefficient in polynomial.items():
+            out[monomial] = out.get(monomial, Fraction(0)) + coefficient
+            if out[monomial] == 0:
+                del out[monomial]
+    return out
+
+
+def poly_scale(polynomial: Polynomial, scalar: Fraction) -> Polynomial:
+    return {
+        monomial: coefficient * scalar
+        for monomial, coefficient in polynomial.items()
+        if coefficient * scalar != 0
+    }
+
+
+def const_fraction(indices: Row) -> Fraction:
+    value = const_term(indices)
+    assert value[1] == 0, f"I{indices} is not real: {fmt_qi(value)}"
+    return value[0]
+
+
+def coefficient_polynomials() -> Tuple[Polynomial, Polynomial, Polynomial]:
+    m2_2 = (2, 0, 0, 0, 0)
+    m2_3 = (3, 0, 0, 0, 0)
+    m3_2 = (0, 2, 0, 0, 0)
+    m2_m4 = (1, 0, 1, 0, 0)
+    m2_4 = (4, 0, 0, 0, 0)
+    m2_2_m4 = (2, 0, 1, 0, 0)
+    m2_m3_2 = (1, 2, 0, 0, 0)
+    m2_m6 = (1, 0, 0, 0, 1)
+    m3_m5 = (0, 1, 0, 1, 0)
+    m4_2 = (0, 0, 2, 0, 0)
+
+    a4 = poly_term(Fraction(1, 2) * const_fraction((2, 2)), m2_2)
+    a6 = poly_add(
+        poly_term(const_fraction((2, 4)), m2_m4),
+        poly_term(Fraction(1, 2) * const_fraction((3, 3)), m3_2),
+        poly_term(-Fraction(1, 6) * const_fraction((2, 2, 2)), m2_3),
+    )
+    a8 = poly_add(
+        poly_term(const_fraction((2, 6)), m2_m6),
+        poly_term(const_fraction((3, 5)), m3_m5),
+        poly_term(Fraction(1, 2) * const_fraction((4, 4)), m4_2),
+        poly_term(-Fraction(1, 2) * const_fraction((2, 2, 4)), m2_2_m4),
+        poly_term(-Fraction(1, 2) * const_fraction((2, 3, 3)), m2_m3_2),
+        poly_term(Fraction(1, 12) * const_fraction((2, 2, 2, 2)), m2_4),
+    )
+    return a4, a6, a8
+
+
+def assert_coefficient_polynomials() -> None:
+    a4, a6, a8 = coefficient_polynomials()
+    assert a4 == {(2, 0, 0, 0, 0): Fraction(1, 8)}, f"A_4 mismatch: {a4}"
+    assert a6 == {
+        (3, 0, 0, 0, 0): Fraction(1, 64),
+        (0, 2, 0, 0, 0): Fraction(6, 64),
+        (1, 0, 1, 0, 0): Fraction(-8, 64),
+    }, f"A_6 mismatch: {a6}"
+    assert a8 == {
+        (4, 0, 0, 0, 0): Fraction(3, 256),
+        (2, 0, 1, 0, 0): Fraction(-12, 256),
+        (1, 2, 0, 0, 0): Fraction(9, 256),
+        (1, 0, 0, 0, 1): Fraction(12, 256),
+        (0, 1, 0, 1, 0): Fraction(-30, 256),
+        (0, 0, 2, 0, 0): Fraction(20, 256),
+    }, f"A_8 mismatch: {a8}"
+
+
 def assert_coefficient_vectors() -> None:
     for n, expected in EXPECTED_POSITIVE_COEFFICIENTS.items():
         actual = [Q[n][k] for k in range(1, n + 1)]
@@ -249,6 +328,7 @@ def fmt_row(indices: Iterable[int]) -> str:
 def main() -> None:
     assert_coefficient_vectors()
     assert_rows()
+    assert_coefficient_polynomials()
     assert sum((c[0] for c in Q[2].values()), Fraction(0)) == Fraction(-1), "Q_2(1) sanity check failed"
     assert all(c[1] == 0 for c in Q[2].values()), "Q_2 has unexpected imaginary coefficients"
     assert a6_two_point() == Fraction(-7, 64), "A_6(rho_sigma) sanity check failed"
@@ -270,6 +350,9 @@ def main() -> None:
             f"lambda={fmt_qi(scalar):>7s}, I={fmt_qi(const_term(indices))}"
         )
     print("Q_2(1) = -1")
+    print("A_4 = mu2^2/8; A_6 = (mu2^3 + 6*mu3^2 - 8*mu2*mu4)/64; "
+          "A_8 = (3*mu2^4 - 12*mu2^2*mu4 + 9*mu2*mu3^2 + "
+          "12*mu2*mu6 - 30*mu3*mu5 + 20*mu4^2)/256")
     print("A_6(rho_sigma) = -7*sigma^6/64")
     print("A_8(rho_sigma) = 23*sigma^8/256")
 

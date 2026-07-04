@@ -355,6 +355,84 @@ and \eqref{eq:bounded-lipschitz-annular-green-limit} follows from the finite
 annular identity.
 \end{proof}
 
+\begin{lemma}[\(L^1\) chain rule for a bounded moving quotient]%
+\label{lem:poisson-kl-l1-ac-chain-rule}
+Let \((X,\mathcal A,\mu)\) be a sigma-finite measure space and let
+\(I=[a,b]\).  Let \(h,g:I\times X\to(0,\infty)\) be measurable functions
+such that, for a.e. \(x\), \(t\mapsto h_t(x)\) and \(t\mapsto g_t(x)\) are
+absolutely continuous on \(I\).  Assume
+\[
+h,g,\partial_th,\partial_tg\in L^1(I\times X),
+\qquad
+0<m\le u_t(x):=\frac{h_t(x)}{g_t(x)}\le M<\infty
+\]
+for a.e. \((t,x)\), and assume also that
+\(\int_Xh_t\,\dd\mu=\int_Xg_t\,\dd\mu=1\) for every \(t\in I\).  Set
+\[
+H(t):=\int_X h_t(x)\log\frac{h_t(x)}{g_t(x)}\,\dd\mu(x).
+\]
+Then \(H\in AC(I)\), and for a.e. \(t\in I\),
+\begin{equation}\label{eq:kl-moving-quotient-l1-chain-rule}
+H'(t)=
+\int_X \log u_t(x)\,\partial_th_t(x)\,\dd\mu(x)
+-\int_X (u_t(x)-1)\,\partial_tg_t(x)\,\dd\mu(x).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put \(F(r,s)=r\log(r/s)\) on the cone
+\(\{(r,s):s>0,\ m\le r/s\le M\}\).  On this cone,
+\[
+\partial_rF(r,s)=\log(r/s)+1,\qquad
+\partial_sF(r,s)=-r/s,
+\]
+and these two partial derivatives are bounded there by a constant depending
+only on \(m\) and \(M\).  Hence, for a.e. \(x\), the ordinary
+one-dimensional chain rule gives
+\[
+\frac{\dd}{\dd t}F(h_t(x),g_t(x))
+=\bigl(\log u_t(x)+1\bigr)\partial_th_t(x)
+-u_t(x)\partial_tg_t(x)
+\]
+for a.e. \(t\).
+
+The same bounded-derivative estimate supplies an \(L^1\) majorant for time
+increments.  More explicitly, if two points \((r_0,s_0)\) and \((r_1,s_1)\)
+lie in the cone \(s>0\), \(m\le r/s\le M\), then the whole line segment lies
+in the same cone, because its quotient is an \(s\)-weighted average of
+\(r_0/s_0\) and \(r_1/s_1\).  Therefore, for \(s,t\in I\) and a.e. \(x\),
+\[
+\left|F(h_t(x),g_t(x))-F(h_s(x),g_s(x))\right|
+\le C_{m,M}\left(|h_t(x)-h_s(x)|+|g_t(x)-g_s(x)|\right),
+\]
+and, using the absolute continuity of the pointwise paths,
+\[
+|h_t(x)-h_s(x)|+|g_t(x)-g_s(x)|
+\le \int_s^t\left(|\partial_\tau h_\tau(x)|
+                 +|\partial_\tau g_\tau(x)|\right)\dd\tau
+\]
+when \(s<t\).  Since \(\partial_th,\partial_tg\in L^1(I\times X)\),
+Fubini implies that \(t\mapsto F(h_t,g_t)\) is absolutely continuous as an
+\(L^1(X)\)-valued map and
+\[
+\frac{\dd}{\dd t}H(t)
+=\int_X\bigl(\log u_t+1\bigr)\partial_th_t\,\dd\mu
+-\int_X u_t\,\partial_tg_t\,\dd\mu
+\]
+for a.e. \(t\in I\).
+
+Finally \(h,g\in AC(I;L^1(X))\), because the same integral estimate applied to
+\(h\) and \(g\) separately gives their \(L^1\)-absolute continuity.  Therefore
+\[
+\frac{\dd}{\dd t}\int_X h_t\,\dd\mu=\int_X\partial_th_t\,\dd\mu,\qquad
+\frac{\dd}{\dd t}\int_X g_t\,\dd\mu=\int_X\partial_tg_t\,\dd\mu
+\]
+for a.e. \(t\).  Since \(\int h_t=\int g_t=1\), the extra
+\(\int\partial_th_t\) term vanishes, and subtracting
+\(\int\partial_tg_t=0\) from the second term gives
+\eqref{eq:kl-moving-quotient-l1-chain-rule}.
+\end{proof}
+
 \begin{lemma}[Poisson quotient verification for the cutoff--Bregman identity]%
 \label{lem:poisson-quotient-cutoff-bregman-verification}
 \label{thm:kl-domain-verification}
@@ -362,7 +440,6 @@ annular identity.
 \label{prop:kl-tail-cutoff-inputs}
 \label{thm:kl-local-doob-bregman-domain-closure}
 \label{prop:kl-local-doob-bregman-domain-closure}
-\label{lem:poisson-kl-l1-ac-chain-rule}
 Let \(0<a<b<\infty\).  Let
 \[
 h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar\gamma),\qquad u_t=h_t/g_t
@@ -448,11 +525,11 @@ and supplies the cutoff convergence in \(L^1\).
 The maps \(t\mapsto h_t,g_t,\partial_th_t,\partial_tg_t\) are locally
 absolutely continuous in \(L^1\), since
 \(\partial_t^kP_t(x)=t^{-k-1}Q_k(x/t)\), \(k=0,1,2\), with
-\(Q_k\in L^1(\RR)\).  On the compact quotient range just proved, the
-derivatives of \(F(r,s)=r\log(r/s)\) are bounded.  The \(L^1\) chain rule
-therefore gives \(H\in AC([a,b])\) and the displayed formula in (i); the
-terms \(+\int\partial_th_t\) and \(-\int\partial_tg_t\) vanish by the mass
-identities.
+\(Q_k\in L^1(\RR)\).  In particular
+\(h,g,\partial_th,\partial_tg\in L^1([a,b]\times\RR)\), and the Poisson
+kernels are pointwise \(C^1\) in \(t\).  Applying
+Lemma~\ref{lem:poisson-kl-l1-ac-chain-rule} on the compact quotient range
+proved above gives \(H\in AC([a,b])\) and the displayed formula in (i).
 
 Finally, on the same compact quotient range,
 \(\Lambda(\alpha,\beta)\le C|\alpha-\beta|^2\).  The Lipschitz bound and the
@@ -598,5 +675,5 @@ Proposition~\ref{prop:dissipation-tail-coefficient-expansion} gives only
 tail integrals and fixed-window averages.  Pointwise asymptotics for
 \(I_\nu(t)\) require extra differentiated remainder input; the precise
 conditional result is isolated in
-Appendix~\ref{app:conditional-post-processing}.
+Subsection~\ref{app:conditional-post-processing}.
 \end{remark}
