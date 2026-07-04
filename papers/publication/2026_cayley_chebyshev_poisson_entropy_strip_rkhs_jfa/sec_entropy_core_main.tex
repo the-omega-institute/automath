@@ -568,12 +568,12 @@ Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) be a probability law on
 \(\RR\) with finite mean \(\bar\gamma\) and finite centred \(L\)th absolute
 moment.  Let
 \[
-X_c=\gamma-\bar\gamma,\qquad
-\mu_n=\int_{\RR} X_c^n\,\dd\nu(\gamma)\quad(2\le n\le L),
-\]
-and set
-\[
-h_t=P_t*\nu,\qquad g_t(x)=P_t(x-\bar\gamma),
+\begin{aligned}
+X_c&=\gamma-\bar\gamma,\\
+\mu_n&=\int_{\RR} X_c^n\,\dd\nu(\gamma)\qquad(2\le n\le L),\\
+h_t&=P_t*\nu,\qquad
+g_t(x)&=P_t(x-\bar\gamma),
+\end{aligned}
 \]
 then
 \begin{equation}\label{eq:poisson-kl-even-orders}
@@ -894,29 +894,35 @@ can evaluate \(A_{2N}\) on the full class of laws.
 
 \subsubsection*{Conditional quotient transfer}
 
-\noindent\textbf{Admissible borderline class.}
-Fix an even integer \(p\ge4\), \(R>0\), and \(c>0\).  The admissible
-borderline class \(\mathcal A_{p,R,c}\) consists of probability laws
-\(\nu\) with density
+\medskip
+\noindent\fbox{%
+\begin{minipage}{0.94\linewidth}
+\begin{definition}[Admissible borderline tail classes]%
+\label{def:admissible-borderline-tail-classes}
+Fix an even integer \(p\ge4\), \(R>0\), and \(c>0\).  Every class in this
+definition uses the same disjoint core-plus-tail convention: \(\nu\) has a
+nonnegative normalized density
 \[
   f(x)=g(x)+\{c|x|^{-p-1}L_f(|x|)+r_f(x)\}
        \mathbf1_{\{|x|\ge R\}},
 \]
 where \(g\ge0\) is symmetric, compactly supported, and
 \(\operatorname{supp}g\subset(-R,R)\), \(L_f\ge0\) is measurable on
-\([R,\infty)\), \(r_f\) is an even measurable perturbation on
-\(\{|x|\ge R\}\), and the displayed density is nonnegative and normalized.
-Thus all theorem statements below use the same disjoint core-plus-tail
-convention.  The following common tail conditions hold.  The law is symmetric,
-has finite absolute moments of every order \(q<p\), and with
+\([R,\infty)\), and \(r_f\) is an even measurable perturbation on
+\(\{|x|\ge R\}\).  Put
 \[
-  M_p(t):=\int_{|x|\le t}x^pf(x)\,\dd x
+  M_p(t):=\int_{|x|\le t}x^pf(x)\,\dd x,\qquad
+  \mathcal R_t^{(p)}(y):=
+  \int_{|x|\le t}
+  \left\{R_{x/t}(y)-\sum_{n=0}^{p}u_n(y)(x/t)^n\right\}f(x)\,\dd x .
 \]
-one has
+
+\(\nu\) belongs to the admissible class \(\mathcal A_{p,R,c}\) if it is
+symmetric, has finite absolute moments of every order \(q<p\),
 \begin{equation}\label{eq:admissible-top-moment-growth}
-  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}).
+  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}),
 \end{equation}
-The four quotient controls are
+and satisfies the four quotient controls
 \begin{align}
 t^{-n}\int_{|x|>t}|x|^nf(x)\,\dd x
   &=o(t^{-p}M_p(t))\qquad(0\le n<p), \label{eq:admissible-lower-tail-control}\\
@@ -927,12 +933,41 @@ t^{-p}\int_{|x|\le t}x^pf(x)\,\dd x
 \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)f(x)\,\dd x
   &=o(t^{-p}M_p(t)). \label{eq:admissible-far-tail-control}
 \end{align}
-Here
+The three named subclasses used below are the following.
+
+\emph{Exact power tail.}
+\(\mathcal A_{p,R,c}^{\rm ex}\) is the class with \(L_f\equiv1\) and
+\(r_f=0\).  Equivalently, after the compact core,
 \[
-  \mathcal R_t^{(p)}(y):=
-  \int_{|x|\le t}
-  \left\{R_{x/t}(y)-\sum_{n=0}^{p}u_n(y)(x/t)^n\right\}f(x)\,\dd x .
+  f(x)=g(x)+c|x|^{-p-1}\mathbf1_{\{|x|\ge R\}} .
 \]
+
+\emph{Perturbative power tail.}
+\(\mathcal A_{p,R,c}^{\rm pert}\) is the class with \(L_f\equiv1\) and
+\(r_f=r\), where \(r\) is even and satisfies
+\[
+\int_{|x|\ge R}|x|^q|r(x)|\,\dd x<\infty\quad(0\le q<p),
+\qquad
+\int_{R\le |x|\le t}|x|^pr(x)\,\dd x=O(1),
+\]
+\[
+t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x=O(t^{-p}),
+\qquad
+\int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x=O(t^{-p}).
+\]
+
+\emph{Monotone slowly varying tail.}
+\(\mathcal A_{p,R,c}^{\rm sv}\) is the class with \(r_f=0\) and
+\(L_f=L\), where \(L\) is nonnegative on \([R,\infty)\), eventually positive,
+eventually monotone, slowly varying, and \(M_p(t)\to\infty\).
+
+The exact, perturbative, and slowly varying theorems below verify membership
+in these three subclasses.  Outside the three displayed subclasses the paper
+uses only the admissible quotient controls defining \(\mathcal A_{p,R,c}\).
+\end{definition}
+\end{minipage}}
+\medskip
+
 Thus membership in \(\mathcal A_{p,R,c}\) records, in one place, the
 symmetry, lower moments, moving truncated top moment, and exact estimates
 needed for the quotient Taylor calculation.  In particular, for
@@ -957,8 +992,9 @@ The following result is only a transfer theorem.  Its hypothesis is the exact
 quotient expansion \eqref{eq:conditional-truncated-top-mode-quotient} with the
 error scale \eqref{eq:conditional-truncated-top-mode-error}; it is not a
 regular-variation theorem and supplies no quotient estimate by itself.
-When \(\nu\in\mathcal A_{p,R,c}\), the quotient hypothesis is supplied by
-\eqref{eq:admissible-borderline-quotient-expansion}.
+When \(\nu\in\mathcal A_{p,R,c}\) in the sense of
+Definition~\ref{def:admissible-borderline-tail-classes}, the quotient
+hypothesis is supplied by \eqref{eq:admissible-borderline-quotient-expansion}.
 
 \begin{proposition}[Conditional truncated top-mode quotient transfer]%
 \label{thm:tail-replacements-proved-here}
@@ -1004,7 +1040,9 @@ where
 \subsubsection*{Exact power-tail verification}
 
 For the exact power law below, the proof verifies
-\(\nu\in\mathcal A_{p,R,c}\) and then applies the conditional transfer.
+\(\nu\in\mathcal A_{p,R,c}^{\rm ex}\) from
+Definition~\ref{def:admissible-borderline-tail-classes} and then applies the
+conditional transfer.
 Lemma~\ref{lem:borderline-exact-power-tail-quotient-expansion} gives the
 sharper \(O(t^{-p})\) quotient remainder used in that verification.  The
 quotient expansion is repeated in the theorem statement so that the entropy
@@ -1023,8 +1061,10 @@ function with \(\operatorname{supp}g\subset(-R,R)\) and total mass
   f(x)=g(x)+c|x|^{-(p+1)}\mathbf1_{\{|x|\ge R\}} .
 \end{equation}
 Let \(\nu\) be the law with density \(f\).  Then
-\(\nu\in\mathcal A_{p,R,c}\) with \(L_f\equiv1\).  In particular \(\nu\) is
-centred,
+\(\nu\in\mathcal A_{p,R,c}^{\rm ex}\subset\mathcal A_{p,R,c}\), where the
+classes are those of
+Definition~\ref{def:admissible-borderline-tail-classes}.  In particular
+\(\nu\) is centred,
 \[
 \EE|X|^q<\infty\quad(q<p),\qquad \EE|X|^p=\infty ,
 \]
@@ -1108,9 +1148,11 @@ and
 \begin{equation}\label{eq:perturbative-power-tail-far-remainder}
   \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x=O(t^{-p}).
 \end{equation}
-These are precisely the controls used to verify membership in
-\(\mathcal A_{p,R,c}\) after the perturbation has been absorbed into the
-compact-plus-tail decomposition.  Lemma~\ref{lem:perturbative-power-tail-quotient-expansion}
+These are precisely the perturbative subclass conditions in
+Definition~\ref{def:admissible-borderline-tail-classes}; they verify
+membership in \(\mathcal A_{p,R,c}^{\rm pert}\) after the perturbation has
+been absorbed into the compact-plus-tail decomposition.
+Lemma~\ref{lem:perturbative-power-tail-quotient-expansion}
 records the resulting quotient expansion.  The theorem below repeats the
 controls and the quotient expansion before transferring it to entropy.  No
 conclusion is claimed for a perturbation that fails these controls.
@@ -1620,7 +1662,9 @@ and let
 \kappa_N:=I(2,p)=(-1)^N(N-1)2^{-2N+2}.
 \]
 Then \(\nu\) is centred, has finite absolute moments of every order \(q<p\),
-belongs to \(\mathcal A_{p,R,c}\) with \(L_f\equiv1\) and \(r_f=r\), and
+belongs to
+\(\mathcal A_{p,R,c}^{\rm pert}\subset\mathcal A_{p,R,c}\) in the sense of
+Definition~\ref{def:admissible-borderline-tail-classes}, and
 \[
   M_p(t):=\EE[X^p\mathbf1_{\{|X|\le t\}}]=2c\log t+O(1).
 \]
@@ -1673,7 +1717,8 @@ The same lemma proves the lower-moment replacement, the top truncated-moment
 identity, the local Taylor-remainder bound, and the far-tail bound that form
 \eqref{eq:admissible-lower-tail-control}--\eqref{eq:admissible-far-tail-control}.
 Since \(M_p(t)\sim2c\log t\), these estimates verify
-\(\nu\in\mathcal A_{p,R,c}\).
+\(\nu\in\mathcal A_{p,R,c}^{\rm pert}\subset\mathcal A_{p,R,c}\) from
+Definition~\ref{def:admissible-borderline-tail-classes}.
 Since \(M_p(t)\sim2c\log t\), the error is
 \(o(t^{-p}M_p(t))\), while
 \[
@@ -1697,8 +1742,10 @@ the theorem.
 
 The next lemma is the only place where slow variation is used.  The corollary
 that follows is not a general regular-variation statement: it proves
-membership in \(\mathcal A_{p,R,c}\), and hence the same conditional
-quotient-transfer hypotheses
+membership in the monotone slowly varying subclass
+\(\mathcal A_{p,R,c}^{\rm sv}\) of
+Definition~\ref{def:admissible-borderline-tail-classes}, and hence the same
+conditional quotient-transfer hypotheses
 \eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error},
 from eventual monotonicity and slow variation for the displayed borderline
 density.
@@ -1849,7 +1896,9 @@ M_p(t):=\int_{|x|\le t}x^pf(x)\,\dd x
          +2c\int_R^t\frac{L(s)}s\,\dd s .
 \]
 Assume only that \(M_p(t)\to\infty\).
-Then \(\nu\in\mathcal A_{p,R,c}\) with \(L_f=L\) and \(r_f=0\).  With
+Then \(\nu\in\mathcal A_{p,R,c}^{\rm sv}\subset\mathcal A_{p,R,c}\), where
+the classes are those of
+Definition~\ref{def:admissible-borderline-tail-classes}.  With
 \[
   \Delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,
   \qquad H(t):=D_{\mathrm{KL}}(P_t*\nu\|P_t),
@@ -2364,7 +2413,7 @@ and the right side tends to
 \(M\to\infty\) proves divergence when the variance is infinite.
 \end{proof}
 
-\subsection{Multidimensional quotient jet and covariance layer}
+\subsection{Multidimensional D1--D4 quotient and covariance package}
 
 For \(d\ge1\), let
 \[
@@ -2464,13 +2513,13 @@ exist, and the scaled quotient has the jet
 (\mathrm{MPJ}_{d,L}):\qquad
 \delta_t^{(d)}(y)
 &=
-\sum_{2\le|\alpha|\le L}
-\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
+\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
 +\rho_{L,t}^{(d)}(y),\\
-\|\rho_{L,t}^{(d)}\|_\infty+
-\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
 &=o(t^{-L}),\qquad
-\|\delta_t^{(d)}\|_\infty=O(t^{-2}).
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
 \end{aligned}
 \end{equation}
 where
@@ -2485,6 +2534,12 @@ is the deterministic and integrated quotient-remainder input, with constants
 depending only on \(d,L\); then
 Theorem~\ref{thm:multidimensional-density-quotient} proves that finite
 centred \(L\)th absolute moment implies \((\mathrm{MPJ}_{d,L})\).
+
+The four front-end statements below keep the logical layers separate:
+D1 transfers the conditional quotient jet to entropy, D2 supplies that jet
+from finite moment, D3 evaluates the covariance algebra under finite
+covariance alone, and D4 is the finite \((d+1)\)-moment leading KL
+coefficient consequence.
 
 \begin{lemma}[Global multidimensional quotient remainder]%
 \label{lem:global-multidim-quotient-remainder-core}
@@ -2633,26 +2688,27 @@ The \(L^1(\Omega_d)\) part follows from the same uniform bound because
 \(\Omega_d\) is a probability measure.
 \end{proof}
 
-\begin{theorem}[Quotient jet implies the multidimensional KL coefficient jet]%
+\begin{theorem}[D1 conditional jet transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), let \(\nu\) be a
 probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies
 \((\mathrm{MPJ}_{d,L})\), namely
 \[
-\delta_t^{(d)}(y)=
-\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
+\delta_t^{(d)}(y)
+=\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
 +\rho_{L,t}^{(d)}(y),
 \]
 with
 \[
-\|\rho_{L,t}^{(d)}\|_\infty+
-\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}),
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}=o(t^{-L}),
 \qquad
-\|\delta_t^{(d)}\|_\infty=O(t^{-2}).
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
 \]
 Then
 \[
-D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
+D_{\mathrm{KL}}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar\gamma)\bigr)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
 +o(t^{-(L+2)}),
 \]
@@ -2722,7 +2778,7 @@ gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
 all omitted layers are \(o(t^{-(L+2)})\).
 \end{proof}
 
-\begin{theorem}[Finite centred \(L\)-absolute moment implies \((\mathrm{MPJ}_{d,L})\)]%
+\begin{theorem}[D2 moment supply]%
 \label{thm:multidimensional-density-quotient}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
 a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred
@@ -2811,8 +2867,10 @@ Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
 a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred
 \(L\)th absolute moment.  Set
 \[
-h_t=P_t^{(d)}*\nu,\qquad
-g_t=P_t^{(d)}(\cdot-\bar\gamma),
+\begin{aligned}
+h_t&=P_t^{(d)}*\nu,\\
+g_t&=P_t^{(d)}(\cdot-\bar\gamma),
+\end{aligned}
 \]
 and define the centred variable and moments by
 \[
@@ -2825,7 +2883,7 @@ Then the finite moment hypothesis first gives the quotient jet
 \((\mathrm{MPJ}_{d,L})\), and this quotient jet gives the matched Poisson KL
 coefficient expansion
 \[
-D_{\rm KL}(h_t\|g_t)
+D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
 +o(t^{-(L+2)}),
 \]
@@ -2848,46 +2906,23 @@ All odd retained coefficients vanish:
 \]
 \end{corollary}
 
-\begin{corollary}[Finite-moment covariance coefficient through the quotient jet]%
-\label{cor:multidim-finite-moment-covariance-coefficient}
-Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
-a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite
-centred \(L\)th absolute moment.  Put
+\begin{proof}
+Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
+centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\),
+with density layers
 \[
-h_t=P_t^{(d)}*\nu,\qquad
-g_t=P_t^{(d)}(\cdot-\bar\gamma),
+D_j^{(d)}(y;\nu)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
 \]
-and let
-\[
-X_c=\gamma-\bar\gamma,\qquad
-\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad
-\Sigma_0=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d .
-\]
-Then the finite \(L\)-moment hypothesis first supplies
-\((\mathrm{MPJ}_{d,L})\), and only through that quotient jet one has
-\begin{equation}\label{eq:finite-moment-covariance-coefficient-through-mpj}
-D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}),
-\end{equation}
-where \(\mathcal Q_d(\Sigma)\) is the quadratic covariance contraction computed in
-Proposition~\ref{prop:multidim-formal-covariance-layer}:
-\[
-\mathcal Q_d(\Sigma)
-=c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
-+c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2 .
-\]
-Equivalently, finite covariance gives the displayed algebraic quantity
-\(\mathcal Q_d(\Sigma)\), but it becomes the leading KL coefficient in
-\eqref{eq:finite-moment-covariance-coefficient-through-mpj} only because the
-stronger finite \(L\)-moment assumption has supplied
-\((\mathrm{MPJ}_{d,L})\).
-\end{corollary}
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} applies to exactly
+that named quotient jet and gives the displayed entropy expansion and
+coefficient formula.  The odd-coefficient cancellation is the parity statement
+proved in that theorem.  No covariance contraction is used in this proof.
+\end{proof}
 
 \noindent
-The preceding corollary is the finite-moment route from covariance data to a
-KL leading coefficient: the route passes through
-\((\mathrm{MPJ}_{d,L})\).  The next lemma and proposition are only the
-separate covariance-algebra layer; they evaluate the quadratic density mode
-under finite covariance and do not by themselves prove any KL asymptotic.
+The next lemma and proposition form only the separate covariance-algebra
+layer.  They evaluate the quadratic density mode under finite covariance and
+do not by themselves prove any KL asymptotic.
 
 \begin{lemma}[Radial--angular contractions for the Cauchy weight]%
 \label{lem:radial-angular-contractions}
@@ -2986,7 +3021,7 @@ degree-two density mode.  Corollary~\ref{cor:multidim-leading-kl-coefficient}
 is the separate statement where this algebraic layer is used as the leading
 KL coefficient after \((\mathrm{MPJ}_{d,L})\) has been assumed.
 
-\begin{proposition}[Covariance algebra under finite covariance]%
+\begin{proposition}[D3 covariance algebra under finite covariance]%
 \label{prop:multidim-formal-covariance-layer}
 Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
 finite centred second moment.  Put
@@ -3184,40 +3219,6 @@ This proves \eqref{eq:multidim-leading-positive-constants}.  The constants are
 positive, so the layer vanishes exactly when \(\Sigma=0\).
 \end{proof}
 
-\begin{proof}[Proof of Corollary~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic}]
-Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
-centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\),
-with density layers
-\[
-D_j^{(d)}(y;\nu)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
-\]
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets} applies to exactly
-that named quotient jet and gives the displayed entropy expansion and
-coefficient formula.  The odd-coefficient cancellation is the parity statement
-proved in that theorem.  No covariance contraction is used in this proof.
-\end{proof}
-
-\begin{proof}[Proof of Corollary~\ref{cor:multidim-finite-moment-covariance-coefficient}]
-Theorem~\ref{thm:multidimensional-density-quotient} turns the finite centred
-\(L\)-absolute moment assumption into \((\mathrm{MPJ}_{d,L})\), and
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets} then gives the KL
-coefficient jet.  The \(m=4\) coefficient in that jet is
-\[
-\mathcal A_4^{(d)}(\nu)
-=\frac12\int_{\RR^d}D_2^{(d)}(y;\nu)^2\,\Omega_d(\dd y).
-\]
-The degree-two density layer depends only on the covariance:
-\[
-D_2^{(d)}(y;\nu)=
-\frac{d+1}{2}\left(
--\frac{\operatorname{tr}\Sigma}{1+|y|^2}
-+\frac{(d+3)y^{\mathsf T}\Sigma y}{(1+|y|^2)^2}
-\right).
-\]
-Proposition~\ref{prop:multidim-formal-covariance-layer} evaluates the last
-quadratic integral as \(\mathcal Q_d(\Sigma)\), proving the asserted leading term.
-\end{proof}
-
 \begin{corollary}[Leading multidimensional KL coefficient under \((\mathrm{MPJ}_{d,L})\)]%
 \label{cor:multidim-leading-kl-coefficient}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and assume that
@@ -3226,7 +3227,11 @@ Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and assume that
 h_t=P_t^{(d)}*\nu,\qquad
 g_t=P_t^{(d)}(\cdot-\bar\gamma).
 \]
-Then
+Since \(L\ge2\), the covariance
+\[
+\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad X_c=\gamma-\bar\gamma,
+\]
+exists.  Then
 \[
 D_{\rm KL}(h_t\|g_t)
 =\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
@@ -3255,7 +3260,63 @@ computes
 Thus \(D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4})\).
 \end{proof}
 
-\begin{corollary}[Finite \((d+1)\)-moment leading multidimensional coefficient]%
+\begin{corollary}[Finite-moment covariance coefficient through the quotient jet]%
+\label{cor:multidim-finite-moment-covariance-coefficient}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite
+centred \(L\)th absolute moment.  Put
+\[
+h_t=P_t^{(d)}*\nu,\qquad
+g_t=P_t^{(d)}(\cdot-\bar\gamma),
+\]
+and let
+\[
+X_c=\gamma-\bar\gamma,\qquad
+\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad
+\Sigma_0=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d .
+\]
+Then the finite \(L\)-moment hypothesis first supplies
+\((\mathrm{MPJ}_{d,L})\), and only through that quotient jet one has
+\begin{equation}\label{eq:finite-moment-covariance-coefficient-through-mpj}
+D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}),
+\end{equation}
+where \(\mathcal Q_d(\Sigma)\) is the quadratic covariance contraction computed
+in Proposition~\ref{prop:multidim-formal-covariance-layer}:
+\[
+\mathcal Q_d(\Sigma)
+=c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
++c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2 .
+\]
+Equivalently, finite covariance gives the displayed algebraic quantity
+\(\mathcal Q_d(\Sigma)\), but it becomes the leading KL coefficient in
+\eqref{eq:finite-moment-covariance-coefficient-through-mpj} only because the
+stronger finite \(L\)-moment assumption has supplied
+\((\mathrm{MPJ}_{d,L})\).
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:multidimensional-density-quotient} turns the finite centred
+\(L\)-absolute moment assumption into \((\mathrm{MPJ}_{d,L})\), and
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} then gives the KL
+coefficient jet.  The \(m=4\) coefficient in that jet is
+\[
+\mathcal A_4^{(d)}(\nu)
+=\frac12\int_{\RR^d}D_2^{(d)}(y;\nu)^2\,\Omega_d(\dd y).
+\]
+The degree-two density layer depends only on the covariance:
+\[
+D_2^{(d)}(y;\nu)=
+\frac{d+1}{2}\left(
+-\frac{\operatorname{tr}\Sigma}{1+|y|^2}
++\frac{(d+3)y^{\mathsf T}\Sigma y}{(1+|y|^2)^2}
+\right).
+\]
+Proposition~\ref{prop:multidim-formal-covariance-layer} evaluates the last
+quadratic integral as \(\mathcal Q_d(\Sigma)\), proving the asserted leading
+term.
+\end{proof}
+
+\begin{corollary}[D4 actual leading KL coefficient]%
 \label{cor:finite-dplusone-moment-leading-multidim-coefficient}
 Let \(d\ge1\), let \(\nu\) be a probability measure on \(\RR^d\) with mean
 \(\bar\gamma\), and assume
