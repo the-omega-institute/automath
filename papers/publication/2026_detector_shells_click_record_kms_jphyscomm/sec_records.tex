@@ -394,7 +394,16 @@ For a renewal process, after observing \(k\) consecutive zeros since the last
 click, the conditional click probability is the zero-run hazard \(h_k\).
 If an \(r\)-step Markov rule generated the same full-support law, then all
 histories with \(k\ge r\) trailing zeros would have the same last \(r\) symbols
-and hence the same click probability.
+and hence the same click probability.  Therefore \(h_k\) would be constant for
+all \(k\ge r\).
+
+This condition concerns a transition rule conditioned on the most recent
+symbols.  It is different from finite dependence of separated sigma-fields:
+\(1\)-dependence says that events separated by one unobserved sample
+factorize, while an \(r\)-step Markov rule says that every future one-step
+transition probability is a function of only the last \(r\) symbols.  For a
+renewal record with full gap support, the latter would force the click
+probability after a long zero run to stop depending on the run length.
 \end{proof}
 
 \begin{lemma}[Cylinder factorization at the memory threshold]\label{lem:kernel-factorization-main}
@@ -576,6 +585,9 @@ by one unobserved sample.  Conversely exact \(1\)-dependence would force
 \(\gamma_2=0\), while
 \(\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}\) and the prefactor is nonzero by
 \Cref{lem:stationary-main}; hence \(\lambda_{\mathrm{hid}}=0\).
+This finite sigma-field separation is not a finite-order Markov transition
+rule: the former is a factorization statement across a gap, whereas the latter
+would make the next-symbol probability depend only on a bounded suffix.
 
 Finally, a renewal process with full gap support that were \(r\)-step Markov
 would have constant click probability after every run of at least \(r\) zeros.
@@ -834,15 +846,16 @@ M_{rs}=
 \end{cases}
 \qquad 1\le r,s\le m,
 \end{equation}
-and set \(D(\varnothing)=1\).  Then elementary LU elimination gives the
-finite LU product identity
+and set \(D_{\rm LU}(\varnothing)=1\).  The associated \emph{LU product
+determinant} is the finite determinant
 \begin{equation}\label{eq:renewal-lu-product-determinant-main}
-D(B):=\det M
+D_{\rm LU}(B):=\det M(B)
 =\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
 \end{equation}
-Thus \(D(B)=\PP(B\subset\varXi)\) for the renewal set.  This is only a
-compact rewriting of the renewal product, not a determinantal-process
-assertion or construction.
+Equivalently, elementary LU elimination gives the displayed finite LU product
+identity.  Thus \(D_{\rm LU}(B)=\PP(B\subset\varXi)\) for the renewal set.
+This is only a compact rewriting of the renewal product, not a
+determinantal-process assertion or construction.
 \end{lemma}
 
 \begin{proof}
@@ -861,10 +874,12 @@ displayed product.
 \begin{remark}[Noncanonical finite LU product identity]\label{rem:finite-determinant-language-main}\label{lem:principal_minor_gauge_nonuniqueness_main}
 \Cref{prop:renewal-principal-minor-lu-main} does not make a determinantal
 process assertion.  The mathematical content is the renewal inclusion product
-already supplied by renewal conditioning; \(M(B)\) and \(D(B)\) are a
-set-indexed finite LU product identity for that product.  No Hermitian,
+already supplied by renewal conditioning; \(M(B)\) and \(D_{\rm LU}(B)\) are
+set-indexed finite LU bookkeeping for that product.  No Hermitian,
 positive-contraction, operator, nonsymmetric, or sampling point-process kernel
-structure is asserted for \(M(B)\) or \(D(B)\).
+structure is asserted for \(M(B)\) or \(D_{\rm LU}(B)\).  In particular,
+\(D_{\rm LU}\) is not DPP notation: no process is being defined by assigning
+all inclusion probabilities to minors of an admissible kernel.
 \end{remark}
 
 \begin{lemma}[Boundary-reset specialization of the renewal product notation]\label{cor:boundary_reset_toeplitz_renewal_specialization}\label{cor:finite_window_principal_minor_word_law}\label{prop:finite_inclusion_tail_phase}
@@ -881,8 +896,8 @@ u_n=\PP(A_n=1\mid A_0=1)
 \qquad n\ge1.
 \end{equation}
 Thus the boundary-reset renewal inclusion products are obtained from
-\eqref{eq:renewal-inclusion-product-main} by this \(u_n\).  The finite LU
-product identity \(D_\Gamma(B)\) is obtained from
+\eqref{eq:renewal-inclusion-product-main} by this \(u_n\).  The specialized
+LU product determinant \(D_{{\rm LU},\Gamma}(B)\) is obtained from
 \eqref{eq:renewal-lu-product-matrix-main} and
 \eqref{eq:renewal-lu-product-determinant-main} after the inclusion product is
 known, and finite word laws are given by
@@ -1030,9 +1045,9 @@ and an externally supplied branch map
 \mathcal B:\{\text{the two roots of }z^2-\sigma_1z+\sigma_2=0\}\to
 \{\text{attempt},\text{recovery}\}.
 \]
-No branch map, no separated labelled rates.  Without such a supplied map, every
-separated labelled-rate statement below is only a statement about the unordered
-rate set
+In this paper, no branch map means no separated labelled rates.  Without such
+a supplied map, every separated labelled-rate statement below is only a statement
+about the unordered rate set
 \[
 \left\{-\frac{\log z_1}{\Delta\tau},
       -\frac{\log z_2}{\Delta\tau}\right\}
@@ -2371,7 +2386,8 @@ labelled-rate reporting is conditional on the external branch-map input
 specified there.  On the exchange
 diagonal, the common numerical rate in \Cref{lem:diagonal-common-rate-main} is
 available only through the projected symmetric-coordinate limit, not through a
-separated-root Wald chart.
+separated-root Wald chart; the induced common-rate confidence set is
+\Cref{cor:exchange-diagonal-common-rate-confidence-main}.
 
 \paragraph{Operational reporting rule.}
 All covariance and Wald reporting attached to this theorem uses the following
@@ -2423,6 +2439,118 @@ and the all-complete-cycle separated-batch estimator in
 \(\widehat Y_j\) from \Cref{def:cycle-index-inclusion-estimator-main}, is
 consistent for \(\Sigma_r\) at the rate stated in
 \Cref{lem:three-coordinate-batch-rate-main}.
+
+\paragraph{Consequences included in this finite-record theorem.}
+The preceding inclusion-coordinate conclusion is the base part of this
+theorem.  The following three finite-record reporting conclusions are part of
+the same theorem and use the same retained block, the same complete-cycle
+convention, and the operational reporting rule above.
+
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item \emph{Quotient inverse delta method.}
+Assume the population inverse is in the stable chart
+\[
+r_0>0,\qquad D=r_1-r_0^2\ne0,
+\]
+equivalently \(r_0\) and \(|r_1/r_0-r_0|\) are bounded away from zero in the
+local neighbourhood considered.  Define
+\[
+a(r)=\frac{r_1}{r_0},\qquad
+u_2(r)=\frac{r_2}{r_0},\qquad
+\lambda(r)=\frac{u_2(r)-r_0}{a(r)-r_0},
+\]
+and
+\[
+\Phi(r)=
+\bigl(1-a(r)+\lambda(r),\,
+r_0(1-\lambda(r))-a(r)+\lambda(r)\bigr).
+\]
+Let \(F=\{(x+y,xy):0\le x,y\le1\}\), let \(\Pi_F^{\rm tb}\) be a measurable
+nearest-point projection onto \(F\), and form the total thresholded estimator
+\(\widetilde\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma_N^{\rm raw})\) with the
+fallback and denominator thresholds of
+\Cref{cor:finite_inverse_delta_boundary_main}.  Then
+\[
+\sqrt N\{\Phi(\widehat r_N^{\mathrm{cyc}})-\Phi(r)\}
+\Rightarrow
+\mathcal N(0,\Sigma_\sigma),
+\qquad
+\Sigma_\sigma=D\Phi(r)\Sigma_rD\Phi(r)^\top ,
+\]
+and at separated interior points of \(F\) the same limit holds with
+\(\Phi(\widehat r_N^{\mathrm{cyc}})\) replaced by
+\(\widetilde\sigma_N\).  The sandwich covariance
+\[
+\widehat\Sigma_{\sigma,N}
+=\widehat J_{\Phi,N}\widehat\Sigma_{r,N}^{\mathrm{all}}
+ \widehat J_{\Phi,N}^{\top}
+\]
+is consistent there.  For the killed-leakage sampled-boundary population,
+\(\Phi(r)=(p+s,ps)\).  If, in addition, \(\Delta_\sigma=(p-s)^2>0\) and an
+external branch map \(\mathcal B\) supplies the separated-root labels in
+\Cref{conv:branch-map-labelled-rates-main}, the retained separated labelled
+rates obey the labelled-rate delta method and the retained-rank Wald statistic
+uses only empirical eigenvalues above \(t_N\).
+
+\item \emph{Exchange-diagonal projection and common-rate reporting.}
+At a population exchange-diagonal point
+\(\sigma_z=(2z,z^2)\), \(0<z<1\), the separated-root labelled-rate chart is
+not used.  Instead
+\[
+\sqrt N(\widetilde\sigma_N-\sigma_z)
+\Rightarrow
+\Pi_{H_z}(Z),\qquad
+Z\sim\mathcal N(0,\Sigma_\sigma),\qquad
+H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
+\]
+The diagonal confidence set is the projected-Gaussian half-space inversion
+\[
+\{(2z,z^2):0<z<1,\ Q_N(z)\le c^{-}_{1-\alpha,N}(z)\}
+\]
+with \(Q_N\), the thresholded pseudoinverse, and the conditional Gaussian
+critical value defined in
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  Its image
+under \(z\mapsto-\log z/\Delta\tau\) is the finite-record confidence set for
+the identified common numerical rate
+\[
+\gamma_{\rm diag}=-\frac{\log z}{\Delta\tau},
+\]
+or equivalently for the invariant ordered quotient pair
+\((\gamma_{\rm diag},\gamma_{\rm diag})\).  This conclusion does not assert a
+separated attempt/recovery branch on the diagonal.
+
+\item \emph{Lag-two studentized scalar interval.}
+For the scalar diagnostic
+\[
+\gamma_2=\operatorname{Cov}(A_0,A_2),
+\]
+use the all-complete-cycle lag-two estimator \(\widehat\gamma_{2,N}\) and its
+observable separated-batch scalar studentizer
+\(\widehat\sigma^2_{\gamma_2,N}\) from
+\Cref{cor:boundary-reset-cycle-clt-main}.  The limiting variance
+\(\sigma_{\gamma_2}^2\) is positive on the full positive sampled-boundary
+parameter domain.  Hence
+\[
+\sqrt N(\widehat\gamma_{2,N}-\gamma_2)
+\Rightarrow \mathcal N(0,\sigma_{\gamma_2}^2),
+\qquad
+\widehat\sigma^2_{\gamma_2,N}\xrightarrow{\PP}\sigma_{\gamma_2}^2,
+\]
+and the two-sided interval
+\[
+\left[
+\widehat\gamma_{2,N}
+-z_{1-\alpha_{\rm ci}/2}\frac{\widehat\sigma_{\gamma_2,N}}{\sqrt N},
+\quad
+\widehat\gamma_{2,N}
++z_{1-\alpha_{\rm ci}/2}\frac{\widehat\sigma_{\gamma_2,N}}{\sqrt N}
+\right]
+\]
+has asymptotic coverage \(1-\alpha_{\rm ci}\) for every
+\(0<\alpha_{\rm ci}<1\).  No other scalar Wald interval is
+claimed from this theorem unless its limiting studentization variance is
+strictly positive and consistently estimated.
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
@@ -2480,6 +2608,19 @@ the stationary law.  On the complement, whose probability is \(o(1)\), the
 distributional contribution is bounded by the coupling failure probability.
 Thus every stationary weak limit and covariance conclusion above transfers to
 the finite-start post-burn-in record with retained sample size \(N\).
+
+The quotient inverse part is the delta-method consequence proved in
+\Cref{cor:finite_inverse_delta_boundary_main}; its assumptions are exactly the
+stable inverse chart, projection, threshold, retained-root, and branch-map
+conditions stated in the theorem.  The exchange-diagonal projected law and
+common-rate confidence set are
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main,cor:exchange-diagonal-common-rate-confidence-main}.
+The scalar lag-two CLT, positive variance, consistent scalar studentizer, and
+normal interval are \Cref{cor:boundary-reset-cycle-clt-main}.  These results
+all use the same retained post-burn-in record convention and the same
+deterministic batch/rank rule stated in the theorem, so they are consequences
+of the fixed-record theorem rather than separate reporting rules assembled
+from independent conventions.
 \end{proof}
 
 \paragraph{Inclusion-coordinate covariance estimation.}
@@ -2874,13 +3015,15 @@ claim that the diagonal common-rate estimand is absent.  If the population
 point is \(\sigma_z=(2z,z^2)\), the target common rate is instead
 \(-\log z/\Delta\tau\) and its finite-record calibration is the projected
 boundary construction of
-\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  On the
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main} pushed forward
+by \Cref{cor:exchange-diagonal-common-rate-confidence-main}.  On the
 complementary separated-root event, compute the two roots of
 \(z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0\).  If either root lies
 outside \([\eta_N,1-\eta_N]\), or if the supplied branch map \(\mathcal B\) does
 not assign the two empirical roots uniquely to the population attempt and
-recovery branches, the rule again reports no separated labelled rates.  Only
-on the retained event are the separated labelled roots and rates recorded as
+recovery branches, the rule withholds separated labelled-rate reporting under
+\Cref{conv:branch-map-labelled-rates-main}.  Only on the retained event are
+the separated labelled roots and rates recorded as
 \[
 (\widehat p_N,\widehat s_N)
 =\mathcal B(\mathcal R_{\mathrm{root}}(\widetilde\sigma_N)),
@@ -2923,7 +3066,7 @@ branch map \(\mathcal B\).  If
 \(\widehat\Delta_{\sigma,N}=O_{\PP}(N^{-1/2})\), so the rule reports no
 separated labelled rates with probability tending to one because
 \(N^{1/2}\delta_N^2\to\infty\); the common-rate estimand is instead covered by
-the projected diagonal statement just cited.
+the projected diagonal common-rate statement just cited.
 \end{proposition}
 
 \begin{proof}
@@ -3078,6 +3221,76 @@ fixed positive critical buffer gives the conservative statement recorded
 above.  Scalar studentization divides by a consistent positive variance
 estimate; hence it is asserted only when the limiting variance is
 nondegenerate.
+\end{proof}
+
+\begin{corollary}[Common-rate confidence set on the exchange diagonal]\label{cor:exchange-diagonal-common-rate-confidence-main}
+Use the notation and hypotheses of
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main}.  For each
+\(0<z<1\), set
+\[
+\gamma(z)=-\frac{\log z}{\Delta\tau}.
+\]
+Let the projected diagonal confidence set in symmetric coordinates be
+\[
+\mathcal C_{\sigma,N}^{\rm diag}
+=\{(2z,z^2):0<z<1,\ Q_N(z)\le c^{-}_{1-\alpha,N}(z)\},
+\]
+with the same thresholded covariance pseudoinverse and projected-Gaussian
+critical value as in
+\eqref{eq:boundary-projected-statistic-main}--\eqref{eq:boundary-projected-confidence-set-main}.
+The corresponding finite-record confidence set for the identified common
+numerical rate is the image
+\begin{equation}\label{eq:common-rate-diagonal-confidence-set-main}
+\mathcal C_{\gamma,N}^{\rm diag}
+=\left\{-\frac{\log z}{\Delta\tau}:0<z<1,\ 
+Q_N(z)\le c^{-}_{1-\alpha,N}(z)\right\}.
+\end{equation}
+Equivalently, the confidence set for the invariant ordered labelled-rate pair
+on the quotient diagonal is
+\[
+\{(\gamma,\gamma):\gamma\in\mathcal C_{\gamma,N}^{\rm diag}\}.
+\]
+If the true diagonal point is
+\(\sigma_{z_*}=(2z_*,z_*^2)\) and
+\(\gamma_*=-\log z_*/\Delta\tau\), then for every \(N\)
+\begin{equation}\label{eq:common-rate-coverage-transfer-main}
+\{\gamma_*\in\mathcal C_{\gamma,N}^{\rm diag}\}
+=
+\{\sigma_{z_*}\in\mathcal C_{\sigma,N}^{\rm diag}\}.
+\end{equation}
+Hence the first-order projected-Gaussian coverage, exact-level alternatives,
+rank-one zero-quantile qualifications, and conservative-buffer fallback in
+\Cref{cor:exchange-diagonal-projected-gaussian-confidence-main} transfer
+unchanged to \(\mathcal C_{\gamma,N}^{\rm diag}\).  In particular, whenever
+\(\PP\{T_{z_*}\le c_{1-\alpha}(z_*)\}=1-\alpha\),
+\[
+\lim_{N\to\infty}
+\PP\{\gamma_*\in\mathcal C_{\gamma,N}^{\rm diag}\}
+=1-\alpha,
+\]
+and in the conservative-buffer subcases the same replacement gives
+\[
+\liminf_{N\to\infty}
+\PP\{\gamma_*\in\mathcal C_{\gamma,N}^{\rm diag}(\varepsilon)\}
+\ge 1-\alpha .
+\]
+Here \(\mathcal C_{\gamma,N}^{\rm diag}(\varepsilon)\) denotes
+\eqref{eq:common-rate-diagonal-confidence-set-main} with
+\(c^{-}_{1-\alpha,N}(z)\) replaced by the fixed positive buffer
+\(\varepsilon\).
+\end{corollary}
+
+\begin{proof}
+The map \(z\mapsto-\log z/\Delta\tau\) is a bijection from \((0,1)\) to
+\((0,\infty)\).  Therefore the true common rate \(\gamma_*\) belongs to the
+image set \(\mathcal C_{\gamma,N}^{\rm diag}\) if and only if its unique
+preimage \(z_*\) satisfies \(Q_N(z_*)\le c^{-}_{1-\alpha,N}(z_*)\), which is
+exactly the event that \((2z_*,z_*^2)\) belongs to
+\(\mathcal C_{\sigma,N}^{\rm diag}\).  This proves the identity
+\eqref{eq:common-rate-coverage-transfer-main}.  The stated limiting and
+conservative coverage conclusions are therefore the corresponding conclusions
+of \Cref{cor:exchange-diagonal-projected-gaussian-confidence-main} applied to
+the identical event.
 \end{proof}
 
 \begin{lemma}[Local projection at the exchange diagonal]\label{lem:local-projection-exchange-diagonal-main}
@@ -3536,10 +3749,32 @@ decomposition.  The conditional row and column means of \(f(G_0,G_1)\) are
 \[
 E_{ij}=f(i,j)-R_i-C_j+M
 \]
-has zero conditional mean in each coordinate.  Orthogonality of the Hoeffding
-components for the product gap law gives
+has zero conditional mean in each coordinate:
+\[
+\EE\{E_{G_0,G_1}\mid G_0\}=0,\qquad
+\EE\{E_{G_0,G_1}\mid G_1\}=0 .
+\]
+For completeness we spell out the two conditional-expectation steps behind
+the sum-of-squares identity.  With
+\(X=f(G_0,G_1)\) and \(X'=f(G_1,G_2)\), independence of the gaps and the
+Hoeffding decomposition
+\[
+X=M+(R_{G_0}-M)+(C_{G_1}-M)+E_{G_0,G_1}
+\]
+give, using \(M=0\),
+\[
+\EE X^2
+=\EE E_{G_0,G_1}^2
+ +\EE R_{G_0}^2+\EE C_{G_1}^2 ,
+\qquad
+\EE(XX')
+=\EE\{\EE(X\mid G_1)\EE(X'\mid G_1)\}
+=\EE\{C_{G_1}R_{G_1}\}.
+\]
+Therefore
 \[
 \EE(Y_0^2)+2\EE(Y_0Y_1)
+=\EE E_{G_0,G_1}^2+\EE\bigl(R_{G_0}+C_{G_0}\bigr)^2
 =\EE E_{G_0,G_1}^2+\EE\bigl(R_{G_0}+C_{G_0}-2M\bigr)^2,
 \]
 which is \eqref{eq:lag-two-variance-squares-main}.  Thus the variance can
@@ -3548,7 +3783,7 @@ this is equivalent to
 \[
 f(i,j)=R_i+C_j-M,\qquad R_i+C_i=2M,\qquad i,j\ge0,
 \]
-or, after writing \(u_i=R_i-M\), to the coboundary form
+or, after writing \(u_i=R_i-M\) and recalling \(M=0\), to the coboundary form
 \[
 f(i,j)=u_i-u_j,\qquad i,j\ge0 .
 \]

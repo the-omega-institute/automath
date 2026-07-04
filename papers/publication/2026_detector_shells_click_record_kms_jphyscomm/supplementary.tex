@@ -38,6 +38,9 @@
 \setlength{\parskip}{0.3em}
 \setlength{\parindent}{1.2em}
 \newcommand{\RR}{\mathbb{R}}
+\providecommand{\EE}{\mathbb{E}}
+\providecommand{\PP}{\mathbb{P}}
+\providecommand{\Var}{\mathrm{Var}}
 
 \begin{document}
 \newcommand{\supplementaryenddocument}{\end{document}}
@@ -52,7 +55,140 @@
 The main article carries the sampled-counter record results and the optional
 fixed-response calibration corollary.  This supplement records only auxiliary
 hypothesis bookkeeping, edge-case formulas, finite-counting checks, and the
-numerical example.
+numerical example.  It also contains the fixed-window continuous intra-bin
+recovery comparator, which is auxiliary to the main record-law theorems.
+
+\section{Fixed-window continuous-comparator calculation}\label{app:fixed-window-comparator}
+
+\begin{proposition}[Fixed-window comparison of killed-leakage sampled-boundary and continuous intra-bin recovery]\label{prop:model-validity-boundary-main}\label{prop:continuous-comparator-main}\label{prop:short-bin-boundary-reset-main}\label{prop:finite-window-continuous-comparator-main}
+Put
+\[
+x=\Gamma\Delta\tau,\qquad y=\kappa_{\mathrm r}\Delta\tau,\qquad
+p=e^{-x},\qquad s=e^{-y},
+\]
+and
+\[
+b=\int_0^1 y e^{-yt}e^{-x(1-t)}\,dt,\qquad
+a=\int_0^1 y e^{-yt}\bigl(1-e^{-x(1-t)}\bigr)\,dt .
+\]
+Let \(T_0,T_1\) be the sampled boundary-reset kernels of the main article.
+Let \(\widetilde T_0,\widetilde T_1\) be the continuous intra-bin comparator:
+within one bin the hidden state evolves as
+\[
+R \xrightarrow{\ \Gamma\ } D,\qquad
+D \xrightarrow{\ \kappa_{\mathrm r}\ } R,
+\]
+and the visible output records only whether at least one click occurred before
+the boundary.  Then
+\[
+\widetilde T_0=T_0,\qquad
+\widetilde T_1-T_1=
+\begin{pmatrix}
+\delta_R&-\delta_R\\
+\delta_D&-\delta_D
+\end{pmatrix},
+\]
+where
+\[
+\delta_R=
+\frac{y(1-e^{-x})-x e^{-x}(1-e^{-y})}{x+y},
+\qquad
+\delta_D=
+\frac{y}{x+y}\bigl(1-e^{-(x+y)}\bigr)-b.
+\]
+The two entries \(\delta_R,\delta_D\) are precisely the intra-bin paths
+suppressed by the sampled boundary-reset convention: click-then-recover before
+the boundary when starting from \(R\), and recover-click-recover before the
+boundary when starting from \(D\).  Thus they are non-negative, and strictly
+positive when \(x,y>0\).  Let
+\(\eta_{x,y}:=\max\{\delta_R,\delta_D\}\).  For every initial hidden law
+\(\alpha\), every fixed word length \(m\ge1\), let
+\(\mathsf P_{\alpha}^{(m)}\) and
+\(\widetilde{\mathsf P}_{\alpha}^{(m)}\) be the two output laws on
+\(\{0,1\}^m\).  Then
+\begin{equation}\label{eq:finite-window-tv-comparator-main}
+\bigl\|\mathsf P_{\alpha}^{(m)}
+-\widetilde{\mathsf P}_{\alpha}^{(m)}\bigr\|_{\mathrm{TV}}
+\le m\,\eta_{x,y}.
+\end{equation}
+Consequently, the same bound gives
+\[
+\left|
+\EE_{\rm sampled}F(A_0,\ldots,A_{m-1})
+-
+\EE_{\rm cont}F(A_0,\ldots,A_{m-1})
+\right|
+\le
+2\|F\|_\infty\,m\,\eta_{x,y}
+\]
+for every bounded \(F:\{0,1\}^m\to\mathbb R\).
+\end{proposition}
+
+\begin{proof}
+Rescale the bin to unit length.  The no-click kernel is unchanged, because no
+reset can occur before the first recorded click.  More explicitly, starting
+from \(R\) the no-click event is just survival in \(R\), with probability
+\(e^{-x}=p\).  Starting from \(D\), no click either means no recovery, with
+probability \(e^{-y}=s\), or recovery at time \(t\) followed by no click until
+the boundary, with density \(y e^{-yt}e^{-x(1-t)}\,dt\), giving the displayed
+entry \(b\).  Hence \(\widetilde T_0=T_0\).
+
+The difference is only in how paths with at least one click are assigned to the
+final hidden state.  For the continuous chain starting from \(R\),
+\(\delta_R\) is
+\[
+   \Pr_R\{\hbox{at least one click in the bin and }X_1=R\}
+   =\Pr_R\{X_1=R\}-p
+   =
+   \frac{y(1-e^{-x})-x e^{-x}(1-e^{-y})}{x+y}.
+\]
+This is the event that the path clicks and then recovers before the boundary,
+including any further complete cycles, so it is non-negative.  Starting from
+\(D\), \(\delta_D\) is
+\[
+   \Pr_D\{\hbox{at least one click in the bin and }X_1=R\}
+   =
+   \Pr_D\{X_1=R\}-b
+   =
+   \frac{y}{x+y}\bigl(1-e^{-(x+y)}\bigr)-b.
+\]
+This is the recover-click-recover-before-boundary event, again with possible
+further complete cycles, and is non-negative.  The sampled boundary-reset
+kernel assigns these paths to the final \(D\) column, while the continuous
+comparator assigns them to the final \(R\) column.  Therefore each affected row
+of the labelled one-step kernel differs by
+\[
+   (\delta_R,-\delta_R)
+   \quad\hbox{or}\quad
+   (\delta_D,-\delta_D),
+\]
+on the two output-one final-state entries, with all no-click entries equal.
+The row total variations are consequently
+\[
+   \frac12\bigl(|\delta_R|+|-\delta_R|\bigr)=\delta_R,
+   \qquad
+   \frac12\bigl(|\delta_D|+|-\delta_D|\bigr)=\delta_D.
+\]
+Thus the one-step labelled total-variation distance is bounded by
+\(\eta_{x,y}=\max\{\delta_R,\delta_D\}\).  A stepwise maximal coupling and the
+union bound over the fixed \(m\) steps give
+\eqref{eq:finite-window-tv-comparator-main}.  The bounded-test-function
+estimate is the total-variation dual inequality.
+\end{proof}
+
+\paragraph{Scope warning.}
+\Cref{prop:finite-window-continuous-comparator-main} is only a fixed-cylinder
+bound.  If the window grows, the displayed estimate is informative only under
+an additional condition such as \(m_N\eta_{x,y}\to0\), and for a full
+\(N\)-bin word this becomes \(N\eta_{x,y}\to0\).  This is only a statement
+about the displayed finite-cylinder inequality.  It is not a stationary,
+spectral, inverse, Fano-factor, or CLT perturbation theorem.  In particular,
+the main article does not prove a stationary law for the continuous comparator
+close to the sampled stationary law, does not transfer the sampled spectral
+density or Fano limit, does not transfer the quotient inverse, and does not
+transfer the fixed-record CLT or studentized intervals.  The main stationary
+and finite-record theorems remain statements about the sampled kernels
+\(T_0,T_1\).
 
 \section{Hypothesis map and literature positioning}
 
