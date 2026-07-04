@@ -1,7 +1,7 @@
 \section{Finite-Record Regenerative Tools}\label{app:finite-record-regenerative-tools-main}
 
 This appendix collects the model-independent renewal and separated-batch
-arguments used in \Cref{sec:records}.  The main finite-record theorems use
+arguments used in \Cref{sec:records}.  The main retained-record asymptotic theorems use
 these results only after the constrained D-MAP law has been reduced to the
 explicit adjacent-gap rewards displayed in the main text.
 
@@ -279,7 +279,7 @@ random-prefix bound with \(R_N=M_N\), then multiplying by
 \(K_N/N=1/\mu+O_{\PP}(N^{-1/2})\), gives the displayed calendar-time rate.
 \end{proof}
 
-\begin{lemma}[Separated-batch covariance estimator]\label{lem:separated-batch-covariance-estimator-main}
+\begin{theorem}[Separated regenerative batch covariance]\label{lem:separated-batch-covariance-estimator-main}
 Let \((G_j)_{j\in\mathbb Z}\) be an i.i.d. Palm gap sequence, put
 \(L_j=G_j+1\), \(\mu=\EE L_0\), and fix \(m\ge0\).  Let
 \[
@@ -303,7 +303,7 @@ B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j,\qquad
 \]
 and
 \[
-\widehat T_N
+\widehat\Sigma_N^{\rm sep}(Y)
 =\frac1{b_N(M_N-1)}
 \sum_{\ell=1}^{M_N}
 (B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top .
@@ -311,7 +311,7 @@ and
 Then \(M_N\ge2\) with probability tending to one and
 \begin{equation}\label{eq:separated-batch-covariance-estimator-rate-main}
 \left\|
-\frac{K_N}{N}\widehat T_N-\frac{T_m}{\mu}
+\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(Y)-\frac{T_m}{\mu}
 \right\|_{\operatorname{op}}
 =O_{\PP}\!\left(b_N^{-1}+\sqrt{b_N/N}\right).
 \end{equation}
@@ -329,14 +329,19 @@ and polynomial \(b_N\), the exponential gap moment and
 \end{equation}
 Consequently the plug-in covariance perturbation is
 \begin{equation}\label{eq:separated-batch-plugin-covariance-main}
+\left\|
+\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(\widehat Y)
+-\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(Y)
+\right\|_{\operatorname{op}}
+=
 O_{\PP}\!\left(\sqrt{\frac{b_N}{N}}\right)
 +O_{\PP}\!\left(\frac{b_N}{N}\right).
 \end{equation}
 Thus the same rate in \eqref{eq:separated-batch-covariance-estimator-rate-main}
 holds for the all-complete-cycle plug-in covariance estimator.  The main
-finite-record theorems use only its D-MAP specialization with the adjacent-gap
+retained-record asymptotic theorems use only its D-MAP specialization with the adjacent-gap
 reward \(Y_j=U_j-rL_j\), \(m=1\), and \(b_N=\lfloor N^{1/3}\rfloor\).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
 \Cref{lem:calendar-stopped-batch-cov-main}, with
@@ -412,3 +417,34 @@ On any event \(M_N\le cN/b_N\), a union bound gives
 \]
 because \(b_N\gg\log N\).  Letting \(c\) increase proves the claim.
 \end{proof}
+
+\paragraph{Estimated branch-map reduction.}\label{app:branch-map-oracle-reduction-main}
+Work at a separated population point \(p\ne s\), and let \(\mathcal B\) be the
+deterministic oracle branch map from
+\Cref{conv:branch-map-labelled-rates-main}.  Choose disjoint open
+neighbourhoods \(U_p,U_s\subset(0,1)\) of the two population roots on which the
+oracle labels are constant.  Let \(\widehat{\mathcal B}_N\) be any branch map
+formed from calibration or side data, and let
+\[
+\mathcal C_N=\{\widehat{\mathcal B}_N
+\text{ agrees with }\mathcal B\text{ on }U_p\cup U_s\}.
+\]
+If \(\PP(\mathcal C_N)\to1\), then every retained labelled-root or
+labelled-rate estimator obtained by replacing \(\mathcal B\) with
+\(\widehat{\mathcal B}_N\) is asymptotically equivalent to the oracle-labelled
+estimator.  In particular, all Gaussian limits, plug-in covariance
+consistency statements, and retained-rank Wald limits proved conditionally on
+\(\mathcal B\) remain valid for the estimated branch map.  If only the weaker
+bound \(\PP(\mathcal C_N^c)\le\epsilon_N\) is available, each corresponding
+one-sided coverage lower bound is reduced by at most \(\epsilon_N+o(1)\).
+
+The retained empirical roots converge in probability to the separated
+population roots.  Hence, with probability tending to one, the retained roots
+lie in \(U_p\cup U_s\).  On the intersection of this event with
+\(\mathcal C_N\), the estimated-map and oracle-map labelled estimators are
+identical.  Therefore their difference is zero with probability tending to
+one, and Slutsky's theorem transfers the oracle Gaussian, covariance, and Wald
+limits.  For coverage, the reported event can fail relative to the oracle
+event only on \(\mathcal C_N^c\), up to the \(o(1)\) probability that the
+retained roots have not entered \(U_p\cup U_s\).  This gives the stated loss
+bound.
