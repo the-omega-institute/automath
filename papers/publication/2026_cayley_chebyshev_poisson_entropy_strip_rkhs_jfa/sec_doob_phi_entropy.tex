@@ -743,6 +743,108 @@ two copies of the same computation give
 \eqref{eq:single-lemma-sym-bregman-integral}.
 \end{proof}
 
+\begin{lemma}[Integrable symmetrized Bregman kernel and arbitrary cutoff removal]%
+\label{lem:bregman-kernel-l1-cutoff-removal}
+Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar{\gamma}\)
+and finite centred second moment.  Put
+\[
+h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar{\gamma}),\qquad u_t=h_t/g_t,
+\]
+where
+\[
+\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta .
+\]
+For \(0<a<b<\infty\), define
+\[
+K(t,x,y):=\mathbf1_{\{x\ne y\}}\,
+\frac{
+g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}.
+\]
+Write
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar{\gamma})^2\dd\nu(\gamma),\qquad
+m:=\frac{1}{2(1+\mu_2/a^2)},\quad
+M:=2+\frac{2\mu_2}{a^2},\quad
+L:=3a^{-1}\bigl(1+\mu_2/a^2\bigr),
+\]
+\[
+C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\},\qquad
+\Psi(z):=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}} .
+\]
+Then for every compact time window \(0<a<b<\infty\),
+\[
+K\in L^1([a,b]\times\RR^2),
+\]
+and
+\[
+\int_a^b\iint_{\RR^2}K(t,x,y)\dd x\dd y\dd t
+\le 8C_{a,b,\nu}(b-a),
+\]
+Consequently, if \(\chi_n:[a,b]\times\RR^2\to[0,1]\) are measurable and
+\(\chi_n(t,x,y)\to1\) for a.e. \((t,x,y)\) with \(x\ne y\), then
+\[
+\int_a^b\iint_{\RR^2}\chi_n(t,x,y)K(t,x,y)\dd x\dd y\dd t
+\longrightarrow
+\int_a^b\iint_{\RR^2}K(t,x,y)\dd x\dd y\dd t .
+\]
+In particular, for each fixed \(t>0\), every measurable spatial cutoff
+\(0\le\chi_n\le1\) with \(\chi_n(x,y)\to1\) for \(x\ne y\) satisfies
+\[
+\iint_{\RR^2}\chi_n(x,y)K(t,x,y)\dd x\dd y
+\longrightarrow
+\iint_{\RR^2}K(t,x,y)\dd x\dd y .
+\]
+
+The one-sided kernel
+\[
+K^{(1)}(t,x,y):=\mathbf1_{\{x\ne y\}}\,
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\]
+also belongs to \(L^1([a,b]\times\RR^2)\), has integral at most
+\(4C_{a,b,\nu}(b-a)\), and satisfies the same cutoff-convergence statement.
+\end{lemma}
+
+\begin{proof}
+Fix \(0<a<b<\infty\).  Lemma
+\ref{lem:single-compact-window-bregman-majorant-constants} gives
+\[
+0\le K^{(1)}(t,x,y)\le C_{a,b,\nu}g_t(x)\Psi(x-y)
+\qquad(t\in[a,b],\ x,y\in\RR),
+\]
+with the diagonal value irrelevant.  Tonelli's theorem, \(\int_\RR g_t=1\),
+and \(\int_\RR\Psi=4\) give
+\[
+\int_a^b\iint_{\RR^2}
+C_{a,b,\nu}g_t(x)\Psi(x-y)\dd x\dd y\dd t
+=4C_{a,b,\nu}(b-a),
+\]
+so \(K^{(1)}\in L^1([a,b]\times\RR^2)\) and the displayed one-sided integral
+bound follows.  Applying the same estimate after interchanging \(x\) and
+\(y\) gives
+\[
+0\le K(t,x,y)\le
+C_{a,b,\nu}\{g_t(x)+g_t(y)\}\Psi(x-y),
+\]
+and therefore \(K\in L^1([a,b]\times\RR^2)\) with integral at most
+\(8C_{a,b,\nu}(b-a)\).  This is exactly the integrable symmetrized majorant
+used in the cutoff Green formula.
+
+For the cutoff assertion, \(0\le\chi_nK\le K\) and
+\(\chi_nK\to K\) a.e. on \([a,b]\times\RR^2\), because the diagonal has
+three-dimensional Lebesgue measure zero and \(K\in L^1\).  Dominated
+convergence gives the compact-window limit.  The one-sided statement is
+identical, using the one-sided \(L^1\) majorant.  For fixed \(t>0\), choose
+any compact window \([a,b]\) containing \(t\).  The pointwise symmetrized
+majorant
+\[
+C_{a,b,\nu}\{g_t(x)+g_t(y)\}\Psi(x-y)
+\]
+is integrable on \(\RR^2\), so the same dominated-convergence argument gives
+the spatial cutoff limit at that time.
+\end{proof}
+
 The next theorem adds only the cutoff calculus to the preceding domain theorem:
 the quotient bounds and the Bregman domination are those of
 Theorem~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain}, while the
@@ -1022,26 +1124,33 @@ gives
 \lim_{R\to\infty}\mathcal I_{\nu,R}(t)
 =\frac1\pi\iint_{\RR^2}\Phi(t,x,y)\dd x\dd y .
 \]
-The same argument shows that every cofinal annular exhaustion gives this
-same value.  More generally, if \(0\le\chi_n\le1\) are measurable cutoffs
-which vanish near the diagonal and at spatial infinity and satisfy
-  \(\chi_n(x,y)\to1\) for \(x\ne y\), then the increasing envelopes
-  \(\widehat\chi_n:=\sup_{k\le n}\chi_k\) give the same limit by monotone
-  convergence; if the original cutoffs are dominated by an annular envelope,
-  the convergence also holds for \(\chi_n\) itself by dominated convergence on
-  each compact time window, using the majorant below.  Thus the definition is
-  independent of the annular cutoff convention used in the Green formulae.
+The same monotone-convergence argument applies to every increasing cofinal
+annular exhaustion.  For nonmonotone or nonsymmetric cutoffs one uses the
+absolute integrability of the kernel rather than cancellation: Lemma
+\ref{lem:bregman-kernel-l1-cutoff-removal} proves that, on every compact time
+window, \(\Phi\in L^1([a,b]\times\RR^2)\), and that for each fixed \(t>0\)
+every measurable family \(0\le\chi_n\le1\) with
+\(\chi_n(x,y)\to1\) for \(x\ne y\) satisfies
+\[
+\iint_{\RR^2}\chi_n(x,y)\Phi(t,x,y)\dd x\dd y
+\longrightarrow
+\iint_{\RR^2}\Phi(t,x,y)\dd x\dd y .
+\]
+Thus the value of \(\mathcal I_\nu(t)\) is independent of the annular cutoff
+convention used in the Green formulae; no symmetry of the approximating
+cutoffs is needed after the kernel has been identified as an \(L^1\) kernel.
 
 Measurability follows from the representation
 \[
 \mathcal I_\nu(t)=\sup_{n\ge2}\frac1\pi\iint_{\Omega_n}\Phi(t,x,y)\dd x\dd y,
 \]
 because each finite-annulus integral is measurable by Tonelli.  Finally fix
-\(0<a<b<\infty\).  Lemma~\ref{lem:single-compact-window-bregman-majorant-constants}
-gives the one-sided bound
-\eqref{eq:single-lemma-one-sided-majorant-integral}.  Thus
-\(\mathcal I_\nu\in L^1([a,b])\), and the same pointwise majorant in that
-lemma gives \(\mathcal I_\nu(t)<\infty\) for every \(t\in[a,b]\).
+\(0<a<b<\infty\).  Lemma~\ref{lem:bregman-kernel-l1-cutoff-removal} gives
+\[
+\int_a^b\mathcal I_\nu(t)\dd t
+\le \frac{4C_{a,b,\nu}}{\pi}(b-a),
+\]
+and also gives \(\mathcal I_\nu(t)<\infty\) for every \(t\in[a,b]\).
 \end{proof}
 
 \begin{theorem}[Poisson quotient KL tail identity]%

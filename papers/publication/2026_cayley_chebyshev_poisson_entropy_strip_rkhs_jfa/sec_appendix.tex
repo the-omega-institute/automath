@@ -51,6 +51,9 @@ is the fixed-law matched Poisson quotient
 \[
   D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar{\gamma})).
 \]
+The comparison is about asymptotic coefficients of this matched-Poisson KL
+quantity as \(t\to\infty\), not functional inequalities for the smoothed
+measure \(P_t*\nu\).
 Table~\ref{tab:recent-jfa-comparison} has a strict admission rule: an entry
 in the comparison column is either a \emph{J. Funct. Anal.} paper dated
 2021--2026 or an explicit statement that no close recent JFA analogue appears
@@ -113,6 +116,19 @@ fixed-law Poisson quotient expansion.
 logarithmic layer \(t^{-(p+2)}M_p(t)\); the exact, perturbative, and monotone
 slowly varying tail theorems are verification mechanisms for that admissible
 class.\\
+\hline
+Corollary~D4 and finite-time Poisson mixtures.
+& Chen--Chewi--Niles-Weed,
+\emph{Dimension-free log-Sobolev inequalities for mixture distributions}
+\cite{ChenChewiNilesWeed2021MixtureLogSobolev}.
+& Mixture distributions and functional inequalities.
+& Their result proves dimension-free log-Sobolev inequalities for mixtures
+under \(\chi^2\) or moment controls; it does not compute fixed-law matched
+Poisson KL asymptotic coefficients.
+& The present paper studies asymptotic coefficients of
+\(D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))\), including the D4
+\(t^{-4}\) covariance coefficient under a finite \((d+1)\)-moment route, not
+functional inequalities for the smoothed measure \(P_t*\nu\).\\
 \hline
 Theorem~D1 and
 Theorem~\ref{thm:multidimensional-poisson-entropy-jets}.
@@ -285,15 +301,15 @@ case where the KL value is already \(+\infty\) at some large times.  The
 finite-moment hierarchy identifies universal polynomial coefficients only
 when the required centred moments exist.
 
-For the exact and perturbative symmetric power-tail density classes in
+For the exact and perturbative symmetric power-tail verified subclasses in
 Theorems~\ref{prop:log-tail-counterexample-top-moment} and
 \ref{thm:exact-perturbative-power-tail-log-replacement}, the missing top
 finite moment is replaced by the truncated top moment \(M_p(t)\), giving the
 stated logarithmic layers.  No theorem for arbitrary regularly varying tails
 is asserted without the exact quotient expansion or quotient controls stated
-in the relevant result.  The only slowly varying add-on is
-Corollary~\ref{cor:conditional-slowly-varying-borderline-tail}, restricted to
-eventually monotone borderline densities; there
+in the relevant result.  The slowly varying add-on is likewise a verified
+subclass, Corollary~\ref{cor:conditional-slowly-varying-borderline-tail},
+restricted to eventually monotone borderline densities; there
 Lemma~\ref{lem:slowly-varying-quotient-controls} proves the
 Potter--Karamata quotient controls from slow variation and
 \(M_p(t)\to\infty\).
@@ -406,7 +422,7 @@ S(\mathbf n):=
 \]
 Then the all-sign coefficient convention gives
 \[
-I(\mathbf n)=[z^0]\prod_{j=1}^rQ_{n_j}(z)
+J(\mathbf n)=[z^0]\prod_{j=1}^rQ_{n_j}(z)
 =\Lambda(\mathbf n)S(\mathbf n).
 \]
 
@@ -451,7 +467,7 @@ C_j(s)=\sum_{0<|k|\le n_j}
 \]
 Then
 \[
-  C_r(0)=[z^0]\prod_{j=1}^r Q_{n_j}(z)=I(\mathbf n).
+  C_r(0)=[z^0]\prod_{j=1}^r Q_{n_j}(z)=J(\mathbf n).
 \]
 In particular \(C_r(0)\in\QQ\).  More explicitly,
 \[
@@ -490,14 +506,14 @@ Thus the certificate used in the proof is completely finite: for each row
 below, the integer \(S(\mathbf n)\) is obtained by the zero-sum convolution
 in Lemma~\ref{lem:appendix-d-deterministic-laurent-recurrence}, multiplication
 by the displayed rational factor \(\Lambda(\mathbf n)\) gives the exact
-constant term \(I(\mathbf n)\), and no external computation is used in the
+constant term \(J(\mathbf n)\), and no external computation is used in the
 argument.
 
 For the mode products entering \(A_4,A_6,A_8\), the finite zero-sum
 convolution is:
 \[
 \begin{array}{c|r|r|c|c}
-\mathbf n&|\mathcal K(\mathbf n)|&S(\mathbf n)&\Lambda(\mathbf n)&I(\mathbf n)\\
+\mathbf n&|\mathcal K(\mathbf n)|&S(\mathbf n)&\Lambda(\mathbf n)&J(\mathbf n)\\
 \hline
 (2,2)&4&4&1/16&1/4\\
 (2,4)&4&8&-1/64&-1/8\\
@@ -516,9 +532,34 @@ Odd total-order entries through order eight vanish by
 \((3,5)\) and \((2,3,3)\) use the same all-sign coefficient rule as the
 other rows; no separate conjugation convention is applied.
 
-Here are the hand checks for the rows where sign slips are easiest.  Write
+For reproducibility, here is a complete hand expansion of the signed integer
+sums for every row used in \(A_6\) and \(A_8\).  The paper-local script
+\texttt{certificates/laurent\_recurrence\_minicheck.py} replays the same
+zero-sum recurrence with exact rational arithmetic.  Write
 \[
 b_m^{(n)}:=\binom{n-1}{m-1}\qquad(1\le m\le n).
+\]
+For the two-factor even rows,
+\[
+\begin{aligned}
+S(2,4)&=2\{b_1^{(2)}b_1^{(4)}+b_2^{(2)}b_2^{(4)}\}
+      =2(1+3)=8,\\
+S(2,6)&=2\{b_1^{(2)}b_1^{(6)}+b_2^{(2)}b_2^{(6)}\}
+      =2(1+5)=12,\\
+S(4,4)&=2\sum_{m=1}^4\bigl(b_m^{(4)}\bigr)^2
+      =2(1+9+9+1)=40.
+\end{aligned}
+\]
+For the odd two-factor row \((3,3)\), the zero-sum condition again forces
+\(\ell=-k\), and the two odd signs contribute \(-1\).  Therefore
+\[
+S(3,3)=-2\sum_{m=1}^3\bigl(b_m^{(3)}\bigr)^2
+      =-2(1+4+1)=-12.
+\]
+For the even triple row \((2,2,2)\), the only zero-sum ordered triples are
+the permutations of \((1,1,-2)\) and of \((-1,-1,2)\).  Hence
+\[
+S(2,2,2)=3+3=6.
 \]
 For the two-factor odd row \((3,5)\), the zero-sum condition forces
 \(\ell=-k\).  Hence the odd signs contribute
@@ -537,7 +578,7 @@ b_{|k|}^{(3)}b_{|k|}^{(5)}  \\
 \]
 Since \(\Lambda(3,5)=(\ii/8)(-\ii/32)=1/256\), this gives
 \[
-I(3,5)=\frac{-30}{256}=-\frac{15}{128}.
+J(3,5)=\frac{-30}{256}=-\frac{15}{128}.
 \]
 
 For the mixed row \((2,3,3)\), set \(a\in\{\pm1,\pm2\}\) for the \(Q_2\)
@@ -564,7 +605,7 @@ S(2,3,3)=-8-8-1-1=-18.
 \]
 Here \(\Lambda(2,3,3)=(-1/4)(\ii/8)^2=1/256\), so
 \[
-I(2,3,3)=\frac{-18}{256}=-\frac9{128}.
+J(2,3,3)=\frac{-18}{256}=-\frac9{128}.
 \]
 
 As an even-row check, consider \((2,2,4)\).  There are no odd-mode sign
@@ -584,5 +625,20 @@ S(2,2,4)
 \]
 Since \(\Lambda(2,2,4)=(-1/4)^2(1/16)=1/256\),
 \[
-I(2,2,4)=\frac{24}{256}=\frac3{32}.
+J(2,2,4)=\frac{24}{256}=\frac3{32}.
 \]
+
+Finally, for \((2,2,2,2)\), group the four \(Q_2\) indices into two ordered
+pairs.  If \(N_m\) is the number of ordered pairs in
+\(\{\pm1,\pm2\}^2\) with sum \(m\), then
+\[
+N_0=4,\qquad N_{\pm1}=2,\qquad N_{\pm2}=1,\qquad
+N_{\pm3}=2,\qquad N_{\pm4}=1.
+\]
+Thus
+\[
+S(2,2,2,2)=\sum_{m=-4}^4N_mN_{-m}
+=4^2+2(2^2+1^2+2^2+1^2)=36.
+\]
+Multiplication by the listed \(\Lambda(\mathbf n)\) values gives exactly the
+\(J(\mathbf n)\) entries in the table.
