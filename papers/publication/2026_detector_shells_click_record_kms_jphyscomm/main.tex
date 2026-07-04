@@ -67,7 +67,7 @@
 \par\smallskip\noindent\fbox{%
 \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{#1}}\par\smallskip}
 
-\title{Exact record laws for a two-state sampled renewal HMM: dependence, quotient inverse, and fixed-setting long-record inference}
+\title{Exact record laws, quotient inverse, and finite-record inference for a constrained two-state sampled D-MAP}
 \author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
 \and
 Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
@@ -79,12 +79,12 @@ Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{ma
 \maketitle
 
 \begin{abstract}
-This paper proves exact record laws for a stipulated constrained two-state
-sampled D-MAP: time is sampled at a fixed interval, the hidden state has two
-values, the killed-leakage boundary constraint fixes the one-labelled kernel,
-and the observed output is a stationary binary record.  The ideal one-step
-blanking model is kept only as the standard Parry benchmark
-\(\Gamma\Delta\tau=\log\varphi\).
+This paper proves three theorem families for a stipulated constrained
+two-state sampled D-MAP.  Time is sampled at a fixed interval, the hidden state
+has two values, the killed-leakage boundary constraint fixes the labelled
+kernels, and the observed output is a stationary binary record.  The ideal
+one-step blanking model is kept only as the standard Parry benchmark
+\(\Gamma\Delta\tau=\log\varphi\), not as the main object.
 
 For the killed-leakage one-recovery-opportunity boundary law, the visible
 record is a full-support stationary renewal process whose zero-run hazard is
@@ -100,50 +100,39 @@ available only after a separated-root branch label is supplied.
 At the exchange diagonal the separated-root chart is singular, but the common
 numerical rate remains an invariant visible-law estimand.
 
-For finite records, the paper proves fixed-setting complete-cycle CLTs,
-covariance estimators, the quotient-inverse delta method, and a projected
-Gaussian limit on the exchange diagonal.  The only fully studentized scalar
-confidence interval proved here is for
+For finite records, a single complete-cycle protocol fixes the batch length,
+thresholds, covariance estimator, projection rule, and chart-retention rule
+before proving the inclusion-coordinate CLT, the quotient-inverse delta method,
+and the projected Gaussian limit on the exchange diagonal.  The diagonal
+confidence construction is pointwise in the true common survival factor \(z\),
+conditional on the retained covariance rank and its zero-quantile exceptions;
+it is not a uniform-in-\(z\) diagonal band and is not a standard
+chi-square/Wald set.  The only fully studentized scalar confidence interval
+proved here is for
 \(\gamma_2=\operatorname{Cov}(A_0,A_2)\); hazard, spectrum, and Fano formulas
-are population identities unless separately studentized.
+are population identities, and no generic scalar studentization is proved.
 \end{abstract}
 
 \noindent\textbf{Keywords:} sampled D-MAP, renewal process, exact \(1\)-dependence, renewal inclusion products, finite-record diagnostics
 
 \section{Introduction}
 
-This paper is about a constrained two-state discrete-time
-Markovian-arrival process (D-MAP) and the stationary binary renewal record it
-generates.  The primitive object is the pair of labelled substochastic kernels
-\((T_0,T_1)\) displayed in
+This paper is about a constrained two-state discrete-time Markovian-arrival
+process (D-MAP) and the stationary binary renewal record it generates.  The
+primitive object is the labelled kernel pair displayed in
 \Cref{ass:constrained-dmap-record-main}: \(T_0+T_1\) is the hidden transition
 matrix, \(T_1\) marks an observed \(1\), and the killed entries
 \(T_1(R,R)=T_1(D,R)=0\) are part of the stipulated sampled-boundary constraint.
-The parameters \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) are a convenient
-positive parametrization of this two-state D-MAP; the words ``attempt'',
-``recovery'', ``click'', and ``counter'' are optional labels for its variables,
-not additional hypotheses.
+The parameters \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) are a positive
+parametrization of this D-MAP.
 
-The paper-level object is therefore the sampled record itself: one constrained
-interval law, its stationary binary distribution, its dependence threshold, its
-renewal inclusion products, its quotient inverse, and its fixed-setting
-long-record lag-two covariance estimator.  All main record, inverse, and
-finite-record claims are read under the standing model assumption in
+The paper-level object is the sampled record itself: its stationary binary
+distribution, dependence threshold, renewal inclusion products, quotient
+inverse, and fixed-setting long-record estimators.  All main record, inverse,
+and finite-record claims are read under
 \Cref{ass:constrained-dmap-record-main}.
 
-The main text below is organized around three paper-level main theorems:
-the record law, the quotient inverse, and fixed-record inference.  Supporting
-lemmas, propositions, and corollaries supply the renewal bookkeeping, generic
-cycle-reward CLTs, separated-batch covariance estimates, and projected-Gaussian
-boundary calculations needed by those three results.  The theorem-by-theorem
-comparison in \Cref{sec:theorem-led-comparison} then separates these
-contributions from standard HMM, renewal, and simulation-output theorems.
-
-\begin{assumption}[Constrained sampled D-MAP record]\label{ass:constrained-dmap-record-main}\label{rem:scope-nonclaims-main}
-All main record, inverse, and finite-record theorems use the following fixed
-model contract.
-
-\recordscopebox{%
+\begin{definition}[Constrained sampled D-MAP record]\label{ass:constrained-dmap-record-main}\label{rem:scope-nonclaims-main}
 Fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and define
 \[
 p=e^{-\Gamma\Delta\tau},\qquad
@@ -167,12 +156,16 @@ The convention is
 \((A_n)_{n\in\mathbb Z}\) is the stationary binary process generated by these
 kernels, and formulas on \(\Gamma=\kappa_{\mathrm r}\) are interpreted by
 continuous limits.  The killed entries \(T_1(R,R)=T_1(D,R)=0\) are a structural
-constraint of this sampled D-MAP.  Terms such as event, click, recovery, reset,
-count, attempt, and counter are optional labels for the displayed variables and
-transitions.  A later response model may supply a scalar map
-\(\Gamma=R_\Omega(x)\); that is a composition with the already proved
-record law, not a change of the mathematical object.}
-\end{assumption}
+constraint of this sampled D-MAP.
+\end{definition}
+
+The main text below is organized around three paper-level main theorems:
+the record law, the quotient inverse, and fixed-record inference.  Supporting
+lemmas, propositions, and corollaries supply the renewal bookkeeping, generic
+cycle-reward CLTs, separated-batch covariance estimates, and projected-Gaussian
+boundary calculations needed by those three results.  The theorem-by-theorem
+comparison in \Cref{sec:theorem-led-comparison} then separates these
+contributions from standard HMM, renewal, and simulation-output theorems.
 
 \subsection{Main two-state sampled-renewal HMM theorem}\label{subsec:main-theorem-boundary}\label{subsec:scope-nonclaims}
 
@@ -276,7 +269,8 @@ Main Theorem 3A--3C: fixed-record inference &
 Theorems~\ref{thm:finite-record-inference-audit-main}--\ref{thm:finite-record-exchange-diagonal-main} &
 Splits fixed-record inference under the post-burn-in retained-length protocol:
 Theorem~3A gives the inclusion-coordinate CLT with covariance scale
-\(\mathcal T_1^{(r)}/\mu\) and separated-batch covariance estimation;
+\(\mathcal T_1^{(r)}/\mu\) and the finite-record covariance theorem
+\Cref{thm:finite-record-covariance-main};
 Theorem~3B applies the quotient inverse delta method and permits separated
 labelled-rate Wald reporting only when \(\Delta_\sigma>0\) and an external
 branch map is supplied; Theorem~3C gives only the exchange-diagonal
@@ -434,12 +428,11 @@ Click set, stationary click density, scalar Palm renewal mass
 tail, and zero-run hazard. \\
 \addlinespace[0.25ex]
 Renewal inclusion bookkeeping &
-\(M(B),\ D_{\rm LU}(B),\ \delta_a\) &
+\(B,\ I,\ S,\ u_n,\ \delta_a\) &
 The inclusion product
-\(\PP(B\subset\varXi)=\rho\prod_r u_{i_{r+1}-i_r}\) is the primary object.
-\(M(B)\) and \(D_{\rm LU}(B)=\det M(B)\) are optional finite LU bookkeeping
-for this already constructed product, not determinantal-process notation;
-\(\delta_a=\rho-a\). \\
+\(\PP(B\subset\varXi)=\rho\prod_r u_{i_{r+1}-i_r}\) is the finite-law
+object.  Exact word probabilities are then obtained by finite
+inclusion-exclusion over \(I\setminus S\), and \(\delta_a=\rho-a\). \\
 \addlinespace[0.25ex]
 Three-inclusion inverse &
 \(\begin{gathered}r_0,\ r_1,\ r_2,\ D,\ \Phi\\
@@ -482,40 +475,42 @@ deterministic rank threshold. \\
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Definition (record kernel family).}
-For each \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\), set
-\[
-p=e^{-\Gamma\Delta\tau},\qquad
-s=e^{-\kappa_{\mathrm r}\Delta\tau}
-\]
-so that \(p,s\in(0,1)\), and set
-\[
-b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
-e^{-\Gamma(\Delta\tau-r)}\,dr ,
-\]
-and define
+\begin{definition}[Constrained sampled-kernel law used by the main theorems]\label{def:main-sampled-kernel-law}
+Let \(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\) denote the stationary
+visible binary law generated by the kernel pair in
+\Cref{ass:constrained-dmap-record-main}.  Equivalently, that pair is
 \[
 \mathcal K(p,s)=
 \left(
 T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
 \quad
 T_1=\begin{pmatrix}0&1-p\\0&1-s-b\end{pmatrix}
-\right).
+\right),
 \]
-Write \(a=1-s-b\), the lower-right entry of \(T_1\).
-The law \(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\) denotes the stationary
-visible binary law generated by \(\mathcal K(p,s)\).  The main record, quotient
-inverse, and finite-record theorems concern only
-\(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\).  No theorem derives
-\((T_0,T_1)\) from a detector, thermodynamic, KMS, or continuous-time physical
-model.
+where
+\[
+p=e^{-\Gamma\Delta\tau},\qquad
+s=e^{-\kappa_{\mathrm r}\Delta\tau},\qquad
+b=\int_0^{\Delta\tau}
+\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}e^{-\Gamma(\Delta\tau-r)}\,dr .
+\]
+Equivalently \(a=1-s-b\) is the lower-right one-labelled entry.  The main
+record, quotient inverse, and finite-record
+theorems concern only
+\(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\).  A later calibrated response
+model may supply an external scalar map for \(\Gamma\); such a use is
+composition with this stationary visible law, not a derivation of
+\(\mathcal K(p,s)\).  No theorem below derives \((T_0,T_1)\) from a detector,
+thermodynamic, KMS, or continuous-time physical model.
+\end{definition}
 \par\medskip
 
 \begin{theorem}[Main Theorem 1: record law]\label{thm:main-record-wrapper}
 Let \((A_n)_{n\in\mathbb Z}\) have law
-\(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\) from the preceding
-record-kernel definition.  Let \(G\) be
-the number of zeros between consecutive ones, and put
+\(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\) from
+\Cref{def:main-sampled-kernel-law}.  Thus the theorem concerns the stipulated
+stationary visible law of the two labelled kernels only.  Let \(G\) be the
+number of zeros between consecutive ones, and put
 \[
 \rho=\PP(A_0=1),\qquad
 \lambda_{\mathrm{hid}}=p-b .
@@ -543,10 +538,9 @@ every \(n\ge1\),
 =\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
 \]
 The record is exact \(1\)-dependent iff \(\lambda_{\mathrm{hid}}=0\), and in no
-positive parameter case is it a finite-order Markov chain.  Finite dependence
-of separated sigma-fields is not the same as a finite-order Markov transition
-rule; the increasing renewal hazard rules out finite Markov order.  Labelled
-rate reporting is governed by \Cref{conv:branch-map-labelled-rates-main}.
+positive parameter case is it a finite-order Markov chain.  The conclusion is a
+population statement about this sampled record law; labelled rate reporting is
+governed by \Cref{conv:branch-map-labelled-rates-main}.
 \end{theorem}
 
 \input{sec_records}
@@ -695,13 +689,16 @@ large-deviation principle. \\
 \end{table}
 
 \paragraph{Strict 2021-07-04 to 2026-07-04 comparators.}
-The recent literature comparison is theorem-indexed rather than topic-indexed.
-Each row below names the theorem it is comparing, one closest comparator from
-the strict five-year window 2021-07-04 through 2026-07-04, what that comparator
-proves or frames, and the precise increment proved here.
+The recent literature comparison is theorem-indexed rather than topic-indexed:
+the rows below separate the exact renewal law, quotient identifiability,
+regenerative CLT, branch-labelled inverse inference, and coalescing-root
+projection.  The strict window is 2021-07-04 through 2026-07-04.  Where the
+nearest theorem-level mathematical comparator is older, the row says so
+explicitly and uses the strict-window paper only as the closest recent
+neighbouring problem, not as the mathematical baseline for the theorem.
 
-Secondary recent comparators are kept in prose rather than in table cells.
-Projected observation and coarse-graining context includes Markov-state
+Secondary recent applied comparators are kept in prose rather than in table
+cells.  Projected observation and coarse-graining context includes Markov-state
 holography, constrained HMM reconstruction, blurred-transition inference,
 transition-based waiting-time inference, snippet statistics, imperfect
 observations, faulty coarse graining, stroboscopic measurements, and blackout
@@ -731,76 +728,93 @@ than the physics-memory comparators.
 \begin{table}[H]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{2.2pt}
-\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{1.12}
 \caption{Theorem-indexed recent venue comparison for the strict 2021-07-04
-through 2026-07-04 window.  The rows follow
-the submitted theorem numbering: Theorem~2.2, Theorem~3.24, and
-Theorems~3.40A--3.40C.  The cited papers are recent scope comparators rather
-than claims of priority over their broader MAP, thermodynamic, molecular, or
-coarse-grained inference programs.}
+through 2026-07-04 window.  The rows follow the submitted theorem numbering:
+Theorem~2.2, Theorem~3.24, and Theorems~3.40A--3.40C.  Broad physics-memory
+and coarse-graining papers are not used as substitutes for theorem-level
+mathematical comparators; older theorem-level baselines are named only in the
+separate baseline column and are not counted as strict-window comparators.}
 \label{tab:recent-venue-comparison}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.14\textwidth}
->{\raggedright\arraybackslash}p{0.28\textwidth}
->{\raggedright\arraybackslash}p{0.24\textwidth}
->{\raggedright\arraybackslash}p{0.24\textwidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.13\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}
+>{\raggedright\arraybackslash}p{0.18\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}
+>{\raggedright\arraybackslash}p{0.19\textwidth}}
 \toprule
-Our theorem & Closest 2021-07-04--2026-07-04 comparator & What comparator proves & Novel increment \\
+Submitted theorem slice & Strict-window comparator status & Outside-window theorem-level baseline & Comparator result & Increment proved here \\
 \midrule
-2.2. &
-van der Meer--Ertel--Seifert 2022
-\cite{VanDerMeerErtelSeifert2022TransitionWTD}. &
-Transition waiting-time inference for partially accessible Markov networks. &
-Closed sampled-record formulas \(g_k,h_k,\gamma_n\), and the exact
-\(\lambda_{\mathrm{hid}}=0\) \(1\)-dependence threshold. \\
+Exact renewal law:
+Theorem~2.2. &
+No strict-window theorem-level comparator found that derives a full-support binary renewal law,
+hazard monotonicity, covariance tail, exact \(1\)-dependence criterion, and
+non-finite-order Markov conclusion for the same two-state sampled D-MAP. &
+Heller's finite-chain-function baseline and the MAP/D-MAP construction
+literature \cite{Heller1965,AlfaNeuts1995DMAP}. &
+Recent transition-observation papers such as
+\cite{VanDerMeerErtelSeifert2022TransitionWTD,HarunariDuttaPolettiniRoldan2022VisibleTransitions}
+infer or bound quantities from partial observations; they do not give this
+closed stationary renewal law. &
+The triangular killed-leakage kernels yield the explicit Palm gap
+\(g_k\), increasing hazard \(h_k\), covariance tail, finite-word support, and
+the exact \(\lambda_{\mathrm{hid}}=0\) dependence threshold. \\
 \addlinespace
-3.24. &
+Quotient identifiability:
+Theorem~3.24. &
 Asanjarani--Nazarathy 2022
 \cite{AsanjaraniNazarathy2022MAP}. &
-Stationary MAP context, representation results, and open problems. &
-Three-inclusion quotient inverse: \((r_0,r_1,r_2)\), with
-\(D=r_1-r_0^2\ne0\), determine \((p+s,ps)\) and hence the exchange quotient
-\(\{p,s\}\). \\
+MAP2 nonidentifiability and weak-equivalence baselines
+\cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability,
+RamirezCoboLillo2012WeakEquivalentMAP}. &
+The recent paper surveys stationary MAP representation results and open
+problems, including nonunique hidden representations. &
+For this constrained D-MAP(2), three visible inclusion probabilities with
+\(D=r_1-r_0^2\ne0\) identify exactly the symmetric quotient
+\((p+s,ps)\), not a labelled ordered pair. \\
 \addlinespace
-3.40A. &
-Janson 2024
-\cite{Janson2024RenewalCLT}. &
-Regenerative renewal CLT. &
-Verified cycle rewards for the concrete inclusion estimators and the separated
-batch covariance scaling needed for fixed-record inference. \\
+Regenerative finite-record CLT:
+Theorem~3.40A. &
+Janson 2024 \cite{Janson2024RenewalCLT}. &
+Regenerative simulation and standardized-time-series covariance theory
+\cite{AsmussenGlynn2007,GlynnIglehart1990STS}. &
+The strict-window comparator proves a renewal CLT at the process level. &
+The theorem verifies the concrete cycle rewards for the inclusion vector,
+states \(b_N,t_N,\varepsilon_N,\eta_N,\delta_N\), and proves covariance
+consistency for the separated complete-cycle batches used by the finite-record
+protocol. \\
 \addlinespace
-3.40B. &
-Maier--Seifert--van der Meer 2025
-\cite{MaierSeifertVanderMeer2025HiddenPaths}. &
-Hidden-path inference from observed transitions in Markov networks. &
-Branch-map/no-label quotient inference: the delta method is applied to the
-explicit exchange-quotient inverse, and separated labels are reported only
-under \(\Delta_\sigma>0\) plus an external branch map. \\
+Quotient inverse inference:
+Theorem~3.40B. &
+No strict-window theorem-level comparator gives a delta method for the explicit exchange
+quotient for this two-root record inverse. &
+Classical delta method for smooth finite-dimensional transforms, combined with
+the MAP nonidentifiability baselines cited above. &
+Recent hidden-path and stroboscopic papers
+\cite{MaierSeifertVanderMeer2025HiddenPaths,
+BauerSeifertVanderMeer2025Stroboscopic} infer hidden Markov paths or generators
+under different observation models. &
+The theorem transports the inclusion-coordinate CLT through the explicit
+quotient inverse \(\Phi(r)=(p+s,ps)\).  The separate finite-record protocol
+reports labelled \((\Gamma,\kappa_{\mathrm r})\) only on the retained separated
+chart and only with the external branch map. \\
 \addlinespace
-3.40C. &
-Brandner 2025 \cite{Brandner2025WeakMemoryPRE} or
-Zhao--Makarov--Godec 2025
-\cite{ZhaoMakarovGodec2025MarkovStateHolography}. &
-Memory and hidden-state inference for projected dynamics. &
-Coalescing-root projected common-rate set at the exchange diagonal.  The
-coverage statement is pointwise in the true \(z\), not a uniform band over
-\(z\in(0,1)\). \\
+Coalescing-root projection:
+Theorem~3.40C. &
+No strict-window theorem-level comparator is used as a proxy for the
+directionally differentiable projection theorem. &
+Shapiro's metric-projection differentiability theorem and Geyer's constrained
+\(M\)-estimation theorem
+\cite{Shapiro1987MetricProjection,Geyer1994ConstrainedM}. &
+Fang--Santos gives the relevant directionally differentiable inference warning
+and limit theory \cite{FangSantos2019DirectionalDifferentiability}; recent
+memory papers do not replace it. &
+The theorem simulates the limiting projected Gaussian law for the cone
+\(\{h_2\le z h_1\}\) at \(p=s=z\), rather than using an ordinary bootstrap or a
+smooth labelled-root delta method. \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\paragraph{Determinant notation boundary.}
-The optional finite LU bookkeeping in
-\Cref{prop:renewal-principal-minor-lu-main,rem:finite-determinant-language-main}
-uses \(D_{\rm LU}(B)=\det M(B)\) only after the renewal inclusion product
-\(\PP(B\subset\varXi)=\rho\prod_r u_{i_{r+1}-i_r}\) has already been
-constructed.  Determinantal
-point-process existence theory
-\cite{Macchi1975Fermion,Lyons2003DPP} uses admissible kernels, with the usual
-Hermitian discrete criterion \(0\le K\le I\), to define an entire process from
-determinantal inclusion probabilities.  No positive contraction kernel, DPP
-sampling rule, repulsion property, negative association theorem, or
-determinantal-process construction is asserted here.
 
 \paragraph{Supplementary fixed-window comparator.}
 The fixed-window continuous intra-bin recovery comparator is given in the
