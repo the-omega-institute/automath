@@ -277,7 +277,7 @@ after exchanging \(x\) and \(y\).  Therefore the symmetric coefficient
 \(\mathcal I\in L^1([a,b])\).
 \end{proof}
 
-\begin{lemma}[Annular Cauchy Green formula for bounded Lipschitz tests]%
+\begin{lemma}[Cauchy cutoff estimates for bounded Lipschitz tests]%
 \label{lem:kl-main-generator-convention-domain}
 \label{lem:poisson-cauchy-generator-l1-domain}
 \label{lem:bounded-lipschitz-cauchy-cutoff-pairing}
@@ -290,22 +290,71 @@ and set \(p_t=P_t*\mu\).  For \(R>1\) put
 \Omega_R:=\{(x,y):R^{-1}<|x-y|<R\}.
 \]
 Then
+\begin{equation}\label{eq:poisson-generator-annular-l1-estimate}
+\sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_1
+\le
+\frac{\|\mu\|_{\mathrm{TV}}}{\pi R}
+\left(\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1+4\right),
+\end{equation}
+and hence
 \begin{equation}\label{eq:poisson-generator-annular-l1}
 \sup_{t\in[a,b]}\|L_Rp_t-\partial_tp_t\|_1\longrightarrow0
 \qquad(R\to\infty).
 \end{equation}
-Moreover, for every bounded Lipschitz function \(q\),
+Moreover, let \(q_t:\RR\to\RR\), \(t\in[a,b]\), be any family of bounded
+Lipschitz functions satisfying
+\[
+M_*:=\sup_{t\in[a,b]}\|q_t\|_\infty<\infty,\qquad
+L_*:=\sup_{t\in[a,b]}\operatorname{Lip}(q_t)<\infty .
+\]
+For each \(t\in[a,b]\),
 \begin{equation}\label{eq:bounded-lipschitz-annular-green-finite}
-\int_{\RR}q(x)L_Rp_t(x)\dd x
+\int_{\RR}q_t(x)L_Rp_t(x)\dd x
 =-\frac1{2\pi}\iint_{\Omega_R}
-\frac{(p_t(x)-p_t(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y
 \end{equation}
-for each \(t\in[a,b]\).  Consequently
+and
+\begin{align}
+&\sup_{\substack{t\in[a,b]\\R>1}}
+\iint_{\Omega_R}
+\left|
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}
+\right|\dd x\dd y \notag\\
+&\qquad\le
+\|\mu\|_{\mathrm{TV}}
+\left(2L_*\sup_{s\in[a,b]}\|\partial_xP_s\|_1+8M_*\right).
+\label{eq:bounded-lipschitz-annular-total-variation-bound}
+\end{align}
+Consequently
+\begin{align}
+&\sup_{t\in[a,b]}
+\left|
+\int_{\RR}q_t(x)\partial_tp_t(x)\dd x
++\frac1{2\pi}\iint_{\Omega_R}
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y
+\right| \notag\\
+&\qquad\le
+\frac{M_*\|\mu\|_{\mathrm{TV}}}{\pi R}
+\left(\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1+4\right),
+\label{eq:bounded-lipschitz-time-dependent-cutoff-error}
+\end{align}
+and therefore, uniformly for such a family \(q_t\),
 \begin{equation}\label{eq:bounded-lipschitz-annular-green-limit}
-\int_{\RR}q(x)\partial_tp_t(x)\dd x
+\int_{\RR}q_t(x)\partial_tp_t(x)\dd x
 =-\frac1{2\pi}\lim_{R\to\infty}\iint_{\Omega_R}
-\frac{(p_t(x)-p_t(y))(q(x)-q(y))}{(x-y)^2}\dd x\dd y .
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y .
 \end{equation}
+The same limit is independent of the annular exhaustion: if
+\(0\le\chi_n\le1\) are measurable cutoffs with \(\chi_n(x,y)\to1\) for
+\(x\ne y\), each \(\chi_n\) vanishing near the diagonal and outside a bounded
+separation annulus, then for every \(t\in[a,b]\)
+\[
+\iint_{\RR^2}\chi_n(x,y)
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y
+\longrightarrow
+\iint_{\RR^2}
+\frac{(p_t(x)-p_t(y))(q_t(x)-q_t(y))}{(x-y)^2}\dd x\dd y .
+\]
 \end{lemma}
 
 \begin{proof}
@@ -343,10 +392,12 @@ The far-tail omission uses only \(\|P_t(\cdot+z)-P_t\|_1\le2\):
 \frac{P_t(\cdot+z)-P_t(\cdot)}{z^2}\dd z\right\|_1
 \le \frac{4}{\pi R}.
 \end{equation}
-Since \(\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1<\infty\), convolution with
-\(\mu\) proves \eqref{eq:poisson-generator-annular-l1}.
+Combining the near and far estimates and convolving with \(\mu\) proves
+\eqref{eq:poisson-generator-annular-l1-estimate}; in particular
+\eqref{eq:poisson-generator-annular-l1} follows.
 
-For bounded \(q\), Fubini is legitimate on every fixed annulus because
+Fix \(t\) and write \(q=q_t\).  For bounded \(q\), Fubini is legitimate on
+every fixed annulus because
 \[
 \int_{R^{-1}<|z|<R}\frac{\|q\|_\infty
 \|p_t(\cdot+z)-p_t\|_1}{z^2}\dd z<\infty .
@@ -371,14 +422,29 @@ singular kernel is dominated, uniformly in \(R>1\), by
 \end{align}
 Here \(\|p_t(\cdot+z)-p_t\|_1\le |z|\|\partial_xp_t\|_1\) for
 \(|z|<1\) and \(\|p_t(\cdot+z)-p_t\|_1\le2\|p_t\|_1\) for \(|z|\ge1\).
-This estimate is the needed domination of the singular kernel for bounded
+Using
+\[
+\|p_t\|_1\le\|\mu\|_{\mathrm{TV}},\qquad
+\|\partial_xp_t\|_1\le
+\|\mu\|_{\mathrm{TV}}\|\partial_xP_t\|_1,
+\]
+and then taking the supremum over \(t\in[a,b]\) gives
+\eqref{eq:bounded-lipschitz-annular-total-variation-bound}.  This estimate
+is the needed domination of the singular kernel for time-dependent bounded
 noncompact Lipschitz tests.  Finally,
 \[
-\left|\int_{\RR}q\,(L_Rp_t-\partial_tp_t)\dd x\right|
-\le \|q\|_\infty\|L_Rp_t-\partial_tp_t\|_1\to0,
+\left|\int_{\RR}q_t\,(L_Rp_t-\partial_tp_t)\dd x\right|
+\le \|q_t\|_\infty\|L_Rp_t-\partial_tp_t\|_1,
 \]
-and \eqref{eq:bounded-lipschitz-annular-green-limit} follows from the finite
-annular identity.
+and the explicit generator estimate
+\eqref{eq:poisson-generator-annular-l1-estimate} give
+\eqref{eq:bounded-lipschitz-time-dependent-cutoff-error}.  Letting
+\(R\to\infty\) in the finite annular identity proves
+\eqref{eq:bounded-lipschitz-annular-green-limit}.  The full off-diagonal
+kernel is absolutely integrable by
+\eqref{eq:bounded-lipschitz-annular-total-variation-bound}; dominated
+convergence therefore gives the same value for every cutoff exhaustion
+\(\chi_n\) described in the statement.
 \end{proof}
 
 \begin{lemma}[\(L^1\) chain rule for a bounded moving quotient]%
@@ -698,7 +764,52 @@ H'(t)=
 \frac{(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
 {(x-y)^2}\dd x\dd y, \label{eq:domain-theorem-g-u-green}
 \end{align}
-where \(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\).
+where \(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\).  More precisely, put
+\[
+K_1:=\sup_{s\in[a,b]}\|\partial_xP_s\|_1,\qquad
+K_2:=\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1,\qquad
+M_{\log}:=\max\{|\log m|,|\log M|\}.
+\]
+Then, for every \(R>1\),
+\begin{align}
+&\sup_{t\in[a,b]}
+\left|
+\int_{\RR}\log u_t\,\partial_th_t\,\dd x
++\frac1{2\pi}\iint_{\Omega_R}
+\frac{(h_t(x)-h_t(y))(\log u_t(x)-\log u_t(y))}
+{(x-y)^2}\dd x\dd y
+\right| \notag\\
+&\qquad\le \frac{M_{\log}}{\pi R}(K_2+4),
+\label{eq:domain-logu-cutoff-error}\\
+&\sup_{t\in[a,b]}
+\left|
+\int_{\RR}u_t\,\partial_tg_t\,\dd x
++\frac1{2\pi}\iint_{\Omega_R}
+\frac{(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
+{(x-y)^2}\dd x\dd y
+\right| \notag\\
+&\qquad\le \frac{M}{\pi R}(K_2+4).
+\label{eq:domain-u-cutoff-error}
+\end{align}
+The corresponding annular integrands are uniformly absolutely controlled by
+\begin{align}
+&\sup_{\substack{t\in[a,b]\\R>1}}
+\iint_{\Omega_R}
+\left|
+\frac{(h_t(x)-h_t(y))(\log u_t(x)-\log u_t(y))}
+{(x-y)^2}
+\right|\dd x\dd y
+\le 2(L/m)K_1+8M_{\log}, \label{eq:domain-logu-annular-tv-bound}\\
+&\sup_{\substack{t\in[a,b]\\R>1}}
+\iint_{\Omega_R}
+\left|
+\frac{(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
+{(x-y)^2}
+\right|\dd x\dd y
+\le 2LK_1+8M . \label{eq:domain-u-annular-tv-bound}
+\end{align}
+Consequently these two limits are unchanged if the symmetric annuli are
+replaced by any cofinal annular exhaustion.
 \end{enumerate}
 Consequently \(\mathcal I_\nu\in L^1([a,b])\) and
 \[
@@ -717,11 +828,28 @@ This proves \textup{(i)} and \textup{(ii)}, with
 \eqref{eq:matched-poisson-one-sided-bregman-majorant}.
 
 Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}, applied first to
-\((p_t,q)=(h_t,\log u_t)\) with \(\mu=\nu\), and then to
-\((p_t,q)=(g_t,u_t)\) with \(\mu=\delta_{\bar\gamma}\), gives the two
+\((p_t,q_t)=(h_t,\log u_t)\) with \(\mu=\nu\), and then to
+\((p_t,q_t)=(g_t,u_t)\) with \(\mu=\delta_{\bar\gamma}\), gives the two
 annular Green pairings \eqref{eq:domain-theorem-h-logu-green} and
-\eqref{eq:domain-theorem-g-u-green}.  The
-same lemma also fixes the Cauchy-generator convention
+\eqref{eq:domain-theorem-g-u-green}.  Here
+\(\|\nu\|_{\mathrm{TV}}=\|\delta_{\bar\gamma}\|_{\mathrm{TV}}=1\),
+\[
+\sup_{t\in[a,b]}\|\log u_t\|_\infty=M_{\log},\qquad
+\sup_{t\in[a,b]}\operatorname{Lip}(\log u_t)\le L/m,
+\]
+and
+\[
+\sup_{t\in[a,b]}\|u_t\|_\infty\le M,\qquad
+\sup_{t\in[a,b]}\operatorname{Lip}(u_t)\le L.
+\]
+The explicit estimates
+\eqref{eq:domain-logu-cutoff-error}--\eqref{eq:domain-u-annular-tv-bound}
+are exactly
+\eqref{eq:bounded-lipschitz-time-dependent-cutoff-error} and
+\eqref{eq:bounded-lipschitz-annular-total-variation-bound} with these
+constants.  The annular-exhaustion independence in \textup{(iv)} is the
+cutoff-independence conclusion of the same lemma.  The same lemma also fixes
+the Cauchy-generator convention
 \[
 (Lf)(x)=\frac1\pi\operatorname{p.v.}\int_{\RR}
 \frac{f(y)-f(x)}{(x-y)^2}\dd y,\qquad \partial_tP_t=LP_t,
@@ -809,10 +937,12 @@ gives
 The same argument shows that every cofinal annular exhaustion gives this
 same value.  More generally, if \(0\le\chi_n\le1\) are measurable cutoffs
 which vanish near the diagonal and at spatial infinity and satisfy
-\(\chi_n(x,y)\to1\) for \(x\ne y\), then
-\(\iint \chi_n\Phi(t,\cdot,\cdot)\to\iint\Phi(t,\cdot,\cdot)\) by dominated
-convergence on each compact time window, using the majorant below.  Thus the
-definition is cutoff-independent.
+  \(\chi_n(x,y)\to1\) for \(x\ne y\), then the increasing envelopes
+  \(\widehat\chi_n:=\sup_{k\le n}\chi_k\) give the same limit by monotone
+  convergence; if the original cutoffs are dominated by an annular envelope,
+  the convergence also holds for \(\chi_n\) itself by dominated convergence on
+  each compact time window, using the majorant below.  Thus the definition is
+  independent of the annular cutoff convention used in the Green formulae.
 
 Measurability follows from the representation
 \[
@@ -827,8 +957,9 @@ domain theorem gives, for \(t\in[a,b]\),
 C_{a,b,\nu}g_t(x)
 \bigl(\mathbf1_{\{|x-y|<1\}}+|x-y|^{-2}\mathbf1_{\{|x-y|\ge1\}}\bigr).
 \]
-The right-hand side has integral \(4C_{a,b,\nu}\) over \(\RR^2\), uniformly
-in \(t\in[a,b]\).  Hence
+  The right-hand side has integral \(4C_{a,b,\nu}\) over \(\RR^2\), uniformly
+  in \(t\in[a,b]\).  Thus \(\mathcal I_\nu(t)<\infty\) for every
+  \(t\in[a,b]\), and
 \[
 \int_a^b\mathcal I_\nu(t)\dd t
 \le \frac{4C_{a,b,\nu}}{\pi}(b-a)<\infty,
