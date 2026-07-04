@@ -65,19 +65,21 @@ Extended KL convention & Every KL statement, including possible
 \(+\infty\) values & Definition fixed in the preliminaries & Definition
 \eqref{eq:extended-kl-definition}\\
 \hline
-Explicit symmetric power-tail density & Logarithmic replacement theorem with
-conditional, exact-tail, perturbative-tail, and \(N=2\) borderline cases &
-Proved only for the displayed class and its stated perturbative variant, with
-separate quotient verification for each class &
-Theorem~\ref{thm:tail-replacements-proved-here}\\
+Explicit symmetric power-tail density & Explicit symmetric power-tail examples
+with conditional, exact-tail, perturbative-tail, slowly varying conditional,
+and \(N=2\) borderline cases &
+Proved only for the displayed classes, with separate quotient verification for
+each class &
+Theorem~\ref{thm:tail-replacements-proved-here} and
+Corollary~\ref{cor:conditional-slowly-varying-borderline-tail}\\
 \hline
 \((\mathrm{MPJ}_{d,L})\) quotient jet with \(L\in\mathbb N\), \(L\ge d+1\)
 & Multidimensional entropy transfer and the leading multidimensional KL
-coefficient & Abstract hypothesis for the transfer theorem; finite centred
-\(L\)th absolute moment is a proved sufficient condition &
+coefficient & Abstract hypothesis for the transfer proposition; finite centred
+\(L\)th absolute moment is the finite-moment theorem stated first below &
 Definition~\eqref{eq:mpj-dl-definition},
-Theorems~\ref{thm:multidimensional-density-quotient} and
-\ref{thm:multidimensional-poisson-entropy-jets}\\
+Theorem~\ref{thm:multidimensional-density-quotient} and
+Proposition~\ref{thm:multidimensional-poisson-entropy-jets}\\
 \hline
 Finite covariance in \(\RR^d\) & Evaluation of
 \(A_{4,\mathrm{quad}}^{(d)}\) & Algebraic coefficient calculation only; no KL
@@ -98,7 +100,7 @@ Corollary~\ref{cor:coefficient-defect-coupling}\\
 Throughout the one-dimensional part,
 \[
   \omega(\dd y)=\frac{\dd y}{\pi(1+y^2)},\qquad
-  X_c=\gamma-\bar\gamma,\qquad
+  X_c:=\gamma-\bar\gamma,\qquad
   \mu_n=\int_{\RR}X_c^n\,\dd\nu(\gamma)
 \]
 whenever the moment exists.  For \(y\in\RR\) and \(\varepsilon\in\RR\), set
@@ -141,13 +143,21 @@ Symbol & Meaning \\
 \(\omega\) & Cauchy probability measure
 \(\dd y/(\pi(1+y^2))=\dd\theta/\pi\), pushed to Haar measure by
 \(z=e^{2\ii\theta}\).\\
+\(X_c\) & The centred variable \(X_c:=\gamma-\bar\gamma\), where
+\(\bar\gamma\) is the matched barycentre.\\
 \(Q_n\) & Laurent polynomial satisfying
 \(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).\\
+\(I(n_1,\ldots,n_r)\) & Cauchy mode integral only; dissipation is denoted
+\(\mathcal I_\nu(t)\) and never by \(I\).\\
 \(A_k^{\rm form}\) & Universal coefficient polynomial before a law is inserted.\\
 \(A_k(\nu)\) & Evaluation of \(A_k^{\rm form}\) at the centred moments of
 \(\nu\), and, after Theorem~\ref{thm:poisson-kl-even-orders}, the
-corresponding KL coefficient.\\
-\(\mathcal A_m^{(d)}(\nu)\) & Multidimensional retained entropy coefficient.\\
+corresponding one-dimensional KL coefficient.\\
+\(\mathcal A_m^{(d)}(\nu)\) & Multidimensional retained entropy coefficient;
+the paper does not use an \(A_m^{(d)}\) alias.\\
+\(A_{4,\mathrm{quad}}^{(d)}(\nu)\) & The algebraic covariance quadratic
+coefficient, equal to \(\mathcal A_4^{(d)}(\nu)\) only under the quotient-jet
+hypotheses that identify the entropy expansion.\\
 \hline
 \end{tabular}
 \end{table}
@@ -169,15 +179,6 @@ and therefore
 \begin{equation}\label{eq:cayley-mode-parity}
 u_n(-y)=(-1)^nu_n(y).
 \end{equation}
-Moreover, for \(m\ge1\) and \(m\ge0\), respectively,
-\[
-u_{2m}(\tan\theta)=(-1)^m2^{-(2m-1)}
-\sum_{j=0}^{2m-1}\binom{2m-1}{j}\cos(2(j+1)\theta),
-\]
-\[
-u_{2m+1}(\tan\theta)=(-1)^m2^{-2m}
-\sum_{j=0}^{2m}\binom{2m}{j}\sin(2(j+1)\theta).
-\]
 \end{theorem}
 
 \begin{proof}
@@ -191,10 +192,7 @@ The generating function
 \(\sum_{n\ge0}U_n(x)r^n=(1-2xr+r^2)^{-1}\)
 \cite[Chapters~1 and~5]{MasonHandscomb2002} gives
 \eqref{eq:cayley-chebyshev-mode}.  The trigonometric form follows from the
-standard identity for \(U_n(\sin\theta)\), and parity is immediate.  The
-finite Fourier formula is obtained from
-\(1+e^{2\ii\theta}=2e^{\ii\theta}\cos\theta\) after taking real and imaginary
-parts.
+standard identity for \(U_n(\sin\theta)\), and parity is immediate.
 \end{proof}
 
 For \(r\ge2\) and \(n_j\ge2\), define
@@ -254,18 +252,21 @@ measure \(\omega\).
 
 \begin{theorem}[Finite Fourier algorithm for mode integrals]%
 \label{thm:finite-fourier-mode-integral-algorithm}
-Define \(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).  Then
+Define \(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).  Equivalently, for every
+\(n\ge1\),
 \begin{equation}\label{eq:mode-laurent-polynomial-definition}
-Q_{2m}(z)=(-1)^m2^{-2m}
-\sum_{j=0}^{2m-1}\binom{2m-1}{j}
-\bigl(z^{j+1}+z^{-(j+1)}\bigr),
+Q_n(z)=2^{-n}(-\ii)^n
+\sum_{k=1}^{n}\binom{n-1}{k-1}
+\bigl(z^k+(-1)^nz^{-k}\bigr).
 \end{equation}
-and
-\[
-Q_{2m+1}(z)=(-1)^m\frac{2^{-2m}}{2\ii}
-\sum_{j=0}^{2m}\binom{2m}{j}
-\bigl(z^{j+1}-z^{-(j+1)}\bigr).
-\]
+Thus, if \(Q_n(z)=\sum_kq_{n,k}z^k\), then \(q_{n,0}=0\) and
+\begin{equation}\label{eq:mode-laurent-coefficients}
+q_{n,k}=
+2^{-n}(-\ii)^n\operatorname{sgn}(k)^{\,n\bmod2}
+\binom{n-1}{|k|-1},
+\qquad 0<|k|\le n,
+\end{equation}
+with \(q_{n,k}=0\) for \(|k|>n\).
 Consequently
 \begin{equation}\label{eq:mode-integral-constant-term}
 I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z).
@@ -273,12 +274,26 @@ I(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z).
 \end{theorem}
 
 \begin{proof}
-The formulas are the finite Fourier identities of
-Theorem~\ref{thm:cayley-chebyshev-mode} after using
-\(\cos(2\ell\theta)=(z^\ell+z^{-\ell})/2\) and
-\(\sin(2\ell\theta)=(z^\ell-z^{-\ell})/(2\ii)\).  Since
-\(\omega(\dd y)=\dd\theta/\pi\), the map \(z=e^{2\ii\theta}\) sends the
-integral to Haar integration on \(\TT\), hence to constant-term extraction.
+Put \(w=e^{\ii\theta}\) and \(z=w^2\).  The trigonometric form in
+Theorem~\ref{thm:cayley-chebyshev-mode} gives
+\[
+u_n(\tan\theta)
+=\frac{\cos^{n-1}\theta}{2\ii}
+\left\{\ii^{\,n+1}w^{-(n+1)}
+-(-\ii)^{n+1}w^{n+1}\right\}.
+\]
+Since
+\(\cos^{n-1}\theta=2^{-(n-1)}w^{-(n-1)}(1+w^2)^{n-1}\), this becomes
+\[
+2^{-n}(1+z)^{n-1}
+\left\{\ii^nz^{-n}+(-\ii)^nz\right\}.
+\]
+Expanding \((1+z)^{n-1}\) and reindexing the negative powers gives
+\eqref{eq:mode-laurent-polynomial-definition}; the coefficient formula
+\eqref{eq:mode-laurent-coefficients} is the same identity read termwise.
+Since \(\omega(\dd y)=\dd\theta/\pi\), the map \(z=e^{2\ii\theta}\) sends
+the integral to Haar integration on \(\TT\), hence to constant-term
+extraction.
 \end{proof}
 
 \subsection{One-dimensional coefficient theorem}
@@ -769,14 +784,10 @@ if one factor is \(L\), total index at least \(L+4> L+2\).  Therefore
   =I(2,L)\,\mathfrak m_2\mathfrak m_L
   +P_N(\mathfrak m_2,\ldots,\mathfrak m_{L-1}).
 \]
-Writing \(L=2m\), the constant-term formula
-Theorem~\ref{thm:finite-fourier-mode-integral-algorithm} gives
-\[
-Q_{2m}(z)=(-1)^m2^{-2m}
-\sum_{j=0}^{2m-1}\binom{2m-1}{j}
-\bigl(z^{j+1}+z^{-(j+1)}\bigr),
-\]
-and \(Q_2(z)=-(z+z^{-1}+z^2+z^{-2})/4\).  Hence only the exponents
+Writing \(L=2m\), the uniform coefficient formula
+\eqref{eq:mode-laurent-coefficients} gives
+\(q_{2,\pm1}=q_{2,\pm2}=-1/4\) and
+\(q_{2m,\pm k}=(-1)^m2^{-2m}\binom{2m-1}{k-1}\).  Hence only the exponents
 \(\pm1\) and \(\pm2\) of \(Q_{2m}\) contribute to \(I(2,2m)\), and
 \[
 \begin{aligned}
@@ -805,15 +816,17 @@ no rule depending only on centred moments of orders at most \(L-1=2N-3\)
 can evaluate \(A_{2N}\) on the full class of laws.
 \end{proof}
 
-The next theorem is the complete list of tail replacements proved in this
-paper.  Its first case is a conditional transfer statement from a quotient
-expansion to an entropy expansion; the remaining cases are the explicit tail
-classes for which the quotient hypotheses are verified here.
+The next theorem is deliberately a theorem about power-tail examples, not a
+regular-variation theorem.  Its first case is a conditional transfer statement
+from a quotient expansion to an entropy expansion; the remaining cases are the
+explicit power-tail classes for which the quotient hypotheses are verified
+here.
 
-\begin{theorem}[Tail replacements proved here]%
+\begin{theorem}[Explicit symmetric power-tail examples]%
 \label{thm:tail-replacements-proved-here}
 No assertion is made for arbitrary regularly varying or slowly varying tails;
-the four assertions below are the tail replacements proved here.
+the four assertions below are the explicit symmetric power-tail examples
+proved here.
 \begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em]
 \item \label{prop:conditional-truncated-top-moment-replacement}
 \emph{Conditional top-mode transfer.}
@@ -917,6 +930,11 @@ and
 \begin{equation}\label{eq:perturbative-power-tail-far-remainder}
   \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x=O(t^{-p}).
 \end{equation}
+A simple pointwise sufficient condition for these four displayed assumptions
+is given in
+Lemma~\ref{lem:pointwise-perturbative-power-tail-sufficient-condition}: it is
+enough that the perturbation satisfy
+\(|r(x)|\le C|x|^{-p-1-\eta}\) on \(|x|\ge R\) for some \(\eta>0\).
 Let \(\nu\) be the law with density \(f\), put
 \[
   H(t)=D_{\mathrm{KL}}(P_t*\nu\|P_t),
@@ -960,6 +978,55 @@ threshold theorem below.
 \end{enumerate}
 \end{theorem}
 
+\begin{lemma}[Pointwise sufficient condition for the perturbative tail]%
+\label{lem:pointwise-perturbative-power-tail-sufficient-condition}
+Let \(p\ge4\), \(R>0\), and let \(r\) be a measurable function on
+\(\{|x|\ge R\}\).  Suppose that, for some \(C<\infty\) and \(\eta>0\),
+\begin{equation}\label{eq:pointwise-perturbative-tail-condition}
+  |r(x)|\le C|x|^{-p-1-\eta}\qquad(|x|\ge R).
+\end{equation}
+Then \(r\) satisfies
+\eqref{eq:perturbative-power-tail-lower-moments}--\eqref{eq:perturbative-power-tail-far-remainder}.
+\end{lemma}
+
+\begin{proof}
+For \(0\le q<p\),
+\[
+  \int_{|x|\ge R}|x|^q|r(x)|\,\dd x
+  \le 2C\int_R^\infty x^{q-p-1-\eta}\,\dd x<\infty,
+\]
+which proves \eqref{eq:perturbative-power-tail-lower-moments}.  Also
+\[
+  \left|\int_{R\le |x|\le t}|x|^pr(x)\,\dd x\right|
+  \le 2C\int_R^\infty x^{-1-\eta}\,\dd x=O(1),
+\]
+so \eqref{eq:perturbative-power-tail-top-moment} holds.  For the local
+Taylor-remainder condition,
+\[
+  t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x
+  \le
+  2Ct^{-(p+1)}\int_R^t x^{-\eta}\,\dd x
+  =
+  \begin{cases}
+    O(t^{-p-\eta}),&0<\eta<1,\\
+    O(t^{-p-1}\log t),&\eta=1,\\
+    O(t^{-p-1}),&\eta>1,
+  \end{cases}
+\]
+and each alternative is \(O(t^{-p})\).  Finally,
+\[
+\begin{aligned}
+  \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x
+  &\le
+  2C\int_t^\infty x^{-p-1-\eta}\,\dd x
+  +2Ct^{-2}\int_t^\infty x^{1-p-\eta}\,\dd x  \\
+  &=O(t^{-p-\eta})=O(t^{-p}),
+\end{aligned}
+\]
+because \(p\ge4\).  This proves
+\eqref{eq:perturbative-power-tail-far-remainder}.
+\end{proof}
+
 \begin{proof}[Proof of Theorem~\ref{thm:tail-replacements-proved-here}\textup{(a)}]
 Set
 \[
@@ -988,7 +1055,7 @@ moving scale, written out to isolate the conditional tail hypothesis.  Expand
 \[
 \Phi(\Delta_t)=
 \sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\Delta_t^r
-O(|\Delta_t|^{N+1}).
++O(|\Delta_t|^{N+1}).
 \]
 The Taylor tail satisfies
 \[
@@ -1377,6 +1444,136 @@ H(t)=
 \]
 Substituting \(M_p(t)=2c\log t+O(1)\) proves the displayed asymptotic in
 Theorem~\ref{thm:tail-replacements-proved-here}\textup{(c)}.
+\end{proof}
+
+\begin{corollary}[Conditional slowly varying borderline tail]%
+\label{cor:conditional-slowly-varying-borderline-tail}
+Let \(N\ge3\), put \(p=2N-2\), and let \(R>0\), \(c>0\).  Let \(L\) be
+slowly varying, eventually monotone, and nonnegative on \([R,\infty)\), and
+let \(g\) be a symmetric nonnegative integrable function supported in
+\((-R,R)\).  Suppose
+\[
+  f(x)=g(x)+c|x|^{-p-1}L(|x|)\mathbf1_{\{|x|\ge R\}}
+\]
+is normalized to have mass one, and let \(\nu\) be the corresponding
+symmetric probability law.  Put
+\[
+M_p(t):=\int_{|x|\le t}x^pf(x)\,\dd x
+       =\int_{|x|<R}x^pg(x)\,\dd x
+        +2c\int_R^t\frac{L(s)}s\,\dd s .
+\]
+Assume
+\begin{equation}\label{eq:slowly-varying-top-moment-growth}
+  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}),\qquad L(t)=o(M_p(t)).
+\end{equation}
+Finally assume the following Potter-type tail controls, stated exactly at the
+scale used by the quotient expansion:
+\begin{align}
+t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x
+&=o(t^{-p}M_p(t))
+\qquad(0\le n<p),\label{eq:slowly-varying-lower-potter-control}\\
+t^{-(p+1)}\int_R^t x^{p+1}
+\left|c x^{-p-1}L(x)-c x^{-p-1}L(t)\right|\dd x
+&=o(t^{-p}M_p(t)),\label{eq:slowly-varying-local-potter-control}\\
+\int_t^\infty\left(1+\frac{x^2}{t^2}\right)
+c x^{-p-1}L(x)\,\dd x
+&=o(t^{-p}M_p(t)).\label{eq:slowly-varying-far-potter-control}
+\end{align}
+Then, with
+\[
+  \Delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,
+  \qquad H(t):=D_{\mathrm{KL}}(P_t*\nu\|P_t),
+\]
+one has, in \(L^\infty(\RR)\cap L^1(\omega)\),
+\begin{equation}\label{eq:slowly-varying-quotient-expansion}
+  \Delta_t(y)=
+  \sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
+  +u_p(y)t^{-p}M_p(t)
+  +o(t^{-p}M_p(t)),
+\end{equation}
+where \(\mu_n=\int x^nf(x)\,\dd x\) for \(2\le n<p\).  Consequently
+\begin{equation}\label{eq:slowly-varying-entropy-expansion}
+H(t)=
+\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
++\kappa_N\mu_2\,t^{-2N}M_p(t)
++o(t^{-2N}M_p(t)),
+\end{equation}
+where
+\[
+  \kappa_N=I(2,p)=(-1)^N(N-1)2^{-2N+2}.
+\]
+\end{corollary}
+
+\begin{proof}
+The law is symmetric, hence centred, and all odd moments below vanish.  The
+compact core has all moments.  For \(0\le n<p\), Potter's bound for the
+slowly varying function \(L\) gives, after enlarging \(R\) if necessary,
+\(L(x)\le C_{n}x^{(p-n)/2}\) on \([R,\infty)\).  Hence
+\[
+  \int_R^\infty x^{n-p-1}L(x)\,\dd x
+  \le C_n\int_R^\infty x^{(n-p)/2-1}\,\dd x<\infty .
+\]
+Thus the lower moments \(\mu_n\) exist.  Moreover the lower-moment tail
+replacement satisfies
+\begin{equation}\label{eq:slowly-varying-lower-moment-tail-replacement}
+  t^{-n}\int_t^\infty x^n c x^{-p-1}L(x)\,\dd x=o(t^{-p}M_p(t)),
+  \qquad 0\le n<p.
+\end{equation}
+This is exactly \eqref{eq:slowly-varying-lower-potter-control}.
+
+Write
+\[
+  r_t(x):=c x^{-p-1}\{L(x)-L(t)\},\qquad R\le x\le t.
+\]
+The hypothesis \eqref{eq:slowly-varying-local-potter-control} is precisely
+the local Taylor-remainder control
+\begin{equation}\label{eq:slowly-varying-local-taylor-bound}
+t^{-(p+1)}\int_R^t x^{p+1}|r_t(x)|\,\dd x
+=o(t^{-p}M_p(t)).
+\end{equation}
+The top truncated moment is the displayed \(M_p(t)\); equivalently
+\begin{equation}\label{eq:slowly-varying-top-mode-identity}
+  \int_{R\le |x|\le t}x^p c|x|^{-p-1}L(|x|)\,\dd x
+  =M_p(t)+O(1),
+\end{equation}
+where the \(O(1)\) term is the compact core contribution.  The far-tail
+quotient bound is exactly
+\begin{equation}\label{eq:slowly-varying-far-tail-bound}
+\left\|
+\int_{|x|>t}\{R_{x/t}-1\}c|x|^{-p-1}L(|x|)\,\dd x
+\right\|_{L^\infty\cap L^1(\omega)}
+=o(t^{-p}M_p(t)),
+\end{equation}
+because \(|R_\varepsilon(y)-1|\le C(1+\varepsilon^2)\) uniformly in \(y\)
+and \(\omega\) is a probability measure.
+
+It remains to assemble the quotient.  On \(|x|<R\), the compact-core Taylor
+expansion contributes the moments \(2\le n<p\), while its \(p\)th mode and
+remainder are \(O(t^{-p})=o(t^{-p}M_p(t))\).  On \(R\le |x|\le t\), Taylor
+expansion through degree \(p\), paired by symmetry, gives
+\[
+\sum_{n=2}^{p}u_n(y)t^{-n}
+\int_{R\le |x|\le t}x^n c|x|^{-p-1}L(|x|)\,\dd x
++\mathcal R_t(y).
+\]
+The remainder \(\mathcal R_t\) is \(o(t^{-p}M_p(t))\) in
+\(L^\infty\cap L^1(\omega)\): replacing \(L(x)\) by \(L(t)\) gives
+\[
+  t^{-(p+1)}L(t)\int_R^t \dd x
+  =O(t^{-p}L(t))=o(t^{-p}M_p(t)),
+\]
+and the difference is controlled by
+\eqref{eq:slowly-varying-local-taylor-bound}.  For \(2\le n<p\), replacing
+the truncated lower moments by the full lower moments costs
+\eqref{eq:slowly-varying-lower-moment-tail-replacement}.  The \(n=p\) term
+is \(u_p(y)t^{-p}M_p(t)+O(t^{-p})\), hence has the asserted leading form.
+Finally the far tail is \eqref{eq:slowly-varying-far-tail-bound}.  These
+estimates prove \eqref{eq:slowly-varying-quotient-expansion}.  The growth
+assumptions \eqref{eq:slowly-varying-top-moment-growth} and the quotient
+expansion verify
+\eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error},
+so Theorem~\ref{thm:tail-replacements-proved-here}\textup{(a)} gives
+\eqref{eq:slowly-varying-entropy-expansion}.
 \end{proof}
 
 \begin{lemma}[Symmetric \(p=2\) quotient tail split]
@@ -2047,7 +2244,86 @@ The \(L^1(\Omega_d)\) part follows from the same uniform bound because
 \(\Omega_d\) is a probability measure.
 \end{proof}
 
-\begin{theorem}[\((\mathrm{MPJ}_{d,L})\) entropy transfer]%
+\begin{theorem}[Finite centred \(L\)-absolute moment quotient expansion]%
+\label{thm:multidimensional-density-quotient}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred
+\(L\)th absolute moment.  Put \(X_c:=\gamma-\bar\gamma\) and
+\[
+\mu_\alpha=\int_{\RR^d}X_c^\alpha\,\dd\nu(\gamma)
+\qquad(|\alpha|\le L).
+\]
+Then, for
+\[
+\delta_t^{(d)}(y):=
+\frac{(P_t^{(d)}*\nu)(\bar\gamma+ty)}
+{P_t^{(d)}(ty)}-1,
+\]
+\begin{equation}\label{eq:multidim-density-quotient-expansion-main}
+\delta_t^{(d)}(y)=
+\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
++\rho_{L,t}^{(d)}(y),
+\end{equation}
+where the remainder satisfies the explicit \(L^\infty\cap L^1(\Omega_d)\)
+bound
+\begin{equation}\label{eq:multidim-density-quotient-explicit-remainder}
+\begin{aligned}
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+&\le C_{d,L}t^{-L}\EE\left[
+|X_c|^L\frac{|X_c|}{t}{\bf1}_{\{|X_c|\le t\}}
+{}
++{}|X_c|^L{\bf1}_{\{|X_c|>t\}}
+\right]  \\
+&=o(t^{-L}).
+\end{aligned}
+\end{equation}
+Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  The first term in
+\eqref{eq:multidim-density-quotient-explicit-remainder} is the local Taylor
+remainder on \(|X_c|\le t\); the second term is the large-translation
+remainder on \(|X_c|>t\), and the estimate for that term uses precisely
+\(L\ge d+1\).  In particular, \((\nu,d,L)\) satisfies
+\((\mathrm{MPJ}_{d,L})\).
+\end{theorem}
+
+\begin{proof}
+For \(x=\bar\gamma+ty\),
+\[
+\frac{P_t^{(d)}(x-\gamma)}{P_t^{(d)}(x-\bar\gamma)}
+=
+\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^{(d+1)/2}
+=F_y(X_c/t).
+\]
+Thus
+\[
+\delta_t^{(d)}(y)=\int_{\RR^d}\{F_y(X_c/t)-1\}\,\dd\nu(\gamma).
+\]
+Subtract the Taylor polynomial through order \(L\).  By
+Lemma~\ref{lem:global-multidim-quotient-remainder-core}, the remainder
+\[
+\rho_{L,t}^{(d)}(y):=
+\int_{\RR^d}\left\{
+F_y(X_c/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X_c/t)^\alpha
+\right\}\dd\nu(\gamma)
+\]
+satisfies \eqref{eq:multidim-density-quotient-explicit-remainder}.
+This is the displayed \(L^\infty\cap L^1(\Omega_d)\) tail split.  The
+\(|X_c|\le t\) region is controlled by the uniform Taylor remainder
+\(O(|X_c/t|^{L+1})\); the tail region \(|X_c|>t\) is controlled by the
+large-translation bound \(O(|X_c/t|^L)\), where \(L\ge d+1\) enters.
+
+The constant term equals \(1\) and is removed by the definition of
+\(\delta_t^{(d)}\).  The first-order Taylor layer is
+\[
+\sum_{|\alpha|=1}\mu_\alpha U_\alpha^{(d)}(y)t^{-1}=0
+\]
+because \(\nu\) is centred.  The remaining Taylor terms give
+\eqref{eq:multidim-density-quotient-expansion-main}.  Finally,
+\eqref{eq:multidim-coefficient-bound} and the displayed expansion give
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})+o(t^{-L})=O(t^{-2})\).
+\end{proof}
+
+\begin{proposition}[Entropy transfer from \((\mathrm{MPJ}_{d,L})\)]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), let \(\nu\) be a
 probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies
@@ -2073,7 +2349,7 @@ Moreover, all odd retained coefficients vanish:
 \mathcal A_m^{(d)}(\nu)=0
 \qquad\text{for every odd }m,\quad 4\le m\le L+2.
 \]
-\end{theorem}
+\end{proposition}
 
 \paragraph{Remark.}
 The coefficient formula includes the multidimensional parity cancellation:
@@ -2082,7 +2358,7 @@ The coefficient formula includes the multidimensional parity cancellation:
 odd total order \(m\) integrates to zero, so all retained odd layers vanish.
 For \(d=1\), \(\Sigma_0=0\), \(\operatorname{tr}\Sigma=\mu_2\), and the
 quadratic form evaluated below gives \(c_1^{\rm iso}=1/8\).  Therefore, once
-the finite-jet hypothesis of this theorem is in force,
+the finite-jet hypothesis of this proposition is in force,
 \(\mathcal A_4^{(1)}=A_4=\mu_2^2/8\), matching the one-dimensional
 Cayley--Chebyshev coefficient.
 
@@ -2122,80 +2398,6 @@ gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
 all omitted layers are \(o(t^{-(L+2)})\).
 \end{proof}
 
-\begin{theorem}[Finite centred \(L\)-absolute moment implies \((\mathrm{MPJ}_{d,L})\)]%
-\label{thm:multidimensional-density-quotient}
-Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
-a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred
-\(L\)th absolute moment.  Put \(X_c=\gamma-\bar\gamma\) and
-\[
-\mu_\alpha=\int_{\RR^d}X_c^\alpha\,\dd\nu(\gamma)
-\qquad(|\alpha|\le L).
-\]
-Then, for
-\[
-\delta_t^{(d)}(y):=
-\frac{(P_t^{(d)}*\nu)(\bar\gamma+ty)}
-{P_t^{(d)}(ty)}-1,
-\]
-\begin{equation}\label{eq:multidim-density-quotient-expansion-main}
-\delta_t^{(d)}(y)=
-\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
-+\rho_{L,t}^{(d)}(y),
-\qquad
-\|\rho_{L,t}^{(d)}\|_\infty+
-\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}).
-\end{equation}
-Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).
-In particular, \((\nu,d,L)\) satisfies \((\mathrm{MPJ}_{d,L})\).
-\end{theorem}
-
-\begin{proof}
-For \(x=\bar\gamma+ty\),
-\[
-\frac{P_t^{(d)}(x-\gamma)}{P_t^{(d)}(x-\bar\gamma)}
-=
-\left(\frac{t^2+|x-\bar\gamma|^2}{t^2+|x-\gamma|^2}\right)^{(d+1)/2}
-=F_y(X_c/t).
-\]
-Thus
-\[
-\delta_t^{(d)}(y)=\int_{\RR^d}\{F_y(X_c/t)-1\}\,\dd\nu(\gamma).
-\]
-Subtract the Taylor polynomial through order \(L\).  By
-Lemma~\ref{lem:global-multidim-quotient-remainder-core}, the remainder
-\[
-\rho_{L,t}^{(d)}(y):=
-\int_{\RR^d}\left\{
-F_y(X_c/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X_c/t)^\alpha
-\right\}\dd\nu(\gamma)
-\]
-satisfies
-\[
-\|\rho_{L,t}^{(d)}\|_\infty+
-\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
-\le C_{d,L}t^{-L}\EE\left[
-|X_c|^L\frac{|X_c|}{t}{\bf1}_{\{|X_c|\le t\}}
-{}
-+{}|X_c|^L{\bf1}_{\{|X_c|>t\}}
-\right]
-=o(t^{-L}).
-\]
-This is the explicit \(L^\infty\cap L^1(\Omega_d)\) tail split.  The
-\(|X_c|\le t\) region is controlled by the uniform Taylor remainder
-\(O(|X_c/t|^{L+1})\); the tail region \(|X_c|>t\) is controlled by the
-large-translation bound \(O(|X_c/t|^L)\), which is where \(L\ge d+1\) enters.
-
-The constant term equals \(1\) and is removed by the definition of
-\(\delta_t^{(d)}\).  The first-order Taylor layer is
-\[
-\sum_{|\alpha|=1}\mu_\alpha U_\alpha^{(d)}(y)t^{-1}=0
-\]
-because \(\nu\) is centred.  The remaining Taylor terms give
-\eqref{eq:multidim-density-quotient-expansion-main}.  Finally,
-\eqref{eq:multidim-coefficient-bound} and the displayed expansion give
-\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})+o(t^{-L})=O(t^{-2})\).
-\end{proof}
-
 \begin{theorem}[Finite-moment multidimensional Poisson KL asymptotic]%
 \label{thm:multidim-finite-moment-poisson-kl-asymptotic}%
 \label{cor:multidim-finite-moment-entropy-jet}
@@ -2205,7 +2407,7 @@ a probability measure on \(\RR^d\) with mean \(\bar\gamma\) and finite centred
 \[
 h_t=P_t^{(d)}*\nu,\qquad
 g_t=P_t^{(d)}(\cdot-\bar\gamma),\qquad
-X_c=\gamma-\bar\gamma,
+X_c:=\gamma-\bar\gamma,
 \]
 write
 \[
@@ -2426,7 +2628,7 @@ finite centred second moment.  Put
 \[
 \bar\gamma=\int_{\RR^d}\gamma\,\dd\nu(\gamma),
 \qquad
-X_c=\gamma-\bar\gamma,
+X_c:=\gamma-\bar\gamma,
 \]
 and
 \[
@@ -2619,7 +2821,7 @@ positive, so the layer vanishes exactly when \(\Sigma=0\).
 \begin{proof}[Proof of Theorem~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic}]
 Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
 centred \(L\)th absolute moment hypothesis implies \((\mathrm{MPJ}_{d,L})\).
-Applying Theorem~\ref{thm:multidimensional-poisson-entropy-jets} gives the
+Applying Proposition~\ref{thm:multidimensional-poisson-entropy-jets} gives the
 displayed entropy expansion and coefficient formula.  The \(m=4\) term in
 that formula has only \(r=2\) and two degree-two density factors.  Write
 \[
@@ -2674,7 +2876,7 @@ The entropy jet identifies the first nonzero retained layer as
 \(\frac12\int b_\Sigma^2\,\dd\Omega_d\), and
 Proposition~\ref{prop:multidim-formal-covariance-layer} computes that
 integral.  The hypothesis \((\mathrm{MPJ}_{d,L})\) is exactly the quotient
-hypothesis needed by Theorem~\ref{thm:multidimensional-poisson-entropy-jets};
+hypothesis needed by Proposition~\ref{thm:multidimensional-poisson-entropy-jets};
 Theorem~\ref{thm:multidimensional-density-quotient} is the separate
 finite-moment result which proves that hypothesis from the stated sufficient
 moment condition.  The covariance-layer calculation itself remains only the
