@@ -57,6 +57,31 @@ The third theorem is dynamic rather than asymptotic.  Under finite centred
 variance the moving matched Cauchy quotient lies in the domain of the
 Cauchy-generator Bregman form on every compact time window, and the KL
 functional is exactly the tail integral of that nonlocal dissipation.
+The point is not merely to quote a Hardy--Stein identity for a fixed
+semigroup orbit.  Here both the quotient
+\[
+u_t=\frac{h_t}{g_t}
+\]
+and the reference density \(g_t=P_t(\cdot-\bar\gamma)\) move with \(t\).
+The logarithmic chain rule therefore first gives the two-pair identity
+\begin{equation}\label{eq:intro-two-pair-chain-rule}
+H'(t)=\langle \log u_t,\partial_t h_t\rangle
+      -\langle u_t-1,\partial_t g_t\rangle,
+\qquad H(t)=D_{\rm KL}(h_t\|g_t),
+\end{equation}
+not a single fixed-reference Dirichlet form.  Applying the Cauchy Green
+formula separately to the pairs \((h_t,\log u_t)\) and \((g_t,u_t)\), and
+using \(\int\partial_tg_t=0\), produces the algebraic difference
+\[
+(\rho_xa-\rho_yb)(\log a-\log b)-(\rho_x-\rho_y)(a-b)
+=\rho_x\Lambda(a,b)+\rho_y\Lambda(b,a),
+\]
+where \(a=u_t(x)\), \(b=u_t(y)\), \(\rho_x=g_t(x)\),
+\(\rho_y=g_t(y)\), and
+\(\Lambda(a,b)=a\log(a/b)-a+b\).  This two-Green-pairing closure, together
+with the compact-window cutoff and measurability lemma in
+Section~\ref{sec:doob-phi-entropy}, is the extra step that is not supplied
+by existing Hardy--Stein formulas alone.
 
 \subsection*{Main results}\label{subsec:main-results}
 
@@ -115,7 +140,7 @@ Let \(d\ge1\), let \(L\in\NN\) satisfy \(L\ge d+1\), and let \(\nu\) be a
 probability measure on \(\RR^d\) with mean \(\bar\gamma\).  Put
 \[
 X_c=\gamma-\bar\gamma,\qquad
-\mu_\alpha=\EE[X_c^\alpha].
+\mu_\alpha=\EE[X_c^\alpha]\quad (|\alpha|\le L).
 \]
 Assume that \(\EE|X_c|^L<\infty\).  Then, with
 \[
@@ -132,15 +157,35 @@ one has the finite quotient jet
 +\rho_{L,t}^{(d)}(y),\\
 \lVert\rho_{L,t}^{(d)}\rVert_\infty+
 \lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
-&\le C_{d,L}t^{-L}\EE\!\left[
-|X_c|^L\frac{|X_c|}{t}\mathbf1_{\{|X_c|\le t\}}
- +|X_c|^L\mathbf1_{\{|X_c|>t\}}
-\right]\\
+&\le C_{d,L}\Bigg(
+t^{-(L+1)}\EE\!\left[
+|X_c|^{L+1}\mathbf1_{\{|X_c|\le t\}}\right]
++t^{-(d+1)}\EE\!\left[
+|X_c|^{d+1}\mathbf1_{\{|X_c|>t\}}\right]\\
+&\hspace{7em}
++\sum_{k=d+2}^{L}t^{-k}\EE\!\left[
+|X_c|^k\mathbf1_{\{|X_c|>t\}}\right]\Bigg)\\
 &=o(t^{-L}).
 \end{aligned}
 \]
-Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\), the matched entropy is
-finite for all sufficiently large \(t\), and
+Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\), and for all sufficiently
+large \(t\) the following entropy-existence package holds:
+\[
+1+\delta_t^{(d)}(y)>0,\qquad
+\int_{\RR^d}\delta_t^{(d)}\,\dd\Omega_d=0,\qquad
+\int_{\RR^d}\Phi(\delta_t^{(d)})\,\dd\Omega_d<\infty,
+\]
+where \(\Phi(s)=(1+s)\log(1+s)-s\), and
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y).
+\]
+In the notation of Section~\ref{sec:entropy-asymptotics}, this says that the
+finite moment hypothesis supplies both the quotient jet
+\((\mathrm{MPJ}_{d,L})\) and the separate large-\(t\) entropy-existence clause
+\((\mathrm{EX}_{d,L})\).  The proof actually uses the displayed two-region
+quotient-tail condition; the finite \(L\)-moment hypothesis is the standard
+sufficient verification, not the only possible route.  Consequently
 \[
 D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
@@ -148,11 +193,10 @@ D_{\mathrm{KL}}(h_t\|g_t)
 \]
 where the tensor coefficients are those of
 Theorem~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic}; all retained
-odd coefficients vanish.  Equivalently, the finite \(L\)-moment hypothesis
-first proves the matched quotient package \((\mathrm{MPJ}_{d,L})\) and the
-large-\(t\) entropy-existence clause \((\mathrm{EX}_{d,L})\), and the
-algebraic Taylor transfer then converts that quotient jet into the displayed
-KL expansion.
+odd coefficients vanish.  The symbol \((\mathrm{EX}_{d,L})\) is not an
+additional moment assumption; it names the displayed positivity, mass-zero,
+integrability, and KL-representation statements needed before the algebraic
+Taylor transfer may be read as an entropy expansion.
 \end{maintheorem}
 
 \begin{maintheorem}{Cauchy Bregman tail identity}
@@ -251,9 +295,13 @@ three roles.
 
 \begin{itemize}
 \item \emph{Missing-top-moment tails.}
-A conditional quotient theorem transfers a missing top moment to the first
-divergent entropy layer.  Exact power, perturbative power, and monotone slowly
-varying tails are then checked as admissible subclasses; they do not change
+Corollary~\ref{cor:main-body-conditional-missing-top-moment-tail} records the
+main-body consequence: once the matched quotient has the displayed
+\(L^\infty\cap L^1(\omega)\) truncated-top-mode expansion, the missing top
+moment contributes the first divergent entropy layer.  The theorem proving
+this conditional transfer and the exact power, perturbative power, and
+monotone slowly varying quotient verifications are placed in
+Appendix~\ref{app:conditional-missing-top-moment-tails}; they do not change
 the finite-moment coefficient theorem.
 
 \item \emph{Conditional transfer behind Main Theorem~\ref{thm:main-B}.}
@@ -282,19 +330,26 @@ and is not used in the Poisson entropy asymptotic proofs.
 \label{subsec:intro-hypotheses-scope}
 
 The body keeps the analytic hypotheses beside the proof that uses them.  The
-reading order is: finite moments for the hierarchy, conditional quotient
-inputs only for missing-top-moment tails, finite \(L\)-moment for the
-multidimensional KL jet, and finite covariance only for the algebraic
+reading order is: finite moments for the hierarchy, the compact
+missing-top-moment corollary with its full verification deferred to
+Appendix~\ref{app:conditional-missing-top-moment-tails}, finite \(L\)-moment
+for the multidimensional KL jet, and finite covariance only for the algebraic
 quadratic layer until a quotient criterion is supplied.
 
 \subsection*{Related theorem-level comparison}
 \label{subsec:intro-recent-jfa-comparison}
 
 Recent \emph{J. Funct. Anal.} papers closest in method treat
-Esscher-transform CLT, heat-profile asymptotics, functional inequalities, and
-Hardy--Stein identities.  None computes fixed-law matched Cauchy/Poisson KL
-Laurent coefficients.  Appendix~\ref{app:related-work-scope} gives the
-theorem-level comparator table and the entropy-asymptotic context beyond JFA.
+Esscher-transform CLT, heat-profile asymptotics, Poisson transport,
+functional inequalities, and Hardy--Stein identities.  Poisson transport and
+Poisson-channel results are adjacent because they combine Poisson laws with
+entropy, but their Poisson object is respectively a count/point-process
+measure or a counting-output channel, not the harmonic Cauchy kernel
+\(P_t(x)=\pi^{-1}t/(t^2+x^2)\) smoothing a fixed Euclidean law.  The
+fixed-law matched functional \eqref{eq:intro-main-functional} and its Laurent
+coefficient hierarchy are therefore separate from those count-Poisson
+problems.  Appendix~\ref{app:related-work-scope} gives the theorem-level
+comparator table and the entropy-asymptotic context beyond JFA.
 
 \subsection*{Convention and organization}
 
@@ -305,10 +360,14 @@ Section~\ref{sec:preliminaries} fixes notation.  Sections~\ref{sec:cayley-gate}
 and~\ref{sec:haar-pullback} record the Cayley and Haar-pullback
 normalizations.  Section~\ref{sec:entropy-asymptotics} proves the
 one-dimensional coefficient hierarchy, the sharp variance threshold, the
-borderline-tail verifications, the multidimensional quotient jets, and the
-covariance algebra.  Section~\ref{sec:doob-phi-entropy} proves the
+multidimensional quotient jets, and the covariance algebra; it keeps only a
+short pointer to the appendix-only missing-top-moment tail verifications.
+Section~\ref{sec:doob-phi-entropy} proves the
 compact-window Bregman domain bounds and the Cauchy/KL tail identity.
 Appendix~\ref{app:related-work-scope} gives the related-work comparison,
 Appendix~\ref{app:optional-fourth-moment-coefficient-algebra} records the
-optional fourth-moment coefficient algebra, and the remaining appendices
-record the normalization integrals and Laurent certificates.
+optional fourth-moment coefficient algebra,
+Appendix~\ref{app:conditional-missing-top-moment-tails} contains the
+conditional missing-top-moment tail theorem and three verification classes,
+and the remaining appendices record the normalization integrals and Laurent
+certificates.
