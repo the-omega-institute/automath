@@ -1206,7 +1206,15 @@ D:=r_1-r_0^2=r_0(a-r_0).
 \end{equation}
 For the constrained D-MAP kernels this domain condition holds:
 \(r_0=\rho>0\) and \(a-r_0=a-\rho<0\) by
-\Cref{lem:stationary-main}.  On this domain,
+\Cref{lem:stationary-main}.  The quotient numerator has the matching model
+factorization
+\[
+r_2-r_0^2=\rho(a-\rho)\lambda_{\mathrm{hid}},
+\qquad
+r_1-r_0^2=\rho(a-\rho),
+\]
+so the cancellation below divides exactly by the nonzero quantity
+\(D=\rho(a-\rho)\).  On this domain,
 \[
 a=\frac{r_1}{r_0},\qquad
 u_2=\frac{r_2}{r_0},\qquad
@@ -1368,23 +1376,26 @@ error is exactly zero at the requested window diameter.  Only the scalar mean
 in \(\rho_*(\widetilde\sigma)\) may require an infinite-tail evaluation, and
 it is reported either from the closed root formula or with the certified
 tail bound stated in
-\Cref{lem:algorithmic-complete-law-reconstruction-main}.
+\Cref{rem:complete-law-numerical-implementation-main}.  The theorem-level
+finite-record assertion is
+\Cref{prop:finite-record-complete-law-renewal-consistency-main}.
 Do not insert the noisy empirical intensity \(\widehat r_0\) directly into
 the final renewal inclusion product.  If the denominator, projection, or
 interior-root retention tests fail, withhold finite word probabilities.}
 
-\begin{algorithmiclemma}[Complete-law reconstruction from three inclusions]\label{lem:algorithmic-complete-law-reconstruction-main}
+\begin{theorem}[Population complete-law reconstruction from three inclusions]\label{lem:algorithmic-complete-law-reconstruction-main}
 Work in the stable quotient domain of
 \Cref{thm:toeplitz_image_inverse_duality}.  The following deterministic
-procedure reconstructs the complete stationary visible renewal law from the
+map reconstructs the complete stationary visible renewal law from the
 population three-inclusion coordinates
 \[
 r=(r_0,r_1,r_2)
 =\bigl(\PP(A_0=1),\PP(A_0=A_1=1),\PP(A_0=A_2=1)\bigr).
 \]
-It is a population reconstruction lemma only; finite-record complete-law
-reporting follows the boxed finite sample rule immediately above, and the
-formal finite-record version is \Cref{prop:finite-record-complete-law-renewal-consistency-main}.
+It is a population reconstruction theorem only; the finite-record projection
+theorem is \Cref{prop:finite-record-complete-law-renewal-consistency-main},
+and numerical truncation guidance is isolated in
+\Cref{rem:complete-law-numerical-implementation-main}.
 
 \begin{enumerate}
 \item Start from the population three inclusion coordinates
@@ -1468,24 +1479,12 @@ U(t):=\sum_{n\ge0}u_n t^n
 =\frac{1}{1-H(t)}
 =\frac{1}{1-\sum_{k\ge0}g_k t^{k+1}} .
 \end{equation}
-For an actual finite-word report on a finite window \(I\), put \(d_I=0\) if
-\(|I|\le1\), and otherwise put \(d_I=\max I-\min I\).  The inclusion products
-in Step~7 require only \(u_0,\ldots,u_{d_I}\).  Compute these coefficients by the finite
-recursion
+Equivalently, the coefficients satisfy the finite recursion
 \begin{equation}\label{eq:finite-window-renewal-recursion-main}
 u_0=1,\qquad
 u_n=\sum_{\ell=1}^{n}g_{\ell-1}u_{n-\ell},
-\qquad 1\le n\le d_I .
+\qquad n\ge1 .
 \end{equation}
-Thus, if an implementation forms a truncated cycle polynomial
-\[
-H_K(t)=\sum_{k=0}^{K}g_k t^{k+1},
-\]
-then every coefficient \(u_n\) with \(0\le n\le d_I\) is exactly unchanged
-whenever \(K\ge d_I-1\).  The practical finite-window rule is therefore:
-for the renewal masses, truncate the gap law at \(K=d_I-1\) and assign zero
-renewal-coefficient error.  No tail probability beyond \(g_{d_I-1}\) can enter
-a word probability on \(I\) through the renewal masses.
 
 \item Compute the stationary renewal intensity from the same gap law,
 \begin{equation}\label{eq:algorithmic-rho-star-main}
@@ -1497,58 +1496,6 @@ At the population input produced by the constrained D-MAP, this value equals
 the original inclusion coordinate \(r_0\).  This equality is a conclusion of
 the population model, not a license to combine a noisy finite-record
 \(\widehat r_0\) with a separately projected root pair.
-For numerical finite-word reporting, evaluate the mean in
-\eqref{eq:algorithmic-rho-star-main} by the closed root sums
-\[
-\sum_{k\ge0}k g_k
-=
-\begin{cases}
-\displaystyle
-\frac{\theta_2 z_1/(1-z_1)-\theta_1 z_2/(1-z_2)}
-     {\theta_2-\theta_1},
-& z_1\ne z_2,\\[1.2em]
-\displaystyle
-\frac{z}{1-z}+\frac{\theta z}{(1-z)^2},
-& z_1=z_2=z,\ \theta=-\log z,
-\end{cases}
-\]
-or, if a truncated sum is used, report its certified tail.  Namely, take any
-displayed \(r\) with \(\max(z_1,z_2)\le r<1\).  In the unequal-root case set
-\[
-C_r=
-\frac{\theta_2(1-z_1)+\theta_1(1-z_2)}
-     {|\theta_2-\theta_1|},
-\]
-and in the diagonal case set
-\[
-C_r=(1-z)+\theta,\qquad \theta=-\log z .
-\]
-Then the corresponding gap law satisfies
-\[
-0\le g_k\le C_r(1+k)r^k,\qquad k\ge0 .
-\]
-For
-\[
-m_K=1+\sum_{k=0}^{K}k g_k,\qquad
-\varepsilon_K=C_r\sum_{k>K}k(1+k)r^k ,
-\]
-one has
-\[
-0\le \EE(G+1)-m_K\le\varepsilon_K .
-\]
-If \(\varepsilon_K<m_K\), then the intensity computed from the truncated mean,
-\(\rho_K=1/m_K\), satisfies the explicit error bound
-\begin{equation}\label{eq:rho-truncation-error-bound-main}
-|\rho_K-\rho_*(\sigma)|
-\le \frac{\varepsilon_K}{m_K(m_K-\varepsilon_K)} .
-\end{equation}
-Since every renewal mass used in Step~7 is a probability, this contributes at
-most
-\[
-2^{|I|}\frac{\varepsilon_K}{m_K(m_K-\varepsilon_K)}
-\]
-to any word probability on \(I\) after finite inclusion--exclusion.  Increase
-\(K\) until this displayed bound is below the declared numerical tolerance.
 
 \item Apply the renewal inclusion product and then finite
 inclusion--exclusion.  For every nonempty
@@ -1571,7 +1518,7 @@ determines the complete finite-dimensional visible law on the exchange
 quotient.  No step assigns the two roots to labelled attempt/recovery rates;
 that additional ordering is precisely the branch-map convention of
 \Cref{conv:branch-map-labelled-rates-main}.
-\end{algorithmiclemma}
+\end{theorem}
 
 \begin{proof}
 The domain test permits the scalar divisions in Step~2.  The formulas for
@@ -1591,27 +1538,82 @@ equation for Palm return probabilities, written first as a finite convolution
 sum at fixed time \(n\) and equivalently as the generating-function identity
 \eqref{eq:renewal-generating-function-complete-law-main}.  Comparing
 coefficients in \(U(t)(1-H(t))=1\) gives
-\eqref{eq:finite-window-renewal-recursion-main}; hence the coefficients up to
-a finite window diameter \(d_I\) depend only on \(g_0,\ldots,g_{d_I-1}\).
+\eqref{eq:finite-window-renewal-recursion-main}.
 The stationary renewal intensity in Step~6 is \(1/\EE(G+1)\); for the
 constrained D-MAP population this equals
 \(\PP(A_0=1)=r_0\) by stationarity of the renewal process already identified
-in \Cref{lem:renewal-gap-main}.  The closed root sums in Step~6 follow from
-\(\sum_{k\ge0}kz^k=z/(1-z)^2\) and
-\(\sum_{k\ge0}k^2z^k=z(1+z)/(1-z)^3\).  The tail estimate follows by
-dominating \(g_k\) by \(C_r(1+k)r^k\), summing the nonnegative omitted tail,
-and applying
-\[
-\left|\frac1{m_K}-\frac1m\right|
-=\frac{|m-m_K|}{m_Km}
-\le\frac{\varepsilon_K}{m_K(m_K-\varepsilon_K)}
-\]
-with \(m=\EE(G+1)\).  Finally, Step~7 is
+in \Cref{lem:renewal-gap-main}.  Finally, Step~7 is
 \Cref{cor:renewal-principal-minor-word-law-main}: first multiply Palm renewal
 masses to obtain marked-set inclusions, then use finite inclusion--exclusion
 over the unprescribed sites.  These operations determine every finite word
 probability and therefore the complete stationary visible law.
 \end{proof}
+
+\begin{remark}[Numerical note for complete-law finite-window evaluation]\label{rem:complete-law-numerical-implementation-main}
+This note concerns only the numerical evaluation of the population law in
+\Cref{lem:algorithmic-complete-law-reconstruction-main} or of a retained
+projected finite-record law in
+\Cref{prop:finite-record-complete-law-renewal-consistency-main}; it is not an
+additional statistical assertion.  For a finite window \(I\), put \(d_I=0\) if
+\(|I|\le1\), and otherwise put \(d_I=\max I-\min I\).  The inclusion products
+need only \(u_0,\ldots,u_{d_I}\).  If an implementation forms the truncated
+cycle polynomial
+\[
+H_K(t)=\sum_{k=0}^{K}g_k t^{k+1},
+\]
+then every coefficient \(u_n\) with \(0\le n\le d_I\) is exactly unchanged
+whenever \(K\ge d_I-1\).  Thus renewal-mass truncation contributes no error to
+word probabilities on \(I\) once the gap law is kept through \(g_{d_I-1}\).
+
+Only the scalar mean in \(\rho_*(\sigma)\) may require an infinite-tail
+evaluation.  It may be computed from the closed root sums
+\[
+\sum_{k\ge0}k g_k
+=
+\begin{cases}
+\displaystyle
+\frac{\theta_2 z_1/(1-z_1)-\theta_1 z_2/(1-z_2)}
+     {\theta_2-\theta_1},
+& z_1\ne z_2,\\[1.2em]
+\displaystyle
+\frac{z}{1-z}+\frac{\theta z}{(1-z)^2},
+& z_1=z_2=z,\ \theta=-\log z,
+\end{cases}
+\]
+or from a truncated sum with a reported tail certificate.  For any displayed
+\(\bar r\) with \(\max(z_1,z_2)\le \bar r<1\), set
+\[
+C_{\bar r}=
+\frac{\theta_2(1-z_1)+\theta_1(1-z_2)}
+     {|\theta_2-\theta_1|}
+\]
+in the unequal-root case, and set
+\[
+C_{\bar r}=(1-z)+\theta,\qquad \theta=-\log z
+\]
+in the diagonal case.  Then
+\[
+0\le g_k\le C_{\bar r}(1+k)\bar r^k,\qquad k\ge0 .
+\]
+For
+\[
+m_K=1+\sum_{k=0}^{K}k g_k,\qquad
+\varepsilon_K=C_{\bar r}\sum_{k>K}k(1+k)\bar r^k ,
+\]
+one has \(0\le\EE(G+1)-m_K\le\varepsilon_K\).  If
+\(\varepsilon_K<m_K\), the intensity \(\rho_K=1/m_K\) computed from the
+truncated mean satisfies
+\begin{equation}\label{eq:rho-truncation-error-bound-main}
+|\rho_K-\rho_*(\sigma)|
+\le \frac{\varepsilon_K}{m_K(m_K-\varepsilon_K)} .
+\end{equation}
+Since every renewal mass used in the inclusion product is a probability, this
+contributes at most
+\[
+2^{|I|}\frac{\varepsilon_K}{m_K(m_K-\varepsilon_K)}
+\]
+to any word probability on \(I\) after finite inclusion--exclusion.
+\end{remark}
 
 \begin{proposition}[Separated-root labelled chart]\label{prop:population-separated-root-labelled-chart-main}
 In the setting of \Cref{thm:toeplitz_image_inverse_duality}, suppose that the
@@ -2188,12 +2190,225 @@ the auxiliary completed matrix
 +\mathbf 1_{\mathcal E_N^c}0_{3\times3}.
 \]
 This completion is only proof notation; on \(\mathcal E_N^c\) the finite-record
-procedure withholds the covariance report and all confidence sets.  The generic
-rate, including separated batches, calendar-stopped random batch counts,
-endpoint/look-ahead deletion, empirical-mean subtraction, and plug-in centering,
-is the reusable appendix theorem
-\Cref{lem:separated-batch-covariance-estimator-main}.  The next theorem records
-only the D-MAP reward specialization needed to invoke that result.
+procedure withholds the covariance report and all confidence sets.  The
+reusable appendix theorem
+\Cref{lem:separated-batch-covariance-estimator-main} is used only through the
+following explicit D-MAP specialization, where the random calendar stop,
+endpoint/look-ahead deletion, empirical-mean subtraction, and plug-in centering
+are kept in the same error decomposition as the reported estimator.
+
+\begin{proposition}[Exact inclusion-coordinate separated-batch covariance rate]\label{prop:exact-inclusion-separated-batch-covariance-main}
+Work under \Cref{ass:fixed-sampled-boundary-record-main} at a population point
+where the finite-record reporting gate satisfies \(\PP(\mathcal E_N^c)\to0\)
+as in the stable quotient chart of
+\Cref{ass:finite-record-master-main}.  Let
+\[
+U_j=
+\bigl(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
+\qquad
+L_j=G_j+1,
+\]
+and put \(Y_j=U_j-rL_j=f(G_j,G_{j+1})\), where
+\(r=(r_0,r_1,r_2)^\top\) and \(r_m=\PP(A_0=A_m=1)\).  Then
+\[
+\EE Y_j=0,\qquad \EE\|Y_j\|^4<\infty .
+\]
+Let
+\[
+T_1^{(r)}
+=\operatorname{Var}(Y_0)+\operatorname{Cov}(Y_0,Y_1)
+ +\operatorname{Cov}(Y_1,Y_0),
+\qquad
+\Sigma_r=T_1^{(r)}/\mu,\qquad \mu=\EE L_0 .
+\]
+Choose a deterministic polynomial batch length \(b_N=\lfloor N^\beta\rfloor\),
+\(0<\beta<1\), set \(d_N=b_N+1\), and use the separated cycle-index blocks
+\[
+I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\}.
+\]
+Let \(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\), let \(M_N\) be the largest
+integer such that \(I_{\ell,N}\subseteq J_N\) for
+\(1\le\ell\le M_N\), and write \(K_N=\max\{k:\tau_k<N\}\), with
+\(K_N=-1\) if the retained word has no click.  On \(M_N\ge2\), define
+\[
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j,\qquad
+\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N},
+\]
+and the infeasible true-centered covariance
+\[
+\widetilde\Sigma_{r,N}
+=
+\frac{K_N}{N}\,
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top .
+\]
+Let
+\[
+\widehat Y_j=Y_j-(\widehat r_N^{\mathrm{cyc}}-r)L_j,\qquad
+\widehat B_{\ell,N}=\sum_{j\in I_{\ell,N}}\widehat Y_j,
+\]
+and let \(\widehat\Sigma_{r,N}\) be Algorithm~1's reported covariance obtained
+from the \(\widehat B_{\ell,N}\)'s on \(\mathcal E_N\).  With the auxiliary
+completion
+\[
+\widehat\Sigma_{r,N}^{\rm tot}
+:=\mathbf 1_{\mathcal E_N}\widehat\Sigma_{r,N}
++\mathbf 1_{\mathcal E_N^c}0_{3\times3},
+\]
+one has
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=
+O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+In particular, for the paper's fixed protocol
+\[
+b_N=\lfloor N^{1/3}\rfloor,
+\]
+the plug-in covariance estimator itself satisfies, on the all-complete-cycle
+reported event and with
+\(\overline{\widehat B}_N=M_N^{-1}\sum_{\ell=1}^{M_N}\widehat B_{\ell,N}\),
+\[
+\left\|
+\frac{K_N}{N}\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)^\top
+-\Sigma_r
+\right\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\]
+\end{proposition}
+
+\begin{proof}
+The displayed formula for \(U_j\) is the adjacent-gap form of the three
+inclusion rewards: a half-open Palm cycle contains the click at its left
+endpoint, a lag-one inclusion occurs exactly on \(G_j=0\), and a lag-two
+inclusion occurs on \(G_j=1\) or on two consecutive zero gaps.  Palm inversion
+for the local windows gives \(\EE U_j^{(m)}=r_m\EE L_j\), so \(\EE Y_j=0\).
+Because \(Y_j=f(G_j,G_{j+1})\) and the gaps are i.i.d., \((Y_j)\) is
+\(1\)-dependent.  The exponential gap moment from
+\Cref{lem:killed-leakage-gap-exponential-moment-main} gives uniformly finite
+fourth moments for the normalized batch sums below.
+
+First ignore plug-in centering and endpoint deletion.  For a deterministic
+prefix \(n_N=\lfloor N/(\mu d_N)\rfloor\), put
+\[
+V_{\ell,N}=b_N^{-1/2}B_{\ell,N},\qquad 1\le\ell\le n_N .
+\]
+The omitted cycle \(\ell d_N-1\) separates the gap pairs entering adjacent
+batch sums, hence the row variables \(V_{\ell,N}\) are independent.  Their
+population covariance is
+\[
+\Gamma_N
+=\frac1{b_N}\operatorname{Var}(B_{\ell,N})
+=\operatorname{Var}(Y_0)
+ +\left(1-\frac1{b_N}\right)
+\{\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0)\},
+\]
+so
+\[
+\|\Gamma_N-T_1^{(r)}\|_{\operatorname{op}}=O(b_N^{-1}).
+\]
+Since \(\sup_{\ell,N}\EE\|V_{\ell,N}\|^4<\infty\), the ordinary sample second
+moment and the empirical-mean subtraction satisfy
+\[
+\left\|
+\frac1{n_N}\sum_{\ell=1}^{n_N}V_{\ell,N}V_{\ell,N}^\top-\Gamma_N
+\right\|_{\operatorname{op}}
+=O_{\PP}(n_N^{-1/2}),
+\qquad
+\|\bar V_N\bar V_N^\top\|_{\operatorname{op}}=O_{\PP}(n_N^{-1}),
+\]
+where \(\bar V_N=n_N^{-1}\sum_{\ell=1}^{n_N}V_{\ell,N}\).  Replacing
+\(n_N\) by \(n_N-1\) changes the covariance by \(O_{\PP}(n_N^{-1})\).  Thus the
+deterministic-prefix, empirical-mean-subtracted batch covariance equals
+\[
+T_1^{(r)}+O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right),
+\]
+because \(n_N^{-1/2}=O(\sqrt{b_N/N})\).
+
+Now restore the random calendar prefix.  The renewal CLT gives
+\[
+K_N=N/\mu+O_{\PP}(\sqrt N).
+\]
+The common all-complete-cycle set \(J_N\) removes only the initial incomplete
+cycle, the terminal incomplete cycle, and the fixed lag-two look-ahead cycles;
+their total calendar length is \(O_{\PP}(\log N)\), and they change the
+retained separated-batch prefix only by endpoint batches plus the omitted
+terminal partial batch.  Consequently
+\[
+M_Nd_N=K_N+O_{\PP}(d_N+\log N+1),
+\qquad
+\frac{M_N}{n_N}-1=O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right).
+\]
+On events where \(|M_N-n_N|\le Cn_N\sqrt{b_N/N}\), the added or removed
+independent row variables lie in a deterministic window of this order.  Markov's
+inequality, the uniform second-moment bound for \(V_{\ell,N}V_{\ell,N}^\top\),
+and the same bound for \(V_{\ell,N}\) show that replacing the deterministic
+prefix by \(M_N\) changes both the sample second moment and the empirical-mean
+term by \(O_{\PP}(\sqrt{b_N/N})\).  The prefactor \(K_N/N\) then converts the
+cycle-time covariance to calendar time:
+\[
+\frac{K_N}{N}=\frac1\mu+O_{\PP}(N^{-1/2}),
+\]
+and the \(O_{\PP}(N^{-1/2})\) multiplication error is absorbed by
+\(O_{\PP}(\sqrt{b_N/N})\).  Therefore
+\[
+\|\widetilde\Sigma_{r,N}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+
+It remains to replace \(r\) by \(\widehat r_N^{\mathrm{cyc}}\).  The
+inclusion-coordinate CLT in
+\Cref{lem:three-inclusion-clt-reduction-main} gives
+\[
+\Delta_N:=\widehat r_N^{\mathrm{cyc}}-r=O_{\PP}(N^{-1/2}),
+\qquad
+\widehat Y_j-Y_j=-\Delta_N L_j .
+\]
+For polynomial \(b_N\), and hence for the batch lengths used in the
+finite-record protocol, the uniform block-average estimate in
+\Cref{lem:uniform-calendar-block-length-main} gives
+\[
+\max_{\ell\le M_N}\left\|\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)\right\|
+=O_{\PP}(b_NN^{-1/2}).
+\]
+Write this plug-in block error as \(P_{\ell,N}\), and subtract its empirical
+mean \(\bar P_N\) in the same way as for \(B_{\ell,N}\).  The difference between
+the plug-in covariance and the true-centered covariance is
+\[
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+\left\{(B_{\ell,N}-\bar B_N)(P_{\ell,N}-\bar P_N)^\top
++(P_{\ell,N}-\bar P_N)(B_{\ell,N}-\bar B_N)^\top
++(P_{\ell,N}-\bar P_N)(P_{\ell,N}-\bar P_N)^\top\right\}.
+\]
+The already proved true-centered covariance bound implies
+\[
+\frac1{b_NM_N}\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|^2=O_{\PP}(1),
+\]
+while the uniform plug-in block bound gives
+\[
+\frac1{b_NM_N}\sum_{\ell=1}^{M_N}\|P_{\ell,N}-\bar P_N\|^2
+=O_{\PP}(b_N/N).
+\]
+Cauchy's inequality bounds the two cross terms by
+\(O_{\PP}(\sqrt{b_N/N})\), and the quadratic plug-in term by
+\(O_{\PP}(b_N/N)\).  Since \(b_N/N\le\sqrt{b_N/N}\) eventually, the plug-in
+perturbation is \(O_{\PP}(\sqrt{b_N/N})\).
+
+Finally, \(\PP(\mathcal E_N^c)\to0\) on the stable quotient chart by
+\Cref{ass:finite-record-master-main}.  Replacing the reported matrix on
+\(\mathcal E_N^c\) by the auxiliary zero matrix therefore changes only a
+vanishing-probability event in the \(O_{\PP}\) assertion.  Combining the
+true-centered rate and the plug-in perturbation proves the claim.
+\end{proof}
+
+The next theorem records the D-MAP reward specialization and the retained-rank
+consequence used by the main inferential theorems.
 
 \begin{theorem}[D-MAP specialization of separated-batch covariance]\label{thm:finite-record-covariance-main}
 Work under \Cref{ass:fixed-sampled-boundary-record-main}.
@@ -2323,15 +2538,19 @@ identities show that \(Y_j\) is a function of the adjacent gap pair
 \(Z_n^{(m)}=A_nA_{n+m}\), gives
 \(\EE U_j^{(m)}=r_m\EE L_j\), so \(\EE Y_j=0\).  The exponential moment from
 \Cref{lem:killed-leakage-gap-exponential-moment-main} gives the fourth
-moments needed by the separated regenerative batch theorem.
-
-Apply \Cref{lem:separated-batch-covariance-estimator-main} with
-\(Y_j=U_j-rL_j\), \(m=1\), \(T_m=T_1^{(r)}\), \(d_N=b_N+1\), and
-\(\widehat Y_j=Y_j-(\widehat r_N-r)L_j\).  The CLT gives
-\(\widehat r_N-r=O_{\PP}(N^{-1/2})\), so the theorem gives the displayed
-plug-in separated-batch rate, including the random retained batch count
-\(M_N\), the \(K_N/N\) calendar scaling, and endpoint/look-ahead deletion.
-Substituting \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), gives
+moments needed for the covariance proposition.  Applying
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} with this
+adjacent-gap reward gives
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+That proposition is exactly the Algorithm~1 estimator: it uses the random
+retained batch count \(M_N\), deletes the endpoint and fixed look-ahead cycles
+through the common complete-cycle set \(J_N\), subtracts the empirical batch
+mean, multiplies by \(K_N/N\), and controls the plug-in perturbation
+\(\widehat Y_j-Y_j=-(\widehat r_N-r)L_j\).  Substituting
+\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), gives
 \[
 O_{\PP}\left(N^{-\beta}+N^{-(1-\beta)/2}\right).
 \]
@@ -2586,13 +2805,51 @@ continuity point of \(F_N^\ast(\cdot;z)\), then
 \qquad\text{in conditional probability as }R\to\infty .
 \]
 If the conditional law has an atom or a flat stretch at the lower quantile,
-the order statistic still estimates a lower conditional quantile in the usual
-empirical-quantile sense, but the DKW bound alone gives no deterministic
-one-sided critical value containing \(c^{-}_{1-\alpha,N}(z)\).
+the raw order statistic still estimates a lower conditional quantile in the
+usual empirical-quantile sense, but the raw order statistic at level
+\(p_\alpha\) is not by itself a one-sided coverage certificate.  A DKW
+certificate is obtained by spending probability in the distribution-function
+scale.  If
+\[
+\varepsilon_{R,\delta}<\alpha,\qquad
+p_{\alpha,\delta,R}^{+}:=p_\alpha+\varepsilon_{R,\delta}<1,
+\]
+put \(q_R=\widehat c^{-}_{1-\alpha,N,R}(z)\) and define
+\[
+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+:=
+\inf\left\{d\ge0:
+\widehat F_{N,R}^\ast(q_R+d;z)-\varepsilon_{R,\delta}
+\ge 1-\alpha\right\}.
+\]
+Equivalently, since the empirical distribution is a step function, the
+inflated lower empirical quantile is
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+:=T_{N,(\lceil p_{\alpha,\delta,R}^{+}R\rceil)}^\ast(z),
+\]
+and \(q_R+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+=\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)\).
+Then, conditionally on the observed record,
+\[
+\PP^\ast\!\left\{
+q_R+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+\ge c^{-}_{1-\alpha,N}(z)\right\}\ge1-\delta .
+\]
+Equivalently, the inflated simulated critical value is the empirical lower
+\((p_\alpha+\varepsilon_{R,\delta})\)-quantile.  This conclusion is
+distribution-free and does not require continuity or a positive density at the
+ideal conditional quantile.
 
-For the coverage-transfer statement, fix the true diagonal coordinate \(z_0\)
-and let \(G_N=G_{\mathrm{MC},N}(z_0)\) be a theorem-level Monte Carlo
-certification event.  Suppose
+For the coverage-transfer statement, fix the true diagonal coordinate \(z_0\).
+Let \(G_N=G_{\mathrm{cert},N}(z_0)\) be the record-level reporting event on
+which the population branch and numerical recipe are certified, and let
+\[
+H_N=G_{\mathrm{MC},N}(z_0)
+=\{\widehat c^-_{1-\alpha,N,R}(z_0)
++d_{R,\delta_N,N}(z_0)\ge c^-_{1-\alpha,N}(z_0)\}
+\]
+be the auxiliary one-sided Monte Carlo domination event.  Suppose
 \[
 \PP(G_N)\to1,\qquad \delta_N\to0,
 \]
@@ -2601,29 +2858,29 @@ and on \(G_N\),
 \PP^\ast\{\widehat c^-_{1-\alpha,N,R}(z_0)
 +d_{R,\delta_N,N}(z_0)\ge c^-_{1-\alpha,N}(z_0)\}\ge1-\delta_N .
 \]
-Define the fixed-candidate ideal and simulated diagonal confidence events by
+Define the fixed-candidate ideal and simulated diagonal acceptance events by
 \[
-\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}
+\mathcal A_N(z_0)
 :=\{Q_N(z_0)\le c^-_{1-\alpha,N}(z_0)\},
 \]
 and
 \[
-\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\mathcal A_N^{\mathrm{MC}}(z_0)
 :=\{Q_N(z_0)\le
 \widehat c^-_{1-\alpha,N,R}(z_0)+d_{R,\delta_N,N}(z_0)\}.
 \]
 Then
 \[
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\PP\{\mathcal A_N^{\mathrm{MC}}(z_0)\}
 \ge
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}
+\PP\{\mathcal A_N(z_0)\}
 -\delta_N-\PP(G_N^c)-o(1).
 \]
-Therefore, if the ideal set has limiting coverage \(1-\alpha\), the simulated
-set has
+Therefore, if the ideal event has limiting coverage \(1-\alpha\), the simulated
+event has
 \[
 \liminf_N
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\PP\{\mathcal A_N^{\mathrm{MC}}(z_0)\}
 \ge1-\alpha .
 \]
 Without such an explicit event \(G_{\mathrm{MC},N}(z_0)\) and one-sided
@@ -2635,8 +2892,8 @@ diagnostic for the ideal conditional projected-Gaussian law.
 Conditional on the record, the variables
 \(T_{N,1}^\ast(z),\ldots,T_{N,R}^\ast(z)\) are independent real-valued draws
 with distribution function \(F_N^\ast(\cdot;z)\).  The displayed exponential
-bound is therefore the Dvoretzky--Kiefer--Wolfowitz inequality applied under
-\(\PP^\ast\).
+bound is therefore the Dvoretzky--Kiefer--Wolfowitz inequality, in Massart's
+sharp-constant form, applied under \(\PP^\ast\) \cite{Massart1990DKW}.
 
 Let
 \[
@@ -2654,36 +2911,147 @@ F_N^\ast(c^{-}_{1-\alpha,N}(z)-\eta;z)<p_\alpha
 Uniform convergence of \(\widehat F_{N,R}^\ast\) to \(F_N^\ast\) then forces
 the order statistic into this \(\eta\)-neighbourhood with conditional
 probability tending to one.  At a discontinuity or flat quantile the same DKW
-bound controls the simulated distribution function but does not identify a
-checkable one-sided separation of the critical value.
+bound controls the simulated distribution function but the uninflated
+\(p_\alpha\)-order statistic need not dominate the ideal lower quantile.
 
-It remains to prove the coverage-transfer inequality.  Let
+The DKW-inflated statistic gives a one-sided certificate without any local
+regularity.  On the event
 \[
-H_N=\{\widehat c^-_{1-\alpha,N,R}(z_0)
-+d_{R,\delta_N,N}(z_0)\ge c^-_{1-\alpha,N}(z_0)\}.
+B_{R,\delta,N}(z)=
+\left\{\Delta_{N,R}(z)\le\varepsilon_{R,\delta}\right\},
 \]
+we have, with
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+=T_{N,(\lceil(p_\alpha+\varepsilon_{R,\delta})R\rceil)}^\ast(z),
+\]
+that
+\[
+\widehat F_{N,R}^\ast
+\bigl(\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z);z\bigr)
+\ge p_\alpha+\varepsilon_{R,\delta}.
+\]
+Therefore
+\[
+F_N^\ast
+\bigl(\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z);z\bigr)
+\ge p_\alpha .
+\]
+By the definition of the lower quantile,
+\[
+c^{-}_{1-\alpha,N}(z)
+\le
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+=q_R
++d^{\mathrm{DKW}}_{R,\delta,N}(z).
+\]
+Since the DKW inequality gives \(\PP^\ast(B_{R,\delta,N}(z))\ge1-\delta\),
+the stated DKW domination bound follows.  The only deterministic size
+condition needed for this construction is
+\(\varepsilon_{R,\delta}<\alpha\), which ensures that the empirical
+\((p_\alpha+\varepsilon_{R,\delta})\)-quantile is below level one.
+
+It remains to prove the coverage-transfer inequality.
 On \(G_N\cap H_N\), the ideal fixed-candidate event is contained in the
 simulated event, because the simulated critical value is at least as large as
 the ideal one.  Taking conditional expectation over the auxiliary Monte Carlo
 draws gives
 \[
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\PP\{\mathcal A_N^{\mathrm{MC}}(z_0)\}
 \ge
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N},G_N\}
+\PP\{\mathcal A_N(z_0),G_N\}
 -\EE\{1_{G_N}\PP^\ast(H_N^c)\}.
 \]
 The assumed conditional bound on \(G_N\) makes the last term at most
 \(\delta_N\).  Since
 \[
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N},G_N\}
+\PP\{\mathcal A_N(z_0),G_N\}
 \ge
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}-\PP(G_N^c),
+\PP\{\mathcal A_N(z_0)\}-\PP(G_N^c),
 \]
 the displayed inequality follows, in fact without the harmless \(o(1)\) term
 except for any asymptotically negligible convention used to make the finite
 Monte Carlo rule measurable on nonreporting records.  The final \(\liminf\)
 claim follows from \(\PP(G_N^c)\to0\), \(\delta_N\to0\), and the assumed ideal
 coverage limit.
+\end{proof}
+
+\begin{lemma}[Deterministic full-rank projected-Gaussian quantile]\label{lem:deterministic-full-rank-projected-gaussian-quantile-main}
+Fix \(0<z<1\), let
+\[
+H_z=\{u\in\mathbb R^2:u_2\le zu_1\},\qquad
+n_z=(-z,1)^\top,
+\]
+and let \(Z\sim\mathcal N(0,\Sigma)\), where \(\Sigma\) is a positive
+definite \(2\times2\) matrix.  For \(c\in\mathbb R\), define
+\[
+F_{z,\Sigma}(c)=
+\PP\{Z\in H_z,\ Z^\top\Sigma^{-1}Z\le c\}
++\PP\{Z\notin H_z,\ 
+(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z)\le c\}.
+\]
+Equivalently, with Gaussian density \(\varphi_\Sigma\) and with
+\[
+\Pi_{H_z}u=
+\begin{cases}
+u,&n_z^\top u\le0,\\[0.2em]
+u-\dfrac{n_z^\top u}{\|n_z\|^2}n_z,&n_z^\top u>0,
+\end{cases}
+\]
+the same function is the deterministic integral
+\[
+F_{z,\Sigma}(c)
+=\int_{H_z}
+\mathbf1_{\{u^\top\Sigma^{-1}u\le c\}}\varphi_\Sigma(u)\,du
++\int_{H_z^c}
+\mathbf1_{\{(\Pi_{H_z}u)^\top\Sigma^{-1}(\Pi_{H_z}u)\le c\}}
+\varphi_\Sigma(u)\,du .
+\]
+It is the distribution function of
+\[
+T_{z,\Sigma}=(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z).
+\]
+Hence \(F_{z,\Sigma}(c)=0\) for \(c<0\), \(F_{z,\Sigma}\) is nondecreasing
+and right-continuous, and \(\lim_{c\to\infty}F_{z,\Sigma}(c)=1\).  For
+\(0<p<1\), the deterministic lower projected-Gaussian quantile is
+\[
+c_p(z,\Sigma):=\inf\{c\ge0:F_{z,\Sigma}(c)\ge p\}.
+\]
+This number is finite and satisfies
+\[
+\PP\{T_{z,\Sigma}\le c_p(z,\Sigma)\}\ge p,\qquad
+\PP\{T_{z,\Sigma}<c_p(z,\Sigma)\}\le p.
+\]
+Moreover \(F_{z,\Sigma}\) has no atoms; in particular
+\(\PP\{T_{z,\Sigma}=c_p(z,\Sigma)\}=0\) and
+\(\PP\{T_{z,\Sigma}\le c_p(z,\Sigma)\}=p\).
+\end{lemma}
+
+\begin{proof}
+The displayed projection formula is the Euclidean projection onto the closed
+half-space \(H_z\), so the two integrals partition the sample space into the
+inside and outside events and give exactly the distribution function of
+\(T_{z,\Sigma}\).  Distribution functions are nondecreasing and
+right-continuous.  Since the quadratic form is nonnegative and finite almost
+surely, \(F_{z,\Sigma}(c)=0\) for \(c<0\) and
+\(\lim_{c\to\infty}F_{z,\Sigma}(c)=1\), which makes the displayed lower
+quantile finite for every \(0<p<1\).  The two lower-quantile inequalities are
+the standard consequences of the definition of
+\(\inf\{c:F_{z,\Sigma}(c)\ge p\}\) and right-continuity.
+
+It remains only to record why no atom is hidden in the projection.  On \(H_z\),
+the statistic is the nonzero quadratic polynomial \(u^\top\Sigma^{-1}u\).  On
+\(H_z^c\), the projection is the linear map
+\[
+L_z u=u-\frac{n_z^\top u}{\|n_z\|^2}n_z
+\]
+and the statistic is the nonzero quadratic polynomial
+\(u^\top L_z^\top\Sigma^{-1}L_z u\).  For each fixed \(c\), the corresponding
+level set in either half-plane has two-dimensional Lebesgue measure zero:
+for \(c>0\) it is contained in a conic section, and for \(c=0\) it is a line
+or the origin.  The full-rank Gaussian law has a Lebesgue density, so
+\(\PP\{T_{z,\Sigma}=c\}=0\) for every \(c\).  Therefore the lower quantile is
+an exact \(p\)-quantile.
 \end{proof}
 
 \begin{lemma}[Projected-Gaussian continuity and rank degeneracy]\label{thm:projected-gaussian-continuity-degeneracy-main}
@@ -2989,16 +3357,37 @@ If none of these certificates is available, the diagonal rank branch is
 declared inconclusive.  An inconclusive branch may still be used to display the
 projected-Gaussian diagnostic \(Q_N(z)\) and the ideal conditional quantile,
 but it is not a coverage-certified report in Theorem~E.
+
+The certification convention is deliberately finite.  This paper does not use
+an unproved global analytic sign classification of
+\(\det\Sigma_\sigma(z)\) on \(0<z<1\), and a floating-point eigenvalue
+calculation at a candidate is not a substitute for a certificate.  A
+coverage-certified diagonal report may use only a finite certified candidate
+domain
+\[
+Z_{\rm cert}=\{z_1,\ldots,z_J\}
+\quad\text{or}\quad
+Z_{\rm cert}=\bigcup_{j=1}^J [z_j^-,z_j^+]\Subset(0,1),
+\]
+where each listed point or interval has its own outward-rounded branch
+certificate satisfying one of the four outcomes above, uniformly over the
+listed interval when an interval is used.  A candidate outside the displayed
+\(Z_{\rm cert}\) is diagnostic only unless an additional certificate is
+attached.  The worked certificate in
+\Cref{rem:worked-diagonal-branch-certificate-main} supplies the finite
+point-domain \(Z_{\rm cert}=\{1/2\}\); no continuum branch classification is
+inferred from it.
 \end{definition}
 
 \begin{algorithmiclemma}[Outward-rounded diagonal branch certificate]\label{lem:diagonal-interval-branch-certificate-main}
-For a fixed \(0<z<1\), the branch certificate in
+For a fixed point \(0<z<1\), or for a closed input interval
+\([z]\Subset(0,1)\), the branch certificate in
 \Cref{def:dmap-diagonal-rank-certificate-main} is reproducibly obtained from
 the finite formulas of \Cref{prop:computable-diagonal-covariance-main} as
 follows.
 Work in an interval arithmetic system with directed rounding.  Enclose the
-input by \([z]\), enclose \(\theta=-\log z\) by \([\theta]\), and then evaluate
-the displayed formulas
+input by \([z]\), enclose \(\theta=-\log z\) over that whole input enclosure by
+\([\theta]\), and then evaluate the displayed formulas
 \[
 [g_0]=(1-[z])-[\theta][z],
 \qquad
@@ -3052,8 +3441,9 @@ are not optional diagnostics but the certificate data:
 If the intervals in \eqref{eq:diagonal-branch-interval-quantities-main}
 satisfy one of the four certified outcomes in
 \Cref{def:dmap-diagonal-rank-certificate-main}, then the corresponding
-population branch of \(\Sigma_\sigma(z)\) is proved.  If none of the interval
-separations succeeds, the branch is reported as inconclusive.
+population branch of \(\Sigma_\sigma(z)\) is proved for the fixed candidate,
+or uniformly for every candidate in the certified input interval.  If none of
+the interval separations succeeds, the branch is reported as inconclusive.
 \end{algorithmiclemma}
 
 \begin{proof}
@@ -3082,25 +3472,70 @@ then the \(2\times2\) nonnegative-definite rank/range classification of
 The repository-local files
 \path{certificates/diagonal_branch_certificate.py} and
 \path{certificates/diagonal_branch_z_half.json} give a reproducible
-directed-rounding certificate for the candidate \(z=1/2\).  The JSON transcript
-records an enclosure of \(\theta=\log 2\), an enclosure of the full
-\(2\times2\) matrix \(\Sigma_\sigma(1/2)\), and the branch quantities
+directed-rounding certificate for the candidate \(z=1/2\).  The transcript is
+regenerated by \path{python certificates/diagonal_branch_certificate.py} and
+is checked by
+\path{python certificates/diagonal_branch_certificate.py --test}.
+The test command evaluates the finite covariance and sandwich formulas
+\eqref{eq:dmap-diagonal-sigma-r-finite-main}--\eqref{eq:dmap-diagonal-sigma-finite-main}
+directly from the displayed scalars, matrices and \(D\Phi\), checks that the
+stored JSON transcript is exactly the deterministic transcript regenerated by
+the script, and verifies that the directed intervals enclose those
+independently evaluated printed-formula values.  The unit tests also reject the
+stale trace/determinant transcript from earlier drafts.  Thus the certificate
+used below is tied to the printed formulas rather than to a manually copied
+numerical table.
+
+For this point certificate the exact substitution into
+\eqref{eq:dmap-diagonal-sigma-r-finite-main} is
+\[
+z=\frac12,\qquad
+\theta=\log2,\qquad
+g_0=\frac{1-\log2}{2},\qquad
+g_1=\frac14,
+\]
+\[
+\mu=2+2\log2,\qquad
+m_2=g_1+g_0^2 .
+\]
+Substituting these values in \eqref{eq:dmap-diagonal-sigma-r-finite-main} and
+then in
+\(\Sigma_\sigma(z)=D\Phi(r(z))\Sigma_r(z)D\Phi(r(z))^\top\) gives
+\[
+\Sigma_\sigma(1/2)=
+\begin{pmatrix}
+25.0645227916081&17.2222593244352\\
+17.2222593244352&11.8884649865292
+\end{pmatrix}.
+\]
 \[
 \operatorname{tr}\Sigma_\sigma(1/2)
-\in[68.46039402313827,68.46039402313828],
+\doteq 36.9529877781373,
+\qquad
+\det\Sigma_\sigma(1/2)
+\doteq 1.37248537400032.
+\]
+The JSON records outward-rounded enclosures of all these displayed quantities;
+for example, the corresponding branch intervals are
+\[
+\operatorname{tr}\Sigma_\sigma(1/2)
+\in[36.95298777813731,36.95298777813732],
 \]
 \[
 \det\Sigma_\sigma(1/2)
-\in[1.387694436091781,1.387694436091782].
+\in[1.372485374000321,1.372485374000322].
 \]
 These are rounded outward for display; the JSON transcript contains the full
 precision intervals.  The determinant enclosure is separated from zero, so the
 certificate proves the full-rank branch with margin, for instance,
-\(\eta=1.38\).  The same transcript
+\(\eta=1.37\).  The same transcript
 also records the outward-rounded vector enclosure for
 \(\Sigma_\sigma(1/2)(1,1/2)^\top\); it is not needed for the full-rank
 decision but is included because the branch protocol always records the
 tangent-direction test.
+This is a point certificate only: it certifies the full-rank branch for the
+single reported candidate \(z=1/2\), not for neighbouring \(z\)'s and not for
+the continuum \(0<z<1\).
 \end{remark}
 
 \begin{lemma}[D-MAP diagonal covariance alternatives]\label{lem:dmap-diagonal-covariance-alternatives-main}
@@ -3201,6 +3636,70 @@ continuity, the half-mass at zero, and the zero statistic are precisely
 case analysis written as a reproducible branch-selection rule: each positive
 inequality gives the displayed margin, and each asserted rank deficiency is
 accepted only when the corresponding equality has been proved exactly.
+\end{proof}
+
+\begin{algorithmiclemma}[Finite interval-cover diagonal branch certification]\label{lem:diagonal-certified-interval-cover-main}
+Let \(I=[z^-,z^+]\Subset(0,1)\) be a compact diagonal candidate interval that
+is reported as coverage-certified.  Algorithm~X is the following deterministic
+branch verifier.
+
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.4em,itemsep=0.25em]
+\item Start with the queue containing \(I\) and with an empty certified list
+\(\mathcal C\).
+\item Remove one interval \(J\) from the queue.  Apply the outward-rounded
+evaluation in \Cref{lem:diagonal-interval-branch-certificate-main} on the
+whole interval \(J\).
+\item If exactly one of the four branch tests in
+\Cref{def:dmap-diagonal-rank-certificate-main} succeeds on \(J\), append
+\((J,\mathrm{branch})\) to \(\mathcal C\).
+\item If no branch test succeeds and the prescribed maximum subdivision depth,
+precision budget, or exact-symbolic fallback has not been exhausted, bisect
+\(J\) and return the two children to the queue.
+\item If no branch test succeeds after the declared resources are exhausted,
+append \(J\) to the undecided list \(\mathcal U\).
+\end{enumerate}
+
+The transcript accepted by the manuscript contains the input interval \(I\),
+the precision and rounding mode, every terminal interval, the branch label and
+margin for every interval in \(\mathcal C\), the undecided list
+\(\mathcal U\), and an exact rational endpoint check proving
+\[
+I=\bigcup_{(J,\mathrm{branch})\in\mathcal C}J\ \cup\
+\bigcup_{J\in\mathcal U}J
+\]
+with disjoint interiors.  The interval \(I\) is a reported certified candidate
+interval only when this verifier returns a finite terminal list and
+\(\mathcal U=\varnothing\).  In that case
+\[
+I=\bigcup_{j=1}^M I_j
+\]
+and directed interval evaluation proves exactly one branch condition on each
+\(I_j\).  Therefore every candidate \(z\in I\) belongs to a certified
+subinterval on which the population branch of
+\(\Sigma_\sigma(z)\) is fixed.  If \(\mathcal U\ne\varnothing\), the union of
+the undecided intervals is displayed and those candidates are diagnostic only;
+they are not in \(Z_{\rm cert}\).
+\end{algorithmiclemma}
+
+\begin{proof}
+All branch assertions made on a terminal interval are consequences of
+\Cref{lem:diagonal-interval-branch-certificate-main}, so each accepted
+terminal interval has a proved population branch for every \(z\) in that
+interval.  The four branch outcomes in
+\Cref{def:dmap-diagonal-rank-certificate-main} are mutually exclusive for the
+actual nonnegative definite matrix \(\Sigma_\sigma(z)\) by
+\Cref{lem:dmap-diagonal-covariance-alternatives-main}.  Hence two distinct
+branch labels cannot both be valid at the same population point; the verifier
+therefore accepts a terminal interval only when its directed enclosures prove a
+single outcome uniformly over the interval.
+
+The equality of the endpoint union is a finite rational check in the transcript,
+independent of floating-point arithmetic.  When the undecided list is empty,
+the accepted terminal intervals cover all of \(I\), and every point in \(I\)
+inherits the unique branch proved on the terminal interval containing it.  If
+the list is nonempty, no coverage-certified theorem is invoked on that
+undecided subunion, which is exactly the reporting convention in
+\Cref{def:dmap-diagonal-rank-certificate-main}.
 \end{proof}
 
 \paragraph{Model verification.}
@@ -3685,12 +4184,21 @@ the quantile level \(1-\alpha\), or the zero-covariance conservative case.  If
 the certificate is inconclusive, the diagonal output is a projected-Gaussian
 diagnostic only and is not a theorem-level confidence report.
 Finite Monte Carlo draws from the retained projected-Gaussian law are
-coverage-certified only when accompanied by the theorem-level event
-\(G_{\mathrm{MC},N}(z)\) and a one-sided inflation
-\(d_{R,\delta_N,N}(z)\) satisfying the conditional dominance condition in
-\Cref{lem:conditional-monte-carlo-quantile-main}.  Without that event and
-inflation, the simulated order statistic is only a diagnostic for the ideal
-conditional quantile.
+coverage-certified only when accompanied by a theorem-level one-sided
+simulation certificate.  The canonical certificate used below is the DKW
+certificate in \Cref{lem:conditional-monte-carlo-quantile-main}: choose
+\(\delta_N\downarrow0\) and \(R_N\to\infty\) with
+\[
+\varepsilon_{R_N,\delta_N}
+=\sqrt{\frac{\log(2/\delta_N)}{2R_N}}<\alpha
+\]
+eventually, retain the usual record-level reporting event \(\mathcal E_N\) and
+the population branch certificate, and replace the raw empirical
+\((1-\alpha)\)-quantile by the empirical
+\((1-\alpha+\varepsilon_{R_N,\delta_N})\)-quantile.  Equivalently, the
+one-sided inflation is the observed gap between these two empirical quantiles.
+Without this or another stated domination certificate, the simulated order
+statistic is only a diagnostic for the ideal conditional quantile.
 \end{enumerate}
 \end{assumption}
 
@@ -3755,11 +4263,13 @@ The auxiliary total-space separated-batch matrix
 On \(\mathcal E_N\), \(\widehat\Sigma_{r,N}^{\rm tot}\) equals the covariance
 matrix actually reported by Algorithm~1; on \(\mathcal E_N^c\), Algorithm~1
 withholds the covariance matrix and no confidence set is formed.  The
-probability-rate assertion is the direct specialization of the separated
-regenerative batch theorem
-\Cref{lem:separated-batch-covariance-estimator-main} with \(m=1\),
-\(T_m=T_1^{(r)}\), and \(b_N=\lfloor N^{1/3}\rfloor\).  Its displayed plug-in
-bound applies to \(\widehat Y_j=U_j-\widehat r_N^{\mathrm{cyc}}L_j\).
+probability-rate assertion is
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} with
+\(b_N=\lfloor N^{1/3}\rfloor\).  That proposition is stated for this exact
+\(Y_j=f(G_j,G_{j+1})\) and includes the random calendar prefix, the
+endpoint/look-ahead deletion, the empirical batch-mean subtraction, and the
+plug-in perturbation
+\(\widehat Y_j-Y_j=-(\widehat r_N^{\mathrm{cyc}}-r)L_j\).
 \end{maintheorem}
 
 \begin{proposition}[Proposition 3.51a: pre-diagonal quotient delta method]\label{prop:finite-record-pre-diagonal-quotient-rule-main}\label{prop:pre-diagonal-quotient-delta-before-main}
@@ -4055,7 +4565,7 @@ specialization follows.  The finite covariance formula is exactly
 probability bound, while the operational protocol reports no covariance matrix.
 \end{proof}
 
-\begin{maintheorem}[fixed-setting retained-record exchange-diagonal projected Gaussian confidence]\label{thm:finite-record-exchange-diagonal-main}
+\begin{maintheorem}[fixed-candidate exchange-diagonal projected-Gaussian acceptance test]\label{thm:finite-record-exchange-diagonal-main}
 Assume the finite-record master assumption
 \Cref{ass:finite-record-master-main}, specifically
 \ref{fr:law-main}--\ref{fr:mc-main}.  Fix a true exchange-diagonal point
@@ -4139,7 +4649,18 @@ by the outward-rounded branch certificate of
 In particular, the reported certificate must contain certified enclosures of
 \(\operatorname{tr}\Sigma_\sigma(z)\), \(\det\Sigma_\sigma(z)\), and
 \(\Sigma_\sigma(z)(1,z)^\top\); a numerical eigenvalue label alone is not a
-theorem-level branch certificate.  Put \(p_c=1-\alpha\).
+theorem-level branch certificate.  Equivalently, coverage-certified reporting
+is restricted to the finite certified candidate domain \(Z_{\rm cert}\) of
+\Cref{def:dmap-diagonal-rank-certificate-main}; the theorem applies at the
+true candidate only under the explicit condition \(z_0\in Z_{\rm cert}\) with
+the corresponding population branch certified.  If \(Z_{\rm cert}\) contains
+an interval component, that component means a finite cover by terminal
+subintervals with empty undecided set in
+\Cref{lem:diagonal-certified-interval-cover-main}; no unproved continuum sign
+classification is being used.  If the manuscript or a numerical report
+displays additional diagonal candidates without such certificates, those
+candidates are visual diagnostics and are not part of the coverage statement.
+Put \(p_c=1-\alpha\).
 The following list is the theorem-level case split used for reporting.  It is
 a split by the pair \((\Sigma_\sigma(z_0),p_c)\), not by the covariance rank
 alone: in the rank-one normal covariance alternative the same limiting law
@@ -4177,7 +4698,16 @@ first-order coverage
 \[
 \PP\{\mathcal A_N(z_0)\}\longrightarrow 1-\alpha .
 \]
-In the first two alternatives \(T_{z_0}\) is continuous.  In the third,
+In the full-rank alternative the quantile is the deterministic number
+\[
+c_{p_c}(z_0,\Sigma_\sigma(z_0))
+=\inf\{c\ge0:F_{z_0,\Sigma_\sigma(z_0)}(c)\ge p_c\},
+\]
+where \(F_{z,\Sigma}\) is the two-region projected-Gaussian distribution
+function constructed in
+\Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main}.  In the
+rank-one non-normal alternative \(T_{z_0}\) is also continuous by
+\Cref{thm:projected-gaussian-continuity-degeneracy-main}.  In the third,
 rank-one-normal alternative, put
 \[
 n_{z_0}=(-z_0,1)^\top,\qquad
@@ -4254,20 +4784,44 @@ They do not require continuity of the lower limiting quantile.
 
 Algorithm~3 below is therefore an implementation protocol for the ideal
 conditional projected-Gaussian calibration and for its finite-simulation
-transfer when the simulation error is itself certified.  The ideal event is
+transfer when both the population branch and the simulation error are
+certified.  The ideal fixed-candidate event is
 \[
-\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}
-:=\mathcal A_N(z_0)
+\mathcal A_N(z_0)
 =\{Q_N(z_0)\le c^{-}_{1-\alpha,N}(z_0)\}.
 \]
 The finite-Monte-Carlo event, when reported, is
 \[
-\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\mathcal A_N^{\mathrm{MC}}(z_0)
 :=\{Q_N(z_0)\le
 \widehat c^-_{1-\alpha,N,R}(z_0)+d_{R,\delta_N,N}(z_0)\}.
 \]
 \textbf{Finite-Monte-Carlo coverage transfer.}
-Let \(G_N=G_{\mathrm{MC},N}(z_0)\).  Suppose
+One concrete choice is the DKW certificate from
+\Cref{lem:conditional-monte-carlo-quantile-main}.  Choose
+\(\delta_N\downarrow0\) and \(R_N\to\infty\) so that
+\[
+\varepsilon_{R_N,\delta_N}
+=\sqrt{\frac{\log(2/\delta_N)}{2R_N}}<\alpha
+\]
+eventually, and set
+\[
+d_{R_N,\delta_N,N}^{\mathrm{DKW}}(z_0)
+=
+T_{N,(\lceil(1-\alpha+\varepsilon_{R_N,\delta_N})R_N\rceil)}^\ast(z_0)
+-T_{N,(\lceil(1-\alpha)R_N\rceil)}^\ast(z_0).
+\]
+Then the inflated simulated critical value is
+\[
+\widehat c^-_{1-\alpha,N,R_N}(z_0)
++d_{R_N,\delta_N,N}^{\mathrm{DKW}}(z_0)
+=T_{N,(\lceil(1-\alpha+\varepsilon_{R_N,\delta_N})R_N\rceil)}^\ast(z_0),
+\]
+and it dominates the ideal lower conditional quantile with conditional
+probability at least \(1-\delta_N\), independently of atoms or flat stretches
+of the conditional law.  More generally, let
+\(G_N=G_{\mathrm{cert},N}(z_0)\) denote the record-level event on which the
+candidate is reported and the branch/numerical recipe is certified.  Suppose
 \[
 \PP(G_N)\to1,\qquad \delta_N\to0,
 \]
@@ -4278,16 +4832,16 @@ and on \(G_N\),
 \]
 Then
 \[
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\PP\{\mathcal A_N^{\mathrm{MC}}(z_0)\}
 \ge
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}
+\PP\{\mathcal A_N(z_0)\}
 -\delta_N-\PP(G_N^c)-o(1).
 \]
-Therefore, if the ideal set has limiting coverage \(1-\alpha\), the simulated
-set has
+Therefore, if the ideal event has limiting coverage \(1-\alpha\), the simulated
+event has
 \[
 \liminf_N
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag,MC}}_{\sigma,N}\}
+\PP\{\mathcal A_N^{\mathrm{MC}}(z_0)\}
 \ge1-\alpha .
 \]
 Plain finite Monte Carlo draws without the event \(G_{\mathrm{MC},N}(z_0)\) and
@@ -4414,10 +4968,15 @@ a separate certified inversion rule.
 \noindent\fbox{\begin{minipage}{0.965\textwidth}
 \textbf{Algorithm 3: projected-Gaussian diagonal calibration and Monte Carlo diagnostics.}
 
-Fix \(0<\alpha<1\), a candidate diagonal coordinate \(0<z<1\), a Monte Carlo
-draw count \(R=R_N\) for optional diagnostics, and
-\(n_z=(-z,1)^\top\).  First compute the population diagonal covariance
-\(\Sigma_\sigma(z)\) from the finite D-MAP formula
+Fix \(0<\alpha<1\), a finite certified candidate domain \(Z_{\rm cert}\) as in
+\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-certified-interval-cover-main},
+a candidate diagonal coordinate \(0<z<1\), a Monte Carlo draw count \(R=R_N\)
+for optional diagnostics, and \(n_z=(-z,1)^\top\).  If
+\(z\notin Z_{\rm cert}\), continue
+only for diagnostic plotting or diagnostic ideal-quantile evaluation and
+report ``diagonal candidate not in certified domain; no coverage-certified
+acceptance event.''  If \(z\in Z_{\rm cert}\), compute the population diagonal
+covariance \(\Sigma_\sigma(z)\) from the finite D-MAP formula
 \eqref{eq:dmap-diagonal-sigma-finite-main} and attach the outward-rounded
 branch certificate specified in
 \Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-interval-branch-certificate-main}.
@@ -4426,7 +4985,7 @@ The certificate transcript must display the intervals for
 \(\Sigma_\sigma(z)(1,z)^\top\).  If the branch certificate is inconclusive,
 continue only if a diagnostic projected-Gaussian plot or diagnostic ideal
 quantile is desired, and report ``diagonal covariance branch not certified; no
-coverage-certified confidence set.''  A finite-sample eigenvalue calculation of
+coverage-certified acceptance event.''  A finite-sample eigenvalue calculation of
 \(\widehat\Sigma_{\sigma,N}\) is not a substitute for this population
 certificate.
 
@@ -4502,10 +5061,19 @@ T_{N,m}^{\ast}(z)
 \Pi_{H_z}(Z_{N,m}^{\ast}).
 \]
 The ideal critical value \(c^{-}_{1-\alpha,N}(z)\) is the lower conditional
-\((1-\alpha)\)-quantile of this projected-Gaussian law.  A
+\((1-\alpha)\)-quantile of this projected-Gaussian law.  In the retained
+full-rank branch it is constructed from the conditional analogue of
+\[
+F_{z,\Sigma}(c)=
+\PP\{Z\in H_z,\ Z^\top\Sigma^{-1}Z\le c\}
++\PP\{Z\notin H_z,\ 
+(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z)\le c\}
+\]
+in \Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main}, with
+\(\Sigma\) replaced by the retained \(\widehat\Sigma_{\sigma,N}\).  A
 coverage-certified report must evaluate this ideal conditional quantile
-directly, either analytically or by a deterministic numerical integration
-routine with a certified enclosure narrow enough to decide the inequality
+directly, either analytically or by a deterministic numerical integration or
+root-finding routine with a certified enclosure narrow enough to decide the inequality
 \[
 Q_N(z)\le c^{-}_{1-\alpha,N}(z)
 \]
@@ -4520,24 +5088,70 @@ estimate is the order statistic
 \widehat c^{-}_{1-\alpha,N,R}(z)
 =T_{N,(\lceil(1-\alpha)R\rceil)}^{\ast}(z),
 \]
-after sorting increasingly.  It may be displayed with the DKW diagnostic band
-from \Cref{lem:conditional-monte-carlo-quantile-main}.  It becomes a
-coverage-certified critical value only when the report also supplies an event
-\(G_{\mathrm{MC},N}(z)\), a level \(\delta_N\to0\), and a one-sided inflation
-\(d_{R,\delta_N,N}(z)\) for which
+after sorting increasingly.  It may be displayed as a diagnostic for the ideal
+conditional quantile.  To turn finite simulation into an operational
+coverage-certified critical value, choose a Monte Carlo error level
+\(\delta_N\downarrow0\) with
 \[
-\PP^\ast\{\widehat c^{-}_{1-\alpha,N,R}(z)
-+d_{R,\delta_N,N}(z)\ge c^{-}_{1-\alpha,N}(z)\}\ge1-\delta_N
+\varepsilon_{R_N,\delta_N}
+=\sqrt{\frac{\log(2/\delta_N)}{2R_N}}<\alpha .
 \]
-holds on \(G_{\mathrm{MC},N}(z)\) and \(\PP(G_{\mathrm{MC},N}(z))\to1\).
-The reported simulated event is then
+Let \(q_R=\widehat c^{-}_{1-\alpha,N,R_N}(z)\) and define the DKW inflation by
+\[
+d^{\mathrm{DKW}}_{R_N,\delta_N,N}(z)
+:=
+\inf\left\{d\ge0:
+\widehat F^\ast_{N,R_N}(q_R+d;z)-\varepsilon_{R_N,\delta_N}
+\ge 1-\alpha\right\}.
+\]
+The DKW one-sided simulated critical value is then
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R_N,\delta_N}(z)
+=T_{N,(\lceil(1-\alpha+\varepsilon_{R_N,\delta_N})R_N\rceil)}^\ast(z),
+\]
+equivalently
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R_N,\delta_N}(z)
+=q_R+d^{\mathrm{DKW}}_{R_N,\delta_N,N}(z).
+\]
+The event
+\[
+G_{\mathrm{MC},N}^{\mathrm{DKW}}(z)
+=\{\Delta_{N,R_N}(z)\le\varepsilon_{R_N,\delta_N}\},
+\qquad
+\Delta_{N,R_N}(z)=
+\sup_t|\widehat F^\ast_{N,R_N}(t;z)-F_N^\ast(t;z)|,
+\]
+has conditional probability at least \(1-\delta_N\), and on it
+\[
+\widehat c^{-}_{1-\alpha,N,R_N}(z)
++d^{\mathrm{DKW}}_{R_N,\delta_N,N}(z)
+\ge c^{-}_{1-\alpha,N}(z).
+\]
+Equivalently, before conditioning on the auxiliary simulation,
+\[
+\PP^\ast\{\widehat c^{-}_{1-\alpha,N,R_N}(z)
++d^{\mathrm{DKW}}_{R_N,\delta_N,N}(z)
+\ge c^{-}_{1-\alpha,N}(z)\}\ge1-\delta_N .
+\]
+This is the default certified finite-Monte-Carlo choice in the theorem.  The
+reported simulated event is then
 \[
 Q_N(z)\le
-\widehat c^{-}_{1-\alpha,N,R}(z)+d_{R,\delta_N,N}(z),
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R_N,\delta_N}(z),
 \]
-with coverage transferred from Theorem~E.  If no such one-sided certificate is
-available, report ``ideal quantile only; Monte Carlo diagnostic not
-coverage-certified'' for this candidate.
+with coverage transferred from Theorem~E and
+\Cref{lem:conditional-monte-carlo-quantile-main}.  Any alternative finite
+simulation rule must state its own event \(G_{\mathrm{MC},N}(z)\), error
+\(\delta_N\), and one-sided inflation \(d_{R,\delta_N,N}(z)\) satisfying the
+same domination condition.  If no such one-sided certificate is available,
+report ``ideal quantile only; Monte Carlo diagnostic not coverage-certified''
+for this candidate.
+
+When several diagonal candidates are displayed, repeat the preceding steps
+only for the finite list or finite interval union in \(Z_{\rm cert}\).  Any
+uncertified continuum curve, heat map, or dense grid is a visualization of the
+diagnostic statistic and is not a confidence-set inversion.
 \end{minipage}}
 
 \begin{proof}[Proof of \Cref{thm:finite-record-inference-audit-main}]
@@ -4640,11 +5254,11 @@ coverage directly, without a continuity assumption at the zero quantile and
 without asserting unbuffered exact equality there.  The ideal coverage proof
 uses the ideal conditional quantile \(c^{-}_{1-\alpha,N}(z)\).  The finite
 Monte Carlo add-on is only the domination argument in
-\Cref{lem:conditional-monte-carlo-quantile-main}: on the event
-\(G_{\mathrm{MC},N}(z)\), the inflated simulated critical value contains the
-ideal one with conditional probability at least \(1-\delta_N\), so the
-simulated acceptance event loses at most
-\(\delta_N+\PP(G_{\mathrm{MC},N}(z)^c)+o(1)\) relative to the ideal event.  The
+\Cref{lem:conditional-monte-carlo-quantile-main}: on the record-level
+certification event \(G_{\mathrm{cert},N}(z)\), the DKW-inflated simulated
+critical value contains the ideal one with conditional probability at least
+\(1-\delta_N\), so the simulated acceptance event loses at most
+\(\delta_N+\PP(G_{\mathrm{cert},N}(z)^c)+o(1)\) relative to the ideal event.  The
 push-forward confidence
 set and the equality of coverage events are precisely
 \Cref{cor:exchange-diagonal-common-rate-confidence-main}.  The separated-root
@@ -4828,79 +5442,63 @@ projection is eventually inactive with probability tending to one at
 separated interior points.
 \end{proof}
 
-\begin{proposition}[Finite-record complete-law reporting is renewal-consistent]\label{prop:finite-record-complete-law-renewal-consistency-main}
-This proposition is the formal implementation of the boxed finite sample rule
-preceding
-\Cref{lem:algorithmic-complete-law-reconstruction-main}.  Use the
-finite-record reporting gate \(\mathcal E_N\), the raw inverse map
-\(\Phi\), the feasible symmetric-coordinate projection \(\Pi_F^{\rm tb}\), and
-the thresholds of
-\Cref{prop:finite-record-quotient-projection-reporting-main}.  A finite-record
-complete-law report is formed only on \(\mathcal E_N\) and only when the
-inverse denominators are retained:
-\[
-\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,\qquad
-|\widehat r_{1,N}^{\mathrm{cyc}}
--(\widehat r_{0,N}^{\mathrm{cyc}})^2|\ge\varepsilon_N .
-\]
-On that event compute
+\begin{proposition}[Finite-record projected complete-law theorem]\label{prop:finite-record-complete-law-renewal-consistency-main}
+Let \(\widehat r_N^{\mathrm{cyc}}\) be the complete-cycle inclusion estimator,
+let \(\Phi\) be the quotient inverse map, and let
+\(\Pi_F^{\rm tb}\) be the feasible symmetric-coordinate projection.  On any
+retained finite record define
 \[
 \widetilde\sigma_N
-=\Pi_F^{\rm tb}\{\Phi(\widehat r_N^{\mathrm{cyc}})\}.
+=\Pi_F^{\rm tb}\{\Phi(\widehat r_N^{\mathrm{cyc}})\},
 \]
-Then compute the projected root pair from
+let \(\{ \widetilde z_{1,N},\widetilde z_{2,N}\}\) be the unordered roots of
 \[
 z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0,
 \]
-and withhold complete-law probabilities if either projected root lies outside
-\([\eta_N,1-\eta_N]\).  On the retained interior-root event,
-\Cref{lem:projected-root-gap-law-valid-main} applies to the projected roots.
-Therefore the projected gap law \(\widetilde g_{k,N}\), computed by the
-formulas in \Cref{lem:algorithmic-complete-law-reconstruction-main}, is a
-\(D\)-row path law for a stochastic triangular kernel and satisfies
+and assume these roots are retained in \((0,1)\).  Then the gap law
+\(\widetilde g_{k,N}\) computed from
+\Cref{lem:algorithmic-complete-law-reconstruction-main} is nonnegative,
+normalized, and is the \(D\)-row path law of a stochastic triangular kernel:
 \[
 \widetilde g_{k,N}\ge0,\qquad
 \sum_{k\ge0}\widetilde g_{k,N}=1 .
 \]
-Compute the projected Palm renewal masses \(\widetilde u_{n,N}\) and the
-projected stationary renewal intensity
+With
 \[
 \widetilde\rho_N
 =\rho_*(\widetilde\sigma_N)
-=\left(1+\sum_{k\ge0}k\,\widetilde g_{k,N}\right)^{-1}.
+=\left(1+\sum_{k\ge0}k\,\widetilde g_{k,N}\right)^{-1},
 \]
-The finite-record inclusion product for a nonempty
-\(B=\{i_1<\cdots<i_m\}\) is then
+and with \(\widetilde u_{n,N}\) the Palm renewal masses of this same projected
+gap law, the finite-record law \(\widetilde\PP_N\) defined by
 \begin{equation}\label{eq:finite-record-renewal-consistent-inclusions-main}
 \widetilde\PP_N(B\subset\varXi)
 =\widetilde\rho_N
  \prod_{\ell=1}^{m-1}\widetilde u_{i_{\ell+1}-i_\ell,N},
+\qquad B=\{i_1<\cdots<i_m\}\ne\emptyset,
 \end{equation}
-with the empty-set value \(1\), and finite words are obtained from
-\eqref{eq:finite-record-renewal-consistent-inclusions-main} by the same
-finite inclusion--exclusion formula as
-\eqref{eq:algorithmic-reconstruction-word-main}.  If the reporting gate or
-the denominator or interior-root tests fail, no finite-record complete-law
-probabilities are reported.
-
-Thus the complete-law finite-record object is a point on the full
-renewal-consistency manifold
+with empty-set inclusion value \(1\), and by finite inclusion--exclusion for
+words, is an exact stationary renewal law.  Equivalently,
 \[
+(\widetilde\rho_N,\widetilde\sigma_N)\in
 \mathcal M_{\rm ren}
-=\{(\rho_*(\sigma),\sigma):\sigma\in F\}.
+:=\{(\rho_*(\sigma),\sigma):\sigma\in F\}.
 \]
-The raw empirical intensity \(\widehat r_{0,N}^{\mathrm{cyc}}\) is used to
-construct the inverse coordinate and to test denominator stability, but it is
-not inserted as the renewal intensity after the root coordinate has been
-projected.  Consequently the reported finite word probabilities cannot mix a
-noisy single-site estimate with a different projected renewal gap law.
-At any separated interior population point, the projection is locally
-eventually inactive with probability tending to one, so
-\(\widetilde\sigma_N\to\Phi(r)\),
-\(\widetilde\rho_N\to r_0\).  More precisely, for every fixed finite window
-\(I\) there are a compact separated-root neighbourhood \(K\) of
-\(\Phi(r)\) and a constant \(C_I(K)<\infty\) such that, on the retained
-complete-law branch and with probability tending to one,
+The empirical coordinate \(\widehat r_{0,N}^{\mathrm{cyc}}\) is used only to
+construct the quotient coordinate and to test denominator stability; after
+projection, the renewal intensity is \(\widetilde\rho_N\), not
+\(\widehat r_{0,N}^{\mathrm{cyc}}\).
+
+Assume now that the population point is separated and interior:
+\(\Phi(r)\in F_{\rm sep}^{\circ}\), with the inverse denominators bounded
+away from zero.  If
+\(\widehat r_N^{\mathrm{cyc}}\to r\) in probability, then the projected
+coordinate satisfies \(\widetilde\sigma_N\to\Phi(r)\) and
+\(\widetilde\rho_N\to r_0\) in probability on the retained branch, whose
+probability tends to one for any thresholds tending to zero slowly enough.
+For every fixed finite window \(I\) there are a compact separated-root
+neighbourhood \(K\) of \(\Phi(r)\) and a constant \(C_I(K)<\infty\) such that,
+with probability tending to one,
 \begin{equation}\label{eq:complete-law-reporting-fixed-window-bound-main}
 \max_{S\subset I}
 \left|\widetilde\PP_N\{\varXi\cap I=S\}
@@ -4909,25 +5507,23 @@ complete-law branch and with probability tending to one,
 \end{equation}
 If the finite-record CLT hypotheses of
 \Cref{thm:finite-record-inference-audit-main} hold, the right-hand side is
-\(O_{\PP}(N^{-1/2})\).  Thus each fixed-window reported word probability
-converges in probability to its population value with an explicit
+\(O_{\PP}(N^{-1/2})\).  Thus each fixed-window retained projected word
+probability converges in probability to its population value with an explicit
 projection-coordinate error bound.
 \end{proposition}
 
 \begin{proof}
-The construction first projects the symmetric root coordinate into \(F\), and
-the interior-root retention test keeps only roots in \((0,1)\).  On that
-retained event \Cref{lem:projected-root-gap-law-valid-main} shows that the
-quotient-root formulas are \(D\)-row path probabilities of a stochastic
-triangular labelled kernel.  They therefore give a nonnegative unit-mass gap
-law, hence a single Palm renewal law.  The intensity \(\widetilde\rho_N\) is
-then defined from that same gap law by the renewal identity \(1/\EE(G+1)\).
-Therefore
-\((\widetilde\rho_N,\widetilde\sigma_N)\) lies on
-\(\mathcal M_{\rm ren}\), and the inclusion products are exactly the renewal
-products for the projected finite-record renewal law.  The non-reporting
-branches are the same retained-record and denominator branches already fixed
-in \Cref{prop:finite-record-quotient-projection-reporting-main}.
+The construction first projects the symmetric root coordinate into \(F\).  If
+the projected roots lie in \((0,1)\), then
+\Cref{lem:projected-root-gap-law-valid-main} applies to those roots and shows
+that the quotient-root formulas are \(D\)-row path probabilities of a
+stochastic triangular labelled kernel.  They therefore give a nonnegative
+unit-mass gap law, hence a single Palm renewal law.  The intensity
+\(\widetilde\rho_N\) is then defined from that same gap law by the renewal
+identity \(1/\EE(G+1)\).  Therefore
+\((\widetilde\rho_N,\widetilde\sigma_N)\) lies on \(\mathcal M_{\rm ren}\),
+and the inclusion products are exactly the renewal products for the projected
+finite-record renewal law.
 
 At a separated interior population point, the inverse denominators are bounded
 away from zero and \(\Phi(r)\) lies in the relative interior of \(F\).  The
@@ -4935,13 +5531,46 @@ complete-cycle inclusion estimator is consistent by
 \Cref{thm:finite-record-inference-audit-main}; hence
 \(\Phi(\widehat r_N^{\mathrm{cyc}})\to\Phi(r)\) in probability and
 \(\Pi_F^{\rm tb}\) is eventually the identity with probability tending to
-one.  The roots, gap probabilities for any fixed finite range, renewal masses
-for any fixed finite range, and \(\rho_*(\sigma)\) are continuous on this
-separated interior chart.  The quantitative fixed-window statement is exactly
-\Cref{lem:projected-complete-law-fixed-window-error-main}, applied on a
-compact separated-root neighbourhood of \(\Phi(r)\).  The displayed
-fixed-window convergence follows from that bound.
+one.  Any denominator and interior-root thresholds tending to zero slowly
+enough therefore retain the record with probability tending to one.  The
+roots, gap probabilities for any fixed finite range, renewal masses for any
+fixed finite range, and \(\rho_*(\sigma)\) are continuous on this separated
+interior chart.  The quantitative fixed-window statement is exactly
+\Cref{lem:projected-complete-law-fixed-window-error-main}, applied on a compact
+separated-root neighbourhood of \(\Phi(r)\).  The displayed fixed-window
+convergence follows from that bound.
 \end{proof}
+
+\begin{remark}[Implementation note for finite-record complete-law reporting]\label{rem:finite-record-complete-law-implementation-main}
+The operational reporting rule is the following finite-record projection
+procedure.  Use the finite-record reporting gate \(\mathcal E_N\), the raw
+inverse map \(\Phi\), the projection \(\Pi_F^{\rm tb}\), and the thresholds of
+\Cref{prop:finite-record-quotient-projection-reporting-main}.  A complete-law
+report is formed only on \(\mathcal E_N\) and only when
+\[
+\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,\qquad
+|\widehat r_{1,N}^{\mathrm{cyc}}
+-(\widehat r_{0,N}^{\mathrm{cyc}})^2|\ge\varepsilon_N .
+\]
+On that event compute
+\[
+\widetilde\sigma_N
+=\Pi_F^{\rm tb}\{\Phi(\widehat r_N^{\mathrm{cyc}})\},
+\]
+then compute the projected roots of
+\[
+z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0 .
+\]
+Withhold complete-law probabilities if either projected root lies outside
+\([\eta_N,1-\eta_N]\).  On the retained interior-root branch, use
+\Cref{prop:finite-record-complete-law-renewal-consistency-main} for the
+renewal law and use
+\Cref{rem:complete-law-numerical-implementation-main} for finite-window
+coefficient evaluation and certified truncation of the scalar mean.  If the
+reporting gate, denominator test, projection-root test, or declared numerical
+tolerance certificate fails, no finite-record complete-law probabilities are
+reported.
+\end{remark}
 
 \begin{proposition}[Symmetric-coordinate inverse delta method]\label{cor:finite_inverse_delta_boundary_main}\label{cor:finite-separated-root-rate-chart-main}
 Work under \Cref{ass:fixed-sampled-boundary-record-main}, and let
@@ -5002,7 +5631,7 @@ the threshold/no-label statement uses the projected-coordinate limit from
 \begin{corollary}[Corollary 3.51b: post-diagonal no-label reporting on the exchange diagonal]\label{cor:post-diagonal-no-label-reporting-main}
 Use the finite-record quotient/projection rule of
 \Cref{prop:finite-record-quotient-projection-reporting-main} and the
-exchange-diagonal confidence theorem
+exchange-diagonal acceptance theorem
 \Cref{thm:finite-record-exchange-diagonal-main}.  At a true diagonal point
 \(\sigma_z=(2z,z^2)\), \(0<z<1\), the projected diagonal result of Theorem~E
 implies
