@@ -257,12 +257,28 @@ Theorem~E and the Bregman tail identity.
 & Hardy--Stein, Beurling--Deny, and stable de Bruijn references such as
 \cite{Gutowski2023HardySteinPureJump,
 GutowskiKwasnicki2025BeurlingDenySobolevBregman,
-JohnsonStableDeBruijn2013}.
+JohnsonStableDeBruijn2013}, together with the information-estimation
+de Bruijn line
+\cite{GuoShamaiVerdu2005MMSE,Verdu2010Mismatched}.
 & Provide proof language for nonlocal Bregman forms, cutoff identities, and
-entropy dissipation.
+entropy dissipation.  The Gaussian-channel identities are included only as
+background for differentiating information along smoothing/noise flows.
 & They are not theorem-level competitors for the moving matched quotient
 \(u_t=(P_t*\nu)/P_t(\cdot-\bar{\gamma})\), whose compact-window bounds and
-tail identity are proved here.\\
+tail identity are proved here; no MMSE or Gaussian-channel estimation formula
+is used in the coefficient proofs.\\
+\hline
+Gaussian-convolution and Bakry--{\'E}mery log-Sobolev context.
+& Gaussian-convolution log-Sobolev and diffusion-curvature references such as
+\cite{BardetGozlanMalrieuZitt2018GaussianConvolutions,
+BakryEmery1985Diffusions,BakryGentilLedoux2014}.
+& Provide comparison language for functional inequalities, curvature
+stability, and the difference between smoothing inequalities and asymptotic
+coefficient extraction.
+& These references concern Gaussian convolutions or Markov diffusion
+semigroups.  The present paper studies matched Cauchy/Poisson quotient
+coefficients for one fixed input law and does not derive its results from
+Bakry--{\'E}mery stability or a Gaussian-convolution log-Sobolev theorem.\\
 \hline
 The finite-moment and power-tail quotient expansions.
 & Euclidean heat, fractional-heat, Poisson-kernel, and regular-variation
@@ -335,7 +351,18 @@ theorem-level competitors.  Cauchy KL and \(f\)-divergence formulae
 give static Cauchy-parameter context, whereas
 Theorem~\ref{thm:poisson-kl-even-orders} expands the
 non-Cauchy mixture quotient \(P_t*\nu\) against its matched translated
-Poisson profile.  Euclidean heat, fractional-heat, and Poisson-kernel moment
+Poisson profile.  Gaussian-convolution log-Sobolev results
+\cite{BardetGozlanMalrieuZitt2018GaussianConvolutions,
+ChenChewiNilesWeed2021MixtureLogSobolev} and the Bakry--{\'E}mery diffusion
+framework \cite{BakryEmery1985Diffusions,BakryGentilLedoux2014} are cited
+only to locate neighbouring functional-inequality questions; they do not
+provide the quotient expansion or the Laurent coefficient arithmetic.
+Likewise, de Bruijn and information-estimation identities
+\cite{DeBruijn1953,GuoShamaiVerdu2005MMSE,Verdu2010Mismatched} give
+background for entropy differentiation along smoothing channels, while the
+Cauchy Bregman identity here is proved directly from the Poisson generator,
+the compact-window quotient bounds, and the explicit \(L^1\) cutoff
+majorant.  Euclidean heat, fractional-heat, and Poisson-kernel moment
 expansions
 \cite{EscobedoZuazua1991,DuoandikoetxeaZuazua1992,
 BilerKarchWoyczynski2001Levy,Yamamoto2012FractionalExpansion,
@@ -455,6 +482,35 @@ These are exactly the cases \(2\le n\le6\) of
 so that the signs in the odd negative-exponent rows can be checked directly
 against the table below.
 
+Here is an independent checksum for the displayed Laurent representatives and
+for three rows used later in the certificate.  For a Laurent polynomial
+\(F(z)=\sum_{|k|\le K}a_kz^k\), put
+\[
+\mathsf G_N(F):=\frac1N\sum_{\ell=0}^{N-1}F(\zeta_N^\ell),
+\qquad \zeta_N:=e^{2\pi\ii/N}.
+\]
+If \(N>K\), then \(\mathsf G_N(F)=[z^0]F\), because no nonzero exponent in
+\([-K,K]\) is divisible by \(N\).  Thus the following root-of-unity checks
+extract the same constant terms without using the zero-sum recurrence below:
+\[
+\begin{array}{c|c|c}
+\text{object}&\text{checksum}&\text{value}\\
+\hline
+Q_2&\bigl(Q_2(1),Q_2(-1)\bigr)&(-1,0)\\
+Q_3&\bigl(Q_3(1),Q_3(-1)\bigr)&(0,0)\\
+Q_4&\bigl(Q_4(1),Q_4(-1)\bigr)&(1,0)\\
+Q_5&\bigl(Q_5(1),Q_5(-1)\bigr)&(0,0)\\
+Q_6&\bigl(Q_6(1),Q_6(-1)\bigr)&(-1,0)\\
+J(2,4)&\mathsf G_{13}(Q_2Q_4)&-1/8\\
+J(3,5)&\mathsf G_{17}(Q_3Q_5)&-15/128\\
+J(2,3,3)&\mathsf G_{17}(Q_2Q_3^2)&-9/128 .
+\end{array}
+\]
+The endpoint checks verify the parity and total-sign normalization of
+\(Q_2,\ldots,Q_6\); the grid checks use \(13>2+4\) and
+\(17>3+5=2+3+3\), so they are exact finite averages rather than numerical
+quadrature.
+
 \begin{lemma}[Deterministic exact Laurent recurrence]%
 \label{lem:appendix-d-deterministic-laurent-recurrence}
 Let \(\mathbf n=(n_1,\ldots,n_r)\) be any finite row of positive integers.
@@ -533,9 +589,7 @@ Odd total-order entries through order eight vanish by
 other rows; no separate conjugation convention is applied.
 
 For reproducibility, here is a complete hand expansion of the signed integer
-sums for every row used in \(A_6\) and \(A_8\).  The paper-local script
-\texttt{certificates/laurent\_recurrence\_minicheck.py} replays the same
-zero-sum recurrence with exact rational arithmetic.  Write
+sums for every row used in \(A_6\) and \(A_8\).  Write
 \[
 b_m^{(n)}:=\binom{n-1}{m-1}\qquad(1\le m\le n).
 \]
@@ -642,3 +696,29 @@ S(2,2,2,2)=\sum_{m=-4}^4N_mN_{-m}
 \]
 Multiplication by the listed \(\Lambda(\mathbf n)\) values gives exactly the
 \(J(\mathbf n)\) entries in the table.
+
+The same finite recurrence can be reproduced by the following short exact
+script, whose output is the last column of the table:
+\begin{verbatim}
+from fractions import Fraction as F; from math import comb
+def add(a,b): return (a[0]+b[0],a[1]+b[1])
+def mul(a,b): return (a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0])
+def scale(c,a): return (c*a[0],c*a[1])
+def mi(n): return [(1,0),(0,-1),(-1,0),(0,1)][n%4]
+def qc(n,k):
+    return scale(F(comb(n-1,abs(k)-1),2**n)*(1 if k>0 else (-1)**n),mi(n))
+def q(n): return {k:qc(n,k) for k in range(-n,n+1) if k}
+def conv(a,b):
+    c={}
+    for i,x in a.items():
+      for j,y in b.items(): c[i+j]=add(c.get(i+j,(0,0)),mul(x,y))
+    return c
+rows=[(2,2),(2,4),(3,3),(2,2,2),(2,6),(3,5),(4,4),(2,2,4),(2,3,3),(2,2,2,2)]
+for row in rows:
+    p={0:(1,0)}
+    for n in row: p=conv(p,q(n))
+    print(row,p.get(0,(0,0)))
+\end{verbatim}
+Only rational Gaussian-integer arithmetic is involved; the imaginary parts
+cancel in the even total-order rows listed above, and odd total-order rows
+vanish by parity.

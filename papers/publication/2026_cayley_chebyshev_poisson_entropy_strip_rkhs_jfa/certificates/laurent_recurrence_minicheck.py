@@ -105,7 +105,7 @@ def print_row(row):
     value = constant_term(row)
     count = integer_recurrence(row, lambda n, k: 1)
     signed = integer_recurrence(row, lambda n, k: eps(n, k) * comb(n - 1, abs(k) - 1))
-    print(f"{row!s:14s} |K|={count:2d} signed={signed:3d} I={fmt(value)}")
+    print(f"{row!s:14s} |K|={count:2d} signed={signed:3d} J={fmt(value)}")
 
 
 def main():
