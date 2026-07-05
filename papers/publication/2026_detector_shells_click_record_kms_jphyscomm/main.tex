@@ -127,7 +127,7 @@ with exponential rate \(\Gamma\), and a dead counter recovers with exponential
 rate \(\kappa_{\mathrm r}\).  A click is recorded as \(A_n=1\), and the
 boundary-reset convention assigns the post-click state at the next sample to
 \(D\).  This construction derives the labelled kernel pair displayed in
-\Cref{ass:constrained-dmap-record-main}: \(T_0+T_1\) is the hidden transition
+\Cref{ass:model-inference-contract-main}: \(T_0+T_1\) is the hidden transition
 matrix, \(T_1\) marks an observed \(1\), and the killed entries
 \(T_1(R,R)=T_1(D,R)=0\) encode the rule that every recorded click leaves the
 counter dead at the next boundary.  Thus
@@ -137,12 +137,10 @@ realization of the D-MAP.
 
 The paper-level contribution is therefore the closed-form record-law,
 quotient-inverse, and fixed-setting retained-record asymptotic analysis of this
-one constrained D-MAP(2) subfamily.  The following contract fixes both the
-model and the finite-record interpretation used by all paper-level theorem
-statements.
+one constrained D-MAP(2) subfamily.  The following contract fixes the model used
+by all paper-level theorem statements.
 
-\begin{assumption}[Model, reporting, and inference contract]\label{ass:model-inference-contract-main}\label{ass:constrained-dmap-record-main}\label{par:model-contract-main}\label{par:inference-scope-main}\label{conv:paper-scope-reporting-main}\label{subsec:scope-nonclaims}\label{rem:scope-nonclaims-main}
-\textup{(Model.)}
+\begin{assumption}[Constrained sampled-counter D-MAP model]\label{ass:model-inference-contract-main}
 Fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and define
 \[
 p=e^{-\Gamma\Delta\tau},\qquad
@@ -167,21 +165,22 @@ The convention is
 kernels, and formulas on \(\Gamma=\kappa_{\mathrm r}\) are interpreted by
 continuous limits.  The killed entries \(T_1(R,R)=T_1(D,R)=0\) are a structural
 constraint of this D-MAP.
+\end{assumption}
 
-\smallskip
-\noindent\textup{(Retained-record inference.)}
+\subsection{Scope of finite-record reports}\label{subsec:finite-record-report-scope-main}
+
 Finite-record confidence procedures are fixed-setting retained-record
-asymptotics for this stationary D-MAP law.  In every theorem that invokes this
-contract, \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) is fixed at the population
-point under discussion, \(\mathcal E_N\) denotes the named reporting event for
-that procedure, and confidence sets are formed only on \(\mathcal E_N\).  If
-\(\mathcal E_N\) fails, the corresponding finite-record report is withheld.
+asymptotics for the stationary law in
+\Cref{ass:model-inference-contract-main}.  In every theorem that invokes this
+scope convention, \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) is fixed at the
+population point under discussion, \(\mathcal E_N\) denotes the named reporting
+event for that procedure, and confidence sets are formed only on
+\(\mathcal E_N\).  If \(\mathcal E_N\) fails, the corresponding finite-record
+report is withheld.
 The paper does not assert finite-sample coverage, uniform coverage over
 \((\Gamma,\kappa_{\mathrm r})\), or model-selection-valid coverage across
 reporting branches.
 
-\smallskip
-\noindent\textup{(Identifiability and reported estimands.)}
 The only model interpretation assumed by this contract is the classical
 sampled-counter protocol of
 \Cref{lem:classical-counter-kernel-construction-main}.  If the sampling
@@ -195,8 +194,6 @@ attempt rate and which is the recovery rate without side information.  If
 identifies only the unordered products
 \(\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\).
 
-\smallskip
-\noindent\textup{(Diagonal certificates and nonclaims.)}
 The submitted diagonal projected-Gaussian confidence statement is the
 fixed-candidate statement at \(z_0=1/2\), using the printed branch certificate in
 \Cref{lem:z-half-diagonal-branch-certificate-main}.  Other diagonal candidates
@@ -207,11 +204,131 @@ transcript.  Ordered labelled rates require the separate branch-map convention o
 simultaneous inversion over \(0<z<1\), nor identification of UDW, KMS,
 thermodynamic, response-profile, or ordered-rate quantities unless the
 particular result supplies the extra hypotheses and proof.
-\end{assumption}
+
+\subsection{Visible-record diagnostics for the model contract}\label{subsec:visible-record-model-diagnostics-main}
+
+\Cref{ass:model-inference-contract-main} and
+\Cref{subsec:finite-record-report-scope-main} form a conditional contract, not a
+model-selection theorem.  The confidence statements below are meaningful only
+after the retained visible record is treated as coming from the killed-leakage
+sampled-counter D-MAP with known \(\Delta\tau\).  The following diagnostics are
+therefore part of the finite-record reporting protocol.  They use only the
+observed binary record and are meant to falsify, not certify, the renewal
+sample-counter assumption.
+
+Let \(A_0,\ldots,A_{N-1}\) be the retained record and let
+\[
+\widehat\tau_0<\widehat\tau_1<\cdots<\widehat\tau_{\widehat K}
+\]
+be its observed click times.  The complete observed inter-click gaps are
+\[
+\widehat G_j=\widehat\tau_{j+1}-\widehat\tau_j-1,\qquad
+0\le j\le \widehat K-1 .
+\]
+Endpoint censored runs before \(\widehat\tau_0\) and after
+\(\widehat\tau_{\widehat K}\) are not used as complete gap observations.  Any
+burn-in deletion or all-complete-cycle deletion used later is applied before
+forming these gaps.
+
+\paragraph{Renewal-i.i.d. gap checks.}
+Under the model, the complete gaps are consecutive observations from one
+i.i.d. Palm gap law \(g\), up to the fixed endpoint deletions described in the
+retained-record protocol.  Basic visible-record checks therefore include:
+\[
+\widehat{\operatorname{Cov}}\{\varphi(\widehat G_j),\psi(\widehat G_{j+\ell})\}\approx0,
+\qquad \ell\ge1,
+\]
+for low lags and simple bounded functions such as indicators
+\(\mathbf1_{\{G=k\}}\), tail indicators \(\mathbf1_{\{G\ge k\}}\), and the
+identity truncated to a stable finite range.  They also include comparisons of
+early, middle, and late empirical gap distributions, empirical survival curves,
+and empirical hazards
+\[
+\widehat h_k
+=\frac{\#\{j:\widehat G_j=k\}}{\#\{j:\widehat G_j\ge k\}},
+\]
+on the range where the denominator is not small.  The fitted constrained
+D-MAP gap law used for comparison is obtained only from the retained quotient
+coordinates of \Cref{thm:toeplitz_image_inverse_duality} or, equivalently, the
+projected renewal law in \Cref{def:projected-plugin-word-law-report-main};
+one does not fit an unrelated renewal family and then reuse the confidence
+theorems below.
+
+\paragraph{Inclusion-product residuals.}
+For a finite lag pattern \(B=\{0=i_1<i_2<\cdots<i_m\}\), the renewal law
+implies
+\[
+\PP(B+t\subset\varXi)
+=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r},
+\]
+where \(u_n=\PP(n\in\varXi\mid0\in\varXi)\).  From the observed record define
+the sliding-window inclusion frequency
+\[
+\widehat p_N(B)
+=\frac{1}{N-i_m}\sum_{t=0}^{N-i_m-1}
+  \prod_{i\in B}A_{t+i},
+\]
+and let \(\widehat\rho_N\) and \(\widehat u_{n,N}\) be the corresponding
+retained empirical or projected renewal estimates used in the finite-record
+report.  The inclusion-product residual is
+\[
+\widehat R_N(B)
+=\widehat p_N(B)
+ -\widehat\rho_N\prod_{r=1}^{m-1}\widehat u_{i_{r+1}-i_r,N}.
+\]
+Systematic nonzero residuals over several small patterns \(B\) are direct
+visible evidence against the renewal product identity of
+\Cref{cor:renewal-principal-minor-word-law-main}.  The three-inclusion inverse
+uses only \(B=\{0\}\), \(\{0,1\}\), and \(\{0,2\}\), but the diagnostic should
+also include longer patterns, since a non-renewal binary process can match the
+first few inclusion probabilities while failing the product law for larger
+sets.
+
+\paragraph{Lag-covariance residuals.}
+The killed-leakage sampled-counter law has the single-tail covariance formula
+\[
+\gamma_n=\operatorname{Cov}(A_0,A_n)
+=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1 .
+\]
+After the quotient fit has supplied
+\((\widehat\rho_N,\widehat a_N,\widehat\lambda_N)\), compare the empirical
+lag covariances
+\[
+\widehat\gamma_{n,N}
+=\frac{1}{N-n}\sum_{t=0}^{N-n-1}
+  (A_t-\widehat\rho_N)(A_{t+n}-\widehat\rho_N)
+\]
+with
+\[
+\widehat\gamma^{\,\mathrm{mod}}_{n,N}
+=\widehat\rho_N(\widehat a_N-\widehat\rho_N)
+  \,\widehat\lambda_N^{\,n-1}.
+\]
+Equivalently, inspect the residuals
+\[
+\widehat C_N(n)
+=\widehat\gamma_{n,N}-\widehat\gamma^{\,\mathrm{mod}}_{n,N}
+\]
+for low and moderate lags \(n\).  A change of sign pattern, a second decay
+rate, or residuals large compared with the separated-batch uncertainty scale
+used later are visible-record failures of the single hidden-mode D-MAP
+structure.  At the exact \(1\)-dependence threshold the same check specializes
+to \(\widehat\gamma_{n,N}\approx0\) for \(n\ge2\), with the lag-two
+studentized interval of \Cref{cor:finite-record-lag-two-studentized-main}
+serving as the formal scalar version for \(n=2\).
+
+These diagnostics do not prove that the sampled-counter model is true.  They
+are falsification checks for the assumptions under which the later confidence
+reports are interpreted.  If the complete-gap renewal-i.i.d. checks,
+inclusion-product residuals, or lag-covariance residuals show a material and
+unexplained failure, the model-conditioned confidence reports in
+\Cref{thm:finite-record-inference-audit-main,thm:finite-record-quotient-delta-main,thm:e1-ideal-fixed-candidate-projection-main,thm:e2-reported-fixed-candidate-diagonal-main,thm:e3-canonical-dkw-monte-carlo-main}
+are invalid for that record and must be withheld rather than reported with
+their nominal conditional coverage.
 
 
 \begin{lemma}[Classical sampled-counter derivation of the D-MAP kernels]\label{lem:classical-counter-kernel-construction-main}
-The kernels in \Cref{ass:constrained-dmap-record-main} are exactly the
+The kernels in \Cref{ass:model-inference-contract-main} are exactly the
 one-step kernels of the following discrete sampled-counter protocol.  At the
 start of a sampling interval of length \(\Delta\tau\), the hidden state is
 either \(R\) or \(D\).  From \(R\), an independent attempt clock with rate
@@ -254,9 +371,9 @@ The main text below is organized around five paper-level theorem statements
 for this constrained D-MAP(2) subfamily.  Supporting lemmas, propositions, and
 corollaries are used only to prove or apply these five statements.
 
-\subsection{Main theorem map}\label{subsec:main-theorem-boundary}\label{subsec:model-validity-boundary}\label{subsec:four-theorem-blocks}
+\subsection{Main theorem map}\label{subsec:main-theorem-boundary}
 
-Under \Cref{ass:constrained-dmap-record-main}, the paper-level theorem chain is
+Under \Cref{ass:model-inference-contract-main}, the paper-level theorem chain is
 as follows.
 \begin{enumerate}[label=\textup{\Alph*.},leftmargin=2.5em,itemsep=0.35em]
 \item \Cref{thm:main-record-wrapper}: the constrained labelled kernels generate
@@ -280,9 +397,9 @@ fixed-candidate projection theorem;
 paper-level reported event at the manuscript candidate \(z_0=1/2\), using the printed
 full-rank certificate; and
 \Cref{thm:e3-canonical-dkw-monte-carlo-main} is Corollary~E3, the only finite-Monte-Carlo
-coverage transfer, with \(R_N=N\), \(\delta_N=N^{-2}\), and the DKW-inflated
-empirical quantile.  This is a fixed-candidate test, not a continuum diagonal
-confidence procedure.
+coverage transfer, with \(R_N=N\), \(\delta_N^{\rm MC}=N^{-2}\), and the
+DKW-inflated empirical quantile.  This is a fixed-candidate test, not a
+continuum diagonal confidence procedure.
 \end{enumerate}
 
 The proof dependencies are intentionally linear: Theorem~A supplies the renewal
@@ -310,7 +427,7 @@ Table~\ref{tab:notation-global} lists the recurring record-side symbols.
 \section{D-MAP setting and record-level observables}\label{sec:operational}
 
 We first consider only the stationary D-MAP record law of
-\Cref{ass:constrained-dmap-record-main}.  The hidden chain has two states, the
+\Cref{ass:model-inference-contract-main}.  The hidden chain has two states, the
 output alphabet is \(\{0,1\}\), and the visible output is the stationary
 two-sided binary process
 \[
@@ -384,7 +501,7 @@ record threshold in the main theorem chain is therefore the exact
 \toprule
 Regime & Output law & Distinguished threshold & Finite-record signature \\
 \midrule
-Constrained D-MAP of \Cref{ass:constrained-dmap-record-main} & Renewal process that is not finite-order Markov; nevertheless exact \(1\)-dependent at \(\lambda_{\rm hid}=0\).  The zero-run law is supported on all \(k\ge0\), hence every finite binary word is allowed; renewal inclusion products determine marked-set and word probabilities & Quotient threshold \(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) modulo \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\); labelled only under \Cref{ass:model-inference-contract-main} & Exact finite-window count variance at the \(1\)-dependence threshold; higher count laws from the finite-window generating polynomial; covariance, hazard, and Fano formulas for this D-MAP record law, with finite-record reporting governed by \Cref{ass:model-inference-contract-main} \\
+Constrained D-MAP of \Cref{ass:model-inference-contract-main} & Renewal process that is not finite-order Markov; nevertheless exact \(1\)-dependent at \(\lambda_{\rm hid}=0\).  The zero-run law is supported on all \(k\ge0\), hence every finite binary word is allowed; renewal inclusion products determine marked-set and word probabilities & Quotient threshold \(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) modulo \((\Gamma,\kappa_{\mathrm r})\sim(\kappa_{\mathrm r},\Gamma)\); labelled only under \Cref{ass:model-inference-contract-main} & Exact finite-window count variance at the \(1\)-dependence threshold; higher count laws from the finite-window generating polynomial; covariance, hazard, and Fano formulas for this D-MAP record law, with finite-record reporting governed by \Cref{ass:model-inference-contract-main} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -408,7 +525,7 @@ the labelled kernels \(T_0,T_1\) derived from the sampled-counter protocol of
 \Cref{lem:classical-counter-kernel-construction-main}, their stationary
 visible binary process, and statistics of that process.  The record-side rates
 \(\Gamma,\kappa_{\mathrm r}\) are the attempt and recovery rates of that
-classical counter; see \Cref{ass:constrained-dmap-record-main}. \\
+classical counter; see \Cref{ass:model-inference-contract-main}. \\
 \addlinespace[0.25ex]
 D-MAP parameters &
 \(\Delta\tau,\ \Gamma,\ \kappa_{\mathrm r}\) &
@@ -461,7 +578,7 @@ Three-inclusion inverse &
 J_\Phi,\ J_{\mathrm{root}},\ J_{\Gamma,\kappa}\\
 \Sigma_r,\ \Sigma_{\sigma},\ \Sigma_{\Gamma,\kappa}\end{gathered}\) &
 \(r_m=\PP(A_0=A_m=1)\) for \(m=0,1,2\), with \(r_0=\rho\).
-The inverse-map denominator is \(D=r_1-r_0^2=r_0(a-r_0)\).  The map
+The inverse-map denominator is \(\Delta_{\mathrm{inv}}=r_1-r_0^2=r_0(a-r_0)\).  The map
 \(\Phi\) sends the three inclusion coordinates to the symmetric survival
 coordinate vector \(\sigma_{\rm sym}=(p+s,ps)\).  At separated roots
 \(p\ne s\), equivalently
@@ -470,8 +587,10 @@ coordinate vector \(\sigma_{\rm sym}=(p+s,ps)\).  At separated roots
 \(J_{\mathrm{root}}\) is the chosen labelled-root Jacobian,
 \(J_{\Gamma,\kappa}\) is the inclusion-to-rate Jacobian, and
 \(\Sigma_r,\Sigma_{\sigma},\Sigma_{\Gamma,\kappa}\) are the CLT
-covariances before the inverse map, after \(\Phi\), and after the labelled-rate
-map. \\
+covariances before the inverse map, after \(\Phi\), and, only after an
+external branch label has been supplied, after the side-data labelled-rate
+map.  The visible-law inverse itself stops at
+\(\Phi(r)=(p+s,ps)\) and the unordered root set. \\
 \addlinespace[0.25ex]
 Finite-record covariance notation &
 \(\begin{gathered}
@@ -499,7 +618,7 @@ the deterministic rank threshold. \\
 \begin{definition}[Constrained D-MAP law used by Theorems A--E]\label{def:main-sampled-kernel-law}
 Let \(\mu_{\Gamma,\kappa_{\mathrm r},\Delta\tau}\) denote the stationary
 visible binary law generated by the kernel pair in
-\Cref{ass:constrained-dmap-record-main}.  Equivalently, that pair is
+\Cref{ass:model-inference-contract-main}.  Equivalently, that pair is
 \[
 \mathcal K(p,s)=
 \left(
@@ -546,8 +665,41 @@ limit, equivalently for
 \[
 g_k=p^k\bigl((1-p)(1+yk)-yp\bigr).
 \]
-The zero-run hazard \(h_k=\PP(G=k\mid G\ge k)\) is strictly increasing.  For
-every \(n\ge1\),
+Writing
+\[
+S_k=\PP(G\ge k),\qquad h_k=\PP(G=k\mid G\ge k)=g_k/S_k ,
+\]
+the survival tail, hazard, and hazard increment are explicit.  Off the
+equal-rate diagonal,
+\[
+S_k=
+\frac{\kappa_{\mathrm r}p^k-\Gamma s^k}{\kappa_{\mathrm r}-\Gamma},
+\qquad
+h_k=
+1-\frac{\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1}}
+        {\kappa_{\mathrm r}p^k-\Gamma s^k},
+\]
+and
+\[
+h_{k+1}-h_k
+=
+\frac{
+  \Gamma\kappa_{\mathrm r}\,
+  (p-s)^2\,p^k s^k
+}{
+  \bigl(\kappa_{\mathrm r}p^k-\Gamma s^k\bigr)
+  \bigl(\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1}\bigr)
+}>0 .
+\]
+On the equal-rate diagonal,
+\[
+S_k=p^k(1+yk),\qquad
+h_k=1-p-\frac{yp}{1+yk},
+\qquad
+h_{k+1}-h_k=
+\frac{y^2p}{(1+yk)(1+y(k+1))}>0 .
+\]
+Thus the zero-run hazard is strictly increasing.  For every \(n\ge1\),
 \[
 \gamma_n:=\operatorname{Cov}(A_0,A_n)
 =\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
@@ -568,7 +720,7 @@ with strictly increasing hazard, suppressed adjacent-one conditional
 probability, classical sub-Poisson count noise, a unique exact
 \(1\)-dependence threshold at the zero of the hidden eigenmode, and a
 three-inclusion inverse with
-\(D=r_1-r_0^2\ne0\), \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange
+\(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\), \(\Gamma\leftrightarrow\kappa_{\mathrm r}\) exchange
 duality, no separated labelled-rate chart at \(p=s\), and an identifiable
 diagonal common rate there.  The associated Section~\ref{sec:records}
 supporting formulas give the renewal inclusion products, finite
@@ -601,17 +753,20 @@ or partial-observation literatures.  It is to identify, for each theorem, the
 object already covered by recent work where available, the older result that
 explains the classical background, and the narrower increment proved here for
 the constrained sampled-counter D-MAP record.
-A literature audit was run on 2026-07-04 in arXiv, Google Scholar, MathSciNet,
-zbMATH Open, Scopus, and Web of Science, using title/abstract and keyword
-searches for the specific D-MAP record observable together with renewal-binary
-laws, MAP/D-MAP representation theory, quotient identifiability, and projection
-inference at constrained points.  The paper of
+The reproducible search protocol, inclusion rules, exclusion rules, and
+theorem-level claim ledger are recorded in
+\Cref{app:literature-search-protocol-main}.  The table below uses that ledger:
+the recent-comparator column states an exact theorem-level analogue only when
+the searched item proves a result for the same mathematical object or for the
+same limiting step used by the paper; otherwise it states that no exact
+2021--2026 analogue was located and moves broader neighbours to the overlap
+column as contextual comparators.  The paper of
 Mart\'inez--Bisker--Horowitz--Parrondo
 \cite{MartinezBiskerHorowitzParrondo2019InferringBrokenDetailedBalance}
 is retained as a motivation source for inference from partial observables
 without visible currents, independent of publication date.
 
-\paragraph{Nearest theorem-level comparators.}
+\paragraph{Search-led theorem-level comparators.}
 For Theorem~A the closest theorem-level comparator is Zamparo's stationary
 renewal-binary construction \cite[Prop.~2.1 and Thm.~4.3]%
 {Zamparo2022RenewalBinary}, not the broader hidden-Markov literature.  The
@@ -621,7 +776,8 @@ model-specific identification of the sampled-counter D-MAP as that renewal
 record, together with the closed hazard, covariance-tail, and \(1\)-dependence
 threshold formulas.
 
-For Theorem~B no exact last-five-years analogue is known: recent MAP work
+For Theorem~B no exact 2021--2026 theorem-level analogue was located under
+the protocol of \Cref{app:literature-search-protocol-main}: recent MAP work
 closest to the algebraic object studies structured-MAP moment systems rather
 than visible-renewal quotient inversion.  The structured-MAP moment paper of
 Asanjarani--Hautphenne--Nazarathy
@@ -655,34 +811,36 @@ The present increment is the D-MAP reward identity for
 complete-cycle covariance estimator, with the off-diagonal covariance printed
 as gap-law finite/double sums in
 \Cref{lem:off-diagonal-inclusion-covariance-gap-sums-main} and the diagonal
-specialization printed in \Cref{lem:dmap-diagonal-covariance-finite-sum-main}.
+specialization printed in \Cref{prop:computable-diagonal-covariance-main}.
 
-For Theorem~D the nearest theorem-level object is the finite-dimensional
+For Theorem~D no exact recent theorem was located for the finite-dimensional
 delta-method transport of the Theorem~C Gaussian inclusion vector through the
-quotient map \(\Phi(r)=(p+s,ps)\).  Recent constrained-HMM and coarse-graining
-papers \cite{TancrediEtAl2024ConstrainedHMM,HilderSharma2024CoarseGraining}
-are useful context for constrained hidden-state inference, but they are not
-the exact inverse map used here.  The paper's increment is the explicit
-three-inclusion derivative bookkeeping and the decision to report unordered
-survival roots rather than labelled hidden rates.
+quotient map \(\Phi(r)=(p+s,ps)\).  Zamparo's renewal-binary CLT is the exact
+recent Gaussian input, while recent constrained-HMM and coarse-graining papers
+\cite{TancrediEtAl2024ConstrainedHMM,HilderSharma2024CoarseGraining} are
+useful context for constrained hidden-state inference but do not contain the
+inverse map used here.  The paper's increment is the explicit three-inclusion
+derivative bookkeeping and the decision to report unordered survival roots
+rather than labelled hidden rates.
 
-For Theorem~E the nearest theorem-level comparators are the boundary and
-projection-testing results: Andrews' boundary asymptotics and boundary tests
-\cite{Andrews1999BoundaryEstimation,Andrews2001BoundaryTesting}, the
-boundary-bootstrap result of Cavaliere--Nielsen--Pedersen--Rahbek
-\cite{CavaliereNielsenPedersenRahbek2022BoundaryBootstrap}, and
+For Theorem~E no exact 2021--2026 theorem-level analogue was located for the
+finite-certificate projected-Gaussian acceptance rule for this D-MAP quotient.
 Fang--Seo's projection-testing framework for cone-shaped restrictions
-\cite{FangSeo2021ProjectionTests}.  Shapiro, Chernoff, Geyer, Self--Liang,
-Fang--Santos, Wang--Ye--Chen, and Li remain the correct projection,
-cone-limit, directional-delta, and recent nonconvex-boundary background
+\cite{FangSeo2021ProjectionTests} is the exact recent comparator for the
+projection-limit component, not for the certificate.  Shapiro, Chernoff,
+Geyer, Self--Liang, Fang--Santos, Andrews, Cavaliere--Nielsen--Pedersen--Rahbek,
+Wang--Ye--Chen, and Li remain the correct projection, cone-limit,
+directional-delta, boundary, bootstrap, and recent nonconvex-boundary
+background
 \cite{Shapiro1987MetricProjection,Chernoff1954LikelihoodRatio,
 Geyer1994ConstrainedM,SelfLiang1987NonstandardLRT,
-FangSantos2019DirectionalDifferentiability,WangYeChen2024NonconvexBoundary,
-Li2025ProximalBootstrap}.  The present theorem is not a general boundary
-bootstrap or likelihood-ratio theorem: it is a fixed-candidate,
-finite-certificate projected-Gaussian acceptance theorem for the exchange
-diagonal of this sampled-counter quotient, with the manuscript certificate
-printed only at \(z=1/2\).
+FangSantos2019DirectionalDifferentiability,Andrews1999BoundaryEstimation,
+Andrews2001BoundaryTesting,CavaliereNielsenPedersenRahbek2022BoundaryBootstrap,
+WangYeChen2024NonconvexBoundary,Li2025ProximalBootstrap}.  The present theorem
+is not a general boundary bootstrap or likelihood-ratio theorem: it is a
+fixed-candidate, finite-certificate projected-Gaussian acceptance theorem for
+the exchange diagonal of this sampled-counter quotient, with the manuscript
+certificate printed only at \(z=1/2\).
 
 \begingroup
 \scriptsize
@@ -694,19 +852,21 @@ printed only at \(z=1/2\).
 >{\raggedright\arraybackslash}p{0.27\textwidth}}
 \caption{Theorem-by-theorem comparison, separating exact recent analogues
 from contextual recent comparators and older antecedents.  The second column
-states explicitly when no exact 2021--2026 theorem-level analogue is known;
-the third column names older background separately and does not count it as a
-last-five-years comparator.}
+lists only exact 2021--2026 theorem-level analogues, or states that none was
+located under the protocol in
+\Cref{app:literature-search-protocol-main}; contextual recent papers appear
+only in the overlap/increment column.  The third column names older background
+separately and does not count it as a last-five-years comparator.}
 \label{tab:theorem-comparison}\\
 \toprule
-Paper theorem & Closest 2021--2026 comparator & Foundational antecedent
+Paper theorem & Exact 2021--2026 theorem-level analogue & Foundational antecedent
 \((<2021)\) & Overlap and new increment in this paper \\
 \midrule
 \endfirsthead
 \caption[]{Theorem-by-theorem comparison with exact/contextual separation
 (continued).}\\
 \toprule
-Paper theorem & Closest 2021--2026 comparator & Foundational antecedent
+Paper theorem & Exact 2021--2026 theorem-level analogue & Foundational antecedent
 \((<2021)\) & Overlap and new increment in this paper \\
 \midrule
 \endhead
@@ -718,10 +878,8 @@ Paper theorem & Closest 2021--2026 comparator & Foundational antecedent
 \Cref{thm:main-record-wrapper} (Theorem~A; numbered Theorem~2.3). &
 Closest exact recent analogue: Zamparo's stationary renewal-binary
 finite-dimensional distribution result, Proposition~2.1 of
-\cite{Zamparo2022RenewalBinary}.  Contextual recent MAP comparator:
-Asanjarani--Hautphenne--Nazarathy's structured-MAP moment identities
-\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments}; those moments
-do not give this full visible renewal law. &
+\cite{Zamparo2022RenewalBinary}.  Zamparo's Theorem~4.3 is also the exact
+recent renewal-binary CLT comparator used later for the Gaussian input. &
 Classical hidden-function and finite-state Markov-process antecedents include
 Blackwell--Koopmans \cite{BlackwellKoopmans1957}, Gilbert
 \cite{Gilbert1959}, and standard hidden-Markov-process background
@@ -737,17 +895,15 @@ strictly increasing zero-run hazard, hidden-mode covariance tail, the exact
 \(1\)-dependence threshold \(\lambda_{\rm hid}=0\), and non-finite-order
 Markovness.  The Fano, spectral, finite-window count, inclusion-product, and
 word formulas remain supporting Section~3 population formulas rather than
-separate claims inside Theorem~A. \\
+separate claims inside Theorem~A.  Asanjarani--Hautphenne--Nazarathy
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments} is contextual
+for structured-MAP moment calculations but does not prove the stationary
+visible renewal law or the D-MAP hazard and \(1\)-dependence formulas. \\
 \addlinespace
 \Cref{thm:toeplitz_image_inverse_duality} (Theorem~B; numbered Theorem~3.22). &
-No exact last-five-years analogue is known for the visible-renewal quotient
-inverse \( (r_0,r_1,r_2)\mapsto (p+s,ps)\).  Closest contextual recent MAP
-comparator: Asanjarani--Hautphenne--Nazarathy
-\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments}, which studies
-moment properties of structured MAP classes rather than quotient
-identifiability from binary inclusion probabilities.  Bauer--Seifert--van der
-Meer \cite{BauerSeifertVanderMeer2025Stroboscopic} is contextual for sampled
-visible-data reconstruction, not an exact MAP quotient theorem. &
+No exact 2021--2026 analogue was located for the visible-renewal quotient
+inverse \( (r_0,r_1,r_2)\mapsto (p+s,ps)\) under the protocol of
+\Cref{app:literature-search-protocol-main}. &
 The MAP2 nonidentifiability theorem of Ram\'irez-Cobo--Lillo--Wiper
 \cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability} is a foundational
 antecedent only.  O'Cinneide's phase-type nonuniqueness result
@@ -762,22 +918,22 @@ inverse used here.  The foundational MAP2 and phase-type results record why
 labelled or matrix representations should not be expected to be identifiable
 in general.
 Theorem~B solves a deliberately smaller quotient problem.  For this triangular
-sampled-counter D-MAP subfamily and \(D=r_1-r_0^2\ne0\), three visible
+sampled-counter D-MAP subfamily and \(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\), three visible
 inclusions \((r_0,r_1,r_2)\) recover \((p+s,ps)\), the unordered survival-root
 pair \(\{p,s\}\), and hence the complete visible renewal word law.  The theorem
 also states the non-increment: it refuses to identify ordered labelled hidden
 rates without side data, so it is compatible with MAP weak-equivalence and
-nonidentifiability results. \\
+nonidentifiability results.  Asanjarani--Hautphenne--Nazarathy
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments} is a contextual
+recent MAP-moment comparator, and Bauer--Seifert--van der Meer
+\cite{BauerSeifertVanderMeer2025Stroboscopic} is contextual for sampled
+visible-data reconstruction; neither proves this quotient inverse. \\
 \addlinespace
 \Cref{thm:finite-record-inference-audit-main} (Theorem~C). &
-Closest exact recent analogue for the Gaussian input: Zamparo's
-renewal-binary CLT, Theorem~4.3 of \cite{Zamparo2022RenewalBinary}.  Direct
-recent MAP-moment comparator: Asanjarani--Hautphenne--Nazarathy
-\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments}; it addresses
-structured-MAP moment properties, not the retained complete-cycle covariance
-estimator.  Harunari--Dutta--Polettini--Rold\'an
-\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions} is contextual for
-visible-transition inference. &
+Exact recent analogue for the Gaussian input: Zamparo's renewal-binary CLT,
+Theorem~4.3 of \cite{Zamparo2022RenewalBinary}.  No exact recent analogue was
+located for the retained complete-cycle covariance estimator and reporting
+gate. &
 Classical regenerative and simulation-output antecedents include
 Asmussen--Glynn \cite{AsmussenGlynn2007} and batch-means variance estimation
 \cite{FlegalJones2010BatchMeansSpectral}. &
@@ -800,7 +956,11 @@ implicit simulation quantity: off the diagonal it is the gap-law
 finite/double-sum formula
 \Cref{lem:off-diagonal-inclusion-covariance-gap-sums-main}, while on the
 diagonal it is the closed computable matrix
-\Cref{lem:dmap-diagonal-covariance-finite-sum-main}.  Harunari--Dutta--Polettini--Rold\'an
+\Cref{prop:computable-diagonal-covariance-main}.
+Asanjarani--Hautphenne--Nazarathy
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments} is a direct
+recent MAP-moment context paper, but it does not give the retained
+complete-cycle covariance estimator.  Harunari--Dutta--Polettini--Rold\'an
 \cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions} is a close
 physics-math neighbour because it asks what can be inferred from statistics of
 a few visible transitions of an otherwise hidden Markov dynamics.  The overlap
@@ -810,20 +970,16 @@ coordinates, a concrete regenerative covariance estimator, and an explicit
 reporting gate for finite records. \\
 \addlinespace
 \Cref{thm:finite-record-quotient-delta-main} (Theorem~D). &
-No exact last-five-years analogue is known for the delta-method transport of
-this explicit visible-renewal quotient inverse.  Exact recent Gaussian input:
-Zamparo's renewal-binary CLT, Theorem~4.3
-\cite{Zamparo2022RenewalBinary}.  Contextual recent constrained-inference
-comparators include Tancredi--Feltrin--Sardo Infirri--Toso--Vollmar--Hugel--Baiesi
-\cite{TancrediEtAl2024ConstrainedHMM} and Hilder--Sharma
-\cite{HilderSharma2024CoarseGraining}; they do not contain the map
-\(\Phi(r)=(p+s,ps)\). &
+No exact 2021--2026 analogue was located for the delta-method transport of
+this explicit visible-renewal quotient inverse.  Zamparo's renewal-binary
+CLT, Theorem~4.3 of \cite{Zamparo2022RenewalBinary}, is an exact recent input
+for the Gaussian vector but not an analogue for the quotient transport map. &
 The foundational antecedent is the finite-dimensional delta-method tradition
 and the older MAP/aggregated-chain identifiability literature
 \cite{Ryden1996Aggregated,BodrogHeindlHorvathTelek2008MAP2Canonical}. &
 The overlap is the Gaussian limit for the retained inclusion vector \(r\).  The
 external theorem supplies the record-level Gaussian input; the standard delta
-method supplies transport through a smooth map where \(D=r_1-r_0^2\ne0\).
+method supplies transport through a smooth map where \(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\).
 The recent constrained-HMM and coarse-graining papers are comparators for
 constrained hidden-state inference, not for this paper's explicit quotient
 formula.  Theorem~D is the fixed-family push-forward of Theorem~C through the
@@ -832,21 +988,20 @@ quotient inverse \(\Phi(r)=(p+s,ps)\).  The new increment is the derivative
 bookkeeping for this constrained three-inclusion quotient and the estimand
 discipline: separated roots are reported as the unordered survival-root pair
 and unordered numerical rates.  Ordered labelled-rate Wald reporting is not a
-visible-record estimand and appears only in the separate side-data branch. \\
+visible-record estimand and appears only in the separate side-data branch.
+Recent constrained-inference papers such as Tancredi--Feltrin--Sardo
+Infirri--Toso--Vollmar--Hugel--Baiesi
+\cite{TancrediEtAl2024ConstrainedHMM} and Hilder--Sharma
+\cite{HilderSharma2024CoarseGraining} are contextual only because they do not
+contain the map \(\Phi(r)=(p+s,ps)\). \\
 \addlinespace
 \Cref{thm:e1-ideal-fixed-candidate-projection-main,thm:e2-reported-fixed-candidate-diagonal-main,thm:e3-canonical-dkw-monte-carlo-main}
 (Theorem~E1 and Corollaries~E2--E3). &
-Closest recent projection theorem: Fang--Seo's convex-cone projection tests
-\cite{FangSeo2021ProjectionTests}.  Recent boundary/context comparators:
-Wang--Ye--Chen's likelihood theory for nonconvex boundary constraints
-\cite{WangYeChen2024NonconvexBoundary} and Li's proximal bootstrap for
-possibly nonsmooth or nonconvex constrained estimators
-\cite{Li2025ProximalBootstrap}.  These are theorem-level comparators for
-projection or boundary inference, but none is an exact analogue of this
-finite-certificate projected-Gaussian acceptance rule for a D-MAP quotient.
-Partial-observation Markov-network papers
-\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,ErtelSeifert2024BlurredTransitions}
-are contextual only. &
+No exact 2021--2026 analogue was located for this finite-certificate
+projected-Gaussian acceptance rule for a D-MAP quotient.  Fang--Seo's
+convex-cone projection tests \cite{FangSeo2021ProjectionTests} are the exact
+recent theorem-level comparator for the projection-limit step, not for the
+D-MAP certificate itself. &
 Shapiro's metric-projection differentiability theorem
 \cite{Shapiro1987MetricProjection}, Chernoff's tangent-cone likelihood limit
 \cite{Chernoff1954LikelihoodRatio}, Geyer's constrained-\(M\)-estimation
@@ -865,6 +1020,13 @@ visible transition information.  In this paper the set is the exchange-diagonal
 feasible quotient in symmetric-root coordinates, the local cone at \(p=s=z\)
 is \(\{h_2\le z h_1\}\), and the Markov-network comparison is thematic rather
 than a claim that the same estimator is being used.
+Wang--Ye--Chen's likelihood theory for nonconvex boundary constraints
+\cite{WangYeChen2024NonconvexBoundary} and Li's proximal bootstrap for
+possibly nonsmooth or nonconvex constrained estimators
+\cite{Li2025ProximalBootstrap} are recent boundary/context comparators, and
+partial-observation Markov-network papers
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions,ErtelSeifert2024BlurredTransitions}
+are contextual only.
 Theorem~E1 supplies the ideal fixed-candidate projected-Gaussian limit after
 Theorem~D has produced the D-MAP covariance in
 \(\sigma=(p+s,ps)\).  Corollary~E2 specializes it to the manuscript-certified
@@ -893,9 +1055,165 @@ foundational antecedents, not substitutes for the 2021--2026 row comparators.
 \paragraph{Supplementary fixed-window comparator.}
 The fixed-window continuous intra-bin recovery comparator is given in the
 supplementary material and is auxiliary to the standing constrained D-MAP record
-model of \Cref{ass:constrained-dmap-record-main}.
+model of \Cref{ass:model-inference-contract-main}.
 
 \appendix
+
+\section{Literature Search Protocol for \texorpdfstring{\Cref{sec:theorem-led-comparison}}{Section 5}}\label{app:literature-search-protocol-main}
+
+This appendix makes the comparison protocol behind
+\Cref{tab:theorem-comparison} reproducible.  It is not a priority claim over
+the broad renewal, MAP, HMM, projection, or boundary-inference literatures.
+It records the narrower rule used in the table: a recent paper enters the
+second column only when it contains a theorem, proposition, lemma, or
+corollary for the same mathematical object as the corresponding row, or for
+the exact limiting step imported by that row.
+
+\paragraph{Databases and fields.}
+The frozen search used for \Cref{tab:theorem-comparison} was run on
+2026-07-04 in arXiv, Google Scholar, MathSciNet, zbMATH Open, Scopus, and Web
+of Science.  For arXiv the search field was all metadata plus abstract.  For
+Google Scholar the search was all indexed text, with title-phrase searches
+repeated when a candidate title was known.  For MathSciNet and zbMATH Open the
+search was title, author, review/abstract, MSC/keyword, and reference metadata
+where available.  For Scopus and Web of Science the search was
+title/abstract/keyword, with cited-reference expansion for the retained
+foundational antecedents.  Hyphenation variants were searched together:
+\(\mathrm{D}\)-MAP, DMAP, discrete MAP, discrete-time MAP, Markovian arrival
+process, and Markov-modulated arrival process.  Formula searches were repeated
+with and without subscripts, for example \(r_2-r_0^2\), ``r2-r0\verb|^|2'',
+``visible renewal quotient'', and ``binary inclusion probabilities''.
+
+\paragraph{Search strings.}
+The following Boolean families were used.  Database-specific syntax was the
+literal analogue of the displayed strings: quotation marks were used for
+phrases, \texttt{OR} grouped synonyms, and \texttt{AND} intersected concepts.
+\begin{enumerate}[label=S\arabic*.,leftmargin=2.8em]
+\item \texttt{("stationary renewal" OR "renewal binary" OR "binary renewal process" OR "stationary binary renewal") AND ("finite-dimensional" OR "cylinder probabilities" OR CLT OR "central limit theorem")}
+\item \texttt{("Markovian arrival process" OR "discrete Markovian arrival process" OR "D-MAP" OR DMAP OR MAP2) AND (identifiability OR nonidentifiability OR "weak equivalence" OR "canonical form")}
+\item \texttt{("Markovian arrival process" OR "D-MAP" OR DMAP OR MAP2) AND (moment OR moments OR covariance OR "second order") AND (structured OR two-state OR rational)}
+\item \texttt{("visible renewal" OR "binary inclusion" OR "inclusion probabilities" OR "renewal quotient" OR "sampled counter") AND (inverse OR identifiability OR quotient OR "delta method")}
+\item \texttt{("projection" OR "metric projection" OR "cone projection") AND ("shape restriction" OR "shape restrictions" OR boundary OR constrained) AND (test OR inference OR asymptotic OR bootstrap)}
+\item \texttt{("nonconvex boundary" OR "boundary constraints" OR "proximal bootstrap" OR "directionally differentiable") AND (likelihood OR estimator OR inference)}
+\item \texttt{("visible transition" OR "partial observation" OR "coarse graining" OR "hidden Markov" OR "Markov network") AND (inference OR reconstruction OR thermodynamic OR "broken detailed balance")}
+\item \texttt{("r2-r0\textasciicircum 2" OR "r\_2-r\_0\textasciicircum 2" OR "retained complete-cycle" OR "finite-certificate projected Gaussian" OR "sampled-counter D-MAP")}
+\end{enumerate}
+
+\paragraph{Inclusion and exclusion criteria.}
+A paper was eligible for the recent-comparator column only if it was dated
+2021--2026 and contained a stated theorem-level result whose hypotheses and
+conclusion matched the row object after only notational translation.  For
+Theorem~A this means a stationary renewal-binary finite-dimensional law or
+renewal-binary CLT.  For Theorem~B it means an inverse theorem from visible
+binary inclusion probabilities, or an algebraically equivalent renewal
+quotient, to \((p+s,ps)\) or the unordered survival roots.  For Theorem~C it
+means either the renewal-binary Gaussian input or the retained complete-cycle
+covariance estimator and reporting gate.  For Theorem~D it means a
+delta-method theorem for the explicit quotient
+\(\Phi(r)=(p+s,ps)\) or an equivalent visible-renewal inverse.  For
+Theorem~E it means the finite-certificate projected-Gaussian acceptance rule
+for a D-MAP quotient, or the projection-limit theorem used as a component of
+that rule.  Foundational antecedents before 2021 were retained only in the
+third column.
+
+Items were excluded from the recent-comparator column, but could still be
+listed as contextual papers in the overlap column, when they addressed only
+one of the following broader topics: generic HMM inference, generic MAP
+moment calculation without the visible-renewal quotient, generic
+coarse-graining or thermodynamic inference from partial observations, generic
+boundary or bootstrap theory without the D-MAP feasible set, or representation
+nonuniqueness without the three-inclusion inverse.  This is why several recent
+papers remain cited in \Cref{tab:theorem-comparison} but are not counted as
+exact analogues.
+
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
+\renewcommand{\arraystretch}{1.14}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.13\textwidth}
+>{\raggedright\arraybackslash}p{0.17\textwidth}
+>{\raggedright\arraybackslash}p{0.24\textwidth}
+>{\raggedright\arraybackslash}p{0.36\textwidth}}
+\caption{Search-led theorem-level claim ledger for the comparison table.  The
+last column is the exact claim used in \Cref{tab:theorem-comparison}.}
+\label{tab:literature-search-ledger-main}\\
+\toprule
+Paper result & Search families & Included exact recent theorem-level item
+& Exact comparison claim made in \Cref{tab:theorem-comparison}\\
+\midrule
+\endfirsthead
+\caption[]{Search-led theorem-level claim ledger (continued).}\\
+\toprule
+Paper result & Search families & Included exact recent theorem-level item
+& Exact comparison claim made in \Cref{tab:theorem-comparison}\\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\emph{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Theorem~A, constrained sampled-counter D-MAP record law &
+S1, S2, S3, S8 &
+Zamparo's stationary renewal-binary construction
+\cite[Prop.~2.1]{Zamparo2022RenewalBinary}; Zamparo's renewal-binary CLT
+\cite[Thm.~4.3]{Zamparo2022RenewalBinary} for the Gaussian component used
+later. &
+There is an exact recent theorem-level analogue for the renewal-binary
+finite-dimensional law and CLT component.  No located recent theorem also
+derives that law from the triangular sampled-counter D-MAP kernels or gives
+the paper's closed hazard, hidden-mode covariance-tail, and exact
+\(1\)-dependence threshold formulas.  Structured-MAP moment papers, including
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments}, are contextual
+for MAP moments only. \\
+\addlinespace
+Theorem~B, quotient inverse from \((r_0,r_1,r_2)\) &
+S2, S3, S4, S8 &
+None located in 2021--2026. &
+No exact recent analogue was located for the visible-renewal quotient inverse
+\((r_0,r_1,r_2)\mapsto(p+s,ps)\), the cancellation
+\((r_2-r_0^2)/(r_1-r_0^2)=\lambda_{\rm hid}\), or the recovery of the
+unordered survival-root pair from three binary inclusion probabilities.
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments} and
+\cite{BauerSeifertVanderMeer2025Stroboscopic} are contextual comparators, not
+exact quotient theorems. \\
+\addlinespace
+Theorem~C, retained-record inclusion CLT and covariance reporting &
+S1, S3, S4, S8 &
+Zamparo's renewal-binary CLT
+\cite[Thm.~4.3]{Zamparo2022RenewalBinary} for the Gaussian input; no exact
+recent theorem located for the retained complete-cycle covariance estimator
+and reporting gate. &
+The exact recent analogue is only the renewal-binary CLT input.  The paper's
+additional D-MAP complete-cycle reward identity, off-diagonal gap-sum
+covariance formula, separated-batch covariance estimator, and retained-record
+reporting event were not located as a 2021--2026 theorem-level analogue.
+\cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments} and
+\cite{HarunariDuttaPolettiniRoldan2022VisibleTransitions} are contextual. \\
+\addlinespace
+Theorem~D, quotient delta method &
+S2, S4, S8 &
+None located in 2021--2026 for the quotient transport map; Zamparo's
+\cite[Thm.~4.3]{Zamparo2022RenewalBinary} remains the exact recent Gaussian
+input. &
+No exact recent analogue was located for the delta-method transport through
+the explicit visible-renewal quotient \(\Phi(r)=(p+s,ps)\).  Recent
+constrained-HMM and coarse-graining papers are contextual because they do not
+contain this quotient map or the unordered-root estimand discipline. \\
+\addlinespace
+Theorem~E1 and Corollaries~E2--E3, projected-Gaussian fixed-candidate rule &
+S5, S6, S7, S8 &
+Fang--Seo's convex-cone projection tests
+\cite{FangSeo2021ProjectionTests} for the projection-limit component; none
+located for the finite-certificate D-MAP acceptance rule. &
+No exact recent analogue was located for the finite-certificate
+projected-Gaussian acceptance rule for the D-MAP quotient.  Fang--Seo is the
+exact recent theorem-level comparator for the projection-limit step only.
+Wang--Ye--Chen \cite{WangYeChen2024NonconvexBoundary}, Li
+\cite{Li2025ProximalBootstrap}, and partial-observation Markov-network papers
+are contextual rather than exact analogues of the certified D-MAP procedure. \\
+\end{longtable}
+\endgroup
 
 \input{app_finite_record_tools}
 

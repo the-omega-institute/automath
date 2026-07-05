@@ -151,7 +151,229 @@ with \eqref{eq:regenerative-boundary-covariance-main} and
 which is \eqref{eq:regenerative-separated-batch-covariance-main}.
 \end{proof}
 
-\begin{proposition}[Standard complete-cycle and separated-batch facts]\label{lem:local-window-regenerative-decomposition-main}\label{prop:generic-complete-cycle-regenerative-clt-main}\label{lem:calendar-stopped-batch-cov-main}\label{lem:separated-batch-covariance-estimator-main}\label{lem:fixed-low-cycle-event-main}\label{lem:uniform-calendar-block-length-main}
+\begin{proposition}[Calendar-stopped separated batches with plug-in centering]\label{prop:calendar-stopped-separated-batch-plugin-main}
+Let \((G_j)_{j\ge0}\) be i.i.d. nonnegative integer-valued gaps with
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\), put
+\(L_j=G_j+1\), \(\mu=\EE L_0\), and
+\[
+S_k=\sum_{j=0}^{k-1}L_j,\qquad
+K_N=\max\{k:S_k<N\}.
+\]
+Fix \(m\ge0\), \(d\ge1\), and
+\[
+Y_j=f(G_j,\ldots,G_{j+m})\in\RR^d,\qquad
+\EE Y_j=0,
+\]
+where
+\[
+\|f(g_0,\ldots,g_m)\|\le C_f\left(1+\sum_{i=0}^m g_i\right).
+\]
+Let
+\[
+\mathcal T_m=\Var(Y_0)+
+\sum_{h=1}^{m}\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+For \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), set
+\(d_N=b_N+m\) and
+\[
+I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j .
+\]
+Fix an integer \(q\ge0\), representing the fixed terminal endpoint and
+look-ahead deletion.  The all-complete-cycle stopped batch count is
+\[
+M_N=\max\{M\ge0:\ (M-1)d_N+b_N-1+m+q\le K_N-1\},
+\]
+with \(M_N=0\) if the set is empty.  On \(M_N\ge2\), define
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) and
+\[
+\widehat\Sigma_N^{Y}
+=
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
+(B_{\ell,N}-\bar B_N)^\top .
+\]
+Then \(M_N\ge2\) with probability tending to one and, with the harmless
+auxiliary definition \(\widehat\Sigma_N^{Y}=0_{d\times d}\) on \(M_N<2\),
+\begin{equation}\label{eq:calendar-stopped-separated-batch-rate-main}
+\left\|\widehat\Sigma_N^{Y}-\frac{\mathcal T_m}{\mu}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+
+Moreover, let \(\Delta_N=O_{\PP}(N^{-1/2})\) be an \(\RR^d\)-valued
+finite-record plug-in error and set
+\[
+\widehat Y_j=Y_j-\Delta_N L_j,\qquad
+\widehat B_{\ell,N}=\sum_{j\in I_{\ell,N}}\widehat Y_j,\qquad
+\overline{\widehat B}_N=M_N^{-1}\sum_{\ell=1}^{M_N}\widehat B_{\ell,N}.
+\]
+The mean \(\overline{\widehat B}_N\) is used only on \(M_N\ge2\).
+Then
+\begin{equation}\label{eq:calendar-stopped-plugin-block-main}
+\max_{1\le\ell\le M_N}
+\left\|\widehat B_{\ell,N}-B_{\ell,N}\right\|
+=O_{\PP}(b_NN^{-1/2})
+\end{equation}
+and the Algorithm~1 covariance object with plug-in rewards satisfies
+\begin{equation}\label{eq:calendar-stopped-plugin-covariance-rate-main}
+\left\|
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)^\top
+-\frac{\mathcal T_m}{\mu}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right),
+\end{equation}
+again with the auxiliary zero completion on \(M_N<2\).
+\end{proposition}
+
+\begin{proof}
+First record the two renewal bounds used below.  Since \(L_0\) has an
+exponential moment, the renewal central limit theorem gives
+\begin{equation}\label{eq:calendar-stopped-k-rate-main}
+K_N=\frac{N}{\mu}+O_{\PP}(\sqrt N),
+\qquad
+\frac{K_N}{N}=\frac1\mu+O_{\PP}(N^{-1/2}).
+\end{equation}
+The same exponential moment gives the maximal-cycle estimate
+\begin{equation}\label{eq:calendar-stopped-max-cycle-main}
+\max_{0\le j\le K_N+q+m+1}L_j=O_{\PP}(\log N).
+\end{equation}
+Indeed, for \(C_0>\mu^{-1}\),
+\[
+\PP\!\left(\max_{0\le j\le K_N+q+m+1}L_j>a\log N\right)
+\le \PP(K_N>C_0N)
+ +(C_0N+q+m+2)\PP(L_0>a\log N),
+\]
+and the right side tends to zero for \(a\) large enough.  Fixed endpoint or
+look-ahead deletions therefore remove only \(O(1)\) cycles and at most
+\(O_{\PP}(\log N)\) calendar observations.  For the separated-batch
+covariance they enter only through the fixed integer \(q\) in the definition
+of \(M_N\).
+
+The stopped batch count obeys
+\begin{equation}\label{eq:calendar-stopped-batch-count-main}
+M_N=\frac{K_N}{d_N}+O(1)
+=\frac{N}{\mu d_N}+O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right).
+\end{equation}
+Consequently \(M_N\asymp_{\PP}N/b_N\), so \(M_N\ge2\) with probability
+tending to one and \(M_N^{-1/2}=O_{\PP}(\sqrt{b_N/N})\).
+
+The retained batches are independent.  More explicitly, \(B_{\ell,N}\)
+depends only on
+\[
+G_{(\ell-1)d_N},\ldots,G_{(\ell-1)d_N+b_N-1+m},
+\]
+and these gap sets are disjoint for different \(\ell\).  Let
+\[
+V_N=b_N^{-1}\Var(B_{1,N}),\qquad
+X_{\ell,N}=b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top
+-\EE(B_{\ell,N}B_{\ell,N}^\top)\}.
+\]
+As in \Cref{thm:regenerative-separated-batch-covariance-main},
+\begin{equation}\label{eq:calendar-stopped-batch-variance-main}
+V_N=\mathcal T_m+O(b_N^{-1}),\qquad
+\EE\|B_{\ell,N}\|^4\le Cb_N^2,\qquad
+\EE\|X_{\ell,N}\|_{\operatorname F}^2\le C .
+\end{equation}
+
+The point needing care is that \(M_N\) is random and is determined by the same
+gaps used in the rewards.  Instead of replacing it by a deterministic prefix,
+control all prefixes up to the largest count reached with high probability.
+With \(\mathcal F_{\ell,N}\) the sigma-field generated by the first \(\ell\)
+batch blocks, \(S_{r,N}:=\sum_{\ell=1}^rX_{\ell,N}\) is a matrix-valued
+martingale.  On the high-probability event \(\{M_N\le C_1N/b_N\}\), Doob's
+\(L^2\) inequality and \eqref{eq:calendar-stopped-batch-variance-main} give
+\[
+\EE\max_{r\le C_1N/b_N}\|S_{r,N}\|_{\operatorname F}^2
+\le C\,\frac{N}{b_N}.
+\]
+Combining this with
+\(\PP(M_N<c_1N/b_N)\to0\) from
+\eqref{eq:calendar-stopped-batch-count-main} yields
+\begin{equation}\label{eq:calendar-stopped-random-prefix-fluctuation-main}
+\left\|
+\frac1{M_N}\sum_{\ell=1}^{M_N}X_{\ell,N}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+Thus
+\[
+\frac1{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
+=V_N+O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right).
+\]
+The empirical mean subtraction is of the same or smaller order.  The stopped
+martingale \(R_{r,N}=\sum_{\ell=1}^rB_{\ell,N}\) satisfies
+\(\EE\|B_{\ell,N}\|^2\le Cb_N\), and the same maximal argument gives
+\[
+\frac1{b_N}\bar B_N\bar B_N^\top
+=O_{\PP}(M_N^{-1})
+=O_{\PP}\left(\frac{b_N}{N}\right).
+\]
+Since \(M_N/(M_N-1)=1+O_{\PP}(b_N/N)\), the centered cycle-time covariance is
+\[
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
+(B_{\ell,N}-\bar B_N)^\top
+=\mathcal T_m+
+O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+Multiplying by \(K_N/N=\mu^{-1}+O_{\PP}(N^{-1/2})\) in
+\eqref{eq:calendar-stopped-k-rate-main} proves
+\eqref{eq:calendar-stopped-separated-batch-rate-main}.
+
+It remains to check that the plug-in rewards used in Algorithm~1 do not change
+the rate.  A Chernoff bound for the exponential-moment variables \(L_j\) gives
+\begin{equation}\label{eq:calendar-stopped-uniform-block-length-main}
+\max_{1\le\ell\le M_N}
+\frac1{b_N}\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(1).
+\end{equation}
+Indeed, after intersecting with \(M_N\le C_1N/b_N\), the union bound is
+\[
+\frac{C_1N}{b_N}\,
+\PP\!\left(\sum_{j=1}^{b_N}L_j>Cb_N\right),
+\]
+which tends to zero for \(C\) large because \(b_N=N^\beta\).  Since
+\(\Delta_N=O_{\PP}(N^{-1/2})\),
+\eqref{eq:calendar-stopped-uniform-block-length-main} proves
+\eqref{eq:calendar-stopped-plugin-block-main}.  Put
+\[
+E_{\ell,N}=\widehat B_{\ell,N}-B_{\ell,N}
+=-\Delta_N\sum_{j\in I_{\ell,N}}L_j,\qquad
+\bar E_N=M_N^{-1}\sum_{\ell=1}^{M_N}E_{\ell,N}.
+\]
+On a high-probability event,
+\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le Cb_NN^{-1/2}\).  The difference between
+the centered plug-in and oracle cycle-time covariance matrices is bounded by
+\[
+\begin{aligned}
+&\frac{2}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|\,\|E_{\ell,N}-\bar E_N\|\\
+&\qquad
++\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|E_{\ell,N}-\bar E_N\|^2 .
+\end{aligned}
+\]
+The oracle centered covariance just proved has bounded operator norm in
+probability, hence
+\[
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|^2=O_{\PP}(1).
+\]
+Also
+\(\sum_{\ell\le M_N}\|E_{\ell,N}-\bar E_N\|^2
+=O_{\PP}(M_Nb_N^2/N)\).  Cauchy's inequality therefore makes the cross term
+\(O_{\PP}(\sqrt{b_N/N})\), while the quadratic plug-in term is
+\(O_{\PP}(b_N/N)\).  Since \(b_N/N\le\sqrt{b_N/N}\) eventually and
+\(K_N/N=O_{\PP}(1)\), the plug-in covariance has the same rate as the oracle
+covariance.  This proves
+\eqref{eq:calendar-stopped-plugin-covariance-rate-main}.
+\end{proof}
+
+\begin{proposition}[Standard complete-cycle and separated-batch facts]\label{prop:standard-complete-cycle-separated-batch-facts-main}
 Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process with
 click epochs \((\tau_j)\), i.i.d. gaps \(G_j\), cycle lengths
 \(L_j=G_j+1\), mean \(\mu=\EE L_0\in(0,\infty)\), and
@@ -205,8 +427,8 @@ where
 \{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
 \]
 
-\item For \(b_N\to\infty\), \(b_N/N\to0\), \(d_N=b_N+m_{\rm dep}\), and
-separated batches
+\item For \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\),
+\(d_N=b_N+m_{\rm dep}\), and separated batches
 \[
 I_{\ell,N}:=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
 \qquad
@@ -281,31 +503,13 @@ large numbers \(K_N/N\to1/\mu\) and the usual random-index replacement
 \(\mathcal T_{m_{\rm dep}}/\mu\).
 
 For the separated-batch estimator, apply
-\Cref{thm:regenerative-separated-batch-covariance-main} to the fixed-range
-gap reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\).  This gives the
-cycle-index covariance estimate
-\[
-\frac1{b_N(M-1)}
-\sum_{\ell=1}^{M}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
-=\mathcal T_{m_{\rm dep}}
-+O_{\PP}\left(b_N^{-1}+\sqrt{b_N/N}\right)
-\]
-for deterministic prefixes \(M\asymp N/b_N\).  The all-complete-cycle retained
-prefix is a random prefix of the same independent separated-batch sequence.
-The renewal law gives
-\[
-M_N=\frac{K_N}{b_N+m_{\rm dep}}+O(1),\qquad K_N/N\to\mu^{-1},
-\]
-in probability after the fixed endpoint and look-ahead deletions.  Replacing
-the deterministic prefix by this calendar-stopped prefix changes the
-normalized covariance by \(O_{\PP}(b_N/N)+O_{\PP}(N^{-1/2})\), using the same
-fourth-moment bound as in
-\Cref{thm:regenerative-separated-batch-covariance-main}; this is absorbed by
-\(O_{\PP}(b_N^{-1}+\sqrt{b_N/N})\).  Multiplication by
-\(K_N/N=\mu^{-1}+O_{\PP}(N^{-1/2})\) converts the cycle-time covariance
-\(\mathcal T_{m_{\rm dep}}\) to the calendar-time covariance
-\(\mathcal T_{m_{\rm dep}}/\mu\) and contributes only another absorbed
-\(O_{\PP}(N^{-1/2})\) term.  This proves
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} to the fixed-range
+gap reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), with \(q\) equal to the
+fixed number of endpoint and look-ahead cycles deleted by the particular
+complete-cycle set.  That proposition proves the random calendar-stopped
+batch count bound
+\(M_N=K_N/(b_N+m_{\rm dep})+O_{\PP}(\sqrt N/b_N+1)\), controls the maximal
+deleted endpoint cycle, subtracts the empirical batch mean, and gives exactly
 \eqref{eq:separated-batch-covariance-estimator-rate-main}.
 
 For the plug-in perturbation, write
@@ -314,49 +518,10 @@ For the plug-in perturbation, write
 \widehat C_{\ell,N}-C_{\ell,N}
 =-\Delta_N\sum_{j\in I_{\ell,N}}L_j .
 \]
-The same exponential-moment Chernoff bound gives
-\[
-\max_{\ell\le M_N}b_N^{-1}\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(1),
-\]
-which proves \eqref{eq:separated-batch-plugin-block-main}.  To see the
-covariance perturbation explicitly, put
-\[
-E_{\ell,N}:=\widehat C_{\ell,N}-C_{\ell,N},\qquad
-\bar E_N:=M_N^{-1}\sum_{\ell=1}^{M_N}E_{\ell,N}.
-\]
-On the high-probability event where
-\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le C b_NN^{-1/2}\), the centered covariance
-difference is bounded by
-\[
-\begin{aligned}
-&\frac1{b_N(M_N-1)}
-\left\|\sum_{\ell=1}^{M_N}
-(\widehat C_{\ell,N}-\bar{\widehat C}_N)
-(\widehat C_{\ell,N}-\bar{\widehat C}_N)^\top
--\sum_{\ell=1}^{M_N}
-(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
-\right\|_{\operatorname{op}}\\
-&\qquad\le
-\frac{2}{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|C_{\ell,N}-\bar C_N\|\,\|E_{\ell,N}-\bar E_N\|
-+\frac{1}{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|E_{\ell,N}-\bar E_N\|^2 .
-\end{aligned}
-\]
-By Cauchy's inequality,
-\(\sum_\ell\|E_{\ell,N}-\bar E_N\|^2=O_{\PP}(M_Nb_N^2/N)\).  Also
-\[
-\frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|C_{\ell,N}-\bar C_N\|^2
-=O_{\PP}(1),
-\]
-because the separated-batch covariance estimator already has bounded
-operator norm in probability by
-\eqref{eq:separated-batch-covariance-estimator-rate-main}.  Therefore the
-cross term contributes \(O_{\PP}(\sqrt{b_N/N})\) after the outer normalization.
-The second sum contributes
-\(O_{\PP}(b_N/N)\).  Multiplication by \(K_N/N=O_{\PP}(1)\) leaves the same
-orders, proving \eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} gives the uniform
+block-length bound, the block perturbation
+\eqref{eq:separated-batch-plugin-block-main}, and the covariance perturbation
+\eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
 \((K_N+1)/N\to1/\mu\) gives the fixed-low-cycle statement, and the preceding
 uniform block-length bound is exactly \eqref{eq:uniform-calendar-block-length-main}.
 \end{proof}
@@ -474,13 +639,13 @@ with \(M_N=0\) if the set is empty.  A partial terminal batch is omitted.
 With \(K_N=\max\{k:\tau_k<N\}\), and with \(K_N=-1\) if no click is observed,
 set
 \[
-\widehat D_N=
+\widehat\Delta_{\mathrm{inv},N}=
 \widehat r_{1,N}^{\mathrm{cyc}}-(\widehat r_{0,N}^{\mathrm{cyc}})^2,
 \qquad
 \mathcal E_N=
 \{K_N\ge K_{\min},\ M_N\ge2,
 \widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,
-|\widehat D_N|\ge\varepsilon_N\}.
+|\widehat\Delta_{\mathrm{inv},N}|\ge\varepsilon_N\}.
 \]
 
 \item Define
@@ -505,17 +670,19 @@ On \(\mathcal E_N^c\), do not form a zero replacement; report
 
 \paragraph{Algorithm 2: quotient inverse, projection, and chart retention.}
 
-Compute \(\widehat D_N\) and apply the denominator thresholds
+Compute \(\widehat\Delta_{\mathrm{inv},N}\) and apply the denominator thresholds
 \(\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N\) and
-\(|\widehat D_N|\ge\varepsilon_N\).  If \(\mathcal E_N^c\) occurs, stop
+\(|\widehat\Delta_{\mathrm{inv},N}|\ge\varepsilon_N\).  If \(\mathcal E_N^c\) occurs, stop
 retained-record inference and report ``insufficient complete cycles; no
 confidence set.''  On \(\mathcal E_N\), compute
 \(\Phi(\widehat r_N^{\mathrm{cyc}})\) and project the resulting raw symmetric
 coordinate by
 \(\widetilde\sigma_N=\Pi_F^{\rm tb}(\Phi(\widehat r_N^{\mathrm{cyc}}))\).
-Report separated labelled rates only when
+The visible-record output at this stage is only the quotient coordinate, the
+unordered root set, and the unordered rate set.  Report separated labelled
+rates only as a side-data output, and only when
 \[
-\widehat\Delta_{\sigma,N}\ge\delta_N^2,
+\widehat\Delta_{\sigma,N}\ge(\delta_N^{\rm root})^2,
 \qquad
 \widehat p_N,\widehat s_N\in[\eta_N,1-\eta_N],
 \]
@@ -523,9 +690,10 @@ and the deterministic oracle branch map \(\mathcal B\) is unique on the two
 projected roots.  If an estimated branch map is used, require the
 high-probability oracle-agreement condition from
 \Cref{conv:branch-map-labelled-rates-main}; otherwise withhold separated
-labels.  At a population exchange diagonal, use only the pointwise common-rate
-acceptance event calibrated by Algorithm~3; a simultaneous diagonal band needs
-a separate certified inversion rule.
+labels and retain only the quotient/unordered report.  At a population
+exchange diagonal, use only the pointwise common-rate acceptance event
+calibrated by Algorithm~3; a simultaneous diagonal band needs a separate
+certified inversion rule.
 
 \paragraph{Algorithm 3: fixed-candidate projected-Gaussian diagonal calibration.}
 
@@ -545,12 +713,19 @@ quantile transcript before it can be used for coverage reporting.  The finite
 Monte Carlo add-on, when used for a coverage-certified report rather than a
 plot, has the fixed theorem-level settings
 \[
-R_N=N,\qquad \delta_N=N^{-2},\qquad
+R_N=N,\qquad \delta_N^{\rm MC}=N^{-2},\qquad
 \varepsilon_N^{\rm MC}:=\sqrt{\frac{\log(2N^2)}{2N}} .
 \]
+Here \(\delta_N^{\rm root}\) is the deterministic root-discriminant reporting
+threshold from the finite-record chart, while \(\delta_N^{\rm MC}\) is the
+conditional DKW error probability for the simulated quantile.
 The algorithm has two outputs: an ideal conditional projected-Gaussian
 calculation and, only when all certificates below are present, a
-coverage-certified finite report.  In the submitted manuscript, if
+coverage-certified finite report.  The latter means a finite diagonal report
+in the precise sense of \Cref{def:finite-diagonal-report-main}: the candidate
+must have a branch certificate and then either a certified ideal-quantile
+enclosure or the canonical DKW-inflated empirical quantile with
+\(R_N=N\) and \(\delta_N^{\rm MC}=N^{-2}\).  In the submitted manuscript, if
 \(z\ne1/2\), continue only for diagnostic plotting or diagnostic
 ideal-quantile evaluation and report ``diagonal candidate outside the printed
 paper certificate; no coverage-certified acceptance event.''  In an
@@ -703,7 +878,7 @@ estimate is the order statistic
 after sorting increasingly.  It may be displayed as a diagnostic for the ideal
 conditional quantile.  To turn finite simulation into an operational
 coverage-certified critical value, the algorithm uses only the canonical DKW
-choice \(R_N=N\), \(\delta_N=N^{-2}\).  If
+choice \(R_N=N\), \(\delta_N^{\rm MC}=N^{-2}\).  If
 \(\varepsilon_N^{\rm MC}\ge\alpha\), the simulated quantile remains
 diagnostic.  If \(\varepsilon_N^{\rm MC}<\alpha\), the DKW one-sided simulated
 critical value is
@@ -739,7 +914,7 @@ Equivalently, before conditioning on the auxiliary simulation,
 \ge c^{-}_{1-\alpha,N}(z)\}\ge1-N^{-2}.
 \]
 This is the default certified finite-Monte-Carlo choice in
-\Cref{cor:exchange-diagonal-dkw-monte-carlo-main}.  The
+\Cref{thm:e3-canonical-dkw-monte-carlo-main}.  The
 reported simulated event is then
 \[
 Q_N(z)\le
@@ -748,7 +923,8 @@ Q_N(z)\le
 with coverage transferred from the ideal Theorem~E1 statement, the
 reported-event corollary
 \Cref{cor:exchange-diagonal-reported-event-main}, and the DKW transfer
-Corollary~E3 \Cref{cor:exchange-diagonal-dkw-monte-carlo-main}.  No other finite
+Corollary~E3 \Cref{thm:e3-canonical-dkw-monte-carlo-main}.  This is the
+simulation route in \Cref{def:finite-diagonal-report-main}.  No other finite
 simulation choice is treated as an operational certificate.  Without the
 canonical DKW event above, all simulated quantiles are diagnostic only: report
 ``ideal quantile only; Monte Carlo diagnostic not coverage-certified'' for
