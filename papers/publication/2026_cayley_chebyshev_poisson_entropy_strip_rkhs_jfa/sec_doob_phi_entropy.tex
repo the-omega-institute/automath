@@ -56,23 +56,29 @@ BanuelosKim2019HardySteinNonsymmetric,
 BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas,
 Gutowski2023HardySteinPureJump,GutowskiKwasnicki2025BeurlingDenySobolevBregman,
 BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.  Here no abstract
-Hardy--Stein theorem is invoked as a black box.  The proof uses three local
+Hardy--Stein theorem is invoked as a black box.  The proof uses four local
 lemmas, followed by the endpoint decay lemma:
 \[
 \begin{array}{ll}
 \text{(1)}&
 \text{compact-window quotient bounds and the single Bregman majorant},\\
 \text{(2)}&
-\text{the Cauchy Green formula and its constants},\\
+\text{annular cutoff, measurability, and compact-window cutoff removal},\\
 \text{(3)}&
-\text{the }L^1\text{ Nemytskii chain rule},\\
+\text{the Cauchy Green formula and its constants},\\
 \text{(4)}&
+\text{the }L^1\text{ Nemytskii chain rule},\\
+\text{(5)}&
 \text{the endpoint decay }D_{\rm KL}(h_T\|g_T)\to0 .
 \end{array}
 \]
 Lemma~\ref{thm:matched-poisson-quotient-cauchy-bregman-domain} supplies the
 only distribution-dependent estimates for the nonstationary quotient
 \((P_t*\nu)/P_t(\cdot-\bar{\gamma})\).
+Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation} defines
+\(\mathcal I_\nu=\lim_{R\to\infty}\mathcal I_{\nu,R}\), proves its
+measurability by monotone limits, and removes the annular or auxiliary
+cutoffs on compact time windows.
 Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing} fixes the generator
 sign and the \(1/\pi,1/(2\pi)\) constants once.
 Theorem~\ref{thm:poisson-kl-doob-tail} combines that chain rule, the two
@@ -571,14 +577,165 @@ Set
 \qquad
 \Psi(z):=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}}.
 \]
-The Bregman dissipation used below is
+For \(R>1\) put
 \[
-\mathcal I_\nu(t):=\frac1\pi\iint_{\RR^2}
+\Omega_R:=\{(x,y)\in\RR^2:R^{-1}<|x-y|<R\}.
+\]
+The Bregman dissipation used below is first defined by annular cutoffs,
+then by monotone convergence:
+\[
+\chi_R(x,y):=\mathbf1_{\{R^{-1}<|x-y|<R\}},
+\qquad
+\mathcal I_{\nu,R}(t):=\frac1\pi\iint_{\Omega_R}
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
 \]
-with the diagonal ignored.  Proposition
-\ref{prop:compact-window-bregman-identity} gives the compact-window
-integrability and identifies the local entropy derivative.
+\[
+\mathcal I_\nu(t):=\lim_{R\to\infty}\mathcal I_{\nu,R}(t)
+=\frac1\pi\iint_{\RR^2\setminus\{x=y\}}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y.
+\]
+The second expression means the nonnegative Lebesgue integral off the
+diagonal.  Proposition~\ref{prop:compact-window-bregman-identity} gives the
+compact-window integrability and identifies the local entropy derivative.
+The following lemma fixes once and for all the cutoff independence,
+measurability in \(t\), and cutoff passage used in the Green-pairing proof.
+
+\begin{lemma}[Annular cutoff and measurable Bregman dissipation]%
+\label{lem:annular-cutoff-measurable-bregman-dissipation}
+Let \(0<a<b<\infty\).  Let \(g_t(x)\) and \(u_t(x)\) be Borel functions on
+\([a,b]\times\RR\), with \(g_t\ge0\) and
+\(\int_{\RR}g_t(x)\dd x=1\) for each \(t\).  Assume the compact-window bounds
+\[
+m\le u_t(x)\le M,\qquad |u_t(x)-u_t(y)|\le L|x-y|
+\qquad(t\in[a,b],\ x,y\in\RR)
+\]
+for constants \(0<m\le M<\infty\) and \(L<\infty\).  Put
+\[
+\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,\qquad
+\Psi(z)=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}},
+\]
+\[
+C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\},
+\]
+and, for \(R>1\),
+\[
+I_{\nu,R}(t)=\frac1\pi\iint_{\RR^2}\chi_R(x,y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\]
+Then \(t\mapsto I_{\nu,R}(t)\) is Borel measurable for each \(R>1\), and
+\begin{equation}\label{eq:annular-cutoff-monotone-definition}
+I_\nu(t):=\lim_{R\to\infty}I_{\nu,R}(t)
+=\sup_{R>1}I_{\nu,R}(t)
+\end{equation}
+exists for every \(t\in[a,b]\) and equals the nonnegative Lebesgue integral
+\begin{equation}\label{eq:annular-cutoff-full-integral}
+I_\nu(t)=\frac1\pi\iint_{\RR^2\setminus\{x=y\}}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\end{equation}
+In particular \(I_\nu\) is Borel measurable and
+\begin{equation}\label{eq:annular-cutoff-compact-window-bound}
+\int_a^b I_\nu(t)\dd t\le \frac{4C_{a,b,\nu}}{\pi}(b-a).
+\end{equation}
+Moreover, every uniformly bounded measurable cutoff converging pointwise to
+\(1\) off the diagonal may be removed by dominated convergence using the
+majorant
+\begin{equation}\label{eq:annular-cutoff-reusable-majorant}
+C_{a,b,\nu}\{g_t(x)+g_t(y)\}
+\left(\mathbf1_{\{|x-y|<1\}}+|x-y|^{-2}\mathbf1_{\{|x-y|\ge1\}}\right).
+\end{equation}
+Precisely, if \(\chi_n\) are measurable on \([a,b]\times\RR^2\),
+\(\sup_n\|\chi_n\|_\infty<\infty\), and
+\(\chi_n(t,x,y)\to1\) for a.e. \((t,x,y)\) with \(x\ne y\), then
+\begin{align}
+&\int_a^b\left|
+\frac1\pi\iint_{\RR^2}\chi_n(t,x,y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+-I_\nu(t)\right|\dd t \longrightarrow0, \label{eq:bregman-cutoff-l1-time-removal}\\
+&\frac1\pi\int_a^b\iint_{\RR^2}\chi_n(t,x,y)
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y\dd t
+\longrightarrow
+\int_a^b I_\nu(t)\dd t . \label{eq:bregman-cutoff-integral-removal}
+\end{align}
+The value in \eqref{eq:annular-cutoff-monotone-definition} is independent of
+the annular exhaustion: if \(E_n\uparrow\RR^2\setminus\{x=y\}\) is any
+increasing measurable exhaustion, then
+\[
+\frac1\pi\iint_{E_n}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+\uparrow I_\nu(t)
+\qquad(n\to\infty)
+\]
+for every \(t\in[a,b]\).
+
+Applied to the Poisson quotient displayed above, this gives
+\[
+\mathcal I_{\nu,R}(t)=I_{\nu,R}(t),\qquad
+\mathcal I_\nu(t)=I_\nu(t)
+\]
+on the compact window \([a,b]\).
+\end{lemma}
+
+\begin{proof}
+The compact-range Taylor estimate
+\[
+0\le\Lambda(\alpha,\beta)\le\frac{1}{2m}|\alpha-\beta|^2
+\qquad(\alpha,\beta\in[m,M])
+\]
+and the Lipschitz bound give, for \(x\ne y\),
+\[
+0\le
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le C_{a,b,\nu}g_t(x)\Psi(x-y).
+\]
+The exchanged kernel satisfies the same estimate with \(x\) and \(y\)
+interchanged, and hence the symmetrized majorant is
+\eqref{eq:annular-cutoff-reusable-majorant}.  Since
+\[
+\int_{\RR}\Psi(z)\dd z
+=\int_{|z|<1}\dd z+\int_{|z|\ge1}|z|^{-2}\dd z=4
+\]
+and \(\int_{\RR}g_t=1\), the one-sided majorant has integral
+\[
+\int_a^b\iint_{\RR^2}C_{a,b,\nu}g_t(x)\Psi(x-y)\dd x\dd y\dd t
+=4C_{a,b,\nu}(b-a).
+\]
+This proves \eqref{eq:annular-cutoff-compact-window-bound} after the factor
+\(1/\pi\).
+
+The function
+\[
+K(t,x,y):=
+\begin{cases}
+\displaystyle
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2},&x\ne y,\\[1ex]
+0,&x=y,
+\end{cases}
+\]
+is Borel and nonnegative.  Tonelli's theorem gives Borel measurability of
+\(t\mapsto I_{\nu,R}(t)\).
+
+The annuli \(\Omega_R\) increase to \(\RR^2\setminus\{x=y\}\) as
+\(R\to\infty\), so the monotone convergence theorem gives
+\eqref{eq:annular-cutoff-monotone-definition} and
+\eqref{eq:annular-cutoff-full-integral}.  Taking the supremum over rational
+\(R>1\) gives measurability of \(I_\nu\).  The same monotone convergence
+argument proves independence of any increasing measurable exhaustion.
+
+With \(B:=\sup_n\|\chi_n\|_\infty\), dominated convergence on
+\([a,b]\times\RR^2\), using \(|\chi_nK|\le BK\), proves
+\eqref{eq:bregman-cutoff-integral-removal}.  Applying dominated convergence
+to
+\[
+\left|\iint_{\RR^2}(\chi_n(t,x,y)-1)K(t,x,y)\dd x\dd y\right|
+\le \iint_{\RR^2}|1-\chi_n(t,x,y)|K(t,x,y)\dd x\dd y
+\]
+with \(|1-\chi_n|K\le(1+B)K\) also gives the \(L^1([a,b])\) convergence in
+\eqref{eq:bregman-cutoff-l1-time-removal}.  For the displayed Poisson
+quotient, \(g_t\) is smooth in \((t,x)\), and \(h_t=P_t*\nu\) is the
+parameter integral of a continuous kernel, so the Borel hypotheses hold;
+Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} supplies the
+required compact-window bounds.
+\end{proof}
 
 \begin{proposition}[Compact-window Bregman identity]%
 \label{prop:compact-window-bregman-identity}
@@ -624,8 +781,8 @@ and the one-sided dissipation estimate
 \int_a^b\mathcal I_\nu(s)\dd s
 \le \frac{4C_{a,b,\nu}}{\pi}(b-a).
 \]
-Finally, if \(H(t)=D_{\mathrm{KL}}(h_t\|g_t)\), then \(H\) is absolutely
-continuous on \([a,b]\) and, for a.e. \(t\in[a,b]\),
+Finally, if \(H(t)=D_{\mathrm{KL}}(h_t\|g_t)\), then \(H\) is finite and
+absolutely continuous on \([a,b]\) and, for a.e. \(t\in[a,b]\),
 \begin{equation}\label{eq:compact-window-bregman-derivative}
 -\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
 =\frac1\pi\iint_{\RR^2}
@@ -639,18 +796,26 @@ Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  The proof uses the compact-window
 domain bounds, the Nemytskii chain rule, the pointwise Green formula, and the
 logarithmic Bregman algebra.
 
-First, on every compact window \([a,b]\Subset(0,\infty)\),
+First, on the compact window \([a,b]\Subset(0,\infty)\),
 Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} gives
 \[
 m\le u_s(x)\le M,\qquad |u_s(x)-u_s(y)|\le L|x-y|
 \]
-with the constants displayed in the proposition, as well as the stated Bregman
-majorants and \(L^1\) cutoff removal.  Also
+with the constants displayed in the proposition, as well as the stated
+Bregman majorants.  Hence the one-sided and symmetrized kernels are dominated
+by the integrable majorants displayed in the statement.  This proves the two
+compact-window integrability estimates, and
+Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation} gives the
+definition \(\mathcal I_\nu=\lim_{R\to\infty}\mathcal I_{\nu,R}\), its
+measurability, independence of the annular exhaustion, and the
+compact-window cutoff removal.  Also
 \(s\mapsto h_s=P_s*\nu\) and \(s\mapsto g_s=P_s(\cdot-\bar\gamma)\) are
 absolutely continuous as \(L^1\)-valued maps on \([a,b]\), because
 \(\partial_sP_s(x)=s^{-2}Q(x/s)\) for an \(L^1(\RR)\) function \(Q\), uniformly
-for \(s\in[a,b]\).  Hence the hypotheses of the Nemytskii chain-rule lemma
-are satisfied on the window.
+for \(s\in[a,b]\).  The quotient bounds give
+\(m g_s\le h_s\le M g_s\), so \(H(s)=\int h_s\log u_s\,\dd x\) is finite on
+the window.  Hence the hypotheses of the Nemytskii chain-rule lemma are
+satisfied on \([a,b]\), and \(H\) is absolutely continuous there.
 
 Second, Lemma~\ref{lem:cauchy-normalization-bounded-test-green} supplies,
 for each fixed \(s\in[a,b]\), the Cauchy Green formula
@@ -686,7 +851,12 @@ this \(s\) gives
 {(x-y)^2}\dd x\dd y. \label{eq:domain-theorem-g-u-green}
 \end{align}
 Since \(\int_{\RR}\partial_sg_s\,\dd x=0\), the second term in the chain
-rule may be written as \(\int_{\RR}u_s\partial_sg_s\dd x\).
+rule may be written as \(\int_{\RR}u_s\partial_sg_s\dd x\).  This is the only
+cancellation used here: it follows from probability preservation of the
+Poisson densities, because \(\int g_s\,\dd x=1\) for every \(s>0\) and the map
+\(s\mapsto g_s\) is absolutely continuous in \(L^1\).  No operator is
+cancelled or inverted, and all divisions by \(u_s\) in the chain-rule
+calculation are protected by the lower bound \(u_s\ge m>0\).
 
 Fourth, with
 \[
@@ -699,8 +869,8 @@ the Bregman algebra
 \]
 turns the difference of the two annular Green numerators into the
 symmetrized logarithmic Bregman numerator.  The majorant from the first step
-is an \(L^1(\RR^2)\) bound at this fixed \(s\), so the two annular limits can
-be combined and the cutoff can be removed by dominated convergence:
+is an \(L^1(\RR^2)\) bound at this fixed \(s\).  The cutoff lemma identifies
+the annular limit with the full nonlocal Bregman integral:
 \[
 -H'(s)=\frac1{2\pi}\iint_{\RR^2}
 \frac{g_s(x)\Lambda(u_s(x),u_s(y))
@@ -714,6 +884,13 @@ Exchanging \(x\) and \(y\) in the second term converts this symmetrized
 \(\mathcal I_\nu\in L^1([a,b])\).
 
 \end{proof}
+
+\begin{remark}
+This proposition is the compact-window domain and derivative part of Main
+Theorem~\ref{thm:main-C}.  The following theorem adds the endpoint decay
+\(D_{\rm KL}(h_T\|g_T)\to0\) and integrates the derivative identity to obtain
+the tail formula.
+\end{remark}
 
 \begin{theorem}[Poisson quotient KL tail identity]%
 \label{thm:poisson-kl-doob-tail}
@@ -741,6 +918,14 @@ The endpoint lemma, Lemma~\ref{lem:poisson-second-moment-kl-decay}, gives
 H(t)=\int_t^\infty \mathcal I_\nu(s)\dd s .
 \]
 \end{proof}
+
+\begin{remark}
+Together with Proposition~\ref{prop:compact-window-bregman-identity}, this is
+the detailed Section~\ref{sec:doob-phi-entropy} form of Main
+Theorem~\ref{thm:main-C}.  The coefficient transfer after this point is a
+consequence of Main Theorem~\ref{thm:main-A} and the tail identity, not a
+separate main theorem.
+\end{remark}
 
 \begin{remark}[Tail-integral coefficient transfer]
 \label{rem:no-pointwise-dissipation-from-finite-moments}
