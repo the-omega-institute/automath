@@ -63,7 +63,7 @@ lemmas, followed by the endpoint decay lemma:
 \text{(1)}&
 \text{compact-window quotient bounds and the single Bregman majorant},\\
 \text{(2)}&
-\text{the Cauchy Green formula, including the normalization ledger},\\
+\text{the Cauchy Green formula and its constants},\\
 \text{(3)}&
 \text{the }L^1\text{ Nemytskii chain rule},\\
 \text{(4)}&
@@ -326,12 +326,11 @@ dominated by the displayed \(L^1\) functions, so all stated cutoff removals
 follow from dominated convergence; the diagonal is a null set.
 \end{proof}
 
-\begin{lemma}[Cauchy Green formula and normalization ledger]%
+\begin{lemma}[Cauchy Green formula and constants]%
 \label{lem:kl-main-generator-convention-domain}
 \label{lem:poisson-cauchy-generator-l1-domain}
 \label{lem:bounded-lipschitz-cauchy-cutoff-pairing}
 \label{lem:cauchy-normalization-bounded-test-green}
-\label{lem:cauchy-bregman-normalization-ledger}
 Use the Fourier convention
 \[
 \widehat f(\xi)=\int_{\RR}f(x)e^{-\ii x\xi}\dd x .
@@ -403,7 +402,7 @@ and the cutoff error is bounded by
 \left(\sup_{s\in[a,b]}\|\partial_x^2P_s\|_1+4\right).
 \label{eq:bounded-lipschitz-time-dependent-cutoff-error}
 \end{align}
-Thus the normalization ledger is: \(L\) carries the prefactor \(1/\pi\);
+Thus the constants are: \(L\) carries the prefactor \(1/\pi\);
 each symmetrized Green pairing carries \(-1/(2\pi)\); after the two
 logarithmic Bregman pairings are combined and the variables are exchanged,
 the final one-sided dissipation carries \(1/\pi\).
@@ -561,93 +560,35 @@ absolutely continuous in \(L^1\),
 \end{proof}
 
 \noindent
-The KL tail identity has two logically separate inputs.  The local input is
-the compact-window Nemytskii chain rule,
-Lemma~\ref{thm:kl-domain-verification}, the pointwise annular Green formula,
-Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing}, and the explicit
-Bregman majorant from
-Lemma~\ref{thm:matched-poisson-quotient-cauchy-bregman-domain}; together they
-give \(H'(t)=-\mathcal I_\nu(t)\) for a.e. \(t\) on each compact window.
-The infinite-tail input is the independent second-moment decay
-\(H(T)=D_{\mathrm{KL}}(h_T\|g_T)\to0\) from
-Lemma~\ref{lem:poisson-second-moment-kl-decay}.  The passage to
-\([t,\infty)\) below uses only these two facts and monotone convergence; it
-does not use any additional cancellation in the singular double integral.
-
-\noindent
 For a probability measure \(\nu\) on~\(\RR\) with mean \(\bar{\gamma}\) and
 finite centred second moment, keep
 \[
 h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar{\gamma}),\qquad u_t=h_t/g_t .
 \]
-For \(t>0\) and \(R>1\), set
+Set
 \[
-\mathcal I_{\nu,R}(t):=
-\frac1\pi\iint_{\{R^{-1}<|x-y|<R\}}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
 \qquad
-\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta .
+\Psi(z):=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}}.
 \]
-The Bregman dissipation used below is the nonnegative Lebesgue integral
+The Bregman dissipation used below is
 \[
 \mathcal I_\nu(t):=\frac1\pi\iint_{\RR^2}
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
 \]
-with the diagonal ignored.  Indeed, if
-\[
-\Phi(t,x,y):=
-\begin{cases}
-\displaystyle
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2},&x\ne y,\\[1.2ex]
-0,&x=y .
-\end{cases}
-\]
-then \(\Phi\) is Borel measurable and nonnegative.  For fixed \(t\), the
-annuli
-\(\Omega_R=\{(x,y):R^{-1}<|x-y|<R\}\) increase to
-\(\RR^2\setminus\{x=y\}\), and monotone convergence gives
-\[
-\lim_{R\to\infty}\mathcal I_{\nu,R}(t)
-=\frac1\pi\iint_{\RR^2}\Phi(t,x,y)\dd x\dd y .
-\]
-The same monotone-convergence argument applies to every increasing cofinal
-annular exhaustion.  For nonmonotone or nonsymmetric cutoffs one uses the
-absolute integrability of the kernel rather than cancellation: Lemma
-\ref{lem:bregman-kernel-l1-cutoff-removal} proves that, on every compact time
-window, \(\Phi\in L^1([a,b]\times\RR^2)\), and that for each fixed \(t>0\)
-every measurable family \(0\le\chi_n\le1\) with
-\(\chi_n(x,y)\to1\) for \(x\ne y\) satisfies
-\[
-\iint_{\RR^2}\chi_n(x,y)\Phi(t,x,y)\dd x\dd y
-\longrightarrow
-\iint_{\RR^2}\Phi(t,x,y)\dd x\dd y .
-\]
-Thus the value of \(\mathcal I_\nu(t)\) is independent of the annular cutoff
-convention used in the Green formulae; no symmetry of the approximating
-cutoffs is needed after the kernel has been identified as an \(L^1\) kernel.
-Measurability follows from
-\[
-\mathcal I_\nu(t)=\sup_{n\ge2}\frac1\pi\iint_{\Omega_n}\Phi(t,x,y)\dd x\dd y,
-\]
-and Lemma~\ref{lem:bregman-kernel-l1-cutoff-removal} gives, for
-\(0<a<b<\infty\),
-\[
-\int_a^b\mathcal I_\nu(t)\dd t
-\le \frac{4C_{a,b,\nu}}{\pi}(b-a),
-\]
-and also gives \(\mathcal I_\nu(t)<\infty\) for every \(t\in[a,b]\).
+with the diagonal ignored.  Proposition
+\ref{prop:compact-window-bregman-identity} gives the compact-window
+integrability and identifies the local entropy derivative.
 
-\begin{theorem}[Poisson quotient KL tail identity]%
-\label{thm:poisson-kl-doob-tail}
-\label{cor:poisson-kl-doob-bregman-tail}
+\begin{proposition}[Compact-window Bregman identity]%
+\label{prop:compact-window-bregman-identity}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar{\gamma}$ and finite
 centred second moment.  Put
 \[
 h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar{\gamma}),\qquad u_t=h_t/g_t,
 \]
-and let \(\mathcal I_\nu\) be the locally integrable Bregman dissipation
-constructed above.  The domain estimates are part of the theorem: for every
-\(0<a<b<\infty\), with
+and let \(\mathcal I_\nu\) be the Bregman dissipation displayed above.  For
+every \(0<a<b<\infty\), with
 \[
 \mu_2:=\int_{\RR}(\gamma-\bar{\gamma})^2\dd\nu(\gamma),\qquad
 m=\frac1{2(1+\mu_2/a^2)},\quad
@@ -659,19 +600,17 @@ one has, for all \(t\in[a,b]\) and \(x,y\in\RR\),
 m\le u_t(x)\le M,\qquad |u_t(x)-u_t(y)|\le L|x-y|.
 \]
 Moreover, for
-\begin{align*}
-\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
-\qquad&
-\Psi(z)=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}},\\
+\[
 C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\},
-\end{align*}
+\]
 one has, for \(x\ne y\) and \(t\in[a,b]\),
 \[
 0\le
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
 \le C_{a,b,\nu}g_t(x)\Psi(x-y).
 \]
-The same constants also give the symmetrized estimate
+Therefore the symmetrized Bregman kernel is in
+\(L^1([a,b]\times\RR^2)\).  More precisely, the same constants give
 \[
 \int_a^b\iint_{\RR^2}
 \frac{
@@ -685,24 +624,27 @@ and the one-sided dissipation estimate
 \int_a^b\mathcal I_\nu(s)\dd s
 \le \frac{4C_{a,b,\nu}}{\pi}(b-a).
 \]
-Consequently, for every \(t>0\),
-\begin{equation}\label{eq:relative-entropy-integrated-dissipation}
-D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\dd s.
+Finally, if \(H(t)=D_{\mathrm{KL}}(h_t\|g_t)\), then \(H\) is absolutely
+continuous on \([a,b]\) and, for a.e. \(t\in[a,b]\),
+\begin{equation}\label{eq:compact-window-bregman-derivative}
+-\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\|g_t)
+=\frac1\pi\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y
+=\mathcal I_\nu(t).
 \end{equation}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  The proof uses only the following
-five inputs, with the constant ledger confined to
-Lemmas~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} and
-\ref{lem:cauchy-normalization-bounded-test-green}.
+Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  The proof uses the compact-window
+domain bounds, the Nemytskii chain rule, the pointwise Green formula, and the
+logarithmic Bregman algebra.
 
 First, on every compact window \([a,b]\Subset(0,\infty)\),
 Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} gives
 \[
 m\le u_s(x)\le M,\qquad |u_s(x)-u_s(y)|\le L|x-y|
 \]
-with the constants displayed in the theorem, as well as the stated Bregman
+with the constants displayed in the proposition, as well as the stated Bregman
 majorants and \(L^1\) cutoff removal.  Also
 \(s\mapsto h_s=P_s*\nu\) and \(s\mapsto g_s=P_s(\cdot-\bar\gamma)\) are
 absolutely continuous as \(L^1\)-valued maps on \([a,b]\), because
@@ -771,7 +713,25 @@ Exchanging \(x\) and \(y\) in the second term converts this symmetrized
 \(s\in[a,b]\), and the same majorant gives
 \(\mathcal I_\nu\in L^1([a,b])\).
 
-Fifth, integrating the derivative identity over \([t,T]\) gives
+\end{proof}
+
+\begin{theorem}[Poisson quotient KL tail identity]%
+\label{thm:poisson-kl-doob-tail}
+\label{cor:poisson-kl-doob-bregman-tail}
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar{\gamma}$ and finite
+centred second moment.  With \(h_t,g_t,u_t\) and \(\mathcal I_\nu\) as above,
+\(\mathcal I_\nu\) is locally integrable on \((0,\infty)\), and for every
+\(t>0\),
+\begin{equation}\label{eq:relative-entropy-integrated-dissipation}
+D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\dd s.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  Proposition
+\ref{prop:compact-window-bregman-identity} gives
+\(\mathcal I_\nu\in L^1([a,b])\) and \(H'=-\mathcal I_\nu\) a.e. on every
+compact window \([a,b]\Subset(0,\infty)\).  Hence, for \(0<t<T\),
 \[
 H(t)-H(T)=\int_t^T \mathcal I_\nu(s)\dd s.
 \]
@@ -782,16 +742,14 @@ H(t)=\int_t^\infty \mathcal I_\nu(s)\dd s .
 \]
 \end{proof}
 
-\begin{remark}[No pointwise conclusion from finite moments alone]
+\begin{remark}[Tail-integral coefficient transfer]
 \label{rem:no-pointwise-dissipation-from-finite-moments}
-The coefficient transfer below concerns only tail integrals
+The coefficient transfer below is formulated for tail integrals
 \(\int_t^\infty\mathcal I_\nu(s)\dd s\) and fixed multiplicative-window
-averages.  It does not assert a pointwise expansion of
-\(\mathcal I_\nu(t)\).  A tail expansion for the primitive
+averages.  Passing from a tail expansion for the primitive
 \(H(t)=\int_t^\infty\mathcal I_\nu(s)\dd s\), even with a full finite-moment
-coefficient hierarchy, does not by itself justify differentiating the
-asymptotic series.  Pointwise asymptotics for \(\mathcal I_\nu(t)\) require
-extra differentiated-remainder input.
+coefficient hierarchy, to pointwise asymptotics for \(\mathcal I_\nu(t)\)
+requires extra differentiated-remainder input.
 
 For example, if the centred law is compactly supported, say
 \(|\gamma-\bar{\gamma}|\le M\), then for each fixed retained order \(L\) and

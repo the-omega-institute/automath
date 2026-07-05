@@ -4,18 +4,17 @@
 
 This section contains the entropy coefficient mechanism, the multidimensional
 covariance calculation, the leading one-dimensional threshold, and the
-coefficient-defect consequence.  The proofs below are internal to the stated
-lemmas and theorems; they do not require auxiliary finite-grid data or
-external certificate files.  Pointwise dissipation asymptotics are not part of
-this coefficient hierarchy; the only retained statement in that direction is
-the short differentiated-remainder remark immediately before
+optional coefficient-defect consequence.  The proofs below are internal to the
+stated lemmas and theorems; all finite Laurent certificates used for checking
+are recorded in the appendices.  The pointwise dissipation comments are
+confined to the short differentiated-remainder remark immediately before
 Proposition~\ref{prop:dissipation-tail-coefficient-expansion}.
 
 \subsection*{Entropy proof architecture}
 \label{sec:entropy-theorem-map}
 
-The scope ledger for conditional quotient inputs, moment-supply hypotheses,
-finite covariance, and non-sharp coefficient consequences is
+The assumption summary for conditional quotient inputs, moment-supply
+hypotheses, finite covariance, and non-sharp coefficient consequences is
 Subsection~\ref{subsec:intro-hypotheses-scope}.  This section records the
 proof architecture: quotient expansions, Taylor transfer to KL, and algebraic
 coefficient evaluation.
@@ -625,8 +624,8 @@ Thus the Taylor polynomial may be evaluated on the finite density polynomial
 \medskip
 \phantomsection\label{par:coefficient-evaluability-scope}
 \noindent\textbf{Finite-moment coefficient level.}
-The coefficient-evaluability scope for the finite-moment hierarchy is recorded
-in Subsection~\ref{subsec:intro-hypotheses-scope}; the algebraic obstruction
+The finite-moment level for the hierarchy is summarized in
+Subsection~\ref{subsec:intro-hypotheses-scope}; the algebraic obstruction
 it refers to is proved below in
 Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
 \medskip
@@ -689,12 +688,10 @@ With \(\sigma^2=\mu_2\), the first evaluated coefficients are
 A_4=\frac{\sigma^4}{8},\qquad
 A_6=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64},
 \]
-and, when the sixth centred moment exists,
-\[
-A_8=
-\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2
-+12\sigma^2\mu_6-30\mu_3\mu_5+20\mu_4^2}{256}.
-\]
+with the sixth-order arithmetic displayed in
+Lemma~\ref{lem:sixth-order-coefficient-arithmetic}.  The optional
+order-eight certificate is kept in
+Appendix~\ref{app:order-eight-laurent-certificate}.
 Equivalently, \(Q_n(z)=\sum_kq_{n,k}z^k\), \(q_{n,0}=0\), and
 \[
 q_{n,k}=2^{-n}(-\ii)^n
@@ -1147,18 +1144,49 @@ where
 \]
 \end{lemma}
 
+\begin{theorem}[Admissible borderline-tail entropy theorem]%
+\label{thm:admissible-borderline-tail-entropy}
+Let \(N\ge3\), put \(p=2N-2\), and let
+\(\nu\in\mathcal A_{p,R,c}\) in the sense of
+Definition~\ref{def:admissible-borderline-tail-classes}.  Let
+\[
+  M_p(t)=\EE[X^p{\bf1}_{\{|X|\le t\}}],
+  \qquad
+  H(t)=D_{\mathrm{KL}}(P_t*\nu\|P_t).
+\]
+Then
+\[
+H(t)=
+\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
++\kappa_N\mu_2\,t^{-2N}M_p(t)
++o(t^{-2N}M_p(t)),
+\]
+where
+\[
+  \kappa_N=J(2,p)=(-1)^N(N-1)2^{-2N+2}.
+\]
+\end{theorem}
+
+\begin{proof}
+The admissible controls give the quotient expansion
+\eqref{eq:admissible-borderline-quotient-expansion}, and
+\eqref{eq:admissible-top-moment-growth} gives the growth hypotheses
+\eqref{eq:conditional-truncated-moment-growth}.  Thus the conditional
+top-mode transfer Lemma~\ref{thm:tail-replacements-proved-here} applies
+directly.
+\end{proof}
+
+The next three propositions are verification statements for this admissible
+theorem: exact power tails, perturbative power tails, and monotone slowly
+varying borderline tails.
+
 \subsubsection*{Exact power-tail verification}
 
-For the exact power-law theorem below, the proof verifies
-\(\nu\in\mathcal A_{p,R,c}^{\rm ex}\) from
-Definition~\ref{def:admissible-borderline-tail-classes} by proving the
-displayed quotient expansion and then applies the conditional transfer.
-Lemma~\ref{lem:borderline-exact-power-tail-quotient-expansion} gives the
-sharper \(O(t^{-p})\) quotient remainder used in that verification.  The
-quotient expansion is repeated in the theorem statement so that the entropy
-conclusion cannot be read as a consequence of regular variation alone.
+The exact power law is a verification of
+Theorem~\ref{thm:admissible-borderline-tail-entropy}.  The quotient expansion
+is displayed because it is the admissibility input.
 
-\begin{theorem}[Verified exact symmetric power-tail theorem]%
+\begin{proposition}[Exact symmetric power-tail verification]%
 \label{prop:log-tail-counterexample-top-moment}
 Let \(N\ge3\), put \(p=2N-2\), and choose \(R>0\) and \(c>0\) such that
 \[
@@ -1196,11 +1224,8 @@ holds in \(L^\infty(\RR)\cap L^1(\omega)\), with
 \begin{equation}\label{eq:exact-power-tail-theorem-quotient-error}
   \|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-p}).
 \end{equation}
-Since \(M_p(t)=2c\log t+O(1)\), this displayed quotient expansion verifies
-the conditional quotient hypothesis of
-Lemma~\ref{thm:tail-replacements-proved-here}.  The entropy assertion
-below is a consequence of that verification, not of the divergence of
-\(M_p(t)\) alone.
+Since \(M_p(t)=2c\log t+O(1)\), this verifies the admissible input of
+Theorem~\ref{thm:admissible-borderline-tail-entropy}.
 With \(H(t)=D_{\mathrm{KL}}(P_t*\nu\|P_t)\),
 \begin{equation}\label{eq:core-log-tail-counterexample-asymptotic}
 H(t)=\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -1218,7 +1243,7 @@ Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.  Thus, for this
 explicit power-tail law, the missing \(A_{2N}t^{-2N}\) polynomial layer is
 replaced by the displayed tail-dependent logarithmic layer.  The case \(N=2\)
 is excluded from this statement.
-\end{theorem}
+\end{proposition}
 
 \begin{theorem}[Borderline infinite-variance power tail]%
 \label{prop:n2-borderline-infinite-variance-layer}
@@ -1244,7 +1269,7 @@ threshold theorem below.
 
 \subsubsection*{Perturbative power-tail verification}
 
-The perturbative theorem
+The perturbative verification
 \ref{thm:exact-perturbative-power-tail-log-replacement} is separated
 from the exact power law.  For later reference, when \(p\ge4\), \(R>0\), and
 \(r\) is an even integrable function on \(\{|x|\ge R\}\), the four
@@ -1518,7 +1543,7 @@ compact-core, truncated-tail, Taylor-remainder, and far-tail estimates proves
 \eqref{eq:borderline-exact-power-tail-quotient-error}.
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{prop:log-tail-counterexample-top-moment}]
+\begin{proof}[Proof of Proposition~\ref{prop:log-tail-counterexample-top-moment}]
 The mass condition makes \eqref{eq:normalized-borderline-tail-density} a
 probability density:
 \[
@@ -1560,12 +1585,8 @@ Lemma~\ref{lem:borderline-exact-power-tail-quotient-expansion} are precisely
 the four controls
 \eqref{eq:admissible-lower-tail-control}--\eqref{eq:admissible-far-tail-control};
 together with \(M_p(t)=2c\log t+O(1)\), they prove
-\(\nu\in\mathcal A_{p,R,c}\).  Because \(M_p(t)=2c\log t+O(1)\), this verifies
-\eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error}
-with \(M_p(t)\) in place of \(2c\log t\): the difference between
-\(M_p(t)u_pt^{-p}\) and \(2c(\log t)u_pt^{-p}\) is \(O(t^{-p})\), which is
-absorbed into the conditional error.  The conditional quotient-transfer
-Lemma~\ref{thm:tail-replacements-proved-here} therefore gives
+\(\nu\in\mathcal A_{p,R,c}\).  The admissible entropy theorem,
+Theorem~\ref{thm:admissible-borderline-tail-entropy}, therefore gives
 \[
 H(t)=
 \sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -1731,7 +1752,7 @@ far-tail bound gives \eqref{eq:perturbative-power-tail-quotient-expansion} and
 \eqref{eq:perturbative-power-tail-quotient-error}.
 \end{proof}
 
-\begin{theorem}[Verified perturbative symmetric power-tail theorem]%
+\begin{proposition}[Perturbative symmetric power-tail verification]%
 \label{thm:exact-perturbative-power-tail-log-replacement}
 \label{cor:perturbative-power-tail-log-replacement}
 Let \(N\ge3\), put \(p=2N-2\), and let \(R>0\), \(c>0\).  Let \(f\) be an
@@ -1782,16 +1803,15 @@ holds in \(L^\infty(\RR)\cap L^1(\omega)\), with
 \begin{equation}\label{eq:perturbative-power-tail-theorem-quotient-error}
 \|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-p}).
 \end{equation}
-Since \(M_p(t)=2c\log t+O(1)\), this quotient expansion verifies the
-conditional quotient hypothesis of
-Lemma~\ref{thm:tail-replacements-proved-here}.  Consequently
+Since \(M_p(t)=2c\log t+O(1)\), this verifies the admissible input of
+Theorem~\ref{thm:admissible-borderline-tail-entropy}.  Consequently
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t)
 =\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
 +2c\,\kappa_N\mu_2\,t^{-2N}\log t
 +o(t^{-2N}\log t).
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 The support condition on \(g\) makes the displayed formula a disjoint
@@ -1825,18 +1845,15 @@ Since \(M_p(t)\sim2c\log t\), the error is
 \[
   M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2})
 \]
-because \(p\ge4\).  Thus
-\eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error}
-hold, and the conditional quotient-transfer
-Lemma~\ref{thm:tail-replacements-proved-here} gives
+because \(p\ge4\).  Thus \(\nu\in\mathcal A_{p,R,c}\), and the admissible
+entropy theorem, Theorem~\ref{thm:admissible-borderline-tail-entropy}, gives
 \[
 H(t)=
 \sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
 +\kappa_N\mu_2\,t^{-2N}M_p(t)
 +o(t^{-2N}M_p(t)).
 \]
-Substituting \(M_p(t)=2c\log t+O(1)\) proves the displayed asymptotic in
-the theorem.
+Substituting \(M_p(t)=2c\log t+O(1)\) proves the displayed asymptotic.
 \end{proof}
 
 \subsubsection*{Monotone slowly varying verification}
@@ -1974,7 +1991,7 @@ Together with \(L(t)=o(\mathcal M_L(t))\), this proves
 \eqref{eq:slowly-varying-far-potter-control}.
 \end{proof}
 
-\begin{theorem}[Verified monotone slowly varying borderline-tail theorem]%
+\begin{proposition}[Monotone slowly varying borderline-tail verification]%
 \label{cor:conditional-slowly-varying-borderline-tail}
 Let \(N\ge3\), put \(p=2N-2\), and let \(R>0\), \(c>0\).  Let \(L\) be
 slowly varying, eventually positive, eventually monotone, and nonnegative on
@@ -2019,8 +2036,7 @@ and the quotient expansion is exactly of the conditional-transfer form
   \qquad
   \|e_t\|_\infty+\|e_t\|_{L^1(\omega)}=o(t^{-p}M_p(t)).
 \]
-Only after this quotient verification does
-Lemma~\ref{thm:tail-replacements-proved-here} apply.  Therefore
+Applying Theorem~\ref{thm:admissible-borderline-tail-entropy} therefore gives
 \begin{equation}\label{eq:slowly-varying-entropy-expansion}
 H(t)=
 \sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -2031,7 +2047,7 @@ where
 \[
   \kappa_N=J(2,p)=(-1)^N(N-1)2^{-2N+2}.
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 The law is symmetric, hence centred, and all odd moments below vanish.  The
@@ -2103,12 +2119,12 @@ the truncated lower moments by the full lower moments costs
 \eqref{eq:slowly-varying-lower-moment-tail-replacement}.  The \(n=p\) term
 is \(u_p(y)t^{-p}M_p(t)+O(t^{-p})\), hence has the asserted leading form.
 Finally the far tail is \eqref{eq:slowly-varying-far-tail-bound}.  These
-estimates prove \eqref{eq:slowly-varying-quotient-expansion}.  The growth
-conclusions supplied by Lemma~\ref{lem:slowly-varying-quotient-controls} and
-the quotient expansion verify
-\eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error},
-so the conditional quotient-transfer
-Lemma~\ref{thm:tail-replacements-proved-here} gives
+estimates prove \eqref{eq:slowly-varying-quotient-expansion}.  Together with
+the growth conclusions supplied by
+Lemma~\ref{lem:slowly-varying-quotient-controls}, they prove
+\(\nu\in\mathcal A_{p,R,c}^{\rm sv}\subset\mathcal A_{p,R,c}\).  The
+admissible entropy theorem,
+Theorem~\ref{thm:admissible-borderline-tail-entropy}, gives
 \eqref{eq:slowly-varying-entropy-expansion}.
 \end{proof}
 
@@ -2511,7 +2527,7 @@ and the right side tends to
 \(M\to\infty\) proves divergence when the variance is infinite.
 \end{proof}
 
-\subsection{Multidimensional D1--D4 quotient and covariance package}
+\subsection{Multidimensional quotient and covariance package}
 
 For \(d\ge1\), let
 \[
@@ -2599,8 +2615,8 @@ bound for \(|\beta|=L+1\), gives
 The next lemma is the analytic estimate used later to verify the named
 matched quotient jet from finite moments.  The quotient jet itself, including
 the entropy-existence clause, is defined in full immediately before the
-conditional transfer theorem to keep the hypothesis of Theorem~II visible at
-the point where it is used.
+conditional transfer theorem so the analytic input is visible at the point
+where it is used.
 
 \begin{lemma}[Global multidimensional quotient remainder]%
 \label{lem:global-multidim-quotient-remainder-core}
@@ -2750,7 +2766,7 @@ The \(L^1(\Omega_d)\) part follows from the same uniform bound because
 \end{proof}
 
 \medskip
-\noindent\textbf{Matched multidimensional quotient input for Theorem~II.}
+\noindent\textbf{Matched multidimensional quotient input.}
 For \(d\ge1\) and \(L\in\mathbb N\) with \(L\ge2\), put
 \[
 h_t=P_t^{(d)}*\nu,\qquad
@@ -2797,48 +2813,31 @@ exist, and the scaled quotient has the \(L^\infty\cap L^1(\Omega_d)\) jet
 \lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
 \end{aligned}
 \end{equation}
-Thus the conditional object used in Theorem~II is precisely
-\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\).  Its definition has no
-dimension-dependent lower bound beyond \(L\ge2\); the restriction
-\(L\ge d+1\) appears only when the jet is proved from finite moment in
+Thus the conditional object used in
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} is precisely
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\).  The restriction \(L\ge d+1\)
+appears only in the finite-moment supply theorem,
 Theorem~\ref{thm:multidimensional-density-quotient}.
 
 \medskip
-\noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
-\textbf{Assumptions and conclusions in the multidimensional package.}
-\begin{itemize}[leftmargin=*,nosep]
-\item \textbf{Assumed:} Theorem~\ref{thm:multidimensional-poisson-entropy-jets}
-assumes the full \((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) package
-displayed above and only then transfers it to KL coefficients.
-\item \textbf{Proved from finite \(L\)-moment:}
-Theorem~\ref{thm:multidimensional-density-quotient} proves
-\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) from
-\(\EE|X_c|^L<\infty\) when \(L\ge d+1\); the corollary after it is therefore
-an actual finite-moment KL jet.
-\item \textbf{Algebra only:}
-Proposition~\ref{prop:multidim-formal-covariance-layer} uses finite covariance
-only to compute
-\(\mathcal Q_d(\Sigma)=\frac12\int b_\Sigma^2\,\dd\Omega_d\).  It does not
-prove entropy existence, quotient convergence, or a KL asymptotic.
-\item \textbf{Open/false under current norm:}
-Finite covariance alone is not a route to the required
-\(L^\infty\cap L^1(\Omega_d)\) quotient control.  In dimensions \(d\ge2\) the
-\(L^\infty\) part is false for sparse finite-covariance laws, as explained
-after Proposition~\ref{prop:second-order-quotient-criterion}; any leading KL
-coefficient under finite covariance alone would need a different hypothesis
-or norm.
-\end{itemize}
+\noindent\fbox{%
+\begin{minipage}{0.94\linewidth}
+\textbf{Status of the multidimensional inputs.}
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets} assumes
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) and concludes the tensor KL
+expansion.  Theorem~\ref{thm:multidimensional-density-quotient} proves that
+package from \(\EE|X_c|^L<\infty\) when \(L\ge d+1\).  The covariance
+result below is algebra only:
+\(\mathcal Q_d(\Sigma)=\frac12\int b_\Sigma^2\,\dd\Omega_d\).  Finite
+covariance in \(d\ge2\) does not imply the \(L^\infty\)-based second-order
+quotient criterion, as the sparse-atom example after
+Theorem~\ref{prop:second-order-quotient-criterion} shows.  The
+\(L^2\)-plus-nonlinear-integrand criterion in
+Lemma~\ref{lem:l2-second-order-entropy-criterion} is a separate sufficient
+route to the leading KL coefficient.
 \end{minipage}}
 
-\medskip
-\noindent
-With this ledger fixed, the four statements below keep the logical layers
-separate: D1 transfers the conditional quotient jet to entropy, D2 supplies
-that jet from finite moment, D3 evaluates the covariance algebra under finite
-covariance alone, and D4 is the finite \((d+1)\)-moment leading KL coefficient
-consequence.
-
-\begin{theorem}[D1 / Theorem II conditional jet transfer]%
+\begin{theorem}[Conditional multidimensional quotient-to-KL transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge2\), let \(\nu\) be a
 probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies the full
@@ -2934,7 +2933,7 @@ argument.  It appears in the following finite-moment verification, where the
 large-translation remainder must be controlled by the available
 \(L\)-absolute moment.
 
-\begin{theorem}[D2 moment supply]%
+\begin{theorem}[Finite-moment supply of the quotient jet]%
 \label{thm:multidimensional-density-quotient}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
 a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\) and finite centred
@@ -3032,7 +3031,7 @@ the change of variables \(x=\bar{\gamma}+ty\) gives the displayed KL
 representation in \((\mathrm{EX}_{d,L})\).
 \end{proof}
 
-\begin{corollary}[Finite-moment multidimensional KL jet]%
+\begin{theorem}[Finite-moment multidimensional KL jet]%
 \label{thm:multidim-finite-moment-poisson-kl-asymptotic}%
 \label{cor:multidim-finite-moment-entropy-jet}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
@@ -3076,7 +3075,7 @@ All odd retained coefficients vanish:
 \mathcal A_m^{(d)}(\nu)=0
 \qquad\text{for every odd }m,\quad 4\le m\le L+2.
 \]
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
 Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
@@ -3092,9 +3091,9 @@ proved in that theorem.  No covariance contraction is used in this proof.
 \end{proof}
 
 \noindent
-The next lemma and proposition form only the separate covariance-algebra
-layer.  They evaluate the quadratic density mode under finite covariance and
-do not by themselves prove any KL asymptotic.
+The next lemma and proposition evaluate the covariance quadratic layer.  This
+algebraic computation becomes a KL leading term through the quotient criteria
+stated afterward.
 
 \begin{lemma}[Radial--angular contractions for the Cauchy weight]%
 \label{lem:radial-angular-contractions}
@@ -3174,31 +3173,14 @@ so \(C=1/(d(d+2))\), proving
 \eqref{eq:spherical-traceless-square}.
 \end{proof}
 
-\subsubsection*{Algebraic covariance layer and its asymptotic use}\leavevmode\par\smallskip
-
-\noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
-\textbf{Covariance-layer orientation.}
-Finite covariance alone is not used here to prove
-\[
-D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar{\gamma})\bigr)
-=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4});
-\]
-it gives only the algebraic number \(\mathcal Q_d(\Sigma)\).  The KL
-asymptotic follows from that number only when a quotient estimate is supplied
-separately.
-\end{minipage}}
-
-\medskip
+\subsubsection*{Covariance algebra and the second-order criterion}\leavevmode\par\smallskip
 
 The next proposition evaluates the finite quadratic form determined by the
-degree-two density mode.  It has no entropy-existence content: neither
-\((\mathrm{EX}_{d,L})\) nor \((\mathrm{MPJ}_{d,L})\) follows from finite
-covariance alone.  The conditional criterion after it records the separate
-quotient hypothesis needed to turn that algebraic number into a KL
-coefficient, and D4 is the finite-moment statement that supplies that
-hypothesis.
+degree-two density mode.  Finite covariance supplies this algebraic layer.  A
+KL leading term requires one more input, recorded immediately afterward as a
+second-order quotient criterion.
 
-\begin{proposition}[D3 covariance algebra under finite covariance]%
+\begin{proposition}[Covariance algebra under finite covariance]%
 \label{prop:multidim-formal-covariance-layer}
 Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
 finite centred second moment.  Put
@@ -3247,10 +3229,8 @@ and, for an isotropic covariance \(\Sigma=\tau I_d\),
 \Sigma_0=0,\qquad
 \mathcal Q_d(\Sigma)=c_d^{\rm iso}d^2\tau^2 .
 \]
-The radial moments and angular contractions entering the two constants are
-isolated in Lemma~\ref{lem:radial-angular-contractions}.  The KL scope of
-this algebraic layer is recorded in
-Subsection~\ref{subsec:intro-hypotheses-scope}.
+Lemma~\ref{lem:radial-angular-contractions} gives the radial and angular
+contractions entering the constants.
 \end{proposition}
 
 \begin{proof}
@@ -3398,14 +3378,56 @@ This proves \eqref{eq:multidim-leading-positive-constants}.  The constants are
 positive, so the layer vanishes exactly when \(\Sigma=0\).
 \end{proof}
 
-\noindent The scope of the finite-covariance layer is summarized in
-Subsection~\ref{subsec:intro-hypotheses-scope}.  The quotient criterion needed
-to turn \(\mathcal Q_d(\Sigma)\) into a KL coefficient is recorded next; it is
-not a consequence of finite covariance alone.
+\noindent The following lemma isolates the nonlinear part of a non-uniform
+second-order entropy transfer.
+
+\begin{lemma}[\(L^2\) second-order entropy criterion]%
+\label{lem:l2-second-order-entropy-criterion}
+Let \((X,\mathcal A,\lambda)\) be a probability space and let
+\(\delta_t:X\to[-1,\infty)\) be measurable with
+\(\int_X\delta_t\,\dd\lambda=0\).  Let \(b\in L^2(\lambda)\), and put
+\[
+  \Phi(s)=(1+s)\log(1+s)-s .
+\]
+Assume
+\[
+  t^2\delta_t\longrightarrow b
+  \qquad\text{in }L^2(\lambda).
+\]
+Assume also the nonlinear integrand estimate
+\[
+  \int_X\left|\Phi(\delta_t)-\frac12\delta_t^2\right|\dd\lambda
+  =o(t^{-4}).
+\]
+Then
+\[
+  \int_X\Phi(\delta_t)\,\dd\lambda
+  =\frac{t^{-4}}2\int_X b^2\,\dd\lambda+o(t^{-4}).
+\]
+\end{lemma}
+
+\begin{proof}
+Write \(z_t=t^2\delta_t\).  The \(L^2\) convergence gives
+\[
+  \int_X z_t^2\,\dd\lambda\to\int_X b^2\,\dd\lambda .
+\]
+Thus
+\[
+  \frac12\int_X\delta_t^2\,\dd\lambda
+  =\frac{t^{-4}}2\int_Xz_t^2\,\dd\lambda
+  =\frac{t^{-4}}2\int_Xb^2\,\dd\lambda+o(t^{-4}).
+\]
+The assumed nonlinear estimate gives
+\[
+  \int_X\Phi(\delta_t)\,\dd\lambda
+  =\frac12\int_X\delta_t^2\,\dd\lambda+o(t^{-4}),
+\]
+which proves the claim.
+\end{proof}
 
 \medskip
 
-\begin{proposition}[Second-order quotient criterion]%
+\begin{theorem}[Second-order KL coefficient under quotient input]%
 \label{prop:second-order-quotient-criterion}
 Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
 mean \(\bar{\gamma}\) and finite centred covariance \(\Sigma\).  Put
@@ -3415,34 +3437,35 @@ mean \(\bar{\gamma}\) and finite centred covariance \(\Sigma\).  Put
   \delta_t^{(d)}(y)=\frac{h_t(\bar{\gamma}+ty)}
   {g_t(\bar{\gamma}+ty)}-1 .
 \]
-Finite covariance gives only
-\[
-\mathcal Q_d(\Sigma)
-=\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y),
-\]
-with \(b_\Sigma\) as in
-\eqref{eq:multidim-leading-theorem-density-mode}.  This algebraic conclusion
-does not contain a uniform quotient estimate.  If, in addition, the separate
-second-order quotient criterion
+Assume the separate second-order quotient criterion
 \begin{equation}\label{eq:second-order-quotient-criterion}
   \delta_t^{(d)}(y)=t^{-2}b_\Sigma(y)+r_t(y),\qquad
   \|r_t\|_\infty+\|r_t\|_{L^1(\Omega_d)}=o(t^{-2}),\qquad
   \|\delta_t^{(d)}\|_\infty=O(t^{-2})
 \end{equation}
-holds in the sense needed for the Taylor transfer below, then
+with \(b_\Sigma\) as in
+\eqref{eq:multidim-leading-theorem-density-mode}.  Then
 \[
 D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
 \]
-For \(d\ge2\), finite covariance alone does not imply the full
-\(L^\infty\)-based second-order quotient criterion.  What remains open is
-whether a weaker \(L^1(\Omega_d)\)-based criterion, strengthened by the
-nonlinear entropy-integrability needed for the Taylor transfer, is sufficient
-for the leading KL coefficient.  Thus the proposition is only a one-way
-sufficiency statement.
-\end{proposition}
+The same conclusion also follows from the non-uniform criterion
+\[
+  t^2\delta_t^{(d)}\to b_\Sigma\quad\text{in }L^2(\Omega_d)
+\]
+and
+\[
+  \int_{\RR^d}\left|
+  \Phi(\delta_t^{(d)}(y))-\frac12(\delta_t^{(d)}(y))^2
+  \right|\,\Omega_d(\dd y)=o(t^{-4}),
+\]
+provided the KL integral is represented by
+\(\int\Phi(\delta_t^{(d)})\,\dd\Omega_d\) for all sufficiently large \(t\).
+\end{theorem}
 
 \begin{proof}
-Since \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\), for all sufficiently large \(t\)
+Under \eqref{eq:second-order-quotient-criterion},
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Hence, for all sufficiently large
+\(t\),
 \[
 \Phi(s)=(1+s)\log(1+s)-s=\frac{s^2}{2}+O(s^3)
 \]
@@ -3478,11 +3501,16 @@ D_{\rm KL}(h_t\|g_t)
 \]
 because Proposition~\ref{prop:multidim-formal-covariance-layer} identifies
 \(\frac12\int b_\Sigma^2\,\dd\Omega_d\) with \(\mathcal Q_d(\Sigma)\).
+Under the \(L^2\)-plus-nonlinear-integrand alternative, the same conclusion follows
+by applying Lemma~\ref{lem:l2-second-order-entropy-criterion} with
+\((X,\lambda)=(\RR^d,\Omega_d)\) and \(b=b_\Sigma\), followed by the same
+identification of \(\frac12\int b_\Sigma^2\,\dd\Omega_d\).
 \end{proof}
 
-\noindent\emph{Why the \(L^\infty\) clause is separate.}
-For \(d\ge2\) the preceding warning is witnessed by a direct sparse-atom
-construction.  Let \(e_1\in\RR^d\), choose \(R_n\uparrow\infty\) so fast that
+\noindent\emph{Finite covariance and the uniform quotient clause.}
+For \(d\ge2\) finite covariance does not imply
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Let \(e_1\in\RR^d\), choose
+\(R_n\uparrow\infty\) so fast that
 \[
   W:=\sum_{n\ge1}R_n^{-2}n^{-2}<1,\qquad
   t_n:=8^{-1/(d+1)}R_n^{(d-1)/(d+1)}n^{-2/(d+1)}\to\infty,
@@ -3507,15 +3535,13 @@ has mean zero and finite covariance because
 \]
 Hence \(\|\delta_{t_n}^{(d)}\|_\infty\ge3\) along \(t_n\to\infty\), so
 \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\) is false on the finite-covariance
-class.  The obstruction is specifically the uniform quotient clause; the
+class.  The obstruction is specifically uniform control of the quotient; the
 quadratic covariance contraction in
-Proposition~\ref{prop:multidim-formal-covariance-layer} remains finite.  This
-example does not settle the weaker \(L^1(\Omega_d)\)-based question stated
-above, which would require a separate nonlinear entropy-integrability
-criterion rather than the \(L^\infty\) Taylor transfer used in
-Proposition~\ref{prop:second-order-quotient-criterion}.
+Proposition~\ref{prop:multidim-formal-covariance-layer} remains finite, and
+the non-uniform \(L^2\)-plus-nonlinear-integrand criterion above is a separate
+sufficient route to the same leading coefficient.
 
-\begin{corollary}[D4 actual leading KL coefficient]%
+\begin{corollary}[Actual leading multidimensional KL coefficient]%
 \label{cor:finite-dplusone-moment-leading-multidim-coefficient}
 Let \(d\ge1\), let \(\nu\) be a probability measure on \(\RR^d\) with mean
 \(\bar{\gamma}\), and assume
@@ -3557,12 +3583,11 @@ c_d^{\rm tr}=
 
 \begin{proof}
 Apply Theorem~\ref{thm:multidimensional-density-quotient} with
-\(L=d+1\).  In the introduction-level notation, this is the D2 input:
-by D2, \(\EE|X_c|^{d+1}<\infty\) implies the second-order quotient criterion
+\(L=d+1\).  Thus \(\EE|X_c|^{d+1}<\infty\) implies the second-order quotient criterion
 \eqref{eq:second-order-quotient-criterion}, including
-\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Proposition~\ref{prop:second-order-quotient-criterion}
-then gives the KL leading term, and D3
-(Proposition~\ref{prop:multidim-formal-covariance-layer}) identifies its
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Theorem~\ref{prop:second-order-quotient-criterion}
+then gives the KL leading term, and
+Proposition~\ref{prop:multidim-formal-covariance-layer} identifies its
 coefficient as \(\mathcal Q_d(\Sigma)\).
 \end{proof}
 
