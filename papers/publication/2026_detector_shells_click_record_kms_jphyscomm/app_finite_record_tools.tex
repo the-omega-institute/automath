@@ -1,11 +1,11 @@
 \section{Finite-Record Regenerative Tools}\label{app:finite-record-regenerative-tools-main}
 
 This appendix collects auxiliary renewal facts used in \Cref{sec:records}.
-The separated-batch covariance proof itself appears once, in the main-text
-master theorem \Cref{thm:main-calendar-stopped-separated-batch-plugin}.  The
-results below are restatements or complete-cycle wrappers that preserve the
-labels used by secondary diagnostics and by the supplementary implementation
-protocols.
+The paper-level retained inclusion covariance estimator is proved in the
+main-text adjacent-gap master theorem
+\Cref{thm:main-calendar-stopped-separated-batch-plugin}.  The fixed-range
+facts below are auxiliary standard regenerative tools used only by secondary
+diagnostics and supplementary protocols.
 
 \begin{proposition}[Separated-batch covariance for fixed-range gap rewards]\label{thm:regenerative-separated-batch-covariance-main}
 Fix an integer \(m\ge0\) and a dimension \(d\).  Let
@@ -41,14 +41,18 @@ for \(1\le\ell\le M_N\).  On \(M_N\ge2\), put
 \end{proposition}
 
 \begin{proof}
-This is the deterministic-prefix specialization of the covariance argument in
-\Cref{thm:main-calendar-stopped-separated-batch-plugin}, with no calendar
-random-index multiplier and no plug-in perturbation.  The same separated
-blocks \(I_{\ell,N}\) are independent because the reward has range \(m\), and
-the proof of the master theorem gives
-\eqref{eq:regenerative-separated-batch-covariance-main} after replacing its
-random stopped prefix by the deterministic prefix \(M_N=\lfloor N/(b_N+m)\rfloor\).
-No additional covariance layer is proved in this appendix.
+The separated blocks \(I_{\ell,N}\) are independent because the reward has
+range \(m\).  Stationarity gives
+\(b_N^{-1}\Var(B_{\ell,N})=T_m+O(b_N^{-1})\), and the fourth-moment expansion
+for \(m\)-dependent sums gives \(\EE\|B_{\ell,N}\|^4\le Cb_N^2\).  Applying
+Kolmogorov's maximal inequality entrywise to the independent centered matrices
+\[
+b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}
+\]
+over the deterministic prefix \(M_N=\lfloor N/(b_N+m)\rfloor\) gives the
+\(\sqrt{b_N/N}\) fluctuation term, and the empirical batch mean contributes
+only \(O_{\PP}(M_N^{-1})\).  This proves
+\eqref{eq:regenerative-separated-batch-covariance-main}.
 \end{proof}
 
 \begin{proposition}[Calendar-stopped separated batches with plug-in centering]\label{prop:calendar-stopped-separated-batch-plugin-main}
@@ -131,23 +135,33 @@ again with the auxiliary zero completion on \(M_N<2\).
 \end{proposition}
 
 \begin{proof}
-\Cref{thm:main-calendar-stopped-separated-batch-plugin} is the main-text
-master statement with the same hypotheses, except that this appendix wrapper
-allows a fixed terminal deletion \(q\).  Replacing the stopped count there by
+The renewal estimates
 \[
-M_N=\max\{M\ge0:\ (M-1)(b_N+m)+b_N-1+m+q\le K_N-1\}
+K_N=N/\mu+O_{\PP}(\sqrt N),\qquad
+\max_{j\le K_N+m+q+1}L_j=O_{\PP}(\log N)
 \]
-changes it by at most \(O(1)\) batches.  Since the master theorem gives
+follow from the exponential moment.  Hence the fixed endpoint/look-ahead
+deletion changes the stopped batch count by at most \(O(1)\), and
 \[
 M_N=\frac{N}{\mu(b_N+m)}
-     +O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right),
+     +O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right).
 \]
-the fixed deletion does not affect the rate, the block perturbation bound, or
-the plug-in covariance conclusion.  The displayed equations
-\eqref{eq:calendar-stopped-separated-batch-rate-main},
-\eqref{eq:calendar-stopped-plugin-block-main}, and
-\eqref{eq:calendar-stopped-plugin-covariance-rate-main} are therefore exactly
-the corresponding conclusions of the master theorem.
+Conditional on any deterministic prefix in the high-probability range
+\(\ell\le C N/b_N\), the separated batch sums are independent by the
+range-\(m\) separator.  The deterministic-prefix estimate in
+\Cref{thm:regenerative-separated-batch-covariance-main}, combined with the
+random-prefix replacement above and \(K_N/N\to1/\mu\), gives
+\eqref{eq:calendar-stopped-separated-batch-rate-main}.  For the plug-in part,
+\[
+\widehat B_{\ell,N}-B_{\ell,N}
+=-\Delta_N\sum_{j\in I_{\ell,N}}L_j,
+\]
+and a Chernoff bound plus a union bound over \(O_{\PP}(N/b_N)\) retained
+batches gives the uniform block bound
+\eqref{eq:calendar-stopped-plugin-block-main}.  Expanding the centered
+quadratic covariance then gives the same cross-term and pure plug-in bounds as
+in the main adjacent-gap theorem, proving
+\eqref{eq:calendar-stopped-plugin-covariance-rate-main}.
 \end{proof}
 
 \begin{proposition}[Standard complete-cycle and separated-batch facts]\label{prop:standard-complete-cycle-separated-batch-facts-main}
@@ -279,13 +293,11 @@ large numbers \(K_N/N\to1/\mu\) and the usual random-index replacement
 \cite[Chs.~IV.3 and VI.3]{AsmussenGlynn2007}.  This gives the covariance
 \(\mathcal T_{m_{\rm dep}}/\mu\).
 
-For the separated-batch estimator, apply the master theorem
-\Cref{thm:main-calendar-stopped-separated-batch-plugin} to the fixed-range gap
-reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\).  The appendix wrapper
-\Cref{prop:calendar-stopped-separated-batch-plugin-main} is only the same
-theorem with \(q\) fixed endpoint and look-ahead cycles deleted by the
-particular complete-cycle set.  It gives the random calendar-stopped batch
-count bound
+For the separated-batch estimator, apply the fixed-range wrapper
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} to the gap reward
+\(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), with \(q\) fixed endpoint and
+look-ahead cycles deleted by the particular complete-cycle set.  It gives the
+random calendar-stopped batch count bound
 \(M_N=K_N/(b_N+m_{\rm dep})+O_{\PP}(\sqrt N/b_N+1)\), controls the maximal
 deleted endpoint cycle, subtracts the empirical batch mean, and gives exactly
 \eqref{eq:separated-batch-covariance-estimator-rate-main}.
@@ -296,9 +308,7 @@ For the plug-in perturbation, write
 \widehat C_{\ell,N}-C_{\ell,N}
 =-\Delta_N\sum_{j\in I_{\ell,N}}L_j .
 \]
-\Cref{thm:main-calendar-stopped-separated-batch-plugin}, equivalently the
-fixed-endpoint wrapper
-\Cref{prop:calendar-stopped-separated-batch-plugin-main}, gives the uniform
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} gives the uniform
 block-length bound, the block perturbation
 \eqref{eq:separated-batch-plugin-block-main}, and the covariance perturbation
 \eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
@@ -596,37 +606,16 @@ scale \(a(z,v)\) in
 \begin{remark}[Worked diagonal branch certificate]\label{rem:worked-diagonal-branch-certificate-main}
 The self-contained certificate used by this manuscript is the interval
 transcript in \Cref{app:self-contained-diagonal-branch-certificate-main}.  The
-paper-local files \path{certificates/diagonal_branch_certificate.py} and
-\path{certificates/diagonal_branch_z_half.json} are the machine-readable replay
-of that transcript.  The command
-\begin{center}
-\path{python certificates/diagonal_branch_certificate.py --test}
-\end{center}
-evaluates the finite covariance and sandwich formulas
-\eqref{eq:dmap-diagonal-sigma-r-finite-main}--\eqref{eq:dmap-diagonal-sigma-finite-main}
-directly from the displayed scalars, matrices and \(D\Phi\), checks that the
-stored JSON transcript is exactly the deterministic transcript regenerated by
-the script, and verifies that the directed intervals enclose those
-independently evaluated printed-formula values.  The unit tests also reject the
-older draft trace/determinant intervals as negative regression fixtures; those
-rejected numbers are not certificate data and are not used in any branch
-decision.  Thus the certificate used below is tied to the printed formulas
-rather than to a manually copied numerical table.  The accepted arithmetic is
-base-ten decimal interval
-arithmetic with precision \(90\) significant digits and directed rounding
-downward for every lower endpoint and upward for every upper endpoint; the
-input interval and all branch enclosures are printed in
-\Cref{app:self-contained-diagonal-branch-certificate-main}.  The script has no
-third-party package dependency; the recorded replay environment is Python
-\(3.10.11\), \path{decimal} \(1.70\), and \path{libmpdec} \(2.5.1\).  The
-canonical UTF-8/LF JSON transcript hash printed by
-\begin{center}
-\path{python certificates/diagonal_branch_certificate.py --hash}
-\end{center}
-is
-\[
-\mathtt{61fa032f034e8aad38ab88b52e98071d89335847ad6fda397ca570bf4a3c7db9}.
-\]
+paper-local script, stored JSON transcript, replay environment, command lines,
+and transcript hash are supplementary reproducibility material.  The main
+article uses only the printed interval transcript and its proved determinant
+margin.  The accepted arithmetic is base-ten decimal interval arithmetic with
+precision \(90\) significant digits and directed rounding downward for every
+lower endpoint and upward for every upper endpoint; the input interval and all
+branch enclosures are printed in
+\Cref{app:self-contained-diagonal-branch-certificate-main}.  Thus the
+certificate used below is tied to the printed formulas rather than to a
+rounded midpoint table.
 
 For this point certificate the exact substitution into
 \eqref{eq:dmap-diagonal-sigma-r-finite-main} is
@@ -1914,16 +1903,17 @@ retained roots have not entered \(U_p\cup U_s\).  This gives the stated loss
 bound.
 \else
 
-\subsection{Finite-domain diagonal certification and implementation protocols}
+\subsection{Diagonal branch certificate interface}
 \label{app:finite-domain-diagonal-certification-main}
 \label{app:diagonal-branch-certificate-protocol-main}
 \label{app:finite-projected-gaussian-certificates-main}
 \label{app:finite-record-implementation-protocols-main}
 
-The detailed interval-cover verifier, outward-rounded branch arithmetic,
-projected-Gaussian quadrature brackets, canonical DKW simulation rule, and
-implementation algorithms are supplementary protocol material.  The main
-article uses only the following compact contract.
+The detailed interval-cover verifier, projected-Gaussian quadrature brackets,
+canonical DKW simulation rule, and implementation algorithms are supplementary
+extension material.  The main article uses only the population branch
+interface below to support the ideal fixed-null asymptotic theorem at
+\(z_0=1/2\).  It does not print any record-specific finite diagonal transcript.
 
 \begin{remark}[Worked diagonal branch certificate]\label{rem:worked-diagonal-branch-certificate-main}
 The printed point transcript for \(z=1/2\) is
@@ -1936,9 +1926,8 @@ neighbouring-point branch classification.
 Fix \(0<z<1\), set \(n_z=(-z,1)^\top\), \(t_z=(1,z)^\top\), and form the
 actual D-MAP covariance \(\Sigma_\sigma(z)\) by
 \eqref{eq:dmap-diagonal-sigma-finite-main}.  A diagonal branch certificate is
-the finite branch component of the larger tuple
-\(\mathcal C(z,\alpha,N)\) in
-\Cref{thm:certified-diagonal-inference-main}.  It proves exactly one of:
+a population certificate for the covariance branch at a fixed candidate.  It
+proves exactly one of:
 \[
 \det\Sigma_\sigma(z)>0,
 \]
@@ -1962,12 +1951,12 @@ zero-width interval enclosures.  A floating-point eigenvalue calculation is
 not a branch certificate.  A branch certificate alone is not a finite
 accept/reject transcript; a realized finite diagonal report also needs the
 record-specific statistic enclosure \([Q]\) and critical-value bracket
-\([L,U]\).  In the submitted main article the only printed branch transcript is
+\([L,U]\), neither of which is printed in the main article.  In the submitted
+main article the only printed branch transcript is
 the full-rank point certificate at \(z=1/2\) in
 \Cref{lem:z-half-diagonal-branch-certificate-main}; all other diagonal
 candidates are diagnostics unless a separate branch transcript is attached,
-and no candidate has an executed finite-report transcript unless the complete
-tuple \(\mathcal C(z,\alpha,N)\) is printed.
+and no candidate has an executed finite-report transcript in this article.
 \end{definition}
 
 \begin{algorithmiclemma}[Outward-rounded diagonal branch certificate]\label{lem:diagonal-interval-branch-certificate-main}
@@ -1982,7 +1971,7 @@ population covariance branch; failed transcripts leave the candidate
 diagnostic only.
 \end{algorithmiclemma}
 
-\begin{algorithmiclemma}[Finite interval-cover diagonal branch certification]\label{lem:diagonal-certified-interval-cover-main}
+\begin{algorithmiclemma}[Supplementary interval-cover branch certification]\label{lem:diagonal-certified-interval-cover-main}
 A future finite-domain extension may cover a compact interval
 \([z^-,z^+]\Subset(0,1)\) by finitely many certified subintervals.  Each
 terminal subinterval must satisfy
@@ -2017,106 +2006,16 @@ identically zero limiting statistic.  The full-rank and rank-one non-normal
 branches have continuous projected-Gaussian laws and exact lower quantiles.
 \end{lemma}
 
-\begin{algorithmiclemma}[Certified deterministic projected-Gaussian quantile bracket]\label{lem:certified-deterministic-projected-gaussian-quantile-main}
-For a certified full-rank covariance branch, the lower conditional
-projected-Gaussian quantile is accepted in the main theorem chain only through
-a finite bracket \(L<U\) with outward-rounded CDF inequalities
-\[
-F^+(L)<q\le F^-(U).
-\]
-The transcript may leave midpoint comparisons undecided; the endpoint
-inequalities alone certify \(L<c_q\le U\) and the corresponding comparison
-with an outward-rounded statistic interval \([Q]\).
-\end{algorithmiclemma}
-
-\begin{lemma}[Certified rank-one non-normal projected-Gaussian quantile]\label{lem:certified-rank-one-nonnormal-projected-gaussian-quantile-main}
-In the rank-one non-normal branch,
-\(\Sigma=\lambda vv^\top\) with
-\(\operatorname{span}\{v\}\ne\operatorname{span}\{n_z\}\), the projected
-statistic has distribution
-\begin{equation}\label{eq:rank-one-nonnormal-cdf-main}
-\frac12F_{\chi^2_1}(c)
-+\frac12F_{\chi^2_1}\!\left(\frac{c}{a(z,v)}\right),
-\qquad
-a(z,v)=
-\left(1-\frac{(n_z^\top v)^2}{\|n_z\|^2}\right)^2\in(0,1].
-\end{equation}
-For the certificate transcript, the scale enclosure is the directed-rounded
-version of
-\begin{equation}\label{eq:diagonal-rank-one-nonnormal-scale-certificate-main}
-a_{\rm rn}=
-\left(
-1-\frac{n_z^\top\Sigma_\sigma(z)n_z}
-{\operatorname{tr}\Sigma_\sigma(z)\,\|n_z\|^2}
-\right)^2 .
-\end{equation}
-A coverage-certified report for this branch must attach an interval enclosure
-of \(a(z,v)\) and a one-dimensional directed-rounding quantile bracket.
-\end{lemma}
-
-\begin{algorithmiclemma}[Certified projected-Gaussian quantile bracketing algorithm]\label{thm:certified-projected-gaussian-quantile-algorithm-main}
-The deterministic quantile transcript for a certified projected-Gaussian
-branch consists of finite outward-rounded enclosures proving
-\[
-L<c_q(z,\Sigma)\le U
-\]
-for the lower \(q\)-quantile of the ideal projected-Gaussian law.  Conditional
-Monte Carlo output is coverage-certified only when it is inflated by a
-one-sided DKW domination certificate; raw simulated quantiles are diagnostics.
-\end{algorithmiclemma}
-
-\begin{definition}[Finite diagonal report certificate]\label{def:finite-diagonal-report-main}
-A finite diagonal report certificate is the record-specific transcript that
-would be required to turn Theorem~E into an executed finite comparison at the
-fixed candidate \(z_0=1/2\) on the retained reporting event
-\(\mathcal E_N\).  The main article prints the population branch certificate
-for \(z_0=1/2\), but it does not print a retained-record critical-value
-bracket or a realized statistic interval.  An executed extension would consist
-of one theorem-level certificate tuple
-\[
-\mathcal C(z_0,\alpha,N)
-=\bigl([z],[\theta],[\Sigma_\sigma],[I_\tau],
-[I_{\det}],[w],[L,U],[Q]\bigr).
-\]
-Here \([z]\) contains only the fixed candidate, \([\theta]\) encloses
-\(-\log z_0\), \([\Sigma_\sigma]\), \([I_\tau]\), \([I_{\det}]\), and \([w]\)
-are the branch-certificate intervals for the retained covariance used in
-Theorem~E, \([L,U]\) is the certified critical-value bracket or dominated
-simulated critical value, and \([Q]\) contains the realized statistic
-\(Q_N(z_0)\).  The submitted branch certificate is
-\Cref{lem:z-half-diagonal-branch-certificate-main}; in the full-rank submitted
-case the tuple must prove
-\[
-[I_{\det}]\subset[\eta,\infty),\qquad
-F_N^+(L)<1-\alpha\le F_N^-(U).
-\]
-The critical-value component is exactly one of two certificates: either an
-ideal-CDF bracket deciding the statistic interval or the canonical
-DKW-inflated projected-Gaussian simulated critical value with
-\[
-\epsilon_N^{MC}=\sqrt{\frac{\log(2N^2)}{2N}}.
-\]
-Without both a branch certificate and a critical-value transcript, the
-projected-Gaussian output is diagnostic and no finite accept/reject report is
-asserted.
-For the submitted article the branch certificate is present, while
-\([L,U]\) and \([Q]\) are not printed; hence this definition supplies a
-checklist for reproducibility rather than a finite decision.
-\end{definition}
-
-\begin{proposition}[Master rule for finite diagonal reports]\label{prop:finite-diagonal-report-master-main}
-Every coverage-certified exchange-diagonal finite-record decision in this
-framework has the form
-\[
-\text{branch certificate}+\text{critical-value domination/bracket}.
-\]
-The branch certificate fixes the population covariance case; the
-critical-value certificate either brackets the ideal conditional quantile or
-dominates it by the DKW rule.  If either component is absent, no
-coverage-certified finite diagonal report is formed.
-In the submitted main article the critical-value component is absent, so no
-coverage-certified finite diagonal report is formed.
-\end{proposition}
+\begin{remark}[Supplementary finite diagonal report protocols]\label{def:finite-diagonal-report-main}\label{prop:finite-diagonal-report-master-main}
+Finite diagonal report certificates, projected-Gaussian quantile brackets,
+DKW-inflated simulation rules, and the fixed-candidate diagonal calibration
+algorithm are not part of the main article's delivered theorem package.  They
+are supplementary extension protocols.  The main article prints no
+record-specific \([L,U]\), no record-specific \([Q]\), and no candidate-specific
+finite comparison tuple.  Therefore the submitted theorem chain ends at
+Theorem~E's ideal fixed-null asymptotics and asserts no finite diagonal
+accept/reject/undecided output.
+\end{remark}
 
 \phantomsection\label{alg:all-complete-cycle-separated-batch-main}
 \phantomsection\label{alg:projected-plugin-word-law-reconstruction-main}
@@ -2124,8 +2023,9 @@ coverage-certified finite diagonal report is formed.
 \paragraph{Supplementary implementation algorithms.}
 The full Algorithm~1 covariance recipe, Algorithm~2 quotient projection and
 chart-retention rule, Algorithm~3 fixed-candidate diagonal calibration rule,
-Algorithm~4 projected plug-in word-law reconstruction, and the estimated branch-map
-reduction are collected in the supplementary material.  The theorem statements
-in the main article use their mathematical outputs only through
-\Cref{conv:boxed-retained-coverage-main,def:finite-diagonal-report-main,prop:finite-diagonal-report-master-main}.
+Algorithm~4 projected plug-in word-law reconstruction, and the estimated
+branch-map reduction are collected in the supplementary material.  The theorem
+statements in the main article use only the retained-record convention
+\Cref{conv:boxed-retained-coverage-main} and the population branch certificate
+printed for \(z_0=1/2\).
 \fi

@@ -70,6 +70,8 @@
 \newcommand{\EE}{\mathbb{E}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Rinc}{R_{\mathrm{inc}}}
+\newcommand{\Rinch}{\widehat{R_{\mathrm{inc}}}}
 \newcommand{\doiid}[1]{\href{https://doi.org/#1}{doi:\nolinkurl{#1}}}
 \newcommand{\arxivid}[1]{\href{https://arxiv.org/abs/#1}{arXiv:\nolinkurl{#1}}}
 \newcommand{\shapirodoi}{\href{https://doi.org/10.1090/S0002-9939-1987-0866441-7}{doi:10.1090/S0002-9939-\allowbreak 1987-0866441-7}}
@@ -78,7 +80,7 @@
 \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{#1}}\par\smallskip}
 \newcommand{\mainresultrow}[3]{\textup{#1} & #2 & #3\\}
 
-\title{Exact record laws, quotient inverse, and fixed-setting retained-record asymptotics for a constrained two-state classical sampled-counter D-MAP}
+\title{Visible renewal laws and quotient inversion for a killed-leakage sampled-counter D-MAP}
 \author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
 \and
 Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
@@ -90,40 +92,33 @@ Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{ma
 \maketitle
 
 \begin{abstract}
-This paper gives a closed-form analysis of one constrained classical
-sampled-counter D-MAP(2) subfamily.  The input is a classical sampled counter:
-an attempt clock with rate \(\Gamma\), a recovery clock with rate
-\(\kappa_{\mathrm r}\), and a sampling interval \(\Delta\tau\).  Sampling the
-counter with the boundary-reset convention derives a pair of labelled
-stochastic kernels \((T_0,T_1)\) with triangular killed-leakage form.  The
-ideal one-step blanking law is mentioned only as a short Parry comparator, not
-as the main object.
+We study the visible binary output of a boundary-reset sampled counter whose
+click and no-click kernels form a two-state killed-leakage D-MAP.  The physical
+input is an attempt clock with rate \(\Gamma\), a recovery clock with rate
+\(\kappa_{\mathrm r}\), and a sampling interval \(\Delta\tau\); the
+killed-leakage convention is a structural part of the model, not a generic
+property of two-state D-MAPs.
 
-For this constrained D-MAP law, the visible record is a full-support
-stationary renewal process whose zero-run hazard is strictly increasing, whose
-covariance has a single hidden-mode tail, and whose exact \(1\)-dependence
-occurs precisely at the unique hidden-eigenvalue zero.
-A stationary-renewal construction gives all finite marked-set and word
-probabilities from renewal products and finite inclusion--exclusion.
+For this fixed subfamily the click record is a full-support stationary renewal
+process.  We derive its Palm gap law, show that the zero-run hazard is strictly
+increasing, compute the one-mode covariance tail, locate the exact
+\(1\)-dependence threshold, and construct all finite word probabilities by
+renewal products and finite inclusion--exclusion.  The visible law also admits
+a quotient inversion: three inclusion probabilities determine the symmetric
+survival-factor coordinates and hence the unordered survival-factor pair.  An
+ordered labelled rate pair is not identified by one visible record unless an
+external separated-root branch label is supplied.
 
-The same record law has an explicit quotient inverse: three inclusion
-probabilities recover the symmetric survival-factor coordinates and hence the
-unordered survival-factor pair, while an ordered labelled rate pair is
-available only after a separated-root branch label is supplied.
-At the exchange diagonal the separated-root chart is singular, but the common
-numerical rate remains an invariant visible-law estimand.
-
-For fixed-setting retained-record asymptotics, a single complete-cycle
-protocol fixes the batch length, thresholds, covariance estimator, projection
-rule, and chart-retention rule before proving the inclusion-coordinate CLT, the
-quotient-inverse delta method, and the projected Gaussian limit on the exchange
-diagonal.  The diagonal theorem is the fixed-null asymptotic statement at
-\(z_0=1/2\), the only diagonal candidate with a printed branch certificate in
-this manuscript.  No record-specific critical-value bracket and no realized
-statistic interval are printed here, so the manuscript does not execute a
-finite-record accept/reject decision.
-The diagonal inference result is not a simultaneous confidence procedure over
-\(0<z<1\), and it is not valid after data-dependent diagonal selection.
+We then give fixed-setting retained-record asymptotics for these visible
+coordinates.  Under the stated sampled-counter model and pre-specified
+reporting gates, complete-cycle estimators satisfy an inclusion-coordinate CLT,
+the quotient inverse has the corresponding delta method, and the exchange
+diagonal has a projected Gaussian limit.  The only diagonal candidate with a
+printed branch certificate here is \(z_0=1/2\).  The manuscript does not print
+a record-specific critical-value bracket or a realized statistic interval, and
+therefore does not execute a finite-record accept/reject decision.  These
+claims are conditional on the model contract; diagnostic pass or fail outcomes
+are not used to create model-selection-valid confidence coverage.
 \end{abstract}
 
 \noindent\textbf{Keywords:} constrained D-MAP, renewal process, exact \(1\)-dependence, renewal inclusion products, finite-record diagnostics
@@ -153,6 +148,53 @@ The paper-level contribution is therefore the closed-form record-law,
 quotient-inverse, and fixed-setting retained-record asymptotic analysis of this
 one constrained D-MAP(2) subfamily.  The following contract fixes the model used
 by all paper-level theorem statements.
+
+This positioning is narrower than several nearby literatures.  The closest
+probability comparator is Zamparo's stationary renewal-binary framework
+\cite{Zamparo2022RenewalBinary}: it supplies a renewal-binary language and
+Gaussian limit technology, but it does not derive the renewal law from a
+triangular killed-leakage sampled-counter D-MAP, compute the Palm gap law and
+monotone hazard in \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\), or invert three
+visible inclusion coordinates to \((p+s,ps)\).  Classical MAP and D-MAP theory
+\cite{Neuts1979MAP,Lucantoni1991BMAP,AlfaNeuts1995DMAP} supplies the
+arrival-process background, while MAP2 and phase-type nonidentifiability
+\cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability,
+OCinneide1989PhaseTypeNonuniqueness} explain why our inverse is deliberately a
+visible quotient inverse rather than a labelled hidden-kernel reconstruction.
+
+Recent physics-math work on weak memory, waiting times, correlations, and
+partial observations is close in motivation but not in theorem object.  Weak
+memory and Markov-state diagnostics
+\cite{Brandner2025WeakMemoryPRE,MeyerBrandner2026WeakMemory,
+HartichGodec2021EmergentMemory,VollmarEtAl2024Memory,
+ZhaoMakarovGodec2025MarkovStateHolography,LoosGodec2025NonMarkovianEffects}
+study memory strength, response, or adequacy of coarse dynamical models; here
+the record theorem gives the exact one-mode covariance tail
+\(\gamma_n=\rho(a-\rho)\lambda_{\rm hid}^{\,n-1}\), the exact
+\(1\)-dependence threshold, and a visible quotient inverse.  Transition
+waiting-time and partial-observation inference
+\cite{VanDerMeerErtelSeifert2022TransitionWTD,
+HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+ErtelSeifert2024BlurredTransitions,BauerSeifertVanderMeer2025Stroboscopic,
+MaierSeifertVanderMeer2025HiddenPaths} targets generators, entropy production,
+hidden paths, or transition-waiting-time functionals under partial access.  The
+waiting-time object here is instead the Palm zero-run gap law \(g_k\) of the
+binary click record, used to build the complete visible renewal law and the
+symmetric sampled-counter quotient.
+
+Detector dead-time and photon-counting models are the closest instrument-level
+comparators
+\cite{Muller1973,CantorTeich1975,YuFessler2000,Hadfield2009,
+EisamanEtAl2011,StrakaEtAl2020SPADCounting,KirchhoffEtAl2025Deadtime,
+JorgensenJohnson2026DED}.  They address count corrections, device recovery,
+afterpulsing, finite-window distributions, or detector-specific estimators.
+The theorem chain below instead fixes the boundary-reset killed-leakage kernel
+and asks exactly what its stationary binary record identifies.  The structural
+fragility of this convention is recorded in
+\Cref{prop:model-fragility-boundary-reset-main}: allowing one-labelled
+same-bin recovery into \(R\) destroys the deterministic post-click reset on
+which the renewal product, quotient inverse, and retained-record covariance
+route depend.
 
 \begin{assumption}[Constrained sampled-counter D-MAP model]\label{ass:model-inference-contract-main}
 Fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and define
@@ -204,15 +246,16 @@ diagnostic outcomes or reporting branches.
 The only model interpretation assumed by this contract is the classical
 sampled-counter protocol of
 \Cref{lem:classical-counter-kernel-construction-main}.  If the sampling
-interval \(\Delta\tau\) is known, the visible stationary
+interval \(\Delta\tau\) is a known design interval, the visible stationary
 record identifies the unordered survival-factor set
 \(\{p,s\}=\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}\) and
 hence the unordered numerical rate set
 \(\{\Gamma,\kappa_{\mathrm r}\}\).  It does not identify which member is the
 attempt rate and which is the recovery rate without side information.  If
-\(\Delta\tau\) is not treated as a known design constant, the visible law
-identifies only the unordered products
-\(\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\).
+\(\Delta\tau\) is not treated as a known design interval, the visible law
+identifies only the dimensionless unordered product set
+\(\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\); the same record does
+not put those products on an absolute numerical rate scale.
 
 The diagonal retained-record theorem is the fixed-candidate asymptotic
 statement at
@@ -437,26 +480,146 @@ Thus the visible law determines the unordered survival-factor pair
 \[
 z^2-\Phi_1(r)z+\Phi_2(r)=0,
 \]
-and determines all visible renewal probabilities through this quotient.  It
-does not determine an ordered labelled vector
+and determines all visible renewal probabilities through this quotient.  For
+known design interval \(\Delta\tau\), the same quotient determines the
+unordered numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},-\frac{\log s}{\Delta\tau}\right\}
+=\{\Gamma,\kappa_{\mathrm r}\}.
+\]
+If \(\Delta\tau\) is not supplied as a known design interval, the numerical
+rate display is replaced by the dimensionless identifiable set
+\[
+\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}.
+\]
+In either case the visible law does not determine an ordered labelled vector
 \((\Gamma,\kappa_{\mathrm r})\) unless an external branch map is supplied as in
 \Cref{conv:branch-map-labelled-rates-main}.  On the exchange diagonal, the
-invariant visible-law estimand is the common numerical rate, not an ordered
+invariant visible-law estimand is the common dimensionless product, and only
+for known \(\Delta\tau\) the common numerical rate, not an ordered
 attempt/recovery label.
 \end{paperthm}
 
+\begin{proposition}[No-post-selection reporting event]\label{thm:no-post-selection-theorem-main}
+Let \(A_N^{\rm aux}\) be a fixed auxiliary acceptance event defined before the
+record is inspected, and let
+\[
+A_N^{\rm rep}=E_N\cap A_N^{\rm aux}.
+\]
+If \(\PP(E_N^c)\to0\), then
+\[
+\left|\PP(A_N^{\rm rep})-\PP(A_N^{\rm aux})\right|
+\le \PP(E_N^c)\to0 .
+\]
+This proposition fails to justify any event \(A_N^{\rm aux}\) chosen after
+inspecting diagnostics, reporting branches, retained ranks, covariance
+estimates, candidate diagonal points, or critical-value transcripts.  Hence
+each finite-record assertion in Theorems~C--E is a fixed-model,
+fixed-protocol statement under the sampled-counter law, estimand map,
+retained-cycle statistic, covariance-estimation rule, retained-rank threshold,
+reporting gate, branch certificate, and limiting critical value fixed before
+the record is inspected.
+\end{proposition}
+
+\begin{proof}
+Since \(A_N^{\rm rep}\subset A_N^{\rm aux}\),
+\[
+0\le \PP(A_N^{\rm aux})-\PP(A_N^{\rm rep})
+=\PP(A_N^{\rm aux}\cap E_N^c)\le \PP(E_N^c).
+\]
+The asserted convergence follows.  The proof uses only the fixed event
+\(A_N^{\rm aux}\) and the pre-specified gate \(E_N\), so it gives no
+probability statement for events selected after the record has been examined.
+\end{proof}
+
+\begin{lemma}[Specialized separated covariance estimator for adjacent gap rewards]\label{lem:paper-level-separated-covariance-main}
+Let \(G_j\) be i.i.d. nonnegative integer-valued variables with
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\).  Put \(L_j=G_j+1\),
+\(\mu=\EE L_0\), \(K_N=\max\{k:\sum_{j=0}^{k-1}L_j\le N\}\), and
+\(Y_j=f(G_j,G_{j+1})\in\RR^d\), where \(\EE Y_j=0\) and
+\(\EE\|Y_j\|^4<\infty\).  Set
+\[
+\Sigma_r=\frac{1}{\mu}\{\operatorname{Var}Y_0+\operatorname{Cov}(Y_0,Y_1)
++\operatorname{Cov}(Y_1,Y_0)\}.
+\]
+With \(b_N=\lfloor N^{1/3}\rfloor\), \(d_N=b_N+1\),
+\[
+I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+M_N=\max\{M:(M-1)d_N+b_N\le K_N-1\},
+\]
+let \(B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j\).  On \(M_N\ge2\), put
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) and
+\[
+\widehat\Sigma_{r,N}
+=\frac{K_N}{N}\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top .
+\]
+Then \(M_N\ge2\) with probability tending to one, and the auxiliary zero
+completion on \(M_N<2\) satisfies
+\[
+\|\widehat\Sigma_{r,N}-\Sigma_r\|_{\operatorname{op}}=O_{\PP}(N^{-1/3}).
+\]
+If \(\widehat Y_j=Y_j-\Delta_NL_j\) with
+\(\Delta_N=O_{\PP}(N^{-1/2})\), the same rate holds for the corresponding
+plug-in separated-batch estimator.
+
+\begin{proof}
+The variables \(Y_j=f(G_j,G_{j+1})\) are centered and \(1\)-dependent.  Since
+the deterministic blocks \(I_{\ell,N}\) are separated by one deleted cycle,
+the block sums \(B_{\ell,N}\) are independent for deterministic prefixes.
+Writing
+\[
+T_1=\operatorname{Var}Y_0+\operatorname{Cov}(Y_0,Y_1)
++\operatorname{Cov}(Y_1,Y_0),
+\]
+one has \(b_N^{-1}\operatorname{Var}B_{\ell,N}=T_1+O(b_N^{-1})\).  The
+exponential moment of \(G_0\) gives uniform fourth moments for the block sums,
+and maximal inequalities for the independent matrices
+\(b_N^{-1}\{B_{\ell,N}B_{\ell,N}^{\top}-\EE B_{\ell,N}B_{\ell,N}^{\top}\}\)
+over all prefixes \(m\le C N/b_N\) give stochastic error
+\(O_{\PP}(\sqrt{b_N/N})\); the empirical block mean contributes only
+\(O_{\PP}(b_N/N)\).  The renewal count obeys
+\[
+K_N=N/\mu+O_{\PP}(\sqrt N),
+\]
+so the stopped block count is controlled by
+\[
+M_N=\frac{N}{\mu d_N}+O_{\PP}(\sqrt N/b_N+1),
+\]
+equivalently
+\[
+M_N=\frac{N}{\mu b_N}
+  +O_{\PP}(N/b_N^2+\sqrt N/b_N+1),
+\]
+where the deterministic \(N/b_N^2\) term is only the one-cycle separator
+correction, and \(b_NM_N/K_N=1+O_{\PP}(b_N^{-1})\).  Combining these estimates with
+\(K_N/N\to1/\mu\) gives the displayed \(O_{\PP}(N^{-1/3})\) rate.  For the
+plug-in rewards,
+\[
+\max_{\ell\le M_N}\left\|\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)\right\|
+\le \|\Delta_N\|\max_{\ell\le M_N}\sum_{j\in I_{\ell,N}}L_j
+=O_{\PP}(b_NN^{-1/2}),
+\]
+and the corresponding cross and quadratic perturbations of the centered batch
+covariance are of smaller order than \(N^{-1/3}\).
+\end{proof}
+\end{lemma}
+
 \begin{paperthm}[Fixed-setting retained-record inclusion CLT]\label{thm:finite-record-inference-audit-main}
-Assume the finite-record master assumption
-\Cref{ass:finite-record-master-main}, specifically
+Use the no-post-selection proposition
+\Cref{thm:no-post-selection-theorem-main} with the finite-record master
+assumption \Cref{ass:finite-record-master-main}, specifically
 \ref{fr:law-main}, \ref{fr:estimands-main}, \ref{fr:protocol-main}, and
 \ref{fr:covariance-main}.  Form the complete-cycle inclusion estimator
 \[
-\widehat r_N^{\rm cyc}
+\Rinch_N^{\rm cyc}
 =\left(\frac1N\sum_{j\in J_{0,N}}U_j^{(0)},
        \frac1N\sum_{j\in J_{1,N}}U_j^{(1)},
        \frac1N\sum_{j\in J_{2,N}}U_j^{(2)}\right)^\top ,
 \qquad
-r=(r_0,r_1,r_2)^\top .
+\Rinc=(r_0,r_1,r_2)^\top .
 \]
 In Palm cycle coordinates put
 \[
@@ -465,11 +628,11 @@ U_j=
 \mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
 \qquad
 L_j=G_j+1,\qquad
-Y_j=U_j-rL_j .
+Y_j=U_j-\Rinc L_j .
 \]
 Then \(\EE Y_j=0\), \((Y_j)\) is \(1\)-dependent, and
 \[
-\sqrt N(\widehat r_N^{\rm cyc}-r)
+\sqrt N(\Rinch_N^{\rm cyc}-\Rinc)
 =\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1)
 \Rightarrow \mathcal N(0,\Sigma_r),
 \]
@@ -484,46 +647,56 @@ The separated-batch covariance estimator with
 \[
 \|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\rm op}=O_{\PP}(N^{-1/3})
 \]
-on the retained reporting convention of
-\Cref{conv:boxed-retained-coverage-main}.
+as the covariance input for any reported event \(E_N\cap A_N^{\rm aux}\)
+defined before the record is inspected.
 \end{paperthm}
 
 \begin{paperthm}[Fixed-setting retained-record quotient delta method]\label{thm:finite-record-quotient-delta-main}
-Assume the hypotheses of Theorem~C and suppose the population inverse lies in
-the stable quotient chart
+Use the no-post-selection proposition
+\Cref{thm:no-post-selection-theorem-main} with the hypotheses of Theorem~C, and
+suppose the population inverse lies in the stable quotient chart
 \[
 r_0>0,\qquad \Delta_{\rm inv}=r_1-r_0^2\ne0 .
 \]
 For the quotient map \(\Phi\) in Theorem~B,
 \[
-\sqrt N\{\Phi(\widehat r_N^{\rm cyc})-\Phi(r)\}
+\sqrt N\{\Phi(\Rinch_N^{\rm cyc})-\Phi(\Rinc)\}
 \Rightarrow
 \mathcal N(0,\Sigma_\sigma),
 \qquad
-\Sigma_\sigma=D\Phi(r)\Sigma_rD\Phi(r)^\top .
+\Sigma_\sigma=D\Phi(\Rinc)\Sigma_rD\Phi(\Rinc)^\top .
 \]
-For the constrained D-MAP population, \(\Phi(r)=(p+s,ps)\).  If
+For the constrained D-MAP population, \(\Phi(\Rinc)=(p+s,ps)\).  If
 \[
-\Delta_\sigma=\Phi_1(r)^2-4\Phi_2(r)=(p-s)^2>0,
+\Delta_\sigma=\Phi_1(\Rinc)^2-4\Phi_2(\Rinc)=(p-s)^2>0,
 \]
 then the unordered roots of \(z^2-\Phi_1(r)z+\Phi_2(r)=0\) identify the
 unordered survival-factor set \(\{p,s\}\) and hence the unordered numerical
-rate set
+rate set, for known design interval \(\Delta\tau\),
 \[
 \left\{-\frac{\log p}{\Delta\tau},-\frac{\log s}{\Delta\tau}\right\}.
 \]
+If \(\Delta\tau\) is not supplied as a known design interval, the theorem
+identifies only the dimensionless unordered product set
+\[
+\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\},
+\]
+not numerical rates per unit time.
 The theorem asserts no ordered hidden-label recovery without the side-data
 branch convention.
 \end{paperthm}
 
-\begin{paperthm}[Fixed-null exchange-diagonal theorem]\label{thm:e-fixed-candidate-exchange-diagonal-main}
+\begin{paperthm}[Ideal fixed-null exchange-diagonal asymptotics]\label{thm:e-fixed-candidate-exchange-diagonal-main}
 Fix
 \[
 z_0=\frac12,\qquad \sigma_0=(1,1/4),\qquad
 H_{z_0}=\{h\in\mathbb R^2:h_2\le z_0h_1\},
 \]
-and assume \Cref{ass:finite-record-master-main},
-\ref{fr:law-main}--\ref{fr:mc-main}.  Suppose the true population satisfies
+and use the no-post-selection proposition
+\Cref{thm:no-post-selection-theorem-main} for the reported event.  Assume
+\Cref{ass:finite-record-master-main},
+\ref{fr:law-main}--\ref{fr:projection-main}.  Suppose the true population satisfies
 \(\sigma=\sigma_0\), the printed interval certificate proves
 \[
 \operatorname{rank}\Sigma_\sigma(z_0)=2,
@@ -531,32 +704,54 @@ and assume \Cref{ass:finite-record-master-main},
 and
 \[
 \sqrt N(\widehat\sigma_N^{\rm raw}-\sigma_0)
-\Rightarrow Z\sim\mathcal N(0,\Sigma_\sigma(z_0)),\qquad
-\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z_0)\|_{\rm op}=o_{\PP}(t_N).
+\Rightarrow Z\sim\mathcal N(0,\Sigma_\sigma(z_0)).
 \]
 Let
 \[
 \widehat\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma_N^{\rm raw}),\qquad
-X_N=\sqrt N(\widehat\sigma_N-\sigma_0),\qquad
-Q_N=X_N^\top\widehat\Sigma_{\sigma,N}^{+}X_N .
+X_N=\sqrt N(\widehat\sigma_N-\sigma_0).
 \]
-Conditional on the retained record, let
+Then
+\[
+X_N\Rightarrow X:=\Pi_{H_{z_0}}Z .
+\]
+Let
+\[
+T=X^\top\Sigma_\sigma(z_0)^{-1}X
+\]
+and let \(c_{1-\alpha}\) be the lower \((1-\alpha)\)-quantile of \(T\).
+For every fixed \(0<\alpha<1\),
+\[
+\PP_{\sigma_0}\{E_N\cap[
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\le c_{1-\alpha}]\}
+\longrightarrow 1-\alpha ,
+\qquad E_N:=\mathcal E_N .
+\]
+If, in addition,
+\[
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z_0)\|_{\rm op}=o_{\PP}(t_N),
+\]
+with retained-rank pseudoinverse
+\[
+\widehat\Sigma_{\sigma,N}^{+}
+=\sum_{\widehat\lambda_{i,N}>t_N}
+\widehat\lambda_{i,N}^{-1}
+\widehat v_{i,N}\widehat v_{i,N}^{\top},
+\]
+and, under the auxiliary Gaussian conditional law given the observed retained
+record,
 \[
 Z_N^\ast\sim\mathcal N(0,\widehat\Sigma_{\sigma,N}),\qquad
 T_N^\ast=
 (\Pi_{H_{z_0}}Z_N^\ast)^\top
 \widehat\Sigma_{\sigma,N}^{+}(\Pi_{H_{z_0}}Z_N^\ast),
 \]
-and let \(c_{1-\alpha,N}^{-}\) be the lower conditional
-\((1-\alpha)\)-quantile of \(T_N^\ast\).  With
-\(E_N=\mathcal E_N\), for every fixed \(0<\alpha<1\),
-\[
-\PP_{\sigma_0}\{E_N\cap[Q_N\le c_{1-\alpha,N}^{-}]\}
-\longrightarrow 1-\alpha .
-\]
-This is a fixed-null theorem at the printed candidate \(z_0=1/2\).  It is not
-a simultaneous diagonal procedure, not valid after data-dependent diagonal
-selection, and not an executed finite-record accept/reject report.
+then the conditional law of \(T_N^\ast\) converges in probability to the law of
+\(T\).  This is an ideal fixed-null asymptotic theorem at the printed
+candidate \(z_0=1/2\).  It is not a simultaneous diagonal procedure, not valid
+after data-dependent diagonal selection, and not an executed finite-record
+accept/reject report.  In particular, it supplies no record-specific statistic
+enclosure \([Q_N]\) and no critical-value bracket \([L,U]\).
 \end{paperthm}
 
 The dependencies are linear: Theorem~A supplies the renewal law, Theorem~B the
@@ -566,12 +761,10 @@ certified candidate.  Detailed theorem forms, proof lemmas, certificate
 interfaces, and implementation algorithms appear below with ordinary section
 numbering; they do not add further paper-level theorems.
 
-\Cref{tab:theorem-comparison,tab:venue-comparator-estimands} give the compact
-external comparison.  The first table lists only proof inputs for
-Theorems~A--E.  The second table lists nearby venue comparators and the
-estimand mismatch: renewal-binary asymptotics, MAP/D-MAP representation
-theory, quotient identifiability, partial-observation inference,
-waiting-time/correlation diagnostics, and projection inference.
+The introduction above gives the mathematical comparison with the closest
+recent renewal, weak-memory, waiting-time, partial-observation, and detector
+comparators.  \Cref{tab:theorem-comparison,tab:venue-comparator-estimands}
+later records the bibliographic proof-input and comparator details.
 
 \Cref{sec:operational} and \Cref{sec:records} define the record-level
 observables and prove the record-side result groups.  The comparison in
@@ -653,7 +846,7 @@ D-MAP law and proofs.  Throughout the paper \(p\) and \(s\) are reserved for
 the two one-bin survival factors in the D-MAP kernel.  Generic quantile
 probabilities are denoted by \(q\) or \(q_\alpha\), and diagonal root
 candidates are denoted by \(z\).  The vector
-\(r=(r_0,r_1,r_2)\) always denotes the three visible inclusion coordinates;
+\(\Rinc=(r_0,r_1,r_2)\) denotes the three visible inclusion coordinates;
 when a numerical rate is needed on the exchange diagonal it is written
 \(R_{\rm diag}\), not \(r\).  In the main finite-record proofs, \(K_N\) is the
 number of complete retained cycles whose starts lie before the calendar stop,
@@ -771,42 +964,39 @@ certificate and the retained-record coverage convention of
 \Cref{conv:boxed-retained-coverage-main}.
 
 \Cref{tab:theorem-comparison,tab:venue-comparator-estimands} record the
-proof-input chain and the venue-comparator estimand mismatches.
+proof-input chain and the bibliographic venue-comparator details.
 
 \section{Related Work and Mathematical Comparison}\label{sec:theorem-led-comparison}
 
-The comparison in this section is a mathematical related-work comparison.  It
-separates two roles for the cited literature.  The proof-input table lists
-theorems used in the argument.  The venue-comparator table lists nearby
-mathematical and physics-facing papers and states the exact estimand mismatch.
-This distinction is important because the contribution is not a claim that no
-nearby paper exists.  It is the explicit constrained sampled-counter D-MAP
-record law, visible quotient inverse, retained-cycle covariance estimator, and
-fixed-null exchange-diagonal projection statement.
+The introduction gives the mathematical narrative comparison with the closest
+renewal-binary, weak-memory, waiting-time, partial-observation, and detector
+papers.  This final section is only the compact bibliographic ledger.  The
+first table separates imported proof inputs from comparator literature.  The
+second table records nearby venue comparators and the estimand mismatch for
+each family.
 
-The closest direct probability input is Zamparo's stationary renewal-binary
-theory \cite{Zamparo2022RenewalBinary}.  It supplies the renewal-binary
-finite-dimensional and Gaussian limit inputs.  The additional step here is to
-derive that renewal record from the triangular killed-leakage D-MAP kernels
-and to compute the gap law, monotone zero-run hazard, one-mode covariance tail,
-and exact \(1\)-dependence threshold in the sampled-counter parameters.
-Classical MAP and D-MAP work supplies representation background
-\cite{Neuts1979MAP,Lucantoni1991BMAP,
-LucantoniMeierHellsternNeuts1990Vacations,AlfaNeuts1995DMAP}, while MAP2 and
-phase-type nonidentifiability explain why the inverse is stated only at the
-visible quotient level
-\cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability,
-OCinneide1989PhaseTypeNonuniqueness}.
+\subsection{Detector dead-time comparator}\label{subsec:detector-dead-time-comparator-main}
 
-The recent physics-math literature on memory, correlations, waiting times, and
-partial observations is close in motivation but not in estimand.  Those papers
-estimate or bound memory, entropy production, generators, hidden paths, or
-transition-waiting-time functionals of partially observed Markov networks.  The
-present inverse instead maps three stationary inclusion probabilities
-\((r_0,r_1,r_2)\) to \((p+s,ps)\), the unordered survival-root pair, and the
-complete visible renewal law.  It does not identify labelled hidden rates or
-thermodynamic response-side parameters without the external side data specified
-in \Cref{ass:model-inference-contract-main}.
+In the nonparalyzable continuous dead-time model, an accepted event is followed
+by a fixed or random inactive period and then by a live waiting time; this
+structure produces renewal count statistics and motivates classical
+dead-time corrections and detector checks
+\cite{YuFessler2000,SarbaziSafariHaas2018LongDeadTime,
+GronbergDanielssonSjolin2018Nonparalyzable,MeeksSiegel2008DeadTime}.
+In contrast, the present model is a sampled discrete D-MAP with stochastic
+recovery inside a sampling bin and a killed one-labelled reset convention.
+Its Palm zero-run law is
+\[
+g_k=e_D^\top T_0^kT_1\mathbf1
+=\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-s)s^k}
+       {\kappa_{\mathrm r}-\Gamma},
+\]
+with the continuous equal-rate limit understood.  The contribution relative to
+the detector dead-time literature is therefore not a generic dead-time
+correction.  It is an exact quotient inverse for the sampled killed-leakage
+D-MAP visible law, together with the renewal product and retained-record
+covariance route that are valid only under the boundary-reset convention in
+\Cref{ass:model-inference-contract-main,prop:model-fragility-boundary-reset-main}.
 
 \paragraph{Imported proof inputs.}
 \Cref{tab:theorem-comparison} records only the external theorem inputs used in
@@ -842,7 +1032,7 @@ Our theorem & Imported proof input & Exact additional step in this paper \\
 \textup{C} & Zamparo renewal-binary CLT \cite[Thm.~4.3]{Zamparo2022RenewalBinary}; renewal/regenerative and batch-means background \cite{Janson2024RenewalCLT,AsmussenGlynn2007,FlegalJones2010BatchMeansSpectral}. & Retained-cycle CLT and separated-batch covariance estimator for \((r_0,r_1,r_2)\), with the all-complete-cycle reporting gate and computable off-diagonal/diagonal covariance formulas. \\
 \addlinespace
 \textup{D} & Zamparo renewal-binary CLT plus the finite-dimensional delta method on \(\Delta_{\rm inv}\ne0\); \doiid{10.1007/s10955-022-02893-8}. & Explicit unordered-root quotient transport through
-\(\Phi(r)=(p+s,ps)\), derivative bookkeeping, and side-data-only separated labelled-rate reporting. \\
+\(\Phi(\Rinc)=(p+s,ps)\), derivative bookkeeping, and side-data-only separated labelled-rate reporting. \\
 \addlinespace
 \textup{E} & Fang--Seo projection tests for the projection-limit component \cite{FangSeo2021ProjectionTests}, \doiid{10.3982/ECTA17764}; Shapiro metric projection background \cite{Shapiro1987MetricProjection}, \shapirodoi. & D-MAP branch certificate, local exchange-diagonal projection calculus, fixed \(z_0=1/2\) projected-Gaussian theorem, and the explicit certificate contract needed before any future record-specific critical value is reported. \\
 \end{longtable}
@@ -885,6 +1075,11 @@ Neuts \cite{Neuts1979MAP}; Alfa--Neuts \cite{AlfaNeuts1995DMAP}; Lucantoni \cite
 Marked-arrival representation, queueing/moment properties, and structured MAP moment calculations. &
 Those objects are representation-level or moment-level.  Here the estimand is the visible renewal quotient recoverable from three binary inclusion probabilities, not a labelled MAP realization or a general structured-MAP moment class. \\
 \addlinespace
+Dead-time and photon-counting detector models &
+M\"uller \cite{Muller1973}, \doiid{10.1016/0029-554X(73)90773-8}; Cantor--Teich \cite{CantorTeich1975}, \doiid{10.1364/JOSA.65.000786}; Yu--Fessler \cite{YuFessler2000}; Sarbazi--Safari--Haas \cite{SarbaziSafariHaas2018LongDeadTime}; Gr\"onberg--Danielsson--Sj\"olin \cite{GronbergDanielssonSjolin2018Nonparalyzable}; Meeks--Siegel \cite{MeeksSiegel2008DeadTime}; Hadfield \cite{Hadfield2009}; Eisaman et al. \cite{EisamanEtAl2011}; Straka et al. \cite{StrakaEtAl2020SPADCounting}, \doiid{10.1109/JLT.2020.2994654}; Kirchhoff et al. \cite{KirchhoffEtAl2025Deadtime}; Jorgensen--Johnson \cite{JorgensenJohnson2026DED}. &
+Nonparalyzable/paralyzable dead-time corrections, finite-window photon-count distributions, SPAD recovery and afterpulsing models, count-rate moments, and dead-time-constrained estimation. &
+Those models target corrected count distributions, rates, or detector-specific recovery phenomena.  This paper fixes a discrete killed-leakage boundary-reset kernel and proves the visible renewal law, Palm gap hazard, inclusion-coordinate quotient inverse, and retained-cycle covariance transport for that kernel. \\
+\addlinespace
 Nonidentifiability of hidden representations &
 Ryd\'en \cite{Ryden1996Aggregated}; Ram\'irez-Cobo--Lillo--Wiper \cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability}; O'Cinneide \cite{OCinneide1989PhaseTypeNonuniqueness}. &
 Nonuniqueness or weak equivalence of labelled aggregated-Markov, MAP, or phase-type representations. &
@@ -910,7 +1105,7 @@ Those procedures target generators, paths, or thermodynamic quantities under obs
 Constrained hidden-state and coarse-graining inference &
 Tancredi et al. \cite{TancrediEtAl2024ConstrainedHMM}, \doiid{10.1088/1367-2630/ad5def}; Hilder--Sharma \cite{HilderSharma2024CoarseGraining}, \doiid{10.1137/22M1473996}, \arxivid{2201.10256}; Schilling \cite{Schilling2022CoarseGrained}. &
 Parametric hidden-state discovery, quantitative Markov-chain coarse graining, and physical coarse-grained modelling. &
-Those estimands are hidden-state models or coarse-grained transition structures.  Here the model class is fixed in advance and the theorem transports retained-record inclusion estimates through the quotient map \(\Phi(r)=(p+s,ps)\). \\
+Those estimands are hidden-state models or coarse-grained transition structures.  Here the model class is fixed in advance and the theorem transports retained-record inclusion estimates through the quotient map \(\Phi(\Rinc)=(p+s,ps)\). \\
 \addlinespace
 Boundary and projection inference &
 Shapiro \cite{Shapiro1987MetricProjection}, \shapirodoi; Chernoff \cite{Chernoff1954LikelihoodRatio}; Geyer \cite{Geyer1994ConstrainedM}; Self--Liang \cite{SelfLiang1987NonstandardLRT}; Fang--Santos \cite{FangSantos2019DirectionalDifferentiability}; Andrews \cite{Andrews1999BoundaryEstimation,Andrews2001BoundaryTesting}; Cavaliere et al. \cite{CavaliereNielsenPedersenRahbek2022BoundaryBootstrap}; Fang--Seo \cite{FangSeo2021ProjectionTests}, \doiid{10.3982/ECTA17764}; Fang \cite{Fang2021UnifyingShape}; Chen--Fang \cite{ChenFang2019FirstOrderDegeneracy}; Wang--Ye--Chen \cite{WangYeChen2024NonconvexBoundary}; Li \cite{Li2025ProximalBootstrap}. &
@@ -920,10 +1115,10 @@ The present diagonal theorem is a fixed-null specialization: the D-MAP exchange-
 \endgroup
 
 Mart\'inez--Bisker--Horowitz--Parrondo
-\cite{MartinezBiskerHorowitzParrondo2019InferringBrokenDetailedBalance} is
-retained as motivation for inference from partial observables without visible
-currents.  The fixed-window continuous intra-bin recovery comparator remains
-supplementary and auxiliary to \Cref{ass:model-inference-contract-main}.
+\cite{MartinezBiskerHorowitzParrondo2019InferringBrokenDetailedBalance} is a
+background partial-observable motivation citation.  The fixed-window
+continuous intra-bin recovery comparator remains supplementary and auxiliary to
+\Cref{ass:model-inference-contract-main}.
 
 \appendix
 

@@ -118,6 +118,67 @@ for the projection-limit component.  The paper's additional finite-record
 object is the D-MAP quotient covariance, the printed branch certificate, and
 the fixed-candidate \(z_0=1/2\) projected-Gaussian critical-value route.
 
+\section{Machine replay for the \(z_0=1/2\) population branch certificate}\label{app:supplementary-diagonal-branch-replay}
+
+This section is supplementary reproducibility material for the population
+branch certificate printed in
+\Cref{app:self-contained-diagonal-branch-certificate-main}.  It is not a
+finite-record decision transcript.  It contains no retained-record
+critical-value bracket \([L,U]\), no statistic enclosure \([Q]\), and no
+realized accept/reject/undecided comparison.
+
+The paper-local replay script is
+\[
+\texttt{certificates/diagonal\_branch\_certificate.py},
+\]
+and the stored machine-readable transcript is
+\[
+\texttt{certificates/diagonal\_branch\_z\_half.json}.
+\]
+From the paper source directory, the submitted replay command is
+\[
+\texttt{python certificates/diagonal\_branch\_certificate.py --test}.
+\]
+The explicit space after \texttt{python} is part of the command.  This command
+regenerates the canonical JSON transcript from the exact interval input
+\([z]=[0.5,0.5]\), checks equality with the stored JSON transcript, and verifies
+that the outward-rounded intervals enclose an independent direct evaluation of
+the printed symbolic formulas.
+
+The script uses only the Python standard library modules
+\texttt{decimal}, \texttt{json}, \texttt{hashlib}, \texttt{pathlib},
+\texttt{sys}, and \texttt{unittest}; there are no third-party package
+dependencies.  The recorded environment is Python \(3.10.11\),
+\texttt{decimal} \(1.70\), and \texttt{libmpdec} \(2.5.1\).  The command
+\[
+\texttt{python certificates/diagonal\_branch\_certificate.py --environment}
+\]
+prints both this recorded environment and the runtime environment used for a
+replay.
+
+The transcript generator canonicalizes output as UTF-8 bytes of
+\[
+\texttt{json.dumps(data, indent=2) + "\textbackslash n"}
+\]
+with LF line endings and no byte-order mark.  The command
+\[
+\texttt{python certificates/diagonal\_branch\_certificate.py --hash}
+\]
+prints the canonical transcript hash
+\[
+\mathtt{61fa032f034e8aad38ab88b52e98071d89335847ad6fda397ca570bf4a3c7db9}
+\]
+and byte length \(13323\).  The checked-in JSON file may have platform line
+endings; its raw repository SHA-256 in the submitted source tree is
+\[
+\mathtt{c469252c9aad42b5358c2fa25623d96f17dcc19d6760f38acbc698eb5270ff0b}.
+\]
+
+The unit tests also reject older draft trace/determinant intervals as negative
+regression fixtures; those rejected numbers are not certificate data and are
+not used in any branch decision.  The replay therefore checks the printed
+finite covariance and sandwich formulas, not a manually copied rounded matrix.
+
 \section{Visible-record diagnostic protocol}\label{app:visible-record-diagnostics}
 
 The diagnostics in this section are model-falsification checks for the
