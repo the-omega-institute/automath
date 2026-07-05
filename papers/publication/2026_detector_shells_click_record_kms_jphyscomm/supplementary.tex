@@ -2,6 +2,7 @@
 \section*{Supplementary calculations}
 \addcontentsline{toc}{section}{Supplementary calculations}
 \newcommand{\supplementaryenddocument}{}
+\newcommand{\SUPPLEMENTARYFULLPROTOCOLS}{}
 \else
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=1in]{geometry}
@@ -28,9 +29,14 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{algorithmiclemma}[theorem]{Algorithmic Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{maintheorem}[theorem]{Theorem}
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{convention}{Convention}[section]
+\newtheorem{assumption}[theorem]{Assumption}
 \fi
 
 \hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
@@ -44,6 +50,7 @@
 
 \begin{document}
 \newcommand{\supplementaryenddocument}{\end{document}}
+\newcommand{\SUPPLEMENTARYFULLPROTOCOLS}{}
 
 \begin{center}
 {\LARGE\bfseries Supplementary calculations}\par
@@ -55,10 +62,182 @@
 The main article carries the sampled-counter record results and the optional
 fixed-response calibration corollary.  This supplement records only auxiliary
 hypothesis bookkeeping, edge-case formulas, finite-counting checks, and the
-numerical example.  It also contains the fixed-window continuous intra-bin
-recovery comparator, which is auxiliary to the main record-law theorems.
+numerical example.  It also contains the finite-record certification and
+implementation protocols cited from the main article, and the fixed-window
+continuous intra-bin recovery comparator, which is auxiliary to the main
+record-law theorems.
 
 \input{sec_response_short}
+
+\section{Bibliographic boundary for the theorem comparison}\label{app:supplementary-bibliographic-boundary}
+
+The main article's compact theorem comparison separates direct theorem inputs,
+nearby mathematical comparators, and contextual partial-observation literature.
+Zamparo's renewal-binary process \cite{Zamparo2022RenewalBinary} is the direct
+probability comparator for the renewal representation and CLT input.  MAP
+background includes Neuts' Markovian point process
+\cite{Neuts1979MAP}, Lucantoni's batch-MAP work
+\cite{Lucantoni1991BMAP}, the non-renewal arrival process of
+Lucantoni--Meier-Hellstern--Neuts
+\cite{LucantoniMeierHellsternNeuts1990Vacations}, and the discrete-time MAP
+construction of Alfa--Neuts \cite{AlfaNeuts1995DMAP}.  Recent structured-MAP
+moment identities \cite{AsanjaraniHautphenneNazarathy2026StructuredMAPMoments}
+are close to the moment calculations but do not contain the visible-renewal
+quotient inverse.
+
+MAP2 and phase-type nonidentifiability
+\cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability,
+OCinneide1989PhaseTypeNonuniqueness} give the cautionary background for
+hidden-label nonidentifiability.  Recent partial-observation papers
+\cite{BauerSeifertVanderMeer2025Stroboscopic,
+HarunariDuttaPolettiniRoldan2022VisibleTransitions,
+VanDerMeerErtelSeifert2022TransitionWTD,
+VanDerMeerDeguntherSeifert2023Snippets,ErtelSeifert2024BlurredTransitions,
+VanDerMeerSaito2025FaultyCoarseGraining,
+FritzErtelSeifert2025ImperfectObservations,
+MaierHaslerSeifert2026Blackouts,GhosalBisker2022PartialLangevin,
+DiTerlizziEtAl2024VarianceSumRule} provide physics-math context for partial
+observability, variance diagnostics, and thermodynamic inference; they do not
+prove the three-inclusion quotient inverse or the exchange-diagonal
+certificate.
+
+For retained-record covariance and diagonal inference, the surrounding
+statistical literature is regenerative CLT and batch means
+\cite{Janson2024RenewalCLT,AsmussenGlynn2007,
+FlegalJones2010BatchMeansSpectral}, constrained hidden-state inference
+\cite{TancrediEtAl2024ConstrainedHMM,HilderSharma2024CoarseGraining}, and
+projection or boundary asymptotics
+\cite{Shapiro1987MetricProjection,Chernoff1954LikelihoodRatio,
+Geyer1994ConstrainedM,SelfLiang1987NonstandardLRT,
+FangSantos2019DirectionalDifferentiability,Andrews1999BoundaryEstimation,
+Andrews2001BoundaryTesting,CavaliereNielsenPedersenRahbek2022BoundaryBootstrap,
+FangSeo2021ProjectionTests,Fang2021UnifyingShape,
+ChenFang2019FirstOrderDegeneracy,WangYeChen2024NonconvexBoundary,
+Li2025ProximalBootstrap}.  Fang--Seo is the closest theorem-level comparator
+for the projection-limit component.  The paper's additional finite-record
+object is the D-MAP quotient covariance, the printed branch certificate, and
+the fixed-candidate \(z_0=1/2\) projected-Gaussian critical-value route.
+
+\section{Visible-record diagnostic protocol}\label{app:visible-record-diagnostics}
+
+The diagnostics in this section are model-falsification checks for the
+constrained sampled-counter D-MAP contract of the main article.  They are not
+model-selection-valid tests and do not supply finite-sample coverage.
+
+Let \(A_0,\ldots,A_{N-1}\) be the retained binary record.  In this diagnostic
+section only, hats denote raw diagnostic click-time quantities, distinct from
+the theorem/protocol complete-cycle count \(K_N\) used in the main retained
+record construction.  Write
+\(\widehat\tau_0<\widehat\tau_1<\cdots<\widehat\tau_{\widehat K_N}\) for the
+observed click times, with \(\widehat K_N=-1\) if no click is observed.  When
+\(\widehat K_N\ge1\), the complete observed inter-click gaps are
+\[
+\widehat G_j=\widehat\tau_{j+1}-\widehat\tau_j-1,\qquad
+0\le j\le\widehat K_N-1 .
+\]
+Endpoint-censored runs are omitted, and any burn-in or all-complete-cycle
+deletion is applied before these gaps are formed.
+
+\paragraph{Complete-gap checks.}
+Under the model the complete gaps are consecutive observations from one i.i.d.
+Palm gap law, up to the fixed endpoint deletions in the retained-record
+protocol.  Inspect low-lag empirical covariances
+\[
+\widehat{\operatorname{Cov}}\{\varphi(\widehat G_j),
+\psi(\widehat G_{j+\ell})\},\qquad \ell\ge1,
+\]
+for bounded indicators, tail indicators, and truncated identity functions.
+Also compare early, middle, and late gap distributions and the empirical
+hazard
+\[
+\widehat h_k
+=\frac{\#\{j:\widehat G_j=k\}}{\#\{j:\widehat G_j\ge k\}}
+\]
+where the denominator is stable.
+
+\paragraph{Inclusion-product residuals.}
+For \(B=\{0=i_1<i_2<\cdots<i_m\}\), the renewal identity is
+\[
+\PP(B+t\subset\varXi)=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\]
+The empirical residual
+\[
+\widehat R_N(B)=
+\frac{1}{N-i_m}\sum_{t=0}^{N-i_m-1}\prod_{i\in B}A_{t+i}
+-\widehat\rho_N\prod_{r=1}^{m-1}\widehat u_{i_{r+1}-i_r,N}
+\]
+should be inspected beyond the three inclusion coordinates used by the
+quotient inverse, since a non-renewal binary process can match those first
+coordinates while failing larger finite-set products.
+
+\paragraph{Lag-covariance residuals.}
+The model covariance is
+\[
+\gamma_n=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1 .
+\]
+After the quotient fit supplies
+\((\widehat\rho_N,\widehat a_N,\widehat\lambda_N)\), compare empirical
+covariances with
+\[
+\widehat\gamma^{\,\mathrm{mod}}_{n,N}
+=\widehat\rho_N(\widehat a_N-\widehat\rho_N)
+  \widehat\lambda_N^{\,n-1}.
+\]
+A second decay rate, a contradictory sign pattern, or residuals large relative
+to the separated-batch uncertainty scale is evidence against the single
+hidden-mode D-MAP structure.
+
+\section{Operational notation and regime summaries}\label{app:operational-notation}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Record-level observables for the constrained D-MAP record.}
+\label{tab:signatures-supp}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth}
+>{\raggedright\arraybackslash}p{0.30\textwidth}
+>{\raggedright\arraybackslash}p{0.22\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}}
+\toprule
+Regime & Output law & Distinguished threshold & Finite-record signature \\
+\midrule
+Constrained D-MAP & Full-support renewal process, not finite-order Markov;
+exact \(1\)-dependent at \(\lambda_{\rm hid}=0\). & Quotient threshold
+\(\Gamma=\Gamma_{\rm crit}(\kappa_{\rm r},\Delta\tau)\) modulo exchange of
+\(\Gamma\) and \(\kappa_{\rm r}\). & Count variance at the \(1\)-dependence
+threshold; covariance, hazard, and Fano formulas under the main model
+contract. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Consolidated notation for the D-MAP-record calculation.}
+\label{tab:notation-global-supp}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.22\textwidth}
+>{\raggedright\arraybackslash}p{0.24\textwidth}
+>{\raggedright\arraybackslash}p{0.46\textwidth}}
+\toprule
+Layer & Symbols & Meaning and scope \\
+\midrule
+Scope & \(T_0,T_1,(A_n)\) & Sampled-counter labelled kernels, their stationary
+visible binary process, and statistics of that process. \\
+D-MAP parameters & \(\Delta\tau,\Gamma,\kappa_{\rm r},p,s,a,b\) & Positive
+record-side coordinates and one-bin kernel quantities; known \(\Delta\tau\)
+gives unordered visible rates only. \\
+Renewal quantities & \(\varXi,\rho,u_n,g_k,S_k,h_k\) & Click set, click
+density, Palm renewal masses, gap law, survival tail, and hazard. \\
+Inverse quantities & \(r_0,r_1,r_2,\Delta_{\rm inv},\Phi\) & Three inclusion
+coordinates and the quotient map to \((p+s,ps)\). \\
+Finite-record quantities & \(\Sigma_r,\Sigma_\sigma,\widehat\Sigma_{r,N},t_N\)
+& Retained-record covariance before and after \(\Phi\), covariance estimator,
+and deterministic rank threshold. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Fixed-window continuous-comparator calculation}\label{app:fixed-window-comparator}
 
