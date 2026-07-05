@@ -51,18 +51,21 @@ jet gives tensor KL coefficients, and finite centred \(L\)-absolute moment
 with \(L\ge d+1\) is only one sufficient way to supply that quotient jet.  The
 third is the exact Cauchy-generator Bregman tail identity.  The verified
 borderline-tail subclasses, the multidimensional finite-moment and covariance
-leading coefficient, and the sixth-order coefficient-defect coupling are
+leading coefficient, and the normalized fourth-moment defect consequence are
 recorded below as corollaries or algebraic consequences of these three
 statements, not as additional main theorems.
 
-The following package is therefore public-facing: it uses three main theorem
-labels and reserves the numbered internal theorem labels for proof locations.
-A guide after the statements records which hypotheses are assumptions, which
+The three main theorems are stated first and reserve the numbered internal
+theorem labels for proof locations.  A separate ``Consequences'' subsection
+then records the conditional transfer lemma, the
+borderline-tail verification classes, the multidimensional finite-moment and
+covariance consequences, and the fourth-moment defect corollary.  The scope
+ledger after these statements records which hypotheses are assumptions, which
 are verified consequences, and where the proof machinery enters.
 
-\subsection*{Main theorem package}
+\subsection*{The three main theorems}
 
-\begin{introresult}{Theorem I: one-dimensional hierarchy and threshold}
+\begin{introresult}{Main Theorem A: one-dimensional coefficient hierarchy and variance threshold}
 Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) be a probability law on
 \(\RR\) with finite mean \(\bar{\gamma}\) and finite centred \(L\)th absolute
 moment.  With
@@ -110,6 +113,119 @@ If the variance is infinite, then
 in the extended sense.  This is the only analytic if-and-only-if moment
 threshold proved here.
 \end{introresult}
+
+\begin{introresult}{Main Theorem B: conditional multidimensional quotient-to-KL transfer}
+Let \(d\ge1\) and let \(L\in\NN\) satisfy \(L\ge2\).  Assume that
+\((\nu,d,L)\) satisfies the full matched Poisson quotient jet
+\((\mathrm{MPJ}_{d,L})\), including the large-\(t\) entropy-existence clause
+\((\mathrm{EX}_{d,L})\):
+\[
+\begin{aligned}
+\delta_t^{(d)}(y)
+&=\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
++\rho_{L,t}^{(d)}(y),\\
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
+&=o(t^{-L}),\qquad
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
+\end{aligned}
+\]
+Then, with \(h_t=P_t^{(d)}*\nu\) and
+\(g_t=P_t^{(d)}(\cdot-\bar{\gamma})\),
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where the tensor coefficients are those of
+Theorem~\ref{thm:multidimensional-poisson-entropy-jets}; all retained odd
+coefficients vanish.
+
+The finite-moment supply result is separate from this transfer theorem.  If
+\(L\ge d+1\) and \(\nu\) has finite centred \(L\)th absolute moment, then
+Corollary~II.1 verifies \((\mathrm{MPJ}_{d,L})\) and
+\((\mathrm{EX}_{d,L})\); inserting that verified quotient jet into the
+conditional transfer above gives the finite-moment tensor KL expansion.
+\end{introresult}
+
+\begin{introresult}{Main Theorem C: Cauchy Bregman tail identity}
+Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar{\gamma}\) and
+finite centred second moment.  Put
+\[
+\begin{aligned}
+h_t&=P_t*\nu,\\
+g_t&=P_t(\cdot-\bar{\gamma}),\\
+u_t&=h_t/g_t .
+\end{aligned}
+\]
+The nonlocal domain is part of the statement.  For every \(0<a<b<\infty\),
+write
+\[
+\begin{aligned}
+\mu_2&:=\int_{\RR}(\gamma-\bar{\gamma})^2\,\dd\nu(\gamma),\\
+m&:=\frac{1}{2(1+\mu_2/a^2)},\\
+M&:=2+\frac{2\mu_2}{a^2},
+\end{aligned}
+\]
+and
+\[
+  L:=3a^{-1}\bigl(1+\mu_2/a^2\bigr).
+\]
+Then, for all \(t\in[a,b]\) and \(x,y\in\RR\),
+\begin{equation}\label{eq:intro-bregman-domain-quotient-bounds}
+m\le u_t(x)\le M,\qquad
+\lvert u_t(x)-u_t(y)\rvert\le L\lvert x-y\rvert .
+\end{equation}
+Define the Bregman kernel by
+\[
+\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
+\]
+and set
+\[
+\Psi(z):=\mathbf1_{\{\lvert z\rvert<1\}}
+\,+\,\lvert z\rvert^{-2}\mathbf1_{\{\lvert z\rvert\ge1\}},
+\qquad
+C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\}.
+\]
+The compact-window bounds imply the pointwise Bregman majorant
+\begin{equation}\label{eq:intro-bregman-domain-majorant}
+0\le
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
+\le C_{a,b,\nu}\,g_t(x)\Psi(x-y)
+\qquad (x\ne y,\ t\in[a,b]),
+\end{equation}
+and the same estimate holds with \(x\) and \(y\) interchanged.  Hence the
+symmetrized kernel is dominated on \([a,b]\times\RR^2\) by
+\[
+C_{a,b,\nu}\{g_t(x)+g_t(y)\}\Psi(x-y),
+\]
+whose integral over \([a,b]\times\RR^2\) equals
+\(8C_{a,b,\nu}(b-a)\).  The same one-sided majorant gives the compact-window
+dissipation bound
+\[
+\int_a^b\mathcal I_\nu(s)\,\dd s
+\le \frac{4C_{a,b,\nu}}{\pi}(b-a)
+\]
+once \(\mathcal I_\nu\) is defined below.  This domain clause makes the
+following nonlocal double integral finite on compact time windows and
+independent of the annular exhaustion used to construct it.
+
+Define \(\mathcal I_\nu(t)\) by annular cutoffs, equivalently by the
+nonnegative Lebesgue integral
+\[
+\mathcal I_\nu(t)
+=\frac1\pi\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
+\]
+with the diagonal ignored.  Then \(\mathcal I_\nu\) is measurable and locally
+integrable on \((0,\infty)\), and for every \(t>0\),
+\[
+D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\,\dd s .
+\]
+\end{introresult}
+
+\subsection*{Consequences}
 
 \begin{introresult}{Lemma I.1: conditional missing-top-moment transfer}
 Let \(N\ge3\), let \(p=2N-2\ge4\), and put
@@ -280,35 +396,6 @@ D_{\mathrm{KL}}(P_t*\nu\|P_t)
 \]
 \end{introresult}
 
-\begin{introresult}{Theorem II: multidimensional quotient-to-KL theorem}
-Let \(d\ge1\) and let \(L\in\NN\) satisfy \(L\ge2\).  Assume that
-\((\nu,d,L)\) satisfies the full matched Poisson quotient jet
-\((\mathrm{MPJ}_{d,L})\), including the large-\(t\) entropy-existence clause
-\((\mathrm{EX}_{d,L})\):
-\[
-\begin{aligned}
-\delta_t^{(d)}(y)
-&=\sum_{2\le\lvert\alpha\rvert\le L}
-\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
-+\rho_{L,t}^{(d)}(y),\\
-\lVert\rho_{L,t}^{(d)}\rVert_\infty+
-\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
-&=o(t^{-L}),\qquad
-\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
-\end{aligned}
-\]
-Then, with \(h_t=P_t^{(d)}*\nu\) and
-\(g_t=P_t^{(d)}(\cdot-\bar{\gamma})\),
-\[
-D_{\mathrm{KL}}(h_t\|g_t)
-=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
-+o(t^{-(L+2)}),
-\]
-where the tensor coefficients are those of
-Theorem~\ref{thm:multidimensional-poisson-entropy-jets}; all retained odd
-coefficients vanish.
-\end{introresult}
-
 \begin{introresult}{Corollary II.1: finite-moment supply of the quotient jet}
 Let \(d\ge1\), let \(L\in\NN\) satisfy \(L\ge d+1\), and let \(\nu\) be a
 probability measure on \(\RR^d\) with mean \(\bar{\gamma}\) and finite centred
@@ -352,13 +439,14 @@ KL asymptotic theorem and does not imply \((\mathrm{EX}_{d,L})\) or
 \((\mathrm{MPJ}_{d,L})\).
 \end{introresult}
 
-\begin{introresult}{Proposition II.2bis: finite-covariance quotient criterion}
+\begin{introresult}{Proposition II.2bis: second-order quotient criterion}
 Under the finite-covariance assumptions of Proposition~II.2, finite
 covariance gives the algebraic quantity
 \[
 \mathcal Q_d(\Sigma)=\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y).
 \]
-If, in addition, the second-order quotient criterion
+This is the whole finite-covariance conclusion.  If, in addition, the separate
+second-order quotient criterion
 \[
   \delta_t^{(d)}(y)=t^{-2}b_\Sigma(y)+r_t(y),\qquad
   \|r_t\|_\infty+\|r_t\|_{L^1(\Omega_d)}=o(t^{-2}),\qquad
@@ -370,6 +458,12 @@ D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}),
 \]
 because \(\Phi(\delta_t^{(d)})=\frac12t^{-4}b_\Sigma^2+o(t^{-4})\) in
 \(L^1(\Omega_d)\).
+For \(d\ge2\), finite covariance alone does not imply the full
+\(L^\infty\)-based second-order quotient criterion.  What remains open is
+whether a weaker \(L^1(\Omega_d)\)-based criterion, strengthened by the
+appropriate nonlinear entropy-integrability control, is sufficient for the
+leading KL coefficient.  Thus this proposition is a one-way conditional KL
+transfer, not a finite-covariance KL theorem.
 \end{introresult}
 
 \begin{introresult}{Corollary II.3: actual leading multidimensional KL coefficient}
@@ -397,102 +491,40 @@ displayed quotient criterion, and by Proposition~II.2 the coefficient is
 \(\mathcal Q_d(\Sigma)\).
 \end{introresult}
 
-\begin{introresult}{Theorem III: Cauchy Bregman tail identity}
-Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar{\gamma}\) and
-finite centred second moment.  Put
-\[
-\begin{aligned}
-h_t&=P_t*\nu,\\
-g_t&=P_t(\cdot-\bar{\gamma}),\\
-u_t&=h_t/g_t .
-\end{aligned}
-\]
-The nonlocal domain is part of the statement.  For every \(0<a<b<\infty\),
-write
-\[
-\begin{aligned}
-\mu_2&:=\int_{\RR}(\gamma-\bar{\gamma})^2\,\dd\nu(\gamma),\\
-m&:=\frac{1}{2(1+\mu_2/a^2)},\\
-M&:=2+\frac{2\mu_2}{a^2},
-\end{aligned}
-\]
-and
-\[
-  L:=3a^{-1}\bigl(1+\mu_2/a^2\bigr).
-\]
-Then, for all \(t\in[a,b]\) and \(x,y\in\RR\),
-\begin{equation}\label{eq:intro-bregman-domain-quotient-bounds}
-m\le u_t(x)\le M,\qquad
-\lvert u_t(x)-u_t(y)\rvert\le L\lvert x-y\rvert .
-\end{equation}
-Define the Bregman kernel by
-\[
-\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
-\]
-and set
-\[
-\Psi(z):=\mathbf1_{\{\lvert z\rvert<1\}}
-\,+\,\lvert z\rvert^{-2}\mathbf1_{\{\lvert z\rvert\ge1\}},
-\qquad
-C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\}.
-\]
-The compact-window bounds imply the pointwise Bregman majorant
-\begin{equation}\label{eq:intro-bregman-domain-majorant}
-0\le
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
-\le C_{a,b,\nu}\,g_t(x)\Psi(x-y)
-\qquad (x\ne y,\ t\in[a,b]),
-\end{equation}
-and the same estimate holds with \(x\) and \(y\) interchanged.  Hence the
-symmetrized kernel is dominated on \([a,b]\times\RR^2\) by
-\[
-C_{a,b,\nu}\{g_t(x)+g_t(y)\}\Psi(x-y),
-\]
-whose integral over \([a,b]\times\RR^2\) equals
-\(8C_{a,b,\nu}(b-a)\).  The same one-sided majorant gives the compact-window
-dissipation bound
-\[
-\int_a^b\mathcal I_\nu(s)\,\dd s
-\le \frac{4C_{a,b,\nu}}{\pi}(b-a)
-\]
-once \(\mathcal I_\nu\) is defined below.  This domain clause makes the
-following nonlocal double integral finite on compact time windows and
-independent of the annular exhaustion used to construct it.
-
-Define \(\mathcal I_\nu(t)\) by annular cutoffs, equivalently by the
-nonnegative Lebesgue integral
-\[
-\mathcal I_\nu(t)
-=\frac1\pi\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
-\]
-with the diagonal ignored.  Then \(\mathcal I_\nu\) is measurable and locally
-integrable on \((0,\infty)\), and for every \(t>0\),
-\[
-D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\,\dd s .
-\]
-\end{introresult}
-
-\begin{introresult}{Corollary I.5: coefficient-defect coupling}
+\begin{introresult}{Corollary I.5: normalized fourth-moment defect and scaled coefficient consequence}
 Let \(\nu\) be a probability law on \(\RR\) with mean \(\bar{\gamma}\),
 positive variance \(\sigma^2>0\), and finite centred fourth absolute moment.
 Set
 \[
   X_c=\gamma-\bar{\gamma},\qquad
-  \mu_k=\EE X_c^k\quad (k=3,4),
-\]
-and define the sixth-order coefficient identified by the coefficient
-hierarchy through order \(t^{-6}\) by
-\[
-A_6(\nu)=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
-\]
-With the normalized variable
-\[
+  \mu_k=\EE X_c^k\quad (k=3,4),\qquad
   X=\frac{X_c}{\sigma},\qquad
   \beta_3=\EE X^3,\qquad
   Q_2=X^2-1-\beta_3X,
 \]
-the sixth-order two-point coefficient defect satisfies the identity
+and put
+\[
+\eta=\frac{\beta_3^2}{32}+\frac{\EE Q_2^2}{8}.
+\]
+The normalized fourth-moment algebra gives
+\[
+\eta
+=\frac{\EE X^4-1}{8}-\frac{3\beta_3^2}{32}\ge0,
+\qquad
+\eta=0\Longleftrightarrow
+\mathcal L(X)=\frac12(\delta_{-1}+\delta_1).
+\]
+The elementary sign--Rademacher coupling gives
+\[
+W_2\!\left(\mathcal L(X),\frac12(\delta_{-1}+\delta_1)\right)
+\le 4\eta^{1/4}+8\eta^{1/2}.
+\]
+Now define the sixth-order coefficient identified by the coefficient
+hierarchy through order \(t^{-6}\),
+\[
+A_6(\nu)=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
+\]
+The scaled two-point coefficient defect is then
 \[
 \Delta_6(\nu)
 :=-\frac{7}{64}\sigma^6-A_6(\nu)
@@ -512,16 +544,21 @@ W_2(\nu_c,\rho_\sigma)
 +8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
 \]
 Moreover \(\Delta_6(\nu)\ge0\), and equality holds if and only if
-\(\nu_c=\rho_\sigma\).  This finite-moment coupling statement is proved as
-Corollary~\ref{cor:coefficient-defect-coupling}; it is a consequence of the
-identified \(A_6\) coefficient and does not assert optimizer stability for a
-sharp functional inequality.
+\(\nu_c=\rho_\sigma\).  This is a scaled coefficient corollary of the
+normalized fourth-moment algebra, proved as
+Corollary~\ref{cor:coefficient-defect-coupling}.  It gives no finite-time KL
+stability: a single finite-\(t\) KL value does not determine the coefficient
+\(A_6\), the quotient remainder, or the defect \(\Delta_6(\nu)\).
 \end{introresult}
+
+The order-eight certificate is supplied in
+Appendix~\ref{app:order-eight-laurent-certificate} for verification.
 
 \subsection*{Hypotheses and scope}
 \label{subsec:intro-hypotheses-scope}
 
-This subsection is the single scope ledger for the theorem package above.
+This subsection is the single scope ledger for the theorem statements and
+their consequences above.
 The formal hypotheses remain in the statements; the paragraphs here record
 which hypotheses are conditional, which are verified sufficient conditions,
 and which non-sharpness or non-converse claims are intentionally not made.
@@ -571,9 +608,15 @@ from finite covariance, but it does not supply a KL asymptotic.  The leading
 KL coefficient \(\mathcal Q_d(\Sigma)t^{-4}\) follows under the separate
 second-order quotient criterion in Proposition~II.2bis, and Corollary~II.3 uses
 finite \((d+1)\)-moment only as a sufficient condition to supply that
-criterion through the multidimensional quotient theorem.  Whether finite
-covariance alone implies the second-order quotient criterion is left open in
-this theorem package.
+criterion through the multidimensional quotient theorem.  In dimensions
+\(d\ge2\), finite covariance alone does not imply the full \(L^\infty\)-based
+second-order quotient criterion: it does not prevent quotient peaks from far
+sparse atoms, so it cannot give
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\) or
+\(\|r_t\|_\infty=o(t^{-2})\) by itself.  What remains open is whether a
+weaker \(L^1(\Omega_d)\)-based criterion, with the nonlinear
+entropy-integrability needed to pass through
+\(\Phi(s)=(1+s)\log(1+s)-s\), is sufficient for the leading KL coefficient.
 
 Theorem~III has a nonlocal domain hypothesis rather than a coefficient
 evaluability issue.  On every compact time window, finite centred variance
@@ -584,42 +627,45 @@ dissipation asymptotics would require additional differentiated-remainder
 input; the coefficient theorems here use only tail integrals and fixed-window
 averages.
 
-Corollary~I.5 is a coefficient-level consequence of \(A_6\) and a finite
-fourth absolute moment.  Its \(W_2\) estimate is the elementary
-sign--Rademacher coupling applied to the normalized variable; it is not an
-optimizer-stability theorem for a sharp functional inequality, does not claim
-sharp constants, and does not infer \(W_2\) control from one finite-time KL
-value.
+Corollary~I.5 is first a normalized fourth-moment algebra statement and
+elementary sign--Rademacher \(W_2\) coupling.  The entropy coefficient enters
+only afterwards, through the identified \(A_6\) coefficient, to scale the
+defect by \(\sigma^6\).  It is not an optimizer-stability theorem for a sharp
+functional inequality, does not claim sharp constants, and gives no
+finite-time KL stability: a single finite-\(t\) value of
+\(D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))\) does not determine
+\(A_6\), the quotient remainder, or the defect.
 
 \subsection*{Recent JFA comparison at theorem level}
 \label{subsec:intro-recent-jfa-comparison}
 
-Among recent \emph{J. Funct. Anal.} papers found under the 2021--2026
-keywords ``entropy'', ``Poisson'', ``Cauchy'', ``KL'', ``moment'',
-``quotient'', ``Bregman'', and ``transport'', the closest neighbours have
-different theorem types.  Bobkov--G{\"o}tze's Esscher-transform CLT paper
-\cite{BobkovGotzeEsscher2025} concerns changing normalized sums, while
-Theorem~I fixes one input law and expands the single-scale Cauchy-kernel
-quantity
+The closest recent \emph{J. Funct. Anal.} neighbours are adjacent in
+method or vocabulary, but not in theorem type.  Bobkov--G{\"o}tze's
+Esscher-transform CLT paper \cite{BobkovGotzeEsscher2025} concerns changing
+normalized sums and normal approximation.  Theorem~I instead fixes one input
+law and expands the single-scale continuous Cauchy-kernel quantity
 \[
   D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))
 \]
-as \(t\to\infty\), including the finite-variance threshold for the leading
-coefficient.  The heat-profile paper
-\cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces} is linear and set on
-noncompact symmetric spaces, whereas Theorem~II is a nonlinear
-matched-Poisson quotient-to-KL transfer with tensor coefficients.  The
-polarized Hardy--Stein paper
-\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein} is a general
-identity, whereas Theorem~III proves the compact-window domain bounds for the
-moving quotient
+as \(t\to\infty\), including explicit Cayley--Chebyshev coefficients and the
+finite-variance threshold for the leading KL coefficient.  The heat-profile
+paper \cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces} proves linear
+large-time profiles on noncompact symmetric spaces, while Theorem~II is a
+conditional nonlinear quotient-to-KL transfer for Euclidean radial
+Poisson-kernel quotients with tensor coefficients.  The polarized
+Hardy--Stein paper
+\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein} supplies an
+abstract nonlocal identity; Theorem~III proves the compact-window domain
+bounds for the moving quotient
 \((P_t*\nu)/P_t(\cdot-\bar\gamma)\) and the exact Cauchy-scale KL tail
-identity.  Chen--Chewi--Niles-Weed
+identity needed to transfer coefficient asymptotics to dissipation tails.
+The functional-inequality papers of Chen--Chewi--Niles-Weed
 \cite{ChenChewiNilesWeed2021MixtureLogSobolev} and
 Cheng--Thalmaier--Wang \cite{ChengThalmaierWang2023EntropySteinTransport}
-are functional-inequality papers; they do not compute the Cayley--Chebyshev
-Laurent coefficients \(A_4,A_6,A_8\), the covariance contraction
-\(\mathcal Q_d(\Sigma)\), or the coefficient-defect coupling proved here.
+locate the transport/log-Sobolev side of the landscape, but they do not
+compute the explicit Cayley--Chebyshev Laurent coefficient hierarchy, the
+radial-Poisson covariance contraction \(\mathcal Q_d(\Sigma)\), or the
+normalized fourth-moment coefficient consequence recorded here.
 
 The word ``Poisson'' also brings up L{\'o}pez-Rivera--Shenfeld's
 \emph{The Poisson transport map}
@@ -631,8 +677,13 @@ problem: here \(P_t\) is the real-line Poisson kernel, the object is the
 large-\(t\) coefficient asymptotics of a matched KL quotient for
 \(P_t*\nu\), and the main hypotheses are moment or quotient-jet hypotheses,
 not discrete transport contractivity or log-Sobolev constants.
-Appendix~\ref{app:related-work-scope} gives the expanded comparison and
-separates these neighbouring literatures from theorem-level overlap.
+Appendix~\ref{app:related-work-scope} records the reproducibility data for
+this comparison: ScienceDirect's \emph{Journal of Functional Analysis}
+catalogue, checked on 5 July 2026 over publication years 2021--2026 with the
+keyword families \(\{\)entropy, Poisson, Cauchy, KL, moment, quotient,
+Bregman, transport\(\}\), and exactly one nearest theorem-level comparator
+per present main result.  Secondary references used only for proof language
+or historical context are discussed there in ordinary prose.
 
 \subsection*{Proof-layer guide}
 \label{subsec:intro-guide-hypotheses}
@@ -665,9 +716,9 @@ including the large-time entropy-existence clause \((\mathrm{EX}_{d,L})\),
 and transfers it to tensor KL coefficients.  Corollary~II.1 proves that
 finite centred \(L\)-absolute moment, \(L\ge d+1\), is one sufficient route to
 that analytic input.  Proposition~II.2 computes
-\(\mathcal Q_d(\Sigma)\), Proposition~II.2bis records the extra quotient
-criterion that turns it into a KL coefficient, and Corollary~II.3 verifies
-that criterion from finite \((d+1)\)-moment.
+\(\mathcal Q_d(\Sigma)\), Proposition~II.2bis records the separate
+second-order quotient criterion that turns it into a KL coefficient, and
+Corollary~II.3 verifies that criterion from finite \((d+1)\)-moment.
 
 Theorem~III has a different domain issue.  On each compact time window
 \([a,b]\subset(0,\infty)\), finite centred variance gives two-sided bounds
@@ -680,10 +731,7 @@ nonlocal domain under control, the tail identity follows from the cutoff
 Green formula and \(H'(t)=-\mathcal I_\nu(t)\).
 
 Corollary~I.5 uses the coefficient algebra through \(A_6\) and a finite
-fourth absolute moment.  The order-eight Laurent certificate is recorded once
-in Appendix~\ref{app:order-eight-laurent-certificate}, including the optional
-Theorem~\ref{thm:poisson-kl-eighth}; the main sixth-order coefficient theorem
-gives
+fourth absolute moment.  The main sixth-order coefficient theorem gives
 \[
 A_6(\nu)=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
 \]
@@ -710,18 +758,17 @@ The paper uses the extended nonnegative Kullback--Leibler functional of
 \eqref{eq:extended-kl-definition}.  Subsection~\ref{subsec:intro-hypotheses-scope}
 is the scope ledger for the theorem package.  The comparison paragraph above
 is the introduction-level guide to the recent JFA landscape.  Appendix
-\ref{app:related-work-scope} expands those rows and then separates older
-entropy, heat-kernel, Hardy--Stein, stability, EPI-stability, and transport
-references that are used as background or proof language.
+\ref{app:related-work-scope} records the reproducible comparison table and
+then separates older entropy, heat-kernel, Hardy--Stein, stability,
+EPI-stability, and transport references that are used as background or proof
+language.
 
 Section~\ref{sec:preliminaries} fixes notation.  Sections~\ref{sec:cayley-gate}
 and~\ref{sec:haar-pullback} record the Cayley and Haar-pullback
 normalizations.  Section~\ref{sec:entropy-asymptotics} proves the
 multidimensional entropy jets, the one-dimensional coefficient hierarchy, the
 sharp leading variance threshold, the explicit coefficient layer through
-order six, and the sixth-order coefficient-defect consequence.  The optional
-order-eight coefficient layer and seventh-moment remainder are recorded in
-Appendix~\ref{app:order-eight-laurent-certificate}.
+order six, and the sixth-order coefficient-defect consequence.
 Section~\ref{sec:doob-phi-entropy}
 derives the Cauchy/KL Bregman tail identity by cutoff Green calculus,
 verifies the Poisson quotient hypotheses, and then proves the dissipation-tail

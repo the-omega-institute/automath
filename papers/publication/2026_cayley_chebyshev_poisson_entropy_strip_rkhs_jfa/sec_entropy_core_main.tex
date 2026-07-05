@@ -482,6 +482,98 @@ remainder, leaving precisely the finite monomials in \(a_t+B_t\) whose size
 is comparable to \(s_t\).
 \end{proof}
 
+\begin{lemma}[Moving-scale Taylor transfer]%
+\label{lem:moving-scale-taylor-transfer}
+Let \((E,\mathcal E,\lambda)\) be a probability space, let \(p\ge4\), and let
+\(a_2,\ldots,a_{p-1},b\in L^\infty(\lambda)\).  Put
+\[
+  A_t=\sum_{j=2}^{p-1}a_jt^{-j},\qquad
+  B_t=t^{-p}M_p(t)b,
+\]
+where
+\begin{equation}\label{eq:moving-scale-growth}
+  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}).
+\end{equation}
+Let \(e_t\in L^\infty(\lambda)\cap L^1(\lambda)\) satisfy
+\begin{equation}\label{eq:moving-scale-error}
+  \|e_t\|_\infty+\|e_t\|_{L^1(\lambda)}
+  =o(t^{-p}M_p(t)).
+\end{equation}
+Then, with \(\Phi(s)=(1+s)\log(1+s)-s\),
+\begin{equation}\label{eq:moving-scale-transfer}
+  \int_E\Phi(A_t+B_t+e_t)\,\dd\lambda
+  =
+  \int_E\Phi(A_t)\,\dd\lambda
+  +t^{-(p+2)}M_p(t)\int_Ea_2b\,\dd\lambda
+  +o(t^{-(p+2)}M_p(t)).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Set
+\[
+  s_t:=t^{-(p+2)}M_p(t).
+\]
+Since the coefficient functions are bounded,
+\(\|A_t\|_\infty=O(t^{-2})\) and
+\(\|B_t\|_\infty=O(t^{-p}M_p(t))=o(t^{-2})\) by
+\eqref{eq:moving-scale-growth}.  Also
+\(\|e_t\|_\infty=o(t^{-2})\) by
+\eqref{eq:moving-scale-error} and \eqref{eq:moving-scale-growth}.  Hence all
+arguments of \(\Phi\) below lie in a fixed interval \((-1/2,1/2)\) for large
+\(t\).
+
+On this interval,
+\[
+  \Phi'(x)=\log(1+x),\qquad \Phi''(x)=\frac1{1+x},
+\]
+and \(|\Phi'(x)|\le C|x|\), \(|\Phi''(x)|\le C\).  The error \(e_t\) is
+negligible because the mean-value theorem gives
+\[
+\begin{aligned}
+\left|\int_E\{\Phi(A_t+B_t+e_t)-\Phi(A_t+B_t)\}\,\dd\lambda\right|
+&\le
+C(\|A_t\|_\infty+\|B_t\|_\infty+\|e_t\|_\infty)\|e_t\|_{L^1(\lambda)}\\
+&=o(s_t),
+\end{aligned}
+\]
+using \(\|A_t\|_\infty=O(t^{-2})\),
+\(\|B_t\|_\infty+\|e_t\|_\infty=o(t^{-2})\), and
+\(\|e_t\|_{L^1}=o(s_t/t^{-2})\).
+
+It remains to compare \(A_t+B_t\) with \(A_t\).  Taylor's formula at \(A_t\)
+gives
+\[
+\Phi(A_t+B_t)-\Phi(A_t)
+=\Phi'(A_t)B_t+O(B_t^2)
+\]
+uniformly.  Since \(b\) is bounded,
+\[
+  \int_E O(B_t^2)\,\dd\lambda
+  =O(t^{-2p}M_p(t)^2)
+  =o(s_t),
+\]
+again by \(M_p(t)=o(t^{p-2})\).  Therefore
+\[
+  \int_E\{\Phi(A_t+B_t)-\Phi(A_t)\}\,\dd\lambda
+  =
+  t^{-p}M_p(t)\int_E\log(1+A_t)b\,\dd\lambda+o(s_t).
+\]
+Finally \(\log(1+A_t)=A_t+O(A_t^2)\) uniformly, so
+\[
+\begin{aligned}
+t^{-p}M_p(t)\int_E\log(1+A_t)b\,\dd\lambda
+&=
+t^{-p}M_p(t)\int_EA_tb\,\dd\lambda+O(t^{-p}M_p(t)\|A_t\|_\infty^2)\\
+&=
+t^{-(p+2)}M_p(t)\int_Ea_2b\,\dd\lambda+o(s_t).
+\end{aligned}
+\]
+The terms \(a_jt^{-j}\) with \(j\ge3\) contribute \(O(t^{-(p+3)}M_p(t))\),
+and the quadratic logarithm remainder contributes \(O(t^{-(p+4)}M_p(t))\).
+Combining the three estimates proves \eqref{eq:moving-scale-transfer}.
+\end{proof}
+
 \begin{proposition}[Finite density jet entropy transfer]%
 \label{prop:finite-density-jet-entropy-transfer}
 Let \(N\ge2\), put \(L=2N-2\), and let \((E,\mathcal E,\lambda)\) be a
@@ -612,15 +704,6 @@ q_{n,k}=2^{-n}(-\ii)^n
 Thus the odd-mode signs on negative exponents are part of \(q_{n,k}\);
 there is no later conjugation rule.
 \end{minipage}}
-\medskip
-
-For \(N\ge3\), the \((2N-2)\)-moment assumption is the first finite moment
-level at which the universal polynomial \(A_{2N}\) can be evaluated for all
-laws; this is not asserted to be an analytic iff threshold for the existence
-of a possibly non-polynomial \(t^{-2N}\)-scale expansion.  The algebraic
-reason is isolated in
-Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
-
 \begin{proof}
 Write
 \[
@@ -1245,12 +1328,12 @@ Set
   \qquad
   B_t(y)=u_p(y)t^{-p}M_p(t).
 \]
-The Cayley modes are bounded, so \(\|A_t\|_\infty=O(t^{-2})\).  By
-\eqref{eq:conditional-truncated-moment-growth},
-\(\|B_t\|_\infty=o(t^{-2})\); by
-\eqref{eq:conditional-truncated-top-mode-error},
-\(\|e_t\|_\infty=o(t^{-2})\).  Hence
-\(\|\Delta_t\|_\infty\to0\), and the KL identity gives
+The Cayley modes are bounded, and
+\eqref{eq:conditional-truncated-moment-growth}--\eqref{eq:conditional-truncated-top-mode-error}
+put the quotient expansion exactly in the form of
+Lemma~\ref{lem:moving-scale-taylor-transfer} on
+\((\RR,\omega)\), with \(a_n=\mu_nu_n\) and \(b=u_p\).  Since
+\(\|\Delta_t\|_\infty\to0\), the KL identity gives
 \[
   H(t)=\int_{\RR}\Phi(\Delta_t(y))\,\omega(\dd y),
   \qquad
@@ -1260,54 +1343,38 @@ Set
 \[
   s_t:=t^{-2N}M_p(t)=t^{-(p+2)}M_p(t).
 \]
-The following bookkeeping is the finite quotient-transfer argument at this
-moving scale, written out to isolate the conditional tail hypothesis.  Expand
-\(\Phi\) through degree \(N\):
-\[
-\Phi(\Delta_t)=
-\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}\Delta_t^r
-+O(|\Delta_t|^{N+1}).
-\]
-The Taylor tail satisfies
-\[
-  O(\|\Delta_t\|_\infty^{N}\|\Delta_t\|_{L^1(\omega)})
-  =O(t^{-2N-2})+o(t^{-2N}M_p(t))
-  =o(s_t),
-\]
-because \(M_p(t)\to\infty\).  Every monomial containing \(e_t\) is also
-negligible at scale \(s_t\).  Indeed, the remaining factors are
-\(O(t^{-2})\) in \(L^\infty\), while
-\[
-  \|e_t\|_{L^1(\omega)}
-  =o(t^{-p}M_p(t))=o(s_t/t^{-2});
-\]
-pure powers of \(e_t\) are smaller because
-\(\|e_t\|_\infty=o(t^{-2})\).  Thus only finite monomials in \(A_t+B_t\)
-can contribute at scale \(s_t\).
-Terms containing \(B_t\) at least twice are also negligible:
-\[
-  \|B_t\|_\infty^2
-  =t^{-2p}M_p(t)^2
-  =o(t^{-(p+2)}M_p(t))
-  =o(t^{-2N}M_p(t)),
-\]
-where the middle equality uses \(M_p(t)=o(t^{p-2})\).  If a term contains one
-factor \(B_t\) and at least two factors from \(A_t\), its size is
-\[
-  O(t^{-4})\,t^{-p}M_p(t)
-  =o(t^{-(p+2)}M_p(t)).
-\]
-Thus the only surviving top-mode term is the quadratic cross term between
-\(\mu_2u_2t^{-2}\) and \(u_pt^{-p}M_p(t)\):
-\[
-  \int_{\RR}\mu_2u_2(y)t^{-2}\,u_p(y)t^{-p}M_p(t)\,\omega(\dd y)
+The moving-scale transfer gives
+\begin{equation}\label{eq:conditional-transfer-applied}
+  H(t)
   =
-  \mu_2J(2,p)t^{-2N}M_p(t).
+  \int_{\RR}\Phi(A_t(y))\,\omega(\dd y)
+  +\mu_2J(2,p)s_t+o(s_t).
+\end{equation}
+
+It remains only to identify the pure finite-jet part
+\(\int\Phi(A_t)\).  Since \(\|A_t\|_\infty=O(t^{-2})\), Taylor expansion
+through degree \(N\) gives
+\[
+\Phi(A_t)=
+\sum_{r=2}^{N}\frac{(-1)^r}{r(r-1)}A_t^r
++O(|A_t|^{N+1}).
 \]
-The pure \(A_t\) terms of total order \(<2N\) give
-\(\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}\).  Pure \(A_t\) terms of total order
-\(2N\), if present, are \(O(t^{-2N})=o(t^{-2N}M_p(t))\), and higher pure
-terms are smaller.  Finally, the computation in
+Here the displayed remainder is \(O(t^{-2N-2})=o(s_t)\).  Expanding the
+finite polynomial \(A_t^r\), the coefficient of \(t^{-k}\) is exactly the
+universal coefficient \(A_k(\nu)\) from
+\eqref{eq:coefficient-identification-transfer-expansion}, with no factor
+involving the missing \(p\)th moment.  The odd coefficients vanish by the
+mode-parity argument in
+Theorem~\ref{thm:universal-entropy-coefficients}.  Therefore the pure part is
+\[
+\int_{\RR}\Phi(A_t)\,\dd\omega
+=
+\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}+o(s_t).
+\]
+Indeed, the next pure even layer has size \(O(t^{-2N})=o(s_t)\), because
+\(M_p(t)\to\infty\), and all higher pure finite-jet layers are smaller.
+Substituting this in \eqref{eq:conditional-transfer-applied} leaves only the
+moving-scale cross coefficient \(\mu_2J(2,p)\).  Finally, the computation in
 Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness} gives
 \(J(2,p)=\kappa_N\).  This proves
 \eqref{eq:conditional-truncated-top-moment-entropy}.
@@ -2528,71 +2595,12 @@ bound for \(|\beta|=L+1\), gives
 \end{proof}
 
 \medskip
-\noindent\textbf{Multidimensional radial Poisson jet and existence
-hypotheses.}
-For \(d\ge1\) and \(L\in\mathbb N\) with \(L\ge2\), first define the
-large-\(t\) entropy-existence clause \((\mathrm{EX}_{d,L})\) as follows.
-With
-\[
-h_t=P_t^{(d)}*\nu,\qquad g_t=P_t^{(d)}(\cdot-\bar{\gamma}),
-\qquad
-\delta_t^{(d)}(y)=
-\frac{h_t(\bar{\gamma}+ty)}{g_t(\bar{\gamma}+ty)}-1,
-\]
-one has, for all sufficiently large \(t\),
-\[
-1+\delta_t^{(d)}(y)>0,\qquad
-\int_{\RR^d}\delta_t^{(d)}(y)\,\Omega_d(\dd y)=0,\qquad
-\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y)<\infty,
-\]
-where \(\Phi(s)=(1+s)\log(1+s)-s\).  Equivalently, the matched KL integral is
-finite for all large \(t\) and is represented by
-\[
-D_{\rm KL}(h_t\|g_t)
-=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y).
-\]
-This clause is recorded separately because the covariance algebra below does
-not imply it.  It is supplied either by the quotient hypothesis itself or, in
-Theorem~\ref{thm:multidimensional-density-quotient}, by the finite
-\(L\)-moment estimate.
-
-We say that \((\nu,d,L)\) satisfies the matched Poisson quotient jet
-\((\mathrm{MPJ}_{d,L})\) when \((\mathrm{EX}_{d,L})\) holds, \(\nu\) is a
-probability law on \(\RR^d\), the mean \(\bar{\gamma}\) exists, the centred
-tensor moments
-\[
-\mu_\alpha=\int_{\RR^d}(\gamma-\bar{\gamma})^\alpha\,\dd\nu(\gamma)
-\qquad(2\le|\alpha|\le L)
-\]
-exist, and the scaled quotient has the jet
-\begin{equation}\label{eq:mpj-dl-definition}
-\begin{aligned}
-(\mathrm{MPJ}_{d,L}):\qquad
-\delta_t^{(d)}(y)
-&=
-\sum_{2\le\lvert\alpha\rvert\le L}
-\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
-+\rho_{L,t}^{(d)}(y),\\
-\lVert\rho_{L,t}^{(d)}\rVert_\infty+
-\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
-&=o(t^{-L}),\qquad
-\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
-\end{aligned}
-\end{equation}
-This displayed quotient expansion is the hypothesis used by the entropy
-transfer below; its definition has no dimension-dependent lower bound beyond
-\(L\ge2\).  Lemma~\ref{lem:global-multidim-quotient-remainder-core} is the
-deterministic and integrated quotient-remainder input used to verify this
-hypothesis from finite moments, with constants depending only on \(d,L\);
-then Theorem~\ref{thm:multidimensional-density-quotient} proves that finite
-centred \(L\)th absolute moment implies \((\mathrm{MPJ}_{d,L})\) in the
-range \(L\ge d+1\).
-
-The four front-end statements below keep the logical layers separate:
-D1 transfers the conditional quotient jet to entropy, D2 supplies that jet
-from finite moment, D3 evaluates the covariance algebra under finite
-covariance alone, and D4 is the finite \((d+1)\)-moment leading KL
-coefficient consequence.
+\noindent\textbf{Deterministic quotient remainder.}
+The next lemma is the analytic estimate used later to verify the named
+matched quotient jet from finite moments.  The quotient jet itself, including
+the entropy-existence clause, is defined in full immediately before the
+conditional transfer theorem to keep the hypothesis of Theorem~II visible at
+the point where it is used.
 
 \begin{lemma}[Global multidimensional quotient remainder]%
 \label{lem:global-multidim-quotient-remainder-core}
@@ -2741,7 +2749,96 @@ The \(L^1(\Omega_d)\) part follows from the same uniform bound because
 \(\Omega_d\) is a probability measure.
 \end{proof}
 
-\begin{theorem}[D1 conditional jet transfer]%
+\medskip
+\noindent\textbf{Matched multidimensional quotient input for Theorem~II.}
+For \(d\ge1\) and \(L\in\mathbb N\) with \(L\ge2\), put
+\[
+h_t=P_t^{(d)}*\nu,\qquad
+g_t=P_t^{(d)}(\cdot-\bar{\gamma}),\qquad
+\delta_t^{(d)}(y)=
+\frac{h_t(\bar{\gamma}+ty)}{g_t(\bar{\gamma}+ty)}-1,
+\]
+and \(\Phi(s)=(1+s)\log(1+s)-s\).  The large-\(t\)
+entropy-existence clause \((\mathrm{EX}_{d,L})\) is the assertion that, for all
+sufficiently large \(t\),
+\[
+1+\delta_t^{(d)}(y)>0,\qquad
+\int_{\RR^d}\delta_t^{(d)}(y)\,\Omega_d(\dd y)=0,\qquad
+\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y)<\infty,
+\]
+and that the matched KL integral is represented by
+\[
+D_{\rm KL}(h_t\|g_t)
+=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y).
+\]
+This existence clause is part of the analytic input; the finite-covariance
+algebra below does not imply it.
+
+We say that \((\nu,d,L)\) satisfies the matched Poisson quotient jet
+\((\mathrm{MPJ}_{d,L})\) when \((\mathrm{EX}_{d,L})\) holds, \(\nu\) is a
+probability law on \(\RR^d\), the mean \(\bar{\gamma}\) exists, the centred
+tensor moments
+\[
+\mu_\alpha=\int_{\RR^d}(\gamma-\bar{\gamma})^\alpha\,\dd\nu(\gamma)
+\qquad(2\le|\alpha|\le L)
+\]
+exist, and the scaled quotient has the \(L^\infty\cap L^1(\Omega_d)\) jet
+\begin{equation}\label{eq:mpj-dl-definition}
+\begin{aligned}
+(\mathrm{MPJ}_{d,L}):\qquad
+\delta_t^{(d)}(y)
+&=
+\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
++\rho_{L,t}^{(d)}(y),\\
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
+&=o(t^{-L}),\qquad
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
+\end{aligned}
+\end{equation}
+Thus the conditional object used in Theorem~II is precisely
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\).  Its definition has no
+dimension-dependent lower bound beyond \(L\ge2\); the restriction
+\(L\ge d+1\) appears only when the jet is proved from finite moment in
+Theorem~\ref{thm:multidimensional-density-quotient}.
+
+\medskip
+\noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\textbf{Assumptions and conclusions in the multidimensional package.}
+\begin{itemize}[leftmargin=*,nosep]
+\item \textbf{Assumed:} Theorem~\ref{thm:multidimensional-poisson-entropy-jets}
+assumes the full \((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) package
+displayed above and only then transfers it to KL coefficients.
+\item \textbf{Proved from finite \(L\)-moment:}
+Theorem~\ref{thm:multidimensional-density-quotient} proves
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) from
+\(\EE|X_c|^L<\infty\) when \(L\ge d+1\); the corollary after it is therefore
+an actual finite-moment KL jet.
+\item \textbf{Algebra only:}
+Proposition~\ref{prop:multidim-formal-covariance-layer} uses finite covariance
+only to compute
+\(\mathcal Q_d(\Sigma)=\frac12\int b_\Sigma^2\,\dd\Omega_d\).  It does not
+prove entropy existence, quotient convergence, or a KL asymptotic.
+\item \textbf{Open/false under current norm:}
+Finite covariance alone is not a route to the required
+\(L^\infty\cap L^1(\Omega_d)\) quotient control.  In dimensions \(d\ge2\) the
+\(L^\infty\) part is false for sparse finite-covariance laws, as explained
+after Proposition~\ref{prop:second-order-quotient-criterion}; any leading KL
+coefficient under finite covariance alone would need a different hypothesis
+or norm.
+\end{itemize}
+\end{minipage}}
+
+\medskip
+\noindent
+With this ledger fixed, the four statements below keep the logical layers
+separate: D1 transfers the conditional quotient jet to entropy, D2 supplies
+that jet from finite moment, D3 evaluates the covariance algebra under finite
+covariance alone, and D4 is the finite \((d+1)\)-moment leading KL coefficient
+consequence.
+
+\begin{theorem}[D1 / Theorem II conditional jet transfer]%
 \label{thm:multidimensional-poisson-entropy-jets}
 Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge2\), let \(\nu\) be a
 probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies the full
@@ -3096,9 +3193,10 @@ separately.
 The next proposition evaluates the finite quadratic form determined by the
 degree-two density mode.  It has no entropy-existence content: neither
 \((\mathrm{EX}_{d,L})\) nor \((\mathrm{MPJ}_{d,L})\) follows from finite
-covariance alone.  The bridge corollary after the proposition records how the
-same algebra enters once \((\mathrm{MPJ}_{d,L})\) is separately present, and
-D4 is the finite-moment statement that supplies that hypothesis.
+covariance alone.  The conditional criterion after it records the separate
+quotient hypothesis needed to turn that algebraic number into a KL
+coefficient, and D4 is the finite-moment statement that supplies that
+hypothesis.
 
 \begin{proposition}[D3 covariance algebra under finite covariance]%
 \label{prop:multidim-formal-covariance-layer}
@@ -3301,13 +3399,13 @@ positive, so the layer vanishes exactly when \(\Sigma=0\).
 \end{proof}
 
 \noindent The scope of the finite-covariance layer is summarized in
-Subsection~\ref{subsec:intro-hypotheses-scope}.  The formal quotient
-criterion needed to turn \(\mathcal Q_d(\Sigma)\) into a KL coefficient is
-recorded next.
+Subsection~\ref{subsec:intro-hypotheses-scope}.  The quotient criterion needed
+to turn \(\mathcal Q_d(\Sigma)\) into a KL coefficient is recorded next; it is
+not a consequence of finite covariance alone.
 
 \medskip
 
-\begin{proposition}[Finite-covariance quotient criterion]%
+\begin{proposition}[Second-order quotient criterion]%
 \label{prop:second-order-quotient-criterion}
 Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
 mean \(\bar{\gamma}\) and finite centred covariance \(\Sigma\).  Put
@@ -3323,7 +3421,8 @@ Finite covariance gives only
 =\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y),
 \]
 with \(b_\Sigma\) as in
-\eqref{eq:multidim-leading-theorem-density-mode}.  If, in addition, the
+\eqref{eq:multidim-leading-theorem-density-mode}.  This algebraic conclusion
+does not contain a uniform quotient estimate.  If, in addition, the separate
 second-order quotient criterion
 \begin{equation}\label{eq:second-order-quotient-criterion}
   \delta_t^{(d)}(y)=t^{-2}b_\Sigma(y)+r_t(y),\qquad
@@ -3334,6 +3433,12 @@ holds in the sense needed for the Taylor transfer below, then
 \[
 D_{\rm KL}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
 \]
+For \(d\ge2\), finite covariance alone does not imply the full
+\(L^\infty\)-based second-order quotient criterion.  What remains open is
+whether a weaker \(L^1(\Omega_d)\)-based criterion, strengthened by the
+nonlinear entropy-integrability needed for the Taylor transfer, is sufficient
+for the leading KL coefficient.  Thus the proposition is only a one-way
+sufficiency statement.
 \end{proposition}
 
 \begin{proof}
@@ -3374,6 +3479,41 @@ D_{\rm KL}(h_t\|g_t)
 because Proposition~\ref{prop:multidim-formal-covariance-layer} identifies
 \(\frac12\int b_\Sigma^2\,\dd\Omega_d\) with \(\mathcal Q_d(\Sigma)\).
 \end{proof}
+
+\noindent\emph{Why the \(L^\infty\) clause is separate.}
+For \(d\ge2\) the preceding warning is witnessed by a direct sparse-atom
+construction.  Let \(e_1\in\RR^d\), choose \(R_n\uparrow\infty\) so fast that
+\[
+  W:=\sum_{n\ge1}R_n^{-2}n^{-2}<1,\qquad
+  t_n:=8^{-1/(d+1)}R_n^{(d-1)/(d+1)}n^{-2/(d+1)}\to\infty,
+\]
+and set \(w_n=R_n^{-2}n^{-2}\).  The symmetric probability law
+\[
+  \nu=(1-W)\delta_0
+  +\sum_{n\ge1}\frac{w_n}{2}
+  \bigl(\delta_{R_ne_1}+\delta_{-R_ne_1}\bigr)
+\]
+has mean zero and finite covariance because
+\(\sum_n w_nR_n^2=\sum_n n^{-2}<\infty\).  At the space-time point
+\(x_n=R_ne_1\), with \(g_t=P_t^{(d)}\) and \(h_t=P_t^{(d)}*\nu\),
+\[
+\frac{h_{t_n}(x_n)}{g_{t_n}(x_n)}
+\ge
+\frac{w_n}{2}\,
+\frac{P_{t_n}^{(d)}(0)}{P_{t_n}^{(d)}(R_ne_1)}
+\ge
+\frac{w_n}{2}\left(\frac{R_n}{t_n}\right)^{d+1}
+=4 .
+\]
+Hence \(\|\delta_{t_n}^{(d)}\|_\infty\ge3\) along \(t_n\to\infty\), so
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\) is false on the finite-covariance
+class.  The obstruction is specifically the uniform quotient clause; the
+quadratic covariance contraction in
+Proposition~\ref{prop:multidim-formal-covariance-layer} remains finite.  This
+example does not settle the weaker \(L^1(\Omega_d)\)-based question stated
+above, which would require a separate nonlinear entropy-integrability
+criterion rather than the \(L^\infty\) Taylor transfer used in
+Proposition~\ref{prop:second-order-quotient-criterion}.
 
 \begin{corollary}[D4 actual leading KL coefficient]%
 \label{cor:finite-dplusone-moment-leading-multidim-coefficient}

@@ -78,18 +78,59 @@ use the finite Laurent substitution in
 Lemma~\ref{lem:sixth-order-coefficient-arithmetic}.
 \end{proof}
 
-\subsection{Sixth-order defect coupling}
+\subsection{Fourth-moment algebra behind the sixth-order defect}
 \label{subsec:coefficient-defect-coupling}
 \label{subsec:fourth-moment-stability}
 
-Only the \(A_6\) coefficient from
-Theorem~\ref{thm:poisson-kl-sixth-coefficient} is used in this subsection.
-The order-eight coefficient \(A_8\) and the seventh-moment remainder are
-recorded separately in Appendix~\ref{app:order-eight-laurent-certificate};
-no eighth-order defect variable, sixth moment, seventh moment, or finite-time
-KL value is part of the coupling statement below.
+The natural statement is first a normalized fourth-moment algebra lemma,
+independent of Poisson kernels, entropy, and finite-time KL values.  This
+keeps the terminology close to the fourth-moment-theorem literature, for
+example Nourdin--Peccati--Swan
+\cite{NourdinPeccatiSwan2014EntropyFourthMoment}, while separating the
+present result from that theory: no Wiener-chaos limit theorem, entropy CLT,
+or functional-inequality stability theorem is used here.  Only after this
+normalized algebra is recorded do we insert the identified \(A_6\) coefficient
+from Theorem~\ref{thm:poisson-kl-sixth-coefficient}.  The order-eight
+coefficient \(A_8\), the seventh-moment remainder, and any finite-time KL
+post-processing are outside the statement below.
 
-\begin{unnumberedlemma}[Normalized sign--Rademacher coupling]
+\begin{lemma}[Normalized fourth-moment defect algebra]%
+\label{lem:normalized-fourth-moment-defect-algebra}
+Let \(X\) be a real random variable with \(\EE X=0\), \(\EE X^2=1\), and
+\(\EE X^4<\infty\).  Put
+\[
+\beta_3=\EE X^3,\qquad
+Q_2=X^2-1-\beta_3X,\qquad
+\kappa=\EE Q_2^2,\qquad
+\eta=\frac{\beta_3^2}{32}+\frac{\kappa}{8}.
+\]
+Then
+\begin{equation}\label{eq:normalized-fourth-moment-algebra}
+\eta
+=\frac{\beta_3^2}{32}+\frac{\EE(X^2-1-\beta_3X)^2}{8}
+=\frac{\EE X^4-1}{8}-\frac{3\beta_3^2}{32}.
+\end{equation}
+In particular \(\eta\ge0\).  Moreover \(\eta=0\) if and only if
+\(\mathcal L(X)=\rho_1:=\frac12(\delta_{-1}+\delta_1)\).
+\end{lemma}
+
+\begin{proof}
+Expanding \(Q_2^2\) and using \(\EE X=0\), \(\EE X^2=1\), and
+\(\EE X^3=\beta_3\) gives
+\[
+\kappa
+=\EE[(X^2-1-\beta_3X)^2]
+=\EE[(X^2-1)^2]-\beta_3^2
+=\EE X^4-1-\beta_3^2.
+\]
+Substitution gives \eqref{eq:normalized-fourth-moment-algebra}.  The first
+displayed form of \(\eta\) proves non-negativity.  If \(\eta=0\), then
+\(\beta_3=0\) and \(Q_2=0\) almost surely, so \(X^2=1\) almost surely; since
+\(\EE X=0\), the two signs have equal mass.  The converse is immediate.
+\end{proof}
+
+\begin{lemma}[Elementary normalized \(W_2\) coupling]%
+\label{lem:normalized-fourth-moment-w2-coupling}
 Let \(X\) be a real random variable with \(\EE X=0\), \(\EE X^2=1\), and
 \(\EE X^4<\infty\).  Put
 \[
@@ -103,7 +144,7 @@ For \(\rho_1=\frac12(\delta_{-1}+\delta_1)\),
 W_2(\mathcal L(X),\rho_1)
 \le 4\eta^{1/4}+8\eta^{1/2}.
 \end{equation}
-\end{unnumberedlemma}
+\end{lemma}
 
 \begin{proof}
 First record the defect size which is seen by the sign map.  Expanding
@@ -169,28 +210,8 @@ Finally \(\sqrt{32}<8\) and \(\sqrt2\,32^{1/4}=2^{7/4}<4\), proving
 \eqref{eq:normalized-sign-rademacher-coupling}.
 \end{proof}
 
-For the coefficient-defect statement below, assume \(\nu\) has mean
-\(\bar{\gamma}\), variance \(\sigma^2>0\), and finite centred fourth absolute
-moment, and put \(X=(\gamma-\bar{\gamma})/\sigma\).  With
-\[
-\beta_3=\EE X^3,\qquad
-Q_2=X^2-1-\beta_3X,
-\]
-the sixth-order coefficient defect attached to \(A_6(\nu)\) is
-\begin{equation}\label{eq:coefficient-defect-normalized-algebra}
-\Delta_6(\nu)
-:=-\frac{7}{64}\sigma^6
--\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}
-=\sigma^6\left(
-\frac{\beta_3^2}{32}+\frac{\|Q_2\|_2^2}{8}
-\right).
-\end{equation}
-Here \(\|Q_2\|_2^2=\EE_\nu Q_2^2\), with \(Q_2\) evaluated on the normalized
-centred variable \(X\).
-This normalized identity is the algebraic input for the following
-moment-coupling statement.
-
-We use the following transport notation in the corollary.  The centred law is
+We use the following transport notation in the scaled corollary.  The centred
+law is
 \[
 \nu_c:=(\gamma-\bar{\gamma})_\#\nu .
 \]
@@ -211,27 +232,31 @@ In particular, with \(X=(\gamma-\bar{\gamma})/\sigma\),
 \(\nu_c=(S_\sigma)_\#\mathcal L(X)\) and
 \(\rho_\sigma=(S_\sigma)_\#\rho_1\).
 
-The following corollary is the section-level proof of Corollary~I.5 from the
-introduction.
-
-The scope of the result should be fixed before the statement is used.  It is
-not a sharp stability theorem for a functional inequality.  The input is the
-coefficient identification of \(A_6(\nu)\) as the matched-Poisson \(t^{-6}\)
-entropy coefficient, together with the fourth-moment identity that turns the
-gap from the symmetric two-point value \(-7\sigma^6/64\) into
-\(\beta_3^2/32+\|Q_2\|_2^2/8\) after normalization.  The transport conclusion
-then comes only from the elementary sign--Rademacher coupling: couple
-\(X\) to \(\operatorname{sgn}X\), correct the sign bias to the symmetric
-Rademacher law, and dilate by \(\sigma\).  Small \(\Delta_6\) therefore means
-coefficient-level closeness to the symmetric two-point law, not optimizer
-stability, sharp constants, or a finite-time KL inference.
-
-\begin{corollary}[Coefficient-defect coupling]%
+\begin{corollary}[Scaled sixth-order coefficient consequence]%
 \label{cor:coefficient-defect-coupling}
 Let \(\nu\) have mean \(\bar{\gamma}\), variance \(\sigma^2>0\), and finite
-centred fourth absolute moment.  Let \(\Delta_6(\nu)\) be the coefficient
-defect in \eqref{eq:coefficient-defect-normalized-algebra}.
-For the centred law \(\nu_c\) and
+centred fourth absolute moment, and write
+\(\mu_k=\EE(\gamma-\bar{\gamma})^k\) for \(k=3,4\).  Let
+\[
+A_6(\nu)=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}
+\]
+be the \(t^{-6}\) entropy coefficient identified in
+Theorem~\ref{thm:poisson-kl-sixth-coefficient}, and define the scaled defect
+from the symmetric two-point coefficient by
+\begin{equation}\label{eq:coefficient-defect-normalized-algebra}
+\Delta_6(\nu)
+:=-\frac{7}{64}\sigma^6-A_6(\nu).
+\end{equation}
+For \(X=(\gamma-\bar{\gamma})/\sigma\), \(\beta_3=\EE X^3\), and
+\(Q_2=X^2-1-\beta_3X\), the normalized fourth-moment lemma gives the
+algebraic identity
+\begin{equation}\label{eq:scaled-fourth-moment-defect}
+\Delta_6(\nu)
+=\sigma^6\left(
+\frac{\beta_3^2}{32}+\frac{\EE Q_2^2}{8}
+\right).
+\end{equation}
+Consequently, for the centred law \(\nu_c\) and
 \(\rho_\sigma=\frac12(\delta_{-\sigma}+\delta_\sigma)\),
 \[
 W_2(\nu_c,\rho_\sigma)
@@ -240,28 +265,40 @@ W_2(\nu_c,\rho_\sigma)
 +8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
 \]
 Moreover \(\Delta_6(\nu)\ge0\), and equality holds if and only if
-\(\nu_c=\rho_\sigma\).  The assertion is a moment-coupling consequence of the
-identified \(A_6\) coefficient.  The constants are non-sharp and chosen for a
-one-line moment coupling.  The assertion uses no sixth moment, eighth-order
-coefficient, finite-time KL value, or post-processing constant.
+\(\nu_c=\rho_\sigma\).
+
+This is a scaled corollary of the normalized fourth-moment algebra and the
+elementary \(W_2\) coupling above.  It is not a finite-time KL stability
+statement: a numerical value of
+\(D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar{\gamma}))\) at any finite \(t\) does not
+by itself provide the quotient remainder, the \(A_6\) coefficient, or
+\(\Delta_6(\nu)\).  The constants are non-sharp, and the assertion uses no
+sixth moment, eighth-order coefficient, finite-time KL value, or
+post-processing constant.
 \end{corollary}
 
 \begin{proof}
 With \(X=(\gamma-\bar{\gamma})/\sigma\), \(\beta_3=\EE X^3\),
-\(\beta_4=\EE X^4\), and \(Q_2=X^2-1-\beta_3X\),
+\(\beta_4=\EE X^4\), and \(Q_2=X^2-1-\beta_3X\), the displayed coefficient
+formula gives
 \[
-\|Q_2\|_2^2
-=\EE[(X^2-1-\beta_3X)^2]
-=\beta_4-1-\beta_3^2 .
+\begin{aligned}
+\sigma^{-6}\Delta_6(\nu)
+&=-\frac7{64}
+-\frac{1+6\beta_3^2-8\beta_4}{64}  \\
+&=\frac{\beta_4-1}{8}-\frac{3\beta_3^2}{32}
+=\frac{\beta_3^2}{32}+\frac{\EE Q_2^2}{8},
+\end{aligned}
 \]
-Together with \eqref{eq:coefficient-defect-normalized-algebra}, this gives
-\(\Delta_6(\nu)=\sigma^6\eta\) for the normalized defect \(\eta\) above.
+where the last equality is
+Lemma~\ref{lem:normalized-fourth-moment-defect-algebra}.  Thus
+\(\Delta_6(\nu)=\sigma^6\eta\).
 Because quadratic Wasserstein distance is homogeneous under dilation,
 \[
 W_2(\nu_c,\rho_\sigma)
 =\sigma\,W_2(\mathcal L(X),\rho_1)
 \]
-and the preceding normalized sign--Rademacher coupling lemma gives
+and Lemma~\ref{lem:normalized-fourth-moment-w2-coupling} gives
 \[
 \sigma\,W_2(\mathcal L(X),\rho_1)
 \le \sigma\{4\eta^{1/4}+8\eta^{1/2}\},
@@ -274,18 +311,19 @@ W_2(\nu_c,\rho_\sigma)
 +8\,\sigma^{-2}\Delta_6(\nu)^{1/2}.
 \]
 The constants in this displayed estimate are the deliberately non-sharp
-constants from the elementary one-line moment coupling above.
-The same identity gives \(\Delta_6\ge0\).  If \(\Delta_6=0\), then
-\(\beta_3=0\) and \(Q_2=0\) almost surely, so \(X^2=1\) almost surely; with
-\(\EE X=0\), this forces \(X=\pm1\) with equal probabilities.  Hence
-\(\nu_c=\rho_\sigma\).  The converse follows by direct substitution.
+constants from the elementary coupling above.  Non-negativity and the
+equality case are exactly the equality statement in
+Lemma~\ref{lem:normalized-fourth-moment-defect-algebra}, followed by the
+dilation \(x\mapsto\sigma x\).
 \end{proof}
 
 \begin{remark}[Relation with functional-inequality stability]
 As emphasized in the introduction and in the statement of
 Corollary~\ref{cor:coefficient-defect-coupling},
-Corollary~\ref{cor:coefficient-defect-coupling} is only a finite-moment
-coupling consequence of the coefficient identity
-\eqref{eq:coefficient-defect-normalized-algebra}.  It is not an
-optimizer-stability theorem for a sharp functional inequality.
+Corollary~\ref{cor:coefficient-defect-coupling} is only a scaled
+finite-moment consequence of the normalized algebra
+\eqref{eq:normalized-fourth-moment-algebra} and the coefficient
+identification of \(A_6\).  It is not an optimizer-stability theorem for a
+sharp functional inequality, and no finite-time KL stability estimate follows
+from it without separate verified coefficient and remainder information.
 \end{remark}
