@@ -42,30 +42,27 @@ ordinary Taylor expansion of \((1+u)\log(1+u)-u\) in
 
 \subsection*{Main contribution}
 
-The paper proves six results about the matched Poisson KL functional
-\eqref{eq:intro-main-functional}.  The first is a one-dimensional coefficient
-hierarchy: finite centred \((2N-2)\)th absolute moment gives the expansion
-through order \(t^{-2N}\), with coefficients obtained by Laurent
-constant-term extraction from the Cayley modes.  The second is the sharp
-leading threshold: finite centred variance is equivalent to a finite
-\(t^{-4}\) matched-Poisson KL coefficient, and the value is \(\mu_2^2/8\).
-The third is a borderline-tail replacement for the missing top moment,
-formulated as a conditional transfer and then verified for exact power,
-perturbative power, and monotone slowly varying subclasses.  The fourth is a
-multidimensional tensor-jet theorem, together with the separate finite-moment
-and covariance statements needed to read its leading term correctly.  The
-fifth is an exact Cauchy-generator Bregman dissipation identity whose tail
-integral recovers the KL value.  The sixth is a finite fourth-moment
-coefficient-defect coupling for the symmetric two-point law, obtained from the
-identified \(A_6\) coefficient.
+The paper has three main theorem statements about the matched Poisson KL
+functional \eqref{eq:intro-main-functional}.  The first is the
+one-dimensional Cayley--Chebyshev hierarchy together with the sharp
+finite-variance threshold for the leading KL coefficient.  The second is the
+multidimensional quotient-to-KL theorem: an assumed matched Poisson quotient
+jet gives tensor KL coefficients, and finite centred \(L\)-absolute moment
+with \(L\ge d+1\) is only one sufficient way to supply that quotient jet.  The
+third is the exact Cauchy-generator Bregman tail identity.  The verified
+borderline-tail subclasses, the multidimensional finite-moment and covariance
+leading coefficient, and the sixth-order coefficient-defect coupling are
+recorded below as corollaries or algebraic consequences of these three
+statements, not as additional main theorems.
 
-The following theorem package states these results.  A guide immediately
-after the statements records which hypotheses are assumptions, which are
-verified consequences, and where the proof machinery enters.
+The following package is therefore public-facing: it uses three main theorem
+labels and reserves the numbered internal theorem labels for proof locations.
+A guide after the statements records which hypotheses are assumptions, which
+are verified consequences, and where the proof machinery enters.
 
-\subsection*{Consolidated theorem package}
+\subsection*{Main theorem package}
 
-\begin{introresult}{Theorem A: one-dimensional coefficient hierarchy}
+\begin{introresult}{Theorem I: one-dimensional hierarchy and threshold}
 Let \(N\ge2\), put \(L=2N-2\), and let \(\nu\) be a probability law on
 \(\RR\) with finite mean \(\bar{\gamma}\) and finite centred \(L\)th absolute
 moment.  With
@@ -90,11 +87,9 @@ vanish, and the leading coefficient is
 \[
 A_4(\nu)=\frac{\mu_2^2}{8}.
 \]
-\end{introresult}
-
-\begin{introresult}{Theorem B: sharp leading variance threshold}
-Let \(\nu\) be a probability law on \(\RR\) with finite mean \(\bar{\gamma}\),
-put \(X_c=\gamma-\bar{\gamma}\), and set
+For an arbitrary probability law on \(\RR\) with finite mean
+\(\bar{\gamma}\), the leading coefficient has the sharp threshold below.
+Put \(X_c=\gamma-\bar{\gamma}\) and set
 \[
 H(t)=D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar{\gamma})\bigr)
 \]
@@ -116,7 +111,7 @@ in the extended sense.  This is the only analytic if-and-only-if moment
 threshold proved here.
 \end{introresult}
 
-\begin{introresult}{Theorem C: principal conditional quotient transfer}
+\begin{introresult}{Lemma I.1: conditional missing-top-moment transfer}
 Let \(N\ge3\), let \(p=2N-2\ge4\), and put
 \[
   \Delta_t(y):=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1 .
@@ -156,20 +151,33 @@ J(2,p)=(-1)^N(N-1)2^{-2N+2}.
 \]
 \end{introresult}
 
-\begin{introresult}{Verified subclass of Theorem C: exact power tail}
+\begin{introresult}{Corollary I.2: exact power-tail verification}
 Let \(N\ge3\), put \(p=2N-2\), fix \(R>0\) and \(c>0\), and let \(\nu\)
 have symmetric probability density
 \[
 f(x)=g(x)+c|x|^{-p-1}\mathbf1_{\{|x|\ge R\}},
 \]
 where \(g\ge0\) is symmetric and compactly supported in \((-R,R)\),
-\(f\ge0\), and \(\int_{\RR}f=1\).
-Then the conditional quotient hypothesis of
-Theorem~C holds with
+\(f\ge0\), and \(\int_{\RR}f=1\).  Put
 \[
 M_p(t)=\int_{|x|\le t}x^pf(x)\,\dd x=2c\log t+O(1).
 \]
-Consequently, after this quotient verification,
+Then, for
+\[
+  \Delta_t(y)=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,
+  \qquad
+  \mu_n=\int x^nf(x)\,\dd x\quad(2\le n<p),
+\]
+the quotient estimate is the first conclusion:
+\[
+\Delta_t(y)=
+\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
++2c\,u_p(y)t^{-p}\log t+E_t(y),
+\qquad
+\|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-p}).
+\]
+This verifies the quotient hypothesis of Lemma~I.1.  Consequently,
+after this quotient verification,
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t)
 =\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -178,7 +186,7 @@ D_{\mathrm{KL}}(P_t*\nu\|P_t)
 \]
 \end{introresult}
 
-\begin{introresult}{Verified subclass of Theorem C: perturbative power tail}
+\begin{introresult}{Corollary I.3: perturbative power-tail verification}
 Let \(N\ge3\), put \(p=2N-2\), fix \(R>0\) and \(c>0\), and let \(\nu\)
 have even probability density
 \[
@@ -204,12 +212,25 @@ t^{-(p+1)}
 \left(1+\frac{x^2}{t^2}\right)\lvert r(x)\rvert\,\dd x
 =O(t^{-p}).
 \]
-Then the conditional quotient hypothesis of
-Theorem~C holds with
+Put
 \[
 M_p(t)=\int_{|x|\le t}x^pf(x)\,\dd x=2c\log t+O(1),
 \]
-and therefore, after this quotient verification,
+and
+\[
+  \Delta_t(y)=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,\qquad
+  \mu_n=\int x^nf(x)\,\dd x\quad(2\le n<p).
+\]
+Then the quotient estimate is the first conclusion:
+\[
+\Delta_t(y)=
+\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
++u_p(y)t^{-p}M_p(t)+E_t(y),
+\qquad
+\|E_t\|_\infty+\|E_t\|_{L^1(\omega)}=O(t^{-p}).
+\]
+This verifies the quotient hypothesis of Lemma~I.1, and therefore,
+after this quotient verification,
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t)
 =\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -220,7 +241,7 @@ No conclusion is asserted for perturbations that fail these quotient-scale
 controls.
 \end{introresult}
 
-\begin{introresult}{Verified subclass of Theorem C: monotone slowly varying tail}
+\begin{introresult}{Corollary I.4: monotone slowly varying tail verification}
 Let \(N\ge3\), put \(p=2N-2\), fix \(R>0\) and \(c>0\), and let \(\nu\)
 have symmetric probability density
 \[
@@ -233,9 +254,24 @@ eventually monotone, and slowly varying.  If
 M_p(t)=\int_{|x|\le t}x^pf(x)\,\dd x
 \]
 tends to \(+\infty\), then the monotone slowly varying estimates verify the
-conditional quotient hypothesis of Theorem~C
-with this \(M_p(t)\).  Only after that quotient verification does one obtain
-the entropy layer \(J(2,p)\mu_2t^{-2N}M_p(t)\):
+conditional quotient hypothesis only by first proving the quotient estimate.
+Indeed, with
+\[
+  \Delta_t(y)=\frac{(P_t*\nu)(ty)}{P_t(ty)}-1,\qquad
+  \mu_n=\int x^nf(x)\,\dd x\quad(2\le n<p),
+\]
+one has
+\[
+\Delta_t(y)=
+\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
++u_p(y)t^{-p}M_p(t)+e_t(y),
+\qquad
+\|e_t\|_\infty+\|e_t\|_{L^1(\omega)}
+=o(t^{-p}M_p(t)).
+\]
+This verifies the quotient hypothesis of Lemma~I.1 with this
+\(M_p(t)\).  Only after that quotient verification does one obtain the entropy
+layer \(J(2,p)\mu_2t^{-2N}M_p(t)\):
 \[
 D_{\mathrm{KL}}(P_t*\nu\|P_t)
 =\sum_{m=2}^{N-1}A_{2m}(\nu)t^{-2m}
@@ -244,15 +280,15 @@ D_{\mathrm{KL}}(P_t*\nu\|P_t)
 \]
 \end{introresult}
 
-The exact, perturbative, and monotone slowly varying corollaries are
-verification results for the displayed quotient expansion in
-Theorem~C; they are not an unrestricted
+The exact, perturbative, and monotone slowly varying theorems are verification
+results for the displayed quotient expansion in Lemma~I.1; they are
+not an unrestricted
 regular-variation principle.  In particular, the lower moments together with
 \(M_p(t)\to\infty\) do not imply the logarithmic layer unless the quotient
 expansion itself is present and its error is \(o(t^{-p}M_p(t))\) in
 \(L^\infty(\RR)\cap L^1(\omega)\).
 
-\begin{introresult}{Theorem D1: conditional jet transfer}
+\begin{introresult}{Theorem II: multidimensional quotient-to-KL theorem}
 Let \(d\ge1\) and let \(L\in\NN\) satisfy \(L\ge2\).  Assume that
 \((\nu,d,L)\) satisfies the full matched Poisson quotient jet
 \((\mathrm{MPJ}_{d,L})\), including the large-\(t\) entropy-existence clause
@@ -282,20 +318,20 @@ coefficients vanish.
 \end{introresult}
 The dimension-dependent restriction \(L\ge d+1\) is not part of this
 conditional transfer theorem; it enters only in the finite-moment verification
-of the quotient jet in Theorem~D2.
+of the quotient jet in Corollary~II.1.
 
-\begin{introresult}{Theorem D2: moment supply}
+\begin{introresult}{Corollary II.1: finite-moment supply of the quotient jet}
 Let \(d\ge1\), let \(L\in\NN\) satisfy \(L\ge d+1\), and let \(\nu\) be a
 probability measure on \(\RR^d\) with mean \(\bar{\gamma}\) and finite centred
 \(L\)th absolute moment.  Then \((\nu,d,L)\) satisfies
 \((\mathrm{MPJ}_{d,L})\), including \((\mathrm{EX}_{d,L})\), with the explicit
 quotient remainder estimate of
 Theorem~\ref{thm:multidimensional-density-quotient}.  This theorem supplies
-the analytic and existence hypotheses in Theorem~D1; it is neither the KL
+the analytic and existence hypotheses in Theorem~II; it is neither the KL
 transfer nor the covariance calculation.
 \end{introresult}
 
-\begin{introresult}{Proposition D3: covariance algebra}
+\begin{introresult}{Proposition II.2: covariance algebra}
 Let \(d\ge1\), and suppose only that the centred covariance
 \(\Sigma=\EE[X_cX_c^{\mathsf T}]\) is finite.  Define
 \[
@@ -329,7 +365,7 @@ KL asymptotic theorem and does not imply \((\mathrm{EX}_{d,L})\) or
 
 \noindent\fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
 \textbf{Open finite-covariance quotient problem.}
-Proposition~D3 gives the number \(\mathcal Q_d(\Sigma)\), not the KL
+Proposition~II.2 gives the number \(\mathcal Q_d(\Sigma)\), not the KL
 asymptotic \(\mathcal Q_d(\Sigma)t^{-4}\).  Finite covariance would become
 sufficient for the leading KL coefficient only after the following
 second-order quotient condition is separately known:
@@ -353,7 +389,7 @@ hold?  The paper proves the quotient input under the sufficient condition
 
 \medskip
 
-\begin{introresult}{Corollary D4: actual leading KL coefficient}
+\begin{introresult}{Corollary II.3: actual leading multidimensional KL coefficient}
 Let \(d\ge1\), and let \(\nu\) be a probability measure on \(\RR^d\) with
 mean \(\bar{\gamma}\).  If
 \[
@@ -369,19 +405,20 @@ h_t=P_t^{(d)}*\nu,\qquad g_t=P_t^{(d)}(\cdot-\bar{\gamma}),
 D_{\mathrm{KL}}(h_t\|g_t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
 \]
 Here \(\mathcal Q_d(\Sigma)\) is the algebraic quadratic form in
-Proposition~D3.  Thus finite covariance alone gives the number
+Proposition~II.2.  Thus finite covariance alone gives the number
 \(\mathcal Q_d(\Sigma)\), while the finite \((d+1)\)-moment hypothesis gives
-the quotient jet and \((\mathrm{EX}_{d,d+1})\) through Theorem~D2 and only
+the quotient jet and \((\mathrm{EX}_{d,d+1})\) through Corollary~II.1 and only
 then turns that number into the leading KL coefficient.
-Equivalently: by D2, \(\EE|X_c|^{d+1}<\infty\) implies the displayed quotient
-criterion, and by D3 the coefficient is \(\mathcal Q_d(\Sigma)\).
+Equivalently: by Corollary~II.1, \(\EE|X_c|^{d+1}<\infty\) implies the
+displayed quotient criterion, and by Proposition~II.2 the coefficient is
+\(\mathcal Q_d(\Sigma)\).
 \end{introresult}
-The hypothesis \(\EE|X_c|^{d+1}<\infty\) in Corollary~D4 is used only as a
+The hypothesis \(\EE|X_c|^{d+1}<\infty\) in Corollary~II.3 is used only as a
 sufficient condition to supply the quotient jet and entropy-existence
 hypotheses.  No sharpness statement, converse, or dimension-\(d\) moment
 threshold is asserted here.
 
-\begin{introresult}{Theorem E: Cauchy Bregman tail identity}
+\begin{introresult}{Theorem III: Cauchy Bregman tail identity}
 Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar{\gamma}\) and
 finite centred second moment.  Put
 \[
@@ -469,7 +506,7 @@ bias.  Thus the conclusion measures coefficient-level proximity to the
 symmetric two-point law, not optimizer stability, sharp constants, or a
 finite-time KL inference.
 
-\begin{introresult}{Theorem F: coefficient-defect coupling}
+\begin{introresult}{Corollary I.5: coefficient-defect coupling}
 Let \(\nu\) be a probability law on \(\RR\) with mean \(\bar{\gamma}\),
 positive variance \(\sigma^2>0\), and finite centred fourth absolute moment.
 Set
@@ -518,9 +555,18 @@ sharp functional inequality.
 \label{subsec:intro-recent-jfa-comparison}
 
 The table below gives the short recent-\emph{J. Funct. Anal.} comparison
-needed to read the theorem package.  Each row names the nearest checked JFA
-axis from 2021--2026 and records a DOI or arXiv identifier.  Appendix
-\ref{app:related-work-scope} gives the expanded version, including older and
+needed to read the theorem package.  The protocol for every row is
+\[
+\begin{gathered}
+\text{journal}=\text{JFA},\qquad
+\text{years}=2021\text{--}2026,\\
+\text{keywords}=\{\text{entropy, Poisson, Cauchy, KL, moment, quotient,
+Bregman}\}.
+\end{gathered}
+\]
+Each row lists exactly one closest checked recent-JFA comparator, its DOI or
+arXiv identifier, and one sentence of theorem-level non-overlap.  Appendix
+\ref{app:related-work-scope} gives expanded context, older papers, and
 non-JFA background references; the present coefficient rows concern the
 asymptotic coefficients of
 \[
@@ -530,91 +576,80 @@ for a fixed input law as \(t\to\infty\), not functional inequalities for the
 smoothed measure \(P_t*\nu\).
 
 {\scriptsize
-\setlength{\tabcolsep}{2pt}
+\setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.18}
 \begin{center}
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}|%
->{\raggedright\arraybackslash}p{0.25\linewidth}|%
->{\raggedright\arraybackslash}p{0.20\linewidth}|%
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}|%
+>{\raggedright\arraybackslash}p{0.27\linewidth}|%
+>{\raggedright\arraybackslash}p{0.18\linewidth}|%
 >{\raggedright\arraybackslash}X}
-\textbf{present result} & \textbf{recent JFA comparator}
-& \textbf{shared axis} & \textbf{scope separation}\\
+\textbf{present theorem} & \textbf{closest checked recent-JFA comparator}
+& \textbf{identifier} & \textbf{exact theorem-level non-overlap}\\
 \hline
-Theorem~A: one-dimensional finite-moment coefficient hierarchy.
+Theorem~I: one-dimensional hierarchy and threshold.
 & Bobkov--G{\"o}tze, \emph{Esscher transform and the central limit theorem},
 JFA 289 (2025), Paper No.~110999
-\cite{BobkovGotzeEsscher2025};
-doi:10.1016/j.jfa.2025.110999; arXiv:2407.20726.
-& Entropic asymptotics under moment information.
-& The JFA theorem concerns normalized sums and Esscher transforms.  Theorem~A
-keeps one law fixed, varies only the Poisson scale, and computes the
-Cayley--Chebyshev Laurent coefficient polynomials for the matched quotient.\\
+\cite{BobkovGotzeEsscher2025}.
+& \nolinkurl{doi:10.1016/j.jfa.2025.110999};
+\nolinkurl{arXiv:2407.20726}.
+& The JFA theorem concerns changing normalized sums and Esscher transforms,
+whereas Theorem~I fixes one law, varies only the Poisson scale, computes the
+Cayley--Chebyshev coefficient hierarchy, and proves the finite-variance
+threshold for the leading matched-KL coefficient.\\
 \hline
-Theorem~B: sharp finite-variance threshold for the leading KL coefficient.
+Transfer Lemma~I.1 and Corollaries~I.2--I.4: verified missing-top-moment
+tail package.
 & Bobkov--G{\"o}tze, JFA 289 (2025), Paper No.~110999
-\cite{BobkovGotzeEsscher2025};
-doi:10.1016/j.jfa.2025.110999; arXiv:2407.20726.
-& Entropy detects finite-moment structure.
-& Theorem~B is an if-and-only-if statement for
-\(\limsup t^4D_{\rm KL}(P_t*\nu\|P_t(\cdot-\bar\gamma))\) for one fixed
-law; it is not a central-limit or changing-law entropy result.\\
-\hline
-Theorem~C and its verified subclasses: conditional missing-top-moment
-transfer.
-& Bobkov--G{\"o}tze, JFA 289 (2025), Paper No.~110999
-\cite{BobkovGotzeEsscher2025};
-doi:10.1016/j.jfa.2025.110999; arXiv:2407.20726; and
-Brigati--Dolbeault--Simonov, JFA 287 (2024), Paper No.~110562
-\cite{BrigatiDolbeaultSimonov2024LogSobolev};
-doi:10.1016/j.jfa.2024.110562; arXiv:2303.12926.
-& Tail, moment, and entropy information.
-& Theorem~C assumes the precise quotient expansion
+\cite{BobkovGotzeEsscher2025}.
+& \nolinkurl{doi:10.1016/j.jfa.2025.110999};
+\nolinkurl{arXiv:2407.20726}.
+& Transfer Lemma~I.1 and its verification corollaries require the precise
+fixed-law quotient expansion
 \(\Delta_t=A_t+u_pt^{-p}M_p(t)+e_t\) with
-\(\|e_t\|_\infty+\|e_t\|_{L^1(\omega)}=o(t^{-p}M_p(t))\); the exact power,
-perturbative power, and monotone slowly varying cases are verification
-classes for that quotient input, not a general regular-variation theorem.\\
+\(\|e_t\|_\infty+\|e_t\|_{L^1(\omega)}=o(t^{-p}M_p(t))\), not a
+changing-law CLT or Esscher-transform entropy expansion.\\
 \hline
-Theorems~D1--D2: multidimensional quotient-jet transfer and finite-moment
+Theorem~II and Corollary~II.1: multidimensional quotient-jet transfer and finite-moment
 supply.
 & Anker--Papageorgiou--Zhang, heat equation on noncompact symmetric spaces,
 JFA 284 (2023), Paper No.~109828
-\cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces};
-doi:10.1016/j.jfa.2022.109828; arXiv:2112.01323.
-& Large-time profile expansions.
-& The JFA result is a linear heat-kernel profile theorem.  D1--D2 use a
+\cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces}.
+& \nolinkurl{doi:10.1016/j.jfa.2022.109828};
+\nolinkurl{arXiv:2112.01323}.
+& The JFA result is a linear heat-kernel profile theorem.  Theorem~II and
+Corollary~II.1 use a
 matched radial Poisson quotient jet \((\mathrm{MPJ}_{d,L})\), including
 \((\mathrm{EX}_{d,L})\), to obtain nonlinear tensor KL coefficients.\\
 \hline
-Proposition~D3 and Corollary~D4: covariance algebra and the actual leading
+Proposition~II.2 and Corollary~II.3: covariance algebra and the actual leading
 multidimensional KL coefficient.
 & Chen--Chewi--Niles-Weed, JFA 281, 109236, 2021
-\cite{ChenChewiNilesWeed2021MixtureLogSobolev};
-doi:10.1016/j.jfa.2021.109236; arXiv:2102.11476.
-& Mixture distributions and functional inequalities.
-& Their result proves dimension-free log-Sobolev inequalities for mixtures
-under \(\chi^2\) or moment controls; it does not compute fixed-law matched
-Poisson KL asymptotic coefficients.  Here finite covariance gives only the
-number \(\mathcal Q_d(\Sigma)\); an actual \(t^{-4}\) KL asymptotic requires
-the separate quotient input supplied in D4 by the finite \((d+1)\)-moment
-route.\\
+\cite{ChenChewiNilesWeed2021MixtureLogSobolev}.
+& \nolinkurl{doi:10.1016/j.jfa.2021.109236};
+\nolinkurl{arXiv:2102.11476}.
+& Their result proves dimension-free log-Sobolev inequalities for mixtures,
+whereas Proposition~II.2 only computes the covariance contraction
+\(\mathcal Q_d(\Sigma)\) and Corollary~II.3 turns it into a matched-Poisson
+KL coefficient only after a separate quotient jet is supplied.\\
 \hline
-Theorem~E: Cauchy Bregman dissipation-tail identity.
+Theorem~III: Cauchy Bregman dissipation-tail identity.
 & Bogdan--Gutowski--Pietruska-Pa{\l}uba, polarized Hardy--Stein identity,
 JFA 288 (2025), Paper No.~110827
-\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein};
-doi:10.1016/j.jfa.2025.110827; arXiv:2309.09856.
-& Two-point Bregman forms for nonlocal generators.
-& Theorem~E verifies compact-window domain bounds for the moving matched
+\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.
+& \nolinkurl{doi:10.1016/j.jfa.2025.110827};
+\nolinkurl{arXiv:2309.09856}.
+& Theorem~III verifies compact-window domain bounds for the moving matched
 quotient \(u_t=(P_t*\nu)/P_t(\cdot-\bar\gamma)\) and derives the exact
-Cauchy-scale KL tail formula.\\
+Cauchy-scale KL tail formula, rather than proving a general polarized
+Hardy--Stein identity.\\
 \hline
-Theorem~F: \(A_6\) coefficient-defect coupling.
+Corollary~I.5: \(A_6\) coefficient-defect coupling.
 & Cheng--Thalmaier--Wang, entropy/Fisher/Stein/transport inequalities,
 JFA 285 (2023), Paper No.~109997
-\cite{ChengThalmaierWang2023EntropySteinTransport};
-doi:10.1016/j.jfa.2023.109997; arXiv:2108.12755.
-& Entropy-type defects and transport distances.
-& Theorem~F is a finite-moment coefficient consequence of the explicit
+\cite{ChengThalmaierWang2023EntropySteinTransport}.
+& \nolinkurl{doi:10.1016/j.jfa.2023.109997};
+\nolinkurl{arXiv:2108.12755}.
+& Corollary~I.5 is a finite-moment coefficient consequence of the explicit
 \(A_6\) Laurent calculation; it is not a stability theorem for a sharp
 functional inequality or a Stein/transport inequality.\\
 \end{tabularx}
@@ -634,17 +669,18 @@ the quotient layers are available.  The theorem statements above keep these
 roles separate so that a reader need not infer which part of a proof supplies
 which assumption.
 
-For Theorems~A and~B the route is finite-dimensional.  The Cayley mode
+For Theorem~I the route is finite-dimensional.  The Cayley mode
 identity for \(R_\varepsilon\), the universal entropy polynomial, and the
 Laurent constant-term rule produce the coefficients.  The finite
-\((2N-2)\)-moment assumption in Theorem~A supplies the quotient remainder
-needed to retain terms through \(t^{-2N}\).  Theorem~B is the one place where
+\((2N-2)\)-moment assumption in Theorem~I supplies the quotient remainder
+needed to retain terms through \(t^{-2N}\).  The threshold clause in
+Theorem~I is the one place where
 the paper proves an analytic if-and-only-if moment threshold: finite variance
 is exactly the condition for the leading finite KL coefficient, and that
 coefficient is \(A_4(\nu)=\mu_2^2/8\).
 
-Theorem~C is the conditional quotient theorem.  It is not a general regularly
-varying theorem, and it is not triggered by lower moments plus
+Transfer Lemma~I.1 is the conditional quotient transfer.  It is not a general
+regularly varying theorem, and it is not triggered by lower moments plus
 \(M_p(t)\to\infty\).  For \(p=2N-2\), the quotient itself must satisfy
 \[
   \Delta_t=A_t+u_p t^{-p}M_p(t)+e_t,\qquad
@@ -659,19 +695,19 @@ including \(0\le q<p\) in the absolute-moment requirement and the three
 displayed tail controls, are part of the verification rather than
 consequences of regular variation alone.
 
-Theorems~D1--D4 separate the multidimensional logic.  Theorem~D1 assumes the
-matched Poisson quotient jet \((\mathrm{MPJ}_{d,L})\), including the
-large-time entropy-existence clause \((\mathrm{EX}_{d,L})\), and transfers it
-to tensor KL coefficients.  Theorem~D2 proves that finite centred
-\(L\)-absolute moment, \(L\ge d+1\), is one sufficient route to that analytic
-input.  Proposition~D3 is only covariance algebra: it computes
-\(\mathcal Q_d(\Sigma)\) from finite covariance and does not assert a KL
-asymptotic.  Corollary~D4 turns the same algebraic quantity into the actual
-leading KL coefficient only after the finite \((d+1)\)-moment hypothesis has
-supplied the quotient jet and \((\mathrm{EX}_{d,d+1})\).  No sharp
-dimension-\(d\) moment threshold is claimed there.
+Theorem~II and its corollaries separate the multidimensional logic.
+Theorem~II assumes the matched Poisson quotient jet \((\mathrm{MPJ}_{d,L})\),
+including the large-time entropy-existence clause \((\mathrm{EX}_{d,L})\),
+and transfers it to tensor KL coefficients.  Corollary~II.1 proves that
+finite centred \(L\)-absolute moment, \(L\ge d+1\), is one sufficient route to
+that analytic input.  Proposition~II.2 is only covariance algebra: it
+computes \(\mathcal Q_d(\Sigma)\) from finite covariance and does not assert
+a KL asymptotic.  Corollary~II.3 turns the same algebraic quantity into the
+actual leading KL coefficient only after the finite \((d+1)\)-moment
+hypothesis has supplied the quotient jet and \((\mathrm{EX}_{d,d+1})\).  No
+sharp dimension-\(d\) moment threshold is claimed there.
 
-Theorem~E has a different domain issue.  On each compact time window
+Theorem~III has a different domain issue.  On each compact time window
 \([a,b]\subset(0,\infty)\), finite centred variance gives two-sided bounds
 and a Lipschitz bound for the moving quotient
 \(u_t=(P_t*\nu)/P_t(\cdot-\bar{\gamma})\).  Those bounds produce the
@@ -681,9 +717,11 @@ most \(8C_{a,b,\nu}(b-a)\), while the one-sided dissipation satisfies
 nonlocal domain under control, the tail identity follows from the cutoff
 Green formula and \(H'(t)=-\mathcal I_\nu(t)\).
 
-Theorem~F uses only the coefficient algebra through \(A_6\) and a finite
+Corollary~I.5 uses only the coefficient algebra through \(A_6\) and a finite
 fourth absolute moment.  The order-eight Laurent certificate is recorded once
-in Theorem~\ref{thm:poisson-kl-eighth}; the sixth-order part gives
+in Appendix~\ref{app:order-eight-laurent-certificate}, including the optional
+Theorem~\ref{thm:poisson-kl-eighth}; the main sixth-order coefficient theorem
+gives
 \[
 A_6(\nu)=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}.
 \]
@@ -722,7 +760,9 @@ and~\ref{sec:haar-pullback} record the Cayley and Haar-pullback
 normalizations.  Section~\ref{sec:entropy-asymptotics} proves the
 multidimensional entropy jets, the one-dimensional coefficient hierarchy, the
 sharp leading variance threshold, the explicit coefficient layer through
-order eight, and the sixth-order coefficient-defect consequence.
+order six, and the sixth-order coefficient-defect consequence.  The optional
+order-eight coefficient layer and seventh-moment remainder are recorded in
+Appendix~\ref{app:order-eight-laurent-certificate}.
 Section~\ref{sec:doob-phi-entropy}
 derives the Cauchy/KL Bregman tail identity by cutoff Green calculus,
 verifies the Poisson quotient hypotheses, and then proves the dissipation-tail
@@ -730,6 +770,4 @@ coefficient expansion.
 Appendix~\ref{app:related-work-scope} gives the theorem-level related-work
 comparison and consolidated scope discussion;
 Appendix~\ref{app:entropy-integrals} records the weighted trigonometric
-normalization behind the Laurent arithmetic;
-Appendix~\ref{app:haar-pullback-uniqueness}
-records the endpoint-normalized Cayley uniqueness statement.
+normalization behind the Laurent arithmetic.
