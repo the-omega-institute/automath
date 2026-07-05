@@ -1,11 +1,13 @@
 \section{Finite-Record Regenerative Tools}\label{app:finite-record-regenerative-tools-main}
 
-This appendix collects the model-independent renewal and separated-batch
-arguments used in \Cref{sec:records}.  The main retained-record asymptotic theorems use
-these results only after the constrained D-MAP law has been reduced to the
-explicit adjacent-gap rewards displayed in the main text.
+This appendix collects auxiliary renewal facts used in \Cref{sec:records}.
+The separated-batch covariance proof itself appears once, in the main-text
+master theorem \Cref{thm:main-calendar-stopped-separated-batch-plugin}.  The
+results below are restatements or complete-cycle wrappers that preserve the
+labels used by secondary diagnostics and by the supplementary implementation
+protocols.
 
-\begin{theorem}[Separated-batch covariance for fixed-range gap rewards]\label{thm:regenerative-separated-batch-covariance-main}
+\begin{proposition}[Separated-batch covariance for fixed-range gap rewards]\label{thm:regenerative-separated-batch-covariance-main}
 Fix an integer \(m\ge0\) and a dimension \(d\).  Let
 \((G_j)_{j\in\mathbb Z}\) be i.i.d. with
 \(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\), and let
@@ -36,119 +38,17 @@ for \(1\le\ell\le M_N\).  On \(M_N\ge2\), put
 \right\|_{\operatorname{op}}
 =O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
 \end{equation}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-The sequence \((Y_j)\) is \(m\)-dependent: if two index sets are separated by
-more than \(m\), then the corresponding \(Y\)'s are functions of disjoint
-families of i.i.d. gaps.  The retained batch \(B_{\ell,N}\) depends only on
-\[
-G_{(\ell-1)(b_N+m)},\ldots,
-G_{(\ell-1)(b_N+m)+b_N-1+m}.
-\]
-The next retained batch starts with
-\(G_{\ell(b_N+m)}\).  Since the separator has length \(m\), these gap sets are
-disjoint for different \(\ell\), and therefore the retained sums
-\((B_{\ell,N})_{\ell\le M_N}\) are independent and identically distributed.
-
-Write \(\Gamma_h=\operatorname{Cov}(Y_0,Y_h)\).  Stationarity and
-\(m\)-dependence give
-\[
-\operatorname{Var}(B_{\ell,N})
-=b_N\Gamma_0+
-\sum_{h=1}^{m}(b_N-h)(\Gamma_h+\Gamma_h^\top).
-\]
-Hence
-\[
-\frac{1}{b_N}\operatorname{Var}(B_{\ell,N})
-=T_m+R_{b_N},\qquad
-R_{b_N}=-\frac1{b_N}\sum_{h=1}^{m}h(\Gamma_h+\Gamma_h^\top).
-\]
-The matrices \(\Gamma_h\) are fixed finite matrices because
-\(\EE\|Y_0\|^2<\infty\).  Thus
-\begin{equation}\label{eq:regenerative-boundary-covariance-main}
-\|R_{b_N}\|_{\operatorname{op}}\le Cb_N^{-1}.
-\end{equation}
-Equivalently, in a block of length \(b_N\) the infinite \(m\)-dependent
-covariance sum misses only the \(h\) boundary pairs at each lag
-\(1\le h\le m\), an \(O(1)\) number of covariance-pair layers after division
-by \(b_N\).
-
-It remains to bound the stochastic part.  The standard fourth-moment bound
-for fixed-range-dependent sums gives
-\begin{equation}\label{eq:regenerative-batch-fourth-main}
-\EE\|B_{\ell,N}\|^4\le Cb_N^2 .
-\end{equation}
-Indeed,
-\(\|B_{\ell,N}\|^4\le d^2\sum_{a,c=1}^d
-(\sum_{j\in I_{\ell,N}}Y_{j,a})^2(\sum_{j\in I_{\ell,N}}Y_{j,c})^2\);
-after expanding, any nonzero centered contribution can involve only index
-quadruples whose dependency graph has connected components of diameter at
-most \(m\).  There are \(O(b_N^2)\) such quadruples, and H\"older's inequality
-bounds each expectation by a constant depending only on
-\(\EE\|Y_0\|^4\), \(m\), and \(d\).
-
-Define
-\[
-V_N:=b_N^{-1}\operatorname{Var}(B_{1,N}),\qquad
-W_{\ell,N}:=
-b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}.
-\]
-The \(W_{\ell,N}\)'s are independent, mean zero, and
-\[
-\EE\|W_{\ell,N}\|_{\operatorname{F}}^2
-\le b_N^{-2}\EE\|B_{\ell,N}B_{\ell,N}^\top\|_{\operatorname{F}}^2
-= b_N^{-2}\EE\|B_{\ell,N}\|^4
-\le C
-\]
-by \eqref{eq:regenerative-batch-fourth-main}.  Therefore
-\begin{equation}\label{eq:regenerative-uncentered-fluctuation-main}
-\EE\left\|
-\frac{1}{b_NM_N}\sum_{\ell=1}^{M_N}
-\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}
-\right\|_{\operatorname{op}}^2
-\le
-\EE\left\|
-\frac{1}{M_N}\sum_{\ell=1}^{M_N}W_{\ell,N}
-\right\|_{\operatorname{F}}^2
-\le \frac{C}{M_N}.
-\end{equation}
-Consequently the uncentered empirical second moment satisfies
-\[
-\frac{1}{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
-=V_N+O_{\PP}(M_N^{-1/2}).
-\]
-Since \(M_N=\lfloor N/(b_N+m)\rfloor\) and \(b_N/N\to0\),
-\(M_N^{-1/2}=O(\sqrt{b_N/N})\).
-
-The subtraction of the empirical batch mean changes only a smaller-order
-term.  Algebra gives
-\[
-\frac{1}{b_N(M_N-1)}\sum_{\ell=1}^{M_N}
-(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top
-=
-\frac{M_N}{M_N-1}
-\left\{
-\frac1{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
--\frac1{b_N}\bar B_N\bar B_N^\top
-\right\}.
-\]
-Moreover
-\[
-\EE\left\|\frac1{\sqrt{b_N}}\bar B_N\right\|^2
-=\frac1{b_NM_N^2}\sum_{\ell=1}^{M_N}\operatorname{tr}\Var(B_{\ell,N})
-\le \frac{C}{M_N},
-\]
-so \(b_N^{-1}\bar B_N\bar B_N^\top=O_{\PP}(M_N^{-1})\).  Also
-\((M_N/(M_N-1))-1=O(M_N^{-1})\) and \(V_N=O(1)\).  Combining this display
-with \eqref{eq:regenerative-boundary-covariance-main} and
-\eqref{eq:regenerative-uncentered-fluctuation-main} yields
-\[
-\frac{1}{b_N(M_N-1)}\sum_{\ell=1}^{M_N}
-(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top
-=T_m+O_{\PP}\left(b_N^{-1}+M_N^{-1/2}\right),
-\]
-which is \eqref{eq:regenerative-separated-batch-covariance-main}.
+This is the deterministic-prefix specialization of the covariance argument in
+\Cref{thm:main-calendar-stopped-separated-batch-plugin}, with no calendar
+random-index multiplier and no plug-in perturbation.  The same separated
+blocks \(I_{\ell,N}\) are independent because the reward has range \(m\), and
+the proof of the master theorem gives
+\eqref{eq:regenerative-separated-batch-covariance-main} after replacing its
+random stopped prefix by the deterministic prefix \(M_N=\lfloor N/(b_N+m)\rfloor\).
+No additional covariance layer is proved in this appendix.
 \end{proof}
 
 \begin{proposition}[Calendar-stopped separated batches with plug-in centering]\label{prop:calendar-stopped-separated-batch-plugin-main}
@@ -231,157 +131,23 @@ again with the auxiliary zero completion on \(M_N<2\).
 \end{proposition}
 
 \begin{proof}
-First record the two renewal bounds used below.  Since \(L_0\) has an
-exponential moment, the renewal central limit theorem gives
-\begin{equation}\label{eq:calendar-stopped-k-rate-main}
-K_N=\frac{N}{\mu}+O_{\PP}(\sqrt N),
-\qquad
-\frac{K_N}{N}=\frac1\mu+O_{\PP}(N^{-1/2}).
-\end{equation}
-The same exponential moment gives the maximal-cycle estimate
-\begin{equation}\label{eq:calendar-stopped-max-cycle-main}
-\max_{0\le j\le K_N+q+m+1}L_j=O_{\PP}(\log N).
-\end{equation}
-Indeed, for \(C_0>\mu^{-1}\),
+\Cref{thm:main-calendar-stopped-separated-batch-plugin} is the main-text
+master statement with the same hypotheses, except that this appendix wrapper
+allows a fixed terminal deletion \(q\).  Replacing the stopped count there by
 \[
-\PP\!\left(\max_{0\le j\le K_N+q+m+1}L_j>a\log N\right)
-\le \PP(K_N>C_0N)
- +(C_0N+q+m+2)\PP(L_0>a\log N),
+M_N=\max\{M\ge0:\ (M-1)(b_N+m)+b_N-1+m+q\le K_N-1\}
 \]
-and the right side tends to zero for \(a\) large enough.  Fixed endpoint or
-look-ahead deletions therefore remove only \(O(1)\) cycles and at most
-\(O_{\PP}(\log N)\) calendar observations.  For the separated-batch
-covariance they enter only through the fixed integer \(q\) in the definition
-of \(M_N\).
-
-The stopped batch count obeys
-\begin{equation}\label{eq:calendar-stopped-batch-count-main}
-M_N=\frac{K_N}{d_N}+O(1)
-=\frac{N}{\mu d_N}+O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right).
-\end{equation}
-Consequently \(M_N\asymp_{\PP}N/b_N\), so \(M_N\ge2\) with probability
-tending to one and \(M_N^{-1/2}=O_{\PP}(\sqrt{b_N/N})\).
-
-The retained batches are independent.  More explicitly, \(B_{\ell,N}\)
-depends only on
+changes it by at most \(O(1)\) batches.  Since the master theorem gives
 \[
-G_{(\ell-1)d_N},\ldots,G_{(\ell-1)d_N+b_N-1+m},
+M_N=\frac{N}{\mu(b_N+m)}
+     +O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right),
 \]
-and these gap sets are disjoint for different \(\ell\).  Let
-\[
-V_N=b_N^{-1}\Var(B_{1,N}),\qquad
-X_{\ell,N}=b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top
--\EE(B_{\ell,N}B_{\ell,N}^\top)\}.
-\]
-As in \Cref{thm:regenerative-separated-batch-covariance-main},
-\begin{equation}\label{eq:calendar-stopped-batch-variance-main}
-V_N=\mathcal T_m+O(b_N^{-1}),\qquad
-\EE\|B_{\ell,N}\|^4\le Cb_N^2,\qquad
-\EE\|X_{\ell,N}\|_{\operatorname F}^2\le C .
-\end{equation}
-
-The point needing care is that \(M_N\) is random and is determined by the same
-gaps used to decide whether a terminal batch is complete.  The proof avoids
-optional-stopping shorthand by controlling all deterministic prefixes at once.
-For each matrix entry, the independent centered variables
-\(\{X_{\ell,N}^{ab}\}_{\ell\ge1}\) have uniformly bounded second moments by
-\eqref{eq:calendar-stopped-batch-variance-main}.  Kolmogorov's maximal
-inequality therefore gives, for every fixed \(C_1<\infty\),
-\[
-\EE\max_{1\le r\le C_1N/b_N}
-\left|\sum_{\ell=1}^rX_{\ell,N}^{ab}\right|^2
-\le C\,\frac{N}{b_N}.
-\]
-Summing over the finitely many matrix entries yields
-\[
-\max_{1\le r\le C_1N/b_N}
-\left\|\sum_{\ell=1}^rX_{\ell,N}\right\|_{\operatorname F}
-=O_{\PP}\!\left(\sqrt{\frac{N}{b_N}}\right).
-\]
-By \eqref{eq:calendar-stopped-batch-count-main}, for any small
-\(\epsilon>0\) there are constants \(0<c_1<C_1<\infty\) such that
-\[
-\PP\!\left(c_1\frac{N}{b_N}\le M_N\le C_1\frac{N}{b_N}\right)>1-\epsilon
-\]
-for all sufficiently large \(N\).  On this event the random stopped prefix is
-one of the deterministic prefixes already controlled, so
-\begin{equation}\label{eq:calendar-stopped-random-prefix-fluctuation-main}
-\left\|
-\frac1{M_N}\sum_{\ell=1}^{M_N}X_{\ell,N}
-\right\|_{\operatorname{op}}
-=O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right).
-\end{equation}
-Thus
-\[
-\frac1{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
-=V_N+O_{\PP}\left(\sqrt{\frac{b_N}{N}}\right).
-\]
-The empirical mean subtraction is of the same or smaller order.  The stopped
-martingale \(R_{r,N}=\sum_{\ell=1}^rB_{\ell,N}\) satisfies
-\(\EE\|B_{\ell,N}\|^2\le Cb_N\), and the same maximal argument gives
-\[
-\frac1{b_N}\bar B_N\bar B_N^\top
-=O_{\PP}(M_N^{-1})
-=O_{\PP}\left(\frac{b_N}{N}\right).
-\]
-Since \(M_N/(M_N-1)=1+O_{\PP}(b_N/N)\), the centered cycle-time covariance is
-\[
-\frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
-(B_{\ell,N}-\bar B_N)^\top
-=\mathcal T_m+
-O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
-\]
-Multiplying by \(K_N/N=\mu^{-1}+O_{\PP}(N^{-1/2})\) in
-\eqref{eq:calendar-stopped-k-rate-main} proves
-\eqref{eq:calendar-stopped-separated-batch-rate-main}.
-
-It remains to check that the plug-in rewards used in Algorithm~1 do not change
-the rate.  A Chernoff bound for the exponential-moment variables \(L_j\) gives
-\begin{equation}\label{eq:calendar-stopped-uniform-block-length-main}
-\max_{1\le\ell\le M_N}
-\frac1{b_N}\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(1).
-\end{equation}
-Indeed, after intersecting with \(M_N\le C_1N/b_N\), the union bound is
-\[
-\frac{C_1N}{b_N}\,
-\PP\!\left(\sum_{j=1}^{b_N}L_j>Cb_N\right),
-\]
-which tends to zero for \(C\) large because \(b_N=N^\beta\).  Since
-\(\Delta_N=O_{\PP}(N^{-1/2})\),
-\eqref{eq:calendar-stopped-uniform-block-length-main} proves
-\eqref{eq:calendar-stopped-plugin-block-main}.  Put
-\[
-E_{\ell,N}=\widehat B_{\ell,N}-B_{\ell,N}
-=-\Delta_N\sum_{j\in I_{\ell,N}}L_j,\qquad
-\bar E_N=M_N^{-1}\sum_{\ell=1}^{M_N}E_{\ell,N}.
-\]
-On a high-probability event,
-\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le Cb_NN^{-1/2}\).  The difference between
-the centered plug-in and oracle cycle-time covariance matrices is bounded by
-\[
-\begin{aligned}
-&\frac{2}{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|\,\|E_{\ell,N}-\bar E_N\|\\
-&\qquad
-+\frac{1}{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|E_{\ell,N}-\bar E_N\|^2 .
-\end{aligned}
-\]
-The oracle centered covariance just proved has bounded operator norm in
-probability, hence
-\[
-\frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}\|B_{\ell,N}-\bar B_N\|^2=O_{\PP}(1).
-\]
-Also
-\(\sum_{\ell\le M_N}\|E_{\ell,N}-\bar E_N\|^2
-=O_{\PP}(M_Nb_N^2/N)\).  Cauchy's inequality therefore makes the cross term
-\(O_{\PP}(\sqrt{b_N/N})\), while the quadratic plug-in term is
-\(O_{\PP}(b_N/N)\).  Since \(b_N/N\le\sqrt{b_N/N}\) eventually and
-\(K_N/N=O_{\PP}(1)\), the plug-in covariance has the same rate as the oracle
-covariance.  This proves
-\eqref{eq:calendar-stopped-plugin-covariance-rate-main}.
+the fixed deletion does not affect the rate, the block perturbation bound, or
+the plug-in covariance conclusion.  The displayed equations
+\eqref{eq:calendar-stopped-separated-batch-rate-main},
+\eqref{eq:calendar-stopped-plugin-block-main}, and
+\eqref{eq:calendar-stopped-plugin-covariance-rate-main} are therefore exactly
+the corresponding conclusions of the master theorem.
 \end{proof}
 
 \begin{proposition}[Standard complete-cycle and separated-batch facts]\label{prop:standard-complete-cycle-separated-batch-facts-main}
@@ -513,12 +279,13 @@ large numbers \(K_N/N\to1/\mu\) and the usual random-index replacement
 \cite[Chs.~IV.3 and VI.3]{AsmussenGlynn2007}.  This gives the covariance
 \(\mathcal T_{m_{\rm dep}}/\mu\).
 
-For the separated-batch estimator, apply
-\Cref{prop:calendar-stopped-separated-batch-plugin-main} to the fixed-range
-gap reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), with \(q\) equal to the
-fixed number of endpoint and look-ahead cycles deleted by the particular
-complete-cycle set.  That proposition proves the random calendar-stopped
-batch count bound
+For the separated-batch estimator, apply the master theorem
+\Cref{thm:main-calendar-stopped-separated-batch-plugin} to the fixed-range gap
+reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\).  The appendix wrapper
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} is only the same
+theorem with \(q\) fixed endpoint and look-ahead cycles deleted by the
+particular complete-cycle set.  It gives the random calendar-stopped batch
+count bound
 \(M_N=K_N/(b_N+m_{\rm dep})+O_{\PP}(\sqrt N/b_N+1)\), controls the maximal
 deleted endpoint cycle, subtracts the empirical batch mean, and gives exactly
 \eqref{eq:separated-batch-covariance-estimator-rate-main}.
@@ -529,7 +296,9 @@ For the plug-in perturbation, write
 \widehat C_{\ell,N}-C_{\ell,N}
 =-\Delta_N\sum_{j\in I_{\ell,N}}L_j .
 \]
-\Cref{prop:calendar-stopped-separated-batch-plugin-main} gives the uniform
+\Cref{thm:main-calendar-stopped-separated-batch-plugin}, equivalently the
+fixed-endpoint wrapper
+\Cref{prop:calendar-stopped-separated-batch-plugin-main}, gives the uniform
 block-length bound, the block perturbation
 \eqref{eq:separated-batch-plugin-block-main}, and the covariance perturbation
 \eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
@@ -657,11 +426,16 @@ The certificate transcript printed in the manuscript, or an explicitly
 included appendix transcript, must specify the precision, rounding mode, and
 the displayed branch margin \(\eta>0\) whenever it asserts a strict positive
 inequality.  A repository script may reproduce the transcript, but the
-coverage-certified status is attached to the printed interval transcript, not
-to an undisplayed local file.  Equalities used to assert a rank-deficient
-branch must be exact equalities, either symbolic identities or interval
-enclosures of width zero in the certified arithmetic; a small floating-point
-residual is not an equality certificate.
+coverage-certified branch status is attached to the printed interval
+transcript, not to an undisplayed local file.  This branch transcript is only
+one component of a finite diagonal report certificate.  A realized
+finite-record accept/reject/undecided output additionally requires the
+record-specific critical-value bracket and statistic interval in the tuple
+\(\mathcal C(z,\alpha,N)\) of
+\Cref{thm:certified-diagonal-inference-main}.  Equalities used to assert a
+rank-deficient branch must be exact equalities, either symbolic identities or
+interval enclosures of width zero in the certified arithmetic; a small
+floating-point residual is not an equality certificate.
 
 The four admissible certified outcomes are:
 \begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em,itemsep=0.25em]
@@ -694,7 +468,10 @@ nonnegative definite matrix.
 If none of these certificates is available, the diagonal rank branch is
 declared inconclusive.  An inconclusive branch may still be used to display the
 projected-Gaussian diagnostic \(Q_N(z)\) and the ideal conditional quantile,
-but it is not a coverage-certified report in Theorem~E.
+but it is not a coverage-certified report in Theorem~E.  Conversely, even a
+conclusive branch certificate is not by itself a finite decision transcript:
+it must be paired with \([L,U]\) and \([Q]\) in
+\(\mathcal C(z,\alpha,N)\).
 
 The certification convention is deliberately finite.  This paper does not use
 an unproved global analytic sign classification of
@@ -820,10 +597,12 @@ scale \(a(z,v)\) in
 The self-contained certificate used by this manuscript is the interval
 transcript in \Cref{app:self-contained-diagonal-branch-certificate-main}.  The
 paper-local files \path{certificates/diagonal_branch_certificate.py} and
-\path{certificates/diagonal_branch_z_half.json} are reproducibility helpers:
-they regenerate and machine-check the same transcript, but the theorem-level
-branch certificate is the appendix transcript itself.  The command
-\path{python certificates/diagonal_branch_certificate.py --test} evaluates the finite covariance and sandwich formulas
+\path{certificates/diagonal_branch_z_half.json} are the machine-readable replay
+of that transcript.  The command
+\begin{center}
+\path{python certificates/diagonal_branch_certificate.py --test}
+\end{center}
+evaluates the finite covariance and sandwich formulas
 \eqref{eq:dmap-diagonal-sigma-r-finite-main}--\eqref{eq:dmap-diagonal-sigma-finite-main}
 directly from the displayed scalars, matrices and \(D\Phi\), checks that the
 stored JSON transcript is exactly the deterministic transcript regenerated by
@@ -837,7 +616,17 @@ base-ten decimal interval
 arithmetic with precision \(90\) significant digits and directed rounding
 downward for every lower endpoint and upward for every upper endpoint; the
 input interval and all branch enclosures are printed in
-\Cref{app:self-contained-diagonal-branch-certificate-main}.
+\Cref{app:self-contained-diagonal-branch-certificate-main}.  The script has no
+third-party package dependency; the recorded replay environment is Python
+\(3.10.11\), \path{decimal} \(1.70\), and \path{libmpdec} \(2.5.1\).  The
+canonical UTF-8/LF JSON transcript hash printed by
+\begin{center}
+\path{python certificates/diagonal_branch_certificate.py --hash}
+\end{center}
+is
+\[
+\mathtt{61fa032f034e8aad38ab88b52e98071d89335847ad6fda397ca570bf4a3c7db9}.
+\]
 
 For this point certificate the exact substitution into
 \eqref{eq:dmap-diagonal-sigma-r-finite-main} is
@@ -1014,12 +803,12 @@ cross-referenced from Theorem~E.  These are executable certificate protocols,
 not additional paper-level theorem targets.
 
 \begin{algorithmiclemma}[Certified deterministic projected-Gaussian quantile bracket]\label{lem:certified-deterministic-projected-gaussian-quantile-main}
-Fix \(0<z<1\), \(0<p<1\), and a positive definite \(2\times2\) covariance
+Fix \(0<z<1\), \(0<q<1\), and a positive definite \(2\times2\) covariance
 matrix \(\Sigma\).  Suppose the data used by the numerical report are given by
 outward-rounded interval enclosures \([z]\), \([\Sigma]\), and \([Q]\), where
 \([Q]\) contains the computed statistic \(Q\).  Then the lower quantile
 \[
-c_p(z,\Sigma)=\inf\{c\ge0:F_{z,\Sigma}(c)\ge p\}
+c_q(z,\Sigma)=\inf\{c\ge0:F_{z,\Sigma}(c)\ge q\}
 \]
 from \Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main} has
 a reproducible deterministic \emph{bracket} certificate of the following form.
@@ -1037,18 +826,18 @@ L<U,\qquad U-L\le\eta_c,
 \]
 and certified distribution-function enclosures at the two endpoints satisfying
 \[
-F^+(L)<p\le F^-(U).
+F^+(L)<q\le F^-(U).
 \]
 The second, called an \emph{undecided but bracketed midpoint}, consists of a
 current bracket \(L<U\), a rational split point \(m\in(L,U)\), and certified
 distribution-function enclosures satisfying
 \[
-F^+(L)<p\le F^-(U),\qquad
-F^-(m)<p\le F^+(m).
+F^+(L)<q\le F^-(U),\qquad
+F^-(m)<q\le F^+(m).
 \]
 In either case the transcript certifies the quantile bracket
 \[
-L<c_p(z,\Sigma)\le U.
+L<c_q(z,\Sigma)\le U.
 \]
 The undecided transcript is a legitimate finite output: it records that the
 available outward-rounded calculation has not decided on which side of the
@@ -1058,15 +847,15 @@ force an accept/reject decision at \(m\).
 Moreover any resolved or undecided bracket gives a rigorous comparison of
 \(Q\) with the ideal quantile whenever the certified intervals are separated:
 \[
-[Q]^+\le L\quad\Longrightarrow\quad Q<c_p(z,\Sigma),
+[Q]^+\le L\quad\Longrightarrow\quad Q<c_q(z,\Sigma),
 \]
 and
 \[
-[Q]^->U\quad\Longrightarrow\quad Q>c_p(z,\Sigma).
+[Q]^->U\quad\Longrightarrow\quad Q>c_q(z,\Sigma).
 \]
 If neither separation holds, the routine returns the certified statement
 \[
-Q-c_p(z,\Sigma)\in
+Q-c_q(z,\Sigma)\in
 \bigl[[Q]^--U,\,[Q]^+-L\bigr],
 \]
 so the only undecided cases are those lying within the declared numerical
@@ -1129,15 +918,15 @@ the partition until \(F^+(c)-F^-(c)\le\eta\).  Denote this finite subroutine
 by \(\mathsf{CDF}(c,\eta)\).
 
 The bracket construction is mechanical.  First run
-\(\mathsf{CDF}(0,\eta_j)\), \(j=0,1,\ldots\), until \(F^+(0)<p\), and set
+\(\mathsf{CDF}(0,\eta_j)\), \(j=0,1,\ldots\), until \(F^+(0)<q\), and set
 \(L=0\).  Next dovetail the dyadic upper search: for stages
 \(s=0,1,2,\ldots\), compute \(\mathsf{CDF}(2^r,\eta_s)\) for every
 \(0\le r\le s\), using rational directed arithmetic at each dyadic point.
 Stop at the first stage \(s\) for which some inspected dyadic point satisfies
-\(p\le F^-(2^r)\), and choose the smallest such \(r\) as \(U=2^r\).  The
+\(q\le F^-(2^r)\), and choose the smallest such \(r\) as \(U=2^r\).  The
 stored endpoint certificates give the invariant
 \[
-F^+(L)<p\le F^-(U).
+F^+(L)<q\le F^-(U).
 \]
 
 Let
@@ -1146,18 +935,18 @@ K=\max\left\{0,\left\lceil\log_2\frac{U-L}{\eta_c}\right\rceil\right\}.
 \]
 For \(k=1,\ldots,K\), form the rational midpoint \(m=(L+U)/2\).  Run
 \(\mathsf{CDF}(m,\eta_0),\ldots,\mathsf{CDF}(m,\eta_J)\).  If some certified
-enclosure has \(F^+(m)<p\), replace \(L\) by \(m\) and keep the certificate
+enclosure has \(F^+(m)<q\), replace \(L\) by \(m\) and keep the certificate
 for the new lower endpoint.  If some certified enclosure has
-\(p\le F^-(m)\), replace \(U\) by \(m\) and keep the certificate for the new
+\(q\le F^-(m)\), replace \(U\) by \(m\) and keep the certificate for the new
 upper endpoint.  If, after the \(J+1\) prescribed refinements,
 \[
-F^-(m)<p\le F^+(m),
+F^-(m)<q\le F^+(m),
 \]
 return the undecided-but-bracketed transcript with the current endpoint
 certificates and the midpoint certificate.  If no undecided midpoint is
 returned during the \(K\) passes, return the resolved bracket \((L,U]\); its
 length is at most \(\eta_c\) and its endpoint certificates still satisfy
-\(F^+(L)<p\le F^-(U)\).
+\(F^+(L)<q\le F^-(U)\).
 \end{algorithmiclemma}
 
 \begin{proof}
@@ -1192,37 +981,37 @@ any prescribed positive value.  Hence the refinement loop achieves
 
 The initial endpoint search is also finite.  At \(c=0\), the no-atom
 statement in \Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main}
-gives \(F_{z,\Sigma}(0)=\PP\{T_{z,\Sigma}=0\}=0<p\); once
-\(\eta<p\), any certified enclosure with width at most \(\eta\) has
-\(F^+(0)<p\).  For the upper endpoint,
+gives \(F_{z,\Sigma}(0)=\PP\{T_{z,\Sigma}=0\}=0<q\); once
+\(\eta<q\), any certified enclosure with width at most \(\eta\) has
+\(F^+(0)<q\).  For the upper endpoint,
 \(F_{z,\Sigma}(c)\to1\) as \(c\to\infty\), so some dyadic point \(2^r\) has
-\(F_{z,\Sigma}(2^r)>p\).  Because the same lemma proves continuity and
+\(F_{z,\Sigma}(2^r)>q\).  Because the same lemma proves continuity and
 strict increase, this inequality is strict at that dyadic point; once the CDF
 enclosure is refined below the positive margin
-\(F_{z,\Sigma}(2^r)-p\), the certificate has \(F^-(2^r)\ge p\).  Thus the
+\(F_{z,\Sigma}(2^r)-q\), the certificate has \(F^-(2^r)\ge q\).  Thus the
 mechanical endpoint search reaches a certified pair \(L<U\) after finitely
 many rational CDF calls.
 
-The certified endpoint inequalities \(F^+(L)<p\) and \(F^-(U)\ge p\) imply
+The certified endpoint inequalities \(F^+(L)<q\) and \(F^-(U)\ge q\) imply
 \[
-F_{z,\Sigma}(L)<p,\qquad F_{z,\Sigma}(U)\ge p,
+F_{z,\Sigma}(L)<q,\qquad F_{z,\Sigma}(U)\ge q,
 \]
-and therefore \(L<c_p(z,\Sigma)\le U\).  The bisection loop preserves this
+and therefore \(L<c_q(z,\Sigma)\le U\).  The bisection loop preserves this
 same invariant by construction.  If the midpoint certificate proves
-\(F^+(m)<p\), then \(F_{z,\Sigma}(m)<p\), so \(m<c_p(z,\Sigma)\) and \(m\) is
-a valid new lower endpoint.  If it proves \(p\le F^-(m)\), then
-\(p\le F_{z,\Sigma}(m)\), so \(c_p(z,\Sigma)\le m\) and \(m\) is a valid new
+\(F^+(m)<q\), then \(F_{z,\Sigma}(m)<q\), so \(m<c_q(z,\Sigma)\) and \(m\) is
+a valid new lower endpoint.  If it proves \(q\le F^-(m)\), then
+\(q\le F_{z,\Sigma}(m)\), so \(c_q(z,\Sigma)\le m\) and \(m\) is a valid new
 upper endpoint.  If neither side is certified after the prescribed finite
 refinement budget, the algorithm returns the explicitly allowed undecided
 midpoint transcript; the stored endpoint certificates still imply
-\(L<c_p(z,\Sigma)\le U\), while the midpoint certificate records only
-\(F^-(m)<p\le F^+(m)\).  This is a finite certificate of a bracket, not a
+\(L<c_q(z,\Sigma)\le U\), while the midpoint certificate records only
+\(F^-(m)<q\le F^+(m)\).  This is a finite certificate of a bracket, not a
 claim that the exact midpoint comparison has been resolved.
 
 There are at most \(K\) midpoint passes before the resolved output, and each
 pass makes at most \(J+1\) finite CDF calls.  Hence the whole procedure has a
 finite transcript.  The final comparison with \([Q]\) follows immediately
-from \(L<c_p(z,\Sigma)\le U\) and the fact that \(Q\in[Q]\).
+from \(L<c_q(z,\Sigma)\le U\) and the fact that \(Q\in[Q]\).
 \end{proof}
 
 
@@ -1255,11 +1044,11 @@ F^{(1)}_{z,v}(c)
  +\frac12F_{\chi^2_1}\!\left(\frac{c}{a(z,v)}\right).
 \end{equation}
 The formula is independent of the scale \(\lambda\).  The distribution is
-continuous and strictly increasing on \([0,\infty)\), so for \(0<p<1\)
+continuous and strictly increasing on \([0,\infty)\), so for \(0<q<1\)
 \[
-c^{(1)}_p(z,v):=\inf\{c\ge0:F^{(1)}_{z,v}(c)\ge p\}
+c^{(1)}_q(z,v):=\inf\{c\ge0:F^{(1)}_{z,v}(c)\ge q\}
 \]
-is the unique exact lower \(p\)-quantile.
+is the unique exact lower \(q\)-quantile.
 
 Moreover this quantile has a certified one-dimensional construction.  Suppose
 a diagonal branch certificate proves the rank-one non-normal branch and gives
@@ -1271,7 +1060,7 @@ rational bisection returns either a resolved bracket \(L<U\), \(U-L\le\eta_c\),
 or an undecided-but-bracketed midpoint transcript.  In both cases the endpoint
 certificates satisfy
 \[
-F^{(1),+}_{[a]}(L)<p\le F^{(1),-}_{[a]}(U),
+F^{(1),+}_{[a]}(L)<q\le F^{(1),-}_{[a]}(U),
 \]
 where, for \(c\ge0\),
 \[
@@ -1290,20 +1079,20 @@ F_{\chi^2_1}(x)=2\Phi(\sqrt x)-1,\qquad x\ge0 .
 \]
 An undecided midpoint transcript also contains a rational \(m\in(L,U)\) with
 \[
-F^{(1),-}_{[a]}(m)<p\le F^{(1),+}_{[a]}(m).
+F^{(1),-}_{[a]}(m)<q\le F^{(1),+}_{[a]}(m).
 \]
 Consequently, for either output,
 \[
-L<c^{(1)}_p(z,v)\le U.
+L<c^{(1)}_q(z,v)\le U.
 \]
 The same transcript certifies the comparison with the ideal quantile:
 \[
-[Q]^+\le L\Rightarrow Q<c^{(1)}_p(z,v),\qquad
-[Q]^->U\Rightarrow Q>c^{(1)}_p(z,v),
+[Q]^+\le L\Rightarrow Q<c^{(1)}_q(z,v),\qquad
+[Q]^->U\Rightarrow Q>c^{(1)}_q(z,v),
 \]
 and otherwise certifies only
 \[
-Q-c^{(1)}_p(z,v)\in[[Q]^--U,[Q]^+-L].
+Q-c^{(1)}_q(z,v)\in[[Q]^--U,[Q]^+-L].
 \]
 \end{lemma}
 
@@ -1337,26 +1126,26 @@ exact lower-quantile statement.
 
 For the certificate, monotonicity of \(F_{\chi^2_1}\) and
 \([a]\Subset(0,1]\) give the displayed lower and upper enclosures of
-\(F^{(1)}_{z,v}(c)\).  The endpoint \(0\) has certified upper value \(0<p\),
+\(F^{(1)}_{z,v}(c)\).  The endpoint \(0\) has certified upper value \(0<q\),
 and sufficiently large dyadic \(b\) has certified lower value at least \(p\)
 because \(F^{(1)}_{z,v}(c)\to1\).  The bisection is exactly the mechanical
 rule used above: split the current bracket at a rational midpoint, keep the
-left half when the directed upper CDF bound is \(<p\), keep the right half
-when the directed lower CDF bound is \(\ge p\), and otherwise stop after the
+left half when the directed upper CDF bound is \(<q\), keep the right half
+when the directed lower CDF bound is \(\ge q\), and otherwise stop after the
 prescribed finite refinement budget with the displayed undecided midpoint
 certificate.  Every accepted endpoint preserves
-\(F^{(1),+}_{[a]}(L)<p\le F^{(1),-}_{[a]}(U)\), and therefore
-\(L<c^{(1)}_p(z,v)\le U\).  The procedure is finite because it performs only
+\(F^{(1),+}_{[a]}(L)<q\le F^{(1),-}_{[a]}(U)\), and therefore
+\(L<c^{(1)}_q(z,v)\le U\).  The procedure is finite because it performs only
 the prescribed endpoint search and finitely many midpoint evaluations; it
 certifies the bracket and does not require a total decision at a midpoint
-where the interval comparison straddles \(p\).  The comparison statements
-follow from \(Q\in[Q]\) and \(L<c^{(1)}_p(z,v)\le U\).
+where the interval comparison straddles \(q\).  The comparison statements
+follow from \(Q\in[Q]\) and \(L<c^{(1)}_q(z,v)\le U\).
 \end{proof}
 
 
-\begin{theorem}[Certified projected-Gaussian quantile bracketing algorithm]\label{thm:certified-projected-gaussian-quantile-algorithm-main}
+\begin{algorithmiclemma}[Certified projected-Gaussian quantile bracketing algorithm]\label{alg:certified-projected-gaussian-quantile-algorithm-long-copy}
 Fix \(0<z<1\), a positive definite \(2\times2\) covariance matrix
-\(\Sigma\), and \(0<p<1\).  Put
+\(\Sigma\), and \(0<q<1\).  Put
 \[
 H_z=\{u\in\RR^2:u_2\le zu_1\},\qquad
 \Pi_{H_z}u=u-\frac{(u_2-zu_1)_+}{1+z^2}(-z,1)^\top ,
@@ -1372,7 +1161,7 @@ F_{z,\Sigma}(c)
 \end{equation}
 The lower projected-Gaussian quantile
 \[
-c_p(z,\Sigma):=\inf\{c\ge0:F_{z,\Sigma}(c)\ge p\}
+c_q(z,\Sigma):=\inf\{c\ge0:F_{z,\Sigma}(c)\ge q\}
 \]
 is a reproducible mathematical object in the following finite-certificate
 sense.  The algorithm certifies an enclosing bracket for the lower quantile
@@ -1390,7 +1179,7 @@ a finite transcript consisting of outward-rounded enclosures for \(z\),
 distribution sums \(F^-(c)\le F_{z,\Sigma}(c)\le F^+(c)\), rational split
 points, and certified endpoints \(L<U\) satisfying the invariant
 \[
-F^+(L)<p\le F^-(U).
+F^+(L)<q\le F^-(U).
 \]
 The transcript is of one of the following two forms.
 \begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em,itemsep=0.2em]
@@ -1398,26 +1187,26 @@ The transcript is of one of the following two forms.
 \item An undecided-but-bracketed midpoint, where the transcript also prints a
 rational \(m\in(L,U)\) satisfying
 \[
-F^-(m)<p\le F^+(m).
+F^-(m)<q\le F^+(m).
 \]
 \end{enumerate}
 Both outputs certify the same theorem-level statement,
 \[
-L<c_p(z,\Sigma)\le U .
+L<c_q(z,\Sigma)\le U .
 \]
 The theorem does not require the finite computation to decide a midpoint whose
-outward-rounded distribution-function enclosure straddles \(p\); such a
+outward-rounded distribution-function enclosure straddles \(q\); such a
 midpoint is reported as undecided, while the endpoint bracket remains
 certified.
 If a computed statistic \(Q\) is given by an outward-rounded interval
 \([Q]\), the same transcript certifies the comparison with the ideal quantile:
 \[
-[Q]^+\le L\Rightarrow Q<c_p(z,\Sigma),\qquad
-[Q]^->U\Rightarrow Q>c_p(z,\Sigma),
+[Q]^+\le L\Rightarrow Q<c_q(z,\Sigma),\qquad
+[Q]^->U\Rightarrow Q>c_q(z,\Sigma),
 \]
 and otherwise certifies only the enclosure
 \[
-Q-c_p(z,\Sigma)\in[[Q]^--U,[Q]^+-L].
+Q-c_q(z,\Sigma)\in[[Q]^--U,[Q]^+-L].
 \]
 
 Moreover, conditional finite Monte Carlo simulation is coverage-certified only
@@ -1426,23 +1215,23 @@ independent draws \(T_1^\ast,\ldots,T_R^\ast\) from the law with distribution
 function \(F_{z,\Sigma}\), let
 \[
 \widehat F_R(t)=R^{-1}\sum_{m=1}^R\mathbf1_{\{T_m^\ast\le t\}},\qquad
-q_R=T_{(\lceil pR\rceil)}^\ast ,
+\widehat c_R=T_{(\lceil qR\rceil)}^\ast ,
 \]
 with the draws sorted increasingly, and let
 \[
 \varepsilon_{R,\delta}:=\sqrt{\frac{\log(2/\delta)}{2R}},\qquad
 d_{R,\delta}:=
-\inf\{d\ge0:\widehat F_R(q_R+d)-\varepsilon_{R,\delta}\ge p\}.
+\inf\{d\ge0:\widehat F_R(\widehat c_R+d)-\varepsilon_{R,\delta}\ge q\}.
 \]
-If \(p+\varepsilon_{R,\delta}<1\), then
+If \(q+\varepsilon_{R,\delta}<1\), then
 \[
-\PP^\ast\{q_R+d_{R,\delta}\ge c_p(z,\Sigma)\}\ge1-\delta .
+\PP^\ast\{\widehat c_R+d_{R,\delta}\ge c_q(z,\Sigma)\}\ge1-\delta .
 \]
 Thus a raw simulated quantile is diagnostic by itself; the reproducible
 coverage-certified simulated critical value is the inflated value
-\(q_R+d_{R,\delta}\), or another value accompanied by an explicitly proved
+\(\widehat c_R+d_{R,\delta}\), or another value accompanied by an explicitly proved
 one-sided domination event of the same form.
-\end{theorem}
+\end{algorithmiclemma}
 
 \begin{proof}
 The identity \eqref{eq:certified-projected-gaussian-cdf-main} is the
@@ -1456,14 +1245,14 @@ on \([0,\infty)\).  The interval-integration and bisection procedure in
 the displayed \(F^-,F^+\), rational split points, and endpoint inequalities.
 The endpoint inequalities imply
 \[
-F_{z,\Sigma}(L)\le F^+(L)<p,\qquad
-F_{z,\Sigma}(U)\ge F^-(U)\ge p,
+F_{z,\Sigma}(L)\le F^+(L)<q,\qquad
+F_{z,\Sigma}(U)\ge F^-(U)\ge q,
 \]
 so the lower quantile lies in \((L,U]\).  If the output is an undecided
 midpoint, the additional displayed inequality is only a record of the
 midpoint's unresolved interval comparison and is not used to infer equality or
 coverage.  The three comparison statements with \([Q]\) are then immediate
-from \(Q\in[Q]\) and \(L<c_p(z,\Sigma)\le U\).
+from \(Q\in[Q]\) and \(L<c_q(z,\Sigma)\le U\).
 
 For the simulation statement, the Dvoretzky--Kiefer--Wolfowitz inequality gives
 \[
@@ -1472,23 +1261,30 @@ For the simulation statement, the Dvoretzky--Kiefer--Wolfowitz inequality gives
 \]
 On this event the defining inequality for \(d_{R,\delta}\) gives
 \[
-F_{z,\Sigma}(q_R+d_{R,\delta})
-\ge \widehat F_R(q_R+d_{R,\delta})-\varepsilon_{R,\delta}
-\ge p .
+F_{z,\Sigma}(\widehat c_R+d_{R,\delta})
+\ge \widehat F_R(\widehat c_R+d_{R,\delta})-\varepsilon_{R,\delta}
+\ge q .
 \]
 By the definition of the lower quantile,
-\(q_R+d_{R,\delta}\ge c_p(z,\Sigma)\).  The stated conditional probability
+\(\widehat c_R+d_{R,\delta}\ge c_q(z,\Sigma)\).  The stated conditional probability
 bound follows.
 \end{proof}
 
 
-\begin{definition}[Finite diagonal report]\label{def:finite-diagonal-report-main}
-Fix \(0<\alpha<1\).  The manuscript's finite diagonal report is a
-record-level statement only at
+\begin{definition}[Finite diagonal report certificate]\label{def:finite-diagonal-report-main}
+Fix \(0<\alpha<1\).  A finite diagonal report certificate is the additional
+record-specific transcript needed to turn the fixed-null asymptotic theorem
+into an executed finite comparison.  It is allowed only at
 \[
 z_0=\frac12,\qquad \sigma_{z_0}=(2z_0,z_0^2)=(1,1/4),
 \]
-and only on the reporting event \(\mathcal E_N\).  On \(\mathcal E_N\), compute
+and only on the reporting event \(\mathcal E_N\).  The present article prints
+the \(z_0=1/2\) population branch certificate, but it does not print a
+record-specific critical-value bracket or statistic interval.  Consequently
+this definition is a reproducibility contract for an implementation transcript,
+not an executed finite-record decision in the article.
+
+On \(\mathcal E_N\), compute
 \[
 Q_N(z_0)=
 N(\widehat\sigma_N-\sigma_{z_0})^\top
@@ -1500,13 +1296,20 @@ used in \Cref{thm:e-fixed-candidate-exchange-diagonal-main}.  The report must
 also carry the population branch certificate for the computable diagonal
 covariance \(\Sigma_\sigma(z_0)\) in the sense of
 \Cref{def:dmap-diagonal-rank-certificate-main}.  For the submitted manuscript
-this certificate is the full-rank certificate
+this population certificate is the full-rank certificate
 \Cref{lem:z-half-diagonal-branch-certificate-main}.
 
-Given this branch certificate, the critical value must be supplied by exactly
-one of the following two routes.  These two routes are exhaustive for the
-finite-record certificate interfaces cross-referenced after Theorem~E: a raw
-simulated quantile, a finite-sample eigenvalue branch guess, or an undocumented
+Given this branch certificate, an executed finite report must add the
+record-specific components
+\[
+\mathcal C_N(z_0,\alpha)
+=\bigl([z_0],[\widehat\Sigma_{\sigma,N}],[Q_N],[L_N,U_N]\bigr)
+\]
+or the same tuple with a DKW-dominated simulated critical value in place of
+\([L_N,U_N]\).  The critical value must be supplied by exactly one of the
+following two routes.  These two routes are exhaustive for the finite-record
+certificate interfaces cross-referenced after Theorem~E: a raw simulated
+quantile, a finite-sample eigenvalue branch guess, or an undocumented
 numerical CDF value is a diagnostic, not a coverage-certified critical value.
 
 \emph{Certified ideal-CDF route.}  Let \(F_N^\ast\) be the conditional CDF of
@@ -1561,8 +1364,8 @@ quantiles are diagnostics only.
 
 \begin{proposition}[Master rule for finite diagonal reports]\label{prop:finite-diagonal-report-master-main}
 Under \Cref{ass:finite-record-master-main}, every coverage-certified
-finite-record exchange-diagonal acceptance statement in this manuscript is a
-finite diagonal report in the sense of
+exchange-diagonal finite-record decision in this framework must be a finite
+diagonal report certificate in the sense of
 \Cref{def:finite-diagonal-report-main}.  Equivalently, the operational
 certificate is
 \[
@@ -1579,6 +1382,9 @@ or
 If either the branch certificate or the critical-value certificate is absent,
 the projected-Gaussian calculation remains an asymptotic diagnostic and no
 coverage-certified finite diagonal report is formed.
+In the submitted article the critical-value certificate and the realized
+statistic interval are absent, so the finite diagonal report is deliberately
+not formed.
 \end{proposition}
 
 \begin{proof}
@@ -1731,9 +1537,9 @@ projected roots.  If an estimated branch map is used, require the
 high-probability oracle-agreement condition from
 \Cref{conv:branch-map-labelled-rates-main}; otherwise withhold separated
 labels and retain only the quotient/unordered report.  At a population
-exchange diagonal, use only the pointwise common-rate acceptance event
-calibrated by Algorithm~3; a simultaneous diagonal band needs a separate
-certified inversion rule.
+exchange diagonal, use only the fixed-candidate common-rate pullback calibrated
+by Algorithm~3; a simultaneous diagonal band needs a separate certified
+inversion rule.
 
 \paragraph{Algorithm 3: fixed-candidate projected-Gaussian diagonal calibration.}
 
@@ -1988,20 +1794,21 @@ only for the finite list or finite interval union in \(Z_{\rm cert}\).  Any
 uncertified continuum curve, heat map, or dense grid is a visualization of the
 diagnostic statistic and is not a confidence-set inversion.
 
-\phantomsection\label{alg:projected-plugin-word-law-report-main}
-\paragraph{Algorithm 4: projected plug-in word-law report.}
+\phantomsection\label{alg:projected-plugin-word-law-reconstruction-main}
+\paragraph{Algorithm 4: projected plug-in word-law reconstruction.}
 
 This protocol implements
-\Cref{def:projected-plugin-word-law-report-main,prop:finite-record-complete-law-renewal-consistency-main}.
-It is a numerical reporting recipe for a retained projected renewal law, not a
-confidence procedure for word probabilities.
+\Cref{def:projected-plugin-word-law-reconstruction-main,prop:finite-record-complete-law-renewal-consistency-main}.
+It is a numerical reconstruction recipe for a retained projected renewal law,
+not an uncertainty statement or a confidence procedure for word probabilities.
 
 \begin{enumerate}[label=\textup{\arabic*.},leftmargin=2.0em,itemsep=0.35em]
 \item Start with the finite-record reporting gate \(\mathcal E_N\), the
 quotient inverse map \(\Phi\), the feasible projection \(\Pi_F^{\rm tb}\),
 and the thresholds \(\varepsilon_N,\eta_N\) of the fixed protocol
 \eqref{prot:finite-record-main}.  If \(\mathcal E_N^c\) occurs, stop and
-report ``insufficient complete cycles; no projected plug-in word-law report.''
+return ``insufficient complete cycles; projected plug-in word-law
+reconstruction not formed.''
 
 \item On \(\mathcal E_N\), compute
 \[
@@ -2018,7 +1825,7 @@ Retain the word-law branch only on
 =\mathcal E_N\cap
 \{\widetilde z_{1,N},\widetilde z_{2,N}\in[\eta_N,1-\eta_N]\}.
 \]
-On \((\mathcal E_N^{\rm law})^c\), withhold all projected plug-in word
+On \((\mathcal E_N^{\rm law})^c\), do not form projected plug-in word
 probabilities.
 
 \item On \(\mathcal E_N^{\rm law}\), compute the projected root gap law
@@ -2034,7 +1841,7 @@ Do not insert the noisy empirical intensity
 \(\widehat r_{0,N}^{\mathrm{cyc}}\) into the final renewal inclusion product.
 
 \item For a requested finite window \(I\), put \(d_I=0\) if \(|I|\le1\), and
-otherwise put \(d_I=\max I-\min I\).  The report uses only
+otherwise put \(d_I=\max I-\min I\).  The reconstruction uses only
 \(\widetilde u_{0,N},\ldots,\widetilde u_{d_I,N}\), obtained from
 \[
 \widetilde U_N(t):=\sum_{n\ge0}\widetilde u_{n,N}t^n
@@ -2051,15 +1858,16 @@ If the implementation truncates the gap law after \(K\ge d_I-1\), the renewal
 masses needed for this finite window are unchanged; the truncation error in
 \(\widetilde u_{0,N},\ldots,\widetilde u_{d_I,N}\) is exactly zero.
 
-\item The only infinite-tail numerical quantity in a finite-window report is
-the scalar mean in \(\widetilde\rho_N\).  Evaluate it either from the closed
+\item The only infinite-tail numerical quantity in a finite-window
+reconstruction is the scalar mean in \(\widetilde\rho_N\).  Evaluate it either from the closed
 root formula in
 \Cref{rem:complete-law-numerical-implementation-main} or from a truncated
 sum accompanied by the certified tail bound stated there.  If the declared
 tail tolerance certificate fails, withhold the projected plug-in word-law
-report instead of replacing the failed quantity by an uncertified number.
+reconstruction instead of replacing the failed quantity by an uncertified
+number.
 
-\item For every nonempty \(B=\{i_1<\cdots<i_m\}\subset I\), report the projected
+\item For every nonempty \(B=\{i_1<\cdots<i_m\}\subset I\), form the projected
 renewal inclusion probability
 \[
 \widetilde\PP_N(B\subset\varXi)
@@ -2067,10 +1875,10 @@ renewal inclusion probability
 \prod_{\ell=1}^{m-1}\widetilde u_{i_{\ell+1}-i_\ell,N},
 \]
 with empty inclusion value \(1\), and obtain the word probabilities on \(I\)
-by finite inclusion--exclusion.  The reported object is the projected plug-in
-word-law report of \(\Cref{def:projected-plugin-word-law-report-main}\).  It
-contains projected word probabilities only, not confidence intervals for those
-word probabilities.
+by finite inclusion--exclusion.  The resulting object is the projected plug-in
+word-law reconstruction of \(\Cref{def:projected-plugin-word-law-reconstruction-main}\).
+It contains projected word probabilities only, not confidence intervals, bands,
+\(p\)-values, or critical values for those word probabilities.
 \end{enumerate}
 
 
@@ -2127,8 +1935,10 @@ neighbouring-point branch classification.
 \begin{definition}[Certified diagonal covariance branch]\label{def:dmap-diagonal-rank-certificate-main}
 Fix \(0<z<1\), set \(n_z=(-z,1)^\top\), \(t_z=(1,z)^\top\), and form the
 actual D-MAP covariance \(\Sigma_\sigma(z)\) by
-\eqref{eq:dmap-diagonal-sigma-finite-main}.  A coverage-certified diagonal
-report must attach a finite transcript that proves exactly one of:
+\eqref{eq:dmap-diagonal-sigma-finite-main}.  A diagonal branch certificate is
+the finite branch component of the larger tuple
+\(\mathcal C(z,\alpha,N)\) in
+\Cref{thm:certified-diagonal-inference-main}.  It proves exactly one of:
 \[
 \det\Sigma_\sigma(z)>0,
 \]
@@ -2149,10 +1959,15 @@ or
 Strict inequalities require a displayed positive margin.  Rank-deficient
 branches require exact equalities, either symbolic identities or certified
 zero-width interval enclosures.  A floating-point eigenvalue calculation is
-not a branch certificate.  In the submitted main article the only printed
-branch transcript is the full-rank point certificate at \(z=1/2\) in
+not a branch certificate.  A branch certificate alone is not a finite
+accept/reject transcript; a realized finite diagonal report also needs the
+record-specific statistic enclosure \([Q]\) and critical-value bracket
+\([L,U]\).  In the submitted main article the only printed branch transcript is
+the full-rank point certificate at \(z=1/2\) in
 \Cref{lem:z-half-diagonal-branch-certificate-main}; all other diagonal
-candidates are diagnostics unless a separate transcript is attached.
+candidates are diagnostics unless a separate branch transcript is attached,
+and no candidate has an executed finite-report transcript unless the complete
+tuple \(\mathcal C(z,\alpha,N)\) is printed.
 \end{definition}
 
 \begin{algorithmiclemma}[Outward-rounded diagonal branch certificate]\label{lem:diagonal-interval-branch-certificate-main}
@@ -2207,10 +2022,10 @@ For a certified full-rank covariance branch, the lower conditional
 projected-Gaussian quantile is accepted in the main theorem chain only through
 a finite bracket \(L<U\) with outward-rounded CDF inequalities
 \[
-F^+(L)<p\le F^-(U).
+F^+(L)<q\le F^-(U).
 \]
 The transcript may leave midpoint comparisons undecided; the endpoint
-inequalities alone certify \(L<c_p\le U\) and the corresponding comparison
+inequalities alone certify \(L<c_q\le U\) and the corresponding comparison
 with an outward-rounded statistic interval \([Q]\).
 \end{algorithmiclemma}
 
@@ -2239,21 +2054,25 @@ A coverage-certified report for this branch must attach an interval enclosure
 of \(a(z,v)\) and a one-dimensional directed-rounding quantile bracket.
 \end{lemma}
 
-\begin{theorem}[Certified projected-Gaussian quantile bracketing algorithm]\label{thm:certified-projected-gaussian-quantile-algorithm-main}
+\begin{algorithmiclemma}[Certified projected-Gaussian quantile bracketing algorithm]\label{thm:certified-projected-gaussian-quantile-algorithm-main}
 The deterministic quantile transcript for a certified projected-Gaussian
 branch consists of finite outward-rounded enclosures proving
 \[
-L<c_p(z,\Sigma)\le U
+L<c_q(z,\Sigma)\le U
 \]
-for the lower \(p\)-quantile of the ideal projected-Gaussian law.  Conditional
+for the lower \(q\)-quantile of the ideal projected-Gaussian law.  Conditional
 Monte Carlo output is coverage-certified only when it is inflated by a
 one-sided DKW domination certificate; raw simulated quantiles are diagnostics.
-\end{theorem}
+\end{algorithmiclemma}
 
-\begin{definition}[Finite diagonal report]\label{def:finite-diagonal-report-main}
-The finite diagonal report covered by the main article is the fixed candidate
-\(z_0=1/2\) on the retained reporting event \(\mathcal E_N\).  It consists of
-one theorem-level certificate tuple
+\begin{definition}[Finite diagonal report certificate]\label{def:finite-diagonal-report-main}
+A finite diagonal report certificate is the record-specific transcript that
+would be required to turn Theorem~E into an executed finite comparison at the
+fixed candidate \(z_0=1/2\) on the retained reporting event
+\(\mathcal E_N\).  The main article prints the population branch certificate
+for \(z_0=1/2\), but it does not print a retained-record critical-value
+bracket or a realized statistic interval.  An executed extension would consist
+of one theorem-level certificate tuple
 \[
 \mathcal C(z_0,\alpha,N)
 =\bigl([z],[\theta],[\Sigma_\sigma],[I_\tau],
@@ -2280,11 +2099,14 @@ DKW-inflated projected-Gaussian simulated critical value with
 Without both a branch certificate and a critical-value transcript, the
 projected-Gaussian output is diagnostic and no finite accept/reject report is
 asserted.
+For the submitted article the branch certificate is present, while
+\([L,U]\) and \([Q]\) are not printed; hence this definition supplies a
+checklist for reproducibility rather than a finite decision.
 \end{definition}
 
 \begin{proposition}[Master rule for finite diagonal reports]\label{prop:finite-diagonal-report-master-main}
-Every coverage-certified exchange-diagonal finite-record acceptance statement
-in the main article has the form
+Every coverage-certified exchange-diagonal finite-record decision in this
+framework has the form
 \[
 \text{branch certificate}+\text{critical-value domination/bracket}.
 \]
@@ -2292,15 +2114,17 @@ The branch certificate fixes the population covariance case; the
 critical-value certificate either brackets the ideal conditional quantile or
 dominates it by the DKW rule.  If either component is absent, no
 coverage-certified finite diagonal report is formed.
+In the submitted main article the critical-value component is absent, so no
+coverage-certified finite diagonal report is formed.
 \end{proposition}
 
 \phantomsection\label{alg:all-complete-cycle-separated-batch-main}
-\phantomsection\label{alg:projected-plugin-word-law-report-main}
+\phantomsection\label{alg:projected-plugin-word-law-reconstruction-main}
 \phantomsection\label{app:branch-map-oracle-reduction-main}
 \paragraph{Supplementary implementation algorithms.}
 The full Algorithm~1 covariance recipe, Algorithm~2 quotient projection and
 chart-retention rule, Algorithm~3 fixed-candidate diagonal calibration rule,
-Algorithm~4 projected plug-in word-law report, and the estimated branch-map
+Algorithm~4 projected plug-in word-law reconstruction, and the estimated branch-map
 reduction are collected in the supplementary material.  The theorem statements
 in the main article use their mathematical outputs only through
 \Cref{conv:boxed-retained-coverage-main,def:finite-diagonal-report-main,prop:finite-diagonal-report-master-main}.

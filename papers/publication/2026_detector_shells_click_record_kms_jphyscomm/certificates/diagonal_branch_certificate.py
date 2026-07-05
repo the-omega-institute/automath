@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import decimal
 import sys
 import unittest
 from decimal import Decimal, getcontext, localcontext, ROUND_FLOOR, ROUND_CEILING
@@ -27,6 +29,24 @@ EXPECTED_ROUNDED = {
     "det": "1.37248537400032",
 }
 TRANSCRIPT_PATH = Path(__file__).with_name("diagonal_branch_z_half.json")
+RECORDED_REPLAY_ENVIRONMENT = {
+    "python": "3.10.11",
+    "decimal": "1.70",
+    "libmpdec": "2.5.1",
+    "third_party_packages": [],
+}
+
+
+def runtime_environment():
+    return {
+        "recorded": RECORDED_REPLAY_ENVIRONMENT,
+        "runtime": {
+            "python": sys.version.split()[0],
+            "decimal": decimal.__version__,
+            "libmpdec": decimal.__libmpdec_version__,
+            "third_party_packages": [],
+        },
+    }
 
 
 def D(x: str) -> Decimal:
@@ -373,6 +393,14 @@ def canonical_json(data):
     return json.dumps(data, indent=2) + "\n"
 
 
+def canonical_transcript_bytes(data):
+    return canonical_json(data).encode("utf-8")
+
+
+def canonical_transcript_sha256(data):
+    return hashlib.sha256(canonical_transcript_bytes(data)).hexdigest()
+
+
 def validate_certificate_against_printed_formulas(data, point):
     sigma = data["sigma_interval"]
     for i in range(2):
@@ -463,4 +491,11 @@ if __name__ == "__main__":
         sys.exit(0)
     run_formula_self_test()
     data = diagonal_covariance("0.5")
+    if "--hash" in sys.argv:
+        print(canonical_transcript_sha256(data))
+        print(len(canonical_transcript_bytes(data)))
+        sys.exit(0)
+    if "--environment" in sys.argv:
+        print(json.dumps(runtime_environment(), indent=2))
+        sys.exit(0)
     print(json.dumps(data, indent=2))
