@@ -325,8 +325,7 @@ E_{\ell,N}:=\widehat C_{\ell,N}-C_{\ell,N},\qquad
 \bar E_N:=M_N^{-1}\sum_{\ell=1}^{M_N}E_{\ell,N}.
 \]
 On the high-probability event where
-\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le C b_NN^{-1/2}\) and
-\(\max_{\ell\le M_N}\|C_{\ell,N}\|\le C b_N\), the centered covariance
+\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le C b_NN^{-1/2}\), the centered covariance
 difference is bounded by
 \[
 \begin{aligned}
@@ -345,14 +344,91 @@ difference is bounded by
 \end{aligned}
 \]
 By Cauchy's inequality,
-\(\sum_\ell\|C_{\ell,N}-\bar C_N\|^2=O_{\PP}(M_Nb_N)\), while
-\(\sum_\ell\|E_{\ell,N}-\bar E_N\|^2=O_{\PP}(M_Nb_N^2/N)\).  Therefore the
+\(\sum_\ell\|E_{\ell,N}-\bar E_N\|^2=O_{\PP}(M_Nb_N^2/N)\).  Also
+\[
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|C_{\ell,N}-\bar C_N\|^2
+=O_{\PP}(1),
+\]
+because the separated-batch covariance estimator already has bounded
+operator norm in probability by
+\eqref{eq:separated-batch-covariance-estimator-rate-main}.  Therefore the
 cross term contributes \(O_{\PP}(\sqrt{b_N/N})\) after the outer normalization.
 The second sum contributes
 \(O_{\PP}(b_N/N)\).  Multiplication by \(K_N/N=O_{\PP}(1)\) leaves the same
 orders, proving \eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
 \((K_N+1)/N\to1/\mu\) gives the fixed-low-cycle statement, and the preceding
 uniform block-length bound is exactly \eqref{eq:uniform-calendar-block-length-main}.
+\end{proof}
+
+\subsection{Finite-domain diagonal certification for implementation extensions}
+\label{app:finite-domain-diagonal-certification-main}
+
+The submitted manuscript uses only the point certificate at \(z=1/2\).  The
+following interval-cover verifier is retained as implementation machinery for a
+future extension that prints additional point or interval transcripts.  It is
+not a paper-level theorem claim for any candidate outside \(z=1/2\).
+
+\begin{algorithmiclemma}[Finite interval-cover diagonal branch certification]\label{lem:diagonal-certified-interval-cover-main}
+Let \(I=[z^-,z^+]\Subset(0,1)\) be a compact diagonal candidate interval that
+is reported as coverage-certified in an implementation extension.  The
+deterministic branch verifier is as follows.
+
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.4em,itemsep=0.25em]
+\item Start with the queue containing \(I\) and with an empty certified list
+\(\mathcal C\).
+\item Remove one interval \(J\) from the queue.  Apply the outward-rounded
+evaluation in \Cref{lem:diagonal-interval-branch-certificate-main} on the
+whole interval \(J\).
+\item If exactly one of the four branch tests in
+\Cref{def:dmap-diagonal-rank-certificate-main} succeeds on \(J\), append
+\((J,\mathrm{branch})\) to \(\mathcal C\).
+\item If no branch test succeeds and the prescribed maximum subdivision depth,
+precision budget, or exact-symbolic fallback has not been exhausted, bisect
+\(J\) and return the two children to the queue.
+\item If no branch test succeeds after the declared resources are exhausted,
+append \(J\) to the undecided list \(\mathcal U\).
+\end{enumerate}
+
+The extension transcript contains the input interval \(I\), the precision and
+rounding mode, every terminal interval, the branch label and margin for every
+interval in \(\mathcal C\), the undecided list \(\mathcal U\), and an exact
+rational endpoint check proving
+\[
+I=\bigcup_{(J,\mathrm{branch})\in\mathcal C}J\ \cup\
+\bigcup_{J\in\mathcal U}J
+\]
+with disjoint interiors.  The interval \(I\) is a certified extension interval
+only when this verifier returns a finite terminal list and
+\(\mathcal U=\varnothing\).  In that case
+\[
+I=\bigcup_{j=1}^M I_j
+\]
+and directed interval evaluation proves exactly one branch condition on each
+\(I_j\).  Therefore every candidate \(z\in I\) belongs to a certified
+subinterval on which the population branch of
+\(\Sigma_\sigma(z)\) is fixed.  If \(\mathcal U\ne\varnothing\), the union of
+the undecided intervals is displayed and those candidates remain diagnostic.
+\end{algorithmiclemma}
+
+\begin{proof}
+All branch assertions made on a terminal interval are consequences of
+\Cref{lem:diagonal-interval-branch-certificate-main}, so each accepted
+terminal interval has a proved population branch for every \(z\) in that
+interval.  The four branch outcomes in
+\Cref{def:dmap-diagonal-rank-certificate-main} are mutually exclusive for the
+actual nonnegative definite matrix \(\Sigma_\sigma(z)\) by
+\Cref{lem:dmap-diagonal-covariance-alternatives-main}.  Hence two distinct
+branch labels cannot both be valid at the same population point; the verifier
+therefore accepts a terminal interval only when its directed enclosures prove a
+single outcome uniformly over the interval.
+
+The equality of the endpoint union is a finite rational check in the transcript,
+independent of floating-point arithmetic.  When the undecided list is empty,
+the accepted terminal intervals cover all of \(I\), and every point in \(I\)
+inherits the unique branch proved on the terminal interval containing it.  If
+the list is nonempty, no coverage-certified extension is invoked on that
+undecided subunion.
 \end{proof}
 
 \subsection{Finite-record implementation protocols}\label{app:finite-record-implementation-protocols-main}
@@ -451,24 +527,35 @@ labels.  At a population exchange diagonal, use only the pointwise common-rate
 acceptance event calibrated by Algorithm~3; a simultaneous diagonal band needs
 a separate certified inversion rule.
 
-\paragraph{Algorithm 3: projected-Gaussian diagonal calibration and Monte Carlo diagnostics.}
+\paragraph{Algorithm 3: fixed-candidate projected-Gaussian diagonal calibration.}
 
-Fix \(0<\alpha<1\), a finite certified candidate domain \(Z_{\rm cert}\) as in
-\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-certified-interval-cover-main},
-a candidate diagonal coordinate \(0<z<1\), and \(n_z=(-z,1)^\top\).  The
-finite Monte Carlo add-on, when used for a coverage-certified report rather
-than a plot, has the fixed theorem-level settings
+Fix \(0<\alpha<1\).  In this manuscript the coverage-certified candidate set
+is the singleton
+\[
+Z_{\rm cert}^{\rm paper}=\{1/2\},
+\]
+because \(\Cref{lem:z-half-diagonal-branch-certificate-main}\) is the only
+printed terminal branch certificate.  Thus the paper-level operational
+algorithm is run at \(z=1/2\), with \(n_z=(-z,1)^\top\).  A finite set or
+finite interval union \(Z_{\rm cert}\) from
+\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-certified-interval-cover-main}
+is only an implementation extension: every displayed candidate in that set
+must carry its own finite branch transcript and a certified conditional
+quantile transcript before it can be used for coverage reporting.  The finite
+Monte Carlo add-on, when used for a coverage-certified report rather than a
+plot, has the fixed theorem-level settings
 \[
 R_N=N,\qquad \delta_N=N^{-2},\qquad
 \varepsilon_N^{\rm MC}:=\sqrt{\frac{\log(2N^2)}{2N}} .
 \]
-The algorithm has two
-outputs: an ideal conditional projected-Gaussian calculation and, only when
-all certificates below are present, a coverage-certified finite report.  If
-\(z\notin Z_{\rm cert}\), continue
-only for diagnostic plotting or diagnostic ideal-quantile evaluation and
-report ``diagonal candidate not in certified domain; no coverage-certified
-acceptance event.''  If \(z\in Z_{\rm cert}\), compute the population diagonal
+The algorithm has two outputs: an ideal conditional projected-Gaussian
+calculation and, only when all certificates below are present, a
+coverage-certified finite report.  In the submitted manuscript, if
+\(z\ne1/2\), continue only for diagnostic plotting or diagnostic
+ideal-quantile evaluation and report ``diagonal candidate outside the printed
+paper certificate; no coverage-certified acceptance event.''  In an
+implementation extension, the same diagnostic-only rule applies to every
+\(z\notin Z_{\rm cert}\).  For a certified candidate, compute the population diagonal
 covariance \(\Sigma_\sigma(z)\) from the finite D-MAP formula
 \eqref{eq:dmap-diagonal-sigma-finite-main} and attach the outward-rounded
 branch certificate specified in
@@ -515,7 +602,8 @@ and use
 \widehat v_{i,N}\widehat v_{i,N}^{\top}.
 \]
 If \(\widehat k_N=0\), report ``retained rank zero'' and use only the
-buffered conservative acceptance event from Theorem~E when the population
+buffered conservative acceptance event from
+\Cref{thm:e1-ideal-fixed-candidate-projection-main} when the population
 certificate is the zero-covariance branch; otherwise this finite retained-rank
 event is an asymptotic pseudoinverse event, not a population branch label.  If
 the population certificate is ``rank-one normal direction,'' then, with
@@ -526,9 +614,10 @@ the limiting law satisfies
 \PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
 \]
 Thus \(c_{p_c}=0\) for \(p_c\le1/2\), in which case use the buffered
-conservative acceptance event from Theorem~E.  For \(p_c>1/2\),
+conservative acceptance event from
+\Cref{thm:e1-ideal-fixed-candidate-projection-main}.  For \(p_c>1/2\),
 \(c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)>0\), and the unbuffered exact branch of
-Theorem~E applies.  If the population certificate is full rank or
+\Cref{thm:e1-ideal-fixed-candidate-projection-main} applies.  If the population certificate is full rank or
 rank-one non-normal, use the exact projected-Gaussian branch.  In the
 rank-one non-normal case the branch certificate must also display
 \([a_{\rm rn}]\) from
@@ -649,15 +738,18 @@ Equivalently, before conditioning on the auxiliary simulation,
 \PP^\ast\{\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z)
 \ge c^{-}_{1-\alpha,N}(z)\}\ge1-N^{-2}.
 \]
-This is the default certified finite-Monte-Carlo choice in the theorem.  The
+This is the default certified finite-Monte-Carlo choice in
+\Cref{cor:exchange-diagonal-dkw-monte-carlo-main}.  The
 reported simulated event is then
 \[
 Q_N(z)\le
 \widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z),
 \]
-with coverage transferred from Theorem~E and
-\Cref{lem:conditional-monte-carlo-quantile-main}.  The theorem does not treat
-other finite simulation choices as operational certificates.  Without the
+with coverage transferred from the ideal Theorem~E1 statement, the
+reported-event corollary
+\Cref{cor:exchange-diagonal-reported-event-main}, and the DKW transfer
+Corollary~E3 \Cref{cor:exchange-diagonal-dkw-monte-carlo-main}.  No other finite
+simulation choice is treated as an operational certificate.  Without the
 canonical DKW event above, all simulated quantiles are diagnostic only: report
 ``ideal quantile only; Monte Carlo diagnostic not coverage-certified'' for
 this candidate.
@@ -666,6 +758,91 @@ When several diagonal candidates are displayed, repeat the preceding steps
 only for the finite list or finite interval union in \(Z_{\rm cert}\).  Any
 uncertified continuum curve, heat map, or dense grid is a visualization of the
 diagnostic statistic and is not a confidence-set inversion.
+
+\phantomsection\label{alg:projected-plugin-word-law-report-main}
+\paragraph{Algorithm 4: projected plug-in word-law report.}
+
+This protocol implements
+\Cref{def:projected-plugin-word-law-report-main,prop:finite-record-complete-law-renewal-consistency-main}.
+It is a numerical reporting recipe for a retained projected renewal law, not a
+confidence procedure for word probabilities.
+
+\begin{enumerate}[label=\textup{\arabic*.},leftmargin=2.0em,itemsep=0.35em]
+\item Start with the finite-record reporting gate \(\mathcal E_N\), the
+quotient inverse map \(\Phi\), the feasible projection \(\Pi_F^{\rm tb}\),
+and the thresholds \(\varepsilon_N,\eta_N\) of the fixed protocol
+\eqref{prot:finite-record-main}.  If \(\mathcal E_N^c\) occurs, stop and
+report ``insufficient complete cycles; no projected plug-in word-law report.''
+
+\item On \(\mathcal E_N\), compute
+\[
+\widetilde\sigma_N
+:=\Pi_F^{\rm tb}\{\Phi(\widehat r_N^{\mathrm{cyc}})\},
+\]
+and let \(\{\widetilde z_{1,N},\widetilde z_{2,N}\}\) be the unordered roots of
+\[
+z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0 .
+\]
+Retain the word-law branch only on
+\[
+\mathcal E_N^{\rm law}
+=\mathcal E_N\cap
+\{\widetilde z_{1,N},\widetilde z_{2,N}\in[\eta_N,1-\eta_N]\}.
+\]
+On \((\mathcal E_N^{\rm law})^c\), withhold all projected plug-in word
+probabilities.
+
+\item On \(\mathcal E_N^{\rm law}\), compute the projected root gap law
+\(\widetilde g_{k,N}\) from the reconstruction formulas in
+\Cref{lem:algorithmic-complete-law-reconstruction-main}.  Define the projected
+renewal intensity by
+\[
+\widetilde\rho_N
+=\rho_*(\widetilde\sigma_N)
+:=\left(1+\sum_{k\ge0}k\,\widetilde g_{k,N}\right)^{-1}.
+\]
+Do not insert the noisy empirical intensity
+\(\widehat r_{0,N}^{\mathrm{cyc}}\) into the final renewal inclusion product.
+
+\item For a requested finite window \(I\), put \(d_I=0\) if \(|I|\le1\), and
+otherwise put \(d_I=\max I-\min I\).  The report uses only
+\(\widetilde u_{0,N},\ldots,\widetilde u_{d_I,N}\), obtained from
+\[
+\widetilde U_N(t):=\sum_{n\ge0}\widetilde u_{n,N}t^n
+:=\frac{1}{1-\sum_{k\ge0}\widetilde g_{k,N}t^{k+1}},
+\]
+or equivalently from the finite recursion
+\[
+\widetilde u_{0,N}=1,\qquad
+\widetilde u_{n,N}
+=\sum_{\ell=1}^{n}\widetilde g_{\ell-1,N}\,
+  \widetilde u_{n-\ell,N},\qquad 1\le n\le d_I .
+\]
+If the implementation truncates the gap law after \(K\ge d_I-1\), the renewal
+masses needed for this finite window are unchanged; the truncation error in
+\(\widetilde u_{0,N},\ldots,\widetilde u_{d_I,N}\) is exactly zero.
+
+\item The only infinite-tail numerical quantity in a finite-window report is
+the scalar mean in \(\widetilde\rho_N\).  Evaluate it either from the closed
+root formula in
+\Cref{rem:complete-law-numerical-implementation-main} or from a truncated
+sum accompanied by the certified tail bound stated there.  If the declared
+tail tolerance certificate fails, withhold the projected plug-in word-law
+report instead of replacing the failed quantity by an uncertified number.
+
+\item For every nonempty \(B=\{i_1<\cdots<i_m\}\subset I\), report the projected
+renewal inclusion probability
+\[
+\widetilde\PP_N(B\subset\varXi)
+:=\widetilde\rho_N
+\prod_{\ell=1}^{m-1}\widetilde u_{i_{\ell+1}-i_\ell,N},
+\]
+with empty inclusion value \(1\), and obtain the word probabilities on \(I\)
+by finite inclusion--exclusion.  The reported object is the projected plug-in
+word-law report of \(\Cref{def:projected-plugin-word-law-report-main}\).  It
+contains projected word probabilities only, not confidence intervals for those
+word probabilities.
+\end{enumerate}
 
 
 \paragraph{Estimated branch-map reduction.}\label{app:branch-map-oracle-reduction-main}
