@@ -4,20 +4,51 @@
 
 This section contains the entropy coefficient mechanism, the multidimensional
 covariance calculation, and the leading one-dimensional threshold.  The proofs
-below are internal to the stated lemmas and theorems; all finite Laurent
-certificates used for checking, together with the fourth-moment coefficient
-algebra and missing-top-moment tail verifications, are recorded in the
-appendices.  The pointwise dissipation comments are confined to the short
+below are internal to the stated lemmas and theorems.  The appendices record
+finite coefficient-calculus examples, the exact Laurent row certificate for
+the order-eight substitution, and the missing-top-moment tail verifications.
+The pointwise dissipation comments are confined to the short
 differentiated-remainder remark immediately before
 Proposition~\ref{prop:dissipation-tail-coefficient-expansion}.
 
 \subsection*{Entropy proof architecture}
 \label{sec:entropy-theorem-map}
+\label{subsec:intro-hypotheses-scope}
 
-The dependency diagram in Subsection~\ref{subsec:intro-hypotheses-scope}
-summarizes the hypothesis flow.  The proofs below follow that diagram:
-quotient expansions, Taylor transfer to KL, and algebraic coefficient
-evaluation.
+The proofs below follow three separate routes.  Here
+\((\mathrm{MPJ}_{d,L})\) denotes the multidimensional quotient jet and
+\((\mathrm{EX}_{d,L})\) denotes the corresponding positivity, mass-zero,
+integrability, and KL-representation package.
+\[
+\begin{array}{rcl}
+\EE|X_c|^{2N-2}<\infty
+&\Longrightarrow&
+\text{one-dimensional quotient jet}\\
+&\Longrightarrow&
+\text{finite Taylor transfer for }\Phi\\
+&\Longrightarrow&
+\text{Theorem~\ref{thm:main-A} coefficient hierarchy},\\[0.7em]
+\EE X_c^2<\infty
+&\Longleftrightarrow&
+\text{finite leading }t^{-4}\text{ KL coefficient}\\
+&\Longrightarrow&
+\text{Theorem~\ref{thm:main-A} threshold},\\[0.7em]
+\text{two-region quotient-tail condition}
+&\Longrightarrow&
+(\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\\
+&\Longrightarrow&
+\text{Theorem~\ref{thm:main-B} tensor KL jet},\\[0.7em]
+\EE|X_c|^L<\infty,\ L\ge d+1
+&\Longrightarrow&
+\text{two-region quotient-tail condition}.
+\end{array}
+\]
+The dynamic Bregman tail identity is proved separately in
+Section~\ref{sec:doob-phi-entropy}.  There the finite variance assumption
+first gives compact-window bounds for the moving quotient, then a consolidated
+differentiation proposition supplies the two Green pairings and the cutoff
+passage.  The present section is therefore only concerned with quotient
+expansions, Taylor transfer to KL, and algebraic coefficient evaluation.
 
 \subsection{Cayley modes and coefficient algebra}
 
@@ -627,8 +658,8 @@ Thus the Taylor polynomial may be evaluated on the finite density polynomial
 \phantomsection\label{par:coefficient-evaluability-scope}
 \noindent\textbf{Finite-moment coefficient level.}
 The finite-moment level for the hierarchy is summarized in
-Subsection~\ref{subsec:intro-hypotheses-scope}; the algebraic obstruction
-it refers to is proved below in
+Subsection~\ref{sec:entropy-theorem-map}; the algebraic obstruction
+behind the leading threshold is proved below in
 Proposition~\ref{prop:poisson-kl-moment-threshold-sharpness}.
 \medskip
 
@@ -1598,17 +1629,18 @@ a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\).  Put
 \begin{equation}\label{eq:conditional-multidim-two-region-tail}
 \begin{aligned}
 &t^{-(L+1)}\EE\!\left[
-|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}\right]
-+t^{-(d+1)}\EE\!\left[
+|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}\right] \\
+&\quad{}+ t^{-(d+1)}\EE\!\left[
 |X_c|^{d+1}{\bf1}_{\{|X_c|>t\}}\right] \\
-&\hspace{3em}
-+\sum_{k=d+2}^{L}t^{-k}\EE\!\left[
+&\quad{}+ \sum_{k=d+2}^{L}t^{-k}\EE\!\left[
 |X_c|^k{\bf1}_{\{|X_c|>t\}}\right]
-&=o(t^{-L}).
+=o(t^{-L}).
 \end{aligned}
 \end{equation}
-where the last sum is empty when \(L=d+1\).  This condition supplies the
-absolute moments through order \(L\), so the coefficients below are finite.
+where the last sum is empty when \(L=d+1\); equivalently, the displayed
+expectations are finite for all sufficiently large \(t\) and the whole left
+side is \(o(t^{-L})\).  This condition supplies the absolute moments through
+order \(L\), so the coefficients below are finite.
 Define
 \[
 \begin{gathered}
@@ -1652,11 +1684,27 @@ remainder on \(|X_c|\le t\); the \(d+1\) tail term controls the Poisson
 quotient itself and the low polynomial modes on \(|X_c|>t\); the remaining
 finite sum controls the higher subtracted polynomial modes when \(L>d+1\).
 Thus the proof requires the tail input
-\eqref{eq:conditional-multidim-two-region-tail}, not the stronger assertion
-that \(\EE |X_c|^L\) must be finite.
+\eqref{eq:conditional-multidim-two-region-tail}.  Finite \(L\)-absolute
+moment is used only in the following corollary as a convenient verification
+of this displayed input, not as an additional hypothesis in the conditional
+theorem.
 \end{theorem}
 
 \begin{proof}
+First note that the tail condition implies the moments used below.  Fix a
+large \(t_0\) for which all expectations in
+\eqref{eq:conditional-multidim-two-region-tail} are finite.  The bounded part
+\(\EE[|X_c|^k{\bf1}_{\{|X_c|\le t_0\}}]\) is finite for every \(k\).  For
+\(0\le k\le d+1\),
+\[
+\EE[|X_c|^k{\bf1}_{\{|X_c|>t_0\}}]
+\le t_0^{\,k-(d+1)}
+\EE[|X_c|^{d+1}{\bf1}_{\{|X_c|>t_0\}}]<\infty,
+\]
+and for \(d+2\le k\le L\) finiteness is one of the displayed tail
+expectations.  Thus \(\EE|X_c|^k<\infty\) for every \(k\le L\), and in
+particular all tensor moments \(\mu_\alpha\), \(|\alpha|\le L\), are finite.
+
 Put \(h_t=P_t^{(d)}*\nu\) and \(g_t=P_t^{(d)}(\cdot-\bar{\gamma})\).
 For \(x=\bar{\gamma}+ty\),
 \[

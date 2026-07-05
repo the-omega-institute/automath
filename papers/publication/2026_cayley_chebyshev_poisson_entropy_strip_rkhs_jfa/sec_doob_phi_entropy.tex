@@ -774,6 +774,102 @@ Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} supplies the
 required compact-window bounds.
 \end{proof}
 
+\begin{lemma}[Annular Green limits close to the full Bregman form]%
+\label{lem:annular-green-limits-close-to-full-bregman}
+Let \(I=[a,b]\Subset(0,\infty)\).  Let \(g_t(x)\ge0\) and
+\(u_t(x)\in[m,M]\), put \(h_t=g_tu_t\), and set
+\[
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta .
+\]
+For \(R>1\) define the two annular Green numerators
+\begin{align*}
+G_R^{h,\log u}(t)
+&:=\iint_{\Omega_R}
+\frac{(h_t(x)-h_t(y))(\log u_t(x)-\log u_t(y))}
+{(x-y)^2}\dd x\dd y,\\
+G_R^{g,u}(t)
+&:=\iint_{\Omega_R}
+\frac{(g_t(x)-g_t(y))(u_t(x)-u_t(y))}
+{(x-y)^2}\dd x\dd y .
+\end{align*}
+Assume that these finite-annulus integrals are well defined, and that, for
+every \(t\) in a set \(E\subset I\), both limits
+\[
+G^{h,\log u}(t):=\lim_{R\to\infty}G_R^{h,\log u}(t),
+\qquad
+G^{g,u}(t):=\lim_{R\to\infty}G_R^{g,u}(t)
+\]
+exist, and that the symmetrized Bregman kernel
+\[
+B_t(x,y):=
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))
++g_t(y)\Lambda(u_t(y),u_t(x))}
+{(x-y)^2}\mathbf1_{\{x\ne y\}}
+\]
+is dominated by an \(L^1(\RR^2)\) majorant for each \(t\in E\).  Then, for
+each \(t\in E\),
+\begin{equation}\label{eq:annular-green-limits-full-sym-bregman}
+G^{h,\log u}(t)-G^{g,u}(t)
+=\iint_{\RR^2}B_t(x,y)\dd x\dd y .
+\end{equation}
+Consequently, if \(B_t\) is dominated on the compact window by an
+\(L^1(I\times\RR^2)\) majorant, the annular differences converge to the full
+symmetrized Bregman integral in \(L^1(I)\):
+\begin{equation}\label{eq:annular-green-difference-l1-full-bregman}
+\int_a^b\left|
+\iint_{\Omega_R}B_t(x,y)\dd x\dd y
+-\iint_{\RR^2}B_t(x,y)\dd x\dd y
+\right|\dd t\longrightarrow0 .
+\end{equation}
+In particular, whenever the full one-sided Bregman integral is finite,
+\begin{equation}\label{eq:annular-green-limits-one-sided-bregman}
+\frac{1}{2\pi}\bigl(G^{h,\log u}(t)-G^{g,u}(t)\bigr)
+=\frac1\pi\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For finite \(R\), put
+\[
+\rho_x=g_t(x),\qquad \rho_y=g_t(y),\qquad
+\alpha=u_t(x),\qquad \beta=u_t(y).
+\]
+Since \(h_t=g_tu_t\), the difference of the two Green numerators is
+pointwise equal on \(\Omega_R\) to
+\[
+(\rho_x\alpha-\rho_y\beta)(\log\alpha-\log\beta)
+-(\rho_x-\rho_y)(\alpha-\beta).
+\]
+The elementary identity
+\[
+(\rho_x\alpha-\rho_y\beta)(\log\alpha-\log\beta)
+-(\rho_x-\rho_y)(\alpha-\beta)
+=\rho_x\Lambda(\alpha,\beta)+\rho_y\Lambda(\beta,\alpha)
+\]
+therefore gives
+\[
+G_R^{h,\log u}(t)-G_R^{g,u}(t)
+=\iint_{\Omega_R}B_t(x,y)\dd x\dd y .
+\]
+Letting \(R\to\infty\) and using the assumed existence of the two Green
+limits gives the left side of
+\eqref{eq:annular-green-limits-full-sym-bregman}.  The right side converges
+to the full nonnegative Bregman integral by dominated convergence, because
+\(\mathbf1_{\Omega_R}\to1\) off the diagonal and \(B_t\) is integrably
+dominated.  The compact-window \(L^1(I)\) convergence
+\eqref{eq:annular-green-difference-l1-full-bregman} is the same dominated
+convergence argument on \(I\times\RR^2\).  Finally, exchanging \(x\) and
+\(y\) in the second term of the symmetrized integral gives
+\[
+\iint_{\RR^2}
+\frac{g_t(y)\Lambda(u_t(y),u_t(x))}{(x-y)^2}\dd x\dd y
+=\iint_{\RR^2}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
+\]
+which proves \eqref{eq:annular-green-limits-one-sided-bregman}.
+\end{proof}
+
 \begin{proposition}[Compact-window differentiation and Bregman identity]%
 \label{prop:compact-window-bregman-identity}
 Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar{\gamma}$ and finite
@@ -908,29 +1004,31 @@ Equation~\eqref{eq:compact-window-annular-l1-convergence} is exactly
 from the same lemma and the majorant already displayed above.
 
 It remains only to identify the derivative at a time \(s\notin N_{a,b}\).
-With
+The two limits in
+\eqref{eq:compact-window-h-logu-green}--\eqref{eq:compact-window-g-u-green}
+exist at this \(s\), and the symmetrized Bregman kernel is dominated by the
+compact-window majorant already displayed.  Applying
+Lemma~\ref{lem:annular-green-limits-close-to-full-bregman}, with the two
+annular numerators denoted there by \(G_R^{h,\log u}(s)\) and
+\(G_R^{g,u}(s)\), gives
 \[
-a=u_s(x),\quad b=u_s(y),\quad \rho_x=g_s(x),\quad \rho_y=g_s(y),
+\frac1{2\pi}
+\left[
+\lim_{R\to\infty}G_R^{h,\log u}(s)
+-\lim_{R\to\infty}G_R^{g,u}(s)
+\right]
+=\mathcal I_\nu(s).
 \]
-the Bregman algebra
+The chain rule and the two Green formulas give exactly
 \[
-(\rho_xa-\rho_yb)(\log a-\log b)-(\rho_x-\rho_y)(a-b)
-=\rho_x\Lambda(a,b)+\rho_y\Lambda(b,a)
+-H'(s)=\frac1{2\pi}
+\left[
+\lim_{R\to\infty}G_R^{h,\log u}(s)
+-\lim_{R\to\infty}G_R^{g,u}(s)
+\right].
 \]
-turns the difference of the two annular Green numerators into the
-symmetrized logarithmic Bregman numerator.  The majorant from the first step
-is an \(L^1(\RR^2)\) bound at this fixed \(s\).  The cutoff lemma identifies
-the annular limit with the full nonlocal Bregman integral:
-\[
--H'(s)=\frac1{2\pi}\iint_{\RR^2}
-\frac{g_s(x)\Lambda(u_s(x),u_s(y))
-+g_s(y)\Lambda(u_s(y),u_s(x))}
-{(x-y)^2}\dd x\dd y .
-\]
-Exchanging \(x\) and \(y\) in the second term converts this symmetrized
-\(1/(2\pi)\) expression into the one-sided \(1/\pi\) definition of
-\(\mathcal I_\nu(s)\).  Thus \(H'(s)=-\mathcal I_\nu(s)\) for every
-\(s\in[a,b]\setminus N_{a,b}\), and the same majorant gives
+Therefore \(H'(s)=-\mathcal I_\nu(s)\) for every
+\(s\in[a,b]\setminus N_{a,b}\).  The same compact-window majorant gives
 \(\mathcal I_\nu\in L^1([a,b])\).
 
 \end{proof}
@@ -1070,7 +1168,6 @@ No pointwise expansion of \(\mathcal I_\nu(t)\) is asserted.
 \end{proposition}
 
 \begin{proof}
-This is a coefficient transfer, not an additional Hardy--Stein theorem.
 The tail identity \eqref{eq:relative-entropy-integrated-dissipation} identifies
 \(\int_t^\infty \mathcal I_\nu\) with \(D_{\mathrm{KL}}(h_t\|g_t)\).  Applying
 Theorem~\ref{thm:poisson-kl-even-orders} gives

@@ -2,12 +2,12 @@
 \section{Missing-top-moment tail transfer}%
 \label{app:conditional-missing-top-moment-tails}
 
-This appendix records the optional missing-top-moment transfer in a compact
-form.  The entropy conclusion is conditional on a matched quotient expansion
+This appendix records the missing-top-moment transfer in a compact form.  The
+entropy conclusion is conditional on a matched quotient expansion
 with an \(L^\infty\cap L^1(\omega)\) remainder; a divergent truncated moment
 alone is not an entropy hypothesis.  The three concrete tail subclasses are
-therefore summarized by a reproducible verification table rather than by
-separate proof chains.
+listed in Table~\ref{tab:missing-top-tail-verification}; the estimates behind
+that table are proved below as \(L^\infty\cap L^1(\omega)\) lemmas.
 
 \subsubsection*{Conditional quotient theorem}\leavevmode\par\smallskip
 
@@ -266,9 +266,11 @@ Theorem~\ref{thm:tail-replacements-proved-here}.
 \end{proof}
 
 \begin{table}[htbp]
-\caption{Reproducible verification table for the admissible borderline-tail
-subclasses.  Here \(p\ge4\) is even, \(g\) is symmetric, nonnegative, compactly
-supported in \((-R,R)\), and the displayed density is normalized.}
+\caption{Admissible borderline-tail subclasses.  Here \(p\ge4\) is even,
+\(g\) is symmetric, nonnegative, compactly supported in \((-R,R)\), and the
+displayed density is normalized.  The proof column points to the lemmas which
+verify the \(L^\infty\cap L^1(\omega)\) controls in
+Definition~\ref{def:admissible-borderline-tail-classes}.}
 \label{tab:missing-top-tail-verification}
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -279,45 +281,336 @@ supported in \((-R,R)\), and the displayed density is normalized.}
 >{\raggedright\arraybackslash}p{0.20\linewidth}}
 \textbf{subclass}
 & \textbf{tail form}
-& \textbf{checks}
+& \textbf{proof}
 & \textbf{output}\\
 \hline
 Exact power
 & \(f=g+c|x|^{-p-1}\mathbf1_{\{|x|\ge R\}}\)
-& \(M_p(t)=2c\log t+O(1)\).  For \(0\le n<p\),
-\(t^{-n}\int_{|x|>t}|x|^nf=O(t^{-p})=o(t^{-p}\log t)\).  The local Taylor
-remainder is
-\(O(t^{-(p+1)}\int_R^t\dd x)=O(t^{-p})\), and the far tail is
-\(O(\int_t^\infty (1+x^2/t^2)x^{-p-1}\dd x)=O(t^{-p})\).
+& Lemma~\ref{lem:exact-power-borderline-tail-controls}.
 & \(\Delta_t=\sum_{n=2}^{p-1}\mu_nu_nt^{-n}
 +2cu_pt^{-p}\log t+O_{L^\infty\cap L^1(\omega)}(t^{-p})\).\\
 \hline
 Perturbative power
 & \(f=g+\{c|x|^{-p-1}+r(x)\}\mathbf1_{\{|x|\ge R\}}\)
 & \(r\) is even and satisfies
-\(\int |x|^q|r|<\infty\) for \(0\le q<p\),
 \(\int_{R\le |x|\le t}|x|^pr(x)\dd x=O(1)\),
+\(t^{-n}\int_{|x|>t}|x|^n|r(x)|\dd x=O(t^{-p})\) for \(0\le n<p\),
 \(t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r|\dd x=O(t^{-p})\), and
 \(\int_{|x|>t}(1+x^2/t^2)|r|\dd x=O(t^{-p})\).
 A pointwise sufficient condition is
 \(|r(x)|\le C|x|^{-p-1-\eta}\) with \(\eta>0\).
+Lemma~\ref{lem:perturbative-power-borderline-tail-controls} proves the
+controls.
 & \(M_p(t)=2c\log t+O(1)\) and the same quotient expansion as the exact-power
 row, with \(2c\log t\) equivalently replaced by \(M_p(t)\).\\
 \hline
 Monotone slowly varying
 & \(f=g+c|x|^{-p-1}L(|x|)\mathbf1_{\{|x|\ge R\}}\)
 & \(L\) is eventually positive, eventually monotone, slowly varying, and
-\(\mathcal M_L(t)=\int_R^tL(s)s^{-1}\dd s\to\infty\).  Karamata and Potter
-give \(L(t)=o(\mathcal M_L(t))\),
-\(\mathcal M_L(t)=o(t^\alpha)\) for every \(\alpha>0\),
-\(t^{-n}\int_t^\infty x^{n-p-1}L(x)\dd x
-=o(t^{-p}\mathcal M_L(t))\), and the local/far remainders at the same scale.
+\(\mathcal M_L(t)=\int_R^tL(s)s^{-1}\dd s\to\infty\).
+Lemma~\ref{lem:slowly-varying-borderline-tail-controls} proves the controls.
 & \(M_p(t)=O(1)+2c\mathcal M_L(t)\) and
 \(\Delta_t=\sum_{n=2}^{p-1}\mu_nu_nt^{-n}
 +u_pt^{-p}M_p(t)+o_{L^\infty\cap L^1(\omega)}(t^{-p}M_p(t))\).\\
 \end{tabularx}
 }
 \end{table}
+
+\begin{lemma}[Local quotient remainder estimate]
+\label{lem:borderline-local-quotient-remainder-estimate}
+Let \(p\ge1\).  There is a constant \(C_p<\infty\) such that, for every
+locally integrable \(h\) and every \(t>0\),
+\[
+\mathcal E_{p,t,h}(y):=
+  \int_{|x|\le t}
+  \left\{R_{x/t}(y)-\sum_{n=0}^{p}u_n(y)(x/t)^n\right\}h(x)\,\dd x
+\]
+satisfies
+\begin{equation}\label{eq:borderline-local-quotient-remainder-estimate}
+\|\mathcal E_{p,t,h}\|_\infty+
+\|\mathcal E_{p,t,h}\|_{L^1(\omega)}
+\le
+C_p t^{-(p+1)}\int_{|x|\le t}|x|^{p+1}|h(x)|\,\dd x .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Lemma~\ref{lem:uniform-one-dimensional-cayley-taylor-remainder} gives
+\[
+R_{x/t}(y)-\sum_{n=0}^{p}u_n(y)(x/t)^n
+=(x/t)^{p+1}v_p(y,x/t),
+\]
+where \(v_p\) is bounded uniformly in \(y\) and \(x/t\).  Taking absolute
+values and integrating gives the \(L^\infty\) bound.  Since \(\omega\) is a
+probability measure, the same pointwise bound gives the \(L^1(\omega)\) bound.
+\end{proof}
+
+\begin{lemma}[Exact-power borderline controls]
+\label{lem:exact-power-borderline-tail-controls}
+Let \(p\ge4\) be even and
+\[
+f(x)=g(x)+c|x|^{-p-1}\mathbf1_{\{|x|\ge R\}},
+\]
+where \(c>0\), \(R>0\), \(g\ge0\) is symmetric and compactly supported in
+\((-R,R)\), and \(f\) is normalized.  Then \(f\in\mathcal A_{p,R,c}^{\rm ex}\).
+More precisely,
+\[
+M_p(t)=2c\log t+O(1),
+\]
+and the quotient expansion in Table~\ref{tab:missing-top-tail-verification}
+holds with an \(O(t^{-p})\) remainder in
+\(L^\infty(\RR)\cap L^1(\omega)\).
+\end{lemma}
+
+\begin{proof}
+It is enough to consider \(t>R\).  The compact part contributes only bounded
+moments, while
+\[
+\int_{R\le |x|\le t}x^p c|x|^{-p-1}\,\dd x
+=2c\int_R^t\frac{\dd x}{x}
+=2c\log t+O(1).
+\]
+Hence \(M_p(t)=2c\log t+O(1)\), so \(M_p(t)\to\infty\) and
+\(M_p(t)=o(t^{p-2})\).
+
+For \(0\le n<p\),
+\[
+t^{-n}\int_{|x|>t}|x|^nf(x)\,\dd x
+=2c\,t^{-n}\int_t^\infty x^{n-p-1}\,\dd x
+=O(t^{-p})
+=o(t^{-p}M_p(t)).
+\]
+Lemma~\ref{lem:borderline-local-quotient-remainder-estimate} gives
+\[
+\|\mathcal R_t^{(p)}\|_\infty+\|\mathcal R_t^{(p)}\|_{L^1(\omega)}
+\le
+C_pt^{-(p+1)}
+\left\{\int_{|x|<R}|x|^{p+1}g(x)\,\dd x
++2c\int_R^t\dd x\right\}
+=O(t^{-p}),
+\]
+which is \(o(t^{-p}M_p(t))\).  Finally,
+\[
+\int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)f(x)\,\dd x
+=2c\int_t^\infty\left(1+\frac{x^2}{t^2}\right)x^{-p-1}\,\dd x
+=O(t^{-p})
+=o(t^{-p}M_p(t)).
+\]
+Thus all controls in
+Definition~\ref{def:admissible-borderline-tail-classes} hold.
+
+The quotient expansion follows by expanding \(R_{x/t}\) on \(|x|\le t\).  The
+lower modes \(2\le n<p\) may be completed from truncated to full moments at
+cost \(O(t^{-p})\) by the first estimate above.  The top mode is
+\[
+u_p(y)t^{-p}\int_{|x|\le t}x^pf(x)\,\dd x
+=2c\,u_p(y)t^{-p}\log t+O(t^{-p}),
+\]
+and the local remainder, omitted polynomial tail, and far quotient tail are
+all \(O(t^{-p})\) in \(L^\infty\cap L^1(\omega)\).
+\end{proof}
+
+\begin{lemma}[Perturbative-power borderline controls]
+\label{lem:perturbative-power-borderline-tail-controls}
+Let \(p\ge4\) be even and
+\[
+f(x)=g(x)+\{c|x|^{-p-1}+r(x)\}\mathbf1_{\{|x|\ge R\}},
+\]
+where \(c>0\), \(R>0\), \(g\ge0\) is symmetric and compactly supported in
+\((-R,R)\), \(r\) is even, and \(f\) is nonnegative and normalized.  Assume
+\begin{align*}
+\int_{R\le |x|\le t}|x|^pr(x)\,\dd x&=O(1),\\
+t^{-n}\int_{|x|>t}|x|^n|r(x)|\,\dd x&=O(t^{-p})
+      \qquad(0\le n<p),\\
+t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x&=O(t^{-p}),\\
+\int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x&=O(t^{-p}).
+\end{align*}
+Then \(f\in\mathcal A_{p,R,c}^{\rm pert}\).  Moreover,
+\[
+M_p(t)=2c\log t+O(1),
+\]
+and the quotient expansion in Table~\ref{tab:missing-top-tail-verification}
+holds with \(2c\log t\) equivalently replaced by \(M_p(t)\).
+The pointwise bound \(|r(x)|\le C|x|^{-p-1-\eta}\), \(\eta>0\), implies the
+four displayed assumptions.
+\end{lemma}
+
+\begin{proof}
+The exact-power part is handled by
+Lemma~\ref{lem:exact-power-borderline-tail-controls}.  It remains to show
+that the perturbation contributes only \(O(t^{-p})\) to each admissibility
+control.  The first assumption gives
+\[
+M_p(t)=2c\log t+O(1).
+\]
+The second assumption is exactly the \(O(t^{-p})\) perturbative contribution
+to the lower-tail controls.  The third assumption and
+Lemma~\ref{lem:borderline-local-quotient-remainder-estimate} give an
+\(O(t^{-p})\) perturbative local Taylor remainder.  The fourth assumption is
+the \(O(t^{-p})\) perturbative far-tail control.  Since
+\(M_p(t)\sim2c\log t\), each of these \(O(t^{-p})\) terms is
+\(o(t^{-p}M_p(t))\), and the admissible controls follow.
+
+The quotient expansion is obtained from the same split as in the exact-power
+case.  The \(r\)-contribution to the top mode is \(O(t^{-p})\), so
+\[
+u_p(y)t^{-p}M_p(t)
+=2c\,u_p(y)t^{-p}\log t+O(t^{-p}),
+\]
+while all lower-mode completions and quotient remainders caused by \(r\) are
+\(O(t^{-p})\) in \(L^\infty\cap L^1(\omega)\).
+
+If \(|r(x)|\le C|x|^{-p-1-\eta}\), then
+\[
+\int_{R\le |x|\le t}|x|^p|r(x)|\,\dd x=O(1),
+\]
+\[
+t^{-n}\int_{|x|>t}|x|^n|r(x)|\,\dd x
+\le C t^{-n}\int_t^\infty x^{n-p-1-\eta}\,\dd x
+=O(t^{-p-\eta}),
+\]
+and
+\[
+t^{-(p+1)}\int_{R\le |x|\le t}|x|^{p+1}|r(x)|\,\dd x=O(t^{-p}),
+\qquad
+\int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)|r(x)|\,\dd x
+=O(t^{-p-\eta}).
+\]
+Thus the pointwise condition implies the four assumptions.
+\end{proof}
+
+\begin{lemma}[Slowly varying integral controls]
+\label{lem:slowly-varying-integral-controls}
+Let \(p\ge4\) be an integer.  Let \(L_0\) be eventually positive, eventually
+monotone, slowly varying, and let
+\[
+  M_0(t)=\int_R^t\frac{L_0(s)}{s}\,\dd s\to\infty .
+\]
+Then
+\[
+  L_0(t)=o(M_0(t)).
+\]
+For every integer \(0\le n<p\),
+\begin{equation}\label{eq:slowly-varying-polynomial-tail-control}
+  \int_t^\infty x^{n-p-1}L_0(x)\,\dd x
+  =O(t^{n-p}L_0(t))
+  =o(t^{n-p}M_0(t)).
+\end{equation}
+Moreover
+\begin{equation}\label{eq:slowly-varying-local-integral-control}
+  t^{-(p+1)}\int_R^tL_0(x)\,\dd x
+  =O(t^{-p}L_0(t))
+  =o(t^{-p}M_0(t)).
+\end{equation}
+Consequently, for the symmetric density tail
+\[
+  c|x|^{-p-1}L_0(|x|)\mathbf1_{\{|x|\ge R\}},
+\]
+the omitted polynomial tails are \(o(t^{-p}M_0(t))\), the local Taylor
+remainder in
+Lemma~\ref{lem:borderline-local-quotient-remainder-estimate} is
+\(o(t^{-p}M_0(t))\), and the far-tail quotient contribution is
+\(o(t^{-p}M_0(t))\) in \(L^\infty(\RR)\cap L^1(\omega)\).
+\end{lemma}
+
+\begin{proof}
+Increasing \(R\) changes \(M_0\) by a bounded amount, so we may suppose that
+\(L_0\) is positive and monotone on \([R,\infty)\).
+
+We first prove \(L_0(t)=o(M_0(t))\).  By the uniform convergence theorem for
+slowly varying functions, for each fixed \(A>1\),
+\[
+  \int_{t/A}^{t}\frac{L_0(s)}s\,\dd s
+  =L_0(t)\log A+o(L_0(t)).
+\]
+This integral is bounded by \(M_0(t)\) up to a fixed additive constant.
+Hence
+\[
+  \limsup_{t\to\infty}\frac{L_0(t)}{M_0(t)}\le \frac1{\log A}.
+\]
+Letting \(A\to\infty\) gives \(L_0(t)=o(M_0(t))\).
+
+For \(0\le n<p\), the function \(x^{n-p-1}L_0(x)\) is regularly varying
+with index \(n-p-1<-1\).  Karamata's tail theorem gives
+\[
+  \int_t^\infty x^{n-p-1}L_0(x)\,\dd x
+  \sim \frac{t^{n-p}L_0(t)}{p-n},
+\]
+which proves \eqref{eq:slowly-varying-polynomial-tail-control} after using
+\(L_0(t)=o(M_0(t))\).  Karamata's theorem at index \(0>-1\) also gives
+\[
+  \int_R^tL_0(x)\,\dd x=O(tL_0(t)),
+\]
+and hence \eqref{eq:slowly-varying-local-integral-control}.
+
+The three quotient estimates are now direct.  For \(0\le n<p\),
+\[
+  t^{-n}\int_{|x|>t}|x|^n c|x|^{-p-1}L_0(|x|)\,\dd x
+  =2c\,t^{-n}\int_t^\infty x^{n-p-1}L_0(x)\,\dd x
+  =o(t^{-p}M_0(t)).
+\]
+Lemma~\ref{lem:borderline-local-quotient-remainder-estimate} and
+\eqref{eq:slowly-varying-local-integral-control} give the local Taylor
+remainder bound.  Finally, since \(p\ge4\),
+\begin{align*}
+  \int_{|x|>t}\left(1+\frac{x^2}{t^2}\right)
+  c|x|^{-p-1}L_0(|x|)\,\dd x
+  &\le C\int_t^\infty x^{-p-1}L_0(x)\,\dd x \\
+  &\quad
+  +Ct^{-2}\int_t^\infty x^{1-p}L_0(x)\,\dd x
+  =O(t^{-p}L_0(t)),
+\end{align*}
+where the last estimate is another application of Karamata's tail theorem.
+This is \(o(t^{-p}M_0(t))\).
+\end{proof}
+
+\begin{lemma}[Monotone slowly varying borderline controls]
+\label{lem:slowly-varying-borderline-tail-controls}
+Let \(p\ge4\) be even and
+\[
+f(x)=g(x)+c|x|^{-p-1}L(|x|)\mathbf1_{\{|x|\ge R\}},
+\]
+where \(c>0\), \(R>0\), \(g\ge0\) is symmetric and compactly supported in
+\((-R,R)\), and \(f\) is normalized.  Assume that \(L\) is eventually
+positive, eventually monotone, slowly varying, and
+\[
+\mathcal M(t):=\int_R^t\frac{L(s)}{s}\,\dd s\to\infty .
+\]
+Then \(f\in\mathcal A_{p,R,c}^{\rm sv}\), with
+\[
+M_p(t)=2c\mathcal M(t)+O(1),
+\]
+and the slowly varying quotient expansion in
+Table~\ref{tab:missing-top-tail-verification} holds.
+\end{lemma}
+
+\begin{proof}
+Increasing \(R\) changes only the compactly supported part, so we may suppose
+that \(L\) is positive and monotone on \([R,\infty)\).  First,
+\[
+M_p(t)=O(1)+2c\int_R^t\frac{L(s)}{s}\,\dd s
+=2c\mathcal M(t)+O(1).
+\]
+The growth \(M_p(t)=o(t^{p-2})\) follows from Potter's bound: for any
+\(\alpha>0\), \(L(s)\le C_\alpha s^\alpha\) for large \(s\), hence
+\(\mathcal M(t)=O(t^\alpha)\); take \(\alpha<p-2\).
+
+Lemma~\ref{lem:slowly-varying-integral-controls}, applied with
+\(L_0=L\) and \(M_0=\mathcal M\), gives the polynomial tail bounds, the
+local Taylor remainder, and the far-tail quotient bound.  The compact part
+contributes only \(O(t^{-p})\) to these three estimates, which is
+\(o(t^{-p}M_p(t))\) because \(\mathcal M(t)\to\infty\).
+
+These estimates verify all controls in
+Definition~\ref{def:admissible-borderline-tail-classes}.  Expanding
+\(R_{x/t}\) on \(|x|\le t\), completing lower modes with the lower-tail
+estimate, and absorbing the local and far-tail terms gives
+\[
+\Delta_t(y)=\sum_{n=2}^{p-1}\mu_nu_n(y)t^{-n}
++u_p(y)t^{-p}M_p(t)
++o_{L^\infty\cap L^1(\omega)}(t^{-p}M_p(t)).
+\]
+\end{proof}
 
 \begin{proposition}[One-table verification of the three subclasses]%
 \label{prop:log-tail-counterexample-top-moment}
@@ -353,15 +646,14 @@ D_{\mathrm{KL}}(P_t*\nu\|P_t)
 \end{proposition}
 
 \begin{proof}
-Each row of Table~\ref{tab:missing-top-tail-verification} verifies the four
-controls in Definition~\ref{def:admissible-borderline-tail-classes}.  The
-exact-power estimates are direct integrations of \(x^{-p-1}\).  The
-perturbative row adds precisely the four displayed bounds on \(r\); the
-pointwise domination \(|r(x)|\le C|x|^{-p-1-\eta}\) implies them by elementary
-integration.  The slowly varying row uses only the standard uniform
-convergence theorem, Potter bounds, and Karamata tail estimates for slowly
-varying functions.  Hence all three subclasses satisfy
-\eqref{eq:admissible-borderline-quotient-expansion}; applying
-Corollary~\ref{thm:admissible-borderline-tail-entropy} gives the displayed
+Lemma~\ref{lem:exact-power-borderline-tail-controls},
+Lemma~\ref{lem:perturbative-power-borderline-tail-controls}, and
+Lemma~\ref{lem:slowly-varying-borderline-tail-controls} verify the four
+controls in Definition~\ref{def:admissible-borderline-tail-classes} for the
+three rows of Table~\ref{tab:missing-top-tail-verification}.  They also prove
+the corresponding \(L^\infty\cap L^1(\omega)\) quotient expansions displayed
+in the output column.  Hence
+\eqref{eq:admissible-borderline-quotient-expansion} holds in each subclass,
+and Corollary~\ref{thm:admissible-borderline-tail-entropy} gives the stated
 entropy expansions.
 \end{proof}
