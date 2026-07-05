@@ -54,8 +54,10 @@ remainder in the matched radial Poisson quotient, gives an explicit
 \(L^\infty\cap L^1(\Omega_d)\) jet, supplies the large-\(t\)
 entropy-existence package, and hence gives the tensor KL expansion through
 order \(L+2\).  The two-region expression is retained as the quantitative
-remainder bound; in this range its \(o(t^{-L})\) decay is equivalent to the
-finite \(L\)-moment assumption.
+remainder bound; in this range the precise statement is the equivalence
+\(\mathcal R_{d,L}(t)=o(t^{-L})\) for the displayed functional
+\eqref{eq:conditional-multidim-two-region-tail} and the finite
+\(L\)-moment assumption.
 The leading multidimensional covariance formula is deliberately read through
 this analytic route.  Finite covariance alone determines the bounded quadratic
 mode \(b_\Sigma\) and the algebraic number \(\mathcal Q_d(\Sigma)\), but it
@@ -68,8 +70,11 @@ criterion stated in Section~\ref{sec:entropy-asymptotics}.
 
 The third theorem is dynamic rather than asymptotic.  Under finite centred
 variance the moving matched Cauchy quotient lies in the domain of the
-Cauchy-generator Bregman form on every compact time window, and the KL
-functional is exactly the tail integral of that nonlocal dissipation.
+Cauchy-generator Bregman form on every compact time window, with the generator
+normalized as the symmetric \(1\)-stable Cauchy generator
+\cite{Feller1971,Bertoin1996LevyProcesses,Sato1999LevyProcesses,
+Applebaum2009LevyProcesses,Kwasnicki2017}.  The KL functional is exactly the
+tail integral of the resulting nonlocal dissipation.
 The point is not merely to quote a Hardy--Stein identity for a fixed
 semigroup orbit.  Here both the quotient
 \[
@@ -91,8 +96,11 @@ using \(\int\partial_tg_t=0\), produces the algebraic difference
 \]
 where \(a=u_t(x)\), \(b=u_t(y)\), \(\rho_x=g_t(x)\),
 \(\rho_y=g_t(y)\), and
-\(\Lambda(a,b)=a\log(a/b)-a+b\).  This two-Green-pairing closure, together
-with the compact-window cutoff and measurability lemma in
+\(\Lambda(a,b)=a\log(a/b)-a+b\).  This is the logarithmic case of the
+Csisz{\'a}r--Morimoto--Ali--Silvey \(f\)-divergence/Bregman calculus
+\cite{AliSilvey1966Divergence,Csiszar1967,Morimoto1963Markov,
+Vajda1989TheoryDivergence,Bregman1967}.  The two-Green-pairing closure,
+together with the compact-window cutoff and measurability lemma in
 Section~\ref{sec:doob-phi-entropy}, is the extra step that is not supplied
 by existing Hardy--Stein formulas alone.
 
@@ -116,10 +124,27 @@ one has
 D_{\mathrm{KL}}(h_t\|g_t)
 =\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
 \]
-Each coefficient \(A_{2m}(\nu)\) is a universal polynomial in
-\(\mu_2,\ldots,\mu_{2m-2}\), evaluated by the Cayley--Chebyshev Laurent
-constant-term rule; explicitly it is the coefficient formula of
-Theorem~\ref{thm:poisson-kl-even-orders}.  All retained odd coefficients
+The coefficients are part of the statement.  For \(2\le m\le N\),
+\begin{equation}\label{eq:main-A-intro-coefficients}
+A_{2m}(\nu)=
+\sum_{r=2}^{m}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=2m\\ n_j\ge2}}
+\mu_{n_1}\cdots\mu_{n_r}
+\,[z^0]\prod_{j=1}^r Q_{n_j}(z),
+\end{equation}
+where \([z^0]\) denotes constant Laurent coefficient and the
+Cayley--Chebyshev Laurent representative is fixed by the convention
+\begin{equation}\label{eq:main-A-intro-Qn}
+Q_n(z)=2^{-n}(-\ii)^n
+\sum_{\ell=1}^{n}\binom{n-1}{\ell-1}
+\bigl(z^\ell+(-1)^nz^{-\ell}\bigr)
+\qquad(n\ge1).
+\end{equation}
+Thus \(A_{2m}(\nu)\) is a universal polynomial in
+\(\mu_2,\ldots,\mu_{2m-2}\); the proof that
+\eqref{eq:main-A-intro-coefficients} is the entropy coefficient is supplied
+by Theorem~\ref{thm:poisson-kl-even-orders}.  All retained odd coefficients
 vanish, and the leading coefficient is
 \[
 A_4(\nu)=\frac{\mu_2^2}{8}.
@@ -158,7 +183,27 @@ Assume \(\EE |X_c|^L<\infty\).  Then the centred moments
 \[
 \mu_\alpha=\EE[X_c^\alpha]\qquad(|\alpha|\le L)
 \]
-are finite.  With
+are finite.  The explicit two-region condition used in the quotient proof is
+only the following one: with the final sum empty when \(L=d+1\),
+\[
+\begin{aligned}
+\mathcal R_{d,L}(t)
+&:=t^{-(L+1)}\EE\!\left[
+|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}\right] \\
+&\quad{}+ t^{-(d+1)}\EE\!\left[
+|X_c|^{d+1}{\bf1}_{\{|X_c|>t\}}\right] \\
+&\quad{}+ \sum_{k=d+2}^{L}t^{-k}\EE\!\left[
+|X_c|^k{\bf1}_{\{|X_c|>t\}}\right],
+\end{aligned}
+\]
+one has, in the stated range \(L\ge d+1\),
+\[
+\mathcal R_{d,L}(t)=o(t^{-L})
+\quad\Longleftrightarrow\quad
+\EE |X_c|^L<\infty .
+\]
+No broader equivalence between arbitrary two-region estimates and moment
+hypotheses is asserted.  With
 \[
 h_t=P_t^{(d)}*\nu,\qquad
 g_t=P_t^{(d)}(\cdot-\bar\gamma),
@@ -247,36 +292,28 @@ integral
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
 \]
 with the diagonal ignored.  Then \(\mathcal I_\nu\) is measurable and locally
-integrable on \((0,\infty)\), and for every \(t>0\),
+integrable on \((0,\infty)\).  More precisely, on every compact window
+\([a,b]\Subset(0,\infty)\), the quotient \(u_t\) satisfies the bounded
+Lipschitz estimates, Green-cutoff convergence, and integrable Bregman-kernel
+domination recorded in
+Proposition~\ref{prop:main-C-domain-differentiation-package}; the identity
+below is obtained from the resulting a.e. derivative formula.  For every
+\(t>0\),
 \[
 D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\,\dd s .
 \]
 \end{maintheorem}
 
-\paragraph{Proof roadmap.}
-The detailed proofs are deferred to the body, after the quotient notation,
-Taylor modes, and nonlocal Green identities have been fixed.  Theorem~\ref{thm:main-A}
-is proved in Section~\ref{sec:entropy-asymptotics} by combining the
-one-dimensional quotient jet with finite Taylor transfer for
-\((1+s)\log(1+s)-s\), and by treating the variance threshold through a
-separate lower-bound argument.  Theorem~\ref{thm:main-B} is proved in the same
-section: finite \(L\)-moment is first converted into the multidimensional
-quotient and entropy-existence package, after which the tensor coefficients,
-parity cancellation, and covariance algebra are evaluated.  The dynamic
-identity in Theorem~\ref{thm:main-C} is proved in
-Section~\ref{sec:doob-phi-entropy}, where compact-window quotient bounds
-justify the two Cauchy Green pairings and the cutoff passage leading to the
-Bregman tail formula.
-
-\subsection*{Related theorem-level comparison}
+\subsection*{Recent \emph{J. Funct. Anal.} theorem-level comparison}
 \label{subsec:intro-recent-jfa-comparison}
 
-The nearest recent \emph{J. Funct. Anal.} papers use overlapping language
---entropy, Poisson, heat asymptotics, or Hardy--Stein--but answer different
-theorem-level questions.  The compact comparison is:
+Table~\ref{tab:intro-jfa-comparison} is deliberately narrow: every
+comparator listed in it appeared in \emph{J. Funct. Anal.} in the last five
+years.  Older JFA papers and recent papers in other journals are discussed
+only in the broader appendix table.
 
 \begin{table}[h]
-\caption{Recent \emph{J. Funct. Anal.} comparators by main theorem.}
+\caption{Last-five-years \emph{J. Funct. Anal.} comparators by main theorem.}
 \label{tab:intro-jfa-comparison}
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -285,51 +322,94 @@ theorem-level questions.  The compact comparison is:
 >{\raggedright\arraybackslash}p{0.31\linewidth}|%
 >{\raggedright\arraybackslash}X}
 \textbf{present theorem}
-& \textbf{recent JFA comparator}
+& \textbf{2021--2026 JFA comparator}
 & \textbf{separation}\\
 \hline
 Theorem~\ref{thm:main-A}: one-dimensional fixed-law Poisson/Cauchy KL
 coefficients and variance threshold.
-& Entropic CLT, Esscher transform, and fourth-moment entropy theorems
-\cite{BobkovGotzeEsscher2025,NourdinPeccatiSwan2014EntropyFourthMoment}.
-& The comparator law changes along a CLT or chaos sequence and is compared
-with Gaussian or stable limits.  Here \(\nu\) is fixed, the reference is the
-moving matched Cauchy law \(P_t(\cdot-\bar\gamma)\), and coefficients are
-Cayley Laurent constant terms.\\
+& Esscher-transform CLT and recent stability/functional-inequality papers
+\cite{BobkovGotzeEsscher2025,BrigatiDolbeaultSimonov2024LogSobolev,
+Carlen2025LogHLS,ChenChewiNilesWeed2021MixtureLogSobolev}.
+& These papers study Gaussian or functional-inequality structures, stability,
+or mixture log-Sobolev bounds.  Here \(\nu\) is fixed, the reference is the
+moving matched Cauchy law \(P_t(\cdot-\bar\gamma)\), and the coefficients are
+computed by Cayley Laurent constant terms.\\
 \hline
 Theorem~\ref{thm:main-B}: multidimensional finite-moment radial Poisson
 quotient jet and tensor KL coefficients.
-& Large-time heat-profile asymptotics, point-process Poisson transport, and
-entropy/transport inequalities
+& Heat-profile asymptotics, point-process Poisson transport, and
+entropy/transport geometry
 \cite{AnkerPapageorgiouZhang2023HeatSymmetricSpaces,
 GozlanHerryPeccati2021PointMeasureTransport,
 LopezRiveraShenfeld2025PoissonTransport,
 ErbarHuesmannJalowyMuller2025StationaryPointTransport,
 ChengThalmaierWang2023EntropySteinTransport}.
 & Heat-profile papers estimate evolved kernels or solutions; point-process
-Poisson papers treat counting measures; transport-inequality papers bound
-entropy by geometric distances.  Theorem~\ref{thm:main-B} instead proves a
-finite-moment quotient remainder for the harmonic Poisson kernel and transfers
-it through the nonlinear KL Taylor map.\\
+Poisson papers treat counting measures; transport-geometry papers build maps,
+metrics, convexity, or entropy bounds.  Theorem~\ref{thm:main-B} instead
+proves a finite-moment quotient remainder for the harmonic Poisson kernel and
+transfers it through the nonlinear KL Taylor map.\\
 \hline
 Theorem~\ref{thm:main-C}: exact Cauchy Bregman tail identity for a moving
 matched quotient.
-& Polarized Hardy--Stein and nonlocal Sobolev--Bregman identities
-\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein,
-GutowskiKwasnicki2025BeurlingDenySobolevBregman}.
-& These give structural semigroup or Sobolev Bregman identities.
-Theorem~\ref{thm:main-C} verifies the specific moving quotient \(h_t/g_t\), performs
-the two Cauchy Green pairings, and identifies the one-sided tail integral of
-the matched KL functional.\\
+& Polarized Hardy--Stein identities
+\cite{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}.
+& This gives structural nonlocal semigroup identities in a recent JFA setting.
+Theorem~\ref{thm:main-C} verifies the specific moving quotient \(h_t/g_t\),
+performs the two Cauchy Green pairings, and identifies the one-sided tail
+integral of the matched KL functional.\\
 \end{tabularx}
 }
 \end{table}
 
 The broader related-work discussion is kept out of the introduction:
-Appendix~\ref{app:related-work-scope} compares the same theorems with
-fractional-heat profile asymptotics, count-output Poisson channels,
-closed-form Cauchy \(f\)-divergences, small-time heat-kernel entropy
-expansions, and general entropy representation formulas.
+Appendix~\ref{app:related-work-scope} compares the same theorems with older
+JFA entropy papers, recent non-JFA Sobolev--Bregman work, fractional-heat
+profile asymptotics, count-output Poisson channels, closed-form Cauchy
+\(f\)-divergences, small-time heat-kernel entropy expansions, and general
+entropy representation formulas.
+
+\subsection*{Hypothesis ledger}
+\label{subsec:intro-hypothesis-ledger}
+
+The theorem statements above are intended to be read with the following
+minimal hypothesis map.
+
+\begin{center}
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}|%
+>{\raggedright\arraybackslash}p{0.30\linewidth}|%
+>{\raggedright\arraybackslash}X}
+\textbf{result}
+& \textbf{analytic hypothesis}
+& \textbf{what it supplies}\\
+\hline
+Theorem~\ref{thm:main-A}, coefficient hierarchy
+& \(N\ge2\), finite centred \((2N-2)\)nd absolute moment.
+& Laurent-mode coefficient expansion through \(t^{-2N}\).\\
+\hline
+Theorem~\ref{thm:main-A}, threshold
+& finite mean for the extended statement; finite variance exactly for the
+finite \(t^4\) coefficient.
+& finite variance gives \(A_4=(\EE X_c^2)^2/8\); infinite variance gives
+\(t^4H(t)\to+\infty\).\\
+\hline
+Theorem~\ref{thm:main-B}
+& \(d\ge1\), \(L\ge d+1\), finite centred \(L\)th absolute moment.
+& the displayed functional \(\mathcal R_{d,L}\) satisfies
+\(o(t^{-L})\), hence the quotient jet and the large-\(t\) KL representation;
+the KL tensor expansion and parity cancellation then follow.\\
+\hline
+Theorem~\ref{thm:main-C}
+& finite centred second moment in dimension one.
+& compact-window bounded quotient, \(L^1\)-absolute continuity, Cauchy Green
+cutoff convergence, local integrability of \(\mathcal I_\nu\), and the tail
+identity after the separate endpoint \(H(T)\to0\).\\
+\end{tabularx}
+}
+\end{center}
 
 \subsection*{Convention and organization}
 
