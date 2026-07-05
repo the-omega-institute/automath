@@ -59,13 +59,16 @@ C_{a,b,\nu}\{g_t(x)+g_t(y)\}
 \bigl(\mathbf1_{\{|x-y|<1\}}+|x-y|^{-2}\mathbf1_{\{|x-y|\ge1\}}\bigr).
 \]
 Lemma~\ref{thm:kl-domain-verification} is the standalone \(L^1\)
-Nemytskii chain rule for bounded moving quotients.  The proof of
-Theorem~\ref{thm:poisson-kl-doob-tail} then applies the annular Cauchy Green
-formula pointwise, for a.e. time, to the two pairs
-\((h_t,\log u_t)\) and \((g_t,u_t)\).  This is the new Cauchy/KL closure step
-for the nonstationary quotient
-\((P_t*\nu)/P_t(\cdot-\bar{\gamma})\); the preceding lemmas only prove the
-pieces that the domain theorem assembles.
+Nemytskii chain rule for bounded moving quotients.
+Proposition~\ref{prop:compact-window-bregman-identity} then consolidates the exact
+local hypothesis package: two Poisson solutions \(h_t=P_t*\mu\) and
+\(g_t=P_t*\eta\), a quotient \(u_t=h_t/g_t\) satisfying one bounded
+Lipschitz estimate on a compact time window, the annular Cauchy Green
+formula for the two pairs \((h_t,\log u_t)\) and \((g_t,u_t)\), and the
+Bregman cutoff passage.  Under precisely those hypotheses it proves
+\(H'(t)=-\mathscr I(t)\) for a.e. time on the window.
+Theorem~\ref{thm:poisson-kl-doob-tail} applies that proposition with
+\(\mu=\nu\) and \(\eta=\delta_{\bar\gamma}\).
 
 The identity is in the de Bruijn/Stam and relative-entropy dissipation
 lineage
@@ -97,20 +100,21 @@ lemmas, followed by the endpoint decay lemma:
 \]
 Lemma~\ref{thm:matched-poisson-quotient-cauchy-bregman-domain} supplies the
 only distribution-dependent estimates for the nonstationary quotient
-\((P_t*\nu)/P_t(\cdot-\bar{\gamma})\).
+\((P_t*\nu)/P_t(\cdot-\bar{\gamma})\), namely the bounded Lipschitz quotient
+hypothesis of Proposition~\ref{prop:compact-window-bregman-identity}.
 Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation} defines
 \(\mathcal I_\nu=\lim_{R\to\infty}\mathcal I_{\nu,R}\), proves its
 measurability by monotone limits, and removes the annular or auxiliary
 cutoffs on compact time windows.
 Lemma~\ref{lem:bounded-lipschitz-cauchy-cutoff-pairing} fixes the generator
 sign and the \(1/\pi,1/(2\pi)\) constants once.
-Theorem~\ref{thm:poisson-kl-doob-tail} combines that chain rule, the two
-pointwise Green pairings, and the elementary logarithmic Bregman identity to
-give \(H'(t)=-\mathcal I_\nu(t)\) on compact windows.  The final tail identity
-follows from this derivative identity, nonnegativity of \(\mathcal I_\nu\),
-and the separate decay \(H(T)\to0\).  The coefficient expansion itself remains
-the Cayley quotient-mode result of Theorem~\ref{thm:poisson-kl-even-orders};
-the identity below only converts those KL tails into dissipation tails.
+Proposition~\ref{prop:compact-window-bregman-identity} is the consolidated local
+statement that combines the chain rule, the two Green pairings, the annular
+cutoff limit, and the Bregman algebra.  The final tail identity follows from
+this derivative identity, nonnegativity of \(\mathcal I_\nu\), and the
+separate decay \(H(T)\to0\).  The coefficient expansion itself remains the
+Cayley quotient-mode result of Theorem~\ref{thm:poisson-kl-even-orders}; the
+identity below only converts those KL tails into dissipation tails.
 
 \begin{lemma}[Second-moment KL decay to the translated Poisson profile]%
 \label{lem:poisson-second-moment-kl-decay}
@@ -285,23 +289,12 @@ one has
 \[
 u_t(x)=\int_{\RR}R_{X_c/t}\!\left(\frac{x-\bar{\gamma}}{t}\right)\dd\nu(\gamma).
 \]
-The elementary inequalities
-\[
-R_\varepsilon(z)\le2(1+\varepsilon^2),\qquad
-R_\varepsilon(z)\ge\frac{1}{2(1+\varepsilon^2)}
-\]
-give the displayed lower and upper bounds in
-\eqref{eq:matched-poisson-quotient-domain-mML}, uniformly on
-\([a,b]\times\RR\).  Indeed, the upper bound follows immediately from
-\(\int X_c^2\dd\nu=\mu_2\).  For the lower bound, Jensen's inequality applied
-to the convex function \(r\mapsto 1/r\) gives
-\[
-\int_{\RR}\frac{1}{2(1+X_c^2/t^2)}\dd\nu(\gamma)
-\ge
-\frac{1}{2(1+\mu_2/t^2)}
-\ge
-\frac{1}{2(1+\mu_2/a^2)}.
-\]
+The two-sided part of \eqref{eq:matched-poisson-quotient-domain-mML} is
+exactly the compact-window Poisson quotient bound
+\eqref{eq:prelim-poisson-quotient-two-sided-bound} from
+Lemma~\ref{lem:kl-bounded-test-and-poisson-quotient}.  It remains in this
+lemma only to add the Lipschitz and Bregman estimates needed for the Green
+pairing.
 Also
 \[
 \partial_zR_\varepsilon(z)
@@ -870,60 +863,89 @@ convergence argument on \(I\times\RR^2\).  Finally, exchanging \(x\) and
 which proves \eqref{eq:annular-green-limits-one-sided-bregman}.
 \end{proof}
 
-\begin{proposition}[Compact-window differentiation and Bregman identity]%
+\begin{proposition}[Bounded Lipschitz quotient implies \(H'=-I\)]%
 \label{prop:compact-window-bregman-identity}
-Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar{\gamma}$ and finite
-centred second moment.  Put
+Let \(I=[a,b]\Subset(0,\infty)\).  Let \(\mu\) and \(\eta\) be probability
+measures on~\(\RR\), and put
 \[
-h_t=P_t*\nu,\qquad g_t=P_t(\cdot-\bar{\gamma}),\qquad u_t=h_t/g_t,
+h_t=P_t*\mu,\qquad g_t=P_t*\eta,\qquad u_t=h_t/g_t .
 \]
-and let \(\mathcal I_\nu\) be the Bregman dissipation displayed above.  For
-every \(0<a<b<\infty\), with
+Assume that the quotient has one compact range and one Lipschitz constant on
+the whole window:
+\begin{equation}\label{eq:abstract-bounded-lipschitz-quotient-hypothesis}
+m\le u_t(x)\le M,\qquad |u_t(x)-u_t(y)|\le L|x-y|
+\qquad(t\in I,\ x,y\in\RR),
+\end{equation}
+for constants \(0<m\le M<\infty\) and \(L<\infty\).  Define
 \[
-\mu_2:=\int_{\RR}(\gamma-\bar{\gamma})^2\dd\nu(\gamma),\qquad
-m=\frac1{2(1+\mu_2/a^2)},\quad
-M=2+\frac{2\mu_2}{a^2},\quad
-L=3a^{-1}(1+\mu_2/a^2),
+\Lambda(\alpha,\beta):=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
+\qquad
+\Psi(z):=\mathbf1_{\{|z|<1\}}+|z|^{-2}\mathbf1_{\{|z|\ge1\}},
 \]
-one has, for all \(t\in[a,b]\) and \(x,y\in\RR\),
+and
 \[
-m\le u_t(x)\le M,\qquad |u_t(x)-u_t(y)|\le L|x-y|.
+C_I:=\frac{1}{2m}\max\{L^2,(M-m)^2\}.
 \]
-Moreover, for
+For \(R>1\), let
 \[
-C_{a,b,\nu}:=\frac{1}{2m}\max\{L^2,(M-m)^2\},
+\Omega_R:=\{(x,y):R^{-1}<|x-y|<R\},
+\qquad
+\mathscr I_R(t):=\frac1\pi\iint_{\Omega_R}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
 \]
-one has, for \(x\ne y\) and \(t\in[a,b]\),
-\[
+and define
+\begin{equation}\label{eq:abstract-bounded-lipschitz-full-dissipation}
+\mathscr I(t):=\lim_{R\to\infty}\mathscr I_R(t)
+=\frac1\pi\iint_{\RR^2\setminus\{x=y\}}
+\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y,
+\end{equation}
+where the second expression is the nonnegative Lebesgue integral.  Then all
+of the following conclusions hold on the same window \(I\).
+
+\begin{enumerate}
+\item For \(x\ne y\) and \(t\in I\),
+\begin{equation}\label{eq:abstract-bounded-lipschitz-majorant}
 0\le
 \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}
-\le C_{a,b,\nu}g_t(x)\Psi(x-y).
-\]
-Therefore the symmetrized Bregman kernel is in
-\(L^1([a,b]\times\RR^2)\).  More precisely, the same constants give
-\[
-\int_a^b\iint_{\RR^2}
+\le C_I g_t(x)\Psi(x-y),
+\end{equation}
+and the same estimate holds with \(x\) and \(y\) interchanged.  Consequently
+\begin{equation}\label{eq:abstract-bounded-lipschitz-sym-integral-bound}
+\int_I\iint_{\RR^2}
 \frac{
 g_s(x)\Lambda(u_s(x),u_s(y))
 +g_s(y)\Lambda(u_s(y),u_s(x))}
 {(x-y)^2}\dd x\dd y\dd s
-\le 8C_{a,b,\nu}(b-a),
-\]
-and the one-sided dissipation estimate
+\le 8C_I|I|,
+\end{equation}
+and
+\begin{equation}\label{eq:abstract-bounded-lipschitz-one-sided-bound}
+\int_I \mathscr I(s)\dd s\le \frac{4C_I}{\pi}|I|.
+\end{equation}
+The function \(\mathscr I\) is Borel measurable, locally integrable on the
+window, and independent of the increasing annular exhaustion.  More generally, if
+\(\chi_n\) are measurable on \(I\times\RR^2\),
+\(\sup_n\|\chi_n\|_\infty<\infty\), and
+\(\chi_n(t,x,y)\to1\) for a.e. \(x\ne y\), then the cutoff integrals converge
+to \(\mathscr I\) in \(L^1(I,\dd t)\), with the single majorant
 \[
-\int_a^b\mathcal I_\nu(s)\dd s
-\le \frac{4C_{a,b,\nu}}{\pi}(b-a).
+C_I\{g_t(x)+g_t(y)\}\Psi(x-y).
 \]
-Let \(H(t)=D_{\mathrm{KL}}(h_t\|g_t)\).  Then \(H\) is finite and absolutely
-continuous on \([a,b]\).  Moreover there is a single null set
-\(N_{a,b}\subset[a,b]\) such that, for every \(s\in[a,b]\setminus N_{a,b}\),
-the \(L^1\)-time derivatives of \(h_s\) and \(g_s\) exist, the moving-quotient
-chain rule holds,
+
+\item Let
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t)
+=\int_{\RR}h_t(x)\log u_t(x)\dd x .
+\]
+Then \(H\) is finite and absolutely continuous on \(I\).  There is a single
+null set \(N_I\subset I\) such that, for every \(s\in I\setminus N_I\), the
+\(L^1\)-time derivatives of \(h_s\) and \(g_s\) exist and the moving-quotient
+chain rule holds:
 \begin{equation}\label{eq:compact-window-chain-rule-single-null-set}
 H'(s)=\int_{\RR}\log u_s\,\partial_sh_s\,\dd x
--\int_{\RR}(u_s-1)\partial_sg_s\,\dd x,
+-\int_{\RR}(u_s-1)\partial_sg_s\,\dd x .
 \end{equation}
-and the two Cauchy Green pairings hold simultaneously:
+At the same times the two noncompact Cauchy Green formulas hold:
 \begin{align}
 \int_{\RR}\log u_s(x)\,\partial_sh_s(x)\dd x
 &=-\frac{1}{2\pi}\lim_{R\to\infty}
@@ -936,101 +958,85 @@ and the two Cauchy Green pairings hold simultaneously:
 \frac{(g_s(x)-g_s(y))(u_s(x)-u_s(y))}
 {(x-y)^2}\dd x\dd y. \label{eq:compact-window-g-u-green}
 \end{align}
-The annular dissipations converge to the full dissipation on the same compact
-window,
+
+\item The annular one-sided dissipations converge to the full one-sided
+Bregman integral in \(L^1(I)\):
 \begin{equation}\label{eq:compact-window-annular-l1-convergence}
-\lim_{R\to\infty}\int_a^b
-\left|\mathcal I_{\nu,R}(s)-\mathcal I_\nu(s)\right|\dd s=0,
+\lim_{R\to\infty}\int_I
+\left|\mathscr I_R(s)-\mathscr I(s)\right|\dd s=0.
 \end{equation}
-and the cutoff-removal statement of
-Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation} applies with
-the displayed majorant.  Finally, for every
-\(s\in[a,b]\setminus N_{a,b}\),
+For every \(s\in I\setminus N_I\), the two Green limits, the chain rule, and
+the Bregman algebra combine to give
 \begin{equation}\label{eq:compact-window-bregman-derivative}
 -H'(s)
 =\frac1\pi\iint_{\RR^2}
 \frac{g_s(x)\Lambda(u_s(x),u_s(y))}{(x-y)^2}\dd x\dd y
-=\mathcal I_\nu(s).
+=\mathscr I(s).
 \end{equation}
+\end{enumerate}
 \end{proposition}
 
 \begin{proof}
-Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  The proof uses the compact-window
-domain bounds, the Nemytskii chain rule, the pointwise Green formula, and the
-logarithmic Bregman algebra, with the exceptional times fixed once.
-
-First, on the compact window \([a,b]\Subset(0,\infty)\),
-Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} gives
+The compact-range Taylor estimate
 \[
-m\le u_s(x)\le M,\qquad |u_s(x)-u_s(y)|\le L|x-y|
+0\le\Lambda(\alpha,\beta)\le\frac{1}{2m}|\alpha-\beta|^2
+\qquad(\alpha,\beta\in[m,M])
 \]
-with the constants displayed in the proposition, as well as the stated
-Bregman majorants.  Hence the one-sided and symmetrized kernels are dominated
-by the integrable majorants displayed in the statement.  This proves the two
-compact-window integrability estimates, and
-Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation} gives the
-definition \(\mathcal I_\nu=\lim_{R\to\infty}\mathcal I_{\nu,R}\), its
-measurability, independence of the annular exhaustion, and the
-compact-window cutoff removal.  Also
-\(s\mapsto h_s=P_s*\nu\) and \(s\mapsto g_s=P_s(\cdot-\bar\gamma)\) are
-absolutely continuous as \(L^1\)-valued maps on \([a,b]\), because
+and \eqref{eq:abstract-bounded-lipschitz-quotient-hypothesis} give
+\eqref{eq:abstract-bounded-lipschitz-majorant}; for \(|x-y|<1\) use the
+Lipschitz part, and for \(|x-y|\ge1\) use \(|u_t(x)-u_t(y)|\le M-m\).  The
+exchanged estimate is identical.  Since
+\[
+\int_{\RR}\Psi(z)\dd z
+=\int_{|z|<1}\dd z+\int_{|z|\ge1}|z|^{-2}\dd z=4
+\]
+and \(\int_{\RR}g_t=1\), the one-sided and symmetrized estimates integrate to
+\eqref{eq:abstract-bounded-lipschitz-sym-integral-bound} and
+\eqref{eq:abstract-bounded-lipschitz-one-sided-bound}.  Lemma
+\ref{lem:annular-cutoff-measurable-bregman-dissipation} gives the monotone
+definition of \(\mathscr I\), measurability, exhaustion independence, and the
+stated cutoff removal, with \(C_I\) replacing \(C_{a,b,\nu}\).
+
+The maps \(s\mapsto h_s=P_s*\mu\) and \(s\mapsto g_s=P_s*\eta\) are
+absolutely continuous as \(L^1(\RR)\)-valued maps on \(I\), because
 \(\partial_sP_s(x)=s^{-2}Q(x/s)\) for an \(L^1(\RR)\) function \(Q\), uniformly
-for \(s\in[a,b]\).  The quotient bounds give
-\(m g_s\le h_s\le M g_s\), so \(H(s)=\int h_s\log u_s\,\dd x\) is finite on
-the window.  Hence the hypotheses of the Nemytskii chain-rule lemma are
-satisfied on \([a,b]\), and \(H\) is absolutely continuous there.
+for \(s\in I\).  The quotient bounds give \(m g_s\le h_s\le M g_s\), hence
+\(H(s)=\int h_s\log u_s\,\dd x\) is finite.  Lemma
+\ref{thm:kl-domain-verification} therefore applies on \(I\), proving absolute
+continuity of \(H\) and the chain rule outside a null set.  Let \(N_I\) be
+the union of that null set with the null set on which the \(L^1\)-time
+derivatives of \(h_s\) or \(g_s\) fail to exist.
 
-Let \(N_{a,b}\) be the union of the null set on which the \(L^1\)-time
-derivatives of \(h_s\) or \(g_s\) fail to exist and the null set on which the
-chain rule of Lemma~\ref{thm:kl-domain-verification} fails.  This gives
-\eqref{eq:compact-window-chain-rule-single-null-set} on
-\([a,b]\setminus N_{a,b}\).  Lemma~\ref{lem:cauchy-normalization-bounded-test-green}
-supplies the Cauchy Green formula for each fixed \(s\in[a,b]\), hence in
-particular for every \(s\notin N_{a,b}\), for the two pairs
-\((p_s,q_s)=(h_s,\log u_s)\) and \((g_s,u_s)\).  Here \(h_s=P_s*\nu\) and
-\(g_s=P_s(\cdot-\bar\gamma)\) have the required Poisson-convolution form,
-while the quotient bounds make \(\log u_s\) and \(u_s\) bounded Lipschitz
-tests uniformly on the window.  This proves
+For \(s\in I\setminus N_I\), Lemma
+\ref{lem:cauchy-normalization-bounded-test-green} applies to the Poisson
+solutions \(h_s=P_s*\mu\) and \(g_s=P_s*\eta\).  The tests \(\log u_s\) and
+\(u_s\) are bounded Lipschitz uniformly on \(I\), because
+\eqref{eq:abstract-bounded-lipschitz-quotient-hypothesis} holds and
+\((\log r)'\le1/m\) on \([m,M]\).  This proves
 \eqref{eq:compact-window-h-logu-green} and
-\eqref{eq:compact-window-g-u-green} with the same exceptional set.  Since
-\(\int_{\RR}\partial_sg_s\,\dd x=0\) for \(s\notin N_{a,b}\), the second term
-in the chain rule may be written as \(\int_{\RR}u_s\partial_sg_s\dd x\).  This
-uses only probability preservation of the Poisson densities and the
-absolute-continuity of \(s\mapsto g_s\) in \(L^1\).
+\eqref{eq:compact-window-g-u-green}.  Since \(\int_{\RR}\partial_sg_s\,\dd x=0\)
+at such a time, the second term in
+\eqref{eq:compact-window-chain-rule-single-null-set} may be written as
+\(\int_{\RR}u_s\partial_sg_s\,\dd x\).
 
-Equation~\eqref{eq:compact-window-annular-l1-convergence} is exactly
-\eqref{eq:bregman-cutoff-l1-time-removal} applied to the annular cutoffs
-\(\chi_R=\mathbf1_{\Omega_R}\).  The general bounded-cutoff removal follows
-from the same lemma and the majorant already displayed above.
-
-It remains only to identify the derivative at a time \(s\notin N_{a,b}\).
-The two limits in
-\eqref{eq:compact-window-h-logu-green}--\eqref{eq:compact-window-g-u-green}
-exist at this \(s\), and the symmetrized Bregman kernel is dominated by the
-compact-window majorant already displayed.  Applying
-Lemma~\ref{lem:annular-green-limits-close-to-full-bregman}, with the two
-annular numerators denoted there by \(G_R^{h,\log u}(s)\) and
-\(G_R^{g,u}(s)\), gives
+The \(L^1(I)\) annular convergence
+\eqref{eq:compact-window-annular-l1-convergence} is the cutoff-removal
+statement from the first paragraph applied to \(\mathbf1_{\Omega_R}\).  To
+identify the derivative, apply
+Lemma~\ref{lem:annular-green-limits-close-to-full-bregman} at a fixed
+\(s\in I\setminus N_I\).  The two Green limits exist by the preceding
+paragraph, and the symmetrized Bregman kernel is dominated by the majorant in
+\eqref{eq:abstract-bounded-lipschitz-majorant} plus its exchanged copy.  Thus
 \[
 \frac1{2\pi}
 \left[
 \lim_{R\to\infty}G_R^{h,\log u}(s)
 -\lim_{R\to\infty}G_R^{g,u}(s)
 \right]
-=\mathcal I_\nu(s).
+=\mathscr I(s).
 \]
-The chain rule and the two Green formulas give exactly
-\[
--H'(s)=\frac1{2\pi}
-\left[
-\lim_{R\to\infty}G_R^{h,\log u}(s)
--\lim_{R\to\infty}G_R^{g,u}(s)
-\right].
-\]
-Therefore \(H'(s)=-\mathcal I_\nu(s)\) for every
-\(s\in[a,b]\setminus N_{a,b}\).  The same compact-window majorant gives
-\(\mathcal I_\nu\in L^1([a,b])\).
-
+The chain rule and the two Green formulas give the same left side as
+\(-H'(s)\).  This proves \eqref{eq:compact-window-bregman-derivative}.
 \end{proof}
 
 \begin{remark}
@@ -1054,9 +1060,24 @@ D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\dd s.
 
 \begin{proof}
 Set \(H(t):=D_{\mathrm{KL}}(h_t\|g_t)\).  For \(0<t<T\), apply
-Proposition~\ref{prop:compact-window-bregman-identity} on the compact window
-\([t,T]\).  Since \(H\in AC([t,T])\), \(\mathcal I_\nu\in L^1([t,T])\), and
-\(H'=-\mathcal I_\nu\) outside the single null set supplied there,
+Lemma~\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} on the compact
+window \([t,T]\).  It gives the bounded Lipschitz quotient hypothesis
+\eqref{eq:abstract-bounded-lipschitz-quotient-hypothesis} of
+Proposition~\ref{prop:compact-window-bregman-identity}, with
+\(\mu=\nu\), \(\eta=\delta_{\bar\gamma}\), and
+\[
+\mu_2:=\int_{\RR}(\gamma-\bar\gamma)^2\dd\nu(\gamma),\qquad
+m=\frac1{2(1+\mu_2/t^2)},\qquad
+M=2+\frac{2\mu_2}{t^2},\qquad
+L=3t^{-1}\bigl(1+\mu_2/t^2\bigr).
+\]
+The abstract dissipation \(\mathscr I\) in
+\eqref{eq:abstract-bounded-lipschitz-full-dissipation} is exactly
+\(\mathcal I_\nu\) by the annular definition preceding
+Lemma~\ref{lem:annular-cutoff-measurable-bregman-dissipation}.  Hence
+Proposition~\ref{prop:compact-window-bregman-identity} gives
+\(H\in AC([t,T])\), \(\mathcal I_\nu\in L^1([t,T])\), and
+\(H'=-\mathcal I_\nu\) outside a single null set on that window.  Therefore
 \[
 H(t)-H(T)=\int_t^T \mathcal I_\nu(s)\dd s.
 \]
