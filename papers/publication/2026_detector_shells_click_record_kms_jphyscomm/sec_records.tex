@@ -263,8 +263,8 @@ zero runs between clicks, extending at the two ends if needed.
 \subsection{Exact dependence, hazard, and count diagnostics}
 
 The hazard, Fano, and low-lag formulas in this subsection have the inferential
-status fixed in \hyperref[par:inference-scope-main]{the inference-scope
-paragraph}.  In particular, the only scalar interval below that is fully
+status fixed in \Cref{ass:model-inference-contract-main}.  In particular, the
+only scalar interval below that is fully
 studentized from the visible record is the lag-two covariance interval for
 \(\gamma_2=\operatorname{Cov}(A_0,A_2)\) in
 \Cref{cor:finite-record-lag-two-studentized-main}.  The hazard, spectral
@@ -1036,9 +1036,9 @@ critical-rate convention of \eqref{eq:gamma-crit-piecewise-main}.
 The hazard curve, the closed Fano factor, and the finite-record plots derived
 from \Cref{lem:survival-hazard-main,prop:spectrum-main} are population formula
 checks for the stipulated D-MAP law.  Their finite-record reporting status is
-the one stated in \hyperref[par:inference-scope-main]{the inference-scope
-paragraph}.  Among the hazard, Fano, spectral, and low-lag diagnostics, only
-\(\gamma_2\) is supplied with a fully studentized scalar visible-record
+the one stated in \Cref{ass:model-inference-contract-main}.  Among the hazard,
+Fano, spectral, and low-lag diagnostics, only \(\gamma_2\) is supplied with a
+fully studentized scalar visible-record
 interval; the lag-two covariance studentization itself is proved later in
 \Cref{cor:boundary-reset-cycle-clt-main}.
 \end{remark}
@@ -1248,13 +1248,12 @@ equal-rate formulas are interpreted by continuous limits.  Let
 \[
 r_0=\rho,\qquad r_1=\rho a,\qquad r_2=\rho u_2 .
 \]
-The population inverse is defined on the domain
+The observable inverse is defined on the domain
 \begin{equation}\label{eq:population-inverse-domain-main}
-r_0>0,\qquad a-r_0\ne0
-\quad
-\left(\text{equivalently } r_0>0,\ r_1-r_0^2\ne0\right).
+r_0>0,\qquad D:=r_1-r_0^2\ne0 .
 \end{equation}
-We write the inverse-map denominator as
+Equivalently, because \(r_1=r_0a\) on the model image, the inverse-map
+denominator is
 \begin{equation}\label{eq:inverse-map-denominator-main}
 D:=r_1-r_0^2=r_0(a-r_0).
 \end{equation}
@@ -1326,6 +1325,10 @@ r_2=\PP(A_0=A_2=1)=\rho u_2
 the domain condition \eqref{eq:population-inverse-domain-main} permits the
 divisions below.  Hence one obtains \(a=r_1/r_0\), \(u_2=r_2/r_0\), and
 \[
+u_2=\rho+(a-\rho)\lambda_{\mathrm{hid}},
+\]
+by \Cref{lem:covariance-transfer-main}.  Since \(r_0=\rho\), this gives
+\[
 \lambda_{\mathrm{hid}}
 =\frac{u_2-r_0}{a-r_0}
 =\frac{r_2/r_0-r_0}{r_1/r_0-r_0}
@@ -1343,9 +1346,27 @@ Then the identities
 \qquad
 \sigma_2=r_0(1-\lambda_{\mathrm{hid}})-a+\lambda_{\mathrm{hid}}
 \]
-recover \(p+s\) and \(ps\) by
-\Cref{lem:quotient-inverse-symmetric-algebra-main}, since \(r_0=\rho\) for
-the constrained D-MAP law.  The unordered roots of
+recover \(p+s\) and \(ps\) as follows.  Inside the proof, using
+\(a+b=1-s\) and \(\lambda_{\mathrm{hid}}=p-b\),
+\[
+1-a+\lambda_{\mathrm{hid}}
+=1-(1-s-b)+(p-b)=p+s.
+\]
+Also \(1-\lambda_{\mathrm{hid}}=1-p+b=q+b\), and
+\[
+\rho(1-\lambda_{\mathrm{hid}})
+=\frac{q(1-s)}{q+b}(q+b)
+=q(1-s).
+\]
+Therefore, since \(r_0=\rho\),
+\[
+r_0(1-\lambda_{\mathrm{hid}})-a+\lambda_{\mathrm{hid}}
+=q(1-s)-(1-s-b)+(p-b)
+=q(1-s)+p+s-1
+=ps.
+\]
+These are exactly the two identities summarized in
+\Cref{lem:quotient-inverse-symmetric-algebra-main}.  The unordered roots of
 \(z^2-\sigma_1z+\sigma_2=0\) are therefore identified, but their labels are
 not.  Finally, \Cref{lem:gap-law-exchange-symmetry-main} proves that swapping
 the two roots also leaves the stationary renewal gap law, and hence all
@@ -1430,6 +1451,11 @@ If \(z_1=z_2=z\), put \(\theta=-\log z\) and use the continuous-limit law
 g_k=z^k\bigl((1-z)(1+\theta k)-\theta z\bigr),
 \qquad k\ge0 .
 \end{equation}
+For population roots this is the D-MAP Palm gap law.  For any later
+finite-record projected root pair retained in \((0,1)^2\), the same formulas
+are certified as a nonnegative normalized gap law by
+\Cref{lem:projected-root-gap-law-valid-main}, independently of the noisy
+empirical intensity used to construct the projected coordinate.
 
 \item Compute the Palm renewal masses
 \[
@@ -1587,6 +1613,132 @@ both the numerator and the denominator in
 equal-rate dictionary \eqref{eq:equal-rate-dictionary-main}; with
 \(\theta=-\log z\), this is exactly
 \eqref{eq:gap-law-from-quotient-roots-diagonal-main}.
+\end{proof}
+
+\begin{lemma}[Projected quotient roots define a stochastic gap law]\label{lem:projected-root-gap-law-valid-main}
+Let \(z_1,z_2\in(0,1)\) and put \(\theta_i=-\log z_i\).  If
+\(z_1\ne z_2\), define
+\[
+g_k=
+\frac{\theta_2(1-z_1)z_1^k-\theta_1(1-z_2)z_2^k}
+     {\theta_2-\theta_1},
+\qquad k\ge0 .
+\]
+If \(z_1=z_2=z\), put \(\theta=-\log z\) and define
+\[
+g_k=z^k\{(1-z)(1+\theta k)-\theta z\},
+\qquad k\ge0 .
+\]
+Then \(g_k\ge0\) for every \(k\ge0\) and
+\[
+\sum_{k\ge0}g_k=1 .
+\]
+More explicitly, the displayed \(g_k\) is the \(D\)-row path probability
+\[
+g_k=e_D^\top T_0(z_1,z_2)^kT_1(z_1,z_2)\mathbf1
+\]
+of a two-state stochastic triangular labelled kernel.  Thus every finite
+projected root pair retained in the interior of \(F\) produces an honest
+nonnegative normalized Palm zero-run law before any finite-window
+probabilities are formed.
+\end{lemma}
+
+\begin{proof}
+First suppose \(z_1\ne z_2\).  Define
+\[
+b=\frac{\theta_2(z_1-z_2)}{\theta_2-\theta_1},
+\qquad
+a=\frac{\theta_2(1-z_1)-\theta_1(1-z_2)}
+        {\theta_2-\theta_1}.
+\]
+These coefficients are nonnegative.  Indeed, after choosing the order
+\(z_1=e^{-\theta_1}\), \(z_2=e^{-\theta_2}\), they have the integral
+representations
+\[
+b=\int_0^1\theta_2 e^{-\theta_2 r}e^{-\theta_1(1-r)}\,dr,
+\qquad
+a=\int_0^1\theta_2 e^{-\theta_2 r}
+       \{1-e^{-\theta_1(1-r)}\}\,dr ,
+\]
+with the displayed quotient values obtained by evaluating the elementary
+integrals.  Moreover \(a+b=1-z_2\).  Hence
+\[
+T_0(z_1,z_2)=
+\begin{pmatrix}
+z_1&0\\ b&z_2
+\end{pmatrix},
+\qquad
+T_1(z_1,z_2)=
+\begin{pmatrix}
+0&1-z_1\\0&a
+\end{pmatrix}
+\]
+are nonnegative labelled kernels and \(T_0+T_1\) is row-stochastic.
+
+For \(k\ge0\),
+\[
+T_0(z_1,z_2)^k=
+\begin{pmatrix}
+z_1^k&0\\
+b\sum_{j=0}^{k-1}z_2^jz_1^{k-1-j}&z_2^k
+\end{pmatrix},
+\]
+with the sum empty when \(k=0\).  Therefore the \(D\)-row probability of
+seeing \(k\) zeros and then a one is
+\[
+e_D^\top T_0^kT_1\mathbf1
+=b(1-z_1)\sum_{j=0}^{k-1}z_2^jz_1^{k-1-j}+az_2^k .
+\]
+Using
+\(\sum_{j=0}^{k-1}z_2^jz_1^{k-1-j}=(z_1^k-z_2^k)/(z_1-z_2)\), this becomes
+\[
+\frac{\theta_2(1-z_1)z_1^k-\theta_1(1-z_2)z_2^k}
+     {\theta_2-\theta_1},
+\]
+which is the stated off-diagonal formula.  Thus \(g_k\ge0\) because it is a
+path probability.
+
+Since the spectral radius of \(T_0\) is \(\max(z_1,z_2)<1\) and
+\(T_1\mathbf1=(I-T_0)\mathbf1\),
+\[
+\sum_{k\ge0}g_k
+=e_D^\top\left(\sum_{k\ge0}T_0^k\right)T_1\mathbf1
+=e_D^\top(I-T_0)^{-1}(I-T_0)\mathbf1
+=1 .
+\]
+
+It remains to treat the double root.  Put \(\theta=-\log z\) and set
+\[
+b=\theta z,\qquad a=1-(1+\theta)z .
+\]
+The coefficient \(a\) is nonnegative because
+\((1+\theta)e^{-\theta}\le1\), equivalently \(\log y\le y-1\) with
+\(y=e^\theta\).  Thus
+\[
+T_0(z,z)=
+\begin{pmatrix}
+z&0\\ \theta z&z
+\end{pmatrix},
+\qquad
+T_1(z,z)=
+\begin{pmatrix}
+0&1-z\\0&1-(1+\theta)z
+\end{pmatrix}
+\]
+again define a stochastic triangular labelled kernel.  Here
+\[
+T_0(z,z)^k=
+\begin{pmatrix}
+z^k&0\\ k\theta z^k&z^k
+\end{pmatrix},
+\]
+so
+\[
+e_D^\top T_0(z,z)^kT_1(z,z)\mathbf1
+=z^k\{(1-z)(1+\theta k)-\theta z\}.
+\]
+The same spectral-radius argument gives total mass one.  Hence the diagonal
+formula is also a nonnegative normalized gap law.
 \end{proof}
 
 \begin{corollary}[Three inclusion probabilities are complete quotient coordinates]\label{cor:three_inclusion_complete_coordinates}
@@ -1821,33 +1973,20 @@ inverse statements are delta-method chart statements for identifiable
 symmetric coordinates, with labelled rates only on a retained separated-root
 branch satisfying \Cref{conv:branch-map-labelled-rates-main}.
 
-\begin{assumption}[Standing fixed constrained D-MAP record]\label{ass:fixed-sampled-boundary-record-main}
+\begin{assumption}[Standing retained-record experiment]\label{ass:fixed-sampled-boundary-record-main}
 All D-MAP finite-record statements in this subsection and in
 \Cref{subsec:studentized-lag-two-main} are relative to the following single
-record experiment, unless a statement explicitly says otherwise.  Fix
-\(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\), put
-\[
-p=e^{-\Gamma\Delta\tau},\qquad
-s=e^{-\kappa_{\mathrm r}\Delta\tau},
-\]
-and use the killed-leakage labelled kernels
-\[
-T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
-\qquad
-T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix},
-\]
-where \(a,b\) are the lower-row labelled-kernel weights in
-\eqref{eq:a-b-main}.  Thus \(T_1(R,R)=T_1(D,R)=0\),
-\((T_i)_{XY}=\PP(A_n=i,H_{n+1}=Y\mid H_n=X)\),
-\(P=T_0+T_1\) is stochastic, \(0<p,s<1\), \(a>0\), \(b>0\), and
-\(a+b=1-s\).  Equal-rate formulas are interpreted by the continuous dictionary
-\eqref{eq:equal-rate-dictionary-main}.  In the stationary version,
+record experiment, unless a statement explicitly says otherwise.  The model
+and pointwise retained-record interpretation are those of
+\Cref{ass:model-inference-contract-main}.  In the stationary version,
 \((A_n)_{n\in\mathbb Z}\) is the stationary visible binary process generated by
-these kernels.  In the finite-start version, an arbitrary hidden initial law is
-run through a deterministic burn-in \(L_N\to\infty\); the observed record is the
-retained post-burn-in block of length \(N\), and every complete-cycle index,
-batch, projection, Wald statistic, and confidence set is formed only from that
-retained visible word.
+the contracted model kernels.  In the finite-start version, an arbitrary hidden
+initial law is run through a deterministic burn-in \(L_N\to\infty\); the
+observed record is the retained post-burn-in block of length \(N\), and every
+complete-cycle index, batch, projection, Wald statistic, and confidence set is
+formed only from that retained visible word.  Equal-rate formulas are
+interpreted by the continuous dictionary
+\eqref{eq:equal-rate-dictionary-main}.
 \end{assumption}
 
 \paragraph{Generic regenerative tools.}
@@ -2452,13 +2591,28 @@ If \(\operatorname{rank}\Sigma=1\) and
 \[
 \PP(T_z=0)=\frac12
 \]
-and \(T_z\) has no atom on \((0,\infty)\).  If \(\Sigma=0\), then
+and \(T_z\) has no atom on \((0,\infty)\).  More precisely,
+\[
+T_z\sim \frac12\delta_0+\frac12\chi^2_1 .
+\]
+Equivalently,
+\[
+\PP(T_z=0)=\frac12,\qquad
+\PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
+\]
+Consequently, for a lower quantile level \(0<p_c<1\), the lower
+\(p_c\)-quantile is
+\[
+c_{p_c}=0\quad\text{if }p_c\le\frac12,\qquad
+c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)\quad\text{if }p_c>\frac12,
+\]
+and the positive-quantile case is a continuity point of the law of \(T_z\).  If
+\(\Sigma=0\), then
 \(T_z=0\) almost surely.  Consequently the continuity condition in
 \Cref{lem:projected-gaussian-bootstrap-halfspace-main} is automatic except
 for the zero covariance case and for the rank-one case in which the retained
 Gaussian direction is normal to the exchange-diagonal tangent half-space; in
-that rank-one normal case the only possible discontinuity is at the zero
-quantile.
+that rank-one normal case the only discontinuity is the atom at zero.
 \end{lemma}
 
 \begin{proof}
@@ -2497,10 +2651,14 @@ The corresponding coefficient in the seminorm \(\Sigma^+\) is
 This coefficient is positive unless \(v\) is parallel to \(n_z\).  Therefore,
 when \(\operatorname{Range}\Sigma\ne\operatorname{span}\{n_z\}\), \(T_z\) is
 a two-sided mixture of positive multiples of \(\xi^2\) and has no atoms.  When
-\(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), the outside
-half-line projects to the origin and contributes mass \(1/2\) at zero, while
-the inside half-line contributes a continuous positive component.  This proves
-the rank-one alternatives.
+  \(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), the outside
+  half-line projects to the origin and contributes mass \(1/2\) at zero, while
+  the inside half-line gives \(T_z=\xi^2/\lambda\).  Conditional on this
+  half-line, \(\xi^2/\lambda\) has the \(\chi^2_1\) law.  Hence the distribution
+  is \(\frac12\delta_0+\frac12\chi^2_1\), and the stated lower-quantile split
+  follows immediately from its distribution function
+  \(F(t)=1/2+\PP\{\chi^2_1\le t\}/2\) for \(t>0\).  This proves the rank-one
+  alternatives.
 \end{proof}
 
 \begin{proposition}[Computable diagonal covariance]\label{lem:dmap-diagonal-covariance-finite-sum-main}\label{prop:computable-diagonal-covariance-main}
@@ -2673,16 +2831,22 @@ or
 \]
 The first two alternatives have a continuous projected-Gaussian statistic and
 therefore supply exact-level projected-Gaussian cases for all confidence
-levels.  In the third alternative the limiting statistic has a half-mass at
-zero and no atom on \((0,\infty)\).  The fourth alternative has an identically
-zero limiting statistic.  The occurrence of the alternative is not a modelling
-choice: it is obtained by evaluating the finite matrix
+levels.  In the third alternative the limiting statistic has law
+\(\frac12\delta_0+\frac12\chi^2_1\): its distribution function is
+\(1/2+F_{\chi^2_1}(t)/2\) for \(t>0\).  Hence its lower \(p_c\)-quantile is
+zero for \(p_c\le1/2\), but for \(p_c>1/2\) it is
+\(F_{\chi^2_1}^{-1}(2p_c-1)\) and is continuous.  The
+fourth alternative has an identically zero limiting statistic.  The occurrence
+of the covariance alternative is not a modelling choice: it is obtained by
+evaluating the finite matrix
 \eqref{eq:dmap-diagonal-sigma-finite-main}.  The paper does not prove a
 closed-form analytic sign classification of this determinant for every
-\(0<z<1\); therefore exact diagonal coverage is stated only as the conditional
-corollary below.  The theorem-level diagonal statement remains the conservative
-positive-buffer report in the exceptional rank-one-normal and zero-covariance
-branches.
+\(0<z<1\); therefore exact diagonal coverage is stated through the
+retained-rank conditions in Main Theorem~3C rather than through a global
+closed-form \(z\)-classification.  In the rank-one-normal covariance
+alternative, the theorem-level branch still depends on the requested quantile
+level \(p_c=1-\alpha\): exact unbuffered coverage for \(p_c>1/2\),
+and buffered conservative coverage for \(p_c\le1/2\).
 
 Equivalently, because \(\Sigma_\sigma(z)\) is \(2\times2\) and nonnegative
 definite, these cases are checked directly from the actual D-MAP covariance by
@@ -3266,9 +3430,11 @@ replacement.  The quotient covariance is the sandwich
 \]
 after the same feasible projection and chart retention as Algorithm~2.
 Diagonal statistics use exactly the empirical eigenvalues of
-\(\widehat\Sigma_{\sigma,N}\) retained above \(t_N=N^{-1/4}\); rank retention
-is justified by
-\(\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma\|_{\operatorname{op}}=o_{\PP}(t_N)\).
+\(\widehat\Sigma_{\sigma,N}\) retained above \(t_N=N^{-1/4}\).  The consistency
+needed for that retained-rank step is not assumed here: it is supplied for
+the inclusion covariance by \Cref{thm:finite-record-covariance-main} and, on
+the exchange diagonal, pushed through the quotient Jacobian in
+\Cref{lem:dmap-diagonal-raw-quotient-clt-main}.
 
 \item\label{fr:projection-main}\textbf{Feasible projection and chart retention.}
 Algorithm~2 is the projection and chart-retention rule.  The raw symmetric
@@ -3295,16 +3461,19 @@ H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
 \item\label{fr:mc-main}\textbf{Diagonal calibration and conservative reporting.}
 The exchange-diagonal statistic uses the \(t_N\)-thresholded pseudoinverse,
 the ideal conditional projected-Gaussian lower quantile
-\(c^{-}_{1-\alpha,N}(z)\), and the optional simulated order statistic
-\(\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)\) defined by Algorithm~3,
-which is stated after Main Theorem~3C.  The theorem itself is the sole
-coverage statement: it classifies the computable D-MAP covariance
+\(c^{-}_{1-\alpha,N}(z)\), and, when finite simulation is used for a reported
+confidence procedure, the inflated simulated set
+\(C_{\sigma,N}^{\rm diag,MC}\) defined in Main Theorem~3C and Algorithm~3.
+The theorem itself is the sole coverage statement: it classifies the
+computable D-MAP covariance
 \(\Sigma_\sigma(z)\) from \eqref{eq:dmap-diagonal-sigma-finite-main} into the
-full-rank/non-normal rank-one exact case, the rank-one-normal atom-at-zero
-conservative case, and the zero-covariance conservative case.  Replacing the
-ideal conditional quantile by finitely many Monte Carlo draws adds only the
-conditional DKW/quantile error in
-\Cref{lem:conditional-monte-carlo-quantile-main}.
+full-rank/non-normal rank-one exact case, the rank-one-normal case split by the
+quantile level \(1-\alpha\), and the zero-covariance conservative case.
+An uninflated simulated order statistic is only a numerical approximation to
+the ideal critical value; the finite-Monte-Carlo confidence procedure is the
+inflated one, with the conditional DKW/quantile error in
+\Cref{lem:conditional-monte-carlo-quantile-main} absorbed into the critical
+value.
 \end{enumerate}
 \end{assumption}
 
@@ -3312,18 +3481,8 @@ conditional DKW/quantile error in
 Assume the finite-record master assumption
 \Cref{ass:finite-record-master-main}, specifically
 \ref{fr:law-main}, \ref{fr:estimands-main}, \ref{fr:protocol-main}, and
-\ref{fr:covariance-main}.  This is a fixed-setting retained-record theorem:
-fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) in the stable quotient chart
-and let \(\mathcal E_N\) be the reporting event.  Then
-\(\PP_{\Gamma,\kappa_{\mathrm r},\Delta\tau}(\mathcal E_N^c)\to0\), and all
-stated confidence sets are reported only on \(\mathcal E_N\).  For every fixed
-population point,
-\[
-\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)\Rightarrow
-\mathcal N(0,\Sigma_r),
-\]
-with no uniformity in \((\Gamma,\kappa_{\mathrm r})\) unless separately
-proved.  On \(\mathcal E_N^c\), no confidence set is reported.
+\ref{fr:covariance-main}; use the reporting and pointwise-limit convention of
+\Cref{ass:model-inference-contract-main}.
 From the retained visible word form the complete-cycle inclusion estimator
 \[
 \widehat r_{m,N}^{\mathrm{cyc}}
@@ -3388,18 +3547,8 @@ inverse is in the stable quotient chart
 \[
 r_0>0,\qquad D=r_1-r_0^2\ne0 .
 \]
-This is a fixed-setting retained-record theorem: fix
-\((\Gamma,\kappa_{\mathrm r},\Delta\tau)\) in this stable quotient chart and
-let \(\mathcal E_N\) be the reporting event.  Then
-\(\PP_{\Gamma,\kappa_{\mathrm r},\Delta\tau}(\mathcal E_N^c)\to0\), and all
-stated confidence sets are reported only on \(\mathcal E_N\).  For every fixed
-population point,
-\[
-\sqrt N(\widehat r_N^{\mathrm{cyc}}-r)\Rightarrow
-\mathcal N(0,\Sigma_r),
-\]
-with no uniformity in \((\Gamma,\kappa_{\mathrm r})\) unless separately
-proved.  On \(\mathcal E_N^c\), no confidence set is reported.  Define only the quotient map
+Use the reporting and pointwise-limit convention of
+\Cref{ass:model-inference-contract-main}.  Define only the quotient map
 \[
 \Phi(r)=\left(1-\frac{r_1}{r_0}+\lambda,\;
 r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
@@ -3428,25 +3577,154 @@ side-data conclusion, stated in
 \Cref{cor:side-data-labelled-rate-wald-main}.
 \end{maintheorem}
 
+\begin{lemma}[Diagonal raw quotient CLT from Main Theorems 3A--3B]\label{lem:dmap-diagonal-raw-quotient-clt-main}
+Assume the finite-record master assumption
+\Cref{ass:finite-record-master-main}, specifically
+\ref{fr:law-main}--\ref{fr:projection-main}.  Fix a constrained D-MAP
+exchange-diagonal population point \(p=s=z\), \(0<z<1\), put
+\(\theta=-\log z\), and write \(\sigma_z=(2z,z^2)\).  Let \(r(z)\) be the
+corresponding inclusion-coordinate vector in
+\Cref{prop:computable-diagonal-covariance-main}.  Then the quotient denominator
+has the explicit diagonal value
+\begin{equation}\label{eq:diagonal-quotient-denominator-main}
+D(z):=r_1(z)-r_0(z)^2
+=-\frac{\theta^2z^2(1-z)^2}{(1-z+\theta z)^2}<0 .
+\end{equation}
+Consequently the diagonal point is not a singular point of the quotient map
+\[
+\Phi(r)=\left(1-\frac{r_1}{r_0}+\lambda,\;
+r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
+\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+The map \(\Phi\) is \(C^1\) on a neighbourhood of \(r(z)\), and \(D\Phi\) is
+locally bounded there.  Hence, if Main Theorem~3A gives
+\[
+\sqrt N(\widehat r_N-r(z))\Rightarrow
+\mathcal N(0,\Sigma_r(z)),
+\]
+then the raw diagonal symmetric-coordinate estimator
+\[
+\widehat\sigma_N^{\rm raw}:=\Phi(\widehat r_N)
+\]
+satisfies
+\begin{equation}\label{eq:diagonal-raw-quotient-clt-main}
+\sqrt N\{\Phi(\widehat r_N)-\Phi(r(z))\}
+\Rightarrow
+\mathcal N\!\left(0,\,
+D\Phi(r(z))\,\Sigma_r(z)\,D\Phi(r(z))^\top\right).
+\end{equation}
+For the constrained D-MAP population, \(\Phi(r(z))=\sigma_z\).
+
+Moreover, for any reported inclusion covariance estimator satisfying
+\[
+\|\widehat\Sigma_{r,N}-\Sigma_r(z)\|_{\operatorname{op}}=o_{\PP}(t_N),
+\qquad t_N\downarrow0,\qquad N^{-1/2}=o(t_N),
+\]
+the plug-in sandwich
+\[
+\widehat\Sigma_{\sigma,N}
+=D\Phi(\widehat r_N)\widehat\Sigma_{r,N}D\Phi(\widehat r_N)^\top,\qquad
+\Sigma_\sigma(z)=D\Phi(r(z))\Sigma_r(z)D\Phi(r(z))^\top,
+\]
+satisfies
+\begin{equation}\label{eq:diagonal-sandwich-consistency-main}
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z)\|_{\operatorname{op}}
+=o_{\PP}(t_N).
+\end{equation}
+In particular, with the separated-batch estimator from
+\Cref{thm:finite-record-covariance-main} and \(b_N=\lfloor N^{1/3}\rfloor\),
+\[
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z)\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3})=o_{\PP}(N^{-1/4}).
+\]
+Thus the raw diagonal CLT and the covariance consistency needed for the
+exchange-diagonal projection theorem are consequences of Main Theorems~3A--3B
+and the separated-batch covariance theorem, not separate diagonal assumptions.
+\end{lemma}
+
+\begin{proof}
+\Cref{prop:computable-diagonal-covariance-main} gives the diagonal coordinates
+\(r(z)\).  Substituting the equal-rate dictionary with
+\(\theta=-\log z\) into \(D=r_1-r_0^2\) gives
+\eqref{eq:diagonal-quotient-denominator-main}.  Since \(0<z<1\),
+\(\theta>0\), \(z>0\), \(1-z>0\), and
+\[
+1-z+\theta z>0,
+\]
+the denominator in \eqref{eq:diagonal-quotient-denominator-main} is nonzero
+and \(D(z)<0\).  Also \(r_0(z)>0\).  Therefore the rational formula defining
+\(\Phi\) has no pole on a small neighbourhood of \(r(z)\), and the derivative
+displayed in \eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main} is
+finite and locally bounded there.
+
+Main Theorem~3A,
+\Cref{thm:finite-record-inference-audit-main}, gives the displayed inclusion
+CLT for the complete-cycle estimator \(\widehat r_N=\widehat r_N^{\mathrm{cyc}}\)
+on the retained reporting branch.  The ordinary \(C^1\) delta method applied
+to \(\Phi\), equivalently the diagonal specialization of Main Theorem~3B,
+\Cref{thm:finite-record-quotient-delta-main}, gives
+\eqref{eq:diagonal-raw-quotient-clt-main}.  The population quotient-inverse
+identity gives \(\Phi(r(z))=(p+s,ps)=(2z,z^2)=\sigma_z\).
+
+It remains to check that the sandwich covariance consistency is inherited from
+the inclusion-coordinate covariance estimator.  The CLT implies
+\(\widehat r_N-r(z)=O_{\PP}(N^{-1/2})\), hence
+\(D\Phi(\widehat r_N)\to D\Phi(r(z))\) in probability; local boundedness gives
+\[
+\|D\Phi(\widehat r_N)\|_{\operatorname{op}}=O_{\PP}(1),\qquad
+\|D\Phi(\widehat r_N)-D\Phi(r(z))\|_{\operatorname{op}}=o_{\PP}(1).
+\]
+The regenerative covariance \(\Sigma_r(z)\) is a fixed finite matrix.  Using
+the triangle inequality and submultiplicativity,
+\[
+\begin{aligned}
+&\left\|
+D\Phi(\widehat r_N)\widehat\Sigma_{r,N}D\Phi(\widehat r_N)^\top
+-D\Phi(r(z))\Sigma_r(z)D\Phi(r(z))^\top
+\right\|_{\operatorname{op}}\\
+&\le
+\|D\Phi(\widehat r_N)\|_{\operatorname{op}}^2
+\|\widehat\Sigma_{r,N}-\Sigma_r(z)\|_{\operatorname{op}}\\
+&\quad+
+\|D\Phi(\widehat r_N)-D\Phi(r(z))\|_{\operatorname{op}}\,
+\|\Sigma_r(z)\|_{\operatorname{op}}\,
+\{\|D\Phi(\widehat r_N)\|_{\operatorname{op}}
++\|D\Phi(r(z))\|_{\operatorname{op}}\}.
+\end{aligned}
+\]
+The first term is \(o_{\PP}(t_N)\) by the assumed inclusion covariance rate.
+For the second term, the concrete retained-rank choices in
+\Cref{ass:finite-record-master-main} use \(t_N=N^{-1/4}\), and the displayed
+hypothesis \(N^{-1/2}=o(t_N)\) is the only rate fact needed here.  The CLT gives
+\(\|D\Phi(\widehat r_N)-D\Phi(r(z))\|_{\operatorname{op}}=O_{\PP}(N^{-1/2})\)
+because \(D\Phi\) is \(C^1\) on the retained neighbourhood.  Thus the second
+term is \(o_{\PP}(t_N)\), proving
+\eqref{eq:diagonal-sandwich-consistency-main}.  With
+\Cref{thm:finite-record-covariance-main} and
+\(b_N=\lfloor N^{1/3}\rfloor\), the inclusion covariance rate is
+\(O_{\PP}(N^{-1/3})\), so the displayed \(O_{\PP}(N^{-1/3})=o_{\PP}(N^{-1/4})\)
+specialization follows.  The finite covariance formula is exactly
+\eqref{eq:dmap-diagonal-sigma-finite-main}.
+\end{proof}
+
 \begin{maintheorem}[Fixed-setting retained-record exchange-diagonal projected Gaussian confidence]\label{thm:finite-record-exchange-diagonal-main}
 Assume the finite-record master assumption
 \Cref{ass:finite-record-master-main}, specifically
 \ref{fr:law-main}--\ref{fr:mc-main}.  Fix a true exchange-diagonal point
 \(\sigma_{z_0}=(2z_0,z_0^2)\), \(0<z_0<1\), and a confidence level
-\(0<\alpha<1\).  This is a fixed-setting retained-record theorem: all limits
-are pointwise in the fixed D-MAP parameter, and all diagonal confidence sets
-are reported only on \(\mathcal E_N\), with \(\PP(\mathcal E_N^c)\to0\).  No
-uniformity in \((\Gamma,\kappa_{\mathrm r})\), no finite-sample coverage, and
-no model-selection-valid coverage across reporting branches is asserted.  The
+\(0<\alpha<1\).  Use the reporting and pointwise-limit convention of
+\Cref{ass:model-inference-contract-main}.  The
 separated-root labelled-rate chart is not used on the diagonal.
 
 Let
 \[
 \widehat\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma_N^{\rm raw}),\qquad
+\widehat\sigma_N^{\rm raw}:=\Phi(\widehat r_N^{\mathrm{cyc}}),\qquad
 \sigma_z=(2z,z^2),\qquad
 H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
 \]
-Assume
+By \Cref{lem:dmap-diagonal-raw-quotient-clt-main}, at the true \(z_0\)
 \[
 \sqrt N(\widehat\sigma_N^{\rm raw}-\sigma_{z_0})
 \Rightarrow Z\sim\mathcal N(0,\Sigma_\sigma(z_0)),\qquad
@@ -3497,31 +3775,25 @@ C^{\mathrm{diag},\varepsilon}_{\sigma,N}
 Let
 \[
 T_z=(\Pi_{H_z}Z)^\top\Sigma_\sigma(z)^+(\Pi_{H_z}Z),\qquad
-c_{1-\alpha}(z)=\inf\{c:\PP(T_z\le c)\ge1-\alpha\},
+c_p(z)=\inf\{c:\PP(T_z\le c)\ge p\},\quad 0<p<1,
 \]
 with \(Z\sim\mathcal N(0,\Sigma_\sigma(z))\).  The covariance
 \(\Sigma_\sigma(z)\) is not an abstract rank assumption: it is the computable
 D-MAP matrix in \eqref{eq:dmap-diagonal-sigma-finite-main}, classified by
-\Cref{lem:dmap-diagonal-covariance-alternatives-main}.  Exactly one of the
-following three coverage branches applies at the true \(z_0\).
+\Cref{lem:dmap-diagonal-covariance-alternatives-main}.  Put
+\(p_c=1-\alpha\).  The following list is the theorem-level case split
+used for reporting.  It is a split by the pair
+\((\Sigma_\sigma(z_0),p_c)\), not by the covariance rank alone: in the
+rank-one normal covariance alternative the same limiting law gives an exact
+positive critical value when \(p_c>1/2\), but gives only the
+atom-at-zero buffered branch when \(p_c\le1/2\).
 
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.5em,itemsep=0.55em]
-\item \textbf{Continuous exact lower quantile.}
-If the lower \((1-\alpha)\)-quantile of
+\item \textbf{Exact projected-Gaussian coverage.}
+Suppose one of the following three alternatives holds for the computable
+D-MAP covariance in \eqref{eq:dmap-diagonal-sigma-finite-main}:
 \[
-(\Pi_{H_{z_0}}Z)^\top\Sigma_\sigma(z_0)^+(\Pi_{H_{z_0}}Z)
-\]
-is a continuity point and the ideal projected-Gaussian calibration is exact,
-then the unbuffered diagonal set has pointwise first-order coverage
-\[
-\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}\longrightarrow
-1-\alpha .
-\]
-For the constrained D-MAP covariance in
-\eqref{eq:dmap-diagonal-sigma-finite-main}, this branch applies in particular
-when either
-\[
-\operatorname{rank}\Sigma_\sigma(z_0)=2
+\operatorname{rank}\Sigma_\sigma(z_0)=2,
 \]
 or
 \[
@@ -3529,30 +3801,63 @@ or
 \operatorname{Range}\Sigma_\sigma(z_0)\ne
 \operatorname{span}\{(-z_0,1)^\top\},
 \]
-because \(T_{z_0}\) is then continuous.
-This is the only diagonal branch in which the theorem reports exact
-unbuffered projected-Gaussian coverage.
+or
+\[
+\operatorname{rank}\Sigma_\sigma(z_0)=1,\quad
+\operatorname{Range}\Sigma_\sigma(z_0)=
+\operatorname{span}\{(-z_0,1)^\top\},
+\quad p_c>1/2 .
+\]
+Then the lower \((1-\alpha)\)-quantile \(c_{1-\alpha}(z_0)\) is a continuity
+point of the law of \(T_{z_0}\), the ideal projected-Gaussian calibration is
+exact, and the unbuffered diagonal set has pointwise first-order coverage
+\[
+\PP\{\sigma_{z_0}\in C^{\mathrm{diag}}_{\sigma,N}\}\longrightarrow
+1-\alpha .
+\]
+In the first two alternatives \(T_{z_0}\) is continuous.  In the third,
+rank-one-normal alternative, put
+\[
+n_{z_0}=(-z_0,1)^\top,\qquad
+\operatorname{Range}\Sigma_\sigma(z_0)=\operatorname{span}\{n_{z_0}\}.
+\]
+Then
+\[
+\PP(T_{z_0}=0)=\frac12,\qquad
+\PP(T_{z_0}\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0,
+\]
+and therefore
+\[
+c_{p_c}(z_0)=F_{\chi^2_1}^{-1}(2p_c-1)>0
+\]
+so the lower quantile is positive and the distribution is continuous at that
+quantile.  Thus ordinary confidence levels such as \(90\%\) and \(95\%\)
+belong to the exact branch even in the rank-one-normal covariance alternative.
 
-\item \textbf{Discontinuous lower quantile: buffered lower coverage.}
-If the limiting projected statistic has an atom at its lower quantile, no exact
-unbuffered coverage statement is made from this branch alone.  For every fixed
+\item \textbf{Rank-one normal atom-at-zero branch: buffered lower coverage.}
+Suppose the constrained D-MAP covariance has the rank-one normal direction
+\[
+n_{z_0}=(-z_0,1)^\top,\qquad
+\operatorname{rank}\Sigma_\sigma(z_0)=1,\qquad
+\operatorname{Range}\Sigma_\sigma(z_0)=
+\operatorname{span}\{n_{z_0}\}.
+\]
+If \(p_c\le1/2\), then
+\[
+\PP(T_{z_0}=0)=\frac12,\qquad
+\PP(T_{z_0}\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0,
+\]
+and hence
+\[
+c_{p_c}(z_0)=0,\qquad \PP(T_{z_0}=0)=\frac12,
+\]
+so the lower quantile lies at the atom.  No exact unbuffered coverage statement
+is made from this branch alone.  For every fixed
 \(\varepsilon>0\),
 \[
 \liminf_{N\to\infty}
 \PP\{\sigma_{z_0}\in C^{\mathrm{diag},\varepsilon}_{\sigma,N}\}
 \ge1-\alpha .
-\]
-For the constrained D-MAP covariance this is exactly the rank-one normal
-direction case
-\[
-\operatorname{rank}\Sigma_\sigma(z_0)=1,\qquad
-\operatorname{Range}\Sigma_\sigma(z_0)=
-\operatorname{span}\{(-z_0,1)^\top\},
-\]
-where
-\[
-\PP(T_{z_0}=0)=\frac12,\qquad
-\PP(T_{z_0}\in\{c\})=0\quad(c>0).
 \]
 
 \item \textbf{Zero covariance: zero-rank fallback and buffered coverage.}
@@ -3560,7 +3865,8 @@ If
 \[
 \Sigma_\sigma(z_0)=0,
 \]
-then the covariance-consistency assumption above implies that all empirical
+then the covariance consistency supplied by
+\Cref{lem:dmap-diagonal-raw-quotient-clt-main} implies that all empirical
 eigenvalues are below \(t_N\) with probability
 tending to one.  Hence the retained pseudoinverse is zero, \(Q_N(z_0)=0\), and
 the conditional projected-Gaussian statistic \(T_N^\ast(z_0)\) is also zero
@@ -3583,22 +3889,87 @@ F_N^\ast(t)=\PP^\ast\{T_N^\ast(z_0)\le t\},\qquad p=1-\alpha .
 \]
 They do not require continuity of the lower limiting quantile.
 
-Algorithm~3 below gives the implementable simulation of
-\(c^{-}_{1-\alpha,N}(z)\).  The theorem's coverage statements use the ideal
-conditional quantile.  Replacing it by the
-\(R_N^{\mathrm{MC}}\)-draw order statistic
-\(\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)\) adds exactly the
-conditional DKW/quantile error of
-\Cref{lem:conditional-monte-carlo-quantile-main}; if the conditional quantile
-is locally separated with modulus \(m_N\) on radius \(\eta_N\), then with
-conditional probability at least \(1-\delta_{\mathrm{MC}}\) this additional
-critical-value error is at most
+Algorithm~3 below gives the implementable finite-Monte-Carlo confidence set.
+For integers \(R\ge1\) and a Monte Carlo failure probability
+\(\delta\in(0,1)\), put
+\begin{equation}\label{eq:mc-critical-value-inflation-main}
+d_{R,\delta,N}(z)
+:=
+\frac{2\sqrt{\log(2/\delta)/(2R)}+R^{-1}}{m_N(z)},
+\end{equation}
+whenever the conditional quantile at the candidate \(z\) is locally separated
+with modulus \(m_N(z)>0\) on a radius containing \(d_{R,\delta,N}(z)\).  If
+finite simulation is used, the theorem-level reported critical value is not
+the order statistic alone.  It is the inflated value
+\(\widehat c^{-}_{1-\alpha,N,R}(z)+d_{R,\delta,N}(z)\), and the
+finite-Monte-Carlo reported set for the exact-quantile branch is
+\begin{equation}\label{eq:boundary-projected-confidence-set-mc-main}
+C_{\sigma,N}^{\rm diag,MC}
+:=\{(2z,z^2):0<z<1,\ 
+Q_N(z)\le
+\widehat c^{-}_{1-\alpha,N,R}(z)+d_{R,\delta,N}(z)\}.
+\end{equation}
+For branches whose theorem-level statement uses a fixed positive buffer
+\(\varepsilon>0\), the finite-Monte-Carlo reported set is instead
 \[
-\frac{2\sqrt{\log(2/\delta_{\mathrm{MC}})/
-        (2R_N^{\mathrm{MC}})}+(R_N^{\mathrm{MC}})^{-1}}{m_N}
+C_{\sigma,N}^{\rm diag,MC,\varepsilon}
+:=\{(2z,z^2):0<z<1,\ 
+Q_N(z)\le
+\widehat c^{-}_{1-\alpha,N,R}(z)+d_{R,\delta,N}(z)+\varepsilon\}.
 \]
-whenever the displayed value is at most \(\eta_N\).  This is a finite
-simulation guarantee and is separate from the record asymptotic limit.
+Thus every confidence set reported with simulated projected-Gaussian
+calibration either uses the ideal conditional quantile \(c^{-}_{1-\alpha,N}\)
+or uses the inflated simulated critical value above.  The uninflated order
+statistic \(\widehat c^{-}_{1-\alpha,N,R}\) is only a numerical diagnostic for
+the ideal critical value and carries no theorem-level coverage claim.
+At the true \(z_0\), the DKW/quantile lemma says that, conditionally on the
+record and with probability at least \(1-\delta\),
+\[
+\widehat c^{-}_{1-\alpha,N,R}(z_0)+d_{R,\delta,N}(z_0)
+\ge c^{-}_{1-\alpha,N}(z_0).
+\]
+Consequently, on any branch in which the ideal unbuffered set
+\(C^{\mathrm{diag}}_{\sigma,N}\) has exact pointwise limit coverage, the
+finite-Monte-Carlo procedure with \(R=R_N\) and \(\delta=\delta_N\) satisfies
+\begin{equation}\label{eq:mc-diagonal-liminf-coverage-main}
+\liminf_{N\to\infty}
+\left[
+\PP\{\sigma_{z_0}\in C_{\sigma,N}^{\rm diag,MC}\}+\delta_N
+\right]
+\ge 1-\alpha .
+\end{equation}
+Equivalently, along the sequence, the finite simulation step contributes only
+the declared error term:
+\[
+\PP\{\sigma_{z_0}\in C_{\sigma,N}^{\rm diag,MC}\}
+\ge 1-\alpha-\delta_N-o(1).
+\]
+Likewise, on a branch whose ideal theorem-level conclusion is the buffered
+lower bound
+\[
+\liminf_{N\to\infty}
+\PP\{\sigma_{z_0}\in C^{\mathrm{diag},\varepsilon}_{\sigma,N}\}
+\ge1-\alpha ,
+\]
+the finite-Monte-Carlo buffered set satisfies, along the same sequence and on
+the same local-separation event,
+\[
+\PP\{\sigma_{z_0}\in C_{\sigma,N}^{\rm diag,MC,\varepsilon}\}
+\ge 1-\alpha-\delta_N-o(1).
+\]
+In particular, if \(\delta_N\to0\), \(R_N\to\infty\), and
+\(d_{R_N,\delta_N,N}(z_0)\to0\) on the local-separation event, then
+\[
+\liminf_{N\to\infty}
+\PP\{\sigma_{z_0}\in C_{\sigma,N}^{\rm diag,MC}\}
+\ge 1-\alpha .
+\]
+Equivalently, before taking the limit the Monte Carlo simulation can reduce
+the advertised lower bound only by its declared failure probability
+\(\delta_N\).  Without the inflation in
+\eqref{eq:boundary-projected-confidence-set-mc-main}, Algorithm~3 supplies
+only a numerical approximation to the ideal conditional-quantile procedure and
+is not a confidence procedure covered by this theorem.
 
 Pushing any of the diagonal sets forward by
 \[
@@ -3614,10 +3985,11 @@ statements are pointwise in the true \(z_0\); no uniform coverage over
 
 \medskip
 \noindent\fbox{\begin{minipage}{0.965\textwidth}
-\textbf{Algorithm 3: projected-Gaussian diagonal calibration.}
+\textbf{Algorithm 3: projected-Gaussian diagonal calibration with finite-Monte-Carlo inflation.}
 
-Fix \(0<\alpha<1\), a candidate diagonal coordinate \(0<z<1\), and
-\(n_z=(-z,1)^\top\).  Compute
+Fix \(0<\alpha<1\), a candidate diagonal coordinate \(0<z<1\), a Monte Carlo
+draw count \(R=R_N\), a Monte Carlo failure probability \(\delta=\delta_N\),
+and \(n_z=(-z,1)^\top\).  Compute
 \[
 \widehat\Sigma_{\sigma,N}
 =D\Phi(\widehat r_N^{\mathrm{cyc}})
@@ -3656,18 +4028,25 @@ angle threshold \(a_N\downarrow0\) with \(t_N/a_N\to0\).  If
 \[
 1-\frac{(\widehat v_N^\top n_z)^2}{\|n_z\|^2}\le a_N,
 \]
-report ``rank-one normal direction'' and use only the buffered conservative
-set from Main Theorem~3C.
+report ``rank-one normal direction.''  In this branch, with \(p_c=1-\alpha\),
+the limiting law satisfies
+\[
+\PP(T_z=0)=\frac12,\qquad
+\PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
+\]
+Thus \(c_{p_c}=0\) for \(p_c\le1/2\), in which case use the buffered
+conservative set from Main Theorem~3C.  For \(p_c>1/2\),
+\(c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)>0\), and the unbuffered exact branch of
+Main Theorem~3C applies.
 
 Generate conditionally independent auxiliary Gaussian draws
 \[
 Z_{N,m}^{\ast}\sim\mathcal N(0,\widehat\Sigma_{\sigma,N}),
-\qquad 1\le m\le R_N^{\mathrm{MC}},
+\qquad 1\le m\le R,
 \]
-where \(R_N^{\mathrm{MC}}\to\infty\) is a Monte Carlo draw count and is
-unrelated to the separated-batch count \(M_N\).  These are plug-in draws from
-the limiting projected Gaussian law, not resampled records.  Project each draw
-onto
+where \(R_N\to\infty\) and \(R_N\) is unrelated to the separated-batch count
+\(M_N\).  These are plug-in draws from the limiting projected Gaussian law,
+not resampled records.  Project each draw onto
 \[
 H_z=\{h:h_2\le zh_1\},\qquad
 \Pi_{H_z}(u)
@@ -3681,16 +4060,34 @@ T_{N,m}^{\ast}(z)
 \Pi_{H_z}(Z_{N,m}^{\ast}).
 \]
 The ideal critical value \(c^{-}_{1-\alpha,N}(z)\) is the lower conditional
-\((1-\alpha)\)-quantile of this projected-Gaussian law.  The reported
-simulation value is the order statistic
+\((1-\alpha)\)-quantile of this projected-Gaussian law.  The raw simulation
+quantile estimate is the order statistic
 \[
-\widehat c^{-}_{1-\alpha,N,R_N^{\mathrm{MC}}}(z)
-=T_{N,(\lceil(1-\alpha)R_N^{\mathrm{MC}}\rceil)}^{\ast}(z),
+\widehat c^{-}_{1-\alpha,N,R}(z)
+=T_{N,(\lceil(1-\alpha)R\rceil)}^{\ast}(z),
 \]
-after sorting increasingly.  The simulated order statistic approximates the
-ideal conditional quantile with the conditional DKW and quantile-error bound
-of \Cref{lem:conditional-monte-carlo-quantile-main}; the asymptotic coverage
-statement uses the ideal quantile.
+after sorting increasingly.  If the conditional quantile is locally separated
+with modulus \(m_N(z)>0\), compute
+\[
+d_{R,\delta,N}(z)
+=\frac{2\sqrt{\log(2/\delta)/(2R)}+R^{-1}}{m_N(z)}
+\]
+and report the candidate diagonal point as included exactly when
+\[
+Q_N(z)\le
+\widehat c^{-}_{1-\alpha,N,R}(z)+d_{R,\delta,N}(z).
+\]
+If the applicable theorem branch also requires a fixed positive buffer
+\(\varepsilon\), add that same buffer to the displayed right-hand side.  The
+uninflated order statistic alone is never the theorem-level reported critical
+value.
+The union of included diagonal points is
+\(C_{\sigma,N}^{\rm diag,MC}\) in
+\eqref{eq:boundary-projected-confidence-set-mc-main}.  If the local
+separation modulus is unavailable, the uninflated order statistic may still
+be used as a numerical approximation to the ideal conditional quantile, but it
+is not the finite-Monte-Carlo confidence procedure covered by Main
+Theorem~3C.
 \end{minipage}}
 
 \begin{proof}[Proof of \Cref{thm:finite-record-inference-audit-main}]
@@ -3737,8 +4134,8 @@ delta-method theorem and is retained only under the external branch convention
 \begin{proof}[Proof of \Cref{thm:finite-record-exchange-diagonal-main}]
 The half-space limit is the local-reach projection limit in
 \Cref{lem:exchange-diagonal-local-reach-before-main} applied to the
-symmetric-coordinate CLT and covariance consistency from
-\Cref{thm:finite-record-inference-audit-main,thm:finite-record-quotient-delta-main}.
+raw symmetric-coordinate CLT and covariance consistency derived in
+\Cref{lem:dmap-diagonal-raw-quotient-clt-main} from Main Theorems~3A--3B.
 The retained-rank conditional projected-Gaussian calibration is the general
 half-space result of \Cref{lem:projected-gaussian-bootstrap-halfspace-main}.
 The actual D-MAP diagonal covariance is one of the alternatives in
@@ -3748,18 +4145,26 @@ rank-one non-normal alternatives,
 projected statistic continuous, so
 \Cref{lem:projected-gaussian-bootstrap-halfspace-main} gives convergence of
 the lower conditional critical value and exact unbuffered coverage.  In the
-rank-one-normal alternative, the same degeneracy lemma gives exactly one atom
-of mass \(1/2\) at zero and no atoms on \((0,\infty)\).  In the
-zero-covariance alternative, covariance consistency and the threshold
-\(t_N\) force retained rank zero with probability tending to one, hence the
-pseudoinverse and \(Q_N(z)\) vanish on that event.  For both exceptional
-alternatives, the conditional weak convergence of the plug-in
-projected-Gaussian law supplies the hypotheses of
-\Cref{lem:buffered-random-quantile-coverage-main}.  With
+rank-one-normal alternative, the same degeneracy lemma gives, with
+\(p_c=1-\alpha\),
+\[
+\PP(T_z=0)=\frac12,\qquad
+\PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
+\]
+Thus \(c_{p_c}=0\) if \(p_c\le1/2\), while
+\(c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)>0\) if \(p_c>1/2\).  The latter is a
+continuity point with exact mass \(p_c=1-\alpha\), so it is covered
+by the exact branch; the former is the atom-at-zero branch and uses the
+buffered random-quantile lemma.  In the zero-covariance alternative, covariance
+consistency and the threshold \(t_N\) force retained rank zero with probability
+tending to one, hence the pseudoinverse and \(Q_N(z)\) vanish on that event.
+For the rank-one-normal zero-quantile branch and the zero-covariance branch,
+the conditional weak convergence of the plug-in projected-Gaussian law supplies
+the hypotheses of \Cref{lem:buffered-random-quantile-coverage-main}.  With
 \(T_N=Q_N(z)\), \(T=T_z\), \(F_N^\ast(t)=\PP^\ast\{T_N^\ast(z)\le t\}\), and
 \(p=1-\alpha\), that lemma gives the fixed-positive-buffer \(\liminf\)
 coverage directly, without a continuity assumption at the zero quantile and
-without asserting unbuffered exact equality.  The Monte Carlo statement is
+without asserting unbuffered exact equality there.  The Monte Carlo statement is
 \Cref{lem:conditional-monte-carlo-quantile-main}.  The push-forward confidence
 set and the equality of coverage events are precisely
 \Cref{cor:exchange-diagonal-common-rate-confidence-main}.  The separated-root
@@ -4095,11 +4500,17 @@ Then compute the projected root pair from
 z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0,
 \]
 and withhold complete-law probabilities if either projected root lies outside
-\([\eta_N,1-\eta_N]\).  On the retained interior-root event, compute the
-projected gap law \(\widetilde g_{k,N}\) by the formulas in
-\Cref{lem:algorithmic-complete-law-reconstruction-main}, the projected Palm
-renewal masses \(\widetilde u_{n,N}\), and the projected stationary renewal
-intensity
+\([\eta_N,1-\eta_N]\).  On the retained interior-root event,
+\Cref{lem:projected-root-gap-law-valid-main} applies to the projected roots.
+Therefore the projected gap law \(\widetilde g_{k,N}\), computed by the
+formulas in \Cref{lem:algorithmic-complete-law-reconstruction-main}, is a
+\(D\)-row path law for a stochastic triangular kernel and satisfies
+\[
+\widetilde g_{k,N}\ge0,\qquad
+\sum_{k\ge0}\widetilde g_{k,N}=1 .
+\]
+Compute the projected Palm renewal masses \(\widetilde u_{n,N}\) and the
+projected stationary renewal intensity
 \[
 \widetilde\rho_N
 =\rho_*(\widetilde\sigma_N)
@@ -4153,9 +4564,12 @@ projection-coordinate error bound.
 \begin{proof}
 The construction first projects the symmetric root coordinate into \(F\), and
 the interior-root retention test keeps only roots in \((0,1)\).  On that
-retained event the quotient-root formulas give a single renewal gap law.  The
-intensity \(\widetilde\rho_N\) is then defined from that same gap law by the
-renewal identity \(1/\EE(G+1)\).  Therefore
+retained event \Cref{lem:projected-root-gap-law-valid-main} shows that the
+quotient-root formulas are \(D\)-row path probabilities of a stochastic
+triangular labelled kernel.  They therefore give a nonnegative unit-mass gap
+law, hence a single Palm renewal law.  The intensity \(\widetilde\rho_N\) is
+then defined from that same gap law by the renewal identity \(1/\EE(G+1)\).
+Therefore
 \((\widetilde\rho_N,\widetilde\sigma_N)\) lies on
 \(\mathcal M_{\rm ren}\), and the inclusion products are exactly the renewal
 products for the projected finite-record renewal law.  The non-reporting
@@ -4241,35 +4655,45 @@ cross-reference handle for the exact branch of Main Theorem~3C; the theorem is
 the complete coverage statement and Algorithm~3 is the complete simulation
 protocol.  At a fixed true diagonal point
 \(\sigma_z=(2z,z^2)\), exact unbuffered pointwise coverage holds precisely in
-the continuous covariance alternatives
+the continuous lower-quantile alternatives
 \[
 \operatorname{rank}\Sigma_\sigma(z)=2,
 \qquad\text{or}\qquad
 \operatorname{rank}\Sigma_\sigma(z)=1,\quad
 \operatorname{Range}\Sigma_\sigma(z)\ne\operatorname{span}\{(-z,1)^\top\},
 \]
-where \(\Sigma_\sigma(z)\) is the computable matrix in
-\eqref{eq:dmap-diagonal-sigma-finite-main}.  In those cases
+and also in the rank-one normal covariance alternative
+\[
+\operatorname{rank}\Sigma_\sigma(z)=1,\quad
+\operatorname{Range}\Sigma_\sigma(z)=\operatorname{span}\{(-z,1)^\top\},
+\qquad p_c:=1-\alpha>1/2.
+\]
+Here \(\Sigma_\sigma(z)\) is the computable matrix in
+\eqref{eq:dmap-diagonal-sigma-finite-main}.  In these cases
 \[
 \PP\{(2z,z^2)\in C^{\mathrm{diag}}_{\sigma,N}\}\to1-\alpha .
 \]
-If the covariance is rank-one normal or zero, the applicable statement is
-instead the atom-at-zero or retained-rank-zero branch and the buffered
-conservative lower coverage in
+If the covariance is rank-one normal with \(p_c\le1/2\), or if the
+covariance is zero, the applicable statement is instead the atom-at-zero or
+retained-rank-zero branch and the buffered conservative lower coverage in
 \Cref{thm:finite-record-exchange-diagonal-main}.  No simultaneous
 uniform-in-\(z\) diagonal band, no ordinary chi-square/Wald replacement at the
 diagonal, and no generic scalar studentization are asserted here.
 \end{corollary}
 
 \begin{proof}
-The continuous alternatives are exactly
-\Cref{thm:finite-record-exchange-diagonal-main}(i).  The exceptional
-rank-one-normal and zero-covariance alternatives are exactly
-\Cref{thm:finite-record-exchange-diagonal-main}(ii)--(iii), where the
-buffered conclusion is obtained from
-\Cref{lem:buffered-random-quantile-coverage-main}.  The warnings about
-uniform diagonal bands, ordinary Wald reporting, and scalar studentization are
-part of the scope of the same theorem and its retained-rank protocol.
+The listed alternatives are exactly the exact branch
+\Cref{thm:finite-record-exchange-diagonal-main}(i).  The rank-one normal
+covariance case is split there by the quantile level \(p_c=1-\alpha\):
+\(p_c>1/2\) gives the positive continuous quantile
+\(F_{\chi^2_1}^{-1}(2p_c-1)\), while \(p_c\le1/2\) gives
+\(c_{p_c}=0\) at the zero atom and hence
+\Cref{thm:finite-record-exchange-diagonal-main}(ii).  The
+zero-covariance alternative is \Cref{thm:finite-record-exchange-diagonal-main}(iii).
+The buffered conclusions are obtained from
+\Cref{lem:buffered-random-quantile-coverage-main}.  The warnings about uniform
+diagonal bands, ordinary Wald reporting, and scalar studentization are part of
+the scope of the same theorem and its retained-rank protocol.
 \end{proof}
 
 \begin{corollary}[Common-rate confidence set on the exchange diagonal]\label{cor:exchange-diagonal-common-rate-confidence-main}
@@ -4317,10 +4741,10 @@ If the true diagonal point is
 \{\sigma_{z_*}\in\mathcal C_{\sigma,N}^{\rm diag}\}.
 \end{equation}
 Hence the full-rank/non-normal rank-one exact branch, the rank-one-normal
-half-mass alternative, the zero-rank fallback, and the conservative-buffer
-branches in \Cref{thm:finite-record-exchange-diagonal-main} transfer
-unchanged to the common-rate scale.  In particular,
-in the exceptional conservative-buffer alternatives of
+positive-quantile exact branch, the rank-one-normal zero-quantile buffered
+branch, and the zero-rank fallback in
+\Cref{thm:finite-record-exchange-diagonal-main} transfer unchanged to the
+common-rate scale.  In particular, in the conservative-buffer alternatives of
 \Cref{thm:finite-record-exchange-diagonal-main},
 \[
 \liminf_{N\to\infty}
@@ -4329,7 +4753,8 @@ in the exceptional conservative-buffer alternatives of
 \]
 for every fixed \(\varepsilon>0\).  Under the exact-coverage condition of
 \Cref{thm:finite-record-exchange-diagonal-main}(i), namely when
-\(\Sigma_\sigma(z_*)\) is full rank or rank one with non-normal range,
+\(\Sigma_\sigma(z_*)\) is full rank, is rank one with non-normal range, or is
+rank one normal with \(p_c:=1-\alpha>1/2\),
 \[
 \lim_{N\to\infty}
 \PP\{\gamma_*\in\mathcal C_{\gamma,N}^{\rm diag}\}
