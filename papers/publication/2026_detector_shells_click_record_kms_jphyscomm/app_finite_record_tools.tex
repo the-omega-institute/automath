@@ -5,6 +5,152 @@ arguments used in \Cref{sec:records}.  The main retained-record asymptotic theor
 these results only after the constrained D-MAP law has been reduced to the
 explicit adjacent-gap rewards displayed in the main text.
 
+\begin{theorem}[Separated-batch covariance for fixed-range gap rewards]\label{thm:regenerative-separated-batch-covariance-main}
+Fix an integer \(m\ge0\) and a dimension \(d\).  Let
+\((G_j)_{j\in\mathbb Z}\) be i.i.d. with
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\), and let
+\[
+Y_j=f(G_j,\ldots,G_{j+m})\in\RR^d,\qquad
+\EE Y_j=0,\qquad \EE\|Y_j\|^4<\infty .
+\]
+Set
+\[
+T_m=\operatorname{Var}(Y_0)+
+\sum_{h=1}^m\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+Let \(b_N\to\infty\), \(b_N/N\to0\),
+\(M_N=\lfloor N/(b_N+m)\rfloor\), and define the separated batches
+\[
+I_{\ell,N}=\{(\ell-1)(b_N+m),\ldots,
+(\ell-1)(b_N+m)+b_N-1\},\qquad
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j ,
+\]
+for \(1\le\ell\le M_N\).  On \(M_N\ge2\), put
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\).  Then
+\begin{equation}\label{eq:regenerative-separated-batch-covariance-main}
+\left\|
+\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
+(B_{\ell,N}-\bar B_N)^\top
+-T_m
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The sequence \((Y_j)\) is \(m\)-dependent: if two index sets are separated by
+more than \(m\), then the corresponding \(Y\)'s are functions of disjoint
+families of i.i.d. gaps.  The retained batch \(B_{\ell,N}\) depends only on
+\[
+G_{(\ell-1)(b_N+m)},\ldots,
+G_{(\ell-1)(b_N+m)+b_N-1+m}.
+\]
+The next retained batch starts with
+\(G_{\ell(b_N+m)}\).  Since the separator has length \(m\), these gap sets are
+disjoint for different \(\ell\), and therefore the retained sums
+\((B_{\ell,N})_{\ell\le M_N}\) are independent and identically distributed.
+
+Write \(\Gamma_h=\operatorname{Cov}(Y_0,Y_h)\).  Stationarity and
+\(m\)-dependence give
+\[
+\operatorname{Var}(B_{\ell,N})
+=b_N\Gamma_0+
+\sum_{h=1}^{m}(b_N-h)(\Gamma_h+\Gamma_h^\top).
+\]
+Hence
+\[
+\frac{1}{b_N}\operatorname{Var}(B_{\ell,N})
+=T_m+R_{b_N},\qquad
+R_{b_N}=-\frac1{b_N}\sum_{h=1}^{m}h(\Gamma_h+\Gamma_h^\top).
+\]
+The matrices \(\Gamma_h\) are fixed finite matrices because
+\(\EE\|Y_0\|^2<\infty\).  Thus
+\begin{equation}\label{eq:regenerative-boundary-covariance-main}
+\|R_{b_N}\|_{\operatorname{op}}\le Cb_N^{-1}.
+\end{equation}
+Equivalently, in a block of length \(b_N\) the infinite \(m\)-dependent
+covariance sum misses only the \(h\) boundary pairs at each lag
+\(1\le h\le m\), an \(O(1)\) number of covariance-pair layers after division
+by \(b_N\).
+
+It remains to bound the stochastic part.  The standard fourth-moment bound
+for fixed-range-dependent sums gives
+\begin{equation}\label{eq:regenerative-batch-fourth-main}
+\EE\|B_{\ell,N}\|^4\le Cb_N^2 .
+\end{equation}
+Indeed,
+\(\|B_{\ell,N}\|^4\le d^2\sum_{a,c=1}^d
+(\sum_{j\in I_{\ell,N}}Y_{j,a})^2(\sum_{j\in I_{\ell,N}}Y_{j,c})^2\);
+after expanding, any nonzero centered contribution can involve only index
+quadruples whose dependency graph has connected components of diameter at
+most \(m\).  There are \(O(b_N^2)\) such quadruples, and H\"older's inequality
+bounds each expectation by a constant depending only on
+\(\EE\|Y_0\|^4\), \(m\), and \(d\).
+
+Define
+\[
+V_N:=b_N^{-1}\operatorname{Var}(B_{1,N}),\qquad
+W_{\ell,N}:=
+b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}.
+\]
+The \(W_{\ell,N}\)'s are independent, mean zero, and
+\[
+\EE\|W_{\ell,N}\|_{\operatorname{F}}^2
+\le b_N^{-2}\EE\|B_{\ell,N}B_{\ell,N}^\top\|_{\operatorname{F}}^2
+= b_N^{-2}\EE\|B_{\ell,N}\|^4
+\le C
+\]
+by \eqref{eq:regenerative-batch-fourth-main}.  Therefore
+\begin{equation}\label{eq:regenerative-uncentered-fluctuation-main}
+\EE\left\|
+\frac{1}{b_NM_N}\sum_{\ell=1}^{M_N}
+\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}
+\right\|_{\operatorname{op}}^2
+\le
+\EE\left\|
+\frac{1}{M_N}\sum_{\ell=1}^{M_N}W_{\ell,N}
+\right\|_{\operatorname{F}}^2
+\le \frac{C}{M_N}.
+\end{equation}
+Consequently the uncentered empirical second moment satisfies
+\[
+\frac{1}{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
+=V_N+O_{\PP}(M_N^{-1/2}).
+\]
+Since \(M_N=\lfloor N/(b_N+m)\rfloor\) and \(b_N/N\to0\),
+\(M_N^{-1/2}=O(\sqrt{b_N/N})\).
+
+The subtraction of the empirical batch mean changes only a smaller-order
+term.  Algebra gives
+\[
+\frac{1}{b_N(M_N-1)}\sum_{\ell=1}^{M_N}
+(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top
+=
+\frac{M_N}{M_N-1}
+\left\{
+\frac1{b_NM_N}\sum_{\ell=1}^{M_N}B_{\ell,N}B_{\ell,N}^\top
+-\frac1{b_N}\bar B_N\bar B_N^\top
+\right\}.
+\]
+Moreover
+\[
+\EE\left\|\frac1{\sqrt{b_N}}\bar B_N\right\|^2
+=\frac1{b_NM_N^2}\sum_{\ell=1}^{M_N}\operatorname{tr}\Var(B_{\ell,N})
+\le \frac{C}{M_N},
+\]
+so \(b_N^{-1}\bar B_N\bar B_N^\top=O_{\PP}(M_N^{-1})\).  Also
+\((M_N/(M_N-1))-1=O(M_N^{-1})\) and \(V_N=O(1)\).  Combining this display
+with \eqref{eq:regenerative-boundary-covariance-main} and
+\eqref{eq:regenerative-uncentered-fluctuation-main} yields
+\[
+\frac{1}{b_N(M_N-1)}\sum_{\ell=1}^{M_N}
+(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top
+=T_m+O_{\PP}\left(b_N^{-1}+M_N^{-1/2}\right),
+\]
+which is \eqref{eq:regenerative-separated-batch-covariance-main}.
+\end{proof}
+
 \begin{proposition}[Standard complete-cycle and separated-batch facts]\label{lem:local-window-regenerative-decomposition-main}\label{prop:generic-complete-cycle-regenerative-clt-main}\label{lem:calendar-stopped-batch-cov-main}\label{lem:separated-batch-covariance-estimator-main}\label{lem:fixed-low-cycle-event-main}\label{lem:uniform-calendar-block-length-main}
 Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process with
 click epochs \((\tau_j)\), i.i.d. gaps \(G_j\), cycle lengths
@@ -113,19 +259,414 @@ after deleting any fixed number of endpoint, look-back, or look-ahead cycles.
 \end{proposition}
 
 \begin{proof}
-These are the usual renewal-reward and separated-batch consequences for
-complete cycles.  Palm inversion gives the centering in (a); the local window
-depends on finitely many neighboring cycles, and exponential cycle tails give
-the \(O_{\PP}(\log N)\) endpoint bound.  The CLT in (b) is the fixed-range
-dependent renewal-reward CLT with the random-index replacement \(K_N/N\to1/\mu\).
-Part (c) is the corresponding separated batch-means estimator: the omitted
-\(m_{\rm dep}\) cycles make the batch rows independent, the finite-batch bias
-is \(O(b_N^{-1})\), and the retained random prefix contributes
-\(O_{\PP}(\sqrt{b_N/N})\).  Part (d) follows from (f) and
-\(\widehat r_N-r=O_{\PP}(N^{-1/2})\).  Parts (e) and (f) are the renewal law of
-large numbers and the exponential Chernoff/union-bound estimate for polynomial
-blocks.
+The only model-specific input to this proposition is that the click epochs
+form a stationary renewal process with an exponential gap moment.  The
+Palm-cycle identity gives
+\[
+\EE Z_0=\frac{\EE U_j}{\EE L_j},\qquad
+U_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,
+\]
+and hence \(\EE U_j=\mu\bar z\) and \(\EE Y_j=0\).  Because \(Z_n\) is a fixed
+local window, \(Y_j\) depends on only finitely many adjacent gaps; call this
+range \(m_{\rm dep}\).  Exponential tails imply that the largest cycle
+intersecting any fixed enlargement of \([0,N-1]\) is \(O_{\PP}(\log N)\), so
+endpoint, look-ahead, and look-back deletions give
+\eqref{eq:local-window-endpoint-main}.
+
+The CLT and the calendar-time scale are the standard regenerative-reward
+facts: apply the ordinary finite-range-dependent CLT to the stationary
+sequence \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), then use the renewal law of
+large numbers \(K_N/N\to1/\mu\) and the usual random-index replacement
+\cite[Chs.~IV.3 and VI.3]{AsmussenGlynn2007}.  This gives the covariance
+\(\mathcal T_{m_{\rm dep}}/\mu\).
+
+For the separated-batch estimator, apply
+\Cref{thm:regenerative-separated-batch-covariance-main} to the fixed-range
+gap reward \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\).  This gives the
+cycle-index covariance estimate
+\[
+\frac1{b_N(M-1)}
+\sum_{\ell=1}^{M}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
+=\mathcal T_{m_{\rm dep}}
++O_{\PP}\left(b_N^{-1}+\sqrt{b_N/N}\right)
+\]
+for deterministic prefixes \(M\asymp N/b_N\).  The all-complete-cycle retained
+prefix is a random prefix of the same independent separated-batch sequence.
+The renewal law gives
+\[
+M_N=\frac{K_N}{b_N+m_{\rm dep}}+O(1),\qquad K_N/N\to\mu^{-1},
+\]
+in probability after the fixed endpoint and look-ahead deletions.  Replacing
+the deterministic prefix by this calendar-stopped prefix changes the
+normalized covariance by \(O_{\PP}(b_N/N)+O_{\PP}(N^{-1/2})\), using the same
+fourth-moment bound as in
+\Cref{thm:regenerative-separated-batch-covariance-main}; this is absorbed by
+\(O_{\PP}(b_N^{-1}+\sqrt{b_N/N})\).  Multiplication by
+\(K_N/N=\mu^{-1}+O_{\PP}(N^{-1/2})\) converts the cycle-time covariance
+\(\mathcal T_{m_{\rm dep}}\) to the calendar-time covariance
+\(\mathcal T_{m_{\rm dep}}/\mu\) and contributes only another absorbed
+\(O_{\PP}(N^{-1/2})\) term.  This proves
+\eqref{eq:separated-batch-covariance-estimator-rate-main}.
+
+For the plug-in perturbation, write
+\(\Delta_N=\widehat r_N-r=O_{\PP}(N^{-1/2})\).  Each batch changes by
+\[
+\widehat C_{\ell,N}-C_{\ell,N}
+=-\Delta_N\sum_{j\in I_{\ell,N}}L_j .
+\]
+The same exponential-moment Chernoff bound gives
+\[
+\max_{\ell\le M_N}b_N^{-1}\sum_{j\in I_{\ell,N}}L_j=O_{\PP}(1),
+\]
+which proves \eqref{eq:separated-batch-plugin-block-main}.  To see the
+covariance perturbation explicitly, put
+\[
+E_{\ell,N}:=\widehat C_{\ell,N}-C_{\ell,N},\qquad
+\bar E_N:=M_N^{-1}\sum_{\ell=1}^{M_N}E_{\ell,N}.
+\]
+On the high-probability event where
+\(\max_{\ell\le M_N}\|E_{\ell,N}\|\le C b_NN^{-1/2}\) and
+\(\max_{\ell\le M_N}\|C_{\ell,N}\|\le C b_N\), the centered covariance
+difference is bounded by
+\[
+\begin{aligned}
+&\frac1{b_N(M_N-1)}
+\left\|\sum_{\ell=1}^{M_N}
+(\widehat C_{\ell,N}-\bar{\widehat C}_N)
+(\widehat C_{\ell,N}-\bar{\widehat C}_N)^\top
+-\sum_{\ell=1}^{M_N}
+(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
+\right\|_{\operatorname{op}}\\
+&\qquad\le
+\frac{2}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|C_{\ell,N}-\bar C_N\|\,\|E_{\ell,N}-\bar E_N\|
++\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}\|E_{\ell,N}-\bar E_N\|^2 .
+\end{aligned}
+\]
+By Cauchy's inequality,
+\(\sum_\ell\|C_{\ell,N}-\bar C_N\|^2=O_{\PP}(M_Nb_N)\), while
+\(\sum_\ell\|E_{\ell,N}-\bar E_N\|^2=O_{\PP}(M_Nb_N^2/N)\).  Therefore the
+cross term contributes \(O_{\PP}(\sqrt{b_N/N})\) after the outer normalization.
+The second sum contributes
+\(O_{\PP}(b_N/N)\).  Multiplication by \(K_N/N=O_{\PP}(1)\) leaves the same
+orders, proving \eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
+\((K_N+1)/N\to1/\mu\) gives the fixed-low-cycle statement, and the preceding
+uniform block-length bound is exactly \eqref{eq:uniform-calendar-block-length-main}.
 \end{proof}
+
+\subsection{Finite-record implementation protocols}\label{app:finite-record-implementation-protocols-main}
+
+The following protocols implement the reporting conventions used by
+Theorems~C--E.  They are computational recipes and certificate checks, not
+additional assumptions or paper-level theorem statements.
+
+\phantomsection\label{alg:all-complete-cycle-separated-batch-main}
+\paragraph{Algorithm 1: all-complete-cycle separated-batch covariance.}
+
+\begin{enumerate}[label=\textup{\arabic*.},leftmargin=2.0em,itemsep=0.35em]
+\item From the retained record \(A_0,\ldots,A_{N-1}\), form the complete-cycle
+sets \(J_{m,N}\) of
+\Cref{def:cycle-index-inclusion-estimator-main} and use only the common set
+\[
+J_N:=J_{0,N}\cap J_{1,N}\cap J_{2,N}.
+\]
+Initial incomplete cycles, terminal incomplete cycles, and the fixed terminal
+look-ahead cycles required by the local windows are omitted.
+
+\item For each \(j\in J_N\), compute the observable centered reward
+\[
+\widehat Y_j=
+\bigl(U_j^{(0)}-\widehat r_{0,N}^{\mathrm{cyc}}L_j,\,
+U_j^{(1)}-\widehat r_{1,N}^{\mathrm{cyc}}L_j,\,
+U_j^{(2)}-\widehat r_{2,N}^{\mathrm{cyc}}L_j\bigr)^\top .
+\]
+
+\item With \(b_N=\lfloor N^{1/3}\rfloor\), set \(d_N=b_N+1\) and use separated
+batch grids
+\[
+I_{\ell,N}:=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\}.
+\]
+The omitted index \(\ell d_N-1\) is the separator.
+
+\item Let
+\[
+M_N:=\max\{m\ge0:\ I_{\ell,N}\subseteq J_N
+\text{ for every }1\le\ell\le m\},
+\]
+with \(M_N=0\) if the set is empty.  A partial terminal batch is omitted.
+With \(K_N=\max\{k:\tau_k<N\}\), and with \(K_N=-1\) if no click is observed,
+set
+\[
+\widehat D_N=
+\widehat r_{1,N}^{\mathrm{cyc}}-(\widehat r_{0,N}^{\mathrm{cyc}})^2,
+\qquad
+\mathcal E_N=
+\{K_N\ge K_{\min},\ M_N\ge2,
+\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,
+|\widehat D_N|\ge\varepsilon_N\}.
+\]
+
+\item Define
+\[
+\widehat B_{\ell,N}:=\sum_{j\in I_{\ell,N}}\widehat Y_j,\qquad
+\overline{\widehat B}_N:=M_N^{-1}\sum_{\ell=1}^{M_N}\widehat B_{\ell,N}
+\quad\text{on }\mathcal E_N.
+\]
+Report the covariance estimator only on \(\mathcal E_N\):
+\[
+\widehat\Sigma_{r,N}
+=
+\frac{K_N}{N}\,
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)^\top .
+\]
+On \(\mathcal E_N^c\), do not form a zero replacement; report
+``insufficient complete cycles; no confidence set.''
+\end{enumerate}
+
+\paragraph{Algorithm 2: quotient inverse, projection, and chart retention.}
+
+Compute \(\widehat D_N\) and apply the denominator thresholds
+\(\widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N\) and
+\(|\widehat D_N|\ge\varepsilon_N\).  If \(\mathcal E_N^c\) occurs, stop
+retained-record inference and report ``insufficient complete cycles; no
+confidence set.''  On \(\mathcal E_N\), compute
+\(\Phi(\widehat r_N^{\mathrm{cyc}})\) and project the resulting raw symmetric
+coordinate by
+\(\widetilde\sigma_N=\Pi_F^{\rm tb}(\Phi(\widehat r_N^{\mathrm{cyc}}))\).
+Report separated labelled rates only when
+\[
+\widehat\Delta_{\sigma,N}\ge\delta_N^2,
+\qquad
+\widehat p_N,\widehat s_N\in[\eta_N,1-\eta_N],
+\]
+and the deterministic oracle branch map \(\mathcal B\) is unique on the two
+projected roots.  If an estimated branch map is used, require the
+high-probability oracle-agreement condition from
+\Cref{conv:branch-map-labelled-rates-main}; otherwise withhold separated
+labels.  At a population exchange diagonal, use only the pointwise common-rate
+acceptance event calibrated by Algorithm~3; a simultaneous diagonal band needs
+a separate certified inversion rule.
+
+\paragraph{Algorithm 3: projected-Gaussian diagonal calibration and Monte Carlo diagnostics.}
+
+Fix \(0<\alpha<1\), a finite certified candidate domain \(Z_{\rm cert}\) as in
+\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-certified-interval-cover-main},
+a candidate diagonal coordinate \(0<z<1\), and \(n_z=(-z,1)^\top\).  The
+finite Monte Carlo add-on, when used for a coverage-certified report rather
+than a plot, has the fixed theorem-level settings
+\[
+R_N=N,\qquad \delta_N=N^{-2},\qquad
+\varepsilon_N^{\rm MC}:=\sqrt{\frac{\log(2N^2)}{2N}} .
+\]
+The algorithm has two
+outputs: an ideal conditional projected-Gaussian calculation and, only when
+all certificates below are present, a coverage-certified finite report.  If
+\(z\notin Z_{\rm cert}\), continue
+only for diagnostic plotting or diagnostic ideal-quantile evaluation and
+report ``diagonal candidate not in certified domain; no coverage-certified
+acceptance event.''  If \(z\in Z_{\rm cert}\), compute the population diagonal
+covariance \(\Sigma_\sigma(z)\) from the finite D-MAP formula
+\eqref{eq:dmap-diagonal-sigma-finite-main} and attach the outward-rounded
+branch certificate specified in
+\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-interval-branch-certificate-main}.
+The certificate transcript must display the intervals for
+\(\operatorname{tr}\Sigma_\sigma(z)\), \(\det\Sigma_\sigma(z)\), and
+\(\Sigma_\sigma(z)(1,z)^\top\).  If the branch certificate is inconclusive,
+continue only if a diagnostic projected-Gaussian plot or diagnostic ideal
+quantile is desired, and report ``diagonal covariance branch not certified; no
+coverage-certified acceptance event.''  A finite-sample eigenvalue calculation of
+\(\widehat\Sigma_{\sigma,N}\) is not a substitute for this population
+certificate.
+
+Compute
+\[
+\widehat\Sigma_{\sigma,N}
+=D\Phi(\widehat r_N^{\mathrm{cyc}})
+ \widehat\Sigma_{r,N}
+ D\Phi(\widehat r_N^{\mathrm{cyc}})^\top
+\]
+on the reporting event \(\mathcal E_N\); if \(\mathcal E_N^c\) occurs, stop
+and report ``insufficient complete cycles; no confidence set.''  Symmetrize
+the matrix for numerical reporting and truncate only roundoff-negative
+eigenvalues to zero.
+
+Diagonalize
+\[
+\widehat\Sigma_{\sigma,N}
+=\sum_{i=1}^2\widehat\lambda_{i,N}
+\widehat v_{i,N}\widehat v_{i,N}^{\top},
+\qquad
+\widehat\lambda_{1,N}\ge\widehat\lambda_{2,N}\ge0,
+\]
+retain exactly
+\[
+\widehat I_N=\{i:\widehat\lambda_{i,N}>t_N\},
+\qquad \widehat k_N=|\widehat I_N|,
+\]
+and use
+\[
+\widehat\Sigma_{\sigma,N}^{+}
+=\sum_{i\in\widehat I_N}
+\widehat\lambda_{i,N}^{-1}
+\widehat v_{i,N}\widehat v_{i,N}^{\top}.
+\]
+If \(\widehat k_N=0\), report ``retained rank zero'' and use only the
+buffered conservative acceptance event from Theorem~E when the population
+certificate is the zero-covariance branch; otherwise this finite retained-rank
+event is an asymptotic pseudoinverse event, not a population branch label.  If
+the population certificate is ``rank-one normal direction,'' then, with
+\(p_c=1-\alpha\),
+the limiting law satisfies
+\[
+\PP(T_z=0)=\frac12,\qquad
+\PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
+\]
+Thus \(c_{p_c}=0\) for \(p_c\le1/2\), in which case use the buffered
+conservative acceptance event from Theorem~E.  For \(p_c>1/2\),
+\(c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)>0\), and the unbuffered exact branch of
+Theorem~E applies.  If the population certificate is full rank or
+rank-one non-normal, use the exact projected-Gaussian branch.  In the
+rank-one non-normal case the branch certificate must also display
+\([a_{\rm rn}]\) from
+\eqref{eq:diagonal-rank-one-nonnormal-scale-certificate-main}; the ideal
+conditional law is
+\[
+F^{(1)}_{z,[a_{\rm rn}]}(c)
+=\frac12F_{\chi^2_1}(c)
+ +\frac12F_{\chi^2_1}\!\left(\frac{c}{a_{\rm rn}}\right),
+\]
+with \(a_{\rm rn}\) interpreted through its certified interval enclosure and
+the lower quantile bracketed by the one-dimensional directed bisection in
+\Cref{lem:certified-rank-one-nonnormal-projected-gaussian-quantile-main}.  If
+the population certificate is zero covariance, use the retained-rank-zero
+buffered branch.  If it is inconclusive, no coverage-certified branch is
+selected.
+
+Generate conditionally independent auxiliary Gaussian draws
+\[
+Z_{N,m}^{\ast}\sim\mathcal N(0,\widehat\Sigma_{\sigma,N}),
+\qquad 1\le m\le N,
+\]
+when a finite simulation diagnostic or DKW-certified simulated critical value
+is requested.  These are plug-in draws from the limiting projected Gaussian
+law, not resampled records, and their count is unrelated to the separated-
+batch count \(M_N\).  Project each draw onto
+\[
+H_z=\{h:h_2\le zh_1\},\qquad
+\Pi_{H_z}(u)
+=u-\frac{(u_2-zu_1)_+}{1+z^2}\binom{-z}{1},
+\]
+and sort the quadratic values
+\[
+T_{N,m}^{\ast}(z)
+=\Pi_{H_z}(Z_{N,m}^{\ast})^\top
+\widehat\Sigma_{\sigma,N}^{+}
+\Pi_{H_z}(Z_{N,m}^{\ast}).
+\]
+The ideal critical value \(c^{-}_{1-\alpha,N}(z)\) is the lower conditional
+\((1-\alpha)\)-quantile of this projected-Gaussian law.  In the retained
+full-rank branch it is constructed from the conditional analogue of
+\[
+F_{z,\Sigma}(c)=
+\PP\{Z\in H_z,\ Z^\top\Sigma^{-1}Z\le c\}
++\PP\{Z\notin H_z,\
+(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z)\le c\}
+\]
+in \Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main}, with
+\(\Sigma\) replaced by the retained \(\widehat\Sigma_{\sigma,N}\).  In the
+rank-one non-normal branch it is constructed from the scalar mixture
+\eqref{eq:rank-one-nonnormal-cdf-main}, with \(a\) replaced by the certified
+conditional enclosure obtained from the retained rank-one covariance.  A
+coverage-certified report must evaluate the applicable ideal conditional
+quantile directly, either analytically or by the appropriate deterministic
+certified enclosure routine:
+\Cref{thm:certified-projected-gaussian-quantile-algorithm-main,lem:certified-deterministic-projected-gaussian-quantile-main}
+for full rank and
+\Cref{lem:certified-rank-one-nonnormal-projected-gaussian-quantile-main}
+for rank-one non-normal.  The full-rank
+routine must use a certified Gaussian tail truncation, interval quadrature over
+the two projected regions in the full-rank display above, and bisection
+stopping rules.  In the rank-one non-normal branch, the one-dimensional
+routine of
+\Cref{lem:certified-rank-one-nonnormal-projected-gaussian-quantile-main}
+instead uses directed evaluations of \(F_{\chi^2_1}(x)=2\Phi(\sqrt x)-1\)
+and bisection on the scalar mixture.  In either case the transcript must
+produce a quantile bracket \((L,U]\) narrow enough to decide the inequality
+\[
+Q_N(z)\le c^{-}_{1-\alpha,N}(z)
+\]
+or, on a buffered branch, the inequality with
+\(c^{-}_{1-\alpha,N}(z)+\varepsilon\).  If no such certified ideal-quantile
+evaluation is available, the branch certificate alone is insufficient: report
+``ideal quantile only; Monte Carlo diagnostic not coverage-certified'' for
+this candidate.
+
+When optional Monte Carlo draws are generated, the raw simulation quantile
+estimate is the order statistic
+\[
+\widehat c^{-}_{1-\alpha,N}(z)
+=T_{N,(\lceil(1-\alpha)N\rceil)}^{\ast}(z),
+\]
+after sorting increasingly.  It may be displayed as a diagnostic for the ideal
+conditional quantile.  To turn finite simulation into an operational
+coverage-certified critical value, the algorithm uses only the canonical DKW
+choice \(R_N=N\), \(\delta_N=N^{-2}\).  If
+\(\varepsilon_N^{\rm MC}\ge\alpha\), the simulated quantile remains
+diagnostic.  If \(\varepsilon_N^{\rm MC}<\alpha\), the DKW one-sided simulated
+critical value is
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z)
+=T_{N,(\lceil(1-\alpha+\varepsilon_N^{\rm MC})N\rceil)}^\ast(z),
+\]
+equivalently
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z)
+=\widehat c^{-}_{1-\alpha,N}(z)
++\Bigl[
+T_{N,(\lceil(1-\alpha+\varepsilon_N^{\rm MC})N\rceil)}^\ast(z)
+-T_{N,(\lceil(1-\alpha)N\rceil)}^\ast(z)
+\Bigr].
+\]
+The event
+\[
+G_{\mathrm{MC},N}^{\mathrm{DKW}}(z)
+=\{\Delta_{N,N}(z)\le\varepsilon_N^{\rm MC}\},
+\qquad
+\Delta_{N,N}(z)=
+\sup_t|\widehat F^\ast_{N,N}(t;z)-F_N^\ast(t;z)|,
+\]
+has conditional probability at least \(1-N^{-2}\), and on it
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z)
+\ge c^{-}_{1-\alpha,N}(z).
+\]
+Equivalently, before conditioning on the auxiliary simulation,
+\[
+\PP^\ast\{\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z)
+\ge c^{-}_{1-\alpha,N}(z)\}\ge1-N^{-2}.
+\]
+This is the default certified finite-Monte-Carlo choice in the theorem.  The
+reported simulated event is then
+\[
+Q_N(z)\le
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N}(z),
+\]
+with coverage transferred from Theorem~E and
+\Cref{lem:conditional-monte-carlo-quantile-main}.  The theorem does not treat
+other finite simulation choices as operational certificates.  Without the
+canonical DKW event above, all simulated quantiles are diagnostic only: report
+``ideal quantile only; Monte Carlo diagnostic not coverage-certified'' for
+this candidate.
+
+When several diagonal candidates are displayed, repeat the preceding steps
+only for the finite list or finite interval union in \(Z_{\rm cert}\).  Any
+uncertified continuum curve, heat map, or dense grid is a visualization of the
+diagnostic statistic and is not a confidence-set inversion.
+
 
 \paragraph{Estimated branch-map reduction.}\label{app:branch-map-oracle-reduction-main}
 Work at a separated population point \(p\ne s\), and let \(\mathcal B\) be the
