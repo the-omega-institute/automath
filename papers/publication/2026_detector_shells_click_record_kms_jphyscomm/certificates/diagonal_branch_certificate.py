@@ -6,11 +6,15 @@ import unittest
 from decimal import Decimal, getcontext, localcontext, ROUND_FLOOR, ROUND_CEILING
 from pathlib import Path
 
-STALE_TRACE_INTERVAL = (
+# Negative regression fixtures from an earlier incorrect draft transcript.
+# They are not certificate data; tests below assert that these intervals are
+# rejected because they do not enclose the values obtained by direct evaluation
+# of the printed formulas.
+REJECTED_DRAFT_TRACE_INTERVAL = (
     Decimal("68.4603940231"),
     Decimal("68.4603940232"),
 )
-STALE_DETERMINANT_INTERVAL = (
+REJECTED_DRAFT_DETERMINANT_INTERVAL = (
     Decimal("1.38769443609"),
     Decimal("1.38769443610"),
 )
@@ -216,7 +220,24 @@ def printed_formula_point_values(prec: int = 90):
         det = sigma[0][0] * sigma[1][1] - sigma[0][1] * sigma[1][0]
         t = [one, z]
         sigt = [sigma[0][0] * t[0] + sigma[0][1] * t[1], sigma[1][0] * t[0] + sigma[1][1] * t[1]]
-        return {"sigma": sigma, "trace": tr, "det": det, "sigma_times_tangent": sigt}
+        return {
+            "g0": g0,
+            "g1": g1,
+            "mu": mu,
+            "nu": nu,
+            "m2": m2,
+            "r": r,
+            "A_z": A,
+            "e_z": e,
+            "d_z": d,
+            "B_z": B,
+            "Sigma_r": sigma_r,
+            "D_Phi": J,
+            "sigma": sigma,
+            "trace": tr,
+            "det": det,
+            "sigma_times_tangent": sigt,
+        }
 
 
 def diagonal_covariance(z_text: str, prec: int = 90):
@@ -305,6 +326,20 @@ def diagonal_covariance(z_text: str, prec: int = 90):
             "m2": "g1+g0^2",
         },
         "theta_interval": theta.to_json(),
+        "scalar_intervals": {
+            "g0": g0.to_json(),
+            "g1": g1.to_json(),
+            "mu": mu.to_json(),
+            "nu": nu.to_json(),
+            "m2": m2.to_json(),
+        },
+        "r_interval": [x.to_json() for x in r],
+        "A_z_interval": [[x.to_json() for x in row] for row in A],
+        "e_z_interval": [x.to_json() for x in e],
+        "d_z_interval": [x.to_json() for x in d],
+        "B_z_interval": [[x.to_json() for x in row] for row in B],
+        "Sigma_r_interval": [[x.to_json() for x in row] for row in sigma_r],
+        "D_Phi_interval": [[x.to_json() for x in row] for row in J],
         "sigma_interval": [[x.to_json() for x in row] for row in sigma],
         "I_tau": tr.to_json(),
         "I_det": det.to_json(),
@@ -354,15 +389,15 @@ def validate_certificate_against_printed_formulas(data, point):
                 f"{json_key} {data[json_key]} does not contain the value "
                 f"obtained from the printed formulas, {point[key]}"
             )
-    if intervals_overlap(data["trace_interval"], STALE_TRACE_INTERVAL):
+    if intervals_overlap(data["trace_interval"], REJECTED_DRAFT_TRACE_INTERVAL):
         raise AssertionError(
-            "trace_interval overlaps the stale manuscript interval "
-            f"{STALE_TRACE_INTERVAL}"
+            "trace_interval overlaps a rejected draft interval "
+            f"{REJECTED_DRAFT_TRACE_INTERVAL}"
         )
-    if intervals_overlap(data["determinant_interval"], STALE_DETERMINANT_INTERVAL):
+    if intervals_overlap(data["determinant_interval"], REJECTED_DRAFT_DETERMINANT_INTERVAL):
         raise AssertionError(
-            "determinant_interval overlaps the stale manuscript interval "
-            f"{STALE_DETERMINANT_INTERVAL}"
+            "determinant_interval overlaps a rejected draft interval "
+            f"{REJECTED_DRAFT_DETERMINANT_INTERVAL}"
         )
 
 
@@ -404,19 +439,22 @@ class DiagonalBranchCertificateTests(unittest.TestCase):
         self.assertEqual(canonical_json(data), canonical_json(regenerated))
         validate_certificate_against_printed_formulas(data, point)
 
-    def test_stale_trace_and_determinant_intervals_are_not_accepted(self):
+    def test_rejected_draft_trace_and_determinant_intervals_are_not_accepted(self):
         data = diagonal_covariance("0.5")
-        stale = dict(data)
-        stale["trace_interval"] = [str(STALE_TRACE_INTERVAL[0]), str(STALE_TRACE_INTERVAL[1])]
-        stale["I_tau"] = stale["trace_interval"]
-        stale["determinant_interval"] = [
-            str(STALE_DETERMINANT_INTERVAL[0]),
-            str(STALE_DETERMINANT_INTERVAL[1]),
+        rejected = dict(data)
+        rejected["trace_interval"] = [
+            str(REJECTED_DRAFT_TRACE_INTERVAL[0]),
+            str(REJECTED_DRAFT_TRACE_INTERVAL[1]),
         ]
-        stale["I_det"] = stale["determinant_interval"]
+        rejected["I_tau"] = rejected["trace_interval"]
+        rejected["determinant_interval"] = [
+            str(REJECTED_DRAFT_DETERMINANT_INTERVAL[0]),
+            str(REJECTED_DRAFT_DETERMINANT_INTERVAL[1]),
+        ]
+        rejected["I_det"] = rejected["determinant_interval"]
         point = printed_formula_point_values()
         with self.assertRaises(AssertionError):
-            validate_certificate_against_printed_formulas(stale, point)
+            validate_certificate_against_printed_formulas(rejected, point)
 
 
 if __name__ == "__main__":
