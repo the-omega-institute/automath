@@ -5,169 +5,49 @@ arguments used in \Cref{sec:records}.  The main retained-record asymptotic theor
 these results only after the constrained D-MAP law has been reduced to the
 explicit adjacent-gap rewards displayed in the main text.
 
-\begin{lemma}[Measurable local-window-to-cycle rewards]\label{lem:local-window-regenerative-decomposition-main}
-Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process with
-click epochs \((\tau_j)_{j\in\mathbb Z}\), i.i.d. cycle lengths
-\(L_j=\tau_{j+1}-\tau_j=G_j+1\), mean
-\(\mu=\EE L_0\in(0,\infty)\), and \(\EE e^{\eta G_0}<\infty\) for some
-\(\eta>0\).  Fix \(r,\ell\ge0\) and let
-\[
-Z_n=\psi(A_{n-r},\ldots,A_{n+\ell})\in\RR^{d_{\rm rew}},
-\qquad
-\bar z=\EE Z_0 ,
-\]
-where \(\psi\) is bounded.  Put
-\[
-q_*(r,\ell):=r+\max\{\ell-1,0\}.
-\]
-For \(g=(g_0,\ldots,g_{q_*})\in\mathbb N_0^{q_*+1}\), set
-\[
-S_0(g)=0,\qquad
-S_m(g)=\sum_{i=0}^{m-1}(g_i+1),\quad 1\le m\le r+\ell,
-\]
-and define the finite local click set, in coordinates whose origin is the
-start of cycle \(r\), by
-\[
-\mathcal C_{r,\ell}(g):=\{S_m(g)-S_r(g):0\le m\le r+\ell\}.
-\]
-Here \(S_{r+\ell}\) is defined by the displayed formula; when \(\ell=0\), no
-gap beyond \(g_r\) is needed and \(q_*=r\).  Define
-\begin{equation}\label{eq:local-window-cycle-map-main}
-\begin{aligned}
-F_{r,\ell}^{\rm raw}(g_0,\ldots,g_{q_*})
-&:=\sum_{u=0}^{g_r}
-\psi\bigl(
-\mathbf1_{\{u-r\in\mathcal C_{r,\ell}(g)\}},\ldots,
-\mathbf1_{\{u+\ell\in\mathcal C_{r,\ell}(g)\}}
-\bigr),\\
-F_{r,\ell}(g_0,\ldots,g_{q_*})
-&:=F_{r,\ell}^{\rm raw}(g_0,\ldots,g_{q_*})-\bar z\,(g_r+1).
-\end{aligned}
-\end{equation}
-For each cycle \(j\), define
-\[
-Y_j^{\rm raw}:=U_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,\qquad
-Y_j=U_j-\bar z\,L_j ,
-\]
-and the future-indexed version
-\[
-\widetilde Y_j^{\rm raw}:=U_{j+r},\qquad
-\widetilde Y_j:=Y_{j+r}.
-\]
-Then
-\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em,itemsep=0.2em]
-\item Palm inversion gives
-\begin{equation}\label{eq:local-window-palm-inversion-main}
-\EE U_j=\mu\,\bar z,\qquad \EE Y_j=0 .
-\end{equation}
-\item The reward is exactly a measurable function of the displayed finite gap
-block:
-\begin{equation}\label{eq:local-window-future-block-main}
-\widetilde Y_j^{\rm raw}
-=F_{r,\ell}^{\rm raw}(G_j,\ldots,G_{j+q_*}),
-\qquad
-\widetilde Y_j
-=F_{r,\ell}(G_j,\ldots,G_{j+q_*}).
-\end{equation}
-Equivalently,
-\[
-Y_j^{\rm raw}
-=F_{r,\ell}^{\rm raw}(G_{j-r},\ldots,G_{j-r+q_*}),
-\qquad
-Y_j
-=F_{r,\ell}(G_{j-r},\ldots,G_{j-r+q_*}).
-\]
-Thus the centered and uncentered future-indexed reward sequences are
-\(q_*(r,\ell)\)-dependent.
-\item For the observed window \([0,N)\), let
-\[
-j_-(N)=\min\{j:[\tau_j,\tau_{j+1})\cap[0,N)\ne\varnothing\},\qquad
-j_+(N)=\max\{j:[\tau_j,\tau_{j+1})\cap[0,N)\ne\varnothing\}.
-\]
-Then
-\begin{equation}\label{eq:local-window-endpoint-main}
-\sum_{n=0}^{N-1}Z_n-\sum_{j=j_-(N)}^{j_+(N)}U_j=O_{\PP}(\log N).
-\end{equation}
-In the future-indexed notation the same assertion is
-\[
-\sum_{n=0}^{N-1}Z_n
--\sum_{j=j_-(N)-r}^{j_+(N)-r}\widetilde Y_j^{\rm raw}
-=O_{\PP}(\log N).
-\]
-Consequently, if \(\bar z=0\), then
-\begin{equation}\label{eq:local-window-centered-endpoint-main}
-\sum_{n=0}^{N-1}Z_n-\sum_{j=j_-(N)}^{j_+(N)}Y_j
-=O_{\PP}(\log N)=o_{\PP}(\sqrt N).
-\end{equation}
-The same endpoint bounds hold after trimming a fixed number of endpoint,
-look-ahead, or look-back cycles.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-Palm inversion gives
-\[
-\EE Z_0
-=\frac1{\mu}\,
-\EE_{\rm Palm}\sum_{n=\tau_0}^{\tau_1-1}Z_n
-=\frac1{\mu}\EE U_0 ,
-\]
-which proves \eqref{eq:local-window-palm-inversion-main}.  For
-\(n=\tau_{j+r}+u\), \(0\le u\le G_{j+r}\), the clicks visible to the window
-\((A_{n-r},\ldots,A_{n+\ell})\) are precisely
-\[
-\tau_{j+m}-\tau_{j+r}=S_m(G_j,\ldots,G_{j+q_*})-S_r(G_j,\ldots,G_{j+q_*}),
-\qquad 0\le m\le r+\ell .
-\]
-A displacement \(r\) left crosses at most \(r\) click epochs, and a
-displacement \(\ell\) right crosses at most \(\ell\) click epochs, since every
-cycle has length at least one.  This gives the finite map
-\eqref{eq:local-window-cycle-map-main} and the identities in
-\eqref{eq:local-window-future-block-main}.  Disjoint gap blocks are
-independent, so the future-indexed rewards are \(q_*(r,\ell)\)-dependent.
-
-The exponential moment implies
-\(\max_{|j|\le cN}L_j=O_{\PP}(\log N)\) for every fixed \(c\), by a union
-bound after possibly reducing \(\eta\).  The renewal law gives
-\(j_+(N)-j_-(N)+1=O_{\PP}(N)\).  Hence, with probability tending to one, all
-cycles that can influence a local window anchored in \([0,N)\) lie in a
-deterministic \(O(N)\)-index range, and the unmatched terms are contained in
-the initial incomplete cycle, the terminal incomplete cycle, and finitely many
-adjacent cycles required by the local window.  Boundedness of \(\psi\) gives
-\eqref{eq:local-window-endpoint-main}; the centered assertion and fixed
-trimming variants follow immediately.
-\end{proof}
-
-\begin{proposition}[Generic complete-cycle regenerative CLT]\label{prop:generic-complete-cycle-regenerative-clt-main}
+\begin{proposition}[Standard complete-cycle and separated-batch facts]\label{lem:local-window-regenerative-decomposition-main}\label{prop:generic-complete-cycle-regenerative-clt-main}\label{lem:calendar-stopped-batch-cov-main}\label{lem:separated-batch-covariance-estimator-main}\label{lem:fixed-low-cycle-event-main}\label{lem:uniform-calendar-block-length-main}
 Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process with
 click epochs \((\tau_j)\), i.i.d. gaps \(G_j\), cycle lengths
 \(L_j=G_j+1\), mean \(\mu=\EE L_0\in(0,\infty)\), and
-\(\EE e^{\eta G_0}<\infty\).  Fix a finite dimension \(d_{\rm rew}\) and a
-fixed look-ahead \(m_{\rm dep}\).  Suppose
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\).  Let
+\(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed.  The
+following standard regenerative conclusions are used in the main text
+\cite{GlynnIglehart1990STS,AsmussenGlynn2007,GlynnWhitt1991BatchMeans,
+VatsFlegalJones2019Multivariate}.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em,itemsep=0.25em]
+\item Every bounded local window
 \[
-Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\in\RR^{d_{\rm rew}},\qquad
-\EE Y_j=0,
+Z_n=\psi(A_{n-r},\ldots,A_{n+\ell}),\qquad \bar z=\EE Z_0,
 \]
-with
+has a complete-cycle reward
+\[
+U_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,\qquad
+Y_j=U_j-\bar zL_j,
+\]
+with Palm centering
+\begin{equation}\label{eq:local-window-palm-inversion-main}
+\EE U_j=\mu\bar z,\qquad \EE Y_j=0 .
+\end{equation}
+Moreover \(Y_j\) is a measurable function of finitely many adjacent gaps and
+is therefore fixed-range dependent.  Endpoint and fixed look-ahead/look-back
+trimming changes the calendar sum by
+\begin{equation}\label{eq:local-window-endpoint-main}
+\sum_{n=0}^{N-1}Z_n-\sum_j U_j=O_{\PP}(\log N),
+\end{equation}
+where the cycle sum is over the complete cycles intersecting the observed
+calendar window, with the same \(O_{\PP}(\log N)\) bound after any fixed
+endpoint trimming.
+
+\item If \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\in\RR^{d_{\rm rew}}\),
+\(\EE Y_j=0\), and
 \[
 \|f(g_0,\ldots,g_{m_{\rm dep}})\|
-\le C_f\left(1+\sum_{i=0}^{m_{\rm dep}}g_i\right).
+\le C_f\left(1+\sum_{i=0}^{m_{\rm dep}}g_i\right),
 \]
-Let \(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed, and
-let \(J_N\) be any all-complete-cycle index set obtained from
-\(\{0,\ldots,K_N-1\}\) by deleting only a fixed number of endpoint and
-look-ahead indices.  Empty sums are interpreted as \(0\).  Define
+then, for any all-complete-cycle index set \(J_N\) obtained from
+\(\{0,\ldots,K_N-1\}\) by deleting only fixed endpoint/look-ahead indices,
 \[
-\widehat\theta_N:=\frac1N\sum_{j\in J_N}Y_j .
-\]
-Then the empty-sum branch is used with probability \(o(1)\),
-\[
-\sum_{j\in J_N}Y_j-\sum_{j=0}^{K_N-1}Y_j
-=O_{\PP}(\log N)=o_{\PP}(\sqrt N),
-\]
-and
-\[
-\sqrt N\,\widehat\theta_N
+\sqrt N\,\frac1N\sum_{j\in J_N}Y_j
 \Rightarrow
 \mathcal N\left(0,\frac{\mathcal T_{m_{\rm dep}}}{\mu}\right),
 \]
@@ -178,244 +58,73 @@ where
 \sum_{h=1}^{m_{\rm dep}}
 \{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
 \]
-Whenever \(Y_j\) is obtained from a bounded local calendar window, the
-representation is supplied by
-\Cref{lem:local-window-regenerative-decomposition-main}.
-\end{proposition}
 
-\begin{proof}
-The endpoint replacement follows from the same exponential-tail maximum
-bound used in \Cref{lem:local-window-regenerative-decomposition-main}; fixed
-endpoint deletions remove only \(O_{\PP}(\log N)\) total reward.  The low-cycle
-empty-sum branch is \(o(1)\) by \Cref{lem:fixed-low-cycle-event-main}.
-
-The sequence \((Y_j)\) is centered, \(m_{\rm dep}\)-dependent, and square
-integrable.  The fixed-range dependent multivariate CLT gives the deterministic
-prefix limit with covariance \(\mathcal T_{m_{\rm dep}}\).  With
-\(m_N=\lfloor N/\mu\rfloor\), the renewal CLT gives
-\(|K_N-m_N|=O_{\PP}(\sqrt N)\), and the standard maximal inequality for fixed
-\(m_{\rm dep}\)-dependent partial sums gives the Anscombe replacement from
-\(m_N\) to \(K_N\).  Since \(K_N/N\to1/\mu\), the calendar-time covariance is
-\(\mathcal T_{m_{\rm dep}}/\mu\).
-\end{proof}
-
-\begin{lemma}[Calendar-stopped triangular-array batch covariance rate]\label{lem:calendar-stopped-batch-cov-main}
-Let \((Y_j,L_j)_{j\in\mathbb Z}\) be a stationary cycle sequence with
-\(\EE Y_0=0\) in a fixed finite dimension, \(\mu=\EE L_0\in(0,\infty)\),
-exponentially decaying tails for \(L_0\), and a fixed look-ahead
-\(m_{\rm dep}\) such that
+\item For \(b_N\to\infty\), \(b_N/N\to0\), \(d_N=b_N+m_{\rm dep}\), and
+separated batches
 \[
-Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}}),\qquad
-\|f(g_0,\ldots,g_{m_{\rm dep}})\|
-\le C_f\left(1+\sum_{i=0}^{m_{\rm dep}}g_i\right),
+I_{\ell,N}:=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+C_{\ell,N}=\sum_{j=(\ell-1)d_N}^{(\ell-1)d_N+b_N-1}Y_j ,
 \]
-with i.i.d. gaps \(G_j\).  Let \(b_N\to\infty\), \(b_N/N\to0\),
-\(d_N=b_N+m_{\rm dep}\), and
-\[
-C_{\ell,N}=\sum_{j=(\ell-1)d_N}^{(\ell-1)d_N+b_N-1}Y_j,\qquad
-V_{\ell,N}=b_N^{-1/2}C_{\ell,N}.
-\]
-Then the \(V_{\ell,N}\)'s are independent within each row,
-\(\sup_{\ell,N}\EE\|V_{\ell,N}\|^4<\infty\), and
-\[
-\EE[V_{\ell,N}V_{\ell,N}^{\top}]\to
-\mathcal T_{m_{\rm dep}}
-:=\Var(Y_0)+
-\sum_{h=1}^{m_{\rm dep}}\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
-\]
-Let \(R_N\) be any positive integer-valued random variable satisfying
-\[
-n_N:=\left\lfloor\frac{N}{\mu d_N}\right\rfloor\to\infty,\qquad
-\left|\frac{R_N}{n_N}-1\right|
-=O_{\PP}\left(\sqrt{\frac{d_N}{N}}\right).
-\]
-On \(R_N\ge2\), define the row sample covariance \(S_N(R_N)\) from
-\(V_{1,N},\ldots,V_{R_N,N}\).  Then
-\begin{equation}\label{eq:calendar-stopped-batch-rate-main}
-\left\|S_N(R_N)-\mathcal T_{m_{\rm dep}}\right\|_{\operatorname{op}}
-=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{d_N}{N}}\right).
-\end{equation}
-Consequently, if \(R_N=M_N\) is the all-complete-cycle batch count before
-calendar time \(N\), then
-\[
-\left\|
-\frac{K_N}{N}\,\frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^{\top}
--\frac{\mathcal T_{m_{\rm dep}}}{\mu}
-\right\|_{\operatorname{op}}
-=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
-\]
-\end{lemma}
-
-\begin{proof}
-The omitted \(m_{\rm dep}\) rewards separate the gap blocks entering distinct
-batch sums, so the row variables are independent.  Uniform fourth moments
-follow from the exponential gap tail.  The finite-batch bias is
-\[
-\frac1{b_N}\Var(C_{\ell,N})
-=\Var(Y_0)+\sum_{h=1}^{m_{\rm dep}}\left(1-\frac{h}{b_N}\right)
-\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\},
-\]
-which is \(O(b_N^{-1})\) from \(\mathcal T_{m_{\rm dep}}\).  For the
-deterministic prefix \(n_N\), fixed dimension and the fourth-moment bound give
-second-moment and empirical-mean errors
-\(O_{\PP}(n_N^{-1/2})=O_{\PP}(\sqrt{d_N/N})\).
-
-The random-prefix replacement uses only
-\(|R_N/n_N-1|=O_{\PP}(\sqrt{d_N/N})\).  On the event where
-\(|R_N-n_N|\le Cn_N\sqrt{d_N/N}\), the added or removed row variables lie in a
-deterministic window of that size.  Markov's inequality and the uniform second
-moment bound show that changing the prefix alters both the second moment and
-the empirical mean by \(O_{\PP}(\sqrt{d_N/N})\).  This proves
-\eqref{eq:calendar-stopped-batch-rate-main}.
-
-For the renewal calendar stop, \(K_N=N/\mu+O_{\PP}(\sqrt N)\).  Endpoint
-cycles, fixed look-ahead cycles, and the unfinished terminal batch give
-\[
-M_Nd_N=K_N+O_{\PP}(d_N+\log N+m_{\rm dep}),
-\]
-and hence \(M_N/(N/(\mu d_N))-1=O_{\PP}(\sqrt{d_N/N})\).  Applying the
-random-prefix bound with \(R_N=M_N\), then multiplying by
-\(K_N/N=1/\mu+O_{\PP}(N^{-1/2})\), gives the displayed calendar-time rate.
-\end{proof}
-
-\begin{theorem}[Separated regenerative batch covariance]\label{lem:separated-batch-covariance-estimator-main}
-Let \((G_j)_{j\in\mathbb Z}\) be an i.i.d. Palm gap sequence, put
-\(L_j=G_j+1\), \(\mu=\EE L_0\), and fix \(m\ge0\).  Let
-\[
-Y_j=f(G_j,\ldots,G_{j+m})\in\RR^d,\qquad
-\EE Y_j=0,\qquad \EE\|Y_j\|^4<\infty ,
-\]
-and suppose \((Y_j)\) is \(m\)-dependent.  Write
-\[
-T_m=\Var(Y_0)+\sum_{h=1}^{m}
-\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
-\]
-Let \(b_N\to\infty\), \(b_N/N\to0\), set \(d_N=b_N+m\), and form batches
-\[
-I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\}.
-\]
-Use only all-complete-cycle batches before calendar time \(N\), and let
-\(M_N\) be the retained batch count.  On \(M_N\ge2\), define
-\[
-B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j,\qquad
-\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N},
-\]
-and
-\[
-\widehat\Sigma_N^{\rm sep}(Y)
-=\frac1{b_N(M_N-1)}
-\sum_{\ell=1}^{M_N}
-(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top .
-\]
-Then \(M_N\ge2\) with probability tending to one and
+let \(M_N\) be the number of all-complete-cycle batches retained before
+calendar time \(N\), and put
+\(\bar C_N=M_N^{-1}\sum_{\ell=1}^{M_N}C_{\ell,N}\) on \(M_N\ge2\).  Then the
+retained batch covariance satisfies
 \begin{equation}\label{eq:separated-batch-covariance-estimator-rate-main}
 \left\|
-\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(Y)-\frac{T_m}{\mu}
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
+-\frac{\mathcal T_{m_{\rm dep}}}{\mu}
 \right\|_{\operatorname{op}}
-=O_{\PP}\!\left(b_N^{-1}+\sqrt{b_N/N}\right).
+=O_{\PP}\left(b_N^{-1}+\sqrt{b_N/N}\right).
 \end{equation}
-For plug-in centered rewards
+Equivalently, before multiplying by \(K_N/N\), the cycle-time sample covariance
+estimates \(\mathcal T_{m_{\rm dep}}\) at the same rate.
+
+\item If plug-in rewards have the form
 \[
 \widehat Y_j=Y_j-(\widehat r_N-r)L_j,\qquad
 \widehat r_N-r=O_{\PP}(N^{-1/2}),
 \]
-and polynomial \(b_N\), the exponential gap moment and
-\Cref{lem:uniform-calendar-block-length-main} give
+and \(b_N\) is polynomial, then
 \begin{equation}\label{eq:separated-batch-plugin-block-main}
 \max_{\ell\le M_N}
 \left\|\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)\right\|
-=O_{\PP}(b_NN^{-1/2}).
+=O_{\PP}(b_NN^{-1/2})
 \end{equation}
-Consequently the plug-in covariance perturbation is
+and replacing \(Y_j\) by \(\widehat Y_j\) in the separated-batch covariance
+changes it by
 \begin{equation}\label{eq:separated-batch-plugin-covariance-main}
-\left\|
-\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(\widehat Y)
--\frac{K_N}{N}\widehat\Sigma_N^{\rm sep}(Y)
-\right\|_{\operatorname{op}}
-=
 O_{\PP}\!\left(\sqrt{\frac{b_N}{N}}\right)
 +O_{\PP}\!\left(\frac{b_N}{N}\right).
 \end{equation}
-Thus the same rate in \eqref{eq:separated-batch-covariance-estimator-rate-main}
-holds for the all-complete-cycle plug-in covariance estimator.  The main
-retained-record asymptotic theorems use only its D-MAP specialization with the adjacent-gap
-reward \(Y_j=U_j-rL_j\), \(m=1\), and \(b_N=\lfloor N^{1/3}\rfloor\).
-\end{theorem}
 
-\begin{proof}
-\Cref{lem:calendar-stopped-batch-cov-main}, with
-\(m_{\rm dep}=m\) and \(d_N=b_N+m\), gives the true-centered rate
-\eqref{eq:separated-batch-covariance-estimator-rate-main}; its proof contains
-the finite-batch bias, empirical-mean subtraction, endpoint deletion, and
-calendar-stopped random-prefix replacement.
+\item For every fixed \(C\), \(\PP(K_N<C)\to0\), and the same conclusion holds
+after deleting any fixed number of endpoint, look-back, or look-ahead cycles.
 
-For the plug-in part,
-\[
-\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)
-=-(\widehat r_N-r)\sum_{j\in I_{\ell,N}}L_j .
-\]
-The uniform block-average bound and
-\(\widehat r_N-r=O_{\PP}(N^{-1/2})\) give
-\eqref{eq:separated-batch-plugin-block-main}.  Let
-\(P_{\ell,N}:=\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)\).  The plug-in sample
-covariance differs from the true-centered one by two cross terms involving
-\(B_{\ell,N}-\bar B_N\) and \(P_{\ell,N}-\bar P_N\), plus the square term in
-\(P_{\ell,N}-\bar P_N\).  The true-centered covariance rate gives the
-quadratic mean of the \(B\)-batch sums as \(O_{\PP}(b_N)\), while
-\(\max_{\ell\le M_N}\|P_{\ell,N}\|=O_{\PP}(b_NN^{-1/2})\).  Cauchy's
-inequality gives cross terms \(O_{\PP}(\sqrt{b_N/N})\), and the square term is
-\(O_{\PP}(b_N/N)\).
-\end{proof}
-
-\begin{lemma}[Fixed low-cycle events vanish]\label{lem:fixed-low-cycle-event-main}
-Let \((A_n)_{n\in\mathbb Z}\) be the stationary visible renewal record, with
-click density \(\rho>0\), and let \(K_N=\max\{k:\tau_k<N\}\), with
-\(K_N=-1\) if no click is observed.  For every fixed integer \(C\ge0\),
-\[
-\PP(K_N<C)\to0 .
-\]
-The same conclusion holds after deleting any fixed number of endpoint,
-look-back, or look-ahead complete cycles.
-\end{lemma}
-
-\begin{proof}
-The observed click count is \(R_N=\sum_{n=0}^{N-1}A_n=K_N+1\).  By
-stationarity and ergodicity, \(R_N/N\to\rho\) almost surely.  Thus
-\(\{K_N<C\}\subset\{R_N/N\le\rho/2\}\) for all sufficiently large \(N\).  Fixed
-endpoint deletions only replace \(C\) by another fixed constant.
-\end{proof}
-
-\begin{lemma}[Uniform block average with exponential moments]\label{lem:uniform-calendar-block-length-main}
-Let \(L_0,L_1,\ldots\) be i.i.d. nonnegative random variables with
-\(\EE e^{\eta L_0}<\infty\) for some \(\eta>0\).  Let
-\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\).  For each \(N\), let
-\(I_{\ell,N}\) be intervals of \(b_N\) consecutive indices, and suppose the
-number \(M_N\) of intervals used by the statistic satisfies
-\(M_N=O_{\PP}(N/b_N)\).  Then
+\item If \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), and
+\(M_N=O_{\PP}(N/b_N)\), then
 \begin{equation}\label{eq:uniform-calendar-block-length-main}
 \max_{1\le \ell\le M_N}
 \frac1{b_N}\sum_{j\in I_{\ell,N}}L_j
 =O_{\PP}(1).
 \end{equation}
-The maximum over an empty index set is interpreted as \(0\).
-\end{lemma}
+\end{enumerate}
+\end{proposition}
 
 \begin{proof}
-For \(x\) large enough, the Chernoff rate
-\[
-I(x)=\sup_{0<\theta\le\eta}\{\theta x-\log \EE e^{\theta L_0}\}
-\]
-is positive.  Uniformly over intervals of length \(b_N\),
-\[
-\PP\left(\sum_{j\in I_{\ell,N}}L_j\ge xb_N\right)\le e^{-b_NI(x)}.
-\]
-On any event \(M_N\le cN/b_N\), a union bound gives
-\[
-\PP\left(\max_{1\le\ell\le cN/b_N}\sum_{j\in I_{\ell,N}}L_j\ge xb_N\right)
-\le \left\lceil\frac{cN}{b_N}\right\rceil e^{-b_NI(x)}\to0,
-\]
-because \(b_N\gg\log N\).  Letting \(c\) increase proves the claim.
+These are the usual renewal-reward and separated-batch consequences for
+complete cycles.  Palm inversion gives the centering in (a); the local window
+depends on finitely many neighboring cycles, and exponential cycle tails give
+the \(O_{\PP}(\log N)\) endpoint bound.  The CLT in (b) is the fixed-range
+dependent renewal-reward CLT with the random-index replacement \(K_N/N\to1/\mu\).
+Part (c) is the corresponding separated batch-means estimator: the omitted
+\(m_{\rm dep}\) cycles make the batch rows independent, the finite-batch bias
+is \(O(b_N^{-1})\), and the retained random prefix contributes
+\(O_{\PP}(\sqrt{b_N/N})\).  Part (d) follows from (f) and
+\(\widehat r_N-r=O_{\PP}(N^{-1/2})\).  Parts (e) and (f) are the renewal law of
+large numbers and the exponential Chernoff/union-bound estimate for polynomial
+blocks.
 \end{proof}
 
 \paragraph{Estimated branch-map reduction.}\label{app:branch-map-oracle-reduction-main}
