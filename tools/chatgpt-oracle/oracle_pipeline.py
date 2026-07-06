@@ -423,10 +423,68 @@ def _invalidate_board_cache() -> None:
     _board_journals = None
 
 
+_ACTIVE_ITERATION_STATUS_PREFIXES = (
+    "a-blocked",
+    "b-stuck",
+    "c-stuck",
+    "c-near-pass",
+    "c-hard-stuck",
+    "c-infra-stuck",
+    "c-scope-stuck",
+    "active-theorem-deepening",
+    "retarget-fit",
+)
+
+
+NYXID_LOCAL_SUBMIT_GRACE_SECONDS = int(
+    os.environ.get("NYXID_LOCAL_SUBMIT_GRACE_SECONDS", "1800")
+)
+
+
+def _nyxid_local_marker_is_recent(path: Path) -> bool:
+    try:
+        age = time.time() - path.stat().st_mtime
+    except OSError:
+        return False
+    return age < NYXID_LOCAL_SUBMIT_GRACE_SECONDS
+
+
+def _route_text_has_active_iteration_marker(text: str) -> bool:
+    lower = text.lower()
+    return any(marker in lower for marker in _ACTIVE_ITERATION_STATUS_PREFIXES)
+
+
+def _status_is_submission_hold(status: str) -> bool:
+    s = status.strip()
+    s_lower = s.lower()
+    hold_prefixes = (
+        "\u5df2\u6295",
+        "\u5df2\u63a5\u6536",
+        "\u63a5\u6536",
+        "\u5df2\u53d1\u8868",
+        "submitted",
+        "under review",
+        "accepted",
+        "published",
+    )
+    if any(s.startswith(prefix) or s_lower.startswith(prefix)
+           for prefix in hold_prefixes):
+        return True
+    return any(marker in s or marker in s_lower for marker in (
+        "\u5ba1\u7a3f\u4e2d",
+        "peer review",
+        "under review",
+    ))
+
+
 def _board_skip(status: str) -> bool:
     """Return True if this paper should be skipped by the pipeline."""
     s = status.strip()
+    s_lower = s.lower()
     if is_recoverable_stage_a_block_status(s):
+        return False
+    if any(s_lower.startswith(prefix)
+           for prefix in _ACTIVE_ITERATION_STATUS_PREFIXES[1:]):
         return False
     skip_prefixes = (
         "\u5df2\u6295",       # submitted
@@ -444,17 +502,10 @@ def _board_skip(status: str) -> bool:
         "rejected",
         "archived",
         "a-blocked",
-        "b-stuck",
-        "c-stuck",
-        "c-near-pass",
-        "c-hard-stuck",
-        "c-infra-stuck",
-        "c-scope-stuck",
         "c-done",
         "time-stuck",
         "paused",
     )
-    s_lower = s.lower()
     for prefix in skip_prefixes:
         if s.startswith(prefix) or s_lower.startswith(prefix):
             return True
@@ -495,13 +546,48 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
     route_text = " ".join(
         str(entry.get(key, "")) for key in ("status", "reroute", "notes")
     ).lower()
+    historical_prior_markers = (
+        "prior route is parked",
+        "prior grg route",
+        "superseded into this merged rewrite",
+        "rejected history route",
+        "history only",
+    )
+    hard_markers = (
+        "overlap deferred",
+        "needs_human_resolution",
+        "semantic overlap",
+        "explicit board resolution",
+        "overlap with earlier submitted",
+        "earlier submitted/current",
+        "submitted sibling feedback",
+        "canonical route before advancing",
+        "duplicate of canonical",
+        "do not process independently",
+        "do not retarget",
+        "superseded by",
+    )
+    for marker in hard_markers:
+        if marker not in route_text:
+            continue
+        if marker in {"superseded by"} and any(
+            prior_marker in route_text
+            for prior_marker in historical_prior_markers
+        ):
+            continue
+        return True
     if (
         "c-near-pass" in status.lower()
         and "manual c+1 approved" in route_text
         and "extra-stage-c-rounds" in route_text
     ):
         return False
-    if _board_skip(status):
+    if _board_skip(status) and not (
+        section
+        and ("active rewrite" in section or "retarget" in section)
+        and _route_text_has_active_iteration_marker(route_text)
+        and not _status_is_submission_hold(status)
+    ):
         return True
     status_lower = status.lower()
     if status_lower.startswith("a-ready") or status_lower.startswith("stage a ready"):
@@ -518,6 +604,190 @@ def _board_entry_skip(paper_name: str, entry: Optional[dict]) -> bool:
         "\u5f52\u6863",
         "parked",
     ))
+
+
+def _active_board_entry_allows_iteration(entry: Optional[dict]) -> bool:
+    if not entry:
+        return False
+    section = str(entry.get("section", "")).lower()
+    if section and "active rewrite" not in section and "retarget" not in section:
+        return False
+    status = str(entry.get("status", ""))
+    route_text = " ".join(
+        str(entry.get(key, "")) for key in ("status", "reroute", "notes")
+    ).lower()
+    historical_prior_markers = (
+        "prior route is parked",
+        "prior grg route",
+        "superseded into this merged rewrite",
+        "rejected history route",
+        "history only",
+    )
+    hard_markers = (
+        "overlap deferred",
+        "needs_human_resolution",
+        "semantic overlap",
+        "explicit board resolution",
+        "overlap with earlier submitted",
+        "earlier submitted/current",
+        "submitted sibling feedback",
+        "canonical route before advancing",
+        "duplicate of canonical",
+        "do not process independently",
+        "do not retarget",
+        "superseded by",
+        "submitted;",
+        "under review",
+        "peer review",
+        "已投",
+        "审稿中",
+        "归档",
+        "parked",
+        "skeleton",
+        "骨架",
+    )
+    if _board_skip(status) and not (
+        _route_text_has_active_iteration_marker(route_text)
+        and not _status_is_submission_hold(status)
+    ):
+        return False
+    for marker in hard_markers:
+        if marker not in route_text:
+            continue
+        if marker in {"parked", "superseded by"} and any(
+            prior_marker in route_text
+            for prior_marker in historical_prior_markers
+        ):
+            continue
+        return False
+    return True
+
+
+def _active_board_entry_requests_theorem_deepening(
+    entry: Optional[dict],
+) -> bool:
+    if not _active_board_entry_allows_iteration(entry):
+        return False
+    route_text = " ".join(
+        str(entry.get(key, "")) for key in ("status", "reroute", "notes")
+    ).lower()
+    return "active-theorem-deepening" in route_text
+
+
+def _state_allows_active_iteration(state: PaperState) -> bool:
+    return _active_board_entry_allows_iteration(
+        _get_board_entries().get(state.paper_name)
+    )
+
+
+def _checkpoint_active_batch_if_allowed(
+    state: PaperState,
+    stage: str,
+    tag: str,
+    status: str,
+    detail: str,
+) -> bool:
+    if not _state_allows_active_iteration(state):
+        return False
+    logger.info(
+        f"{tag} {stage} reached a batch checkpoint; "
+        "keeping active route runnable"
+    )
+    state.current_stage = stage
+    state.current_round = 0
+    state.error = ""
+    state.block_reason = "ACTIVE_BATCH_CHECKPOINT"
+    if stage == "B":
+        state.stage_b_rounds = 0
+        state.stage_b_passed = False
+    elif stage == "C":
+        state.stage_c_rounds = 0
+        state.stage_c_passed = False
+    state.log_event(
+        stage,
+        "active_batch_checkpoint",
+        detail=(
+            f"{status}: {detail}; active/retarget policy keeps this route "
+            "in the pipeline for continued iteration"
+        ),
+    )
+    save_state(state)
+    return True
+
+
+def _checkpoint_active_stage_c_batch_if_allowed(
+    state: PaperState, tag: str
+) -> bool:
+    stage_c_status, stage_c_detail = classify_stage_c_terminal(state)
+    checkpoint_detail = (
+        f"{stage_c_detail}; checkpoint; continue automatic rewrite/retarget "
+        "iteration"
+    )
+    if not _checkpoint_active_batch_if_allowed(
+        state, "C", tag, stage_c_status, checkpoint_detail
+    ):
+        return False
+    update_program_board(state.paper_name, stage_c_status, checkpoint_detail)
+    return True
+
+
+def _reopen_active_terminal_state_if_allowed(state: PaperState,
+                                             entry: Optional[dict]) -> bool:
+    if not _active_board_entry_allows_iteration(entry):
+        return False
+    terminal_status = structured_terminal_status_from_error(state.error)
+    reopened = False
+    if (
+        state.current_stage == "DONE"
+        and state.completed_at
+        and _active_board_entry_requests_theorem_deepening(entry)
+    ):
+        state.current_stage = "A"
+        state.stage_a_passed = False
+        state.stage_a_rounds = 0
+        state.stage_a_scores = []
+        state.stage_a_audit_rounds = 0
+        state.stage_a_audit_metrics = {}
+        state.current_round = 0
+        state.completed_at = ""
+        state.error = ""
+        reopened = True
+    if state.current_stage == "B" and (
+        str(state.error).startswith("Stage B stuck:")
+        or str(state.block_reason).startswith("B_STUCK")
+        or state.stage_b_rounds >= MAX_STAGE_B_ROUNDS
+    ):
+        state.stage_b_rounds = 0
+        state.stage_b_passed = False
+        state.current_round = 0
+        state.error = ""
+        state.block_reason = ""
+        reopened = True
+    elif state.current_stage == "C" and terminal_status.startswith("C-"):
+        state.stage_c_rounds = 0
+        state.stage_c_passed = False
+        state.current_round = 0
+        state.error = ""
+        reopened = True
+    elif terminal_status.startswith("C-"):
+        state.current_stage = "C"
+        state.stage_c_rounds = 0
+        state.stage_c_passed = False
+        state.current_round = 0
+        state.error = ""
+        reopened = True
+    if reopened:
+        state.block_reason = "ACTIVE_TERMINAL_REOPEN"
+        state.log_event(
+            state.current_stage,
+            "active_terminal_reopen",
+            detail=(
+                "board active/retarget policy reopens non-overlap terminal "
+                "state for continued iteration"
+            ),
+        )
+        save_state(state)
+    return reopened
 
 
 def _state_has_hard_stage_a_block(state: Optional[PaperState]) -> bool:
@@ -556,7 +826,8 @@ def _pending_nyxid_oracle_prompts_for_paper(paper_name: str) -> list[Path]:
         result_name = prompt_path.name[: -len(".prompt.txt")] + ".json"
         result_path = prompt_path.with_name(result_name)
         if not result_path.exists():
-            pending.append(prompt_path)
+            if _nyxid_local_marker_is_recent(prompt_path):
+                pending.append(prompt_path)
             continue
         try:
             record = json.loads(result_path.read_text(encoding="utf-8"))
@@ -611,6 +882,8 @@ def _pending_nyxid_oracle_prompts_for_paper(paper_name: str) -> list[Path]:
                     except FileNotFoundError:
                         pass
                     continue
+            elif not _nyxid_local_marker_is_recent(prompt_path):
+                continue
             pending.append(prompt_path)
     return pending
 
@@ -1207,9 +1480,8 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
         return (
             "C-INFRA-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with Oracle "
-            "extraction/infra symptoms; next action: repair extraction or "
-            "re-submit final-review task, then ask human to review the "
-            "recovered final verdict",
+            "extraction/infra symptoms; continue infra repair and rerun "
+            "the recovered final-review task",
         )
 
     hard_markers = ("major revision", "reject", "revise")
@@ -1222,9 +1494,8 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
         return (
             "C-NEAR-PASS",
             f"near-pass final gate after {MAX_STAGE_C_ROUNDS} rounds; "
-            "recent Oracle accept + Codex submit; needs final review / "
-            "possible C+1 override; next action: report to the user for "
-            "manual final review, not another ordinary rewrite loop",
+            "recent Oracle accept + Codex submit; continue final C+1 / "
+            "package confirmation",
         )
 
     scope_markers = (
@@ -1241,8 +1512,7 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
             "C-SCOPE-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
             "scope/novelty or journal-fit blockers; route to novelty "
-            "escalation or retarget; next action: ask the user to choose "
-            "deep rewrite, merge, or lower/alternate venue",
+            "escalation or retarget iteration",
         )
 
     if hard_count >= 2 or (recent and hard_count == len(recent)):
@@ -1250,23 +1520,23 @@ def classify_stage_c_terminal(state: PaperState) -> tuple[str, str]:
             "C-HARD-STUCK",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with repeated "
             "major revision/reject/revise verdicts; return to Stage B or "
-            "deep rewrite; next action: report blockers and ask the user "
-            "whether to rewrite, merge, or park",
+            "continue deep rewrite / retarget iteration unless a hard "
+            "overlap or submitted-route block is recorded",
         )
 
     if "oracle:accept;claude:submit" in recent_text:
         return (
             "C-NEAR-PASS",
             f"Stage C exhausted {MAX_STAGE_C_ROUNDS} rounds with at least one "
-            "recent Oracle accept + Codex submit; next action: report to "
-            "the user for manual final review / possible C+1 override",
+            "recent Oracle accept + Codex submit; continue final C+1 / "
+            "package confirmation",
         )
 
     return (
         "C-STUCK",
         f"Oracle+Codex exhausted {MAX_STAGE_C_ROUNDS} Stage C rounds without "
-        "a clean terminal pattern; next action: report to the user for manual "
-        "classification before any further automatic rewrite",
+        "a clean terminal pattern; continue automatic rewrite / retarget "
+        "iteration unless a hard overlap or submitted-route block is recorded",
     )
 
 
@@ -1279,6 +1549,8 @@ def normalize_stage_c_terminal_state(state: PaperState, *,
     `current_stage` or `error` field was cleared by a later daemon pass.
     """
     if state.stage_c_passed:
+        return False
+    if state.block_reason in {"ACTIVE_TERMINAL_REOPEN", "ACTIVE_BATCH_CHECKPOINT"}:
         return False
     if state.stage_c_rounds < MAX_STAGE_C_ROUNDS:
         return False
@@ -1364,6 +1636,10 @@ def rebuild_rounds_from_git(state: PaperState) -> None:
     if _state_is_post_rejection_retarget_reopen(state):
         logger.info(f"[{state.paper_name}] git-rebuild: skipped old round "
                     "recovery for post-rejection retarget reopen")
+        return
+    if state.block_reason in {"ACTIVE_TERMINAL_REOPEN", "ACTIVE_BATCH_CHECKPOINT"}:
+        logger.info(f"[{state.paper_name}] git-rebuild: skipped old round "
+                    "recovery after active checkpoint/reopen")
         return
 
     paper_path = Path(state.paper_dir)
@@ -2479,6 +2755,70 @@ def is_oracle_final_response_valid(response: str) -> bool:
     ))
 
 
+def research_novelty_gate_prompt() -> str:
+    return textwrap.dedent("""\
+
+        Research novelty gate:
+        You must explicitly decide whether this manuscript contains a
+        genuine new academic contribution, not just exposition, formatting,
+        venue fit, implementation packaging, or repackaging of known results.
+        Compare the central theorems/claims against the cited and likely
+        uncited prior work. Identify the concrete theorem, construction,
+        bound, equivalence, counterexample, dataset, formalization, or
+        experimentally reproducible finding that is genuinely new.
+
+        Output exactly one line:
+          Research novelty gate: PASS/FAIL - <one-sentence evidence>
+
+        Use PASS only when the paper itself contains enough concrete new
+        research content to justify an independent academic submission.
+        If this gate fails, your Overall verdict must be Major revision
+        or Reject, and the issue table must name the missing research
+        contribution that would be needed.
+    """)
+
+
+def oracle_research_novelty_gate_passed(response: str) -> bool:
+    if not response:
+        return False
+    lower = response.lower()
+    matches = list(re.finditer(
+        r"research\s+novelty\s+gate\s*:\s*(pass|fail)\b",
+        lower,
+    ))
+    if not matches:
+        return False
+    last = matches[-1]
+    if last.group(1) != "pass":
+        return False
+    evidence_window = lower[last.start():last.start() + 700]
+    evidence_markers = (
+        "genuine new academic contribution",
+        "new academic contribution",
+        "new research contribution",
+        "new mathematical contribution",
+        "genuinely new",
+        "novel contribution",
+        "novel increment",
+        "original contribution",
+    )
+    return any(marker in evidence_window for marker in evidence_markers)
+
+
+def require_oracle_research_novelty_gate(response: str) -> tuple[bool, str]:
+    if oracle_research_novelty_gate_passed(response):
+        return True, response
+    note = textwrap.dedent("""\
+
+        | RN-GATE | Whole paper | BLOCKER | Research novelty gate was not
+        explicitly passed by Oracle. At least one Oracle review round must
+        verify a genuine new academic contribution before Stage B can pass. |
+        Add or expose the missing new theorem/research contribution, then
+        rerun a fresh Oracle review. |
+    """)
+    return False, (response or "").rstrip() + "\n" + note
+
+
 def oracle_poll(task_id: str, timeout: int = 7200,
                 poll_interval: int = 30) -> str:
     """EVENT WAIT — blocks until oracle responds.
@@ -3524,12 +3864,93 @@ def summarize_content_changes(paper_path: Path,
     return "; ".join(parts)
 
 
+def _cell_text_is_pipeline_checkpoint(text: str) -> bool:
+    stripped = text.strip()
+    lower = stripped.lower()
+    if not stripped or stripped in {"—", "-"}:
+        return False
+    return (
+        is_recoverable_stage_a_block_status(stripped)
+        or any(lower.startswith(prefix)
+               for prefix in _ACTIVE_ITERATION_STATUS_PREFIXES)
+        or lower.startswith(("time-stuck", "paused"))
+    )
+
+
+def _cell_text_mentions_journal_flow(text: str) -> bool:
+    lower = text.lower()
+    return any(marker in lower for marker in (
+        "submitted",
+        "under review",
+        "peer review",
+        "rejected",
+        "retarget",
+        "transferred",
+        "withdrawn",
+        "accepted",
+        "published",
+        "revision",
+        "paper id",
+        "submission",
+        "easychair",
+        "snapp",
+        "editflow",
+        "scholarone",
+        "拒稿",
+        "已投",
+        "审稿",
+        "改投",
+        "转投",
+        "接收",
+        "发表",
+    ))
+
+
+def _board_flow_status_cell(
+    existing_status: str,
+    journal: str,
+    reroute: str,
+) -> str:
+    """Return the status-column journal-flow summary for machine board rows."""
+    status = existing_status.strip()
+    if status and not _cell_text_is_pipeline_checkpoint(status):
+        return status
+
+    reroute_text = reroute.strip()
+    if _cell_text_mentions_journal_flow(reroute_text):
+        first_sentence = re.split(r"(?<=[.;。；])\s+", reroute_text, maxsplit=1)[0]
+        return first_sentence.strip() or reroute_text
+
+    if journal and journal not in {"—", "-"}:
+        return f"Targeting {journal}; no submission result recorded"
+    return "No submission result recorded"
+
+
+def _board_reroute_with_pipeline_checkpoint(reroute: str, checkpoint: str) -> str:
+    existing = reroute.strip()
+    prefix = "Pipeline checkpoint:"
+    checkpoint_text = f"{prefix} {checkpoint}"
+    if existing in {"", "—", "-"}:
+        return checkpoint_text
+    if prefix in existing:
+        return re.sub(
+            rf"{re.escape(prefix)}.*$",
+            checkpoint_text,
+            existing,
+            flags=re.IGNORECASE,
+        ).strip()
+    return f"{existing} {checkpoint_text}"
+
+
 def update_program_board(paper_name: str, stage: str, detail: str, *,
                          deterministic: bool = False) -> None:
-    """Update the machine board status column for a paper in-place.
+    """Update the machine board row for a paper in-place.
 
     Finds the row whose backtick-wrapped dir name matches paper_name
-    and overwrites the status cell.  Thread-safe via _git_lock.
+    and records the pipeline checkpoint.  In the machine board, the
+    status cell is reserved for journal-flow facts such as submitted,
+    rejected, and retargeted; stage/round diagnostics go into reroute.
+    Thread-safe via _git_lock.
     """
     terminal_statuses = {
         "A-BLOCKED",
@@ -3565,7 +3986,15 @@ def update_program_board(paper_name: str, stage: str, detail: str, *,
                 parts = line.split("|")
                 # Expected: ['', ' `dir` ', ' journal ', ' status ', ' reroute ', '']
                 if len(parts) >= 5:
-                    parts[3] = f" {new_status} "
+                    if board_path == PROGRAM_BOARD_MACHINE and len(parts) >= 6:
+                        parts[3] = " " + _board_flow_status_cell(
+                            parts[3], parts[2], parts[4]
+                        ) + " "
+                        parts[4] = " " + _board_reroute_with_pipeline_checkpoint(
+                            parts[4], new_status
+                        ) + " "
+                    else:
+                        parts[3] = f" {new_status} "
                     lines[i] = "|".join(parts)
                     updated = True
                 break
@@ -5416,6 +5845,7 @@ def build_oracle_followup_prompt(fix_summary: str, target_journal: str) -> str:
         new mathematical defect or failed to implement an explicitly named prior
         blocker. Treat residual editorial compression after a Minor revision
         as Minor revision, not a renewed major blocker.
+        {research_novelty_gate_prompt()}
     """)
 
 
@@ -5454,10 +5884,12 @@ def build_oracle_review_prompt(target_journal: str,
         8. **Concrete fixes**: for each BLOCKER and MEDIUM issue, show HOW to
            fix with mathematical content (corrected proof sketch, precise bound,
            missing lemma statement, etc.).
+        9. **Research novelty gate**: include the exact line specified below.
 
         Be rigorous. Do not hedge. Focus on what needs to change, not on what
         the paper already says. A single wrong identity in a main theorem is a
         BLOCKER, not a LOW.
+        {research_novelty_gate_prompt()}
     """)
     if framing_mode == "fresh_eval":
         journal = target_journal or "the journal"
@@ -5478,7 +5910,7 @@ def build_oracle_review_prompt(target_journal: str,
 
 
 def build_cicm_short_review_prompt() -> str:
-    return textwrap.dedent("""\
+    return textwrap.dedent(f"""\
         === CICM PRESENTATION-ONLY SHORT-PAPER REVIEW ===
         Review only `submission_abstract.pdf` as the operative CICM manuscript.
         Do not review `main.pdf` as the operative manuscript; if a long paper or
@@ -5502,6 +5934,7 @@ def build_cicm_short_review_prompt() -> str:
         2. Any blockers specific to the short paper's two-page claim boundary.
         3. Any supplement/source-link issues that must be fixed before EasyChair.
         4. A concise action list for final human submission, if Accept or Minor.
+        {research_novelty_gate_prompt()}
     """)
 
 
@@ -5594,14 +6027,19 @@ def run_cicm_short_review(paper_path: Path, *, oracle_timeout: int,
         response = ""
     elif is_oracle_response_valid(raw):
         verdict = extract_verdict(raw) or "unknown"
-        response = raw
+        novelty_passed, response = require_oracle_research_novelty_gate(raw)
+        if verdict in ("accept", "minor revision") and not novelty_passed:
+            verdict = "major revision"
     else:
         verdict = "timeout" if not raw else "invalid_response"
         response = raw or ""
 
     record_cicm_short_review_queue(
         paper_path, task_id, pdf_path, verdict, response)
-    return verdict in ("accept", "minor revision"), verdict, response
+    return (
+        verdict in ("accept", "minor revision")
+        and oracle_research_novelty_gate_passed(response)
+    ), verdict, response
 
 
 def build_oracle_re_review_prompt(target_journal: str) -> str:
@@ -5628,6 +6066,7 @@ def build_oracle_re_review_prompt(target_journal: str) -> str:
         2. Any new problems introduced by the revision.
         3. Copyediting-only issues separately from mathematical blockers.
         4. A concise rationale for the verdict.
+        {research_novelty_gate_prompt()}
 
         If this paper now meets the standards of "{target_journal}", state Accept.
     """)
@@ -9169,7 +9608,10 @@ def _stage_b_fresh_eval(state: PaperState, *, rnd: int,
         if is_oracle_response_valid(raw):
             verdict = extract_verdict(raw)
             passed = verdict in ("accept", "minor revision")
-            return passed, verdict or "unknown", raw
+            novelty_passed, gated_raw = require_oracle_research_novelty_gate(raw)
+            if passed and not novelty_passed:
+                return False, "major revision", gated_raw
+            return passed and novelty_passed, verdict or "unknown", gated_raw
         if not raw:
             oracle_cancel(fresh_task_id, f"{state.paper_name} fresh-eval poll timeout")
             return False, "timeout", ""
@@ -9190,22 +9632,37 @@ def _latest_stage_b_fresh_verdict(state: PaperState) -> str:
 def _mark_stage_b_round_cap_stuck(state: PaperState, tag: str) -> None:
     last_deepen_v = state.stage_b_verdicts[-1] if state.stage_b_verdicts else "?"
     last_fresh_v = _latest_stage_b_fresh_verdict(state)
+    board_detail = (
+        f"deepen={last_deepen_v}, fresh={last_fresh_v}, "
+        f"{state.stage_b_rounds} rounds - checkpoint; "
+        "continue strategy iteration"
+    )
+    if _checkpoint_active_batch_if_allowed(
+        state,
+        "B",
+        tag,
+        "B-STUCK",
+        board_detail,
+    ):
+        update_program_board(state.paper_name, "B-STUCK", board_detail)
+        return
     logger.error(
         f"{tag} {MAX_STAGE_B_ROUNDS} rounds without fresh Oracle acceptance "
-        f"(deepen={last_deepen_v}, fresh={last_fresh_v}). Halting - needs human review."
+        f"(deepen={last_deepen_v}, fresh={last_fresh_v}). "
+        "Continuing via active strategy iteration."
     )
     state.stage_b_passed = False
     state.block_reason = "B_STUCK_MAX_ROUNDS_FRESH_EVAL"
     state.error = (
         f"Stage B stuck: max {MAX_STAGE_B_ROUNDS} rounds; "
         f"deepen Oracle={last_deepen_v}; "
-        f"fresh first-look={last_fresh_v}; needs human review"
+        f"fresh first-look={last_fresh_v}; continue strategy iteration"
     )
     update_program_board(
         state.paper_name,
         "B-STUCK",
         f"deepen={last_deepen_v}, fresh={last_fresh_v}, "
-        f"{state.stage_b_rounds} rounds - needs human review",
+        f"{state.stage_b_rounds} rounds - continue strategy iteration",
     )
     save_state(state)
 
@@ -9920,6 +10377,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 "streak": state.stage_b_issue_streaks.get("__journal_fit__", 0),
             })
             if state.retarget_history:
+                if _checkpoint_active_batch_if_allowed(
+                    state,
+                    "B",
+                    tag,
+                    "B-STUCK",
+                    "repeated journal-fit reject after retarget attempt; "
+                    "checkpoint; continue retarget/strategy iteration",
+                ):
+                    update_program_board(
+                        state.paper_name, "B-STUCK",
+                        "repeated journal-fit reject after retarget attempt; "
+                        "checkpoint; continue retarget/strategy iteration")
+                    return False
                 state.block_reason = "B_STUCK_JOURNAL_FIT"
                 state.stage_b_passed = False
                 state.error = "Stage B stuck: repeated journal-fit reject after retarget attempt"
@@ -9976,10 +10446,23 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
             if recent_classes and fit_count > len(recent_classes) / 2:
                 if len(state.retarget_history) >= 2:
                     logger.error(f"{tag} gate A: max retargets reached, "
-                                 "escalating to human")
+                                 "continuing strategy iteration")
+                    if _checkpoint_active_batch_if_allowed(
+                        state,
+                        "B",
+                        tag,
+                        "B-STUCK",
+                        "max fit-retargets reached; checkpoint; continue "
+                        "journal strategy iteration",
+                    ):
+                        update_program_board(
+                            state.paper_name, "B-STUCK",
+                            "max fit-retargets reached; checkpoint; continue "
+                            "journal strategy iteration")
+                        return False
                     state.error = (
-                        "Stage B gate A: max retargets reached, escalating "
-                        "to human"
+                        "Stage B gate A: max retargets reached; continue "
+                        "journal strategy iteration"
                     )
                     state.events.append({
                         "stage": "B",
@@ -9990,7 +10473,7 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                     })
                     update_program_board(
                         state.paper_name, "B-STUCK",
-                        "max fit-retargets reached; needs human review")
+                        "max fit-retargets reached; continue strategy iteration")
                     save_state(state)
                     return False
 
@@ -10098,6 +10581,19 @@ def run_stage_b(state: PaperState, *, dry_run: bool = False,
                 if state.stage_b_issue_streaks.get(key, 0) >= 4
             ]
             if stuck_gate == "B_STUCK_REPEATED_BLOCKER" and keys_at_four:
+                if _checkpoint_active_batch_if_allowed(
+                    state,
+                    "B",
+                    tag,
+                    "B-STUCK",
+                    "repeated blocker after focused-patch attempts; "
+                    "checkpoint; continue targeted rewrite iteration",
+                ):
+                    update_program_board(
+                        state.paper_name, "B-STUCK",
+                        "repeated blocker after focused-patch attempts; "
+                        "checkpoint; continue targeted rewrite iteration")
+                    return False
                 state.block_reason = "B_STUCK_REPEATED_BLOCKER"
                 state.stage_b_passed = False
                 state.error = (
@@ -10681,6 +11177,9 @@ def run_stage_c(state: PaperState, *, dry_run: bool = False,
 
         logger.info(f"{tag} Round {rnd}/{round_cap} complete, "
                     f"looping for re-review")
+
+    if _checkpoint_active_stage_c_batch_if_allowed(state, tag):
+        return False
 
     stage_c_status, stage_c_detail = classify_stage_c_terminal(state)
     state.error = f"{stage_c_status}: {stage_c_detail}"
@@ -11514,11 +12013,16 @@ def run_paper_pipeline(
             paper_name=paper_name,
             started_at=datetime.now().isoformat(),
         )
+        active_reopened = False
     else:
         # State files are shared between Windows and WSL runs.  Always trust
         # the current invocation's resolved paper path so resumed stages do
         # not keep stale D:\... paths when running under Linux.
         state.paper_dir = str(paper_path)
+        board_entry = _get_board_entries().get(paper_name)
+        active_reopened = _reopen_active_terminal_state_if_allowed(
+            state, board_entry
+        )
         if (
             not extra_stage_c_rounds
             and normalize_stage_c_terminal_state(state, persist=True)
@@ -11581,6 +12085,16 @@ def run_paper_pipeline(
     # Recover round counters from git log if state was reset or started fresh.
     # Prevents redoing Codex/Oracle work already committed in prior sessions.
     rebuild_rounds_from_git(state)
+    if active_reopened or state.block_reason == "ACTIVE_BATCH_CHECKPOINT":
+        if state.current_stage == "B":
+            state.stage_b_rounds = 0
+        elif state.current_stage == "C":
+            state.stage_c_rounds = 0
+        state.current_round = 0
+        state.error = ""
+        if active_reopened:
+            state.block_reason = "ACTIVE_TERMINAL_REOPEN"
+        save_state(state)
 
     # Auto-detect target journal: paper metadata/board > explicit CLI arg >
     # existing state > conservative default.
@@ -11758,6 +12272,8 @@ def _discovery_diagnosis(summary: dict) -> str:
         return "runnable"
     if summary.get("candidate_count", 0) == 0:
         return "no_candidate_dirs"
+    if summary.get("skipped_oracle_pending_count", 0):
+        return "oracle_pending"
     if (
         summary.get("skipped_status_count", 0)
         or summary.get("skipped_done_count", 0)
@@ -11828,8 +12344,9 @@ def discover_paper_summary(paper_dirs: Optional[list[str]] = None,
                     )
                     continue
                 if state and state.current_stage == "DONE":
-                    skipped_done.append(d.name)
-                    continue
+                    if not _active_board_entry_requests_theorem_deepening(entry):
+                        skipped_done.append(d.name)
+                        continue
 
                 pending_nyxid = _pending_nyxid_oracle_prompts_for_paper(d.name)
                 if pending_nyxid:

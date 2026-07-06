@@ -23,7 +23,7 @@ REPO="/mnt/d/omega/automath"
 # the whole runnable queue (its inner pool gets --all automatically) with
 # --parallel worker slots; add `--paper <dir>` to pin to one paper.
 SUPERVISOR_ARGS=(
-  --parallel 5
+  --parallel 3
   --poll-interval 120
   --no-auto-commit
   --no-server-spawn

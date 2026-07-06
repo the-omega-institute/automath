@@ -114,9 +114,128 @@ class SupervisorHelpersTests(unittest.TestCase):
         board.assert_called_once_with(
             "2026_b_stuck",
             "B-STUCK",
-            "deepen=accept, fresh=major revision, 20 rounds - needs human review",
+            "deepen=accept, fresh=major revision, 20 rounds - continue strategy iteration",
         )
         save.assert_called_once_with(state)
+
+    def test_oracle_review_prompts_require_research_novelty_gate(self):
+        prompts = [
+            oracle_pipeline.build_oracle_review_prompt("Example Journal"),
+            oracle_pipeline.build_oracle_review_prompt(
+                "Example Journal", framing_mode="fresh_eval"),
+            oracle_pipeline.build_oracle_followup_prompt(
+                "fixed the previous issues", "Example Journal"),
+            oracle_pipeline.build_oracle_re_review_prompt("Example Journal"),
+            oracle_pipeline.build_stage_c_fresh_confirmation_prompt(
+                "Example Journal"),
+            oracle_pipeline.build_cicm_short_review_prompt(),
+        ]
+
+        for prompt in prompts:
+            with self.subTest(prompt=prompt[:40]):
+                self.assertIn("Research novelty gate", prompt)
+                self.assertIn("genuine new academic contribution", prompt)
+                self.assertIn("Research novelty gate: PASS/FAIL", prompt)
+                self.assertIn("If this gate fails", prompt)
+
+    def test_oracle_research_novelty_gate_requires_explicit_pass(self):
+        accepted_without_gate = (
+            "Overall verdict: Accept\n"
+            "The proof is correct and the paper is well written."
+        )
+        failed_gate = (
+            "Overall verdict: Major revision\n"
+            "Research novelty gate: FAIL - this is mainly exposition and "
+            "does not establish a genuine new academic contribution."
+        )
+        passed_gate = (
+            "Overall verdict: Minor revision\n"
+            "Research novelty gate: PASS - Theorem 2.1 and Theorem 3.4 "
+            "establish a genuine new academic contribution beyond known "
+            "repackaging."
+        )
+
+        self.assertFalse(
+            oracle_pipeline.oracle_research_novelty_gate_passed(
+                accepted_without_gate))
+        self.assertFalse(
+            oracle_pipeline.oracle_research_novelty_gate_passed(failed_gate))
+        self.assertTrue(
+            oracle_pipeline.oracle_research_novelty_gate_passed(passed_gate))
+
+    def test_stage_b_fresh_eval_requires_research_novelty_gate_pass(self):
+        state = oracle_pipeline.PaperState(
+            paper_dir="papers/publication/2026_gate",
+            paper_name="2026_gate",
+            target_journal="Example Journal",
+            current_stage="B",
+            pdf_path="papers/publication/2026_gate/main.pdf",
+        )
+
+        with mock.patch.object(oracle_pipeline, "save_state"), \
+             mock.patch.object(oracle_pipeline, "oracle_submit", return_value=True), \
+             mock.patch.object(
+                 oracle_pipeline,
+                 "oracle_poll",
+                 return_value=(
+                     "Overall verdict: Accept\n"
+                     + (
+                         "The referee report says the manuscript is technically "
+                         "correct, presentation-ready, and has no remaining "
+                         "revision blockers. "
+                     ) * 12
+                 ),
+             ):
+            passed, verdict, response = oracle_pipeline._stage_b_fresh_eval(
+                state,
+                rnd=1,
+                oracle_timeout=5,
+                dry_run=False,
+                tag="[2026_gate|B]",
+                safe_name="2026_gate",
+            )
+
+        self.assertFalse(passed)
+        self.assertEqual(verdict, "major revision")
+        self.assertIn("Research novelty gate", response)
+
+    def test_cicm_short_review_requires_research_novelty_gate_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paper = Path(tmp) / "2026_auditable_theory_to_paper_pipeline"
+            paper.mkdir()
+            short_pdf = paper / "submission_abstract.pdf"
+            short_pdf.write_bytes(b"%PDF short")
+            (paper / "submission_abstract.tex").write_text(
+                r"\documentclass{article}\begin{document}short\end{document}",
+                encoding="utf-8",
+            )
+
+            with mock.patch.object(
+                oracle_pipeline, "compile_latex_document", return_value=short_pdf
+            ), mock.patch.object(
+                oracle_pipeline, "oracle_submit", return_value=True
+            ), mock.patch.object(
+                oracle_pipeline,
+                "oracle_poll",
+                return_value=(
+                    "Overall verdict: Minor revision\n"
+                    + (
+                        "The presentation-only short paper is clear, concise, "
+                        "and suitable for the venue route. "
+                    ) * 12
+                ),
+            ), mock.patch.object(
+                oracle_pipeline, "record_cicm_short_review_queue", return_value=None
+            ):
+                ok, verdict, response = oracle_pipeline.run_cicm_short_review(
+                    paper,
+                    oracle_timeout=5,
+                    dry_run=False,
+                )
+
+        self.assertFalse(ok)
+        self.assertEqual(verdict, "major revision")
+        self.assertIn("Research novelty gate", response)
 
     def test_cicm_short_review_submits_submission_abstract_not_main_pdf(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -148,6 +267,9 @@ class SupervisorHelpersTests(unittest.TestCase):
                 oracle_pipeline, "oracle_poll",
                 return_value=(
                     "Overall verdict: Minor revision\n"
+                    "Research novelty gate: PASS - the short paper states a "
+                    "genuine new academic contribution in auditable theorem-to-"
+                    "paper pipeline certification.\n"
                     "Ready for presentation-only route after minor metadata checks. "
                     * 80
                 ),
@@ -607,6 +729,22 @@ class SupervisorHelpersTests(unittest.TestCase):
             entry,
         ))
 
+    def test_board_entry_skip_blocks_overlap_even_when_status_is_journal_flow(self):
+        entry = {
+            "journal": "retarget symbolic dynamics venue",
+            "status": "SIADS rejected for application-fit; retarget pending",
+            "reroute": (
+                "A-BLOCKED (semantic overlap requires explicit board "
+                "resolution before this paper can advance)"
+            ),
+            "section": "Active Rewrite / Retarget",
+        }
+
+        self.assertTrue(oracle_pipeline._board_entry_skip(
+            "2026_folded_histograms_sampling_certificates_parry_mismatch_etds",
+            entry,
+        ))
+
     def test_board_skip_allows_codex_ceiling_for_oracle_escalation(self):
         self.assertFalse(oracle_pipeline._board_skip(
             "A-BLOCKED (A2 fake extension: no new theorems; "
@@ -621,6 +759,17 @@ class SupervisorHelpersTests(unittest.TestCase):
         self.assertFalse(oracle_pipeline._board_skip(
             "A-BLOCKED (FQ deepening audit real block score=6)"
         ))
+
+    def test_board_skip_allows_non_overlap_stuck_statuses_to_iterate(self):
+        for status in (
+            "B-STUCK (deepen=minor revision, fresh=reject, 20 rounds - needs strategy iteration)",
+            "C-SCOPE-STUCK (route to novelty escalation or retarget)",
+            "C-INFRA-STUCK (retry infra repair before review)",
+            "C-NEAR-PASS (needs final review / possible C+1 override)",
+            "ACTIVE-THEOREM-DEEPENING",
+        ):
+            with self.subTest(status=status):
+                self.assertFalse(oracle_pipeline._board_skip(status))
 
     def test_board_entry_allows_manual_stage_c_extra_round_override(self):
         entry = {
@@ -1790,17 +1939,17 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertTrue(oracle_pipeline._board_skip("✅ 可投稿 — C-8"))
         self.assertFalse(oracle_pipeline._board_skip("C-RUNNING"))
 
-    def test_board_skip_halts_blocked_and_stuck_statuses(self):
+    def test_board_skip_halts_hard_blocks_but_allows_recoverable_stuck_statuses(self):
         self.assertTrue(oracle_pipeline._board_skip(
             "A-BLOCKED (overlap deferred; wait for prior submitted/current sibling feedback)"
         ))
         self.assertTrue(oracle_pipeline._board_skip(
             "A-BLOCKED (overlap needs_human_resolution before Stage A)"
         ))
-        self.assertTrue(oracle_pipeline._board_skip(
-            "B-STUCK (max fit-retargets reached; needs human review)"
+        self.assertFalse(oracle_pipeline._board_skip(
+            "B-STUCK (max fit-retargets reached; continue strategy iteration)"
         ))
-        self.assertTrue(oracle_pipeline._board_skip(
+        self.assertFalse(oracle_pipeline._board_skip(
             "C-STUCK (joint Oracle+Claude gate exhausted)"
         ))
         self.assertTrue(oracle_pipeline._board_skip(
@@ -1959,6 +2108,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
 
         self.assertNotIn(str(paper), summary["papers"])
         self.assertEqual(summary["skipped_oracle_pending_count"], 1)
+        self.assertEqual(summary["diagnosis"], "oracle_pending")
         self.assertTrue(any(
             "2026_active_oracle_pending" in item
             for item in summary["skipped_oracle_pending"]
@@ -2005,6 +2155,52 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
             "2026_active_oracle_dispatched" in item
             for item in summary["skipped_oracle_pending"]
         ))
+
+    def test_discovery_ignores_stale_local_nyxid_timeout_without_remote_task(self):
+        paper = self._write_paper(
+            "2026_active_oracle_stale_local_timeout",
+            "Active rewrite with stale local timeout.",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_oracle_stale_local_timeout` | Test J. | A-READY | run |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        runtime = self.root / "nyxid_runtime"
+        runtime.mkdir()
+        task = "stage_a_escalate_2026_active_oracle_stale_local_timeout_123"
+        prompt = runtime / f"{task}.prompt.txt"
+        prompt.write_text("stale local timeout", encoding="utf-8")
+        (runtime / f"{task}.json").write_text(
+            json.dumps({
+                "status": "submitted",
+                "task_id": task,
+                "response": "",
+                "error": "NyxID Oracle command timed out after 120 seconds",
+            }),
+            encoding="utf-8",
+        )
+        old_time = time.time() - 6 * 3600
+        os.utime(prompt, (old_time, old_time))
+
+        with mock.patch.object(oracle_pipeline, "ORACLE_BACKEND", "nyxid"), \
+             mock.patch.object(oracle_pipeline, "_nyxid_runtime_dir", return_value=runtime):
+            summary = oracle_pipeline.discover_paper_summary(
+                respect_assignment=False
+            )
+
+        self.assertIn(str(paper), summary["papers"])
+        self.assertEqual(summary["skipped_oracle_pending_count"], 0)
 
     def test_discovery_recovers_completed_nyxid_result_and_unblocks_paper(self):
         paper = self._write_paper(
@@ -2082,6 +2278,483 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         )
 
         self.assertEqual(summary["papers"], [str(active)])
+
+    def test_active_rewrite_runs_non_overlap_stuck_and_deepening_routes(self):
+        statuses = {
+            "2026_b_stuck_iterate": "B-STUCK (deepen=minor revision, fresh=reject, 20 rounds - needs strategy iteration)",
+            "2026_c_scope_iterate": "C-SCOPE-STUCK (route to novelty escalation or retarget)",
+            "2026_c_infra_iterate": "C-INFRA-STUCK (retry infra repair before review)",
+            "2026_c_near_pass_iterate": "C-NEAR-PASS (needs final review / possible C+1 override)",
+            "2026_theorem_deepening": "ACTIVE-THEOREM-DEEPENING",
+        }
+        expected = []
+        for name in statuses:
+            expected.append(str(self._write_paper(name, f"{name} active route.")))
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                *[
+                    f"| `{name}` | Test J. | {status} | continue iteration |"
+                    for name, status in statuses.items()
+                ],
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertEqual(sorted(summary["papers"]), sorted(expected))
+        self.assertEqual(summary["skipped_status"], [])
+
+    def test_active_canonical_route_can_reference_parked_prior_route(self):
+        paper = self._write_paper(
+            "2026_active_canonical_with_parked_prior_route",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                (
+                    "| `2026_active_canonical_with_parked_prior_route` | Test J. | "
+                    "B-STUCK (continue strategy iteration) | Existing folder "
+                    "remains canonical; prior route is parked and superseded "
+                    "into this merged rewrite; reopen the B-stage strategy loop |"
+                ),
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        entry = oracle_pipeline._get_board_entries().get(paper.name)
+        self.assertTrue(oracle_pipeline._active_board_entry_allows_iteration(entry))
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+        self.assertEqual(summary["papers"], [str(paper)])
+
+    def test_run_paper_pipeline_reopens_active_non_overlap_terminal_state(self):
+        paper = self._write_paper(
+            "2026_active_b_stuck_reopen",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_b_stuck_reopen` | Test J. | B-STUCK (deepen=minor revision, fresh=reject, 20 rounds - needs strategy iteration) | continue iteration |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="B",
+        )
+        state.stage_a_passed = True
+        state.stage_a_audit_metrics = {
+            "metrics": {
+                key: value
+                for key, value in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS.items()
+            },
+            "verdict": "pass",
+            "audit_unparseable": False,
+            "blockers": [],
+            "split_required": False,
+            "ready_for_oracle_review": True,
+        }
+        state.stage_b_rounds = oracle_pipeline.MAX_STAGE_B_ROUNDS
+        state.error = "Stage B stuck: max 20 rounds; needs strategy iteration"
+        oracle_pipeline.save_state(state)
+
+        calls = []
+
+        def fake_stage_b(updated, **_kwargs):
+            calls.append((updated.current_stage, updated.stage_b_rounds, updated.error))
+            return False
+
+        old_stage_b = oracle_pipeline.STAGE_RUNNERS["B"]
+        try:
+            oracle_pipeline.STAGE_RUNNERS["B"] = fake_stage_b
+            ok, updated = oracle_pipeline.run_paper_pipeline(str(paper))
+        finally:
+            oracle_pipeline.STAGE_RUNNERS["B"] = old_stage_b
+
+        self.assertFalse(ok)
+        self.assertEqual(calls, [("B", 0, "")])
+        self.assertEqual(updated.stage_b_rounds, 0)
+        self.assertTrue(any(
+            event.get("action") == "active_terminal_reopen"
+            for event in updated.history
+        ))
+
+    def test_active_b_stuck_reopen_ignores_git_round_cap_recovery(self):
+        paper = self._write_paper(
+            "2026_active_b_stuck_git_reopen",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_b_stuck_git_reopen` | Test J. | B-STUCK (deepen=minor revision, fresh=reject, 20 rounds - needs strategy iteration) | continue iteration |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="B",
+        )
+        state.stage_a_passed = True
+        state.stage_a_audit_metrics = {
+            "metrics": {
+                key: value
+                for key, value in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS.items()
+            },
+            "verdict": "pass",
+            "audit_unparseable": False,
+            "blockers": [],
+            "split_required": False,
+            "ready_for_oracle_review": True,
+        }
+        state.stage_b_rounds = oracle_pipeline.MAX_STAGE_B_ROUNDS
+        state.error = "Stage B stuck: max 20 rounds; needs strategy iteration"
+        oracle_pipeline.save_state(state)
+
+        calls = []
+
+        def fake_rebuild(updated):
+            updated.stage_b_rounds = oracle_pipeline.MAX_STAGE_B_ROUNDS
+
+        def fake_stage_b(updated, **_kwargs):
+            calls.append((updated.current_stage, updated.stage_b_rounds, updated.error))
+            return False
+
+        old_rebuild = oracle_pipeline.rebuild_rounds_from_git
+        old_stage_b = oracle_pipeline.STAGE_RUNNERS["B"]
+        try:
+            oracle_pipeline.rebuild_rounds_from_git = fake_rebuild
+            oracle_pipeline.STAGE_RUNNERS["B"] = fake_stage_b
+            ok, updated = oracle_pipeline.run_paper_pipeline(str(paper))
+        finally:
+            oracle_pipeline.rebuild_rounds_from_git = old_rebuild
+            oracle_pipeline.STAGE_RUNNERS["B"] = old_stage_b
+
+        self.assertFalse(ok)
+        self.assertEqual(calls, [("B", 0, "")])
+        self.assertEqual(updated.stage_b_rounds, 0)
+
+    def test_active_batch_checkpoint_ignores_git_round_cap_recovery(self):
+        paper = self._write_paper(
+            "2026_active_batch_checkpoint_git_reopen",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_batch_checkpoint_git_reopen` | Test J. | B-STUCK (checkpoint; continue strategy iteration) | continue iteration |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="B",
+        )
+        state.stage_a_passed = True
+        state.stage_a_audit_metrics = {
+            "metrics": {
+                key: value
+                for key, value in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS.items()
+            },
+            "verdict": "pass",
+            "audit_unparseable": False,
+            "blockers": [],
+            "split_required": False,
+            "ready_for_oracle_review": True,
+        }
+        state.stage_b_rounds = 0
+        state.block_reason = "ACTIVE_BATCH_CHECKPOINT"
+        oracle_pipeline.save_state(state)
+
+        calls = []
+
+        def fake_rebuild(updated):
+            updated.stage_b_rounds = oracle_pipeline.MAX_STAGE_B_ROUNDS
+
+        def fake_stage_b(updated, **_kwargs):
+            calls.append((updated.current_stage, updated.stage_b_rounds, updated.error))
+            return False
+
+        old_rebuild = oracle_pipeline.rebuild_rounds_from_git
+        old_stage_b = oracle_pipeline.STAGE_RUNNERS["B"]
+        try:
+            oracle_pipeline.rebuild_rounds_from_git = fake_rebuild
+            oracle_pipeline.STAGE_RUNNERS["B"] = fake_stage_b
+            ok, updated = oracle_pipeline.run_paper_pipeline(str(paper))
+        finally:
+            oracle_pipeline.rebuild_rounds_from_git = old_rebuild
+            oracle_pipeline.STAGE_RUNNERS["B"] = old_stage_b
+
+        self.assertFalse(ok)
+        self.assertEqual(calls, [("B", 0, "")])
+        self.assertEqual(updated.stage_b_rounds, 0)
+
+    def test_active_c_terminal_reopen_bypasses_terminal_normalization(self):
+        paper = self._write_paper(
+            "2026_active_c_infra_reopen",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_c_infra_reopen` | Test J. | C-INFRA-STUCK (retry infra repair before review) | continue infra repair |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="C",
+        )
+        state.stage_a_passed = True
+        state.stage_b_passed = True
+        state.stage_a_audit_metrics = {
+            "metrics": {
+                key: value
+                for key, value in oracle_pipeline.STAGE_A_METRIC_THRESHOLDS.items()
+            },
+            "verdict": "pass",
+            "audit_unparseable": False,
+            "blockers": [],
+            "split_required": False,
+            "ready_for_oracle_review": True,
+        }
+        state.stage_c_rounds = oracle_pipeline.MAX_STAGE_C_ROUNDS
+        state.error = "C-INFRA-STUCK: Stage C exhausted 15 rounds with Oracle extraction/infra symptoms"
+        oracle_pipeline.save_state(state)
+
+        calls = []
+
+        def fake_stage_c(updated, **_kwargs):
+            calls.append((updated.current_stage, updated.stage_c_rounds, updated.error))
+            return False
+
+        def fake_rebuild(updated):
+            updated.stage_c_rounds = oracle_pipeline.MAX_STAGE_C_ROUNDS
+
+        old_rebuild = oracle_pipeline.rebuild_rounds_from_git
+        old_stage_c = oracle_pipeline.STAGE_RUNNERS["C"]
+        try:
+            oracle_pipeline.rebuild_rounds_from_git = fake_rebuild
+            oracle_pipeline.STAGE_RUNNERS["C"] = fake_stage_c
+            ok, updated = oracle_pipeline.run_paper_pipeline(str(paper))
+        finally:
+            oracle_pipeline.rebuild_rounds_from_git = old_rebuild
+            oracle_pipeline.STAGE_RUNNERS["C"] = old_stage_c
+
+        self.assertFalse(ok)
+        self.assertEqual(calls, [("C", 0, "")])
+        self.assertEqual(updated.stage_c_rounds, 0)
+
+    def test_active_stage_b_round_cap_is_checkpoint_not_terminal(self):
+        paper = self._write_paper(
+            "2026_active_b_checkpoint",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_b_checkpoint` | Test J. | B-RUNNING | continue iteration |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="B",
+            stage_b_rounds=oracle_pipeline.MAX_STAGE_B_ROUNDS,
+            stage_b_verdicts=["major revision"],
+        )
+        state.log_event(
+            "B",
+            "fresh_eval",
+            round_num=oracle_pipeline.MAX_STAGE_B_ROUNDS,
+            verdict="major revision",
+        )
+
+        with mock.patch.object(oracle_pipeline, "save_state") as save, \
+             mock.patch.object(oracle_pipeline, "update_program_board") as board:
+            oracle_pipeline._mark_stage_b_round_cap_stuck(
+                state, "[2026_active_b_checkpoint|B]")
+
+        self.assertEqual(state.current_stage, "B")
+        self.assertEqual(state.stage_b_rounds, 0)
+        self.assertEqual(state.error, "")
+        self.assertEqual(state.block_reason, "ACTIVE_BATCH_CHECKPOINT")
+        self.assertFalse(state.stage_b_passed)
+        self.assertTrue(any(
+            event.get("action") == "active_batch_checkpoint"
+            for event in state.history
+        ))
+        board.assert_called_once_with(
+            "2026_active_b_checkpoint",
+            "B-STUCK",
+            "deepen=major revision, fresh=major revision, 20 rounds - "
+            "checkpoint; continue strategy iteration",
+        )
+        save.assert_called_once_with(state)
+
+    def test_active_stage_c_round_cap_is_checkpoint_not_terminal(self):
+        paper = self._write_paper(
+            "2026_active_c_checkpoint",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_c_checkpoint` | Test J. | C-RUNNING | continue iteration |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        state = oracle_pipeline.PaperState(
+            paper_dir=str(paper),
+            paper_name=paper.name,
+            current_stage="C",
+            stage_c_rounds=oracle_pipeline.MAX_STAGE_C_ROUNDS,
+            stage_c_verdicts=["oracle:major revision;claude:revise"],
+        )
+
+        with mock.patch.object(oracle_pipeline, "save_state") as save, \
+             mock.patch.object(oracle_pipeline, "update_program_board") as board:
+            handled = oracle_pipeline._checkpoint_active_stage_c_batch_if_allowed(
+                state, "[2026_active_c_checkpoint|C]")
+
+        self.assertTrue(handled)
+        self.assertEqual(state.current_stage, "C")
+        self.assertEqual(state.stage_c_rounds, 0)
+        self.assertEqual(state.error, "")
+        self.assertEqual(state.block_reason, "ACTIVE_BATCH_CHECKPOINT")
+        self.assertFalse(state.stage_c_passed)
+        self.assertTrue(any(
+            event.get("action") == "active_batch_checkpoint"
+            for event in state.history
+        ))
+        board.assert_called_once()
+        status, detail = board.call_args.args[1:]
+        self.assertTrue(status.startswith("C-"))
+        self.assertIn("checkpoint", detail)
+        self.assertIn("continue", detail)
+        save.assert_called_once_with(state)
+
+    def test_active_theorem_deepening_done_state_is_runnable(self):
+        paper = self._write_paper(
+            "2026_active_done_deepening",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        ordinary_done = self._write_paper(
+            "2026_ordinary_done",
+            "\\documentclass{article}\n\\begin{document}x\\end{document}\n",
+        )
+        oracle_pipeline.PROGRAM_BOARD.write_text(
+            "\n".join([
+                "## Active Rewrite / Retarget",
+                "",
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                "| `2026_active_done_deepening` | Test J. | ACTIVE-THEOREM-DEEPENING | generate theorem package |",
+                "| `2026_ordinary_done` | Test J. | C-DONE | wait |",
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            oracle_pipeline.PROGRAM_BOARD.read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+        for path in (paper, ordinary_done):
+            state = oracle_pipeline.PaperState(
+                paper_dir=str(path),
+                paper_name=path.name,
+                current_stage="DONE",
+            )
+            state.completed_at = "2026-06-01T00:00:00"
+            oracle_pipeline.save_state(state)
+
+        summary = oracle_pipeline.discover_paper_summary(
+            respect_assignment=False
+        )
+
+        self.assertIn(str(paper), summary["papers"])
+        self.assertNotIn(str(ordinary_done), summary["papers"])
+        self.assertTrue(any(
+            "2026_ordinary_done" in item
+            for item in summary["skipped_status"] + summary["skipped_done"]
+        ))
 
     def test_semantic_overlap_blocks_unresolved_submitted_sibling(self):
         current = self._write_paper("2026_current_overlap", """
@@ -2221,6 +2894,39 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         self.assertIn("A-BLOCKED", board)
         self.assertIn("C-NEAR-PASS", board)
 
+    def test_active_checkpoint_updates_keep_journal_flow_in_status_cell(self):
+        oracle_pipeline.PROGRAM_BOARD_MACHINE.write_text(
+            "\n".join([
+                "| Directory | Target journal | Status | Reroute |",
+                "|------|---------|------|---------|",
+                (
+                    "| `2026_flow_status` | Experimental Mathematics (was IMRN) | "
+                    "IMRN rejected 2026-06-01; retargeted to Experimental Mathematics | "
+                    "Run Stage C confirmation |"
+                ),
+            ]),
+            encoding="utf-8",
+        )
+        oracle_pipeline._invalidate_board_cache()
+
+        oracle_pipeline.update_program_board(
+            "2026_flow_status",
+            "C-NEAR-PASS",
+            "Sage certificate passed; final C+1/package confirmation needed",
+            deterministic=True,
+        )
+
+        row = oracle_pipeline.PROGRAM_BOARD_MACHINE.read_text(
+            encoding="utf-8"
+        ).splitlines()[2]
+        parts = [part.strip() for part in row.split("|")]
+        self.assertEqual(
+            parts[3],
+            "IMRN rejected 2026-06-01; retargeted to Experimental Mathematics",
+        )
+        self.assertIn("C-NEAR-PASS", parts[4])
+        self.assertIn("Sage certificate passed", parts[4])
+
     def test_stage_c_terminal_classifies_recent_accept_submit_as_near_pass(self):
         state = oracle_pipeline.PaperState(
             paper_dir=str(self.root / "2026_near_pass"),
@@ -2236,8 +2942,8 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
         status, detail = oracle_pipeline.classify_stage_c_terminal(state)
 
         self.assertEqual(status, "C-NEAR-PASS")
-        self.assertIn("final review", detail)
-        self.assertIn("report to the user", detail)
+        self.assertIn("C+1", detail)
+        self.assertIn("package confirmation", detail)
 
     def test_stage_c_requires_fresh_accept_after_deepen_accept(self):
         paper = self._write_paper("2026_stage_c_gate", "\\title{Gate}\n")
@@ -2493,7 +3199,7 @@ class OraclePipelineOverlapGuardTests(unittest.TestCase):
 
         self.assertEqual(status, "C-HARD-STUCK")
         self.assertIn("major revision", detail.lower())
-        self.assertIn("ask the user", detail)
+        self.assertIn("continue deep rewrite", detail)
 
     def test_stage_c_terminal_does_not_treat_extraction_word_as_infra(self):
         state = oracle_pipeline.PaperState(

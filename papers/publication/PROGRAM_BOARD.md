@@ -1,16 +1,15 @@
 # Publication Board
 
-Updated: 2026-06-22
+Updated: 2026-07-06
 
 This board is for human tracking only: one paper or route per row. Machine
 state, hard gates, temporary failures, and daemon scheduling details live in
 `PROGRAM_BOARD_MACHINE.md`.
 
-Current pipeline health: Oracle server is online and five ChatGPT Oracle tabs
-are registered. The approved JDDE C+1 gate completed on 2026-06-11 with Oracle
-`accept` and Codex `submit`. The remaining infrastructure task is to restart
-the long-running supervisor under the Windows user environment that can execute
-MiKTeX.
+Current pipeline health: the local NyxID `chatgpt-pro` CDP pool is the
+scheduler target for this branch, with three local tabs. The WSL supervisor
+runs the rolling paper pipeline with `--parallel 3`; shared `omega-oracle` is
+not the scheduler target for this branch.
 
 Operating rule: rejected routes have priority. If a rejected manuscript overlaps
 strongly with a submitted or under-review manuscript, wait for the active
@@ -20,35 +19,37 @@ submission unless the board explicitly records a merge, supersession, or closure
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| Pipeline daemon / Oracle | local automation | Oracle server online with 5 registered tabs. JDDE C+1 proved the Windows MiKTeX path works when the pipeline is launched under the real user environment. | Restart the long-running supervisor with `--parallel 5 --no-claude --no-auto-commit --no-server-spawn --no-pi-review`, then verify health snapshot and advancing logs. |
-| `2026_auditable_theory_to_paper_pipeline` | CICM presentation-only / mathematical software workshop | Short-paper Oracle fresh review returned `Minor revision` with no two-page claim-boundary blocker. The requested packaging clarity was handled on 2026-06-21: short PDF clarifies roles versus coordinates, `CICM_SUPPLEMENT_README.md` names operative support records, and the supplement zip was rebuilt. | Ready for human EasyChair final check: verify author/order/metadata, visually inspect `submission_abstract.pdf`, confirm source link and supplement zip, then submit as CICM presentation-only. Do not run ordinary Stage B on `main.pdf` for this route. |
+| Pipeline daemon / Oracle | local automation | Local NyxID `chatgpt-pro` CDP pool online with 3 registered tabs. The long-running supervisor is running under WSL with `--parallel 3 --no-auto-commit --no-server-spawn --no-pi-review`; `.inner.restart` has been reissued so the next safe drain loads the active batch-checkpoint fix. | Keep the local 3-tab pool as the scheduler target; do not use the shared `omega-oracle` pool for this branch's rolling paper pipeline. |
 
 ## Submitted: Wait For Feedback
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | Journal of Theoretical Probability | Submitted; peer review in progress; 7 reviewers invited. Current title: "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type". | Wait for editorial/reviewer feedback. Do not process overlapping zero-jitter route. |
-| `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-Theor. Inf. Appl. | Submitted; no feedback recorded. | Wait for result. |
-| `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | Journal of Number Theory | Submitted 2026-03-14; under review since 2026-03-25. Major revision completed and submitted; revision package recorded on `dev-automation-integration` commit `8f185f3a2`. Title: "A quartic cover of 37a1 and its regular S4-closure". | Wait for JNT feedback on the submitted major revision. |
-| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | Submitted 2026-05-11; under review; Paper ID `260511-Zhang-2`. | Wait for result. Related Fibonacci/Zeckendorf finite-window manuscripts remain paused. |
+| `submitted_2026_tilt_dynamics_cylinder_information_parry_measure_qtds` | Journal of Theoretical Probability | Submitted to JTP; peer review in progress. | Wait for editorial/reviewer feedback. Recorded context: 7 reviewers invited; current title "Exponential Tilting and Information Fluctuations for One-Step Markov Measures on Shifts of Finite Type". Do not process overlapping zero-jitter route. |
+| `submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita` | RAIRO-Theor. Inf. Appl. | Submitted to RAIRO; referee reports received and local revision package is in progress. | Prepare the revised manuscript and response package from `response_to_referees.tex`, `NOVELTY_AUDIT.md`, and `THEOREM_MINING_ORACLE.md`; do not treat this as ordinary active rewrite unless a revision-resubmission gate is explicitly opened. |
+| `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` | Journal of Number Theory | Submitted to JNT 2026-03-14; under review since 2026-03-25; major revision submitted. | Wait for JNT feedback on the submitted major revision. Recorded context: revision package on `dev-automation-integration` commit `8f185f3a2`; title "A quartic cover of 37a1 and its regular S4-closure". |
+| `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds` | DCDS-A | Submitted to DCDS-A 2026-05-11; under review. | Wait for result. Recorded context: Paper ID `260511-Zhang-2`. Related Fibonacci/Zeckendorf finite-window manuscripts remain paused. |
 | `2026_scan_error_prefix_partitions_convergence_rates_etds` | ETDS | Submitted; submission date and ID still need to be recorded. | Add submission ID/date when available. Old `prefix_scan_error...` route is legacy only. |
 | `2026_homological_visibility_gluing_obstructions_state_forcing_apal` | APAL | Submitted manually by user on 2026-06-11. 2026-06-17: two referee-grade blockers fixed locally (§7.21 cocycle normalization; §7.14 Čech-site over-claim → precise finite-site Leray comparison), compiles clean — held as a revision-ready improvement, NOT re-entered. | Wait for APAL editorial feedback; use the 2026-06-17 fixes if a revision is requested. Do not process overlapping gluing-failure or recursive-addressing routes independently. |
+| `2026_auditable_theory_to_paper_pipeline` | CICM 2026 Presentation Only | Submitted to CICM 2026 Presentation Only on EasyChair 2026-06-22. | Wait for CICM feedback. Recorded context: Submission `3974`; uploaded paper `CICM_2026_paper_3974.pdf`; title "Publication-Coordinate Audit Interfaces for AI-Assisted Formal-Mathematics Pipelines". EasyChair did not expose a separate supplement/archive upload field in the observed submission flow; contact chairs only if a supplement update is needed. |
+| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | Journal of Dynamics and Differential Equations | Submitted via Springer Nature SNAPP on 2026-06-22 after final human review. Source package and cover letter were uploaded; SNAPP reported successful LaTeX-to-PDF conversion. Submission ID not yet recorded locally. | Wait for JDDE/Springer feedback; add manuscript/submission ID when available. |
 
 ## Ready Or Near-Ready After Human Review
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde` | JDDE | C-DONE after controlled C+1 on 2026-06-11. Round 16 returned Oracle `accept` and Codex `submit`, with 0 remaining work packages; no paper changes were needed. | Ready for human final submission review: confirm JDDE/Springer source-package requirements, author metadata, declarations, and upload files. |
-| `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory; backups: Operators and Matrices / Complex Analysis and Operator Theory | C-DONE after JST rejection. JST/EditFlow rejected as not suitable, with no technical referee report. Current retarget is IEOT, but research directive still calls for checking the Weyl-Horn singular-value body theorem package. | Not direct upload today. Verify the new Weyl-Horn package is actually in the manuscript, then final venue/package review. |
-| `2026_elliptic_normalization_branch_geometry_quartic_spectral` | Indagationes Mathematicae | C-DONE, complete multi-file manuscript, split-overlap gate clean. No theorem-deepening blocker is recorded on the human board. | Do final theorem/venue review and Stage F journal confirmation; if no new blocker appears, prepare submission package. |
-| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | Experimental Mathematics (was IMRN) | C-NEAR-PASS after retarget; recent Oracle accepted and Codex said submit, but this needs final human review / possible C+1 override rather than another ordinary rewrite loop. | Run `certificates/verify_certificates.py` under Sage and do final package/venue review before upload. |
-| `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | venue pending | C-DONE review history exists, but this is not yet a direct-upload route: the board lacks a concrete strengthened theorem package and venue decision. | Generate a theorem-deepening work order first, implement or explicitly reject it, then rerun Stage F/C after the strengthened package is present. |
+| `2026_fredholm_determinants_cyclic_block_spectral_rigidity_jst` | Integral Equations and Operator Theory; backups: Operators and Matrices / Complex Analysis and Operator Theory | JST/EditFlow rejected as not suitable; retargeted to IEOT. | Not direct upload today. Pipeline checkpoint: C-DONE/ready-needs-human-review after JST rejection. Verify the new Weyl-Horn package is actually in the manuscript, then final venue/package review. |
 
 ## Active Rewrite / Retarget
 
 | Paper or route | Venue | Status | Next step |
 |---|---|---|---|
-| _None_ | - | No ordinary rolling-pipeline paper is currently runnable. | Promote a paper into this section only after its board and machine gates are non-blocked. |
+| `2026_detector_shells_click_record_kms_jphyscomm` | retarget physics-math venue | GRG and JPhysComm rejected; canonical route is retargeting. | Still active. Latest machine state 2026-07-06 11:32: Stage B reopened at B1, but Oracle infra paused after three no-valid-response attempts. Next automatic action is re-submit the same B1 review when local Oracle capacity is clear; do not move to ready/submitted. |
+| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | retarget dynamical systems / symbolic dynamics venue | ETDS rejected; route reopened for dynamical/symbolic-dynamics retarget. | Still active. Latest machine state 2026-07-06 11:25: Stage B is at B5/B6 after ETDS rejection, last deepen verdict minor revision, but Oracle infra paused at B6. Next automatic action is retry B6 with a clean fresh Oracle review. |
+| `2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa` | JFA / analysis venue | Targeting JFA/analysis venue; no submission result recorded. | Still active. Latest machine state 2026-07-06 13:22: Stage C reached C5, last recorded final verdict lane was `oracle:minor revision;claude:revise`, then Oracle final-review retry paused on invalid/no response. Next automatic action is rerun C5 final gate. |
+| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | Targeting Monatshefte; no submission result recorded. | Still active. Do not downgrade because the last Stage A escalation produced no paper diff: that is treated as NyxID/Oracle extraction or instruction-capture failure, not evidence that no research route exists. Latest machine state 2026-07-06 14:12: A-BLOCKED score=4 after repeated unparseable/no-change escalation cycles. Next action is rerun Oracle escalation after NyxID capture is fixed, requiring concrete theorem/venue instructions. |
+| `2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists` | Experimental Mathematics (was IMRN) | IMRN route retargeted to Experimental Mathematics; not yet submitted to T&F. | Still active but blocked on Oracle capacity, not ready for Taylor & Francis upload. Latest machine state 2026-07-06 13:22: Stage C C1 re-submit hit NyxID `oracle_quota_exceeded` / invalid final-review response; retry C1 after local pool clears. |
+| `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | venue pending | Venue not selected; no submission result recorded. | In active rewrite now. Latest log 2026-07-06 13:43-14:13: Stage B round 2 deepen was minor revision, fresh eval returned major revision, repeated blocker is Theorem 3.11; Codex focused fixes B4.1-B4.3 are being applied to the manuscript/source files. Keep running targeted rewrite and then rerun B review. |
 
 ## Newmath Intake
 
@@ -74,15 +75,13 @@ These are not active papers until manually promoted into a `2026_*` directory.
 | `submitted_2026_resolution_folding_core_symbolic_dynamics_jnt` | Journal of Number Theory | Rejected; superseded by DCDS-A `2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds`. | Do not process while DCDS-A is under review. |
 | `submitted_2026_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp` | Journal of Theoretical Probability | Rejected; superseded by tilt-dynamics JTP route. | Do not process while JTP route is under review. |
 | `submitted_2026_shell_geometry_detector_thermality_kms_grg` | GRG | Rejected history route; superseded by canonical detector-shells rewrite. | Do not process independently; use as background for detector-shells. |
-| `2026_detector_shells_click_record_kms_jphyscomm` | retarget physics-math venue | B-STUCK after 20 rounds: deepen review was minor revision but fresh Oracle returned reject, with blocker-level PDF/citation/bibliography/physics-claim issues. | Needs human decision: major repair, downgrade, or new route. Do not leave in rolling Active Rewrite until that decision is made. |
-| `2026_finite_parts_dynamical_zeta_shifts_finite_type_etds` | retarget dynamical systems / symbolic dynamics venue | B-STUCK after the post-rejection reopen: Stage A passed on the Perron-boundary theorem spine, but the local machine board now records `deepen=?`, `fresh=?`, `20 rounds`, and `needs human review`. | Do not leave in rolling Active Rewrite. Decide whether this is an Oracle-infra reset/reopen, a manual B-stage review, or a venue/claim downgrade before allowing another automatic run. |
 | `2026_single_primitive_universality_hierarchy` | Proc. AMS | Stage A blocked after repeated deterministic failure around Richardson normal-form obstruction and one-free-monogenic-orbit multiplication obstruction. | Needs real theorem strengthening or scope tightening before automatic rerun; avoid expanding into Zeckendorf/folded-family material. |
-| `2026_prime_languages_finite_state_obstructions_monatshefte` | Monatshefte | C-SCOPE-STUCK after Stage C exhausted 15 rounds; ordinary rolling supervisor will not rerun it. | Needs explicit human override (`--extra-stage-c-rounds`) or a route decision: deep rewrite, merge, or lower/alternate venue. Do not process as ordinary Active Rewrite. |
 | `2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds` | ETDS | Parked; merged into folded-histograms route. | Use as material only. |
 | `2026_prefix_scan_error_boundary_rates_dynamical_systems` | legacy | Parked; canonical route is `2026_scan_error_prefix_partitions_convergence_rates_etds`. | Do not process independently. |
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` / `2026_recursive_addressing_prefix_sites_tac` | APAL / TAC | Overlaps homological-visibility APAL route. | Decide canonical route before any work; currently APAL homological-visibility is canonical. |
 | `2026_cubical_stokes_inverse_boundary_readout_jdsgt` | legacy | Duplicate of canonical JDDE route `2026_coefficient_sup_radial_homotopy_monomial_forms_jdde`. | Do not process independently. |
 | `2026_golden_ratio_driven_scan_projection_generation_recursive_emergence` | missing source | Board entry exists but local source directory is missing. | Do not process until source is restored or explicitly renamed. |
+| `2026_elliptic_normalization_branch_geometry_quartic_spectral` | Indagationes Mathematicae | Parked before journal upload: Indagationes author guide requires papers to be uploaded to arXiv before journal consideration; no local arXiv ID is recorded. The manuscript is otherwise complete as a multi-file PDF/source package. | First prepare and submit the arXiv package, then reopen the Indagationes journal submission route after an arXiv identifier is available. |
 
 ## Skeletons
 
