@@ -50,6 +50,8 @@ def build_parser():
                         help="Python interpreter for judge verification. Default: <judge-root>/.venv/bin/python.")
     parser.add_argument("--daemon", action="store_true",
                         help="Detach before running.")
+    parser.add_argument("--full", action="store_true",
+                        help="Run the FULL blind benchmark over all residuals (default: 19-problem spike).")
     return parser
 
 
@@ -135,8 +137,9 @@ def main():
     if args.daemon:
         daemonize()
 
-    sample = pick_sample()
-    log(f"BLIND spike: {len(sample)} problems ({sum(1 for _,_,v in sample if v)} true / {sum(1 for _,_,v in sample if not v)} false)")
+    sample = R.load_unsolved() if args.full else pick_sample()
+    mode = "full" if args.full else "spike"
+    log(f"BLIND {mode}: {len(sample)} problems ({sum(1 for _,_,v in sample if v)} true / {sum(1 for _,_,v in sample if not v)} false)")
     results = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=PARALLEL) as ex:
         futs = {ex.submit(run_one, i, p, v): i for i, p, v in sample}

@@ -18,9 +18,9 @@ Guided results are upper bounds.
 | deterministic solo | no LLM | sample_200 | 160/200 | - | baseline |
 | deterministic solo | no LLM | hard2 | 65/200 | - | baseline |
 | guided escalation | yes | 175 residuals | 173/175 | 0 | upper bound |
-| blind spike | no | 19 residuals | 18/19 | 0 | preliminary |
+| blind (full) | no | 175 residuals | 174/175 | 0 | full run |
 
-Guided totals after escalation are `sample_200` 200/200 and `hard2` 198/200. The two guided residual misses are `hard2_0027` and `hard2_0051`. The blind spike miss is `hard2_0009`, an abstention with no accepted certificate.
+Guided totals after escalation are `sample_200` 200/200 and `hard2` 198/200 (residual misses `hard2_0027`, `hard2_0051`). Blind totals (verdict self-decided, judge as solve-time oracle) are `sample_200` 200/200 and `hard2` 199/200; the single blind residual miss is `hard2_0176`. Blind ≈ guided here because the counterexample/proof search itself reveals the verdict. All certificates are machine-checked with 0 wrong verdicts.
 
 ## Artifact layout
 
