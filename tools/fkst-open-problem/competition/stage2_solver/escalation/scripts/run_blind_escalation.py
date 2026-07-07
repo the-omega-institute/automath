@@ -4,23 +4,70 @@ judge-accepted certificate, and we score it. Measures the real (competition-rele
 hit rate of the hybrid on a sample of the previously-unsolved problems.
 
 Sample: 7T+3F from sample_200-unsolved and 7T+3F from hard2-unsolved = 20 problems.
-Daemonized, PARALLEL=5, resumable via accepted-cache. Run from repo root after `source .env.judge`.
+Daemonized, PARALLEL=5, resumable via accepted-cache.
 """
-import json, os, subprocess, sys, time, threading, concurrent.futures, pathlib
-import run_escalation as R  # reuse ROOT, VENV_PY, load_unsolved
+import argparse
+import concurrent.futures
+import json
+import os
+import pathlib
+import subprocess
+import time
+import threading
 
-ROOT = R.ROOT
-VENV_PY = R.VENV_PY
-BASE = pathlib.Path("/private/tmp/claude-501/-Users-lexa-Desktop-lexa-omega-automath/"
-                    "212fb8e9-b173-4c53-b415-65750bbe217b/scratchpad/spike_blind")
-BASE.mkdir(exist_ok=True)
-INSTR = BASE / "SPIKE_INSTRUCTIONS_BLIND.md"
-CODEX_LOGDIR = BASE / "codex_logs"; CODEX_LOGDIR.mkdir(exist_ok=True)
-PROGRESS = BASE / "blind_progress.json"
-CACHE = BASE / "accepted_cache.json"
+import run_guided_escalation as R  # reuse configure, load_unsolved
+
+ARTIFACT_ROOT = pathlib.Path(__file__).resolve().parents[1]
+VERIFY_ONE = pathlib.Path(__file__).resolve().with_name("verify_one.py")
+
+ROOT = None
+VENV_PY = None
+BASE = None
+INSTR = ARTIFACT_ROOT / "prompts" / "SPIKE_INSTRUCTIONS_BLIND.md"
+CODEX_LOGDIR = None
+PROGRESS = None
+CACHE = None
 PARALLEL = 5
 PER_PROBLEM_TIMEOUT = 1500
 _lock = threading.Lock()
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        description="Run blind Codex escalation over a deterministic residual spike."
+    )
+    parser.add_argument("--judge-root", required=True, type=pathlib.Path,
+                        help="Local checkout of equational-theories-lean-stage2.")
+    parser.add_argument("--work-dir", required=True, type=pathlib.Path,
+                        help="Scratch directory for per-problem files, answers, and logs.")
+    parser.add_argument("--results-ref", required=True, type=pathlib.Path,
+                        help="Directory containing deterministic residual id lists.")
+    parser.add_argument("--parallel", type=int, default=5,
+                        help="Concurrent Codex jobs. Default: 5.")
+    parser.add_argument("--timeout", type=int, default=1500,
+                        help="Per-problem Codex wall timeout in seconds. Default: 1500.")
+    parser.add_argument("--venv-python", default=None,
+                        help="Python interpreter for judge verification. Default: <judge-root>/.venv/bin/python.")
+    parser.add_argument("--daemon", action="store_true",
+                        help="Detach before running.")
+    return parser
+
+
+def configure(args):
+    global ROOT, VENV_PY, BASE, CODEX_LOGDIR, PROGRESS, CACHE
+    global PARALLEL, PER_PROBLEM_TIMEOUT
+
+    R.configure(args)
+    ROOT = R.ROOT
+    VENV_PY = R.VENV_PY
+    BASE = args.work_dir.resolve()
+    PARALLEL = args.parallel
+    PER_PROBLEM_TIMEOUT = args.timeout
+    CODEX_LOGDIR = BASE / "codex_logs"
+    PROGRESS = BASE / "blind_progress.json"
+    CACHE = BASE / "accepted_cache.json"
+    BASE.mkdir(parents=True, exist_ok=True)
+    CODEX_LOGDIR.mkdir(parents=True, exist_ok=True)
 
 
 def log(m):
@@ -43,7 +90,7 @@ def verify(pid):
     if not ans.exists():
         return None, None
     try:
-        r = subprocess.run([VENV_PY, str(ROOT / "verify_one.py"), str(prob), str(ans)],
+        r = subprocess.run([VENV_PY, str(VERIFY_ONE), "--judge-root", str(ROOT), str(prob), str(ans)],
                            cwd=ROOT, capture_output=True, text=True, timeout=120)
         st = json.loads(r.stdout.strip().splitlines()[-1])["status"]
         chosen = json.load(open(ans)).get("verdict")
@@ -82,6 +129,12 @@ def daemonize():
 
 
 def main():
+    parser = build_parser()
+    args = parser.parse_args()
+    configure(args)
+    if args.daemon:
+        daemonize()
+
     sample = pick_sample()
     log(f"BLIND spike: {len(sample)} problems ({sum(1 for _,_,v in sample if v)} true / {sum(1 for _,_,v in sample if not v)} false)")
     results = {}
@@ -101,6 +154,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--daemon" in sys.argv:
-        daemonize()
     main()

@@ -1,57 +1,81 @@
-# SAIR-EQT2 codex escalation layer
+# SAIR-EQT2 Escalation Artifact
 
-The deterministic `../submission/solver.py` is a zero-LLM floor (sample_200 160/200, hard2 65/200).
-This directory adds an **LLM escalation layer**: for each problem the solver leaves unsolved, run
-`codex` in a **judge-in-the-loop** cycle (propose a Lean certificate → run the official Lean judge →
-read the goal-state error → fix → repeat) until the judge accepts, or abstain. Nothing is trusted
-without the judge; the output is either a machine-checked certificate or none.
+## What this is
 
-## Results (independently re-verified under the official `DEFAULT_PROOF_POLICY`)
+A proof-carrying verifier-in-the-loop escalation artifact for SAIR-EQT2. It records an FKST-style Codex/Lean-judge loop that converts deterministic-solver residuals into machine-checked Lean certificates. It contains harness scripts, certificate JSONL files, replay manifests, and result ledgers for guided upper-bound and blind proof-carrying runs.
 
-### Guided (codex is told the verdict) — an UPPER BOUND
-| set | solo floor | + codex | total | still unsolved |
-|---|---|---|---|---|
-| sample_200 | 160/200 | +40 | **200/200** | — |
-| hard2 | 65/200 | +133 | **198/200** | `hard2_0027`, `hard2_0051` |
+## What this is not
 
-173 / 175 previously-unsolved problems given a machine-checked Lean certificate.
+This is not a hosted leaderboard submission.
+This is not a claim of new mathematics.
+This is not a full blind benchmark yet.
+Guided results are upper bounds.
 
-### Blind (codex is NOT told the verdict; it self-decides) — the competition-relevant measure
-- **18 / 19** on a spike of previously-unsolved problems, **0 wrong verdicts** (the one miss,
-  `hard2_0009` a false case, *abstained* — left no certificate rather than answering wrong).
-- For comparison, the published pure single-prompt LLM ceiling on the verdict-only task is
-  ~**79% local / 55% official** balanced accuracy (see arXiv 2604.18897). This layer clears it on a
-  strictly harder, proof-carrying task.
+## Results
 
-## Honest boundary (do NOT overstate)
-- **Guided 200/198 is an upper bound** (the verdict was provided). The blind number is lower and is
-  the honest, competition-relevant figure; the blind run here is a 19-problem spike, not the full set.
-- This is the **LLM track**, distinct from the deterministic Solo floor (160/65).
-- Scores are from a **local clone of the official runner**, not the hosted leaderboard.
-  **Nothing has been submitted or registered.**
-- **No new mathematics**: every problem has a known answer (the ETP resolved all of these); these
-  certificates re-prove known facts. The contribution is a system/method, not a theorem.
+| mode | verdict given? | scope | accepted | wrong accepted | status |
+|---|---|---|---|---|---|
+| deterministic solo | no LLM | sample_200 | 160/200 | - | baseline |
+| deterministic solo | no LLM | hard2 | 65/200 | - | baseline |
+| guided escalation | yes | 175 residuals | 173/175 | 0 | upper bound |
+| blind spike | no | 19 residuals | 18/19 | 0 | preliminary |
 
-## Files
-- `run_escalation.py` — guided full-run orchestrator (resumable, cache-backed, daemonizable).
-- `run_blind_spike.py` — blind spike orchestrator (codex self-decides the verdict).
-- `verify_one.py` — single (problem, answer) check against `judge.verify.verify_answer`, injecting
-  the official `DEFAULT_PROOF_POLICY` (mirrors `pipeline/proxy.py`).
-- `SPIKE_INSTRUCTIONS.md` / `SPIKE_INSTRUCTIONS_BLIND.md` — the per-problem codex directives.
-- `certs/guided_certs.jsonl` — 173 accepted guided certificates (`{id, set, eq*, equation*, truth,
-  verdict, code}` per line).
-- `certs/blind_certs.jsonl` — 18 accepted blind certificates.
-- `results/guided_final.json`, `results/blind_spike.json`, `results/guided_final_sweep.json` — tallies.
+Guided totals after escalation are `sample_200` 200/200 and `hard2` 198/200. The two guided residual misses are `hard2_0027` and `hard2_0051`. The blind spike miss is `hard2_0009`, an abstention with no accepted certificate.
 
-## Reproduce
-Requires an external checkout of the judge (not vendored, per FKST discipline):
+## Artifact layout
+
+- `scripts/` contains the guided runner, blind runner, one-certificate verifier, manifest exporter, certificate schema checker, and result summarizer.
+- `prompts/` contains the guided and blind Codex instructions used by the runs.
+- `certs/` contains accepted certificate JSONL ledgers.
+- `results/` contains result ledgers and `summary.md`.
+- `manifests/` contains judge snapshot metadata and replay manifests.
+- `docs/` contains the honest boundary, replay guide, internal memo, outline, and next steps.
+- `data/residual_sets/` contains deterministic residual id lists derived from `results/guided_final_sweep.json`.
+- `external/` documents the non-vendored judge dependency.
+
+## Reproducing certificate verification
+
+Clone the official judge separately and pin it to the snapshot recorded in `manifests/judge_snapshot.json`. The judge is not vendored here.
+
 ```sh
 git clone https://github.com/SAIRcompetition/equational-theories-lean-stage2 /path/eqt2-stage2
-cd /path/eqt2-stage2 && SKIP_DOCKER=1 bash scripts/setup.sh   # builds local Lean judge
-python3 -m venv .venv && .venv/bin/pip install openai         # runner imports openai
-# place run_escalation.py / verify_one.py / run_blind_spike.py at the judge repo root, then:
-source .env.judge && PYTHONDONTWRITEBYTECODE=1 .venv/bin/python run_escalation.py --daemon
+cd /path/eqt2-stage2
+git checkout 6805e2323018fbd8a85f41ca09fc33d74d5a02a5
 ```
-Note: the harness scripts contain absolute paths from the run environment (judge root, a scratch work
-dir); adjust the constants at the top of each before re-running elsewhere. macOS `/tmp` is purged on a
-3-day cycle — keep the judge clone at a durable (non-`/tmp`) path.
+
+Validate the local certificate ledgers:
+
+```sh
+python3 scripts/check_cert_jsonl.py certs/guided_certs.jsonl
+python3 scripts/check_cert_jsonl.py certs/blind_spike_certs.jsonl
+```
+
+Replay of a specific certificate should use `scripts/verify_one.py --judge-root /path/eqt2-stage2 <problem.json> <answer.json>` and the rows in `manifests/certificate_replay_manifest.jsonl`.
+
+## Running new escalation jobs
+
+Guided escalation is parameterized:
+
+```sh
+python scripts/run_guided_escalation.py --judge-root /path/eqt2-stage2 --work-dir /path/scratch/guided --results-ref data/residual_sets --parallel 5 --timeout 1500
+```
+
+Blind escalation uses the same contract:
+
+```sh
+python scripts/run_blind_escalation.py --judge-root /path/eqt2-stage2 --work-dir /path/scratch/blind --results-ref data/residual_sets --parallel 5 --timeout 1500
+```
+
+Both runners depend on the Codex CLI and the local judge environment. They are resumable through scratch-directory cache files.
+
+## Relation to FKST
+
+The artifact follows the FKST discipline: extract the deterministic frontier, condition synthesis on problem statements and judge policy, ask Codex for Lean proofs or finite countermodels, and trust only certificates replayed by the Lean judge.
+
+## Relation to router-hypothesis work
+
+Earlier router-hypothesis work studies proof-routing over Lean-verified algebra under blind and cue-conditioned settings. This artifact is the constructive counterpart: a routes-and-proves escalation loop in the magma/equational SAIR-EQT2 domain.
+
+## Honest boundary
+
+See [docs/HONEST_BOUNDARY.md](docs/HONEST_BOUNDARY.md).

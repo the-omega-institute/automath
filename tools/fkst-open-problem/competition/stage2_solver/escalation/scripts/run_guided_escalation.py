@@ -10,8 +10,10 @@ independently re-verify it under the official DEFAULT_PROOF_POLICY, and record t
 - Per-problem wall timeout (codex `timeout`), miss -> recorded, not fatal.
 - Progress written to escalation_progress.json; summary line every ~20s.
 
-Run from repo root with `.venv/bin/python run_escalation.py` after `source .env.judge`.
+Run from this artifact package with explicit --judge-root, --work-dir, and
+--results-ref arguments after preparing the judge checkout environment.
 """
+import argparse
 import json
 import os
 import subprocess
@@ -21,27 +23,44 @@ import threading
 import concurrent.futures
 import pathlib
 
-ROOT = pathlib.Path("/Users/lexa/Desktop/lexa/omega/eqt2-stage2")
-WORK = pathlib.Path(
-    "/private/tmp/claude-501/-Users-lexa-Desktop-lexa-omega-automath/"
-    "212fb8e9-b173-4c53-b415-65750bbe217b/scratchpad/spike"
-)
-INSTR = WORK / "SPIKE_INSTRUCTIONS.md"
-RESULTS_REF = pathlib.Path(
-    "/Users/lexa/Desktop/lexa/omega/automath-outreach/tools/fkst-open-problem/"
-    "competition/stage2_solver/official_results"
-)
-PARALLEL = 5  # capped from 8: 8-way concurrent Lean (decideFin! w/ 1M heartbeats) caused
-              # memory-pressure kills (~1.5M pageouts). 5 keeps peak RSS survivable.
+ARTIFACT_ROOT = pathlib.Path(__file__).resolve().parents[1]
+VERIFY_ONE = pathlib.Path(__file__).resolve().with_name("verify_one.py")
+
+ROOT = None
+WORK = None
+INSTR = ARTIFACT_ROOT / "prompts" / "SPIKE_INSTRUCTIONS.md"
+RESULTS_REF = None
+PARALLEL = 5
 PER_PROBLEM_TIMEOUT = 1500
-VENV_PY = str(ROOT / ".venv" / "bin" / "python")
-PROGRESS = WORK / "escalation_progress.json"
-ACCEPTED_CACHE = WORK / "accepted_cache.json"
-CODEX_LOGDIR = WORK / "codex_logs"
-CODEX_LOGDIR.mkdir(exist_ok=True)
+VENV_PY = None
+PROGRESS = None
+ACCEPTED_CACHE = None
+CODEX_LOGDIR = None
 
 _print_lock = threading.Lock()
 _cache_lock = threading.Lock()
+_ACCEPTED = set()
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        description="Run guided Codex escalation over deterministic residual sets."
+    )
+    parser.add_argument("--judge-root", required=True, type=pathlib.Path,
+                        help="Local checkout of equational-theories-lean-stage2.")
+    parser.add_argument("--work-dir", required=True, type=pathlib.Path,
+                        help="Scratch directory for per-problem files, answers, and logs.")
+    parser.add_argument("--results-ref", required=True, type=pathlib.Path,
+                        help="Directory containing deterministic residual id lists.")
+    parser.add_argument("--parallel", type=int, default=5,
+                        help="Concurrent Codex jobs. Default: 5.")
+    parser.add_argument("--timeout", type=int, default=1500,
+                        help="Per-problem Codex wall timeout in seconds. Default: 1500.")
+    parser.add_argument("--venv-python", default=None,
+                        help="Python interpreter for judge verification. Default: <judge-root>/.venv/bin/python.")
+    parser.add_argument("--daemon", action="store_true",
+                        help="Detach before running.")
+    return parser
 
 
 def load_cache():
@@ -51,7 +70,22 @@ def load_cache():
         return set()
 
 
-_ACCEPTED = load_cache()
+def configure(args):
+    global ROOT, WORK, RESULTS_REF, PARALLEL, PER_PROBLEM_TIMEOUT
+    global VENV_PY, PROGRESS, ACCEPTED_CACHE, CODEX_LOGDIR, _ACCEPTED
+
+    ROOT = args.judge_root.resolve()
+    WORK = args.work_dir.resolve()
+    RESULTS_REF = args.results_ref.resolve()
+    PARALLEL = args.parallel
+    PER_PROBLEM_TIMEOUT = args.timeout
+    VENV_PY = args.venv_python or str(ROOT / ".venv" / "bin" / "python")
+    PROGRESS = WORK / "escalation_progress.json"
+    ACCEPTED_CACHE = WORK / "accepted_cache.json"
+    CODEX_LOGDIR = WORK / "codex_logs"
+    WORK.mkdir(parents=True, exist_ok=True)
+    CODEX_LOGDIR.mkdir(parents=True, exist_ok=True)
+    _ACCEPTED = load_cache()
 
 
 def mark_accepted(pid):
@@ -79,11 +113,13 @@ def log(msg):
 def load_unsolved():
     """Return list of (id, problem_dict, verdict) for every unsolved problem."""
     sets = [
-        ("examples/problems/sample_200.json", RESULTS_REF / "sample200_final.json"),
-        ("examples/problems/hard2.jsonl", RESULTS_REF / "hard2_final.json"),
+        ("sample_200", "examples/problems/sample_200.json",
+         RESULTS_REF / "deterministic_unsolved_sample200.json"),
+        ("hard2", "examples/problems/hard2.jsonl",
+         RESULTS_REF / "deterministic_unsolved_hard2.json"),
     ]
     out = []
-    for probs_path, res_path in sets:
+    for _set_name, probs_path, ids_path in sets:
         p = ROOT / probs_path
         text = p.read_text()
         if text.lstrip()[0] == "[":
@@ -95,12 +131,9 @@ def load_unsolved():
                 if line:
                     r = json.loads(line)
                     probs[r["id"]] = r
-        res = json.load(open(res_path))
-        for r in res:
-            if not r.get("solved"):
-                pid = r["id"]
-                pr = probs[pid]
-                out.append((pid, {k: pr[k] for k in ("id", "eq1_id", "eq2_id", "equation1", "equation2")}, pr["answer"]))
+        for pid in json.load(open(ids_path)):
+            pr = probs[pid]
+            out.append((pid, {k: pr[k] for k in ("id", "eq1_id", "eq2_id", "equation1", "equation2")}, pr["answer"]))
     return out
 
 
@@ -112,7 +145,7 @@ def verify(pid):
         return None
     try:
         r = subprocess.run(
-            [VENV_PY, str(ROOT / "verify_one.py"), str(prob), str(ans)],
+            [VENV_PY, str(VERIFY_ONE), "--judge-root", str(ROOT), str(prob), str(ans)],
             cwd=ROOT, capture_output=True, text=True, timeout=120,
         )
         return json.loads(r.stdout.strip().splitlines()[-1])["status"]
@@ -154,6 +187,12 @@ def run_one(pid, problem, verdict):
 
 
 def main():
+    parser = build_parser()
+    args = parser.parse_args()
+    configure(args)
+    if args.daemon:
+        daemonize()
+
     work = load_unsolved()
     log(f"unsolved total: {len(work)}  (TRUE={sum(1 for _,_,v in work if v)} FALSE={sum(1 for _,_,v in work if not v)})")
     # pre-skip already accepted
@@ -200,6 +239,4 @@ def daemonize():
 
 
 if __name__ == "__main__":
-    if "--daemon" in sys.argv:
-        daemonize()
     main()
