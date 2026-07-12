@@ -48,7 +48,7 @@ const TOKEN = (() => {
   if (file) return readFileSync(file, "utf8").trim();
   return process.env.NYXID_WORKER_TOKEN || "";
 })();
-const LABEL = process.env.NYXID_WORKER_LABEL || "tab_1";
+const LABEL = process.env.NYXID_WORKER_LABEL || "company_win_work_1";
 const CDP_URL = process.env.CHROME_CDP_URL || "http://localhost:9222";
 const TAB_URL_MATCH = process.env.NYXID_CHATGPT_TAB_URL_MATCH || "";
 const TAB_STORAGE_MARKER = process.env.NYXID_CHATGPT_TAB_STORAGE_MARKER || "";

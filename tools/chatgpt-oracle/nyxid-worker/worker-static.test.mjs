@@ -46,3 +46,8 @@ test("backs off network failures without controlling WARP", () => {
   assert.match(source, /boundedBackoffMs/);
   assert.doesNotMatch(source, /warp-cli|Cloudflare WARP/i);
 });
+
+test("defaults to a company identity rather than the retired local pool", () => {
+  assert.match(source, /NYXID_WORKER_LABEL \|\| "company_win_work_1"/);
+  assert.doesNotMatch(source, /NYXID_WORKER_LABEL \|\| "tab_1"/);
+});
