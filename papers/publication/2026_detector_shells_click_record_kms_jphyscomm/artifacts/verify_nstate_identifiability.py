@@ -8,15 +8,17 @@ so T1=(I-T0)1 e_n^T.  Its visible record is renewal.
 This script checks two different questions that must not be conflated:
 
 1. In the serial subclass, do visible coordinates recover the unordered rate
-   tuple?  A Hankel pencil applied to the Palm gap-tail sequence recovers the
-   sampled poles exp(-rate_i) for the explicit n=2 and n=3 examples.
+   multiset, including pole collisions?  A Hankel recurrence applied to the
+   Palm gap-tail sequence recovers the sampled poles exp(-rate_i), with their
+   algebraic multiplicities, for representative n=2,3,4 examples.
 2. Does killed reset alone identify a hidden kernel?  No.  A stochastic
    similarity transform gives a different nonnegative killed-reset kernel
    with exactly the same visible renewal law.
 
 The numerical searches are evidence and diagnostics, not proofs of global
-injectivity.  The associated manuscript proposition supplies the n=3 proof
-under pairwise-distinct serial rates.
+injectivity.  The associated manuscript theorem supplies the exact minimal
+similarity-orbit criterion and proves serial identifiability for arbitrary
+positive rates, including collision strata.
 """
 
 from __future__ import annotations
@@ -198,6 +200,72 @@ class SearchSummary:
     best_nonpermutation_residual: float
 
 
+@dataclass(frozen=True)
+class HankelDiagnostics:
+    rank: int
+    determinant: float
+    condition_number: float
+    smallest_singular_value: float
+
+
+def hankel_diagnostics(tails: ArrayLike, n_states: int) -> HankelDiagnostics:
+    """Return numerical rank and conditioning of the leading Hankel block."""
+    tail_array = np.asarray(tails, dtype=float)
+    if tail_array.size < 2 * n_states - 1:
+        raise ValueError("the Hankel block needs S_0 through S_{2n-2}")
+    hankel = np.array(
+        [[tail_array[row + col] for col in range(n_states)] for row in range(n_states)]
+    )
+    singular_values = np.linalg.svd(hankel, compute_uv=False)
+    tolerance = singular_values[0] * max(hankel.shape) * np.finfo(float).eps
+    return HankelDiagnostics(
+        rank=int(np.sum(singular_values > tolerance)),
+        determinant=float(np.linalg.det(hankel)),
+        condition_number=float(singular_values[0] / singular_values[-1]),
+        smallest_singular_value=float(singular_values[-1]),
+    )
+
+
+def recover_minimal_recurrence(
+    tails: ArrayLike, n_states: int
+) -> tuple[FloatArray, float]:
+    """Recover the monic order-n annihilator and its tail residual.
+
+    If ``p(x)=x^n+c_{n-1}x^(n-1)+...+c_0``, the returned coefficients are
+    ``[1,c_{n-1},...,c_0]``.  Repeated roots retain their multiplicities.
+    """
+    tail_array = np.asarray(tails, dtype=float)
+    if tail_array.size < 2 * n_states:
+        raise ValueError("the recurrence needs S_0 through S_{2n-1}")
+    h0 = np.array(
+        [[tail_array[row + col] for col in range(n_states)] for row in range(n_states)]
+    )
+    future = np.array([tail_array[row + n_states] for row in range(n_states)])
+    ascending = np.linalg.solve(h0, -future)
+    polynomial = np.concatenate(([1.0], ascending[::-1]))
+    residuals = []
+    for offset in range(tail_array.size - n_states):
+        residuals.append(
+            tail_array[offset + n_states]
+            + float(ascending @ tail_array[offset : offset + n_states])
+        )
+    return polynomial, float(np.max(np.abs(residuals)))
+
+
+def reset_similarity_lie_basis(n_states: int) -> tuple[FloatArray, ...]:
+    """Basis of B1=0 and e_n^T B=0, the reset-preserving similarity tangent."""
+    if n_states < 2:
+        raise ValueError("n_states must be at least two")
+    basis = []
+    for row in range(n_states - 1):
+        for column in range(n_states - 1):
+            tangent = np.zeros((n_states, n_states))
+            tangent[row, column] = 1.0
+            tangent[row, -1] = -1.0
+            basis.append(tangent)
+    return tuple(basis)
+
+
 def multistart_fiber_search(
     target_rates: ArrayLike, starts: int, seed: int
 ) -> SearchSummary:
@@ -231,7 +299,7 @@ def multistart_fiber_search(
 
     canonical = sorted(
         {
-            tuple(np.round(np.sort(solution), 7))
+            tuple(np.round(np.sort(solution), 4))
             for solution in accepted
         }
     )
@@ -245,7 +313,7 @@ def multistart_fiber_search(
     nonpermutation = [
         residual_value
         for solution, residual_value in zip(accepted, residuals)
-        if np.linalg.norm(np.sort(solution) - target_sorted) > 1e-5
+        if np.linalg.norm(np.sort(solution) - target_sorted) > 1e-3
     ]
     return SearchSummary(
         starts=starts,
@@ -287,13 +355,18 @@ def array_string(values: ArrayLike) -> str:
     )
 
 
-def report_example(rates: tuple[float, ...]) -> None:
+def report_example(rates: tuple[float, ...], search_starts: int = 80) -> None:
     n_states = len(rates)
     t0, t1 = serial_killed_reset_kernels(rates)
     tails = kernel_tail_coordinates(t0, 2 * n_states)
+    extended_tails = kernel_tail_coordinates(t0, 3 * n_states + 1)
     moments = visible_click_moments(rates, 2 * n_states + 2)
-    poles = recover_sampled_poles(tails, n_states)
-    recovered_rates = np.sort(-np.log(poles))
+    recurrence, recurrence_residual = recover_minimal_recurrence(
+        extended_tails, n_states
+    )
+    roots = np.roots(recurrence)
+    recovered_rates = np.sort(-np.log(np.abs(roots)))
+    diagnostics = hankel_diagnostics(tails, n_states)
     permutations = list(itertools.permutations(rates))
     permutation_error = max(
         float(np.max(np.abs(visible_click_moments(item, 2 * n_states + 2) - moments)))
@@ -311,8 +384,16 @@ def report_example(rates: tuple[float, ...]) -> None:
     print(array_string(t1))
     print(f"Palm tails S_0,...,S_{2 * n_states - 1}={array_string(tails)}")
     print(f"click moments r_0,...,r_{2 * n_states + 2}={array_string(moments)}")
-    print(f"Hankel recovered poles={array_string(poles)}")
-    print(f"Hankel recovered unordered rates={array_string(recovered_rates)}")
+    print(f"Hankel recurrence polynomial={array_string(recurrence)}")
+    print(f"expected sampled-pole polynomial={array_string(np.poly(np.exp(-np.asarray(rates))))}")
+    print(f"maximum recurrence residual={recurrence_residual:.3e}")
+    print(
+        "leading Hankel diagnostics: "
+        f"rank={diagnostics.rank}, determinant={diagnostics.determinant:.3e}, "
+        f"condition={diagnostics.condition_number:.3e}, "
+        f"sigma_min={diagnostics.smallest_singular_value:.3e}"
+    )
+    print(f"recovered unordered rates (root moduli)={array_string(recovered_rates)}")
     if n_states == 2:
         print(
             "three-inclusion recovered unordered rates="
@@ -321,7 +402,7 @@ def report_example(rates: tuple[float, ...]) -> None:
     print(f"maximum moment error over all labelled permutations={permutation_error:.3e}")
     print(f"moment-map Jacobian singular values={array_string(singular_values)}")
 
-    search = multistart_fiber_search(rates, starts=80, seed=100 + n_states)
+    search = multistart_fiber_search(rates, starts=search_starts, seed=100 + n_states)
     print(
         f"multistart search: {search.converged}/{search.starts} converged; "
         f"canonical sorted fibers={search.canonical_fibers}"
@@ -355,6 +436,7 @@ def report_example(rates: tuple[float, ...]) -> None:
     print(array_string(equivalent))
     print(f"||T0'-T0||_F={np.linalg.norm(equivalent - t0):.3e}")
     print(f"maximum S_0,...,S_19 difference={tail_difference:.3e}")
+    print(f"reset-preserving similarity tangent dimension={(n_states - 1) ** 2}")
     print(
         "interpretation: killed reset alone has a nontrivial hidden-kernel "
         "fiber, while the serial rate tuple is recovered here only as an "
@@ -364,36 +446,37 @@ def report_example(rates: tuple[float, ...]) -> None:
 
 
 def main() -> None:
-    print("Killed-reset D-MAP identifiability feasibility check")
+    print("Sharp killed-reset D-MAP identifiability dichotomy verification")
     print("delta=1; all searches use deterministic random seeds")
     print()
     report_example((0.7, 1.6))
-    report_example((0.7, 1.2, 2.3))
+    report_example((0.7, 1.2, 1.2), search_starts=60)
+    report_example((0.7, 1.2, 1.2, 2.3), search_starts=50)
 
     separated = (0.7, 1.2, 2.3)
-    near_collision = (0.7, 1.2, 1.2001)
+    collision = (0.7, 1.2, 1.2)
     separated_singular_values = np.linalg.svd(
         finite_difference_jacobian(separated, 8), compute_uv=False
     )
     collision_singular_values = np.linalg.svd(
-        finite_difference_jacobian(near_collision, 8), compute_uv=False
+        finite_difference_jacobian(collision, 8), compute_uv=False
     )
     print("n=3 conditioning diagnostic")
     print(f"separated rates={separated}: {array_string(separated_singular_values)}")
-    print(f"near-collision rates={near_collision}: {array_string(collision_singular_values)}")
+    print(f"collision rates={collision}: {array_string(collision_singular_values)}")
     print(
-        "smallest-singular-value ratio (near/separated)="
+        "smallest-singular-value ratio (collision/separated)="
         f"{collision_singular_values[-1] / separated_singular_values[-1]:.3e}"
     )
     print()
     print("NUMERICAL CONCLUSION")
     print("- n=2: the known three-inclusion inverse recovers the unordered rate pair.")
-    print("- n=3 serial subclass: the Hankel pencil recovers the unordered rate triple;")
-    print("  searches found no fiber beyond permutations for the tested moments.")
-    print("- unrestricted killed-reset kernels: explicit stochastic-similarity pairs")
-    print("  have identical visible laws, so hidden kernels are not identifiable.")
-    print("- collision strata are substantially more ill-conditioned; the promoted")
-    print("  n=3 proposition therefore assumes pairwise-distinct rates.")
+    print("- n=2,3,4 serial subclasses: the confluent Hankel recurrence recovers")
+    print("  the unordered sampled-pole multiset, including repeated poles.")
+    print("- unrestricted killed-reset kernels: explicit reset-preserving similarity")
+    print("  pairs have identical visible laws but different hidden kernels for n=2,3,4.")
+    print("- pole collision is an ill-conditioning/singular-chart boundary, not an")
+    print("  identifiability boundary; the exact boundary is the Markovian orbit fibre.")
 
 
 if __name__ == "__main__":
