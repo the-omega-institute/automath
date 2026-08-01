@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import product
+from math import factorial
 from pathlib import Path
 from typing import Callable, Hashable, Iterable, Sequence
 
@@ -239,6 +240,56 @@ def determinant_signature(
     return tuple(_expr_string(poly) for poly in determinant_polynomials(graph, group, tau))
 
 
+def label_multiplicities(
+    group: FiniteGroup, tau: Sequence[Hashable]
+) -> tuple[int, ...]:
+    return tuple(sum(label == element for label in tau) for element in group.elements)
+
+
+def fourier_recovered_multiplicities(
+    group: FiniteGroup, tau: Sequence[Hashable]
+) -> tuple[int, ...]:
+    if any(representation.dimension != 1 for representation in group.irreps):
+        raise ValueError("Fourier recovery in this form requires an abelian group")
+    spectral_sums = tuple(
+        sp.simplify(sum(representation.matrix(label)[0, 0] for label in tau))
+        for representation in group.irreps
+    )
+    recovered = []
+    for element in group.elements:
+        value = sp.simplify(
+            sum(
+                spectral_sum * sp.conjugate(representation.matrix(element)[0, 0])
+                for representation, spectral_sum in zip(group.irreps, spectral_sums)
+            )
+            / len(group.elements)
+        )
+        if value.is_integer is not True:
+            value = sp.nsimplify(value)
+        recovered.append(int(value))
+    return tuple(recovered)
+
+
+def bouquet_predicted_fiber_size(
+    group: FiniteGroup, tau: Sequence[Hashable]
+) -> int:
+    result = factorial(len(tau))
+    for count in label_multiplicities(group, tau):
+        result //= factorial(count)
+    return result
+
+
+def bouquet_swap_collision(tau: Sequence[Hashable]) -> tuple[Hashable, ...]:
+    if not tau:
+        raise ValueError("an empty bouquet has no collision")
+    right = next((index for index, label in enumerate(tau[1:], 1) if label != tau[0]), None)
+    if right is None:
+        raise ValueError("a constant bouquet labeling is spectrally rigid")
+    result = list(tau)
+    result[0], result[right] = result[right], result[0]
+    return tuple(result)
+
+
 def gauge_transform(
     graph: BaseGraph,
     group: FiniteGroup,
@@ -270,6 +321,20 @@ def gauge_representative(
         for transfer in product(group.elements, repeat=graph.vertex_count)
     )
     return min(orbit, key=lambda candidate: _label_key(group, candidate))
+
+
+def determinant_cohomology_multiplicity(
+    graph: BaseGraph, group: FiniteGroup, tau: Sequence[Hashable]
+) -> int:
+    target = determinant_signature(graph, group, tau)
+    representatives = {
+        gauge_representative(graph, group, candidate)
+        for candidate in product(group.elements, repeat=len(graph.edges))
+    }
+    return sum(
+        determinant_signature(graph, group, representative) == target
+        for representative in representatives
+    )
 
 
 def _closed_edge_paths(graph: BaseGraph, length: int) -> Iterable[tuple[int, ...]]:
@@ -339,11 +404,28 @@ def regular_skew_adjacency(
     return matrix
 
 
+def perron_boundary_signature(
+    graph: BaseGraph, group: FiniteGroup, tau: Sequence[Hashable]
+) -> tuple[str, ...]:
+    trivial = group.irreps[0]
+    base = twisted_matrix(graph, trivial, (group.identity(),) * len(graph.edges))
+    base_eigenvalues = tuple(base.eigenvals())
+    perron_root = max(base_eigenvalues, key=lambda value: float(sp.re(value).evalf()))
+    skew_eigenvalues = regular_skew_adjacency(graph, group, tau).eigenvals()
+    boundary = []
+    for eigenvalue, multiplicity in skew_eigenvalues.items():
+        squared_modulus = sp.simplify(eigenvalue * sp.conjugate(eigenvalue))
+        if sp.simplify(squared_modulus - perron_root**2) == 0:
+            boundary.extend(_expr_string(eigenvalue) for _ in range(multiplicity))
+    return tuple(sorted(boundary))
+
+
 def is_primitive_nonnegative(matrix: sp.Matrix) -> bool:
     if matrix.rows == 1:
         return matrix[0, 0] > 0
     boolean = matrix.applyfunc(lambda entry: 1 if entry > 0 else 0)
     power_matrix = sp.eye(matrix.rows)
+    # Wielandt's primitivity exponent bound, DOI 10.1007/BF02230720.
     wielandt_bound = matrix.rows * matrix.rows - 2 * matrix.rows + 2
     for _ in range(1, wielandt_bound + 1):
         power_matrix = power_matrix * boolean
@@ -370,6 +452,66 @@ class SearchStatistics:
     determinant_fibers: int
     colliding_gauge_pairs: int
     marked_witness_pairs: int
+
+
+@dataclass(frozen=True)
+class AbelianBouquetAudit:
+    graph: str
+    group: str
+    cocycles: int
+    rigid_cocycles: int
+    nonrigid_cocycles: int
+    formula_failures: int
+    collision_failures: int
+
+
+def abelian_bouquet_necessity_audit(
+    graph: BaseGraph, group: FiniteGroup
+) -> AbelianBouquetAudit:
+    if graph.vertex_count != 1 or any(
+        edge.origin != 0 or edge.terminus != 0 for edge in graph.edges
+    ):
+        raise ValueError("the necessity audit requires a one-vertex bouquet")
+    if any(representation.dimension != 1 for representation in group.irreps):
+        raise ValueError("the necessity audit requires an abelian group")
+
+    cocycles = tuple(product(group.elements, repeat=len(graph.edges)))
+    fibers: dict[tuple[str, ...], list[tuple[Hashable, ...]]] = {}
+    for tau in cocycles:
+        fibers.setdefault(determinant_signature(graph, group, tau), []).append(tau)
+
+    rigid = 0
+    formula_failures = 0
+    collision_failures = 0
+    for tau in cocycles:
+        fiber = fibers[determinant_signature(graph, group, tau)]
+        predicted = bouquet_predicted_fiber_size(group, tau)
+        if (
+            len(fiber) != predicted
+            or fourier_recovered_multiplicities(group, tau)
+            != label_multiplicities(group, tau)
+        ):
+            formula_failures += 1
+        if predicted == 1:
+            rigid += 1
+            continue
+        tau_prime = bouquet_swap_collision(tau)
+        if (
+            tau_prime == tau
+            or determinant_signature(graph, group, tau_prime)
+            != determinant_signature(graph, group, tau)
+            or first_marked_periodic_witness(graph, group, tau, tau_prime, 1) is None
+        ):
+            collision_failures += 1
+    return AbelianBouquetAudit(
+        graph.name,
+        group.name,
+        len(cocycles),
+        rigid,
+        len(cocycles) - rigid,
+        formula_failures,
+        collision_failures,
+    )
 
 
 def search_model(graph: BaseGraph, group: FiniteGroup) -> SearchStatistics:
@@ -477,6 +619,7 @@ def render_report() -> str:
     s3 = s3_group()
     full_one = BaseGraph.full_shift(1)
     full_two = BaseGraph.full_shift(2)
+    full_three = BaseGraph.full_shift(3)
     golden = BaseGraph.golden_mean()
     full_two_vertex = BaseGraph.full_two_vertex()
     cases = (
@@ -490,8 +633,14 @@ def render_report() -> str:
         (golden, z3),
         (golden, s3),
         (full_two_vertex, z2),
+        (full_three, z2),
+        (full_three, z3),
     )
     statistics = tuple(search_model(graph, group) for graph, group in cases)
+    bouquet_audits = (
+        abelian_bouquet_necessity_audit(full_three, z2),
+        abelian_bouquet_necessity_audit(full_three, z3),
+    )
 
     identity, transposition, cycle = s3.named_elements("()", "(12)", "(123)")
     sanity_checks = (
@@ -505,6 +654,8 @@ def render_report() -> str:
     right = minimal.tau_prime
     witness = first_marked_periodic_witness(full_two, z2, left, right)
     assert witness is not None
+    colliding_peripheral_example = (0, 0, 0, 1)
+    rigid_peripheral_example = (0, 0, 1, 0)
 
     lines = [
         "TWISTED-DETERMINANT INVERSE-RIGIDITY FINITE CERTIFICATE",
@@ -524,6 +675,36 @@ def render_report() -> str:
         )
     lines.extend(
         [
+            "",
+            f"Total cocycles enumerated: {sum(item.cocycles for item in statistics)} "
+            "(the prior 327 plus 35 abelian full-three-shift cocycles).",
+            "",
+            "SHARP ABELIAN-BOUQUET NECESSITY AUDIT",
+            "model | group | cocycles | rigid | nonrigid | formula failures | explicit-collision failures",
+            "--- | --- | ---: | ---: | ---: | ---: | ---:",
+        ]
+    )
+    for audit in bouquet_audits:
+        lines.append(
+            f"{audit.graph} | {audit.group} | {audit.cocycles} | "
+            f"{audit.rigid_cocycles} | {audit.nonrigid_cocycles} | "
+            f"{audit.formula_failures} | {audit.collision_failures}"
+        )
+    lines.extend(
+        [
+            "Every nonconstant audited bouquet cocycle is paired with the cocycle obtained",
+            "by swapping two differently labelled named loops; the determinants agree and a",
+            "length-one marked orbit has distinct abelian holonomy.",
+            "",
+            "PERRON-PERIPHERAL INSUFFICIENCY (fixed graph=full-two-vertex, group=Z/2)",
+            f"colliding class {colliding_peripheral_example}: boundary="
+            f"{perron_boundary_signature(full_two_vertex, z2, colliding_peripheral_example)}, "
+            f"cohomology multiplicity={determinant_cohomology_multiplicity(full_two_vertex, z2, colliding_peripheral_example)}",
+            f"rigid class {rigid_peripheral_example}: boundary="
+            f"{perron_boundary_signature(full_two_vertex, z2, rigid_peripheral_example)}, "
+            f"cohomology multiplicity={determinant_cohomology_multiplicity(full_two_vertex, z2, rigid_peripheral_example)}",
+            "Both regular skew adjacencies are primitive, so graph, group, and Perron-peripheral",
+            "spectrum do not determine determinant-to-Livsic rigidity.",
             "",
             f"Gauge sanity transformations checked: {sanity_total}; failures: 0.",
             "",
