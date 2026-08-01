@@ -1,0 +1,408 @@
+\section{The Parry-rank fold for every quadratic Pisot base}
+\label{sec:quadratic-pisot-extension}
+
+This section closes the interface left by Remark~\ref{rem:metallic-beta-scope}.
+The point requiring care is that a quadratic Pisot number need not be a unit
+and its conjugate need not be negative.  Consequently the metallic
+Ostrowski language is not the appropriate common object.  We instead use the
+greedy $\beta$-language itself and its canonical colexicographic rank.  The
+published results on greedy admissibility and finite-state normalization are
+used only for context; the finite rank and sliding-congruence arguments needed
+below are proved here.
+
+\subsection{Quadratic classification and canonical finite windows}
+
+\begin{lemma}[The two quadratic Pisot parameter chambers]
+\label{lem:quadratic-pisot-chambers}
+Let $\beta>1$ be a quadratic algebraic integer and let $\beta'$ be its
+conjugate.  Then $|\beta'|<1$ if and only if the minimal polynomial of
+$\beta$ belongs to exactly one of the following two families:
+\begin{align*}
+P^-_{a,b}(x)&=x^2-ax-b, & a\ge b\ge1,\\
+P^+_{a,b}(x)&=x^2-ax+b, & a\ge3,\quad 1\le b\le a-2.
+\end{align*}
+In the first chamber $\beta'<0$, $\lfloor\beta\rfloor=a$, and
+\[
+d_\beta(1)=ab0^\infty,\qquad
+d_\beta^*(1)=\bigl(a(b-1)\bigr)^\infty.
+\]
+In the second chamber $\beta'>0$, $\lfloor\beta\rfloor=a-1$, and
+\[
+d_\beta(1)=(a-1)(a-b-1)^\infty=d_\beta^*(1).
+\]
+Here $d_\beta$ is the greedy expansion and $d_\beta^*$ is Parry's
+quasi-greedy boundary word.
+\end{lemma}
+
+\begin{proof}
+Write the monic minimal polynomial as $x^2-ax+c$.  Since
+$c=\beta\beta'\ne0$, the sign of $c$ is the sign of $\beta'$.  If
+$c=-b<0$, then $b/\beta=|\beta'|<1$.  The positive root exceeds $a$;
+the last inequality is equivalent, for integral $a,b$, to $1\le b\le a$.
+Conversely these inequalities place the negative root in $(-1,0)$.
+If $c=b>0$, then $0<b/\beta=\beta'<1$ and $a-1<\beta<a$; evaluating
+$P^+_{a,b}$ at $a-1$ and $a$ gives exactly $a\ge3$ and
+$1\le b\le a-2$.  The converses follow from the same sign test.
+
+For $P^-_{a,b}$ one has $\beta^2=a\beta+b$.  The greedy algorithm applied
+to $1$ therefore gives the two digits $a,b$ and then terminates; Parry's
+standard replacement of a finite expansion gives
+$d_\beta^*(1)=(a(b-1))^\infty$.  For $P^+_{a,b}$, put
+$r=\beta-a+1=1-b/\beta$.  Then
+$\lfloor\beta\rfloor=a-1$ and
+\[
+\beta r=\beta-b=(a-b-1)+r,
+\]
+so every digit after the first is $a-b-1$.  The expansion is infinite and
+hence already quasi-greedy.  This is precisely Parry's calculation
+\cite{Parry1960}; it is included to fix the parameters, not as a new proof of
+his general admissibility theorem.
+\end{proof}
+
+For either chamber put $d=\lfloor\beta\rfloor$ and
+$\mathcal A_\beta=\{0,\ldots,d\}$.  Let $\mathcal L_m(X_\beta)$ be the
+length-$m$ language of the two-sided greedy $\beta$-shift, characterized by
+Parry's suffix inequalities against $d_\beta^*(1)$.
+
+\begin{definition}[Canonical Parry-rank window fold]
+\label{def:quadratic-parry-fold}
+For $m\ge0$ define $Q_m(\beta)=|\mathcal L_m(X_\beta)|$.  In the two
+chambers of Lemma~\ref{lem:quadratic-pisot-chambers}, respectively, these
+integers are
+\begin{align}
+Q_0&=1,\quad Q_1=a+1,\quad Q_{j+2}=aQ_{j+1}+bQ_j,
+&& (P^-_{a,b}),\label{eq:qminus}\\
+Q_0&=1,\quad Q_1=a,\quad Q_{j+2}=aQ_{j+1}-bQ_j,
+&& (P^+_{a,b}).\label{eq:qplus}
+\end{align}
+Use the low-to-high orientation
+\[
+X_m^{(\beta)}:=\{x\in\mathcal A_\beta^m:
+(x_m,\ldots,x_1)\in\mathcal L_m(X_\beta)\}
+\]
+and set
+\[
+\operatorname{Rank}_{\beta,m}(x)=\sum_{j=0}^{m-1}x_{j+1}Q_j(\beta).
+\]
+The canonical finite-window fold is
+\[
+\Fold_{\beta,m}(w)=
+\bigl(\operatorname{Rank}_{\beta,m}|_{X_m^{(\beta)}}\bigr)^{-1}
+\left(\operatorname{Rank}_{\beta,m}(w)\bmod Q_m(\beta)\right).
+\]
+Finally,
+\[
+(\Phi_{\beta,m}(z))_t
+=\Fold_{\beta,m}(z_t,\ldots,z_{t+m-1}),\qquad
+Y_{\beta,m}=\Phi_{\beta,m}(\mathcal A_\beta^{\mathbb Z}).
+\]
+The nontrivial threshold is
+\[
+m_*(\beta)=\min\{m\ge2:\Phi_{\beta,m}\text{ is a conjugacy onto the
+SFT }Y_{\beta,m}\}.
+\]
+\end{definition}
+
+\begin{proposition}[Parry rank is consecutive and canonical]
+\label{prop:parry-rank-bijection}
+For every quadratic Pisot $\beta$ and $m\ge1$,
+\[
+\operatorname{Rank}_{\beta,m}|_{X_m^{(\beta)}}:
+X_m^{(\beta)}\longrightarrow\{0,\ldots,Q_m(\beta)-1\}
+\]
+is an order-preserving bijection when $X_m^{(\beta)}$ is read in the
+colexicographic order.  Thus Definition~\ref{def:quadratic-parry-fold} is
+determined by the greedy language and its Parry word; it is not a choice of
+an auxiliary enumeration.  For $P^-_{a,1}$ it is exactly
+Definition~\ref{def:metallic-window-data}.
+\end{proposition}
+
+\begin{proof}
+In the negative chamber, Parry admissibility reduces in the low-to-high
+orientation to
+\[
+x_k=a\Longrightarrow x_{k-1}<b.
+\]
+Words whose last digit is $0,\ldots,a-1$ give $a$ consecutive intervals of
+length $Q_{m-1}$.  If the last digit is $a$, the preceding digit is one of
+$0,\ldots,b-1$ and gives $b$ consecutive intervals of length $Q_{m-2}$.
+Their union is
+$[0,aQ_{m-1}+bQ_{m-2}-1]$.  This proves both \eqref{eq:qminus} and the rank
+claim by induction.
+
+In the positive chamber put $c=a-b-1$.  Parry admissibility says that after
+an occurrence of $a-1$ the remaining lower word is at most $c^\infty$ in
+lexicographic order.  Simultaneous induction gives
+\[
+|\mathcal L_m(X_\beta)|=aQ_{m-1}-bQ_{m-2}
+\]
+and says that the legal lower words bounded by $c^\infty$ have ranks
+\[
+0,\ldots,Q_{m-1}-bQ_{m-2}-1.
+\]
+Indeed the last digit classes $0,\ldots,a-2$ contribute the consecutive
+interval $[0,(a-1)Q_{m-1}-1]$, while the last digit $a-1$ contributes the
+next interval of the displayed bounded length.  Splitting the bounded class
+according as its next digit is smaller than or equal to $c$ gives the same
+statement one index lower, which initializes at lengths zero and one.
+The upper endpoint is
+$(a-1)Q_{m-1}+Q_{m-1}-bQ_{m-2}-1=Q_m-1$.
+This proves \eqref{eq:qplus}, consecutiveness, and order preservation.
+When $b=1$ in the negative chamber, the rule and recurrence are precisely
+those of Definition~\ref{def:metallic-window-data}.
+\end{proof}
+
+\subsection{The bounded sliding-congruence lemma}
+
+The following elementary lemma is the arithmetic core.  It is stated
+separately so that the exact hypothesis behind the family-wide claim is
+visible.
+
+\begin{lemma}[Quadratic bounded sliding congruences]
+\label{lem:quadratic-sliding-congruences}
+Take either parameter chamber in
+Lemma~\ref{lem:quadratic-pisot-chambers}, let $d=\lfloor\beta\rfloor$, and
+let $(Q_j)$ be \eqref{eq:qminus} or \eqref{eq:qplus}.  If $m\ge3$ and
+$e_0,\ldots,e_{2m-2}\in[-d,d]\cap\mathbb Z$ satisfy
+\begin{equation}
+\sum_{j=0}^{m-1}Q_j e_{t+j}\equiv0\pmod{Q_m}
+\qquad(0\le t<m),\label{eq:sliding-kernel}
+\end{equation}
+then $e_0=\cdots=e_{2m-2}=0$.
+\end{lemma}
+
+\begin{proof}
+Write $s=1$ in the negative chamber and $s=-1$ in the positive chamber, so
+$Q_{j+2}=aQ_{j+1}+sbQ_j$, and put
+$\delta=Q_1-a$; hence $(d,\delta)=(a,1)$ for $s=1$ and
+$(d,\delta)=(a-1,0)$ for $s=-1$.  Subtracting $a$ times the congruence at
+$t+1$ and $sb$ times that at $t+2$ from the congruence at $t$ cancels every
+interior coefficient and gives
+\begin{equation}
+e_t+\delta e_{t+1}-sbQ_{m-1}e_{t+m+1}\equiv0\pmod{Q_m}.
+\label{eq:quadratic-elimination}
+\end{equation}
+
+We record the elementary separation calculation used twice below.  Direct
+division using the recurrence and the parameter inequalities gives
+\begin{equation}
+\operatorname{dist}(beQ_{r-1},Q_r\mathbb Z)\ge Q_{r-2}
+\quad(r\ge4,\ 1\le |e|\le d).
+\label{eq:quadratic-separation}
+\end{equation}
+For completeness, the division has only the following two rows; replacing
+$e$ by $-e$ changes no distance.
+\[
+\begin{array}{c|c|c|c}
+s&Q_1&\text{parameter range}&Q_2\text{ and required lower bound}\\ \hline
++1&a+1&1\le b\le a&a^2+a+b>2a\\
+-1&a&1\le b\le a-2&a^2-b>a-1
+\end{array}
+\]
+To verify \eqref{eq:quadratic-separation}, choose the nearest integer $k$
+and insert $Q_r=aQ_{r-1}+sbQ_{r-2}$ in
+$beQ_{r-1}-kQ_r$.  If its modulus were below $Q_{r-2}$, division by
+$Q_{r-2}$ and the inequalities
+\[
+a<\frac{Q_{r-1}}{Q_{r-2}}<a+b\quad(s=1),
+\qquad
+a-1<\frac{Q_{r-1}}{Q_{r-2}}<a\quad(s=-1)
+\]
+force respectively
+$be=ka+ksbQ_{r-2}/Q_{r-1}$ with a nonzero integer strictly between
+$-1$ and $1$.  This is impossible.  Equality can occur only at an endpoint
+and is harmless.  This proves the separation claim by induction from the
+displayed $Q_2$ row.
+
+Suppose first that $m\ge4$.  The small part of
+\eqref{eq:quadratic-elimination} has modulus at most
+$d(1+\delta)$, whereas \eqref{eq:quadratic-separation} and the table give a
+strictly larger distance whenever $e_{t+m+1}\ne0$.  Hence
+$e_{t+m+1}=0$ for $0\le t\le m-3$.  Thus
+$e_{m+1}=\cdots=e_{2m-2}=0$.  The final original congruence reduces to
+\[
+e_{m-1}+Q_1e_m\equiv0\pmod{Q_m}.
+\]
+Its left side has modulus at most $d(1+Q_1)<Q_m$ and $Q_1>d$, so both
+digits vanish.  Back substitution in the preceding congruences then gives
+$e_{m-2},\ldots,e_0=0$ successively.
+
+It remains to check $m=3$, where endpoint equality in the separation bound
+can occur.  Here each integer sum in \eqref{eq:sliding-kernel} has modulus
+less than $2Q_3$, so it is $k_tQ_3$ with $k_t\in\{-1,0,1\}$.  Substituting
+the three values of $t$ gives
+\begin{equation}
+e_t+Q_1e_{t+1}+Q_2e_{t+2}=k_tQ_3,
+\qquad t=0,1,2.
+\label{eq:quadratic-m3-equalities}
+\end{equation}
+We now eliminate the two conjugate signs separately.
+
+Suppose first that $s=1$.  Thus $d=a$ and
+\[
+(Q_1,Q_2,Q_3)
+=(a+1,a^2+a+b,a^3+a^2+2ab+b).
+\]
+Consider one equation $x+Q_1y+Q_2z=kQ_3$ occurring in
+\eqref{eq:quadratic-m3-equalities}.  By symmetry it suffices to treat
+$k=0,1$.  If $k=0$, then $|z|\ge2$ is impossible because
+$2Q_2>a(1+Q_1)$.  The choice $z=0$ gives $x=y=0$, while $z=1$ gives
+\[
+x+b+(a+1)(y+a)=0.
+\]
+Since $y+a\ge0$ and $-(x+b)\le a-b<a+1$, this forces
+$(x,y,z)=(-b,-a,1)$; the case $z=-1$ is its negative.  If $k=1$ and
+$z\le a-1$, then
+\[
+x+Q_1y+Q_2z
+\le a+aQ_1+(a-1)Q_2
+=Q_3-\bigl(b(a+2)-a\bigr)<Q_3.
+\]
+Hence $z=a$, after which $x+(a+1)y=b(a+1)$ forces $(x,y)=(0,b)$.
+Consequently every bounded solution of one equation is
+\[
+(x,y,z;k)\in
+\{(0,0,0;0),\ \pm(b,a,-1;0),\ \pm(0,b,a;1)\}.
+\]
+The terminal pairs of these triples are
+$(0,0)$, $\pm(a,-1)$, and $\pm(b,a)$.  If $e_4\ne0$ and the $t=2$
+triple is $\pm(0,b,a)$, its initial pair $\pm(0,b)$ cannot be a terminal
+pair of the $t=1$ triple.  If instead the $t=2$ triple is
+$\pm(b,a,-1)$, the overlap forces the $t=1$ triple to be
+$\pm(0,b,a)$, whose initial pair $\pm(0,b)$ cannot be a terminal pair of
+the $t=0$ triple.  Both alternatives are impossible, and therefore
+$e_4=0$.
+
+Suppose next that $s=-1$.  Put $c=a-b$ and $d=a-1$; then
+$2\le c\le d$ and
+\[
+(Q_1,Q_2,Q_3)=(a,a^2-b,a^3-2ab).
+\]
+For one equation $x+ay+Q_2z=kQ_3$, again it suffices to take $k=0,1$.
+When $k=0$, the inequality $2Q_2>d(1+a)=a^2-1$ gives $|z|\le1$.
+The choice $z=0$ gives $x=y=0$, whereas $z=1$ gives
+\[
+x-b+a(y+a)=0.
+\]
+Here $1\le y+a\le2a-1$ and $b-x\le b+a-1\le2a-3$, so necessarily
+$y+a=1$ and $x=b-a=-c$; the case $z=-1$ is the negative solution.
+For $k=1$, if $z\le a-2$, then
+\[
+x+ay+Q_2z
+\le d(1+a)+(a-2)Q_2
+=Q_3-\bigl(a(a-b)-2b+1\bigr)<Q_3,
+\]
+because $a-b\ge2$.  Thus $z=d$, and
+\[
+x+ay=a(a-b)-b=ac-b.
+\]
+Reduction modulo $a$, together with $|x|\le a-1$, leaves precisely
+$(x,y)=(-b,c)$ and $(x,y)=(c,c-1)$.  Hence the complete list is
+\[
+(x,y,z;k)\in
+\{(0,0,0;0),\ \pm(c,d,-1;0),\
+  \ \pm(-b,c,d;1),\ \pm(c,c-1,d;1)\}.
+\]
+Its terminal pairs are $(0,0)$, $\pm(d,-1)$, $\pm(c,d)$, and
+$\pm(c-1,d)$.  Since $2\le c\le d$, neither $\pm(-b,c)$ nor
+$\pm(c,c-1)$ occurs in this list of terminal pairs.  Thus a $t=2$ triple
+of either of the last two types cannot overlap a $t=1$ triple.  The only
+remaining nonzero possibility is $\pm(c,d,-1)$; it forces the $t=1$
+triple to be $\pm(-b,c,d)$, whose initial pair $\pm(-b,c)$ cannot overlap
+a $t=0$ triple.  Therefore $e_4=0$ also in this chamber.
+
+In either sign, every nonzero triple in the corresponding list has nonzero
+last coordinate.  It follows successively from the equations at
+$t=2,1,0$ that $e_2=e_3=e_4=0$, then $e_1=0$, and finally $e_0=0$.
+Thus the kernel is trivial also at $m=3$.  This endpoint calculation is
+independently certified by the routine \texttt{block\_language\_profile}
+in \url{artifacts/verify_quadratic_pisot_threshold.py}, called with
+$m=n=3$ in its threshold-and-block-language battery.
+\end{proof}
+
+\subsection{Sharp threshold and extremal bases}
+
+\begin{theorem}[Full quadratic-Pisot fold threshold]
+\label{thm:full-quadratic-pisot-threshold}
+Let $\beta$ be an arbitrary quadratic Pisot number and use exactly the
+greedy language, Parry data, rank, cyclic modulus and fold of
+Definition~\ref{def:quadratic-parry-fold}.  Then
+\[
+m_*(\beta)=
+\begin{cases}
+3,&\beta\text{ is the root of }x^2-ax-a,\quad a\ge1,\\
+3,&\beta\text{ is the root of }x^2-ax+1,\quad a\ge3,\\
+2,&\text{otherwise}.
+\end{cases}
+\]
+More strongly, for every $m\ge m_*(\beta)$ and every $n\ge m$, the
+finite-block sliding fold is injective and
+\begin{equation}
+|\mathcal L_n(Y_{\beta,m})|
+=(\lfloor\beta\rfloor+1)^{n+m-1}.
+\label{eq:quadratic-pisot-block-count}
+\end{equation}
+At these apertures $\Phi_{\beta,m}$ is a topological conjugacy from the full
+$(\lfloor\beta\rfloor+1)$-shift onto the SFT $Y_{\beta,m}$, with inverse of
+memory zero and anticipation $m-1$.
+
+Consequently the maximum of the threshold function on the full quadratic
+Pisot family is three.  Its extremizers are exactly the negative-conjugate
+diagonal $P^-_{a,a}$ and the positive-conjugate norm-one family
+$P^+_{a,1}$.  The golden mean is the least extremizer, but it is not the
+unique extremizer after passage from metallic units to all quadratic Pisot
+bases.
+\end{theorem}
+
+\begin{proof}
+Equality of two folded output blocks is, by
+Proposition~\ref{prop:parry-rank-bijection}, equivalent to the sliding
+congruences \eqref{eq:sliding-kernel} for their digit differences.  For
+$m\ge3$, Lemma~\ref{lem:quadratic-sliding-congruences} makes every
+length-$m$ finite-block map injective.  Consecutive decoded blocks cover a
+longer raw block, proving injectivity for every $n\ge m$ and the count
+\eqref{eq:quadratic-pisot-block-count}.  The standard gluing argument used in
+Theorem~\ref{thm:metallic-threshold-classification} then gives a local inverse
+and an SFT description by forbidden output words of length at most $m+1$.
+
+It remains to classify $m=2$.  Put
+\[
+\kappa=Q_2-dQ_1=
+\begin{cases}b,&P^-_{a,b},\\ a-b,&P^+_{a,b}.
+\end{cases}
+\]
+Proposition~\ref{prop:parry-rank-bijection} gives the same explicit rule in
+both chambers:
+\[
+\Fold_{\beta,2}(u,v)=
+\begin{cases}
+(u,v),&v<d\text{ or }u<\kappa,\\
+(u-\kappa,0),&v=d\text{ and }u\ge\kappa.
+\end{cases}
+\]
+If the second coordinate of the preceding output is positive, it is the raw
+central digit.  If it is zero, that digit is either $0$ or $d$; the first
+coordinate of the next output is respectively $0$ or one of
+$d-\kappa,d$.  Hence the raw digit is locally recoverable exactly when
+$d-\kappa>0$.  This condition is $a>b$ in the negative chamber and $b>1$
+in the positive chamber.  If $d=\kappa$, the two constant raw points
+$0^{\mathbb Z}$ and $d^{\mathbb Z}$ both map to the constant zero output,
+so conjugacy fails.  Thus failure occurs exactly for $P^-_{a,a}$ and
+$P^+_{a,1}$, and Lemma~\ref{lem:quadratic-sliding-congruences} shows that the
+next aperture succeeds.  The chamber classification is exhaustive by
+Lemma~\ref{lem:quadratic-pisot-chambers}, completing the proof.
+\end{proof}
+
+\begin{remark}[What is and is not claimed]
+\label{rem:quadratic-open-interface}
+The theorem concerns the canonical cyclic Parry-rank fold of
+Definition~\ref{def:quadratic-parry-fold}.  Published finite-transducer
+normalization results for Pisot bases
+\cite{Frougny1992,FrougnySteiner2008,BertheFrougnyRigoSakarovitch2019}
+establish recognizability for other redundant digit sets and boundary
+conventions, but they do not identify those folds with this cyclic rank map.
+No threshold claim is made for signed digits, non-greedy expansions,
+non-cyclic truncation, degree greater than two, or general Pisot substitution
+codings.  These choices are genuine residual interfaces rather than
+consequences of Theorem~\ref{thm:full-quadratic-pisot-threshold}.
+\end{remark}
