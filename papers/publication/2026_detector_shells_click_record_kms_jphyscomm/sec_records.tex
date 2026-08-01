@@ -1988,6 +1988,126 @@ the whole finite-word visible law on the exchange quotient, and the only
 remaining ambiguity is the exchange of the two roots.
 \end{proof}
 
+\subsubsection{Feasibility boundary for higher-state identifiability}
+
+The two-state quotient inverse above does not extend to an arbitrary
+killed-reset D-MAP as a labelled-kernel inverse.  Once a click resets to one
+state, the visible record determines a discrete phase-type gap law, and
+minimal linear realizations of that scalar law are unique only up to
+similarity.  Markovian representatives inside a similarity class need not be
+unique.  This is the classical obstruction in phase-type and MAP
+identifiability
+\cite{Ryden1996Aggregated,OCinneide1989PhaseTypeNonuniqueness,
+BladtNielsen2017MatrixExponential,RamirezCoboLillo2012WeakEquivalentMAP},
+not a new general identifiability phenomenon.  Generic hidden-Markov
+identifiability results such as
+\cite{BlackwellKoopmans1957,AllmanMatiasRhodes2009HMMIdentifiability} do not
+remove it for this transition-labelled, deterministic-reset family.
+
+There is a tractable narrower extension when the hidden chart is fixed to be
+a serial sampled phase process.  The following proposition records the first
+new dimension explicitly.  It is a modest specialization of standard
+phase-type/Hankel realization algebra, not a claim of a new general
+$n$-state MAP identifiability theorem.
+
+\begin{proposition}[Explicit three-rate serial quotient inverse]
+\label{prop:three-state-serial-identifiability-main}
+Fix a known sampling interval \(\Delta\tau>0\) and pairwise distinct rates
+\(\theta_1,\theta_2,\theta_3>0\).  Put
+\[
+Q(\theta)=
+\begin{pmatrix}
+-\theta_1&0&0\\
+\theta_2&-\theta_2&0\\
+0&\theta_3&-\theta_3
+\end{pmatrix},\qquad
+T_0=e^{\Delta\tau Q(\theta)},\qquad
+T_1=(I-T_0)\mathbf1 e_3^\top .
+\]
+Thus a one-labelled transition resets the next hidden state to phase $3$.
+Let $G$ be the Palm number of zeros before the next click and define the
+visible tail coordinates
+\[
+S_k=\PP(G\ge k)
+=\PP(A_1=\cdots=A_k=0\mid A_0=1),\qquad 0\le k\le5,
+\]
+with $S_0=1$.  Form
+\[
+H_0=(S_{i+j})_{0\le i,j\le2},\qquad
+H_1=(S_{i+j+1})_{0\le i,j\le2}.
+\]
+Then $H_0$ is invertible and the generalized eigenvalues of the pencil
+$H_1-\zeta H_0$ are exactly
+\[
+\{e^{-\theta_1\Delta\tau},e^{-\theta_2\Delta\tau},
+e^{-\theta_3\Delta\tau}\}.
+\]
+Consequently $S_0,\ldots,S_5$, hence the visible finite-word law, determines
+the unordered rate triple.  Within this pairwise-distinct serial family the
+fibre of a labelled rate tuple is exactly its permutation orbit under
+\(\mathfrak S_3\).
+\end{proposition}
+
+\begin{proof}
+Starting in phase $3$, absorption is the completion time
+\(W=X_3+X_2+X_1\), where the $X_i$ are independent exponentials with rates
+\(\theta_i\).  Therefore
+\[
+S_k=\PP(W>k\Delta\tau)=\sum_{i=1}^3 c_i z_i^k,qquad
+z_i=e^{-\theta_i\Delta\tau},\qquad
+c_i=\prod_{j\ne i}\frac{\theta_j}{\theta_j-\theta_i}.
+\]
+The pairwise-distinct hypothesis gives $c_i\ne0$ and distinct $z_i$.
+Let
+\[
+V=(z_j^i)_{0\le i\le2,\ 1\le j\le3},\qquad
+C=\operatorname{diag}(c_1,c_2,c_3),\qquad
+Z=\operatorname{diag}(z_1,z_2,z_3).
+\]
+The exponential-sum formula gives
+\[
+H_0=VCV^\top,\qquad H_1=VCZV^\top.
+\]
+Both $V$ and $C$ are invertible, so $H_0$ is invertible and
+\[
+\det(H_1-\zeta H_0)
+=\det(V)^2\det(C)\prod_{i=1}^3(z_i-\zeta).
+\]
+The pencil therefore recovers the unordered $z_i$, and the known sampling
+interval recovers the unordered rates by
+\(\theta_i=-\Delta\tau^{-1}\log z_i\).  Conversely, permuting the rates does
+not change the law of the sum $W$, hence does not change the Palm gap law or
+the stationary renewal record.  This proves the fibre statement.
+\end{proof}
+
+The serial restriction is essential.  For a general $n$-state killed-reset
+kernel with reset row vector $e_n^\top$, let $M$ be invertible with
+\(M\mathbf1=\mathbf1\) and $e_n^\top M=e_n^\top$.  Whenever
+\(T_0^{(M)}=M^{-1}T_0M\) remains nonnegative and substochastic, the kernel
+\[
+T_1^{(M)}=(I-T_0^{(M)})\mathbf1e_n^\top
+\]
+is another killed-reset representation, and
+\[
+e_n^\top(T_0^{(M)})^k\mathbf1=e_n^\top T_0^k\mathbf1,
+\qquad k\ge0.
+\]
+The fibre can be nontrivial even for two states.  For example,
+\[
+T_0=\begin{pmatrix}1/2&0\\1/2&1/4\end{pmatrix},\qquad
+M=\begin{pmatrix}9/10&1/10\\0&1\end{pmatrix},\qquad
+T_0^{(M)}=\begin{pmatrix}9/20&1/45\\9/20&3/10\end{pmatrix}.
+\]
+Here \(M\mathbf1=\mathbf1\), \(e_2^\top M=e_2^\top\), both zero-labelled
+kernels are nonnegative and substochastic, and \(T_0^{(M)}\ne T_0\).
+Their reset kernels therefore have exactly the same visible renewal law.
+Hence killed reset alone does not identify hidden entries or a rate tuple.
+The same Hankel argument extends routinely to pairwise-distinct
+serial $n$-phase models, while collision strata require confluent
+realization coordinates and are ill-conditioned.  Because that extension is
+standard realization theory rather than a genuinely new MAP/HMM structure
+theorem, no general $n$-state theorem is promoted here.
+
 \begin{lemma}[Diagonal common-rate estimand]\label{lem:diagonal-common-rate-main}
 On the exchange diagonal
 \[
