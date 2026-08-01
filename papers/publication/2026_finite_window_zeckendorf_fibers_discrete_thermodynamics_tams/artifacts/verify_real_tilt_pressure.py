@@ -1,0 +1,307 @@
+#!/usr/bin/env python3
+"""Numerical audit of real-tilt pressure, freezing, and Legendre rates."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import math
+from collections import Counter
+from pathlib import Path
+
+import mpmath
+
+
+def fibonacci_through(n: int) -> list[int]:
+    values = [0, 1]
+    while len(values) <= n:
+        values.append(values[-1] + values[-2])
+    return values
+
+
+def extend_coefficients(coefficients: list[int], weight: int) -> list[int]:
+    result = [0] * (len(coefficients) + weight)
+    for index, value in enumerate(coefficients):
+        result[index] += value
+        result[index + weight] += value
+    return result
+
+
+def log_partition_derivatives(
+    levels: Counter[int], tilt: float
+) -> tuple[float, float, float]:
+    terms = [
+        (math.log(count) + tilt * math.log(level), math.log(level))
+        for level, count in levels.items()
+    ]
+    maximum = max(term for term, _ in terms)
+    weights = [math.exp(term - maximum) for term, _ in terms]
+    normalizer = sum(weights)
+    mean = sum(weight * log_level for weight, (_, log_level) in zip(weights, terms))
+    mean /= normalizer
+    variance = sum(
+        weight * (log_level - mean) ** 2
+        for weight, (_, log_level) in zip(weights, terms)
+    ) / normalizer
+    return maximum + math.log(normalizer), mean, variance
+
+
+def totients_through(n: int) -> list[int]:
+    values = list(range(n + 1))
+    for prime in range(2, n + 1):
+        if values[prime] == prime:
+            for multiple in range(prime, n + 1, prime):
+                values[multiple] -= values[multiple] // prime
+    return values
+
+
+def weinstein_psi_through(n: int) -> list[int]:
+    totients = totients_through(n)
+    psi = [0] * (n + 1)
+    psi[1] = 1
+    for value in range(2, n + 1):
+        psi[value] = sum(
+            psi[value // divisor] * totients[divisor]
+            for divisor in range(2, value + 1)
+            if value % divisor == 0
+        )
+    return psi
+
+
+def ordinary_partition_values(limit: int, weights: list[int]) -> list[int]:
+    values = [0] * (limit + 1)
+    values[0] = 1
+    for weight in weights:
+        for index in range(limit, weight - 1, -1):
+            values[index] += values[index - weight]
+    return values
+
+
+def layer_bound_counterexample_search(max_layer: int, fib: list[int]) -> int:
+    limit = fib[max_layer + 1] - 2
+    ordinary = ordinary_partition_values(
+        limit, [fib[index] for index in range(2, max_layer + 1)]
+    )
+    maximum_level = max(ordinary)
+    psi = weinstein_psi_through(maximum_level)
+    failures = 0
+    for layer in range(2, max_layer + 1):
+        counts = Counter(ordinary[fib[layer] - 1 : fib[layer + 1] - 1])
+        if counts[1] != 1:
+            failures += 1
+        failures += sum(
+            count > 2 * psi[level]
+            for level, count in counts.items()
+            if level > 1
+        )
+    return failures
+
+
+def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="ascii") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--max-m", type=int, default=32)
+    parser.add_argument("--max-layer", type=int, default=22)
+    parser.add_argument(
+        "--pressure-csv",
+        type=Path,
+        default=Path(__file__).with_name("real_tilt_pressure.csv"),
+    )
+    parser.add_argument(
+        "--rate-csv",
+        type=Path,
+        default=Path(__file__).with_name("real_tilt_rate.csv"),
+    )
+    parser.add_argument(
+        "--report",
+        type=Path,
+        default=Path(__file__).with_name("real_tilt_verification.txt"),
+    )
+    args = parser.parse_args()
+    if args.max_m < 24:
+        parser.error("--max-m must be at least 24")
+
+    fib = fibonacci_through(max(args.max_m + 3, args.max_layer + 3))
+    sigma = float(
+        mpmath.findroot(
+            lambda value: mpmath.zeta(value - 1) / mpmath.zeta(value) - 2,
+            (2.2, 3.0),
+        )
+    )
+    snapshot_indices = sorted({12, 16, 20, 24, 28, args.max_m})
+    selected_tilts = [
+        -8.0,
+        -6.0,
+        -5.0,
+        -4.0,
+        -3.0,
+        -sigma,
+        -2.0,
+        -1.0,
+        0.0,
+        1.0,
+        2.0,
+        5.0,
+        10.0,
+    ]
+    derivative_grid = [value / 4 for value in range(-32, 41)]
+    rate_tilts = [value / 10 for value in range(-80, 121)]
+
+    snapshots: dict[int, Counter[int]] = {}
+    coefficients = [1]
+    for m in range(1, args.max_m + 1):
+        coefficients = extend_coefficients(coefficients, fib[m])
+        if m in snapshot_indices:
+            snapshots[m] = Counter(coefficients)
+
+    failures = layer_bound_counterexample_search(args.max_layer, fib)
+    pressure_rows: list[dict[str, object]] = []
+    rate_rows: list[dict[str, object]] = []
+    messages = [
+        "REAL-TILT PRESSURE / LDP NUMERICAL VERIFICATION",
+        f"sigma_0={sigma:.15f}",
+        f"window_battery={snapshot_indices}",
+        f"tilt_grid=[{derivative_grid[0]:.2f},{derivative_grid[-1]:.2f}] step=0.25",
+        f"layer_bound_counterexample_search=2..{args.max_layer}",
+        f"layer_bound_counterexamples={failures}",
+    ]
+
+    previous_logs: dict[float, tuple[int, float]] = {}
+    for m, levels in sorted(snapshots.items()):
+        derivatives = []
+        curvatures = []
+        for tilt in derivative_grid:
+            log_sum, first, second = log_partition_derivatives(levels, tilt)
+            derivatives.append(first / m)
+            curvatures.append(second / m)
+        derivative_violations = sum(
+            right < left - 1.0e-12
+            for left, right in zip(derivatives, derivatives[1:])
+        )
+        curvature_violations = sum(value < -1.0e-13 for value in curvatures)
+        failures += derivative_violations + curvature_violations
+
+        messages.append(
+            "ANALYTIC_CONVEXITY m={} derivative_monotonicity_violations={} "
+            "negative_curvatures={} min_curvature={:.3e}".format(
+                m,
+                derivative_violations,
+                curvature_violations,
+                min(curvatures),
+            )
+        )
+        for tilt in selected_tilts:
+            log_sum, first, second = log_partition_derivatives(levels, tilt)
+            increment = math.nan
+            if tilt in previous_logs:
+                previous_m, previous_log = previous_logs[tilt]
+                increment = (log_sum - previous_log) / (m - previous_m)
+            previous_logs[tilt] = (m, log_sum)
+            pressure_rows.append(
+                {
+                    "m": m,
+                    "t": f"{tilt:.15f}",
+                    "P_m": f"{log_sum / m:.15f}",
+                    "P_m_prime": f"{first / m:.15f}",
+                    "P_m_second": f"{second / m:.15f}",
+                    "log_sum_increment": ""
+                    if math.isnan(increment)
+                    else f"{increment:.15f}",
+                }
+            )
+
+        log_cardinality = math.log(fib[m + 2])
+        cgfs = []
+        for tilt in rate_tilts:
+            log_sum, _, _ = log_partition_derivatives(levels, tilt)
+            cgfs.append((log_sum - log_cardinality) / m)
+        _, mean_log, _ = log_partition_derivatives(levels, 0.0)
+        mean_alpha = mean_log / m
+        alpha_max = math.log(max(levels)) / m
+        alphas = sorted(
+            set([alpha_max * index / 100 for index in range(101)] + [mean_alpha])
+        )
+        rates = [
+            max(tilt * alpha - cgf for tilt, cgf in zip(rate_tilts, cgfs))
+            for alpha in alphas
+        ]
+        secants = [
+            (right_rate - left_rate) / (right_alpha - left_alpha)
+            for left_alpha, right_alpha, left_rate, right_rate in zip(
+                alphas, alphas[1:], rates, rates[1:]
+            )
+        ]
+        rate_violations = sum(
+            right < left - 1.0e-9 for left, right in zip(secants, secants[1:])
+        )
+        negative_rates = sum(rate < -1.0e-10 for rate in rates)
+        mean_rate = rates[alphas.index(mean_alpha)]
+        failures += rate_violations + negative_rates + (abs(mean_rate) > 1.0e-9)
+        messages.append(
+            "LEGENDRE_RATE m={} convexity_violations={} negative_rates={} "
+            "I_m(mean)={:.3e} alpha_mean={:.9f} alpha_max={:.9f}".format(
+                m,
+                rate_violations,
+                negative_rates,
+                mean_rate,
+                mean_alpha,
+                alpha_max,
+            )
+        )
+        for alpha, rate in zip(alphas, rates):
+            rate_rows.append(
+                {
+                    "m": m,
+                    "alpha": f"{alpha:.15f}",
+                    "I_m": f"{rate:.15f}",
+                }
+            )
+
+    final_m = max(snapshots)
+    final_levels = snapshots[final_m]
+    frozen_lines = []
+    for tilt in (-8.0, -6.0, -5.0, -4.0, -3.0):
+        log_sum, first, second = log_partition_derivatives(final_levels, tilt)
+        frozen_lines.append(
+            "t={:.1f}: log(S_t)={:.9f}, P_m={:.9f}, P_m'={:.3e}, P_m''={:.3e}".format(
+                tilt, log_sum, log_sum / final_m, first / final_m, second / final_m
+            )
+        )
+    messages.append("FROZEN_PHASE_FINITE_WINDOW m={}: {}".format(final_m, "; ".join(frozen_lines)))
+    messages.append(
+        "COUNTEREXAMPLE_TO_REQUESTED_GLOBAL_STRICT_CONVEXITY="
+        "analytic theorem gives P(t)=0 for all t<=-sigma_0 while P(0)=log(phi)"
+    )
+
+    write_csv(
+        args.pressure_csv,
+        ["m", "t", "P_m", "P_m_prime", "P_m_second", "log_sum_increment"],
+        pressure_rows,
+    )
+    write_csv(args.rate_csv, ["m", "alpha", "I_m"], rate_rows)
+    messages.extend(
+        [
+            f"pressure_csv={args.pressure_csv.resolve()}",
+            f"rate_csv={args.rate_csv.resolve()}",
+            f"failures={failures}",
+            "RESULT: 0 numerical failures / global-analyticity target refuted"
+            if failures == 0
+            else "RESULT: VERIFICATION FAILED",
+        ]
+    )
+    report = "\n".join(messages) + "\n"
+    args.report.parent.mkdir(parents=True, exist_ok=True)
+    args.report.write_text(report, encoding="ascii")
+    print(report, end="")
+    return 0 if failures == 0 else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
