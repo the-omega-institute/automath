@@ -2,7 +2,7 @@
 
 Journal: Ergodic Theory and Dynamical Systems
 
-Title: Adams--Mobius primitive inversion for finite-group extensions of shifts of finite type
+Title: Twisted-determinant inverse rigidity and Perron-boundary Adams--Mobius coordinates for finite-group extensions of shifts of finite type
 
 Article type: Original Article
 
@@ -19,12 +19,15 @@ Authors:
 
 Abstract:
 
-For finite-group extensions of mixing subshifts of finite type, we develop a primitive determinant calculus in Peter--Weyl coordinates. The main theorem spine is finite-group theoretic. First, twisted determinants, which record periodic labels, are converted into primitive Peter--Weyl series by an Adams--Mobius inversion that accounts for the operations \(g\mapsto g^m\) produced by repetitions of primitive orbits. Second, under the gap hypothesis, those primitive series have well-defined Perron-point values, giving conjugacy-class Mertens constants; Hermitian character orthogonality then reads off the non-trivial primitive channels from the constant deviations. The linear span of cyclic quotient observables is the one-dimensional shadow of the full primitive class profile at the Perron point, under \(\eta<\lambda\). The root-of-unity layer used for scalar sampling is separate: it appears only after replacing the cocycle by the canonical cyclic lift. The orthogonal complement is a genuine non-abelian defect. In the \(S_3\) model the vanishing sign trace is the quadratic one-dimensional Adams obstruction, while the standard two-dimensional channel gives a certified non-zero non-abelian contribution. The scalar finite part of \(\zeta_A(z)=\det(I-zA)^{-1}\) and the canonical cyclic-lift comparison are auxiliary finite-matrix inputs: they provide the trivial-channel normalisation and a separate fixed-matrix scalar recovery model, not a parallel theorem chain.
+For finite-group extensions of mixing subshifts of finite type, we characterize the kernel of the full family of irreducible twisted determinants. Equality of every determinant is equivalent to equality of the unmarked primitive orbit counts at every length and in every conjugacy class, but is not in general Livsic cohomology. The smallest counterexample is the full two-shift with group Z/2: the named-edge labelings (0,1) and (1,0) have common determinant family (1-2z,1), both skew products are mixing, and every twisted block is semisimple, yet a marked fixed point separates the cocycles. On an edge-resolving graph, semisimplicity plus a common vertex-compatible spectral-projector certificate forces one vertex gauge. The forward reconstruction uses Adams--Mobius inversion in Peter--Weyl coordinates and extends to the Perron boundary, where all peripheral phases are retained and the renormalized Frobenius-class product constants are computed from reduced fixed-label determinant coordinates.
 
 Keywords:
 
 - Dynamical zeta-function
 - Subshift of finite type
+- Inverse rigidity
+- Livsic cohomology
+- Twisted determinant
 - Adams operation
 - Primitive orbit
 - Finite-group extension
