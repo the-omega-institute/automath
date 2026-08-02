@@ -1,0 +1,315 @@
+\section{Context-free pumping and Pisot recurrence actions}
+\label{sec:context-free-pisot}
+
+We now pass from finite automata to pushdown automata. Recall that an
+infinite language is \emph{CF-immune} if it contains no infinite
+context-free sublanguage. Here a context-free language means one accepted
+by an arbitrary nondeterministic pushdown automaton, equivalently generated
+by a context-free grammar. We impose no determinism, unambiguity,
+real-time, or growth hypothesis on that automaton. The classical
+fixed-base theorem is due independently to Hartmanis--Shank and
+Sch\"utzenberger
+\cite{HartmanisShank1968,Schutzenberger1968}. The point below is that
+the square-modulus block action survives the two simultaneous pumps
+supplied by Ogden's lemma \cite{Ogden1968}; the interchange lemma of
+Ogden--Ross--Winklmann \cite{OgdenRossWinklmann1985} is a stronger
+related tool, but is not needed for the proof.
+
+\begin{lemma}[Paired Zeckendorf pumping congruence]
+  \label{lem:zeckendorf-paired-pumping-congruence}
+  Let \(u,v,x,y,z\in\{0,1\}^\ast\), and put
+  \[
+    N(k):=\val(uv^kxy^kz)\qquad(k\ge0).
+  \]
+  Suppose that \(\abs v+\abs y>0\). If \(q\ge2\), and \(h\) is a
+  common multiple of the orders modulo \(q\) of the nonempty-block
+  matrices among \(M_v,M_y\) (with \(M_\varepsilon=I\)), then
+  \[
+    N(k+h)\equiv N(k)\pmod q
+    \qquad(k\ge0).
+  \]
+\end{lemma}
+
+\begin{proof}
+  With \(v_0=(0,1,1)^t\), concatenation and
+  \Cref{lem:zeckendorf-unimodular-block-action} give
+  \[
+    N(k)=e_1^tM_zM_y^kM_xM_v^kM_uv_0.
+  \]
+  Every nonempty block matrix is invertible modulo \(q\). By the
+  definition of \(h\), both \(M_v^h\equiv I\pmod q\) and
+  \(M_y^h\equiv I\pmod q\), where the same identities are automatic for
+  an empty block. Substitution in the displayed product proves the
+  congruence.
+\end{proof}
+
+\begin{theorem}[Context-free coprime-quotient Zeckendorf pumping]
+  \label{thm:context-free-coprime-quotient-zeckendorf-pumping}
+  Let \(L\subseteq\mathcal Z\) be context-free. There is an integer
+  \(P_L\ge1\) such that every \(w\in L\) with
+  \(\abs w\ge P_L\) and \(\val(w)\ge2\) begins a sequence
+  \(w_0=w,w_1,w_2,\ldots\) in \(L\) whose lengths are strictly
+  increasing and whose values \(N_i=\val(w_i)\) satisfy
+  \[
+    N_{i+1}=N_iQ_i,\qquad Q_i>1,\qquad
+    Q_i\equiv1\pmod {N_i},\qquad \gcd(Q_i,N_i)=1.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Apply Ogden's lemma with every position distinguished. It supplies a
+  constant \(P_L\) such that each \(w\in L\) of length at least \(P_L\)
+  has a factorisation
+  \[
+    w=uvxyz,\qquad \abs v+\abs y>0,\qquad
+    uv^kxy^kz\in L\quad(k\ge0).
+  \]
+  The additional marked-position bound in Ogden's lemma is not needed
+  here. Starting with \(w_i\in L\), choose such a factorisation and
+  let \(h_i\) be a common multiple of the orders of \(M_v\) and \(M_y\)
+  in
+  \(\operatorname{GL}_3(\ZZ/N_i^2\ZZ)\), omitting an empty block. These
+  orders exist by
+  \Cref{lem:zeckendorf-unimodular-block-action}. Define
+  \[
+    w_{i+1}:=uv^{\,1+h_i}xy^{\,1+h_i}z.
+  \]
+  By \Cref{lem:zeckendorf-paired-pumping-congruence},
+  \(N_{i+1}\equiv N_i\pmod {N_i^2}\). Hence
+  \(N_{i+1}=N_i(1+t_iN_i)\) for an integer \(t_i\).
+
+  Since \(h_i\ge1\) and \(\abs v+\abs y>0\), the new word is longer.
+  Both words belong to \(L\subseteq\mathcal Z\), and canonical
+  Zeckendorf intervals are strictly ordered by length; consequently
+  \(N_{i+1}>N_i\), so \(t_i\ge1\). Taking
+  \(Q_i=1+t_iN_i\) gives all four assertions. The new word still has
+  length at least \(P_L\) and value at least \(2\), so the construction
+  iterates.
+\end{proof}
+
+\begin{corollary}[Zeckendorf CF-immunity package]
+  \label{cor:zeckendorf-context-free-immunity-package}
+  Every infinite context-free \(L\subseteq\mathcal Z\) satisfies
+  \[
+    \sup_{w\in L}\omega(\val(w))=\infty.
+  \]
+  Consequently, for each \(K\ge1\), the bounded-distinct-prime language
+  \(\mathcal B_K\), the bounded-almost-prime language \(\mathcal A_K\),
+  and every infinite finite-prime-support language \(\mathcal Z_S\)
+  are CF-immune. In particular, the Zeckendorf prime language
+  \(\mathcal P_{\mathcal Z}\) is CF-immune.
+\end{corollary}
+
+\begin{proof}
+  Choose a sufficiently long word in \(L\) and apply
+  \Cref{thm:context-free-coprime-quotient-zeckendorf-pumping}. Since
+  \(N_j\mid N_i\) for \(j\le i\), while every \(Q_i>1\) is coprime to
+  \(N_i\), a prime divisor of \(Q_i\) divides no earlier value. Thus
+  \(\omega(N_i)\ge\omega(N_0)+i\). The immunity conclusions follow
+  exactly as in the regular cases: \(\omega\le K\) on \(\mathcal B_K\),
+  \(\mathcal A_K\subseteq\mathcal B_K\), and
+  \(\omega\le\abs S\) on \(\mathcal Z_S\). Finally prime values have
+  \(\omega=1\), while Euclid's theorem makes
+  \(\mathcal P_{\mathcal Z}\) infinite.
+\end{proof}
+
+We next isolate the precise base-independent interface. This is
+deliberately narrower than every object called a Pisot or abstract
+numeration system in the literature.
+
+\begin{definition}[Canonical eventually recurrent numeration]
+  \label{def:canonical-eventually-recurrent-numeration}
+  A canonical eventually recurrent numeration system consists of:
+  \begin{enumerate}[label=\textup{(U\arabic*)}]
+    \item a strictly increasing sequence of positive integers
+    \(U=(U_n)_{n\ge0}\) and a finite digit alphabet
+    \(A\subseteq\NN\) containing \(0\);
+    \item an LSD-first language \(\mathcal R_U\subseteq A^\ast\), with
+    \[
+      \val_U(x_0\cdots x_{m-1})
+        :=\sum_{j=0}^{m-1}x_jU_j,
+    \]
+    for which \(\val_U:\mathcal R_U\to\NN_{\ge1}\) is a bijection;
+    \item strict length ordering: if \(r,s\in\mathcal R_U\) and
+    \(\abs r<\abs s\), then \(\val_U(r)<\val_U(s)\);
+    \item integers \(J\ge0,d\ge1,a_0,\ldots,a_{d-1}\), with
+    \(a_0\ne0\), such that
+    \[
+      U_{n+d}=a_0U_n+a_1U_{n+1}+\cdots+a_{d-1}U_{n+d-1}
+      \qquad(n\ge J).
+    \]
+  \end{enumerate}
+  It is a \emph{unit system} if \(\abs{a_0}=1\). No regularity of
+  \(\mathcal R_U\) is included in this definition.
+\end{definition}
+
+\begin{lemma}[Affine recurrence block action]
+  \label{lem:affine-recurrence-block-action}
+  Under \textup{(U4)}, let \(C\) be the \(d\times d\) companion matrix
+  with superdiagonal entries \(1\) and last row
+  \((a_0,\ldots,a_{d-1})\). For \(\varepsilon\in A\), put
+  \[
+    D_\varepsilon=
+    \begin{pmatrix}
+      1&\varepsilon e_1^t\\
+      0&C
+    \end{pmatrix}.
+  \]
+  Once \(r\ge J\), appending \(\varepsilon\) sends
+  \[
+    (N_r,U_r,\ldots,U_{r+d-1})^t
+    \quad\hbox{to}\quad
+    D_\varepsilon(N_r,U_r,\ldots,U_{r+d-1})^t.
+  \]
+  Moreover
+  \(\det D_\varepsilon=(-1)^{d-1}a_0\). Hence every block action is
+  invertible modulo \(q\) whenever \(\gcd(q,a_0)=1\), and modulo every
+  \(q\ge2\) in a unit system. Here and below, for a block
+  \(b=b_1\cdots b_\ell\), we write
+  \(M_b=D_{b_\ell}\cdots D_{b_1}\), with \(M_\varepsilon=I\).
+\end{lemma}
+
+\begin{proof}
+  The first coordinate becomes \(N_r+\varepsilon U_r\); the remaining
+  coordinates shift once and the final one is supplied by \textup{(U4)}.
+  These are exactly the displayed matrix equations. The determinant
+  is \(\det C=(-1)^{d-1}a_0\). Multiplicativity of determinants gives
+  the assertion for blocks.
+\end{proof}
+
+\begin{theorem}[Prime immunity for recurrent numeration systems]
+  \label{thm:recurrent-numeration-prime-cf-immunity}
+  Let \((U,A,\mathcal R_U)\) satisfy \textup{(U1)--(U4)}, and put
+  \[
+    \mathcal P_U
+      :=\{w\in\mathcal R_U:\val_U(w)\text{ is prime}\}.
+  \]
+  Then \(\mathcal P_U\) is CF-immune, and therefore REG-immune and not
+  recognizable by a finite automaton over \(A\).
+
+  If, in addition, \(\abs{a_0}=1\), then every infinite context-free
+  \(L\subseteq\mathcal R_U\) has unbounded
+  \(\omega(\val_U(w))\). More precisely, \(L\) contains a
+  coprime-quotient chain \(N_{i+1}=N_iQ_i\) with
+  \(Q_i>1\) and \(Q_i\equiv1\pmod {N_i}\). Thus the bounded-\(\omega\),
+  bounded-\(\Omega\), and finite-prime-support languages of a unit
+  system are CF-immune whenever they are infinite.
+\end{theorem}
+
+\begin{proof}
+  Suppose first that an infinite context-free
+  \(L\subseteq\mathcal P_U\) exists. Discard its finitely many words of
+  length less than \(J\). Among the finitely many length-\(J\) prefixes
+  there is a word \(a\) for which the left quotient
+  \[
+    L_a:=\{s\in A^\ast:as\in L\}
+  \]
+  is infinite. Context-free languages are closed under left quotient
+  by a fixed word, so \(L_a\) is context-free. By \textup{(U2)}, its
+  full-word values are distinct primes. Choose \(s\in L_a\) beyond an
+  Ogden pumping threshold and with
+  \(p:=\val_U(as)\nmid a_0\); only finitely many primes divide \(a_0\).
+
+  Mark every position of \(s\) and write \(s=uvxyz\) as supplied by
+  Ogden's lemma. In the stationary action beginning after \(a\),
+  \[
+    \val_U(auv^kxy^kz)
+     =e_1^tM_zM_y^kM_xM_v^kM_uV_J,
+  \]
+  where \(V_J=(\val_U(a),U_J,\ldots,U_{J+d-1})^t\).
+  By \Cref{lem:affine-recurrence-block-action}, the nonempty \(M_v,M_y\)
+  lie in \(\operatorname{GL}_{d+1}(\ZZ/p^2\ZZ)\). If \(h\) is a common
+  multiple of their orders, pumping from exponent \(1\) to \(1+h\)
+  produces another word of \(L\) whose value \(N'\) satisfies
+  \(N'\equiv p\pmod {p^2}\). The word is longer, so \textup{(U3)} gives
+  \(N'>p\). Therefore \(N'=p(1+tp)\) with \(t\ge1\), a composite
+  value, contradicting \(L\subseteq\mathcal P_U\). This proves
+  CF-immunity. Regular languages are context-free, and the bijection
+  in \textup{(U2)} together with Euclid's theorem makes
+  \(\mathcal P_U\) infinite, proving the remaining assertions in the
+  first paragraph.
+
+  Now suppose \(\abs{a_0}=1\) and \(L\subseteq\mathcal R_U\) is infinite
+  and context-free. Choose an infinite prefix quotient \(L_a\) as
+  above and a sufficiently long word of value at least \(2\). The same
+  paired-pump construction may now be performed modulo \(N_i^2\) at
+  every stage, because all block determinants are units modulo every
+  \(N_i^2\). Strict length ordering gives
+  \(N_{i+1}=N_iQ_i\) with \(Q_i>1\) and
+  \(Q_i\equiv1\pmod {N_i}\). A prime divisor of \(Q_i\) is new at each
+  stage, so \(\omega(N_i)\to\infty\). The final immunity statements
+  follow as in
+  \Cref{cor:zeckendorf-context-free-immunity-package}.
+\end{proof}
+
+\begin{corollary}[Linear Pisot \(U\)-systems]
+  \label{cor:linear-pisot-prime-cf-immunity}
+  Let \(U=(U_n)_{n\ge0}\) be a linear Pisot \(U\)-system in the
+  following precise sense: \(U_0=1\), the \(U_n\) are strictly increasing
+  integers with bounded quotients, \(\mathcal R_U\) is the LSD-first
+  reversal of the usual greedy representation language, and \(U\)
+  eventually satisfies an integral recurrence whose characteristic
+  polynomial is the minimal polynomial of a Pisot number. Then its prime
+  representation language is CF-immune, hence REG-immune and
+  nonrecognizable. The same statements hold in the usual MSD-first
+  convention.
+
+  If the dominant Pisot number is a unit and the chosen recurrence has
+  trailing coefficient \(a_0=\pm1\), then the full coprime-quotient and
+  bounded-prime-support CF-immunity conclusions of
+  \Cref{thm:recurrent-numeration-prime-cf-immunity} hold.
+\end{corollary}
+
+\begin{proof}
+  Greedy expansion gives a unique representation of every positive
+  integer, and its length-\(m\) words represent values between successive
+  place-value thresholds; thus \textup{(U1)--(U3)} hold. The defining
+  Pisot recurrence gives \textup{(U4)}. Apply
+  \Cref{thm:recurrent-numeration-prime-cf-immunity}. Frougny's finite
+  normalization theorem supplies a finite transducer for normalization
+  in this Pisot setting, and the associated canonical syntax and
+  Bertrand/substitution descriptions are standard
+  \cite{Frougny1992,BruyereHansel1997,Fabre1995,FrougnySolomyak1992}.
+  Those finite-state results identify this corollary with the usual
+  recognizability convention; the immunity proof itself uses only
+  \textup{(U1)--(U4)}. Finally, context-free and regular languages are
+  closed under reversal, so changing between the LSD-first proof
+  convention and the usual MSD-first convention preserves every
+  conclusion.
+\end{proof}
+
+\begin{example}[Unit and nonunit Pisot systems]
+  \label{ex:pisot-unit-nonunit}
+  The Fibonacci recurrence has characteristic polynomial
+  \(X^2-X-1\), the Pell recurrence has \(X^2-2X-1\), and the
+  Tribonacci recurrence has \(X^3-X^2-X-1\). Their trailing recurrence
+  coefficient is \(a_0=1\), so the iterated conclusion applies. In
+  ordinary base \(b\), \(U_n=b^n\) and \(a_0=b\); prime CF-immunity
+  follows, recovering the classical conclusion, but the unit iteration
+  is not being asserted. A genuinely nonintegral, nonunit Pisot example
+  is the dominant root \(1+\sqrt3\) of \(X^2-2X-2\): the recurrence
+  \(U_{n+2}=2U_{n+1}+2U_n\) has \(a_0=2\), and the action is singular
+  modulo \(2\).
+\end{example}
+
+\begin{remark}[Exact open interfaces]
+  \label{rem:pisot-open-interfaces}
+  The terminology for Pisot numeration systems is not uniform.
+  \Cref{cor:linear-pisot-prime-cf-immunity} covers the standard
+  positional linear \(U\)-systems just specified, including integer
+  bases, Zeckendorf/Fibonacci, Pell, and higher-order Pisot recurrences.
+  It does not assert the theorem for arbitrary real-base
+  \(\beta\)-shift representations, non-positional abstract numeration
+  systems, redundant noninjective digit systems, or systems lacking an
+  eventual integral recurrence and strict length ordering. Extending
+  the argument to any of those classes requires a stationary finite
+  block action that is invertible modulo represented primes.
+
+  For a nonunit recurrence, prime CF-immunity is still proved: one
+  starts with a prime \(p\nmid a_0\). The stronger iteration can fail at
+  the present proof interface because a later composite \(N_i\) may
+  share a factor with \(a_0\), making the companion action singular
+  modulo \(N_i^2\). Thus bounded-prime-support CF-immunity for general
+  nonunit Pisot \(U\)-systems remains open here; no contrary language is
+  claimed.
+\end{remark}

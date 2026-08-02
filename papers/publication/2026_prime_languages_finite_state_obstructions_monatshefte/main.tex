@@ -31,7 +31,7 @@
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\abs}[1]{\lvert #1 \rvert}
 
-\title[Fixed-DFA Prime-Slice Obstructions]{Fixed-DFA prime-slice obstructions in base \(b\) and trim Zeckendorf presentations}
+\title[Prime immunity in Pisot numeration]{Finite-state prime-slice obstructions and context-free immunity in Pisot numeration}
 
 \author{Haobo Ma}
 \address[Haobo Ma]{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}
@@ -46,47 +46,45 @@
 \begin{document}
 
 \begin{abstract}
-Classical density theory for regular languages implies that normalized
-length-\(m\) counts for a fixed DFA are eventually periodic up to an
-exponentially small error. This paper turns that input into quantitative
-finite-budget obstructions for approximating prime slices by one fixed
-DFA, and extends the comparison to arbitrary trim deterministic
-presentations with several maximal components. In that multicomponent
-setting, the Perron-scale residue classes have expansions
-\(\lambda^m(d_rm^{s_r}+O(m^{s_r-1}))+O(\theta^m m^S)\), while the
-remaining classes are sub-Perron; comparing the active polynomial
-exponents gives the obstruction to targets of size
-\(\asymp\lambda^m/m\). Given a complete DFA over \(\Sigma_b\), we also
-compute, in a compressed Markov-chain output format, the recurrent
-classes, periods, residue alternatives, thresholds, and constants
-entering the base-\(b\) symmetric-difference and recall/precision
-bounds. The prime-counting constants are instantiated from an explicit
-PNT inequality. In particular, no fixed DFA can keep both recall and
-precision bounded below on infinitely many lengths, and the symmetric
-difference from the base-\(b\) prime slice is at least
-\(c_{\mathcal A,b}b^m/m\) for all large \(m\). The same finite-budget
-mechanism gives the corresponding Zeckendorf corollaries with
-\(\varphi^m/m\). In addition, a PNT-free unimodular pumping argument
-gives a coprime-quotient Zeckendorf pumping theorem: every sufficiently
-long accepted word of value at least \(2\) in a regular Zeckendorf
-sublanguage starts an infinite divisibility chain
-\(N_{i+1}=N_iQ_i\) with \(Q_i\equiv1\pmod {N_i}\). Consequently each
-pumping step may introduce a prime coprime to the previous value, the
-number of distinct rational prime divisors is unbounded on every
-infinite regular Zeckendorf sublanguage, and bounded-distinct-prime and
-finite-prime-support Zeckendorf languages, including the prime language,
-are REG-immune.
+Classical density theory for regular languages gives quantitative
+finite-budget obstructions to approximating prime slices by one fixed
+automaton. We retain those base-\(b\) and Zeckendorf bounds, including
+the lower scales \(b^m/m\) and \(\varphi^m/m\), and strengthen the
+PNT-free language theorem. An Ogden-lemma argument combines the two
+context-free pumps with the unimodular Zeckendorf block action modulo
+the square of the current value. Every sufficiently long word in a
+context-free Zeckendorf sublanguage therefore starts a chain
+\(N_{i+1}=N_iQ_i\), where \(Q_i>1\) and
+\(Q_i\equiv1\pmod {N_i}\). It follows that every infinite
+context-free Zeckendorf sublanguage has unboundedly many distinct prime
+divisors; in particular, the Zeckendorf prime language is CF-immune.
+
+The argument is then made base-independent. For a canonical positional
+system with strictly length-ordered representations and an eventual
+integral recurrence having nonzero trailing coefficient, the affine
+companion action is invertible modulo every represented prime outside a
+fixed finite set. Hence its prime language is CF-immune, and therefore
+REG-immune. This applies to every standard linear Pisot \(U\)-system
+with greedy canonical representations; Frougny normalization supplies
+the usual finite-state syntax. If the Pisot recurrence is a unit
+recurrence, the full iterated coprime-quotient and bounded-prime-support
+CF-immunity conclusions hold. For nonunit recurrences only prime
+CF-immunity is asserted: iteration may meet a prime divisor of the
+trailing coefficient. Arbitrary real-base beta-shifts and
+non-positional abstract numeration systems are recorded as explicit
+open interfaces.
 \end{abstract}
 
 \subjclass[2020]{68Q45, 11A41, 11A63, 37B10}
-\keywords{Deterministic finite automaton, base-\(b\) prime language, regular approximation,
-Zeckendorf representation, density dichotomy}
+\keywords{Context-free immunity, Pisot numeration, Zeckendorf representation,
+prime language, pushdown automaton, finite-state density}
 
 \maketitle
 
 \input{sec_introduction}
 \input{sec_automata}
 \input{sec_zeckendorf}
+\input{sec_pisot}
 \input{sec_conclusion}
 \appendix
 \input{sec_analytic}
@@ -159,7 +157,8 @@ Prescribing the binary digits of primes, II,
 \bibitem{BruyereHansel1997}
 V. Bruy{\`e}re and G. Hansel,
 Bertrand numeration systems and recognizability,
-\textit{Theoret. Comput. Sci.} \textbf{181} (1997), no.~1, 17--43.
+\textit{Theoret. Comput. Sci.} \textbf{181} (1997), no.~1, 17--43,
+doi:10.1016/S0304-3975(96)00260-5.
 
 \bibitem{BustosKellendonkYassawi2025}
 D. Bustos-Gajardo, J. Kellendonk, and R. Yassawi,
@@ -242,6 +241,12 @@ Approximate recognition of non-regular languages by finite automata,
 Science Conference (ACSC 2005)}, Newcastle, Australia, 2005,
 pp.~219--228.
 
+\bibitem{Fabre1995}
+S. Fabre,
+Substitutions et \(\beta\)-syst\`emes de num\'eration,
+\textit{Theoret. Comput. Sci.} \textbf{137} (1995), no.~2, 219--236,
+doi:10.1016/0304-3975(95)91132-A.
+
 \bibitem{FlajoletSedgewick2009}
 P. Flajolet and R. Sedgewick,
 \textit{Analytic Combinatorics},
@@ -250,7 +255,15 @@ Cambridge University Press, Cambridge, 2009.
 \bibitem{Frougny1992}
 C. Frougny,
 Representations of numbers and finite automata,
-\textit{Math. Systems Theory} \textbf{25} (1992), no.~1, 37--60.
+\textit{Math. Systems Theory} \textbf{25} (1992), no.~1, 37--60,
+doi:10.1007/BF01368783.
+
+\bibitem{FrougnySolomyak1992}
+C. Frougny and B. Solomyak,
+Finite beta-expansions,
+\textit{Ergodic Theory Dynam. Systems} \textbf{12} (1992), no.~4,
+713--723,
+doi:10.1017/S0143385700007057.
 
 \bibitem{HanselPerrin1989}
 G. Hansel and D. Perrin,
@@ -266,7 +279,8 @@ Revised by D. R. Heath-Brown and J. H. Silverman.
 \bibitem{HartmanisShank1968}
 J. Hartmanis and H. Shank,
 On the recognition of primes by automata,
-\textit{J. ACM} \textbf{15} (1968), no.~3, 382--389.
+\textit{J. ACM} \textbf{15} (1968), no.~3, 382--389,
+doi:10.1145/321466.321470.
 
 \bibitem{Kitchens1998}
 B. P. Kitchens,
@@ -287,7 +301,8 @@ Conditional densities of regular languages,
 \bibitem{LecomteRigo2001}
 P. B. A. Lecomte and M. Rigo,
 Numeration systems on a regular language,
-\textit{Theory Comput. Syst.} \textbf{34} (2001), no.~1, 27--44.
+\textit{Theory Comput. Syst.} \textbf{34} (2001), no.~1, 27--44,
+doi:10.1007/S002240010014.
 
 \bibitem{Lekkerkerker1952}
 C. G. Lekkerkerker,
@@ -328,6 +343,18 @@ Relative densities of formal languages,
 \textit{Descriptional Complexity of Formal Systems},
 Lecture Notes in Comput. Sci., vol.~15759, Springer, Cham, 2025,
 pp.~166--179.
+
+\bibitem{Ogden1968}
+W. Ogden,
+A helpful result for proving inherent ambiguity,
+\textit{Math. Systems Theory} \textbf{2} (1968), no.~3, 191--194,
+doi:10.1007/BF01694004.
+
+\bibitem{OgdenRossWinklmann1985}
+W. Ogden, R. J. Ross, and K. Winklmann,
+An interchange lemma for context-free languages,
+\textit{SIAM J. Comput.} \textbf{14} (1985), no.~2, 410--415,
+doi:10.1137/0214031.
 
 \bibitem{Muellner2017}
 C. M\"ullner,
