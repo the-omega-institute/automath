@@ -177,6 +177,8 @@ m&D_m&\mathcal M_m\\ \hline
 11&16&\{37,63,71,79,105\}.
 \end{array}
 \]
+The windows \(m=10\) and \(m=12\) are covered by the generic even formula
+for \(\mathcal M_{2k}\); they require no additional exceptional rows.
 In particular, apart from the displayed initial exceptions, the degeneracy of
 the maximum is exactly \(2\) in even windows and exactly \(4\) in odd windows.
 \end{theorem}
@@ -263,7 +265,9 @@ For real \(t\), define the real collision sum
  S_t(m):=\sum_{x\in X_m}d_m(x)^t.
 \]
 This is well defined for all \(t\in\RR\), since every fiber is nonempty.  The
-positive integer specializations agree with the moments in
+interval-completeness lemma following \Cref{thm:affine-transfer} proves this
+nonemptiness before negative powers are introduced.  The positive integer
+specializations agree with the moments in
 \Cref{def:difference-spectrum}.
 
 The following lemma records exactly the convention transfer and uniform bound
@@ -299,6 +303,26 @@ and his half-open layer \([f_j-1,f_{j+1}-1)\) is exactly
 \(\mathcal I_j\).  His partition function also equals \(R\), because its
 admissible parts \(f_1,f_2,\ldots\) are our \(F_2,F_3,\ldots\).
 
+For \(n\ge1\), write Weinstein's Zeckendorf index partition as
+\[
+ Z(n)=\langle z(n,1),\ldots,z(n,\lambda(n))\rangle
+\]
+and define its largest index by
+\[
+ L(n):=z(n,\lambda(n))=\max Z(n).
+\]
+Weinstein's Lemma~2.19, together with
+\(R(f_i-1)=1\), gives the endpoint-sensitive equivalence
+\begin{equation}
+ R(n)>1\quad\Longrightarrow\quad
+ \bigl(n\in[f_j-1,f_{j+1}-1)\iff L(n)=j\bigr).
+ \label{eq:layer-largest-index}
+\end{equation}
+Indeed, after the left endpoint \(f_j-1\) and the right endpoint
+\(f_{j+1}-1\), both of which have partition value \(1\), are removed,
+Lemma~2.19 identifies the remaining integers in the layer with those whose
+largest Zeckendorf index is \(j\).
+
 At level \(1\), Weinstein's description
 \(\{n:R(n)=1\}=\{f_i-1:i\ge1\}\), together with the half-open endpoint
 convention, places exactly the left endpoint \(f_j-1\) in each
@@ -315,20 +339,123 @@ the two endpoints are \(f_i\) and \(f_{i+1}\); the second lies in
 so \(N_j(2)\le2=2\Psi(2)\), with equality for \(j\ge4\).
 
 Now let \(k>2\).  By Weinstein's Theorem~3.8, every solution of
-\(R(n)=k\) lies in the unique orbit of one of the \(\Psi(k)\) generating
-solutions.  We recall the point in the proof of his Theorem~5.1 that is needed
-for an upper bound, rather than eventual equality.  Formulas~(17)--(19) there
-write an orbit uniquely as
-\([a]\tau^\epsilon\sigma^\delta(g)\).  For a fixed generator \(g\), the two
-\(\tau\)-branches with \(\delta=0\) contribute together at most one point to
-any layer: increasing \(a\) shifts the relevant Zeckendorf indices by two,
-and \(\tau\) supplies the opposite parity branch.  The involution \(\sigma\)
-maps the possible point in the preceding layer to the complementary branch in
-the current layer.  Thus each generating orbit meets \(\mathcal I_j\) in at
-most two points.  Summing over the \(\Psi(k)\) disjoint orbits proves the
-uniform inequality.  The size condition \(j\ge2k\) in Weinstein's
-Theorem~5.1 is used only to show that both possible points are present; it
-gives the stated eventual equality and is not used for the upper bound.
+\(R(n)=k\) has a unique representation
+\begin{equation}
+ [a]\tau^\varepsilon\sigma^\delta(g),
+ \qquad
+ g\in G(k),\quad a\ge0,\quad \varepsilon,\delta\in\{0,1\},
+ \label{eq:weinstein-orbit-normal-form}
+\end{equation}
+where \(G(k)\) is the set of \(\Psi(k)\) generating solutions.  We derive the
+largest-index behavior of all four branches from Weinstein's explicit
+formulas~(17)--(19).
+
+First consider a number \(n\) in Weinstein's sheet \(N_1\), and let
+\(\theta(n)\) and \(Z'(n)\) denote the initial-block parameter and the
+Zeckendorf tail used in those formulas.  Thus \(Z'(n)\) is a nonempty terminal
+subpartition of \(Z(n)\), and in particular \(\max Z'(n)=L(n)\).  Formula~(18)
+states that
+\[
+ [a](n)=f_{2\theta(n)-2+2a}-1+\lVert f_{Z'(n)+2a}\rVert.
+\]
+The definition of \(\theta(n)\) gives
+\begin{equation}
+ z(n,\theta(n))\ge2\theta(n).
+ \label{eq:theta-tail-separation}
+\end{equation}
+To see this directly, if \(\theta(n)=1\), then the defining first index is at
+least \(3\).  If \(\theta(n)>1\), the indices preceding
+\(z(n,\theta(n))\) differ successively by \(2\), the first index is at least
+\(1\), and the gap at \(\theta(n)\) is at least \(3\).  Hence
+\(z(n,\theta(n))\ge1+2(\theta(n)-2)+3=2\theta(n)\).
+The identity
+\[
+ f_{2q}-1=f_1+f_3+\cdots+f_{2q-1}\qquad(q\ge0),
+\]
+with the sum empty for \(q=0\), and
+\eqref{eq:theta-tail-separation} show that the displayed sum is already the
+Zeckendorf decomposition
+\[
+ Z([a]n)
+ =\langle1,3,\ldots,2\theta(n)+2a-3\rangle
+   \sqcup\bigl(Z'(n)+2a\bigr).
+\]
+The terminal subpartition contains the largest index.  Hence
+\begin{equation}
+ L([a]n)=L(n)+2a.
+ \label{eq:L-a-shift}
+\end{equation}
+
+Formula~(19) gives
+\[
+ \tau(n)=
+ \begin{cases}
+ f_{2\theta(n)}-1+\lVert f_{Z'(n)+1}\rVert,
+   &z(n,\theta(n))\ \text{odd},\\
+ f_{2\theta(n)-4}-1+\lVert f_{Z'(n)-1}\rVert,
+   &z(n,\theta(n))\ \text{even}.
+ \end{cases}
+\]
+Expanding the first terms by the same identity and using
+\eqref{eq:theta-tail-separation} shows that the shifted tail begins at least
+two indices after the prefix and therefore supplies the largest index.
+Consequently
+\begin{equation}
+ L(\tau n)=
+ \begin{cases}
+ L(n)+1,&z(n,\theta(n))\ \text{odd},\\
+ L(n)-1,&z(n,\theta(n))\ \text{even},
+ \end{cases}
+ \label{eq:L-tau-shift}
+\end{equation}
+In either case,
+\[
+ L(\tau n)\equiv L(n)+1\pmod2.
+\]
+Because \(\tau n\in N_1\), applying \eqref{eq:L-a-shift} to \(\tau n\)
+also gives the exact formula
+\begin{equation}
+ L([a]\tau n)=L(\tau n)+2a.
+ \label{eq:L-a-tau-shift}
+\end{equation}
+Finally, the definition of Weinstein's involution \(\sigma\) adds \(1\) to
+every Zeckendorf index on \(N_1\).  Therefore
+\begin{equation}
+ Z(\sigma n)=Z(n)+1,
+ \qquad L(\sigma n)=L(n)+1
+ \qquad(n\in N_1).
+ \label{eq:L-sigma-shift}
+\end{equation}
+
+Fix \(g\in G(k)\) and a layer index \(j\).  By
+\eqref{eq:L-a-shift} and \eqref{eq:L-a-tau-shift}, the largest indices in the
+two \(N_1\)-branches are
+\[
+ L([a]g)=L(g)+2a,
+ \qquad
+ L([a]\tau g)=L(\tau g)+2a,
+\]
+and hence range over the two progressions
+\[
+ \{L(g)+2a:a\ge0\},
+ \qquad
+ \{L(\tau g)+2a:a\ge0\}.
+\]
+Each progression contains at most one occurrence of \(j\), and
+\eqref{eq:L-tau-shift} gives them opposite parities.  Their union therefore
+contains at most one occurrence of \(j\).  By \eqref{eq:L-sigma-shift}, the
+two \(\sigma\)-branches meet layer \(j\) exactly when their corresponding
+\(N_1\)-branches meet layer \(j-1\), so together they contribute at most one
+additional point.  Thus the orbit of \(g\) contributes at most two points to
+every layer, including the early layers.  The freeness of Weinstein's action
+and the fundamental-domain property of \(G(k)\) make the generating orbits
+disjoint.  Summing over them yields
+\[
+ N_j(k)\le2\lvert G(k)\rvert=2\Psi(k).
+\]
+The hypothesis \(j\ge2k\) in Weinstein's Theorem~5.1 is needed to prove that
+both possible orbit points occur, and hence to prove eventual equality; it is
+not used in this upper bound.
 
 Finally, Weinstein often writes the auxiliary layer with both endpoints.
 The shared endpoint has partition value \(1\), so this distinction is
@@ -337,13 +464,16 @@ above.  This completes the treatment of endpoints and early layers.
 \end{proof}
 
 We now show that an all-real analyticity ansatz cannot hold.  The obstruction
-is an actual frozen phase of the Fibonacci partition spectrum.  Let
+is a proved frozen half-line for the Fibonacci partition spectrum.  Let
 \(\sigma_0>2\) be the unique real solution of
 \begin{equation}
  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2.
  \label{eq:freezing-exponent}
 \end{equation}
 Numerically, \(\sigma_0=2.478750785733960\ldots\).
+The number \(-\sigma_0\) is a Dirichlet-series freezing bound: the argument
+below does not determine whether \(( -\infty,-\sigma_0]\) is the maximal
+zero-pressure interval.
 
 \begin{theorem}[Negative-temperature freezing]
 \label{thm:negative-temperature-freezing}
@@ -358,25 +488,25 @@ extension can be both real analytic and strictly convex on \(\RR\).
 \end{theorem}
 
 \begin{proof}
-We use Weinstein's Dirichlet series for the generating-orbit counts.  In its
-half-plane of convergence, his Theorem~10.3 gives
+For \(s>2\), put
+\[
+ A(s):=\sum_{n=2}^{\infty}\frac{\phi_{\rm E}(n)}{n^s}
+ =\frac{\zeta(s-1)}{\zeta(s)}-1,
+\]
+where \(\phi_{\rm E}\) is Euler's totient function.  Weinstein's free-monoid
+decomposition and Tonelli's theorem give the following equality in
+\([0,+\infty]\):
 \begin{equation}
  1+\sum_{k=2}^{\infty}\frac{\Psi(k)}{k^s}
- =\left(2-\frac{\zeta(s-1)}{\zeta(s)}\right)^{-1}.
+ =\sum_{r=0}^{\infty}A(s)^r.
  \label{eq:weinstein-level-dirichlet-series}
 \end{equation}
-Indeed, Weinstein obtains the right side as the nonnegative free-monoid
-series
-\[
- \sum_{r\ge0}
- \left(\frac{\zeta(s-1)}{\zeta(s)}-1\right)^r.
-\]
-Writing \(\phi_{\rm E}\) for Euler's totient function, the identity
-\(\zeta(s-1)/\zeta(s)=\sum_{n\ge1}\phi_{\rm E}(n)n^{-s}\) shows that the ratio is
-strictly decreasing from \(+\infty\) to \(1\) on \((2,\infty)\).  Hence
-\Cref{eq:freezing-exponent} has exactly one solution, and Tonelli's theorem
-shows that the nonnegative Dirichlet series in
-\Cref{eq:weinstein-level-dirichlet-series} converges precisely for
+The geometric series is finite exactly when \(A(s)<1\), equivalently when
+\(\zeta(s-1)/\zeta(s)<2\); in that region its value is
+\((2-\zeta(s-1)/\zeta(s))^{-1}\).  The totient Dirichlet series also shows
+that the ratio is strictly decreasing from \(+\infty\) to \(1\) on
+\((2,\infty)\).  Hence \Cref{eq:freezing-exponent} has exactly one solution,
+and \Cref{eq:weinstein-level-dirichlet-series} is finite precisely for
 \(s>\sigma_0\).
 
 By \Cref{thm:fiber-partition-interval}, the collision sum is exactly the sum
@@ -443,20 +573,47 @@ finite-window sums in the exponential sense
 \end{proposition}
 
 \begin{proof}
-Analytic perturbation theory for a simple isolated eigenvalue
-\cite[Chap.~VII, Sec.~1]{Kato1995} gives, near each real \(t_0\), an analytic
-eigenvalue branch through \(r(t_0)\).  The local spectral separation and the
-positive simple choice identify this branch with \(r(t)\) on the real axis.
-The local branches therefore agree on overlaps, so \(r\), and hence
-\(t\mapsto\log r(t)\), is real analytic on \(\RR\).  The representation
-hypothesis would make this function equal to \(P(t)\).  By
+For each \(m\ge1\), the function
+\[
+ p_m(t):=\frac1m\log S_t(m)
+\]
+is convex on \(\RR\).  Indeed, all fiber multiplicities are positive by the
+interval-completeness lemma, and H\"older's inequality gives the defining
+convexity inequality for \(S_t(m)\).  The representation hypothesis says that
+\(p_m(t)\) converges pointwise on \(\RR\) to
+\[
+ P(t):=\log r(t).
+\]
+The finite pointwise limit \(P\) is therefore convex.  A finite convex function
+on the open interval \(\RR\) is continuous, so \(r(t)=e^{P(t)}\) is continuous
+on \(\RR\).
+
+Fix \(t_0\in\RR\).  Choose a positively oriented contour \(\Gamma\) enclosing
+\(r(t_0)\) and no other point of the spectrum of \(\mathcal L_{t_0}\).  For
+complex \(z\) sufficiently close to \(t_0\), the contour remains in the
+resolvent set and the Riesz projection
+\[
+ \Pi(z)=\frac{1}{2\pi i}\int_\Gamma
+  (\lambda I-\mathcal L_z)^{-1}\,d\lambda
+\]
+is analytic.  Its rank is locally constant and equals the algebraic
+multiplicity of \(r(t_0)\), hence is one.  Analytic perturbation theory
+\cite[Chap.~VII, Sec.~1]{Kato1995} therefore supplies a unique analytic
+eigenvalue branch \(\mu(z)\) inside \(\Gamma\), with
+\(\mu(t_0)=r(t_0)\).  The continuity of \(r(t)\) puts \(r(t)\) inside
+\(\Gamma\) for all real \(t\) sufficiently close to \(t_0\); the local
+spectral separation and rank-one Riesz projection then force
+\(r(t)=\mu(t)\).  Thus \(r\), and hence \(t\mapsto\log r(t)\), is locally real
+analytic at every \(t_0\).
+
+The representation hypothesis makes this function equal to \(P(t)\).  By
 \Cref{thm:negative-temperature-freezing}, it vanishes on
 \(( -\infty,-\sigma_0)\), and therefore vanishes identically.  This
 contradicts \(P(0)=\log\varphi\).
 \end{proof}
 
 The remaining issue is therefore not global analyticity but the construction
-and regularity of the pressure above the freezing threshold.
+and regularity of the pressure outside the proved frozen half-line.
 
 \begin{pressurehypothesis}
 \label{hyp:residual-real-pressure}
@@ -476,8 +633,8 @@ exists.
 
 \begin{corollary}[Conditional real-tilt large deviation principle]
 \label{thm:conditional-full-ldp}
-Assume \Cref{hyp:residual-real-pressure}.  Let \(X^{(m)}\) be uniformly distributed on
-\(X_m\), and set
+Assume the residual real-pressure hypothesis stated above.  Let \(X^{(m)}\) be
+uniformly distributed on \(X_m\), and set
 \[
  Y_m:=\frac1m\log d_m(X^{(m)}).
 \]
@@ -578,8 +735,10 @@ operator obstruction precisely.  Sanna's theorem and the finite-window
 transfer determine \(P(q)=\log\lambda_q\) at positive integer orders, but
 those discrete values do not define \(P(t)\) at noninteger \(t\), and the
 freezing theorem only treats \(t\le-\sigma_0\).  Existence for every
-\(t\in(-\sigma_0,\infty)\), differentiability at the freezing point, and
-analytic strict convexity on the open positive-pressure phase remain open.
+\(t\in(-\sigma_0,\infty)\), differentiability at the boundary
+\(-\sigma_0\) of the proved region, and analytic strict convexity on the
+residual interval remain open.  In particular, positivity of \(P(t)\) for all
+\(t> -\sigma_0\) has not been established.
 One possible approach would require an induced or countable-state real-tilt
 operator with explicit recurrence and spectral-gap estimates; a compact
 analytic family satisfying \Cref{prop:no-analytic-compact-representation} is
