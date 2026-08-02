@@ -1,22 +1,17 @@
-\section{Population branch certificate only for the diagonal candidate \(z=1/2\)}\label{app:self-contained-diagonal-branch-certificate-main}
+\section{Population branch certificate only for the diagonal candidate
+\texorpdfstring{\(z=1/2\)}{z=1/2}}\label{app:self-contained-diagonal-branch-certificate-main}
 
-This appendix is the finite branch certificate used in
-\Cref{def:dmap-diagonal-rank-certificate-main} and
-\Cref{rem:worked-diagonal-branch-certificate-main}.  It certifies only the
-single diagonal candidate
+This appendix certifies covariance nondegeneracy only at the single diagonal
+candidate
 \[
 Z_{\rm cert}=\{1/2\}.
 \]
 \recordscopebox{\textbf{Scope of Appendix B.}
-This transcript certifies only
-\(\operatorname{rank}\Sigma_\sigma(1/2)=2\).  It is not a finite-record
-inference certificate because it contains neither a critical-value bracket
-\([L,U]\) nor a statistic enclosure \([Q]\).  The paper-local replay command is
+This transcript proves only
+\(\operatorname{rank}\Sigma_\sigma(1/2)=2\) for the pointwise projection
+example.  The paper-local replay command is
 \texttt{python certificates/diagonal\_branch\_certificate.py --test}.}
-No other diagonal point has a printed branch certificate in this article.
-This transcript is a population branch certificate only.  It is not a
-finite-record critical-value transcript and, by itself, it does not certify a
-realized accept/reject/undecided comparison for any retained record.
+No other diagonal point is certified in this article.
 
 The arithmetic is interval arithmetic in base-ten decimal arithmetic with
 precision \(90\) significant digits.  Every lower endpoint below is rounded
@@ -25,9 +20,7 @@ wrapped typographically; the line breaks and indentation inside one endpoint
 are not digits.  The supplementary material gives the paper-local replay
 script, stored JSON transcript, environment, command lines, and transcript
 hash.  The present appendix prints the mathematical transcript used by the
-main theorem and should not be read as a finite-record transcript: it contains
-no retained-record critical-value bracket \([L,U]\) and no statistic enclosure
-\([Q]\).
+pointwise limit theorem.
 
 The input interval is the exact singleton
 \[
@@ -58,10 +51,54 @@ g_1=\frac14,
 \mu=2+2\log2,\qquad
 m_2=g_1+g_0^2.
 \]
-The directed interval evaluation then follows exactly the displayed formulas
-in \eqref{eq:dmap-diagonal-sigma-r-finite-main},
-\eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main}, and
-\eqref{eq:dmap-diagonal-sigma-finite-main}.
+For reproducibility, define
+\[
+R=\mu^{-1}(1,g_0,m_2)^\top,qquad
+\nu=\frac{1+z}{(1-z)^2}+\frac{\theta z(3+z)}{(1-z)^3},
+\]
+\[
+A_z=\begin{pmatrix}
+1&g_0&m_2\\ g_0&g_0&g_0^2\\ m_2&g_0^2&m_2
+\end{pmatrix},\quad
+e_z=\begin{pmatrix}\mu\\g_0\\2g_1+g_0^2\end{pmatrix},\quad
+d_z=\begin{pmatrix}\mu\\\mu g_0\\\mu g_1+g_0^2\end{pmatrix},
+\]
+and
+\[
+B_z=\begin{pmatrix}
+1&g_0&m_2\\
+g_0&g_0^2&g_0m_2\\
+m_2&g_0(g_1+g_0)&g_1^2+g_1g_0^2+g_0^3
+\end{pmatrix}.
+\]
+The inclusion-coordinate covariance is the finite matrix
+\[
+\Sigma_r=\frac1\mu\{A_z-e_zR^\top-Re_z^\top+\nu RR^\top
++B_z-d_zR^\top+B_z^\top-Rd_z^\top\}.
+\]
+Writing \(R=(r_0,r_1,r_2)^\top\), put
+\[
+\Delta_{\rm inv}=r_1-r_0^2,\quad E=r_2-r_0^2,\quad
+a=r_1/r_0,\quad \lambda=E/\Delta_{\rm inv},
+\]
+\[
+(\lambda_0,\lambda_1,\lambda_2)=
+\left(-\frac{2r_0(r_1-r_2)}{\Delta_{\rm inv}^2},
+-\frac{E}{\Delta_{\rm inv}^2},\frac1{\Delta_{\rm inv}}\right),
+\]
+\[
+D\Phi(R)=\begin{pmatrix}
+a/r_0+\lambda_0&-1/r_0+\lambda_1&\lambda_2\\
+1-\lambda+a/r_0+(1-r_0)\lambda_0&
+-1/r_0+(1-r_0)\lambda_1&(1-r_0)\lambda_2
+\end{pmatrix}.
+\]
+The certified covariance is therefore
+\[
+\Sigma_\sigma=D\Phi(R)\Sigma_rD\Phi(R)^\top.
+\]
+The directed interval evaluation below follows these displayed formulas
+exactly.
 
 The following table is the interval transcript for the finite arithmetic
 objects used in this branch decision.  Each endpoint in the table is itself
@@ -261,17 +298,14 @@ g_0=\frac{1-\log2}{2},\qquad g_1=\frac14,
 \[
 \mu=2+2\log2,\qquad m_2=g_1+g_0^2 .
 \]
-Evaluate the finite matrices \(A_z,B_z,e_z,d_z\) and the Jacobian
-\(D\Phi(r(z))\) in
-\Cref{prop:computable-diagonal-covariance-main} by the directed interval
-arithmetic transcript in \Cref{tab:diagonal-branch-transcript-main}, with
+Evaluate the displayed finite matrices \(A_z,B_z,e_z,d_z\) and the Jacobian
+\(D\Phi(r(z))\) by the directed interval arithmetic transcript in
+\Cref{tab:diagonal-branch-transcript-main}, with
 rounding mode \(R\) equal to downward rounding for lower endpoints and upward
 rounding for upper endpoints, and precision \(P=90\) significant decimal
 digits.  The supplementary material gives the machine replay of this
 population branch transcript, including the exact JSON transcript and
-environment.  Those replay files are evidence for the printed interval
-arithmetic only; they do not add a retained-record critical-value bracket or
-statistic enclosure.
+environment.  Those replay files support the printed interval arithmetic only.
 The resulting enclosure for
 \[
 \Sigma_\sigma(1/2)
@@ -289,34 +323,33 @@ satisfies
 Therefore \(z=1/2\) belongs to the certified domain \(Z_{\rm cert}\), and the
 certified population branch at this candidate is the full-rank branch:
 \[
-\operatorname{rank}\Sigma_\sigma(1/2)=2.
+\operatorname{rank}\Sigma_\sigma(1/2)=2,qquad
+\lambda_{\min}\{\Sigma_\sigma(1/2)\}>0.037.
 \]
-This certificate supplies only the population branch input used by
-Theorem~E's ideal fixed-null asymptotics.  It supplies no retained-record
-critical-value bracket \([L,U]\), no statistic enclosure \([Q]\), and no
-complete finite comparison tuple.
+This certificate supplies only the covariance input used by Theorem~E's
+pointwise projection example.
 \end{lemma}
 
 \begin{proof}
 The preceding transcript is an outward-rounded directed interval evaluation of
 the finite D-MAP covariance and quotient-sandwich formulas, with the exact
-input singleton \([z]=[0.5,0.5]\).  By
-\Cref{lem:diagonal-interval-branch-certificate-main}, the determinant
-enclosure contains the true determinant
+input singleton \([z]=[0.5,0.5]\).  Directed outward rounding at every
+arithmetic operation ensures that the determinant enclosure contains the true determinant
 \(\det\Sigma_\sigma(1/2)\).  Its lower endpoint is larger than \(1.37\), and
 therefore
 \[
 [I_{\det}]\subset[1.37,\infty).
 \]
-Thus the full-rank branch condition in
-\Cref{def:dmap-diagonal-rank-certificate-main} holds with branch margin
-\(\eta=1.37\).  The mutually exclusive branch classification in
-\Cref{lem:dmap-diagonal-covariance-alternatives-main} then gives
-\(\operatorname{rank}\Sigma_\sigma(1/2)=2\).  Since the transcript is attached
+Thus both eigenvalues are positive.  Moreover, for a positive definite
+\(2\times2\) matrix,
+\[
+\lambda_{\min}=\frac{\det\Sigma_\sigma}{\lambda_{\max}}
+\ge\frac{\det\Sigma_\sigma}{\operatorname{tr}\Sigma_\sigma}
+>\frac{1.372485374000321}{36.95298777813732}>0.037.
+\]
+This gives the asserted rank and quantitative nondegeneracy.  Since the transcript is attached
 only to the singleton input interval, it certifies no candidate other than
 \(z=1/2\).  There is therefore no terminal subinterval list for a continuum
 \(Z_{\rm cert}\) in this appendix; any later interval-valued certified domain
-would have to print its terminal subintervals and margins separately.  Since
-the transcript contains no record-specific \([L,U]\) or \([Q]\), it is not a
-finite comparison certificate for a realized record.
+would have to print its terminal subintervals and margins separately.
 \end{proof}

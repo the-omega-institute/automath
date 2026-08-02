@@ -2,7 +2,7 @@
 \section*{Supplementary calculations}
 \addcontentsline{toc}{section}{Supplementary calculations}
 \newcommand{\supplementaryenddocument}{}
-\newcommand{\SUPPLEMENTARYFULLPROTOCOLS}{}
+\newcommand{\SUPPLEMENTARYPROTOCOLSOMITTED}{}
 \else
 \documentclass[11pt]{article}
 \usepackage[a4paper,margin=1in]{geometry}
@@ -12,6 +12,7 @@
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{array}
 \usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{enumitem}
 \usepackage{float}
 \usepackage{tikz}
@@ -47,10 +48,15 @@
 \providecommand{\EE}{\mathbb{E}}
 \providecommand{\PP}{\mathbb{P}}
 \providecommand{\Var}{\mathrm{Var}}
+\providecommand{\Rinc}{R_{\mathrm{inc}}}
+\providecommand{\Rinch}{\widehat{R_{\mathrm{inc}}}}
+\providecommand{\recordscopebox}[1]{%
+\par\smallskip\noindent\fbox{%
+\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{#1}}\par\smallskip}
 
 \begin{document}
 \newcommand{\supplementaryenddocument}{\end{document}}
-\newcommand{\SUPPLEMENTARYFULLPROTOCOLS}{}
+\newcommand{\SUPPLEMENTARYPROTOCOLSOMITTED}{}
 
 \begin{center}
 {\LARGE\bfseries Supplementary calculations}\par
@@ -173,6 +179,12 @@ endings; its raw repository SHA-256 in the submitted source tree is
 \[
 \mathtt{c469252c9aad42b5358c2fa25623d96f17dcc19d6760f38acbc698eb5270ff0b}.
 \]
+The raw SHA-256 of the submitted replay script is
+\[
+\mathtt{fb3006c0e2f5c44e754c78967bbf52696b241d2845231a1f28c0aa02ddf846a1}.
+\]
+The archive manifest \texttt{certificates/README.md} records these hashes,
+the exact commands, and the tested scope \(z_0=1/2\).
 
 The unit tests also reject older draft trace/determinant intervals as negative
 regression fixtures; those rejected numbers are not certificate data and are
@@ -468,7 +480,7 @@ sources.
 Hypothesis or construction & Verification class & Status in the paper & Conditional theorem dependence & Consequence under the stated input \\
 \midrule
 Stationary worldline and proper-time sampling by $\Delta\tau$ & Verifiable setup & Setup choice for the record process & \Cref{prop:ideal-main,thm:main-record-wrapper,cor:conditional-calibration-bridge-main} & Defines the binary stationary record; no claim is made for nonstationary sampling or finite switching records. \\
-Classical sampled counter with conditional response calibration: sampled interval instrument with thresholded binary readout, sampled one-recovery-opportunity boundary reset, and stationary closure $\Gamma=R_\Omega(x)=\Gamma_+$ & Verifiable model specification plus open calibration closure & Main-text framing plus model specification in \Cref{prop:instrument-kernels-main}; not claimed as universal UDW measurement theory and not derived from a UDW measurement model & \Cref{prop:ideal-main,thm:main-record-wrapper,lem:renewal-gap-main,lem:one-dep-criterion-main,cor:conditional-calibration-bridge-main} and shell lifts through \Cref{thm:shells-general-main} & Takes the labelled kernels $T_0,T_1$ as the stipulated sampled-counter law; \Cref{prop:continuous-comparator-main} contrasts them with the true continuous intra-bin recovery kernels, and once the sampled kernels are fixed the support, hazard, covariance, exact-dependence, and finite-record diagnostics are consequences of those kernels. \\
+Latched killed-leakage sampled counter with conditional response calibration: sampled interval instrument with thresholded binary readout, explicit post-click latching until the boundary, and stationary closure $\Gamma=R_\Omega(x)=\Gamma_+$ & Verifiable model specification plus open calibration closure & Main-text framing plus model specification in \Cref{prop:instrument-kernels-main}; not claimed as universal UDW measurement theory and not derived from a UDW measurement model & \Cref{prop:ideal-main,thm:main-record-wrapper,lem:renewal-gap-main,lem:one-dep-criterion-main,cor:conditional-calibration-bridge-main} and shell lifts through \Cref{thm:shells-general-main} & Takes the labelled kernels $T_0,T_1$ as the stipulated latched law; \Cref{prop:continuous-comparator-main} contrasts it with continuous intra-bin recovery kernels, and once the sampled kernels are fixed the support, hazard, covariance, exact-dependence, and finite-record diagnostics are consequences of those kernels. \\
 Ideal one-step blanking after a click & Verifiable model specification & Counter-mode definition inside the readout layer & \Cref{prop:ideal-main} and the ideal-benchmark part of \Cref{cor:conditional-calibration-bridge-main,thm:shells-general-main} & Gives the golden-mean Markov chain; the Parry benchmark occurs exactly at $\Gamma\Delta\tau=\log\varphi$. \\
 One-recovery-opportunity sampled boundary reset after a click and positive parameters & Verifiable model specification & Counter-mode definition inside the readout layer & \Cref{thm:main-record-wrapper,lem:renewal-gap-main,cor:word-support-main,lem:kernel-factorization-main,lem:one-dep-criterion-main,cor:conditional-calibration-bridge-main} & Gives a renewal law with full support on zero-run lengths and hence on every finite binary word; exact $1$-dependence occurs exactly at $\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)$. \\
 Long-time stationary UDW response for the fixed detector profile & Generic response regularity plus cited standard input & Standard weak-coupling response fact under \Cref{ass:long-time-switch-main}, including absolute continuity with continuous density near $\pm\Omega$ and no atom there & \Cref{prop:stationary-udw-response-main,cor:conditional-calibration-bridge-main,thm:response-locus-main} & Supplies $\Gamma_\pm=\lambda_{\mathrm{sw}}^2\widehat W_x(\pm\Omega)$ from the gap density before any shell equation is introduced. \\
@@ -1650,6 +1662,21 @@ same step size $h=10^{-6}$ in the $(\beta_\infty,M)$ coordinates.
 \end{enumerate}
 With those steps, the rows of \Cref{tab:worked} are reproduced to the stated
 rounding directly from the formulas in the paper.
+
+\clearpage
+\section{Detailed theorem forms and finite-record protocols}
+
+This section contains the duplicated detailed forms, supporting regenerative
+lemmas, implementation algorithms, withholding rules, and extended covariance
+interfaces removed from the main article.  Their presence here does not change
+the scope of main-text Theorem~E, which is only a pointwise projection-limit
+example and has no confidence-procedure interpretation.
+
+\input{sec_records}
+
+\input{app_finite_record_tools}
+
+\input{app_diagonal_branch_certificate}
 
 \ifdefined\SUPPLEMENTARYAPPENDIX
 \else
