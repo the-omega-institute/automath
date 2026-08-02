@@ -281,6 +281,70 @@ def bell_number(k: int) -> int:
     return row[0]
 
 
+def private_cover_lower_bound(k: int) -> int:
+    """Return the universal private-coordinate construction bound.
+
+    Two coordinates are reserved to avoid the exceptional ranks 2, 6, and 12.
+    For k >= 3, floor(k/2) safe private coordinates remain available.
+    """
+    if k < 0:
+        raise ValueError("k must be nonnegative")
+    if k < 3:
+        return 1
+    private = k // 2
+    return (2**private - 1) ** (k - private)
+
+
+def private_cover_upper_bound(k: int, multiplicity: int) -> int:
+    """Count all private-coordinate encodings with slot multiplicity bounded."""
+    if k < 0:
+        raise ValueError("k must be nonnegative")
+    if multiplicity < 1:
+        raise ValueError("multiplicity must be positive")
+    return sum(
+        math.comb(k, size)
+        * (2 * multiplicity) ** size
+        * 2 ** (size * (k - size))
+        for size in range(1, k + 1)
+    )
+
+
+@lru_cache(maxsize=None)
+def atomic_family_multiplicity(n: int) -> int:
+    """Return max #A_{I,J}(n) over nonempty essential/full supports."""
+    if n < 3:
+        raise ValueError("atomic multiplicity is used here only for n >= 3")
+    n_factors = factor_dict(
+        tuple(sorted((int(p), int(e)) for p, e in factorint(n).items()))
+    )
+    coordinates = tuple(n_factors)
+    family_counts: Dict[Tuple[frozenset, frozenset], int] = {}
+
+    for prime, top_exponent in factorint_fibonacci(n):
+        for exponent in range(1, top_exponent + 1):
+            rank = alpha_for_fn_divisor(prime**exponent, n)
+            lower_rank = alpha_for_fn_divisor(prime ** (exponent - 1), n)
+            if rank == lower_rank:
+                continue
+            full = frozenset(
+                i
+                for i, ell in enumerate(coordinates)
+                if valuation(rank, ell) == n_factors[ell]
+            )
+            essential = frozenset(
+                i
+                for i in full
+                if valuation(lower_rank, coordinates[i]) < n_factors[coordinates[i]]
+            )
+            if essential:
+                key = (essential, full)
+                family_counts[key] = family_counts.get(key, 0) + 1
+
+    if not family_counts:
+        raise AssertionError(f"no effective atomic family at n={n}")
+    return max(family_counts.values())
+
+
 def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     if exhaustive_max < 30:
         raise ValueError("exhaustive_max must be at least 30")
@@ -307,6 +371,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         if n >= 3:
             count = len(threshold.minimal_generators)
             k = omega(n)
+            multiplicity = atomic_family_multiplicity(n)
             big_omega = omega_big(factorint_fibonacci(n))
             subset_bound = sum(
                 math.comb(big_omega, r)
@@ -321,6 +386,17 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
             if n % 2 == 1 and count < bell_number(k):
                 counterexamples.append(
                     f"n={n}: #M={count} below Bell({k})={bell_number(k)}"
+                )
+            if k >= 3 and count < private_cover_lower_bound(k):
+                counterexamples.append(
+                    f"n={n}: #M={count} below private-cover bound "
+                    f"{private_cover_lower_bound(k)}"
+                )
+            private_upper = private_cover_upper_bound(k, multiplicity)
+            if count > private_upper:
+                counterexamples.append(
+                    f"n={n}: #M={count} exceeds private-cover upper bound "
+                    f"{private_upper} with R(n)={multiplicity}"
                 )
 
     expected_m30 = (20, 22, 31, 244, 671)
@@ -349,10 +425,27 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         ]
         max_n, max_count = max(values, key=lambda item: item[1])
         mean_log = sum(math.log(count) for _, count in values) / len(values)
+        high_support = [
+            n for n, _ in values if omega(n) >= 3
+        ]
+        entropy_constant = math.log(2) / 4
+        if high_support:
+            cumulative_ratio = sum(
+                math.log(len(results[n].minimal_generators)) for n in high_support
+            ) / sum(entropy_constant * omega(n) ** 2 for n in high_support)
+            ratio_text = f"; private-entropy ratio = {cumulative_ratio:.6f}"
+        else:
+            ratio_text = "; private-entropy ratio = n/a"
         growth_lines.append(
             f"  n <= {bound:>3}: max #M_n = {max_count} at n={max_n}; "
-            f"mean(log #M_n) = {mean_log:.6f}"
+            f"mean(log #M_n) = {mean_log:.6f}{ratio_text}"
         )
+
+    multiplicities = {
+        n: atomic_family_multiplicity(n) for n in range(3, scalable_max + 1)
+    }
+    max_r_n = max(multiplicities, key=multiplicities.get)
+    support_four = results.get(210)
 
     elapsed = time.time() - started
     lines = [
@@ -372,7 +465,23 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         "  finite upper bound: #M_n <= sum_{r<=omega(n)} binom(Omega(F_n), r)",
         "  simplified upper bound: #M_n <= n^omega(n)",
         "  odd-layer lower bound: #M_n >= Bell(omega(n))",
+        "  private-cover lower bound (k>=3): #M_n >= "
+        "(2^floor(k/2)-1)^ceil(k/2)",
+        "  private-cover upper bound: sum_{r<=k} binom(k,r) "
+        "(2R(n))^r 2^{r(k-r)}",
         *growth_lines,
+        f"  max rank-window multiplicity R(n) = {multiplicities[max_r_n]} "
+        f"at n={max_r_n}",
+        *(
+            [
+                f"  first support-four layer n=210: #M_210 = "
+                f"{len(support_four.minimal_generators)}, R(210) = "
+                f"{multiplicities[210]}, lower bound = "
+                f"{private_cover_lower_bound(4)}"
+            ]
+            if support_four is not None
+            else []
+        ),
         "",
         "Counterexample search:",
         f"  failures = {len(failures)}",
