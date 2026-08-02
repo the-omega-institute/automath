@@ -4,7 +4,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{enumitem}
 \usepackage{booktabs}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{microtype}
 
 \numberwithin{equation}{section}
@@ -14,6 +14,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
@@ -27,7 +28,7 @@
 \DeclareMathOperator{\Atom}{Atom}
 \DeclareMathOperator{\widthop}{width}
 
-\title{Upper fibers, witness covers, and minimal-generator growth for
+\title{Upper fibers, witness covers, and support entropy for
 Fibonacci ranks of apparition}
 \author{
 Haobo Ma\\
@@ -49,48 +50,20 @@ Singapore\\
 \begin{abstract}
 For each positive integer $n$, let $B_n$ denote the set of divisors of the
 Fibonacci number $F_n$ whose rank of apparition under the map $\alpha$ equals
-$n$, where $\alpha(q)$ is the least positive index $r$ with $q\mid F_r$ and
-$\alpha(1)=1$. We prove that
-$B_n$ is an upper set in the divisor lattice of $F_n$ obtained by removing
-the covering ideals associated with the maximal proper divisors of~$n$. Our
-main result classifies the minimal generators of~$B_n$: every minimal
-generator factors uniquely as a pairwise coprime product of atomic
-prime-power birth moduli forming a witness cover whose support spans the prime
-coordinates of~$n$. This yields the globally sharp support budget
-$\omega(m)\le\omega(n)$ for every minimal generator $m$: the budget cannot be
-improved as a function of $\omega(n)$, because equality occurs on every odd
-layer $n\ge3$. As an arithmetic growth theorem, let $R(n)$ be the largest
-number of atomic prime powers having one fixed essential/full support pair.
-If $k=\omega(n)\to\infty$, we prove the sharp witness-cover entropy bounds
+$n$. We describe $B_n$ as an upper set in the divisor lattice of $F_n$ and
+classify its minimal elements by irredundant witness covers of the prime
+coordinates of $n$. The resulting support budget $\omega(m)\leq\omega(n)$ is
+best possible as a uniform bound. If $k=\omega(n)$ and $R(n)$ is the largest
+number of atomic prime powers with one fixed essential/full support pair, then
 \[
- \frac{\log2}{4}k^2+O(1)
- \le \log\#\mathcal M_n
- \le \frac{\log2}{4}k^2+k\log R(n)+O(k).
+ \frac{\log 2}{4}k^2-O(1)\leq \log\#\mathcal M_n
+ \leq \frac{\log 2}{4}k^2+k\log R(n)+O(k).
 \]
-Thus $(\log2/4)k^2$ is the sharp combinatorial entropy scale, with the
-arithmetic multiplicity isolated in the residual term $k\log R(n)$. At the
-Hardy--Ramanujan maximal-order scale $k\sim\log n/\log\log n$, this entropy
-scale is $(\log n)^2/(\log\log n)^2$, a factor $\log\log n$ below the crude
-envelope $(\log n)^2/\log\log n$. The latter is only a corollary of
-$\#\mathcal M_n\le n^{\omega(n)}$ and the maximal order of $\omega(n)$; it
-does not follow from the sharp entropy estimate. The unconditional mean is at
-least $(\log2/4+o(1))x(\log\log x)^2$. The asserted normal order
-$\log\#\mathcal M_n\sim(\log2/4)(\log\log n)^2$ is conditional on the
-explicit rank-window sparsity hypothesis \textup{(H1)}, namely
-$\log R(n)=o(\omega(n))$ for almost all $n$; it is not proved
-unconditionally. A stated mean analogue gives the corresponding conditional
-asymptotic mean. We isolate these unproved arithmetic hypotheses rather than
-deriving them from the primitive-divisor theorem.
-We also prove a primitive-versus-ladder dichotomy for atomic factors and give complete
-classifications for $\omega(n)\le 3$ and show that
-both $B_n$ and its minimal-generator set admit unique factorizations into
-connected coordinate blocks, producing partition-lattice formulas for $A(n) =
-\#B_n$ and $\#\mathcal{M}_n$. As consequences, nonexceptional birth layers
-contain canonical principal intervals and satisfy Bell-type lower bounds on
-odd layers. At the first three-coordinate index, we prove that
-$\mathcal M_{30}=\{20,22,31,244,671\}$ realizes exactly five of the eight
-admissible support types; an exact computation through $n=210$ finds no
-counterexample to the finite growth bounds.
+The coefficient $\log 2/4$ is the exact entropy coefficient of the support
+construction; the displayed estimate is not an asymptotic formula for
+$\log\#\mathcal M_n$ without additional control of the unresolved arithmetic
+quantity $R(n)$. We also classify the cases $\omega(n)\leq3$ and prove unique
+connected-block factorizations for $B_n$ and its minimal elements.
 \end{abstract}
 
 \medskip
@@ -124,6 +97,13 @@ $\mathcal M_n$ denote the set of minimal elements of $B_n$ under divisibility.
 Thus $B_n$ consists of those moduli that first divide a Fibonacci number at
 index~$n$. Since $F_2=1$, the boundary layer is empty: throughout the paper
 we use the convention $B_2=\mathcal M_2=\varnothing$ and $A(2)=0$.
+Throughout, $\log$ is the natural logarithm, $\omega(t)$ is the number of
+distinct prime divisors of $t$, and $\Omega(t)$ counts prime divisors with
+multiplicity. We write $A_{\rm pr}(n)$ for the number of primes of exact rank
+$n$, $\mathsf{Part}(X)$ for the set of set partitions of a finite set $X$,
+and $\mathsf B_k$ for the $k$th Bell number. A hypergraph on one vertex is
+regarded as connected. These conventions also apply when the notation first
+appears in a later section.
 The counting function $A(n)$ is subsumed by the
 $\alpha$-contraction formalism of Stroi\'nski \cite{Stroinski2016AlphaContraction};
 see also the classical M\"obius inversions discussed in
@@ -137,8 +117,10 @@ $\alpha(q)\mid m$
 \cite{Wall1960FibonacciModm,Vinson1963RankApparition}. Second, the Fibonacci
 sequence satisfies strong divisibility: $\gcd(F_a,F_b)=F_{\gcd(a,b)}$.
 Third, ranks of apparition respect least common multiples:
-$\alpha(\lcmop(u,v))=\lcmop(\alpha(u),\alpha(v))$. These properties, combined
-with the primitive divisor theorem for Fibonacci numbers
+$\alpha(\lcmop(u,v))=\lcmop(\alpha(u),\alpha(v))$; Renault proves the
+corresponding identity in the more general $(a,b)$-Fibonacci setting
+\cite{Renault2013PeriodRankOrder}. These properties, combined with the
+primitive divisor theorem for Fibonacci numbers
 \cite{Carmichael1913PrimitiveDivisors,BiluHanrotVoutier2001PrimitiveDivisorsLucas},
 are the sole inputs for the main results.
 
@@ -153,30 +135,17 @@ polynomials and related algebraic factorizations; and Sanna
 \cite{Sanna2016LucasSequences} and Marques \cite{Marques2012OrderAppearance}
 study the growth and fixed-point behavior of the order-of-appearance map. The
 present paper instead fixes a single fiber $B_n$ and studies its divisibility
-geometry inside $D_n$. The classical rank-divisibility identities, the
-primitive-divisor theorem, and the prime-power rank formulas are used here as
-tools. New in this paper are the upper-fiber description of $B_n$ as a divisor
-lattice upper set, the witness-cover classification of its minimal generators,
-the complete low-support classifications and resulting cardinality formulas for
-$\omega(n)\le3$, the connected block factorizations of both $B_n$ and
-$\mathcal M_n$, and the private-coordinate entropy theorem for
-$\#\mathcal M_n$. The latter identifies $\log2/4$ as the exact combinatorial
-constant and separates the sole remaining arithmetic term, the maximal
-primitive-rank-window multiplicity $R(n)$.
-
-Our first main result identifies $B_n$ as an upper fiber obtained by sieve.
-
-\begin{previewtheorem}[Theorem A: upper fibers]
-For every $n\ge2$,
-\[
-B_n=D_n\setminus\bigcup_{p\mid n}D_{n/p}.
-\]
-In particular, $B_n$ is an upper set in the divisor lattice $D_n$, and
-\[
-B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:\ m\mid q\}.
-\]
-This is proved as Theorem~\ref{thm:upper-fiber}.
-\end{previewtheorem}
+geometry inside $D_n$. The upper-fiber identity, the coordinatewise minimal-lcm
+criterion, the prime--ladder alternative, the private-coordinate injection, and
+the coprimality of disjoint coordinate blocks are recorded below as lemmas:
+they are formal consequences of the cited classical identities and are not
+claimed as independent arithmetic advances. The contributions developed from
+these facts are the witness-cover formulation, the exhaustive support-three
+classification with its arithmetic realization test, the passage of connected
+block factorization to minimal elements, and the support-entropy coefficient
+$\log 2/4$. The last result isolates, rather than resolves, the arithmetic
+multiplicity $R(n)$. Accordingly, we make no unconditional claim of a sharp
+asymptotic for $\#\mathcal M_n$.
 
 Call a prime power $\theta=p^e$ \emph{atomic for the index $d$} if
 $\alpha(\theta)=d$ and $\alpha(p^{e-1})<d$. An \emph{$n$-witness cover} is a
@@ -184,7 +153,7 @@ pairwise coprime set of such atomic prime powers whose apparition indices
 collectively span the prime factorization of $n$ in a minimal, irredundant
 fashion; the full definition is Definition~\ref{def:witness-cover}.
 
-\begin{previewtheorem}[Theorem B: witness covers]
+\begin{previewtheorem}[Witness-cover theorem]
 For every $n\ge2$, multiplication gives a bijection from $n$-witness
 covers $\Theta$ to minimal generators:
 \[
@@ -205,7 +174,7 @@ and~\ref{cor:support-budget-best-possible}.
 The witness classification also controls the number of minimal generators,
 not merely their form.
 
-\begin{previewtheorem}[Theorem C: witness-cover entropy and conditional order]
+\begin{previewtheorem}[Support-entropy theorem]
 For $n\ge3$, let $k=\omega(n)$ and let $R(n)$ be the largest atomic-family
 multiplicity at one essential/full support pair. If $k\ge3$ and
 $r=\lfloor k/2\rfloor$, then
@@ -218,35 +187,21 @@ Hence, uniformly as $k\to\infty$,
  \frac{\log2}{4}k^2+O(1)\le\log\#\mathcal M_n
  \le\frac{\log2}{4}k^2+k\log R(n)+O(k).
 \]
-The sharp leading entropy is therefore $(\log2/4)k^2$, up to the displayed
-arithmetic term $k\log R(n)$. At the Hardy--Ramanujan maximal-order scale,
-\[
- k\sim\frac{\log n}{\log\log n},
- \qquad
- k^2\asymp\frac{(\log n)^2}{(\log\log n)^2}.
-\]
-By contrast, the larger envelope
-$(\log n)^2/\log\log n$ is only the crude corollary of
-$\#\mathcal M_n\le n^{\omega(n)}$ and the maximal order of $\omega(n)$, and
-is a factor $\log\log n$ larger than the witness-cover entropy scale.
-In particular, the lower mean is
-$(\log2/4+o(1))x(\log\log x)^2$. If
-$\log R(n)=o(\omega(n))$ for almost all $n$, as required by Hypothesis
-\textup{(H1)}, then
-$(\log2/4)(\log\log n)^2$ is the normal order of
-$\log\#\mathcal M_n$; an explicit mean sparsity hypothesis yields the
-matching asymptotic mean. This normal-order assertion is conditional on
-\textup{(H1)} and is not proved unconditionally. This is
-Theorem~\ref{thm:minimal-generator-growth}.
+ The coefficient $\log2/4$ is exact for the support combinatorics. This is not
+ an asymptotic formula for $\log\#\mathcal M_n$ unless
+ $R(n)=\exp(o(\omega(n)))$. The theorem also gives unconditional
+ almost-everywhere and primorial lower bounds; separate conjectures about
+ $R(n)$ imply conditional normal-order and mean equivalents. This is
+ Theorem~\ref{thm:minimal-generator-growth} and its corollaries.
 \end{previewtheorem}
 
 Making this classification effective requires the prime-power apparition
 formulas of Fulton--Morris \cite{FultonMorris1969ArithmeticalFunctions} and
 Lengyel \cite{Lengyel1995OrderFibonacciLucas}. These show that every atomic
-factor is either \emph{primitive} (arising from a new prime) or lies on a
+factor is either a \emph{prime atom} or lies on a
 \emph{prime-power ladder} (changing exactly one prime coordinate of the
 apparition index). This dichotomy
-(Theorem~\ref{thm:primitive-ladder-dichotomy}) enables complete
+(Lemma~\ref{thm:primitive-ladder-dichotomy}) enables complete
 classifications of $\mathcal M_n$ when $\omega(n)\le 3$. The detailed
 ingredients are Corollary~\ref{cor:two-support-complete-classification} and
 Lemma~\ref{lem:three-coordinate-nonemptiness}; the consolidated
@@ -258,7 +213,7 @@ recorded in Corollary~\ref{cor:low-support-birth-layer-package}.
 The same lcm mechanism gives a local-to-global factorization over connected
 coordinate blocks.
 
-\begin{previewtheorem}[Theorem D: connected block factorization]
+\begin{previewtheorem}[Connected block factorization]
 Let $q\in B_n$ and form the support hypergraph on $\mathcal P(n)$ whose
 edges are the prime-coordinate supports of the ranks of the prime-power
 factors of $q$. If its connected components are $C$, then
@@ -272,25 +227,25 @@ $A(n)$ and $\#\mathcal M_n$ are partition sums over the connected counts.
 This is proved in Section~\ref{sec:connected}.
 \end{previewtheorem}
 
-As secondary consequences, nonexceptional birth layers contain canonical
-principal intervals
+As secondary consequences, nonexceptional birth layers contain principal
+intervals natural after choosing an exact-rank prime
 (Corollary~\ref{cor:canonical-principal-interval}), Boolean subposets of rank
 $\tau(n)-O(1)$ (Corollary~\ref{cor:boolean-skeleton}), and---for odd
 $n$---Bell-type lower bounds on $\#\mathcal M_n$
 (Corollary~\ref{cor:odd-primitive-cover-realization}).
 
-The paper is organized as follows. Section~\ref{sec:prelim} collects the
-background on Fibonacci divisibility and the prime-power apparition formulas.
-Section~\ref{sec:upper-fibers} proves the upper-fiber and witness-cover
-theory used later. Section~\ref{sec:low-support} treats the
-primitive--ladder dichotomy and the low-support classifications.
+The paper is organized as follows. Section~\ref{sec:prelim} collects classical
+background on Fibonacci divisibility and exact-rank primes.
+Section~\ref{sec:upper-fibers} first records the general fiber and witness-cover
+structure. Section~\ref{sec:low-support} then introduces the Fibonacci-specific
+prime-power arithmetic and the low-support classifications.
 Section~\ref{sec:connected} proves the connected-block factorization
 (Theorems~\ref{thm:birth-connected-factorization}
 and~\ref{thm:mingenerator-connected-factorization}) and the partition-lattice
 formulas.
-Section~\ref{sec:growth} proves the maximal and mean logarithmic growth
-theorem. Section~\ref{sec:numerical} presents numerical data and the
-counterexample search, and
+Section~\ref{sec:growth} proves the support-entropy bounds and isolates the
+unresolved arithmetic interface. Section~\ref{sec:numerical} presents the
+finite verification, and
 Section~\ref{sec:questions} records further questions.
 
 %% ====================================================================
@@ -341,16 +296,29 @@ $\alpha(\lcmop(u,v))$ are exactly the multiples of
 $\lcmop(\alpha(u),\alpha(v))$, and the two positive integers are equal.
 \end{proof}
 
-\subsection{Primitive divisors}\label{subsec:primitive}
+\subsection{Exact-rank primes and primitive divisors}\label{subsec:primitive}
 
-\begin{theorem}\label{thm:primitive-divisors}
+A prime $p$ is an \emph{exact-rank prime of rank $d$} if $\alpha(p)=d$;
+when it is viewed as an atomic prime power, we also call it a \emph{prime
+atom}. We reserve \emph{primitive divisor of $F_d$} for the standard
+Carmichael--Bilu--Hanrot--Voutier convention: a prime $p$ dividing $F_d$ is
+primitive when
+\[
+ p\nmid 5F_1F_2\cdots F_{d-1}.
+\]
+Thus every primitive divisor is an exact-rank prime, but the exact-rank prime
+$5$ at rank $5$ is excluded from the primitive-divisor terminology because it
+divides the discriminant. This distinction will be maintained throughout.
+
+\begin{theorem}[Classical exact-rank existence]\label{thm:primitive-divisors}
 For every $n\ge 3$ with $n\notin\{6,12\}$, there exists a prime $p_n$ with
 $\alpha(p_n)=n$.
 \end{theorem}
 
 \begin{proof}
-For $n=3,4,5$ one takes $p_3=2$, $p_4=3$, $p_5=5$. For $n\ge 7$, $n\neq 12$,
-the primitive divisor theorem
+For $n=3,4,5$ one takes $p_3=2$, $p_4=3$, and $p_5=5$; the last is the
+discriminant-related exact-rank exception just described. For $n\ge 7$,
+$n\neq 12$, the primitive divisor theorem
 \cite{Carmichael1913PrimitiveDivisors,Yabuta2001PrimitiveDivisorFibonacci,%
 BiluHanrotVoutier2001PrimitiveDivisorsLucas}
 gives a prime dividing $F_n$ but no earlier Fibonacci number. Since
@@ -379,7 +347,7 @@ A_{\mathrm{pr}}(n)=\sum_{d\mid n}\mu(n/d)\,\omega(F_d).
 We regard these as known corollaries; the results of
 Sections~\ref{sec:upper-fibers}--\ref{sec:connected} are independent of them.
 
-\begin{lemma}[Primitive-prime M\"obius count]\label{lem:primitive-prime-mobius-count}
+\begin{lemma}[Exact-rank prime M\"obius count]\label{lem:primitive-prime-mobius-count}
 For $d\ge1$, put
 \[
 \Pi_\alpha(d):=\{p\text{ prime}:\alpha(p)=d\}.
@@ -407,66 +375,7 @@ divisors.  Applying M\"obius inversion on the divisor lattice of $d$ gives the
 displayed formula.
 \end{proof}
 
-\subsection{Prime-power apparition formulas}\label{subsec:prime-power}
-
-\begin{proposition}[Classical prime-power rank lifting]
-\label{prop:prime-power-ladders}
-Let $p$ be prime, and put $z_p:=\alpha(p)$. For $p\ne2,5$, put
-$h_p:=\nu_p(F_{z_p})$. Then the ranks of apparition of prime powers are as
-follows:
-\[
-\alpha(2)=3,\qquad \alpha(4)=6,\qquad
-\alpha(2^e)=3\cdot2^{e-2}\quad(e\ge3),
-\]
-\[
-\alpha(5^e)=5^e\quad(e\ge1),
-\]
-and, for $p\ne2,5$,
-\[
-\alpha(p^e)=p^{\max\{e-h_p,0\}}\,z_p\quad(e\ge1).
-\]
-\end{proposition}
-
-\begin{proof}
-We record the standard formulas in the present notation.  Wall's
-rank-divisibility theorem gives, for every prime $p$ and integer $r\ge1$,
-\[
-p\mid F_r\qquad\Longleftrightarrow\qquad z_p\mid r,
-\]
-where $z_p=\alpha(p)$ \cite{Wall1960FibonacciModm}.  Lengyel's valuation
-formulas \cite[Theorems~1 and~2]{Lengyel1995OrderFibonacciLucas} give the
-following sharpened forms.  If $p\ne2,5$, then for $r=z_p u$,
-\[
-\nu_p(F_r)=h_p+\nu_p(u),
-\qquad h_p=\nu_p(F_{z_p}),
-\]
-and no factor $p$ occurs when $z_p\nmid r$.  Hence $p^e\mid F_r$ holds
-exactly when $r=z_pu$ and $\nu_p(u)\ge e-h_p$; the least such $r$ is
-$z_p p^{\max\{e-h_p,0\}}$.  This proves the asserted formula for
-$p\ne2,5$ and makes the plateau explicit: the rank stays equal to $z_p$
-for $1\le e\le h_p$, then gains one factor of $p$ at each further level.
-
-For the exceptional primes the same cited valuation formulas specialize to
-\[
-\nu_5(F_r)=\nu_5(r)
-\]
-and
-\[
-\nu_2(F_r)=
-\begin{cases}
-0, & 3\nmid r,\\
-1, & r\equiv3\pmod 6,\\
-3, & r\equiv6\pmod {12},\\
-\nu_2(r)+2, & 12\mid r.
-\end{cases}
-\]
-The first identity shows that the least $r$ with $5^e\mid F_r$ is
-$r=5^e$.  For $2$, the least indices with valuation at least $1$, $2$, and
-$3$ are respectively $3$, $6$, and $6$; for $e\ge4$ the least multiple of
-$12$ satisfying $\nu_2(r)+2\ge e$ is $r=3\cdot2^{e-2}$.  Thus
-$\alpha(2)=3$, $\alpha(4)=\alpha(8)=6$, and the displayed formula
-$\alpha(2^e)=3\cdot2^{e-2}$ holds for every $e\ge3$.
-\end{proof}
+\subsection{Atomic notation}\label{subsec:prime-power}
 
 \begin{definition}\label{def:atomic-families}
 For a prime power $\theta=p^e$ with $e\ge1$, put
@@ -504,44 +413,14 @@ E_n(\theta)=I,\ T_n(\theta)=J\}.
 \]
 \end{definition}
 
-\begin{corollary}\label{cor:atomic-classification}
-The atomic prime powers are exactly the following:
-\begin{enumerate}[label=(\roman*)]
-\item $2\in\Atom(3)$, $4\in\Atom(6)$, and
-$2^e\in\Atom(3\cdot2^{e-2})$ for every $e\ge4$; the power $8$ is not atomic.
-\item $5^e\in\Atom(5^e)$ for every $e\ge1$.
-\item If $p\ne2,5$, $z_p=\alpha(p)$, and
-$h_p=\nu_p(F_{z_p})$, then $p\in\Atom(z_p)$ and
-$p^e\in\Atom(p^{e-h_p}z_p)$ for every $e>h_p$; no power $p^e$ with
-$1<e\le h_p$ is atomic.
-\end{enumerate}
-Consequently every atom is either a primitive atom $p\in\Atom(\alpha(p))$ or
-a ladder atom $p^e$ with $e>1$. Every ladder atom changes only the $p$-adic
-coordinate of its apparition index when it is lowered to $p^{e-1}$.
-\end{corollary}
-
-\begin{proof}
-Apply Proposition~\ref{prop:prime-power-ladders}. For $p=2$, the ranks are
-$3,6,6,12,24,\ldots$ on $2,4,8,16,32,\ldots$. Hence $2$ and $4$ are atomic,
-$8$ is not, and each $2^e$ with $e\ge4$ is atomic because lowering the
-exponent divides the rank by $2$. For $p=5$, the ranks are $5^e$, so every
-step is atomic.
-
-Let $p\ne2,5$. The formula
-$\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p$ gives $\alpha(p)=z_p$, so $p$ is
-atomic. For $1<e\le h_p$ the rank is still $z_p$, so $p^e$ is not atomic.
-For $e>h_p$, lowering from $p^e$ to $p^{e-1}$ changes the rank from
-$p^{e-h_p}z_p$ to $p^{e-1-h_p}z_p$, so $p^e$ is atomic.
-
-The final assertion follows from the same list. A nonprimitive atom has
-$e>1$ and is one of the displayed ladder steps; in each case the quotient
-$d(\theta)/d^-(\theta)$ is a power of the same prime $p$, so lowering
-$\theta$ can change only the $p$-adic coordinate of the apparition index.
-\end{proof}
-
 %% ====================================================================
 \section{Birth layers and witness covers}\label{sec:upper-fibers}
 %% ====================================================================
+
+The first two lemmas in this section use only rank divisibility and the lcm
+identity. They are included to fix the structural framework and are not
+presented as new Fibonacci identities. The witness-cover theorem packages
+their minimality conditions for the subsequent Fibonacci analysis.
 
 \begin{definition}\label{def:birth-layer}
 For $n\ge2$ let
@@ -568,7 +447,7 @@ B_2=\mathcal M_2=\varnothing,\qquad A(2)=\widthop(B_2)=0.
 \]
 \end{definition}
 
-\begin{theorem}\label{thm:upper-fiber}
+\begin{lemma}[Upper-fiber identity]\label{thm:upper-fiber}
 For every $n\ge2$,
 \[
 B_n=D_n\setminus\bigcup_{p\mid n}D_{n/p}.
@@ -578,7 +457,7 @@ $q\mid r$, then $r\in B_n$. Consequently
 \[
 B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:\ m\mid q\}.
 \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 By Proposition~\ref{prop:rank-basics}, an integer $q$ lies in $D_m$ if and
@@ -610,7 +489,7 @@ some $m\in\mathcal M_n$ lies again in $B_n$. This proves the displayed
 decomposition.
 \end{proof}
 
-\begin{theorem}\label{thm:minimal-generators}
+\begin{lemma}[Minimal-lcm criterion]\label{thm:minimal-generators}
 Let $n\ge2$, and let
 $m=\prod_{i=1}^r p_i^{e_i}$ be a divisor of $F_n$, with the $p_i$ distinct
 and $e_i\ge1$. Put
@@ -626,7 +505,7 @@ where $\alpha(1)=1$. Then $m\in\mathcal M_n$ if and only if
 \lambda_{i+1},\ldots,\lambda_r)<n
 \quad(1\le i\le r).
 \end{equation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 Because $m\mid F_n$, Proposition~\ref{prop:rank-basics} gives
@@ -769,7 +648,7 @@ $m=\prod_{i=1}^r\theta_i$ with $\theta_i=p_i^{e_i}$ and the $p_i$ distinct.
 Each $\theta_i$ is atomic: if $\alpha(p_i^{e_i-1})=\alpha(p_i^{e_i})$, then
 replacing $\theta_i$ by $p_i^{e_i-1}$ preserves the lcm, contradicting
 the minimal-generator criterion in
-Theorem~\ref{thm:minimal-generators}. Since
+Lemma~\ref{thm:minimal-generators}. Since
 $n=\lcmop(d(\theta_i))$, the sets $T_n(\theta_i)$ cover $\mathcal P(n)$. The
 condition $\alpha(m/p_i)<n$ forces
 $E_n(\theta_i)\nsubseteq\bigcup_{j\neq i}T_n(\theta_j)$; otherwise the lost
@@ -783,7 +662,7 @@ $\alpha(m)=\lcmop(d(\theta):\theta\in\Theta)=n$. For each
 $\theta=p^e\in\Theta$, the witness condition
 provides $\ell\in E_n(\theta)\setminus\bigcup_{\eta\neq\theta}T_n(\eta)$; at
 this coordinate, $\alpha(m/p)<n$.
-Theorem~\ref{thm:minimal-generators} then gives $m\in\mathcal M_n$.
+Lemma~\ref{thm:minimal-generators} then gives $m\in\mathcal M_n$.
 
 It remains to record injectivity and the stated inverse.  If two witness covers
 $\Theta$ and $\Theta'$ have the same product, then unique factorization in
@@ -808,84 +687,58 @@ $\ell(\theta)\in E_n(\theta)\setminus\bigcup_{\eta\neq\theta}T_n(\eta)$.
 Hence $\omega(m)=\#\Theta\le\omega(n)$.
 \end{proof}
 
-\begin{corollary}[Finite witness-cover grammar at fixed support]
+\begin{corollary}[Finite Fibonacci support grammar]
 \label{cor:finite-witness-cover-types}
 Fix $k\ge1$. Up to relabeling of the $k$ prime coordinates of $n$, only
 finitely many witness-cover support types can occur for minimal generators
-$m\in\mathcal M_n$ with $\omega(n)=k$. More explicitly, if
+$m\in\mathcal M_n$ with $\omega(n)=k$. Put
 \[
-N_k:=\#\{(I,J):\varnothing\ne I\subseteq J\subseteq [k]\}=3^k-2^k,
+\mathcal P_k:=\{(I,J):\varnothing\ne I\subseteq J\subseteq[k],\
+ I=J\text{ or }|I|=1\},
+\qquad
+N'_k:=\#\mathcal P_k=(2^k-1)+k(2^{k-1}-1).
 \]
-then every labelled support type is a word-free finite grammar
+Every minimal generator determines a unique labelled support set
 \[
-\mathcal S=\{(I_1,J_1),\ldots,(I_r,J_r)
- :1\le r\le k,
- \varnothing\ne I_a\subseteq J_a\subseteq[k]\},
+\mathsf T(m):=\{(E_n(\theta),T_n(\theta)):\theta\in\Theta(m)\}
+ \subseteq\mathcal P_k,
 \]
-subject only to
+with $1\le|\mathsf T(m)|\le k$, satisfying coverage and irredundance:
 \[
-\bigcup_{a=1}^rJ_a=[k],\qquad
-I_a\nsubseteq\bigcup_{b\ne a}J_b\quad(1\le a\le r).
+\bigcup_{(I,J)\in\mathsf T(m)}J=[k],\qquad
+I\nsubseteq\bigcup_{(I',J')\in\mathsf T(m)\setminus\{(I,J)\}}J'.
 \]
-Consequently the number of labelled support types is at most
+Consequently the number of possible labelled support types is at most
 \[
-\sum_{r=0}^k \binom{N_k}{r},
+\sum_{r=1}^k\binom{N'_k}{r}.
 \]
-and the number of unlabelled support types is bounded by the same constant; a
-sharper canonical count is obtained by quotienting this finite family by the
-coordinate action of $S_k$.
-When the coordinates are identified with $[k]$, the type of $m$ is determined
-by a finite set
-\[
-\mathsf T(m)=\{(E_n(\theta),T_n(\theta)):\theta\in\Theta\},
-\]
-where $\Theta$ is the witness cover corresponding to $m$, and this set has at
-most $k$ elements drawn from the finite collection of pairs
-\[
-\{(I,J):\varnothing\ne I\subseteq J\subseteq [k]\}.
-\]
-Thus this corollary supplies a canonical finite grammar for general $k$;
-explicit arithmetic enumeration in this paper is pursued only for
-$\omega(n)\le3$. When $k=3$, the arithmetic realization layer is the
-support-three slot test of Lemma~\ref{lem:three-coordinate-nonemptiness} and
+The converse is not asserted: arithmetic realization additionally requires
+nonempty atom families and representatives with distinct underlying primes.
+Unlabelled types are $S_k$-orbits of the labelled support sets. For $k=3$, the
+realization layer is the support-three slot test of
+Lemma~\ref{lem:three-coordinate-nonemptiness} and
 Theorem~\ref{thm:low-support-classification-package}.
 \end{corollary}
 
 \begin{proof}
-By Theorem~\ref{thm:witness-classification}, every
-$m\in\mathcal M_n$ is the product attached to a unique $n$-witness cover
-$\Theta$. Corollary~\ref{cor:support-bound} gives $\#\Theta\le k$. For every
-$\theta\in\Theta$, Definition~\ref{def:atomic-families} gives nonempty sets
-$E_n(\theta)\subseteq T_n(\theta)\subseteq\mathcal P(n)$: nonemptiness follows
-from the witness-cover irredundance condition in
-Definition~\ref{def:witness-cover}, since an empty essential support would be
-contained in the union of the other full supports. After a labeling
-$\mathcal P(n)\simeq[k]$, each atom therefore contributes one of the finitely
-many pairs $(I,J)$ with $\varnothing\ne I\subseteq J\subseteq[k]$.
-Two distinct atoms cannot contribute the same pair $(I,J)$ in an irredundant
-witness cover: if $\theta\ne\eta$ had equal full support $J$, then
-$E_n(\theta)=I\subseteq J=T_n(\eta)$, contradicting the requirement that
-$E_n(\theta)$ not be contained in the union of the other full supports. Thus
-the set notation for $\mathsf T(m)$ records no collapsed multiplicities.
+By Theorem~\ref{thm:witness-classification}, every $m\in\mathcal M_n$ is the
+product attached to a unique witness cover $\Theta(m)$, and
+Corollary~\ref{cor:support-bound} gives $\#\Theta(m)\le k$. Irredundance makes
+each $E_n(\theta)$ nonempty. After labeling $\mathcal P(n)$ by $[k]$, the
+prime--ladder alternative in Lemma~\ref{thm:primitive-ladder-dichotomy} shows
+that each atom contributes a pair in $\mathcal P_k$: a prime atom has $I=J$,
+whereas a ladder atom with nonempty essential support has $|I|=1$.
 
-The number of pairs $(I,J)$ with $\varnothing\ne I\subseteq J\subseteq[k]$ is
-$3^k-2^k$: for each coordinate one chooses whether it lies outside $J$, in
-$J\setminus I$, or in $I$, and then deletes the $2^k$ choices with $I=
-\varnothing$. The coverage and irredundance clauses in
-Definition~\ref{def:witness-cover} are exactly the two displayed grammar rules
-after the coordinate set $\mathcal P(n)$ is identified with $[k]$. Conversely,
-any witness cover has a type obeying these two rules, and forgetting the
-arithmetic prime powers but retaining the set of pairs loses no support-type
-data.
-
-Since a type uses at most $k$ atoms, the number of labelled sets of possible
-pairs is bounded by $\sum_{r=0}^k\binom{3^k-2^k}{r}$. Relabeling the
-coordinates merely quotients this finite collection by the finite symmetric
-group $S_k$, so the same expression is also an upper bound for the unlabelled
-types. The sharper canonical count is the number of $S_k$-orbits of the finite
-subfamily satisfying the two grammar rules. The final sentence is a scope
-statement: the later sections replace this abstract grammar by explicit
-arithmetic slot enumeration only in supports one, two, and three.
+Two distinct atoms cannot contribute the same pair $(I,J)$, since then the
+essential support of either would be contained in the full support of the
+other. Hence $\mathsf T(m)$ is a genuine set and is uniquely determined by
+the labelled prime-power factorization. There are $2^k-1$ diagonal pairs and,
+for each singleton $I=\{i\}$, there are $2^{k-1}-1$ proper supersets
+$J\supsetneq I$, proving the formula for $N'_k$. Coverage and irredundance are
+exactly the two displayed conditions. Counting nonempty subsets of
+$\mathcal P_k$ of size at most $k$ proves the bound. Passing to unlabelled
+types amounts to taking $S_k$-orbits. The atom-family nonemptiness and
+coprimeness requirements explain why the converse need not hold.
 \end{proof}
 
 \begin{corollary}\label{cor:support-bound-sharp}
@@ -905,7 +758,7 @@ Theorem~\ref{thm:primitive-divisors}, therefore supplies a prime
 $\pi_\ell$ with $\alpha(\pi_\ell)=d_\ell$.
 
 The primes $\pi_\ell$ are distinct, because a single prime has only one rank
-of apparition. Each $\pi_\ell$ is a primitive atom in
+of apparition. Each $\pi_\ell$ is a prime atom in
 \(\Atom(d_\ell)\), so, relative to $n$,
 \[
 T_n(\pi_\ell)=E_n(\pi_\ell)=\{\ell\}.
@@ -985,7 +838,7 @@ ranks of $2,4,8$, and $5$. For the remaining primes,
 Proposition~\ref{prop:rank-basics} reduces the rank computation to the proper
 divisors of $10$, $15$, and $30$: one has
 \[
- F_{10}=55,qquad F_{15}=610,qquad F_{30}=832040,
+ F_{10}=55,\qquad F_{15}=610,\qquad F_{30}=832040,
 \]
 and the required nondivisibilities are
 \[
@@ -1012,8 +865,8 @@ subscripts, are exactly
  \quad L_{2,23}=\{4\}.
 \]
 Indeed, a prime atom has essential support equal to its full support, which
-gives the three displayed primitive slots and the singleton atoms $2$ and
-$5$.  The only nonprimitive atom is $4$; lowering it to $2$ changes its rank
+gives the three displayed exact-rank prime slots and the singleton atoms $2$
+and $5$. The only nonprime atom is $4$; lowering it to $2$ changes its rank
 from $6$ to $3$, so its full support is $\{2,3\}$ and its essential support
 is $\{2\}$.  This also proves that every slot not displayed above is empty.
 
@@ -1043,19 +896,21 @@ the five products displayed above exhaust $\mathcal M_{30}$.
 \subsection*{Substructures of nonexceptional birth layers}
 
 \begin{corollary}\label{cor:canonical-principal-interval}
-Let $n\ge3$, $n\notin\{6,12\}$, and let $\pi_n$ be any primitive prime
-divisor of $F_n$. Then the principal interval
+Let $n\ge3$, $n\notin\{6,12\}$, and choose an exact-rank prime $\pi_n$ with
+$\alpha(\pi_n)=n$. Then the principal interval
 \[
 [\pi_n,F_n]_{D_n}:=\{q\in D_n:\ \pi_n\mid q\}
 \]
 is contained in $B_n$. In particular $B_n$ contains a divisor-lattice
-interval naturally isomorphic to $\operatorname{Div}(F_n/\pi_n)$.
+interval naturally isomorphic to $\operatorname{Div}(F_n/\pi_n)$. This
+interval is natural after choosing $\pi_n$; no choice-free canonical interval
+is asserted.
 \end{corollary}
 
 \begin{proof}
 By Theorem~\ref{thm:primitive-divisors}, there is a prime
 $\pi_n$ with $\alpha(\pi_n)=n$. Thus $\pi_n\in B_n$. Since
-Theorem~\ref{thm:upper-fiber} says that $B_n$ is an upper set in $D_n$,
+Lemma~\ref{thm:upper-fiber} says that $B_n$ is an upper set in $D_n$,
 every divisor $q$ of $F_n$ with $\pi_n\mid q$ also lies in $B_n$. Division by
 $\pi_n$ gives an order-preserving bijection from this interval to
 $\operatorname{Div}(F_n/\pi_n)$, with inverse $d\mapsto \pi_n d$.
@@ -1066,8 +921,8 @@ Let $n\ge3$, $n\notin\{6,12\}$, and put
 \[
 \mathcal D_n^*:=\{d:\ d\mid n,\ 3\le d<n,\ d\notin\{6,12\}\}.
 \]
-For each $d\in\mathcal D_n^*$ choose a primitive prime
-$\pi_d$ with $\alpha(\pi_d)=d$, and choose a primitive prime
+For each $d\in\mathcal D_n^*$ choose an exact-rank prime
+$\pi_d$ with $\alpha(\pi_d)=d$, and choose an exact-rank prime
 $\pi_n$ with $\alpha(\pi_n)=n$. Then
 \[
 S\longmapsto \pi_n\prod_{d\in S}\pi_d
@@ -1081,7 +936,7 @@ $B_n$ contains a Boolean subposet of rank
 \end{corollary}
 
 \begin{proof}
-The primitive primes exist by Theorem~\ref{thm:primitive-divisors}. They
+The exact-rank primes exist by Theorem~\ref{thm:primitive-divisors}. They
 are distinct, because distinct ranks of apparition cannot belong to the
 same prime. For every $d\mid n$, $\pi_d\mid F_d\mid F_n$, so the displayed
 products divide $F_n$. They all also divide a multiple of $\pi_n$ inside
@@ -1099,15 +954,107 @@ $\{1,2,6,12,n\}$, so $|\mathcal D_n^*|\ge\tau(n)-5$.
 \section{Low-support classifications}\label{sec:low-support}
 %% ====================================================================
 
+We now introduce the Fibonacci-specific arithmetic input. The structural
+results of Section~\ref{sec:upper-fibers} did not use the formulas below.
+
+\begin{proposition}[Classical prime-power rank lifting]
+\label{prop:prime-power-ladders}
+Let $p$ be prime, and put $z_p:=\alpha(p)$. For $p\ne2,5$, put
+$h_p:=\nu_p(F_{z_p})$. Then
+\[
+\alpha(2)=3,\qquad \alpha(4)=6,\qquad
+\alpha(2^e)=3\cdot2^{e-2}\quad(e\ge3),
+\]
+\[
+\alpha(5^e)=5^e\quad(e\ge1),
+\]
+and, for $p\ne2,5$,
+\[
+\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p\quad(e\ge1).
+\]
+\end{proposition}
+
+\begin{proof}
+Wall's rank-divisibility theorem gives
+\[
+p\mid F_r\quad\Longleftrightarrow\quad z_p\mid r
+\]
+\cite{Wall1960FibonacciModm}. For $p\ne2,5$, the classical congruence
+\[
+F_{p-(5/p)}\equiv0\pmod p
+\]
+gives
+\[
+z_p\mid p-\left(\frac5p\right),
+\]
+so $p\nmid z_p$. Lengyel's valuation formula
+\cite[Theorems~1 and~2]{Lengyel1995OrderFibonacciLucas}, in the modern
+treatment of Medina--Rowland \cite{MedinaRowland2015PRegularity}, states that
+when $z_p\mid r$,
+\[
+\nu_p(F_r)=\nu_p(F_{z_p})+\nu_p(r).
+\]
+Writing $r=z_pu$ and using $p\nmid z_p$ yields
+\[
+\nu_p(F_{z_pu})=h_p+\nu_p(u).
+\]
+Thus $p^e\mid F_{z_pu}$ if and only if
+$\nu_p(u)\ge e-h_p$, and the least admissible $u$ is
+$p^{\max\{e-h_p,0\}}$. This proves the formula for $p\ne2,5$ without an
+implicit assumption on $z_p$.
+
+For the exceptional primes, the cited formulas specialize to
+\[
+\nu_5(F_r)=\nu_5(r),
+\qquad
+\nu_2(F_r)=
+\begin{cases}
+0, & 3\nmid r,\\
+1, & r\equiv3\pmod 6,\\
+3, & r\equiv6\pmod {12},\\
+\nu_2(r)+2, & 12\mid r.
+\end{cases}
+\]
+The least index divisible by $5^e$ is $5^e$. For $2$, the least indices with
+valuation at least $1$, $2$, and $3$ are $3$, $6$, and $6$; for $e\ge4$ the
+least admissible multiple of $12$ is $3\cdot2^{e-2}$.
+\end{proof}
+
+\begin{corollary}\label{cor:atomic-classification}
+The atomic prime powers are exactly the following:
+\begin{enumerate}[label=(\roman*)]
+\item $2\in\Atom(3)$, $4\in\Atom(6)$, and
+$2^e\in\Atom(3\cdot2^{e-2})$ for every $e\ge4$; the power $8$ is not atomic.
+\item $5^e\in\Atom(5^e)$ for every $e\ge1$.
+\item If $p\ne2,5$, $z_p=\alpha(p)$, and
+$h_p=\nu_p(F_{z_p})$, then $p\in\Atom(z_p)$ and
+$p^e\in\Atom(p^{e-h_p}z_p)$ for every $e>h_p$; no power $p^e$ with
+$1<e\le h_p$ is atomic.
+\end{enumerate}
+Consequently every atom is either a prime atom $p\in\Atom(\alpha(p))$ or a
+ladder atom $p^e$ with $e>1$. Every ladder atom changes only the $p$-adic
+coordinate of its apparition index when it is lowered to $p^{e-1}$.
+\end{corollary}
+
+\begin{proof}
+Apply Proposition~\ref{prop:prime-power-ladders}. For $p=2$, the ranks are
+$3,6,6,12,24,\ldots$ on $2,4,8,16,32,\ldots$. Hence $2$ and $4$ are atomic,
+$8$ is not, and each $2^e$ with $e\ge4$ is atomic. For $p=5$, every step is
+atomic. If $p\ne2,5$, the rank remains $z_p$ for $1\le e\le h_p$ and then
+gains one factor of $p$ at each further level. This proves the list. At every
+ladder step, $d(\theta)/d^-(\theta)$ is a power of the same prime $p$, which
+proves the final assertion.
+\end{proof}
+
 This section keeps the low-support classification in the main theorem stream
-while treating the slot mechanics as proof support.  The FQ-facing conclusion is
+while treating the slot mechanics as proof support. The principal conclusion is
 Theorem~\ref{thm:low-support-classification-package}: for support three there
 are exactly eight admissible families, and every remaining decision is a finite
 slot-filling test.  The arithmetic tests for filling those slots are stated here;
 the reader-facing checklist and the worked $n=42$ verification are collected in
 Appendix~\ref{app:three-coordinate-checklist}.
 
-\begin{theorem}\label{thm:primitive-ladder-dichotomy}
+\begin{lemma}[Prime--ladder alternative]\label{thm:primitive-ladder-dichotomy}
 Let $\theta=p^e\in\Atom(d)$ and suppose $d\mid n$. If $e=1$, then
 \[
 E_n(\theta)=T_n(\theta).
@@ -1118,7 +1065,7 @@ Fibonacci atom has
 \[
 1<\#E_n(\theta)<\#T_n(\theta).
 \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 If $e=1$, then $d^-(\theta)=\alpha(1)=1$, so every coordinate of
@@ -1137,10 +1084,10 @@ passing from $d(\theta)$ to $d^-(\theta)$ is the coordinate $p$ itself.
 Thus $E_n(\theta)$ is empty or $\{p\}$.
 
 The final assertion follows because either $E_n(\theta)=T_n(\theta)$ in
-the primitive case or $\#E_n(\theta)\le1$ in the ladder case.
+the prime-atom case or $\#E_n(\theta)\le1$ in the ladder case.
 \end{proof}
 
-\begin{theorem}\label{thm:extremal-coordinate-separation}
+\begin{lemma}[Private-coordinate injection]\label{thm:extremal-coordinate-separation}
 Let $\Theta$ be an $n$-witness cover. For each
 $\theta\in\Theta$ one may choose a coordinate
 \[
@@ -1156,7 +1103,7 @@ T_n(\theta_\ell)=\{\ell\}\qquad(\ell\in\mathcal P(n)).
 In particular, when $\omega(n)=2$, every two-element $n$-witness cover has
 one atom supported on the first coordinate and one atom supported on the
 second.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 The existence of $\ell(\theta)$ is exactly the irredundance condition in
@@ -1214,7 +1161,7 @@ $\{\ell_1,\ell_2\}$ with $\{1,2\}$ in the notation
 $\mathcal A_{I,J}(n)$ from Definition~\ref{def:atomic-families}. Also put
 \[
 \mathcal P_i(n):=\{\theta\in\mathcal A_{\{i\},\{i\}}(n):
-\theta\text{ is primitive}\},
+\theta\text{ is a prime atom}\},
 \qquad
 \mathcal L_i(n):=\{\theta\in\mathcal A_{\{i\},\{i\}}(n):
 \theta\text{ is a ladder atom}\}.
@@ -1230,7 +1177,7 @@ and
 \gcd(\theta_1,\theta_2)=1\}.
 \]
 Equivalently, every non-atomic minimal generator is obtained by choosing,
-for each coordinate, one primitive or ladder atom born exactly on that
+for each coordinate, one prime or ladder atom born exactly on that
 coordinate, with the two chosen prime powers coprime.
 \end{corollary}
 
@@ -1240,14 +1187,14 @@ $\#\Theta=1$, then its sole atom has rank $n$, so $m\in\Atom(n)$.
 
 Assume $\#\Theta>1$. By Corollary~\ref{cor:support-bound},
 $\#\Theta\le2$, hence $\#\Theta=2$. The second assertion of
-Theorem~\ref{thm:extremal-coordinate-separation} says, after relabeling the
+Lemma~\ref{thm:extremal-coordinate-separation} says, after relabeling the
 two factors, that one atom has full support $\{1\}$ and the other has full
 support $\{2\}$. Since each atom in a witness cover has a nonempty essential
 coordinate not supplied by the other atom, the first has
 $E_n=T_n=\{1\}$ and the second has $E_n=T_n=\{2\}$. Thus the two atoms lie in
 the displayed families, and pairwise coprimeness is part of the witness-cover
 definition. Corollary~\ref{cor:atomic-classification} gives the stated
-primitive-or-ladder decomposition of each one-coordinate family.
+prime-or-ladder decomposition of each one-coordinate family.
 
 Conversely, a single atom in $\Atom(n)$ is an $n$-witness cover by itself,
 because lowering it lowers its rank. If
@@ -1259,69 +1206,11 @@ $\theta_1\theta_2\in\mathcal M_n$. The two displayed families are disjoint
 because their elements have respectively one and two prime-power factors.
 \end{proof}
 
-We now classify the three-support case.  The lemmas until
-Theorem~\ref{thm:low-support-classification-package} are the proof machinery for
-one visible result rather than separate endpoints.  The reader should keep the
-following four-step pipeline in mind.
-\begin{center}
-\small
-\begin{tabular}{p{0.08\linewidth}p{0.82\linewidth}}
-\toprule
-step & role\\
-\midrule
-1 & Lemma~\ref{lem:abstract-three-types} lists the possible abstract pairs
-$(I,J)=(E_n(\theta),T_n(\theta))$ on three labelled coordinates.\\
-2 & Lemma~\ref{lem:fibonacci-three-coordinate-types} inserts the
-primitive--ladder dichotomy and removes the impossible type
-$\Gamma_2=\{(12,123)\}$.\\
-3 & Lemmas~\ref{lem:three-coordinate-atom-families} and
-\ref{lem:three-coordinate-arithmetic-tests} turn each remaining slot into a
-finite primitive window $P_J(n)$, singleton slot $S_i(n)$, or ladder slot
-$L_{i,J}(n)$.\\
-4 & Lemma~\ref{lem:finite-slot-selection} and
-Lemma~\ref{lem:three-coordinate-nonemptiness} impose the final
-distinct-prime selection test.\\
-\bottomrule
-\end{tabular}
-\end{center}
-Thus the $\Gamma$-types are only the abstract menu; for a fixed $n$, actual
-minimal generators are obtained by filling the resulting finite slots and
-checking coprimeness.
-
-\begin{center}
-\small
-\begin{tabular}{p{0.16\linewidth}p{0.25\linewidth}p{0.49\linewidth}}
-\toprule
-object & section role & arithmetic meaning\\
-\midrule
-$\Gamma_i$ &
-abstract menu &
-one of the finite witness-cover shapes, recording only the pairs
-$(I,J)=(E_n(\theta),T_n(\theta))$ up to relabeling of the three coordinates; \\
-$\mathcal R_J^\circ(n)$ &
-primitive window &
-the divisor ranks of $n$ whose full coordinates are exactly $J$, with the
-exceptional ranks $1,2,6,12$ removed; \\
-$P_J(n)$ &
-primitive slots &
-primes $p$ with $\alpha(p)\in\mathcal R_J^\circ(n)$, hence
-$E_n(p)=T_n(p)=J$; \\
-$L_{i,J}(n)$ &
-ladder slots &
-prime powers whose full support is $J$ but whose essential coordinate is
-only $i$; \\
-$\mathcal L_i^*(n)$ &
-ladder candidate &
-the set, empty or a singleton, left by the prime-power rank formulas before
-the full-support test for a chosen $L_{i,J}(n)$ is applied; \\
-coprimeness &
-final selection &
-after primitive and ladder slots are filled, the selected prime powers must
-have distinct underlying primes, which is exactly coprimeness in a witness
-cover.\\
-\bottomrule
-\end{tabular}
-\end{center}
+We now classify the three-support case. The abstract $\Gamma_i$ record only
+the pairs $(E_n(\theta),T_n(\theta))$ up to coordinate relabeling. The lemmas
+below exclude the one shape incompatible with Fibonacci prime-power arithmetic,
+identify finite exact-rank and ladder slots for the remaining shapes, and apply
+the distinct-underlying-prime selection criterion.
 
 \begin{lemma}[Abstract three-coordinate skeletons]\label{lem:abstract-three-types}
 Let $X=\{1,2,3\}$. Consider finite collections
@@ -1397,8 +1286,8 @@ Lemma~\ref{lem:abstract-three-types}; coverage and irredundance are exactly
 the last two conditions in Definition~\ref{def:witness-cover}. Hence its
 type is one of $\Gamma_1,\ldots,\Gamma_9$.
 
-By Theorem~\ref{thm:primitive-ladder-dichotomy}, a Fibonacci atom has either
-$E_n(\theta)=T_n(\theta)$, in the primitive case, or
+By Lemma~\ref{thm:primitive-ladder-dichotomy}, a Fibonacci atom has either
+$E_n(\theta)=T_n(\theta)$, in the prime-atom case, or
 $E_n(\theta)$ empty or a singleton, in the ladder case. In a witness cover
 $E_n(\theta)$ cannot be empty. Therefore no atom can have
 $1<\#E_n(\theta)<\#T_n(\theta)$. The only abstract type in the displayed
@@ -1409,11 +1298,11 @@ This proves the asserted containment in the eight displayed types and the
 exclusion of $\Gamma_2$.
 \end{proof}
 
-\begin{lemma}[Primitive and ladder atom families in three coordinates]
+\begin{lemma}[Prime and ladder atom families in three coordinates]
 \label{lem:three-coordinate-atom-families}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$ and identify subsets of
 $[3]=\{1,2,3\}$ with the corresponding coordinate subsets of
-$\mathcal P(n)$. For nonempty $J\subseteq[3]$ define the primitive family
+$\mathcal P(n)$. For nonempty $J\subseteq[3]$ define the prime-atom family
 \[
 P_J(n):=\{\theta\in\mathcal A_{J,J}(n):\theta\text{ is a prime}\},
 \]
@@ -1436,21 +1325,21 @@ L_{i,J}(n), & I=\{i\}\subsetneq J,\\[1mm]
 
 \begin{proof}
 Let $\theta\in\mathcal A_{I,J}(n)$. By definition, $\theta$ is an atom with
-$E_n(\theta)=I$ and $T_n(\theta)=J$. If $\theta=p$ is primitive, then
+$E_n(\theta)=I$ and $T_n(\theta)=J$. If $\theta=p$ is a prime atom, then
 $d^-(\theta)=1$, so every full coordinate is lost after lowering; hence
 $E_n(\theta)=T_n(\theta)$ and $\theta\in P_J(n)$. Conversely, every
 $\theta\in P_J(n)$ has $(E_n(\theta),T_n(\theta))=(J,J)$ by definition.
 
-Now suppose $\theta=p^e$ with $e>1$. The primitive--ladder dichotomy
-(Theorem~\ref{thm:primitive-ladder-dichotomy}) gives that $E_n(\theta)$ is
+Now suppose $\theta=p^e$ with $e>1$. The prime--ladder alternative
+(Lemma~\ref{thm:primitive-ladder-dichotomy}) gives that $E_n(\theta)$ is
 either empty or a singleton. Since $\mathcal A_{I,J}(n)$ is defined only for
 nonempty $I$, any such atom in it has $I=\{i\}$ for some $i\in J$, and it
 lies in $L_{i,J}(n)$. Conversely, every member of $L_{i,J}(n)$ is a ladder
 atom with $(E_n(\theta),T_n(\theta))=(\{i\},J)$ by definition.
 
-Combining the primitive case with the ladder case gives the four displayed
-alternatives. If $\#I>1$ and $I\ne J$, the primitive case is impossible
-because primitive atoms have $I=J$, while the ladder case is impossible
+Combining the prime-atom case with the ladder case gives the four displayed
+alternatives. If $\#I>1$ and $I\ne J$, the prime-atom case is impossible
+because prime atoms have $I=J$, while the ladder case is impossible
 because ladder atoms have singleton essential support. Hence the remaining
 families are empty.
 \end{proof}
@@ -1469,33 +1358,16 @@ distinct if and only if, for every $Y\subseteq X$,
 \]
 Consequently, in the three-coordinate classification below, a row is decided
 by the finite bipartite graph whose left vertices are the row slots and whose
-right vertices are the admissible underlying primes supplied by the primitive
+right vertices are the admissible underlying primes supplied by the exact-rank
 rank windows and the explicit ladder candidates.
 \end{lemma}
 
 \begin{proof}
-The necessity is immediate: $\#Y$ slots filled by pairwise distinct underlying
-primes must use at least $\#Y$ primes from the displayed union.  Conversely,
-write $N_x=\nu(C_x)$.  The cases $\#X\le2$ are direct: for two slots the only
-possible obstruction, after both individual sets are nonempty, is
-$N_{x_1}=N_{x_2}$ a singleton, which is exactly the failure of the displayed
-inequality for $Y=X$.
-
-It remains to treat $X=\{1,2,3\}$.  If some $N_i$ is a singleton, say
-$N_1=\{p\}$, fill the first slot with a prime power above $p$.  For any
-$Y\subseteq\{2,3\}$ the inequality applied to $Y\cup\{1\}$ gives
-$\#((\bigcup_{y\in Y}N_y)\setminus\{p\})\ge\#Y$; the two-slot case therefore
-fills the remaining slots without using $p$.
-
-We may now assume that every $N_i$ has at least two elements.  Choose any
-$p\in N_1$.  If the two residual sets $N_2\setminus\{p\}$ and
-$N_3\setminus\{p\}$ satisfy the two-slot inequality, we fill slots $2$ and $3$
-there and are done.  Otherwise their union has size at most one.  Since
-$N_2$ and $N_3$ each have at least two elements, this forces
-$N_2=N_3=\{p,q\}$ for some $q$.  The inequality for $Y=X$ then implies that
-$N_1$ contains an element $r\notin\{p,q\}$.  Fill slot $1$ using $r$, and fill
-slots $2$ and $3$ using $p$ and $q$.  This gives the required distinct
-underlying primes.
+Apply Hall's marriage theorem to the finite family of underlying-prime sets
+$N_x:=\nu(C_x)$, with the slots as the left vertex class
+\cite[Chapter~2]{LovaszPlummer1986MatchingTheory}. Its neighborhood condition
+is exactly the displayed inequality, and a matching saturating all slots is
+equivalent to choosing representatives with distinct underlying primes.
 \end{proof}
 
 \begin{lemma}[Arithmetic tests for the three-coordinate atom families]
@@ -1513,7 +1385,7 @@ Then
 \[
 P_J(n)=\bigcup_{d\in\mathcal R_J^\circ(n)}\Pi_\alpha(d),
 \]
-where a prime $p$ is identified with the primitive atom $p$. In particular
+where a prime $p$ is identified with the prime atom $p$. In particular
 $P_J(n)\ne\varnothing$ if and only if $\mathcal R_J^\circ(n)\ne\varnothing$.
 More generally, after forbidding a finite set $S$ of primes,
 $P_J(n)\setminus S\ne\varnothing$ if and only if there exists
@@ -1550,24 +1422,24 @@ L_{i,J}(n)=
 \]
 Thus every ladder family $L_{i,J}(n)$ is empty or consists of the single
 displayed prime power.  Hence every labelled three-coordinate slot has an
-explicit finite admissible set: a primitive slot is the finite disjoint union
+explicit finite admissible set: a prime slot is the finite disjoint union
 of the rank classes $\Pi_\alpha(d)$ with
 $d\in\mathcal R_J^\circ(n)$, and a ladder slot is decided by the displayed
 single candidate.  Pairwise-coprime filling of any row is therefore exactly
 the finite slot-selection test of Lemma~\ref{lem:finite-slot-selection}; the
-primitive multiplicities are
+exact-rank prime multiplicities are
 $\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c)$.
 \end{lemma}
 
 \begin{proof}
-Let $p\in P_J(n)$ and put $d=\alpha(p)$. Since $p$ is a primitive atom,
+Let $p\in P_J(n)$ and put $d=\alpha(p)$. Since $p$ is a prime atom,
 $E_n(p)=T_n(p)$, and the condition $T_n(p)=J$ says exactly that
 $d\in\mathcal R_J(n)$. No prime has rank $1$ or $2$, because
 $F_1=F_2=1$. Also no prime has rank $6$ or $12$: the prime divisors of
 $F_6=8$ and $F_{12}=144$ are $2$ and $3$, with
 $\alpha(2)=3$ and $\alpha(3)=4$. Hence $d\in\mathcal R_J^\circ(n)$.
 Conversely, if $d\in\mathcal R_J^\circ(n)$ and $p\in\Pi_\alpha(d)$, then
-$d\mid n$ and the full-coordinate set of $d$ is $J$; since $p$ is primitive,
+$d\mid n$ and the full-coordinate set of $d$ is $J$; since $p$ is a prime atom,
 $p\in P_J(n)$. This proves the displayed identity for $P_J(n)$.
 
 The nonemptiness equivalence is precisely where the Fibonacci primitive-divisor
@@ -1575,7 +1447,7 @@ theorem enters. If $P_J(n)$ is nonempty, the identity just proved gives a rank
 $d\in\mathcal R_J^\circ(n)$. Conversely, if
 $\mathcal R_J^\circ(n)$ is nonempty and $d$ is any element of it, then by
 definition $d\mid n$ and $d\notin\{1,2,6,12\}$. The only possible
-primitive-rank obstructions are exactly $1,2,6,12$: ranks $1$ and $2$ occur for
+exact-rank obstructions are exactly $1,2,6,12$: ranks $1$ and $2$ occur for
 no prime, ranks $6$ and $12$ occur for no prime as checked above, and
 Theorem~\ref{thm:primitive-divisors} supplies a prime $p$ with
 $\alpha(p)=d$ for every remaining $d\ge3$. Thus
@@ -1589,14 +1461,14 @@ Lemma~\ref{lem:primitive-prime-mobius-count}.
 
 It remains to identify the ladder families. Let
 $\theta=p^e\in L_{i,J}(n)$. By
-Theorem~\ref{thm:primitive-ladder-dichotomy}, the essential coordinate of a
+Lemma~\ref{thm:primitive-ladder-dichotomy}, the essential coordinate of a
 ladder atom is the prime coordinate $p$ itself; hence $p=\ell_i$. The
 prime-power formulas in Proposition~\ref{prop:prime-power-ladders} now leave
 only one possible exponent once the $\ell_i$-adic coordinate of
 $\alpha(p^e)$ is required to equal $a_i$. If $\ell_i=2$, the atomic ladder
 levels are $4$ of rank $6$ and $2^e$ of rank $3\cdot2^{e-2}$ for $e\ge4$;
 therefore the candidate is $4$ when $a_i=1$ and $2^{a_i+2}$ when $a_i\ge2$.
-If $\ell_i=5$, the rank is $5^e$, so a nonprimitive ladder with full
+If $\ell_i=5$, the rank is $5^e$, so a nonprime ladder atom with full
 $5$-coordinate $a_i$ exists only for $a_i\ge2$, and then it is $5^{a_i}$.
 Finally suppose $\ell_i\notin\{2,5\}$. At atomic ladder levels,
 \[
@@ -1615,9 +1487,9 @@ same prime-power formulas show that $\lambda$ is an atomic ladder. Lowering
 $\lambda$ reduces only the $\ell_i$-coordinate of its rank, so
 $E_n(\lambda)=\{i\}$ and $T_n(\lambda)=J$. Hence
 $\lambda\in L_{i,J}(n)$.
-The displayed primitive windows and ladder candidate sets also exhaust the
+The displayed exact-rank windows and ladder candidate sets also exhaust the
 exceptional cases: $2$ and $5$ are handled by their separate ladder lines,
-the ranks $1,2,6,12$ are removed from primitive windows, and any
+the ranks $1,2,6,12$ are removed from exact-rank windows, and any
 Wall--Sun--Sun plateau for $p\ne2,5$ is already absorbed in the parameter
 $h_i=\nu_{\ell_i}(F_{z_i})$ before the single possible exponent
 $h_i+a_i-s_i$ is formed.
@@ -1631,7 +1503,7 @@ $J\subseteq[3]$ let
 \[
 P_J(n)=\{\theta\in\mathcal A_{J,J}(n):\theta\text{ is a prime}\}
 \]
-be the primitive slot.  For $i\in J$ let
+be the exact-rank prime slot. For $i\in J$ let
 \[
 L_{i,J}(n)=\{\theta\in\mathcal A_{\{i\},J}(n):
 \theta=p^e\text{ with }e>1\}
@@ -1680,30 +1552,34 @@ Let $(I_j,J_j)$ be the essential and full coordinate supports attached to the
 $j$th slot of the labelled row. The row is realized by an element of
 $\mathcal M_n$ if and only if the following arithmetic selection test succeeds:
 \begin{enumerate}[label=(\alph*)]
-\item for every nonsingleton primitive slot $I_j=J_j$, $\#J_j>1$, choose a prime
+\item for every nonsingleton prime slot $I_j=J_j$, $\#J_j>1$, choose a prime
 $\theta_j\in\Pi_\alpha(d_j)$ for some
 $d_j\in\mathcal R_{J_j}^\circ(n)$;
 \item for every proper ladder slot $I_j=\{i\}\subsetneq J_j$, choose the
 unique candidate in $L_{i,J_j}(n)$ given by
 Lemma~\ref{lem:three-coordinate-arithmetic-tests};
-\item for every singleton slot $I_j=J_j=\{i\}$, choose either a primitive
+\item for every singleton slot $I_j=J_j=\{i\}$, choose either an exact-rank
 prime from $\bigcup_{d\in\mathcal R_{\{i\}}^\circ(n)}\Pi_\alpha(d)$ or the
 unique ladder candidate in $L_{i,\{i\}}(n)$;
 \item the chosen prime powers have distinct underlying primes.
 \end{enumerate}
 Equivalently, form for each slot its finite admissible set $C_j$: for a
-primitive slot use
+prime slot use
 $\bigcup_{d\in\mathcal R_{J_j}^\circ(n)}\Pi_\alpha(d)$, for a proper ladder
 slot use $L_{i,J_j}(n)$, and for a singleton slot use
 $P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.  The row succeeds precisely when these
 sets satisfy the Hall inequalities of Lemma~\ref{lem:finite-slot-selection},
-with underlying-prime multiplicities in each primitive rank window given by
+with underlying-prime multiplicities in each exact-rank window given by
 $\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c)$.
 
-In that case $m=\theta_1\cdots\theta_r$ is the realizing minimal generator,
-and every realization with these fixed labelled coordinate supports is
-obtained uniquely in this way, up to the order of factors with identical
-labelled data.
+In that case $m=\theta_1\cdots\theta_r$ is the realizing minimal generator.
+Its labelled atomic factor set
+\[
+ \{(\theta,E_n(\theta),T_n(\theta)):\theta\text{ is a maximal prime-power
+ factor of }m\}
+\]
+is unique. The associated unlabelled shape is unique only as the $S_3$-orbit
+of the labelled support set $\mathsf T(m)$.
 
 Equivalently, the rows in
 Definition~\ref{def:three-coordinate-slot-construction} are unlabelled
@@ -1719,14 +1595,14 @@ $\Theta=\{\theta_1,\dots,\theta_r\}$ with the factors ordered so that
 $(E_n(\theta_j),T_n(\theta_j))=(I_j,J_j)$. By definition
 $\theta_j\in\mathcal A_{I_j,J_j}(n)$, and pairwise coprimeness is part of
 Definition~\ref{def:witness-cover}. Lemma~\ref{lem:three-coordinate-atom-families}
-places each such factor in the corresponding primitive or ladder family, and
+places each such factor in the corresponding prime or ladder family, and
 Lemma~\ref{lem:three-coordinate-arithmetic-tests} translates those
 families into the displayed rank-window and ladder-candidate conditions. Thus
 the arithmetic selection test succeeds.
 
 Conversely, assume that the arithmetic selection test succeeds. By
 Lemma~\ref{lem:three-coordinate-arithmetic-tests}, each selected
-prime power lies in the required primitive or ladder family, and
+prime power lies in the required prime or ladder family, and
 Lemma~\ref{lem:three-coordinate-atom-families} gives
 $\theta_j\in\mathcal A_{I_j,J_j}(n)$. Distinct underlying primes are exactly
 pairwise coprimeness for prime powers. Because the fixed row is an abstract
@@ -1738,12 +1614,12 @@ gives the remaining condition. Hence $\Theta$ is an $n$-witness cover, so
 Theorem~\ref{thm:witness-classification} gives
 $m=\prod_j\theta_j\in\mathcal M_n$ with the prescribed row type.
 
- The factorization of $m$ into prime powers is unique. Therefore, after the
-labelled supports $I_j,J_j\subseteq\{1,2,3\}$ are fixed, any realization
-recovers the same atomic factors and hence the same tuple, except for
-permuting factors that have identical labelled data. For unlabelled rows, one
-first chooses a coordinate relabeling and then applies this fixed-labelled
-criterion. The final exclusion of $\Gamma_2$ is
+The factorization of $m$ into maximal prime powers is unique, so it recovers
+the displayed labelled atomic factor set uniquely. A raw enumeration over all
+coordinate permutations may nevertheless repeat a labelled row or a product
+when a $\Gamma_i$ has a nontrivial stabilizer. Accordingly, unlabelled shapes
+are identified only at the level of $S_3$-orbits, and all enumerated products
+are deduplicated. The final exclusion of $\Gamma_2$ is
 Lemma~\ref{lem:fibonacci-three-coordinate-types}.
 \end{proof}
 
@@ -1781,15 +1657,17 @@ $\omega(n)\le3$ as follows.
  $\theta_i\in\mathcal A_{\{i\},\{i\}}(n)$ and
  $\gcd(\theta_1,\theta_2)=1$.
 \item If $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$, then $\mathcal M_n$ is the
- set of products admitted by Table~\ref{tab:three-coordinate-classification},
+ set of distinct products admitted by Table~\ref{tab:three-coordinate-classification},
  after applying all coordinate permutations and the finite slot-selection
  criterion of Lemma~\ref{lem:finite-slot-selection}.  Equivalently, for each
  permuted row one chooses one prime power from each displayed slot set, with
- distinct underlying primes; every such product occurs, and every element of
- $\mathcal M_n$ occurs uniquely up to reordering equal labelled slots.
+ distinct underlying primes. Every such product occurs. Each element of
+ $\mathcal M_n$ has a unique labelled support set $\mathsf T(m)$, while its
+ unlabelled $\Gamma_i$ is determined only up to the $S_3$-orbit; a product
+ produced more than once by the raw permuted enumeration is retained once.
 \end{enumerate}
 For the three-coordinate rows,
-$P_J(n)$ denotes the primitive slot, $L_{i,J}(n)$ the ladder slot with
+$P_J(n)$ denotes the exact-rank prime slot, $L_{i,J}(n)$ the ladder slot with
 essential coordinate $i$ and full support $J$, and
 $S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$ the singleton slot.  Each slot is the
 following explicit finite set:
@@ -1801,16 +1679,16 @@ following explicit finite set:
 \mathfrak C(S_i)&:=\mathfrak C(P_{\{i\}})\cup \mathfrak C(L_{i,\{i\}}).
 \end{aligned}
 \]
-Here $\mathcal R_J^\circ(n)$ is the finite primitive rank window and
+Here $\mathcal R_J^\circ(n)$ is the finite exact-rank window and
 $\mathcal L_i^*(n)$ is the empty-or-singleton ladder candidate set of
 Lemma~\ref{lem:three-coordinate-arithmetic-tests}. A row succeeds
 exactly when its displayed finite slot sets admit a filling by distinct
 underlying primes, equivalently when the Hall test of
 Lemma~\ref{lem:finite-slot-selection} holds.  The displayed rows are
 representatives modulo relabeling of the coordinates $1,2,3$.
-Equivalently, writing $[3]=\{1,2,3\}$, suppressing braces in primitive set
+Equivalently, writing $[3]=\{1,2,3\}$, suppressing braces in prime-slot
 subscripts, and letting $(i,j,k)$ range over ordered triples of distinct
-coordinates, the eight rows are the canonical families
+coordinates, the eight orbit representatives are
 \[
 P_{[3]},\quad L_{i,[3]},\quad P_{i,j}P_{j,k},\quad
 L_{i,\{i,j\}}P_{j,k},\quad
@@ -1825,13 +1703,14 @@ $\omega(n)\le3$,
 \[
 \mathcal G_n=\mathcal M_n,
 \]
-and the displayed list is a canonical minimal-generator classification.  The
+and the displayed list is a finite minimal-generator classification. The
 table should be read in three passes.  First choose one of the eight
 unlabelled support skeletons and then apply an arbitrary permutation of the
 coordinate labels $1,2,3$.  Next replace every displayed slot by its explicit
-finite candidate set $\mathfrak C(\cdot)$, so primitive slots are tested through
+finite candidate set $\mathfrak C(\cdot)$, so prime slots are tested through
 the rank windows $\mathcal R_J^\circ(n)$ and ladder slots through the candidate
-sets $\mathcal L_i^*(n)$.  Finally apply the distinct-prime Hall test: a row
+sets $\mathcal L_i^*(n)$. Finally apply the distinct-prime Hall test and insert
+the resulting products into a set: a row
 contributes exactly the products obtained by choosing one prime power from each
 of its candidate slots with no underlying prime repeated.  The lemmas preceding
 the theorem prove that these three finite steps are equivalent to the abstract
@@ -1861,27 +1740,6 @@ $\Gamma_9$ & $S_1(n),\ S_2(n),\ S_3(n)$ & the three finite singleton sets satisf
 \end{tabular}
 \end{table}
 
-The proof has four ingredients. First, the abstract irredundant-cover
-classification gives nine possible three-coordinate skeletons before Fibonacci
-arithmetic is imposed. Second, the Fibonacci atom dichotomy excludes
-$\Gamma_2$, because no atom can have two essential coordinates. Third, each
-remaining abstract slot decomposes into exactly one of the primitive, ladder,
-or singleton slots displayed below. Finally, the only residual obstruction is
-whether the resulting finite slot family can be filled by pairwise coprime prime
-powers, and this is exactly the Hall-type finite selection test.
-
-In every primitive slot $P_J(n)$, availability is decided by the finite rank
-window $\mathcal R_J^\circ(n)$ and the multiplicity formula
-\[
-\#\Pi_\alpha(d)=\sum_{c\mid d}\mu(d/c)\omega(F_c).
-\]
-In every ladder slot $L_{i,J}(n)$, availability is decided by the single
-candidate set $\mathcal L_i^*(n)$ and the full-support test
-\[
-L_{i,J}(n)=\{\lambda\in\mathcal L_i^*(n):\alpha(\lambda)\mid n,
-\ \{k:\nu_{\ell_k}(\alpha(\lambda))=\nu_{\ell_k}(n)\}=J\}.
-\]
-No minimal generator has the excluded type $\Gamma_2$.
 \end{theorem}
 
 \begin{proof}
@@ -1890,19 +1748,19 @@ The two-coordinate assertion is Corollary~\ref{cor:two-support-complete-classifi
 Assume now that $\omega(n)=3$. Lemma~\ref{lem:fibonacci-three-coordinate-types}
 reduces every witness cover to the eight listed abstract types and excludes
 $\Gamma_2$. Lemma~\ref{lem:three-coordinate-atom-families} translates
-an abstract slot $(I,J)$ into exactly one of the displayed primitive, ladder,
+an abstract slot $(I,J)$ into exactly one of the displayed prime, ladder,
 or singleton families: nonsingleton slots with $I=J$ are $P_J(n)$, proper
 ladder slots $I=\{i\}\subsetneq J$ are $L_{i,J}(n)$, and singleton slots are
 $S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$. Substituting these translations into
 the eight admissible abstract types of Lemma~\ref{lem:abstract-three-types}
 gives precisely the rows of Table~\ref{tab:three-coordinate-classification}.
-The same substitution, with braces suppressed in primitive set subscripts,
+The same substitution, with braces suppressed in prime-slot subscripts,
 gives the displayed canonical-family list: the first two rows are the full
-primitive and full ladder families, the next three are the two-slot overlapping
+prime and full ladder families, the next three are the two-slot overlapping
 families, the next two attach a singleton slot to a nonsingleton slot, and the
 last row is the three-singleton family.
 
-It remains only to identify the tests in the last column. For primitive slots,
+It remains only to identify the tests in the last column. For prime slots,
 Lemma~\ref{lem:three-coordinate-arithmetic-tests} gives
 $P_J(n)=\bigcup_{d\in\mathcal R_J^\circ(n)}\Pi_\alpha(d)$ and, after deleting
 previously used underlying primes, the stated finite multiplicity criterion.
@@ -1918,7 +1776,7 @@ resulting products with the elements of $\mathcal M_n$.
 Thus the displayed support-dependent set $\mathcal G_n$ equals
 $\mathcal M_n$ in all cases $\omega(n)\le3$, including the boundary convention
 $\mathcal G_2=\varnothing=\mathcal M_2$.  In the three-coordinate case the
-finiteness of the primitive and ladder slot sets and the exact slot enumeration
+finiteness of the prime and ladder slot sets and the exact slot enumeration
 are supplied by Proposition~\ref{prop:three-coordinate-table-checklist}.
 \end{proof}
 
@@ -1948,14 +1806,14 @@ inside an otherwise admissible slot row.
 
 \begin{proof}
 By Lemma~\ref{lem:abstract-three-types}, every irredundant three-coordinate
-witness skeleton is one of $\Gamma_1,\ldots,\Gamma_9$.  The primitive--ladder
-dichotomy, Theorem~\ref{thm:primitive-ladder-dichotomy}, excludes precisely the
+witness skeleton is one of $\Gamma_1,\ldots,\Gamma_9$. The prime--ladder
+dichotomy, Lemma~\ref{thm:primitive-ladder-dichotomy}, excludes precisely the
 case in which an atom has a proper nonsingleton essential set inside a larger
 full-support set; among the nine skeletons this is exactly $\Gamma_2$, proving
 (a).
 
 For every remaining skeleton, Lemma~\ref{lem:three-coordinate-atom-families}
-translates each abstract slot into one of the primitive slots $P_J(n)$, ladder
+translates each abstract slot into one of the prime slots $P_J(n)$, ladder
 slots $L_{i,J}(n)$, or singleton slots $S_i(n)$.  Lemma~\ref{lem:three-coordinate-arithmetic-tests}
 identifies these as the finite candidate sets displayed in
 Theorem~\ref{thm:low-support-classification-package}.  A selected row therefore
@@ -2000,7 +1858,7 @@ Theorem~\ref{thm:low-support-classification-package} gives
 $\mathcal G_n=\mathcal M_n$ for $\omega(n)\le3$, including the boundary
 convention $\mathcal G_2=\varnothing=\mathcal M_2$. Minimal elements of an
 upper set are pairwise incomparable, so $\mathcal G_n$ is an antichain in
-$D_n$.  The upper-fiber theorem, Theorem~\ref{thm:upper-fiber}, gives for every
+$D_n$.  The upper-fiber identity, Lemma~\ref{thm:upper-fiber}, gives for every
 $n\ge2$ the principal-upper-ideal decomposition
 \[
 B_n=\bigcup_{m\in\mathcal M_n}\{q\in D_n:m\mid q\}.
@@ -2034,14 +1892,14 @@ $B_n=\bigcup_{g\in\mathcal G_n}U_g$ proves
 \eqref{eq:low-support-cardinality-formula}.
 \end{proof}
 
-\begin{corollary}[Primitive three-coordinate skeleton]
+\begin{corollary}[Prime-only three-coordinate skeleton]
 \label{cor:primitive-three-skeleton}
 Assume $\mathcal P(n)=\{\ell_1,\ell_2,\ell_3\}$ and that
 $n_S:=\prod_{i\in S}\ell_i^{\nu_{\ell_i}(n)}$ satisfies
 $n_S\ge 3$ and $n_S\notin\{6,12\}$ for every nonempty
-$S\subseteq[3]$. Then the four primitive-only three-coordinate
+$S\subseteq[3]$. Then the four prime-only three-coordinate
 types $\Gamma_1$, $\Gamma_4$, $\Gamma_7$, and $\Gamma_9$ are realized in
-$\mathcal M_n$. More precisely, after choosing primitive primes
+$\mathcal M_n$. More precisely, after choosing exact-rank primes
 $\pi_S$ with $\alpha(\pi_S)=n_S$, the following minimal generators realize
 these types:
 \[
@@ -2054,9 +1912,9 @@ these types:
 
 \begin{proof}
 The hypothesis and Theorem~\ref{thm:primitive-divisors} provide the indicated
-primitive primes. A primitive prime for $n_S$ is a primitive atom with
+exact-rank primes. An exact-rank prime for $n_S$ is a prime atom with
 $E_n(\pi_S)=T_n(\pi_S)=S$. The four displayed collections of coordinate
-sets are precisely the primitive-only types $\Gamma_1$, $\Gamma_4$,
+sets are precisely the prime-only types $\Gamma_1$, $\Gamma_4$,
 $\Gamma_7$, and $\Gamma_9$ in Lemma~\ref{lem:abstract-three-types}, and
 the chosen primes are pairwise distinct. The
 pairwise-coprime selection criterion of
@@ -2076,6 +1934,11 @@ we do not use any distributional assertion about such primes.
 %% ====================================================================
 \section{Connected block factorizations}\label{sec:connected}
 %% ====================================================================
+
+The hypergraph decomposition below is a generic consequence of strong
+divisibility and disjoint coordinate supports. Its role here is structural:
+the substantive endpoint for the present fibers is the induced factorization
+of minimal elements and the associated partition formulas.
 
 Throughout this section, write
 $n_C:=\prod_{\ell\in C}\ell^{\nu_\ell(n)}$ for nonempty
@@ -2105,7 +1968,7 @@ For a connected component $C$ of $H_n(q)$, define $q_C$ to be the product of
 those prime-power factors $p_i^{e_i}$ whose support edge lies in $C$.
 \end{definition}
 
-\begin{theorem}\label{thm:coprime-embedding}
+\begin{lemma}[Disjoint-block coprimality]\label{thm:coprime-embedding}
 Let $\Pi$ be a set partition of $\mathcal P(n)$. For each block
 $C\in\Pi$, choose $q_C\in D_{n_C}$. Then the integers $q_C$ are pairwise
 coprime. If in addition $q_C\in B_{n_C}$ for every $C$, then
@@ -2113,7 +1976,7 @@ coprime. If in addition $q_C\in B_{n_C}$ for every $C$, then
 q:=\prod_{C\in\Pi}q_C
 \]
 lies in $B_n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 If $C\ne C'$, then $\gcd(n_C,n_{C'})=1$, so
@@ -2125,7 +1988,7 @@ $q_{C'}\mid F_{n_{C'}}$, the chosen factors are pairwise coprime.
 Equivalently, any common prime divisor $p$ would satisfy
 $\alpha(p)\mid n_C$ and $\alpha(p)\mid n_{C'}$, hence
 $\alpha(p)\mid\gcd(n_C,n_{C'})=1$; this is impossible for a prime, and in
-particular excludes the shared special prime $5$ and any shared primitive prime
+particular excludes the shared special prime $5$ and any shared exact-rank prime
 across disjoint coordinate blocks.
 
 When $q_C\in B_{n_C}$ for every $C$, we have $\alpha(q_C)=n_C$. Repeated use
@@ -2172,7 +2035,7 @@ connected by construction, so $q_C\in B_{n_C}^{\mathrm{conn}}$.
 
 Uniqueness follows from unique prime-power factorization of $q$ and the
 unique connected-component partition of a hypergraph. The converse is exactly
-Theorem~\ref{thm:coprime-embedding}; because each $q_C$ is connected on its
+Lemma~\ref{thm:coprime-embedding}; because each $q_C$ is connected on its
 own block and no edge of $H_n(\prod_C q_C)$ meets two different blocks, the
 components are precisely the blocks of $\Pi$.
 
@@ -2206,12 +2069,12 @@ $s_C\in B_{n_C}$ satisfied $s_C\mid m_C$ and $s_C<m_C$, then
 s_C\prod_{D\ne C}m_D
 \]
 would divide $m$. The factors are pairwise coprime by
-Theorem~\ref{thm:coprime-embedding}, and the displayed product lies in
+Lemma~\ref{thm:coprime-embedding}, and the displayed product lies in
 $B_n$ by the same theorem. This contradicts the minimality of $m$ in $B_n$.
 Therefore $m_C\in\mathcal M_{n_C}^{\mathrm{conn}}$.
 
 Conversely, let $m=\prod_{C\in\Pi}m_C$ with
-$m_C\in\mathcal M_{n_C}^{\mathrm{conn}}$. Theorem~\ref{thm:coprime-embedding}
+$m_C\in\mathcal M_{n_C}^{\mathrm{conn}}$. Lemma~\ref{thm:coprime-embedding}
 puts $m$ in $B_n$. If $s\mid m$ and $s\in B_n$, write
 $s=\prod_C s_C$ with $s_C\mid m_C$; pairwise coprimeness of the block
 factors makes this decomposition unique. Since
@@ -2247,6 +2110,7 @@ M^{\mathrm{conn}}(n)=
 Equation~\eqref{eq:partition-formula} is the ordinary exponential formula on
 the finite set $\mathcal P(n)$ with block weight
 $C\mapsto A^{\mathrm{conn}}(n_C)$. M\"obius inversion in the partition lattice
+\cite[Section~3.7]{Stanley2012EnumerativeCombinatoricsI}
 gives
 \[
 \mu_{\mathsf{Part}}(\Pi,\hat1)=(-1)^{|\Pi|-1}(|\Pi|-1)!,
@@ -2321,7 +2185,7 @@ Let $n\ge3$ be odd. For each nonempty $S\subseteq\mathcal P(n)$ put
 \[
 n_S=\prod_{\ell\in S}\ell^{\nu_\ell(n)}.
 \]
-Choose a primitive prime $\pi_S$ with $\alpha(\pi_S)=n_S$, whose existence is
+Choose an exact-rank prime $\pi_S$ with $\alpha(\pi_S)=n_S$, whose existence is
 guaranteed by Theorem~\ref{thm:primitive-divisors}. Then every set partition
 $\Pi$ of $\mathcal P(n)$ gives a minimal generator
 \[
@@ -2341,11 +2205,11 @@ where $\mathsf B_k$ is the $k$th Bell number.
 \begin{proof}
 Since $n$ is odd and $n\ge3$, every nonempty $n_S$ is odd and at least $3$;
 therefore $n_S\notin\{6,12\}$, and Theorem~\ref{thm:primitive-divisors}
-supplies the required primitive prime $\pi_S$. For each block $C$, the prime
-$\pi_C$ is a primitive atom of rank $n_C$ and
+supplies the required exact-rank prime $\pi_S$. For each block $C$, the prime
+$\pi_C$ is a prime atom of rank $n_C$ and
 therefore belongs to $\mathcal M_{n_C}^{\mathrm{conn}}$: its support
 hypergraph has the single edge $C$. Distinct blocks have coprime Fibonacci
-ambient factors by Theorem~\ref{thm:coprime-embedding}, so the primes
+ambient factors by Lemma~\ref{thm:coprime-embedding}, so the primes
 $\pi_C$ are pairwise coprime. Theorem~\ref{thm:mingenerator-connected-factorization}
 then gives $m_\Pi\in\mathcal M_n$.
 
@@ -2359,7 +2223,7 @@ antichain in $B_n$, so $\widthop(B_n)\ge\#\mathcal M_n$.
 \end{proof}
 
 %% ====================================================================
-\section{Maximal and mean growth of minimal-generator counts}
+\section{Support entropy and the unresolved arithmetic multiplicity}
 \label{sec:growth}
 %% ====================================================================
 
@@ -2371,12 +2235,12 @@ multiplicity
  \max_{\varnothing\ne I\subseteq J\subseteq\mathcal P(n)}
        \#\mathcal A_{I,J}(n)\right\}.
 \end{equation}
-By the primitive--ladder dichotomy, the nonsingleton families counted here are the
-primitive windows $P_J(n)$, whereas every ladder family contributes at most
+By the prime--ladder alternative, the nonsingleton families counted here are the
+exact-rank windows $P_J(n)$, whereas every ladder family contributes at most
 one atom. Thus $R(n)$ records exactly the arithmetic multiplicity not fixed by
 the support combinatorics.
 
-\begin{theorem}[Witness-cover entropy and rank-window interface]
+\begin{theorem}[Combinatorial support entropy]
 \label{thm:minimal-generator-growth}
 For every integer $n\ge3$, put $k=\omega(n)$ and
 $L(n)=\log\#\mathcal M_n$. Then $\mathcal M_n$ is nonempty. If $k\ge3$ and
@@ -2388,17 +2252,15 @@ $r=\lfloor k/2\rfloor$, then
 \end{equation}
 In particular, uniformly along every sequence for which $\omega(n)\to\infty$,
 \begin{equation}\label{eq:private-cover-entropy-order}
- \frac{\log2}{4}\,\omega(n)^2+O(1)
+ \frac{\log2}{4}\,\omega(n)^2-O(1)
  \le L(n)
  \le \frac{\log2}{4}\,\omega(n)^2
       +\omega(n)\log R(n)+O(\omega(n)).
 \end{equation}
-In particular, the sharp leading witness-cover entropy is
-$(\log2/4)k^2$, with the residual arithmetic contribution bounded by
-$k\log R(n)+O(k)$. At the Hardy--Ramanujan maximal-order scale
-$k\sim\log n/\log\log n$, this places $L(n)$ on the natural entropy scale
-$(\log n)^2/(\log\log n)^2$, apart from that explicitly displayed residual
-term.
+The coefficient $\log2/4$ is the exact entropy coefficient for the support
+combinatorics. This is not an asymptotic formula for $L(n)$ unless
+$R(n)=\exp(o(\omega(n)))$; no such unconditional estimate for $R(n)$ is
+proved here.
 
 For comparison, the crude support-count estimate gives
 \begin{equation}
@@ -2407,7 +2269,7 @@ For comparison, the crude support-count estimate gives
  \le \sum_{r=0}^{k}\binom{\Omega(F_n)}{r}
  \le n^k.
 \end{equation}
-Combining only the last inequality with the Hardy--Ramanujan maximal order of
+Combining only the last inequality with the classical maximal order of
 $\omega(n)$ gives the crude corollary
 \begin{equation}
 \label{eq:crude-maximal-order}
@@ -2436,32 +2298,6 @@ Moreover, as $x\to\infty$,
  \le (1+o(1))x\log x\,\log\log x.
 \end{equation}
 
-Two explicit hypotheses close the remaining rank-window interface.
-\begin{enumerate}[label={(\(\mathrm{H}_{\arabic*}\))}]
-\item\label{hyp:normal-window}
-For every $\varepsilon>0$,
-\[
- \#\{n\le x:\log R(n)>\varepsilon\omega(n)\}=o(x).
-\]
-Under this hypothesis,
-\begin{equation}\label{eq:conditional-normal-order}
- L(n)\sim\frac{\log2}{4}(\log\log n)^2
- \quad\text{for almost all }n.
-\end{equation}
-This normal-order conclusion is conditional on \textup{(H1)} and is not
-proved unconditionally.
-\item\label{hyp:mean-window}
-The weighted mean satisfies
-\[
- \sum_{3\le n\le x}\omega(n)\log R(n)
- =o\bigl(x(\log\log x)^2\bigr).
-\]
-Under this hypothesis,
-\begin{equation}\label{eq:conditional-mean-order}
- \sum_{3\le n\le x}L(n)
- \sim\frac{\log2}{4}x(\log\log x)^2.
-\end{equation}
-\end{enumerate}
 \end{theorem}
 
 \begin{proof}
@@ -2494,7 +2330,7 @@ each support that occurs.
 
 The supports $T_i$ cover $\mathcal P(n)$ because $H(q)$ is nonempty for every
 $q\in Q$. Moreover, $i$ belongs to $T_i$ and to no $T_j$ with $j\ne i$.
-Each $\pi_{T_i}$ is a primitive atom, so
+Each $\pi_{T_i}$ is a prime atom, so
 $E_n(\pi_{T_i})=T_n(\pi_{T_i})=T_i$. Thus
 $\{\pi_{T_i}:i\in P\}$ is an $n$-witness cover. Distinct supports have
 distinct ranks and therefore distinct underlying primes. If two maps $H$
@@ -2517,7 +2353,7 @@ $Q=\mathcal P(n)\setminus P$. If $x_\theta=x$, then
  T_n(\theta)=\{x\}\cup U_\theta,\qquad U_\theta\subseteq Q,
 \]
 because every other member of $P$ is private to another atom. By
-Theorem~\ref{thm:primitive-ladder-dichotomy}, either
+Lemma~\ref{thm:primitive-ladder-dichotomy}, either
 $E_n(\theta)=T_n(\theta)$ or $E_n(\theta)=\{x\}$. Hence there are at most two
 support-pair alternatives, and the definition
 \eqref{eq:rank-window-multiplicity} allows at most $R(n)$ atoms for each.
@@ -2563,8 +2399,8 @@ $k$ with a new symbol; therefore
 Taking $N=\Omega(F_n)$ gives the second inequality in
 \eqref{eq:finite-minimal-generator-bound}.
 
-The classical maximal-order formula
-\cite{HardyRamanujan1917NormalPrimeFactors}
+The classical maximal-order formula for $\omega(n)$
+\cite[Theorem~22.11]{HardyWright2008Introduction}
 \[
  \limsup_{n\to\infty}
  \frac{\omega(n)\log\log n}{\log n}=1
@@ -2610,44 +2446,140 @@ After enlarging the absolute constant in the lower half of
 \eqref{eq:private-cover-entropy-order}, it holds as
 $L(n)\ge(\log2)\omega(n)^2/4-O(1)$ also for $\omega(n)<3$.
 Summation and \eqref{eq:omega-second-moment} prove the lower half of
-\eqref{eq:mean-logarithmic-growth}.
+\eqref{eq:mean-logarithmic-growth} and complete the proof.
+\end{proof}
 
-Assume Hypothesis~\ref{hyp:normal-window}. Intersect its density-one set with
-the Hardy--Ramanujan normal-order set
-$\omega(n)\sim\log\log n$. The error term
-$\omega(n)\log R(n)+O(\omega(n))$ in
-\eqref{eq:private-cover-entropy-order} is then $o(\omega(n)^2)$ in the
-almost-everywhere sense, which proves \eqref{eq:conditional-normal-order}.
-Finally, under Hypothesis~\ref{hyp:mean-window}, sum the upper half of
-\eqref{eq:private-cover-entropy-order}, use
-\eqref{eq:omega-second-moment} and
+\begin{lemma}[Known baseline for the arithmetic interface]
+\label{lem:R-baseline}
+For every $n\ge3$,
+\[
+ R(n)\le 1+\omega(F_n)=O(n),
+ \qquad
+ \log R(n)\le\log n+O(1).
+\]
+Moreover, Stroi\'nski's cumulative estimate gives
+\[
+ \limsup_{x\to\infty}\frac{\log x}{x^2}
+ \#\{p:\alpha(p)\le x\}
+ \le \frac{3\log\varphi}{2\pi^2}.
+\]
+Neither estimate implies the conjectures below.
+\end{lemma}
+
+\begin{proof}
+Every prime atom in a family $\mathcal A_{I,J}(n)$ divides $F_n$, and a fixed
+ladder family contains at most one atom. Thus a family contains at most all
+distinct prime divisors of $F_n$ together with one ladder atom, proving
+$R(n)\le1+\omega(F_n)$. Since
+$2^{\omega(F_n)}\le\operatorname{rad}(F_n)\le F_n$ and
+$\log F_n=n\log\varphi+O(1)$, this gives $R(n)=O(n)$ and the logarithmic
+bound. The cumulative estimate is Stroi\'nski's Theorem~7
+\cite{Stroinski2016AlphaContraction}.
+
+Quantitatively, the normal-order conjecture below asks for
+$\log R(n)=o(\log\log n)$ for almost all $n$, whereas the elementary estimate
+gives only $O(\log n)$. The cumulative estimate controls all primes of rank at
+most $x$ together and likewise gives at best a logarithmic bound of order
+$\log n$ for a single window. For the mean conjecture, the elementary bound
+and the mean order of $\omega$ give only
+$O(x\log x\log\log x)$, not $o(x(\log\log x)^2)$.
+\end{proof}
+
+\begin{corollary}[Unconditional lower growth]
+\label{cor:unconditional-lower-growth}
+For almost all $n$,
+\[
+ \log\#\mathcal M_n\ge
+ \left(\frac{\log2}{4}+o(1)\right)(\log\log n)^2.
+\]
+If $N_y:=\prod_{p\le y}p$, then
+\[
+ \log\#\mathcal M_{N_y}\ge
+ \left(\frac{\log2}{4}+o(1)\right)
+ \frac{(\log N_y)^2}{(\log\log N_y)^2}.
+\]
+\end{corollary}
+
+\begin{proof}
+The Hardy--Ramanujan normal-order theorem states that
+$\omega(n)=(1+o(1))\log\log n$ for almost all $n$
+\cite{HardyRamanujan1917NormalPrimeFactors,%
+Tenenbaum2015AnalyticProbabilistic}. Substitution in the lower half of
+\eqref{eq:private-cover-entropy-order} proves the first assertion. The prime
+number theorem gives
+$\omega(N_y)=\pi(y)\sim y/\log y\sim\log N_y/\log\log N_y$; substituting this
+in the same lower bound proves the second assertion.
+\end{proof}
+
+\begin{conjecture}[Normal rank-window sparsity]\label{hyp:normal-window}
+For every $\varepsilon>0$,
+\[
+ \#\{n\le x:\log R(n)>\varepsilon\omega(n)\}=o(x).
+\tag{H1}
+\]
+\end{conjecture}
+
+\begin{conjecture}[Mean rank-window sparsity]\label{hyp:mean-window}
+One has
+\[
+ \sum_{3\le n\le x}\omega(n)\log R(n)
+ =o\bigl(x(\log\log x)^2\bigr).
+\tag{H2}
+\]
+\end{conjecture}
+
+\begin{corollary}[Conditional normal and mean orders]
+\label{cor:conditional-orders}
+Assuming Conjecture~\ref{hyp:normal-window},
+\begin{equation}\label{eq:conditional-normal-order}
+ L(n)\sim\frac{\log2}{4}(\log\log n)^2
+ \quad\text{for almost all }n.
+\end{equation}
+Assuming Conjecture~\ref{hyp:mean-window},
+\begin{equation}\label{eq:conditional-mean-order}
+ \sum_{3\le n\le x}L(n)
+ \sim\frac{\log2}{4}x(\log\log x)^2.
+\end{equation}
+Neither conclusion is unconditional.
+\end{corollary}
+
+\begin{proof}
+For the first assertion, intersect the density-one set in
+Conjecture~\ref{hyp:normal-window} with the Hardy--Ramanujan normal-order set.
+Then the error $\omega(n)\log R(n)+O(\omega(n))$ in
+\eqref{eq:private-cover-entropy-order} is $o(\omega(n)^2)$. For the second,
+sum the upper bound in \eqref{eq:private-cover-entropy-order}, use
+Conjecture~\ref{hyp:mean-window}, \eqref{eq:omega-second-moment}, and
 $\sum_{n\le x}\omega(n)=O(x\log\log x)$, and compare with the unconditional
-lower bound. This proves \eqref{eq:conditional-mean-order} and completes the
-proof.
+lower mean bound \eqref{eq:mean-logarithmic-growth}.
 \end{proof}
 
 \begin{remark}[Exact residual arithmetic interface]
 \label{rem:exact-average-open-interface}
-Theorem~\ref{thm:minimal-generator-growth} closes the combinatorial part of
-the order problem: $\log2/4$ is the exact entropy constant, and the only term
-left in the upper bound is $\omega(n)\log R(n)$. The rank partition used in
+Theorem~\ref{thm:minimal-generator-growth} determines the support contribution:
+$\log2/4$ is its exact entropy coefficient, and the unresolved term in the
+upper bound is $\omega(n)\log R(n)$. The rank partition used in
 Lemma~\ref{lem:three-coordinate-arithmetic-tests} applies verbatim to every
-support size: primitive families are finite disjoint unions of the rank
+support size: prime-atom families are finite disjoint unions of the rank
 classes $\Pi_\alpha(d)$, while ladder families are singletons. Thus
-Hypotheses~\ref{hyp:normal-window} and
+Conjectures~\ref{hyp:normal-window} and
 \ref{hyp:mean-window} ask precisely for upper distributional control of
-primitive-prime multiplicities in those rank windows.
+exact-rank prime multiplicities in those rank windows.
 
-The primitive-divisor theorems of Carmichael and Bilu--Hanrot--Voutier give
-nonemptiness, not such upper multiplicity estimates. The Hardy--Ramanujan and
+The primitive-divisor theorems of Carmichael and Bilu--Hanrot--Voutier, and
+the refinements and size results of Kiss, Granville, and Hong
+\cite{Kiss1988PrimitiveDivisors,Granville2012PrimitivePrimeFactors,%
+Hong2025BigPrimitiveDivisors}, give existence or information about the size of
+primitive divisors, not the required upper multiplicity estimates. The
+Hardy--Ramanujan and
 Tur\'an theorems control the additive function $\omega(n)$ but not the prime
 factorization of $F_d$ across exact apparition ranks. Likewise, the
 Erd\H{o}s--Wintner theorem \cite{ErdosWintner1939Additive} concerns limiting
 distributions of additive arithmetic functions, whereas $L(n)$ and $R(n)$
 are not additive. No implication from RH or ERH to either rank-window
-hypothesis is presently known. Accordingly, the normal and mean equivalents
+conjecture is presently known. Accordingly, the normal and mean equivalents
 \eqref{eq:conditional-normal-order} and
-\eqref{eq:conditional-mean-order} are conditional; unconditionally the exact
+\eqref{eq:conditional-mean-order} are conditional; the unconditional
 statements are \eqref{eq:private-cover-entropy-order} and
 \eqref{eq:mean-logarithmic-growth}.
 \end{remark}
@@ -2658,16 +2590,17 @@ statements are \eqref{eq:private-cover-entropy-order} and
 
 Table~\ref{tab:birth-layer-data-generated} displays the birth layer cardinality $A(n)$
 and the number of minimal generators $\#\mathcal M_n$ for $2\le n\le 30$,
-computed by exhaustive enumeration. The table is illustrative only: the claims
-proved in Theorem~\ref{thm:minimal-generator-growth} are asymptotic statements,
-but they do not rely on this finite sample. Several features visible in the
+computed by exhaustive enumeration. The table is illustrative only: the
+unconditional inequalities in Theorem~\ref{thm:minimal-generator-growth} do
+not rely on this finite sample. Several features visible in the
 data agree with the structural results of the preceding sections.
 First, $\#\mathcal M_n=1$ whenever $\omega(n)=1$ and
 $n\notin\{19,25,27\}$; the exceptions arise from composite Fibonacci numbers
 with multiple atomic families at the same prime-power index.
 Second, the jump at $n=12$ ($A(12)=10$, $\#\mathcal M_{12}=3$) and at $n=24$
 ($A(24)=55$, $\#\mathcal M_{24}=4$) reflects the interaction of the
-exceptional prime $2$ with the non-primitive layers at indices $6$ and $12$.
+exceptional prime $2$ with the layers having no exact-rank prime at indices
+$6$ and $12$.
 Third, the first nonempty three-coordinate layer occurs at $n=30$ and has
 $\#\mathcal M_{30}=5$; the displayed witness covers realize exactly the
 types $\Gamma_1$, $\Gamma_4$, $\Gamma_5$, $\Gamma_7$, and $\Gamma_8$.
@@ -2680,7 +2613,9 @@ The table was produced by the finite divisor/rank computation in the next
 proposition, applied exhaustively for $2\le n\le30$.  The manuscript source
 includes the short script that performs this enumeration and the generated
 table file input below; these files are supplementary to the mathematical
-criterion rather than part of the theorem stream.
+criterion rather than part of the theorem stream. For the classical
+factorization literature, see the tables of Brillhart--Montgomery--Silverman
+\cite{BrillhartMontgomerySilverman1988Tables}.
 
 \begin{proposition}[Finite divisor/rank verification with supplied factorization]
 \label{prop:effective-birth-layer-computation}
@@ -2718,9 +2653,14 @@ gives $A(n)$.
 
 It remains to justify step (d). The set $B_n$ is finite. If its elements are
 processed in increasing size, then every proper divisor of the current element
-has already been processed. Therefore an element is retained exactly when no
-smaller element of $B_n$ divides it, which is the definition of being minimal
-in the divisibility poset. This retained set is $\mathcal M_n$.
+has already been processed. We claim inductively that every discarded element
+has a retained minimal divisor. The claim is vacuous before the first element.
+If the current element is discarded, it has a previously retained divisor by
+the algorithm, so the claim holds for it; if it is retained, it is its own
+retained divisor. Thus every earlier divisor, retained or discarded, has a
+retained divisor below it. Consequently the current element is retained if and
+only if no smaller element of $B_n$ divides it, which is exactly minimality in
+the divisibility poset. The retained set is therefore $\mathcal M_n$.
 \end{proof}
 
 \begin{remark}[Reproducibility scope]
@@ -2733,27 +2673,30 @@ does not include the cost of factoring $F_n$ in the numerical evidence.
 \end{remark}
 
 \paragraph{Table generation.}
-The source files
+The reproducibility files
 \[
-\text{\texttt{scripts/compute\_birth\_layer\_table.py}},\qquad
-\text{\texttt{generated/tab\_birth\_layer\_data.tex}}
+\text{\texttt{artifacts/compute\_birth\_layer\_table.py}},\qquad
+\text{\texttt{artifacts/tab\_birth\_layer\_data.tex}}
 \]
-are included with the manuscript source. Running
+are included with the manuscript source. Running the command in
+\texttt{artifacts/REPRODUCE.md}
 \[
-\texttt{python scripts/compute\_birth\_layer\_table.py}
+\texttt{python artifacts/compute\_birth\_layer\_table.py}
 \]
 regenerates the table input from the divisor/rank method of
 Proposition~\ref{prop:effective-birth-layer-computation}.  The printed table is
 therefore an exhaustive enumeration of $A(n)$ and $\#\mathcal M_n$ for
 $2\le n\le30$ using only the finite tests proved above; the displayed
 factorizations of the small integers $F_n$ are produced by the script's exact
-integer trial-division routine, with no external factor table or dataset.
+integer trial-division routine. Its complete console output is supplied as
+\path{artifacts/birth_layer_table_output.txt}.
 \input{generated/tab_birth_layer_data.tex}
 
-\paragraph{Counterexample battery.}
+\paragraph{Finite verification.}
 The supplementary script
-\texttt{scripts/verify\_deepening\_delta.py} independently compares direct
-divisor/rank enumeration with the upper-fiber formula through $n=60$.  It
+\texttt{artifacts/verify\_finite\_claims.py} independently compares the actual
+sets obtained by direct divisor/rank enumeration with the upper-fiber and
+witness constructions through $n=60$. It
 then uses the latter formula through $n=210$: inclusion--exclusion computes
 \[
  A(n)=\sum_{S\subseteq\mathcal P(n)}(-1)^{|S|}
@@ -2764,12 +2707,16 @@ $q\nmid F_{n/p}$ compute $\mathcal M_n$.  The script checks
 \eqref{eq:finite-minimal-generator-bound}, the simplified bound
 $\#\mathcal M_n\le n^{\omega(n)}$, the odd Bell lower bound, and both finite
 private-cover bounds in \eqref{eq:private-cover-finite-bounds}. It also
-computes $R(n)$ and the running ratio against the entropy scale
-$(\log2)\omega(n)^2/4$. It reports zero disagreements, zero failures, and
-zero counterexamples; the exact output is saved as
-\texttt{artifacts/deepening\_delta\_verification.txt}.  Integer factorization
-is performed during the run, and no external factorization table or numerical
-data set is read.
+computes $R(n)$ and the running ratio against the support-entropy scale
+$(\log2)\omega(n)^2/4$. It reports $59/59$ set equalities for both comparisons
+and no finite-bound failures. The exact output is
+\path{artifacts/finite_verification.txt}. The exact factorizations used for
+$2\le n\le210$ are recorded in
+\path{artifacts/fibonacci_factorizations_2_210.tsv}; the verifier checks
+every row by multiplication. The Python and SymPy versions, commands, file
+inventory, and verification scope are in \path{artifacts/REPRODUCE.md}, and
+\path{artifacts/SHA256SUMS} authenticates the supplied files. These finite
+checks do not provide distributional control of $R(n)$.
 
 %% ====================================================================
 \section{Further questions}\label{sec:questions}
@@ -2784,12 +2731,12 @@ Corollary~\ref{cor:four-support-reduction}, the one-, two-, and
 three-coordinate classifications already determine every disconnected
 four-coordinate pattern. A full connected high-support classification would be
 a separate project.
-\item Prove or disprove either rank-window sparsity hypothesis in
+\item Prove or disprove either rank-window sparsity conjecture in
 Theorem~\ref{thm:minimal-generator-growth}. As explained in
 Remark~\ref{rem:exact-average-open-interface}, this is precisely an upper
-distribution problem for the primitive-rank multiplicities inside $R(n)$.
-The paper proves the exact conditional normal and mean orders, but does not
-claim that either hypothesis follows from presently known primitive-divisor
+distribution problem for the exact-rank prime multiplicities inside $R(n)$.
+The paper derives conditional normal and mean orders, but does not
+claim that either conjecture follows from presently known primitive-divisor
 theorems, RH, or ERH.
 \end{enumerate}
 
@@ -2805,10 +2752,10 @@ Assume $\mathcal P(n)=\{\ell_1,
 \ell_2,\ell_3\}$.  The following finite procedure returns exactly
 $\mathcal M_n$.
 \begin{enumerate}[label=(\roman*)]
-\item For every nonempty $J\subseteq[3]$, compute the primitive window
+\item For every nonempty $J\subseteq[3]$, compute the exact-rank window
 $\mathcal R_J^\circ(n)$ and the rank classes
 $\Pi_\alpha(d)$ for $d\in\mathcal R_J^\circ(n)$ by
-Lemma~\ref{lem:primitive-prime-mobius-count}.  This gives every primitive
+Lemma~\ref{lem:primitive-prime-mobius-count}. This gives every prime
 slot $P_J(n)$.
 \item For each coordinate $i$, compute the single possible ladder candidate
 $\mathcal L_i^*(n)$ from
@@ -2822,7 +2769,8 @@ $S_i(n)=P_{\{i\}}(n)\cup L_{i,\{i\}}(n)$.
 \item Keep precisely those row fillings whose selected prime powers have
 distinct underlying primes, equivalently those satisfying the Hall
 inequalities in Lemma~\ref{lem:finite-slot-selection}; multiply the selected
-prime powers.
+prime powers and insert the product into a set, thereby removing repetitions
+caused by stabilizers and coordinate permutations.
 \end{enumerate}
 The products retained in (iv) are exactly the minimal generators listed in
 Theorem~\ref{thm:low-support-classification-package}.  In particular, the
@@ -2831,7 +2779,7 @@ additional infinite search.
 \end{proposition}
 
 \begin{proof}
-Step (i) is precisely the primitive-slot identity in
+Step (i) is precisely the prime-slot identity in
 Lemma~\ref{lem:three-coordinate-arithmetic-tests}; the M\"obius formula
 there is Lemma~\ref{lem:primitive-prime-mobius-count}.  Step (ii) is the
 ladder-slot identity in the same proposition, which says that every
@@ -2847,8 +2795,9 @@ three-coordinate support.  Conversely, every minimal generator with
 three-coordinate support has, by
 Lemma~\ref{lem:three-coordinate-realization}, one fixed labelled
 coordinate permutation of one of the eight row types and therefore appears in
-this procedure.  This proves both exhaustion and uniqueness with the same
-labelled-slot convention as Lemma~\ref{lem:three-coordinate-nonemptiness}.
+this procedure. The labelled atomic factor set is unique, whereas the
+unlabelled row is an $S_3$-orbit; the set insertion in step (iv) prevents the
+raw permuted enumeration from asserting stronger uniqueness.
 \end{proof}
 
 \begin{example}[Applying the checklist at $n=42$]
@@ -2867,7 +2816,7 @@ have ranks
 \alpha(421)=21,
 \alpha(211)=42.
 \]
-Thus $\Atom(42)=\{211\}$.  The primitive windows used below are
+Thus $\Atom(42)=\{211\}$. The exact-rank windows used below are
 $P_{12}(42)=\varnothing$, $P_{13}(42)=\{29\}$,
 $P_{23}(42)=\{421\}$, and $P_{123}(42)=\{211\}$.  Singleton slots are
 $S_1(42)=\varnothing$, $S_2(42)=\{2\}$, and $S_3(42)=\{13\}$.  The proper
@@ -2879,7 +2828,7 @@ The table then gives the following non-atomic generators.  The row
 $\Gamma_4$ with the permuted slots $P_{13}$ and $P_{23}$ gives
 $29\cdot421=12209$.  The row $\Gamma_5$ gives
 $4\cdot421=1684$ from $L_{1,12}$ and $P_{23}$, while the analogous
-coordinate permutation with a primitive $P_{13}$ partner is not a row of type
+coordinate permutation with an exact-rank $P_{13}$ partner is not a row of type
 $\Gamma_5$ for this ladder orientation.  The row $\Gamma_7$ gives
 $2\cdot29=58$ from $S_2$ and $P_{13}$ after relabeling.  The row $\Gamma_8$
 gives $13\cdot4=52$ from $S_3$ and the permuted ladder slot $L_{1,12}$.
@@ -2898,9 +2847,9 @@ is decided by a finite slot list and a coprimeness check.
 %% ====================================================================
 
 The table in Section~\ref{sec:numerical} is generated from the divisor/rank
-method described there.  The manuscript source includes the script
-\texttt{scripts/compute\_birth\_layer\_table.py} and the generated input file
-\texttt{generated/tab\_birth\_layer\_data.tex}; no external data set is used.
+method described there. The computational supplement in \texttt{artifacts/}
+contains the script, generated input, exact output, factorization archive,
+environment description, and checksums; see \texttt{artifacts/REPRODUCE.md}.
 \bibliographystyle{plain}
 \bibliography{references_local}
 

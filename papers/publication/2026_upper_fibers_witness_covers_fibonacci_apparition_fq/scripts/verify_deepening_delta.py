@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the Deepening Delta claims by exact finite computations.
+"""Verify the manuscript's finite claims by exact computations.
 
 The script uses two independent routes on an initial range:
 
@@ -17,12 +17,14 @@ from __future__ import annotations
 import argparse
 import itertools
 import math
+import platform
 import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Iterable, Optional, Sequence, Tuple
 
+from sympy import __version__ as sympy_version
 from sympy import factorint
 
 
@@ -56,6 +58,61 @@ def fibonacci(n: int) -> int:
 def factorint_fibonacci(n: int) -> Tuple[Tuple[int, int], ...]:
     """Return the exact factorization of F_n as an immutable tuple."""
     return tuple(sorted((int(p), int(e)) for p, e in factorint(fibonacci(n)).items()))
+
+
+def _factorization_text(factors: Sequence[Tuple[int, int]]) -> str:
+    if not factors:
+        return "1"
+    return "*".join(
+        str(prime) if exponent == 1 else f"{prime}^{exponent}"
+        for prime, exponent in factors
+    )
+
+
+def write_factorization_archive(path: Path, max_n: int) -> None:
+    """Write the exact Fibonacci factorizations used by the verification."""
+    if max_n < 2:
+        raise ValueError("max_n must be at least 2")
+    lines = [
+        "# python_version\tsympy_version",
+        f"# {platform.python_version()}\t{sympy_version}",
+        "n\tF_n\tfactorization",
+    ]
+    for n in range(2, max_n + 1):
+        lines.append(
+            f"{n}\t{fibonacci(n)}\t{_factorization_text(factorint_fibonacci(n))}"
+        )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="ascii")
+
+
+def load_factorization_archive(
+    path: Path, expected_max_n: int
+) -> Dict[int, Tuple[Tuple[int, int], ...]]:
+    """Load an archive and verify every factorization against F_n."""
+    rows: Dict[int, Tuple[Tuple[int, int], ...]] = {}
+    for line in path.read_text(encoding="ascii").splitlines():
+        if not line or line.startswith("#") or line.startswith("n\t"):
+            continue
+        n_text, value_text, factors_text = line.split("\t")
+        n = int(n_text)
+        factors = []
+        if factors_text != "1":
+            for item in factors_text.split("*"):
+                if "^" in item:
+                    prime_text, exponent_text = item.split("^", 1)
+                    factors.append((int(prime_text), int(exponent_text)))
+                else:
+                    factors.append((int(item), 1))
+        frozen = tuple(factors)
+        reconstructed = math.prod(prime**exponent for prime, exponent in frozen)
+        if int(value_text) != fibonacci(n) or reconstructed != fibonacci(n):
+            raise ValueError(f"invalid factorization archive row for n={n}")
+        rows[n] = frozen
+    expected = set(range(2, expected_max_n + 1))
+    if set(rows) != expected:
+        raise ValueError("factorization archive does not contain the expected range")
+    return rows
 
 
 def factor_dict(items: Sequence[Tuple[int, int]]) -> Dict[int, int]:
@@ -355,18 +412,23 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     failures = []
     counterexamples = []
     results = {}
+    birth_layer_set_equalities = 0
+    minimal_generator_set_equalities = 0
 
     for n in range(2, scalable_max + 1):
         threshold = upper_fiber_threshold(n)
         results[n] = threshold
         if n <= exhaustive_max:
             exhaustive = upper_fiber_exhaustive(n)
+            birth_layer_set_equalities += 1
             if exhaustive.a_count != threshold.a_count:
                 failures.append(
                     f"n={n}: A mismatch {exhaustive.a_count} != {threshold.a_count}"
                 )
             if exhaustive.minimal_generators != threshold.minimal_generators:
                 failures.append(f"n={n}: minimal-generator methods disagree")
+            else:
+                minimal_generator_set_equalities += 1
 
         if n >= 3:
             count = len(threshold.minimal_generators)
@@ -449,11 +511,18 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
 
     elapsed = time.time() - started
     lines = [
-        "Deepening Delta verification report",
-        "===================================",
+        "Finite verification report",
+        "==========================",
         f"Exact exhaustive divisor/rank range: 2 <= n <= {exhaustive_max}",
-        f"Upper-fiber threshold/counterexample range: 2 <= n <= {scalable_max}",
-        "Arithmetic: exact Python integers; SymPy factorint; no external data set",
+        f"Finite claim-check range: 2 <= n <= {scalable_max}",
+        f"Python version: {platform.python_version()}",
+        f"SymPy version: {sympy_version}",
+        "Factorization algorithm: SymPy factorint over exact Python integers",
+        "Set comparisons on the exhaustive range:",
+        f"  B_n direct = B_n upper fiber: {birth_layer_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
+        f"  M_n direct = M_n witness: {minimal_generator_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
         "",
         "Corrected n=30 data:",
         f"  A(30) = {n30.a_count}",
@@ -483,7 +552,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
             else []
         ),
         "",
-        "Counterexample search:",
+        "Finite claim checks:",
         f"  failures = {len(failures)}",
         f"  counterexamples = {len(counterexamples)}",
     ]
@@ -512,19 +581,27 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--exhaustive-max", type=int, default=60)
-    parser.add_argument("--scalable-max", type=int, default=150)
+    parser.add_argument("--scalable-max", type=int, default=210)
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("artifacts/deepening_delta_verification.txt"),
+        default=Path("artifacts/finite_verification.txt"),
+    )
+    parser.add_argument(
+        "--factorizations-output",
+        type=Path,
+        default=Path("artifacts/fibonacci_factorizations_2_210.tsv"),
     )
     args = parser.parse_args()
 
     report = run_battery(args.exhaustive_max, args.scalable_max)
+    write_factorization_archive(args.factorizations_output, args.scalable_max)
+    load_factorization_archive(args.factorizations_output, args.scalable_max)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="ascii")
     print(report, end="")
     print(f"Saved report: {args.output}")
+    print(f"Saved factorization archive: {args.factorizations_output}")
 
 
 if __name__ == "__main__":
