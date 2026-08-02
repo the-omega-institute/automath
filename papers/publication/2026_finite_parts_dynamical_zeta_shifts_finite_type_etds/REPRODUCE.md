@@ -54,3 +54,21 @@ python certificates/s3_log_certificates.py --write-cert certificates/s3_log_cert
 
 The calculation uses exact rational arithmetic. No floating-point root or
 logarithm approximation is used as certificate evidence.
+
+## Quotient, harmonic, and Fourier checks
+
+The additional exact verification enumerates primitive binary necklaces in a
+strict-gap `C2` extension, compares the quotient split-orbit correction with
+the periodic-minus-fixed power series through degree 16, derives the universal
+harmonic jet symbolically:
+
+```powershell
+python -m unittest artifacts.test_verify_a5_results -v
+python artifacts/verify_a5_results.py
+```
+
+The second command exits with status zero and ends with:
+
+```text
+STATUS: PASS
+```
