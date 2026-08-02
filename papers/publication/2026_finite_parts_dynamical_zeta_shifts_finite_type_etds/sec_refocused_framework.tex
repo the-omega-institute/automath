@@ -1,0 +1,277 @@
+\section{Finite-state framework and the two logarithms}\label{sec:framework}
+
+\subsection{One-sided edge shifts and twisted determinants}
+
+Throughout, \(\Gamma=(V,E,o,t)\) is a finite directed multigraph.  Parallel
+edges are allowed and are regarded as named edges.  Its adjacency matrix is
+\[
+  A_{ij}=\#\{e\in E:o(e)=i,\ t(e)=j\}.
+\]
+We assume that \(A\) is primitive and that its Perron root satisfies
+\(\lambda>1\).  The phase space in every main statement is the one-sided
+edge shift
+\[
+  X_\Gamma^+=\{(e_0,e_1,\ldots):t(e_j)=o(e_{j+1})\},
+  \qquad \sigma(e_0e_1\ldots)=e_1e_2\ldots.
+\]
+No assertion about arbitrary two-sided cocycles is implicit in this
+notation.
+
+Fix a finite group \(G\) and an edge labelling \(\tau:E\to G\).  For a
+directed path \(q=e_0\cdots e_{n-1}\), set
+\(\tau(q)=\tau(e_0)\cdots\tau(e_{n-1})\).  Changing the initial point on a
+closed path conjugates this product.  Hence a periodic orbit \(\gamma\) has a
+well-defined Frobenius conjugacy class \([g_\gamma]\), although a representative
+\(g_\gamma\) requires a base point.
+
+For a finite-dimensional unitary representation
+\(\rho:G\to U(V_\rho)\), define the twisted adjacency matrix by blocks
+\begin{equation}\label{eq:twisted-adjacency}
+  (A_\rho)_{ij}:=\sum_{e:i\to j}\rho(\tau(e))
+  \quad\in\End(V_\rho),
+  \qquad
+  P_\rho(z):=\det(I-zA_\rho).
+\end{equation}
+For the trivial representation, \(A_{\mathbf1}=A\).  Reversing every
+representation convention replaces labels by inverses and classes by inverse
+classes; none of the distinction between \(F\) and \(L\) depends on that
+choice.
+
+Let \(N_{n,C}\) be the number of period-\(n\) points whose length-\(n\)
+holonomy lies in the conjugacy class \(C\).  Let \(p_{n,C}\) be the number of
+primitive periodic orbits of least period \(n\) with Frobenius class \(C\).
+For a class function \(\phi:G\to\CC\), use the abbreviations
+\begin{align}
+  T_n(\phi)&:=\sum_C\phi(C)N_{n,C},
+  &c_n(\phi)&:=\sum_C\phi(C)p_{n,C},\label{eq:weighted-counts}\\
+  \Pi_\phi(z)&:=\sum_{n\geq1}c_n(\phi)z^n
+  =\sum_{\gamma\in\cP}\phi(g_\gamma)z^{|\gamma|}.
+  \label{eq:primitive-channel}
+\end{align}
+
+\begin{lemma}[Twisted trace and periodic logarithm]\label{lem:trace-log}
+For every irreducible representation \(\rho\) and every \(n\geq1\),
+\begin{equation}\label{eq:twisted-trace}
+  \Tr(A_\rho^n)=T_n(\chi_\rho).
+\end{equation}
+Consequently, on \(|z|<\lambda^{-1}\),
+\begin{equation}\label{eq:artin-determinant-log}
+  L_{\chi_\rho}(z):=-\Log_0P_\rho(z)
+  =\sum_{n\geq1}\frac{T_n(\chi_\rho)}{n}z^n
+  =\sum_{r\geq1}\frac{\Pi_{\psi^r\chi_\rho}(z^r)}{r}.
+\end{equation}
+Here \(\Log_0P_\rho\) is the analytic germ at zero normalized by
+\(\Log_0P_\rho(0)=0\).
+\end{lemma}
+
+\begin{proof}
+Expanding the block product in \(A_\rho^n\) sums \(\rho(\tau(q))\) over
+closed length-\(n\) paths, with a trace over \(V_\rho\); this is
+\eqref{eq:twisted-trace}.  The finite-matrix identity
+\[
+  -\Log_0\det(I-zB)=\sum_{n\geq1}\Tr(B^n)z^n/n
+\]
+gives the second expression in \eqref{eq:artin-determinant-log}.  A primitive
+orbit \(\gamma\) of length \(d\) contributes its \(d\) cyclic base points to
+period \(n=rd\), and its repeated holonomy is \(g_\gamma^r\).  Division by
+\(n=rd\) leaves the factor \(1/r\), proving the last expression.  Absolute
+convergence follows from the finite-matrix trace bound on every smaller disc.
+\end{proof}
+
+For a general class function, write
+\[
+  \phi=\sum_{\rho\in\Irr(G)}
+     \widehat\phi(\rho)\chi_\rho,
+  \qquad
+  \widehat\phi(\rho)
+    =\frac1{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\rho(g)},
+\]
+and define \(L_\phi=\sum_\rho\widehat\phi(\rho)L_{\chi_\rho}\).  This agrees
+with the orbit expansion in \eqref{eq:artin-determinant-log}.  The Adams
+operation \(\psi^m\) acts on class functions by
+\((\psi^m\phi)(g)=\phi(g^m)\).  It need not preserve irreducibility or
+positivity, but it has a finite character expansion
+\begin{equation}\label{eq:adams-coefficients}
+  \psi^m\chi_\rho=\sum_{\pi\in\Irr(G)}
+      a_{\rho,\pi}^{(m)}\chi_\pi,
+  \qquad
+  a_{\rho,\pi}^{(m)}
+     =\langle\psi^m\chi_\rho,\chi_\pi\rangle_G.
+\end{equation}
+The coefficients are periodic in \(m\) modulo the exponent of \(G\), and
+therefore uniformly bounded.
+
+\subsection{Adams--M\"obius primitive inversion}
+
+\begin{theorem}[Primitive and fixed-label determinant coordinates]
+\label{thm:adams-mobius}
+For every class function \(\phi\) and \(|z|<\lambda^{-1}\),
+\begin{align}
+  \Pi_\phi(z)
+    &=\sum_{m\geq1}\frac{\mu(m)}{m}
+       L_{\psi^m\phi}(z^m),
+       \label{eq:primitive-adams-mobius}\\
+  F_\phi(z):=\sum_{r\geq1}\frac{\Pi_\phi(z^r)}{r}
+    &=\sum_{r,m\geq1}\frac{\mu(m)}{rm}
+       L_{\psi^m\phi}(z^{rm}).
+       \label{eq:fixed-adams-mobius}
+\end{align}
+For \(\phi=\chi_\rho\), insertion of \eqref{eq:adams-coefficients} gives a
+formula involving only the finite determinant family:
+\begin{equation}\label{eq:fixed-determinant-open-disc}
+  F_{\chi_\rho}(z)=
+  \sum_{r,m\geq1}\frac{\mu(m)}{rm}
+    \sum_{\pi\in\Irr(G)}a_{\rho,\pi}^{(m)}
+      \bigl(-\Log_0P_\pi(z^{rm})\bigr).
+\end{equation}
+All three series are absolutely convergent on compact subsets of the Perron
+disc after expansion into primitive orbits.
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:trace-log},
+\[
+  L_{\psi^m\phi}(z^m)
+  =\sum_{\gamma\in\cP}\sum_{r\geq1}
+     \frac{\phi(g_\gamma^{mr})}{r}z^{mr|\gamma|}.
+\]
+Multiplying by \(\mu(m)/m\), summing, and putting \(s=mr\), the coefficient
+of \(\phi(g_\gamma^s)z^{s|\gamma|}\) becomes
+\[
+  \sum_{m\mid s}\frac{\mu(m)}{m(s/m)}
+  =\frac1s\sum_{m\mid s}\mu(m).
+\]
+It is one for \(s=1\) and zero otherwise.  This proves
+\eqref{eq:primitive-adams-mobius}.  Summing that identity over \(z^r/r\)
+proves \eqref{eq:fixed-adams-mobius}.  Finally use the character expansion
+\eqref{eq:adams-coefficients} and \eqref{eq:artin-determinant-log}.
+
+For convergence, the total number \(p_n\) of primitive length-\(n\) orbits
+satisfies \(p_n\leq\Tr(A^n)/n\ll\lambda^n/n\).  Thus the orbit expansions
+are dominated on \(|z|\leq R<\lambda^{-1}\) by convergent logarithmic series.
+This also justifies every rearrangement above.
+\end{proof}
+
+The difference between the periodic and fixed-label transforms is now
+formal rather than terminological.
+
+\begin{proposition}[Exact Artin-substitution obstruction]
+\label{prop:artin-substitution-obstruction}
+On \(|z|<\lambda^{-1}\),
+\begin{equation}\label{eq:exact-f-minus-l}
+  F_\phi(z)-L_\phi(z)
+  =\sum_{r\geq2}\frac{
+       \Pi_\phi(z^r)-\Pi_{\psi^r\phi}(z^r)}{r}.
+\end{equation}
+Writing \(\Pi_\phi(z)=\sum_{n\geq1}c_n(\phi)z^n\), the two germs agree if
+and only if
+\begin{equation}\label{eq:coefficient-obstruction}
+  \sum_{r\mid n}\frac1r
+    c_{n/r}(\phi-\psi^r\phi)=0
+  \qquad(n\geq1).
+\end{equation}
+There is no general character-theoretic reason for these identities to hold.
+\end{proposition}
+
+\begin{proof}
+Subtract the two orbit expansions in
+\eqref{eq:intro-artin}--\eqref{eq:intro-fixed}; the \(r=1\) terms cancel.
+Extracting the coefficient of \(z^n\) gives
+\eqref{eq:coefficient-obstruction}.
+\end{proof}
+
+\subsection{The Perron boundary is derived from the determinant}
+
+Put
+\begin{equation}\label{eq:strict-gap}
+  \eta:=\max_{\rho\in\Irr(G),\ \rho\neq\mathbf1}\rad(A_\rho).
+\end{equation}
+The main product theorem assumes \(\eta<\lambda\).  Under this hypothesis,
+the \(rm=1\) terms in \eqref{eq:fixed-determinant-open-disc} are regular for
+non-trivial \(\pi\), and every term with \(rm\geq2\) is an interior value
+because
+\begin{equation}\label{eq:interior-radius}
+  \rad(\lambda^{-rm}A_\pi)\leq\lambda^{1-rm}<1.
+\end{equation}
+
+We record the boundary convention in a form that makes clear that no branch
+or peripheral factor is an additional input coordinate.
+
+\begin{proposition}[Canonical radial boundary construction]
+\label{prop:derived-boundary}
+Let \(P_\pi(z)=\det(I-zA_\pi)\).  The normalized germ
+\(-\Log_0P_\pi(z)\), its continuation along \(z=t/\lambda\) with
+\(0\leq t<1\), its peripheral factorization, and every radial renormalized
+endpoint are determined by \(P_\pi\), \(\lambda\), and this path convention.
+More explicitly, factor
+\begin{equation}\label{eq:peripheral-factorization}
+  P_\pi(t/\lambda)
+   =\prod_{\zeta\in\Omega_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
+      Q_{\partial,\pi}(t),
+\end{equation}
+where \(\Omega_\pi\subset\TT\) is the multiset of peripheral phases and
+\(Q_{\partial,\pi}\) has no zero on \([0,1]\).  If
+\(s_\pi=m_{\pi,1}\), then
+\begin{align}
+  B_{1,\pi}^{\mathrm{ren}}
+  &:={\lim}_{t\uparrow1}
+     \left(-\Log_{[0,t]}P_\pi(t/\lambda)+s_\pi\log(1-t)\right)
+     \label{eq:derived-b-ren}\\
+  &=-\sum_{\substack{\zeta\in\Omega_\pi\\\zeta\neq1}}
+       m_{\pi,\zeta}\Log_{[0,1]}(1-\zeta)
+     -\Log_{[0,1]}Q_{\partial,\pi}(1).
+     \label{eq:derived-b-factor}
+\end{align}
+In particular, a list of branch rules, peripheral factors, or values such as
+\(B_{k,\pi}^{\mathrm{ren}}\) is derived output, not independent cocycle data.
+\end{proposition}
+
+\begin{proof}
+The roots and their multiplicities in \eqref{eq:peripheral-factorization}
+are determined by the polynomial \(P_\pi(t/\lambda)\).  The normalized
+logarithm has a unique continuation along any zero-free subinterval beginning
+at zero.  Removing the factor \((1-t)^{s_\pi}\), taking the radial limit, and
+using the same continuation on every remaining factor yields
+\eqref{eq:derived-b-factor}.  The construction for \(k>1\) is the identical
+one applied at \(t^k/\lambda^k\); by \eqref{eq:interior-radius} it is an
+ordinary interior logarithm in the strict-gap theorem below.
+\end{proof}
+
+\begin{lemma}[Perron evaluation of a non-trivial fixed-label coordinate]
+\label{lem:perron-fixed-coordinate}
+Assume \(\eta<\lambda\).  For every non-trivial irreducible \(\rho\), the
+series
+\begin{equation}\label{eq:perron-fixed-determinant}
+  \mathfrak F_\rho:=
+  \sum_{r,m\geq1}\frac{\mu(m)}{rm}
+    \sum_{\substack{\pi\in\Irr(G)\\(r,m,\pi)\neq(1,1,\mathbf1)}}
+       a_{\rho,\pi}^{(m)}
+       \bigl(-\Log_{[0,1]}P_\pi(\lambda^{-rm})\bigr)
+\end{equation}
+is well defined and equals \(F_{\chi_\rho}(\lambda^{-1})\).  In
+\eqref{eq:perron-fixed-determinant}, the notation means radial continuation
+for the finitely many terms with \(rm=1\) and the normalized interior germ
+for \(rm\geq2\).  The omitted scalar Perron triple has coefficient
+\(a_{\rho,\mathbf1}^{(1)}=0\) and is deleted before endpoint evaluation.
+\end{lemma}
+
+\begin{proof}
+Since \(\rho\neq\mathbf1\), character orthogonality gives
+\(a_{\rho,\mathbf1}^{(1)}=0\).  If \(rm=1\), all remaining \(\pi\) are
+non-trivial and \(P_\pi(t/\lambda)\neq0\) for \(0\leq t\leq1\) by the strict
+gap.  For \(rm\geq2\), the trace expansion and
+\(\abs{\Tr(A_\pi^n)}\leq(\dim A_\pi)\lambda^n\) give, uniformly for
+\(0\leq t\leq1\),
+\[
+ \abs{-\Log_0P_\pi(t^{rm}\lambda^{-rm})}
+ \leq C\sum_{n\geq1}\frac{\lambda^{(1-rm)n}}n
+ \leq C'\lambda^{1-rm}.
+\]
+The Adams coefficients are uniformly bounded, and
+\[
+  \sum_{rm\geq2}\frac{\lambda^{1-rm}}{rm}
+  =\sum_{k\geq2}\frac{d(k)}k\lambda^{1-k}<\infty.
+\]
+Dominated convergence in \eqref{eq:fixed-determinant-open-disc}, along
+\(z=t/\lambda\), proves the assertion.
+\end{proof}

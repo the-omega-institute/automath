@@ -1,0 +1,104 @@
+\section{Exact certificates and reproducibility}\label{sec:exactness}
+
+\subsection{An exact strict-gap test}
+
+Let \(\widetilde A\) be the non-negative integral adjacency matrix of the
+regular skew product on \(V\times G\).  Its Peter--Weyl block decomposition
+contains \(A_\rho\) with multiplicity \(\dim\rho\).  Thus the strict gap is
+decidable from one integer characteristic polynomial, but the field in which
+the Perron factor is removed must be stated correctly.
+
+\begin{proposition}[Algebraic-number certificate for the strict gap]
+\label{prop:exact-gap-certificate}
+Let
+\[
+  \chi_{\widetilde A}(t)=\det(tI-\widetilde A)\in\ZZ[t],
+  \qquad K=\QQ(\lambda).
+\]
+Division by the Perron factor is performed in \(K[t]\):
+\begin{equation}\label{eq:gap-division-field}
+  q(t):=\chi_{\widetilde A}(t)/(t-\lambda)\in K[t].
+\end{equation}
+Then \(\eta<\lambda\) if and only if every root \(\alpha\) of \(q\) satisfies
+\begin{equation}\label{eq:exact-root-comparison}
+  \alpha\overline\alpha<\lambda^2.
+\end{equation}
+An exact certificate consists of:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+  \item the squarefree defining polynomial and isolating interval for the
+    chosen real embedding of \(\lambda\);
+  \item a squarefree factorization of \(q\) over a number field containing
+    \(K\), with an isolating rectangle for each embedded complex root
+    \(\alpha\);
+  \item in a compositum containing
+    \(\lambda,\alpha,\overline\alpha\), exact sign determination of the real
+    algebraic number
+    \(\lambda^2-\alpha\overline\alpha\).
+\end{enumerate}
+The last sign may be certified by a minimal polynomial together with a
+rational isolating interval contained in \((0,\infty)\), computed for example
+by Sturm or subresultant sign determination.  Floating-point root moduli are
+not an exact certificate.
+\end{proposition}
+
+\begin{proof}
+The regular representation decomposes as
+\(\bigoplus_{\rho\in\Irr(G)}(\dim\rho)\rho\).  Consequently the spectrum of
+\(\widetilde A\), with algebraic multiplicity, is the union of the spectra of
+the \(A_\rho\), each repeated \(\dim\rho\) times.  The trivial block is \(A\).
+Primitivity makes \(\lambda\) a simple root and puts every other root of that
+block strictly inside the Perron circle.  Removing this root in
+\(\QQ(\lambda)[t]\) therefore leaves all non-trivial twisted roots together
+with the harmless non-Perron base roots.  Condition
+\eqref{eq:exact-root-comparison} for every remaining root is precisely
+\(\max_{\rho\neq\mathbf1}\rad(A_\rho)<\lambda\).
+
+The proposed representation of the algebraic numbers makes conjugation,
+multiplication, and sign determination exact.  Since
+\(\lambda^2-\alpha\overline\alpha\) is real algebraic, an isolating interval
+disjoint from zero decides its sign.
+\end{proof}
+
+\subsection{Computational records}
+
+The \(S_3\) window \eqref{eq:s3-rational-window} is independently reproduced
+by
+\begin{center}
+\ttfamily
+python certificates/s3\_log\_certificates.py
+\end{center}
+using exact rational arithmetic.  The script constructs the rational
+logarithm brackets, adds the explicit tails, and exits only after verifying
+the four stored primitive and fixed-label windows.  Its expected final line is
+\texttt{fixed-label windows verified.}
+
+The fixed-presentation determinant-fibre enumerator discussed in
+\Cref{sec:inverse-background} is archived separately from the mathematical
+argument.  The executable record consists of
+\begin{center}
+\ttfamily
+artifacts/verify\_twisted\_determinant\_rigidity.py
+\end{center}
+together with its regression test and expected output.  The repository
+revision containing that record is
+\[
+ \texttt{0ee48dc3905b8e44d872d14db84457b614e87ef4},
+\]
+and the verifier's SHA-256 digest is
+\begin{center}
+ \footnotesize\ttfamily
+ 1F0B198271CF33F4F67FF6D6B1140E5CC3332C93A8C65C7162E7B3476B9750F7
+\end{center}
+The one-command instructions, dependency information, expected terminal
+line, archive name, and integrity checks are in \texttt{REPRODUCE.md}.  These
+records reproduce only presentation-relative finite enumeration.  They are
+not evidence that the resulting fibres survive quotienting by base-shift
+automorphisms, and no proof of the correction theorem depends on them.
+
+\begin{remark}[Archival status]
+The hash above identifies a repository revision already containing the
+verifier.  The present referee-response edits are intentionally left
+uncommitted, as requested.  A public DOI or repository URL must be assigned
+at deposition; \texttt{REPRODUCE.md} distinguishes the presently available
+git-addressed local archive from that future public archival step.
+\end{remark}

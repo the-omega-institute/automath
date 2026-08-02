@@ -2,7 +2,7 @@
 
 Journal: Ergodic Theory and Dynamical Systems
 
-Title: Twisted-determinant inverse rigidity and Perron-boundary Adams--Mobius coordinates for finite-group extensions of shifts of finite type
+Title: Adams-corrected Frobenius-class product constants for finite-group extensions of one-sided shifts of finite type
 
 Article type: Original Article
 
@@ -19,19 +19,35 @@ Authors:
 
 Abstract:
 
-For finite-group extensions of mixing subshifts of finite type, we characterize the kernel of the full family of irreducible twisted determinants. Equality of every determinant is equivalent to equality of the unmarked primitive orbit counts at every length and in every conjugacy class, but is not in general Livsic cohomology. The smallest counterexample is the full two-shift with group Z/2: the named-edge labelings (0,1) and (1,0) have common determinant family (1-2z,1), both skew products are mixing, and every twisted block is semisimple, yet a marked fixed point separates the cocycles. On an edge-resolving graph, semisimplicity plus a common vertex-compatible spectral-projector certificate forces one vertex gauge. The forward reconstruction uses Adams--Mobius inversion in Peter--Weyl coordinates and extends to the Perron boundary, where all peripheral phases are retained and the renormalized Frobenius-class product constants are computed from reduced fixed-label determinant coordinates.
+Let X_Gamma^+ be a mixing one-sided edge shift, let G be finite, and let a
+one-step cocycle label each primitive orbit gamma by a conjugacy class
+[g_gamma]. We determine the constant in the Frobenius-class Mertens product
+by separating the periodic Artin logarithm from the fixed-label Euler
+transform. The former powers the primitive label under repetition, whereas
+the latter repeats the scalar weight while keeping the primitive label fixed.
+Under the strict twisted spectral gap, we prove an Adams--Mobius determinant
+formula for F_rho(lambda^{-1}) and hence for every class-product constant.
+This gives a formal correction of the Artin-L constant asserted by Mohamed
+and Noorani (1999): their proof replaces chi_rho(g_gamma) by
+chi_rho(g_gamma^r) in the r-th logarithmic term. A strict-gap S_3 extension
+makes the contradiction explicit, since its sign Artin logarithm vanishes
+while its fixed-label coordinate is strictly negative. The classical exponent
+|C|/|G| is unchanged. For context, the determinant family is also translated
+into conjugacy-class periodic data and directed G-cospectrality; those inverse
+equivalences are treated as established background and all fibre counts are
+explicitly relative to a fixed marked-edge presentation.
 
 Keywords:
 
+- One-sided edge shift
+- Finite-group extension
 - Dynamical zeta-function
-- Subshift of finite type
-- Inverse rigidity
-- Livsic cohomology
+- Frobenius-class Mertens product
 - Twisted determinant
 - Adams operation
 - Primitive orbit
-- Finite-group extension
-- Finite-part constant
+- Artin L-function
+- Gain graph
 
 2020 MSC:
 
@@ -39,27 +55,23 @@ Keywords:
 - 37D35
 - 11M41
 - 20C15
+- 05C25
 
 Competing interests:
 
 The authors declare none.
 
-Files:
+Primary files:
 
 - main.pdf
 - main.tex
-- sec_introduction.tex
-- sec_preliminaries.tex
-- sec_chebotarev.tex
-- sec_chebotarev_peter_weyl_bridge.tex
-- sec_chebotarev_class_mertens.tex
-- sec_chebotarev_readout.tex
-- sec_secondary_term.tex
-- sec_eta_gap.tex
-- sec_shadows.tex
-- sec_shadows_s3_certificates.tex
-- sec_finite_part.tex
-- sec_conclusion.tex
-- sec_appendices.tex
-- sec_appendices_scalar_boundaries.tex
-- sec_appendices_s3_certificates.tex
+- sec_refocused_introduction.tex
+- sec_refocused_framework.tex
+- sec_refocused_product_correction.tex
+- sec_refocused_s3_witness.tex
+- sec_refocused_inverse_background.tex
+- sec_refocused_exactness.tex
+- sec_refocused_conclusion.tex
+- references.bib
+- REPRODUCE.md
+- artifacts/twisted_determinant_rigidity_verifier_0ee48dc.zip
