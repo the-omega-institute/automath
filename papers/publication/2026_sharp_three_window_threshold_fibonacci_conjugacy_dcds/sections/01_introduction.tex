@@ -1,203 +1,135 @@
 \section{Introduction}\label{sec:intro}
 
-Finite-window recodings occur naturally in symbolic dynamics and in numeration.
-A local rule may identify several words when one window is read in isolation,
-while consecutive windows can contain enough overlap to recover the original
-sequence.  We determine the exact threshold for every quadratic Pisot base,
-using a canonical fold obtained from the greedy language and Parry rank.
+Finite-window recodings may identify words when a single window is observed
+and nevertheless become injective when consecutive windows overlap.  We
+determine the exact overlap-injectivity threshold for a particular recoding
+attached to every quadratic Pisot $\beta$-language.
 
-For an integer $A\ge1$, let
-\[
-\beta_A=\frac{A+\sqrt{A^2+4}}2,
-\qquad Q_0=1,\quad Q_1=A+1,\quad Q_{j+2}=AQ_{j+1}+Q_j.
-\]
-On the alphabet $\{0,\ldots,A\}$ we use the constant-type Ostrowski rule
-$x_k=A\Rightarrow x_{k-1}=0$ and normalize a length-$m$ word to the unique
-legal representative with the same $Q$-valuation modulo $Q_m$.  The resulting
-sliding map is denoted $\Phi_{A,m}$ and its image $Y_{A,m}$.  Since the
-one-symbol fold is the identity for every $A$, the nontrivial threshold is
-defined over apertures $m\ge2$.
+The construction is an ordered-language construction.  For each length $m$,
+we reverse the legal greedy $\beta$-words, order them lexicographically (or,
+equivalently, order the unreversed words colexicographically), and identify
+them with the integer interval $\{0,\ldots,Q_m(\beta)-1\}$.  The same weighted
+rank formula is evaluated on the full digit cube and reduced cyclically modulo
+$Q_m(\beta)$.  The residue is then returned to the corresponding legal word.
+We call this operation a \emph{cyclic language-rank recoding}.
 
-The metallic theorem gives the threshold function
-\[
-m_*(\beta_A)=
-\begin{cases}
-3,&A=1,\\
-2,&A\ge2.
-\end{cases}
-\]
-More precisely, except at $(A,m)=(1,2)$, the map $\Phi_{A,m}$ is a
-finite-memory topological conjugacy from the full $(A+1)$-shift onto the SFT
-$Y_{A,m}$, and for every $n\ge m$ its finite-block map is bijective onto the
-image language:
-\[
-|\mathcal L_n(Y_{A,m})|=(A+1)^{n+m-1}.
-\]
-These are Theorems~\ref{thm:metallic-family-block-bijection}
-and~\ref{thm:metallic-threshold-classification}.  At the unique excluded pair,
-the zeta function is $(1-z)/(1-2z)$ instead of $1/(1-2z)$, while entropy
-remains $\log2$; Theorem~\ref{thm:metallic-entropy-zeta-extremality} therefore
-gives a periodic-orbit invariant which detects the golden extremality.
+This terminology is essential.  The congruence is a congruence of integer
+language ranks, not of numerical $\beta$-values.  In particular, the paper
+does not construct a quotient of $\mathbb Z[\beta]$ and does not prove that an
+input word and its recoded word represent the same real number.  For example,
+if $\beta^2-3\beta+1=0$, then $(Q_0,Q_1,Q_2)=(1,3,8)$ and the rank of $(2,2)$
+is $2+2Q_1=8$.  Thus the cyclic rank recoding sends $(2,2)$ to $(0,0)$, but
+this says only that the two language ranks are congruent modulo $8$; it does
+not assert $2+2\beta\equiv0$ in any arithmetic quotient.  Standard
+$\beta$-normalization and finite-transducer results therefore provide
+important context but concern a different operation
+\cite{Frougny1992,FrougnySolomyak1992,BerendFrougny1994,FrougnySteiner2008}.
 
-The full-family result is Theorem~\ref{thm:full-quadratic-pisot-threshold}.
-Every quadratic Pisot minimal polynomial is $x^2-ax-b$ with
-$a\ge b\ge1$, or $x^2-ax+b$ with $a\ge3$ and $1\le b\le a-2$.
-For the canonical cyclic Parry-rank fold,
+Every quadratic Pisot minimal polynomial belongs to one of the two chambers
+\[
+P^-_{a,b}(x)=x^2-ax-b,\quad a\ge b\ge1,
+\qquad
+P^+_{a,b}(x)=x^2-ax+b,\quad a\ge3,\ 1\le b\le a-2.
+\]
+For the cyclic rank recoding $\Phi_{\beta,m}$, let $m_*(\beta)$ be the least
+nontrivial aperture $m\ge2$ for which the sliding map is a topological
+conjugacy from the full digit shift onto its finite-type image.  Our main
+result, Theorem~\ref{thm:full-quadratic-pisot-threshold}, is
 \[
 m_*(\beta)=3
 \quad\Longleftrightarrow\quad
-\operatorname{minpoly}(\beta)=x^2-ax-a\ \text{or}\ x^2-ax+1,
+\operatorname{minpoly}(\beta)\in
+\{x^2-ax-a:a\ge1\}\cup\{x^2-ax+1:a\ge3\},
 \]
-and all other quadratic Pisot bases have threshold two.  Hence the golden mean
-is the least global extremizer, while golden uniqueness survives only inside
-the norm-$-1$ metallic-unit subfamily.  Above threshold the block count is
-$|\mathcal L_n(Y_{\beta,m})|=(\lfloor\beta\rfloor+1)^{n+m-1}$.
-
-For $m\ge1$ let $X_m$ be the set of binary words of length $m$ with no adjacent $1$'s, and let $F_1=F_2=1$, $F_{n+2}=F_{n+1}+F_n$. We consider the map
+and $m_*(\beta)=2$ otherwise.  At every aperture at or above threshold, the
+finite-block maps are injective and
 \[
-\Fold_m:\{0,1\}^m\to X_m
+|\mathcal L_n(Y_{\beta,m})|
+=(\lfloor\beta\rfloor+1)^{n+m-1}\qquad(n\ge m).
 \]
-which sends a word to the unique element of $X_m$ having the same Fibonacci valuation modulo $F_{m+2}$. Thus $\Fold_m$ is a finite-window version of Zeckendorf normalization in which the right boundary is closed by reduction modulo the next Fibonacci number. It is onto, but it is not generally one-to-one on the full cube $\{0,1\}^m$.
+The inverse has memory zero and finite anticipation.
 
-The golden endpoint $A=1$ is the Fibonacci system.  In this special case, if
+The negative norm-one subfamily is the boundary-modified constant-type
+recurrence model
 \[
-(\Phi_m(a))_t=\Fold_m(a_ta_{t+1}\cdots a_{t+m-1}),\qquad a\in\{0,1\}^{\mathbb Z},
+\beta_A=\frac{A+\sqrt{A^2+4}}2,\qquad
+Q_0=1,\quad Q_1=A+1,\quad Q_{j+2}=AQ_{j+1}+Q_j.
 \]
-then the overlap graph gives a finite-state presentation of the image for every
-$m\ge2$. For $m\ge3$, the map $\Phi_m$ is a topological conjugacy from the
-full two-shift onto its image; its inverse is a sliding-block code with memory
-$0$ and anticipation $m-1$. At $m=2$ there is a single obstruction: the two
-constant raw sequences have the same stabilized image, and all other
-path-space fibers are singletons. These supporting sharp-case assertions are
-Theorems~\ref{thm:finite-state-lift}, \ref{thm:block-invertibility},
-\ref{thm:m2-branch-locus} and~\ref{thm:two-sided-conjugacy}.
+Its digit strings obey the Ostrowski local constraint
+$x_k=A\Rightarrow x_{k-1}=0$.  The model is not identified with standard
+Ostrowski numeration: its weights are $q_j+q_{j-1}$ rather than the convergent
+denominators $q_j$, and its boundary convention permits the lowest digit to
+equal $A$; see Lemma~\ref{lem:constant-type-ostrowski-origin}.  In this
+subfamily,
+\[
+m_*(\beta_A)=3\quad(A=1),
+\qquad
+m_*(\beta_A)=2\quad(A\ge2).
+\]
 
-The threshold is arithmetic, not merely a formal consequence of sofic theory. We first build the de Bruijn-type overlap graph associated with $\Fold_m$ and observe that it is resolving in both time directions. This gives a uniform finite-to-one bound, but not injectivity. The decisive step is an explicit residue decoder at $m=3$; once the first overlap state is recovered, resolvingness propagates the reconstruction. For $m\ge4$ the same idea is implemented by congruences which separate the possible values of a boundary bit. The two-window case is small enough to classify directly.
+At $A=1$ the ranks are the Fibonacci ranks of binary words with no adjacent
+ones.  The three-window decoder is explicit, while at aperture two the two
+constant raw sequences form the sole nontrivial path-space fiber.  The natural
+overlap graph above threshold is also identified with the right Fischer cover
+of the image shift in its presented output alphabet.  The resulting
+$2^{m-1}$ state count is canonical for that labeled shift presentation; it is
+not invariant under arbitrary topological conjugacy, since the same image
+shift is conjugate to the binary full shift.
 
-For $A\ge2$, the small apertures require new arithmetic.  At $m=2$ a
-two-symbol local rule recovers the central raw digit.  At $m=3$ a difference
-argument shows that a putative collision can only have boundary difference
-$0$ or $\pm A$, and the latter alternatives contradict the middle residue.
-For $m\ge4$, the recurrence combination
-$r_t-Ar_{t+1}-r_{t+2}$ separates every possible boundary difference because
-$Q_{m-2}>2A$.  This closes all apertures and promotes the previous two-window
-comparison, Theorem~\ref{thm:metallic-two-window-rigidity}, to the full
-threshold classification.  For the golden image we also prove that the
-natural overlap presentation is the right Fischer cover; see
-Theorem~\ref{thm:fischer-cover-stabilized-image}.
+The closest general framework is ordered numeration on languages.  Abstract
+numeration systems assign integers by ordering a regular language, while
+Bertrand systems connect admissible numeration languages with shift spaces
+\cite{BertrandMathis1986,BruyereHansel1997,LecomteRigo2001,Loraud1995}.
+Classical $\beta$-expansion and $\beta$-shift results establish the greedy
+language, its dynamical realization, and automata-theoretic properties
+\cite{Renyi1957,ItoTakahashi1974,Parry1960,Blanchard1989,FrougnySolomyak1992}.
+Our use of ordered-language rank agrees with this literature at the ranking
+stage.  The additional operation studied here is the cyclic reduction of that
+rank modulo the number of length-$m$ legal words, followed by sliding overlap;
+we have not found this threshold problem in the cited frameworks.
 
-The results proved in this paper are the full quadratic-Pisot Parry-rank
-threshold classification, the family-wide metallic threshold
-function, the finite-block bijection above threshold, the entropy/zeta
-certificate for golden uniqueness, the sharp $m=3$ Fibonacci decoder, the
-complete golden $m=2$ branch classification, the finite-memory SFT conjugacy,
-and the Fischer-cover identification of the golden overlap presentation.  The
-full-family claim uses exactly the greedy language and cyclic rank fold of
-Definition~\ref{def:quadratic-parry-fold}; no claim is made for redundant or
-signed alphabets, non-greedy maps, or other boundary closures.  Related
-finite-automaton and numeration results include
-Zeckendorf normalization, Fibonacci automaticity, and Ostrowski or Bertrand
-numeration systems.
-
+The main contributions can therefore be separated from their standard
+inputs as follows.
 \begin{center}
-\renewcommand{\arraystretch}{1.18}
-\begin{tabular}{p{0.25\textwidth}p{0.36\textwidth}p{0.30\textwidth}}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{p{0.26\textwidth}p{0.35\textwidth}p{0.29\textwidth}}
 \toprule
-This theorem & Closest predecessor & New ingredient here\\
+Result & Closest established framework & Additional result proved here\\
 \midrule
 Theorem~\ref{thm:full-quadratic-pisot-threshold} &
-Parry admissibility \cite{Parry1960}; quadratic Pisot expansions
-\cite{HejdaSteiner2018}; Pisot normalization automata
-\cite{Frougny1992,FrougnySteiner2008}. &
-The canonical cyclic Parry-rank fold, a bounded sliding-congruence theorem,
-and the exact two extremal loci across both conjugate signs.\\
-Theorems~\ref{thm:metallic-family-block-bijection}
-and~\ref{thm:metallic-threshold-classification} &
-Ostrowski numeration and constant partial quotient expansions
-\cite{Ostrowski1922,Berthe2001Ostrowski,AlloucheShallit2003}; general
-sliding-block conjugacy theory \cite{Hedlund1969,LindMarcus1995}. &
-An all-aperture residue-difference argument giving the exact function
-$m_*(\beta_1)=3$ and $m_*(\beta_A)=2$ for $A\ge2$, together with exact block
-counts.\\
+Greedy $\beta$-languages and their shift/automaton realizations
+\cite{Renyi1957,ItoTakahashi1974,Parry1960,Blanchard1989,BerendFrougny1994} &
+The exact overlap threshold for the newly defined cyclic rank recoding in both
+quadratic Pisot chambers.\\
+Proposition~\ref{prop:parry-rank-bijection} &
+Ordered regular-language numeration and Bertrand systems
+\cite{BertrandMathis1986,BruyereHansel1997,LecomteRigo2001} &
+The coupled interval-rank proof for the two quadratic Parry languages and its
+use under cyclic reduction.\\
+Theorem~\ref{thm:metallic-family-block-bijection} &
+Ostrowski local constraints and constant recurrences
+\cite{Ostrowski1922,HieronymiTerry2018} &
+An all-aperture block-injectivity argument for the boundary-modified model.\\
 Theorem~\ref{thm:block-invertibility} &
-Sliding-block codes and finite-to-one factor theory
-\cite{Hedlund1969,LindMarcus1995,Nasu1995}; Sturmian rigidity and
-low-complexity shift symmetries are adjacent but concern maps on Sturmian or
-low-complexity subshifts \cite{MorseHedlund1940,BaakeRobertsYassawi2018}. &
-Exact residue-degree computation for the concrete maps $\Phi_{m,n}$ on the
-full binary cube, including the sharp threshold $m=3$.\\
-Theorem~\ref{thm:m2-branch-locus} &
-General finite-to-one factor theory and resolving presentations
-\cite{Ashley1991,Boyle1983,LindMarcus1995}. &
-Complete classification of the exceptional two-window fiber:
-$0^{\ZZ}$ and $1^{\ZZ}$ are the only nontrivial path-space collision.\\
-Theorem~\ref{thm:two-sided-conjugacy} &
-Curtis--Hedlund--Lyndon sliding-block theory and standard conjugacy transport
-\cite{Hedlund1969,LindMarcus1995}. &
-An explicit finite-memory inverse obtained from the arithmetic decoder, not
-only an abstract degree-one factor statement.\\
-Theorem~\ref{thm:metallic-entropy-zeta-extremality} &
-Periodic-point and zeta invariance under conjugacy
-\cite{LindMarcus1995,Walters1982}. &
-The normalized zeta defect $1-z$ detects the unique golden two-window branch,
-which entropy alone does not distinguish.\\
+Resolving sliding-block presentations
+\cite{Hedlund1969,LindMarcus1995,Nasu1995} &
+The sharp three-window Fibonacci decoder on the full binary cube.\\
 Theorem~\ref{thm:fischer-cover-stabilized-image} &
-Fischer and Krieger covers and minimal right-resolving presentations
-\cite{Fischer1975,Krieger1984,Krieger1987,LindMarcus1995,BoyleKitchensMarcus1985,Johansen2011}. &
-Identification of the concrete overlap graph of $\Phi_m$ with the right
-Fischer cover, using the threshold decoder to prove synchronization and
-follower separation.\\
+Fischer--Krieger cover theory
+\cite{Fischer1975,Krieger1984,LindMarcus1995} &
+Identification of the concrete overlap presentation in the stabilized output
+alphabet.\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-The DCDS-A shift-space literature includes papers on sofic spacing shifts and
-symbolic symmetries, for example
-\cite{BanksOprochaStanley2015,BaakeRobertsYassawi2018}. Those papers are
-thematic comparators: they study structural properties of shift spaces and
-their presentations or symmetries. They are not direct predecessors of the
-cyclic Fibonacci residue map studied here, whose main issue is the exact
-injectivity degree of a particular finite-window normalization under overlap.
-
-We record the fixed-window arithmetic of the same map. The fibers of $\Fold_m$ are described by a residue formula and a roots-of-unity filter, and an affine transfer principle identifies the canonical valuation with a shifted-weight model up to a permutation of residues. The second moment
-\[
-\Sigma_m=\sum_{x\in X_m}|\Fold_m^{-1}(x)|^2
-\]
-satisfies a closed linear recurrence. These facts are independent of the overlap threshold, but they describe the local multiplicities which disappear on path space when $m\ge3$.
-
-This should be distinguished from the general existence of normalization
-automata and resolving presentations. Fibonacci and Ostrowski numeration have
-well-developed finite-automaton normal forms, and symbolic dynamics supplies
-general criteria under which a degree-one resolving factor is a conjugacy.
-Those results do not determine the degree of the cyclic maps
-$\Fold_{A,m}$ on the full digit cubes.  The point here is the exact
-family-wide degree computation under sliding overlap, including the threshold
-function, the complete golden $m=2$ branch locus and the Fischer-cover
-identification of the resulting golden image shift.
-
-The source model plays a limited role. Sturmian words and Fibonacci numeration provide the admissible language and the normalization viewpoint \cite{MorseHedlund1940,Lothaire2002,Queffelec2010,Frougny1992,Berstel2001}. More general connections between numeration and symbolic dynamics are treated in \cite{BertheRigo2010,BertheSteinerThuswaldner2019}, and the metallic comparison uses the standard Ostrowski framework \cite{Ostrowski1922,Berthe2001Ostrowski,AlloucheShallit2003}. The broader numeration background includes the classical relation between $\beta$-expansions and shift spaces \cite{Parry1960}. Sofic shifts, sliding-block codes, resolving presentations, Fischer covers and finite-to-one factors are used in the sense of \cite{Hedlund1969,LindMarcus1995,Kitchens1998,Nasu1995}; related resolving factor theory appears in \cite{Ashley1991,Boyle1983}.
-
-Several auxiliary results are included to fix notation and to place the threshold in a broader symbolic-dynamical setting. Theorem~\ref{thm:noise-full-support} is the standard full-support consequence of a strictly positive finite channel \cite{CoverThomas2006}. Theorems~\ref{thm:fold-suite} and~\ref{thm:fiber-residue} are finite-window forms of Zeckendorf uniqueness and normalization \cite{Zeckendorf1972,Lothaire2002,Frougny1992,Berstel2001}. The Fourier expression for the fibers is the usual roots-of-unity filter \cite{Stanley2012}, and the affine transfer uses d'Ocagne's identity \cite{Koshy2001}. The entropy identities below are fixed-window or finite-to-one consequences used to distinguish local multiplicity from trajectory-level invertibility. The estimates in Section~\ref{sec:fp:tv} combine deterministic pushforward with classical discrepancy bounds for rotations \cite{KuipersNiederreiter1974,DrmotaTichy1997}.
-
-The motivation from finite-resolution observation of quasiperiodic order \cite{Shechtman1984,Jagannathan2021,BaakeGrimm2013} enters only through the induced symbolic law. In a noiseless golden Sturmian model the words are already $11$-free, so stabilization acts trivially on each legal window. A strictly positive local readout, however, assigns positive probability to every binary word of a fixed length. The normalization must therefore be defined on the full cube, and the relevant question is whether overlap recovers the hidden raw word.
-
-The paper is organized around the threshold and Fischer-cover results.
-Section~\ref{sec:stabilization} defines the finite-window Fibonacci
-normalization, proves the residue and affine-transfer facts, and supplies the
-finite fibers used later. Section~\ref{sec:stab:conjugacy} proves the
-finite-state presentation, the three-window threshold, and the two-window
-branch classification. Section~\ref{sec:metallic-cover} proves the metallic
-family block bijection, threshold function and zeta certificate, then gives
-the Fischer-cover identification for the golden image.
-Section~\ref{sec:quadratic-pisot-extension} constructs the canonical
-Parry-rank fold and proves the exhaustive quadratic-Pisot threshold theorem.
-Section~\ref{sec:discussion} closes the main narrative. The remaining material
-is placed in appendices as standard consequences and auxiliary source-law
-information: Appendix~\ref{sec:readout} fixes the symbolic source model,
-Appendix~\ref{sec:entropy-ledger} records the fixed-window entropy
-decomposition, Appendix~\ref{sec:measurement} transports block experiments and
-finite-range interactions through the conjugacy,
-Appendix~\ref{sec:fiber-spectrum} records the independent second-moment
-statistic, Appendix~\ref{sec:fp:tv} gives supporting Sturmian discrepancy
-certificates, and Appendix~\ref{sec:superspace} is retained only as
-source-layer motivation.
+Section~\ref{sec:stabilization} develops the finite Fibonacci rank recoding.
+Sections~\ref{sec:stab:conjugacy} and the following branch-locus section prove
+the sharp Fibonacci decoder and the two-window exception.
+Section~\ref{sec:metallic-cover} treats the boundary-modified constant-type
+family and its Fischer cover.  Section~\ref{sec:quadratic-pisot-extension}
+proves the two-chamber theorem and gives four worked nonmetallic examples.
+Section~\ref{sec:discussion} records the scope and remaining interfaces.
+Routine source-law, entropy, Blackwell-equivalence, pressure, fiber-moment,
+discrepancy, and geometric consequences have been moved to the separate
+supplementary material; none is used in the threshold proofs.

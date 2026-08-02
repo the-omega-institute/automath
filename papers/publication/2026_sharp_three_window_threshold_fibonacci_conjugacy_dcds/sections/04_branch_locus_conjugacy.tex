@@ -1,6 +1,15 @@
 ﻿\subsection{The two-window branch locus and conjugacy}
 \label{sec:stab:branch-and-conjugacy}
 
+For $m\ge2$, define the one-sided sliding recoding by
+\[
+(\Phi_m^+(a))_t:=\Fold_m(a_t,\ldots,a_{t+m-1}),\qquad t\ge0,
+\]
+and its one-sided image by
+\[
+Y_m^+:=\Phi_m^+(\{0,1\}^{\mathbb N}).
+\]
+
 \begin{theorem}[Complete classification of the two-window branch locus]\label{thm:m2-branch-locus}
 Let
 \[
@@ -315,36 +324,6 @@ inverse bijection is pushforward by the inverse conjugacy.  The inverse
 conjugacy is the local decoder in (i), proving (iv).
 \end{proof}
 
-\begin{theorem}[Three-window phase transition]\label{thm:phase-transition}
-For the sliding stabilized-window factors $\Phi_m$, $m\ge2$, there are exactly
-two regimes.
-\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
-  \item At $m=2$ the unique non-singleton path-space fiber is the branch pair
-  \[
-  \Phi_2^{-1}\bigl((\ldots,00,00,\ldots)\bigr)
-  =
-  \{0^{\ZZ},1^{\ZZ}\}.
-  \]
-  Every other point of $Y_2$ has a singleton preimage.
-  \item For every $m\ge3$ the map
-  \[
-  \Phi_m:\bigl(\{0,1\}^{\ZZ},\sigma\bigr)\to(Y_m,\sigma)
-  \]
-  is a topological conjugacy onto a subshift of finite type. Its inverse is a
-  sliding-block code with memory $0$ and anticipation $m-1$.
-\end{enumerate}
-Consequently the stabilized-window dynamics has no intermediate degeneration:
-in the whole Fibonacci family $m\ge2$, failure of path-space conjugacy occurs
-only at $m=2$, and there it consists of the single branch orbit pair displayed
-above.
-\end{theorem}
-
-\begin{proof}
-The two-window statement is exactly Theorem~\ref{thm:m2-branch-locus}.  The
-above-threshold statement is Theorem~\ref{thm:two-sided-conjugacy}.  These two
-alternatives exhaust all integers $m\ge2$.
-\end{proof}
-
 \begin{remark}[Decoder complexity]\label{rem:decoder-complexity}
 The inverse code supplied by Corollary~\ref{cor:explicit-decoder} reads a
 sliding window of length $m$ and outputs one raw bit. Equivalently, the decoder
@@ -352,52 +331,6 @@ may be implemented by maintaining an overlap state of size $m-1$. The
 arithmetic cost is $O(m)$ per output symbol, since each decoding step involves
 at most $m$ Fibonacci-weighted additions modulo $F_{m+2}$.
 \end{remark}
-
-\begin{proposition}[Standard dynamical corollaries above threshold]\label{prop:conjugacy-consequences}
-Assume $m\ge3$.  Then:
-\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
-  \item For every $n\ge1$,
-  \[
-  \#\operatorname{Fix}(\sigma^n|_{Y_m})=2^n.
-  \]
-  Hence the Artin--Mazur zeta function is
-  \[
-  \zeta_{Y_m}(z)
-  :=\exp\left(\sum_{n\ge1}
-  \frac{\#\operatorname{Fix}(\sigma^n|_{Y_m})}{n}z^n\right)
-  =
-  \frac{1}{1-2z}.
-  \]
-  \item Pushforward by $\Phi_m$ is a bijection from shift-invariant Borel
-  probability measures on $\{0,1\}^{\ZZ}$ to shift-invariant Borel
-  probability measures on $Y_m$, with inverse pushforward by the local
-  decoder in Theorem~\ref{thm:two-sided-conjugacy}.
-  \item Ergodicity, weak mixing, strong mixing, Bernoulli-ness, the
-  $K$-property, and entropy are transported exactly through this measure
-  correspondence.
-\end{enumerate}
-These are standard consequences of the topological conjugacy in
-Theorem~\ref{thm:two-sided-conjugacy}; the arithmetic contribution is the
-finite-window decoder proving that conjugacy.
-\end{proposition}
-
-\begin{proof}
-By Theorem~\ref{thm:two-sided-conjugacy}, $\Phi_m$ is a topological conjugacy
-between the full two-shift and $(Y_m,\sigma)$, with inverse given by a
-sliding-block code. Periodic points, invariant measures, entropy and the
-listed measure-theoretic properties are standard invariants of topological or
-measure-theoretic conjugacy. Thus the fixed points of $\sigma^n|_{Y_m}$ are in
-bijection with the $2^n$ fixed points of $\sigma^n$ on the full two-shift, and
-\[
-\zeta_{Y_m}(z)=
-\exp\left(\sum_{n\ge1}\frac{(2z)^n}{n}\right)
-=\exp\bigl(-\log(1-2z)\bigr)
-=\frac{1}{1-2z}.
-\]
-The measure correspondence is pushforward by $\Phi_m$, with inverse pushforward
-by the local decoder. See \cite{Walters1982} for the standard entropy and
-isomorphism invariance statements.
-\end{proof}
 
 \begin{remark}\label{rem:exact-recoding}
 For $m\ge3$ the stabilized image is a subshift of finite type topologically
@@ -415,108 +348,4 @@ equal-entropy resolving theory and \cite{Boyle1983} for the lower-entropy
 obstruction. The threshold theorem says that degree~1 is achieved exactly at
 $m=3$. This is an arithmetic fact, not a formal consequence of the sofic
 framework, and it uses the explicit decoder of Lemma~\ref{lem:m3-decoder}.
-\end{remark}
-
-\begin{proposition}[Measure-theoretic entropy preservation under the stabilized-window factor]\label{prop:measure-entropy-preservation}
-Let $m\ge 2$, let $\nu$ be a shift-invariant Borel probability measure on
-$\{0,1\}^{\ZZ}$, and let
-\[
-\eta:=(\Phi_m)_*\nu
-\]
-be its image on $Y_m\subset (X_m)^{\ZZ}$. Then
-\[
-h_\eta(\sigma)=h_\nu(\sigma).
-\]
-This finite-to-one entropy preservation is a standard bounded-fiber
-consequence of Theorem~\ref{thm:finite-state-lift}; for $m\ge3$ it is
-subsumed by the conjugacy theorem.
-\end{proposition}
-
-\begin{proof}
-For $n\ge 1$, let
-\[
-A_{0:n+m-2}:=(A_0,\dots,A_{n+m-2})
-\]
-denote the raw binary block of length $n+m-1$, and let
-\[
-Y_{0:n-1}:=(Y_0,\dots,Y_{n-1}),\qquad
-Y_t=\Fold_m(A_t\cdots A_{t+m-1}),
-\]
-denote the stabilized block of length $n$.
-
-Since $Y_{0:n-1}$ is a deterministic function of $A_{0:n+m-2}$, one has
-\[
-H_\eta(Y_{0:n-1})\le H_\nu(A_{0:n+m-2}).
-\]
-Conversely, by the finite-state lift in Theorem~\ref{thm:finite-state-lift},
-once the initial overlap state
-\[
-(A_0,\dots,A_{m-2})\in\{0,1\}^{m-1}
-\]
-is specified, the entire raw block $A_{0:n+m-2}$ is uniquely determined by the
-stabilized block $Y_{0:n-1}$. Therefore
-\[
-H_\nu(A_{0:n+m-2}\mid Y_{0:n-1})\le (m-1)\log 2.
-\]
-By the chain rule,
-\[
-H_\nu(A_{0:n+m-2})
-=
-H_\eta(Y_{0:n-1})
-+
-H_\nu(A_{0:n+m-2}\mid Y_{0:n-1}),
-\]
-hence
-\[
-0\le H_\nu(A_{0:n+m-2})-H_\eta(Y_{0:n-1})\le (m-1)\log 2.
-\]
-Divide by $n$ and let $n\to\infty$. The additive discrepancy is $O(1)$, so it
-disappears after normalization. The left-hand side converges to
-$h_\nu(\sigma)$ because shifting the block length by the fixed amount $m-1$
-does not affect the entropy rate, while the right-hand side converges to
-$h_\eta(\sigma)$. Thus
-\[
-h_\eta(\sigma)=h_\nu(\sigma).
-\]
-\end{proof}
-
-\begin{corollary}[Sequence-level entropy preservation]\label{cor:entropy-preservation}
-For every $m\ge 2$,
-\[
-h_{\mathrm{top}}(Y_m)=\log 2.
-\]
-\end{corollary}
-
-\begin{proof}
-The map $\Phi_m$ is a continuous factor from the full two-shift onto $Y_m$, so
-\[
-h_{\mathrm{top}}(Y_m)\le h_{\mathrm{top}}(\{0,1\}^{\ZZ})=\log 2.
-\]
-Let
-\[
-\nu_{1/2}:=\Bigl(\tfrac12,\tfrac12\Bigr)^{\otimes \ZZ}
-\]
-be the Bernoulli measure on the full two-shift, and set
-\[
-\eta_{1/2}:=(\Phi_m)_*\nu_{1/2}.
-\]
-By Proposition~\ref{prop:measure-entropy-preservation},
-\[
-h_{\eta_{1/2}}(\sigma)=h_{\nu_{1/2}}(\sigma)=\log 2.
-\]
-Since $\eta_{1/2}$ is a shift-invariant Borel probability measure on $Y_m$,
-the variational principle \cite{Walters1982} gives
-\[
-h_{\mathrm{top}}(Y_m)\ge \log 2.
-\]
-Thus equality holds.
-\end{proof}
-
-\begin{remark}
-For every $m\ge2$ the stabilized-window factor preserves entropy. Once
-$m\ge3$, the structure is stronger: $Y_m$ is conjugate to the full two-shift.
-Preservation of periodic data and invariant measures is then a consequence of
-the conjugacy, not an additional source of arithmetic content.
-Proposition~\ref{prop:low-window-counterexamples} shows that the threshold
-cannot be lowered.
 \end{remark}

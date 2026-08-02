@@ -1,14 +1,18 @@
-\section{The Parry-rank fold for every quadratic Pisot base}
+\section{Cyclic rank recoding for quadratic Pisot languages}
 \label{sec:quadratic-pisot-extension}
 
 This section closes the interface left by Remark~\ref{rem:metallic-beta-scope}.
 The point requiring care is that a quadratic Pisot number need not be a unit
-and its conjugate need not be negative.  Consequently the metallic
-Ostrowski language is not the appropriate common object.  We instead use the
-greedy $\beta$-language itself and its canonical colexicographic rank.  The
-published results on greedy admissibility and finite-state normalization are
-used only for context; the finite rank and sliding-congruence arguments needed
-below are proved here.
+and its conjugate need not be negative.  Consequently the boundary-modified
+constant-type language is not the appropriate common object.  We instead use
+the greedy $\beta$-language and its colexicographic ordered-language rank, and
+we introduce a cyclic reduction of that rank.  This recoding is not numerical
+$\beta$-value normalization: it asserts congruence only between integer
+language ranks and does not assert equality in $\mathbb Z[\beta]$.  The
+classical $\beta$-shift and automata literature supplies context
+\cite{Renyi1957,ItoTakahashi1974,Parry1960,Blanchard1989,Loraud1995,
+BruyereHansel1997,LecomteRigo2001}; every finite-rank and
+sliding-congruence statement used below is proved here.
 
 \subsection{Quadratic classification and canonical finite windows}
 
@@ -64,17 +68,18 @@ $\mathcal A_\beta=\{0,\ldots,d\}$.  Let $\mathcal L_m(X_\beta)$ be the
 length-$m$ language of the two-sided greedy $\beta$-shift, characterized by
 Parry's suffix inequalities against $d_\beta^*(1)$.
 
-\begin{definition}[Canonical Parry-rank window fold]
+For words $x=(x_1,\ldots,x_m)$ and $y=(y_1,\ldots,y_m)$ in low-to-high
+orientation, write $x<_{\rm colex}y$ when
+$(x_m,\ldots,x_1)<_{\rm lex}(y_m,\ldots,y_1)$.  Lexicographic comparison of a
+finite word with an infinite boundary uses the available finite prefix: the
+first unequal digit decides the comparison, and equality through the end of
+the finite word is allowed.  A comparison with $c_0^m$ is the literal
+finite-word comparison.
+
+\begin{definition}[Cyclic rank recoding attached to the Parry language]
 \label{def:quadratic-parry-fold}
-For $m\ge0$ define $Q_m(\beta)=|\mathcal L_m(X_\beta)|$.  In the two
-chambers of Lemma~\ref{lem:quadratic-pisot-chambers}, respectively, these
-integers are
-\begin{align}
-Q_0&=1,\quad Q_1=a+1,\quad Q_{j+2}=aQ_{j+1}+bQ_j,
-&& (P^-_{a,b}),\label{eq:qminus}\\
-Q_0&=1,\quad Q_1=a,\quad Q_{j+2}=aQ_{j+1}-bQ_j,
-&& (P^+_{a,b}).\label{eq:qplus}
-\end{align}
+For $m\ge0$ define $Q_m(\beta)=|\mathcal L_m(X_\beta)|$; the recurrences for
+these counts are proved in Proposition~\ref{prop:parry-rank-bijection}.
 Use the low-to-high orientation
 \[
 X_m^{(\beta)}:=\{x\in\mathcal A_\beta^m:
@@ -84,7 +89,7 @@ and set
 \[
 \operatorname{Rank}_{\beta,m}(x)=\sum_{j=0}^{m-1}x_{j+1}Q_j(\beta).
 \]
-The canonical finite-window fold is
+The cyclic language-rank recoding is
 \[
 \Fold_{\beta,m}(w)=
 \bigl(\operatorname{Rank}_{\beta,m}|_{X_m^{(\beta)}}\bigr)^{-1}
@@ -96,7 +101,7 @@ Finally,
 =\Fold_{\beta,m}(z_t,\ldots,z_{t+m-1}),\qquad
 Y_{\beta,m}=\Phi_{\beta,m}(\mathcal A_\beta^{\mathbb Z}).
 \]
-The nontrivial threshold is
+The nontrivial overlap threshold is
 \[
 m_*(\beta)=\min\{m\ge2:\Phi_{\beta,m}\text{ is a conjugacy onto the
 SFT }Y_{\beta,m}\}.
@@ -105,6 +110,13 @@ SFT }Y_{\beta,m}\}.
 
 \begin{proposition}[Parry rank is consecutive and canonical]
 \label{prop:parry-rank-bijection}
+The language counts satisfy
+\begin{align}
+Q_0&=1,\quad Q_1=a+1,\quad Q_m=aQ_{m-1}+bQ_{m-2}
+&& (P^-_{a,b},\ m\ge2),\label{eq:qminus}\\
+Q_0&=1,\quad Q_1=a,\quad Q_m=aQ_{m-1}-bQ_{m-2}
+&& (P^+_{a,b},\ m\ge2).\label{eq:qplus}
+\end{align}
 For every quadratic Pisot $\beta$ and $m\ge1$,
 \[
 \operatorname{Rank}_{\beta,m}|_{X_m^{(\beta)}}:
@@ -123,40 +135,283 @@ orientation to
 \[
 x_k=a\Longrightarrow x_{k-1}<b.
 \]
-Words whose last digit is $0,\ldots,a-1$ give $a$ consecutive intervals of
-length $Q_{m-1}$.  If the last digit is $a$, the preceding digit is one of
-$0,\ldots,b-1$ and gives $b$ consecutive intervals of length $Q_{m-2}$.
-Their union is
-$[0,aQ_{m-1}+bQ_{m-2}-1]$.  This proves both \eqref{eq:qminus} and the rank
-claim by induction.
+We use induction on $m$, with the invariant that the ranks of $X_m^{(\beta)}$
+form the initial interval $[0,Q_m-1]$.  It is immediate for $m=0,1$.  For
+$m\ge2$, a high digit $h\in\{0,\ldots,a-1\}$ leaves an arbitrary word of
+$X_{m-1}^{(\beta)}$ and hence contributes
+\[
+[hQ_{m-1},(h+1)Q_{m-1}-1].
+\]
+For high digit $a$, the next digit is
+$g\in\{0,\ldots,b-1\}$ and the remaining word is arbitrary in
+$X_{m-2}^{(\beta)}$; its ranks are
+\[
+aQ_{m-1}+[gQ_{m-2},(g+1)Q_{m-2}-1].
+\]
+The intervals are consecutive in colexicographic order and their union is
+$[0,aQ_{m-1}+bQ_{m-2}-1]$.  This proves simultaneously the negative
+recurrence, the induction invariant, and order preservation.
 
-In the positive chamber put $c=a-b-1$.  Parry admissibility says that after
-an occurrence of $a-1$ the remaining lower word is at most $c^\infty$ in
-lexicographic order.  Simultaneous induction gives
+For the positive chamber put
 \[
-|\mathcal L_m(X_\beta)|=aQ_{m-1}-bQ_{m-2}
+d=a-1,\qquad c_0=a-b-1,
 \]
-and says that the legal lower words bounded by $c^\infty$ have ranks
+and define the boundary-bounded sublanguage
 \[
-0,\ldots,Q_{m-1}-bQ_{m-2}-1.
+B_m:=\{x\in X_m^{(\beta)}:
+(x_m,\ldots,x_1)\le_{\rm lex}c_0^m\},
+\qquad R_m:=|B_m|.
 \]
-Indeed the last digit classes $0,\ldots,a-2$ contribute the consecutive
-interval $[0,(a-1)Q_{m-1}-1]$, while the last digit $a-1$ contributes the
-next interval of the displayed bounded length.  Splitting the bounded class
-according as its next digit is smaller than or equal to $c$ gives the same
-statement one index lower, which initializes at lengths zero and one.
-The upper endpoint is
-$(a-1)Q_{m-1}+Q_{m-1}-bQ_{m-2}-1=Q_m-1$.
-This proves \eqref{eq:qplus}, consecutiveness, and order preservation.
+We prove simultaneously, for every $m\ge0$, the coupled induction invariant
+\begin{equation}
+\Rank_{\beta,m}(X_m^{(\beta)})=[0,Q_m-1],
+\qquad
+\Rank_{\beta,m}(B_m)=[0,R_m-1].
+\label{eq:coupled-rank-invariant}
+\end{equation}
+Here $X_0^{(\beta)}=B_0=\{\varnothing\}$, so $Q_0=R_0=1$ and the assertion
+holds at $m=0$.  At $m=1$, one has $Q_1=d+1=a$ and
+$R_1=c_0+1=a-b$, and the ranks are the stated intervals.
+
+Assume \eqref{eq:coupled-rank-invariant} through length $m-1$.  Parry
+admissibility says that a high digit $h<d$ may be followed by any word in
+$X_{m-1}^{(\beta)}$, whereas a high digit $d$ must be followed by a word in
+$B_{m-1}$.  The classes $h=0,\ldots,d-1$ therefore give the consecutive
+intervals
+\[
+[hQ_{m-1},(h+1)Q_{m-1}-1],
+\]
+and the high class $h=d$ gives
+\[
+[dQ_{m-1},dQ_{m-1}+R_{m-1}-1].
+\]
+Consequently
+\begin{equation}
+Q_m=dQ_{m-1}+R_{m-1},
+\qquad
+\Rank_{\beta,m}(X_m^{(\beta)})=[0,Q_m-1].
+\label{eq:positive-X-coupling}
+\end{equation}
+
+The same decomposition inside $B_m$ has high digits
+$0,\ldots,c_0-1$ followed by arbitrary words of $X_{m-1}^{(\beta)}$, and
+high digit $c_0$ followed by a word of $B_{m-1}$.  Hence
+\begin{equation}
+R_m=c_0Q_{m-1}+R_{m-1},
+\qquad
+\Rank_{\beta,m}(B_m)=[0,R_m-1].
+\label{eq:positive-B-coupling}
+\end{equation}
+This closes the simultaneous induction and proves consecutiveness rather than
+assuming it.  Subtracting \eqref{eq:positive-B-coupling} from
+\eqref{eq:positive-X-coupling} gives
+\[
+Q_m-R_m=(d-c_0)Q_{m-1}=bQ_{m-1}.
+\]
+Thus, for $m\ge2$,
+\[
+R_{m-1}=Q_{m-1}-bQ_{m-2}
+\]
+and
+\[
+Q_m=dQ_{m-1}+R_{m-1}
+=(d+1)Q_{m-1}-bQ_{m-2}
+=aQ_{m-1}-bQ_{m-2},
+\]
+which proves \eqref{eq:qplus}.  The order of the displayed digit classes is
+the colexicographic order, so the same induction proves order preservation.
 When $b=1$ in the negative chamber, the rule and recurrence are precisely
 those of Definition~\ref{def:metallic-window-data}.
 \end{proof}
 
 \subsection{The bounded sliding-congruence lemma}
 
-The following elementary lemma is the arithmetic core.  It is stated
-separately so that the exact hypothesis behind the family-wide claim is
-visible.
+The separation estimate used in the sliding argument is isolated first.  In
+particular, the integer multiple and the error term are both retained.
+
+\begin{lemma}[Nearest-multiple separation]
+\label{lem:nearest-multiple-separation}
+Let $Q_0,Q_1,\ldots$ satisfy either \eqref{eq:qminus} or \eqref{eq:qplus},
+write $s=1$ or $s=-1$ accordingly, and put
+\[
+d=\begin{cases}a,&s=1,\\a-1,&s=-1.\end{cases}
+\]
+Then, for $r\ge4$ and $1\le |e|\le d$,
+\begin{equation}
+\operatorname{dist}(beQ_{r-1},Q_r\mathbb Z)\ge Q_{r-2}.
+\label{eq:quadratic-separation}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Distance is unchanged by replacing $e$ with $-e$, so assume $1\le e\le d$.
+Set
+\[
+R_r:=\frac{Q_{r-1}}{Q_{r-2}}.
+\]
+The recurrence gives $R_{r+1}=a+sb/R_r$.  Its initial values and the parameter
+ranges imply, by induction,
+\begin{align}
+a+\frac{b}{a+1}&\le R_r<a+\frac ba &&(s=1,\ r\ge3),
+\label{eq:ratio-plus}\\
+a-\frac{b}{a-1}&<R_r\le a-\frac ba &&(s=-1,\ r\ge3).
+\label{eq:ratio-minus}
+\end{align}
+For completeness, in the positive-recurrence case the map
+$x\mapsto a+b/x$ reverses order, sends
+$[a+b/(a+1),a+b/a)$ into itself, and $R_3=a+b/(a+1)$.
+In the negative-recurrence case $x\mapsto a-b/x$ preserves order, the interval
+in \eqref{eq:ratio-minus} lies in $(a-1,a)$, and $R_3=a-b/a$.
+These observations prove the two inductions, including the stated strict
+endpoints.
+
+We shall also use the following sharpened bounds, obtained by applying the
+same recurrence once more:
+\begin{align*}
+L_+&:=a+\frac{b}{a+b/(a+b/(a+1))},&
+U_+&:=a+\frac{b}{a+b/(a+1)},\\
+L_-&:=a-\frac{b}{a-1},&
+U_-&:=a-\frac{b}{a-b/a}.
+\end{align*}
+Thus
+\begin{equation}
+L_+\le R_r\le U_+\quad(s=1,r\ge4),
+\qquad
+L_-<R_r\le U_-\quad(s=-1,r\ge4).
+\label{eq:sharpened-ratio-bounds}
+\end{equation}
+The first assertion follows because the order-reversing map interchanges the
+endpoints $R_4=U_+$ and $R_5=L_+$ and maps $[L_+,U_+]$ into itself.  The
+second follows because $R_3=a-b/a$, $R_4=U_-$, and the increasing map sends
+$(L_-,U_-]$ into itself.
+
+Choose a nearest integer $k$ to
+\[
+z:=\frac{beQ_{r-1}}{Q_r}=\frac{be}{R_{r+1}}.
+\]
+The lower bounds $R_{r+1}>a$ for $s=1$ and $R_{r+1}>a-1$ for $s=-1$ give
+\[
+0<z<b.
+\]
+Indeed $e\le a$ in the first case and $e\le a-1$ in the second.  Hence every
+nearest integer satisfies
+\begin{equation}
+0\le k\le b.
+\label{eq:nearest-k-bound}
+\end{equation}
+Put $h:=be-ak$.  The exact error, with no omitted remainder, is
+\begin{align}
+E&:=beQ_{r-1}-kQ_r\notag\\
+ &=(be-ak)Q_{r-1}-skbQ_{r-2}
+   =(hR_r-skb)Q_{r-2}.
+\label{eq:nearest-error}
+\end{align}
+
+We record the bounded integer exclusion used for the only cancelling sign
+cases.  This is separated from the recurrence argument so that all of its
+integer hypotheses are visible.  For the parameter ranges above and integers
+$1\le e\le d$, $0\le k\le b$, $h=be-ak$, one has
+\begin{align}
+h>0, s=1&\Longrightarrow
+  hL_+-kb\ge1\quad\hbox{or}\quad kb-hU_+\ge1,
+\label{eq:endpoint-plus}\\
+h<0, s=-1&\Longrightarrow
+  (-h)L_--kb\ge1\quad\hbox{or}\quad kb-(-h)U_-\ge1.
+\label{eq:endpoint-minus}
+\end{align}
+Here is the integer calculation.  Write $j=kb-ah$ in the first line and
+$j=a(-h)-kb$ in the second.  Since $h=be-ak$, solving for $(e,k)$ gives
+\[
+k=\frac{ah+j}{b},\qquad
+e=\frac{(a^2+b)h+aj}{b^2}\quad(s=1),
+\]
+and, with $g=-h$,
+\[
+k=\frac{ag-j}{b},\qquad
+e=\frac{(a^2-b)g-aj}{b^2}\quad(s=-1).
+\]
+Thus the two displayed numerators are divisible by $b$ and $b^2$,
+respectively.  We give the remaining Euclidean divisions explicitly.  In the
+$s=1$ case write
+\[
+be=aq+r,\qquad qb=ap+t,\qquad 0\le r,t<a.
+\]
+If $k\le q-1$, then $h\ge a+r$ and
+\[
+hL_+-kb>(a+r)a-(b-1)b\ge1.
+\]
+If $k\ge q+1$, then $h<0$, so this case is not in the hypothesis of
+\eqref{eq:endpoint-plus}.  Hence only $k=q$ remains, and then $h=r$.
+Now $j=a(p-r)+t$.  The cases $p<r$ and $p>r$ give, respectively,
+$hL_+-kb\ge1$ and $kb-hU_+\ge1$ directly from $0\le t<a$ and
+$0<U_+-a<b/a$.  When $p=r$, put $w=rb-at$.  The two division identities give
+\begin{equation}
+b^2e=r(a^2+b)+at,\qquad w=r(a^2+2b)-b^2e.
+\label{eq:plus-terminal-divisions}
+\end{equation}
+The integer $w$ is nonzero: if $w=0$, the three divisions imply successively
+$a\mid rb$, $a\mid qb$ and $a\mid eb$, contrary to $0<r<a$.  Substitution of
+\eqref{eq:plus-terminal-divisions}, followed by multiplication by the positive
+denominators, gives the exhaustive terminal alternatives
+\[
+\begin{array}{c|c}
+w>0& rb(a^2+a+b)\ge(t+1)(a^3+a^2+2ab+b),\\
+w<0& t(a^2+a+b)\ge rb(a+1)+(a^2+a+b).
+\end{array}
+\]
+Indeed, after moving the right side to the left, division first by $a$ and
+then by $b$ has remainders $w$ and $r$, respectively; in the first row both
+remainders are positive, while in the second their negatives are positive.
+These are precisely $rL_+-t\ge1$ and $t-r(U_+-a)\ge1$.  This proves
+\eqref{eq:endpoint-plus}.
+
+For $s=-1$, put $g=-h>0$ and perform the same divisions with subtraction:
+\[
+be=aq+r,\qquad kb=ap+t,\qquad 0\le r,t<a.
+\]
+The inequality $g>0$ forces $k\ge q+1$.  If $k\ge q+2$, then
+$g=ak-be\ge a+1$, and, since $k\le b$ and $b\le a-2$,
+\[
+gL_--kb
+\ge (a+1)\left(a-\frac b{a-1}\right)-b^2\ge1.
+\]
+It remains to take $k=q+1$, for which $g=a-r$.  If $p<g$, then
+$j=ag-kb=a(g-p)-t$, and clearing the denominator in $gL_--kb\ge1$ gives
+\[
+(a-1)\{a(g-p)-t-1\}-gb\ge0.                 \tag{*}
+\]
+Substitute $r=a-g$, $be=aq+r$, and $kb=ap+t$.  Successive division by
+$a$ and $a-1$ leaves the nonnegative remainders
+$g-p-1$, $a-1-e$, and $a-2-b$; hence (*) holds.  If $p>g$, then
+$kb-ag=a(p-g)+t\ge1$, so $kb-gU_-\ge1$.  Finally, if $p=g$, then
+$kb-ag=t$.  This again gives $kb-gU_-\ge1$ when $t>0$; when $t=0$, the
+three exact divisions, together with $e\le a-1$, give
+$gab\ge a^2-b$, which is the same inequality after multiplication by
+$a^2-b$.  These cases are exhaustive and prove
+\eqref{eq:endpoint-minus}.
+
+We now cover all signs explicitly.  If $s=1$ and $h<0$, then
+\[
+|hR_r-kb|=(-h)R_r+kb>1.
+\]
+If $h=0$, then $k\ge1$ (because $e\ge1$), and
+$|hR_r-kb|=kb\ge1$.  If $h>0$, the two alternatives in
+\eqref{eq:endpoint-plus}, together with
+$L_+\le R_r\le U_+$, give $|hR_r-kb|\ge1$.
+
+If $s=-1$ and $h>0$, then $hR_r+kb>1$.  If $h=0$, again $k\ge1$ and the
+modulus is $kb\ge1$.  If $h<0$, put $g=-h$; then
+$|hR_r+kb|=|kb-gR_r|$, and
+\eqref{eq:endpoint-minus} with $L_-<R_r\le U_-$ gives the same lower bound.
+Thus in both chambers
+\[
+|hR_r-skb|\ge1.
+\]
+Equation~\eqref{eq:nearest-error} now yields $|E|\ge Q_{r-2}$, which is
+\eqref{eq:quadratic-separation}.
+\end{proof}
+
+The following sliding lemma is the arithmetic core of the block decoder.
 
 \begin{lemma}[Quadratic bounded sliding congruences]
 \label{lem:quadratic-sliding-congruences}
@@ -183,41 +438,18 @@ e_t+\delta e_{t+1}-sbQ_{m-1}e_{t+m+1}\equiv0\pmod{Q_m}.
 \label{eq:quadratic-elimination}
 \end{equation}
 
-We record the elementary separation calculation used twice below.  Direct
-division using the recurrence and the parameter inequalities gives
-\begin{equation}
-\operatorname{dist}(beQ_{r-1},Q_r\mathbb Z)\ge Q_{r-2}
-\quad(r\ge4,\ 1\le |e|\le d).
-\label{eq:quadratic-separation}
-\end{equation}
-For completeness, the division has only the following two rows; replacing
-$e$ by $-e$ changes no distance.
-\[
-\begin{array}{c|c|c|c}
-s&Q_1&\text{parameter range}&Q_2\text{ and required lower bound}\\ \hline
-+1&a+1&1\le b\le a&a^2+a+b>2a\\
--1&a&1\le b\le a-2&a^2-b>a-1
-\end{array}
-\]
-To verify \eqref{eq:quadratic-separation}, choose the nearest integer $k$
-and insert $Q_r=aQ_{r-1}+sbQ_{r-2}$ in
-$beQ_{r-1}-kQ_r$.  If its modulus were below $Q_{r-2}$, division by
-$Q_{r-2}$ and the inequalities
-\[
-a<\frac{Q_{r-1}}{Q_{r-2}}<a+b\quad(s=1),
-\qquad
-a-1<\frac{Q_{r-1}}{Q_{r-2}}<a\quad(s=-1)
-\]
-force respectively
-$be=ka+ksbQ_{r-2}/Q_{r-1}$ with a nonzero integer strictly between
-$-1$ and $1$.  This is impossible.  Equality can occur only at an endpoint
-and is harmless.  This proves the separation claim by induction from the
-displayed $Q_2$ row.
-
 Suppose first that $m\ge4$.  The small part of
 \eqref{eq:quadratic-elimination} has modulus at most
-$d(1+\delta)$, whereas \eqref{eq:quadratic-separation} and the table give a
-strictly larger distance whenever $e_{t+m+1}\ne0$.  Hence
+$d(1+\delta)$.  On the other hand,
+\[
+Q_{m-2}\ge Q_2=
+\begin{cases}
+a^2+a+b>2a=d(1+\delta),&s=1,\\
+a^2-b>a-1=d(1+\delta),&s=-1.
+\end{cases}
+\]
+Lemma~\ref{lem:nearest-multiple-separation} therefore gives a strictly larger
+distance whenever $e_{t+m+1}\ne0$.  Hence
 $e_{t+m+1}=0$ for $0\le t\le m-3$.  Thus
 $e_{m+1}=\cdots=e_{2m-2}=0$.  The final original congruence reduces to
 \[
@@ -273,8 +505,8 @@ $\pm(0,b,a)$, whose initial pair $\pm(0,b)$ cannot be a terminal pair of
 the $t=0$ triple.  Both alternatives are impossible, and therefore
 $e_4=0$.
 
-Suppose next that $s=-1$.  Put $c=a-b$ and $d=a-1$; then
-$2\le c\le d$ and
+Suppose next that $s=-1$.  Put $C=a-b$ and $d=a-1$; then
+$2\le C\le d$ and
 \[
 (Q_1,Q_2,Q_3)=(a,a^2-b,a^3-2ab).
 \]
@@ -285,7 +517,7 @@ The choice $z=0$ gives $x=y=0$, whereas $z=1$ gives
 x-b+a(y+a)=0.
 \]
 Here $1\le y+a\le2a-1$ and $b-x\le b+a-1\le2a-3$, so necessarily
-$y+a=1$ and $x=b-a=-c$; the case $z=-1$ is the negative solution.
+$y+a=1$ and $x=b-a=-C$; the case $z=-1$ is the negative solution.
 For $k=1$, if $z\le a-2$, then
 \[
 x+ay+Q_2z
@@ -294,35 +526,34 @@ x+ay+Q_2z
 \]
 because $a-b\ge2$.  Thus $z=d$, and
 \[
-x+ay=a(a-b)-b=ac-b.
+x+ay=a(a-b)-b=aC-b.
 \]
 Reduction modulo $a$, together with $|x|\le a-1$, leaves precisely
-$(x,y)=(-b,c)$ and $(x,y)=(c,c-1)$.  Hence the complete list is
+$(x,y)=(-b,C)$ and $(x,y)=(C,C-1)$.  Hence the complete list is
 \[
 (x,y,z;k)\in
-\{(0,0,0;0),\ \pm(c,d,-1;0),\
-  \ \pm(-b,c,d;1),\ \pm(c,c-1,d;1)\}.
+\{(0,0,0;0),\ \pm(C,d,-1;0),\
+  \ \pm(-b,C,d;1),\ \pm(C,C-1,d;1)\}.
 \]
-Its terminal pairs are $(0,0)$, $\pm(d,-1)$, $\pm(c,d)$, and
-$\pm(c-1,d)$.  Since $2\le c\le d$, neither $\pm(-b,c)$ nor
-$\pm(c,c-1)$ occurs in this list of terminal pairs.  Thus a $t=2$ triple
+Its terminal pairs are $(0,0)$, $\pm(d,-1)$, $\pm(C,d)$, and
+$\pm(C-1,d)$.  Since $2\le C\le d$, neither $\pm(-b,C)$ nor
+$\pm(C,C-1)$ occurs in this list of terminal pairs.  Thus a $t=2$ triple
 of either of the last two types cannot overlap a $t=1$ triple.  The only
-remaining nonzero possibility is $\pm(c,d,-1)$; it forces the $t=1$
-triple to be $\pm(-b,c,d)$, whose initial pair $\pm(-b,c)$ cannot overlap
+remaining nonzero possibility is $\pm(C,d,-1)$; it forces the $t=1$
+triple to be $\pm(-b,C,d)$, whose initial pair $\pm(-b,C)$ cannot overlap
 a $t=0$ triple.  Therefore $e_4=0$ also in this chamber.
 
 In either sign, every nonzero triple in the corresponding list has nonzero
 last coordinate.  It follows successively from the equations at
 $t=2,1,0$ that $e_2=e_3=e_4=0$, then $e_1=0$, and finally $e_0=0$.
-Thus the kernel is trivial also at $m=3$.  This endpoint calculation is
-independently certified by the routine \texttt{block\_language\_profile}
-in \url{artifacts/verify_quadratic_pisot_threshold.py}, called with
-$m=n=3$ in its threshold-and-block-language battery.
+Thus the kernel is trivial also at $m=3$.  The finite computation described in
+the data-availability statement includes this case as regression testing; it
+is not used as proof of the parameter-uniform statement.
 \end{proof}
 
 \subsection{Sharp threshold and extremal bases}
 
-\begin{theorem}[Full quadratic-Pisot fold threshold]
+\begin{theorem}[Full quadratic-Pisot cyclic-rank threshold]
 \label{thm:full-quadratic-pisot-threshold}
 Let $\beta$ be an arbitrary quadratic Pisot number and use exactly the
 greedy language, Parry data, rank, cyclic modulus and fold of
@@ -380,27 +611,172 @@ both chambers:
 (u-\kappa,0),&v=d\text{ and }u\ge\kappa.
 \end{cases}
 \]
-If the second coordinate of the preceding output is positive, it is the raw
-central digit.  If it is zero, that digit is either $0$ or $d$; the first
-coordinate of the next output is respectively $0$ or one of
-$d-\kappa,d$.  Hence the raw digit is locally recoverable exactly when
-$d-\kappa>0$.  This condition is $a>b$ in the negative chamber and $b>1$
-in the positive chamber.  If $d=\kappa$, the two constant raw points
+If $d=\kappa$, the two constant raw points
 $0^{\mathbb Z}$ and $d^{\mathbb Z}$ both map to the constant zero output,
-so conjugacy fails.  Thus failure occurs exactly for $P^-_{a,a}$ and
-$P^+_{a,1}$, and Lemma~\ref{lem:quadratic-sliding-congruences} shows that the
-next aperture succeeds.  The chamber classification is exhaustive by
+so conjugacy fails.  This occurs exactly for $P^-_{a,a}$ and $P^+_{a,1}$.
+
+Now assume $d>\kappa$, which is equivalent to $a>b$ in the negative chamber
+and to $b>1$ in the positive chamber.  We prove finite-block injectivity,
+including the boundary digits, rather than inferring it from a two-sided
+inverse.  Let a raw triple $(a_0,a_1,a_2)$ produce
+\[
+y_i=(p_i,q_i)=\Fold_{\beta,2}(a_i,a_{i+1}),\qquad i=0,1.
+\]
+First recover the central digit from the two output symbols:
+\begin{equation}
+a_1=
+\begin{cases}
+q_0,&q_0>0,\\
+0,&q_0=0\text{ and }p_1=0,\\
+d,&q_0=0\text{ and }p_1\in\{d-\kappa,d\}.
+\end{cases}
+\label{eq:m2-central-decoder}
+\end{equation}
+Indeed, $q_0=0$ implies $a_1\in\{0,d\}$.  If $a_1=0$, the next pair has
+first output coordinate $p_1=0$.  If $a_1=d$, then $p_1=d$ when
+$a_2<d$ and $p_1=d-\kappa$ when $a_2=d$.  The alternatives are disjoint
+because $d>\kappa>0$.
+
+Having found $a_1$, recover the left boundary digit by
+\begin{equation}
+a_0=
+\begin{cases}
+p_0,&q_0>0,\\
+p_0,&q_0=0\text{ and }a_1=0,\\
+p_0+\kappa,&q_0=0\text{ and }a_1=d.
+\end{cases}
+\label{eq:m2-left-decoder}
+\end{equation}
+The last line is exactly the wrapped case in the explicit fold rule.  Finally,
+recover the right boundary digit by
+\begin{equation}
+a_2=
+\begin{cases}
+q_1,&q_1>0,\\
+0,&q_1=0\text{ and }p_1=a_1,\\
+d,&q_1=0\text{ and }p_1=a_1-\kappa.
+\end{cases}
+\label{eq:m2-right-decoder}
+\end{equation}
+When $q_1=0$, the raw digit $a_2$ is $0$ or $d$; these give the last two
+lines, which are disjoint because $\kappa>0$.  Equations
+\eqref{eq:m2-central-decoder}--\eqref{eq:m2-right-decoder} prove directly that
+\[
+\Phi_{\beta,2,2}:\mathcal A_\beta^3
+\longrightarrow (X_2^{(\beta)})^2
+\]
+is injective.
+
+For any $n\ge2$, every consecutive pair $(y_t,y_{t+1})$ decodes the raw
+triple $(a_t,a_{t+1},a_{t+2})$.  These triples cover the entire raw block
+$a_0\ldots a_{n+1}$, so $\Phi_{\beta,2,n}$ is injective and
+$|\mathcal L_n(Y_{\beta,2})|=(d+1)^{n+1}$.  On trajectories, using the first
+coordinate of the triple decoded from $(y_t,y_{t+1})$ gives a genuine
+memory-zero, anticipation-one inverse.
+
+For the two extremal loci, Lemma~\ref{lem:quadratic-sliding-congruences} shows
+that aperture three succeeds.  The chamber classification is exhaustive by
 Lemma~\ref{lem:quadratic-pisot-chambers}, completing the proof.
 \end{proof}
 
+\subsection{Worked cases in both chambers}
+
+The following computations use the low-to-high convention $(u,v)$ and show
+the Parry boundary, the legal rank interval, the cyclic reduction, and the
+threshold classification in four genuinely nonmetallic cases.
+
+\begin{example}[Negative conjugate, extremal]
+Let $\beta$ be the positive root of $x^2-2x-2$.  Here
+$(a,b,d)=(2,2,2)$,
+\[
+d_\beta^*(1)=(21)^\infty,\qquad (Q_0,Q_1,Q_2)=(1,3,8),
+\qquad \kappa=b=2=d.
+\]
+At length two, legality is $v=2\Rightarrow u<2$.  Thus the legal pairs are
+\[
+(0,0),(1,0),(2,0),(0,1),(1,1),(2,1),(0,2),(1,2),
+\]
+and their ranks $u+3v$ are exactly $0,\ldots,7$.  The raw pair $(2,2)$ has
+rank $8$, so cyclic reduction modulo $Q_2=8$ gives
+$\Fold_{\beta,2}(2,2)=(0,0)$.  Consequently the constant raw points
+$0^{\mathbb Z}$ and $2^{\mathbb Z}$ collide at aperture two.  Theorem
+\ref{thm:full-quadratic-pisot-threshold} gives $m_*(\beta)=3$, as predicted by
+the negative extremal condition $a=b$.
+\end{example}
+
+\begin{example}[Negative conjugate, nonextremal]
+Let $\beta$ be the positive root of $x^2-3x-2$.  Then
+$(a,b,d)=(3,2,3)$,
+\[
+d_\beta^*(1)=(31)^\infty,\qquad (Q_0,Q_1,Q_2)=(1,4,14),
+\qquad \kappa=b=2<d.
+\]
+The legal pairs obey $v=3\Rightarrow u<2$; explicitly,
+\[
+X_2^{(\beta)}=\{0,1,2,3\}\times\{0,1,2\}
+\ \cup\ \{(0,3),(1,3)\},
+\]
+and their ranks $u+4v$ fill $0,\ldots,13$.  The only wrapped pairs are
+\[
+\Fold_{\beta,2}(2,3)=(0,0),\qquad
+\Fold_{\beta,2}(3,3)=(1,0).
+\]
+For the raw triple $(3,3,0)$ the two outputs are
+$y_0=(1,0)$ and $y_1=(3,0)$.  Formula
+\eqref{eq:m2-central-decoder} reads $p_1=3\in\{d-\kappa,d\}=\{1,3\}$ and
+recovers $a_1=3$; then \eqref{eq:m2-left-decoder} gives
+$a_0=1+2=3$, and \eqref{eq:m2-right-decoder} gives $a_2=0$ because
+$p_1=a_1$.  Hence the boundary triple is recovered from two outputs and
+$m_*(\beta)=2$.
+\end{example}
+
+\begin{example}[Positive conjugate, extremal]
+Let $\beta$ be the positive root of $x^2-3x+1$.  Here
+$(a,b,d,c_0)=(3,1,2,1)$,
+\[
+d_\beta^*(1)=21^\infty,\qquad (Q_0,Q_1,Q_2)=(1,3,8),
+\qquad \kappa=a-b=2=d.
+\]
+The boundary condition at length two is $v=2\Rightarrow u\le1$.  Hence the
+legal pairs are
+\[
+(0,0),(1,0),(2,0),(0,1),(1,1),(2,1),(0,2),(1,2),
+\]
+with ranks $0,\ldots,7$, while $(2,2)$ has rank $8$ and is recoded to
+$(0,0)$.  The constant raw points $0^{\mathbb Z}$ and
+$2^{\mathbb Z}$ therefore collide at aperture two.  This is the positive
+norm-one extremal family $b=1$, and $m_*(\beta)=3$.
+\end{example}
+
+\begin{example}[Positive conjugate, nonextremal]
+Let $\beta$ be the positive root of $x^2-4x+2$.  Then
+$(a,b,d,c_0)=(4,2,3,1)$,
+\[
+d_\beta^*(1)=31^\infty,\qquad (Q_0,Q_1,Q_2)=(1,4,14),
+\qquad \kappa=a-b=2<d.
+\]
+The length-two boundary again gives $v=3\Rightarrow u\le1$, so the legal
+ranks on
+\[
+X_2^{(\beta)}=\{0,1,2,3\}\times\{0,1,2\}
+\ \cup\ \{(0,3),(1,3)\}
+\]
+are $0,\ldots,13$, and the wrapped pairs are
+$(2,3)\mapsto(0,0)$ and $(3,3)\mapsto(1,0)$.  For the raw triple $(3,3,0)$,
+the output pair $((1,0),(3,0))$ is decoded exactly as in the preceding
+nonextremal example: $a_1=3$, $a_0=1+\kappa=3$, and $a_2=0$.  Thus the
+positive-chamber nonextremal case has $m_*(\beta)=2$.
+\end{example}
+
 \begin{remark}[What is and is not claimed]
 \label{rem:quadratic-open-interface}
-The theorem concerns the canonical cyclic Parry-rank fold of
+The theorem concerns the cyclic language-rank recoding of
 Definition~\ref{def:quadratic-parry-fold}.  Published finite-transducer
 normalization results for Pisot bases
 \cite{Frougny1992,FrougnySteiner2008,BertheFrougnyRigoSakarovitch2019}
-establish recognizability for other redundant digit sets and boundary
-conventions, but they do not identify those folds with this cyclic rank map.
+establish recognizability for numerical representations on other redundant
+digit sets and boundary conventions, but they do not identify those
+normalizations with this cyclic rank map.
 No threshold claim is made for signed digits, non-greedy expansions,
 non-cyclic truncation, degree greater than two, or general Pisot substitution
 codings.  These choices are genuine residual interfaces rather than
