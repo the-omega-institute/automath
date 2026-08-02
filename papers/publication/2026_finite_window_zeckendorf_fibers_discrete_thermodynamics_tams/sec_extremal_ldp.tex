@@ -63,7 +63,8 @@ For a compact statement of the maximizing residues, put
 \[
  G_j:=F_{j+1}\qquad(j\ge0),
 \]
-so \(G_0=G_1=1\) and \(G_{j+1}=G_j+G_{j-1}\).  For \(k\ge5\), define
+so \(G_0=G_1=1\) and \(G_{j+1}=G_j+G_{j-1}\).
+For \(k\ge5\), define
 \[
  I_{2k+1}:=
  \begin{cases}
@@ -86,6 +87,54 @@ For \(k\ge7\), define
  G_kG_{k-2}+1,&k\text{ odd}.
  \end{cases}
 \]
+
+\begin{conventionlemma}
+Let \((G_j)_{j\ge0}\) denote the convention of
+\cite{KocabovaMasakovaPelantova2005}, namely \(G_0=G_1=1\), with
+representations using the parts \(G_1,G_2,\ldots\).  Then
+\(G_j=F_{j+1}\) for every \(j\ge0\), and the source representation-count
+function is exactly \(R\).  In particular, the source formulas
+\[
+ \max_{G_{2a+1}\le n<G_{2a+2}}R(n)=G_{a+1},\qquad
+ \max_{G_{2a+2}\le n<G_{2a+3}}R(n)=2G_a
+\]
+become
+\[
+ \max_{F_{2a+2}\le n<F_{2a+3}}R(n)=F_{a+2},\qquad
+ \max_{F_{2a+3}\le n<F_{2a+4}}R(n)=2F_{a+1}.
+\]
+The generic maximizing arguments in the source are
+\[
+ G_{2k+1}-1+I_{2k+1},\qquad G_{2k+2}-1-I_{2k+1}
+\]
+in odd source length \(2k+1\), and
+\[
+ \begin{split}
+ G_{2k}-1+I_{2k},&\quad G_{2k+1}-1-I_{2k},\\
+ G_{2k}-1+J_{2k},&\quad G_{2k+1}-1-J_{2k}
+ \end{split}
+\]
+in even source length \(2k\).  The exceptional source arguments and their
+translated fiber residues are
+\[
+ \begin{array}{c|c|c}
+ \text{source length}&\text{partition arguments}&\text{fiber residues}\\ \hline
+ 9&63,71,79&8,16,24\\
+ 12&270,296,304,312,338&37,63,71,79,105.
+ \end{array}
+\]
+Here the last column subtracts \(G_9=F_{10}=55\) or
+\(G_{12}=F_{13}=233\), respectively.
+\end{conventionlemma}
+
+\begin{proof}
+The identity \(G_j=F_{j+1}\) follows from the initial values and recurrence.
+The admissible source parts \(G_1,G_2,\ldots\) are therefore exactly our
+parts \(F_2,F_3,\ldots\), including a single unit part.  The maximum and
+argument formulas are Theorems~4.7 and~5.3 of
+\cite{KocabovaMasakovaPelantova2005}; direct substitution gives the displayed
+formulas and endpoint subtractions.
+\end{proof}
 
 \begin{theorem}[Exact largest fibers]
 \label{thm:unconditional-extremal-fibers}
@@ -137,8 +186,8 @@ Let
 \[
  M_\ell:=\max_{F_{\ell+1}\le n<F_{\ell+2}}R(n).
 \]
-After translating the Fibonacci indexing in
-\cite[Thm.~4.7]{KocabovaMasakovaPelantova2005}, one has
+By the Fibonacci-convention lemma, Theorem~4.7 of
+\cite{KocabovaMasakovaPelantova2005} gives
 \[
  M_{2a+1}=F_{a+2}\quad(a\ge0),
  \qquad
@@ -161,9 +210,9 @@ for \(m=0,1,2,3\), with the stated exceptional degeneracies, follows by direct
 enumeration of the at most eight raw words.  Substitution of \(m=2k\) and
 \(m=2k+1\) into the formulas for \(M_{m+1}\) proves the asserted closed forms.
 
-It remains to translate the arguments of the maximum.  In the notation
-\(G_j=F_{j+1}\) used above, \cite[Thm.~5.3]{KocabovaMasakovaPelantova2005}
-states that the two generic maximizing integers of odd length \(2k+1\) are
+It remains to translate the arguments of the maximum.  The
+Fibonacci-convention lemma states that the two generic maximizing integers of
+odd source length \(2k+1\) are
 \[
  G_{2k+1}-1+I_{2k+1},
  \qquad
@@ -175,9 +224,9 @@ case of \Cref{thm:fiber-partition-interval}, gives
 maximizing integers of even length \(2k\) are obtained by using \(I_{2k}\) and
 \(J_{2k}\) in the same two symmetric positions.  Subtraction of
 \(G_{2k}=F_{m+2}\) gives the four residues displayed in the theorem.  The
-exceptional length-nine and length-twelve central maximizers in the cited
-classification give \(m=8\) and \(m=11\), respectively.  Direct evaluation of
-the finitely many shorter cases gives the table.  Since \(V_m\) is bijective,
+exceptional-argument table in that lemma gives \(m=8\) and \(m=11\) after the
+same endpoint subtraction.  Direct evaluation of the finitely many shorter
+cases gives the remaining rows of the theorem.  Since \(V_m\) is bijective,
 this residue list classifies the visible maximizing words themselves.
 \end{proof}
 
@@ -214,10 +263,80 @@ For real \(t\), define the real collision sum
  S_t(m):=\sum_{x\in X_m}d_m(x)^t.
 \]
 This is well defined for all \(t\in\RR\), since every fiber is nonempty.  The
-integer values agree with \Cref{def:collision-moments}.
+positive integer specializations agree with the moments in
+\Cref{def:difference-spectrum}.
 
-We first show that the previously natural all-real analyticity ansatz cannot
-hold.  The obstruction is not a defect of the integer collision kernels: it
+The following lemma records exactly the convention transfer and uniform bound
+needed below.
+
+\begin{layercountlemma}
+For \(j\ge0\), set
+\[
+ \mathcal I_j=[F_{j+1}-1,F_{j+2}-1),\qquad
+ N_j(k)=\card{\{n\in\mathcal I_j:R(n)=k\}}.
+\]
+Let \(\Psi(k)\) be Weinstein's number of generating orbits at level \(k\).
+Then
+\[
+ N_0(1)=0,\qquad N_j(1)=1\quad(j\ge1),
+\]
+and, for every \(j\ge0\) and \(k\ge2\),
+\[
+ N_j(k)\le 2\Psi(k).
+\]
+For clarity, eventual equality is a separate statement: \(N_j(2)=2\) for
+\(j\ge4\), while Weinstein's theorem gives
+\(N_j(k)=2\Psi(k)\) for \(k>2\) and \(j\ge2k\).
+\end{layercountlemma}
+
+\begin{proof}
+Weinstein uses \(f_0=f_1=1\)
+\cite[Secs.~3 and~5]{Weinstein2016}.  Thus
+\[
+ f_j=F_{j+1}\qquad(j\ge0),
+\]
+and his half-open layer \([f_j-1,f_{j+1}-1)\) is exactly
+\(\mathcal I_j\).  His partition function also equals \(R\), because its
+admissible parts \(f_1,f_2,\ldots\) are our \(F_2,F_3,\ldots\).
+
+At level \(1\), Weinstein's description
+\(\{n:R(n)=1\}=\{f_i-1:i\ge1\}\), together with the half-open endpoint
+convention, places exactly the left endpoint \(f_j-1\) in each
+\(\mathcal I_j\) for \(j\ge1\); \(\mathcal I_0\) is empty.
+
+At level \(2\), Weinstein gives \(\Psi(2)=1\) and the two families
+\[
+ f_i-1+f_{i+3},\qquad f_{i+2}-1+f_{i+4}\qquad(i\ge0).
+\]
+The first lies in \([f_{i+3}-1,f_{i+4}-1)\), since the distances from
+the two endpoints are \(f_i\) and \(f_{i+1}\); the second lies in
+\([f_{i+4}-1,f_{i+5}-1)\), with the analogous upper distance
+\(f_{i+1}\).  Hence a layer contains at most one member of each family,
+so \(N_j(2)\le2=2\Psi(2)\), with equality for \(j\ge4\).
+
+Now let \(k>2\).  By Weinstein's Theorem~3.8, every solution of
+\(R(n)=k\) lies in the unique orbit of one of the \(\Psi(k)\) generating
+solutions.  We recall the point in the proof of his Theorem~5.1 that is needed
+for an upper bound, rather than eventual equality.  Formulas~(17)--(19) there
+write an orbit uniquely as
+\([a]\tau^\epsilon\sigma^\delta(g)\).  For a fixed generator \(g\), the two
+\(\tau\)-branches with \(\delta=0\) contribute together at most one point to
+any layer: increasing \(a\) shifts the relevant Zeckendorf indices by two,
+and \(\tau\) supplies the opposite parity branch.  The involution \(\sigma\)
+maps the possible point in the preceding layer to the complementary branch in
+the current layer.  Thus each generating orbit meets \(\mathcal I_j\) in at
+most two points.  Summing over the \(\Psi(k)\) disjoint orbits proves the
+uniform inequality.  The size condition \(j\ge2k\) in Weinstein's
+Theorem~5.1 is used only to show that both possible points are present; it
+gives the stated eventual equality and is not used for the upper bound.
+
+Finally, Weinstein often writes the auxiliary layer with both endpoints.
+The shared endpoint has partition value \(1\), so this distinction is
+irrelevant for \(k\ge2\); the level \(1\) endpoint was assigned directly
+above.  This completes the treatment of endpoints and early layers.
+\end{proof}
+
+We now show that an all-real analyticity ansatz cannot hold.  The obstruction
 is an actual frozen phase of the Fibonacci partition spectrum.  Let
 \(\sigma_0>2\) be the unique real solution of
 \begin{equation}
@@ -234,25 +353,13 @@ For every real \(t\le-\sigma_0\), the pressure exists unconditionally and
 \]
 Consequently there is no real-analytic function on \(\RR\) which agrees with
 the finite-window pressure limits wherever those limits exist and also
-satisfies \(P(0)=\log\varphi\).  In particular, the pressure is not strictly
-convex on \(\RR\), and no compact, uniformly positive real-tilt transfer
-operator with a globally analytic simple leading eigenvalue can represent
-these partition sums.
+satisfies \(P(0)=\log\varphi\).  In particular, no everywhere finite pressure
+extension can be both real analytic and strictly convex on \(\RR\).
 \end{theorem}
 
 \begin{proof}
-We use the published level-set decomposition of the ordinary Fibonacci
-partition function rather than reproducing it.  In Weinstein's notation, let
-\(\Psi(k)\) be the number of generating orbits at level \(k\).  His orbit
-classification and Fibonacci-layer theorem
-\cite[Thms.~3.8, 5.1, and 10.3]{Weinstein2016} imply the following two facts.
-First, in every Fibonacci layer
-\[
- [F_j-1,F_{j+1}-1)
-\]
-the equation \(R(n)=k>1\) has at most \(2\Psi(k)\) solutions (and it has
-exactly that many once the layer index is at least \(2k\)); the level \(k=1\)
-occurs once.  Second, in its half-plane of convergence,
+We use Weinstein's Dirichlet series for the generating-orbit counts.  In its
+half-plane of convergence, his Theorem~10.3 gives
 \begin{equation}
  1+\sum_{k=2}^{\infty}\frac{\Psi(k)}{k^s}
  =\left(2-\frac{\zeta(s-1)}{\zeta(s)}\right)^{-1}.
@@ -278,7 +385,7 @@ of \(R(n)^t\) over two adjacent Fibonacci layers:
  S_t(m)=\sum_{n=F_{m+1}-1}^{F_{m+3}-2}R(n)^t.
  \label{eq:real-collision-two-layers}
 \end{equation}
-If \(t<-\sigma_0\), the level-set bound and
+If \(t<-\sigma_0\), the uniform layer-count lemma and
 \Cref{eq:weinstein-level-dirichlet-series} give, uniformly in \(m\),
 \[
  1\le S_t(m)
@@ -286,8 +393,12 @@ If \(t<-\sigma_0\), the level-set bound and
 \]
 Thus \(m^{-1}\log S_t(m)\to0\).
 
-At \(t=-\sigma_0\), fix \(\varepsilon>0\).  Since no fiber exceeds \(D_m\),
-the same level-set estimate gives
+At \(t=-\sigma_0\), fix \(\varepsilon>0\).  Only levels \(k\le D_m\)
+occur, and for each such level
+\[
+ k^{-\sigma_0}\le D_m^\varepsilon k^{-(\sigma_0+\varepsilon)}.
+\]
+The same layer-count estimate therefore gives
 \[
  S_{-\sigma_0}(m)
  \le 2+4D_m^{\varepsilon}
@@ -310,10 +421,44 @@ Finally, an analytic function which vanishes on the open interval
 This proves the analytic and strict-convexity obstructions.
 \end{proof}
 
+\begin{proposition}[No globally analytic compact-operator representation]
+\label{prop:no-analytic-compact-representation}
+There do not exist a complex Banach space \(\mathcal B\), a connected open
+set \(U\subset\mathbb C\) containing \(\RR\), and an operator-norm analytic
+map
+\[
+ z\longmapsto\mathcal L_z\in\mathcal K(\mathcal B)
+ \qquad(z\in U)
+\]
+into the compact operators with the following properties.  For every real
+\(t\), the operator \(\mathcal L_t\) has a positive algebraically simple
+isolated eigenvalue \(r(t)\); for every \(t_0\in\RR\), this eigenvalue is
+separated from the remainder of the spectrum by a positive gap uniformly for
+\(t\) in some real neighborhood of \(t_0\); and the family represents the
+finite-window sums in the exponential sense
+\[
+ \lim_{m\to\infty}\frac1m\log S_t(m)=\log r(t)
+ \qquad(t\in\RR).
+\]
+\end{proposition}
+
+\begin{proof}
+Analytic perturbation theory for a simple isolated eigenvalue
+\cite[Chap.~VII, Sec.~1]{Kato1995} gives, near each real \(t_0\), an analytic
+eigenvalue branch through \(r(t_0)\).  The local spectral separation and the
+positive simple choice identify this branch with \(r(t)\) on the real axis.
+The local branches therefore agree on overlaps, so \(r\), and hence
+\(t\mapsto\log r(t)\), is real analytic on \(\RR\).  The representation
+hypothesis would make this function equal to \(P(t)\).  By
+\Cref{thm:negative-temperature-freezing}, it vanishes on
+\(( -\infty,-\sigma_0)\), and therefore vanishes identically.  This
+contradicts \(P(0)=\log\varphi\).
+\end{proof}
+
 The remaining issue is therefore not global analyticity but the construction
 and regularity of the pressure above the freezing threshold.
 
-\begin{definition}[Residual real-pressure hypothesis]
+\begin{pressurehypothesis}
 \label{hyp:residual-real-pressure}
 We say that the residual real-pressure hypothesis holds if the following
 assertions are true.
@@ -327,9 +472,9 @@ exists.
 \(t\le-\sigma_0\) is differentiable on \(\RR\); its restriction to
 \(( -\sigma_0,\infty)\) is real analytic and satisfies \(P''(t)>0\).
 \end{enumerate}
-\end{definition}
+\end{pressurehypothesis}
 
-\begin{theorem}[Full real-tilt LDP, residual conditional form]
+\begin{corollary}[Conditional real-tilt large deviation principle]
 \label{thm:conditional-full-ldp}
 Assume \Cref{hyp:residual-real-pressure}.  Let \(X^{(m)}\) be uniformly distributed on
 \(X_m\), and set
@@ -362,7 +507,7 @@ precisely, for the unique \(t(\alpha)>-\sigma_0\) satisfying
  I''(\alpha)=\frac1{P''(t(\alpha))}>0.
 \]
 Moreover, \(\lim_{t\to+\infty}P(t)/t=\frac12\log\varphi\).
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
 Let \(\nu_m\) be the uniform law on \(X_m\).  For every \(t\in\RR\),
@@ -381,7 +526,7 @@ Moreover, \(0\le Y_m\le m^{-1}\log D_m\), and
 The laws of \(Y_m\) are therefore exponentially tight (indeed, they are
 eventually supported in one fixed compact interval).  The
 G\"artner--Ellis theorem
-\cite{Gartner1977,Ellis1984}\cite[Thm.~2.3.6]{DemboZeitouni2010}, applied on the
+\cite{Gartner1977,Ellis1984,DemboZeitouni2010}, applied on the
 full effective domain \(\RR\), yields the stated full LDP with good rate
 \[
  \Lambda^*(\alpha)
@@ -427,16 +572,18 @@ Thus \(\alpha_+=\frac12\log\varphi\).
 
 \begin{remark}[Residual real-pressure interface]
 \label{rem:real-pressure-open-interface}
-\Cref{thm:negative-temperature-freezing} closes the former all-real analytic
-interface negatively: such a pressure cannot exist.  The integer collision
-kernels prove \(P(q)=\log\lambda_q\) for integer \(q\ge0\), but tensor-power
-kernels do not define \(P(t)\) at noninteger \(t\), and the freezing theorem
-only treats \(t\le-\sigma_0\).  Existence for every
+\Cref{thm:negative-temperature-freezing} excludes a globally analytic
+pressure, and \Cref{prop:no-analytic-compact-representation} states the
+operator obstruction precisely.  Sanna's theorem and the finite-window
+transfer determine \(P(q)=\log\lambda_q\) at positive integer orders, but
+those discrete values do not define \(P(t)\) at noninteger \(t\), and the
+freezing theorem only treats \(t\le-\sigma_0\).  Existence for every
 \(t\in(-\sigma_0,\infty)\), differentiability at the freezing point, and
 analytic strict convexity on the open positive-pressure phase remain open.
-These require an induced or countable-state real-tilt operator with explicit
-recurrence and spectral-gap estimates; the compact finite-alphabet
-Ruelle--Perron--Frobenius paradigm alone cannot remove the frozen phase
+One possible approach would require an induced or countable-state real-tilt
+operator with explicit recurrence and spectral-gap estimates; a compact
+analytic family satisfying \Cref{prop:no-analytic-compact-representation} is
+impossible
 \cite{Ruelle2004,Sarig1999,Sarig2001}.  Consequently the full LDP in
 \Cref{thm:conditional-full-ldp} remains conditional precisely on
 \Cref{hyp:residual-real-pressure}, and no unconditional strictly convex full

@@ -1,382 +1,153 @@
-﻿\section{Introduction}\label{sec:introduction}
+\section{Introduction}\label{sec:introduction}
 
-Every positive integer has a unique representation as a sum of
-non-consecutive Fibonacci numbers \cite{Lekkerkerker1952,Zeckendorf1972}.
-An arbitrary binary word $\omega\in\{0,1\}^m$ determines a Fibonacci-weighted
-integer $N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}$ that generally violates the
-adjacency constraint; reducing modulo $F_{m+2}$ and inverting the standard
-bijection $V_m\colon X_m\to\{0,\dots,F_{m+2}-1\}$ yields the finite-window
-fold
+Let \(F_0=0\), \(F_1=F_2=1\), and
+\(F_{j+2}=F_{j+1}+F_j\).  A word
+\(\omega\in\{0,1\}^m\) determines the raw sum
 \[
-  \Fold_m(\omega):=V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr).
+  N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}.
 \]
-The fiber multiplicity $d_m(x):=|\Fold_m^{-1}(x)|$ records how many raw words
-stabilize to a given visible word~$x$.
+We consider the finite-window fold obtained by reducing this sum modulo
+\(F_{m+2}\) and taking the unique legal Zeckendorf word in the visible
+window.  If \(d_m(x)\) is the cardinality of the fiber over a legal word
+\(x\), the basic problem is to identify the finite multiset
+\(\{d_m(x):x\in X_m\}\) and its extremal and moment statistics.
 
-A natural question arises: what structure does this fiber spectrum carry, and
-how does it connect to the classical theory of Fibonacci partitions?  We show
-that the answer is highly structured.  After an explicit affine permutation
-of residues, each fiber multiplicity equals a Fibonacci-lag discrete
-derivative of the classical partition function.  This single identity converts
-the fiber spectrum into a discrete thermodynamic system whose pressures are the
-Fibonacci partition constants of Sanna~\cite{Sanna2025}, and whose
-kernel-certified recurrence polynomials carry arithmetic content in a
-computable window.
-
-The paper makes four contributions.  First, it identifies the fiber list with
-ordinary Fibonacci-partition values on two exact intervals.  This makes the
-largest-fiber recurrence unconditional and gives a complete classification of
-the maximizing visible words.  Second, it identifies the same multiplicities
-with an explicit affine reindexing of Fibonacci partition differences, so
-single fibers inherit the exact formulas of Chow and
-Slattery~\cite{ChowSlattery2021}.  Third, it transfers the full integer-moment
-sequence to Sanna's partition constants and realizes those constants as Perron
-roots of finite-state kernels, yielding algebraicity, convex integer pressure,
-canonical concentration, and zero-temperature asymptotics.  It also proves an
-exact negative-temperature frozen phase, which rules out the formerly
-plausible globally analytic pressure, and states the full G\"artner--Ellis LDP
-under the corrected residual real-pressure hypothesis above the freezing
-threshold.  Fourth, in the
-arithmetic window \(q=9,\dots,17\), exact finite certificate records, isolated
-as a separate certificate theorem, imply
-irreducibility and full symmetric Galois groups for recurrence polynomials
-derived from the exact finite-state kernels by residual certificates with an a
-priori order bound, together with linear disjointness and product Chebotarev
-densities for the block \(q\in\{12,13,14,15\}\).
+The paper is centered on two exact correspondences with the classical
+Fibonacci partition function.  The first is an affine reindexing of a finite
+subset-sum spectrum; the second expresses the complete fiber list as two
+consecutive blocks of ordinary partition values.  These correspondences are
+finite identities and do not require a normalization transducer.
 
 \subsection{Main results}
 
-Let $R(n)$ be the number of partitions of~$n$ into distinct Fibonacci numbers
-(with $F_1=F_2=1$ not distinguished), set $R^\dagger(n):=R(n)+R(n-1)$, and
-write $T_q^\dagger(N):=\sum_{n=0}^{N-1}R^\dagger(n)^q$.  For integers
-$q\ge 1$, set $S_q(m):=\sum_{x\in X_m}d_m(x)^q$.
+Let \(R(n)\) be the number of partitions of \(n\) into distinct Fibonacci
+numbers when the two unit weights are not distinguished, with \(R(n)=0\) for
+\(n<0\), and put \(R^\dagger(n)=R(n)+R(n-1)\).  Let
+\[
+  \widetilde d_m(n)=[z^n]\prod_{j=1}^m(1+z^{F_j}),
+  \qquad 0\le n<F_{m+2}.
+\]
+For residues modulo \(F_{m+2}\), define
+\[
+  \pi_m(n)\equiv F_{m+1}n+F_{m+1}-1\pmod{F_{m+2}}.
+\]
 
-\begin{theoremA}
+\begin{theoremA}[Affine fiber--partition correspondence]
+For every \(m\ge1\), the map \(\pi_m\) is a permutation and
+\[
+  d_m^\#(\pi_m(n))
+  =\widetilde d_m(n)
+  =R^\dagger(n)-R^\dagger(n-F_{m+1})
+  \qquad(0\le n<F_{m+2}).
+\]
+\end{theoremA}
+
+This combines \Cref{thm:affine-transfer,thm:partition-difference}.  It gives a
+pointwise correspondence, not only an equality of aggregate moments.
+
+There is also a direct interval description:
+\[
+ d_m^\#(r)=
+ \begin{cases}
+ R(F_{m+2}+r),&0\le r\le F_{m+1}-2,\\
+ R(r),&F_{m+1}-1\le r<F_{m+2}.
+ \end{cases}
+\]
+The known extremal classification of Koc\'abov\'a, Mas\'akov\'a, and
+Pelantov\'a can therefore be transferred exactly after an explicit change of
+Fibonacci convention.
+
+\begin{theoremB}[Interval identity and largest fibers]
 Let \(D_m=\max_{x\in X_m}d_m(x)\).  Then
 \[
  D_0=D_1=1,\qquad D_{2k}=F_{k+2}\ (k\ge0),\qquad
- D_{2k+1}=2F_{k+1}\ (k\ge1).
+ D_{2k+1}=2F_{k+1}\ (k\ge1),
 \]
-Consequently \(D_m=D_{m-2}+D_{m-4}\) for every integer \(m\ge6\).  The
-maximizing residues are exactly the two parity-dependent Fibonacci-product
-families of \Cref{thm:unconditional-extremal-fibers}, together with the finite
-exception table there; generically their degeneracy is two for even \(m\) and
-four for odd \(m\).
-\end{theoremA}
-
-\begin{theoremB}
-For every pair of integers $m\ge 1$ and $n$ with $0\le n<F_{m+2}$, with
-\[
-  \pi_m(r):=F_{m+1}r+(F_{m+1}-1)\pmod {F_{m+2}},
-\]
-\[
-  d_m^\#(\pi_m(n))
-  =
-  R^\dagger(n)-R^\dagger(n-F_{m+1}).
-\]
+and \(D_m=D_{m-2}+D_{m-4}\) for every \(m\ge6\).  The maximizing residues,
+including the exceptional initial cases, are given in
+\Cref{thm:unconditional-extremal-fibers}.
 \end{theoremB}
 
-\noindent
-The fiber spectrum is the Fibonacci-lag discrete derivative of the indexed
-partition function.  Exact Zeckendorf formulas of Chow and
-Slattery~\cite{ChowSlattery2021} therefore apply directly to individual fibers.
-
-\begin{theoremC}
-For every pair of integers $m\ge 1$ and $q\ge 1$,
+For a real tilt \(t\), put
 \[
-  T_q^\dagger(F_{m+1})\le S_q(m)\le T_q^\dagger(F_{m+2}),
+  S_t(m)=\sum_{x\in X_m}d_m(x)^t.
 \]
-and consequently $S_q(m)\asymp_q \lambda_q^m$, where $\lambda_q$ is the
-partition constant of Sanna~\cite[Thm.~1.1]{Sanna2025}.
+The level sets of \(R\) are sufficiently sparse to produce a frozen
+half-line.  Let \(\sigma_0>2\) be the unique solution of
+\[
+  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2;
+  \qquad \sigma_0=2.4787507857\ldots.
+\]
+
+\begin{theoremC}[Negative-temperature freezing]
+For every real \(t\le-\sigma_0\),
+\[
+  \lim_{m\to\infty}\frac1m\log S_t(m)=0.
+\]
+Consequently these pressure limits cannot be represented on all real tilts by
+the logarithm of a positive simple isolated eigenvalue of an analytic compact
+operator family on a fixed Banach space.
 \end{theoremC}
 
-\begin{theoremD}
-For $q\ge 2$, the Perron root of the finite-state collision kernel of
-Section~\ref{sec:moment-kernel} equals $\lambda_q$.  More precisely,
-$\lambda_q$ is the spectral radius of a nonnegative integer matrix of
-dimension polynomial in~$q$; in particular, $\lambda_q$ is an algebraic
-integer.  The pressure sequence $P_0:=\log\varphi$,
-$P_q:=\log\lambda_q$ is convex, and its discrete slopes
-$\Delta_q:=P_q-P_{q-1}$ satisfy $\Delta_q\nearrow\frac12\log\varphi$.
-\end{theoremD}
+The proof of \Cref{thm:negative-temperature-freezing} includes a separate
+layer-count lemma transferring Weinstein's convention \(f_j=F_{j+1}\).  It
+distinguishes the levels \(k=1,2\), endpoints, early layers, and the eventual
+equality asserted in Weinstein's theorem.  The compact-operator conclusion is
+stated precisely in \Cref{prop:no-analytic-compact-representation} and follows
+from analytic perturbation theory.
 
-\begin{theoremE}
-Let \(\sigma_0>2\) be determined by
-\(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Unconditionally,
+Two supporting results are retained.  First, for every positive integer
+\(q\), the fiber moment \(S_q(m)\) is trapped between two adjacent Fibonacci
+windows of the partition power sum.  Sanna's theorem therefore gives
+\(S_q(m)\asymp_q\lambda_q^m\).  Sanna also proved
+\(\lambda_q^{1/q}\to\varphi^{1/2}\); our norm squeeze is recorded only as an
+alternative finite-window proof.  The additional diagonal consequence is
 \[
- \lim_{m\to\infty}m^{-1}\log\sum_{x\in X_m}d_m(x)^t=0
- \qquad(t\le-\sigma_0).
+  \frac{1}{m q_m}\log S_{q_m}(m)
+  \longrightarrow\frac12\log\varphi
 \]
-Hence the pressure cannot be real analytic or strictly convex on all of
-\(\RR\).  Conditional only on existence and differentiability above this
-frozen phase, with analytic positive curvature on
-\(( -\sigma_0,\infty)\), the uniform thickness satisfies the full
-G\"artner--Ellis LDP.  Its rate is analytic and strictly convex on
-\((0,\frac12\log\varphi)\), satisfies \(I(0)=\log\varphi\), and has upper
-endpoint \(\frac12\log\varphi\).
-\end{theoremE}
+for every sequence of positive integers \(q_m\to\infty\); the same squeeze
+also applies to real tilts \(t_m\to\infty\).  Second, the quadratic moment has
+the independently proved recurrence
+\[
+  S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)\qquad(m\ge4).
+\]
 
-\begin{theoremF}
-For each fixed integer $q\ge 1$ and every $\varepsilon>0$, the $q$-canonical law
-$\mu_{m,q}\propto d_m(x)^q$ is exponentially concentrated on the adjacent
-pressure-slope band $[\Delta_q,\Delta_{q+1}]$:
-\[
-  \mu_{m,q}\bigl\{x:m^{-1}\log d_m(x)\notin
-  [\Delta_q-\varepsilon,\,\Delta_{q+1}+\varepsilon]\bigr\}
-  \le \exp\bigl(-(\varepsilon+o(1))m\bigr).
-\]
-\end{theoremF}
+The residual pressure problem on \(( -\sigma_0,\infty)\) remains open.  We
+state the full real-tilt large deviation principle only as a conditional
+corollary under explicit existence, differentiability, and curvature
+hypotheses; it is not counted among the principal results.
 
-\begin{theoremG}
-For each fixed integer \(q\ge 1\) and every \(\varepsilon>0\), set
-\[
-  B_{m,q}(\varepsilon)
-  :=
-  \left\{
-    x\in X_m:
-    \Delta_q-\varepsilon\le m^{-1}\log d_m(x)
-    \le \Delta_{q+1}+\varepsilon
-  \right\}.
-\]
-Write \(p_m(A):=2^{-m}\sum_{x\in A}d_m(x)\) for visible mass.
-Then \(B_{m,q}(\varepsilon)\) carries all but exponentially small
-\(q\)-canonical mass, and its cardinality and visible mass satisfy the
-explicit exponent bounds
-\[
-  P_q-q(\Delta_{q+1}+\varepsilon)
-  \le
-  \liminf_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|,
-\]
-\[
-  \limsup_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|
-  \le
-  P_q-q(\Delta_q-\varepsilon),
-\]
-\[
-  P_q-\log 2-(q-1)(\Delta_{q+1}+\varepsilon)
-  \le
-  \liminf_{m\to\infty}\frac1m\log p_m(B_{m,q}(\varepsilon)),
-\]
-\[
-  \limsup_{m\to\infty}\frac1m\log p_m(B_{m,q}(\varepsilon))
-  \le
-  P_q-\log 2-(q-1)(\Delta_q-\varepsilon).
-\]
-\end{theoremG}
+\subsection{Scope of the revision}
 
-\begin{theoremH}
-Every real sequence of diverging tilts $q(m)\to\infty$ selects the
-zero-temperature thickness \(\frac12\log\varphi\):
-\[
-  D_m^{1/m}\to\sqrt{\varphi},
-  \qquad
-  \log S_{q(m)}(m)
-  =
-  \bigl(\tfrac12\log\varphi+o(1)\bigr)m\,q(m).
-\]
-\end{theoremH}
-
-\medskip\noindent
-The escalation summarized by Theorems~A--H proceeds as follows.
-Theorem~A proves the unconditional extremal formulas and classifies their
-arguments.  Theorem~B identifies single fibers with partition differences.
-Theorem~C transfers the moment growth to Fibonacci windows of Sanna's
-power sums.  Theorem~D realizes the partition constants as finite-state
-Perron roots and extracts a convex integer pressure.  Theorem~E proves the
-negative-temperature frozen phase and gives the full real-tilt LDP only under
-the explicitly displayed residual real-pressure hypothesis.
-Theorems~F and~G use integer-pressure geometry for canonical concentration and
-microcanonical band bounds.  Theorem~H passes to the zero-temperature limit.
-These eight
-results do not use the arithmetic-window certificates of
-Section~\ref{sec:chebotarev}; the latter enter only the Galois and
-Chebotarev statements, where the recurrences are certified from exact kernel
-matrices in Appendix~\ref{app:certification}.
-
-The hypotheses in this chain are explicit.  Theorem~A uses \(m\ge0\), the
-finite-window definitions, and the published extremal classification for the
-ordinary Fibonacci partition function.  Theorem~B is pointwise in \(m\ge1\)
-and \(0\le n<F_{m+2}\); Theorem~C is pointwise in \(m\ge1\) and \(q\ge1\);
-Theorem~D uses the collision kernel obtained from the deterministic
-subsequential Fibonacci normalizer for \(q\ge2\).  The unconditional part of
-Theorem~E uses Weinstein's published level-set orbits and their Dirichlet
-series.  Its LDP part additionally assumes existence and differentiability
-above the proven freezing threshold, with analytic strict convexity only in
-that open phase; this residual hypothesis is not a consequence of the integer
-kernels.  Theorems~F--H use only the integer pressure already identified in
-Theorems~C--D.  No arithmetic-window
-recurrence, Galois, or Chebotarev certificate is used in the proofs of
-Theorems~A--H.
-For clarity, the only exact certificate records in the paper enter after this
-main theorem chain: Section~\ref{sec:chebotarev} uses the certificate records of
-Theorem~\ref{thm:arithmetic-window-certificates}, the
-recurrence soundness theorem \Cref{prop:kernel-derived-recurrences}, the Smith-form
-certificates of Table~\ref{tab:appendix-principalization-q9-17}, and the finite-field
-factorization and discriminant certificates displayed in its tables.  The
-recurrence certificate consists of the exact residual identity defining
-\(\mathsf W_q(P_q)=\mathrm{accept}\) in the finite certificate-record format of
-Appendix~\ref{app:certification}.  The
-coefficient row and this residual certificate are inseparable: the coefficient
-row states the polynomial, while the residual certificate is the proof that the
-polynomial annihilates the tail.  It is a kernel identity in the exact
-histogram matrix \(\widetilde A_q\): with
-\[
-  R_q=
-  \begin{bmatrix}
-  \widetilde u_q^{\mathsf T}\widetilde A_q^2\\
-  \widetilde u_q^{\mathsf T}\widetilde A_q^3\\
-  \vdots\\
-  \widetilde u_q^{\mathsf T}\widetilde A_q^{N_q+1}
-  \end{bmatrix},
-  \qquad N_q=\dim\widetilde A_q,
-\]
-the residual certificate asserts that the displayed row polynomial satisfies
-\[
-  R_qP_q(\widetilde A_q)\widetilde v_q=0.
-\]
-This is a block of \(N_q\) exact residual zeros after \(P_q\) has been
-substituted into the kernel.  Because the residual sequence is a scalar
-coefficient of the same \(N_q\times N_q\) matrix, Cayley--Hamilton propagates
-that block to the whole recurrence tail.  The appendix also records additional
-rank identities for the observable quotient, but those ranks are not required
-to prove the all-tail recurrence.  No finite window of scalar moment values is
-used as a stand-alone recurrence proof, and a row of the coefficient table is
-not cited anywhere below without this residual-verifier theorem.
-
-\begin{table}[t]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\caption{Logical dependency map for the main results and the arithmetic
-window.  ``Exact residual verifier'' means the finite kernel identity
-\(\mathsf W_q(P_q)=\mathrm{accept}\) in the exact histogram matrix, propagated
-by the a priori order bound \(N_q=\dim\widetilde A_q\).}
-\label{tab:intro-dependency-map}
-\begin{tabular}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.36\textwidth}@{}}
-\toprule
-Result & Range & Proven inputs and certificate status \\
-\midrule
-Theorem A & \(m\ge0\) &
-The exact interval identity and the extremal-value and argument classification
-of \cite{KocabovaMasakovaPelantova2005}; no fiber recurrence is assumed. \\
-Theorem B & \(m\ge1\), \(0\le n<F_{m+2}\) &
-Affine transfer and the generating-function identity for \(R^\dagger\). \\
-Theorem C & \(m\ge1\), \(q\ge1\) &
-Theorem B, nonnegativity of fiber multiplicities, and Sanna's power-sum
-asymptotic. \\
-Theorem D & \(q\ge2\) &
-Theorem C, Frougny's deterministic subsequential Fibonacci normalizer, and the
-finite-state collision kernel of Section~\ref{sec:moment-kernel}. \\
-Theorem E & \(t\le-\sigma_0\), unconditional; residual LDP conditional &
-Weinstein's level-set orbit Dirichlet series proves freezing; pressure
-regularity for \(t>-\sigma_0\) is the remaining interface. \\
-Theorems F--G & fixed \(q\ge1\) &
-Theorems C--D, integer-pressure convexity, and exponential Markov bounds. \\
-Theorem H & \(q(m)\to\infty\) &
-Theorems A and C and the exact largest-fiber estimate. \\
-Section~\ref{sec:chebotarev} & \(q=9,\dots,17\) &
-Exact residual-verifier identities for \(P_q\), Smith forms, mod-\(p\)
-factorizations,
-and discriminant squareclasses, isolated in
-Theorem~\ref{thm:arithmetic-window-certificates}; only this row uses finite certificate
-records, and its recurrence soundness is the exact-kernel theorem
-\Cref{thm:apriori-exact-kernel-certification}. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-All unconditional implications in the first seven rows of
-Table~\ref{tab:intro-dependency-map} are proved in the body of the paper from the
-displayed hypotheses and the cited standard inputs; only the residual-LDP part
-of the Theorem~E row is conditional.  The last row is the only
-certificate-record row: its recurrence input is the exact residual certificate
-of Theorem~\ref{thm:arithmetic-window-certificates}, where the relevant
-residual sequence has the a priori order bound \(N_q=\dim\widetilde A_q\), and
-its Galois inputs are finite algebra certificates over \(\ZZ\) and finite
-fields.  Thus the
-arithmetic window has a separate, explicit certificate layer rather than an
-implicit assumption in Theorems~A--H.  Within that layer, the recurrence rows
-are used only after the exact kernel residual verifier has accepted and the
-a priori certification theorem has converted the finite residual block into an
-all-tail recurrence.
-
-Thus the arithmetic statements in Section~\ref{sec:chebotarev} are proved from
-the finite exact certificate records stated in
-Theorem~\ref{thm:arithmetic-window-certificates}; they do not rest on a finite numerical
-fit.  Their recurrence input is the exact
-residual-verifier certificate in the kernel, and the remaining computational
-inputs are finite-field and Smith-form certificates displayed in
-Section~\ref{sec:chebotarev} and Appendix~\ref{app:certification}.  Theorems~A--H
-and the entropy ledger are independent of those arithmetic certificates.
-
-Beyond the thermodynamic formalism, the same partition constants carry
-arithmetic content.  The quadratic case $q=2$ yields the cubic
-$\lambda^3-2\lambda^2-2\lambda+2$, in agreement with Chow and
-Jones~\cite{ChowJones2024}.  In the arithmetic window $q=9,\dots,17$, the
-kernel-certified recurrence polynomials of $S_q(m)$ are, using the exact
-certificate records of Theorem~\ref{thm:arithmetic-window-certificates},
-irreducible over~$\QQ$ with full symmetric Galois groups $S_{d_q}$
-(Section~\ref{sec:chebotarev}); irreducibility then identifies them with the
-minimal recurrence polynomials.  For $q\in\{12,13,14,15\}$ the splitting
-fields are linearly disjoint, yielding product Chebotarev densities.
+No finite-state normalizer, collision automaton, Perron realization,
+recurrence-polynomial certificate, Galois-group computation, or Chebotarev
+claim is asserted in this paper.  In particular, the former transducer and
+arithmetic-window sections are withdrawn.  The constant-term formula and the
+quadratic recurrence in \Cref{sec:second-collision} are direct finite
+identities and are independent of that withdrawn machinery.
 
 \subsection{Related work}
 
-Zeckendorf~\cite{Zeckendorf1972} and Lekkerkerker~\cite{Lekkerkerker1952}
-established the uniqueness of Fibonacci representations.  Earlier analyses of
-the Fibonacci partition function and its extremal structure include
-Robbins~\cite{Robbins1996}, Weinstein~\cite{Weinstein2016}, and Koc\'abov\'a,
-Mas\'akov\'a, and Pelantov\'a~\cite{KocabovaMasakovaPelantova2005}.  Theorem~A
-transfers the last authors' extremal-value and maximizer classification exactly
-to finite-window fibers.  Kempton's dynamical viewpoint
-\cite{Kempton2023} is especially close
-to the partition-function side of Sections~\ref{sec:residue-affine}--
-\ref{sec:moment-kernel}.  Chow and Slattery~\cite{ChowSlattery2021} gave exact
-formulas for $R(n)$ via the Zeckendorf expansion; our Theorem~B shows that
-finite-window fiber
-multiplicities are, after an explicit affine permutation, the Fibonacci-lag
-discrete derivatives of these same partition counts.  Chow and
-Jones~\cite{ChowJones2024} identified the cubic governing the variance of
-$R(n)$; our cubic recurrence for $S_2(m)$ gives a finite-window explanation.
-Sanna~\cite[Thm.~1.1]{Sanna2025} proved that $\sum_{n<N}R(n)^q\asymp_q
-N^{(\log\lambda_q)/\log\varphi}$; Theorem~C transfers these constants to the
-collision moments.  The finite-state realization of
-Section~\ref{sec:moment-kernel} draws on classical Perron--Frobenius theory
-\cite{Seneta2006,LindMarcus1995} and a bounded-delay transducer model for
-Fibonacci normalization
-\cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.  Its
-automata-theoretic certification viewpoint is close in spirit to the general
-Fibonacci-representation framework of Shallit and
-Shan~\cite{ShallitShan2023}, which provides a direct methodological comparator
-for the transducer and certificate constructions in the appendices.
-For real tilts, Weinstein's generating-orbit Dirichlet series
-\cite[Thms.~3.8, 5.1, and 10.3]{Weinstein2016} supplies the freezing
-obstruction in Theorem~E.  Classical compact-state Ruelle theory
-\cite{Ruelle2004} gives analytic pressure only under spectral hypotheses that
-are incompatible with this frozen half-line.  Countable-state thermodynamic
-formalism allows recurrence changes and phase transitions
-\cite{Sarig1999,Sarig2001}; it is therefore the relevant framework for the
-residual open phase, but no theorem from that literature verifies its
-hypotheses for the present multiplicity cocycle.
+Carlitz's early recurrence formulas initiated the systematic study of
+Fibonacci representations \cite{Carlitz1968}.  Subsequent work includes the
+partition identities of Robbins \cite{Robbins1996}, Weinstein's orbit and
+level-set analysis \cite{Weinstein2016}, and the exact extremal classification
+of Koc\'abov\'a, Mas\'akov\'a, and Pelantov\'a
+\cite{KocabovaMasakovaPelantova2005}.  Sanna proved the power-sum asymptotics
+used here and the endpoint law
+\(\lim_{q\to\infty}\lambda_q^{1/q}=\varphi^{1/2}\)
+\cite[Thms.~1.1 and~1.2]{Sanna2025}.  Chow and Jones obtained the same cubic
+that appears in our quadratic finite-window recurrence in their analysis of
+the variance of the partition function \cite{ChowJones2024}.
 
 \subsection{Organization}
 
-Section~\ref{sec:preliminaries} defines the finite-window fold and records
-its basic properties.  Section~\ref{sec:residue-affine} proves the affine
-transfer principle and the partition-difference formula.
-Section~\ref{sec:extremal-ldp} proves the unconditional extremal and freezing
-theorems and states the full G\"artner--Ellis LDP under the corrected residual
-real-pressure regularity hypothesis.
-Section~\ref{sec:second-collision} establishes the Fibonacci-window moment
-transfer and treats the explicit quadratic case.
-Section~\ref{sec:moment-kernel} develops the finite-state realization, convex
-pressure geometry, canonical selection, and zero-temperature concentration.
-Section~\ref{sec:ledger} deduces the R\'enyi entropy-rate spectrum of the
-visible law.  Section~\ref{sec:chebotarev} proves, from the exact certificate
-records, irreducibility, full symmetric Galois groups, and Chebotarev density
-results for the recurrence polynomials in the arithmetic window
-$q=9,\dots,17$.
-Section~\ref{sec:conclusion} summarizes.  Appendix~\ref{app:transducer}
-gives the transducer construction for the collision kernels, and
-Appendix~\ref{app:certification} records the exact recurrence, Smith-form, and
-finite-field certificates.
+\Cref{sec:preliminaries} defines the finite-window fold and fixes notation.
+\Cref{sec:residue-affine} proves the residue, affine, and partition-difference
+formulas.  \Cref{sec:extremal-ldp} proves the interval identity, transfers the
+extremal classification, establishes the freezing theorem and compact-operator
+obstruction, and states the conditional large deviation corollary.
+\Cref{sec:second-collision} proves the moment transfer and the quadratic
+recurrence.  \Cref{sec:integer-pressure} records Sanna's endpoint law with an
+alternative proof and isolates the diagonal high-tilt consequence.
