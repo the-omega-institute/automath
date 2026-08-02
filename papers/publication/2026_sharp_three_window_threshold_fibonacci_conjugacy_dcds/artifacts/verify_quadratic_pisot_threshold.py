@@ -8,6 +8,7 @@ does not discard output information.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from itertools import product
 from math import sqrt
@@ -141,6 +142,62 @@ def block_language_profile(beta: QuadraticPisot, m: int, n: int) -> tuple[int, i
     return len(outputs), raw_count, collision
 
 
+def causal_first_digit_is_determined(beta: QuadraticPisot, m: int, output_length: int) -> bool:
+    """Check whether an output block determines the first raw digit exactly."""
+    if m < 1 or output_length < 1:
+        raise ValueError("m and output_length must be positive")
+
+    base = beta.alphabet_size
+    table = residue_table(beta, m)
+    suffix_modulus = base ** (m - 1)
+    first_digits: dict[tuple[int, ...], int] = {}
+
+    for raw in product(range(base), repeat=m + output_length - 1):
+        window_code = 0
+        for digit in raw[:m]:
+            window_code = window_code * base + digit
+
+        outputs = []
+        for t in range(output_length):
+            outputs.append(table[window_code])
+            if t + 1 < output_length:
+                window_code = (window_code % suffix_modulus) * base + raw[t + m]
+
+        key = tuple(outputs)
+        previous = first_digits.setdefault(key, raw[0])
+        if previous != raw[0]:
+            return False
+    return True
+
+
+def minimum_injective_output_length(beta: QuadraticPisot, m: int) -> int | None:
+    """Return the first injective finite-block length up to the aperture."""
+    for n in range(1, m + 1):
+        _, _, collision = block_language_profile(beta, m, n)
+        if not collision:
+            return n
+    return None
+
+
+def critical_periodic_fiber_histogram(beta: QuadraticPisot, period: int) -> Counter[int]:
+    """Count periodic output fibers for an extremal aperture-two recoding."""
+    if predicted_threshold(beta) != 3:
+        raise ValueError("the critical double-fiber profile is extremal only")
+    if period < 1:
+        raise ValueError("period must be positive")
+
+    base = beta.alphabet_size
+    table = residue_table(beta, 2)
+    fibers: Counter[tuple[int, ...]] = Counter()
+    for raw in product(range(base), repeat=period):
+        outputs = []
+        for t in range(period):
+            code = raw[t] * base + raw[(t + 1) % period]
+            outputs.append(table[code])
+        fibers[tuple(outputs)] += 1
+    return Counter(fibers.values())
+
+
 def periodic_point_count(beta: QuadraticPisot, m: int, n: int) -> int:
     base = beta.alphabet_size
     table = residue_table(beta, m)
@@ -229,6 +286,65 @@ def main() -> int:
         print(f"  {beta.polynomial}: got={got}; expected={expected}")
         if got != expected:
             failures += 1
+
+    print()
+    print("Aperture-two chamber-duality and aperture-three separation battery:")
+    duality_checks = 0
+    for q in range(3, 8):
+        for kappa in range(2, q):
+            negative = QuadraticPisot("negative", q - 1, kappa)
+            positive = QuadraticPisot("positive", q, q - kappa)
+            same_fold = residue_table(negative, 2) == residue_table(positive, 2)
+            negative_words = {
+                word for word in product(range(q), repeat=3) if negative.is_legal(word)
+            }
+            positive_words = {
+                word for word in product(range(q), repeat=3) if positive.is_legal(word)
+            }
+            expected_difference = {
+                (high, kappa - 1, q - 1) for high in range(kappa, q)
+            }
+            separated = (
+                negative_words - positive_words == expected_difference
+                and not positive_words - negative_words
+                and negative.q(3) - positive.q(3) == q - kappa
+            )
+            duality_checks += 1
+            if not same_fold or not separated:
+                failures += 1
+    print(f"  {duality_checks} paired chambers checked: identical at m=2, exact separation at m=3")
+
+    print()
+    print("Optimal causal-length and exact finite-block-onset battery:")
+    local_cases = (
+        QuadraticPisot("negative", 1, 1),
+        QuadraticPisot("negative", 4, 3),
+        QuadraticPisot("positive", 3, 1),
+        QuadraticPisot("positive", 5, 2),
+    )
+    local_checks = 0
+    for beta in local_cases:
+        causal_length = 2 if beta.conjugate_sign == "negative" else 3
+        for m in range(max(3, predicted_threshold(beta)), 6):
+            lower = causal_first_digit_is_determined(beta, m, causal_length - 1)
+            exact = causal_first_digit_is_determined(beta, m, causal_length)
+            onset = minimum_injective_output_length(beta, m)
+            local_checks += 1
+            if lower or not exact or onset != m:
+                failures += 1
+    print(f"  {local_checks} parameter/aperture pairs checked: causal lengths 2/3 and delta=m")
+
+    print()
+    print("Critical periodic-fiber battery:")
+    fiber_checks = 0
+    for beta in extremals:
+        for period in range(1, 7):
+            histogram = critical_periodic_fiber_histogram(beta, period)
+            expected_singletons = beta.alphabet_size**period - 2
+            fiber_checks += 1
+            if histogram.get(2) != 1 or histogram.get(1, 0) != expected_singletons:
+                failures += 1
+    print(f"  {fiber_checks} parameter/period pairs checked: one double fiber, all others singleton")
 
     print()
     print("Counterexample search domain:")

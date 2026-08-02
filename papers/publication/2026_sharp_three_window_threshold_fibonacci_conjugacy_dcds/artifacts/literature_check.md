@@ -119,3 +119,37 @@ periodic expansions, beta-tiles, and Pisot-substitution geometry are cited as
 prior results and are not reproved as new.  Because the Atom API itself was
 rate-limited, the novelty conclusion remains a documented search conclusion,
 not a claim of exhaustive bibliographic nonexistence.
+
+## Follow-up API audit for the local-structure results
+
+Checked: 2026-08-03 (Asia/Singapore).  The first-party Atom endpoint was
+available for this audit.  Each request returned HTTP 200.  The exact query
+`all:"cyclic rank recoding"` returned zero records.  The following broader
+queries also returned zero records:
+
+- `all:("quadratic Pisot" AND "sliding block")`;
+- `all:("quadratic Pisot" AND "causal decoding")`;
+- `all:("beta-expansion" AND "finite window" AND conjugacy)`;
+- `all:("bounded coefficient" AND "polynomial multiple")`;
+- `all:("Fischer cover" AND "full shift")`;
+- `all:("Parry" AND "quadratic Pisot" AND language)`;
+- `all:("beta-shifts" AND "same language")`.
+
+The query `all:("near Markov" AND sofic)` returned one record,
+Marcus--Meyerovitch--Wu, *A Krieger Embedding Theorem for Near Markov Sofic
+Shifts*, arXiv:2606.25475.  It proves an embedding theorem for the established
+near-Markov class; it does not contain the cyclic Parry-rank recoding, the
+two-fixed-point extremal family, or its Fischer presentation.  The query
+`au:Jankauskas_J AND all:Littlewood` returned Drungilas--Jankauskas--
+Junevicius--Klebonas--Siurys, *On certain multiples of Littlewood and Newman
+polynomials*, arXiv:1801.07179.  That paper studies divisibility between
+Littlewood and Newman polynomials.  It does not identify a bounded multiple
+degree with the causal inverse length of a sliding cyclic rank code.
+
+These searches locate no arXiv predecessor for: the aperture-two
+cross-chamber equality and aperture-three separation law; the exact causal
+lengths two and three; the family-specific critical two-fixed-point normal
+form; or the exact finite-block onset and Markov order.  The manuscript cites
+Parry admissibility, bounded-polynomial-multiple terminology, near-Markov
+terminology, and the general Fischer-cover criterion as prior framework and
+claims only the parameter-specific deductions for its newly defined recoding.
