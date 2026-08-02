@@ -32,10 +32,72 @@ For a finite-dimensional unitary representation
   \qquad
   P_\rho(z):=\det(I-zA_\rho).
 \end{equation}
-For the trivial representation, \(A_{\mathbf1}=A\).  Reversing every
-representation convention replaces labels by inverses and classes by inverse
-classes; none of the distinction between \(F\) and \(L\) depends on that
-choice.
+For the trivial representation, \(A_{\mathbf1}=A\).
+
+\begin{lemma}[Two-sided left cocycles and chronological edge products]
+\label{lem:convention-bridge}
+Let \((\bar X_A,\sigma)\) be a two-sided shift of finite type and let
+\[
+  \widetilde\sigma(x,g)=(\sigma x,\alpha(x)g)
+\]
+be a continuous cocycle with values in the finite group \(G\).  After a
+higher-block recoding, \(\alpha\) is a one-step function on directed edges.
+Let \(X_A^+\) be the corresponding one-sided edge shift and set
+\(\tau(e)=\alpha(e)^{-1}\).  The two-sided and one-sided primitive periodic
+orbits correspond to the same cyclic edge words, with the same least period.
+For a based word \(\gamma=e_0\cdots e_{n-1}\), its left-cocycle holonomy and
+chronological edge product satisfy
+\begin{equation}\label{eq:convention-holonomy-inverse}
+ h_\gamma=\alpha(e_{n-1})\cdots\alpha(e_0),
+ \qquad
+ g_\gamma=\tau(e_0)\cdots\tau(e_{n-1})=h_\gamma^{-1}.
+\end{equation}
+Consequently, for every conjugacy class \(C\),
+\begin{equation}\label{eq:convention-class-counts}
+ p^{\mathrm{left}}_{n,C}=p^{\mathrm{edge}}_{n,C^{-1}},
+ \qquad
+ P^{\mathrm{left}}_C(N)=P^{\mathrm{edge}}_{C^{-1}}(N).
+\end{equation}
+If \(\bar\rho\) denotes the contragredient of the unitary representation
+\(\rho\), then
+\begin{equation}\label{eq:convention-character-blocks}
+ \chi_\rho(h_\gamma)=\chi_{\bar\rho}(g_\gamma),
+ \qquad
+ P^{\mathrm{left}}_\rho(z)=P^{\mathrm{edge}}_{\bar\rho}(z).
+\end{equation}
+Here the left-convention block is defined after recoding by
+\(B^{\mathrm{left}}_\rho:=A^{\mathrm{edge}}_{\bar\rho,\tau}\) and
+\(P^{\mathrm{left}}_\rho(z):=\det(I-zB^{\mathrm{left}}_\rho)\); its
+length-\(n\) trace is the sum of \(\chi_\rho(h_\gamma)\) over based
+periodic words.  In particular,
+\begin{equation}\label{eq:convention-channel-transport}
+ \Pi^{\mathrm{left}}_{\chi_\rho}
+   =\Pi^{\mathrm{edge}}_{\chi_{\bar\rho}},\qquad
+ L^{\mathrm{left}}_{\chi_\rho}
+   =L^{\mathrm{edge}}_{\chi_{\bar\rho}},\qquad
+ F^{\mathrm{left}}_{\chi_\rho}
+   =F^{\mathrm{edge}}_{\chi_{\bar\rho}}.
+\end{equation}
+Thus the Fourier formulas are transported by
+\(C\mapsto C^{-1}\) and \(\rho\mapsto\bar\rho\).  Conjugate representation
+pairs give the same real class-product constant under this transport.
+Every logarithm in this correspondence is the germ normalized at \(z=0\),
+continued along the radial segment \(0\le z\le\lambda^{-1}\) whenever an
+endpoint value is used.
+\end{lemma}
+
+\begin{proof}
+Continuity into the finite discrete group makes \(\alpha\) locally constant;
+a higher-block conjugacy therefore makes it depend on one edge and preserves
+least periods.  Iterating the left cocycle gives the reverse-ordered product
+\(h_\gamma\), and the definition of \(\tau\) gives
+\eqref{eq:convention-holonomy-inverse}.  Cyclic changes of base point conjugate
+both products, which proves \eqref{eq:convention-class-counts}.  Since
+\(\chi_\rho(g^{-1})=\overline{\chi_\rho(g)}=\chi_{\bar\rho}(g)\), the weighted
+periodic traces agree after \(\rho\mapsto\bar\rho\).  The trace-determinant
+identity then gives \eqref{eq:convention-character-blocks}; its normalized
+germ fixes the stated logarithm branch.
+\end{proof}
 
 Let \(N_{n,C}\) be the number of period-\(n\) points whose length-\(n\)
 holonomy lies in the conjugacy class \(C\).  Let \(p_{n,C}\) be the number of
@@ -48,6 +110,36 @@ For a class function \(\phi:G\to\CC\), use the abbreviations
   =\sum_{\gamma\in\cP}\phi(g_\gamma)z^{|\gamma|}.
   \label{eq:primitive-channel}
 \end{align}
+
+\begin{lemma}[Perron-weighted domination of twisted blocks]
+\label{lem:perron-weighted-domination}
+Let \(v>0\) satisfy \(Av=\lambda v\), and put
+\(D_\rho=|V|\dim\rho\).  On block vectors \(x=(x_i)_{i\in V}\), define
+\[
+  \norm{x}_v:=\max_{i\in V}\frac{\norm{x_i}}{v_i}.
+\]
+Then, for every unitary representation \(\rho\),
+\begin{equation}\label{eq:perron-weighted-block-bound}
+  \norm{A_\rho}_v\le\lambda,
+  \qquad \rad(A_\rho)\le\lambda,
+  \qquad \abs{\Tr(A_\rho^n)}\le D_\rho\lambda^n
+  \quad(n\ge1).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Unitarity gives
+\[
+ \norm{(A_\rho x)_i}
+ \le \sum_j\sum_{e:i\to j}\norm{\rho(\tau(e))x_j}
+ \le \sum_j A_{ij}v_j\norm{x}_v
+ =\lambda v_i\norm{x}_v.
+\]
+Hence \(\norm{A_\rho}_v\le\lambda\) and
+\(\rad(A_\rho)\le\lambda\).  Every eigenvalue of \(A_\rho\) has modulus at
+most \(\lambda\); summing the \(n\)-th powers of the \(D_\rho\) eigenvalues,
+with algebraic multiplicity, proves the trace bound.
+\end{proof}
 
 \begin{lemma}[Twisted trace and periodic logarithm]\label{lem:trace-log}
 For every irreducible representation \(\rho\) and every \(n\geq1\),
@@ -67,15 +159,16 @@ Here \(\Log_0P_\rho\) is the analytic germ at zero normalized by
 \begin{proof}
 Expanding the block product in \(A_\rho^n\) sums \(\rho(\tau(q))\) over
 closed length-\(n\) paths, with a trace over \(V_\rho\); this is
-\eqref{eq:twisted-trace}.  The finite-matrix identity
+  \eqref{eq:twisted-trace}.  The finite-matrix identity
 \[
   -\Log_0\det(I-zB)=\sum_{n\geq1}\Tr(B^n)z^n/n
 \]
 gives the second expression in \eqref{eq:artin-determinant-log}.  A primitive
 orbit \(\gamma\) of length \(d\) contributes its \(d\) cyclic base points to
 period \(n=rd\), and its repeated holonomy is \(g_\gamma^r\).  Division by
-\(n=rd\) leaves the factor \(1/r\), proving the last expression.  Absolute
-convergence follows from the finite-matrix trace bound on every smaller disc.
+  \(n=rd\) leaves the factor \(1/r\), proving the last expression.  Absolute
+  convergence follows from \Cref{lem:perron-weighted-domination} on every
+  smaller disc.
 \end{proof}
 
 For a general class function, write
@@ -102,6 +195,14 @@ The coefficients are periodic in \(m\) modulo the exponent of \(G\), and
 therefore uniformly bounded.
 
 \subsection{Adams--M\"obius primitive inversion}
+
+Primitive Euler coordinates and periodic ghost coordinates are related by the
+classical necklace/Witt M\"obius transform
+\cite{MetropolisRota1983Necklaces}.  The point specific to the present problem
+is that a Frobenius-class product retains the fixed primitive label before the
+Adams power operation is applied.  Applying the classical transform to this
+fixed-label coordinate and then to the finite twisted-determinant family gives
+the formulas below.
 
 \begin{theorem}[Primitive and fixed-label determinant coordinates]
 \label{thm:adams-mobius}
@@ -184,7 +285,8 @@ Extracting the coefficient of \(z^n\) gives
 
 Put
 \begin{equation}\label{eq:strict-gap}
-  \eta:=\max_{\rho\in\Irr(G),\ \rho\neq\mathbf1}\rad(A_\rho).
+  \eta:=\max_{\rho\in\Irr(G),\ \rho\neq\mathbf1}\rad(A_\rho),
+  \qquad \max\varnothing:=0.
 \end{equation}
 The main product theorem assumes \(\eta<\lambda\).  Under this hypothesis,
 the \(rm=1\) terms in \eqref{eq:fixed-determinant-open-disc} are regular for
@@ -194,48 +296,9 @@ because
   \rad(\lambda^{-rm}A_\pi)\leq\lambda^{1-rm}<1.
 \end{equation}
 
-We record the boundary convention in a form that makes clear that no branch
-or peripheral factor is an additional input coordinate.
-
-\begin{proposition}[Canonical radial boundary construction]
-\label{prop:derived-boundary}
-Let \(P_\pi(z)=\det(I-zA_\pi)\).  The normalized germ
-\(-\Log_0P_\pi(z)\), its continuation along \(z=t/\lambda\) with
-\(0\leq t<1\), its peripheral factorization, and every radial renormalized
-endpoint are determined by \(P_\pi\), \(\lambda\), and this path convention.
-More explicitly, factor
-\begin{equation}\label{eq:peripheral-factorization}
-  P_\pi(t/\lambda)
-   =\prod_{\zeta\in\Omega_\pi}(1-t\zeta)^{m_{\pi,\zeta}}
-      Q_{\partial,\pi}(t),
-\end{equation}
-where \(\Omega_\pi\subset\TT\) is the multiset of peripheral phases and
-\(Q_{\partial,\pi}\) has no zero on \([0,1]\).  If
-\(s_\pi=m_{\pi,1}\), then
-\begin{align}
-  B_{1,\pi}^{\mathrm{ren}}
-  &:={\lim}_{t\uparrow1}
-     \left(-\Log_{[0,t]}P_\pi(t/\lambda)+s_\pi\log(1-t)\right)
-     \label{eq:derived-b-ren}\\
-  &=-\sum_{\substack{\zeta\in\Omega_\pi\\\zeta\neq1}}
-       m_{\pi,\zeta}\Log_{[0,1]}(1-\zeta)
-     -\Log_{[0,1]}Q_{\partial,\pi}(1).
-     \label{eq:derived-b-factor}
-\end{align}
-In particular, a list of branch rules, peripheral factors, or values such as
-\(B_{k,\pi}^{\mathrm{ren}}\) is derived output, not independent cocycle data.
-\end{proposition}
-
-\begin{proof}
-The roots and their multiplicities in \eqref{eq:peripheral-factorization}
-are determined by the polynomial \(P_\pi(t/\lambda)\).  The normalized
-logarithm has a unique continuation along any zero-free subinterval beginning
-at zero.  Removing the factor \((1-t)^{s_\pi}\), taking the radial limit, and
-using the same continuation on every remaining factor yields
-\eqref{eq:derived-b-factor}.  The construction for \(k>1\) is the identical
-one applied at \(t^k/\lambda^k\); by \eqref{eq:interior-radius} it is an
-ordinary interior logarithm in the strict-gap theorem below.
-\end{proof}
+Only the zero-free radial endpoint is used below.  The general peripheral
+factorization and renormalized boundary construction are recorded separately
+in Appendix~\ref{app:radial-boundary}.
 
 \begin{lemma}[Perron evaluation of a non-trivial fixed-label coordinate]
 \label{lem:perron-fixed-coordinate}

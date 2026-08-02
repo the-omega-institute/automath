@@ -41,8 +41,8 @@ In the sign representation,
   A_\varepsilon=
   \begin{pmatrix}-1&1\\-1&1\end{pmatrix},
   \qquad A_\varepsilon^2=0,
-\]
-so \(P_\varepsilon(z)=1\).  In a real model of the standard
+  \]
+so \(P_\varepsilon(z)=1\).  In a non-orthonormal real model of the standard
 representation, direct substitution of the four labels gives
 \[
   A_\varrho=
@@ -56,8 +56,12 @@ representation, direct substitution of the four labels gives
 Row reduction, or a direct determinant calculation, gives
 \[
   \det(tI-A_\varrho)=t^3(t+1).
-\]
-Thus \(P_\varrho(z)=1+z\) and \(\rad(A_\varrho)=1\); the sign block has
+  \]
+This rational real model is similar to a unitary realization: averaging any
+positive definite inner product over \(S_3\) gives an invariant Gram matrix,
+and conjugating by its positive square root makes the representation
+orthogonal.  Similarity does not change the displayed determinant.  Thus
+\(P_\varrho(z)=1+z\) and \(\rad(A_\varrho)=1\); the sign block has
 spectral radius zero.  The logarithm identities follow from
 \eqref{eq:artin-determinant-log}.
 \end{proof}
@@ -118,19 +122,51 @@ zero otherwise.  Hence \(k=2^j\), proving \eqref{eq:s3-f-sign}.  The series
 converges at \(z=1/2\), and every summand in
 \eqref{eq:s3-strict-negative} is strictly negative.
 
-For completeness, the rational window uses
+It remains to prove the rational window without computational input.  Put
 \[
-  2\sum_{k=0}^{3}\frac{u^{2k+1}}{2k+1}
-  <\log q<
-  2\sum_{k=0}^{3}\frac{u^{2k+1}}{2k+1}
-    +\frac{2u^9}{9(1-u^2)},
-  \qquad u=\frac{q-1}{q+1},
+ x_j:=2^{1-2^{j+1}},\qquad
+ q_j:=(1-x_j)^{-1},\qquad
+ u_j:=\frac{q_j-1}{q_j+1}=\frac{x_j}{2-x_j}.
 \]
-on the first four logarithms in \eqref{eq:s3-strict-negative}; the remaining
-tail is less than \((2^{35}-8)^{-1}\).  Substitution and clearing the positive
-denominators gives \eqref{eq:s3-rational-window}.  These are precisely the
-operations reproduced by the exact-arithmetic certificate cited in
-\Cref{sec:exactness}.
+For \(j=0,1,2,3\), define the rational numbers
+\begin{equation}\label{eq:s3-rational-log-brackets}
+ L_j:=2\sum_{k=0}^{3}\frac{u_j^{2k+1}}{2k+1},
+ \qquad
+ U_j:=L_j+\frac{2u_j^9}{9(1-u_j^2)}.
+\end{equation}
+The identity
+\(\log q=2\sum_{k\ge0}u^{2k+1}/(2k+1)\), for
+\(u=(q-1)/(q+1)\in(0,1)\), and a geometric estimate of its positive tail give
+\begin{equation}\label{eq:s3-rational-log-order}
+ L_j<\log q_j<U_j\qquad(0\le j\le3).
+\end{equation}
+Moreover, \(\log(1-x)^{-1}<x/(1-x)\) and the double-exponential decrease of
+\(x_j\) give the rational tail estimate
+\begin{equation}\label{eq:s3-rational-tail}
+ 0<\frac12\sum_{j\ge4}2^{-j}\log q_j
+   <\frac1{2^{35}-16}.
+\end{equation}
+Substitution of \(u_j=x_j/(2-x_j)\) in
+\eqref{eq:s3-rational-log-brackets}, followed only by clearing positive
+integer denominators, gives the exact rational comparisons
+\begin{align}
+ \frac{380}{1000}
+ &<\frac12\sum_{j=0}^{3}2^{-j}L_j,
+ \label{eq:s3-rational-lower-comparison}\\
+ \frac12\sum_{j=0}^{3}2^{-j}U_j
+   +\frac1{2^{35}-16}
+ &<\frac{381}{1000}.
+ \label{eq:s3-rational-upper-comparison}
+\end{align}
+Equations \eqref{eq:s3-strict-negative} and
+\eqref{eq:s3-rational-log-order}--\eqref{eq:s3-rational-upper-comparison}
+therefore imply
+\[
+ \frac{380}{1000}<-F_\varepsilon(1/2)<\frac{381}{1000},
+\]
+which is equivalent to \eqref{eq:s3-rational-window}.  The exact-arithmetic
+program cited in \Cref{sec:exactness} independently checks the same rational
+comparisons.
 \end{proof}
 
 \begin{theorem}[The \(S_3\) contradiction and its resolution]

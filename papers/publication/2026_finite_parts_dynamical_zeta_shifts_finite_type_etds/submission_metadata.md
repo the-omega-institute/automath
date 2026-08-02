@@ -14,7 +14,7 @@ Authors:
 
 2. Wenlin Zhang
    - Email: e1327962@u.nus.edu
-   - Affiliation: National University of Singapore, Singapore
+   - Affiliation: National University of Singapore, 21 Lower Kent Ridge Road, Singapore 119077, Singapore
    - Corresponding author: yes
 
 Abstract:
@@ -27,15 +27,16 @@ transform. The former powers the primitive label under repetition, whereas
 the latter repeats the scalar weight while keeping the primitive label fixed.
 Under the strict twisted spectral gap, we prove an Adams--Mobius determinant
 formula for F_rho(lambda^{-1}) and hence for every class-product constant.
-This gives a formal correction of the Artin-L constant asserted by Mohamed
-and Noorani (1999): their proof replaces chi_rho(g_gamma) by
-chi_rho(g_gamma^r) in the r-th logarithmic term. A strict-gap S_3 extension
-makes the contradiction explicit, since its sign Artin logarithm vanishes
-while its fixed-label coordinate is strictly negative. The classical exponent
-|C|/|G| is unchanged. For context, the determinant family is also translated
-into conjugacy-class periodic data and directed G-cospectrality; those inverse
-equivalences are treated as established background and all fibre counts are
-explicitly relative to a fixed marked-edge presentation.
+This gives two corrections to the theorem of Mohamed and Noorani (1999).
+Mixing of the base alone does not imply uniform Frobenius density, so an
+extension-level transitivity/aperiodicity condition, imposed here as the
+strict twisted gap, is required for the exponent |C|/|G|. Under this
+hypothesis, their constant also replaces chi_rho(g_gamma) by
+chi_rho(g_gamma^r) in the r-th logarithmic term. A trivial C_2-cocycle
+exhibits the first defect, while a strict-gap S_3 extension exhibits the
+second: its sign Artin logarithm vanishes although its fixed-label coordinate
+is strictly negative. We also give the corrected union-of-classes constant
+for the homogeneous-extension consequence.
 
 Keywords:
 
@@ -69,9 +70,10 @@ Primary files:
 - sec_refocused_framework.tex
 - sec_refocused_product_correction.tex
 - sec_refocused_s3_witness.tex
+- sec_refocused_boundary_appendix.tex
 - sec_refocused_inverse_background.tex
 - sec_refocused_exactness.tex
 - sec_refocused_conclusion.tex
 - references.bib
 - REPRODUCE.md
-- artifacts/twisted_determinant_rigidity_verifier_0ee48dc.zip
+- certificates/s3_log_certificates.py
