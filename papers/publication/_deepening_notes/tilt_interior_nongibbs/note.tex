@@ -1,0 +1,485 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\one}{\mathbf 1}
+
+\title{A Banked Rigidity Note for Cylinder Information:\\
+Sub-root Gordin $g$-Measures, Including Non-Gibbs Examples}
+\author{}
+\date{2 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $(X_A,\sigma)$ be a one-sided mixing shift of finite type and let
+$\mu$ be a fully supported regular $g$-measure.  We isolate two
+quantitative hypotheses which do not require the Bowen--Gibbs or DLR
+property: sub-root distortion of the $g$-Jacobian along cylinders, and a
+uniform Gordin projective condition for $-\log g$.  Under these hypotheses
+the cylinder-information variance exists and is the squared norm of a
+canonical reverse martingale difference.  It vanishes exactly for the
+Parry measure.  The class is genuinely non-Gibbs: the non-Gibbs renewal
+$g$-measures of Fern\'andez--Gallo--Maillard, with their explicit oscillatory
+parameters, satisfy the two hypotheses.  We also give a full-support
+stationary zero-variance counterexample outside the regular $g$-measure
+class.  What remains open is removal of the projective condition, or an
+ergodic full-support counterexample at that boundary.
+\end{abstract}
+
+\section{Setting and the class}
+
+Let $A$ be a primitive zero-one matrix which is not a permutation matrix,
+and let
+\[
+ X_A=\{x=(x_0,x_1,\ldots):A_{x_jx_{j+1}}=1\},\qquad
+ (\sigma x)_j=x_{j+1}.
+\]
+Write $\lambda>1$ for the Perron eigenvalue of $A$.  A continuous function
+$g:X_A\to(0,1]$ is a normalized reverse $g$-function if
+\begin{equation}\label{eq:normalization}
+ \sum_{\sigma y=x}g(y)=1\quad(x\in X_A).
+\end{equation}
+Its transfer operator is
+\[
+ P\varphi(x):=\sum_{\sigma y=x}g(y)\varphi(y).
+\]
+A $g$-measure is a Borel probability $\mu$ such that $P^*\mu=\mu$.
+We always assume that $\mu$ is $\sigma$-invariant and fully supported.
+This convention is the time reversal of the equally standard convention
+in which $g$ gives the present conditioned on the past.
+
+Put $f=-\log g$, $h=\int f\,d\mu$, and
+\[
+ D_n(g):=\sup\{|S_n\log g(x)-S_n\log g(y)|:
+                 x_0^{n-1}=y_0^{n-1}\},
+ \qquad S_nf=\sum_{j=0}^{n-1}f\circ\sigma^j.
+\]
+
+\begin{definition}[Sub-root Gordin class]\label{def:class}
+The pair $(g,\mu)$ belongs to $\mathsf{SRG}(A)$ if:
+\begin{enumerate}
+\item[(D)] $D_n(g)=o(\sqrt n)$;
+\item[(G)] with $\bar f=f-\int f\,d\mu$,
+\begin{equation}\label{eq:gordin}
+ \sum_{k=1}^{\infty}\|P^k\bar f\|_\infty<\infty.
+\end{equation}
+\end{enumerate}
+No DLR, Bowen--Gibbs, H\"older, Walters, or summable-variation hypothesis
+is imposed.  A convenient sufficient condition for (D) is
+$\sum_{j=1}^n\operatorname{var}_j(\log g)=o(\sqrt n)$, but (D) can hold
+through cancellations when that sufficient condition fails.
+\end{definition}
+
+Condition (G) is deliberately stated only for the information observable.
+It is weaker than asking for a spectral gap on a prescribed Banach space,
+and is directly checkable by coupling or regeneration.  It is also the
+precise interface used below: without a martingale--coboundary
+decomposition, zero linear variance need not imply a coboundary for a
+general stationary process.
+
+For a cylinder $[x_0^{n-1}]$ define
+\[
+ \tau_n(x):=-\log\mu([x_0^{n-1}]).
+\]
+
+\section{Rigidity theorem}
+
+\begin{theorem}[Non-Gibbs $g$-measure rigidity]\label{thm:main}
+Let $A$ be primitive and not a permutation matrix.  Let $g$ be a normalized
+continuous positive $g$-function and let $\mu$ be a fully supported
+$\sigma$-invariant $g$-measure.  Assume $(g,\mu)\in\mathsf{SRG}(A)$.
+Then the limit
+\[
+ \sigma_\tau^2(\mu):=
+ \lim_{n\to\infty}\frac1n\Var_\mu(\tau_n)
+\]
+exists.  More precisely, the uniformly convergent series
+\[
+ u:=\sum_{k=1}^{\infty}P^k(f-h),\qquad
+ m:=f-h+u-u\circ\sigma
+\]
+satisfies $Pm=0$ and
+\begin{equation}\label{eq:varianceformula}
+ \sigma_\tau^2(\mu)=\int m^2\,d\mu.
+\end{equation}
+The following are equivalent:
+\begin{enumerate}
+\item $\sigma_\tau^2(\mu)=0$;
+\item $-\log g-h=u\circ\sigma-u$ for a continuous $u$;
+\item $h=\log\lambda$ and $g$ is the normalized reverse Jacobian of the
+      Parry measure;
+\item $\mu$ is the Parry measure, equivalently the unique measure of maximal
+      entropy on $X_A$.
+\end{enumerate}
+Conversely, the Parry measure belongs to $\mathsf{SRG}(A)$ and has bounded
+cylinder-information variance.  Thus, throughout the full-support class
+$\mathsf{SRG}(A)$,
+\[
+ \boxed{\quad \sigma_\tau^2(\mu)=0
+       \quad\Longleftrightarrow\quad
+       \mu=\mu_{\rm Parry}.\quad}
+\]
+\end{theorem}
+
+The proof is given in full.  Only the standard Perron--Frobenius description
+and uniqueness of the Parry measure are used as external background; no
+published Gibbs zero-variance proof is repackaged.
+
+\begin{lemma}[Cylinder information versus the $g$-Jacobian]\label{lem:cylinder}
+There is a constant $C_\mu<\infty$ such that, for every $x$ and $n$,
+\begin{equation}\label{eq:approx}
+ |\tau_n(x)-S_nf(x)|\le D_n(g)+C_\mu.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For a legal word $w=w_0\cdots w_{n-1}$ let
+\[
+ F(w)=\{z\in X_A:A_{w_{n-1}z_0}=1\}.
+\]
+By $P^*\mu=\mu$ and normalization,
+\begin{equation}\label{eq:disintegration}
+ \mu([w])=\int_{F(w)}g_n(wz)\,d\mu(z),\qquad
+ g_n(y)=\prod_{j=0}^{n-1}g(\sigma^jy).
+\end{equation}
+Here $wz$ denotes the legal concatenation.  If $x\in[w]$ and
+$z\in F(w)$, then $wz$ and $x$ have their first $n$ coordinates in common;
+hence
+\[
+ e^{-D_n(g)}g_n(x)\le g_n(wz)\le e^{D_n(g)}g_n(x).
+\]
+Every $F(w)$ is one of finitely many nonempty finite unions of one-symbol
+cylinders.  Full support therefore gives
+$c_\mu:=\min_w\mu(F(w))>0$.  Integrating and taking logarithms yields
+\eqref{eq:approx} with $C_\mu=-\log c_\mu$.
+\end{proof}
+
+\begin{lemma}[Uniform Gordin decomposition]\label{lem:gordin}
+Under \eqref{eq:gordin}, $u$ and $m$ in Theorem~\ref{thm:main} are
+continuous, $Pm=0$, and
+\begin{equation}\label{eq:decomposition}
+ S_n(f-h)=\sum_{j=0}^{n-1}m\circ\sigma^j-u+u\circ\sigma^n.
+\end{equation}
+Moreover the functions $m\circ\sigma^j$ are pairwise orthogonal in
+$L^2(\mu)$, and
+\begin{equation}\label{eq:birkvariance}
+ \lim_{n\to\infty}\frac1n\Var_\mu(S_nf)=\int m^2\,d\mu.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Uniform convergence in \eqref{eq:gordin} makes $u$ continuous.  Since
+$P(\varphi\circ\sigma)=\varphi$ and
+\[
+ Pu=\sum_{k=2}^{\infty}P^k(f-h),
+\]
+we have
+\[
+ Pm=P(f-h)+Pu-u=0.
+\]
+The definition of $m$ telescopes to \eqref{eq:decomposition}.  If $j>i$,
+invariance and transfer-operator duality give
+\[
+ \int (m\circ\sigma^i)(m\circ\sigma^j)\,d\mu
+ =\int m(m\circ\sigma^{j-i})\,d\mu
+ =\int (P^{j-i}m)m\,d\mu=0.
+\]
+Thus the variance of the martingale sum in \eqref{eq:decomposition} is
+$n\int m^2d\mu$.  The remaining coboundary is uniformly bounded, so its
+variance is $O(1)$ and its covariance with the martingale sum is
+$O(\sqrt n)$.  Division by $n$ proves \eqref{eq:birkvariance}.
+\end{proof}
+
+\begin{lemma}[Positive eigenfunction rigidity]\label{lem:pf}
+Let
+\[
+ L_0H(x)=\sum_{\sigma y=x}H(y).
+\]
+If $H:X_A\to(0,\infty)$ is continuous and $L_0H=\rho H$, then
+$\rho=\lambda$ and $H$ is a scalar multiple of the Perron eigenfunction
+$R(x)=\ell_{x_0}$, where $\ell A=\lambda\ell$ is a positive left Perron
+vector.
+\end{lemma}
+
+\begin{proof}
+Since $H$ is bounded above and away from zero,
+\[
+ (\min H)L_0^n\one(x)\le \rho^nH(x)
+ \le(\max H)L_0^n\one(x).
+\]
+Perron--Frobenius estimates for the primitive matrix $A$ bound
+$L_0^n\one(x)$ above and below by positive constants times $\lambda^n$,
+uniformly in $x$.  Taking $n$th roots gives $\rho=\lambda$.
+
+Both $H$ and $R$ are positive $\lambda$-eigenfunctions.  For
+$q=H/R$, the eigenfunction equation writes $q(x)$ as a strict convex
+combination of the values $q(y)$ over all one-step preimages of $x$.
+Let $x^*$ maximize $q$.  Every preimage of $x^*$ also maximizes $q$, and
+induction gives the same conclusion for every finite preimage.  Primitivity
+implies that the union of the finite preimages of $x^*$ is dense in $X_A$:
+any legal word can be connected to $x_0^*$ by a sufficiently long legal
+bridge.  Continuity forces $q$ to be constant.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Lemma~\ref{lem:gordin}, $\Var(S_nf)=O(n)$.  Write
+$R_n=\tau_n-S_nf$.  Lemma~\ref{lem:cylinder} and (D) give
+$\|R_n\|_\infty=o(\sqrt n)$.  Consequently
+\[
+ \frac1n\Var(R_n)\longrightarrow0,
+ \qquad
+ \frac1n|\operatorname{Cov}(S_nf,R_n)|
+ \le \sqrt{\frac{\Var(S_nf)}n}
+       \sqrt{\frac{\Var(R_n)}n}\longrightarrow0.
+\]
+Equation \eqref{eq:varianceformula} follows from
+\eqref{eq:birkvariance}.
+
+If the variance is zero, then $m=0$ in $L^2(\mu)$.  Since $m$ is
+continuous and $\mu$ has full support, $m$ vanishes everywhere.  Hence
+\begin{equation}\label{eq:cohomology}
+ -\log g-h=u\circ\sigma-u,
+ \quad\text{or equivalently}\quad
+ g(y)=e^{-h}\frac{e^{u(y)}}{e^{u(\sigma y)}}.
+\end{equation}
+Putting $H=e^u$ in \eqref{eq:normalization} yields
+\[
+ L_0H=e^hH.
+\]
+Lemma~\ref{lem:pf} gives $e^h=\lambda$ and $H=cR$.  Therefore
+\[
+ g(y)=\frac{R(y)}{\lambda R(\sigma y)},
+\]
+the reverse transition Jacobian of the Parry chain.  Its stationary
+$g$-measure is uniquely the Parry measure.  This proves
+(1)$\Rightarrow$(2)$\Rightarrow$(3)$\Rightarrow$(4).
+
+For the reverse Parry Jacobian the displayed formula is already a
+continuous coboundary with $h=\log\lambda$; it is locally constant and
+satisfies (D) and (G).  The familiar Perron cylinder formula
+\[
+ \mu_{\rm Parry}([x_0^{n-1}])
+ =\frac{\ell_{x_0}r_{x_{n-1}}}{\ell r}\lambda^{-(n-1)}
+\]
+shows directly that $\tau_n-n\log\lambda$ is a bounded endpoint term.
+Thus (4)$\Rightarrow$(1) and the final assertion follow.
+\end{proof}
+
+\section{The class is genuinely non-Gibbs}
+
+The distinction between one-sided regular $g$-measures and two-sided DLR
+Gibbs measures is substantive.  Fern\'andez, Gallo and Maillard
+constructed a unique, non-null, continuous $g$-measure on the binary full
+shift whose two-sided conditional probabilities have an essential
+discontinuity at the all-zero configuration; see
+\cite{FGM2011}.  We use their theorem of non-Gibbsianness and their renewal
+description, not their proof.
+
+\begin{proposition}[A published non-Gibbs subfamily lies inside the theorem]
+\label{prop:non-gibbs-inside}
+Consider the Fern\'andez--Gallo--Maillard renewal kernel
+\[
+ \Pr(X_0=1\mid\text{the last $1$ is $k+1$ sites back})=p_k,
+ \qquad
+ p_k=1-(1-p_\infty)\xi^{v_k},
+\]
+where $p_\infty\in(0,1)$,
+$1<\xi<(1-p_\infty)^{-2}$, and
+\[
+ v_k=\frac{(-1)^{r_k}}{r_k},\qquad
+ r_k=\min\left\{r\ge1:\sum_{j=1}^rj\ge k+1\right\}.
+\]
+After time reversal, its unique stationary law has a normalized continuous
+positive $g$-function and belongs to $\mathsf{SRG}$ on the binary full
+shift.  It is fully supported and non-Gibbs in the DLR (hence also in the
+SRB) sense.  It is not the fair Bernoulli/Parry measure, and therefore its
+cylinder-information variance is strictly positive by
+Theorem~\ref{thm:main}.
+\end{proposition}
+
+\begin{proof}
+The cited paper proves uniqueness, non-nullness, left--right symmetry,
+visible renewal, and non-Gibbsianness for this kernel.  It remains only to
+check (D) and (G).
+
+The sequence $v_k$ is constant on a block of length $r$ with value
+$(-1)^r/r$.  Each complete block therefore contributes $(-1)^r$ to a
+partial sum.  Hence all partial sums $\sum_{k=0}^{N}v_k$ lie in a fixed
+compact interval (indeed, with the indexing above, in $[-1,0]$), and every
+interval sum is uniformly bounded.  Along a zero-run,
+\[
+ \log(1-p_k)=\log(1-p_\infty)+v_k\log\xi.
+\]
+Two continuations of a fixed word can affect only the initial unresolved
+zero-run; after the first visible $1$ the renewal age is reset.  The
+difference of the corresponding logarithmic $g$-products is therefore a
+difference of two interval sums of $v_k\log\xi$, plus at most two bounded
+endpoint terms $\log p_k$.  Thus $\sup_nD_n(g)<\infty$, proving (D).
+
+Let $\epsilon=\inf_k\min(p_k,1-p_k)>0$.  In the standard common-uniform
+coupling, two renewal chains with arbitrary remote histories both produce
+a renewal at the next step whenever the uniform random variable lies in
+an interval of length at least $\epsilon$.  Once this simultaneous visible
+renewal occurs, the two ages, and hence their future information
+observables, coincide.  The coupling time is dominated by a geometric
+random variable.  For the bounded centered observable $\bar f=-\log g-h$, the
+usual coupling inequality consequently gives
+\[
+ \|P^n\bar f\|_\infty\le 2\|\bar f\|_\infty(1-\epsilon)^n.
+\]
+Summation proves (G).  Left--right symmetry identifies this past-kernel
+argument with the reverse convention used in Definition~\ref{def:class}.
+\end{proof}
+
+This proposition is why Theorem~\ref{thm:main} is not merely a restatement
+of Bowen--Ruelle rigidity.  The measure just displayed is excluded from
+the two-sided Gibbs class but included in the proved cylinder-information
+class.
+
+\section{A sharp full-support failure outside the class}
+
+Full support and stationarity alone do not preserve rigidity.  The next
+counterexample strengthens the usual single-periodic-orbit objection by
+retaining full support.
+
+\begin{proposition}[Full-support atomic zero-variance counterexample]
+On every nontrivial mixing SFT $X_A$ there exists a fully supported
+$\sigma$-invariant probability $\nu\ne\mu_{\rm Parry}$ such that
+\[
+ \sup_{n\ge1}\Var_\nu\bigl(-\log\nu([X_0^{n-1}])\bigr)<\infty.
+\]
+In particular $\sigma_\tau^2(\nu)=0$.  The measure can be chosen as a
+countable convex combination of periodic-orbit measures.
+\end{proposition}
+
+\begin{proof}
+Every legal word in a mixing SFT extends to a periodic point.  Choose a
+sequence of distinct periodic orbits $(O_j)_{j\ge1}$ whose union is dense,
+and let $q_j=|O_j|$.  Define
+\[
+ a_j=\frac{2^{-j}}{(1+\log q_j)^4},\qquad
+ w_j=\frac{a_j}{\sum_{k\ge1}a_k},\qquad
+ \nu=\sum_{j\ge1}w_j\nu_{O_j},
+\]
+where $\nu_{O_j}$ is uniform on $O_j$.  Density makes $\nu$ fully
+supported, and invariance is immediate.
+
+For $x\in O_j$, cylinder masses decrease to the atom mass and
+\[
+ 0\le\tau_n(x)\uparrow -\log\nu(\{x\})
+ \le -\log(w_j/q_j)=:Z_j.
+\]
+Moreover
+\[
+ \int Z^2\,d\nu
+ \le\sum_{j\ge1}w_j\bigl(\log q_j-\log w_j\bigr)^2<\infty.
+\]
+Indeed the fourth power in the definition of $a_j$ controls the
+$\log q_j$ term, while $2^{-j}$ controls all polynomial factors in $j$;
+the elementary inequality $(s+t)^2\le2s^2+2t^2$ makes this explicit.
+Thus $\Var_\nu(\tau_n)\le\int Z^2d\nu$ uniformly in $n$.  The measure is
+atomic and cannot be the nonatomic Parry measure.
+\end{proof}
+
+This is sharp with respect to the qualitative hypotheses ``invariant and
+full support'': neither can rescue rigidity.  It lies just outside the
+regular positive $g$-measure world.  A positive continuous $g$ is bounded
+away from zero on compact $X_A$, whereas the dense atomic measure above
+has conditional probabilities collapsing along cylinders which isolate
+its atoms.
+
+\section{Boundary and open interfaces}
+
+The theorem does \emph{not} claim maximality among all invariant measures.
+It gives the strongest fully proved intermediate class established in this
+note.  Three interfaces are intentionally left open.
+
+\begin{enumerate}
+\item The sub-root error in (D) is exactly what permits transfer of a
+variance divided by $n$ from $S_nf$ to $\tau_n$.  At
+$D_n(g)=O(\sqrt n)$ the error can contribute at the same scale; the present
+argument cannot decide the sign or cancellation of that contribution.
+\item Without (G), a stationary observable may have
+$\Var(S_nf)=o(n)$ without being an $L^2$ coboundary.  Regularity of $g$
+alone does not supply the missing martingale--coboundary implication.
+The Bramson--Kalikow phase-transition examples
+\cite{BK1993,GalloEtAl2013} show why uniqueness and projective contraction
+cannot be silently assumed for regular $g$-functions.
+\item The counterexample above is full support but nonergodic.  Whether
+there is an ergodic, fully supported, regular positive $g$-measure outside
+(G), with zero cylinder-information variance and not equal to Parry, is a
+precise open interface.  No such example is asserted here.
+\end{enumerate}
+
+Accordingly, ``all regular $g$-measures'' and ``the largest natural class''
+remain unjustified claims.  The proven statement is exactly
+Theorem~\ref{thm:main}, with the non-Gibbs inclusion of
+Proposition~\ref{prop:non-gibbs-inside}.
+
+\begin{thebibliography}{99}
+
+\bibitem{BK1993}
+M. Bramson and S. Kalikow,
+\emph{Nonuniqueness in $g$-functions},
+Israel J. Math. \textbf{84} (1993), 153--160,
+doi:10.1007/BF02761697.
+
+\bibitem{Bowen1975}
+R. Bowen,
+\emph{Equilibrium States and the Ergodic Theory of Anosov Diffeomorphisms},
+Lecture Notes in Mathematics 470, Springer, 1975,
+reprinted Springer, 2008, ISBN 978-3-540-77605-5.
+
+\bibitem{FGM2011}
+R. Fern\'andez, S. Gallo and G. Maillard,
+\emph{Regular $g$-measures are not always Gibbsian},
+Electron. Commun. Probab. \textbf{16} (2011), 732--740,
+arXiv:1106.4188, doi:10.1214/ECP.v16-1681.
+
+\bibitem{GalloEtAl2013}
+C. Gallesco, S. Gallo and D. Y. Takahashi,
+\emph{Explicit estimates in the Bramson--Kalikow model},
+Nonlinearity \textbf{27} (2014), 2281--2296,
+arXiv:1302.1267, doi:10.1088/0951-7715/27/9/2281.
+
+\bibitem{JohanssonOberg2008}
+A. Johansson and A. \"Oberg,
+\emph{Square summability of variations and convergence of the transfer
+operator},
+Ergodic Theory Dynam. Systems \textbf{28} (2008), 1145--1151,
+arXiv:math/0612131, doi:10.1017/S0143385707000788.
+
+\bibitem{Keane1972}
+M. Keane,
+\emph{Strongly mixing $g$-measures},
+Invent. Math. \textbf{16} (1972), 309--324,
+doi:10.1007/BF01418784.
+
+\bibitem{Parry1964}
+W. Parry,
+\emph{Intrinsic Markov chains},
+Trans. Amer. Math. Soc. \textbf{112} (1964), 55--66,
+doi:10.1090/S0002-9947-1964-0161372-1
+(also JSTOR doi:10.2307/1994294).
+
+\end{thebibliography}
+
+\end{document}
