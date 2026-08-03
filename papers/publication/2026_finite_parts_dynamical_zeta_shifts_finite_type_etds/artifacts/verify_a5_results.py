@@ -58,6 +58,25 @@ def quotient_correction_coefficients(
     return periodic_minus_fixed, split_orbit_product
 
 
+def quotient_correction_real_interval_matches(max_degree: int = 16) -> bool:
+    """Evaluate the two independently assembled series on 0 < z < 1/2."""
+    periodic_minus_fixed, split_orbit_product = quotient_correction_coefficients(
+        max_degree
+    )
+    sample_points = tuple(sp.Rational(n, 20) for n in range(1, 10))
+
+    def evaluate(coefficients: dict[int, sp.Rational], z: sp.Rational) -> sp.Expr:
+        return sum(
+            (coefficient * z**degree for degree, coefficient in coefficients.items()),
+            sp.Rational(0),
+        )
+
+    return all(
+        evaluate(periodic_minus_fixed, z) == evaluate(split_orbit_product, z)
+        for z in sample_points
+    )
+
+
 def verify_c2_regular_cover_factorization() -> bool:
     """Check the regular-cover determinant and reduced Perron constants."""
     z = sp.Symbol("z")
@@ -76,6 +95,65 @@ def verify_c2_regular_cover_factorization() -> bool:
     )
     base_constant = sp.limit((1 - t) / (1 - t), t, 1, dir="-")
     return cover_polynomial == block_product and cover_constant == base_constant == 1
+
+
+def s3_constant_fourier_round_trip(
+    scalar: sp.Expr, sign: sp.Expr, standard: sp.Expr
+) -> tuple[sp.Expr, sp.Expr, sp.Expr]:
+    """Recover the scalar and non-trivial S3 coordinates from class constants."""
+    class_sizes = (1, 3, 2)
+    sign_character = (1, -1, 1)
+    standard_character = (2, 0, -1)
+    group_order = 6
+    log_constants = tuple(
+        -sp.Rational(size, group_order)
+        * (
+            scalar
+            + sign_character[index] * sign
+            + standard_character[index] * standard
+        )
+        for index, size in enumerate(class_sizes)
+    )
+    recovered_scalar = -sum(log_constants)
+    recovered_sign = -sum(
+        character_value * log_constant
+        for character_value, log_constant in zip(sign_character, log_constants)
+    )
+    recovered_standard = -sum(
+        character_value * log_constant
+        for character_value, log_constant in zip(
+            standard_character, log_constants
+        )
+    )
+    return recovered_scalar, recovered_sign, recovered_standard
+
+
+def c3_constant_fourier_round_trip(
+    scalar: sp.Expr, first: sp.Expr, second: sp.Expr
+) -> tuple[sp.Expr, sp.Expr, sp.Expr]:
+    """Check the inverse convention for a group with complex characters."""
+    omega = (-sp.Integer(1) + sp.sqrt(3) * sp.I) / 2
+    first_character = (sp.Integer(1), omega, omega**2)
+    second_character = tuple(sp.conjugate(value) for value in first_character)
+    log_constants = tuple(
+        -sp.Rational(1, 3)
+        * (
+            scalar
+            + sp.conjugate(first_character[index]) * first
+            + sp.conjugate(second_character[index]) * second
+        )
+        for index in range(3)
+    )
+    recovered_scalar = -sum(log_constants)
+    recovered_first = -sum(
+        character_value * log_constant
+        for character_value, log_constant in zip(first_character, log_constants)
+    )
+    recovered_second = -sum(
+        character_value * log_constant
+        for character_value, log_constant in zip(second_character, log_constants)
+    )
+    return recovered_scalar, recovered_first, recovered_second
 
 
 def universal_product_jet(alpha: sp.Expr, order: int) -> sp.Expr:
@@ -97,6 +175,9 @@ def render_report() -> str:
     checks = {
         "quotient correction power series": periodic_minus_fixed
         == split_orbit_product,
+        "quotient correction on 0 < z < 1/2": (
+            quotient_correction_real_interval_matches(max_degree)
+        ),
         "quotient correction is non-zero": sum(periodic_minus_fixed.values()) > 0,
         "regular-cover determinant factorization": verify_c2_regular_cover_factorization(),
         "universal harmonic jet": sp.simplify(
@@ -107,16 +188,37 @@ def render_report() -> str:
             + alpha**2 * (alpha + 2) * sp.Symbol("x") ** 3 / 48
         )
         == 0,
+        "S3 class-constant Fourier inversion": all(
+            sp.simplify(recovered - original) == 0
+            for recovered, original in zip(
+                s3_constant_fourier_round_trip(
+                    sp.Symbol("S"), sp.Symbol("F_sign"), sp.Symbol("F_standard")
+                ),
+                (sp.Symbol("S"), sp.Symbol("F_sign"), sp.Symbol("F_standard")),
+            )
+        ),
+        "C3 complex-character Fourier inversion": all(
+            sp.simplify(recovered - original) == 0
+            for recovered, original in zip(
+                c3_constant_fourier_round_trip(
+                    sp.Symbol("S"), sp.Symbol("F_1"), sp.Symbol("F_2")
+                ),
+                (sp.Symbol("S"), sp.Symbol("F_1"), sp.Symbol("F_2")),
+            )
+        ),
     }
     if not all(checks.values()):
         failed = ", ".join(name for name, passed in checks.items() if not passed)
         raise AssertionError(f"failed checks: {failed}")
 
     lines = [
-        "A5 NEW-RESULT EXACT VERIFICATION",
+        "A5 CLAIM VERIFICATION",
         "Model: full binary shift with C2 labels 0 and 1; exact SymPy arithmetic.",
         f"Primitive necklaces and quotient correction checked through z^{max_degree}.",
+        "The quotient identity agrees at nine rational points in 0 < z < 1/2.",
         f"Universal product jet through N^(-3): {sp.sstr(jet)}",
+        "The S3 class constants recover the scalar, sign, and standard coordinates.",
+        "The C3 check confirms the complex-character conjugation convention.",
         "STATUS: PASS",
     ]
     return "\n".join(lines) + "\n"
