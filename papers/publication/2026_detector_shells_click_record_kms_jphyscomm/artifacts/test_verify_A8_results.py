@@ -22,6 +22,70 @@ class PhysicalImageTests(unittest.TestCase):
                 )
                 self.assertLess(abs(exact - second_order), 3.0 * d**4 / m**3)
 
+    def test_analytic_extension_matches_real_root_formula(self):
+        for p, s in ((0.12, 0.83), (0.35, 0.5), (0.6, 0.600001)):
+            expected = verify.symmetric_log_divided_difference(p, s)
+            actual = verify.analytic_log_divided_difference(p + s, p * s)
+            self.assertAlmostEqual(actual, expected, places=11)
+
+    def test_analytic_extension_is_real_on_nonreal_root_side(self):
+        value = verify.analytic_log_divided_difference(1.0, 0.3)
+        self.assertTrue(math.isfinite(value))
+
+    def test_joint_constraint_jacobian_has_rank_two_on_grid(self):
+        for x in np.geomspace(0.1, 5.0, 12):
+            for y in np.geomspace(0.1, 5.5, 11):
+                coordinates = verify.sampled_counter_inclusions(float(x), float(y))
+                jacobian = verify.constraint_jacobian(coordinates)
+                self.assertGreater(np.linalg.svd(jacobian, compute_uv=False)[-1], 1e-5)
+
+
+class JointImageTestChecks(unittest.TestCase):
+    def test_regenerative_covariance_and_constraint_covariance_are_positive(self):
+        for x, y in ((0.1, 0.1), (0.2, 1.7), (1.0, 1.0), (2.0, 4.0), (5.0, 5.5)):
+            coordinates, sigma_r = verify.regenerative_inclusion_covariance(x, y)
+            jacobian = verify.constraint_jacobian(coordinates)
+            omega = jacobian @ sigma_r @ jacobian.T
+            self.assertGreater(np.linalg.eigvalsh(sigma_r)[0], 1e-8)
+            self.assertGreater(np.linalg.eigvalsh(omega)[0], 1e-8)
+
+    def test_cone_distance_matches_direct_scalar_minimization(self):
+        rng = np.random.default_rng(20260803)
+        for _ in range(200):
+            matrix = rng.normal(size=(2, 2))
+            omega = matrix @ matrix.T + 0.1 * np.eye(2)
+            e, d = rng.normal(size=2)
+            beta = omega[0, 1] / omega[0, 0]
+            minimizer = max(0.0, d - beta * e)
+            residual = np.array([e, d - minimizer])
+            direct = residual @ np.linalg.inv(omega) @ residual
+            self.assertAlmostEqual(
+                verify.cone_wald_distance(e, d, omega), direct, places=11
+            )
+
+    def test_boundary_critical_value_matches_mixture_quantile(self):
+        self.assertAlmostEqual(verify.boundary_critical_value(0.05), 5.1383807853, places=9)
+
+    def test_finite_support_submodel_has_prescribed_coordinate_changes(self):
+        directions = verify.local_gap_perturbation_basis()
+        cycle_lengths = np.arange(1.0, 5.0)
+        self.assertTrue(np.allclose(directions.sum(axis=1), 0.0))
+        self.assertTrue(
+            np.allclose(directions @ cycle_lengths, np.array([1.0, 0.0, 0.0]))
+        )
+        self.assertTrue(np.allclose(directions[:, 0], np.array([0.0, 1.0, 0.0])))
+        self.assertTrue(np.allclose(directions[:, 1], np.array([0.0, 0.0, 1.0])))
+
+    def test_local_power_is_size_at_origin_and_increases_nonreal_side(self):
+        omega = np.array([[1.4, 0.3], [0.3, 1.1]])
+        alpha = 0.05
+        at_origin = verify.local_power(0.0, 0.0, omega, alpha)
+        nonreal_side = verify.local_power(0.0, -1.0, omega, alpha)
+        physical_side = verify.local_power(0.0, 1.0, omega, alpha)
+        self.assertAlmostEqual(at_origin, alpha, places=8)
+        self.assertGreater(nonreal_side, alpha)
+        self.assertLess(physical_side, alpha)
+
 
 class HiddenModeTests(unittest.TestCase):
     def test_sharp_global_spectral_bound_and_extremizer(self):

@@ -3,7 +3,7 @@
 The manuscript contains the proofs.  This script checks the exact physical
 image residual, the sharp hidden-mode bound and its diagonal extremizer, the
 diagonal counterexample to the oracle's unqualified one-dependence equation,
-and the fast-sampling expansion of the rounded two-stage waiting time.
+the fast-sampling expansion, and the A8-r2 joint physical-image test.
 """
 
 from __future__ import annotations
@@ -17,6 +17,203 @@ from numpy.typing import ArrayLike, NDArray
 
 
 FloatArray = NDArray[np.float64]
+
+
+def _analytic_h_and_derivative(w: float) -> tuple[float, float]:
+    """Return H(w) and H'(w) on the real analytic branch w < 1."""
+    if not math.isfinite(w) or w >= 1.0:
+        raise ValueError("w must be finite and less than one")
+    if abs(w) < 1e-6:
+        value = 1.0 - w / 3.0 - 4.0 * w**2 / 45.0 - 44.0 * w**3 / 945.0
+        derivative = -1.0 / 3.0 - 8.0 * w / 45.0 - 44.0 * w**2 / 315.0
+        return value, derivative
+    if w > 0.0:
+        root = math.sqrt(w)
+        angle = math.atanh(root)
+        value = root / angle
+        derivative = (angle - root / (1.0 - root**2)) / (
+            2.0 * root * angle**2
+        )
+        return value, derivative
+    root = math.sqrt(-w)
+    angle = math.atan(root)
+    value = root / angle
+    derivative = -(angle - root / (1.0 + root**2)) / (
+        2.0 * root * angle**2
+    )
+    return value, derivative
+
+
+def analytic_log_divided_difference(sigma1: float, sigma2: float) -> float:
+    """Evaluate the real analytic continuation in symmetric coordinates."""
+    if not (math.isfinite(sigma1) and math.isfinite(sigma2)):
+        raise ValueError("symmetric coordinates must be finite")
+    if sigma1 <= 0.0 or sigma2 <= 0.0:
+        raise ValueError("sigma1 and sigma2 must be positive")
+    w = 1.0 - 4.0 * sigma2 / sigma1**2
+    h, _ = _analytic_h_and_derivative(w)
+    return 0.5 * sigma1 * (1.0 - 0.5 * math.log(sigma2) * h)
+
+
+def _analytic_log_divided_difference_gradient(
+    sigma1: float, sigma2: float
+) -> FloatArray:
+    w = 1.0 - 4.0 * sigma2 / sigma1**2
+    h, h_prime = _analytic_h_and_derivative(w)
+    log_sigma2 = math.log(sigma2)
+    dw_dsigma1 = 8.0 * sigma2 / sigma1**3
+    dw_dsigma2 = -4.0 / sigma1**2
+    common = 1.0 - 0.5 * log_sigma2 * h
+    d_sigma1 = 0.5 * common - 0.25 * sigma1 * log_sigma2 * h_prime * dw_dsigma1
+    d_sigma2 = -0.25 * sigma1 * (
+        h / sigma2 + log_sigma2 * h_prime * dw_dsigma2
+    )
+    return np.array([d_sigma1, d_sigma2])
+
+
+def constraint_jacobian(coordinates: ArrayLike) -> FloatArray:
+    """Return the Jacobian of (analytic image residual, discriminant)."""
+    r0, r1, r2 = np.asarray(coordinates, dtype=float)
+    denominator = r1 - r0**2
+    if r0 <= 0.0 or denominator == 0.0:
+        raise ValueError("coordinates lie outside the quotient chart")
+    a = r1 / r0
+    lam = (r2 - r0**2) / denominator
+    sigma1 = 1.0 - a + lam
+    sigma2 = r0 * (1.0 - lam) - a + lam
+    da = np.array([-r1 / r0**2, 1.0 / r0, 0.0])
+    dlam = np.array(
+        [2.0 * r0 * (lam - 1.0) / denominator, -lam / denominator, 1.0 / denominator]
+    )
+    dphi1 = -da + dlam
+    dphi2 = np.array([1.0 - lam, 0.0, 0.0]) - da + (1.0 - r0) * dlam
+    dphi = np.vstack([dphi1, dphi2])
+    gradient = _analytic_log_divided_difference_gradient(sigma1, sigma2)
+    de = da + gradient @ dphi
+    ddiscriminant = np.array([2.0 * sigma1, -4.0]) @ dphi
+    return np.vstack([de, ddiscriminant])
+
+
+def _gap_masses(x: float, y: float, tolerance: float = 1e-15) -> FloatArray:
+    masses: list[float] = []
+    p = math.exp(-x)
+    s = math.exp(-y)
+
+    def survival(k: int) -> float:
+        if math.isclose(x, y, rel_tol=1e-10, abs_tol=1e-14):
+            theta = 0.5 * (x + y)
+            return math.exp(-theta * k) * (1.0 + theta * k)
+        return (y * p**k - x * s**k) / (y - x)
+
+    previous = survival(0)
+    for k in range(1_000_000):
+        following = survival(k + 1)
+        masses.append(previous - following)
+        if following < tolerance:
+            return np.asarray(masses)
+        previous = following
+    raise ArithmeticError("gap-law truncation did not converge")
+
+
+def regenerative_inclusion_covariance(x: float, y: float) -> tuple[FloatArray, FloatArray]:
+    """Deterministically sum the complete-cycle covariance from the gap law."""
+    if min(x, y) <= 0.0:
+        raise ValueError("dimensionless rates must be positive")
+    g = _gap_masses(x, y)
+    index = np.arange(g.size)
+    mu = float(np.dot(index + 1.0, g))
+    r = np.array([1.0 / mu, g[0] / mu, (g[1] + g[0] ** 2) / mu])
+    i = index[:, None]
+    j = index[None, :]
+    reward = np.empty((g.size, g.size, 3))
+    reward[:, :, 0] = 1.0
+    reward[:, :, 1] = i == 0
+    reward[:, :, 2] = (i == 1) + ((i == 0) & (j == 0))
+    centered = reward - r[None, None, :] * (i[:, :, None] + 1.0)
+    pair_mass = g[:, None] * g[None, :]
+    variance = np.einsum("ij,ija,ijb->ab", pair_mass, centered, centered)
+    future_mean = np.einsum("k,jka->ja", g, centered)
+    adjacent = np.einsum("ij,ija,jb->ab", pair_mass, centered, future_mean)
+    return r, (variance + adjacent + adjacent.T) / mu
+
+
+def cone_wald_distance(e: float, discriminant: float, omega: ArrayLike) -> float:
+    """Return the covariance-metric squared distance to {0} x [0,infinity)."""
+    covariance = np.asarray(omega, dtype=float)
+    if covariance.shape != (2, 2) or np.linalg.eigvalsh(covariance)[0] <= 0.0:
+        raise ValueError("omega must be a positive-definite 2 by 2 matrix")
+    beta = covariance[0, 1] / covariance[0, 0]
+    variance = covariance[1, 1] - covariance[0, 1] ** 2 / covariance[0, 0]
+    standardized_inequality = discriminant - beta * e
+    return e**2 / covariance[0, 0] + min(standardized_inequality, 0.0) ** 2 / variance
+
+
+def _chi_square_cdf(value: float, degrees: int) -> float:
+    if value <= 0.0:
+        return 0.0
+    if degrees == 1:
+        return math.erf(math.sqrt(value / 2.0))
+    if degrees == 2:
+        return 1.0 - math.exp(-value / 2.0)
+    raise ValueError("only one and two degrees of freedom are used")
+
+
+def boundary_critical_value(alpha: float) -> float:
+    """Return the upper-alpha quantile of 0.5 chi1^2 + 0.5 chi2^2."""
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must lie in (0,1)")
+    lower, upper = 0.0, 1.0
+    target = 1.0 - alpha
+    while 0.5 * (_chi_square_cdf(upper, 1) + _chi_square_cdf(upper, 2)) < target:
+        upper *= 2.0
+    for _ in range(80):
+        midpoint = 0.5 * (lower + upper)
+        cdf = 0.5 * (_chi_square_cdf(midpoint, 1) + _chi_square_cdf(midpoint, 2))
+        if cdf < target:
+            lower = midpoint
+        else:
+            upper = midpoint
+    return 0.5 * (lower + upper)
+
+
+def local_gap_perturbation_basis() -> FloatArray:
+    """Rows give the eta_mu, eta_0, eta_1 perturbations on gaps 0,...,3."""
+    return np.array(
+        [[0.0, 0.0, -1.0, 1.0], [1.0, 0.0, -3.0, 2.0], [0.0, 1.0, -2.0, 1.0]]
+    )
+
+
+def local_power(
+    delta: float, tau: float, omega: ArrayLike, alpha: float = 0.05
+) -> float:
+    """Evaluate the joint image test's two-coordinate local-power integral."""
+    covariance = np.asarray(omega, dtype=float)
+    beta = covariance[0, 1] / covariance[0, 0]
+    variance = covariance[1, 1] - covariance[0, 1] ** 2 / covariance[0, 0]
+    a_star = delta / math.sqrt(covariance[0, 0])
+    b_star = (tau - beta * delta) / math.sqrt(variance)
+    critical = boundary_critical_value(alpha)
+
+    with mp.workdps(40):
+        root_critical = mp.sqrt(critical)
+
+        def normal_cdf(value: mp.mpf) -> mp.mpf:
+            return (1 + mp.erf(value / mp.sqrt(2))) / 2
+
+        def interval_probability(q: mp.mpf) -> mp.mpf:
+            if q <= 0:
+                return mp.mpf("0")
+            root = mp.sqrt(q)
+            return normal_cdf(root - a_star) - normal_cdf(-root - a_star)
+
+        positive_part = normal_cdf(b_star) * interval_probability(critical)
+        negative_part = mp.quad(
+            lambda value: interval_probability(critical - value**2)
+            * mp.exp(-((value - b_star) ** 2) / 2)
+            / mp.sqrt(2 * mp.pi),
+            [-root_critical, 0],
+        )
+        return float(1 - positive_part - negative_part)
 
 
 def symmetric_log_divided_difference(p: float, s: float) -> float:
@@ -165,6 +362,64 @@ def main() -> None:
     print(
         "scaled fast-sampling |remainder|/Delta^6="
         + np.array2string(np.asarray(sampling_remainders), precision=6)
+    )
+
+    image_formula_errors = []
+    minimum_jacobian_singular_value = math.inf
+    minimum_sigma_eigenvalue = math.inf
+    minimum_omega_eigenvalue = math.inf
+    covariance_points = (
+        (0.1, 0.1),
+        (0.2, 1.7),
+        (1.0, 1.0),
+        (2.0, 4.0),
+        (5.0, 5.5),
+    )
+    for x, y in covariance_points:
+        p = math.exp(-x)
+        s = math.exp(-y)
+        image_formula_errors.append(
+            analytic_log_divided_difference(p + s, p * s)
+            - symmetric_log_divided_difference(p, s)
+        )
+        coordinates, sigma_r = regenerative_inclusion_covariance(x, y)
+        jacobian = constraint_jacobian(coordinates)
+        omega = jacobian @ sigma_r @ jacobian.T
+        minimum_jacobian_singular_value = min(
+            minimum_jacobian_singular_value,
+            np.linalg.svd(jacobian, compute_uv=False)[-1],
+        )
+        minimum_sigma_eigenvalue = min(
+            minimum_sigma_eigenvalue, np.linalg.eigvalsh(sigma_r)[0]
+        )
+        minimum_omega_eigenvalue = min(
+            minimum_omega_eigenvalue, np.linalg.eigvalsh(omega)[0]
+        )
+
+    trial_omega = np.array([[1.4, 0.3], [0.3, 1.1]])
+    alpha = 0.05
+    powers = np.array(
+        [
+            local_power(0.0, 0.0, trial_omega, alpha),
+            local_power(0.0, 1.0, trial_omega, alpha),
+            local_power(0.0, -1.0, trial_omega, alpha),
+        ]
+    )
+    print("A8-r2 joint physical-image verification")
+    print(f"analytic C formula maximum error={_maximum(image_formula_errors):.3e}")
+    print(
+        "tested minimum singular value Dpsi="
+        f"{minimum_jacobian_singular_value:.6e}"
+    )
+    print(f"tested minimum eigenvalue Sigma_r={minimum_sigma_eigenvalue:.6e}")
+    print(f"tested minimum eigenvalue Omega={minimum_omega_eigenvalue:.6e}")
+    print(
+        "boundary mixture 0.95 quantile="
+        f"{boundary_critical_value(alpha):.10f}"
+    )
+    print(
+        "local powers (origin, physical tau=1, nonreal tau=-1)="
+        + np.array2string(powers, precision=10)
     )
 
 

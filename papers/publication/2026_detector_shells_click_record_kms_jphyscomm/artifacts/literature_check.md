@@ -119,3 +119,49 @@ cycle bias. These results are promoted only in their narrow model-specific
 forms. The general minimal-realization orbit theorem, Lambert-W theory,
 metric-projection limits, and confluent Prony collision theory remain cited
 background rather than new contributions.
+
+## A8-r2 joint image-test boundary check
+
+Checked 2026-08-03 through the live arXiv Atom API before integrating the
+joint image test. The initial identified requests received HTTP 429 responses;
+identified curl retries then returned HTTP 200. The following model-specific
+queries all returned opensearch:totalResults=0:
+
+- all:"sampled-counter" AND all:"physical image";
+- all:"discrete Markovian arrival" AND all:"boundary test";
+- all:"renewal binary" AND all:"model specification";
+- all:"three inclusion" AND all:"Markovian arrival";
+- all:"cone Wald" AND all:"local power";
+- all:"Markovian arrival process" AND all:"goodness of fit".
+
+A broader API query,
+all:"Markovian arrival process" AND all:inference, returned one result,
+arXiv:2401.14561v1, “Fitting procedure for the two-state Batch Markov
+modulated Poisson process.” It does not state a three-inclusion physical-image
+test, the analytic discriminant constraint used here, or the local-power
+formula.
+
+The general constrained-inference ground is already published. Exact-title
+API queries returned:
+
+- Fang and Seo, “A Projection Framework for Testing Shape Restrictions That
+  Form Convex Cones,” arXiv:1910.07689v4, published in *Econometrica* 89(5),
+  2439--2458 (2021), DOI 10.3982/ECTA17764;
+- Fang and Santos, “Inference on Directionally Differentiable Functions,”
+  arXiv:1404.3763v2, published in *Review of Economic Studies* 86(1),
+  377--412 (2019), DOI 10.1093/restud/rdy049.
+
+The older foundational sources have no arXiv record returned by exact-title
+queries: Chernoff (1954), DOI 10.1214/aoms/1177728725; Shapiro (1987), DOI
+10.1090/S0002-9939-1987-0866441-7; and Andrews (2001), DOI
+10.1111/1468-0262.00210. Crossref and OpenAlex searches for
+“sampled-counter D-MAP physical image,” “discrete Markovian arrival boundary
+Wald test,” and “renewal binary model specification test” returned no
+model-specific theorem matching the proposed construction.
+
+Accordingly, the manuscript attributes cone projection, chi-bar-square
+limits, boundary calibration, and general LAN machinery to the standard
+literature. The only novelty claimed is the sampled-counter specialization:
+the root-free analytic constraint map, its rank and regenerative covariance
+nondegeneracy, compact-uniform studentization, and its explicit local-power
+coordinates.
