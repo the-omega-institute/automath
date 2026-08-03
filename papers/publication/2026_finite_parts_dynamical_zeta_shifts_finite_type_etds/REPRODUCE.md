@@ -61,6 +61,11 @@ The additional exact verification enumerates primitive binary necklaces in a
 strict-gap `C2` extension, compares the quotient split-orbit correction with
 the periodic-minus-fixed power series through degree 16, derives the universal
 harmonic jet symbolically, and checks the exact four-vertex boundary collision.
+It also verifies a positive rational Mahler certificate on a real parameter
+grid and an exact counterexample showing that positivity cannot be omitted
+from the rational-certificate kernel domain.  A diagonal signed-block model
+checks that the remaining special-value interface occurs within the same-base
+compatibility and strict-gap constraints.
 It also exhausts all `10^4` four-vertex two-out-regular base matrices and every
 compatible signed block used in the polynomial-certificate minimality proof.
 The expected enumeration is `2208` primitive bases, `48` supports for

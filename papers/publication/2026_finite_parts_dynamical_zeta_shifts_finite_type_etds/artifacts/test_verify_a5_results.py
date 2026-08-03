@@ -5,9 +5,12 @@ import sympy as sp
 from artifacts import verify_a5_results as verifier
 from artifacts.verify_a5_results import (
     quotient_correction_coefficients,
+    rational_mahler_certificate_matches,
     render_report,
+    unrestricted_mahler_kernel_domain_counterexample,
     universal_product_jet,
     verify_c2_regular_cover_factorization,
+    verify_diagonal_realizable_mahler_subclass,
 )
 
 
@@ -25,6 +28,15 @@ class OracleA5ResultTests(unittest.TestCase):
             "the real-parameter binary coboundary check is not implemented",
         )
         self.assertTrue(verifier.binary_coboundary_real_interval_matches())
+
+    def test_positive_rational_mahler_certificate_on_a_real_parameter_grid(self):
+        self.assertTrue(rational_mahler_certificate_matches())
+
+    def test_unrestricted_mahler_kernel_needs_a_positivity_domain(self):
+        self.assertTrue(unrestricted_mahler_kernel_domain_counterexample())
+
+    def test_diagonal_mahler_subclass_is_same_base_realizable_and_strict_gap(self):
+        self.assertTrue(verify_diagonal_realizable_mahler_subclass())
 
     def test_quadratic_binary_certificate_minimality_enumeration(self):
         self.assertTrue(
@@ -123,6 +135,9 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Primitive two-out bases: 2208", report)
         self.assertIn("Determinant supports: 48 and 0", report)
         self.assertIn("Real boundary grid: 25 points", report)
+        self.assertIn("Positive rational Mahler certificate: verified", report)
+        self.assertIn("Unrestricted Mahler kernel inclusion: domain counterexample", report)
+        self.assertIn("Diagonal same-base Mahler subclass: compatibility", report)
         self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))
 

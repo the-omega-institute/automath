@@ -152,6 +152,88 @@ def binary_coboundary_real_interval_matches() -> bool:
     return True
 
 
+def rational_mahler_certificate_matches() -> bool:
+    """Check a non-polynomial positive rational Mahler certificate."""
+    z = sp.Symbol("z")
+    rational_r = (1 + z) / (1 + 4 * z**2)
+    coboundary = sp.cancel(rational_r.subs(z, z**2) / rational_r**2)
+    expected = sp.cancel(
+        (1 + z**2) * (1 + 4 * z**2) ** 2
+        / ((1 + 4 * z**4) * (1 + z) ** 2)
+    )
+    symbolic = all(
+        (
+            sp.cancel(coboundary.subs(z, 0)) == 1,
+            sp.cancel(rational_r.subs(z, sp.Rational(1, 4))) == 1,
+            sp.cancel(coboundary - expected) == 0,
+        )
+    )
+    if not symbolic:
+        return False
+
+    with mp.workdps(80):
+        for numerator_x in range(1, 26):
+            x = mp.mpf(numerator_x) / 100
+
+            def r(value: mp.mpf) -> mp.mpf:
+                return (1 + value) / (1 + 4 * value**2)
+
+            logarithmic_product = mp.fsum(
+                mp.power(2, -j)
+                * (mp.log(r(x ** (2 ** (j + 1)))) - 2 * mp.log(r(x ** (2**j))))
+                for j in range(14)
+            )
+            if abs(logarithmic_product + 2 * mp.log(r(x))) > mp.mpf("1e-70"):
+                return False
+    return True
+
+
+def unrestricted_mahler_kernel_domain_counterexample() -> bool:
+    """Refute the kernel inclusion when positivity/regularity is omitted."""
+    z = sp.Symbol("z")
+    x = sp.Rational(1, 4)
+    rational_r = 1 + sp.Rational(256, 3) * z * (z - x)
+    coboundary = sp.cancel(rational_r.subs(z, z**2) / rational_r**2)
+    return all(
+        (
+            rational_r.subs(z, 0) == 1,
+            rational_r.subs(z, x) == 1,
+            rational_r.subs(z, x**2) == 0,
+            coboundary.subs(z, x) == 0,
+        )
+    )
+
+
+def verify_diagonal_realizable_mahler_subclass() -> bool:
+    """Check a same-base strict-gap diagonal determinant-ratio model."""
+    z = sp.Symbol("z")
+    adjacency = sp.Matrix(((5, 2, 2), (2, 5, 2), (2, 2, 5)))
+    first = sp.diag(-5, 1, 3)
+    second = sp.diag(-3, 3, 5)
+    compatible = all(
+        abs(twist[i, j]) <= adjacency[i, j]
+        and (adjacency[i, j] - twist[i, j]) % 2 == 0
+        for twist in (first, second)
+        for i in range(3)
+        for j in range(3)
+    )
+    first_polynomial = sp.expand((sp.eye(3) - z * first).det())
+    second_polynomial = sp.expand((sp.eye(3) - z * second).det())
+    return all(
+        (
+            compatible,
+            all(entry > 0 for entry in adjacency),
+            adjacency * sp.ones(3, 1) == 9 * sp.ones(3, 1),
+            max(abs(value) for value in first.diagonal()) < 9,
+            max(abs(value) for value in second.diagonal()) < 9,
+            first_polynomial
+            == sp.expand((1 + 5 * z) * (1 - z) * (1 - 3 * z)),
+            second_polynomial
+            == sp.expand((1 + 3 * z) * (1 - 3 * z) * (1 - 5 * z)),
+        )
+    )
+
+
 @lru_cache(maxsize=1)
 def enumerate_quadratic_binary_certificates() -> dict[str, int]:
     """Exhaust the four-vertex, two-out-regular signed certificate class."""
@@ -384,6 +466,13 @@ def render_report() -> str:
     checks = {
         "exact C2 boundary collision": verify_c2_boundary_collision(),
         "binary coboundary real interval": binary_coboundary_real_interval_matches(),
+        "positive rational Mahler certificate": rational_mahler_certificate_matches(),
+        "unrestricted Mahler kernel domain counterexample": (
+            unrestricted_mahler_kernel_domain_counterexample()
+        ),
+        "diagonal realizable Mahler subclass": (
+            verify_diagonal_realizable_mahler_subclass()
+        ),
         "quadratic binary certificate enumeration": enumeration
         == {
             "primitive_bases": 2208,
@@ -440,6 +529,9 @@ def render_report() -> str:
         f"{enumeration['first_determinant_support']} and "
         f"{enumeration['second_determinant_support']}",
         "Real boundary grid: 25 points in 0 < z <= 1/4 at 80 digits",
+        "Positive rational Mahler certificate: verified on the same real grid",
+        "Unrestricted Mahler kernel inclusion: domain counterexample verified",
+        "Diagonal same-base Mahler subclass: compatibility and strict gap verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",
         f"Primitive necklaces and quotient correction checked through z^{max_degree}.",
