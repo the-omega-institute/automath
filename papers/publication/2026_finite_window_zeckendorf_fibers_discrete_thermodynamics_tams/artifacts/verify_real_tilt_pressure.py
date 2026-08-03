@@ -77,6 +77,107 @@ def ordinary_partition_values(limit: int, weights: list[int]) -> list[int]:
     return values
 
 
+def compositions(total: int):
+    """Yield all ordered compositions of a positive integer."""
+    for mask in range(1 << (total - 1)):
+        parts = []
+        current = 1
+        for index in range(total - 1):
+            if mask & (1 << index):
+                parts.append(current)
+                current = 1
+            else:
+                current += 1
+        parts.append(current)
+        yield tuple(parts)
+
+
+def negative_continuant(entries: tuple[int, ...]) -> int:
+    previous_previous = 1
+    previous = entries[0]
+    for entry in entries[1:]:
+        previous_previous, previous = previous, entry * previous - previous_previous
+    return previous
+
+
+def weighted_generator_counters(max_layer: int) -> list[Counter[int]]:
+    """Return exact multiplicity counters for generator weights at each cost."""
+    letters = [Counter() for _ in range(max_layer + 1)]
+    for cost_sum in range(1, (max_layer - 1) // 2 + 1):
+        cost = 2 * cost_sum + 1
+        for composition in compositions(cost_sum):
+            denominator = negative_continuant(
+                tuple(part + 1 for part in composition)
+            )
+            letters[cost][denominator] += 1
+
+    generators = [Counter() for _ in range(max_layer + 1)]
+    generators[0][1] = 1
+    for total_cost in range(1, max_layer + 1):
+        for letter_cost in range(1, total_cost + 1):
+            for denominator, letter_count in letters[letter_cost].items():
+                for weight, word_count in generators[
+                    total_cost - letter_cost
+                ].items():
+                    generators[total_cost][denominator * weight] += (
+                        letter_count * word_count
+                    )
+    return generators
+
+
+def weighted_renewal_counterexample_search(
+    max_layer: int, fib: list[int], sigma: float, beta_star: float
+) -> tuple[list[int], int, int]:
+    """Check the weighted renewal identity coefficientwise and at real tilts."""
+    limit = fib[max_layer + 2] - 2
+    ordinary = ordinary_partition_values(
+        limit, [fib[index] for index in range(2, max_layer + 2)]
+    )
+    generators = weighted_generator_counters(max_layer)
+    failed_layers = []
+    symbolic_checks = 0
+    real_tilt_checks = 0
+    real_tilts = [beta_star, (beta_star + sigma) / 2.0, sigma]
+
+    for layer in range(1, max_layer + 1):
+        actual = Counter(
+            ordinary[fib[layer + 1] - 1 : fib[layer + 2] - 1]
+        )
+        predicted = Counter({1: 1})
+        predicted.update(generators[layer])
+        for generator_cost in range(1, layer):
+            for level, count in generators[generator_cost].items():
+                predicted[level] += 2 * count
+        symbolic_checks += 1
+        if predicted != actual:
+            failed_layers.append(layer)
+
+    for tilt in real_tilts:
+        generator_weights = [
+            sum(count * level ** (-tilt) for level, count in counter.items())
+            for counter in generators
+        ]
+        for m in range(1, max_layer):
+            actual = sum(
+                level ** (-tilt)
+                for level in ordinary[
+                    fib[m + 1] - 1 : fib[m + 3] - 1
+                ]
+            )
+            predicted = (
+                4.0 * sum(generator_weights[:m])
+                + 3.0 * generator_weights[m]
+                + generator_weights[m + 1]
+                - 2.0
+            )
+            real_tilt_checks += 1
+            tolerance = 2.0e-11 * max(1.0, abs(actual))
+            if abs(actual - predicted) > tolerance and m not in failed_layers:
+                failed_layers.append(m)
+
+    return sorted(set(failed_layers)), symbolic_checks, real_tilt_checks
+
+
 def layer_bound_counterexample_search(max_layer: int, fib: list[int]) -> tuple[int, int]:
     limit = fib[max_layer + 2] - 2
     ordinary = ordinary_partition_values(
@@ -152,6 +253,8 @@ def main() -> int:
             (2.2, 3.0),
         )
     )
+    phi = (1.0 + math.sqrt(5.0)) / 2.0
+    beta_star = math.log(phi) / math.log(2.0 / phi)
     snapshot_indices = sorted({12, 16, 20, 24, 28, args.max_m})
     selected_tilts = [
         -8.0,
@@ -178,9 +281,16 @@ def main() -> int:
         if m in snapshot_indices:
             snapshots[m] = Counter(coefficients)
 
-    failures, layer_stability_checks = layer_bound_counterexample_search(
+    layer_failures, layer_stability_checks = layer_bound_counterexample_search(
         args.max_layer, fib
     )
+    failures = layer_failures
+    renewal_failed_layers, renewal_symbolic_checks, renewal_real_tilt_checks = (
+        weighted_renewal_counterexample_search(
+            args.max_layer, fib, sigma, beta_star
+        )
+    )
+    failures += len(renewal_failed_layers)
     maximum_fiber = max(
         exact_maximum_fiber(m, fib) for m in range(1, args.max_m + 1)
     )
@@ -194,7 +304,13 @@ def main() -> int:
         f"tilt_grid=[{derivative_grid[0]:.2f},{derivative_grid[-1]:.2f}] step=0.25",
         f"layer_bound_counterexample_search=2..{args.max_layer}",
         f"layer_stability_checks={layer_stability_checks}",
-        f"layer_bound_counterexamples={failures}",
+        f"layer_bound_counterexamples={layer_failures}",
+        "WEIGHTED_RENEWAL symbolic_checks={} real_tilt_checks={} "
+        "failed_layers={}".format(
+            renewal_symbolic_checks,
+            renewal_real_tilt_checks,
+            renewal_failed_layers,
+        ),
     ]
 
     previous_logs: dict[float, tuple[int, float]] = {}
@@ -338,8 +454,6 @@ def main() -> int:
             lambda value: mpmath.zeta(value - 1) / mpmath.zeta(value), sigma
         )
     )
-    phi = (1.0 + math.sqrt(5.0)) / 2.0
-    beta_star = math.log(phi) / math.log(2.0 / phi)
     rho = max(
         float(root.real)
         for root in mpmath.polyroots([1.0, -2.0, -2.0, 2.0])
