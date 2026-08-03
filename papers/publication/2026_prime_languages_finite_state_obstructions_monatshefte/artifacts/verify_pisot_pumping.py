@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Finite checks for the linear-numeration pumping congruence.
+"""Finite checks for recurrent-numeration pumping and local obstructions.
 
 This is not a proof of language immunity.  It checks the exact matrix identity
-used in the proof on several explicit Pisot recurrences and searches for the
-singular-modulus obstruction that explains the nonunit hypothesis in the
-iterated coprime-quotient theorem.
+used in the proof on explicit recurrences, synchronized multi-block return
+periods, a local prime-layer isolation certificate, prescribed-depth quotient
+congruences, and a finite induced divisibility tree.  It also searches for the
+singular-modulus obstruction at a prime dividing a nonunit trailing coefficient.
 """
 
 from __future__ import annotations
@@ -207,6 +208,60 @@ def pumped_word(word: Word, cuts: tuple[int, int, int, int], exponent: int) -> W
     return u + v * exponent + x + y * exponent + z
 
 
+def pump_disjoint_blocks(
+    word: Word, spans: Sequence[tuple[int, int]], exponent: int
+) -> Word:
+    if exponent < 0:
+        raise ValueError("the pumping exponent must be nonnegative")
+    previous = 0
+    pieces: list[int] = []
+    nonempty = False
+    for start, stop in spans:
+        if not previous <= start <= stop <= len(word):
+            raise ValueError("pumped spans must be ordered and disjoint")
+        pieces.extend(word[previous:start])
+        block = word[start:stop]
+        pieces.extend(block * exponent)
+        nonempty = nonempty or bool(block)
+        previous = stop
+    if not nonempty:
+        raise ValueError("at least one pumped block must be nonempty")
+    pieces.extend(word[previous:])
+    return tuple(pieces)
+
+
+def check_synchronized_orbit(
+    system: LinearSystem,
+    word: Word,
+    spans: Sequence[tuple[int, int]],
+    moduli: Iterable[int],
+    parameters: Iterable[int],
+) -> int:
+    blocks = tuple(word[start:stop] for start, stop in spans if start < stop)
+    if not blocks:
+        raise ValueError("at least one pumped block must be nonempty")
+    tested = 0
+    parameter_values = tuple(parameters)
+    for modulus in moduli:
+        orders = tuple(
+            matrix_order(block_matrix(system, block), modulus) for block in blocks
+        )
+        return_time = lcm(*orders)
+        for parameter in parameter_values:
+            current = value(system, pump_disjoint_blocks(word, spans, parameter))
+            returned = value(
+                system,
+                pump_disjoint_blocks(word, spans, parameter + return_time),
+            )
+            if returned % modulus != current % modulus:
+                raise AssertionError(
+                    f"synchronized congruence failed for {system.name}, "
+                    f"q={modulus}, t={parameter}"
+                )
+            tested += 1
+    return tested
+
+
 def is_prime(number: int) -> bool:
     if number < 2:
         return False
@@ -218,6 +273,136 @@ def is_prime(number: int) -> bool:
             return False
         divisor += 2
     return True
+
+
+def prime_factors(number: int) -> tuple[int, ...]:
+    if number < 1:
+        raise ValueError("prime factorization is defined here only for positive integers")
+    factors = []
+    candidate = 2
+    remaining = number
+    while candidate * candidate <= remaining:
+        if remaining % candidate == 0:
+            factors.append(candidate)
+            while remaining % candidate == 0:
+                remaining //= candidate
+        candidate = 3 if candidate == 2 else candidate + 2
+    if remaining > 1:
+        factors.append(remaining)
+    return tuple(factors)
+
+
+def valuation(number: int, prime: int) -> int:
+    exponent = 0
+    while number % prime == 0:
+        number //= prime
+        exponent += 1
+    return exponent
+
+
+def omega_outside(number: int, excluded_primes: Iterable[int]) -> int:
+    excluded = set(excluded_primes)
+    return sum(prime not in excluded for prime in prime_factors(number))
+
+
+def in_local_prime_layer(
+    number: int,
+    maximum_outside_primes: int,
+    excluded_primes: Iterable[int],
+    valuation_bounds: dict[int, int],
+) -> bool:
+    excluded = tuple(excluded_primes)
+    return (
+        number >= 1
+        and omega_outside(number, excluded) <= maximum_outside_primes
+        and all(valuation(number, prime) <= valuation_bounds[prime] for prime in excluded)
+    )
+
+
+def local_layer_isolation_modulus(
+    number: int,
+    excluded_primes: Iterable[int],
+    valuation_bounds: dict[int, int],
+) -> int:
+    excluded = tuple(excluded_primes)
+    if not in_local_prime_layer(
+        number, omega_outside(number, excluded), excluded, valuation_bounds
+    ):
+        raise ValueError("the point violates an excluded-prime valuation bound")
+
+    outside = tuple(
+        prime for prime in prime_factors(number) if prime not in set(excluded)
+    )
+    outside_core = product_power = 1
+    prime_power_modulus = 1
+    for prime in outside:
+        exponent = valuation(number, prime)
+        product_power *= prime**exponent
+        prime_power_modulus *= prime ** (exponent + 1)
+    outside_core = product_power
+
+    smooth_factors = [1]
+    for prime in excluded:
+        smooth_factors = [
+            factor * prime**exponent
+            for factor in smooth_factors
+            for exponent in range(valuation_bounds[prime] + 1)
+        ]
+    candidates = tuple(outside_core * factor for factor in smooth_factors)
+    differences = tuple(abs(candidate - number) for candidate in candidates if candidate != number)
+
+    auxiliary = 2
+    forbidden = set(excluded) | set(outside)
+    while (
+        not is_prime(auxiliary)
+        or auxiliary in forbidden
+        or any(difference % auxiliary == 0 for difference in differences)
+    ):
+        auxiliary += 1
+    return prime_power_modulus * auxiliary
+
+
+def construct_deep_congruence_chain(
+    initial: int, specifications: Sequence[tuple[int, int]]
+) -> tuple[int, ...]:
+    if initial < 1:
+        raise ValueError("the initial value must be positive")
+    chain = [initial]
+    for modulus_factor, depth in specifications:
+        if modulus_factor < 1 or depth < 1:
+            raise ValueError("modulus factors and depths must be positive")
+        current = chain[-1]
+        quotient = 1 + modulus_factor * current**depth
+        chain.append(current * quotient)
+    return tuple(chain)
+
+
+def construct_divisibility_tree(
+    root: int,
+    nodes: Sequence[tuple[int, ...]],
+    thresholds: dict[tuple[int, ...], int],
+) -> tuple[dict[tuple[int, ...], int], dict[tuple[int, ...], int]]:
+    if not nodes or nodes[0] != () or root < 1:
+        raise ValueError("nodes must begin with the root and the root value must be positive")
+    values = {(): root}
+    edge_quotients: dict[tuple[int, ...], int] = {}
+    for node in nodes[1:]:
+        parent = node[:-1]
+        if parent not in values:
+            raise ValueError("every parent must precede its children")
+        threshold = thresholds[node]
+        small_prime_product = 1
+        for candidate in range(2, threshold + 1):
+            if is_prime(candidate):
+                small_prime_product *= candidate
+        previous_product = root * small_prime_product
+        for quotient in edge_quotients.values():
+            previous_product *= quotient
+        parent_value = values[parent]
+        quotient = 1 + parent_value * previous_product
+        values[node] = parent_value * quotient
+        edge_quotients[node] = quotient
+    return values, edge_quotients
 
 
 def verify_pump_witness(
@@ -317,11 +502,76 @@ def run_verification() -> dict[str, object]:
             )
         except AssertionError:
             failures += 1
+
+    synchronized_orbit_cases = check_synchronized_orbit(
+        system_by_name("fibonacci"),
+        (0, 1, 0, 0, 0, 0, 1),
+        ((2, 3), (4, 5)),
+        moduli=range(2, 21),
+        parameters=range(6),
+    )
+    synchronized_orbit_cases += check_synchronized_orbit(
+        system_by_name("quadratic_nonunit"),
+        (1, 0, 0, 1),
+        ((1, 2), (2, 3)),
+        moduli=range(3, 20, 2),
+        parameters=range(5),
+    )
+
+    layer_point = 2 * 3 * 5**2 * 7
+    excluded_primes = (2, 3)
+    valuation_bounds = {2: 2, 3: 1}
+    isolation_modulus = local_layer_isolation_modulus(
+        layer_point, excluded_primes, valuation_bounds
+    )
+    layer_matches = [
+        number
+        for number in range(1, 50_001)
+        if in_local_prime_layer(number, 2, excluded_primes, valuation_bounds)
+        and (number - layer_point) % isolation_modulus == 0
+    ]
+    local_layer_isolation_failures = int(layer_matches != [layer_point])
+
+    specifications = ((6, 1), (30, 2), (210, 1))
+    chain = construct_deep_congruence_chain(2, specifications)
+    deep_chain_failures = sum(
+        following % current != 0
+        or (following // current) % (modulus_factor * current**depth) != 1
+        for current, following, (modulus_factor, depth) in zip(
+            chain, chain[1:], specifications
+        )
+    )
+
+    tree_nodes = ((), (0,), (1,), (0, 0), (0, 1), (1, 0))
+    thresholds = {(0,): 3, (1,): 5, (0, 0): 7, (0, 1): 11, (1, 0): 13}
+    tree_values, tree_edges = construct_divisibility_tree(2, tree_nodes, thresholds)
+    divisibility_tree_failures = sum(
+        (tree_values[right] % tree_values[left] == 0)
+        != (right[: len(left)] == left)
+        for left in tree_nodes
+        for right in tree_nodes
+    )
+    edge_values = tuple(tree_edges.values())
+    divisibility_tree_failures += sum(
+        gcd(left, right) != 1
+        for index, left in enumerate(edge_values)
+        for right in edge_values[index + 1 :]
+    )
+    divisibility_tree_failures += sum(
+        quotient % prime == 0
+        for edge, quotient in tree_edges.items()
+        for prime in range(2, thresholds[edge] + 1)
+        if is_prime(prime)
+    )
     return {
         "systems_checked": len(SYSTEMS),
         "affine_cases": affine_cases,
         "pump_witnesses": len(witnesses),
         "congruence_failures": failures,
+        "synchronized_orbit_cases": synchronized_orbit_cases,
+        "local_layer_isolation_failures": local_layer_isolation_failures,
+        "deep_chain_failures": deep_chain_failures,
+        "divisibility_tree_failures": divisibility_tree_failures,
         "witnesses": witnesses,
         "counterexample": search_singular_counterexample(),
     }
@@ -334,6 +584,11 @@ def _format_report(report: dict[str, object]) -> str:
         f"affine action cases: {report['affine_cases']}",
         f"valid canonical pump witnesses: {report['pump_witnesses']}",
         f"congruence failures: {report['congruence_failures']}",
+        f"synchronized orbit cases: {report['synchronized_orbit_cases']}",
+        "local layer isolation failures: "
+        f"{report['local_layer_isolation_failures']}",
+        f"deep chain failures: {report['deep_chain_failures']}",
+        f"divisibility tree failures: {report['divisibility_tree_failures']}",
     ]
     for witness in report["witnesses"]:
         lines.append(
@@ -347,7 +602,17 @@ def _format_report(report: dict[str, object]) -> str:
         "block={block}, modulus={modulus}, determinant={determinant}, "
         "invertible={invertible}".format(**counterexample)
     )
-    lines.append("OVERALL: PASS" if report["congruence_failures"] == 0 else "OVERALL: FAIL")
+    failure_keys = (
+        "congruence_failures",
+        "local_layer_isolation_failures",
+        "deep_chain_failures",
+        "divisibility_tree_failures",
+    )
+    lines.append(
+        "OVERALL: PASS"
+        if all(report[key] == 0 for key in failure_keys)
+        else "OVERALL: FAIL"
+    )
     return "\n".join(lines)
 
 

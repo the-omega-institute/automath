@@ -45,6 +45,93 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertGreater(report["pump_witnesses"], 0)
         self.assertEqual(report["congruence_failures"], 0)
         self.assertEqual(report["counterexample"]["modulus"], 2)
+        self.assertGreater(report["synchronized_orbit_cases"], 100)
+        self.assertEqual(report["local_layer_isolation_failures"], 0)
+        self.assertEqual(report["deep_chain_failures"], 0)
+        self.assertEqual(report["divisibility_tree_failures"], 0)
+
+    def test_synchronized_multi_block_orbit_for_all_tested_parameters(self):
+        fibonacci = verifier.system_by_name("fibonacci")
+        word = (0, 1, 0, 0, 0, 0, 1)
+        spans = ((2, 3), (4, 5))
+        cases = verifier.check_synchronized_orbit(
+            fibonacci,
+            word,
+            spans,
+            moduli=range(2, 21),
+            parameters=range(6),
+        )
+        self.assertEqual(cases, 19 * 6)
+
+        nonunit = verifier.system_by_name("quadratic_nonunit")
+        with self.assertRaises(verifier.NonInvertibleAction):
+            verifier.check_synchronized_orbit(
+                nonunit,
+                (1, 0, 0, 1),
+                ((1, 2), (2, 3)),
+                moduli=(2,),
+                parameters=(0,),
+            )
+
+    def test_local_layer_isolation_certificate(self):
+        n = 2 * 3 * 5**2 * 7
+        excluded_primes = (2, 3)
+        valuation_bounds = {2: 2, 3: 1}
+        modulus = verifier.local_layer_isolation_modulus(
+            n, excluded_primes, valuation_bounds
+        )
+        self.assertEqual(verifier.omega_outside(n, excluded_primes), 2)
+        self.assertEqual(verifier.gcd(modulus, 2 * 3), 1)
+
+        congruent_layer_points = [
+            m
+            for m in range(1, 50_001)
+            if verifier.in_local_prime_layer(
+                m, 2, excluded_primes, valuation_bounds
+            )
+            and (m - n) % modulus == 0
+        ]
+        self.assertEqual(congruent_layer_points, [n])
+
+    def test_deep_chain_has_prescribed_congruence_depth(self):
+        specifications = ((6, 1), (30, 2), (210, 1))
+        chain = verifier.construct_deep_congruence_chain(2, specifications)
+        for current, following, (modulus_factor, depth) in zip(
+            chain, chain[1:], specifications
+        ):
+            quotient = following // current
+            self.assertGreater(quotient, 1)
+            self.assertEqual(following % current, 0)
+            self.assertEqual(
+                quotient % (modulus_factor * current**depth), 1
+            )
+
+    def test_finite_divisibility_tree_is_induced_and_has_coprime_edges(self):
+        nodes = ((), (0,), (1,), (0, 0), (0, 1), (1, 0))
+        thresholds = {
+            (0,): 3,
+            (1,): 5,
+            (0, 0): 7,
+            (0, 1): 11,
+            (1, 0): 13,
+        }
+        values, edge_quotients = verifier.construct_divisibility_tree(
+            root=2, nodes=nodes, thresholds=thresholds
+        )
+        for left in nodes:
+            for right in nodes:
+                self.assertEqual(
+                    values[right] % values[left] == 0,
+                    right[: len(left)] == left,
+                )
+        quotients = list(edge_quotients.values())
+        for index, left in enumerate(quotients):
+            for right in quotients[index + 1 :]:
+                self.assertEqual(verifier.gcd(left, right), 1)
+        for edge, quotient in edge_quotients.items():
+            for prime in range(2, thresholds[edge] + 1):
+                if verifier.is_prime(prime):
+                    self.assertNotEqual(quotient % prime, 0)
 
 
 if __name__ == "__main__":

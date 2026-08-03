@@ -110,9 +110,58 @@ No claim is made for every object sometimes called a "Pisot numeration
 system."  In particular, arbitrary real-base beta-shifts, non-positional
 abstract numeration systems, systems without an eventual integral recurrence,
 and non-injective redundant representations are explicit open interfaces.
-The Pisot-unit hypothesis is needed only for the iterated coprime-quotient and
-bounded-prime-support strengthening: for a nonunit recurrence, primes dividing
-the trailing coefficient make the companion action singular modulo the
-current composite value.  Prime REG/CF-immunity itself still holds because an
-infinite prime sublanguage contains a represented prime not dividing that
-fixed coefficient.
+The Pisot-unit hypothesis is needed for the unrestricted deep-quotient and
+induced-tree conclusions and for unconditional bounded-omega immunity. For a
+nonunit recurrence, primes dividing the trailing coefficient make the
+companion action singular modulo some composite values. The local-adic
+dichotomy nevertheless gives prime and bounded-Omega MCF-immunity; bounded
+distinct-prime support can escape only through unbounded valuation at a prime
+dividing the trailing coefficient.
+
+## Multiple-context-free and adic extension (2026-08-03)
+
+The public arXiv Atom endpoint at https://export.arxiv.org/api/query was queried
+with the following literal searches (and with a single-record
+search_query=id:2509.02117 control):
+
+- all:"multiple context-free" AND all:pumping;
+- all:"multiple context-free" AND all:prime;
+- all:"adic topology" AND all:integers;
+- all:"Cantor-Bendixson" AND all:"prime factors";
+- all:"divisibility tree" AND all:language.
+
+Every API request returned HTTP 429 after retries with an identifying user
+agent and four-second spacing. These failures are not treated as null search
+results. The corresponding arXiv web searches, Crossref bibliographic
+searches, DBLP metadata, and exact-source checks located no paper asserting an
+MCFL prime-immunity theorem for recurrence numeration, an MCFL-induced local
+congruence orbit, or the induced divisibility-tree conclusion.
+
+The following published inputs delimit what is not new:
+
+- H. Seki, T. Matsumura, M. Fujii, and T. Kasami, "On multiple
+  context-free grammars," *Theoretical Computer Science* 88 (1991),
+  191--229, DOI 10.1016/0304-3975(91)90374-B. Its Lemma 3.2 is the weak
+  pumping lemma supplying one synchronized family with 2k pumped factors.
+- M. Kanazawa, G. M. Kobele, J. Michaelis, S. Salvati, and R. Yoshinaka,
+  "The Failure of the Strong Pumping Lemma for Multiple Context-Free
+  Languages," *Theory of Computing Systems* 55 (2014), 250--278,
+  DOI 10.1007/S00224-014-9534-Z.
+- A. Duncan, M. Elder, L. Frenkel, and M. Liu, "A substitution lemma for
+  multiple context-free languages," *International Journal of Algebra and
+  Computation* (2026), DOI 10.1142/S0218196726500463,
+  arXiv:2509.02117. The direct arXiv PDF was checked; its Lemma 5.3 quotes
+  the exact Seki weak-pumping factorization used in the manuscript.
+- K. A. Broughan, "Adic Topologies for the Rational Integers," *Canadian
+  Journal of Mathematics* 55 (2003), 711--723,
+  DOI 10.4153/CJM-2003-030-3. The Cambridge primary PDF was checked.
+  Theorem 2.4 gives the rational-space classification, Corollary 3.1 gives
+  the Cantor completion, and Theorem 4.3 treats full-adic prime-factor
+  strata counted with multiplicity.
+
+Accordingly, the manuscript cites the Seki pumping family and Broughan's
+topological classifications as inputs. The claims retained as new are the
+combination with a fixed recurrence block orbit, the deleted-prime intrinsic
+Cantor--Bendixson rank for distinct prime support with bounded local
+valuations, the nonunit escape dichotomy and MCF-immunity consequences, and
+the unit-system arbitrary-depth quotient and induced-tree constructions.
