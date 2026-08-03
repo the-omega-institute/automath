@@ -55,12 +55,17 @@ python certificates/s3_log_certificates.py --write-cert certificates/s3_log_cert
 The calculation uses exact rational arithmetic. No floating-point root or
 logarithm approximation is used as certificate evidence.
 
-## Quotient, harmonic, and Fourier checks
+## Boundary collision, minimality, quotient, harmonic, and Fourier checks
 
 The additional exact verification enumerates primitive binary necklaces in a
 strict-gap `C2` extension, compares the quotient split-orbit correction with
 the periodic-minus-fixed power series through degree 16, derives the universal
-harmonic jet symbolically:
+harmonic jet symbolically, and checks the exact four-vertex boundary collision.
+It also exhausts all `10^4` four-vertex two-out-regular base matrices and every
+compatible signed block used in the polynomial-certificate minimality proof.
+The expected enumeration is `2208` primitive bases, `48` supports for
+`1-z^2+2z^4`, and `0` supports for `(1-z+2z^2)^2`.  A separate high-precision
+check evaluates the telescoping identity at 25 points in `0 < z <= 1/4`:
 
 ```powershell
 python -m unittest artifacts.test_verify_a5_results -v

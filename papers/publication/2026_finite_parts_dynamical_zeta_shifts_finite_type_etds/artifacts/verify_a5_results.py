@@ -2,10 +2,218 @@
 
 from __future__ import annotations
 
-from itertools import product
+from functools import lru_cache
+from itertools import combinations_with_replacement, permutations, product
 from pathlib import Path
 
+import mpmath as mp
 import sympy as sp
+
+
+_PERMUTATIONS_WITH_SIGN = tuple(
+    (
+        permutation,
+        -1
+        if sum(
+            permutation[i] > permutation[j]
+            for i in range(4)
+            for j in range(i + 1, 4)
+        )
+        % 2
+        else 1,
+    )
+    for permutation in permutations(range(4))
+)
+
+
+def _is_primitive_matrix(matrix: tuple[tuple[int, ...], ...]) -> bool:
+    """Use the four-dimensional Wielandt bound to decide primitivity."""
+    support = tuple(tuple(value > 0 for value in row) for row in matrix)
+    power = support
+    for _exponent in range(1, 11):
+        if all(all(row) for row in power):
+            return True
+        power = tuple(
+            tuple(
+                any(power[i][k] and support[k][j] for k in range(4))
+                for j in range(4)
+            )
+            for i in range(4)
+        )
+    return False
+
+
+def _compatible_signed_rows(row: tuple[int, ...]) -> tuple[tuple[int, ...], ...]:
+    return tuple(
+        product(*(range(-entry, entry + 1, 2) for entry in row))
+    )
+
+
+def _matrix_invariants(
+    matrix: tuple[tuple[int, ...], ...],
+) -> tuple[int, int, int, int]:
+    """Return tr(B), tr(B^2), tr(B^3), and det(B), exactly."""
+    trace_one = sum(matrix[i][i] for i in range(4))
+    trace_two = sum(matrix[i][j] * matrix[j][i] for i in range(4) for j in range(4))
+    trace_three = sum(
+        matrix[i][j] * matrix[j][k] * matrix[k][i]
+        for i in range(4)
+        for j in range(4)
+        for k in range(4)
+    )
+    determinant = sum(
+        sign
+        * matrix[0][permutation[0]]
+        * matrix[1][permutation[1]]
+        * matrix[2][permutation[2]]
+        * matrix[3][permutation[3]]
+        for permutation, sign in _PERMUTATIONS_WITH_SIGN
+    )
+    return trace_one, trace_two, trace_three, determinant
+
+
+def verify_c2_boundary_collision() -> bool:
+    """Verify the exact four-vertex C2 collision from integer matrix data."""
+    z, t, y = sp.symbols("z t y")
+    adjacency = sp.Matrix(
+        ((0, 4, 0, 0), (1, 1, 0, 2), (0, 0, 0, 4), (0, 2, 1, 1))
+    )
+    first = sp.Matrix(
+        ((0, -2, 0, 0), (-1, -1, 0, -2), (0, 0, 0, -2), (0, 2, -1, 1))
+    )
+    second = sp.Matrix(
+        ((0, -4, 0, 0), (1, 1, 0, 0), (0, 0, 0, -4), (0, 0, 1, 1))
+    )
+    q = 1 - z + 4 * z**2
+    compatible = all(
+        abs(twist[i, j]) <= adjacency[i, j]
+        and (adjacency[i, j] - twist[i, j]) % 2 == 0
+        for twist in (first, second)
+        for i in range(4)
+        for j in range(4)
+    )
+    primitive = _is_primitive_matrix(
+        tuple(tuple(int(adjacency[i, j]) for j in range(4)) for i in range(4))
+    )
+    first_polynomial = sp.expand((sp.eye(4) - z * first).det())
+    second_polynomial = sp.expand((sp.eye(4) - z * second).det())
+    reduced_perron_constant = sp.limit(
+        (1 - t) / (sp.eye(4) - t * adjacency / 4).det(), t, 1, dir="-"
+    )
+    first_labels = tuple(int(first[i, i]) for i in range(4) if adjacency[i, i])
+    second_labels = tuple(
+        int(second[i, i]) for i in range(4) if adjacency[i, i]
+    )
+    q_symbols = sp.symbols("q0:14")
+    finite_telescoping = sp.simplify(
+        sum(
+            sp.Rational(1, 2**j) * (2 * q_symbols[j] - q_symbols[j + 1])
+            for j in range(13)
+        )
+        - 2 * q_symbols[0]
+        + sp.Rational(1, 2**12) * q_symbols[13]
+    )
+    return all(
+        (
+            compatible,
+            primitive,
+            all(sum(adjacency.row(i)) == 4 for i in range(4)),
+            first_polynomial == sp.expand(q.subs(z, z**2)),
+            second_polynomial == sp.expand(q**2),
+            first.charpoly().as_expr() == sp.Symbol("lambda") ** 4
+            - sp.Symbol("lambda") ** 2
+            + 4,
+            sp.factor(second.charpoly().as_expr())
+            == (sp.Symbol("lambda") ** 2 - sp.Symbol("lambda") + 4) ** 2,
+            sp.discriminant(y**2 - y + 4, y) == -15,
+            finite_telescoping == 0,
+            q.subs(z, sp.Rational(1, 4)) == 1,
+            2 * sp.log(q.subs(z, sp.Rational(1, 4))) == 0,
+            reduced_perron_constant == sp.Rational(4, 5),
+            sorted(first_labels) == [-1, 1],
+            sorted(second_labels) == [1, 1],
+        )
+    )
+
+
+def binary_coboundary_real_interval_matches() -> bool:
+    """Numerically test the telescoping identity on 0 < x <= 1/4."""
+    with mp.workdps(80):
+        sample_points = tuple(mp.mpf(n) / 100 for n in range(1, 26))
+        for x in sample_points:
+            log_q = lambda value: mp.log(1 - value + 4 * value**2)
+            partial = mp.fsum(
+                mp.power(2, -j)
+                * (2 * log_q(x ** (2**j)) - log_q(x ** (2 ** (j + 1))))
+                for j in range(12)
+            )
+            if abs(partial - 2 * log_q(x)) > mp.mpf("1e-70"):
+                return False
+    return True
+
+
+@lru_cache(maxsize=1)
+def enumerate_quadratic_binary_certificates() -> dict[str, int]:
+    """Exhaust the four-vertex, two-out-regular signed certificate class."""
+    row_types = []
+    for indices in combinations_with_replacement(range(4), 2):
+        row = [0, 0, 0, 0]
+        for index in indices:
+            row[index] += 1
+        row_types.append(tuple(row))
+    signed_rows = {row: _compatible_signed_rows(row) for row in row_types}
+    targets = {
+        "first_determinant_support": (0, 2, 0, 2),
+        "second_determinant_support": (2, -6, -10, 4),
+    }
+    counts = {
+        "primitive_bases": 0,
+        "first_determinant_support": 0,
+        "second_determinant_support": 0,
+    }
+    for adjacency in product(row_types, repeat=4):
+        if not _is_primitive_matrix(adjacency):
+            continue
+        counts["primitive_bases"] += 1
+        supported = {name: False for name in targets}
+        for signed_matrix in product(*(signed_rows[row] for row in adjacency)):
+            trace_one = sum(signed_matrix[i][i] for i in range(4))
+            possible_targets = tuple(
+                name
+                for name, target in targets.items()
+                if not supported[name] and trace_one == target[0]
+            )
+            if not possible_targets:
+                continue
+            invariants = _matrix_invariants(signed_matrix)
+            for name in possible_targets:
+                if invariants == targets[name]:
+                    supported[name] = True
+            if all(supported.values()):
+                break
+        for name, is_supported in supported.items():
+            counts[name] += int(is_supported)
+    return counts
+
+
+def radial_profile_leading_coefficient(
+    primitive_differences: dict[int, sp.Expr],
+) -> tuple[int, sp.Expr] | None:
+    """Return the first non-zero coefficient of sum a_n log(1-z^n)."""
+    non_zero = [
+        length
+        for length, value in primitive_differences.items()
+        if sp.simplify(value) != 0
+    ]
+    if not non_zero:
+        return None
+    first_length = min(non_zero)
+    coefficient = -sum(
+        sp.Rational(divisor, first_length) * primitive_differences.get(divisor, 0)
+        for divisor in range(1, first_length + 1)
+        if first_length % divisor == 0
+    )
+    return first_length, sp.simplify(coefficient)
 
 
 def _least_rotation(word: tuple[int, ...]) -> tuple[int, ...]:
@@ -170,9 +378,22 @@ def render_report() -> str:
     periodic_minus_fixed, split_orbit_product = quotient_correction_coefficients(
         max_degree
     )
+    enumeration = enumerate_quadratic_binary_certificates()
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
     checks = {
+        "exact C2 boundary collision": verify_c2_boundary_collision(),
+        "binary coboundary real interval": binary_coboundary_real_interval_matches(),
+        "quadratic binary certificate enumeration": enumeration
+        == {
+            "primitive_bases": 2208,
+            "first_determinant_support": 48,
+            "second_determinant_support": 0,
+        },
+        "radial-profile triangularity": radial_profile_leading_coefficient(
+            {1: 0, 2: 0, 3: sp.Integer(7), 4: sp.Integer(-5)}
+        )
+        == (3, sp.Integer(-7)),
         "quotient correction power series": periodic_minus_fixed
         == split_orbit_product,
         "quotient correction on 0 < z < 1/2": (
@@ -213,7 +434,14 @@ def render_report() -> str:
 
     lines = [
         "A5 CLAIM VERIFICATION",
-        "Model: full binary shift with C2 labels 0 and 1; exact SymPy arithmetic.",
+        "Exact C2 boundary collision: verified",
+        f"Primitive two-out bases: {enumeration['primitive_bases']}",
+        "Determinant supports: "
+        f"{enumeration['first_determinant_support']} and "
+        f"{enumeration['second_determinant_support']}",
+        "Real boundary grid: 25 points in 0 < z <= 1/4 at 80 digits",
+        "Radial-profile leading coefficient: triangular",
+        "Quotient model: full binary shift with C2 labels 0 and 1.",
         f"Primitive necklaces and quotient correction checked through z^{max_degree}.",
         "The quotient identity agrees at nine rational points in 0 < z < 1/2.",
         f"Universal product jet through N^(-3): {sp.sstr(jet)}",

@@ -12,6 +12,46 @@ from artifacts.verify_a5_results import (
 
 
 class OracleA5ResultTests(unittest.TestCase):
+    def test_exact_c2_boundary_collision_certificate(self):
+        self.assertTrue(
+            hasattr(verifier, "verify_c2_boundary_collision"),
+            "the exact C2 boundary-collision verifier is not implemented",
+        )
+        self.assertTrue(verifier.verify_c2_boundary_collision())
+
+    def test_binary_coboundary_identity_on_a_real_parameter_grid(self):
+        self.assertTrue(
+            hasattr(verifier, "binary_coboundary_real_interval_matches"),
+            "the real-parameter binary coboundary check is not implemented",
+        )
+        self.assertTrue(verifier.binary_coboundary_real_interval_matches())
+
+    def test_quadratic_binary_certificate_minimality_enumeration(self):
+        self.assertTrue(
+            hasattr(verifier, "enumerate_quadratic_binary_certificates"),
+            "the exhaustive minimality enumeration is not implemented",
+        )
+        self.assertEqual(
+            verifier.enumerate_quadratic_binary_certificates(),
+            {
+                "primitive_bases": 2208,
+                "first_determinant_support": 48,
+                "second_determinant_support": 0,
+            },
+        )
+
+    def test_radial_profile_has_triangular_leading_coefficient(self):
+        self.assertTrue(
+            hasattr(verifier, "radial_profile_leading_coefficient"),
+            "the radial-profile triangular check is not implemented",
+        )
+        self.assertEqual(
+            verifier.radial_profile_leading_coefficient(
+                {1: 0, 2: 0, 3: sp.Integer(7), 4: sp.Integer(-5)}
+            ),
+            (3, sp.Integer(-7)),
+        )
+
     def test_quotient_correction_matches_primitive_orbit_expansion(self):
         periodic_minus_fixed, split_orbit_product = (
             quotient_correction_coefficients(max_degree=16)
@@ -79,6 +119,11 @@ class OracleA5ResultTests(unittest.TestCase):
     def test_report_records_a_clean_exact_verification(self):
         report = render_report()
         self.assertTrue(report.startswith("A5 CLAIM VERIFICATION"))
+        self.assertIn("Exact C2 boundary collision: verified", report)
+        self.assertIn("Primitive two-out bases: 2208", report)
+        self.assertIn("Determinant supports: 48 and 0", report)
+        self.assertIn("Real boundary grid: 25 points", report)
+        self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))
 
 

@@ -1,259 +1,261 @@
-经逐式推导与文献排查，本文框架中至少蕴含三项未被稿件识别、具有独立发表价值的结论。其中最重要者将“存在一个  $S_3$  反例”提升为：对于任何非平凡且满足严格扭曲谱隙的有限群扩张，旧 Artin 常数在单位 Frobenius 类上必然错误，并且误差具有正的、完全显式的覆盖轨道乘积。
-以下记  $\gamma_E$  为 Euler 常数， $\mathcal P$  为本原轨道集， $\ell(\omega)=|\omega|$ ， $g_\omega$  为轨道标签。
-一、商覆盖分裂因子与普遍 Artin 失效定理
-设  $H\triangleleft G$ ， $Q=G/H$ ， $q=|Q|$ 。令
+结论是否定的。即使  $\Gamma$  固定、 $G=C_{2}$ 、两 cocycle 均满足严格扭曲谱隙，全部逐类 Mertens 常数仍不能恢复逐长度本原周期数据。
+定理：严格谱隙下的精确边界碰撞
+令  $G=C_{2}=\{1,s\}$ ， $\varepsilon(s)=-1$ 。取四个顶点，并令底图邻接矩阵为
 
-$$K_H:=\prod_{\substack{C\in\operatorname{Conj}(G)\\C\subset H}}K_C,$$
+$$A=
+\begin{pmatrix}
+0&4&0&0\\
+1&1&0&2\\
+0&0&0&4\\
+0&2&1&1
+\end{pmatrix}.$$
 
-并以  $\widetilde A_Q$  表示  $Q$ -正则斜积的邻接矩阵。对本原轨道  $\omega$ ，定义商群中的 holonomy 阶
+每行和为  $4$ ，故 Perron 根为  $\lambda=4$ 。底图强连通，且顶点  $2,4$  有环，因而  $A$  本原。
+对每个  $A_{ij}$  条带标记平行边，按下列两个符号矩阵规定标签：
 
-$$q_H(\omega):=\operatorname{ord}_{Q}(g_\omega H).$$
-
-定理 1（商覆盖精确分解）
-在本文严格扭曲谱隙假设下，
-
-$$\boxed{
-K_H=
-\left(\frac{e^{-\gamma_E}}{C(\widetilde A_Q)}\right)^{1/q}
-\prod_{\substack{\omega\in\mathcal P\\q_H(\omega)>1}}
-\left(1-\lambda^{-q_H(\omega)\ell(\omega)}\right)^{-1/q_H(\omega)} .
-}
-\tag{A}$$
-
-其中无穷乘积绝对收敛。
-第一因子恰为将本文式 (37) 中全部  $F_\rho(\lambda^{-1})$  错换为  $L_\rho(\lambda^{-1})$  后所得的 Artin 候选常数：
-
-$$K_H^{\mathrm{Art}}
-=
-\left(\frac{e^{-\gamma_E}}{C(\widetilde A_Q)}\right)^{1/q}.
-\tag{B}$$
-
-因此
-
-$$\boxed{
-\log\frac{K_H}{K_H^{\mathrm{Art}}}
-=
--\sum_{\substack{\omega\in\mathcal P\\q_H(\omega)>1}}
-\frac{1}{q_H(\omega)}
-\log\!\left(1-\lambda^{-q_H(\omega)\ell(\omega)}\right)>0
-}
-\tag{C}$$
-
-只要存在一个  $g_\omega\notin H$  的本原轨道。
-证明
-标准正则表示分解给出
-
-$$\det(I-z\widetilde A_Q)
-=
-\prod_{\sigma\in\operatorname{Irr}(Q)}
-P_\sigma(z)^{\dim\sigma}.$$
-
-在 Perron 径向端点取约化行列式，得到
-
-$$\log C(\widetilde A_Q)
-=
-\log C(A)
-+
-\sum_{\sigma\ne\mathbf1}
-(\dim\sigma)L_\sigma(\lambda^{-1}).$$
-
-将其代入本文式 (37) 对所有  $C\subset H$  的和，立即得到 (B)。
-另一方面，令  $\mathbf1_H$  为  $H$  的示性类函数。虽然
- $F_{\mathbf1_H}(\lambda^{-1})$  与  $L_{\mathbf1_H}(\lambda^{-1})$ 
-分别发散，但径向差
-
-$$\Delta_H
-:=
-\lim_{z\uparrow\lambda^{-1}}
-\bigl(L_{\mathbf1_H}(z)-F_{\mathbf1_H}(z)\bigr)$$
-
-绝对收敛。若  $g_\omega\in H$ ，则  $g_\omega^r\in H$  对所有  $r$  成立，该轨道对差值贡献为零。若  $g_\omega\notin H$ ，则
-
-$$g_\omega^r\in H
-\iff q_H(\omega)\mid r,$$
-
-故其贡献为
-
-$$\sum_{k\ge1}
-\frac{\lambda^{-kq_H(\omega)\ell(\omega)}}{kq_H(\omega)}
-=
--\frac1{q_H(\omega)}
-\log\!\left(1-\lambda^{-q_H(\omega)\ell(\omega)}\right).$$
-
-由于  $q_H(\omega)\ge2$ ，本原轨道数的  $O(\lambda^n/n)$  上界保证绝对收敛。又由本文的角色展开，
-
-$$\log\frac{K_H}{K_H^{\mathrm{Art}}}=\Delta_H,$$
-
-从而得到 (A)–(C)。证毕。
-推论 1（普遍失效，而非偶然反例）
-取  $H=\{e\}$ 。若  $G\neq\{e\}$ ，则严格扭曲谱隙蕴含存在非单位标签的本原轨道。因此
-
-$$\boxed{
-\frac{K_{\{e\}}}{K_{\{e\}}^{\mathrm{Art}}}
-=
-\prod_{\substack{\omega\in\mathcal P\\g_\omega\ne e}}
-\left(
-1-\lambda^{-\operatorname{ord}(g_\omega)\ell(\omega)}
-\right)^{-1/\operatorname{ord}(g_\omega)}
->1.
-}
-\tag{D}$$
-
-故旧 Artin 公式对单位 Frobenius 类不仅“有时失败”，而是在每一个非平凡、满足严格谱隙的有限群扩张中必然严格低估正确常数。
-这一结论实质上取代了本文的  $S_3$  见证：无需寻找特殊符号表示或偶然消失的 Artin 通道。错误的几何本质是，覆盖空间 zeta 函数纳入了那些必须重复  $q_H(\omega)>1$  次才闭合的提升轨道，而固定标签乘积只选取立即完全分裂的轨道。标准图覆盖 Artin 分解可参见 Stark–Terras；式 (A) 中临界 Mertens 分裂因子并未见于该理论。
-二、全部代数阶修正均为普适量
-令  $\mathscr U\subseteq G$  为任意共轭不变子集，
-
-$$\alpha_{\mathscr U}:=\frac{|\mathscr U|}{|G|},\qquad
-P_{\mathscr U}(N):=
-\prod_{\substack{\omega\in\mathcal P\\
-                  \ell(\omega)\le N,\ g_\omega\in\mathscr U}}
-\left(1-\lambda^{-\ell(\omega)}\right),$$
-
-并令  $K_{\mathscr U}$  为相应常数。
-设
-
-$$\theta=\max_{\nu\in\operatorname{Spec}(A),\,\nu\ne\lambda}|\nu|,
+$$B=
+\begin{pmatrix}
+0&-2&0&0\\
+-1&-1&0&-2\\
+0&0&0&-2\\
+0&2&-1&1
+\end{pmatrix},
 \qquad
-q_*=
-\max\left\{
-\frac{\theta}{\lambda},
-\frac{\eta}{\lambda},
-\lambda^{-1/2}
-\right\}<1.$$
+B'=
+\begin{pmatrix}
+0&-4&0&0\\
+1&1&0&0\\
+0&0&0&-4\\
+0&0&1&1
+\end{pmatrix}.$$
 
-定理 2（调和正规化后的指数收敛）
-对任意  $q_*<\xi<1$ ，
+具体地，在 cocycle  $\tau$  中，从  $i$  到  $j$  的  $1$ -标记边和  $s$ -标记边数分别为
 
-$$\boxed{
-P_{\mathscr U}(N)
-=
-K_{\mathscr U}N^{-\alpha_{\mathscr U}}
-\exp\!\left[
--\alpha_{\mathscr U}
-\bigl(H_N-\log N-\gamma_E\bigr)
-\right]
-\bigl(1+O_\xi(\xi^N)\bigr).
-}
-\tag{E}$$
+$$\frac{A_{ij}+B_{ij}}2,\qquad \frac{A_{ij}-B_{ij}}2;$$
 
-因此，除常数  $K_{\mathscr U}$  外，整个  $N^{-1}$  渐近展开完全不依赖底图、cocycle、群结构或所选共轭类；所有系统特异性在移除调和因子后均降为指数小量。
-特别地，
+对  $\tau'$  则以  $B'$  代替  $B$ 。这些数均为非负整数，故给出了同一带标记有向多重图上的两个显式 cocycle。其非平凡扭曲矩阵分别为
 
-$$\begin{aligned}
-P_{\mathscr U}(N)
-=K_{\mathscr U}N^{-\alpha_{\mathscr U}}
-\Bigg[
-1
-&-\frac{\alpha_{\mathscr U}}{2N}
-+\frac{\alpha_{\mathscr U}(3\alpha_{\mathscr U}+2)}{24N^2}\\
-&-\frac{\alpha_{\mathscr U}^2(\alpha_{\mathscr U}+2)}{48N^3}
-+O(N^{-4})
-\Bigg].
-\end{aligned}
-\tag{F}$$
+$$A_{\varepsilon,\tau}=B,\qquad A_{\varepsilon,\tau'}=B'.$$
 
-更一般地，其对数的全阶展开为
+记
 
-$$\boxed{
-\log\frac{P_{\mathscr U}(N)N^{\alpha_{\mathscr U}}}
-             {K_{\mathscr U}}
-\sim
--\frac{\alpha_{\mathscr U}}{2N}
-+
-\alpha_{\mathscr U}
-\sum_{j\ge1}
-\frac{B_{2j}}{2j\,N^{2j}}.
-}
-\tag{G}$$
+$$Q(z)=1-z+4z^{2}.$$
 
-证明
-记  $p_{n,\mathscr U}$  为长度  $n$ 、标签属于  $\mathscr U$  的本原轨道数，并置
+直接按整数行列式计算得
 
-$$a_n=p_{n,\mathscr U}\lambda^{-n}
--\frac{\alpha_{\mathscr U}}n,
+$$\det(I-zB)=1-z^{2}+4z^{4}=Q(z^{2}),$$
+
+而
+
+$$\det(I-zB')
+ =1-2z+9z^{2}-8z^{3}+16z^{4}
+ =Q(z)^{2}.$$
+
+严格谱隙
+矩阵  $B$  的特征方程为
+
+$$x^{4}-x^{2}+4=0.$$
+
+若  $y=x^{2}$ ，则  $y^{2}-y+4=0$ ，故  $|y|=2$ ，从而
+
+$$\operatorname{rad}(B)=\sqrt2<4.$$
+
+矩阵  $B'$  的特征方程为
+
+$$(x^{2}-x+4)^{2}=0,$$
+
+其根的模均为  $2$ ，故
+
+$$\operatorname{rad}(B')=2<4.$$
+
+因此  $[\tau],[\tau']\in\mathcal T_{\mathrm{gap}}(\Gamma,C_{2})$ 。
+全部逐类常数精确相等
+令
+
+$$L_B(z)=-\log\det(I-zB),
 \qquad
-b_n=p_{n,\mathscr U}
-\sum_{r\ge2}\frac{\lambda^{-rn}}r.$$
+L_{B'}(z)=-\log\det(I-zB'),$$
 
-本文估计 (33)–(34) 与标量 Möbius 公式共同给出
+取从  $0$  出发的实径向分支。由于
 
-$$a_n=O_\xi(\xi^n),\qquad
-b_n=O(\lambda^{-n}/n).$$
+$$\psi^{m}\varepsilon=
+\begin{cases}
+\varepsilon,&m\ \text{为奇数},\\
+\mathbf1,&m\ \text{为偶数},
+\end{cases}$$
 
-由乘积定义及常数定义可得精确恒等式
+Adams–Möbius坐标中依赖 cocycle 的差为
 
-$$\log\frac{P_{\mathscr U}(N)N^{\alpha_{\mathscr U}}}
-             {K_{\mathscr U}}
+$$F_{\varepsilon}^{\tau}(z)-F_{\varepsilon}^{\tau'}(z)
+ =
+\sum_{k\ge1}\frac1k
+ \left(\sum_{\substack{m\mid k\\m\ {\rm odd}}}\mu(m)\right)
+ \bigl(L_B(z^k)-L_{B'}(z^k)\bigr).$$
+
+奇因子上的 Möbius 和满足
+
+$$\sum_{\substack{m\mid k\\m\ {\rm odd}}}\mu(m)
 =
--\alpha_{\mathscr U}
-(H_N-\log N-\gamma_E)
-+
-\sum_{n>N}(a_n+b_n).$$
+\begin{cases}
+1,&k=2^{j},\\
+0,&\text{其他情形}.
+\end{cases}$$
 
-尾和为  $O_\xi(\xi^N)$ ，从而得到 (E)。将标准 Euler–Maclaurin 展开
+因而
 
-$$H_N-\log N-\gamma_E
-\sim
-\frac1{2N}
--\sum_{j\ge1}\frac{B_{2j}}{2jN^{2j}}$$
+$$F_{\varepsilon}^{\tau}(z)-F_{\varepsilon}^{\tau'}(z)
+ =
+\sum_{j\ge0}2^{-j}
+ \bigl(L_B(z^{2^{j}})-L_{B'}(z^{2^{j}})\bigr).$$
 
-代入即得 (F)–(G)。证毕。
-公开的 sofic-shift 轨道增长结果给出的是首阶 Mertens 渐近与抽象常数，而没有上述“精确调和因子＋指数余项”的结论，参见 Nordin–Noorani–Mohd。
-三、Frobenius 常数向量的 Fourier 刚性
-令  $\operatorname{Conj}(G)$  为共轭类集合，并取  $c_C\in C$ 。记
+置  $z_j=z^{2^j}$ 。由两个精确行列式恒等式，
 
-$$S_A:=\gamma_E+\log C(A),\qquad
-F_\rho:=F_{\chi_\rho}(\lambda^{-1}).$$
+$$L_B(z_j)-L_{B'}(z_j)
+ =2\log Q(z_j)-\log Q(z_{j+1}).$$
 
-定理 3（常数—固定标签坐标的精确反演）
-本文式 (37) 的逆变换为
+由于  $\log Q(z_j)=O(z_j)$ ，该级数绝对收敛，并严格望远镜化为
 
-$$\boxed{
-S_A=-\sum_{C\in\operatorname{Conj}(G)}\log K_C,
-}
-\tag{H}$$
+$$F_{\varepsilon}^{\tau}(z)-F_{\varepsilon}^{\tau'}(z)
+ =2\log Q(z).$$
 
-以及对每个非平凡不可约表示  $\rho$ ，
+在 Perron 边界  $z=\lambda^{-1}=1/4$  上，
 
-$$\boxed{
-F_\rho
-=
--\sum_{C\in\operatorname{Conj}(G)}
-\chi_\rho(c_C)\log K_C.
-}
-\tag{I}$$
+$$Q(1/4)=1-\frac14+\frac14=1,$$
 
-证明仅需将式 (37) 乘以  $\chi_\rho(c_C)$ ，对共轭类求和，并使用角色表的行正交关系。
-由此立即得到两个结构性推论：
+故
 
-$$\boxed{
-\prod_{C\in\operatorname{Conj}(G)}K_C
-=
-\frac{e^{-\gamma_E}}{C(A)}.
-}
-\tag{J}$$
+$$F_{\varepsilon}^{\tau}(1/4)
+ =
+F_{\varepsilon}^{\tau'}(1/4).$$
 
-该乘积完全独立于 cocycle；全部 Frobenius 类常数中的非平凡群信息严格相互抵消。
-其次，对同一底图上的两个严格谱隙 cocycle  $\tau,\tau'$ ，
+底矩阵相同，且  $C_{2}$  仅有一个非平凡角色；因此稿件中逐类常数公式立即给出
 
-$$K_C^\tau=K_C^{\tau'}\quad\forall C
-\iff
-F_\rho^\tau=F_\rho^{\tau'}\quad\forall\rho\ne\mathbf1.
-\tag{K}$$
+$$K_{\{1\}}^\tau=K_{\{1\}}^{\tau'},
+\qquad
+K_{\{s\}}^\tau=K_{\{s\}}^{\tau'}.$$
 
-因此，Frobenius Mertens 常数向量既不只是若干孤立常数，也不编码完整周期数据；它恰好是 Perron 边界处固定标签坐标的角色 Fourier 变换。这与 Boyle–Schmieding 所研究的完整周期数据不变量形成严格层级关系；后者确实能够区分远多于单点边界坐标的信息，Boyle–Schmieding。
-发表价值判断
-上述结果中：
+这里没有任何数值截断。常数相等完全来自
+
+$$Q(z^{2})\quad\text{与}\quad Q(z)^{2}$$
+
+在二进制边界泛函下的精确 coboundary 消去。附带地，
+
+$$\det(I-zA)
+ =(1-4z)(1+2z-3z^{2}-4z^{3}),
+\qquad C(A)=\frac45,$$
+
+所以两个 cocycle 的标量归一化亦逐项相同。
+有限长度本原数据不同
+底图恰有两个长度  $1$  环，分别位于顶点  $2,4$ 。对  $\tau$ ，这两个环的标签分别为  $s,1$ ；对  $\tau'$ ，二者均为  $1$ 。故
+
+$$p_{1,\{1\}}(\tau)=1,\qquad
+p_{1,\{s\}}(\tau)=1,$$
+
+而
+
+$$p_{1,\{1\}}(\tau')=2,\qquad
+p_{1,\{s\}}(\tau')=0.$$
+
+特别地，全部常数相等而长度  $1$  的本原周期数据已经不同。
+两 cocycle 也不属于同一 switching–整体共轭类： $C_{2}$  的整体共轭作用平凡，而顶点 switching 不改变环的标签。等价地，switching 只会以对角符号矩阵共轭  $B$ ，不可能将两个不同的特征多项式互相变换。
+可认证最小性
+为避免把不可判定的“偶然超越数相等”混入有限反例比较，采用如下自然的代数证书复杂度。考虑正则  $C_{2}$ -底图上的二次二进制 coboundary 证书：
+
+$$Q(z)=1-kz+kmz^{2},\qquad
+\det(I-zB)=Q(z^{2}),\qquad
+\det(I-zB')=Q(z)^{2},$$
+
+其中底图为  $m$ -出正则， $\lambda=m$ ，且  $Q(1/m)=1$ 。按
+
+$$\bigl(|G|,\deg Q,|V|,m,|E|\bigr)$$
+
+作字典序比较。本例的复杂度为
+
+$$(2,2,4,4,16).$$
+
+它在该精确证书类中最小：
 
 
-定理 1 与推论 1 为最高价值结论。它们把本文目前的“显式  $S_3$  反例”提升为适用于所有非平凡严格谱隙扩张的普遍不可能性定理，并给出缺失因子的覆盖几何解释。
+非平凡有限群必有  $|G|\ge2$ ，本例达到等号。
 
 
-定理 2 显著强化主定理的  $1+O(N^{-1})$ ：整个代数阶渐近 jet 均为普适 Bernoulli 多项式，系统依赖仅存在于  $K_{\mathscr U}$  与指数小余项中。
+若  $Q(0)=Q(1/m)=1$  且  $Q$  非常数，则  $\deg Q\ge2$ 。
 
 
-定理 3 给出常数族的完整可逆结构及 cocycle 无关守恒律，适合作为新的结构定理，而非附带计算。
+ $\deg Q=2$  时， $Q(z^{2})$  的次数为  $4$ ；而  $\det(I-zB)$  的次数不超过  $|V|$ ，故  $|V|\ge4$ 。
 
 
-截至 2026 年 8 月 3 日，在本文参考文献、有限群扩张周期数据文献、图覆盖 Artin-zeta 文献及可检索的 dynamical Mertens 文献中，未发现 (A)、(D)、(E) 或 (I) 的同式陈述。最稳妥的论文改写方式，是以定理 1 取代“单一  $S_3$  反例”作为第二主定理，以定理 2 作为主渐近定理的强化，并将定理 3 作为常数空间的 Fourier 刚性部分。
+当  $m=2$  时严格谱隙迫使  $k=1$ 。四顶点二出正则底图的每一行只有十种多重边型： $2e_i$  或  $e_i+e_j$ 。对全部  $10^{4}$  个邻接矩阵作整数分类，其中恰有  $2208$  个本原矩阵；利用
+
+$$\det(I-zB)
+=1-t_1z+\frac{t_1^2-t_2}{2}z^2
+-\frac{t_1^3-3t_1t_2+2t_3}{6}z^3
++\det(B)z^4,
+\quad t_r=\operatorname{tr}(B^r),$$
+
+逐一枚举兼容符号矩阵。恰有  $48$  个底矩阵支持
+ $1-z^2+2z^4$ ，但没有任何本原底矩阵支持
+ $(1-z+2z^2)^2$ 。这是有限整数枚举，不含浮点判定。
+
+
+当  $m=3$  时，每个兼容符号矩阵满足
+ $B\mathbf1\equiv\mathbf1\pmod2$ ，故
+ $\det(I-B)\equiv0\pmod2$ 。另一方面
+
+$$Q(1)=1-k+3k=1+2k\equiv1\pmod2,$$
+
+与  $\det(I-B)=Q(1)$  矛盾。
+
+
+因此  $m\ge4$ ，而本例在  $m=4$  实现；正则性给出
+
+$$|E|=m|V|\ge16,$$
+
+本例再次达到等号。
+这一最小性针对“以有限多项式恒等式证明常数相等”的自然证书复杂度；它不把尚无有限证书的孤立超越值碰撞伪装成已完成的全局分类。
+信息损失机制
+对  $C_{2}$  定义二进制边界泛函
+
+$$\mathscr M_x(P):=-\sum_{j\ge0}2^{-j}\log P(x^{2^j}).$$
+
+则
+
+$$\mathscr M_x\!\bigl(Q(z^{2})\bigr)
+-\mathscr M_x\!\bigl(Q(z)^2\bigr)
+=2\log Q(x).$$
+
+因此，当  $Q(\lambda^{-1})=1$  时， $\mathscr M_{\lambda^{-1}}$  消灭非零的行列式 coboundary
+
+$$Q(z^{2})/Q(z)^2.$$
+
+这正是  $\Phi$  的结构性核：它不保存扭曲行列式函数，只保存其在一个 Perron 边界点上的 Mahler 加权值。该核中的元素可以改变最低次迹，甚至改变长度  $1$  本原数据，而边界常数完全不变。
+此现象严格弱于既有的 represented  $G$ -cospectrality：后者要求全部扭曲行列式相等，并因而保存全部周期数据；本例两个行列式明显不同。因此它不属于已有的 cospectral/switching 构造范围。相关的完整周期数据框架见 Boyle–Schmieding；一般 Mahler 型无穷乘积背景可参见 Badziahin。
+恢复刚性的最弱自然增强
+令
+
+$$D_C(z):=\sum_{n\ge1}
+\bigl(p_{n,C}(\tau)-p_{n,C}(\tau')\bigr)\log(1-z^n).$$
+
+严格谱隙给出某个  $\beta<\lambda$ ，使
+
+$$p_{n,C}(\tau)-p_{n,C}(\tau')=O(\beta^n/n),$$
+
+故  $D_C$  在  $|z|<\beta^{-1}$  内解析，并包含  $z=\lambda^{-1}$ 。
+若不只知道单点常数，而假设对每个  $C$ ，相应的亚临界类 Euler 坐标在某个具有域内聚点的集合  $S$  上相等，即
+
+$$D_C(z)=0\qquad(z\in S),$$
+
+则解析恒等定理给出  $D_C\equiv0$ 。若  $n_0$  是首个本原数据不同的长度，则  $D_C$  的  $z^{n_0}$  系数恰为
+
+$$-\bigl(p_{n_0,C}(\tau)-p_{n_0,C}(\tau')\bigr),$$
+
+产生矛盾。因此
+
+$$p_{n,C}(\tau)=p_{n,C}(\tau')
+\qquad(n\ge1,\ C\in\operatorname{Conj}(G)).$$
+
+只需取例如  $S=\{\lambda^{-r}:r\ge2\}$ ；其聚点为  $0$ 。这是自然的“全温度径向剖面”增强。它恰好排除上述碰撞，因为本例在任意径向参数  $z$  上满足
+
+$$F_{\varepsilon}^{\tau}(z)-F_{\varepsilon}^{\tau'}(z)=2\log Q(z),$$
+
+而  $Q(z)=1$  在  $0<z\le1/4$  中仅于  $z=1/4$  成立。故碰撞确为孤立的 Perron 边界取值，而非两个周期生成函数的恒等。
