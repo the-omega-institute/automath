@@ -5,7 +5,7 @@ rates ``rates``.  Sampling it at unit time gives T0=exp(Q); absorption is a
 click and deterministically resets the next hidden state to the last phase,
 so T1=(I-T0)1 e_n^T.  Its visible record is renewal.
 
-This script checks two different questions that must not be conflated:
+This script checks five different questions that must not be conflated:
 
 1. In the serial subclass, do visible coordinates recover the unordered rate
    multiset, including pole collisions?  A Hankel recurrence applied to the
@@ -14,6 +14,10 @@ This script checks two different questions that must not be conflated:
 2. Does killed reset alone identify a hidden kernel?  No.  A stochastic
    similarity transform gives a different nonnegative killed-reset kernel
    with exactly the same visible renewal law.
+3. Does a physical two-state inclusion triple satisfy the exact scalar image
+   equation?  The residual is checked on separated and repeated-rate examples.
+4. Does the hidden mode obey its sharp global secant-slope bound?
+5. Does the exact mean sampled cycle have the stated small-interval expansion?
 
 The numerical searches are evidence and diagnostics, not proofs of global
 injectivity.  The associated manuscript theorem supplies the exact minimal
@@ -34,6 +38,102 @@ from scipy.spatial import cKDTree
 
 
 FloatArray = NDArray[np.float64]
+
+
+def hidden_mode_secant(x: float, y: float) -> float:
+    """Return the secant slope of t*exp(-t), with its diagonal limit."""
+    if not np.isfinite(x) or not np.isfinite(y) or min(x, y) <= 0.0:
+        raise ValueError("x and y must be finite and positive")
+    if x == y:
+        return float(np.exp(-x) * (1.0 - x))
+    return float((y * np.exp(-y) - x * np.exp(-x)) / (y - x))
+
+
+def symmetric_log_divided_difference(p: float, s: float) -> float:
+    """Return the symmetric logarithmic divided difference C(p,s)."""
+    if not np.isfinite(p) or not np.isfinite(s) or min(p, s) <= 0.0:
+        raise ValueError("p and s must be finite and positive")
+    midpoint = 0.5 * (p + s)
+    half_gap = 0.5 * (p - s)
+    if abs(half_gap) <= 1e-6 * midpoint:
+        log_midpoint = np.log(midpoint)
+        return float(
+            midpoint * (1.0 - log_midpoint)
+            + half_gap**2 / midpoint * (0.5 + log_midpoint / 3.0)
+            + half_gap**4 / midpoint**3 * (1.0 / 12.0 + 4.0 * log_midpoint / 45.0)
+        )
+    return float((s * np.log(p) - p * np.log(s)) / (np.log(p) - np.log(s)))
+
+
+def two_state_inclusion_coordinates(
+    gamma: float, recovery: float, delta: float
+) -> FloatArray:
+    """Return (r0,r1,r2) for the physical two-state sampled counter."""
+    if min(gamma, recovery, delta) <= 0.0:
+        raise ValueError("rates and sampling interval must be positive")
+    x = gamma * delta
+    y = recovery * delta
+    p = float(np.exp(-x))
+    s = float(np.exp(-y))
+    if x == y:
+        b = x * p
+    else:
+        b = y * (p - s) / (y - x)
+    a = 1.0 - s - b
+    rho = (1.0 - p) * (1.0 - s) / (1.0 - p + b)
+    hidden_lambda = p - b
+    r1 = rho * a
+    r2 = rho * rho + hidden_lambda * (r1 - rho * rho)
+    return np.array([rho, r1, r2])
+
+
+def physical_image_residual(inclusions: ArrayLike) -> float:
+    """Evaluate the exact three-inclusion sampled-counter image equation."""
+    coordinates = np.asarray(inclusions, dtype=float)
+    if coordinates.size != 3:
+        raise ValueError("exactly r0, r1, and r2 are required")
+    r0, r1, r2 = coordinates
+    denominator = r1 - r0 * r0
+    if r0 <= 0.0 or denominator == 0.0:
+        raise ValueError("the inclusion triple is outside the stable inverse chart")
+    a = r1 / r0
+    hidden_lambda = (r2 - r0 * r0) / denominator
+    sigma1 = 1.0 - a + hidden_lambda
+    sigma2 = r0 * (1.0 - hidden_lambda) - a + hidden_lambda
+    discriminant = sigma1 * sigma1 - 4.0 * sigma2
+    if discriminant < -1e-13:
+        raise ValueError("the quotient polynomial has nonreal roots")
+    root_gap = np.sqrt(max(discriminant, 0.0))
+    p = 0.5 * (sigma1 + root_gap)
+    s = 0.5 * (sigma1 - root_gap)
+    return float(a - 1.0 + symmetric_log_divided_difference(p, s))
+
+
+def mean_cycle_length(gamma: float, recovery: float, delta: float) -> float:
+    """Return E(G+1) for the two-stage sampled cycle."""
+    if min(gamma, recovery, delta) <= 0.0:
+        raise ValueError("rates and sampling interval must be positive")
+    x = gamma * delta
+    y = recovery * delta
+    gx = 1.0 / (-np.expm1(-x))
+    if x == y:
+        return float(gx + x * np.exp(-x) * gx * gx)
+    gy = 1.0 / (-np.expm1(-y))
+    return float((y * gx - x * gy) / (y - x))
+
+
+def small_delta_mean_expansion(
+    gamma: float, recovery: float, delta: float
+) -> float:
+    """Return the expansion of delta*E(G+1) through order delta^4."""
+    if min(gamma, recovery, delta) <= 0.0:
+        raise ValueError("rates and sampling interval must be positive")
+    return float(
+        1.0 / gamma
+        + 1.0 / recovery
+        + delta / 2.0
+        + gamma * recovery * (gamma + recovery) * delta**4 / 720.0
+    )
 
 
 def serial_generator(rates: ArrayLike) -> FloatArray:
@@ -449,6 +549,29 @@ def main() -> None:
     print("Sharp killed-reset D-MAP identifiability dichotomy verification")
     print("delta=1; all searches use deterministic random seeds")
     print()
+    image_examples = ((0.35, 0.8, 0.2), (0.7, 1.6, 1.0), (2.0, 2.0, 1.0))
+    image_residuals = [
+        abs(physical_image_residual(two_state_inclusion_coordinates(*item)))
+        for item in image_examples
+    ]
+    spectral_grid = np.geomspace(1e-4, 50.0, 181)
+    spectral_values = np.array(
+        [hidden_mode_secant(x, y) for x in spectral_grid for y in spectral_grid]
+    )
+    delta = 0.05
+    mean_error = abs(
+        delta * mean_cycle_length(0.7, 1.6, delta)
+        - small_delta_mean_expansion(0.7, 1.6, delta)
+    )
+    print("A8 accepted-result diagnostics")
+    print(f"maximum physical-image residual={max(image_residuals):.3e}")
+    print(
+        "hidden-mode grid range="
+        f"[{spectral_values.min():.12f}, {spectral_values.max():.12f}], "
+        f"sharp lower bound={-np.exp(-2.0):.12f}"
+    )
+    print(f"small-delta mean expansion error at delta={delta:g}: {mean_error:.3e}")
+    print()
     report_example((0.7, 1.6))
     report_example((0.7, 1.2, 1.2), search_starts=60)
     report_example((0.7, 1.2, 1.2, 2.3), search_starts=50)
@@ -470,6 +593,9 @@ def main() -> None:
     )
     print()
     print("NUMERICAL CONCLUSION")
+    print("- physical n=2 inclusion triples satisfy the exact scalar image equation.")
+    print("- the hidden-mode grid respects the sharp lower bound -exp(-2).")
+    print("- the sampled-cycle mean agrees with the expansion through order delta^4.")
     print("- n=2: the known three-inclusion inverse recovers the unordered rate pair.")
     print("- n=2,3,4 serial subclasses: the confluent Hankel recurrence recovers")
     print("  the unordered sampled-pole multiset, including repeated poles.")

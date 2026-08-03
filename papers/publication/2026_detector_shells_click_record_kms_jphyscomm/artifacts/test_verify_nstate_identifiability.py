@@ -6,6 +6,49 @@ from artifacts import verify_nstate_identifiability as verify
 
 
 class SerialKilledLeakageTests(unittest.TestCase):
+    def test_exact_three_inclusion_image_equation(self):
+        examples = (
+            (0.35, 0.8, 0.2),
+            (0.7, 1.6, 1.0),
+            (2.0, 2.0, 1.0),
+            (4.0, 0.45, 0.7),
+        )
+        for gamma, recovery, delta in examples:
+            inclusions = verify.two_state_inclusion_coordinates(
+                gamma, recovery, delta
+            )
+            residual = verify.physical_image_residual(inclusions)
+            self.assertLess(abs(residual), 2e-12)
+
+    def test_physical_image_equation_detects_intensity_perturbation(self):
+        inclusions = verify.two_state_inclusion_coordinates(0.7, 1.6, 1.0)
+        perturbed = inclusions.copy()
+        perturbed[0] *= 1.01
+        self.assertGreater(abs(verify.physical_image_residual(perturbed)), 1e-4)
+
+    def test_hidden_mode_obeys_sharp_global_bound(self):
+        grid = np.geomspace(1e-4, 50.0, 181)
+        values = np.array(
+            [verify.hidden_mode_secant(x, y) for x in grid for y in grid]
+        )
+        self.assertGreaterEqual(float(values.min()), -np.exp(-2.0) - 2e-14)
+        self.assertLess(float(values.max()), 1.0)
+        self.assertAlmostEqual(
+            verify.hidden_mode_secant(2.0, 2.0), -np.exp(-2.0), places=15
+        )
+
+    def test_small_sampling_interval_mean_expansion_has_sixth_order_remainder(self):
+        gamma = 0.7
+        recovery = 1.6
+        normalized_errors = []
+        for delta in (0.2, 0.1, 0.05):
+            exact = delta * verify.mean_cycle_length(gamma, recovery, delta)
+            approximation = verify.small_delta_mean_expansion(
+                gamma, recovery, delta
+            )
+            normalized_errors.append(abs(exact - approximation) / delta**6)
+        self.assertLess(max(normalized_errors), 2e-3)
+
     def test_kernels_are_stochastic_and_clicks_reset(self):
         for rates in ((0.7, 1.6), (0.7, 1.2, 2.3)):
             t0, t1 = verify.serial_killed_reset_kernels(rates)
