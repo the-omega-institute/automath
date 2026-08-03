@@ -153,3 +153,54 @@ form; or the exact finite-block onset and Markov order.  The manuscript cites
 Parry admissibility, bounded-polynomial-multiple terminology, near-Markov
 terminology, and the general Fischer-cover criterion as prior framework and
 claims only the parameter-specific deductions for its newly defined recoding.
+
+## Follow-up API audit for the simple-Parry causal obstructions
+
+Checked: 2026-08-03 (Asia/Singapore).  The first-party arXiv Atom endpoint
+returned HTTP 200 for every query.  The following searches returned zero
+records:
+
+- `all:"cyclic language rank"`;
+- `all:"bounded sliding congruence"`;
+- `all:multinacci AND all:"sliding block"`;
+- `all:Pisot AND all:"causal inverse"`;
+- `all:"Littlewood multiple" AND all:Pisot`;
+- `all:"restricted coefficient" AND all:"polynomial multiple"`;
+- `all:"finite delay" AND all:"sliding block code"`;
+- `all:"simple Parry" AND all:"language rank"`;
+- `all:p-bonacci AND all:Pisot`.
+
+The broader query `all:"multinacci number"` returned nine records.  The
+closest was the established beta-numeration literature, including Kalle,
+*Isomorphisms between positive and negative beta-transformations*,
+arXiv:1203.4695, DOI `10.1017/etds.2012.127`; none studies rank reduction
+modulo the legal-word count, the bounded sliding-congruence depth, or either
+causal separation proved here.
+
+Crossref bibliographic and OpenAlex full-text searches were also run for
+`cyclic Parry rank recoding`, `bounded sliding congruence Pisot`, `multinacci
+sliding block inverse`, `Pisot causal inverse symbolic dynamics`, `restricted
+coefficient polynomial multiples`, `finite delay sliding block code inverse`,
+`simple Parry language rank`, and `multinacci Pisot number`.  Their relevant
+hits were the classical or established inputs, not predecessors of the new
+map-specific statements:
+
+- K. Schmidt, *On Periodic Expansions of Pisot Numbers and Salem Numbers*,
+  Bull. Lond. Math. Soc. **12** (1980), 269--278,
+  DOI `10.1112/blms/12.4.269`;
+- E. Charlier, C. Cisternino and M. Stipulanti, *A Full Characterization of
+  Bertrand Numeration Systems*, 2022, arXiv:2202.04938,
+  DOI `10.1007/978-3-031-05578-2_8`;
+- P. Drungilas et al., *On Littlewood and Newman Polynomial Multiples of
+  Borwein Polynomials*, Math. Comp. **87** (2018),
+  DOI `10.1090/mcom/3258`, with preprint arXiv:1609.07295;
+- D. Dombek, Z. Masakova and T. Vavra, *Confluent Parry numbers, their
+  spectra, and integers in positive- and negative-base number systems*,
+  J. Theor. Nombres Bordeaux **27** (2015), DOI `10.5802/jtnb.922`,
+  arXiv:1402.4314.
+
+Parry admissibility, Pisot eventual periodicity, multinacci bases, general
+fiber-product collision graphs, and restricted-coefficient polynomial
+multiples are therefore treated as published framework.  No checked record
+states the exact Toeplitz obstruction formula for this cyclic language-rank
+fold, the unbounded `p-2` separation, or the reverse cubic inequality.
