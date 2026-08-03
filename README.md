@@ -5,7 +5,7 @@
 [![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
 [![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
 [![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
-[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
+[![Theorems: 18,624](https://img.shields.io/badge/theorems-18%2C624-orange.svg)](#status)
 
 > An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
 
@@ -378,18 +378,27 @@ automath/
 
 | Metric | Value |
 |--------|-------|
-| Theory: theorem-level statements | 10,588 |
+| Theory: theorem-level statements | 12,989 |
 | Theory: chapters | 21 body + 13 appendix |
 | Theory: mathematical domains | 12+ |
-| Theory: lines | ~770,000 |
-| Lean 4: lines of code | 38,876 |
-| Lean 4: theorems & definitions | 3,427 |
+| Theory: lines | ~820,000 |
+| Lean 4: files | 9,784 |
+| Lean 4: lines of code | ~642,000 |
+| Lean 4: declarations | 49,623 |
+| Lean 4: theorems | 18,624 |
+| Lean 4: lemmas | 4,680 |
+| Lean 4: definitions & abbrevs | 23,865 |
 | Lean 4: **axioms** | **0** |
 | Lean 4: formalization rounds | 182 |
-| Papers: total in pipeline | 42 |
+| Body claims matched to Lean | 7,877 / 12,989 (60.6%) |
+| Papers: total in pipeline | 43 |
 | Papers: submission-ready (P7) | 3 |
 | AI agents | 16 (8 formalization + 8 publication) |
 | Python experiment scripts | 515 |
+
+Reproduce the Lean figures with `python3 lean4/scripts/omega_ci.py inventory`, the
+axiom claim with `omega_ci.py audit`, and the coverage figure with
+`omega_ci.py paper-coverage`.
 
 The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 

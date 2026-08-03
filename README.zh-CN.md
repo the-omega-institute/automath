@@ -5,7 +5,7 @@
 [![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
 [![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
 [![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
-[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
+[![Theorems: 18,624](https://img.shields.io/badge/theorems-18%2C624-orange.svg)](#status)
 
 > 一个可审计的理论编译器，从单一方程出发，推导、验证、可视化并发表数学。
 
@@ -343,18 +343,26 @@ automath/
 
 | 指标 | 数值 |
 |------|------|
-| 理论：定理级陈述 | 10,588 |
+| 理论：定理级陈述 | 12,989 |
 | 理论：篇章数 | 21 章正文 + 13 附录 |
 | 理论：数学领域 | 12+ |
-| 理论：代码行数 | ~770,000 |
-| Lean 4：代码行数 | 38,876 |
-| Lean 4：定理与定义 | 3,427 |
+| 理论：代码行数 | ~820,000 |
+| Lean 4：文件数 | 9,784 |
+| Lean 4：代码行数 | ~642,000 |
+| Lean 4：声明总数 | 49,623 |
+| Lean 4：定理 | 18,624 |
+| Lean 4：引理 | 4,680 |
+| Lean 4：定义与缩写 | 23,865 |
 | Lean 4：**公理** | **0** |
 | Lean 4：形式化轮次 | 182 |
-| 论文：管线中总数 | 42 |
+| 正文断言已对应 Lean | 7,877 / 12,989（60.6%） |
+| 论文：管线中总数 | 43 |
 | 论文：可投稿（P7） | 3 |
 | AI 智能体 | 16（8 形式化 + 8 出版） |
 | Python 实验脚本 | 515 |
+
+Lean 数字用 `python3 lean4/scripts/omega_ci.py inventory` 复现，零公理用
+`omega_ci.py audit`，覆盖率用 `omega_ci.py paper-coverage`。
 
 该库依赖 [Mathlib](https://github.com/leanprover-community/mathlib4) 和 Lean 4。
 
