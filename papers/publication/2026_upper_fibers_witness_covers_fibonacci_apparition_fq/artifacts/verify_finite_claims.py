@@ -60,6 +60,16 @@ class RankWindowDeaggregationData:
     exponent_cost: float
 
 
+@dataclass(frozen=True)
+class FibotomicRankEntropyData:
+    rank: int
+    fibotomic_value: int
+    exact_rank_primes: Tuple[int, ...]
+    exact_rank_radical: int
+    entropy_lower_bound: float
+    binet_error: float
+
+
 @lru_cache(maxsize=None)
 def fibonacci(n: int) -> int:
     """Return F_n by fast doubling."""
@@ -513,6 +523,71 @@ def exact_rank_prime_count(rank: int) -> int:
     )
 
 
+def fibotomic_error_bound(terms: int = 64) -> float:
+    """Return a rigorous numerical upper bound for the Binet error constant."""
+    if terms < 1:
+        raise ValueError("terms must be positive")
+    golden_ratio = (1.0 + math.sqrt(5.0)) / 2.0
+    ratio = golden_ratio**-2
+    partial = sum(
+        abs(math.log1p(-((-ratio) ** index)))
+        for index in range(1, terms + 1)
+    )
+    tail = ratio ** (terms + 1) / (1.0 - ratio) ** 2
+    return partial + tail
+
+
+@lru_cache(maxsize=None)
+def fibotomic_rank_entropy_data(rank: int) -> FibotomicRankEntropyData:
+    """Compute the finite data in the fibotomic rank-entropy inequality."""
+    if rank < 3:
+        raise ValueError("fibotomic rank entropy is stated only for rank >= 3")
+    rank_divisors = divisors_from_factorization(
+        tuple(sorted((int(p), int(e)) for p, e in factorint(rank).items()))
+    )
+    fibotomic_exponents: Dict[int, int] = {}
+    for divisor in rank_divisors:
+        coefficient = _mobius(rank // divisor)
+        for prime, exponent in factorint_fibonacci(divisor):
+            fibotomic_exponents[prime] = (
+                fibotomic_exponents.get(prime, 0) + coefficient * exponent
+            )
+    if any(exponent < 0 for exponent in fibotomic_exponents.values()):
+        raise AssertionError(f"nonintegral fibotomic factor at rank={rank}")
+    fibotomic_value = math.prod(
+        prime**exponent
+        for prime, exponent in fibotomic_exponents.items()
+        if exponent
+    )
+    exact_rank_primes = tuple(
+        sorted(
+            prime
+            for prime, _ in factorint_fibonacci(rank)
+            if alpha_for_fn_divisor(prime, rank) == rank
+        )
+    )
+    exact_rank_radical = math.prod(exact_rank_primes)
+    count = len(exact_rank_primes)
+    half_count = count // 2
+    entropy_lower_bound = (
+        count * math.log(2.0 * rank / 3.0)
+        + 2.0 * math.lgamma(half_count + 1)
+        + (count - 2 * half_count) * math.log(half_count + 1)
+    )
+    golden_ratio = (1.0 + math.sqrt(5.0)) / 2.0
+    totient = rank
+    for prime in factorint(rank):
+        totient = totient // int(prime) * (int(prime) - 1)
+    return FibotomicRankEntropyData(
+        rank=rank,
+        fibotomic_value=fibotomic_value,
+        exact_rank_primes=exact_rank_primes,
+        exact_rank_radical=exact_rank_radical,
+        entropy_lower_bound=entropy_lower_bound,
+        binet_error=math.log(fibotomic_value) - totient * math.log(golden_ratio),
+    )
+
+
 @lru_cache(maxsize=None)
 def rank_pure_sector(n: int) -> RankPureSectorResult:
     """Verify the rank-pure cover embedding on one finite arithmetic layer."""
@@ -714,6 +789,12 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     squarefree_layers = 0
     squarefree_pigeonhole_checks = 0
     refined_private_bound_checks = 0
+    fibotomic_layers = 0
+    fibotomic_entropy_checks = 0
+    fibotomic_radical_checks = 0
+    jarden_layers = 0
+    jarden_checks = 0
+    error_bound = fibotomic_error_bound()
 
     cover_formula_checks = 0
     connected_cover_checks = 0
@@ -747,6 +828,54 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         if n >= 3:
             count = len(threshold.minimal_generators)
             k = omega(n)
+            fibotomic_layers += 1
+            entropy_data = fibotomic_rank_entropy_data(n)
+            congruences_hold = all(
+                prime in (2, 5)
+                or (prime - 1) % n == 0
+                or (prime + 1) % n == 0
+                for prime in entropy_data.exact_rank_primes
+            )
+            candidate_bounds_hold = all(
+                prime >= n * math.ceil(index / 2) - 1
+                for index, prime in enumerate(
+                    entropy_data.exact_rank_primes, start=1
+                )
+            )
+            if (
+                entropy_data.entropy_lower_bound
+                <= math.log(entropy_data.fibotomic_value) + 1e-12
+                and abs(entropy_data.binet_error) <= error_bound
+                and congruences_hold
+                and candidate_bounds_hold
+            ):
+                fibotomic_entropy_checks += 1
+            else:
+                failures.append(f"n={n}: fibotomic rank-entropy bound failed")
+            if (
+                len(entropy_data.exact_rank_primes)
+                == exact_rank_prime_count(n)
+                and entropy_data.fibotomic_value
+                % entropy_data.exact_rank_radical
+                == 0
+            ):
+                fibotomic_radical_checks += 1
+            else:
+                failures.append(
+                    f"n={n}: exact-rank radical does not divide fibotomic value"
+                )
+            if n % 10 == 0:
+                jarden_prime = n // 10
+                jarden_factorization = factorint(jarden_prime)
+                if (
+                    jarden_prime > 5
+                    and jarden_factorization == {jarden_prime: 1}
+                ):
+                    jarden_layers += 1
+                    if exact_rank_prime_count(n) >= 2:
+                        jarden_checks += 1
+                    else:
+                        failures.append(f"n={n}: Jarden exact-rank consequence failed")
             deaggregation_layers += 1
             deaggregation = rank_window_deaggregation_data(n)
             log_gap = math.log(deaggregation.multiplicity) - math.log(
@@ -954,6 +1083,11 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"{squarefree_pigeonhole_checks}/{squarefree_layers}",
         f"  Refined private-cover upper bounds: {refined_private_bound_checks}/"
         f"{deaggregation_layers}",
+        f"  Fibotomic rank-entropy inequalities: {fibotomic_entropy_checks}/"
+        f"{fibotomic_layers}",
+        f"  Fibotomic exact-rank radical divisibilities: "
+        f"{fibotomic_radical_checks}/{fibotomic_layers}",
+        f"  Jarden a(10p) >= 2 checks: {jarden_checks}/{jarden_layers}",
         "",
         "Corrected n=30 data:",
         f"  A(30) = {n30.a_count}",

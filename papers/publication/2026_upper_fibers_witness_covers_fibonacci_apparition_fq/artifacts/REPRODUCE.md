@@ -20,7 +20,8 @@ multiplies back to the stated Fibonacci number.
   finite-bound checks, exact minimal-cover and connected-cover enumeration,
   theta-normalized and discrete local-limit checks, rank-pure sector checks,
   rank-window deaggregation and squarefree pigeonhole checks, refined
-  private-coordinate upper bounds, environment reporting, and
+  private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
+  radical checks, the finite Jarden consequence, environment reporting, and
   factorization-archive generation and validation.
 - `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
   finite bounds, archive round trip, and report contents.
@@ -63,7 +64,11 @@ normalization, the connected-cover ratio, and the central discrete local
 limit. On every `3 <= n <= 210` layer the report also checks the pointwise
 rank-window deaggregation inequalities and the refined private-coordinate
 upper bound; on every squarefree layer it checks the exact-rank partition and
-the BLMS pigeonhole inequality. These finite checks do not resolve the
+the BLMS pigeonhole inequality. It also reconstructs the fibotomic integer on
+every rank in this range, verifies its exact-rank radical divisibility and the
+rank-congruence spacing used in the entropy bound, and checks `a(10p) >= 2`
+for the five eligible prime values with `10p <= 210`. These finite checks do
+not resolve the
 asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
 connected and disconnected arithmetic sectors without those hypotheses.
 

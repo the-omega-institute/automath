@@ -16,6 +16,8 @@ from verify_finite_claims import (
     connected_minimal_cover_count,
     exact_rank_prime_count,
     factorint_fibonacci,
+    fibotomic_error_bound,
+    fibotomic_rank_entropy_data,
     load_factorization_archive,
     local_limit_probability,
     minimal_cover_count,
@@ -37,6 +39,41 @@ from verify_finite_claims import (
 
 
 class FiniteClaimTests(unittest.TestCase):
+    def test_fibotomic_rank_entropy_and_rank_congruences_through_120(self):
+        error_bound = fibotomic_error_bound()
+        for rank in range(3, 121):
+            with self.subTest(rank=rank):
+                data = fibotomic_rank_entropy_data(rank)
+                self.assertEqual(
+                    len(data.exact_rank_primes), exact_rank_prime_count(rank)
+                )
+                self.assertEqual(
+                    data.exact_rank_radical,
+                    math.prod(data.exact_rank_primes),
+                )
+                self.assertEqual(
+                    data.fibotomic_value % data.exact_rank_radical, 0
+                )
+                self.assertLessEqual(
+                    data.entropy_lower_bound,
+                    math.log(data.fibotomic_value) + 1e-12,
+                )
+                self.assertLessEqual(abs(data.binet_error), error_bound)
+                for index, prime in enumerate(data.exact_rank_primes, start=1):
+                    self.assertGreaterEqual(
+                        prime, rank * math.ceil(index / 2) - 1
+                    )
+                    if prime not in (2, 5):
+                        self.assertTrue(
+                            (prime - 1) % rank == 0
+                            or (prime + 1) % rank == 0
+                        )
+
+    def test_jarden_exact_rank_consequence_in_available_range(self):
+        for prime in (7, 11, 13, 17, 19):
+            with self.subTest(prime=prime):
+                self.assertGreaterEqual(exact_rank_prime_count(10 * prime), 2)
+
     def test_rank_window_deaggregation_bounds_through_120(self):
         for n in range(3, 121):
             with self.subTest(n=n):
@@ -246,6 +283,9 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Rank-window deaggregation inequalities: 28/28", report)
         self.assertIn("Squarefree BLMS pigeonhole inequalities: 17/17", report)
         self.assertIn("Refined private-cover upper bounds: 28/28", report)
+        self.assertIn("Fibotomic rank-entropy inequalities: 28/28", report)
+        self.assertIn("Fibotomic exact-rank radical divisibilities: 28/28", report)
+        self.assertIn("Jarden a(10p) >= 2 checks: 0/0", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
         self.assertNotIn("Deepening Delta", report)
