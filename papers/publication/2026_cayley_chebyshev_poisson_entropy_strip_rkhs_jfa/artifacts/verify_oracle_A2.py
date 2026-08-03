@@ -128,7 +128,79 @@ def symbolic_checks() -> list[Check]:
             ", ".join(spike_rows),
         )
     )
+
+    critical_rows = []
+    critical_ok = True
+    for d in range(4, 41):
+        a_d = sp.Rational(d + 1, 2)
+        p_d = sp.Rational(4 * (d + 1), d + 5)
+        q_d = sp.Rational(d + 5, d + 1)
+        # Radial beta integrals after translating u=y-z.  Since
+        # a_d(q_d-1)=2, the numerator is exactly (1+|u+z|^2)^2.
+        j0 = sp.gamma(a_d) * sp.gamma(sp.Rational(5, 2)) / (
+            sp.sqrt(sp.pi) * sp.gamma(a_d + 2)
+        )
+        j1 = sp.gamma(a_d) * sp.gamma(sp.Rational(3, 2)) / (
+            sp.sqrt(sp.pi) * sp.gamma(a_d + 1)
+        )
+        quadratic = sp.simplify(2 * j1 + sp.Rational(4, d) * (j1 - j0))
+        quartic = sp.simplify(j0)
+        expected_quadratic = sp.Rational(2 * (d + 5), (d + 1) * (d + 3))
+        expected_quartic = sp.Rational(3, (d + 1) * (d + 3))
+        m_d = int(sp.floor(p_d))
+        row_ok = (
+            sp.simplify(p_d * q_d - 4) == 0
+            and sp.simplify(a_d * (q_d - 1) - 2) == 0
+            and sp.simplify(quadratic - expected_quadratic) == 0
+            and sp.simplify(quartic - expected_quartic) == 0
+            and sp.Rational(m_d, 1) <= p_d < sp.Rational(m_d + 1, 1)
+        )
+        critical_ok = critical_ok and row_ok
+        if d in (4, 10, 11, 12, 40):
+            critical_rows.append(
+                f"d={d}: p={p_d}, q={q_d}, m={m_d}, "
+                f"norm^q=1+({quadratic})|z|^2+({quartic})|z|^4"
+            )
+    checks.append(
+        Check(
+            "critical Lq translation identity",
+            critical_ok,
+            "; ".join(critical_rows),
+        )
+    )
     return checks
+
+
+def critical_bregman_check() -> Check:
+    """Stress the uniform Phi-Bregman bound at zero density and large spikes."""
+
+    def phi(value: float) -> float:
+        if value == -1.0:
+            return 1.0
+        return (1.0 + value) * math.log1p(value) - value
+
+    rows = []
+    passed = True
+    for d in (4, 5, 10, 11, 12, 20, 40):
+        q_d = (d + 5) / (d + 1)
+        minimum = math.inf
+        maximum_ratio = 0.0
+        for u in np.linspace(-0.25, 0.25, 21):
+            negative_and_local = np.linspace(-1.0 - u, 0.5001, 500)
+            positive_spikes = np.geomspace(0.5001, 1.0e12, 500)
+            for v in np.concatenate((negative_and_local, positive_spikes)):
+                if abs(v) < 1.0e-13:
+                    continue
+                remainder = phi(u + v) - phi(u) - math.log1p(u) * v
+                minimum = min(minimum, remainder)
+                maximum_ratio = max(maximum_ratio, remainder / abs(v) ** q_d)
+        row_ok = minimum >= -2.0e-10 and math.isfinite(maximum_ratio)
+        passed = passed and row_ok
+        rows.append(
+            f"d={d}: min Bregman={minimum:.3e}, "
+            f"max Bregman/|v|^q={maximum_ratio:.6g}"
+        )
+    return Check("critical Bregman perturbation bound", passed, "; ".join(rows))
 
 
 def quotient(y: mp.mpf, t: mp.mpf, law: Sequence[tuple[mp.mpf, mp.mpf]]) -> mp.mpf:
@@ -250,7 +322,12 @@ def pareto_square_boundary_check(quick: bool) -> Check:
 
 
 def run(quick: bool) -> list[Check]:
-    return symbolic_checks() + numerical_moment_matching_checks(quick) + [pareto_square_boundary_check(quick)]
+    return (
+        symbolic_checks()
+        + [critical_bregman_check()]
+        + numerical_moment_matching_checks(quick)
+        + [pareto_square_boundary_check(quick)]
+    )
 
 
 def main() -> int:

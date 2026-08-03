@@ -586,28 +586,198 @@ The exponent of \(R_j\) is positive exactly when \(d>3\).  Choosing the
 radii recursively makes the final expression tend to infinity.
 \end{proof}
 
-\begin{remark}[Open KL moment interface]
-\label{rem:optimal-kl-moment-interface}
-The preceding localized argument also gives a rigorous obstruction below
+For the high-dimensional entropy topology, define
+\begin{equation}\label{eq:critical-kl-exponents}
+ q_d:=\frac{d+5}{d+1},
+ \qquad
+ p_d:=\frac{4(d+1)}{d+5}.
+\end{equation}
+Thus \(1<q_d<2\), \(2<p_d<4\), and \(p_dq_d=4\) when \(d\ge4\).
+
+\begin{lemma}[Critical translation remainder]
+\label{lem:critical-lq-translation-remainder}
+Let \(d\ge4\), let \(p_d,q_d\) be as in
+\eqref{eq:critical-kl-exponents}, and put \(m=\lfloor p_d\rfloor\).
+If \(T_m(y,z)\) is the Taylor polynomial of \(F_y(z)\) through degree
+\(m\), then
+\begin{equation}\label{eq:critical-lq-exact-translation-norm}
+ \|F_\cdot(z)\|_{L^{q_d}(\Omega_d)}^{q_d}
+ =1+\frac{2(d+5)}{(d+1)(d+3)}|z|^2
+ +\frac{3}{(d+1)(d+3)}|z|^4.
+\end{equation}
+Consequently, for a constant depending only on \(d\),
+\begin{equation}\label{eq:critical-lq-global-remainder}
+ \|F_\cdot(z)-T_m(\cdot,z)\|_{L^{q_d}(\Omega_d)}
+ \le C_d
+ \begin{cases}
+ |z|^{m+1},& |z|\le1,\\
+ |z|^{p_d},& |z|>1,
+ \end{cases}
+ \le C_d|z|^{p_d}.
+\end{equation}
+Here \(m=2\) for \(4\le d\le10\), while \(m=3\) for \(d\ge11\),
+including the integer endpoint \(p_{11}=3\).
+\end{lemma}
+
+\begin{proof}
+Since \(a(q_d-1)=2\), translation by \(z\) gives
 \[
- p_{\rm KL}(d)=\frac{4(d+1)}{d+5}.
+ \|F_\cdot(z)\|_{q_d}^{q_d}
+ =c_d\int_{\RR^d}
+ \frac{(1+|u+z|^2)^2}{(1+|u|^2)^{(d+5)/2}}\dd u.
 \]
-Indeed, for every \(d\ge4\) and
-\(2\le p<p_{\rm KL}(d)\), weights
-\(w_j=\alpha_jR_j^{-p}\) produce a finite \(p\)th moment while the lower
-bound scales as
+Write \(A=1+|u|^2\).  The odd term in the expansion of
+\((A+|z|^2+2u\cdot z)^2\) integrates to zero, and rotational invariance
+gives
 \[
- R_j^{\,4-p(d+5)/(d+1)}
+ \int(u\cdot z)^2(1+|u|^2)^{-(d+5)/2}\dd u
+ =\frac{|z|^2}{d}\int |u|^2(1+|u|^2)^{-(d+5)/2}\dd u.
 \]
-up to a positive power of \(\alpha_j\); sufficiently rapid radii make
-\(t_j^4H_d(t_j)\) unbounded.  What remains open is the load-bearing
-sufficiency statement at and above this exponent: it is not proved here
-that
+The three normalized beta integrals needed here are
 \[
- \EE|X|^{\max\{2,p_{\rm KL}(d)\}}<\infty
- \quad\Longrightarrow\quad
- H_d(t)=\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
+ \begin{aligned}
+ c_d\int(1+|u|^2)^{-(d+1)/2}\dd u&=1,\\
+ c_d\int(1+|u|^2)^{-(d+3)/2}\dd u&=\frac1{d+1},\\
+ c_d\int(1+|u|^2)^{-(d+5)/2}\dd u
+ &=\frac3{(d+1)(d+3)}.
+ \end{aligned}
 \]
-Thus \(p_{\rm KL}(d)\) is presently a sharp candidate forced by the spike
-obstruction, not an established KL threshold.
-\end{remark}
+Substitution proves \eqref{eq:critical-lq-exact-translation-norm}.
+
+For \(|z|\le1\), the local quotient--Taylor estimate
+\eqref{eq:local-multidim-taylor-remainder} implies the first line of
+\eqref{eq:critical-lq-global-remainder}.  For \(|z|>1\), the exact identity
+gives \(\|F_\cdot(z)\|_{q_d}\le C_d|z|^{4/q_d}=C_d|z|^{p_d}\).
+Every coefficient of \(T_m\) is bounded in \(y\), and \(m\le p_d\), so
+\(\|T_m(\cdot,z)\|_{q_d}\le C_d|z|^{p_d}\).  Finally,
+\(m+1>p_d\), which proves the last inequality for \(|z|\le1\).
+\end{proof}
+
+\begin{lemma}[Critical Bregman perturbation bound]
+\label{lem:critical-lq-kl-perturbation}
+Let \(1<q<2\) and
+\(\Phi(s)=(1+s)\log(1+s)-s\) on \([-1,\infty)\), with
+\(0\log0=0\).  There is a constant \(C_q\) such that
+\begin{equation}\label{eq:critical-bregman-pointwise-bound}
+ 0\le \Phi(u+v)-\Phi(u)-\log(1+u)v\le C_q|v|^q
+\end{equation}
+whenever \(|u|\le1/4\) and \(u+v\ge-1\).
+\end{lemma}
+
+\begin{proof}
+The lower bound is convexity.  If \(|v|\le1/2\), the segment between
+\(u\) and \(u+v\) is contained in \([-3/4,3/4]\).  Since
+\(\Phi''(s)=(1+s)^{-1}\) there, Taylor's theorem gives an upper bound
+\(C v^2\le C|v|^q\).  If \(v<-1/2\), the admissible pairs
+\((u,v)\) range over a compact set and \(|v|^q\ge2^{-q}\); continuity at
+\(u+v=-1\) gives the result.  If \(v>1/2\), direct expansion of the left
+side shows that it is at most \(C(1+v)\log(1+v)+Cv\), which is bounded by
+\(C_qv^q\).  These three regions prove
+\eqref{eq:critical-bregman-pointwise-bound}.
+\end{proof}
+
+\begin{theorem}[Sharp high-dimensional KL moment threshold]
+\label{thm:high-dimensional-kl-moment-threshold}
+Let \(d\ge4\), let \(\nu\) be a probability law on \(\RR^d\) with mean
+\(\bar\gamma\), and put \(X=\gamma-\bar\gamma\).  If
+\begin{equation}\label{eq:critical-kl-moment-hypothesis}
+ \EE|X|^{p_d}<\infty,
+ \qquad p_d=\frac{4(d+1)}{d+5},
+\end{equation}
+then \(\Sigma=\EE[XX^{\mathsf T}]\) is finite and
+\begin{equation}\label{eq:critical-kl-leading-asymptotic}
+ D_{\rm KL}\!\left(P_t^{(d)}*\nu\,\middle\|\,
+ P_t^{(d)}(\mathord\cdot-\bar\gamma)\right)
+ =\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}).
+\end{equation}
+The exponent is sharp among assumptions stated solely as a finite absolute
+moment: for every \(2\le r<p_d\), there is a centred law with
+positive-definite covariance and finite \(r\)th absolute moment for which
+\(\limsup_{t\to\infty}t^4H_d(t)=+\infty\).  Thus the endpoint
+\(p_d\) belongs to the sufficient side.
+\end{theorem}
+
+\begin{proof}
+Translation permits us to assume \(\bar\gamma=0\).  Fix
+\(q=q_d\), \(p=p_d\), and \(m=\lfloor p\rfloor\), and write
+\[
+ R_m(y,z)=F_y(z)-T_m(y,z),
+ \qquad r_t(y)=\EE R_m(y,X/t).
+\]
+Minkowski's inequality and
+\eqref{eq:critical-lq-global-remainder} give
+\[
+ t^p\|R_m(\cdot,X/t)\|_q\le C_d|X|^p.
+\]
+For each fixed \(X\), the local part of the same estimate and \(m+1>p\)
+give
+\[
+ t^p\|R_m(\cdot,X/t)\|_q
+ \le C_d|X|^{m+1}t^{p-m-1}\longrightarrow0.
+\]
+Dominated convergence therefore yields
+\begin{equation}\label{eq:critical-lq-integrated-remainder}
+ \|r_t\|_{L^q(\Omega_d)}=o(t^{-p}).
+\end{equation}
+
+Centering removes the linear Taylor layer.  Averaging the remaining layers
+gives
+\begin{equation}\label{eq:critical-kl-quotient-decomposition}
+ \delta_t^{(d)}=u_t+r_t,
+ \qquad
+ u_t=
+ \begin{cases}
+ t^{-2}b_\Sigma,&m=2,\\
+ t^{-2}b_\Sigma+t^{-3}B_3,&m=3,
+ \end{cases}
+\end{equation}
+where \(B_3\) is a bounded linear combination of third-order modes.  In the
+second case the required third moments exist because \(p\ge3\).  Hence
+\(\|u_t\|_\infty=O(t^{-2})\).
+
+The identity
+\(F_y(z)\Omega_d(\dd y)=P_1^{(d)}(y-z)\dd y\) shows that every translated
+quotient has integral one.  Moreover,
+\(\int|F_y(z)-1|\Omega_d(\dd y)\le2\), so Tonelli's theorem gives
+\(\delta_t^{(d)}\in L^1(\Omega_d)\) with zero integral.  The KL change of
+variables is therefore
+\[
+ H_d(t)=\int\Phi(\delta_t^{(d)})\dd\Omega_d
+\]
+in the extended sense.  For all sufficiently large \(t\), apply
+Lemma~\ref{lem:critical-lq-kl-perturbation} to \(u=u_t\), \(v=r_t\).
+Hölder's inequality and \eqref{eq:critical-lq-integrated-remainder} give
+\begin{align*}
+ \left|H_d(t)-\int\Phi(u_t)\dd\Omega_d\right|
+ &\le \|\log(1+u_t)\|_{q/(q-1)}\|r_t\|_q
+       +C_q\|r_t\|_q^q\\
+ &\le O(t^{-2})o(t^{-p})+o(t^{-pq})=o(t^{-4}).
+\end{align*}
+This estimate also proves that the extended KL integral is finite for all
+sufficiently large \(t\).
+
+Finally, the boundedness of the retained modes permits a uniform Taylor
+expansion of \(\Phi(u_t)\).  From
+\eqref{eq:critical-kl-quotient-decomposition},
+\[
+ \int\Phi(u_t)\dd\Omega_d
+ =\frac{t^{-4}}2\int b_\Sigma^2\dd\Omega_d+o(t^{-4})
+ =\mathcal Q_d(\Sigma)t^{-4}+o(t^{-4}),
+\]
+which proves \eqref{eq:critical-kl-leading-asymptotic}.
+
+For sharpness, fix \(2\le r<p_d\) and repeat the symmetric spike
+construction in the proof of
+Proposition~\ref{prop:high-dimensional-finite-covariance-obstruction} with
+\(w_j=\alpha_jR_j^{-r}\), where \(\sum_j\alpha_j<\infty\).  At
+\(t_j=\kappa R_jw_j^{1/(d+1)}\), the same binary data-processing estimate
+gives
+\[
+ t_j^4H_d(t_j)\ge c_dR_j^4w_j^{1+4/(d+1)}
+ =c_d\alpha_j^{q_d}R_j^{4-rq_d}.
+\]
+Since \(r<p_d=4/q_d\), the exponent of \(R_j\) is positive.  Recursive
+choice of the radii makes this expression unbounded while preserving the
+finite \(r\)th moment and, after adding a bounded spanning component, a
+positive-definite covariance.
+\end{proof}

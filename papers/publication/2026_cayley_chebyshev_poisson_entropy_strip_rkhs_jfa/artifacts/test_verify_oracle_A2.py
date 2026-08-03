@@ -21,6 +21,8 @@ class OracleA2VerificationTests(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
         self.assertIn("first-mode Laplace resolvent identity", completed.stdout)
+        self.assertIn("critical Lq translation identity", completed.stdout)
+        self.assertIn("critical Bregman perturbation bound", completed.stdout)
 
         manuscript = (ROOT / "sec_verified_A2_results.tex").read_text(encoding="utf-8")
         for label in (
@@ -32,6 +34,9 @@ class OracleA2VerificationTests(unittest.TestCase):
             "thm:low-dimensional-finite-covariance-threshold",
             "thm:multidim-l2-moment-threshold",
             "prop:high-dimensional-finite-covariance-obstruction",
+            "lem:critical-lq-translation-remainder",
+            "lem:critical-lq-kl-perturbation",
+            "thm:high-dimensional-kl-moment-threshold",
         ):
             self.assertIn(r"\label{" + label + "}", manuscript)
 
