@@ -6,12 +6,15 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from sympy import factorint
+
 from verify_finite_claims import (
     atomic_family_multiplicity,
     bell_number,
     bicolored_graph_count,
     classify_support_three,
     connected_minimal_cover_count,
+    exact_rank_prime_count,
     factorint_fibonacci,
     load_factorization_archive,
     local_limit_probability,
@@ -21,17 +24,76 @@ from verify_finite_claims import (
     omega_big,
     private_cover_lower_bound,
     private_cover_upper_bound,
+    rank_window_deaggregation_data,
     rank_pure_sector,
     run_battery,
     theta_constant,
     theta_normalized_cover_ratio,
     upper_fiber_exhaustive,
     upper_fiber_threshold,
+    refined_private_cover_upper_bound,
     write_factorization_archive,
 )
 
 
 class FiniteClaimTests(unittest.TestCase):
+    def test_rank_window_deaggregation_bounds_through_120(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                data = rank_window_deaggregation_data(n)
+                self.assertLessEqual(data.prime_window_maximum, data.multiplicity)
+                self.assertLessEqual(
+                    data.multiplicity, data.prime_window_maximum + 1
+                )
+                self.assertLessEqual(data.visible_rank_maximum, data.multiplicity)
+                self.assertLessEqual(
+                    data.multiplicity,
+                    1 + data.visible_rank_maximum * data.exponent_product,
+                )
+                self.assertGreaterEqual(
+                    math.log(data.multiplicity)
+                    - math.log(data.visible_rank_maximum),
+                    0.0,
+                )
+                self.assertLessEqual(
+                    math.log(data.multiplicity)
+                    - math.log(data.visible_rank_maximum),
+                    math.log(2) + data.exponent_cost + 1e-12,
+                )
+
+    def test_squarefree_exact_rank_partition_and_blms_pigeonhole(self):
+        checks = 0
+        for n in range(3, 121):
+            factors = factorint(n)
+            if any(exponent != 1 for exponent in factors.values()):
+                continue
+            data = rank_window_deaggregation_data(n)
+            exact_rank_total = sum(
+                exact_rank_prime_count(d)
+                for d in range(1, n + 1)
+                if n % d == 0
+            )
+            self.assertEqual(exact_rank_total, len(factorint_fibonacci(n)))
+            self.assertGreaterEqual(
+                data.multiplicity,
+                exact_rank_total / (2 ** omega(n) - 1),
+            )
+            checks += 1
+        self.assertEqual(checks, 73)
+
+    def test_refined_private_cover_bound_and_boundary_convention(self):
+        self.assertEqual(atomic_family_multiplicity(2), 1)
+        self.assertEqual(refined_private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(refined_private_cover_upper_bound(2, 1), 10)
+        self.assertEqual(refined_private_cover_upper_bound(3, 1), 50)
+        for support_size in range(1, 20):
+            for multiplicity in (1, 2, 5):
+                self.assertLessEqual(
+                    refined_private_cover_upper_bound(support_size, multiplicity),
+                    multiplicity**support_size
+                    * refined_private_cover_upper_bound(support_size, 1),
+                )
+
     def test_minimal_cover_formula_and_connected_counts(self):
         self.assertEqual(
             tuple(minimal_cover_count(k) for k in range(1, 7)),
@@ -181,6 +243,9 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
         self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
         self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
+        self.assertIn("Rank-window deaggregation inequalities: 28/28", report)
+        self.assertIn("Squarefree BLMS pigeonhole inequalities: 17/17", report)
+        self.assertIn("Refined private-cover upper bounds: 28/28", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
         self.assertNotIn("Deepening Delta", report)

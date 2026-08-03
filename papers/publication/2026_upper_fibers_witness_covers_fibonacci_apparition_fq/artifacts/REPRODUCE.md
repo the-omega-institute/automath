@@ -19,7 +19,9 @@ multiplies back to the stated Fibonacci number.
 - `verify_finite_claims.py`: independent direct and structural computations,
   finite-bound checks, exact minimal-cover and connected-cover enumeration,
   theta-normalized and discrete local-limit checks, rank-pure sector checks,
-  environment reporting, and factorization-archive generation and validation.
+  rank-window deaggregation and squarefree pigeonhole checks, refined
+  private-coordinate upper bounds, environment reporting, and
+  factorization-archive generation and validation.
 - `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
   finite bounds, archive round trip, and report contents.
 - `fibonacci_factorizations_2_210.tsv`: exact factorization input/archive.
@@ -58,8 +60,12 @@ minimal-generator set. The exact Hearne--Wagner and connected-cover counts are
 cross-checked against direct cover enumeration for `1 <= k <= 4`. Exact counts
 through `k=80` also check convergence to the parity-dependent theta
 normalization, the connected-cover ratio, and the central discrete local
-limit. These finite checks do not resolve the asymptotic behavior of `R(n)` or
-compare the total connected and disconnected arithmetic sectors.
+limit. On every `3 <= n <= 210` layer the report also checks the pointwise
+rank-window deaggregation inequalities and the refined private-coordinate
+upper bound; on every squarefree layer it checks the exact-rank partition and
+the BLMS pigeonhole inequality. These finite checks do not resolve the
+asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
+connected and disconnected arithmetic sectors without those hypotheses.
 
 To verify the checksums in PowerShell:
 

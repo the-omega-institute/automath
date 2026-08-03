@@ -50,6 +50,16 @@ class RankPureSectorResult:
     canonical_products: Tuple[int, ...]
 
 
+@dataclass(frozen=True)
+class RankWindowDeaggregationData:
+    n: int
+    visible_rank_maximum: int
+    prime_window_maximum: int
+    multiplicity: int
+    exponent_product: int
+    exponent_cost: float
+
+
 @lru_cache(maxsize=None)
 def fibonacci(n: int) -> int:
     """Return F_n by fast doubling."""
@@ -490,6 +500,20 @@ def _mobius(value: int) -> int:
 
 
 @lru_cache(maxsize=None)
+def exact_rank_prime_count(rank: int) -> int:
+    """Return #Pi_alpha(rank) by exact Mobius inversion."""
+    if rank < 1:
+        raise ValueError("rank must be positive")
+    divisors = divisors_from_factorization(
+        tuple(sorted((int(p), int(e)) for p, e in factorint(rank).items()))
+    )
+    return sum(
+        _mobius(rank // divisor) * len(factorint_fibonacci(divisor))
+        for divisor in divisors
+    )
+
+
+@lru_cache(maxsize=None)
 def rank_pure_sector(n: int) -> RankPureSectorResult:
     """Verify the rank-pure cover embedding on one finite arithmetic layer."""
     if n < 3:
@@ -523,12 +547,7 @@ def rank_pure_sector(n: int) -> RankPureSectorResult:
     }
 
     for rank in support_rank.values():
-        mobius_count = sum(
-            _mobius(rank // divisor) * len(factorint_fibonacci(divisor))
-            for divisor in divisors_from_factorization(
-                tuple(sorted((int(p), int(e)) for p, e in factorint(rank).items()))
-            )
-        )
+        mobius_count = exact_rank_prime_count(rank)
         if mobius_count != len(primes_by_rank.get(rank, tuple())):
             raise AssertionError(f"exact-rank prime count failed at n={n}, rank={rank}")
 
@@ -591,10 +610,25 @@ def private_cover_upper_bound(k: int, multiplicity: int) -> int:
     )
 
 
+def refined_private_cover_upper_bound(k: int, multiplicity: int) -> int:
+    """Count private-coordinate encodings with one total ladder choice."""
+    if k < 0:
+        raise ValueError("k must be nonnegative")
+    if multiplicity < 1:
+        raise ValueError("multiplicity must be positive")
+    return sum(
+        math.comb(k, size)
+        * (multiplicity * 2 ** (k - size) + 1) ** size
+        for size in range(1, k + 1)
+    )
+
+
 @lru_cache(maxsize=None)
 def atomic_family_multiplicity(n: int) -> int:
     """Return max #A_{I,J}(n) over nonempty essential/full supports."""
-    if n < 3:
+    if n == 2:
+        return 1
+    if n < 2:
         raise ValueError("atomic multiplicity is used here only for n >= 3")
     n_factors = factor_dict(
         tuple(sorted((int(p), int(e)) for p, e in factorint(n).items()))
@@ -627,6 +661,38 @@ def atomic_family_multiplicity(n: int) -> int:
     return max(family_counts.values())
 
 
+@lru_cache(maxsize=None)
+def rank_window_deaggregation_data(n: int) -> RankWindowDeaggregationData:
+    """Return the finite quantities in the rank-window deaggregation bounds."""
+    if n < 3:
+        raise ValueError("rank-window deaggregation is used only for n >= 3")
+    n_factors = {
+        int(prime): int(exponent) for prime, exponent in factorint(n).items()
+    }
+    divisors = divisors_from_factorization(tuple(sorted(n_factors.items())))
+    window_totals: Dict[frozenset[int], int] = {}
+    visible_counts = []
+    for divisor in divisors:
+        full_support = frozenset(
+            prime
+            for prime, exponent in n_factors.items()
+            if valuation(divisor, prime) == exponent
+        )
+        if not full_support:
+            continue
+        count = exact_rank_prime_count(divisor)
+        visible_counts.append(count)
+        window_totals[full_support] = window_totals.get(full_support, 0) + count
+    return RankWindowDeaggregationData(
+        n=n,
+        visible_rank_maximum=max([1, *visible_counts]),
+        prime_window_maximum=max(window_totals.values(), default=0),
+        multiplicity=atomic_family_multiplicity(n),
+        exponent_product=math.prod(n_factors.values()),
+        exponent_cost=sum(math.log(exponent) for exponent in n_factors.values()),
+    )
+
+
 def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     if exhaustive_max < 30:
         raise ValueError("exhaustive_max must be at least 30")
@@ -643,6 +709,11 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     rank_pure_membership_layers = 0
     odd_rank_pure_layers = 0
     odd_complete_realizations = 0
+    deaggregation_layers = 0
+    deaggregation_checks = 0
+    squarefree_layers = 0
+    squarefree_pigeonhole_checks = 0
+    refined_private_bound_checks = 0
 
     cover_formula_checks = 0
     connected_cover_checks = 0
@@ -676,6 +747,62 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         if n >= 3:
             count = len(threshold.minimal_generators)
             k = omega(n)
+            deaggregation_layers += 1
+            deaggregation = rank_window_deaggregation_data(n)
+            log_gap = math.log(deaggregation.multiplicity) - math.log(
+                deaggregation.visible_rank_maximum
+            )
+            if (
+                deaggregation.prime_window_maximum
+                <= deaggregation.multiplicity
+                <= deaggregation.prime_window_maximum + 1
+                and deaggregation.visible_rank_maximum
+                <= deaggregation.multiplicity
+                <= 1
+                + deaggregation.visible_rank_maximum
+                * deaggregation.exponent_product
+                and -1e-12 <= log_gap
+                <= math.log(2) + deaggregation.exponent_cost + 1e-12
+            ):
+                deaggregation_checks += 1
+            else:
+                failures.append(f"n={n}: rank-window deaggregation bound failed")
+
+            refined_upper = refined_private_cover_upper_bound(
+                k, deaggregation.multiplicity
+            )
+            if count <= refined_upper:
+                refined_private_bound_checks += 1
+            else:
+                counterexamples.append(
+                    f"n={n}: #M={count} exceeds refined private-cover "
+                    f"upper bound {refined_upper}"
+                )
+
+            n_factorization = factorint(n)
+            if all(int(exponent) == 1 for exponent in n_factorization.values()):
+                squarefree_layers += 1
+                exact_rank_total = sum(
+                    exact_rank_prime_count(divisor)
+                    for divisor in divisors_from_factorization(
+                        tuple(
+                            sorted(
+                                (int(p), int(e))
+                                for p, e in n_factorization.items()
+                            )
+                        )
+                    )
+                )
+                if (
+                    exact_rank_total == len(factorint_fibonacci(n))
+                    and deaggregation.multiplicity
+                    >= exact_rank_total / (2**k - 1)
+                ):
+                    squarefree_pigeonhole_checks += 1
+                else:
+                    failures.append(
+                        f"n={n}: squarefree exact-rank pigeonhole bound failed"
+                    )
             if k <= 4:
                 rank_pure_layers += 1
                 try:
@@ -821,6 +948,12 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
             f"{abs(local_limit_probability(k, 0)[0] - local_limit_probability(k, 0)[1]):.3e}"
             for k in (40, 80)
         ),
+        f"  Rank-window deaggregation inequalities: {deaggregation_checks}/"
+        f"{deaggregation_layers}",
+        f"  Squarefree BLMS pigeonhole inequalities: "
+        f"{squarefree_pigeonhole_checks}/{squarefree_layers}",
+        f"  Refined private-cover upper bounds: {refined_private_bound_checks}/"
+        f"{deaggregation_layers}",
         "",
         "Corrected n=30 data:",
         f"  A(30) = {n30.a_count}",

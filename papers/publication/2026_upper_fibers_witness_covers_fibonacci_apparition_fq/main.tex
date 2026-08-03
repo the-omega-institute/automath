@@ -70,8 +70,14 @@ The lower bound has an explicit parity-dependent Jacobi theta constant and is
 realized by connected minimal generators. It does not imply that disconnected
 generators are negligible in the full arithmetic count. The upper estimate is
 not an asymptotic formula without additional control of the unresolved quantity
-$R(n)$. We also classify the cases $\omega(n)\leq3$ and prove unique connected-
-block factorizations for $B_n$ and its minimal elements.
+$R(n)$. We prove that the mean contribution from aggregating several exact-rank
+classes in one support window is only $O(x\log\log x)$, reducing the mean
+interface to a visible single-rank maximum. We also show that a published
+conjecture of Bugeaud--Luca--Mignotte--Siksek would contradict the resulting
+mean sparse-window hypothesis, and give a blockwise condition under which
+disconnected generators are exponentially negligible. Finally, we classify
+the cases $\omega(n)\leq3$ and prove unique connected-block factorizations for
+$B_n$ and its minimal elements.
 \end{abstract}
 
 \medskip
@@ -156,7 +162,14 @@ embedding of arbitrary minimal set covers, which transfers the classical theta
 asymptotic and a discrete central local limit to an explicit Fibonacci sector.
 These lower results isolate, rather than resolve, the arithmetic multiplicity
 $R(n)$. Accordingly, we make no unconditional claim of a sharp asymptotic for
-$\#\mathcal M_n$ or of the negligibility of its disconnected part.
+$\#\mathcal M_n$ or of the negligibility of its disconnected part. We do,
+however, isolate the mean interface further: support-window aggregation costs
+only $O(x\log\log x)$ on average, so only a visible single-rank maximum remains.
+A conditional dominance theorem also identifies the stronger blockwise control
+that would make the disconnected part exponentially negligible. The mean
+sparse-window hypothesis is not presented as a prediction: Conjecture~5.1 of
+Bugeaud--Luca--Mignotte--Siksek
+\cite{BugeaudLucaMignotteSiksek2005FewPrimeDivisors} would imply its failure.
 
 Call a prime power $\theta=p^e$ \emph{atomic for the index $d$} if
 $\alpha(\theta)=d$ and $\alpha(p^{e-1})<d$. An \emph{$n$-witness cover} is a
@@ -2241,7 +2254,8 @@ antichain in $B_n$, so $\widthop(B_n)\ge\#\mathcal M_n$.
 %% ====================================================================
 
 Write $\Omega(N)=\sum_p\nu_p(N)$ for the number of prime factors of $N$
-counted with multiplicity. For $n\ge3$ define the maximal atomic rank-window
+counted with multiplicity. Set $R(2)=1$, consistently with
+$\mathcal M_2=\varnothing$. For $n\ge3$ define the maximal atomic rank-window
 multiplicity
 \begin{equation}\label{eq:rank-window-multiplicity}
  R(n):=\max\!\left\{1,
@@ -2252,6 +2266,136 @@ By the prime--ladder alternative, the nonsingleton families counted here are the
 exact-rank windows $P_J(n)$, whereas every ladder family contributes at most
 one atom. Thus $R(n)$ records exactly the arithmetic multiplicity not fixed by
 the support combinatorics.
+
+We first remove the contribution caused solely by collecting several exact
+rank classes in one support window. For $d\mid n$, write
+\[
+ T_n(d):=\{\ell\in\mathcal P(n):
+ \nu_\ell(d)=\nu_\ell(n)\}.
+\]
+
+\begin{theorem}[Mean rank-window deaggregation]
+\label{thm:mean-rank-window-deaggregation}
+Put
+\[
+ a(d):=\#\Pi_\alpha(d),\qquad
+ \mathcal D^+(n):=\{d\mid n:T_n(d)\ne\varnothing\},
+\]
+and
+\[
+ A^*(n):=\max\left\{1,\max_{d\in\mathcal D^+(n)}a(d)\right\}.
+\]
+Then, as $x\to\infty$,
+\begin{equation}\label{eq:mean-window-deaggregation}
+ \sum_{3\le n\le x}\omega(n)\log R(n)
+ =\sum_{3\le n\le x}\omega(n)\log A^*(n)
+ +O(x\log\log x).
+\end{equation}
+Consequently the mean sparse-window hypothesis \textup{(H2)} is equivalent to
+\begin{equation}\label{eq:visible-single-rank-interface}
+ \sum_{3\le n\le x}\omega(n)
+ \log\max\left\{1,
+ \max_{\substack{d\mid n\\T_n(d)\ne\varnothing}}
+ \#\Pi_\alpha(d)\right\}
+ =o\bigl(x(\log\log x)^2\bigr).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For nonempty $J\subseteq\mathcal P(n)$, let
+\[
+ W_J(n):=\{d\mid n:T_n(d)=J\}.
+\]
+If $n=\prod_\ell\ell^{e_\ell}$, then
+\begin{equation}\label{eq:support-window-size}
+ \#W_J(n)=\prod_{\ell\notin J}e_\ell.
+\end{equation}
+The prime atoms in the family with essential and full supports $(J,J)$ form
+the disjoint union
+\[
+ \coprod_{d\in W_J(n)}\Pi_\alpha(d),
+\]
+because a prime has a unique rank of apparition. By
+Lemma~\ref{thm:primitive-ladder-dichotomy}, every remaining effective atomic
+family is a ladder family with singleton essential support. Once that
+essential coordinate $\ell$ is fixed, the underlying prime is $\ell$, and
+the full-exponent equation in Proposition~\ref{prop:prime-power-ladders}
+determines at most one ladder exponent. Therefore, with
+\[
+ P(n):=\max_{\varnothing\ne J\subseteq\mathcal P(n)}
+       \sum_{d\in W_J(n)}a(d),
+\]
+one has
+\begin{equation}\label{eq:prime-window-versus-R}
+ P(n)\le R(n)\le P(n)+1.
+\end{equation}
+Every $d\in\mathcal D^+(n)$ belongs to one of the windows above. Hence
+\[
+ A^*(n)\le R(n)
+ \le1+A^*(n)\max_J\#W_J(n)
+ \le1+A^*(n)\prod_{\ell^{e_\ell}\parallel n}e_\ell.
+\]
+Writing
+\[
+ h(n):=\sum_{\ell^{e_\ell}\parallel n}\log e_\ell,
+\]
+and using $A^*(n)\ge1$ gives
+\begin{equation}\label{eq:pointwise-window-deaggregation}
+ 0\le\log R(n)-\log A^*(n)\le\log2+h(n).
+\end{equation}
+For each exponent $e\ge2$, $\log e\le\sum_{2\le j\le e}\log j$, so
+\[
+ h(n)\le\sum_{\substack{p^j\mid n\\j\ge2}}\log j.
+\]
+The classical mean estimate \eqref{eq:mean-omega-input}, used uniformly with
+$\log\log(3y)$ in place of $\log\log y$ for small $y$, yields
+\begin{align*}
+ \sum_{n\le x}\omega(n)h(n)
+ &\le\sum_{\substack{p^j\le x\\j\ge2}}\log j
+       \sum_{m\le x/p^j}\omega(p^jm)\\
+ &\le\sum_{\substack{p^j\le x\\j\ge2}}\log j
+       \sum_{m\le x/p^j}(1+\omega(m))\\
+ &\ll x\log\log x\sum_p\sum_{j\ge2}\frac{\log j}{p^j}
+ \ll x\log\log x.
+\end{align*}
+The double series converges absolutely. Summing
+\eqref{eq:pointwise-window-deaggregation} and using
+$\sum_{n\le x}\omega(n)\ll x\log\log x$ proves
+\eqref{eq:mean-window-deaggregation}; the stated equivalence follows because
+$x\log\log x=o(x(\log\log x)^2)$.
+\end{proof}
+
+\begin{corollary}[Single-rank sufficient and necessary interfaces]
+\label{cor:single-rank-mean-interfaces}
+A sufficient condition for \textup{(H2)} is
+\begin{equation}\label{eq:single-rank-sufficient-condition}
+ \sum_{d\le x}
+ \frac{(\omega(d)+\log\log x)\log\max\{1,a(d)\}}{d}
+ =o\bigl((\log\log x)^2\bigr).
+\end{equation}
+Conversely, \textup{(H2)} implies the diagonal necessary condition
+\begin{equation}\label{eq:single-rank-necessary-condition}
+ \sum_{n\le x}\omega(n)\log\max\{1,a(n)\}
+ =o\bigl(x(\log\log x)^2\bigr).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Since
+\[
+ \log A^*(n)\le\sum_{d\mid n}\log\max\{1,a(d)\},
+\]
+the substitution $n=dm$ and $\omega(dm)\le\omega(d)+\omega(m)$ gives
+\[
+ \sum_{n\le x}\omega(n)\log A^*(n)
+ \ll x\sum_{d\le x}
+ \frac{(\omega(d)+\log\log x)\log\max\{1,a(d)\}}{d}.
+\]
+Thus \eqref{eq:single-rank-sufficient-condition} and
+Theorem~\ref{thm:mean-rank-window-deaggregation} imply \textup{(H2)}. For the
+necessary condition, $n\in\mathcal D^+(n)$, and hence
+$R(n)\ge A^*(n)\ge\max\{1,a(n)\}$; summation proves the claim.
+\end{proof}
 
 For a finite set $V$, let $\operatorname{MinCov}(V)$ denote the set of
 minimal, or irredundant, covers of $V$ by nonempty subsets:
@@ -2763,6 +2907,32 @@ and the mean order of $\omega$ give only
 $O(x\log x\log\log x)$, not $o(x(\log\log x)^2)$.
 \end{proof}
 
+\begin{remark}[Cumulative rank estimates do not imply \textup{(H2)}]
+\label{rem:cumulative-rank-estimates-insufficient}
+This nonimplication can be made quantitative without asserting that the model
+below is realized by Fibonacci ranks. Fix $c>0$ and put
+\[
+ a_0(d):=\max\left\{1,
+ \left\lfloor\frac{cd}{\log(2d)}\right\rfloor\right\}.
+\]
+Elementary integral comparison gives
+\[
+ \sum_{d\le y}a_0(d)\ll\frac{y^2}{\log y},\qquad
+ a_0(d)\ll\frac d{\log(2d)},\qquad
+ \sum_{d\le y}a_0(d)\log d\ll y^2.
+\]
+Thus this formal multiplicity sequence has the cumulative, pointwise, and
+logarithmic-mass scales supplied by the presently known estimates. On the
+other hand, $\log a_0(n)=\log n-\log\log n+O(1)$ for large $n$.
+Partial summation in \eqref{eq:mean-omega-input} therefore gives
+\[
+ \sum_{n\le x}\omega(n)\log a_0(n)
+ \sim x\log x\log\log x,
+\]
+which is larger than the scale in \textup{(H2)}. Hence cumulative exact-rank
+counts alone cannot establish the required visible-divisor maximum estimate.
+\end{remark}
+
 \begin{corollary}[Unconditional lower growth]
 \label{cor:unconditional-lower-growth}
 For almost all $n$,
@@ -2797,7 +2967,7 @@ For every $\varepsilon>0$,
 \]
 \end{conjecture}
 
-\begin{conjecture}[Mean rank-window sparsity]\label{hyp:mean-window}
+\begin{conjecture}[Mean sparse-window hypothesis]\label{hyp:mean-window}
 One has
 \[
  \sum_{3\le n\le x}\omega(n)\log R(n)
@@ -2805,6 +2975,51 @@ One has
 \tag{H2}
 \]
 \end{conjecture}
+
+\begin{proposition}[Conditional obstruction from Fibonacci prime divisors]
+\label{prop:blms-obstructs-mean-window}
+Assume Conjecture~5.1 of Bugeaud--Luca--Mignotte--Siksek
+\cite{BugeaudLucaMignotteSiksek2005FewPrimeDivisors}, namely that
+$\omega(F_n)\gg\log n$ for composite $n$. Then
+\begin{equation}\label{eq:blms-mean-window-obstruction}
+ \liminf_{x\to\infty}
+ \frac{\sum_{3\le n\le x}\omega(n)\log R(n)}
+ {x(\log\log x)^2}
+ \ge\frac6{\pi^2}(1-\log2)>0.
+\end{equation}
+In particular, under that published conjecture, the mean sparse-window
+hypothesis \textup{(H2)} is false.
+\end{proposition}
+
+\begin{proof}
+Let $n$ be squarefree and put $k=\omega(n)$. The exact-rank partition of the
+prime divisors of $F_n$ gives
+\[
+ \omega(F_n)=\sum_{d\mid n}a(d).
+\]
+For squarefree $n$, every nonempty support $J\subseteq\mathcal P(n)$ has the
+single rank $d=\prod_{\ell\in J}\ell$ in its window. Since $a(1)=0$, the
+pigeonhole principle and \eqref{eq:prime-window-versus-R} give
+\begin{equation}\label{eq:squarefree-blms-pigeonhole}
+ R(n)\ge\max_{d\mid n}a(d)
+ \ge\frac{\omega(F_n)}{2^k-1}.
+\end{equation}
+Under the stated conjecture, for every sufficiently large squarefree composite
+$n$,
+\[
+ \log R(n)\ge\log\log n-k\log2+O(1).
+\]
+The Hardy--Ramanujan theorem has an exceptional set of $o(x)$ integers, so on
+all but $o(x)$ squarefree integers one has
+$k=(1+o(1))\log\log n$. Consequently
+\[
+ \omega(n)\log R(n)
+ \ge(1-\log2+o(1))(\log\log n)^2
+\]
+on this set. Squarefree integers have density $6/\pi^2$, and squarefree prime
+indices have density zero. Summation over squarefree composite indices proves
+\eqref{eq:blms-mean-window-obstruction}.
+\end{proof}
 
 \begin{corollary}[Conditional normal and mean orders]
 \label{cor:conditional-orders}
@@ -2863,8 +3078,153 @@ conjecture is presently known. Accordingly, the normal and mean equivalents
 statements are \eqref{eq:private-cover-entropy-order} and
 \eqref{eq:mean-logarithmic-growth}, together with the stronger connected lower
 bound \eqref{eq:theta-connected-log-lower-bound}. None of these estimates
-implies that the disconnected part of $\mathcal M_n$ is negligible.
+implies that the disconnected part of $\mathcal M_n$ is negligible; the
+strictly stronger blockwise hypothesis needed for that conclusion is isolated
+in Theorem~\ref{thm:blockwise-connected-dominance} below.
 \end{remark}
+
+\begin{lemma}[Refined private-coordinate upper bound]
+\label{lem:refined-private-coordinate-upper-bound}
+For $m\ge2$, put $s=\omega(m)$ and $r=R(m)$. Then
+\begin{equation}\label{eq:refined-private-coordinate-upper-bound}
+ \#\mathcal M_m\le U_s(r),\qquad
+ U_s(r):=\sum_{t=1}^s\binom st
+             \bigl(r2^{s-t}+1\bigr)^t.
+\end{equation}
+There is an absolute constant $K$ such that, for all $s,r\ge1$,
+\begin{equation}\label{eq:refined-upper-versus-covers}
+ U_s(r)\le Kr^sC_s.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The case $m=2$ is immediate from $\mathcal M_2=\varnothing$ and $R(2)=1$.
+Suppose $m\ge3$, and let a witness cover have $t$ atoms. Choose the canonical
+private coordinate of each atom as in the proof of
+Theorem~\ref{thm:minimal-generator-growth}; let $P$ be the resulting
+$t$-set and $Q$ its complement. For a fixed $x\in P$, a prime atom has full
+support $\{x\}\cup U$ for some $U\subseteq Q$, giving at most
+$r2^{s-t}$ choices. A ladder atom with essential coordinate $x$ must be a
+power of the index prime $x$, and the full-exponent equation in
+Proposition~\ref{prop:prime-power-ladders} determines at most one such atom
+over all its possible full supports. Thus the atom assigned to $x$ has at most
+$r2^{s-t}+1$ choices. Summing over $P$ and $t$ proves
+\eqref{eq:refined-private-coordinate-upper-bound}; ignoring coverage and
+coprimeness only enlarges the count.
+
+For $r\ge1$,
+\[
+ U_s(r)\le r^sU_s(1).
+\]
+If $t\le3s/4$, then, uniformly in this range,
+\[
+ (2^{s-t}+1)^t
+ =2^{t(s-t)}(1+2^{-(s-t)})^t
+ =(1+o(1))2^{t(s-t)}.
+\]
+The sum over $t>3s/4$ is
+$2^{-s^2/16+O(s)}$ times a central term of
+$b_s=\sum_t\binom st2^{t(s-t)}$. Hence $U_s(1)\sim b_s$. The published
+asymptotic \eqref{eq:minimal-cover-theta} gives $C_s\sim b_s$; enlarging a
+constant to cover the finitely many small values of $s$ proves
+\eqref{eq:refined-upper-versus-covers}.
+\end{proof}
+
+\begin{theorem}[Blockwise criterion for connected dominance]
+\label{thm:blockwise-connected-dominance}
+Let $(n_j)$ be a sequence, put $V_j=\mathcal P(n_j)$ and
+$k_j=\omega(n_j)\to\infty$, and for nonempty $C\subseteq V_j$ put
+\[
+ (n_j)_C:=\prod_{\ell\in C}\ell^{\nu_\ell(n_j)}.
+\]
+For a nontrivial partition $\Pi\in\mathsf{Part}(V_j)$ define
+\[
+ \Delta(\Pi):=\sum_{\substack{C,D\in\Pi\\C<D}}|C||D|
+ =\frac{k_j^2-\sum_{C\in\Pi}|C|^2}{2}.
+\]
+Suppose
+\begin{equation}\label{eq:blockwise-window-condition}
+ \varepsilon_j:=
+ \max_{\substack{\Pi\in\mathsf{Part}(V_j)\\|\Pi|\ge2}}
+ \frac{\sum_{C\in\Pi}|C|\log R((n_j)_C)}{\Delta(\Pi)}
+ \longrightarrow0\qquad\text{\rm(BW)}.
+\end{equation}
+Then
+\begin{equation}\label{eq:connected-dominance-conclusion}
+ \frac{\#(\mathcal M_{n_j}\setminus\mathcal M_{n_j}^{\rm conn})}
+ {\#\mathcal M_{n_j}^{\rm conn}}
+ \le\exp\left[-\left(\frac{\log2}{2}-o(1)\right)k_j\right]
+ =o(1).
+\end{equation}
+A sufficient condition for \eqref{eq:blockwise-window-condition} is
+\begin{equation}\label{eq:blockwise-window-sufficient-condition}
+ \max_{\varnothing\ne C\subsetneq V_j}
+ \frac{\log R((n_j)_C)}{k_j-|C|}\longrightarrow0
+ \qquad\text{\rm(BW$'$)}.
+\end{equation}
+In particular, \eqref{eq:connected-dominance-conclusion} holds if
+$R((n_j)_C)=1$ for every nonempty proper block $C$ and all sufficiently
+large $j$.
+\end{theorem}
+
+\begin{proof}
+The unique connected-block factorization in
+Theorem~\ref{thm:mingenerator-connected-factorization} gives
+\[
+ \#(\mathcal M_{n_j}\setminus\mathcal M_{n_j}^{\rm conn})
+ =\sum_{\substack{\Pi\in\mathsf{Part}(V_j)\\|\Pi|\ge2}}
+   \prod_{C\in\Pi}M^{\rm conn}((n_j)_C).
+\]
+Apply Lemma~\ref{lem:refined-private-coordinate-upper-bound} to each block.
+The theta asymptotic \eqref{eq:minimal-cover-theta} gives uniform two-sided
+bounds
+\[
+ C_s\asymp(s+1)^{-1/2}2^{s^2/4+s}.
+\]
+Consequently there is an absolute constant $K_1$ such that every partition
+$\Pi$ with block sizes $s_C=|C|$ contributes, after division by $C_{k_j}$,
+at most
+\begin{equation}\label{eq:partition-contribution-bound}
+ K_1^{|\Pi|}\sqrt{k_j}\,
+ \exp\left\{-\frac{\log2}{2}\Delta(\Pi)
+ +\sum_{C\in\Pi}|C|\log R((n_j)_C)\right\}.
+\end{equation}
+Under \textup{(BW)}, this is
+\[
+ K_1^{|\Pi|}\sqrt{k_j}\,
+ \exp\left\{-\left(\frac{\log2}{2}-o(1)\right)
+ \Delta(\Pi)\right\},
+\]
+where the $o(1)$ is uniform over all nontrivial partitions.
+
+If every block has size at most $k_j/2$, then
+$\Delta(\Pi)\ge k_j^2/4$. There are at most $k_j^{k_j}$ set partitions,
+so the total of these terms is $\exp(-\Omega(k_j^2))$. Otherwise there is a
+unique largest block of size $k_j-q>k_j/2$. Then
+$\Delta(\Pi)\ge q(k_j-q)$, and the remaining $q$ vertices can be selected and
+partitioned in at most
+\[
+ \binom{k_j}{q}\mathsf B_q\le(ek_j)^q
+\]
+ways. Summing \eqref{eq:partition-contribution-bound} over
+$1\le q<k_j/2$ therefore gives
+\[
+ \exp\left[-\left(\frac{\log2}{2}-o(1)\right)k_j\right]C_{k_j}.
+\]
+Corollary~\ref{cor:theta-refined-connected-entropy} gives
+$M^{\rm conn}(n_j)\ge(1-o(1))C_{k_j}$, proving
+\eqref{eq:connected-dominance-conclusion}.
+
+Finally, if the maximum in \textup{(BW$'$)} is $\eta_j$, then every block of
+a nontrivial partition is proper and
+\[
+ \sum_{C\in\Pi}|C|\log R((n_j)_C)
+ \le\eta_j\sum_{C\in\Pi}|C|(k_j-|C|)
+ =2\eta_j\Delta(\Pi).
+\]
+Thus \textup{(BW$'$)} implies \textup{(BW)}, and the last assertion is the
+case $\eta_j=0$.
+\end{proof}
 
 %% ====================================================================
 \section{Numerical evidence}\label{sec:numerical}
@@ -2989,7 +3349,12 @@ $q\nmid F_{n/p}$ compute $\mathcal M_n$.  The script checks
 \eqref{eq:finite-minimal-generator-bound}, the simplified bound
 $\#\mathcal M_n\le n^{\omega(n)}$, the odd Bell lower bound, and both finite
 private-cover bounds in \eqref{eq:private-cover-finite-bounds}. It also
-computes $R(n)$ and the running ratio against the support-entropy scale
+computes $R(n)$, checks the pointwise deaggregation bounds
+\eqref{eq:prime-window-versus-R} and
+\eqref{eq:pointwise-window-deaggregation}, verifies the exact-rank partition
+and \eqref{eq:squarefree-blms-pigeonhole} on every squarefree layer, checks
+the refined upper bound \eqref{eq:refined-private-coordinate-upper-bound},
+and records the running ratio against the support-entropy scale
 $(\log2)\omega(n)^2/4$. For the rank-pure results, it directly enumerates all
 minimal covers for $k\le4$, checks the Hearne--Wagner and connected-component
 counts, verifies the M\"obius exact-rank-prime formula on every support, and
@@ -3005,6 +3370,8 @@ every row by multiplication. The Python and SymPy versions, commands, file
 inventory, and verification scope are in \path{artifacts/REPRODUCE.md}, and
 \path{artifacts/SHA256SUMS} authenticates the supplied files. These finite
 checks do not provide distributional control of $R(n)$.
+In particular, they do not prove the asymptotic hypotheses \textup{(H2)} or
+\textup{(BW)}.
 
 %% ====================================================================
 \section{Further questions}\label{sec:questions}
@@ -3021,10 +3388,14 @@ four-coordinate pattern. Corollary~\ref{cor:theta-refined-connected-entropy}
 shows that connected kernels already realize the complete known lower support
 entropy, so a full connected high-support classification is not a low-entropy
 residual problem. It would be a separate project.
-\item Prove or disprove either rank-window sparsity conjecture in
-Theorem~\ref{thm:minimal-generator-growth}. As explained in
-Remark~\ref{rem:exact-average-open-interface}, this is precisely an upper
-distribution problem for the exact-rank prime multiplicities inside $R(n)$.
+\item Prove or disprove either rank-window sparsity conjecture. For the mean
+hypothesis, Theorem~\ref{thm:mean-rank-window-deaggregation} reduces the
+problem to the visible single-rank maximum
+\eqref{eq:visible-single-rank-interface}; Proposition
+\ref{prop:blms-obstructs-mean-window} also shows that a published conjecture
+predicts failure rather than sparsity. As explained in
+Remark~\ref{rem:exact-average-open-interface}, the remaining question is an
+upper distribution problem for exact-rank prime multiplicities.
 The paper derives conditional normal and mean orders, but does not
 claim that either conjecture follows from presently known primitive-divisor
 theorems, RH, or ERH.
