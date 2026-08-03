@@ -480,6 +480,96 @@ def search_singular_counterexample() -> dict[str, int | str | bool]:
     }
 
 
+def verify_inflated_fibonacci_separation(
+    primes: Sequence[int] = (2, 3, 5, 7, 11, 13),
+    maximum_power: int = 4,
+    maximum_index: int = 24,
+) -> dict[str, int]:
+    """Check the ambient/reachable determinant separation for Fibonacci tails."""
+    fibonacci = [1, 2]
+    while len(fibonacci) <= maximum_index + 3:
+        fibonacci.append(fibonacci[-1] + fibonacci[-2])
+
+    reachable_state = (1, 2, 3)
+    reachable_next = (2, 3, 5)
+    reachable_action = ((0, 1), (1, 1))
+    reachable_determinant = determinant(reachable_action)
+    saturation_minors = (
+        reachable_state[0] * reachable_next[1]
+        - reachable_state[1] * reachable_next[0],
+        reachable_state[0] * reachable_next[2]
+        - reachable_state[2] * reachable_next[0],
+        reachable_state[1] * reachable_next[2]
+        - reachable_state[2] * reachable_next[1],
+    )
+
+    cases = 0
+    failures = 0
+
+    def check(condition: bool) -> None:
+        nonlocal cases, failures
+        cases += 1
+        failures += int(not condition)
+
+    check(gcd(*saturation_minors) == 1)
+    check(reachable_determinant == -1)
+
+    for prime in primes:
+        inflated = LinearSystem(
+            name=f"inflated_fibonacci_{prime}",
+            polynomial=f"(x-{prime})(x^2-x-1)",
+            recurrence=(-prime, 1 - prime, prime + 1),
+            initials=reachable_state,
+            max_digit=1,
+        )
+        companion = tuple(
+            tuple(row[1:]) for row in digit_matrix(inflated, 0)[1:]
+        )
+        check(determinant(companion) == -prime)
+        check(matvec(companion, reachable_state) == reachable_next)
+        twice = matvec(companion, reachable_next)
+        check(
+            tuple(
+                twice[index] - reachable_next[index] - reachable_state[index]
+                for index in range(3)
+            )
+            == (0, 0, 0)
+        )
+
+        for index in range(maximum_index + 1):
+            check(
+                fibonacci[index + 3]
+                == -prime * fibonacci[index]
+                + (1 - prime) * fibonacci[index + 1]
+                + (prime + 1) * fibonacci[index + 2]
+            )
+
+        for power in range(1, maximum_power + 1):
+            modulus = prime**power
+            check(gcd(determinant(companion), modulus) != 1)
+            check(gcd(reachable_determinant, modulus) == 1)
+            state = tuple(entry % modulus for entry in reachable_state)
+            for _ in range(maximum_index + 1):
+                following = tuple(entry % modulus for entry in matvec(companion, state))
+                twice = tuple(entry % modulus for entry in matvec(companion, following))
+                check(
+                    all(
+                        (twice[index] - following[index] - state[index]) % modulus
+                        == 0
+                        for index in range(3)
+                    )
+                )
+                check(any(entry % modulus for entry in state))
+                state = following
+
+    return {
+        "cases": cases,
+        "failures": failures,
+        "reachable_rank": 2,
+        "reachable_determinant": reachable_determinant,
+    }
+
+
 def run_verification() -> dict[str, object]:
     affine_cases = sum(check_affine_action(system) for system in SYSTEMS)
     examples = (
@@ -563,6 +653,7 @@ def run_verification() -> dict[str, object]:
         for prime in range(2, thresholds[edge] + 1)
         if is_prime(prime)
     )
+    inflated_fibonacci = verify_inflated_fibonacci_separation()
     return {
         "systems_checked": len(SYSTEMS),
         "affine_cases": affine_cases,
@@ -572,6 +663,8 @@ def run_verification() -> dict[str, object]:
         "local_layer_isolation_failures": local_layer_isolation_failures,
         "deep_chain_failures": deep_chain_failures,
         "divisibility_tree_failures": divisibility_tree_failures,
+        "inflated_fibonacci_cases": inflated_fibonacci["cases"],
+        "inflated_fibonacci_failures": inflated_fibonacci["failures"],
         "witnesses": witnesses,
         "counterexample": search_singular_counterexample(),
     }
@@ -589,6 +682,8 @@ def _format_report(report: dict[str, object]) -> str:
         f"{report['local_layer_isolation_failures']}",
         f"deep chain failures: {report['deep_chain_failures']}",
         f"divisibility tree failures: {report['divisibility_tree_failures']}",
+        f"inflated Fibonacci cases: {report['inflated_fibonacci_cases']}",
+        f"inflated Fibonacci failures: {report['inflated_fibonacci_failures']}",
     ]
     for witness in report["witnesses"]:
         lines.append(
@@ -607,6 +702,7 @@ def _format_report(report: dict[str, object]) -> str:
         "local_layer_isolation_failures",
         "deep_chain_failures",
         "divisibility_tree_failures",
+        "inflated_fibonacci_failures",
     )
     lines.append(
         "OVERALL: PASS"

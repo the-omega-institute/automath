@@ -165,3 +165,44 @@ combination with a fixed recurrence block orbit, the deleted-prime intrinsic
 Cantor--Bendixson rank for distinct prime support with bounded local
 valuations, the nonunit escape dichotomy and MCF-immunity consequences, and
 the unit-system arbitrary-depth quotient and induced-tree constructions.
+
+## Minimal-reachable recurrence and witness inflation (2026-08-03)
+
+The public arXiv Atom API returned zero records for each of the following
+literal queries:
+
+- `all:"reachable recurrence module" AND all:"multiple context-free"`;
+- `all:"minimal recurrence" AND all:"multiple context-free language"`;
+- `all:"Fibonacci" AND all:"multiple context-free" AND all:"prime factors"`;
+- `all:"nonunit Pisot" AND all:"context-free"`;
+- `all:"affine block semigroup" AND all:numeration`;
+- `all:"prime factor" AND all:"multiple context-free language"`;
+- `all:"multiple context-free" AND all:numeration`;
+- `all:"multiple context-free" AND all:prime`.
+
+The broader query `all:"Pisot numeration" AND all:prime` returned only
+Adrian-Maria Scheerer, "Normality in Pisot Numeration Systems,"
+arXiv:1503.08047, published in *Ergodic Theory and Dynamical Systems* 37
+(2017), 1872--1886, DOI 10.1017/etds.2015.53. It concerns normality of
+prime concatenations and does not address MCFLs, reachable recurrence
+lattices, or recurrence-witness inflation. The query
+`all:"minimal polynomial" AND all:"numeration system" AND all:recurrence`
+returned only Olivier Carton, Jake Sudbery, and Reem Yassawi, "From some
+Pisot numerations to topological groups," arXiv:2606.30496. Its abstract
+studies Condition F, topological
+groups, and torus factors; it does not state the minimal-reachable determinant
+lemma or the base-\(p\)/inflated-Fibonacci escape separation.
+
+The cyclic-subspace identities used in the oracle response---equality of the
+minimal and characteristic polynomials on a cyclic restriction, and recovery
+of the minimal polynomial from the first Krylov dependence---are standard
+rational-canonical-form facts; see F. R. Gantmacher, *The Theory of Matrices*,
+vol. I, Chelsea, 1959, Chapter VI. They are not retained as new theorem
+content.
+
+Crossref bibliographic searches for `multiple context-free Pisot numeration
+prime factor`, `minimal recurrence reachable lattice numeration`, `inflated
+Fibonacci recurrence nonunit Pisot`, and `affine semigroup p-adic numeration`
+returned only standard Pisot tiling, numeration, recurrence, and affine
+semigroup papers unrelated to the retained strict separation. These searches are
+negative novelty evidence, not a proof that no related result exists.

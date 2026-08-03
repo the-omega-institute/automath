@@ -49,6 +49,19 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["local_layer_isolation_failures"], 0)
         self.assertEqual(report["deep_chain_failures"], 0)
         self.assertEqual(report["divisibility_tree_failures"], 0)
+        self.assertGreater(report["inflated_fibonacci_cases"], 100)
+        self.assertEqual(report["inflated_fibonacci_failures"], 0)
+
+    def test_inflated_fibonacci_has_unit_reachable_action(self):
+        report = verifier.verify_inflated_fibonacci_separation(
+            primes=(2, 3, 5, 7, 11, 13),
+            maximum_power=4,
+            maximum_index=24,
+        )
+        self.assertGreater(report["cases"], 100)
+        self.assertEqual(report["failures"], 0)
+        self.assertEqual(report["reachable_rank"], 2)
+        self.assertEqual(report["reachable_determinant"], -1)
 
     def test_synchronized_multi_block_orbit_for_all_tested_parameters(self):
         fibonacci = verifier.system_by_name("fibonacci")

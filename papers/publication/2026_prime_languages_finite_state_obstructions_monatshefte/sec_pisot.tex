@@ -139,8 +139,9 @@ numeration system in the literature.
       \qquad(n\ge J).
     \]
   \end{enumerate}
-  It is a \emph{unit system} if \(\abs{a_0}=1\). No regularity of
-  \(\mathcal R_U\) is included in this definition.
+  Relative to this recurrence witness, it is a \emph{unit system} if
+  \(\abs{a_0}=1\). No regularity of \(\mathcal R_U\) is included in
+  this definition.
 \end{definition}
 
 \begin{lemma}[Affine recurrence block action]
@@ -176,6 +177,11 @@ numeration system in the literature.
   is \(\det C=(-1)^{d-1}a_0\). Multiplicativity of determinants gives
   the assertion for blocks.
 \end{proof}
+
+The coefficient \(a_0\) belongs to the displayed recurrence witness,
+not intrinsically to \((U,A,\mathcal R_U)\); see
+\Cref{prop:recurrence-witness-separation} for the resulting strict
+separation.
 
 We now use the standard fan-out convention: a multiple context-free
 language (MCFL) is a \(k\)-MCFL for some finite \(k\ge1\). An infinite
@@ -424,6 +430,56 @@ The second alternative is necessary. In ordinary base \(b\), where
 \(\{0^n1:n\ge0\}\) represents \(b^n\). Its distinct prime support is
 fixed, while \(v_p(b^n)\) is unbounded for every \(p\mid b\).
 
+\begin{proposition}[Recurrence-witness inflation and strict separation]
+  \label{prop:recurrence-witness-separation}
+  If a tail has minimal recurrence polynomial \(\mu_U\), then for every
+  prime \(p\) it also has a recurrence witness with characteristic
+  polynomial \((X-p)\mu_U(X)\).  When \(\abs{\mu_U(0)}=1\), the trailing
+  coefficient of this witness has absolute value \(p\).
+
+  Moreover, there are two canonical eventually recurrent
+  numeration systems with regular representation languages and recurrence
+  witnesses whose trailing-coefficient prime set is \(\{p\}\), but with
+  opposite bounded-outside-prime escape behavior:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item ordinary base \(p\) contains the infinite regular language
+    \(\{0^n1:n\ge0\}\), whose values are \(p^n\);
+    \item the Zeckendorf system, equipped with the order-three recurrence
+    witness
+    \[
+      F_{n+3}=-pF_n+(1-p)F_{n+1}+(p+1)F_{n+2},
+    \]
+    contains no infinite MCFL \(L\) for which
+    \[
+      \sup_{w\in L}\omega_{\{p\}^c}(\val(w))<\infty.
+    \]
+  \end{enumerate}
+  Thus the prime divisors of an arbitrarily selected trailing coefficient
+  do not determine the escape behavior of the numeration system.
+\end{proposition}
+
+\begin{proof}
+  The polynomial identity \(\mu_U(C)z_J=0\) remains valid after
+  multiplication by \(X-p\).  In the companion convention, the trailing
+  recurrence coefficient is the negative of the constant term of the
+  characteristic polynomial, proving the first assertion.
+
+  The base-\(p\) assertion is the preceding example.  For the Zeckendorf
+  sequence, multiplication of its minimal polynomial by \(X-p\) gives
+  \[
+    (X-p)(X^2-X-1)
+      =X^3-(p+1)X^2+(p-1)X+p,
+  \]
+  which is exactly the displayed recurrence and has trailing coefficient
+  \(-p\).  This changes neither the sequence nor its regular canonical
+  representation language.  On the other hand, its minimal recurrence
+  has unit trailing coefficient.  If the displayed supremum were bounded
+  by \(K\), then
+  \(\omega(\val(w))\le K+1\) on \(L\), contrary to the unit-recurrence
+  conclusion of
+  \Cref{thm:nonunit-mcfl-escape-dichotomy}.  This proves the separation.
+\end{proof}
+
 \begin{theorem}[Arbitrarily deep quotient congruences]
   \label{thm:unit-mcfl-deep-congruence-chain}
   Suppose \(\abs{a_0}=1\), and let \(L\subseteq\mathcal R_U\) be an
@@ -596,12 +652,16 @@ fixed, while \(v_p(b^n)\) is unbounded for every \(p\mid b\).
   the argument to any of those classes requires a stationary finite
   block action that is invertible modulo represented primes.
 
-  In a nonunit recurrence, the action can be singular modulo primes
-  dividing \(a_0\), so the unrestricted unit-system divisibility tree
-  need not follow. \Cref{thm:nonunit-mcfl-escape-dichotomy} is the exact
-  surviving statement: every infinite MCFL must acquire unbounded prime
-  support outside that finite set or unbounded valuation at one of its
-  primes. The ordinary-base example preceding
+  For a fixed nonunit recurrence witness, the ambient action can be
+  singular modulo primes dividing \(a_0\), so the unrestricted unit-system
+  divisibility tree need not follow. The witness-relative surviving
+  statement is \Cref{thm:nonunit-mcfl-escape-dichotomy}: every infinite
+  MCFL must acquire unbounded prime support outside that finite set or
+  unbounded valuation at one of its primes. The invariant restricted
+  action and the failure of arbitrary recurrence witnesses to classify
+  escape behavior are distinguished in
+  \Cref{prop:recurrence-witness-separation}.
+  The ordinary-base example preceding
   \Cref{thm:unit-mcfl-deep-congruence-chain} shows that the valuation
   alternative cannot be removed.
 \end{remark}
