@@ -8,6 +8,24 @@
 
 ---
 
+## 冲刺状态 · 停跑论文的最终目标期刊（滚动更新）
+
+深化冲刺（ChatGPT 5.6 sol pro chat 模式多轮追问 + codex 逐条检验 + 独立复核）。**一篇论文在 Oracle 开始复述已整合内容（即新一轮全判 `ALREADY-IN-PAPER`）时判定饱和、停跑**，此表随即记录其最终目标期刊。
+
+| 篇 | 冲刺状态 | 停跑判据 | 最终目标期刊 |
+|---|---|---|---|
+| **A5** `finite_parts` | ⏹ **已停跑（饱和）** | 第 2 轮 11 条声称 (A)–(K) **全部 `ALREADY-IN-PAPER`，零整合** | **PRIMARY: Dynamical Systems (T&F)**<br>BACKUP: Qualitative Theory of Dynamical Systems · Monatshefte für Mathematik<br>⚠️ **勿回投 ETDS**（已拒其前身）|
+| A2 `cayley_chebyshev` | 🔄 第 2 轮进行中 | — | 待定（原评 JFA）|
+| A3 `sharp_three_window` | 🔄 第 2 轮检验中 | — | 待定（原评 DCDS-A）|
+| A4 `prime_languages` | 🔄 第 2 轮进行中 | — | 待定（原评 Monatshefte）|
+| A6 `zeckendorf_fibers` | 🔄 第 2 轮进行中 | — | 待定（原评 JNT）|
+| A7 `upper_fibers` | 🔄 第 2 轮进行中 | — | 待定（原评 Fibonacci Q.）|
+| A8 `detector_shells` | 🔄 第 2 轮进行中 | — | 待定（原评 Stochastic Models）|
+
+**A5 冲刺产出（已提交）**：精确商覆盖分裂因子、恒等类普遍 Artin 失效、指数精度调和重正规化；标量 Bernoulli 展开优先权明确归 Hasegawa–Saito（arXiv:1507.00498）；"Fourier 刚性"一组经检验仅为已有定理逆线性形式，拒绝写入。
+
+---
+
 ## 现状定稿 · 目标期刊（2026-08，深化 + Oracle 外审后，codex 选刊评估）
 
 6 篇核心 Track A 均已完成：**深化新定理（verifier 验证）→ 前沿门 → Oracle referee 外审 → 修订**（A2/A3/A7/A8 首轮已提交；A5/A6 二轮已提交）。目标期刊依**修订后实际内容 + 外审新颖性天花板**定稿（以本表为准，下方各表"候选刊"列为深化前参考）：
