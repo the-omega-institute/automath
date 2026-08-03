@@ -53,17 +53,25 @@ Fibonacci number $F_n$ whose rank of apparition under the map $\alpha$ equals
 $n$. We describe $B_n$ as an upper set in the divisor lattice of $F_n$ and
 classify its minimal elements by irredundant witness covers of the prime
 coordinates of $n$. The resulting support budget $\omega(m)\leq\omega(n)$ is
-best possible as a uniform bound. If $k=\omega(n)$ and $R(n)$ is the largest
-number of atomic prime powers with one fixed essential/full support pair, then
+best possible as a uniform bound. We construct a rank-pure exact-rank-prime
+sector that embeds every irredundant cover of the prime coordinates except for
+at most two explicitly identified exceptional supports, preserving the complete
+support hypergraph. If $k=\omega(n)$ and $R(n)$ is the largest number of
+atomic prime powers with one fixed essential/full support pair, then, uniformly
+as $k\to\infty$,
 \[
- \frac{\log 2}{4}k^2-O(1)\leq \log\#\mathcal M_n
+ \log\#\mathcal M_n^{\rm conn}\geq
+ \frac{\log 2}{4}k^2+k\log2-\frac12\log k+O(1),
+ \qquad
+ \log\#\mathcal M_n
  \leq \frac{\log 2}{4}k^2+k\log R(n)+O(k).
 \]
-The coefficient $\log 2/4$ is the exact entropy coefficient of the support
-construction; the displayed estimate is not an asymptotic formula for
-$\log\#\mathcal M_n$ without additional control of the unresolved arithmetic
-quantity $R(n)$. We also classify the cases $\omega(n)\leq3$ and prove unique
-connected-block factorizations for $B_n$ and its minimal elements.
+The lower bound has an explicit parity-dependent Jacobi theta constant and is
+realized by connected minimal generators. It does not imply that disconnected
+generators are negligible in the full arithmetic count. The upper estimate is
+not an asymptotic formula without additional control of the unresolved quantity
+$R(n)$. We also classify the cases $\omega(n)\leq3$ and prove unique connected-
+block factorizations for $B_n$ and its minimal elements.
 \end{abstract}
 
 \medskip
@@ -143,9 +151,12 @@ claimed as independent arithmetic advances. The contributions developed from
 these facts are the witness-cover formulation, the exhaustive support-three
 classification with its arithmetic realization test, the passage of connected
 block factorization to minimal elements, and the support-entropy coefficient
-$\log 2/4$. The last result isolates, rather than resolves, the arithmetic
-multiplicity $R(n)$. Accordingly, we make no unconditional claim of a sharp
-asymptotic for $\#\mathcal M_n$.
+$\log 2/4$. A further contribution is the support-preserving rank-pure
+embedding of arbitrary minimal set covers, which transfers the classical theta
+asymptotic and a discrete central local limit to an explicit Fibonacci sector.
+These lower results isolate, rather than resolve, the arithmetic multiplicity
+$R(n)$. Accordingly, we make no unconditional claim of a sharp asymptotic for
+$\#\mathcal M_n$ or of the negligibility of its disconnected part.
 
 Call a prime power $\theta=p^e$ \emph{atomic for the index $d$} if
 $\alpha(\theta)=d$ and $\alpha(p^{e-1})<d$. An \emph{$n$-witness cover} is a
@@ -182,17 +193,18 @@ $r=\lfloor k/2\rfloor$, then
  (2^r-1)^{k-r}\le\#\mathcal M_n
  \le\sum_{s=1}^{k}\binom{k}{s}(2R(n))^s2^{s(k-s)}.
 \]
-Hence, uniformly as $k\to\infty$,
+The rank-pure sector gives the stronger connected lower bound
 \[
- \frac{\log2}{4}k^2+O(1)\le\log\#\mathcal M_n
- \le\frac{\log2}{4}k^2+k\log R(n)+O(k).
+ \log\#\mathcal M_n^{\rm conn}\ge
+ \frac{\log2}{4}k^2+k\log2-\frac12\log k+O(1)
 \]
- The coefficient $\log2/4$ is exact for the support combinatorics. This is not
- an asymptotic formula for $\log\#\mathcal M_n$ unless
- $R(n)=\exp(o(\omega(n)))$. The theorem also gives unconditional
- almost-everywhere and primorial lower bounds; separate conjectures about
- $R(n)$ imply conditional normal-order and mean equivalents. This is
- Theorem~\ref{thm:minimal-generator-growth} and its corollaries.
+uniformly as $k\to\infty$, with an explicit parity-dependent theta constant.
+The coefficient $\log2/4$ is exact for the support combinatorics. These lower
+bounds do not give an asymptotic formula for $\log\#\mathcal M_n$ unless
+$R(n)=\exp(o(\omega(n)))$. Separate conjectures about $R(n)$ imply conditional
+normal-order and mean equivalents. These statements are
+Theorems~\ref{thm:rank-pure-universality} and
+\ref{thm:minimal-generator-growth}, together with their corollaries.
 \end{previewtheorem}
 
 Making this classification effective requires the prime-power apparition
@@ -231,8 +243,8 @@ As secondary consequences, nonexceptional birth layers contain principal
 intervals natural after choosing an exact-rank prime
 (Corollary~\ref{cor:canonical-principal-interval}), Boolean subposets of rank
 $\tau(n)-O(1)$ (Corollary~\ref{cor:boolean-skeleton}), and---for odd
-$n$---Bell-type lower bounds on $\#\mathcal M_n$
-(Corollary~\ref{cor:odd-primitive-cover-realization}).
+$n$---realizations of every minimal cover of $\mathcal P(n)$
+(Corollary~\ref{cor:odd-rank-pure-universality}).
 
 The paper is organized as follows. Section~\ref{sec:prelim} collects classical
 background on Fibonacci divisibility and exact-rank primes.
@@ -243,7 +255,8 @@ Section~\ref{sec:connected} proves the connected-block factorization
 (Theorems~\ref{thm:birth-connected-factorization}
 and~\ref{thm:mingenerator-connected-factorization}) and the partition-lattice
 formulas.
-Section~\ref{sec:growth} proves the support-entropy bounds and isolates the
+Section~\ref{sec:growth} proves rank-pure universality, the theta-refined
+support-entropy bounds, and the discrete local limit, before isolating the
 unresolved arithmetic interface. Section~\ref{sec:numerical} presents the
 finite verification, and
 Section~\ref{sec:questions} records further questions.
@@ -2240,6 +2253,270 @@ exact-rank windows $P_J(n)$, whereas every ladder family contributes at most
 one atom. Thus $R(n)$ records exactly the arithmetic multiplicity not fixed by
 the support combinatorics.
 
+For a finite set $V$, let $\operatorname{MinCov}(V)$ denote the set of
+minimal, or irredundant, covers of $V$ by nonempty subsets:
+\[
+ \operatorname{MinCov}(V):=
+ \left\{\mathcal C\subseteq 2^V\setminus\{\varnothing\}:
+ \bigcup_{S\in\mathcal C}S=V,\quad
+ S\nsubseteq\bigcup_{T\in\mathcal C\setminus\{S\}}T
+ \ \text{for every }S\in\mathcal C\right\}.
+\]
+
+\begin{theorem}[Rank-pure universality]\label{thm:rank-pure-universality}
+Let $n\ge3$, put $V=\mathcal P(n)$, and, for every nonempty $S\subseteq V$,
+define
+\[
+ n_S:=\prod_{\ell\in S}\ell^{\nu_\ell(n)},\qquad
+ a_n(S):=\#\Pi_\alpha(n_S),
+\]
+and
+\[
+ \mathcal E_n:=\{S\subseteq V:S\ne\varnothing,\ n_S\in\{2,6,12\}\}.
+\]
+Then $\#\mathcal E_n\le2$, and every member of $\mathcal E_n$ has cardinality
+at most two. Define the rank-pure prime sector
+\[
+ \mathcal R_n^{\rm rp}:=
+ \left\{
+ \prod_{S\in\mathcal C}p_S:
+ \begin{array}{l}
+  \mathcal C\in\operatorname{MinCov}(V),\quad
+  \mathcal C\cap\mathcal E_n=\varnothing,\\
+  p_S\in\Pi_\alpha(n_S)\quad(S\in\mathcal C)
+ \end{array}
+ \right\}.
+\]
+Then $\mathcal R_n^{\rm rp}\subseteq\mathcal M_n$, the displayed representation is
+unique, and
+\begin{equation}\label{eq:rank-pure-weighted-sector}
+ \#\mathcal R_n^{\rm rp}=
+ \sum_{\substack{\mathcal C\in\operatorname{MinCov}(V)\\
+                   \mathcal C\cap\mathcal E_n=\varnothing}}
+ \prod_{S\in\mathcal C}a_n(S),
+ \qquad
+ a_n(S)=\sum_{d\mid n_S}\mu(n_S/d)\,\omega(F_d).
+\end{equation}
+Moreover, the support hypergraph of the product attached to $\mathcal C$ has
+edge set exactly $\mathcal C$. In particular, connected minimal covers map to
+$\mathcal M_n^{\rm conn}$, with their complete hypergraph structure preserved.
+\end{theorem}
+
+\begin{proof}
+The map $S\mapsto n_S$ is injective. If $n_S=2$, then
+$S=\{2\}$ and $\nu_2(n)=1$. If $n_S=6$, then
+$S=\{2,3\}$ and $\nu_2(n)=\nu_3(n)=1$; if $n_S=12$, then
+$S=\{2,3\}$, $\nu_2(n)=2$, and $\nu_3(n)=1$. Thus the ranks $6$ and $12$
+cannot both occur, while rank $2$ can coexist only with rank $6$. This proves
+the assertions about $\mathcal E_n$.
+
+Fix $\mathcal C\in\operatorname{MinCov}(V)$ avoiding $\mathcal E_n$. For
+every $S\in\mathcal C$, the integer $n_S$ is at least $3$ and is not $6$ or
+$12$. Theorem~\ref{thm:primitive-divisors} therefore gives a prime
+$p_S\in\Pi_\alpha(n_S)$. Distinct supports have distinct ranks, so the primes
+$p_S$ are distinct. Since $p_S$ is a prime atom and $d^-(p_S)=1$,
+\[
+ E_n(p_S)=T_n(p_S)=S.
+\]
+Consequently the coverage and private-coordinate conditions defining
+$\operatorname{MinCov}(V)$ are exactly the witness-cover conditions for
+$\{p_S:S\in\mathcal C\}$. Theorem~\ref{thm:witness-classification} places
+$\prod_{S\in\mathcal C}p_S$ in $\mathcal M_n$.
+
+Unique factorization recovers every selected prime from the product; its rank
+$\alpha(p_S)=n_S$ then recovers $S$. Hence both the cover and all prime choices
+are recovered, proving injectivity and the weighted count in
+\eqref{eq:rank-pure-weighted-sector}. The formula for $a_n(S)$ is
+Lemma~\ref{lem:primitive-prime-mobius-count}. Finally,
+\[
+ \operatorname{supp}_n(\alpha(p_S))=
+ \operatorname{supp}_n(n_S)=S,
+\]
+so Definition~\ref{def:support-hypergraph} gives precisely the edge set
+$\mathcal C$ and therefore preserves connected components.
+\end{proof}
+
+\begin{corollary}[Odd-layer cover universality]
+\label{cor:odd-rank-pure-universality}
+Let $n\ge3$ be odd and put $k=\omega(n)$. Then $\mathcal E_n=\varnothing$.
+After fixing one prime $\pi_S\in\Pi_\alpha(n_S)$ for every nonempty
+$S\subseteq\mathcal P(n)$, the map
+\[
+ \mathcal C\longmapsto\prod_{S\in\mathcal C}\pi_S
+\]
+embeds $\operatorname{MinCov}(\mathcal P(n))$ into $\mathcal M_n$ and
+preserves the support hypergraph. Hence, if $C_k$ denotes the number of minimal
+covers of a labelled $k$-set, then
+\begin{equation}\label{eq:odd-minimal-cover-bound}
+ \#\mathcal M_n\ge C_k,
+ \qquad
+ \widthop(B_n)\ge C_k.
+\end{equation}
+Through Royle's correspondence
+\cite{Royle2000SetCoversSplitGraphs}, every isomorphism type of split graph on
+$k$ vertices consequently has a rank-pure Fibonacci realization on the prime
+coordinates of $n$.
+\end{corollary}
+
+\begin{proof}
+Every nonempty $n_S$ is odd and at least $3$, so no support is exceptional.
+Theorem~\ref{thm:rank-pure-universality} gives the embedding and support
+preservation. Minimal generators form an antichain, which proves the width
+bound. Royle's theorem is a correspondence between isomorphism types of split
+graphs and minimal covers; choosing a labelling of a representative cover and
+then applying the embedding gives the final assertion.
+\end{proof}
+
+We next fix the classical enumeration input, without claiming it as a result of
+this paper. Let $C_{k,s}$ count the minimal covers of a labelled $k$-set having
+$s$ members, put $C_k=\sum_s C_{k,s}$, and put
+\[
+ b_k:=\sum_{s=0}^k\binom{k}{s}2^{s(k-s)}.
+\]
+Hearne and Wagner \cite{HearneWagner1973MinimalCovers} proved
+\begin{equation}\label{eq:hearne-wagner}
+ C_{k,s}=\sum_{j=s}^k\binom{k}{j}
+ \genfrac{\{}{\}}{0pt}{}{j}{s}
+ (2^s-s-1)^{k-j}.
+\end{equation}
+The central-sum asymptotic occurring in the labelled split-graph enumeration of
+Bender--Richmond--Wormald \cite{BenderRichmondWormald1985ChordalSplit}, in the
+form recorded also by Troyka \cite[Section~3]{Troyka2019SplitGraphs}, gives,
+with
+\[
+ \vartheta_0:=\sum_{r\in\mathbb Z}2^{-r^2},\qquad
+ \vartheta_1:=\sum_{r\in\mathbb Z}2^{-(r+1/2)^2},\qquad
+ \varepsilon\equiv k\pmod2,
+\]
+the published asymptotic
+\begin{equation}\label{eq:minimal-cover-theta}
+ C_k\sim b_k\sim
+ \vartheta_\varepsilon\binom{k}{\lfloor k/2\rfloor}2^{k^2/4}.
+\end{equation}
+In particular, $b_{k-1}/b_k=O(2^{-k/2})$.
+
+\begin{lemma}[Connected minimal-cover concentration]
+\label{lem:connected-minimal-cover-concentration}
+If $C_k^{\rm conn}$ denotes the number of connected minimal covers, then
+\begin{equation}\label{eq:connected-minimal-cover-asymptotic}
+ C_k-C_k^{\rm conn}=O(kC_{k-1})=o(C_k).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Connected components of a minimal cover are themselves minimal covers, so the
+labelled exponential formula gives
+\[
+ C_k=\sum_{j=1}^k\binom{k-1}{j-1}C_j^{\rm conn}C_{k-j}.
+\]
+The terms $j=1$ and $j=k-1$ contribute $O(kC_{k-1})$. Choosing the least
+private element in each cover member gives $C_j\le b_j\le2^j2^{j^2/4}$.
+For the remaining terms, use this bound and the central lower bound for
+$C_{k-1}$ furnished by the $s=\lfloor(k-1)/2\rfloor$ term of
+\eqref{eq:hearne-wagner}. After division by $kC_{k-1}$, the term indexed by
+$j$ is
+\[
+ \ll \binom{k}{j}
+ 2^{-(j-1)(k-j-1)/2}\qquad(2\le j\le k-2).
+\]
+The sum of these bounds is bounded (and in fact tends to zero), by symmetry
+and separation into $2\le j\le k/2$ and its reflection. This proves the first
+estimate in \eqref{eq:connected-minimal-cover-asymptotic}; the second equality
+follows from \eqref{eq:minimal-cover-theta}.
+\end{proof}
+
+\begin{corollary}[Theta-refined connected support entropy]
+\label{cor:theta-refined-connected-entropy}
+Uniformly along every sequence of integers for which $k=\omega(n)\to\infty$,
+\begin{equation}\label{eq:theta-connected-lower-bound}
+ \#\mathcal M_n^{\rm conn}\ge
+ (1-o(1))\,
+ \vartheta_\varepsilon\binom{k}{\lfloor k/2\rfloor}2^{k^2/4},
+ \qquad \varepsilon\equiv k\pmod2.
+\end{equation}
+Consequently
+\begin{equation}\label{eq:theta-connected-log-lower-bound}
+ \log\#\mathcal M_n^{\rm conn}\ge
+ \frac{\log2}{4}k^2+k\log2-\frac12\log k
+ +\log\vartheta_\varepsilon+\frac12\log\frac2\pi+o(1).
+\end{equation}
+The same lower bounds hold with $\mathcal M_n$ in place of
+$\mathcal M_n^{\rm conn}$.
+\end{corollary}
+
+\begin{proof}
+Fix an exceptional support $S_0\in\mathcal E_n$. If a minimal cover contains
+$S_0$, choose a canonical private vertex $x\in S_0$ of that member. Every
+other member avoids $x$ and is recovered from its canonical private vertex and
+an arbitrary subset of the remaining nonprivate vertices. The number of such
+encodings is at most $b_{k-1}$ for each choice of $x$. Therefore the number of
+minimal covers meeting $\mathcal E_n$ is at most
+\[
+ \sum_{S_0\in\mathcal E_n}|S_0|b_{k-1}\le4b_{k-1}=o(C_k).
+\]
+Lemma~\ref{lem:connected-minimal-cover-concentration} also shows that only
+$o(C_k)$ minimal covers are disconnected. Thus $(1-o(1))C_k$ covers are simultaneously
+connected and disjoint from $\mathcal E_n$. Theorem
+\ref{thm:rank-pure-universality} embeds them in
+$\mathcal M_n^{\rm conn}$, proving \eqref{eq:theta-connected-lower-bound}.
+Taking logarithms and using
+\[
+ \log\binom{k}{\lfloor k/2\rfloor}
+ =k\log2-\frac12\log k+\frac12\log\frac2\pi+o(1)
+\]
+gives \eqref{eq:theta-connected-log-lower-bound}.
+\end{proof}
+
+\begin{corollary}[Discrete local limit in a fixed-prime rank-pure sector]
+\label{cor:rank-pure-local-limit}
+Let $(n_j)$ be any sequence with $k_j=\omega(n_j)\to\infty$. For every
+$j$ and every nonexceptional nonempty support
+$S\subseteq\mathcal P(n_j)$, fix one prime
+$\pi_{j,S}\in\Pi_\alpha((n_j)_S)$. Let $\mathcal Q_{n_j}^{\rm rp}$ consist of the
+products $\prod_{S\in\mathcal C}\pi_{j,S}$ over all
+$\mathcal C\in\operatorname{MinCov}(\mathcal P(n_j))$ disjoint from
+$\mathcal E_{n_j}$, and choose $m$ uniformly from $\mathcal Q_{n_j}^{\rm rp}$. Put
+$W_j=\omega(m)$. Along the subsequence $k_j=2q_j$, for every fixed
+$d\in\mathbb Z$,
+\begin{equation}\label{eq:even-rank-pure-local-limit}
+ \Pr(W_j=q_j+d)\longrightarrow\frac{2^{-d^2}}{\vartheta_0}.
+\end{equation}
+Along the subsequence $k_j=2q_j+1$,
+\begin{equation}\label{eq:odd-rank-pure-local-limit}
+ \Pr(W_j=q_j+d)\longrightarrow
+ \frac{2^{-(d-1/2)^2}}{\vartheta_1}.
+\end{equation}
+In particular, $W_j=k_j/2+O_{\mathbb P}(1)$.
+\end{corollary}
+
+\begin{proof}
+Unique factorization and distinct support ranks show that $W_j$ is the number
+of members of the corresponding cover. By the proof of
+Corollary~\ref{cor:theta-refined-connected-entropy}, deleting covers meeting
+$\mathcal E_{n_j}$ changes the uniform distribution in total variation by
+$o(1)$. For $s=\lfloor k/2\rfloor+d$ with fixed $d$, the $j=s$ term of
+\eqref{eq:hearne-wagner} and the canonical-private-element encoding give
+\[
+ \binom{k}{s}(2^s-s-1)^{k-s}
+ \le C_{k,s}\le \binom{k}{s}2^{s(k-s)},
+ \qquad
+ C_{k,s}\sim\binom{k}{s}2^{s(k-s)}.
+\]
+Dividing this by \eqref{eq:minimal-cover-theta} gives
+\eqref{eq:even-rank-pure-local-limit} and
+\eqref{eq:odd-rank-pure-local-limit}. The quadratic limiting tails are
+summable, which is equivalent to tightness on the integer scale.
+\end{proof}
+
+\begin{remark}\label{rem:connected-lower-not-dominance}
+Corollary~\ref{cor:theta-refined-connected-entropy} proves that connected
+minimal generators alone realize the full currently known lower support
+entropy, including its linear and logarithmic corrections. It does not compare
+the total connected and disconnected parts of $\mathcal M_n$. Such a comparison
+would require upper control of the arithmetic multiplicities in $R(n)$ and is
+not presently available.
+\end{remark}
+
 \begin{theorem}[Combinatorial support entropy]
 \label{thm:minimal-generator-growth}
 For every integer $n\ge3$, put $k=\omega(n)$ and
@@ -2307,7 +2584,8 @@ sequence from index $2$ onward forces $d\ge n$; hence $\alpha(F_n)=n$.
 Because $B_n$ is a nonempty finite poset, it has a minimal element, so
 $\mathcal M_n\ne\varnothing$ and $L(n)$ is defined.
 
-We first prove the new lower bound. Fix $k\ge3$, and give
+We first prove the explicit finite private-cover bound in
+\eqref{eq:private-cover-finite-bounds}. Fix $k\ge3$, and give
 $\mathcal P(n)$ an arbitrary order. Put
 \[
  X=\mathcal P(n)\cap\{2,3\},\qquad r=\lfloor k/2\rfloor.
@@ -2556,9 +2834,11 @@ lower mean bound \eqref{eq:mean-logarithmic-growth}.
 
 \begin{remark}[Exact residual arithmetic interface]
 \label{rem:exact-average-open-interface}
-Theorem~\ref{thm:minimal-generator-growth} determines the support contribution:
-$\log2/4$ is its exact entropy coefficient, and the unresolved term in the
-upper bound is $\omega(n)\log R(n)$. The rank partition used in
+Corollary~\ref{cor:theta-refined-connected-entropy} and
+Theorem~\ref{thm:minimal-generator-growth} determine the currently available
+support contribution: $\log2/4$ is its exact quadratic coefficient, the
+rank-pure sector supplies its theta-refined lower terms, and the unresolved
+term in the upper bound is $\omega(n)\log R(n)$. The rank partition used in
 Lemma~\ref{lem:three-coordinate-arithmetic-tests} applies verbatim to every
 support size: prime-atom families are finite disjoint unions of the rank
 classes $\Pi_\alpha(d)$, while ladder families are singletons. Thus
@@ -2581,7 +2861,9 @@ conjecture is presently known. Accordingly, the normal and mean equivalents
 \eqref{eq:conditional-normal-order} and
 \eqref{eq:conditional-mean-order} are conditional; the unconditional
 statements are \eqref{eq:private-cover-entropy-order} and
-\eqref{eq:mean-logarithmic-growth}.
+\eqref{eq:mean-logarithmic-growth}, together with the stronger connected lower
+bound \eqref{eq:theta-connected-log-lower-bound}. None of these estimates
+implies that the disconnected part of $\mathcal M_n$ is negligible.
 \end{remark}
 
 %% ====================================================================
@@ -2708,8 +2990,14 @@ $q\nmid F_{n/p}$ compute $\mathcal M_n$.  The script checks
 $\#\mathcal M_n\le n^{\omega(n)}$, the odd Bell lower bound, and both finite
 private-cover bounds in \eqref{eq:private-cover-finite-bounds}. It also
 computes $R(n)$ and the running ratio against the support-entropy scale
-$(\log2)\omega(n)^2/4$. It reports $59/59$ set equalities for both comparisons
-and no finite-bound failures. The exact output is
+$(\log2)\omega(n)^2/4$. For the rank-pure results, it directly enumerates all
+minimal covers for $k\le4$, checks the Hearne--Wagner and connected-component
+counts, verifies the M\"obius exact-rank-prime formula on every support, and
+tests every canonical rank-pure product against the independently computed
+$\mathcal M_n$. This covers all $208$ layers $3\le n\le210$, including exact
+realization of every minimal cover on all $104$ odd layers. It reports $59/59$
+set equalities for both original comparisons and no finite-bound or rank-pure
+failures. The exact output is
 \path{artifacts/finite_verification.txt}. The exact factorizations used for
 $2\le n\le210$ are recorded in
 \path{artifacts/fibonacci_factorizations_2_210.tsv}; the verifier checks
@@ -2729,8 +3017,10 @@ the results proved above.
 \item Classify connected support kernels of size at least four. By
 Corollary~\ref{cor:four-support-reduction}, the one-, two-, and
 three-coordinate classifications already determine every disconnected
-four-coordinate pattern. A full connected high-support classification would be
-a separate project.
+four-coordinate pattern. Corollary~\ref{cor:theta-refined-connected-entropy}
+shows that connected kernels already realize the complete known lower support
+entropy, so a full connected high-support classification is not a low-entropy
+residual problem. It would be a separate project.
 \item Prove or disprove either rank-window sparsity conjecture in
 Theorem~\ref{thm:minimal-generator-growth}. As explained in
 Remark~\ref{rem:exact-average-open-interface}, this is precisely an upper
