@@ -100,6 +100,59 @@ def negative_continuant(entries: tuple[int, ...]) -> int:
     return previous
 
 
+def negative_continued_fraction_value(
+    composition: tuple[int, ...],
+) -> tuple[int, int]:
+    """Return p, q for the negative continued fraction with a_i=e_i+1."""
+    entries = tuple(part + 1 for part in composition)
+    denominator = negative_continuant(entries)
+    numerator = 1 if len(entries) == 1 else negative_continuant(entries[1:])
+    common = math.gcd(numerator, denominator)
+    return numerator // common, denominator // common
+
+
+def regular_partial_quotient_sum(numerator: int, denominator: int) -> int:
+    """Sum the canonical regular partial quotients of p/q in (0, 1)."""
+    if not 0 < numerator < denominator or math.gcd(numerator, denominator) != 1:
+        raise ValueError("expected a reduced fraction in (0, 1)")
+    total = 0
+    left, right = denominator, numerator
+    while right:
+        quotient, remainder = divmod(left, right)
+        total += quotient
+        left, right = right, remainder
+    return total
+
+
+def stern_brocot_layer_denominators(depth: int) -> list[int]:
+    """Denominators in the new Stern--Brocot layer of composition depth d."""
+    if depth < 1:
+        raise ValueError("depth must be positive")
+    return [
+        negative_continuant(tuple(part + 1 for part in composition))
+        for composition in compositions(depth)
+    ]
+
+
+def critical_slope_partial(
+    sigma: float, max_denominator: int
+) -> tuple[float, float, float]:
+    """Truncate the two absolutely convergent critical slope moments."""
+    numerator_sum = 0.0
+    denominator_sum = 0.0
+    for denominator in range(2, max_denominator + 1):
+        weight = denominator ** (-sigma)
+        log_denominator = math.log(denominator)
+        for numerator in range(1, denominator):
+            if math.gcd(numerator, denominator) != 1:
+                continue
+            digit_sum = regular_partial_quotient_sum(numerator, denominator)
+            cost = 2 * digit_sum - 1
+            numerator_sum += weight * log_denominator
+            denominator_sum += weight * cost
+    return numerator_sum, denominator_sum, numerator_sum / denominator_sum
+
+
 def weighted_generator_counters(max_layer: int) -> list[Counter[int]]:
     """Return exact multiplicity counters for generator weights at each cost."""
     letters = [Counter() for _ in range(max_layer + 1)]
@@ -137,7 +190,18 @@ def weighted_renewal_counterexample_search(
     failed_layers = []
     symbolic_checks = 0
     real_tilt_checks = 0
-    real_tilts = [beta_star, (beta_star + sigma) / 2.0, sigma]
+    real_tilts = [
+        -4.0,
+        -1.0,
+        0.0,
+        1.0,
+        2.0,
+        beta_star,
+        (beta_star + sigma) / 2.0,
+        sigma,
+        3.0,
+        5.0,
+    ]
 
     for layer in range(1, max_layer + 1):
         actual = Counter(
@@ -475,6 +539,89 @@ def main() -> int:
         "CRITICAL_CONSTANTS kappa={:.15f} beta_star={:.15f} "
         "strip_width={:.15f} rho={:.15f}".format(
             kappa, beta_star, sigma - beta_star, rho
+        )
+    )
+
+    maximum_depth = (args.max_layer - 1) // 2
+    all_real_layer_checks = 0
+    all_real_layer_failures = 0
+    for depth in range(1, maximum_depth + 1):
+        denominators = stern_brocot_layer_denominators(depth)
+        checks = [
+            len(denominators) == 2 ** (depth - 1),
+            min(denominators) >= depth + 1,
+            max(denominators) <= fib[depth + 2],
+            sum(denominators) == 2 * 3 ** (depth - 1),
+        ]
+        for composition in compositions(depth):
+            numerator, denominator = negative_continued_fraction_value(composition)
+            checks.append(
+                regular_partial_quotient_sum(numerator, denominator) - 1
+                == depth
+            )
+        all_real_layer_checks += len(checks)
+        all_real_layer_failures += sum(not check for check in checks)
+
+    exact_root_checks = [
+        abs((1.0 / phi) ** 3 / (1.0 - 2.0 / phi**2) - 1.0)
+        < 1.0e-14,
+        abs(2.0 * 0.5**3 / (1.0 - 3.0 * 0.5**2) - 1.0)
+        < 1.0e-14,
+        1.0 / phi < 1.0 / math.sqrt(2.0),
+        0.5 < 1.0 / math.sqrt(3.0),
+    ]
+    b_at_sigma = float(mpmath.zeta(sigma - 1) / mpmath.zeta(sigma) - 1)
+    b_below_sigma = float(
+        mpmath.zeta(sigma - 0.05 - 1) / mpmath.zeta(sigma - 0.05) - 1
+    )
+    b_above_sigma = float(
+        mpmath.zeta(sigma + 0.05 - 1) / mpmath.zeta(sigma + 0.05) - 1
+    )
+    root_phase_checks = [
+        abs(b_at_sigma - 1.0) < 1.0e-13,
+        b_below_sigma > 1.0,
+        b_above_sigma < 1.0,
+    ]
+    slope_rows = []
+    for cutoff in (100, 300, 1000):
+        slope_numerator, slope_denominator, slope = critical_slope_partial(
+            sigma, cutoff
+        )
+        slope_rows.append((cutoff, slope_numerator, slope_denominator, slope))
+    slope_checks = [
+        all(
+            math.isfinite(value) and value > 0.0
+            for _, numerator, denominator, slope in slope_rows
+            for value in (numerator, denominator, slope)
+        ),
+        all(
+            right[1] > left[1] and right[2] > left[2]
+            for left, right in zip(slope_rows, slope_rows[1:])
+        ),
+    ]
+    all_real_failures = (
+        all_real_layer_failures
+        + sum(not check for check in exact_root_checks)
+        + sum(not check for check in root_phase_checks)
+        + sum(not check for check in slope_checks)
+    )
+    failures += all_real_failures
+    messages.append(
+        "ALL_REAL_LAYER_AUDIT depths=1..{} checks={} failures={}".format(
+            maximum_depth, all_real_layer_checks, all_real_layer_failures
+        )
+    )
+    messages.append(
+        "ALL_REAL_ROOT_AUDIT exact_special_checks={} phase_values={} "
+        "failures={}".format(
+            exact_root_checks,
+            (b_below_sigma, b_at_sigma, b_above_sigma),
+            sum(not check for check in exact_root_checks + root_phase_checks),
+        )
+    )
+    messages.append(
+        "CRITICAL_SLOPE partial_rows={} checks={} failures={}".format(
+            slope_rows, slope_checks, sum(not check for check in slope_checks)
         )
     )
 
