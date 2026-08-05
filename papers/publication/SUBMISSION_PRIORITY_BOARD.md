@@ -12,15 +12,19 @@
 
 深化冲刺（ChatGPT 5.6 sol pro chat 模式多轮追问 + codex 逐条检验 + 独立复核）。**一篇论文在 Oracle 开始复述已整合内容（即新一轮全判 `ALREADY-IN-PAPER`）时判定饱和、停跑**，此表随即记录其最终目标期刊。
 
-| 篇 | 冲刺状态 | 停跑判据 | 最终目标期刊 |
-|---|---|---|---|
-| **A5** `finite_parts` | ⏹ **已停跑（饱和）** | 第 2 轮 11 条声称 (A)–(K) **全部 `ALREADY-IN-PAPER`，零整合** | **PRIMARY: Dynamical Systems (T&F)**<br>BACKUP: Qualitative Theory of Dynamical Systems · Monatshefte für Mathematik<br>⚠️ **勿回投 ETDS**（已拒其前身）|
-| A2 `cayley_chebyshev` | 🔄 第 2 轮进行中 | — | 待定（原评 JFA）|
-| A3 `sharp_three_window` | 🔄 第 2 轮检验中 | — | 待定（原评 DCDS-A）|
-| A4 `prime_languages` | 🔄 第 2 轮进行中 | — | 待定（原评 Monatshefte）|
-| A6 `zeckendorf_fibers` | 🔄 第 2 轮进行中 | — | 待定（原评 JNT）|
-| A7 `upper_fibers` | 🔄 第 2 轮进行中 | — | 待定（原评 Fibonacci Q.）|
-| A8 `detector_shells` | 🔄 第 2 轮进行中 | — | 待定（原评 Stochastic Models）|
+### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
+
+| 篇 | 冲刺轮次 | **PRIMARY** | BACKUP | 注意 |
+|---|---|---|---|---|
+| **A2** `cayley_chebyshev` | r1–r3 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 82 页需大幅压缩，主定理层次待理清 |
+| **A3** `sharp_three_window` | r1–r3 | **DCDS-A** | JNT · Dynamical Systems | 56 页；⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
+| **A4** `prime_languages` | r1–r3 | **Monatshefte für Mathematik** | TCS · JNT | MCFL immunity + 整除树提供了刊级新颖性；22k 词双主线恐被要求拆分 |
+| **A5** `finite_parts` | r1–r3 | **DCDS** | ETDS · Dynamical Systems | 商覆盖与边界定理已验证；⚠️ 更正型窄 scope 是主要编辑风险 |
+| **A6** `zeckendorf_fibers` | r1–r3 | **Journal of Number Theory** | EJC · Monatshefte | 冻结相变 + 更新理论已验证；44 页需收紧 |
+| **A7** `upper_fibers` | r1–r3 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
+| **A8** `detector_shells` | r1–r2 | **Stochastic Models** | MCAP · Stochastics | ⚠️ 曾被 GRG 与 J.Phys.Comm. 拒，转概率向 |
+
+**冲刺净效果**：A2 凭已验证的尖锐 Poisson-熵阈值**守住 JFA**；A4 由"待定"升到 **Monatshefte 刊级**(MCFL immunity + 整除树);A5 由原评的 Dynamical Systems **升至 DCDS**;A6 稳在 JNT;A3 维持 DCDS-A;A7/A8 维持专业刊定位。**共性待办：多篇需压缩篇幅并把 certificate/comparator 移入 supplement。**
 
 **A5 冲刺产出（已提交）**：精确商覆盖分裂因子、恒等类普遍 Artin 失效、指数精度调和重正规化；标量 Bernoulli 展开优先权明确归 Hasegawa–Saito（arXiv:1507.00498）；"Fourier 刚性"一组经检验仅为已有定理逆线性形式，拒绝写入。
 
