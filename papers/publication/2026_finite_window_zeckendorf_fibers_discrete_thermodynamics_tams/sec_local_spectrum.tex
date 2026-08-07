@@ -591,13 +591,249 @@ positive right derivative.  The pressure is identically zero to the left of
 \(t_c\), so its left derivative is zero.
 \end{proof}
 
+\begin{theorem}[Full large deviations across the freezing corner]
+\label{thm:full-fiber-ldp}
+Let \(\mathbf X_m\) be uniformly distributed on \(X_m\), and set
+\[
+ \begin{gathered}
+ y_m(x):=\frac1m\log d_m(x),\qquad
+ Y_m:=y_m(\mathbf X_m),\\
+ t_c:=-\sigma_0,\qquad v_c:=P'_+(t_c),
+ \qquad \alpha_+:=\frac12\log\varphi.
+ \end{gathered}
+\]
+Then \((Y_m)\) satisfies a full large deviation principle with speed \(m\)
+and good rate function
+\begin{equation}
+ I(\alpha)=\sup_{t\in\mathbb R}
+ \{t\alpha-P(t)+\log\varphi\}.
+ \label{eq:full-fiber-ldp-rate}
+\end{equation}
+Its effective domain is \([0,\alpha_+]\).  On the coexistence interval,
+\begin{equation}
+ I(\alpha)=\log\varphi-\sigma_0\alpha
+ \qquad(0\le\alpha\le v_c).
+ \label{eq:frozen-affine-rate}
+\end{equation}
+More precisely, for every \(0<\alpha<v_c\),
+\begin{equation}
+ \begin{aligned}
+ &\lim_{\varepsilon\downarrow0}\liminf_{m\to\infty}
+ \frac1m\log\Pr\{|Y_m-\alpha|<\varepsilon\}\\
+ &\quad=
+ \lim_{\varepsilon\downarrow0}\limsup_{m\to\infty}
+ \frac1m\log\Pr\{|Y_m-\alpha|<\varepsilon\}\\
+ &\quad=-\bigl(\log\varphi-\sigma_0\alpha\bigr).
+ \end{aligned}
+ \label{eq:frozen-local-large-deviation}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For \(\alpha\in\mathbb R\) and \(\varepsilon>0\), write
+\[
+ A_m(\alpha,\varepsilon)
+ :=\card{\left\{x\in X_m:
+ \left|m^{-1}\log d_m(x)-\alpha\right|<\varepsilon\right\}}.
+\]
+We first establish the lower bound at the nonexposed slopes.  Fix
+\(t>t_c\), put \(v=P'(t)>v_c\), and define the tilted law on \(X_n\) by
+\[
+ \nu_{n,t}(x):=\frac{d_n(x)^t}{S_t(n)}.
+\]
+For sufficiently small \(s>0\), the exponential Markov inequality and
+\Cref{thm:all-real-pressure} give
+\[
+ \limsup_{n\to\infty}\frac1n
+ \log\nu_{n,t}\{y_n\ge v+\delta\}
+ \le P(t+s)-P(t)-s(v+\delta)<0.
+\]
+The corresponding estimate with \(s<0\) gives the same conclusion for
+\(y_n\le v-\delta\).  Consequently,
+\[
+ \sum_{\substack{x\in X_n\\|y_n(x)-v|<\delta}}d_n(x)^t
+ =\exp\{n(P(t)+o(1))\}.
+\]
+Every summand on the left is at most
+\(\exp\{n(tv+|t|\delta)\}\), and hence
+\begin{equation}
+ \liminf_{n\to\infty}\frac1n\log A_n(v,\delta)
+ \ge P(t)-tv-|t|\delta.
+ \label{eq:exposed-source-count}
+\end{equation}
+
+We now transfer these source states to a larger layer without changing their
+multiplicities.  The proof of \Cref{thm:fiber-partition-interval} gives the
+explicit bijection
+\[
+ \chi_n(x)=
+ \begin{cases}
+  F_{n+2}+V_n(x),&0\le V_n(x)\le F_{n+1}-2,\\
+  V_n(x),&F_{n+1}-1\le V_n(x)<F_{n+2},
+ \end{cases}
+\]
+from \(X_n\) onto the integer points of
+\(\mathcal I_n\sqcup\mathcal I_{n+1}\), with
+\(d_n(x)=R(\chi_n(x))\).  Take
+\(\delta<v/2\), so their multiplicities exceed two for all sufficiently
+large \(n\).  The uniform layer-count lemma shows that each Weinstein
+generating orbit supplies at most four source states to these two layers.
+The specialized formulas in the proof of
+\Cref{prop:weighted-generator-renewal} give
+\[
+ L([a]g)=L(g)+2a,\qquad
+ L([a]\tau g)=L(g)+1+2a,
+\]
+and the two sigma branches increase these lengths by one.  Hence every orbit
+meeting \(\mathcal I_n\sqcup\mathcal I_{n+1}\) has generator length at most
+\(n+1\).
+Keeping the generating number of every orbit which occurs therefore gives a
+set \(\mathcal G_n\) such that
+\begin{equation}
+ \card{\mathcal G_n}\ge\frac14 A_n(v,\delta),
+ \qquad L(g)\le n+1\quad(g\in\mathcal G_n),
+ \label{eq:source-generating-orbits}
+\end{equation}
+and \(n^{-1}\log R(g)\in(v-\delta,v+\delta)\), since the orbit action
+preserves \(R\).  Distinct elements of
+\(\mathcal G_n\) generate disjoint orbits.
+
+Fix \(0<\alpha<v_c\), set \(\rho=\alpha/v\), and let
+\(n_m=\lfloor\rho m\rfloor\).  For sufficiently large \(m\), every
+\(g\in\mathcal G_{n_m}\) has \(L(g)<m\).  The generator formulas in the
+proof of \Cref{prop:weighted-generator-renewal} permit the parity-free
+definition
+\[
+ z_m(g):=
+ \begin{cases}
+ [a]g,&m-L(g)=2a,\\
+ [a]\tau g,&m-L(g)=2a+1.
+ \end{cases}
+\]
+They give \(L(z_m(g))=m\) and \(R(z_m(g))=R(g)>1\).  Thus
+\(z_m(g)\in\mathcal I_m\), and \(\chi_m^{-1}\) turns these into distinct
+states of \(X_m\).  Moreover,
+\[
+ \left|m^{-1}\log R(z_m(g))-\alpha\right|
+ \le \frac{n_m}{m}\delta+\frac vm.
+\]
+Combining this injection with
+\eqref{eq:exposed-source-count}--\eqref{eq:source-generating-orbits} yields,
+for every \(\varepsilon>\rho\delta\),
+\begin{equation}
+ \liminf_{m\to\infty}\frac1m\log A_m(\alpha,\varepsilon)
+ \ge \rho\bigl(P(t)-tv-|t|\delta\bigr).
+ \label{eq:orbit-filling-lower-bound}
+\end{equation}
+First let \(\delta\downarrow0\), and then let \(t\downarrow t_c\).  Since
+\(P(t)\to0\), \(P'(t)=v\to v_c\), and
+\[
+ \rho(P(t)-tv)=\alpha\left(\frac{P(t)}v-t\right)
+ \longrightarrow-t_c\alpha=\sigma_0\alpha,
+\]
+we obtain
+\begin{equation}
+ \lim_{\varepsilon\downarrow0}\liminf_{m\to\infty}
+ \frac1m\log A_m(\alpha,\varepsilon)
+ \ge\sigma_0\alpha.
+ \label{eq:frozen-count-lower}
+\end{equation}
+
+The matching upper bound uses the critical pressure directly.  On the set
+counted by \(A_m(\alpha,\varepsilon)\),
+\(d_m(x)^{-\sigma_0}\ge
+\exp\{-\sigma_0m(\alpha+\varepsilon)\}\).  Therefore
+\[
+ A_m(\alpha,\varepsilon)
+ e^{-\sigma_0m(\alpha+\varepsilon)}
+ \le S_{-\sigma_0}(m)=e^{o(m)},
+\]
+which, together with \eqref{eq:frozen-count-lower}, proves the corresponding
+counting limit.  Since \(\card{X_m}=F_{m+2}\) and
+\(m^{-1}\log F_{m+2}\to\log\varphi\), this is
+\eqref{eq:frozen-local-large-deviation}.
+
+We next identify the convex dual.  If \(0\le\alpha\le v_c\), then
+\(P(t)=0\) for \(t\le t_c\), while convexity and the right derivative at
+\(t_c\) give \(P(t)\ge v_c(t-t_c)\) for \(t\ge t_c\).  It follows that
+\(t\alpha-P(t)\le t_c\alpha\) for every \(t\), with equality at
+\(t=t_c\), proving \eqref{eq:frozen-affine-rate}.
+
+The exact maximum theorem gives
+\[
+ \max_{x\in X_m}m^{-1}\log d_m(x)\longrightarrow\alpha_+.
+\]
+For \(t>0\), the bounds
+\(D_m^t\le S_t(m)\le F_{m+2}D_m^t\) imply
+\[
+ \alpha_+\le\frac{P(t)}t
+ \le\alpha_++\frac{\log\varphi}{t}.
+\]
+By convexity, (P') is increasing and therefore has a limit in
+\((0,+\infty]\).  The identity
+\[
+ \frac{P(t)}t=\frac{P(0)}t+\frac1t\int_0^t P'(u)\,du
+\]
+and Ces\`aro convergence show that this limit is \(\alpha_+\).  Thus
+\(P'(t)\uparrow\alpha_+\) as \(t\to\infty\).  Strict convexity and
+analyticity on \((t_c,\infty)\) now show that every
+\(\alpha\in(v_c,\alpha_+)\) is exposed by a unique \(t>t_c\).  The tilted
+estimate above with \(n=m\) supplies
+\begin{equation}
+ \lim_{\varepsilon\downarrow0}\liminf_{m\to\infty}
+ \frac1m\log\Pr\{|Y_m-\alpha|<\varepsilon\}
+ \ge P(t)-t\alpha-\log\varphi=-I(\alpha).
+ \label{eq:exposed-local-large-deviation}
+\end{equation}
+
+Finally, the logarithmic moment generating functions under the uniform law
+converge on all of \(\mathbb R\) to
+\[
+ \Lambda(t)=P(t)-\log\varphi.
+\]
+The variables are eventually supported in a fixed compact interval, so they
+are exponentially tight.  The G\"artner--Ellis upper bound
+\cite[Theorem~2.3.6(a)]{DemboZeitouni2010} therefore gives the
+large-deviation upper bound for all closed sets.
+
+It remains to justify the effective domain and endpoint lower bounds.  If
+\(\alpha<0\), letting \(t\to-\infty\) in
+\eqref{eq:full-fiber-ldp-rate} and using \(P(t)=0\) gives
+\(I(\alpha)=+\infty\).  If \(\alpha>\alpha_+\), the limit
+\(P(t)/t\to\alpha_+\) gives the same conclusion as \(t\to\infty\).
+Conversely, if \(0\le\alpha\le\alpha_+\), then
+\(t\alpha-P(t)\) is bounded above on \(( -\infty,t_c]\), on the compact
+interval \([t_c,0]\), and on \([0,\infty)\), where
+\(P(t)\ge t\alpha_+\).  Thus the effective domain is exactly
+\([0,\alpha_+]\).  The rate is a lower-semicontinuous convex function, and
+its finiteness on this closed interval implies continuity relative to the
+interval, including at the endpoints.
+
+The local lower bounds already proved cover the coexistence and exposed
+parts of \((0,\alpha_+)\), and points from either side approximate \(v_c\).
+At \(0\), the two singleton fibers give the lower bound directly.  At
+\(\alpha_+\), continuity of \(I\) and exposed points approaching from below
+supply the lower bound for every open neighborhood.  Hence the lower bound
+holds for every open set.  The effective domain is compact and \(I\) is
+lower semicontinuous, so \(I\) is good and the full large deviation principle
+follows.
+\end{proof}
+
 \begin{remark}[Imported and new components]
 Weinstein's free-monoid parameterization, multiplicativity of \(R(g)\), and
 largest-index formula \eqref{eq:generator-weight-length} are published inputs.
 The weighted cost \(c(p/q)\), the finite-layer renewal identity
 \eqref{eq:weighted-layer-renewal}, its transfer to the finite-window sums, and
 the all-real finite-window pressure formula are the additional conclusions
-here.  The Stern--Brocot pressure and the Knauf denominator-layer estimate
+here.  The orbit thinning and parity-complete filling in
+\Cref{thm:full-fiber-ldp} are the additional ingredients that close the
+nonexposed large-deviation slopes.  The standard upper bound and the
+exposed-slope tilting argument are not claimed as new.  The Stern--Brocot
+multifractal theorem of Kesseb\"ohmer and Stratmann
+\cite{KessebohmerStratmann2004,KessebohmerStratmann2007} concerns interval
+growth rates and does not state the finite-window LDP above.  The
+Stern--Brocot pressure and the Knauf
+denominator-layer estimate
 are cited published inputs.  In
 particular, the argument does not reprove or invoke Weinstein's eventual
 layer-stabilization theorem.

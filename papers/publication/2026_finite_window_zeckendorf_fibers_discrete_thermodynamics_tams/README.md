@@ -13,7 +13,7 @@ The compiled paper retains only the independently justified core:
 - the exact two-layer interval identity and transferred extremal theorem;
 - the uniform Weinstein layer-count lemma and negative-temperature freezing;
 - the precise compact-operator obstruction;
-- the conditional real-tilt large deviation corollary;
+- the full real-tilt large deviation principle across the freezing corner;
 - the integer moment transfer, direct quadratic recurrence, Sanna endpoint
   attribution, and diagonal high-tilt limit.
 

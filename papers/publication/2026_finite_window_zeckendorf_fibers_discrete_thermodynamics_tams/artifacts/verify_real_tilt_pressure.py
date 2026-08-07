@@ -271,6 +271,118 @@ def layer_bound_counterexample_search(max_layer: int, fib: list[int]) -> tuple[i
     return failures, stability_checks
 
 
+def orbit_padding_counterexample_search(
+    max_source: int, max_target: int, fib: list[int]
+) -> tuple[list[str], int, int]:
+    """Audit the two exact counting inequalities used by orbit padding."""
+    if max_source < 1 or max_target <= max_source + 1:
+        raise ValueError("expected 1 <= max_source < max_target - 1")
+    if len(fib) <= max_target + 2:
+        raise ValueError("Fibonacci table is too short for the requested layers")
+
+    limit = fib[max_target + 2] - 2
+    ordinary = ordinary_partition_values(
+        limit, [fib[index] for index in range(2, max_target + 2)]
+    )
+    generators = weighted_generator_counters(max_target)
+    cumulative_generators: list[Counter[int]] = []
+    running: Counter[int] = Counter()
+    for counter in generators:
+        running.update(counter)
+        cumulative_generators.append(running.copy())
+
+    failures: list[str] = []
+    capacity_checks = 0
+    padding_checks = 0
+    for source in range(1, max_source + 1):
+        source_levels = Counter(
+            ordinary[fib[source + 1] - 1 : fib[source + 3] - 1]
+        )
+        available = cumulative_generators[source + 1]
+        for level, source_count in source_levels.items():
+            if level == 1:
+                continue
+            capacity_checks += 1
+            if source_count > 4 * available[level]:
+                failures.append(
+                    f"capacity(source={source},level={level},"
+                    f"states={source_count},generators={available[level]})"
+                )
+
+        for target in range(source + 2, max_target + 1):
+            target_layer = Counter(
+                ordinary[fib[target + 1] - 1 : fib[target + 2] - 1]
+            )
+            for level, generator_count in available.items():
+                if level == 1 or generator_count == 0:
+                    continue
+                padding_checks += 1
+                if target_layer[level] < generator_count:
+                    failures.append(
+                        f"padding(source={source},target={target},level={level},"
+                        f"target_states={target_layer[level]},"
+                        f"generators={generator_count})"
+                    )
+    return failures, capacity_checks, padding_checks
+
+
+def coexistence_local_counterexample_search(
+    windows: tuple[int, ...],
+    fib: list[int],
+    sigma: float,
+    bands: tuple[tuple[float, float], ...],
+) -> tuple[list[str], int, list[tuple[int, float, float, int, float, float, float]]]:
+    """Audit the critical local-count bound and record coexistence entropies."""
+    if not windows or min(windows) < 1 or tuple(sorted(windows)) != windows:
+        raise ValueError("windows must be a nonempty increasing tuple")
+    if len(fib) <= max(windows) + 2:
+        raise ValueError("Fibonacci table is too short for the requested windows")
+    if sigma <= 0.0 or not bands:
+        raise ValueError("sigma and the local bands must be positive")
+
+    failures: list[str] = []
+    rows: list[tuple[int, float, float, int, float, float, float]] = []
+    coefficients = [1]
+    selected = set(windows)
+    for m in range(1, max(windows) + 1):
+        coefficients = extend_coefficients(coefficients, fib[m])
+        if m not in selected:
+            continue
+        levels = Counter(coefficients)
+        log_critical_sum = log_partition_derivatives(levels, -sigma)[0]
+        for alpha, epsilon in bands:
+            if not 0.0 < epsilon < alpha:
+                raise ValueError("each band must satisfy 0 < epsilon < alpha")
+            count = sum(
+                multiplicity
+                for level, multiplicity in levels.items()
+                if abs(math.log(level) / m - alpha) < epsilon
+            )
+            log_count = math.log(count) if count else -math.inf
+            critical_margin = (
+                log_critical_sum
+                - log_count
+                + sigma * m * (alpha + epsilon)
+            )
+            if count == 0 or critical_margin < -1.0e-12:
+                failures.append(
+                    f"window={m},alpha={alpha},epsilon={epsilon},"
+                    f"count={count},critical_margin={critical_margin}"
+                )
+            rows.append(
+                (
+                    m,
+                    alpha,
+                    epsilon,
+                    count,
+                    log_count / m,
+                    sigma * alpha,
+                    critical_margin,
+                )
+            )
+    return failures, len(rows), rows
+
+
 def exact_maximum_fiber(m: int, fib: list[int]) -> int:
     if m <= 1:
         return 1
@@ -349,6 +461,21 @@ def main() -> int:
         args.max_layer, fib
     )
     failures = layer_failures
+    padding_failures, orbit_capacity_checks, orbit_padding_checks = (
+        orbit_padding_counterexample_search(
+            min(args.max_layer - 2, 16), args.max_layer, fib
+        )
+    )
+    failures += len(padding_failures)
+    coexistence_failures, coexistence_checks, coexistence_rows = (
+        coexistence_local_counterexample_search(
+            tuple(snapshot_indices),
+            fib,
+            sigma,
+            ((0.04, 0.02), (0.08, 0.02), (0.12, 0.02)),
+        )
+    )
+    failures += len(coexistence_failures)
     renewal_failed_layers, renewal_symbolic_checks, renewal_real_tilt_checks = (
         weighted_renewal_counterexample_search(
             args.max_layer, fib, sigma, beta_star
@@ -369,6 +496,25 @@ def main() -> int:
         f"layer_bound_counterexample_search=2..{args.max_layer}",
         f"layer_stability_checks={layer_stability_checks}",
         f"layer_bound_counterexamples={layer_failures}",
+        "ORBIT_PADDING capacity_checks={} padding_checks={} failures={}".format(
+            orbit_capacity_checks, orbit_padding_checks, padding_failures
+        ),
+        "COEXISTENCE_LOCAL checks={} failures={} final_rows={}".format(
+            coexistence_checks,
+            coexistence_failures,
+            [
+                (
+                    alpha,
+                    count,
+                    round(entropy, 9),
+                    round(predicted, 9),
+                    round(margin, 9),
+                )
+                for m, alpha, _, count, entropy, predicted, margin
+                in coexistence_rows
+                if m == snapshot_indices[-1]
+            ],
+        ),
         "WEIGHTED_RENEWAL symbolic_checks={} real_tilt_checks={} "
         "failed_layers={}".format(
             renewal_symbolic_checks,
@@ -680,7 +826,7 @@ def main() -> int:
             f"pressure_csv={args.pressure_csv.resolve()}",
             f"rate_csv={args.rate_csv.resolve()}",
             f"failures={failures}",
-            "RESULT: 0 numerical failures / global-analyticity target refuted"
+            "RESULT: 0 numerical failures / full-LDP orbit-padding audit passed"
             if failures == 0
             else "RESULT: VERIFICATION FAILED",
         ]
