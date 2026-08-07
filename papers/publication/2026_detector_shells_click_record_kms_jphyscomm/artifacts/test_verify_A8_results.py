@@ -103,6 +103,49 @@ class HiddenModeTests(unittest.TestCase):
         self.assertNotEqual(verify.hidden_mode(x, y), 0.0)
 
 
+class CompleteVisibleLawTestChecks(unittest.TestCase):
+    def test_markov_gap_alternative_is_stochastic_and_preserves_gap_marginal(self):
+        for x in (0.35, 1.0, 2.4, 5.0):
+            g, h, transition, _ = verify.markov_gap_alternative(x, 0.005)
+            self.assertGreaterEqual(np.min(transition), 0.0)
+            self.assertTrue(np.allclose(transition.sum(axis=1), 1.0, atol=2e-13))
+            self.assertTrue(np.allclose(g @ transition, g, atol=2e-13))
+            self.assertAlmostEqual(float(g @ h), 0.0, places=13)
+            self.assertEqual(h[0], 0.0)
+
+    def test_markov_gap_alternative_preserves_three_inclusions_but_changes_word_five(self):
+        x = 1.35
+        null = verify.markov_gap_alternative(x, 0.0)
+        alternative = verify.markov_gap_alternative(x, 0.08)
+        r_null = verify.markov_gap_inclusions(null[0], null[2], null[3])
+        r_alternative = verify.markov_gap_inclusions(
+            alternative[0], alternative[2], alternative[3]
+        )
+        self.assertTrue(np.allclose(r_null, r_alternative, atol=2e-13))
+
+        g, _, transition, mu = alternative
+        observed = g[1] * transition[1, 1] / mu
+        expected = g[1] ** 2 * 1.08 / mu
+        self.assertAlmostEqual(observed, expected, places=13)
+        self.assertGreater(observed, null[0][1] * null[2][1, 1] / null[3])
+
+    def test_markov_gap_information_matches_score_variance_per_calendar_time(self):
+        for x in (0.35, 1.0, 2.4, 5.0):
+            g, h, _, mu = verify.markov_gap_alternative(x, 0.0)
+            information = verify.markov_gap_information(g, h, mu)
+            second_moment = float(g @ (h * h))
+            expected = second_moment**2 / mu
+            self.assertAlmostEqual(information, expected, places=13)
+            self.assertGreater(information, 0.0)
+
+    def test_markov_gap_local_power_has_size_at_origin_and_is_strictly_increasing(self):
+        alpha = 0.05
+        powers = [verify.markov_gap_local_power(1.35, t, alpha) for t in (0.0, 0.5, 1.0)]
+        self.assertAlmostEqual(powers[0], alpha, places=13)
+        self.assertGreater(powers[1], powers[0])
+        self.assertGreater(powers[2], powers[1])
+
+
 class SamplingBiasTests(unittest.TestCase):
     def test_exact_rounded_cycle_mean_matches_gap_tail_sum(self):
         for gamma, kappa, delta in ((0.7, 1.9, 0.4), (1.3, 1.3, 0.2), (3.0, 0.6, 0.1)):

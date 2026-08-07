@@ -3,12 +3,14 @@
 The manuscript contains the proofs.  This script checks the exact physical
 image residual, the sharp hidden-mode bound and its diagonal extremizer, the
 diagonal counterexample to the oracle's unqualified one-dependence equation,
-the fast-sampling expansion, and the A8-r2 joint physical-image test.
+the fast-sampling expansion, the A8-r2 joint physical-image test, and the
+A8-r3 finite-range Markov-gap specification score.
 """
 
 from __future__ import annotations
 
 import math
+from statistics import NormalDist
 from typing import Iterable
 
 import mpmath as mp
@@ -241,6 +243,83 @@ def hidden_mode(x: float, y: float) -> float:
     return (y * math.exp(-y) - x * math.exp(-x)) / (y - x)
 
 
+def markov_gap_alternative(
+    diagonal_rate: float, eta: float
+) -> tuple[FloatArray, FloatArray, FloatArray, float]:
+    """Construct the finite-range Markov-gap alternative at an exchange point."""
+    if not math.isfinite(diagonal_rate) or diagonal_rate <= 0.0:
+        raise ValueError("the diagonal rate must be finite and positive")
+    if not math.isfinite(eta) or eta < 0.0:
+        raise ValueError("eta must be finite and nonnegative")
+
+    gap_mass = _gap_masses(diagonal_rate, diagonal_rate)
+    gap_mass /= gap_mass.sum()
+    if gap_mass.size < 3 or min(gap_mass[1], gap_mass[2]) <= 0.0:
+        raise ArithmeticError("the truncated gap law does not contain positive masses 1 and 2")
+
+    score = np.zeros_like(gap_mass)
+    score[1] = 1.0
+    score[2] = -gap_mass[1] / gap_mass[2]
+    maximum_eta = gap_mass[2] / gap_mass[1]
+    if eta >= maximum_eta:
+        raise ValueError(f"eta must be smaller than {maximum_eta:.12g} for positivity")
+
+    transition = gap_mass[None, :] * (
+        1.0 + eta * score[:, None] * score[None, :]
+    )
+    indices = np.arange(gap_mass.size, dtype=float)
+    mean_cycle = float((indices + 1.0) @ gap_mass)
+    return gap_mass, score, transition, mean_cycle
+
+
+def markov_gap_inclusions(
+    gap_mass: ArrayLike, transition: ArrayLike, mean_cycle: float
+) -> FloatArray:
+    """Return the first three inclusion coordinates of a stationary gap chain."""
+    g = np.asarray(gap_mass, dtype=float)
+    q = np.asarray(transition, dtype=float)
+    if g.ndim != 1 or g.size < 2 or q.shape != (g.size, g.size):
+        raise ValueError("gap_mass and transition have incompatible shapes")
+    if not math.isfinite(mean_cycle) or mean_cycle <= 0.0:
+        raise ValueError("mean_cycle must be finite and positive")
+    return np.array(
+        [
+            1.0 / mean_cycle,
+            g[0] / mean_cycle,
+            (g[1] + g[0] * q[0, 0]) / mean_cycle,
+        ]
+    )
+
+
+def markov_gap_information(
+    gap_mass: ArrayLike, score: ArrayLike, mean_cycle: float
+) -> float:
+    """Return Fisher information per calendar bin for the Markov-gap path."""
+    g = np.asarray(gap_mass, dtype=float)
+    h = np.asarray(score, dtype=float)
+    if g.shape != h.shape or g.ndim != 1:
+        raise ValueError("gap_mass and score must be one-dimensional arrays of equal size")
+    if not math.isfinite(mean_cycle) or mean_cycle <= 0.0:
+        raise ValueError("mean_cycle must be finite and positive")
+    second_moment = float(g @ (h * h))
+    return second_moment**2 / mean_cycle
+
+
+def markov_gap_local_power(
+    diagonal_rate: float, local_parameter: float, alpha: float = 0.05
+) -> float:
+    """Return the one-sided Gaussian local power of the finite-range score."""
+    if not math.isfinite(local_parameter) or local_parameter < 0.0:
+        raise ValueError("the local parameter must be finite and nonnegative")
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must lie in (0,1)")
+    g, h, _, mean_cycle = markov_gap_alternative(diagonal_rate, 0.0)
+    information = markov_gap_information(g, h, mean_cycle)
+    normal = NormalDist()
+    critical = normal.inv_cdf(1.0 - alpha)
+    return 1.0 - normal.cdf(critical - local_parameter * math.sqrt(information))
+
+
 def sampled_counter_inclusions(x: float, y: float) -> FloatArray:
     """Return (r0,r1,r2) for dimensionless positive rates x and y."""
     with mp.workdps(50):
@@ -420,6 +499,43 @@ def main() -> None:
     print(
         "local powers (origin, physical tau=1, nonreal tau=-1)="
         + np.array2string(powers, precision=10)
+    )
+
+    row_sum_errors = []
+    stationary_errors = []
+    inclusion_errors = []
+    word_five_errors = []
+    informations = []
+    for diagonal_rate in (0.35, 1.0, 2.4, 5.0):
+        g0, h0, q0, mu0 = markov_gap_alternative(diagonal_rate, 0.0)
+        g1, h1, q1, mu1 = markov_gap_alternative(diagonal_rate, 0.005)
+        row_sum_errors.append(np.max(np.abs(q1.sum(axis=1) - 1.0)))
+        stationary_errors.append(np.max(np.abs(g1 @ q1 - g1)))
+        inclusion_errors.append(
+            np.max(
+                np.abs(
+                    markov_gap_inclusions(g1, q1, mu1)
+                    - markov_gap_inclusions(g0, q0, mu0)
+                )
+            )
+        )
+        word_five_errors.append(
+            abs(g1[1] * q1[1, 1] / mu1 - g1[1] ** 2 * 1.005 / mu1)
+        )
+        informations.append(markov_gap_information(g0, h0, mu0))
+
+    score_powers = np.array(
+        [markov_gap_local_power(1.35, t, alpha) for t in (0.0, 0.5, 1.0)]
+    )
+    print("A8-r3 complete visible-law score verification")
+    print(f"Markov-gap maximum row-sum error={_maximum(row_sum_errors):.3e}")
+    print(f"Markov-gap maximum stationary-marginal error={_maximum(stationary_errors):.3e}")
+    print(f"three-inclusion maximum preservation error={_maximum(inclusion_errors):.3e}")
+    print(f"length-five identity maximum error={_maximum(word_five_errors):.3e}")
+    print(f"tested minimum calendar-time information={min(informations):.6e}")
+    print(
+        "finite-range score local powers (t=0,0.5,1)="
+        + np.array2string(score_powers, precision=10)
     )
 
 

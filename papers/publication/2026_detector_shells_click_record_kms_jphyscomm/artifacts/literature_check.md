@@ -165,3 +165,60 @@ literature. The only novelty claimed is the sampled-counter specialization:
 the root-free analytic constraint map, its rank and regenerative covariance
 nondegeneracy, compact-uniform studentization, and its explicit local-power
 coordinates.
+
+## A8-r3 complete-law and realization check
+
+Checked 2026-08-07 through the live arXiv Atom API and Crossref before theorem
+integration. The arXiv query
+`all:"distributional distance" AND all:"time series"` returned six records,
+including Ryabko, arXiv:1107.4165v2, and Ryabko--Ryabko,
+arXiv:0804.0510v4. The author query
+`au:Ryabko AND (all:"hypothesis testing" OR all:"distributional distance")`
+returned five records, including arXiv:0905.4937v4, arXiv:1107.4165v2, and
+arXiv:0804.0510v4. These papers establish distributional-distance testing and
+the stationary-ergodic scope limitations; neither the metric nor the general
+ergodic consistency principle is claimed here as new.
+
+The following model-specific arXiv API queries each returned zero results:
+
+- `all:"sampled-counter" AND all:"full law"`;
+- `all:"Markov gaps" AND all:"local power"`;
+- `all:"renewal process" AND all:"orthogonal score"`;
+- `all:"distributional distance" AND all:"local power"`;
+- `all:"three-inclusion" AND all:"goodness-of-fit"`.
+
+Crossref searches for the same combinations returned no matching
+sampled-counter theorem. They did recover the direct goodness-of-fit
+comparators: Agustin--Pena, "A basis approach to goodness-of-fit testing in
+recurrent event models," *Journal of Statistical Planning and Inference*
+**133**(2), 285--303 (2005), DOI `10.1016/j.jspi.2004.03.022`; and
+Titman--Sharples, "A general goodness-of-fit test for Markov and hidden Markov
+models," *Statistics in Medicine* **27**(12), 2177--2195 (2008), DOI
+`10.1002/sim.3033`. The distributional-distance citation used in the article
+is Ryabko--Ryabko, *IEEE Transactions on Information Theory* **56**(3),
+1430--1435 (2010), DOI `10.1109/TIT.2009.2039169`; the composite stationary
+testing citation is Ryabko, *Statistics* **48**(1), 121--128 (2014), DOI
+`10.1080/02331888.2012.719511`.
+
+For the higher-state transfer-map claim, the arXiv query
+`all:"minimal realization" AND (all:"transfer function" OR
+all:"similarity orbit")` returned four modern records but no reason to treat
+the differential quotient as new. Crossref recovered the classical moduli
+source M. Hazewinkel, "Moduli and canonical forms for linear dynamical systems
+II: The topological case," *Mathematical Systems Theory* **10**, 363--385
+(1976), DOI `10.1007/BF01683285`, as well as the established canonical-form
+and identifiability literature. Together with Kalman's minimal-realization
+uniqueness and Telek--Horvath's minimal MAP formulation, this places the
+kernel/rank statement in standard minimal SISO realization quotient geometry.
+The Fisher nullspace equality is the corresponding likelihood consequence:
+directions tangent to a minimal realization similarity orbit leave every gap
+mass, hence the visible likelihood, unchanged. It is therefore not promoted as
+a manuscript theorem.
+
+No source returned by the stated arXiv and Crossref searches combines the
+sampled-counter complete-word guard with the bounded adjacent-gap score, the
+exactly three-inclusion-preserving Markov-gap alternative, and its explicit
+calendar-time local power. The integrated novelty claim is restricted to that
+combination; general distributional-distance testing, recurrent-event/HMM
+goodness-of-fit methodology, LAN, and Gaussian-shift optimality remain cited
+background.

@@ -126,6 +126,12 @@ the image equation and the discriminant inequality yield a studentized joint
 physical-image test with compact-uniform size control across the exchange
 diagonal and an explicit dominated-renewal local-power function.  This tests
 the three-inclusion physical image, not arbitrary time-series misspecification.
+To separate that limited diagnostic from model checking, we also construct a
+total-space complete-visible-law test.  A distributional-distance guard is
+consistent against every fixed stationary ergodic law separated from the
+sampled-counter family, while a bounded finite-range gap score has
+compact-uniform size and detects an explicit nonrenewal local alternative that
+preserves all three inclusion coordinates, at the optimal $N^{-1/2}$ rate.
 At the single preselected exchange
 point \(z_0=1/2\), we give a pointwise projected-Gaussian limit as an example of
 the nonregular geometry.  It is not a confidence procedure, test, or coverage
@@ -135,7 +141,7 @@ diagnostic outcomes are not used to select a model or inferential branch.
 
 \noindent\textbf{Keywords:} constrained D-MAP, phase-type identifiability,
 similarity orbit, confluent Prony method, renewal process, exact
-\(1\)-dependence, boundary inference
+\(1\)-dependence, boundary inference, specification testing
 
 \section{Introduction}
 
@@ -160,8 +166,9 @@ the attempt rate, recovery rate, and sampling interval of this sampled-counter
 realization of the D-MAP.
 
 The paper-level contribution is the closed-form record law, quotient inverse,
-joint three-inclusion physical-image test, and fixed-setting retained-record
-asymptotic analysis of this constrained D-MAP(2) subfamily, together with an
+joint three-inclusion physical-image test, complete-visible-law specification
+test, and fixed-setting retained-record asymptotic analysis of this constrained
+D-MAP(2) subfamily, together with an
 \(n\)-state identifiability theorem that
 separates pure serial models from general killed-reset realizations by their
 Markovian similarity-orbit fibres. The following contract fixes the physical
@@ -199,6 +206,16 @@ hidden paths, or transition-waiting-time functionals under partial access.  The
 waiting-time object here is instead the Palm zero-run gap law \(g_k\) of the
 binary click record, used to build the complete visible renewal law and the
 symmetric sampled-counter quotient.
+
+The growing-word distributional distance used below is imported from the
+stationary-ergodic testing framework of Ryabko and Ryabko
+\cite{RyabkoRyabko2010ErgodicInference,Ryabko2012StationaryTesting}; it is not
+claimed as a new general time-series method.  Recurrent-event and Markov/HMM
+goodness-of-fit procedures are likewise established
+\cite{AgustinPena2005RecurrentGOF,TitmanSharples2008MarkovGOF}.  The new object
+here is narrower: a sampled-counter specialization that combines the complete
+word-law guard with a finite-range score which remains regular at the exchange
+diagonal and has an explicit three-inclusion-invisible nonrenewal LAN path.
 
 Detector dead-time and photon-counting models are the closest instrument-level
 comparators
@@ -1407,6 +1424,293 @@ stochastically exceeds \(Z^-\) on a set of positive probability, proving
 strictly greater power.  At \(\xi=0\) the laws coincide.  The tangent-cone
 formulas follow from the rank-two constraint qualification and the local
 description \(e=0,\mathcal D\ge0\).
+\end{proof}
+
+\begin{paperthm}[Single-record complete visible-law specification test]
+\label{thm:complete-visible-law-specification-main}
+Fix $0<\varepsilon<M<\infty$, put
+
+\[
+\Theta_{\varepsilon,M}=[\varepsilon,M]^2,
+\qquad \mathcal P_0=\{P_\theta:\theta\in\Theta_{\varepsilon,M}\},
+\]
+
+where $P_\theta$ is the stationary visible law of the sampled-counter kernels
+at the dimensionless parameter $\theta=(x,y)$.  For a binary word
+$w=(w_1,\ldots,w_m)$, write
+
+\[
+P_\theta[w]=\pi_\theta T_{w_1}(\theta)\cdots
+T_{w_m}(\theta)\mathbf1,
+\]
+
+where $\pi_\theta$ is stationary for $T_0(\theta)+T_1(\theta)$.  On
+stationary binary laws define
+
+\[
+d(P,Q)=\sum_{m=1}^{\infty}4^{-m}
+\sum_{w\in\{0,1\}^m}|P[w]-Q[w]|,
+\qquad
+d(P,\mathcal P_0)=\inf_{\theta\in\Theta_{\varepsilon,M}}d(P,P_\theta).
+\]
+
+For a record $A_0,\ldots,A_{N-1}$ with $N\ge3$, let
+
+\[
+\widehat P_N[w]=\frac1{N-m+1}\sum_{j=0}^{N-m}
+\mathbf1_{\{A_j\cdots A_{j+m-1}=w\}},
+\qquad
+L_N=\max\left\{3,\left\lfloor\frac18\log_2N\right\rfloor\right\},
+\]
+
+and set
+
+\[
+d_N=\min_{\theta\in\Theta_{\varepsilon,M}}
+\sum_{m=1}^{L_N}4^{-m}\sum_{w\in\{0,1\}^m}
+|\widehat P_N[w]-P_\theta[w]|.
+\]
+
+Choose a minimizer $\widehat\theta_N$ by a fixed lexicographic rule.  Delete
+the initial and terminal incomplete cycles and denote the remaining complete
+zero gaps by $G_1,\ldots,G_{K_N}$.  If $g_\theta$ is the model Palm gap
+mass function, define
+
+\[
+h_\theta(k)=\mathbf1_{\{k=1\}}
+-\frac{g_\theta(1)}{g_\theta(2)}\mathbf1_{\{k=2\}}.
+\]
+
+When $K_N\ge3$, put
+
+\[
+\widehat\nu_N=\frac1{K_N}\sum_{j=1}^{K_N}
+h_{\widehat\theta_N}(G_j)^2,
+\qquad
+\widehat I_N=\frac{K_N}{N}\widehat\nu_N^2,
+\]
+
+\[
+Z_N=\frac{1}{\sqrt{N\widehat I_N}}
+\sum_{j=1}^{K_N-1}
+h_{\widehat\theta_N}(G_j)h_{\widehat\theta_N}(G_{j+1}).
+\]
+
+If $K_N<3$ or $\widehat I_N=0$, set $Z_N=0$.  Thus, for every binary
+record of length $N\ge3$, the test
+
+\[
+\varphi_N=\mathbf1_{\{d_N>N^{-1/4}\ \text{or}\ Z_N>z_{1-\alpha}\}}
+\tag{F}
+\]
+
+is defined without empirical roots, logarithms, or evaluations of the analytic
+root chart outside its domain.  It has the following properties.
+
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Its null size is compact-uniform:
+\[
+\sup_{\theta\in\Theta_{\varepsilon,M}}
+\left|\PP_\theta(\varphi_N=1)-\alpha\right|\longrightarrow0.
+\]
+This includes the exchange diagonal and every null triangular array, in
+particular arrays satisfying $N^{1/4}|p_N-s_N|=O(1)$.
+
+\item If $P$ is a fixed stationary ergodic binary law and
+$d(P,\mathcal P_0)>0$, then
+\[
+\PP_P(\varphi_N=1)\longrightarrow1.
+\]
+The convergence is uniform on any class with a common geometric
+$\alpha$-mixing envelope $\alpha_P(k)\le Cq^k$, $q<1$, and a common
+separation $d(P,\mathcal P_0)\ge\delta>0$.  No consistency assertion is made
+for arbitrary stationary nonergodic mixtures.
+
+\item Fix an interior exchange point $\theta_0=(x_0,x_0)$, and abbreviate
+$g_k=g_{\theta_0}(k)$, $\mu=\sum_{k\ge0}(k+1)g_k$, and
+\[
+h(k)=\mathbf1_{\{k=1\}}-\frac{g_1}{g_2}\mathbf1_{\{k=2\}}.
+\]
+For $0\le\eta<g_2/g_1$, the transition matrix
+\[
+Q_\eta(\ell\mid k)=g_\ell\{1+\eta h(k)h(\ell)\}
+\tag{G}
+\]
+is stochastic, has stationary marginal $g$, and defines by Palm inversion a
+stationary nonrenewal visible law when $\eta>0$.  This law preserves exactly
+the sampled-counter coordinates $r_0,r_1,r_2$, because
+\[
+r_0=\mu^{-1},\qquad r_1=\mu^{-1}g_0,
+\qquad r_2=\mu^{-1}\{g_1+g_0Q_\eta(0\mid0)\},
+\]
+and $Q_\eta(0\mid0)=g_0$.  Nevertheless,
+\[
+\PP_\eta(10101)=\mu^{-1}g_1^2(1+\eta),
+\]
+so a length-five word separates every $\eta>0$ from the renewal null.
+
+\item Put
+\[
+\nu=\EE_g h(G)^2=g_1+\frac{g_1^2}{g_2},
+\qquad \mathcal I=\frac{\nu^2}{\mu}.
+\]
+Along $\eta_N=t/\sqrt N$, $t\ge0$, the stationary record experiments in
+part~\textup{(iii)} satisfy
+\[
+\log\frac{dP_{\eta_N}^{(N)}}{dP_0^{(N)}}
+=t\Delta_N-\frac12t^2\mathcal I+o_{P_0}(1),
+\qquad \Delta_N\Rightarrow N(0,\mathcal I).
+\]
+Moreover, $\widehat I_N\to_P\mathcal I$ and
+\[
+Z_N\Rightarrow N(t\sqrt{\mathcal I},1),
+\qquad
+\pi_\alpha(t)=1-\Phi_{\rm N}
+\{z_{1-\alpha}-t\sqrt{\mathcal I}\}.
+\]
+Thus $\pi_\alpha(t)>\alpha$ for every $t>0$.  If
+$\eta_N=o(N^{-1/2})$, the Kullback--Leibler divergence tends to zero, while
+the score component of \textup{(F)} attains the Neyman--Pearson power envelope
+of this one-dimensional Gaussian-shift subexperiment at the $N^{-1/2}$
+rate.
+\end{enumerate}
+
+The distributional-distance guard in parts~\textup{(i)}--\textup{(ii)} is a
+specialization of established stationary-ergodic testing methods
+\cite{RyabkoRyabko2010ErgodicInference,Ryabko2012StationaryTesting}.  Generic
+LAN and Gaussian-shift optimality are also standard
+\cite{vanDerVaart1998AsymptoticStatistics}.  The model-specific assertions are
+the exchange-uniform finite-range score, the exactly
+$(r_0,r_1,r_2)$-preserving alternative \textup{(G)}, and their joint use with
+the complete visible-law guard.
+\end{paperthm}
+
+\begin{proof}
+On $\Theta_{\varepsilon,M}$, the hidden transition matrix is
+\[
+T_0+T_1=\begin{pmatrix}p&b\\1-p&1-b\end{pmatrix}.
+\]
+Each entry has a positive parameter-independent lower bound.  The hidden chain
+therefore satisfies a uniform Doeblin condition, and every bounded function of
+the visible record has a common geometric mixing envelope.  For a word $w$
+of length $m\le N$, overlap for lags below $m$ and the mixing covariance
+bound above that lag give
+\[
+\sup_\theta\operatorname{Var}_\theta\{\widehat P_N[w]\}
+\le \frac{Cm}{N}.
+\]
+Consequently, by Cauchy--Schwarz,
+\[
+\sup_\theta\EE_\theta
+\sum_{m=1}^{L_N}4^{-m}\sum_w
+|\widehat P_N[w]-P_\theta[w]|
+\le \frac{C'}{\sqrt N}
+\sum_{m\ge1}2^{-m}\sqrt m=O(N^{-1/2}).
+\]
+Since the minimum defining $d_N$ is no larger than its value at the true
+parameter, Markov's inequality yields
+\[
+\sup_\theta\PP_\theta(d_N>N^{-1/4})=O(N^{-1/4}).
+\tag{1}
+\]
+
+Let $\widehat\sigma_N=(\widehat p_N+\widehat s_N,
+\widehat p_N\widehat s_N)$ and $\sigma_\theta=(p+s,ps)$.  The terms of
+length at most three in the distance contain the three inclusion coordinates
+$r_0,r_1,r_2$: $r_0=P[1]$, $r_1=P[11]$, and
+$r_2=P[101]+P[111]$.  Optimality of $\widehat\theta_N$, the preceding
+bound for these finitely many word frequencies, and the uniformly bounded
+derivative of the quotient map $\Phi$ on
+$\Theta_{\varepsilon,M}$ therefore give
+\[
+\widehat\sigma_N-\sigma_\theta=O_{P_\theta}(N^{-1/2})
+\tag{2}
+\]
+uniformly.  No ordered-root map is used in this step.  For every fixed gap
+index, $g_\theta(k)$ is a symmetric analytic function of the two roots;
+compactness and $\inf_\theta g_\theta(2)>0$ make $h_\theta$ and its first
+two $\sigma$-derivatives uniformly bounded.
+
+Under the null, the complete Palm gaps are consecutive members of an i.i.d.
+gap sequence.  With
+\[
+q_j(\theta)=h_\theta(G_j)h_\theta(G_{j+1}),
+\]
+one has
+\[
+\EE_\theta q_j=0,\qquad
+\operatorname{Var}_\theta(q_j)=\nu_\theta^2,
+\qquad
+\operatorname{Cov}_\theta(q_j,q_{j+1})=0,
+\]
+where $\nu_\theta=\EE_\theta h_\theta(G)^2$.  These rewards are bounded and
+one-dependent, $K_N/N\to1/\mu_\theta$, and the initial and terminal deletions
+affect only $o_P(\sqrt N)$ reward.  The uniform one-dependent CLT and the
+renewal-index replacement thus give
+\[
+\frac{\sum_{j=1}^{K_N-1}q_j(\theta)}
+{\sqrt{K_N}\nu_\theta}\Rightarrow N(0,1)
+\]
+uniformly in $\theta$.  The plug-in has no first-order effect: independence
+and $\EE_\theta h_\theta(G)=0$ imply
+\[
+\EE_\theta\left[
+\partial_\sigma\{h_\sigma(G_0)h_\sigma(G_1)\}
+\right]_{\sigma=\sigma_\theta}=0.
+\]
+Hence the sum of the first derivatives is $O_P(\sqrt N)$; multiplying by
+$(2)$, and bounding the summed Taylor remainder by
+$O_P(N\|\widehat\sigma_N-\sigma_\theta\|^2)$, shows that both terms are
+$o_P(\sqrt N)$.  The same bounds give
+$\widehat I_N\to_P\nu_\theta^2/\mu_\theta$, uniformly.  Together with
+$(1)$, this proves part~\textup{(i)}.
+
+For part~\textup{(ii)}, Birkhoff's theorem gives almost-sure convergence of
+every fixed empirical word probability under a stationary ergodic law.  For
+every $L$, the finitely many terms with $m\le L$ converge uniformly in
+$\theta$ by continuity and compactness, while, for all probability laws,
+\[
+\sum_{m>L}4^{-m}\sum_w|P[w]-Q[w]|\le2^{1-L}.
+\]
+It follows that $d_N\to d(P,\mathcal P_0)$ almost surely.  Under a common
+geometric mixing envelope the preceding variance calculation is uniform over
+the alternative class, which proves the stated uniform version.
+
+For part~\textup{(iii)}, $\EE_g h=0$ gives both
+$\sum_\ell Q_\eta(\ell\mid k)=1$ and $gQ_\eta=g$.  The only negative
+product among nonzero score values is
+$h(1)h(2)=-g_1/g_2$; hence $0\le\eta<g_2/g_1$ gives a nonnegative kernel.
+Its rows depend on $k$ when $\eta>0$, so the stationary Palm gap sequence
+is not i.i.d.  The three inclusion identities follow by enumerating a click at
+lags zero, one, and two, and $h(0)=0$ gives
+$Q_\eta(0\mid0)=g_0$.  Two consecutive gaps equal to one produce the word
+$10101$, and
+\[
+\mu^{-1}g_1Q_\eta(1\mid1)
+=\mu^{-1}g_1^2(1+\eta),
+\]
+which proves the separation assertion.
+
+Finally, apart from $O_P(1)$ endpoint terms, the log likelihood ratio along
+$\eta_N=t/\sqrt N$ is
+\[
+\sum_{j=1}^{K_N-1}\log\{1+\eta_Nh(G_j)h(G_{j+1})\}.
+\]
+The score is bounded.  Taylor expansion, the one-dependent CLT, and
+$K_N/N\to1/\mu$ give the displayed LAN expansion with
+$\mathcal I=\nu^2/\mu$.  The score is orthogonal to every renewal marginal
+score $s(G_j)$, since
+\[
+\EE\{h(G_j)h(G_{j+1})s(G_j)\}
+=\EE\{h(G_j)s(G_j)\}\EE h(G_{j+1})=0,
+\]
+and similarly at the other endpoint.  Thus estimating the symmetric renewal
+nuisance coordinates causes no information loss, including at the exchange
+boundary.  Under the local alternative, $d_N=O_P(N^{-1/2})$, so the guard in
+\textup{(F)} is inactive with probability tending to one.  Le Cam's third
+lemma gives the stated normal shift and power.  The local divergence is
+$N\eta_N^2\mathcal I/2+o(N\eta_N^2)$; contiguity below $N^{-1/2}$ and the
+Gaussian-shift Neyman--Pearson bound complete part~\textup{(iv)}.
 \end{proof}
 
 \begin{paperthm}[Fixed-setting retained-record quotient delta method]\label{thm:finite-record-quotient-delta-main}
