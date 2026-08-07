@@ -222,3 +222,49 @@ calendar-time local power. The integrated novelty claim is restricted to that
 combination; general distributional-distance testing, recurrent-event/HMM
 goodness-of-fit methodology, LAN, and Gaussian-shift optimality remain cited
 background.
+
+## A8-r4 Markov--Palm tangent and omnibus check
+
+Checked 2026-08-07 through the live arXiv Atom API and Crossref. The
+model-specific arXiv queries `all:"three inclusion" AND all:omnibus` and
+`all:"fixed marginal" AND all:"Markov gap"` each returned zero results. The
+broader query `all:"sampled-counter"` returned two lexical false positives,
+arXiv:2503.11227v2 and arXiv:2210.14086v3; neither concerns detector gaps,
+Palm laws, D-MAPs, or the tangent-space problem. Two additional exact queries
+were rate-limited by the API. Crossref searches for "sampled-counter tangent
+space", "Markov-Palm effective information", "three inclusion omnibus", and
+"fixed marginal Markov gap" returned no model-specific theorem matching the
+proposed construction.
+
+The general methodological ground is published and is not claimed here:
+
+- Brock--Kshirsagar, "A chi-square goodness-of-fit test for Markov renewal
+  processes," *Annals of the Institute of Statistical Mathematics* **25**,
+  643--654 (1973), DOI `10.1007/BF02479406`;
+- Skaug--Tjostheim, "A nonparametric test of serial independence based on the
+  empirical distribution function," *Biometrika* **80**(3), 591--602 (1993),
+  DOI `10.1093/biomet/80.3.591`;
+- Ghoudi--Kulperger--Remillard, "A nonparametric test of serial independence
+  for time series and residuals," *Journal of Multivariate Analysis* **79**(2),
+  191--218 (2001), DOI `10.1006/jmva.2000.1967`;
+- Dedecker--Merlevede, "The conditional central limit theorem in Hilbert
+  spaces," *Stochastic Processes and their Applications* **108**(2), 229--262
+  (2003), DOI `10.1016/S0304-4149(03)00115-7`;
+- Ingster--Suslina, *Nonparametric Goodness-of-Fit Testing Under Gaussian
+  Models*, Springer (2003), DOI `10.1007/978-0-387-21580-8`.
+
+Accordingly, Hilbert-space central limits, generic serial-independence basis
+tests, Rademacher-mixture lower bounds, and finite- or growing-dimensional
+Gaussian-sequence minimax envelopes remain attributed background. The
+model-specific novelty is restricted to the sampled-counter constraint
+`q(0,0)=0`, the resulting Markov--Palm information projection, and the
+exchange-local calibration of the weighted interaction statistic. The
+oracle's stronger assertion of LAN uniformity on every norm-compact subset of
+the full tangent space was not integrated: its direction-dependent truncation
+does not provide a common chart or a uniform likelihood remainder, and norm
+compactness alone does not make the isonormal limit tight on the index set.
+The assertion that finite gap mean alone controls every stationary-record
+endpoint likelihood was likewise not integrated; LAN is restricted to the
+explicit uniformly close realizing paths or to paths carrying an explicit
+endpoint-negligibility hypothesis. Absence from these searches is a bounded
+novelty check, not proof of universal absence from the literature.

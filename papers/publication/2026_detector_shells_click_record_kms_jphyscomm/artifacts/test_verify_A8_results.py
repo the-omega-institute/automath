@@ -146,6 +146,142 @@ class CompleteVisibleLawTestChecks(unittest.TestCase):
         self.assertGreater(powers[2], powers[1])
 
 
+class CompleteMarkovPalmTangentChecks(unittest.TestCase):
+    def setUp(self):
+        self.g = np.array([0.18, 0.27, 0.31, 0.24])
+        self.raw = np.array(
+            [
+                [0.7, -0.3, 0.2, 0.5],
+                [-0.8, 0.4, 0.1, -0.6],
+                [0.3, 0.9, -0.5, 0.2],
+                [-0.2, 0.6, 0.8, -0.7],
+            ]
+        )
+
+    def test_tangent_projection_is_double_centered_and_annihilates_zero_cell(self):
+        score = verify.markov_palm_tangent_projection(self.g, self.raw)
+        self.assertTrue(np.allclose(score @ self.g, 0.0, atol=2e-14))
+        self.assertTrue(np.allclose(self.g @ score, 0.0, atol=2e-14))
+        self.assertAlmostEqual(score[0, 0], 0.0, places=14)
+        self.assertTrue(
+            np.allclose(
+                verify.markov_palm_tangent_projection(self.g, score),
+                score,
+                atol=2e-14,
+            )
+        )
+
+    def test_projected_path_preserves_marginal_and_three_inclusions(self):
+        score = verify.markov_palm_tangent_projection(self.g, self.raw)
+        transition = verify.markov_palm_transition(self.g, score, 0.08)
+        null_transition = np.broadcast_to(self.g, transition.shape)
+        mean_cycle = float((np.arange(self.g.size) + 1.0) @ self.g)
+        self.assertTrue(np.allclose(transition.sum(axis=1), 1.0, atol=2e-14))
+        self.assertTrue(np.allclose(self.g @ transition, self.g, atol=2e-14))
+        self.assertTrue(
+            np.allclose(
+                verify.markov_gap_inclusions(self.g, transition, mean_cycle),
+                verify.markov_gap_inclusions(self.g, null_transition, mean_cycle),
+                atol=2e-14,
+            )
+        )
+
+    def test_calendar_time_information_has_mu_inverse_scaling(self):
+        score = verify.markov_palm_tangent_projection(self.g, self.raw)
+        mean_cycle = float((np.arange(self.g.size) + 1.0) @ self.g)
+        norm_squared = float(np.einsum("i,j,ij->", self.g, self.g, score**2))
+        information = verify.markov_palm_information(self.g, score)
+        self.assertAlmostEqual(information, norm_squared / mean_cycle, places=14)
+
+    def test_weighted_omnibus_has_strict_power_for_nonzero_direction(self):
+        weights = np.array([0.5, 0.2, 0.08, 0.03])
+        null_size, alternative_power = verify.weighted_omnibus_monte_carlo(
+            weights,
+            np.array([0.0, 0.0, 1.4, 0.0]),
+            alpha=0.05,
+            draws=300_000,
+            seed=20260807,
+        )
+        self.assertLess(abs(null_size - 0.05), 0.002)
+        self.assertGreater(alternative_power, null_size + 0.01)
+
+    def test_full_markov_tangent_projection_satisfies_all_constraints(self):
+        rng = np.random.default_rng(20260807)
+        for x in (0.35, 1.0, 2.4, 5.0):
+            g = verify.markov_gap_alternative(x, 0.0)[0][:12]
+            g /= g.sum()
+            projected = verify.markov_palm_tangent_projection(
+                g, rng.normal(size=(g.size, g.size))
+            )
+            self.assertTrue(np.allclose(projected @ g, 0.0, atol=3e-13))
+            self.assertTrue(np.allclose(g @ projected, 0.0, atol=3e-13))
+            self.assertAlmostEqual(projected[0, 0], 0.0, places=12)
+
+            mean_cycle = float((np.arange(g.size) + 1.0) @ g)
+            scale = 0.02 / np.max(np.abs(projected))
+            transition = g[None, :] * (1.0 + scale * projected)
+            null_transition = np.broadcast_to(g, transition.shape)
+            self.assertGreater(np.min(transition), 0.0)
+            self.assertTrue(np.allclose(transition.sum(axis=1), 1.0, atol=3e-13))
+            self.assertTrue(np.allclose(g @ transition, g, atol=3e-13))
+            self.assertTrue(
+                np.allclose(
+                    verify.markov_gap_inclusions(g, transition, mean_cycle),
+                    verify.markov_gap_inclusions(g, null_transition, mean_cycle),
+                    atol=3e-13,
+                )
+            )
+
+    def test_finite_markov_tangent_basis_is_orthonormal_and_complete(self):
+        g = verify.markov_gap_alternative(1.35, 0.0)[0][:7]
+        g /= g.sum()
+        basis = verify.finite_markov_tangent_basis(g)
+        self.assertEqual(basis.shape, ((g.size - 1) ** 2 - 1, g.size, g.size))
+        gram = np.einsum("i,j,aij,bij->ab", g, g, basis, basis)
+        self.assertTrue(np.allclose(gram, np.eye(basis.shape[0]), atol=4e-13))
+        self.assertTrue(np.allclose(np.einsum("aij,j->ai", basis, g), 0.0, atol=3e-13))
+        self.assertTrue(np.allclose(np.einsum("i,aij->aj", g, basis), 0.0, atol=3e-13))
+        self.assertTrue(np.allclose(basis[:, 0, 0], 0.0, atol=3e-13))
+
+    def test_markov_tangent_information_and_mixture_limit(self):
+        g = verify.markov_gap_alternative(1.35, 0.0)[0][:9]
+        g /= g.sum()
+        q = verify.finite_markov_tangent_basis(g)[3]
+        mean_cycle = float((np.arange(g.size) + 1.0) @ g)
+        information = verify.markov_palm_information(g, q)
+        self.assertAlmostEqual(information, 1.0 / mean_cycle, places=12)
+
+        lag_covariance = np.einsum("i,j,k,ij,jk->", g, g, g, q, q)
+        self.assertAlmostEqual(float(lag_covariance), 0.0, places=12)
+        second_moments = [
+            verify.rademacher_mixture_second_moment(1.7, mean_cycle, dimension)
+            for dimension in (16, 64, 256, 1024)
+        ]
+        self.assertTrue(all(value > 1.0 for value in second_moments))
+        self.assertTrue(all(a > b for a, b in zip(second_moments, second_moments[1:])))
+        self.assertLess(second_moments[-1] - 1.0, 3e-3)
+
+    def test_double_centering_cancels_first_order_marginal_drift(self):
+        g = np.array([0.12, 0.19, 0.27, 0.23, 0.19])
+        q = verify.finite_markov_tangent_basis(g)[5]
+        marginal_score = np.array([-0.7, 0.2, 0.9, -0.3, 0.1])
+        marginal_score -= float(g @ marginal_score)
+        coefficient = float(
+            np.einsum(
+                "i,j,ij,i,j->",
+                g,
+                g,
+                q,
+                marginal_score,
+                marginal_score,
+            )
+        )
+        for parameter in (0.04, -0.03, 0.015):
+            perturbed = g * (1.0 + parameter * marginal_score)
+            actual = float(np.einsum("i,j,ij->", perturbed, perturbed, q))
+            self.assertAlmostEqual(actual, parameter**2 * coefficient, places=14)
+
+
 class SamplingBiasTests(unittest.TestCase):
     def test_exact_rounded_cycle_mean_matches_gap_tail_sum(self):
         for gamma, kappa, delta in ((0.7, 1.9, 0.4), (1.3, 1.3, 0.2), (3.0, 0.6, 0.1)):

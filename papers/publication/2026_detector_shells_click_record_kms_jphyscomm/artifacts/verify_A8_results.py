@@ -4,7 +4,9 @@ The manuscript contains the proofs.  This script checks the exact physical
 image residual, the sharp hidden-mode bound and its diagonal extremizer, the
 diagonal counterexample to the oracle's unqualified one-dependence equation,
 the fast-sampling expansion, the A8-r2 joint physical-image test, and the
-A8-r3 finite-range Markov-gap specification score.
+A8-r3 finite-range Markov-gap specification score.  It also checks the full
+fixed-marginal Markov--Palm tangent projection and finite-dimensional basis
+used by the A8-r4 omnibus-score result.
 """
 
 from __future__ import annotations
@@ -320,6 +322,144 @@ def markov_gap_local_power(
     return 1.0 - normal.cdf(critical - local_parameter * math.sqrt(information))
 
 
+def _probability_vector(gap_mass: ArrayLike) -> FloatArray:
+    g = np.asarray(gap_mass, dtype=float)
+    if g.ndim != 1 or g.size < 2 or not np.all(np.isfinite(g)):
+        raise ValueError("gap_mass must be a finite one-dimensional vector")
+    if np.min(g) <= 0.0 or not math.isclose(float(g.sum()), 1.0, abs_tol=1e-12):
+        raise ValueError("gap_mass must be a strictly positive probability vector")
+    return g
+
+
+def markov_palm_tangent_projection(
+    gap_mass: ArrayLike, values: ArrayLike
+) -> FloatArray:
+    """Project a finite table onto the fixed-marginal, q(0,0)=0 tangent space."""
+    g = _probability_vector(gap_mass)
+    table = np.asarray(values, dtype=float)
+    if table.shape != (g.size, g.size) or not np.all(np.isfinite(table)):
+        raise ValueError("values must be a finite square table matching gap_mass")
+
+    row_mean = table @ g
+    column_mean = g @ table
+    interaction = table - row_mean[:, None] - column_mean[None, :] + g @ row_mean
+    zero_contrast = np.zeros_like(g)
+    zero_contrast[0] = 1.0
+    zero_contrast -= g[0]
+    atom_interaction = np.outer(zero_contrast, zero_contrast)
+    atom_norm_squared = float(
+        np.einsum("i,j,ij->", g, g, atom_interaction * atom_interaction)
+    )
+    coefficient = float(
+        np.einsum("i,j,ij->", g, g, interaction * atom_interaction)
+        / atom_norm_squared
+    )
+    return interaction - coefficient * atom_interaction
+
+
+def project_markov_tangent(gap_mass: ArrayLike, values: ArrayLike) -> FloatArray:
+    """Compatibility alias for :func:`markov_palm_tangent_projection`."""
+    return markov_palm_tangent_projection(gap_mass, values)
+
+
+def markov_palm_transition(
+    gap_mass: ArrayLike, score: ArrayLike, parameter: float
+) -> FloatArray:
+    """Construct Q(l|k)=g(l){1+parameter*q(k,l)} on a finite gap space."""
+    g = _probability_vector(gap_mass)
+    q = np.asarray(score, dtype=float)
+    if q.shape != (g.size, g.size) or not np.all(np.isfinite(q)):
+        raise ValueError("score must be a finite square table matching gap_mass")
+    if not math.isfinite(parameter):
+        raise ValueError("parameter must be finite")
+    transition = g[None, :] * (1.0 + parameter * q)
+    if np.min(transition) < -1e-14:
+        raise ValueError("parameter makes the transition kernel negative")
+    return transition
+
+
+def markov_palm_information(gap_mass: ArrayLike, score: ArrayLike) -> float:
+    """Return the fixed-marginal Markov score information per calendar bin."""
+    g = _probability_vector(gap_mass)
+    q = np.asarray(score, dtype=float)
+    if q.shape != (g.size, g.size) or not np.all(np.isfinite(q)):
+        raise ValueError("score must be a finite square table matching gap_mass")
+    mean_cycle = float((np.arange(g.size, dtype=float) + 1.0) @ g)
+    norm_squared = float(np.einsum("i,j,ij->", g, g, q * q))
+    return norm_squared / mean_cycle
+
+
+def _weighted_mean_zero_basis(gap_mass: ArrayLike) -> FloatArray:
+    g = _probability_vector(gap_mass)
+    candidates = []
+    zero_contrast = np.zeros_like(g)
+    zero_contrast[0] = 1.0
+    candidates.append(zero_contrast - g[0])
+    for index in range(1, g.size):
+        contrast = np.zeros_like(g)
+        contrast[index] = 1.0
+        candidates.append(contrast - g[index])
+
+    basis: list[FloatArray] = []
+    for candidate in candidates:
+        residual = candidate.copy()
+        for vector in basis:
+            residual -= float(g @ (residual * vector)) * vector
+        norm = math.sqrt(float(g @ (residual * residual)))
+        if norm > 2e-12:
+            basis.append(residual / norm)
+        if len(basis) == g.size - 1:
+            break
+    return np.asarray(basis)
+
+
+def finite_markov_tangent_basis(gap_mass: ArrayLike) -> FloatArray:
+    """Return an orthonormal basis of the finite Markov-Palm tangent space."""
+    one_gap_basis = _weighted_mean_zero_basis(gap_mass)
+    products = [
+        np.outer(left, right)
+        for left_index, left in enumerate(one_gap_basis)
+        for right_index, right in enumerate(one_gap_basis)
+        if (left_index, right_index) != (0, 0)
+    ]
+    return np.asarray(products)
+
+
+def weighted_omnibus_monte_carlo(
+    weights: ArrayLike,
+    direction: ArrayLike,
+    alpha: float = 0.05,
+    draws: int = 100_000,
+    seed: int = 0,
+) -> tuple[float, float]:
+    """Numerically compare the weighted Gaussian score law at zero and a direction."""
+    lam = np.asarray(weights, dtype=float)
+    shift = np.asarray(direction, dtype=float)
+    if lam.ndim != 1 or shift.shape != lam.shape or np.min(lam) <= 0.0:
+        raise ValueError("weights and direction must be equal-length vectors with positive weights")
+    if not 0.0 < alpha < 1.0 or draws < 2:
+        raise ValueError("alpha and draws are outside their admissible ranges")
+    rng = np.random.default_rng(seed)
+    normals = rng.normal(size=(draws, lam.size))
+    null_values = (normals * normals) @ lam
+    critical = float(np.quantile(null_values, 1.0 - alpha))
+    alternative_values = ((normals + shift) ** 2) @ lam
+    return (
+        float(np.mean(null_values > critical)),
+        float(np.mean(alternative_values > critical)),
+    )
+
+
+def rademacher_mixture_second_moment(
+    radius: float, mean_cycle: float, dimension: int
+) -> float:
+    """Return [cosh(r^2/(mu*d))]^d for the Gaussian-sequence mixture."""
+    if radius <= 0.0 or mean_cycle <= 0.0 or dimension < 1:
+        raise ValueError("radius, mean_cycle, and dimension must be positive")
+    argument = radius * radius / (mean_cycle * dimension)
+    return math.exp(dimension * math.log(math.cosh(argument)))
+
+
 def sampled_counter_inclusions(x: float, y: float) -> FloatArray:
     """Return (r0,r1,r2) for dimensionless positive rates x and y."""
     with mp.workdps(50):
@@ -536,6 +676,103 @@ def main() -> None:
     print(
         "finite-range score local powers (t=0,0.5,1)="
         + np.array2string(score_powers, precision=10)
+    )
+
+    tangent_row_errors = []
+    tangent_column_errors = []
+    tangent_atom_errors = []
+    tangent_inclusion_errors = []
+    tangent_information_errors = []
+    rng = np.random.default_rng(20260807)
+    for diagonal_rate in (0.35, 1.0, 2.4, 5.0):
+        gap_mass = markov_gap_alternative(diagonal_rate, 0.0)[0][:12]
+        gap_mass /= gap_mass.sum()
+        raw = rng.normal(size=(gap_mass.size, gap_mass.size))
+        score = markov_palm_tangent_projection(gap_mass, raw)
+        tangent_row_errors.append(np.max(np.abs(score @ gap_mass)))
+        tangent_column_errors.append(np.max(np.abs(gap_mass @ score)))
+        tangent_atom_errors.append(abs(score[0, 0]))
+        parameter = 0.02 / np.max(np.abs(score))
+        transition = markov_palm_transition(gap_mass, score, parameter)
+        null_transition = np.broadcast_to(gap_mass, transition.shape)
+        mean_cycle = float((np.arange(gap_mass.size) + 1.0) @ gap_mass)
+        tangent_inclusion_errors.append(
+            np.max(
+                np.abs(
+                    markov_gap_inclusions(gap_mass, transition, mean_cycle)
+                    - markov_gap_inclusions(gap_mass, null_transition, mean_cycle)
+                )
+            )
+        )
+        norm_squared = float(
+            np.einsum("i,j,ij->", gap_mass, gap_mass, score * score)
+        )
+        tangent_information_errors.append(
+            markov_palm_information(gap_mass, score) - norm_squared / mean_cycle
+        )
+
+    mixture_moments = np.array(
+        [rademacher_mixture_second_moment(1.7, 1.9, d) for d in (16, 64, 256, 1024)]
+    )
+    tangent_g = markov_gap_alternative(1.35, 0.0)[0][:9]
+    tangent_g /= tangent_g.sum()
+    tangent_raw = np.arange(tangent_g.size**2, dtype=float).reshape(
+        tangent_g.size, tangent_g.size
+    )
+    tangent_raw = np.sin(tangent_raw + 0.37)
+    tangent_score = markov_palm_tangent_projection(tangent_g, tangent_raw)
+    tangent_scale = 0.03 / np.max(np.abs(tangent_score))
+    tangent_transition = markov_palm_transition(
+        tangent_g, tangent_score, tangent_scale
+    )
+    tangent_mu = float((np.arange(tangent_g.size) + 1.0) @ tangent_g)
+    tangent_null = np.broadcast_to(tangent_g, tangent_transition.shape)
+    tangent_basis = finite_markov_tangent_basis(tangent_g)
+    tangent_gram = np.einsum(
+        "i,j,aij,bij->ab", tangent_g, tangent_g, tangent_basis, tangent_basis
+    )
+    tangent_norm = float(
+        np.einsum("i,j,ij->", tangent_g, tangent_g, tangent_score**2)
+    )
+    tangent_information_error = abs(
+        markov_palm_information(tangent_g, tangent_score)
+        - tangent_norm / tangent_mu
+    )
+    null_power, direction_power = weighted_omnibus_monte_carlo(
+        np.array([0.5, 0.2, 0.08, 0.03]),
+        np.array([0.0, 0.0, 1.4, 0.0]),
+        alpha=alpha,
+        draws=300_000,
+        seed=20260807,
+    )
+    print("A8-r4 complete Markov-Palm tangent verification")
+    print(
+        "tangent maximum row/column-centering error="
+        f"{max(_maximum(tangent_row_errors), _maximum(tangent_column_errors), np.max(np.abs(tangent_score @ tangent_g)), np.max(np.abs(tangent_g @ tangent_score))):.3e}"
+    )
+    print(
+        "tangent maximum |q(0,0)|="
+        f"{max(_maximum(tangent_atom_errors), abs(tangent_score[0, 0])):.3e}"
+    )
+    print(
+        "tangent three-inclusion maximum preservation error="
+        f"{max(_maximum(tangent_inclusion_errors), np.max(np.abs(markov_gap_inclusions(tangent_g, tangent_transition, tangent_mu) - markov_gap_inclusions(tangent_g, tangent_null, tangent_mu)))):.3e}"
+    )
+    print(
+        "finite tangent-basis maximum Gram error="
+        f"{np.max(np.abs(tangent_gram - np.eye(tangent_basis.shape[0]))):.3e}"
+    )
+    print(
+        "calendar-time information maximum scaling error="
+        f"{max(_maximum(tangent_information_errors), tangent_information_error):.3e}"
+    )
+    print(
+        "Rademacher mixture second moments (d=16,64,256,1024)="
+        + np.array2string(mixture_moments, precision=10)
+    )
+    print(
+        "weighted omnibus Monte Carlo (null, nonzero direction)="
+        + np.array2string(np.array([null_power, direction_power]), precision=10)
     )
 
 
