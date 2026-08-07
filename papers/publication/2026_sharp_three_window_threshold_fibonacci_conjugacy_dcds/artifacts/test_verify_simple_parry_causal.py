@@ -11,6 +11,7 @@ from verify_simple_parry_causal import (
     collision_graph_bad_path_count,
     gamma_claims,
     p_bonacci_claims,
+    periodic_collision,
     q_sequence,
     rank_is_consecutive,
 )
@@ -60,6 +61,12 @@ class SimpleParryCausalTests(unittest.TestCase):
         result = gamma_claims()
         self.assertEqual(result["counts"], [12, 4, 2, 0])
         self.assertEqual(result["positive_representatives"], [6, 2, 1, 0])
+
+    def test_gamma_aperture_two_has_a_constant_collision(self):
+        self.assertTrue(periodic_collision((1, 0, 1), 2, (1,)))
+
+    def test_gamma_aperture_three_has_a_period_four_collision(self):
+        self.assertTrue(periodic_collision((1, 0, 1), 3, (1, -1, -1, 1)))
 
     def test_gamma_root_geometry_is_pisot(self):
         roots = np.roots([1, -1, 0, -1])

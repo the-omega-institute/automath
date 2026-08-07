@@ -107,6 +107,27 @@ def collision_graph_bad_path_count(
     return sum(frontier.values())
 
 
+def periodic_collision(
+    digits: tuple[int, ...], m: int, period: tuple[int, ...]
+) -> bool:
+    """Return whether a nonzero periodic difference labels an output collision."""
+    if m < 1 or not period:
+        raise ValueError("the aperture and period must be positive")
+    d = digits[0]
+    if all(entry == 0 for entry in period):
+        return False
+    if any(entry < -d or entry > d for entry in period):
+        return False
+    q = q_sequence(digits, m)
+    modulus = q[m]
+    return all(
+        sum(q[j] * period[(phase + j) % len(period)] for j in range(m))
+        % modulus
+        == 0
+        for phase in range(len(period))
+    )
+
+
 def p_bonacci_claims(p: int) -> dict[str, int]:
     if p < 3:
         raise ValueError("the high-degree family begins at p=3")
@@ -121,7 +142,7 @@ def p_bonacci_claims(p: int) -> dict[str, int]:
     }
 
 
-def gamma_claims() -> dict[str, list[int] | int]:
+def gamma_claims() -> dict[str, list[int] | int | bool]:
     digits = (1, 0, 1)
     counts = [len(bad_blocks(digits, 4, length)) for length in range(1, 5)]
     positive = [
@@ -132,6 +153,10 @@ def gamma_claims() -> dict[str, list[int] | int]:
         "bounded_multiple_order": bounded_multiple_order(digits),
         "counts": counts,
         "positive_representatives": positive,
+        "aperture_2_periodic_collision": periodic_collision(digits, 2, (1,)),
+        "aperture_3_periodic_collision": periodic_collision(
+            digits, 3, (1, -1, -1, 1)
+        ),
     }
 
 
@@ -205,6 +230,8 @@ def main() -> int:
         "bounded_multiple_order": 3,
         "counts": [12, 4, 2, 0],
         "positive_representatives": [6, 2, 1, 0],
+        "aperture_2_periodic_collision": True,
+        "aperture_3_periodic_collision": True,
     }
     status = "PASS" if gamma == gamma_expected else "FAIL"
     print("Cubic reverse-mismatch battery:")

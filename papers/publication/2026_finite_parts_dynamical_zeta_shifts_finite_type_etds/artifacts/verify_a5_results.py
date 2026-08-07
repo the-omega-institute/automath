@@ -252,17 +252,20 @@ def critical_mahler_normalization_matches() -> bool:
         return False
 
     with mp.workdps(80):
-        real_x = mp.mpf(1) / 3
-        logarithmic_product = mp.fsum(
-            mp.power(2, -nu)
-            * mp.log((1 - real_x ** (2**nu)) / (1 + real_x ** (2**nu)))
-            for nu in range(12)
-        )
-        product_value = mp.exp(logarithmic_product)
-        return (
-            abs(product_value - mp.mpf(4) / 9) < mp.mpf("1e-70")
-            and abs(product_value - (1 - real_x)) > mp.mpf("1e-2")
-        )
+        for numerator_x in range(1, 50):
+            real_x = mp.mpf(numerator_x) / 100
+            logarithmic_product = mp.fsum(
+                mp.power(2, -nu)
+                * mp.log((1 - real_x ** (2**nu)) / (1 + real_x ** (2**nu)))
+                for nu in range(12)
+            )
+            product_value = mp.exp(logarithmic_product)
+            if (
+                abs(product_value - (1 - real_x) ** 2) >= mp.mpf("1e-70")
+                or abs(product_value - (1 - real_x)) <= mp.mpf("1e-3")
+            ):
+                return False
+    return True
 
 
 def _critical_mahler_coefficients(order: int) -> tuple[sp.Integer, ...]:
@@ -316,7 +319,7 @@ def critical_zero_estimate_pullback_matches() -> bool:
         p_zero**n * q.subs({z: z**2, y: p_one * y**2 / p_zero}, simultaneous=True)
     )
     pullback = sp.Poly(pullback, z, y).as_expr()
-    coefficients = _critical_mahler_coefficients(18)
+    coefficients = _critical_mahler_coefficients(22)
     f = sum(coefficient * z**degree for degree, coefficient in enumerate(coefficients))
     evaluated_pullback = sp.series(pullback.subs(y, f), z, 0, 19).removeO()
     expected = sp.series(
@@ -325,12 +328,26 @@ def critical_zero_estimate_pullback_matches() -> bool:
         0,
         19,
     ).removeO()
+    degree_z = 2
+    degree_y = 2
+    bound = degree_z + 4 * degree_z * degree_y + eta * degree_y**2
+    columns = []
+    for y_degree in range(degree_y + 1):
+        f_power = sp.series(f**y_degree, z, 0, bound + 1).removeO()
+        for z_degree in range(degree_z + 1):
+            polynomial = sp.Poly(
+                sp.series(z**z_degree * f_power, z, 0, bound + 1).removeO(),
+                z,
+            )
+            columns.append([polynomial.nth(row) for row in range(bound + 1)])
+    coefficient_matrix = sp.Matrix(bound + 1, len(columns), lambda row, col: columns[col][row])
     return all(
         (
             sp.Poly(q, z, y).is_irreducible,
             sp.Poly(pullback, z, y).degree(y) <= 2 * n,
             sp.Poly(pullback, z, y).degree(z) <= 2 * d + eta * n,
             sp.expand(evaluated_pullback - expected) == 0,
+            coefficient_matrix.rank() == (degree_z + 1) * (degree_y + 1),
         )
     )
 
@@ -669,9 +686,9 @@ def render_report() -> str:
         "Positive rational Mahler certificate: verified on the same real grid",
         "Unrestricted Mahler kernel inclusion: domain counterexample verified",
         "Diagonal same-base Mahler subclass: compatibility and strict gap verified",
-        "Critical Mahler normalization: squared product; unsquared identity refuted",
+        "Critical Mahler normalization: squared product on 49 real points; unsquared identity refuted",
         "Critical Mahler integrality: 24 integer coefficients and equation verified",
-        "Critical zero-estimate pullback: exact identity and bidegrees verified",
+        "Critical zero-estimate pullback: exact identity, bidegrees, and finite-rank bound verified",
         "Normalized Mahler saturation: exact rational examples verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",
