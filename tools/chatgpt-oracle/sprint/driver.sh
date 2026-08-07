@@ -27,7 +27,9 @@ for tick in $(seq 1 400); do
         echo "[$ts] $t r$rnd FAILED upstream -> rolled back, will resend"; acted=1
         continue
       fi
-      if [ "$n" -gt 800 ] && ! echo "$r" | grep -q "Task is dispatched"; then
+      # 300, not 800: an honest short verdict ("undecided", a retraction) is a real
+      # round and must not be mistaken for an empty reply
+      if [ "$n" -gt 300 ] && ! echo "$r" | grep -qE "Task is dispatched|Task is queued"; then
         # off-topic reply: the pool handed back another conversation's answer
         if ! echo "$r" | grep -qi "${K[$t]}"; then
           : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
