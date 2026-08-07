@@ -100,6 +100,42 @@ unknown.  Absolute priority cannot be certified by a finite database search;
 the zero-result API queries and the targeted comparison above provide
 evidence of novelty, not a logical proof of it.
 
+## Effective rational Mahler coboundary audit
+
+An additional search was performed on 8 August 2026 for the normalized
+nonlinear equation
+`P0(z) R(z)^2 = P1(z) R(z^2)`. The arXiv Atom API returned zero results for
+each of
+
+- `all:"rational solutions" AND all:"Mahler equation"`;
+- `all:"Mahler coboundary"`;
+- `all:"multiplicative coboundary" AND all:Mahler`;
+- `all:"rational function" AND all:"f(z^k)"`.
+
+The broader query `all:"Mahler equations" AND all:algorithm AND
+all:rational` returned four records. The only directly adjacent one was
+F. Chyzak, T. Dreyfus, P. Dumas, and M. Mezzarobba, *Computing solutions of
+linear Mahler equations*, Math. Comp. 87 (2018), 2977--3021,
+DOI `10.1090/mcom/3359`, arXiv:`1612.05518`. It treats linear Mahler
+operators, not the nonlinear normalized equation above. The same authors'
+*First-order factors of linear Mahler operators*, arXiv:`2403.11545`, computes
+infinite-product solutions and factors of linear Mahler operators; its
+Hermite--Pade step likewise does not state the divisor bound, coefficient
+height bound, or nonlinear Pade criterion used here.
+
+Crossref and zbMATH Open were queried with the phrases `rational solutions
+Mahler equations`, `effective rationality Mahler functions algorithm`,
+`rational solutions nonlinear Mahler equation`, and `algebraic Mahler equation
+rational solution algorithm`. The potentially closest title was C. Pegis,
+*Rational solutions of a nonlinear functional equation related to Mahler's
+equation*, J. Math. Anal. Appl. 199 (1996), 489--494,
+DOI `10.1006/jmaa.1996.0156`. The zbMATH review identifies its equation as
+`F(z^2)=A F(z)+B+C/F(z)` for constants `A,B,C`; it is not the equation
+`F(z^2)=(P0/P1)F(z)^2` and supplies none of the present input-dependent
+bounds. No searched record states the effective normalized rational
+coboundary theorem integrated in the manuscript. As above, this is positive
+evidence of novelty rather than a proof of absolute priority.
+
 Finally, the requested stronger dependence on only `(graph, group,
 Perron-peripheral spectrum)` is mathematically impossible.  The paper gives
 two primitive `Z/2` extensions of the same two-vertex graph with the same

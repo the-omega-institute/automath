@@ -66,6 +66,42 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.rational_mahler_saturation_matches())
 
+    def test_effective_mahler_pade_reconstructs_normalized_certificates(self):
+        self.assertTrue(
+            hasattr(verifier, "effective_rational_mahler_coboundary"),
+            "the effective rational Mahler decision procedure is not implemented",
+        )
+        z = sp.Symbol("z")
+
+        first = verifier.effective_rational_mahler_coboundary(1 + z, 1 - z)
+        second = verifier.effective_rational_mahler_coboundary(
+            1 + z**2, (1 + z) ** 2
+        )
+
+        self.assertEqual(first["rational_function"], 1 - z)
+        self.assertEqual(second["rational_function"], 1 + z)
+
+    def test_effective_mahler_pade_rejects_a_parity_compatible_noncertificate(self):
+        z = sp.Symbol("z")
+
+        result = verifier.effective_rational_mahler_coboundary(1 + 2 * z, 1 - 2 * z)
+
+        self.assertIsNone(result)
+
+    def test_effective_mahler_certificate_obeys_stated_degree_and_height_bounds(self):
+        self.assertTrue(
+            hasattr(verifier, "effective_mahler_bounds_match"),
+            "the effective Mahler degree and height checks are not implemented",
+        )
+        self.assertTrue(verifier.effective_mahler_bounds_match())
+
+    def test_same_base_characteristic_polynomial_coefficient_bound(self):
+        self.assertTrue(
+            hasattr(verifier, "same_base_determinant_bounds_match"),
+            "the same-base determinant coefficient check is not implemented",
+        )
+        self.assertTrue(verifier.same_base_determinant_bounds_match())
+
     def test_quadratic_binary_certificate_minimality_enumeration(self):
         self.assertTrue(
             hasattr(verifier, "enumerate_quadratic_binary_certificates"),
@@ -170,6 +206,9 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Critical Mahler integrality: 24 integer coefficients", report)
         self.assertIn("Critical zero-estimate pullback: exact identity, bidegrees", report)
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
+        self.assertIn("Effective rational Mahler Pade decision: verified", report)
+        self.assertIn("Effective Mahler degree and height bounds: verified", report)
+        self.assertIn("Same-base determinant coefficient bound: verified", report)
         self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))
 

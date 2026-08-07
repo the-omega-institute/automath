@@ -384,6 +384,198 @@ def rational_mahler_saturation_matches() -> bool:
     return True
 
 
+def _constant_one_polynomial(expression: sp.Expr, variable: sp.Symbol) -> sp.Poly:
+    polynomial = sp.Poly(expression, variable, domain=sp.QQ)
+    constant = polynomial.eval(0)
+    if constant == 0:
+        raise ValueError("the polynomial must be non-zero at the origin")
+    return sp.Poly(polynomial.as_expr() / constant, variable, domain=sp.QQ)
+
+
+@lru_cache(maxsize=None)
+def effective_rational_mahler_coboundary(
+    p_zero_expression: sp.Expr, p_one_expression: sp.Expr
+) -> dict[str, sp.Expr | int] | None:
+    """Decide P0/P1=R(z^2)/R(z)^2 by the finite Pade criterion."""
+    z = sp.Symbol("z")
+    p_zero = sp.Poly(p_zero_expression, z, domain=sp.ZZ)
+    p_one = sp.Poly(p_one_expression, z, domain=sp.ZZ)
+    if p_zero.eval(0) != 1 or p_one.eval(0) != 1:
+        raise ValueError("both input polynomials must have constant term one")
+    if sp.gcd(p_zero, p_one).degree() > 0:
+        raise ValueError("the input polynomials must be coprime")
+
+    total_degree = p_zero.degree() + p_one.degree()
+    if total_degree == 0:
+        return {
+            "rational_function": sp.Integer(1),
+            "numerator": sp.Integer(1),
+            "denominator": sp.Integer(1),
+            "degree_bound": 0,
+            "height_bound": sp.Integer(0),
+        }
+    if p_zero.degree() != p_one.degree():
+        return None
+    maximum_degree = max(p_zero.degree(), p_one.degree())
+    if any(
+        (p_zero.nth(index) - p_one.nth(index)) % 2
+        for index in range(maximum_degree + 1)
+    ):
+        return None
+
+    logarithmic_depth = total_degree.bit_length() - 1
+    degree_bound = total_degree**2 * (2 ** (logarithmic_depth + 1) - 1)
+    p_zero_coefficients = [
+        p_zero.nth(index) for index in range(p_zero.degree() + 1)
+    ]
+    p_one_coefficients = [
+        p_one.nth(index) for index in range(p_one.degree() + 1)
+    ]
+    series_coefficients = [sp.Integer(1)]
+    for degree in range(1, 2 * degree_bound + 1):
+        right_hand_side = sum(
+            p_one_coefficients[index] * series_coefficients[(degree - index) // 2]
+            for index in range(min(degree, p_one.degree()) + 1)
+            if (degree - index) % 2 == 0
+        )
+        known_square = sp.Integer(0)
+        for index in range(min(degree, p_zero.degree()) + 1):
+            residual_degree = degree - index
+            for left_degree in range(residual_degree + 1):
+                right_degree = residual_degree - left_degree
+                if index == 0 and (
+                    (left_degree == 0 and right_degree == degree)
+                    or (left_degree == degree and right_degree == 0)
+                ):
+                    continue
+                known_square += (
+                    p_zero_coefficients[index]
+                    * series_coefficients[left_degree]
+                    * series_coefficients[right_degree]
+                )
+        series_coefficients.append(sp.cancel((right_hand_side - known_square) / 2))
+
+    denominator_variables = sp.symbols(f"b1:{degree_bound + 1}")
+    denominator_coefficients = (sp.Integer(1),) + denominator_variables
+    pade_equations = [
+        sum(
+            denominator_coefficients[index] * series_coefficients[degree - index]
+            for index in range(degree_bound + 1)
+        )
+        for degree in range(degree_bound + 1, 2 * degree_bound + 1)
+    ]
+    solution_set = sp.linsolve(pade_equations, denominator_variables)
+    if solution_set == sp.EmptySet:
+        return None
+    solution = next(iter(solution_set))
+    free_variables = set().union(*(entry.free_symbols for entry in solution))
+    specialization = {variable: 0 for variable in free_variables}
+    denominator_coefficients = (sp.Integer(1),) + tuple(
+        sp.cancel(entry.subs(specialization)) for entry in solution
+    )
+    denominator = sum(
+        coefficient * z**degree
+        for degree, coefficient in enumerate(denominator_coefficients)
+    )
+    numerator = sum(
+        sum(
+            denominator_coefficients[index] * series_coefficients[degree - index]
+            for index in range(min(degree, degree_bound) + 1)
+        )
+        * z**degree
+        for degree in range(degree_bound + 1)
+    )
+    numerator, denominator = sp.cancel(numerator / denominator).as_numer_denom()
+    numerator = _constant_one_polynomial(numerator, z).as_expr()
+    denominator = _constant_one_polynomial(denominator, z).as_expr()
+    identity = sp.expand(
+        p_zero.as_expr() * numerator**2 * denominator.subs(z, z**2)
+        - p_one.as_expr() * numerator.subs(z, z**2) * denominator**2
+    )
+    if identity != 0:
+        return None
+
+    heights = [
+        sp.log(max(abs(coefficient) for coefficient in polynomial.all_coeffs()))
+        for polynomial in (p_zero, p_one)
+    ]
+    mahler_input_bound = (
+        sum(heights)
+        + sp.log((p_zero.degree() + 1) * (p_one.degree() + 1)) / 2
+    )
+    height_bound = (
+        degree_bound * sp.log(2)
+        + total_degree * (logarithmic_depth + 1) * mahler_input_bound
+    )
+    return {
+        "rational_function": sp.cancel(numerator / denominator),
+        "numerator": numerator,
+        "denominator": denominator,
+        "degree_bound": degree_bound,
+        "height_bound": height_bound,
+    }
+
+
+def effective_mahler_bounds_match() -> bool:
+    """Check reconstruction, parity, and the explicit degree/height bounds."""
+    z = sp.Symbol("z")
+    examples = (1 - z, 1 + 2 * z)
+    for rational_function in examples:
+        ratio = sp.cancel(
+            rational_function.subs(z, z**2) / rational_function**2
+        )
+        p_zero, p_one = ratio.as_numer_denom()
+        p_zero = _constant_one_polynomial(p_zero, z).as_expr()
+        p_one = _constant_one_polynomial(p_one, z).as_expr()
+        result = effective_rational_mahler_coboundary(p_zero, p_one)
+        if result is None or result["rational_function"] != rational_function:
+            return False
+        numerator = sp.Poly(result["numerator"], z, domain=sp.ZZ)
+        denominator = sp.Poly(result["denominator"], z, domain=sp.ZZ)
+        actual_height = max(
+            sp.log(max(abs(coefficient) for coefficient in polynomial.all_coeffs()))
+            for polynomial in (numerator, denominator)
+        )
+        if not all(
+            (
+                numerator.degree() + denominator.degree()
+                <= result["degree_bound"],
+                sp.N(actual_height - result["height_bound"], 30) <= 0,
+                sp.Poly(p_zero - p_one, z, modulus=2).is_zero,
+            )
+        ):
+            return False
+    return effective_rational_mahler_coboundary(1 + 2 * z, 1 - 2 * z) is None
+
+
+def same_base_determinant_bounds_match() -> bool:
+    """Check the coefficient estimate for compatible same-base sign blocks."""
+    z = sp.Symbol("z")
+    adjacency = sp.Matrix(
+        ((0, 4, 0, 0), (1, 1, 0, 2), (0, 0, 0, 4), (0, 2, 1, 1))
+    )
+    sign_blocks = (
+        sp.Matrix(((0, -2, 0, 0), (-1, -1, 0, -2), (0, 0, 0, -2), (0, 2, -1, 1))),
+        sp.Matrix(((0, -4, 0, 0), (1, 1, 0, 0), (0, 0, 0, -4), (0, 0, 1, 1))),
+    )
+    size = adjacency.rows
+    maximum_entry = max(1, *(int(entry) for entry in adjacency))
+    coefficient_bound = (size * maximum_entry) ** size
+    for matrix in sign_blocks:
+        determinant = sp.Poly((sp.eye(size) - z * matrix).det(), z, domain=sp.ZZ)
+        if not all(
+            (
+                determinant.degree() <= size,
+                max(abs(coefficient) for coefficient in determinant.all_coeffs())
+                <= coefficient_bound,
+                all(abs(matrix[i, j]) <= adjacency[i, j] for i in range(size) for j in range(size)),
+                all((matrix[i, j] - adjacency[i, j]) % 2 == 0 for i in range(size) for j in range(size)),
+            )
+        ):
+            return False
+    return True
+
+
 @lru_cache(maxsize=1)
 def enumerate_quadratic_binary_certificates() -> dict[str, int]:
     """Exhaust the four-vertex, two-out-regular signed certificate class."""
@@ -627,6 +819,20 @@ def render_report() -> str:
         "critical Mahler integrality": critical_mahler_integrality_matches(),
         "critical zero-estimate pullback": critical_zero_estimate_pullback_matches(),
         "normalized rational Mahler saturation": rational_mahler_saturation_matches(),
+        "effective rational Mahler Pade decision": all(
+            (
+                effective_rational_mahler_coboundary(
+                    1 + sp.Symbol("z"), 1 - sp.Symbol("z")
+                )["rational_function"]
+                == 1 - sp.Symbol("z"),
+                effective_rational_mahler_coboundary(
+                    1 + 2 * sp.Symbol("z"), 1 - 2 * sp.Symbol("z")
+                )
+                is None,
+            )
+        ),
+        "effective Mahler bounds": effective_mahler_bounds_match(),
+        "same-base determinant coefficient bound": same_base_determinant_bounds_match(),
         "quadratic binary certificate enumeration": enumeration
         == {
             "primitive_bases": 2208,
@@ -690,6 +896,9 @@ def render_report() -> str:
         "Critical Mahler integrality: 24 integer coefficients and equation verified",
         "Critical zero-estimate pullback: exact identity, bidegrees, and finite-rank bound verified",
         "Normalized Mahler saturation: exact rational examples verified",
+        "Effective rational Mahler Pade decision: verified",
+        "Effective Mahler degree and height bounds: verified",
+        "Same-base determinant coefficient bound: verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",
         f"Primitive necklaces and quotient correction checked through z^{max_degree}.",

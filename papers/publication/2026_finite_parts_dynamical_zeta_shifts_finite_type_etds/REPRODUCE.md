@@ -68,6 +68,10 @@ checks that the remaining special-value interface occurs within the same-base
 compatibility and strict-gap constraints.
 It also exhausts all `10^4` four-vertex two-out-regular base matrices and every
 compatible signed block used in the polynomial-certificate minimality proof.
+The same exact-arithmetic program executes the finite rational Mahler
+coefficient recursion and Pade system on accepted and rejected inputs, checks
+the cleared polynomial identity, and verifies the stated degree, height, and
+same-base determinant coefficient bounds.
 The expected enumeration is `2208` primitive bases, `48` supports for
 `1-z^2+2z^4`, and `0` supports for `(1-z+2z^2)^2`.  A separate high-precision
 check evaluates the telescoping identity at 25 points in `0 < z <= 1/4`:

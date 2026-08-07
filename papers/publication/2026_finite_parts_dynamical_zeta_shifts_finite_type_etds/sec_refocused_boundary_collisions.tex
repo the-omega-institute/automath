@@ -512,6 +512,284 @@ strict gaps, and realizes
 \]
 \end{remark}
 
+The preceding lifting theorem supplies a rational certificate abstractly.  We
+now show that its existence and the certificate itself are decidable by a
+single finite Pad\'e calculation.  For an integral polynomial \(P\), write
+\[
+ h(P):=\log\max_j\abs{[z^j]P}.
+\]
+
+\begin{theorem}[Effective normalized rational coboundary criterion]
+\label{thm:effective-rational-mahler-coboundary}
+Let \(P_0,P_1\in\ZZ[z]\) be coprime, with
+\(P_0(0)=P_1(0)=1\).  Put \(d_i=\deg P_i\) and \(D=d_0+d_1\).
+If \(D=0\), then \(P_0=P_1=1\), and the unique normalized solution is
+\(R=1\).  If \(D>0\), put
+\begin{equation}\label{eq:effective-mahler-bounds}
+ L=\lfloor\log_2D\rfloor,
+ \qquad
+ N=D^2(2^{L+1}-1)<2D^3,
+\end{equation}
+and
+\begin{equation}\label{eq:effective-mahler-height-bound}
+ \Lambda=h(P_0)+h(P_1)
+   +\frac12\log\bigl((d_0+1)(d_1+1)\bigr),
+ \qquad
+ K=N\log2+D(L+1)\Lambda.
+\end{equation}
+There is a finite algorithm over \(\QQ\), using only \(P_0,P_1\), which
+decides whether
+\begin{equation}\label{eq:effective-mahler-equation}
+ \frac{P_0(z)}{P_1(z)}
+ =\frac{R(z^2)}{R(z)^2},
+ \qquad R\in\QQ(z)^\times,\quad R(0)=1,
+\end{equation}
+and constructs \(R\) when it exists.  The solution is unique.  In its unique
+reduced form
+\[
+ R=\frac{A}{B},
+ \qquad A,B\in\ZZ[z],\quad (A,B)=1,\quad A(0)=B(0)=1,
+\]
+it satisfies
+\begin{equation}\label{eq:effective-mahler-output-bounds}
+ \deg A+\deg B\le N,
+ \qquad
+ \max\{h(A),h(B)\}\le K.
+\end{equation}
+In particular, \(\max\{\deg A,\deg B\}<2D^3\).  Two necessary conditions
+are
+\begin{equation}\label{eq:effective-mahler-obstructions}
+ d_0=d_1,
+ \qquad P_0\equiv P_1\pmod2.
+\end{equation}
+
+More explicitly, let \(S(z)=\sum_{n\ge0}s_nz^n\in1+z\QQ[[z]]\) be the
+unique formal solution of
+\begin{equation}\label{eq:effective-mahler-formal-equation}
+ P_0(z)S(z)^2=P_1(z)S(z^2).
+\end{equation}
+Writing \(p_{i,j}=[z^j]P_i\), its coefficients are obtained successively from
+\begin{equation}\label{eq:effective-mahler-coefficient-recurrence}
+\begin{split}
+ 2s_n={}&
+ \sum_{\substack{0\le j\le d_1\\j\le n,\ n-j\ {\rm even}}}
+   p_{1,j}s_{(n-j)/2} \\
+ &-\sum_{\substack{0\le j\le d_0,\ u,v\ge0,\ u+v=n-j\\
+          (j,u,v)\ne(0,0,n),(0,n,0)}}p_{0,j}s_us_v
+ \qquad(n\ge1).
+\end{split}
+\end{equation}
+After computing \(s_0,\ldots,s_{2N}\), solve the affine linear system
+\begin{equation}\label{eq:effective-mahler-pade-system}
+ \sum_{j=0}^N b_js_{k-j}=0
+ \quad(N+1\le k\le2N),
+ \qquad b_0=1,\qquad s_m=0\ (m<0).
+\end{equation}
+If it is inconsistent, reject.  Otherwise choose any solution, put
+\[
+ B_*(z)=\sum_{j=0}^Nb_jz^j,
+ \qquad
+ A_*(z)=\sum_{k=0}^N
+       \left(\sum_{j=0}^{\min\{k,N\}}b_js_{k-j}\right)z^k,
+\]
+cancel their common factor, and normalize both constant terms to one.  Accept
+the resulting \(A/B\) precisely when
+\begin{equation}\label{eq:effective-mahler-final-identity}
+ P_0(z)A(z)^2B(z^2)=P_1(z)A(z^2)B(z)^2.
+\end{equation}
+Thus the procedure requires neither factorization over
+\(\overline{\QQ}\) nor enumeration of divisors.
+\end{theorem}
+
+\begin{proof}
+Suppose first that \(R\) exists.  For
+\(\alpha\in\overline{\QQ}^{\times}\), set
+\[
+ r(\alpha)=\operatorname{ord}_{z=\alpha}R,
+ \qquad
+ e(\alpha)=\operatorname{ord}_{z=\alpha}(P_0/P_1).
+\]
+The map \(z\mapsto z^2\) is unramified at \(\alpha\ne0\), so
+\begin{equation}\label{eq:effective-mahler-divisor-recurrence}
+ e(\alpha)=r(\alpha^2)-2r(\alpha).
+\end{equation}
+Along the forward square orbit, write \(r_j=r(\alpha^{2^j})\) and
+\(e_j=e(\alpha^{2^j})\).  Iteration gives
+\[
+ r_0=2^{-m}r_m-\sum_{j=0}^{m-1}2^{-j-1}e_j.
+\]
+The divisor of \(R\) has finite support, so \(r_m\) is bounded.  Letting
+\(m\to\infty\), and using \(\abs{e_j}\le D\), gives
+\(\abs{r(\alpha)}\le D\).  If \(r(\alpha)\ne0\), the forward orbit must
+meet the support of \(e\).  If \(k\) is its first such index, then
+\(r_{j+1}=2r_j\) for \(j<k\); hence
+\[
+ 2^k\le2^k\abs{r_0}=\abs{r_k}\le D,
+ \qquad k\le L.
+\]
+Consequently every finite non-zero zero or pole of \(R\) is a zero of
+\begin{equation}\label{eq:effective-mahler-window-polynomial}
+ W(z):=\prod_{k=0}^{L}P_0(z^{2^k})P_1(z^{2^k}).
+\end{equation}
+Because each input polynomial is primitive and has constant term one, every
+rational irreducible factor of \(W\), normalized to have constant term one,
+lies in \(\ZZ[z]\).  The multiplicity bound above therefore gives
+\[
+ A(z)B(z)\mid W(z)^D\quad\hbox{in }\ZZ[z].
+\]
+Since
+\(\deg W=D(2^{L+1}-1)\), this proves the degree bound in
+\eqref{eq:effective-mahler-output-bounds}.
+
+Let \(M(\,\cdot\,)\) denote Mahler measure.  The standard estimates
+\[
+ \log M(Q)\le h(Q)+\frac12\log(\deg Q+1),
+ \qquad
+ h(Q)\le\deg Q\log2+\log M(Q)
+\]
+and \(M(Q(z^m))=M(Q)\) give
+\[
+ \log M(W)\le(L+1)\Lambda.
+\]
+Mahler measure is multiplicative, and a non-zero integral polynomial has
+measure at least one.  The preceding divisibility thus implies
+\[
+ \log M(A),\ \log M(B)\le D(L+1)\Lambda.
+\]
+Together with the degree bound, this proves
+\eqref{eq:effective-mahler-height-bound}--
+\eqref{eq:effective-mahler-output-bounds}.
+
+At infinity,
+\(\operatorname{ord}_\infty R(z^2)=2\operatorname{ord}_\infty R\), so the right-hand side
+of \eqref{eq:effective-mahler-equation} has order zero there.  This proves
+\(d_0=d_1\).  Moreover, reduction modulo two gives
+\(A(z^2)=A(z)^2\) and \(B(z^2)=B(z)^2\).  Hence the right-hand side is one
+in \(\mathbb F_2(z)\), proving \(P_0\equiv P_1\pmod2\).
+
+The two occurrences of \(s_n\) on the left of
+\eqref{eq:effective-mahler-formal-equation} have coefficient two; every
+other coefficient in degree \(n\) involves only
+\(s_0,\ldots,s_{n-1}\).  This proves
+\eqref{eq:effective-mahler-coefficient-recurrence} and the uniqueness of
+\(S\).  If a rational solution exists, its Taylor series is \(S\).  The
+degree bound therefore implies that its denominator occurs among the
+solutions of \eqref{eq:effective-mahler-pade-system}.
+
+It remains to justify that an arbitrary solution of that system is harmless.
+For two resulting pairs \((A_i,B_i)\), one has
+\[
+ B_iS-A_i=O(z^{2N+1}),
+\]
+and consequently
+\[
+ A_1B_2-A_2B_1=O(z^{2N+1}).
+\]
+The polynomial on the left has degree at most \(2N\), and hence vanishes
+identically.  Thus every solution of the affine system produces the same
+rational approximant.  If a genuine \(R\) exists, this approximant is \(R\);
+conversely, \eqref{eq:effective-mahler-final-identity} is exactly the cleared
+form of \eqref{eq:effective-mahler-equation}.  The final identity therefore
+gives both sound rejection and complete reconstruction.  Uniqueness also
+follows from the normalized injectivity of \(\delta\) proved in
+\Cref{prop:rational-mahler-certificate}.
+\end{proof}
+
+\begin{remark}[Termination and a conservative bit bound]
+\label{rem:effective-rational-mahler-complexity}
+Let
+\[
+ d=\max\{1,d_0,d_1\},
+ \qquad
+ \tau=1+\max_i\left\lceil\log_2\norm{P_i}_\infty\right\rceil,
+ \qquad b=\tau+\log(D+1).
+\]
+All loops stop at \(2N\), and the only linear system has \(N\) equations and
+\(N\) unknowns.  If the parity condition in
+\eqref{eq:effective-mahler-obstructions} holds, the
+Dieudonn\'e--Dwork argument of
+\Cref{lem:critical-mahler-integrality} applies verbatim to
+\eqref{eq:effective-mahler-formal-equation}, so \(S\in\ZZ[[z]]\).  On the
+circle
+\[
+ \abs z=\rho:=(4d2^\tau)^{-1}
+\]
+one has \(\abs{P_i(z)-1}\le1/4\).  The convergent local product for \(S\)
+is
+\[
+ S(z)=\prod_{\nu\ge0}
+ \left(\frac{P_1(z^{2^\nu})}{P_0(z^{2^\nu})}\right)^{2^{-\nu-1}}.
+\]
+Indeed,
+\[
+ \abs{P_i(z)-1}
+ \le\frac{d2^{\tau-1}\rho}{1-\rho}<\frac14,
+\]
+and the logarithm series gives
+\(\abs{\log S(z)}\le2\log(4/3)<\log2\).  Thus
+\(\abs{S(z)}<2\) on the circle, and Cauchy's estimate gives
+\begin{equation}\label{eq:effective-mahler-coefficient-size}
+ \abs{s_n}\le2(4d2^\tau)^n.
+\end{equation}
+Thus the required series coefficients have \(O(Nb)\) bits.  In Bareiss
+fraction-free elimination, every intermediate entry is a minor and has
+\(O(N^2b)\) bits.  With schoolbook integer arithmetic, the complete procedure
+therefore uses
+\begin{equation}\label{eq:effective-mahler-bit-complexity}
+ O(N^7b^2)\quad\hbox{bit operations},
+ \qquad O(N^4b)\quad\hbox{bits of storage}.
+\end{equation}
+These deliberately elementary bounds prove polynomial-time termination; no
+claim of optimality is made.  Fast integer and modular linear algebra improve
+them, but an exact sharper exponent would require a separate complexity
+analysis.
+\end{remark}
+
+\begin{corollary}[Same-base effective specialization]
+\label{cor:same-base-effective-rational-mahler}
+Let \(A\) be an \(n\times n\) non-negative integral matrix and let \(B,B'\)
+be integral matrices satisfying
+\[
+ \abs{B_{ij}},\abs{B'_{ij}}\le A_{ij},
+ \qquad B_{ij}\equiv B'_{ij}\equiv A_{ij}\pmod2.
+\]
+Assume that
+\(P_0=\det(I-zB)\) and \(P_1=\det(I-zB')\) are coprime, and put
+\(a_*=\max\{1,A_{ij}:1\le i,j\le n\}\).  Then the algorithm of
+\Cref{thm:effective-rational-mahler-coboundary} decides and constructs every
+normalized rational certificate for \(P_0/P_1\), using integer coefficient
+recursion before the Pad\'e step.  Uniformly,
+\begin{equation}\label{eq:same-base-effective-input-bounds}
+ D\le2n,\qquad N<16n^3,\qquad
+ h(P_0),h(P_1)\le n\log(na_*),
+\end{equation}
+and one may use
+\begin{equation}\label{eq:same-base-effective-height-bound}
+ K\le N\log2+2n(\lfloor\log_2(2n)\rfloor+1)
+       \bigl(2n\log(na_*)+\log(n+1)\bigr).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The determinant congruence modulo two gives \(P_0\equiv P_1\pmod2\).
+For \(0\le k\le n\), expansion by principal minors and domination by the
+permanent give
+\[
+ \abs{[z^k]\det(I-zB)}
+ \le\sum_{\substack{I\subset\{1,\ldots,n\}\\|I|=k}}
+       \operatorname{per}(A[I,I])
+ \le n^ka_*^k\le(na_*)^n,
+\]
+and the same estimate holds for \(B'\).  This proves
+\eqref{eq:same-base-effective-input-bounds}; substituting those inequalities
+in \eqref{eq:effective-mahler-height-bound} proves
+\eqref{eq:same-base-effective-height-bound}.  Coprimality is stated because
+the numerical bounds of \Cref{thm:effective-rational-mahler-coboundary} apply
+to the reduced input pair.  A non-coprime determinant ratio may first be
+cancelled, but no unchanged-height assertion for the uncancelled pair is
+being made here.
+\end{proof}
+
 This mechanism is strictly weaker than full \(G\)-cospectrality, equivalently
 represented cospectrality in every irreducible representation:
 \eqref{eq:c2-collision-first-determinant} and
@@ -603,10 +881,11 @@ which is odd.  Thus \(m=3\) is impossible.  Since \(m>1\), it follows that
 \end{proof}
 
 The minimality assertion is deliberately confined to the finite polynomial
-certificate class in \eqref{eq:regular-polynomial-certificate}; it does not
-give a complexity bound for the rational certificates supplied abstractly by
-\Cref{thm:determinant-boundary-lifting}, or address positive rational functions
-outside that theorem's determinant-parity hypotheses.
+certificate class in \eqref{eq:regular-polynomial-certificate}; it is not a
+minimality statement for the rational certificates decided by
+\Cref{thm:effective-rational-mahler-coboundary}, and it does not address
+positive rational functions outside the determinant-parity hypotheses of
+\Cref{thm:determinant-boundary-lifting}.
 
 Although one Perron-point value loses information, an analytic radial profile
 restores it.  The following is a sufficient recovery criterion; no optimality
