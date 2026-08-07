@@ -178,6 +178,68 @@ def weighted_generator_counters(max_layer: int) -> list[Counter[int]]:
     return generators
 
 
+def marked_window_counter(
+    m: int, generators: list[Counter[int]]
+) -> Counter[tuple[int, int]]:
+    """Count nonunit fibers jointly by generator cost and multiplicity."""
+    if m < 1 or len(generators) <= m + 1:
+        raise ValueError("generator table must include costs through m + 1")
+    marked: Counter[tuple[int, int]] = Counter()
+    for cost, generator_levels in enumerate(generators):
+        if cost <= m - 1:
+            orbit_weight = 4
+        elif cost == m:
+            orbit_weight = 3
+        elif cost == m + 1:
+            orbit_weight = 1
+        else:
+            orbit_weight = 0
+        if orbit_weight == 0:
+            continue
+        for level, word_count in generator_levels.items():
+            if level > 1:
+                marked[cost, level] += orbit_weight * word_count
+    return marked
+
+
+def conditional_marked_scan(
+    windows: tuple[int, ...],
+    generators: list[Counter[int]],
+    bands: tuple[tuple[float, float], ...],
+) -> list[tuple[int, float, float, int, float, float]]:
+    """Return exact finite-window conditional energy and generator-cost means."""
+    if not windows or min(windows) < 1 or len(generators) <= max(windows) + 1:
+        raise ValueError("generator table must cover every requested window")
+    rows = []
+    for m in windows:
+        marked = marked_window_counter(m, generators)
+        for alpha, epsilon in bands:
+            if not 0.0 < epsilon < alpha:
+                raise ValueError("each band must satisfy 0 < epsilon < alpha")
+            selected = [
+                (cost, math.log(level), count)
+                for (cost, level), count in marked.items()
+                if abs(math.log(level) / m - alpha) < epsilon
+            ]
+            total = sum(count for _, _, count in selected)
+            if total == 0:
+                rows.append((m, alpha, epsilon, 0, math.nan, math.nan))
+                continue
+            mean_energy = sum(log_level * count for _, log_level, count in selected)
+            mean_cost = sum(cost * count for cost, _, count in selected)
+            rows.append(
+                (
+                    m,
+                    alpha,
+                    epsilon,
+                    total,
+                    mean_energy / (m * total),
+                    mean_cost / (m * total),
+                )
+            )
+    return rows
+
+
 def weighted_renewal_counterexample_search(
     max_layer: int, fib: list[int], sigma: float, beta_star: float
 ) -> tuple[list[int], int, int]:
@@ -482,6 +544,40 @@ def main() -> int:
         )
     )
     failures += len(renewal_failed_layers)
+    marked_generators = weighted_generator_counters(args.max_layer)
+    marked_windows = tuple(
+        window for window in (12, 16, 20) if window + 1 <= args.max_layer
+    )
+    marked_fixed_rows = conditional_marked_scan(
+        marked_windows, marked_generators, ((0.08, 0.02),)
+    )
+    marked_diagonal_rows = [
+        conditional_marked_scan(
+            (window,), marked_generators, ((0.08, 1.0 / window),)
+        )[0]
+        for window in marked_windows
+        if 1.0 / window < 0.08
+    ]
+    marked_failures = sum(
+        count == 0
+        or not alpha - epsilon < mean_energy < alpha + epsilon
+        or not 0.0 < mean_cost <= 1.0
+        for _, alpha, epsilon, count, mean_energy, mean_cost
+        in marked_fixed_rows + marked_diagonal_rows
+    )
+    failures += marked_failures
+    heavy_letter_checks = []
+    for denominator in range(2, 101):
+        cost = 2 * regular_partial_quotient_sum(1, denominator) - 1
+        heavy_letter_checks.append(cost == 2 * denominator - 1)
+    heavy_letter_checks.extend(
+        [
+            abs(199.0 / 100.0 - 2.0) < 0.02,
+            math.log(100.0) / 100.0 < 0.05,
+        ]
+    )
+    heavy_letter_failures = sum(not check for check in heavy_letter_checks)
+    failures += heavy_letter_failures
     maximum_fiber = max(
         exact_maximum_fiber(m, fib) for m in range(1, args.max_m + 1)
     )
@@ -520,6 +616,15 @@ def main() -> int:
             renewal_symbolic_checks,
             renewal_real_tilt_checks,
             renewal_failed_layers,
+        ),
+        "MARKED_CONDITIONAL fixed_rows={} diagonal_rows={} failures={}".format(
+            marked_fixed_rows, marked_diagonal_rows, marked_failures
+        ),
+        "HEAVY_LETTER q=2..100 exact_cost_checks={} energy_over_q={:.9f} "
+        "failures={}".format(
+            len(heavy_letter_checks) - 2,
+            math.log(100.0) / 100.0,
+            heavy_letter_failures,
         ),
     ]
 

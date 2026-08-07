@@ -6,6 +6,7 @@ from __future__ import annotations
 import math
 import unittest
 
+import verify_real_tilt_pressure as verification
 from verify_real_tilt_pressure import (
     coexistence_local_counterexample_search,
     critical_slope_partial,
@@ -17,6 +18,49 @@ from verify_real_tilt_pressure import (
 
 
 class AllRealPressureHelpersTest(unittest.TestCase):
+    def test_conditional_marked_scan_matches_direct_band_counts(self) -> None:
+        self.assertTrue(hasattr(verification, "conditional_marked_scan"))
+        fibonacci = [0, 1]
+        for _ in range(20):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        generators = verification.weighted_generator_counters(18)
+        rows = verification.conditional_marked_scan(
+            (12, 16), generators, ((0.08, 0.02),)
+        )
+        coefficients = [1]
+        direct_counts = {}
+        for m in range(1, 17):
+            coefficients = verification.extend_coefficients(coefficients, fibonacci[m])
+            if m in (12, 16):
+                direct_counts[m] = sum(
+                    1
+                    for level in coefficients
+                    if abs(math.log(level) / m - 0.08) < 0.02
+                )
+        self.assertEqual([row[3] for row in rows], [direct_counts[12], direct_counts[16]])
+        self.assertTrue(all(0.06 < row[4] < 0.10 for row in rows))
+        self.assertTrue(all(0.0 < row[5] <= 1.0 for row in rows))
+
+    def test_marked_window_counter_recovers_exact_fiber_spectrum(self) -> None:
+        self.assertTrue(hasattr(verification, "marked_window_counter"))
+        fibonacci = [0, 1]
+        for _ in range(16):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        generators = verification.weighted_generator_counters(13)
+        coefficients = [1]
+        for m in range(1, 13):
+            coefficients = verification.extend_coefficients(coefficients, fibonacci[m])
+            if m < 4:
+                continue
+            marked = verification.marked_window_counter(m, generators)
+            predicted = verification.Counter()
+            for (cost, level), count in marked.items():
+                self.assertLessEqual(cost, m + 1)
+                predicted[level] += count
+            actual = verification.Counter(coefficients)
+            del actual[1]
+            self.assertEqual(predicted, actual)
+
     def test_regular_and_negative_costs_agree(self) -> None:
         examples = {
             (1,): (1, 2),
