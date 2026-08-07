@@ -43,7 +43,10 @@ for tick in $(seq 1 400); do
           if printf '%s' "$r" | cmp -s - "$prev"; then
             : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
             [ "$rnd" -gt 1 ] && echo $((rnd-1)) > "$D/round_${t}"
-            echo "[$ts] $t r$rnd DUPLICATE of $(basename "$prev") -> rolled back"; acted=1
+            # the worker read the page before the new answer rendered; resending at
+            # once just reproduces it, so cool down before the next attempt
+            echo "[$ts] $t r$rnd DUPLICATE of $(basename "$prev") -> rolled back, cooling 240s"; acted=1
+            sleep 240
             continue 2
           fi
         done
