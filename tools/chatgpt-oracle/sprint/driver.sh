@@ -27,9 +27,24 @@ for tick in $(seq 1 400); do
         echo "[$ts] $t r$rnd FAILED upstream -> rolled back, will resend"; acted=1
         continue
       fi
+      # stalled in flight: the worker waits two hours for a reply that never comes
+      # when its send click failed, so reclaim the slot long before that
+      if echo "$r" | grep -qE "Task is dispatched|Task is queued"; then
+        m="$D/sent_${t}_r${rnd}"
+        if [ -f "$m" ]; then
+          age=$(( $(date +%s) - $(stat -c %Y "$m") ))
+          if [ "$age" -gt 2100 ]; then
+            nyx oracle cancel "$tid" >/dev/null 2>&1
+            : > "$D/task_${t}"; rm -f "$m"
+            [ "$rnd" -gt 1 ] && echo $((rnd-1)) > "$D/round_${t}"
+            echo "[$ts] $t r$rnd STALLED ${age}s -> cancelled, will resend"; acted=1
+          fi
+        fi
+        continue
+      fi
       # 300, not 800: an honest short verdict ("undecided", a retraction) is a real
       # round and must not be mistaken for an empty reply
-      if [ "$n" -gt 300 ] && ! echo "$r" | grep -qE "Task is dispatched|Task is queued"; then
+      if [ "$n" -gt 300 ]; then
         # off-topic reply: the pool handed back another conversation's answer
         if ! echo "$r" | grep -qi "${K[$t]}"; then
           : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
