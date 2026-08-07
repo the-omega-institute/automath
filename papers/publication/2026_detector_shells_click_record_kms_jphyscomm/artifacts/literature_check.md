@@ -268,3 +268,31 @@ endpoint likelihood was likewise not integrated; LAN is restricted to the
 explicit uniformly close realizing paths or to paths carrying an explicit
 endpoint-negligibility hypothesis. Absence from these searches is a bounded
 novelty check, not proof of universal absence from the literature.
+
+## A8-r5 growing-layer and ellipsoid boundary check
+
+Checked 2026-08-07 through the live arXiv Atom API, Crossref, and OpenAlex.
+The model-specific arXiv queries `all:"sampled-counter" AND
+all:"Markov-Palm"` and `all:"weighted Helmert" AND all:"Gaussian
+approximation"` each returned `opensearch:totalResults=0`.  The query
+`all:"Yurinskii coupling" AND all:martingale` returned one record,
+arXiv:2210.00362v4, Cattaneo--Masini--Underwood, "Yurinskii's Coupling for
+Martingales."  Crossref identifies the published article by DOI
+`10.1214/25-AOS2538`.  Its Corollary 2.2 is used only as the general coupling
+input; the equal-rate Helmert moment calculation, calendar stopping transfer,
+exchange-local covariance control, and rare-tail obstruction are the
+sampled-counter specialization established here.
+
+The broader arXiv query `all:"Gaussian sequence" AND all:ellipsoid AND
+all:minimax` returned eight records, including arXiv:2002.07623v1,
+arXiv:1503.08562v2, and arXiv:1406.5387v4.  Crossref and OpenAlex confirmed
+Ingster--Suslina, *Nonparametric Goodness-of-Fit Testing Under Gaussian
+Models* (2003), DOI `10.1007/978-0-387-21580-8`.  Crossref also confirmed van
+der Vaart--Wellner, *Weak Convergence and Empirical Processes*, DOI
+`10.1007/978-1-4757-2545-2`, and Bogachev, *Gaussian Measures*, DOI
+`10.1090/surv/062`.  Accordingly, compact diagonal ellipsoids, pre-Gaussian
+criteria, and Gaussian-sequence minimax envelopes are treated as published
+background.  No minimax result was integrated because the proposed tangent
+ellipsoid does not specify a uniform chart of probability laws, and the
+oracle supplied neither a positivity-compatible global alternative class nor
+a transfer theorem and matching lower bound for one.

@@ -282,6 +282,54 @@ class CompleteMarkovPalmTangentChecks(unittest.TestCase):
             self.assertAlmostEqual(actual, parameter**2 * coefficient, places=14)
 
 
+class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
+    def test_equal_rate_tail_matches_direct_gap_mass_sum(self):
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            masses = verify._gap_masses(rate, rate, tolerance=1e-17)
+            for layer in (0, 1, 2, 5, 10):
+                direct = float(np.sum(masses[layer:]))
+                exact = verify.equal_rate_gap_tail(rate, layer)
+                self.assertLess(abs(direct - exact), 3e-14)
+
+    def test_weighted_helmert_basis_and_layer_moment_bounds(self):
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            for layer in (2, 4, 8, 12, 20):
+                gram_error, scaled_envelope, scaled_third_moment = (
+                    verify.helmert_layer_diagnostics(rate, layer)
+                )
+                self.assertLess(gram_error, 2e-12)
+                self.assertGreater(scaled_envelope, 0.0)
+                self.assertLess(scaled_envelope, 200.0)
+                self.assertGreater(scaled_third_moment, 0.0)
+                self.assertLess(scaled_third_moment, 1500.0)
+
+    def test_second_order_logarithmic_bracket_has_claimed_signs(self):
+        log_n = 200.0
+        for rate in (0.35, 1.0, 2.4, 5.0):
+            log_log_n = math.log(log_n)
+            necessary_inside = math.floor(
+                (log_n + 2.0 * log_log_n - 20.0) / (2.0 * rate)
+            )
+            necessary_outside = math.ceil(
+                (log_n + 2.0 * log_log_n + 20.0) / (2.0 * rate)
+            )
+            sufficient_inside = math.floor(
+                (log_n - 2.0 * log_log_n - 20.0) / (2.0 * rate)
+            )
+            necessary_log_inside = verify.helmert_log_rate_terms(
+                rate, log_n, necessary_inside
+            )[0]
+            necessary_log_outside = verify.helmert_log_rate_terms(
+                rate, log_n, necessary_outside
+            )[0]
+            sufficient_log_inside = verify.helmert_log_rate_terms(
+                rate, log_n, sufficient_inside
+            )[1]
+            self.assertGreater(necessary_log_inside, 5.0)
+            self.assertLess(necessary_log_outside, -5.0)
+            self.assertLess(sufficient_log_inside, -5.0)
+
+
 class SamplingBiasTests(unittest.TestCase):
     def test_exact_rounded_cycle_mean_matches_gap_tail_sum(self):
         for gamma, kappa, delta in ((0.7, 1.9, 0.4), (1.3, 1.3, 0.2), (3.0, 0.6, 0.1)):

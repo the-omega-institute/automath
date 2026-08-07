@@ -425,6 +425,75 @@ def finite_markov_tangent_basis(gap_mass: ArrayLike) -> FloatArray:
     return np.asarray(products)
 
 
+def equal_rate_gap_tail(rate: float, layer: int) -> float:
+    """Return S_layer=exp(-rate*layer)*(1+rate*layer)."""
+    if not math.isfinite(rate) or rate <= 0.0 or layer < 0:
+        raise ValueError("rate must be positive and layer must be nonnegative")
+    return math.exp(-rate * layer) * (1.0 + rate * layer)
+
+
+def weighted_helmert_partition(rate: float, layer: int) -> tuple[FloatArray, FloatArray]:
+    """Evaluate e_0,...,e_layer on atoms 0,...,layer and the residual tail."""
+    if layer < 0:
+        raise ValueError("layer must be nonnegative")
+    tails = np.array([equal_rate_gap_tail(rate, j) for j in range(layer + 2)])
+    masses = tails[:-1] - tails[1:]
+    partition_mass = np.concatenate((masses, tails[-1:]))
+    basis = np.zeros((layer + 1, layer + 2))
+    for index in range(layer + 1):
+        basis[index, index] = math.sqrt(
+            tails[index + 1] / (masses[index] * tails[index])
+        )
+        basis[index, index + 1 :] = -math.sqrt(
+            masses[index] / (tails[index] * tails[index + 1])
+        )
+    return partition_mass, basis
+
+
+def helmert_layer_diagnostics(rate: float, layer: int) -> tuple[float, float, float]:
+    """Return Gram error, S_J-scaled tensor envelope, and scaled third moment."""
+    partition_mass, basis = weighted_helmert_partition(rate, layer)
+    gram = np.einsum("k,ak,bk->ab", partition_mass, basis, basis)
+    tensor_envelope = 0.0
+    for left in range(layer + 1):
+        for right in range(layer + 1):
+            if (left, right) != (0, 0):
+                tensor_envelope = max(
+                    tensor_envelope,
+                    float(np.max(np.abs(np.outer(basis[left], basis[right])))),
+                )
+
+    christoffel = np.sum(basis * basis, axis=0)
+    omitted = np.outer(basis[0] * basis[0], basis[0] * basis[0])
+    vector_norm_squared = np.outer(christoffel, christoffel) - omitted
+    vector_third_moment = float(
+        np.einsum(
+            "i,j,ij->",
+            partition_mass,
+            partition_mass,
+            np.maximum(vector_norm_squared, 0.0) ** 1.5,
+        )
+    )
+    tail = equal_rate_gap_tail(rate, layer)
+    return (
+        float(np.max(np.abs(gram - np.eye(layer + 1)))),
+        tail * tensor_envelope,
+        tail * vector_third_moment,
+    )
+
+
+def helmert_log_rate_terms(rate: float, log_sample_size: float, layer: int) -> tuple[float, float]:
+    """Return logs of n*S_J^2 and d_J/(sqrt(n)*S_J)."""
+    if not math.isfinite(log_sample_size):
+        raise ValueError("log_sample_size must be finite")
+    log_tail = -rate * layer + math.log1p(rate * layer)
+    dimension = (layer + 1) ** 2 - 1
+    return (
+        log_sample_size + 2.0 * log_tail,
+        math.log(dimension) - 0.5 * log_sample_size - log_tail,
+    )
+
+
 def weighted_omnibus_monte_carlo(
     weights: ArrayLike,
     direction: ArrayLike,
@@ -773,6 +842,69 @@ def main() -> None:
     print(
         "weighted omnibus Monte Carlo (null, nonzero direction)="
         + np.array2string(np.array([null_power, direction_power]), precision=10)
+    )
+
+    helmert_gram_errors = []
+    helmert_envelopes = []
+    helmert_third_moments = []
+    for diagonal_rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+        for layer in (2, 4, 8, 12, 20):
+            gram_error, envelope, third_moment = helmert_layer_diagnostics(
+                diagonal_rate, layer
+            )
+            helmert_gram_errors.append(gram_error)
+            helmert_envelopes.append(envelope)
+            helmert_third_moments.append(third_moment)
+
+    log_n = 200.0
+    rate = 1.35
+    log_log_n = math.log(log_n)
+    necessary_inside = math.floor(
+        (log_n + 2.0 * log_log_n - 20.0) / (2.0 * rate)
+    )
+    necessary_outside = math.ceil(
+        (log_n + 2.0 * log_log_n + 20.0) / (2.0 * rate)
+    )
+    sufficient_inside = math.floor(
+        (log_n - 2.0 * log_log_n - 20.0) / (2.0 * rate)
+    )
+    log_necessary_inside = helmert_log_rate_terms(
+        rate, log_n, necessary_inside
+    )[0]
+    log_necessary_outside = helmert_log_rate_terms(
+        rate, log_n, necessary_outside
+    )[0]
+    log_sufficient_inside = helmert_log_rate_terms(
+        rate, log_n, sufficient_inside
+    )[1]
+    print("A8-r5 canonical Helmert growing-layer verification")
+    print(f"Helmert maximum Gram error={_maximum(helmert_gram_errors):.3e}")
+    print(
+        "tested range of S_J * max||phi_ab||_infinity="
+        + np.array2string(
+            np.array([min(helmert_envelopes), max(helmert_envelopes)]),
+            precision=10,
+        )
+    )
+    print(
+        "tested range of S_J * E||Phi_J||_2^3="
+        + np.array2string(
+            np.array([min(helmert_third_moments), max(helmert_third_moments)]),
+            precision=10,
+        )
+    )
+    print(
+        "log threshold diagnostics (necessary inside/outside, sufficient inside)="
+        + np.array2string(
+            np.array(
+                [
+                    log_necessary_inside,
+                    log_necessary_outside,
+                    log_sufficient_inside,
+                ]
+            ),
+            precision=10,
+        )
     )
 
 
