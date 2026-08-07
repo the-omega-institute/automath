@@ -6,6 +6,10 @@ PUB=/d/omega/automath/papers/publication
 W=".nyxid-oracle/nyxid-via-warp.ps1"
 nyx(){ MSYS_NO_PATHCONV=1 powershell.exe -ExecutionPolicy Bypass -File "$W" "$@" 2>&1 | sed 's/\r//'; }
 declare -A S=( [A2]=2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa [A3]=2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds [A4]=2026_prime_languages_finite_state_obstructions_monatshefte [A5]=2026_finite_parts_dynamical_zeta_shifts_finite_type_etds [A6]=2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams [A7]=2026_upper_fibers_witness_covers_fibonacci_apparition_fq [A8]=2026_detector_shells_click_record_kms_jphyscomm )
+# Relevance guard: a reply must mention something this paper is actually about.
+# The shared pool has returned answers belonging to entirely unrelated
+# conversations, so an on-topic token is required before a reply is accepted.
+declare -A K=( [A2]="entropy\|Poisson\|Chebyshev\|RKHS\|熵\|矩" [A3]="Parry\|Pisot\|Fibonacci\|window\|窗\|共轭" [A4]="language\|automat\|synchron\|Parry\|语言\|自动机\|同步" [A5]="zeta\|Mahler\|shift\|coboundary\|SFT\|zeta\|上边界\|移位" [A6]="Zeckendorf\|thermodynam\|pressure\|large deviation\|Fibonacci\|压力\|大偏差" [A7]="apparition\|fiber\|witness\|Fibonacci\|cover\|纤维\|见证" [A8]="D-MAP\|renewal\|quotient\|leakage\|J_N\|Helmert\|JN\|更新\|商\|泄漏" )
 
 for tick in $(seq 1 400); do
   ts=$(date +%H:%M:%S); acted=0
@@ -24,6 +28,23 @@ for tick in $(seq 1 400); do
         continue
       fi
       if [ "$n" -gt 800 ] && ! echo "$r" | grep -q "Task is dispatched"; then
+        # off-topic reply: the pool handed back another conversation's answer
+        if ! echo "$r" | grep -qi "${K[$t]}"; then
+          : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
+          [ "$rnd" -gt 1 ] && echo $((rnd-1)) > "$D/round_${t}"
+          echo "[$ts] $t r$rnd OFF-TOPIC reply discarded -> rolled back"; acted=1
+          continue
+        fi
+        # duplicate reply: identical to a round we already hold, so nothing is new
+        for prev in "$D"/result_${t}_r*.md; do
+          [ -f "$prev" ] || continue
+          if printf '%s' "$r" | cmp -s - "$prev"; then
+            : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
+            [ "$rnd" -gt 1 ] && echo $((rnd-1)) > "$D/round_${t}"
+            echo "[$ts] $t r$rnd DUPLICATE of $(basename "$prev") -> rolled back"; acted=1
+            continue 2
+          fi
+        done
         printf '%s' "$r" > "$D/result_${t}_r${rnd}.md"
         cp "$D/result_${t}_r${rnd}.md" "$d/artifacts/oracle_sprint_${t}_r${rnd}.md"
         cvj=$(nyx oracle result "$tid" --output json | grep -oE "conv_[a-f0-9]+" | head -1)
