@@ -168,6 +168,37 @@ def symbolic_checks() -> list[Check]:
             "; ".join(critical_rows),
         )
     )
+
+    cluster_ok = True
+    cluster_rows = []
+    integer_endpoints = []
+    for d in range(4, 81):
+        p_d = sp.Rational(4 * (d + 1), d + 5)
+        q_d = sp.Rational(d + 5, d + 1)
+        row_ok = (
+            p_d > 2
+            and p_d < 4
+            and sp.simplify(q_d - (1 + sp.Rational(4, d + 1))) == 0
+            and sp.simplify(p_d * q_d - 4) == 0
+            and sp.simplify(1 - p_d / (d + 1)) > 0
+        )
+        cluster_ok = cluster_ok and row_ok
+        if p_d.q == 1:
+            integer_endpoints.append((d, int(p_d)))
+        if d in (4, 11, 40, 80):
+            cluster_rows.append(
+                f"d={d}: p={p_d}, q={q_d}, "
+                f"t-growth={sp.simplify(1-p_d/(d+1))}"
+            )
+    cluster_ok = cluster_ok and integer_endpoints == [(11, 3)]
+    checks.append(
+        Check(
+            "critical vague-tail exponent algebra",
+            cluster_ok,
+            "; ".join(cluster_rows)
+            + f"; integer endpoints={integer_endpoints}",
+        )
+    )
     return checks
 
 
@@ -321,12 +352,119 @@ def pareto_square_boundary_check(quick: bool) -> Check:
     )
 
 
+def critical_vague_tail_checks() -> list[Check]:
+    """Stress the diffuse and clustered mechanisms in the new boundary theorem."""
+
+    checks: list[Check] = []
+
+    def test_function(value: float) -> float:
+        if abs(value) >= 1.0:
+            return 0.0
+        return (1.0 - value * value) ** 2
+
+    radial_rows = []
+    radial_ok = True
+    for d in (4, 11, 40):
+        p_d = 4.0 * (d + 1) / (d + 5)
+        target = float(
+            mp.quad(
+                lambda value: p_d
+                * mp.exp(-p_d * value)
+                * (1 - value * value) ** 2,
+                [-1, 1],
+            )
+        )
+        scales = (80.0, 800.0, 8000.0)
+        errors = []
+        s_values = [12.0]
+        while s_values[-1] <= scales[-1] + 1.1:
+            s_values.append(s_values[-1] + s_values[-1] ** (-0.5))
+        for scale in scales:
+            value = 0.0
+            for left, right in zip(s_values[:-1], s_values[1:]):
+                offset = left - scale
+                if abs(offset) >= 1.1:
+                    continue
+                # exp(p*scale)/scale times the exact shell mass
+                # integral_left^right p*u*exp(-p*u) du.
+                scaled_mass = (
+                    ((left + 1.0 / p_d) / scale)
+                    * math.exp(-p_d * (left - scale))
+                    - ((right + 1.0 / p_d) / scale)
+                    * math.exp(-p_d * (right - scale))
+                )
+                value += scaled_mass * test_function(offset)
+            errors.append(abs(value / target - 1.0))
+        row_ok = errors[-1] < errors[0] and errors[-1] < 0.025
+        radial_ok = radial_ok and row_ok
+        radial_rows.append(f"d={d}: relative errors={errors}")
+    checks.append(
+        Check(
+            "critical clustered-shell vague Riemann sums",
+            radial_ok,
+            "; ".join(radial_rows),
+        )
+    )
+
+    rate_rows = []
+    rate_ok = True
+    log_times = (8.0, 16.0, 32.0, 64.0)
+    for d in (4, 10, 11, 12, 40):
+        p_d = 4.0 * (d + 1) / (d + 5)
+        if d == 11:
+            ratios = [math.exp(-value) * value**2 for value in log_times]
+        else:
+            ratios = [
+                math.exp((2.0 - p_d) * value) * value
+                for value in log_times
+            ]
+        row_ok = all(
+            ratios[index + 1] < ratios[index]
+            for index in range(len(ratios) - 1)
+        ) and ratios[-1] < 1.0e-3
+        rate_ok = rate_ok and row_ok
+        rate_rows.append(f"d={d}: normalized remainder rates={ratios}")
+    checks.append(
+        Check(
+            "critical diffuse remainder decay including d=11",
+            rate_ok,
+            "; ".join(rate_rows),
+        )
+    )
+
+    bernoulli_rows = []
+    bernoulli_ok = True
+    for atom_mass in np.geomspace(1.0e-9, 1.0e-2, 16):
+        convolved_mass = 0.4 * atom_mass
+        reference_mass = 0.02 * atom_mass
+        divergence = (
+            convolved_mass * math.log(convolved_mass / reference_mass)
+            + (1.0 - convolved_mass)
+            * math.log(
+                (1.0 - convolved_mass) / (1.0 - reference_mass)
+            )
+        )
+        ratio = divergence / atom_mass
+        bernoulli_rows.append(ratio)
+        bernoulli_ok = bernoulli_ok and ratio > 0.75
+    checks.append(
+        Check(
+            "critical cluster Bernoulli entropy lower bound",
+            bernoulli_ok,
+            f"D(Ber(0.4a)||Ber(0.02a))/a range="
+            f"[{min(bernoulli_rows)}, {max(bernoulli_rows)}]",
+        )
+    )
+    return checks
+
+
 def run(quick: bool) -> list[Check]:
     return (
         symbolic_checks()
         + [critical_bregman_check()]
         + numerical_moment_matching_checks(quick)
         + [pareto_square_boundary_check(quick)]
+        + critical_vague_tail_checks()
     )
 
 

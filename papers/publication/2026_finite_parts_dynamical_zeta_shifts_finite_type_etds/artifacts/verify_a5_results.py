@@ -234,6 +234,139 @@ def verify_diagonal_realizable_mahler_subclass() -> bool:
     )
 
 
+def critical_mahler_normalization_matches() -> bool:
+    """Verify that the weighted product is F(x)^2, rather than F(x)."""
+    z = sp.Symbol("z")
+    x = sp.Rational(1, 3)
+    h = (1 - z) / (1 + z)
+    f = 1 - z
+    symbolic = all(
+        (
+            sp.cancel(f**2 - h * f.subs(z, z**2)) == 0,
+            f.subs(z, x) == sp.Rational(2, 3),
+            f.subs(z, x) ** 2 == sp.Rational(4, 9),
+            f.subs(z, x) != f.subs(z, x) ** 2,
+        )
+    )
+    if not symbolic:
+        return False
+
+    with mp.workdps(80):
+        real_x = mp.mpf(1) / 3
+        logarithmic_product = mp.fsum(
+            mp.power(2, -nu)
+            * mp.log((1 - real_x ** (2**nu)) / (1 + real_x ** (2**nu)))
+            for nu in range(12)
+        )
+        product_value = mp.exp(logarithmic_product)
+        return (
+            abs(product_value - mp.mpf(4) / 9) < mp.mpf("1e-70")
+            and abs(product_value - (1 - real_x)) > mp.mpf("1e-2")
+        )
+
+
+def _critical_mahler_coefficients(order: int) -> tuple[sp.Integer, ...]:
+    """Solve F^2=((1-z)/(1-3z))F(z^2) coefficient by coefficient."""
+    h_coefficients = [sp.Integer(1)] + [
+        2 * sp.Integer(3) ** (degree - 1) for degree in range(1, order + 1)
+    ]
+    coefficients = [sp.Integer(1)]
+    for degree in range(1, order + 1):
+        known_square = sum(
+            coefficients[index] * coefficients[degree - index]
+            for index in range(1, degree)
+        )
+        right_hand_side = sum(
+            h_coefficients[degree - 2 * index] * coefficients[index]
+            for index in range(degree // 2 + 1)
+        )
+        coefficients.append(sp.simplify((right_hand_side - known_square) / 2))
+    return tuple(coefficients)
+
+
+def critical_mahler_integrality_matches(order: int = 24) -> bool:
+    """Check determinant parity, integral recursion, and the truncated equation."""
+    z = sp.Symbol("z")
+    p_zero = 1 - z
+    p_one = 1 - 3 * z
+    coefficients = _critical_mahler_coefficients(order)
+    f = sum(coefficient * z**degree for degree, coefficient in enumerate(coefficients))
+    residual = sp.series(
+        f**2 - (p_zero / p_one) * f.subs(z, z**2), z, 0, order + 1
+    ).removeO()
+    return all(
+        (
+            sp.Poly(p_zero - p_one, z).all_coeffs()[-1] % 2 == 0,
+            all(coefficient.is_Integer for coefficient in coefficients),
+            sp.expand(residual) == 0,
+        )
+    )
+
+
+def critical_zero_estimate_pullback_matches() -> bool:
+    """Check the cleared pullback identity and its two bidegree bounds."""
+    z, y = sp.symbols("z y")
+    p_zero = 1 - z
+    p_one = 1 - 3 * z
+    q = y**2 + z * y + z + 1
+    d = sp.Poly(q, z, y).degree(z)
+    n = sp.Poly(q, z, y).degree(y)
+    eta = max(sp.degree(p_zero, z), sp.degree(p_one, z))
+    pullback = sp.cancel(
+        p_zero**n * q.subs({z: z**2, y: p_one * y**2 / p_zero}, simultaneous=True)
+    )
+    pullback = sp.Poly(pullback, z, y).as_expr()
+    coefficients = _critical_mahler_coefficients(18)
+    f = sum(coefficient * z**degree for degree, coefficient in enumerate(coefficients))
+    evaluated_pullback = sp.series(pullback.subs(y, f), z, 0, 19).removeO()
+    expected = sp.series(
+        p_zero**n * q.subs({z: z**2, y: f.subs(z, z**2)}, simultaneous=True),
+        z,
+        0,
+        19,
+    ).removeO()
+    return all(
+        (
+            sp.Poly(q, z, y).is_irreducible,
+            sp.Poly(pullback, z, y).degree(y) <= 2 * n,
+            sp.Poly(pullback, z, y).degree(z) <= 2 * d + eta * n,
+            sp.expand(evaluated_pullback - expected) == 0,
+        )
+    )
+
+
+def rational_mahler_saturation_matches() -> bool:
+    """Verify normalized saturation identities in exact rational examples."""
+    z = sp.Symbol("z")
+    examples = (
+        ((1 - z) ** 2 * (1 + 2 * z) / ((1 - 3 * z) * (1 + z) ** 3), 2),
+        ((1 + z + z**2) / ((1 - 2 * z) ** 2 * (1 + 3 * z)), 3),
+        ((1 - 4 * z) * (1 + z) ** 2 / (1 + 2 * z**2), 5),
+    )
+    for rational_r, exponent in examples:
+        rational_r = sp.cancel(rational_r)
+        h = sp.cancel(rational_r.subs(z, z**2) / rational_r**2)
+        q = sp.cancel(rational_r**exponent)
+        delta_q = sp.cancel(q.subs(z, z**2) / q**2)
+        numerator, denominator = sp.fraction(q)
+        factor_exponents = [
+            multiplicity
+            for polynomial in (numerator, denominator)
+            for _factor, multiplicity in sp.factor_list(polynomial)[1]
+        ]
+        if not all(
+            (
+                rational_r.subs(z, 0) == 1,
+                h.subs(z, 0) == 1,
+                q.subs(z, 0) == 1,
+                sp.cancel(h**exponent - delta_q) == 0,
+                all(multiplicity % exponent == 0 for multiplicity in factor_exponents),
+            )
+        ):
+            return False
+    return True
+
+
 @lru_cache(maxsize=1)
 def enumerate_quadratic_binary_certificates() -> dict[str, int]:
     """Exhaust the four-vertex, two-out-regular signed certificate class."""
@@ -473,6 +606,10 @@ def render_report() -> str:
         "diagonal realizable Mahler subclass": (
             verify_diagonal_realizable_mahler_subclass()
         ),
+        "critical Mahler normalization": critical_mahler_normalization_matches(),
+        "critical Mahler integrality": critical_mahler_integrality_matches(),
+        "critical zero-estimate pullback": critical_zero_estimate_pullback_matches(),
+        "normalized rational Mahler saturation": rational_mahler_saturation_matches(),
         "quadratic binary certificate enumeration": enumeration
         == {
             "primitive_bases": 2208,
@@ -532,6 +669,10 @@ def render_report() -> str:
         "Positive rational Mahler certificate: verified on the same real grid",
         "Unrestricted Mahler kernel inclusion: domain counterexample verified",
         "Diagonal same-base Mahler subclass: compatibility and strict gap verified",
+        "Critical Mahler normalization: squared product; unsquared identity refuted",
+        "Critical Mahler integrality: 24 integer coefficients and equation verified",
+        "Critical zero-estimate pullback: exact identity and bidegrees verified",
+        "Normalized Mahler saturation: exact rational examples verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",
         f"Primitive necklaces and quotient correction checked through z^{max_degree}.",

@@ -240,46 +240,272 @@ The numerator tends to one because \(R(0)=1\), proving
 \eqref{eq:positive-rational-certificate-kernel}.
 \end{proof}
 
-\begin{remark}[Boundary of the rational certificate]
-\label{rem:mahler-kernel-open-interface}
-\Cref{prop:rational-mahler-certificate} classifies only the intersection of
-the boundary kernel with the positive rational coboundary image.  It does not
-assert the converse lifting
-\[
- H\in\QQ(z)^\times,\quad H>0\text{ on }[0,x],\quad \Pi_x(H)=1
- \quad\Longrightarrow\quad H=\delta R.
-\]
-The present paper leaves that implication open.  The lifting and purity
-results of Adamczewski--Faverjon concern linear regular-singular Mahler
-systems \cite{AdamczewskiFaverjon2018MahlerSeveralVariablesII}.  Greuel's
-implicit-function theorem requires a strict degree inequality which is not
-met by the boundary equation
-\(Y(z)^2=H(z)^2Y(z^2)\) in its critical quadratic case
-\cite{Greuel2000ImplicitMahler}.  Lam proves transcendence for a particular
-weighted Mahler product at non-zero algebraic points, but not multiplicative
-relations for arbitrary rational ratios \cite{Lam2025ValuationProducts}.
-Thus none of these results supplies the omitted converse, and no such
-converse is used below.
+We now prove that the converse in
+\eqref{eq:positive-rational-certificate-kernel} does hold for strict-gap
+determinant ratios arising from two sign blocks on one base.  The argument has
+two arithmetic inputs.  The first is the Dieudonn\'e--Dwork integrality
+criterion; the second is Nishioka's published special-value theorem for
+implicit Mahler equations.  We isolate the parts specific to the present
+determinant setting.
 
-The realizability restriction does not remove the special-value question.
-Indeed, fix \(r\ge2\), an odd integer \(a>0\), and a positive even integer
-\(b\), and let \(A\) have diagonal entries \(a\) and off-diagonal entries
-\(b\).  Then \(A\) is positive and has Perron root
-\(\lambda=a+(r-1)b\).  For any odd integers \(c_i,d_i\) with
-\(\lvert c_i\rvert,\lvert d_i\rvert\le a\), the diagonal matrices
+\begin{lemma}[Integral critical Mahler product]
+\label{lem:critical-mahler-integrality}
+Let \(B,B'\) be integer matrices such that \(B\equiv B'\pmod 2\), put
 \[
- B=\operatorname{diag}(c_1,\ldots,c_r),\qquad
- B'=\operatorname{diag}(d_1,\ldots,d_r)
+ P_0(z)=\det(I-zB),\qquad P_1(z)=\det(I-zB'),\qquad
+ H(z)=\frac{P_0(z)}{P_1(z)},
 \]
-are compatible sign blocks on this same base and satisfy
-\(\rad(B),\rad(B')\le a<\lambda\).  Their determinant ratio is
+and suppose that both determinant polynomials are zero-free on \(\abs z<r\),
+where \(0<r\le1\).  On this disk define
+\begin{equation}\label{eq:critical-mahler-product}
+ F(z)=\prod_{\nu\ge0}H(z^{2^\nu})^{2^{-\nu-1}},
+ \qquad F(0)=1,
+\end{equation}
+using the logarithm germ at zero.  Then \(F\) is analytic and non-vanishing,
+\begin{equation}\label{eq:critical-mahler-equation}
+ F(z)^2=H(z)F(z^2),
+\end{equation}
+and \(F\in\ZZ[[z]]\).
+\end{lemma}
+
+\begin{proof}
+Normal convergence of the logarithmic series on compact subdisks proves the
+analytic assertions and shifting the product proves
+\eqref{eq:critical-mahler-equation}.  The determinant congruence gives
+\(P_0\equiv P_1\pmod2\), hence
 \[
- \frac{\det(I-zB)}{\det(I-zB')}
- =\frac{\prod_i(1-c_i z)}{\prod_i(1-d_i z)}.
+ H(z)^{-1}\in1+2z\ZZ_2[[z]].
 \]
-Thus the omitted converse already contains multiplicative-relation questions
-for weighted products built from these linear factors; it is not an artifact
-of dropping the same-base compatibility or strict-gap hypotheses.
+Since
+\(F(z^2)/F(z)^2=H(z)^{-1}\), the Dieudonn\'e--Dwork criterion
+\cite[Theorem~1.1]{PomeratStraub2024RootsPowerSeries} gives
+\(F\in\ZZ_2[[z]]\).  Also \(F\in\QQ[[z]]\), directly from
+\eqref{eq:critical-mahler-product}.  For an odd prime \(p\), compare the
+coefficient of \(z^n\) in \eqref{eq:critical-mahler-equation}.  Its left-hand
+side is \(2f_n\) plus an expression in \(f_0,\ldots,f_{n-1}\), while its
+right-hand side belongs to \(\ZZ_p\) whenever the preceding coefficients do,
+because \(P_1(0)=1\).  Induction and \(2\in\ZZ_p^\times\) give
+\(F\in\ZZ_p[[z]]\) for every odd \(p\).  A rational number integral at every
+prime is an integer, proving the claim coefficientwise.
+\end{proof}
+
+The next estimate is not needed to reprove the special-value theorem below;
+it records an effective feature of the critical quadratic equation itself.
+
+\begin{lemma}[Critical quadratic zero estimate]
+\label{lem:critical-mahler-zero-estimate}
+Let \(P_0,P_1\in\CC[z]\) have constant term one, set
+\(\eta=\max\{\deg P_0,\deg P_1\}\), and let an analytic germ
+\(F(0)=1\) satisfy
+\[
+ P_1(z)F(z)^2=P_0(z)F(z^2).
+\]
+If \(F\) is transcendental over \(\CC(z)\), then every non-zero
+\(Q\in\CC[z,Y]\) with \(\deg_zQ\le D\) and \(\deg_YQ\le N\) satisfies
+\begin{equation}\label{eq:critical-mahler-zero-bound}
+ \operatorname{ord}_{z=0}Q(z,F(z))
+ \le D+4DN+\eta N^2.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+First take an irreducible factor \(q\in\CC[z,Y]\) of positive
+\(Y\)-degree and write \(d=\deg_zq\), \(n=\deg_Yq\).  Clear the denominator
+in its pullback by setting
+\[
+ \widetilde q(z,Y)=P_0(z)^n
+ q\!\left(z^2,\frac{P_1(z)}{P_0(z)}Y^2\right).
+\]
+This is a polynomial, with
+\begin{equation}\label{eq:critical-pullback-orders}
+ \deg_Y\widetilde q=2n,\qquad
+ \deg_z\widetilde q\le2d+\eta n,\qquad
+ \operatorname{ord}_0\widetilde q(z,F(z))
+ =2\operatorname{ord}_0q(z,F(z)).
+\end{equation}
+If \(q(0,1)\ne0\), then \(\operatorname{ord}_0q(z,F(z))=0\), so there is
+nothing to prove.  Assume henceforth that \(q(0,1)=0\).
+We claim that \(q\nmid\widetilde q\).  Otherwise the irreducible curve
+\(C:q=0\) is invariant under the rational map
+\[
+ \Phi(z,Y)=\left(z^2,\frac{P_1(z)}{P_0(z)}Y^2\right).
+\]
+Pass to the normalization of \(C\).  The induced map permutes forward the
+finite set of places above \((0,1)\), so this finite dynamical system contains
+a periodic place.  Its Puiseux germ \(Y=G(z)\), based at \((0,1)\), therefore
+satisfies for some \(\ell\ge1\) the \(\ell\)-fold iterate of the same equation
+as \(F\).  Consequently \(U=G/F\) obeys
+\[
+ U(z^{2^\ell})=U(z)^{2^\ell},\qquad U(0)=1.
+\]
+If \(U=1+cz^\alpha+\cdots\), with \(c\ne0\) and the least positive Puiseux
+exponent \(\alpha\), the least non-constant exponents on the two sides are
+respectively \(2^\ell\alpha\) and \(\alpha\), a contradiction.  Thus
+\(U=1\), which would make \(F=G\) algebraic.  This proves the claim.
+
+Hence \(R_q(z)=\operatorname{Res}_Y(q,\widetilde q)\) is non-zero.  A
+B\'ezout identity in \(Y\), evaluated at \(Y=F(z)\), and
+\eqref{eq:critical-pullback-orders} imply
+\[
+ \operatorname{ord}_0q(z,F(z))
+ \le\operatorname{ord}_0R_q
+ \le\deg R_q
+ \le4dn+\eta n^2.
+\]
+Finally write \(Q=a(z)\prod_iq_i^{e_i}\), separating its polynomial content
+in \(z\).  The content contributes at most \(D\).  With multiplicities,
+\(\sum_i e_id_i\le D\) and \(\sum_i e_in_i\le N\); therefore
+\(\sum_i e_id_in_i\le DN\) and
+\(\sum_i e_in_i^2\le N^2\).  Summing the factor bounds proves
+\eqref{eq:critical-mahler-zero-bound}.
+\end{proof}
+
+\begin{lemma}[Normalized saturation of rational coboundaries]
+\label{lem:rational-mahler-saturation}
+Let \(H,Q\in\QQ(z)^\times\) satisfy \(H(0)=Q(0)=1\).  If, for some
+integer \(m\ge1\),
+\[
+ H^m=\delta Q=\frac{Q(z^2)}{Q(z)^2},
+\]
+then there is an \(R\in\QQ(z)^\times\), with \(R(0)=1\), such that
+\(H=\delta R\).
+\end{lemma}
+
+\begin{proof}
+For \(a\in\overline{\QQ}^\times\), let \(h(a)\) and \(q(a)\) denote the
+coefficients of \([a]\) in the divisors of \(H\) and \(Q\), respectively.
+Taking divisors gives
+\begin{equation}\label{eq:saturation-divisor-recurrence}
+ mh(a)=q(a^2)-2q(a),
+ \qquad q(a^2)\equiv2q(a)\pmod m.
+\end{equation}
+Fix \(a\ne0,\infty\).  For sufficiently large \(N\), among the
+\(2^N\)-th roots of \(a\) choose \(b_N\) outside the finite support of
+\(\operatorname{div}Q\).  Iterating the congruence along the chain from
+\(b_N\) to \(a\) gives \(q(a)\equiv2^Nq(b_N)\equiv0\pmod m\).
+The coefficient at zero is zero because \(Q(0)=1\), and the degree-zero
+condition on a principal divisor gives the same divisibility at infinity.
+Thus \(\operatorname{div}Q=mD\).
+
+The divisor \(D\) is Galois invariant and has degree zero.  Since
+\(\operatorname{Pic}^0(\mathbb P^1_{\QQ})=0\), choose
+\(S\in\QQ(z)^\times\) with \(\operatorname{div}S=D\), normalized by
+\(S(0)=1\).  Then \(Q/S^m\) is constant, and evaluation at zero gives
+\(Q=S^m\).  It follows that \((H/\delta S)^m=1\).  This rational function is
+constant and has value one at zero, so \(H=\delta S\); take \(R=S\).
+\end{proof}
+
+\begin{proposition}[Algebraic critical products are rational coboundaries]
+\label{prop:algebraic-mahler-coboundary}
+Let \(H\in\QQ(z)^\times\), \(H(0)=1\), and suppose that
+\(F\in1+z\QQ[[z]]\) is algebraic over \(\CC(z)\) and satisfies
+\(F(z)^2=H(z)F(z^2)\).  Then \(H=\delta R\) for a unique
+\(R\in\QQ(z)^\times\) with \(R(0)=1\).
+\end{proposition}
+
+\begin{proof}
+Put \(G=zF'/F\).  Logarithmic differentiation gives
+\begin{equation}\label{eq:log-derivative-mahler}
+ G(z)=G(z^2)+\frac z2\frac{H'(z)}{H(z)}.
+\end{equation}
+If the rational inhomogeneous term is non-zero, the equations at \(z\) and
+\(z^2\) eliminate it to give a homogeneous scalar \(2\)-Mahler equation for
+\(G\); if it is zero, \eqref{eq:log-derivative-mahler} and \(G(0)=0\) give
+\(G=0\).  Since algebraic functions are D-finite, B\'ezivin's theorem that a
+D-finite Mahler function is rational
+\cite[Theorem~1]{BellCoonsRowland2013MahlerDichotomy} yields
+\(G\in\CC(z)\), and its rational Taylor coefficients give
+\(G\in\QQ(z)\).
+
+All analytic branches of the algebraic function \(F\) have the same rational
+logarithmic derivative, so their pairwise quotients are constants.  Finite
+monodromy therefore gives an \(m\ge1\) for which
+\(T=F^m\) is single-valued, hence \(T\in\CC(z)^\times\).  Its Taylor
+coefficients give \(T\in\QQ(z)^\times\), and \(T(0)=1\).  Raising the
+functional equation to the \(m\)-th power gives
+\[
+ H^m=\frac{T(z)^2}{T(z^2)}=\delta(T^{-1}).
+\]
+Apply \Cref{lem:rational-mahler-saturation}, and then use the normalized
+injectivity proved in \Cref{prop:rational-mahler-certificate} for uniqueness.
+\end{proof}
+
+\begin{theorem}[Strict-gap determinant boundary lifting]
+\label{thm:determinant-boundary-lifting}
+Let \(A\) be a primitive non-negative integer matrix with Perron root
+\(\lambda>1\), and put \(x=\lambda^{-1}\).  Let \(B,B'\) be integer matrices
+of the same size such that, entrywise,
+\[
+ \abs{B_{ij}},\abs{B'_{ij}}\le A_{ij},
+ \qquad B_{ij}\equiv B'_{ij}\equiv A_{ij}\pmod2,
+\]
+and suppose that \(\rad(B),\rad(B')<\lambda\).  Set
+\[
+ H(z)=\frac{\det(I-zB)}{\det(I-zB')}.
+\]
+Then the following are equivalent:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+ \item \(\Pi_x(H)=1\);
+ \item there is a unique \(R\in\QQ(z)^\times\) such that
+ \[
+  R(0)=R(x)=1,
+  \qquad H(z)=\frac{R(z^2)}{R(z)^2}.
+ \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The strict gaps imply that both determinant polynomials are non-zero on a disk
+\(\abs z<r\) for some \(x<r<1\).  They are positive on \([0,x]\), because
+they are real, non-zero there, and equal one at zero.  Hence \(H>0\) on that
+interval.  Define \(F\) by \eqref{eq:critical-mahler-product}.  By
+\Cref{lem:critical-mahler-integrality}, it is analytic on \(\abs z<r\), has
+integer coefficients, and satisfies \eqref{eq:critical-mahler-equation}.
+Crucially, the product normalization is
+\begin{equation}\label{eq:critical-product-square-normalization}
+ F(x)^2=\Pi_x(H),
+\end{equation}
+not \(F(x)=\Pi_x(H)\).
+
+We apply Nishioka's special-value theorem
+\cite[Theorem, p.~387]{Nishioka1982MahlerFunctionValues} to the reduced form
+of
+\[
+ P_0(z)F(z^2)-P_1(z)F(z)^2=0.
+\]
+In her notation one may take \(p=2\), \(N=0\), \(n=1\), \(m=2\),
+\(M=2\), \(U=1\), and coefficient-growth exponent \(L=1\).  The required
+numerical inequality is \(M(p+N)n^2=4<2^{2+1/L}=8\).  The integer
+coefficients and analyticity of \(F\) give the required linear coefficient
+height bound, while the strict gaps ensure that the reduced coefficient
+polynomials do not vanish anywhere on the orbit \(x,x^2,x^4,\ldots\).
+Consequently, if \(F\) were transcendental over \(\CC(z)\), then \(F(x)\)
+would be transcendental.
+
+Assume \(\textup{(i)}\).  Positivity and \eqref{eq:critical-product-square-normalization}
+give \(F(x)=1\), so the cited theorem forces \(F\) to be algebraic.  By
+\Cref{prop:algebraic-mahler-coboundary}, \(H=\delta R\) for the unique
+normalized rational \(R\).  Now
+\Cref{prop:rational-mahler-certificate} gives
+\(1=\Pi_x(H)=R(x)^{-2}\) and \(R(x)>0\), hence \(R(x)=1\).  This proves
+\(\textup{(ii)}\).  Conversely, \(\textup{(ii)}\) and
+\eqref{eq:rational-mahler-telescope} give \(\textup{(i)}\), and the
+same proposition gives uniqueness.
+\end{proof}
+
+\begin{remark}[Scope of the lifting theorem]
+The determinant parity in \Cref{thm:determinant-boundary-lifting} is essential
+to the integrality step, so the theorem does not assert the converse for an
+arbitrary positive rational \(H\).  Its realizable class is nevertheless broad.
+Fix \(r\ge2\), an odd \(a>0\), and a positive even \(b\), and let \(A\) have
+diagonal entries \(a\) and off-diagonal entries \(b\).  Then
+\(\lambda=a+(r-1)b\).  Any diagonal \(B=\operatorname{diag}(c_i)\) and
+\(B'=\operatorname{diag}(d_i)\), with odd
+\(\abs{c_i},\abs{d_i}\le a\), satisfies the same-base compatibility and
+strict gaps, and realizes
+\[
+ H(z)=\frac{\prod_i(1-c_i z)}{\prod_i(1-d_i z)}.
+\]
 \end{remark}
 
 This mechanism is strictly weaker than full \(G\)-cospectrality, equivalently
@@ -374,8 +600,9 @@ which is odd.  Thus \(m=3\) is impossible.  Since \(m>1\), it follows that
 
 The minimality assertion is deliberately confined to the finite polynomial
 certificate class in \eqref{eq:regular-polynomial-certificate}; it does not
-purport to classify possible isolated equalities of transcendental boundary
-values lacking such a certificate.
+give a complexity bound for the rational certificates supplied abstractly by
+\Cref{thm:determinant-boundary-lifting}, or address positive rational functions
+outside that theorem's determinant-parity hypotheses.
 
 Although one Perron-point value loses information, an analytic radial profile
 restores it.  The following is a sufficient recovery criterion; no optimality

@@ -135,6 +135,211 @@ by \(4^nt^{2n}\).  The right side of
 \(t\), so monotone convergence proves the final assertion.
 \end{proof}
 
+\subsection{The infinite critical-moment boundary is not spectrally identifiable}
+
+The finite critical-moment theorem below cannot be extended by replacing its
+moment hypothesis with vague multivariate regular variation at the same
+index.  We use the standard measure formulation of multivariate regular
+variation on \(\RR^d\setminus\{0\}\), as in
+Hult--Lindskog~\cite{HultLindskog2006RegularVariation}.  For a probability
+measure \(\sigma\) on \(S^{d-1}\) and \(p>0\), write
+\begin{equation}\label{eq:critical-rv-tail-measure}
+ \mu_\sigma(\dd\rho,\dd\theta)
+ =p\rho^{-p-1}\dd\rho\,\sigma(\dd\theta).
+\end{equation}
+
+We first record a lower bound which requires no regular-variation
+hypothesis.
+
+\begin{lemma}[Finite-covariance Fatou lower bound]
+\label{lem:finite-covariance-fatou-lower-bound}
+Let \(d\ge1\), and let \(\nu\) be a centred probability law on \(\RR^d\)
+with finite covariance matrix \(\Sigma\).  Then, with the relative entropy
+understood in the extended sense,
+\begin{equation}\label{eq:finite-covariance-fatou-lower-bound}
+ \liminf_{t\to\infty}t^4H_d(t)\ge \mathcal Q_d(\Sigma).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Fix \(y\in\RR^d\).  Taylor's formula near the origin, followed by the
+elementary large-\(z\) bound, gives
+\[
+ \left|F_y(z)-1-D_zF_y(0)z\right|\le C_y|z|^2,
+ \qquad z\in\RR^d.
+\]
+Indeed, the assertion is the usual second-order Taylor bound for
+\(|z|\le1\); for \(|z|>1\), \(F_y(z)\le(1+|y|^2)^{(d+1)/2}\), while the
+subtracted affine function is \(O_y(1+|z|)\).  Centering and dominated
+convergence therefore imply
+\[
+ t^2\delta_t^{(d)}(y)\longrightarrow b_\Sigma(y).
+\]
+Since \(\Phi\ge0\) on \([-1,\infty)\) and
+\(t^4\Phi(\delta_t^{(d)}(y))\to b_\Sigma(y)^2/2\), Fatou's lemma yields
+\[
+ \liminf_{t\to\infty}t^4H_d(t)
+ \ge \frac12\int_{\RR^d}b_\Sigma^2\dd\Omega_d
+ =\mathcal Q_d(\Sigma),
+\]
+where the last identity is Theorem~\ref{thm:multidim-covariance-algebra}.
+\end{proof}
+
+\begin{theorem}[Critical vague tails do not identify the leading entropy]
+\label{thm:critical-vague-tail-nonidentifiability}
+Fix \(d\ge4\), and set
+\[
+ p=\frac{4(d+1)}{d+5},\qquad
+ q=\frac{d+5}{d+1}=1+\frac4{d+1};
+\]
+thus \(pq=4\).  Let \(\sigma\) be normalized surface measure on
+\(S^{d-1}\), and let \(L(r)=\log r\).  For every positive-definite matrix
+\(\Sigma\), there are two centred probability laws
+\(\nu_{\rm ac}\) and \(\nu_{\rm cl}\) with covariance \(\Sigma\) such that
+\begin{equation}\label{eq:critical-vague-tail-common-limit}
+ \frac{r^p}{\log r}\,\nu_\bullet(r\,\mathord\cdot)
+ \xrightarrow[r\to\infty]{v}\mu_\sigma
+ \quad\text{on }\RR^d\setminus\{0\},
+ \qquad \bullet\in\{\mathrm{ac},\mathrm{cl}\},
+\end{equation}
+but
+\begin{equation}\label{eq:critical-vague-tail-contrasting-entropy}
+ t^4H_{d,{\rm ac}}(t)\longrightarrow\mathcal Q_d(\Sigma),
+ \qquad
+ \limsup_{t\to\infty}t^4H_{d,{\rm cl}}(t)=+\infty.
+\end{equation}
+Consequently, the spectral measure and the slowly varying factor do not
+determine whether the covariance lower bound is an asymptotic equality,
+even when the spectral measure is smooth, everywhere nondegenerate, and
+antipodally symmetric.
+\end{theorem}
+
+\begin{proof}
+We construct the tails first and then complete them on a bounded set.  Choose
+\(s_1\) large and put \(R_0=e^{s_1}\).  The diffuse tail is
+\begin{equation}\label{eq:critical-diffuse-tail-definition}
+ \tau_{\rm ac}(\dd r,\dd\theta)
+ =p r^{-p-1}\log r\,\mathbf1_{\{r\ge R_0\}}
+   \dd r\,\sigma(\dd\theta).
+\end{equation}
+Changing variables \(r=R\rho\) and applying dominated convergence against
+each compactly supported continuous test function on
+\(\RR^d\setminus\{0\}\) proves
+\(R^p(\log R)^{-1}\tau_{\rm ac}(R\,\mathord\cdot)\to\mu_\sigma\).
+
+For the clustered tail, define recursively
+\[
+ s_{n+1}=s_n+s_n^{-1/2},\qquad R_n=e^{s_n},\qquad
+ W_n=\int_{s_n}^{s_{n+1}}pu e^{-pu}\dd u.
+\]
+Choose an antipodally symmetric equal-weight empirical probability
+\(\pi_n\) on \(S^{d-1}\), supported on
+\(N_n\asymp s_n^{1/4}\) points, so that \(\pi_n\Rightarrow\sigma\), and set
+\begin{equation}\label{eq:critical-clustered-tail-definition}
+ \tau_{\rm cl}=\sum_{n\ge1}W_n(\theta\mapsto R_n\theta)_\#\pi_n.
+\end{equation}
+This tail has the same vague limit.  To verify the assertion without a
+moving-set argument, let \(f\in C_c(\RR^d\setminus\{0\})\) and write
+\(R=e^s\).  Then
+\[
+ \frac{e^{ps}}s\int f(x/e^s)\tau_{\rm cl}(\dd x)
+ =\frac{e^{ps}}s\sum_nW_n
+   \int f(e^{s_n-s}\theta)\pi_n(\dd\theta).
+\]
+Only indices with \(s_n-s\) in a fixed compact interval occur.  On this
+interval the maximal mesh \(s_n^{-1/2}\) tends to zero, \(u/s\to1\)
+uniformly, and \(\pi_n\Rightarrow\sigma\) uniformly over the indices in
+question.  The right side is therefore a Riemann sum converging to
+\[
+ \int_\RR pe^{-pv}\int_{S^{d-1}}f(e^v\theta)
+ \sigma(\dd\theta)\dd v
+ =\int f\dd\mu_\sigma.
+\]
+This proves \eqref{eq:critical-vague-tail-common-limit} for the two tails.
+
+Both tails have arbitrarily small total mass and covariance when \(s_1\) is
+large, because \(p>2\).  They are symmetric.  After increasing \(s_1\),
+their covariance matrices \(C_\bullet\) satisfy
+\(C_\bullet<\Sigma\).  A bounded symmetric measure of the remaining mass
+can realize the covariance \(\Sigma-C_\bullet\): diagonalize that matrix
+and place equal pairs of atoms on its eigenvectors with the corresponding
+radii.  Thus each tail can be completed to a centred probability law with
+covariance exactly \(\Sigma\), without changing its vague limit.
+
+We next prove the diffuse asymptotic.  Let
+\(m=2\) when \(p\le3\) and \(m=3\) when \(p>3\).  The local Taylor estimate
+\eqref{eq:local-multidim-taylor-remainder}, the boundedness of the retained
+modes, and symmetry give
+\begin{equation}\label{eq:critical-diffuse-quotient-remainder}
+ \|r_t\|_\infty+\|r_t\|_{L^1(\Omega_d)}
+ \le C\left\{
+ t^{-(m+1)}\EE[|X|^{m+1};|X|\le t]+t^{-p}\log t
+ \right\},
+\end{equation}
+where
+\(\delta_t^{(d)}=t^{-2}b_\Sigma+r_t\).  For completeness, the only
+estimate in \eqref{eq:critical-diffuse-quotient-remainder} not already
+contained in the local Taylor bound is the uniform control of the diffuse
+tail.  In Lebesgue coordinates it follows from
+\begin{equation}\label{eq:critical-diffuse-convolution-bound}
+ \sup_{y\in\RR^d}\int_{|z|>1}F_y(z)|z|^{-d-p}
+ (1+\log|z|)\dd z<\infty.
+\end{equation}
+For \(|y|\le2\) the bound is immediate.  If \(|y|=R>2\), split the
+integral into \(|z-y|\le R/2\) and its complement.  In the first region
+\(|z|\asymp R\), and translation by \(y\) bounds the integral by
+\(CR^{1-p}(1+\log R)\); in the second region \(F_y(z)\le C_d\), and the
+radial weight is integrable.  Since \(p>1\), this proves
+\eqref{eq:critical-diffuse-convolution-bound}.  Integration in \(y\) uses
+\(\int F_y(z)\Omega_d(\dd y)=1\), and gives the corresponding \(L^1\)
+bound.  The polynomial tail terms are bounded by the same
+\(O(t^{-p}\log t)\) quantity because \(m<p\), proving
+\eqref{eq:critical-diffuse-quotient-remainder}.
+
+When \(p\ne3\), the right side of
+\eqref{eq:critical-diffuse-quotient-remainder} is
+\(O(t^{-p}\log t)=o(t^{-2})\).  At the sole integer endpoint \(p=3\),
+equivalently \(d=11\), its first term is
+\(O(t^{-3}(\log t)^2)=o(t^{-2})\).  The second-order quotient criterion,
+Theorem~\ref{thm:second-order-quotient-kl-coefficient}, now gives the first
+limit in \eqref{eq:critical-vague-tail-contrasting-entropy}.  Notice also
+that the whole construction is antipodally symmetric; at \(d=11\) every
+truncated third-moment tensor is therefore identically zero.
+
+It remains to obtain the clustered lower bound.  Each atom in the \(n\)th
+shell has mass
+\[
+ a_n=\frac{W_n}{N_n}\sim p s_n^{1/4}R_n^{-p},
+ \qquad R_n^pa_n\longrightarrow\infty.
+\]
+Fix one such atom, choose a sufficiently small constant \(\kappa>0\), and
+put
+\[
+ t_n=\kappa R_na_n^{1/(d+1)}.
+\]
+Then \(t_n\to\infty\) and \(t_n/R_n\to0\).  If \(A_n\) is the ball of
+radius \(t_n\) centred at that atom, the corresponding mixture component
+and the centred reference satisfy
+\[
+ (P_{t_n}^{(d)}*\nu_{\rm cl})(A_n)\ge c_da_n,
+ \qquad
+ P_{t_n}^{(d)}(A_n)\le C_d(t_n/R_n)^{d+1}
+ =C_d\kappa^{d+1}a_n.
+\]
+Choose \(\kappa\) so that the second constant is smaller by a fixed factor.
+Data processing to \(\{A_n,A_n^c\}\), followed by
+\(D(\operatorname{Ber}(u)\|\operatorname{Ber}(v))
+\ge u\log(u/v)-u+v\), gives \(H_{d,{\rm cl}}(t_n)\ge c'_da_n\).
+Consequently,
+\[
+ t_n^4H_{d,{\rm cl}}(t_n)
+ \ge c_dR_n^4a_n^{1+4/(d+1)}
+ =c_d(R_n^pa_n)^q
+ \asymp s_n^{q/4}\longrightarrow\infty,
+\]
+where \(pq=4\).  This proves the second limit and the theorem.
+\end{proof}
+
 \subsection{Moment-matched comparisons and Gaussian compression}
 
 For a probability law \(\rho\) with a finite \(j\)th absolute moment, write

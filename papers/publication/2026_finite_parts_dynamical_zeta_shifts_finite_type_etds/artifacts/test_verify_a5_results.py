@@ -38,6 +38,34 @@ class OracleA5ResultTests(unittest.TestCase):
     def test_diagonal_mahler_subclass_is_same_base_realizable_and_strict_gap(self):
         self.assertTrue(verify_diagonal_realizable_mahler_subclass())
 
+    def test_critical_mahler_normalization_has_the_required_square(self):
+        self.assertTrue(
+            hasattr(verifier, "critical_mahler_normalization_matches"),
+            "the critical Mahler normalization counterexample is not implemented",
+        )
+        self.assertTrue(verifier.critical_mahler_normalization_matches())
+
+    def test_determinant_parity_forces_integral_critical_mahler_coefficients(self):
+        self.assertTrue(
+            hasattr(verifier, "critical_mahler_integrality_matches"),
+            "the critical Mahler integrality check is not implemented",
+        )
+        self.assertTrue(verifier.critical_mahler_integrality_matches(order=24))
+
+    def test_critical_zero_estimate_pullback_identity_and_degree_bounds(self):
+        self.assertTrue(
+            hasattr(verifier, "critical_zero_estimate_pullback_matches"),
+            "the critical zero-estimate pullback check is not implemented",
+        )
+        self.assertTrue(verifier.critical_zero_estimate_pullback_matches())
+
+    def test_normalized_rational_mahler_coboundaries_are_saturated_in_examples(self):
+        self.assertTrue(
+            hasattr(verifier, "rational_mahler_saturation_matches"),
+            "the normalized Mahler saturation check is not implemented",
+        )
+        self.assertTrue(verifier.rational_mahler_saturation_matches())
+
     def test_quadratic_binary_certificate_minimality_enumeration(self):
         self.assertTrue(
             hasattr(verifier, "enumerate_quadratic_binary_certificates"),
@@ -138,6 +166,10 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Positive rational Mahler certificate: verified", report)
         self.assertIn("Unrestricted Mahler kernel inclusion: domain counterexample", report)
         self.assertIn("Diagonal same-base Mahler subclass: compatibility", report)
+        self.assertIn("Critical Mahler normalization: squared product", report)
+        self.assertIn("Critical Mahler integrality: 24 integer coefficients", report)
+        self.assertIn("Critical zero-estimate pullback: exact", report)
+        self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))
 

@@ -37,6 +37,8 @@ class OracleA2VerificationTests(unittest.TestCase):
             "lem:critical-lq-translation-remainder",
             "lem:critical-lq-kl-perturbation",
             "thm:high-dimensional-kl-moment-threshold",
+            "lem:finite-covariance-fatou-lower-bound",
+            "thm:critical-vague-tail-nonidentifiability",
         ):
             self.assertIn(r"\label{" + label + "}", manuscript)
 
