@@ -230,6 +230,72 @@ def pump_disjoint_blocks(
     return tuple(pieces)
 
 
+def tail_action_state(
+    recurrence: Sequence[int],
+    weight_values: Sequence[int],
+    prefix: Word,
+    suffix: Word,
+) -> tuple[int, ...]:
+    """Apply suffix matrices to the state seeded after a fixed prefix."""
+    dimension = len(recurrence)
+    start = len(prefix)
+    required = start + len(suffix) + dimension
+    if dimension < 1 or len(weight_values) < required:
+        raise ValueError("insufficient recurrence or weight data for the suffix")
+    for index in range(start, len(weight_values) - dimension):
+        expected = sum(
+            recurrence[offset] * weight_values[index + offset]
+            for offset in range(dimension)
+        )
+        if weight_values[index + dimension] != expected:
+            raise ValueError("the supplied recurrence is not valid after the prefix")
+
+    max_digit = max(prefix + suffix, default=0)
+    tail_system = LinearSystem(
+        name="tail_action",
+        polynomial="",
+        recurrence=tuple(recurrence),
+        initials=tuple(weight_values[start : start + dimension]),
+        max_digit=max_digit,
+    )
+    prefix_value = sum(
+        digit * weight for digit, weight in zip(prefix, weight_values)
+    )
+    seed = (prefix_value,) + tuple(weight_values[start : start + dimension])
+    return matvec(block_matrix(tail_system, suffix), seed)
+
+
+def linear_mcfg_ray_word(
+    prefix: Word,
+    constants: Sequence[Word],
+    left_pumps: Sequence[Word],
+    middles: Sequence[Word],
+    right_pumps: Sequence[Word],
+    exponent: int,
+) -> Word:
+    """Evaluate the word produced after ``exponent`` ray recursions."""
+    if exponent < 0:
+        raise ValueError("the ray exponent must be nonnegative")
+    fan_out = len(left_pumps)
+    if not (
+        len(constants) == fan_out + 1
+        and len(middles) == fan_out
+        and len(right_pumps) == fan_out
+    ):
+        raise ValueError("inconsistent synchronized-ray block counts")
+    if not any(left_pumps) and not any(right_pumps):
+        raise ValueError("at least one synchronized pump must be nonempty")
+
+    word = list(prefix)
+    for index in range(fan_out):
+        word.extend(constants[index])
+        word.extend(left_pumps[index] * exponent)
+        word.extend(middles[index])
+        word.extend(right_pumps[index] * exponent)
+    word.extend(constants[-1])
+    return tuple(word)
+
+
 def check_synchronized_orbit(
     system: LinearSystem,
     word: Word,
@@ -654,6 +720,46 @@ def run_verification() -> dict[str, object]:
         if is_prime(prime)
     )
     inflated_fibonacci = verify_inflated_fibonacci_separation()
+
+    transient_weights = (1, 3, 6, 12, 24, 48, 96, 192)
+    transient_prefix = (2,)
+    tail_prefix_cases = 0
+    tail_prefix_failures = 0
+    for suffix_length in range(6):
+        for suffix in product((0, 1), repeat=suffix_length):
+            transformed = tail_action_state(
+                (-10, 7), transient_weights, transient_prefix, suffix
+            )
+            full_word = transient_prefix + suffix
+            expected = (
+                sum(
+                    digit * weight
+                    for digit, weight in zip(full_word, transient_weights)
+                ),
+                *transient_weights[
+                    len(full_word) : len(full_word) + 2
+                ],
+            )
+            tail_prefix_cases += 1
+            tail_prefix_failures += int(transformed != expected)
+
+    base_two = system_by_name("integer_base_2")
+    geometric_ray_cases = 13
+    geometric_ray_failures = sum(
+        value(
+            base_two,
+            linear_mcfg_ray_word(
+                prefix=(),
+                constants=((), (1,)),
+                left_pumps=((0,),),
+                middles=((),),
+                right_pumps=((),),
+                exponent=exponent,
+            ),
+        )
+        != 2**exponent
+        for exponent in range(geometric_ray_cases)
+    )
     return {
         "systems_checked": len(SYSTEMS),
         "affine_cases": affine_cases,
@@ -665,6 +771,10 @@ def run_verification() -> dict[str, object]:
         "divisibility_tree_failures": divisibility_tree_failures,
         "inflated_fibonacci_cases": inflated_fibonacci["cases"],
         "inflated_fibonacci_failures": inflated_fibonacci["failures"],
+        "tail_prefix_cases": tail_prefix_cases,
+        "tail_prefix_failures": tail_prefix_failures,
+        "geometric_ray_cases": geometric_ray_cases,
+        "geometric_ray_failures": geometric_ray_failures,
         "witnesses": witnesses,
         "counterexample": search_singular_counterexample(),
     }
@@ -684,6 +794,10 @@ def _format_report(report: dict[str, object]) -> str:
         f"divisibility tree failures: {report['divisibility_tree_failures']}",
         f"inflated Fibonacci cases: {report['inflated_fibonacci_cases']}",
         f"inflated Fibonacci failures: {report['inflated_fibonacci_failures']}",
+        f"tail-prefix action cases: {report['tail_prefix_cases']}",
+        f"tail-prefix action failures: {report['tail_prefix_failures']}",
+        f"geometric ray cases: {report['geometric_ray_cases']}",
+        f"geometric ray failures: {report['geometric_ray_failures']}",
     ]
     for witness in report["witnesses"]:
         lines.append(
@@ -703,6 +817,8 @@ def _format_report(report: dict[str, object]) -> str:
         "deep_chain_failures",
         "divisibility_tree_failures",
         "inflated_fibonacci_failures",
+        "tail_prefix_failures",
+        "geometric_ray_failures",
     )
     lines.append(
         "OVERALL: PASS"

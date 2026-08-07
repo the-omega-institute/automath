@@ -206,3 +206,35 @@ Fibonacci recurrence nonunit Pisot`, and `affine semigroup p-adic numeration`
 returned only standard Pisot tiling, numeration, recurrence, and affine
 semigroup papers unrelated to the retained strict separation. These searches are
 negative novelty evidence, not a proof that no related result exists.
+
+## Geometric-ray characterization (2026-08-07)
+
+The public arXiv Atom API returned zero records for each of the following
+literal queries:
+
+- \`all:"multiple context-free" AND all:"geometric progression"\`;
+- \`all:"multiple context-free" AND all:"bounded prime support"\`;
+- \`all:"multiple context-free" AND all:"linear recurrence"\`;
+- \`all:"multiple context-free" AND all:"S-unit"\`;
+- \`all:"Pisot numeration" AND all:"geometric progression"\`;
+- \`all:"numeration system" AND all:"bounded prime support"\`;
+- \`all:"linear MCFG" AND all:"geometric progression"\`;
+- \`all:"semidecidable" AND all:"multiple context-free" AND all:"numeration"\`.
+
+Crossref and OpenAlex searches for the corresponding unquoted combinations
+returned general references on MCFGs, geometric-progression-free sets, and
+Pisot numeration, but no work combining an MCFL sublanguage, bounded prime
+support, and an exact geometric numerical ray. This is negative novelty
+evidence only.
+
+Two published inputs delimit the claim. Seki--Matsumura--Fujii--Kasami,
+*Theoretical Computer Science* 88 (1991), 191--229, supply the weak
+synchronized pumping family. J.-H. Evertse, "On sums of \(S\)-units and
+linear recurrences," *Compositio Mathematica* 53 (1984), 225--244,
+Theorem 3, proves unbounded prime-ideal support in ratios of terms of a
+nondegenerate recurrence with at least two characteristic roots. The latter
+excludes a fixed-\(S\)-unit nondegenerate subsequence; Schur's polynomial
+prime-divisor theorem handles the remaining one-root polynomial factor.
+Neither published input states the manuscript's equivalence with the
+existence of a finite-fan-out synchronized MCFG ray, nor the resulting
+positive-semidecidability statement.

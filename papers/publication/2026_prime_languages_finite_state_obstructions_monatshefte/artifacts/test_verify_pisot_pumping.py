@@ -4,6 +4,47 @@ from artifacts import verify_pisot_pumping as verifier
 
 
 class PisotPumpingVerifierTests(unittest.TestCase):
+    def test_tail_action_starts_after_the_eventual_recurrence_transient(self):
+        recurrence = (-10, 7)
+        weights = (1, 3, 6, 12, 24, 48, 96, 192)
+        prefix = (2,)
+
+        for suffix_length in range(6):
+            for suffix_number in range(1 << suffix_length):
+                suffix = tuple(
+                    (suffix_number >> index) & 1
+                    for index in range(suffix_length)
+                )
+                transformed = verifier.tail_action_state(
+                    recurrence, weights, prefix, suffix
+                )
+                full_word = prefix + suffix
+                expected = (
+                    sum(
+                        digit * weight
+                        for digit, weight in zip(full_word, weights)
+                    ),
+                    *weights[len(full_word) : len(full_word) + len(recurrence)],
+                )
+                self.assertEqual(transformed, expected)
+
+    def test_explicit_linear_mcfg_ray_realizes_a_geometric_base_two_orbit(self):
+        base_two = verifier.system_by_name("integer_base_2")
+        values = []
+        for exponent in range(13):
+            word = verifier.linear_mcfg_ray_word(
+                prefix=(),
+                constants=((), (1,)),
+                left_pumps=((0,),),
+                middles=((),),
+                right_pumps=((),),
+                exponent=exponent,
+            )
+            self.assertEqual(word, (0,) * exponent + (1,))
+            values.append(verifier.value(base_two, word))
+
+        self.assertEqual(values, [2**exponent for exponent in range(13)])
+
     def test_affine_action_matches_direct_evaluation(self):
         for system in verifier.SYSTEMS:
             with self.subTest(system=system.name):
@@ -51,6 +92,10 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["divisibility_tree_failures"], 0)
         self.assertGreater(report["inflated_fibonacci_cases"], 100)
         self.assertEqual(report["inflated_fibonacci_failures"], 0)
+        self.assertGreater(report["tail_prefix_cases"], 50)
+        self.assertEqual(report["tail_prefix_failures"], 0)
+        self.assertEqual(report["geometric_ray_cases"], 13)
+        self.assertEqual(report["geometric_ray_failures"], 0)
 
     def test_inflated_fibonacci_has_unit_reachable_action(self):
         report = verifier.verify_inflated_fibonacci_separation(
