@@ -19,4 +19,6 @@ fi
 echo $$ > "$LOCK/pid"
 trap 'rm -rf "$LOCK"' EXIT INT TERM
 echo "=== driver started $(date) pid=$$ ==="
-bash "$D/driver.sh"
+# exec, not a child: the recorded pid must BE the driver, so killing the lock
+# owner actually stops it instead of orphaning a running loop
+exec bash "$D/driver.sh"
