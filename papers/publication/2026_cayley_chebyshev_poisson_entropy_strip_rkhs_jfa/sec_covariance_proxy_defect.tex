@@ -1,0 +1,217 @@
+% sec_covariance_proxy_defect.tex -- exact covariance-proxy KL defect
+\section{The Covariance-Matched Poisson Defect}
+\label{sec:covariance-proxy-defect}
+
+Finite covariance determines the quadratic mode but, in dimensions at least
+four, does not force the matched entropy to attain the corresponding
+coefficient.  The following result identifies the complete nonnegative
+remainder without imposing a tail class or an absolute moment above order
+two.
+
+\begin{theorem}[Covariance-proxy defect decomposition]
+\label{thm:covariance-proxy-defect-decomposition}
+\label{thm:finite-covariance-proxy-defect-decomposition}
+Let \(d\ge1\), and let \(\nu\) be a probability law on \(\RR^d\) with mean
+\(\bar\gamma\) and finite covariance matrix \(\Sigma\).  Put
+\[
+ h_t=P_t^{(d)}*\nu,
+ \qquad g_t=P_t^{(d)}(\mathord\cdot-\bar\gamma),
+ \qquad H_d(t)=D_{\rm KL}(h_t\|g_t),
+\]
+and let \(b_\Sigma\) be the bounded covariance mode in
+\eqref{eq:multidim-leading-theorem-density-mode}.  For all sufficiently
+large \(t\),
+\begin{equation}\label{eq:covariance-poisson-proxy}
+ k_{\Sigma,t}(x)
+ :=g_t(x)\left[1+t^{-2}b_\Sigma
+ \left(\frac{x-\bar\gamma}{t}\right)\right]
+\end{equation}
+is a probability density.  Define
+\begin{equation}\label{eq:covariance-proxy-defect-functional}
+ \mathcal C_{\nu,\Sigma}(t)
+ :=t^4D_{\rm KL}(h_t\|k_{\Sigma,t}).
+\end{equation}
+Then
+\begin{equation}\label{eq:covariance-proxy-defect-decomposition}
+ t^4H_d(t)
+ =\mathcal Q_d(\Sigma)+\mathcal C_{\nu,\Sigma}(t)+o(1)
+ \qquad(t\to\infty).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:covariance-proxy-defect-equivalence}
+ t^4H_d(t)\longrightarrow\mathcal Q_d(\Sigma)
+ \quad\Longleftrightarrow\quad
+ \mathcal C_{\nu,\Sigma}(t)\longrightarrow0.
+\end{equation}
+No density of \(\nu\), regular-variation hypothesis, angular balance, or
+higher absolute moment is required.
+\end{theorem}
+
+\begin{proof}
+After translation, assume \(\bar\gamma=0\), and write
+\[
+ \Omega_d(\dd y)=P_1^{(d)}(y)\dd y,
+ \qquad
+ F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^{(d+1)/2}.
+\]
+In normalized coordinates,
+\[
+ q_t(y):=\frac{h_t(ty)}{g_t(ty)}
+ =\EE F_y(X/t),
+ \qquad \delta_t=q_t-1,
+ \qquad u_t=t^{-2}b_\Sigma.
+\]
+The covariance calculation in
+Theorem~\ref{thm:multidim-covariance-algebra} gives
+\(\int b_\Sigma\dd\Omega_d=0\).  Since \(b_\Sigma\) is bounded,
+\(1+u_t\ge1/2\) for all sufficiently large \(t\), proving that
+\eqref{eq:covariance-poisson-proxy} is positive and has integral one.
+
+We first establish the only asymptotic input needed below:
+\begin{equation}\label{eq:covariance-proxy-weak-pairing}
+ t^2\int_{\RR^d}b_\Sigma(y)\delta_t(y)\,\Omega_d(\dd y)
+ \longrightarrow
+ \int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y).
+\end{equation}
+Set
+\[
+ J(z)=\int_{\RR^d}b_\Sigma(y)F_y(z)\,\Omega_d(\dd y)
+ =\int_{\RR^d}b_\Sigma(y)P_1^{(d)}(y-z)\dd y.
+\]
+The function \(b_\Sigma\) is even, smooth, and has bounded second
+derivatives.  Translation in the last integral shows that \(J\) is even,
+\(J(0)=0\), and its Hessian is bounded on the unit ball.  Hence
+\(|J(z)|\le C|z|^2\) for \(|z|\le1\).  For \(|z|\ge1\), positivity and
+normalization of the translated Poisson density give
+\(|J(z)|\le\|b_\Sigma\|_\infty\le
+\|b_\Sigma\|_\infty|z|^2\).  Thus
+\begin{equation}\label{eq:covariance-proxy-global-quadratic-pairing}
+ |J(z)|\le C_{d,\Sigma}|z|^2,
+ \qquad z\in\RR^d.
+\end{equation}
+
+Let \(B_2(y,z)\) denote the homogeneous degree-two Taylor term of
+\(F_y(z)\) at zero.  Taylor expansion under the integral gives
+\[
+ J(z)=\int b_\Sigma(y)B_2(y,z)\,\Omega_d(\dd y)+o(|z|^2).
+\]
+The covariance-mode identity proved in
+Theorem~\ref{thm:multidim-covariance-algebra} is
+\(\EE B_2(y,X)=b_\Sigma(y)\).  Since \(\EE|X|^2<\infty\),
+\eqref{eq:covariance-proxy-global-quadratic-pairing} and dominated
+convergence imply
+\[
+ \EE[t^2J(X/t)]
+ \longrightarrow
+ \int b_\Sigma(y)\EE B_2(y,X)\,\Omega_d(\dd y)
+ =\int b_\Sigma^2\dd\Omega_d.
+\]
+Because \(\int b_\Sigma\dd\Omega_d=0\), the left side is precisely the
+left side of \eqref{eq:covariance-proxy-weak-pairing}.
+
+We also have
+\begin{equation}\label{eq:covariance-proxy-l1-smallness}
+ \|\delta_t\|_{L^1(\Omega_d)}\longrightarrow0.
+\end{equation}
+Indeed, Minkowski's integral inequality bounds this norm by
+\[
+ \EE\left\|P_1^{(d)}(\mathord\cdot-X/t)-P_1^{(d)}
+ \right\|_{L^1(\RR^d)},
+\]
+which tends to zero by translation continuity and dominated convergence.
+
+Put \(r_t=\delta_t-u_t\).  Equations
+\eqref{eq:covariance-proxy-weak-pairing} and
+\eqref{eq:covariance-proxy-l1-smallness} give
+\begin{equation}\label{eq:covariance-proxy-remainder-pairing}
+ t^2\int b_\Sigma r_t\dd\Omega_d\longrightarrow0,
+ \qquad \|r_t\|_{L^1(\Omega_d)}\longrightarrow0.
+\end{equation}
+Uniformly in \(y\),
+\[
+ \log(1+u_t)=u_t+O(t^{-4}).
+\]
+It follows from \eqref{eq:covariance-proxy-remainder-pairing} that
+\begin{equation}\label{eq:covariance-proxy-cross-remainder}
+ \int r_t\log(1+u_t)\dd\Omega_d=o(t^{-4}).
+\end{equation}
+On the other hand, with
+\(\Phi(s)=(1+s)\log(1+s)-s\), boundedness of \(b_\Sigma\) gives
+\begin{align}
+ \int(1+u_t)\log(1+u_t)\dd\Omega_d
+ &=\int\Phi(u_t)\dd\Omega_d \notag\\
+ &=\frac{t^{-4}}2\int b_\Sigma^2\dd\Omega_d+O(t^{-6})
+ =t^{-4}\mathcal Q_d(\Sigma)+O(t^{-6}).
+ \label{eq:covariance-proxy-self-cross-entropy}
+\end{align}
+Combining \eqref{eq:covariance-proxy-cross-remainder} and
+\eqref{eq:covariance-proxy-self-cross-entropy} yields
+\begin{equation}\label{eq:covariance-proxy-cross-entropy-asymptotic}
+ \int(1+\delta_t)\log(1+u_t)\dd\Omega_d
+ =t^{-4}\mathcal Q_d(\Sigma)+o(t^{-4}).
+\end{equation}
+
+Finally, the exact logarithmic identity is
+\[
+ H_d(t)=D_{\rm KL}(h_t\|k_{\Sigma,t})
+ +\int(1+\delta_t)\log(1+u_t)\dd\Omega_d.
+\]
+ All terms are finite for large \(t\).  Indeed, convexity of relative entropy
+ and
+ \[
+  D_{\rm KL}\!\left(P_1^{(d)}(\mathord\cdot-z)\,\middle\|\,
+  P_1^{(d)}\right)
+  \le \frac{d+1}{2}\log\{2(1+|z|^2)\}
+  \le C_d(1+|z|^2)
+ \]
+ bound \(H_d(t)\) by an integrable average under
+ \(\EE|X|^2<\infty\).  The first inequality follows from
+ \(1+|w+z|^2\le2(1+|w|^2)(1+|z|^2)\).  Moreover,
+ \(\log(1+u_t)\) is bounded.  Substitution of
+\eqref{eq:covariance-proxy-cross-entropy-asymptotic} proves
+\eqref{eq:covariance-proxy-defect-decomposition}.  Nonnegativity of relative
+entropy then gives \eqref{eq:covariance-proxy-defect-equivalence}.
+\end{proof}
+
+\begin{corollary}[Proxy characterization at the critical vague boundary]
+\label{cor:critical-rv-proxy-characterization}
+Fix \(d\ge4\), set
+\[
+ p_d=\frac{4(d+1)}{d+5},
+ \qquad
+ \mu_\sigma(\dd\rho,\dd\theta)
+ =p_d\rho^{-p_d-1}\dd\rho\,\sigma(\dd\theta),
+\]
+and let \(\nu\) have mean \(\bar\gamma\), finite covariance \(\Sigma\), and
+centred law \(\nu_c\).  Suppose that, for a slowly varying \(L\),
+\[
+ \frac{r^{p_d}}{L(r)}\nu_c(r\,\mathord\cdot)
+ \xrightarrow[r\to\infty]{v}\mu_\sigma
+ \quad\text{on }\RR^d\setminus\{0\},
+ \qquad
+ \ell_L(t):=\int_{R_0}^t\frac{L(s)}s\dd s\longrightarrow\infty.
+\]
+Then
+\[
+ t^4H_d(t)\longrightarrow\mathcal Q_d(\Sigma)
+ \quad\Longleftrightarrow\quad
+ \mathcal C_{\nu,\Sigma}(t)\longrightarrow0.
+\]
+In particular, for the two laws \(\nu_{\rm ac}\) and \(\nu_{\rm cl}\) in
+Theorem~\ref{thm:critical-vague-tail-nonidentifiability},
+\[
+ \mathcal C_{\nu_{\rm ac},\Sigma}(t)\longrightarrow0,
+ \qquad
+ \limsup_{t\to\infty}\mathcal C_{\nu_{\rm cl},\Sigma}(t)=+\infty.
+\]
+Thus the spectral measure and slowly varying factor do not determine the
+covariance-proxy defect trajectory.
+\end{corollary}
+
+\begin{proof}
+The equivalence is Theorem~\ref{thm:covariance-proxy-defect-decomposition};
+the regular-variation assumptions specify the critical class but are not
+needed for that decomposition.  Its combination with
+\eqref{eq:critical-vague-tail-contrasting-entropy} gives the two final
+assertions.
+\end{proof}

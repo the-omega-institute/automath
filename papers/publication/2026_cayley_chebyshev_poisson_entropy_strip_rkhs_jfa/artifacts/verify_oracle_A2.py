@@ -17,6 +17,8 @@ import mpmath as mp
 import numpy as np
 import sympy as sp
 from numpy.polynomial.legendre import leggauss
+from scipy.special import ndtri
+from scipy.stats import qmc
 
 
 @dataclass
@@ -30,6 +32,29 @@ def symbolic_checks() -> list[Check]:
     x, t = sp.symbols("x t", real=True, positive=True)
     a = sp.I * x / (2 * t - sp.I * x)
     checks: list[Check] = []
+
+    p_density, q_density = sp.symbols("p_density q_density", positive=True)
+    phi_delta = p_density * sp.log(p_density) - p_density + 1
+    proxy_bregman = (
+        p_density * (sp.log(p_density) - sp.log(q_density))
+        - p_density
+        + q_density
+    )
+    proxy_cross_entropy = p_density * sp.log(q_density)
+    chain_residual = sp.simplify(
+        phi_delta
+        - proxy_bregman
+        - proxy_cross_entropy
+        + (q_density - 1)
+    )
+    checks.append(
+        Check(
+            "covariance-proxy KL chain identity",
+            chain_residual == 0,
+            "pointwise residual after restoring the zero-mass proxy mode "
+            f"is {chain_residual}",
+        )
+    )
 
     recurrence_residuals = []
     for k in range(1, 9):
@@ -199,7 +224,132 @@ def symbolic_checks() -> list[Check]:
             + f"; integer endpoints={integer_endpoints}",
         )
     )
+
+    proxy_rows = []
+    proxy_ok = True
+    for d in range(1, 41):
+        radial_inverse = sp.Rational(1, d + 1)
+        radial_quadratic = sp.Rational(d, (d + 1) * (d + 3))
+        normalized_mean = sp.simplify(
+            sp.Rational(d + 1, 2)
+            * (
+                -radial_inverse
+                + sp.Rational(d + 3, d) * radial_quadratic
+            )
+        )
+        proxy_ok = proxy_ok and normalized_mean == 0
+        if d in (1, 4, 11, 40):
+            proxy_rows.append(
+                f"d={d}: integral(b_Sigma)/tr(Sigma)={normalized_mean}"
+            )
+    checks.append(
+        Check(
+            "covariance Poisson proxy normalization",
+            proxy_ok,
+            "; ".join(proxy_rows),
+        )
+    )
+
+    delta_symbol, log_delta, log_u = sp.symbols(
+        "delta log_delta log_u"
+    )
+    chain_residual = sp.expand(
+        (1 + delta_symbol) * log_delta
+        - (1 + delta_symbol) * (log_delta - log_u)
+        - (1 + delta_symbol) * log_u
+    )
+    checks.append(
+        Check(
+            "covariance proxy exact KL chain identity",
+            chain_residual == 0,
+            f"pointwise residual={chain_residual}",
+        )
+    )
     return checks
+
+
+def finite_covariance_proxy_check(quick: bool) -> Check:
+    """Stress the proxy cross-entropy asymptotic on anisotropic atomic laws."""
+
+    rows = []
+    passed = True
+    sample_power = 18
+    times = (4.0, 7.0, 12.0) if quick else (4.0, 7.0, 12.0, 20.0)
+
+    for d in (4, 7):
+        sobol = qmc.Sobol(d=d + 1, scramble=True, seed=1729 + d)
+        uniform = sobol.random_base2(sample_power)
+        normal = ndtri(np.clip(uniform, 1.0e-14, 1.0 - 1.0e-14))
+        y = normal[:, :d] / np.abs(normal[:, d, None])
+        y_norm_sq = np.sum(y * y, axis=1)
+
+        pair_masses = np.linspace(0.45 / d, 0.75 / d, d)
+        pair_masses *= 0.72 / np.sum(pair_masses)
+        radii = np.linspace(0.65, 2.15, d)
+        covariance = np.diag(pair_masses * radii**2)
+        trace = float(np.trace(covariance))
+        covariance_zero = covariance - trace * np.eye(d) / d
+        iso = 3 * (d + 1) * (7 * d + 9) / (
+            4 * d * (d + 3) * (d + 5) * (d + 7)
+        )
+        traceless = 3 * (d + 1) * (d + 3) / (4 * (d + 5) * (d + 7))
+        q_value = iso * trace**2 + traceless * float(
+            np.sum(covariance_zero * covariance_zero)
+        )
+
+        quadratic = np.einsum("ni,ij,nj->n", y, covariance, y)
+        b_mode = (d + 1) / 2 * (
+            -trace / (1 + y_norm_sq)
+            + (d + 3) * quadratic / (1 + y_norm_sq) ** 2
+        )
+
+        cross_ratios = []
+        scaled_defects = []
+        for time in times:
+            quotient = np.full(y.shape[0], 1.0 - np.sum(pair_masses))
+            for axis, (mass, radius) in enumerate(zip(pair_masses, radii)):
+                shift = radius / time
+                dot = y[:, axis]
+                plus_denominator = 1 + y_norm_sq + shift**2 - 2 * shift * dot
+                minus_denominator = 1 + y_norm_sq + shift**2 + 2 * shift * dot
+                quotient += 0.5 * mass * (
+                    ((1 + y_norm_sq) / plus_denominator) ** ((d + 1) / 2)
+                    + ((1 + y_norm_sq) / minus_denominator) ** ((d + 1) / 2)
+                )
+
+            delta = quotient - 1
+            u = b_mode / time**2
+            remainder = delta - u
+            proxy_entropy = np.mean(
+                (1 + u) * np.log1p(u) - u
+                + remainder * np.log1p(u)
+            )
+            proxy_divergence = np.mean(
+                (1 + delta) * np.log((1 + delta) / (1 + u))
+                - remainder
+            )
+            cross_ratios.append(time**4 * proxy_entropy / q_value)
+            scaled_defects.append(time**4 * proxy_divergence)
+
+        row_ok = (
+            all(np.isfinite(cross_ratios))
+            and all(np.isfinite(scaled_defects))
+            and all(value >= -2.0e-10 for value in scaled_defects)
+            and abs(cross_ratios[-1] - 1.0) < (0.03 if quick else 0.012)
+            and abs(cross_ratios[-1] - 1.0) < abs(cross_ratios[0] - 1.0)
+            and scaled_defects[-1] < scaled_defects[0]
+        )
+        passed = passed and row_ok
+        rows.append(
+            f"d={d}: t^4 cross/Q={cross_ratios}, "
+            f"t^4 D(h||k)={scaled_defects}"
+        )
+
+    return Check(
+        "finite-covariance proxy asymptotic stress",
+        passed,
+        "; ".join(rows),
+    )
 
 
 def critical_bregman_check() -> Check:
@@ -232,6 +382,107 @@ def critical_bregman_check() -> Check:
             f"max Bregman/|v|^q={maximum_ratio:.6g}"
         )
     return Check("critical Bregman perturbation bound", passed, "; ".join(rows))
+
+
+def covariance_proxy_quadrature_check(quick: bool) -> Check:
+    """Test the proxy chain identity and cross-entropy coefficient in d>=4."""
+
+    node_count = 70 if quick else 130
+    nodes, weights = leggauss(node_count)
+    theta = (math.pi / 4) * (nodes + 1)
+    theta_weights = (math.pi / 4) * weights
+    phi = (math.pi / 2) * (nodes + 1)
+    phi_weights = (math.pi / 2) * weights
+    radius_nodes = np.tan(theta)
+
+    rows = []
+    passed = True
+    times = (7.0, 10.0, 14.0, 20.0) if quick else (7.0, 10.0, 14.0, 20.0, 30.0)
+    for d, sphere_radius in ((4, 0.8), (7, 1.3), (11, 1.7)):
+        radial_weights = theta_weights * np.sin(theta) ** (d - 1)
+        radial_weights /= np.sum(radial_weights)
+        angular_weights = phi_weights * np.sin(phi) ** (d - 2)
+        angular_weights /= np.sum(angular_weights)
+        cosines = np.cos(phi)
+        exponent = (d + 1) / 2
+        variance = sphere_radius**2 / d
+        radius_squared = radius_nodes**2
+        b_sigma = exponent * (
+            -sphere_radius**2 / (1 + radius_squared)
+            + (d + 3)
+            * variance
+            * radius_squared
+            / (1 + radius_squared) ** 2
+        )
+        q_sigma = 0.5 * float(np.sum(radial_weights * b_sigma**2))
+
+        ratios = []
+        identity_errors = []
+        minimum_defect = math.inf
+        rejected_times = []
+        valid_times = []
+        for time in times:
+            epsilon = sphere_radius / time
+            denominator = (
+                1
+                + radius_squared[:, None]
+                + epsilon**2
+                - 2 * radius_nodes[:, None] * epsilon * cosines[None, :]
+            )
+            quotient_values = np.sum(
+                angular_weights[None, :]
+                * ((1 + radius_squared[:, None]) / denominator) ** exponent,
+                axis=1,
+            )
+            proxy_values = 1 + b_sigma / time**2
+            if np.min(proxy_values) <= 0:
+                rejected_times.append(time)
+                continue
+            valid_times.append(time)
+            entropy = float(
+                np.sum(
+                    radial_weights
+                    * quotient_values
+                    * np.log(quotient_values)
+                )
+            )
+            defect = float(
+                np.sum(
+                    radial_weights
+                    * quotient_values
+                    * np.log(quotient_values / proxy_values)
+                )
+            )
+            cross_entropy = float(
+                np.sum(
+                    radial_weights
+                    * quotient_values
+                    * np.log(proxy_values)
+                )
+            )
+            identity_errors.append(abs(entropy - defect - cross_entropy))
+            minimum_defect = min(minimum_defect, defect)
+            ratios.append(time**4 * cross_entropy / q_sigma)
+
+        row_ok = (
+            max(identity_errors) < 2.0e-13
+            and minimum_defect > -2.0e-13
+            and abs(ratios[-1] - 1) < (0.012 if quick else 0.005)
+            and abs(ratios[-1] - 1) < abs(ratios[0] - 1)
+        )
+        passed = passed and row_ok
+        rows.append(
+            f"d={d}, sphere radius={sphere_radius}: "
+            f"valid t={valid_times}, positivity-gate rejections={rejected_times}, "
+            f"t^4 cross/Q ratios={ratios}, "
+            f"max chain residual={max(identity_errors):.3e}, "
+            f"min proxy KL={minimum_defect:.3e}"
+        )
+    return Check(
+        "covariance proxy multidimensional quadrature",
+        passed,
+        "; ".join(rows),
+    )
 
 
 def quotient(y: mp.mpf, t: mp.mpf, law: Sequence[tuple[mp.mpf, mp.mpf]]) -> mp.mpf:
@@ -461,7 +712,8 @@ def critical_vague_tail_checks() -> list[Check]:
 def run(quick: bool) -> list[Check]:
     return (
         symbolic_checks()
-        + [critical_bregman_check()]
+        + [critical_bregman_check(), covariance_proxy_quadrature_check(quick)]
+        + [finite_covariance_proxy_check(quick)]
         + numerical_moment_matching_checks(quick)
         + [pareto_square_boundary_check(quick)]
         + critical_vague_tail_checks()

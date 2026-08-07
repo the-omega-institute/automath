@@ -23,8 +23,16 @@ class OracleA2VerificationTests(unittest.TestCase):
         self.assertIn("first-mode Laplace resolvent identity", completed.stdout)
         self.assertIn("critical Lq translation identity", completed.stdout)
         self.assertIn("critical Bregman perturbation bound", completed.stdout)
+        self.assertIn("covariance-proxy KL chain identity", completed.stdout)
+        self.assertIn("finite-covariance proxy asymptotic stress", completed.stdout)
 
-        manuscript = (ROOT / "sec_verified_A2_results.tex").read_text(encoding="utf-8")
+        manuscript = "\n".join(
+            (ROOT / name).read_text(encoding="utf-8")
+            for name in (
+                "sec_verified_A2_results.tex",
+                "sec_covariance_proxy_defect.tex",
+            )
+        )
         for label in (
             "thm:first-cayley-mode-closure",
             "thm:moment-matched-poisson-kl",
@@ -39,6 +47,8 @@ class OracleA2VerificationTests(unittest.TestCase):
             "thm:high-dimensional-kl-moment-threshold",
             "lem:finite-covariance-fatou-lower-bound",
             "thm:critical-vague-tail-nonidentifiability",
+            "thm:finite-covariance-proxy-defect-decomposition",
+            "cor:critical-rv-proxy-characterization",
         ):
             self.assertIn(r"\label{" + label + "}", manuscript)
 

@@ -114,3 +114,39 @@ This is a documented negative literature search, not a logically exhaustive
 proof that no publication exists outside the indexed sources. Within the
 queried arXiv corpus and the standard references/comparators above, no prior
 publication of the stated theorem was found.
+
+## Covariance-Proxy Defect Search
+
+Checked 2026-08-08 (Asia/Singapore).  The additional search target was an
+exact large-scale decomposition of radial Poisson relative entropy into the
+quadratic covariance coefficient and the relative entropy from a
+covariance-matched second-order Poisson proxy.
+
+Direct arXiv API queries gave the following results:
+
+| Query | Results | Relevance finding |
+|---|---:|---|
+| `all:"Poisson kernel" AND all:"relative entropy" AND all:covariance` | 0 | No matching record. |
+| `all:"Cauchy semigroup" AND all:"relative entropy"` | 0 | No matching record. |
+| `all:"Poisson semigroup" AND all:entropy AND all:deficit` | 0 | No matching record. |
+| `all:"Poisson kernel" AND all:"Kullback-Leibler"` | 2 | The returned path-planning and discrete-kernel-smoothing papers are unrelated. |
+| `all:Poisson AND all:"relative entropy"` | 10 in the requested page | The results concern Poisson channels, Poisson approximation, coding, Euler--Poisson systems, or Poisson suspensions, not harmonic Poisson smoothing against a covariance proxy. |
+
+A Crossref bibliographic search for `Poisson kernel relative entropy
+covariance deficit` returned Poisson-channel and Poisson-approximation papers,
+an ARMA covariance-constraint paper, and unrelated applications.  None states
+the covariance-proxy decomposition.  The closest standard information-theory
+inputs remain the classical data-processing and finite-partition
+characterizations of relative entropy; those facts are not claimed as new.
+
+No indexed source located in this search gives the combination of a fixed
+input law with only finite covariance, harmonic Poisson smoothing, the
+explicit bounded mode (b_\Sigma), and the asymptotic identity
+
+\[
+t^4D_{\rm KL}(h_t\Vert g_t)
+=\mathcal Q_d(\Sigma)+t^4D_{\rm KL}(h_t\Vert k_{\Sigma,t})+o(1).
+\]
+
+As above, this is a documented negative search rather than a logically
+exhaustive proof of absence from all literature.
