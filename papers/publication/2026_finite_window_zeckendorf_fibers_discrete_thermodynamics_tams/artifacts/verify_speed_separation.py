@@ -19,7 +19,7 @@ from decimal import (
     localcontext,
 )
 from fractions import Fraction
-from math import factorial
+from math import factorial, gcd
 
 import numpy as np
 from numba import njit, prange
@@ -66,6 +66,18 @@ class Interval:
     def __post_init__(self) -> None:
         if self.lo > self.hi:
             raise ValueError("reversed interval")
+
+
+@dataclass(frozen=True)
+class SpeedCertificate:
+    sigma_lower: Decimal
+    sigma_upper: Decimal
+    gamma_upper: Decimal
+    h_upper: Decimal
+    d_lower: Decimal
+    v2_lower: Decimal
+    vc_upper: Decimal
+    speed_gap_lower: Decimal
 
 
 def point(value: Decimal | int | str) -> Interval:
@@ -338,13 +350,17 @@ def finite_d_interval(costs: np.ndarray) -> Interval:
     return Interval(lower.lo, upper.hi)
 
 
-def lower_d_tail() -> Interval:
+def lower_d_tail(
+    q_cutoff: int = Q_CUTOFF,
+    p_cutoff: int = P_CUTOFF,
+    sigma_upper: Decimal = SIGMA_HI,
+) -> Interval:
     """Selected symmetric residues, integrated block by block."""
-    phi = totients_through(P_CUTOFF)
-    sigma = point(SIGMA_HI)
+    phi = totients_through(p_cutoff)
+    sigma = point(sigma_upper)
     total = point(0)
-    for numerator in range(1, P_CUTOFF + 1):
-        start = Q_CUTOFF + numerator
+    for numerator in range(1, p_cutoff + 1):
+        start = q_cutoff + numerator
         first = mul(
             div(point(4), mul(point(numerator), sub(sigma, point(2)))),
             decimal_power(start, sub(point(2), sigma)),
@@ -400,6 +416,108 @@ def decimal_string(value: Decimal, places: int = 24) -> str:
     quantum = Decimal(1).scaleb(-places)
     with localcontext(CTX_NEAR):
         return str(value.quantize(quantum))
+
+
+def dyadic_gamma_certificate() -> tuple[Fraction, Fraction, Fraction]:
+    """Return the exact finite part, analytic tail, and resulting upper bound."""
+    return GAMMA_25, GAMMA_TAIL, GAMMA_UPPER
+
+
+def _regular_digit_sum(numerator: int, denominator: int) -> int:
+    total = 0
+    left, right = denominator, numerator
+    while right:
+        quotient, remainder = divmod(left, right)
+        total += quotient
+        left, right = right, remainder
+    return total
+
+
+def verify_complete_block_identity(max_denominator: int = 250) -> None:
+    """Audit the exact block count and symmetric continued-fraction costs."""
+    if max_denominator < 2:
+        raise ValueError("max_denominator must be at least two")
+    phi = totients_through(max_denominator)
+    for modulus in range(1, max_denominator + 1):
+        for block_index in range(3):
+            start = block_index * modulus + 1
+            coprime_count = sum(
+                gcd(value, modulus) == 1
+                for value in range(start, start + modulus)
+            )
+            if coprime_count != int(phi[modulus]):
+                raise AssertionError(
+                    f"complete-block identity failed for modulus {modulus}"
+                )
+
+    for denominator in range(3, max_denominator + 1):
+        for numerator in range(1, (denominator + 1) // 2):
+            if gcd(numerator, denominator) != 1:
+                continue
+            left = _regular_digit_sum(numerator, denominator)
+            right = _regular_digit_sum(denominator - numerator, denominator)
+            if left != right:
+                raise AssertionError(
+                    "symmetric cost identity failed for "
+                    f"{numerator}/{denominator}"
+                )
+            if 4 * left - 2 < Fraction(4 * denominator, numerator) - 6:
+                raise AssertionError(
+                    f"symmetric cost lower bound failed for {numerator}/{denominator}"
+                )
+
+
+def _refined_root_interval(iterations: int = 18) -> Interval:
+    lower = SIGMA_LO
+    upper = SIGMA_HI
+    for _ in range(iterations):
+        midpoint = (lower + upper) / 2
+        sign = ratio_minus_two(midpoint)
+        if sign.lo > 0:
+            lower = midpoint
+        elif sign.hi < 0:
+            upper = midpoint
+        else:
+            raise ArithmeticError("root sign interval contains zero")
+    return Interval(lower, upper)
+
+
+def build_certificate() -> SpeedCertificate:
+    """Build a tighter certificate used by the regression-test interface."""
+    sigma = _refined_root_interval()
+    gamma_upper_i = fraction_to_interval(GAMMA_UPPER)
+    v2_lower = div(decimal_ln(Decimal(2)), gamma_upper_i).lo
+    h_upper = totient_dirichlet_log_moment(sigma.lo).hi
+
+    extended_cutoff = 40_000
+    costs = fixed_denominator_costs(extended_cutoff)
+    d_finite = point(0)
+    for denominator in range(2, extended_cutoff + 1):
+        d_finite = add(
+            d_finite,
+            mul(
+                point(int(costs[denominator])),
+                decimal_power(denominator, point(-sigma.hi)),
+            ),
+        )
+    d_tail = lower_d_tail(
+        q_cutoff=extended_cutoff,
+        p_cutoff=P_CUTOFF,
+        sigma_upper=sigma.hi,
+    )
+    d_lower = CTX_DOWN.add(d_finite.lo, d_tail.lo)
+    vc_upper = CTX_UP.divide(h_upper, d_lower)
+    speed_gap = CTX_DOWN.subtract(v2_lower, vc_upper)
+    return SpeedCertificate(
+        sigma_lower=sigma.lo,
+        sigma_upper=sigma.hi,
+        gamma_upper=gamma_upper_i.hi,
+        h_upper=h_upper,
+        d_lower=d_lower,
+        v2_lower=v2_lower,
+        vc_upper=vc_upper,
+        speed_gap_lower=speed_gap,
+    )
 
 
 def main() -> int:
