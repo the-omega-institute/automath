@@ -59,6 +59,31 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.critical_zero_estimate_pullback_matches())
 
+    def test_nishioka_special_value_specialization_has_all_required_parameters(self):
+        self.assertTrue(
+            hasattr(verifier, "nishioka_special_value_specialization"),
+            "the Nishioka specialization audit is not implemented",
+        )
+        self.assertEqual(
+            verifier.nishioka_special_value_specialization(),
+            {
+                "p": 2,
+                "N": 0,
+                "n": 1,
+                "m": 2,
+                "M": 2,
+                "U": 1,
+                "L": 1,
+                "inequality_left": 4,
+                "inequality_right": 8,
+                "reduced_coefficients_coprime": True,
+                "admissibility_polynomial": "1 - z",
+                "algebraic_point": sp.Rational(1, 5),
+                "sampled_orbit_admissible": True,
+                "coefficients_integral": True,
+            },
+        )
+
     def test_normalized_rational_mahler_coboundaries_are_saturated_in_examples(self):
         self.assertTrue(
             hasattr(verifier, "rational_mahler_saturation_matches"),
@@ -205,6 +230,7 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Critical Mahler normalization: squared product on 49 real points", report)
         self.assertIn("Critical Mahler integrality: 24 integer coefficients", report)
         self.assertIn("Critical zero-estimate pullback: exact identity, bidegrees", report)
+        self.assertIn("Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8", report)
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Effective rational Mahler Pade decision: verified", report)
         self.assertIn("Effective Mahler degree and height bounds: verified", report)

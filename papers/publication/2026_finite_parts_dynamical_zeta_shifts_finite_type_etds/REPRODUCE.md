@@ -72,6 +72,11 @@ The same exact-arithmetic program executes the finite rational Mahler
 coefficient recursion and Pade system on accepted and rejected inputs, checks
 the cleared polynomial identity, and verifies the stated degree, height, and
 same-base determinant coefficient bounds.
+It also audits the exact specialization of Nishioka's 1982 theorem used in
+Theorem 6.8: `p=2`, `N=0`, `n=1`, `m=M=2`, `U=L=1`, coprimality of the
+reduced equation, and the numerical inequality `4<8`.  This is parameter
+bookkeeping; the published transcendence theorem remains an external analytic
+input and is not claimed to be machine-verified.
 The expected enumeration is `2208` primitive bases, `48` supports for
 `1-z^2+2z^4`, and `0` supports for `(1-z+2z^2)^2`.  A separate high-precision
 check evaluates the telescoping identity at 25 points in `0 < z <= 1/4`:

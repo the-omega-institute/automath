@@ -128,3 +128,37 @@ Fibonacci rank \(10p\) before using it in the weighted lower bound.
 The absence of a match in these searches is not a proof of global priority.
 It is the stated evidence for the novelty classification used in this
 revision.
+
+## Independent Recheck for the Weighted Visible-Maximum Target
+
+Checked 2026-08-08. This recheck queried the arXiv Atom API (up to 100
+records per query), Crossref, Google Scholar, and zbMATH Open, and inspected
+the full text and reference list of arXiv:1606.01715 together with Crossref's
+46-item reference list for Bilu--Hanrot--Voutier. Searches covered Fibonacci
+rank/order of appearance, primitive-divisor counts and average orders,
+fibotomic prime factors, and exact-rank multiplicities.
+
+The reference-chain check found an important predecessor to state explicitly.
+Kiss, *Primitive Divisors of Lucas Numbers* (1988), proves an asymptotic for
+the accumulated logarithmic mass of primitive parts and deduces the cumulative
+`x^2/log x` upper-bound scale for the number of distinct primitive primes.
+Stroinski's Theorem 7 gives the explicit limsup constant on that scale. A
+second Kiss paper (1990) averages reciprocal sums of primitive divisors; it is
+not an average theorem for their number. The manuscript now credits this
+boundary explicitly.
+
+Bilu--Hanrot--Voutier proves existence for all Lucas and Lehmer indices above
+30 and classifies the defective cases below 31. In the present Fibonacci
+argument it supplies existence of one exact-rank prime at the required
+nonexceptional indices. It supplies no upper distribution law for
+`a(d) = #Pi_alpha(d)`.
+
+No located source proves, or readily implies,
+`sum_{n<=x} omega(n) log A*(n) = O(x (log log x)^2)`. In particular, Kiss and
+Stroinski control cumulative counts or logarithmic mass, Sanna counts primes
+whose rank is divisible by a fixed integer rather than primes of one exact
+rank, and modern large-primitive-divisor results control the size of at least
+one primitive divisor rather than the multiplicity of an exact-rank class.
+The missing input is an unconditional upper-distribution estimate for
+`log #Pi_alpha(d)` along divisor maxima; the primitive-part size and
+congruence restrictions alone do not provide it.

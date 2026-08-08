@@ -2,6 +2,51 @@
 
 Date of search: 2 August 2026 (Asia/Singapore).
 
+## Frobenius-class product and Axiom A flow audit (8 August 2026)
+
+This additional audit was performed before attempting any flow extension.
+The arXiv Atom API, Crossref, Google Scholar, zbMATH Open, and the reference
+lists of the principal antecedents were searched for combinations of
+`Frobenius class`, `Mertens`, `closed orbits`, `finite group extension`,
+`Galois covering`, and `Axiom A flow`.  The exact arXiv queries for
+`"Axiom A flows" AND Chebotarev` and for `"Frobenius class" AND
+"closed orbits"` returned zero records; the broader query `"closed orbits"
+AND Mertens` returned the later sofic-shift note arXiv:2202.03075.  Crossref
+confirmed the records and citation trails for Sharp (1991), DOI
+`10.1007/BF01237365`, and Parry--Pollicott (1986), DOI
+`10.1017/S0143385700003333`.  Google Scholar returned those two works and
+Mohamed--Noorani (1999) as the relevant exact-title results; subsequent
+requests encountered Scholar's automated-traffic challenge.  zbMATH Open
+record `0761.58041` supplies a review and full reference list for Sharp's
+Mertens product theorem, and record `0626.58006` states the Frobenius-class
+Chebotarev theorem for finite Galois coverings of Axiom A flows.
+
+The official Mohamed--Noorani PDF was checked directly, including Theorem 1
+on pp. 124--125 and all seven references.  Theorem 1 already proves a
+Frobenius-class Mertens product for closed orbits of a subshift of finite type,
+with exponent `|C|/|G|` and an explicit constant written in Artin-L terms.
+The present manuscript cites it in the abstract, introduction, theorem-local
+comparison, formal correction theorem, conclusion, and bibliography.  It
+states plainly that product existence and the exponent are prior art, isolates
+the invalid replacement of `chi(g_gamma)` by `chi(g_gamma^r)`, and separately
+repairs the missing extension-level mixing/strict-gap hypothesis.  No citation
+change was needed.
+
+The proposed leading-product analogue for Axiom A flows is not a defensible
+tier-up target.  Sharp already proves the unrestricted Axiom A Mertens product,
+while Parry--Pollicott prove Frobenius-class density for mixing finite Galois
+extensions; the class-restricted leading product is a direct synthesis of that
+analytic framework.  There is also a formulation problem: a continuous (hence
+Holder) cocycle `c:X x R -> G` into a discrete finite group is trivial, since
+`t -> c(x,t)` is continuous and equals the identity at zero.  The non-trivial
+flow category is a finite principal covering with monodromy, or equivalently a
+finite cocycle on a Poincare return map/Markov coding.  In that correct
+category, the genuinely defensible increment of this manuscript remains the
+fixed-primitive-label correction to the constant and its exact finite-state
+consequences, not a new Mertens theorem or a new Axiom A leading asymptotic.
+As with the earlier audit, this is evidence delimiting the novelty claim, not
+a proof of absolute priority.
+
 ## Scope and method
 
 The search concerned the following precise question: for a fixed finite directed

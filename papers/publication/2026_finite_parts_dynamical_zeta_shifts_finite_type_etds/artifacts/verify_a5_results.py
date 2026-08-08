@@ -306,6 +306,54 @@ def critical_mahler_integrality_matches(order: int = 24) -> bool:
     )
 
 
+def nishioka_special_value_specialization() -> dict[str, object]:
+    """Audit the exact parameters used for Nishioka's 1982 theorem.
+
+    This checks the algebraic specialization and a realizable strict-gap model;
+    Nishioka's transcendence theorem itself remains the cited analytic input.
+    """
+    z, u = sp.symbols("z u")
+    p_zero = 1 - z
+    p_one = 1 - 3 * z
+    q_zero = p_zero
+    q_one = -p_one * u**2
+    p = 2
+    transformation_tail_degree = 0
+    transformed_function_degree = 1
+    current_function_degree = 2
+    maximum_degree = max(p + transformation_tail_degree, current_function_degree)
+    coefficient_growth_exponent = 1
+    algebraic_point = sp.Rational(1, 5)
+    coefficients = _critical_mahler_coefficients(24)
+
+    return {
+        "p": p,
+        "N": transformation_tail_degree,
+        "n": transformed_function_degree,
+        "m": current_function_degree,
+        "M": maximum_degree,
+        "U": 1,
+        "L": coefficient_growth_exponent,
+        "inequality_left": maximum_degree
+        * (p + transformation_tail_degree)
+        * transformed_function_degree**2,
+        "inequality_right": p ** (2 + sp.Rational(1, coefficient_growth_exponent)),
+        "reduced_coefficients_coprime": sp.gcd(
+            sp.Poly(q_zero, z, u), sp.Poly(q_one, z, u)
+        ).as_expr()
+        == 1,
+        "admissibility_polynomial": sp.sstr(q_zero),
+        "algebraic_point": algebraic_point,
+        "sampled_orbit_admissible": all(
+            q_zero.subs(z, algebraic_point ** (2**iterate)) != 0
+            for iterate in range(12)
+        ),
+        "coefficients_integral": all(
+            coefficient.is_Integer for coefficient in coefficients
+        ),
+    }
+
+
 def critical_zero_estimate_pullback_matches() -> bool:
     """Check the cleared pullback identity and its two bidegree bounds."""
     z, y = sp.symbols("z y")
@@ -803,6 +851,7 @@ def render_report() -> str:
         max_degree
     )
     enumeration = enumerate_quadratic_binary_certificates()
+    nishioka = nishioka_special_value_specialization()
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
     checks = {
@@ -818,6 +867,14 @@ def render_report() -> str:
         "critical Mahler normalization": critical_mahler_normalization_matches(),
         "critical Mahler integrality": critical_mahler_integrality_matches(),
         "critical zero-estimate pullback": critical_zero_estimate_pullback_matches(),
+        "Nishioka specialization": all(
+            (
+                nishioka["inequality_left"] < nishioka["inequality_right"],
+                nishioka["reduced_coefficients_coprime"],
+                nishioka["sampled_orbit_admissible"],
+                nishioka["coefficients_integral"],
+            )
+        ),
         "normalized rational Mahler saturation": rational_mahler_saturation_matches(),
         "effective rational Mahler Pade decision": all(
             (
@@ -895,6 +952,7 @@ def render_report() -> str:
         "Critical Mahler normalization: squared product on 49 real points; unsquared identity refuted",
         "Critical Mahler integrality: 24 integer coefficients and equation verified",
         "Critical zero-estimate pullback: exact identity, bidegrees, and finite-rank bound verified",
+        "Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8",
         "Normalized Mahler saturation: exact rational examples verified",
         "Effective rational Mahler Pade decision: verified",
         "Effective Mahler degree and height bounds: verified",
