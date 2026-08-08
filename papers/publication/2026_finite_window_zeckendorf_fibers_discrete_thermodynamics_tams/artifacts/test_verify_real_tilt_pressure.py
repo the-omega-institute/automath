@@ -18,6 +18,26 @@ from verify_real_tilt_pressure import (
 
 
 class AllRealPressureHelpersTest(unittest.TestCase):
+    def test_dyadic_exact_multiplier_counts_match_direct_fibers(self) -> None:
+        self.assertTrue(hasattr(verification, "dyadic_generator_cost_counters"))
+        self.assertTrue(hasattr(verification, "dyadic_finite_window_count"))
+        counters = verification.dyadic_generator_cost_counters(6)
+        for exponent in range(1, 7):
+            self.assertEqual(sum(counters[exponent].values()), 3 ** (exponent - 1))
+
+        fibonacci = [0, 1]
+        for _ in range(24):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        coefficients = [1]
+        for m in range(1, 21):
+            coefficients = verification.extend_coefficients(coefficients, fibonacci[m])
+            direct = verification.Counter(coefficients)
+            for exponent in range(2, 7):
+                self.assertEqual(
+                    verification.dyadic_finite_window_count(m, counters[exponent]),
+                    direct[2**exponent],
+                )
+
     def test_conditional_marked_scan_matches_direct_band_counts(self) -> None:
         self.assertTrue(hasattr(verification, "conditional_marked_scan"))
         fibonacci = [0, 1]

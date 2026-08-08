@@ -124,6 +124,47 @@ def regular_partial_quotient_sum(numerator: int, denominator: int) -> int:
     return total
 
 
+def dyadic_generator_cost_counters(max_exponent: int) -> list[Counter[int]]:
+    """Count free generator words by total dyadic exponent and layer cost."""
+    if max_exponent < 1:
+        raise ValueError("max_exponent must be positive")
+    letters = [Counter() for _ in range(max_exponent + 1)]
+    for exponent in range(1, max_exponent + 1):
+        denominator = 2**exponent
+        for numerator in range(1, denominator, 2):
+            cost = 2 * regular_partial_quotient_sum(numerator, denominator) - 1
+            letters[exponent][cost] += 1
+
+    generators = [Counter() for _ in range(max_exponent + 1)]
+    generators[0][0] = 1
+    for exponent in range(1, max_exponent + 1):
+        for letter_exponent in range(1, exponent + 1):
+            for prefix_cost, prefix_count in generators[
+                exponent - letter_exponent
+            ].items():
+                for letter_cost, letter_count in letters[letter_exponent].items():
+                    generators[exponent][prefix_cost + letter_cost] += (
+                        prefix_count * letter_count
+                    )
+    return generators
+
+
+def dyadic_finite_window_count(m: int, cost_counter: Counter[int]) -> int:
+    """Apply the adjacent-layer orbit weights to a dyadic cost counter."""
+    total = 0
+    for cost, count in cost_counter.items():
+        if cost <= m - 1:
+            weight = 4
+        elif cost == m:
+            weight = 3
+        elif cost == m + 1:
+            weight = 1
+        else:
+            weight = 0
+        total += weight * count
+    return total
+
+
 def stern_brocot_layer_denominators(depth: int) -> list[int]:
     """Denominators in the new Stern--Brocot layer of composition depth d."""
     if depth < 1:
@@ -566,6 +607,32 @@ def main() -> int:
         in marked_fixed_rows + marked_diagonal_rows
     )
     failures += marked_failures
+    dyadic_counters = dyadic_generator_cost_counters(8)
+    dyadic_total_checks = [
+        sum(dyadic_counters[exponent].values()) == 3 ** (exponent - 1)
+        for exponent in range(1, len(dyadic_counters))
+    ]
+    dyadic_window_checks = [
+        dyadic_finite_window_count(m, dyadic_counters[exponent])
+        == snapshots[m][2**exponent]
+        for m in snapshot_indices
+        for exponent in range(2, len(dyadic_counters))
+    ]
+    dyadic_failures = sum(
+        not check for check in dyadic_total_checks + dyadic_window_checks
+    )
+    failures += dyadic_failures
+    dyadic_mean_costs = [
+        (
+            exponent,
+            sum(
+                cost * count
+                for cost, count in dyadic_counters[exponent].items()
+            )
+            / (exponent * 3 ** (exponent - 1)),
+        )
+        for exponent in range(1, len(dyadic_counters))
+    ]
     heavy_letter_checks = []
     for denominator in range(2, 101):
         cost = 2 * regular_partial_quotient_sum(1, denominator) - 1
@@ -619,6 +686,14 @@ def main() -> int:
         ),
         "MARKED_CONDITIONAL fixed_rows={} diagonal_rows={} failures={}".format(
             marked_fixed_rows, marked_diagonal_rows, marked_failures
+        ),
+        "DYADIC_EXACT exponents=1..{} total_checks={} window_checks={} "
+        "mean_cost_over_exponent={} failures={}".format(
+            len(dyadic_counters) - 1,
+            len(dyadic_total_checks),
+            len(dyadic_window_checks),
+            dyadic_mean_costs,
+            dyadic_failures,
         ),
         "HEAVY_LETTER q=2..100 exact_cost_checks={} energy_over_q={:.9f} "
         "failures={}".format(
