@@ -352,6 +352,173 @@ def finite_covariance_proxy_check(quick: bool) -> Check:
     )
 
 
+def raw_tail_poisson_energy_check(quick: bool) -> Check:
+    """Stress the exact tail split and its finite-covariance asymptotic."""
+
+    node_count = 400 if quick else 900
+    nodes, weights = leggauss(node_count)
+    y = np.tan((math.pi / 2) * nodes)
+    omega_weights = weights / 2
+    one_plus_y_squared = 1 + y * y
+
+    # The listed masses are total antipodal-pair masses; the remaining mass
+    # is placed at zero.  The active-tail check uses t=8, so two pairs remain
+    # in V_t, while the asymptotic check starts beyond the support.
+    pairs = ((1.0, 0.20), (4.0, 0.12), (12.0, 0.08), (40.0, 0.05))
+    variance = sum(radius * radius * mass for radius, mass in pairs)
+    b_mode = variance * (
+        -1 / one_plus_y_squared
+        + 4 * y * y / one_plus_y_squared**2
+    )
+    q_value = 0.5 * float(np.sum(omega_weights * b_mode**2))
+
+    def phi(values: np.ndarray) -> np.ndarray:
+        return (1 + values) * np.log1p(values) - values
+
+    def pair_quotient(radius: float, time: float) -> np.ndarray:
+        epsilon = radius / time
+        return 0.5 * (
+            one_plus_y_squared / (1 + (y - epsilon) ** 2)
+            + one_plus_y_squared / (1 + (y + epsilon) ** 2)
+        )
+
+    active_time = 8.0
+    quotient = np.full(y.shape, 1 - sum(mass for _, mass in pairs))
+    tail_potential = np.zeros_like(y)
+    tail_mass = 0.0
+    interior_remainder = np.zeros_like(y)
+    omitted_tail_polynomial = np.zeros_like(y)
+    for radius, mass in pairs:
+        pair_value = pair_quotient(radius, active_time)
+        quotient += mass * pair_value
+        epsilon = radius / active_time
+        quadratic_pair = 1 + epsilon**2 * (
+            -1 / one_plus_y_squared
+            + 4 * y * y / one_plus_y_squared**2
+        )
+        if radius <= active_time:
+            interior_remainder += mass * (pair_value - quadratic_pair)
+        else:
+            tail_potential += mass * pair_value
+            tail_mass += mass
+            omitted_tail_polynomial += mass * (quadratic_pair - 1)
+
+    delta = quotient - 1
+    u_mode = b_mode / active_time**2
+    reconstructed_remainder = interior_remainder - omitted_tail_polynomial
+    split_error = float(
+        np.max(
+            np.abs(
+                delta
+                - u_mode
+                - tail_potential
+                + tail_mass
+                - reconstructed_remainder
+            )
+        )
+    )
+    tail_mass_error = abs(
+        float(np.sum(omega_weights * tail_potential)) - tail_mass
+    )
+
+    times = (80.0, 160.0, 320.0, 640.0) if quick else (
+        80.0,
+        120.0,
+        200.0,
+        320.0,
+        500.0,
+        800.0,
+    )
+    coefficient_ratios = []
+    for time in times:
+        quotient = np.full(y.shape, 1 - sum(mass for _, mass in pairs))
+        for radius, mass in pairs:
+            quotient += mass * pair_quotient(radius, time)
+        entropy = float(np.sum(omega_weights * phi(quotient - 1)))
+        coefficient_ratios.append(time**4 * entropy / q_value)
+
+    passed = (
+        split_error < 2.0e-12
+        and tail_mass_error < 2.0e-12
+        and all(
+            coefficient_ratios[index] < coefficient_ratios[index + 1]
+            for index in range(len(coefficient_ratios) - 1)
+        )
+        and abs(coefficient_ratios[-1] - 1) < (0.006 if quick else 0.003)
+    )
+    return Check(
+        "raw-tail Poisson energy decomposition stress",
+        passed,
+        f"active-tail split residual={split_error:.3e}, "
+        f"tail normalization residual={tail_mass_error:.3e}, "
+        f"post-support t^4 H/Q ratios={coefficient_ratios}",
+    )
+
+
+def moving_annulus_comparability_check() -> Check:
+    """Check the dyadic moving-annulus kernel against the Poisson kernel."""
+
+    rows = []
+    passed = True
+    for d in (1, 4, 11, 40):
+        exponent = (d + 1) / 2
+        ratios = []
+        for k in range(0, 10):
+            if k == 0:
+                radii = (0.0, 0.37, 0.999999)
+                dyadic_weight = 1.0
+            else:
+                lower = 2.0 ** (k - 1)
+                upper = 2.0**k
+                radii = (lower, math.sqrt(lower * upper), upper * (1 - 1e-12))
+                dyadic_weight = 2.0 ** (-k * (d + 1))
+            ratios.extend(
+                (1 + radius * radius) ** (-exponent) / dyadic_weight
+                for radius in radii
+            )
+        row_ok = min(ratios) >= 2.0 ** (-(d + 1) / 2) - 1e-12 and max(ratios) <= 2.0 ** (d + 1) + 1e-8
+        passed = passed and row_ok
+        rows.append(f"d={d}: kernel-ratio range=[{min(ratios):.6g}, {max(ratios):.6g}]")
+
+    def scalar_phi(value: float) -> float:
+        return (1 + value) * math.log1p(value) - value
+
+    multiplier_ratios = []
+    for constant in (0.05, 0.3, 2.0, 10.0):
+        for value in np.geomspace(1.0e-10, 1.0e10, 300):
+            multiplier_ratios.append(scalar_phi(constant * value) / scalar_phi(value))
+    passed = passed and min(multiplier_ratios) > 0 and math.isfinite(max(multiplier_ratios))
+    rows.append(
+        "Phi fixed-multiplier ratio range="
+        f"[{min(multiplier_ratios):.6g}, {max(multiplier_ratios):.6g}]"
+    )
+    return Check("moving-annulus potential comparability", passed, "; ".join(rows))
+
+
+def pre_phi_thin_shell_aggregation_check() -> Check:
+    """Stress the critical scaling behind aggregation before applying Phi."""
+
+    rows = []
+    passed = True
+    for d in (4, 11, 40):
+        q_value = (d + 5) / (d + 1)
+        b_values = np.array((2.0, 4.0, 8.0, 16.0, 32.0))
+        # K=B^{3q/(q-1)} is more than sufficient for
+        # B^q K^{1-q}->0, while the aggregate energy is B^q.
+        log_k = 3 * q_value / (q_value - 1) * np.log(b_values)
+        isolated_log_energy = q_value * np.log(b_values) + (1 - q_value) * log_k
+        aggregate_log_energy = q_value * np.log(b_values)
+        isolated = np.exp(isolated_log_energy)
+        aggregate = np.exp(aggregate_log_energy)
+        row_ok = all(np.diff(isolated) < 0) and all(np.diff(aggregate) > 0)
+        passed = passed and row_ok
+        rows.append(
+            f"d={d}, q={q_value:.6g}: isolated={isolated.tolist()}, "
+            f"aggregate={aggregate.tolist()}"
+        )
+    return Check("pre-Phi thin-shell aggregation scaling", passed, "; ".join(rows))
+
+
 def critical_bregman_check() -> Check:
     """Stress the uniform Phi-Bregman bound at zero density and large spikes."""
 
@@ -714,6 +881,11 @@ def run(quick: bool) -> list[Check]:
         symbolic_checks()
         + [critical_bregman_check(), covariance_proxy_quadrature_check(quick)]
         + [finite_covariance_proxy_check(quick)]
+        + [
+            raw_tail_poisson_energy_check(quick),
+            moving_annulus_comparability_check(),
+            pre_phi_thin_shell_aggregation_check(),
+        ]
         + numerical_moment_matching_checks(quick)
         + [pareto_square_boundary_check(quick)]
         + critical_vague_tail_checks()

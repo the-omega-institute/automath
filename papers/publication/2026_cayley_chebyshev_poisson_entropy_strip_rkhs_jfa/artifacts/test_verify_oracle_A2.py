@@ -25,6 +25,9 @@ class OracleA2VerificationTests(unittest.TestCase):
         self.assertIn("critical Bregman perturbation bound", completed.stdout)
         self.assertIn("covariance-proxy KL chain identity", completed.stdout)
         self.assertIn("finite-covariance proxy asymptotic stress", completed.stdout)
+        self.assertIn("raw-tail Poisson energy decomposition stress", completed.stdout)
+        self.assertIn("moving-annulus potential comparability", completed.stdout)
+        self.assertIn("pre-Phi thin-shell aggregation scaling", completed.stdout)
 
         manuscript = "\n".join(
             (ROOT / name).read_text(encoding="utf-8")
@@ -49,6 +52,9 @@ class OracleA2VerificationTests(unittest.TestCase):
             "thm:critical-vague-tail-nonidentifiability",
             "thm:finite-covariance-proxy-defect-decomposition",
             "cor:critical-rv-proxy-characterization",
+            "thm:raw-tail-poisson-energy-decomposition",
+            "cor:moving-annulus-tail-criterion",
+            "prop:pre-phi-thin-shell-aggregation",
         ):
             self.assertIn(r"\label{" + label + "}", manuscript)
 
