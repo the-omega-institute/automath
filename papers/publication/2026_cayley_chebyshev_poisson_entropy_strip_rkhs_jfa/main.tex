@@ -29,6 +29,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{remark}[theorem]{Remark}
+\newtheorem{observationprofilelemma}[theorem]{Lemma}
 
 \numberwithin{equation}{section}
 
@@ -47,6 +48,11 @@
 \newcommand{\norm}[1]{\lVert #1\rVert}
 \newcommand{\ii}{\mathrm{i}}
 \newcommand{\mathscr}[1]{\mathcal{#1}}
+\newcommand{\relocatedproof}[2]{%
+  \begin{proof}
+  See Supplementary Material, #2, in \path{supplement.pdf}
+  (source: \path{#1}).
+  \end{proof}}
 
 \title[Cayley--Poisson Entropy Thresholds]{Cayley--Poisson Entropy:
 Variance Thresholds, Regularly Varying Boundaries, and Coefficient Asymptotics}
@@ -75,95 +81,60 @@ dissipation, regular variation, Karamata theory}
 %   sec_appendix_conditional_tails.tex
 
 \begin{document}
+\def\JFAArticleMain{1}
 \begin{abstract}
-For a fixed probability law~\(\nu\) on \(\RR\) with mean \(\bar{\gamma}\), the
-Cayley transform reduces the large-scale matched Poisson entropy
+For a probability law \(\nu\) on \(\RR\), the Cayley transform reduces the
+large-scale matched Poisson entropy to finite Laurent constant-term algebra.
+Writing \(X_c=\gamma-\bar\gamma\), we prove the unconditional threshold
 \[
-  D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar{\gamma}))
+\mathbb E X_c^2<\infty
+\quad\Longleftrightarrow\quad
+\limsup_{t\to\infty}t^4
+D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma))<\infty,
 \]
-  to finite Laurent constant-term algebra.  The principal unconditional
-  result is the analytic variance threshold
-  \[
-  \mathbb E X_c^2<\infty
-  \quad\Longleftrightarrow\quad
-  \limsup_{t\to\infty}t^4
-  D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma))<\infty .
-  \]
-  The limit is \((\mathbb E X_c^2)^2/8\) when the variance is finite and is
-  \(+\infty\) otherwise; the infinite-variance direction uses a bounded
-  Cayley-mode test and no tail-class assumption.  At each higher boundary,
-  a second principal result gives a class-conditional analytic statement.
-  If the centred law has two-sided regularly varying tails of index
-  \(-(2N-2)\), with common slowly varying factor \(L\) and
-  \(\ell_L(t)=\int^tL(s)\dd s/s\to\infty\), then
-  \[
-  \frac{t^{2N}}{M_{2N-2}(t)}
-  \left\{D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t)
-  -\sum_{j=2}^{N-1}A_{2j}(\nu)t^{-2j}\right\}
-  \longrightarrow \kappa_N\mu_2,
-  \]
-  where \(M_{2N-2}\) is the truncated boundary moment and
-  \(\kappa_N=(-1)^N(N-1)2^{-2N+2}\).  This regularly varying boundary
-  replacement permits asymmetric laws and requires neither a density nor
-  monotonicity of \(L\).
+with limit \((\mathbb E X_c^2)^2/8\) in the finite-variance case and
+\(+\infty\) otherwise.  More generally, finite centred \((2N-2)\)th absolute
+moment yields an expansion through \(t^{-2N}\), with all odd coefficients
+zero and every even coefficient given by one Cayley--Chebyshev constant-term
+rule.  For \(m\ge3\), its top layer is
+\(\kappa_m\mathfrak m_2\mathfrak m_{2m-2}\), where
+\(\kappa_m=(-1)^m(m-1)2^{-2m+2}\ne0\); hence the \((2m-2)\)nd absolute moment
+is the sharp universal polynomial-evaluability threshold.  The resulting
+coefficient defects form an explicit two-level ladder.
 
-As supporting machinery, if \(\nu\) has finite centred
-\((2N-2)\)th absolute moment, then
+At a missing top moment, if the centred tails are two-sided regularly varying
+of index \(-(2N-2)\), with common slowly varying factor \(L\) and
+\(\int^tL(s)\dd s/s\to\infty\), then, without symmetry, a density assumption,
+or monotonicity of \(L\),
 \[
-D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar{\gamma}))
-=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}),
+\frac{t^{2N}}{M_{2N-2}(t)}
+\left\{D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t)
+-\sum_{j=2}^{N-1}A_{2j}(\nu)t^{-2j}\right\}
+\longrightarrow \kappa_N\mu_2.
 \]
-  where the universal polynomials \(A_{2m}\) are obtained from the
-  Cayley--Chebyshev modes by one constant-term rule, and all odd coefficients
-  vanish.  For \(m\ge3\), algebraically,
-  \[
-  A_{2m}^{\rm form}=\kappa_m\mathfrak m_2\mathfrak m_{2m-2}
-  +P_m(\mathfrak m_2,\ldots,\mathfrak m_{2m-3}).
-  \]
-  At the leading order, \(A_4^{\rm form}=\mathfrak m_2^2/8\).
-  Consequently, finite \((2m-2)\)nd absolute moment is the minimal assumption
-  that guarantees evaluation of this universal polynomial over all centred
-  laws.  For \(m\ge3\) this is an algebraic polynomial-domain minimality
-  statement, not an unconditional analytic equivalence for the entropy
-  remainder.
+Gaussian-quadrature comparison further gives unconditional all-order moment
+thresholds and positive square boundary terms under regular variation.
 
-In \(\RR^d\), finite \(L\)-moment with \(L\ge d+1\) gives a matched radial
-  Poisson quotient with an explicit two-region \(L^\infty\cap L^1(\Omega_d)\)
-  remainder and hence tensor KL coefficients through order \(L+2\); the
-  \(\mathcal R_{d,L}(t)=o(t^{-L})\) decay of the displayed
-  two-region
-  functional is equivalent to that finite-moment hypothesis in this range.
-  The threshold \(L\ge d+1\) is sharp for this uniform quotient topology;
-  the sharp all-class \(L^2(\Omega_d)\) moment exponent is instead
-  \(\max\{2,(d+1)/2\}\).  Finite covariance is necessary and sufficient for
-  the leading KL coefficient in dimensions \(d\le3\), whereas in every
-  \(d\ge4\) a finite positive-definite covariance can coexist with unbounded
-  \(t^4D_{\rm KL}\).  For \(d\ge4\), the sharp high-dimensional exponent among
-  finite absolute-moment hypotheses is
-  \(4(d+1)/(d+5)\), including sufficiency at the critical endpoint.
-  At the corresponding infinite-moment boundary, however, vague
-  multivariate regular variation does not determine the leading entropy:
-  two laws with the same smooth spectral measure, slowly varying factor,
-  and positive-definite covariance can respectively attain the covariance
-  coefficient and have unbounded \(t^4D_{\rm KL}\) along a subsequence.
-  For every finite covariance, a covariance-matched Poisson proxy isolates
-  this failure in an asymptotically exact nonnegative defect:
-  \(t^4H_d(t)=\mathcal Q_d(\Sigma)
-  +t^4D_{\rm KL}(h_t\|k_{\Sigma,t})+o(1)\).
-  In one dimension, the first Cayley channel satisfies an exact
-  cross-scale differential closure.  Comparing against the \(n\)-node
-  Gaussian quadrature law gives an unconditional \(2n\)th-moment entropy
-  threshold and a positive square boundary under regular variation.
-  Under finite centred second moment, the
-  moving Cauchy quotient is verified to lie in the domain of the general
-  simultaneous-semigroup relative-entropy dissipation identity and satisfies
-  \[
-  D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar{\gamma}))
-  =\int_t^\infty \mathcal I_\nu(s)\,\dd s,
-  \]
-  after a separate endpoint passage.  Appendices collect related-work
-comparisons and auxiliary coefficient-calculus and tail-verification checks;
-they are not additional hypotheses for the main theorems.
+In \(\RR^d\), finite \(L\)-moment with \(L\ge d+1\) produces the matched
+radial quotient jet and tensor KL coefficients through order \(L+2\), with a
+sharp two-region remainder criterion.  The sharp all-class
+\(L^2(\Omega_d)\) exponent is \(\max\{2,(d+1)/2\}\).  Finite covariance is
+equivalent to the leading KL coefficient for \(d\le3\); for \(d\ge4\), the
+sharp finite-moment exponent is \(4(d+1)/(d+5)\), including its endpoint,
+while multivariate regular variation alone does not determine the leading
+entropy.  A covariance-matched Poisson proxy isolates the obstruction in an
+asymptotically exact nonnegative defect and admits a raw-tail Poisson-energy
+decomposition.
+
+Finally, the secant modes generate a Poisson-strip RKHS with an explicit Gram
+kernel, unitary Poisson image, integer-orbit symbol, and exact lattice
+projection theorem for observation channels.  Under finite variance the
+moving Cauchy quotient also satisfies the fully justified nonlocal Bregman
+tail identity
+\[
+D_{\mathrm{KL}}(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma))
+=\int_t^\infty\mathcal I_\nu(s)\,\dd s.
+\]
 \end{abstract}
 \maketitle
 
@@ -172,519 +143,29 @@ they are not additional hypotheses for the main theorems.
 \input{sec_cayley_gate}
 \input{sec_haar_pullback}
 \input{sec_entropy_asymptotics}
-\input{sec_doob_phi_entropy}
-\input{sec_entropy_n4_defect}
+The Doob--Bregman domain closure and tail identity are proved in the
+Supplementary Material (\path{supplement.pdf}), Section ``Domain and Endpoint
+Closure for the Moving Poisson Quotient.''  The explicit sixth-order rows are
+in its subsection ``Explicit coefficients through order six,'' and the
+order-eight certificate is in its subsection ``Order-eight coefficient layer
+extracted from the finite-order coefficient calculus.''  The defect ladder and
+its proof remain here.
+\def\JFAArticleDefectLadder{1}
+\input{sec_entropy_30_eighth_defect_layer}
 \input{sec_verified_A2_results}
 \input{sec_covariance_proxy_defect}
-
-The main text has five independent outputs.  The one-dimensional Cayley
-  calculus gives the bounded-mode variance threshold, the algebraic
-  minimality of the universal coefficient domain, and the supporting finite
-  Laurent coefficient hierarchy; a regular-variation argument identifies
-  the exact divergent
-missing-moment boundary layer; the
-multidimensional radial quotient estimates transfer finite moments into
-tensor KL coefficients; the first-channel and Gaussian-comparison arguments
-give all-order moment thresholds and the dimensional \(L^2\)/KL phase
-change; and the moving-reference Cauchy calculation gives
-the nonlocal Bregman tail identity for the matched quotient.  The appendices
-that follow provide comparison, normalization, coefficient-check details,
-and the proof of the boundary-layer theorem without changing its hypotheses.
-
-\appendix
-\input{sec_appendix}
-\input{sec_appendix_conditional_tails}
-
-\begin{thebibliography}{99}
-
-\bibitem{AliSilvey1966Divergence}
-S.~M. Ali and S.~D. Silvey.
-\newblock A general class of coefficients of divergence of one distribution
-from another.
-\newblock \emph{J. Roy. Statist. Soc. Ser. B} 28 (1966), no.~1, 131--142.
-
-\bibitem{Applebaum2009LevyProcesses}
-D.~Applebaum.
-\newblock \emph{L{\'e}vy Processes and Stochastic Calculus}.
-\newblock 2nd ed., Cambridge University Press, Cambridge, 2009.
-
-\bibitem{ArtsteinBallBartheNaor2004}
-S.~Artstein, K.~M. Ball, F.~Barthe, and A.~Naor.
-\newblock On the rate of convergence in the entropic central limit theorem.
-\newblock \emph{Probab. Theory Related Fields} 129 (2004), no.~3, 381--390.
-
-\bibitem{AtarWeissman2012PoissonChannel}
-R.~Atar and T.~Weissman.
-\newblock Mutual information, relative entropy, and estimation in the Poisson
-channel.
-\newblock \emph{IEEE Trans. Inform. Theory} 58 (2012), no.~3, 1302--1318.
-\newblock doi:10.1109/TIT.2011.2172572.
-
-\bibitem{AnkerPapageorgiouZhang2023HeatSymmetricSpaces}
-J.-P. Anker, E.~Papageorgiou, and H.-W. Zhang.
-\newblock Asymptotic behavior of solutions to the heat equation on noncompact
-symmetric spaces.
-\newblock \emph{J. Funct. Anal.} 284 (2023), no.~6, Paper No.~109828,
-43 pp.
-\newblock doi:10.1016/j.jfa.2022.109828; arXiv:2112.01323.
-
-\bibitem{Barron1986}
-A.~R. Barron.
-\newblock Entropy and the central limit theorem.
-\newblock \emph{Ann. Probab.} 14 (1986), no.~1, 336--342.
-
-\bibitem{Blachman1965}
-N.~M. Blachman.
-\newblock The convolution inequality for entropy powers.
-\newblock \emph{IEEE Trans. Information Theory} 11 (1965), no.~2, 267--271.
-\newblock doi:10.1109/TIT.1965.1053750.
-
-\bibitem{BanuelosBogdanLuks2016HardyStein}
-R.~Ba{\~n}uelos, K.~Bogdan, and T.~Luks.
-\newblock Hardy--Stein identities and square functions for semigroups.
-\newblock \emph{J. London Math. Soc.} (2) 94 (2016), no.~2, 462--478.
-\newblock doi:10.1112/jlms/jdw042; arXiv:1506.09007.
-
-\bibitem{BanuelosKim2019HardySteinNonsymmetric}
-R.~Ba{\~n}uelos and D.~Kim.
-\newblock On square functions and Fourier multipliers for nonlocal operators.
-\newblock \emph{J. Math. Anal. Appl.} 480 (2019), no.~1, Paper No.~123383,
-20 pp.
-\newblock doi:10.1016/j.jmaa.2019.123383; arXiv:1702.06573.
-\newblock The journal publication uses the title ``Hardy--Stein identity for
-non-symmetric L{\'e}vy processes and Fourier multipliers.''
-
-\bibitem{Bertoin1996LevyProcesses}
-J.~Bertoin.
-\newblock \emph{L{\'e}vy Processes}.
-\newblock Cambridge University Press, Cambridge, 1996.
-
-\bibitem{BinghamGoldieTeugels1987RegularVariation}
-N.~H. Bingham, C.~M. Goldie, and J.~L. Teugels.
-\newblock \emph{Regular Variation}.
-\newblock Encyclopedia of Mathematics and its Applications, vol.~27,
-Cambridge University Press, Cambridge, 1987.
-\newblock doi:10.1017/CBO9780511721434.
-
-\bibitem{BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}
-K.~Bogdan, M.~Gutowski, and K.~Pietruska-Pa{\l}uba.
-\newblock Polarized Hardy--Stein identity.
-\newblock \emph{J. Funct. Anal.} 288 (2025), no.~7, Paper No.~110827,
-39 pp.
-\newblock doi:10.1016/j.jfa.2025.110827; arXiv:2309.09856.
-
-\bibitem{BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas}
-K.~Bogdan, T.~Grzywny, K.~Pietruska-Pa{\l}uba, and A.~Rutkowski.
-\newblock Nonlinear nonlocal Douglas identity.
-\newblock \emph{Calc. Var. Partial Differential Equations} 62 (2023),
-Article No.~151.
-\newblock doi:10.1007/s00526-023-02458-x; arXiv:2006.01932.
-
-\bibitem{BobkovGotzeRenyiSurvey2025}
-S.~G. Bobkov and F.~G\"otze.
-\newblock R\'enyi divergences in central limit theorems: Old and new.
-\newblock \emph{Probab. Surv.} 22 (2025), 1--75.
-\newblock doi:10.1214/25-PS30; arXiv:2503.03926.
-
-\bibitem{BobkovGotzeEsscher2025}
-S.~G. Bobkov and F.~G\"otze.
-\newblock Esscher transform and the central limit theorem.
-\newblock \emph{J. Funct. Anal.} 289 (2025), no.~5, Paper No.~110999,
-39 pp.
-\newblock doi:10.1016/j.jfa.2025.110999; arXiv:2407.20726.
-
-\bibitem{BobkovChistyakovGotze2013StableEntropy}
-S.~G. Bobkov, G.~P. Chistyakov, and F.~G\"otze.
-\newblock Convergence to stable laws in relative entropy.
-\newblock \emph{J. Theoret. Probab.} 26 (2013), no.~3, 803--818.
-\newblock doi:10.1007/s10959-011-0377-0; arXiv:1104.4360.
-
-\bibitem{BobkovGozlanRobertoSamson2014LogSobolevDeficit}
-S.~G. Bobkov, N.~Gozlan, C.~Roberto, and P.-M. Samson.
-\newblock Bounds on the deficit in the logarithmic Sobolev inequality.
-\newblock \emph{J. Funct. Anal.} 267 (2014), no.~11, 4110--4138.
-\newblock doi:10.1016/j.jfa.2014.09.016; arXiv:1408.2115.
-
-\bibitem{BrigatiDolbeaultSimonov2024LogSobolev}
-G.~Brigati, J.~Dolbeault, and N.~Simonov.
-\newblock Stability for the logarithmic Sobolev inequality.
-\newblock \emph{J. Funct. Anal.} 287 (2024), no.~8, 110562.
-\newblock doi:10.1016/j.jfa.2024.110562; arXiv:2303.12926.
-
-\bibitem{Bregman1967}
-L.~M. Bregman.
-\newblock The relaxation method of finding the common point of convex sets and
-its application to the solution of problems in convex programming.
-\newblock \emph{USSR Comput. Math. Math. Phys.} 7 (1967), no.~3, 200--217.
-\newblock doi:10.1016/0041-5553(67)90040-7.
-
-\bibitem{BakryCoulhonLedouxSaloffCoste1995}
-D.~Bakry, T.~Coulhon, M.~Ledoux, and L.~Saloff-Coste.
-\newblock Sobolev inequalities in disguise.
-\newblock \emph{Indiana Univ. Math. J.} 44 (1995), no.~4, 1033--1074.
-\newblock doi:10.1512/iumj.1995.44.2001.
-
-\bibitem{Chafai2004PhiEntropies}
-D.~Chafa{\"\i}.
-\newblock Entropies, convexity, and functional inequalities: On
-\(\Phi\)-entropies and \(\Phi\)-Sobolev inequalities.
-\newblock \emph{J. Math. Kyoto Univ.} 44 (2004), no.~2, 325--363.
-\newblock doi:10.1215/kjm/1250283556.
-
-\bibitem{Carlen2025LogHLS}
-E.~A. Carlen.
-\newblock Stability for the logarithmic Hardy--Littlewood--Sobolev inequality
-with application to the Keller--Segel equation.
-\newblock \emph{J. Funct. Anal.} 288 (2025), no.~6, 110818.
-\newblock doi:10.1016/j.jfa.2024.110818; arXiv:2312.00614.
-
-\bibitem{ChenChewiNilesWeed2021MixtureLogSobolev}
-H.-B. Chen, S.~Chewi, and J.~Niles-Weed.
-\newblock Dimension-free log-Sobolev inequalities for mixture distributions.
-\newblock \emph{J. Funct. Anal.} 281 (2021), no.~11, Paper No.~109236.
-\newblock doi:10.1016/j.jfa.2021.109236; arXiv:2102.11476.
-
-\bibitem{ChengThalmaierWang2023EntropySteinTransport}
-L.-J. Cheng, A.~Thalmaier, and F.-Y. Wang.
-\newblock Some inequalities on Riemannian manifolds linking entropy, Fisher
-information, Stein discrepancy and Wasserstein distance.
-\newblock \emph{J. Funct. Anal.} 285 (2023), no.~5, Paper No.~109997.
-\newblock doi:10.1016/j.jfa.2023.109997; arXiv:2108.12755.
-
-\bibitem{CoverThomas2006}
-T.~M. Cover and J.~A. Thomas.
-\newblock \emph{Elements of Information Theory}.
-\newblock 2nd ed., John Wiley \& Sons, Hoboken, NJ, 2006.
-
-\bibitem{Csiszar1967}
-I.~Csisz{\'a}r.
-\newblock Information-type measures of difference of probability distributions
-and indirect observations.
-\newblock \emph{Studia Sci. Math. Hungar.} 2 (1967), 299--318.
-
-\bibitem{DeBruijn1953}
-N.~G. de~Bruijn.
-\newblock A property of heat equation connected with Shannon's theory of
-information.
-\newblock \emph{Nederl. Akad. Wetensch. Proc. Ser. A} 56 (1953), 80--81.
-
-\bibitem{DonskerVaradhan1975AsymptoticI}
-M.~D. Donsker and S.~R.~S. Varadhan.
-\newblock Asymptotic evaluation of certain {M}arkov process expectations for
-large time. {I}.
-\newblock \emph{Comm. Pure Appl. Math.} 28 (1975), no.~1, 1--47.
-\newblock doi:10.1002/cpa.3160280102.
-
-\bibitem{DupuisEllis1997WeakConvergence}
-P.~Dupuis and R.~S. Ellis.
-\newblock \emph{A Weak Convergence Approach to the Theory of Large
-Deviations}.
-\newblock Wiley Series in Probability and Statistics, John Wiley \& Sons,
-New York, 1997.
-
-\bibitem{DuoandikoetxeaZuazua1992}
-J.~Duoandikoetxea and E.~Zuazua.
-\newblock Moments, masses de Dirac et d{\'e}composition de fonctions.
-\newblock \emph{C. R. Acad. Sci. Paris S{\'e}r. I Math.} 315 (1992),
-no.~6, 693--698.
-
-\bibitem{EldanMikulincer2020ShannonStam}
-R.~Eldan and D.~Mikulincer.
-\newblock Stability of the Shannon--Stam inequality via the F{\"o}llmer
-process.
-\newblock \emph{Probab. Theory Related Fields} 177 (2020), nos.~3--4,
-891--922.
-\newblock doi:10.1007/s00440-020-00967-w; arXiv:1903.07140.
-
-\bibitem{ErbarHuesmannJalowyMuller2025StationaryPointTransport}
-M.~Erbar, M.~Huesmann, P.~Jalowy, and D.~M{\"u}ller.
-\newblock Optimal transport of stationary point processes: Metric structure,
-gradient flow and convexity of the specific entropy.
-\newblock \emph{J. Funct. Anal.} 289 (2025), no.~4, Paper No.~110974.
-\newblock doi:10.1016/j.jfa.2025.110974; arXiv:2304.11145.
-
-\bibitem{Erbar2014JumpEntropy}
-M.~Erbar.
-\newblock Gradient flows of the entropy for jump processes.
-\newblock \emph{Ann. Inst. Henri Poincar{\'e} Probab. Stat.} 50 (2014),
-no.~3, 920--945.
-\newblock doi:10.1214/12-AIHP537; arXiv:1204.2190.
-
-\bibitem{EscobedoZuazua1991}
-M.~Escobedo and E.~Zuazua.
-\newblock Large time behavior for convection-diffusion equations in
-{$\mathbb R^N$}.
-\newblock \emph{J. Funct. Anal.} 100 (1991), no.~1, 119--161.
-\newblock doi:10.1016/0022-1236(91)90105-E.
-
-\bibitem{Feller1971}
-W.~Feller.
-\newblock \emph{An Introduction to Probability Theory and Its Applications},
-Vol.~II.
-\newblock 2nd ed., John Wiley \& Sons, New York, 1971.
-
-\bibitem{FageotFallahHorel2022EntropicCompressibilityLevy}
-J.~Fageot, A.~Fallah, and T.~Horel.
-\newblock Entropic compressibility of L{\'e}vy processes.
-\newblock \emph{IEEE Trans. Inform. Theory} 68 (2022), no.~8, 4949--4963.
-\newblock doi:10.1109/TIT.2022.3167863; arXiv:2009.10753.
-
-\bibitem{FilaIshigeKawakami2012PoissonKernel}
-M.~Fila, K.~Ishige, and T.~Kawakami.
-\newblock Convergence to the Poisson kernel for the Laplace equation with a
-nonlinear dynamical boundary condition.
-\newblock \emph{Commun. Pure Appl. Anal.} 11 (2012), no.~3, 1285--1301.
-\newblock doi:10.3934/cpaa.2012.11.1285.
-
-\bibitem{GuoShamaiVerdu2008PoissonChannel}
-D.~Guo, S.~Shamai, and S.~Verd{\'u}.
-\newblock Mutual information and conditional mean estimation in Poisson
-channels.
-\newblock \emph{IEEE Trans. Inform. Theory} 54 (2008), no.~5, 1837--1849.
-\newblock doi:10.1109/TIT.2008.920206.
-
-\bibitem{GozlanHerryPeccati2021PointMeasureTransport}
-N.~Gozlan, R.~Herry, and G.~Peccati.
-\newblock Transport inequalities for random point measures.
-\newblock \emph{J. Funct. Anal.} 281 (2021), no.~9, Paper No.~109141.
-\newblock doi:10.1016/j.jfa.2021.109141; arXiv:2002.04923.
-
-\bibitem{GolubWelsch1969GaussQuadrature}
-G.~H. Golub and J.~H. Welsch.
-\newblock Calculation of {G}auss quadrature rules.
-\newblock \emph{Math. Comp.} 23 (1969), 221--230; addendum, ibid.,
-A1--A10.
-\newblock doi:10.1090/S0025-5718-69-99647-1.
-
-\bibitem{GhourchianAminiGohari2018InnovationCompressibility}
-S.~Ghourchian, A.~A. Amini, and A.~Gohari.
-\newblock How compressible are innovation processes?
-\newblock \emph{IEEE Trans. Inform. Theory} 64 (2018), no.~7, 4843--4871.
-\newblock doi:10.1109/TIT.2018.2822660; arXiv:1703.09537.
-
-\bibitem{Gutowski2023HardySteinPureJump}
-M.~Gutowski.
-\newblock Hardy--Stein identity for pure-jump Dirichlet forms.
-\newblock \emph{Bulletin Polish Acad. Sci. Math.} 71 (2023), 65--84.
-\newblock doi:10.4064/ba230404-1-6; arXiv:2209.13568.
-
-\bibitem{GutowskiKwasnicki2025BeurlingDenySobolevBregman}
-M.~Gutowski and M.~Kwa{\'s}nicki.
-\newblock Beurling--Deny formula for Sobolev--Bregman forms.
-\newblock \emph{Nonlinear Anal.} 257 (2025), Paper No.~113808.
-\newblock doi:10.1016/j.na.2025.113808; arXiv:2312.10824.
-
-\bibitem{HultLindskog2006RegularVariation}
-H.~Hult and F.~Lindskog.
-\newblock Regular variation for measures on metric spaces.
-\newblock \emph{Publ. Inst. Math. (Beograd) (N.S.)} 80(94) (2006), 121--140.
-\newblock doi:10.2298/PIM0694121H.
-
-\bibitem{HirataNemotoYoshida2012RelativeEntropy}
-Y.~Hirata, T.~Nemoto, and N.~Yoshida.
-\newblock A generalized relative entropy and a de Bruijn type identity.
-\newblock \emph{J. Math. Phys.} 53 (2012), no.~10, 103301.
-\newblock doi:10.1063/1.4756955.
-
-\bibitem{IshigeKawakamiMichihisa2017}
-K.~Ishige, T.~Kawakami, and H.~Michihisa.
-\newblock Asymptotic expansions of solutions of fractional diffusion
-equations.
-\newblock \emph{SIAM J. Math. Anal.} 49 (2017), no.~3, 2167--2190.
-\newblock doi:10.1137/16M1101428.
-
-\bibitem{IshigeKawakamiMichihisa2022RefinedFractional}
-K.~Ishige and T.~Kawakami.
-\newblock Refined asymptotic expansions of solutions to fractional diffusion
-equations.
-\newblock \emph{J. Dynam. Differential Equations} 36 (2024), no.~3,
-2679--2702.
-\newblock doi:10.1007/s10884-022-10224-4; arXiv:2109.14193.
-
-\bibitem{Iwabuchi2015CriticalBurgersPoisson}
-T.~Iwabuchi.
-\newblock Global solutions for the critical Burgers equation in the Besov
-spaces and the large time behavior.
-\newblock \emph{Ann. Inst. H. Poincar{\'e} C Anal. Non Lin{\'e}aire}
-32 (2015), no.~3, 687--713.
-\newblock doi:10.1016/j.anihpc.2014.03.002.
-
-\bibitem{JohnsonBarron2004}
-O.~T. Johnson and A.~R. Barron.
-\newblock Fisher information inequalities and the central limit theorem.
-\newblock \emph{Probab. Theory Related Fields} 129 (2004), no.~3, 391--409.
-
-\bibitem{Johnson2013StableDeBruijn}
-O.~Johnson.
-\newblock A de Bruijn identity for symmetric stable laws.
-\newblock arXiv:1310.2045, 2013.
-
-\bibitem{KentTyler1988WrappedCauchy}
-J.~T. Kent and D.~E. Tyler.
-\newblock Maximum likelihood estimation for the wrapped Cauchy distribution.
-\newblock \emph{J. Appl. Statist.} 15 (1988), no.~2, 247--254.
-\newblock doi:10.1080/02664768800000029.
-
-\bibitem{KatoJones2010MobiusCircle}
-S.~Kato and M.~C. Jones.
-\newblock A family of distributions on the circle with links to, and
-applications arising from, M{\"o}bius transformation.
-\newblock \emph{J. Amer. Statist. Assoc.} 105 (2010), no.~489, 249--262.
-\newblock doi:10.1198/jasa.2009.tm08313.
-
-\bibitem{KatoMcCullagh2020SphereCauchyMobius}
-S.~Kato and P.~McCullagh.
-\newblock Some properties of a Cauchy family on the sphere derived from the
-M{\"o}bius transformations.
-\newblock \emph{Bernoulli} 26 (2020), no.~4, 3224--3248.
-\newblock doi:10.3150/20-BEJ1222.
-
-\bibitem{Kwasnicki2017}
-M.~Kwa{\'s}nicki.
-\newblock Ten equivalent definitions of the fractional Laplace operator.
-\newblock \emph{Fract. Calc. Appl. Anal.} 20 (2017), no.~1, 7--51.
-\newblock doi:10.1515/fca-2017-0002.
-
-\bibitem{KullbackLeibler1951}
-S.~Kullback and R.~A. Leibler.
-\newblock On information and sufficiency.
-\newblock \emph{Ann. Math. Statist.} 22 (1951), no.~1, 79--86.
-\newblock doi:10.1214/aoms/1177729694.
-
-\bibitem{LopezRiveraShenfeld2025PoissonTransport}
-P.~L{\'o}pez-Rivera and Y.~Shenfeld.
-\newblock The Poisson transport map.
-\newblock \emph{J. Funct. Anal.} 288 (2025), no.~10, Paper No.~110864.
-\newblock doi:10.1016/j.jfa.2025.110864; arXiv:2407.02359.
-
-\bibitem{MasonHandscomb2002}
-J.~C. Mason and D.~C. Handscomb.
-\newblock \emph{Chebyshev Polynomials}.
-\newblock Chapman \& Hall/CRC, Boca Raton, FL, 2003.
-
-\bibitem{MadimanBarron2007}
-M.~Madiman and A.~R. Barron.
-\newblock Generalized entropy power inequalities and monotonicity properties
-of information.
-\newblock \emph{IEEE Trans. Inform. Theory} 53 (2007), no.~7, 2317--2329.
-
-\bibitem{Morimoto1963Markov}
-T.~Morimoto.
-\newblock Markov processes and the \(H\)-theorem.
-\newblock \emph{J. Phys. Soc. Japan} 18 (1963), no.~3, 328--331.
-
-\bibitem{Maas2011EntropyMarkov}
-J.~Maas.
-\newblock Gradient flows of the entropy for finite Markov chains.
-\newblock \emph{J. Funct. Anal.} 261 (2011), no.~8, 2250--2292.
-\newblock doi:10.1016/j.jfa.2011.06.009; arXiv:1102.5238.
-
-\bibitem{McCullagh1996CauchyMobius}
-P.~McCullagh.
-\newblock M{\"o}bius transformation and Cauchy parameter estimation.
-\newblock \emph{Ann. Statist.} 24 (1996), no.~2, 787--808.
-\newblock doi:10.1214/aos/1032894465.
-
-\bibitem{McCullagh1992CauchyModels}
-P.~McCullagh.
-\newblock Conditional inference and Cauchy models.
-\newblock \emph{Biometrika} 79 (1992), no.~2, 247--259.
-\newblock doi:10.1093/biomet/79.2.247.
-
-\bibitem{MenkovskiPortegiesRavelonanosy2024HeatKernelEntropy}
-V.~Menkovski, J.~W. Portegies, and M.~R. Ravelonanosy.
-\newblock Small time asymptotics of the entropy of the heat kernel on a
-{R}iemannian manifold.
-\newblock \emph{Appl. Comput. Harmon. Anal.} 71 (2024), Article 101642.
-\newblock doi:10.1016/j.acha.2024.101642; arXiv:2209.11509.
-
-\bibitem{NielsenOkamura2023Cauchy}
-F.~Nielsen and K.~Okamura.
-\newblock On {$f$}-divergences between Cauchy distributions.
-\newblock \emph{IEEE Trans. Inform. Theory} 69 (2023), no.~5, 3150--3171.
-\newblock doi:10.1109/TIT.2022.3231645; arXiv:2101.12459.
-
-\bibitem{Nielsen2020CauchyVoronoi}
-F.~Nielsen.
-\newblock On Voronoi diagrams on the information-geometric Cauchy manifolds.
-\newblock \emph{Entropy} 22 (2020), no.~7, 713.
-\newblock doi:10.3390/e22070713; arXiv:2006.07020.
-
-\bibitem{NourdinPeccatiSwan2014EntropyFourthMoment}
-I.~Nourdin, G.~Peccati, and Y.~Swan.
-\newblock Entropy and the fourth moment phenomenon.
-\newblock \emph{J. Funct. Anal.} 266 (2014), no.~5, 3170--3207.
-\newblock doi:10.1016/j.jfa.2013.09.017; arXiv:1304.1255.
-
-\bibitem{OttoVillani2000}
-F.~Otto and C.~Villani.
-\newblock Generalization of an inequality by Talagrand and links with the
-logarithmic Sobolev inequality.
-\newblock \emph{J. Funct. Anal.} 173 (2000), no.~2, 361--400.
-
-\bibitem{Papageorgiou2024FractionalLargeTime}
-E.~Papageorgiou.
-\newblock Large-time behavior of two families of operators related to the
-fractional Laplacian on certain Riemannian manifolds.
-\newblock \emph{Potential Anal.} 61 (2024), no.~2, 263--287.
-\newblock doi:10.1007/s11118-023-10109-1.
-
-\bibitem{Vazquez2018FractionalHeatEuclidean}
-J.~L. V\'azquez.
-\newblock Asymptotic behaviour for the fractional heat equation in the
-Euclidean space.
-\newblock \emph{Complex Var. Elliptic Equ.} 63 (2018), nos.~7--8,
-1216--1231.
-\newblock doi:10.1080/17476933.2017.1393807; arXiv:1708.00821.
-
-\bibitem{Sato1999LevyProcesses}
-K.-I. Sato.
-\newblock \emph{L{\'e}vy Processes and Infinitely Divisible Distributions}.
-\newblock Cambridge University Press, Cambridge, 1999.
-
-\bibitem{Stam1959}
-A.~J. Stam.
-\newblock Some inequalities satisfied by the quantities of information of
-Fisher and Shannon.
-\newblock \emph{Information and Control} 2 (1959), no.~2, 101--112.
-\newblock doi:10.1016/S0019-9958(59)90348-1.
-
-\bibitem{Stein1971}
-E.~M. Stein and G.~Weiss.
-\newblock \emph{Introduction to Fourier Analysis on Euclidean Spaces}.
-\newblock Princeton University Press, Princeton, NJ, 1971.
-
-\bibitem{Toscani2016StableEntropy}
-G.~Toscani.
-\newblock Entropy inequalities for stable densities and strengthened central
-limit theorems.
-\newblock \emph{J. Stat. Phys.} 165 (2016), no.~2, 371--389.
-\newblock doi:10.1007/s10955-016-1619-4; arXiv:1512.05874.
-
-\bibitem{Vajda1989TheoryDivergence}
-I.~Vajda.
-\newblock \emph{Theory of Statistical Inference and Information}.
-\newblock Kluwer Academic Publishers, Dordrecht, 1989.
-
-\bibitem{Verdu2023Cauchy}
-S.~Verd{\'u}.
-\newblock The Cauchy distribution in information theory.
-\newblock \emph{Entropy} 25 (2023), no.~2, 346.
-\newblock doi:10.3390/e25020346.
-
-\bibitem{Verdu2010Mismatched}
-S.~Verd{\'u}.
-\newblock Mismatched estimation and relative entropy.
-\newblock \emph{IEEE Trans. Inform. Theory} 56 (2010), no.~8, 3712--3720.
-\newblock doi:10.1109/TIT.2010.2050800.
-
-\bibitem{Yoshida2017RelativeEntropyDiffusion}
-N.~Yoshida.
-\newblock A de Bruijn type identity with respect to a relative entropy and
-Fisher information of a probability law on Wiener space.
-\newblock \emph{Entropy} 19 (2017), no.~7, 323.
-\newblock doi:10.3390/e19070323.
-
-\end{thebibliography}
+\input{sec_gram_space}
+\input{sec_strip_00_poisson_image}
+The classical Hardy splitting and integer-orbit projection proof are in the
+Supplementary Material (\path{supplement.pdf}), subsection ``Hardy splitting
+and the integer-orbit projection.''
+\input{sec_strip_20_symbol_sampling}
+\input{sec_strip_30_cardinal_observation}
+
+The output synopsis and complete supplementary-source map are in the
+Supplementary Material (\path{supplement.pdf}), Section ``Relocated article
+synopsis and source map.''
+
+\input{bibliography_shared}
 
 \end{document}
