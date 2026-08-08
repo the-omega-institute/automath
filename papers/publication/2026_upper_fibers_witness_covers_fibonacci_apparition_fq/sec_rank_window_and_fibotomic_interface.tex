@@ -1,0 +1,278 @@
+\section{Support entropy and the unresolved arithmetic multiplicity}
+\label{sec:growth}
+%% ====================================================================
+
+Write $\Omega(N)=\sum_p\nu_p(N)$ for the number of prime factors of $N$
+counted with multiplicity. Set $R(2)=1$, consistently with
+$\mathcal M_2=\varnothing$. For $n\ge3$ define the maximal atomic rank-window
+multiplicity
+\begin{equation}\label{eq:rank-window-multiplicity}
+ R(n):=\max\!\left\{1,
+ \max_{\varnothing\ne I\subseteq J\subseteq\mathcal P(n)}
+       \#\mathcal A_{I,J}(n)\right\}.
+\end{equation}
+By the prime--ladder alternative, the nonsingleton families counted here are the
+exact-rank windows $P_J(n)$, whereas every ladder family contributes at most
+one atom. Thus $R(n)$ records the maximal atomic-family multiplicity retained
+by the counting bounds below. It is an exact parameter for those bounds, but
+it is not asserted to be an information-theoretically complete invariant of
+the arithmetic outside the support combinatorics.
+
+We first remove the contribution caused solely by collecting several exact
+rank classes in one support window. For $d\mid n$, write
+\[
+ T_n(d):=\{\ell\in\mathcal P(n):
+ \nu_\ell(d)=\nu_\ell(n)\}.
+\]
+
+\begin{theorem}[Mean rank-window deaggregation]
+\label{thm:mean-rank-window-deaggregation}
+Put
+\[
+ a(d):=\#\Pi_\alpha(d),\qquad
+ \mathcal D^+(n):=\{d\mid n:T_n(d)\ne\varnothing\},
+\]
+and
+\[
+ A^*(n):=\max\left\{1,\max_{d\in\mathcal D^+(n)}a(d)\right\}.
+\]
+Then, as $x\to\infty$,
+\begin{equation}\label{eq:mean-window-deaggregation}
+ \sum_{3\le n\le x}\omega(n)\log R(n)
+ =\sum_{3\le n\le x}\omega(n)\log A^*(n)
+ +O(x\log\log x).
+\end{equation}
+Consequently the mean sparse-window hypothesis \textup{(H2)} is equivalent to
+\begin{equation}\label{eq:visible-single-rank-interface}
+ \sum_{3\le n\le x}\omega(n)
+ \log\max\left\{1,
+ \max_{\substack{d\mid n\\T_n(d)\ne\varnothing}}
+ \#\Pi_\alpha(d)\right\}
+ =o\bigl(x(\log\log x)^2\bigr).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For nonempty $J\subseteq\mathcal P(n)$, let
+\[
+ W_J(n):=\{d\mid n:T_n(d)=J\}.
+\]
+If $n=\prod_\ell\ell^{e_\ell}$, then
+\begin{equation}\label{eq:support-window-size}
+ \#W_J(n)=\prod_{\ell\notin J}e_\ell.
+\end{equation}
+The prime atoms in the family with essential and full supports $(J,J)$ form
+the disjoint union
+\[
+ \coprod_{d\in W_J(n)}\Pi_\alpha(d),
+\]
+because a prime has a unique rank of apparition. By the prime--ladder
+alternative and rank-lifting formula proved in the \suppref{section
+``Low-support classifications''}, every remaining effective atomic family is
+a ladder family with singleton essential support. Once that essential
+coordinate $\ell$ is fixed, the underlying prime is $\ell$, and the
+full-exponent equation determines at most one ladder exponent. Therefore, with
+\[
+ P(n):=\max_{\varnothing\ne J\subseteq\mathcal P(n)}
+       \sum_{d\in W_J(n)}a(d),
+\]
+one has
+\begin{equation}\label{eq:prime-window-versus-R}
+ P(n)\le R(n)\le P(n)+1.
+\end{equation}
+Every $d\in\mathcal D^+(n)$ belongs to one of the windows above. Hence
+\[
+ A^*(n)\le R(n)
+ \le1+A^*(n)\max_J\#W_J(n)
+ \le1+A^*(n)\prod_{\ell^{e_\ell}\parallel n}e_\ell.
+\]
+Writing
+\[
+ h(n):=\sum_{\ell^{e_\ell}\parallel n}\log e_\ell,
+\]
+and using $A^*(n)\ge1$ gives
+\begin{equation}\label{eq:pointwise-window-deaggregation}
+ 0\le\log R(n)-\log A^*(n)\le\log2+h(n).
+\end{equation}
+For each exponent $e\ge2$, $\log e\le\sum_{2\le j\le e}\log j$, so
+\[
+ h(n)\le\sum_{\substack{p^j\mid n\\j\ge2}}\log j.
+\]
+The classical mean estimate \eqref{eq:mean-omega-input}, used uniformly with
+$\log\log(3y)$ in place of $\log\log y$ for small $y$, yields
+\begin{align*}
+ \sum_{n\le x}\omega(n)h(n)
+ &\le\sum_{\substack{p^j\le x\\j\ge2}}\log j
+       \sum_{m\le x/p^j}\omega(p^jm)\\
+ &\le\sum_{\substack{p^j\le x\\j\ge2}}\log j
+       \sum_{m\le x/p^j}(1+\omega(m))\\
+ &\ll x\log\log x\sum_p\sum_{j\ge2}\frac{\log j}{p^j}
+ \ll x\log\log x.
+\end{align*}
+The double series converges absolutely. Summing
+\eqref{eq:pointwise-window-deaggregation} and using
+$\sum_{n\le x}\omega(n)\ll x\log\log x$ proves
+\eqref{eq:mean-window-deaggregation}; the stated equivalence follows because
+$x\log\log x=o(x(\log\log x)^2)$.
+\end{proof}
+
+\begin{corollary}[Single-rank sufficient and necessary interfaces]
+\label{cor:single-rank-mean-interfaces}
+A sufficient condition for \textup{(H2)} is
+\begin{equation}\label{eq:single-rank-sufficient-condition}
+ \sum_{d\le x}
+ \frac{(\omega(d)+\log\log x)\log\max\{1,a(d)\}}{d}
+ =o\bigl((\log\log x)^2\bigr).
+\end{equation}
+Conversely, \textup{(H2)} implies the diagonal necessary condition
+\begin{equation}\label{eq:single-rank-necessary-condition}
+ \sum_{n\le x}\omega(n)\log\max\{1,a(n)\}
+ =o\bigl(x(\log\log x)^2\bigr).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Since
+\[
+ \log A^*(n)\le\sum_{d\mid n}\log\max\{1,a(d)\},
+\]
+the substitution $n=dm$ and $\omega(dm)\le\omega(d)+\omega(m)$ gives
+\[
+ \sum_{n\le x}\omega(n)\log A^*(n)
+ \ll x\sum_{d\le x}
+ \frac{(\omega(d)+\log\log x)\log\max\{1,a(d)\}}{d}.
+\]
+Thus \eqref{eq:single-rank-sufficient-condition} and
+Theorem~\ref{thm:mean-rank-window-deaggregation} imply \textup{(H2)}. For the
+necessary condition, $n\in\mathcal D^+(n)$, and hence
+$R(n)\ge A^*(n)\ge\max\{1,a(n)\}$; summation proves the claim.
+\end{proof}
+
+\begin{theorem}[Fibotomic rank entropy]
+\label{thm:fibotomic-rank-entropy}
+Let $\varphi=(1+\sqrt5)/2$, let $\phi_{\rm E}$ denote Euler's totient
+function, and, for $d\geq3$, put
+\[
+ \mathfrak F_d:=\prod_{r\mid d}F_r^{\mu(d/r)}.
+\]
+For $k\geq0$, set $m=\lfloor k/2\rfloor$ and
+\[
+ \mathcal H_d(k):=
+ k\log\frac{2d}{3}+2\log(m!)+(k-2m)\log(m+1).
+\]
+There is an absolute constant $C_F$ such that, for every $d\geq3$,
+\begin{equation}\label{eq:fibotomic-rank-entropy}
+ \mathcal H_d(a(d))\leq \phi_{\rm E}(d)\log\varphi+C_F.
+\end{equation}
+More generally, every finitely supported family of nonnegative real numbers
+$(\lambda_d)_{d\geq3}$ satisfies
+\begin{equation}\label{eq:weighted-fibotomic-rank-entropy}
+ \sum_{d\geq3}\lambda_d\mathcal H_d(a(d))
+ \leq (\log\varphi)\sum_{d\geq3}\lambda_d\phi_{\rm E}(d)
+       +C_F\sum_{d\geq3}\lambda_d.
+\end{equation}
+Uniformly as $d\to\infty$,
+\begin{equation}\label{eq:pointwise-exact-rank-bound}
+ a(d)\leq
+ \left(\frac{\log\varphi}{2}+o(1)\right)
+ \frac{\phi_{\rm E}(d)}{\log d}.
+\end{equation}
+Consequently, uniformly as $n\to\infty$,
+\begin{equation}\label{eq:visible-exact-rank-bound}
+ A^*(n)\leq
+ \left(\frac{\log\varphi}{2}+o(1)\right)
+ \frac{\phi_{\rm E}(n)}{\log n}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let $\Psi_d(x)$ be the $d$th fibotomic polynomial. The fibotomic
+factorization of Byer--Dvorachek--Eckard--Harrington--Wise--Wong
+\cite{CameronCountsLundMillerPiechnikWong2022Fibotomic} gives
+\[
+ F_d(x)=\prod_{r\mid d}\Psi_r(x),
+ \qquad
+ \mathfrak F_d=\Psi_d(1)\in\mathbb N.
+\]
+This published factorization is used as an input and is not asserted as a
+result of the present paper.
+Binet's formula, in the form
+\[
+ F_r=\frac{\varphi^r}{\sqrt5}
+ \bigl(1-(-\varphi^{-2})^r\bigr),
+\]
+and the identities
+$\sum_{r\mid d}\mu(d/r)=0$ and
+$\sum_{r\mid d}r\mu(d/r)=\phi_{\rm E}(d)$ show that
+\begin{equation}\label{eq:fibotomic-binet-error}
+ \log\mathfrak F_d=\phi_{\rm E}(d)\log\varphi+E_d,
+ \qquad
+ |E_d|\leq
+ C_F:=\sum_{j\geq1}
+ \left|\log\bigl(1-(-\varphi^{-2})^j\bigr)\right|.
+\end{equation}
+The series defining $C_F$ converges geometrically.
+
+If $p\in\Pi_\alpha(d)$, then $p\mid F_d$ but $p\nmid F_r$ for every
+proper divisor $r$ of $d$. Since
+$F_d=\prod_{r\mid d}\mathfrak F_r$ and each factor is an integer, $p$ must
+divide $\mathfrak F_d$. Distinct exact-rank primes are coprime, and hence
+\begin{equation}\label{eq:exact-rank-radical-divides-fibotomic}
+ \prod_{p\in\Pi_\alpha(d)}p\mid\mathfrak F_d.
+\end{equation}
+For $p\notin\{2,5\}$, the classical rank congruence gives
+\[
+ d=\alpha(p)\mid p-\left(\frac5p\right),
+\]
+see \cite{Wall1960FibonacciModm,Vinson1963RankApparition}. Thus
+$p\equiv\pm1\pmod d$. The exceptional ranks $d=3,5$ have respectively
+the single exact-rank primes $2,5$ and satisfy the estimate directly. For
+every other $d$, write the exact-rank primes in increasing order as
+$p_1<\cdots<p_k$. There are at most two candidates in each pair of residue
+classes $jd\pm1$, whence
+\[
+ p_i\geq d\left\lceil\frac i2\right\rceil-1
+ \geq\frac{2d}{3}\left\lceil\frac i2\right\rceil.
+\]
+It follows that, with $m=\lfloor k/2\rfloor$,
+\begin{equation}\label{eq:rank-congruence-product-bound}
+ \prod_{i=1}^kp_i\geq
+ \left(\frac{2d}{3}\right)^k(m!)^2(m+1)^{k-2m}.
+\end{equation}
+Combining \eqref{eq:fibotomic-binet-error}--
+\eqref{eq:rank-congruence-product-bound} and taking logarithms proves
+\eqref{eq:fibotomic-rank-entropy}. Multiplication by $\lambda_d\geq0$ and
+finite summation proves \eqref{eq:weighted-fibotomic-rank-entropy}.
+
+Stirling's lower bound applied in \eqref{eq:fibotomic-rank-entropy} gives,
+with an absolute implied constant,
+\begin{equation}\label{eq:rank-entropy-coarse}
+ a(d)\bigl(\log d+\log\max\{1,a(d)\}-O(1)\bigr)
+ \leq \phi_{\rm E}(d)\log\varphi+O(1).
+\end{equation}
+If $a(d)\leq\phi_{\rm E}(d)/(\log d)^2$, then
+\eqref{eq:pointwise-exact-rank-bound} follows immediately. Otherwise the
+standard uniform lower bound
+$\phi_{\rm E}(d)\gg d/\log\log(3d)$
+\cite{HardyWright2008Introduction} implies
+\[
+ \log a(d)=\log d+O(\log\log d)=\log d+o(\log d).
+\]
+Substitution in \eqref{eq:rank-entropy-coarse} yields
+$(2+o(1))a(d)\log d\leq\phi_{\rm E}(d)\log\varphi$, proving
+\eqref{eq:pointwise-exact-rank-bound} uniformly.
+
+For \eqref{eq:visible-exact-rank-bound}, the case $A^*(n)=1$ follows from
+$\phi_{\rm E}(n)/\log n\to\infty$. Otherwise choose
+$d_n\in\mathcal D^+(n)$ with $A^*(n)=a(d_n)$. The preceding estimate has
+the coarse consequence $a(d)\ll d/\log(2d)$. If
+$d_n\leq n/(\log n)^3$, the lower bound for $\phi_{\rm E}(n)$ gives
+\[
+ a(d_n)=o\left(\frac{\phi_{\rm E}(n)}{\log n}\right).
+\]
+If $d_n>n/(\log n)^3$, then
+$\log d_n=(1+o(1))\log n$ and, since $d_n\mid n$,
+$\phi_{\rm E}(d_n)\leq\phi_{\rm E}(n)$. Applying
+\eqref{eq:pointwise-exact-rank-bound} at $d_n$ completes the proof.
+\end{proof}
+

@@ -1,0 +1,182 @@
+\section{Introduction}\label{sec:intro}
+%% ====================================================================
+
+For an integer $q\ge 1$, the \emph{rank of apparition} (or \emph{order of
+appearance}) $\alpha(q)$ is the least positive index $r$ such that $q\mid
+F_r$, where $(F_r)_{r\ge 0}$ denotes the Fibonacci sequence with $F_0=0$,
+$F_1=1$; the existence of this least index for every $q$ is recorded in
+Lemma~\ref{lem:finite-rank}. We use the harmless conventions $\alpha(1)=1$ and
+$D_1=\operatorname{Div}(F_1)=\{1\}$ in divisor-lattice formulas. For each
+$n\ge 2$, write
+\[
+D_n:=\operatorname{Div}(F_n),
+\qquad
+B_n:=\{q\in D_n:\ \alpha(q)=n\},
+\qquad
+A(n):=\#B_n.
+\]
+Let $\mathcal P(n)$ be the set of prime divisors of $n$, and let
+$\mathcal M_n$ denote the set of minimal elements of $B_n$ under divisibility.
+Thus $B_n$ consists of those moduli that first divide a Fibonacci number at
+index~$n$. Since $F_2=1$, the boundary layer is empty: throughout the paper
+we use the convention $B_2=\mathcal M_2=\varnothing$ and $A(2)=0$.
+Throughout, $\log$ is the natural logarithm, $\omega(t)$ is the number of
+distinct prime divisors of $t$, and $\Omega(t)$ counts prime divisors with
+multiplicity. We write $A_{\rm pr}(n)$ for the number of primes of exact rank
+$n$, $\mathsf{Part}(X)$ for the set of set partitions of a finite set $X$,
+and $\mathsf B_k$ for the $k$th Bell number. A hypergraph on one vertex is
+regarded as connected. These conventions also apply when the notation first
+appears in a later section.
+The counting function $A(n)$ is subsumed by the
+$\alpha$-contraction formalism of Stroi\'nski \cite{Stroinski2016AlphaContraction};
+see also the classical M\"obius inversions discussed in
+\cite{Halton1966DivisibilityFibonacci,FultonMorris1969ArithmeticalFunctions}.
+In this paper we go beyond enumeration and study $B_n$ as an
+ordered subset of the divisor lattice $(D_n,\mid)$, asking how it sits inside
+$D_n$, how it is generated, and what combinatorial structure it carries.
+
+Three classical facts underlie the analysis. First, $q\mid F_m$ if and only if
+$\alpha(q)\mid m$
+\cite{Wall1960FibonacciModm,Vinson1963RankApparition}. Second, the Fibonacci
+sequence satisfies strong divisibility: $\gcd(F_a,F_b)=F_{\gcd(a,b)}$.
+Third, ranks of apparition respect least common multiples:
+$\alpha(\lcmop(u,v))=\lcmop(\alpha(u),\alpha(v))$; Renault proves the
+corresponding identity in the more general $(a,b)$-Fibonacci setting
+\cite{Renault2013PeriodRankOrder}. These properties, combined with the
+primitive divisor theorem for Fibonacci numbers
+\cite{Carmichael1913PrimitiveDivisors,BiluHanrotVoutier2001PrimitiveDivisorsLucas},
+are the sole inputs for the main results.
+
+This point of view complements several nearby strands in the literature.
+Luca and Pomerance \cite{LucaPomerance2014LocalBehavior} study the local
+behavior of $\alpha$ under additive shifts; Trojovsk\'a
+\cite{Trojovska2020PeriodicPoints} and FitzGibbons--Javaheri--Miller--Verga
+\cite{FitzGibbonsJavaheriMillerVerga2025Dynamics} study periodic points and
+iteration dynamics of $\alpha$; Byer--Dvorachek--Eckard--Harrington--Wise--Wong
+\cite{CameronCountsLundMillerPiechnikWong2022Fibotomic} study fibotomic
+polynomials and related algebraic factorizations; and Sanna
+\cite{Sanna2016LucasSequences} and Marques \cite{Marques2012OrderAppearance}
+study the growth and fixed-point behavior of the order-of-appearance map. The
+present paper instead fixes a single fiber $B_n$ and studies its divisibility
+geometry inside $D_n$. The upper-fiber identity, the coordinatewise minimal-lcm
+criterion, the prime--ladder alternative, the private-coordinate injection, and
+the coprimality of disjoint coordinate blocks are recorded below as lemmas:
+they are formal consequences of the cited classical identities and are not
+claimed as independent arithmetic advances. The contributions developed from
+these facts are the witness-cover formulation, the exhaustive support-three
+classification with its arithmetic realization test, the passage of connected
+block factorization to minimal elements, and the support-entropy coefficient
+$\log 2/4$. A further contribution is the support-preserving rank-pure
+embedding of arbitrary minimal set covers, which transfers the classical theta
+asymptotic and a discrete central local limit to an explicit Fibonacci sector.
+These lower results isolate, rather than resolve, the arithmetic multiplicity
+$R(n)$. Accordingly, we make no unconditional claim of a sharp asymptotic for
+$\#\mathcal M_n$ or of the negligibility of its disconnected part. We do,
+however, isolate the mean interface further: support-window aggregation costs
+only $O(x\log\log x)$ on average, so only a visible single-rank maximum remains.
+A fibotomic size estimate and the congruence restrictions on exact-rank primes
+then yield a uniform entropy inequality for each exact-rank class and a
+pointwise bound of order $\phi_{\rm E}(d)/\log d$. This improves the available
+single-rank input but does not settle the mean sparse-window hypothesis.
+A conditional dominance theorem also identifies the stronger blockwise control
+that would make the disconnected part exponentially negligible. The mean
+sparse-window hypothesis is not presented as a prediction: Conjecture~5.1 of
+Bugeaud--Luca--Mignotte--Siksek
+\cite{BugeaudLucaMignotteSiksek2005FewPrimeDivisors} would imply its failure.
+
+Call a prime power $\theta=p^e$ \emph{atomic for the index $d$} if
+$\alpha(\theta)=d$ and $\alpha(p^{e-1})<d$. An \emph{$n$-witness cover} is a
+pairwise coprime set of such atomic prime powers whose apparition indices
+collectively span the prime factorization of $n$ in a minimal, irredundant
+fashion; the full definition is Definition~\ref{def:witness-cover}.
+
+\begin{previewtheorem}[Witness-cover theorem]
+For every $n\ge2$, multiplication gives a bijection from $n$-witness
+covers $\Theta$ to minimal generators:
+\[
+\mathcal M_n=
+\left\{\prod_{\theta\in\Theta}\theta:\ \Theta\text{ is an $n$-witness cover}
+\right\}.
+\]
+Consequently every $m\in\mathcal M_n$ satisfies
+$\omega(m)\le\omega(n)$. This support budget is globally sharp in the precise
+sense that no smaller bound depending only on $\omega(n)$ is valid; equality
+is constructed on every odd layer $n\ge3$. The precise cover conditions are
+given in Definition~\ref{def:witness-cover}, and the result is
+Theorem~\ref{thm:witness-classification} together with
+Corollaries~\ref{cor:support-bound},~\ref{cor:support-bound-sharp},
+and the \suppref{Corollary ``Best possible support budget''}.
+\end{previewtheorem}
+
+The witness classification also controls the number of minimal generators,
+not merely their form.
+
+\begin{previewtheorem}[Support-entropy theorem]
+For $n\ge3$, let $k=\omega(n)$ and let $R(n)$ be the largest atomic-family
+multiplicity at one essential/full support pair. If $k\ge3$ and
+$r=\lfloor k/2\rfloor$, then
+\[
+ (2^r-1)^{k-r}\le\#\mathcal M_n
+ \le\sum_{s=1}^{k}\binom{k}{s}(2R(n))^s2^{s(k-s)}.
+\]
+The rank-pure sector gives the stronger connected lower bound
+\[
+ \log\#\mathcal M_n^{\rm conn}\ge
+ \frac{\log2}{4}k^2+k\log2-\frac12\log k+O(1)
+\]
+uniformly as $k\to\infty$, with an explicit parity-dependent theta constant.
+The coefficient $\log2/4$ is exact for the unweighted minimal-cover count
+embedded in the fixed-choice rank-pure sector. This assertion is not an
+optimality statement for all information obtainable from fibotomic sizes and
+exact-rank congruences. These lower bounds do not give an asymptotic formula
+for $\log\#\mathcal M_n$ unless $R(n)=\exp(o(\omega(n)))$. Separate
+conjectures about $R(n)$ imply conditional normal-order and mean equivalents.
+These statements are
+Theorems~\ref{thm:rank-pure-universality} and
+\ref{thm:minimal-generator-growth}, together with their corollaries.
+\end{previewtheorem}
+
+The prime-power apparition formulas of Fulton--Morris
+\cite{FultonMorris1969ArithmeticalFunctions} and Lengyel
+\cite{Lengyel1995OrderFibonacciLucas} make the classification effective:
+every atom is a prime atom or lies on a prime-power ladder changing one index
+coordinate. The complete cases $\omega(n)\le3$, including the eight
+support-three families, their finite slot test, and the induced description of
+$B_n$, are proved in the \suppref{section ``Low-support classifications''}.
+
+The same lcm mechanism gives a local-to-global factorization over connected
+coordinate blocks.
+
+\begin{previewtheorem}[Connected block factorization]
+Let $q\in B_n$ and form the support hypergraph on $\mathcal P(n)$ whose
+edges are the prime-coordinate supports of the ranks of the prime-power
+factors of $q$. If its connected components are $C$, then
+\[
+q=\prod_C q_C,\qquad q_C\in B_{n_C},
+\qquad n_C=\prod_{\ell\in C}\ell^{\nu_\ell(n)} ,
+\]
+and this factorization is unique. The same statement holds for minimal
+generators after replacing $B_{n_C}$ by $\mathcal M_{n_C}$. Consequently
+$A(n)$ and $\#\mathcal M_n$ are partition sums over the connected counts.
+This is proved in Section~\ref{sec:connected}.
+\end{previewtheorem}
+
+As secondary consequences, nonexceptional birth layers contain principal
+intervals natural after choosing an exact-rank prime and Boolean subposets of
+rank $\tau(n)-O(1)$; both are proved in the \suppref{section
+``Supplementary witness-cover consequences''}. For odd $n$, every minimal
+cover of $\mathcal P(n)$ is realized by
+Corollary~\ref{cor:odd-rank-pure-universality}.
+
+Section~\ref{sec:prelim} records the classical background;
+Section~\ref{sec:upper-fibers} develops witness covers;
+Section~\ref{sec:connected} proves both connected-block factorizations; and
+Section~\ref{sec:growth} proves rank-window deaggregation, fibotomic and
+rank-pure bounds, and the entropy theorem before isolating the unresolved
+arithmetic interface. Section~\ref{sec:questions} records its two boundary
+questions. The \suppref{section ``Low-support classifications''} proves the
+complete cases $\omega(n)\le3$; the supplementary sections on rank-pure
+asymptotics and finite numerical evidence prove the theta/local-limit
+consequences and document the exhaustive tables and case checks.
+
+%% ====================================================================

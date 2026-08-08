@@ -1,0 +1,151 @@
+\section{Numerical evidence}\label{sec:numerical}
+%% ====================================================================
+
+Table~\ref{tab:birth-layer-data-generated} displays the birth layer cardinality $A(n)$
+and the number of minimal generators $\#\mathcal M_n$ for $2\le n\le 30$,
+computed by exhaustive enumeration. The table is illustrative only: the
+unconditional inequalities in Theorem~\ref{article-thm:minimal-generator-growth} do
+not rely on this finite sample. Several features visible in the
+data agree with the structural results of the preceding sections.
+First, $\#\mathcal M_n=1$ whenever $\omega(n)=1$ and
+$n\notin\{19,25,27\}$; the exceptions arise from composite Fibonacci numbers
+with multiple atomic families at the same prime-power index.
+Second, the jump at $n=12$ ($A(12)=10$, $\#\mathcal M_{12}=3$) and at $n=24$
+($A(24)=55$, $\#\mathcal M_{24}=4$) reflects the interaction of the
+exceptional prime $2$ with the layers having no exact-rank prime at indices
+$6$ and $12$.
+Third, the first nonempty three-coordinate layer occurs at $n=30$ and has
+$\#\mathcal M_{30}=5$; the displayed witness covers realize exactly the
+types $\Gamma_1$, $\Gamma_4$, $\Gamma_5$, $\Gamma_7$, and $\Gamma_8$.
+The remaining admissible shapes $\Gamma_3$, $\Gamma_6$, and $\Gamma_9$ are
+not realized at $n=30$. This exact five-type assertion, including the three
+nonrealization proofs, is Proposition~\ref{prop:n30-five-type-classification};
+it is not inferred from the table.
+
+The table was produced by the finite divisor/rank computation in the next
+proposition, applied exhaustively for $2\le n\le30$.  The manuscript source
+includes the short script that performs this enumeration and the generated
+table file input below; these files are supplementary to the mathematical
+criterion rather than part of the theorem stream. For the classical
+factorization literature, see the tables of Brillhart--Montgomery--Silverman
+\cite{BrillhartMontgomerySilverman1988Tables}.
+
+\begin{proposition}[Finite divisor/rank verification with supplied factorization]
+\label{prop:effective-birth-layer-computation}
+Let $n\ge2$ and suppose the integer factorization of $F_n$ is known. Then
+$B_n$, $A(n)$, and $\mathcal M_n$ are recovered exactly by the following finite
+divisor/rank test.
+\begin{enumerate}[label=(\alph*)]
+\item Enumerate the divisor set $D_n=\operatorname{Div}(F_n)$ from the
+ factorization of $F_n$.
+\item Enumerate the divisor set $\operatorname{Div}(n)$. For each
+ $q\in D_n$, compute
+ \[
+ \alpha_n(q):=\min\{d\mid n:q\mid F_d\}.
+ \]
+\item Set $B_n=\{q\in D_n:q\ge2,\ \alpha_n(q)=n\}$ and
+ $A(n)=\#B_n$.
+\item Sort $B_n$ by divisibility-compatible order, for instance by size, and
+ retain exactly those $m\in B_n$ for which no previously retained element
+ divides $m$; the retained set is $\mathcal M_n$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Since every $q\in D_n$ divides $F_n$, Proposition~\ref{article-prop:rank-basics}
+shows that $q\mid F_d$ for some $d$ if and only if $\alpha(q)\mid d$. In
+particular $q\mid F_n$ implies $\alpha(q)\mid n$, so the least positive index
+at which $q$ appears is exactly
+\[
+\alpha(q)=\min\{d\mid n:q\mid F_d\}=\alpha_n(q).
+\]
+Hence the test in step (c) gives precisely the definition
+$B_n=\{q\in D_n:\alpha(q)=n\}$, with the harmless exclusion of $q=1$ already
+consistent with the convention $\alpha(1)=1$ and $n\ge2$. Counting this set
+gives $A(n)$.
+
+It remains to justify step (d). The set $B_n$ is finite. If its elements are
+processed in increasing size, then every proper divisor of the current element
+has already been processed. We claim inductively that every discarded element
+has a retained minimal divisor. The claim is vacuous before the first element.
+If the current element is discarded, it has a previously retained divisor by
+the algorithm, so the claim holds for it; if it is retained, it is its own
+retained divisor. Thus every earlier divisor, retained or discarded, has a
+retained divisor below it. Consequently the current element is retained if and
+only if no smaller element of $B_n$ divides it, which is exactly minimality in
+the divisibility poset. The retained set is therefore $\mathcal M_n$.
+\end{proof}
+
+\begin{remark}[Reproducibility scope]
+The preceding proposition is used only to document the finite verification
+interface for the table, not as a complexity theorem.  After the factorization
+of $F_n$ has been supplied, the displayed loops involve only the finite divisor
+sets of $F_n$ and $n$, ordinary divisibility tests $q\mid F_d$, and divisor
+comparisons inside $B_n$.  The manuscript makes no bit-complexity assertion and
+does not include the cost of factoring $F_n$ in the numerical evidence.
+\end{remark}
+
+\paragraph{Table generation.}
+The reproducibility files
+\[
+\text{\texttt{artifacts/compute\_birth\_layer\_table.py}},\qquad
+\text{\texttt{artifacts/tab\_birth\_layer\_data.tex}}
+\]
+are included with the manuscript source. Running the command in
+\texttt{artifacts/REPRODUCE.md}
+\[
+\texttt{python artifacts/compute\_birth\_layer\_table.py}
+\]
+regenerates the table input from the divisor/rank method of
+Proposition~\ref{prop:effective-birth-layer-computation}.  The printed table is
+therefore an exhaustive enumeration of $A(n)$ and $\#\mathcal M_n$ for
+$2\le n\le30$ using only the finite tests proved above; the displayed
+factorizations of the small integers $F_n$ are produced by the script's exact
+integer trial-division routine. Its complete console output is supplied as
+\path{artifacts/birth_layer_table_output.txt}.
+\input{generated/tab_birth_layer_data.tex}
+
+\paragraph{Finite verification.}
+The supplementary script
+\texttt{artifacts/verify\_finite\_claims.py} independently compares the actual
+sets obtained by direct divisor/rank enumeration with the upper-fiber and
+witness constructions through $n=60$. It
+then uses the latter formula through $n=210$: inclusion--exclusion computes
+\[
+ A(n)=\sum_{S\subseteq\mathcal P(n)}(-1)^{|S|}
+ \tau\!\left(F_{n/\prod_{p\in S}p}\right),
+\]
+and the minimal threshold covers of the conditions
+$q\nmid F_{n/p}$ compute $\mathcal M_n$.  The script checks
+\eqref{article-eq:finite-minimal-generator-bound}, the simplified bound
+$\#\mathcal M_n\le n^{\omega(n)}$, the odd Bell lower bound, and both finite
+private-cover bounds in \eqref{article-eq:private-cover-finite-bounds}. It also
+computes $R(n)$, checks the pointwise deaggregation bounds
+\eqref{article-eq:prime-window-versus-R} and
+\eqref{article-eq:pointwise-window-deaggregation}, verifies the exact-rank partition
+and \eqref{article-eq:squarefree-blms-pigeonhole} on every squarefree layer, checks
+the refined upper bound \eqref{eq:refined-private-coordinate-upper-bound},
+checks the fibotomic identities \eqref{article-eq:fibotomic-binet-error} and
+\eqref{article-eq:exact-rank-radical-divides-fibotomic}, the entropy inequality
+\eqref{article-eq:fibotomic-rank-entropy}, the exact-rank congruence candidate bound,
+and the available cases of \eqref{eq:jarden-exact-rank-consequence}, and
+records the running ratio against the support-entropy scale
+$(\log2)\omega(n)^2/4$. For the rank-pure results, it directly enumerates all
+minimal covers for $k\le4$, checks the Hearne--Wagner and connected-component
+counts, verifies the M\"obius exact-rank-prime formula on every support, and
+tests every canonical rank-pure product against the independently computed
+$\mathcal M_n$. This covers all $208$ layers $3\le n\le210$, including exact
+realization of every minimal cover on all $104$ odd layers. It reports $59/59$
+set equalities for both original comparisons and no finite-bound or rank-pure
+failures. The exact output is
+\path{artifacts/finite_verification.txt}. The exact factorizations used for
+$2\le n\le210$ are recorded in
+\path{artifacts/fibonacci_factorizations_2_210.tsv}; the verifier checks
+every row by multiplication. The Python and SymPy versions, commands, file
+inventory, and verification scope are in \path{artifacts/REPRODUCE.md}, and
+\path{artifacts/SHA256SUMS} authenticates the supplied files. These finite
+checks do not provide distributional control of $R(n)$.
+In particular, they do not prove the asymptotic hypotheses \textup{(H2)} or
+\textup{(BW)}.
+
+%% ====================================================================
