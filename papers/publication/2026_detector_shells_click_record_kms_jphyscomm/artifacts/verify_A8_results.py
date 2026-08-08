@@ -545,7 +545,7 @@ def helmert_exact_block_moment_ratio(rate: float, layer: int, length: int) -> fl
 def helmert_blocking_log_terms(
     rate: float, log_sample_size: float, layer: int
 ) -> tuple[float, float, float]:
-    """Return log bounds for deleted edges and the two block Yurinskii terms."""
+    """Return deleted-edge and CMU dimension-adjusted log error bounds."""
     dimension = (layer + 1) ** 2 - 1
     log_block_length = math.log(dimension**2 + log_sample_size)
     log_dimension = math.log(dimension)
@@ -555,8 +555,8 @@ def helmert_blocking_log_terms(
     )
     return (
         math.log(deleted_mean_square),
-        0.5 * log_block_length + 1.5 * log_dimension - 0.5 * log_sample_size,
-        -0.5 * log_sample_size - log_tail,
+        0.5 * log_block_length + 2.5 * log_dimension - 0.5 * log_sample_size,
+        log_dimension - 0.5 * log_sample_size - log_tail,
     )
 
 
@@ -1035,21 +1035,21 @@ def main() -> None:
             )
         )
 
-    sharp_log_n = 12_800.0
-    sharp_rate = 1.35
-    sharp_layer = math.floor(
+    bracket_log_n = 12_800.0
+    bracket_rate = 1.35
+    sufficient_layer = math.floor(
         (
-            sharp_log_n
-            + 2.0 * math.log(sharp_log_n)
+            bracket_log_n
+            - 2.0 * math.log(bracket_log_n)
             - 10.0
-            - math.sqrt(math.log(sharp_log_n))
+            - math.sqrt(math.log(bracket_log_n))
         )
-        / (2.0 * sharp_rate)
+        / (2.0 * bracket_rate)
     )
     blocking_logs = helmert_blocking_log_terms(
-        sharp_rate, sharp_log_n, sharp_layer
+        bracket_rate, bracket_log_n, sufficient_layer
     )
-    print("A8-r7 sharp exchange-point Helmert coupling verification")
+    print("A8-r7 exchange-point Helmert coupling-bracket verification")
     print(
         "overlap maximum covariance/lag-one error="
         f"{_maximum(overlap_covariance_errors):.3e}/"
@@ -1064,7 +1064,7 @@ def main() -> None:
     )
     print(f"small-block maximum Rosenthal ratio={max(exact_block_ratios):.10f}")
     print(
-        "sharp-boundary log error terms (deleted, Gaussian, rare)="
+        "sufficient-region log error terms (deleted, CMU Gaussian, CMU rare)="
         + np.array2string(np.asarray(blocking_logs), precision=10)
     )
     print(

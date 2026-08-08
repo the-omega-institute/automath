@@ -297,7 +297,7 @@ ellipsoid does not specify a uniform chart of probability laws, and the
 oracle supplied neither a positivity-compatible global alternative class nor
 a transfer theorem and matching lower bound for one.
 
-## A8-r7 sharp exchange-point coupling boundary check
+## A8-r7 initial exchange-point coupling check (corrected below)
 
 Checked 2026-08-08 through the live arXiv Atom API, Crossref, OpenAlex, and
 the published sources used in the proof. The following arXiv API queries
@@ -326,15 +326,58 @@ Rosenthal--Burkholder moment bound. Cattaneo--Masini--Underwood,
 independent-vector Euclidean Yurinskii coupling and attributes its classical
 form to Pollard and Le Cam.
 
-The manuscript already contained the exact tail formula, Helmert partition
-identity and moment bounds, zero adjacent covariance, calendar-stopping and
-local covariance corrections, and the moving-corner necessary condition.
-The narrow new result is the exchange-point sufficiency obtained by retaining
-all overlaps inside independent big blocks and deleting only connecting
-edges. The oracle's claimed local-null-uniform extension was not promoted:
-its displayed comparison with an exchange-point core vector is not a result
-already proved in the manuscript and no uniform recentering/block-covariance
-argument was supplied. Direct substitution also refutes the oracle's
-critical constant: under
+The initial audit incorrectly promoted the block argument to sharp sufficiency.
+The independent reassessment below retracts that conclusion. Direct
+substitution still gives the corrected critical constant: under
 `2*x_0*J_N=log(n_N)+2*log(log(n_N))-c+o(1)`, the limit is
 `exp(c)/4`, not `4*exp(c)`.
+
+## Independent prior-art and proof reassessment, 2026-08-08
+
+This reassessment used the arXiv Atom API, Crossref, Google Scholar, the zbMATH
+Open API as a MathSciNet-style index, Semantic Scholar's reference graph, and
+the complete published/arXiv text and bibliography of
+Cattaneo--Masini--Underwood (CMU). The arXiv query `all:"Yurinskii coupling"`
+returned arXiv:2210.00362v4 and one application paper. The earlier exact
+Helmert/one-dependent API queries listed above returned zero results; later API
+retries were throttled and are not used as negative evidence. Crossref
+confirmed DOI `10.1214/25-AOS2538`, *Annals of Statistics* **53**(5) (2025),
+and returned no matching weighted-Helmert renewal theorem. A Google Scholar
+query for `"weighted Helmert" "Gaussian coupling"` returned only unrelated
+Gauss--Helmert engineering papers; exact follow-ups triggered Scholar's
+captcha, so Scholar is recorded as searched but is not used to claim absence.
+The zbMATH query for Yurinskii martingale coupling returned CMU; its
+phase-type-identifiability query recovered Ryden's classical identifiability
+paper and related phase-type work, but no deterministic-reset refinement.
+
+CMU's own reference graph identifies the relevant general predecessors:
+Yurinskii (1978), Le Cam (1988), Pollard (2002), Zaitsev (1987),
+Dudley--Philipp (1983), Dehling (1983), Belloni--Oliveira (2018), Li--Liao
+(2020), and Berthet--Mason (2006). These sources contain the general coupling,
+strong-approximation, or dependent-vector machinery. They do not make the
+sampled-counter Helmert calculation a new coupling method.
+
+Most importantly, CMU Corollary 2.3 does not follow from the manuscript's old
+quantity `beta_N -> 0`. For Euclidean norm it uses
+`phi_2(d)^2 = 2d`, and its `beta_{2,2}` includes both the block third moments
+and the Gaussian comparison third moments. The block calculation gives
+
+`beta_{2,2} <= C{sqrt(L)d^(3/2)/sqrt(n) + 1/(sqrt(n)S_J)}`,
+
+so the cited corollary requires `d beta_{2,2} -> 0`. The rare-cell term is
+therefore `d/(sqrt(n)S_J)`, not merely `1/(sqrt(n)S_J)`. The proposition has
+been weakened accordingly: `n S_J^2 -> infinity` is necessary,
+`d/(sqrt(n)S_J) -> 0` is sufficient, and the resulting
+`4 log log n` second-order window is an explicit open interface.
+
+The requested compact-class extension is not valid from the pointwise tail
+display alone. Compactness of parameter labels does not make the `o(1)`
+uniform or control `g_j/S_j`: a family can move a finite near-plateau to layer
+`j=m`, while every fixed law eventually has the same geometric-polynomial
+tail. Adding a uniform tail-ratio remainder, uniform atom-to-tail bounds, and
+compact bounds on `(c,a,x)` makes the CMU verification uniform under the same
+stronger sufficient condition; that is a direct application, not a tier-raising
+theorem. The coupling line is therefore not extended. The manuscript is
+positioned instead around its killed-reset D-MAP visible quotient and
+similarity-fibre structure, while acknowledging that minimal-realization and
+confluent-Prony inputs are established theory.

@@ -350,13 +350,13 @@ class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
                 self.assertGreater(min(ratios), 0.0)
                 self.assertLess(max(ratios), 40.0)
 
-    def test_blocking_error_terms_vanish_inside_sharp_boundary(self):
+    def test_cmu_blocking_terms_vanish_inside_sufficient_boundary(self):
         for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
             for log_n in (200.0, 800.0, 3200.0, 12800.0):
                 layer = math.floor(
                     (
                         log_n
-                        + 2.0 * math.log(log_n)
+                        - 2.0 * math.log(log_n)
                         - 10.0
                         - math.sqrt(math.log(log_n))
                     )
@@ -369,6 +369,15 @@ class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
                     all(math.isfinite(value) for value in (log_residual, log_gaussian, log_rare))
                 )
             self.assertLess(max(log_residual, log_gaussian, log_rare), -1.0)
+
+    def test_cmu_dimension_factor_exposes_the_open_logarithmic_gap(self):
+        log_n = 12_800.0
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            layer = math.floor(log_n / (2.0 * rate))
+            _, _, log_rare = verify.helmert_blocking_log_terms(
+                rate, log_n, layer
+            )
+            self.assertGreater(log_rare, 1.0)
 
     def test_critical_window_constant_is_exp_c_over_four(self):
         c = 3.0
