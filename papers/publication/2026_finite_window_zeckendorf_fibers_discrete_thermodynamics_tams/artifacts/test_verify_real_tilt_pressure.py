@@ -10,10 +10,12 @@ import verify_real_tilt_pressure as verification
 from verify_real_tilt_pressure import (
     coexistence_local_counterexample_search,
     critical_slope_partial,
+    matrix_bridge_audit,
     negative_continued_fraction_value,
     orbit_padding_counterexample_search,
     regular_partial_quotient_sum,
     stern_brocot_layer_denominators,
+    stern_brocot_word_matrices,
 )
 
 
@@ -110,6 +112,18 @@ class AllRealPressureHelpersTest(unittest.TestCase):
             self.assertEqual(
                 sum(denominators), 2 * 3 ** (depth - 1)
             )
+            self.assertEqual(
+                sorted(denominators),
+                sorted(
+                    sum(matrix)
+                    for matrix in stern_brocot_word_matrices(depth - 1)[-1]
+                ),
+            )
+
+    def test_stern_brocot_matrix_bridge_inequalities(self) -> None:
+        checks, failures = matrix_bridge_audit(5)
+        self.assertGreater(checks, 0)
+        self.assertEqual(failures, 0)
 
     def test_truncated_critical_slope_is_finite_and_positive(self) -> None:
         numerator, denominator, slope = critical_slope_partial(

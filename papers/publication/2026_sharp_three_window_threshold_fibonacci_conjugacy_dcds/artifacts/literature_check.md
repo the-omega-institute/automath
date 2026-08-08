@@ -204,3 +204,64 @@ fiber-product collision graphs, and restricted-coefficient polynomial
 multiples are therefore treated as published framework.  No checked record
 states the exact Toeplitz obstruction formula for this cyclic language-rank
 fold, the unbounded `p-2` separation, or the reverse cubic inequality.
+
+## Independent refresh for the cubic upgrade and named nearest work
+
+Checked: 2026-08-08 (Asia/Singapore).
+
+The arXiv Atom API was queried for `"cyclic language rank"`, `"cubic
+Pisot" AND "causal"`, `"Bertrand numeration" AND "sliding block"`,
+`"finite delay" AND "beta-expansion"`, and the exact Bassino title.  The
+endpoint returned HTTP 429 with `cache-control: private, no-store` through the
+LGA/Singapore Varnish route.  This is an API availability failure, not a
+zero-result search.  Google Scholar title/mechanism searches and Crossref
+bibliographic searches were therefore used as independent discovery checks.
+
+Crossref confirmed the following nearest-work records and DOI metadata:
+
+- P. B. A. Lecomte and M. Rigo, *Numeration Systems on a Regular Language*,
+  Theory Comput. Systems **34** (2001), 27--44,
+  DOI `10.1007/s002240010014`.  Its published abstract introduces abstract
+  numeration by ordering an arbitrary infinite regular language and studies
+  finite-automaton recognizability.  It supplies the ordered-language stage,
+  not cyclic reduction modulo a fixed-length language count or overlap
+  injectivity.
+- V. Bruyere and G. Hansel, *Bertrand numeration systems and
+  recognizability*, Theoret. Comput. Sci. **181** (1997), 17--43,
+  DOI `10.1016/S0304-3975(96)00260-5`.  Its 26-item Crossref reference trail
+  includes Bertrand-Mathis, Parry, Frougny, Cobham, Shallit, and the classical
+  automata/linear-numeration literature.  It concerns Bertrand systems and
+  recognizable sets, not the manuscript's rank-modulo-`Q_m` sliding map.
+- F. Bassino, *Beta-Expansions for Cubic Pisot Numbers*, LATIN 2002,
+  pp. 141--152, DOI `10.1007/3-540-45995-2_17`.  The abstract states that the
+  expansion of one is computed for every cubic Pisot number and that cubic
+  simple beta-numbers are Pisot.  Its references include Akiyama, Boyd,
+  Frougny--Solomyak, Hollander, Parry, Schmidt, and Solomyak.  Consequently,
+  the Pisot/simple-Parry expansion data for the candidate cubic family are
+  published input, not a novelty claim.
+
+Exact Google Scholar searches for `"cyclic language rank" Pisot` and for the
+polynomial string `"x^3-(n+2)x^2+2nx-n"` returned no matching scholarly
+title.  The broader search `"cubic Pisot" "sliding block"` returned work on
+beta-shifts/S-gap shifts and general automata material, not a cyclic
+language-rank fold.  Crossref searches for `cubic Pisot causal inverse`,
+`finite delay sliding block beta expansion`, and the exact polynomial found
+Bassino and established beta-expansion/arithmetic papers but no causal-depth
+or overlap-threshold predecessor.
+
+The defensible novelty boundary is therefore narrow.  Ordered regular-
+language numeration, Bertrand recognizability, cubic Pisot expansions, and
+simple-Parry admissibility are prior art.  The only potentially new cubic
+statement is the parameter-uniform modulus-`Q_m` collision-depth theorem.
+That statement is not integrated because its required all-parameter carry
+classification remains unproved.
+
+The zbMATH Open API supplied the MathSciNet-style subject-index check.  Exact
+title searches returned Lecomte--Rigo as Zbl `0969.68095`,
+Bruyere--Hansel as Zbl `0957.11015`, and Bassino as Zbl `1152.11342`.
+The Bassino query also returned Akiyama's *Cubic Pisot units with finite beta
+expansions* (Zbl `1001.11038`) and the established periodic-expansion
+literature.  Searches for `cubic Pisot causal inverse` and `cyclic language
+rank Pisot` returned no zbMATH record.  These negative results have the same
+query-language limitation as the other database searches and are not treated
+as proof of bibliographic nonexistence.

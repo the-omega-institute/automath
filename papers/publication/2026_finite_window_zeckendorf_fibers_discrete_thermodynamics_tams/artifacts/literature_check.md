@@ -96,9 +96,65 @@ level-orbit Dirichlet structure through the paper's exact two-layer fiber
 identity to obtain this finite-window freezing theorem, including the critical
 endpoint. No located reference states this finite-window consequence.
 
-The residual open interface is existence for every
-`t in (-sigma_0, infinity)`, differentiability at `-sigma_0`, and analytic
-positive curvature within the open positive-pressure phase. Consequently the
-full LDP remains conditional on this corrected residual hypothesis. The paper
-does not claim that general Ruelle or Sarig theory verifies the required
-operator hypotheses for this cocycle.
+At the date of this first audit, the residual open interface was existence for
+every t in (-sigma_0, infinity), differentiability at -sigma_0, and analytic
+positive curvature within the open positive-pressure phase. The later
+weighted-renewal proof in the manuscript closes that interface; the updated
+source audit and the missing denominator-layer estimate are recorded below.
+
+# Tier-up prior-art audit (2026-08-08)
+
+The audit used the arXiv API, Crossref, Google Scholar, Semantic Scholar's
+citation graph, and zbMATH Open. MathSciNet itself was not accessible without
+an authenticated subscription. Search strings included combinations of
+"Fibonacci partitions", "fixed multiplier", "prime exponent vector",
+"ordered factorizations", "multivariate local limit", "multiplicative
+renewal", and "Stern-Brocot denominator pressure".
+
+Weinstein's paper was checked from the full arXiv text, not just metadata.
+Its Proposition 3.3 and Theorems 3.8, 5.1, and 10.3 supply the free generator
+monoid, multiplier multiplicativity, orbit decomposition and layer
+stabilization, and the Dirichlet generating series. The manuscript already
+cited Weinstein, but the introduction now states this ownership in one
+explicit sentence and says that none of those mechanisms is claimed here.
+Semantic Scholar returned six citing works; Google Scholar returned seven.
+The visible citation chain consists of Chow--Slattery, Chow--Jones, Shallit,
+Sanna, Kempton, and related Fibonacci-partition papers. No item in that chain
+states the finite-window weighted-cost renewal or active-window arithmetic
+asymptotics.
+
+The pressure audit found that Kessebohmer--Stratmann Theorem 1.1 proves the
+logarithmic Stern--Brocot pressure law, while Fiala--Kleban--Oezluek Section
+IV, equations (23), (26), and (28), gives the Perron--Frobenius layer
+asymptotic for 0 < s < 2. Those locations did not by themselves justify the
+manuscript's former generic all-s < 2 attribution. The manuscript now
+contains a separate lemma: it maps the positive range to those exact
+equations and proves s <= 0 directly by a bridged matrix
+quasi-multiplicativity argument.
+
+For a fixed prime set S, Weinstein's free monoid gives the exact rational
+generating function
+
+    1 / (2 - product_{p in S} (1-z_p)/(1-p z_p)).
+
+The applicable standard coefficient result is the smooth-point theory of
+R. Pemantle and M. C. Wilson, "Asymptotics of Multivariate Sequences",
+J. Combin. Theory Ser. A 97 (2002), 129--161,
+doi:10.1006/jcta.2001.3201. The ordered-factorization comparison literature
+also includes Y.-K. Lau, "Local Distribution of Ordered Factorizations of
+Integers", J. Number Theory 91 (2001), 312--317,
+doi:10.1006/jnth.2001.2687, and H.-K. Hwang and S. Janson, "A Central Limit
+Theorem for Random Ordered Factorizations of Integers", Electron. J. Probab.
+16 (2011), doi:10.1214/EJP.v16-858. Those two papers concern averaged random
+ordered factorizations, not the present exact fixed-prime exponent vectors.
+
+Consequently the proposed m^{-(|S|-1)/2} exponent-ray asymptotic in the
+inactive-cost interior is a standard smooth-point multivariate rational
+coefficient theorem, followed by the same cost-law transfer used for the
+dyadic ray. This is an easy ACSV/renewal corollary, not a tier-raising new
+mechanism, and it has not been added as a theorem. A materially stronger
+nearby target would describe the active finite-window cost boundary and its
+critical crossover. That requires a sharp joint local theorem for the prime
+exponent vector and continued-fraction cost; no such input was located in the
+searched literature, and it is not available from the manuscript's current
+arguments.

@@ -175,6 +175,64 @@ def stern_brocot_layer_denominators(depth: int) -> list[int]:
     ]
 
 
+def matrix_multiply(
+    left: tuple[int, int, int, int], right: tuple[int, int, int, int]
+) -> tuple[int, int, int, int]:
+    a, b, c, d = left
+    e, f, g, h = right
+    return (a * e + b * g, a * f + b * h, c * e + d * g, c * f + d * h)
+
+
+def matrix_entry_sum(matrix: tuple[int, int, int, int]) -> int:
+    return sum(matrix)
+
+
+def stern_brocot_word_matrices(
+    max_length: int,
+) -> list[list[tuple[int, int, int, int]]]:
+    """Return the L/R matrix products grouped by word length."""
+    if max_length < 0:
+        raise ValueError("max_length must be nonnegative")
+    left = (1, 0, 1, 1)
+    right = (1, 1, 0, 1)
+    layers = [[(1, 0, 0, 1)]]
+    for _ in range(max_length):
+        layers.append(
+            [
+                matrix_multiply(prefix, letter)
+                for prefix in layers[-1]
+                for letter in (left, right)
+            ]
+        )
+    return layers
+
+
+def matrix_bridge_audit(max_length: int) -> tuple[int, int]:
+    """Check the submultiplicative and one-letter bridge inequalities."""
+    layers = stern_brocot_word_matrices(max_length)
+    left = (1, 0, 1, 1)
+    right = (1, 1, 0, 1)
+    checks = 0
+    failures = 0
+    for left_layer in layers:
+        for right_layer in layers:
+            for first in left_layer:
+                first_sum = matrix_entry_sum(first)
+                for second in right_layer:
+                    product = first_sum * matrix_entry_sum(second)
+                    direct = matrix_entry_sum(matrix_multiply(first, second))
+                    bridged = max(
+                        matrix_entry_sum(
+                            matrix_multiply(matrix_multiply(first, bridge), second)
+                        )
+                        for bridge in (left, right)
+                    )
+                    checks += 2
+                    failures += direct > product
+                    failures += 2 * bridged < product
+    return checks, failures
+
+
 def critical_slope_partial(
     sigma: float, max_denominator: int
 ) -> tuple[float, float, float]:
@@ -873,11 +931,16 @@ def main() -> int:
     all_real_layer_failures = 0
     for depth in range(1, maximum_depth + 1):
         denominators = stern_brocot_layer_denominators(depth)
+        matrix_denominators = sorted(
+            matrix_entry_sum(matrix)
+            for matrix in stern_brocot_word_matrices(depth - 1)[-1]
+        )
         checks = [
             len(denominators) == 2 ** (depth - 1),
             min(denominators) >= depth + 1,
             max(denominators) <= fib[depth + 2],
             sum(denominators) == 2 * 3 ** (depth - 1),
+            sorted(denominators) == matrix_denominators,
         ]
         for composition in compositions(depth):
             numerator, denominator = negative_continued_fraction_value(composition)
@@ -887,6 +950,10 @@ def main() -> int:
             )
         all_real_layer_checks += len(checks)
         all_real_layer_failures += sum(not check for check in checks)
+
+    bridge_checks, bridge_failures = matrix_bridge_audit(5)
+    all_real_layer_checks += bridge_checks
+    all_real_layer_failures += bridge_failures
 
     exact_root_checks = [
         abs((1.0 / phi) ** 3 / (1.0 - 2.0 / phi**2) - 1.0)
@@ -933,8 +1000,12 @@ def main() -> int:
     )
     failures += all_real_failures
     messages.append(
-        "ALL_REAL_LAYER_AUDIT depths=1..{} checks={} failures={}".format(
-            maximum_depth, all_real_layer_checks, all_real_layer_failures
+        "ALL_REAL_LAYER_AUDIT depths=1..{} checks={} bridge_checks={} "
+        "failures={}".format(
+            maximum_depth,
+            all_real_layer_checks,
+            bridge_checks,
+            all_real_layer_failures,
         )
     )
     messages.append(

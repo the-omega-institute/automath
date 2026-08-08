@@ -417,15 +417,116 @@ essential in \eqref{eq:weighted-layer-renewal}, because \(\mathcal I_0\) is
 empty.
 \end{proof}
 
-\begin{theorem}[All-real pressure and the freezing corner]
-\label{thm:exact-negative-pressure}
-\label{thm:all-real-pressure}
 Let \(\mathfrak P\) denote the Stern--Brocot pressure
 \[
  \mathfrak P(\theta)
  :=\lim_{d\to\infty}\frac1d
    \log\sum_{T\in\mathcal T_d}|T|^\theta .
 \]
+
+\begin{lemma}[New-denominator layer estimate]
+\label{lem:knauf-layer-estimate}
+For every fixed real \(s<2\),
+\begin{equation}
+ a_d(s):=
+ \sum_{\substack{0<p<q,\ (p,q)=1\\d(p/q)=d}}q^{-s}
+ \asymp_s \exp\{d\mathfrak P(s/2)\}.
+ \label{eq:knauf-layer-pressure}
+\end{equation}
+For every fixed \(s\ge2\), one has instead
+\[
+ \lim_{d\to\infty}\frac1d\log a_d(s)=0.
+\]
+\end{lemma}
+
+\begin{proof}
+First suppose \(0<s<2\), and put \(\beta=s/2\).  The even Knauf
+partition function \(Z^{K,e}_d(2\beta)\) is exactly \(a_d(s)\): its
+states are the new Stern--Brocot denominators at depth \(d\).  In the
+notation of Fiala, Kleban, and \"Ozl\"uk, the first-coordinate identity
+for their Knauf vector, its Perron--Frobenius iteration, and its spectral
+asymptotic are given in
+\cite[Sec.~IV, especially Eqs.~(23), (26), and (28)]{FialaKlebanOzluk2003}.
+They give
+\[
+ a_d(s)=c_s\lambda(s/2)^d(1+o(1)),\qquad c_s>0.
+\]
+Their free-energy identification, together with the denominator formula
+for Stern--Brocot pressure
+\cite[Thm.~1.1 and the denominator formula in Sec.~2]{KessebohmerStratmann2007},
+gives \(\log\lambda(s/2)=\mathfrak P(s/2)\).  This proves
+\eqref{eq:knauf-layer-pressure} in the range \(0<s<2\).  At \(s=0\),
+there are exactly \(2^{d-1}\) new denominators and
+\(\mathfrak P(0)=\log2\), so the assertion is immediate.
+
+It remains to supply the estimate for \(s<0\), a range not covered by
+the positive-temperature Perron--Frobenius statement just cited.  Put
+\(t=-s>0\), and let
+\[
+ L=\begin{pmatrix}1&0\\1&1\end{pmatrix},\qquad
+ R=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+ \lVert M\rVert_\Sigma=\sum_{i,j=1}^2M_{ij}.
+\]
+The Stern--Brocot recursion gives, by induction, a bijection between the
+new denominators at depth \(d\) and words \(w\in\{L,R\}^{d-1}\), under
+which
+\begin{equation}
+ q(w)=\lVert M_w\rVert_\Sigma.
+ \label{eq:stern-brocot-matrix-denominator}
+\end{equation}
+Define
+\[
+ Z_n(t):=\sum_{w\in\{L,R\}^n}\lVert M_w\rVert_\Sigma^t,
+ \qquad n\ge0.
+\]
+For nonnegative matrices \(A,B\),
+\(\lVert AB\rVert_\Sigma\le
+\lVert A\rVert_\Sigma\lVert B\rVert_\Sigma\), and hence
+\begin{equation}
+ Z_{m+n}(t)\le Z_m(t)Z_n(t).
+ \label{eq:matrix-partition-submultiplicative}
+\end{equation}
+For the reverse inequality with one bridging letter, write
+\(\alpha=A^T(1,1)^T\) and \(\beta=B(1,1)^T\).  Direct multiplication gives
+\[
+ \lVert ALB\rVert_\Sigma+\lVert ARB\rVert_\Sigma
+ =\lVert A\rVert_\Sigma\lVert B\rVert_\Sigma
+   +\alpha_1\beta_1+\alpha_2\beta_2.
+\]
+Thus at least one \(C\in\{L,R\}\) satisfies
+\(\lVert ACB\rVert_\Sigma\ge
+\frac12\lVert A\rVert_\Sigma\lVert B\rVert_\Sigma\).  Summing over
+all pairs of words yields
+\begin{equation}
+ Z_{m+n+1}(t)\ge2^{-t}Z_m(t)Z_n(t).
+ \label{eq:matrix-partition-bridged}
+\end{equation}
+
+Let \(\lambda_t=\lim_n Z_n(t)^{1/n}\), whose existence follows from
+\eqref{eq:matrix-partition-submultiplicative}.  That inequality gives
+\(Z_n(t)\ge\lambda_t^n\).  Iterating
+\eqref{eq:matrix-partition-bridged} \(k-1\) times and then letting
+\(k\to\infty\) gives
+\[
+ Z_{k(n+1)-1}(t)\ge2^{-t(k-1)}Z_n(t)^k,
+ \qquad
+ Z_n(t)\le2^t\lambda_t^{n+1}.
+\]
+Consequently \(Z_n(t)\asymp_t\lambda_t^n\).  By
+\eqref{eq:stern-brocot-matrix-denominator} and the denominator form of
+Stern--Brocot pressure cited above,
+\(\log\lambda_t=\mathfrak P(-t/2)\).  Since
+\(a_d(-t)=Z_{d-1}(t)\), this proves
+\eqref{eq:knauf-layer-pressure} for \(s<0\).
+
+Finally, the logarithmic assertion for \(s\ge2\) is precisely the
+denominator formulation of the zero-pressure part of
+\cite[Thm.~1.1]{KessebohmerStratmann2007}.
+\end{proof}
+
+\begin{theorem}[All-real pressure and the freezing corner]
+\label{thm:exact-negative-pressure}
+\label{thm:all-real-pressure}
 For every \(s\in\mathbb R\), the radius of convergence of \(B_s\) is
 \begin{equation}
  R_B(s)=\exp\{-\mathfrak P(s/2)/2\}.
@@ -489,15 +590,9 @@ parameterization gives
 There are \(2^{d-1}\) fractions in this layer, and their denominators satisfy
 \(d+1\le q\le F_{d+2}\).  In particular, every \(B_s\) has positive finite
 radius.  The layer is precisely the new-denominator layer of the Knauf model.
-The published Stern--Brocot/Knauf pressure comparison
-\cite{FialaKlebanOzluk2003,KessebohmerStratmann2007} gives, for fixed \(s<2\),
-\begin{equation}
- a_d(s)\asymp_s \exp\{d\mathfrak P(s/2)\},
- \label{eq:knauf-layer-pressure}
-\end{equation}
-and gives
-\(d^{-1}\log a_d(s)\to0\) for \(s\ge2\).  Here only this published
-denominator-layer estimate is imported.  Cauchy--Hadamard now proves
+The precise estimate in \Cref{lem:knauf-layer-estimate} gives, for fixed
+\(s<2\), \eqref{eq:knauf-layer-pressure}, and gives
+\(d^{-1}\log a_d(s)\to0\) for \(s\ge2\).  Cauchy--Hadamard now proves
 \eqref{eq:Bs-radius}.  Moreover, \eqref{eq:knauf-layer-pressure} shows that
 the terms of \(B_s\) do not tend to zero on \(|z|=R_B(s)\) when \(s<2\).
 At \(s=2\), the positive real boundary also diverges.  For \(s>2\), Tonelli's

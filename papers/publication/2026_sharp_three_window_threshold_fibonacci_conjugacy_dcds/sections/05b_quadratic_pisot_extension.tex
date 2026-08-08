@@ -683,10 +683,12 @@ Lemma~\ref{lem:quadratic-pisot-chambers}, completing the proof.
 
 The threshold classification leaves three finer questions: whether a fixed
 aperture identifies the parameter chamber, how many consecutive output
-symbols are actually needed by a causal inverse, and whether the finite-block
-and finite-type bounds in Theorem~\ref{thm:full-quadratic-pisot-threshold}
-are sharp.  We answer all three for the recoding of
-Definition~\ref{def:quadratic-parry-fold}.
+symbols are needed by a causal inverse, and whether the finite-block and
+finite-type bounds in Theorem~\ref{thm:full-quadratic-pisot-threshold} are
+sharp.  We answer the first and third completely.  For the causal question we
+obtain the exact positive-chamber value and the exact negative-chamber value
+at aperture three; the parameter-uniform negative-chamber value at larger
+apertures remains an explicit interface.
 
 \begin{theorem}[Aperture-two chamber duality and first separation]
 \label{thm:quadratic-aperture-two-duality}
@@ -771,93 +773,25 @@ Q_3^+=qQ_2-(q-\kappa)q,
 whose difference is $q^2-Q_2=q-\kappa$.
 \end{proof}
 
-We next isolate the only bounded-carry fact not already contained in
-Lemma~\ref{lem:quadratic-sliding-congruences}.
-
-\begin{lemma}[Negative-chamber two-window bounded carry]
-\label{lem:negative-two-window-bounded-carry}
-Let $a\ge b\ge1$, let
+\begin{remark}[Open negative-chamber two-window interface]
+\label{rem:negative-two-window-open-interface}
+For $a\ge b\ge1$ and $m\ge4$, the natural candidate statement is that two
+consecutive congruences
 \[
-Q_0=1,\quad Q_1=a+1,\quad Q_{j+2}=aQ_{j+1}+bQ_j,
-\]
-and let $m\ge3$.  If $e_0,\ldots,e_m\in[-a,a]\cap\mathbb Z$ satisfy
-\[
-\sum_{j=0}^{m-1}Q_je_j\equiv0\pmod{Q_m},
-\qquad
+\sum_{j=0}^{m-1}Q_je_j\equiv
 \sum_{j=0}^{m-1}Q_je_{j+1}\equiv0\pmod{Q_m},
+\qquad |e_j|\le a,
 \]
-then $e_0=0$.
-\end{lemma}
+force $e_0=0$ for the recurrence
+$Q_{j+2}=aQ_{j+1}+bQ_j$.  Finite enumeration supports this assertion, but a
+parameter-uniform proof requires an exhaustive bounded-carry invariant.  In
+particular, sorting only by the two multiples of $Q_m$ and then appealing to
+the signs of successive quotient coefficients does not prove that all carry
+branches have been covered.  We therefore do not use or claim this candidate
+statement below.
+\end{remark}
 
-\begin{proof}
-We give the bounded coefficient descent because the digit bound $a$ is
-essential.  Put $P(z)=z^2-az-b$ and
-$E(z)=\sum_{j=0}^m e_jz^j$.  Divide in $\mathbb Z[z]$:
-\[
-E(z)=P(z)\sum_{i=0}^{m-2}c_iz^i+r_0+r_1z.
-\]
-Coefficient comparison gives
-\begin{align*}
-e_0&=-bc_0+r_0,\\
-e_1&=-ac_0-bc_1+r_1,\\
-e_j&=c_{j-2}-ac_{j-1}-bc_j &&(2\le j\le m-2),\\
-e_{m-1}&=c_{m-3}-ac_{m-2},\qquad e_m=c_{m-2}.
-\end{align*}
-The linear functional $L(\sum f_jz^j)=\sum f_jQ_j$ annihilates every
-$z^iP(z)$.  Removing the top term before applying $L$, and dividing
-$E-e_0$ by $z$, therefore give respectively
-\begin{equation}
-r_0+(a+1)r_1\equiv0\pmod{Q_m},
-\qquad r_1+c_0\equiv0\pmod{Q_m}.
-\label{eq:negative-carry-remainders}
-\end{equation}
-
-For completeness, write the two original sums as $k_0Q_m$ and $k_1Q_m$.
-The bound
-\[
-a\sum_{j=0}^{r-1}Q_j<2Q_r\qquad(r\ge3)
-\]
-follows by induction from the recurrence (the case $a=b=1$ is the only
-$a=1$ case and is immediate).  Hence $k_0,k_1\in\{-1,0,1\}$.
-
-We now perform coefficient descent.  Starting with the two highest
-coefficients and moving toward $c_0$, the only update is
-\begin{equation}
-c_{j-2}=e_j+ac_{j-1}+bc_j.
-\label{eq:negative-carry-descent}
-\end{equation}
-At the low end one uses
-\eqref{eq:negative-carry-remainders} and the first two coefficient equations.
-Induction in the number of applications of
-\eqref{eq:negative-carry-descent} gives the following exhaustive table:
-\[
-\begin{array}{c|c|c}
-k_1&k_0&\text{consequence}\\ \hline
--1&-1,0,1&\max_{0\le j\le m}|e_j|\ge a+1,\\
-0&-1,0,1&e_0=0,\\
-1&-1,0,1&\max_{0\le j\le m}|e_j|\ge a+1.
-\end{array}
-\]
-To check the induction step, substitute
-\eqref{eq:negative-carry-descent} in the next lower coefficient.  If the two
-successive carries have the same sign, the term $ac_{j-1}+bc_j$ has modulus
-at least $a+1$ unless the next carry is zero.  If they have opposite signs,
-the substitution changes the sign and reduces to the preceding row.  Thus a
-nonzero $k_1$ reaches an endpoint coefficient of modulus at least $a+1$.
-When $k_1=0$, the descent reaches
-$r_1=-c_0$; substituting this in the other congruence and then in
-$e_0=-bc_0+r_0$ gives
-\[
-e_0=(a+1-b)c_0+\nu Q_m
-\]
-for some $\nu\in\mathbb Z$.  The same-sign alternative gives modulus at
-least $a+1$, while the opposite-sign alternative descends once more; at the
-endpoint it leaves $c_0=\nu=0$.  Hence $e_0=0$.  These are exactly the three
-rows of the table, so the descent is exhaustive.  The assumed bound excludes
-the first and third rows and proves the lemma.
-\end{proof}
-
-\begin{theorem}[Optimal causal inverse length]
+\begin{theorem}[Causal inverse bounds and the positive-chamber optimum]
 \label{thm:quadratic-optimal-causal-inverse}
 For $m\ge3$ define
 \[
@@ -867,14 +801,14 @@ For $m\ge3$ define
 \]
 Then
 \[
-\ell_{\rm cau}(\beta,m)=
-\begin{cases}
-2,&\beta'<0,\\
-3,&\beta'>0.
-\end{cases}
+\ell_{\rm cau}(\beta,m)=3\quad(\beta'>0),
+\qquad
+\ell_{\rm cau}(\beta,3)=2\quad(\beta'<0).
 \]
-In particular, this optimal length is independent of $m$; the anticipation
-is respectively one or two.
+For $\beta'<0$ and $m\ge4$, the proved bounds are
+\[
+2\le \ell_{\rm cau}(\beta,m)\le m.
+\]
 
 If, explicitly, $(P)\subset\mathbb Z[z]$ denotes the principal ideal
 generated by $P$ and
@@ -884,9 +818,14 @@ generated by $P$ and
 \]
 then
 \[
-\ell_{\rm cau}(\beta,m)=\mathfrak a(P_\beta,d),
-\qquad d=\lfloor\beta\rfloor,\quad m\ge3.
+\mathfrak a(P^-_{a,b},a)=2,
+\qquad
+\mathfrak a(P^+_{a,b},a-1)=3.
 \]
+Thus $\ell_{\rm cau}=\mathfrak a$ in the positive chamber for every
+$m\ge3$ and in the negative chamber at $m=3$; equality in the negative
+chamber for $m\ge4$ is precisely the interface in
+Remark~\ref{rem:negative-two-window-open-interface}.
 \end{theorem}
 
 \begin{proof}
@@ -894,9 +833,15 @@ Suppose first that $P=P^-_{a,b}$, so $d=a$.  The coefficient vector
 $(b,a,-1)$ of $-P$ is the difference of two digit blocks and has nonzero
 first coordinate.  Padding it by zeros gives two raw length-$m$ words with
 the same single output, so one output never suffices.  Conversely, equality
-of two consecutive outputs gives the two congruences in
-Lemma~\ref{lem:negative-two-window-bounded-carry} for the digit differences;
-that lemma gives $e_0=0$.  Hence two outputs determine the first digit.
+of two consecutive outputs at $m=3$ gives two overlapping triples from the
+complete negative-chamber list in the proof of
+Lemma~\ref{lem:quadratic-sliding-congruences}.  A triple in that list with
+nonzero first coordinate is necessarily $\pm(b,a,-1)$; the next triple would
+then begin with $\pm(a,-1)$, which is not the initial pair of any triple in
+the list.  Hence $e_0=0$, and two outputs determine the first digit at
+$m=3$.  For $m\ge4$, the lower bound remains two, while
+Lemma~\ref{lem:quadratic-sliding-congruences} shows that $m$ consecutive
+outputs determine the entire overlapping raw block and hence its first digit.
 
 Now let $P=P^+_{a,b}$, so $d=a-1$.  The polynomial
 \[
