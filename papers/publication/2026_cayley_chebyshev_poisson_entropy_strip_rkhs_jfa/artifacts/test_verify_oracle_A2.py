@@ -11,6 +11,25 @@ CERTIFICATE = ROOT / "artifacts" / "verify_oracle_A2.py"
 
 
 class OracleA2VerificationTests(unittest.TestCase):
+    def test_stable_kernel_exponent_and_claim_interface(self) -> None:
+        completed = subprocess.run(
+            [sys.executable, str(CERTIFICATE), "--quick"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        self.assertIn("stable-kernel critical exponent algebra", completed.stdout)
+        self.assertIn("critical Bregman perturbation bound including q=2", completed.stdout)
+
+        manuscript = (ROOT / "sec_verified_A2_results.tex").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(r"\label{lem:stable-critical-translation-remainder}", manuscript)
+        self.assertIn("Optimal uniform sufficient moment exponent", manuscript)
+        self.assertNotIn("[Sharp high-dimensional KL moment threshold]", manuscript)
+
     def test_certificate_and_manuscript_labels(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(CERTIFICATE), "--quick"],

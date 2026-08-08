@@ -194,6 +194,44 @@ def symbolic_checks() -> list[Check]:
         )
     )
 
+    stable_rows = []
+    stable_ok = True
+    for d in range(1, 13):
+        for alpha in (sp.Rational(1, 4), sp.Rational(1, 2), sp.Rational(1, 1),
+                      sp.Rational(3, 2), sp.Rational(7, 4)):
+            beta = d + alpha
+            q_value = sp.Rational(2, 1) if beta <= 4 else 1 + 4 / beta
+            p_value = sp.simplify(4 / q_value)
+            expected = max(sp.Rational(2, 1), sp.simplify(4 * beta / (beta + 4)))
+            translation_growth = sp.simplify(beta * (1 - 1 / q_value))
+            row_ok = (
+                sp.simplify(p_value - expected) == 0
+                and sp.simplify(p_value * q_value - 4) == 0
+                and translation_growth <= p_value
+            )
+            if beta > 4:
+                row_ok = row_ok and sp.simplify(
+                    4 - p_value * (1 + 4 / beta)
+                ) == 0
+            stable_ok = stable_ok and row_ok
+            if (d, alpha) in (
+                (1, sp.Rational(1, 2)),
+                (2, sp.Rational(3, 2)),
+                (3, sp.Rational(3, 2)),
+                (11, sp.Rational(1, 1)),
+            ):
+                stable_rows.append(
+                    f"d={d}, alpha={alpha}: beta={beta}, p={p_value}, "
+                    f"q={q_value}, shift-growth={translation_growth}"
+                )
+    checks.append(
+        Check(
+            "stable-kernel critical exponent algebra",
+            stable_ok,
+            "; ".join(stable_rows),
+        )
+    )
+
     cluster_ok = True
     cluster_rows = []
     integer_endpoints = []
@@ -529,8 +567,11 @@ def critical_bregman_check() -> Check:
 
     rows = []
     passed = True
-    for d in (4, 5, 10, 11, 12, 20, 40):
-        q_d = (d + 5) / (d + 1)
+    cases = [("q=2", 2.0)] + [
+        (f"d={d}", (d + 5) / (d + 1))
+        for d in (4, 5, 10, 11, 12, 20, 40)
+    ]
+    for label, q_d in cases:
         minimum = math.inf
         maximum_ratio = 0.0
         for u in np.linspace(-0.25, 0.25, 21):
@@ -545,10 +586,14 @@ def critical_bregman_check() -> Check:
         row_ok = minimum >= -2.0e-10 and math.isfinite(maximum_ratio)
         passed = passed and row_ok
         rows.append(
-            f"d={d}: min Bregman={minimum:.3e}, "
+            f"{label}: min Bregman={minimum:.3e}, "
             f"max Bregman/|v|^q={maximum_ratio:.6g}"
         )
-    return Check("critical Bregman perturbation bound", passed, "; ".join(rows))
+    return Check(
+        "critical Bregman perturbation bound including q=2",
+        passed,
+        "; ".join(rows),
+    )
 
 
 def covariance_proxy_quadrature_check(quick: bool) -> Check:

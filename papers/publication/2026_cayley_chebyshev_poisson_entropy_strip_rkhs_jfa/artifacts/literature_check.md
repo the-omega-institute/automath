@@ -150,3 +150,57 @@ t^4D_{\rm KL}(h_t\Vert g_t)
 
 As above, this is a documented negative search rather than a logically
 exhaustive proof of absence from all literature.
+
+## Stable-Kernel Critical-Moment Search
+
+Checked 2026-08-08 (Asia/Singapore).  The search target was the optimal
+absolute-moment hypothesis for the covariance-order relative-entropy
+asymptotic of a fixed law smoothed by an isotropic strictly alpha-stable
+kernel, with the stable kernel itself as the translated reference.
+
+The nearest paper was inspected in full:
+
+- K. Ishige, T. Kawakami, and H. Michihisa, *Asymptotic Expansions of
+  Solutions of Fractional Diffusion Equations*, SIAM J. Math. Anal. 49
+  (2017), 2167--2190, arXiv:1610.09789,
+  DOI 10.1137/16M1101428.
+- K. Ishige and T. Kawakami, *Refined Asymptotic Expansions of Solutions to
+  Fractional Diffusion Equations*, J. Dynam. Differential Equations 36
+  (2024), 2679--2702, arXiv:2109.14193,
+  DOI 10.1007/s10884-022-10224-4.
+
+Their theorems, bibliographies, and forward-citation records were checked,
+along with Crossref, Semantic Scholar, zbMATH, and targeted arXiv searches
+for combinations of stable/fractional heat kernels, translated density
+quotients, relative entropy, asymptotic expansions, and moment conditions.
+The arXiv API returned HTTP 429 during this audit, so arXiv abstract pages,
+HTML, and PDFs were used to inspect the relevant records.  Google Scholar
+was also queried but returned its unusual-traffic interstitial; no Scholar
+results are therefore represented as inspected.
+
+Ishige--Kawakami--Michihisa prove density-level fractional-heat expansions:
+moment-weighted kernel derivatives are subtracted and the remainder is
+controlled in scaled L^q and weighted L^1 norms.  The refined paper extends
+that framework to inhomogeneous and nonlinear equations.  Neither paper
+states the critical matched-quotient estimate
+
+\[
+\left\|\frac{p_1(\mathord\cdot-z)}{p_1}\right\|_{L^q(p_1)}^q
+\asymp (1+|z|)^{(d+\alpha)(q-1)},
+\]
+
+uses it to transfer a moment expansion through relative entropy, or gives
+the uniform sufficient exponent
+
+\[
+p_{\alpha,d}=\max\left\{2,
+\frac{4(d+\alpha)}{d+\alpha+4}\right\}.
+\]
+
+The stable-entropy papers of Bobkov--Chistyakov--Goetze, Johnson, and
+Toscani concern convergence of normalized convolution sequences or entropy
+relative to a fixed stable target.  They do not address this fixed-input,
+large-spatial-scale, moving matched-reference problem.  No indexed source
+located in the audit states the exponent or the matching uniform
+moment-class optimality result.  This remains a qualified negative search,
+not a proof of absence from every publication.
