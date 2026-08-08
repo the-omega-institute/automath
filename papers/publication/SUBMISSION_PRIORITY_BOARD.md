@@ -14,19 +14,31 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 冲刺轮次 | **PRIMARY** | BACKUP | 注意 |
-|---|---|---|---|---|
-| **A2** `cayley_chebyshev` | r1–r3 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 82 页需大幅压缩，主定理层次待理清 |
-| **A3** `sharp_three_window` | r1–r3 | **DCDS-A** | JNT · Dynamical Systems | 56 页；⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
-| **A4** `prime_languages` | r1–r3 | **Monatshefte für Mathematik** | TCS · JNT | MCFL immunity + 整除树提供了刊级新颖性；22k 词双主线恐被要求拆分 |
-| **A5** `finite_parts` | r1–r3 | **DCDS** | ETDS · Dynamical Systems | 商覆盖与边界定理已验证；⚠️ 更正型窄 scope 是主要编辑风险 |
-| **A6** `zeckendorf_fibers` | r1–r3 | **Journal of Number Theory** | EJC · Monatshefte | 冻结相变 + 更新理论已验证；44 页需收紧 |
-| **A7** `upper_fibers` | r1–r3 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
-| **A8** `detector_shells` | r1–r2 | **Stochastic Models** | MCAP · Stochastics | ⚠️ 曾被 GRG 与 J.Phys.Comm. 拒，转概率向 |
+| 篇 | 冲刺轮次 | 页 | **PRIMARY** | BACKUP | 注意 |
+|---|---|---|---|---|---|
+| **A2** `cayley_chebyshev` | r1–**r5** | 87 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 篇幅仍需大幅压缩，主定理层次待理清 |
+| **A3** `sharp_three_window` | r1–**r3** | 57 | **DCDS-A** | JNT · Dynamical Systems | ⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
+| **A4** `prime_languages` | r1–**r5** | — | **Monatshefte für Mathematik** | TCS · JNT | MCFL immunity + 整除树提供刊级新颖性；22k 词双主线恐被要求拆分 |
+| **A5** `finite_parts` | r1–**r5** | 38 | **DCDS** | ETDS · Dynamical Systems | Mahler 线已从存在性升级为判定程序；⚠️ 更正型窄 scope 仍是主要编辑风险 |
+| **A6** `zeckendorf_fibers` | r1–**r7** | 62 | **Journal of Number Theory** | EJC · Monatshefte | 本轮深化幅度最大；需收紧并把证书移入 supplement |
+| **A7** `upper_fibers` | r1–**r5** | 50 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
+| **A8** `detector_shells` | r1–**r7** | 55 | **Stochastic Models** | MCAP · Stochastics | ⚠️ 曾被 GRG 与 J.Phys.Comm. 拒，转概率向 |
 
-**冲刺净效果**：A2 凭已验证的尖锐 Poisson-熵阈值**守住 JFA**；A4 由"待定"升到 **Monatshefte 刊级**(MCFL immunity + 整除树);A5 由原评的 Dynamical Systems **升至 DCDS**;A6 稳在 JNT;A3 维持 DCDS-A;A7/A8 维持专业刊定位。**共性待办：多篇需压缩篇幅并把 certificate/comparator 移入 supplement。**
+**七篇均未饱和**——每轮仍有非 `ALREADY-IN-PAPER` 的判决，故全部继续深化，目标期刊维持上表不变。
 
-**A5 冲刺产出（已提交）**：精确商覆盖分裂因子、恒等类普遍 Artin 失效、指数精度调和重正规化；标量 Bernoulli 展开优先权明确归 Hasegawa–Saito（arXiv:1507.00498）；"Fourier 刚性"一组经检验仅为已有定理逆线性形式，拒绝写入。
+### 冲刺产出（均经 codex 逐条检验 + 我方独立复跑 verifier 与编译后提交）
+
+- **A5** `thm:determinant-boundary-lifting` 闭合了长期卡住的边界碰撞问题——绕开取不到的 Nishioka 1985，改用 1982 特殊值定理并显式核验全部参数（$p{=}2,N{=}0,n{=}1,m{=}2,M{=}2,U{=}1,L{=}1$，$M(p{+}N)n^2=4<2^{2+1/L}=8$），配合 Dieudonné–Dwork 整性给出 $F\in\mathbb Z[[z]]$；r5 再把存在性升级为**判定程序**（`thm:effective-rational-mahler-coboundary`：显式次数/高度界 + 有限 Padé 判定）。承重的平方归一化 $F(x)^2=\Pi_x(H)$ 已明写；不主张任意正有理 $H$ 的逆命题。
+- **A6** r7 证得**严格速度分离** $v_2>v_c$，间隙 $\ge 0.001171960512764161$。截断证不了它（$\gamma_2$ 级数从下方慢收敛，部分和给的是 $v_2$ 的上界，方向相反），故改用区间证书 `verify_speed_separation.py`：$\gamma_{\text{upper}}=4435863088103/847288609443$、$v_2^{\text{lower}}=0.132397168$、$v_c^{\text{upper}}=0.131225208$。r6 另证**统一命题不成立**，并把 dyadic 词计数明确归为 Weinstein 已发表公式的系数推论。
+- **A8** r7 整合固定交换点的**尖锐充要边界** `prop:helmert-growing-layer-bracket-main`；r4 补 Markov–Palm 交换点全切空间。
+- **A2** r5 整合 `thm:raw-tail-poisson-energy-decomposition`（原始尾 Poisson 能量分解）。
+- **A3** r3 证得三次 simple-Parry Pisot 数上 $\ell_{\mathrm{cau}}$ **无统一有限上界**，并收紧了 simple-Parry 系列结论的适用范围。
+
+### 被拒绝写入的内容（同等重要）
+
+深化的价值有一半来自拒收。已记录在案的有：A6 r4 的 **17 条 WRONG**；A8 的 minimax 主张（切线论证无效）、尾格统计量、临界常数 $4e^c$（精度不成立，反例已存）；A2 的跨壳层聚合主张（验伪）与"同一 Poisson 单元内不可抵消"断言（**整条撤回**，替代文字仅作经典背景、不申报新颖性）；A7 的 fibotomic 熵最优性主张（**正式撤回**，稿件确无该证明）并纠正 Granville 引用被误表述为 Fibonacci 奇重数定理；A5 的标量 Bernoulli 展开优先权归 Hasegawa–Saito（arXiv:1507.00498）。
+
+**Oracle 两次诚实拒答**：A4 r4 在给定有限输入模型下无法建立几何同步方案的可判定性或 $\Sigma^0_1$-困难性，未向稿件加入任何定理；A7 r4/r5 连续两轮判 little-o 命题未决，障碍精确定位为 Sanna 的无条件定理只控制 $d\mid\alpha(p)$ 而非纤维 $\alpha(p)=d$、固定指标渐近式依赖 GRH 且仅在 $x>t^3$ 上一致（而 $\alpha(p)=d$ 迫使 $p=td\pm1$），r6 起已正式换向到本文有限结构理论可无条件处理的问题。
 
 ---
 
