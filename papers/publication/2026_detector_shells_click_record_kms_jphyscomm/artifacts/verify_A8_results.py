@@ -11,6 +11,7 @@ used by the A8-r4 omnibus-score result.
 
 from __future__ import annotations
 
+import itertools
 import math
 from statistics import NormalDist
 from typing import Iterable
@@ -482,6 +483,101 @@ def helmert_layer_diagnostics(rate: float, layer: int) -> tuple[float, float, fl
     )
 
 
+def _helmert_interaction_values(rate: float, layer: int) -> tuple[FloatArray, FloatArray]:
+    partition_mass, basis = weighted_helmert_partition(rate, layer)
+    values = np.asarray(
+        [
+            np.outer(basis[:, left], basis[:, right]).reshape(-1)[1:]
+            for left in range(partition_mass.size)
+            for right in range(partition_mass.size)
+        ]
+    ).reshape(partition_mass.size, partition_mass.size, -1)
+    return partition_mass, values
+
+
+def helmert_overlap_diagnostics(rate: float, layer: int) -> tuple[float, float, float]:
+    """Return covariance error, lag-one covariance error, and S_J-scaled third moment."""
+    partition_mass, values = _helmert_interaction_values(rate, layer)
+    dimension = (layer + 1) ** 2 - 1
+    covariance = np.einsum(
+        "i,j,ija,ijb->ab", partition_mass, partition_mass, values, values
+    )
+    lag_covariance = np.einsum(
+        "i,j,k,ija,jkb->ab",
+        partition_mass,
+        partition_mass,
+        partition_mass,
+        values,
+        values,
+    )
+    third_moment = float(
+        np.einsum(
+            "i,j,ij->",
+            partition_mass,
+            partition_mass,
+            np.linalg.norm(values, axis=2) ** 3,
+        )
+    )
+    return (
+        float(np.max(np.abs(covariance - np.eye(dimension)))),
+        float(np.max(np.abs(lag_covariance))),
+        equal_rate_gap_tail(rate, layer) * third_moment,
+    )
+
+
+def helmert_exact_block_moment_ratio(rate: float, layer: int, length: int) -> float:
+    """Enumerate a small overlap block and divide its third moment by its Rosenthal scale."""
+    if length < 1:
+        raise ValueError("length must be positive")
+    partition_mass, values = _helmert_interaction_values(rate, layer)
+    dimension = values.shape[2]
+    third_moment = 0.0
+    for states in itertools.product(range(partition_mass.size), repeat=length + 1):
+        probability = math.prod(float(partition_mass[state]) for state in states)
+        block_sum = np.zeros(dimension)
+        for index in range(length):
+            block_sum += values[states[index], states[index + 1]]
+        third_moment += probability * float(np.linalg.norm(block_sum) ** 3)
+    scale = (length * dimension) ** 1.5 + length / equal_rate_gap_tail(rate, layer)
+    return third_moment / scale
+
+
+def helmert_blocking_log_terms(
+    rate: float, log_sample_size: float, layer: int
+) -> tuple[float, float, float]:
+    """Return log bounds for deleted edges and the two block Yurinskii terms."""
+    dimension = (layer + 1) ** 2 - 1
+    log_block_length = math.log(dimension**2 + log_sample_size)
+    log_dimension = math.log(dimension)
+    log_tail = -rate * layer + math.log1p(rate * layer)
+    deleted_mean_square = math.exp(log_dimension - log_block_length) + math.exp(
+        log_block_length + log_dimension - log_sample_size
+    )
+    return (
+        math.log(deleted_mean_square),
+        0.5 * log_block_length + 1.5 * log_dimension - 0.5 * log_sample_size,
+        -0.5 * log_sample_size - log_tail,
+    )
+
+
+def helmert_critical_log_mean(rate: float, layer: int, constant: float) -> float:
+    """Return log(n*S_J^2) on 2*rate*J=log n+2*log log n-constant."""
+    target = 2.0 * rate * layer + constant
+    lower = 1.0
+    upper = max(2.0, target)
+    while upper + 2.0 * math.log(upper) < target:
+        upper *= 2.0
+    for _ in range(100):
+        midpoint = 0.5 * (lower + upper)
+        if midpoint + 2.0 * math.log(midpoint) < target:
+            lower = midpoint
+        else:
+            upper = midpoint
+    log_sample_size = 0.5 * (lower + upper)
+    log_tail = -rate * layer + math.log1p(rate * layer)
+    return log_sample_size + 2.0 * log_tail
+
+
 def helmert_log_rate_terms(rate: float, log_sample_size: float, layer: int) -> tuple[float, float]:
     """Return logs of n*S_J^2 and d_J/(sqrt(n)*S_J)."""
     if not math.isfinite(log_sample_size):
@@ -905,6 +1001,75 @@ def main() -> None:
             ),
             precision=10,
         )
+    )
+
+    overlap_covariance_errors = []
+    overlap_lag_errors = []
+    overlap_third_moments = []
+    exact_block_ratios = []
+    critical_constant_errors = []
+    critical_constant = 3.0
+    critical_target = critical_constant - math.log(4.0)
+    for diagonal_rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+        for layer in (1, 2, 4, 8):
+            covariance_error, lag_error, third_moment = helmert_overlap_diagnostics(
+                diagonal_rate, layer
+            )
+            overlap_covariance_errors.append(covariance_error)
+            overlap_lag_errors.append(lag_error)
+            overlap_third_moments.append(third_moment)
+        if diagonal_rate < 5.0:
+            for layer in (1, 2, 3):
+                for length in (1, 2, 3, 4):
+                    exact_block_ratios.append(
+                        helmert_exact_block_moment_ratio(
+                            diagonal_rate, layer, length
+                        )
+                    )
+        critical_constant_errors.append(
+            abs(
+                helmert_critical_log_mean(
+                    diagonal_rate, 10_000, critical_constant
+                )
+                - critical_target
+            )
+        )
+
+    sharp_log_n = 12_800.0
+    sharp_rate = 1.35
+    sharp_layer = math.floor(
+        (
+            sharp_log_n
+            + 2.0 * math.log(sharp_log_n)
+            - 10.0
+            - math.sqrt(math.log(sharp_log_n))
+        )
+        / (2.0 * sharp_rate)
+    )
+    blocking_logs = helmert_blocking_log_terms(
+        sharp_rate, sharp_log_n, sharp_layer
+    )
+    print("A8-r7 sharp exchange-point Helmert coupling verification")
+    print(
+        "overlap maximum covariance/lag-one error="
+        f"{_maximum(overlap_covariance_errors):.3e}/"
+        f"{_maximum(overlap_lag_errors):.3e}"
+    )
+    print(
+        "tested range of S_J * E||Y_J||_2^3="
+        + np.array2string(
+            np.array([min(overlap_third_moments), max(overlap_third_moments)]),
+            precision=10,
+        )
+    )
+    print(f"small-block maximum Rosenthal ratio={max(exact_block_ratios):.10f}")
+    print(
+        "sharp-boundary log error terms (deleted, Gaussian, rare)="
+        + np.array2string(np.asarray(blocking_logs), precision=10)
+    )
+    print(
+        "critical-window maximum |log(n*S_J^2)-(c-log 4)|="
+        f"{max(critical_constant_errors):.3e}"
     )
 
 

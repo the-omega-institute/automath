@@ -329,6 +329,58 @@ class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
             self.assertLess(necessary_log_outside, -5.0)
             self.assertLess(sufficient_log_inside, -5.0)
 
+    def test_overlap_vector_has_identity_covariance_and_zero_lag_covariance(self):
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            for layer in (1, 2, 4, 8):
+                covariance_error, lag_error, scaled_third_moment = (
+                    verify.helmert_overlap_diagnostics(rate, layer)
+                )
+                self.assertLess(covariance_error, 5e-10)
+                self.assertLess(lag_error, 5e-10)
+                self.assertGreater(scaled_third_moment, 0.0)
+                self.assertLess(scaled_third_moment, 2000.0)
+
+    def test_exact_small_block_third_moments_have_rosenthal_scaling(self):
+        for rate in (0.2, 0.7, 1.35, 3.0):
+            for layer in (1, 2, 3):
+                ratios = [
+                    verify.helmert_exact_block_moment_ratio(rate, layer, length)
+                    for length in (1, 2, 3, 4)
+                ]
+                self.assertGreater(min(ratios), 0.0)
+                self.assertLess(max(ratios), 40.0)
+
+    def test_blocking_error_terms_vanish_inside_sharp_boundary(self):
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            for log_n in (200.0, 800.0, 3200.0, 12800.0):
+                layer = math.floor(
+                    (
+                        log_n
+                        + 2.0 * math.log(log_n)
+                        - 10.0
+                        - math.sqrt(math.log(log_n))
+                    )
+                    / (2.0 * rate)
+                )
+                log_residual, log_gaussian, log_rare = verify.helmert_blocking_log_terms(
+                    rate, log_n, layer
+                )
+                self.assertTrue(
+                    all(math.isfinite(value) for value in (log_residual, log_gaussian, log_rare))
+                )
+            self.assertLess(max(log_residual, log_gaussian, log_rare), -1.0)
+
+    def test_critical_window_constant_is_exp_c_over_four(self):
+        c = 3.0
+        target = c - math.log(4.0)
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            errors = [
+                abs(verify.helmert_critical_log_mean(rate, layer, c) - target)
+                for layer in (100, 300, 1000, 10000)
+            ]
+            self.assertLess(errors[-1], errors[0])
+            self.assertLess(errors[-1], 0.02)
+
 
 class SamplingBiasTests(unittest.TestCase):
     def test_exact_rounded_cycle_mean_matches_gap_tail_sum(self):

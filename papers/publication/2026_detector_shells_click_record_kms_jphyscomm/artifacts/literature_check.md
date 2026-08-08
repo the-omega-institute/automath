@@ -296,3 +296,45 @@ background.  No minimax result was integrated because the proposed tangent
 ellipsoid does not specify a uniform chart of probability laws, and the
 oracle supplied neither a positivity-compatible global alternative class nor
 a transfer theorem and matching lower bound for one.
+
+## A8-r7 sharp exchange-point coupling boundary check
+
+Checked 2026-08-08 through the live arXiv Atom API, Crossref, OpenAlex, and
+the published sources used in the proof. The following arXiv API queries
+returned `opensearch:totalResults=0`:
+
+- `all:"weighted Helmert" AND all:"Gaussian coupling"`;
+- `all:"weighted Helmert" AND all:"Gaussian approximation"`;
+- `all:"one-dependent" AND all:"Yurinskii"`;
+- `all:"Helmert" AND all:"strong approximation"`.
+
+The broad query `all:"Yurinskii coupling"` returned arXiv:2210.00362v4 and
+one application paper, but no overlapping-Helmert or sampled-counter theorem.
+Crossref searches for "weighted Helmert Gaussian coupling", "overlapping
+pair one-dependent Gaussian approximation Yurinskii", and "Helmert strong
+approximation growing dimension" returned no theorem matching the
+single-connecting-edge block construction. These negative searches are a
+bounded novelty check and do not prove universal absence.
+
+The two general probabilistic inputs are published and are cited rather than
+claimed as new. Pinelis, "Optimum Bounds for the Distributions of Martingales
+in Banach Spaces", *Annals of Probability* **22**(4), 1679--1706 (1994), DOI
+`10.1214/aop/1176988477`, supplies the Hilbert-space
+Rosenthal--Burkholder moment bound. Cattaneo--Masini--Underwood,
+"Yurinskii's Coupling for Martingales", *Annals of Statistics* (2025), DOI
+`10.1214/25-AOS2538`, arXiv:`2210.00362v4`, Corollary 2.3, records the
+independent-vector Euclidean Yurinskii coupling and attributes its classical
+form to Pollard and Le Cam.
+
+The manuscript already contained the exact tail formula, Helmert partition
+identity and moment bounds, zero adjacent covariance, calendar-stopping and
+local covariance corrections, and the moving-corner necessary condition.
+The narrow new result is the exchange-point sufficiency obtained by retaining
+all overlaps inside independent big blocks and deleting only connecting
+edges. The oracle's claimed local-null-uniform extension was not promoted:
+its displayed comparison with an exchange-point core vector is not a result
+already proved in the manuscript and no uniform recentering/block-covariance
+argument was supplied. Direct substitution also refutes the oracle's
+critical constant: under
+`2*x_0*J_N=log(n_N)+2*log(log(n_N))-c+o(1)`, the limit is
+`exp(c)/4`, not `4*exp(c)`.
