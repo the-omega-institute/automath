@@ -20,7 +20,7 @@
 | **A3** `sharp_three_window` | r1–**r3** | 57 | **DCDS-A** | JNT · Dynamical Systems | ⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
 | **A4** `prime_languages` | r1–**r4** | **38**+29 | **Monatshefte für Mathematik** | TCS · JNT | 已压缩至 38 页（+29 页补充材料）；MCFL immunity + 整除树提供刊级新颖性 |
 | **A5** `finite_parts` | r1–**r5** | 38 | **DCDS** | ETDS · Dynamical Systems | Mahler 线已从存在性升级为判定程序；⚠️ 更正型窄 scope 仍是主要编辑风险 |
-| **A6** `zeckendorf_fibers` | r1–**r7** | 62 | **Journal of Number Theory** | EJC · Monatshefte | 本轮深化幅度最大；需收紧并把证书移入 supplement |
+| **A6** `zeckendorf_fibers` | r1–**r7** | 62 | **Journal of Number Theory** | EJC · Monatshefte | 本轮深化幅度最大；⚠️ 压缩尝试已回退（见下）——正文可降至 34–37 页，但正文与补充材料**相互交叉引用**，xr-hyper 需往复多遍才收敛，未能达到零未定义引用；`sec_local_spectrum.tex` 1504 行仍超 800 行规范 |
 | **A7** `upper_fibers` | r1–**r5** | 50 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
 | **A8** `detector_shells` | r1–**r7** | 55 | **Stochastic Models** | MCAP · Stochastics | ⚠️ 曾被 GRG 与 J.Phys.Comm. 拒，转概率向 |
 
@@ -33,6 +33,25 @@
 - **A8** r7 整合固定交换点的**尖锐充要边界** `prop:helmert-growing-layer-bracket-main`；r4 补 Markov–Palm 交换点全切空间。
 - **A2** r5 整合 `thm:raw-tail-poisson-energy-decomposition`（原始尾 Poisson 能量分解）。
 - **A3** r3 证得三次 simple-Parry Pisot 数上 $\ell_{\mathrm{cau}}$ **无统一有限上界**，并收紧了 simple-Parry 系列结论的适用范围。
+
+### 篇幅压缩（2026-08，本地执行，均经清理重建核验）
+
+顶刊对篇幅有硬约束，故在 Oracle 链路中断期间就地压缩。**做法**：只迁移不删改，迁出的章节由独立编译的补充材料承载，正文留精确指针。
+
+| 篇 | 原 | 现 | 补充材料 | 目标刊 |
+|---|--:|--:|--:|---|
+| A2 `cayley_chebyshev` | 90 | **55** | 31 | JFA ✓ |
+| A4 `prime_languages` | 63 | **38** | 29 | Monatshefte ✓ |
+| A7 `upper_fibers` | 50 | **25** | 27 | Fibonacci Quarterly ✓ |
+| A6 `zeckendorf_fibers` | 62 | 62（已回退）| — | JNT |
+
+**验收标准（三篇均通过）**：定理类环境总数不变；迁出章节的每个定理标签在 `supplement.pdf` 中解析；两文档**清空全部 `.aux` 后从零重建**，exit 0 且未定义引用/文献/重复标签/错误全为 0；verifier 与测试原样通过。A7 另外把 3805 行的单体 `main.tex` 拆到最大 544 行。
+
+**教训（下次务必前置）**：
+1. **增量编译会靠陈旧 `.aux` 报假成功** —— A2 曾自报"零未定义"，清理重建实测 60 处未定义引用、25 处未定义文献。只有 `latexmk -C` + `rm -f *.aux` 的完整序列算数。
+2. **补充材料必须是能编译的真文档**，不能只是一串 `\input`；否则迁出的定理"源码里有、任何 PDF 里都没有"，正文指针悬空，而"零未定义引用"这项检查**发现不了**（指针是 `\path{}` 字面量）。
+3. **补充材料只能包含正文不再 input 的章节** —— 重复 input 会把文章重排一遍。
+4. **A6 回退原因**：正文与补充材料相互交叉引用，xr-hyper 需要往复多遍才收敛，单向"先正文后补充"的构建序列无法达到零未定义引用。若要重做，须先切断双向依赖（把被补充材料引用的结果留在正文，或改为文字指针）。
 
 ### 被拒绝写入的内容（同等重要）
 
