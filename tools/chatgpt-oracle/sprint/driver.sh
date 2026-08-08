@@ -9,7 +9,7 @@ declare -A S=( [A2]=2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa [A3]=20
 # Relevance guard: a reply must mention something this paper is actually about.
 # The shared pool has returned answers belonging to entirely unrelated
 # conversations, so an on-topic token is required before a reply is accepted.
-declare -A K=( [A2]="entropy\|Poisson\|Chebyshev\|RKHS\|熵\|矩" [A3]="Parry\|Pisot\|Fibonacci\|window\|窗\|共轭" [A4]="language\|automat\|synchron\|Parry\|语言\|自动机\|同步" [A5]="zeta\|Mahler\|shift\|coboundary\|SFT\|zeta\|上边界\|移位" [A6]="Zeckendorf\|thermodynam\|pressure\|large deviation\|Fibonacci\|压力\|大偏差" [A7]="apparition\|fiber\|witness\|Fibonacci\|cover\|纤维\|见证" [A8]="D-MAP\|renewal\|quotient\|leakage\|J_N\|Helmert\|JN\|更新\|商\|泄漏" )
+declare -A K=( [A2]="entropy\|Poisson\|Chebyshev\|RKHS\|熵\|矩\|壳层" [A3]="Parry\|Pisot\|窗\|共轭\|孔径\|carry\|数字表" [A4]="language\|automat\|synchron\|语言\|自动机\|同步\|判定" [A5]="Mahler\|coboundary\|zeta\|SFT\|移位\|Nishioka\|Pade\|Padé" [A6]="Zeckendorf\|thermodynam\|pressure\|large deviation\|Fibonacci\|压力\|大偏差\|乘子\|Weinstein\|窗" [A7]="apparition\|witness\|fiber\|Fibonacci\|纤维\|见证\|秩\|覆盖" [A8]="D-MAP\|Helmert\|leakage\|停止日历\|交换点\|sampled-counter\|Gaussian" )
 
 for tick in $(seq 1 400); do
   ts=$(date +%H:%M:%S); acted=0
@@ -46,10 +46,20 @@ for tick in $(seq 1 400); do
       # round and must not be mistaken for an empty reply
       if [ "$n" -gt 300 ]; then
         # off-topic reply: the pool handed back another conversation's answer
-        if ! echo "$r" | grep -qi "${K[$t]}"; then
+        own=$(echo "$r" | grep -oi "${K[$t]}" | wc -l)
+        # cross-match: the pool has also served one of MY papers' answers to another
+        # of my tasks, so a reply that looks more like a sibling paper is rejected
+        # even when it scrapes a hit of its own
+        best=""; bestn=0
+        for u in A2 A3 A4 A5 A6 A7 A8; do
+          [ "$u" = "$t" ] && continue
+          c=$(echo "$r" | grep -oi "${K[$u]}" | wc -l)
+          [ "$c" -gt "$bestn" ] && { bestn=$c; best=$u; }
+        done
+        if [ "$own" -eq 0 ] || [ "$bestn" -gt "$own" ]; then
           : > "$D/task_${t}"; rm -f "$D/sent_${t}_r${rnd}"
           [ "$rnd" -gt 1 ] && echo $((rnd-1)) > "$D/round_${t}"
-          echo "[$ts] $t r$rnd OFF-TOPIC reply discarded -> rolled back"; acted=1
+          echo "[$ts] $t r$rnd OFF-TOPIC discarded (own=$own, looks like ${best:-none}=$bestn) -> rolled back"; acted=1
           continue
         fi
         # duplicate reply: identical to a round we already hold, so nothing is new
