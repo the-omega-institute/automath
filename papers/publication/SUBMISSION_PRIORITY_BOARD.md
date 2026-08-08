@@ -16,9 +16,9 @@
 
 | 篇 | 冲刺轮次 | 页 | **PRIMARY** | BACKUP | 注意 |
 |---|---|---|---|---|---|
-| **A2** `cayley_chebyshev` | r1–**r5** | 87 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 篇幅仍需大幅压缩，主定理层次待理清 |
+| **A2** `cayley_chebyshev` | r1–**r5** | **55**+31 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 已压缩至 55 页（+31 页补充材料），JFA 可受理；主定理层次待理清 |
 | **A3** `sharp_three_window` | r1–**r3** | 57 | **DCDS-A** | JNT · Dynamical Systems | ⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
-| **A4** `prime_languages` | r1–**r5** | — | **Monatshefte für Mathematik** | TCS · JNT | MCFL immunity + 整除树提供刊级新颖性；22k 词双主线恐被要求拆分 |
+| **A4** `prime_languages` | r1–**r4** | **38**+29 | **Monatshefte für Mathematik** | TCS · JNT | 已压缩至 38 页（+29 页补充材料）；MCFL immunity + 整除树提供刊级新颖性 |
 | **A5** `finite_parts` | r1–**r5** | 38 | **DCDS** | ETDS · Dynamical Systems | Mahler 线已从存在性升级为判定程序；⚠️ 更正型窄 scope 仍是主要编辑风险 |
 | **A6** `zeckendorf_fibers` | r1–**r7** | 62 | **Journal of Number Theory** | EJC · Monatshefte | 本轮深化幅度最大；需收紧并把证书移入 supplement |
 | **A7** `upper_fibers` | r1–**r5** | 50 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
