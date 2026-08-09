@@ -6,8 +6,10 @@ import unittest
 import numpy as np
 
 from verify_simple_parry_causal import (
+    aperture_two_claims,
     bad_blocks,
     bounded_multiple_order,
+    collision_graph_analysis,
     collision_graph_bad_path_count,
     gamma_claims,
     p_bonacci_claims,
@@ -18,6 +20,53 @@ from verify_simple_parry_causal import (
 
 
 class SimpleParryCausalTests(unittest.TestCase):
+    def test_injective_folds_have_finite_causal_length_within_state_bound(self):
+        for digits, m, expected_length in (
+            ((1, 1, 1), 4, 2),
+            ((1, 0, 1), 4, 4),
+            ((2, 1), 2, 2),
+            ((2, 0, 1), 2, 2),
+        ):
+            result = collision_graph_analysis(digits, m)
+            self.assertTrue(result["injective"])
+            self.assertEqual(result["causal_length"], expected_length)
+            self.assertLessEqual(result["causal_length"], result["state_bound"])
+            self.assertTrue(result["zero_predecessor_is_unique"])
+            self.assertIsNone(result["periodic_witness"])
+
+    def test_noninjectivity_has_a_bounded_periodic_collision_witness(self):
+        for digits, m in (((1, 0, 1), 3), ((2, 2), 2)):
+            result = collision_graph_analysis(digits, m)
+            witness = result["periodic_witness"]
+            self.assertFalse(result["injective"])
+            self.assertIsNone(result["causal_length"])
+            self.assertIsNotNone(witness)
+            self.assertLessEqual(len(witness), result["state_bound"])
+            self.assertTrue(periodic_collision(digits, m, witness))
+
+    def test_aperture_two_has_exact_three_regime_classification(self):
+        local = aperture_two_claims((1, 1, 1))
+        self.assertEqual(local["boundary_parameter"], 2)
+        self.assertEqual(local["regime"], "local_bijection")
+        self.assertEqual(local["causal_length"], 1)
+
+        causal = aperture_two_claims((2, 0, 1))
+        self.assertEqual(causal["boundary_parameter"], 1)
+        self.assertEqual(causal["regime"], "two_output_inverse")
+        self.assertEqual(causal["causal_length"], 2)
+
+        branch = aperture_two_claims((1, 0, 1))
+        self.assertEqual(branch["boundary_parameter"], 1)
+        self.assertEqual(branch["regime"], "constant_branch_pair")
+        self.assertIsNone(branch["causal_length"])
+        self.assertEqual(branch["periodic_witness"], (1,))
+
+    def test_quadratic_aperture_two_cases_are_recovered(self):
+        self.assertEqual(aperture_two_claims((2, 1))["causal_length"], 2)
+        critical = aperture_two_claims((2, 2))
+        self.assertEqual(critical["regime"], "constant_branch_pair")
+        self.assertEqual(critical["periodic_witness"], (2,))
+
     def test_simple_parry_count_recurrences(self):
         self.assertEqual(q_sequence((1, 1, 1), 6), [1, 2, 4, 7, 13, 24, 44])
         self.assertEqual(q_sequence((1, 0, 1), 6), [1, 2, 3, 4, 6, 9, 13])

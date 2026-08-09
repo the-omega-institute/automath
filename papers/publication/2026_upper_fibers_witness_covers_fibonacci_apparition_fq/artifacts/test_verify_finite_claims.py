@@ -15,6 +15,9 @@ from verify_finite_claims import (
     classify_support_three,
     connected_minimal_cover_count,
     exact_rank_prime_count,
+    expected_connected_support_spectrum,
+    expected_support_spectrum,
+    extremal_support_product_count,
     factorint_fibonacci,
     fibotomic_error_bound,
     fibotomic_rank_entropy_data,
@@ -29,6 +32,7 @@ from verify_finite_claims import (
     rank_window_deaggregation_data,
     rank_pure_sector,
     run_battery,
+    support_spectra,
     theta_constant,
     theta_normalized_cover_ratio,
     upper_fiber_exhaustive,
@@ -39,6 +43,36 @@ from verify_finite_claims import (
 
 
 class FiniteClaimTests(unittest.TestCase):
+    def test_exact_total_and_connected_support_spectra(self):
+        expected = {
+            12: ((1, 2), (1,)),
+            18: ((1, 2), (1, 2)),
+            24: ((1, 2), (1, 2)),
+            30: ((1, 2), (1, 2)),
+            60: ((1, 2, 3), (1, 2)),
+            105: ((1, 2, 3), (1, 2)),
+            180: ((1, 2, 3), (1, 2, 3)),
+            210: ((1, 2, 3), (1, 2, 3)),
+        }
+        for n, spectra in expected.items():
+            with self.subTest(n=n):
+                self.assertEqual(support_spectra(n), spectra)
+                self.assertEqual(expected_support_spectrum(n), spectra[0])
+                self.assertEqual(
+                    expected_connected_support_spectrum(n), spectra[1]
+                )
+
+    def test_extremal_support_slice_has_atomic_product_count(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                total, _ = support_spectra(n)
+                actual = sum(
+                    omega(m) == omega(n)
+                    for m in upper_fiber_threshold(n).minimal_generators
+                )
+                self.assertEqual(actual, extremal_support_product_count(n))
+                self.assertEqual(omega(n) in total, actual > 0)
+
     def test_fibotomic_rank_entropy_and_rank_congruences_through_120(self):
         error_bound = fibotomic_error_bound()
         for rank in range(3, 121):
@@ -278,6 +312,9 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Rank-pure layers checked: 28", report)
         self.assertIn("Odd layers realizing all minimal covers: 14/14", report)
         self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
+        self.assertIn("Exact total support spectra: 28/28", report)
+        self.assertIn("Exact connected support spectra: 28/28", report)
+        self.assertIn("Extremal atomic-product counts: 28/28", report)
         self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
         self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
         self.assertIn("Rank-window deaggregation inequalities: 28/28", report)

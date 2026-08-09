@@ -711,6 +711,36 @@ every \(n\ge J_{\mathrm r}\), and put
   proving \textup{(i)}.
 \end{proof}
 
+\begin{lemma}[Prime support of the geometric ratio]
+  \label{lem:geometric-ratio-tail-support}
+  In every geometric synchronized scheme
+  \(\val_U(W(t))=cb^t\), each prime divisor of \(b\) divides the
+  constant coefficient \(c_0\) of the minimal tail recurrence.  Equivalently,
+  \[
+    \operatorname{rad}(b)\mid\operatorname{rad}(\abs{c_0}).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Suppose that a prime \(p\mid b\) does not divide \(c_0\), put
+  \(e=v_p(c)\), and take the allowed modulus \(q=p^{e+1}\).  Every
+  nonempty block matrix among the \(M_{v_j}\) and \(M_{s_j}\) is invertible
+  modulo \(q\) by \Cref{lem:affine-recurrence-block-action}.  A common
+  multiple \(H\ge1\) of their orders gives, by the matrix product defining
+  the scheme exactly as in the proof of
+  \Cref{thm:mcfl-synchronized-congruence-orbit},
+  \[
+    \val_U(W(t+H))\equiv\val_U(W(t))\pmod q
+    \qquad(t\ge0).
+  \]
+  At \(t=0\) this says
+  \[
+    cb^H\equiv c\pmod {p^{e+1}}.
+  \]
+  But \(p\mid b\) implies \(p\nmid b^H-1\), so
+  \(v_p(c(b^H-1))=e\), contradicting the displayed congruence.
+\end{proof}
+
 \begin{corollary}[Positive semidecidability]
   \label{cor:bounded-outside-support-semidecidable}
   Suppose the numeration system is given effectively by its finite
@@ -906,8 +936,85 @@ every \(n\ge J_{\mathrm r}\), and put
   is not being asserted. A genuinely nonintegral, nonunit Pisot example
   is the dominant root \(1+\sqrt3\) of \(X^2-2X-2\): the recurrence
   \(U_{n+2}=2U_{n+1}+2U_n\) has \(a_0=2\), and the action is singular
-  modulo \(2\).
+  modulo \(2\).  Nevertheless,
+  \Cref{cor:linear-pisot-bounded-support-classification} shows that every
+  infinite MCFL in this nonintegral system acquires unbounded prime support
+  away from \(2\); singularity of the ambient action does not produce a
+  valuation-only escape language.
 \end{example}
+
+\begin{corollary}[Bounded-support classification for linear Pisot systems]
+  \label{cor:linear-pisot-bounded-support-classification}
+  Let \(U\) be a linear Pisot \(U\)-system in the precise sense of
+  \Cref{cor:linear-pisot-prime-cf-immunity}, let \(\beta\) be its dominant
+  Pisot number, and let \(S_{\mathrm r}\) be the prime divisors of the
+  constant coefficient of its minimal tail recurrence.  The following are
+  equivalent:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item there is an infinite MCFL \(L\subseteq\mathcal R_U\) such that
+    \[
+      \sup_{w\in L}\omega_{S_{\mathrm r}^c}(\val_U(w))<\infty;
+    \]
+    \item \(U\) admits a geometric synchronized scheme;
+    \item \(\beta\in\mathbb Z_{\ge2}\).
+  \end{enumerate}
+  Consequently, if \(\beta\) is nonintegral, every infinite MCFL
+  \(L\subseteq\mathcal R_U\) has unbounded prime support outside
+  \(S_{\mathrm r}\).  For effective input as in
+  \Cref{cor:bounded-outside-support-semidecidable}, the three equivalent
+  properties are decidable in this linear Pisot class: the answer is positive
+  exactly when the supplied minimal polynomial has degree one.
+\end{corollary}
+
+\begin{proof}
+  The equivalence of \textup{(i)} and \textup{(ii)} is
+  \Cref{thm:bounded-outside-support-geometric-ray}.  Suppose that
+  \textup{(ii)} holds, write
+  \[
+    \val_U(W(t))=cb^t,
+    \qquad \abs{W(t)}=L+Dt,
+  \]
+  where \(D>0\) is the total pumped length.  In a greedy \(U\)-system, a
+  canonical word of length \(m\) represents a value in the half-open interval
+  \([U_{m-1},U_m)\).  Hence
+  \[
+    U_{L+Dt-1}\le cb^t<U_{L+Dt}.
+  \]
+  The standard solution of the recurrence defined by the minimal polynomial
+  of the Pisot number gives
+  \[
+    \lim_{n\to\infty}U_n^{1/n}=\beta.
+  \]
+  Indeed, the coefficient of the dominant root is nonzero because \(U\) is
+  unbounded, while every other conjugate has modulus less than one.  Taking
+  \(t\)-th roots in the preceding inequalities therefore yields
+  \(b=\beta^D\).
+
+  If \(\beta\) had degree greater than one, any other conjugate
+  \(\beta'\) would satisfy \((\beta')^D=b\), and hence
+  \(\abs{\beta'}=b^{1/D}=\beta>1\), contrary to the defining Pisot
+  inequality.  Thus \(\beta\) has degree one; being an algebraic integer
+  greater than one, it belongs to \(\mathbb Z_{\ge2}\).  This proves
+  \textup{(ii)}\(\Rightarrow\)\textup{(iii)}.
+
+  Conversely, suppose \(\beta=B\in\mathbb Z_{\ge2}\).  Its minimal
+  polynomial is \(X-B\), so, after the minimal recurrence threshold
+  \(J_{\mathrm r}\), one has \(U_{n+1}=BU_n\).  The greedy representation
+  of \(U_n\), in the LSD-first convention, is \(0^n1\).  Taking
+  \[
+    a=0^{J_{\mathrm r}},\quad k=1,\quad
+    u_1=w_1=s_1=\varepsilon,\quad v_1=0,\quad u_2=1
+  \]
+  gives canonical words \(W(t)=0^{J_{\mathrm r}+t}1\) and
+  \[
+    \val_U(W(t))=U_{J_{\mathrm r}}B^t.
+  \]
+  This is a geometric synchronized scheme, proving
+  \textup{(iii)}\(\Rightarrow\)\textup{(ii)}.  The universal assertion
+  for nonintegral \(\beta\) is the negation of \textup{(i)}.  Finally, a
+  Pisot minimal polynomial has degree one exactly when its root is an
+  integer, which gives the stated terminating decision procedure.
+\end{proof}
 
 \begin{remark}[Exact open interfaces]
   \label{rem:pisot-open-interfaces}
@@ -931,7 +1038,9 @@ every \(n\ge J_{\mathrm r}\), and put
   action and the failure of arbitrary recurrence witnesses to classify
   escape behavior are distinguished in
   \Cref{prop:recurrence-witness-separation}.
-  The ordinary-base example preceding
+  Within linear Pisot \(U\)-systems, the residual alternative is classified
+  by \Cref{cor:linear-pisot-bounded-support-classification}: it occurs exactly
+  for an integral dominant root.  The ordinary-base example preceding
   \Cref{thm:unit-mcfl-deep-congruence-chain} shows that the valuation
   alternative cannot be removed.
 \end{remark}

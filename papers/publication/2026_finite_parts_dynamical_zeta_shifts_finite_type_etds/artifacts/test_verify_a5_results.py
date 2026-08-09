@@ -120,6 +120,26 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.effective_mahler_bounds_match())
 
+    def test_finite_radial_collision_audit_recovers_the_exact_collision_set(self):
+        self.assertTrue(
+            hasattr(verifier, "finite_radial_collision_audit"),
+            "the finite radial-collision audit is not implemented",
+        )
+        z = sp.Symbol("z")
+        q = 1 - z + 4 * z**2
+
+        audit = verifier.finite_radial_collision_audit(
+            q.subs(z, z**2), q**2, sp.Rational(1, 4)
+        )
+
+        self.assertEqual(audit["rational_function"], q)
+        self.assertEqual(audit["collision_polynomial"], z * (4 * z - 1))
+        self.assertEqual(audit["collision_points"], (sp.Rational(1, 4),))
+        self.assertEqual(audit["degree_bound"], 960)
+        self.assertEqual(audit.get("collision_bound"), 959)
+        self.assertEqual(audit["sample_budget"], 960)
+        self.assertTrue(audit["collision_count_within_bound"])
+
     def test_same_base_characteristic_polynomial_coefficient_bound(self):
         self.assertTrue(
             hasattr(verifier, "same_base_determinant_bounds_match"),
@@ -234,6 +254,8 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Effective rational Mahler Pade decision: verified", report)
         self.assertIn("Effective Mahler degree and height bounds: verified", report)
+        self.assertIn("Finite radial collision set: {1/4}; 1 <= 959", report)
+        self.assertIn("Finite radial recovery budget: 960 algebraic samples", report)
         self.assertIn("Same-base determinant coefficient bound: verified", report)
         self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))

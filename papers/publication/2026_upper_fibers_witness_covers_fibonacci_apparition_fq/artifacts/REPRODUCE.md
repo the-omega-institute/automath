@@ -19,6 +19,8 @@ multiplies back to the stated Fibonacci number.
 - `verify_finite_claims.py`: independent direct and structural computations,
   finite-bound checks, exact minimal-cover and connected-cover enumeration,
   theta-normalized and discrete local-limit checks, rank-pure sector checks,
+  exact total and connected support-spectrum checks and the extremal
+  atomic-product count,
   rank-window deaggregation and squarefree pigeonhole checks, refined
   private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
   radical checks, the finite Jarden consequence, environment reporting, and
@@ -67,8 +69,11 @@ upper bound; on every squarefree layer it checks the exact-rank partition and
 the BLMS pigeonhole inequality. It also reconstructs the fibotomic integer on
 every rank in this range, verifies its exact-rank radical divisibility and the
 rank-congruence spacing used in the entropy bound, and checks `a(10p) >= 2`
-for the five eligible prime values with `10p <= 210`. These finite checks do
-not resolve the
+for the five eligible prime values with `10p <= 210`. In addition, it extracts
+the positive-coordinate rank hypergraph of every minimal generator, verifies
+the total and connected support spectra on all 208 layers, and checks that the
+top-support slice has the product cardinality of its singleton diagonal atomic
+families. These finite checks do not resolve the
 asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
 connected and disconnected arithmetic sectors without those hypotheses.
 

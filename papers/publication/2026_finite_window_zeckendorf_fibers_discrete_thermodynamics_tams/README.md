@@ -12,6 +12,7 @@ The compiled paper retains only the independently justified core:
 - the pointwise Fibonacci partition-difference formula;
 - the exact two-layer interval identity and transferred extremal theorem;
 - the uniform Weinstein layer-count lemma and negative-temperature freezing;
+- the linear critical finite-size law and uniform critical coexistence limit;
 - the precise compact-operator obstruction;
 - the full real-tilt large deviation principle across the freezing corner;
 - the integer moment transfer, direct quadratic recurrence, Sanna endpoint

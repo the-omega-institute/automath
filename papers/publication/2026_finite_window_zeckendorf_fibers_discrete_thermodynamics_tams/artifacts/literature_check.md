@@ -158,3 +158,55 @@ critical crossover. That requires a sharp joint local theorem for the prime
 exponent vector and continued-fraction cost; no such input was located in the
 searched literature, and it is not available from the manuscript's current
 arguments.
+
+# Deep-exploration audit: critical finite-window scaling (2026-08-08)
+
+The new search queried the arXiv Atom API for `"Fibonacci partition"`
+combined separately with `critical`, `Gibbs`, `pressure`, `large deviation`,
+and `renewal`; every combined query returned zero records. The broad query
+returned the known Weinstein, Sanna, Kempton, Chow--Slattery, and
+Chow--Jones records. Crossref confirmed Weinstein
+(DOI 10.1080/10586458.2015.1118416), Sarig's two pressure papers
+(DOIs 10.1017/S0143385799146820 and 10.1007/s002200100367), Pemantle--Wilson
+(DOI 10.1006/jcta.2001.3201), Lau
+(DOI 10.1006/jnth.2001.2687), and Hwang--Janson
+(DOI 10.1214/EJP.v16-858). zbMATH Open searches for `Fibonacci partition`,
+`ordered factorizations`, `renewal reward theorem`, and `multivariate
+rational coefficient` found the expected adjacent subjects but no
+finite-window critical Gibbs theorem. The Semantic Scholar endpoint returned
+HTTP 429 throughout this pass; its same-day citation-graph audit recorded
+above had already found only the known Weinstein citation chain. Thus no
+novelty claim depends on the unavailable Semantic Scholar response.
+
+Candidates were scored on a ten-point scale as follows.
+
+1. Exact critical finite-size and uniform coexistence law: reach 10,
+   novelty 8, value 9. Nearest inputs are Feller's arithmetic renewal theorem
+   and Sarig's general phase-transition framework; neither treats Fibonacci
+   partition fibers or the four-branch finite-window transfer. This is the
+   theorem added in the present round.
+2. Active prime-ray crossover with a joint exponent--cost local theorem:
+   reach 3, novelty 9, value 10. The heavy letters `1/q` force an infinite
+   second cost moment, so a Gaussian crossover is false; a heavy-tail or
+   semistable local theorem is missing. Tsirelson (arXiv:1207.1290) and Chi
+   (arXiv:0707.4596) are only general renewal-reward comparators.
+3. Divergence of active-side pressure curvature at the freezing point:
+   reach 10, novelty 7, value 7. The derivative formula and the letters
+   `1/q` prove it directly. Sarig is the nearest qualitative comparator, but
+   this is less informative than the full finite-window Gibbs limit.
+4. Fixed finite-prime-support exponent-ray asymptotics in the inactive
+   region: reach 8, novelty 4, value 5. Pemantle--Wilson smooth-point ACSV is
+   the decisive existing theorem; Lau and Hwang--Janson treat averaged ordered
+   factorizations. This remains a standard corollary rather than a new
+   mechanism.
+5. Exact prime-power quenched speed for every prime: reach 9, novelty 6,
+   value 6. Weinstein's free-monoid formula and the manuscript's dyadic
+   renewal proof nearly give it verbatim; the gain over the dyadic theorem is
+   mainly parameter coverage.
+6. Sharpness of the stabilization threshold `m >= 2k`: reach 10, novelty 6,
+   value 5. Weinstein's orbit formulas and the extremal letter `1/k` give the
+   converse, but the result is chiefly exact bookkeeping.
+7. Classification of the second or fixed top multiplicity rank: reach 3,
+   novelty 8, value 8. Kocabova--Masakova--Pelantova is the nearest extremal
+   work. The interval transfer reduces the question but supplies no new
+   classification of those partition levels.

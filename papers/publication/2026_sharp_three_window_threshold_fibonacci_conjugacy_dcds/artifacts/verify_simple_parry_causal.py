@@ -107,6 +107,120 @@ def collision_graph_bad_path_count(
     return sum(frontier.values())
 
 
+def _collision_graph(
+    digits: tuple[int, ...], m: int
+) -> dict[tuple[int, ...], tuple[tuple[int, ...], ...]]:
+    """Build the bounded-difference collision graph at aperture ``m``."""
+    if m < 2:
+        raise ValueError("the collision graph requires m>=2")
+    d = digits[0]
+    q = q_sequence(digits, m)
+    modulus = q[m]
+    vertices = product(range(-d, d + 1), repeat=m - 1)
+    adjacency: dict[tuple[int, ...], tuple[tuple[int, ...], ...]] = {}
+    for vertex in vertices:
+        following = []
+        for appended in range(-d, d + 1):
+            weighted = sum(q[j] * vertex[j] for j in range(m - 1))
+            weighted += q[m - 1] * appended
+            if weighted % modulus == 0:
+                following.append(vertex[1:] + (appended,))
+        adjacency[vertex] = tuple(following)
+    return adjacency
+
+
+def _reachable_cycle(
+    adjacency: dict[tuple[int, ...], tuple[tuple[int, ...], ...]],
+    starts: list[tuple[int, ...]],
+) -> tuple[int, ...] | None:
+    """Return the first-coordinate word on a cycle reachable from ``starts``."""
+    color: dict[tuple[int, ...], int] = {}
+    parent: dict[tuple[int, ...], tuple[int, ...]] = {}
+
+    def visit(vertex: tuple[int, ...]) -> tuple[int, ...] | None:
+        color[vertex] = 1
+        for following in adjacency[vertex]:
+            if color.get(following, 0) == 0:
+                parent[following] = vertex
+                witness = visit(following)
+                if witness is not None:
+                    return witness
+            elif color[following] == 1:
+                reverse_cycle = [vertex]
+                while reverse_cycle[-1] != following:
+                    reverse_cycle.append(parent[reverse_cycle[-1]])
+                cycle = tuple(reversed(reverse_cycle))
+                return tuple(state[0] for state in cycle)
+        color[vertex] = 2
+        return None
+
+    for start in starts:
+        if color.get(start, 0) == 0:
+            witness = visit(start)
+            if witness is not None:
+                return witness
+    return None
+
+
+def collision_graph_analysis(
+    digits: tuple[int, ...], m: int
+) -> dict[str, int | bool | tuple[int, ...] | None]:
+    """Return the exact injectivity, causal-depth, and cycle certificates."""
+    adjacency = _collision_graph(digits, m)
+    zero = (0,) * (m - 1)
+    starts = [vertex for vertex in adjacency if vertex[0] != 0]
+    zero_predecessors = [vertex for vertex, targets in adjacency.items() if zero in targets]
+    periodic_witness = _reachable_cycle(adjacency, starts)
+    if periodic_witness is not None and periodic_witness[0] < 0:
+        periodic_witness = tuple(-entry for entry in periodic_witness)
+    injective = periodic_witness is None
+
+    causal_length = None
+    if injective:
+        longest_cache: dict[tuple[int, ...], int] = {}
+
+        def longest_path(vertex: tuple[int, ...]) -> int:
+            if vertex not in longest_cache:
+                longest_cache[vertex] = max(
+                    (1 + longest_path(target) for target in adjacency[vertex]),
+                    default=0,
+                )
+            return longest_cache[vertex]
+
+        causal_length = 1 + max(longest_path(start) for start in starts)
+
+    return {
+        "injective": injective,
+        "causal_length": causal_length,
+        "periodic_witness": periodic_witness,
+        "zero_predecessor_is_unique": zero_predecessors == [zero],
+        "state_bound": len(adjacency) - 1,
+    }
+
+
+def aperture_two_claims(
+    digits: tuple[int, ...],
+) -> dict[str, int | str | tuple[int, ...] | None]:
+    """Classify aperture two by the second-digit boundary parameter."""
+    if len(digits) < 2:
+        raise ValueError("the aperture-two classification requires Parry order p>=2")
+    d = digits[0]
+    boundary = digits[1] + (1 if len(digits) > 2 else 0)
+    analysis = collision_graph_analysis(digits, 2)
+    if boundary == d + 1:
+        regime = "local_bijection"
+    elif boundary == d:
+        regime = "constant_branch_pair"
+    else:
+        regime = "two_output_inverse"
+    return {
+        "boundary_parameter": boundary,
+        "regime": regime,
+        "causal_length": analysis["causal_length"],
+        "periodic_witness": analysis["periodic_witness"],
+    }
+
+
 def periodic_collision(
     digits: tuple[int, ...], m: int, period: tuple[int, ...]
 ) -> bool:
@@ -208,6 +322,39 @@ def main() -> int:
                 )
         print(f"  t={digits}, m={m}: bad counts {counts}")
     print(f"  {graph_checks} path-length comparisons checked")
+
+    print()
+    print("Causal-completeness and aperture-two classification battery:")
+    aperture_two_cases = {
+        (1, 1, 1): ("local_bijection", 1, None),
+        (2, 0, 1): ("two_output_inverse", 2, None),
+        (1, 0, 1): ("constant_branch_pair", None, (1,)),
+        (2, 1): ("two_output_inverse", 2, None),
+        (2, 2): ("constant_branch_pair", None, (2,)),
+    }
+    for digits, expected in aperture_two_cases.items():
+        result = aperture_two_claims(digits)
+        got = (result["regime"], result["causal_length"], result["periodic_witness"])
+        analysis = collision_graph_analysis(digits, 2)
+        passed = got == expected and analysis["zero_predecessor_is_unique"]
+        status = "PASS" if passed else "FAIL"
+        print(f"  t={digits}: c={result['boundary_parameter']}, {got} [{status}]")
+        failures += not passed
+
+    global_cases = (((1, 1, 1), 4), ((1, 0, 1), 3), ((1, 0, 1), 4))
+    for digits, m in global_cases:
+        result = collision_graph_analysis(digits, m)
+        certificate_ok = result["zero_predecessor_is_unique"]
+        if result["injective"]:
+            certificate_ok &= result["causal_length"] <= result["state_bound"]
+        else:
+            witness = result["periodic_witness"]
+            certificate_ok &= witness is not None
+            certificate_ok &= len(witness) <= result["state_bound"]
+            certificate_ok &= periodic_collision(digits, m, witness)
+        status = "PASS" if certificate_ok else "FAIL"
+        print(f"  t={digits}, m={m}: {result} [{status}]")
+        failures += not certificate_ok
 
     print()
     print("p-bonacci unbounded-separation battery:")

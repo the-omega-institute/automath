@@ -596,6 +596,43 @@ def effective_mahler_bounds_match() -> bool:
     return effective_rational_mahler_coboundary(1 + 2 * z, 1 - 2 * z) is None
 
 
+def finite_radial_collision_audit(
+    p_zero_expression: sp.Expr,
+    p_one_expression: sp.Expr,
+    interval_end: sp.Expr,
+) -> dict[str, sp.Expr | int | bool | tuple[sp.Expr, ...]]:
+    """Extract the radial collision set from a normalized Mahler certificate."""
+    z = sp.Symbol("z")
+    certificate = effective_rational_mahler_coboundary(
+        p_zero_expression, p_one_expression
+    )
+    if certificate is None:
+        raise ValueError("the input ratio has no normalized rational certificate")
+
+    collision_polynomial = sp.factor(
+        certificate["numerator"] - certificate["denominator"]
+    )
+    if collision_polynomial == 0:
+        raise ValueError("the identity ratio has every admissible point as a collision")
+    roots = sp.real_roots(sp.Poly(collision_polynomial, z, domain=sp.QQ))
+    collision_points = tuple(
+        root
+        for root in roots
+        if bool(root > 0) and bool(root <= interval_end)
+    )
+    degree_bound = int(certificate["degree_bound"])
+    collision_bound = degree_bound - 1
+    return {
+        **certificate,
+        "collision_polynomial": collision_polynomial,
+        "collision_points": collision_points,
+        "degree_bound": degree_bound,
+        "collision_bound": collision_bound,
+        "sample_budget": degree_bound,
+        "collision_count_within_bound": len(collision_points) <= collision_bound,
+    }
+
+
 def same_base_determinant_bounds_match() -> bool:
     """Check the coefficient estimate for compatible same-base sign blocks."""
     z = sp.Symbol("z")
@@ -852,6 +889,11 @@ def render_report() -> str:
     )
     enumeration = enumerate_quadratic_binary_certificates()
     nishioka = nishioka_special_value_specialization()
+    z = sp.Symbol("z")
+    collision_q = 1 - z + 4 * z**2
+    finite_collisions = finite_radial_collision_audit(
+        collision_q.subs(z, z**2), collision_q**2, sp.Rational(1, 4)
+    )
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
     checks = {
@@ -889,6 +931,14 @@ def render_report() -> str:
             )
         ),
         "effective Mahler bounds": effective_mahler_bounds_match(),
+        "finite radial collision set": all(
+            (
+                finite_collisions["collision_points"] == (sp.Rational(1, 4),),
+                finite_collisions["collision_count_within_bound"],
+                finite_collisions["collision_bound"] == 959,
+                finite_collisions["sample_budget"] == 960,
+            )
+        ),
         "same-base determinant coefficient bound": same_base_determinant_bounds_match(),
         "quadratic binary certificate enumeration": enumeration
         == {
@@ -956,6 +1006,8 @@ def render_report() -> str:
         "Normalized Mahler saturation: exact rational examples verified",
         "Effective rational Mahler Pade decision: verified",
         "Effective Mahler degree and height bounds: verified",
+        "Finite radial collision set: {1/4}; 1 <= 959",
+        "Finite radial recovery budget: 960 algebraic samples",
         "Same-base determinant coefficient bound: verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",

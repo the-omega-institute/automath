@@ -72,6 +72,10 @@ The same exact-arithmetic program executes the finite rational Mahler
 coefficient recursion and Pade system on accepted and rejected inputs, checks
 the cleared polynomial identity, and verifies the stated degree, height, and
 same-base determinant coefficient bounds.
+It reconstructs the four-vertex collision certificate
+\(R=1-z+4z^2\), isolates \(1/4\) as its only collision radius in
+\(0<z\le1/4\), checks the theorem's \(N-1=959\) collision bound, and records
+the corresponding \(N_*=960\) algebraic-sample recovery budget.
 It also audits the exact specialization of Nishioka's 1982 theorem used in
 Theorem 6.8: `p=2`, `N=0`, `n=1`, `m=M=2`, `U=L=1`, coprimality of the
 reduced equation, and the numerical inequality `4<8`.  This is parameter

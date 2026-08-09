@@ -5,7 +5,7 @@ rates ``rates``.  Sampling it at unit time gives T0=exp(Q); absorption is a
 click and deterministically resets the next hidden state to the last phase,
 so T1=(I-T0)1 e_n^T.  Its visible record is renewal.
 
-This script checks five different questions that must not be conflated:
+This script checks six different questions that must not be conflated:
 
 1. In the serial subclass, do visible coordinates recover the unordered rate
    multiset, including pole collisions?  A Hankel recurrence applied to the
@@ -18,6 +18,10 @@ This script checks five different questions that must not be conflated:
    equation?  The residual is checked on separated and repeated-rate examples.
 4. Does the hidden mode obey its sharp global secant-slope bound?
 5. Does the exact mean sampled cycle have the stated small-interval expansion?
+6. What is the complete Markovian similarity fibre of the physical two-state
+   kernel?  The exact arc parameter runs between 1 and gamma/recovery; its
+   endpoints are the rate-swapped physical kernels, while its interior is
+   strictly positive and has the same complete Palm tail.
 
 The numerical searches are evidence and diagnostics, not proofs of global
 injectivity.  The associated manuscript theorem supplies the exact minimal
@@ -85,6 +89,61 @@ def two_state_inclusion_coordinates(
     r1 = rho * a
     r2 = rho * rho + hidden_lambda * (r1 - rho * rho)
     return np.array([rho, r1, r2])
+
+
+def sampled_counter_killed_kernel(
+    gamma: float, recovery: float, delta: float
+) -> FloatArray:
+    """Return the physical two-state no-click kernel."""
+    if not np.all(np.isfinite((gamma, recovery, delta))):
+        raise ValueError("rates and sampling interval must be finite")
+    if min(gamma, recovery, delta) <= 0.0:
+        raise ValueError("rates and sampling interval must be positive")
+    p = float(np.exp(-gamma * delta))
+    s = float(np.exp(-recovery * delta))
+    difference = recovery - gamma
+    if difference == 0.0:
+        b = recovery * delta * p
+    else:
+        b = recovery * p * (-np.expm1(-difference * delta)) / difference
+    return np.array([[p, 0.0], [b, s]])
+
+
+def sampled_counter_fibre_interval(
+    gamma: float, recovery: float
+) -> tuple[float, float]:
+    """Return the exact closed q-interval of Markovian similarity equivalents."""
+    finite_rates = np.all(np.isfinite((gamma, recovery)))
+    if not finite_rates or min(gamma, recovery) <= 0.0:
+        raise ValueError("rates must be finite and positive")
+    endpoint = gamma / recovery
+    return min(1.0, endpoint), max(1.0, endpoint)
+
+
+def sampled_counter_fibre_kernel(
+    gamma: float, recovery: float, delta: float, q: float
+) -> FloatArray:
+    """Return the q member of the exact physical two-state Markovian fibre."""
+    if not np.isfinite(q):
+        raise ValueError("q must be finite")
+    lower, upper = sampled_counter_fibre_interval(gamma, recovery)
+    if q < lower or q > upper:
+        raise ValueError("q lies outside the exact Markovian fibre interval")
+    physical = sampled_counter_killed_kernel(gamma, recovery, delta)
+    p = float(physical[0, 0])
+    b = float(physical[1, 0])
+    s = float(physical[1, 1])
+    endpoint = gamma / recovery
+    equivalent = np.array(
+        [
+            [p - b + b * q, b * (1.0 - q) * (q - endpoint) / q],
+            [b * q, s + b * (1.0 - q)],
+        ]
+    )
+    deficits = np.ones(2) - equivalent @ np.ones(2)
+    if float(equivalent.min()) < -1e-12 or float(deficits.min()) < -1e-12:
+        raise ArithmeticError("closed-form fibre member is not substochastic")
+    return equivalent
 
 
 def physical_image_residual(inclusions: ArrayLike) -> float:
@@ -572,6 +631,49 @@ def main() -> None:
     )
     print(f"small-delta mean expansion error at delta={delta:g}: {mean_error:.3e}")
     print()
+    print("Complete physical two-state killed-reset fibre diagnostics")
+    for gamma, recovery, sample_delta in ((0.7, 1.6, 0.8), (2.1, 0.9, 0.6)):
+        lower, upper = sampled_counter_fibre_interval(gamma, recovery)
+        midpoint = 0.5 * (lower + upper)
+        baseline = sampled_counter_killed_kernel(gamma, recovery, sample_delta)
+        swapped = sampled_counter_killed_kernel(recovery, gamma, sample_delta)
+        members = tuple(
+            sampled_counter_fibre_kernel(
+                gamma, recovery, sample_delta, fibre_parameter
+            )
+            for fibre_parameter in (lower, midpoint, upper)
+        )
+        endpoint_swap_error = min(
+            max(
+                float(np.max(np.abs(members[0] - first))),
+                float(np.max(np.abs(members[2] - second))),
+            )
+            for first, second in ((baseline, swapped), (swapped, baseline))
+        )
+        tail_error = max(
+            float(
+                np.max(
+                    np.abs(
+                        kernel_tail_coordinates(member, 30)
+                        - kernel_tail_coordinates(baseline, 30)
+                    )
+                )
+            )
+            for member in members
+        )
+        midpoint_deficit = np.ones(2) - members[1] @ np.ones(2)
+        print(
+            f"rates=({gamma:g},{recovery:g}), q interval=[{lower:.12g},{upper:.12g}], "
+            f"endpoint swap error={endpoint_swap_error:.3e}"
+        )
+        print(
+            f"midpoint min entry={members[1].min():.3e}, "
+            f"midpoint min deficit={midpoint_deficit.min():.3e}, "
+            f"maximum S_0,...,S_29 error={tail_error:.3e}"
+        )
+    diagonal_interval = sampled_counter_fibre_interval(1.3, 1.3)
+    print(f"equal-rate q interval={diagonal_interval}")
+    print()
     report_example((0.7, 1.6))
     report_example((0.7, 1.2, 1.2), search_starts=60)
     report_example((0.7, 1.2, 1.2, 2.3), search_starts=50)
@@ -593,6 +695,10 @@ def main() -> None:
     )
     print()
     print("NUMERICAL CONCLUSION")
+    print("- the complete physical n=2 Markovian fibre is the exact q interval")
+    print("  between 1 and gamma/recovery, with rate-swapped physical endpoints.")
+    print("- strict fibre-interior positivity holds off diagonal; the equal-rate")
+    print("  interval collapses to the singleton q=1.")
     print("- physical n=2 inclusion triples satisfy the exact scalar image equation.")
     print("- the hidden-mode grid respects the sharp lower bound -exp(-2).")
     print("- the sampled-cycle mean agrees with the expansion through order delta^4.")

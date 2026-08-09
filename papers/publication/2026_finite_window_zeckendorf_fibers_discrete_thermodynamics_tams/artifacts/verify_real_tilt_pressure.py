@@ -277,6 +277,28 @@ def weighted_generator_counters(max_layer: int) -> list[Counter[int]]:
     return generators
 
 
+def critical_renewal_coefficients(
+    generators: list[Counter[int]], sigma: float
+) -> list[float]:
+    """Evaluate the generator renewal mass u_j at the critical exponent."""
+    return [
+        sum(count * multiplier ** (-sigma) for multiplier, count in layer.items())
+        for layer in generators
+    ]
+
+
+def critical_window_partition(m: int, renewal: list[float]) -> float:
+    """Evaluate the exact two-layer critical partition function from u_j."""
+    if m < 1 or m + 1 >= len(renewal):
+        raise ValueError("renewal coefficients must be available through m + 1")
+    return (
+        4.0 * sum(renewal[:m])
+        + 3.0 * renewal[m]
+        + renewal[m + 1]
+        - 2.0
+    )
+
+
 def marked_window_counter(
     m: int, generators: list[Counter[int]]
 ) -> Counter[tuple[int, int]]:
@@ -644,6 +666,16 @@ def main() -> int:
     )
     failures += len(renewal_failed_layers)
     marked_generators = weighted_generator_counters(args.max_layer)
+    critical_renewal = critical_renewal_coefficients(marked_generators, sigma)
+    critical_window_rows = [
+        (
+            window,
+            critical_window_partition(window, critical_renewal),
+            critical_window_partition(window, critical_renewal) / window,
+        )
+        for window in (12, 16, 20)
+        if window + 1 <= args.max_layer
+    ]
     marked_windows = tuple(
         window for window in (12, 16, 20) if window + 1 <= args.max_layer
     )
@@ -744,6 +776,9 @@ def main() -> int:
         ),
         "MARKED_CONDITIONAL fixed_rows={} diagonal_rows={} failures={}".format(
             marked_fixed_rows, marked_diagonal_rows, marked_failures
+        ),
+        "CRITICAL_FINITE_SIZE rows_m_S_S_over_m={}".format(
+            critical_window_rows
         ),
         "DYADIC_EXACT exponents=1..{} total_checks={} window_checks={} "
         "mean_cost_over_exponent={} failures={}".format(

@@ -181,6 +181,39 @@ bounds. No searched record states the effective normalized rational
 coboundary theorem integrated in the manuscript. As above, this is positive
 evidence of novelty rather than a proof of absolute priority.
 
+## Effective finite-sampling audit
+
+A further search on 8 August 2026 tested the finite-sampling consequence of
+the certificate.  The arXiv Atom API returned zero records for both
+all:"finite sampling" AND all:Mahler and
+all:"dynamical zeta" AND all:"finite samples".  It again returned zero for
+all:"rational solutions" AND all:"Mahler equation" and
+all:"Mahler coboundary".
+
+Crossref, Semantic Scholar, and zbMATH Open were searched for finite sampling
+Mahler function, zeros special values Mahler functions finite sampling,
+Pade rational reconstruction Mahler equation, and finite group extension
+dynamical zeta inverse finite samples.  The nearest records were:
+
+- Chyzak--Dreyfus--Dumas--Mezzarobba (2018), DOI 10.1090/mcom/3359,
+  for algorithms solving linear Mahler equations;
+- Arreche--Zhang, *Mahler Discrete Residues and Summability for Rational
+  Functions* (ISSAC 2022), DOI 10.1145/3476446.3536186, for additive
+  rational summability;
+- Pegis (1996), DOI 10.1006/jmaa.1996.0156, for the different equation
+  F(z^2)=A F(z)+B+C/F(z);
+- Boyle--Schmieding (2017), DOI 10.1017/etds.2015.87, for periodic-data
+  invariants of finite-group extensions.
+
+Semantic Scholar resolved all four DOI records; its keyword-search endpoint
+was intermittently rate-limited with HTTP 429.  zbMATH Open returned the
+linear-solution paper (record 1393.39002), the 2025 first-order-factor paper
+(record 1572.11106), and the Mahler-residue paper, but no finite-sampling
+inverse theorem.  None of the located works bounds radial collision points by
+the degree of a normalized multiplicative Mahler certificate or derives a
+finite dynamical-zeta sampling theorem.  This supports, but cannot prove,
+the priority of Theorem thm:finite-radial-sampling.
+
 Finally, the requested stronger dependence on only `(graph, group,
 Perron-peripheral spectrum)` is mathematically impossible.  The paper gives
 two primitive `Z/2` extensions of the same two-vertex graph with the same

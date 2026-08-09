@@ -162,3 +162,44 @@ one primitive divisor rather than the multiplicity of an exact-rank class.
 The missing input is an unconditional upper-distribution estimate for
 `log #Pi_alpha(d)` along divisor maxima; the primitive-part size and
 congruence restrictions alone do not provide it.
+
+## Deep Exploration Check: Exact Support Spectra
+
+Checked 2026-08-08. Fresh queries were sent to the arXiv Atom API, Crossref,
+Semantic Scholar, and zbMATH Open for Fibonacci ranks of apparition, minimal
+generators, minimal covers, connected hypergraphs, split graphs, primitive
+divisors, and strong divisibility sequences. Semantic Scholar's keyword-search
+endpoint returned HTTP 429 from the shared address, so the three nearest known
+papers were checked there by DOI instead. The API identified Hearne--Wagner,
+*Minimal Covers of Finite Sets* (1973), Bilu--Hanrot--Voutier, *Existence of
+Primitive Divisors of Lucas and Lehmer Numbers* (2001), and Renault, *The
+Period, Rank, and Order of the $(a,b)$-Fibonacci Sequence Mod $m$* (2013).
+
+The nearest combinatorial papers are Hearne--Wagner's enumeration of minimal
+covers, Royle's correspondence with split graphs, and the later split-graph
+asymptotics of Bender--Richmond--Wormald and Troyka. The nearest arithmetic
+papers are Fulton--Morris and Lengyel on prime-power ranks, Bilu--Hanrot--
+Voutier on defective primitive-divisor indices, and Renault on the lcm rank
+identity for generalized Fibonacci sequences. The searches found no paper
+combining those inputs to classify the support sizes of minimal elements in a
+fixed Fibonacci apparition fiber, no extremal atomic-product formula, and no
+connected endpoint dichotomy involving the oriented defective rank $6$.
+
+Six candidates were compared on a five-point scale `(reach, novelty, value)`:
+
+- exact total/connected support spectra and the extremal slice: `(5,4,5)`;
+- exact realization criteria for covers meeting the even exceptional supports:
+  `(3,4,4)`;
+- support-refined polynomial connected-factorization identities: `(5,2,2)`;
+- transfer of the full witness-cover package to general Lucas sequences:
+  `(3,3,4)`;
+- complete connected four-coordinate kernel classification: `(2,4,4)`;
+- unconditional resolution of the rank-window sparsity alternatives:
+  `(1,5,5)`.
+
+The first candidate was selected. The third is a routine grading of the
+existing partition formula; the fourth needs a recurrence-specific atomic and
+defective-index analysis; the fifth is the manuscript's explicit high-support
+open project; and the sixth still needs arithmetic dispersion unavailable in
+the cited literature. The second remains plausible but requires a separate
+coprime slot classification for covers using ranks $2$, $6$, and $12$.

@@ -265,3 +265,29 @@ literature.  Searches for `cubic Pisot causal inverse` and `cyclic language
 rank Pisot` returned no zbMATH record.  These negative results have the same
 query-language limitation as the other database searches and are not treated
 as proof of bibliographic nonexistence.
+
+## Deep-exploration refresh: causal completeness and aperture two
+
+Checked: 2026-08-08 (Asia/Singapore).
+
+The arXiv Atom API was queried for `right-closing`, `finite delay` together
+with `symbolic dynamics`, `simple Parry`, `sliding block code`, and `cyclic
+language rank`.  The exact mechanism queries returned no relevant record;
+the broad `sliding block code` query returned general Curtis--Hedlund--Lyndon
+and coding papers, not a cyclic rank-modulo-`Q_m` fold.  Crossref and Semantic
+Scholar returned HTTP 429 on the fresh broad searches.  This is an API rate
+limit, not a zero-result claim; the previously confirmed DOI metadata in this
+file remains the Crossref evidence used for the named comparators.
+
+The zbMATH Open API returned Nasu's *Textile systems for endomorphisms and
+automorphisms of the shift* (Zbl `0845.54031`) and Ashley's *Resolving factor
+maps for shifts of finite type with equal entropy* (Zbl `0741.54014`) as the
+nearest general resolving-code framework.  Exact-title checks again returned
+Bruyere--Hansel (Zbl `0957.11015`), Lecomte--Rigo (Zbl `0969.68095`), and
+Bassino (Zbl `1152.11342`) for the numeration and cubic-expansion inputs.
+These sources cover resolving codes, fiber-product/textile methods, ordered
+regular-language numeration, and simple-Parry data.  None of the checked
+records states that injectivity of this article's cyclic language-rank fold
+forces a finite future-only inverse, supplies the map-specific state-count
+and periodic-witness bounds, or classifies its aperture-two branch locus from
+the second Parry digit.

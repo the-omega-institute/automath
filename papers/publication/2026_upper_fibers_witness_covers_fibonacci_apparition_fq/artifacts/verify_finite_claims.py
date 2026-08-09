@@ -318,6 +318,107 @@ def _support_pairs(m: int, n: int):
     return tuple(pairs)
 
 
+def _rank_supports(m: int, n: int) -> Tuple[frozenset, ...]:
+    """Return the positive-coordinate supports in the rank hypergraph."""
+    coordinates = prime_divisors(n)
+    supports = []
+    for prime, exponent in sorted(
+        (int(p), int(e)) for p, e in factorint(m).items()
+    ):
+        rank = alpha_for_fn_divisor(prime**exponent, n)
+        supports.append(
+            frozenset(i for i, ell in enumerate(coordinates) if rank % ell == 0)
+        )
+    return tuple(supports)
+
+
+def _supports_are_connected(supports: Sequence[frozenset], k: int) -> bool:
+    if k == 1:
+        return True
+    adjacency = [set() for _ in range(k)]
+    for support in supports:
+        for vertex in support:
+            adjacency[vertex].update(support - {vertex})
+    reached = {0}
+    frontier = [0]
+    while frontier:
+        vertex = frontier.pop()
+        for neighbor in adjacency[vertex] - reached:
+            reached.add(neighbor)
+            frontier.append(neighbor)
+    return len(reached) == k
+
+
+@lru_cache(maxsize=None)
+def support_spectra(n: int) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
+    """Compute the total and connected omega-spectra of M_n exactly."""
+    if n < 3:
+        raise ValueError("support spectra are stated here only for n >= 3")
+    k = omega(n)
+    total = set()
+    connected = set()
+    for m in upper_fiber_threshold(n).minimal_generators:
+        size = omega(m)
+        total.add(size)
+        if _supports_are_connected(_rank_supports(m, n), k):
+            connected.add(size)
+    return tuple(sorted(total)), tuple(sorted(connected))
+
+
+def expected_support_spectrum(n: int) -> Tuple[int, ...]:
+    """Return the theorem's predicted total support spectrum."""
+    if n < 3:
+        raise ValueError("support spectra are stated here only for n >= 3")
+    factors = factor_dict(
+        tuple(sorted((int(p), int(e)) for p, e in factorint(n).items()))
+    )
+    k = len(factors)
+    has_extremal_slice = not (2 in factors and all(e == 1 for e in factors.values()))
+    return tuple(range(1, k + 1 if has_extremal_slice else k))
+
+
+def expected_connected_support_spectrum(n: int) -> Tuple[int, ...]:
+    """Return the theorem's predicted connected support spectrum."""
+    if n < 3:
+        raise ValueError("support spectra are stated here only for n >= 3")
+    factors = factor_dict(
+        tuple(sorted((int(p), int(e)) for p, e in factorint(n).items()))
+    )
+    k = len(factors)
+    if k == 1:
+        return (1,)
+    squarefree = all(e == 1 for e in factors.values())
+    rank_six_orientation_obstruction = (
+        factors.get(2) == 2
+        and factors.get(3) == 1
+        and all(e == 1 for p, e in factors.items() if p not in (2, 3))
+    )
+    has_connected_extremal_slice = (
+        not squarefree and not rank_six_orientation_obstruction
+    )
+    return tuple(range(1, k + 1 if has_connected_extremal_slice else k))
+
+
+@lru_cache(maxsize=None)
+def extremal_support_product_count(n: int) -> int:
+    """Count the product of the k singleton diagonal atomic families."""
+    if n < 3:
+        raise ValueError("the extremal slice is stated here only for n >= 3")
+    k = omega(n)
+    counts = [0] * k
+    for prime, top_exponent in factorint_fibonacci(n):
+        for exponent in range(1, top_exponent + 1):
+            theta = prime**exponent
+            if alpha_for_fn_divisor(theta, n) == alpha_for_fn_divisor(
+                prime ** (exponent - 1), n
+            ):
+                continue
+            essential, full = _support_pairs(theta, n)[0]
+            if essential == full and len(full) == 1:
+                counts[next(iter(full))] += 1
+    return math.prod(counts)
+
+
 def _normalized_pairs(pairs) -> Tuple[Tuple[Tuple[int, ...], Tuple[int, ...]], ...]:
     return tuple(
         sorted((tuple(sorted(essential)), tuple(sorted(full))) for essential, full in pairs)
@@ -794,6 +895,9 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     fibotomic_radical_checks = 0
     jarden_layers = 0
     jarden_checks = 0
+    support_spectrum_checks = 0
+    connected_support_spectrum_checks = 0
+    extremal_slice_checks = 0
     error_bound = fibotomic_error_bound()
 
     cover_formula_checks = 0
@@ -828,6 +932,40 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         if n >= 3:
             count = len(threshold.minimal_generators)
             k = omega(n)
+            total_spectrum, connected_spectrum = support_spectra(n)
+            if total_spectrum == expected_support_spectrum(n):
+                support_spectrum_checks += 1
+            else:
+                failures.append(
+                    f"n={n}: total support spectrum {total_spectrum} disagrees "
+                    f"with {expected_support_spectrum(n)}"
+                )
+            if connected_spectrum == expected_connected_support_spectrum(n):
+                connected_support_spectrum_checks += 1
+            else:
+                failures.append(
+                    f"n={n}: connected support spectrum {connected_spectrum} "
+                    f"disagrees with {expected_connected_support_spectrum(n)}"
+                )
+            extremal = tuple(
+                m for m in threshold.minimal_generators if omega(m) == k
+            )
+            diagonal_pairs = tuple(
+                ((i,), (i,)) for i in range(k)
+            )
+            if (
+                len(extremal) == extremal_support_product_count(n)
+                and all(
+                    _normalized_pairs(_support_pairs(m, n)) == diagonal_pairs
+                    for m in extremal
+                )
+            ):
+                extremal_slice_checks += 1
+            else:
+                failures.append(
+                    f"n={n}: extremal slice fails the singleton-family "
+                    "product classification"
+                )
             fibotomic_layers += 1
             entropy_data = fibotomic_rank_entropy_data(n)
             congruences_hold = all(
@@ -1061,6 +1199,12 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"{rank_pure_layers} layer checks",
         f"  Odd layers realizing all minimal covers: {odd_complete_realizations}/"
         f"{odd_rank_pure_layers}",
+        f"  Exact total support spectra: {support_spectrum_checks}/"
+        f"{deaggregation_layers}",
+        f"  Exact connected support spectra: {connected_support_spectrum_checks}/"
+        f"{deaggregation_layers}",
+        f"  Extremal atomic-product counts: {extremal_slice_checks}/"
+        f"{deaggregation_layers}",
         "  Exact minimal-cover values C_k (1 <= k <= 6): "
         + str(tuple(minimal_cover_count(k) for k in range(1, 7))),
         "  Connected-cover ratios D_k/C_k at k=20,40,80: "

@@ -366,6 +366,28 @@ def valuation(number: int, prime: int) -> int:
     return exponent
 
 
+def geometric_ratio_support_obstruction(
+    trailing_coefficient: int, initial_factor: int, ratio: int
+) -> dict[str, int] | None:
+    """Return the first local-congruence obstruction to ``c * b**t``."""
+    if trailing_coefficient == 0 or initial_factor < 1 or ratio < 2:
+        raise ValueError("the tail, initial factor, and ratio must define a scheme")
+    for prime in prime_factors(ratio):
+        if trailing_coefficient % prime != 0:
+            exponent = valuation(initial_factor, prime)
+            return {
+                "prime": prime,
+                "modulus": prime ** (exponent + 1),
+                "initial_valuation": exponent,
+            }
+    return None
+
+
+def has_bounded_outside_support_mcfl(system: LinearSystem) -> bool:
+    """Decision rule for systems whose recurrence polynomial is minimal Pisot."""
+    return system.dimension == 1
+
+
 def omega_outside(number: int, excluded_primes: Iterable[int]) -> int:
     excluded = set(excluded_primes)
     return sum(prime not in excluded for prime in prime_factors(number))
@@ -760,6 +782,32 @@ def run_verification() -> dict[str, object]:
         != 2**exponent
         for exponent in range(geometric_ray_cases)
     )
+    expected_pisot_decisions = {
+        "fibonacci": False,
+        "pell": False,
+        "tribonacci": False,
+        "quadratic_nonunit": False,
+        "integer_base_2": True,
+    }
+    pisot_decisions = {
+        system.name: has_bounded_outside_support_mcfl(system)
+        for system in SYSTEMS
+    }
+    ratio_support_examples = (
+        (2, 5, 8, None),
+        (2, 5, 6, 3),
+        (1, 12, 2, 2),
+        (-6, 7, 18, None),
+    )
+    ratio_support_failures = sum(
+        (
+            None
+            if geometric_ratio_support_obstruction(tail, initial, ratio) is None
+            else geometric_ratio_support_obstruction(tail, initial, ratio)["prime"]
+        )
+        != expected_prime
+        for tail, initial, ratio, expected_prime in ratio_support_examples
+    )
     return {
         "systems_checked": len(SYSTEMS),
         "affine_cases": affine_cases,
@@ -775,6 +823,12 @@ def run_verification() -> dict[str, object]:
         "tail_prefix_failures": tail_prefix_failures,
         "geometric_ray_cases": geometric_ray_cases,
         "geometric_ray_failures": geometric_ray_failures,
+        "linear_pisot_classification_cases": len(SYSTEMS),
+        "linear_pisot_classification_failures": int(
+            pisot_decisions != expected_pisot_decisions
+        ),
+        "geometric_ratio_support_cases": len(ratio_support_examples),
+        "geometric_ratio_support_failures": ratio_support_failures,
         "witnesses": witnesses,
         "counterexample": search_singular_counterexample(),
     }
@@ -798,6 +852,14 @@ def _format_report(report: dict[str, object]) -> str:
         f"tail-prefix action failures: {report['tail_prefix_failures']}",
         f"geometric ray cases: {report['geometric_ray_cases']}",
         f"geometric ray failures: {report['geometric_ray_failures']}",
+        "linear Pisot classification cases: "
+        f"{report['linear_pisot_classification_cases']}",
+        "linear Pisot classification failures: "
+        f"{report['linear_pisot_classification_failures']}",
+        "geometric ratio support cases: "
+        f"{report['geometric_ratio_support_cases']}",
+        "geometric ratio support failures: "
+        f"{report['geometric_ratio_support_failures']}",
     ]
     for witness in report["witnesses"]:
         lines.append(
@@ -819,6 +881,8 @@ def _format_report(report: dict[str, object]) -> str:
         "inflated_fibonacci_failures",
         "tail_prefix_failures",
         "geometric_ray_failures",
+        "linear_pisot_classification_failures",
+        "geometric_ratio_support_failures",
     )
     lines.append(
         "OVERALL: PASS"

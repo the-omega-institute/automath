@@ -381,3 +381,29 @@ theorem. The coupling line is therefore not extended. The manuscript is
 positioned instead around its killed-reset D-MAP visible quotient and
 similarity-fibre structure, while acknowledging that minimal-realization and
 confluent-Prony inputs are established theory.
+
+## Deep quotient/fibre exploration, 2026-08-08
+
+The follow-up search used all four requested bibliographic APIs. The arXiv
+query `all:"phase-type" AND all:identifiability` returned 20 records, including
+Rizk--Burke--Walsh (arXiv:`1901.03849v2`) and a 2026 multivariate
+matrix-exponential paper; no returned title or abstract stated the physical
+sampled-counter fibre arc. Crossref confirmed the exact metadata and DOIs for
+Ramirez-Cobo--Lillo--Wiper (2010), Ramirez-Cobo--Lillo (2012), O'Cinneide
+(1989), Radulescu et al. (2025), and Gupta--Fairman (1973). Semantic Scholar
+resolved DOI `10.1239/jap/1285335400`, returned the MAP2 paper's abstract and
+reference/citation graph, and then rate-limited subsequent batch calls with
+HTTP 429. zbMATH returned nine records for `phase-type identifiability`, led by
+Ryden (1996) and the MAP2 papers, plus the Coxian and algebraic time-to-event
+comparators under narrower searches.
+
+The nearest prior theorem remains Ramirez-Cobo--Lillo--Wiper's general MAP2
+nonidentifiability result. The new claim is narrower and explicit: for the
+triangular sampled-counter no-click kernel, the complete two-state
+reset-preserving Markovian orbit intersection is the closed parameter interval
+between \(1\) and \(\Gamma/\kappa_{\mathrm r}\); it joins exactly the two
+rate-swapped physical endpoints, is strictly positive in its relative
+interior, and collapses to a singleton on the exchange diagonal. This is not
+claimed as a new general MAP2 canonical-form or realization theorem. The full
+candidate ledger, including five rejected or deferred directions, is in
+`artifacts/deep_exploration_fibre_candidates.md`.

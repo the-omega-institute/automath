@@ -4,6 +4,47 @@ from artifacts import verify_pisot_pumping as verifier
 
 
 class PisotPumpingVerifierTests(unittest.TestCase):
+    def test_linear_pisot_decision_accepts_exactly_integer_bases(self):
+        decisions = {
+            system.name: verifier.has_bounded_outside_support_mcfl(system)
+            for system in verifier.SYSTEMS
+        }
+
+        self.assertEqual(
+            decisions,
+            {
+                "fibonacci": False,
+                "pell": False,
+                "tribonacci": False,
+                "quadratic_nonunit": False,
+                "integer_base_2": True,
+            },
+        )
+
+    def test_geometric_ratio_uses_only_tail_primes(self):
+        self.assertIsNone(
+            verifier.geometric_ratio_support_obstruction(
+                trailing_coefficient=2, initial_factor=5, ratio=8
+            )
+        )
+        obstruction = verifier.geometric_ratio_support_obstruction(
+            trailing_coefficient=2, initial_factor=5, ratio=6
+        )
+        self.assertEqual(
+            obstruction,
+            {
+                "prime": 3,
+                "modulus": 3,
+                "initial_valuation": 0,
+            },
+        )
+        self.assertEqual(
+            verifier.geometric_ratio_support_obstruction(
+                trailing_coefficient=1, initial_factor=12, ratio=2
+            ),
+            {"prime": 2, "modulus": 8, "initial_valuation": 2},
+        )
+
     def test_tail_action_starts_after_the_eventual_recurrence_transient(self):
         recurrence = (-10, 7)
         weights = (1, 3, 6, 12, 24, 48, 96, 192)
@@ -96,6 +137,10 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["tail_prefix_failures"], 0)
         self.assertEqual(report["geometric_ray_cases"], 13)
         self.assertEqual(report["geometric_ray_failures"], 0)
+        self.assertEqual(report["linear_pisot_classification_cases"], 5)
+        self.assertEqual(report["linear_pisot_classification_failures"], 0)
+        self.assertEqual(report["geometric_ratio_support_cases"], 4)
+        self.assertEqual(report["geometric_ratio_support_failures"], 0)
 
     def test_inflated_fibonacci_has_unit_reachable_action(self):
         report = verifier.verify_inflated_fibonacci_separation(

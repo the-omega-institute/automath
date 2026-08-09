@@ -292,3 +292,65 @@ semigroups. No such bound follows from the cited pumping or recurrence
 theorems; general zero/equality questions for linear recurrences already meet
 Skolem-type barriers. The present tools therefore do not justify promoting
 that semidecision procedure to a decision theorem.
+
+## Deep exploration: bounded-support classification (2026-08-08)
+
+Six theorem candidates were compared on a five-point scale (reach, novelty,
+value).
+
+1. General decidability of geometric synchronized schemes: (2, 5, 5).
+   Corollary 3.15 checks any guessed scheme, but no finite bound on fan-out or
+   block length is available. The nearest decision literature is the Skolem
+   problem for linear recurrences, including Luca--Ouaknine--Worrell,
+   "Effective results on the Skolem Problem for linear recurrence sequences,"
+   J. Number Theory 201 (2019), DOI 10.1016/j.jnt.2018.08.012.
+2. Classification for standard linear Pisot systems: (5, 4, 5). Greedy length
+   thresholds and Pisot asymptotics force a geometric ratio to equal a power
+   of the dominant root. The nearest numeration work is Frougny's finite
+   normalization theory and Sadahiro's "Multiple points of tilings associated
+   with Pisot numeration systems," DOI 10.1016/j.tcs.2006.02.017; neither
+   concerns bounded prime support or MCFLs.
+3. Prime support of every geometric ratio is contained in the minimal tail
+   constant: (5, 4, 4). This follows from the manuscript's local return
+   congruence. Evertse's 1984 S-unit recurrence theorem is the nearest
+   arithmetic input, but it does not give this numeration-specific local
+   restriction.
+4. Remove the valuation-only escape alternative for nonintegral Pisot bases:
+   (5, 4, 5). This is the universal negative half of candidate 2. The nearest
+   prior work is again Pisot normalization/recognizability, not prime-support
+   behavior of MCFL sublanguages.
+5. Compute the local Cantor--Bendixson behavior with unbounded bad-prime
+   valuations: (5, 3, 3). Broughan, "Adic Topologies for the Rational
+   Integers," DOI 10.4153/CJM-2003-030-3, is nearest; the claim would mainly
+   sharpen why the manuscript's bounded local valuations are necessary.
+6. Extend the quantitative density theorem to bounded-ambiguity automata:
+   (2, 2, 3). The deterministic stochastic decomposition does not control
+   multiplicities or cancellation. Nearby ambiguity work includes Christian
+   Herzog, "Pushdown automata with bounded nondeterminism and bounded
+   ambiguity," DOI 10.1016/S0304-3975(96)00267-8, but it supplies no required
+   prime-slice asymptotics.
+
+Live API checks used the arXiv Atom API, Crossref, Semantic Scholar, and
+zbMATH. Exact arXiv queries combining "multiple context-free" or "Pisot
+numeration" with "geometric progression" or "bounded prime support" returned
+zero entries. Crossref returned separate Pisot numeration, recurrence
+prime-divisor, adic-topology, and ambiguity papers, with no combined result.
+Semantic Scholar's broad search endpoint returned HTTP 429, so DOI lookups
+were used to confirm Sadahiro (2006), Broughan (2003), and the classical
+second-order recurrence prime-divisor record. Exact combined zbMATH searches
+returned no entries; broader searches found 120 Pisot-numeration records and
+105 multiple-context-free-language records, but no overlap matching the new
+classification. These are negative search results, not a priority proof.
+
+Candidates 2--4 were proved together. In a geometric synchronized scheme,
+the finite-group block return modulo \(p^{v_p(c)+1}\) excludes every
+\(p\mid b\) with \(p\nmid c_0\). For a linear Pisot greedy system, a scheme
+of word lengths \(L+Dt\) satisfies
+\[
+U_{L+Dt-1}\le cb^t<U_{L+Dt},
+\]
+so \(b=\beta^D\). A nonintegral Pisot number cannot have a positive integral
+power: every conjugate would then have modulus \(\beta>1\). Conversely, an
+integer root \(B\) supplies the canonical ray \(0^{J+t}1\) of values
+\(U_JB^t\). Thus the bounded-outside-support property is decidable on the
+standard linear Pisot class and is positive exactly in degree one.

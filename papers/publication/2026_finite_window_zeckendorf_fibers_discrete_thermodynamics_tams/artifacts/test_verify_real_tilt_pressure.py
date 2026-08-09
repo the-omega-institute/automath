@@ -20,6 +20,23 @@ from verify_real_tilt_pressure import (
 
 
 class AllRealPressureHelpersTest(unittest.TestCase):
+    def test_critical_window_renewal_matches_direct_partition_sum(self) -> None:
+        self.assertTrue(hasattr(verification, "critical_renewal_coefficients"))
+        self.assertTrue(hasattr(verification, "critical_window_partition"))
+        sigma = 2.4787507857339603
+        generators = verification.weighted_generator_counters(17)
+        renewal = verification.critical_renewal_coefficients(generators, sigma)
+
+        fibonacci = [0, 1]
+        for _ in range(20):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        coefficients = [1]
+        for m in range(1, 17):
+            coefficients = verification.extend_coefficients(coefficients, fibonacci[m])
+            predicted = verification.critical_window_partition(m, renewal)
+            direct = sum(level ** (-sigma) for level in coefficients)
+            self.assertAlmostEqual(predicted, direct, places=11)
+
     def test_dyadic_exact_multiplier_counts_match_direct_fibers(self) -> None:
         self.assertTrue(hasattr(verification, "dyadic_generator_cost_counters"))
         self.assertTrue(hasattr(verification, "dyadic_finite_window_count"))

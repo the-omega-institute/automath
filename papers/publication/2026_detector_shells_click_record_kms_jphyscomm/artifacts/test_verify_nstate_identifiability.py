@@ -6,6 +6,65 @@ from artifacts import verify_nstate_identifiability as verify
 
 
 class SerialKilledLeakageTests(unittest.TestCase):
+    def test_two_state_physical_fibre_endpoints_are_rate_swaps(self):
+        gamma = 0.7
+        recovery = 1.6
+        delta = 0.8
+        lower, upper = verify.sampled_counter_fibre_interval(gamma, recovery)
+        endpoint_kernels = (
+            verify.sampled_counter_fibre_kernel(gamma, recovery, delta, lower),
+            verify.sampled_counter_fibre_kernel(gamma, recovery, delta, upper),
+        )
+        physical_endpoints = (
+            verify.sampled_counter_killed_kernel(gamma, recovery, delta),
+            verify.sampled_counter_killed_kernel(recovery, gamma, delta),
+        )
+        for expected in physical_endpoints:
+            self.assertTrue(
+                any(
+                    np.allclose(actual, expected, atol=2e-13)
+                    for actual in endpoint_kernels
+                )
+            )
+
+    def test_two_state_physical_fibre_interior_is_positive_and_visible_equivalent(
+        self,
+    ):
+        gamma = 2.1
+        recovery = 0.9
+        delta = 0.6
+        lower, upper = verify.sampled_counter_fibre_interval(gamma, recovery)
+        q = 0.35 * lower + 0.65 * upper
+        baseline = verify.sampled_counter_killed_kernel(gamma, recovery, delta)
+        interior = verify.sampled_counter_fibre_kernel(gamma, recovery, delta, q)
+        self.assertGreater(float(interior.min()), 0.0)
+        deficits = np.ones(2) - interior @ np.ones(2)
+        self.assertGreater(float(deficits.min()), 0.0)
+        np.testing.assert_allclose(
+            verify.kernel_tail_coordinates(interior, 30),
+            verify.kernel_tail_coordinates(baseline, 30),
+            rtol=2e-12,
+            atol=2e-13,
+        )
+
+    def test_two_state_physical_fibre_collapses_exactly_on_exchange_diagonal(
+        self,
+    ):
+        lower, upper = verify.sampled_counter_fibre_interval(1.3, 1.3)
+        self.assertEqual(lower, 1.0)
+        self.assertEqual(upper, 1.0)
+        with self.assertRaises(ValueError):
+            verify.sampled_counter_fibre_kernel(1.3, 1.3, 0.7, 1.0 + 1e-5)
+
+    def test_two_state_physical_fibre_rejects_points_beyond_exact_arc(self):
+        gamma = 0.7
+        recovery = 1.6
+        lower, upper = verify.sampled_counter_fibre_interval(gamma, recovery)
+        with self.assertRaises(ValueError):
+            verify.sampled_counter_fibre_kernel(gamma, recovery, 1.0, lower - 1e-6)
+        with self.assertRaises(ValueError):
+            verify.sampled_counter_fibre_kernel(gamma, recovery, 1.0, upper + 1e-6)
+
     def test_exact_three_inclusion_image_equation(self):
         examples = (
             (0.35, 0.8, 0.2),
