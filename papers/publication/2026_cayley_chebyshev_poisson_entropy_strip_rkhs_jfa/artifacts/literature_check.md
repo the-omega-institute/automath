@@ -204,3 +204,58 @@ large-spatial-scale, moving matched-reference problem.  No indexed source
 located in the audit states the exponent or the matching uniform
 moment-class optimality result.  This remains a qualified negative search,
 not a proof of absence from every publication.
+
+## Stable Law-by-Law Tail-Decomposition Search
+
+Checked 2026-08-10 (Asia/Singapore), before extending the Poisson raw-tail
+identity to every isotropic strictly alpha-stable kernel.  The target was the
+finite-covariance decomposition
+
+\[
+H_{\alpha,d}(s)=\mathcal Q_{\alpha,d}(\Sigma)s^{-4}
++\int\Phi\!\left(\int_{|x|>s}
+  \frac{p_1^{(\alpha,d)}(y-x/s)}{p_1^{(\alpha,d)}(y)}\,\nu(dx)
+ \right)\Omega_{\alpha,d}(dy)+o(s^{-4}).
+\]
+
+The arXiv API was queried for combinations of `isotropic stable kernel`,
+`relative entropy`, `covariance asymptotic`, `fractional heat kernel`,
+`moment expansion`, and `Kullback--Leibler`.  Broad queries were noisy; exact
+title queries recovered the two fractional-diffusion papers below and no
+record stating the displayed nonlinear tail-potential formula.  Crossref
+bibliographic queries likewise returned the two papers with DOI
+10.1137/16M1101428 and DOI 10.1007/s10884-022-10224-4 as the closest
+mathematical matches.  Semantic Scholar's API returned HTTP 429 during this
+live pass; its records and forward citations for the same papers had already
+been inspected in the 2026-08-08 audit above.  The zbMATH Open API was queried
+through `/v1/document/_search`; its fractional-diffusion results contained no
+matching entropy decomposition.
+
+A subsequent exact-record retry on the same date succeeded.  The arXiv title
+queries returned arXiv:1610.09789 and arXiv:2109.14193; the targeted stable
+kernel/relative entropy/covariance and fractional heat
+kernel/relative entropy/moment queries each returned zero records.  Semantic
+Scholar's DOI endpoints returned the same two papers and their forward
+citation sets (21 and 5 citations at query time).  The exact zbMATH title
+query returned the 2017 paper as its single result.  Inspection of these
+records did not locate the displayed nonlinear tail-potential decomposition.
+
+The nearest prior work remains:
+
+- K. Ishige, T. Kawakami, and H. Michihisa, *Asymptotic Expansions of
+  Solutions of Fractional Diffusion Equations*, SIAM J. Math. Anal. 49
+  (2017), 2167--2190, arXiv:1610.09789, DOI 10.1137/16M1101428.
+- K. Ishige and T. Kawakami, *Refined Asymptotic Expansions of Solutions to
+  Fractional Diffusion Equations*, J. Dynam. Differential Equations 36
+  (2024), 2679--2702, arXiv:2109.14193,
+  DOI 10.1007/s10884-022-10224-4.
+
+Those works prove stable heat-kernel density expansions after subtracting
+moment derivatives.  They provide the decay and derivative estimates used in
+the present proof, but the inspected theorem statements do not aggregate the
+unexpanded mass beyond the moving scale before applying the entropy
+nonlinearity.  The Bobkov--Chistyakov--Goetze, Johnson, and Toscani papers
+listed above remain the nearest entropy comparators, in the different regime
+of stable limits or stable de Bruijn identities.  This is a documented,
+qualified search of the four requested indexes, not a proof of global
+novelty.
