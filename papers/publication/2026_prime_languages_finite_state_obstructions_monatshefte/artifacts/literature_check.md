@@ -301,7 +301,7 @@ value).
 1. General decidability of geometric synchronized schemes: (2, 5, 5).
    Corollary 3.15 checks any guessed scheme, but no finite bound on fan-out or
    block length is available. The nearest decision literature is the Skolem
-   problem for linear recurrences, including Luca--Ouaknine--Worrell,
+   problem for linear recurrences, including Min Sha,
    "Effective results on the Skolem Problem for linear recurrence sequences,"
    J. Number Theory 201 (2019), DOI 10.1016/j.jnt.2018.08.012.
 2. Classification for standard linear Pisot systems: (5, 4, 5). Greedy length
@@ -354,3 +354,43 @@ power: every conjugate would then have modulus \(\beta>1\). Conversely, an
 integer root \(B\) supplies the canonical ray \(0^{J+t}1\) of values
 \(U_JB^t\). Thus the bounded-outside-support property is decidable on the
 standard linear Pisot class and is positive exactly in degree one.
+
+## Tier-up decision audit and refreshed prior art (2026-08-10)
+
+The arXiv Atom API, Crossref, Semantic Scholar, and zbMATH Open APIs were
+searched before the new proof audit. Exact arXiv combinations of `multiple
+context-free` with `geometric progression` returned no record; searches for
+effective linear-recurrence decision problems returned Min Sha's arXiv
+1505.07147 and the current Skolem literature. Crossref confirmed the metadata
+for Sha (DOI 10.1016/j.jnt.2018.08.012), Tarasov--Vyalyi (DOI
+10.1007/978-3-642-20712-9_24), Ouaknine--Worrell (DOI
+10.1007/978-3-642-33512-9_3), and Bell--Halava--Harju--Karhumaki--Potapov
+(DOI 10.1142/S0218196708004925). Semantic Scholar's DOI lookup for Sha
+succeeded and exposed the surrounding orbit/Skolem citation graph; later
+broad searches were rate-limited and are not treated as negative evidence.
+zbMATH returned the Skolem decision survey and Tarasov--Vyalyi's regular-
+language/orbit work, while the exact MCFL/numeration/geometric query returned
+no record.
+
+The nearest mechanism remains the pair of classical inputs already used:
+Seki--Matsumura--Fujii--Kasami's weak synchronized pumping lemma and
+Evertse's Theorem 3 on unbounded prime-ideal support in quotients of a
+nondegenerate recurrence. The nearest algorithmic boundary is
+Tarasov--Vyalyi's equivalence between an orbit-hitting problem and a regular-
+language intersection problem, together with the still-open general Skolem
+problem surveyed by Ouaknine--Worrell. Bell et al. prove undecidability for
+unrestricted multiplicative matrix equations, but their matrices do not
+preserve the companion-form digit action or canonical conditions (U1)--(U3),
+so this is not an undecidability result for the manuscript's promise class.
+
+The attempted full decision procedure stops at witness compression. For a
+fixed synchronized scheme, DFA acceptance and the identity `N(t)=c b^t` are
+decidable. To decide negative instances one needs a computable bound, from
+the DFA and minimal tail recurrence, on fan-out and total block length of a
+smallest positive witness. Ordinary DFA cycle deletion does not supply it:
+two words with the same DFA endpoints can have different affine recurrence
+matrices, and replacing one by the other can destroy `N(t+1)=b N(t)`. No
+located result provides this bound, and no promise-preserving reduction was
+obtained. General decidability, undecidability, and hardness therefore remain
+open; only the existing positive semidecision and the linear Pisot decision
+theorem are integrated.

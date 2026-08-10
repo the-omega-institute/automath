@@ -6,7 +6,8 @@ diagonal counterexample to the oracle's unqualified one-dependence equation,
 the fast-sampling expansion, the A8-r2 joint physical-image test, and the
 A8-r3 finite-range Markov-gap specification score.  It also checks the full
 fixed-marginal Markov--Palm tangent projection and finite-dimensional basis
-used by the A8-r4 omnibus-score result.
+used by the A8-r4 omnibus-score result, and the compact-uniform singular
+exchange expansion and information series.
 """
 
 from __future__ import annotations
@@ -118,6 +119,82 @@ def _gap_masses(x: float, y: float, tolerance: float = 1e-15) -> FloatArray:
             return np.asarray(masses)
         previous = following
     raise ArithmeticError("gap-law truncation did not converge")
+
+
+def survival_factor_gap_masses(p: float, s: float, maximum_gap: int) -> FloatArray:
+    """Return gap masses 0,...,maximum_gap-1 from survival factors p and s."""
+    if not (0.0 < p < 1.0 and 0.0 < s < 1.0):
+        raise ValueError("p and s must lie in (0,1)")
+    if maximum_gap < 1:
+        raise ValueError("maximum_gap must be positive")
+    x = -math.log(p)
+    y = -math.log(s)
+    indices = np.arange(maximum_gap + 1, dtype=float)
+    if math.isclose(x, y, rel_tol=1e-10, abs_tol=1e-14):
+        rate = 0.5 * (x + y)
+        survival = np.exp(-rate * indices) * (1.0 + rate * indices)
+    else:
+        survival = (y * p**indices - x * s**indices) / (y - x)
+    return survival[:-1] - survival[1:]
+
+
+def singular_gap_expansion(z: float, maximum_gap: int) -> tuple[FloatArray, FloatArray]:
+    """Return g_z(k) and the d^2 coefficient for (p,s)=(z+d,z-d)."""
+    if not 0.0 < z < 1.0:
+        raise ValueError("z must lie in (0,1)")
+    if maximum_gap < 1:
+        raise ValueError("maximum_gap must be positive")
+    k = np.arange(maximum_gap, dtype=float)
+    log_z = math.log(z)
+    denominator = 1.0 - z + log_z * (k * z - k + z)
+    gap = z**k * denominator
+    numerator = (
+        k**3 * z * log_z
+        - k**3 * log_z
+        - 3.0 * k**2 * z
+        + 3.0 * k**2 * log_z
+        + 3.0 * k**2
+        - 3.0 * k * z * log_z
+        - 6.0 * k * z
+        - 2.0 * z * log_z
+        - 3.0 * z
+    )
+    coefficient = z**k * numerator / (6.0 * z**2)
+    return gap, coefficient
+
+
+def singular_gap_score(
+    z: float, tolerance: float = 1e-15
+) -> tuple[FloatArray, FloatArray, float, float]:
+    """Return the diagonal gap law, singular score, cycle mean, and information."""
+    if not 0.0 < tolerance < 1.0:
+        raise ValueError("tolerance must lie in (0,1)")
+    rate = -math.log(z)
+    maximum_gap = 1
+    while equal_rate_gap_tail(rate, maximum_gap) >= tolerance:
+        maximum_gap += 1
+        if maximum_gap > 1_000_000:
+            raise ArithmeticError("gap-law truncation did not converge")
+    gap, coefficient = singular_gap_expansion(z, maximum_gap)
+    score = coefficient / gap
+    mean_cycle = (1.0 - z - z * math.log(z)) / (1.0 - z) ** 2
+    information = float(np.dot(gap, score**2) / mean_cycle)
+    return gap, score, mean_cycle, information
+
+
+def singular_symmetric_shift(z: float, h: float, sample_size: int) -> FloatArray:
+    """Return sqrt(N) times the symmetric-coordinate shift of the N^-1/4 split."""
+    if not 0.0 < z < 1.0 or not math.isfinite(h):
+        raise ValueError("z must lie in (0,1) and h must be finite")
+    if sample_size < 1:
+        raise ValueError("sample_size must be positive")
+    root_n = math.sqrt(sample_size)
+    displacement = h / math.sqrt(root_n)
+    p = z + displacement
+    s = z - displacement
+    if not (0.0 < p < 1.0 and 0.0 < s < 1.0):
+        raise ValueError("the split survival factors must lie in (0,1)")
+    return root_n * np.array([p + s - 2.0 * z, p * s - z**2])
 
 
 def regenerative_inclusion_covariance(x: float, y: float) -> tuple[FloatArray, FloatArray]:
@@ -1070,6 +1147,47 @@ def main() -> None:
     print(
         "critical-window maximum |log(n*S_J^2)-(c-log 4)|="
         f"{max(critical_constant_errors):.3e}"
+    )
+
+    expansion_errors = []
+    centering_errors = []
+    singular_informations = []
+    for z in (0.12, 0.25, 0.5, 0.78, 0.9):
+        diagonal, coefficient = singular_gap_expansion(z, 80)
+        for displacement in (2e-3, 1e-3, 5e-4):
+            split = survival_factor_gap_masses(
+                z + displacement, z - displacement, 80
+            )
+            expansion_errors.append(
+                float(
+                    np.max(
+                        np.abs(
+                            split
+                            - diagonal
+                            - displacement**2 * coefficient
+                        )
+                    )
+                    / displacement**4
+                )
+            )
+        gap, score, _, information = singular_gap_score(z, tolerance=1e-16)
+        centering_errors.append(abs(float(gap @ score)))
+        singular_informations.append(information)
+
+    print("Singular exchange experiment verification")
+    print(
+        "maximum scaled d^4 gap-expansion remainder="
+        f"{max(expansion_errors):.10f}"
+    )
+    print(f"maximum truncated score-centering error={max(centering_errors):.3e}")
+    print(
+        "tested information range="
+        + np.array2string(
+            np.asarray(
+                [min(singular_informations), max(singular_informations)]
+            ),
+            precision=10,
+        )
     )
 
 

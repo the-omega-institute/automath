@@ -1,8 +1,8 @@
 # Finite-Window Zeckendorf Fibers
 
-This directory contains the refocused manuscript
+This directory contains the refocused main manuscript
 `Finite-Window Zeckendorf Fibers: Affine Partition Correspondence and
-Negative-Temperature Freezing`.
+Negative-Temperature Freezing` and a separately compiled supplement.
 
 ## Scope
 
@@ -15,8 +15,12 @@ The compiled paper retains only the independently justified core:
 - the linear critical finite-size law and uniform critical coexistence limit;
 - the precise compact-operator obstruction;
 - the full real-tilt large deviation principle across the freezing corner;
-- the integer moment transfer, direct quadratic recurrence, Sanna endpoint
-  attribution, and diagonal high-tilt limit.
+- the exact finite-prime-support coefficient interface and the explicit
+  heavy-cost obstruction at the active cutoff.
+
+The conditional microcanonical refinements, exact dyadic ray, integer moment
+transfer, direct quadratic recurrence, and high-tilt consequences are in
+`supplement.pdf`, not in the main theorem spine.
 
 The invalid normalization transducer, collision automaton, histogram kernels,
 arithmetic-window recurrence certificates, Galois computations, and
@@ -26,11 +30,12 @@ package are not part of this directory.
 ## Build
 
 The bibliography is written directly in `sec_references.tex`; BibTeX is not
-used. Compile twice to stabilize references:
+used. Compile the main article before the supplement so `xr-hyper` can resolve
+cross-document references:
 
 ```powershell
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-The expected output is `main.pdf`.
+The expected outputs are `main.pdf` and `supplement.pdf`.

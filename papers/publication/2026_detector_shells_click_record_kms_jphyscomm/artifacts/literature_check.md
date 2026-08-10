@@ -407,3 +407,42 @@ interior, and collapses to a singleton on the exchange diagonal. This is not
 claimed as a new general MAP2 canonical-form or realization theorem. The full
 candidate ledger, including five rejected or deferred directions, is in
 `artifacts/deep_exploration_fibre_candidates.md`.
+
+## Singular exchange experiment audit, 2026-08-10
+
+The requested audit used all four named services before the theorem was
+integrated. The arXiv Atom API returned no record for the exact query
+`all:"Markovian arrival process" AND all:nonidentifiability`; its broader
+estimation query returned Ramirez-Cobo--Lillo--Wiper, "Maximum likelihood
+estimation in the two-state Markovian arrival process" (arXiv:1401.3105).
+Queries for `n^{-1/4}` finite-mixture estimation returned the established
+finite-mixture rate literature, but no sampled-counter or D-MAP singular
+experiment.
+
+Crossref resolved Ramirez-Cobo--Lillo--Wiper, "Nonidentifiability of the
+Two-State Markovian Arrival Process," *J. Appl. Probab.* **47** (2010), DOI
+`10.1239/jap/1285335400`. Searches for loss of identifiability and locally
+conic experiments returned Dacunha-Castelle--Gassiat, "Testing in locally
+conic models, and application to mixture models," *ESAIM Probab. Stat.* **1**
+(1997), DOI `10.1051/ps:1997111`, and Liu--Shao, "Asymptotics for likelihood
+ratio tests under loss of identifiability," *Ann. Statist.* **31** (2003), DOI
+`10.1214/aos/1056562463`.
+
+Semantic Scholar resolved the MAP2 DOI, abstract, and citation graph. The
+graph contains MAP2 estimation, weak-equivalence, BMAP2, and phase-type
+estimability papers, but no citation title or abstract reporting the
+exchange-diagonal `N^{-1/4}` likelihood experiment. Its free search endpoint
+then returned HTTP 429; no absence claim relies on that throttled query.
+zbMATH returned the Liu--Shao paper and related loss-of-identifiability work
+for that query, and the Dacunha-Castelle--Gassiat paper for `locally conic
+models`; it returned no MAP-specific local-experiment match.
+
+The nearest MAP prior work is therefore Ramirez-Cobo--Lillo--Wiper (2010): it
+establishes equality of stationary observable laws under distinct MAP2
+representations, not the singular local likelihood experiment. The nearest
+mechanism prior work is Dacunha-Castelle--Gassiat (1997) and Liu--Shao (2003):
+the `N^{-1/4}` scale and squared local coordinate are established singular
+asymptotic phenomena. The manuscript consequently claims only the exact,
+compact-uniform sampled-counter specialization, with its explicit Palm-gap
+score and information. These database searches bound the novelty audit; they
+do not prove universal absence.

@@ -391,6 +391,36 @@ class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
             self.assertLess(errors[-1], 0.02)
 
 
+class SingularExchangeExperimentChecks(unittest.TestCase):
+    def test_singular_gap_expansion_is_second_order_and_uniform_on_grid(self):
+        for z in (0.12, 0.25, 0.5, 0.78, 0.9):
+            diagonal, coefficient = verify.singular_gap_expansion(z, 80)
+            for d in (2e-3, 1e-3, 5e-4):
+                split = verify.survival_factor_gap_masses(z + d, z - d, 80)
+                error = np.max(np.abs(split - diagonal - d**2 * coefficient))
+                self.assertLess(error / d**4, 2.0e5)
+
+    def test_singular_score_is_centered_with_positive_information(self):
+        informations = []
+        for z in np.linspace(0.1, 0.9, 17):
+            gap, score, mean_cycle, information = verify.singular_gap_score(
+                float(z), tolerance=1e-16
+            )
+            self.assertLess(abs(float(gap @ score)), 2e-11)
+            self.assertAlmostEqual(float(gap.sum()), 1.0, places=12)
+            self.assertGreater(mean_cycle, 1.0)
+            self.assertGreater(information, 0.0)
+            informations.append(information)
+        self.assertGreater(min(informations), 1e-5)
+
+    def test_n_quarter_split_is_root_n_in_symmetric_coordinates(self):
+        for z in (0.15, 0.5, 0.85):
+            for h in (-1.7, -0.4, 0.0, 0.9, 2.1):
+                sigma_shift = verify.singular_symmetric_shift(z, h, 100_000_000)
+                self.assertAlmostEqual(sigma_shift[0], 0.0, places=14)
+                self.assertLess(abs(sigma_shift[1] + h**2), 2e-12)
+
+
 class SamplingBiasTests(unittest.TestCase):
     def test_exact_rounded_cycle_mean_matches_gap_tail_sum(self):
         for gamma, kappa, delta in ((0.7, 1.9, 0.4), (1.3, 1.3, 0.2), (3.0, 0.6, 0.1)):

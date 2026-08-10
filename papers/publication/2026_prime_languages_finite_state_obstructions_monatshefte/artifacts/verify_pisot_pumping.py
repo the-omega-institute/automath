@@ -65,6 +65,17 @@ class PumpWitness:
     canonical_after: bool
 
 
+def evertse_prime_ideal_norm_bound(
+    rational_primes: Sequence[int], field_degree: int
+) -> int:
+    """Bound norms of prime ideals above a fixed rational-prime support."""
+    if field_degree < 1:
+        raise ValueError("field degree must be positive")
+    if any(prime < 2 or not is_prime(prime) for prime in rational_primes):
+        raise ValueError("support must contain rational primes")
+    return max((prime**field_degree for prime in rational_primes), default=1)
+
+
 def system_by_name(name: str) -> LinearSystem:
     return next(system for system in SYSTEMS if system.name == name)
 
@@ -808,6 +819,16 @@ def run_verification() -> dict[str, object]:
         != expected_prime
         for tail, initial, ratio, expected_prime in ratio_support_examples
     )
+    evertse_support_examples = (
+        ((), 7, 1),
+        ((2,), 1, 2),
+        ((2, 3), 2, 9),
+        ((2, 3, 5), 4, 625),
+    )
+    evertse_support_bound_failures = sum(
+        evertse_prime_ideal_norm_bound(support, degree) != expected
+        for support, degree, expected in evertse_support_examples
+    )
     return {
         "systems_checked": len(SYSTEMS),
         "affine_cases": affine_cases,
@@ -829,6 +850,8 @@ def run_verification() -> dict[str, object]:
         ),
         "geometric_ratio_support_cases": len(ratio_support_examples),
         "geometric_ratio_support_failures": ratio_support_failures,
+        "evertse_support_bound_cases": len(evertse_support_examples),
+        "evertse_support_bound_failures": evertse_support_bound_failures,
         "witnesses": witnesses,
         "counterexample": search_singular_counterexample(),
     }
@@ -860,6 +883,10 @@ def _format_report(report: dict[str, object]) -> str:
         f"{report['geometric_ratio_support_cases']}",
         "geometric ratio support failures: "
         f"{report['geometric_ratio_support_failures']}",
+        "Evertse support-bound cases: "
+        f"{report['evertse_support_bound_cases']}",
+        "Evertse support-bound failures: "
+        f"{report['evertse_support_bound_failures']}",
     ]
     for witness in report["witnesses"]:
         lines.append(
@@ -883,6 +910,7 @@ def _format_report(report: dict[str, object]) -> str:
         "geometric_ray_failures",
         "linear_pisot_classification_failures",
         "geometric_ratio_support_failures",
+        "evertse_support_bound_failures",
     )
     lines.append(
         "OVERALL: PASS"

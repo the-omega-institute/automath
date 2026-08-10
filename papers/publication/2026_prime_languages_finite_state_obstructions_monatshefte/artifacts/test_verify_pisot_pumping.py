@@ -4,6 +4,16 @@ from artifacts import verify_pisot_pumping as verifier
 
 
 class PisotPumpingVerifierTests(unittest.TestCase):
+    def test_evertse_support_gives_uniform_prime_ideal_norm_bound(self):
+        self.assertEqual(
+            verifier.evertse_prime_ideal_norm_bound((2, 3, 5), 4),
+            5**4,
+        )
+        self.assertEqual(
+            verifier.evertse_prime_ideal_norm_bound((), 7),
+            1,
+        )
+
     def test_linear_pisot_decision_accepts_exactly_integer_bases(self):
         decisions = {
             system.name: verifier.has_bounded_outside_support_mcfl(system)
@@ -141,6 +151,8 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["linear_pisot_classification_failures"], 0)
         self.assertEqual(report["geometric_ratio_support_cases"], 4)
         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+        self.assertEqual(report["evertse_support_bound_cases"], 4)
+        self.assertEqual(report["evertse_support_bound_failures"], 0)
 
     def test_inflated_fibonacci_has_unit_reachable_action(self):
         report = verifier.verify_inflated_fibonacci_separation(

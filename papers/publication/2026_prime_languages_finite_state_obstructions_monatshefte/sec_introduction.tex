@@ -1,581 +1,173 @@
 \section{Introduction}\label{sec:introduction}
 
-Finite-state symbolic models impose rigid constraints on counting
-functions. In a deterministic automaton, the number of accepted words
-of length \(m\) is governed by powers of a finite matrix. In a sofic
-shift, the number of admissible words of a given length is likewise
-controlled by a finite-state presentation. These mechanisms force
-periodic density laws or exponential-polynomial growth, and that is
-often enough to rule out arithmetic languages whose size is governed by
-the prime number theorem.
-
-This paper isolates a quantitative finite-budget obstruction. The first
-part makes the fixed-base obstruction effective: from the DFA transition
-matrix and explicit prime-counting bounds one computes the residue
-alternatives, thresholds, and constants in the base-\(b\) prime-slice
-comparison. The second part removes the strongly connected restriction
-from the relative-density comparison. For an arbitrary trim
-deterministic presentation with Perron root \(\lambda>1\), possibly
-with several maximal strongly connected components and transient paths
-between them, the Perron-scale residue classes have residue-wise
-expansions with polynomial factors, while the remaining classes are
-sub-Perron. Comparing the active polynomial exponents gives a
-finite-budget obstruction for target families of size
-\(\asymp\lambda^m/m\) on those active classes. The Zeckendorf
-prime-slice results are then the strongly connected specialization of
-this mechanism.
-
-The language-theoretic part is independent of the prime number theorem.
-After the Zeckendorf context-free argument, it combines the weak pumping
-lemma for multiple context-free languages with the eventual affine
-recurrence action. Every infinite MCFL then contains one increasing
-orbit that returns simultaneously modulo every integer coprime to the
-trailing recurrence coefficient. This yields a copy of \(\mathbb Q\) in
-the associated deleted-congruence topology, a Cantor closure in the
-completion, and an exact Cantor--Bendixson obstruction. Prime and
-bounded-\(\Omega\) representation languages are MCF-immune even in the
-nonunit case. In a unit recurrence witness, arbitrary-depth quotient
-congruences produce an induced countably branching divisibility tree.
-The trailing coefficient of a nonminimal witness is not a
-numeration-system invariant: \Cref{prop:recurrence-witness-separation} exhibits
-ordinary base \(p\) and an inflated Zeckendorf witness with the same
-selected bad-prime set but opposite escape behavior.
-Passing instead to the intrinsic minimal tail recurrence yields an exact
-inverse statement: bounded prime support away from its constant term
-occurs on an infinite MCFL precisely when the canonical language
-contains a synchronized ray whose values are an integer geometric
-  progression. An explicit linear MCFG generates every such ray. When the
-  canonical syntax is supplied by a DFA, positive instances are
-  semidecidable. For standard linear Pisot \(U\)-systems the question is
-  decidable: a bounded-outside-support MCFL exists exactly when the dominant
-  Pisot number is an integer. In particular, for a nonintegral Pisot number
-  every infinite MCFL has unbounded support even after the primes dividing
-  its norm are deleted. No general decision procedure is asserted beyond
-  this linear Pisot class.
-
-For explicit Zeckendorf constants we use the canonical trim strongly
-connected presentation, but the abstract finite-budget comparison in
-\suppref{Theorem~1.14} applies to arbitrary trim
-deterministic presentations. Numeration automata with multiple strongly
-connected components do occur
-\cite{CharlierRampersadRigoWaxweiler2010}; their polynomial factors are
-accounted for in that theorem rather than excluded from the framework.
-
-Throughout, \(f(m)\asymp g(m)\) means that \(c_1g(m)\le f(m)\le c_2g(m)\)
-for some positive constants \(c_1,c_2\) and all sufficiently large
-\(m\). We use the standard prime-counting convention
-\(\pi(x)=\#\{p\le x:p\text{ prime}\}\). Thus an integer half-open
-interval \([X,Y)\) contains exactly \(\pi(Y-1)-\pi(X-1)\) primes; in
-asymptotic estimates below this may equivalently be written
-\(\pi(Y)-\pi(X)+O(1)\). We write \(F_0=0\), \(F_1=1\) for the Fibonacci numbers,
-\(\varphi=(1+\sqrt5)/2\), and for a Zeckendorf word
-\(w=x_1\cdots x_m\) we set
+Let \(U=(U_n)_{n\ge0}\) be a sequence of place values and let a word
+\(x_0\cdots x_{m-1}\) be read least-significant digit first, with value
 \[
-  \val(w):=\sum_{k=1}^m x_kF_{k+1}.
+  \val_U(x_0\cdots x_{m-1})=\sum_{j=0}^{m-1}x_jU_j.
 \]
-For \(n\ge2\), \(\omega(n)\) denotes the number of distinct rational
-prime divisors of \(n\), while \(\Omega(n)\) denotes the total number
-of prime factors of \(n\), counted with multiplicity. We put
-\(\omega(1)=\Omega(1)=0\), so \(\omega(n)\le\Omega(n)\) for all
-\(n\ge1\).
+This paper studies an arithmetic restriction imposed by finite-fan-out
+multiple context-free syntax: how few rational primes can occur among the
+values of an infinite multiple context-free sublanguage of a canonical
+numeration language? The answer is governed by a local recurrence action.
+It applies beyond ordinary bases and remains informative when the trailing
+coefficient of the recurrence is not a unit.
+
+The ambient assumptions are deliberately explicit. The sequence \(U\) is
+strictly increasing and eventually satisfies an integral linear recurrence
+with nonzero trailing coefficient. A finite nonnegative digit alphabet and
+a canonical language \(\mathcal R_U\) give exactly one representation of
+each positive integer, and canonical words are strictly ordered by length.
+Regularity of \(\mathcal R_U\) is not needed for the structural theorems; it
+is imposed only for the effective statement.
 
 \subsection{Main results}
 
-We separate the classical background inputs from the quantitative
-corollaries proved later. The residue-class refinements and their proofs
-appear in \suppref{Section~1}; the Zeckendorf results are proved in
-\Cref{sec:zeckendorf}.
-
-The logical chain is the following. First,
-\suppref{Theorem~1.2} supplies the residue constants \(c_r\)
-for a fixed complete DFA, and
-\suppref{Theorem~1.14} supplies the multicomponent
-finite-budget comparison for general trim deterministic presentations.
-Second,
-\suppref{Lemma~1.3} and \suppref{Lemma~1.5} turn a published
-explicit prime-counting estimate into concrete base-\(b\) slice
-constants \(A_b,B_b,M_b\). Third,
-\suppref{Theorem~1.7} combines these two
-finite inputs and outputs the certified residue alternatives,
-thresholds, and symmetric-difference and precision bounds. The later
-base-\(b\) and Zeckendorf corollaries are consequences of this
-finite-budget conversion.
-
-\begin{center}
-\begin{tabular}{p{0.18\linewidth}p{0.72\linewidth}}
-\textbf{Symbol} & \textbf{Meaning}\\
-\(D_A,c_r\) & Period and residue density constants for a complete DFA
-\(\mathcal A\) over \(\Sigma_b\).\\
-\(\mathcal P_m^{(b)}\) & The base-\(b\) prime slice; we reserve
-\(p_m^{(b)}=\abs{\mathcal P_m^{(b)}}\) for its size.\\
-\(D_N,d_r,e_r\) & Period and numerator/denominator residue constants
-for a trim strongly connected presentation \(\mathcal N\).\\
-\(s_r,t_r,S,\lambda\) & Polynomial exponents, maximum exponent, and
-Perron root in the multicomponent presentation theorem.\\
-\(D_{\mathrm Z},c_r^{(\mathrm Z)}\) & Period and relative-density
-constants for the Zeckendorf product presentation.\\
-\(\mathcal P_m^{(\mathrm Z)}\), \(\mathcal P_{\mathcal Z}\) &
-The length-\(m\) Zeckendorf prime slice and the full prime Zeckendorf
-language.\\
-\(A_b,B_b,M_b\), \(A_{\mathrm Z},B_{\mathrm Z},M_{\mathrm Z}\) &
-Explicit prime-slice lower/upper constants and thresholds in the
-base-\(b\) and Zeckendorf settings.\\
-\end{tabular}
-\end{center}
-
-We begin with the classical density dichotomy for deterministic
-automata, recorded in \suppref{Theorem~1.2} because its
-constants feed directly into the prime approximation bounds. In the
-binary case, if
+The recurrence gives an affine matrix \(D_\varepsilon\) for each digit.
+After a fixed prefix beyond the transient, concatenation is matrix
+multiplication, and every block matrix is invertible modulo each integer
+coprime to the trailing coefficient. The weak pumping lemma of
+Seki--Matsumura--Fujii--Kasami then supplies a single synchronized family
 \[
-  a_m(\mathcal A)
-  :=\#\{w\in\{0,1\}^m:\mathcal A\text{ accepts }w\},
+  W(t)=a u_1v_1^tw_1s_1^tu_2\cdots
+       u_kv_k^tw_ks_k^tu_{k+1}\qquad(t\ge0)
 \]
-then
+inside every infinite \(k\)-MCFL. Canonical length ordering makes
+\(N(t)=\val_U(W(t))\) strictly increasing. For every admissible
+modulus \(q\), a common return time for the pumped block matrices gives
 \[
-  \frac{a_m(\mathcal A)}{2^m}=c_{m\bmod D_A}+O(\theta^m)
+  N(t+H(q))\equiv N(t)\pmod q\qquad(t\ge0).
 \]
-for some automaton period \(D_A\), constants \(c_r\ge0\) indexed by
-\(r\bmod D_A\), and \(\theta\in(0,1)\). Thus, on each residue
-class, the normalized count either decays exponentially or is eventually
-bounded below by a positive constant. In particular, the intermediate scale
-\(a_m(\mathcal A)/2^m\asymp m^{-\alpha}\) is excluded.
+This is \Cref{thm:mcfl-synchronized-congruence-orbit}. Importantly, the
+factorization is fixed before \(q\) is chosen.
 
-When this is applied to the binary prime language
-\(\mathcal P_m^{(2)}\), whose size is \(\asymp 2^m/m\) by the prime
-number theorem \cite{HardyWright2008}, the full base-\(b\) results
-\suppref{Corollary~1.10} and \suppref{Corollary~1.12}
-give the following binary consequences. For every fixed deterministic
-finite automaton there is \(c>0\) such that
-\[
-  \abs{(L(\mathcal A)\cap\{0,1\}^m)\triangle\mathcal P_m^{(2)}}
-  \ge c\,\frac{2^m}{m}
-\]
-for all sufficiently large \(m\), and positive-density languages have
-\(\gg 2^m\) symmetric difference along an arithmetic progression. For
-the corresponding recall and precision ratios, every fixed DFA has
-either exponentially decaying recall or \(O(1/m)\) precision along an
-infinite arithmetic progression. These introductory statements are
-summaries of the later corollaries, not separate theorem content.
+The same orbit has two topological consequences. In the topology generated
+by congruence classes with moduli coprime to the trailing coefficient, it
+has no isolated point and is homeomorphic to \(\mathbb Q\); its closure in
+the corresponding profinite completion is a Cantor set
+(\Cref{thm:mcfl-local-adic-fingerprint}). The exact Cantor--Bendixson rank
+of a set with at most \(K\) primes outside the exceptional support and
+bounded exceptional valuations is \(K+1\)
+(\Cref{prop:local-prime-factor-cb-rank}). These facts give the nonunit
+escape dichotomy \Cref{thm:nonunit-mcfl-escape-dichotomy}: on every
+infinite MCFL, either the number of prime divisors outside the trailing
+coefficient is unbounded, or one valuation at a prime dividing that
+coefficient is unbounded. Prime and bounded-\(\Omega\) representation
+languages are therefore MCF-immune without a unit hypothesis.
 
-\begin{example}[MSD-first base-\(5\) convention]\label{ex:msd-base}
-  With digits read from the most significant position first, the word
-  \(w=2031\in\{0,1,2,3,4\}^4\) encodes the integer
-  \(2\cdot 5^3+0\cdot 5^2+3\cdot 5+1=266\). The leading digit must be
-  non-zero when counting prime slices of fixed length: although the
-  word \(0031\) has the same numerical value, it is excluded from
-  \(\mathcal P^{(5)}_4\) because it lies outside
-  \(\{1,\dots,4\}\Sigma_5^{3}\). This is the convention used throughout
-  \suppref{Section~1}.
-\end{example}
+The trailing coefficient of a nonminimal recurrence witness is not an
+invariant. \Cref{prop:recurrence-witness-separation} exhibits ordinary
+base \(p\) and the Zeckendorf sequence with inflated recurrence witnesses
+having the same exceptional prime \(p\), but opposite bounded-support
+behavior. We therefore pass to the minimal tail recurrence
+\[
+  \mu_U(X)=X^{d_{\mathrm r}}-c_{d_{\mathrm r}-1}X^{d_{\mathrm r}-1}
+    -\cdots-c_1X-c_0
+\]
+and write \(S_{\mathrm r}=\{p:p\mid c_0\}\).
 
-For the Zeckendorf setting we use the background growth law proved in
-the specialized form needed in
-\Cref{prop:zeckendorf-regular-powerlaw}. It applies to regular
-sublanguages of
-\[
-  \mathcal Z
-  :=\{x_1\cdots x_m\in\{0,1\}^\ast:
-      x_ix_{i+1}\neq 11,\ x_m=1\}.
-\]
-For such an \(L\), after deleting states that are not reachable from
-the initial state or cannot reach an accepting state, let \(\rho\) be
-the maximal spectral radius of a strongly connected component in a DFA
-recognizing \(L\), and define
-\[
-  N_L(T):=\#\{w\in L:\val(w)\le T\},
-\]
-where \(\val(w)\) is the Zeckendorf value of \(w\). The growth law says
-\[
-  N_L(T)=T^{\alpha+o(1)},
-  \qquad
-  \alpha=
-  \begin{cases}
-    0, & \rho\le 1,\\[0.3em]
-    \dfrac{\log \rho}{\log \varphi}, & \rho>1.
-  \end{cases}
-  \qquad (T\to\infty).
-\]
-\Cref{sec:zeckendorf} combines this background statement with
-prime-counting estimates to deduce the quantitative Zeckendorf
-slice-obstruction corollaries. Its language-theoretic conclusions are
-stronger and do not use the prime number theorem. The regular theorem
-\Cref{thm:coprime-quotient-zeckendorf-pumping} and its context-free
-extension
-\Cref{thm:context-free-coprime-quotient-zeckendorf-pumping} prove, by
-block-action pumping modulo \(N_i^2\), that every sufficiently long
-word in the respective language class starts an infinite chain
-\[
-  N_{i+1}=N_iQ_i,\qquad Q_i\equiv1\pmod {N_i}.
-\]
-Thus each pumping step may be chosen with quotient coprime to the
-previous value, and \(\omega(\val(w))\) is unbounded on every infinite
-context-free \(L\subseteq\mathcal Z\). The general recurrent-system
-results
-\Cref{thm:mcfl-synchronized-congruence-orbit,thm:mcfl-local-adic-fingerprint,thm:nonunit-mcfl-escape-dichotomy,thm:bounded-outside-support-geometric-ray}
-upgrade prime immunity to MCF-immunity and isolate the exact nonunit
-escape alternative and its intrinsic geometric-ray inverse. The
-  positive semidecidability consequence is
-  \Cref{cor:bounded-outside-support-semidecidable}. In unit systems,
-\Cref{thm:unit-mcfl-deep-congruence-chain,thm:unit-mcfl-divisibility-tree}
-give arbitrary congruence depth and the induced divisibility tree.
-  The specialization and bounded-support classification for standard linear
-  Pisot \(U\)-systems are
-  \Cref{cor:linear-pisot-prime-cf-immunity,cor:linear-pisot-bounded-support-classification}.
-  In the endpoint case \(\rho\le1\), the
-displayed formula is used only in the form \(N_L(T)=T^{o(1)}\).
+The central inverse theorem is the geometric-ray characterization
+\Cref{thm:bounded-outside-support-geometric-ray}. The following are
+equivalent:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item some infinite finite-fan-out MCFL \(L\subseteq\mathcal R_U\)
+    has bounded prime support outside \(S_{\mathrm r}\);
+  \item \(\mathcal R_U\) contains a synchronized family \(W(t)\) of the
+    displayed form with \(\val_U(W(t))=cb^t\) for integers \(c\ge1\),
+    \(b\ge2\);
+  \item such a family itself forms an infinite linear MCFL of finite
+    fan-out.
+\end{enumerate}
+The difficult direction first uses local return times to pass to a
+subsequence supported on a fixed finite set of primes. That subsequence is
+a strictly increasing linear recurrence. We then separate root-of-unity
+classes of characteristic roots. Evertse's theorem says uniformly that the
+largest prime-ideal norm in a quotient of two terms of a nondegenerate
+recurrence with at least two characteristic roots tends to infinity
+\cite[Theorem~3]{Evertse1984}. Since quotients of the fixed-support
+subsequence have prime ideals only above a fixed finite set of rational
+primes, Evertse excludes two or more roots. Schur's theorem excludes a
+nonconstant polynomial factor in the remaining one-root expression. An
+arithmetic subsequence is consequently exactly \(cb^t\). The full
+prime-ideal norm bound and all quantifiers from Evertse's input are given
+in \Cref{lem:evertse-quotient-support-input}; this recurrence theorem is
+used as a classical input, not claimed as new.
 
-\begin{example}[LSD-first Zeckendorf convention]\label{ex:lsd-zeck}
-  Consider the integer \(23=F_8+F_3\). Its Zeckendorf expansion uses
-  digits \(x_k\in\{0,1\}\) with \(x_k\) multiplying \(F_{k+1}\) and the
-  least significant digit listed first. The admissible word
-  \(w=0100001\) has length \(7\), satisfies the no-\(11\) rule, and
-  evaluates to
-  \(x_1F_2+x_2F_3+\cdots+x_7F_8=0+1\cdot 2+\cdots+1\cdot 21=23\).
-  The terminal \(1\) is the most significant digit, consistent with the
-  trim deterministic presentation used in \Cref{sec:zeckendorf}.
-\end{example}
+Every geometric ratio is locally constrained:
+\[
+  \operatorname{rad}(b)\mid\operatorname{rad}(|c_0|)
+\]
+by \Cref{lem:geometric-ratio-tail-support}. If the digit alphabet,
+recurrence data, minimal tail recurrence, and a DFA for \(\mathcal R_U\)
+are effective, a proposed synchronized scheme can be checked using the
+finite transition monoid and an exact recurrence identity. Enumerating all
+schemes proves the \(\Sigma^0_1\) upper bound in
+\Cref{cor:bounded-outside-support-semidecidable}.
 
-The final remarks are only contextual. They recall the classical
-P\'olya--Carlson--Estermann natural-boundary obstruction for
-prime-supported Euler products and the elementary \(2\pi i\)-periodicity
-of scalar determinant models after \(z=e^{-s}\); these statements are
-not used in the finite-budget proofs.
+This does not decide negative instances. A general decision procedure
+would require a computable complete bound on fan-out and block lengths, or
+an equivalent finite negative certificate. DFA loop compression alone does
+not preserve the affine recurrence matrix and therefore does not preserve
+the exact geometric identity. \Cref{rem:general-decision-interface}
+records this failed step precisely. No undecidability claim is made: known
+undecidability for unrestricted matrix equations does not preserve the
+companion-form digit action and the canonical conditions used here.
+
+There are two resolved regimes. When the trailing coefficient is a unit,
+the synchronized orbit admits quotient congruences of arbitrary prescribed
+depth and an induced copy of the countably branching divisibility tree with
+pairwise coprime, arbitrarily rough edge quotients
+(\Cref{thm:unit-mcfl-deep-congruence-chain,thm:unit-mcfl-divisibility-tree}).
+For standard linear Pisot \(U\)-systems, greedy length thresholds complete
+the bounded-support classification: the three equivalent properties above
+hold exactly when the dominant Pisot number is an integer
+(\Cref{cor:linear-pisot-bounded-support-classification}). Hence the
+property is decidable in that subclass by computing the degree of the
+minimal polynomial.
 
 \subsection{Relation to prior work}\label{subsec:prior-work}
 
-We give a theorem-by-theorem account of what is known, what is a
-specialized reproof, and what is new.
+The fixed-base context-free prime obstruction is classical, due to
+Hartmanis--Shank and Sch\"utzenberger
+\cite{HartmanisShank1968,Schutzenberger1968}. Our language-theoretic input
+is the weak pumping lemma for multiple context-free grammars from
+Seki--Matsumura--Fujii--Kasami \cite{SekiEtAl1991}. It guarantees one
+synchronized pumpable word; the stronger assertion that every sufficiently
+long word pumps is false for general MCFLs
+\cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}. The affine recurrence
+action and its simultaneous local returns are the bridge from this weak
+language statement to prime support.
 
-\begin{itemize}
-  \item \textbf{\suppref{Theorem~1.2} (density dichotomy):
-  classical.} The eventual periodicity of normalized word counts for a
-  deterministic automaton is a direct Perron--Frobenius consequence and
-  is standard in the density literature for regular languages; see
-  \cite{Berstel1973,SalomaaSoittola1978,BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity,Koga2019Density,BerstelReutenauer2011}.
-  We record it only in the residue-class form needed for the later
-  prime estimates.
+Evertse's theorem on sums of \(S\)-units and linear recurrences is the
+nearest arithmetic input \cite{Evertse1984}. It supplies exactly the
+unbounded prime-ideal support in term quotients needed for the geometric
+rigidity step; it does not state the synchronized-language characterization.
+Broughan's adic-topology classification \cite{Broughan2003} supplies
+classical context for the deleted-congruence topology. Frougny's
+normalization theorem and the Bertrand and substitution literature provide
+the regular canonical interfaces for Pisot numeration
+\cite{Frougny1992,BruyereHansel1997,Fabre1995,FrougnySolomyak1992}.
 
-  \item \textbf{\suppref{Lemma~1.16} and
-  \Cref{prop:zeckendorf-regular-powerlaw}: classical.} These results are standard residue-class regroupings of
-  the periodic Perron--Frobenius theorem for trim strongly connected
-  presentations and of the known Zeckendorf growth law; see, e.g.,
-  \cite{SalomaaSoittola1978,LecomteRigo2001,CharlierRampersad2011}.
+The nearest algorithmic boundary is the decision theory of linear
+recurrences. The Skolem problem remains open in general; see
+Ouaknine--Worrell \cite{OuaknineWorrell2012}. Tarasov--Vyalyi relate orbit
+hitting to a regular-language intersection problem
+\cite{TarasovVyalyi2011}. At the other extreme, unrestricted multiplicative
+matrix equations contain undecidable families
+\cite{BellEtAl2008MatrixEquations}. These works explain why a finite witness
+bound cannot be inferred from general matrix-semigroup theory, but none
+settles the constrained decision problem formulated here.
 
-  \item \textbf{Multicomponent theorem.}
-  \suppref{Theorem~1.14} keeps the
-  residue-wise exponential-polynomial expansion on the Perron-scale
-  active classes of arbitrary trim deterministic presentations, absorbs
-  lower-growth classes into the sub-Perron term, and compares the
-  polynomial exponents in the product automaton. This is the
-  presentation-level finite-budget result used to handle maximal
-  components connected by transient paths.
+The compiled supplement retains the separate finite-state results: the
+density dichotomy and effective fixed-DFA prime-slice bounds in ordinary
+bases, the corresponding Zeckendorf growth and regular-language results,
+and the classical analytic comparisons. They are not used in the proof of
+the recurrent MCFL theorem chain.
 
-  \item \textbf{\suppref{Theorem~1.18} (trim strongly connected
-  presentations).} This is the \(s_r=0\) specialization of the
-  multicomponent picture and agrees with the conditional-density
-  literature
-  \cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}.
-  Its role is to isolate the constants used in the Zeckendorf
-  application.
+\subsection{Organization}
 
-  \item \textbf{Effective quantitative prime-slice obstructions.} The
-  introductory binary corollaries above summarize the later statements
-  \suppref{Proposition~1.9}, \suppref{Corollary~1.10}, and
-  \suppref{Corollary~1.12}.
-  The effective theorem \suppref{Theorem~1.7}
-  makes the fixed-base constants and thresholds computable from a
-  compressed Markov-chain certificate for the transition matrix of the
-  given DFA. This is an effective packaging of the classical density
-  dichotomy with explicit prime-counting input, not a new density
-  dichotomy. Together with
-  \suppref{Corollary~1.19}, this gives a uniform
-  obstruction to approximating the base-\(b\) prime slices by a single
-  fixed DFA, both for symmetric difference and for simultaneous
-  recall/precision. The Zeckendorf analogues
-  \Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision} follow by the
-  same mechanism.
-
-  \item \textbf{Coprime-quotient Zeckendorf pumping
-  (\Cref{thm:coprime-quotient-zeckendorf-pumping}).} The PNT-free
-  unimodular block-action argument is the primary new Zeckendorf
-  language theorem in this note. It uses
-  \Cref{lem:zeckendorf-unimodular-block-action,lem:zeckendorf-pumping-congruence}
-  with modulus \(N_i^2\) to build an infinite chain
-  \(N_{i+1}=N_iQ_i\) with \(Q_i\equiv1\pmod {N_i}\) inside any
-  infinite regular \(L\subseteq\mathcal Z\). This implies that new
-  rational prime divisors occur along the chain, hence
-  \[
-    \sup_{w\in L}\omega(\val(w))=\infty.
-  \]
-  The bounded-distinct-prime and finite-prime-support REG-immunity
-  corollaries are the main language-theoretic consequences; bounded
-  almost-prime and prime-language REG-immunity are weaker downstream
-  cases. The slice-rigidity statement
-  \(\Cref{prop:zeckendorf-regular-slice-rigidity}\) remains a separate
-  density-scale obstruction, while the nonregularity corollary
-  \(\Cref{cor:zeckendorf-prime-language-not-regular}\) follows
-  immediately from REG-immunity. The sofic-slice exclusion
-  \(\Cref{rem:zeckendorf-primes-not-sofic}\) is then a short consequence
-  of regularity of sofic block languages.
-
-  \item \textbf{Context-free, MCFL, and Pisot extensions.}
-  Fixed-base prime CF-immunity is classical. Hartmanis and Shank proved
-  that no infinite set of primes can be accepted in fixed-base notation
-  by a pushdown automaton; Sch\"utzenberger obtained the conclusion
-  independently \cite{HartmanisShank1968,Schutzenberger1968}. We do not
-  reproduce their proofs as new. Our use of Ogden's lemma
-  \cite{Ogden1968} instead couples the two pumped blocks to the
-  Zeckendorf unimodular action and yields the stronger coprime-quotient
-  chain
-  \Cref{thm:context-free-coprime-quotient-zeckendorf-pumping}. The
-  weak pumping lemma of Seki--Matsumura--Fujii--Kasami
-  \cite{SekiEtAl1991} supplies one synchronized \(2k\)-block orbit for
-  every infinite \(k\)-MCFL; it is used as an input, not reproved.
-  Kanazawa--Kobele--Michaelis--Salvati--Yoshinaka prove that the usual
-  strong pumping form fails in general
-  \cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}, and the recent
-  substitution lemma of Duncan--Elder--Frenkel--Liu gives a different
-  strong interface \cite{DuncanElderFrenkelLiu2026}. Neither result
-  concerns recurrence numeration or divisibility. The new deductions
-  are the fixed local-congruence orbit
-  \Cref{thm:mcfl-synchronized-congruence-orbit}, the topological
-  fingerprint \Cref{thm:mcfl-local-adic-fingerprint}, the exact rank
-  formula \Cref{prop:local-prime-factor-cb-rank}, and the escape
-  dichotomy \Cref{thm:nonunit-mcfl-escape-dichotomy}. The unit-system
-  constructions are \Cref{thm:unit-mcfl-deep-congruence-chain} and
-  \Cref{thm:unit-mcfl-divisibility-tree}.
-  Evertse's theorem on prime ideals in ratios of terms of
-  nondegenerate recurrences \cite{Evertse1984} is used as an arithmetic
-  input to the geometric-ray characterization
-  \Cref{thm:bounded-outside-support-geometric-ray}; it is not claimed as
-  a new recurrence theorem. The local return congruence further confines the
-  geometric ratio to primes dividing the minimal tail constant, and greedy
-  length thresholds give the integer/nonintegral Pisot classification in
-  \Cref{lem:geometric-ratio-tail-support,cor:linear-pisot-bounded-support-classification}.
-  Broughan's \(\mathbb Q\)- and Cantor-space classifications for adic
-  integer topologies are cited as classical inputs
-  \cite{Broughan2003}. Frougny normalization and the
-  Bertrand and substitution literature
-  \cite{Frougny1992,BruyereHansel1997,Fabre1995,FrougnySolomyak1992}
-  supply the canonical finite-state numeration interface, not the
-  arithmetic pumping proof. The residual nonunit and non-positional
-  limits are stated in \Cref{rem:pisot-open-interfaces}. The
-  recurrence-witness separation
-  \Cref{prop:recurrence-witness-separation} distinguishes the invariant
-  minimal action from an arbitrarily inflated companion presentation.
-
-  \item \textbf{Analytic obstructions: classical background.}
-  \suppref{Theorem~A.1} is the usual
-  P\'olya--Carlson natural-boundary mechanism for Euler products.
-  \suppref{Proposition~A.2} is the corresponding
-  periodicity obstruction for determinant models after \(z=e^{-s}\). Both are
-  classical
-  \cite{Polya1923,Carlson1921,Estermann1928,ArtinMazur1965,BowenLanford1970}.
-\end{itemize}
-\smallskip
-\noindent\textbf{Relation to density and approximation literature.} For ordinary
-automatic sets, asymptotic density questions go back at least to
-Berstel \cite{Berstel1973}; the standard global sources include
-B\"uchi's automata-theoretic decidability work \cite{Buchi1960} and
-Allouche--Shallit's monograph on automatic sequences
-\cite{AlloucheShallit2003}. Matrix and algorithmic treatments appear
-in
-\cite{BodirskyGaertnerVonOertzenSchwinghammer2004,Bell2020UpperDensity},
-and Koga's paper \cite{Koga2019Density} revisits Sin'ya's density-zero
-criterion \cite{Sinya2021}. The rational-measure viewpoint of Hansel
-and Perrin \cite{HanselPerrin1989} interprets regular languages via
-probability measures on shifts of finite type. Kozik's MFCS 2005 paper
-\cite{Kozik2005Conditional} formulates conditional densities for
-deterministic presentations in the trim strongly connected setting,
-Montoya \cite{Montoya2025Relative} recasts these questions in terms of
-relative densities, and Berth\'e--Goulet-Ouellet--Perrin
-\cite{BertheGouletPerrin2025} establish a broad density theorem under
-shift-invariant measures. Accordingly,
-\suppref{Theorem~1.2}, \Cref{prop:zeckendorf-regular-powerlaw}, and
-\suppref{Theorem~1.18}
-should be read here as background statements in a form suited to the
-prime-slice applications, while
-\suppref{Theorem~1.14} is the exponent-sensitive
-extension needed for general trim deterministic presentations. Cobham's
-theorem
-\cite{Cobham1969} is the foundational reference for base-dependent
-automatic recognizability of sets of integers. Regular approximation of
-non-regular languages is a separate line of work; see, for example,
-Eisman and Ravikumar \cite{EismanRavikumar2005} and the asymptotic
-approximation framework of Sin'ya \cite{Sinya2021}. Polynomial and
-sparse growth phenomena for regular languages are part of the classical
-transfer-matrix picture \cite{Berstel1973,SalomaaSoittola1978}, and
-numeration systems on regular languages are treated in
-\cite{LecomteRigo2001,Frougny1992,BruyereHansel1997,CharlierRampersad2011,Rigo2014Vol1,Rigo2014Vol2}.
-The present contribution is narrower: it packages the fixed-DFA
-prime-slice obstruction with computable residue-class constants and
-explicit thresholds, then applies the same finite-budget argument in the
-Zeckendorf setting.
-
-
-\medskip
-\noindent\textbf{Summary.} \suppref{Theorem~1.2 and Lemma~1.16} and
-\Cref{prop:zeckendorf-regular-powerlaw}
-record the density statements needed for deterministic presentations.
-\suppref{Theorem~1.14} gives the general trim
-deterministic finite-budget theorem, including multiple maximal
-components, Perron-active residue classes, and their polynomial factors,
-and \suppref{Theorem~1.18} records the strongly connected
-specialization used for Zeckendorf. The paper's effective contribution
-is the finite-budget obstruction mechanism with quantitative fixed-DFA
-recall/precision and symmetric-difference instances; see
-\suppref{Corollary~1.19}, \suppref{Proposition~1.9},
-\suppref{Corollary~1.10}, and \suppref{Corollary~1.12}.
-The Zeckendorf analogues are
-\Cref{cor:zeck-symmetric-diff,cor:zeck-recall-precision}. The
-Zeckendorf prime-language theorem is downstream of the PNT-free
-coprime-quotient pumping theorem
-\Cref{thm:coprime-quotient-zeckendorf-pumping}. Its principal
-consequences are
-\Cref{cor:unbounded-distinct-prime-divisors,cor:bounded-distinct-prime-zeckendorf-languages-reg-immune}
-and \Cref{cor:finite-prime-support-zeckendorf-languages-reg-immune};
-\Cref{prop:zeckendorf-regular-slice-rigidity} remains a separate
-slice-cardinality obstruction, and
-\Cref{cor:zeckendorf-prime-language-not-regular} is an immediate
-consequence of REG-immunity.
-Context-free Zeckendorf pumping is
-\Cref{thm:context-free-coprime-quotient-zeckendorf-pumping}, with the
-immunity consequences in
-\Cref{cor:zeckendorf-context-free-immunity-package}. The stronger MCFL
-package is
-\Cref{thm:mcfl-synchronized-congruence-orbit,thm:mcfl-local-adic-fingerprint,prop:local-prime-factor-cb-rank,thm:nonunit-mcfl-escape-dichotomy,thm:bounded-outside-support-geometric-ray,lem:geometric-ratio-tail-support,cor:bounded-outside-support-semidecidable,thm:unit-mcfl-deep-congruence-chain,thm:unit-mcfl-divisibility-tree};
-its linear Pisot specialization is
-\Cref{thm:recurrent-numeration-prime-cf-immunity,cor:linear-pisot-prime-cf-immunity,cor:linear-pisot-bounded-support-classification}.
-The eventual-sofic exclusion is recorded only as the brief consequence
-\Cref{rem:zeckendorf-primes-not-sofic}, while
-\suppref{Theorem~A.1} and \suppref{Proposition~A.2}
-remain classical background.
-
-\medskip
-Finite-automata non-recognizability of the base-\(b\) prime language
-goes back to Minsky and Papert \cite{MinskyPapert1966}.
-Allen \cite{Allen1968}, Hartmanis--Shank
-\cite{HartmanisShank1968}, and Sch\"utzenberger
-\cite{Schutzenberger1968} proved stronger related results for broader
-language classes and acceptable sets. Shallit's survey and monograph
-treat automaticity and number theory from the finite-automata viewpoint
-\cite{Shallit1996,AlloucheShallit2003}. Recent work of Yuen and Dubbe
-studies regularity and quantitative automaticity around the prime set
-\cite{Yuen2022,Dubbe2024}, and Shen proves that prime automata in Yao's
-finite-automata primeness model do not exist \cite{Shen2022}. Those
-results concern
-recognizability or growing-state quantitative automaticity. The present
-theorems are different: the automaton is fixed, the comparison is made
-on each fixed length slice, and the conclusion is a recall/precision
-or symmetric-difference obstruction rather than a state lower bound for
-a sequence of automata.
-
-The Zeckendorf theorem in \Cref{sec:zeckendorf} should be compared with,
-but not identified with, the classical base-representation results of
-Sch\"utzenberger. In a fixed base the digit value update is controlled
-by multiplication by the base modulo a prime. For LSD-first Zeckendorf
-words the corresponding update is instead the unimodular \(3\times3\)
-matrix action on
-\((\val(\text{prefix}),F_{r+1},F_{r+2})^t\). This invertibility modulo
-the square of the current value is what makes the pumping congruence
-work and yields quotients \(Q_i\equiv1\pmod {N_i}\). Thus the quotient
-is coprime to the previous value, forcing new rational prime divisors;
-the prime-language REG-immunity is the \(K=1\) bounded-distinct-prime
-subcase.
-
-The interaction between primes and digital
-constraints has a much deeper literature. Mauduit and Rivat
-\cite{MauduitRivat2010}, Drmota--Mauduit--Rivat
-\cite{DrmotaMauduitRivat2009}, and M\"ullner \cite{Muellner2017} prove
-analytic equidistribution results for digit functions and automatic
-sequences evaluated at primes. Maynard's theorem on primes with missing
-digits \cite{Maynard2019}, Bourgain's work on primes with prescribed
-binary digits
-\cite{Bourgain2013PrescribedDigits,Bourgain2015PrescribedDigitsII},
-Swaenepoel's extension to a positive proportion of preassigned digits
-in arbitrary bases \cite{Swaenepoel2020PreassignedDigits}, and
-Bhowmik--Suzuki's work on reversed primes in arithmetic progressions
-\cite{BhowmikSuzuki2024} address complementary problems about primes
-and digital restrictions. These analytic results allow the digit
-constraints to vary with the length and prove prime
-asymptotics or positive proportions inside those varying families. The
-present paper does neither: the automaton is fixed once and for all,
-and the obstruction is the elementary mismatch between eventual
-periodic finite-state densities and the finite prime budget
-\(\asymp\lambda^m/m\). For Zeckendorf and more general Parry numeration
-systems, the uniqueness theorem goes back to Lekkerkerker and
-Zeckendorf \cite{Lekkerkerker1952,Zeckendorf1972}, and the regularity
-of admissible expansions is standard; see
-\cite{Frougny1992,BruyereHansel1997,Rigo2014Vol1,Rigo2014Vol2}. Analytic
-work of Drmota--M\"ullner--Spiegelhofer on primes in Fibonacci or
-Zeckendorf representations \cite{DrmotaMuellnerSpiegelhofer2021}
-studies prime distribution under numeration constraints. Here we use
-only the size of the Zeckendorf interval and regular syntax, not an
-equidistribution theorem for Zeckendorf digit patterns. The
-transfer-matrix viewpoint on word counts is familiar from symbolic
-dynamics and analytic combinatorics
-\cite{LindMarcus1995,Kitchens1998,FlajoletSedgewick2009}.
-
-Recent Monatshefte work illustrates the surrounding symbolic-dynamical
-landscape: Bustos-Gajardo--Kellendonk--Yassawi use finite semigroup
-methods for factors of substitution shifts
-\cite{BustosKellendonkYassawi2025}, and Charlier--Cisternino study
-soficity phenomena in Cantor real-base expansions
-\cite{CharlierCisternino2021}. These are complementary to the present
-finite-budget obstruction; they do not supply, and are not used as, a
-prime-slice density theorem.
-
-For clarity, the comparison with prior work can be summarized as follows.
-Regular-language density results of
-\cite{HanselPerrin1989,Kozik2005Conditional,Koga2019Density,Montoya2025Relative,BertheGouletPerrin2025}
-give the periodic or conditional density statements used here; the new
-increment is to feed the resulting residue constants into explicit
-prime-slice thresholds for one fixed automaton. Numeration-system work
-\cite{Frougny1992,BruyereHansel1997,CharlierRampersad2011,Rigo2014Vol1,Rigo2014Vol2}
-supplies regular admissible languages and growth laws for abstract
-numeration, including Zeckendorf-type systems; in the trim strongly
-connected cases stated explicitly, the present paper transfers the same
-fixed-prime-slice obstruction to Zeckendorf length slices with computable
-constants. For primes in Fibonacci or Zeckendorf representations, we use
-only the prime number theorem estimate
-\(\#\{p\in[F_{m+1},F_{m+2})\}\asymp\varphi^m/m\), and no distribution
-theorem for Zeckendorf digit patterns is claimed.
-
-The sofic and orbit-growth papers
-\cite{BustosKellendonkYassawi2025,CharlierCisternino2021}, together with
-the classical zeta references recalled in \suppref{Appendix~A}, are used
-only for contextual comparison: the present argument separates those
-phenomena from the fixed prime-slice density obstruction. Similarly,
-regular-approximation frameworks for nonregular languages
-\cite{EismanRavikumar2005,Sinya2021} position the problem, but the
-obstruction proved here is slice-wise and quantitative for one fixed DFA,
-not an optimal approximation scheme. The main theorem chain,
-\suppref{Theorem~1.7}, \suppref{Theorem~1.14}, and
-\suppref{Corollary~1.19},
-computes residue alternatives, thresholds, and constants for a fixed
-finite automaton, and compares multicomponent polynomial exponents
-against a prime budget of order \(\lambda^m/m\).
-
-\subsection{Organisation}
-
-\suppref{Section~1} proves the density dichotomy for deterministic
-automata and derives the fixed-base prime corollaries.
-\Cref{sec:zeckendorf} records the background growth law for regular
-Zeckendorf sublanguages, deduces the corresponding quantitative prime
-corollaries, proves the PNT-free coprime-quotient Zeckendorf pumping
-theorem and its unbounded-\(\omega\), bounded-distinct-prime,
-finite-prime-support, and prime-language REG-immunity corollaries,
-records the older slice-level
-rigidity as a separate density obstruction, and then notes the easy
-nonregularity and sofic exclusions.
-\Cref{sec:context-free-pisot} proves the paired-pump Zeckendorf theorem,
-the synchronized MCFL orbit, its local-adic and Cantor--Bendixson
-consequences, the nonunit escape dichotomy, the geometric-ray
-characterization and its positive semidecidability consequence, and the
-unit-system divisibility tree, then specializes the recurrent interface
-to linear Pisot \(U\)-systems.
-\suppref{Appendix~A} collects final background analytic comparators
-concerning Euler products and scalar determinant models. Later sections
-cite the statements recorded above directly, so their proofs and
-corollaries need not restate the results in full.
+\Cref{sec:context-free-pisot} begins with the context-free Zeckendorf
+motivation, develops the recurrent block action and synchronized MCFL orbit,
+proves the local-adic and prime-support consequences, establishes the
+geometric-ray characterization and its effective boundary, and concludes
+with the unit and linear Pisot specializations. \Cref{sec:conclusion}
+summarizes the proved scope and the remaining decision interface.

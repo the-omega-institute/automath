@@ -221,3 +221,32 @@ Perron-peripheral spectrum `{2}` but spectral cohomology multiplicities `2`
 and `1`.  Thus the sharp invariant must retain the full Wedderburn
 characteristic data; peripheral data alone cannot be repaired by stronger
 mixing or semisimplicity assumptions.
+
+## General-group polynomial sampling audit (10 August 2026)
+
+A fresh search targeted the proposed statement that finitely many algebraic
+radial values determine all primitive length--class data for every finite
+group, with a sample bound polynomial in the graph size and group order.
+The arXiv API query
+`("finite sampling" OR "finite determination") AND
+("dynamical zeta" OR Mahler)` returned no records.  Broad zbMATH Open
+searches for `"finite sampling" Mahler` and
+`"dynamical zeta" "finite group" inverse` likewise returned no records.
+
+Crossref and exact-DOI lookups identified two nearest antecedents:
+
+- F. Chyzak, T. Dreyfus, P. Dumas, and M. Mezzarobba, *Computing
+  solutions of linear Mahler equations*, Math. Comp. 87 (2018), 2977--3021,
+  DOI `10.1090/mcom/3359`, arXiv:`1612.05518`, zbMATH `1393.39002`;
+- M. Boyle and S. Schmieding, *Finite group extensions of shifts of finite
+  type: K-theory, Parry and Livsic*, ETDS 37 (2017), 2355--2366,
+  DOI `10.1017/etds.2015.87`, zbMATH record `6728708`.
+
+The first is the nearest effective Mahler work but concerns linear Mahler
+equations.  The second is the nearest dynamical work and studies periodic-data
+invariants and non-rigidity for finite-group SFT extensions.  Neither states
+an effective inverse theorem for nonlinear multiplicative-coboundary radial
+sampling.  Semantic Scholar's keyword endpoint returned HTTP 429 during this
+audit, while exact DOI lookups for both records succeeded.  As always, these
+database results are evidence about nearest prior work, not proof of absolute
+priority.

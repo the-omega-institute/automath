@@ -1,4 +1,14 @@
-# Reproducing the exact S3 certificate
+# Reproducing the manuscripts and exact certificates
+
+The refocused inverse theorem is built from `main.tex`; the independently
+compiled Frobenius-class correction is built from `supplement.tex`:
+
+```powershell
+latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex
+```
+
+## Exact S3 certificate
 
 The manuscript prints a self-contained rational proof of the interval for
 `F_epsilon(1/2)`. The program below independently reproduces the logarithm
@@ -81,6 +91,10 @@ Theorem 6.8: `p=2`, `N=0`, `n=1`, `m=M=2`, `U=L=1`, coprimality of the
 reduced equation, and the numerical inequality `4<8`.  This is parameter
 bookkeeping; the published transcendence theorem remains an external analytic
 input and is not claimed to be machine-verified.
+It additionally checks the displayed `C3` Adams--Mobius coefficients through
+60 and records non-zero support at the primes `2, 5, 11, 17`.  This finite
+audit checks the formula only; the manuscript's elementary argument proves
+that primes congruent to two modulo three are infinite.
 The expected enumeration is `2208` primitive bases, `48` supports for
 `1-z^2+2z^4`, and `0` supports for `(1-z+2z^2)^2`.  A separate high-precision
 check evaluates the telescoping identity at 25 points in `0 < z <= 1/4`:

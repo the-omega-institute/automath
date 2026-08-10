@@ -7,6 +7,7 @@ import argparse
 import csv
 import math
 from collections import Counter
+from itertools import product
 from pathlib import Path
 
 import mpmath
@@ -147,6 +148,66 @@ def dyadic_generator_cost_counters(max_exponent: int) -> list[Counter[int]]:
                         prefix_count * letter_count
                     )
     return generators
+
+
+def prime_support_generator_cost_counter(
+    primes: tuple[int, ...], target: tuple[int, ...]
+) -> Counter[int]:
+    """Count free words by cost at one finite-prime exponent vector."""
+    if not primes or len(primes) != len(target):
+        raise ValueError("primes and target must be nonempty vectors of equal length")
+    if len(set(primes)) != len(primes) or any(prime < 2 for prime in primes):
+        raise ValueError("primes must be distinct integers at least two")
+    if any(exponent < 0 for exponent in target) or not any(target):
+        raise ValueError("target exponents must be nonnegative and not all zero")
+
+    zero = (0,) * len(target)
+    letter_counters: dict[tuple[int, ...], Counter[int]] = {}
+    ranges = [range(exponent + 1) for exponent in target]
+    for exponent_vector in product(*ranges):
+        if exponent_vector == zero:
+            continue
+        denominator = math.prod(
+            prime**exponent
+            for prime, exponent in zip(primes, exponent_vector)
+        )
+        costs: Counter[int] = Counter()
+        for numerator in range(1, denominator):
+            if math.gcd(numerator, denominator) == 1:
+                cost = 2 * regular_partial_quotient_sum(numerator, denominator) - 1
+                costs[cost] += 1
+        letter_counters[exponent_vector] = costs
+
+    generators: dict[tuple[int, ...], Counter[int]] = {zero: Counter({0: 1})}
+    for exponent_vector in product(*ranges):
+        if exponent_vector == zero:
+            continue
+        counts: Counter[int] = Counter()
+        for letter_vector, letter_costs in letter_counters.items():
+            if any(
+                letter > exponent
+                for letter, exponent in zip(letter_vector, exponent_vector)
+            ):
+                continue
+            prefix = tuple(
+                exponent - letter
+                for exponent, letter in zip(exponent_vector, letter_vector)
+            )
+            for prefix_cost, prefix_count in generators[prefix].items():
+                for letter_cost, letter_count in letter_costs.items():
+                    counts[prefix_cost + letter_cost] += prefix_count * letter_count
+        generators[exponent_vector] = counts
+    return generators[target]
+
+
+def heavy_dyadic_second_moment_terms(max_exponent: int) -> list[float]:
+    """Terms forced by the letters 1/2^a in the dyadic cost second moment."""
+    if max_exponent < 1:
+        raise ValueError("max_exponent must be positive")
+    return [
+        3.0 ** (-exponent) * (2 ** (exponent + 1) - 1) ** 2
+        for exponent in range(1, max_exponent + 1)
+    ]
 
 
 def dyadic_finite_window_count(m: int, cost_counter: Counter[int]) -> int:
@@ -712,6 +773,13 @@ def main() -> int:
         not check for check in dyadic_total_checks + dyadic_window_checks
     )
     failures += dyadic_failures
+    mixed_prime_counter = prime_support_generator_cost_counter((2, 3), (1, 1))
+    prime_support_checks = [
+        mixed_prime_counter == Counter({8: 4, 11: 2}),
+        prime_support_generator_cost_counter((2,), (8,)) == dyadic_counters[8],
+    ]
+    prime_support_failures = sum(not check for check in prime_support_checks)
+    failures += prime_support_failures
     dyadic_mean_costs = [
         (
             exponent,
@@ -735,6 +803,20 @@ def main() -> int:
     )
     heavy_letter_failures = sum(not check for check in heavy_letter_checks)
     failures += heavy_letter_failures
+    heavy_second_moment_terms = heavy_dyadic_second_moment_terms(20)
+    heavy_second_moment_checks = [
+        all(
+            right > left
+            for left, right in zip(
+                heavy_second_moment_terms[2:], heavy_second_moment_terms[3:]
+            )
+        ),
+        heavy_second_moment_terms[-1] > 1000.0,
+    ]
+    heavy_second_moment_failures = sum(
+        not check for check in heavy_second_moment_checks
+    )
+    failures += heavy_second_moment_failures
     maximum_fiber = max(
         exact_maximum_fiber(m, fib) for m in range(1, args.max_m + 1)
     )
@@ -788,11 +870,20 @@ def main() -> int:
             dyadic_mean_costs,
             dyadic_failures,
         ),
+        "PRIME_SUPPORT_INTERFACE mixed_2x3={} checks={} failures={}".format(
+            dict(sorted(mixed_prime_counter.items())),
+            len(prime_support_checks),
+            prime_support_failures,
+        ),
         "HEAVY_LETTER q=2..100 exact_cost_checks={} energy_over_q={:.9f} "
         "failures={}".format(
             len(heavy_letter_checks) - 2,
             math.log(100.0) / 100.0,
             heavy_letter_failures,
+        ),
+        "HEAVY_DYADIC_SECOND_MOMENT term_a20={:.9f} failures={}".format(
+            heavy_second_moment_terms[-1],
+            heavy_second_moment_failures,
         ),
     ]
 

@@ -2,6 +2,41 @@
 
 Date of search: 2026-08-02 (Asia/Singapore).
 
+## Active-cutoff joint-renewal audit (2026-08-10)
+
+The tier-up target was searched before the proof attempt in all four required
+services.  The arXiv Atom API returned the known Fibonacci-partition chain for
+`all:"Fibonacci partition"`; the combined query with `"local limit"`
+returned zero records.  `all:"ordered factorizations"` returned Hwang--Janson
+(arXiv:0902.3419) and later factorisatio-numerorum papers, while
+`all:"renewal reward" AND all:"local limit"` returned zero records and the
+semistable/local-limit query returned only the general strong-renewal paper
+arXiv:2005.11121.
+
+Crossref identified the nearest coefficient and factorization results as
+Pemantle--Wilson, doi:10.1006/jcta.2001.3201; Lau,
+doi:10.1006/jnth.2001.2687; and Hwang--Janson,
+doi:10.1214/EJP.v16-858.  Its heavy-tail search also located Mineka's general
+stable local limit theorem, doi:10.1214/aop/1176996764.  Semantic Scholar's
+free-text endpoint returned HTTP 429 on repeated queries, but its DOI endpoint
+successfully confirmed Pemantle--Wilson and its citation graph.  zbMATH Open,
+after the required terms-of-use handshake, returned Zbl 1763798
+(Pemantle--Wilson), Zbl 1731886 (Lau), and Zbl 3462906 (Mineka).  No located
+record combines fixed prime-exponent conditioning, continued-fraction cost,
+and a uniform lattice local theorem at a moving cutoff.
+
+The proof attempt reaches the exact formal identity
+`1/(1-A_P(z,u))` for the joint exponent--cost counts and the rational
+specialization `1/(2-product_i (1-z_i)/(1-p_i z_i))` at `u=1`.  It fails at
+local inversion in the cost coordinate.  On the dyadic ray the letter
+`1/2^a` has probability `3^{-a}` and cost `2^{a+1}-1`, so the cost has
+infinite second moment and no positive exponential moment.  Thus neither a
+Gaussian local theorem nor a two-sided Cramer tilt applies through
+`j=m+O(1)`.  The missing input is a multivariate exponent-conditioned lattice
+stable or semistable local-renewal theorem with the arithmetic boundary
+weights `4,3,1`; the manuscript now records this interface without claiming
+the requested sharp asymptotic.
+
 ## Search protocol
 
 The arXiv Atom API (`https://export.arxiv.org/api/query`) was queried directly.

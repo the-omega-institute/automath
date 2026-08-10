@@ -20,6 +20,23 @@ from verify_real_tilt_pressure import (
 
 
 class AllRealPressureHelpersTest(unittest.TestCase):
+    def test_finite_prime_support_interface_and_heavy_cost_obstruction(self) -> None:
+        self.assertTrue(
+            hasattr(verification, "prime_support_generator_cost_counter")
+        )
+        self.assertTrue(hasattr(verification, "heavy_dyadic_second_moment_terms"))
+
+        dyadic = verification.prime_support_generator_cost_counter((2,), (6,))
+        self.assertEqual(dyadic, verification.dyadic_generator_cost_counters(6)[6])
+
+        mixed = verification.prime_support_generator_cost_counter((2, 3), (1, 1))
+        self.assertEqual(sum(mixed.values()), 6)
+
+        terms = verification.heavy_dyadic_second_moment_terms(20)
+        self.assertEqual(len(terms), 20)
+        self.assertTrue(all(right > left for left, right in zip(terms[2:], terms[3:])))
+        self.assertGreater(terms[-1], 1000.0)
+
     def test_critical_window_renewal_matches_direct_partition_sum(self) -> None:
         self.assertTrue(hasattr(verification, "critical_renewal_coefficients"))
         self.assertTrue(hasattr(verification, "critical_window_partition"))

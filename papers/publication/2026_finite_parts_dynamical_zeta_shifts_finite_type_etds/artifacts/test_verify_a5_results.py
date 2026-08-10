@@ -64,6 +64,20 @@ class OracleA5ResultTests(unittest.TestCase):
             hasattr(verifier, "nishioka_special_value_specialization"),
             "the Nishioka specialization audit is not implemented",
         )
+
+    def test_c3_adams_mobius_support_is_not_lacunary(self):
+        self.assertTrue(
+            hasattr(verifier, "c3_adams_mobius_support_obstruction"),
+            "the C3 Adams-Mobius obstruction audit is not implemented",
+        )
+        audit = verifier.c3_adams_mobius_support_obstruction(60)
+        self.assertEqual(audit[2], (0, 1, -1))
+        self.assertEqual(audit[3], (-1, 1, 0))
+        self.assertEqual(audit[5], (0, 1, -1))
+        self.assertEqual(audit[11], (0, 1, -1))
+        self.assertEqual(audit[17], (0, 1, -1))
+        self.assertNotIn(7, audit)
+        self.assertNotIn(13, audit)
         self.assertEqual(
             verifier.nishioka_special_value_specialization(),
             {
@@ -256,6 +270,10 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Effective Mahler degree and height bounds: verified", report)
         self.assertIn("Finite radial collision set: {1/4}; 1 <= 959", report)
         self.assertIn("Finite radial recovery budget: 960 algebraic samples", report)
+        self.assertIn(
+            "C3 Adams-Mobius support: non-zero at primes 2, 5, 11, 17",
+            report,
+        )
         self.assertIn("Same-base determinant coefficient bound: verified", report)
         self.assertIn("Radial-profile leading coefficient: triangular", report)
         self.assertTrue(report.rstrip().endswith("STATUS: PASS"))

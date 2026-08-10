@@ -354,6 +354,21 @@ def nishioka_special_value_specialization() -> dict[str, object]:
     }
 
 
+def c3_adams_mobius_support_obstruction(
+    limit: int,
+) -> dict[int, tuple[int, int, int]]:
+    """Return the non-zero Mobius transforms of Adams states modulo three."""
+    support: dict[int, tuple[int, int, int]] = {}
+    for index in range(1, limit + 1):
+        coefficients = [0, 0, 0]
+        for divisor in sp.divisors(index):
+            coefficients[divisor % 3] += int(sp.mobius(divisor))
+        state = tuple(coefficients)
+        if any(state):
+            support[index] = state
+    return support
+
+
 def critical_zero_estimate_pullback_matches() -> bool:
     """Check the cleared pullback identity and its two bidegree bounds."""
     z, y = sp.symbols("z y")
@@ -894,6 +909,7 @@ def render_report() -> str:
     finite_collisions = finite_radial_collision_audit(
         collision_q.subs(z, z**2), collision_q**2, sp.Rational(1, 4)
     )
+    c3_support = c3_adams_mobius_support_obstruction(60)
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
     checks = {
@@ -937,6 +953,12 @@ def render_report() -> str:
                 finite_collisions["collision_count_within_bound"],
                 finite_collisions["collision_bound"] == 959,
                 finite_collisions["sample_budget"] == 960,
+            )
+        ),
+        "C3 Adams-Mobius support obstruction": all(
+            (
+                c3_support[prime] == (0, 1, -1)
+                for prime in (2, 5, 11, 17)
             )
         ),
         "same-base determinant coefficient bound": same_base_determinant_bounds_match(),
@@ -1008,6 +1030,7 @@ def render_report() -> str:
         "Effective Mahler degree and height bounds: verified",
         "Finite radial collision set: {1/4}; 1 <= 959",
         "Finite radial recovery budget: 960 algebraic samples",
+        "C3 Adams-Mobius support: non-zero at primes 2, 5, 11, 17",
         "Same-base determinant coefficient bound: verified",
         "Radial-profile leading coefficient: triangular",
         "Quotient model: full binary shift with C2 labels 0 and 1.",
