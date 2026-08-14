@@ -59,10 +59,10 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.critical_zero_estimate_pullback_matches())
 
-    def test_nishioka_special_value_specialization_has_all_required_parameters(self):
+    def test_kumiko_nishioka_special_value_specialization_has_all_required_parameters(self):
         self.assertTrue(
             hasattr(verifier, "nishioka_special_value_specialization"),
-            "the Nishioka specialization audit is not implemented",
+            "the Kumiko Nishioka specialization audit is not implemented",
         )
 
     def test_c3_adams_mobius_support_is_not_lacunary(self):
@@ -327,7 +327,7 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Critical Mahler normalization: squared product on 49 real points", report)
         self.assertIn("Critical Mahler integrality: 24 integer coefficients", report)
         self.assertIn("Critical zero-estimate pullback: exact identity, bidegrees", report)
-        self.assertIn("Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8", report)
+        self.assertIn("Kumiko Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8", report)
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Effective rational Mahler Pade decision: verified", report)
         self.assertIn("Effective Mahler degree and height bounds: verified", report)

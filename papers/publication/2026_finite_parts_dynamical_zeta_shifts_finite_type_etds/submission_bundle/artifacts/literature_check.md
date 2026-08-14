@@ -258,7 +258,7 @@ supersedes any broader wording in earlier audit notes:
 
 - Ostrowski (1968) treats the linear multiplicative equation
   `Phi(phi(z)) = g(z) Phi(z)` for rational data.
-- Nishioka (1985) directly implies that an algebraic solution of
+- Keiji Nishioka (1985) directly implies that an algebraic solution of
   `F(z^2) = H(z)^(-1) F(z)^2` is rational, by the one-variable specialization
   with `p = 2` and `R(z,Y) = Y^2/H(z)`. This algebraic-to-rational step is
   prior work and is not a contribution of the paper.

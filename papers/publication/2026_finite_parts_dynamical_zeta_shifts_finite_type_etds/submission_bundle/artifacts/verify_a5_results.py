@@ -307,10 +307,10 @@ def critical_mahler_integrality_matches(order: int = 24) -> bool:
 
 
 def nishioka_special_value_specialization() -> dict[str, object]:
-    """Audit the exact parameters used for Nishioka's 1982 theorem.
+    """Audit the exact parameters used for Kumiko Nishioka's 1982 theorem.
 
     This checks the algebraic specialization and a realizable strict-gap model;
-    Nishioka's transcendence theorem itself remains the cited analytic input.
+    Kumiko Nishioka's transcendence theorem itself remains the cited analytic input.
     """
     z, u = sp.symbols("z u")
     p_zero = 1 - z
@@ -1184,7 +1184,7 @@ def render_report() -> str:
         "critical Mahler normalization": critical_mahler_normalization_matches(),
         "critical Mahler integrality": critical_mahler_integrality_matches(),
         "critical zero-estimate pullback": critical_zero_estimate_pullback_matches(),
-        "Nishioka specialization": all(
+        "Kumiko Nishioka specialization": all(
             (
                 nishioka["inequality_left"] < nishioka["inequality_right"],
                 nishioka["reduced_coefficients_coprime"],
@@ -1321,7 +1321,7 @@ def render_report() -> str:
         "Critical Mahler normalization: squared product on 49 real points; unsquared identity refuted",
         "Critical Mahler integrality: 24 integer coefficients and equation verified",
         "Critical zero-estimate pullback: exact identity, bidegrees, and finite-rank bound verified",
-        "Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8",
+        "Kumiko Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8",
         "Normalized Mahler saturation: exact rational examples verified",
         "Effective rational Mahler Pade decision: verified",
         "Effective Mahler degree and height bounds: verified",

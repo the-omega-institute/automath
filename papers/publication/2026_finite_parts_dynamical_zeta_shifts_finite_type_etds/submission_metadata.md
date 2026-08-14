@@ -31,8 +31,8 @@ although each location supplies the full 2^r-component profile vector. For a
 reduced binary character-determinant ratio of total degree D>0, one algebraic
 collision identifies the complete real collision set, which has at most
 D ceil(log_2(2D))-1 points. The inverse mechanism is arithmetic: determinant
-parity, Nishioka's special-value theorem, and Nishioka's algebraic-solution
-rationality theorem force a normalized rational Mahler coboundary. A divisor
+parity, Kumiko Nishioka's special-value theorem, and Keiji Nishioka's
+algebraic-solution rationality theorem force a normalized rational Mahler coboundary. A divisor
 l1 estimate gives an O(D log D) degree bound and one finite Pade system
 reconstructs or rejects the certificate. An exact four-vertex pair shows that
 one centered Perron-boundary profile vector does not suffice. For general
@@ -76,7 +76,7 @@ main manuscript.
 
 ## Priority boundary
 
-Ostrowski (1968) treats the linear multiplicative equation. Nishioka (1985)
+Ostrowski (1968) treats the linear multiplicative equation. Keiji Nishioka (1985)
 directly implies that an algebraic solution of
 `F(z^2)=H(z)^(-1)F(z)^2` is rational. The submission makes no originality
 claim for that implication. Its claimed contribution is limited to

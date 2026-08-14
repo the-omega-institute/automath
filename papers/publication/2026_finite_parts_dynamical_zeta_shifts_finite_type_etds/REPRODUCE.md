@@ -83,7 +83,8 @@ fixed-label windows verified
 
 ## Integrity
 
-Verify every archived input and output listed in `artifacts/SHA256SUMS`:
+From the paper root directory, verify every archived input and output listed in
+`artifacts/SHA256SUMS`; all paths in that file are relative to the paper root:
 
 ```powershell
 Get-Content artifacts/SHA256SUMS | ForEach-Object {

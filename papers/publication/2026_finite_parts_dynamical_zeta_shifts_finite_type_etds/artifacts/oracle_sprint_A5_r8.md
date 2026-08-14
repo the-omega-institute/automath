@@ -116,7 +116,7 @@ det(I−zA)=det(I−zA′).
 Bχ,τ​≡A(mod2),Bχ,τ′​≡A′(mod2).
 底行列式已经相等，故
 det(I−zBχ,τ​)≡det(I−zBχ,τ′​)(mod2).
-于是稿件的 Dieudonné–Dwork—Nishioka 提升可逐字符直接使用，即使两扭曲块大小不同。
+于是稿件的 Dieudonné–Dwork—Kumiko Nishioka 提升可逐字符直接使用，即使两扭曲块大小不同。
 4. 一个代数锚点与其余实样本
 一个共同代数碰撞对每个非平凡 χ 产生唯一
 Hχ​(z)=Rχ​(z)2Rχ​(z2)​.
@@ -226,7 +226,7 @@ p-进临界提升。
 F(z)2=H(z)F(z2)
 替换为
 F(z)p=H(z)F(zp).
-Nishioka 参数变为
+Kumiko Nishioka 参数变为
 M=m=p,p2<p3,
 因而属于现成特殊值定理的直接参数核查，而非新的超越论。
 

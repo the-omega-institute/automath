@@ -1,10 +1,10 @@
 A: 尚未达到闭合，因而不能宣布证明完毕。
-唯一未解决的证据障碍是 Nishioka 1985 原始排印版的直接核验。出版社仅公开书目信息，并将第 330–335 页全文置于订阅访问之后；检索片段属于机器索引文本，后续论文中的转述属于二次引用，二者均不满足“不依赖 OCR 或二手转述”的要求。Springer 原始记录
-其余部分——Nishioka 1982 条件的逐项核验、系数高度引理、公分母增长引理、逆像除子引理、边界核的必要充分条件及有限代数证书——已经完成，但依照“不提交中间结论”的要求，暂不作为闭合定稿给出。
+唯一未解决的证据障碍是 Keiji Nishioka 1985 原始排印版的直接核验。出版社仅公开书目信息，并将第 330–335 页全文置于订阅访问之后；检索片段属于机器索引文本，后续论文中的转述属于二次引用，二者均不满足“不依赖 OCR 或二手转述”的要求。Springer 原始记录
+其余部分——Kumiko Nishioka 1982 条件的逐项核验、系数高度引理、公分母增长引理、逆像除子引理、边界核的必要充分条件及有限代数证书——已经完成，但依照“不提交中间结论”的要求，暂不作为闭合定稿给出。
 完成优先权核验需要提供：
 
 
-K. Nishioka, Algebraic function solutions of a certain class of functional equations, Archiv der Mathematik 44 (1985), 330–335 的原始 PDF 或清晰页面扫描。
+Keiji Nishioka, Algebraic function solutions of a certain class of functional equations, Archiv der Mathematik 44 (1985), 330–335 的原始 PDF 或清晰页面扫描。
 
 
 取得该原文后，方能核定主定理是否编号、逐字检查其函数域假设及代入条件，并据此提交完整定理、证明和严格限定的优先权声明。当前不得声称证明已经全部完成。

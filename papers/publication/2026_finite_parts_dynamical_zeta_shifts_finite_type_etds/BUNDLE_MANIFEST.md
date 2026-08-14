@@ -34,6 +34,6 @@ supplement pointer. The named companion PDF exists in this bundle.
 - `artifacts/unittest_output.txt` reports 37 tests and `OK`.
 - `certificates/s3_log_certificates.run.txt` ends with
   `fixed-label windows verified`.
-- `artifacts/literature_check.md` states the narrow Ostrowski/Nishioka priority
-  boundary used by the current article.
+- `artifacts/literature_check.md` states the narrow priority boundary involving
+  Ostrowski and Keiji Nishioka used by the current article.
 - `artifacts/SHA256SUMS` verifies the submitted scripts and text records.
