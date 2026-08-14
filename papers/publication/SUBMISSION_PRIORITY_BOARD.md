@@ -16,14 +16,17 @@
 
 | 篇 | 轮次 | 页 | 独立评估档位 | **PRIMARY** | 在飞任务 |
 |---|:--:|---|:--:|---|---|
-| **A2** `cayley_chebyshev` | **r6** | 60 | TIER-3 | **Journal of Functional Analysis** | `1bbb9117` |
-| **A3** `sharp_three_window` | **r5** | 63 | TIER-4 | **DCDS-A** | `d069ef5b` |
-| **A4** `prime_languages` | **r5** | 21 | TIER-3 | **Monatshefte für Mathematik** | `4cfefb12` |
-| **A5** `finite_parts` | **r7** | 27 | TIER-3 | **DCDS** | `a18fd23b` |
-| **A6** `zeckendorf_fibers` | **r8** | 47 | TIER-3 | **Journal of Number Theory** | `92737c82` |
-| **A7** `upper_fibers` | **r6** | 23+32 | TIER-4 | **The Fibonacci Quarterly** | `1f6962d1` |
-| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待队列 |
-| **A9** `homological_visibility` | — | 93 | 评估中 | ⚠️ APAL 已拒(表述,非内容)| — |
+| **A2** `cayley_chebyshev` | **r6** | 60 | TIER-3 | **Journal of Functional Analysis** | `5555d04e` |
+| **A3** `sharp_three_window` | **r5** | 63 | TIER-4 | **DCDS-A** | `37c7181c` |
+| **A4** `prime_languages` | **r5** | 21 | TIER-3 | **Monatshefte für Mathematik** | `d53e5f76` |
+| **A5** `finite_parts` | **r7** | 27 | TIER-3 | **DCDS** | `6ed3bc90` |
+| **A6** `zeckendorf_fibers` | **r8** | 47 | TIER-3 | **Journal of Number Theory** | `55b0fafc` |
+| **A7** `upper_fibers` | **r6** | 23+32 | TIER-4 | **The Fibonacci Quarterly** | `d1e24449` |
+| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待槽位 |
+| **A9** `homological_visibility` | — | 93 | **TIER-4** | ⚠️ APAL 已拒(表述);内容判为 REPACKAGING | 桥接中 |
+
+> **Oracle 协议已变更(2026-08-14 实测)**：worker 升级到 `cdp-2.5-chat-work-media-gate` 后加了 `submission-gate` 前置校验。**新会话必须在 `--tag` 里显式写 `mode:chat` 或 `mode:work`**（v1 通过 tag 传模式，`--mode` 参数不再被接受）；**续接会话必须省略模式控制与附件**，原 worker/账号与控制项自动保留；首轮只能带 `--pdf` 或 `--attach-file` 其一。不合规的任务会一直排队且**永不派发**——症状是 worker 全空闲、Queued 不降。
+
 
 **目标期刊在整轮冲刺后没有变化。** 深化显著增厚了内容（见下），但没有哪一篇因此跨过档次线；PRIMARY 维持上表。
 
