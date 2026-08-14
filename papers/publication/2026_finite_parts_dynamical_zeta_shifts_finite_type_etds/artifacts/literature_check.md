@@ -258,10 +258,19 @@ supersedes any broader wording in earlier audit notes:
 
 - Ostrowski (1968) treats the linear multiplicative equation
   `Phi(phi(z)) = g(z) Phi(z)` for rational data.
-- Keiji Nishioka (1985) directly implies that an algebraic solution of
-  `F(z^2) = H(z)^(-1) F(z)^2` is rational, by the one-variable specialization
-  with `p = 2` and `R(z,Y) = Y^2/H(z)`. This algebraic-to-rational step is
-  prior work and is not a contribution of the paper.
+- Kumiko Nishioka, *Mahler Functions and Transcendence* (1996), Theorem 5.1.7,
+  is the standard reference for the rational--transcendental dichotomy for
+  `k`-Mahler functions defined by a linear functional equation. Bell, Coons and
+  Rowland, arXiv:1210.2070v2, Corollary 8, gives an open-access restatement and
+  a new proof.
+- The equation `F(z^2) = H(z)^(-1) F(z)^2` is quadratic in `F` and therefore
+  outside that linear class. Keiji Nishioka's 1985 nonlinear class
+  `f(z^p) = R(z,f(z))` is the applicable result, with `p = 2` and
+  `R(z,Y) = Y^2/H(z)`. This algebraic-to-rational step is prior work and is not
+  a contribution of the paper.
+- Springer keeps the cited 1985 pages 330--335 behind subscription, and
+  Unpaywall reported no open-access copy; this audit does not record a
+  first-hand check of the printed text.
 - The paper's claimed contribution is limited to parity-compatible algebraic
   collision lifting, effective rational-coboundary bounds and reconstruction,
   and the cross-base elementary-two-group result.
