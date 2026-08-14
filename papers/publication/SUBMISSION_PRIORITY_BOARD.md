@@ -14,16 +14,19 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 页 | 当前动作 | **去向** |
+| 篇 | 页 | 状态 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | 67 | ✅ 已修已提交（$r\ge1$ 纳入定理） | **Potential Analysis** |
-| **A3** `sharp_three_window` | **57** | ✅ 已修已提交（三处证明补全，页数反减 6） | **DCDS-A**（无须降投）|
+| **A2** `cayley_chebyshev` | 67 | ✅ 已修已提交 | **Potential Analysis** |
+| **A3** `sharp_three_window` | **57** | ✅ 已修已提交 | **DCDS-A**(无须降投) |
 | **A4** `prime_languages` | 25+43 | ✅ 投稿包已复核 | Monatshefte |
-| **A5** `finite_parts` | 33+19 | ✅ 投稿包已复核;codex 修 Nishioka 署名 | ETDS |
-| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交（定理 36→33） | **JNT** |
-| **A7** `upper_fibers` | 27 | **拒稿重投** → codex 修复中 | Fibonacci Quarterly |
-| **A8** `detector_shells` | 62 | **拒稿** → codex 修复中 | **Methodology and Computing in Applied Probability** |
-| **A9** `homological_visibility` | 48+50 | **拒稿** → codex 修复中 | **Cahiers de Topologie**（修订后 35–50%）|
+| **A5** `finite_parts` | 33+19 | ✅ 已修已提交(Nishioka 拆分) | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交(定理 36→33) | **JNT** |
+| **A7** `upper_fibers` | 27 | codex 修复中 | Fibonacci Quarterly |
+| **A8** `detector_shells` | **49+19** | ✅ 已修已提交(186→68 页) | **Methodology and Computing in Applied Probability** |
+| **A9** `homological_visibility` | 48+50 | codex 修复中 | **Cahiers de Topologie** |
+
+**七篇外审全部走完;六篇已修复入库,余 A7、A9 在改。**
+
 
 **七篇全部走完外审。六篇存在优先权遗漏，三篇因补充材料未随投而被扣分。**
 
@@ -42,15 +45,16 @@
 
 
 
-> **TICK 31 — 外审全部收齐;A7 拒稿重投,同一个坑第三次**。池子归零、六 worker 全空闲,七篇外审至此走完。
+> **TICK 32 — A8、A5 入库,六篇已闭环**。池子空闲,无在飞任务;A7、A9 修复中;内存 2.43 GB、硬缺页 41/s。
 >
-> **A7 的两条缺陷与 A9 如出一辙。** 审稿人同样**未找到反例**推翻其核心分类(精确秩纤维 $B_n=lpha^{-1}(n)$ 的整除极小元归约为带降阶见证的不可约 lcm-覆盖,及平方自由切片的加权计数),拒稿理由是:①**Theorem 5.1 与 5.10 的上界调用了只存在于未随投补编中的 prime–ladder alternative 与 prime-power lifting**,而这两处直接撑起第 4、5 项主张,不是可选技术补充——**这是补充材料第三次让我们丢分**(A4、A9、A7);②**漏引 Wagner 1978**。
+> **A8 186→68 页**(正文 62→49,补编 124→19),数学未丢,定理类环境 26→22。交替四遍清构建每遍 exit 0,53 测试通过。
 >
-> Wagner 已核实:*Minimal multiplicative covers of an integer*, Discrete Math. **24**(1) (1978) 87–94, `10.1016/0012-365X(78)90175-9`——他研究的正是 $\operatorname{lcm}(d_1,\dots,d_r)=n$ 而去掉任一个后 lcm 变小的除数组,并明确视之为有限集极小覆盖的乘法推广。检索还带出审稿人提到却未点名的前身:**Hearne & Wagner, *Minimal covers of finite sets*, Discrete Math. **5** (1973) 247–251**——我们的覆盖骨架正处在这条谱系上,两篇都得引。
+> **核实优先权时守住了一条线,值得记。** 我此前四处索引都查不到 Bickel–Kwon,故在任务书里写明**不得凭印象著录,查不实宁可谨慎表述也不要编造**。agent 交回的正是我当初的推测(Statistica Sinica **11**, 863–960, 2001)——**没有因为"和我猜的一样"就放行**,改走 Google Scholar 拿到 JSTOR `stable/24306883`,作者、摘要相符,另有 McNeney–Wellner 的 Comments 篇印证该刊讨论稿体例与长跨页码。属实。反向教训同样重要:**Crossref/OpenAlex/Semantic/DBLP 全查不到,不等于文献不存在**。
 >
-> 另须:标注/未标注对象的转换要讲清;**BLMS 猜想同时排斥 H1 与 H2**,我们那两条应改名 sufficient maximum-window hypotheses,若仍称猜想则必须写明我们在此点上作出与 BLMS 不相容的预测;Corollary 5.14 改为纯条件推论。
+> **A5 的 Nishioka 已拆为两人**,配对经核对无误:Kumiko 的 special-value 定理逼出代数性,Keiji 1985 定理再逼出有理性。`SHA256SUMS` 也改为 LF。
 >
-> **内存假警报一次**:一度只剩 539 MB,查明是 A5 自己的 verifier 与 unittest 在 06:19:51 同时起跑的峰值(两进程各 1.3 GB),随即回落到 134/128 MB,**不是孤儿泄漏,没有误杀正在干活的 agent**。现 3.1 GB。
+> ⚠️ **一项遗留,需人工取原文**:**Keiji Nishioka 1985 的原始排印文本无法核验** —— Springer 将 330–335 页置于订阅之后,Unpaywall 无 OA 副本,检索片段是机器 OCR,后续论文属二次转述。**让出优先权的那些地方无碍**(让出即主张更少);但我们**同时把它当证明步骤在用并陈述了它的假设**,那部分目前仍依赖二手来源,投稿前应对原文核一次。
+
 
 
 
