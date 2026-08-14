@@ -38,14 +38,14 @@
 
 
 
-> **TICK 28 补 — A2 升级落地，A8 第三份拒稿**。
+> **TICK 29 — 无可收割，继续独立核实引文**。池子 2/6,A7 `6496b45e`、A9 `226c441b` 仍在 `waiting_response`(已约 30 分钟,逼近 35 分钟停滞线,再无回应即取消重发);codex ×4 全在跑,八篇零闲置;内存 1.61 GB。
 >
-> **A2 的 $r=1$ 真的做进去了**,已独立复核提交(`e9a9c0772`)。定理假设由 $r\ge2$ 改为 $r\ge1$;$r=1$ 处端点公式仍给出 $p\ge1$,故所设 $p$-矩供出一阶矩与 $\EE|X|<\infty$,且 $m+1>p$、$pq=2$,恰好留出 $o(s^{-2})$ 所需的幂次。被藏在 "standard estimates" 里的分母正性机制也写出来了:$\|
-abla\log p_1\|_\infty\le L$ 给出 $q_s^\lambda\ge\exp(-L\EE|X|/s)	o1$,再加 $L^1$ 平移连续性。清构建 exit 0、67 页、三项缺陷全 0、三个 verifier PASS、11 测试通过。**改投 Potential Analysis**(Chen–Niles-Weed 本身即发表于该刊)。
+> 上一 tick 自查 Crossref 抓出 Nishioka 署名错误后,本 tick 把同样的核实用在 A8 审稿人指认的三条先验工作上,结果一正一负:
 >
-> **A8 拒稿**,但审稿人明言**未发现任何反例**推翻记录律、三坐标商逆或二态 fibre 弧 —— 拒的是"尚未达到其自称的完整性与优先权标准"。三条:①**漏引 Bickel–Kwon** 的 known-marginal Markov tangent 与 additive projection,是本轮优先权审计最重要的发现;Ramírez-Cobo–Lillo 与 He–Zhang 须由"邻近背景"升为逐式比较对象;三坐标商逆在比较完成前只能作**候选**原创。②coupling 构造对全部 $\sigma\in H_N(\mathbb C)$ 的可测性与一致性未证;Helmert coupling 与 singular LAN 这类无限样本定理,**数值测试只能作 sanity check,不能替代缺失的 uniform remainder 证明**。③这实际是两篇论文,且 J. Phys. Comm. 要求贡献于**物理知识**,而我们的 sampled-counter 物理实现目前只充当模型解释。**改投 Methodology and Computing in Applied Probability。**
+> **一处署名要补**:Ramírez-Cobo, Lillo **& Wiper**, *Nonidentifiability of the Two-State Markovian Arrival Process*, J. Appl. Probab. **47**(3) (2010) 630–649。审稿人写作"Ramírez-Cobo–Lillo",**漏了 Wiper**。该文主题正是 MAP$_2$ 的不可识别性,与我们的二态 fibre 弧直接同域,确属必须逐式比较的对象。
 >
-> 至此六篇有外审的论文中**五篇存在优先权遗漏**。
+> **一处不能凭印象写**:**Bickel–Kwon 在 Crossref、OpenAlex、Semantic Scholar、DBLP 四处均查不到**。推测是 Statistica Sinica 2001(该刊早期卷次收录很差),但这是推测不是核实。审稿人称漏引它是本轮优先权审计最重要的发现,正因如此更不能凭印象著录一条参考文献 —— 已写进 `PENDING_FIXES.md` 要求确认确切出处后再落笔。He–Zhang 同样待核。
+
 
 
 
