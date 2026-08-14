@@ -510,6 +510,30 @@ def single_layer_orbit_counter(
     return levels
 
 
+def single_layer_joint_counter(
+    layer: int, generators: list[Counter[int]]
+) -> Counter[tuple[int, int]]:
+    """Count a standard layer jointly by generator cost and multiplier."""
+    if layer < 1 or layer >= len(generators):
+        raise ValueError("generator table must include costs through layer")
+    joint: Counter[tuple[int, int]] = Counter({(0, 1): 1})
+    for cost in range(1, layer + 1):
+        orbit_weight = 2 if cost < layer else 1
+        for level, word_count in generators[cost].items():
+            recorded_cost = 0 if level <= 2 else cost
+            joint[recorded_cost, level] += orbit_weight * word_count
+    return joint
+
+
+def low_reward_cost_filler(target_cost: int) -> tuple[int, ...]:
+    """Return one or two denominators whose 1/q letters have the target cost."""
+    if target_cost < 6:
+        raise ValueError("the uniform filler construction starts at cost six")
+    if target_cost % 2:
+        return ((target_cost + 1) // 2,)
+    return (2, (target_cost - 2) // 2)
+
+
 def marked_window_counter(
     m: int, generators: list[Counter[int]]
 ) -> Counter[tuple[int, int]]:
@@ -892,6 +916,8 @@ def main() -> int:
     )
     standard_layer_checks = 0
     standard_layer_failures = 0
+    joint_layer_checks = 0
+    joint_layer_failures = 0
     for layer in range(1, args.max_layer + 1):
         left = fib[layer + 1] - 1
         right = fib[layer + 2] - 1
@@ -907,7 +933,26 @@ def main() -> int:
             rel_tol=1.0e-12,
             abs_tol=1.0e-12,
         )
+        joint_marginal: Counter[int] = Counter()
+        for (_, level), count in single_layer_joint_counter(
+            layer, marked_generators
+        ).items():
+            joint_marginal[level] += count
+        joint_layer_checks += 1
+        joint_layer_failures += joint_marginal != Counter(direct_values)
     failures += standard_layer_failures
+    failures += joint_layer_failures
+    filler_checks = 0
+    filler_failures = 0
+    for target_cost in range(6, 301):
+        denominators = low_reward_cost_filler(target_cost)
+        filler_checks += 2
+        filler_failures += sum(2 * q - 1 for q in denominators) != target_cost
+        filler_failures += (
+            sum(math.log(q) for q in denominators)
+            > 2.0 * math.log(target_cost)
+        )
+    failures += filler_failures
     marked_windows = tuple(
         window for window in (12, 16, 20) if window + 1 <= args.max_layer
     )
@@ -1046,6 +1091,12 @@ def main() -> int:
         ),
         "STANDARD_ONE_LAYER layers=1..{} checks={} failures={}".format(
             args.max_layer, standard_layer_checks, standard_layer_failures
+        ),
+        "JOINT_ONE_LAYER layers=1..{} checks={} failures={}".format(
+            args.max_layer, joint_layer_checks, joint_layer_failures
+        ),
+        "LOW_REWARD_FILLER costs=6..300 checks={} failures={}".format(
+            filler_checks, filler_failures
         ),
         "DYADIC_EXACT exponents=1..{} total_checks={} window_checks={} "
         "mean_cost_over_exponent={} failures={}".format(

@@ -178,6 +178,46 @@ class AllRealPressureHelpersTest(unittest.TestCase):
             del actual[1]
             self.assertEqual(predicted, actual)
 
+    def test_single_layer_joint_counter_recovers_exact_partition_spectrum(
+        self,
+    ) -> None:
+        self.assertTrue(hasattr(verification, "single_layer_joint_counter"))
+        fibonacci = [0, 1]
+        for _ in range(16):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        generators = verification.weighted_generator_counters(13)
+        partition_values = verification.ordinary_partition_values(
+            fibonacci[16], fibonacci[2:16]
+        )
+        for layer in range(6, 13):
+            joint = verification.single_layer_joint_counter(layer, generators)
+            marginal = verification.Counter()
+            for (cost, level), count in joint.items():
+                if level <= 2:
+                    self.assertEqual(cost, 0)
+                else:
+                    self.assertGreater(cost, 0)
+                    self.assertLessEqual(cost, layer)
+                marginal[level] += count
+            direct = verification.Counter(
+                partition_values[
+                    fibonacci[layer + 1] - 1 : fibonacci[layer + 2] - 1
+                ]
+            )
+            self.assertEqual(marginal, direct)
+
+    def test_low_reward_fillers_realize_every_cost_from_six(self) -> None:
+        self.assertTrue(hasattr(verification, "low_reward_cost_filler"))
+        for target_cost in range(6, 301):
+            denominators = verification.low_reward_cost_filler(target_cost)
+            self.assertIn(len(denominators), (1, 2))
+            costs = [2 * denominator - 1 for denominator in denominators]
+            self.assertEqual(sum(costs), target_cost)
+            self.assertLessEqual(
+                sum(math.log(denominator) for denominator in denominators),
+                2.0 * math.log(target_cost),
+            )
+
     def test_regular_and_negative_costs_agree(self) -> None:
         examples = {
             (1,): (1, 2),

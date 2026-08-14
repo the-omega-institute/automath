@@ -10,6 +10,8 @@ The compiled paper retains only the independently justified core:
 
 - the all-real pressure, critical Gibbs law, and full LDP on a single
   standard Fibonacci partition layer;
+- the joint generation-cost and log-multiplicity LDP, including its affine
+  two-dimensional coexistence face;
 - the residue and affine fiber correspondence;
 - the pointwise Fibonacci partition-difference formula;
 - the exact two-layer interval identity and transferred extremal theorem;

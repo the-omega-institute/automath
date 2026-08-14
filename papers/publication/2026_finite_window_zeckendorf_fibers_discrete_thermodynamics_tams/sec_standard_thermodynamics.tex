@@ -263,3 +263,167 @@ bound directly.  At \(\alpha_+\), use interior points tending to the endpoint
 and continuity of the finite convex rate on \([0,\alpha_+]\).  Hence the
 lower bound holds for every open set, completing the full LDP.
 \end{proof}
+
+For the same uniform point \(\mathbf N_m\), retain the generating cost by
+putting
+\[
+ B_m^R:=\frac1m\ell_m^R(\mathbf N_m).
+\]
+
+\begin{theorem}[Joint generation-cost and multiplicity large deviations]
+\label{thm:joint-cost-reward-ldp}
+The vectors \((B_m^R,Y_m^R)\) satisfy a full large deviation principle on
+\(\mathbb R^2\) with speed \(m\).  Their limiting logarithmic moment generating
+function is
+\begin{equation}
+ \Lambda(a,t)=\max\{0,a+P(t)\}-\log\varphi
+ \qquad(a,t\in\mathbb R).
+ \label{eq:joint-cost-reward-log-mgf}
+\end{equation}
+The good rate function is
+\begin{equation}
+ J(\beta,\alpha)=
+ \begin{cases}
+  (1-\beta)\log\varphi+\beta I(\alpha/\beta),
+   &0<\beta\le1,\quad 0\le\alpha\le\beta\alpha_+,\\
+  \log\varphi,&(\beta,\alpha)=(0,0),\\
+  +\infty,&\text{otherwise}.
+ \end{cases}
+ \label{eq:joint-cost-reward-rate}
+\end{equation}
+In particular, the rate surface has the affine face
+\begin{equation}
+ J(\beta,\alpha)=\log\varphi-\sigma_0\alpha
+ \qquad(0\le\beta\le1,\ 0\le\alpha\le\beta v_c).
+ \label{eq:joint-cost-reward-flat-face}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let \(\mathcal W_j\) be the set of nonempty free generator words of total
+cost \(j\), and write \(Q(w)\) for the product of the denominators of the
+letters of \(w\).  By \eqref{eq:generator-weight-length},
+\begin{equation}
+ u_j(-t)=\sum_{w\in\mathcal W_j}Q(w)^t.
+ \label{eq:fixed-cost-word-partition}
+\end{equation}
+The convention \(\ell_m^R=0\) at multiplicities at most two changes only a
+bounded number of states.  The one-layer orbit weights in
+\eqref{eq:standard-layer-marked-count} therefore give, up to a term bounded
+for each fixed \((a,t)\),
+\begin{equation}
+ \sum_{n\in\mathcal I_m}e^{a\ell_m^R(n)}R(n)^t
+ =2\sum_{j=1}^{m-1}e^{aj}u_j(-t)+e^{am}u_m(-t)+O_{a,t}(1).
+ \label{eq:joint-cost-reward-renewal}
+\end{equation}
+More precisely, the bounded correction removes the level-two generator orbit
+from its positive cost and records it at cost zero; the level-one endpoint is
+already a cost-zero term.
+
+The proof of \Cref{thm:all-real-pressure} established
+\(\lim_{j\to\infty}j^{-1}\log u_j(-t)=P(t)\), and \(u_j(-t)>0\) for every
+\(j\ge8\).  Applying these facts to the partial sum in
+\eqref{eq:joint-cost-reward-renewal}, while retaining the level-one endpoint,
+gives
+\[
+ \lim_{m\to\infty}\frac1m\log
+ \sum_{n\in\mathcal I_m}e^{a\ell_m^R(n)}R(n)^t
+ =\max\{0,a+P(t)\}.
+\]
+Since \(\card{\mathcal I_m}=F_m\), this proves
+\eqref{eq:joint-cost-reward-log-mgf}.
+
+We next compute its convex dual.  For fixed \(t\),
+\[
+ \sup_{a\in\mathbb R}\{a\beta-\max(0,a+P(t))\}
+ =\begin{cases}
+   -\beta P(t),&0\le\beta\le1,\\
+   +\infty,&\text{otherwise}.
+  \end{cases}
+\]
+For \(0<\beta\le1\), subsequent optimization over \(t\) gives
+\[
+ \log\varphi+\beta\sup_t\{t\alpha/\beta-P(t)\}
+ =(1-\beta)\log\varphi+\beta I(\alpha/\beta).
+\]
+At \(\beta=0\), the dual is finite only at \(\alpha=0\), where it equals
+\(\log\varphi\).  The effective domain of \(I\) from
+\Cref{thm:standard-fibonacci-thermodynamics} now gives exactly
+\eqref{eq:joint-cost-reward-rate}.  The variables are supported in a common
+compact set up to a vanishing enlargement: \(0\le B_m^R\le1\), and
+\eqref{eq:standard-layer-maximum} bounds \(Y_m^R\).  Thus the
+G\"artner--Ellis upper bound applies to every closed set.
+
+It remains to prove the lower bound, because the interior points with
+\(0<\beta<1\) are not exposed points of \(\Lambda\).  Fix \(t>t_c\) and put
+\(v=P'(t)>v_c\).  On \(\mathcal W_j\), use the probability proportional to
+\(Q(w)^t\).  For sufficiently small real \(s\),
+\eqref{eq:fixed-cost-word-partition} and the fixed-cost pressure limit give
+\[
+ \limsup_{j\to\infty}\frac1j\log
+ \Pr_t\left\{\left|j^{-1}\log Q(w)-v\right|\ge\delta\right\}<0.
+\]
+This is the same two-sided exponential Markov argument as in
+\eqref{eq:standard-layer-exposed-source}.  Consequently,
+\begin{equation}
+ \liminf_{j\to\infty}\frac1j\log
+ \card{\{w\in\mathcal W_j:\ |j^{-1}\log Q(w)-v|<\delta\}}
+ \ge P(t)-tv-|t|\delta.
+ \label{eq:fixed-cost-exposed-source}
+\end{equation}
+
+Let \(0<\beta\le1\) and suppose first that
+\(\alpha/\beta=v>v_c\).  Taking integers \(j_m\) with \(j_m/m\to\beta\),
+each word counted in \eqref{eq:fixed-cost-exposed-source} determines at least
+one point of \(\mathcal I_m\), because a generator orbit of cost \(j_m\le m\)
+meets that layer.  Freeness preserves injectivity.  Hence the local counting
+exponent is at least
+\(\beta(P(t)-t\alpha/\beta)\), which, after division by \(F_m\), is
+\(-J(\beta,\alpha)\).  The same conclusion at \(v_c\) follows by approximation
+from \(t\downarrow t_c\).
+
+Now let \(0<\alpha\le\beta v_c\).  Keep \(t>t_c\), put \(v=P'(t)\), and choose
+integers
+\[
+ k_m/m\longrightarrow\alpha/v,\qquad j_m/m\longrightarrow\beta.
+\]
+Then \(r_m:=j_m-k_m\) tends linearly to infinity.  Every integer \(r\ge6\)
+is the total cost of at most two letters with logarithmic multiplier
+\(O(\log r)\): if \(r\) is odd, use the letter \(1/q\) with
+\(q=(r+1)/2\), whose cost is \(2q-1=r\); if \(r\) is even, use \(1/2\) and
+\(1/q\) with \(q=(r-2)/2\).  Append this fixed suffix to every source word of
+cost \(k_m\) counted in \eqref{eq:fixed-cost-exposed-source}.  The free-monoid
+property again gives an injection, the total cost is exactly \(j_m\), and the
+added reward is \(o(m)\).  The resulting local counting exponent is at least
+\[
+ \frac{\alpha}{v}\{P(t)-tv\}.
+\]
+Letting \(t\downarrow t_c=-\sigma_0\), and using \(P(t)\to0\) and
+\(v\downarrow v_c\), gives the exponent \(\sigma_0\alpha\).  For \(\alpha=0\)
+the filler word alone gives exponent zero.  After normalization by \(F_m\),
+these bounds equal the negative of
+\eqref{eq:joint-cost-reward-flat-face}.  The point \((0,0)\) is supplied by
+the level-one endpoint.  Finally, points with
+\(\alpha=\beta\alpha_+\) follow by approximation from the relative interior;
+the finite convex rate in \eqref{eq:joint-cost-reward-rate} is continuous on
+its compact effective domain.  This proves the lower bound for every open set
+and completes the full LDP.
+\end{proof}
+
+\begin{remark}[Open second-order critical-cost interface]
+\label{rem:critical-cost-tail-open-interface}
+The preceding theorem uses only exponential rates and does not identify a
+second-order critical renewal term.  Such a result would require, at a
+minimum, a uniform mixed-denominator estimate of the form
+\[
+ \sum_{q\ge2}q^{-\sigma_0}
+ \card{\{1\le p<q:(p,q)=1,\ c(p/q)>x\}}
+ \sim K_Cx^{1-\sigma_0}\qquad(x\to\infty)
+\]
+with \(K_C>0\), including a proof that multiple large partial quotients and
+possible lattice oscillations are lower order.  Fixed-denominator estimates
+such as \cite{AistleitnerBordaHauke2023} do not by themselves provide the
+uniform summation in the critical range \(q\asymp x\).  No such regular
+variation statement, and hence no \(m^{3-\sigma_0}\) correction to the
+critical partition sum, is asserted here.
+\end{remark}
