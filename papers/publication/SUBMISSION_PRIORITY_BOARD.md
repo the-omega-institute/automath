@@ -45,15 +45,14 @@
 
 
 
-> **TICK 32 — A8、A5 入库,六篇已闭环**。池子空闲,无在飞任务;A7、A9 修复中;内存 2.43 GB、硬缺页 41/s。
+> **TICK 33 — 用一份开放获取文献把 Nishioka 缺口收窄,并确认署名判断没错**。池子空闲;A7、A9 修复中(A9 日志已 33 MB,正在把核心证明搬回正文);无孤儿进程,内存 1.99 GB。
 >
-> **A8 186→68 页**(正文 62→49,补编 124→19),数学未丢,定理类环境 26→22。交替四遍清构建每遍 exit 0,53 测试通过。
+> Keiji Nishioka 1985 原文仍拿不到(Springer 订阅墙、Unpaywall 无 OA;未走盗版站点)。但找到一份可逐字核对的开放获取陈述:**Bell–Coons–Rowland**, arXiv:1210.2070v2, **Corollary 8** —— "$k$-Mahler 函数若代数则有理",出处标为 **Ku. Nishioka**, *Mahler Functions and Transcendence*, LNM **1631**, Springer 1996, **Theorem 5.1.7**。("Ku." 即 Kumiko;该领域用 Ku./Ke. 区分二人,这个惯例我们也该采用。)
 >
-> **核实优先权时守住了一条线,值得记。** 我此前四处索引都查不到 Bickel–Kwon,故在任务书里写明**不得凭印象著录,查不实宁可谨慎表述也不要编造**。agent 交回的正是我当初的推测(Statistica Sinica **11**, 863–960, 2001)——**没有因为"和我猜的一样"就放行**,改走 Google Scholar 拿到 JSTOR `stable/24306883`,作者、摘要相符,另有 McNeney–Wellner 的 Comments 篇印证该刊讨论稿体例与长跨页码。属实。反向教训同样重要:**Crossref/OpenAlex/Semantic/DBLP 全查不到,不等于文献不存在**。
+> **但它顶替不了。** Corollary 8 针对的是由**线性**方程 $\sum_j a_j(z)F(z^{k^j})=0$ 定义的 $k$-Mahler 函数,而我们的 $F(z^2)=H(z)^{-1}F(z)^2$ **关于 $F$ 是二次的**,不在该类中。这反过来**佐证 Keiji 才是正确署名**:他 1985 年处理的类 $f(z^p)=\mathscr R(z,f(z))$($\mathscr R$ 有理)正是非线性类;审稿人说 Ostrowski 1968 只管线性乘性方程,也对得上。
 >
-> **A5 的 Nishioka 已拆为两人**,配对经核对无误:Kumiko 的 special-value 定理逼出代数性,Keiji 1985 定理再逼出有理性。`SHA256SUMS` 也改为 LF。
->
-> ⚠️ **一项遗留,需人工取原文**:**Keiji Nishioka 1985 的原始排印文本无法核验** —— Springer 将 330–335 页置于订阅之后,Unpaywall 无 OA 副本,检索片段是机器 OCR,后续论文属二次转述。**让出优先权的那些地方无碍**(让出即主张更少);但我们**同时把它当证明步骤在用并陈述了它的假设**,那部分目前仍依赖二手来源,投稿前应对原文核一次。
+> 所以缺口收窄而未闭合:**Keiji 1985 仍承重、仍未核验**。已派 agent 补上 Ku. Nishioka Thm 5.1.7 作线性情形对照,并明写我们的方程非线性故线性定理不适用——既堵住"为何不直接引标准 Nishioka 定理"的追问,也把两位 Nishioka 的分工讲清楚;同时明令**不得写出任何暗示已核对 Keiji 原文的措辞**。
+
 
 
 

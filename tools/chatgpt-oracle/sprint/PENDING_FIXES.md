@@ -117,3 +117,34 @@ $S	o\pi_0(S)$ 使其成为其连通分支层上的 gerbe，沿 $\pi_0(S)$ 的截
 他同时明确：$v\mapsto[E[v]]$ 这个打包**有用但不是新的构造原理**。
 另外他说未找到把那条两标签 wedge 分类逐字发表过的定理，但**这不构成实质优先权**——
 由标准等价复合出来的精确陈述可以形式上是新的，而几乎没有独立的数学优先权。
+
+## A5 — Keiji Nishioka 1985 核验:缺口已收窄,但未闭合
+
+原文仍拿不到(Springer 将 Arch. Math. **44**, 330–335 置于订阅墙后,Unpaywall
+无 OA 副本;未走盗版站点)。但找到一份**开放获取且可逐字核对**的相邻权威陈述,
+足以厘清该引哪一条:
+
+Bell, Coons & Rowland, *The rational–transcendental dichotomy of Mahler functions*,
+arXiv:1210.2070v2,**Corollary 8**:
+
+> Let $k\ge2$ and $F(z)\in\mathbb C[[z]]$ be a $k$-Mahler function. If $F(z)$ is
+> algebraic, then $F(z)$ is a rational function.
+
+其出处标为 **Ku. Nishioka**, *Mahler Functions and Transcendence*, Lecture Notes in
+Mathematics **1631**, Springer-Verlag, 1996, **Theorem 5.1.7**。
+
+**"Ku." 即 Kumiko** —— 该领域文献用 "Ku. Nishioka" 与 "Ke. Nishioka" 区分二人,
+这个书写惯例我们也该采用。
+
+**关键限制,不可含糊**:Corollary 8 针对的是 $k$-Mahler 函数,即由**线性**方程
+$\sum_j a_j(z)F(z^{k^j})=0$ 定义者。我们的方程
+$$F(z^2)=H(z)^{-1}F(z)^2$$
+**关于 $F$ 是二次的,非线性**,故 Kumiko 的 Theorem 5.1.7 **不覆盖我们这一步**。
+反过来,这恰好**佐证 Keiji 才是正确署名**:他 1985 年那篇处理的类
+$f(z^p)=\mathscr R(z,f(z))$($\mathscr R$ 有理)正是非线性类,与我们的形式吻合;
+审稿人说 Ostrowski 1968 只处理线性乘性方程,也与此一致。
+
+**结论**:Keiji 1985 仍是承重且仍未核验,**不能用 Bell–Coons–Rowland 顶替**。
+但应在正文补上 Ku. Nishioka LNM 1631 Thm 5.1.7 作为线性情形的标准对照,并明写
+我们的方程非线性、故线性定理不适用 —— 这既堵住审稿人"为何不直接引标准 Nishioka
+定理"的追问,也把两位 Nishioka 的分工讲清楚。已据此派 agent。
