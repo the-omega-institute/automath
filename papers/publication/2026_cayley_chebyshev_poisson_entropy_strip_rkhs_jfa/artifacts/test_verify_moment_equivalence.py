@@ -1,6 +1,9 @@
 import unittest
 
-import verify_moment_equivalence as v
+try:
+    from . import verify_moment_equivalence as v
+except ImportError:  # Direct execution from the artifacts directory.
+    import verify_moment_equivalence as v
 
 
 class MomentEquivalenceVerificationTests(unittest.TestCase):

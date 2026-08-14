@@ -1,0 +1,262 @@
+\begin{theorem}[Cauchy case of Johnson's integral-representation problem]%
+\label{thm:johnson-cauchy-integral-representation}
+Fix \(s>0\), and let \(\mu\) be a probability measure on \(\RR\) with finite
+second moment.  For \(q>0\) put
+\[
+h_q=P_q*\mu,\qquad g_q=P_{q+s}=P_q*P_s,\qquad u_q=h_q/g_q,
+\]
+and define the nonnegative Lebesgue integral
+\[
+\mathcal J_{\mu,s}(q)
+:=\frac1\pi\iint_{\RR^2\setminus\{x=y\}}
+\frac{g_q(x)\Lambda(u_q(x),u_q(y))}{(x-y)^2}\dd x\dd y .
+\]
+Then \(\mathcal J_{\mu,s}\) is locally integrable on \((0,\infty)\), and,
+with relative entropy between probability measures interpreted in
+\([0,\infty]\),
+\begin{equation}\label{eq:johnson-cauchy-integral-representation}
+D_{\rm KL}(\mu\|P_s)
+=\int_0^\infty \mathcal J_{\mu,s}(q)\dd q .
+\end{equation}
+
+More precisely, let \(X\sim\mu\), let \(Z_s\sim P_s\) be independent, and
+write \(\mu_t\) for the law of Johnson's Cauchy interpolation
+\(X_t=(1-t)X+tZ_s\), \(0\le t<1\).  With
+\[
+q=\frac{st}{1-t},
+\]
+one has
+\begin{equation}\label{eq:johnson-cauchy-dilation-conjugacy}
+D_{\rm KL}(\mu_t\|P_s)
+=D_{\rm KL}(P_q*\mu\|P_{q+s}),
+\end{equation}
+and, for almost every \(t\in(0,1)\),
+\begin{equation}\label{eq:johnson-cauchy-interpolation-derivative}
+-\frac{\dd}{\dd t}D_{\rm KL}(\mu_t\|P_s)
+=\frac{s}{(1-t)^2}
+\mathcal J_{\mu,s}\!\left(\frac{st}{1-t}\right).
+\end{equation}
+Thus \eqref{eq:johnson-cauchy-integral-representation} is a nonnegative
+Bregman realization of the integral requested in
+\cite[Open Problem 4]{Johnson2013StableDeBruijn} for \(\alpha=1\), under the
+stated finite-variance hypothesis.  It does not settle that problem for
+general symmetric stable index \(\alpha\).  Whenever Johnson's score pairing
+in his equation~(17) is defined, comparison with
+\eqref{eq:johnson-cauchy-interpolation-derivative} identifies that pairing
+with the displayed nonnegative Bregman density after the change of variables.
+\end{theorem}
+
+\begin{proof}
+Let \(m=\int x\,\mu(\dd x)\), and set
+\[
+A_q(x):=\frac{(P_q*\mu)(x)}{P_q(x-m)},\qquad
+B_q(x):=\frac{P_{q+s}(x)}{P_q(x-m)}.
+\]
+Then \(u_q=A_q/B_q\).  On each compact interval
+\([a,b]\Subset(0,\infty)\), Lemma
+\ref{lem:matched-poisson-quotient-cauchy-bregman-domain} gives one positive
+compact range and one Lipschitz constant for \(A_q\).  Moreover
+\[
+B_q(x)=\frac{q+s}{q}
+\frac{q^2+(x-m)^2}{(q+s)^2+x^2}.
+\]
+The function on the right, its reciprocal, and their \(x\)-derivatives are
+bounded uniformly for \((q,x)\in[a,b]\times\RR\).  Indeed, after adjoining
+the point \(x=\infty\), they are continuous rational functions on the
+compact set \([a,b]\times\overline\RR\), and neither denominator vanishes.
+The quotient rule therefore gives constants
+\(0<c_{a,b}\le C_{a,b}<\infty\) and \(L_{a,b}<\infty\) such that
+\[
+c_{a,b}\le u_q(x)\le C_{a,b},\qquad
+|u_q(x)-u_q(y)|\le L_{a,b}|x-y|.
+\]
+Proposition~\ref{prop:compact-window-bregman-identity}, applied with the two
+initial measures \(\mu\) and \(P_s(x)\dd x\), now shows that
+\[
+H(q):=D_{\rm KL}(P_q*\mu\|P_{q+s})
+\]
+is absolutely continuous on \([a,b]\), that
+\(\mathcal J_{\mu,s}\in L^1([a,b])\), and that
+\begin{equation}\label{eq:johnson-cauchy-q-derivative}
+H'(q)=-\mathcal J_{\mu,s}(q)
+\quad\text{for a.e. }q\in[a,b].
+\end{equation}
+
+We next close both endpoints separately.  As \(q\downarrow0\),
+\(P_q*\mu\Rightarrow\mu\) and \(P_{q+s}\Rightarrow P_s\).  The variational
+formula for relative entropy gives joint lower semicontinuity under weak
+convergence, whereas convolution by \(P_q\) and the data-processing inequality
+give
+\[
+H(q)=D_{\rm KL}(P_q*\mu\|P_q*P_s)
+\le D_{\rm KL}(\mu\|P_s).
+\]
+Consequently
+\begin{equation}\label{eq:johnson-cauchy-zero-endpoint}
+H(q)\longrightarrow D_{\rm KL}(\mu\|P_s)
+\qquad(q\downarrow0)
+\end{equation}
+in the extended interval \([0,\infty]\).
+
+At the other endpoint, Lemma~\ref{lem:exact-moment-density-truncation} with
+\(L=2\) gives \(\|A_q-1\|_\infty=O(q^{-2})\).  If
+\(y=(x-m)/q\), \(\sigma=s/q\), and \(\delta=m/q\), then
+\[
+B_q(x)=(1+\sigma)
+\frac{1+y^2}{(1+\sigma)^2+(y+\delta)^2}.
+\]
+The difference of its numerator and denominator is
+\(\sigma y^2-2\delta y-\sigma-\sigma^2-\delta^2\).  For all large \(q\),
+\((1+\sigma)^2+(y+\delta)^2\ge(1+y^2)/3\), and
+\(|y|/(1+y^2)\le1/2\).  This identity therefore gives
+\(\|B_q-1\|_\infty=O((s+|m|)/q)\).  Hence
+\begin{equation}\label{eq:johnson-cauchy-infinity-quotient}
+\|u_q-1\|_\infty\longrightarrow0.
+\end{equation}
+For all large \(q\), the quadratic bound
+\(\Phi(1+r)\le2r^2\) for \(|r|\le1/2\) therefore yields
+\[
+0\le H(q)=\int \Phi(u_q)g_q\dd x
+\le2\|u_q-1\|_\infty^2\longrightarrow0.
+\]
+
+Integrating \eqref{eq:johnson-cauchy-q-derivative} first over a finite
+window gives
+\[
+H(\varepsilon)-H(T)
+=\int_\varepsilon^T\mathcal J_{\mu,s}(q)\dd q.
+\]
+Let \(T\to\infty\), then \(\varepsilon\downarrow0\), and use the two endpoint
+limits and monotone convergence of the nonnegative integral.  This proves
+\eqref{eq:johnson-cauchy-integral-representation}, including when either
+side is infinite.
+
+Finally, dilation by \((1-t)^{-1}\) sends the law of \(X_t\) to
+\[
+\mu*P_{st/(1-t)}=P_q*\mu
+\]
+and sends \(P_s\) to
+\(P_{s/(1-t)}=P_{s+q}\).  Relative entropy is invariant under the same
+bimeasurable dilation of both arguments, proving
+\eqref{eq:johnson-cauchy-dilation-conjugacy}.  Since
+\(\dd q/\dd t=s/(1-t)^2\), the chain rule and
+\eqref{eq:johnson-cauchy-q-derivative} give
+\eqref{eq:johnson-cauchy-interpolation-derivative} almost everywhere.
+\end{proof}
+
+\begin{remark}[Tail-integral coefficient transfer]
+\label{rem:no-pointwise-dissipation-from-finite-moments}
+The coefficient transfer below is formulated for tail integrals
+\(\int_t^\infty\mathcal I_\nu(s)\dd s\) and fixed multiplicative-window
+averages.  Passing from a tail expansion for the primitive
+\(H(t)=\int_t^\infty\mathcal I_\nu(s)\dd s\), even with a full finite-moment
+coefficient hierarchy, to pointwise asymptotics for \(\mathcal I_\nu(t)\)
+requires extra differentiated-remainder input.
+
+For example, if the centred law is compactly supported, say
+\(|\gamma-\bar{\gamma}|\le M\), then for each fixed retained order \(L\) and
+all \(t>2M\) the Cayley generating function gives the uniformly convergent
+expansion, with \(\mu_n=\EE(\gamma-\bar{\gamma})^n\),
+\[
+\frac{(P_t*\nu)(\bar{\gamma}+ty)}{P_t(ty)}-1
+=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\rho_{L,t}=\sum_{n>L}\mu_nu_n(y)t^{-n}.
+\]
+The same uniform majorant gives
+\[
+\begin{aligned}
+\|\rho_{L,t}\|_{L^\infty}
++\|\rho_{L,t}\|_{L^1(\omega)}
++\|t\partial_t\rho_{L,t}\|_{L^\infty}
++\|t\partial_t\rho_{L,t}\|_{L^1(\omega)}
+=O_\nu(t^{-(L+1)}).
+\end{aligned}
+\]
+Under such a differentiated remainder bound, one may
+differentiate the finite quotient expansion and combine it with
+\eqref{eq:relative-entropy-integrated-dissipation}; this auxiliary
+observation requires more than the finite-moment coefficient hierarchy.
+\end{remark}
+
+\begin{proposition}[Dissipation-tail and window-average coefficient transfer]%
+\label{prop:dissipation-tail-coefficient-expansion}
+Let \(N\ge2\), and assume that \(\nu\) has finite centred
+\((2N-2)\)th absolute moment.  Then the KL dissipation tail has the same
+universal coefficient polynomial layer as the entropy expansion:
+\begin{equation}\label{eq:bregman-tail-coefficient-expansion}
+\int_t^\infty \mathcal I_\nu(s)\dd s
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N})
+\qquad(t\to\infty).
+\end{equation}
+Equivalently, for every \(2\le M\le N\),
+\begin{equation}\label{eq:bregman-tail-coefficient-recovery}
+A_{2M}(\nu)
+=
+\lim_{t\to\infty}t^{2M}
+\left(
+\int_t^\infty \mathcal I_\nu(s)\dd s
+-\sum_{m=2}^{M-1}A_{2m}(\nu)t^{-2m}
+\right),
+\end{equation}
+with the sum interpreted as zero when \(M=2\).
+
+More locally, for each fixed \(\lambda>1\),
+\begin{equation}\label{eq:bregman-finite-window-coefficients}
+\int_t^{\lambda t} \mathcal I_\nu(s)\dd s
+=
+\sum_{m=2}^{N}A_{2m}(\nu)(1-\lambda^{-2m})t^{-2m}
++o(t^{-2N}).
+\end{equation}
+Thus the averaged dissipation on a multiplicative window satisfies
+\begin{equation}\label{eq:bregman-window-average-coefficients}
+\frac{1}{(\lambda-1)t}\int_t^{\lambda t} \mathcal I_\nu(s)\dd s
+=
+\sum_{m=2}^{N}
+\frac{1-\lambda^{-2m}}{\lambda-1}\,A_{2m}(\nu)t^{-(2m+1)}
++o(t^{-(2N+1)}).
+\end{equation}
+If, in addition, \(0<\eta\le1\) and the centred
+\((2N-2+\eta)\)th absolute moment is finite, then the error terms above have
+the following positive-margin bounds:
+\[
+\int_t^\infty \mathcal I_\nu(s)\dd s
+=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+O_\nu(t^{-(2N+\eta)})
+\]
+and, for each fixed \(\lambda>1\),
+\[
+\int_t^{\lambda t} \mathcal I_\nu(s)\dd s
+=
+\sum_{m=2}^{N}A_{2m}(\nu)(1-\lambda^{-2m})t^{-2m}
+ +O_{\nu,N,\eta,\lambda}(t^{-(2N+\eta)}).
+\]
+Consequently the averaged-window remainder is
+\[
+O_{\nu,N,\eta,\lambda}(t^{-(2N+1+\eta)}).
+\]
+No pointwise expansion of \(\mathcal I_\nu(t)\) is asserted.
+
+\end{proposition}
+
+\begin{proof}
+The tail identity \eqref{eq:relative-entropy-integrated-dissipation} identifies
+\(\int_t^\infty \mathcal I_\nu\) with \(D_{\mathrm{KL}}(h_t\|g_t)\).  Applying
+Theorem~\ref{thm:poisson-kl-even-orders} gives
+\eqref{eq:bregman-tail-coefficient-expansion} and hence the coefficient
+recovery formula \eqref{eq:bregman-tail-coefficient-recovery}.
+
+For the finite window, use the already proved tail identity twice:
+\[
+H(t):=D_{\mathrm{KL}}(h_t\|g_t),
+\qquad
+\int_t^{\lambda t}\mathcal I_\nu(s)\dd s=H(t)-H(\lambda t).
+\]
+Substitute the expansion of \(H\) at \(t\) and at \(\lambda t\).  The
+coefficient of \(t^{-2m}\) is
+\(A_{2m}(\nu)-A_{2m}(\nu)\lambda^{-2m}\), which gives
+\eqref{eq:bregman-finite-window-coefficients}; division by
+\((\lambda-1)t\) gives \eqref{eq:bregman-window-average-coefficients}.
+The positive-margin assertion follows from the explicit remainder estimate
+\eqref{eq:positive-margin-retained-order-theorem} for \(H(t)\) and
+\(H(\lambda t)\).
+\end{proof}

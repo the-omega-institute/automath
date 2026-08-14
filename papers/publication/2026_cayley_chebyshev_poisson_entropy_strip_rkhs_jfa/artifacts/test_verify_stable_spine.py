@@ -1,8 +1,24 @@
 from pathlib import Path
+import re
 import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
+INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
+
+
+def read_tex_source(path: Path) -> str:
+    """Read a TeX source together with any local input wrappers."""
+
+    source = path.read_text(encoding="utf-8")
+
+    def expand(match: re.Match[str]) -> str:
+        child = ROOT / match.group(1)
+        if child.suffix == "":
+            child = child.with_suffix(".tex")
+        return read_tex_source(child)
+
+    return INPUT_RE.sub(expand, source)
 
 
 class StableSpineManuscriptTests(unittest.TestCase):
@@ -24,7 +40,7 @@ class StableSpineManuscriptTests(unittest.TestCase):
 
     def test_stable_tail_decomposition_is_stated_and_proved(self) -> None:
         theorem_path = ROOT / "sec_verified_A2_results.tex"
-        theorem_source = theorem_path.read_text(encoding="utf-8")
+        theorem_source = read_tex_source(theorem_path)
 
         required = (
             r"\label{thm:stable-law-by-law-decomposition}",
@@ -74,7 +90,7 @@ class StableSpineManuscriptTests(unittest.TestCase):
             self.assertIn(text, audit)
 
     def test_cauchy_interpolation_integral_representation_is_complete(self) -> None:
-        source = (ROOT / "sec_doob_phi_entropy.tex").read_text(encoding="utf-8")
+        source = read_tex_source(ROOT / "sec_doob_phi_entropy.tex")
         required = (
             r"\label{thm:johnson-cauchy-integral-representation}",
             r"g_q=P_{q+s}=P_q*P_s",

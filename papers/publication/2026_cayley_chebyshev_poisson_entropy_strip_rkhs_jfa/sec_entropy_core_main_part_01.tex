@@ -1,0 +1,682 @@
+% sec_entropy_core_main.tex -- compact main entropy core
+\section{Poisson Smoothing and Entropy Asymptotics}%
+\label{sec:entropy-asymptotics}
+
+\subsection*{Proof roadmap}
+\label{sec:entropy-theorem-map}
+\label{subsec:intro-hypotheses-scope}
+
+The entropy proofs in this section follow three separate routes.  First, the
+Laurent coefficient formula exposes a nonzero top-moment layer and gives the
+minimal universal absolute-moment assumption for polynomial evaluation in
+Proposition~\ref{thm:sharp-moment-equivalence-hierarchy}.  Under the resulting
+finite \((2N-2)\)-moment hypothesis, the one-dimensional quotient jet and
+finite Taylor transfer for \(\Phi(s)=(1+s)\log(1+s)-s\) then give the
+supporting all-order expansion.  Second, the leading \(t^{-4}\) coefficient
+has its own unconditional analytic variance threshold, proved below by
+combining the finite-variance coefficient calculation with a bounded-mode
+converse lower bound.  Third, in dimension \(d\), the finite
+\(L\)-moment hypothesis with \(L\ge d+1\) is converted into a quotient jet and
+an entropy-existence package before tensor KL coefficients are extracted.
+Here \((\mathrm{MPJ}_{d,L})\) denotes that multidimensional quotient jet and
+\((\mathrm{EX}_{d,L})\) denotes the corresponding positivity, mass-zero,
+integrability, and KL-representation package.  The equivalent two-region
+  remainder \(\mathcal R_{d,L}(t)=o(t^{-L})\) is introduced at the beginning of
+the multidimensional proof.
+The dynamic Bregman tail identity is proved separately in
+\path{sec_doob_phi_entropy.tex}, Section ``Domain and Endpoint Closure for the
+Moving Poisson Quotient.''  There the finite variance assumption
+first gives compact-window bounds for the moving quotient, then a consolidated
+differentiation proposition supplies the two Green pairings and the cutoff
+passage.  The present section is therefore only concerned with quotient
+expansions, Taylor transfer to KL, and algebraic coefficient evaluation.
+The appendices contain only related-work context and auxiliary
+coefficient-calculus and tail-verification checks.
+
+\subsection{Cayley modes and coefficient algebra}
+
+Throughout the one-dimensional part,
+\[
+  \omega(\dd y)=\frac{\dd y}{\pi(1+y^2)}.
+\]
+For a law with mean \(\bar{\gamma}\), write
+\[
+  X_c=\gamma-\bar{\gamma},\qquad
+  \mu_n=\int_{\RR} X_c^n\,\dd\nu(\gamma)
+\]
+whenever the moment exists.  For \(y\in\RR\) and \(\varepsilon\in\RR\), set
+\[
+R_\varepsilon(y):=\frac{1+y^2}{1+(y-\varepsilon)^2}.
+\]
+Let \(u_n(y)\) be the Taylor coefficient of \(R_\varepsilon(y)\) at
+\(\varepsilon=0\):
+\[
+  R_\varepsilon(y)\sim\sum_{n\ge0}u_n(y)\varepsilon^n .
+\]
+\begin{lemma}[Uniform one-dimensional Cayley Taylor remainder]%
+\label{lem:uniform-one-dimensional-cayley-taylor-remainder}
+Let \(L\ge1\).  The Taylor coefficients of \(R_\varepsilon(y)\) at
+\(\varepsilon=0\) satisfy
+\[
+  R_\varepsilon(y)=\sum_{n=0}^{L}u_n(y)\varepsilon^n
+  +\varepsilon^{L+1}v_L(y,\varepsilon)
+\]
+for all \(y,\varepsilon\in\RR\), where \(v_L\) is a rational function on
+\(\RR^2\) and
+\begin{equation}\label{eq:uniform-vL-one-dimensional-bound}
+  \sup_{y\in\RR,\ |\varepsilon|\le1}|v_L(y,\varepsilon)|
+  \le \sup_{y,\varepsilon\in\RR}|v_L(y,\varepsilon)|
+  \le \frac{5L+7}{2}.
+\end{equation}
+Moreover
+\begin{equation}\label{eq:uniform-un-one-dimensional-bound}
+  \|u_n\|_{L^\infty(\RR)}\le n+1,\qquad 0\le n\le L+1 .
+\end{equation}
+\end{lemma}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Lemma
+``Uniform one-dimensional Cayley Taylor remainder''}
+\else
+\begin{proof}
+Write \(y=\tan\theta\), \(c=\cos\theta\), and \(s=\sin\theta\).  Then
+\[
+R_\varepsilon(\tan\theta)
+=\{1-2(\varepsilon c)s+(\varepsilon c)^2\}^{-1}.
+\]
+The finite Chebyshev identity for the Chebyshev polynomials \(U_n\) of the
+second kind,
+\[
+\sum_{n=0}^{L}U_n(x)r^n
+=\frac{1-r^{L+1}U_{L+1}(x)+r^{L+2}U_L(x)}
+       {1-2xr+r^2}
+\]
+with \(x=s\) and \(r=\varepsilon c\) gives
+\[
+  u_n(\tan\theta)=c^nU_n(s)
+\]
+and
+\[
+v_L(\tan\theta,\varepsilon)
+=\frac{c^{L+1}U_{L+1}(s)-\varepsilon c^{L+2}U_L(s)}
+       {1-2(\varepsilon c)s+(\varepsilon c)^2}.
+\]
+Since
+\[
+1-2(\varepsilon c)s+(\varepsilon c)^2
+=\frac{1+(\tan\theta-\varepsilon)^2}{1+\tan^2\theta},
+\]
+this is the rational function
+\[
+v_L(y,\varepsilon)
+=\frac{(1+y^2)u_{L+1}(y)-\varepsilon u_L(y)}
+       {1+(y-\varepsilon)^2}.
+\]
+It remains only to prove that this function is uniformly bounded on the whole
+\((y,\varepsilon)\)-plane.  Put \(d=\tan\theta-\varepsilon\).  Since
+\(\varepsilon c=s-dc\), the preceding trigonometric expression becomes
+\[
+v_L(\tan\theta,\varepsilon)
+=\frac{c^{L-1}\{U_{L+1}(s)-sU_L(s)+dc\,U_L(s)\}}
+       {1+d^2}.
+\]
+For \(|s|\le1\), \(\sup |U_L(s)|=L+1\) and
+\(\sup |U_{L+1}(s)|=L+2\).  Hence, using
+\(|c|\le1\) and \(|d|/(1+d^2)\le1/2\),
+\[
+|v_L(\tan\theta,\varepsilon)|
+\le (L+2)+(L+1)+\frac{L+1}{2}
+=\frac{5L+7}{2}.
+\]
+This proves \eqref{eq:uniform-vL-one-dimensional-bound}.  Finally,
+\[
+  |u_n(\tan\theta)|\le |c|^n\sup_{|x|\le1}|U_n(x)|\le n+1,
+\]
+which proves \eqref{eq:uniform-un-one-dimensional-bound}.
+\end{proof}
+\fi
+
+The following derivative form is the uniform Taylor input used in
+\eqref{eq:one-dimensional-two-region-taylor-remainder}.  It is recorded
+separately because it is independent of the Chebyshev representation.
+
+\begin{lemma}[Uniform derivative bound for the Cayley quotient]%
+\label{lem:uniform-cayley-derivative-bound}
+For every \(L\ge2\),
+\[
+\sup_{y\in\RR,\ |\varepsilon|\le1}
+\left|
+\partial_\varepsilon^{L+1}
+\frac{1+y^2}{1+(y-\varepsilon)^2}
+\right|<\infty .
+\]
+\end{lemma}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Lemma
+``Uniform derivative bound for the Cayley quotient''}
+\else
+\begin{proof}
+For each \(k\ge0\), repeated differentiation of
+\((1+(y-\varepsilon)^2)^{-1}\) gives
+\[
+\partial_\varepsilon^k
+\frac{1}{1+(y-\varepsilon)^2}
+=
+\frac{P_k(y-\varepsilon)}
+{(1+(y-\varepsilon)^2)^{k+1}},
+\]
+where \(P_k\) is a polynomial of degree at most \(k\).  When
+\(|\varepsilon|\le1\),
+\[
+1+y^2\le C\bigl(1+(y-\varepsilon)^2\bigr)
+\]
+with an absolute constant \(C\).  Hence, with \(z=y-\varepsilon\),
+\[
+(1+y^2)
+\frac{|P_k(y-\varepsilon)|}{(1+(y-\varepsilon)^2)^{k+1}}
+\le
+C_k\frac{1+|z|^{k+2}}{(1+z^2)^{k+1}}
+\le C_k .
+\]
+Taking \(k=L+1\) proves the claim.
+\end{proof}
+\fi
+
+Thus, for each \(L\ge1\),
+\[
+R_\varepsilon(y)=\sum_{n=0}^{L}u_n(y)\varepsilon^n
+ +\varepsilon^{L+1}v_L(y,\varepsilon)
+\]
+with \(v_L\) as in
+Lemma~\ref{lem:uniform-one-dimensional-cayley-taylor-remainder}.  The
+finite-order estimate used below is the
+following two-region form: for every \(L\ge2\) there is a constant \(C_L\)
+such that, uniformly in \(y\in\RR\),
+\begin{equation}\label{eq:one-dimensional-two-region-taylor-remainder}
+\left|R_\varepsilon(y)-\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le C_L
+\begin{cases}
+|\varepsilon|^{L+1},& |\varepsilon|\le1,\\
+|\varepsilon|^L,& |\varepsilon|>1.
+\end{cases}
+\end{equation}
+Indeed, Lemma~\ref{lem:uniform-cayley-derivative-bound} and Taylor's formula
+give the first line; equivalently the explicit remainder
+Lemma~\ref{lem:uniform-one-dimensional-cayley-taylor-remainder}
+gives it with constant \((5L+7)/2\).  For
+\(|\varepsilon|>1\), the elementary bound
+\[
+R_\varepsilon(y)\le3(1+\varepsilon^2)
+\]
+and \(\|u_n\|_\infty\le n+1\) give
+\[
+\left|R_\varepsilon(y)-\sum_{n=0}^{L}u_n(y)\varepsilon^n\right|
+\le
+\left(6+\sum_{n=0}^{L}(n+1)\right)|\varepsilon|^L .
+\]
+Thus \eqref{eq:one-dimensional-two-region-taylor-remainder} holds with a
+constant depending only on \(L\), uniformly in \(y\).
+
+\phantomsection\label{tab:coefficient-notation}
+We use \(\theta\) for the half-angle Cayley coordinate \(y=\tan\theta\) and
+\(z=e^{2\ii\theta}\) for the Laurent phase.  Thus
+\(\dd\omega(y)=\dd y/(\pi(1+y^2))=\dd\theta/\pi\), and
+\(\cos(2k\theta)\), \(\sin(2k\theta)\) become \(z^{\pm k}\) modes.  The
+notation guide at the end of the Cayley--Haar preliminaries separates the
+coefficient, mode, covariance, and dissipation symbols used below.  Locally, the
+Laurent representative of \(u_n\) is denoted \(Q_n\), so
+\(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).  Mode integrals are written
+\(J(n_1,\ldots,n_r)\); the dissipation is always
+\(\mathcal I_\nu(t)\).  The one-dimensional universal coefficient polynomial
+is \(A_k^{\rm form}\), its evaluation on \(\nu\) is \(A_k(\nu)\), and
+multidimensional retained coefficients are denoted
+\(\mathcal A_m^{(d)}(\nu)\).  The separate symbol
+\(\mathcal Q_d(\Sigma)\) refers only to the algebraic covariance quadratic layer,
+which equals \(\mathcal A_4^{(d)}(\nu)\) after a quotient jet has identified
+the KL expansion.
+
+\begin{theorem}[Cayley--Chebyshev mode formula]%
+\label{thm:cayley-chebyshev-mode}
+\label{lem:mode-parity-vanish}
+Let \(U_n\) be the Chebyshev polynomial of the second kind.  If
+\(y=\tan\theta\), then
+\begin{equation}\label{eq:cayley-chebyshev-mode}
+u_n(\tan\theta)=\cos^n\theta\,U_n(\sin\theta).
+\end{equation}
+Equivalently, for \(n\ge1\),
+\[
+u_n(\tan\theta)=
+\cos^{n-1}\theta\,
+\sin\!\left((n+1)\left(\frac{\pi}{2}-\theta\right)\right),
+\]
+and therefore
+\begin{equation}\label{eq:cayley-mode-parity}
+u_n(-y)=(-1)^nu_n(y).
+\end{equation}
+\end{theorem}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Theorem
+``Cayley--Chebyshev mode formula''}
+\else
+\begin{proof}
+With \(y=\tan\theta\),
+\[
+R_\varepsilon(\tan\theta)
+=\{1-2(\varepsilon\cos\theta)\sin\theta
++(\varepsilon\cos\theta)^2\}^{-1}.
+\]
+The generating function
+\(\sum_{n\ge0}U_n(x)r^n=(1-2xr+r^2)^{-1}\)
+\cite[Chapters~1 and~5]{MasonHandscomb2002} gives
+\eqref{eq:cayley-chebyshev-mode}.  The trigonometric form follows from the
+standard identity for \(U_n(\sin\theta)\), and parity is immediate.
+\end{proof}
+\fi
+
+For \(r\ge2\) and \(n_j\ge2\), define
+\begin{equation}\label{eq:mode-integral-definition}
+J(n_1,\ldots,n_r):=
+\int_{\RR}u_{n_1}(y)\cdots u_{n_r}(y)\,\omega(\dd y).
+\end{equation}
+In the formal polynomial algebra
+\(\QQ[\mathfrak m_2,\ldots,\mathfrak m_k]\), put
+\begin{equation}\label{eq:universal-entropy-coefficient}
+A_k^{\rm form}:=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\ n_j\ge2}}
+\mathfrak m_{n_1}\cdots\mathfrak m_{n_r}\,J(n_1,\ldots,n_r).
+\end{equation}
+When the required centred moments exist,
+\begin{equation}\label{eq:universal-entropy-coefficient-evaluation}
+A_k(\nu):=\operatorname{ev}_{\nu,k}(A_k^{\rm form}),
+\qquad
+\operatorname{ev}_{\nu,k}(\mathfrak m_n)=\mu_n .
+\end{equation}
+
+\begin{definition}[Canonical coefficient finiteness]
+\label{def:canonical-coefficient-finiteness}
+Let \(k\ge4\), and let \(\nu\) be a probability law on \(\RR\) with finite
+mean.  We say that \(A_k(\nu)\) is \emph{finite}, and write
+\(A_k(\nu)\in\RR\), when the reduced polynomial
+\(A_k^{\rm form}\) admits its canonical Lebesgue evaluation at the centred
+moments of \(\nu\): every moment occurring in a nonzero monomial is an
+absolutely integrable, finite real number, and ordinary real arithmetic then
+gives \eqref{eq:universal-entropy-coefficient-evaluation}.  Otherwise we
+write \(A_k(\nu)\notin\RR\).  In particular, no value is assigned by a
+principal value, by a choice of truncation, or by cancellation of divergent
+quantities.  This is a deliberately specified domain for evaluation of the
+universal coefficient polynomial.  It is not defined through the existence
+of an entropy remainder.  Theorem~\ref{thm:poisson-kl-even-orders} separately
+identifies the evaluated polynomial with an entropy-asymptotic coefficient
+under its finite-moment hypothesis.
+\end{definition}
+
+\begin{theorem}[Universal entropy coefficients]%
+\label{thm:universal-entropy-coefficients}
+The coefficient of \(t^{-k}\) in the formal expression
+\[
+\int_{\RR}\left\{
+\left(1+\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}\right)
+\log\left(1+\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}\right)
+-\sum_{n=2}^{k}\mathfrak m_nu_n(y)t^{-n}
+\right\}\omega(\dd y)
+\]
+is \(A_k^{\rm form}\).  If the moments needed in
+\eqref{eq:universal-entropy-coefficient} exist for \(\nu\), then
+\[
+A_k(\nu)=
+\sum_{r=2}^{\lfloor k/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{n_1+\cdots+n_r=k\\ n_j\ge2}}
+\mu_{n_1}\cdots\mu_{n_r}\,J(n_1,\ldots,n_r).
+\]
+All odd formal coefficients vanish.
+\end{theorem}
+
+\begin{proof}
+Use
+\[
+(1+s)\log(1+s)-s=\sum_{r=2}^{\infty}\frac{(-1)^r}{r(r-1)}s^r.
+\]
+The coefficient of total degree \(k\) is finite and is exactly
+\eqref{eq:universal-entropy-coefficient}.  If \(k\) is odd, then each mode
+product in the coefficient has odd total parity by
+\eqref{eq:cayley-mode-parity}, hence integrates to zero against the even
+measure \(\omega\).
+\end{proof}
+
+\begin{theorem}[Finite Fourier algorithm for mode integrals]%
+\label{thm:finite-fourier-mode-integral-algorithm}
+Define \(Q_n(e^{2\ii\theta})=u_n(\tan\theta)\).  Equivalently, for every
+\(n\ge1\),
+\begin{equation}\label{eq:mode-laurent-polynomial-definition}
+Q_n(z)=2^{-n}(-\ii)^n
+\sum_{k=1}^{n}\binom{n-1}{k-1}
+\bigl(z^k+(-1)^nz^{-k}\bigr).
+\end{equation}
+Thus, if \(Q_n(z)=\sum_kq_{n,k}z^k\), then \(q_{n,0}=0\) and
+\begin{equation}\label{eq:mode-laurent-coefficients}
+q_{n,k}=
+2^{-n}(-\ii)^n\operatorname{sgn}(k)^{\,n\bmod2}
+\binom{n-1}{|k|-1},
+\qquad 0<|k|\le n,
+\end{equation}
+with \(q_{n,k}=0\) for \(|k|>n\).
+Consequently
+\begin{equation}\label{eq:mode-integral-constant-term}
+J(n_1,\ldots,n_r)=[z^0]\prod_{j=1}^r Q_{n_j}(z).
+\end{equation}
+\end{theorem}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Theorem
+``Finite Fourier algorithm for mode integrals''}
+\else
+\begin{proof}
+Put \(w=e^{\ii\theta}\) and \(z=w^2\).  The trigonometric form in
+Theorem~\ref{thm:cayley-chebyshev-mode} gives
+\[
+u_n(\tan\theta)
+=\frac{\cos^{n-1}\theta}{2\ii}
+\left\{\ii^{\,n+1}w^{-(n+1)}
+-(-\ii)^{n+1}w^{n+1}\right\}.
+\]
+Since
+\(\cos^{n-1}\theta=2^{-(n-1)}w^{-(n-1)}(1+w^2)^{n-1}\), this becomes
+\[
+2^{-n}(1+z)^{n-1}
+\left\{\ii^nz^{-n}+(-\ii)^nz\right\}.
+\]
+Expanding \((1+z)^{n-1}\) and reindexing the negative powers gives
+\eqref{eq:mode-laurent-polynomial-definition}; the coefficient formula
+\eqref{eq:mode-laurent-coefficients} is the same identity read termwise.
+Since \(\omega(\dd y)=\dd\theta/\pi\), the map \(z=e^{2\ii\theta}\) sends
+the integral to Haar integration on \(\TT\), hence to constant-term
+extraction.
+\end{proof}
+\fi
+
+\begin{proposition}[Minimal absolute moment for universal polynomial evaluation]%
+\label{thm:sharp-moment-equivalence-hierarchy}
+Let \(m\ge2\), and let \(\nu\) be a probability law on \(\RR\) with finite
+mean \(\bar\gamma\).  Put \(X_c=\gamma-\bar\gamma\).  No variance or tail
+assumption is imposed.  For \(m\ge3\), the reduced universal polynomial has
+the form
+\begin{equation}\label{eq:sharp-moment-equivalence-top-layer}
+A_{2m}^{\rm form}
+=\kappa_m\,\mathfrak m_2\mathfrak m_{2m-2}
+ +P_m(\mathfrak m_2,\ldots,\mathfrak m_{2m-3}),
+\qquad
+\kappa_m=(-1)^m(m-1)2^{-2m+2}\ne0,
+\end{equation}
+At \(m=2\), \(A_4^{\rm form}=\mathfrak m_2^2/8\).  Thus the exact top absolute moment
+is sufficient for evaluating every monomial and is minimal among
+absolute-moment assumptions that guarantee evaluation uniformly over the full
+class of centred laws.  Equivalently, within the specially stipulated
+canonical domain of Definition~\ref{def:canonical-coefficient-finiteness},
+\begin{equation}\label{eq:sharp-moment-equivalence-hierarchy}
+ A_{2m}(\nu)\in\RR
+ \quad\Longleftrightarrow\quad
+ \EE|X_c|^{2m-2}<\infty .
+\end{equation}
+This equivalence describes only the domain of polynomial evaluation.  For
+\(m\ge3\) it is not an unconditional converse for an entropy remainder.  When the
+finite-moment condition holds, Theorem~\ref{thm:poisson-kl-even-orders}, with
+\(N=m\), identifies this finite number as the actual \(t^{-2m}\)
+coefficient in the entropy expansion under precisely the same finite
+\((2m-2)\)nd absolute-moment hypothesis.
+\end{proposition}
+
+\begin{proof}
+First suppose that \(\EE|X_c|^{2m-2}<\infty\).  Lyapunov's inequality gives
+\(\EE|X_c|^j<\infty\) for every \(0\le j\le2m-2\).  Every index in
+\eqref{eq:universal-entropy-coefficient} is at most \(2m-2\), because every
+entropy monomial has at least two factors and every index is at least two.
+The coefficient therefore has a finite canonical evaluation.  This proves
+the moment-to-coefficient implication without any additional tail
+hypothesis.
+
+For the converse and sharpness, first take \(m=2\).  The only composition
+of four into parts at least two is \((2,2)\), and
+\[
+ A_4^{\rm form}=\frac12\mathfrak m_2^2J(2,2)
+ =\frac18\mathfrak m_2^2,
+\]
+because \(J(2,2)=1/4\).  Hence its canonical evaluation is finite exactly
+when \(\EE X_c^2<\infty\).
+
+Let \(m\ge3\) and write \(L=2m-2\).  A monomial in
+\eqref{eq:universal-entropy-coefficient} which contains
+\(\mathfrak m_L\) and has total index \(2m=L+2\) must have exactly two
+factors, of indices \((2,L)\) or \((L,2)\).  Thus
+\[
+ A_{2m}^{\rm form}
+ =J(2,L)\mathfrak m_2\mathfrak m_L
+  +P_m(\mathfrak m_2,\ldots,\mathfrak m_{L-1}).
+\]
+It remains to show that the displayed top variable genuinely occurs.  Put
+\(L=2q\), so \(q=m-1\).  The Laurent formula
+\eqref{eq:mode-laurent-polynomial-definition} gives
+\[
+Q_2(z)=-\frac14(z+z^{-1}+z^2+z^{-2})
+\]
+and
+\[
+Q_{2q}(z)=(-1)^q2^{-2q}
+\sum_{j=0}^{2q-1}\binom{2q-1}{j}
+\bigl(z^{j+1}+z^{-(j+1)}\bigr).
+\]
+Only the exponents \(\pm1,\pm2\) of \(Q_{2q}\) contribute to the constant
+term of \(Q_2Q_{2q}\).  Therefore
+\begin{align*}
+J(2,2q)
+&=[z^0]Q_2Q_{2q}\\
+&=-\frac12(-1)^q2^{-2q}
+  \left\{\binom{2q-1}{0}+\binom{2q-1}{1}\right\}\\
+&=(-1)^{q+1}q2^{-2q}
+ =(-1)^m(m-1)2^{-2m+2}=\kappa_m\ne0.
+\end{align*}
+This proves \eqref{eq:sharp-moment-equivalence-top-layer}.
+
+Now assume that \(A_{2m}(\nu)\in\RR\).  Canonical finiteness already
+requires every moment occurring in a nonzero monomial of the reduced
+polynomial to be a finite Lebesgue moment.  The calculation above shows that
+\(\mathfrak m_L\) is such a variable whenever \(0<\mu_2<\infty\), and hence
+\(\mu_L=\EE|X_c|^L<\infty\), since \(L\) is even.  If \(\mu_2=0\), then
+\(X_c=0\) almost surely and the same conclusion is automatic.  Infinite
+variance is excluded already by canonical evaluability of the displayed
+monomial.  Hence finite evaluation implies \(\EE|X_c|^{2m-2}<\infty\),
+which completes the equivalence.
+
+Finally, lower moments cannot replace the top moment.  For example, with
+\(a_j=\mathrm e^j\) and sufficiently small \(c>0\), the centred symmetric
+law
+\[
+\left(1-\sum_{j\ge1}\frac{c}{j a_j^L}\right)\delta_0
++\sum_{j\ge1}\frac{c}{2j a_j^L}
+ (\delta_{a_j}+\delta_{-a_j})
+\]
+has every absolute moment of order \(r<L\) finite and its \(L\)th moment
+infinite.  Formula \eqref{eq:sharp-moment-equivalence-top-layer} therefore
+shows, at every order \(m\), that all strictly lower moments may be finite
+while \(A_{2m}(\nu)\notin\RR\).
+\end{proof}
+
+\subsection{One-dimensional coefficient theorem}
+
+\begin{lemma}[Exact-moment density truncation]%
+\label{lem:exact-moment-density-truncation}
+Let \(L\ge2\), and let \(\nu\) have mean \(\bar{\gamma}\) and finite centred
+\(L\)th absolute moment.  For
+\[
+\delta_t(y):=
+\frac{(P_t*\nu)(\bar{\gamma}+ty)}{P_t(ty)}-1
+\]
+one has
+\begin{equation}\label{eq:exact-moment-density-truncation}
+\delta_t(y)=\sum_{n=2}^{L}\mu_nu_n(y)t^{-n}+\rho_{L,t}(y),
+\qquad
+\|\rho_{L,t}\|_{\infty}+\|\rho_{L,t}\|_{L^1(\omega)}=o(t^{-L}).
+\end{equation}
+Also \(\|\delta_t\|_\infty=O(t^{-2})\).
+\end{lemma}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Lemma
+``Exact-moment density truncation''}
+\else
+\begin{proof}
+For \(x=\bar{\gamma}+ty\),
+\[
+\frac{P_t(x-\gamma)}{P_t(x-\bar{\gamma})}
+=R_{X_c/t}(y).
+\]
+Subtract the Taylor polynomial in \(X_c/t\) through order \(L\).  On
+\(|X_c|\le t\), the small-translation part of
+\eqref{eq:one-dimensional-two-region-taylor-remainder} gives
+\[
+C_Lt^{-L}\EE\!\left[|X_c|^L(|X_c|/t)\mathbf1_{\{|X_c|\le t\}}\right]
+=o(t^{-L}).
+\]
+On \(|X_c|>t\), the large-translation part gives
+\[
+\left|R_{X_c/t}(y)-\sum_{n=0}^{L}u_n(y)(X_c/t)^n\right|
+\le C_L|X_c/t|^L,
+\]
+and hence \(C_Lt^{-L}\EE[|X_c|^L\mathbf1_{\{|X_c|>t\}}]=o(t^{-L})\).  The same
+uniform estimates prove both the \(L^\infty\) and \(L^1(\omega)\) bounds.  The
+\(n=0\) term is removed by subtracting \(1\), and the \(n=1\) term vanishes
+because \(\EE X_c=0\).  The \(O(t^{-2})\) bound follows by applying the two
+displayed estimates with \(L=2\): the small-translation part is bounded by
+\(Ct^{-2}\EE[|X_c|^2\mathbf1_{\{|X_c|\le t\}}]\), and the
+large-translation part by
+\(Ct^{-2}\EE[|X_c|^2\mathbf1_{\{|X_c|>t\}}]\).  These two bounds are
+uniform in \(y\) and hence also hold in \(L^1(\omega)\).
+\end{proof}
+\fi
+
+\begin{proposition}[Finite quotient jet implies KL coefficient jet]%
+\label{prop:finite-quotient-jet-implies-kl-coefficient-jet}
+Let \((E,\mathcal E,\lambda)\) be a probability space, let \(J\ge2\), and
+let \(b_2,\ldots,b_J\in L^\infty(\lambda)\).  Put
+\[
+  q_t=\sum_{j=2}^{J}b_jt^{-j},\qquad
+  \delta_t=q_t+\rho_t,
+\]
+and assume
+\[
+  \|\delta_t\|_\infty=O(t^{-2}),\qquad
+  \|\rho_t\|_\infty+\|\rho_t\|_{L^1(\lambda)}=o(t^{-J}).
+\]
+Then, with \(\Phi(s)=(1+s)\log(1+s)-s\),
+\begin{equation}\label{eq:finite-quotient-jet-transfer}
+  \int_E\Phi(\delta_t)\,\dd\lambda
+  =
+  \sum_{m=4}^{J+2}C_m t^{-m}+o(t^{-(J+2)}),
+\end{equation}
+where
+\begin{equation}\label{eq:finite-quotient-jet-coefficients}
+  C_m=
+  \sum_{r=2}^{\lfloor m/2\rfloor}
+  \frac{(-1)^r}{r(r-1)}
+  \sum_{\substack{j_1+\cdots+j_r=m\\2\le j_1,\ldots,j_r\le J}}
+  \int_E b_{j_1}\cdots b_{j_r}\,\dd\lambda .
+\end{equation}
+If a symmetry of \(\lambda\) and the functions \(b_j\) makes the integrals in
+\eqref{eq:finite-quotient-jet-coefficients} vanish for odd \(m\), then the
+corresponding odd coefficients in \eqref{eq:finite-quotient-jet-transfer}
+vanish.
+
+More generally, let \(s_t\downarrow0\) be a comparison scale.  Suppose
+\[
+  \delta_t=a_t+B_t+e_t,\qquad
+  a_t=\sum_{j=2}^{J}b_jt^{-j},
+\]
+\[
+  \|a_t\|_\infty=O(t^{-2}),\qquad
+  \|B_t\|_\infty+\|e_t\|_\infty=o(t^{-2}),\qquad
+  \|e_t\|_{L^1(\lambda)}=o(s_t/t^{-2}).
+\]
+If, for some fixed Taylor order \(R_0\), the finite polynomial
+\[
+  \sum_{r=2}^{R_0}\frac{(-1)^r}{r(r-1)}(a_t+B_t)^r
+\]
+has only finitely many monomial contributions at scale \(s_t\), then
+\(\int_E\Phi(\delta_t)\,\dd\lambda\) has exactly those finite monomial
+contributions at scale \(s_t\); every monomial containing \(e_t\) is
+\(o(s_t)\), and the Taylor remainder is \(o(s_t)\) provided
+\(\|\delta_t\|_\infty^{R_0}\|\delta_t\|_{L^1(\lambda)}=o(s_t)\).
+\end{proposition}
+
+\ifdefined\JFAArticleMain
+\relocatedproof{sec_entropy_core_main.tex}{the proof following Proposition
+``Finite quotient jet implies KL coefficient jet''}
+\else
+\begin{proof}
+The first part is the finite algebraic transfer used in the finite-jet
+theorems.  Since \(\|\delta_t\|_\infty=O(t^{-2})\), for all large \(t\)
+\[
+\Phi(\delta_t)=
+\sum_{r=2}^{R}\frac{(-1)^r}{r(r-1)}\delta_t^r
++O(|\delta_t|^{R+1}),
+\qquad
+R=\left\lfloor\frac{J+2}{2}\right\rfloor+1 .
+\]
+The integrated Taylor tail is
+\(O(t^{-2(R+1)})=o(t^{-(J+2)})\).  For \(2\le r\le R\),
+\[
+\|\delta_t^r-q_t^r\|_{L^1(\lambda)}
+\le
+C_r\sum_{\ell=1}^{r}
+\|q_t\|_\infty^{r-\ell}
+\|\rho_t\|_\infty^{\ell-1}
+\|\rho_t\|_{L^1(\lambda)}
+=o(t^{-(J+2)}),
+\]
+with the largest possible layer \(O(t^{-2})o(t^{-J})\).  Hence only pure
+powers of the finite quotient polynomial \(q_t\) remain through order
+\(J+2\).  Collecting the coefficient of \(t^{-m}\) gives
+\eqref{eq:finite-quotient-jet-coefficients}.  The parity assertion is then
+immediate from the displayed coefficient formula.
+
+For the scale \(s_t\), the same Taylor expansion through order \(R_0\) gives
+the asserted rule.
+Any product containing \(e_t\) and another factor is bounded in \(L^1\) by
+\(O(t^{-2})\|e_t\|_{L^1}=o(s_t)\).  A product made only of powers of \(e_t\)
+is \(o(s_t)\) because \(\|e_t\|_\infty=o(t^{-2})\) and
+\(\|e_t\|_{L^1}=o(s_t/t^{-2})\).  The assumed Taylor-tail bound removes the
+remainder, leaving precisely the finite monomials in \(a_t+B_t\) whose size
+is comparable to \(s_t\).
+\end{proof}
+\fi
+
+\begin{lemma}[Moving-scale Taylor transfer]%
+\label{lem:moving-scale-taylor-transfer}
+Let \((E,\mathcal E,\lambda)\) be a probability space, let \(p\ge4\), and let
+\(a_2,\ldots,a_{p-1},b\in L^\infty(\lambda)\).  Put
+\[
+  A_t=\sum_{j=2}^{p-1}a_jt^{-j},\qquad
+  B_t=t^{-p}M_p(t)b,
+\]
+where
+\begin{equation}\label{eq:moving-scale-growth}
+  M_p(t)\to\infty,\qquad M_p(t)=o(t^{p-2}).
+\end{equation}
+Let \(e_t\in L^\infty(\lambda)\cap L^1(\lambda)\) satisfy
+\begin{equation}\label{eq:moving-scale-error}
+  \|e_t\|_\infty+\|e_t\|_{L^1(\lambda)}
+  =o(t^{-p}M_p(t)).
+\end{equation}
+Then, with \(\Phi(s)=(1+s)\log(1+s)-s\),
+\begin{equation}\label{eq:moving-scale-transfer}
+  \int_E\Phi(A_t+B_t+e_t)\,\dd\lambda
+  =
+  \int_E\Phi(A_t)\,\dd\lambda
+  +t^{-(p+2)}M_p(t)\int_Ea_2b\,\dd\lambda
+  +o(t^{-(p+2)}M_p(t)).
+\end{equation}
+\end{lemma}
+

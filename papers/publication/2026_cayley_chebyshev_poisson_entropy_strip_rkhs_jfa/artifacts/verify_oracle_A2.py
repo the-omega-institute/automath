@@ -234,7 +234,7 @@ def symbolic_checks() -> list[Check]:
 
     all_order_rows = []
     all_order_ok = True
-    for r in range(2, 9):
+    for r in range(1, 9):
         for d in range(1, 13):
             for alpha in (
                 sp.Rational(1, 4),
@@ -269,6 +269,7 @@ def symbolic_checks() -> list[Check]:
                     ) > 0
                 all_order_ok = all_order_ok and row_ok
                 if (r, d, alpha) in (
+                    (1, 1, sp.Rational(1, 4)),
                     (2, 1, sp.Rational(1, 1)),
                     (3, 5, sp.Rational(7, 4)),
                     (4, 9, sp.Rational(1, 1)),
@@ -289,7 +290,7 @@ def symbolic_checks() -> list[Check]:
 
     difference_rows = []
     difference_ok = True
-    for r in range(2, 9):
+    for r in range(1, 9):
         coefficients = [
             (-1) ** (r - k) * sp.binomial(r, k) for k in range(r + 1)
         ]

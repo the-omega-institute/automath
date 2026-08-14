@@ -1,0 +1,508 @@
+Integrating over the ball and summing against all probability weights of
+\(\eta\) yields
+\[
+ (p_{s_j}^{(\alpha,d)}*\eta)(E_j)
+ \le C_{\alpha,d,r}(s_j/R_j)^\beta
+ =C_{\alpha,d,r}\kappa^\beta w_j,
+\]
+which is the second assertion.
+\end{proof}
+
+\begin{lemma}[Uniform Bernoulli relative-entropy separation]
+\label{lem:bernoulli-kl-linear-separation}
+Let \(0<b<a\).  If \(u\ge aw\) and \(v\le bw\) are Bernoulli parameters,
+then
+\begin{equation}\label{eq:bernoulli-kl-linear-separation}
+ D_{\rm KL}(\operatorname{Ber}(u)\|\operatorname{Ber}(v))
+ \ge a\left\{\log\frac ab-1+\frac ba\right\}w.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If \(v=0<u\), the relative entropy is infinite.  Otherwise \(u>v>0\), and
+\[
+ (1-u)\log\frac{1-u}{1-v}\ge-(u-v).
+\]
+Writing \(\theta=v/u\le b/a<1\) therefore gives
+\[
+ D_{\rm KL}(\operatorname{Ber}(u)\|\operatorname{Ber}(v))
+ \ge u\{\log(1/\theta)-1+\theta\}
+ \ge aw\left\{\log\frac ab-1+\frac ba\right\},
+\]
+because the braced function is decreasing on \((0,1)\).
+\end{proof}
+
+\paragraph{Gaussian benchmark and priority.}
+Let \(\rho_t(x)=(2\pi t)^{-d/2}e^{-|x|^2/(2t)}\).  Under a finite
+exponential square moment for each centred input, Chen and Niles-Weed
+\cite[Theorem~2.5]{ChenNilesWeed2022SmoothedWasserstein} prove that moment
+matching below order \(r=n+1\), followed by a nonzero difference at order
+\(r\), implies, with
+\(\Delta m_\gamma=m_\gamma(\mu)-m_\gamma(\eta)\),
+\begin{equation}\label{eq:chen-niles-weed-gaussian-kl-benchmark}
+ \lim_{t\to\infty}t^rD_{\rm KL}(\mu*\rho_t\|\eta*\rho_t)
+ =\frac12\sum_{|\gamma|=r}\frac{|\Delta m_\gamma|^2}{\gamma!}.
+\end{equation}
+Putting \(s=\sqrt t\) gives the same \(s^{-2r}\) scaling as below.  For the
+standard Gaussian \(g=\rho_1\), the identities
+\((-1)^{|\gamma|}\partial^\gamma g=H_\gamma g\) and
+\(\int H_\gamma H_\delta g=\gamma!\mathbf1_{\gamma=\delta}\) identify the
+right side of \eqref{eq:chen-niles-weed-gaussian-kl-benchmark} exactly with
+the quadratic functional \eqref{eq:all-order-stable-leading-functional} at
+the Gaussian boundary \(\alpha=2\).  Accordingly, the first-unmatched
+quadratic KL mechanism and its positivity are prior work in the Gaussian
+case.  The theorem below contributes the heavy-tailed range \(0<\alpha<2\),
+the critical complete-moment exponent, endpoint sufficiency, and uniform
+sharpness over those moment classes.
+
+\begin{theorem}[All-order first unmatched tensor under stable smoothing]
+\label{thm:all-order-stable-first-unmatched-moment}
+Let \(d\ge1\), \(0<\alpha<2\), and let \(r\ge1\) be an integer.  Define
+\(q_{r,\alpha,d}\) and \(p_{r,\alpha,d}\) by
+\eqref{eq:all-order-stable-critical-exponents}.  Let \(\nu,\eta\) be
+probability laws on \(\RR^d\) such that
+\begin{equation}\label{eq:all-order-stable-moment-hypotheses}
+ m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
+ \qquad
+ \int|x|^{p_{r,\alpha,d}}(\nu+\eta)(\dd x)<\infty.
+\end{equation}
+Put
+\[
+ \Delta_r:=\int_{\RR^d}x^{\otimes r}(\nu-\eta)(\dd x)
+ \in\operatorname{Sym}^r(\RR^d),
+\]
+so its multi-index coordinates are
+\(\Delta m_\gamma=m_\gamma(\nu)-m_\gamma(\eta)\), and suppose
+\(\Delta_r\ne0\).  With the Euclidean contraction of symmetric tensors,
+define
+\begin{equation}\label{eq:all-order-stable-leading-mode}
+ B_{\Delta_r}(y):=
+ \frac{(-1)^r}{r!p_1^{(\alpha,d)}(y)}
+ \langle\Delta_r,D^rp_1^{(\alpha,d)}(y)\rangle
+ =\frac{(-1)^r}{p_1^{(\alpha,d)}(y)}
+ \sum_{|\gamma|=r}\frac{\Delta m_\gamma}{\gamma!}
+ \partial^\gamma p_1^{(\alpha,d)}(y)
+\end{equation}
+and
+\begin{equation}\label{eq:all-order-stable-leading-functional}
+ \mathcal Q_{\alpha,d,r}(\Delta_r)
+ :=\frac12\int_{\RR^d}B_{\Delta_r}(y)^2
+                  \Omega_{\alpha,d}(\dd y).
+\end{equation}
+Then \(\mathcal Q_{\alpha,d,r}(\Delta_r)>0\), the quadratic form is
+invariant under \(\Delta_r\mapsto U^{\otimes r}\Delta_r\) for every
+\(U\in O(d)\), and
+\begin{equation}\label{eq:all-order-stable-first-unmatched-asymptotic}
+ D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
+ =\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}+o(s^{-2r}).
+\end{equation}
+
+The exponent \(p_{r,\alpha,d}\) is optimal as a uniform sufficient
+absolute-moment hypothesis, with its endpoint included.  More precisely,
+if \(d+\alpha>2r\), then for every
+\(r\le\rho<p_{r,\alpha,d}\) there are probability laws \(\nu,\eta\)
+having finite \(\rho\)th absolute moments, matching every tensor moment
+below order \(r\), and having a finite nonzero order-\(r\) tensor difference,
+but
+\begin{equation}\label{eq:all-order-stable-sharpness}
+ \limsup_{s\to\infty}s^{2r}
+ D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)=+\infty.
+\end{equation}
+For \(0<\rho<r\), finiteness of the \(\rho\)th absolute moment does not
+even guarantee that the tensor in \eqref{eq:all-order-stable-leading-mode}
+is defined throughout the moment class.  Thus the latter observation is a
+domain obstruction, whereas \eqref{eq:all-order-stable-sharpness} is the
+analytic sharpness statement on laws for which the leading tensor exists.
+\end{theorem}
+
+\begin{proof}
+Write \(q=q_{r,\alpha,d}\), \(p=p_{r,\alpha,d}\), and
+\(m=\lfloor p\rfloor\).  Apply
+Lemma~\ref{lem:all-order-stable-critical-remainder} to both laws.  Their
+common moments below order \(r\) cancel, so
+\begin{equation}\label{eq:all-order-stable-two-quotient-split}
+ q_s^\nu-q_s^\eta=v_s+e_s,
+ \quad
+ v_s=\sum_{j=r}^m s^{-j}(B_j^\nu-B_j^\eta),
+ \quad
+ e_s=r_s^\nu-r_s^\eta.
+\end{equation}
+In particular,
+\[
+ s^rv_s\longrightarrow B_{\Delta_r}\quad\hbox{in }L^\infty,
+ \qquad \|e_s\|_q=o(s^{-p}).
+\]
+The intermediate modes \(r<j\le m\) in
+\eqref{eq:all-order-stable-two-quotient-split} are essential: unless their
+moments also match, they are not part of the \(o(s^{-p})\) remainder.
+
+No part of this argument requires \(r\ge2\).  At \(r=1\), the endpoint
+formula still gives \(p\ge1\), hence the assumed \(p\)-moment supplies the
+first moments and \(\EE|X|<\infty\); also \(m+1>p\) and \(pq=2\).  Thus the
+critical remainder and the two-background transfer have exactly the powers
+needed for an \(o(s^{-2})\) error.  Lemma~\ref{lem:stable-finite-difference-blocks}
+records the corresponding first-difference block used for sharpness.
+
+Proposition~\ref{prop:stable-kernel-input-package} implies
+\(\|\nabla\log p_1^{(\alpha,d)}\|_\infty\le L_{\alpha,d}\).  Hence, if
+\(X\) has law \(\lambda\),
+\[
+ q_s^\lambda(y)
+ \ge\EE\exp(-L_{\alpha,d}|X|/s)
+ \ge\exp(-L_{\alpha,d}\EE|X|/s),
+\]
+uniformly in \(y\).  The last expression tends to one.  Translation
+continuity of \(p_1^{(\alpha,d)}\) in \(L^1\) gives, by Tonelli and dominated
+convergence,
+\[
+ \|q_s^\eta-1\|_{L^1(\Omega_{\alpha,d})}
+ \le\int\|p_1^{(\alpha,d)}(\mathord\cdot-x/s)
+              -p_1^{(\alpha,d)}\|_1\,\eta(\dd x)\longrightarrow0;
+\]
+the integrand is bounded by two.  A second Tonelli calculation gives
+\(\int q_s^\lambda\dd\Omega_{\alpha,d}=1\) for every probability law
+\(\lambda\).  These are precisely the positive lower bound, mass
+normalization, and \(L^1\)-convergence required of the denominator by
+Lemma~\ref{lem:two-background-critical-bregman-transfer}; no
+\(L^\infty\)-convergence of \(q_s^\eta\) to one is used.  Taking
+\(g_s=q_s^\eta\) in that lemma proves
+\eqref{eq:all-order-stable-first-unmatched-asymptotic}.
+
+Boundedness of \(B_{\Delta_r}\) makes
+\(\mathcal Q_{\alpha,d,r}\) finite.  If it were zero, then
+\[
+ \sum_{|\gamma|=r}\frac{\Delta m_\gamma}{\gamma!}
+ \partial^\gamma p_1^{(\alpha,d)}=0
+\]
+almost everywhere.  Fourier transformation in the sense of tempered
+distributions gives a homogeneous polynomial in \(\xi\), with coefficients
+\(\Delta m_\gamma/\gamma!\), multiplied by the nowhere-vanishing stable
+characteristic function.  The polynomial must vanish identically, contrary
+to \(\Delta_r\ne0\).  This proves strict positivity.  If \(U\in O(d)\),
+isotropy and the tensor chain rule give
+\(B_{U^{\otimes r}\Delta_r}(Uy)=B_{\Delta_r}(y)\).  Orthogonal invariance of
+\(\Omega_{\alpha,d}\) then proves the asserted invariance of \(\mathcal Q\).
+For \(d\ge2\), under the homogeneous-polynomial identification, the standard
+trace/harmonic decomposition
+\[
+ \operatorname{Sym}^r(\RR^d)
+ =\bigoplus_{k=0}^{\lfloor r/2\rfloor}
+   |x|^{2k}\mathcal H_{r-2k}
+\]
+is multiplicity-free under \(O(d)\).  Hence the self-adjoint operator of
+\(\mathcal Q\) is scalar on each harmonic summand; the positivity just proved
+shows that all these scalars are strictly positive.  No formula for the
+individual scalars is needed below.
+
+It remains to establish sharpness.  Assume \(\beta=d+\alpha>2r\), so
+\[
+ q=1+\frac{2r}{\beta},\qquad p=\frac{2r}{q}>r.
+\]
+Fix a unit vector \(e\), and let \(A_R^\pm\) be the probability blocks from
+Lemma~\ref{lem:stable-finite-difference-blocks}.
+
+Choose \(a_j>0\) with \(\sum_ja_j<\infty\).  Choose the radii recursively so
+that
+\begin{equation}\label{eq:all-order-separated-block-radii}
+ R_{j+1}>4(r+1)R_j,
+\end{equation}
+and enlarge each new radius further whenever necessary below.  Put
+\(w_j=a_jR_j^{-\rho}\), with \(\sum_jw_j<1\), and define
+\[
+ \nu=\left(1-\sum_jw_j\right)\delta_0+\sum_jw_jA_{R_j}^+,
+ \qquad
+ \eta=\left(1-\sum_jw_j\right)\delta_0+\sum_jw_jA_{R_j}^-.
+\]
+They have finite \(\rho\)th moments.  Since \(\rho\ge r\),
+\eqref{eq:stable-block-moment-identities} also shows that their
+order-\(r\) tensor difference is finite and nonzero.
+
+The endpoint \(x_j=(r+1)R_je\) belongs to \(A_{R_j}^+\) and not to
+\(A_{R_j}^-\).  Let \(E_j\) be the ball of radius
+\[
+ s_j=\kappa R_jw_j^{1/\beta}
+\]
+about \(x_j\).  Recursive enlargement of \(R_j\) makes \(s_j\to\infty\);
+also \(s_j/R_j=\kappa w_j^{1/\beta}<1/4\) for all sufficiently large \(j\).
+Lemma~\ref{lem:stable-moving-ball-probability-separation} gives both
+probability bounds, after explicitly separating \(E_j\) from every
+opposite-sign atom in the same, preceding, and succeeding blocks.
+Choose \(\kappa\) so that
+\(C_{\alpha,d,r}\kappa^\beta<a_r\).  Data processing to
+\(\{E_j,E_j^c\}\), followed by
+Lemma~\ref{lem:bernoulli-kl-linear-separation}, gives
+\[
+ D_{\rm KL}(p_{s_j}^{(\alpha,d)}*\nu\|
+            p_{s_j}^{(\alpha,d)}*\eta)\ge c w_j.
+\]
+Consequently,
+\[
+ s_j^{2r}D_{\rm KL}(p_{s_j}^{(\alpha,d)}*\nu\|
+                    p_{s_j}^{(\alpha,d)}*\eta)
+ \ge cR_j^{2r}w_j^{1+2r/\beta}
+ =ca_j^qR_j^{2r-\rho q}.
+\]
+The final exponent is positive exactly when \(\rho<p=2r/q\).
+Recursive enlargement of \(R_j\) proves
+\eqref{eq:all-order-stable-sharpness}.  Finally, for \(\rho<r\), a
+one-dimensional Pareto law supported on the \(e\)-axis may have finite
+\(\rho\)th and infinite \(r\)th absolute moment, proving the stated domain
+obstruction.
+\end{proof}
+
+\begin{corollary}[Stable Gaussian-quadrature entropy threshold]
+\label{cor:stable-gaussian-quadrature-threshold}
+Let \(0<\alpha<2\), \(n\ge1\), and let \(\nu\) be a probability law on
+\(\RR\) such that
+\[
+ \EE|X|^{2n-1}<\infty,\qquad |\operatorname{supp}\nu|\ge n.
+\]
+Let \(G_n\nu\) and \(\pi_n\) be its \(n\)-node Gaussian quadrature law and
+monic degree-\(n\) orthogonal polynomial, respectively.  Then
+\begin{equation}\label{eq:stable-gaussian-quadrature-finite}
+ \EE|X|^{2n}<\infty
+ \quad\Longrightarrow\quad
+ \lim_{s\to\infty}s^{4n}
+ D_{\rm KL}(p_s^{(\alpha,1)}*\nu\|
+            p_s^{(\alpha,1)}*G_n\nu)
+ =C_{\alpha,n}\|\pi_n\|_{L^2(\nu)}^4,
+\end{equation}
+where
+\begin{equation}\label{eq:stable-gaussian-quadrature-constant}
+ C_{\alpha,n}:=
+ \frac1{2((2n)!)^2}\int_{\RR}
+ \frac{(\partial^{2n}p_1^{(\alpha,1)}(y))^2}
+      {p_1^{(\alpha,1)}(y)}\dd y>0.
+\end{equation}
+On the other hand,
+\begin{equation}\label{eq:stable-gaussian-quadrature-infinite}
+ \EE|X|^{2n}=\infty
+ \quad\Longrightarrow\quad
+ s^{4n}D_{\rm KL}(p_s^{(\alpha,1)}*\nu\|
+                  p_s^{(\alpha,1)}*G_n\nu)\longrightarrow+\infty.
+\end{equation}
+Consequently, finiteness of the \(2n\)th absolute moment is equivalent to
+boundedness of the scaled relative entropy in
+\eqref{eq:stable-gaussian-quadrature-finite}.
+\end{corollary}
+
+\begin{proof}
+Since \(1+\alpha<2(2n)\), the all-order critical exponent at \(r=2n\) is
+\(p_{2n,\alpha,1}=2n\).  Gaussian exactness through degree \(2n-1\) and
+\eqref{eq:gauss-missing-moment-norm} show that the first unmatched moment is
+\(\|\pi_n\|_{L^2(\nu)}^2\).  Theorem
+\ref{thm:all-order-stable-first-unmatched-moment} therefore gives
+\eqref{eq:stable-gaussian-quadrature-finite} and
+\eqref{eq:stable-gaussian-quadrature-constant}.  If this moment difference
+vanishes, \(\nu=G_n\nu\), and the same formula holds with both sides zero.
+Strict positivity of \(C_{\alpha,n}\) also follows from the Fourier argument
+in that theorem.
+
+For the converse, define
+\[
+ R_n(u):=(-1)^n\left\{\cos u-
+       \sum_{k=0}^{n-1}\frac{(-1)^ku^{2k}}{(2k)!}\right\}.
+\]
+One has \(R_1=1-\cos\ge0\), while
+\(R_n''=R_{n-1}\) and \(R_n(0)=R_n'(0)=0\).  Induction therefore gives
+\(R_n\ge0\) on \(\RR\).  Moreover,
+\(s^{2n}R_n(x/s)\to x^{2n}/(2n)!\).  If the \(2n\)th moment of \(\nu\) is
+infinite, Fatou's lemma gives
+\[
+ s^{2n}\int R_n(x/s)\nu(\dd x)\longrightarrow+\infty.
+\]
+The corresponding integral for the finite-support law \(G_n\nu\) remains
+bounded.  Since all even moments below \(2n\) agree, it follows that
+\[
+ s^{2n}\left|\Re\{\varphi_\nu(1/s)
+                 -\varphi_{G_n\nu}(1/s)\}\right|\longrightarrow+\infty.
+\]
+At frequency \(1/s\), stable smoothing multiplies this difference by the
+fixed nonzero number \(\widehat p_1^{(\alpha,1)}(1)\).  The dual
+characterization of total variation and Pinsker's inequality now imply
+\eqref{eq:stable-gaussian-quadrature-infinite}.
+\end{proof}
+
+\subsection{The law-by-law finite-covariance decomposition}
+
+The preceding theorem optimizes over moment classes.  The next theorem gives
+the exact law-by-law interface under finite covariance alone.  It separates
+the universal quadratic covariance energy from the full nonlinear energy of
+the raw tail beyond the smoothing scale.
+
+\begin{theorem}[Stable law-by-law tail decomposition]
+\label{thm:stable-law-by-law-decomposition}
+Let \(d\ge1\), \(0<\alpha<2\), and let \(\nu\) be a centred probability law
+on \(\RR^d\) with finite covariance matrix \(\Sigma\).  Put
+\[
+ H_{\alpha,d}(s):=
+ D_{\rm KL}\!\left(p_s^{(\alpha,d)}*\nu\,\middle\|\,
+ p_s^{(\alpha,d)}\right)
+\]
+and define
+\begin{equation}\label{eq:stable-raw-tail-potential}
+ V_s^\nu(y):=\int_{\{|x|>s\}}
+ \frac{p_1^{(\alpha,d)}(y-x/s)}
+      {p_1^{(\alpha,d)}(y)}\,\nu(\dd x).
+\end{equation}
+Then
+\begin{equation}\label{eq:stable-law-by-law-decomposition}
+ H_{\alpha,d}(s)=\mathcal Q_{\alpha,d}(\Sigma)s^{-4}
+ +\int_{\RR^d}\Phi(V_s^\nu(y))\,\Omega_{\alpha,d}(\dd y)
+ +o(s^{-4}).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:stable-law-by-law-criterion}
+ s^4H_{\alpha,d}(s)\longrightarrow\mathcal Q_{\alpha,d}(\Sigma)
+ \quad\Longleftrightarrow\quad
+ s^4\int_{\RR^d}\Phi(V_s^\nu)\dd\Omega_{\alpha,d}\longrightarrow0.
+\end{equation}
+No regular-variation, absolute-continuity, or moment hypothesis above order two
+is imposed.
+\end{theorem}
+
+\begin{proof}
+For brevity write
+\[
+ p_1=p_1^{(\alpha,d)},\qquad
+ F_y(z)=F_y^{(\alpha,d)}(z)
+ =\frac{p_1(y-z)}{p_1(y)}.
+\]
+Let \(\ell_y(z)\) and \(B_2(y,z)\) denote the homogeneous first- and
+second-order Taylor terms of \(F_y(z)\) at zero.  The estimates in
+Proposition~\ref{prop:stable-kernel-input-package} and Taylor's formula give, for
+\(|z|\le1\),
+\begin{equation}\label{eq:stable-local-taylor-modulus}
+ \|F_\cdot(z)-1-\ell_\cdot(z)-B_2(\cdot,z)\|_\infty
+ +\|F_\cdot(z)-1-\ell_\cdot(z)-B_2(\cdot,z)\|_{L^1(\Omega_{\alpha,d})}
+ \le\varepsilon_{\alpha,d}(|z|)|z|^2,
+\end{equation}
+where \(\varepsilon_{\alpha,d}\) is bounded on \([0,1]\) and tends to zero
+at zero.  The uniform term is in fact \(O(|z|^3)\).  For the \(L^1\)
+term, multiplication by \(p_1(y)\) turns it into the second-order
+translation remainder of \(p_1\).  Since \(D^2p_1\in L^1\), the integral
+form of Taylor's theorem and translation continuity in \(L^1\) give
+\[
+ \int_0^1(1-\theta)|z|^2
+ \|D^2p_1(\mathord\cdot-\theta z)-D^2p_1\|_1\dd\theta=o(|z|^2).
+\]
+The Taylor coefficients also satisfy
+\begin{equation}\label{eq:stable-taylor-coefficient-norms}
+ \|B_j(\cdot,z)\|_\infty
+ +\|B_j(\cdot,z)\|_{L^1(\Omega_{\alpha,d})}
+ \le C|z|^j,\qquad j=1,2,\quad B_1=\ell.
+\end{equation}
+
+Write
+\[
+ \delta_s(y)=\int\{F_y(x/s)-1\}\nu(\dd x),\qquad
+ u_s=s^{-2}b_{\alpha,d,\Sigma},\qquad
+ \tau_s=\nu(|x|>s).
+\]
+Finite covariance implies
+\begin{equation}\label{eq:stable-tail-mass-smallness}
+ \tau_s\le s^{-2}\int_{|x|>s}|x|^2\nu(\dd x)=o(s^{-2}).
+\end{equation}
+Centering and the identity
+\(\int B_2(y,x)\nu(\dd x)=b_{\alpha,d,\Sigma}(y)\) give the exact split
+\begin{equation}\label{eq:stable-raw-tail-split}
+ \delta_s=u_s+V_s^\nu-\tau_s+R_s,
+\end{equation}
+where
+\[
+ R_s=\int_{|x|\le s}\!
+ \{F_\cdot(x/s)-1-\ell_\cdot(x/s)-B_2(\cdot,x/s)\}\nu(\dd x)
+ -\int_{|x|>s}\!\{\ell_\cdot(x/s)+B_2(\cdot,x/s)\}\nu(\dd x).
+\]
+Equations \eqref{eq:stable-local-taylor-modulus} and
+\eqref{eq:stable-taylor-coefficient-norms}, followed by dominated
+convergence after multiplication by \(s^2\), show that
+\begin{equation}\label{eq:stable-raw-tail-remainder-smallness}
+ \|R_s\|_\infty+\|R_s\|_{L^1(\Omega_{\alpha,d})}=o(s^{-2}).
+\end{equation}
+For the omitted tail modes one uses
+\[
+ s^{-1}\int_{|x|>s}|x|\nu(\dd x)
+ \le s^{-2}\int_{|x|>s}|x|^2\nu(\dd x)
+\]
+and the analogous quadratic bound.
+
+The translation identity for \(F_y\) gives the exact normalization
+\begin{equation}\label{eq:stable-tail-potential-normalization}
+ V_s^\nu\ge0,\qquad
+ \int V_s^\nu\dd\Omega_{\alpha,d}=\tau_s.
+\end{equation}
+All entropy integrals used below are finite.  Indeed,
+Proposition~\ref{prop:stable-kernel-input-package} and
+\(1+|w+z|\le(1+|w|)(1+|z|)\) give
+\[
+ D_{\rm KL}\!\left(p_1(\mathord\cdot-z)\,\middle\|\,p_1\right)
+ \le C_{\alpha,d}+(d+\alpha)\log(1+|z|).
+\]
+Convexity of relative entropy and \(\EE|X|^2<\infty\) therefore make
+\(H_{\alpha,d}(s)\) finite.  If \(\tau_s>0\), write
+\(V_s^\nu=\tau_s q_s\), where \(q_s\) is the quotient of the normalized
+tail mixture by \(p_1\).  Convexity gives
+\[
+ \int q_s\log q_s\dd\Omega_{\alpha,d}
+ \le \frac1{\tau_s}\int_{|x|>s}
+ \left\{C_{\alpha,d}+(d+\alpha)\log(1+|x|/s)\right\}\nu(\dd x)<\infty.
+\]
+Since \(\Phi(\tau q)\le\tau q\log(1+q)\) for \(0\le\tau\le1\), and the
+negative part of \(q\log q\) is bounded by \(e^{-1}\), this also proves
+\(\int\Phi(V_s^\nu)\dd\Omega_{\alpha,d}<\infty\).  The case \(\tau_s=0\)
+is immediate.
+
+For \(|u|\le1/4\) and \(v\ge0\), two integrations of
+\(\Phi''(w)=(1+w)^{-1}\) yield
+\begin{equation}\label{eq:stable-phi-interaction}
+ |\Phi(u+v)-\Phi(u)-\Phi(v)|\le C|u|v.
+\end{equation}
+All negative terms in \eqref{eq:stable-raw-tail-split} are uniformly larger
+than \(-1/2\) for large \(s\).  The mean-value theorem,
+\(\log(1+v)\le v\), and
+\eqref{eq:stable-tail-potential-normalization} therefore give
+\begin{align}
+ \int|\Phi(\delta_s)-\Phi(u_s+V_s^\nu-\tau_s)|
+       \dd\Omega_{\alpha,d}&=o(s^{-4}),\label{eq:stable-remove-remainder}\\
+ \int|\Phi(u_s+V_s^\nu-\tau_s)-\Phi(u_s+V_s^\nu)|
+       \dd\Omega_{\alpha,d}&=o(s^{-4}),\label{eq:stable-remove-mass}\\
+ \int|\Phi(u_s+V_s^\nu)-\Phi(u_s)-\Phi(V_s^\nu)|
+       \dd\Omega_{\alpha,d}&=o(s^{-4}).\label{eq:stable-remove-interaction}
+\end{align}
+Indeed, the three left sides are bounded, respectively, by
+\[
+ C\|R_s\|_\infty\tau_s+Cs^{-2}\|R_s\|_1
+ +C\|R_s\|_\infty\|R_s\|_1,
+ \quad C\tau_s(\tau_s+s^{-2}),
+ \quad C\|u_s\|_\infty\tau_s,
+\]
+and each is \(o(s^{-4})\).
+
+Finally, integration of the second derivatives in
+\eqref{eq:stable-leading-covariance-functional} gives
+\(\int b_{\alpha,d,\Sigma}\dd\Omega_{\alpha,d}=0\).  Boundedness of the
+covariance mode then implies
+\begin{equation}\label{eq:stable-covariance-phi-expansion}
+ \int\Phi(u_s)\dd\Omega_{\alpha,d}
+ =\frac{s^{-4}}2\int b_{\alpha,d,\Sigma}^2\dd\Omega_{\alpha,d}
+ +O(s^{-6})
+ =\mathcal Q_{\alpha,d}(\Sigma)s^{-4}+O(s^{-6}).
+\end{equation}
+Since \(H_{\alpha,d}(s)=\int\Phi(\delta_s)\dd\Omega_{\alpha,d}\),
+equations \eqref{eq:stable-remove-remainder}--
+\eqref{eq:stable-covariance-phi-expansion} prove
+\eqref{eq:stable-law-by-law-decomposition}.  The equivalence
+\eqref{eq:stable-law-by-law-criterion} follows because the tail energy is
+nonnegative.
+\end{proof}
+
+\begin{remark}[What the decomposition resolves]
+When \(d+\alpha\le4\), one has \(p_{\alpha,d}=2\), so every
+finite-covariance law makes the tail energy \(o(s^{-4})\) by
+Theorem~\ref{thm:high-dimensional-kl-moment-threshold}.  When
+\(d+\alpha>4\), finite covariance alone need not do so.  In that regime
+\eqref{eq:stable-law-by-law-criterion} is the exact missing law-by-law
+condition: it neither replaces the nonlinear tail energy by a moment nor
+assumes regular variation.
+\end{remark}
