@@ -17,24 +17,26 @@
 | 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
 |---|:--:|---|---|---|---|
 | **A2** `cayley_chebyshev` | r7 | 65 | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 空闲 |
-| **A3** `sharp_three_window` | **r6** | 63 | TIER-4 | **DCDS-A** | `fb4b4c73` |
-| **A4** `prime_languages` | **r6** | 22 | TIER-3 | **Monatshefte** | `b85cb7f1` |
-| **A5** `finite_parts` | r8 | 28 | TIER-3 / 上 TIER-3 | **DCDS** | 执行中 |
-| **A6** `zeckendorf_fibers` | **r10** | 59 | TIER-3 | **JNT** | `9210a56f` |
-| **A7** `upper_fibers` | **r7** | 26+32 | TIER-4 | **Fibonacci Quarterly** | `560da0d5` |
+| **A3** `sharp_three_window` | r6 | 63 | TIER-4 | **DCDS-A** | `fb4b4c73` |
+| **A4** `prime_languages` | r6 | 22 | TIER-3 | **Monatshefte** | `b85cb7f1` |
+| **A5** `finite_parts` | r8 | **32** | TIER-3 / 上 TIER-3 | **DCDS** | 空闲 |
+| **A6** `zeckendorf_fibers` | r10 | 59 | TIER-3 | **JNT** | `9210a56f` |
+| **A7** `upper_fibers` | r7 | 26+32 | TIER-4 | **Fibonacci Quarterly** | `560da0d5` |
 | **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | 检验中 |
-| **A9** `homological_visibility` | r1 | 96 | TIER-4 待重估 | TAC / Logic and Analysis | `20a5e73f` |
+| **A9** `homological_visibility` | r1 | 96 | TIER-4，**已找到具名开放问题路线** | TAC / Logic and Analysis | 检验中 |
 
 
 
 
 
 
-> **TICK 13 — A8 要求恢复我们已撤回的主张**。A8 r9 声称 $n_NS_N^2	o\infty$ 对有界局部 null 类 $\mathcal H_N(C)$ 上的一致欧氏 Gaussian 耦合**既必要又充分**，并明说现稿两条边界之间**不存在额外维数损失**——即我们记为开放的 $4\log\log n_N$ 窗口不存在。
+
+> **TICK 14 — A9 重估回来，且找到了具名开放问题路线**。表述修好后专家第一次读到数学。他的总判定与我方独立评估一致：主分类**依赖预选好覆盖、有限神经、常有限带与非分裂提升，不是经验模型或其他标准对象的内在不变量**；贡献是"对标准输入的组织 + 若干展示相对商、构造定理与有限群分类"，**不是新的一般 gerbe 分类原理**。他并指出高层模型类允许把满足类型条件的站点/预层/prestack 数据**直接作为扩张加入**——这是模型类约定，而非关于既有对象的存在或闭包定理。
 >
-> 这正是 `047b9527a` 撤回的尖锐性主张。撤回理由是具体的：从块矩估计 (B4)–(B5) 到完整增维结论那一步无效，因 CMU Corollary 2.3 带 $arphi_2(d)^2=2d$ 且其矩量**同时计入实际块与高斯块**。已派检验并写明三个决定性核查点：新证明如何处理迫使原夹逼的 $d^{3/2}$ 因子（$d_N=(J_N+1)^2-1$ 是增长的）；限制到 $\mathcal H_N(C)$ 是真的买到一致性，**还是只把同一维数损失挪进常数 $C$**；CMU 矩量这次是否正确计入两个块。**明令：除非新证明无懈可击，否则不得恢复已撤回的主张——错误恢复比从未尝试更糟。**
+> 但他给出了一条**具名开放问题**路线，排名第一（45% × 4/5 = 1.80）：**中心扩张所产生的 crossed-module 特征三类，与提升 gerbe 的 Čech 二类之间的显式比较**。次选（65% × 2/5）是把 $H^2$ 层同调像、初始系数商与多分量正合列提升到标准有限带高阶 gerbe——可成后续论文，但不解决高阶 gerbe 文献的主要几何开放问题。已派检验判断该路线是否真在本文机器射程内。
 >
-> A3/A4/A6/A7 四份新式提问已发出（含"每条建议须附自我证伪测试"的要求）。池内 5/6 在跑。
+> A5 r8 部分整合：**证到什么就写什么**。有限 $p$-群证书链、任意有限群多算子推广、文献穷尽性断言**均因关键消元/共同零点/特殊值提升步骤未证而拒收**。测试 34→37、28→32 页。
+
 
 
 
