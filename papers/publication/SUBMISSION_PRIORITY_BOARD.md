@@ -27,6 +27,32 @@
 
 **目标期刊在整轮冲刺后没有变化。** 深化显著增厚了内容（见下），但没有哪一篇因此跨过档次线；PRIMARY 维持上表。
 
+### A9 `homological_visibility` — 新入列（APAL 拒稿后重建）
+
+**拒稿性质要看清:不是内容被否,是没人读到内容。** `APAL-D-26-00107`,主编 Benno van den Berg 原话:"does not meet the standard requirements for a mathematical paper **in terms of style**"、"uses terminology **in a way that is not standard and is not explained**"、因此 "an evaluation of its content **is not possible** in its current state"。**没有审稿人评判过这篇的数学。**
+
+**这意味着换刊无效** —— 同样的问题在任何期刊都会得到同样的 desk rejection。APAL 本就是最对口的去处(van den Berg 是范畴论/构造性数学专家),他给的是可修复的诊断。
+
+**结构性成因(已量化)**:93 页、52 个定义、81 条定理/命题,核心词汇几乎全自造且与标准术语冲突:
+
+| 词 | 次数 | 冲突 |
+|---|--:|---|
+| `visible` / `visibility` | 223 | 无标准含义,须自定义 |
+| `realization` | 198 | **模型论中已有标准含义**(realizing a type),此处另作他用 |
+| `slice` | 133 | **范畴论 slice category** 是标准术语 |
+| `admitted reference` | 42 | 完全自造 |
+| `bouquet` | 19 | 拓扑中指楔和 |
+
+专家读到 `realization` 会自动套用模型论含义,越读越不对,最后判定无法评估。
+
+**内容初判(待独立评估确认)**:摘要里能辨认出的是硬对象 —— 层化单位在终纤维上的满射性配合 $H^1$ 消没、带 band 的实现叠扩张给出落在 $H^2$ 的 **Giraud 类**、character-blind 情形恰为纯 $\operatorname{Ext}$ 贡献、以及一条**不可定义性分离定理**。最漂亮的是结尾那条充要刻画:**bouquet 好覆盖上,非零有限交换群 $G$ 出现为纯双分支消解核,当且仅当 $d(G)\le2eta$ 且 $G$ 不是循环 $p$-群**。这条被埋在 93 页末尾,**它应该是标题和引言第一句**。
+
+**执行顺序(不可颠倒)**:① 独立评估定档(进行中)→ ② 术语审计 + 改名 + 术语对照表 → ③ 压缩至 35–45 页(用 A2/A4/A7 已验证的补充材料方案)→ ④ 引言用标准语言前置主定理 → ⑤ 再选刊。**先选刊没有意义。**
+
+**候选去向**:重写后仍投 **APAL**(说明已按编辑意见重构),或 **JSL** / **Logic and Analysis** / **Theory and Applications of Categories**(TAC 对层论/gerbe 方向对口且开放获取)。
+
+⚠️ **不可投 Nuclear Physics** —— Elsevier 只有 Nuclear Physics A/B,**无 D 刊**;且本文属层论与范畴逻辑,与核物理/高能物理无交集,投过去会当天 desk reject。
+
 ### 是否还有继续冲刺的必要与可能（2026-08-08 评估）
 
 判据用"最后一轮是否仍产出可整合的新内容"，而非轮数。
