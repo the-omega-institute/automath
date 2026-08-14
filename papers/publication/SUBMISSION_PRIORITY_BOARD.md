@@ -14,16 +14,16 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 轮次 | 页 | referee 裁决 / 档位 | **PRIMARY** | 状态 |
-|---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r7 | 66 | **拒稿（优先权，非反例）→ 已据实重写** | JFA 待重估 | 空闲 |
-| **A3** `sharp_three_window` | r6 | 63 | 具名问题不可达 | **DCDS-A** | referee `dcf7b78f` |
-| **A4** `prime_languages` | r6 | 22 | 量词结构不匹配 | **Monatshefte** | referee `9e1be8e0` |
-| **A5** `finite_parts` | r8 | 32 | **拒稿后重投：端点类剖面非有限值（数学缺陷）** | **DCDS/ETDS** | 修复中 |
-| **A6** `zeckendorf_fibers` | r10 | 59 | 专家相变边界两次皆错 | **JNT** | referee `2ad5d848` |
-| **A7** `upper_fibers` | r7 | 27 | **已解决 FJMV 两个问题（更强素数形式）** | **Fibonacci Quarterly** | 空闲 |
-| **A8** `detector_shells` | r9 | 62 | 尖锐边界已用新证明恢复 | **Stochastic Models** | 空闲 |
-| **A9** `homological_visibility` | r1 | 96 | TIER-4，有 crossed-module 具名路线 | TAC / Logic and Analysis | 空闲 |
+| 篇 | 页 | referee 裁决 | 优先权问题 | **去向** |
+|---|--:|---|---|---|
+| **A2** `cayley_chebyshev` | 66 | 拒稿（优先权） | **漏引 Chen–Niles-Weed** → 已重写 | JFA 待重估 |
+| **A3** `sharp_three_window` | 63 | **Major Revision** | **碰撞图—有向环—可逆性判定属经典一维局部码/tessellation automata/pair-graph 传统** | DCDS-A |
+| **A4** `prime_languages` | 22 | **Major Revision** | Seki–Matsumura–Fujii–Kasami 比较需深化 | Monatshefte |
+| **A5** `finite_parts` | 32 | **拒稿后重投** | 固定 Frobenius 类 Euler 乘积等未比较；另有**端点类剖面非有限值**之数学缺陷 | DCDS/ETDS |
+| **A6** `zeckendorf_fibers` | 59 | **拒稿**（不建议大修重审） | **黄金分割 Bernoulli 卷积正 $q$ 压力公式早于本稿近三十年**，全实 $q$ 与负 $q$ 相变亦有文献 | TAMS 不可达，JNT 存疑 |
+| **A7** `upper_fibers` | 27 | — | — | Fibonacci Quarterly（已解决 FJMV 两问题）|
+| **A8** `detector_shells` | 62 | — | — | Stochastic Models（尖锐边界已恢复）|
+| **A9** `homological_visibility` | 96→压缩中 | — | — | TAC / Logic and Analysis |
 
 
 
@@ -33,9 +33,14 @@
 
 
 
-> **TICK 23 — A9 压缩启动，四条硬规则前置写入**。A9 仍是 96 页（含 1281 行超规文件），而 TAC / Logic and Analysis 对这个体量不会给公正阅读。本项目已成功压缩三次（A2 90→55、A4 63→38、A7 50→25），故把全部教训直接写进任务书：① **增量编译会靠陈旧 `.aux` 报假成功**，只有 `latexmk -C` + `rm -f *.aux` 的完整序列算数；② **逐文件编译**——本篇此前两次改名都因批量提交而死在半途、构建也坏掉；③ **禁止正文与补充材料相互交叉引用**——A6 的压缩正是因 xr-hyper 需往复多遍收敛而**整体回退**；④ 硬编码"Supplement Theorem 1.14"式指针**写错不报警**，优先用携带标题的指针。定理环境须保持 159 不变。
+
+> **TICK 24 — 优先权遗漏已是系统性问题，不是个案**。A3 与 A6 的审稿意见同时返回，各查出一处实质优先权遗漏，加上此前的 A2、A5，**五篇送审的论文中有四篇存在优先权问题**。
 >
-> 本 tick 无 Oracle 返回：A3/A6 外审在飞，A5 端点类缺陷修复与 A4 审稿修复均在推进（各 500 万 / 300 万字节输出）。
+> - **A6（最严重）**：拒稿，且明确不建议在 TAMS 程序内按大修重审。**理由不是未解决具名问题**——审稿人未发现可立即构成反例的核心公式，有限窗恒等式、更新结构、临界常数、非暴露斜率填充大体自洽。问题是稿件**遗漏了 Erdős 测度、黄金分割 Bernoulli 卷积及其 $L^q$ 谱文献**：**正 $q$ 压力公式早于本稿近三十年**，全实 $q$ 扩张与负 $q$ 相变亦有明确文献。故"一层/有限窗全实压力"与"一阶冻结相变"的新颖性边界**不能成立**。
+> - **A3**：Major Revision。碰撞图—有向环—可逆性判定属经典一维局部码、tessellation automata、cellular automata、fiber-product/pair-graph 传统，不能作为本文首创；另有 Lemma 5.3/6.7/6.8 若干参数一致估计压缩过度。
+>
+> **共同教训**：这四处遗漏没有一处是靠"再加一条定理"能发现的，全部由 referee 式外审查出。**文献核查必须前置到写作之前，而非投稿之后。**
+
 
 
 
