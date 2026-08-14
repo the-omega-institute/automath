@@ -31,7 +31,7 @@ Status: blocked_pending_author_metadata
 | B2 | `thm:gerbe-null-semantics` | Gluing-level absence holds exactly when visible branches exist but every component gerbe is non-neutral; under global conservativity, global sectionability is equivalent to some component gerbe being neutral. |
 | C1 | `thm:intrinsic-visible-quotient` | The class-admissible characters of a branch obstruction class are exactly the annihilator of the image of the homological evaluation map; the intrinsic visible quotient is the cokernel of that map. |
 | C2 | `thm:character-blind-obstructions` | A branch obstruction is character-blind iff the class is a pure Ext-type residual. |
-| C3 | `thm:unique-branch-contextuality-comparison` | In the unique-branch support-presheaf setting, the theory recovers the Abramsky--Brandenburger no-global-section picture and refines it by identifying the precise blind residual as an Ext-type mechanism. |
+| C3 | `thm:empirical-model-stack-interface` | Every finite empirical model has a canonical refinement-functorial split stack, but its Giraud classes vanish; the AMB relative H1 torsor obstruction cannot be recovered by the H2 branch map on all finite models. |
 
 ### Secondary consequences (not foregrounded)
 
@@ -59,7 +59,7 @@ Status: blocked_pending_author_metadata
 
 **Research question:** Given an admitted reference carrying a finite abelian gluing obstruction, which part is semantically visible without enlarging the state space, and how much additional information is required to recover the hidden part?
 
-**Answer:** Seven main results in three groups. A1-A2 justify the enrichment; B1-B2 supply the gerbe semantic framework; C1-C3 deliver the quantitative answer and external anchor (Abramsky--Brandenburger).
+**Answer:** Seven main results in three groups. A1-A2 justify the enrichment; B1-B2 supply the gerbe semantic framework; C1-C2 deliver the conditional quantitative answer, while C3 proves the exact limit of transfer to Abramsky--Brandenburger empirical models.
 
 **Scope cuts:**
 - `sec_observer_spacetime.tex`: Out of scope. No main-chain theorem depends on it.

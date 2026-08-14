@@ -23,7 +23,7 @@
 
 ### 3. Abramsky--Brandenburger 联系
 
-- 新增 subsection（Connection to sheaf-theoretic contextuality）：在 unique-branch case 下，将本文的 branched gerbe semantics 退化为标准 no-global-section picture，并用 $\operatorname{Ext}$-residual 精确解释 Caru 所发现的 incomplete cohomological detection。
+- 精确界定 empirical-model 接口：每个有限 support presheaf 都函子性地产生 split realization stack，但其 Giraud 类全为零；AMB 障碍是由局部截面索引的相对 $H^1$ torsor 类，不是本文由全局 component 索引的 $H^2$ gerbe 类。因而 bouquet 的 $d(G)\le 2\beta$ 分类不自动转移到 empirical models。
 
 ### 4. 清除 "larger architecture ghost"
 
