@@ -1,0 +1,506 @@
+\section{Preliminaries}\label{sec:preliminaries}
+
+The notation in this section follows the hierarchy of the paper. We
+first fix primitive orbit counts for the base shift, then the
+finite-group extension and Adams operations used in the main theorem
+chain. The reduced determinant, finite part, and fixed-matrix cyclic-lift
+notation come afterwards as the scalar normalisation and canonical comparison
+interface.
+
+\medskip
+\noindent\textbf{Finite-data guide.}
+All main objects are finite.  The base datum is a primitive adjacency
+matrix \(A\) of a finite edge shift, with Perron root
+\(\lambda=\rho(A)>0\).  A cocycle \(\tau:E_A\to G\) assigns labels in a
+finite group.  For \(\varrho\in\Irr(G)\), the twisted matrix
+\(A_\varrho\) is the finite block transition matrix whose traces record
+periodic labels in the \(\varrho\)-channel, and
+\[
+  \eta:=\max_{\varrho\ne\mathbf1}\rho(A_\varrho)
+\]
+is the non-trivial twisted spectral radius, with the empty maximum read
+as \(0\).  The Perron-boundary data used below are broader than this
+strict exclusion of non-trivial boundary channels:
+\Cref{def:peripheral-peter-weyl-data,lem:finite-cover-peripheral-expansion}
+record the peripheral sets \(\Gamma_\pi\), multiplicities
+\(m_{\pi,\zeta}\), logarithmic ranks \(s_\pi\), the exceptional lists
+\(\Lambda_\perp\) and \(\Lambda_\partial\), the Abel branch families
+\(\Log_{\pi,\zeta}\) and \(\Log_{\partial,\pi}\), and, when one wants it,
+the finite semisimplicity certificate for the twisted boundary blocks.
+These data form the renormalized tuple
+\(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\) in
+\eqref{eq:perron-boundary-data-tuple}.  The clean inequality
+\(\eta<\lambda\) is retained as the diagnostic strict-gap specialization of
+\Cref{cor:strict-gap-specialization}, where all non-trivial boundary phases
+are absent.  For a class function \(\phi\),
+\(\Pi_\phi(z)\) denotes the primitive fixed-label series,
+\(\mathcal L_\phi(z)\) the periodic Artin logarithm, and
+\[
+  F_\phi(z)=\sum_{r\ge1}\frac{\Pi_\phi(z^r)}{r}
+\]
+the fixed-label Euler transform.  The distinction between
+\(F_\phi\) and \(\mathcal L_\phi\) is the Adams distinction: repetitions
+change labels by \(g\mapsto g^r\).  The Adams operation is
+\(\psi^r\phi(g)=\phi(g^r)\), and the Adams--M\"obius coefficients are the
+finite character-table coefficients obtained when each
+\(\psi^r\chi_\pi\) is expanded in the irreducible characters.
+
+The Fourier convention is Hermitian.  The forward class coefficient is
+written with the star notation
+\[
+  \chi_\varrho^\ast(C)
+  :=\overline{\chi_\varrho(C)}
+  =\chi_\varrho(C^{-1}),
+\]
+while inverse recovery uses \(\chi_\sigma(C)\) without conjugation.  The
+scalar normalisations are
+\(C(A)=\det'(I-A/\lambda)^{-1}\),
+\(\FP(A)\), and \(\mathcal M(A)=\gamma+\FP(A)\).  The trivial determinant
+\(\det(I-zA)\) is singular at \(z=\lambda^{-1}\), so the trivial channel
+is never evaluated there as an ordinary determinant branch; it enters
+only through the finite part \(\mathcal M(A)\) and the reduced constant
+\(C(A)\).  Non-trivial channels on the Perron boundary are evaluated in the
+main theorem chain by the reduced finite-part branches and semisimplicity
+certificate in \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\).  In the
+strict-gap specialization, those reduced branches collapse to ordinary
+regular values at \(z=\lambda^{-1}\).
+
+\subsection{Mixing subshifts and primitive orbit counts}
+
+Our standing symbolic system is a finite directed multigraph
+\(\Gamma=(V,E_A)\).  We write \(o(e)\) and \(t(e)\) for the initial and
+terminal vertices of an edge and
+\[
+  A_{ij}:=\#\{e\in E_A:o(e)=i,\ t(e)=j\}
+\]
+for its non-negative integer adjacency matrix.  The matrix \(A\) is
+assumed primitive.  The associated one-sided edge shift is
+\[
+  X_A^+
+  =
+  \bigl\{(e_n)_{n\ge 0}\in E_A^{\NN}:
+    t(e_n)=o(e_{n+1})\ \text{for all }n\ge 0\bigr\},
+\]
+equipped with the left shift \(\sigma\).  Thus closed length-\(n\) edge
+paths are the same as fixed points of \(\sigma^n\), and we write
+\[
+  a_n(A):=\Tr(A^n)=\#\operatorname{Fix}(\sigma^n)
+\]
+for the number of points of period dividing \(n\). The number of
+primitive orbits of least period \(n\) is
+\begin{equation}\label{eq:primitive-mobius}
+  p_n(A)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(A),
+\end{equation}
+and the necklace identity reads
+\begin{equation}\label{eq:trace-primitive-identity}
+  a_n(A)=\sum_{d\mid n}d\,p_d(A).
+\end{equation}
+
+This is the convention in the finite-group sections: \(E_A\) is an edge
+set and primitive orbits are orbits in the edge shift.  In the scalar
+finite-matrix sections and appendices we also allow \(A\) to be an
+arbitrary primitive non-negative real matrix.  There \(p_n(A)\) denotes
+the algebraic M\"obius coefficient in \eqref{eq:primitive-mobius}; it is
+an actual non-negative orbit count only when \(A\) is the adjacency
+matrix of a finite directed multigraph.
+
+We use the next proposition only as standard symbolic-dynamics
+background: it is the usual Artin--Mazur/Bowen--Lanford zeta identity,
+with the primitive-orbit Euler product obtained from the necklace
+decomposition.  In the notation below, closed orbits are primitive orbits
+of the edge shift, \(a_n(A)=\Tr(A^n)\) counts period-
+dividing points, and \(p_n(A)\) is the primitive-orbit M\"obius
+coefficient.  These are the conventions of the standard SFT zeta
+references
+\cite{ArtinMazur1965PeriodicPoints,BowenLanford1970Zeta,LindMarcus1995,ParryPollicott1990Zeta}
+and of the finite homogeneous extension setting in which the same
+closed-orbit normalisation is later used
+\cite{NooraniParry1992ChebotarevShifts}.  The proof is included to fix
+normalisations for the later finite-group Euler products, and no novelty is
+claimed for this supporting identity.
+
+\begin{proposition}[Trace, primitive orbits, and Euler product]
+  \label{prop:prelim-trace-primitive}
+  For the adjacency matrix \(A\) of a primitive finite directed
+  multigraph, the dynamical \(\zeta\)-function
+  satisfies
+  \begin{equation}\label{eq:zeta-def}
+    \zeta_A(z)
+    :=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
+    =\frac{1}{\det(I-zA)}
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(A)}.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  The last equality follows from \eqref{eq:trace-primitive-identity},
+  since
+  \[
+    \sum_{n\ge 1}\frac{a_n(A)}{n}z^n
+    =\sum_{m\ge 1}\sum_{k\ge 1}\frac{p_m(A)}{k}z^{mk}
+    =-\sum_{m\ge 1}p_m(A)\log(1-z^m).
+  \]
+  The determinant identity is standard for finite matrices.
+\end{proof}
+
+The finite-group Adams--M\"obius arguments only need the following
+uniform Perron--Frobenius trace bound.  This is classical
+Perron--Frobenius background for primitive non-negative matrices, stated
+here in the precise finite-dimensional form used below: the Perron
+eigenvalue is simple, all other eigenvalues lie strictly inside the Perron
+circle, and the trace is the sum of the eigenvalue powers counted with
+algebraic multiplicity.  Compare the standard finite-matrix
+Perron--Frobenius reference \cite{Seneta2006NonnegativeMatrices} and the
+treatment of mixing shifts of finite type in
+\cite{LindMarcus1995,ParryPollicott1990Zeta}.
+The bound remains valid even when \(\lambda=1\), and it is used only as a
+supporting finite-matrix estimate.
+
+\begin{lemma}[Perron--Frobenius trace bound]
+  \label{lem:pf-trace-bound}
+  Let \(A\) be a primitive non-negative \(d\times d\) matrix with
+  Perron root \(\lambda=\rho(A)\). Then
+  \[
+    \abs{\Tr(A^n)}\le d\,\lambda^n
+    \qquad (n\ge 1).
+  \]
+  In particular, there is a constant \(C_A>0\) such that
+  \[
+    \abs{\Tr(A^n)}\le C_A\lambda^n
+    \qquad (n\ge 1).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let \(\lambda,\mu_2,\dots,\mu_d\) be the eigenvalues of \(A\), counted
+  with algebraic multiplicity. Since \(A\) is primitive,
+  the Perron--Frobenius theorem for primitive non-negative matrices
+  \cite{Seneta2006NonnegativeMatrices} gives \(\lambda>0\), the eigenvalue
+  \(\lambda\) is simple, and \(|\mu_j|<\lambda\) for \(j\ge 2\). Hence
+  \[
+    \abs{\Tr(A^n)}
+    =
+    \abs{\lambda^n+\sum_{j=2}^d\mu_j^n}
+    \le
+    \lambda^n+\sum_{j=2}^d|\mu_j|^n
+    \le
+    d\,\lambda^n,
+  \]
+  which proves the claim.
+\end{proof}
+
+If \(\lambda=\rho(A)\) is the Perron root and \(\lambda>1\), then
+\[
+  \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
+\]
+with the maximum interpreted as \(0\) if there are no non-Perron
+eigenvalues,
+then the M\"obius coefficients \(p_n(A)\) enjoy the usual square-root
+loss from the higher divisors in \eqref{eq:primitive-mobius}.  This is
+again a standard SFT/Perron--Frobenius estimate: the leading term
+\(\lambda^n/n\) is the primitive-orbit prime term, while the explicit
+\(O(\max\{\Lambda(A)^n,\lambda^{n/2}\}/n)\) remainder below is obtained by
+combining the spectral gap with the elementary divisor bound
+\(d\le n/2\) for proper divisors.  We record the constants because the
+later finite-part and twisted-determinant arguments need a uniform error
+term; see, for example,
+\cite{Parry1983PrimeOrbit,LindMarcus1995,ParryPollicott1990Zeta} for the
+classical orbit-counting setting and
+\cite{NooraniParry1992ChebotarevShifts} for finite homogeneous extensions.
+The underlying spectral input is the standard primitive-matrix
+Perron--Frobenius theorem \cite{Seneta2006NonnegativeMatrices}.  The
+contribution here is not this
+background asymptotic, but its later use inside the finite determinant and
+class-product normalisations.
+
+\begin{lemma}[Primitive M\"obius asymptotic]
+  \label{lem:primitive-orbit-asymptotic}
+  Let \(A\) be a primitive non-negative matrix with Perron root
+  \(\lambda>1\), and let
+  \[
+    \Lambda(A):=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\}.
+  \]
+  If the set is empty, put \(\Lambda(A)=0\).
+  Then
+  \[
+    \Tr(A^n)=\lambda^n+O(\Lambda(A)^n)
+  \]
+  and
+  \[
+    K_{\mathrm{PF}}(A)
+    :=
+    \begin{cases}
+      \displaystyle
+      \sup_{n\ge 1}
+        \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n},
+      & \Lambda(A)>0, \\[2ex]
+      0,
+      & \Lambda(A)=0,
+    \end{cases}
+    \qquad
+    K_{\mathrm{tr}}(A)
+    :=
+    \sup_{\ell\ge 1}\frac{\abs{\Tr(A^\ell)}}{\lambda^\ell}
+  \]
+  are finite. Moreover,
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{K_{\mathrm{tr}}(A)}{n}
+      \sum_{\substack{m\mid n\\ m>1}}\lambda^{n/m}
+  \]
+  and therefore
+  \[
+    \abs{p_n(A)-\lambda^n/n}
+    \le
+    \frac{K_{\mathrm{PF}}(A)\Lambda(A)^n}{n}
+    +\frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}
+      \frac{\lambda^{n/2}}{n}.
+  \]
+  Hence
+  \[
+    p_n(A)
+    =
+    \frac{\lambda^n}{n}
+    +O\!\left(
+      \frac{\max\{\Lambda(A)^n,\lambda^{n/2}\}}{n}
+    \right).
+  \]
+  Consequently, with
+  \[
+    \vartheta_A:=\max\{\Lambda(A)/\lambda,\lambda^{-1/2}\}<1,
+  \]
+  one has
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}+O\!\left(\frac{\vartheta_A^n}{n}\right),
+  \]
+  and the series
+  \[
+    \sum_{n\ge 1}
+      \left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely.
+\end{lemma}
+
+\begin{proof}
+  List the eigenvalues of \(A\) with algebraic multiplicity as
+  \(\lambda,\mu_2,\dots,\mu_d\). Since \(A\) is primitive,
+  Perron--Frobenius theory \cite{Seneta2006NonnegativeMatrices} gives that
+  \(\lambda\) is simple and
+  \(|\mu_j|<\lambda\) for \(j\ge 2\). For a finite matrix,
+  the trace of \(A^n\) is the sum of the \(n\)-th powers of its
+  eigenvalues, counted with algebraic multiplicity. Hence
+  \[
+    \Tr(A^n)
+    =
+    \lambda^n+\sum_{j=2}^d\mu_j^n
+    =
+    \lambda^n+O(\Lambda(A)^n).
+  \]
+  If \(\Lambda(A)=0\), then every non-Perron eigenvalue is \(0\), so
+  \(\Tr(A^n)=\lambda^n\) for all \(n\ge 1\), and the convention
+  \(K_{\mathrm{PF}}(A)=0\) is exact. If \(\Lambda(A)>0\), then
+  \[
+    \frac{\abs{\Tr(A^n)-\lambda^n}}{\Lambda(A)^n}
+    \le
+    \sum_{j=2}^d\left|\frac{\mu_j}{\Lambda(A)}\right|^n
+    \le d-1,
+  \]
+  so \(K_{\mathrm{PF}}(A)<\infty\). The trace bound from
+  \Cref{lem:pf-trace-bound} gives \(K_{\mathrm{tr}}(A)\le d\), so
+  \(K_{\mathrm{tr}}(A)<\infty\).
+
+  Insert this estimate into the M\"obius formula
+  \[
+    p_n(A)=\frac{1}{n}\sum_{m\mid n}\mu(m)\Tr(A^{n/m}).
+  \]
+  The divisor \(m=1\) contributes \(\lambda^n/n\), with error bounded
+  by \(K_{\mathrm{PF}}(A)\Lambda(A)^n/n\). For the remaining divisors,
+  \(m>1\) implies \(n/m\le n/2\), and the definition of
+  \(K_{\mathrm{tr}}(A)\) gives
+  \[
+    \sum_{\substack{m\mid n\\ m>1}}\abs{\Tr(A^{n/m})}
+    \le
+    K_{\mathrm{tr}}(A)\sum_{1\le k\le n/2}\lambda^k
+    \le
+    \frac{\lambda K_{\mathrm{tr}}(A)}{\lambda-1}\lambda^{n/2}.
+  \]
+  Dividing by \(n\) gives the two explicit displayed bounds and hence
+  the stated M\"obius-coefficient asymptotic.
+  Since \(\Lambda(A)<\lambda\) and \(\lambda>1\), the number
+  \(\vartheta_A\) lies in \((0,1)\), and the final two assertions follow
+  by dividing the asymptotic by \(\lambda^n\).
+\end{proof}
+
+\subsection{Finite-group extensions and Adams operations}
+
+Let \(G\) be a finite group, let \(\tau:E_A\to G\) be an edge cocycle,
+and let \(\widetilde\Gamma\) be the skew-product extension on vertex set
+\(V\times G\), with one edge
+\[
+  (i,g)\longrightarrow (j,g\tau(e))
+  \qquad \text{for each } e\in E_A \text{ with } o(e)=i,\ t(e)=j.
+\]
+Its adjacency matrix is denoted by \(\widetilde A\).
+
+For an irreducible unitary representation
+\(\varrho:G\to U(V_\varrho)\) with character \(\chi_\varrho\), define
+the twisted transition matrix
+\begin{equation}\label{eq:twisted-matrix-def}
+  (A_\varrho)_{ij}:=\sum_{e:i\to j}\varrho(\tau(e)),
+\end{equation}
+viewed as an operator on \(\CC^V\otimes V_\varrho\).
+
+If \(\gamma=e_1\cdots e_n\) is a primitive orbit, write
+\[
+  \tau(\gamma)=\tau(e_1)\cdots\tau(e_n)\in G
+\]
+for its group label. A different choice of the initial edge conjugates
+this element by a prefix product, so the conjugacy class of
+\(\tau(\gamma)\) is intrinsic. All orbit-level evaluations below are
+therefore made with class functions. For a class function
+\(\phi:G\to\CC\), write
+\begin{equation}\label{eq:class-function-fourier}
+  \phi
+  =\sum_{\varrho\in\Irr(G)}\widehat\phi(\varrho)\chi_\varrho,
+  \qquad
+  \widehat\phi(\varrho)
+  :=\frac{1}{|G|}\sum_{g\in G}\phi(g)\overline{\chi_\varrho(g)}.
+\end{equation}
+With this Hermitian Fourier convention, the coefficient attached to a
+conjugacy class \(C\subset G\) is the conjugated character value. We
+fix the notation
+\[
+  \chi^\ast(C)
+  :=\overline{\chi(C)}
+  =\chi(C^{-1})
+\]
+for every character \(\chi\) and every conjugacy class \(C\subset G\).
+Thus every forward class expansion below uses \(\chi_\varrho^\ast(C)\),
+while inversion and orthogonality pair it against the unconjugated
+\(\chi_\pi(C)\). The two symbols coincide exactly for real-valued
+characters.
+Equivalently, on class functions we use the Hermitian inner product
+\[
+  \langle f,h\rangle_{\mathrm{cl}}
+  :=
+  \sum_{C\subset G}\frac{|C|}{|G|}f(C)\overline{h(C)}.
+\]
+The functions \(C\mapsto\chi_\varrho^\ast(C)\) are orthonormal for this
+inner product, and recovering the coefficient of a forward expansion
+\(F(C)=\sum_\varrho b_\varrho\chi_\varrho^\ast(C)\) means
+\[
+  b_\pi
+  =
+  \langle F,\chi_\pi^\ast\rangle_{\mathrm{cl}}
+  =
+  \sum_{C\subset G}\frac{|C|}{|G|}F(C)\chi_\pi(C).
+\]
+Thus displayed products such as
+\(\chi_\varrho^\ast(C)\chi_\pi(C)\) are the Hermitian orthogonality
+relation written after expanding the complex conjugate in the second
+slot; they are not a separate bilinear pairing.
+For \(m\ge 1\), define the Adams operation on class functions by
+\begin{equation}\label{eq:adams-class-function}
+  (\psi^m\phi)(g):=\phi(g^m).
+\end{equation}
+For \(\varrho,\pi\in\Irr(G)\) we write
+\begin{equation}\label{eq:prelim-adams-character-coefficients}
+  \psi^m\chi_\varrho
+  =\sum_{\pi\in\Irr(G)}a_{\varrho,\pi}^{(m)}\chi_\pi,
+  \qquad
+  a_{\varrho,\pi}^{(m)}
+  =\frac{1}{|G|}\sum_{g\in G}
+    \chi_\varrho(g^m)\overline{\chi_\pi(g)} .
+\end{equation}
+These are the Adams coefficients used in the determinant formulas below.
+
+\begin{remark}[Preliminary finite-state determinant support data]
+  \label{prop:finite-state-data-collection}
+  \label{prop:finite-state-data-package}
+The following objects form the preliminary finite-state support data used
+  for the open-disc determinant identities and for the strict-gap
+  specialization:
+  \[
+    (A,X_A^+,p_n(A),\zeta_A,\Lambda(A),G,\tau,
+      \widetilde A,A_\varrho,\psi^m,a_{\varrho,
+      \pi}^{(m)}) .
+  \]
+  More precisely, once a finite directed multigraph \(\Gamma=(V,E_A)\),
+  a primitive adjacency matrix \(A\), a finite group \(G\), and an edge
+  cocycle \(\tau:E_A\to G\) are fixed, all the displayed objects are
+  determined as follows. The shift \(X_A^+\), the primitive orbit counts
+  \(p_n(A)\), and the zeta function \(\zeta_A\) are those of
+  \Cref{prop:prelim-trace-primitive}. The non-Perron spectral radius is
+  \[
+    \Lambda(A)=\max\{|\mu|:\mu\in\spec(A),\ \mu\neq\lambda\},
+  \]
+  with value \(0\) if the set is empty. The cocycle \(\tau\) determines
+  the skew-product adjacency matrix \(\widetilde A\) and the twisted
+  matrices \(A_\varrho\) by \eqref{eq:twisted-matrix-def}. The Adams
+  operation \(\psi^m\) and the coefficients
+  \(a_{\varrho,\pi}^{(m)}\) are given by
+  \eqref{eq:adams-class-function} and
+  \eqref{eq:prelim-adams-character-coefficients}. These objects are not,
+  by themselves, the boundary datum of the main theorem.  The primary
+  Perron-boundary datum is the renormalized tuple
+  \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\) of
+  \eqref{eq:perron-boundary-data-tuple} and
+  \eqref{eq:renormalized-finite-data-tuple}, which additionally records
+  \(\Gamma_\pi\), \(m_{\pi,\zeta}\), \(s_\pi\),
+  \(\Lambda_\perp\), \(\Lambda_\partial\), optional finite semisimplicity
+  checks, and reduced determinant finite-part branches.  Scalar/product
+  logarithms are the ordinary real logarithm only after positivity has been
+  proved.  Consequently the preliminary data determine the formal
+  open-disc traces and primitive coefficients, while the full renormalized
+  datum determines the boundary quantities
+  \(\delta_C\), \(M_C^{\mathrm{ren}}\),
+  \(F_\pi^{\mathrm{ren}}\), and \(K_C^{\mathrm{ren}}\) as proved in
+  \Cref{prop:finite-data-main-chain-closure}.  The old
+  \(\eta<\lambda\) record is only the strict-gap specialization supplied by
+  \Cref{cor:strict-gap-specialization}.
+\end{remark}
+
+\begin{proof}
+  The adjacency matrix determines the edge shift \(X_A^+\) by the
+  incidence rule defining admissible edge sequences. Its traces count
+  fixed points of \(\sigma^n\); M\"obius inversion gives
+  \(p_n(A)\) through \eqref{eq:primitive-mobius}, and the determinant
+  identity in \Cref{prop:prelim-trace-primitive} gives \(\zeta_A\).
+  Since \(A\) is a finite matrix, its Perron root \(\lambda\) and the
+  finite set \(\spec(A)\setminus\{\lambda\}\) determine
+  \(\Lambda(A)\), including the empty-set convention.
+
+  The cocycle \(\tau:E_A\to G\) assigns one group element to each edge,
+  so it determines the skew-product graph on \(V\times G\) and hence its
+  adjacency matrix \(\widetilde A\). For a fixed irreducible
+  representation \(\varrho\), formula \eqref{eq:twisted-matrix-def}
+  is a finite sum over edges from \(i\) to \(j\), so it determines the
+  finite matrix \(A_\varrho\). For a closed path, multiplying the finitely
+  many labels along the path gives \(\tau(\gamma)\), up to conjugacy
+  after changing the initial edge; therefore all class-function orbit
+  sums used later are well-defined from \(A\) and \(\tau\).
+
+  The map \(g\mapsto g^m\) is a finite power map on \(G\), hence
+  \eqref{eq:adams-class-function} determines \(\psi^m\) on all class
+  functions. The irreducible characters form an orthonormal basis for
+  class functions, so expanding \(\psi^m\chi_\varrho\) in that basis gives
+  the unique coefficients in
+  \eqref{eq:prelim-adams-character-coefficients}. The periodic
+  logarithms, primitive series, fixed-label Euler transforms, and
+  determinant expressions in \S\ref{sec:chebotarev} are assembled from
+  the resulting finite traces, labels, characters, and determinant
+  polynomials.  Boundary evaluations at \(z=\lambda^{-1}\), however, are
+  not determined by determinant polynomials alone as branch-free data:
+  they require the peripheral lists with algebraic multiplicities and the
+  reduced Abel/interior branch convention recorded in
+  \(\mathfrak D_{\partial}^{\mathrm{ren}}(A,\tau;G)\).  Product constants
+  then use the real logarithm on \(\mathbb R_{>0}\) after positivity.  With those
+  additions, \Cref{prop:finite-data-main-chain-closure} determines
+  the renormalized boundary constants.  Imposing \(\eta<\lambda\) simply
+  collapses this datum to the ordinary strict-gap endpoint chart.
+\end{proof}
+

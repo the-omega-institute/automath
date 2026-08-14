@@ -1,0 +1,621 @@
+\section{Synchronized pumping and recurrent numeration}
+\label{sec:context-free-pisot}
+
+We now pass from finite automata to pushdown automata. Recall that an
+infinite language is \emph{CF-immune} if it contains no infinite
+context-free sublanguage. Here a context-free language means one accepted
+by an arbitrary nondeterministic pushdown automaton, equivalently generated
+by a context-free grammar. We impose no determinism, unambiguity,
+real-time, or growth hypothesis on that automaton. The classical
+fixed-base theorem is due independently to Hartmanis--Shank and
+Sch\"utzenberger
+\cite{HartmanisShank1968,Schutzenberger1968}. The point below is that
+the square-modulus block action survives the two simultaneous pumps
+supplied by Ogden's lemma \cite{Ogden1968}; the interchange lemma of
+Ogden--Ross--Winklmann \cite{OgdenRossWinklmann1985} is a stronger
+related tool, but is not needed for the proof.
+
+Write
+\[
+  \mathcal Z=\{x_1\cdots x_m\in\{0,1\}^\ast:
+      x_ix_{i+1}\ne11,\ x_m=1\}
+\]
+and \(\val(x_1\cdots x_m)=\sum_{j=1}^m x_jF_{j+1}\).
+For \(n\ge2\), let \(\omega(n)\) and \(\Omega(n)\) denote respectively
+the number of distinct prime divisors and the number counted with
+  multiplicity; put \(\omega(1)=\Omega(1)=0\).
+
+\begin{lemma}[Unimodular Zeckendorf block action]
+  \label{lem:main-zeckendorf-unimodular-block-action}
+  After an LSD-first prefix \(x_1\cdots x_r\), put
+  \[
+    V_r=\begin{pmatrix}N_r\\F_{r+1}\\F_{r+2}\end{pmatrix},
+    \qquad N_r=\sum_{j=1}^r x_jF_{j+1},
+    \qquad V_0=(0,1,1)^t.
+  \]
+  Reading \(\varepsilon\in\{0,1\}\) sends \(V_r\) to
+  \[
+    D_\varepsilon V_r,
+    \qquad
+    D_\varepsilon=
+    \begin{pmatrix}
+      1&0&\varepsilon\\
+      0&0&1\\
+      0&1&1
+    \end{pmatrix},
+    \qquad \det D_\varepsilon=-1.
+  \]
+  For a block \(y=y_1\cdots y_\ell\), therefore,
+  \(M_y=D_{y_\ell}\cdots D_{y_1}\) has determinant
+  \((-1)^\ell\), concatenation acts by multiplication of the block
+  matrices, and every nonempty \(M_y\) belongs to
+  \(\operatorname{GL}_3(\ZZ/q\ZZ)\) for every \(q\ge2\).
+\end{lemma}
+
+\begin{proof}
+  The identities
+  \[
+    N_{r+1}=N_r+\varepsilon F_{r+2},\qquad
+    F_{r+2}=F_{r+2},\qquad F_{r+3}=F_{r+1}+F_{r+2}
+  \]
+  give the displayed action. Expanding along the first row gives
+  \(\det D_\varepsilon=-1\); the remaining assertions follow by
+  multiplication and reduction modulo \(q\).
+\end{proof}
+
+\begin{lemma}[Paired Zeckendorf pumping congruence]
+  \label{lem:zeckendorf-paired-pumping-congruence}
+  Let \(u,v,x,y,z\in\{0,1\}^\ast\), and put
+  \[
+    N(k):=\val(uv^kxy^kz)\qquad(k\ge0).
+  \]
+  Suppose that \(\abs v+\abs y>0\). If \(q\ge2\), and \(h\) is a
+  common multiple of the orders modulo \(q\) of the nonempty-block
+  matrices among \(M_v,M_y\) (with \(M_\varepsilon=I\)), then
+  \[
+    N(k+h)\equiv N(k)\pmod q
+    \qquad(k\ge0).
+  \]
+\end{lemma}
+
+\begin{proof}
+  With \(v_0=(0,1,1)^t\), concatenation and
+  \Cref{lem:main-zeckendorf-unimodular-block-action} give
+  \[
+    N(k)=e_1^tM_zM_y^kM_xM_v^kM_uv_0.
+  \]
+  Every nonempty block matrix is invertible modulo \(q\). By the
+  definition of \(h\), both \(M_v^h\equiv I\pmod q\) and
+  \(M_y^h\equiv I\pmod q\), where the same identities are automatic for
+  an empty block. Substitution in the displayed product proves the
+  congruence.
+\end{proof}
+
+\begin{theorem}[Context-free coprime-quotient Zeckendorf pumping]
+  \label{thm:context-free-coprime-quotient-zeckendorf-pumping}
+  Let \(L\subseteq\mathcal Z\) be context-free. There is an integer
+  \(P_L\ge1\) such that every \(w\in L\) with
+  \(\abs w\ge P_L\) and \(\val(w)\ge2\) begins a sequence
+  \(w_0=w,w_1,w_2,\ldots\) in \(L\) whose lengths are strictly
+  increasing and whose values \(N_i=\val(w_i)\) satisfy
+  \[
+    N_{i+1}=N_iQ_i,\qquad Q_i>1,\qquad
+    Q_i\equiv1\pmod {N_i},\qquad \gcd(Q_i,N_i)=1.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Apply Ogden's lemma with every position distinguished. It supplies a
+  constant \(P_L\) such that each \(w\in L\) of length at least \(P_L\)
+  has a factorisation
+  \[
+    w=uvxyz,\qquad \abs v+\abs y>0,\qquad
+    uv^kxy^kz\in L\quad(k\ge0).
+  \]
+  The additional marked-position bound in Ogden's lemma is not needed
+  here. Starting with \(w_i\in L\), choose such a factorisation and
+  let \(h_i\) be a common multiple of the orders of \(M_v\) and \(M_y\)
+  in
+  \(\operatorname{GL}_3(\ZZ/N_i^2\ZZ)\), omitting an empty block. These
+  orders exist by
+  \Cref{lem:main-zeckendorf-unimodular-block-action}. Define
+  \[
+    w_{i+1}:=uv^{\,1+h_i}xy^{\,1+h_i}z.
+  \]
+  By \Cref{lem:zeckendorf-paired-pumping-congruence},
+  \(N_{i+1}\equiv N_i\pmod {N_i^2}\). Hence
+  \(N_{i+1}=N_i(1+t_iN_i)\) for an integer \(t_i\).
+
+  Since \(h_i\ge1\) and \(\abs v+\abs y>0\), the new word is longer.
+  Both words belong to \(L\subseteq\mathcal Z\), and canonical
+  Zeckendorf intervals are strictly ordered by length; consequently
+  \(N_{i+1}>N_i\), so \(t_i\ge1\). Taking
+  \(Q_i=1+t_iN_i\) gives all four assertions. The new word still has
+  length at least \(P_L\) and value at least \(2\), so the construction
+  iterates.
+\end{proof}
+
+\begin{corollary}[Zeckendorf CF-immunity package]
+  \label{cor:zeckendorf-context-free-immunity-package}
+  Every infinite context-free \(L\subseteq\mathcal Z\) satisfies
+  \[
+    \sup_{w\in L}\omega(\val(w))=\infty.
+  \]
+  Consequently, for each \(K\ge1\), the bounded-distinct-prime language
+  \(\mathcal B_K\), the bounded-almost-prime language \(\mathcal A_K\),
+  and every infinite finite-prime-support language \(\mathcal Z_S\)
+  are CF-immune. In particular, the Zeckendorf prime language
+  \(\mathcal P_{\mathcal Z}\) is CF-immune.
+\end{corollary}
+
+\begin{proof}
+  Choose a sufficiently long word in \(L\) and apply
+  \Cref{thm:context-free-coprime-quotient-zeckendorf-pumping}. Since
+  \(N_j\mid N_i\) for \(j\le i\), while every \(Q_i>1\) is coprime to
+  \(N_i\), a prime divisor of \(Q_i\) divides no earlier value. Thus
+  \(\omega(N_i)\ge\omega(N_0)+i\). The immunity conclusions follow
+  exactly as in the regular cases: \(\omega\le K\) on \(\mathcal B_K\),
+  \(\mathcal A_K\subseteq\mathcal B_K\), and
+  \(\omega\le\abs S\) on \(\mathcal Z_S\). Finally prime values have
+  \(\omega=1\), while Euclid's theorem makes
+  \(\mathcal P_{\mathcal Z}\) infinite.
+\end{proof}
+
+We next isolate the precise base-independent interface. This is
+deliberately narrower than every object called a Pisot or abstract
+numeration system in the literature.
+
+\begin{definition}[Canonical eventually recurrent numeration]
+  \label{def:canonical-eventually-recurrent-numeration}
+  A canonical eventually recurrent numeration system consists of:
+  \begin{enumerate}[label=\textup{(U\arabic*)}]
+    \item a strictly increasing sequence of positive integers
+    \(U=(U_n)_{n\ge0}\) and a finite digit alphabet
+    \(A\subseteq\NN\) containing \(0\);
+    \item an LSD-first language \(\mathcal R_U\subseteq A^\ast\), with
+    \[
+      \val_U(x_0\cdots x_{m-1})
+        :=\sum_{j=0}^{m-1}x_jU_j,
+    \]
+    for which \(\val_U:\mathcal R_U\to\NN_{\ge1}\) is a bijection;
+    \item strict length ordering: if \(r,s\in\mathcal R_U\) and
+    \(\abs r<\abs s\), then \(\val_U(r)<\val_U(s)\);
+    \item integers \(J\ge0,d\ge1,a_0,\ldots,a_{d-1}\), with
+    \(a_0\ne0\), such that
+    \[
+      U_{n+d}=a_0U_n+a_1U_{n+1}+\cdots+a_{d-1}U_{n+d-1}
+      \qquad(n\ge J).
+    \]
+  \end{enumerate}
+  Relative to this recurrence witness, it is a \emph{unit system} if
+  \(\abs{a_0}=1\). No regularity of \(\mathcal R_U\) is included in
+  this definition.
+\end{definition}
+
+\begin{lemma}[Affine recurrence block action]
+  \label{lem:affine-recurrence-block-action}
+  Under \textup{(U4)}, let \(C\) be the \(d\times d\) companion matrix
+  with superdiagonal entries \(1\) and last row
+  \((a_0,\ldots,a_{d-1})\). For \(\varepsilon\in A\), put
+  \[
+    D_\varepsilon=
+    \begin{pmatrix}
+      1&\varepsilon e_1^t\\
+      0&C
+    \end{pmatrix}.
+  \]
+  Once \(r\ge J\), appending \(\varepsilon\) sends
+  \[
+    (N_r,U_r,\ldots,U_{r+d-1})^t
+    \quad\hbox{to}\quad
+    D_\varepsilon(N_r,U_r,\ldots,U_{r+d-1})^t.
+  \]
+  Moreover
+  \(\det D_\varepsilon=(-1)^{d-1}a_0\). Hence every block action is
+  invertible modulo \(q\) whenever \(\gcd(q,a_0)=1\), and modulo every
+  \(q\ge2\) in a unit system. Here and below, for a block
+  \(b=b_1\cdots b_\ell\), we write
+  \(M_b=D_{b_\ell}\cdots D_{b_1}\), with \(M_\varepsilon=I\).
+\end{lemma}
+
+\begin{proof}
+  The first coordinate becomes \(N_r+\varepsilon U_r\); the remaining
+  coordinates shift once and the final one is supplied by \textup{(U4)}.
+  These are exactly the displayed matrix equations. The determinant
+  is \(\det C=(-1)^{d-1}a_0\). Multiplicativity of determinants gives
+  the assertion for blocks.
+\end{proof}
+
+The coefficient \(a_0\) belongs to the displayed recurrence witness,
+not intrinsically to \((U,A,\mathcal R_U)\); see
+\Cref{prop:recurrence-witness-separation} for the resulting strict
+separation.
+
+We now use the standard fan-out convention: a multiple context-free
+language (MCFL) is a \(k\)-MCFL for some finite \(k\ge1\). An infinite
+language is \emph{MCF-immune} if it contains no infinite MCFL
+sublanguage. The weak pumping lemma of Seki--Matsumura--Fujii--Kasami
+states that an infinite \(k\)-MCFL contains one word that can be pumped
+synchronously at \(2k\) factors \cite[Lemma~3.2]{SekiEtAl1991}. The
+  lemma makes no assertion about every sufficiently long word; that
+  stronger form fails for general MCFLs
+  \cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}.
+
+  Duncan--Elder--Frenkel--Lyu's substitution lemma
+  \cite[Theorem~4.5]{DuncanElderFrenkelLiu2026} is stronger in a different
+  quantifier direction: after enough positions of each sufficiently long
+  word are marked, it gives either a bounded pump or a factorization in
+  which a tuple can be replaced by another tuple from one of finitely many
+  switchable families. It does not select a single family parameterized by
+  one exponent \(t\), nor does it make all replacement blocks simultaneous
+  powers of fixed words. Consequently it supplies neither a fixed affine
+  matrix-power expression nor a return time valid for every parameter on
+  one orbit. The switchable alternative also prevents it from replacing the
+  paired Ogden pump in the Zeckendorf argument above. Thus it does not by
+  itself imply any immunity result proved here. We use Seki et al.'s weaker
+  conclusion precisely because its one synchronized family has the fixed
+  \(2k\)-block power form needed below. The imported language statement is
+  only that family; its placement beyond the recurrence transient, the
+  finite-group return, and all arithmetic consequences are proved here.
+
+\begin{theorem}[Synchronized local-congruence orbit]
+  \label{thm:mcfl-synchronized-congruence-orbit}
+  Let \((U,A,\mathcal R_U)\) satisfy \textup{(U1)--(U4)}, and let
+  \(L\subseteq\mathcal R_U\) be an infinite \(k\)-MCFL. There are words
+  \[
+    \begin{gathered}
+      a,u_1,\ldots,u_{k+1},v_1,\ldots,v_k\in A^\ast,\\
+      w_1,\ldots,w_k,s_1,\ldots,s_k\in A^\ast
+    \end{gathered}
+  \]
+  such that
+  \[
+    W(t)=a u_1v_1^tw_1s_1^tu_2\cdots
+          u_kv_k^tw_ks_k^tu_{k+1}\in L
+          \qquad(t\ge0),
+  \]
+  \[
+    \sum_{j=1}^k(\abs{v_j}+\abs{s_j})>0,
+  \]
+  and \(N(t):=\val_U(W(t))\) is strictly increasing. Moreover, for
+  every \(q\ge2\) with \(\gcd(q,a_0)=1\), there is \(H(q)\ge1\) such
+  that
+  \[
+    N(t+H(q))\equiv N(t)\pmod q
+    \qquad\text{for every }t\ge0.
+  \]
+  The factorization, and hence the orbit \(W(t)\), is independent of
+  \(q\).
+\end{theorem}
+
+\begin{proof}
+  Delete the finitely many words of length less than \(J\). Since the
+  alphabet is finite, some \(a\in A^J\) is the prefix of infinitely many
+  remaining words; when \(J=0\), take \(a=\varepsilon\). For completeness,
+  fixed left quotient preserves fan-out. Introduce a fresh letter \(\#\),
+  let \(h(\#)=a\) and \(h(x)=x\) for \(x\in A\), intersect
+  \(h^{-1}(L)\) with the regular language \(\#A^*\), and erase \(\#\).
+  Inverse homomorphism, regular intersection, and homomorphism preserve
+  \(k\)-MCFLs without increasing the maximum nonterminal dimension
+  \cite[Proposition~2.3]{DuncanElderFrenkelLiu2026}. Hence
+  \[
+    L_a=\{x\in A^\ast:ax\in L\}
+  \]
+  is an infinite \(k\)-MCFL. The weak pumping lemma supplies
+  \(u_j,v_j,w_j,s_j\) with the displayed synchronized pumping property
+  and with at least one \(v_j\) or \(s_j\) nonempty.
+
+  All digit actions after \(a\) are in the stationary range of
+  \textup{(U4)}. Fix an allowed modulus \(q\). By
+  \Cref{lem:affine-recurrence-block-action}, every nonempty matrix among
+  \[
+    M_{v_1},M_{s_1},\ldots,M_{v_k},M_{s_k}
+  \]
+  lies in the finite group
+  \(\operatorname{GL}_{d+1}(\ZZ/q\ZZ)\). One may take
+  \[
+    H(q)=\abs{\operatorname{GL}_{d+1}(\ZZ/q\ZZ)}
+      \le q^{(d+1)^2};
+  \]
+  Lagrange's theorem makes this a common multiple of their orders, and
+  empty blocks contribute the identity.
+  Replacing \(t\) by \(t+H(q)\) in the matrix product for \(W(t)\)
+  therefore leaves every powered block unchanged modulo \(q\), proving
+  the congruence simultaneously for all \(t\ge0\).
+
+  Finally,
+  \[
+    \abs{W(t+1)}-\abs{W(t)}
+      =\sum_{j=1}^k(\abs{v_j}+\abs{s_j})>0.
+  \]
+  Both words are canonical, so \textup{(U3)} gives
+  \(N(t+1)>N(t)\).
+\end{proof}
+
+\begin{lemma}[Explicit grammar for a synchronized ray]
+  \label{lem:synchronized-ray-linear-mcfg}
+  Fix \(k\ge1\), a word \(a\), and words
+  \(u_1,\ldots,u_{k+1},v_1,\ldots,v_k,w_1,\ldots,w_k,
+  s_1,\ldots,s_k\) over a finite alphabet. If
+  \[
+    \sum_{j=1}^k(\abs{v_j}+\abs{s_j})>0,
+  \]
+  then
+  \[
+    \left\{a u_1v_1^tw_1s_1^tu_2\cdots
+      u_kv_k^tw_ks_k^tu_{k+1}:t\ge0\right\}
+  \]
+  is an infinite linear \(2k\)-MCFL.
+\end{lemma}
+
+\begin{proof}
+  Take a nonterminal \(X\) of fan-out \(2k\) and a start symbol \(T\) of
+  fan-out one. The productions are
+  \[
+    X(\varepsilon,\ldots,\varepsilon)\leftarrow,
+  \]
+  \[
+    X(v_1x_1,s_1x_2,\ldots,v_kx_{2k-1},s_kx_{2k})
+      \leftarrow X(x_1,\ldots,x_{2k}),
+  \]
+  and
+  \[
+    T(a u_1x_1w_1x_2u_2\cdots
+      u_kx_{2k-1}w_kx_{2k}u_{k+1})
+      \leftarrow X(x_1,\ldots,x_{2k}).
+  \]
+  After \(t\) recursive applications, the tuple derived from \(X\) is
+  \((v_1^t,s_1^t,\ldots,v_k^t,s_k^t)\), so the generated language is
+  exactly the displayed ray. Every variable occurs exactly once in each
+  production. The positive total pumped length makes the words at
+  distinct parameters have distinct lengths.
+\end{proof}
+
+Put \(S=\{p:p\text{ is prime and }p\mid a_0\}\). On
+\(\NN_{\ge1}\), let \(\tau_S\) be the topology generated by the basis
+\[
+  \{(n+q\ZZ)\cap\NN_{\ge1}:n\ge1,\ q\ge1,\ \gcd(q,a_0)=1\}.
+\]
+Its completion is
+\[
+  \widehat{\ZZ}_{S^c}
+    :=\varprojlim_{\gcd(q,a_0)=1}\ZZ/q\ZZ
+    \cong\prod_{p\notin S}\ZZ_p.
+\]
+These are the adic topologies and completions studied by Broughan
+\cite{Broughan2003}. His Theorem~2.4 and Corollary~3.1 supply the
+\(\mathbb Q\)-space and Cantor-completion classifications used below. The
+new assertion here is that every synchronized MCFL orbit satisfies their
+no-isolated-point hypothesis, and hence yields the scattered-set
+obstruction.
+
+\begin{theorem}[Adic recurrence and scattered-set obstruction for synchronized MCFL orbits]
+  \label{thm:mcfl-local-adic-fingerprint}
+  For the orbit \(Y=\{N(t):t\ge0\}\) supplied by
+  \Cref{thm:mcfl-synchronized-congruence-orbit}, the following hold.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The subspace \(Y\subseteq(\NN_{\ge1},\tau_S)\) has no isolated
+    points and is homeomorphic to \(\mathbb Q\).
+    \item Its closure in \(\widehat{\ZZ}_{S^c}\) is homeomorphic to the
+    Cantor set.
+    \item If \(B\subseteq\NN_{\ge1}\) is scattered in \(\tau_S\), then
+    \[
+      \operatorname{Rep}_U(B)
+        :=\{w\in\mathcal R_U:\val_U(w)\in B\}
+    \]
+    is MCF-immune whenever it is infinite.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  Let \(N(t)\in Y\), and let its basic neighborhood be specified modulo
+  an allowed \(q\). If \(q=1\), take any later orbit point. If \(q\ge2\),
+  \Cref{thm:mcfl-synchronized-congruence-orbit} gives
+  \(N(t+H(q))\equiv N(t)\pmod q\), and strict increase makes these points
+  distinct. Thus \(Y\) has no isolated point.
+
+  The allowed congruences separate distinct positive integers: for
+  \(m\ne n\), choose a prime outside the finite set \(S\) that does not
+  divide \(m-n\). Consequently \(\tau_S\) is Hausdorff and metrizable;
+  it also has a countable basis. Hence \(Y\) is a countable metrizable
+  space without isolated points. The Sierpi\'nski characterization used
+  in \cite[Theorem~2.4]{Broughan2003} yields \(Y\cong\mathbb Q\).
+
+  The profinite ring \(\widehat{\ZZ}_{S^c}\) is compact, metrizable, and
+  zero-dimensional. Its closed subspace \(\overline Y\) has no isolated
+  point: an isolated point of the closure would, by density of \(Y\),
+  belong to and be isolated in \(Y\). Thus \(\overline Y\) is a nonempty
+  compact perfect zero-dimensional metrizable space, and the classical
+  Cantor-space characterization gives the second assertion; compare
+  \cite[Corollary~3.1]{Broughan2003}.
+
+  For the last assertion, an infinite MCFL sublanguage of
+  \(\operatorname{Rep}_U(B)\) would, by the first assertion, provide a
+  nonempty subspace \(Y\subseteq B\) without isolated points. This
+  contradicts scatteredness, which is hereditary to subspaces.
+\end{proof}
+
+For a prime \(p\), write \(v_p(n)\) for the exponent of \(p\) in \(n\),
+and let \(\omega_{S^c}(n)=\#\{p\notin S:p\mid n\}\).
+For \(K\ge0\) and \(E=(E_p)_{p\in S}\in\NN_0^S\), define
+\[
+  X_{K,E}=\{n\ge1:\omega_{S^c}(n)\le K,
+               \ v_p(n)\le E_p\ (p\in S)\}.
+\]
+For \(X\subseteq\NN_{\ge1}\), let \(D_SX\) be the set of points of \(X\)
+that are not isolated in its \(\tau_S\)-subspace topology. Thus \(D_S\)
+is the intrinsic Cantor--Bendixson derivative. We use the height convention
+\[
+  \operatorname{ht}(X)=\min\{\alpha:D_S^\alpha X=\varnothing\}.
+\]
+
+\begin{proposition}[Exact local prime-factor rank]
+  \label{prop:local-prime-factor-cb-rank}
+  For every \(K\ge1\),
+  \[
+    D_SX_{K,E}=X_{K-1,E}.
+  \]
+  Consequently
+  \[
+    D_S^{\,j}X_{K,E}=X_{K-j,E}\quad(0\le j\le K),
+    \qquad D_S^{\,K+1}X_{K,E}=\varnothing,
+  \]
+  and the Cantor--Bendixson height of \(X_{K,E}\) is exactly \(K+1\).
+  For \(K=0\), the nonempty set \(X_{0,E}\) is finite,
+  \(D_SX_{0,E}=\varnothing\), and its height is \(1\).
+\end{proposition}
+
+\begin{proof}
+  Suppose first that \(n\in X_{K-1,E}\), and let \(q\ge1\) be coprime
+  to \(a_0\). Dirichlet's theorem supplies a prime
+  \(r\equiv1\pmod q\) outside the finite set \(S\cup\{p:p\mid n\}\).
+  Then \(nr\ne n\), \(nr\equiv n\pmod q\), the \(S\)-adic valuations
+  are unchanged, and
+  \[
+    \omega_{S^c}(nr)=\omega_{S^c}(n)+1\le K.
+  \]
+  Hence \(n\in D_SX_{K,E}\).
+
+  Conversely, let \(n\in X_{K,E}\) have
+  \(\omega_{S^c}(n)=K\), and write
+  \[
+    n=c\prod_{i=1}^K\ell_i^{e_i},
+    \qquad c=\prod_{p\in S}p^{f_p},\quad 0\le f_p\le E_p,
+  \]
+  with distinct \(\ell_i\notin S\). Put
+  \(q_0=\prod_i\ell_i^{e_i+1}\). If \(m\in X_{K,E}\) and
+  \(m\equiv n\pmod {q_0}\), then
+  \(v_{\ell_i}(m)=e_i\) for every \(i\). The budget of \(K\) primes
+  outside \(S\) leaves no further such prime, so \(m\) belongs to the
+  finite set
+  \[
+    F=\left\{
+      \left(\prod_{p\in S}p^{g_p}\right)
+      \prod_{i=1}^K\ell_i^{e_i}:
+      0\le g_p\le E_p
+    \right\}.
+  \]
+  Choose a prime \(r\notin S\cup\{\ell_1,\ldots,\ell_K\}\) dividing
+  none of the finitely many nonzero differences \(m-n\), \(m\in F\).
+  Then \(q=q_0r\) is coprime to \(a_0\), and the \(q\)-neighborhood of
+  \(n\) meets \(X_{K,E}\) only at \(n\). Thus precisely the points with
+  fewer than \(K\) outside primes survive one derivative. Iteration
+  proves the formula. Finally \(X_{0,E}\) is a nonempty finite set (it
+  contains \(1\)), so the height is exactly \(K+1\).
+\end{proof}
+
+Broughan's related full-adic result counts prime factors with
+multiplicity and identifies closures of the corresponding strata
+\cite[Theorem~4.3]{Broughan2003}. The preceding proposition is a local
+refinement of that analysis, not a new classification of the ambient adic
+space: it uses distinct prime support, deletes the finite set \(S\), imposes
+bounded \(S\)-adic valuations, and computes derivatives intrinsically in
+the indicated subspace rather than only in its ambient closure.
+
+\begin{theorem}[Nonunit escape dichotomy and MCF-immunity]
+  \label{thm:nonunit-mcfl-escape-dichotomy}
+  Let \(L\subseteq\mathcal R_U\) be an infinite MCFL. Then either
+  \[
+    \sup_{w\in L}\omega_{S^c}(\val_U(w))=\infty,
+  \]
+  or there is a prime \(p\mid a_0\) such that
+  \[
+    \sup_{w\in L}v_p(\val_U(w))=\infty.
+  \]
+  Consequently the following languages are MCF-immune whenever they are
+  infinite:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item the prime representation language \(\mathcal P_U\);
+    \item every language on which \(\Omega(\val_U(w))\) is bounded;
+    \item every finite-prime-support language on which all
+    \(v_p(\val_U(w))\), \(p\mid a_0\), are bounded.
+  \end{enumerate}
+  In a unit system, every bounded-\(\omega(\val_U(w))\) language is
+  MCF-immune.
+\end{theorem}
+
+\begin{proof}
+  If neither alternative held, finiteness of \(S\) would give
+  \(K\ge0\) and \(E\in\NN_0^S\) such that
+  \[
+    \{\val_U(w):w\in L\}\subseteq X_{K,E}.
+  \]
+  By \Cref{prop:local-prime-factor-cb-rank}, \(X_{K,E}\) is scattered.
+  This contradicts
+  \Cref{thm:mcfl-local-adic-fingerprint}. Prime values satisfy
+  \(\omega_{S^c}\le1\) and \(v_p\le1\); bounded \(\Omega\) bounds both
+  alternatives; and finite prime support bounds \(\omega_{S^c}\), with
+  the remaining valuations bounded by hypothesis. If \(S=\varnothing\),
+  the second alternative is absent, giving the unit-system assertion.
+\end{proof}
+
+The second alternative is necessary. In ordinary base \(b\), where
+\(a_0=b\), the regular LSD-first language
+\(\{0^n1:n\ge0\}\) represents \(b^n\). Its distinct prime support is
+fixed, while \(v_p(b^n)\) is unbounded for every \(p\mid b\).
+
+\begin{proposition}[Recurrence-witness inflation and strict separation]
+  \label{prop:recurrence-witness-separation}
+  If a tail has minimal recurrence polynomial \(\mu_U\), then for every
+  prime \(p\) it also has a recurrence witness with characteristic
+  polynomial \((X-p)\mu_U(X)\).  When \(\abs{\mu_U(0)}=1\), the trailing
+  coefficient of this witness has absolute value \(p\).
+
+  Moreover, there are two canonical eventually recurrent
+  numeration systems with regular representation languages and recurrence
+  witnesses whose trailing-coefficient prime set is \(\{p\}\), but with
+  opposite bounded-outside-prime escape behavior:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item ordinary base \(p\) contains the infinite regular language
+    \(\{0^n1:n\ge0\}\), whose values are \(p^n\);
+    \item the Zeckendorf system, with \(F_0=0,F_1=1\) and
+    \(F_{n+2}=F_{n+1}+F_n\), equipped with the order-three recurrence
+    witness
+    \[
+      F_{n+3}=-pF_n+(1-p)F_{n+1}+(p+1)F_{n+2},
+    \]
+    contains no infinite MCFL \(L\) for which
+    \[
+      \sup_{w\in L}\omega_{\{p\}^c}(\val(w))<\infty.
+    \]
+  \end{enumerate}
+  Thus the prime divisors of an arbitrarily selected trailing coefficient
+  do not determine the escape behavior of the numeration system.
+\end{proposition}
+
+\begin{proof}
+  The polynomial identity \(\mu_U(C)z_J=0\) remains valid after
+  multiplication by \(X-p\).  In the companion convention, the trailing
+  recurrence coefficient is the negative of the constant term of the
+  characteristic polynomial, proving the first assertion.
+
+  The base-\(p\) assertion is the preceding example.  For the Zeckendorf
+  sequence, multiplication of its minimal polynomial by \(X-p\) gives
+  \[
+    (X-p)(X^2-X-1)
+      =X^3-(p+1)X^2+(p-1)X+p,
+  \]
+  which is exactly the displayed recurrence and has trailing coefficient
+  \(-p\).  This changes neither the sequence nor its regular canonical
+  representation language.  On the other hand, its minimal recurrence
+  has unit trailing coefficient.  If the displayed supremum were bounded
+  by \(K\), then
+  \(\omega(\val(w))\le K+1\) on \(L\), contrary to the unit-recurrence
+  conclusion of
+  \Cref{thm:nonunit-mcfl-escape-dichotomy}.  This proves the separation.
+\end{proof}
+
+Let
+\[
+  \mu_U(X)=X^{d_{\mathrm r}}-c_{d_{\mathrm r}-1}X^{d_{\mathrm r}-1}
+    -\cdots-c_1X-c_0
+\]
+be the minimal recurrence polynomial of a tail of \(U\). Since it
+divides the characteristic polynomial of a recurrence allowed in
+\textup{(U4)}, its constant term is nonzero. Enlarge the recurrence
+threshold to \(J_{\mathrm r}\) so that this minimal recurrence holds for
+every \(n\ge J_{\mathrm r}\), and put
+\[
+  S_{\mathrm r}=\{p:p\text{ is prime and }p\mid c_0\}.
+\]
+

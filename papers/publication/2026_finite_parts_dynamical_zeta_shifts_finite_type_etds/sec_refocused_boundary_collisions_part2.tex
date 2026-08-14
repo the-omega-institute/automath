@@ -1,0 +1,641 @@
+\begin{theorem}[Effective normalized rational coboundary criterion]
+\label{thm:effective-rational-mahler-coboundary}
+Let \(P_0,P_1\in\ZZ[z]\) be coprime, with
+\(P_0(0)=P_1(0)=1\).  Put \(d_i=\deg P_i\) and \(D=d_0+d_1\).
+If \(D=0\), then \(P_0=P_1=1\), and the unique normalized solution is
+\(R=1\).  If \(D>0\), put
+\begin{equation}\label{eq:effective-mahler-bounds}
+ L=\lfloor\log_2D\rfloor,
+ \qquad
+ N=b_2(D)=D\lceil\log_2(2D)\rceil,
+\end{equation}
+and
+\begin{equation}\label{eq:effective-mahler-height-bound}
+ \Lambda=h(P_0)+h(P_1)
+   +\frac12\log\bigl((d_0+1)(d_1+1)\bigr),
+ \qquad
+ K=N\log2+D(L+1)\Lambda.
+\end{equation}
+There is a finite algorithm over \(\QQ\), using only \(P_0,P_1\), which
+decides whether
+\begin{equation}\label{eq:effective-mahler-equation}
+ \frac{P_0(z)}{P_1(z)}
+ =\frac{R(z^2)}{R(z)^2},
+ \qquad R\in\QQ(z)^\times,\quad R(0)=1,
+\end{equation}
+and constructs \(R\) when it exists.  The solution is unique.  In its unique
+reduced form
+\[
+ R=\frac{A}{B},
+ \qquad A,B\in\ZZ[z],\quad (A,B)=1,\quad A(0)=B(0)=1,
+\]
+it satisfies
+\begin{equation}\label{eq:effective-mahler-output-bounds}
+ \deg A+\deg B\le N,
+ \qquad
+ \max\{h(A),h(B)\}\le K.
+\end{equation}
+ In particular, \(\max\{\deg A,\deg B\}\le
+ D\lceil\log_2(2D)\rceil\).  Two necessary conditions
+are
+\begin{equation}\label{eq:effective-mahler-obstructions}
+ d_0=d_1,
+ \qquad P_0\equiv P_1\pmod2.
+\end{equation}
+
+More explicitly, let \(S(z)=\sum_{n\ge0}s_nz^n\in1+z\QQ[[z]]\) be the
+unique formal solution of
+\begin{equation}\label{eq:effective-mahler-formal-equation}
+ P_0(z)S(z)^2=P_1(z)S(z^2).
+\end{equation}
+Writing \(p_{i,j}=[z^j]P_i\), its coefficients are obtained successively from
+\begin{equation}\label{eq:effective-mahler-coefficient-recurrence}
+\begin{split}
+ 2s_n={}&
+ \sum_{\substack{0\le j\le d_1\\j\le n,\ n-j\ {\rm even}}}
+   p_{1,j}s_{(n-j)/2} \\
+ &-\sum_{\substack{0\le j\le d_0,\ u,v\ge0,\ u+v=n-j\\
+          (j,u,v)\ne(0,0,n),(0,n,0)}}p_{0,j}s_us_v
+ \qquad(n\ge1).
+\end{split}
+\end{equation}
+After computing \(s_0,\ldots,s_{2N}\), solve the affine linear system
+\begin{equation}\label{eq:effective-mahler-pade-system}
+ \sum_{j=0}^N b_js_{k-j}=0
+ \quad(N+1\le k\le2N),
+ \qquad b_0=1,\qquad s_m=0\ (m<0).
+\end{equation}
+If it is inconsistent, reject.  Otherwise choose any solution, put
+\[
+ B_*(z)=\sum_{j=0}^Nb_jz^j,
+ \qquad
+ A_*(z)=\sum_{k=0}^N
+       \left(\sum_{j=0}^{\min\{k,N\}}b_js_{k-j}\right)z^k,
+\]
+cancel their common factor, and normalize both constant terms to one.  Accept
+the resulting \(A/B\) precisely when
+\begin{equation}\label{eq:effective-mahler-final-identity}
+ P_0(z)A(z)^2B(z^2)=P_1(z)A(z^2)B(z)^2.
+\end{equation}
+Thus the procedure requires neither factorization over
+\(\overline{\QQ}\) nor enumeration of divisors.
+\end{theorem}
+
+\begin{proof}
+Suppose first that \(R\) exists.  The degree estimate is
+\Cref{prop:logarithmic-mahler-divisor-bound} with \(p=2\).  For the height
+estimate, retain the following support information.  For
+\(\alpha\in\overline{\QQ}^{\times}\), set
+\[
+ r(\alpha)=\operatorname{ord}_{z=\alpha}R,
+ \qquad
+ e(\alpha)=\operatorname{ord}_{z=\alpha}(P_0/P_1).
+\]
+The map \(z\mapsto z^2\) is unramified at \(\alpha\ne0\), so
+\begin{equation}\label{eq:effective-mahler-divisor-recurrence}
+ e(\alpha)=r(\alpha^2)-2r(\alpha).
+\end{equation}
+Along the forward square orbit, write \(r_j=r(\alpha^{2^j})\) and
+\(e_j=e(\alpha^{2^j})\).  Iteration gives
+\[
+ r_0=2^{-m}r_m-\sum_{j=0}^{m-1}2^{-j-1}e_j.
+\]
+The divisor of \(R\) has finite support, so \(r_m\) is bounded.  Letting
+\(m\to\infty\), and using \(\abs{e_j}\le D\), gives
+    \(\abs{r(\alpha)}\le D\).  If \(r(\alpha)\ne0\), the forward orbit must
+meet the support of \(e\).  If \(k\) is its first such index, then
+\(r_{j+1}=2r_j\) for \(j<k\); hence
+\[
+ 2^k\le2^k\abs{r_0}=\abs{r_k}\le D,
+ \qquad k\le L.
+\]
+Consequently every finite non-zero zero or pole of \(R\) is a zero of
+\begin{equation}\label{eq:effective-mahler-window-polynomial}
+ W(z):=\prod_{k=0}^{L}P_0(z^{2^k})P_1(z^{2^k}).
+\end{equation}
+Because each input polynomial is primitive and has constant term one, every
+rational irreducible factor of \(W\), normalized to have constant term one,
+lies in \(\ZZ[z]\).  The multiplicity bound above therefore gives
+\[
+ A(z)B(z)\mid W(z)^D\quad\hbox{in }\ZZ[z].
+\]
+ This divisibility will be used only for the height estimate; the sharper degree
+ bound has already been obtained from
+ \Cref{prop:logarithmic-mahler-divisor-bound}.
+
+Let \(M(\,\cdot\,)\) denote Mahler measure.  The standard estimates
+\[
+ \log M(Q)\le h(Q)+\frac12\log(\deg Q+1),
+ \qquad
+ h(Q)\le\deg Q\log2+\log M(Q)
+\]
+and \(M(Q(z^m))=M(Q)\) give
+\[
+ \log M(W)\le(L+1)\Lambda.
+\]
+Mahler measure is multiplicative, and a non-zero integral polynomial has
+measure at least one.  The preceding divisibility thus implies
+\[
+ \log M(A),\ \log M(B)\le D(L+1)\Lambda.
+\]
+Together with the degree bound, this proves
+\eqref{eq:effective-mahler-height-bound}--
+\eqref{eq:effective-mahler-output-bounds}.
+
+At infinity,
+\(\operatorname{ord}_\infty R(z^2)=2\operatorname{ord}_\infty R\), so the right-hand side
+of \eqref{eq:effective-mahler-equation} has order zero there.  This proves
+\(d_0=d_1\).  Moreover, reduction modulo two gives
+\(A(z^2)=A(z)^2\) and \(B(z^2)=B(z)^2\).  Hence the right-hand side is one
+in \(\mathbb F_2(z)\), proving \(P_0\equiv P_1\pmod2\).
+
+The two occurrences of \(s_n\) on the left of
+\eqref{eq:effective-mahler-formal-equation} have coefficient two; every
+other coefficient in degree \(n\) involves only
+\(s_0,\ldots,s_{n-1}\).  This proves
+\eqref{eq:effective-mahler-coefficient-recurrence} and the uniqueness of
+\(S\).  If a rational solution exists, its Taylor series is \(S\).  The
+degree bound therefore implies that its denominator occurs among the
+solutions of \eqref{eq:effective-mahler-pade-system}.
+
+It remains to justify that an arbitrary solution of that system is harmless.
+For two resulting pairs \((A_i,B_i)\), one has
+\[
+ B_iS-A_i=O(z^{2N+1}),
+\]
+and consequently
+\[
+ A_1B_2-A_2B_1=O(z^{2N+1}).
+\]
+The polynomial on the left has degree at most \(2N\), and hence vanishes
+identically.  Thus every solution of the affine system produces the same
+rational approximant.  If a genuine \(R\) exists, this approximant is \(R\);
+conversely, \eqref{eq:effective-mahler-final-identity} is exactly the cleared
+form of \eqref{eq:effective-mahler-equation}.  The final identity therefore
+gives both sound rejection and complete reconstruction.  Uniqueness also
+follows from the normalized injectivity of \(\delta\) proved in
+\Cref{prop:rational-mahler-certificate}.
+\end{proof}
+
+\begin{remark}[Termination and a conservative bit bound]
+\label{rem:effective-rational-mahler-complexity}
+Let
+\[
+ d=\max\{1,d_0,d_1\},
+ \qquad
+ \tau=1+\max_i\left\lceil\log_2\norm{P_i}_\infty\right\rceil,
+ \qquad b=\tau+\log(D+1).
+\]
+All loops stop at \(2N\), and the only linear system has \(N\) equations and
+\(N\) unknowns.  If the parity condition in
+\eqref{eq:effective-mahler-obstructions} holds, the
+Dieudonn\'e--Dwork argument of
+\Cref{lem:critical-mahler-integrality} applies verbatim to
+\eqref{eq:effective-mahler-formal-equation}, so \(S\in\ZZ[[z]]\).  On the
+circle
+\[
+ \abs z=\rho:=(4d2^\tau)^{-1}
+\]
+one has \(\abs{P_i(z)-1}\le1/4\).  The convergent local product for \(S\)
+is
+\[
+ S(z)=\prod_{\nu\ge0}
+ \left(\frac{P_1(z^{2^\nu})}{P_0(z^{2^\nu})}\right)^{2^{-\nu-1}}.
+\]
+Indeed,
+\[
+ \abs{P_i(z)-1}
+ \le\frac{d2^{\tau-1}\rho}{1-\rho}<\frac14,
+\]
+and the logarithm series gives
+\(\abs{\log S(z)}\le2\log(4/3)<\log2\).  Thus
+\(\abs{S(z)}<2\) on the circle, and Cauchy's estimate gives
+\begin{equation}\label{eq:effective-mahler-coefficient-size}
+ \abs{s_n}\le2(4d2^\tau)^n.
+\end{equation}
+Thus the required series coefficients have \(O(Nb)\) bits.  In Bareiss
+fraction-free elimination, every intermediate entry is a minor and has
+\(O(N^2b)\) bits.  With schoolbook integer arithmetic, the complete procedure
+therefore uses
+\begin{equation}\label{eq:effective-mahler-bit-complexity}
+ O(N^7b^2)\quad\hbox{bit operations},
+ \qquad O(N^4b)\quad\hbox{bits of storage}.
+\end{equation}
+These deliberately elementary bounds prove polynomial-time termination; no
+claim of optimality is made.  Fast integer and modular linear algebra improve
+them, but an exact sharper exponent would require a separate complexity
+analysis.
+\end{remark}
+
+\begin{corollary}[Same-base effective specialization]
+\label{cor:same-base-effective-rational-mahler}
+Let \(A\) be an \(n\times n\) non-negative integral matrix and let \(B,B'\)
+be integral matrices satisfying
+\[
+ \abs{B_{ij}},\abs{B'_{ij}}\le A_{ij},
+ \qquad B_{ij}\equiv B'_{ij}\equiv A_{ij}\pmod2.
+\]
+Assume that
+\(P_0=\det(I-zB)\) and \(P_1=\det(I-zB')\) are coprime, and put
+\(a_*=\max\{1,A_{ij}:1\le i,j\le n\}\).  Then the algorithm of
+\Cref{thm:effective-rational-mahler-coboundary} decides and constructs every
+normalized rational certificate for \(P_0/P_1\), using integer coefficient
+recursion before the Pad\'e step.  Uniformly,
+\begin{equation}\label{eq:same-base-effective-input-bounds}
+ D\le2n,\qquad N\le2n\lceil\log_2(4n)\rceil,\qquad
+ h(P_0),h(P_1)\le n\log(na_*),
+\end{equation}
+and one may use
+\begin{equation}\label{eq:same-base-effective-height-bound}
+ K\le N\log2+2n(\lfloor\log_2(2n)\rfloor+1)
+       \bigl(2n\log(na_*)+\log(n+1)\bigr).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The determinant congruence modulo two gives \(P_0\equiv P_1\pmod2\).
+For \(0\le k\le n\), expansion by principal minors and domination by the
+permanent give
+\[
+ \abs{[z^k]\det(I-zB)}
+ \le\sum_{\substack{I\subset\{1,\ldots,n\}\\|I|=k}}
+       \operatorname{per}(A[I,I])
+ \le n^ka_*^k\le(na_*)^n,
+\]
+and the same estimate holds for \(B'\).  This proves
+\eqref{eq:same-base-effective-input-bounds}; substituting those inequalities
+in \eqref{eq:effective-mahler-height-bound} proves
+\eqref{eq:same-base-effective-height-bound}.  Coprimality is stated because
+the numerical bounds of \Cref{thm:effective-rational-mahler-coboundary} apply
+to the reduced input pair.  A non-coprime determinant ratio may first be
+cancelled, but no unchanged-height assertion for the uncancelled pair is
+being made here.
+\end{proof}
+
+\begin{theorem}[Unconditional interior finite sampling and collision dichotomy]
+\label{thm:finite-radial-sampling}
+Let \(G=C_2\), and let
+\(\tau,\tau':E(\Gamma)\to C_2\) be two labellings on the same marked
+directed multigraph with primitive base matrix \(A\), Perron root
+\(\lambda>1\), and sign blocks \(B,B'\).  Put \(x=\lambda^{-1}\), and set
+\[
+ \Delta_\varepsilon(y)
+ :=F_\varepsilon^\tau(y)-F_\varepsilon^{\tau'}(y)
+ \qquad(0<y<x).
+\]
+For
+\(C\in\operatorname{Conj}(C_2)\), the corresponding pairwise radial
+class-profile difference is
+\[
+ \mathcal D_C(y):=\sum_{n\ge1}
+ \bigl(p_{n,C}(\tau)-p_{n,C}(\tau')\bigr)\log(1-y^n);
+\]
+both series converge absolutely for \(0<y<x\).  Write
+\[
+ H(z):=\frac{\det(I-zB)}{\det(I-zB')}
+      =\frac{P_0(z)}{P_1(z)}
+\]
+in reduced form with coprime \(P_0,P_1\in\ZZ[z]\) and
+\(P_0(0)=P_1(0)=1\), and put \(D=\deg P_0+\deg P_1\).
+Equivalently, \(H=\zeta_{\widetilde X_{\tau'}}/
+\zeta_{\widetilde X_\tau}\) by \Cref{prop:c2-standard-zeta-ratio}.
+
+If \(D=0\), then the two labellings have identical primitive
+length--class profiles.  If \(D>0\), define
+\[
+ N=D\lceil\log_2(2D)\rceil.
+\]
+\begin{equation}\label{eq:finite-radial-algebraic-collision-bound}
+ \#\{y\in\overline{\QQ}\cap(0,x):
+          \Delta_\varepsilon(y)=0\}\le N-1.
+\end{equation}
+If the set in
+\eqref{eq:finite-radial-algebraic-collision-bound} is non-empty, then the
+finite Pad\'e procedure of
+\Cref{thm:effective-rational-mahler-coboundary} constructs the unique reduced
+\[
+ R=\frac{A_0}{B_0}\in\QQ(z)^\times,
+ \qquad A_0(0)=B_0(0)=1,
+ \qquad \deg A_0+\deg B_0\le N,
+\]
+for which \(H(z)=R(z^2)/R(z)^2\).  The complete real collision set is then
+\begin{equation}\label{eq:finite-radial-complete-collision-set}
+ \{y\in(0,x):\Delta_\varepsilon(y)=0\}
+ =\{y\in(0,x):A_0(y)-B_0(y)=0\}.
+\end{equation}
+In this case the complete real collision set has at most \(N-1\) elements.
+Consequently, if \(v\) is the size of the base matrix and
+\[
+ N_*=2v\lceil\log_2(4v)\rceil,
+\]
+then equality at any \(N_*\) distinct radii
+\(y_1,\ldots,y_{N_*}\in(0,x)\), meaning
+\(\Delta_\varepsilon(y_i)=0\) for every \(i\), at least one of which is
+algebraic, forces
+\[
+ p_{n,C}(\tau)=p_{n,C}(\tau')
+ \qquad(n\ge1,\ C\in\operatorname{Conj}(C_2)).
+\]
+Equivalently, simultaneous vanishing of
+\(\mathcal D_{\{e\}}\) and \(\mathcal D_{\{s\}}\) at \(N_*\) such radii
+recovers the entire primitive length--class profile.
+If \(\rad(B),\rad(B')<\lambda\), the assertions about
+\(\Delta_\varepsilon\) and the equivalent centered class-profile differences
+remain valid on \((0,x]\).  No raw class profile is assigned a finite value at
+\(x\).
+\end{theorem}
+
+\begin{proof}
+Every primitive length-\(n\) orbit contributes \(n\) period-\(n\) points, so
+\(np_{n,C}\le\Tr(A^n)=O(\lambda^n)\).  This proves the asserted absolute
+convergence at every \(y<x\).
+
+The base is fixed, so its trivial determinant coordinate is the same for
+\(\tau\) and \(\tau'\).  The \(C_2\) Adams--M\"obius reduction used in
+\eqref{eq:c2-collision-dyadic-reduction}, now with arbitrary sign blocks,
+therefore gives
+\begin{equation}\label{eq:finite-radial-boundary-identity}
+ \Delta_\varepsilon(y)
+ =-\sum_{j\ge0}2^{-j}\log H(y^{2^j})
+ =-\log\Pi_y(H)
+ \qquad(0<y<x).
+\end{equation}
+The Perron-weighted domination estimate gives
+\(\rad(B),\rad(B')\le\lambda\).  Hence both determinant polynomials are
+zero-free on \(\abs z<x\), are positive on \([0,y]\) for each \(y<x\), and
+the series in \eqref{eq:finite-radial-boundary-identity} converges there.
+Thus
+\[
+ \Delta_\varepsilon(y)=0\quad\Longleftrightarrow\quad\Pi_y(H)=1.
+\]
+
+If \(D=0\), then \(H=1\).  The trivial and sign determinant coordinates are
+both equal, so \Cref{prop:comparison-dictionary} gives equality of all
+primitive length--class data.  The same conclusion holds whenever \(H=1\).
+
+Suppose now that \(H\ne1\).  If there is no algebraic collision radius,
+\eqref{eq:finite-radial-algebraic-collision-bound} is immediate.  Otherwise
+choose one such radius \(y_0\).  The algebraic-radius form of
+\Cref{thm:determinant-boundary-lifting} gives a unique normalized
+\(R\in\QQ(z)^\times\) with
+\[
+ H(z)=\frac{R(z^2)}{R(z)^2},
+ \qquad R(y_0)=1.
+\]
+The effective criterion constructs its reduced numerator and denominator
+\(A_0,B_0\) and gives \(\deg A_0+\deg B_0\le N\).
+
+For every real \(0<y<x\),
+\Cref{prop:rational-mahler-certificate} applies on \([0,y]\) and gives
+\(\Pi_y(H)=R(y)^{-2}\) with \(R(y)>0\).  Hence
+\[
+ \Delta_\varepsilon(y)=0
+ \quad\Longleftrightarrow\quad
+ R(y)=1
+ \quad\Longleftrightarrow\quad
+ A_0(y)-B_0(y)=0,
+\]
+which proves \eqref{eq:finite-radial-complete-collision-set}.  Since \(H\ne1\),
+the polynomial \(A_0-B_0\) is non-zero.  Its degree is at most \(N\), while
+\(A_0(0)-B_0(0)=0\).  It therefore has at most \(N-1\) distinct non-zero
+roots, proving \eqref{eq:finite-radial-algebraic-collision-bound}.
+
+Each determinant has degree at most \(v\), so reduction gives \(D\le2v\).
+The displayed function defining \(N\) is increasing in the positive integer
+\(D\); hence \(N\le N_*\).  If \(\Delta_\varepsilon\) vanished at \(N_*\)
+distinct radii, one of which is algebraic, the complete real collision-set
+bound \(N-1<N_*\) would be contradicted when \(H\ne1\).  Thus \(H=1\), and
+the periodic data dictionary gives the
+asserted recovery.  Finally, for \(C_2=\{e,s\}\)
+the fixed base gives equality of the scalar coordinate, while
+\(\mathbf1_{\{e\}}=(\mathbf1+\varepsilon)/2\) and
+\(\mathbf1_{\{s\}}=(\mathbf1-\varepsilon)/2\).  Therefore equality of
+\(\Delta_\varepsilon(y)\) is equivalent to
+\(\mathcal D_{\{e\}}(y)=\mathcal D_{\{s\}}(y)=0\), proving the last
+assertion.
+
+If both sign blocks have strict spectral radius below \(\lambda\), their
+determinants are zero-free on a disk strictly larger than \(\abs z\le x\).
+The identity \eqref{eq:finite-radial-boundary-identity}, the lifting theorem,
+and the rational telescoping formula then hold also at \(x\).  Since the base
+is common, the class-profile differences equal the differences of the centered
+profiles.  This gives precisely the asserted centered endpoint extension.
+\end{proof}
+
+\begin{theorem}[Rank-independent radial locations for elementary two-groups]
+\label{thm:elementary-two-group-finite-sampling}
+Let \(E=(C_2)^r\), with \(r\ge0\).  Let
+\(\tau:E(\Gamma)\to E\) and \(\tau':E(\Gamma')\to E\) be one-step
+cocycles over primitive non-negative integral base matrices \(A,A'\), whose
+sizes are at most \(V\) and whose Perron roots \(\lambda,\lambda'>1\) need
+not agree.  Put
+\[
+ x=\min\{\lambda^{-1},(\lambda')^{-1}\},
+ \qquad M(V)=2V\lceil\log_2(4V)\rceil.
+\]
+For \(g\in E\), define
+\[
+ \mathcal E_g^\tau(y)=\sum_{n\ge1}p_{n,g}(\tau)\log(1-y^n),
+ \qquad 0<y<x,
+\]
+and define \(\mathcal E_g^{\tau'}\) analogously.  Suppose that
+\[
+ \mathcal E_g^\tau(y_i)=\mathcal E_g^{\tau'}(y_i)
+ \qquad(g\in E,\ 1\le i\le M(V))
+\]
+at \(M(V)\) distinct radii in \((0,x)\), at least one of which is
+algebraic.  Then
+\[
+ p_{n,g}(\tau)=p_{n,g}(\tau')
+ \qquad(n\ge1,\ g\in E).
+\]
+One radial observation here means the full vector
+\((\mathcal E_g(y_i))_{g\in E}\).  Thus the theorem uses \(M(V)\)
+radial locations independently of \(r\), while the total number of scalar
+equalities assumed is \(|E|M(V)=2^rM(V)\).  Neither a common base
+presentation nor a strict spectral gap for the non-trivial character blocks
+is required.
+\end{theorem}
+
+\begin{proof}
+Absolute convergence follows for each system from the periodic-point estimate
+used in \Cref{thm:finite-radial-sampling}.  Summing the assumed identities over
+\(g\in E\) gives, at every sampled radius,
+\[
+ \log\det(I-y_iA)=\sum_{g\in E}\mathcal E_g^\tau(y_i)
+ =\sum_{g\in E}\mathcal E_g^{\tau'}(y_i)
+ =\log\det(I-y_iA').
+\]
+Both determinants are positive on \((0,x)\).  Their difference has degree at
+most \(V\), vanishes at the \(M(V)\ge V\) distinct non-zero sample points,
+and also vanishes at zero.  Hence
+\begin{equation}\label{eq:elementary-two-group-base-determinant-equality}
+ \det(I-zA)=\det(I-zA').
+\end{equation}
+
+Every \(\chi\in\widehat E\) takes values in \(\{\pm1\}\).  Let
+\(B_{\chi,\tau}\) and \(B_{\chi,\tau'}\) be the corresponding character
+blocks and put
+\[
+ H_\chi(z)=\frac{\det(I-zB_{\chi,\tau})}
+                  {\det(I-zB_{\chi,\tau'})}.
+\]
+Since \(\chi(g)\equiv1\pmod2\), entrywise reduction gives
+\[
+ B_{\chi,\tau}\equiv A\pmod2,
+ \qquad B_{\chi,\tau'}\equiv A'\pmod2.
+\]
+Together with \eqref{eq:elementary-two-group-base-determinant-equality}, this
+is precisely the parity input in
+\Cref{thm:determinant-boundary-lifting}; the two blocks need not have the same
+size.
+
+Fourier transformation of the sampled class-profile identities gives
+\[
+ \Delta_\chi(y_i):=
+ \sum_{g\in E}\chi(g)
+ \bigl(\mathcal E_g^\tau(y_i)-\mathcal E_g^{\tau'}(y_i)\bigr)=0.
+\]
+For the trivial character this is already
+\eqref{eq:elementary-two-group-base-determinant-equality}.  For non-trivial
+\(\chi\), one has \(\chi^m=\chi\) for odd \(m\) and
+\(\chi^m=\mathbf1\) for even \(m\).  The Adams--M\"obius calculation in
+\eqref{eq:finite-radial-boundary-identity}, with the now common trivial
+determinant coordinate, therefore gives
+\[
+ \Delta_\chi(y)=\sum_{j\ge0}2^{-j}\log H_\chi(y^{2^j}).
+\]
+
+Choose an algebraic sampled radius \(y_0\).  If \(H_\chi\ne1\),
+\Cref{thm:determinant-boundary-lifting} supplies the unique normalized
+\(R_\chi\in\QQ(z)^\times\) such that
+\[
+ H_\chi(z)=\frac{R_\chi(z^2)}{R_\chi(z)^2},
+ \qquad R_\chi(y_0)=1.
+\]
+Write the reduced ratio \(H_\chi=P_{0,\chi}/P_{1,\chi}\) and put
+\(D_\chi=\deg P_{0,\chi}+\deg P_{1,\chi}\).  Both character determinants
+have degree at most \(V\), so \(D_\chi\le2V\).  By
+\Cref{prop:logarithmic-mahler-divisor-bound} and the positive telescoping
+identity in \Cref{prop:rational-mahler-certificate}, all real zeros of
+\(\Delta_\chi\) lie among the non-zero roots of \(R_\chi-1\), of which there
+are at most
+\[
+ D_\chi\lceil\log_2(2D_\chi)\rceil-1
+ \le M(V)-1.
+\]
+The \(M(V)\) sampled zeros are therefore impossible.  Thus \(H_\chi=1\)
+for every character \(\chi\).  The cross-base periodic-data dictionary in
+\Cref{prop:comparison-dictionary}, followed by character Fourier inversion,
+now gives equality of every primitive length--element count.
+\end{proof}
+
+\begin{remark}[Located obstruction for general finite groups]
+\label{rem:general-group-finite-sampling-interface}
+For a same-base pair and \(\pi\in\Irr(G)\), put
+\(H_\pi=P_{\pi,\tau}/P_{\pi,\tau'}\); then \(H_{\mathbf1}=1\).
+Rearranging \eqref{eq:fixed-determinant-open-disc} by \(k=rm\) gives
+\begin{equation}\label{eq:general-group-adams-mobius-obstruction}
+ \begin{aligned}
+ F_{\chi_\rho}^\tau(z)-F_{\chi_\rho}^{\tau'}(z)
+   &=-\sum_{k\ge1}\frac1k\sum_{\pi\in\Irr(G)}
+       b_{\rho,\pi}(k)\Log_0H_\pi(z^k),\\
+ b_{\rho,\pi}(k)
+   &=\sum_{m\mid k}\mu(m)a_{\rho,\pi}^{(m)}.
+ \end{aligned}
+\end{equation}
+For \(C_2\), projection away from the common trivial channel makes these
+coefficients vanish unless \(k\) is a power of two.  That lacunarity is exactly
+what produces the scalar Mahler product in
+\eqref{eq:finite-radial-boundary-identity}.
+
+It already fails for \(C_3=\langle g\rangle\).  If \(\chi(g)=\omega\), record
+the Adams states in the ordered basis
+\((\mathbf1,\chi,\chi^2)\).  Their M\"obius transform is
+\[
+ \mathbf b(k)=\sum_{m\mid k}\mu(m)e_{m\bmod3}.
+\]
+For a prime \(p\), this is zero when \(p\equiv1\pmod3\), equals
+\(e_1-e_2\) when \(p\equiv2\pmod3\), and equals \(e_1-e_0\) when
+\(p=3\).  There are infinitely many primes congruent to two modulo three:
+if \(p_1,\ldots,p_r\) were all of them, any prime divisor congruent to two
+modulo three of \(3p_1\cdots p_r-1\) would be new.  Thus
+\eqref{eq:general-group-adams-mobius-obstruction} couples the two non-trivial
+determinant ratios at infinitely many arithmetically distributed powers and
+does not satisfy the scalar finite-degree Mahler equation used in
+\Cref{thm:determinant-boundary-lifting}.
+
+Accordingly the proof of a polynomial radial sampling bound for every finite
+group stops here.  The missing input is a special-value theorem forcing
+rationality from one algebraic common collision for this coupled cyclotomic
+Euler system, together with an effective degree or zero bound for the resulting
+certificate.  Neither the scalar lifting theorem nor the Pad\'e bound proved
+above supplies that input.  The finite computation in
+\Cref{sec:exactness} only checks the displayed \(C_3\) coefficients in a
+finite range.
+\end{remark}
+
+This mechanism is strictly weaker than full \(G\)-cospectrality, equivalently
+represented cospectrality in every irreducible representation:
+\eqref{eq:c2-collision-first-determinant} and
+\eqref{eq:c2-collision-second-determinant} are different.  Represented
+cospectrality in every irreducible representation instead requires equality
+of the full twisted spectra and therefore preserves the complete periodic profile
+\cite{BoyleSchmieding2017FiniteGroupExtensions,
+CavaleriDonno2022Cospectrality}.
+
+Although one centered Perron-point vector loses information, an analytic radial profile
+restores it.  The following is a sufficient recovery criterion; no optimality
+claim about the amount of profile data is intended.
+
+\begin{theorem}[Radial-profile recovery]
+\label{thm:radial-profile-recovery}
+Let \(\tau:E(\Gamma)\to G\) and \(\tau':E(\Gamma')\to G\) be two
+labellings over primitive base matrices with Perron roots
+\(\lambda,\lambda'>1\); the bases need not agree.  Put
+\(x=\min\{\lambda^{-1},(\lambda')^{-1}\}\).  For every conjugacy class \(C\),
+define
+\begin{equation}\label{eq:radial-profile-difference}
+ D_C(z):=\sum_{n\ge1}
+ \bigl(p_{n,C}(\tau)-p_{n,C}(\tau')\bigr)\log(1-z^n),
+\end{equation}
+where the logarithm is normalized at zero.  Every \(D_C\) is analytic on
+\(|z|<x\).  If, for every \(C\), \(D_C\) vanishes on a set
+\(S\subset\{|z|<x\}\) having an accumulation point in that disc,
+then
+\begin{equation}\label{eq:radial-profile-recovery}
+ p_{n,C}(\tau)=p_{n,C}(\tau')
+ \qquad(n\ge1,\ C\in\operatorname{Conj}(G)).
+\end{equation}
+It is enough, for example, to fix \(0<q<x\) and take
+\(S=\{q^r:r\ge1\}\).
+\end{theorem}
+
+\begin{proof}
+Every primitive length-\(n\) orbit contributes \(n\) period-\(n\) points, so
+\(np_{n,C}(\tau)\le\Tr(A^n)=O(\lambda^n)\), with the analogous bound
+for \(\tau'\).  Since
+\(-\log(1-z^n)=O(|z|^n)\) uniformly on compact subdiscs of
+\(|z|<x\), \eqref{eq:radial-profile-difference} converges normally
+there and defines an analytic function.
+
+If \(D_C\) vanishes on \(S\), the analytic identity theorem gives
+\(D_C\equiv0\).  Suppose that \(n_0\) is the least length at which the two
+primitive counts for this class differ.  In the expansion
+\[
+ D_C(z)=-\sum_{n\ge1}\sum_{r\ge1}
+  \frac{p_{n,C}(\tau)-p_{n,C}(\tau')}{r}z^{nr},
+\]
+every contribution to the coefficient of \(z^{n_0}\) from a proper divisor
+of \(n_0\) vanishes by minimality.  That coefficient is therefore
+\(-\bigl(p_{n_0,C}(\tau)-p_{n_0,C}(\tau')\bigr)\ne0\), a contradiction.
+This proves \eqref{eq:radial-profile-recovery}.  Finally,
+\(q^r<x\) for \(r\ge1\), and these points accumulate at zero inside the
+disc.
+\end{proof}
+
+For the collision in \Cref{thm:c2-boundary-collision},
+\eqref{eq:c2-collision-exact-difference} equals \(2\log Q(z)\), and
+\(Q(z)=1\) on \(0<z\le1/4\) only at \(z=1/4\).  Thus its centered equality
+is an isolated Perron-boundary evaluation and cannot persist on any set allowed by
+\Cref{thm:radial-profile-recovery}.

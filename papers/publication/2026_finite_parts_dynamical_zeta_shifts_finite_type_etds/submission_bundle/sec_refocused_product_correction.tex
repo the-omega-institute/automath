@@ -1,0 +1,348 @@
+\section{The corrected Frobenius-class product constant}
+\label{sec:product-correction}
+
+We first isolate the scalar normalization.  Let
+\(p_n=\sum_Cp_{n,C}\) and
+\(\Pi_{\mathbf1}(z)=\sum_{n\geq1}p_nz^n\).  Define
+\begin{equation}\label{eq:scalar-finite-part}
+  \mathcal F(A):=
+  \sum_{n\geq1}\left(p_n\lambda^{-n}-\frac1n\right),
+  \qquad
+  \mathcal M(A):=\gamma+\mathcal F(A).
+\end{equation}
+
+\begin{lemma}[Scalar and class Mertens sums]\label{lem:class-mertens}
+The series in \eqref{eq:scalar-finite-part} converges absolutely, and
+\begin{equation}\label{eq:scalar-mertens}
+  \sum_{n\leq N}p_n\lambda^{-n}
+  =\log N+\mathcal M(A)+O(N^{-1}).
+\end{equation}
+Moreover,
+\begin{equation}\label{eq:scalar-c-relation}
+  \mathcal F(A)+
+  \sum_{r\geq2}\frac{\Pi_{\mathbf1}(\lambda^{-r})}{r}
+  =\log C(A),
+  \qquad
+  C(A)=\lim_{t\uparrow1}(1-t)\det(I-tA/\lambda)^{-1}.
+\end{equation}
+
+If the strict gap \(\eta<\lambda\) holds, then for every conjugacy class
+\(C\subset G\),
+\begin{equation}\label{eq:class-mertens}
+  \sum_{n\leq N}p_{n,C}\lambda^{-n}
+  =\frac{|C|}{|G|}\log N+\mathcal M_C+O(N^{-1}),
+\end{equation}
+uniformly over the finite set of conjugacy classes, where
+\begin{equation}\label{eq:class-mertens-constant}
+  \mathcal M_C=
+  \frac{|C|}{|G|}\left(
+    \mathcal M(A)+
+    \sum_{\rho\neq\mathbf1}
+       \overline{\chi_\rho(C)}\Pi_{\chi_\rho}(\lambda^{-1})
+  \right).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+M\"obius inversion of
+\(\Tr(A^n)=\sum_{d\mid n}d p_d\) gives
+\[
+  p_n=\frac1n\sum_{d\mid n}\mu(d)\Tr(A^{n/d}).
+\]
+If \(\theta<\lambda\) bounds the non-Perron spectrum of \(A\), then
+\(\Tr(A^n)=\lambda^n+O(\theta^n)\).  The term \(d=1\) therefore gives
+\(p_n\lambda^{-n}=n^{-1}+O((\theta/\lambda)^n/n)\), while the divisors
+\(d\geq2\) contribute \(O(d(n)\lambda^{-n/2}/n)\).  This proves absolute
+convergence in \eqref{eq:scalar-finite-part}; comparison with
+\(H_N=\log N+\gamma+O(N^{-1})\) proves \eqref{eq:scalar-mertens}.
+
+The scalar Euler identity is
+\[
+  -\Log_0\det(I-zA)
+  =\sum_{r\geq1}\frac{\Pi_{\mathbf1}(z^r)}r.
+\]
+Put \(z=t/\lambda\), add \(\log(1-t)\), and let \(t\uparrow1\).  The
+\(r=1\) term tends to \(\mathcal F(A)\), because
+\(\sum_{n\geq1}t^n/n=-\log(1-t)\); the \(r\geq2\) terms pass to the limit by
+absolute convergence.  This proves \eqref{eq:scalar-c-relation}.
+
+For the class statement, character orthogonality gives
+\begin{equation}\label{eq:class-indicator}
+  \mathbf1_C(g)=\frac{|C|}{|G|}
+     \sum_{\rho\in\Irr(G)}
+        \overline{\chi_\rho(C)}\chi_\rho(g).
+\end{equation}
+Hence
+\[
+  p_{n,C}=\frac{|C|}{|G|}
+   \left(p_n+\sum_{\rho\neq\mathbf1}
+     \overline{\chi_\rho(C)}c_n(\chi_\rho)\right).
+\]
+Coefficient extraction in \eqref{eq:primitive-adams-mobius} gives
+\begin{equation}\label{eq:primitive-coefficient-bound-start}
+  c_n(\chi_\rho)=\frac1n\sum_{m\mid n}\mu(m)
+       T_{n/m}(\psi^m\chi_\rho).
+\end{equation}
+Let
+\[
+ a_*:=\max_{\rho,\pi,m}\abs{a_{\rho,\pi}^{(m)}},
+ \qquad D_*:=\max_{\pi\in\Irr(G)}|V|\dim\pi.
+\]
+The maximum defining \(a_*\) is finite because the Adams coefficients are
+periodic in \(m\).  The trace bound in
+\Cref{lem:perron-weighted-domination} and the definition of \(\eta\) give the
+explicit estimate
+\begin{align}
+ \abs{c_n(\chi_\rho)}
+ &\le \frac{D_\rho\eta^n}{n}
+   +\frac{a_*|\Irr(G)|D_*}{n}
+       \sum_{\substack{m\mid n\\m\ge2}}\lambda^{n/m}
+       \label{eq:explicit-primitive-trace-bound}\\
+ &\le \frac{D_\rho\eta^n+
+       a_*|\Irr(G)|D_*d(n)\lambda^{n/2}}{n}.
+\end{align}
+Thus \(\sum_n\abs{c_n(\chi_\rho)}\lambda^{-n}\) converges with an
+exponentially decreasing tail.  Summing the class-indicator identity and
+using \eqref{eq:scalar-mertens} proves
+\eqref{eq:class-mertens}--\eqref{eq:class-mertens-constant}.
+\end{proof}
+
+We can now state the product theorem in its focused form.
+
+\begin{theorem}[Adams-corrected Frobenius-class product constant]
+\label{thm:correct-product}
+Let \(A\) be primitive with Perron root \(\lambda>1\), let
+\(\tau:E(\Gamma)\to G\), and assume the certified strict twisted gap
+\(\eta<\lambda\).  For every conjugacy class \(C\subset G\), the product
+\eqref{eq:intro-class-product} satisfies
+\begin{equation}\label{eq:correct-product-asymptotic}
+  P_C(N)=K_C N^{-|C|/|G|}\bigl(1+O(N^{-1})\bigr),
+\end{equation}
+with an error uniform in \(C\).  The positive constant is
+\begin{equation}\label{eq:correct-product-orbit}
+  K_C=\exp\!\left(
+    -\mathcal M_C-
+    \sum_{r\geq2}\frac{\Pi_{\mathbf1_C}(\lambda^{-r})}{r}
+  \right),
+\end{equation}
+and equivalently
+\begin{equation}\label{eq:correct-product-fourier}
+  K_C=\exp\!\left\{-\frac{|C|}{|G|}
+    \left(\gamma+\log C(A)+
+      \sum_{\rho\neq\mathbf1}
+       \overline{\chi_\rho(C)}F_{\chi_\rho}(\lambda^{-1})
+    \right)\right\}.
+\end{equation}
+Finally, the fixed-label values in \eqref{eq:correct-product-fourier} are
+the Adams-corrected finite-determinant coordinates
+\begin{equation}\label{eq:correct-product-determinant-coordinate}
+ F_{\chi_\rho}(\lambda^{-1})=\mathfrak F_\rho,
+\end{equation}
+where \(\mathfrak F_\rho\) is the derived radial expression
+\eqref{eq:perron-fixed-determinant}.  Thus neither a branch family nor a
+peripheral factorization is an additional input beyond the polynomials,
+\(\lambda\), and the fixed radial convention.
+\end{theorem}
+
+\begin{proof}
+Taking real logarithms in \eqref{eq:intro-class-product} gives
+\begin{align}
+  \log P_C(N)
+  &=-\sum_{n\leq N}p_{n,C}\lambda^{-n}
+    -\sum_{r\geq2}\frac1r
+       \sum_{n\leq N}p_{n,C}\lambda^{-rn}.
+       \label{eq:product-log-split}
+\end{align}
+The first term is handled by \eqref{eq:class-mertens}.  Since
+\(0\leq p_{n,C}\leq p_n\ll\lambda^n/n\), the second double series converges
+absolutely and its omitted tail is \(O(\lambda^{-N}/N)\), uniformly in
+\(C\).  Therefore
+\[
+  \log P_C(N)=-\frac{|C|}{|G|}\log N+\log K_C+O(N^{-1}),
+\]
+with \(K_C\) as in \eqref{eq:correct-product-orbit}.  Exponentiation proves
+\eqref{eq:correct-product-asymptotic}.
+
+Apply the class-indicator expansion \eqref{eq:class-indicator} first to
+\(\mathcal M_C\) and then to the absolutely convergent \(r\geq2\) tail.
+The trivial coordinate becomes
+\[
+ \mathcal M(A)+\sum_{r\geq2}\Pi_{\mathbf1}(\lambda^{-r})/r
+ =\gamma+\log C(A)
+\]
+by \eqref{eq:scalar-c-relation}.  For \(\rho\neq\mathbf1\), the corresponding
+coordinate is
+\[
+ \Pi_{\chi_\rho}(\lambda^{-1})+
+ \sum_{r\geq2}\Pi_{\chi_\rho}(\lambda^{-r})/r
+ =F_{\chi_\rho}(\lambda^{-1}).
+\]
+This proves \eqref{eq:correct-product-fourier}.  Complex conjugate
+representations pair to make the bracket real; positivity is also immediate
+from \eqref{eq:correct-product-orbit}.  The determinant identity
+\eqref{eq:correct-product-determinant-coordinate} is
+\Cref{lem:perron-fixed-coordinate}.
+\end{proof}
+
+\begin{corollary}[Homogeneous union of Frobenius classes]
+\label{cor:homogeneous-union-constant}
+Let \(\mathcal C_\ell\) be any collection of conjugacy classes; in the
+homogeneous-extension application, these are the classes for which the cyclic
+subgroup action has partition type \(\ell\).  Put
+\[
+ P_\ell(N):=\prod_{C\in\mathcal C_\ell}P_C(N),
+ \qquad
+ \delta_\ell:=\frac1{|G|}\sum_{C\in\mathcal C_\ell}|C|.
+\]
+Under the hypotheses of \Cref{thm:correct-product},
+\begin{equation}\label{eq:homogeneous-union-product}
+ P_\ell(N)=K_\ell N^{-\delta_\ell}\bigl(1+O(N^{-1})\bigr),
+\end{equation}
+where \(K_\ell=\prod_{C\in\mathcal C_\ell}K_C\) and
+\begin{equation}\label{eq:homogeneous-union-constant}
+ \begin{split}
+ \log K_\ell={}&-\delta_\ell\bigl(\gamma+\log C(A)\bigr)\\
+ &-\frac1{|G|}\sum_{\rho\ne\mathbf1}
+   \left(\sum_{C\in\mathcal C_\ell}
+       |C|\,\overline{\chi_\rho(C)}\right)
+       F_{\chi_\rho}(\lambda^{-1}).
+ \end{split}
+\end{equation}
+This is the fixed-label replacement for an Artin-coordinate constant in the
+homogeneous-extension theorem.
+\end{corollary}
+
+\begin{proof}
+Multiply the finitely many asymptotics
+\eqref{eq:correct-product-asymptotic}.  Summing the logarithms in
+\eqref{eq:correct-product-fourier} gives
+\eqref{eq:homogeneous-union-constant}.
+\end{proof}
+
+The theorem permits a direct audit of the older formula, before any limit is
+taken.  For
+\[
+  \Pi_{\chi,N}(z):=
+  \sum_{\substack{\gamma\in\cP\\|\gamma|\leq N}}
+     \chi(g_\gamma)z^{|\gamma|},
+\]
+character orthogonality gives the exact identity
+\begin{equation}\label{eq:exact-truncated-product-identity}
+  -\log P_C(N)=\frac{|C|}{|G|}
+  \sum_{\rho\in\Irr(G)}\overline{\chi_\rho(C)}
+    \sum_{r\geq1}\frac{\Pi_{\chi_\rho,N}(\lambda^{-r})}{r}.
+\end{equation}
+The \(r\)-th term on the right contains \(\chi_\rho(g_\gamma)\), not
+\(\chi_\rho(g_\gamma^r)\).
+
+\begin{theorem}[Formal correction of the Mohamed--Noorani constant]
+\label{thm:formal-correction}
+Let the base matrix be primitive, with Perron root \(\lambda>1\), and assume
+the extension-level aperiodicity condition
+\begin{equation}\label{eq:historical-correction-gap}
+ \max_{\rho\ne\mathbf1}\rad(A_\rho)<\lambda.
+\end{equation}
+Then the Frobenius-class product has exponent \(|C|/|G|\) and constant
+\eqref{eq:correct-product-fourier}; its non-trivial character coordinate is
+\(F_{\chi_\rho}(\lambda^{-1})\), not the periodic Artin logarithm
+\(L_{\chi_\rho}(\lambda^{-1})\) in general.  Mixing of the base alone implies
+neither the exponent \(|C|/|G|\) nor the asserted Artin-coordinate formula.
+
+More precisely, the proof of
+\cite[Theorem~1, pp.~124--125]{MeslizaNoorani1999FrobeniusMertens}
+correctly expands the indicator of \(C\) by irreducible characters, but then
+identifies
+\begin{equation}\label{eq:mn-fixed-sum}
+  \sum_{\gamma\in\cP}\sum_{r\geq1}
+     \frac{\chi_\rho(g_\gamma)}{r}
+       \lambda^{-r|\gamma|}
+\end{equation}
+with the logarithm of its Artin \(L\)-function.  Under the definition of that
+\(L\)-function in
+\cite[p.~121]{MeslizaNoorani1999FrobeniusMertens}, its logarithm is instead
+\begin{equation}\label{eq:mn-artin-sum}
+  \sum_{\gamma\in\cP}\sum_{r\geq1}
+     \frac{\chi_\rho(g_\gamma^r)}{r}
+       \lambda^{-r|\gamma|}.
+\end{equation}
+The substitution \eqref{eq:mn-fixed-sum}\(={}\)
+\eqref{eq:mn-artin-sum} is the erroneous step.  Their difference is exactly
+\begin{equation}\label{eq:mn-correction-difference}
+  F_{\chi_\rho}(\lambda^{-1})-L_{\chi_\rho}(\lambda^{-1})
+  =\sum_{r\geq2}\frac{
+    \Pi_{\chi_\rho}(\lambda^{-r})-
+    \Pi_{\psi^r\chi_\rho}(\lambda^{-r})}{r}.
+\end{equation}
+Here, and in transporting the formula from the two-sided convention of the
+cited article, the correspondence is the one in
+\Cref{lem:convention-bridge}: \(C\mapsto C^{-1}\) and
+\(\rho\mapsto\bar\rho\).  Every Artin logarithm is the branch normalized at
+zero and continued along \(0\le z\le\lambda^{-1}\).  Replacing every
+non-principal Artin logarithm in the asserted constant by
+the corresponding fixed-label value \(F_{\chi_\rho}(\lambda^{-1})\) yields
+\eqref{eq:correct-product-fourier}.  Under
+\eqref{eq:historical-correction-gap}, the Euler constant, scalar
+reduced-determinant factor, and exponent require no further change.
+\end{theorem}
+
+\begin{proof}
+Equation \eqref{eq:exact-truncated-product-identity} proves that the product
+selects the fixed-label sum \eqref{eq:mn-fixed-sum}.  The periodic orbit
+expansion in \Cref{lem:trace-log} proves
+\eqref{eq:mn-artin-sum}.  Their exact difference is
+\Cref{prop:artin-substitution-obstruction}.  The limiting constant and its
+scalar normalization are supplied by \Cref{thm:correct-product}.  The
+strict-gap \(S_3\) system in \Cref{thm:s3-contradiction} has
+\(L_\varepsilon(1/2)=0\) but \(F_\varepsilon(1/2)<0\), so the invalid
+  substitution is not a harmless identity at the evaluation point.  This also
+  excludes the possibility that the two displayed constants merely use
+  different notations for the same number.  The failure of the exponent under
+  mixing of the base alone is established by
+  \Cref{rem:trivial-cocycle-counterexample}.
+\end{proof}
+
+\begin{remark}[Mixing of the base does not suffice]
+\label{rem:trivial-cocycle-counterexample}
+Let the base be the full two-shift, represented by the one-vertex matrix
+\(A=[2]\), let \(G=C_2=\{e,s\}\), and label both loops by \(e\).  The base is
+mixing and \(\lambda=2\), but no primitive orbit has Frobenius class \(\{s\}\).
+Consequently
+\[
+ p_{n,\{s\}}=0\quad(n\ge1),
+ \qquad P_{\{s\}}(N)=1\quad(N\ge1),
+\]
+whereas the exponent \(|\{s\}|/|C_2|=1/2\) would force decay proportional to
+\(N^{-1/2}\).  For the sign representation \(\varepsilon\),
+\[
+ A_\varepsilon=A,
+ \qquad \rad(A_\varepsilon)=2=\lambda.
+\]
+Thus the regular extension is not transitive and aperiodic, the strict
+twisted gap fails, and the printed base-mixing hypothesis cannot imply the
+claimed Frobenius density.  This defect is independent of the replacement
+of \(L_\rho\) by \(F_\rho\).
+\end{remark}
+
+\begin{remark}[Effect on subsequent class-Mertens statements]
+\label{rem:post-1999-scope}
+The finite homogeneous extension must satisfy an extension-level
+transitivity/aperiodicity hypothesis, and its union-of-classes constant is
+\eqref{eq:homogeneous-union-constant}.  The sofic-shift discussion in
+\cite[Sec.~4.3]{NordinNooraniMohd2024OrbitGrowthSoficPFT} assumes that the
+finite-group extension itself is topologically mixing and denotes its
+positive constants abstractly; it does not reproduce the non-principal
+Artin-coordinate evaluation.  Its displayed exponent and order statements
+are therefore not changed by the coordinate correction.  Any evaluation of
+those abstract constants through the explicit 1999 Artin formula must,
+however, use \eqref{eq:correct-product-fourier} and
+\eqref{eq:homogeneous-union-constant} instead.
+\end{remark}
+
+\begin{remark}[Extent of the correction]
+Under an extension-level strict gap, the correction concerns the
+character-dependent constant and not the classical scalar Mertens
+normalization.  Under mixing of the base alone, the leading Frobenius density
+may also fail, as \Cref{rem:trivial-cocycle-counterexample} shows.  No claim
+of priority is made for Frobenius-class Mertens asymptotics or for the
+classical necklace/Witt inversion used in their analysis.
+\end{remark}

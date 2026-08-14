@@ -1,0 +1,50 @@
+One precise bibliographic correction. Do not ask for design approval, do not run any
+brainstorming or approval workflow, do not change any mathematics, and do not touch any
+theorem statement or proof. Proceed directly.
+
+We cite two DIFFERENT mathematicians as one person, in the exact passage where we concede
+priority. Both are verified against Crossref:
+
+  Nishioka1982MahlerFunctionValues
+    = KUMIKO Nishioka, "On a problem of Mahler for transcendency of function values",
+      J. Austral. Math. Soc. Ser. A 33 (1982), no. 3, 386-393,
+      doi 10.1017/S1446788700018814.
+
+  Nishioka1985AlgebraicSolutions
+    = KEIJI Nishioka, "Algebraic function solutions of a certain class of functional
+      equations", Arch. Math. (Basel) 44 (1985), 330-335, doi 10.1007/BF01235775.
+
+Keiji Nishioka is a different person from Kumiko Nishioka. He also wrote "A note on the
+transcendency of the first transcendent of Painleve", Nagoya Math. J. 109 (1988) 63-67.
+
+Our references.bib currently writes BOTH as "K.~Nishioka", and the prose refers to them
+as a single author - for example "Nishioka's special-value and algebraic-solution
+rationality theorems" and "both Nishioka theorems". The journal, volume and page data we
+have are correct; only the author identity and the singular prose are wrong.
+
+Required:
+ - Set the two author fields to "Kumiko Nishioka" and "Keiji Nishioka" respectively, and
+   add the DOIs.
+ - Go through every occurrence in the text and name them separately and correctly. Known
+   locations: main.tex around lines 88-89 and 135-137; sec_inverse_introduction.tex around
+   90-93, 207-211, 232-236; sec_inverse_conclusion.tex around line 30;
+   sec_refocused_boundary_collisions_part1.tex around 256, 385-397, 456-457, 484; and
+   artifacts/literature_check.md. Search for every other occurrence too - do not rely on
+   this list being complete.
+ - No phrasing may remain that treats them as one person. In particular "both Nishioka
+   theorems" must go. Where the two results are used together, attribute each explicitly.
+ - The special-value theorem is Kumiko's (1982); the algebraic-solution rationality
+   theorem is Keiji's (1985). Check each occurrence against which theorem is actually
+   being used and attribute accordingly - do not assume the existing text got the pairing
+   right.
+
+Then:
+ - Clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined references,
+   zero undefined citations, zero multiply-defined labels, for main and supplement.
+ - Re-run artifacts/verify*.py and artifacts/test_*.py and report pass counts.
+ - Regenerate artifacts/SHA256SUMS. Write it with UNIX (LF) line endings, not CRLF -
+   CRLF breaks "sha256sum -c" on Linux and macOS, which is where a referee will run it.
+   Also state in REPRODUCE.md that the checksum file is to be verified from the paper
+   root directory, since its paths are relative to that root.
+ - No revision marks anywhere.
+ - Report: every location changed, and which of the two theorems each one cites.
