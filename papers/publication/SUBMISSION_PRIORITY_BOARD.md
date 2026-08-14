@@ -14,16 +14,18 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 页 | 当前动作 | 在飞 id | **去向** |
-|---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | **67** | ✅ 已修已提交（$r\ge1$ 纳入定理） | — | **Potential Analysis** |
-| **A3** `sharp_three_window` | 63 | codex 修复中 | — | DCDS-A;备选 TCS |
-| **A4** `prime_languages` | 25+43 | ✅ 投稿包已复核 | — | Monatshefte |
-| **A5** `finite_parts` | 33+19 | ✅ 投稿包已复核;codex 修 Nishioka 署名 | — | ETDS |
-| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交（定理 36→33） | — | **JNT** |
-| **A7** `upper_fibers` | 27 | 外审在飞（worker 活跃） | `6496b45e` | Fibonacci Quarterly |
-| **A8** `detector_shells` | 62 | **拒稿** → codex 修复中 | — | **Methodology and Computing in Applied Probability** |
-| **A9** `homological_visibility` | 48+50 | **拒稿** → codex 修复中 | — | **Cahiers de Topologie**（修订后 35–50%）|
+| 篇 | 页 | 当前动作 | **去向** |
+|---|--:|---|---|
+| **A2** `cayley_chebyshev` | 67 | ✅ 已修已提交（$r\ge1$ 纳入定理） | **Potential Analysis** |
+| **A3** `sharp_three_window` | **57** | ✅ 已修已提交（三处证明补全，页数反减 6） | **DCDS-A**（无须降投）|
+| **A4** `prime_languages` | 25+43 | ✅ 投稿包已复核 | Monatshefte |
+| **A5** `finite_parts` | 33+19 | ✅ 投稿包已复核;codex 修 Nishioka 署名 | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交（定理 36→33） | **JNT** |
+| **A7** `upper_fibers` | 27 | **拒稿重投** → codex 修复中 | Fibonacci Quarterly |
+| **A8** `detector_shells` | 62 | **拒稿** → codex 修复中 | **Methodology and Computing in Applied Probability** |
+| **A9** `homological_visibility` | 48+50 | **拒稿** → codex 修复中 | **Cahiers de Topologie**（修订后 35–50%）|
+
+**七篇全部走完外审。六篇存在优先权遗漏，三篇因补充材料未随投而被扣分。**
 
 
 
@@ -39,11 +41,17 @@
 
 
 
-> **TICK 30 — 无可收割，把 A9 的优先权指控定位到行**。池子 1/6,A7 `6496b45e` 仍在 `waiting_response`,但 worker `..._1_tab_3` 26 秒前还活着,是真在算不是卡死(A9 那份也跑了约 48 分钟才回),**不取消**。四个 codex 全在跑,八篇零闲置,内存 1.48 GB。
+
+> **TICK 31 — 外审全部收齐;A7 拒稿重投,同一个坑第三次**。池子归零、六 worker 全空闲,七篇外审至此走完。
 >
-> 审稿人说 A9 漏了一条**定理层级**的先例。核实后是更准确的一句话:**不是没引 Giraud,是引错了章**。全文六处都引 `[Chap.~IV]`(banded gerbe 按 $H^2$ 的**分类**),而缺的是 **Chap. III, Prop. 2.1.5.3** 的**构造**——对任意 stack $S$,$S	o\pi_0(S)$ 是其分支层上的 gerbe,沿截面拉回即得极大子 gerbe,这正是 Theorems 4.8(i)/4.9 的结构内容。最该动的是 `sec_gerbe_obstruction.tex:349`:那里**手工验证局部同构后再引 Chap. IV**,而 III.2.1.5.3 直接给出该构造。已连同审稿人给的最小修复原句记入 `PENDING_FIXES.md`。
+> **A7 的两条缺陷与 A9 如出一辙。** 审稿人同样**未找到反例**推翻其核心分类(精确秩纤维 $B_n=lpha^{-1}(n)$ 的整除极小元归约为带降阶见证的不可约 lcm-覆盖,及平方自由切片的加权计数),拒稿理由是:①**Theorem 5.1 与 5.10 的上界调用了只存在于未随投补编中的 prime–ladder alternative 与 prime-power lifting**,而这两处直接撑起第 4、5 项主张,不是可选技术补充——**这是补充材料第三次让我们丢分**(A4、A9、A7);②**漏引 Wagner 1978**。
 >
-> 他另一句值得记住:未找到把那条两标签 wedge 分类逐字发表过的定理,但**这不构成实质优先权**——由标准等价复合出来的精确陈述可以形式上是新的,而几乎没有独立数学优先权。这条对我们整批论文都适用。
+> Wagner 已核实:*Minimal multiplicative covers of an integer*, Discrete Math. **24**(1) (1978) 87–94, `10.1016/0012-365X(78)90175-9`——他研究的正是 $\operatorname{lcm}(d_1,\dots,d_r)=n$ 而去掉任一个后 lcm 变小的除数组,并明确视之为有限集极小覆盖的乘法推广。检索还带出审稿人提到却未点名的前身:**Hearne & Wagner, *Minimal covers of finite sets*, Discrete Math. **5** (1973) 247–251**——我们的覆盖骨架正处在这条谱系上,两篇都得引。
+>
+> 另须:标注/未标注对象的转换要讲清;**BLMS 猜想同时排斥 H1 与 H2**,我们那两条应改名 sufficient maximum-window hypotheses,若仍称猜想则必须写明我们在此点上作出与 BLMS 不相容的预测;Corollary 5.14 改为纯条件推论。
+>
+> **内存假警报一次**:一度只剩 539 MB,查明是 A5 自己的 verifier 与 unittest 在 06:19:51 同时起跑的峰值(两进程各 1.3 GB),随即回落到 134/128 MB,**不是孤儿泄漏,没有误杀正在干活的 agent**。现 3.1 GB。
+
 
 
 
