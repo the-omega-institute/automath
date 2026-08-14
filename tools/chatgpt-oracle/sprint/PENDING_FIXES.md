@@ -82,3 +82,37 @@ Hu 那条（TAMS，黄金分割 Bernoulli 卷积的局部维数）尚未独立�
   若无法确认,宁可在正文中以"据审稿意见指出的先验结果"方式谨慎处理,也不要
   编造一条参考文献。
 - **He–Zhang** 的 generalized-Erlang / Coxian 理论,同样尚未核实。
+
+## A9 `homological_visibility` — Giraud 遗漏的确切位置（已定位到行）
+
+审稿人称我们漏了一条**定理层级**的先例。核实结果：**不是没引 Giraud，是引错了章**。
+
+`references.bib:230` 的 `Giraud1971` 条目本身正确（Jean Giraud, *Cohomologie non
+abélienne*, Grundlehren der math. Wiss. **179**, Springer-Verlag, 1971），书名法文
+变音符缺失（`abelienne` → `abélienne`）可顺手补。
+
+问题在于全文**只引 `[Chap.~IV]`**（banded gerbe 按 $H^2$ 的**分类**），而审稿人指出
+所缺的是 **Chap. III, Prop. 2.1.5.3** 的**构造**：对任意 stack $S$，投影
+$S	o\pi_0(S)$ 使其成为其连通分支层上的 gerbe，沿 $\pi_0(S)$ 的截面拉回即得相应的
+极大子 gerbe。这正是 Theorems 4.8(i) 与 4.9 的结构内容。
+
+**最该动的一行**：`sec_gerbe_obstruction.tex:349` ——
+
+> Thus any two objects of $\mathfrak E_r[v](U)$ are locally isomorphic. The full
+> substack $\mathfrak E_r[v]$ is therefore a gerbe \cite[Chap.~IV]{Giraud1971},
+> \cite[Tag 06NY]{StacksProject}.
+
+此处手工验证了局部同构再引 Chap. IV 的分类，而 III.2.1.5.3 直接给出该构造。
+其余 `[Chap.~IV]` 引用点：`sec_gerbe_obstruction.tex` 的 17、227、365、647，
+`sec_homological_visibility_intrinsic.tex:533`，`sec_introduction.tex:30`。
+
+审稿人给出的最小修复原文（置于 Theorem 4.8 之前）：
+
+> By Giraud III.2.1.5.3, $E	o\pi_0(E)$ is a gerbe over its component sheaf, and the
+> pullback along a section is the corresponding maximal subgerbe. The following theorem
+> records this standard construction together with the compatibility needed for our
+> later presheaf comparison.
+
+他同时明确：$v\mapsto[E[v]]$ 这个打包**有用但不是新的构造原理**。
+另外他说未找到把那条两标签 wedge 分类逐字发表过的定理，但**这不构成实质优先权**——
+由标准等价复合出来的精确陈述可以形式上是新的，而几乎没有独立的数学优先权。
