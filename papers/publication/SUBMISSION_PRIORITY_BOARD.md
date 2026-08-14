@@ -14,15 +14,15 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 轮次 | 页 | 档位(独立评估 / referee 裁决) | **PRIMARY** | 状态 |
+| 篇 | 轮次 | 页 | referee 裁决 / 档位 | **PRIMARY** | 状态 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r7 | 65 | **JFA referee：现版本拒稿（优先权，非反例）** | JFA 待重估 | 优先权核实中 |
-| **A3** `sharp_three_window` | r6 | 63 | TIER-4，具名问题「不可达到」 | **DCDS-A** | 空闲 |
-| **A4** `prime_languages` | r6 | 22 | TIER-3，障碍为量词结构不匹配 | **Monatshefte** | 空闲 |
-| **A5** `finite_parts` | r8 | 32 | TIER-3 / 上 TIER-3 | **DCDS** | referee 在飞 |
-| **A6** `zeckendorf_fibers` | r10 | 59 | TIER-3，**专家相变边界两次皆错** | **JNT** | 空闲 |
-| **A7** `upper_fibers` | r7 | 26+32 | TIER-4，称可闭合 FJMV 两问题 | **Fibonacci Quarterly** | 检验中 |
-| **A8** `detector_shells` | r9 | **62** | TIER-4，**尖锐边界已用新证明恢复** | **Stochastic Models** | 空闲 |
+| **A2** `cayley_chebyshev` | r7 | 66 | **拒稿（优先权，非反例）→ 已据实重写** | JFA 待重估 | 空闲 |
+| **A3** `sharp_three_window` | r6 | 63 | 具名问题不可达 | **DCDS-A** | referee `dcf7b78f` |
+| **A4** `prime_languages` | r6 | 22 | 量词结构不匹配 | **Monatshefte** | referee `9e1be8e0` |
+| **A5** `finite_parts` | r8 | 32 | **拒稿后重投：端点类剖面非有限值（数学缺陷）** | **DCDS/ETDS** | 修复中 |
+| **A6** `zeckendorf_fibers` | r10 | 59 | 专家相变边界两次皆错 | **JNT** | referee `2ad5d848` |
+| **A7** `upper_fibers` | r7 | 27 | **已解决 FJMV 两个问题（更强素数形式）** | **Fibonacci Quarterly** | 空闲 |
+| **A8** `detector_shells` | r9 | 62 | 尖锐边界已用新证明恢复 | **Stochastic Models** | 空闲 |
 | **A9** `homological_visibility` | r1 | 96 | TIER-4，有 crossed-module 具名路线 | TAC / Logic and Analysis | 空闲 |
 
 
@@ -32,13 +32,9 @@
 
 
 
-> **TICK 20 — A5 审稿发现一处真正的数学陈述缺陷**。ETDS 级裁决：**拒稿后重投**（非小修，也不宜按常规大修）。开 Perron 区间主定理**不是问题**——审稿人逐层核查了依赖链（固定标签与行列式坐标 → 二进制 Adams–Möbius 稀疏化 → 代数碰撞提升 → 有理余边界次数界 → 逐字符消除 → Fourier 反演），判定 Theorem 3.16 的跨底图步骤闭合、有限径向决定结论很可能确有新意。
->
-> 缺陷有两处：① **Perron 端点类 Euler 剖面被当作有限量使用，但按本文自身定义它并非有限值**——这是数学陈述缺陷，必须删除或正规化；② 固定 Frobenius 类 Euler 乘积、代数 Mahler 解有理性两条直接在先文献**未做比较**，关系到核心原创性边界。已派 agent 逐条修复。
->
-> **A2 优先权已据实重写**：Chen–Niles-Weed 的 Gaussian 首失配矩结果归还原主，本文贡献重述为扣除后存活的部分（推进到重尾各向同性稳定核 + 临界绝对矩指数 + 端点充分 + 完整矩类统一锐性）。agent 自评亦如实保留：**优先权叙述现已准确，稳定核定理技术上可信可发表，但审稿人的档位判断依然成立——现形态并非稳妥的 JFA 稿**。
->
-> A3/A4/A6 三份 referee 外审已发出（`dcf7b78f` / `9e1be8e0` / `2ad5d848`）。
+
+> **TICK 21 — A7 解决了他人正式提出的问题**，这是本次冲刺第一次。新章节 `sec_prime_inverse_dynamics` 证：对每个正固定点阶 $k\ge1$ 存在无穷多素数具有固定点阶 $k$；秩映射每个固定点 $x>5$ 的吸引域含无穷多素数——**以更强的素数形式解决了 FitzGibbons–Javaheri–Miller–Verga 的两个问题**。检验前我先要求核查两点：原问题问的是"无穷多互素整数"，量词不同，须确认是真蕴含而非形似；以及两问题**确实仍未解决**。两项均通过。范围如实写明：**只用到精确秩素数存在性，未动加权覆盖机器**——这消耗的是本文机器最薄的一层，对"这条结果能把论文抬多高"是必要的诚实说明。22 测试 + 566 子测试、27 页零未定义。
+
 
 
 
