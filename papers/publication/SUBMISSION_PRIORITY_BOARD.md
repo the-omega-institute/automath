@@ -16,14 +16,14 @@
 
 | 篇 | 页 | referee 裁决 | 优先权问题 | **去向** |
 |---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | 66 | 拒稿（优先权） | **漏引 Chen–Niles-Weed** → 已重写 | JFA 待重估 |
-| **A3** `sharp_three_window` | 63 | **Major Revision** | **碰撞图—有向环—可逆性判定属经典一维局部码/tessellation automata/pair-graph 传统** | DCDS-A |
-| **A4** `prime_languages` | 22 | **Major Revision** | Seki–Matsumura–Fujii–Kasami 比较需深化 | Monatshefte |
-| **A5** `finite_parts` | 32 | **拒稿后重投** | 固定 Frobenius 类 Euler 乘积等未比较；另有**端点类剖面非有限值**之数学缺陷 | DCDS/ETDS |
-| **A6** `zeckendorf_fibers` | 59 | **拒稿**（不建议大修重审） | **黄金分割 Bernoulli 卷积正 $q$ 压力公式早于本稿近三十年**，全实 $q$ 与负 $q$ 相变亦有文献 | TAMS 不可达，JNT 存疑 |
+| **A2** `cayley_chebyshev` | 66 | 拒稿（优先权） | 漏引 Chen–Niles-Weed → 已重写 | JFA 待重估 |
+| **A3** `sharp_three_window` | 63 | Major Revision | 碰撞图判定属经典 pair-graph 传统 | DCDS-A |
+| **A4** `prime_languages` | **25** | Major Revision → **已修** | SMFK 比较已深化 | Monatshefte |
+| **A5** `finite_parts` | **33** | 拒稿后重投 → **已修** | **Ostrowski(1968)、Nishioka(1985) 直接蕴含**；新颖性已收窄至三项 | DCDS/ETDS |
+| **A6** `zeckendorf_fibers` | 59 | **拒稿** | 黄金分割 Bernoulli 卷积正 $q$ 压力早三十年 | TAMS 不可达 |
 | **A7** `upper_fibers` | 27 | — | — | Fibonacci Quarterly（已解决 FJMV 两问题）|
 | **A8** `detector_shells` | 62 | — | — | Stochastic Models（尖锐边界已恢复）|
-| **A9** `homological_visibility` | 96→压缩中 | — | — | TAC / Logic and Analysis |
+| **A9** `homological_visibility` | **48**+50 | — | — | TAC / Logic and Analysis |
 
 
 
@@ -34,12 +34,15 @@
 
 
 
-> **TICK 24 — 优先权遗漏已是系统性问题，不是个案**。A3 与 A6 的审稿意见同时返回，各查出一处实质优先权遗漏，加上此前的 A2、A5，**五篇送审的论文中有四篇存在优先权问题**。
+
+> **TICK 25 — A9 压缩一次通过；A5/A4 审稿修复入库**。
 >
-> - **A6（最严重）**：拒稿，且明确不建议在 TAMS 程序内按大修重审。**理由不是未解决具名问题**——审稿人未发现可立即构成反例的核心公式，有限窗恒等式、更新结构、临界常数、非暴露斜率填充大体自洽。问题是稿件**遗漏了 Erdős 测度、黄金分割 Bernoulli 卷积及其 $L^q$ 谱文献**：**正 $q$ 压力公式早于本稿近三十年**，全实 $q$ 扩张与负 $q$ 相变亦有明确文献。故"一层/有限窗全实压力"与"一阶冻结相变"的新颖性边界**不能成立**。
-> - **A3**：Major Revision。碰撞图—有向环—可逆性判定属经典一维局部码、tessellation automata、cellular automata、fiber-product/pair-graph 传统，不能作为本文首创；另有 Lemma 5.3/6.7/6.8 若干参数一致估计压缩过度。
+> **A9 96→48 页**（+50 页补充材料），是本项目第四次压缩、**第一次一遍通过**——因为把 A2/A4/A6/A7 挣来的四条硬规则**前置写进任务书**而非等它重新踩坑。清理重建下两文档四项缺陷全 0、定理环境 159 无损、68 个迁移标签零缺失、最大文件 767 行合规。**表述与篇幅两道障碍现已全部清除。**
 >
-> **共同教训**：这四处遗漏没有一处是靠"再加一条定理"能发现的，全部由 referee 式外审查出。**文献核查必须前置到写作之前，而非投稿之后。**
+> **A5** 删除了不可审计的计算极小性命题（2208/48/0 仅保留为 verifier 诊断），并按审稿要求做了优先权比较——代价是确认 **Ostrowski (1968) 处理线性乘性方程、Nishioka (1985) 直接蕴含** $F(z^2)=H(z)^{-1}F(z)^2$ 的代数解为有理。存活的新颖性收窄为三项：宇称相容代数碰撞提升、有效有理余边界界与重构、跨底初等二群结果。37 测试、33 页。
+>
+> **A4** 修复入库，测试 16→19+6 子测试、25 页。
+
 
 
 
