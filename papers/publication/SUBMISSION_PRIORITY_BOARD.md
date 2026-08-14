@@ -16,22 +16,26 @@
 
 | 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r7 | **65** | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 提问稿待派 |
-| **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 提问稿生成中 |
-| **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | 提问稿生成中 |
+| **A2** `cayley_chebyshev` | r7 | 65 | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 空闲 |
+| **A3** `sharp_three_window` | **r6** | 63 | TIER-4 | **DCDS-A** | `fb4b4c73` |
+| **A4** `prime_languages` | **r6** | 22 | TIER-3 | **Monatshefte** | `b85cb7f1` |
 | **A5** `finite_parts` | r8 | 28 | TIER-3 / 上 TIER-3 | **DCDS** | 执行中 |
-| **A6** `zeckendorf_fibers` | r9 | 59 | TIER-3 | **JNT** | 提问稿生成中 |
-| **A7** `upper_fibers` | r6 | 26+32 | TIER-4 | **Fibonacci Quarterly** | 提问稿生成中 |
-| **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | `ad5ce98e` |
-| **A9** `homological_visibility` | **r1** | 96 | TIER-4 待重估 | TAC / Logic and Analysis | `20a5e73f` |
+| **A6** `zeckendorf_fibers` | **r10** | 59 | TIER-3 | **JNT** | `9210a56f` |
+| **A7** `upper_fibers` | **r7** | 26+32 | TIER-4 | **Fibonacci Quarterly** | `560da0d5` |
+| **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | 检验中 |
+| **A9** `homological_visibility` | r1 | 96 | TIER-4 待重估 | TAC / Logic and Analysis | `20a5e73f` |
 
 
 
 
 
-> **TICK 12 — A2 全阶合成定理证成入库**。`thm:all-order-stable-first-unmatched-moment` 与 `lem:all-order-stable-critical-remainder` 已整合：把一维 Cauchy 核任意阶首失配矩的平方型 KL 渐近，与任意维稳定核**仅 $r=2$** 的临界 $L^q$ 余项/Bregman 转移/最优矩指数，合成为全阶定理并给出统一最优性。验证脚本核对 $r=2,\dots,8$ 全阶指数代数，`RESULT: PASS`、11 测试、65 页零未定义。**Johnson 的限制已显式写入正文**（只达对称稳定指数下的有限方差情形，非完整解决），口径未被升格。
+
+> **TICK 13 — A8 要求恢复我们已撤回的主张**。A8 r9 声称 $n_NS_N^2	o\infty$ 对有界局部 null 类 $\mathcal H_N(C)$ 上的一致欧氏 Gaussian 耦合**既必要又充分**，并明说现稿两条边界之间**不存在额外维数损失**——即我们记为开放的 $4\log\log n_N$ 窗口不存在。
 >
-> **A9 首次送 Oracle**（`20a5e73f`）——表述修好后第一次让专家读到数学。A3/A4/A6/A7 的新式提问稿并发生成，并按前两轮教训加了一条要求：**每条建议须附带"如何证伪它"的具体检验点，并标出哪些步骤专家自己没有验证过**。带自我证伪测试的建议，比自信的建议有价值得多。
+> 这正是 `047b9527a` 撤回的尖锐性主张。撤回理由是具体的：从块矩估计 (B4)–(B5) 到完整增维结论那一步无效，因 CMU Corollary 2.3 带 $arphi_2(d)^2=2d$ 且其矩量**同时计入实际块与高斯块**。已派检验并写明三个决定性核查点：新证明如何处理迫使原夹逼的 $d^{3/2}$ 因子（$d_N=(J_N+1)^2-1$ 是增长的）；限制到 $\mathcal H_N(C)$ 是真的买到一致性，**还是只把同一维数损失挪进常数 $C$**；CMU 矩量这次是否正确计入两个块。**明令：除非新证明无懈可击，否则不得恢复已撤回的主张——错误恢复比从未尝试更糟。**
+>
+> A3/A4/A6/A7 四份新式提问已发出（含"每条建议须附自我证伪测试"的要求）。池内 5/6 在跑。
+
 
 
 
