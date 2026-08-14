@@ -37,10 +37,17 @@ Keiji Nishioka 另有 Nagoya Math. J. **109** (1988) 63–67 的 Painlevé 论�
   goldenshift, and related problems*, Monatsh. Math. **126**(3) (1998) 215–261,
   `10.1007/BF01367764`。摘要确载 "we study central measures on the **Fibonacci
   graph**"，与"$f_m(k)$ 即 Fibonacci graph 顶点频数"的说法相符。
-- Lau & Ngai, *Multifractal Measures and a Weak Separation Condition*,
-  Adv. Math. **141**(1) (1999) 45–96, `10.1006/aima.1998.1773`。
-  **注意年份**：DOI 里是 1998，但卷次为 1999。审稿人说的"Lau–Ngai 1998"须按
-  Adv. Math. 141 (1999) 著录，不可直接写 1998。
+- Lau–Ngai 有多篇相关工作，A6 实际引的是
+  *$L^q$-spectrum of the Bernoulli convolution associated with the golden ratio*,
+  Studia Math. **131** (1998), no. 3, 225–251 —— 标题即审稿人所指内容，选得比我
+  先前找到的那篇更贴切。**先前那条"1998 与 1999 年份不符"的提醒作废**：它针对的是
+  另一篇 *Multifractal Measures and a Weak Separation Condition*,
+  Adv. Math. **141** (1999) 45–96, `10.1006/aima.1998.1773`，与 A6 所引不是同一篇，
+  后续 agent 不要据此去"订正"一个本来正确的引用。
+  Studia Math. 131 那条我未能在 Crossref / Google Scholar 独立确认（该刊 2000 年前
+  卷次 DOI 收录很差），但同作者相邻工作确实存在，例如
+  *$L^q$-spectrum of Bernoulli convolutions associated with P.V. numbers*,
+  Osaka J. Math. **36**(4) (1999)。定稿前值得再核一次页码。
 - Feng & Olivier, *Multifractal analysis of weak Gibbs measures and phase
   transition—application to some Bernoulli convolutions*, Ergodic Theory Dynam.
   Systems **23**(6) (2003) 1751–1784, `10.1017/S0143385703000051`。

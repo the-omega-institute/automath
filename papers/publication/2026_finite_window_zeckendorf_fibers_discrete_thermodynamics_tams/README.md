@@ -1,23 +1,40 @@
-# Fibonacci Partition Thermodynamics and Finite-Window Zeckendorf Fibers
+# Arithmetic Criticality and Large Deviations for Fibonacci Partitions and Finite-Window Fibers
 
-This directory contains the refocused main manuscript
-`Fibonacci Partition Thermodynamics and Finite-Window Zeckendorf Fibers` and
-a separately compiled supplement.
+This directory contains the main manuscript `Arithmetic Criticality and Large
+Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+compiled supplement. The submission target is the *Journal of Number Theory*.
 
 ## Scope
 
-The compiled paper retains only the independently justified core:
+The finite Fibonacci representation frequencies of Sidorov--Vershik are the
+subset-sum coefficients used here after the exact shift
+\(F_j^{\mathrm{SV}}=F_{j+1}\). With the convention for the golden-ratio
+Bernoulli convolution used in the paper, the pressure dictionary is
 
-- the all-real pressure, critical Gibbs law, and full LDP on a single
-  standard Fibonacci partition layer;
+\[
+P(t)=t\log 2-\tau_\mu(t)\log\varphi.
+\]
+
+The positive spectrum is attributed to Lau--Ngai, and the all-real spectrum
+and negative first-order phase transition are attributed to Feng--Olivier and
+Feng; Hu is cited for the early local-dimension theory. The all-real pressure
+and frozen branch are recorded as finite-layer recovery and consistency
+results.
+
+The main contribution consists of:
+
+- the exact indexing and normalization dictionary from the golden-ratio
+  Bernoulli-convolution \(L^q\)-spectrum to Fibonacci partition layers;
+- the arithmetic critical point, critical Gibbs law, and full finite-layer
+  LDP on a single standard Fibonacci partition layer;
 - the joint generation-cost and log-multiplicity LDP, including its affine
   two-dimensional coexistence face;
 - the residue and affine fiber correspondence;
 - the pointwise Fibonacci partition-difference formula;
 - the exact two-layer interval identity and transferred extremal theorem;
-- the uniform Weinstein layer-count lemma and negative-temperature freezing;
+- the uniform Weinstein layer-count lemma and the finite-layer recovery of the
+  known negative-temperature frozen branch;
 - the linear critical finite-size law and uniform critical coexistence limit;
-- the precise compact-operator obstruction;
 - the full real-tilt large deviation principle across the freezing corner;
 - the exact finite-prime-support coefficient interface and the explicit
   heavy-cost obstruction at the active cutoff.
@@ -26,10 +43,14 @@ The conditional microcanonical refinements, exact dyadic ray, integer moment
 transfer, direct quadratic recurrence, and high-tilt consequences are in
 `supplement.pdf`, not in the main theorem spine.
 
-The invalid normalization transducer, collision automaton, histogram kernels,
-arithmetic-window recurrence certificates, Galois computations, and
-Chebotarev claims have been withdrawn. Their section sources and certificate
-package are not part of this directory.
+The fixed finite-prime-support result is an exact rational generating-function
+interface only. No directional coefficient asymptotic or quenched-velocity
+law is asserted.
+
+The affine fiber--partition correspondence is stated for \(m\ge1\). In the
+generic maximizing-residue formulas, \(I_{2k+1}\) is defined for \(k\ge5\),
+whereas \(I_{2k}\) and \(J_{2k}\) are defined for \(k\ge7\); exceptional
+initial cases are listed separately.
 
 ## Build
 
