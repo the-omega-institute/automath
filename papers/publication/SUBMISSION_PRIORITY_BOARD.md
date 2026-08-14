@@ -16,18 +16,20 @@
 
 | 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r6 | 61 | TIER-3 / **强 TIER-3、临界 TIER-2** | **JFA** | 已收 |
+| **A2** `cayley_chebyshev` | **r7** | 61 | TIER-3 / **强 TIER-3、临界 TIER-2** | **JFA** | `4e089669` |
 | **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 已收 |
 | **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | `7e5e1364` |
-| **A5** `finite_parts` | r7 | 28 | TIER-3 / **上 TIER-3,ETDS 有可能未坐实** | **DCDS** | 已收 |
-| **A6** `zeckendorf_fibers` | r8 | 47 | TIER-3 | **JNT** | 已收,检验中 |
-| **A7** `upper_fibers` | r6 | 23+32 | TIER-4 | **Fibonacci Quarterly** | 已收,检验中 |
-| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待发 |
-| **A9** `homological_visibility` | — | 94 | **TIER-4,无已知升档路径** | TAC / Logic and Analysis | — |
+| **A5** `finite_parts` | **r8** | 28 | TIER-3 / **上 TIER-3,ETDS 未坐实** | **DCDS** | `ab7635bb` |
+| **A6** `zeckendorf_fibers` | **r9** | 47 | TIER-3 | **JNT** | `fc58d3fa` |
+| **A7** `upper_fibers` | r6 | 23+32 | TIER-4 | **Fibonacci Quarterly** | 检验中 |
+| **A8** `detector_shells` | **r9** | 61 | TIER-4 | **Stochastic Models** | `a17939f4` |
+| **A9** `homological_visibility` | — | 94 | 待重估(表述重写中) | TAC / Logic and Analysis | — |
 
-> **TICK 3（进行中）**：七个 agent 并发。**A9 表述重写已启动**——依据 44KB 术语审计落地改名、加术语对照表、用标准语言重写摘要与引言，并要求在引言里就诚实交代与 AMB 的次数差异（他们在相对 Čech $H^1$，本文在导出 $H^2$，已证不对应）。硬约束：不改任何定理陈述、假设或证明，定理环境总数须不变。**Oracle 问法已改**：不再要求验证或按我们指定的目标推进，改为「给定已证内容与已建机器，这个邻域里真正够得着的最强定理是什么；文献里有没有有名字的公开问题可攻」，并要求提问稿附上**已试过并失败的方向及原因**，免得专家重复建议。A2/A5/A6 提问稿生成中。
+
+> **TICK 4**：**新式提问已发出**（A2 r7、A5 r8、A6 r9）——问的是「给定已证内容与已建机器，这个邻域里真正够得着的最强定理是什么；文献里有没有有名字的公开问题可攻」，并在稿中附上**已试过并失败的方向及原因**，要求专家按（成功概率 × 档位影响）排序，且明说「够不到、原因是……」是有价值的回答。A8 r9 补发（`a17939f4`）。七篇全部在飞。A9 表述重写与 A6/A7 检验仍在跑。
 >
-> ⚠️ **更正**：此前记为 A9「无已知升档路径」属过度概括——实际只是 AB 经验模型桥接这一条杠杆按次数失败，未做广泛搜索。天花板判断待表述修复后由 Oracle 重估。
+> ⚠️ **更正**：此前记 A9「无已知升档路径」属过度概括——只测了 AB 经验模型桥接一条杠杆（按次数失败：AMB 在相对 Čech $H^1$，本文在导出 $H^2$），未做广泛搜索。天花板判断待表述修复后由 Oracle 重估。
+
 
 
 
