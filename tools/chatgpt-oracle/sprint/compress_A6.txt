@@ -1,0 +1,27 @@
+This article is 62 pages. Its target journal is the Journal of Number Theory, which expects a substantially shorter paper. Bring the compiled main.pdf down to roughly 30-35 pages. Also, sec_local_spectrum.tex is 1504 lines, against this repository's convention that no .tex file exceeds 800 lines; split it into coherent section files.
+
+HARD CONSTRAINTS — violating any of these makes the work useless:
+- Do NOT delete, weaken, or restate any theorem, proposition, lemma, corollary, or definition. Nothing currently proved may become unproved or less general.
+- The sprint results must survive intact. In particular: the strict speed separation v_2 > v_c with its interval certificate must keep its rigorous UPPER bound on gamma_2 (a truncation of gamma_2's series bounds it from below and so bounds v_2 from above, which is the wrong direction and does not prove the separation); the refutation of the uniform proposition must stay a refutation; and the dyadic word count must remain credited as a coefficient consequence of Weinstein's published free-monoid multiplier formula, not claimed as this paper's own.
+- Compression is RELOCATION and PROSE TIGHTENING only. Move supporting material into a standalone supplementary document and leave a precise pointer in the article saying what is proved there.
+- Build the supplement as a REAL DOCUMENT: a driver (supplement.tex) with the same preamble, macros, theorem environments and bibliography as main.tex, its own title identifying it as supplementary material, inputting ONLY the sections main.tex no longer inputs. Re-inputting a section the article still has will re-typeset the article and break the build. If the bibliography is inline, factor it into a shared file both documents input.
+
+VERIFICATION YOU MUST DO BEFORE REPORTING — an incremental build reports false success off stale auxiliaries:
+  latexmk -C && rm -f *.aux
+  latexmk -pdfxe -interaction=nonstopmode main.tex
+  latexmk -pdfxe -interaction=nonstopmode supplement.tex
+Both must end at exit 0 with zero undefined references, zero undefined citations, zero multiply-defined labels and no "! " errors, STARTING FROM NO .aux FILES.
+
+Then confirm yourself:
+- the theorem/proposition/lemma/corollary/definition environment count across the top-level .tex files is unchanged from before your edits;
+- every such label in the relocated sections resolves inside supplement.pdf;
+- no .tex file exceeds 800 lines.
+
+WHAT BELONGS IN THE ARTICLE: the full large deviation principle and its rate function, the finite-window conditional phase separation, the strict speed separation theorem, and the local spectrum results those depend on.
+WHAT SHOULD MOVE OUT: the numeric interval certificates and their arithmetic, long orbit-padding audits, secondary tail estimates, and worked examples that support a main theorem rather than being one.
+
+Also re-run every artifacts/verify*.py and the pytest suite; all must still pass, including verify_speed_separation.py reporting STATUS: PASS with the same certified numbers.
+
+Report ONLY: page counts before and after for both documents, both clean-rebuild exit codes, the four defect counts for each, the environment-count invariant, the label check, the largest remaining .tex line count, and the verifier results. Do NOT git commit.
+
+RESOURCE NOTE: this host has limited free memory. Do NOT run `python -m pytest` at the paper root — collecting every test at once exhausted memory and killed the previous attempt. Run the specific test files one at a time instead, e.g. `python -m pytest artifacts/test_verify_real_tilt_pressure.py -q`, and note that artifacts/test_verify_speed_separation.py takes about two minutes.

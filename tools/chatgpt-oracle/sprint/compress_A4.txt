@@ -1,0 +1,25 @@
+This manuscript is 63 pages. Its target journal is Monatshefte für Mathematik, which expects a substantially shorter article. Bring the compiled main.pdf down to roughly 35-40 pages.
+
+HARD CONSTRAINTS — violating any of these makes the work useless:
+- Do NOT delete, weaken, or restate any theorem, proposition, lemma, corollary, or definition. Nothing currently proved may become unproved or less general.
+- Compression is RELOCATION and PROSE TIGHTENING only. Move supporting material into a standalone supplementary document, and leave a precise pointer in the article saying what is proved there.
+- Build the supplement as a REAL DOCUMENT: a driver (supplement.tex) with the same preamble, macros, theorem environments and bibliography as main.tex, its own title identifying it as supplementary material, inputting only the sections you actually removed from main.tex. If the bibliography is inline in main.tex, factor it into a shared file that both documents input.
+- The supplement must contain EXACTLY the sections main.tex no longer inputs — nothing that is still in the article. Re-inputting a section that main.tex still has will re-typeset the article and break the build.
+
+VERIFICATION YOU MUST DO BEFORE REPORTING — an incremental build reports false success off stale auxiliaries:
+  latexmk -C && rm -f *.aux
+  latexmk -pdfxe -interaction=nonstopmode main.tex
+  latexmk -pdfxe -interaction=nonstopmode supplement.tex
+Both must end at exit 0 with zero undefined references, zero undefined citations, zero multiply-defined labels, and no "! " errors, STARTING FROM NO .aux FILES.
+
+Then confirm two invariants yourself:
+- the total count of theorem/proposition/lemma/corollary/definition environments across all .tex sources is unchanged from before your edits;
+- every such label in the relocated sections resolves inside supplement.pdf.
+
+WHAT BELONGS IN THE ARTICLE: the core theorem chain and its proofs, including the MCFL immunity result, the divisibility-tree machinery, and the results integrated during this sprint.
+WHAT SHOULD MOVE OUT: long automaton case analyses, routine pumping verifications, enumeration tables, and secondary variants that support a main theorem rather than being one.
+Judge what is core by reading the manuscript, not by filename.
+
+Also re-run the verification scripts under artifacts/ and the pytest suite; they must still pass.
+
+Report ONLY: page counts before and after for both documents, both clean-rebuild exit codes, the four defect counts for each document, the environment-count invariant, the label check, and the verifier results. Do NOT git commit.

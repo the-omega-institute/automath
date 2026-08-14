@@ -16,14 +16,14 @@
 
 | 篇 | 页 | referee 裁决 | 优先权问题 | **去向** |
 |---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | 66 | 拒稿（优先权） | 漏引 Chen–Niles-Weed → 已重写 | JFA 待重估 |
-| **A3** `sharp_three_window` | 63 | Major Revision | 碰撞图判定属经典 pair-graph 传统 | DCDS-A |
+| **A2** `cayley_chebyshev` | 66 | **拒稿** | 漏引 Chen–Niles-Weed → 已重写 | 强专门期刊；仅以 Thm 4.19 投 JFA 拒稿概率显著高于接收 |
+| **A3** `sharp_three_window` | 63 | Major Revision | 碰撞图判定属经典 pair-graph 传统 | **DCDS-A**（须动力系统导向重构）；备选 TCS |
 | **A4** `prime_languages` | **25** | Major Revision → **已修** | SMFK 比较已深化 | Monatshefte |
-| **A5** `finite_parts` | **33** | 拒稿后重投 → **已修** | **Ostrowski(1968)、Nishioka(1985) 直接蕴含**；新颖性已收窄至三项 | DCDS/ETDS |
-| **A6** `zeckendorf_fibers` | 59 | **拒稿** | 黄金分割 Bernoulli 卷积正 $q$ 压力早三十年 | TAMS 不可达 |
-| **A7** `upper_fibers` | 27 | — | — | Fibonacci Quarterly（已解决 FJMV 两问题）|
-| **A8** `detector_shells` | 62 | — | — | Stochastic Models（尖锐边界已恢复）|
-| **A9** `homological_visibility` | **48**+50 | — | — | TAC / Logic and Analysis |
+| **A5** `finite_parts` | **33** | 重投 → **已修** | Ostrowski(1968)、Nishioka(1985) 直接蕴含；新颖性收窄至三项 | DCDS/ETDS |
+| **A6** `zeckendorf_fibers` | 59 | **拒稿** | 黄金分割 Bernoulli 卷积正 $q$ 压力早三十年 | **JNT**（修复中） |
+| **A7** `upper_fibers` | 27 | 外审在途 | — | Fibonacci Quarterly（已解决 FJMV 两问题）|
+| **A8** `detector_shells` | 62 | 外审在途 | — | Stochastic Models（尖锐边界已恢复）|
+| **A9** `homological_visibility` | **48**+50 | 外审在途 | — | 表述障碍已清除，期刊待定 |
 
 
 
@@ -35,13 +35,15 @@
 
 
 
-> **TICK 25 — A9 压缩一次通过；A5/A4 审稿修复入库**。
+
+> **TICK 26 — 队列清空，补上三个缺口**。在飞任务全部收回，无一遗留。缺口有三：A9 压缩后未重新评档、A7 与 A8 从未走过外审轮。已派 codex 写这三份外审问题。
 >
-> **A9 96→48 页**（+50 页补充材料），是本项目第四次压缩、**第一次一遍通过**——因为把 A2/A4/A6/A7 挣来的四条硬规则**前置写进任务书**而非等它重新踩坑。清理重建下两文档四项缺陷全 0、定理环境 159 无损、68 个迁移标签零缺失、最大文件 767 行合规。**表述与篇幅两道障碍现已全部清除。**
+> **A6 进入修复**。审稿人明确写道他**没有发现任何一个可立即构成反例的核心公式**——拒稿理由是另外两条：优先权叙述实质性错误（Sidorov–Vershik 的 $f_m(k)$ 与我们的有限 Fibonacci 子集和系数只差一个索引平移；Hu 在 TAMS、Lau–Ngai 1998 给出 $q>0$ 的 $L^q$ 谱、Feng 扩到全实 $q$ 并指出负 $q$ 处相变），以及两处承重证明未达可核验标准（Lemma 5.7 的 Stern–Brocot/Knauf 规范化转移、Theorem 5.12 的参数一致渐近与无界代价截断）。任务书要求：按上述文献重新界定主定理，**无存活新颖性的定理降为一致性检查或删除，不得制造替代主张**；两处证明或补全或减弱并向下游传播；改投 JNT。
 >
-> **A5** 删除了不可审计的计算极小性命题（2208/48/0 仅保留为 verifier 诊断），并按审稿要求做了优先权比较——代价是确认 **Ostrowski (1968) 处理线性乘性方程、Nishioka (1985) 直接蕴含** $F(z^2)=H(z)^{-1}F(z)^2$ 的代数解为有理。存活的新颖性收窄为三项：宇称相容代数碰撞提升、有效有理余边界界与重构、跨底初等二群结果。37 测试、33 页。
+> **A2 定档**。审稿人的话是：这是一个**强的专门期刊结果**，若仅以 Theorem 4.19 为核心投 JFA 是合理试投，但拒稿概率显著高于接收概率。JFA 不再作为默认去向。
 >
-> **A4** 修复入库，测试 16→19+6 子测试、25 页。
+> **A3 有明确路径**。修正优先权并补全证明后，真正的新增量足以支撑 DCDS-A：全部二次 Pisot 基数的精确阈值、精确有限块起点与 Markov 阶；simple-Parry 算术差分图的特殊压缩与孔径二分类；Bassino 三次族上的精确无界未来解码深度。**无须主动降投。**
+
 
 
 

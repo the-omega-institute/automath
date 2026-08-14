@@ -1,0 +1,28 @@
+This paper has two problems at once.
+
+(a) main.tex is a single 3805-line file. This repository's convention is that no .tex file exceeds 800 lines; anything longer must be split. Split main.tex into section files (sec_*.tex) that main.tex inputs, each comfortably under 800 lines, named for their content.
+
+(b) The compiled article is 50 pages. Its target journal is The Fibonacci Quarterly, which publishes short papers. Bring the article down to roughly 20-25 pages.
+
+HARD CONSTRAINTS — violating any of these makes the work useless:
+- Do NOT delete, weaken, or restate any theorem, proposition, lemma, corollary, or definition. Nothing currently proved may become unproved or less general. In particular the sprint results must survive intact, including the withdrawal of the fibotomic-entropy optimality claim (it must stay withdrawn, not silently reinstated) and the corrected Granville attribution.
+- Compression is RELOCATION and PROSE TIGHTENING only. Move supporting material into a standalone supplementary document and leave a precise pointer in the article saying what is proved there.
+- Build the supplement as a REAL DOCUMENT: a driver (supplement.tex) with the same preamble, macros, theorem environments and bibliography as main.tex, its own title identifying it as supplementary material, inputting ONLY the sections main.tex no longer inputs. Re-inputting a section the article still has will re-typeset the article and break the build. If the bibliography is inline, factor it into a shared file both documents input.
+
+VERIFICATION YOU MUST DO BEFORE REPORTING — an incremental build reports false success off stale auxiliaries:
+  latexmk -C && rm -f *.aux
+  latexmk -pdfxe -interaction=nonstopmode main.tex
+  latexmk -pdfxe -interaction=nonstopmode supplement.tex
+Both must end at exit 0 with zero undefined references, zero undefined citations, zero multiply-defined labels and no "! " errors, STARTING FROM NO .aux FILES.
+
+Then confirm yourself:
+- the total count of theorem/proposition/lemma/corollary/definition environments across all .tex sources is unchanged from before your edits;
+- every such label in the relocated sections resolves inside supplement.pdf;
+- no .tex file exceeds 800 lines.
+
+WHAT BELONGS IN THE ARTICLE: the witness-cover machinery, minimal odd-layer covers, rank-window deaggregation, exact-rank radical divisibility, and the explicitly recorded open interface around d | alpha(p) versus the fiber alpha(p) = d.
+WHAT SHOULD MOVE OUT: the finite enumeration tables and their commentary, long mechanical case checks, and secondary corollaries that support a main theorem rather than being one.
+
+Also re-run artifacts/verify_finite_claims.py and the pytest suite; both must still pass.
+
+Report ONLY: page counts before and after for both documents, both clean-rebuild exit codes, the four defect counts for each, the environment-count invariant, the label check, the largest remaining .tex line count, and the verifier results. Do NOT git commit.

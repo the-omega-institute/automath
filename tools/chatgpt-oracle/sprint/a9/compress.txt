@@ -1,0 +1,19 @@
+This article is 96 pages. Its realistic targets are Theory and Applications of Categories or Logic and Analysis, where a paper this long will not get a fair reading. Bring the article down to roughly 40-50 pages. Also, sec files up to 1281 lines exceed this repository's 800-line convention; split those.
+
+This exact compression has been done successfully three times in this project (A2 90->55, A4 63->38, A7 50->25). Follow that method and its hard-won rules.
+
+METHOD — relocation, never deletion:
+- Do NOT delete, weaken or restate any theorem, proposition, lemma, corollary or definition. The theorem-environment count across all .tex sources is currently 159 and must stay 159.
+- Move supporting material into a standalone supplementary document and leave a precise pointer in the article saying what is proved there.
+- Build the supplement as a REAL COMPILABLE DOCUMENT with its own preamble, macros, theorem environments and bibliography — not a list of \input lines. If the bibliography is inline in main.tex, factor it into a shared file both documents input.
+- The supplement must contain EXACTLY the sections main.tex no longer inputs. Re-inputting a section the article still has re-typesets the article and breaks the build.
+
+RULES LEARNED THE HARD WAY IN THIS PROJECT — ignore these and the work will fail as it failed before:
+1. An incremental LaTeX build reports false success off stale auxiliaries. Verify with: latexmk -C, then rm -f *.aux, then build main, then build supplement. Only that sequence counts.
+2. Compile after each file you edit, not once at the end. Two earlier passes on THIS paper died mid-edit and left the build broken because they batched.
+3. Do not create mutual cross-references between article and supplement. A6's compression had to be reverted entirely because xr-hyper needed alternating passes to converge and a one-way build never reached zero undefined references. Keep anything the supplement needs to cite inside the article, or make it a textual pointer.
+4. If you use hard-coded pointers like "Supplement Theorem 1.14", note that a wrong number produces NO LaTeX warning. Prefer pointers carrying the result's title rather than its number.
+
+VERIFY BEFORE REPORTING: both documents exit 0 from the clean sequence with zero undefined references, zero undefined citations, zero multiply-defined labels and no "! " errors; theorem-environment count still 159; every theorem label in the relocated sections resolves inside supplement.pdf; no .tex file exceeds 800 lines.
+
+Report at most 20 lines: page counts for both documents, the four defect counts for each, the environment-count invariant, the label check, the largest remaining .tex line count. Do NOT git commit.
