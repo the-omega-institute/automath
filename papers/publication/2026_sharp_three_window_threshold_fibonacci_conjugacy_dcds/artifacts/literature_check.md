@@ -324,3 +324,120 @@ language and Bertrand-numeration frameworks.  None of these sources states
 the parameter-uniform rank-modulo-`Q_m` two-window carry exclusion, the exact
 terminal collision paths, or the unbounded causal-depth conclusion proved
 here.
+
+## Tier-2 audit: externally posed open problems and actual interfaces
+
+Checked: 2026-08-14 (Asia/Singapore).
+
+### Search record and open status
+
+The arXiv Atom API was queried for Salem-number beta expansions, purely
+periodic Pisot expansions, weak finiteness, Property (F), and the Pisot
+substitution conjecture.  Primary sources arXiv:1411.2419, arXiv:1912.10386,
+arXiv:1810.03500, arXiv:2206.06675, and arXiv:2603.19554 were inspected in
+full text.  Crossref and OpenAlex returned HTTP 429 and are recorded as
+rate-limited, not as zero-result searches.  Semantic Scholar returned the
+records for DOI `10.4064/aa8260-11-2017`, `10.1112/blms/12.4.269`, and
+`10.1017/etds.2016.44`; its citation graph lists only two citations of
+Hejda--Steiner, neither claiming a solution of the questions below.  The
+zbMATH Open API was searched for `purely periodic Pisot`, `Pisot substitution
+conjecture`, and `Salem Parry Schmidt`.  Its post-2018 real-base results do
+not report a resolution of the Hejda--Steiner questions.  Its review of E.
+Miyanohara, *A note on non-periodic greedy expansions in Salem base*, Res.
+Number Theory **10** (2024), DOI `10.1007/s40993-024-00507-8`, still calls
+Salem eventual periodicity an open question.  The 2022 result arXiv:2206.06675
+proves that a positive-density set of powers of a Salem number are Parry,
+not that the Salem number itself is Parry.  These checks support the open
+status assertions below as of the audit date.
+
+### Four printed questions
+
+1. **Schmidt's Salem--Parry conjecture.**  K. Schmidt, *On periodic
+   expansions of Pisot numbers and Salem numbers*, Bull. Lond. Math. Soc.
+   **12** (1980), 269--278, DOI `10.1112/blms/12.4.269`.  Stockton's explicit
+   statement of Schmidt's conjecture in *On the co-factors of degree 6 Salem
+   number beta expansions*, Int. J. Number Theory **17** (2021), 1175--1200,
+   DOI `10.1142/S1793042121500317`, arXiv:1912.10386, reads: "Schmidt
+   conjectured that the same was true for
+   Salem numbers," where "the same" is that `beta` is a Parry number, i.e.
+   `d_beta(1)` is eventually periodic.  Stockton adds: "it is still not known
+   for any degree greater than 4."
+
+2. **Hejda--Steiner Question (A).**  T. Hejda and W. Steiner,
+   *Beta-expansions of rational numbers in quadratic Pisot bases*, Acta Arith.
+   **183** (2018), 35--51, DOI `10.4064/aa8260-11-2017`, arXiv:1411.2419,
+   Section 5, final open-problems list: "Prove or disprove that
+   $\gamma(\beta)=1$ for quadratic Pisot number
+   $\beta>1$, a root of $\beta^2=a\beta+b$, if and only if
+   $a/b\in\mathbb Z$ and $a\ge b^2$ or
+   $(a,b)\in\{(24,6),(30,6)\}$."
+
+3. **Hejda--Steiner Question (B).**  Same citation and open-problems list:
+   "For which
+   quadratic $\beta$ we have that $\gamma(\beta)=0$? Can we drop the
+   restrictions on $a$ and $b$ in Theorem 2? More specifically, is it true
+   that $a<\frac{1+\sqrt5}{2}b$ implies $\gamma(\beta)=0$?"
+
+4. **Hejda--Steiner Question (C).**  Same citation and open-problems list:
+   "What is the
+   structure of the prefixes of $\beta$-adic expansions of integers for a
+   general quadratic $\beta$?"
+
+### Machinery-to-problem map
+
+- **Schmidt.**  The finite Parry word and recurrence used in
+  `thm:simple-parry-causal-collision` exist only after the desired eventual
+  periodicity (and, in the paper, the stronger simple-Parry property) is
+  known.  The collision graph can analyze a Salem base already known to be
+  simple Parry, but it supplies no bounded orbit for `T_beta(1)`.  The missing
+  step is exactly the conjecture, so applying the graph would be circular.
+- **Question (A).**  `prop:parry-rank-bijection` and
+  `thm:full-quadratic-pisot-threshold` cover precisely the roots
+  `beta^2=a beta+b` and give their legal languages and count recurrence.
+  However, `gamma(beta)` is defined by equality of real beta-values and the
+  beta-natural-extension domain.  The paper reduces an integer language rank
+  modulo `Q_m`.  A bridge would have to identify these congruence fibers with
+  beta-adic/natural-extension fibers or establish the required tile-boundary
+  inclusion; no such identity is present, and the paper gives an explicit
+  example showing rank congruence does not preserve beta-value.
+- **Question (B).**  The nearest-multiple separation lemma controls multiples
+  of the integer word count `Q_m`, not the conjugate-coordinate extrema that
+  determine `gamma(beta)`.  What is missing is a uniform beta-tile boundary
+  estimate in the parameter range `a<phi b`.  None of the sliding congruence
+  estimates has that geometric conclusion.
+- **Question (C).**  The closest objects are the standard Parry language,
+  its colex rank, and the prefix counts `Q_m`.  The paper's cyclic rank fold
+  discards the compatible inverse-system data needed for a beta-adic integer.
+  A canonical map would require compatibility of the residues as `m` varies;
+  the current moduli `Q_m` do not divide one another, and no bonding maps are
+  proved.  Thus the finite-window results do not determine beta-adic prefix
+  structure.
+
+### A/B/C/D assessment and selected route
+
+- **(A):** no named problem above is honestly touched beyond sharing the
+  Parry language.  The numerical-value, natural-extension, or substitution
+  geometry needed by each is absent.
+- **(B):** the input full shift, greedy beta-language, Parry word, language
+  counts, and colex ordered-language rank are standard.  The reduction modulo
+  `Q_m` is bespoke.  Above threshold the image is canonically conjugate back
+  to a full shift, so it does not yield a new invariant of a standard
+  beta-system.  There is no canonical map to numerical beta-normalization.
+- **(C):** the Pisot hypothesis in the exact collision criterion, causal
+  completeness, bounded-multiple order, and aperture-two trichotomy is an
+  artifact: their proofs use only simple-Parry language/rank data and finite
+  congruence graphs.  The simple-Parry hypothesis itself is real because it
+  supplies the finite recurrence and positional colex rank used by the graph.
+- **(D):** the negative-conjugate conjecture `ell_cau(beta,m)=2` for `m>=4`
+  remains plausible, but a proof would sharpen only the bespoke decoder and
+  the current carry analysis does not exhaust the nonzero constant-carry
+  branches.  No plausible converse links overlap injectivity to a standard
+  beta-expansion property.
+
+Route **(C)** was selected as the best product of feasibility and impact.
+Proposition `prop:nonpisot-simple-parry-scope` removes Pisot from the four
+general simple-Parry results.  Strictness is proved using the irreducible
+non-Pisot simple-Parry polynomial `x^4-2x^3-2`, for which
+`d_beta(1)=2002 0^infinity` and `ell_cau(beta,2)=2`.  This is a genuine
+hypothesis removal, but it does not solve a named problem and does not by
+itself move the paper to Tier 2.

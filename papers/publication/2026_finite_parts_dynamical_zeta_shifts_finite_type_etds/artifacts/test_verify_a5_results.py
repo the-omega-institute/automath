@@ -154,6 +154,26 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertEqual(audit["sample_budget"], 960)
         self.assertTrue(audit["collision_count_within_bound"])
 
+    def test_interior_sampling_needs_no_twisted_spectral_gap(self):
+        self.assertTrue(
+            hasattr(verifier, "interior_no_gap_standard_zeta_audit"),
+            "the no-gap interior-sampling audit is not implemented",
+        )
+        audit = verifier.interior_no_gap_standard_zeta_audit()
+
+        self.assertEqual(audit["perron_root"], 2)
+        self.assertEqual(audit["first_twisted_radius"], 2)
+        self.assertFalse(audit["first_has_strict_gap"])
+        self.assertEqual(audit["sample_radius"], sp.Rational(1, 3))
+        self.assertTrue(audit["sample_is_interior"])
+        self.assertTrue(audit["same_base_compatible"])
+        self.assertTrue(audit["determinants_positive_at_sample"])
+        self.assertEqual(audit["determinant_ratio"], 1 - 2 * sp.Symbol("z"))
+        self.assertEqual(audit["standard_zeta_ratio"], 1 - 2 * sp.Symbol("z"))
+        self.assertTrue(audit["determinant_ratio_is_standard_zeta_ratio"])
+        self.assertTrue(audit["all_dyadic_factors_lie_between_zero_and_one"])
+        self.assertTrue(audit["dyadic_logarithm_is_negative"])
+
     def test_same_base_characteristic_polynomial_coefficient_bound(self):
         self.assertTrue(
             hasattr(verifier, "same_base_determinant_bounds_match"),

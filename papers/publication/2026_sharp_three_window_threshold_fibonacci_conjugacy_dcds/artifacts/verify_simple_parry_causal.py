@@ -336,6 +336,41 @@ def gamma_claims() -> dict[str, list[int] | int | bool]:
     }
 
 
+def non_pisot_simple_parry_claims() -> dict[str, object]:
+    """Verify the strict non-Pisot witness d_beta(1)=2002 0^infinity."""
+    digits = (2, 0, 0, 2)
+    boundary = digits + (0,) * len(digits)
+    parry_admissible = all(
+        digits[start:] + (0,) * (len(digits) + start) < boundary
+        for start in range(1, len(digits))
+    )
+
+    def bisect_root(function, left: float, right: float) -> float:
+        for _ in range(80):
+            midpoint = (left + right) / 2
+            if function(midpoint) > 0:
+                right = midpoint
+            else:
+                left = midpoint
+        return (left + right) / 2
+
+    beta = bisect_root(lambda x: x**4 - 2 * x**3 - 2, 2.0, 2.2)
+    negative_root_modulus = bisect_root(lambda x: x**4 + 2 * x**3 - 2, 0.0, 1.0)
+    complex_root_modulus = (2 / (beta * negative_root_modulus)) ** 0.5
+    aperture_two = collision_graph_analysis(digits, 2)
+    return {
+        "digits": digits,
+        "parry_admissible": parry_admissible,
+        "is_pisot": complex_root_modulus < 1,
+        "largest_nondominant_modulus": max(
+            negative_root_modulus, complex_root_modulus
+        ),
+        "q_prefix": q_sequence(digits, 6),
+        "rank_checks": [rank_is_consecutive(digits, m) for m in range(1, 7)],
+        "aperture_two_causal_length": aperture_two["causal_length"],
+    }
+
+
 def main() -> int:
     failures = 0
     print("Simple-Parry causal-obstruction verification")
@@ -417,6 +452,24 @@ def main() -> int:
         status = "PASS" if certificate_ok else "FAIL"
         print(f"  t={digits}, m={m}: {result} [{status}]")
         failures += not certificate_ok
+
+    print()
+    non_pisot = non_pisot_simple_parry_claims()
+    non_pisot_passed = (
+        non_pisot["parry_admissible"]
+        and not non_pisot["is_pisot"]
+        and non_pisot["largest_nondominant_modulus"] > 1
+        and all(non_pisot["rank_checks"])
+        and non_pisot["aperture_two_causal_length"] == 2
+    )
+    print("Pisot-hypothesis removal battery:")
+    print(
+        "  d_beta(1)=2002 0^infinity: "
+        f"max nondominant modulus={non_pisot['largest_nondominant_modulus']:.12f}, "
+        f"m=2 causal={non_pisot['aperture_two_causal_length']} "
+        f"[{'PASS' if non_pisot_passed else 'FAIL'}]"
+    )
+    failures += not non_pisot_passed
 
     print()
     print("Unbounded cubic causal-depth battery:")

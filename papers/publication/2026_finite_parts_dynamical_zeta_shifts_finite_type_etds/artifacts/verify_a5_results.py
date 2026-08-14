@@ -648,6 +648,85 @@ def finite_radial_collision_audit(
     }
 
 
+def interior_no_gap_standard_zeta_audit() -> dict[str, object]:
+    """Check interior regularity when a binary twisted block has no strict gap."""
+    z = sp.Symbol("z")
+    sample = sp.Rational(1, 3)
+
+    first_identity = sp.Matrix(((2,),))
+    first_involution = sp.zeros(1)
+    second_identity = sp.Matrix(((1,),))
+    second_involution = sp.Matrix(((1,),))
+    first_base = first_identity + first_involution
+    second_base = second_identity + second_involution
+    first_twisted = first_identity - first_involution
+    second_twisted = second_identity - second_involution
+    first_cover = first_identity.row_join(first_involution).col_join(
+        first_involution.row_join(first_identity)
+    )
+    second_cover = second_identity.row_join(second_involution).col_join(
+        second_involution.row_join(second_identity)
+    )
+
+    same_base_compatible = first_base == second_base
+    perron_root = max(abs(value) for value in first_base.eigenvals())
+    first_twisted_radius = max(abs(value) for value in first_twisted.eigenvals())
+
+    first_determinant = sp.expand((sp.eye(1) - z * first_twisted).det())
+    second_determinant = sp.expand((sp.eye(1) - z * second_twisted).det())
+    determinant_ratio = sp.cancel(first_determinant / second_determinant)
+    first_cover_zeta = sp.cancel(1 / (sp.eye(2) - z * first_cover).det())
+    second_cover_zeta = sp.cancel(1 / (sp.eye(2) - z * second_cover).det())
+    standard_zeta_ratio = sp.cancel(second_cover_zeta / first_cover_zeta)
+
+    entrywise_dominated = all(
+        abs(twisted[i, j]) <= first_base[i, j]
+        for twisted in (first_twisted, second_twisted)
+        for i in range(first_base.rows)
+        for j in range(first_base.cols)
+    )
+    parity_compatible = all(
+        (twisted[i, j] - first_base[i, j]) % 2 == 0
+        for twisted in (first_twisted, second_twisted)
+        for i in range(first_base.rows)
+        for j in range(first_base.cols)
+    )
+
+    # Here H(t)=1-2t.  For every j>=0, 0<sample^(2^j)<=sample<1/2,
+    # hence every dyadic factor lies in (0,1).  Its logarithm is negative,
+    # and the positive weighted sum is therefore strictly negative.
+    exact_dyadic_form = determinant_ratio == 1 - 2 * z
+    all_dyadic_factors_lie_between_zero_and_one = bool(
+        exact_dyadic_form and 0 < sample < sp.Rational(1, 2)
+    )
+
+    return {
+        "perron_root": perron_root,
+        "first_twisted_radius": first_twisted_radius,
+        "first_has_strict_gap": first_twisted_radius < perron_root,
+        "sample_radius": sample,
+        "sample_is_interior": sample < 1 / perron_root,
+        "same_base_compatible": same_base_compatible,
+        "entrywise_dominated": entrywise_dominated,
+        "parity_compatible": parity_compatible,
+        "determinants_positive_at_sample": all(
+            polynomial.subs(z, sample) > 0
+            for polynomial in (first_determinant, second_determinant)
+        ),
+        "determinant_ratio": determinant_ratio,
+        "standard_zeta_ratio": standard_zeta_ratio,
+        "determinant_ratio_is_standard_zeta_ratio": (
+            determinant_ratio == standard_zeta_ratio
+        ),
+        "all_dyadic_factors_lie_between_zero_and_one": (
+            all_dyadic_factors_lie_between_zero_and_one
+        ),
+        "dyadic_logarithm_is_negative": (
+            all_dyadic_factors_lie_between_zero_and_one
+        ),
+    }
+
+
 def same_base_determinant_bounds_match() -> bool:
     """Check the coefficient estimate for compatible same-base sign blocks."""
     z = sp.Symbol("z")
@@ -909,6 +988,7 @@ def render_report() -> str:
     finite_collisions = finite_radial_collision_audit(
         collision_q.subs(z, z**2), collision_q**2, sp.Rational(1, 4)
     )
+    interior_no_gap = interior_no_gap_standard_zeta_audit()
     c3_support = c3_adams_mobius_support_obstruction(60)
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
@@ -953,6 +1033,20 @@ def render_report() -> str:
                 finite_collisions["collision_count_within_bound"],
                 finite_collisions["collision_bound"] == 959,
                 finite_collisions["sample_budget"] == 960,
+            )
+        ),
+        "unconditional interior sampling": all(
+            (
+                not interior_no_gap["first_has_strict_gap"],
+                interior_no_gap["sample_is_interior"],
+                interior_no_gap["same_base_compatible"],
+                interior_no_gap["entrywise_dominated"],
+                interior_no_gap["parity_compatible"],
+                interior_no_gap["determinants_positive_at_sample"],
+                interior_no_gap["determinant_ratio"] == 1 - 2 * z,
+                interior_no_gap["determinant_ratio_is_standard_zeta_ratio"],
+                interior_no_gap["all_dyadic_factors_lie_between_zero_and_one"],
+                interior_no_gap["dyadic_logarithm_is_negative"],
             )
         ),
         "C3 Adams-Mobius support obstruction": all(
@@ -1030,6 +1124,7 @@ def render_report() -> str:
         "Effective Mahler degree and height bounds: verified",
         "Finite radial collision set: {1/4}; 1 <= 959",
         "Finite radial recovery budget: 960 algebraic samples",
+        "No-gap interior model: y=1/3; standard cover-zeta ratio verified",
         "C3 Adams-Mobius support: non-zero at primes 2, 5, 11, 17",
         "Same-base determinant coefficient bound: verified",
         "Radial-profile leading coefficient: triangular",

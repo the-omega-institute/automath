@@ -846,7 +846,8 @@ every \(n\ge J_{\mathrm r}\), and put
   \textup{(U1)--(U3)} must also be preserved. Thus general decidability,
   undecidability, and any hardness classification remain open; the proved
   effective statement is exactly the positive semidecision above. The
-  linear Pisot subclass is resolved separately below.
+  Perron-recurrence subclass of greedy linear numeration bases is resolved
+  separately below.
 \end{remark}
 
 \begin{theorem}[Arbitrarily deep quotient congruences]
@@ -958,19 +959,22 @@ every \(n\ge J_{\mathrm r}\), and put
   \(\mathcal P_U\) infinite.
 \end{proof}
 
-\begin{corollary}[Linear Pisot \(U\)-systems]
-  \label{cor:linear-pisot-prime-cf-immunity}
-  Let \(U=(U_n)_{n\ge0}\) be a linear Pisot \(U\)-system in the
-  following precise sense: \(U_0=1\), the \(U_n\) are strictly increasing
-  integers with bounded quotients, \(\mathcal R_U\) is the LSD-first
+\begin{corollary}[Linear numeration bases with Perron recurrence]
+  \label{cor:linear-perron-prime-cf-immunity}
+  Let \(U=(U_n)_{n\ge0}\) be a standard greedy linear numeration basis in
+  the following precise sense: \(U_0=1\), the \(U_n\) are strictly
+  increasing integers with bounded quotients, \(\mathcal R_U\) is the LSD-first
   reversal of the usual greedy representation language, and \(U\)
-  eventually satisfies an integral recurrence whose characteristic
-  polynomial is the minimal polynomial of a Pisot number. Then its prime
+  has minimal tail recurrence polynomial equal to the minimal polynomial
+  of a Perron number \(\beta\). Thus
+  \(\beta>1\) is a real algebraic integer and every other conjugate
+  \(\beta'\) satisfies \(\abs{\beta'}<\beta\); compare
+  \cite{LindMarcus1995,Rigo2014Vol2}. Then its prime
   representation language is MCF-immune, hence CF-immune, REG-immune and
   nonrecognizable. The same statements hold in the usual MSD-first
   convention.
 
-  If the dominant Pisot number is a unit and the chosen recurrence has
+  If the dominant Perron number is a unit and the chosen recurrence has
   trailing coefficient \(a_0=\pm1\), then the full coprime-quotient and
   bounded-prime-support MCF-immunity conclusions of
   \Cref{thm:recurrent-numeration-prime-cf-immunity} hold.
@@ -980,21 +984,20 @@ every \(n\ge J_{\mathrm r}\), and put
   Greedy expansion gives a unique representation of every positive
   integer, and its length-\(m\) words represent values between successive
   place-value thresholds; thus \textup{(U1)--(U3)} hold. The defining
-  Pisot recurrence gives \textup{(U4)}. Apply
-  \Cref{thm:recurrent-numeration-prime-cf-immunity}. Frougny's finite
-  normalization theorem supplies a finite transducer for normalization
-  in this Pisot setting, and the associated canonical syntax and
-  Bertrand/substitution descriptions are standard
+  Perron recurrence gives \textup{(U4)}. Apply
+  \Cref{thm:recurrent-numeration-prime-cf-immunity}. The immunity proof
+  uses only \textup{(U1)--(U4)} and does not assume that the full greedy
+  language is regular. In the Pisot subclass, Frougny's finite
+  normalization theorem supplies a finite transducer, and the associated
+  canonical syntax and Bertrand/substitution descriptions are standard
   \cite{Frougny1992,BruyereHansel1997,Fabre1995,FrougnySolomyak1992}.
-  Those finite-state results identify this corollary with the usual
-  recognizability convention; the immunity proof itself uses only
-  \textup{(U1)--(U4)}. Finally, multiple context-free, context-free, and
+  Finally, multiple context-free, context-free, and
   regular languages are closed under reversal, so changing between the LSD-first proof
   convention and the usual MSD-first convention preserves every
   conclusion.
 \end{proof}
 
-\begin{example}[Unit and nonunit Pisot systems]
+\begin{example}[Pisot and non-Pisot Perron systems]
   \label{ex:pisot-unit-nonunit}
   The Fibonacci recurrence has characteristic polynomial
   \(X^2-X-1\), the Pell recurrence has \(X^2-2X-1\), and the
@@ -1006,17 +1009,46 @@ every \(n\ge J_{\mathrm r}\), and put
   is the dominant root \(1+\sqrt3\) of \(X^2-2X-2\): the recurrence
   \(U_{n+2}=2U_{n+1}+2U_n\) has \(a_0=2\), and the action is singular
   modulo \(2\).  Nevertheless,
-  \Cref{cor:linear-pisot-bounded-support-classification} shows that every
+  \Cref{cor:linear-perron-bounded-support-classification} shows that every
   infinite MCFL in this nonintegral system acquires unbounded prime support
   away from \(2\); singularity of the ambient action does not produce a
   valuation-only escape language.
+
+  The polynomial \(X^2-5X+5\) gives a genuinely non-Pisot instance. Its
+  dominant root \(\beta=(5+\sqrt5)/2\) is Perron, while its other conjugate
+  \((5-\sqrt5)/2\) is greater than one. The integer sequence
+  \[
+    U_0=1,\qquad U_1=4,\qquad
+    U_{n+2}=5U_{n+1}-5U_n
+  \]
+  begins \(1,4,15,55,200,\ldots\) and is strictly increasing. Indeed,
+  \[
+    U_{n+1}>3U_n>0
+  \]
+  holds at \(n=0\), and if it holds at \(n\), then
+  \[
+    U_{n+2}=5(U_{n+1}-U_n)
+      >\frac{10}{3}U_{n+1}>3U_{n+1}.
+  \]
+  Moreover, if \(3<U_{n+1}/U_n\le4\), then
+  \[
+    \frac{U_{n+2}}{U_{n+1}}
+      =5-\frac{5U_n}{U_{n+1}}
+      \le 5-\frac54<4,
+  \]
+  while the lower bound was just proved; starting from \(U_1/U_0=4\)
+  therefore gives \(3<U_{n+1}/U_n\le4\) for every \(n\). Thus the quotients
+  are bounded, so its greedy language is the greedy language of a linear
+  numeration basis with Perron recurrence in the stated sense. The
+  classification below implies that every infinite MCFL in this standard
+  greedy language has unbounded prime support away from \(5\).
 \end{example}
 
-\begin{corollary}[Bounded-support classification for linear Pisot systems]
-  \label{cor:linear-pisot-bounded-support-classification}
-  Let \(U\) be a linear Pisot \(U\)-system in the precise sense of
-  \Cref{cor:linear-pisot-prime-cf-immunity}, let \(\beta\) be its dominant
-  Pisot number, and let \(S_{\mathrm r}\) be the prime divisors of the
+\begin{corollary}[Bounded support for Perron-recurrence numeration]
+  \label{cor:linear-perron-bounded-support-classification}
+  Let \(U\) be a greedy linear numeration basis in the precise sense of
+  \Cref{cor:linear-perron-prime-cf-immunity}, let \(\beta\) be its dominant
+  Perron number, and let \(S_{\mathrm r}\) be the prime divisors of the
   constant coefficient of its minimal tail recurrence.  The following are
   equivalent:
   \begin{enumerate}[label=\textup{(\roman*)}]
@@ -1031,7 +1063,7 @@ every \(n\ge J_{\mathrm r}\), and put
   \(L\subseteq\mathcal R_U\) has unbounded prime support outside
   \(S_{\mathrm r}\).  For effective input as in
   \Cref{cor:bounded-outside-support-semidecidable}, the three equivalent
-  properties are decidable in this linear Pisot class: the answer is positive
+  properties are decidable in this Perron-recurrence class: the answer is positive
   exactly when the supplied minimal polynomial has degree one.
 \end{corollary}
 
@@ -1050,18 +1082,19 @@ every \(n\ge J_{\mathrm r}\), and put
     U_{L+Dt-1}\le cb^t<U_{L+Dt}.
   \]
   The standard solution of the recurrence defined by the minimal polynomial
-  of the Pisot number gives
+  of the Perron number gives
   \[
     \lim_{n\to\infty}U_n^{1/n}=\beta.
   \]
-  Indeed, the coefficient of the dominant root is nonzero because \(U\) is
-  unbounded, while every other conjugate has modulus less than one.  Taking
+  Indeed, the coefficient of the dominant root is nonzero because the
+  displayed polynomial is the minimal tail recurrence, while every other
+  conjugate has modulus strictly less than \(\beta\). Taking
   \(t\)-th roots in the preceding inequalities therefore yields
   \(b=\beta^D\).
 
   If \(\beta\) had degree greater than one, any other conjugate
   \(\beta'\) would satisfy \((\beta')^D=b\), and hence
-  \(\abs{\beta'}=b^{1/D}=\beta>1\), contrary to the defining Pisot
+  \(\abs{\beta'}=b^{1/D}=\beta\), contrary to the defining Perron
   inequality.  Thus \(\beta\) has degree one; being an algebraic integer
   greater than one, it belongs to \(\mathbb Z_{\ge2}\).  This proves
   \textup{(ii)}\(\Rightarrow\)\textup{(iii)}.
@@ -1081,16 +1114,18 @@ every \(n\ge J_{\mathrm r}\), and put
   This is a geometric synchronized scheme, proving
   \textup{(iii)}\(\Rightarrow\)\textup{(ii)}.  The universal assertion
   for nonintegral \(\beta\) is the negation of \textup{(i)}.  Finally, a
-  Pisot minimal polynomial has degree one exactly when its root is an
+  Perron minimal polynomial has degree one exactly when its root is an
   integer, which gives the stated terminating decision procedure.
 \end{proof}
 
 \begin{remark}[Exact open interfaces]
   \label{rem:pisot-open-interfaces}
-  The terminology for Pisot numeration systems is not uniform.
-  \Cref{cor:linear-pisot-prime-cf-immunity} covers the standard
+  The terminology for linear numeration systems with Perron or Pisot
+  recurrence is not uniform.
+  \Cref{cor:linear-perron-prime-cf-immunity} covers the standard
   positional linear \(U\)-systems just specified, including integer
-  bases, Zeckendorf/Fibonacci, Pell, and higher-order Pisot recurrences.
+  bases, Zeckendorf/Fibonacci, Pell, higher-order Pisot recurrences, and
+  non-Pisot Perron examples such as \(X^2-5X+5\).
   It does not assert the theorem for arbitrary real-base
   \(\beta\)-shift representations, non-positional abstract numeration
   systems, redundant noninjective digit systems, or systems lacking an
@@ -1107,8 +1142,9 @@ every \(n\ge J_{\mathrm r}\), and put
   action and the failure of arbitrary recurrence witnesses to classify
   escape behavior are distinguished in
   \Cref{prop:recurrence-witness-separation}.
-  Within linear Pisot \(U\)-systems, the residual alternative is classified
-  by \Cref{cor:linear-pisot-bounded-support-classification}: it occurs exactly
+  Within greedy linear numeration bases with Perron recurrence, the residual
+  alternative is classified
+  by \Cref{cor:linear-perron-bounded-support-classification}: it occurs exactly
   for an integral dominant root.  The ordinary-base example preceding
   \Cref{thm:unit-mcfl-deep-congruence-chain} shows that the valuation
   alternative cannot be removed.

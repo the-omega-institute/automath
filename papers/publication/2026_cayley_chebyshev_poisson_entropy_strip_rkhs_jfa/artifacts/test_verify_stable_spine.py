@@ -56,6 +56,47 @@ class StableSpineManuscriptTests(unittest.TestCase):
             self.assertIn(index, audit)
         self.assertIn("Ishige--Kawakami--Michihisa", audit)
 
+    def test_named_problem_audit_records_printed_questions_and_status(self) -> None:
+        audit = (ROOT / "artifacts" / "tier2_named_problem_audit.md").read_text(
+            encoding="utf-8"
+        )
+        required = (
+            "Johnson, Open Problem 1",
+            "corresponding result for the MMSE score",
+            "Johnson, Open Problem 4",
+            "representation of $D(f \\Vert g_s^{(\\alpha)})$ as an integral",
+            "Johnson, Open Problem 6",
+            "more general (non-symmetric) families of stable laws",
+            "No later source located",
+            "Finite-variance Cauchy case proved",
+        )
+        for text in required:
+            self.assertIn(text, audit)
+
+    def test_cauchy_interpolation_integral_representation_is_complete(self) -> None:
+        source = (ROOT / "sec_doob_phi_entropy.tex").read_text(encoding="utf-8")
+        required = (
+            r"\label{thm:johnson-cauchy-integral-representation}",
+            r"g_q=P_{q+s}=P_q*P_s",
+            r"D_{\rm KL}(\mu\|P_s)",
+            r"\int_0^\infty \mathcal J_{\mu,s}(q)\dd q",
+            r"q=\frac{st}{1-t}",
+            r"\frac{s}{(1-t)^2}",
+            r"joint lower semicontinuity",
+            r"data-processing inequality",
+            r"\|u_q-1\|_\infty\longrightarrow0",
+            r"Proposition~\ref{prop:compact-window-bregman-identity}",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        intro = (ROOT / "sec_introduction.tex").read_text(encoding="utf-8")
+        self.assertIn(r"Johnson's integral-representation problem", intro)
+        self.assertNotIn(
+            r"Theorem~\ref{thm:johnson-cauchy-integral-representation}", intro
+        )
+        self.assertIn(r"the finite-variance Cauchy statement proved in", intro)
+
 
 if __name__ == "__main__":
     unittest.main()

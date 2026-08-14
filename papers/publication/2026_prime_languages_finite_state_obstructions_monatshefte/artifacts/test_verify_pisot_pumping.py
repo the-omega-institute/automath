@@ -14,7 +14,7 @@ class PisotPumpingVerifierTests(unittest.TestCase):
             1,
         )
 
-    def test_linear_pisot_decision_accepts_exactly_integer_bases(self):
+    def test_linear_perron_decision_accepts_exactly_integer_bases(self):
         decisions = {
             system.name: verifier.has_bounded_outside_support_mcfl(system)
             for system in verifier.SYSTEMS
@@ -27,8 +27,18 @@ class PisotPumpingVerifierTests(unittest.TestCase):
                 "pell": False,
                 "tribonacci": False,
                 "quadratic_nonunit": False,
+                "quadratic_perron_nonpisot": False,
                 "integer_base_2": True,
             },
+        )
+
+    def test_nonpisot_perron_example_is_strictly_increasing(self):
+        system = verifier.system_by_name("quadratic_perron_nonpisot")
+
+        self.assertEqual(system.polynomial, "x^2-5x+5")
+        self.assertEqual(
+            verifier.weights(system, 8),
+            [1, 4, 15, 55, 200, 725, 2625, 9500],
         )
 
     def test_geometric_ratio_uses_only_tail_primes(self):
@@ -147,8 +157,8 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["tail_prefix_failures"], 0)
         self.assertEqual(report["geometric_ray_cases"], 13)
         self.assertEqual(report["geometric_ray_failures"], 0)
-        self.assertEqual(report["linear_pisot_classification_cases"], 5)
-        self.assertEqual(report["linear_pisot_classification_failures"], 0)
+        self.assertEqual(report["linear_perron_classification_cases"], 6)
+        self.assertEqual(report["linear_perron_classification_failures"], 0)
         self.assertEqual(report["geometric_ratio_support_cases"], 4)
         self.assertEqual(report["geometric_ratio_support_failures"], 0)
         self.assertEqual(report["evertse_support_bound_cases"], 4)

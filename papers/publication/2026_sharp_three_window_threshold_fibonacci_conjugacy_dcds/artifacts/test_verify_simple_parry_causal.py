@@ -16,6 +16,7 @@ from verify_simple_parry_causal import (
     cubic_family_extremal_vector,
     cubic_family_q_sequence,
     gamma_claims,
+    non_pisot_simple_parry_claims,
     p_bonacci_claims,
     periodic_collision,
     q_sequence,
@@ -24,6 +25,16 @@ from verify_simple_parry_causal import (
 
 
 class SimpleParryCausalTests(unittest.TestCase):
+    def test_collision_theorems_do_not_require_the_pisot_hypothesis(self):
+        result = non_pisot_simple_parry_claims()
+        self.assertEqual(result["digits"], (2, 0, 0, 2))
+        self.assertTrue(result["parry_admissible"])
+        self.assertFalse(result["is_pisot"])
+        self.assertGreater(result["largest_nondominant_modulus"], 1.0)
+        self.assertEqual(result["q_prefix"], [1, 3, 7, 15, 32, 70, 154])
+        self.assertTrue(all(result["rank_checks"]))
+        self.assertEqual(result["aperture_two_causal_length"], 2)
+
     def test_cubic_family_has_the_claimed_parry_word_and_factorization(self):
         for n in range(4, 13):
             result = cubic_family_claims(n)

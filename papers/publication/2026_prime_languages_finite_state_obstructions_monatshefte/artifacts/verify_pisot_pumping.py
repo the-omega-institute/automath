@@ -42,6 +42,9 @@ SYSTEMS = (
     LinearSystem("pell", "x^2-2x-1", (1, 2), (1, 2), 2),
     LinearSystem("tribonacci", "x^3-x^2-x-1", (1, 1, 1), (1, 2, 4), 1),
     LinearSystem("quadratic_nonunit", "x^2-2x-2", (2, 2), (1, 3), 2),
+    LinearSystem(
+        "quadratic_perron_nonpisot", "x^2-5x+5", (-5, 5), (1, 4), 3
+    ),
     LinearSystem("integer_base_2", "x-2", (2,), (1,), 1),
 )
 
@@ -395,7 +398,7 @@ def geometric_ratio_support_obstruction(
 
 
 def has_bounded_outside_support_mcfl(system: LinearSystem) -> bool:
-    """Decision rule for systems whose recurrence polynomial is minimal Pisot."""
+    """Decision rule when the recurrence polynomial is minimal Perron."""
     return system.dimension == 1
 
 
@@ -793,14 +796,15 @@ def run_verification() -> dict[str, object]:
         != 2**exponent
         for exponent in range(geometric_ray_cases)
     )
-    expected_pisot_decisions = {
+    expected_perron_decisions = {
         "fibonacci": False,
         "pell": False,
         "tribonacci": False,
         "quadratic_nonunit": False,
+        "quadratic_perron_nonpisot": False,
         "integer_base_2": True,
     }
-    pisot_decisions = {
+    perron_decisions = {
         system.name: has_bounded_outside_support_mcfl(system)
         for system in SYSTEMS
     }
@@ -844,9 +848,9 @@ def run_verification() -> dict[str, object]:
         "tail_prefix_failures": tail_prefix_failures,
         "geometric_ray_cases": geometric_ray_cases,
         "geometric_ray_failures": geometric_ray_failures,
-        "linear_pisot_classification_cases": len(SYSTEMS),
-        "linear_pisot_classification_failures": int(
-            pisot_decisions != expected_pisot_decisions
+        "linear_perron_classification_cases": len(SYSTEMS),
+        "linear_perron_classification_failures": int(
+            perron_decisions != expected_perron_decisions
         ),
         "geometric_ratio_support_cases": len(ratio_support_examples),
         "geometric_ratio_support_failures": ratio_support_failures,
@@ -859,7 +863,7 @@ def run_verification() -> dict[str, object]:
 
 def _format_report(report: dict[str, object]) -> str:
     lines = [
-        "LINEAR PISOT PUMPING VERIFICATION",
+        "LINEAR RECURRENT NUMERATION VERIFICATION",
         f"systems checked: {report['systems_checked']}",
         f"affine action cases: {report['affine_cases']}",
         f"valid canonical pump witnesses: {report['pump_witnesses']}",
@@ -875,10 +879,10 @@ def _format_report(report: dict[str, object]) -> str:
         f"tail-prefix action failures: {report['tail_prefix_failures']}",
         f"geometric ray cases: {report['geometric_ray_cases']}",
         f"geometric ray failures: {report['geometric_ray_failures']}",
-        "linear Pisot classification cases: "
-        f"{report['linear_pisot_classification_cases']}",
-        "linear Pisot classification failures: "
-        f"{report['linear_pisot_classification_failures']}",
+        "linear Perron classification cases: "
+        f"{report['linear_perron_classification_cases']}",
+        "linear Perron classification failures: "
+        f"{report['linear_perron_classification_failures']}",
         "geometric ratio support cases: "
         f"{report['geometric_ratio_support_cases']}",
         "geometric ratio support failures: "
@@ -908,7 +912,7 @@ def _format_report(report: dict[str, object]) -> str:
         "inflated_fibonacci_failures",
         "tail_prefix_failures",
         "geometric_ray_failures",
-        "linear_pisot_classification_failures",
+        "linear_perron_classification_failures",
         "geometric_ratio_support_failures",
         "evertse_support_bound_failures",
     )

@@ -86,6 +86,11 @@ It reconstructs the four-vertex collision certificate
 \(R=1-z+4z^2\), isolates \(1/4\) as its only collision radius in
 \(0<z\le1/4\), checks the theorem's \(N-1=959\) collision bound, and records
 the corresponding \(N_*=960\) algebraic-sample recovery budget.
+It also checks an exact one-vertex two-loop example in which the strict gap
+fails, while the algebraic sample `y=1/3` lies in the open Perron interval and
+both determinant germs are positive. Block diagonalization verifies that the
+sign-determinant ratio equals the ratio of the ordinary Artin-Mazur zeta
+functions of the two binary covers.
 It also audits the exact specialization of Nishioka's 1982 theorem used in
 Theorem 6.8: `p=2`, `N=0`, `n=1`, `m=M=2`, `U=L=1`, coprimality of the
 reduced equation, and the numerical inequality `4<8`.  This is parameter
