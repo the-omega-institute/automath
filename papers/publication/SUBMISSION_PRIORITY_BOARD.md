@@ -14,15 +14,16 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 冲刺轮次 | 页 | **PRIMARY** | BACKUP | 注意 |
-|---|---|---|---|---|---|
-| **A2** `cayley_chebyshev` | r1–**r5** | **55**+31 | **Journal of Functional Analysis** | AIHP-PS · SIMA | 已压缩至 55 页（+31 页补充材料），JFA 可受理；主定理层次待理清 |
-| **A3** `sharp_three_window` | r1–**r3** | 57 | **DCDS-A** | JNT · Dynamical Systems | ⚠️ 窄版曾被 DCDS-A 以 scope 拒 |
-| **A4** `prime_languages` | r1–**r4** | **38**+29 | **Monatshefte für Mathematik** | TCS · JNT | 已压缩至 38 页（+29 页补充材料）；MCFL immunity + 整除树提供刊级新颖性 |
-| **A5** `finite_parts` | r1–**r5** | 38 | **DCDS** | ETDS · Dynamical Systems | Mahler 线已从存在性升级为判定程序；⚠️ 更正型窄 scope 仍是主要编辑风险 |
-| **A6** `zeckendorf_fibers` | r1–**r7** | 62 | **Journal of Number Theory** | EJC · Monatshefte | 本轮深化幅度最大；⚠️ 压缩尝试已回退（见下）——正文可降至 34–37 页，但正文与补充材料**相互交叉引用**，xr-hyper 需往复多遍才收敛，未能达到零未定义引用；`sec_local_spectrum.tex` 1504 行仍超 800 行规范 |
-| **A7** `upper_fibers` | r1–**r5** | 50 | **The Fibonacci Quarterly** | J. Integer Seq. · INTEGERS | ⚠️ 2026-05 已被 Ramanujan J. 拒；须大幅压缩 |
-| **A8** `detector_shells` | r1–**r7** | 55 | **Stochastic Models** | MCAP · Stochastics | ⚠️ 曾被 GRG 与 J.Phys.Comm. 拒，转概率向 |
+| 篇 | 轮次 | 页 | 独立评估档位 | **PRIMARY** | 在飞任务 |
+|---|:--:|---|:--:|---|---|
+| **A2** `cayley_chebyshev` | **r6** | 60 | TIER-3 | **Journal of Functional Analysis** | `1bbb9117` |
+| **A3** `sharp_three_window` | **r5** | 63 | TIER-4 | **DCDS-A** | `d069ef5b` |
+| **A4** `prime_languages` | **r5** | 21 | TIER-3 | **Monatshefte für Mathematik** | `4cfefb12` |
+| **A5** `finite_parts` | **r7** | 27 | TIER-3 | **DCDS** | `a18fd23b` |
+| **A6** `zeckendorf_fibers` | **r8** | 47 | TIER-3 | **Journal of Number Theory** | `92737c82` |
+| **A7** `upper_fibers` | **r6** | 23+32 | TIER-4 | **The Fibonacci Quarterly** | `1f6962d1` |
+| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待队列 |
+| **A9** `homological_visibility` | — | 93 | 评估中 | ⚠️ APAL 已拒(表述,非内容)| — |
 
 **目标期刊在整轮冲刺后没有变化。** 深化显著增厚了内容（见下），但没有哪一篇因此跨过档次线；PRIMARY 维持上表。
 
