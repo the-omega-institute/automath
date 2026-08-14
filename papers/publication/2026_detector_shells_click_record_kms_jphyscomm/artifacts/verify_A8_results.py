@@ -637,6 +637,24 @@ def helmert_blocking_log_terms(
     )
 
 
+def helmert_zolotarev_blocking_log_terms(
+    rate: float, log_sample_size: float, layer: int
+) -> tuple[float, float, float]:
+    """Return deleted-edge and actual-block log terms for the Z2--W2 bound."""
+    dimension = (layer + 1) ** 2 - 1
+    log_block_length = math.log(dimension**2 + log_sample_size)
+    log_dimension = math.log(dimension)
+    log_tail = -rate * layer + math.log1p(rate * layer)
+    deleted_mean_square = math.exp(log_dimension - log_block_length) + math.exp(
+        log_block_length + log_dimension - log_sample_size
+    )
+    return (
+        math.log(deleted_mean_square),
+        0.5 * log_block_length + 1.5 * log_dimension - 0.5 * log_sample_size,
+        -0.5 * log_sample_size - log_tail,
+    )
+
+
 def helmert_critical_log_mean(rate: float, layer: int, constant: float) -> float:
     """Return log(n*S_J^2) on 2*rate*J=log n+2*log log n-constant."""
     target = 2.0 * rate * layer + constant
@@ -1126,6 +1144,13 @@ def main() -> None:
     blocking_logs = helmert_blocking_log_terms(
         bracket_rate, bracket_log_n, sufficient_layer
     )
+    old_window_layer = math.floor(bracket_log_n / (2.0 * bracket_rate))
+    zolotarev_logs = helmert_zolotarev_blocking_log_terms(
+        bracket_rate, bracket_log_n, old_window_layer
+    )
+    old_window_cmu_logs = helmert_blocking_log_terms(
+        bracket_rate, bracket_log_n, old_window_layer
+    )
     print("A8-r7 exchange-point Helmert coupling-bracket verification")
     print(
         "overlap maximum covariance/lag-one error="
@@ -1147,6 +1172,15 @@ def main() -> None:
     print(
         "critical-window maximum |log(n*S_J^2)-(c-log 4)|="
         f"{max(critical_constant_errors):.3e}"
+    )
+    print("A8-r9 sharp Zolotarev--Wasserstein boundary verification")
+    print(
+        "old-window Z2 logs (deleted, actual-block d^(3/2), rare)="
+        + np.array2string(np.asarray(zolotarev_logs), precision=10)
+    )
+    print(
+        "same-layer CMU logs (deleted, dimension-adjusted block, rare)="
+        + np.array2string(np.asarray(old_window_cmu_logs), precision=10)
     )
 
     expansion_errors = []

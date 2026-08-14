@@ -446,3 +446,45 @@ asymptotic phenomena. The manuscript consequently claims only the exact,
 compact-uniform sampled-counter specialization, with its explicit Palm-gap
 score and information. These database searches bound the novelty audit; they
 do not prove universal absence.
+
+## A8-r9 sharp local-null Helmert boundary audit
+
+Checked 2026-08-15 through the live arXiv Atom API and Crossref, with the
+complete arXiv texts of the two load-bearing probability sources. The exact
+model queries
+
+- `all:"sampled-counter" AND all:"Gaussian coupling"`;
+- `all:"weighted Helmert" AND all:Zolotarev`;
+- `all:"one-dependent" AND all:Zolotarev`;
+- `all:Zolotarev AND all:"Gaussian coupling"`
+
+each returned `opensearch:totalResults=0`. The broader query
+`all:"Zolotarev distance" AND all:"Wasserstein"` returned four records. Its
+only sharp multidimensional comparison is Bo{\l}botowski--Bouchitt\'e,
+"Sharp inequalities between Zolotarev and Wasserstein distances in
+$\mathcal P_2(\mathbb R^d)$," arXiv:`2511.00232v1`. Crossref confirms its
+publication in *Probability Theory and Related Fields* on 2026-07-30, DOI
+`10.1007/s00440-026-01527-4`. Theorem 3.1 proves the imported inequality
+`W_2^2/4 <= Z_2` in every dimension; neither that theorem nor its optimal
+constant is claimed as new here.
+
+The Stein regularity input is likewise published: Meckes, "On Stein's method
+for multivariate normal approximation," *IMS Collections*, 153--178 (2009),
+DOI `10.1214/09-IMSCOLL511`, arXiv:`0902.0333`. Her Lemma 2 gives the
+coordinate-free third-derivative bound for the multivariate Gaussian Stein
+solution. Combining that bound with the standard leave-one-block-out Taylor
+expansion yields a `Z_2` estimate involving only the actual independent block
+third moments. This is not CMU Corollary 2.3: CMU's `beta_{2,2}` still counts
+both actual and Gaussian comparison blocks and its Euclidean bound still has
+`phi_2(d)^2=2d`. The manuscript now states this distinction explicitly.
+
+Crossref searches for "weighted Helmert Zolotarev Gaussian coupling,"
+"sampled-counter Gaussian coupling," and "one-dependent Zolotarev Gaussian
+approximation" returned no matching model theorem; the lexical results were
+unrelated Helmert-transformation or general Gaussian-approximation works.
+OpenAlex was rate-limited during this audit and is not used as negative
+evidence. The promoted novelty is therefore restricted to the sampled-counter
+application: the independent-block Helmert moment calculation, its uniform
+local-null covariance comparison, the calendar-stopping transfer, and the
+resulting equivalence `n S_J^2 -> infinity`. The general `Z_2`--`W_2`, Stein,
+Rosenthal--Burkholder, and Yurinskii results remain cited background.

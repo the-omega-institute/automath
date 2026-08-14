@@ -379,6 +379,30 @@ class CanonicalHelmertGrowingLayerChecks(unittest.TestCase):
             )
             self.assertGreater(log_rare, 1.0)
 
+    def test_zolotarev_block_terms_close_the_old_cmu_window(self):
+        for rate in (0.2, 0.7, 1.35, 3.0, 5.0):
+            new_terms = []
+            old_rare_terms = []
+            for log_n in (200.0, 800.0, 3200.0, 12_800.0):
+                layer = math.floor(log_n / (2.0 * rate))
+                log_deleted, log_block, log_rare = (
+                    verify.helmert_zolotarev_blocking_log_terms(
+                        rate, log_n, layer
+                    )
+                )
+                _, old_block, old_rare = verify.helmert_blocking_log_terms(
+                    rate, log_n, layer
+                )
+                log_dimension = math.log((layer + 1) ** 2 - 1)
+                self.assertAlmostEqual(log_block, old_block - log_dimension)
+                self.assertAlmostEqual(log_rare, old_rare - log_dimension)
+                new_terms.append(max(log_deleted, log_block, log_rare))
+                old_rare_terms.append(old_rare)
+            self.assertLess(new_terms[-1], new_terms[0])
+            self.assertLess(new_terms[-1], -4.0)
+            self.assertGreater(old_rare_terms[-1], old_rare_terms[0])
+            self.assertGreater(old_rare_terms[-1], 1.0)
+
     def test_critical_window_constant_is_exp_c_over_four(self):
         c = 3.0
         target = c - math.log(4.0)
