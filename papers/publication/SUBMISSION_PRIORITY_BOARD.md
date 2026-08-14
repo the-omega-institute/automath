@@ -16,14 +16,14 @@
 
 | 篇 | 页 | 当前动作 | 在飞 id | **去向** |
 |---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | 66 | codex 修复中（$r=1$ 纳入定理、分母正性机制、锐性拆引理） | — | 强专门期刊（JFA 拒稿概率显著高于接收）|
-| **A3** `sharp_three_window` | 63 | codex 修复中（优先权 + Lemma 5.3/6.7/6.8 + 三次根计数） | — | **DCDS-A**（无须降投）；备选 TCS |
+| **A2** `cayley_chebyshev` | **67** | ✅ 已修已提交（$r\ge1$ 已纳入定理） | — | **Potential Analysis** |
+| **A3** `sharp_three_window` | 63 | codex 修复中 | — | DCDS-A;备选 TCS |
 | **A4** `prime_languages` | 25 | 投稿包封装中 | — | Monatshefte |
-| **A5** `finite_parts` | 33 | 投稿包封装中 | — | DCDS / ETDS |
-| **A6** `zeckendorf_fibers` | 59 | codex 修复中（按 Bernoulli 卷积文献重定主定理、改投） | — | **JNT** |
+| **A5** `finite_parts` | 33 | 投稿包封装中（另欠 Nishioka 署名修正） | — | DCDS / ETDS |
+| **A6** `zeckendorf_fibers` | 59 | codex 修复中 | — | JNT |
 | **A7** `upper_fibers` | 27 | 外审在飞 | `6496b45e` | Fibonacci Quarterly |
-| **A8** `detector_shells` | 62 | 外审在飞 | `6dd1a961` | Stochastic Models |
-| **A9** `homological_visibility` | 48+50 | 外审在飞（压缩后重新评档） | `226c441b` | 待定 |
+| **A8** `detector_shells` | 62 | **拒稿** → codex 修复中 | — | **Methodology and Computing in Applied Probability** |
+| **A9** `homological_visibility` | 48+50 | 外审在飞 | `226c441b` | 待定 |
 
 
 
@@ -37,13 +37,16 @@
 
 
 
-> **TICK 28 — 独立核实审稿人的引文，抓到我们自己的一处署名错误**。三份外审均在 `waiting_response`(A7 `6496b45e`、A8 `6dd1a961`、A9 `226c441b`),四个 codex 仍在跑,无可收割;内存 1.07 GB,不加派。
+
+> **TICK 28 补 — A2 升级落地，A8 第三份拒稿**。
 >
-> 我们正在**依据审稿人给的文献删除和降级定理**,而这些文献此前从未独立核实过。本 tick 逐条查 Crossref:
+> **A2 的 $r=1$ 真的做进去了**,已独立复核提交(`e9a9c0772`)。定理假设由 $r\ge2$ 改为 $r\ge1$;$r=1$ 处端点公式仍给出 $p\ge1$,故所设 $p$-矩供出一阶矩与 $\EE|X|<\infty$,且 $m+1>p$、$pq=2$,恰好留出 $o(s^{-2})$ 所需的幂次。被藏在 "standard estimates" 里的分母正性机制也写出来了:$\|
+abla\log p_1\|_\infty\le L$ 给出 $q_s^\lambda\ge\exp(-L\EE|X|/s)	o1$,再加 $L^1$ 平移连续性。清构建 exit 0、67 页、三项缺陷全 0、三个 verifier PASS、11 测试通过。**改投 Potential Analysis**(Chen–Niles-Weed 本身即发表于该刊)。
 >
-> **A5 抓到实错**。`Nishioka` 是**两个人**,我们当成了一个 —— `references.bib` 两条都写 `K.~Nishioka`,正文还以单数合指("both Nishioka theorems")。实际是 **Kumiko** Nishioka(J. Austral. Math. Soc. A **33** (1982) 386–393)与 **Keiji** Nishioka(Arch. Math. **44** (1985) 330–335);Keiji 另有 Nagoya Math. J. **109** 的 Painlevé 论文,确非同一人。期刊卷页我们都对,错的是作者身份。**这正是审稿人要我们让出优先权的那一处**,而他自己也只写"K. Nishioka 1985",所以这处只能我们自己发现。A5 当前有 agent 在改,未并发改动,已记入 `PENDING_FIXES.md`。
+> **A8 拒稿**,但审稿人明言**未发现任何反例**推翻记录律、三坐标商逆或二态 fibre 弧 —— 拒的是"尚未达到其自称的完整性与优先权标准"。三条:①**漏引 Bickel–Kwon** 的 known-marginal Markov tangent 与 additive projection,是本轮优先权审计最重要的发现;Ramírez-Cobo–Lillo 与 He–Zhang 须由"邻近背景"升为逐式比较对象;三坐标商逆在比较完成前只能作**候选**原创。②coupling 构造对全部 $\sigma\in H_N(\mathbb C)$ 的可测性与一致性未证;Helmert coupling 与 singular LAN 这类无限样本定理,**数值测试只能作 sanity check,不能替代缺失的 uniform remainder 证明**。③这实际是两篇论文,且 J. Phys. Comm. 要求贡献于**物理知识**,而我们的 sampled-counter 物理实现目前只充当模型解释。**改投 Methodology and Computing in Applied Probability。**
 >
-> **A6 四条引文全部属实**,可放心据以删改;但有一处年份陷阱:Lau–Ngai 的 DOI 是 `aima.1998.1773` 而**卷次为 Adv. Math. 141 (1999)**,不可照审稿人的"1998"著录。Hu 那条尚未核实,引用前须补。
+> 至此六篇有外审的论文中**五篇存在优先权遗漏**。
+
 
 
 
