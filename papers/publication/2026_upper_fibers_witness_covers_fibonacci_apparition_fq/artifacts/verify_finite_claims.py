@@ -48,6 +48,7 @@ class RankPureSectorResult:
     canonical_product_count: int
     weighted_product_count: int
     canonical_products: Tuple[int, ...]
+    all_products: Tuple[int, ...]
 
 
 @dataclass(frozen=True)
@@ -728,6 +729,7 @@ def rank_pure_sector(n: int) -> RankPureSectorResult:
             raise AssertionError(f"exact-rank prime count failed at n={n}, rank={rank}")
 
     canonical_products = []
+    all_products = []
     weighted_product_count = 0
     connected_count = 0
     admissible_count = 0
@@ -740,11 +742,17 @@ def rank_pure_sector(n: int) -> RankPureSectorResult:
         admissible_count += 1
         weighted_product_count += math.prod(len(choices) for choices in prime_choices)
         canonical_products.append(math.prod(choices[0] for choices in prime_choices))
+        all_products.extend(
+            math.prod(choice_tuple)
+            for choice_tuple in itertools.product(*prime_choices)
+        )
         if _cover_is_connected(family, k):
             connected_count += 1
 
     if len(set(canonical_products)) != len(canonical_products):
         raise AssertionError(f"rank-pure product collision at n={n}")
+    if len(set(all_products)) != weighted_product_count:
+        raise AssertionError(f"weighted rank-pure product collision at n={n}")
     return RankPureSectorResult(
         n=n,
         coordinate_count=k,
@@ -755,6 +763,7 @@ def rank_pure_sector(n: int) -> RankPureSectorResult:
         canonical_product_count=len(canonical_products),
         weighted_product_count=weighted_product_count,
         canonical_products=tuple(sorted(canonical_products)),
+        all_products=tuple(sorted(all_products)),
     )
 
 
@@ -883,6 +892,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     minimal_generator_set_equalities = 0
     rank_pure_layers = 0
     rank_pure_membership_layers = 0
+    rank_pure_weighted_membership_layers = 0
     odd_rank_pure_layers = 0
     odd_complete_realizations = 0
     deaggregation_layers = 0
@@ -1085,6 +1095,15 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
                         failures.append(
                             f"n={n}: a rank-pure product is absent from M_n"
                         )
+                    if set(sector.all_products).issubset(
+                        threshold.minimal_generators
+                    ):
+                        rank_pure_weighted_membership_layers += 1
+                    else:
+                        failures.append(
+                            f"n={n}: a weighted rank-pure product is absent "
+                            "from M_n"
+                        )
                     if n % 2 == 1:
                         odd_rank_pure_layers += 1
                         if (
@@ -1138,6 +1157,27 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     excluded_types = ("Gamma_3", "Gamma_6", "Gamma_9")
     if not set(excluded_types).isdisjoint(realized_types):
         counterexamples.append("n=30 realizes a claimed excluded type")
+
+    ladder_separation_lines = []
+    if scalable_max >= 91:
+        sector_91 = rank_pure_sector(91)
+        generators_91 = set(results[91].minimal_generators)
+        rank_pure_91 = set(sector_91.all_products)
+        if (
+            sector_91.weighted_product_count != 3
+            or len(generators_91) != 4
+            or 169 not in generators_91
+            or 169 in rank_pure_91
+        ):
+            failures.append(
+                "n=91 ladder separation failed: expected "
+                "#R_91^rp=3, #M_91=4, and 169 in M_91 \\\\ R_91^rp"
+            )
+        else:
+            ladder_separation_lines.append(
+                "  n=91 ladder separation: #R_91^rp = 3 < #M_91 = 4; "
+                "169 in M_91 \\\\ R_91^rp"
+            )
 
     checkpoints = sorted(
         set([30, exhaustive_max, scalable_max] + list(range(50, scalable_max + 1, 50)))
@@ -1197,6 +1237,9 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"  Exact-rank Mobius counts checked on every nonempty support",
         f"  Rank-pure canonical products in M_n: {rank_pure_membership_layers}/"
         f"{rank_pure_layers} layer checks",
+        f"  Rank-pure weighted products in M_n: "
+        f"{rank_pure_weighted_membership_layers}/{rank_pure_layers} "
+        "layer checks",
         f"  Odd layers realizing all minimal covers: {odd_complete_realizations}/"
         f"{odd_rank_pure_layers}",
         f"  Exact total support spectra: {support_spectrum_checks}/"
@@ -1232,6 +1275,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"  Fibotomic exact-rank radical divisibilities: "
         f"{fibotomic_radical_checks}/{fibotomic_layers}",
         f"  Jarden a(10p) >= 2 checks: {jarden_checks}/{jarden_layers}",
+        *ladder_separation_lines,
         "",
         "Corrected n=30 data:",
         f"  A(30) = {n30.a_count}",

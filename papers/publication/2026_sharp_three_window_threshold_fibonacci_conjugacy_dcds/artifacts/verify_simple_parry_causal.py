@@ -10,6 +10,68 @@ from __future__ import annotations
 from itertools import product
 
 
+def cubic_family_digits(n: int) -> tuple[int, ...]:
+    """Return the finite Parry word for the cubic family indexed by ``n``."""
+    if n < 4:
+        raise ValueError("the cubic family begins at n=4")
+    return tuple(
+        [n]
+        + list(range(1, n - 1))
+        + [n, 1, 0]
+        + list(range(n - 1, 1, -1))
+        + [0, n]
+    )
+
+
+def cubic_family_q_sequence(n: int, maximum: int) -> list[int]:
+    """Return the cubic-family language counts through ``maximum``."""
+    return q_sequence(cubic_family_digits(n), maximum)
+
+
+def cubic_family_extremal_vector(n: int, aperture: int) -> tuple[int, ...]:
+    """Return the extremal length-(aperture-1) collision path."""
+    if n < 4 or not 2 <= aperture <= n - 1:
+        raise ValueError("require n>=4 and 2<=aperture<=n-1")
+    if aperture == 2:
+        return (2, n)
+    padding = aperture - 3
+    return tuple(
+        [-2] * padding + [n - 2, -2, -n, 1] + [0] * padding
+    )
+
+
+def _polynomial_product(left: list[int], right: list[int]) -> list[int]:
+    """Multiply low-to-high integer coefficient lists."""
+    result = [0] * (len(left) + len(right) - 1)
+    for i, left_coefficient in enumerate(left):
+        for j, right_coefficient in enumerate(right):
+            result[i + j] += left_coefficient * right_coefficient
+    return result
+
+
+def cubic_family_claims(n: int) -> dict[str, bool | int]:
+    """Check the Parry factorization and suffix inequalities for one index."""
+    digits = cubic_family_digits(n)
+    parry = [-digit for digit in reversed(digits)] + [1]
+    minimal = [-n, 2 * n, -(n + 2), 1]
+    geometric_n = [1] * n
+    geometric_n1 = [1] * (n + 1)
+    factored = _polynomial_product(
+        _polynomial_product(minimal, geometric_n), geometric_n1
+    )
+
+    boundary = digits + (0,) * len(digits)
+    suffixes_are_smaller = all(
+        digits[start:] + (0,) * (len(digits) + start) < boundary
+        for start in range(1, len(digits))
+    )
+    return {
+        "parry_factorization": parry == factored,
+        "proper_suffixes_are_smaller": suffixes_are_smaller,
+        "parry_length": len(digits),
+    }
+
+
 def q_sequence(digits: tuple[int, ...], n: int) -> list[int]:
     """Return Q_0,...,Q_n for a finite Parry word."""
     p = len(digits)
@@ -355,6 +417,31 @@ def main() -> int:
         status = "PASS" if certificate_ok else "FAIL"
         print(f"  t={digits}, m={m}: {result} [{status}]")
         failures += not certificate_ok
+
+    print()
+    print("Unbounded cubic causal-depth battery:")
+    for n in range(4, 7):
+        digits = cubic_family_digits(n)
+        aperture = n - 1
+        family = cubic_family_claims(n)
+        analysis = collision_graph_analysis(digits, aperture)
+        terminal_counts = (
+            collision_graph_bad_path_count(digits, aperture, aperture - 1),
+            collision_graph_bad_path_count(digits, aperture, aperture),
+        )
+        passed = (
+            family["parry_factorization"]
+            and family["proper_suffixes_are_smaller"]
+            and analysis["injective"]
+            and analysis["causal_length"] == aperture
+            and terminal_counts == (2, 0)
+        )
+        status = "PASS" if passed else "FAIL"
+        print(
+            f"  n={n}, m={aperture}: causal={analysis['causal_length']}, "
+            f"terminal paths={terminal_counts} [{status}]"
+        )
+        failures += not passed
 
     print()
     print("p-bonacci unbounded-separation battery:")

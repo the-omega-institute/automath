@@ -11,6 +11,10 @@ from verify_simple_parry_causal import (
     bounded_multiple_order,
     collision_graph_analysis,
     collision_graph_bad_path_count,
+    cubic_family_claims,
+    cubic_family_digits,
+    cubic_family_extremal_vector,
+    cubic_family_q_sequence,
     gamma_claims,
     p_bonacci_claims,
     periodic_collision,
@@ -20,6 +24,51 @@ from verify_simple_parry_causal import (
 
 
 class SimpleParryCausalTests(unittest.TestCase):
+    def test_cubic_family_has_the_claimed_parry_word_and_factorization(self):
+        for n in range(4, 13):
+            result = cubic_family_claims(n)
+            self.assertEqual(len(cubic_family_digits(n)), 2 * n + 2)
+            self.assertTrue(result["parry_factorization"])
+            self.assertTrue(result["proper_suffixes_are_smaller"])
+
+    def test_cubic_family_count_recurrence_and_extremal_paths(self):
+        for n in range(4, 13):
+            q = cubic_family_q_sequence(n, n - 1)
+            self.assertEqual(q[:3], [1, n + 1, n * n + n + 2])
+            for r in range(3, n):
+                self.assertEqual(
+                    q[r],
+                    (n + 2) * q[r - 1] - 2 * n * q[r - 2] + n * q[r - 3],
+                )
+            for r in range(2, n):
+                witness = cubic_family_extremal_vector(n, r)
+                self.assertEqual(len(witness), 2 * r - 2)
+                weighted = [
+                    sum(q[j] * witness[t + j] for j in range(r))
+                    for t in range(r - 1)
+                ]
+                expected = [q[r]] if r == 2 else [-q[r]] + [0] * (r - 2)
+                self.assertEqual(weighted, expected)
+                self.assertTrue(all(-n <= entry <= n for entry in witness))
+
+    def test_cubic_family_has_unbounded_exact_causal_lengths(self):
+        for n in range(4, 7):
+            digits = cubic_family_digits(n)
+            m = n - 1
+            result = collision_graph_analysis(digits, m)
+            self.assertTrue(result["injective"])
+            self.assertEqual(result["causal_length"], n - 1)
+            self.assertIsNone(result["periodic_witness"])
+
+    def test_cubic_family_terminal_path_counts_match_the_classification(self):
+        for n in range(4, 7):
+            digits = cubic_family_digits(n)
+            for r in range(2, n):
+                self.assertEqual(
+                    collision_graph_bad_path_count(digits, r, r - 1), 2
+                )
+                self.assertEqual(collision_graph_bad_path_count(digits, r, r), 0)
+
     def test_injective_folds_have_finite_causal_length_within_state_bound(self):
         for digits, m, expected_length in (
             ((1, 1, 1), 4, 2),

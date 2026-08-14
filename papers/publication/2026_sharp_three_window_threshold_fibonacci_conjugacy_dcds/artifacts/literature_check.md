@@ -251,10 +251,10 @@ or overlap-threshold predecessor.
 
 The defensible novelty boundary is therefore narrow.  Ordered regular-
 language numeration, Bertrand recognizability, cubic Pisot expansions, and
-simple-Parry admissibility are prior art.  The only potentially new cubic
-statement is the parameter-uniform modulus-`Q_m` collision-depth theorem.
-That statement is not integrated because its required all-parameter carry
-classification remains unproved.
+simple-Parry admissibility are prior art.  The new cubic statement is the
+parameter-uniform modulus-`Q_m` collision-depth theorem.  Its required
+all-parameter two-window carry exclusion and terminal-path induction are now
+proved in the manuscript; no novelty is claimed for Bassino's expansion data.
 
 The zbMATH Open API supplied the MathSciNet-style subject-index check.  Exact
 title searches returned Lecomte--Rigo as Zbl `0969.68095`,
@@ -291,3 +291,36 @@ records states that injectivity of this article's cyclic language-rank fold
 forces a finite future-only inverse, supplies the map-specific state-count
 and periodic-witness bounds, or classifies its aperture-two branch locus from
 the second Parry digit.
+
+## Tier-up refresh: unbounded cubic causal depth
+
+Checked: 2026-08-10 (Asia/Singapore).
+
+- The arXiv Atom API query for `"beta expansion"` together with Pisot,
+  normalization, or transducer terms returned 15 records.  The closest
+  mechanism-level results were Panju's *Beta Expansions for Regular Pisot
+  Numbers* (arXiv:1103.2147), Kalle--Steiner's work on Pisot-unit natural
+  extensions (arXiv:0907.2676), and the established cubic/multinacci
+  literature.  The exact query combining `x^3`, Pisot, and beta expansion
+  returned zero records.  This is only a query result, not a nonexistence
+  proof.
+- Crossref reconfirmed Bassino, Lecomte--Rigo, Bruyere--Hansel, and the
+  standard Pisot beta-numeration literature as the nearest records.  A query
+  containing the exact polynomial family returned no mathematically relevant
+  item.
+- Semantic Scholar's public Graph API search returned HTTP 429, and its public
+  HTML search surface did not expose stable result metadata to the client.
+  This is recorded as a rate-limited search, not as a zero-result claim.
+- The zbMATH Open API exact-title search returned Bassino's record
+  `Zbl 1152.11342` (document 2086225, DOI
+  `10.1007/3-540-45995-2_17`).  Its classification is 11R06/11A67.  The
+  earlier exact mechanism searches in this artifact returned no cyclic-rank
+  or causal-depth predecessor.
+
+Nearest prior work remains Fr\'ed\'erique Bassino, *Beta-Expansions for Cubic
+Pisot Numbers*, LATIN 2002.  It supplies the cubic Pisot/simple-Parry
+expansion data.  Lecomte--Rigo and Bruyere--Hansel supply the nearest ordered-
+language and Bertrand-numeration frameworks.  None of these sources states
+the parameter-uniform rank-modulo-`Q_m` two-window carry exclusion, the exact
+terminal collision paths, or the unbounded causal-depth conclusion proved
+here.

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
+from fractions import Fraction
 from itertools import product
 from math import sqrt
 
@@ -97,6 +98,77 @@ def predicted_threshold(beta: QuadraticPisot) -> int:
     if beta.conjugate_sign == "negative":
         return 3 if beta.a == beta.b else 2
     return 3 if beta.b == 1 else 2
+
+
+def nearest_multiple_separation(
+    beta: QuadraticPisot, r: int, difference: int
+) -> tuple[int, int]:
+    """Return the exact nearest-multiple distance and its claimed lower bound."""
+    if r < 4 or not 1 <= abs(difference) <= beta.max_digit:
+        raise ValueError("require r>=4 and a nonzero bounded digit difference")
+    q = beta.q_sequence(r)
+    residue = beta.b * difference * q[r - 1] % q[r]
+    distance = min(residue, q[r] - residue)
+    return distance, q[r - 2]
+
+
+def separation_proof_obligations(beta: QuadraticPisot) -> bool:
+    """Check the exact integer branches used in the separation proof."""
+    a, b = beta.a, beta.b
+    if beta.conjugate_sign == "negative":
+        denominator_u = a * a + a + b
+        denominator_l = a**3 + a * a + 2 * a * b + b
+        upper_offset = Fraction(b * (a + 1), denominator_u)
+        lower_offset = Fraction(b * denominator_u, denominator_l)
+        for e in range(1, a + 1):
+            q, remainder = divmod(b * e, a)
+            for k in range(0, b + 1):
+                h = b * e - a * k
+                if h <= 0:
+                    continue
+                if k <= q - 1:
+                    if h * (a + lower_offset) - k * b < 1:
+                        return False
+                    continue
+                if k != q:
+                    return False
+                p, terminal = divmod(q * b, a)
+                if p < remainder:
+                    if remainder * (a + lower_offset) - q * b < 1:
+                        return False
+                elif p > remainder:
+                    if q * b - remainder * (a + upper_offset) < 1:
+                        return False
+                else:
+                    w = remainder * b - a * terminal
+                    if w == 0:
+                        return False
+                    if w > 0:
+                        if (
+                            remainder * b * denominator_u
+                            < (terminal + 1) * denominator_l
+                        ):
+                            return False
+                    elif (
+                        terminal * denominator_u
+                        < remainder * b * (a + 1) + denominator_u
+                    ):
+                        return False
+        return True
+
+    denominator = a * a - b
+    upper = Fraction(a**3 - 2 * a * b, denominator)
+    for e in range(1, a):
+        for k in range(0, b + 1):
+            g = a * k - b * e
+            if g <= 0:
+                continue
+            norm = k * k - a * e * k + b * e * e
+            if norm == 0:
+                return False
+            if norm > 0 and k * b - g * upper < 1:
+                return False
+    return True
 
 
 def residue_table(beta: QuadraticPisot, m: int) -> list[int]:
@@ -345,6 +417,48 @@ def main() -> int:
             if histogram.get(2) != 1 or histogram.get(1, 0) != expected_singletons:
                 failures += 1
     print(f"  {fiber_checks} parameter/period pairs checked: one double fiber, all others singleton")
+
+    print()
+    print("Nearest-multiple separation battery:")
+    separation_checks = 0
+    for a in range(1, 16):
+        for b in range(1, a + 1):
+            beta = QuadraticPisot("negative", a, b)
+            for r in range(4, 11):
+                for difference in range(1, a + 1):
+                    distance, lower_bound = nearest_multiple_separation(
+                        beta, r, difference
+                    )
+                    separation_checks += 1
+                    failures += distance < lower_bound
+    for a in range(3, 16):
+        for b in range(1, a - 1):
+            beta = QuadraticPisot("positive", a, b)
+            for r in range(4, 11):
+                for difference in range(1, a):
+                    distance, lower_bound = nearest_multiple_separation(
+                        beta, r, difference
+                    )
+                    separation_checks += 1
+                    failures += distance < lower_bound
+    print(f"  {separation_checks} exact distances checked in both chambers")
+
+    print()
+    print("Nearest-multiple proof-obligation battery:")
+    obligation_checks = 0
+    for a in range(1, 40):
+        for b in range(1, a + 1):
+            obligation_checks += 1
+            failures += not separation_proof_obligations(
+                QuadraticPisot("negative", a, b)
+            )
+    for a in range(3, 40):
+        for b in range(1, a - 1):
+            obligation_checks += 1
+            failures += not separation_proof_obligations(
+                QuadraticPisot("positive", a, b)
+            )
+    print(f"  {obligation_checks} exact branch tables checked")
 
     print()
     print("Counterexample search domain:")

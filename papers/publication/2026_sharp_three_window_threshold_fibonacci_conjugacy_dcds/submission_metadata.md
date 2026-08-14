@@ -5,7 +5,7 @@ Journal: Discrete and Continuous Dynamical Systems - Series A (DCDS-A)
 Submission system: MSP/EditFlow
 
 Manuscript title:
-Overlap-injectivity thresholds for cyclic ranks of quadratic Pisot beta-languages
+Overlap thresholds and unbounded causal depth for cyclic ranks of Pisot beta-languages
 
 Article type:
 Research article
@@ -23,13 +23,13 @@ Authors:
    Corresponding author: yes
 
 Abstract:
-We define a cyclic rank recoding attached to the greedy language of every quadratic Pisot base beta. At length m, legal words are ordered colexicographically, their integer language ranks are extended to the full digit cube, and those ranks are reduced modulo the number of legal words. This is not numerical beta-value normalization in Z[beta]. We prove that the overlap threshold is three exactly for the roots of x^2-ax-a and x^2-ax+1, and is two for every other quadratic Pisot base. Above threshold the finite-block maps are injective, their image language has the full raw-block cardinality, and the trajectory inverse has memory zero and finite anticipation. The positive-conjugate rank theorem is proved by a coupled induction on the full and boundary-bounded languages; a nearest-multiple lemma supplies the uniform separation estimate; and an explicit two-output decoder handles all nonextremal aperture-two cases. The metallic/Fibonacci threshold and the Fischer-cover result are recovered as special cases.
+We study a cyclic rank recoding of greedy beta-languages: ordered-language ranks are extended to the full digit cube, reduced modulo the number of legal words, and overlapped along consecutive windows. This is not numerical beta-value normalization in Z[beta]. For every quadratic Pisot base, we prove that the overlap threshold is three exactly for the roots of x^2-ax-a and x^2-ax+1, and is two otherwise. For arbitrary nonintegral simple-Parry Pisot bases, an exact finite collision graph determines the optimal causal inverse length. This length is unbounded already in degree three: if beta_n in (n,n+1) is the root of x^3-(n+2)x^2+2nx-n and m_n=n-1, then the aperture-m_n recoding is injective and has optimal causal inverse length n-1. The proof uses a parameter-uniform two-window carry exclusion and an exact terminal collision-path classification.
 
 2020 Mathematics Subject Classification:
 Primary: 37B10, 37B40; Secondary: 11B39, 37A35, 11A67, 11K38
 
 Keywords:
-quadratic Pisot number; beta-language; ordered-language rank; cyclic recoding; symbolic dynamics; finite-memory conjugacy; branch locus; Fischer cover
+Pisot number; beta-language; ordered-language rank; cyclic recoding; symbolic dynamics; causal inverse; collision graph
 
 Suggested personal keywords:
 symbolic dynamics; abstract numeration; cyclic language rank; finite-memory conjugacy; Fischer cover

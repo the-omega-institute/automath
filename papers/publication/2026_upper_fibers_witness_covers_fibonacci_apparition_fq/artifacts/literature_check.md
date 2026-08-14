@@ -203,3 +203,39 @@ defective-index analysis; the fifth is the manuscript's explicit high-support
 open project; and the sixth still needs arithmetic dispersion unavailable in
 the cited literature. The second remains plausible but requires a separate
 coprime slot classification for covers using ranks $2$, $6$, and $12$.
+
+## Tier-up Recheck: Exact-rank Fiber Multiplicity
+
+Checked 2026-08-10 before the present proof attempt. The arXiv Atom API was
+queried for rank/order of appearance together with Fibonacci and for primitive
+divisors of Lucas sequences. Crossref was queried independently for exact-rank,
+primitive-divisor multiplicity, and average-order phrases. Semantic Scholar's
+keyword endpoint again returned HTTP 429, so Bilu--Hanrot--Voutier and the
+nearest DOI-bearing records were resolved through the paper-by-DOI endpoint.
+The zbMATH Open syntax search covered titles, abstracts, and reviews containing
+Fibonacci/Lucas, rank of apparition, primitive divisors, and average order.
+The API terms were accepted in the session before querying its document
+endpoint.
+
+The closest overlooked paper is P. Kiss, *On rank of apparition of primes in
+Lucas sequences*, Publ. Math. Debrecen 36 (1989), 147--151, DOI
+10.5486/pmd.1989.36.1-4.17. Its reviewed results bound averages of
+$r(p)/p$, including sums over primes with $r(p)\le x$; they do not bound the
+cardinality of a growing exact fiber
+$a(d)=\#\{p:\alpha(p)=d\}$. Kiss's 1988 primitive-divisor paper and 1990
+prime-power paper are also adjacent, but address primitive parts, large
+primitive factors, or reciprocal sums rather than upper distribution of
+$a(d)$.
+
+No returned record states an almost-all estimate for the weighted minimal-cover
+partition function
+\[
+ \sum_{\mathcal C}\prod_{S\in\mathcal C}a(n_S)
+\]
+on odd $n$, or an estimate implying that its logarithmic excess over the
+unweighted cover count is $o((\log\log n)^2)$. This weighted rank-pure estimate
+is a necessary positive-density interface in the manuscript. It is not
+sufficient: ladder atoms can occur even at odd squarefree indices, as
+$\alpha(13)=7$ and $\alpha(13^2)=91$ show. The previous maximum-window
+condition $\log R(n)=o(\omega(n))$ remains sufficient but is not presented as
+necessary. Database non-detection is not a proof of priority.

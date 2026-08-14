@@ -218,10 +218,30 @@ class FiniteClaimTests(unittest.TestCase):
                     len(sector.canonical_products),
                 )
                 self.assertTrue(set(sector.canonical_products).issubset(actual))
+                self.assertEqual(
+                    sector.weighted_product_count,
+                    len(sector.all_products),
+                )
+                self.assertTrue(set(sector.all_products).issubset(actual))
                 self.assertGreaterEqual(
                     sector.weighted_product_count,
                     sector.canonical_product_count,
                 )
+
+    def test_odd_squarefree_layer_can_have_a_ladder_generator(self):
+        sector = rank_pure_sector(91)
+        actual = set(upper_fiber_threshold(91).minimal_generators)
+        self.assertEqual(sector.weighted_product_count, 3)
+        self.assertEqual(len(actual), 4)
+        self.assertTrue(set(sector.all_products).issubset(actual))
+        self.assertNotIn(169, sector.all_products)
+        self.assertIn(169, actual)
+        report = run_battery(30, 91)
+        self.assertIn(
+            "n=91 ladder separation: #R_91^rp = 3 < #M_91 = 4; "
+            "169 in M_91 \\\\ R_91^rp",
+            report,
+        )
 
     def test_corrected_n30_data_and_types(self):
         exhaustive = upper_fiber_exhaustive(30)
@@ -312,6 +332,7 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Rank-pure layers checked: 28", report)
         self.assertIn("Odd layers realizing all minimal covers: 14/14", report)
         self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
+        self.assertIn("Rank-pure weighted products in M_n: 28/28 layer checks", report)
         self.assertIn("Exact total support spectra: 28/28", report)
         self.assertIn("Exact connected support spectra: 28/28", report)
         self.assertIn("Extremal atomic-product counts: 28/28", report)

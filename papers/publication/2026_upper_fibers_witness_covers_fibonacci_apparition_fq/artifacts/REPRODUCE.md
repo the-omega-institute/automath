@@ -21,7 +21,9 @@ multiplies back to the stated Fibonacci number.
   theta-normalized and discrete local-limit checks, rank-pure sector checks,
   exact total and connected support-spectrum checks and the extremal
   atomic-product count,
-  rank-window deaggregation and squarefree pigeonhole checks, refined
+  rank-window deaggregation and squarefree pigeonhole checks, complete
+  weighted rank-pure product membership and the strict ladder example at
+  `n=91`, refined
   private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
   radical checks, the finite Jarden consequence, environment reporting, and
   factorization-archive generation and validation.
@@ -58,8 +60,10 @@ For `61 <= n <= 210`, the structural route checks the stated finite upper and
 lower bounds. On every layer `3 <= n <= 210`, it also enumerates the rank-pure
 sector (all layers in this range have at most four prime coordinates), checks
 the exact-rank-prime Mobius formula on every nonempty support, and verifies that
-every canonical rank-pure product belongs to the independently constructed
-minimal-generator set. The exact Hearne--Wagner and connected-cover counts are
+every canonical and weighted rank-pure product belongs to the independently
+constructed minimal-generator set. It also confirms that the rank-pure sector
+is strict at `n=91`, where `169` is a ladder generator. The exact
+Hearne--Wagner and connected-cover counts are
 cross-checked against direct cover enumeration for `1 <= k <= 4`. Exact counts
 through `k=80` also check convergence to the parity-dependent theta
 normalization, the connected-cover ratio, and the central discrete local

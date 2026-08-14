@@ -12,11 +12,47 @@ from verify_quadratic_pisot_threshold import (
     critical_periodic_fiber_histogram,
     minimum_injective_output_length,
     predicted_threshold,
+    separation_proof_obligations,
+    nearest_multiple_separation,
     residue_table,
 )
 
 
 class QuadraticPisotThresholdTests(unittest.TestCase):
+    def test_nearest_multiple_proof_obligations_in_both_chambers(self):
+        for a in range(1, 40):
+            for b in range(1, a + 1):
+                self.assertTrue(
+                    separation_proof_obligations(
+                        QuadraticPisot("negative", a, b)
+                    )
+                )
+
+        for a in range(3, 40):
+            for b in range(1, a - 1):
+                self.assertTrue(
+                    separation_proof_obligations(
+                        QuadraticPisot("positive", a, b)
+                    )
+                )
+
+    def test_nearest_multiple_separation_in_both_parameter_chambers(self):
+        for a in range(1, 16):
+            for b in range(1, a + 1):
+                beta = QuadraticPisot("negative", a, b)
+                for r in range(4, 11):
+                    for e in range(1, a + 1):
+                        distance, lower_bound = nearest_multiple_separation(beta, r, e)
+                        self.assertGreaterEqual(distance, lower_bound)
+
+        for a in range(3, 16):
+            for b in range(1, a - 1):
+                beta = QuadraticPisot("positive", a, b)
+                for r in range(4, 11):
+                    for e in range(1, a):
+                        distance, lower_bound = nearest_multiple_separation(beta, r, e)
+                        self.assertGreaterEqual(distance, lower_bound)
+
     def test_minimal_polynomial_classification_covers_both_conjugate_signs(self):
         self.assertEqual(classify_minimal_polynomial(1, -1), QuadraticPisot("negative", 1, 1))
         self.assertEqual(classify_minimal_polynomial(5, -3), QuadraticPisot("negative", 5, 3))
