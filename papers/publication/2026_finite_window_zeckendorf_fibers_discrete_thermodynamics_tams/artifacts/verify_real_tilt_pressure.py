@@ -200,6 +200,135 @@ def prime_support_generator_cost_counter(
     return generators[target]
 
 
+def prime_support_inverse_h(prime: int, value: float) -> float:
+    """Invert h(z)=(p-1)z/((1-z)(1-pz)) on (0,1/p)."""
+    if prime < 2 or value <= 0.0:
+        raise ValueError("prime must be at least two and value must be positive")
+    middle = (prime - 1.0) + (prime + 1.0) * value
+    discriminant = middle * middle - 4.0 * prime * value * value
+    return 2.0 * value / (middle + math.sqrt(discriminant))
+
+
+def prime_support_saddle(
+    primes: tuple[int, ...], direction: tuple[float, ...]
+) -> tuple[float, tuple[float, ...]]:
+    """Solve prod_i (1-z_i)/(1-p_i z_i)=2 and h_i(z_i)=tau rho_i."""
+    if not primes or len(primes) != len(direction):
+        raise ValueError("primes and direction must be nonempty vectors of equal length")
+    if any(prime < 2 for prime in primes) or any(value <= 0.0 for value in direction):
+        raise ValueError("primes must be at least two and direction must be positive")
+
+    def point_and_product(tau: float) -> tuple[tuple[float, ...], float]:
+        point = tuple(
+            prime_support_inverse_h(prime, tau * rho)
+            for prime, rho in zip(primes, direction)
+        )
+        value = math.prod(
+            (1.0 - coordinate) / (1.0 - prime * coordinate)
+            for prime, coordinate in zip(primes, point)
+        )
+        return point, value
+
+    lower, upper = 0.0, 1.0
+    while point_and_product(upper)[1] < 2.0:
+        upper *= 2.0
+    for _ in range(100):
+        middle = 0.5 * (lower + upper)
+        if point_and_product(middle)[1] < 2.0:
+            lower = middle
+        else:
+            upper = middle
+    tau = 0.5 * (lower + upper)
+    point, _ = point_and_product(tau)
+    return tau, point
+
+
+def unmarked_prime_support_coefficients_2d(
+    first_prime: int, second_prime: int, maximum: int
+) -> list[list[int]]:
+    """Exact coefficients of the two-prime unmarked sequence function."""
+    coefficients = [[0] * (maximum + 1) for _ in range(maximum + 1)]
+    for first in range(maximum + 1):
+        for second in range(maximum + 1):
+            numerator = {
+                (0, 0): 1,
+                (1, 0): -first_prime,
+                (0, 1): -second_prime,
+                (1, 1): first_prime * second_prime,
+            }.get((first, second), 0)
+            coefficients[first][second] = (
+                numerator
+                + ((2 * first_prime - 1) * coefficients[first - 1][second]
+                   if first else 0)
+                + ((2 * second_prime - 1) * coefficients[first][second - 1]
+                   if second else 0)
+                - ((2 * first_prime * second_prime - 1)
+                   * coefficients[first - 1][second - 1]
+                   if first and second else 0)
+            )
+    return coefficients
+
+
+def prime_support_local_asymptotic_audit(exponent: int) -> dict[str, float]:
+    """Compare the corrected and proposed saddle scales to exact coefficients."""
+    if exponent < 1:
+        raise ValueError("exponent must be positive")
+    primes = (2, 3)
+    direction = (0.5, 0.5)
+    tau, point = prime_support_saddle(primes, direction)
+    h_values = [tau * rho for rho in direction]
+    means = [2.0 * value for value in h_values]
+    covariance = [[0.0, 0.0], [0.0, 0.0]]
+    for index, (prime, coordinate, h_value) in enumerate(
+        zip(primes, point, h_values)
+    ):
+        denominator = (1.0 - coordinate) * (1.0 - prime * coordinate)
+        derivative = (
+            (prime - 1.0) * (1.0 - prime * coordinate * coordinate)
+            / (denominator * denominator)
+        )
+        euler_derivative = coordinate * derivative
+        covariance[index][index] = (
+            2.0 * (h_value * h_value + euler_derivative)
+            - means[index] * means[index]
+        )
+    covariance[0][1] = covariance[1][0] = (
+        2.0 * h_values[0] * h_values[1] - means[0] * means[1]
+    )
+    determinant = (
+        covariance[0][0] * covariance[1][1]
+        - covariance[0][1] * covariance[1][0]
+    )
+    inverse = (
+        (covariance[1][1] * means[0] ** 2
+         - 2.0 * covariance[0][1] * means[0] * means[1]
+         + covariance[0][0] * means[1] ** 2)
+        / determinant
+    )
+    coefficients = unmarked_prime_support_coefficients_2d(2, 3, exponent)
+    scaled_exact = (
+        coefficients[exponent][exponent]
+        * (point[0] * point[1]) ** exponent
+    )
+    scale_parameter = 2.0 * exponent
+    corrected_length = scale_parameter / (2.0 * tau)
+    oracle_length = 2.0 * tau * scale_parameter
+    common = 2.0 * math.pi * determinant * inverse
+    corrected_leading = 1.0 / math.sqrt(common * corrected_length)
+    oracle_leading = 1.0 / math.sqrt(common * oracle_length)
+    middle = 4.0
+    oracle_inverse = (middle - math.sqrt(8.0)) / 2.0
+    return {
+        "tau": tau,
+        "corrected_length_per_N": 1.0 / (2.0 * tau),
+        "oracle_length_per_N": 2.0 * tau,
+        "corrected_ratio": scaled_exact / corrected_leading,
+        "oracle_ratio": scaled_exact / oracle_leading,
+        "inverse_counterexample": prime_support_inverse_h(2, 1.0),
+        "oracle_inverse": oracle_inverse,
+    }
+
+
 def heavy_dyadic_second_moment_terms(max_exponent: int) -> list[float]:
     """Terms forced by the letters 1/2^a in the dyadic cost second moment."""
     if max_exponent < 1:
@@ -358,6 +487,27 @@ def critical_window_partition(m: int, renewal: list[float]) -> float:
         + renewal[m + 1]
         - 2.0
     )
+
+
+def critical_single_layer_partition(layer: int, renewal: list[float]) -> float:
+    """Evaluate the exact one-layer critical partition function from u_j."""
+    if layer < 1 or layer >= len(renewal):
+        raise ValueError("renewal coefficients must be available through layer")
+    return 2.0 * sum(renewal[:layer]) + renewal[layer] - 1.0
+
+
+def single_layer_orbit_counter(
+    layer: int, generators: list[Counter[int]]
+) -> Counter[int]:
+    """Recover the standard Fibonacci-partition spectrum on one layer."""
+    if layer < 1 or layer >= len(generators):
+        raise ValueError("generator table must include costs through layer")
+    levels: Counter[int] = Counter({1: 1})
+    for cost in range(1, layer + 1):
+        orbit_weight = 2 if cost < layer else 1
+        for level, word_count in generators[cost].items():
+            levels[level] += orbit_weight * word_count
+    return levels
 
 
 def marked_window_counter(
@@ -737,6 +887,27 @@ def main() -> int:
         for window in (12, 16, 20)
         if window + 1 <= args.max_layer
     ]
+    partition_values = ordinary_partition_values(
+        fib[args.max_layer + 2] - 2, fib[2 : args.max_layer + 2]
+    )
+    standard_layer_checks = 0
+    standard_layer_failures = 0
+    for layer in range(1, args.max_layer + 1):
+        left = fib[layer + 1] - 1
+        right = fib[layer + 2] - 1
+        direct_values = partition_values[left:right]
+        standard_layer_checks += 2
+        standard_layer_failures += (
+            single_layer_orbit_counter(layer, marked_generators)
+            != Counter(direct_values)
+        )
+        standard_layer_failures += not math.isclose(
+            critical_single_layer_partition(layer, critical_renewal),
+            sum(value ** (-sigma) for value in direct_values),
+            rel_tol=1.0e-12,
+            abs_tol=1.0e-12,
+        )
+    failures += standard_layer_failures
     marked_windows = tuple(
         window for window in (12, 16, 20) if window + 1 <= args.max_layer
     )
@@ -780,6 +951,17 @@ def main() -> int:
     ]
     prime_support_failures = sum(not check for check in prime_support_checks)
     failures += prime_support_failures
+    prime_support_local_audit = prime_support_local_asymptotic_audit(80)
+    prime_support_local_checks = [
+        abs(prime_support_local_audit["corrected_ratio"] - 1.0) < 0.01,
+        prime_support_local_audit["oracle_ratio"] > 1.9,
+        prime_support_local_audit["inverse_counterexample"] < 0.5,
+        prime_support_local_audit["oracle_inverse"] > 0.5,
+    ]
+    prime_support_local_failures = sum(
+        not check for check in prime_support_local_checks
+    )
+    failures += prime_support_local_failures
     dyadic_mean_costs = [
         (
             exponent,
@@ -862,6 +1044,9 @@ def main() -> int:
         "CRITICAL_FINITE_SIZE rows_m_S_S_over_m={}".format(
             critical_window_rows
         ),
+        "STANDARD_ONE_LAYER layers=1..{} checks={} failures={}".format(
+            args.max_layer, standard_layer_checks, standard_layer_failures
+        ),
         "DYADIC_EXACT exponents=1..{} total_checks={} window_checks={} "
         "mean_cost_over_exponent={} failures={}".format(
             len(dyadic_counters) - 1,
@@ -874,6 +1059,11 @@ def main() -> int:
             dict(sorted(mixed_prime_counter.items())),
             len(prime_support_checks),
             prime_support_failures,
+        ),
+        "PRIME_SUPPORT_LOCAL_SCALE audit={} checks={} failures={}".format(
+            prime_support_local_audit,
+            len(prime_support_local_checks),
+            prime_support_local_failures,
         ),
         "HEAVY_LETTER q=2..100 exact_cost_checks={} energy_over_q={:.9f} "
         "failures={}".format(

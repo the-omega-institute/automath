@@ -2,6 +2,93 @@
 
 Date of search: 2026-08-02 (Asia/Singapore).
 
+## Named-problem and standard-object audit (2026-08-14)
+
+The search was repeated against primary texts and four bibliographic
+services.  The arXiv Atom query 'all:"Fibonacci partition"' returned twelve
+records.  Crossref DOI records and zbMATH Open confirmed the publication
+metadata below.  Semantic Scholar's DOI endpoint returned Weinstein's
+six-item citation graph and the five-item citation graph of Chow--Slattery;
+its free-text endpoint and a later request for the 2022 paper returned HTTP
+429.  Exact-phrase arXiv and Crossref searches, the available citation
+graphs, and full-text checks of the later Fibonacci-partition papers located
+no resolution of the following three problems.  This is evidence of current
+status, not a claim of exhaustive priority.
+
+1. F. V. Weinstein, *Notes on Fibonacci Partitions*, Experimental
+   Mathematics 25 (2016), 482--499,
+   doi:10.1080/10586458.2015.1118416, p. 18:
+   **"How to describe the set of F-primitive numbers?"**
+
+   The paper's weighted-generator renewal
+   (prop:weighted-generator-renewal) and Tauberian law
+   (thm:psi-tauberian) enumerate Weinstein generators by multiplier and
+   cost.  They do not decide whether the *minimal integer* at a fixed
+   multiplier is f-simple.  The missing step is an order-sensitive
+   comparison excluding every non-simple orbit representative below the
+   least simple representative.
+
+2. Weinstein, ibid., Conjecture 9.1, pp. 19--20:
+   **"Then \(C_i\) coincides with the convex hull of the set of points
+   \((c,F(c))\)"** for the explicitly defined sets \(B_1(i)\), and also
+   \(B_2(i)\) in even layers.
+
+   The interval identity (thm:fiber-partition-interval) canonically
+   recovers every value of the standard function \(R=F\) on these layers,
+   and thm:unconditional-extremal-fibers proves the top horizontal support
+   value and all its maximizers.  The conjecture requires every supporting
+   slope.  What is missing is a uniform supporting-line inequality for all
+   partition values, not another maximum computation.
+
+3. F. V. Weinstein, *On a theorem of J. Shallit concerning Fibonacci
+   partitions*, Communications in Mathematics 30 (2022), 203--207,
+   doi:10.46298/cm.10769, Conjecture 3.3, p. 207:
+   **"\(r_3^{(a,i,b)}(n)-r_3^{(a,j,b)}(n)\le1\) for any
+   \(i,j\in\{0,1,2\}\). Moreover, [the product of the three pairwise
+   differences] \(=0\)."**
+
+   The coefficient-spectrum identity in thm:affine-transfer starts from
+   the same truncated product, and a part-count mark replaces it by
+   \(\prod_{r=a}^b(1+u z^{f_r})\).  The present Fourier formulas act on the
+   value coordinate only.  The missing input is a roots-of-unity
+   cancellation theorem at \(u^3=1\), uniform in \(a,b,n\); no such estimate
+   follows from the unmarked renewal.
+
+### Closed false lead
+
+Chow--Slattery, *On Fibonacci partitions*, J. Number Theory 225 (2021),
+310--326, Conjecture 1.4, asked whether
+**"\(B(H)\to B\) \((H\to\infty)\)"**.  This is not still open.  Zhou,
+*On the Representation Functions of Certain Numeration Systems*,
+arXiv:2305.00792, Corollary 1.5, explicitly states that its Fibonacci
+specialization solves Conjecture 1.4 and the first three problems on
+Chow--Slattery p. 315.  It is therefore excluded from the candidate list.
+
+### A/B/C/D decision
+
+- **(A):** The three live problems are genuine, but the manuscript lacks the
+  order-sensitive minimum comparison, all-slope support inequalities, and
+  roots-of-unity cancellation they respectively require.
+- **(B):** The exact identity
+  \(d_m(x)=R(\chi_m(x))\) maps the bespoke fibers bijectively to two standard
+  Fibonacci layers.  More strongly, the already proved generator renewal has
+  exact one-layer weights \(2,1\).  This route is selected.
+- **(C):** The main pressure and LDP are already unconditional.  The local
+  prime-support theorem stops at an active-cutoff stable/semistable renewal
+  input; the dyadic infinite-variance and no-positive-exponential-moment
+  calculation shows that this is a real obstruction, not a removable
+  Gaussian hypothesis.
+- **(D):** The largest-fiber formulas, freezing boundary, critical constants,
+  and LDP exponent are already sharp.  The compact-operator obstruction has
+  no plausible converse without specifying an operator class beyond the
+  hypotheses it rules out.
+
+The selected theorem is now thm:standard-fibonacci-thermodynamics: all-real
+pressure, frozen unnormalized limit, critical \(2m/\mu_C\) law, critical
+Gibbs coexistence, and a full LDP for \(m^{-1}\log R(n)\) under the uniform
+law on one standard Fibonacci layer.  Its LDP lower bound uses one-layer
+orbit weights directly; it is not inferred from a two-layer mixture.
+
 ## Active-cutoff joint-renewal audit (2026-08-10)
 
 The tier-up target was searched before the proof attempt in all four required

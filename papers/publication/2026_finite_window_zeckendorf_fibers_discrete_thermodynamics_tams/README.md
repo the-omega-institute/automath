@@ -1,13 +1,15 @@
-# Finite-Window Zeckendorf Fibers
+# Fibonacci Partition Thermodynamics and Finite-Window Zeckendorf Fibers
 
 This directory contains the refocused main manuscript
-`Finite-Window Zeckendorf Fibers: Affine Partition Correspondence and
-Negative-Temperature Freezing` and a separately compiled supplement.
+`Fibonacci Partition Thermodynamics and Finite-Window Zeckendorf Fibers` and
+a separately compiled supplement.
 
 ## Scope
 
 The compiled paper retains only the independently justified core:
 
+- the all-real pressure, critical Gibbs law, and full LDP on a single
+  standard Fibonacci partition layer;
 - the residue and affine fiber correspondence;
 - the pointwise Fibonacci partition-difference formula;
 - the exact two-layer interval identity and transferred extremal theorem;

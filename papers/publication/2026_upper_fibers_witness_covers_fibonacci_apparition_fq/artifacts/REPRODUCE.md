@@ -29,6 +29,17 @@ multiplies back to the stated Fibonacci number.
   factorization-archive generation and validation.
 - `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
   finite bounds, archive round trip, and report contents.
+- `../scripts/verify_squarefree_slice.py`: independent enumeration of
+  weighted minimal covers and rank-pure prime products for the canonical
+  squarefree exact-fiber slice.
+- `../scripts/test_verify_squarefree_slice.py`: unit tests for the sharp
+  fixed-total-weight bound, its unique equality profile for `k >= 3` and
+  nonuniqueness at `k = 2`, support incidence, and the squarefree-slice set
+  equality.
+- `squarefree_slice_verification.txt`: complete report for the new sharpness
+  and squarefree-fiber checks.
+- `named_problem_audit.md`: primary-source quotations, current-status checks,
+  and exact mappings from five printed open problems to the manuscript.
 - `fibonacci_factorizations_2_210.tsv`: exact factorization input/archive.
 - `tab_birth_layer_data.tex`: generated table included in the manuscript.
 - `birth_layer_table_output.txt`: complete stdout from table generation.
@@ -41,8 +52,10 @@ Run these commands from the manuscript directory:
 
 ```powershell
 python -m unittest discover -s artifacts -p "test_verify_finite_claims.py" -v
+Push-Location scripts; python -m unittest -v test_verify_squarefree_slice.py; Pop-Location
 python artifacts\compute_birth_layer_table.py
 python artifacts\verify_finite_claims.py --exhaustive-max 60 --scalable-max 210 --output artifacts\finite_verification.txt --factorizations-output artifacts\fibonacci_factorizations_2_210.tsv
+python scripts\verify_squarefree_slice.py --max-index 210 --output artifacts\squarefree_slice_verification.txt
 ```
 
 The first verification route enumerates every divisor of `F_n`, computes its
@@ -80,6 +93,14 @@ top-support slice has the product cardinality of its singleton diagonal atomic
 families. These finite checks do not resolve the
 asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
 connected and disconnected arithmetic sectors without those hypotheses.
+
+The squarefree-slice verifier independently enumerates all irredundant covers
+for `1 <= k <= 4`, checks 36 exact full-support equality profiles for the
+sharp weighted-cover lower bound, and compares direct rank-pure products with
+the squarefree elements of the independently constructed `M_n` for every
+squarefree `3 <= n <= 210`. The stored run contains 127 set equalities and 427
+squarefree minimal generators. These checks do not show that the abstract
+fixed-total extremizer is realizable by Fibonacci exact-rank primes.
 
 To verify the checksums in PowerShell:
 

@@ -21,6 +21,8 @@ from verify_finite_claims import (
     factorint_fibonacci,
     fibotomic_error_bound,
     fibotomic_rank_entropy_data,
+    four_coordinate_counterexample_data,
+    four_coordinate_orbit_summary,
     load_factorization_archive,
     local_limit_probability,
     minimal_cover_count,
@@ -43,6 +45,51 @@ from verify_finite_claims import (
 
 
 class FiniteClaimTests(unittest.TestCase):
+    def test_four_coordinate_witness_kernel_orbits(self):
+        summary = four_coordinate_orbit_summary()
+        self.assertTrue(summary.claimed_representatives_match)
+        self.assertEqual(summary.orbit_count, 24)
+        self.assertEqual(summary.labelled_count, 243)
+        self.assertEqual(summary.t_connected_orbit_count, 13)
+        self.assertEqual(summary.t_connected_labelled_count, 133)
+        self.assertEqual(summary.t_disconnected_orbit_count, 11)
+        self.assertEqual(summary.t_disconnected_labelled_count, 110)
+        self.assertEqual(
+            summary.t_connected_orbit_sizes,
+            (1, 4, 6, 12, 6, 12, 12, 24, 24, 4, 12, 12, 4),
+        )
+        self.assertEqual(
+            summary.t_disconnected_orbit_sizes,
+            (3, 12, 12, 4, 12, 12, 24, 12, 6, 12, 1),
+        )
+
+    def test_positive_support_connectivity_is_strict_at_n3465(self):
+        data = four_coordinate_counterexample_data()
+        self.assertEqual(data.n, 3465)
+        self.assertEqual(data.m, 8_644_661_177)
+        self.assertEqual(data.ranks, (9, 15, 21, 33))
+        self.assertEqual(
+            data.full_supports,
+            (
+                frozenset({0}),
+                frozenset({1}),
+                frozenset({2}),
+                frozenset({3}),
+            ),
+        )
+        self.assertEqual(
+            data.positive_supports,
+            (
+                frozenset({0}),
+                frozenset({0, 1}),
+                frozenset({0, 2}),
+                frozenset({0, 3}),
+            ),
+        )
+        self.assertEqual(data.lowered_lcms, (1155, 693, 495, 315))
+        self.assertFalse(data.full_support_connected)
+        self.assertTrue(data.positive_support_connected)
+
     def test_exact_total_and_connected_support_spectra(self):
         expected = {
             12: ((1, 2), (1,)),
@@ -336,6 +383,20 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Exact total support spectra: 28/28", report)
         self.assertIn("Exact connected support spectra: 28/28", report)
         self.assertIn("Extremal atomic-product counts: 28/28", report)
+        self.assertIn(
+            "Four-coordinate witness kernels: 24 orbits / 243 labelled",
+            report,
+        )
+        self.assertIn(
+            "T-connected kernels: 13 orbits / 133 labelled; "
+            "T-disconnected kernels: 11 orbits / 110 labelled",
+            report,
+        )
+        self.assertIn(
+            "n=3465 support separation: ranks (9, 15, 21, 33); "
+            "T-support disconnected; positive support connected",
+            report,
+        )
         self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
         self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
         self.assertIn("Rank-window deaggregation inequalities: 28/28", report)

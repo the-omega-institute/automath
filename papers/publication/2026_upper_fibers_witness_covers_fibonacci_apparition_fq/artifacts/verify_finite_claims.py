@@ -71,6 +71,31 @@ class FibotomicRankEntropyData:
     binet_error: float
 
 
+@dataclass(frozen=True)
+class FourCoordinateOrbitSummary:
+    orbit_count: int
+    labelled_count: int
+    t_connected_orbit_count: int
+    t_connected_labelled_count: int
+    t_disconnected_orbit_count: int
+    t_disconnected_labelled_count: int
+    t_connected_orbit_sizes: Tuple[int, ...]
+    t_disconnected_orbit_sizes: Tuple[int, ...]
+    claimed_representatives_match: bool
+
+
+@dataclass(frozen=True)
+class FourCoordinateCounterexampleData:
+    n: int
+    m: int
+    ranks: Tuple[int, ...]
+    full_supports: Tuple[frozenset, ...]
+    positive_supports: Tuple[frozenset, ...]
+    lowered_lcms: Tuple[int, ...]
+    full_support_connected: bool
+    positive_support_connected: bool
+
+
 @lru_cache(maxsize=None)
 def fibonacci(n: int) -> int:
     """Return F_n by fast doubling."""
@@ -348,6 +373,215 @@ def _supports_are_connected(supports: Sequence[frozenset], k: int) -> bool:
             reached.add(neighbor)
             frontier.append(neighbor)
     return len(reached) == k
+
+
+def _mask_supports_are_connected(supports: Sequence[int], full_mask: int) -> bool:
+    reached = full_mask & -full_mask
+    while True:
+        enlarged = reached
+        for support in supports:
+            if support & reached:
+                enlarged |= support
+        if enlarged == reached:
+            return reached == full_mask
+        reached = enlarged
+
+
+def _permuted_mask(mask: int, permutation: Sequence[int]) -> int:
+    result = 0
+    for coordinate, image in enumerate(permutation):
+        if mask & (1 << coordinate):
+            result |= 1 << image
+    return result
+
+
+def _canonical_four_coordinate_skeleton(
+    skeleton: Sequence[Tuple[int, int]],
+) -> Tuple[Tuple[int, int], ...]:
+    images = []
+    for permutation in itertools.permutations(range(4)):
+        images.append(
+            tuple(
+                sorted(
+                    (
+                        _permuted_mask(essential, permutation),
+                        _permuted_mask(full, permutation),
+                    )
+                    for essential, full in skeleton
+                )
+            )
+        )
+    return min(images)
+
+
+@lru_cache(maxsize=None)
+def _four_coordinate_labelled_skeletons() -> Tuple[Tuple[Tuple[int, int], ...], ...]:
+    full_mask = (1 << 4) - 1
+    slots = []
+    for full in range(1, full_mask + 1):
+        slots.append((full, full))
+        if full.bit_count() >= 2:
+            for coordinate in range(4):
+                singleton = 1 << coordinate
+                if full & singleton:
+                    slots.append((singleton, full))
+
+    skeletons = []
+    for size in range(1, 5):
+        for skeleton in itertools.combinations(sorted(slots), size):
+            covered = 0
+            for _, full in skeleton:
+                covered |= full
+            if covered != full_mask:
+                continue
+            irredundant = True
+            for index, (essential, _) in enumerate(skeleton):
+                other_full = 0
+                for other_index, (_, full) in enumerate(skeleton):
+                    if other_index != index:
+                        other_full |= full
+                if essential & ~other_full == 0:
+                    irredundant = False
+                    break
+            if irredundant:
+                skeletons.append(skeleton)
+    return tuple(skeletons)
+
+
+def _claimed_four_coordinate_representatives() -> Tuple[
+    Tuple[Tuple[Tuple[int, int], ...], ...],
+    Tuple[Tuple[Tuple[int, int], ...], ...],
+]:
+    def subset(*coordinates: int) -> int:
+        return sum(1 << (coordinate - 1) for coordinate in coordinates)
+
+    def prime(*coordinates: int) -> Tuple[int, int]:
+        support = subset(*coordinates)
+        return support, support
+
+    def ladder(coordinate: int, *full_coordinates: int) -> Tuple[int, int]:
+        return subset(coordinate), subset(*full_coordinates)
+
+    connected = (
+        (prime(1, 2, 3, 4),),
+        (ladder(1, 1, 2, 3, 4),),
+        (prime(1, 2, 3), prime(1, 2, 4)),
+        (ladder(3, 1, 2, 3), prime(1, 2, 4)),
+        (ladder(3, 1, 2, 3), ladder(4, 1, 2, 4)),
+        (prime(1, 2), prime(2, 3, 4)),
+        (ladder(1, 1, 2), prime(2, 3, 4)),
+        (prime(1, 2), ladder(3, 2, 3, 4)),
+        (ladder(1, 1, 2), ladder(3, 2, 3, 4)),
+        (prime(1, 2), prime(1, 3), prime(1, 4)),
+        (ladder(2, 1, 2), prime(1, 3), prime(1, 4)),
+        (ladder(2, 1, 2), ladder(3, 1, 3), prime(1, 4)),
+        (ladder(2, 1, 2), ladder(3, 1, 3), ladder(4, 1, 4)),
+    )
+    disconnected = (
+        (prime(1, 2), prime(3, 4)),
+        (ladder(1, 1, 2), prime(3, 4)),
+        (ladder(1, 1, 2), ladder(3, 3, 4)),
+        (prime(1), prime(2, 3, 4)),
+        (prime(1), ladder(2, 2, 3, 4)),
+        (prime(1), prime(2, 3), prime(2, 4)),
+        (prime(1), ladder(2, 2, 3), prime(3, 4)),
+        (prime(1), ladder(2, 2, 3), ladder(4, 3, 4)),
+        (prime(1), prime(2), prime(3, 4)),
+        (prime(1), prime(2), ladder(3, 3, 4)),
+        (prime(1), prime(2), prime(3), prime(4)),
+    )
+    return connected, disconnected
+
+
+@lru_cache(maxsize=None)
+def four_coordinate_orbit_summary() -> FourCoordinateOrbitSummary:
+    labelled = _four_coordinate_labelled_skeletons()
+    orbit_sizes: Dict[Tuple[Tuple[int, int], ...], int] = {}
+    for skeleton in labelled:
+        canonical = _canonical_four_coordinate_skeleton(skeleton)
+        orbit_sizes[canonical] = orbit_sizes.get(canonical, 0) + 1
+
+    connected_claims, disconnected_claims = _claimed_four_coordinate_representatives()
+    connected_keys = tuple(
+        _canonical_four_coordinate_skeleton(skeleton)
+        for skeleton in connected_claims
+    )
+    disconnected_keys = tuple(
+        _canonical_four_coordinate_skeleton(skeleton)
+        for skeleton in disconnected_claims
+    )
+    observed_connected = {
+        skeleton
+        for skeleton in orbit_sizes
+        if _mask_supports_are_connected(
+            tuple(full for _, full in skeleton), (1 << 4) - 1
+        )
+    }
+    observed_disconnected = set(orbit_sizes) - observed_connected
+    representatives_match = (
+        len(set(connected_keys)) == len(connected_keys)
+        and len(set(disconnected_keys)) == len(disconnected_keys)
+        and set(connected_keys) == observed_connected
+        and set(disconnected_keys) == observed_disconnected
+    )
+    connected_sizes = tuple(orbit_sizes[key] for key in connected_keys)
+    disconnected_sizes = tuple(orbit_sizes[key] for key in disconnected_keys)
+    return FourCoordinateOrbitSummary(
+        orbit_count=len(orbit_sizes),
+        labelled_count=len(labelled),
+        t_connected_orbit_count=len(observed_connected),
+        t_connected_labelled_count=sum(orbit_sizes[key] for key in observed_connected),
+        t_disconnected_orbit_count=len(observed_disconnected),
+        t_disconnected_labelled_count=sum(
+            orbit_sizes[key] for key in observed_disconnected
+        ),
+        t_connected_orbit_sizes=connected_sizes,
+        t_disconnected_orbit_sizes=disconnected_sizes,
+        claimed_representatives_match=representatives_match,
+    )
+
+
+@lru_cache(maxsize=None)
+def four_coordinate_counterexample_data() -> FourCoordinateCounterexampleData:
+    n = 3**2 * 5 * 7 * 11
+    primes = (17, 61, 421, 19801)
+    containing_indices = (9, 15, 21, 33)
+    ranks = tuple(
+        alpha_for_fn_divisor(prime, index)
+        for prime, index in zip(primes, containing_indices)
+    )
+    coordinates = prime_divisors(n)
+    n_factorization = factorint(n)
+    full_supports = tuple(
+        frozenset(
+            coordinate
+            for coordinate, ell in enumerate(coordinates)
+            if valuation(rank, ell) == int(n_factorization[ell])
+        )
+        for rank in ranks
+    )
+    positive_supports = tuple(
+        frozenset(
+            coordinate
+            for coordinate, ell in enumerate(coordinates)
+            if rank % ell == 0
+        )
+        for rank in ranks
+    )
+    lowered_lcms = tuple(
+        math.lcm(*(rank for other, rank in enumerate(ranks) if other != index))
+        for index in range(len(ranks))
+    )
+    return FourCoordinateCounterexampleData(
+        n=n,
+        m=math.prod(primes),
+        ranks=ranks,
+        full_supports=full_supports,
+        positive_supports=positive_supports,
+        lowered_lcms=lowered_lcms,
+        full_support_connected=_supports_are_connected(full_supports, 4),
+        positive_support_connected=_supports_are_connected(positive_supports, 4),
+    )
 
 
 @lru_cache(maxsize=None)
@@ -910,6 +1144,36 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     extremal_slice_checks = 0
     error_bound = fibotomic_error_bound()
 
+    four_coordinate_summary = four_coordinate_orbit_summary()
+    if not (
+        four_coordinate_summary.claimed_representatives_match
+        and four_coordinate_summary.orbit_count == 24
+        and four_coordinate_summary.labelled_count == 243
+        and four_coordinate_summary.t_connected_orbit_count == 13
+        and four_coordinate_summary.t_connected_labelled_count == 133
+        and four_coordinate_summary.t_disconnected_orbit_count == 11
+        and four_coordinate_summary.t_disconnected_labelled_count == 110
+    ):
+        failures.append(
+            "four-coordinate witness-kernel enumeration disagrees with the "
+            "claimed 13+11 orbit classification"
+        )
+
+    four_coordinate_counterexample = four_coordinate_counterexample_data()
+    if not (
+        four_coordinate_counterexample.n == 3465
+        and four_coordinate_counterexample.m == 8_644_661_177
+        and four_coordinate_counterexample.ranks == (9, 15, 21, 33)
+        and math.lcm(*four_coordinate_counterexample.ranks) == 3465
+        and all(
+            lowered < four_coordinate_counterexample.n
+            for lowered in four_coordinate_counterexample.lowered_lcms
+        )
+        and not four_coordinate_counterexample.full_support_connected
+        and four_coordinate_counterexample.positive_support_connected
+    ):
+        failures.append("n=3465 positive-support connectivity certificate failed")
+
     cover_formula_checks = 0
     connected_cover_checks = 0
     for k in range(1, 5):
@@ -1248,6 +1512,18 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"{deaggregation_layers}",
         f"  Extremal atomic-product counts: {extremal_slice_checks}/"
         f"{deaggregation_layers}",
+        f"  Four-coordinate witness kernels: "
+        f"{four_coordinate_summary.orbit_count} orbits / "
+        f"{four_coordinate_summary.labelled_count} labelled",
+        f"  T-connected kernels: "
+        f"{four_coordinate_summary.t_connected_orbit_count} orbits / "
+        f"{four_coordinate_summary.t_connected_labelled_count} labelled; "
+        f"T-disconnected kernels: "
+        f"{four_coordinate_summary.t_disconnected_orbit_count} orbits / "
+        f"{four_coordinate_summary.t_disconnected_labelled_count} labelled",
+        f"  n=3465 support separation: ranks "
+        f"{four_coordinate_counterexample.ranks}; T-support disconnected; "
+        "positive support connected",
         "  Exact minimal-cover values C_k (1 <= k <= 6): "
         + str(tuple(minimal_cover_count(k) for k in range(1, 7))),
         "  Connected-cover ratios D_k/C_k at k=20,40,80: "

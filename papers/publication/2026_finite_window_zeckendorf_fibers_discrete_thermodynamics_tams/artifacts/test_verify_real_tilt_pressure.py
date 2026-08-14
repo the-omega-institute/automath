@@ -13,6 +13,9 @@ from verify_real_tilt_pressure import (
     matrix_bridge_audit,
     negative_continued_fraction_value,
     orbit_padding_counterexample_search,
+    prime_support_inverse_h,
+    prime_support_local_asymptotic_audit,
+    prime_support_saddle,
     regular_partial_quotient_sum,
     stern_brocot_layer_denominators,
     stern_brocot_word_matrices,
@@ -20,6 +23,64 @@ from verify_real_tilt_pressure import (
 
 
 class AllRealPressureHelpersTest(unittest.TestCase):
+    def test_prime_support_inverse_and_projective_saddle_scaling(self) -> None:
+        inverse = prime_support_inverse_h(2, 1.0)
+        self.assertAlmostEqual(inverse, 1.0 - 1.0 / math.sqrt(2.0), places=14)
+
+        tau_unit, point_unit = prime_support_saddle((2, 3), (1.0, 1.0))
+        tau_half, point_half = prime_support_saddle((2, 3), (0.5, 0.5))
+        self.assertAlmostEqual(tau_half, 2.0 * tau_unit, places=13)
+        for left, right in zip(point_unit, point_half):
+            self.assertAlmostEqual(left, right, places=14)
+
+    def test_prime_support_local_scale_matches_exact_diagonal_coefficients(
+        self,
+    ) -> None:
+        audit = prime_support_local_asymptotic_audit(80)
+        self.assertLess(abs(audit["corrected_ratio"] - 1.0), 0.01)
+        self.assertGreater(audit["oracle_ratio"], 1.9)
+        self.assertLess(audit["inverse_counterexample"], 0.5)
+        self.assertGreater(audit["oracle_inverse"], 0.5)
+
+    def test_single_layer_orbit_counter_recovers_partition_spectrum(self) -> None:
+        self.assertTrue(hasattr(verification, "single_layer_orbit_counter"))
+        fibonacci = [0, 1]
+        for _ in range(18):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        generators = verification.weighted_generator_counters(16)
+        partition_values = verification.ordinary_partition_values(
+            fibonacci[18], fibonacci[2:18]
+        )
+        for layer in range(4, 16):
+            predicted = verification.single_layer_orbit_counter(layer, generators)
+            direct = verification.Counter(
+                partition_values[
+                    fibonacci[layer + 1] - 1 : fibonacci[layer + 2] - 1
+                ]
+            )
+            self.assertEqual(predicted, direct)
+
+    def test_critical_single_layer_renewal_matches_direct_partition_sum(self) -> None:
+        self.assertTrue(hasattr(verification, "critical_single_layer_partition"))
+        sigma = 2.4787507857339603
+        generators = verification.weighted_generator_counters(17)
+        renewal = verification.critical_renewal_coefficients(generators, sigma)
+        fibonacci = [0, 1]
+        for _ in range(20):
+            fibonacci.append(fibonacci[-1] + fibonacci[-2])
+        partition_values = verification.ordinary_partition_values(
+            fibonacci[19], fibonacci[2:19]
+        )
+        for layer in range(1, 17):
+            predicted = verification.critical_single_layer_partition(layer, renewal)
+            direct = sum(
+                value ** (-sigma)
+                for value in partition_values[
+                    fibonacci[layer + 1] - 1 : fibonacci[layer + 2] - 1
+                ]
+            )
+            self.assertAlmostEqual(predicted, direct, places=11)
+
     def test_finite_prime_support_interface_and_heavy_cost_obstruction(self) -> None:
         self.assertTrue(
             hasattr(verification, "prime_support_generator_cost_counter")
