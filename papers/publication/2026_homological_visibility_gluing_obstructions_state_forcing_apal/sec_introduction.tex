@@ -1,30 +1,238 @@
 \section{Introduction}\label{sec:introduction}
 
-Sheaf-theoretic semantics offers a natural language for the passage from local data to global objects. In logical applications, and in particular in sheaf-theoretic analyses of contextuality \cite{AbramskyBrandenburger2011,AbramskyMansfieldSoaresBarbosa2012,AbramskyBarbosaKishidaLalMansfield2015,Caru2017,Caru2018,Montanhano2021}, the central question is whether compatible local families glue to global sections. The classical tools for measuring the failure of gluing are gerbes, obstruction classes, and cohomological invariants \cite{Giraud1971,Breen2006,Hatcher2002}. In this paper we study that question in a forcing semantics whose states are sets of realizations, with the aim of separating the successive layers at which genuinely new local-to-global structure appears.
-
-Our starting point is the extension chain
+Fix an integer $\beta\geq 1$.  Our main classification theorem concerns the
+good-cover intersection site obtained from barycentric open-star covers of a
+finite model of the wedge $\bigvee_{j=1}^{\beta}S^2$.  A nonzero finite
+abelian group $G$ occurs as the kernel of the canonical map
 \[
-\mathbb{L}_0 \xhookrightarrow{\iota} \mathbb{L}_1 \preceq \mathbb{L}_2 \preceq \mathbb{L}_3 \preceq \mathbb{L}_4,
+ A/\bigl(K_1\cap K_2\bigr)\longrightarrow A/\bigl(K_1+K_2\bigr)
 \]
-where $\mathbb{L}_0$ is the pointwise layer, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local objects and site structure, $\mathbb{L}_3$ adds branchwise obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. The map $\mathbb{L}_0\hookrightarrow\mathbb{L}_1$ is a singleton semantic embedding, whereas the later steps are conservative extensions in the sense of \Cref{def:conservative-extension}. Thus the geometric and homological material introduced later does not alter the forcing behaviour of formulas already present in the lower layers.
-The semantics is thus related both to team and imperfect-information semantics \cite{Hodges1997,Vaananen2007,AbramskyPuljujarviVaananen2025} and to the forcing and sheaf-theoretic tradition stemming from Beth, Kripke, Fitting, and Tierney and later developed in topos-theoretic form \cite{Beth1956,Kripke1965,Fitting1969,Tierney1972,Goldblatt2006,Johnstone2002}.
-
-The first part of the paper concerns the passage from information states to local objects. \Cref{prop:compsec-to-sheafification} shows that compatible local sectionability gives nonemptiness of the associated sheafification, and \Cref{thm:sheafification-characterization} proves the converse on slice-separated reference slices. We then prove in \Cref{thm:pointwise-irreducibility} that the predicates $\CompSec_s$, $\Sec_s$, and $\Null^{\mathrm{glue}}_s$ are not definable by automorphism-invariant, constant-free formulas of the $\mathbb{L}_1$-reduct with one free reference variable. This is only a lower-bound statement for the comparison fragment under consideration, but it isolates a genuine change of behaviour between $\mathbb L_1$ and $\mathbb L_2$.
-
-The second part begins once the set-valued local-object functor is enriched by groupoid-valued data. \Cref{thm:canonical-lift-rigidity} gives a rigidity statement for representative-rigid lifts: if the local-object presheaf is slice-separated and a realization prestack admits a strict functorial choice of representatives and is globally conservative at the terminal fibre, then the sheafification unit is surjective there; under $H^1$-vanishing and the same slice-separatedness, this is equivalent to the local object functor already being a sheaf at the terminal fibre. Thus gluing-level nullity is necessarily tied to genuinely gluing-sensitive lift data. \Cref{thm:intrinsic-branch-obstruction-extension} identifies the canonicity that survives at this level: once the sheafified local object functor has been lifted to a banded realization stack, the branch obstruction map to derived $H^2$ is intrinsic up to equivalence of banded extensions. For such an extension, visible value classes are the global sections of the sheaf of connected components (\Cref{thm:visible-value-components}), each visible branch determines a banded component gerbe (\Cref{thm:component-gerbe-decomposition}), and, on slice-separated reference slices, \Cref{thm:gerbe-null-semantics} identifies gluing-level absence with the existence of visible branches together with non-neutrality of the corresponding component gerbes.
-
-The empirical-model interface gives a sharp limit to this canonicity.  \Cref{thm:empirical-model-stack-interface} proves that every finite Abramsky--Brandenburger empirical model has a canonical split realization-stack extension, pseudonatural under ordinary refinements of measurement contexts, but every component gerbe in that extension is neutral.  The Abramsky--Mansfield--Barbosa class is a relative \v{C}ech $H^1$ class of a presheaf, equivalently a torsor class \cite{AbramskyMansfieldSoaresBarbosa2012,Caru2017}; it is indexed by a chosen local section.  By contrast, the Giraud map here is a derived $H^2$ class for a sheaf band, indexed by a global component, and for a strongly contextual model that indexing set is empty.  Thus the canonical split construction supplies no non-split banded data, and no branch map of the present kind can recover the AMB classes on all finite empirical models without an additional degree-shifting construction. Appendix~\ref{sec:appendix-ghz} exhibits only a chosen split GHZ/Mermin lift.
-
-The homological part of the paper starts only after one visible branch, one finite nerve presentation, and one constant finite abelian band have been fixed. From that point the tools are classical: the universal coefficient sequence, finite-abelian duality, and standard quotient arguments. What matters for the semantics, at a fixed presentation, is the presentation-object image
+for two non-neutral component gerbes with $K_1\cap K_2=0$ and
+$K_1+K_2=G$ if and only if
 \[
-K_\omega:=\operatorname{Im}(\mathrm{ev}_\omega)
+ d(G)\leq 2\beta
+ \qquad\text{and}\qquad
+ G\text{ is not a cyclic }p\text{-group}.
 \]
-and quotient $A_{\mathrm{vis}}^\omega=A/K_\omega$ attached to the branch obstruction class. \Cref{prop:invariance-visible-quotients} establishes invariance under elementary homology-equivalent refinements, cocycle replacement, and re-trivialization of the band, and gives functorial transport along chosen finite comparison zigzags; it does not assert path independence between distinct zigzags. \Cref{thm:intrinsic-visible-quotient} gives the corresponding character-theoretic description, and \Cref{thm:character-blind-obstructions} identifies the character-blind case with the pure $\operatorname{Ext}$ contribution.
+Here $d(G)$ is the minimal number of generators of $G$.  In the terminology
+fixed below, this kernel is the \emph{component-forgetting kernel}; the
+displayed special case is a two-component label-loss kernel with complementary
+nonzero image subgroups.  The statement is an existence and classification
+result for the chosen site, band, and lift data, not an invariant of an
+arbitrary empirical model.
 
-When several visible branches are present, one obtains branch-sensitive and branch-uniform quotients, related by the short exact sequence of \Cref{thm:branch-comparison-exact-sequence}. On a generated pullback subsite for a fixed finite nerve, with constant finite abelian band, the explicit finite-site Leray comparison of \Cref{lem:generated-subsite-model-interface}, and the additional assumption $H_1(N(\mathcal U),\mathbb Z)\allowbreak=0$, we prove realization theorems for prescribed branchwise homomorphisms $H_2(N(\mathcal U),\mathbb Z)\allowbreak\to A$. These theorems are internal constructions under the generated admissible-expansion convention of \Cref{prop:admissible-layer-expansion-interface}: the algebraic data are built first, and the one-state $\mathbb L_2$- and $\mathbb L_3$-models are then obtained by admissible expansion. \Cref{thm:prescribed-branch-realization} treats non-neutral branches, while \Cref{thm:mixed-branch-realization} allows arbitrary finite families and identifies the neutral branches with the zero maps.
+The standard input is as follows.  We use universal satisfaction on nonempty
+teams of assignments, presheaves and their sheafifications, stackification of
+categories fibred in groupoids, the classification of banded gerbes by
+Giraud's $H^2$, the \v{C}ech-to-derived comparison on the specified Leray
+covers, the universal coefficient theorem, and elementary structure theory
+and duality for finite abelian groups
+\cite{Giraud1971,Breen2006,Hatcher2002}.  Our contributions are the organization
+of these inputs into the stated semantic framework; the comparison between
+matching families and component gerbes under explicit lift hypotheses; the
+presentation-comparison groupoid and the two aggregate quotients; the
+component-forgetting exact sequence; the construction of prescribed
+componentwise homological images; and the preceding finite-group
+classification.
 
-Under the same fixed finite-nerve, constant-band, $H_1=0$, and mixed-realization hypotheses, if $H_2(N(\mathcal U),\mathbb Z)\cong \mathbb Z^\beta$, \Cref{cor:torsion-free-h2-classification} shows that the realizable hidden subgroups are exactly the subgroups of $A$ generated by at most $\beta$ elements. The bouquet theorem \Cref{thm:bouquet-two-branch-resolution} then supplies an explicit chosen family of examples, namely open-star good covers of a fixed finite model of $\bigvee_{j=1}^{\beta}S^2$, for which the acyclic-cover hypothesis is automatic and the pure two-branch resolution kernels can be classified explicitly: a finite abelian group $G$ occurs precisely when $d(G)\le 2\beta$ and $G$ is not a cyclic $p$-group. This is an existence and classification statement inside the chosen good-cover construction, not a uniqueness assertion for all presentations of the bouquet and, by \Cref{thm:unique-branch-contextuality-comparison}, not an invariant canonically attached to empirical models.
+The relation with the Abramsky--Mansfield--Barbosa obstruction must be stated
+at the outset.  Their obstruction is a relative \v{C}ech class
+\[
+ \gamma_e(s)\in
+ \check H^1(\mathcal M,\mathcal F_{e,\overline C_0})
+\]
+of a presheaf, equivalently a torsor class indexed by a chosen local section
+\cite{AbramskyMansfieldSoaresBarbosa2012,Caru2017}.  Our obstruction is the
+derived Giraud class
+\[
+ \omega_v=[\mathfrak G_v]\in H^2(\mathcal C/a,\Band)
+\]
+of a gerbe banded by a sheaf, indexed by a global component section.  These
+classes do not correspond.  What is functorial is only the support-level
+comparison: every finite Abramsky--Brandenburger empirical model gives a
+canonical split stack whose component gerbes are neutral.  In particular, a
+strongly contextual model has no global component section from which our map
+could produce its local-section-indexed AMB classes.  Consequently the
+condition $d(G)\leq2\beta$ with $G$ not a cyclic $p$-group does not transfer to
+bare empirical models; a band and a non-split banded stack lift would have to
+be supplied as additional data.  This is proved precisely in
+\Cref{thm:empirical-model-stack-interface,thm:unique-branch-contextuality-comparison}.
 
-The sheaf-theoretic, gerbe-theoretic, and homological tools used here are classical, and several of the later comparison results are formal once the branchwise intrinsic data have been fixed. The contribution of the paper is accordingly structural: the extension chain separates the semantic layers, the empirical-model comparison proves exactly where an extra categorical degree enters, and the obstruction class gives rise to a groupoid-indexed invariant only after branchwise lift data and a finite nerve presentation have been fixed.
+We now describe the framework.  An information state
+$p=(\Gamma_p,R_p)$ is a nonempty team $R_p$ of assignments with common finite
+context $\Gamma_p$.  We write $M,p\Vdash\varphi$ when every assignment in
+$R_p$ satisfies $\varphi$ in the ordinary Tarskian sense.  Thus $\Vdash$ is
+universal team satisfaction, not set-theoretic, Kripke, Beth, or
+Kripke--Joyal forcing.  Refinement enlarges the context and may restrict the
+team, which immediately gives persistence.  Point assignments enter through
+the singleton-state embedding.  The later semantic frameworks add typed data
+while preserving the truth of formulas in the reduct; we call these
+truth-preserving reduct expansions because consequence conservativity is not asserted without an expansion
+theorem for every lower model.
 
-The paper is organized as follows. \Cref{sec:preliminaries} fixes the extension chain and the relevant notions of conservativity. \Cref{sec:information-states} recalls forcing over information states. \Cref{sec:null-decomposition} studies local objects, sheafification, and lower-fragment separation. \Cref{sec:gerbe-obstruction} introduces component gerbes and branch obstruction classes. \Cref{sec:homological-visibility} and \Cref{sec:branch-aggregation} contain the homological visibility theory together with the branchwise comparison and realization results. The appendix collects the supplementary material on refinement dynamics and the GHZ/Mermin example.
+For an admissible parameter $r$ at $p$, the paper specifies a thin
+reference-refinement site $\mathcal C_{p,s}$, its base object
+$a=[r]_p$, and a presheaf of local sections
+$F_{p,s}:\mathcal C_{p,s}^{\mathrm{op}}\to\mathbf{Set}$.  A matching family
+without an element of $F_{p,s}(a)$ is the set-valued failure studied here.
+The forward implication from a matching family to a section of the
+sheafification is formal; the converse holds when
+$F_{p,s}|_{\mathcal C_{p,s}/a}$ is separated
+(\Cref{prop:compsec-to-sheafification,thm:sheafification-characterization}).
+The predicates expressing a matching family, a global section, and matching
+without amalgamation are not definable in the automorphism-invariant,
+constant-free, one-variable fragment of the lower reduct
+(\Cref{thm:pointwise-irreducibility}).
+
+Gerbe-valued obstructions require extra, noncanonical structure.  A
+gluing-sensitive banded lift datum consists of a banded groupoid lift of $F$,
+its stackification together with an identification of its component sheaf
+with $aF$, essential surjectivity on the terminal fibre, and a
+\v{C}ech-to-derived comparison hypothesis.  A section
+$v\in\pi_0(\mathfrak L_r)(a)\cong(aF)(a)$ determines a full component gerbe
+$\mathfrak G_v$ and hence a Giraud class $\omega_v$.  Under the stated
+separatedness, representability, and comparison hypotheses, matching without
+amalgamation is equivalent to the existence of global component sections with
+all corresponding component gerbes non-neutral
+(\Cref{thm:component-gerbe-decomposition,thm:gerbe-null-semantics}).  A
+strictly pullback-stable representative choice imposes a useful rigidity
+condition: together with terminal-fibre essential surjectivity it forces the
+sheafification unit to be onto at the terminal object
+(\Cref{thm:canonical-lift-rigidity}).
+
+Fix next a global component section, a finite nerve representative, and a
+constant finite abelian band $A$.  The universal coefficient map evaluates
+the class on second homology,
+\[
+ \operatorname{ev}_{\omega}:H_2(N,\mathbb Z)\longrightarrow A.
+\]
+We write $K_\omega=\operatorname{Im}(\operatorname{ev}_\omega)$ for its
+homological image and $Q_\omega=\operatorname{coker}(\operatorname{ev}_\omega)
+=A/K_\omega$ for its homological cokernel.  These are invariants of an object
+of the presentation-comparison groupoid and transport functorially along the
+chosen comparison zigzags; no path independence is claimed.  A class with
+zero $H_2$ evaluation is precisely a class in the $\operatorname{Ext}^1$
+kernel of the universal coefficient sequence.  This separates the
+homology-evaluation quotient from the more presentation-dependent quotient by
+the subgroup generated by the coordinates of a chosen cocycle.
+
+For finitely many component sections $v$, put $K_v=\operatorname{Im}
+(\operatorname{ev}_{\omega_v})$.  Retaining the component label gives the
+label-aware quotient $A/(\bigcap_vK_v)$; retaining only characters that work
+for every component gives the common-character quotient
+$A/(\sum_vK_v)$.  Their canonical comparison has kernel
+\[
+ \frac{\sum_vK_v}{\bigcap_vK_v}.
+\]
+The exact sequence and its finite-register interpretation are formal.  The
+existence results are not: on the finite intersection site associated to a
+connected good-cover nerve with $H_1=0$, we construct typed expansions whose
+componentwise evaluation maps have prescribed images, including mixtures of
+neutral and non-neutral component gerbes.  If $H_2(N,\mathbb Z)\cong
+\mathbb Z^\beta$, the attainable image subgroups are exactly those generated
+by at most $\beta$ elements.  The main classification follows by asking when
+$G$ decomposes as $K_1\oplus K_2$ with both summands nonzero and each generated
+by at most $\beta$ elements.
+
+The paper is organized as follows.  Sections~\ref{sec:preliminaries} and
+\ref{sec:information-states} define the semantic frameworks and universal
+team satisfaction.  Section~\ref{sec:null-decomposition} treats presheaves,
+sheafification, and lower-fragment non-definability.  The component-gerbe and
+Giraud-class results follow, then the finite-presentation and homological
+quotients, their aggregation over component sections, the construction
+theorems, the wedge-of-spheres classification, and the precise empirical-model
+comparison.  The appendix records supplementary results on indexed
+refinements and the GHZ/Mermin example.
+
+\subsection*{Glossary of retained terminology}
+
+The following short names are used only after their standard-language content
+has been fixed.
+
+\begin{description}[style=nextline,leftmargin=2em,labelindent=0pt]
+\item[Information state $p=(\Gamma,R)$.]
+A nonempty team $R$ of assignments with common finite context $\Gamma$.
+\item[Universal team satisfaction.]
+$M,p\Vdash\varphi$ means that every assignment in the team of $p$ satisfies
+$\varphi$ in ordinary Tarskian semantics.
+\item[Singleton-state embedding.]
+The map from an assignment to its singleton team, preserving ordinary
+satisfaction.
+\item[Truth-preserving reduct expansion.]
+An expansion whose higher models preserve lower-language satisfaction after
+the specified model reduct and state projection; consequence conservativity
+is not part of the definition.
+\item[Typed expansion class.]
+The class of all supplied higher-layer data of the stipulated types over a
+fixed lower model.
+\item[Admissible parameter $r$.]
+An element satisfying the primitive predicate $\Adm_s$; the predicate records
+exactly that the site and presheaf data stipulated in the relevant typed model
+are attached to $r$.
+\item[{Base object $a=[r]_p$.}]
+The object of the reference-refinement site associated to the pair $(p,r)$;
+the brackets do not denote an equivalence class.
+\item[Reference-refinement site $\mathcal C_{p,s}$.]
+The thin category of base objects ordered by refinement, equipped with the
+specified pretopology and pullbacks.
+\item[Presheaf of local sections $F_{p,s}$.]
+The functor $\mathcal C_{p,s}^{\mathrm{op}}\to\mathbf{Set}$.
+\item[Matching without amalgamation at $a$.]
+A matching family exists on a cover of $a$, but $F_{p,s}(a)$ is empty.
+\item[Gluing-sensitive banded lift datum.]
+A banded groupoid lift, its stackification and component-sheaf identification,
+terminal-fibre essential surjectivity, and a \v{C}ech-to-derived comparison
+hypothesis.
+\item[Pullback-stable representative choice.]
+A choice of one representative of each presheaf section that is preserved
+strictly by every pullback; ``representative-rigid'' abbreviates this condition.
+\item[Global component section $v$.]
+An element of $\pi_0(\mathfrak L_r)(a)$, identified with a section of
+$(aF)(a)$.
+\item[Component gerbe $\mathfrak G_v$ and component obstruction $\omega_v$.]
+The full banded substack over $v$ and its Giraud class
+$[\mathfrak G_v]\in H^2(\mathcal C/a,\Band)$.
+\item[Presentation-comparison groupoid.]
+The groupoid freely generated by the specified refinements, cocycle
+replacements, band retrivializations, and their formal inverses; distinct
+zigzags need not give the same comparison.
+\item[Coordinate-image subgroup and cocycle-coordinate quotient.]
+For a chosen cocycle $\alpha$, the subgroup generated by its coordinate values
+and the corresponding quotient $A/H_\alpha$.
+\item[Homological image $K_\omega$ and homological cokernel $Q_\omega$.]
+$\operatorname{Im}(\operatorname{ev}_\omega)$ and
+$\operatorname{coker}(\operatorname{ev}_\omega)=A/K_\omega$.
+\item[Label-aware quotient.]
+$A/(\bigcap_vK_v)$, equivalently the image of $A$ in the product of the
+componentwise homological cokernels.
+\item[Common-character quotient.]
+$A/(\sum_vK_v)$, detected by the characters that annihilate every $K_v$.
+\item[Component-forgetting kernel.]
+The kernel of the canonical map from the label-aware quotient to the
+common-character quotient, namely $(\sum_vK_v)/(\bigcap_vK_v)$.
+\item[Fibre-separating auxiliary register.]
+A finite set used in an injective lift of a quotient map; its minimum
+cardinality is the largest quotient-fibre cardinality.
+\item[Finite intersection site associated to a cover nerve.]
+The finite thin pullback site generated by the formal intersections indexed by
+the nerve, with an initial object representing empty intersections.
+\item[Typed readout.]
+The partial output attached to an admissible parameter: inadmissible if no
+typed data are attached, uniquely determined if the sheafified global section
+is unique, and non-unique-or-absent otherwise.
+\item[Indexed refinement system.]
+A family of state-refinement relations indexed by information coordinates,
+each monotone for the state preorder and the specified time order.
+\item[Information-determining axis set.]
+A finite set of refinement coordinates whose information values determine any
+decided truth value among the states reachable along those coordinates.
+\item[Pairwise commuting refinements and common refinement.]
+Refinements for which every indicated finite family has a state refining all
+its members.
+\item[Readout-preserving rewrite.]
+A rewrite between partial outputs that preserves both definedness and value.
+\item[Banded groupoid lift of a support presheaf.]
+A category fibred in groupoids whose presheaf of isomorphism classes is the
+given empirical-model support presheaf and whose automorphism sheaves are the
+specified band.
+\end{description}
