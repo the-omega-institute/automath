@@ -23,8 +23,45 @@ Write
 and \(\val(x_1\cdots x_m)=\sum_{j=1}^m x_jF_{j+1}\).
 For \(n\ge2\), let \(\omega(n)\) and \(\Omega(n)\) denote respectively
 the number of distinct prime divisors and the number counted with
-multiplicity; put \(\omega(1)=\Omega(1)=0\). The required Zeckendorf
-block action is recorded in \suppref{Lemma~2.5}.
+  multiplicity; put \(\omega(1)=\Omega(1)=0\).
+
+\begin{lemma}[Unimodular Zeckendorf block action]
+  \label{lem:main-zeckendorf-unimodular-block-action}
+  After an LSD-first prefix \(x_1\cdots x_r\), put
+  \[
+    V_r=\begin{pmatrix}N_r\\F_{r+1}\\F_{r+2}\end{pmatrix},
+    \qquad N_r=\sum_{j=1}^r x_jF_{j+1},
+    \qquad V_0=(0,1,1)^t.
+  \]
+  Reading \(\varepsilon\in\{0,1\}\) sends \(V_r\) to
+  \[
+    D_\varepsilon V_r,
+    \qquad
+    D_\varepsilon=
+    \begin{pmatrix}
+      1&0&\varepsilon\\
+      0&0&1\\
+      0&1&1
+    \end{pmatrix},
+    \qquad \det D_\varepsilon=-1.
+  \]
+  For a block \(y=y_1\cdots y_\ell\), therefore,
+  \(M_y=D_{y_\ell}\cdots D_{y_1}\) has determinant
+  \((-1)^\ell\), concatenation acts by multiplication of the block
+  matrices, and every nonempty \(M_y\) belongs to
+  \(\operatorname{GL}_3(\ZZ/q\ZZ)\) for every \(q\ge2\).
+\end{lemma}
+
+\begin{proof}
+  The identities
+  \[
+    N_{r+1}=N_r+\varepsilon F_{r+2},\qquad
+    F_{r+2}=F_{r+2},\qquad F_{r+3}=F_{r+1}+F_{r+2}
+  \]
+  give the displayed action. Expanding along the first row gives
+  \(\det D_\varepsilon=-1\); the remaining assertions follow by
+  multiplication and reduction modulo \(q\).
+\end{proof}
 
 \begin{lemma}[Paired Zeckendorf pumping congruence]
   \label{lem:zeckendorf-paired-pumping-congruence}
@@ -43,7 +80,7 @@ block action is recorded in \suppref{Lemma~2.5}.
 
 \begin{proof}
   With \(v_0=(0,1,1)^t\), concatenation and
-  \suppref{Lemma~2.5} gives
+  \Cref{lem:main-zeckendorf-unimodular-block-action} give
   \[
     N(k)=e_1^tM_zM_y^kM_xM_v^kM_uv_0.
   \]
@@ -81,7 +118,7 @@ block action is recorded in \suppref{Lemma~2.5}.
   in
   \(\operatorname{GL}_3(\ZZ/N_i^2\ZZ)\), omitting an empty block. These
   orders exist by
-  \suppref{Lemma~2.5}. Define
+  \Cref{lem:main-zeckendorf-unimodular-block-action}. Define
   \[
     w_{i+1}:=uv^{\,1+h_i}xy^{\,1+h_i}z.
   \]
@@ -200,9 +237,26 @@ language is \emph{MCF-immune} if it contains no infinite MCFL
 sublanguage. The weak pumping lemma of Seki--Matsumura--Fujii--Kasami
 states that an infinite \(k\)-MCFL contains one word that can be pumped
 synchronously at \(2k\) factors \cite[Lemma~3.2]{SekiEtAl1991}. The
-lemma makes no assertion about every sufficiently long word; that
-stronger form fails for general MCFLs
-\cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}.
+  lemma makes no assertion about every sufficiently long word; that
+  stronger form fails for general MCFLs
+  \cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}.
+
+  Duncan--Elder--Frenkel--Lyu's substitution lemma
+  \cite[Theorem~4.5]{DuncanElderFrenkelLiu2026} is stronger in a different
+  quantifier direction: after enough positions of each sufficiently long
+  word are marked, it gives either a bounded pump or a factorization in
+  which a tuple can be replaced by another tuple from one of finitely many
+  switchable families. It does not select a single family parameterized by
+  one exponent \(t\), nor does it make all replacement blocks simultaneous
+  powers of fixed words. Consequently it supplies neither a fixed affine
+  matrix-power expression nor a return time valid for every parameter on
+  one orbit. The switchable alternative also prevents it from replacing the
+  paired Ogden pump in the Zeckendorf argument above. Thus it does not by
+  itself imply any immunity result proved here. We use Seki et al.'s weaker
+  conclusion precisely because its one synchronized family has the fixed
+  \(2k\)-block power form needed below. The imported language statement is
+  only that family; its placement beyond the recurrence transient, the
+  finite-group return, and all arithmetic consequences are proved here.
 
 \begin{theorem}[Synchronized local-congruence orbit]
   \label{thm:mcfl-synchronized-congruence-orbit}
@@ -237,8 +291,13 @@ stronger form fails for general MCFLs
 \begin{proof}
   Delete the finitely many words of length less than \(J\). Since the
   alphabet is finite, some \(a\in A^J\) is the prefix of infinitely many
-  remaining words. MCFLs are closed, without increasing fan-out, under
-  left quotient by a fixed word \cite[Section~3]{SekiEtAl1991}; hence
+  remaining words; when \(J=0\), take \(a=\varepsilon\). For completeness,
+  fixed left quotient preserves fan-out. Introduce a fresh letter \(\#\),
+  let \(h(\#)=a\) and \(h(x)=x\) for \(x\in A\), intersect
+  \(h^{-1}(L)\) with the regular language \(\#A^*\), and erase \(\#\).
+  Inverse homomorphism, regular intersection, and homomorphism preserve
+  \(k\)-MCFLs without increasing the maximum nonterminal dimension
+  \cite[Proposition~2.3]{DuncanElderFrenkelLiu2026}. Hence
   \[
     L_a=\{x\in A^\ast:ax\in L\}
   \]
@@ -253,8 +312,13 @@ stronger form fails for general MCFLs
     M_{v_1},M_{s_1},\ldots,M_{v_k},M_{s_k}
   \]
   lies in the finite group
-  \(\operatorname{GL}_{d+1}(\ZZ/q\ZZ)\). Let \(H(q)\) be a common
-  multiple of their orders; empty blocks contribute the identity.
+  \(\operatorname{GL}_{d+1}(\ZZ/q\ZZ)\). One may take
+  \[
+    H(q)=\abs{\operatorname{GL}_{d+1}(\ZZ/q\ZZ)}
+      \le q^{(d+1)^2};
+  \]
+  Lagrange's theorem makes this a common multiple of their orders, and
+  empty blocks contribute the identity.
   Replacing \(t\) by \(t+H(q)\) in the matrix product for \(W(t)\)
   therefore leaves every powered block unchanged modulo \(q\), proving
   the congruence simultaneously for all \(t\ge0\).
@@ -319,9 +383,13 @@ Its completion is
     \cong\prod_{p\notin S}\ZZ_p.
 \]
 These are the adic topologies and completions studied by Broughan
-\cite{Broughan2003}.
+\cite{Broughan2003}. His Theorem~2.4 and Corollary~3.1 supply the
+\(\mathbb Q\)-space and Cantor-completion classifications used below. The
+new assertion here is that every synchronized MCFL orbit satisfies their
+no-isolated-point hypothesis, and hence yields the scattered-set
+obstruction.
 
-\begin{theorem}[MCFL local-adic topological fingerprint]
+\begin{theorem}[Adic recurrence and scattered-set obstruction for synchronized MCFL orbits]
   \label{thm:mcfl-local-adic-fingerprint}
   For the orbit \(Y=\{N(t):t\ge0\}\) supplied by
   \Cref{thm:mcfl-synchronized-congruence-orbit}, the following hold.
@@ -376,7 +444,10 @@ For \(K\ge0\) and \(E=(E_p)_{p\in S}\in\NN_0^S\), define
 \]
 For \(X\subseteq\NN_{\ge1}\), let \(D_SX\) be the set of points of \(X\)
 that are not isolated in its \(\tau_S\)-subspace topology. Thus \(D_S\)
-is the intrinsic Cantor--Bendixson derivative.
+is the intrinsic Cantor--Bendixson derivative. We use the height convention
+\[
+  \operatorname{ht}(X)=\min\{\alpha:D_S^\alpha X=\varnothing\}.
+\]
 
 \begin{proposition}[Exact local prime-factor rank]
   \label{prop:local-prime-factor-cb-rank}
@@ -390,6 +461,8 @@ is the intrinsic Cantor--Bendixson derivative.
     \qquad D_S^{\,K+1}X_{K,E}=\varnothing,
   \]
   and the Cantor--Bendixson height of \(X_{K,E}\) is exactly \(K+1\).
+  For \(K=0\), the nonempty set \(X_{0,E}\) is finite,
+  \(D_SX_{0,E}=\varnothing\), and its height is \(1\).
 \end{proposition}
 
 \begin{proof}
@@ -433,10 +506,11 @@ is the intrinsic Cantor--Bendixson derivative.
 
 Broughan's related full-adic result counts prime factors with
 multiplicity and identifies closures of the corresponding strata
-\cite[Theorem~4.3]{Broughan2003}. The preceding proposition instead
-uses distinct prime support, deletes the finite set \(S\), imposes
-bounded \(S\)-adic valuations, and computes the intrinsic derivative
-rank.
+\cite[Theorem~4.3]{Broughan2003}. The preceding proposition is a local
+refinement of that analysis, not a new classification of the ambient adic
+space: it uses distinct prime support, deletes the finite set \(S\), imposes
+bounded \(S\)-adic valuations, and computes derivatives intrinsically in
+the indicated subspace rather than only in its ambient closure.
 
 \begin{theorem}[Nonunit escape dichotomy and MCF-immunity]
   \label{thm:nonunit-mcfl-escape-dichotomy}
@@ -573,7 +647,8 @@ every \(n\ge J_{\mathrm r}\), and put
   be the largest norm of a finite prime ideal \(\mathfrak p\) for which
   \(\operatorname{ord}_{\mathfrak p}(x)\ne0\), with \(P_K(x)=1\) when
   \(x\) is a unit. If \(Z=(Z(n))_{n\ge0}\) is a nondegenerate linear
-  recurrence over \(K\) with at least two characteristic roots, then
+  recurrence over \(K\) whose minimal shift-annihilating polynomial has
+  at least two distinct nonzero roots, then
   \[
     \lim_{\substack{r\to\infty\\ r>s\ge0,\ Z(s)\ne0}}
       P_K\!\left(\frac{Z(r)}{Z(s)}\right)=\infty.
@@ -602,7 +677,9 @@ every \(n\ge J_{\mathrm r}\), and put
   \]
   for every \(r,s\) with nonzero denominator. This fixed bound
   contradicts Evertse's limit when there are at least two characteristic
-  roots.
+  roots. Here and below, ``characteristic roots of a sequence'' always
+  means the roots of its minimal shift-annihilating polynomial, not roots
+  introduced by a nonminimal recurrence witness.
 \end{proof}
 
 \begin{lemma}[Increasing \(S\)-unit recurrences]
@@ -650,13 +727,32 @@ every \(n\ge J_{\mathrm r}\), and put
   with one characteristic root.
 
   Choose one residue subsequence and shift its index if necessary so
-  that the displayed expansion holds from \(n=0\). The Hankel matrix of
-  \(Z\) has rational entries and finite rank, so a minimal linear
-  dependence among its shift columns has coefficients in
-  \(\mathbb Q\). Thus the minimal annihilating polynomial of \(Z\) lies
-  in \(\mathbb Q[X]\). Over \(\overline{\mathbb Q}\) it is a power of
-  \(X-\lambda\). Galois invariance therefore gives
-  \(\lambda\in\mathbb Q\). Now \(f(n)=Z(n)/\lambda^n\in\mathbb Q\)
+  that the displayed expansion holds from \(n=0\), and put
+  \(e=\deg f\). Let \(E\) denote the forward shift. Over
+  \(\overline{\mathbb Q}\), finite differences give
+  \[
+    (E-\lambda)^{e+1}Z=0,
+    \qquad (E-\lambda)^eZ\ne0,
+  \]
+  because the \(e\)-th difference of the nonzero degree-\(e\) polynomial
+  \(f\) is a nonzero constant. Hence the monic minimal shift-annihilator
+  over \(\overline{\mathbb Q}\) is exactly
+  \((X-\lambda)^{e+1}\), and the Hankel rank of \(Z\) over that field is
+  \(e+1\).
+
+  The Hankel matrix has rational entries, and a rational matrix has the
+  same rank over \(\mathbb Q\) and over \(\overline{\mathbb Q}\).
+  Therefore a minimal dependence among its shift columns gives a monic
+  polynomial \(P\in\mathbb Q[X]\) of the same degree \(e+1\). After
+  extending scalars, minimality and equality of degrees force
+  \[
+    P(X)=(X-\lambda)^{e+1}.
+  \]
+  For every
+  \(\sigma\in\operatorname{Gal}(\overline{\mathbb Q}/\mathbb Q)\), the
+  polynomial \(P\) is fixed and has only the root \(\lambda\); thus
+  \(\sigma(\lambda)=\lambda\). Hence \(\lambda\in\mathbb Q\). Now
+  \(f(n)=Z(n)/\lambda^n\in\mathbb Q\)
   for every \(n\), and interpolation from \(\deg(f)+1\) integer
   arguments gives \(f\in\mathbb Q[X]\). If \(f\) were nonconstant, clear its
   denominators to obtain a nonconstant \(g\in\mathbb Z[X]\). The
@@ -724,11 +820,21 @@ every \(n\ge J_{\mathrm r}\), and put
   \]
   are supported on the fixed finite set \(S_{\mathrm r}\cup T\).
 
-  The entries of every matrix power \(M^n\) satisfy a linear recurrence
-  by Cayley--Hamilton. The expression for \(N(t)\) is a finite sum of
-  finite products of such entries, and linear recurrence sequences are
-  closed under sums and termwise products. Hence \(Y\) is a strictly
-  increasing positive integer recurrence. By
+  To make the termwise-product closure explicit, put
+  \(n_0=d_{\mathrm r}+1\), list the \(2k\) powered affine blocks as
+  \(B_1,\ldots,B_{2k}\), and form
+  \[
+    K=B_1\otimes\cdots\otimes B_{2k}.
+  \]
+  Since \(K^t=B_1^t\otimes\cdots\otimes B_{2k}^t\), expansion of the
+  interspersed constant block matrices expresses \(N(t)\) as a fixed
+  linear functional of \(K^t\). Cayley--Hamilton therefore gives a
+  recurrence of order at most
+  \[
+    R=n_0^{2k}=(d_{\mathrm r}+1)^{2k}.
+  \]
+  Arithmetic subsequences of a recurrence are recurrences, so \(Y\) is a
+  strictly increasing positive integer recurrence. By
   \Cref{lem:s-unit-increasing-recurrence-rigidity}, there are
   \(r\ge0,h\ge1,c\ge1,b\ge2\) such that
   \(N(t_\ast+h_\ast n)=cb^n\), where
@@ -786,16 +892,18 @@ every \(n\ge J_{\mathrm r}\), and put
   \(v_p(c(b^H-1))=e\), contradicting the displayed congruence.
 \end{proof}
 
-\begin{corollary}[Positive semidecidability]
+\begin{corollary}[Positive semidecidability on promised presentations]
   \label{cor:bounded-outside-support-semidecidable}
-  Suppose the numeration system is given effectively by its finite
-  digit alphabet, recurrence and initial data, and a DFA recognizing
-  \(\mathcal R_U\), with the minimal tail recurrence and a valid
-  threshold \(J_{\mathrm r}\) effectively computable from these data.
-  Then the property in
+  On the promised class of valid presentations satisfying
+  \textup{(U1)--(U4)}, suppose the finite digit alphabet, recurrence and
+  initial data, and a DFA recognizing \(\mathcal R_U\) are supplied,
+  together with a supplied or effectively certified minimal tail
+  recurrence and a valid threshold \(J_{\mathrm r}\). Then the set of
+  positive promised instances of the property in
   \Cref{thm:bounded-outside-support-geometric-ray}\textup{(i)} is
   recursively enumerable, equivalently it has a \(\Sigma^0_1\) upper
-  bound.
+  bound. No recognition procedure for membership in the promised input
+  class is asserted.
 \end{corollary}
 
 \begin{proof}
@@ -812,15 +920,21 @@ every \(n\ge J_{\mathrm r}\), and put
   \[
     N(t)=\val_U(W(t)).
   \]
-  Kronecker products implement the termwise
-  products arising from the several synchronized block powers. For a
-  tuple accepted at every parameter, compute \(c=N(0)\). The only
+  With \(d_{\mathrm r}\) the minimal tail order, the Kronecker construction
+  in the proof of
+  \Cref{thm:bounded-outside-support-geometric-ray} has dimension
+  \[
+    R=(d_{\mathrm r}+1)^{2k};
+  \]
+  it is computable from the candidate and is an upper bound for the
+  recurrence order of \(N(t)\). For a tuple accepted at every parameter,
+  compute \(c=N(0)\). The only
   possible integer ratio is \(b=N(1)/N(0)\). Check that
   \(b\in\mathbb Z_{\ge2}\), and then decide whether the recurrence
-  \(N(t+1)-bN(t)\) is identically zero by checking an initial segment of
-  length equal to an explicitly constructed recurrence order. Thus each
+  \(N(t+1)-bN(t)\) is identically zero by checking its first \(R\) terms;
+  Cayley--Hamilton makes those \(R\) zero values sufficient. Thus each
   candidate scheme is decidable, and the enumeration halts exactly on
-  positive instances by
+  positive promised instances by
   \Cref{thm:bounded-outside-support-geometric-ray}. No claim of a
   decision procedure for negative instances is made.
 \end{proof}
@@ -837,12 +951,19 @@ every \(n\ge J_{\mathrm r}\), and put
   and can therefore destroy the identity
   \(\val_U(W(t+1))=b\val_U(W(t))\).
 
-  The neighboring decision theory does not close this step. Orbit and
-  zero problems for linear recurrences already contain the open Skolem
-  problem \cite{OuaknineWorrell2012,TarasovVyalyi2011}, while unrestricted
-  multiplicative matrix equations include undecidable families
-  \cite{BellEtAl2008MatrixEquations}. Neither observation is a reduction
-  for the companion-form digit matrices here, and conditions
+  The neighboring decision theory does not close this step. Skolem asks
+  whether one term of a recurrence vanishes, while Positivity and Ultimate
+  Positivity ask for signs of all or all sufficiently late terms; these
+  problems remain open in unrestricted order
+  \cite{OuaknineWorrell2012,AkshayBazilleGenestVahanwala2024}.
+  Tarasov--Vyalyi relate an orbit-hitting problem to regular-language
+  intersection \cite{TarasovVyalyi2011}, while unrestricted multiplicative
+  matrix equations include undecidable families
+  \cite{BellEtAl2008MatrixEquations}. Our candidate check instead asks
+  whether the explicitly constructed recurrence
+  \(N(t+1)-bN(t)\) is identically zero; no reduction in either direction is
+  claimed. None of these observations is a reduction for the companion-form
+  digit matrices here, and conditions
   \textup{(U1)--(U3)} must also be preserved. Thus general decidability,
   undecidability, and any hardness classification remain open; the proved
   effective statement is exactly the positive semidecision above. The
@@ -901,8 +1022,17 @@ every \(n\ge J_{\mathrm r}\), and put
 
 \begin{proof}
   Use the fixed strictly increasing orbit from
-  \Cref{thm:mcfl-synchronized-congruence-orbit}. Enumerate the edges of
-  \(\NN^{<\omega}\) so that each parent occurs before its children. Map
+  \Cref{thm:mcfl-synchronized-congruence-orbit}. Here is an explicit
+  parent-before-child enumeration. If \(p_i\) is the \(i\)-th prime, encode
+  \(\sigma=(\sigma_0,\ldots,\sigma_{m-1})\) by
+  \[
+    \kappa(\sigma)=2^m\prod_{i=0}^{m-1}p_{i+2}^{\sigma_i+1}.
+  \]
+  Unique factorization makes \(\kappa\) injective, and
+  \(\kappa(\sigma^\frown j)>\kappa(\sigma)\). Enumerating the nonroot
+  nodes, equivalently their incoming edges, by increasing \(\kappa\)
+  therefore has order type \(\omega\) and places every parent before each
+  child. Map
   the root to any orbit word of value \(R_0\ge2\). Suppose finitely many
   edges have been assigned, and consider a new edge from a parent of
   value \(P\). Let \(R\) be divisible by \(R_0\), by every previously
@@ -921,9 +1051,11 @@ every \(n\ge J_{\mathrm r}\), and put
   Recursion defines \(\Phi\) on every node. The value at a node is the
   root value times the product of the edge quotients along its path.
   Since the root and all distinct edge quotients are pairwise coprime,
-  a node value divides another exactly when its path-edge set is an
-  initial segment of the other path. This is precisely the prefix
-  relation and also proves injectivity.
+  the value at \(\sigma\) divides the value at \(\tau\) exactly when the
+  root-to-\(\sigma\) edge set is contained in the root-to-\(\tau\) edge
+  set. For two nodes of a rooted tree, containment of their root-path edge
+  sets holds exactly when the first node is an ancestor of the second;
+  here this is precisely \(\sigma\preceq\tau\). This also proves injectivity.
 \end{proof}
 
 \begin{theorem}[Prime immunity for recurrent numeration systems]
@@ -1004,11 +1136,24 @@ every \(n\ge J_{\mathrm r}\), and put
   Tribonacci recurrence has \(X^3-X^2-X-1\). Their trailing recurrence
   coefficient is \(a_0=1\), so the iterated conclusion applies. In
   ordinary base \(b\), \(U_n=b^n\) and \(a_0=b\); prime MCF-immunity
-  follows, recovering the classical conclusion, but the unit iteration
-  is not being asserted. A genuinely nonintegral, nonunit Pisot example
-  is the dominant root \(1+\sqrt3\) of \(X^2-2X-2\): the recurrence
-  \(U_{n+2}=2U_{n+1}+2U_n\) has \(a_0=2\), and the action is singular
-  modulo \(2\).  Nevertheless,
+  follows, strengthening the classical fixed-base CF-immunity conclusion
+  to MCF-immunity, but the unit iteration is not being asserted.
+
+  A genuinely nonintegral, nonunit Pisot example is obtained from
+  \[
+    U_0=1,\qquad U_1=3,\qquad
+    U_{n+2}=2U_{n+1}+2U_n.
+  \]
+  If \(2<U_{n+1}/U_n\le3\), then
+  \[
+    \frac{U_{n+2}}{U_{n+1}}
+      =2+\frac{2U_n}{U_{n+1}}\in[8/3,3),
+  \]
+  so induction from \(U_1/U_0=3\) proves strict increase and bounded
+  quotients. The irreducible polynomial \(X^2-2X-2\) annihilates this
+  nonzero rational sequence, hence is its minimal tail polynomial. Its
+  dominant root is \(1+\sqrt3\), and its trailing coefficient is
+  \(a_0=2\), so the action is singular modulo \(2\). Nevertheless,
   \Cref{cor:linear-perron-bounded-support-classification} shows that every
   infinite MCFL in this nonintegral system acquires unbounded prime support
   away from \(2\); singularity of the ambient action does not produce a
@@ -1086,9 +1231,15 @@ every \(n\ge J_{\mathrm r}\), and put
   \[
     \lim_{n\to\infty}U_n^{1/n}=\beta.
   \]
-  Indeed, the coefficient of the dominant root is nonzero because the
-  displayed polynomial is the minimal tail recurrence, while every other
-  conjugate has modulus strictly less than \(\beta\). Taking
+  Here is the required nonvanishing argument. Over the splitting field the
+  minimal polynomial is separable and the eventual expansion has the form
+  \(U_n=\sum_\gamma A_\gamma\gamma^n\), with \(\gamma\) running over the
+  conjugates of \(\beta\). Since \(U_n\in\mathbb Q\), Galois automorphisms
+  send \(A_\beta\) to the corresponding \(A_{\sigma(\beta)}\). If
+  \(A_\beta=0\), every conjugate coefficient would vanish, contradicting
+  that this polynomial is the minimal tail annihilator of the nonzero
+  sequence. Thus \(A_\beta\ne0\), and every other conjugate has modulus
+  strictly less than \(\beta\), proving the limit. Taking
   \(t\)-th roots in the preceding inequalities therefore yields
   \(b=\beta^D\).
 

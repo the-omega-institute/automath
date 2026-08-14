@@ -1,9 +1,53 @@
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from artifacts import verify_pisot_pumping as verifier
 
 
 class PisotPumpingVerifierTests(unittest.TestCase):
+    def test_report_rejects_archived_count_drift(self):
+        report = verifier.run_verification()
+        report["systems_checked"] -= 1
+
+        with self.assertRaisesRegex(RuntimeError, "systems_checked"):
+            verifier._format_report(report)
+
+    def test_report_records_reproducibility_provenance(self):
+        report = verifier._format_report(verifier.run_verification())
+
+        self.assertIn("script version:", report)
+        self.assertIn("script SHA-256:", report)
+        self.assertIn("Python version:", report)
+        self.assertIn(
+            "command: python artifacts/verify_pisot_pumping.py",
+            report,
+        )
+        self.assertIn("random seed: none (deterministic)", report)
+
+    def test_cli_writes_the_archived_report(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output_path = Path(temporary_directory) / "verification.txt"
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(Path(verifier.__file__)),
+                    "--output",
+                    str(output_path),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(completed.stdout, "")
+            archived = output_path.read_text(encoding="utf-8")
+            self.assertIn("systems checked: 6", archived)
+            self.assertIn("affine action cases: 2282", archived)
+            self.assertTrue(archived.endswith("OVERALL: PASS\n"))
+
     def test_evertse_support_gives_uniform_prime_ideal_norm_bound(self):
         self.assertEqual(
             verifier.evertse_prime_ideal_norm_bound((2, 3, 5), 4),
@@ -142,18 +186,18 @@ class PisotPumpingVerifierTests(unittest.TestCase):
 
     def test_full_verification_suite_has_no_congruence_failures(self):
         report = verifier.run_verification()
-        self.assertGreaterEqual(report["systems_checked"], 5)
-        self.assertGreater(report["affine_cases"], 100)
-        self.assertGreater(report["pump_witnesses"], 0)
+        self.assertEqual(report["systems_checked"], 6)
+        self.assertEqual(report["affine_cases"], 2282)
+        self.assertEqual(report["pump_witnesses"], 5)
         self.assertEqual(report["congruence_failures"], 0)
         self.assertEqual(report["counterexample"]["modulus"], 2)
-        self.assertGreater(report["synchronized_orbit_cases"], 100)
+        self.assertEqual(report["synchronized_orbit_cases"], 159)
         self.assertEqual(report["local_layer_isolation_failures"], 0)
         self.assertEqual(report["deep_chain_failures"], 0)
         self.assertEqual(report["divisibility_tree_failures"], 0)
-        self.assertGreater(report["inflated_fibonacci_cases"], 100)
+        self.assertEqual(report["inflated_fibonacci_cases"], 1418)
         self.assertEqual(report["inflated_fibonacci_failures"], 0)
-        self.assertGreater(report["tail_prefix_cases"], 50)
+        self.assertEqual(report["tail_prefix_cases"], 63)
         self.assertEqual(report["tail_prefix_failures"], 0)
         self.assertEqual(report["geometric_ray_cases"], 13)
         self.assertEqual(report["geometric_ray_failures"], 0)

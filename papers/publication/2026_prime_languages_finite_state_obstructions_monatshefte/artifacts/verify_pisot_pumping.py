@@ -10,14 +10,43 @@ singular-modulus obstruction at a prime dividing a nonunit trailing coefficient.
 
 from __future__ import annotations
 
+import argparse
+import hashlib
+import subprocess
+import sys
 from dataclasses import asdict, dataclass
 from itertools import product
 from math import gcd, lcm
+from pathlib import Path
 from typing import Iterable, Sequence
 
 
 Matrix = tuple[tuple[int, ...], ...]
 Word = tuple[int, ...]
+
+SCRIPT_VERSION = "1.0.0"
+EXPECTED_REPORT_COUNTS = {
+    "systems_checked": 6,
+    "affine_cases": 2282,
+    "pump_witnesses": 5,
+    "congruence_failures": 0,
+    "synchronized_orbit_cases": 159,
+    "local_layer_isolation_failures": 0,
+    "deep_chain_failures": 0,
+    "divisibility_tree_failures": 0,
+    "inflated_fibonacci_cases": 1418,
+    "inflated_fibonacci_failures": 0,
+    "tail_prefix_cases": 63,
+    "tail_prefix_failures": 0,
+    "geometric_ray_cases": 13,
+    "geometric_ray_failures": 0,
+    "linear_perron_classification_cases": 6,
+    "linear_perron_classification_failures": 0,
+    "geometric_ratio_support_cases": 4,
+    "geometric_ratio_support_failures": 0,
+    "evertse_support_bound_cases": 4,
+    "evertse_support_bound_failures": 0,
+}
 
 
 @dataclass(frozen=True)
@@ -861,9 +890,24 @@ def run_verification() -> dict[str, object]:
     }
 
 
-def _format_report(report: dict[str, object]) -> str:
+def _format_report(
+    report: dict[str, object],
+    command_line: str = "python artifacts/verify_pisot_pumping.py",
+) -> str:
+    for key, expected in EXPECTED_REPORT_COUNTS.items():
+        actual = report[key]
+        if actual != expected:
+            raise RuntimeError(f"{key}: expected {expected}, got {actual}")
+
+    script_path = Path(__file__).resolve()
+    script_hash = hashlib.sha256(script_path.read_bytes()).hexdigest()
     lines = [
         "LINEAR RECURRENT NUMERATION VERIFICATION",
+        f"script version: {SCRIPT_VERSION}",
+        f"script SHA-256: {script_hash}",
+        f"Python version: {sys.version.split()[0]}",
+        f"command: {command_line}",
+        "random seed: none (deterministic)",
         f"systems checked: {report['systems_checked']}",
         f"affine action cases: {report['affine_cases']}",
         f"valid canonical pump witnesses: {report['pump_witnesses']}",
@@ -924,5 +968,19 @@ def _format_report(report: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, help="write the full report to this path")
+    arguments = parser.parse_args(argv)
+    command_arguments = sys.argv if argv is None else [str(Path(__file__)), *argv]
+    command_line = subprocess.list2cmdline(["python", *command_arguments])
+    formatted = _format_report(run_verification(), command_line=command_line)
+    if arguments.output is None:
+        print(formatted)
+    else:
+        arguments.output.write_text(formatted + "\n", encoding="utf-8")
+    return 0
+
+
 if __name__ == "__main__":
-    print(_format_report(run_verification()))
+    raise SystemExit(main())

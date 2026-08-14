@@ -147,11 +147,16 @@ The following published inputs delimit what is not new:
   "The Failure of the Strong Pumping Lemma for Multiple Context-Free
   Languages," *Theory of Computing Systems* 55 (2014), 250--278,
   DOI 10.1007/S00224-014-9534-Z.
-- A. Duncan, M. Elder, L. Frenkel, and M. Liu, "A substitution lemma for
+- A. Duncan, M. Elder, L. Frenkel, and M. Lyu, "A substitution lemma for
   multiple context-free languages," *International Journal of Algebra and
   Computation* (2026), DOI 10.1142/S0218196726500463,
-  arXiv:2509.02117. The direct arXiv PDF was checked; its Lemma 5.3 quotes
-  the exact Seki weak-pumping factorization used in the manuscript.
+  arXiv:2509.02117v4. The direct arXiv PDF was checked. Its Lemma 5.3 quotes
+  the exact Seki weak-pumping factorization used in the manuscript, while
+  Theorem 4.5 gives an every-sufficiently-marked-word alternative between
+  bounded pumping and replacement from one of finitely many switchable-tuple
+  families. The latter does not parameterize the replacements as simultaneous
+  powers of fixed blocks and therefore does not itself provide the fixed
+  affine matrix-power orbit or a return time uniform in the orbit parameter.
 - K. A. Broughan, "Adic Topologies for the Rational Integers," *Canadian
   Journal of Mathematics* 55 (2003), 711--723,
   DOI 10.4153/CJM-2003-030-3. The Cambridge primary PDF was checked.
@@ -165,6 +170,24 @@ combination with a fixed recurrence block orbit, the deleted-prime intrinsic
 Cantor--Bendixson rank for distinct prime support with bounded local
 valuations, the nonunit escape dichotomy and MCF-immunity consequences, and
 the unit-system arbitrary-depth quotient and induced-tree constructions.
+
+The arithmetic comparison now also includes Y. Bugeaud and J.-H. Evertse,
+"S-parts of terms of integer linear recurrence sequences," *Mathematika* 63
+(2017), 840--851, DOI 10.1112/S0025579317000298. It studies the size of the
+fixed-\(S\) part of recurrence terms; it does not state a synchronized-language
+characterization. The manuscript therefore presents its Evertse--Schur lemma
+as a classical arithmetic input organized for the language interface, not as
+an independent priority claim.
+
+For the retained supplementary finite-state results, Shen (2022) supplies a
+qualitative ordinary-base finite-automaton obstruction. Dubbe (2025) instead
+lets the automaton grow with the cutoff and proves that exact prime
+recognition below \(x\) requires at least
+\(x\exp(-c(\log\log x)^2\log\log\log x)\) states. The supplement fixes one
+DFA first and gives lengthwise symmetric-difference and recall/precision
+bounds, including a Zeckendorf analogue. It does not improve Dubbe's growing
+state-complexity bound, and those ordinary-base results do not supply the
+fixed-DFA residue-class error statement or its Zeckendorf version.
 
 ## Minimal-reachable recurrence and witness inflation (2026-08-03)
 

@@ -1,16 +1,30 @@
-# Split-out manuscript
+# Prime support and multiple-context-free languages in recurrent numeration
 
-This folder contains the standalone syntax-focused manuscript split out
-from
-`2026_dynamical_zeta_finite_part_spectral_fingerprint_etds`.
+This directory contains the article, its separately compiled finite-state
+supplement, and the finite consistency checks cited in the submission record.
+The article is self-contained: in particular, the Zeckendorf block matrix used
+by its context-free theorem is proved in `sec_pisot.tex` and no article theorem
+depends on a supplement number.
 
-Focus of this paper:
+## Reproducibility
 
-- density dichotomies for deterministic finite automata,
-- lower bounds against finite-state approximation of binary primes,
-- regular and sofic obstructions in Zeckendorf syntax,
-- analytic obstructions for prime-supported Euler products and finite
-  determinants.
+Run all commands from this directory. Full commands and file roles are in
+`REPRODUCE.md`; the upload manifest is in `submission_metadata.md`.
 
-The exposition has been rewritten as a single finite-state obstruction
-paper rather than a miscellaneous section of the larger draft.
+The deterministic verifier is expected to report:
+
+- systems checked: 6;
+- affine action cases: 2282;
+- valid canonical pump witnesses: 5;
+- synchronized orbit cases: 159;
+- inflated Fibonacci cases: 1418;
+- tail-prefix action cases: 63;
+- geometric ray cases: 13;
+- linear Perron classification cases: 6;
+- geometric-ratio and Evertse support cases: 4 each;
+- every recorded failure count: 0;
+- final status: `OVERALL: PASS`.
+
+The unit-test archive must report 19 tests and `OK`. The verifier contains
+exact expected totals and exits nonzero if any archived count drifts. Neither
+script uses the network or randomness.
