@@ -232,6 +232,140 @@ def symbolic_checks() -> list[Check]:
         )
     )
 
+    all_order_rows = []
+    all_order_ok = True
+    for r in range(2, 9):
+        for d in range(1, 13):
+            for alpha in (
+                sp.Rational(1, 4),
+                sp.Rational(1, 1),
+                sp.Rational(7, 4),
+            ):
+                beta = d + alpha
+                q_value = (
+                    sp.Rational(2, 1)
+                    if beta <= 2 * r
+                    else 1 + sp.Rational(2 * r, 1) / beta
+                )
+                p_value = sp.simplify(2 * r / q_value)
+                expected = max(
+                    sp.Rational(r, 1),
+                    sp.simplify(2 * r * beta / (beta + 2 * r)),
+                )
+                shift_growth = sp.simplify(beta * (1 - 1 / q_value))
+                m_value = int(sp.floor(p_value))
+                row_ok = (
+                    sp.simplify(p_value - expected) == 0
+                    and sp.simplify(p_value * q_value - 2 * r) == 0
+                    and shift_growth <= p_value
+                    and sp.Rational(m_value, 1)
+                    <= p_value
+                    < sp.Rational(m_value + 1, 1)
+                )
+                if beta > 2 * r:
+                    rho = sp.simplify((r + p_value) / 2)
+                    row_ok = row_ok and sp.simplify(
+                        2 * r - rho * (1 + sp.Rational(2 * r, 1) / beta)
+                    ) > 0
+                all_order_ok = all_order_ok and row_ok
+                if (r, d, alpha) in (
+                    (2, 1, sp.Rational(1, 1)),
+                    (3, 5, sp.Rational(7, 4)),
+                    (4, 9, sp.Rational(1, 1)),
+                    (7, 12, sp.Rational(7, 4)),
+                ):
+                    all_order_rows.append(
+                        f"r={r}, d={d}, alpha={alpha}: beta={beta}, "
+                        f"p={p_value}, q={q_value}, m={m_value}, "
+                        f"shift-growth={shift_growth}"
+                    )
+    checks.append(
+        Check(
+            "all-order stable critical exponent algebra",
+            all_order_ok,
+            "; ".join(all_order_rows),
+        )
+    )
+
+    difference_rows = []
+    difference_ok = True
+    for r in range(2, 9):
+        coefficients = [
+            (-1) ** (r - k) * sp.binomial(r, k) for k in range(r + 1)
+        ]
+        residuals = [
+            sp.expand(
+                sum(
+                    coefficients[k] * (k + 1) ** ell
+                    for k in range(r + 1)
+                )
+            )
+            for ell in range(r + 1)
+        ]
+        positive_mass = sum(value for value in coefficients if value > 0)
+        negative_mass = -sum(value for value in coefficients if value < 0)
+        row_ok = (
+            all(value == 0 for value in residuals[:r])
+            and residuals[r] == sp.factorial(r)
+            and positive_mass == 2 ** (r - 1)
+            and negative_mass == 2 ** (r - 1)
+        )
+        difference_ok = difference_ok and row_ok
+        difference_rows.append(
+            f"r={r}: moments={residuals}, masses=({positive_mass},{negative_mass})"
+        )
+    checks.append(
+        Check(
+            "finite-difference moment-cancellation blocks",
+            difference_ok,
+            "; ".join(difference_rows),
+        )
+    )
+
+    cosine_rows = []
+    cosine_ok = True
+    previous = 1 - sp.cos(x)
+    original_dps = mp.mp.dps
+    mp.mp.dps = 80
+    for n in range(1, 9):
+        remainder = sp.expand(
+            (-1) ** n
+            * (
+                sp.cos(x)
+                - sum(
+                    (-1) ** k * x ** (2 * k) / sp.factorial(2 * k)
+                    for k in range(n)
+                )
+            )
+        )
+        recurrence_ok = n == 1 or sp.simplify(sp.diff(remainder, x, 2) - previous) == 0
+        minimum = mp.inf
+        for index in range(401):
+            value = mp.mpf(-40) + mp.mpf(80 * index) / 400
+            numerical = (-1) ** n * (
+                mp.cos(value)
+                - sum(
+                    (-1) ** k * value ** (2 * k) / mp.factorial(2 * k)
+                    for k in range(n)
+                )
+            )
+            minimum = min(minimum, numerical)
+        row_ok = recurrence_ok and minimum > mp.mpf("-1e-60")
+        cosine_ok = cosine_ok and row_ok
+        cosine_rows.append(
+            f"n={n}: second-derivative recurrence={recurrence_ok}, "
+            f"sample minimum={mp.nstr(minimum, 5)}"
+        )
+        previous = remainder
+    mp.mp.dps = original_dps
+    checks.append(
+        Check(
+            "global cosine Taylor remainder sign",
+            cosine_ok,
+            "; ".join(cosine_rows),
+        )
+    )
+
     cluster_ok = True
     cluster_rows = []
     integer_endpoints = []
@@ -304,6 +438,53 @@ def symbolic_checks() -> list[Check]:
         )
     )
     return checks
+
+
+def two_background_bregman_transfer_check() -> Check:
+    """Stress the scaled two-background expansion behind the all-order result."""
+
+    nodes, weights = leggauss(800)
+    weights = weights / 2
+    common = nodes**2 - float(np.sum(weights * nodes**2))
+    leading = np.sin(math.pi * nodes)
+    leading -= float(np.sum(weights * leading))
+    higher = np.cos(2 * math.pi * nodes)
+    higher -= float(np.sum(weights * higher))
+    error_mode = nodes**5
+    error_mode -= float(np.sum(weights * error_mode))
+
+    r = 3
+    q = 1.35
+    p = 2 * r / q
+    quadratic = 0.5 * float(np.sum(weights * leading**2))
+    times = (4.0, 7.0, 12.0, 20.0, 35.0)
+    ratios = []
+    lower_bounds = []
+    error_rates = []
+    for time in times:
+        denominator = 1 + common / time
+        retained = leading / time**r + higher / time ** (r + 1)
+        error = error_mode / time ** (p + 0.4)
+        numerator = denominator + retained + error
+        lower_bounds.append(float(min(np.min(denominator), np.min(numerator))))
+        divergence = float(
+            np.sum(weights * numerator * np.log(numerator / denominator))
+        )
+        ratios.append(time ** (2 * r) * divergence / quadratic)
+        error_rates.append(time**p * float(np.sum(weights * abs(error) ** q)) ** (1 / q))
+
+    passed = (
+        min(lower_bounds) > 0.7
+        and abs(ratios[-1] - 1) < 0.015
+        and abs(ratios[-1] - 1) < abs(ratios[0] - 1)
+        and error_rates[-1] < error_rates[0]
+    )
+    return Check(
+        "two-background critical Bregman transfer stress",
+        passed,
+        f"r={r}, q={q}, p={p}; scaled KL/Q ratios={ratios}; "
+        f"minimum backgrounds={lower_bounds}; scaled Lq errors={error_rates}",
+    )
 
 
 def finite_covariance_proxy_check(quick: bool) -> Check:
@@ -762,6 +943,44 @@ def numerical_moment_matching_checks(quick: bool) -> list[Check]:
             f"Delta_3={delta_three}, C_3=3/32, ratios={[mp.nstr(v, 12) for v in ratios_three]}",
         )
     )
+
+    # Opposite fourth finite-difference perturbations preserve moments
+    # 0,1,2,3.  This independently exercises an even order beyond covariance.
+    locations_four = [mp.mpf(j) for j in range(5)]
+    signed_four = [mp.mpf(1), mp.mpf(-4), mp.mpf(6), mp.mpf(-4), mp.mpf(1)]
+    epsilon_four = mp.mpf("0.004")
+    first_four = [
+        (mp.mpf("0.2") + epsilon_four * signed_four[j], locations_four[j])
+        for j in range(5)
+    ]
+    second_four = [
+        (mp.mpf("0.2") - epsilon_four * signed_four[j], locations_four[j])
+        for j in range(5)
+    ]
+    delta_four = sum(w * z**4 for w, z in first_four) - sum(
+        w * z**4 for w, z in second_four
+    )
+    expected_four = mp.mpf(5) * delta_four**2 / 64
+    times_four = (
+        (mp.mpf(5), mp.mpf(8), mp.mpf(12))
+        if quick
+        else (mp.mpf(5), mp.mpf(8), mp.mpf(12), mp.mpf(20), mp.mpf(30))
+    )
+    scaled_four = [
+        time**8 * discrete_kl(time, first_four, second_four)
+        for time in times_four
+    ]
+    ratios_four = [value / expected_four for value in scaled_four]
+    checks.append(
+        Check(
+            "fourth-moment-matched KL constant",
+            all(ratios_four[j] < ratios_four[j + 1] for j in range(len(ratios_four) - 1))
+            and abs(ratios_four[-1] - 1)
+            < (mp.mpf("0.05") if quick else mp.mpf("0.015")),
+            f"Delta_4={delta_four}, C_4=5/64, "
+            f"ratios={[mp.nstr(v, 12) for v in ratios_four]}",
+        )
+    )
     return checks
 
 
@@ -924,7 +1143,11 @@ def critical_vague_tail_checks() -> list[Check]:
 def run(quick: bool) -> list[Check]:
     return (
         symbolic_checks()
-        + [critical_bregman_check(), covariance_proxy_quadrature_check(quick)]
+        + [
+            critical_bregman_check(),
+            two_background_bregman_transfer_check(),
+            covariance_proxy_quadrature_check(quick),
+        ]
         + [finite_covariance_proxy_check(quick)]
         + [
             raw_tail_poisson_energy_check(quick),

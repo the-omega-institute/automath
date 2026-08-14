@@ -259,3 +259,49 @@ listed above remain the nearest entropy comparators, in the different regime
 of stable limits or stable de Bruijn identities.  This is a documented,
 qualified search of the four requested indexes, not a proof of global
 novelty.
+
+## All-Order First-Unmatched Stable-Tensor Search
+
+Checked 2026-08-15 (Asia/Singapore), before adding Theorem
+thm:all-order-stable-first-unmatched-moment.  The target was a two-input
+relative-entropy asymptotic under isotropic strictly stable smoothing, at an
+arbitrary first unmatched tensor order \(r\), together with the endpoint
+\[
+q_{r,\alpha,d}=\min\{2,1+2r/(d+\alpha)\},\qquad
+p_{r,\alpha,d}=2r/q_{r,\alpha,d}
+\]
+and uniform moment-class optimality.
+
+The arXiv API was queried directly.  The searches “stable kernel” AND
+“moment asymptotic”, “fractional heat kernel” AND “relative entropy”, and
+“Gaussian quadrature” AND “stable” AND “entropy” returned zero records.
+The search “moment matched” AND “relative entropy” returned three records:
+arXiv:1801.01740 (micro--macro acceleration), arXiv:2005.00738 (smoothed
+Wasserstein distances), and arXiv:1706.00050 (cellular-network interference);
+none is in the theorem's regime.  The broader “stable law” AND
+“relative entropy” query returned Bobkov--Chistyakov--Goetze
+(arXiv:1104.4360), Johnson (arXiv:1310.2045), Toscani
+(arXiv:1512.05874), and Cook (arXiv:2504.13423).  Their abstracts and stated
+regimes concern stable-limit convergence, stable de Bruijn identities, or
+stable-to-stable scale families, not fixed-input large-scale smoothing with a
+first unmatched tensor.
+
+Crossref title and bibliographic searches returned
+Bobkov--Chistyakov--Goetze, DOI 10.1007/s10959-011-0377-0, as the closest
+stable-entropy record, together with unrelated moment-problem papers.  The
+zbMATH Open API returned no record for the combined stable-kernel,
+relative-entropy, moment query.  Semantic Scholar's live API returned HTTP
+429 and is not counted as a completed search in this pass; its records and
+forward citations for the two nearest fractional-diffusion papers had been
+inspected in the 2026-08-08 audit above.
+
+The closest density-expansion results remain Ishige--Kawakami--Michihisa,
+SIAM J. Math. Anal. 49 (2017), 2167--2190, arXiv:1610.09789, and
+Ishige--Kawakami, J. Dynam. Differential Equations 36 (2024), 2679--2702,
+arXiv:2109.14193.  They establish moment-subtracted stable heat-kernel
+expansions, but the inspected theorem statements do not give the critical
+matched-quotient remainder, the two-background Bregman transfer, the
+\(s^{-2r}\) KL tensor coefficient, or the endpoint uniform counterexample.
+No indexed source located in this audit states the combined theorem.  As in
+the preceding audits, this is a documented negative search, not a logical
+proof of absence from all publications.

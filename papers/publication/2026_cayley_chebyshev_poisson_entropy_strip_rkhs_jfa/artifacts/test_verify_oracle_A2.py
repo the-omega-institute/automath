@@ -30,6 +30,39 @@ class OracleA2VerificationTests(unittest.TestCase):
         self.assertIn("Optimal uniform sufficient moment exponent", manuscript)
         self.assertNotIn("[Sharp high-dimensional KL moment threshold]", manuscript)
 
+    def test_all_order_stable_first_unmatched_interface(self) -> None:
+        completed = subprocess.run(
+            [sys.executable, str(CERTIFICATE), "--quick"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        self.assertIn("all-order stable critical exponent algebra", completed.stdout)
+        self.assertIn("finite-difference moment-cancellation blocks", completed.stdout)
+        self.assertIn("global cosine Taylor remainder sign", completed.stdout)
+        self.assertIn("two-background critical Bregman transfer stress", completed.stdout)
+        self.assertIn("fourth-moment-matched KL constant", completed.stdout)
+
+        manuscript = (ROOT / "sec_verified_A2_results.tex").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            r"\label{lem:two-background-critical-bregman-transfer}",
+            manuscript,
+        )
+        self.assertIn(
+            r"\label{thm:all-order-stable-first-unmatched-moment}",
+            manuscript,
+        )
+        self.assertIn(
+            r"\label{cor:stable-gaussian-quadrature-threshold}",
+            manuscript,
+        )
+        self.assertIn(r"q_{r,\alpha,d}", manuscript)
+        self.assertIn(r"p_{r,\alpha,d}", manuscript)
+
     def test_certificate_and_manuscript_labels(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(CERTIFICATE), "--quick"],
