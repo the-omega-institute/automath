@@ -54,6 +54,9 @@ A9 的外审把这条代价说透了。审稿人写道：
       `artifacts/` 与 `scripts/` 钉为 `eol=lf`？本仓库 `core.autocrlf=true`，
       工作区是 CRLF 而审稿人在 Linux 上拿到的是 LF，**两边哈希的字节不同**；
       用 `git check-attr text eol -- <file>` 确认确实生效
+- [ ] **归档输出是不是 UTF-16?** Windows PowerShell 5.1 的 `>` 与 `Out-File` 默认写
+      **UTF-16 LE + BOM**(文件头 `fffe`),审稿人在 Linux 上 `cat`/`grep` 只会得到乱码,
+      git 也会把它当二进制。必须是 UTF-8/ASCII。用 `file -b <f>` 查
 - [ ] 统一约定：清单路径**相对 `artifacts/`**，以 `cd artifacts && sha256sum -c SHA256SUMS`
       校验，并在 `artifacts/REPRODUCE.md` 写明目录、命令与预期 OK 行数
 
