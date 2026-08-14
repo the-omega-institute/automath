@@ -31,6 +31,12 @@ multiplies back to the stated Fibonacci number.
   factorization-archive generation and validation.
 - `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
   finite bounds, archive round trip, and report contents.
+- `../scripts/verify_deepening_delta.py`: independent legacy verification
+  battery for the finite upper-fiber and growth-law checks.
+- `../scripts/test_verify_deepening_delta.py`: unit tests for the independent
+  legacy verification battery.
+- `deepening_delta_verification.txt`: complete deterministic report from the
+  independent legacy verification battery.
 - `../scripts/verify_squarefree_slice.py`: independent enumeration of
   weighted minimal covers and rank-pure prime products for the canonical
   squarefree exact-fiber slice.
@@ -46,7 +52,11 @@ multiplies back to the stated Fibonacci number.
 - `tab_birth_layer_data.tex`: generated table included in the manuscript.
 - `birth_layer_table_output.txt`: complete stdout from table generation.
 - `finite_verification.txt`: complete stdout report from the verification run.
-- `SHA256SUMS`: SHA-256 digest of every reproducibility file listed above.
+- `../.gitattributes`: LF line-ending policy for the reproducibility files.
+- `SHA256SUMS`: SHA-256 digest of the LF-stable reproducibility sources,
+  archives, reports, documentation, and line-ending policy named in the
+  manifest. The generated TeX table is represented by its generator and
+  deterministic text transcript rather than hashed directly.
 
 ## Commands
 
@@ -57,6 +67,7 @@ python -m unittest discover -s artifacts -p "test_verify_finite_claims.py" -v
 Push-Location scripts; python -m unittest -v test_verify_squarefree_slice.py; Pop-Location
 python artifacts\compute_birth_layer_table.py
 python artifacts\verify_finite_claims.py --exhaustive-max 60 --scalable-max 210 --output artifacts\finite_verification.txt --factorizations-output artifacts\fibonacci_factorizations_2_210.tsv
+python scripts\verify_deepening_delta.py --exhaustive-max 60 --scalable-max 210 --output artifacts\deepening_delta_verification.txt --factorizations-output artifacts\fibonacci_factorizations_2_210.tsv
 python scripts\verify_squarefree_slice.py --max-index 210 --output artifacts\squarefree_slice_verification.txt
 ```
 
@@ -109,13 +120,19 @@ squarefree `3 <= n <= 210`. The stored run contains 127 set equalities and 427
 squarefree minimal generators. These checks do not show that the abstract
 fixed-total extremizer is realizable by Fibonacci exact-rank primes.
 
-To verify the checksums in PowerShell:
+## Checksum verification
 
-```powershell
-Get-Content artifacts\SHA256SUMS | ForEach-Object {
-    $hash, $name = $_ -split '  ', 2
-    if ((Get-FileHash -Algorithm SHA256 (Join-Path artifacts $name)).Hash.ToLower() -ne $hash) {
-        throw "checksum mismatch: $name"
-    }
-}
+Paths in `SHA256SUMS` are relative to the `artifacts` directory, including
+the `../scripts/...` entries. Run the check from the manuscript directory
+with exactly:
+
+```sh
+cd artifacts && sha256sum -c SHA256SUMS
 ```
+
+A successful check prints exactly 15 `OK` lines and no failures. The manifest
+and all files it covers use Unix LF line endings. The project-local
+`.gitattributes` pins the reproducibility files to LF even when
+`core.autocrlf=true`, and each verifier explicitly writes LF output, so a
+clean checkout and regenerated reports have the same bytes on Windows,
+Linux, and macOS.

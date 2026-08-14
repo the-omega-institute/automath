@@ -203,7 +203,7 @@ def main() -> None:
     args = parser.parse_args()
     report = run_battery(args.max_index)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(report, encoding="ascii")
+    args.output.write_text(report, encoding="ascii", newline="\n")
     print(report, end="")
     print(f"Saved report: {args.output}")
 

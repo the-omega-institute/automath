@@ -18,7 +18,6 @@ import argparse
 import itertools
 import math
 import platform
-import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -83,7 +82,7 @@ def write_factorization_archive(path: Path, max_n: int) -> None:
             f"{n}\t{fibonacci(n)}\t{_factorization_text(factorint_fibonacci(n))}"
         )
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines) + "\n", encoding="ascii")
+    path.write_text("\n".join(lines) + "\n", encoding="ascii", newline="\n")
 
 
 def load_factorization_archive(
@@ -408,7 +407,6 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     if scalable_max < exhaustive_max:
         raise ValueError("scalable_max must be at least exhaustive_max")
 
-    started = time.time()
     failures = []
     counterexamples = []
     results = {}
@@ -509,7 +507,6 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     max_r_n = max(multiplicities, key=multiplicities.get)
     support_four = results.get(210)
 
-    elapsed = time.time() - started
     lines = [
         "Finite verification report",
         "==========================",
@@ -562,7 +559,6 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         lines.extend(f"  COUNTEREXAMPLE: {item}" for item in counterexamples)
     lines.extend(
         [
-            f"  elapsed_seconds = {elapsed:.3f}",
             "",
             "RESULT: "
             + (
@@ -598,7 +594,7 @@ def main() -> None:
     write_factorization_archive(args.factorizations_output, args.scalable_max)
     load_factorization_archive(args.factorizations_output, args.scalable_max)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(report, encoding="ascii")
+    args.output.write_text(report, encoding="ascii", newline="\n")
     print(report, end="")
     print(f"Saved report: {args.output}")
     print(f"Saved factorization archive: {args.factorizations_output}")

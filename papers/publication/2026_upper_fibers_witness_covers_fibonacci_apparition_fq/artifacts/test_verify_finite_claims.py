@@ -438,6 +438,9 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
+        self.assertNotIn("elapsed_seconds", report.lower())
+        self.assertNotIn("runtime", report.lower())
+        self.assertNotIn("duration", report.lower())
         self.assertNotIn("Deepening Delta", report)
         self.assertNotIn("counterexample battery", report.lower())
 

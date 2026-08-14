@@ -112,6 +112,9 @@ class DeepeningDeltaTests(unittest.TestCase):
         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
+        self.assertNotIn("elapsed_seconds", report.lower())
+        self.assertNotIn("runtime", report.lower())
+        self.assertNotIn("duration", report.lower())
         self.assertNotIn("Deepening Delta", report)
         self.assertNotIn("counterexample battery", report.lower())
 
