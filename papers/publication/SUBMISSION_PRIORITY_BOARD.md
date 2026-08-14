@@ -16,14 +16,14 @@
 
 | 篇 | 页 | 当前动作 | 在飞 id | **去向** |
 |---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | **67** | ✅ 已修已提交（$r\ge1$ 已纳入定理） | — | **Potential Analysis** |
+| **A2** `cayley_chebyshev` | **67** | ✅ 已修已提交（$r\ge1$ 纳入定理） | — | **Potential Analysis** |
 | **A3** `sharp_three_window` | 63 | codex 修复中 | — | DCDS-A;备选 TCS |
-| **A4** `prime_languages` | 25 | 投稿包封装中 | — | Monatshefte |
-| **A5** `finite_parts` | 33 | 投稿包封装中（另欠 Nishioka 署名修正） | — | DCDS / ETDS |
-| **A6** `zeckendorf_fibers` | 59 | codex 修复中 | — | JNT |
-| **A7** `upper_fibers` | 27 | 外审在飞 | `6496b45e` | Fibonacci Quarterly |
+| **A4** `prime_languages` | 25+43 | ✅ 投稿包已复核 | — | Monatshefte |
+| **A5** `finite_parts` | 33+19 | ✅ 投稿包已复核;codex 修 Nishioka 署名 | — | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交（定理 36→33） | — | **JNT** |
+| **A7** `upper_fibers` | 27 | 外审在飞（worker 活跃） | `6496b45e` | Fibonacci Quarterly |
 | **A8** `detector_shells` | 62 | **拒稿** → codex 修复中 | — | **Methodology and Computing in Applied Probability** |
-| **A9** `homological_visibility` | 48+50 | 外审在飞 | `226c441b` | 待定 |
+| **A9** `homological_visibility` | 48+50 | **拒稿** → codex 修复中 | — | **Cahiers de Topologie**（修订后 35–50%）|
 
 
 
@@ -38,13 +38,13 @@
 
 
 
-> **TICK 29 — 无可收割，继续独立核实引文**。池子 2/6,A7 `6496b45e`、A9 `226c441b` 仍在 `waiting_response`(已约 30 分钟,逼近 35 分钟停滞线,再无回应即取消重发);codex ×4 全在跑,八篇零闲置;内存 1.61 GB。
+
+> **TICK 30 — 无可收割，把 A9 的优先权指控定位到行**。池子 1/6,A7 `6496b45e` 仍在 `waiting_response`,但 worker `..._1_tab_3` 26 秒前还活着,是真在算不是卡死(A9 那份也跑了约 48 分钟才回),**不取消**。四个 codex 全在跑,八篇零闲置,内存 1.48 GB。
 >
-> 上一 tick 自查 Crossref 抓出 Nishioka 署名错误后,本 tick 把同样的核实用在 A8 审稿人指认的三条先验工作上,结果一正一负:
+> 审稿人说 A9 漏了一条**定理层级**的先例。核实后是更准确的一句话:**不是没引 Giraud,是引错了章**。全文六处都引 `[Chap.~IV]`(banded gerbe 按 $H^2$ 的**分类**),而缺的是 **Chap. III, Prop. 2.1.5.3** 的**构造**——对任意 stack $S$,$S	o\pi_0(S)$ 是其分支层上的 gerbe,沿截面拉回即得极大子 gerbe,这正是 Theorems 4.8(i)/4.9 的结构内容。最该动的是 `sec_gerbe_obstruction.tex:349`:那里**手工验证局部同构后再引 Chap. IV**,而 III.2.1.5.3 直接给出该构造。已连同审稿人给的最小修复原句记入 `PENDING_FIXES.md`。
 >
-> **一处署名要补**:Ramírez-Cobo, Lillo **& Wiper**, *Nonidentifiability of the Two-State Markovian Arrival Process*, J. Appl. Probab. **47**(3) (2010) 630–649。审稿人写作"Ramírez-Cobo–Lillo",**漏了 Wiper**。该文主题正是 MAP$_2$ 的不可识别性,与我们的二态 fibre 弧直接同域,确属必须逐式比较的对象。
->
-> **一处不能凭印象写**:**Bickel–Kwon 在 Crossref、OpenAlex、Semantic Scholar、DBLP 四处均查不到**。推测是 Statistica Sinica 2001(该刊早期卷次收录很差),但这是推测不是核实。审稿人称漏引它是本轮优先权审计最重要的发现,正因如此更不能凭印象著录一条参考文献 —— 已写进 `PENDING_FIXES.md` 要求确认确切出处后再落笔。He–Zhang 同样待核。
+> 他另一句值得记住:未找到把那条两标签 wedge 分类逐字发表过的定理,但**这不构成实质优先权**——由标准等价复合出来的精确陈述可以形式上是新的,而几乎没有独立数学优先权。这条对我们整批论文都适用。
+
 
 
 
