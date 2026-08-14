@@ -14,16 +14,16 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
+| 篇 | 轮次 | 页 | 档位(独立评估 / referee 裁决) | **PRIMARY** | 状态 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r7 | 65 | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 空闲 |
-| **A3** `sharp_three_window` | r6 | 63 | TIER-4 | **DCDS-A** | `fb4b4c73` |
-| **A4** `prime_languages` | r6 | 22 | TIER-3 | **Monatshefte** | `b85cb7f1` |
-| **A5** `finite_parts` | r8 | **32** | TIER-3 / 上 TIER-3 | **DCDS** | 空闲 |
-| **A6** `zeckendorf_fibers` | r10 | 59 | TIER-3 | **JNT** | `9210a56f` |
-| **A7** `upper_fibers` | r7 | 26+32 | TIER-4 | **Fibonacci Quarterly** | `560da0d5` |
-| **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | 检验中 |
-| **A9** `homological_visibility` | r1 | 96 | TIER-4，**已找到具名开放问题路线** | TAC / Logic and Analysis | 检验中 |
+| **A2** `cayley_chebyshev` | r7 | 65 | **JFA referee：现版本拒稿（优先权，非反例）** | JFA 待重估 | 优先权核实中 |
+| **A3** `sharp_three_window` | r6 | 63 | TIER-4，具名问题「不可达到」 | **DCDS-A** | 空闲 |
+| **A4** `prime_languages` | r6 | 22 | TIER-3，障碍为量词结构不匹配 | **Monatshefte** | 空闲 |
+| **A5** `finite_parts` | r8 | 32 | TIER-3 / 上 TIER-3 | **DCDS** | referee 在飞 |
+| **A6** `zeckendorf_fibers` | r10 | 59 | TIER-3，**专家相变边界两次皆错** | **JNT** | 空闲 |
+| **A7** `upper_fibers` | r7 | 26+32 | TIER-4，称可闭合 FJMV 两问题 | **Fibonacci Quarterly** | 检验中 |
+| **A8** `detector_shells` | r9 | **62** | TIER-4，**尖锐边界已用新证明恢复** | **Stochastic Models** | 空闲 |
+| **A9** `homological_visibility` | r1 | 96 | TIER-4，有 crossed-module 具名路线 | TAC / Logic and Analysis | 空闲 |
 
 
 
@@ -31,11 +31,13 @@
 
 
 
-> **TICK 17 — referee 外审抓到一个我们不知道的优先权问题**。A2 的 JFA 级审稿裁决：**现版本拒稿**，但**不是因为发现反例**——定理 4.19 主证明链条数学上闭合，Lemma 4.17 的指数配合（含 $p$ 为整数的端点）正确，$r<j\le\lfloor pfloor$ 的中间 Taylor 模式也正确地未并入余项。
+
+> **TICK 18 — A8 尖锐边界恢复成功（换了证明），A6 相变边界第二次出错**。
 >
-> 决定性问题是**优先权**：稿件遗漏了 **Chen–Niles-Weed 关于 Gaussian 平滑下任意首失配矩的精确 KL 渐近**，与本定理结构上直接对应。若属实，则"任意首失配阶的显式正张量系数"**不能作为本文独立首创点**——审稿人明说这改变的是核心优先权叙述，不是普通补引文。扣除之后，可信新内容是：**把 Gaussian 机制推进到重尾各向同性稳定核、确定临界绝对矩指数、证端点充分、给出完整矩类上的统一锐性**——有实质价值，但以现有特殊核定理及其证明机制**尚不足以稳妥达到 JFA**。已派 agent 独立核实该在先工作并据实重写优先权叙述。
+> **A8**：`047b9527a` 撤回的尖锐充要边界现已恢复，关键在于**新证明不走老路**——改用 Stein 方法与 Zolotarev–Wasserstein 比较配合 Meckes 正则性估计，而非当初失败的 CMU 块矩路径。`prop:helmert-growing-layer-bracket-main` 已从源码中完全移除，由 `prop:helmert-growing-layer-sharp-main` 取代，$4\log\log n_N$ 窗口关闭。审稿 agent 同时**拒绝把 $Z_2$–$W_2$ 不等式、其最优常数、Meckes 估计、既有块矩、停止转移、必要性与临界性算作我方成果**，一律按已发表输入引用。测试 45→53、62 页。
 >
-> A7 r7 找到一个**外部问题簇**：对每个正固定点阶 $k\ge1$ 存在无穷多素数具有固定点阶 $k$；秩映射每个固定点 $x>5$ 的吸引域含无穷多素数——称同时严格加强并解决 FitzGibbons–Javaheri–Miller–Verga 的两个未编号问题。它诚实指出这**只消耗本文机器最薄的一层**。已派检验，首要核查点：原问题问的是"无穷多互素整数"，与此表述**量词不同**，须确认是真加强还是换了问题。
+> **A6**：同一专家、同一片领域，**第二次给出错误的相变边界与系数比**；候选 2–4 亦因自陈的承重步骤未证而拒收。因已明令"先查边界、不成立即停"，本轮只花了一次核验的代价。
+
 
 
 
