@@ -1,749 +1,369 @@
-\subsection{Homological images, cokernels, and annihilating characters}
+\section{Homological images and aggregate quotients}
+\label{sec:homological-images}
 
-\begin{definition}[Homological image and cokernel]\label{def:intrinsic-visible-quotient}
-In the setting of \Cref{def:finite-nerve-presentation}, define the \emph{presentation-relative homological image subgroup}
+Fix a finite simplicial complex \(N\), a finite abelian group \(A\), and a
+class \(\omega\in H^2(N,A)\).  The universal coefficient map is denoted by
 \[
-K_{\omega}:=\mathrm{Im}(\mathrm{ev}_{\omega})
+ \operatorname{ev}_\omega:
+ H_2(N,\mathbb Z)\longrightarrow A.
 \]
-and the associated \emph{homological cokernel}
-\[
-Q_{\omega}:=\operatorname{coker}(\mathrm{ev}_{\omega})=A/K_{\omega}.
-\]
-These terms are relative to the presentation-comparison groupoid of
-\Cref{def:finite-nerve-comparison-relation}; no presentation-free quotient is
-asserted outside that groupoid.
-\end{definition}
+Define its \emph{homological image} and \emph{homological cokernel} by
+\begin{equation}\label{eq:homological-image-cokernel}
+ K_\omega:=\operatorname{Im}(\operatorname{ev}_\omega),
+ \qquad Q_\omega:=A/K_\omega.
+\end{equation}
+These definitions depend on the supplied finite presentation of the component
+gerbe.  Refinement and retrivialization transport them by UCT naturality, but
+no canonical identification along distinct comparison zigzags is asserted.
+The resulting freely generated presentation groupoid and its elementary
+naturality calculation are recorded in the technical appendix rather than
+promoted to an invariance theorem.
 
-\begin{definition}[Class-trivializing characters]\label{def:class-admissible-character}
-In the setting of \Cref{def:finite-nerve-presentation}, let
-\[
-X_{\omega}:=\{\chi\in\widehat A\mid \chi_*(\omega)=0\},
-\qquad
-\widehat A:=\mathrm{Hom}(A,\mathbb T).
-\]
-Elements of $X_{\omega}$ are called \emph{class-trivializing} for $\omega$.
-\end{definition}
+For a finite family of component classes
+\((\omega_v)_{v\in V}\), put \(K_v=K_{\omega_v}\) and define
+\begin{equation}\label{eq:aggregate-quotients}
+ Q_{\mathrm{lab}}:=A\Big/\bigcap_{v\in V}K_v,
+ \qquad
+ Q_{\mathrm{com}}:=A\Big/\sum_{v\in V}K_v.
+\end{equation}
+The first quotient retains enough information to map to every componentwise
+quotient \(A/K_v\).  The second retains only characters which descend through
+every one of them.
 
-\begin{theorem}[Character-theoretic detection of the homological cokernel]\label{thm:intrinsic-visible-quotient}
-In the setting of \Cref{def:class-admissible-character},
-\[
-X_{\omega}
-=
-\{\chi\in\widehat A\mid \chi\circ \mathrm{ev}_{\omega}=0\}
-=
-\mathrm{Ann}(K_{\omega}).
-\]
-Consequently,
-\[
-K_{\omega}
-=
-\bigcap_{\chi\in X_{\omega}}\ker\chi,
-\qquad
-Q_{\omega}\cong A\Big/\!\bigcap_{\chi\in X_{\omega}}\ker\chi.
-\]
-\end{theorem}
-
-\begin{proof}
-For every character $\chi:A\to\mathbb T$, naturality of the universal coefficient sequence gives a commutative square
-\[
-\begin{CD}
-H^2(N(\mathcal U),A) @>\eta_A>> \mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A) \\
-@V\chi_*VV @VV(\chi\circ -)V \\
-H^2(N(\mathcal U),\mathbb T) @>\eta_{\mathbb T}>> \mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),\mathbb T).
-\end{CD}
-\]
-Since $\mathbb T$ is divisible and hence injective in $\mathbf{Ab}$, one has
-\[
-\operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),\mathbb T)=0
-\]
-\cite[Sec.~2.3]{Weibel1994}. Thus $\eta_{\mathbb T}$ is an isomorphism by \Cref{def:finite-nerve-presentation}. Therefore
-\[
-\chi_*(\omega)=0
-\Longleftrightarrow
-\eta_{\mathbb T}(\chi_*(\omega))=0
-\Longleftrightarrow
-\chi\circ \eta_A(\omega)=0
-\Longleftrightarrow
-\chi\circ \mathrm{ev}_{\omega}=0.
-\]
-This proves the first displayed identity, and the second is simply the definition of the annihilator of a subgroup of $A$.
-
-Let $H:=K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega})\le A$. By the first part of the proof, $X_{\omega}=\mathrm{Ann}(H)$. Finite abelian duality implies
-\[
-\bigcap_{\chi\in \mathrm{Ann}(H)}\ker\chi=H
-\]
-\cite[Part~I, Chaps.~2, 12]{Terras1999}. Hence
-\[
-K_{\omega}
-=
-\bigcap_{\chi\in X_{\omega}}\ker\chi.
-\]
-The final isomorphism follows immediately:
-\[
-Q_{\omega}
-=
-A/K_{\omega}
-\cong
-A\Big/\!\bigcap_{\chi\in X_{\omega}}\ker\chi.
-\qedhere
-\]
-\end{proof}
-
-\begin{corollary}[Character detection of the homological cokernel]\label{cor:intrinsic-character-detection}
-The quotient map
-\[
-\pi_{\omega}:A\twoheadrightarrow Q_{\omega}
-\]
-induces a natural isomorphism
-\[
-\widehat{Q_{\omega}}\cong X_{\omega}.
-\]
-For elements $x,y\in A$, one has
-\[
-\pi_{\omega}(x)=\pi_{\omega}(y)
-\quad\Longleftrightarrow\quad
-\chi(x)=\chi(y)\ \text{for every class-trivializing }\chi.
-\]
-\end{corollary}
-
-\begin{proof}
-By \Cref{thm:intrinsic-visible-quotient},
-\[
-X_{\omega}=\mathrm{Ann}(K_{\omega})=K_{\omega}^{\perp}.
-\]
-Characters of $Q_{\omega}=A/K_{\omega}$ are exactly the characters of $A$ that kill $K_{\omega}$, so precomposition with $\pi_{\omega}$ identifies $\widehat{Q_{\omega}}$ with $X_{\omega}$. The separation statement follows from finite abelian duality applied to the finite group $Q_{\omega}$ \cite[Part~I, Chap.~2]{Terras1999}.
-\end{proof}
-
-\begin{theorem}[Initiality among zero-evaluation quotients]\label{thm:intrinsic-pure-ext-initiality}
-In the finite nerve representative of \Cref{def:finite-nerve-presentation}, let
-\[
-\pi_\omega:A\twoheadrightarrow Q_\omega=A/K_\omega
-\]
-be the homological cokernel. For every surjective homomorphism $q:A\twoheadrightarrow B$, the following are equivalent:
+\begin{proposition}[UCT and aggregate subgroup package]
+\label{prop:uct-aggregate-package}
+With the notation above:
 \begin{enumerate}[label=(\roman*),nosep]
-\item $q$ factors uniquely through $\pi_\omega$;
-\item $q$ kills $\operatorname{Im}(\mathrm{ev}_\omega)=K_\omega$;
-\item $\eta_B(q_*\omega)=0$;
-\item $q_*(\omega)$ lies in the UCT $\operatorname{Ext}^1$ subgroup
-\[
-\operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),B)
-\subseteq H^2(N(\mathcal U),B)
-\]
-of the universal coefficient sequence.
+\item The universal coefficient sequence is
+      \[
+      0\longrightarrow
+      \operatorname{Ext}^1(H_1(N,\mathbb Z),A)
+      \longrightarrow H^2(N,A)
+      \xrightarrow{\operatorname{ev}}
+      \operatorname{Hom}(H_2(N,\mathbb Z),A)
+      \longrightarrow0.
+      \]
+      Thus \(K_\omega=0\) exactly when \(\omega\) lies in the displayed
+      Ext subgroup.  In particular, nonzero classes can have zero
+      homological image when \(H_1\) has torsion.
+\item The quotient map \(q_\omega:A\to Q_\omega\) is initial among group
+      homomorphisms \(q:A\to B\) satisfying
+      \(q\circ\operatorname{ev}_\omega=0\).  A character
+      \(\chi:A\to\mathbb Q/\mathbb Z\) factors through \(Q_\omega\)
+      exactly when \(\chi(K_\omega)=0\).  Since finite Pontryagin duality
+      separates points,
+      \[
+      K_\omega=\mathop{\bigcap}_{\chi(K_\omega)=0}\ker\chi.
+      \]
+\item For a nonempty finite family \((K_v)_{v\in V}\), there is a natural
+      short exact sequence
+      \begin{equation}\label{eq:aggregate-exact-sequence}
+      0\longrightarrow
+      \frac{\sum_vK_v}{\bigcap_vK_v}
+      \longrightarrow Q_{\mathrm{lab}}
+      \longrightarrow Q_{\mathrm{com}}
+      \longrightarrow0.
+      \end{equation}
+      Moreover,
+      \[
+      \widehat{Q_{\mathrm{com}}}
+      \cong\bigcap_{v\in V}K_v^\perp,
+      \qquad
+      \widehat{Q_{\mathrm{lab}}}
+      \cong\sum_{v\in V}K_v^\perp
+      \]
+      inside \(\widehat A\).
+\item If \(H_1(N,\mathbb Z)=0\) and
+      \(H_2(N,\mathbb Z)\cong\mathbb Z^\beta\), a subgroup
+      \(K\le A\) occurs as \(K_\omega\) exactly when \(d(K)\le\beta\).
+      Every finite family of such subgroups is simultaneously attained by
+      the prestack of
+      \Cref{thm:prescribed-component-image-construction}.
 \end{enumerate}
-Thus $Q_\omega$ is initial among coefficient quotients for which the pushed-forward obstruction has zero $H_2$ evaluation. This is the pullback-site, finite-nerve form of the companion initiality theorem \cite[Theorem~6.13]{MaZhang2026ConditionalGluingFailure}.
-\end{theorem}
-
-\begin{proof}
-The equivalence of \textup{(i)} and \textup{(ii)} is the universal property of the quotient
-\[
-\pi_\omega:A\twoheadrightarrow A/K_\omega.
-\]
-Indeed, a homomorphism $q:A\to B$ factors uniquely through $\pi_\omega$ if and only if $K_\omega\subseteq\ker q$, which is exactly the assertion that $q$ kills $\operatorname{Im}(\mathrm{ev}_\omega)$.
-
-For \textup{(ii)} and \textup{(iii)}, use naturality of the universal coefficient map with respect to the coefficient homomorphism $q$. The naturality square gives
-\[
-\eta_B(q_*\omega)=q\circ \eta_A(\omega)=q\circ \mathrm{ev}_\omega.
-\]
-Thus $\eta_B(q_*\omega)=0$ if and only if $q$ vanishes on the image of $\mathrm{ev}_\omega$, namely on $K_\omega$.
-
-Finally, the universal coefficient exact sequence for the finite nerve is
-\[
-0\to \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),B)
-\to H^2(N(\mathcal U),B)
-\xrightarrow{\eta_B}
-\operatorname{Hom}(H_2(N(\mathcal U),\mathbb Z),B)
-\to 0.
-\]
-Therefore $\eta_B(q_*\omega)=0$ if and only if $q_*(\omega)$ lies in the kernel of $\eta_B$, which is precisely the displayed UCT $\operatorname{Ext}^1$ subgroup. This proves all equivalences and the initiality statement.
-\end{proof}
-
-\begin{corollary}[Class-trivializing initiality when $H_1$ vanishes]\label{cor:h1-vanishing-class-trivializing}
-Assume
-\[
-H_1(N(\mathcal U),\mathbb Z)=0.
-\]
-Then, for every surjective homomorphism $q:A\twoheadrightarrow B$, the following are equivalent:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $q_*(\omega)=0$ in $H^2(N(\mathcal U),B)$;
-\item $q$ factors uniquely through
-\[
-\pi_{\omega}:A\twoheadrightarrow Q_{\omega}.
-\]
-\end{enumerate}
-Hence, when $H_1(N(\mathcal U),\mathbb Z)=0$, the homological cokernel is initial among coefficient quotients that annihilate the obstruction class itself.
-\end{corollary}
-
-\begin{proof}
-If $H_1(N(\mathcal U),\mathbb Z)=0$, then
-\[
-\operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),B)=0
-\]
-for every abelian group $B$. Thus, in the criterion of \Cref{thm:intrinsic-pure-ext-initiality}, the zero-evaluation condition is equivalent to $q_*(\omega)=0$, and the conclusion follows.
-\end{proof}
-
-\begin{remark}[Presentation-relative invariance without a canonical splitting]\label{rem:no-canonical-splitting}
-For a fixed finite nerve representative, the quotient
-$Q_{\omega}$ and the subgroup
-$K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega})$ are invariants of the chosen
-presentation. Across comparison-equivalent presentations they are transported
-functorially only along chosen morphisms in the presentation-comparison
-groupoid, as in \Cref{prop:invariance-visible-quotients}; different zigzags
-with the same endpoints may carry different coefficient automorphisms. By
-contrast, the universal coefficient sequence need not split canonically. Thus
-the theory isolates a homological cokernel and homological image subgroup
-at each presentation, with comparison-zigzag functoriality, without requiring
-any noncanonical decomposition of $\omega$ into $H_2$-evaluated and UCT-Ext
-summands.
-\end{remark}
-
-\begin{corollary}[Comparison with cocycle-coordinate quotients]\label{cor:strict-to-intrinsic-visible}
-Let $\alpha$ be any finite \v{C}ech cocycle representative of the class $\omega$. Then the homological cokernel
-\[
-Q_{\omega}
-\]
-admits a canonical surjective homomorphism onto the cocycle-coordinate quotient
-\[
-A/H_\alpha.
-\]
-Equivalently, every cocycle-coordinate quotient is a quotient of the homological cokernel.
-\end{corollary}
-
-\begin{proof}
-Let $q:A\twoheadrightarrow A/H_\alpha$ be the canonical quotient. By
-\suppresult{Cocycle-coordinate quotient}, the quotient kills every cocycle
-value $\alpha_{ijk}$ pointwise, so the pushed-forward cocycle representative
-is zero. Hence $q_*(\omega)=0$, and in particular it lies in the
-$\operatorname{Ext}$-subgroup of $H^2(N(\mathcal U),A/H_\alpha)$. Apply
-\Cref{thm:intrinsic-pure-ext-initiality}.
-\end{proof}
-
-\begin{definition}[Chain-level evaluation of a presentation]\label{def:chain-level-evaluation}
-Let $\alpha\in Z^2(N(\mathcal U),A)$ be a finite \v{C}ech cocycle representative of the class $\omega$. Write
-\[
-C_2(N(\mathcal U),\mathbb Z)
-\]
-for the simplicial group of integral $2$-chains on the finite nerve. The \emph{chain-level evaluation map} of $\alpha$ is the homomorphism
-\[
-\widetilde\alpha:C_2(N(\mathcal U),\mathbb Z)\to A
-\]
-defined by linear extension from the oriented $2$-simplices:
-\[
-\widetilde\alpha\!\left(\sum_{\sigma} n_{\sigma}\sigma\right)
-:=
-\sum_{\sigma} n_{\sigma}\alpha(\sigma).
-\]
-\end{definition}
-
-\begin{proposition}[Chain-coordinate versus homology-evaluation quotient]\label{prop:chain-vs-homological-visibility}
-In the setting of \Cref{def:chain-level-evaluation}, the following hold.
-\begin{enumerate}[label=(\roman*),nosep]
-\item $\widetilde\alpha$ vanishes on $2$-boundaries and therefore induces a homomorphism
-\[
-\overline\alpha:H_2(N(\mathcal U),\mathbb Z)\to A.
-\]
-\item The induced homomorphism $\overline\alpha$ is exactly the homological evaluation map $\mathrm{ev}_{\omega}$.
-\item The strict coordinate-image subgroup and the presentation-relative homological image subgroup satisfy
-\[
-H_\alpha=\mathrm{Im}(\widetilde\alpha),
-\qquad
-K_{\omega}=\mathrm{Im}(\overline\alpha)=\widetilde\alpha(Z_2(N(\mathcal U),\mathbb Z)).
-\]
-\end{enumerate}
-Thus the gap between chain-coordinate quotient and homology-evaluation quotient is exactly the gap between the image of the cocycle on all $2$-chains and its image on $2$-cycles.
 \end{proposition}
 
 \begin{proof}
-If $c\in C_3(N(\mathcal U),\mathbb Z)$, then
-\[
-\widetilde\alpha(\partial c)=(\delta\alpha)(c)=0
-\]
-because $\alpha$ is a cocycle. Hence $\widetilde\alpha$ vanishes on $B_2(N(\mathcal U),\mathbb Z)$ and induces a homomorphism
-\[
-\overline\alpha:H_2(N(\mathcal U),\mathbb Z)=Z_2/B_2\to A.
-\]
-This proves \textup{(i)}.
+Clause (i) is the cohomological universal coefficient theorem, natural in
+both \(N\) and \(A\) \cite[Sec.~3.1]{Hatcher2002}.  Its middle-to-right map
+evaluates a cohomology class on integral \(2\)-cycles, so its value at
+\(\omega\) is \(\operatorname{ev}_\omega\).  Exactness identifies the
+kernel with the Ext term.
 
-For any $2$-cycle $z=\sum_{\sigma} n_{\sigma}\sigma\in Z_2(N(\mathcal U),\mathbb Z)$, set
+For a simplicial map \(f:N'\to N\), naturality is the commutative square
 \[
-\alpha^{\sharp}(z):=\sum_{\sigma} n_{\sigma}\alpha(\sigma)=\widetilde\alpha(z).
-\]
-If $z'$ is another $2$-cycle homologous to $z$, then $z-z'=\partial c$ for some $c\in C_3(N(\mathcal U),\mathbb Z)$. By \textup{(i)},
-\[
-\alpha^{\sharp}(z)-\alpha^{\sharp}(z')
-=
-\widetilde\alpha(z-z')
-=
-\widetilde\alpha(\partial c)
-=
-0.
-\]
-Therefore $\alpha^{\sharp}$ depends only on the homology class of $z$ and defines a homomorphism
-\[
-H_2(N(\mathcal U),\mathbb Z)\to A,\qquad
-[z]\longmapsto \alpha^{\sharp}(z).
-\]
-By the definition of the universal coefficient map $\eta_A$, this homomorphism is exactly the image of the cohomology class $\omega=[\alpha]$ under
-\[
-\eta_A:H^2(N(\mathcal U),A)\to \operatorname{Hom}(H_2(N(\mathcal U),\mathbb Z),A).
+\begin{CD}
+H^2(N,A) @>{\operatorname{ev}}>>
+ \operatorname{Hom}(H_2(N,\mathbb Z),A)\\
+@V{f^*}VV @VV{(-)\circ f_*}V\\
+H^2(N',A) @>{\operatorname{ev}}>>
+ \operatorname{Hom}(H_2(N',\mathbb Z),A).
+\end{CD}
 \]
 Thus
 \[
-\overline\alpha([z])=\alpha^{\sharp}(z)=\eta_A(\omega)([z])=\mathrm{ev}_{\omega}([z])
+ \operatorname{ev}_{f^*\omega}
+ =\operatorname{ev}_\omega\circ f_*.
 \]
-for every $[z]\in H_2(N(\mathcal U),\mathbb Z)$, proving \textup{(ii)}.
-
-For \textup{(iii)}, the image of $\widetilde\alpha$ is exactly the subgroup generated by the simplex values $\alpha_{ijk}$, hence it is $H_\alpha$ by \suppresult{Finite \v{C}ech cocycle representative}. The equality
+For a coefficient homomorphism \(\theta:A\to A'\), the corresponding
+identity is
 \[
-\mathrm{Im}(\overline\alpha)=\widetilde\alpha(Z_2(N(\mathcal U),\mathbb Z))
+ \operatorname{ev}_{\theta_*\omega}
+ =\theta\circ\operatorname{ev}_\omega.
 \]
-is immediate from \textup{(i)}, and \Cref{def:intrinsic-visible-quotient} identifies this image with $K_{\omega}$.
+These formulas are the only invariance input used for a specified
+presentation comparison.  The short exact UCT sequence may split as a
+sequence of groups, but no natural splitting is chosen.
+
+For (ii), \(q\circ\operatorname{ev}_\omega=0\) says precisely that \(q\)
+vanishes on \(K_\omega\).  The universal property of the quotient gives a
+unique factorization through \(A/K_\omega\).  Apply the same observation to
+characters.  The intersection formula follows because characters of a
+finite abelian group separate points \cite{Terras1999}.
+
+For the last assertion, pass to the finite quotient \(A/K_\omega\).  If
+\(a\notin K_\omega\), then \(\bar a\ne0\) in that quotient.  Finite
+Pontryagin duality gives a character
+\[
+ \bar\chi:A/K_\omega\longrightarrow\mathbb Q/\mathbb Z
+\]
+with \(\bar\chi(\bar a)\ne0\).  Its pullback \(\chi=\bar\chi q_\omega\)
+annihilates \(K_\omega\) but not \(a\).  Hence no element outside
+\(K_\omega\) belongs to the displayed intersection of kernels.  The reverse
+containment is immediate.
+
+The containment \(\bigcap_vK_v\subseteq\sum_vK_v\) gives the quotient map in
+\eqref{eq:aggregate-exact-sequence}.  By the third isomorphism theorem its
+kernel is
+\[
+ \frac{\sum_vK_v}{\bigcap_vK_v},
+\]
+which proves exactness.  For finite abelian groups, annihilators exchange sums and
+intersections:
+\[
+ \Big(\sum_vK_v\Big)^\perp=\bigcap_vK_v^\perp,
+ \qquad
+ \Big(\bigcap_vK_v\Big)^\perp=\sum_vK_v^\perp.
+\]
+Dualizing the two quotients proves the character formulas in (iii).
+
+The first annihilator identity does not require finiteness:
+\(\chi\) kills \(\sum_vK_v\) exactly when it kills every \(K_v\).  For the
+second, one inclusion is immediate:
+\[
+ \sum_vK_v^\perp\subseteq\Big(\bigcap_vK_v\Big)^\perp.
+\]
+For finite groups, equality follows from exactness of Pontryagin duality.
+It may also be checked by cardinalities, using
+\[
+ |H^\perp|=\frac{|A|}{|H|}
+\]
+and, for two subgroups,
+\[
+ |K+L|\,|K\cap L|=|K|\,|L|.
+\]
+Induction gives the formula for a finite family.
+
+Under the hypotheses of (iv), the Ext term vanishes and UCT becomes
+\[
+ H^2(N,A)\cong\operatorname{Hom}(\mathbb Z^\beta,A).
+\]
+The image of a homomorphism from \(\mathbb Z^\beta\) is generated by the
+images of the standard basis, so it has at most \(\beta\) generators.
+Conversely, given generators \(k_1,\dots,k_\beta\) of \(K\), allowing zeros
+when fewer are needed, the map
+\[
+ (n_1,\dots,n_\beta)\longmapsto\sum_jn_jk_j
+\]
+has image \(K\).  Applying
+\Cref{thm:prescribed-component-image-construction} to a family of these maps
+gives simultaneous realization.
+
+The number \(d(K)\) can be read prime by prime.  If
+\[
+ K\cong\bigoplus_p\bigoplus_{j=1}^{r_p}C_{p^{e_{p,j}}},
+\]
+then
+\[
+ d(K)=\max_p r_p.
+\]
+Thus the condition in (iv) is not a bound on \(|K|\) or on its exponent.
+It is precisely the rank bound imposed by the \(\beta\) basis elements of
+\(H_2(N,\mathbb Z)\).  Once homomorphisms with the desired images have been
+chosen componentwise, simultaneous attainment is the prestack-level part
+supplied by \Cref{thm:prescribed-component-image-construction}.
 \end{proof}
 
-\begin{corollary}[Coincidence of the chain-coordinate and homology-evaluation quotients]\label{cor:strict-intrinsic-coincidence-criterion}
-Let $\alpha$ be a finite \v{C}ech cocycle representative of $\omega$. The following are equivalent:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $A/H_\alpha\cong Q_{\omega}$;
-\item $H_\alpha=K_{\omega}$;
-\item $\widetilde\alpha(C_2(N(\mathcal U),\mathbb Z))=\widetilde\alpha(Z_2(N(\mathcal U),\mathbb Z))$.
-\end{enumerate}
-Equivalently, the chain-coordinate quotient agrees with the homology-evaluation quotient exactly when every value of the cocycle on a $2$-chain already occurs on a $2$-cycle.
-\end{corollary}
+\subsection*{How to read the aggregate quotients}
 
-\begin{proof}
-The equivalence of \textup{(i)} and \textup{(ii)} is immediate from the quotient descriptions
+There are canonical maps
 \[
-A/H_\alpha
-\qquad\text{and}\qquad
-Q_{\omega}=A/K_{\omega}.
+ Q_{\mathrm{lab}}\longrightarrow A/K_v
+ \qquad(v\in V),
 \]
-The equivalence of \textup{(ii)} and \textup{(iii)} is exactly \Cref{prop:chain-vs-homological-visibility}(iii).
-\end{proof}
+because \(\bigcap_wK_w\subseteq K_v\).  The product of these maps is
+injective:
+\begin{equation}\label{eq:labelled-product-embedding}
+ A/\bigcap_vK_v
+ \longrightarrow\prod_{v\in V}A/K_v,
+ \qquad
+ a+\bigcap_vK_v\longmapsto(a+K_v)_v.
+\end{equation}
+Its kernel consists of the elements lying in every \(K_v\).  Thus
+\(Q_{\mathrm{lab}}\) is the part of the coefficient group retained by all
+componentwise quotient values together.
 
-\begin{theorem}[Nonzero UCT-Ext classes and vanishing $H_2$ evaluation]\label{thm:character-blind-obstructions}
-In the setting of \Cref{def:finite-nerve-presentation}, with a chosen admissible
-parameter, global component section, banded groupoid lift, trivialized constant finite
-abelian band $A$, and the \textup{(H4)} comparison datum needed to regard
-$\omega$ as a derived component class, the following are equivalent:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $K_{\omega}=0$;
-\item $Q_{\omega}=A$;
-\item $\mathrm{ev}_{\omega}=0$;
-\item $\omega$ lies in the subgroup
+In the other direction, every componentwise quotient maps onto
+\(Q_{\mathrm{com}}\):
 \[
-\operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A)\subseteq H^2(N(\mathcal U),A).
+ A/K_v\longrightarrow A/\sum_wK_w,
 \]
-\end{enumerate}
-If these conditions hold and $\omega\neq 0$, then the chosen component gerbe $\mathfrak G_v$ is non-neutral, while every character of $A$ is class-trivializing for that component class. If, in addition, the banded groupoid lift is essentially surjective on the terminal fibre, \(F_{p,s}|_{\mathcal C_a}\) is separated on the slice, and $|\Vis_{p,s}(r)|=1$, then
-\[
-M,p\Vdash \NoAmalg_s(r).
-\]
-\end{theorem}
+because \(K_v\subseteq\sum_wK_w\).  This is the largest quotient of \(A\)
+of the displayed form receiving the quotient map from every \(A/K_v\).
+The map in \eqref{eq:aggregate-exact-sequence} measures the loss between
+keeping the tuple of component values and keeping only their common quotient.
 
-\begin{proof}
-By \Cref{def:intrinsic-visible-quotient},
-\[
-K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega}),
-\]
-so \textup{(i)} and \textup{(iii)} are equivalent. Since $Q_{\omega}=A/K_{\omega}$, conditions \textup{(i)} and \textup{(ii)} are equivalent. By the universal coefficient sequence, \textup{(iii)} holds exactly when $\omega\in\ker(\eta_A)$, and this kernel is the stated $\operatorname{Ext}$-subgroup. Hence all four conditions are equivalent.
+On characters, the directions reverse.  A character of
+\(Q_{\mathrm{com}}\) must kill every \(K_v\), while a character of
+\(Q_{\mathrm{lab}}\) is a finite sum of characters each killing one of the
+component subgroups.  Written inside \(\widehat A\), these are precisely the
+two annihilator identities in the proposition.  This interpretation uses
+only the contravariance of finite duality.
 
-If they hold and $\omega\neq 0$, then \Cref{prop:derived-branch-classification} shows that the component gerbe $\mathfrak G_v$ is non-neutral.
-On the other hand, $\mathrm{ev}_{\omega}=0$ implies
-\[
-\chi\circ \mathrm{ev}_{\omega}=0
-\]
-for every $\chi\in\widehat A$, so \Cref{thm:intrinsic-visible-quotient} shows that every character is class-trivializing.
+\subsection*{Evaluation at chain level}
 
-Assume now that \(F_{p,s}|_{\mathcal C_a}\) is separated on the slice and that $|\Vis_{p,s}(r)|=1$. Since the chosen global component section $v$ exists, \Cref{prop:compsecs-vs-visible-branches} gives
+Choose a simplicial cocycle
+\(\alpha\in Z^2(N,A)\) representing \(\omega\).  If
 \[
-M,p\Vdash \CompSec_s(r).
+ z=\sum_{\sigma\in N_2}n_\sigma\sigma
 \]
-Suppose towards a contradiction that
+is an integral \(2\)-cycle, then
+\begin{equation}\label{eq:chain-level-evaluation}
+ \operatorname{ev}_\omega([z])
+ =\langle\alpha,z\rangle
+ =\sum_{\sigma\in N_2}n_\sigma\alpha(\sigma).
+\end{equation}
+Replacing \(\alpha\) by \(\alpha+\delta b\) changes the last expression by
 \[
-M,p\Vdash \Sec_s(r).
+ \langle\delta b,z\rangle
+ =\langle b,\partial z\rangle=0.
 \]
-By clause \textup{(i)} of \suppresult{Banded groupoid lift and stackification}, this yields an object of the terminal fibre $(\mathfrak P_r)_a$, and its image under the stackification morphism
+Replacing \(z\) by \(z+\partial c\) changes it by
 \[
-\iota_r:\mathfrak P_r\to \mathfrak L_r
+ \langle\alpha,\partial c\rangle
+ =\langle\delta\alpha,c\rangle=0.
 \]
-defines an object of $\mathfrak L_r(a)$. Because there is only one global component section, every object of $\mathfrak L_r(a)$ lies in the unique component gerbe $\mathfrak G_v(a)$. Hence
-\[
-\mathfrak G_v(a)\neq\varnothing.
-\]
-By \Cref{lem:terminal-fibre-neutrality}, this implies that $\mathfrak G_v$ is neutral, contradicting the non-neutrality already proved. Therefore
-\[
-M,p\nVdash \Sec_s(r).
-\]
-Combining this with $M,p\Vdash \CompSec_s(r)$ and admissibility of $r$, we obtain
-\[
-M,p\Vdash \NoAmalg_s(r).
-\]
-\end{proof}
+Thus \eqref{eq:chain-level-evaluation} depends only on the cohomology class
+and the homology class.  In the realization theorem,
+\(\alpha=\alpha_\lambda\) is also the triple-overlap defect of the
+\(\lambda\)-component gerbe, so the formula evaluates that defect directly
+on a \(2\)-cycle of the chosen nerve.
 
-\begin{corollary}[Vanishing evaluation when $H_2=0$]\label{cor:h2-vanishing-blindness}
-Assume
+This chain formula also explains why the coordinate subgroup
 \[
-H_2(N(\mathcal U),\mathbb Z)=0.
+ H_\alpha=\langle\alpha(\sigma):\sigma\in N_2\rangle
 \]
-Then, for every obstruction class $\omega\in H^2(N(\mathcal U),A)$,
-\[
-\mathrm{ev}_{\omega}=0,
-\qquad
-K_{\omega}=0,
-\qquad
-Q_{\omega}=A.
-\]
-Every nonzero component obstruction class on such a nerve therefore has zero $H_2$ evaluation, and every character is class-trivializing.
-\end{corollary}
+can be larger than \(K_\omega\).  Every value in \(K_\omega\) is an integral
+combination of cocycle coordinates, so \(K_\omega\subseteq H_\alpha\).
+But the coefficients in \eqref{eq:chain-level-evaluation} must satisfy the
+cycle equations.  An arbitrary combination of coordinates need not arise
+from a cycle.  Moreover, \(H_\alpha\) can change when \(\alpha\) is altered
+by a coboundary, whereas \(K_\omega\) cannot.
 
-\begin{proof}
-If $H_2(N(\mathcal U),\mathbb Z)=0$, then
-\[
-\mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),A)=0,
-\]
-so $\mathrm{ev}_{\omega}=0$ for every $\omega$. Apply \Cref{thm:character-blind-obstructions}.
-\end{proof}
+\subsection*{Torsion and free-homology boundary cases}
 
-\begin{corollary}[No nonzero classes with vanishing $H_2$ evaluation when $H_1$ is free]\label{cor:h1-free-no-blindness}
-Assume that $H_1(N(\mathcal U),\mathbb Z)$ is free abelian. Then
+Suppose
 \[
-K_{\omega}=0
-\quad\Longleftrightarrow\quad
-\omega=0.
+ H_1(N,\mathbb Z)
+ \cong\mathbb Z^r\oplus\bigoplus_{j=1}^t\mathbb Z/n_j\mathbb Z.
 \]
-Equivalently, every nonzero component obstruction class has nonzero $H_2$ evaluation. In particular, if $|\Vis_{p,s}(r)|=1$, every nonzero component obstruction class on such a nerve produces a proper homological cokernel.
-\end{corollary}
+The free summand contributes nothing to the Ext term, while
+\[
+ \operatorname{Ext}^1(\mathbb Z/n_j\mathbb Z,A)
+ \cong A/n_jA.
+\]
+Consequently,
+\begin{equation}\label{eq:explicit-ext-term}
+ \operatorname{Ext}^1(H_1(N,\mathbb Z),A)
+ \cong\bigoplus_{j=1}^t A/n_jA.
+\end{equation}
+If every multiplication map \(n_j:A\to A\) is surjective, the Ext term
+vanishes even though \(H_1\) has torsion.  For finite \(A\), shared primary
+torsion between \(H_1\) and \(A\) is what permits classes that evaluation on
+\(H_2\) cannot detect.
 
-\begin{proof}
-If $H_1(N(\mathcal U),\mathbb Z)$ is free abelian, then
+For example, if
 \[
-\operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A)=0.
+ H_1(N,\mathbb Z)\cong\mathbb Z/2\mathbb Z,
+ \qquad H_2(N,\mathbb Z)=0,
+ \qquad A=\mathbb Z/2\mathbb Z,
 \]
-Hence the universal coefficient map $\eta_A$ is injective. By \Cref{thm:character-blind-obstructions},
+then \(H^2(N,A)\cong\mathbb Z/2\mathbb Z\) entirely through
+\eqref{eq:explicit-ext-term}.  The nonzero class defines a non-neutral
+banded gerbe, but
 \[
-K_{\omega}=0
-\quad\Longleftrightarrow\quad
-\mathrm{ev}_{\omega}=0
-\quad\Longleftrightarrow\quad
-\eta_A(\omega)=0.
+ \operatorname{ev}_\omega:0\longrightarrow A
 \]
-Injectivity of $\eta_A$ therefore gives $K_{\omega}=0$ if and only if $\omega=0$. If $\omega\neq 0$, then $K_{\omega}\neq 0$, so $Q_{\omega}=A/K_{\omega}$ is a proper quotient of the finite group $A$.
-\end{proof}
+has zero image and \(Q_\omega=A\).  The quotient does not detect neutrality
+in this case.
 
-\begin{example}[A nonzero class with vanishing $H_2$ evaluation on an $\mathbb{R}P^2$-type nerve]\label{ex:rp2-character-blind}
-This is a finite-nerve mechanism example.  Let $\mathcal U$ be a finite cover
-whose \v{C}ech nerve is a finite triangulation of $\mathbb{R}P^2$, and take
+At the opposite endpoint, if \(H_1(N,\mathbb Z)\) is free, the Ext term
+vanishes.  Then
 \[
-A=\mathbb Z/2\mathbb Z.
+ H^2(N,A)\longrightarrow\operatorname{Hom}(H_2(N,\mathbb Z),A)
 \]
-Then
-\[
-H_2(\mathbb{R}P^2,\mathbb Z)=0,
-\qquad
-H_1(\mathbb{R}P^2,\mathbb Z)\cong \mathbb Z/2\mathbb Z
-\]
-\cite[Sec.~2.2]{Hatcher2002}. The universal coefficient sequence therefore yields
-\[
-H^2(\mathbb{R}P^2,\mathbb Z/2\mathbb Z)
-\cong
-\operatorname{Ext}^1(\mathbb Z/2\mathbb Z,\mathbb Z/2\mathbb Z)
-\cong
-\mathbb Z/2\mathbb Z
-\]
-\cite[Sec.~3.1]{Hatcher2002}. Let $\omega$ be the nonzero class. Then
-\[
-\mathrm{ev}_{\omega}=0,
-\qquad
-K_{\omega}=0,
-\qquad
-Q_{\omega}=A,
-\]
-by \Cref{thm:character-blind-obstructions}. Thus the homological cokernel is all of $A$, although the obstruction class is nonzero. Every character is therefore class-trivializing. If this is the unique global component section of the admissible parameter under consideration and \(F_{p,s}|_{\mathcal C_a}\) is separated on the slice, then \Cref{thm:gerbe-null-semantics} yields a matching family without global amalgamation whose component class is trivialized by every character.
+is an isomorphism.  A class has zero homological image only when it is zero.
+The wedge-of-spheres application lies in this regime.
 
-The last sentence is conditional on the usual banded-stack-lift data: an
-admissible parameter, a banded stack lift with constant band
-$\mathbb Z/2\mathbb Z$, essential surjectivity on the terminal fibre, and the
-\textup{(H4)} comparison identifying the displayed finite-nerve class with the
-derived component class; the matching-without-amalgamation conclusion also requires
-separatedness on the slice site associated to the parameter.  The unconditional content of the example is the
-homological mechanism
-\[
-\omega\in \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A),
-\qquad
-\eta_A(\omega)=0,
-\]
-which makes the homological cokernel equal to $A$ although the
-obstruction class is nonzero.  Thus the example records the UCT
-$\operatorname{Ext}^1$ kernel of the finite nerve, while the component-gerbe conclusion
-enters only after the admissible-parameter and banded-lift hypotheses have been
-supplied.
-\end{example}
-
-\begin{example}[A single-component surjective-homological-evaluation class on $S^2$]\label{ex:s2-single-branch-maximal-collapse}
-Let $\mathcal U=\{U_i\to S^2\}_{i\in I}$ be a finite good cover of $S^2$, let $N:=N(\mathcal U)$ be its nerve, and let $\mathcal C_a$ be the corresponding slice site for one admissible parameter $r:\mathsf{Ref}_s$ with $a=[r]_p$. Take the constant band
-\[
-A=\mathbb Z/2\mathbb Z
-\]
-on $\mathcal C_a$. Define the presheaf of local sections
-\[
-F_{p,s}|_{\mathcal C_a}:\mathcal C_a^{op}\to\mathsf{Set}
-\]
-by
-\[
-F_{p,s}(U)=\{v\}
-\]
-for every nonempty proper finite intersection $U$ of members of $\mathcal U$, by
-\[
-F_{p,s}(a)=\varnothing,
-\]
-and by the identity map on every restriction between proper intersections. Then the cover
-\[
-\mathcal U=\{U_i\to a\}_{i\in I}
-\]
-supports the compatible family constantly equal to $v$, while there is no global section at $a$. Hence
-\[
-M,p\Vdash \CompSec_s(r),
-\qquad
-M,p\nVdash \Sec_s(r).
-\]
-The restricted presheaf is separated on the slice: over \(a\) there are no two
-sections to compare, and over every proper nonempty intersection there is
-only the section \(v\).
-Because
-\[
-H^2(N,A)\cong \mathbb Z/2\mathbb Z,
-\]
-choose a simplicial cocycle
-\[
-\alpha\in Z^2(N,A)
-\]
-representing the nonzero class. For each $U_i$ choose a local lift object $x_i$ with automorphism group $A$, and choose isomorphisms
-\[
-\phi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim} x_j|_{U_{ij}}
-\]
-on the pairwise overlaps such that
-\[
-\phi_{ik}^{-1}\phi_{jk}\phi_{ij}=\alpha_{ijk}\in A
-\]
-on each triple overlap. This is the single-label instance of the
-cocycle-to-prestack construction isolated in
-\suppresult{$2$-cocycle-defined banded prestack for one component}, used under the same generated-subsite
-admissibility convention as \suppresult{Finite intersection site associated to the cover nerve, Leray comparison, and one-state admissible expansion};
-equivalently, it is the standard local-trivialization construction for gerbes
-\cite[Chap.~IV]{Giraud1971}, \cite[Sec.~5]{Breen2006}, \cite{Murray1996}. It
-yields a prestack presentation $\mathfrak P_r$ on $\mathcal C_a$ with the following properties:
-\begin{enumerate}[label=(\roman*),nosep]
-\item over each member $U_i$ of the cover there is the chosen local lift object $x_i$ with automorphism group $A$;
-\item the chosen transition maps have triple-overlap defect exactly $\alpha$;
-\item the presheaf of isomorphism classes satisfies
-\[
- \pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}.
-\]
-\end{enumerate}
-Thus the example begins with an explicit presheaf of local sections and then chooses local lift objects and transition data whose component presheaf is the given functor; the component gerbe is recovered from those data by stackification rather than being taken as primitive input.
+\subsection*{A two-component arithmetic check}
 
 Let
 \[
-\mathfrak L_r:=a(\mathfrak P_r).
+ A=\mathbb Z/12\mathbb Z,\qquad
+ K_1=\langle4\rangle,\qquad
+ K_2=\langle3\rangle.
 \]
-Because $\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}$, the sheaf of connected components of $\mathfrak L_r$ has exactly one global section at $a$, represented by the constant compatible family above. Therefore
+Then \(K_1\) has order \(3\), \(K_2\) has order \(4\), and
 \[
-\Vis_{p,s}(r)=\{v\}.
-\]
-But $\alpha$ is nonzero, so the descent datum is ineffective and no object exists over $a$ in the resulting stack; equivalently, the unique component gerbe is non-neutral. Hence
-\[
-\mathfrak G_v=\mathfrak L_r,
-\qquad
-\omega_v=[\alpha]\neq 0.
-\]
-Combining this with the already computed presheaf-level facts gives
-\[
-M,p\Vdash \NoAmalg_s(r),
-\qquad
-M,p\nVdash \Sec_s(r),
-\qquad
-\Vis_{p,s}(r)=\{v\},
-\qquad
-\mathfrak G_v=\mathfrak L_r,
-\qquad
-\omega_v=[\alpha]\neq 0.
-\]
-The good cover $\mathcal U$ trivializes the constant band, all finite intersections are contractible, and therefore the $H^1$-vanishing and \v{C}ech-to-derived comparison hypotheses of \Cref{def:cech-gluing-obstruction,def:finite-nerve-presentation} are satisfied.
-
-Since
-\[
-H_1(N,\mathbb Z) = 0,
-\qquad
-H_2(N,\mathbb Z) \cong \mathbb Z
-\]
-\cite[Secs.~2.1, 2.2]{Hatcher2002}, the universal coefficient theorem gives
-\[
-H^2(N, \mathbb{Z}/2\mathbb{Z})
-\cong
-\mathrm{Hom}(\mathbb{Z}, \mathbb{Z}/2\mathbb{Z})
-\cong
-\mathbb{Z}/2\mathbb{Z}.
-\]
-Let $\omega$ be the nonzero class, and let $[S^2]$ denote the fundamental class in $H_2(N,\mathbb Z)$. Then
-\[
-\mathrm{ev}_\omega([S^2]) = 1 \in \mathbb{Z}/2\mathbb{Z},
-\]
-so the homological evaluation map is surjective. By \Cref{cor:maximal-collapse},
-\[
-K_\omega = A = \mathbb{Z}/2\mathbb{Z},
-\qquad
-Q_\omega = 0.
+ K_1\cap K_2=0,\qquad K_1+K_2=A.
 \]
 Hence
 \[
-M,p\Vdash \NoAmalg_s(r),
-\qquad
-\omega=\omega_v\neq 0,
-\qquad
-\mathrm{ev}_{\omega}:H_2(N,\mathbb Z)\twoheadrightarrow A,
-\qquad
-K_\omega=A,
-\qquad
-Q_\omega=0.
+ Q_{\mathrm{lab}}=A,\qquad Q_{\mathrm{com}}=0,
 \]
-Since $K_\omega = A$, \Cref{thm:intrinsic-visible-quotient} gives
-\[
-X_\omega = \mathrm{Ann}(K_\omega) = \mathrm{Ann}(A) = \{1\},
-\]
-so only the trivial character is class-trivializing. Equivalently, $Q_\omega = A/K_\omega = 0$.
+and the kernel in \eqref{eq:aggregate-exact-sequence} is \(A\).  Both
+subgroups are cyclic, so each is the image of a homomorphism
+\(\mathbb Z\to A\).  On a nerve with
+\(H_2(N,\mathbb Z)\cong\mathbb Z\) and \(H_1(N,\mathbb Z)=0\), the
+prescribed-realization theorem places these maps in two component gerbes of
+a single prestack.
 
-This example therefore verifies the full downstream hypothesis chain
+By contrast, if \(A=\mathbb Z/8\mathbb Z\), any two nonzero subgroups are
+comparable:
 \[
-(\mathcal C_a,\mathfrak P_r,A,\omega,\mathrm{ev}_\omega,K_\omega,Q_\omega)
+ \langle4\rangle\subseteq\langle2\rangle\subseteq A.
 \]
-inside a concrete site-theoretic example, once the banded stack lift has been fixed by the chosen cocycle data. It is the opposite extreme from the zero-evaluation case of \Cref{ex:rp2-character-blind}: for an $\mathbb{R}P^2$-type nerve one has $K_\omega=0$, every character is class-trivializing, and the obstruction is entirely in the UCT $\operatorname{Ext}^1$ kernel with $Q_\omega=A$; for the present $S^2$-type nerve one has $K_\omega=A$, only the trivial character is class-trivializing, and the obstruction is entirely detected on $H_2$, with $Q_\omega=0$.
-\end{example}
+Their intersection cannot be zero.  Thus no two nonzero component images
+can satisfy \(K_1\cap K_2=0\) and \(K_1+K_2=A\).  This elementary contrast
+is the cyclic part of the arithmetic used in the next section.
 
-\begin{definition}[Auxiliary register for the homological quotient]\label{def:intrinsic-strictification-code}
-An \emph{auxiliary register for the homological quotient} for the obstruction class $\omega$ consists of a finite set $R$ and an injective map
+All clauses except simultaneous prestack realization are standard formal
+consequences of UCT, finite duality, and subgroup arithmetic.  In particular,
+there is no separate information-theoretic theorem hidden in the fibres of
+these quotients.  Since a quotient fibre is a coset of its kernel, the minimum
+cardinality of an unrestricted auxiliary set capable of separating every
+fibre is simply the kernel cardinality.  For example,
 \[
-\iota_{\omega}:A\hookrightarrow Q_{\omega}\times R
+ |q_\omega^{-1}(\bar a)|=|K_\omega|,
+ \qquad
+ \left|\ker(Q_{\mathrm{lab}}\to Q_{\mathrm{com}})\right|
+ =\left|\frac{\sum_vK_v}{\bigcap_vK_v}\right|.
 \]
-such that
-\[
-\mathrm{pr}_1\circ\iota_{\omega}=\pi_{\omega}.
-\]
-\end{definition}
 
-\begin{corollary}[Fibre size of the homological quotient]\label{cor:intrinsic-hidden-state-lower-bound}
-Every auxiliary register for the homological quotient satisfies
-\[
-|R|\ge |K_{\omega}|.
-\]
-Equivalently,
-\[
-\log_2|R|\ge \log_2|K_{\omega}|.
-\]
-This lower bound is sharp.
-\end{corollary}
-
-\begin{proof}
-By \Cref{def:intrinsic-visible-quotient}, the fibres of $\pi_{\omega}$ are exactly the cosets of $K_{\omega}$, so every fibre has cardinality $|K_{\omega}|$. The same fibre-counting argument as in \suppresult{Fibre size of an auxiliary register} therefore shows that any auxiliary register preserving the first projection must satisfy $|R|\ge |K_{\omega}|$.
-
-For sharpness, take $R:=K_{\omega}$ and choose a set-theoretic section $s_{\omega}:Q_{\omega}\to A$ of $\pi_{\omega}$. Then
-\[
-\iota_{\omega}(x):=\bigl(\pi_{\omega}(x),x-s_{\omega}(\pi_{\omega}(x))\bigr)
-\]
-is injective.
-\end{proof}
-
-\begin{theorem}[Prime decomposition of the homological quotient and fibre size]\label{thm:intrinsic-prime-decomposition}
-Write the finite abelian group $A$ as a direct sum of its $p$-primary components:
-\[
-A=\bigoplus_p A_{(p)}.
-\]
-Let $\omega_p\in H^2(N(\mathcal U),A_{(p)})$ be the image of $\omega$ under the projection onto the $p$-primary summand. Then
-\[
-\mathrm{ev}_{\omega}=\bigoplus_p \mathrm{ev}_{\omega_p},
-\qquad
-K_{\omega}=\bigoplus_p K_{\omega,p},
-\qquad
-Q_{\omega}\cong \bigoplus_p A_{(p)}/K_{\omega,p},
-\]
-where
-\[
-K_{\omega,p}:=\mathrm{Im}(\mathrm{ev}_{\omega_p}).
-\]
-Consequently,
-\[
-|K_{\omega}|=\prod_p |K_{\omega,p}|,
-\qquad
-\log_2|K_{\omega}|=\sum_p \log_2|K_{\omega,p}|.
-\]
-\end{theorem}
-
-\begin{proof}
-Both $H^2(N(\mathcal U),-)$ and $\mathrm{Hom}(H_2(N(\mathcal U),\mathbb Z),-)$ commute with finite direct sums, so the universal coefficient map is compatible with the primary decomposition of $A$. Hence
-\[
-\eta_A(\omega)=\bigoplus_p \eta_{A_{(p)}}(\omega_p),
-\]
-which is exactly the asserted decomposition of $\mathrm{ev}_{\omega}$.
-
-Taking images gives
-\[
-K_{\omega}
-=
-\mathrm{Im}(\mathrm{ev}_{\omega})
-=
-\bigoplus_p \mathrm{Im}(\mathrm{ev}_{\omega_p})
-=
-\bigoplus_p K_{\omega,p},
-\]
-by \Cref{def:intrinsic-visible-quotient}. The quotient decomposition follows immediately:
-\[
-Q_{\omega}
-=
-A/K_{\omega}
-\cong
-\bigoplus_p A_{(p)}/K_{\omega,p}.
-\]
-Since finite direct sums correspond to products of cardinalities, the logarithmic fibre-cardinality formula is immediate.
-\end{proof}
-
-\begin{corollary}[Homological versus chain-coordinate fibre size]\label{cor:strict-intrinsic-budget-comparison}
-For every finite \v{C}ech cocycle representative $\alpha$ of the class $\omega$,
-\[
-|K_{\omega}|\le |H_\alpha|,
-\qquad
-\log_2|K_{\omega}|\le \log_2|H_\alpha|.
-\]
-Hence the minimum auxiliary register size for the homological quotient never exceeds that for the cocycle-coordinate quotient. Equality holds if and only if the canonical surjection
-\[
-Q_{\omega}\twoheadrightarrow A/H_\alpha
-\]
-is an isomorphism.
-\end{corollary}
-
-\begin{proof}
-By \Cref{cor:strict-to-intrinsic-visible}, there is a surjective homomorphism
-\[
-Q_{\omega}=A/K_{\omega}\twoheadrightarrow A/H_\alpha.
-\]
-For finite groups this implies
-\[
-|A|/|K_{\omega}|\ge |A|/|H_\alpha|,
-\]
-hence $|K_{\omega}|\le |H_\alpha|$. The logarithmic inequality is immediate. Equality of cardinalities holds exactly when the displayed surjection is bijective.
-\end{proof}
-
-\begin{corollary}[Surjective homological evaluation]\label{cor:maximal-collapse}
-In the setting of \Cref{def:finite-nerve-presentation}, the following are equivalent:
-\begin{enumerate}[label=(\roman*),nosep]
-\item $\mathrm{ev}_{\omega}:H_2(N(\mathcal U),\mathbb Z)\to A$ is surjective;
-\item $K_{\omega}=A$;
-\item $Q_{\omega}=0$;
-\item the logarithmic fibre cardinality of the homological quotient is $\log_2|A|$:
-\[
-\log_2|K_{\omega}|=\log_2|A|.
-\]
-\end{enumerate}
-\end{corollary}
-
-\begin{proof}
-By \Cref{def:intrinsic-visible-quotient}, $K_{\omega}=\mathrm{Im}(\mathrm{ev}_{\omega})$, so \textup{(i)} and \textup{(ii)} are equivalent. Condition \textup{(ii)} is equivalent to \textup{(iii)} by the definition of $Q_{\omega}=A/K_{\omega}$. For finite groups, \textup{(ii)} is also equivalent to $|K_{\omega}|=|A|$, which is exactly \textup{(iv)} after taking $\log_2$.
-\end{proof}
+The Ext clause also marks a limitation of the homological image.  If
+\(H_2(N,\mathbb Z)=0\) and
+\(\operatorname{Ext}^1(H_1(N,\mathbb Z),A)\ne0\), a nonzero gerbe class can
+have \(K_\omega=0\) and \(Q_\omega=A\).  For instance, an
+\(\mathbb RP^2\)-type nerve and suitable \(2\)-torsion coefficients exhibit
+this behavior.  Conversely, when \(H_1(N,\mathbb Z)\) is free, the Ext term
+vanishes and zero evaluation forces \(\omega=0\).  These are UCT boundary
+cases, not additional classification results.

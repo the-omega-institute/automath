@@ -1,767 +1,355 @@
-\section{Component gerbes and component obstruction classes}\label{sec:gerbe-obstruction}
+\section{Component gerbes and terminal rigidity}
+\label{sec:gerbe-obstruction}
 
-From this point on the argument proceeds componentwise relative to a chosen
-banded groupoid lift. When derived obstruction classes are needed, the
-\v{C}ech-to-derived comparison hypothesis below is also imposed. No unconditional
-existence theorem for such data is sought here. This section reorganizes the
-gerbe-theoretic obstruction data of the companion paper
-\cite{MaZhang2026ConditionalGluingFailure} in the language of banded stack
-lifts used later. The first result of the section
-isolates the invariance available once the sheafified presheaf
-functor has been lifted to a banded stack: the component obstruction class is
-invariant under equivalence of the resulting banded stack lifts. Since a
-single parameter may carry several global component sections,
-the relevant obstruction objects are the corresponding component gerbes
-rather than a single global gerbe. The cocycle constructions used below are
-the standard local-trivialization constructions for gerbes
-\cite[Chap.~IV]{Giraud1971}, \cite[Sec.~5]{Breen2006}, together with their
-bundle-gerbe counterparts \cite{Murray1996,Brylinski1993}, applied
-componentwise in the present setting.
+For a stack in groupoids \(\mathfrak E\), let \(\pi_0(\mathfrak E)\) denote
+the sheafification of its presheaf of fibrewise isomorphism classes.  If
+\(v\in\pi_0(\mathfrak E)(a)\), define the full substack
+\begin{equation}\label{eq:component-substack}
+ \mathfrak E[v](X)=
+ \{x\in\mathfrak E(X):[x]=v|_X\}.
+\end{equation}
+The equality in \eqref{eq:component-substack} is equality in the component
+sheaf, so it is local by construction.
 
-We begin by fixing the hypotheses used in the section. Individual statements invoke only the subcollection they require.
+The exact ancestry of this construction is classical.  Giraud proves that
+the projection of a stack to its sheaf of connected components is a gerbe
+over that sheaf, and that pullback along a component section gives the
+corresponding maximal subgerbe
+\cite[III, Prop.~2.1.5.3]{Giraud1971}.  The next proposition records this
+standard construction and the two compatibilities used later.  It is an
+input, not an originality claim.
 
-\begin{definition}[\v{C}ech-to-derived comparison hypothesis]\label{def:cech-derived-comparison-package}
-For an admissible parameter \(r:\mathsf{Ref}_s\) at \(p\), a band \(\Band\)
-on \(\mathcal C_{p,s}/a\), and a global component section \(v\), a
-\emph{\v{C}ech-to-derived comparison hypothesis} consists of a filtered cofinal
-family
-\[
-\Cov_v^{\mathrm{acyc}}(a)\subseteq \Cov_{p,s}(a)
-\]
-such that every cover \(\mathcal U=\{U_i\to a\}\) in the family has a
-\v{C}ech nerve in the slice site, trivializes the band on all intersections
-used in degrees \(0,1,2\), and satisfies the following comparison condition:
-the canonical refinement map
-\[
-\varinjlim_{\mathcal U\in\Cov_v^{\mathrm{acyc}}(a)}
-\check H^2(\mathcal U,\Band)
-\longrightarrow
-H^2(\mathcal C_{p,s}/a,\Band)
-\]
-is an isomorphism. One way to verify this condition is the usual Leray
-hypothesis: all nonempty finite intersections appearing in the family are
-\(\Band\)-acyclic in every positive degree needed for the derived
-comparison. The definition itself, however, records the comparison
-isomorphism as the required assumption; the later theorems do not silently
-infer derived \(H^2\) from a single \v{C}ech cocycle unless this hypothesis, or
-the explicit finite good-cover Leray theorem of
-\suppresult{Finite intersection site associated to the cover nerve, Leray comparison, and one-state admissible expansion}, is in force.
-\end{definition}
-
-\begin{enumerate}[label=\textup{(H\arabic*)},nosep]
-\item\label{hyp:admitted-prestack} An admissible parameter $r:\mathsf{Ref}_s$ at a state $p$ with $a=[r]_p$, equipped with a banded groupoid lift $\mathfrak P_r \to \mathcal C_a$ and band $\Band$ in the sense of \suppresult{Banded groupoid lift and stackification}.
-\item\label{hyp:band-identification} The band $\Band$ is identified with a fixed abelian sheaf on the slice site $\mathcal C_{p,s}/a$.
-\item\label{hyp:global-conservativity} The banded groupoid lift $\mathfrak P_r$ is essentially surjective on the terminal fibre over $a$ in the sense of \suppresult{Essential surjectivity on the terminal fibre}.
-\item\label{hyp:cofinal-gerbe-adapted} For every global component section \(v\), a
-\v{C}ech-to-derived comparison hypothesis in the sense of
-\Cref{def:cech-derived-comparison-package} has been fixed.
-\end{enumerate}
-
-When a statement compares global component sections with the strict predicate
-\(\CompSec_s\), or with \(\NoAmalg_s\) through that predicate,
-it separately assumes that \(F_{p,s}|_{\mathcal C_a}\) is separated on the slice.
-Without this separatedness assumption global component sections are only
-sheafified sections, and no strict compatible family is asserted.
-
-\begin{remark}[\v{C}ech versus derived cohomology]\label{rem:cech-vs-derived}
-Hypothesis \ref{hyp:cofinal-gerbe-adapted}, equivalently the hypothesis of
-\Cref{def:cech-derived-comparison-package}, is the precise comparison
-assumption governing the passage between \v{C}ech and derived $H^2$. It
-requires the comparison isomorphism itself; acyclicity in positive degrees is
-one standard sufficient Leray condition, not an unstated assumption unless
-explicitly invoked. Without this hypothesis, the component obstruction class lives in
-the filtered colimit
-\[
-\varinjlim_{\mathcal U\in \Cov_v^{\mathrm{acyc}}(a)} \check H^2(\mathcal U,\Band),
-\]
-and the non-neutrality statement in \Cref{thm:cech-component-gerbe-obstruction} is purely \v{C}ech-theoretic. With \ref{hyp:cofinal-gerbe-adapted}, this colimit is canonically identified with the derived $H^2(\mathcal C_a,\Band)$, and the obstruction class $\omega_v$ is an element of derived cohomology. All theorems in this subsection state explicitly whether they use only the \v{C}ech-level data or additionally require the comparison isomorphism.
-\end{remark}
-
-\begin{remark}[Relation to the companion paper]
-The companion paper \cite{MaZhang2026ConditionalGluingFailure} formulates component obstructions relative to a chosen gluing-sensitive banded groupoid lift and its stackification. The present section isolates the three constructions needed later: the promotion of cover-relative \v{C}ech classes to derived classes $\omega_v$ under \textup{(H4)}, the reformulation of the obstruction theory for arbitrary banded stack lifts of the component sheaf of the sheafified presheaf of local sections, and the componentwise neutrality criteria stated directly in terms of component gerbes.
-\end{remark}
-
-\begin{definition}[Component gerbes and component obstruction classes]\label{def:component-gerbes}\label{def:cech-gluing-obstruction}
-Fix an admissible parameter $r:\mathsf{Ref}_s$ at a state $p$, write
-\[
-a=[r]_p,
-\]
-and assume that $r$ admits a banded groupoid lift $\mathfrak P_r$ with stackification $\mathfrak L_r$ and band $\Band$ as in \suppresult{Banded groupoid lift and stackification}. For a global component section
-\[
-v\in \Vis_{p,s}(r)\cong \pi_0(\mathfrak L_r)(a),
-\]
-let $\mathfrak G_v(U)$ be the full subgroupoid of $\mathfrak L_r(U)$ on those objects whose connected-component class restricts to $v$ on $U$. When \Cref{thm:component-gerbe-decomposition} applies, we call $\mathfrak G_v$ the \emph{component gerbe} of the global component section $v$.
-
-Assume moreover that \textup{(H4)} holds. For each global component section $v$ and each cover
-\[
-\mathcal U\in \Cov_v^{\mathrm{acyc}}(a),
-\]
-\Cref{thm:cech-component-gerbe-obstruction} produces a \v{C}ech obstruction class
-\[
-[g_{\mathcal U}]\in \check H^2(\mathcal U,\Band).
-\]
-Refinement compatibility identifies these classes in the filtered system, and the comparison isomorphism in \textup{(H4)} therefore determines a unique derived class
-\[
-\omega_v\in H^2(\mathcal C_{p,s}/a,\Band),
-\]
-called the \emph{component obstruction class} of $v$.
-\end{definition}
-
-\begin{definition}[Banded stack lift of the component sheaf]\label{def:banded-stack-lift}
-For an admissible parameter $r:\mathsf{Ref}_s$ at a state $p$, abbreviate
-\[
-a=[r]_p,
-\qquad
-\mathcal C_a:=\mathcal C_{p,s}/a,
-\]
-and fix an abelian sheaf $\Band$ on $\mathcal C_a$. Let $\mathfrak E_r$ be a
-$\Band$-banded stack in groupoids on $\mathcal C_a$. A
-\emph{$\Band$-banded stack lift of the component sheaf} is a pair
-\[
-(\mathfrak E_r,\epsilon_r)
-\]
-consisting of such a stack together with an isomorphism of sheaves
-\[
-\epsilon_r:\pi_0(\mathfrak E_r)\xrightarrow{\sim} a_{p,s}F_{p,s}|_{\mathcal C_a}
-\]
-on $\mathcal C_a$.
-
-For a sheafified global section
-\[
-v\in \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a),
-\]
-the \emph{$v$-component substack} of $\mathfrak E_r$ is the full substack
-\[
-\mathfrak E_r[v](U):=
-\bigl\{x\in \mathfrak E_r(U)\mid \epsilon_{r,U}([x])=v|_U\bigr\}
-\]
-for objects $U$ of $\mathcal C_a$, where $\epsilon_{r,U}$ denotes the component of $\epsilon_r$ at $U$.
-\end{definition}
-
-\begin{lemma}[Equivalence data and component transport]\label{lem:extension-equivalence-component-transport}
-Let
-\[
-(\mathfrak E_r,\Band,\epsilon_r),
-\qquad
-(\mathfrak E'_r,\Band',\epsilon'_r)
-\]
-be banded stack lifts of the component sheaf on $\mathcal C_a$. Suppose an equivalence of stacks
-\[
-\Phi:\mathfrak E_r\to\mathfrak E'_r
-\]
-comes with a band isomorphism $\theta:\Band\xrightarrow{\sim}\Band'$ and satisfies
-\[
-\epsilon'_r\circ\pi_0(\Phi)=\epsilon_r.
-\]
-Then, for every sheafified global section $v$, $\Phi$ restricts to an equivalence of full component substacks
-\[
-\Phi_v:\mathfrak E_r[v]\xrightarrow{\sim}\mathfrak E'_r[v],
-\]
-and this restricted equivalence is banded by $\theta$.
-\end{lemma}
-
-\begin{proof}
-Let $U$ be an object of $\mathcal C_a$ and let $x\in\mathfrak E_r[v](U)$. By definition,
-\[
-\epsilon_{r,U}([x])=v|_U.
-\]
-The compatibility condition gives
-\[
-\epsilon'_{r,U}([\Phi(x)])
-=
-(\epsilon'_r\circ\pi_0(\Phi))_U([x])
-=
-\epsilon_{r,U}([x])
-=
-v|_U.
-\]
-Thus $\Phi(x)\in\mathfrak E'_r[v](U)$, so $\Phi$ restricts to a functor
-\[
-\Phi_v:\mathfrak E_r[v]\to\mathfrak E'_r[v].
-\]
-Since both component substacks are full, $\Phi_v$ is fully faithful because $\Phi$ is. For local essential surjectivity, take $z\in\mathfrak E'_r[v](U)$. A quasi-inverse $\Psi$ to $\Phi$ gives, after possibly refining $U$, an object $y\in\mathfrak E_r(U)$ with $\Phi(y)\cong z$. Applying $\epsilon'_r$ to this local isomorphism gives
-\[
-\epsilon_{r,U}([y])
-=
-\epsilon'_{r,U}([\Phi(y)])
-=
-\epsilon'_{r,U}([z])
-=
-v|_U,
-\]
-so $y$ lies locally in $\mathfrak E_r[v]$. Hence $\Phi_v$ is an equivalence of stacks. The automorphism-sheaf maps of $\Phi_v$ are the restrictions of the automorphism-sheaf maps of $\Phi$, so the band is transported by the same isomorphism $\theta$.
-\end{proof}
-
-\begin{lemma}[Transport of Giraud classes under banded equivalence]\label{lem:giraud-class-transport}
-Let $\mathfrak G$ be a $\Band$-banded gerbe and let $\mathfrak G'$ be a $\Band'$-banded gerbe on the same site $\mathcal C$. Suppose
-\[
-\Phi:\mathfrak G\to\mathfrak G'
-\]
-is an equivalence of stacks whose induced maps on automorphism sheaves identify the bands through an isomorphism
-\[
-\theta:\Band\xrightarrow{\sim}\Band'.
-\]
-Then
-\[
-\theta_*[\mathfrak G]=[\mathfrak G']
-\qquad\text{in}\qquad
-H^2(\mathcal C,\Band').
-\]
-\end{lemma}
-
-\begin{proof}
-Choose a cover $\{U_i\to U\}$ which locally trivializes $\mathfrak G$, objects $x_i\in\mathfrak G(U_i)$, and descent isomorphisms
-\[
-\varphi_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim}x_j|_{U_{ij}}.
-\]
-The usual Giraud cocycle $c_{ijk}\in\Band(U_{ijk})$ is defined by
-\[
-\varphi_{ik}^{-1}\varphi_{jk}\varphi_{ij}=c_{ijk}\in\operatorname{Aut}(x_i|_{U_{ijk}})\cong\Band(U_{ijk}).
-\]
-Applying $\Phi$ gives local lift objects $\Phi(x_i)$ of $\mathfrak G'$ and comparison isomorphisms $\Phi(\varphi_{ij})$. The corresponding defect is
-\[
-\Phi(\varphi_{ik})^{-1}\Phi(\varphi_{jk})\Phi(\varphi_{ij})
-=
-\Phi(c_{ijk}),
-\]
-which is identified with $\theta(c_{ijk})$ under the band isomorphism. Thus the transported local trivialization of $\mathfrak G'$ has cocycle $\theta_*(c)$. Refining the cover or changing the local lift objects changes both cocycles by the corresponding coboundary, exactly as in the standard local-trivialization classification of banded gerbes \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. Hence the cohomology class of $\mathfrak G'$ is $\theta_*[\mathfrak G]$.
-
-The functoriality invoked here is the usual naturality of Giraud's classification with respect to a morphism of bands. Equivalently, the assignment
-\[
-(\mathfrak G,\Band)\longmapsto [\mathfrak G]\in H^2(\mathcal C,\Band)
-\]
-is functorial for banded equivalences: an equivalence of gerbes whose automorphism sheaves are identified by $\theta$ transports a local descent-defect cocycle to its pointwise image under $\theta$, and this construction is independent of all choices after passage to cohomology.
-\end{proof}
-
-\begin{theorem}[Canonical component-section obstruction map under banded stack lifts]\label{thm:intrinsic-branch-obstruction-extension}
-Let $r:\mathsf{Ref}_s$ be admissible at a state $p$, write
-\[
-a=[r]_p,
-\qquad
-\mathcal C_a:=\mathcal C_{p,s}/a,
-\]
-and let
-\[
-(\mathfrak E_r,\Band,\epsilon_r)
-\]
-be a $\Band$-banded stack lift of the component sheaf in the sense of \Cref{def:banded-stack-lift}. Then the assignment
-\[
-\delta_{\mathfrak E_r}:\Vis_{p,s}(r)\longrightarrow H^2(\mathcal C_a,\Band),
-\qquad
-v\longmapsto [\mathfrak E_r[v]]
-\]
-is canonically defined, where $[\mathfrak E_r[v]]$ denotes the Giraud class of the $v$-component substack. More precisely:
+\begin{proposition}[Standard component-gerbe package]
+\label{prop:standard-component-gerbe-package}
+Let \(\mathfrak E\) be a stack in groupoids on \(\mathcal C\), and let
+\(v\in\pi_0(\mathfrak E)(a)\).
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every sheafified global section $v$, the full substack $\mathfrak E_r[v]$ is a $\Band$-banded gerbe on $\mathcal C_a$;
-\item for every sheafified global section $v$,
-\[
-\delta_{\mathfrak E_r}(v)=0
-\quad\Longleftrightarrow\quad
-\mathfrak E_r[v]\ \text{is neutral}
-\quad\Longleftrightarrow\quad
-\mathfrak E_r[v](a)\neq\varnothing;
-\]
-\item if
-\[
-(\mathfrak E'_r,\Band',\epsilon'_r)
-\]
-is another banded stack lift of the component sheaf and
-\[
-\Phi:\mathfrak E_r\to \mathfrak E'_r
-\]
-is an equivalence of stacks whose induced map on automorphism sheaves identifies the bands through an isomorphism
-\[
-\theta:\Band\xrightarrow{\sim}\Band'
-\]
-and whose map on connected components satisfies
-\[
-\epsilon'_r\circ \pi_0(\Phi)=\epsilon_r,
-\]
-then for every sheafified global section $v$ the functor $\Phi$ restricts to an equivalence
-\[
-\mathfrak E_r[v]\xrightarrow{\sim}\mathfrak E'_r[v]
-\]
-and
-\[
-\theta_*\bigl(\delta_{\mathfrak E_r}(v)\bigr)=\delta_{\mathfrak E'_r}(v)
-\quad\text{in}\quad
-H^2(\mathcal C_a,\Band');
-\]
-\item if $r$ admits a gluing-sensitive banded lift datum and
-\[
-\mathfrak E_r=\mathfrak L_r=a(\mathfrak P_r)
-\]
-is its stackification, then
-\[
-\delta_{\mathfrak E_r}(v)=\omega_v
-\]
-for every global component section $v$ for which \textup{(H4)} holds.
+\item The full substack \(\mathfrak E[v]\) is the maximal gerbe over the
+      section \(v\).  If \(\mathfrak E\) is banded by an abelian sheaf
+      \(\mathscr A\), then \(\mathfrak E[v]\) has the restricted
+      \(\mathscr A\)-banding.
+\item Its Giraud class satisfies
+      \[
+      [\mathfrak E[v]]=0\text{ in }H^2(\mathcal C,\mathscr A)
+      \quad\Longleftrightarrow\quad
+      \mathfrak E[v]\text{ is neutral}
+      \quad\Longleftrightarrow\quad
+      \mathfrak E[v](a)\ne\varnothing.
+      \]
+\item Suppose \(\Phi:\mathfrak E\to\mathfrak E'\) is a banded equivalence,
+      its band map is \(\theta:\mathscr A\xrightarrow{\sim}\mathscr A'\),
+      and its component map carries \(v\) to \(v'\).  Then \(\Phi\)
+      restricts to a banded equivalence
+      \(\mathfrak E[v]\simeq\mathfrak E'[v']\), and
+      \[
+      \theta_*[\mathfrak E[v]]=[\mathfrak E'[v']].
+      \]
 \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Clause (i) is precisely the component-gerbe construction of
+\cite[III, Prop.~2.1.5.3]{Giraud1971}.  Concretely, \(v|_X\) is locally
+represented by an object, so \(\mathfrak E[v]\) is locally nonempty; two of
+its objects have the same component class and are therefore locally
+isomorphic.  Fullness preserves the automorphism sheaves and hence the band.
+
+The classification of abelian-banded gerbes identifies equivalence classes
+with \(H^2\), with the neutral gerbes representing zero
+\cite[Chap.~IV]{Giraud1971}.  On a site with terminal object \(a\), neutrality
+is exactly existence of an object over \(a\), proving (ii).  For (iii), the
+component compatibility makes \(\Phi\) restrict to the full component
+substacks.  Applying \(\Phi\) to local objects and overlap arrows applies
+\(\theta\) to their triple-overlap defect cocycle.  This is the standard
+naturality of Giraud classification under a banded equivalence
+\cite[Tag 06NY]{StacksProject}.
+\end{proof}
+
+Apply this package to the stackification
+\(\mathfrak L=a(\mathfrak P)\) of \Cref{sec:preliminaries}.  In view of
+\eqref{eq:stackification-components-core}, every
+\(v\in(aF)(a)\) determines the component gerbe
+\[
+ \mathfrak G_v:=\mathfrak L[v]
+\]
+and, when \(\mathfrak P\) is \(\mathscr A\)-banded, a class
+\[
+ \omega_v:=[\mathfrak G_v]\in H^2(\mathcal C,\mathscr A).
+\]
+On a Leray cover, choosing local objects and overlap arrows produces the
+usual Cech \(2\)-cocycle; changing either choice changes it by a coboundary.
+This is the local representative of the same Giraud class, not a second
+obstruction construction \cite{Breen2006,Moerdijk2002}.
+
+\subsection*{The standard cocycle in local coordinates}
+
+We spell out the preceding sentence because the realization theorem will use
+the same coordinates in the opposite direction.  Let
+\(\mathcal U=\{U_i\to a\}\) be a cover on which
+\(\mathfrak G_v\) has objects \(x_i\in\mathfrak G_v(U_i)\).  After refining
+the cover when necessary, choose isomorphisms
+\[
+ g_{ij}:x_i|_{U_{ij}}\longrightarrow x_j|_{U_{ij}},
+ \qquad
+ g_{ii}=1,\quad g_{ji}=g_{ij}^{-1}.
+\]
+On a triple overlap \(U_{ijk}\), the two arrows from \(x_i\) to \(x_k\)
+need not agree.  Their ratio is an automorphism of \(x_i\):
+\begin{equation}\label{eq:giraud-triple-defect}
+ c_{ijk}
+ :=g_{ik}^{-1}g_{jk}g_{ij}
+ \in\underline{\operatorname{Aut}}(x_i)(U_{ijk})
+ \cong\mathscr A(U_{ijk}).
+\end{equation}
+The last identification is the chosen banding.  We write the band
+additively.  Comparing the five composites around a quadruple overlap gives
+\begin{equation}\label{eq:giraud-cocycle-equation}
+ c_{jkl}-c_{ikl}+c_{ijl}-c_{ijk}=0.
+\end{equation}
+Thus \(c=(c_{ijk})\) is a Cech \(2\)-cocycle.
+
+There are two relevant changes of choice.  First, keep the local objects
+fixed and replace the overlap arrows by
+\[
+ g'_{ij}=b_{ij}\cdot g_{ij},
+ \qquad b_{ij}\in\mathscr A(U_{ij}).
+\]
+Because the band is abelian, substituting in
+\eqref{eq:giraud-triple-defect} gives
+\[
+ c'_{ijk}
+ =c_{ijk}+b_{jk}-b_{ik}+b_{ij}
+ =c_{ijk}+(\delta b)_{ijk}.
+\]
+Second, replace \(x_i\) by an isomorphic local object \(x'_i\) and choose
+arrows \(h_i:x_i\to x'_i\).  Transporting \(g_{ij}\) by the \(h_i\) gives
+overlap arrows for the new objects with the same defect under the band
+identification.  Any other choice of transported overlap arrows differs
+from these by a \(1\)-cochain and therefore changes the defect by a
+coboundary.  Refining the cover pulls the cocycle back.  The resulting
+class is consequently independent of all local choices in the Cech colimit,
+and the Leray comparison sends it to
+\([\mathfrak G_v]\in H^2(\mathcal C,\mathscr A)\).
+
+The neutral case is visible in the same coordinates.  A global object
+\(x\in\mathfrak G_v(a)\) restricts to local objects whose canonical overlap
+arrows have zero triple defect.  Conversely, if the defect of a chosen local
+system is a coboundary, modifying its overlap arrows by the corresponding
+\(1\)-cochain makes the defect zero.  Effective descent in the stack then
+glues the local objects to a global object.  This is the cocycle-level
+description of the neutrality equivalence in
+\Cref{prop:standard-component-gerbe-package}(ii); it is not a replacement
+for Giraud classification on a general site.
+
+Finally, if a banded equivalence has band map
+\(\theta:\mathscr A\to\mathscr A'\), it sends the chosen local objects and
+arrows to local objects and arrows whose defect is \(\theta(c_{ijk})\).
+This makes the naturality in
+\Cref{prop:standard-component-gerbe-package}(iii) literal on a common
+presentation.
+
+\begin{theorem}[Presheaf-to-component-gerbe comparison criterion]
+\label{thm:gerbe-null-semantics}
+Let \(F\) be separated on the slice over \(a\), and let
+\(\mathfrak P\) be an abelian-banded prestack lift whose stackification map
+is terminally essentially surjective.  Then
+\begin{equation}\label{eq:matching-gerbe-criterion}
+ \operatorname{MWA}(F,a)
+ \quad\Longleftrightarrow\quad
+ (aF)(a)\ne\varnothing
+ \ \text{and}\
+ \mathfrak G_v\text{ is non-neutral for every }v\in(aF)(a).
+\end{equation}
+Equivalently, every \(\omega_v\) is nonzero.  The dependencies are
+\[
+\begin{array}{c@{\quad\Longleftrightarrow\quad}c}
+ \operatorname{Match}(F,a)&(aF)(a)\ne\varnothing
+ \quad\text{(slice separatedness)},\\[2mm]
+ v\in(aF)(a)&\mathfrak G_v\text{ a component gerbe}
+ \quad\text{(Giraud III.2.1.5.3)},\\[2mm]
+ F(a)\ne\varnothing&\mathfrak L(a)\ne\varnothing
+ \quad\text{(terminal essential surjectivity)},\\[2mm]
+ \mathfrak G_v(a)\ne\varnothing&\mathfrak G_v\text{ neutral}
+ \quad\text{(Giraud classification)}.
+\end{array}
+\]
 \end{theorem}
 
 \begin{proof}
-Fix a sheafified global section
-\[
-v\in \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-Since $\mathfrak E_r$ is a stack in groupoids and $\mathfrak E_r[v]$ is a full substack, $\mathfrak E_r[v]$ is again a stack in groupoids.
-
-Let $U$ be an object of $\mathcal C_a$. The section
-\[
-v|_U\in \bigl(a_{p,s}F_{p,s}\bigr)(U)\cong \pi_0(\mathfrak E_r)(U)
-\]
-is, by definition of the sheaf of connected components, locally represented by objects of $\mathfrak E_r$. Hence there exists a cover
-\[
-\{U_i\to U\}
-\]
-and objects
-\[
-x_i\in \mathfrak E_r(U_i)
-\]
-with
-\[
-\epsilon_{r,U_i}([x_i])=v|_{U_i}.
-\]
-Therefore
-\[
-(\mathfrak E_r[v])(U_i)\neq\varnothing
-\]
-for every $i$, so $\mathfrak E_r[v]$ is locally nonempty.
-
-Now let
-\[
-x,y\in \mathfrak E_r[v](U).
-\]
-Then
-\[
-\epsilon_{r,U}([x])=\epsilon_{r,U}([y])=v|_U.
-\]
-Because $\epsilon_{r,U}$ is an isomorphism, the connected-component classes $[x]$ and $[y]$ in $\pi_0(\mathfrak E_r)(U)$ coincide. By the definition of $\pi_0(\mathfrak E_r)$, there exists a cover
-\[
-\{U_i\to U\}
-\]
-such that
-\[
-x|_{U_i}\cong y|_{U_i}
-\qquad
-(\forall i).
-\]
-Thus any two objects of $\mathfrak E_r[v](U)$ are locally isomorphic. The full substack $\mathfrak E_r[v]$ is therefore a gerbe \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. Since it is full inside the $\Band$-banded stack $\mathfrak E_r$, the automorphism sheaf of every object in $\mathfrak E_r[v]$ is still identified with $\Band$.
-
-The preceding sentence is the band-preservation lemma used in this
-argument: if \(P\) is \(\Band\)-banded and \(L=a(P)\), every object of \(L\)
-is locally in the essential image of \(P\), and the automorphism sheaf of
-that local representative is \(\Band\). Because automorphism presheaves are
-sheafified in the stackification and the band identifications are compatible
-with restriction, these local identifications descend and glue on overlaps.
-Consequently every object of \(L\), and every object of a full component
-substack, has automorphism sheaf locally identified with \(\Band\) in a way
-compatible with descent. This proves \textup{(i)}.
-
-Clause \textup{(i)} identifies $\mathfrak E_r[v]$ as a $\Band$-banded gerbe, so its Giraud class
-\[
-[\mathfrak E_r[v]]\in H^2(\mathcal C_a,\Band)
-\]
-is defined canonically \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. By the classification of banded gerbes, this class vanishes if and only if the gerbe is neutral. Since $a$ is the terminal object of the slice site $\mathcal C_a$, neutrality is equivalent to the existence of an object over $a$, namely
-\[
-\mathfrak E_r[v](a)\neq\varnothing.
-\]
-This proves \textup{(ii)}.
-
-Assume now that $\Phi$ is an equivalence as in \textup{(iii)}. The compatibility condition
-\[
-\epsilon'_r\circ\pi_0(\Phi)=\epsilon_r
-\]
-first fixes the component on which the equivalence is allowed to act: an object whose component is $v|_U$ is sent to an object whose component is again $v|_U$. Hence \Cref{lem:extension-equivalence-component-transport} gives a restricted equivalence
-\[
-\Phi_v:\mathfrak E_r[v]\to \mathfrak E'_r[v]
-\]
-of the two $v$-component gerbes. This equivalence is not merely an abstract equivalence of stacks: on every lift object $x$ the induced map
-\[
-\operatorname{Aut}_{\mathfrak E_r[v]}(x)\longrightarrow
-\operatorname{Aut}_{\mathfrak E'_r[v]}(\Phi_v x)
-\]
-is the band map $\theta:\Band\to\Band'$. Therefore the local-trivialization cocycle defining the Giraud class of $\mathfrak E_r[v]$ is transported termwise by $\theta$ to the cocycle defining the class of $\mathfrak E'_r[v]$. By the band-functorial classification recalled in \Cref{lem:giraud-class-transport},
-\[
-\theta_*\bigl([\mathfrak E_r[v]]\bigr)=[\mathfrak E'_r[v]]
-\]
-in $H^2(\mathcal C_a,\Band')$. This is exactly the displayed identity in \textup{(iii)}.
-
-For \textup{(iv)}, let $\mathfrak E_r=\mathfrak L_r=a(\mathfrak P_r)$. By \suppresult{Components of the stackification}, the stackification carries a canonical identification
-\[
-\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a},
-\]
-so $\mathfrak L_r$ is a banded stack lift of the component sheaf. The $v$-component substack defined above is then exactly the component gerbe $\mathfrak G_v$ of \Cref{def:component-gerbes}. On every cover
-\[
-\mathcal U\in \Cov_v^{\mathrm{acyc}}(a),
-\]
-\Cref{thm:cech-component-gerbe-obstruction} constructs the \v{C}ech class of this gerbe. The filtered colimit of those \v{C}ech classes is, by the standard classification of banded gerbes, the Giraud class of $\mathfrak G_v$, and hypothesis \textup{(H4)} identifies that colimit with the derived cohomology group
-\[
-H^2(\mathcal C_a,\Band).
-\]
-By \Cref{def:cech-gluing-obstruction}, the image of that same filtered system is precisely $\omega_v$. Therefore
-\[
-\delta_{\mathfrak E_r}(v)=[\mathfrak G_v]=\omega_v.
-\]
+By \Cref{prop:finite-site-semantic-interface}(i), matching is equivalent to
+\((aF)(a)\ne\varnothing\).  By clause (ii) of that proposition and terminal
+essential surjectivity, \(F(a)\ne\varnothing\) is equivalent to
+\(\mathfrak L(a)\ne\varnothing\).  The latter holds exactly when one of the
+full components \(\mathfrak G_v\) contains an object over \(a\).  By
+\Cref{prop:standard-component-gerbe-package}(ii), this is equivalent to
+neutrality of at least one component gerbe.  Negating that statement while
+retaining nonemptiness of \((aF)(a)\) proves
+\eqref{eq:matching-gerbe-criterion}; the cohomological form follows from the
+same standard package.
 \end{proof}
 
-\begin{theorem}[Supporting component gerbes of global component sections]\label{thm:component-gerbe-decomposition}
-In the pullback-based setting of \Cref{def:component-gerbes}, and using only the banded groupoid lift and component data fixed there, every global component section $v\in \Vis_{p,s}(r)$ determines a full substack $\mathfrak G_v\subseteq \mathfrak L_r$ that is a banded $\Band$-gerbe over $\mathcal C_{p,s}/a$. In particular, neither essential surjectivity on the terminal fibre over $a$ nor the derived comparison hypothesis \textup{(H4)} is used here.
-\end{theorem}
+The criterion is a site-theoretic reformulation of the meet-semilattice
+comparison in the companion manuscript
+\cite[Theorem~5.20]{MaZhang2026ConditionalGluingFailure}; it is not an
+independent gerbe-classification theorem.  Its role here is to connect the
+strict presheaf predicate to the standard component-gerbe construction on a
+pullback site.
 
-\begin{proof}
-By \suppresult{Components of the stackification}, the stackification
-\[
-\mathfrak E_r:=\mathfrak L_r
-\]
-is a $\Band$-banded stack lift of the component sheaf of
-$a_{p,s}F_{p,s}|_{\mathcal C_a}$. The global component section $v$ is a section of
-\[
-\pi_0(\mathfrak L_r)(a)\cong (a_{p,s}F_{p,s})(a),
-\]
-and the full substack
-\[
-\mathfrak G_v(U)=
-\{x\in\mathfrak L_r(U)\mid [x]\ \text{restricts to}\ v|_U\}
-\]
-is therefore exactly the $v$-component substack
-$\mathfrak E_r[v]$ of \Cref{def:banded-stack-lift}.
+We now give the representative-rigidity argument in full.  This result
+isolates a restriction on attempts to realize matching without amalgamation
+by an excessively strict lift.
 
-We recall why this is a gerbe. Because $\mathfrak L_r$ is a stack in
-groupoids, every descent datum for objects whose component lies over
-$v$ glues to an object whose component still lies over $v$; hence
-$\mathfrak G_v$ is a full substack. Local nonemptiness follows from the
-definition of a global component section as a section of the sheaf of connected
-components: after passing to a cover of any object $U$, the section
-$v|_U$ is represented by objects of $\mathfrak L_r$. Local connectedness
-is the local form of equality in the component sheaf: if two objects of
-$\mathfrak G_v(U)$ have component $v|_U$, then they become isomorphic
-after a cover of $U$. Fullness is built into the definition of
-$\mathfrak G_v$, so no morphisms between objects in the component are
-discarded. Finally, for every object $x$ of $\mathfrak G_v(U)$, the
-automorphism sheaf of $x$ inside $\mathfrak G_v$ is the same as its
-automorphism sheaf inside $\mathfrak L_r$, and this sheaf is identified
-with $\Band|_{\mathcal C_a/U}$ by the banding of the groupoid lift
-prestack and its stackification. Thus $\mathfrak G_v$ is a
-$\Band$-banded gerbe.
-
-This argument uses only the banded groupoid lift, its stackification, and
-the component identification. Essential surjectivity on the terminal fibre concerns
-whether terminal stack objects come from terminal prestack objects, and
-\textup{(H4)} concerns promotion of cover-level \v{C}ech classes to
-derived cohomology; neither condition enters the gerbe construction
-itself.
-\end{proof}
-
-\begin{theorem}[\v{C}ech obstruction of a component gerbe on an acyclic cover]\label{thm:cech-component-gerbe-obstruction}
-Assume that $\mathfrak G_v$ is a banded component gerbe with band $\Band$ in the sense of \Cref{def:component-gerbes}. Using only this gerbe and a single acyclic cover of $a$, let
-\[
-\mathcal U=\{U_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
-\]
-be any cover whose \v{C}ech nerve exists in $\mathcal C_{p,s}/a$, and write
-\[
-U_{i_0\cdots i_n}
-\]
-for the corresponding simplices. Assume that the component gerbe is locally nonempty on the cover, so that objects
-\[
-x_i\in \mathfrak G_v(U_i)
-\]
-exist for all $i$, and assume
-\[
-H^1(U_{i_0\cdots i_n},\Band)=0
-\]
-for every nonempty intersection used below, including all members, pairwise overlaps, triple overlaps, and quadruple overlaps appearing in the descent calculation.
+\begin{theorem}[Terminal rigidity for representative-rigid lifts]
+\label{thm:canonical-lift-rigidity}
+Let \(F\) be separated on the slice over \(a\), and let \(\mathfrak P\) be a
+representative-rigid \(\mathscr A\)-banded prestack lift of \(F\).  Write
+\(u:F\to aF\) and \(\iota:\mathfrak P\to\mathfrak L=a(\mathfrak P)\).
 Then:
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every pair $(i,j)$ there exists an isomorphism
-\[
-\theta_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim} x_j|_{U_{ij}};
-\]
-\item on each triple overlap $U_{ijk}$, the element
-\[
-c_{ijk}:=\theta_{ik}^{-1}|_{U_{ijk}}\circ \theta_{jk}|_{U_{ijk}}\circ \theta_{ij}|_{U_{ijk}}
-\in \Band(U_{ijk})
-\]
-defines a \v{C}ech $2$-cocycle $c=(c_{ijk})\in \check Z^2(\mathcal U,\Band)$;
-\item the class $[c]\in \check H^2(\mathcal U,\Band)$ depends only on the component gerbe $\mathfrak G_v$ and the chosen cover: changing the local lift objects or the comparison isomorphisms changes $c$ by a \v{C}ech coboundary, and refinements of acyclic covers pull this class back functorially;
-\item the class $[c]$ vanishes if and only if the component gerbe $\mathfrak G_v$ is neutral over $a$.
+\item terminal essential surjectivity of \(\iota\) implies that
+      \(u_a:F(a)\to(aF)(a)\) is surjective;
+\item if \(H^1(\mathcal C,\mathscr A)=0\), surjectivity of \(u_a\) implies
+      terminal essential surjectivity of \(\iota\).
 \end{enumerate}
+Under the same \(H^1\)-vanishing hypothesis, the following are equivalent:
+\begin{enumerate}[label=(\alph*),nosep]
+\item \(\iota\) is terminally essentially surjective;
+\item \(u_a\) is bijective;
+\item every strict matching family on every cover of \(a\) has a unique
+      amalgamation in \(F(a)\).
+\end{enumerate}
+Strict pullback stability of the selected representatives is used in
+\textup{(i)}.  The converse \textup{(ii)} uses only the standard
+\(\mathscr A\)-torsor of isomorphisms and its \(H^1\)-class.
 \end{theorem}
 
 \begin{proof}
-By local nonemptiness, fix objects $x_i\in \mathfrak G_v(U_i)$. For every pair $(i,j)$, the sheaf
-\[
-\mathrm{Isom}(x_i|_{U_{ij}},x_j|_{U_{ij}})
-\]
-is a $\Band|_{U_{ij}}$-torsor. The vanishing
-\[
-H^1(U_{ij},\Band)=0
-\]
-therefore trivializes this torsor \cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Sec.~11]{StacksProject}, so we may choose a section
-\[
-\theta_{ij}:x_i|_{U_{ij}}\xrightarrow{\sim} x_j|_{U_{ij}}.
-\]
-This proves \textup{(i)}.
+We separate the proof into the forward descent construction, the converse
+torsor argument, and the comparison with strict amalgamation.
 
-On a triple overlap $U_{ijk}$, the composite
+\medskip
+\noindent\emph{Forward descent construction.}
+Let
+\(\xi\in(aF)(a)=\pi_0(\mathfrak L)(a)\).  By the proof of
+\Cref{prop:finite-site-semantic-interface}(i), there is a cover
+\(\{U_i\to a\}\) and a strict matching family \(t_i\in F(U_i)\)
+representing \(\xi\).  Representative-rigidity supplies objects
 \[
-c_{ijk}:=\theta_{ik}^{-1}|_{U_{ijk}}\circ \theta_{jk}|_{U_{ijk}}\circ \theta_{ij}|_{U_{ijk}}
+ y_i=s_{U_i}(t_i)\in\mathfrak P(U_i).
 \]
-is an automorphism of $x_i|_{U_{ijk}}$ and hence an element of $\Band(U_{ijk})$. On a quadruple overlap $U_{ijkl}$ one computes
+On \(U_{ij}\), strict pullback stability gives literal equalities
 \[
-c_{jkl}\,c_{ijl}
-=
-\theta_{jl}^{-1}\theta_{kl}\theta_{jk}\,\theta_{il}^{-1}\theta_{jl}\theta_{ij}
-=
-\theta_{il}^{-1}\theta_{kl}\theta_{ik}^{-1}\theta_{ik}\theta_{jk}\theta_{ij}
-=
-c_{ikl}\,c_{ijk},
+ y_i|_{U_{ij}}
+ =s_{U_{ij}}(t_i|_{U_{ij}})
+ =s_{U_{ij}}(t_j|_{U_{ij}})
+ =y_j|_{U_{ij}}.
 \]
-where all restrictions to $U_{ijkl}$ are suppressed from the notation. This is exactly the \v{C}ech cocycle identity $\delta c=0$, so $c=(c_{ijk})$ lies in $\check Z^2(\mathcal U,\Band)$. This proves \textup{(ii)}.
+The identity arrows of these common objects are therefore legitimate
+descent arrows.  Their triple composites are identities on the nose, so
+stack descent glues the \(y_i\) to an object
+\(x_\xi\in\mathfrak L(a)\) with component class \(\xi\).  This is the sole
+place where strict pullback stability is used.  With merely
+pseudofunctorial representatives, cartesian comparison arrows would enter
+and their coherence would have to be controlled separately.
 
-For \textup{(iii)}, first keep the objects $x_i$ fixed and replace $\theta_{ij}$ by another choice $\theta'_{ij}$. Since $\mathrm{Isom}(x_i|_{U_{ij}},x_j|_{U_{ij}})$ is a $\Band|_{U_{ij}}$-torsor, there exist unique sections $h_{ij}\in \Band(U_{ij})$ with
+The descent datum just constructed is stronger than the datum provided by
+equality of component classes alone.  Equality
+\([y_i|_{U_{ij}}]=[y_j|_{U_{ij}}]\) would only guarantee local
+isomorphisms after further covers.  Equation
+\eqref{eq:strict-representative-pullback} instead gives the same object on
+the overlap.  Hence the chosen descent arrow is the identity, not a selected
+arrow in a nontrivial Isom torsor.  On \(U_{ijk}\) the descent equation is
 \[
-\theta'_{ij}=\theta_{ij}\circ h_{ij}^{-1}.
+ 1_{y_k}\circ1_{y_j}=1_{y_i}
 \]
-A direct calculation on triple overlaps gives
-\[
-c'_{ijk}=h_{ik}\,c_{ijk}\,h_{jk}^{-1}h_{ij}^{-1},
-\]
-which is the multiplicative form of the statement that $c'$ and $c$ differ by the coboundary $\delta h$.
+after the literal identifications of the three restrictions.  No
+\(\mathscr A\)-valued \(2\)-cocycle remains to be killed.  This explains
+exactly why strict pullback stability, rather than a componentwise choice of
+objects, is the forward hypothesis.
 
-Next replace the objects $x_i$ by another family $x_i'\in \mathfrak G_v(U_i)$. Since $x_i$ and $x_i'$ lie in the same gerbe over $U_i$, the sheaf $\mathrm{Isom}(x_i,x_i')$ is a $\Band|_{U_i}$-torsor. The vanishing
+Assume terminal essential surjectivity.  There is
+\(y\in\mathfrak P(a)\) and an isomorphism
+\(\iota(y)\cong x_\xi\).  Let \(t\in F(a)\) be the component of \(y\).
+The component map of \(\iota\) is \(u\), hence
 \[
-H^1(U_i,\Band)=0
+ u_a(t)=[\iota(y)]=[x_\xi]=\xi.
 \]
-trivializes it, so choose isomorphisms
-\[
-\psi_i:x_i\xrightarrow{\sim} x_i'.
-\]
-Define
-\[
-\theta_{ij}':=\psi_j|_{U_{ij}}\circ \theta_{ij}\circ \psi_i^{-1}|_{U_{ij}}.
-\]
-Then the associated cocycle satisfies
-\[
-c'_{ijk}
-=
-\psi_i|_{U_{ijk}}\,c_{ijk}\,\psi_i^{-1}|_{U_{ijk}}
-=
-c_{ijk},
-\]
-under the band identification $\underline{\mathrm{Aut}}(x_i)\cong \Band|_{U_i}$. Thus changing local lift objects changes the cocycle only by the preliminary freedom in the choice of the $\psi_i$, hence only by a coboundary. If
-\[
-\lambda:\mathcal V\to\mathcal U
-\]
-is a refinement by another cover $\mathcal V\in\Cov_{p,s}(a)$ whose \v{C}ech nerve exists and whose relevant intersections satisfy the same $H^1$-vanishing hypothesis, then the same construction on $\mathcal V$ uses the pulled-back objects and isomorphisms, so the resulting cocycle is exactly $\lambda^*(c)$. Therefore the induced cohomology class is refinement compatible.
+Since \(\xi\) was arbitrary, \(u_a\) is surjective.  This proves (i).
 
-For \textup{(iv)}, suppose first that $\mathfrak G_v$ is neutral and choose a global object $x\in \mathfrak G_v(a)$. For each $i$, the sheaf $\mathrm{Isom}(x|_{U_i},x_i)$ is a $\Band|_{U_i}$-torsor and therefore trivial because $H^1(U_i,\Band)=0$. Choose
+\medskip
+\noindent\emph{The converse Isom-torsor argument.}
+For (ii), assume \(u_a\) is surjective and take any
+\(x\in\mathfrak L(a)\).  Choose \(t\in F(a)\) with
+\(u_a(t)=[x]\), and put \(y=s_a(t)\).  The sheaf
 \[
-\psi_i:x|_{U_i}\xrightarrow{\sim} x_i.
+ \mathcal I_{y,x}:=
+ \underline{\operatorname{Isom}}_{\mathfrak L}(\iota(y),x)
 \]
-If we set
+is locally nonempty because the two objects have the same component class.
+Composition makes it a simply transitive torsor under
+\(\underline{\operatorname{Aut}}(\iota(y))\cong\mathscr A\).  This is the
+usual Isom-torsor of a banded stack
+\cite[Chap.~III]{MacLaneMoerdijk1994}, \cite[Tag 04TU]{StacksProject}.
+More explicitly, choose a cover \(\{V_j\to a\}\) and isomorphisms
 \[
-\theta_{ij}:=\psi_j|_{U_{ij}}\circ \psi_i^{-1}|_{U_{ij}},
+ h_j:\iota(y)|_{V_j}\xrightarrow{\sim}x|_{V_j}.
 \]
-then the resulting cocycle is identically zero, so $[c]=0$.
+On \(V_{jk}\), the ratio
+\[
+ d_{jk}=h_k^{-1}h_j
+\]
+is an automorphism of \(\iota(y)|_{V_{jk}}\), hence a section of
+\(\mathscr A(V_{jk})\).  The equality of threefold composites gives
+\[
+ d_{jk}+d_{kl}=d_{jl}
+\]
+on \(V_{jkl}\), so \(d=(d_{jk})\) is a Cech \(1\)-cocycle representing
+the Isom torsor.  If its class vanishes, there are sections
+\(e_j\in\mathscr A(V_j)\) with \(d_{jk}=e_k-e_j\).  Replacing
+\(h_j\) by \(h_j\cdot e_j\) makes the local isomorphisms agree on overlaps,
+and the sheaf condition for Isom glues them to a global isomorphism
+\(\iota(y)\cong x\).
 
-Conversely, assume $[c]=0$. Then there is a $1$-cochain $h=(h_{ij})$ with
-\[
-c=\delta h.
-\]
-Replace $\theta_{ij}$ by
-\[
-\theta_{ij}':=\theta_{ij}\circ h_{ij}^{-1}.
-\]
-The defining equation $c=\delta h$ is exactly the statement that the $\theta_{ij}'$ satisfy the strict cocycle condition on triple overlaps. Hence $(x_i,\theta_{ij}')$ is a descent datum for the stack $\mathfrak G_v$, and since $\mathfrak G_v$ is a stack in groupoids, that descent datum is effective. The resulting glued object of $\mathfrak G_v(a)$ is a global object, so the gerbe is neutral.
+The hypothesis \(H^1(\mathcal C,\mathscr A)=0\) makes every such torsor
+trivial, so \(\mathcal I_{y,x}\) has a global section.  Thus
+\(\iota(y)\cong x\), proving terminal essential surjectivity.
+
+\medskip
+\noindent\emph{Comparison with strict amalgamation.}
+It remains to compare (b) and (c).  Slice separatedness implies that \(u_a\)
+is injective: equality after sheafification is witnessed after a cover, and
+separatedness at \(a\) returns equality in \(F(a)\).  Thus surjectivity and
+bijectivity of \(u_a\) are equivalent.
+
+Suppose \(u_a\) is bijective and let \((t_i)\) be a strict matching family
+on a cover of \(a\).  It glues in \(aF\) to \(\xi\); choose
+\(t\in F(a)\) with \(u_a(t)=\xi\).  Over each \(U_i\), the sections
+\(t|_{U_i}\) and \(t_i\) become equal in \(aF(U_i)\).  Such equality is
+witnessed after a further cover of \(U_i\), and separatedness at that object
+of the slice gives \(t|_{U_i}=t_i\).  Hence \(t\) is an amalgamation, unique
+by separatedness at \(a\).
+
+Conversely, assume every matching family on a cover of \(a\) has a unique
+amalgamation.  Given \(\xi\in(aF)(a)\), the plus--plus representation and
+slice separatedness used in
+\Cref{prop:finite-site-semantic-interface}(i) produce a strict matching
+family representing \(\xi\).  Its amalgamation \(t\in F(a)\) satisfies
+\(u_a(t)=\xi\), so \(u_a\) is surjective and hence bijective.  Combining
+this equivalence with (i) and (ii) proves (a)--(c).
+
+The roles of the hypotheses are now separate.  Slice separatedness upgrades
+locally witnessed equality of presheaf sections to strict equality and gives
+uniqueness of amalgamations.  Representative-rigidity turns a strict
+matching family into identity-valued object descent data.  Terminal
+essential surjectivity is used only in the forward passage from a stack
+object to a prestack object.  Finally,
+\(H^1(\mathcal C,\mathscr A)=0\) is used only to trivialize the Isom torsor
+in the converse.  None of these steps supplies a new classification of
+gerbes.
 \end{proof}
 
-\begin{lemma}[\v{C}ech calculus for component gerbes]\label{lem:cech-branch-gerbe-calculus}
-In the setting of \Cref{thm:cech-component-gerbe-obstruction}, the following four operations have the indicated effects on the cocycle
-\[
-c_{ijk}:=\theta_{ik}^{-1}\theta_{jk}\theta_{ij}.
-\]
-\begin{enumerate}[label=(\roman*),nosep]
-\item If the local lift objects $x_i$ are fixed and $\theta'_{ij}=\theta_{ij}\circ h_{ij}^{-1}$ for a $1$-cochain $h=(h_{ij})$ with values in $\Band$, then the new cocycle is
-\[
-c'_{ijk}=h_{ik}\,c_{ijk}\,h_{jk}^{-1}h_{ij}^{-1};
-\]
-in additive notation, $c'-c=\delta h$.
-\item If local lift objects $x_i$ are replaced by $x_i'$ and $\psi_i:x_i\xrightarrow{\sim}x_i'$ are chosen, then
-\[
-\theta'_{ij}:=\psi_j\theta_{ij}\psi_i^{-1}
-\]
-produces the same cocycle under the band identifications. Changing the $\psi_i$ modifies the result only by a coboundary of the kind in \textup{(i)}.
-\item If $\lambda:\mathcal V\to\mathcal U$ is a refinement satisfying the same acyclicity hypotheses, the cocycle constructed from the pulled-back objects and isomorphisms on $\mathcal V$ is $\lambda^*c$.
-\item The class $[c]$ is zero if and only if the descent datum may be adjusted so that the comparison isomorphisms satisfy the strict cocycle condition; by effective descent for the stack $\mathfrak G_v$, this is equivalent to a global object of $\mathfrak G_v(a)$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-For \textup{(i)}, the Isom sheaf on $U_{ij}$ is a $\Band$-torsor, so the ratio between $\theta_{ij}$ and $\theta'_{ij}$ is the unique element $h_{ij}^{-1}\in\Band(U_{ij})$ with
-\[
-\theta'_{ij}=\theta_{ij}\circ h_{ij}^{-1}.
-\]
-Substituting these three identities in
-\[
-c'_{ijk}=(\theta'_{ik})^{-1}\theta'_{jk}\theta'_{ij}
-\]
-and using that the band is abelian gives
-\[
-c'_{ijk}=h_{ik}\,c_{ijk}\,h_{jk}^{-1}h_{ij}^{-1}.
-\]
-This is precisely the multiplicative Cech coboundary formula.
-
-For \textup{(ii)}, substituting
-\[
-\theta'_{ij}=\psi_j\theta_{ij}\psi_i^{-1}
-\]
-into the triple product gives
-\[
-(\theta'_{ik})^{-1}\theta'_{jk}\theta'_{ij}
-=
-\psi_i\theta_{ik}^{-1}\theta_{jk}\theta_{ij}\psi_i^{-1}.
-\]
-Under the band identification
-\[
-\underline{\mathrm{Aut}}(x_i)\cong\Band|_{U_i}\cong
-\underline{\mathrm{Aut}}(x_i'),
-\]
-conjugation by $\psi_i$ is the identity on $\Band$. If the isomorphisms $\psi_i$ are changed, the new choices differ from the old ones by a $0$-cochain in the automorphism sheaves, and the resulting comparison isomorphisms differ from the displayed $\theta'_{ij}$ by the coboundary described in \textup{(i)}.
-
-For \textup{(iii)}, a refinement map $\lambda$ sends each member of $\mathcal V$ to one member of $\mathcal U$. Pulling back the objects $x_i$ and maps $\theta_{ij}$ along these assignments gives on each triple overlap of $\mathcal V$ exactly the restriction of $c_{\lambda(i)\lambda(j)\lambda(k)}$. This is the usual pullback cocycle $\lambda^*c$.
-
-For \textup{(iv)}, if $[c]=0$, choose $h$ with $c=\delta h$ and replace $\theta_{ij}$ by $\theta_{ij}\circ h_{ij}^{-1}$. By \textup{(i)} the new cocycle is zero, which says exactly that the modified $\theta_{ij}$ satisfy the strict descent condition on triple overlaps. Since $\mathfrak G_v$ is a stack, this descent datum is effective and glues to an object of $\mathfrak G_v(a)$. Conversely, a global object $x\in\mathfrak G_v(a)$ and local isomorphisms $x|_{U_i}\cong x_i$ produce comparison maps whose triple defect is zero; \textup{(ii)} and \textup{(i)} then show that the original cocycle class is zero.
-\end{proof}
-
-\begin{proposition}[Derived component classes detect neutrality]\label{prop:derived-branch-classification}
-Assume \textup{(H1)}--\textup{(H4)}. For every global component section $v$,
-\[
-\omega_v=0\ \text{in}\ H^2(\mathcal C_a,\Band)
-\quad\Longleftrightarrow\quad
-\mathfrak G_v\ \text{is neutral}.
-\]
-\end{proposition}
-
-\begin{proof}
-By \Cref{def:cech-gluing-obstruction}, the derived class $\omega_v$ is the image of the refinement-compatible \v{C}ech classes supplied by \Cref{thm:cech-component-gerbe-obstruction}. The comparison isomorphism in \textup{(H4)} identifies this class with the standard Giraud class of the banded gerbe $\mathfrak G_v$. The vanishing of that derived class is equivalent to neutrality by the classification of banded gerbes by $H^2$ \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}.
-\end{proof}
-
-\begin{proposition}[Matching families versus global component sections]\label{prop:compsecs-vs-visible-branches}
-Assume that $r:\mathsf{Ref}_s$ is admissible at $p$, admits a banded groupoid lift in the sense of \suppresult{Banded groupoid lift and stackification}, and that $F_{p,s}|_{\mathcal C_a}$ is separated on the slice. Then global component sections detect the existence of matching families, without any terminal-fibre essential-surjectivity or derived-comparison hypothesis:
-\[
-\Vis_{p,s}(r)\neq\varnothing
-\quad\Longleftrightarrow\quad
-M,p\Vdash \CompSec_s(r).
-\]
-\end{proposition}
-
-\begin{proof}
-By \suppresult{Sheafified global sections as sections of the sheaf of connected components},
-\[
-\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
-\]
-The implication from strict existence of a matching family to
-nonemptiness of this sheafification is
-\suppresult{Existence of a matching family gives a sheafified section}. Conversely, a global component section gives
-an element of \((a_{p,s}F_{p,s})(a)\) by the same displayed
-identification. Separatedness on the slice is exactly the additional
-condition needed to choose a matching-family representative of that sheafified section: applying
-\suppresult{Sheafification characterizes existence of a matching family on separated slice sites} to
-\(F_{p,s}|_{\mathcal C_a}\) produces a cover of \(a\) and a strict
-matching family of \(F_{p,s}\)-sections on that cover. By
-clause \textup{(ii)} of \suppresult{Three existence levels}, this is
-\[
-M,p\Vdash\CompSec_s(r).
-\]
-\end{proof}
-
-\begin{lemma}[Terminal-fibre nonemptiness and neutrality]\label{lem:terminal-fibre-neutrality}
-Let $v\in \Vis_{p,s}(r)$. Then
-\[
-\mathfrak G_v(a)\neq\varnothing
-\quad\Longleftrightarrow\quad
-\mathfrak G_v\ \text{is neutral}.
-\]
-\leanverified{paper_gluing_failure_terminal_fibre_neutrality}
-\end{lemma}
-
-\begin{proof}
-By definition of the gerbe notion used in this paper, neutrality means the existence of a global object over $a$. Therefore it is exactly the same as $\mathfrak G_v(a)\neq\varnothing$.
-\end{proof}
-
-\begin{proposition}[Global sections versus neutral component gerbes]\label{prop:global-sections-vs-neutral-components}
-\leanverified{paper_gluing_failure_global_sections_vs_neutral_components}
-Assume that $r:\mathsf{Ref}_s$ is admissible at $p$, that it admits a banded groupoid lift in the sense of \suppresult{Banded groupoid lift and stackification}, and that this prestack is essentially surjective on the terminal fibre over $a$ in the sense of \suppresult{Essential surjectivity on the terminal fibre}. Then a global lift object exists exactly when some global component section has a global object:
-\[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-\exists v\in \Vis_{p,s}(r)\ \text{such that}\ \mathfrak G_v(a)\neq\varnothing.
-\]
-Equivalently, by \Cref{lem:terminal-fibre-neutrality}, a global lift object exists exactly when at least one global component section gerbe is neutral.
-\end{proposition}
-
-\begin{proof}
-From \suppresult{No new global objects at $a$}, $M,p\Vdash \Sec_s(r)$ iff $\mathfrak L_r(a)\neq\varnothing$.
-
-If $\mathfrak L_r(a)\neq\varnothing$, choose $x\in \mathfrak L_r(a)$ and let
-\[
-v=[x]\in \pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r).
-\]
-Then $x\in \mathfrak G_v(a)$, so $\mathfrak G_v(a)\neq\varnothing$.
-
-Conversely, if $\mathfrak G_v(a)\neq\varnothing$ for some global component section $v$, then $\mathfrak G_v(a)\subseteq \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
-\end{proof}
-
-\begin{theorem}[Component-gerbe criterion for matching without amalgamation]\label{thm:gerbe-null-semantics}
-Assume \textup{(H1)}--\textup{(H3)} for an admissible parameter $r:\mathsf{Ref}_s$ at $p$, and assume in addition that \(F_{p,s}|_{\mathcal C_a}\) is separated on the slice. Then matching without amalgamation is equivalent to the existence of at least one global component section and the non-neutrality of every component gerbe:
-\[
-M,p\Vdash \NoAmalg_s(r)
-\quad\Longleftrightarrow\quad
-\Vis_{p,s}(r)\neq\varnothing
-\ \text{and}\
-\mathfrak G_v\ \text{is non-neutral for every }v\in\Vis_{p,s}(r).
-\]
-If, in addition, \textup{(H4)} holds, then this is equivalently
-\[
-M,p\Vdash \NoAmalg_s(r)
-\quad\Longleftrightarrow\quad
-\Vis_{p,s}(r)\neq\varnothing
-\ \text{and}\
-\omega_v\neq 0\ \text{in }H^2(\mathcal C_a,\Band)
-\text{ for every }v\in\Vis_{p,s}(r).
-\]
-The companion theorem \cite[Theorem~5.20]{MaZhang2026ConditionalGluingFailure} is the meet-semilattice analogue of this pullback-site formulation.
-\end{theorem}
-
-\begin{proof}
-Because $r$ is admissible, the definition of matching without amalgamation gives
-\[
-M,p\Vdash \NoAmalg_s(r)
-\quad\Longleftrightarrow\quad
-M,p\Vdash \CompSec_s(r)\ \text{and}\ M,p\nVdash \Sec_s(r).
-\]
-By \Cref{prop:compsecs-vs-visible-branches}, the compatible-local clause is equivalent to
-\[
-\Vis_{p,s}(r)\neq\varnothing.
-\]
-By \Cref{prop:global-sections-vs-neutral-components}, using essential surjectivity on the terminal fibre over $a$ from \textup{(H3)}, the global-section clause is equivalent to the existence of a global component section $v$ with
-\[
-\mathfrak G_v(a)\neq\varnothing.
-\]
-By \Cref{lem:terminal-fibre-neutrality}, this is equivalent to the existence of a neutral component gerbe. Therefore
-\[
-M,p\nVdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-\mathfrak G_v\ \text{is non-neutral for every }v\in\Vis_{p,s}(r),
-\]
-provided the compatible-local clause has supplied at least one global component section. Combining these two equivalences proves the first displayed characterization.
-
-Assume now also \textup{(H4)}. For each global component section $v$, \Cref{prop:derived-branch-classification} gives
-\[
-\omega_v=0
-\quad\Longleftrightarrow\quad
-\mathfrak G_v\ \text{is neutral}.
-\]
-Thus non-neutrality of every component gerbe is equivalent to nonvanishing of every derived component class $\omega_v$, and the second displayed characterization follows.
-\end{proof}
+Consequently, on a slice with \(H^1(\mathcal C,\mathscr A)=0\), matching
+without amalgamation cannot coexist with both terminal essential
+surjectivity and a strictly pullback-stable representative choice.  This is
+a no-go statement for that rigid presentation of a lift; it is not a new
+general descent or gerbe-classification principle.
