@@ -16,19 +16,19 @@
 
 | 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | **r7** | 61 | TIER-3 / **强 TIER-3、临界 TIER-2** | **JFA** | `4e089669` |
+| **A2** `cayley_chebyshev` | r7 | 61 | TIER-3 / **强 TIER-3、临界 TIER-2** | **JFA** | `4e089669` |
 | **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 已收 |
 | **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | `7e5e1364` |
-| **A5** `finite_parts` | **r8** | 28 | TIER-3 / **上 TIER-3,ETDS 未坐实** | **DCDS** | `ab7635bb` |
-| **A6** `zeckendorf_fibers` | **r9** | 47 | TIER-3 | **JNT** | `fc58d3fa` |
-| **A7** `upper_fibers` | r6 | 23+32 | TIER-4 | **Fibonacci Quarterly** | 检验中 |
-| **A8** `detector_shells` | **r9** | 61 | TIER-4 | **Stochastic Models** | `a17939f4` |
-| **A9** `homological_visibility` | — | 94 | 待重估(表述重写中) | TAC / Logic and Analysis | — |
+| **A5** `finite_parts` | r8 | 28 | TIER-3 / **上 TIER-3,ETDS 未坐实** | **DCDS** | `ab7635bb` |
+| **A6** `zeckendorf_fibers` | r9 | **55** | TIER-3 | **JNT** | `fc58d3fa` |
+| **A7** `upper_fibers` | r6 | **26**+32 | TIER-4 | **Fibonacci Quarterly** | 已收 |
+| **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | `ad5ce98e` |
+| **A9** `homological_visibility` | — | 94 | 待重估(表述重写收尾中) | TAC / Logic and Analysis | — |
 
 
-> **TICK 4**：**新式提问已发出**（A2 r7、A5 r8、A6 r9）——问的是「给定已证内容与已建机器，这个邻域里真正够得着的最强定理是什么；文献里有没有有名字的公开问题可攻」，并在稿中附上**已试过并失败的方向及原因**，要求专家按（成功概率 × 档位影响）排序，且明说「够不到、原因是……」是有价值的回答。A8 r9 补发（`a17939f4`）。七篇全部在飞。A9 表述重写与 A6/A7 检验仍在跑。
->
-> ⚠️ **更正**：此前记 A9「无已知升档路径」属过度概括——只测了 AB 经验模型桥接一条杠杆（按次数失败：AMB 在相对 Čech $H^1$，本文在导出 $H^2$），未做广泛搜索。天花板判断待表述修复后由 Oracle 重估。
+
+> **TICK 5**：A6 r8 / A7 r6 检验轮已独立复核入库（A6 55 页 18 测试、A7 26 页 21 测试+566 子测试，均 exit 0 零未定义）。**A9 表述重写中断在半途**——定理环境 159=159 无损，但留下未闭合数学模式（`\item[Base object $a=[r]`）导致编译 exit 12，且改名只做了一半（`realization` 198→96、`slice` 133→119）。**半改名比不改更糟：同一对象出现两个名字。** 已派收尾 agent 修编译并完成改名。A8 两次 `extraction_failure`，第三次重发 `ad5ce98e`。
+
 
 
 
