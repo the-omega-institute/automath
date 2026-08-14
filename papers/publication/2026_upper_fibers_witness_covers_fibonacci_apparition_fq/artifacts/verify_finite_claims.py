@@ -213,6 +213,21 @@ def divisors_from_factorization(
     return tuple(sorted(divisors))
 
 
+@lru_cache(maxsize=None)
+def fibonacci_rank(q: int) -> int:
+    """Compute the least positive r with q | F_r by modular iteration."""
+    if q < 1:
+        raise ValueError("q must be positive")
+    if q == 1:
+        return 1
+    previous, current = 0, 1
+    for rank in range(1, q * q + 2):
+        previous, current = current, (previous + current) % q
+        if previous == 0:
+            return rank
+    raise AssertionError(f"Fibonacci state did not return modulo {q}")
+
+
 def alpha_for_fn_divisor(q: int, n: int) -> int:
     """Compute alpha(q), given q | F_n, by testing the divisors of n."""
     if q == 1:
@@ -859,6 +874,35 @@ def exact_rank_prime_count(rank: int) -> int:
     )
 
 
+@lru_cache(maxsize=None)
+def exact_rank_primes(rank: int) -> Tuple[int, ...]:
+    """Return the primes p with alpha(p)=rank."""
+    if rank < 1:
+        raise ValueError("rank must be positive")
+    return tuple(
+        sorted(
+            prime
+            for prime, _ in factorint_fibonacci(rank)
+            if alpha_for_fn_divisor(prime, rank) == rank
+        )
+    )
+
+
+def prime_inverse_ray_prefix(initial_rank: int, steps: int) -> Tuple[int, ...]:
+    """Choose the least exact-rank prime at each step of a finite reverse ray."""
+    if initial_rank < 1:
+        raise ValueError("initial_rank must be positive")
+    if steps < 0:
+        raise ValueError("steps must be nonnegative")
+    ray = [initial_rank]
+    for _ in range(steps):
+        fiber = exact_rank_primes(ray[-1])
+        if not fiber:
+            raise ValueError(f"no exact-rank prime over rank {ray[-1]}")
+        ray.append(fiber[0])
+    return tuple(ray)
+
+
 def fibotomic_error_bound(terms: int = 64) -> float:
     """Return a rigorous numerical upper bound for the Binet error constant."""
     if terms < 1:
@@ -895,15 +939,9 @@ def fibotomic_rank_entropy_data(rank: int) -> FibotomicRankEntropyData:
         for prime, exponent in fibotomic_exponents.items()
         if exponent
     )
-    exact_rank_primes = tuple(
-        sorted(
-            prime
-            for prime, _ in factorint_fibonacci(rank)
-            if alpha_for_fn_divisor(prime, rank) == rank
-        )
-    )
-    exact_rank_radical = math.prod(exact_rank_primes)
-    count = len(exact_rank_primes)
+    exact_rank_prime_values = exact_rank_primes(rank)
+    exact_rank_radical = math.prod(exact_rank_prime_values)
+    count = len(exact_rank_prime_values)
     half_count = count // 2
     entropy_lower_bound = (
         count * math.log(2.0 * rank / 3.0)
@@ -917,7 +955,7 @@ def fibotomic_rank_entropy_data(rank: int) -> FibotomicRankEntropyData:
     return FibotomicRankEntropyData(
         rank=rank,
         fibotomic_value=fibotomic_value,
-        exact_rank_primes=exact_rank_primes,
+        exact_rank_primes=exact_rank_prime_values,
         exact_rank_radical=exact_rank_radical,
         entropy_lower_bound=entropy_lower_bound,
         binet_error=math.log(fibotomic_value) - totient * math.log(golden_ratio),
@@ -1143,6 +1181,35 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
     connected_support_spectrum_checks = 0
     extremal_slice_checks = 0
     error_bound = fibotomic_error_bound()
+
+    empty_exact_rank_prime_fibers = tuple(
+        rank
+        for rank in range(3, scalable_max + 1)
+        if not exact_rank_primes(rank)
+    )
+    expected_empty_fibers = tuple(
+        rank for rank in (6, 12) if rank <= scalable_max
+    )
+    nonexceptional_exact_rank_checks = (
+        scalable_max - 2 - len(expected_empty_fibers)
+    )
+    if empty_exact_rank_prime_fibers != expected_empty_fibers:
+        failures.append(
+            "exact-rank prime fibers disagree with the classical exceptions: "
+            f"found {empty_exact_rank_prime_fibers}"
+        )
+    reverse_ray = prime_inverse_ray_prefix(7, 3)
+    if reverse_ray != (7, 13, 233, 139801) or tuple(
+        fibonacci_rank(prime) for prime in reverse_ray[1:]
+    ) != reverse_ray[:-1]:
+        failures.append("prime inverse-ray prefix above rank 7 failed")
+    exceptional_path = (7, 8, 6, 12)
+    if tuple(fibonacci_rank(value) for value in exceptional_path[:-1]) != (
+        8,
+        6,
+        12,
+    ):
+        failures.append("exceptional path 7 -> 8 -> 6 -> 12 failed")
 
     four_coordinate_summary = four_coordinate_orbit_summary()
     if not (
@@ -1552,6 +1619,14 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"{fibotomic_radical_checks}/{fibotomic_layers}",
         f"  Jarden a(10p) >= 2 checks: {jarden_checks}/{jarden_layers}",
         *ladder_separation_lines,
+        "",
+        "Prime inverse-dynamics checks:",
+        f"  Exact-rank prime existence on 3 <= d <= {scalable_max}: "
+        f"{nonexceptional_exact_rank_checks}/"
+        f"{nonexceptional_exact_rank_checks} nonexceptional ranks",
+        "  Exceptional empty prime fibers: ranks 6 and 12",
+        "  Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
+        "  Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12",
         "",
         "Corrected n=30 data:",
         f"  A(30) = {n30.a_count}",

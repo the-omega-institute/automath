@@ -14,11 +14,13 @@ from verify_finite_claims import (
     bicolored_graph_count,
     classify_support_three,
     connected_minimal_cover_count,
+    exact_rank_primes,
     exact_rank_prime_count,
     expected_connected_support_spectrum,
     expected_support_spectrum,
     extremal_support_product_count,
     factorint_fibonacci,
+    fibonacci_rank,
     fibotomic_error_bound,
     fibotomic_rank_entropy_data,
     four_coordinate_counterexample_data,
@@ -31,6 +33,7 @@ from verify_finite_claims import (
     omega_big,
     private_cover_lower_bound,
     private_cover_upper_bound,
+    prime_inverse_ray_prefix,
     rank_window_deaggregation_data,
     rank_pure_sector,
     run_battery,
@@ -45,6 +48,23 @@ from verify_finite_claims import (
 
 
 class FiniteClaimTests(unittest.TestCase):
+    def test_exact_rank_prime_existence_and_inverse_ray(self):
+        missing = tuple(
+            rank for rank in range(3, 211) if not exact_rank_primes(rank)
+        )
+        self.assertEqual(missing, (6, 12))
+
+        ray = prime_inverse_ray_prefix(7, 3)
+        self.assertEqual(ray, (7, 13, 233, 139801))
+        self.assertEqual(
+            tuple(fibonacci_rank(prime) for prime in ray[1:]),
+            ray[:-1],
+        )
+        self.assertEqual(
+            tuple(fibonacci_rank(value) for value in (7, 8, 6)),
+            (8, 6, 12),
+        )
+
     def test_four_coordinate_witness_kernel_orbits(self):
         summary = four_coordinate_orbit_summary()
         self.assertTrue(summary.claimed_representatives_match)
@@ -405,6 +425,17 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Fibotomic rank-entropy inequalities: 28/28", report)
         self.assertIn("Fibotomic exact-rank radical divisibilities: 28/28", report)
         self.assertIn("Jarden a(10p) >= 2 checks: 0/0", report)
+        self.assertIn(
+            "Exact-rank prime existence on 3 <= d <= 30: 26/26 "
+            "nonexceptional ranks",
+            report,
+        )
+        self.assertIn("Exceptional empty prime fibers: ranks 6 and 12", report)
+        self.assertIn(
+            "Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
+            report,
+        )
+        self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
         self.assertNotIn("Deepening Delta", report)

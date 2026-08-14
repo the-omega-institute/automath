@@ -25,7 +25,9 @@ multiplies back to the stated Fibonacci number.
   weighted rank-pure product membership and the strict ladder example at
   `n=91`, refined
   private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
-  radical checks, the finite Jarden consequence, environment reporting, and
+  radical checks, the finite Jarden consequence, exact-rank prime existence
+  through rank 210, a prime inverse-ray prefix, the exceptional path to the
+  fixed point 12, environment reporting, and
   factorization-archive generation and validation.
 - `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
   finite bounds, archive round trip, and report contents.
@@ -90,7 +92,12 @@ for the five eligible prime values with `10p <= 210`. In addition, it extracts
 the positive-coordinate rank hypergraph of every minimal generator, verifies
 the total and connected support spectra on all 208 layers, and checks that the
 top-support slice has the product cardinality of its singleton diagonal atomic
-families. These finite checks do not resolve the
+families. It confirms that the only empty exact-rank prime fibers on
+`3 <= d <= 210` are `d=6,12`, verifies
+`7 <- 13 <- 233 <- 139801`, and checks `7 -> 8 -> 6 -> 12` by direct modular
+rank computation. These finite checks support, but do not prove, the infinite
+inverse-ray theorem; infinitude uses the classical exact-rank existence
+theorem. These finite checks do not resolve the
 asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
 connected and disconnected arithmetic sectors without those hypotheses.
 

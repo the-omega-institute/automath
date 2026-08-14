@@ -134,3 +134,45 @@ converse, but they do not supply a Tier-2 arithmetic theorem. Without a named
 problem solution, a realizable sharpness construction, or exact-rank
 dispersion, the honest ceiling remains Tier 3 (with a plausible specialist
 number-theory/combinatorics venue), not JFA/ETDS/Transactions/Math. Comp.
+
+## 6. FitzGibbons--Javaheri--Miller--Verga inverse-dynamics problems
+
+Checked 2026-08-15 against the four-author final manuscript of M.
+FitzGibbons, M. Javaheri, S. J. Miller, and A. Verga, "Dynamics of the
+Fibonacci Order of Appearance Map," *The Fibonacci Quarterly* (published
+online 31 December 2025), DOI `10.1080/00150517.2025.2515497`. The author
+manuscript is dated 18 April 2025. Its first unnumbered problem asks:
+
+> "Is it true that for every \(k\geq1\) there exist infinitely many
+> relatively prime integers whose fixed point order is \(k\)?"
+
+After Theorem 3.3, the second unnumbered problem is stated as:
+
+> "One conjectures that \(\Omega_x\) contains infinitely many relatively
+> prime elements for every fixed point \(x>5\)."
+
+The earlier arXiv version `arXiv:2309.14501v1` has three authors and does not
+contain these formulations, so it is not the source used for the wording.
+The constructions in the published manuscript prove infinitude using
+multiples of a fixed seed or of the fixed point; they do not produce an
+infinite pairwise-coprime family.
+
+The arXiv Atom API searches for `"fixed point order" AND Fibonacci`,
+`"order of appearance" AND "relatively prime"`, Fibonacci rank-map
+preimages, and self-Fibonacci divisors located no resolution. Crossref
+reported zero references to the DOI; OpenAlex reported `cited_by_count = 0`;
+Semantic Scholar reported `citationCount = 0` and an empty citations result;
+and the zbMATH search for "order of appearance map" found only the earlier
+arXiv record. Thus no published resolution was located through 15 August
+2026. This database result is a bounded priority check, not a proof that no
+unindexed resolution exists.
+
+Theorem `thm:prime-inverse-rays` and Corollaries `cor:prime-basins` and
+`cor:prime-fixed-order` give infinitely many distinct primes in the two
+families. Distinct primes are pairwise relatively prime, so the result
+strictly strengthens both printed statements rather than changing their
+quantifiers. The only manuscript input used is the unconditional exact-rank
+prime existence theorem for every rank \(d\geq3\), \(d\notin\{6,12\}\),
+plus the published fixed-point classification and termination of all rank-map
+orbits. The exceptional basin is reached through
+\(7\mapsto8\mapsto6\mapsto12\).

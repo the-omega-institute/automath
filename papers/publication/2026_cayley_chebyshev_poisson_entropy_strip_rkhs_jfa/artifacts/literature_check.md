@@ -277,8 +277,15 @@ The arXiv API was queried directly.  The searches “stable kernel” AND
 “Gaussian quadrature” AND “stable” AND “entropy” returned zero records.
 The search “moment matched” AND “relative entropy” returned three records:
 arXiv:1801.01740 (micro--macro acceleration), arXiv:2005.00738 (smoothed
-Wasserstein distances), and arXiv:1706.00050 (cellular-network interference);
-none is in the theorem's regime.  The broader “stable law” AND
+Wasserstein distances), and arXiv:1706.00050 (cellular-network interference).
+The initial audit incorrectly dismissed arXiv:2005.00738.  Chen--Niles-Weed,
+Theorem 2.5, is the direct Gaussian precedent: under sub-Gaussian tails it
+proves the exact KL coefficient in every dimension and at every first
+unmatched order.  With their heat time \(t=s^2\), their coefficient is exactly
+the Gaussian/Hermite specialization of the quadratic form in the present
+theorem.  It does not cover \(0<\alpha<2\), the critical finite-moment
+exponent, endpoint sufficiency, or uniform moment-class sharpness.  The
+broader “stable law” AND
 “relative entropy” query returned Bobkov--Chistyakov--Goetze
 (arXiv:1104.4360), Johnson (arXiv:1310.2045), Toscani
 (arXiv:1512.05874), and Cook (arXiv:2504.13423).  Their abstracts and stated
@@ -302,6 +309,7 @@ arXiv:2109.14193.  They establish moment-subtracted stable heat-kernel
 expansions, but the inspected theorem statements do not give the critical
 matched-quotient remainder, the two-background Bregman transfer, the
 \(s^{-2r}\) KL tensor coefficient, or the endpoint uniform counterexample.
-No indexed source located in this audit states the combined theorem.  As in
-the preceding audits, this is a documented negative search, not a logical
-proof of absence from all publications.
+No indexed source located in this audit states the combined heavy-tailed
+theorem with its critical moment threshold and sharpness.  This revised
+conclusion concerns only that surviving increment; arbitrary-order
+first-unmatched KL asymptotics themselves are not claimed as new.
