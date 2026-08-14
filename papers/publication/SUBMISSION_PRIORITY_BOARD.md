@@ -14,16 +14,19 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 轮次 | 页 | 独立评估档位 | **PRIMARY** | 在飞任务 |
-|---|:--:|---|:--:|---|---|
-| **A2** `cayley_chebyshev` | **r6** | 60 | TIER-3 | **Journal of Functional Analysis** | `5555d04e` |
-| **A3** `sharp_three_window` | **r5** | 63 | TIER-4 | **DCDS-A** | `37c7181c` |
-| **A4** `prime_languages` | **r5** | 21 | TIER-3 | **Monatshefte für Mathematik** | `d53e5f76` |
-| **A5** `finite_parts` | **r7** | 27 | TIER-3 | **DCDS** | `6ed3bc90` |
-| **A6** `zeckendorf_fibers` | **r8** | 47 | TIER-3 | **Journal of Number Theory** | `55b0fafc` |
-| **A7** `upper_fibers` | **r6** | 23+32 | TIER-4 | **The Fibonacci Quarterly** | `d1e24449` |
-| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待槽位 |
-| **A9** `homological_visibility` | — | 93 | **TIER-4** | ⚠️ APAL 已拒(表述);内容判为 REPACKAGING | 桥接中 |
+| 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
+|---|:--:|---|---|---|---|
+| **A2** `cayley_chebyshev` | r6 | 61 | TIER-3 / **强 TIER-3、临界 TIER-2** | **JFA** | 已收 |
+| **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 已收 |
+| **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | `7e5e1364` |
+| **A5** `finite_parts` | r7 | 28 | TIER-3 / **上 TIER-3,ETDS 有可能未坐实** | **DCDS** | 已收 |
+| **A6** `zeckendorf_fibers` | r8 | 47 | TIER-3 | **JNT** | 已收,检验中 |
+| **A7** `upper_fibers` | r6 | 23+32 | TIER-4 | **Fibonacci Quarterly** | 已收,检验中 |
+| **A8** `detector_shells` | r8 | 61 | TIER-4 | **Stochastic Models** | 待发 |
+| **A9** `homological_visibility` | — | 94 | **TIER-4,无已知升档路径** | TAC / Logic and Analysis | — |
+
+> **TICK 2 要点**：A2 走"解决印刷公开问题"路线，产出对 Johnson 对称-$lpha$ 问题的**部分解答**（证得 $lpha=1$ 有限方差情形），摘要与主定理 C 只陈述已证部分、不主张完整问题。A5 走"去假设"路线，逐元控制给出 $ho(B),ho(B')\le\lambda$，二元行列式比证为典范。**A9 升档桥接按次数失败**（AMB 在 $\check H^1$，本文在 $H^2$），$d(G)\le2eta$ 刻画不迁移到裸经验模型 —— 天花板钉死在 TIER-4。
+
 
 > **Oracle 协议已变更(2026-08-14 实测)**：worker 升级到 `cdp-2.5-chat-work-media-gate` 后加了 `submission-gate` 前置校验。**新会话必须在 `--tag` 里显式写 `mode:chat` 或 `mode:work`**（v1 通过 tag 传模式，`--mode` 参数不再被接受）；**续接会话必须省略模式控制与附件**，原 worker/账号与控制项自动保留；首轮只能带 `--pdf` 或 `--attach-file` 其一。不合规的任务会一直排队且**永不派发**——症状是 worker 全空闲、Queued 不降。
 
