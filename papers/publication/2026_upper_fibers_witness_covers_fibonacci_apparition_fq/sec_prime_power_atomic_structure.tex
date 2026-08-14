@@ -1,0 +1,168 @@
+\section{Fibonacci prime-power realization}
+\label{sec:prime-power-realization}
+
+The witness-cover classification is structural.  We now supply the
+Fibonacci-specific input that determines which prime powers can occur in its
+atomic families.  These formulas will be used explicitly in the upper bounds.
+
+\begin{proposition}[Classical prime-power rank lifting]
+\label{prop:prime-power-ladders}
+Let $p$ be prime, and put $z_p:=\alpha(p)$. For $p\ne2,5$, put
+$h_p:=\nu_p(F_{z_p})$. Then
+\[
+\alpha(2)=3,\qquad \alpha(4)=6,\qquad
+\alpha(2^e)=3\cdot2^{e-2}\quad(e\ge3),
+\]
+\[
+\alpha(5^e)=5^e\quad(e\ge1),
+\]
+and, for $p\ne2,5$,
+\[
+\alpha(p^e)=p^{\max\{e-h_p,0\}}z_p\quad(e\ge1).
+\]
+\end{proposition}
+
+\begin{proof}
+Wall's rank-divisibility theorem gives
+\[
+p\mid F_r\quad\Longleftrightarrow\quad z_p\mid r
+\]
+\cite{Wall1960FibonacciModm}. For $p\ne2,5$, the classical congruence
+\[
+F_{p-(5/p)}\equiv0\pmod p
+\]
+gives $z_p\mid p-(5/p)$, so $p\nmid z_p$. Lengyel's valuation formula
+\cite[Theorems~1 and~2]{Lengyel1995OrderFibonacciLucas}, in the treatment of
+Medina--Rowland \cite{MedinaRowland2015PRegularity}, states that when
+$z_p\mid r$,
+\[
+\nu_p(F_r)=\nu_p(F_{z_p})+\nu_p(r).
+\]
+Writing $r=z_pu$ yields
+$\nu_p(F_{z_pu})=h_p+\nu_p(u)$. Thus $p^e\mid F_{z_pu}$ if and only if
+$\nu_p(u)\ge e-h_p$, and the least admissible $u$ is
+$p^{\max\{e-h_p,0\}}$.
+
+For the exceptional primes, the same valuation formulas specialize to
+\[
+\nu_5(F_r)=\nu_5(r),
+\qquad
+\nu_2(F_r)=
+\begin{cases}
+0, & 3\nmid r,\\
+1, & r\equiv3\pmod 6,\\
+3, & r\equiv6\pmod {12},\\
+\nu_2(r)+2, & 12\mid r.
+\end{cases}
+\]
+The least index divisible by $5^e$ is $5^e$. For $2$, the least indices
+with valuation at least $1$, $2$, and $3$ are $3$, $6$, and $6$; for
+$e\ge4$ the least admissible multiple of $12$ is $3\cdot2^{e-2}$.
+\end{proof}
+
+\begin{corollary}[Atomic prime-power classification]
+\label{cor:atomic-classification}
+The atomic prime powers are exactly the following:
+\begin{enumerate}[label=(\roman*)]
+\item $2\in\Atom(3)$, $4\in\Atom(6)$, and
+$2^e\in\Atom(3\cdot2^{e-2})$ for every $e\ge4$; the power $8$ is not
+atomic.
+\item $5^e\in\Atom(5^e)$ for every $e\ge1$.
+\item If $p\ne2,5$, $z_p=\alpha(p)$, and
+$h_p=\nu_p(F_{z_p})$, then $p\in\Atom(z_p)$ and
+$p^e\in\Atom(p^{e-h_p}z_p)$ for every $e>h_p$; no power $p^e$ with
+$1<e\le h_p$ is atomic.
+\end{enumerate}
+Consequently every atom is either a prime atom or a ladder atom $p^e$ with
+$e>1$. Every ladder step changes only the $p$-adic coordinate of its
+apparition index when it is lowered to $p^{e-1}$.
+\end{corollary}
+
+\begin{proof}
+Apply Proposition~\ref{prop:prime-power-ladders}. For $p=2$, the ranks are
+$3,6,6,12,24,\ldots$ on $2,4,8,16,32,\ldots$. For $p=5$, every step is
+atomic. If $p\ne2,5$, the rank remains $z_p$ for $1\le e\le h_p$ and then
+gains one factor of $p$ at each further level. The last assertion follows
+from the same formulas.
+\end{proof}
+
+\begin{lemma}[Prime-ladder dichotomy]
+\label{thm:primitive-ladder-dichotomy}
+Let $\theta=p^e\in\Atom(d)$ and suppose $d\mid n$. If $e=1$, then
+\[
+E_n(\theta)=T_n(\theta).
+\]
+If $e>1$, then $E_n(\theta)$ is either empty or the singleton $\{p\}$.
+In particular, no Fibonacci atom has
+\[
+1<\#E_n(\theta)<\#T_n(\theta).
+\]
+\end{lemma}
+
+\begin{proof}
+If $e=1$, then $d^-(\theta)=\alpha(1)=1$, so every coordinate in
+$T_n(\theta)$ is lost after lowering. Assume $e>1$. By
+Corollary~\ref{cor:atomic-classification}, $\theta$ is a ladder atom.
+Proposition~\ref{prop:prime-power-ladders} shows that $d(\theta)$ and
+$d^-(\theta)$ differ only in their $p$-adic coordinate. Therefore the only
+full coordinate that can be lost is $p$ itself, and the result follows.
+\end{proof}
+
+For nonempty $J\subseteq\mathcal P(n)$, define the prime window
+\[
+P_J(n):=\coprod_{\substack{d\mid n\\T_n(d)=J}}\Pi_\alpha(d),
+\]
+where $T_n(d)=\{\ell\in\mathcal P(n):
+\nu_\ell(d)=\nu_\ell(n)\}$.  A prime in $P_J(n)$ is identified with its
+prime atom.
+
+\begin{proposition}[Atomic families and unique ladder slots]
+\label{prop:atomic-family-ladder-slots}
+Let $n\ge3$ and let $\varnothing\ne I\subseteq J\subseteq\mathcal P(n)$.
+Then every atom in $\mathcal A_{I,J}(n)$ is either in the prime window
+$P_J(n)$, which occurs only when $I=J$, or in a ladder family with
+$I=\{p\}$ for a prime coordinate $p\in J$.  Each such ladder family contains
+at most one atom.
+
+More precisely, put $a=\nu_p(n)$.  Its only possible ladder atom is
+\[
+\lambda_p(n)=
+\begin{cases}
+4, & p=2,\ a=1,\\
+2^{a+2}, & p=2,\ a\ge2,\\
+5^a, & p=5,\ a\ge2,\\
+p^{h_p+a}, & p\notin\{2,5\},
+\end{cases}
+\]
+with no candidate for $p=5$, $a=1$.  The candidate belongs to
+$\mathcal A_{\{p\},J}(n)$ exactly when
+$d(\lambda_p(n))\mid n$ and $T_n(\lambda_p(n))=J$.
+Consequently every atomic family is finite, every nonsingleton atomic family
+is a finite disjoint union of exact-rank prime classes, and every labelled
+ladder slot has at most one candidate.
+\end{proposition}
+
+\begin{proof}
+If $\theta=q$ is a prime atom, the prime-ladder dichotomy gives
+$E_n(q)=T_n(q)$, and $q$ belongs to the unique class
+$\Pi_\alpha(d(q))$ in $P_{T_n(q)}(n)$. Conversely every prime in $P_J(n)$
+has $(E_n,T_n)=(J,J)$.
+
+Suppose $\theta=q^e$ is a ladder atom. The same dichotomy gives
+$E_n(\theta)=\{q\}$ whenever the essential support is nonempty. Hence its
+essential coordinate determines its underlying prime, so $q=p$. The
+full-exponent equation
+$\nu_p(d(p^e))=\nu_p(n)=a$ and
+Proposition~\ref{prop:prime-power-ladders} now leave only the displayed
+candidate. For $p=2$, the atomic ladder levels are $4$ of rank $6$ and
+$2^e$ of rank $3\cdot2^{e-2}$ for $e\ge4$. For $p=5$, the rank is $5^e$,
+and $e=1$ is a prime atom. For $p\notin\{2,5\}$, one has
+$p\nmid z_p$ and
+$\alpha(p^e)=p^{e-h_p}z_p$ at atomic ladder levels, so $e=h_p+a$.
+The remaining conditions $d(\theta)\mid n$ and $T_n(\theta)=J$ are exactly
+the conditions for membership in $\mathcal A_{\{p\},J}(n)$.
+
+Finally, each $\Pi_\alpha(d)$ is finite by
+Lemma~\ref{lem:primitive-prime-mobius-count}, and there are only finitely many
+divisors $d$ of $n$. This proves all finiteness and uniqueness assertions.
+\end{proof}
