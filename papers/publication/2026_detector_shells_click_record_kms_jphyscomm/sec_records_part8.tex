@@ -1,0 +1,700 @@
+=\PP(\mathcal A_N^{\rm aux}\cap\mathcal E_N^c)
+\le \PP(\mathcal E_N^c).
+\]
+The convergence follows from the assumed vanishing withholding probability.
+The fixed-event hypothesis is essential: the displayed inequality is not a
+post-selection theorem for an auxiliary event chosen after seeing the record.
+\end{proof}
+
+\begin{lemma}[Retained-cycle CLT reduction for adjacent-gap rewards]\label{lem:retained-cycle-covariance-adjacent-gap-main}
+Work under the retained stationary renewal representation in
+\Cref{ass:finite-record-master-main}, with i.i.d. gaps \(G_j\), cycle lengths
+\(L_j=G_j+1\), \(\mu=\EE L_0\in(0,\infty)\), and an exponential gap moment.
+For the three inclusion coordinates put
+\[
+U_j=
+\bigl(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
+\qquad
+Y_j=U_j-\Rinc L_j=f(G_j,G_{j+1}),
+\]
+where \(\Rinc=(r_0,r_1,r_2)^\top\) and
+\(r_m=\PP(A_0=A_m=1)\).  Then \(\EE Y_j=0\),
+\(\EE\|Y_j\|^4<\infty\), and \((Y_j)\) is \(1\)-dependent.  Define
+\[
+T_1^{(r)}
+=\Var(Y_0)+\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0),
+\qquad
+\Sigma_r=T_1^{(r)}/\mu .
+\]
+Let
+\[
+S_k=\sum_{j=0}^{k-1}L_j,\qquad
+K_N=\max\{k:S_k<N\},
+\]
+with the harmless auxiliary value \(K_N=0\) if no retained click is present.
+Let \(J_N\) be the common complete-cycle, terminal-look-ahead-retained index
+set used by \(\Rinch_N^{\mathrm{cyc}}\) and Algorithm~1.  Then the
+endpoint and terminal-look-ahead deletion has the explicit negligible scale
+\begin{equation}\label{eq:retained-cycle-endpoint-deletion-main}
+\left\|
+\sum_{j\in J_N}Y_j-\sum_{j=0}^{K_N-1}Y_j
+\right\|=O_{\PP}(\log N),
+\qquad
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+=\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1).
+\end{equation}
+Consequently
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+\Rightarrow \mathcal N(0,\Sigma_r).
+\]
+
+The retained covariance estimator for this same adjacent-gap reward, including
+the exact \(J_N\), \(M_N\), separator, multiplier \(K_N/N\), empirical batch
+mean, and plug-in centering by \(\Rinch_N^{\mathrm{cyc}}\), is the object
+in \Cref{prop:exact-inclusion-separated-batch-covariance-main}.  In
+particular, for the paper's protocol \(b_N=\lfloor N^{1/3}\rfloor\), its
+auxiliary total-space completion obeys
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\]
+\end{lemma}
+
+\begin{proof}
+The formula for \(U_j\) is the adjacent-gap version of the three inclusion
+rewards: a Palm cycle contributes one left-end click, the lag-one coordinate
+is \(\mathbf1_{\{G_j=0\}}\), and the lag-two coordinate is
+\(\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\).  Palm inversion gives
+\(\EE U_j=\Rinc\,\EE L_j\), hence \(\EE Y_j=0\).  Since \(Y_j=f(G_j,G_{j+1})\)
+and the gaps are i.i.d., the sequence is \(1\)-dependent; the exponential gap
+tail gives the fourth moment and the maximal-cycle bound
+\(\max_{j\le K_N+2}L_j=O_{\PP}(\log N)\).  Deleting the fixed initial,
+terminal, and terminal-look-ahead cycles can therefore change the retained
+cycle sum by only \(O_{\PP}(\log N)\), proving the first estimate in
+\eqref{eq:retained-cycle-endpoint-deletion-main}.  The second estimate follows
+from the same endpoint bound after dividing by \(\sqrt N\), and the displayed
+CLT is the ordinary \(1\)-dependent CLT for the cycle rewards combined with
+the renewal random-index replacement \(K_N/N\to1/\mu\).
+
+The covariance statement is exactly
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} with
+\(b_N=\lfloor N^{1/3}\rfloor\).
+\end{proof}
+
+\begin{proposition}[Detailed form of Theorem~C: fixed-setting retained-record inclusion CLT]\label{prop:finite-record-inference-audit-detailed}
+Assume the finite-record master assumption
+\Cref{ass:finite-record-master-main}, specifically
+\ref{fr:law-main}, \ref{fr:estimands-main}, \ref{fr:protocol-main}, and
+\ref{fr:covariance-main}.
+All confidence-language consequences of this theorem are conditional on
+\Cref{ass:model-inference-contract-main}, the fixed pre-specified reporting
+gate \(\mathcal E_N\), and the convention in
+\Cref{conv:boxed-retained-coverage-main}.
+At positive constrained D-MAP population points, the reporting event
+\(\mathcal E_N\) obeys \(\PP(\mathcal E_N^c)\to0\) by
+\Cref{lem:finite-record-reporting-gate-main}.
+From the retained visible word form the complete-cycle inclusion estimator
+\[
+\widehat r_{m,N}^{\mathrm{cyc}}
+=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)},\qquad m=0,1,2,
+\]
+with the empty-sum convention in
+\Cref{def:cycle-index-inclusion-estimator-main}, and write
+\(\Rinch_N^{\mathrm{cyc}}
+=(\widehat r_{0,N}^{\mathrm{cyc}},
+  \widehat r_{1,N}^{\mathrm{cyc}},
+  \widehat r_{2,N}^{\mathrm{cyc}})^\top\).  Let
+\[
+\Rinc=(r_0,r_1,r_2)^\top,\qquad r_m=\PP(A_0=A_m=1).
+\]
+In Palm cycle coordinates put
+\[
+U_j=
+\bigl(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
+\qquad
+L_j=G_j+1,\qquad
+Y_j=U_j-\Rinc L_j .
+\]
+Then
+\[
+\EE Y_j=0,\qquad (Y_j)\text{ is \(1\)-dependent},
+\]
+and
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+=\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1).
+\]
+
+Consequently
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+\Rightarrow \mathcal N(0,\Sigma_r),
+\]
+where
+\[
+\Sigma_r=\frac1\mu\left\{\operatorname{Var}(Y_0)
++\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0)\right\},
+\qquad \mu=\EE L_0 .
+\]
+The auxiliary total-space separated-batch matrix
+\(\widehat\Sigma_{r,N}^{\rm tot}\) from
+\ref{fr:covariance-main} obeys
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3}).
+\]
+The covariance-rate assertion is exactly
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} with the protocol
+choice \(b_N=\lfloor N^{1/3}\rfloor\),
+\[
+Y_j=f(G_j,G_{j+1})=U_j-\Rinc L_j,\qquad
+\Delta_N=\Rinch_N^{\mathrm{cyc}}-\Rinc=O_{\PP}(N^{-1/2}).
+\]
+That proposition is the single place where the exact \(J_N\), \(M_N\),
+separator, \(K_N/N\) multiplier, empirical batch mean, and plug-in
+perturbation are verified for Algorithm~1.
+\end{proposition}
+
+\begin{proposition}[Pre-diagonal quotient delta method]\label{prop:finite-record-pre-diagonal-quotient-rule-main}
+Let \(\Rinch_N\) be any three-coordinate finite-record estimator.  On the
+population inverse domain
+\[
+r_0>0,\qquad \Delta_{\mathrm{inv}}(\Rinc):=r_1-r_0^2\ne0,
+\]
+define
+\[
+a(\Rinc)=\frac{r_1}{r_0},\qquad
+u_2(\Rinc)=\frac{r_2}{r_0},\qquad
+\lambda(\Rinc)=\frac{u_2(\Rinc)-r_0}{a(\Rinc)-r_0},
+\]
+and
+\begin{equation}\label{eq:finite-inverse-delta-map-main}
+\Phi(\Rinc)=
+\bigl(1-a(\Rinc)+\lambda(\Rinc),\,
+r_0(1-\lambda(\Rinc))-a(\Rinc)+\lambda(\Rinc)\bigr).
+\end{equation}
+Then \(\Phi\) is \(C^1\) on a neighbourhood of every point in this domain, and
+its Jacobian is the one displayed in
+\eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main}.  If
+\[
+\sqrt N(\Rinch_N-\Rinc)\Rightarrow \mathcal N(0,\Sigma_r),
+\]
+then
+\[
+\sqrt N\{\Phi(\Rinch_N)-\Phi(\Rinc)\}
+\Rightarrow
+\mathcal N(0,\Sigma_{\sigma}),\qquad
+\Sigma_{\sigma}=D\Phi(\Rinc)\Sigma_rD\Phi(\Rinc)^\top .
+\]
+Moreover, if a reported covariance estimator has an auxiliary total-space
+completion \(\widehat\Sigma_{r,N}^{\rm tot}\) satisfying
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}=o_{\PP}(t_N),
+\qquad t_N\downarrow0,\qquad N^{-1/2}=o(t_N),
+\]
+then the plug-in sandwich
+\[
+\widehat\Sigma_{\sigma,N}^{\rm tot}
+=\mathbf1_{\mathcal E_N}
+D\Phi(\Rinch_N)\widehat\Sigma_{r,N}D\Phi(\Rinch_N)^\top
++\mathbf1_{\mathcal E_N^c}0_{2\times2}
+\]
+satisfies
+\[
+\|\widehat\Sigma_{\sigma,N}^{\rm tot}-\Sigma_{\sigma}\|_{\operatorname{op}}
+=o_{\PP}(t_N).
+\]
+If, in addition, the constrained D-MAP population has
+\[
+\Phi(\Rinc)=\sigma=(\sigma_1,\sigma_2)=(p+s,ps),
+\qquad
+\Delta_\sigma:=\sigma_1^2-4\sigma_2=(p-s)^2>0,
+\]
+then the two unordered roots of
+\[
+z^2-\sigma_1z+\sigma_2=0
+\]
+are locally \(C^1\) functions of \(\sigma=\Phi(\Rinc)\).  The unordered
+survival-factor set \(\{p,s\}\) is therefore identified locally from
+\(\Phi(\Rinc)\).  For known design interval \(\Delta\tau\), the unordered
+numerical rate set follows by applying
+\[
+z\longmapsto -\frac{\log z}{\Delta\tau}
+\]
+to the two roots.  Without known \(\Delta\tau\), the same roots identify only
+the dimensionless products \(\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\).  No diagonal
+projection, exchange-diagonal confidence, or diagonal no-label conclusion is
+asserted in this proposition.
+
+\end{proposition}
+
+\begin{proof}
+The only possible poles of the displayed rational formula are \(r_0=0\) and
+\(\Delta_{\mathrm{inv}}(\Rinc)=r_1-r_0^2=0\).  On the stated domain these poles are absent in a small
+neighbourhood of \(\Rinc\), so \(\Phi\) is \(C^1\), with the already computed
+derivative \eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main}.  The
+ordinary multivariate delta method gives the Gaussian limit.
+
+The covariance statement is the same continuous-mapping argument at the
+Jacobian level.  The CLT gives \(\Rinch_N-\Rinc=O_{\PP}(N^{-1/2})\).  Since
+\(D\Phi\) is \(C^1\) on the retained neighbourhood,
+\[
+\|D\Phi(\Rinch_N)-D\Phi(\Rinc)\|_{\operatorname{op}}=O_{\PP}(N^{-1/2}),
+\qquad
+\|D\Phi(\Rinch_N)\|_{\operatorname{op}}=O_{\PP}(1).
+\]
+Submultiplicativity and the triangle inequality give
+\[
+\begin{aligned}
+&\left\|
+D\Phi(\Rinch_N)\widehat\Sigma_{r,N}^{\rm tot}D\Phi(\Rinch_N)^\top
+-D\Phi(\Rinc)\Sigma_rD\Phi(\Rinc)^\top
+\right\|_{\operatorname{op}}\\
+&\le
+\|D\Phi(\Rinch_N)\|_{\operatorname{op}}^2
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}\\
+&\quad+
+\|D\Phi(\Rinch_N)-D\Phi(\Rinc)\|_{\operatorname{op}}\,
+\|\Sigma_r\|_{\operatorname{op}}\,
+\{\|D\Phi(\Rinch_N)\|_{\operatorname{op}}+\|D\Phi(\Rinc)\|_{\operatorname{op}}\}.
+\end{aligned}
+\]
+The first term is \(o_{\PP}(t_N)\); the second is \(O_{\PP}(N^{-1/2})\), hence
+\(o_{\PP}(t_N)\) by the stated threshold scale.
+
+If \(\Delta_\sigma>0\), the discriminant is nonzero and the implicit-function
+theorem applied to \(z^2-\sigma_1z+\sigma_2\) gives two local \(C^1\) root
+charts; taking the set of their values gives the unordered root map, independent
+of a branch labelling.  The logarithm map is \(C^1\) on compact subintervals of
+\((0,1)\), so, for known design interval \(\Delta\tau\), the unordered
+numerical rate set is the image of this unordered root set under
+\(z\mapsto-\log z/\Delta\tau\).  Without known \(\Delta\tau\), the same root
+set gives only the unordered dimensionless products.
+
+\end{proof}
+
+\begin{proposition}[Detailed form of Theorem~D: fixed-setting retained-record quotient delta method]\label{prop:finite-record-quotient-delta-detailed}
+Assume the finite-record master assumption
+\Cref{ass:finite-record-master-main}, specifically
+\ref{fr:law-main}--\ref{fr:projection-main}.  Assume also that the population
+inverse is in the stable quotient chart
+\[
+r_0>0,\qquad \Delta_{\mathrm{inv}}=r_1-r_0^2\ne0 .
+\]
+Define the quotient map
+\[
+\Phi(\Rinc)=\left(1-\frac{r_1}{r_0}+\lambda,\;
+r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
+\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+Then
+\[
+\sqrt N\{\Phi(\Rinch_N^{\mathrm{cyc}})-\Phi(\Rinc)\}
+\Rightarrow
+\mathcal N(0,\Sigma_\sigma),
+\qquad
+\Sigma_\sigma=D\Phi(\Rinc)\Sigma_rD\Phi(\Rinc)^\top.
+\]
+For the constrained D-MAP population, \(\Phi(\Rinc)=(p+s,ps)\).  If
+\(\Delta_\sigma=\sigma_1^2-4\sigma_2>0\), the polynomial
+\(z^2-\sigma_1z+\sigma_2\) identifies the unordered survival-factor set
+\(\{p,s\}\), and hence, for known design interval \(\Delta\tau\), the
+unordered numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},-\frac{\log s}{\Delta\tau}\right\}.
+\]
+If \(\Delta\tau\) is not supplied as a known design interval, the
+corresponding identified object is only the dimensionless unordered product set
+\[
+\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}.
+\]
+\end{proposition}
+
+\begin{lemma}[Diagonal raw quotient CLT from the retained-record CLT and diagonal covariance formula]\label{lem:dmap-diagonal-raw-quotient-clt-main}
+Assume the finite-record master assumption
+\Cref{ass:finite-record-master-main}, specifically
+\ref{fr:law-main}--\ref{fr:projection-main}.  Fix a constrained D-MAP
+exchange-diagonal population point \(p=s=z\), \(0<z<1\), put
+\(\theta=-\log z\), and write \(\sigma_z=(2z,z^2)\).  Let \(\Rinc(z)\) be the
+corresponding inclusion-coordinate vector in
+\Cref{prop:computable-diagonal-covariance-main}.  Then the quotient denominator
+has the explicit diagonal value
+\begin{equation}\label{eq:diagonal-quotient-denominator-main}
+\Delta_{\mathrm{inv}}(z):=r_1(z)-r_0(z)^2
+=-\frac{\theta^2z^2(1-z)^2}{(1-z+\theta z)^2}<0 .
+\end{equation}
+Consequently the diagonal point is not a singular point of the quotient map
+\[
+\Phi(\Rinc)=\left(1-\frac{r_1}{r_0}+\lambda,\;
+r_0(1-\lambda)-\frac{r_1}{r_0}+\lambda\right),
+\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+The map \(\Phi\) is \(C^1\) on a neighbourhood of \(\Rinc(z)\), and \(D\Phi\) is
+locally bounded there.  Hence, if Theorem~C gives
+\[
+\sqrt N(\Rinch_N-\Rinc(z))\Rightarrow
+\mathcal N(0,\Sigma_r(z)),
+\]
+then the raw diagonal symmetric-coordinate estimator
+\[
+\widehat\sigma_N^{\rm raw}:=\Phi(\Rinch_N)
+\]
+satisfies
+\begin{equation}\label{eq:diagonal-raw-quotient-clt-main}
+\sqrt N\{\Phi(\Rinch_N)-\Phi(\Rinc(z))\}
+\Rightarrow
+\mathcal N\!\left(0,\,
+D\Phi(\Rinc(z))\,\Sigma_r(z)\,D\Phi(\Rinc(z))^\top\right).
+\end{equation}
+For the constrained D-MAP population, \(\Phi(\Rinc(z))=\sigma_z\).
+
+Moreover, for any reported inclusion covariance estimator whose auxiliary
+total-space completion satisfies
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r(z)\|_{\operatorname{op}}=o_{\PP}(t_N),
+\qquad t_N\downarrow0,\qquad N^{-1/2}=o(t_N),
+\]
+the reported plug-in sandwich on \(\mathcal E_N\),
+\[
+\widehat\Sigma_{\sigma,N}
+=D\Phi(\Rinch_N)\widehat\Sigma_{r,N}D\Phi(\Rinch_N)^\top,\qquad
+\Sigma_\sigma(z)=D\Phi(\Rinc(z))\Sigma_r(z)D\Phi(\Rinc(z))^\top,
+\]
+has auxiliary total-space completion
+\[
+\widehat\Sigma_{\sigma,N}^{\rm tot}
+:=\mathbf 1_{\mathcal E_N}\widehat\Sigma_{\sigma,N}
++\mathbf 1_{\mathcal E_N^c}0_{2\times2}
+\]
+satisfying
+\begin{equation}\label{eq:diagonal-sandwich-consistency-main}
+\|\widehat\Sigma_{\sigma,N}^{\rm tot}-\Sigma_\sigma(z)\|_{\operatorname{op}}
+=o_{\PP}(t_N).
+\end{equation}
+In particular, with the separated-batch estimator from
+\Cref{thm:finite-record-covariance-main} and \(b_N=\lfloor N^{1/3}\rfloor\),
+\[
+\|\widehat\Sigma_{\sigma,N}^{\rm tot}-\Sigma_\sigma(z)\|_{\operatorname{op}}
+=O_{\PP}(N^{-1/3})=o_{\PP}(N^{-1/4}).
+\]
+Thus the raw diagonal CLT and the covariance consistency needed for the
+exchange-diagonal projection theorem are consequences of Theorem~C,
+\Cref{prop:finite-record-pre-diagonal-quotient-rule-main}, and the separated-batch
+covariance theorem, not separate diagonal assumptions and not consequences of
+Theorem~D or Theorem~E.
+\end{lemma}
+
+\begin{proof}
+\Cref{prop:computable-diagonal-covariance-main} gives the diagonal coordinates
+\(\Rinc(z)\).  Substituting the equal-rate dictionary with
+\(\theta=-\log z\) into \(\Delta_{\mathrm{inv}}=r_1-r_0^2\) gives
+\eqref{eq:diagonal-quotient-denominator-main}.  Since \(0<z<1\),
+\(\theta>0\), \(z>0\), \(1-z>0\), and
+\[
+1-z+\theta z>0,
+\]
+the denominator in \eqref{eq:diagonal-quotient-denominator-main} is nonzero
+and \(D(z)<0\).  Also \(r_0(z)>0\).  Therefore the rational formula defining
+\(\Phi\) has no pole on a small neighbourhood of \(\Rinc(z)\), and the derivative
+displayed in \eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main} is
+finite and locally bounded there.
+
+Theorem~C,
+\Cref{thm:finite-record-inference-audit-main}, gives the displayed inclusion
+CLT for the complete-cycle estimator \(\Rinch_N=\Rinch_N^{\mathrm{cyc}}\)
+on the retained reporting branch.  The ordinary \(C^1\) delta method applied
+to \(\Phi\), equivalently the diagonal specialization of the pre-diagonal
+quotient rule \Cref{prop:finite-record-pre-diagonal-quotient-rule-main}, gives
+\eqref{eq:diagonal-raw-quotient-clt-main}.  The population quotient-inverse
+identity gives \(\Phi(\Rinc(z))=(p+s,ps)=(2z,z^2)=\sigma_z\).
+
+It remains to check that the sandwich covariance consistency is inherited from
+the inclusion-coordinate covariance estimator.  The CLT implies
+\(\Rinch_N-\Rinc(z)=O_{\PP}(N^{-1/2})\), hence
+\(D\Phi(\Rinch_N)\to D\Phi(\Rinc(z))\) in probability; local boundedness gives
+\[
+\|D\Phi(\Rinch_N)\|_{\operatorname{op}}=O_{\PP}(1),\qquad
+\|D\Phi(\Rinch_N)-D\Phi(\Rinc(z))\|_{\operatorname{op}}=o_{\PP}(1).
+\]
+The regenerative covariance \(\Sigma_r(z)\) is a fixed finite matrix.  Using
+the triangle inequality and submultiplicativity,
+\[
+\begin{aligned}
+&\left\|
+D\Phi(\Rinch_N)\widehat\Sigma_{r,N}^{\rm tot}D\Phi(\Rinch_N)^\top
+-D\Phi(\Rinc(z))\Sigma_r(z)D\Phi(\Rinc(z))^\top
+\right\|_{\operatorname{op}}\\
+&\le
+\|D\Phi(\Rinch_N)\|_{\operatorname{op}}^2
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r(z)\|_{\operatorname{op}}\\
+&\quad+
+\|D\Phi(\Rinch_N)-D\Phi(\Rinc(z))\|_{\operatorname{op}}\,
+\|\Sigma_r(z)\|_{\operatorname{op}}\,
+\{\|D\Phi(\Rinch_N)\|_{\operatorname{op}}
++\|D\Phi(\Rinc(z))\|_{\operatorname{op}}\}.
+\end{aligned}
+\]
+The first term is \(o_{\PP}(t_N)\) by the assumed inclusion covariance rate.
+For the second term, the concrete retained-rank choices in
+\Cref{ass:finite-record-master-main} use \(t_N=N^{-1/4}\), and the displayed
+hypothesis \(N^{-1/2}=o(t_N)\) is the only rate fact needed here.  The CLT gives
+\(\|D\Phi(\Rinch_N)-D\Phi(\Rinc(z))\|_{\operatorname{op}}=O_{\PP}(N^{-1/2})\)
+because \(D\Phi\) is \(C^1\) on the retained neighbourhood.  Thus the second
+term is \(o_{\PP}(t_N)\), proving
+\eqref{eq:diagonal-sandwich-consistency-main}.  With
+\Cref{thm:finite-record-covariance-main} and
+\(b_N=\lfloor N^{1/3}\rfloor\), the inclusion covariance rate is
+\(O_{\PP}(N^{-1/3})\), so the displayed \(O_{\PP}(N^{-1/3})=o_{\PP}(N^{-1/4})\)
+specialization follows.  The finite covariance formula is exactly
+\eqref{eq:dmap-diagonal-sigma-finite-main} on \(\mathcal E_N\).  On
+\(\mathcal E_N^c\) the auxiliary zero completion is used only in the preceding
+probability bound, while the operational protocol reports no covariance matrix.
+\end{proof}
+
+\begin{lemma}[Local-projection expansion used in Theorem~E]\label{lem:local-projection-expansion-before-theorem-e-main}
+For fixed \(z\in(0,1)\) and every \(M<\infty\), there is a constant
+\(C_M<\infty\), depending only on \(z\) and \(M\), such that
+\[
+\sup_{\|h\|\le M}
+\left\|
+\sqrt N\{\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\}
+-\Pi_{H_z}h
+\right\|
+\le C_MN^{-1/2},
+\]
+where \(\sigma_z=(2z,z^2)\), \(H_z=\{h:h_2\le zh_1\}\), and
+\(F=\{(x+y,xy):0\le x,y\le1\}\).
+\end{lemma}
+
+\begin{proof}
+This is the uniform expansion
+\eqref{eq:explicit-local-projection-expansion-main}.  The argument is local:
+near \(\sigma_z\), \(F\) is the hypograph
+\[
+F=\{(\sigma_1,\sigma_2):\sigma_2\le \sigma_1^2/4\}.
+\]
+For \(\sigma=\sigma_z+h/\sqrt N\), feasibility is
+\[
+h_2\le zh_1+\frac{h_1^2}{4\sqrt N}.
+\]
+If this holds, the local projection is \(\sigma\), and the only discrepancy
+from \(\Pi_{H_z}h\) occurs in the \(O(N^{-1/2})\) boundary strip where
+\(0<h_2-zh_1\le h_1^2/(4\sqrt N)\).  If feasibility fails, write the projected
+boundary point as
+\[
+s_1=2z+\frac{k_1}{\sqrt N},\qquad
+s_2=z^2+\frac{zk_1}{\sqrt N}+\frac{k_1^2}{4N}.
+\]
+The normal equation to the parabola gives, uniformly for \(\|h\|\le M\),
+\[
+k
+=h-\frac{h_2-zh_1}{1+z^2}(-z,1)+O_M(N^{-1/2}).
+\]
+Taking the positive part across the feasible and infeasible split gives
+\[
+k=\Pi_{H_z}h+O_M(N^{-1/2}),
+\]
+which is the displayed bound.  \Cref{lem:exchange-diagonal-local-reach-before-main}
+also verifies that the local projection is the tie-broken projection onto the
+full compact set \(F\) in a sufficiently small neighbourhood of \(\sigma_z\).
+\end{proof}
+
+\iffalse % Removed under response B2: no confidence procedure is claimed.
+\recordscopebox{The diagonal inference result in this manuscript is an
+ideal fixed-null asymptotic statement at \(z_0=1/2\).  It is not a simultaneous
+confidence procedure over \(0<z<1\), not a data-dependent
+model-selection-valid diagonal report, and not an executed finite-record
+accept/reject report.  The article prints the \(z_0=1/2\) population branch
+certificate, but it does not print a record-specific critical-value bracket
+\([L,U]\), a statistic interval \([Q_N]\), or any complete finite diagonal
+certificate tuple.}
+
+\begin{proposition}[Detailed form of Theorem~E: ideal fixed-null exchange-diagonal asymptotics]\label{prop:e-fixed-candidate-exchange-diagonal-detailed}
+Fix
+\[
+z_0=\frac12,\qquad \sigma_0=(1,1/4),\qquad
+H_{z_0}=\{h\in\mathbb R^2:h_2\le z_0h_1\},
+\]
+and assume the finite-record master assumption
+\Cref{ass:finite-record-master-main},
+\ref{fr:law-main}--\ref{fr:projection-main}.  Suppose the true constrained D-MAP
+population satisfies \(\sigma=\sigma_0\), the printed interval certificate
+\Cref{lem:z-half-diagonal-branch-certificate-main} proves
+\[
+\operatorname{rank}\Sigma_\sigma(z_0)=2,
+\]
+and
+\[
+\sqrt N(\widehat\sigma_N^{\rm raw}-\sigma_0)
+\Rightarrow Z\sim\mathcal N(0,\Sigma_\sigma(z_0)).
+\]
+Let
+\[
+\widehat\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma_N^{\rm raw}),\qquad
+X_N=\sqrt N(\widehat\sigma_N-\sigma_0),
+\]
+where \(F=\{(x+y,xy):0\le x,y\le1\}\).  Then
+\[
+X_N\Rightarrow X:=\Pi_{H_{z_0}}Z .
+\]
+The full-rank certificate makes \(\Sigma_\sigma(z_0)\) invertible.  Put
+\[
+T:=X^\top\Sigma_\sigma(z_0)^{-1}X,
+\]
+and let \(c_{1-\alpha}\) be the lower \((1-\alpha)\)-quantile of \(T\).  With
+\[
+E_N:=\mathcal E_N
+\]
+the retained-record gate, for each fixed \(0<\alpha<1\),
+\[
+\PP_{\sigma_0}\{E_N\cap[
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\le c_{1-\alpha}]\}
+\longrightarrow 1-\alpha .
+\]
+If, in addition, a retained covariance estimator satisfies
+\[
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z_0)\|_{\operatorname{op}}
+=o_{\PP}(t_N),
+\]
+with retained-rank pseudoinverse
+\[
+\widehat\Sigma_{\sigma,N}^{+}
+=\sum_{\widehat\lambda_{i,N}>t_N}
+\widehat\lambda_{i,N}^{-1}
+\widehat v_{i,N}\widehat v_{i,N}^{\top},
+\]
+and, under the auxiliary Gaussian conditional law given the retained record,
+\[
+Z_N^\ast\sim\mathcal N(0,\widehat\Sigma_{\sigma,N}),\qquad
+T_N^\ast=
+(\Pi_{H_{z_0}}Z_N^\ast)^\top
+\widehat\Sigma_{\sigma,N}^{+}(\Pi_{H_{z_0}}Z_N^\ast),
+\]
+then the conditional law of \(T_N^\ast\) converges in probability to the law
+of \(T\).  This auxiliary convergence is a limit statement for the ideal
+projected-Gaussian calibration law; it is not a realized finite comparison.
+This is the only diagonal inference theorem in the main text.  Its confidence
+language is conditional on \Cref{ass:model-inference-contract-main}, on the
+fixed candidate \(z_0=1/2\), and on the pre-specified reporting gate \(E_N\).
+It is an ideal fixed-null asymptotic statement, not a simultaneous confidence
+procedure over \(0<z<1\), not valid after data-dependent diagonal selection,
+and not an executed finite-record accept/reject report.  The printed
+\(z_0=1/2\) branch certificate supplies the population covariance branch
+needed by the theorem; it is not a diagnostic pass, a model certificate, or a
+critical-value transcript for a realized record.  The theorem does not supply
+record-specific intervals \([Q_N]\) or \([L,U]\).
+\end{proposition}
+
+\begin{proof}
+The raw quotient CLT in the theorem statement and the local projection
+expansion of \Cref{lem:local-projection-expansion-before-theorem-e-main} give the
+projected limit at the fixed exchange diagonal:
+\[
+X_N
+=\Pi_{H_{z_0}}\sqrt N(\widehat\sigma_N^{\rm raw}-\sigma_0)+o_{\PP}(1)
+\Rightarrow
+X:=\Pi_{H_{z_0}}Z .
+\]
+Here the projection lemma is used only at \(z_0=1/2\); no assertion is made for
+a moving, selected, or simultaneous family of diagonal points.
+
+The printed branch certificate gives full rank, so
+\(\Sigma_\sigma(z_0)\) is invertible.  The continuous-mapping theorem yields
+\[
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\Rightarrow
+T:=(\Pi_{H_{z_0}}Z)^\top
+\Sigma_\sigma(z_0)^{-1}(\Pi_{H_{z_0}}Z).
+\]
+Since the certificate establishes \(\operatorname{rank}\Sigma_\sigma(z_0)=2\),
+\Cref{thm:projected-gaussian-continuity-degeneracy-main} gives continuity of
+the limiting distribution at its lower \((1-\alpha)\)-quantile and exact
+probability content \(1-\alpha\).  Hence
+\[
+\PP_{\sigma_0}\{
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\le c_{1-\alpha}\}\to1-\alpha .
+\]
+Finally, \(\PP_{\sigma_0}(E_N^c)\to0\) by
+\Cref{lem:finite-record-reporting-gate-main}.  Intersecting the preceding
+event with \(E_N\) changes its probability by at most \(\PP_{\sigma_0}(E_N^c)\),
+which proves the ideal fixed-null event.
+
+For the optional auxiliary calibration-law convergence, Weyl's inequality and
+\[
+\|\widehat\Sigma_{\sigma,N}-\Sigma_\sigma(z_0)\|_{\operatorname{op}}
+=o_{\PP}(t_N),
+\]
+the retained-rank rule keeps exactly the positive population eigenspaces with
+probability tending to one.  The printed branch certificate gives full rank,
+so on that event
+\[
+\widehat\Sigma_{\sigma,N}^{+}\to \Sigma_\sigma(z_0)^{-1}
+\qquad\text{in probability}.
+\]
+The conditional projected-Gaussian lemma
+\Cref{lem:projected-gaussian-bootstrap-halfspace-main}, applied with the
+fixed half-space \(H_{z_0}\), \(\widehat\Sigma_N=\widehat\Sigma_{\sigma,N}\),
+and \(\Sigma=\Sigma_\sigma(z_0)\), gives weak convergence in probability of
+the conditional law of \(T_N^\ast\) to the law of \(T\).  Since the certificate
+establishes \(\operatorname{rank}\Sigma_\sigma(z_0)=2\),
+\Cref{thm:projected-gaussian-continuity-degeneracy-main} gives continuity of
+the limiting distribution at its lower quantiles.  This proves the stated
+auxiliary convergence and deliberately stops before any record-specific
+critical-value bracket or statistic interval is asserted.
+\end{proof}
+
+\paragraph{Finite-record certificate interfaces.}
+Theorem~E deliberately stops at ideal fixed-null asymptotics.  A realized
+finite-record accept/reject/undecided output would require the separate
+certificate interface
+\Cref{thm:certified-diagonal-inference-main,def:finite-diagonal-report-main,prop:finite-diagonal-report-master-main}.
+Those appendix protocols require the \(z_0=1/2\) branch certificate, a
+record-specific covariance input, an outward-rounded statistic interval
+\([Q_N]\), and either an outward-rounded ideal conditional quantile bracket
+\([L,U]\) or the canonical one-sided DKW simulated critical value.  The present
+article supplies only the branch certificate; it supplies neither \([L,U]\)
+nor \([Q_N]\), so it asserts no realized finite diagonal decision.  The DKW
+route is the conditional auxiliary-simulation domination of
+\Cref{lem:conditional-monte-carlo-quantile-main}; it is not finite-sample
+record coverage under \(P_N\) and is combined with Theorem~E only on the
+product space of records and independent projected-Gaussian simulations.
+No finite decision is asserted for \(z\ne z_0\), for a data-selected \(z\), or
+without an attached branch certificate and critical-value transcript.
+
+\paragraph{Finite-record implementation protocols.}
+The retained-record reporting gates, separated-batch covariance recipe,
+quotient projection rule, and diagonal calibration protocol are implementation
+material.  They are collected in
+\Cref{app:finite-record-implementation-protocols-main} after the regenerative
+tools; the theorem statements above use only the named reporting events and
+certification conditions stated in the main text.
+\fi
+\begin{proof}[Proof of \Cref{prop:finite-record-inference-audit-detailed}]
+\Cref{lem:killed-leakage-gap-exponential-moment-main} verifies the
+exponential renewal tail required by the complete-cycle reduction.  Applying
+\Cref{lem:retained-cycle-covariance-adjacent-gap-main} to the displayed reward
+\(Y_j=U_j-\Rinc L_j=f(G_j,G_{j+1})\) gives Palm centering, one-gap dependence, the
+endpoint/look-ahead deletion estimate, the renewal random-index replacement,
+and the Gaussian limit with covariance \(\Sigma_r=T_1^{(r)}/\mu\).
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} applies the
+master adjacent-gap covariance theorem to the same \(Y_j\), the common
+complete-cycle set \(J_N\), and the plug-in rewards \(\widehat Y_j\) from
+\Cref{def:cycle-index-inclusion-estimator-main}.  With
+\(b_N=\lfloor N^{1/3}\rfloor\), it gives
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(N^{-1/3}\right),
+\]
+which is \(o_{\PP}(t_N)\) for \(t_N=N^{-1/4}\).
+
+The preceding argument is under the stationary retained renewal law.  For a
+finite hidden start, the retained word after the burn-in deletion is compared
+to the stationary retained word by
+\Cref{lem:finite-hidden-start-path-contraction-main}.  All complete-cycle
+indices, reporting gates, and covariance batches are measurable functions of

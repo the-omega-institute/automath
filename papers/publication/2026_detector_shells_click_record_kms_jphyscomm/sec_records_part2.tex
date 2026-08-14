@@ -1,0 +1,700 @@
+h_k=\frac{g_k}{S_k}=1-\frac{S_{k+1}}{S_k}.
+\]
+This hazard formula is a population diagnostic.  Substitution yields the
+theorem's hazard formula and the increment identity
+\begin{equation}\label{eq:hazard-increment-theorem-main}
+h_{k+1}-h_k
+=
+\frac{
+  \Gamma\kappa_{\mathrm r}\,
+  (p-s)^2\,p^k s^k
+}{
+  \bigl(\kappa_{\mathrm r}p^k-\Gamma s^k\bigr)
+  \bigl(\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1}\bigr)
+}.
+\end{equation}
+The numerator in \eqref{eq:hazard-increment-theorem-main} is positive because
+\(\Gamma,\kappa_{\mathrm r}>0\), \(p,s\in(0,1)\), and \((p-s)^2>0\) off the
+diagonal.  The denominator factors satisfy
+\[
+\kappa_{\mathrm r}p^m-\Gamma s^m
+=(\kappa_{\mathrm r}-\Gamma)S_m,\qquad m=k,k+1.
+\]
+Both denominator factors have sign \(\kappa_{\mathrm r}-\Gamma\), so their
+product is positive.  Equivalently,
+\[
+\bigl(\kappa_{\mathrm r}p^k-\Gamma s^k\bigr)
+\bigl(\kappa_{\mathrm r}p^{k+1}-\Gamma s^{k+1}\bigr)
+=(\kappa_{\mathrm r}-\Gamma)^2S_kS_{k+1}>0.
+\]
+Thus \(h_{k+1}>h_k\) off the diagonal.  On the equal-rate diagonal,
+\eqref{eq:equal-rate-dictionary-main} gives
+\[
+h_k=1-p-\frac{yp}{1+yk},\qquad
+h_{k+1}-h_k=
+\frac{y^2p}{(1+yk)(1+y(k+1))}>0,
+\]
+where \(y=\Gamma\Delta\tau=\kappa_{\mathrm r}\Delta\tau\).  Hence the
+zero-run hazard is strictly increasing in all positive parameter cases.
+
+It remains to verify the covariance and dependence assertions.  Let
+\(P=T_0+T_1\) and \(u=T_1\mathbf1=(1-p,a)^\top\).  By
+\Cref{lem:stationary-main}, the stationary hidden law is \(\pi\), the click
+density is \(\rho=\pi u\), and \(a-\rho\ne0\).  The two eigenvalues of \(P\)
+are \(1\) and \(\lambda_{\mathrm{hid}}=p-b\).  The centered click vector lies
+in the hidden eigenspace:
+\[
+u-\rho\mathbf1=\frac{1-p-a}{1-p+b}\binom{1-p}{-b},
+\qquad
+P^{n-1}u=\rho\mathbf1+
+\lambda_{\mathrm{hid}}^{\,n-1}(u-\rho\mathbf1).
+\]
+Conditioning on \(A_0=1\) again leaves the next hidden state equal to \(D\);
+therefore
+\[
+\PP(A_n=1\mid A_0=1)
+=e_D^\top P^{n-1}u
+=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1}.
+\]
+Multiplying by \(\PP(A_0=1)=\rho\) and subtracting \(\rho^2\) gives
+\[
+\gamma_n=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},\qquad n\ge1 .
+\]
+
+If \(\lambda_{\mathrm{hid}}=0\), then \(\det P=0\).  Since \(P\) is stochastic,
+both rows of \(P\) equal the stationary row \(\pi\), so \(P=\mathbf1\pi\).
+Summing over one unobserved sample between two visible blocks inserts this
+rank-one matrix and factorizes the two cylinder probabilities, as in
+\Cref{lem:kernel-factorization-main}; hence the visible record is
+\(1\)-dependent.  Conversely, \(1\)-dependence makes \(A_0\) and \(A_2\)
+independent, so \(0=\gamma_2=\rho(a-\rho)\lambda_{\mathrm{hid}}\).  The
+prefactor is nonzero by \Cref{lem:stationary-main}, and hence
+\(\lambda_{\mathrm{hid}}=0\).
+
+Finally, suppose the renewal record were an \(r\)-step Markov chain.  Because
+all finite zero runs have positive probability, the conditional click
+probability after a run of \(k\) zeros would depend only on the final \(r\)
+zeros once \(k\ge r\).  Thus \(h_k\) would be eventually constant.  The strict
+increase proved above rules this out for every \(r\), so the visible process
+is not a finite-order Markov chain.
+\end{proof}
+
+\begin{proposition}[Threshold finite-window count variance]\label{prop:threshold-finite-window-count-main}
+Fix the constrained D-MAP kernels of
+\Cref{prop:instrument-kernels-main} in stationarity and suppose that the
+hidden transfer mode is at the exact-dependence threshold
+\(\lambda_{\mathrm{hid}}=0\).  For
+\[
+N_m=\sum_{n=0}^{m-1}A_n,\qquad m\ge1,
+\]
+one has the exact finite-window identity
+\begin{equation}\label{eq:threshold-finite-window-count-main}
+\Var(N_m)
+=m\rho(1-\rho)+2(m-1)\rho(a-\rho).
+\end{equation}
+Equivalently, the finite-window variance is the one-dependent covariance
+sum with only the adjacent covariance retained.
+
+The paper uses only \eqref{eq:threshold-finite-window-count-main}.  Higher
+finite-window count laws at the threshold are obtained from the ordinary
+probability generating polynomial
+\[
+P_m(z)=\EE z^{N_m}
+=\sum_{u\in\{0,1\}^m}z^{u_0+\cdots+u_{m-1}}
+  \,\PP(A_0=u_0,\ldots,A_{m-1}=u_{m-1}),
+\]
+with the cylinder probabilities evaluated by the renewal inclusion product
+of \Cref{cor:renewal-principal-minor-word-law-main}.  This is the finite-window
+specialization of the standard \(1\)-dependent count generating-function
+bookkeeping; no separate closed formula for every higher count law is used in
+the sequel.
+\end{proposition}
+
+\begin{proof}
+Stationarity gives the exact variance decomposition
+\[
+\Var(N_m)
+=m\gamma_0+2\sum_{h=1}^{m-1}(m-h)\gamma_h,
+\qquad
+\gamma_h=\operatorname{Cov}(A_0,A_h).
+\]
+Here \(\gamma_0=\rho(1-\rho)\).  The covariance tail proved in
+\Cref{thm:main-record-wrapper} is
+\[
+\gamma_h=\rho(a-\rho)\lambda_{\mathrm{hid}}^{\,h-1},
+\qquad h\ge1.
+\]
+At \(\lambda_{\mathrm{hid}}=0\), exact \(1\)-dependence is
+\Cref{lem:one-dep-criterion-main} and the displayed tail leaves
+\(\gamma_1=\rho(a-\rho)\) and \(\gamma_h=0\) for every \(h\ge2\).
+The strict inequality \(\gamma_1<0\), proved in
+\Cref{lem:stationary-main}, excludes \(0\)-dependence.
+Substitution
+in the stationary variance sum gives
+\[
+\Var(N_m)
+=m\rho(1-\rho)+2(m-1)\rho(a-\rho),
+\]
+which is \eqref{eq:threshold-finite-window-count-main}.
+
+For the final assertion, the polynomial \(P_m\) is just the definition of the
+finite-window count distribution.  At the threshold the law is \(1\)-dependent
+by \Cref{lem:one-dep-criterion-main}; the same finite cylinder probabilities
+are explicitly determined from renewal inclusion products in
+\Cref{cor:renewal-principal-minor-word-law-main}.  Taking coefficients of \(P_m\) therefore
+recovers the count probabilities.
+\end{proof}
+
+\begin{lemma}[Discrete renewal count-variance identity]\label{lem:discrete-renewal-fano-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process on the
+sample lattice, with click epochs separated by i.i.d. integer cycle lengths
+\(L_j\ge1\), mean \(\mu=\EE L_j<\infty\), variance
+\(\sigma_L^2=\Var(L_j)<\infty\), and exponentially decaying tails.  For
+\(N_m=\sum_{n=0}^{m-1}A_n\),
+\begin{equation}\label{eq:discrete-renewal-fano-identity-main}
+\lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
+=\frac{\sigma_L^2}{\mu^2}.
+\end{equation}
+If, in addition, the autocovariances are summable and \(f(0)\) denotes the
+zero-frequency spectral density
+\(\operatorname{Cov}(A_0,A_0)+2\sum_{h\ge1}\operatorname{Cov}(A_0,A_h)\),
+then the same limit equals \(f(0)/\rho\), where \(\rho=\EE A_0=1/\mu\).
+Throughout this paper \(f\) uses this covariance-series convention:
+\[
+f(\theta)=\gamma_0+2\sum_{h\ge1}\gamma_h\cos(h\theta),
+\qquad
+\gamma_h=\operatorname{Cov}(A_0,A_h).
+\]
+There is no \(2\pi\) normalization in \(f\); with the Fourier-transform
+convention \(S(\theta)=(2\pi)^{-1}\sum_{h\in\mathbb Z}\gamma_he^{-ih\theta}\),
+one has \(f(\theta)=2\pi S(\theta)\).
+\end{lemma}
+
+\begin{proof}
+Work first in Palm coordinates with a click at the left endpoint and write
+\(S_k=L_1+\cdots+L_k\) and
+\(K_m=\max\{k:S_k\le m\}\).  The stationary count \(N_m\) differs from the
+corresponding Palm count only through the initial delayed cycle and the
+terminal residual cycle.  The stationary residual cycle has the size-biased
+cycle tail, which is still exponentially decaying, and the maximum of the
+complete cycles intersecting \([0,m)\) is \(O_{\PP}(\log m)\).  Hence this
+endpoint replacement changes \(m^{-1/2}(N_m-\EE N_m)\) by \(o_{\PP}(1)\), and
+the squared normalized family is uniformly integrable.
+
+At the renewal stopping index,
+\[
+S_{K_m}\le m<S_{K_m+1}.
+\]
+Thus, with \(W_j=L_j-\mu\),
+\[
+\mu\left(K_m-\frac m\mu\right)
+=-\sum_{j=1}^{K_m}W_j+O_{\PP}(\log m).
+\]
+Since \(K_m/m\to1/\mu\) and the partial sums of the centered i.i.d. sequence
+\((W_j)\) satisfy the usual random-time-change estimate,
+\[
+\sum_{j=1}^{K_m}W_j
+=\sum_{j=1}^{\lfloor m/\mu\rfloor}W_j+o_{\PP}(\sqrt m).
+\]
+Therefore
+\[
+\frac{K_m-m/\mu}{\sqrt m}
+=-\frac1\mu\,
+\frac{\sum_{j=1}^{\lfloor m/\mu\rfloor}W_j}{\sqrt m}
++o_{\PP}(1),
+\]
+and uniform integrability yields
+\[
+\frac{\Var(N_m)}m
+\longrightarrow
+\frac{\sigma_L^2}{\mu^3}.
+\]
+Stationarity gives \(\EE N_m=m\rho=m/\mu\), which proves
+\eqref{eq:discrete-renewal-fano-identity-main}.
+
+For the spectral form, stationarity gives the exact sampled-window identity
+\[
+\Var(N_m)=
+m\gamma_0+2\sum_{h=1}^{m-1}(m-h)\gamma_h,\qquad
+\gamma_h=\operatorname{Cov}(A_0,A_h).
+\]
+Summability of \((\gamma_h)\) implies
+\[
+\frac{\Var(N_m)}m\longrightarrow
+\gamma_0+2\sum_{h\ge1}\gamma_h=f(0).
+\]
+Dividing by \(\EE N_m/m=\rho\) gives the equivalent limit \(f(0)/\rho\).
+\end{proof}
+
+\begin{lemma}[Renewal generating-function expansion at one]\label{lem:renewal-gf-expansion-main}
+Let \(L\ge1\) have finite third moment, put \(\mu=\EE L\),
+\(\rho=1/\mu\), and let
+\(u_0=1,\ u_n=\PP(n\ \text{is a renewal epoch}\mid0\ \text{is a renewal epoch})\).
+If \(\sum_{n\ge0}|u_n-\rho|<\infty\), then
+\[
+\sum_{n\ge0}u_nz^n=\frac{1}{1-\EE z^L}
+=\frac{\rho}{1-z}
+ + \frac{\EE\{L(L-1)\}}{2\mu^2}+O(1-z)
+\qquad (z\uparrow1),
+\]
+and consequently
+\[
+\sum_{n\ge0}(u_n-\rho)
+=\frac{\EE\{L(L-1)\}}{2\mu^2}.
+\]
+\end{lemma}
+
+\begin{proof}
+The first identity is the renewal equation in generating-function form.  With
+\(t=1-z\),
+\[
+\EE z^L
+=1-\mu t+\frac{\EE\{L(L-1)\}}2t^2+O(t^3),
+\]
+so
+\[
+\frac1{1-\EE z^L}
+=\frac1{\mu t}
+ +\frac{\EE\{L(L-1)\}}{2\mu^2}+O(t).
+\]
+Since \(\rho=1/\mu\), subtracting \(\rho/(1-z)=\sum_{n\ge0}\rho z^n\) and
+letting \(z\uparrow1\) gives the stated sum by absolute convergence.
+\end{proof}
+
+\begin{proposition}[Spectral density and Fano limit for the constrained D-MAP renewal record]\label{prop:spectrum-main}
+Fix one positive constrained D-MAP setting
+\(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\), let \(T_0,T_1\) be the
+killed-leakage labelled kernels in \eqref{eq:t0-t1-main} with
+\(p=e^{-\Gamma\Delta\tau}\), \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\), and
+the lower-row weights \(a,b\) in \eqref{eq:a-b-main}.  Thus
+\(T_1(R,R)=T_1(D,R)=0\), \(P=T_0+T_1\) is stochastic, \(0<p,s<1\),
+\(a>0\), \(b>0\), and \(a+b=1-s\).  Let
+\((A_n)_{n\in\mathbb Z}\) be the stationary visible binary process generated
+by these kernels, put \(\rho=\PP(A_0=1)\) and
+\(\lambda_{\mathrm{hid}}=p-b\), and interpret equal-rate expressions by
+continuous limits when \(\Gamma=\kappa_{\mathrm r}\).  The stationary
+covariance spectral density is
+\begin{equation}\label{eq:spectrum-main}
+f(\theta)=
+\rho(1-\rho)+
+2\rho(a-\rho)
+\frac{\cos\theta-\lambda_{\mathrm{hid}}}
+     {1-2\lambda_{\mathrm{hid}}\cos\theta+\lambda_{\mathrm{hid}}^2}.
+\end{equation}
+This is the covariance-series normalization
+\[
+f(\theta)=\gamma_0+2\sum_{n\ge1}\gamma_n\cos(n\theta),
+\qquad
+\gamma_n=\operatorname{Cov}(A_0,A_n),
+\]
+so no \(2\pi\) factor is included in \(f\).
+The displayed \(f(\theta)\) is a population spectral diagnostic.
+If \(N_m=\sum_{n=0}^{m-1}A_n\), then
+\begin{equation}\label{eq:fano-main}
+0\le
+\lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
+=\frac{\Var(G+1)}{\bigl(\EE(G+1)\bigr)^2}
+=1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}
+<1,
+\end{equation}
+with \(G\) distributed as in \Cref{lem:renewal-gap-main}.
+This Fano display has the same population status: finite-record uncertainty
+for quotient coordinates is handled later by sandwich/projection statements.
+\end{proposition}
+
+\begin{proof}
+Insert the covariance tail from \Cref{lem:covariance-transfer-main} into the Herglotz
+Fourier series:
+\[
+f(\theta)
+=\rho(1-\rho)
++2\rho(a-\rho)\sum_{n\ge1}
+\lambda_{\mathrm{hid}}^{\,n-1}\cos(n\theta).
+\]
+The exponent is \(n-1\), not \(n\), because the covariance tail begins with
+\(\operatorname{Cov}(A_0,A_1)=\rho(a-\rho)\).  Thus the relevant geometric
+series is the shifted series below; using
+\(\sum_{n\ge1}\lambda_{\mathrm{hid}}^{n}e^{in\theta}\) would insert an
+extraneous factor of \(\lambda_{\mathrm{hid}}\) and give the wrong numerator.
+Since \(|\lambda_{\mathrm{hid}}|<1\),
+\[
+\sum_{n\ge1}\lambda_{\mathrm{hid}}^{\,n-1}e^{in\theta}
+=
+\frac{e^{i\theta}}{1-\lambda_{\mathrm{hid}}e^{i\theta}},
+\]
+and taking real parts gives
+\[
+\sum_{n\ge1}\lambda_{\mathrm{hid}}^{\,n-1}\cos(n\theta)
+=
+\frac{\cos\theta-\lambda_{\mathrm{hid}}}
+       {1-2\lambda_{\mathrm{hid}}\cos\theta+\lambda_{\mathrm{hid}}^2}.
+\]
+This includes the exact \(1\)-dependent case
+\(\lambda_{\mathrm{hid}}=0\), where only the adjacent covariance contributes.
+For this discrete count convention,
+\Cref{lem:discrete-renewal-fano-main} gives, with \(L=G+1\),
+\[
+\lim_{m\to\infty}\frac{\Var(N_m)}{\EE N_m}
+=\frac{\Var(L)}{(\EE L)^2}.
+\]
+The cycle moments can be read directly from the renewal-mass tail.  Let
+\(u_n=\PP(A_n=1\mid A_0=1)\).  In the present D-MAP renewal law,
+\[
+u_n=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},
+\qquad n\ge1,
+\]
+so \(\sum_{n\ge1}(u_n-\rho)=(a-\rho)/(1-\lambda_{\mathrm{hid}})\).  The
+renewal generating-function expansion in
+\Cref{lem:renewal-gf-expansion-main},
+\[
+\frac{1}{1-\EE z^L}
+=\sum_{n\ge0}u_nz^n,
+\]
+gives
+\[
+\sum_{n\ge0}(u_n-\rho)
+=\frac{\EE\{L(L-1)\}}{2(\EE L)^2}.
+\]
+Since \(u_0=1\) and \(\rho=1/\EE L\), this yields the explicit cycle-moment
+display
+\[
+\EE L=\frac1\rho,\qquad
+\EE L^2
+=\frac{2-\rho+\displaystyle\frac{2(a-\rho)}
+              {1-\lambda_{\mathrm{hid}}}}{\rho^2},
+\]
+and hence
+\[
+\frac{\Var(L)}{(\EE L)^2}
+=\rho^2\EE L^2-1
+=1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
+\]
+The same discrete-renewal identity also identifies this cycle-variance
+quotient with \(f(0)/\rho\).  Equivalently, evaluating the displayed spectral
+density at \(\theta=0\) gives the same expression:
+\[
+\frac{\Var(G+1)}{\bigl(\EE(G+1)\bigr)^2}
+=\frac{f(0)}{\rho}
+=1-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}.
+\]
+The lower bound in \eqref{eq:fano-main} is therefore inherited from the
+nonnegative variance quotient, not from the sign of the closed algebraic
+correction.  The upper bound is direct: \(\rho>0\), \(a-\rho<0\) by
+\Cref{lem:stationary-main}, and \(\lambda_{\mathrm{hid}}<1\) by
+\Cref{lem:hidden-mode-contraction-main}.  Hence
+\[
+\frac{f(0)}{\rho}-1
+=-\rho+\frac{2(a-\rho)}{1-\lambda_{\mathrm{hid}}}<0.
+\]
+\end{proof}
+
+\begin{remark}[Population lag-two diagnostic and scope]\label{rem:diagnostics-consistency-only-main}
+For the fixed constrained D-MAP kernels in
+\eqref{eq:t0-t1-main}, the covariance paragraph in the proof of
+\Cref{thm:main-record-wrapper} gives
+\[
+\gamma_2=\operatorname{Cov}(A_0,A_2)=\rho(a-\rho)\lambda_{\mathrm{hid}} .
+\]
+The prefactor is nonzero by \Cref{lem:stationary-main}.  Thus the population
+diagnostic \(\gamma_2=0\) is exactly the hidden-mode threshold
+\(\lambda_{\mathrm{hid}}=0\), equivalently
+\(\Gamma=\Gamma_{\mathrm{crit}}(\kappa_{\mathrm r},\Delta\tau)\) under the
+critical-rate convention of \eqref{eq:gamma-crit-piecewise-main}.
+
+The hazard curve, the closed Fano factor, and the finite-record plots derived
+from \Cref{lem:survival-hazard-main,prop:spectrum-main} are population formula
+checks for the sampled-counter D-MAP law.  Their finite-record reporting status is
+the one stated in \Cref{ass:model-inference-contract-main}.
+\end{remark}
+
+\subsection{Renewal inclusion products and quotient inverse}
+
+In Markovian-arrival-process language, the pair \((T_0,T_1)\) in
+\eqref{eq:t0-t1-main} is a constrained two-state discrete-time MAP:
+\(T_0+T_1\) is stochastic, \(T_0\) records a no-arrival transition, and
+\(T_1\) records a one-arrival transition.  This places the model inside the
+MAP/D-MAP family introduced and developed for correlated arrival streams
+\cite{Neuts1979MAP,Lucantoni1991BMAP,AlfaNeuts1995DMAP,
+Chakravarthy2010MAPSurvey,AsanjaraniNazarathy2022MAP}.  The closest
+representation comparators are the D-MAP construction of
+\cite{AlfaNeuts1995DMAP} and the MAP/non-renewal arrival antecedents of
+\cite{LucantoniMeierHellsternNeuts1990Vacations}.  The relevant
+canonical-form and weak-equivalence results are
+\cite{Ryden1996Aggregated,BodrogHeindlHorvathTelek2008MAP2Canonical,
+RamirezCoboLilloWiper2010MAP2Nonidentifiability,
+RamirezCoboLillo2012WeakEquivalentMAP}, which show that hidden MAP and
+phase-type representations are generally nonunique and must be quotiented or
+put in a specified representation chart.  The theorem below proves a different
+and narrower statement for the sampled killed-leakage D-MAP(2) subfamily:
+three visible inclusion probabilities reduce the renewal law to the quotient
+coordinates \((p+s,ps)\), so the visible law identifies the unordered pair
+\(\{p,s\}\) and no ordered branch label beyond it.
+
+\begin{corollary}[Renewal inclusion and finite word law]\label{cor:renewal-principal-minor-word-law-main}
+For a stationary renewal click set \(\varXi\) with intensity \(\rho\) and Palm
+renewal masses \(u_n=\PP(n\in\varXi\mid0\in\varXi)\), every nonempty finite
+ordered set \(B=\{i_1<\cdots<i_m\}\) satisfies
+\begin{equation}\label{eq:renewal-inclusion-product-main}
+\PP(B\subset\varXi)
+=\rho\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}.
+\end{equation}
+For the empty set this inclusion probability is \(1\).  Exact finite
+configuration probabilities follow by finite inclusion-exclusion:
+\begin{equation}\label{eq:finite-exact-configuration-probabilities-main}
+\PP(\varXi\cap I=S)
+=\sum_{C\subset I\setminus S}(-1)^{|C|}
+\PP(S\cup C\subset\varXi).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Condition on the leftmost click in \(B\).  Under the Palm law at that click,
+the future click process renews, so the conditional probability of the
+successive gaps \(i_{r+1}-i_r\) being occupied is
+\(\prod_{r=1}^{m-1}u_{i_{r+1}-i_r}\).  Multiplying by the stationary click
+intensity \(\rho\) gives \eqref{eq:renewal-inclusion-product-main}.  The
+finite word formula is the ordinary inclusion-exclusion identity over the
+unprescribed click sites \(I\setminus S\).
+\end{proof}
+
+\begin{lemma}[Constrained D-MAP specialization of the renewal product notation]\label{lem:constrained-dmap-renewal-product-specialization-main}
+Fix one positive constrained D-MAP setting
+\(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\), and let
+\((A_n)_{n\in\mathbb Z}\) be the stationary visible binary process generated
+by the killed-leakage kernels \eqref{eq:t0-t1-main} with
+\(p=e^{-\Gamma\Delta\tau}\), \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\), the
+positive \(a,b\) from \eqref{eq:a-b-main}, \(T_1(R,R)=T_1(D,R)=0\), and
+continuous equal-rate interpretation on \(\Gamma=\kappa_{\mathrm r}\).  Then
+\begin{equation}\label{eq:finite-inclusion-u-n-main}
+u_n=\PP(A_n=1\mid A_0=1)
+=\rho+(a-\rho)\lambda_{\mathrm{hid}}^{\,n-1},
+\qquad n\ge1.
+\end{equation}
+Thus the constrained D-MAP renewal inclusion products are obtained from
+\eqref{eq:renewal-inclusion-product-main} by this \(u_n\), and finite word
+laws are given by
+\eqref{eq:finite-exact-configuration-probabilities-main}.
+\end{lemma}
+
+\begin{proof}
+The formula for \(u_n\) is \Cref{lem:covariance-transfer-main}.  Insert that
+Palm renewal mass into \Cref{cor:renewal-principal-minor-word-law-main}.
+\end{proof}
+
+\begin{lemma}[Symmetric-coordinate algebra for the quotient inverse]\label{lem:quotient-inverse-symmetric-algebra-main}
+Let \(p\in(0,1)\), put \(q=1-p\), and let the constrained D-MAP parameters satisfy
+\[
+a+b=1-s,\qquad
+\lambda_{\mathrm{hid}}=p-b,\qquad
+\rho=\frac{q(1-s)}{q+b}.
+\]
+Then
+\begin{equation}\label{eq:quotient-inverse-s1-algebra-main}
+1-a+\lambda_{\mathrm{hid}}=p+s
+\end{equation}
+and
+\begin{equation}\label{eq:quotient-inverse-s2-algebra-main}
+\rho(1-\lambda_{\mathrm{hid}})-a+\lambda_{\mathrm{hid}}=ps .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Since \(a+b=1-s\), we have \(a=1-s-b\).  Therefore
+\[
+1-a+\lambda_{\mathrm{hid}}
+=1-(1-s-b)+(p-b)
+=p+s,
+\]
+which proves \eqref{eq:quotient-inverse-s1-algebra-main}.  For the second
+identity, first note that
+\[
+1-\lambda_{\mathrm{hid}}=1-p+b=q+b.
+\]
+Thus
+\[
+\rho(1-\lambda_{\mathrm{hid}})
+=\frac{q(1-s)}{q+b}\,(q+b)
+=q(1-s).
+\]
+Combining this with \(a=1-s-b\) and \(\lambda_{\mathrm{hid}}=p-b\) gives
+\[
+\rho(1-\lambda_{\mathrm{hid}})-a+\lambda_{\mathrm{hid}}
+=q(1-s)-(1-s-b)+(p-b)
+=q(1-s)+p+s-1.
+\]
+Because \(p+q=1\), the last expression is
+\[
+q(1-s)+p+s-1
+=s-qs
+=ps,
+\]
+as claimed.
+\end{proof}
+
+\begin{lemma}[Exchange symmetry in dimensionless survival coordinates]\label{lem:gap-law-exchange-symmetry-main}
+Put
+\[
+x=-\log p=\Gamma\Delta\tau,\qquad
+y=-\log s=\kappa_{\mathrm r}\Delta\tau,
+\qquad p=e^{-x},\qquad s=e^{-y}.
+\]
+For \(x\ne y\), the zero-run law in \eqref{eq:gap-closed-main} is
+\begin{equation}\label{eq:symmetric-gap-law-main}
+g_k=
+\frac{y(1-p)p^k-x(1-s)s^k}{y-x},
+\qquad k\ge0.
+\end{equation}
+The hidden eigenvalue in \eqref{eq:lambda-hid-main} is, in the same
+coordinates,
+\begin{equation}\label{eq:symmetric-lambda-hid-main}
+\lambda_{\mathrm{hid}}
+=\frac{y s-x p}{y-x}
+=\frac{y e^{-y}-x e^{-x}}{y-x}.
+\end{equation}
+Both \eqref{eq:symmetric-gap-law-main} and
+\eqref{eq:symmetric-lambda-hid-main} are invariant under the simultaneous
+exchange \((x,p)\leftrightarrow(y,s)\).  The equal-rate laws are their
+continuous limits.  Consequently the stationary visible renewal law is
+unchanged by exchanging \(\Gamma\) and \(\kappa_{\mathrm r}\).
+\end{lemma}
+
+\begin{proof}
+Multiplying numerator and denominator in \eqref{eq:gap-closed-main} by
+\(\Delta\tau\) gives \eqref{eq:symmetric-gap-law-main}.  Similarly,
+\eqref{eq:lambda-hid-main} becomes
+\[
+\lambda_{\mathrm{hid}}
+=\frac{\kappa_{\mathrm r}s-\Gamma p}{\kappa_{\mathrm r}-\Gamma}
+=\frac{y s-x p}{y-x}.
+\]
+Under \((x,p)\leftrightarrow(y,s)\), the numerator
+\[
+y(1-p)p^k-x(1-s)s^k
+\]
+and the denominator \(y-x\) both change sign, so \(g_k\) is unchanged.  The
+same sign cancellation gives
+\[
+y s-x p\longmapsto x p-y s=-(y s-x p),
+\qquad
+y-x\longmapsto x-y=-(y-x),
+\]
+and hence \(\lambda_{\mathrm{hid}}\) is unchanged.  The diagonal formulas
+follow by taking the continuous limits \(x\to y\).  Since
+\Cref{lem:renewal-gap-main} proves that the visible law is the stationary
+renewal law with gap probabilities \(g_k\), the unordered pair
+\(\{(x,p),(y,s)\}\) determines the whole gap distribution.  It also determines
+the stationary renewal intensity \(1/\EE(G+1)\).  Therefore the stationary
+renewal measures generated before and after the exchange have the same
+finite-dimensional visible distributions.
+\end{proof}
+
+\begin{convention}\label{conv:branch-map-labelled-rates-main}
+\textbf{Identifiable estimands and branch-map convention.}
+From one stationary visible record the identifiable objects are the inclusion
+vector \((r_0,r_1,r_2)\), the quotient
+\(\Phi(r)=(p+s,ps)\) on
+\(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\), the unordered survival-factor pair
+\(\{p,s\}\), and visible functionals such as
+\(\gamma_2=\operatorname{Cov}(A_0,A_2)\).  These are quotient-level objects:
+the visible inverse does not order the two roots and does not by itself
+produce labelled attempt/recovery parameters.  When the sampling interval is
+a known design interval, the unordered numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},
+       -\frac{\log s}{\Delta\tau}\right\}
+\]
+is visible-law identifiable, but the ordered vector
+\((\Gamma,\kappa_{\mathrm r})\) is not.  If \(\Delta\tau\) is not known as a
+design interval, the same quotient identifies only
+\[
+\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\},
+\]
+not numerical rates per unit time.  A separated ordered labelled-rate vector
+may be reported only after an additional side-data branch map
+\(\mathcal B\), not contained in the visible record, assigns the two roots to
+the attempt and recovery labels on a separated chart
+\(\Delta_\sigma=(p-s)^2>0\).  Any theorem using such a vector is a
+conditional side-data theorem: it first applies the quotient inverse
+\(\Phi\), then applies the externally supplied branch map.  Theorem statements
+condition on a deterministic branch map; estimated branch maps are reduced to
+this case in \Cref{app:branch-map-oracle-reduction-main}.  On the exchange
+diagonal \((2z,z^2)\), the invariant visible-law estimand is the common
+dimensionless product \(-\log z\), and only for known \(\Delta\tau\) the common
+numerical rate \(-\log z/\Delta\tau\), not a separated ordered chart.
+\end{convention}
+
+\begin{proposition}[Detailed form of Theorem~B: quotient inverse]\label{prop:toeplitz-image-inverse-duality-detailed}
+Work under the constrained D-MAP record model of
+\Cref{ass:model-inference-contract-main}.  Thus \(p,s,a,b,T_0,T_1\) and the
+stationary visible process \((A_n)_{n\in\mathbb Z}\) are the quantities fixed
+there; in particular \(0<p,s<1\), \(a>0\), \(b>0\), \(a+b=1-s\), and
+equal-rate formulas are interpreted by continuous limits.  Let
+\[
+r_0=\rho,\qquad r_1=\rho a,\qquad r_2=\rho u_2 .
+\]
+The visible inverse is a quotient inverse, defined on the domain
+\begin{equation}\label{eq:population-inverse-domain-main}
+r_0>0,\qquad \Delta_{\mathrm{inv}}:=r_1-r_0^2\ne0 .
+\end{equation}
+On this domain put
+\[
+a=\frac{r_1}{r_0},\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+\[
+\boxed{\Phi(r)=
+\left( 1-a+\lambda,\,
+r_0(1-\lambda)-a+\lambda \right).}
+\]
+On the constrained D-MAP image,
+\[
+\Phi_1=p+s,\qquad \Phi_2=ps,
+\]
+so the visible law determines the unordered survival-factor pair
+\[
+\{p,s\}=\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\},
+\]
+or equivalently the unordered roots of \(z^2-\Phi_1z+\Phi_2=0\).  For known
+design interval \(\Delta\tau\), this root set also gives the unordered
+numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},
+       -\frac{\log s}{\Delta\tau}\right\}
+=\{\Gamma,\kappa_{\mathrm r}\}.
+\]
+If \(\Delta\tau\) is not supplied as a known design interval, the visible law
+stops at the unordered dimensionless product set
+\[
+\{-\log p,-\log s\}
+=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}.
+\]
+Its root discriminant is
+\[
+\Delta_\sigma:=\Phi_1^2-4\Phi_2=(p-s)^2 .
+\]
+Within this constrained D-MAP(2) subfamily, the population inverse is
+the quotient map
+\[
+r\longmapsto (p+s,ps).
+\]
+This theorem stops at the exchange quotient; ordered
+\((\Gamma,\kappa_{\mathrm r})\) requires
+\Cref{conv:branch-map-labelled-rates-main}.  The first population singularity
+is the quotient denominator
+\[
+\Delta_{\mathrm{inv}}=r_1-r_0^2=r_0(a-r_0),
+\]
+which must be nonzero to recover \(\lambda_{\mathrm{hid}}\).  The second is
+not a singularity of the quotient inverse itself: at
+\(\Delta_\sigma=0\) the unordered pair simply collapses to the common root.
+Only the separated-root labelled chart of
+\Cref{prop:population-separated-root-labelled-chart-main} is singular there.  The
+dimensionless formulas
+\eqref{eq:symmetric-gap-law-main}--\eqref{eq:symmetric-lambda-hid-main} show
+that the stationary visible law generated by \((\Gamma,\kappa_{\mathrm r})\)
+equals that generated by \((\kappa_{\mathrm r},\Gamma)\).  Thus the visible
+law identifies only the exchange quotient, not an ordered branch labelling.
+At the exchange diagonal
+\(\sigma=(2z,z^2)\), \(0<z<1\), the unordered pair collapses to the single
+survival factor \(z\), so the common dimensionless product \(-\log z\), and

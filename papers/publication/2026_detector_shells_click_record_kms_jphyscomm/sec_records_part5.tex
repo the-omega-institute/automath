@@ -1,0 +1,700 @@
+\]
+\end{proposition}
+
+\begin{proof}
+The displayed formula for \(U_j\) is the only model-specific input.  It is the
+adjacent-gap form of the three inclusion rewards: a half-open Palm cycle
+contains the click at its left endpoint, a lag-one inclusion occurs exactly on
+\(G_j=0\), and a lag-two inclusion occurs on \(G_j=1\) or on two consecutive
+zero gaps.  Palm inversion for these local windows gives
+\(\EE U_j^{(m)}=r_m\EE L_j\), hence \(\EE Y_j=0\).  Because
+\(Y_j=f(G_j,G_{j+1})\) and the gaps are i.i.d., \((Y_j)\) is \(1\)-dependent,
+and the exponential gap moment from
+\Cref{lem:killed-leakage-gap-exponential-moment-main} gives the fourth moments
+required by the master covariance theorem.
+
+The concrete instantiation of
+\Cref{thm:main-calendar-stopped-separated-batch-plugin} is
+\[
+d=3,\qquad T_1=T_1^{(r)},\qquad
+\Delta_N=\Rinch_N^{\mathrm{cyc}}-\Rinc .
+\]
+The common complete-cycle set
+\(J_N=J_{0,N}\cap J_{1,N}\cap J_{2,N}\) and Algorithm~1's requirement that
+every batch be contained in \(J_N\) are precisely the stopped condition
+\((M-1)(b_N+1)+b_N\le K_N-1\).  Finally,
+\Cref{lem:three-inclusion-clt-reduction-main} gives the plug-in scale
+\(\Delta_N=O_{\PP}(N^{-1/2})\), and
+\Cref{lem:finite-record-reporting-gate-main} gives
+\(\PP(\mathcal E_N^c)\to0\).  Applying the master theorem with these
+identifications proves the displayed rate for the reported covariance object,
+including the empirical batch mean, the multiplier \(K_N/N\), the random
+calendar-stopped batch count, and the plug-in rewards.  The auxiliary zero
+completion has the same probability rate because the withholding event has
+vanishing probability.
+\end{proof}
+
+\begin{lemma}[Off-diagonal gap-law formula for the inclusion covariance]\label{lem:off-diagonal-inclusion-covariance-gap-sums-main}
+Work under the positive constrained D-MAP record model away from the exchange
+diagonal, so that the two survival roots \(p\ne s\) are distinct.  Let
+\[
+g_k=\PP(G=k),\qquad k\ge0,
+\]
+be the Palm gap law, equivalently the off-diagonal closed law
+\eqref{eq:symmetric-gap-law-main}.  Put
+\[
+\mu=\sum_{k\ge0}(k+1)g_k,\qquad
+r=\frac1\mu(1,g_0,g_1+g_0^2)^\top .
+\]
+For \(i,j\ge0\), define the two-gap reward kernel
+\[
+u(i,j)=
+\left(1,\mathbf1_{\{i=0\}},
+\mathbf1_{\{i=1\}}+\mathbf1_{\{i=0,j=0\}}\right)^\top,
+\qquad
+y(i,j)=u(i,j)-r(i+1).
+\]
+Finally set
+\[
+\bar y(j):=\sum_{k\ge0}y(j,k)g_k
+=
+\left(
+1-r_0(j+1),\
+\mathbf1_{\{j=0\}}-r_1(j+1),\
+\mathbf1_{\{j=1\}}+g_0\mathbf1_{\{j=0\}}-r_2(j+1)
+\right)^\top .
+\]
+Then the cycle-time long-run covariance in
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} has the explicit
+gap-law representation
+\begin{equation}\label{eq:off-diagonal-inclusion-covariance-gap-sums-main}
+T_1^{(r)}=V_g+C_g+C_g^\top ,
+\end{equation}
+where
+\begin{align}
+V_g&=\sum_{i,j\ge0} y(i,j)y(i,j)^\top g_i g_j,
+\label{eq:off-diagonal-inclusion-var-gap-sum-main}\\
+C_g&=\sum_{i,j\ge0} y(i,j)\bar y(j)^\top g_i g_j .
+\label{eq:off-diagonal-inclusion-adjacent-gap-sum-main}
+\end{align}
+Equivalently, entry by entry,
+\begin{equation}\label{eq:off-diagonal-inclusion-entry-gap-sum-main}
+[T_1^{(r)}]_{\alpha\beta}
+=\sum_{i,j\ge0}y_\alpha(i,j)y_\beta(i,j)g_i g_j
++\sum_{i,j\ge0}
+\{y_\alpha(i,j)\bar y_\beta(j)+\bar y_\alpha(j)y_\beta(i,j)\}g_i g_j .
+\end{equation}
+All finite-dimensional sums in
+\eqref{eq:off-diagonal-inclusion-var-gap-sum-main}--\eqref{eq:off-diagonal-inclusion-entry-gap-sum-main}
+are absolutely convergent.  Since the off-diagonal law
+\eqref{eq:symmetric-gap-law-main} is a finite linear combination of
+\(p^k\) and \(s^k\), these finite and double sums reduce, if desired, to
+ordinary geometric moment sums; no Monte Carlo or covariance-tail truncation is
+part of the definition.  The retained-record covariance in Theorem~C is
+\[
+\Sigma_r=\frac{T_1^{(r)}}{\mu}.
+\]
+Equivalently, let \(G_0,G_1,G_2\) be i.i.d. with law \(g\), put
+\(L_i=G_i+1\), and set
+\[
+A=\EE\{u(G_0,G_1)u(G_0,G_1)^\top\},\qquad
+B=\EE\{u(G_0,G_1)u(G_1,G_2)^\top\},
+\]
+\[
+e=\EE\{L_0u(G_0,G_1)\},\qquad
+d=\EE\{L_1u(G_0,G_1)\},\qquad
+\nu=\EE L_0^2 .
+\]
+Then the same covariance is the reproducible matrix formula
+\begin{equation}\label{eq:off-diagonal-inclusion-covariance-ABednu-main}
+\Sigma_r
+=\frac1\mu\{A-er^\top-re^\top+\nu rr^\top
++B-dr^\top+B^\top-rd^\top\}.
+\end{equation}
+In summation form,
+\[
+A=\sum_{i,j\ge0}u(i,j)u(i,j)^\top g_i g_j,\qquad
+B=\sum_{i,j,k\ge0}u(i,j)u(j,k)^\top g_i g_j g_k,
+\]
+\[
+e=\sum_{i,j\ge0}(i+1)u(i,j)g_i g_j,\qquad
+d=\sum_{i,j\ge0}(j+1)u(i,j)g_i g_j,\qquad
+\nu=\sum_{i\ge0}(i+1)^2g_i .
+\]
+These sums also converge absolutely by the exponential gap tail.  Thus the
+off-diagonal covariance is determined for every positive
+\((\Gamma,\kappa_{\rm r},\Delta\tau)\) away from the exchange diagonal by
+gap-law sums alone.
+\end{lemma}
+
+\begin{proof}
+The complete-cycle reward identities in
+\eqref{eq:inclusion-cycle-reward-identities-main} give
+\[
+Y_j=y(G_j,G_{j+1}).
+\]
+The Palm inversion identity used in
+\Cref{prop:exact-inclusion-separated-batch-covariance-main} gives
+\(\EE Y_j=0\), and the displayed formula for \(r\) follows from
+\[
+\EE U_j=(1,g_0,g_1+g_0^2)^\top .
+\]
+Because the gaps are i.i.d.,
+\[
+\operatorname{Var}(Y_0)=\EE(Y_0Y_0^\top)
+=\sum_{i,j\ge0}y(i,j)y(i,j)^\top g_i g_j=V_g .
+\]
+For the adjacent covariance,
+\[
+\operatorname{Cov}(Y_0,Y_1)=\EE(Y_0Y_1^\top)
+=\sum_{i,j,k\ge0}y(i,j)y(j,k)^\top g_i g_jg_k .
+\]
+Summing first over the independent future gap \(k\) gives
+\[
+\sum_{k\ge0}y(j,k)g_k=\bar y(j),
+\]
+with the displayed closed expression; hence
+\(\operatorname{Cov}(Y_0,Y_1)=C_g\).  Transposition gives
+\(\operatorname{Cov}(Y_1,Y_0)=C_g^\top\), which proves
+\eqref{eq:off-diagonal-inclusion-covariance-gap-sums-main}.
+
+The \(A,B,e,d,\nu\) display is the same identity expanded before centering.
+Indeed,
+\[
+\operatorname{Var}(Y_0)
+=\EE\{(u(G_0,G_1)-rL_0)(u(G_0,G_1)-rL_0)^\top\}
+=A-er^\top-re^\top+\nu rr^\top .
+\]
+Also
+\[
+\begin{aligned}
+\operatorname{Cov}(Y_0,Y_1)
+&=\EE\{(u(G_0,G_1)-rL_0)(u(G_1,G_2)-rL_1)^\top\}\\
+&=B-dr^\top-r\,\EE\{L_0u(G_1,G_2)^\top\}
+  +rr^\top\EE(L_0L_1).
+\end{aligned}
+\]
+Since \(G_0\) is independent of \((G_1,G_2)\),
+\(\EE\{L_0u(G_1,G_2)\}=\mu\,\EE u(G_1,G_2)=\mu^2r\), and
+\(\EE(L_0L_1)=\mu^2\).  These last two terms cancel, so
+\(\operatorname{Cov}(Y_0,Y_1)=B-dr^\top\), and transposition gives
+\(\operatorname{Cov}(Y_1,Y_0)=B^\top-rd^\top\).  Dividing
+\(T_1^{(r)}\) by \(\mu\) proves
+\eqref{eq:off-diagonal-inclusion-covariance-ABednu-main}.
+
+The exponential gap bound in
+\Cref{lem:killed-leakage-gap-exponential-moment-main} and the linear growth
+of \(y(i,j)\) and \(\bar y(j)\) imply absolute convergence of all displayed
+sums.  Finally, \eqref{eq:symmetric-gap-law-main} expresses \(g_k\) as a
+finite linear combination of geometric sequences, so the required moments are
+finite combinations of the usual geometric derivative sums.
+\end{proof}
+
+The next theorem records the D-MAP reward specialization and the retained-rank
+consequence used by the main inferential theorems.
+
+\begin{proposition}[D-MAP specialization of separated-batch covariance]\label{thm:finite-record-covariance-main}
+Work under \Cref{ass:fixed-sampled-boundary-record-main} and the deterministic
+threshold protocol \ref{fr:protocol-main} at a population point in the stable
+quotient chart \(r_0>0\), \(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\).
+Let \(U_j\), \(Y_j\), \(T_1^{(r)}\), and
+\(\Sigma_r=T_1^{(r)}/\mu\) be the adjacent-gap reward and calendar-time
+covariance from
+\Cref{prop:exact-inclusion-separated-batch-covariance-main}.  Away from the
+exchange diagonal, \(T_1^{(r)}\) is the explicit finite-gap-law expression
+in \Cref{lem:off-diagonal-inclusion-covariance-gap-sums-main}; on the
+exchange diagonal, the corresponding computable closed formula is
+\Cref{prop:computable-diagonal-covariance-main}.  Algorithm~1
+forms the separated all-complete-cycle plug-in covariance estimator
+\(\widehat\Sigma_{r,N}\) and reports it only on \(\mathcal E_N\).  For
+probability limits use the auxiliary total-space completion
+\[
+\widehat\Sigma_{r,N}^{\rm tot}
+:=\mathbf 1_{\mathcal E_N}\widehat\Sigma_{r,N}
++\mathbf 1_{\mathcal E_N^c}0_{3\times3}.
+\]
+With a deterministic separated batch length
+\(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), this completed matrix satisfies
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=
+O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right)
+=
+O_{\PP}\left(N^{-\beta}+N^{-(1-\beta)/2}\right).
+\]
+With
+\[
+\omega_\beta:=\min\{\beta,(1-\beta)/2\},
+\]
+any rank-adaptive deterministic threshold \(t_N\) must satisfy
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=o_{\PP}(t_N).
+\]
+A concrete admissible choice is
+\[
+t_N=N^{-\alpha},
+\qquad
+0<\alpha<\omega_\beta;
+\]
+for the balanced choice \(b_N=\lfloor N^{1/3}\rfloor\), this becomes any
+\(0<\alpha<1/3\), for instance \(t_N=N^{-1/4}\).
+\end{proposition}
+
+\begin{proof}
+The D-MAP reward identity and the scale
+\(\Sigma_r=T_1^{(r)}/\mu\) are those of
+\Cref{prop:exact-inclusion-separated-batch-covariance-main}.  That proposition
+instantiates the master adjacent-gap theorem
+\Cref{thm:main-calendar-stopped-separated-batch-plugin} with
+\(Y_j=f(G_j,G_{j+1})=U_j-\Rinc L_j\) and
+\(\Delta_N=\Rinch_N^{\mathrm{cyc}}-\Rinc=O_{\PP}(N^{-1/2})\).  Therefore
+Algorithm~1 gives
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\]
+Substituting \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), gives
+\[
+O_{\PP}\left(N^{-\beta}+N^{-(1-\beta)/2}\right).
+\]
+The threshold claim is immediate from Weyl's eigenvalue inequality: every
+positive limiting eigenvalue stays above \(t_N\), and every zero limiting
+eigenvalue falls below \(t_N\), with probability tending to one whenever
+\(\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=o_{\PP}(t_N)\).
+\end{proof}
+
+
+\begin{lemma}[Conditional projected-Gaussian law at a moving half-space]\label{lem:projected-gaussian-bootstrap-halfspace-main}
+For \(t\in(0,1)\), write
+\[
+H_t=\{h\in\RR^2:h_2\le th_1\}.
+\]
+Let \(z_N\to z\in(0,1)\) in probability and let
+\(\widehat\Sigma_N\) be a symmetric nonnegative definite covariance estimator
+such that
+\[
+\|\widehat\Sigma_N-\Sigma\|_{\operatorname{op}}=o_{\PP}(t_N),
+\qquad t_N\downarrow0,
+\]
+for a fixed nonnegative definite \(2\times2\) matrix \(\Sigma\).  Let
+\[
+\widehat\Sigma_N^+
+=\sum_{\widehat\lambda_{i,N}>t_N}
+\widehat\lambda_{i,N}^{-1}
+\widehat v_{i,N}\widehat v_{i,N}^{\top}
+\]
+be the thresholded Moore--Penrose inverse.  Suppose that
+\[
+X_N\Rightarrow X:=\Pi_{H_z}(Z),
+\qquad Z\sim\mathcal N(0,\Sigma).
+\]
+This is the local constrained-estimation limit: the Gaussian perturbation is
+projected onto the tangent half-space before the quadratic statistic is formed.
+It is the same projected-normal structure that appears in constrained
+\(M\)-estimation limits \cite{Geyer1994ConstrainedM}.  The simulation below is
+therefore not an ordinary nonparametric or parametric bootstrap from the
+record; it is the conditional plug-in projected Gaussian law, with retained
+empirical rank.
+Define
+\[
+T_N=X_N^\top\widehat\Sigma_N^+X_N
+\]
+and, conditionally on the observed record,
+\[
+Z_N^\ast\sim \mathcal N(0,\widehat\Sigma_N),\qquad
+X_N^\ast=\Pi_{H_{z_N}}(Z_N^\ast),\qquad
+T_N^\ast=(X_N^\ast)^\top\widehat\Sigma_N^+X_N^\ast .
+\]
+Then
+\[
+T_N\Rightarrow T:=X^\top\Sigma^+X,
+\]
+and the conditional law of \(T_N^\ast\) converges weakly in probability to
+the law of \(T\).  Consequently, if \(c_{1-\alpha,N}^{\ast,-}\) is the lower
+conditional \((1-\alpha)\)-quantile of \(T_N^\ast\) and the limiting quantile
+\[
+c_{1-\alpha}:=\inf\{c:\PP(T\le c)\ge1-\alpha\}
+\]
+is a continuity point of the distribution function of \(T\), then
+\[
+c_{1-\alpha,N}^{\ast,-}\to c_{1-\alpha}
+\quad\text{in probability}.
+\]
+If in addition \(\PP(T\le c_{1-\alpha})=1-\alpha\), then
+\[
+\PP\{T_N\le c_{1-\alpha,N}^{\ast,-}\}\to1-\alpha .
+\]
+If \(\Sigma=0\), then the retained-rank inverse is the zero matrix with
+probability tending to one; consequently \(T_N=0\) and \(T_N^\ast=0\) with
+probability tending to one, and the fixed positive-buffer lower-coverage
+conclusion follows from
+\Cref{lem:buffered-random-quantile-coverage-main}.
+
+\end{lemma}
+
+\begin{proof}
+Weyl's inequality and the condition
+\(\|\widehat\Sigma_N-\Sigma\|_{\operatorname{op}}=o_{\PP}(t_N)\) imply that,
+with probability tending to one, every positive eigenvalue of \(\Sigma\) is
+retained and every zero eigenvalue is removed by the threshold.  On that event
+the retained spectral projection converges to the range projection of
+\(\Sigma\), and
+\[
+\|\widehat\Sigma_N^+-\Sigma^+\|_{\operatorname{op}}\to0
+\]
+in probability.  Slutsky's theorem therefore gives
+\[
+X_N^\top\widehat\Sigma_N^+X_N
+\Rightarrow X^\top\Sigma^+X .
+\]
+In the special case \(\Sigma=0\), the same eigenvalue bound says
+\[
+\PP\{\|\widehat\Sigma_N\|_{\operatorname{op}}\le t_N\}\to1,
+\]
+so the thresholded retained-rank inverse is exactly zero with probability
+tending to one.  Hence \(T_N=0\) and, conditionally, \(T_N^\ast=0\) on that
+high-probability event.  The limiting distribution is the point mass at zero,
+whose lower \(q\)-quantile is zero for every \(0<q<1\); the positive-buffer
+coverage statement is therefore the buffered random-quantile conclusion.
+
+The remaining issue is conditional Gaussian convergence after the moving
+projection.  The half-space projection has the explicit formula
+\[
+\Pi_{H_t}(u)
+=u-\frac{(u_2-tu_1)_+}{1+t^2}\binom{-t}{1}.
+\]
+Thus \((t,u)\mapsto\Pi_{H_t}(u)\) is continuous, uniformly for \(t\) in compact
+subintervals of \((0,1)\) and \(u\) in bounded sets.  Since
+\(\widehat\Sigma_N\to\Sigma\) in probability, the conditional Gaussian laws
+\(\mathcal N(0,\widehat\Sigma_N)\) converge weakly in probability to
+\(\mathcal N(0,\Sigma)\).  Combining this Gaussian continuity with
+\(z_N\to z\) and \(\widehat\Sigma_N^+\to\Sigma^+\) shows that, for every
+bounded continuous \(\varphi:\RR\to\RR\),
+\[
+\EE^\ast\varphi(T_N^\ast)
+\to
+\EE\varphi\!\left((\Pi_{H_z}Z)^\top\Sigma^+\Pi_{H_z}Z\right)
+\]
+in probability, where \(\EE^\ast\) denotes conditional expectation given the
+record.  This is conditional weak convergence in probability.  The quantile
+conclusion is the standard consequence of weak convergence at a continuity
+point of the limiting distribution function; the final coverage statement
+then follows from the convergence of \(T_N\) and the random quantile
+\(c_{1-\alpha,N}^{\ast,-}\).
+\end{proof}
+
+\begin{lemma}[Buffered random-quantile lower coverage]\label{lem:buffered-random-quantile-coverage-main}
+Let \(T_N\Rightarrow T\), and let \(F_N^\ast\) be random conditional
+distribution functions such that
+\[
+F_N^\ast(t)\to F(t):=\PP(T\le t)
+\qquad\text{in probability}
+\]
+at every continuity point \(t\) of \(F\).  Fix \(0<q<1\), and define the
+lower random conditional \(q\)-quantile and the limiting lower \(q\)-quantile
+by
+\[
+c_N^-=\inf\{t:F_N^\ast(t)\ge q\},
+\qquad
+c^-=\inf\{t:F(t)\ge q\}.
+\]
+Assume \(c^-\) is finite.  Then, for every fixed \(\varepsilon>0\),
+\[
+\liminf_{N\to\infty}\PP\{T_N\le c_N^-+\varepsilon\}\ge q .
+\]
+No continuity of \(F\) at \(c^-\), and no equality \(F(c^-)=q\), is required.
+In particular, this lemma applies to the diagonal projected-Gaussian
+zero-quantile alternatives after replacing \(q\) by \(1-\alpha\).
+\end{lemma}
+
+\begin{proof}
+First the random lower quantile cannot fall a fixed distance below the
+limiting lower quantile.  Fix \(\delta>0\).  By the definition of \(c^-\),
+\(F(c^--\delta)<q\).  Choose a continuity point
+\[
+x\in(c^--\delta,c^-)
+\]
+with \(F(x)<q\); distribution functions have at most countably many
+discontinuities, so such a point is available after decreasing \(x\) slightly
+if needed.  The pointwise conditional convergence gives
+\[
+F_N^\ast(x)\to F(x)
+\qquad\text{in probability}.
+\]
+For any distribution function \(G\), the event
+\(\inf\{t:G(t)\ge q\}\le x\) implies \(G(x)\ge q\).  Hence
+\[
+\PP\{c_N^-\le x\}
+\le
+\PP\{F_N^\ast(x)\ge q\}\to0,
+\]
+and \(c_N^->x\) with probability tending to one.
+
+Choose \(x>c^- -\varepsilon\), and then choose a continuity point
+\[
+y\in(c^-,x+\varepsilon).
+\]
+This is possible because \(x+\varepsilon>c^-\).  On the event
+\(\{c_N^->x\}\), the inclusion
+\[
+\{T_N\le y\}\subseteq\{T_N\le c_N^-+\varepsilon\}
+\]
+holds.  Therefore
+\[
+\liminf_N\PP\{T_N\le c_N^-+\varepsilon\}
+\ge
+\liminf_N\PP\{T_N\le y\}.
+\]
+Weak convergence at the continuity point \(y\) gives
+\[
+\lim_N\PP\{T_N\le y\}=F(y).
+\]
+Finally \(y>c^-\) implies \(F(y)\ge q\) by the lower-quantile definition.
+The displayed lower bound follows.
+\end{proof}
+
+\begin{lemma}[Conditional Monte Carlo diagnostic and auxiliary domination]\label{lem:conditional-monte-carlo-quantile-main}
+Fix \(0<z<1\) and condition on the observed record.  Let
+\[
+T_N^\ast(z)=
+\Pi_{H_z}(Z_N^\ast)^\top\widehat\Sigma_{\sigma,N}^{+}
+\Pi_{H_z}(Z_N^\ast),
+\qquad
+Z_N^\ast\mid A_0,\ldots,A_{N-1}\sim
+\mathcal N(0,\widehat\Sigma_{\sigma,N}),
+\]
+where \(H_z=\{h:h_2\le zh_1\}\), and let
+\[
+F_N^\ast(t;z)=\PP^\ast\{T_N^\ast(z)\le t\}
+\]
+be its conditional distribution function.  If
+\(T_{N,1}^\ast(z),\ldots,T_{N,R}^\ast(z)\) are conditionally independent draws
+from this law and
+\[
+\widehat F_{N,R}^\ast(t;z)
+=\frac1R\sum_{m=1}^R\mathbf1_{\{T_{N,m}^\ast(z)\le t\}},
+\]
+then for every \(\varepsilon>0\),
+\[
+\PP^\ast\!\left(
+\sup_{t\in\mathbb R}
+\left|\widehat F_{N,R}^\ast(t;z)-F_N^\ast(t;z)\right|>\varepsilon
+\right)
+\le 2e^{-2R\varepsilon^2}.
+\]
+Equivalently, for every \(0<\delta<1\), with conditional probability at least
+\(1-\delta\),
+\[
+\sup_t|\widehat F_{N,R}^\ast(t;z)-F_N^\ast(t;z)|
+\le
+\varepsilon_{R,\delta}:=
+\sqrt{\frac{\log(2/\delta)}{2R}} .
+\]
+Let \(q_\alpha=1-\alpha\), let
+\[
+c^{-}_{1-\alpha,N}(z)
+=\inf\{t:F_N^\ast(t;z)\ge q_\alpha\},
+\qquad
+\widehat c^{-}_{1-\alpha,N,R}(z)
+=T_{N,(\lceil q_\alpha R\rceil)}^\ast(z),
+\]
+where the draws are sorted increasingly.  If \(c^{-}_{1-\alpha,N}(z)\) is a
+continuity point of \(F_N^\ast(\cdot;z)\), then
+\[
+\widehat c^{-}_{1-\alpha,N,R}(z)
+\longrightarrow c^{-}_{1-\alpha,N}(z)
+\qquad\text{in conditional probability as }R\to\infty .
+\]
+If the conditional law has an atom or a flat stretch at the lower quantile,
+the raw order statistic still estimates a lower conditional quantile in the
+usual empirical-quantile sense, but the raw order statistic at level
+\(q_\alpha\) is not by itself a one-sided coverage certificate.  A DKW
+certificate is obtained by spending probability in the distribution-function
+scale.  If
+\[
+\varepsilon_{R,\delta}<\alpha,\qquad
+q_{\alpha,\delta,R}^{+}:=q_\alpha+\varepsilon_{R,\delta}<1,
+\]
+put \(\widehat c_R=\widehat c^{-}_{1-\alpha,N,R}(z)\) and define
+\[
+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+:=
+\inf\left\{d\ge0:
+\widehat F_{N,R}^\ast(\widehat c_R+d;z)-\varepsilon_{R,\delta}
+\ge 1-\alpha\right\}.
+\]
+Equivalently, since the empirical distribution is a step function, the
+inflated lower empirical quantile is
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+:=T_{N,(\lceil q_{\alpha,\delta,R}^{+}R\rceil)}^\ast(z),
+\]
+and \(\widehat c_R+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+=\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)\).
+Then, conditionally on the observed record,
+\[
+\PP^\ast\!\left\{
+\widehat c_R+d^{\mathrm{DKW}}_{R,\delta,N}(z)
+\ge c^{-}_{1-\alpha,N}(z)\right\}\ge1-\delta .
+\]
+Equivalently, the inflated simulated critical value is the empirical lower
+\((q_\alpha+\varepsilon_{R,\delta})\)-quantile.  This conclusion is
+distribution-free and does not require continuity or a positive density at the
+ideal conditional quantile.
+
+For the record-probability consequence, fix the true diagonal coordinate
+\(z_0\).  Throughout this paragraph \(\PP\) is the fixed-population law of the
+observed retained record and all record-level gates, whereas \(\PP^\ast\) is
+only the conditional law of the auxiliary Gaussian simulation after that
+record has been observed.  The DKW step below is not a finite-sample
+statement about record coverage; it is a conditional one-sided domination
+statement for the simulated projected-Gaussian critical value.  Let
+\(G_N=G_{\mathrm{cert},N}(z_0)\) be the record-level reporting event on which
+the population branch, ideal-quantile enclosure, and numerical recipe are
+certified.  A finite report may set \(G_N=1\) only when the manuscript or
+attached transcript contains the branch certificate and the ideal conditional
+quantile enclosure used by the reported inequality; otherwise the event is
+declared false for coverage-certification purposes.  Let
+\[
+H_N=G_{\mathrm{MC},N}(z_0)
+=\{\widehat c^-_{1-\alpha,N,R}(z_0)
++d_{R,\delta_N^{\rm MC},N}(z_0)\ge c^-_{1-\alpha,N}(z_0)\}
+\]
+be the auxiliary one-sided Monte Carlo domination event.  For each realized
+record, \(H_N\) is an event in the auxiliary simulation space; its probability
+is measured by \(\PP^\ast(\,\cdot\,)\), not by \(\PP\).  The event \(H_N\) is
+part of the report only through a displayed one-sided certificate, for example
+the DKW event and inflation in the preceding display.  Suppose
+\[
+\PP(G_N)\to1,\qquad \delta_N^{\rm MC}\to0,
+\]
+and on \(G_N\),
+\[
+\PP^\ast\{\widehat c^-_{1-\alpha,N,R}(z_0)
++d_{R,\delta_N^{\rm MC},N}(z_0)\ge c^-_{1-\alpha,N}(z_0)\}
+\ge1-\delta_N^{\rm MC} .
+\]
+Define the auxiliary all-space fixed-candidate ideal and simulated diagonal
+acceptance events by
+\[
+\mathcal A_N^{\mathrm{aux}}(z_0)
+:=\{Q_N(z_0)\le c^-_{1-\alpha,N}(z_0)\},
+\]
+and
+\[
+\mathcal A_N^{\mathrm{MC,aux}}(z_0)
+:=\{Q_N(z_0)\le
+\widehat c^-_{1-\alpha,N,R}(z_0)+d_{R,\delta_N^{\rm MC},N}(z_0)\}.
+\]
+The operational reported events are
+\[
+\mathcal A_N^{\mathrm{rep}}(z_0)
+:=\mathcal E_N\cap\mathcal A_N^{\mathrm{aux}}(z_0),
+\qquad
+\mathcal A_N^{\mathrm{MC,rep}}(z_0)
+:=\mathcal E_N\cap\mathcal A_N^{\mathrm{MC,aux}}(z_0).
+\]
+On \(\mathcal E_N^c\) the finite-record procedure withholds the diagonal
+report, so no diagonal finite-record report is formed there.
+Then
+\[
+\PP\{\mathcal A_N^{\mathrm{MC,rep}}(z_0)\}
+\ge
+\PP\{\mathcal A_N^{\mathrm{aux}}(z_0)\}
+-\delta_N^{\rm MC}-\PP(G_N^c)-\PP(\mathcal E_N^c)-o(1).
+\]
+Therefore, if the ideal event has limiting coverage \(1-\alpha\), the simulated
+reported event has
+\[
+\liminf_N
+\PP\{\mathcal A_N^{\mathrm{MC,rep}}(z_0)\}
+\ge1-\alpha .
+\]
+Without such an explicit event \(G_{\mathrm{MC},N}(z_0)\) and one-sided
+inflation \(d_{R,\delta_N^{\rm MC},N}(z_0)\), finite simulation remains only a
+numerical diagnostic for the ideal conditional projected-Gaussian law.
+\end{lemma}
+
+\begin{proof}
+Conditional on the record, the variables
+\(T_{N,1}^\ast(z),\ldots,T_{N,R}^\ast(z)\) are independent real-valued draws
+with distribution function \(F_N^\ast(\cdot;z)\).  The displayed exponential
+bound is therefore the Dvoretzky--Kiefer--Wolfowitz inequality, in Massart's
+sharp-constant form, applied under \(\PP^\ast\) \cite{Massart1990DKW}.
+
+Let
+\[
+\Delta_{N,R}(z)=
+\sup_t|\widehat F_{N,R}^\ast(t;z)-F_N^\ast(t;z)|.
+\]
+The DKW bound gives \(\Delta_{N,R}(z)=O_{\PP^\ast}(R^{-1/2})\).  At a
+continuity point of the conditional quantile, the Glivenko--Cantelli
+consequence of this bound gives the standard empirical-quantile consistency:
+for every \(\eta>0\), after decreasing \(\eta\) if necessary on the left,
+\[
+F_N^\ast(c^{-}_{1-\alpha,N}(z)-\eta;z)<q_\alpha
+\le F_N^\ast(c^{-}_{1-\alpha,N}(z)+\eta;z).
+\]
+Uniform convergence of \(\widehat F_{N,R}^\ast\) to \(F_N^\ast\) then forces
+the order statistic into this \(\eta\)-neighbourhood with conditional
+probability tending to one.  At a discontinuity or flat quantile the same DKW
+bound controls the simulated distribution function but the uninflated
+\(q_\alpha\)-order statistic need not dominate the ideal lower quantile.
+
+The DKW-inflated statistic gives a one-sided certificate without any local
+regularity.  On the event
+\[
+B_{R,\delta,N}(z)=
+\left\{\Delta_{N,R}(z)\le\varepsilon_{R,\delta}\right\},
+\]
+we have, with
+\[
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+=T_{N,(\lceil(q_\alpha+\varepsilon_{R,\delta})R\rceil)}^\ast(z),
+\]
+that
+\[
+\widehat F_{N,R}^\ast
+\bigl(\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z);z\bigr)
+\ge q_\alpha+\varepsilon_{R,\delta}.
+\]
+Therefore
+\[
+F_N^\ast
+\bigl(\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z);z\bigr)
+\ge q_\alpha .
+\]
+By the definition of the lower quantile,
+\[
+c^{-}_{1-\alpha,N}(z)
+\le
+\widehat c^{\mathrm{DKW},-}_{1-\alpha,N,R,\delta}(z)
+=\widehat c_R
++d^{\mathrm{DKW}}_{R,\delta,N}(z).
+\]
+Since the DKW inequality gives \(\PP^\ast(B_{R,\delta,N}(z))\ge1-\delta\),
+the stated DKW domination bound follows.  The only deterministic size
+condition needed for this construction is
+\(\varepsilon_{R,\delta}<\alpha\), which ensures that the empirical
+\((q_\alpha+\varepsilon_{R,\delta})\)-quantile is below level one.
+
+It remains to prove the coverage-transfer inequality.
+On \(G_N\cap H_N\), the auxiliary ideal fixed-candidate event is contained in the
+simulated event, because the simulated critical value is at least as large as
+the ideal one.  Intersecting this inclusion with the reporting gate
+\(\mathcal E_N\) and then taking conditional expectation over the auxiliary
+Monte Carlo draws gives
+\[
+\PP\{\mathcal A_N^{\mathrm{MC,rep}}(z_0)\}
+\ge
+\PP\{\mathcal E_N\cap\mathcal A_N^{\mathrm{aux}}(z_0)\cap G_N\}
+-\EE\{1_{G_N}\PP^\ast(H_N^c)\}.
+\]
+The assumed conditional bound on \(G_N\) makes the last term at most
+\(\delta_N^{\rm MC}\).  Since
+\[
+\PP\{\mathcal E_N\cap\mathcal A_N^{\mathrm{aux}}(z_0)\cap G_N\}
+\ge
+\PP\{\mathcal A_N^{\mathrm{aux}}(z_0)\}

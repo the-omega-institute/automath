@@ -1,0 +1,316 @@
+\begin{abstract}
+We study a two-state killed-reset discrete-time Markovian arrival process
+(D-MAP) through its stationary binary output.  The deterministic post-arrival
+reset makes the visible process renewal, but it does not make the hidden
+representation identifiable.  We derive the Palm gap law, its increasing
+zero-run hazard, the one-mode covariance tail, the exact \(1\)-dependence
+criterion, and finite-word probabilities.
+
+Three visible inclusion probabilities give a rational inverse to the symmetric
+survival coordinates \((p+s,ps)\).  This three-inclusion formula is presented
+as a candidate original result pending complete reduction against canonical
+DMAP2 coordinates; it identifies the unordered pair \(\{p,s\}\), not a
+labelled realization.  Intersecting the weak-equivalence class with the
+killed-reset Markov cone gives an explicit two-state fibre arc whose endpoints
+are the two rate-swapped triangular kernels and which collapses on the exchange
+diagonal.  For minimal interior \(n\)-state kernels, the fibre contains a local
+positivity-preserving similarity manifold of dimension \((n-1)^2\).  The pure
+serial result is stated as a finite-coordinate sampled-tail corollary of
+generalized-Erlang and Coxian representation theory.
+
+For a fixed model and prespecified complete-cycle convention, we prove a
+three-inclusion central limit theorem, a complete-visible-law specification
+test, and the quotient delta method.  The sorted-root and log-rate limits are
+consequences of that delta method rather than separate contributions.  A
+root-free physical-image test is also given under explicit compactness and
+uniform-margin hypotheses.  Abstract Markov--Palm tangent calculations, the
+moving-dimensional Helmert Gaussian coupling, an exact complete-Palm-gap
+singular subexperiment, and a pointwise projection example are collected in
+the supplement.  The supplement distinguishes the Bickel--Kwon
+known-marginal Markov projection from the additional killed-reset constraints.
+\end{abstract}
+
+\noindent\textbf{Keywords:} constrained D-MAP, phase-type identifiability,
+weak equivalence, similarity orbit, renewal process, quotient inversion,
+specification testing
+
+\section{Introduction}
+
+The applied-probability question is what the binary arrival record of a
+constrained D-MAP determines when every marked transition resets the hidden
+chain to a fixed state.  This reset creates renewal structure, while the usual
+nonuniqueness of Markovian and phase-type representations remains.  The model
+therefore sits at the intersection of renewal theory, D-MAP weak equivalence,
+phase-type representation, and fixed-setting inference.
+
+Our two-state parametrization has hidden states \(R\) and \(D\).  During a
+sampling interval of length \(\Delta\tau\), an attempt clock has rate
+\(\Gamma\) and a recovery clock has rate \(\kappa_{\mathrm r}\).  A marked
+transition is latched in \(D\) until the next boundary.  This construction is
+only a realization of the probability model: the results concern the labelled
+kernels and their visible binary law.  Allowing a marked transition into
+\(R\) changes the model and removes the deterministic regeneration used below.
+
+Classical MAP and D-MAP theory supplies the arrival-process framework
+\cite{Neuts1979MAP,Lucantoni1991BMAP,AlfaNeuts1995DMAP}.  Zamparo's
+renewal-binary results supply the finite-dimensional renewal-law language and
+the finite-order Markov criterion used here \cite{Zamparo2022RenewalBinary}.
+Ram\'irez-Cobo and Lillo give the complete weak-equivalence classification for
+MAP2 and MAP3 processes \cite{RamirezCoboLillo2012WeakEquivalentMAP};
+M\'esz\'aros and Telek give canonical coordinates for discrete MAP2/RAP2
+models \cite{MeszarosTelek2013DiscreteMAP2Canonical}.  Those results are the
+primary comparison objects for both the quotient inverse and the killed-reset
+cone intersection.  The direct three-inclusion inverse below is a candidate
+original result pending complete reduction against canonical DMAP2
+coordinates.  It is not asserted as an established priority claim.
+
+For serial kernels, generalized-Erlang/Coxian representation and minimality
+theory are the primary antecedents \cite{HeZhang2008MinimalCoxian,
+HeZhang2009GeneralizedErlang}.  Our serial statement is limited to the
+finite-coordinate sampled-tail specialization, including confluent repeated
+poles.  For general killed-reset kernels, realization uniqueness identifies a
+similarity orbit, but only its intersection with the Markov cone consists of
+valid stochastic representations.  This distinction leads to an explicit
+two-state cone-intersection arc and a local dimension statement on the minimal
+interior stratum; neither is a claim about the global dimension of every fibre.
+
+The five lettered results have the following fixed roles and dependencies:
+\begin{center}
+\begin{tabular}{>{\bfseries}c p{0.30\textwidth} p{0.53\textwidth}}
+\toprule
+Result & Statement & Logical dependence \\
+\midrule
+A & Killed-reset record law & Assumption~1.1 and deterministic post-click reset. \\
+B & Candidate three-inclusion quotient inverse & Theorem~A and the nonzero covariance chart. \\
+C & Fixed-setting inclusion CLT & Theorem~A, complete retained cycles, and stopped separated batches. \\
+D & Complete-visible-law specification test & Theorem~A for the null word law; its finite-range local conclusion uses the declared Markov-gap path. \\
+E & Quotient delta method & Theorems~B and C on a stable separated-root chart. \\
+\bottomrule
+\end{tabular}
+\end{center}
+The physical-image test, two-state fibre arc, serial corollary, and minimal
+interior similarity-manifold result use ordinary theorem numbering.  The
+Markov--Palm tangent, moving-dimensional Helmert coupling, exact
+complete-Palm-gap split experiment, and pointwise projection calculation are
+supplementary results.  In particular, Bickel--Kwon's known-marginal Markov
+tangent and additive projection are antecedents of the supplementary tangent
+calculation \cite{BickelKwon2001Semiparametric}; the added restrictions there
+are the killed-reset atom constraint, positivity-compatible path realization,
+and calendar-time scaling.
+
+The specification statistic imports distributional-distance consistency from
+stationary-ergodic testing \cite{RyabkoRyabko2010ErgodicInference,
+Ryabko2012StationaryTesting}.  The physical-image statistic instead tests the
+finite-dimensional inclusion image under the sampled-counter model.  These are
+different questions, and neither diagnostic is used to select a model and then
+authorize another inferential statement from the same record.
+
+\begin{assumption}[Constrained sampled-counter D-MAP model]\label{ass:model-inference-contract-main}
+Fix \((\Gamma,\kappa_{\mathrm r},\Delta\tau)\in(0,\infty)^3\) and define
+\[
+p=e^{-\Gamma\Delta\tau},\qquad
+s=e^{-\kappa_{\mathrm r}\Delta\tau},
+\]
+\[
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr,\qquad
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+e^{-\Gamma(\Delta\tau-r)}\,dr .
+\]
+The record model is the two-state D-MAP with hidden states ordered as
+\((R,D)\) and labelled kernels
+\[
+T_0=\begin{pmatrix}p&0\\ b&s\end{pmatrix},
+\qquad
+T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix}.
+\]
+The convention is
+\((T_i)_{XY}=\PP(A_n=i,H_{n+1}=Y\mid H_n=X)\), the visible process
+\((A_n)_{n\in\mathbb Z}\) is the stationary binary process generated by these
+kernels, and formulas on \(\Gamma=\kappa_{\mathrm r}\) are interpreted by
+continuous limits.  The killed entries \(T_1(R,R)=T_1(D,R)=0\) are a structural
+constraint of this D-MAP, not optional boundary cases of the finite-record
+theorems.
+\end{assumption}
+
+\subsection{Scope of finite-record reports}\label{subsec:finite-record-report-scope-main}
+
+The retained-record limits are fixed-setting asymptotic statements inside the
+stationary law specified in \Cref{ass:model-inference-contract-main}.  The
+model, population point, complete-cycle convention, and deterministic batch
+sequence are fixed before the record is interpreted.  Theorems~C and D are CLT
+and specification-test statements, respectively; Theorem~E is the quotient
+delta method.  The pointwise projection example is supplementary and has no
+confidence-set, testing, or coverage conclusion.
+
+The only model interpretation assumed by this contract is the latched
+killed-leakage sampled-counter protocol of
+\Cref{lem:classical-counter-kernel-construction-main}.  If the sampling
+interval \(\Delta\tau\) is a known design interval, the visible stationary
+record identifies the unordered survival-factor set
+\(\{p,s\}=\{e^{-\Gamma\Delta\tau},e^{-\kappa_{\mathrm r}\Delta\tau}\}\) and
+hence the unordered numerical rate set
+\(\{\Gamma,\kappa_{\mathrm r}\}\).  It does not identify which member is the
+attempt rate and which is the recovery rate without side information.  If
+\(\Delta\tau\) is not treated as a known design interval, the visible law
+identifies only the dimensionless unordered product set
+\(\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\); the same record does
+not put those products on an absolute numerical rate scale.
+
+The supplementary singular likelihood calculation observes a deterministic
+number of independent complete Palm gaps.  Its exact product experiment is
+uniform for \(z\) in compact subsets of \((0,1)\) and bounded local split
+\(h\), and it identifies only \(h^2\).  It does not establish an endpoint
+factorization or asymptotic equivalence for the stationary finite record.  The
+separate projection result is only the pointwise limit at the preselected
+population point \(z_0=1/2\), using the printed covariance certificate in
+\Cref{lem:z-half-diagonal-branch-certificate-main}.  No confidence set, test,
+critical value, coverage conclusion, or uniform projection claim is attached
+to it.
+Ordered labelled rates require external side information fixed independently
+of this record.  The paper does not claim
+simultaneous inversion over \(0<z<1\), nor identification of UDW, KMS,
+thermodynamic, response-profile, or ordered-rate quantities unless the
+particular result supplies the extra hypotheses and proof.
+
+\subsection{Visible-record diagnostics for the model contract}\label{subsec:visible-record-model-diagnostics-main}
+
+\Cref{ass:model-inference-contract-main} and
+\Cref{subsec:finite-record-report-scope-main} form a conditional contract, not a
+model-selection theorem.  The retained-record limits below are statements
+inside the killed-leakage sampled-counter D-MAP with known \(\Delta\tau\);
+they are not procedures that first validate that model from the same record and
+then authorize inference under it.  The physical-image test and the
+complete-visible-law test have only the size and power guarantees stated in
+\Cref{thm:uniform-joint-physical-image-test-main,thm:complete-visible-law-specification-main}.
+Auxiliary complete-gap renewal
+checks, inclusion-product residuals, and low-lag covariance residuals have no
+separate calibration theorem: they can falsify the standing interpretation,
+but they do not certify it or validate assumptions used by another result.
+
+
+\begin{lemma}[Latched sampled-counter derivation of the D-MAP kernels]\label{lem:classical-counter-kernel-construction-main}
+The kernels in \Cref{ass:model-inference-contract-main} are exactly the
+one-step kernels of the following discrete sampled-counter protocol.  At the
+start of a sampling interval of length \(\Delta\tau\), the hidden state is
+either \(R\) or \(D\).  From \(R\), an independent attempt clock with rate
+\(\Gamma\) either rings before the end of the interval, in which case the
+visible output is \(1\) and the counter is latched in \(D\) until the boundary,
+or it does not ring, in which case the visible output is \(0\) and the next
+state remains \(R\).
+From \(D\), an independent recovery clock with rate \(\kappa_{\mathrm r}\)
+either does not ring, giving output \(0\) and next state \(D\), or rings at
+time \(r\in(0,\Delta\tau)\).  Conditional on recovery at \(r\), the same
+attempt clock is run only during the remaining time \(\Delta\tau-r\): no
+attempt gives output \(0\) and next state \(R\), while an attempt gives output
+\(1\) and latches the counter in \(D\) until the boundary.  No post-click
+recovery or further within-bin evolution is permitted.  This protocol gives
+\[
+T_0(R,R)=p,\quad T_1(R,D)=1-p,\quad T_0(D,D)=s,
+\]
+\[
+T_0(D,R)=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+e^{-\Gamma(\Delta\tau-r)}\,dr=b,
+\quad
+T_1(D,D)=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}
+\bigl(1-e^{-\Gamma(\Delta\tau-r)}\bigr)\,dr=a,
+\]
+and the two killed entries \(T_1(R,R)=T_1(D,R)=0\).
+\end{lemma}
+
+\begin{proof}
+The \(R\)-row is the survival and ringing decomposition of an exponential
+clock over one interval.  For the \(D\)-row, no recovery before
+\(\Delta\tau\) has probability \(s=e^{-\kappa_{\mathrm r}\Delta\tau}\) and
+contributes to \(T_0(D,D)\).  If recovery occurs at \(r\), its density is
+\(\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}r}\,dr\).  Survival of the attempt
+clock for the remaining time \(\Delta\tau-r\) gives the \(T_0(D,R)\) integral,
+and its complement gives the \(T_1(D,D)\) integral.  The latching rule never
+allows a marked transition landing in \(R\), which gives the two killed
+entries.  These mutually exclusive cases exhaust each row, since
+\(s+a+b=1\) and \(p+(1-p)=1\).
+\end{proof}
+
+\begin{proposition}[Fragility under non-killed one-labelled leakage]\label{prop:model-fragility-boundary-reset-main}
+The killed-leakage convention in
+\Cref{ass:model-inference-contract-main} is not a removable presentation
+choice.  It is a structural hypothesis behind the renewal law, quotient
+inverse, and retained-record inference in Theorems~A, B, C, and E.  Let
+\((\widetilde T_0,\widetilde T_1)\) be any two-state labelled kernel with the
+same visible convention
+\[
+(\widetilde T_i)_{XY}
+=\PP(A_n=i,H_{n+1}=Y\mid H_n=X),\qquad X,Y\in\{R,D\},
+\]
+but suppose that either
+\[
+\widetilde T_1(R,R)>0
+\qquad\hbox{or}\qquad
+\widetilde T_1(D,R)>0 .
+\]
+Then a click no longer forces the next hidden state to be the deterministic
+state \(D\).  Consequently the click epochs are not regeneration epochs in
+general.  In particular, the Palm renewal product
+\[
+\PP(B\subset\Xi)=\rho\prod_j u_{i_{j+1}-i_j}
+\]
+for \(B=\{i_1<\cdots<i_m\}\) does not follow from the D-MAP structure alone;
+nor do the Palm gap formula
+\(g_k=e_D^\top T_0^kT_1\mathbf1\), the single-mode covariance identity
+\[
+u_2=\rho+(a-\rho)\lambda_{\rm hid},
+\]
+or the quotient recovery
+\[
+\lambda_{\rm hid}=(r_2-r_0^2)/(r_1-r_0^2),\qquad
+\Phi(r)=(p+s,ps).
+\]
+Therefore Theorems~A and B, and Theorems~C--E wherever they use the same
+renewal law, inverse, or covariance route, fail to be valid generic
+sampled-counter or generic D-MAP(2) statements unless additional hypotheses
+restore a deterministic post-click reset or supply a replacement regeneration
+theory.
+\end{proposition}
+
+\begin{proof}
+The proofs of the lettered results use the following deterministic post-click fact:
+on every event \(\{A_n=1\}\), the next hidden state is \(H_{n+1}=D\).  In the
+kernel notation this is exactly
+\(T_1(R,R)=T_1(D,R)=0\).  It makes each observed click a reset to the same
+state \(D\), so the post-click future starts from the fixed vector \(e_D\),
+independently of the pre-click hidden state and of the earlier visible record.
+The inter-click zero runs are then i.i.d. under the Palm law, their tail is
+computed by iterating \(T_0\) from \(e_D\), and inclusion probabilities factor
+as the displayed renewal product.
+
+If \(\widetilde T_1(R,R)>0\), a click from \(R\) can leave the next hidden
+state equal to \(R\).  If \(\widetilde T_1(D,R)>0\), a click from \(D\) can
+leave the next hidden state equal to \(R\).  Whenever either transition has
+positive probability, conditioning on \(A_n=1\) need not put \(H_{n+1}\) at
+the deterministic state \(D\); it produces a post-click distribution that can
+depend on the pre-click hidden state and on the stationary mixture at the
+click time.  The D-MAP property by itself only records labelled Markov
+transitions.  It does not turn this state-dependent post-click mixture into
+the fixed Palm restart required for a renewal record.
+
+The continuous same-bin recovery comparator is a concrete instance: the paths
+``click--recover'' from \(R\) and ``recover--click--recover'' from \(D\) give
+positive entries \(\widetilde T_1(R,R)\) and
+\(\widetilde T_1(D,R)\).  The Palm gap law is therefore no longer a consequence
+of the labelled kernel without extra assumptions.  The renewal product
+formulas and the covariance transfer lemma are downstream of that Palm renewal
+law, while the quotient inverse in Theorem~B explicitly divides the covariance
+identity \(r_2-r_0^2=\rho(a-\rho)\lambda_{\rm hid}\) by
+\(r_1-r_0^2=\rho(a-\rho)\).  Once the renewal identity is unavailable, the
+displayed inverse and the retained-record covariance estimator are no longer
+proved for the modified kernel.  This proves the stated logical dependence.
+\end{proof}
+
+The main text below is organized around exactly five paper-level theorem
+statements for this constrained D-MAP(2) subfamily.  Supporting lemmas,
+propositions, corollaries, certificate interfaces, and algorithms are used only
+to prove or apply these five statements.  The killed-leakage dependency is
+explicit in \Cref{prop:model-fragility-boundary-reset-main}: if same-bin
+recovery after a click is retained in the one-labelled kernel, this theorem
+chain is not the applicable theorem chain.
+

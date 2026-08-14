@@ -1,0 +1,790 @@
+convention.  This exchange
+non-identifiability does not remove the diagonal common-rate estimand in
+\Cref{lem:diagonal-common-rate-main}, where the two entries are equal.
+\end{proposition}
+
+\begin{proof}
+The two parameter points induce the same finite-dimensional visible law by
+\Cref{thm:toeplitz_image_inverse_duality}; hence every visible-record
+statistic has the same distribution under them.  This is the exchange
+specialization inside the present constrained D-MAP(2) family, consistent with the
+broader MAP2 lesson that a hidden arrival representation need not be uniquely
+identified from the stationary observable arrival law
+\cite{RamirezCoboLilloWiper2010MAP2Nonidentifiability}.
+\end{proof}
+
+\subsection{Fully studentized lag-two covariance interval}\label{subsec:studentized-lag-two-main}
+
+This subsection proves the lag-two covariance interval.  The first two lemmas
+are generic finite-lag CLT and batch-covariance tools, reused here for the
+scalar lag-two observable.  The remaining results verify the lag-two reward
+identity, prove the positivity of the scalar variance, and state the observable
+\(\widehat\sigma^2_{\gamma_2,N}\)-based interval, with no report when fewer
+than two complete separated lag-two batches are available,
+\eqref{eq:lag-two-studentized-interval-main}.
+
+\begin{lemma}[Finite-lag regenerative CLT]\label{lem:finite-lag-renewal-reward-main}
+Let \((A_n)\) be a stationary renewal indicator process with i.i.d. gaps
+satisfying \(\PP(G\ge k)\le Ce^{-\eta k}\).  Let
+\(Z_n=\psi(A_n,\ldots,A_{n+h_{\rm cal}})\in\RR^{d_{\rm rew}}\) be a bounded
+centered local observable, with fixed reward dimension \(d_{\rm rew}\) and
+fixed calendar look-ahead \(h_{\rm cal}\).  Let
+\[
+m_{\rm dep}:=q_*(0,h_{\rm cal})=\max\{h_{\rm cal}-1,0\},
+\]
+where \(q_*\) is the explicit local-window range from
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}.  Define the Palm
+cycle reward by the measurable map
+\[
+Y_j:=F_{0,h_{\rm cal}}(G_j,\ldots,G_{j+m_{\rm dep}}).
+\]
+Equivalently,
+\[
+Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\in\RR^{d_{\rm rew}},\qquad
+\|f\|\le C_f\left(1+\sum_{i=0}^{m_{\rm dep}}G_{j+i}\right).
+\]
+Put \(\mu=\EE(G+1)\) and
+\[
+\mathcal T_{m_{\rm dep}}=
+\Var(Y_0)+
+\sum_{h=1}^{m_{\rm dep}}\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+Then the exact calendar-time empirical vector average satisfies
+\[
+\sqrt N\left(\frac1N\sum_{n=0}^{N-1}Z_n\right)
+=\frac1{\sqrt N}\sum_{n=0}^{N-1}Z_n
+\Rightarrow
+\mathcal N\left(0,\frac{\mathcal T_{m_{\rm dep}}}{\mu}\right).
+\]
+In the scalar case this covariance reduces to \(\tau_{m_{\rm dep}}^2/\mu\),
+where
+\[
+\tau_{m_{\rm dep}}^2=\Var(Y_0)+2\sum_{h=1}^{m_{\rm dep}}\operatorname{Cov}(Y_0,Y_h).
+\]
+The same conclusion holds after the finite-start burn-in in
+\Cref{ass:fixed-sampled-boundary-record-main}.  In the constrained D-MAP
+applications below, \((A_n)\) is the retained visible renewal record from that
+standing assumption.  No continuous-comparator or growing-window perturbation
+statement is used in this lemma.
+\end{lemma}
+
+\begin{proof}
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} supplies the displayed
+Palm reward \(Y_j=F_{0,h_{\rm cal}}(G_j,\ldots,G_{j+m_{\rm dep}})\), its
+centering, fixed \(m_{\rm dep}\)-dependence, and the
+\(O_{\PP}(\log N)\) endpoint replacement for the local calendar sum.
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} then gives the
+deterministic-prefix CLT and the renewal random-index replacement, with
+calendar-time covariance \(\mathcal T_{m_{\rm dep}}/\mu\).  The finite-start
+burn-in case follows by applying
+\Cref{lem:finite-hidden-start-path-contraction-main} to the retained
+post-burn-in block.
+\end{proof}
+
+\begin{lemma}[Finite-lag separated-batch covariance]\label{lem:finite-lag-separated-batch-main}
+Under the hypotheses and notation of
+\Cref{lem:finite-lag-renewal-reward-main}, form all-complete-cycle batches of
+cycle rewards \(Y_j\) with deterministic length
+\[
+b_N=\lfloor N^\beta\rfloor,\qquad 0<\beta<1,
+\]
+and leave \(m_{\rm dep}\) complete cycle rewards between consecutive batches.
+Let \(K_N=\max\{k:\tau_k<N\}\), \(d_N=b_N+m_{\rm dep}\), and use only batch
+indices for which every local calendar window entering the batched rewards is
+observed.  With
+\[
+I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j,
+\]
+and \(M_N\) the number of all-complete-cycle batches selected before calendar
+time \(N\), with \(M_N=0\) when no such batch exists.  Define
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) on
+\(\{M_N\ge1\}\), and set the auxiliary completed statistic
+\[
+\widehat\Sigma_N^{\rm batch,aux}
+=
+\begin{cases}
+\displaystyle
+\frac{K_N}{N}\,
+\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)(B_{\ell,N}-\bar B_N)^\top,
+&M_N\ge2,\\[1.1ex]
+0_{d_{\rm rew}\times d_{\rm rew}},
+&M_N<2 .
+\end{cases}
+\]
+Then \(M_N\ge2\) with probability tending to one and
+\begin{equation}\label{eq:finite-lag-separated-batch-rate-main}
+\left\|\widehat\Sigma_N^{\rm batch,aux}
+-\frac{\mathcal T_{m_{\rm dep}}}{\mu}\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+Thus the auxiliary completed statistic estimates the calendar-time covariance
+\(\mathcal T_{m_{\rm dep}}/\mu\) at the displayed rate.  The operational
+finite-record report uses the \(M_N\ge2\) branch only; on \(\{M_N<2\}\) it
+reports insufficient complete cycles.
+
+In the constrained D-MAP applications below, \((A_n)\) is the retained visible
+renewal record from \Cref{ass:fixed-sampled-boundary-record-main}.  No
+continuous-comparator or growing-window perturbation statement is used in this
+lemma.
+\end{lemma}
+
+\begin{proof}
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} identifies the
+rewards as an \(m_{\rm dep}\)-dependent fixed-window function of the i.i.d.
+gaps, and the exponential gap tail gives the moment hypothesis of
+\Cref{prop:calendar-stopped-separated-batch-plugin-main}.  That appendix
+fixed-range wrapper gives the displayed separated-batch rate, including the
+calendar-stopped batch count,
+endpoint/look-ahead deletion, and empirical-mean subtraction.  Since
+\(b_N=\lfloor N^\beta\rfloor\) with \(0<\beta<1\), the retained batch count
+satisfies \(M_N\ge2\) with probability tending to one; the low-cycle
+exception is covered by \Cref{prop:standard-complete-cycle-separated-batch-facts-main}.
+\end{proof}
+
+\begin{lemma}[Observed lag-two windows in the all-complete-cycle batches]\label{lem:all-cycle-lag-two-windows-main}
+For lag-two rewards, using all-complete-cycle batches and leaving one complete
+cycle after the last batched cycle ensures every term \(A_nA_{n+2}\) used by
+the statistic is observed.
+\end{lemma}
+
+\begin{proof}
+If \(n\in[\tau_j,\tau_{j+1}-1]\), then \(A_{n+2}\) is determined by the
+click pattern up to time \(\tau_{j+1}+1\).  This time lies no later than the
+end of cycle \(j+1\): if \(G_j\ge1\), then \(\tau_{j+1}+1\le\tau_{j+2}\);
+if \(G_j=0\), then the cycle \(j\) interval contains only \(n=\tau_j\), and
+\(A_{\tau_j+2}\) is determined by whether \(G_{j+1}=0\).  Thus every lag-two
+term assigned to cycle \(j\) is determined by \(G_j\) and \(G_{j+1}\).  The
+all-complete-cycle convention uses only batched indices for which cycle
+\(j+1\) is complete and, at the terminal edge, leaves one complete cycle after
+the last batched cycle.  Hence no term \(A_nA_{n+2}\) in a used batch reaches
+outside the observed record.
+\end{proof}
+
+\begin{lemma}[Lag-two reward identity, centering, and one-gap dependence]\label{lem:lag-two-reward-main}
+For \(Z_n=(A_n-\rho)(A_{n+2}-\rho)-\gamma_2\), the Palm cycle reward has the
+explicit form
+\begin{equation}\label{eq:lag-two-cycle-reward-main}
+Y_j=f(G_j,G_{j+1}),
+\end{equation}
+where
+\[
+f(g,h)=
+\mathbf1_{\{g=1\}}+\mathbf1_{\{g=0,\ h=0\}}
+-\rho\bigl(1+\mathbf1_{\{g\ge1\}}+\mathbf1_{\{h=0\}}\bigr)
++(\rho^2-\gamma_2)(g+1).
+\]
+In particular \(\EE Y_j=0\), and \((Y_j)\) is \(1\)-dependent in the cycle
+index.
+\end{lemma}
+
+\begin{proof}
+Work in Palm coordinates with \(\tau_j=0\).  The cycle \(j\) contains the
+times \(0,1,\ldots,G_j\), the next click is at \(G_j+1\), and the following
+click is at \(G_j+G_{j+1}+2\).  Hence
+\[
+\sum_{n=0}^{G_j}A_n=1,
+\]
+while the shifted count in the same cycle is
+\[
+\sum_{n=0}^{G_j}A_{n+2}
+=\mathbf1_{\{G_j\ge1\}}+\mathbf1_{\{G_{j+1}=0\}}.
+\]
+The lag-two product count is nonzero only when the click at the cycle start
+is followed by another click exactly two sampled steps later:
+\[
+\sum_{n=0}^{G_j}A_nA_{n+2}
+=\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,\ G_{j+1}=0\}}.
+\]
+Summing
+\((A_n-\rho)(A_{n+2}-\rho)-\gamma_2\) over the cycle therefore gives
+\[
+\begin{aligned}
+Y_j
+&=\sum_{n=0}^{G_j}A_nA_{n+2}
+-\rho\sum_{n=0}^{G_j}A_n
+-\rho\sum_{n=0}^{G_j}A_{n+2}
++(\rho^2-\gamma_2)(G_j+1)  \\
+&=f(G_j,G_{j+1}),
+\end{aligned}
+\]
+which is \eqref{eq:lag-two-cycle-reward-main}.
+
+The centering is not an additional assumption.  The stationary renewal record
+has \(\EE[(A_0-\rho)(A_2-\rho)-\gamma_2]=0\), and Palm inversion gives
+\[
+\EE Y_j
+=\EE L\,
+\EE\bigl[(A_0-\rho)(A_2-\rho)-\gamma_2\bigr]
+=0.
+\]
+Finally, \(Y_j\) is a function only of the adjacent pair
+\((G_j,G_{j+1})\).  If \(|j-k|>1\), the pairs
+\((G_j,G_{j+1})\) and \((G_k,G_{k+1})\) are disjoint functions of i.i.d. gaps,
+so \(Y_j\) and \(Y_k\) are independent.  Thus the reward sequence is
+\(1\)-dependent.
+\end{proof}
+
+\begin{lemma}[Hoeffding row--column decomposition and coboundary zero criterion]\label{lem:row-column-coboundary-criterion-main}
+Let \(G_0,G_1,G_2\) be i.i.d. with a full-support law \(g\) on
+\(\mathbb N_0\).  Let \(f:\mathbb N_0^2\to\RR\) have
+\(\EE f(G_0,G_1)^2<\infty\), and put
+\[
+M=\EE f(G_0,G_1),\qquad
+R_i=\EE\{f(i,G_1)\},\qquad
+C_i=\EE\{f(G_0,i)\}.
+\]
+Then, with \(X=f(G_0,G_1)\), \(X'=f(G_1,G_2)\), and
+\[
+E_{ij}=f(i,j)-R_i-C_j+M,
+\]
+one has
+\begin{equation}\label{eq:row-column-variance-decomposition-main}
+\EE(X-M)^2+2\EE\{(X-M)(X'-M)\}
+=
+\EE E_{G_0,G_1}^2+\EE(R_{G_0}+C_{G_0}-2M)^2 .
+\end{equation}
+Consequently the zero-variance coboundary criterion is the following: the
+left-hand side is zero if and only if there is a sequence
+\((u_i)_{i\ge0}\) such that
+\begin{equation}\label{eq:row-column-zero-coboundary-main}
+f(i,j)-M=u_i-u_j,\qquad i,j\ge0 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The residual has zero conditional mean in each coordinate:
+\[
+\EE\{E_{G_0,G_1}\mid G_0\}=0,\qquad
+\EE\{E_{G_0,G_1}\mid G_1\}=0 .
+\]
+The Hoeffding row--column decomposition
+\[
+X-M=(R_{G_0}-M)+(C_{G_1}-M)+E_{G_0,G_1}
+\]
+is therefore orthogonal in \(L^2\).  Hence
+\[
+\EE(X-M)^2
+=\EE(R_{G_0}-M)^2+\EE(C_{G_1}-M)^2+\EE E_{G_0,G_1}^2 .
+\]
+For the adjacent copy \(X'\), independence gives the only nonzero cross-term
+after conditioning on the shared gap:
+\[
+\EE\{(X-M)(X'-M)\}
+=\EE\{\EE(X-M\mid G_1)\EE(X'-M\mid G_1)\}
+=\EE\{(C_{G_1}-M)(R_{G_1}-M)\}.
+\]
+Adding the preceding two displays proves
+\eqref{eq:row-column-variance-decomposition-main}.
+
+Both terms on the right of
+\eqref{eq:row-column-variance-decomposition-main} are nonnegative.  Since
+\(g_i>0\) for every \(i\), equality to zero is equivalent to
+\[
+E_{ij}=0,\qquad R_i+C_i=2M,\qquad i,j\ge0 .
+\]
+The first relation gives \(f(i,j)-M=(R_i-M)+(C_j-M)\).  The second gives
+\(C_j-M=-(R_j-M)\).  Thus
+\eqref{eq:row-column-zero-coboundary-main} holds with \(u_i=R_i-M\).
+Conversely, if \eqref{eq:row-column-zero-coboundary-main} holds, then
+\(R_i-M=u_i-\EE u_{G_0}\), \(C_i-M=\EE u_{G_0}-u_i\), and
+\(E_{ij}=0\), so both square terms vanish.
+\end{proof}
+
+\begin{lemma}[Explicit lag-two variance and finite-pair nondegeneracy certificate]\label{lem:lag-two-variance-nondegenerate-main}
+Let \(g_k=\PP(G=k)\) be the full-support gap law from
+\Cref{lem:renewal-gap-main}, let \(\mu=\EE(G+1)=1/\rho\), and let
+\[
+f(i,j)=
+\mathbf1_{\{i=1\}}+\mathbf1_{\{i=0,\ j=0\}}
+-\rho\bigl(1+\mathbf1_{\{i\ge1\}}+\mathbf1_{\{j=0\}}\bigr)
++(\rho^2-\gamma_2)(i+1),
+\qquad i,j\ge0 .
+\]
+Equivalently, for independent gaps \(G_0,G_1,G_2\) with law \(g\),
+the centered Palm reward for
+\((A_n-\rho)(A_{n+2}-\rho)-\gamma_2\) is \(f(G_j,G_{j+1})\).  The
+lag-two calendar-time variance in
+\Cref{cor:finite-record-lag-two-studentized-main} is
+\begin{equation}\label{eq:lag-two-probabilistic-variance-main}
+\sigma_{\gamma_2}^2
+=\frac{
+\EE f(G_0,G_1)^2
++2\EE\{f(G_0,G_1)f(G_1,G_2)\}}
+{\EE(G+1)} .
+\end{equation}
+It is also the absolutely convergent double/triple sum
+\begin{equation}\label{eq:lag-two-explicit-variance-main}
+\sigma_{\gamma_2}^2
+=\frac1{\mu}\left[
+\sum_{i,j\ge0}f(i,j)^2g_ig_j
++2\sum_{i,j,k\ge0}f(i,j)f(j,k)g_ig_jg_k
+\right].
+\end{equation}
+Thus numerical verification of the studentizing variance is finite and
+monotone: truncate the two sums to \(0\le i,j,k\le K\), bound the omitted tail
+with any slack envelope \(g_k\le C_{\bar r}\bar r^k\),
+\(\bar r\in(\max\{p,s\},1)\), from
+\Cref{lem:killed-leakage-gap-exponential-moment-main} and the linear growth of
+\(f\), and increase \(K\) until the tail bound is below the required tolerance.  The
+closed nondegeneracy certificate below shows that this numerical recipe is a
+check on arithmetic rather than an additional assumption.
+Equivalently, with
+\[
+R_i=\sum_{j\ge0}f(i,j)g_j,\qquad
+C_i=\sum_{j\ge0}f(j,i)g_j,\qquad
+M=\sum_{i,j\ge0}f(i,j)g_ig_j,
+\]
+one has the sum-of-squares form
+\begin{equation}\label{eq:lag-two-variance-squares-main}
+\mu\,\sigma_{\gamma_2}^2
+=\sum_{i\ge0}g_i(R_i+C_i-2M)^2
++\sum_{i,j\ge0}g_ig_j\bigl(f(i,j)-R_i-C_j+M\bigr)^2 .
+\end{equation}
+The zero-variance criterion from \eqref{eq:row-column-zero-coboundary-main}
+reduces nondegeneracy to checking that such a coboundary cannot hold.  The
+finite certificate
+\begin{equation}\label{eq:lag-two-finite-nondegeneracy-certificate-main}
+f(0,0)-f(0,1)=1-\rho,\qquad
+f(1,0)-f(1,1)=-\rho
+\end{equation}
+will be compared after the zero-variance criterion is identified in the proof.
+It excludes the only possible zero-variance coboundary.  Hence
+the expression in \eqref{eq:lag-two-probabilistic-variance-main} is strictly
+positive.
+In particular \(\sigma_{\gamma_2}^2>0\) for every
+\(\Gamma,\kappa_{\mathrm r},\Delta\tau>0\).
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:lag-two-reward-main}, the centered Palm reward is
+\(Y_j=f(G_j,G_{j+1})\), where the gaps are i.i.d. with law \(g\).  The
+exponential tail of \(g\) and the linear growth of \(f(i,j)\) in \(i\) give
+absolute convergence of all displayed second-moment sums.  Since
+\(\EE Y_j=0\) and the sequence is \(1\)-dependent,
+\[
+\sigma_{\gamma_2}^2
+=\frac{\Var(Y_0)+2\operatorname{Cov}(Y_0,Y_1)}{\mu}
+=\frac{\EE(Y_0^2)+2\EE(Y_0Y_1)}{\mu},
+\]
+which is exactly \eqref{eq:lag-two-probabilistic-variance-main} and
+\eqref{eq:lag-two-explicit-variance-main} after expanding
+\[
+\EE(Y_0^2)=\sum_{i,j\ge0}f(i,j)^2g_ig_j,\qquad
+\EE(Y_0Y_1)=\sum_{i,j,k\ge0}f(i,j)f(j,k)g_ig_jg_k .
+\]
+
+It remains to make the nondegeneracy explicit rather than implicit.  The
+unconditional mean \(M=\EE f(G_0,G_1)\) is zero, because \(\EE Y_j=0\), but
+we keep it in the displayed row--column formula.  Applying
+\Cref{lem:row-column-coboundary-criterion-main} gives
+\eqref{eq:lag-two-variance-squares-main}.  The same lemma also states the
+only way the variance can vanish: because the gap law has full support, there
+would have to be a sequence \((u_i)\) such that
+\[
+f(i,j)=u_i-u_j,\qquad i,j\ge0 .
+\]
+This coboundary form has a row-independent difference between any two fixed
+columns:
+\[
+f(i,0)-f(i,1)=u_1-u_0,\qquad i\ge0 .
+\]
+For the lag-two reward this fails on the finite \(2\times2\) corner.  Directly
+from the displayed formula for \(f\),
+\[
+f(0,0)-f(0,1)=1-\rho,\qquad
+f(1,0)-f(1,1)=-\rho .
+\]
+These two values are unequal for \(0<\rho<1\).  Hence the zero-variance
+coboundary case is excluded, and \(\sigma_{\gamma_2}^2>0\) throughout the
+positive parameter domain.
+\end{proof}
+
+\begin{lemma}[Trimmed shifted-click centering]\label{lem:trimmed-shifted-click-centering-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary renewal indicator process with
+i.i.d. gaps \(G_j\) satisfying \(\PP(G\ge k)\le Ce^{-\eta k}\), click epochs
+\((\tau_j)\), and click density \(\rho=\EE A_0\).  Fix
+\(\ell\ge0\).  Let \(J_N^{(\ell)}\) be any all-complete-cycle index set
+obtained from the complete observed cycles in \([0,N)\) by deleting only a
+fixed number of endpoint cycles and by requiring that every term
+\(A_{n+\ell}\), \(n\in[\tau_j,\tau_{j+1})\), is observed.  Then
+\begin{equation}\label{eq:trimmed-shifted-click-centering-main}
+\frac1N\sum_{j\in J_N^{(\ell)}}
+\sum_{n=\tau_j}^{\tau_{j+1}-1}(A_{n+\ell}-\rho)
+=O_{\PP}(N^{-1/2}) .
+\end{equation}
+Consequently, for any fixed finite set of shifts
+\(\Lambda\subset\mathbb Z_{\ge0}\), fixed coefficients \(c_\ell\), and any
+all-complete-cycle index set on which all the shifted terms are observed and
+which differs from the complete-cycle set by only fixed endpoint trimming,
+\begin{equation}\label{eq:trimmed-shifted-linear-combination-main}
+\frac1N\sum_{j\in J_N}
+\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\sum_{\ell\in\Lambda}c_\ell(A_{n+\ell}-\rho)
+=O_{\PP}(N^{-1/2}) .
+\end{equation}
+In particular the conclusion holds for the lag-two all-complete-cycle set
+\(J_{2,N}\) with \(\ell=0\) and \(\ell=2\), and for their sum.
+\end{lemma}
+
+\begin{proof}
+Apply \Cref{prop:standard-complete-cycle-separated-batch-facts-main} to the bounded
+local observable \(Z_n=A_{n+\ell}-\rho\), with \(r=0\) and the fixed
+look-ahead \(\ell\).  Since the process is stationary,
+\(\EE Z_0=0\).  Palm inversion therefore centers the assigned cycle reward
+\[
+W_j^{(\ell)}
+=\sum_{n=\tau_j}^{\tau_{j+1}-1}(A_{n+\ell}-\rho)
+\]
+by the explicit local-window map with \(r=0\):
+\(\EE W_j^{(\ell)}=0\).  The reward is a function of the fixed future gap
+block \(F_{0,\ell}(G_j,\ldots,G_{j+q_\ell})\), where
+\(q_\ell=\max\{\ell-1,0\}\).  Moreover
+\(|W_j^{(\ell)}|\le L_j+\ell+1\), so the exponential tail of \(G_j\) gives
+\(\EE |W_j^{(\ell)}|^2<\infty\).  Hence the centered sequence
+\((W_j^{(\ell)})\) is \(q_\ell\)-dependent with finite variance, and its
+partial sums over any deterministic \(m=O(N)\) consecutive cycles are
+\(O_{\PP}(\sqrt N)\).
+
+The renewal law gives \(K_N=O_{\PP}(N)\) for the number of complete cycles
+intersecting \([0,N)\).  Replacing the deterministic \(O(N)\) prefix by the
+calendar-stopped prefix \(K_N\), or by a subset that differs from it by only a
+fixed number of endpoint and look-ahead cycles, changes the preceding partial
+sum by \(O_{\PP}(\log N)\) by the endpoint bound in
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}.  Thus the numerator
+in \eqref{eq:trimmed-shifted-click-centering-main} is \(O_{\PP}(\sqrt N)\),
+and division by \(N\) proves the claim.
+The linear-combination form follows by applying the preceding bound to each
+fixed shift after replacing \(J_N\) by the corresponding shift-specific
+observed all-complete-cycle set; the finitely many discrepancies between these
+sets are endpoint cycles, hence contribute only \(O_{\PP}(\log N)\) before
+division by \(N\).  A fixed finite linear combination of
+\(O_{\PP}(N^{-1/2})\) terms is again \(O_{\PP}(N^{-1/2})\).
+\end{proof}
+
+
+
+\begin{corollary}[Lag-two studentized scalar interval]\label{cor:finite-record-lag-two-studentized-main}
+Work under \Cref{ass:fixed-sampled-boundary-record-main}.  Define the observed
+complete-cycle lag-two covariance estimator by
+\[
+\widehat\gamma_{2,N}
+=\frac1N\sum_{j\in J_{2,N}}\sum_{n=\tau_j}^{\tau_{j+1}-1}
+(A_n-\widehat\rho_N)(A_{n+2}-\widehat\rho_N),
+\qquad
+\widehat\rho_N=\frac1N\sum_{n=0}^{N-1}A_n,
+\]
+where \(J_{2,N}\) contains exactly those all-complete-cycle indices for which
+the lag-two windows lie in the observed record.
+This is the paper's fully studentized scalar visible-record interval.
+
+The scalar studentizer used for this statistic is the following observable
+separated-batch estimator.  Let
+\[
+b_N=\lfloor N^\beta\rfloor,\qquad 0<\beta<1,\qquad d_N=b_N+1,
+\]
+and let
+\[
+M_{2,N}=\max\{m\ge0:(m-1)d_N+b_N-1\in J_{2,N}\},
+\qquad
+I^{\gamma}_{\ell,N}
+=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\]
+with \(M_{2,N}=0\) if the displayed set is empty.  For
+\(j\in J_{2,N}\), define the plug-in lag-two cycle reward
+\begin{equation}\label{eq:lag-two-plugin-cycle-reward-main}
+\widehat Y^{\gamma}_{j,N}
+=
+\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\left\{(A_n-\widehat\rho_N)(A_{n+2}-\widehat\rho_N)
+-\widehat\gamma_{2,N}\right\}.
+\end{equation}
+Put
+\[
+\widehat C^{\gamma}_{\ell,N}
+=\sum_{j\in I^{\gamma}_{\ell,N}}\widehat Y^{\gamma}_{j,N},
+\qquad
+\bar{\widehat C}^{\gamma}_N
+=M_{2,N}^{-1}\sum_{\ell=1}^{M_{2,N}}\widehat C^{\gamma}_{\ell,N}
+\quad\text{on }\{M_{2,N}\ge1\}.
+\]
+The scalar lag-two variance estimator is reported only when at least two
+complete separated lag-two batches are available.  For the proof of consistency
+on a total probability space, use the auxiliary completed statistic
+\begin{equation}\label{eq:lag-two-scalar-studentizer-main}
+\widehat\sigma^{2,\rm aux}_{\gamma_2,N}
+=
+\begin{cases}
+\displaystyle
+\frac{K_N}{N}\,
+\frac1{b_N(M_{2,N}-1)}
+\sum_{\ell=1}^{M_{2,N}}
+\left(\widehat C^{\gamma}_{\ell,N}
+-\bar{\widehat C}^{\gamma}_N\right)^2,
+&M_{2,N}\ge2,\\[1.1ex]
+0,&M_{2,N}<2 .
+\end{cases}
+\end{equation}
+On \(\{M_{2,N}<2\}\) the lag-two interval is not reported; the zero branch in
+\(\widehat\sigma^{2,\rm aux}_{\gamma_2,N}\) is used only in the convergence
+proof.  On \(\{M_{2,N}\ge2\}\), put
+\(\widehat\sigma^2_{\gamma_2,N}:=
+\widehat\sigma^{2,\rm aux}_{\gamma_2,N}\).
+Then
+\[
+\sqrt N(\widehat\gamma_{2,N}-\gamma_2)
+\Rightarrow \mathcal N(0,\sigma_{\gamma_2}^2),
+\]
+where \(\sigma_{\gamma_2}^2\) is the explicit positive variance
+\eqref{eq:lag-two-explicit-variance-main}, and
+\[
+\widehat\sigma^{2,\rm aux}_{\gamma_2,N}
+\xrightarrow{\PP}\sigma_{\gamma_2}^2 .
+\]
+Consequently, for \(0<\alpha<1\), with
+\(z_{1-\alpha/2}\) denoting the standard-normal \(1-\alpha/2\) quantile and
+\(\widehat\sigma_{\gamma_2,N}=(\widehat\sigma^2_{\gamma_2,N})^{1/2}\),
+the fixed-setting two-sided interval reported on \(\{M_{2,N}\ge2\}\),
+\begin{equation}\label{eq:lag-two-studentized-interval-main}
+\left[
+\widehat\gamma_{2,N}
+-z_{1-\alpha/2}\frac{\widehat\sigma_{\gamma_2,N}}{\sqrt N},
+\quad
+\widehat\gamma_{2,N}
++z_{1-\alpha/2}\frac{\widehat\sigma_{\gamma_2,N}}{\sqrt N}
+\right]
+\end{equation}
+has limiting coverage \(1-\alpha\).
+\end{corollary}
+
+\begin{proof}
+\Cref{lem:lag-two-reward-main} identifies the complete-cycle reward for the
+true-centered statistic as a centered \(1\)-dependent reward, and
+\Cref{lem:all-cycle-lag-two-windows-main} verifies that every lag-two term
+used by \(J_{2,N}\) is observed.  Thus the \(m_{\rm dep}=1\) case of
+\Cref{lem:finite-lag-renewal-reward-main} applies with
+\[
+\sigma_{\gamma_2}^2
+=\frac{\Var(Y_0)+2\operatorname{Cov}(Y_0,Y_1)}{\EE(G+1)}.
+\]
+\Cref{lem:lag-two-variance-nondegenerate-main} identifies this quantity with
+the double/triple sum \eqref{eq:lag-two-explicit-variance-main} and proves
+that it is strictly positive on the full positive parameter domain.
+Replacing \(\rho\) by \(\widehat\rho_N\) in the displayed estimator changes
+the true-centered average by
+\[
+-(\widehat\rho_N-\rho)\frac1N
+\sum_{j\in J_{2,N}}\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\bigl((A_n-\rho)+(A_{n+2}-\rho)\bigr)
++(\widehat\rho_N-\rho)^2\frac1N\sum_{j\in J_{2,N}}L_j .
+\]
+The stationarity and exponential renewal tail give the ordinary record mean
+\(\widehat\rho_N-\rho=O_{\PP}(N^{-1/2})\).  The trimmed bracket is exactly the
+linear-combination estimate
+\eqref{eq:trimmed-shifted-linear-combination-main} with
+\(\Lambda=\{0,2\}\) and \(c_0=c_2=1\):
+\[
+\frac1N
+\sum_{j\in J_{2,N}}\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\bigl((A_n-\rho)+(A_{n+2}-\rho)\bigr)
+=O_{\PP}(N^{-1/2}).
+\]
+Also \(N^{-1}\sum_{j\in J_{2,N}}L_j=O_{\PP}(1)\).  Therefore the two plug-in
+terms are respectively \(O_{\PP}(N^{-1})\) and \(O_{\PP}(N^{-1})\), hence
+\(o_{\PP}(N^{-1/2})\).  The CLT therefore has the same variance as the
+true-centered reward.
+
+It remains only to identify the displayed scalar studentizer with the
+batch-estimated variance of that same limiting reward.  Let
+\[
+Y^\gamma_j
+=\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\{(A_n-\rho)(A_{n+2}-\rho)-\gamma_2\},
+\qquad
+C^\gamma_{\ell,N}=\sum_{j\in I^\gamma_{\ell,N}}Y^\gamma_j .
+\]
+Write
+\(\bar C^\gamma_N=M_{2,N}^{-1}\sum_{\ell=1}^{M_{2,N}}C^\gamma_{\ell,N}\)
+on \(\{M_{2,N}\ge1\}\).
+The \(m_{\rm dep}=1\) case of
+\Cref{lem:finite-lag-separated-batch-main} applied to
+\((Y^\gamma_j)\) gives consistency of
+\[
+\frac{K_N}{N}\,
+\frac1{b_N(M_{2,N}-1)}
+\sum_{\ell=1}^{M_{2,N}}
+\left(C^\gamma_{\ell,N}-\bar C^\gamma_N\right)^2
+\]
+for \(\sigma_{\gamma_2}^2\), with the same auxiliary zero completion on
+\(\{M_{2,N}<2\}\), an event whose probability tends to zero and on which the
+lag-two interval is not reported.
+
+For the plug-in batch rewards, write
+\[
+\Delta_{\rho,N}=\widehat\rho_N-\rho,\qquad
+\Delta_{\gamma,N}=\widehat\gamma_{2,N}-\gamma_2,
+\]
+and
+\[
+W_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}
+\bigl\{(A_n-\rho)+(A_{n+2}-\rho)\bigr\}.
+\]
+Then, for every used cycle,
+\begin{equation}\label{eq:lag-two-plugin-cycle-difference-main}
+\widehat Y^\gamma_{j,N}-Y^\gamma_j
+=-\Delta_{\rho,N}W_j
++(\Delta_{\rho,N}^2-\Delta_{\gamma,N})L_j .
+\end{equation}
+The CLT already proved above gives
+\(\Delta_{\gamma,N}=O_{\PP}(N^{-1/2})\), and the ordinary renewal mean gives
+\(\Delta_{\rho,N}=O_{\PP}(N^{-1/2})\).  Since \(|W_j|\le2L_j+4\),
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} gives the same uniform
+\(O_{\PP}(b_NN^{-1/2})\) block perturbation as
+\eqref{eq:separated-batch-plugin-block-main}.  The plug-in covariance
+perturbation bound \eqref{eq:separated-batch-plugin-covariance-main}, applied
+in this scalar \(m=1\) setting, is \(o_{\PP}(1)\) because \(b_N/N\to0\).
+Thus
+\(\widehat\sigma^{2,\rm aux}_{\gamma_2,N}\to_{\PP}\sigma_{\gamma_2}^2\), and
+the reported \(\widehat\sigma^2_{\gamma_2,N}\) has the same limit on the
+retained event.
+Since the limiting variance is positive by
+\Cref{lem:lag-two-variance-nondegenerate-main}, Slutsky's theorem gives the
+studentized statistic and hence the interval
+\eqref{eq:lag-two-studentized-interval-main}.
+\end{proof}
+
+\begin{corollary}[Side-data-only labelled-rate transport after the quotient inverse]\label{cor:side-data-labelled-rate-wald-main}
+This corollary is not a visible-record parameter-estimation result.  It is the
+ordinary delta-method transport obtained after the quotient-only estimator
+\(\Phi(\Rinch_N)\) has been formed and after external side data have
+chosen an ordering of the two separated roots.  It also conditions on the
+sampling interval \(\Delta\tau\) being a known design interval; otherwise the
+same construction transports only the ordered dimensionless products.  Work
+under the fixed finite-record experiment and reporting gate \(\mathcal E_N\).
+Suppose the quotient population point is separated:
+\[
+\Delta_\sigma=(p-s)^2>0,\qquad p,s\in(0,1),
+\]
+and suppose the visible-record estimator satisfies the inclusion CLT and
+covariance rate used in \Cref{thm:finite-record-inference-audit-main}:
+\[
+\sqrt N(\Rinch_N-\Rinc)\Rightarrow \mathcal N(0,\Sigma_r),\qquad
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\operatorname{op}}
+=o_{\PP}(t_N)
+\]
+for the retained-rank threshold \(t_N\).  Add one of the following side-data
+hypotheses, neither of which is a consequence of the visible record:
+
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.35em]
+\item A deterministic oracle branch map \(\mathcal B\) is fixed on a
+neighbourhood of the unordered root set and orders the two roots as the
+attempt and recovery branches.
+\item A calibration or side-data estimator \(\widehat{\mathcal B}_N\) is used
+only on an event \(\mathcal C_N\) such that
+\[
+\PP(\mathcal C_N)\to1,\qquad
+\mathcal C_N\subseteq
+\{\widehat{\mathcal B}_N=\mathcal B
+\text{ on the retained separated-root neighbourhood}\}.
+\]
+\end{enumerate}
+
+Then the visible-record part of the construction supplies only
+\(\Phi(\Rinch_N)\) and the unordered root set.  On \(\mathcal E_N\) and on
+the corresponding side-data retained chart, after applying the external branch
+map, the ordered labelled-rate transport
+\[
+(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
+=\left(-\frac{\log\widehat p_N}{\Delta\tau},
+       -\frac{\log\widehat s_N}{\Delta\tau}\right)
+\]
+satisfies
+\[
+\sqrt N\{(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
+-(\Gamma,\kappa_{\mathrm r})\}
+\Rightarrow
+\mathcal N(0,\Sigma_{\Gamma,\kappa}),
+\qquad
+\Sigma_{\Gamma,\kappa}
+=J_{\Gamma,\kappa}(\Rinc)\Sigma_rJ_{\Gamma,\kappa}(\Rinc)^\top .
+\]
+With
+\[
+\widehat\Sigma_{\Gamma,\kappa,N}
+=\widehat J_{\Gamma,\kappa,N}\widehat\Sigma_{r,N}
+\widehat J_{\Gamma,\kappa,N}^{\top},
+\]
+where \(\widehat J_{\Gamma,\kappa,N}\) is
+\eqref{eq:inclusion-to-rate-jacobian-main} evaluated on the retained labelled
+chart, the covariance is consistent at the same operator-norm scale.  If
+\[
+\|\widehat\Sigma_{\Gamma,\kappa,N}
+-\Sigma_{\Gamma,\kappa}\|_{\operatorname{op}}=o_{\PP}(t_N),
+\]
+then the thresholded retained-rank Wald statistic converges to
+\(\chi_k^2\), \(k=\operatorname{rank}\Sigma_{\Gamma,\kappa}\).  No labelled-rate
+conclusion is asserted on \(\Delta_\sigma=0\), without an oracle map, or for an
+estimated branch map outside the high-probability agreement event.  In
+particular, this corollary never converts Theorem~B into identification of an
+ordered hidden labelled D-MAP representation from the visible law alone.
+\end{corollary}
+
+\begin{proof}
+On a separated-root neighbourhood the oracle branch map fixes one \(C^1\)
+ordering of the two roots, and
+\Cref{lem:separated-root-rate-delta-main} gives the root and rate Jacobians.
+The complete-cycle reporting gate has probability tending to one at the stable
+population point, and the separated discriminant/end-point thresholds are
+eventually retained.  The multivariate delta method therefore gives the
+displayed Gaussian limit after the external branch map has supplied the
+ordering.  If an estimated map is used, the event
+\(\mathcal C_N\) makes the estimated-map estimator identical to the oracle-map
+estimator with probability tending to one, so the same limit follows by the
+standard high-probability replacement argument.  The covariance consistency is
+the same continuous-mapping argument applied to the plug-in Jacobian on the
+retained separated chart.  Finally, Weyl's eigenvalue inequality retains
+exactly the positive limiting covariance eigenvalues above the threshold
+\(t_N\), and Slutsky's theorem gives the retained-rank \(\chi_k^2\) limit.
+Every step after \(\Phi(\Rinch_N)\) is conditional on side-data ordering;
+the quotient estimator and its covariance remain the visible-record output.
+\end{proof}
+
+\begin{proposition}[Quotient-only estimands from one constrained D-MAP fixed-setting long record]\label{thm:one-record-estimates-main}
+Under \Cref{ass:fixed-sampled-boundary-record-main}, a single fixed-setting
+record estimates only quantities of the stationary visible law: the inclusion
+coordinates, the projected
+symmetric coordinates \((p+s,ps)\), the unordered survival-factor pair and
+unordered numerical rate set when \(\Delta\tau\) is a known design interval,
+the corresponding dimensionless product set otherwise, the fixed-setting
+lag-two covariance, and their regenerative covariances under the assumptions
+above.  It does not label two separated rates and does not identify any object
+outside the visible stationary record law.  Response loci, KMS quantities,
+spectral weights, shell locations, ordered hidden labels, and ordered
+\((\Gamma,\kappa_{\mathrm r})\) are therefore not outputs of the one-record
+CLT or of the quotient inverse.  The branch-map convention is
+\Cref{conv:branch-map-labelled-rates-main}; at \(\sigma=(2z,z^2)\) the common
+dimensionless product, and only for known \(\Delta\tau\) the common numerical
+rate, is the invariant visible-law exception described in
+\Cref{lem:diagonal-common-rate-main}.
+\end{proposition}
+
+\begin{proof}
+The positive estimands are exactly the CLT targets in
+\Cref{thm:finite-record-inference-audit-main,cor:finite-record-lag-two-studentized-main}
+together with the quotient transform in
+\Cref{thm:toeplitz_image_inverse_duality,thm:finite-record-quotient-delta-main}.
+The non-identifiability statement is
+\Cref{prop:hidden_label_exchange_nonidentifiability}: exchanging the two
+hidden labels leaves every finite-dimensional visible distribution unchanged.
+Hence a statistic of one visible record can be a function only of the quotient
+law, not of a chosen hidden ordering.  Side-data branch maps enter only through
+\Cref{conv:branch-map-labelled-rates-main,cor:side-data-labelled-rate-wald-main}.
+Response-locus statements are appendix/supplementary conditional corollaries
+that require an independently calibrated response closure beyond the
+visible-record law.  The record analysis starts from \(T_0,T_1\) and therefore
+supplies no estimator for
+any externally defined scalar response map, shell location, KMS parameter, or
+inverse image of such a map.
+\end{proof}

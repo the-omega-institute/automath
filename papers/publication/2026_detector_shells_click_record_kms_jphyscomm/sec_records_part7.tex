@@ -1,0 +1,700 @@
+
+Finally fix \(0<\eta<-\log r\).  In the equal-rate case,
+\[
+\EE e^{\eta G}
+=\sum_{k\ge0}e^{\eta k}g_k
+\le C_2\sum_{k\ge0}(1+k)(re^\eta)^k
+\]
+is finite because \(re^\eta<1\).  In the unequal-rate case the same argument
+uses \(g_k\le Cr^k\) and the geometric series
+\(\sum_{k\ge0}(re^\eta)^k\).  Finally,
+\(\EE e^{\eta(G+1)}=e^\eta\EE e^{\eta G}\).
+\end{proof}
+
+\begin{corollary}[Stationary killed-leakage three-inclusion complete-cycle CLT]\label{cor:three-inclusion-complete-cycle-clt-main}
+In the stationary version of \Cref{ass:fixed-sampled-boundary-record-main}, let
+\(\Rinch_N^{\mathrm{cyc}}\) be the exact finite-record statistic from
+\Cref{def:cycle-index-inclusion-estimator-main}:
+\[
+\widehat r_{m,N}^{\mathrm{cyc}}
+=\frac1N\sum_{j\in J_{m,N}}U_j^{(m)},\qquad m=0,1,2,
+\]
+with empty sums equal to \(0\).  Put
+\[
+\Rinc=(r_0,r_1,r_2)^\top,\qquad
+r_m=\PP(A_0=A_m=1),\qquad
+\mu=\EE(G+1).
+\]
+In Palm cycle coordinates,
+\begin{equation}\label{eq:inclusion-cycle-reward-identities-main}
+U_j^{(0)}=1,\qquad
+U_j^{(1)}=\mathbf1_{\{G_j=0\}},\qquad
+U_j^{(2)}
+=\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,\ G_{j+1}=0\}},
+\end{equation}
+and the centered reward is
+\[
+Y_j=
+\bigl(U_j^{(0)}-r_0L_j,\,
+U_j^{(1)}-r_1L_j,\,
+U_j^{(2)}-r_2L_j\bigr)^\top .
+\]
+Then \(Y_j=f(G_j,G_{j+1})\), \(\EE Y_j=0\), and the reward sequence is
+\(1\)-dependent.  With
+\[
+\mathcal T_1^{(r)}
+=\Var(Y_0)+\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0),
+\qquad
+\Sigma_r=\frac{\mathcal T_1^{(r)}}{\mu},
+\]
+one has
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+\Rightarrow \mathcal N(0,\Sigma_r).
+\]
+The proof uses the \(O_{\PP}(\log N)\) endpoint replacement and the
+renewal random-index replacement from
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}; the covariance
+scale is exactly \(\mathcal T_1^{(r)}/\mu\).
+\end{corollary}
+
+\begin{proof}
+The half-open cycle \([\tau_j,\tau_{j+1})\) contains only the click at
+\(\tau_j\), so \(U_j^{(0)}=1\).  A one-step look-ahead is a click exactly
+when the next click occurs one sampled step later, so
+\(U_j^{(1)}=\mathbf1_{\{G_j=0\}}\).  For lag two, the contributing time must
+again be the click at \(\tau_j\); the click two steps later occurs either
+when \(G_j=1\), or when \(G_j=0\) and the following gap also has length zero.
+This gives the displayed reward identities.
+
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}, applied to
+\(Z_n^{(m)}=A_nA_{n+m}\), gives the Palm inversion identity
+\[
+\EE U_j^{(m)}=r_m\EE L_j,\qquad m=0,1,2.
+\]
+Thus \(\EE Y_j=0\).  The displayed identities show that \(Y_j\) is a
+function only of \((G_j,G_{j+1})\), hence \(1\)-dependent, and
+\[
+\|Y_j\|\le C(1+G_j)
+\]
+for a fixed finite \(C\).  The exponential moment required by the generic
+proposition is supplied by
+\Cref{lem:killed-leakage-gap-exponential-moment-main}.
+
+For each coordinate,
+\[
+\widehat r_{m,N}^{\mathrm{cyc}}-r_m
+=\frac1N\sum_{j\in J_{m,N}}\{U_j^{(m)}-r_mL_j\}
++\frac{r_m}{N}\left\{\sum_{j\in J_{m,N}}L_j-N\right\}.
+\]
+The complete cycles used by \(J_{m,N}\) differ from the calendar window
+\([0,N)\) by only the initial incomplete cycle, the terminal incomplete
+cycle, and a fixed look-ahead cycle.  Their total length is
+\(O_{\PP}(\log N)\), by the endpoint proof in
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}.  Therefore the
+second displayed term is \(o_{\PP}(N^{-1/2})\), and the first term has the
+same \(N^{1/2}\)-limit as \(N^{-1}\sum_{j=0}^{K_N-1}Y_j\).
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} then supplies the
+deterministic \(1\)-dependent CLT, the endpoint replacement, and the
+random-index replacement \(K_N/N\to1/\mu\).  The resulting calendar-time
+covariance is \(\mathcal T_1^{(r)}/\mu\).
+\end{proof}
+
+\begin{lemma}[CLT reduction for inclusion coordinates]\label{lem:three-inclusion-clt-reduction-main}
+Under \Cref{ass:fixed-sampled-boundary-record-main}, let
+\(\Rinch_N^{\mathrm{cyc}}\), \(K_N\), \(L_j=G_j+1\), \(U_j^{(m)}\),
+\(\Rinc=(r_0,r_1,r_2)^\top\), and \(\mu=\EE L_0\) be as in
+\Cref{cor:three-inclusion-complete-cycle-clt-main}.  Define
+\[
+Y_j=
+\bigl(U_j^{(0)}-r_0L_j,\,
+U_j^{(1)}-r_1L_j,\,
+U_j^{(2)}-r_2L_j\bigr)^\top
+=f(G_j,G_{j+1}),
+\]
+where
+\[
+U_j^{(0)}=1,\qquad
+U_j^{(1)}=\mathbf1_{\{G_j=0\}},\qquad
+U_j^{(2)}
+=\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}} .
+\]
+Then
+\[
+\EE Y_j=0,\qquad (Y_j)_{j\in\mathbb Z}\ \text{is \(1\)-dependent},
+\qquad
+\frac{K_N}{N}\xrightarrow{\PP}\frac1\mu,
+\]
+and the finite-record statistic has the cycle-sum reduction
+\begin{equation}\label{eq:three-inclusion-clt-reduction-main}
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+=
+\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1).
+\end{equation}
+Consequently, with
+\[
+T_1^{(r)}
+=\operatorname{Var}(Y_0)+\operatorname{Cov}(Y_0,Y_1)
+ +\operatorname{Cov}(Y_1,Y_0),
+\qquad
+\Sigma_r=\frac{T_1^{(r)}}{\mu},
+\]
+one has
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)
+\Rightarrow \mathcal N(0,\Sigma_r).
+\]
+The same reduction and limit hold for a finite hidden start after a
+post-burn-in block of length \(L_N\to\infty\), with \(N\) interpreted as the
+retained block length and with all cycle indices formed from that retained
+word.
+\end{lemma}
+
+\begin{proof}
+The Palm reward identities are exactly
+\eqref{eq:inclusion-cycle-reward-identities-main}.  Palm inversion for the
+local windows gives \(\EE U_j^{(m)}=r_m\EE L_j\), hence \(\EE Y_j=0\).  The
+displayed formulas make \(Y_j\) a function of the two adjacent gaps
+\((G_j,G_{j+1})\), so independent renewal gaps imply \(1\)-dependence.
+
+It remains to isolate the calendar-window error.  For each coordinate,
+\[
+\widehat r_{m,N}^{\mathrm{cyc}}-r_m
+=
+\frac1N\sum_{j\in J_{m,N}}\{U_j^{(m)}-r_mL_j\}
++\frac{r_m}{N}\left\{\sum_{j\in J_{m,N}}L_j-N\right\}.
+\]
+The complete cycles entering \(J_{m,N}\) differ from the prefix
+\(\{0,\ldots,K_N-1\}\) only by the initial incomplete cycle, the terminal
+incomplete cycle, and the fixed look-ahead cycles needed by the local
+windows.  By the endpoint estimate in
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} and the exponential
+gap moment of \Cref{lem:killed-leakage-gap-exponential-moment-main}, the total
+omitted length is \(O_{\PP}(\log N)\).  Therefore both the length correction
+and the replacement of \(J_{m,N}\) by the common cycle prefix are
+\(o_{\PP}(N^{-1/2})\), which proves
+\eqref{eq:three-inclusion-clt-reduction-main}.
+
+The renewal law of large numbers gives \(K_N/N\to1/\mu\).  Applying the
+fixed-\(1\)-dependent multivariate CLT to the deterministic cycle prefix and
+then the random-index replacement in
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main} gives the displayed
+Gaussian limit with covariance \(T_1^{(r)}/\mu\).
+
+For a finite hidden start, apply
+\Cref{lem:finite-hidden-start-path-contraction-main} with \(L=L_N\).  The
+retained cycle-index estimator, the retained complete-cycle count, and the
+retained cycle-sum approximation are measurable functions of the retained
+visible \(N\)-word.  Hence their joint law under the finite-start protocol
+differs from the stationary-start retained-word law by at most
+\(C\theta^{L_N}\to0\) in total variation, uniformly in \(N\).  The stationary
+\(o_{\PP}(1)\) reduction, the convergence \(K_N/N\to1/\mu\), and the Gaussian
+limit therefore transfer to the finite-start retained block.
+\end{proof}
+
+\begin{lemma}[Lemma E-local: explicit local projection at the exchange diagonal]\label{lem:exchange-diagonal-local-reach-before-main}
+Let
+\[
+F=\{(x+y,xy):0\le x,y\le1\},\qquad
+\sigma_z=(2z,z^2),\quad
+H_z=\{h\in\mathbb R^2:h_2\le zh_1\},\quad 0<z<1.
+\]
+There exists \(\varepsilon_z>0\) such that \(\Pi_F^{\rm tb}\) is single-valued
+on \(B_{\varepsilon_z}(\sigma_z)\).  Moreover, for every \(M<\infty\),
+\begin{equation}\label{eq:exchange-diagonal-local-projection-rate-main}
+\sup_{\|h\|\le M}\left\|
+N^{1/2}\{\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\}
+-\Pi_{H_z}h\right\|\longrightarrow0.
+\end{equation}
+In fact the sharper deterministic bound
+\begin{equation}\label{eq:explicit-local-projection-expansion-main}
+\sup_{\|h\|\le M}\left\|
+N^{1/2}\{\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\}
+-\Pi_{H_z}h\right\|=O_M(N^{-1/2})
+\end{equation}
+holds, where the implicit constant may depend on \(z\) and \(M\).
+Consequently, if
+\[
+H_N:=\sqrt N(\widehat\sigma_N^{\rm raw}-\sigma_z)\Rightarrow Z
+\qquad\text{and}\qquad H_N=O_{\PP}(1),
+\]
+then, with
+\(\widehat\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma_N^{\rm raw})\),
+\[
+\sqrt N(\widehat\sigma_N-\sigma_z)
+=\Pi_{H_z}H_N+o_{\PP}(1)
+\Rightarrow \Pi_{H_z}Z .
+\]
+Equivalently, the local projection is Hadamard directionally differentiable at
+\(\sigma_z\), tangentially to \(\mathbb R^2\), with derivative
+\(h\mapsto\Pi_{H_z}h\).  No global nonexpansiveness of the nonconvex
+projection selection is used.
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:feasible-set-computable-projection-main}, \(F\) is the compact
+hypograph
+\[
+F=\{(\sigma_1,\sigma_2):0\le\sigma_1\le2,
+\ell_F(\sigma_1)\le\sigma_2\le\sigma_1^2/4\}.
+\]
+Choose \(\delta>0\) such that \(2z-2\delta>0\), \(2z+2\delta<2\), and
+\[
+z^2-\ell_F(2z)>4\delta .
+\]
+Continuity of \(\ell_F\) then gives, after reducing \(\delta\) if necessary,
+\[
+F\cap\{|s-2z|<2\delta,\ |y-z^2|<2\delta\}
+=\{(s,y): |s-2z|<2\delta,\ |y-z^2|<2\delta,\ y\le s^2/4\}.
+\]
+The lower box-boundary piece is therefore absent from this neighbourhood, and
+only the exchange parabola \(y=s^2/4\) can be active.  Hence, in this local
+neighbourhood of \(\sigma_z=(2z,z^2)\), the feasible set is exactly the
+hypograph
+\[
+F=\{(\sigma_1,\sigma_2):\sigma_2\le\sigma_1^2/4\}.
+\]
+
+We first prove the scaled projection expansion in this local hypograph.
+Write \(e=N^{-1/2}\), \(h=(a,b)\), and introduce the scaled boundary
+\[
+\gamma_e(t)=\left(t,\ zt+\frac{e t^2}{4}\right).
+\]
+Indeed,
+\[
+\sigma_z+e\,\gamma_e(t)
+=\left(2z+et,\ z^2+ezt+\frac{e^2t^2}{4}\right)
+=\left(2z+et,\ \frac{(2z+et)^2}{4}\right).
+\]
+Thus the local scaled feasible set is
+\[
+K_e=\left\{u\in\mathbb R^2:
+u_2\le zu_1+\frac{e u_1^2}{4}\right\}.
+\]
+Equivalently, for \(\sigma=\sigma_z+h/\sqrt N\), local feasibility is
+\[
+h_2\le zh_1+\frac{h_1^2}{4\sqrt N}.
+\]
+The limiting half-space projection is explicit.  With
+\[
+A=1+z^2,\qquad d=b-za,\qquad n_z=(-z,1)^\top ,
+\]
+\[
+\Pi_{H_z}h=
+\begin{cases}
+h,&d\le0,\\[2mm]
+h-\dfrac{d}{A}n_z
+=\left(\dfrac{a+zb}{A},\ z\dfrac{a+zb}{A}\right),&d>0.
+\end{cases}
+\]
+
+Fix \(M<\infty\).  If \(\|h\|\le M\) and \(d\le0\), then \(h\in K_e\) because
+\(e a^2/4\ge0\), and the local projection is exactly \(h=\Pi_{H_z}h\).  If
+\(0<d\le e a^2/4\), then \(h\in K_e\) but \(h\notin H_z\), so the local
+projection is \(h\), while
+\[
+\|h-\Pi_{H_z}h\|=\frac{d}{\sqrt A}\le \frac{eM^2}{4\sqrt A}.
+\]
+It remains to consider \(d>e a^2/4\).  Then \(h\) lies strictly above the
+local parabola.  For a fixed first coordinate \(t\), the closest point of
+\(K_e\) to \(h\) has second coordinate \(zt+et^2/4\); hence the local
+projection is \(\gamma_e(t_e)\), where \(t_e\) minimizes
+\[
+q_e(t)=(t-a)^2+\left(zt+\frac{e t^2}{4}-b\right)^2 .
+\]
+The minimizer is uniformly bounded on the \(M\)-window: if
+\[
+R_M:=2M+\frac{M^2}{4},\qquad C_M:=M+R_M+1,
+\]
+then, for \(e\le1\),
+\[
+q_e(a)=\left(za+\frac{e a^2}{4}-b\right)^2\le R_M^2 .
+\]
+If \(|t|>C_M\), then \(|t-a|>R_M\), so \(q_e(t)>R_M^2\).  Thus every
+minimizer lies in \([-C_M,C_M]\) for all sufficiently small \(e\).  On this
+interval,
+\[
+\frac12q_e''(t)
+=1+\left(z+\frac{et}{2}\right)^2
++\frac e2\left(zt+\frac{e t^2}{4}-b\right)
+\ge \frac A2
+\]
+for all sufficiently small \(e\), uniformly in \(\|h\|\le M\).  Hence the
+minimizer is unique.  Its normal equation is
+\begin{equation}\label{eq:parabola-normal-equation-main}
+0=\frac12q_e'(t_e)
+=(t_e-a)+\left(z+\frac{e t_e}{2}\right)
+\left(zt_e+\frac{e t_e^2}{4}-b\right).
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:parabola-normal-expanded-main}
+0=A t_e-(a+zb)
++e\left(\frac{3z}{4}t_e^2-\frac b2t_e\right)
++\frac{e^2}{8}t_e^3 .
+\end{equation}
+Put
+\[
+t_0=\frac{a+zb}{A},\qquad
+R(t)=\frac{3z}{4}t^2-\frac b2t .
+\]
+Subtracting \(A t_0-(a+zb)=0\) from
+\eqref{eq:parabola-normal-expanded-main} gives
+\[
+A(t_e-t_0)=-eR(t_e)-\frac{e^2}{8}t_e^3 .
+\]
+Since \(|t_e|\le C_M\) and \(|b|\le M\), this identity gives the uniform
+normal-equation solution
+\[
+t_e=t_0+O_M(e).
+\]
+Writing the projected boundary displacement as
+\[
+k=\gamma_e(t_e)
+=\left(t_e,\ zt_e+\frac{e t_e^2}{4}\right),
+\]
+and using \(d=b-za\), this is equivalently the first-order normal-projection
+formula
+\[
+k
+=h-\frac{h_2-zh_1}{1+z^2}(-z,1)+O_M(e),
+\]
+uniformly for \(\|h\|\le M\) in the infeasible case.  The feasible cases above
+give the same display after replacing \(h_2-zh_1\) by its positive part, up to
+the \(O_M(e)\) boundary perturbation.
+Substituting into the boundary parametrization yields
+\[
+\gamma_e(t_e)
+=\left(t_0,\ zt_0\right)+O_M(e)
+=\Pi_{H_z}h+O_M(e),
+\]
+uniformly over all \(\|h\|\le M\) in the case \(d>ea^2/4\).  Combining the
+three cases,
+\begin{equation}\label{eq:scaled-local-hypograph-projection-main}
+\sup_{\|h\|\le M}
+\left\|\Pi_{K_e}h-\Pi_{H_z}h\right\|=O_M(e).
+\end{equation}
+
+It remains only to identify the local hypograph projection with the
+tie-broken projection onto the full feasible set.  The same second-derivative
+calculation at \(e=1\), after translating the first coordinate by \(2z\) and
+shrinking the rectangle if necessary, gives a unique local nearest point for
+each point in a sufficiently small ball about \(\sigma_z\).  The preceding
+scaled strict-convexity argument gives the corresponding \(N\)-window
+uniqueness uniformly for \(\|h\|\le M\) in the rectangle
+\(|s-2z|<2\delta\), \(|y-z^2|<2\delta\), while every point of
+\(F\) outside that rectangle has positive distance from \(\sigma_z\).  Taking
+\(\varepsilon_z>0\) smaller than this separation margin and then taking
+\(N\) large enough for \(\|h\|\le M\) to imply
+\(\sigma_z+h/\sqrt N\in B_{\varepsilon_z}(\sigma_z)\), no remote point of
+\(F\) can tie the local minimizer.  Hence
+\[
+\sqrt N\{\Pi_F^{\rm tb}(\sigma_z+h/\sqrt N)-\sigma_z\}
+=\Pi_{K_{N^{-1/2}}}h
+\]
+uniformly for \(\|h\|\le M\) and all sufficiently large \(N\).  With
+\eqref{eq:scaled-local-hypograph-projection-main}, this is exactly
+\eqref{eq:exchange-diagonal-local-projection-rate-main}, with the sharper
+\(O_M(N^{-1/2})\) rate.
+
+Finally, tightness gives: for every \(\eta>0\) choose \(M\) with
+\(\PP(\|H_N\|>M)<\eta\) for all large \(N\).  On \(\{\|H_N\|\le M\}\), the
+uniform display gives
+\[
+\sqrt N\{\Pi_F^{\rm tb}(\sigma_z+H_N/\sqrt N)-\sigma_z\}
+=\Pi_{H_z}H_N+o_{\PP}(1).
+\]
+The continuous mapping theorem for the continuous half-space projection then
+gives \(\Pi_{H_z}H_N\Rightarrow\Pi_{H_z}Z\).
+\end{proof}
+
+\begin{assumption}[Finite-record master assumption]\label{ass:finite-record-master-main}
+\Cref{thm:finite-record-inference-audit-main,thm:finite-record-quotient-delta-main,thm:e-fixed-candidate-exchange-diagonal-main}
+are read under \Cref{subsec:finite-record-report-scope-main} and the following named
+hypotheses.  These hypotheses collect the finite-record law, estimand,
+reporting gate, covariance-estimation, projection, and diagonal calibration
+rules; the theorem statements below invoke these names instead of repeating
+the full scope contract.
+The algorithmic recipes implementing these conventions are collected after
+Theorem~E so that the assumption block is the single pre-theorem contract.
+No item below is a data-driven model-selection rule.  When a theorem displays
+coverage or confidence language, that language is read only under
+\Cref{ass:model-inference-contract-main} and only for the fixed statistic,
+branch, thresholds, and reporting gate named before the record is used.
+
+\begin{enumerate}[label=\textup{FR-\arabic*.},ref=FR-\arabic*,leftmargin=3.0em,itemsep=0.45em]
+\item\label{fr:law-main}\textbf{Record law and retained word.}
+Assumption~\ref{ass:fixed-sampled-boundary-record-main} holds.  The observed
+data are the retained post-burn-in visible word of length \(N\).  All
+complete-cycle sets, batches, projections, Wald statistics, and finite-record
+reports are functions only of that retained word.
+
+\item\label{fr:estimands-main}\textbf{Visible-record estimands.}
+The inclusion estimand is
+\[
+\Rinc=(r_0,r_1,r_2),\qquad r_m=\PP(A_0=A_m=1).
+\]
+On the stable quotient chart \(r_0>0\) and \(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\), the symmetric
+quotient estimand is
+\[
+\sigma_{\rm sym}=\Phi(\Rinc)=(p+s,ps),
+\qquad
+\lambda=\frac{r_2-r_0^2}{r_1-r_0^2}.
+\]
+The finite visible record identifies \(\{p,s\}\).  For known design interval
+\(\Delta\tau\), this gives the unordered numerical rate set
+\[
+\left\{-\frac{\log p}{\Delta\tau},-\frac{\log s}{\Delta\tau}\right\},
+\]
+and, on the exchange diagonal \(p=s=z\), the common numerical rate
+\(-\log z/\Delta\tau\).  Without known \(\Delta\tau\), the corresponding
+rate-scale estimands are only \(\{-\log p,-\log s\}\) and, on the diagonal,
+\(-\log z\).  Ordered labelled rates are not visible-record estimands here.
+The retained-record coverage statements in Theorems~C--E therefore concern
+\(\Rinc\), \(\Phi(\Rinc)\), unordered roots, known-interval unordered rates or
+dimensionless products as applicable, the lag-two visible covariance, and the
+exchange-diagonal common-root/common-rate event.  A confidence statement for
+the ordered vector \((\Gamma,\kappa_{\mathrm r})\) is outside the quotient-only
+visible-law inverse and appears only after the separate side-data assumptions
+of \Cref{cor:side-data-labelled-rate-wald-main}.
+
+\item\label{fr:protocol-main}\textbf{Operational gate and deterministic thresholds.}
+The deterministic thresholds are
+\begin{equation}\label{prot:finite-record-main}
+\begin{aligned}
+b_N=\lfloor N^{1/3}\rfloor,\qquad
+t_N=N^{-1/4},\qquad
+\varepsilon_N=N^{-1/4},\qquad
+\eta_N=N^{-1/8},\\
+\delta_N^{\rm root}=N^{-1/8},
+\qquad
+\delta_N^{\rm MC}=N^{-2}.
+\end{aligned}
+\end{equation}
+and the rank-one diagonal angle threshold used in the reporting algorithm is
+\(a_N=N^{-1/8}\).  Fix once and for all an integer \(K_{\min}\ge2\).  With
+\(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed, with
+\(M_N\) the separated-batch count in Algorithm~1, and with
+\[
+\widehat\Delta_{\mathrm{inv},N}=
+\widehat r_{1,N}^{\mathrm{cyc}}-(\widehat r_{0,N}^{\mathrm{cyc}})^2,
+\]
+the reporting event is
+\begin{equation}\label{eq:finite-record-reporting-event-main}
+\mathcal E_N=
+\{K_N\ge K_{\min},\ M_N\ge2,\ \widehat r_{0,N}^{\mathrm{cyc}}\ge\varepsilon_N,
+|\widehat\Delta_{\mathrm{inv},N}|\ge\varepsilon_N\}.
+\end{equation}
+On \(\mathcal E_N\) the pre-specified fixed-model protocol evaluates the
+estimator, sandwich covariance, retained rank, and any finite-record event
+specified by the applicable theorem branch.  On \(\mathcal E_N^c\) it reports
+insufficient complete cycles and forms no finite-record report.  The event is
+a finite-record reporting gate, not a diagnostic pass/fail certificate and not
+a population-level exclusion; its high-probability validity on the stable
+quotient chart is proved separately in
+\Cref{lem:finite-record-reporting-gate-main}.  The separated-batch covariance
+rate is \(N^{-1/3}\), the retained-rank threshold is larger than the
+covariance-estimation error, \(N^{1/2}(\delta_N^{\rm root})^2\to\infty\), and
+\(t_N/a_N\to0\).  The root threshold \(\delta_N^{\rm root}\) is deterministic
+chart-reporting input; the separate value
+\(\delta_N^{\rm MC}=N^{-2}\) is used only as the DKW Monte Carlo error
+probability in simulation certificates.  The two thresholds are never
+identified.
+
+\item\label{fr:covariance-main}\textbf{Covariance estimator and retained rank.}
+Algorithm~1 is the covariance rule.  On \(\mathcal E_N\) it reports
+\(\widehat\Sigma_{r,N}\); on \(\mathcal E_N^c\) it withholds the covariance
+matrix and no finite-record report is formed.  Probability-limit statements use only
+the auxiliary total-space completion
+\[
+\widehat\Sigma_{r,N}^{\rm tot}
+:=\mathbf 1_{\mathcal E_N}\widehat\Sigma_{r,N}
++\mathbf 1_{\mathcal E_N^c}0_{3\times3},
+\]
+which is not an operational replacement.  The quotient covariance used on the
+reported event is the sandwich
+\[
+\widehat\Sigma_{\sigma,N}
+=D\Phi(\Rinch_N^{\mathrm{cyc}})
+ \widehat\Sigma_{r,N}
+ D\Phi(\Rinch_N^{\mathrm{cyc}})^\top,
+\]
+after the same feasible projection and chart retention as Algorithm~2.
+For full-space probability limits its auxiliary completion is
+\[
+\widehat\Sigma_{\sigma,N}^{\rm tot}
+:=\mathbf 1_{\mathcal E_N}\widehat\Sigma_{\sigma,N}
++\mathbf 1_{\mathcal E_N^c}0_{2\times2}.
+\]
+Diagonal statistics use exactly the empirical eigenvalues of
+\(\widehat\Sigma_{\sigma,N}\) retained above \(t_N=N^{-1/4}\).  The consistency
+needed for that retained-rank step is not assumed here: it is supplied for
+the inclusion covariance by \Cref{thm:finite-record-covariance-main} and, on
+the exchange diagonal, pushed through the quotient Jacobian in
+\Cref{lem:dmap-diagonal-raw-quotient-clt-main}.
+
+\item\label{fr:projection-main}\textbf{Feasible projection and chart retention.}
+Algorithm~2 is the projection and chart-retention rule.  The raw symmetric
+coordinate is projected to
+\[
+\widetilde\sigma_N=\Pi_F^{\rm tb}(\Phi(\Rinch_N^{\mathrm{cyc}})),
+\qquad
+F=\{(x+y,xy):0\le x,y\le1\}.
+\]
+At separated roots with \(\Delta_\sigma>0\), the theorem reports only the
+unordered root and rate sets.  A labelled separated-rate report is withheld
+unless an external branch map satisfies
+\Cref{conv:branch-map-labelled-rates-main}.
+
+\item\label{fr:diagonal-main}\textbf{Exchange-diagonal local projection.}
+At \(\sigma_z=(2z,z^2)\), \(0<z<1\), the local-reach hypothesis is exactly
+\Cref{lem:exchange-diagonal-local-reach-before-main}: with probability tending
+to one, the global tie-broken projection agrees with the unique local
+projection, and its tangent projection is onto
+\[
+H_z=\{h\in\mathbb R^2:h_2\le zh_1\}.
+\]
+
+\item\label{fr:mc-main}\textbf{Diagonal calibration and conservative reporting.}
+The exchange-diagonal statistic uses the \(t_N\)-thresholded pseudoinverse and
+the ideal conditional projected-Gaussian lower quantile
+\(c^{-}_{1-\alpha,N}(z)\).  The main text uses only the following
+pre-specified certificate interface.  A diagonal theorem-level report is
+available only for a candidate fixed in advance whose appendices supply both a
+population branch certificate for the computable covariance
+\(\Sigma_\sigma(z)\) from \eqref{eq:dmap-diagonal-sigma-finite-main} and a
+critical-value certificate for the same retained branch.  For the submitted
+manuscript this occurs only at \(z_0=1/2\).  If either certificate is absent or
+inconclusive, the projected-Gaussian output is a diagnostic display only and
+is not a finite-record confidence report.  Such diagnostic output neither
+selects a valid branch nor certifies the model.  The full interval-arithmetic
+transcripts, mechanical bisection rules, and finite accept/reject/undecided
+report formats are not part of this assumption block; they are the certificate
+protocols in
+\Cref{def:finite-diagonal-report-main,prop:finite-diagonal-report-master-main,app:self-contained-diagonal-branch-certificate-main}.
+\end{enumerate}
+\end{assumption}
+
+\begin{lemma}[Finite-record reporting gate is asymptotically open]\label{lem:finite-record-reporting-gate-main}
+Work under \Cref{ass:finite-record-master-main},
+\ref{fr:law-main}, \ref{fr:estimands-main}, and \ref{fr:protocol-main}.
+At any positive constrained D-MAP population point of
+\Cref{ass:fixed-sampled-boundary-record-main}, write
+\[
+r_0=\rho,\qquad r_1=\rho a,\qquad \Delta_{\mathrm{inv}}:=r_1-r_0^2=\rho(a-\rho).
+\]
+Then \(r_0=\rho>0\) and \(\Delta_{\mathrm{inv}}=\rho(a-\rho)<0\).
+With
+\[
+b_N=\lfloor N^{1/3}\rfloor,\qquad
+\varepsilon_N=N^{-1/4},
+\]
+and fixed \(K_{\min}\ge2\), the reporting event \(\mathcal E_N\) in
+\eqref{eq:finite-record-reporting-event-main},
+\[
+\PP(\mathcal E_N^c)\to0 .
+\]
+More explicitly,
+\[
+\PP(K_N<K_{\min})\to0,\qquad
+\PP(M_N<2)\to0,
+\]
+and
+\[
+\PP(\widehat r_{0,N}^{\mathrm{cyc}}<\varepsilon_N)\to0,\qquad
+\PP(|\widehat\Delta_{\mathrm{inv},N}|<\varepsilon_N)\to0 .
+\]
+The same conclusions hold in the finite hidden-start experiment after any
+deterministic burn-in \(L_N\to\infty\).
+\end{lemma}
+
+\begin{proof}
+The D-MAP model identities are those of
+\Cref{lem:stationary-main,thm:toeplitz_image_inverse_duality}:
+\(r_0=\rho\), \(r_1=\rho a\), and
+\[
+\Delta_{\mathrm{inv}}=r_1-r_0^2=\rho(a-\rho).
+\]
+At a positive constrained D-MAP point, \(\rho>0\) and
+\(a-\rho<0\), so \(\Delta_{\mathrm{inv}}<0\).  Thus the denominator test below is a consequence
+of the population law, not an additional finite-record assumption.
+
+The fixed low-cycle assertion is exactly
+\Cref{prop:standard-complete-cycle-separated-batch-facts-main}, with \(C=K_{\min}\).  Since
+\(b_N=\lfloor N^{1/3}\rfloor\) and \(d_N=b_N+1=o(N)\), the all-complete-cycle
+separated-batch count satisfies \(M_N\ge2\) with probability tending to one by
+\Cref{prop:calendar-stopped-separated-batch-plugin-main}; equivalently, the
+renewal law gives
+\[
+K_N/N\to\rho=1/\mu>0
+\]
+in probability, so \(K_N\ge K_{\min}\) with probability tending to one, and
+the retained separated-batch count satisfies
+\[
+M_N\sim K_N/(b_N+1)
+\]
+up to fixed endpoint and look-ahead deletions.  With
+\(b_N=\lfloor N^{1/3}\rfloor\), this implies \(M_N\to\infty\) in probability,
+hence \(M_N\ge2\) with probability tending to one.
+
+\Cref{lem:three-inclusion-clt-reduction-main} gives
+\(\Rinch_N^{\mathrm{cyc}}-\Rinc=O_{\PP}(N^{-1/2})\), hence
+\(\widehat r_{0,N}^{\mathrm{cyc}}\to r_0\) in probability.  Because
+\(r_0>0\) and \(\varepsilon_N=N^{-1/4}\to0\),
+\[
+\PP(\widehat r_{0,N}^{\mathrm{cyc}}<\varepsilon_N)
+\le
+\PP(|\widehat r_{0,N}^{\mathrm{cyc}}-r_0|>r_0/2)
+\]
+for all sufficiently large \(N\), and the right side tends to zero.
+
+The map \(x\mapsto x_1-x_0^2\) is continuous, so
+\[
+\widehat\Delta_{\mathrm{inv},N}
+=\widehat r_{1,N}^{\mathrm{cyc}}
+ -(\widehat r_{0,N}^{\mathrm{cyc}})^2
+\xrightarrow{\PP}
+r_1-r_0^2=\Delta_{\mathrm{inv}}=\rho(a-\rho)<0 .
+\]
+Since \(|\Delta_{\mathrm{inv}}|>0\) and \(\varepsilon_N\to0\),
+\[
+\PP(|\widehat\Delta_{\mathrm{inv},N}|<\varepsilon_N)
+\le
+\PP(|\widehat\Delta_{\mathrm{inv},N}-\Delta_{\mathrm{inv}}|>|\Delta_{\mathrm{inv}}|/2)
+\]
+eventually, and this probability tends to zero.  A union bound over the four
+complementary gate conditions proves \(\PP(\mathcal E_N^c)\to0\).
+
+For a finite hidden start, \(\mathcal E_N\), \(K_N\), \(M_N\),
+\(\Rinch_N^{\mathrm{cyc}}\), and \(\widehat\Delta_{\mathrm{inv},N}\) are measurable functions
+of the retained \(N\)-word.  The total-variation transfer in
+\Cref{lem:finite-hidden-start-path-contraction-main} therefore carries each
+stationary-start probability limit to the post-burn-in retained block.
+\end{proof}
+
+\begin{proposition}[No-post-selection reporting event for finite-record reports]\label{conv:boxed-retained-coverage-main}
+Let \(\mathcal A_N^{\rm aux}\) be a fixed auxiliary acceptance event defined
+before the retained record is inspected, and let
+\[
+\mathcal A_N^{\rm rep}:=\mathcal E_N\cap\mathcal A_N^{\rm aux}.
+\]
+If \(\PP(\mathcal E_N^c)\to0\), then
+\[
+\left|\PP(\mathcal A_N^{\rm rep})-\PP(\mathcal A_N^{\rm aux})\right|
+\le \PP(\mathcal E_N^c)\to0 .
+\]
+This proposition fails to justify any event \(\mathcal A_N^{\rm aux}\) chosen
+after inspecting diagnostics, reporting branches, retained ranks, covariance
+estimates, candidate diagonal points, or critical-value transcripts.  Thus each
+detailed finite-record assertion below concerns the reported event
+\(\mathcal E_N\cap\mathcal A_N^{\rm aux}\) under the fixed population law,
+model, estimand, statistic, deterministic thresholds, branch, covariance rule,
+and reporting gate specified before inspection.  On \(\mathcal E_N^c\) the
+report is withheld.  Auxiliary zero completions used in proofs are not
+reported confidence sets and are never operational substitutes for the
+withheld report.
+\end{proposition}
+
+\begin{proof}
+Since \(\mathcal A_N^{\rm rep}\subset\mathcal A_N^{\rm aux}\),
+\[
+0\le \PP(\mathcal A_N^{\rm aux})-\PP(\mathcal A_N^{\rm rep})

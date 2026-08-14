@@ -1,0 +1,319 @@
+\section{Finite-Record Regenerative Tools}\label{app:finite-record-regenerative-tools-main}
+
+This appendix collects the auxiliary renewal facts used by the article's
+fixed-setting inclusion CLT.
+The paper-level retained inclusion covariance estimator is proved in the
+main-text adjacent-gap master theorem
+\Cref{prop:calendar-stopped-separated-batch-plugin-main}.  The fixed-range
+facts below are auxiliary standard regenerative tools used only by secondary
+diagnostics and supplementary protocols.
+
+\begin{proposition}[Separated-batch covariance for fixed-range gap rewards]\label{thm:regenerative-separated-batch-covariance-main}
+Fix an integer \(m\ge0\) and a dimension \(d\).  Let
+\((G_j)_{j\in\mathbb Z}\) be i.i.d. with
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\), and let
+\[
+Y_j=f(G_j,\ldots,G_{j+m})\in\RR^d,\qquad
+\EE Y_j=0,\qquad \EE\|Y_j\|^4<\infty .
+\]
+Set
+\[
+T_m=\operatorname{Var}(Y_0)+
+\sum_{h=1}^m\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+Let \(b_N\to\infty\), \(b_N/N\to0\),
+\(M_N=\lfloor N/(b_N+m)\rfloor\), and define the separated batches
+\[
+I_{\ell,N}=\{(\ell-1)(b_N+m),\ldots,
+(\ell-1)(b_N+m)+b_N-1\},\qquad
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j ,
+\]
+for \(1\le\ell\le M_N\).  On \(M_N\ge2\), put
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\).  Then
+\begin{equation}\label{eq:regenerative-separated-batch-covariance-main}
+\left\|
+\frac{1}{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
+(B_{\ell,N}-\bar B_N)^\top
+-T_m
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The separated blocks \(I_{\ell,N}\) are independent because the reward has
+range \(m\).  Stationarity gives
+\(b_N^{-1}\Var(B_{\ell,N})=T_m+O(b_N^{-1})\), and the fourth-moment expansion
+for \(m\)-dependent sums gives \(\EE\|B_{\ell,N}\|^4\le Cb_N^2\).  Applying
+Kolmogorov's maximal inequality entrywise to the independent centered matrices
+\[
+b_N^{-1}\{B_{\ell,N}B_{\ell,N}^\top-\EE(B_{\ell,N}B_{\ell,N}^\top)\}
+\]
+over the deterministic prefix \(M_N=\lfloor N/(b_N+m)\rfloor\) gives the
+\(\sqrt{b_N/N}\) fluctuation term, and the empirical batch mean contributes
+only \(O_{\PP}(M_N^{-1})\).  This proves
+\eqref{eq:regenerative-separated-batch-covariance-main}.
+\end{proof}
+
+\begin{proposition}[Calendar-stopped separated batches with plug-in centering]\label{prop:calendar-stopped-separated-batch-plugin-main}
+Let \((G_j)_{j\ge0}\) be i.i.d. nonnegative integer-valued gaps with
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\), put
+\(L_j=G_j+1\), \(\mu=\EE L_0\), and
+\[
+S_k=\sum_{j=0}^{k-1}L_j,\qquad
+K_N=\max\{k:S_k<N\}.
+\]
+Fix \(m\ge0\), \(d\ge1\), and
+\[
+Y_j=f(G_j,\ldots,G_{j+m})\in\RR^d,\qquad
+\EE Y_j=0,
+\]
+where
+\[
+\|f(g_0,\ldots,g_m)\|\le C_f\left(1+\sum_{i=0}^m g_i\right).
+\]
+Let
+\[
+\mathcal T_m=\Var(Y_0)+
+\sum_{h=1}^{m}\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+For \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), set
+\(d_N=b_N+m\) and
+\[
+I_{\ell,N}=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+B_{\ell,N}=\sum_{j\in I_{\ell,N}}Y_j .
+\]
+Fix an integer \(q\ge0\), representing the fixed terminal endpoint and
+look-ahead deletion.  The all-complete-cycle stopped batch count is
+\[
+M_N=\max\{M\ge0:\ (M-1)d_N+b_N-1+m+q\le K_N-1\},
+\]
+with \(M_N=0\) if the set is empty.  On \(M_N\ge2\), define
+\(\bar B_N=M_N^{-1}\sum_{\ell=1}^{M_N}B_{\ell,N}\) and
+\[
+\widehat\Sigma_N^{Y}
+=
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(B_{\ell,N}-\bar B_N)
+(B_{\ell,N}-\bar B_N)^\top .
+\]
+Then \(M_N\ge2\) with probability tending to one and, with the harmless
+auxiliary definition \(\widehat\Sigma_N^{Y}=0_{d\times d}\) on \(M_N<2\),
+\begin{equation}\label{eq:calendar-stopped-separated-batch-rate-main}
+\left\|\widehat\Sigma_N^{Y}-\frac{\mathcal T_m}{\mu}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right).
+\end{equation}
+
+Moreover, let \(\Delta_N=O_{\PP}(N^{-1/2})\) be an \(\RR^d\)-valued
+finite-record plug-in error and set
+\[
+\widehat Y_j=Y_j-\Delta_N L_j,\qquad
+\widehat B_{\ell,N}=\sum_{j\in I_{\ell,N}}\widehat Y_j,\qquad
+\overline{\widehat B}_N=M_N^{-1}\sum_{\ell=1}^{M_N}\widehat B_{\ell,N}.
+\]
+The mean \(\overline{\widehat B}_N\) is used only on \(M_N\ge2\).
+Then
+\begin{equation}\label{eq:calendar-stopped-plugin-block-main}
+\max_{1\le\ell\le M_N}
+\left\|\widehat B_{\ell,N}-B_{\ell,N}\right\|
+=O_{\PP}(b_NN^{-1/2})
+\end{equation}
+and the Algorithm~1 covariance object with plug-in rewards satisfies
+\begin{equation}\label{eq:calendar-stopped-plugin-covariance-rate-main}
+\left\|
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)
+(\widehat B_{\ell,N}-\overline{\widehat B}_N)^\top
+-\frac{\mathcal T_m}{\mu}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{\frac{b_N}{N}}\right),
+\end{equation}
+again with the auxiliary zero completion on \(M_N<2\).
+\end{proposition}
+
+\begin{proof}
+The renewal estimates
+\[
+K_N=N/\mu+O_{\PP}(\sqrt N),\qquad
+\max_{j\le K_N+m+q+1}L_j=O_{\PP}(\log N)
+\]
+follow from the exponential moment.  Hence the fixed endpoint/look-ahead
+deletion changes the stopped batch count by at most \(O(1)\), and
+\[
+M_N=\frac{N}{\mu(b_N+m)}
+     +O_{\PP}\!\left(\frac{\sqrt N}{b_N}+1\right).
+\]
+Conditional on any deterministic prefix in the high-probability range
+\(\ell\le C N/b_N\), the separated batch sums are independent by the
+range-\(m\) separator.  The deterministic-prefix estimate in
+\Cref{thm:regenerative-separated-batch-covariance-main}, combined with the
+random-prefix replacement above and \(K_N/N\to1/\mu\), gives
+\eqref{eq:calendar-stopped-separated-batch-rate-main}.  For the plug-in part,
+\[
+\widehat B_{\ell,N}-B_{\ell,N}
+=-\Delta_N\sum_{j\in I_{\ell,N}}L_j,
+\]
+and a Chernoff bound plus a union bound over \(O_{\PP}(N/b_N)\) retained
+batches gives the uniform block bound
+\eqref{eq:calendar-stopped-plugin-block-main}.  Expanding the centered
+quadratic covariance then gives the same cross-term and pure plug-in bounds as
+in the main adjacent-gap theorem, proving
+\eqref{eq:calendar-stopped-plugin-covariance-rate-main}.
+\end{proof}
+
+\begin{proposition}[Standard complete-cycle and separated-batch facts]\label{prop:standard-complete-cycle-separated-batch-facts-main}
+Let \((A_n)_{n\in\mathbb Z}\) be a stationary binary renewal process with
+click epochs \((\tau_j)\), i.i.d. gaps \(G_j\), cycle lengths
+\(L_j=G_j+1\), mean \(\mu=\EE L_0\in(0,\infty)\), and
+\(\EE e^{\eta G_0}<\infty\) for some \(\eta>0\).  Let
+\(K_N=\max\{k:\tau_k<N\}\), with \(K_N=-1\) if no click is observed.  The
+following standard regenerative conclusions are used in the main text
+\cite{GlynnIglehart1990STS,AsmussenGlynn2007,GlynnWhitt1991BatchMeans,
+VatsFlegalJones2019Multivariate}.
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em,itemsep=0.25em]
+\item Every bounded local window
+\[
+Z_n=\psi(A_{n-r},\ldots,A_{n+\ell}),\qquad \bar z=\EE Z_0,
+\]
+has a complete-cycle reward
+\[
+U_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,\qquad
+Y_j=U_j-\bar zL_j,
+\]
+with Palm centering
+\begin{equation}\label{eq:local-window-palm-inversion-main}
+\EE U_j=\mu\bar z,\qquad \EE Y_j=0 .
+\end{equation}
+Moreover \(Y_j\) is a measurable function of finitely many adjacent gaps and
+is therefore fixed-range dependent.  Endpoint and fixed look-ahead/look-back
+trimming changes the calendar sum by
+\begin{equation}\label{eq:local-window-endpoint-main}
+\sum_{n=0}^{N-1}Z_n-\sum_j U_j=O_{\PP}(\log N),
+\end{equation}
+where the cycle sum is over the complete cycles intersecting the observed
+calendar window, with the same \(O_{\PP}(\log N)\) bound after any fixed
+endpoint trimming.
+
+\item If \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\in\RR^{d_{\rm rew}}\),
+\(\EE Y_j=0\), and
+\[
+\|f(g_0,\ldots,g_{m_{\rm dep}})\|
+\le C_f\left(1+\sum_{i=0}^{m_{\rm dep}}g_i\right),
+\]
+then, for any all-complete-cycle index set \(J_N\) obtained from
+\(\{0,\ldots,K_N-1\}\) by deleting only fixed endpoint/look-ahead indices,
+\[
+\sqrt N\,\frac1N\sum_{j\in J_N}Y_j
+\Rightarrow
+\mathcal N\left(0,\frac{\mathcal T_{m_{\rm dep}}}{\mu}\right),
+\]
+where
+\[
+\mathcal T_{m_{\rm dep}}
+=\Var(Y_0)+
+\sum_{h=1}^{m_{\rm dep}}
+\{\operatorname{Cov}(Y_0,Y_h)+\operatorname{Cov}(Y_h,Y_0)\}.
+\]
+
+\item For \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\),
+\(d_N=b_N+m_{\rm dep}\), and separated batches
+\[
+I_{\ell,N}:=\{(\ell-1)d_N,\ldots,(\ell-1)d_N+b_N-1\},
+\qquad
+C_{\ell,N}=\sum_{j=(\ell-1)d_N}^{(\ell-1)d_N+b_N-1}Y_j ,
+\]
+let \(M_N\) be the number of all-complete-cycle batches retained before
+calendar time \(N\), and put
+\(\bar C_N=M_N^{-1}\sum_{\ell=1}^{M_N}C_{\ell,N}\) on \(M_N\ge2\).  Then the
+retained batch covariance satisfies
+\begin{equation}\label{eq:separated-batch-covariance-estimator-rate-main}
+\left\|
+\frac{K_N}{N}\frac1{b_N(M_N-1)}
+\sum_{\ell=1}^{M_N}(C_{\ell,N}-\bar C_N)(C_{\ell,N}-\bar C_N)^\top
+-\frac{\mathcal T_{m_{\rm dep}}}{\mu}
+\right\|_{\operatorname{op}}
+=O_{\PP}\left(b_N^{-1}+\sqrt{b_N/N}\right).
+\end{equation}
+Equivalently, before multiplying by \(K_N/N\), the cycle-time sample covariance
+estimates \(\mathcal T_{m_{\rm dep}}\) at the same rate.
+
+\item If plug-in rewards have the form
+\[
+\widehat Y_j=Y_j-(\widehat r_N-r)L_j,\qquad
+\widehat r_N-r=O_{\PP}(N^{-1/2}),
+\]
+and \(b_N\) is polynomial, then
+\begin{equation}\label{eq:separated-batch-plugin-block-main}
+\max_{\ell\le M_N}
+\left\|\sum_{j\in I_{\ell,N}}(\widehat Y_j-Y_j)\right\|
+=O_{\PP}(b_NN^{-1/2})
+\end{equation}
+and replacing \(Y_j\) by \(\widehat Y_j\) in the separated-batch covariance
+changes it by
+\begin{equation}\label{eq:separated-batch-plugin-covariance-main}
+O_{\PP}\!\left(\sqrt{\frac{b_N}{N}}\right)
++O_{\PP}\!\left(\frac{b_N}{N}\right).
+\end{equation}
+
+\item For every fixed \(C\), \(\PP(K_N<C)\to0\), and the same conclusion holds
+after deleting any fixed number of endpoint, look-back, or look-ahead cycles.
+
+\item If \(b_N=\lfloor N^\beta\rfloor\), \(0<\beta<1\), and
+\(M_N=O_{\PP}(N/b_N)\), then
+\begin{equation}\label{eq:uniform-calendar-block-length-main}
+\max_{1\le \ell\le M_N}
+\frac1{b_N}\sum_{j\in I_{\ell,N}}L_j
+=O_{\PP}(1).
+\end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The only model-specific input to this proposition is that the click epochs
+form a stationary renewal process with an exponential gap moment.  The
+Palm-cycle identity gives
+\[
+\EE Z_0=\frac{\EE U_j}{\EE L_j},\qquad
+U_j=\sum_{n=\tau_j}^{\tau_{j+1}-1}Z_n,
+\]
+and hence \(\EE U_j=\mu\bar z\) and \(\EE Y_j=0\).  Because \(Z_n\) is a fixed
+local window, \(Y_j\) depends on only finitely many adjacent gaps; call this
+range \(m_{\rm dep}\).  Exponential tails imply that the largest cycle
+intersecting any fixed enlargement of \([0,N-1]\) is \(O_{\PP}(\log N)\), so
+endpoint, look-ahead, and look-back deletions give
+\eqref{eq:local-window-endpoint-main}.
+
+The CLT and the calendar-time scale are the standard regenerative-reward
+facts: apply the ordinary finite-range-dependent CLT to the stationary
+sequence \(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), then use the renewal law of
+large numbers \(K_N/N\to1/\mu\) and the usual random-index replacement
+\cite[Chs.~IV.3 and VI.3]{AsmussenGlynn2007}.  This gives the covariance
+\(\mathcal T_{m_{\rm dep}}/\mu\).
+
+For the separated-batch estimator, apply the fixed-range wrapper
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} to the gap reward
+\(Y_j=f(G_j,\ldots,G_{j+m_{\rm dep}})\), with \(q\) fixed endpoint and
+look-ahead cycles deleted by the particular complete-cycle set.  It gives the
+random calendar-stopped batch count bound
+\(M_N=K_N/(b_N+m_{\rm dep})+O_{\PP}(\sqrt N/b_N+1)\), controls the maximal
+deleted endpoint cycle, subtracts the empirical batch mean, and gives exactly
+\eqref{eq:separated-batch-covariance-estimator-rate-main}.
+
+For the plug-in perturbation, write
+\(\Delta_N=\widehat r_N-r=O_{\PP}(N^{-1/2})\).  Each batch changes by
+\[
+\widehat C_{\ell,N}-C_{\ell,N}
+=-\Delta_N\sum_{j\in I_{\ell,N}}L_j .
+\]
+\Cref{prop:calendar-stopped-separated-batch-plugin-main} gives the uniform
+block-length bound, the block perturbation
+\eqref{eq:separated-batch-plugin-block-main}, and the covariance perturbation
+\eqref{eq:separated-batch-plugin-covariance-main}.  Finally,
+\((K_N+1)/N\to1/\mu\) gives the fixed-low-cycle statement, and the preceding
+uniform block-length bound is exactly \eqref{eq:uniform-calendar-block-length-main}.
+\end{proof}
+

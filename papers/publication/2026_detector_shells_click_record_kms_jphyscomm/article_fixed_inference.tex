@@ -1,0 +1,779 @@
+\begin{paperthm}[Fixed-setting retained-record inclusion CLT]\label{thm:finite-record-inference-audit-main}
+Assume the stationary model in \Cref{ass:model-inference-contract-main} and
+retain only cycles fully observed within the length-\(N\) record.  Form the
+complete-cycle inclusion estimator
+\[
+\Rinch_N^{\rm cyc}
+=\left(\frac1N\sum_{j\in J_{0,N}}U_j^{(0)},
+       \frac1N\sum_{j\in J_{1,N}}U_j^{(1)},
+       \frac1N\sum_{j\in J_{2,N}}U_j^{(2)}\right)^\top ,
+\qquad
+\Rinc=(r_0,r_1,r_2)^\top .
+\]
+In Palm cycle coordinates put
+\[
+U_j=
+\bigl(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\bigr)^\top,
+\qquad
+L_j=G_j+1,\qquad
+Y_j=U_j-\Rinc L_j .
+\]
+Then \(\EE Y_j=0\), \((Y_j)\) is \(1\)-dependent, and
+\[
+\sqrt N(\Rinch_N^{\rm cyc}-\Rinc)
+=\frac1{\sqrt N}\sum_{j=0}^{K_N-1}Y_j+o_{\PP}(1)
+\Rightarrow \mathcal N(0,\Sigma_r),
+\]
+where
+\[
+\Sigma_r=\frac1\mu\{\operatorname{Var}(Y_0)
++\operatorname{Cov}(Y_0,Y_1)+\operatorname{Cov}(Y_1,Y_0)\},
+\qquad \mu=\EE L_0 .
+\]
+The separated-batch covariance estimator with
+\(b_N=\lfloor N^{1/3}\rfloor\), plug-in centering, and the operational gate
+\(M_N\ge m_N\), where \(m_N\to\infty\) and \(m_N=o(N/b_N)\), obeys
+\[
+\|\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r\|_{\rm op}=O_{\PP}(N^{-1/3})
+\]
+on an event whose probability tends to one.
+\end{paperthm}
+
+\begin{theorem}[Uniform joint three-inclusion physical-image test]
+\label{thm:uniform-joint-physical-image-test-main}
+Fix \(0<\varepsilon<M<\infty\), and let \(\mathcal U\), \(e\),
+\(\mathcal D\), and \(\psi=(e,\mathcal D)^\top\) be as in
+\Cref{prop:analytic-joint-image-chart-main}.  Choose, before observing the
+record, a closed neighbourhood \(\mathcal U_0\) of the compact physical
+image such that \(\mathcal U_0\subset\mathcal U\), and put
+\[
+\widehat r_N=\Rinch_N^{\rm cyc},
+\qquad
+\mathcal G_N=\{\widehat r_N\in\mathcal U_0\}.
+\]
+On \(\mathcal G_N\), define
+\[
+J(r)=D\psi(r),qquad
+\widehat\Omega_N
+=J(\widehat r_N)\widehat\Sigma_{r,N}^{\rm tot}
+J(\widehat r_N)^\top .
+\]
+Let \(\widehat\Omega_N^{\rm tr}\) be obtained by replacing every eigenvalue
+of \(\widehat\Omega_N\) below \(N^{-1/4}\) by \(N^{-1/4}\), and write
+\[
+\widehat\Omega_N^{\rm tr}
+=\begin{pmatrix}
+\widehat\omega_{11,N}&\widehat\omega_{12,N}\\
+\widehat\omega_{12,N}&\widehat\omega_{22,N}
+\end{pmatrix}.
+\]
+Set
+\[
+\widehat\beta_N
+=\frac{\widehat\omega_{12,N}}{\widehat\omega_{11,N}},
+\qquad
+\widehat v_N
+=\widehat\omega_{22,N}
+-\frac{\widehat\omega_{12,N}^2}{\widehat\omega_{11,N}},
+\]
+\[
+Z_{e,N}
+=\frac{\sqrt N\,e(\widehat r_N)}
+{\sqrt{\widehat\omega_{11,N}}},
+\qquad
+Z_{d,N}
+=\frac{\sqrt N\{\mathcal D(\widehat r_N)
+-\widehat\beta_Ne(\widehat r_N)\}}
+{\sqrt{\widehat v_N}},
+\]
+and
+\[
+T_N=Z_{e,N}^2+(Z_{d,N}^{-})^2,
+\qquad z^-:=\max\{-z,0\}.
+\]
+For \(0<\alpha<1\), let
+\[
+c_{1,\alpha}=F_{\chi_1^2}^{-1}(1-\alpha)
+\]
+and let \(c_{\partial,\alpha}\) be the unique solution of
+\[
+\frac12F_{\chi_1^2}(c_{\partial,\alpha})
++\frac12F_{\chi_2^2}(c_{\partial,\alpha})=1-\alpha.
+\]
+With \(\kappa_N=\log N\), use
+\[
+c_{N,\alpha}=
+\begin{cases}
+c_{1,\alpha},&Z_{d,N}>\kappa_N,\\
+c_{\partial,\alpha},&Z_{d,N}\le\kappa_N.
+\end{cases}
+\]
+The operational procedure rejects when
+\(\mathcal G_N\cap\{T_N>c_{N,\alpha}\}\) occurs and otherwise withholds
+the report off \(\mathcal G_N\).  For a total-space mathematical test, the
+off-gate decision is defined to be no rejection.
+
+Then the following assertions hold.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Uniformly on \(\Theta_{\varepsilon,M}\),
+\[
+\widehat\Sigma_{r,N}^{\rm tot}-\Sigma_r(\theta)
+\longrightarrow_{\PP_\theta}0,
+\qquad
+\inf_{\theta\in\Theta_{\varepsilon,M}}
+\lambda_{\min}\{J(r(\theta))\Sigma_r(\theta)J(r(\theta))^\top\}>0.
+\]
+The convergence is uniform in probability, and the chart gate and spectral
+truncation are inactive with probability tending to one uniformly in
+\(\theta\).
+
+\item At every fixed physical point with \(p\ne s\),
+\[
+T_N\Rightarrow\chi_1^2,
+\qquad
+\PP_\theta\{Z_{d,N}>\kappa_N\}\longrightarrow1.
+\]
+At every fixed exchange-diagonal point,
+\[
+T_N\Rightarrow Z_1^2+(Z_2^-)^2
+\sim\frac12\chi_1^2+\frac12\chi_2^2,
+\]
+where \(Z_1,Z_2\) are independent standard normal variables.  In particular,
+\[
+c_{1,0.05}=3.8414588\ldots,\qquad
+c_{\partial,0.05}=5.1383808\ldots .
+\]
+
+\item The test has compact-uniform asymptotic size at most \(\alpha\):
+\[
+\limsup_{N\to\infty}
+\sup_{\theta\in\Theta_{\varepsilon,M}}
+\PP_\theta\{\mathcal G_N,\ T_N>c_{N,\alpha}\}
+\le\alpha.
+\]
+More precisely, along a null sequence define
+\[
+\eta_N=
+\frac{\sqrt N\,(p_N-s_N)^2}
+{\sqrt{v(\theta_N)}},
+\qquad
+v=\omega_{22}-\frac{\omega_{12}^2}{\omega_{11}}.
+\]
+If \(\eta_N\to\eta<\infty\), then
+\[
+T_N\Rightarrow Z_1^2+(Z_2+\eta)^-{}^2
+\]
+and the boundary critical value is selected with probability tending to one.
+If \(\eta_N\to\infty\), then
+\(T_N-Z_{e,N}^2\to_{\PP}0\); if also
+\(\eta_N/\log N\to\infty\), the interior critical value is selected with
+probability tending to one.  If \(\eta_N\to\infty\) but
+\(\eta_N/\log N\) is bounded or oscillatory, either critical value can be
+selected along a subsequence; nevertheless
+\(c_{N,\alpha}\ge c_{1,\alpha}\) and
+\(T_N-Z_{e,N}^2\to_{\PP}0\), so every such subsequence has rejection upper
+limit at most \(\alpha\).
+
+\item Let a stationary full-support renewal alternative have an exponential
+gap moment, a limiting inclusion triple \(r\in\operatorname{int}\mathcal U_0\),
+and the complete-cycle CLT and covariance consistency in Theorem~C with a
+positive-definite constraint covariance.  If \(e(r)\ne0\) or
+\(\mathcal D(r)<0\), then \(T_N\to_{\PP}\infty\).  Thus the stated
+consistency conclusion is conditional on an explicit renewal alternative;
+no test of arbitrary nonrenewal time-series misspecification is claimed.
+\end{enumerate}
+The chi-bar-square and boundary-selection principles are standard
+\cite{Chernoff1954LikelihoodRatio,Shapiro1987MetricProjection,
+Andrews2001BoundaryTesting}; the theorem is their studentized specialization
+to the sampled-counter three-inclusion image, including the uniform
+nondegeneracy verification below.
+\end{theorem}
+
+\begin{proof}
+On \(\Theta_{\varepsilon,M}\), both eigenvalues of the zero-labelled kernel
+are at most \(e^{-\varepsilon}\).  At a repeated eigenvalue its powers carry
+only a first-degree Jordan factor.  Hence, for constants independent of
+\(\theta\),
+\[
+\sup_{\theta\in\Theta_{\varepsilon,M}}
+\PP_\theta(G\ge k)\le C(1+k)e^{-\varepsilon k},
+\qquad k\ge0.
+\]
+Every exponential moment of \(G\) of order below \(\varepsilon\) is
+therefore uniformly bounded.  The complete-cycle reward in Theorem~C is a
+function of two consecutive independent gaps, so the corresponding
+triangular arrays are \(1\)-dependent and have uniformly bounded fourth
+moments.  The usual even--odd blocking proof of the \(1\)-dependent CLT is
+then uniform along every convergent parameter sequence.  The renewal-count
+replacement and the two endpoint deletions are uniform by the same
+exponential bound.  Compactness and the subsequence criterion give the
+uniform bounded-Lipschitz CLT.  The maximal and Chernoff bounds in the proof
+of \Cref{lem:paper-level-separated-covariance-main} use only these uniform
+moment constants, so they also give the stated uniform covariance
+consistency.
+
+It remains to prove nondegeneracy rather than assume it.  If
+\(c^\top\Sigma_rc=0\), put
+\[
+f(i,j)=c^\top
+\left[
+\begin{pmatrix}
+1\\ \mathbf1_{\{i=0\}}\\
+\mathbf1_{\{i=1\}}+\mathbf1_{\{i=0,j=0\}}
+\end{pmatrix}
+-r(i+1)
+\right].
+\]
+For a full-support i.i.d. gap law, the Hoeffding row--column decomposition
+of a one-dependent sequence says that its long-run variance is zero exactly
+when \(f(i,j)=u_i-u_j\).  The degenerate interaction residual of \(f\) is
+\[
+c_2(\mathbf1_{\{i=0\}}-g_0)
+(\mathbf1_{\{j=0\}}-g_0).
+\]
+Since \(0<g_0<1\), vanishing of the interaction forces \(c_2=0\).  Then
+\(f\) depends only on \(i\), and an identity \(f(i)=u_i-u_j\) for all
+\(i,j\) forces \(f\equiv0\).  For all \(i\ge1\), this reads
+\[
+c_0-(c^\top r)(i+1)=0,
+\]
+so \(c^\top r=c_0=0\); the value \(i=0\) then gives \(c_1=0\).  Thus
+\(c=0\), and \(\Sigma_r\) is positive definite.  Its entries are continuous
+in \(\theta\) by dominated convergence.  Compactness and the rank-two
+conclusion of \Cref{prop:analytic-joint-image-chart-main} now give the
+uniform positive lower bound for \(\Omega=J\Sigma_rJ^\top\).
+
+For any positive-definite
+\(\Omega=(\omega_{ij})_{i,j=1}^2\), direct completion of squares gives
+\[
+\inf_{u\ge0}
+\left\|\binom e{d-u}\right\|_{\Omega^{-1}}^2
+=\frac{e^2}{\omega_{11}}
++\frac{\{d-(\omega_{12}/\omega_{11})e\}_{-}^2}
+{\omega_{22}-\omega_{12}^2/\omega_{11}}.
+\]
+Hence \(T_N\) is exactly the estimated covariance-metric distance to
+\(\{0\}\times[0,\infty)\).  Residualization makes its two Gaussian limits
+independent.  At a fixed interior point the standardized slack diverges to
+\(+\infty\), leaving one squared normal.  At the boundary it is centered,
+and conditioning on its sign gives the equal mixture of one and two degrees
+of freedom.
+
+For uniform size, take an arbitrary null sequence and a convergent parameter
+subsequence.  If \(\eta_N\) is bounded, take a further subsequence on which
+it converges.  The sequential CLT gives the asserted limit, and
+\((z+\eta)^-\le z^-\) for \(\eta\ge0\) shows stochastic domination by the
+boundary law.  If \(\eta_N\to\infty\), its negative part vanishes in
+  probability and \(c_{N,\alpha}\ge c_{1,\alpha}\), so the rejection
+  probability has upper limit at most \(\alpha\).  This includes every
+  intermediate sequence.  From any subsequence on which
+  \(\eta_N/\log N\) is bounded, extract one on which the ratio converges.  A
+  limit below one selects the boundary value, a limit above one selects the
+  interior value, and at limit one the selector may remain random.  In every
+  case the statistic is asymptotically \(Z_{e,N}^2\) and the critical value
+  is at least \(c_{1,\alpha}\).  Oscillatory ratios are covered by the same
+  subsequence argument.  The usual near-maximizing-sequence contradiction
+  proves the displayed supremum bound.
+Finally, under the explicit alternative assumptions, the continuous mapping
+theorem makes \(N^{-1}T_N\) converge to the strictly positive squared
+distance from \(\psi(r)\) to the constraint cone, proving consistency.
+\end{proof}
+
+\begin{proposition}[Dominated renewal local power]
+\label{prop:joint-physical-image-local-power-main}
+Fix an exchange-diagonal physical point \(r_\circ\) in
+\(\Theta_{\varepsilon,M}\), and let \(g^\circ=(g_k^\circ)_{k\ge0}\) be its
+Palm gap law, with mean cycle length \(\mu^\circ\).  For
+\(\eta=(\eta_\mu,\eta_0,\eta_1)\), define
+\[
+g_\eta(k)=g^\circ(k)+v_\eta(k),
+\]
+where
+\[
+\begin{aligned}
+v_\eta(0)&=\eta_0,\\
+v_\eta(1)&=\eta_1,\\
+v_\eta(2)&=-\eta_\mu-3\eta_0-2\eta_1,\\
+v_\eta(3)&=\eta_\mu+2\eta_0+\eta_1,\\
+v_\eta(k)&=0,\qquad k\ge4.
+\end{aligned}
+\]
+On a sufficiently small fixed neighbourhood of the origin this is a
+full-support probability law.  The resulting stationary renewal experiment
+is differentiable in quadratic mean and locally asymptotically normal per
+unit calendar time, with information
+\[
+\mathcal I_{ij}
+=\frac1{\mu^\circ}\sum_{k=0}^3
+\frac{v_i(k)v_j(k)}{g_k^\circ},
+\]
+where \(v_i\) denotes the coefficient vector of the \(i\)-th component of
+\(\eta\).  The matrix \(\mathcal I\) is positive definite.
+
+All first-order directions in three-inclusion space are represented by this
+experiment.  Indeed, for any renewal gap law,
+\[
+r=\left(\frac1\mu,\frac{g_0}{\mu},
+\frac{g_1+g_0^2}{\mu}\right),
+\]
+and the Jacobian with respect to \((\mu,g_0,g_1)\) is
+\[
+\begin{pmatrix}
+-\mu^{-2}&0&0\\
+-g_0\mu^{-2}&\mu^{-1}&0\\
+-(g_1+g_0^2)\mu^{-2}&2g_0\mu^{-1}&\mu^{-1}
+\end{pmatrix},
+\qquad \det=-\mu^{-4}\ne0.
+\]
+
+Let a local sequence in this experiment satisfy
+\[
+\sqrt N\,e(r_N)\longrightarrow\delta,\qquad
+\sqrt N\,\mathcal D(r_N)\longrightarrow\tau.
+\]
+At \(r_\circ\), write
+\[
+\Omega=
+\begin{pmatrix}\omega_{11}&\omega_{12}\\
+\omega_{12}&\omega_{22}\end{pmatrix},
+\qquad
+\beta=\frac{\omega_{12}}{\omega_{11}},
+\qquad
+v=\omega_{22}-\frac{\omega_{12}^2}{\omega_{11}},
+\]
+and put
+\[
+a_*=\frac{\delta}{\sqrt{\omega_{11}}},
+\qquad
+b_*=\frac{\tau-\beta\delta}{\sqrt v}.
+\]
+For the test in
+\Cref{thm:uniform-joint-physical-image-test-main},
+\[
+T_N\Rightarrow X^2+(Y^-)^2,
+\qquad
+X\sim N(a_*,1),\quad Y\sim N(b_*,1),
+\]
+with \(X\) and \(Y\) independent, and the boundary critical value is
+selected with probability tending to one.  Hence its complete local-power
+function is
+\[
+\pi_\alpha(\delta,\tau)
+=\PP\{X^2+(Y^-)^2>c_{\partial,\alpha}\}.
+\]
+For deterministic evaluation, define
+\[
+A(q,a)=\Phi_{\rm N}(\sqrt q-a)-\Phi_{\rm N}(-\sqrt q-a),
+\]
+where \(\Phi_{\rm N}\) and \(\phi_{\rm N}\) denote the standard normal
+distribution and density.  Then
+\[
+\begin{aligned}
+\pi_\alpha(\delta,\tau)
+=1&-\Phi_{\rm N}(b_*)A(c_{\partial,\alpha},a_*)\\
+&-\int_{-\sqrt{c_{\partial,\alpha}}}^{0}
+A(c_{\partial,\alpha}-y^2,a_*)\phi_{\rm N}(y-b_*)\,dy .
+\end{aligned}
+\]
+
+In particular, a physical sequence satisfying
+\[
+N^{1/4}|p_N-s_N|\longrightarrow\xi
+\]
+has \((\delta,\tau)=(0,\xi^2)\), so
+\(\pi_\alpha(0,\xi^2)\le\alpha\).  Conversely, for every \(\xi>0\), the
+dominated renewal experiment contains a nonreal-root-side sequence with
+\((\delta,\tau)=(0,-\xi^2)\), and
+\[
+\pi_\alpha(0,-\xi^2)>\alpha.
+\]
+The restriction \(\xi>0\) is essential; at \(\xi=0\) the power equals
+\(\alpha\).
+
+Finally, the null tangent cone and its first-order indistinguishable
+subspace are
+\[
+T_{H_0}(r_\circ)
+=\{h:De(r_\circ)h=0,\ D\mathcal D(r_\circ)h\ge0\},
+\]
+\[
+\ker D\psi(r_\circ)
+=\{h:De(r_\circ)h=0,\ D\mathcal D(r_\circ)h=0\}.
+\]
+Thus a direction with \(De\,h=0\) and \(D\mathcal D\,h>0\) is a physical
+interior direction whose root separation occurs at the
+\(N^{-1/4}\) scale; it is not model misspecification.
+\end{proposition}
+
+\begin{proof}
+The displayed coefficients satisfy
+\[
+\sum_kv_\eta(k)=0,\qquad
+\sum_k(k+1)v_\eta(k)=\eta_\mu,
+\]
+and change \(g_0,g_1\) by \(\eta_0,\eta_1\), respectively.  On the compact
+physical set, \(g_k^\circ\) is uniformly positive for \(0\le k\le3\);
+hence sufficiently small perturbations remain probability laws dominated by
+counting measure.  The one-cycle score is \(v_i(k)/g_k^\circ\).  The three
+coefficient vectors are linearly independent, which proves positive
+definiteness of \(\mathcal I\).  A Taylor expansion of the finite changed
+part of the one-cycle log likelihood gives quadratic-mean differentiability.
+The initial and terminal incomplete cycles contribute \(o_{\PP}(1)\) to the
+local log-likelihood ratio, while the number of complete cycles divided by
+\(N\) converges to \(1/\mu^\circ\).  The independent-cycle score CLT
+therefore proves the stated calendar-time LAN expansion.  This is the
+finite-support regenerative specialization of standard LAN theory
+\cite{vanDerVaart1998AsymptoticStatistics}.
+
+The three moment identities and the nonzero Jacobian determinant prove local
+surjectivity onto inclusion space.  The rank-two constraint conclusion in
+\Cref{prop:analytic-joint-image-chart-main} then makes every pair
+\((\delta,\tau)\) locally attainable.
+
+Under a \(N^{-1/2}\) local perturbation, the uniform studentization in
+\Cref{thm:uniform-joint-physical-image-test-main} and the third lemma give
+two residualized independent normals with the displayed means.  Since
+\(Z_{d,N}=O_{\PP}(1)\), the boundary critical value is selected.  To compute
+the acceptance probability, condition first on \(Y\ge0\), and then integrate
+over \(-\sqrt{c_{\partial,\alpha}}\le Y<0\); this gives the one-dimensional
+integral.
+
+For a physical root pair,
+\(\mathcal D(r_N)=(p_N-s_N)^2\) and \(e(r_N)=0\), proving the physical-side
+claim.  On the nonreal side, \(b_*<0\) for \(\xi>0\).  Coupling
+\(Y=Z+b_*\) to the boundary variable \(Z\) shows that \(Y^-\) strictly
+stochastically exceeds \(Z^-\) on a set of positive probability, proving
+strictly greater power.  At \(\xi=0\) the laws coincide.  The tangent-cone
+formulas follow from the rank-two constraint qualification and the local
+description \(e=0,\mathcal D\ge0\).
+\end{proof}
+
+\begin{paperthm}[Single-record complete visible-law specification test]
+\label{thm:complete-visible-law-specification-main}
+Fix $0<\varepsilon<M<\infty$, put
+
+\[
+\Theta_{\varepsilon,M}=[\varepsilon,M]^2,
+\qquad \mathcal P_0=\{P_\theta:\theta\in\Theta_{\varepsilon,M}\},
+\]
+
+where $P_\theta$ is the stationary visible law of the sampled-counter kernels
+at the dimensionless parameter $\theta=(x,y)$.  For a binary word
+$w=(w_1,\ldots,w_m)$, write
+
+\[
+P_\theta[w]=\pi_\theta T_{w_1}(\theta)\cdots
+T_{w_m}(\theta)\mathbf1,
+\]
+
+where $\pi_\theta$ is stationary for $T_0(\theta)+T_1(\theta)$.  On
+stationary binary laws define
+
+\[
+d(P,Q)=\sum_{m=1}^{\infty}4^{-m}
+\sum_{w\in\{0,1\}^m}|P[w]-Q[w]|,
+\qquad
+d(P,\mathcal P_0)=\inf_{\theta\in\Theta_{\varepsilon,M}}d(P,P_\theta).
+\]
+
+For a record $A_0,\ldots,A_{N-1}$ with $N\ge3$, let
+
+\[
+\widehat P_N[w]=\frac1{N-m+1}\sum_{j=0}^{N-m}
+\mathbf1_{\{A_j\cdots A_{j+m-1}=w\}},
+\qquad
+L_N=\max\left\{3,\left\lfloor\frac18\log_2N\right\rfloor\right\},
+\]
+
+and set
+
+\[
+d_N=\min_{\theta\in\Theta_{\varepsilon,M}}
+\sum_{m=1}^{L_N}4^{-m}\sum_{w\in\{0,1\}^m}
+|\widehat P_N[w]-P_\theta[w]|.
+\]
+
+Choose a minimizer $\widehat\theta_N$ by a fixed lexicographic rule.  Delete
+the initial and terminal incomplete cycles and denote the remaining complete
+zero gaps by $G_1,\ldots,G_{K_N}$.  If $g_\theta$ is the model Palm gap
+mass function, define
+
+\[
+h_\theta(k)=\mathbf1_{\{k=1\}}
+-\frac{g_\theta(1)}{g_\theta(2)}\mathbf1_{\{k=2\}}.
+\]
+
+When $K_N\ge3$, put
+
+\[
+\widehat\nu_N=\frac1{K_N}\sum_{j=1}^{K_N}
+h_{\widehat\theta_N}(G_j)^2,
+\qquad
+\widehat I_N=\frac{K_N}{N}\widehat\nu_N^2,
+\]
+
+\[
+Z_N=\frac{1}{\sqrt{N\widehat I_N}}
+\sum_{j=1}^{K_N-1}
+h_{\widehat\theta_N}(G_j)h_{\widehat\theta_N}(G_{j+1}).
+\]
+
+If $K_N<3$ or $\widehat I_N=0$, set $Z_N=0$.  Thus, for every binary
+record of length $N\ge3$, the test
+
+\[
+\varphi_N=\mathbf1_{\{d_N>N^{-1/4}\ \text{or}\ Z_N>z_{1-\alpha}\}}
+\tag{F}
+\]
+
+is defined without empirical roots, logarithms, or evaluations of the analytic
+root chart outside its domain.  It has the following properties.
+
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Its null size is compact-uniform:
+\[
+\sup_{\theta\in\Theta_{\varepsilon,M}}
+\left|\PP_\theta(\varphi_N=1)-\alpha\right|\longrightarrow0.
+\]
+This includes the exchange diagonal and every null triangular array, in
+particular arrays satisfying $N^{1/4}|p_N-s_N|=O(1)$.
+
+\item If $P$ is a fixed stationary ergodic binary law and
+$d(P,\mathcal P_0)>0$, then
+\[
+\PP_P(\varphi_N=1)\longrightarrow1.
+\]
+The convergence is uniform on any class with a common geometric
+$\alpha$-mixing envelope $\alpha_P(k)\le Cq^k$, $q<1$, and a common
+separation $d(P,\mathcal P_0)\ge\delta>0$.  No consistency assertion is made
+for arbitrary stationary nonergodic mixtures.
+
+\item Fix an interior exchange point $\theta_0=(x_0,x_0)$, and abbreviate
+$g_k=g_{\theta_0}(k)$, $\mu=\sum_{k\ge0}(k+1)g_k$, and
+\[
+h(k)=\mathbf1_{\{k=1\}}-\frac{g_1}{g_2}\mathbf1_{\{k=2\}}.
+\]
+For $0\le\eta<g_2/g_1$, the transition matrix
+\[
+Q_\eta(\ell\mid k)=g_\ell\{1+\eta h(k)h(\ell)\}
+\tag{G}
+\]
+is stochastic, has stationary marginal $g$, and defines by Palm inversion a
+stationary nonrenewal visible law when $\eta>0$.  This law preserves exactly
+the sampled-counter coordinates $r_0,r_1,r_2$, because
+\[
+r_0=\mu^{-1},\qquad r_1=\mu^{-1}g_0,
+\qquad r_2=\mu^{-1}\{g_1+g_0Q_\eta(0\mid0)\},
+\]
+and $Q_\eta(0\mid0)=g_0$.  Nevertheless,
+\[
+\PP_\eta(10101)=\mu^{-1}g_1^2(1+\eta),
+\]
+so a length-five word separates every $\eta>0$ from the renewal null.
+
+\item Put
+\[
+\nu=\EE_g h(G)^2=g_1+\frac{g_1^2}{g_2},
+\qquad \mathcal I=\frac{\nu^2}{\mu}.
+\]
+Along $\eta_N=t/\sqrt N$, $t\ge0$, the stationary record experiments in
+part~\textup{(iii)} satisfy
+\[
+\log\frac{dP_{\eta_N}^{(N)}}{dP_0^{(N)}}
+=t\Delta_N-\frac12t^2\mathcal I+o_{P_0}(1),
+\qquad \Delta_N\Rightarrow N(0,\mathcal I).
+\]
+Moreover, $\widehat I_N\to_P\mathcal I$ and
+\[
+Z_N\Rightarrow N(t\sqrt{\mathcal I},1),
+\qquad
+\pi_\alpha(t)=1-\Phi_{\rm N}
+\{z_{1-\alpha}-t\sqrt{\mathcal I}\}.
+\]
+Thus $\pi_\alpha(t)>\alpha$ for every $t>0$.  If
+$\eta_N=o(N^{-1/2})$, the Kullback--Leibler divergence tends to zero, while
+the score component of \textup{(F)} attains the Neyman--Pearson power envelope
+of this one-dimensional Gaussian-shift subexperiment at the $N^{-1/2}$
+rate.
+\end{enumerate}
+
+The distributional-distance guard in parts~\textup{(i)}--\textup{(ii)} is a
+specialization of established stationary-ergodic testing methods
+\cite{RyabkoRyabko2010ErgodicInference,Ryabko2012StationaryTesting}.  Generic
+LAN and Gaussian-shift optimality are also standard
+\cite{vanDerVaart1998AsymptoticStatistics}.  The model-specific assertions are
+the exchange-uniform finite-range score, the exactly
+$(r_0,r_1,r_2)$-preserving alternative \textup{(G)}, and their joint use with
+the complete visible-law guard.
+\end{paperthm}
+
+\begin{proof}
+On $\Theta_{\varepsilon,M}$, the hidden transition matrix is
+\[
+T_0+T_1=\begin{pmatrix}p&1-p\\b&1-b\end{pmatrix}.
+\]
+Each entry has a positive parameter-independent lower bound.  The hidden chain
+therefore satisfies a uniform Doeblin condition, and every bounded function of
+the visible record has a common geometric mixing envelope.  For a word $w$
+of length $m\le N$, overlap for lags below $m$ and the mixing covariance
+bound above that lag give
+\[
+\sup_\theta\operatorname{Var}_\theta\{\widehat P_N[w]\}
+\le \frac{Cm}{N}.
+\]
+Consequently, by Cauchy--Schwarz,
+\[
+\sup_\theta\EE_\theta
+\sum_{m=1}^{L_N}4^{-m}\sum_w
+|\widehat P_N[w]-P_\theta[w]|
+\le \frac{C'}{\sqrt N}
+\sum_{m\ge1}2^{-m}\sqrt m=O(N^{-1/2}).
+\]
+Since the minimum defining $d_N$ is no larger than its value at the true
+parameter, Markov's inequality yields
+\[
+\sup_\theta\PP_\theta(d_N>N^{-1/4})=O(N^{-1/4}).
+\tag{1}
+\]
+
+Let $\widehat\sigma_N=(\widehat p_N+\widehat s_N,
+\widehat p_N\widehat s_N)$ and $\sigma_\theta=(p+s,ps)$.  Define the empirical
+inclusion vector
+\[
+\widehat r_N^{\rm word}
+=\{\widehat P_N[1],\widehat P_N[11],
+\widehat P_N[101]+\widehat P_N[111]\}^\top.
+\]
+For every model parameter $\vartheta$, the corresponding coordinates obey
+$r_0=P_\vartheta[1]$, $r_1=P_\vartheta[11]$, and
+$r_2=P_\vartheta[101]+P_\vartheta[111]$.  Since all these words have length at
+most three, the definition of the truncated objective gives the deterministic
+bound
+\[
+\|\widehat r_N^{\rm word}-r(\widehat\theta_N)\|
+\le C_0d_N.
+\]
+Consequently, for the true parameter $\theta$,
+\[
+\|r(\widehat\theta_N)-r(\theta)\|
+\le C_0d_N+C_1\sum_{m\le3}\sum_{|w|=m}
+|\widehat P_N[w]-P_\theta[w]|.
+\tag{2a}
+\]
+The first part of the proof gives $d_N=O_{P_\theta}(N^{-1/2})$ uniformly,
+and the finite sum in \textup{(2a)} has the same uniform rate.  The uniformly
+bounded derivative of $\Phi$ on $\Theta_{\varepsilon,M}$ therefore gives
+\[
+\widehat\sigma_N-\sigma_\theta=O_{P_\theta}(N^{-1/2})
+\tag{2}
+\]
+uniformly.  No ordered-root map is used in this step.  For every fixed gap
+index, $g_\theta(k)$ is a symmetric analytic function of the two roots;
+compactness and $\inf_\theta g_\theta(2)>0$ make $h_\theta$ and its first
+two $\sigma$-derivatives uniformly bounded.
+
+Under the null, the complete Palm gaps are consecutive members of an i.i.d.
+gap sequence.  With
+\[
+q_j(\theta)=h_\theta(G_j)h_\theta(G_{j+1}),
+\]
+one has
+\[
+\EE_\theta q_j=0,\qquad
+\operatorname{Var}_\theta(q_j)=\nu_\theta^2,
+\qquad
+\operatorname{Cov}_\theta(q_j,q_{j+1})=0,
+\]
+where $\nu_\theta=\EE_\theta h_\theta(G)^2$.  These rewards are bounded and
+one-dependent, $K_N/N\to1/\mu_\theta$, and the initial and terminal deletions
+affect only $o_P(\sqrt N)$ reward.  The uniform one-dependent CLT and the
+renewal-index replacement thus give
+\[
+\frac{\sum_{j=1}^{K_N-1}q_j(\theta)}
+{\sqrt{K_N}\nu_\theta}\Rightarrow N(0,1)
+\]
+uniformly in $\theta$.  The plug-in has no first-order effect: independence
+and $\EE_\theta h_\theta(G)=0$ imply
+\[
+\EE_\theta\left[
+\partial_\sigma\{h_\sigma(G_0)h_\sigma(G_1)\}
+\right]_{\sigma=\sigma_\theta}=0.
+\]
+Hence the sum of the first derivatives is $O_P(\sqrt N)$; multiplying by
+$(2)$, and bounding the summed Taylor remainder by
+$O_P(N\|\widehat\sigma_N-\sigma_\theta\|^2)$, shows that both terms are
+$o_P(\sqrt N)$.  The same bounds give
+$\widehat I_N\to_P\nu_\theta^2/\mu_\theta$, uniformly.  Together with
+$(1)$, this proves part~\textup{(i)}.
+
+For part~\textup{(ii)}, Birkhoff's theorem gives almost-sure convergence of
+every fixed empirical word probability under a stationary ergodic law.  For
+every $L$, the finitely many terms with $m\le L$ converge uniformly in
+$\theta$ by continuity and compactness, while, for all probability laws,
+\[
+\sum_{m>L}4^{-m}\sum_w|P[w]-Q[w]|\le2^{1-L}.
+\]
+It follows that $d_N\to d(P,\mathcal P_0)$ almost surely.  Under a common
+geometric mixing envelope the preceding variance calculation is uniform over
+the alternative class, which proves the stated uniform version.
+
+For part~\textup{(iii)}, $\EE_g h=0$ gives both
+$\sum_\ell Q_\eta(\ell\mid k)=1$ and $gQ_\eta=g$.  The only negative
+product among nonzero score values is
+$h(1)h(2)=-g_1/g_2$; hence $0\le\eta<g_2/g_1$ gives a nonnegative kernel.
+Its rows depend on $k$ when $\eta>0$, so the stationary Palm gap sequence
+is not i.i.d.  The three inclusion identities follow by enumerating a click at
+lags zero, one, and two, and $h(0)=0$ gives
+$Q_\eta(0\mid0)=g_0$.  Two consecutive gaps equal to one produce the word
+$10101$, and
+\[
+\mu^{-1}g_1Q_\eta(1\mid1)
+=\mu^{-1}g_1^2(1+\eta),
+\]
+which proves the separation assertion.
+
+Finally, write the observed click times as
+$0\le C_1<\cdots<C_J<N$, put $A=C_1$, $R=N-1-C_J$, and let
+$G_j=C_{j+1}-C_j-1$.  For $J\ge2$, Palm inversion gives the exact stationary
+record probability
+\[
+\frac1\mu\sum_{k\ge A}g_kQ_\eta(G_1\mid k)
+\prod_{j=1}^{J-2}Q_\eta(G_{j+1}\mid G_j)
+\sum_{\ell\ge R}Q_\eta(\ell\mid G_{J-1}).
+\tag{3}
+\]
+The factor $1/\mu$ is unchanged because the path preserves the invariant gap
+marginal $g$ and its mean.  If $S_a=\sum_{k\ge a}g_k$ and
+$\bar h_a=S_a^{-1}\sum_{k\ge a}g_kh(k)$, division of \textup{(3)} by its
+$\eta=0$ value gives
+\[
+\{1+\eta h(G_1)\bar h_A\}
+\prod_{j=1}^{J-2}\{1+\eta h(G_j)h(G_{j+1})\}
+\{1+\eta h(G_{J-1})\bar h_R\}.
+\tag{4}
+\]
+Here $|\bar h_a|\le\|h\|_\infty$, so for $\eta_N=t/\sqrt N$ the two endpoint
+log factors in \textup{(4)} are uniformly $O(N^{-1/2})=o(1)$.  The events
+$J<2$ have exponentially small null probability by the uniform gap-tail
+bound.  Thus the log likelihood ratio equals, up to $o_P(1)$,
+\[
+\sum_{j=1}^{J-2}\log\{1+\eta_Nh(G_j)h(G_{j+1})\}.
+\]
+The score is bounded.  Taylor expansion, the one-dependent CLT, and
+$K_N/N\to1/\mu$ give the displayed LAN expansion with
+$\mathcal I=\nu^2/\mu$.  The score is orthogonal to every renewal marginal
+score $s(G_j)$, since
+\[
+\EE\{h(G_j)h(G_{j+1})s(G_j)\}
+=\EE\{h(G_j)s(G_j)\}\EE h(G_{j+1})=0,
+\]
+and similarly at the other endpoint.  Thus estimating the symmetric renewal
+nuisance coordinates causes no information loss, including at the exchange
+boundary.  Under the local alternative, $d_N=O_P(N^{-1/2})$, so the guard in
+\textup{(F)} is inactive with probability tending to one.  Le Cam's third
+lemma gives the stated normal shift and power.  The local divergence is
+$N\eta_N^2\mathcal I/2+o(N\eta_N^2)$; contiguity below $N^{-1/2}$ and the
+Gaussian-shift Neyman--Pearson bound complete part~\textup{(iv)}.
+\end{proof}
+

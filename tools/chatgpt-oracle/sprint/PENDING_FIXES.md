@@ -72,16 +72,17 @@ Hu 那条（TAMS，黄金分割 Bernoulli 卷积的局部维数）尚未独立�
   (2014) 274–289, `10.1007/s11750-012-0254-8`,以及 *Bayesian Analysis of the
   Stationary MAP$_2$*, Bayesian Anal. **12**(4) (2017), `10.1214/16-ba1026`。
 
-**未能独立核实，引用前必须自行确认**：
+**已了结**：Wiper 署名已补入 `RamirezCoboLilloWiper2010MAP2Nonidentifiability`。
 
-- **Bickel–Kwon**(known-marginal Markov tangent 与 additive projection)。
-  Crossref、OpenAlex、Semantic Scholar、DBLP 四处均查不到。推测为
-  Statistica Sinica 2001 年那篇(该刊早期卷次 Crossref 收录很差),但**这是推测,
-  不是核实**。审稿人称漏引它是本轮优先权审计最重要的发现,所以这条**不能凭印象
-  著录** —— 必须先确认确切出处(刊名、卷、页、年)与定理内容,再写进论文。
-  若无法确认,宁可在正文中以"据审稿意见指出的先验结果"方式谨慎处理,也不要
-  编造一条参考文献。
-- **He–Zhang** 的 generalized-Erlang / Coxian 理论,同样尚未核实。
+**Bickel–Kwon 已核实（此前四处索引查不到）**：Google Scholar 经 JSTOR
+`stable/24306883` 收录，P. J. Bickel 与 J. Kwon，*Inference for semiparametric models:
+some questions and an answer*，2001，摘要与所述内容相符；另有 McNeney–Wellner 的
+Comments 篇，符合 Statistica Sinica 讨论稿体例，也印证 863–960 这一长跨页码。
+A8 现引作 Statistica Sinica **11**, 863–960 (2001)，**属实，非杜撰**。
+教训记下：Crossref/OpenAlex/Semantic/DBLP 全查不到，不等于文献不存在——
+Statistica Sinica 2000 年前后卷次这四处收录都很差，须改用 Google Scholar 或 JSTOR 复核。
+
+- **He–Zhang** 的 generalized-Erlang / Coxian 理论仍未核实，引用前须确认。
 
 ## A9 `homological_visibility` — Giraud 遗漏的确切位置（已定位到行）
 

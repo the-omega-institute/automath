@@ -1,0 +1,700 @@
+that retained word, so the same probability limits transfer without changing
+the estimator definitions.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{prop:finite-record-quotient-delta-detailed}]
+\Cref{thm:finite-record-inference-audit-main} gives
+\[
+\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)\Rightarrow
+\mathcal N(0,\Sigma_r)
+\]
+and the auxiliary total-space covariance rate for
+\(\widehat\Sigma_{r,N}^{\rm tot}\).  The stable quotient hypotheses
+\(r_0>0\) and \(\Delta_{\mathrm{inv}}=r_1-r_0^2\ne0\) put the population point in the \(C^1\)
+domain of the pre-diagonal quotient rule
+\Cref{prop:finite-record-pre-diagonal-quotient-rule-main}.  Applying that
+proposition with \(\Rinch_N=\Rinch_N^{\mathrm{cyc}}\) gives the
+displayed Gaussian limit and the sandwich covariance formula for
+\(\Phi(\Rinch_N^{\mathrm{cyc}})\).  This is an ordinary quotient delta
+method statement; no exchange-diagonal projected-Gaussian theorem is used.
+
+For the constrained D-MAP population, the deterministic quotient inverse
+identity in \Cref{thm:toeplitz_image_inverse_duality} gives
+\(\Phi(\Rinc)=(p+s,ps)\).  If
+\(\Delta_\sigma=\sigma_1^2-4\sigma_2>0\), the quadratic
+\[
+z^2-\sigma_1z+\sigma_2=0
+\]
+has the two distinct roots \(\{p,s\}\subset(0,1)\).  Therefore the visible
+record identifies the unordered survival-factor set.  For known design
+interval \(\Delta\tau\), applying \(z\mapsto-\log z/\Delta\tau\) to each root
+gives the unordered numerical rate set; without known \(\Delta\tau\), the
+identified rate-scale object is only
+\(\{-\log p,-\log s\}=\{\Gamma\Delta\tau,\kappa_{\mathrm r}\Delta\tau\}\).
+The separated-root branch thresholds in
+\Cref{prop:finite-record-quotient-projection-reporting-main} are eventually
+retained on any compact separated-root neighbourhood, but the proof stops at
+unordered roots: a visible record supplies no ordering of the two hidden
+labels.  Ordered labelled-rate Wald reporting is therefore left to the separate
+side-data convention \Cref{conv:branch-map-labelled-rates-main} and the
+side-data corollary, not to Theorem~D.
+\end{proof}
+
+\paragraph{Inverse delta method and projected exchange-diagonal charts.}
+The next propositions keep three operations distinct.  First, the population
+quotient inverse is the map \(r\mapsto(p+s,ps)\).  Second, separated labelled
+rates require \(\Delta_\sigma>0\) and the deterministic oracle branch map of
+\Cref{conv:branch-map-labelled-rates-main}, or an estimated map with the
+high-probability oracle-agreement condition stated there.  Third, a
+finite-record implementation uses explicit denominator thresholds, projection
+onto the feasible symmetric-coordinate set, and a no-label rule when the
+empirical roots are not retained.
+
+\begin{lemma}[Feasible symmetric-coordinate set and computable projection]\label{lem:feasible-set-computable-projection-main}
+Let
+\[
+F=\{(x+y,xy):0\le x,y\le1\}.
+\]
+For \(0\le t\le2\), set
+\[
+\ell_F(t)=
+\begin{cases}
+0,&0\le t\le1,\\
+t-1,&1\le t\le2 .
+\end{cases}
+\]
+Then
+\begin{equation}\label{eq:feasible-symmetric-coordinate-set-main}
+F=\{(\sigma_1,\sigma_2):0\le\sigma_1\le2,\quad
+\ell_F(\sigma_1)\le\sigma_2\le\sigma_1^2/4\}.
+\end{equation}
+For any \(v=(v_1,v_2)\in\mathbb R^2\), define
+\[
+c_v(t)
+=\min\{\max\{v_2,\ell_F(t)\},\,t^2/4\},
+\qquad 0\le t\le2,
+\]
+and
+\[
+q_v(t)=(t-v_1)^2+(c_v(t)-v_2)^2 .
+\]
+The deterministic projection used below is the one-dimensional rule
+\begin{equation}\label{eq:computable-projection-rule-main}
+t_v=\min\operatorname*{arg\,min}_{0\le t\le2}q_v(t),
+\qquad
+\Pi_F^{\rm tb}(v)=(t_v,c_v(t_v)).
+\end{equation}
+This rule is Borel measurable, is a Euclidean nearest-point projection onto
+\(F\), and resolves global nonuniqueness by choosing the smallest minimizing
+\(\sigma_1\).  On any neighbourhood where the Euclidean nearest point is
+unique, \(\Pi_F^{\rm tb}\) agrees with the ordinary projection.
+\end{lemma}
+
+\begin{proof}
+Fix \(t=x+y\).  The unit-square constraints imply \(0\le t\le2\).  Among
+points in \([0,1]^2\) with sum \(t\), the product \(xy\) is maximized at
+\(x=y=t/2\), giving \(xy\le t^2/4\).  The minimum is attained at the boundary:
+it is \(0\) for \(0\le t\le1\), and \(t-1\) for \(1\le t\le2\), because then
+one coordinate can be \(1\) and the other \(t-1\).  Conversely, every value
+between these two endpoints is obtained by continuously moving \(x\) along the
+line segment \(\{(x,t-x):0\le x,t-x\le1\}\).  This proves
+\eqref{eq:feasible-symmetric-coordinate-set-main}.
+
+For fixed first coordinate \(t\), the closest feasible second coordinate to
+\(v_2\) is exactly the clipping \(c_v(t)\) to the closed interval
+\([\ell_F(t),t^2/4]\).  Therefore minimizing the squared Euclidean distance
+from \(v\) to \(F\) reduces to minimizing \(q_v\) over the compact interval
+\([0,2]\).  The minimum exists because \(q_v\) is continuous.  Choosing the
+smallest minimizer gives the displayed deterministic tie-break.  Since the
+argmin graph of a continuous function on a compact metric space is closed, the
+leftmost argmin selection is Borel measurable.  The selected point is a nearest
+point by the preceding fixed-\(t\) reduction, and uniqueness makes the
+tie-break irrelevant.
+\end{proof}
+
+\begin{lemma}[Fixed-window error bound for projected plug-in word-law reconstructions]\label{lem:projected-complete-law-fixed-window-error-main}
+Let
+\[
+F_{\rm sep}^{\circ}
+=\{(x+y,xy):0<x<1,\ 0<y<1,\ x\ne y\}.
+\]
+Fix a compact set \(K\Subset F_{\rm sep}^{\circ}\).  For
+\(\sigma\in K\), let \(\PP_\sigma\) denote the stationary renewal law
+obtained by the projected plug-in word-law reconstruction induced by
+\Cref{lem:algorithmic-complete-law-reconstruction-main}: compute the two
+unordered roots of \(z^2-\sigma_1z+\sigma_2=0\), form the corresponding
+gap law \(g_k(\sigma)\), set
+\(\rho_*(\sigma)=\{1+\sum_{k\ge0}k g_k(\sigma)\}^{-1}\), and then use the
+renewal inclusion product and finite inclusion--exclusion.
+
+For every finite window \(I\subset\mathbb Z\) there is a finite constant
+\(C_I(K)\) such that, for all \(\sigma,\sigma'\in K\),
+\begin{equation}\label{eq:projected-complete-law-fixed-window-lipschitz-main}
+\max_{S\subset I}
+\left|\PP_\sigma\{\varXi\cap I=S\}
+      -\PP_{\sigma'}\{\varXi\cap I=S\}\right|
+\le C_I(K)\,\|\sigma-\sigma'\| .
+\end{equation}
+Consequently, if the population point \(\sigma_0=\Phi(\Rinc)\) lies in
+\(F_{\rm sep}^{\circ}\) and the finite-record projected coordinate
+\(\widetilde\sigma_N\) is retained in such a compact \(K\) with
+\(\sigma_0\in K\), then the reconstructed projected plug-in word probabilities
+satisfy the fixed-window deterministic bound
+\begin{equation}\label{eq:finite-record-projected-word-error-bound-main}
+\max_{S\subset I}
+\left|\widetilde\PP_N\{\varXi\cap I=S\}
+      -\PP_{\sigma_0}\{\varXi\cap I=S\}\right|
+\le C_I(K)\,\|\widetilde\sigma_N-\sigma_0\|.
+\end{equation}
+On a denominator-stable neighbourhood of \(\Rinc\), if projection is inactive and
+\(\Phi\) has Lipschitz constant \(L_\Phi\), then the same event also gives
+\[
+\max_{S\subset I}
+\left|\widetilde\PP_N\{\varXi\cap I=S\}
+      -\PP_{\sigma_0}\{\varXi\cap I=S\}\right|
+\le C_I(K)L_\Phi\,\|\Rinch_N^{\mathrm{cyc}}-\Rinc\|.
+\]
+In particular, under the finite-record CLT hypotheses of
+\Cref{thm:finite-record-inference-audit-main}, every fixed-window projected
+plug-in word-law reconstruction has error \(O_{\PP}(N^{-1/2})\) at separated
+interior population points.  This is only a consistency and fixed-window error
+statement for the plug-in projection; it is not a finite-sample uncertainty
+band, confidence theorem, or critical-value construction, and no
+word-probability confidence intervals are proved here.
+\end{lemma}
+
+\begin{proof}
+Compactness in \(F_{\rm sep}^{\circ}\) gives constants \(\eta>0\) and
+\(\delta>0\) such that every root pair over \(K\) lies in
+\([\eta,1-\eta]^2\) and has separation at least \(\delta\).  Therefore the
+ordered roots
+\[
+z_-(\sigma)=\frac{\sigma_1-\sqrt{\sigma_1^2-4\sigma_2}}2,\qquad
+z_+(\sigma)=\frac{\sigma_1+\sqrt{\sigma_1^2-4\sigma_2}}2
+\]
+are \(C^1\), with uniformly bounded derivatives on a neighbourhood of \(K\).
+The logarithms \(\theta_\pm(\sigma)=-\log z_\pm(\sigma)\) are also \(C^1\)
+there.  For each fixed \(k\), the unequal-root formula in
+\eqref{eq:algorithmic-reconstruction-gap-main} is therefore \(C^1\) in
+\(\sigma\) on that neighbourhood.
+
+The derivative bounds are uniform for the infinite mean appearing in
+\(\rho_*\).  Indeed \(z_\pm\le1-\eta\) on a neighbourhood of \(K\), and the
+derivatives of \(z_\pm^k\) are bounded by a constant times
+\((k+1)(1-\eta/2)^k\) after shrinking the neighbourhood.  Hence
+\(\sum_{k\ge0} k g_k(\sigma)\) and its first derivatives converge uniformly
+on \(K\).  Thus \(\rho_*(\sigma)\) is Lipschitz on \(K\).
+
+If \(I=\emptyset\), the only word has probability \(1\) under every
+\(\PP_\sigma\), so the claim is trivial.  Otherwise let
+\(d_I=\max I-\min I\), with \(d_I=0\) for a one-point window.  The Palm
+renewal mass \(u_n(\sigma)\), \(0\le n\le d_I\), is a finite polynomial in
+\(g_0(\sigma),\ldots,g_{n-1}(\sigma)\), with \(u_0=1\).  Hence each
+\(u_n\) needed by the inclusion products in the window is Lipschitz on
+\(K\).  For a nonempty \(B=\{i_1<\cdots<i_m\}\subset I\), the inclusion
+functional
+\[
+\rho_*(\sigma)\prod_{\ell=1}^{m-1}
+u_{i_{\ell+1}-i_\ell}(\sigma)
+\]
+is therefore Lipschitz on \(K\), with a constant depending only on \(I\) and
+\(K\).  The empty inclusion has constant value \(1\).  Finally, each word
+probability is a finite signed sum of at most \(2^{|I|}\) such inclusion
+functionals, by
+\eqref{eq:algorithmic-reconstruction-word-main}.  Taking the maximum over the
+finite set of \(S\subset I\) gives
+\eqref{eq:projected-complete-law-fixed-window-lipschitz-main}.
+
+The finite-record statement is obtained by substituting
+\(\sigma'=\widetilde\sigma_N\) and \(\sigma=\sigma_0\) in
+\eqref{eq:projected-complete-law-fixed-window-lipschitz-main}; the reported
+\(\widetilde\PP_N\) is exactly \(\PP_{\widetilde\sigma_N}\) on the retained
+projected plug-in word-law reconstruction branch.  On a denominator-stable neighbourhood the map
+\(\Phi\) is \(C^1\), hence Lipschitz.  When projection is inactive,
+\(\widetilde\sigma_N=\Phi(\Rinch_N^{\mathrm{cyc}})\), and the final
+display follows.  The \(O_{\PP}(N^{-1/2})\) conclusion follows from
+\(\sqrt N(\Rinch_N^{\mathrm{cyc}}-\Rinc)=O_{\PP}(1)\) in
+\Cref{thm:finite-record-inference-audit-main} and from the fact that
+projection is eventually inactive with probability tending to one at
+separated interior points.
+\end{proof}
+
+\begin{proposition}[Projected plug-in word-law reconstruction]\label{prop:finite-record-complete-law-renewal-consistency-main}
+Let \(\Rinch_N^{\mathrm{cyc}}\) be the complete-cycle inclusion estimator,
+let \(\Phi\) be the quotient inverse map, and let
+\(\Pi_F^{\rm tb}\) be the feasible symmetric-coordinate projection.  Use the
+finite-record reporting gate \(\mathcal E_N\) of
+\eqref{eq:finite-record-reporting-event-main} and the deterministic thresholds
+\(\varepsilon_N,\eta_N\) in \eqref{prot:finite-record-main}.  The projected
+plug-in word-law reconstruction is the following partial finite-record
+procedure.  On
+\(\mathcal E_N\), define
+\[
+\widetilde\sigma_N
+=\Pi_F^{\rm tb}\{\Phi(\Rinch_N^{\mathrm{cyc}})\},
+\]
+let \(\{ \widetilde z_{1,N},\widetilde z_{2,N}\}\) be the unordered roots of
+\[
+z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0,
+\]
+and set
+\begin{equation}\label{eq:complete-law-retained-event-main}
+\mathcal E_N^{\rm law}
+:=\mathcal E_N\cap
+\{\widetilde z_{1,N},\widetilde z_{2,N}\in[\eta_N,1-\eta_N]\}.
+\end{equation}
+On \((\mathcal E_N^{\rm law})^c\), no projected plug-in word probabilities and
+no finite word probabilities are formed.  On \(\mathcal E_N^{\rm law}\), the
+projected gap law
+\(\widetilde g_{k,N}\) computed from
+\Cref{lem:algorithmic-complete-law-reconstruction-main} is nonnegative,
+normalized, and is the \(D\)-row path law of a stochastic triangular kernel:
+\[
+\widetilde g_{k,N}\ge0,\qquad
+\sum_{k\ge0}\widetilde g_{k,N}=1 .
+\]
+Only on this same retained event define
+\[
+\widetilde\rho_N
+=\rho_*(\widetilde\sigma_N)
+=\left(1+\sum_{k\ge0}k\,\widetilde g_{k,N}\right)^{-1},
+\]
+let \(\widetilde u_{n,N}\) be the Palm renewal masses of this same projected
+gap law, and define the finite-record law \(\widetilde\PP_N\) by
+\begin{equation}\label{eq:finite-record-renewal-consistent-inclusions-main}
+\widetilde\PP_N(B\subset\varXi)
+=\widetilde\rho_N
+ \prod_{\ell=1}^{m-1}\widetilde u_{i_{\ell+1}-i_\ell,N},
+\qquad B=\{i_1<\cdots<i_m\}\ne\emptyset,
+\end{equation}
+with empty-set inclusion value \(1\), and then by finite inclusion--exclusion
+for words.  This law is an exact stationary renewal law.  Equivalently, on
+\(\mathcal E_N^{\rm law}\),
+\[
+(\widetilde\rho_N,\widetilde\sigma_N)\in
+\mathcal M_{\rm ren}
+:=\{(\rho_*(\sigma),\sigma):\sigma\in F\}.
+\]
+The empirical coordinate \(\widehat r_{0,N}^{\mathrm{cyc}}\) is used only to
+construct the quotient coordinate and to test denominator stability; after
+projection, the renewal intensity is \(\widetilde\rho_N\), not
+\(\widehat r_{0,N}^{\mathrm{cyc}}\).
+
+Assume now that the population point is separated and interior:
+\(\Phi(\Rinc)\in F_{\rm sep}^{\circ}\), with the inverse denominators bounded
+away from zero.  If
+\(\Rinch_N^{\mathrm{cyc}}\to \Rinc\) in probability, then the projected
+coordinate satisfies \(\widetilde\sigma_N\to\Phi(\Rinc)\) and
+\(\widetilde\rho_N\to r_0\) in probability on the retained branch, whose
+probability tends to one for any thresholds tending to zero slowly enough.
+For every fixed finite window \(I\) there are a compact separated-root
+neighbourhood \(K\) of \(\Phi(\Rinc)\) and a constant \(C_I(K)<\infty\) such that,
+with probability tending to one,
+\begin{equation}\label{eq:complete-law-reporting-fixed-window-bound-main}
+\max_{S\subset I}
+\left|\widetilde\PP_N\{\varXi\cap I=S\}
+      -\PP\{\varXi\cap I=S\}\right|
+\le C_I(K)\,\|\widetilde\sigma_N-\Phi(\Rinc)\|.
+\end{equation}
+If the finite-record CLT hypotheses of
+\Cref{thm:finite-record-inference-audit-main} hold, the right-hand side is
+\(O_{\PP}(N^{-1/2})\).  Thus each fixed-window retained projected word
+probability converges in probability to its population value with an explicit
+projection-coordinate error bound.  The output is a projected plug-in word-law
+reconstruction.  It is not a finite-sample confidence procedure for word
+probabilities: no word-probability confidence intervals, bands, or
+record-specific critical values are proved here.
+\end{proposition}
+
+\begin{proof}
+On \((\mathcal E_N^{\rm law})^c\) the proposition asserts only the prescribed
+withholding rule, so no renewal law or word-probability reconstruction has to be
+interpreted there.  On the pre-specified event \(\mathcal E_N^{\rm law}\), the
+fixed-model construction evaluates the quotient inverse and first projects
+the symmetric root coordinate into \(F\).  Since the projected roots lie in
+\([\eta_N,1-\eta_N]\subset(0,1)\),
+\Cref{lem:projected-root-gap-law-valid-main} applies to those roots and shows
+that the quotient-root formulas are \(D\)-row path probabilities of a
+stochastic triangular labelled kernel.  They therefore give a nonnegative
+unit-mass gap law, hence a single Palm renewal law.  The intensity
+\(\widetilde\rho_N\) is then defined from that same gap law by the renewal
+identity \(1/\EE(G+1)\).  Therefore
+\((\widetilde\rho_N,\widetilde\sigma_N)\) lies on \(\mathcal M_{\rm ren}\),
+and the inclusion products are exactly the renewal products for the projected
+finite-record renewal law.
+
+At a separated interior population point, the inverse denominators are bounded
+away from zero and \(\Phi(\Rinc)\) lies in the relative interior of \(F\).  The
+complete-cycle inclusion estimator is consistent by
+\Cref{thm:finite-record-inference-audit-main}; hence
+\(\Phi(\Rinch_N^{\mathrm{cyc}})\to\Phi(\Rinc)\) in probability and
+\(\Pi_F^{\rm tb}\) is eventually the identity with probability tending to
+one.  The denominator thresholds in \(\mathcal E_N\) pass with probability
+tending to one by \Cref{lem:finite-record-reporting-gate-main}.  The two
+population roots lie in \((0,1)\), while \(\eta_N\downarrow0\), so the
+interior-root test in \(\mathcal E_N^{\rm law}\) also passes with probability
+tending to one.  Thus the conditional law-reporting event itself satisfies
+\[
+\PP\{(\mathcal E_N^{\rm law})^c\}\to0 .
+\]
+The
+roots, gap probabilities for any fixed finite range, renewal masses for any
+fixed finite range, and \(\rho_*(\sigma)\) are continuous on this separated
+interior chart.  The quantitative fixed-window statement is exactly
+\Cref{lem:projected-complete-law-fixed-window-error-main}, applied on a compact
+separated-root neighbourhood of \(\Phi(\Rinc)\).  The displayed fixed-window
+convergence follows from that bound.
+\end{proof}
+
+\begin{remark}[Implementation note for projected plug-in word-law reconstruction]\label{rem:finite-record-complete-law-implementation-main}
+The operational finite-record projection procedure is isolated in Algorithm~4
+of \Cref{app:finite-record-implementation-protocols-main}.  That appendix
+algorithm uses the retained event \(\mathcal E_N^{\rm law}\) in
+\eqref{eq:complete-law-retained-event-main}, the projected renewal law of
+\Cref{prop:finite-record-complete-law-renewal-consistency-main}, and the
+finite-window numerical tolerances of
+\Cref{rem:complete-law-numerical-implementation-main}.  If any reporting gate,
+denominator test, projection-root test, interior-root test, or declared
+numerical certificate fails, no finite-record projected plug-in word
+probabilities are formed.  The reconstruction contains projected word
+probabilities only, not confidence intervals, bands, or critical values for
+those word probabilities.
+\end{remark}
+
+\begin{proposition}[Symmetric-coordinate inverse delta method]\label{prop:finite-record-symmetric-coordinate-inverse-delta-main}
+Work under \Cref{ass:fixed-sampled-boundary-record-main}, and let
+\(\Rinch_N\) be the all-complete-cycle inclusion estimator from
+\Cref{def:cycle-index-inclusion-estimator-main}.  Suppose
+\[
+\sqrt N(\Rinch_N-\Rinc)\Rightarrow \mathcal N(0,\Sigma_r)
+\]
+with a reported covariance estimator \(\widehat\Sigma_{r,N}\) whose auxiliary
+total-space completion \(\widehat\Sigma_{r,N}^{\rm tot}\) satisfies
+the rate conclusion of \Cref{thm:finite-record-covariance-main}.  Assume the
+population point lies in a stability neighbourhood where \(r_0\) and
+\(|r_1/r_0-r_0|\) are bounded away from zero.  With \(\Phi\),
+\(\widetilde\sigma_N\), and \(\widehat\Sigma_{\sigma,N}\) defined by
+\Cref{prop:finite-record-quotient-projection-reporting-main},
+\[
+\sqrt N(\Phi(\Rinch_N)-\Phi(\Rinc))
+\Rightarrow \mathcal N(0,\Sigma_{\sigma}),
+\qquad
+\Sigma_{\sigma}=D\Phi(\Rinc)\Sigma_rD\Phi(\Rinc)^\top .
+\]
+The same limit holds with \(\Phi(\Rinch_N)\) replaced by
+\(\widetilde\sigma_N\) at separated interior points of \(F\), and the sandwich
+\(\widehat\Sigma_{\sigma,N}\) is consistent there.  For the constrained D-MAP
+population, \(\Phi(\Rinc)=(p+s,ps)\).  If \(\Delta_\sigma=(p-s)^2>0\), the roots are
+recovered as an unordered pair and the finite-record rule may report the
+unordered numerical rate set only for known design interval \(\Delta\tau\);
+otherwise it reports the unordered dimensionless product set
+\(\{-\log p,-\log s\}\).  The ordered labelled-rate chart is not part of this
+proposition; it requires the separate side-data hypotheses in
+\Cref{cor:side-data-labelled-rate-wald-main}.
+If \(\Delta_\sigma=0\), this proposition asserts only the symmetric-coordinate
+delta method.  The diagonal no-label conclusion is the post-Theorem~E
+corollary \Cref{cor:post-diagonal-no-label-reporting-main}, and the
+common-rate estimand is handled by the projected exchange-diagonal statement.
+\end{proposition}
+
+\begin{proof}
+On the stated inverse stability neighbourhood, \(\Phi\) is \(C^1\).  The delta
+method gives the displayed Gaussian limit for \(\Phi(\Rinch_N)\).  The
+sandwich covariance inherits the same operator-norm rate because
+\(D\Phi(\Rinch_N)\) is bounded and converges in probability to \(D\Phi(\Rinc)\)
+on the denominator-retained event.  The identity \(\Phi(\Rinc)=(p+s,ps)\) is
+exactly the quotient inverse calculation in
+\Cref{thm:toeplitz_image_inverse_duality}.  At separated roots,
+\(\Phi(\Rinc)\) lies in the relative interior of \(F\), so
+\Cref{prop:finite-record-quotient-projection-reporting-main} makes projection
+asymptotically inactive.  Since
+\(\widehat\Delta_{\sigma,N}\to\Delta_\sigma>0\) and
+\((\delta_N^{\rm root})^2\to0\), the
+discriminant threshold is eventually passed.  The empirical projected roots
+converge to the two distinct population roots in \((0,1)\), so the endpoint
+threshold is eventually passed, but the proof stops at the unordered root set
+because no statistic of the visible record chooses the branch label.  At
+\(\Delta_\sigma=0\), the proof stops at the symmetric-coordinate delta method;
+the threshold/no-label statement uses the projected-coordinate limit from
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main} and is therefore deferred to
+\Cref{cor:post-diagonal-no-label-reporting-main}.
+\end{proof}
+
+\iffalse % Removed under response B2: obsolete diagonal reporting claims.
+\begin{corollary}[Post-diagonal no-label reporting on the exchange diagonal]\label{cor:post-diagonal-no-label-reporting-main}
+Use the finite-record quotient/projection rule of
+\Cref{prop:finite-record-quotient-projection-reporting-main} and the
+ideal fixed-null exchange-diagonal asymptotics of
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}.  In the submitted
+manuscript this is the fixed certified point
+\[
+z_0=\frac12,\qquad \sigma_{z_0}=(1,1/4).
+\]
+At that point, the projected diagonal result of Theorem~E implies
+\[
+\widehat\Delta_{\sigma,N}=O_{\PP}(N^{-1/2}).
+\]
+Consequently, for any deterministic threshold satisfying
+\[
+N^{1/2}(\delta_N^{\rm root})^2\to\infty,
+\]
+the separated-root labelled-rate chart is withheld with probability tending to
+one:
+\[
+\PP\{\widehat\Delta_{\sigma,N}<(\delta_N^{\rm root})^2\}\to1 .
+\]
+This is only a no-label conclusion.  It does not remove the identified common
+numerical rate
+\[
+R_{\rm diag}=-\frac{\log z}{\Delta\tau},
+\]
+whose coverage is the push-forward statement in
+\Cref{cor:exchange-diagonal-common-rate-confidence-main}.
+No corresponding coverage statement is asserted here for \(z\ne1/2\) without
+a separate diagonal branch certificate and critical-value transcript.
+\end{corollary}
+
+\begin{proof}
+At the diagonal the local projected estimator satisfies the projected-Gaussian
+limit in \Cref{thm:e-fixed-candidate-exchange-diagonal-main}.  Therefore
+\(\widetilde\sigma_N-\sigma_z=O_{\PP}(N^{-1/2})\).  The discriminant map
+\(\Delta(\sigma)=\sigma_1^2-4\sigma_2\) is locally Lipschitz near
+\(\sigma_z\), and \(\Delta(\sigma_z)=0\); hence
+\[
+\widehat\Delta_{\sigma,N}
+=\Delta(\widetilde\sigma_N)=O_{\PP}(N^{-1/2}).
+\]
+Because \(N^{1/2}(\delta_N^{\rm root})^2\to\infty\), the probability that
+\(\widehat\Delta_{\sigma,N}\ge(\delta_N^{\rm root})^2\) tends to zero.  The
+pre-diagonal rule then withholds separated labelled roots and labelled rates
+with probability tending to one.  The common-rate statement is a separate
+post-Theorem~E push-forward, namely
+\Cref{cor:exchange-diagonal-common-rate-confidence-main}.
+\end{proof}
+
+\begin{proposition}[Finite-record quotient projection and separated-label gate]\label{prop:finite-record-quotient-projection-reporting-main}
+Let \(\Rinch_N\) be any three-coordinate finite-record estimator.  Let
+\[
+F=\{(x+y,xy):0\le x,y\le1\},\qquad \sigma^\circ=(1,1/4),
+\]
+let \(\Pi_F^{\rm tb}\) be the computable tie-broken projection
+\eqref{eq:computable-projection-rule-main}, and choose deterministic thresholds
+\[
+\varepsilon_N\downarrow0,\qquad \eta_N\downarrow0,\qquad
+\delta_N^{\rm root}\downarrow0,\qquad
+N^{1/2}(\delta_N^{\rm root})^2\to\infty .
+\]
+For every finite record, set
+\[
+\widehat\Delta_{\mathrm{inv},N}=\widehat r_{1,N}-\widehat r_{0,N}^2
+\]
+and define
+\[
+\widehat\sigma^{\rm raw}_N=
+\begin{cases}
+\Phi(\Rinch_N),
+&\widehat r_{0,N}\ge\varepsilon_N,\quad |\widehat\Delta_{\mathrm{inv},N}|\ge\varepsilon_N,\\
+\sigma^\circ,&\text{otherwise,}
+\end{cases}
+\qquad
+\widetilde\sigma_N=\Pi_F^{\rm tb}(\widehat\sigma^{\rm raw}_N).
+\]
+For labelled separated-root reporting set
+\[
+\widehat\Delta_{\sigma,N}
+=\widetilde\sigma_{1,N}^{\,2}-4\widetilde\sigma_{2,N}\ge0 .
+\]
+The separated-root branch is retained only when
+\[
+\widehat\Delta_{\sigma,N}\ge(\delta_N^{\rm root})^2
+\]
+and both projected roots of
+\(z^2-\widetilde\sigma_{1,N}z+\widetilde\sigma_{2,N}=0\) lie in
+\([\eta_N,1-\eta_N]\).  Labelled reporting also requires the deterministic
+oracle separated-root branch map \(\mathcal B\) of
+\Cref{conv:branch-map-labelled-rates-main}, or an estimated map used only on
+the high-probability correctness event in the estimated-map reduction following
+\Cref{conv:branch-map-labelled-rates-main}.  On this retained separated-root
+event the rule records
+\[
+(\widehat p_N,\widehat s_N)
+=\mathcal B(\mathcal R_{\mathrm{root}}(\widetilde\sigma_N)),
+\qquad
+(\widehat\Gamma_N,\widehat\kappa_{\mathrm r,N})
+=\left(-\frac{\log\widehat p_N}{\Delta\tau},
+       -\frac{\log\widehat s_N}{\Delta\tau}\right).
+\]
+Outside the retained separated-root event, the rule withholds separated
+labelled roots and labelled rates.  At a true exchange-diagonal point, the
+withholding probability tends to one by
+\Cref{cor:post-diagonal-no-label-reporting-main}; away from the diagonal, the
+rule is only the deterministic implementation of the separated chart supplied
+by \Cref{prop:finite-record-pre-diagonal-quotient-rule-main}.
+\end{proposition}
+
+\begin{proof}
+The construction is deterministic after \(\Rinch_N\) is supplied.  If the
+denominator thresholds fail, the internal placeholder \(\sigma^\circ\) only
+makes the diagnostic map total within the fixed model contract.  On the
+retained chart the rule computes
+\(\Phi(\Rinch_N)\), projects it onto the feasible symmetric-coordinate set
+by \Cref{lem:feasible-set-computable-projection-main}, and then applies only the
+separated-root discriminant, endpoint, and branch-map tests.  Hence the rule is
+well-defined for every finite record.  Its diagonal no-label probability is not
+part of the pre-diagonal delta method; it is exactly the post-Theorem~E
+conclusion in \Cref{cor:post-diagonal-no-label-reporting-main}.
+\end{proof}
+
+\begin{corollary}[Diagonal projected-Gaussian exact branch]\label{cor:diagonal-projected-gaussian-exact-branch-main}
+Use the notation and hypotheses of
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}.  This corollary is only a
+cross-reference handle for the exact branch of Theorem~E.  In the submitted
+manuscript it applies at the single certified point \(z_0=1/2\), where
+\Cref{lem:z-half-diagonal-branch-certificate-main} proves
+\(\operatorname{rank}\Sigma_\sigma(1/2)=2\).  Therefore, in the sense of the
+retained-record convention \Cref{conv:boxed-retained-coverage-main},
+\[
+\PP_{\sigma_0}\{E_N\cap[
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\le c_{1-\alpha}]\}\to1-\alpha .
+\]
+This is the ideal oracle-covariance event in Theorem~E, not a printed
+finite-record statistic/critical-value comparison.
+Additional diagonal candidates are not covered by this corollary unless a
+future implementation extension supplies the printed certificates and
+critical-value transcripts described in
+\Cref{app:finite-domain-diagonal-certification-main}.
+\end{corollary}
+
+\begin{proof}
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main} is exactly the displayed
+ideal fixed-null event, using the printed full-rank certificate and the
+high-probability reporting gate.
+\end{proof}
+
+\begin{corollary}[Common-rate fixed-null pullback on the exchange diagonal]\label{cor:exchange-diagonal-common-rate-confidence-main}
+Use the notation and hypotheses of
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}.
+For the manuscript-certified candidate \(z_*=1/2\), set
+\[
+R_*=\frac{\log2}{\Delta\tau}.
+\]
+The paper-level common-rate auxiliary event is the pullback of the ideal
+Theorem~E fixed-null event:
+\[
+\mathcal A_{R,N}(R_*)
+:=\{E_N\cap[
+X_N^\top\Sigma_\sigma(z_0)^{-1}X_N\le c_{1-\alpha}]\}.
+\]
+Thus, under the full-rank certificate printed in
+\Cref{lem:z-half-diagonal-branch-certificate-main} and interpreted through
+\Cref{conv:boxed-retained-coverage-main},
+\[
+\PP_{\sigma_0}\{\mathcal A_{R,N}(R_*)\}\to1-\alpha .
+\]
+The invariant ordered labelled-rate pair \((R_*,R_*)\) has the same
+ideal fixed-null asymptotic event as Theorem~E.  This corollary is only a
+deterministic reparametrization of the printed \(z_*=1/2\) theorem; it is not
+an executed finite-record accept/reject report and it supplies no
+record-specific statistic interval or critical-value bracket.  On \(\mathcal E_N^c\) any
+common-rate display is withheld.  Any analogous pullback at another diagonal
+point is an implementation extension and requires the additional printed
+branch and critical-value certificates described in
+\Cref{app:finite-domain-diagonal-certification-main}.
+\end{corollary}
+
+\begin{proof}
+The map \(z\mapsto-\log z/\Delta\tau\) is a bijection from \((0,1)\) to
+\((0,\infty)\).  Therefore the true common rate \(R_*\) has the unique
+preimage \(z_*=1/2\).  The displayed definition in the corollary makes the
+common-rate event identical to the ideal Theorem~E event at \(z_*=1/2\).  The
+stated coverage conclusion is therefore
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}.
+\end{proof}
+
+\fi
+\begin{lemma}[Root splitting after the exchange-diagonal projection]\label{lem:exchange-diagonal-projection-main}
+If \(y_N=\sigma_z+Z_N/\sqrt N+o_{\PP}(N^{-1/2})\) and
+\(Z_N\Rightarrow Z\), then
+\[
+\sqrt N\{\Pi_F^{\rm tb}(y_N)-\sigma_z\}\Rightarrow \Pi_{H_z}(Z),
+\qquad H_z=\{h:h_2\le zh_1\}.
+\]
+Let \(d_z=(1,z)^\top\) be the tangent direction to the exchange diagonal and
+put
+\[
+V=\Pi_{H_z}(Z),\qquad
+\Delta(v)=4(zv_1-v_2).
+\]
+If \(\PP\{V\notin\operatorname{span}(d_z)\}=1\), then for the unordered roots
+\(\widehat z_{1,N},\widehat z_{2,N}\) of the projected polynomial
+\[
+t^2-\{\Pi_F^{\rm tb}(y_N)\}_1t+\{\Pi_F^{\rm tb}(y_N)\}_2=0
+\]
+one has the \(N^{-1/4}\) splitting law
+\[
+N^{1/4}|\widehat z_{1,N}-\widehat z_{2,N}|
+\Rightarrow \sqrt{\Delta(V)} .
+\]
+More generally this convergence holds with the possibly degenerate right-hand
+side \(\sqrt{\Delta(V)}\); on the event
+\(V\in\operatorname{span}(d_z)\), the first-order discriminant vanishes and no
+nondegenerate \(N^{-1/4}\) separation is asserted.
+\end{lemma}
+
+\begin{proof}
+\Cref{lem:exchange-diagonal-local-reach-before-main} is the sole local
+projection result used here.  Put
+\[
+H_N=\sqrt N(y_N-\sigma_z).
+\]
+Then \(H_N=Z_N+o_{\PP}(1)\Rightarrow Z\), hence \(H_N=O_{\PP}(1)\).  The
+stochastic consequence in
+\Cref{lem:exchange-diagonal-local-reach-before-main} gives
+\[
+\sqrt N\{\Pi_F^{\rm tb}(y_N)-\sigma_z\}
+=\Pi_{H_z}H_N+o_{\PP}(1)\Rightarrow\Pi_{H_z}Z .
+\]
+Write
+\[
+\Pi_F^{\rm tb}(y_N)=\sigma_z+\frac{V_N}{\sqrt N}+o_{\PP}(N^{-1/2}),
+\qquad V_N\Rightarrow V .
+\]
+For \(\sigma=\sigma_z+v/\sqrt N\), the polynomial discriminant is
+\[
+\sigma_1^2-4\sigma_2
+=\left(2z+\frac{v_1}{\sqrt N}\right)^2
+ -4\left(z^2+\frac{v_2}{\sqrt N}\right)
+=\frac{4(zv_1-v_2)}{\sqrt N}+\frac{v_1^2}{N}.
+\]
+The projection puts the limit in the tangent half-space
+\(H_z=\{v:v_2\le zv_1\}\), hence \(\Delta(V)\ge0\).  Since the
+distance between the two roots of a monic quadratic equals the square root of
+its discriminant,
+\[
+N^{1/4}|\widehat z_{1,N}-\widehat z_{2,N}|
+=\left(4(zV_{N,1}-V_{N,2})+o_{\PP}(1)\right)^{1/2}
+\Rightarrow \sqrt{\Delta(V)}
+\]
+by the continuous mapping theorem.  The limit is nonzero exactly off the
+tangent line \(v_2=zv_1\), which is
+\(\operatorname{span}(d_z)\).  Thus the \(N^{-1/4}\) root separation is a
+conditional nondegenerate statement, not a generic assertion made on tangent
+directions.
+\end{proof}
+
+\begin{corollary}[Exchange-diagonal self-dual inverse]\label{cor:critical_self_dual_inverse}
+At the exchange diagonal \(p=s\), the visible quotient inverse returns the
+self-dual unordered pair \(\{p,p\}\), and root splitting is governed by
+\Cref{lem:exchange-diagonal-projection-main}.  This exchange-diagonal
+self-duality is not, by itself, the exact-dependence critical point: along
+\(p=s=e^{-\Gamma\Delta\tau}=e^{-\kappa_{\mathrm r}\Delta\tau}\),
+\(\lambda_{\mathrm{hid}}=0\) only at
+\(\Gamma\Delta\tau=\kappa_{\mathrm r}\Delta\tau=1\), equivalently
+\(p=s=e^{-1}\).
+\end{corollary}
+
+\begin{proposition}[Hidden-label exchange non-identifiability]\label{prop:hidden_label_exchange_nonidentifiability}
+No statistic of one visible D-MAP record can distinguish the two separated
+ordered points \((\Gamma,\kappa_{\mathrm r})\) and
+\((\kappa_{\mathrm r},\Gamma)\) without external labelling information.
+\Cref{conv:branch-map-labelled-rates-main} records the resulting reporting

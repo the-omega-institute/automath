@@ -1,0 +1,700 @@
+-\PP(G_N^c)-\PP(\mathcal E_N^c),
+\]
+the displayed inequality follows, in fact without the harmless \(o(1)\) term
+except for any asymptotically negligible convention used to make the finite
+Monte Carlo rule measurable on nonreporting records.  The final \(\liminf\)
+claim follows from \(\PP(G_N^c)\to0\), \(\PP(\mathcal E_N^c)\to0\),
+\(\delta_N^{\rm MC}\to0\), and the assumed ideal coverage limit.
+\end{proof}
+
+\begin{corollary}[DKW simulation domination on the auxiliary product space]\label{cor:dkw-product-space-diagonal-main}
+Fix the certified exchange-diagonal candidate \(z_0\) and condition on the
+retained record.  Let \(P_N\) denote the record law and let \(P_N^\ast\) denote
+the conditional law of the projected-Gaussian simulation used to approximate
+the conditional law of \(T_N^\ast(z_0)\).  Draw \(N\) auxiliary values
+\(T^\ast_1,\ldots,T^\ast_N\) from this conditional law and sort them
+increasingly.  Define
+\[
+\epsilon_N^{MC}=\sqrt{\frac{\log(2N^2)}{2N}}, \qquad
+c_{N,DKW}=T^\ast_{(\lceil(1-\alpha+\epsilon_N^{MC})N\rceil)} .
+\]
+When \(\epsilon_N^{MC}<\alpha\),
+\[
+P_N^\ast\{c_{N,DKW}\ge c^-_{1-\alpha,N}\}\ge1-N^{-2},
+\]
+where \(c^-_{1-\alpha,N}\) is the ideal lower conditional
+\((1-\alpha)\)-quantile for the same retained projected-Gaussian branch.
+Therefore, with
+\[
+A_N^{aux}:=\{Q_N\le c^-_{1-\alpha,N}\},
+\]
+the product-space record-and-simulation statement is
+\[
+(P_N\otimes P_N^\ast)\{E_N\cap[Q_N\le c_{N,DKW}]\}
+\ge
+P_N(A_N^{aux})-P_N(E_N^c)-N^{-2}-o(1).
+\]
+This is only a domination statement for the auxiliary simulated critical
+value.  It is not a bootstrap from the observed record and is not finite-sample
+record coverage; record coverage enters only through the separate fixed-null
+asymptotic theorem for \(A_N^{aux}\) and the retained reporting gate \(E_N\).
+\end{corollary}
+
+\begin{proof}
+The first display is \Cref{lem:conditional-monte-carlo-quantile-main} with
+\(R=N\), \(\delta=N^{-2}\), and
+\(\epsilon_N^{MC}=\sqrt{\log(2N^2)/(2N)}\).  On the auxiliary domination event
+\(\{c_{N,DKW}\ge c^-_{1-\alpha,N}\}\), the ideal event
+\(A_N^{aux}\) implies \(\{Q_N\le c_{N,DKW}\}\).  Therefore
+\[
+1_{E_N}1_{A_N^{aux}}1_{\{c_{N,DKW}\ge c^-_{1-\alpha,N}\}}
+\le
+1_{E_N}1_{\{Q_N\le c_{N,DKW}\}} .
+\]
+Taking first \(P_N^\ast\)-expectation conditional on the record and then
+\(P_N\)-expectation gives
+\[
+(P_N\otimes P_N^\ast)\{E_N\cap[Q_N\le c_{N,DKW}]\}
+\ge
+P_N(E_N\cap A_N^{aux})-N^{-2}-o(1),
+\]
+where the harmless \(o(1)\) allows the usual measurable completion on records
+where the finite reporting protocol withholds the simulation transcript.
+Finally
+\[
+P_N(E_N\cap A_N^{aux})\ge P_N(A_N^{aux})-P_N(E_N^c),
+\]
+which proves the displayed inequality.
+\end{proof}
+
+\iffalse % Removed under response B2: obsolete diagonal confidence machinery.
+\begin{lemma}[Deterministic full-rank projected-Gaussian quantile]\label{lem:deterministic-full-rank-projected-gaussian-quantile-main}
+Fix \(0<z<1\), let
+\[
+H_z=\{u\in\mathbb R^2:u_2\le zu_1\},\qquad
+n_z=(-z,1)^\top,
+\]
+and let \(Z\sim\mathcal N(0,\Sigma)\), where \(\Sigma\) is a positive
+definite \(2\times2\) matrix.  For \(c\in\mathbb R\), define
+\[
+F_{z,\Sigma}(c)=
+\PP\{Z\in H_z,\ Z^\top\Sigma^{-1}Z\le c\}
++\PP\{Z\notin H_z,\ 
+(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z)\le c\}.
+\]
+Equivalently, with Gaussian density \(\varphi_\Sigma\) and with
+\[
+\Pi_{H_z}u=
+\begin{cases}
+u,&n_z^\top u\le0,\\[0.2em]
+u-\dfrac{n_z^\top u}{\|n_z\|^2}n_z,&n_z^\top u>0,
+\end{cases}
+\]
+the same function is the deterministic integral
+\[
+F_{z,\Sigma}(c)
+=\int_{H_z}
+\mathbf1_{\{u^\top\Sigma^{-1}u\le c\}}\varphi_\Sigma(u)\,du
++\int_{H_z^c}
+\mathbf1_{\{(\Pi_{H_z}u)^\top\Sigma^{-1}(\Pi_{H_z}u)\le c\}}
+\varphi_\Sigma(u)\,du .
+\]
+It is the distribution function of
+\[
+T_{z,\Sigma}=(\Pi_{H_z}Z)^\top\Sigma^{-1}(\Pi_{H_z}Z).
+\]
+Hence \(F_{z,\Sigma}(c)=0\) for \(c<0\), \(F_{z,\Sigma}\) is nondecreasing
+and right-continuous, and \(\lim_{c\to\infty}F_{z,\Sigma}(c)=1\).  For
+\(0<q<1\), the deterministic lower projected-Gaussian quantile is
+\[
+c_q(z,\Sigma):=\inf\{c\ge0:F_{z,\Sigma}(c)\ge q\}.
+\]
+This number is finite and satisfies
+\[
+\PP\{T_{z,\Sigma}\le c_q(z,\Sigma)\}\ge q,\qquad
+\PP\{T_{z,\Sigma}<c_q(z,\Sigma)\}\le q.
+\]
+Moreover \(F_{z,\Sigma}\) has no atoms; in particular
+\(\PP\{T_{z,\Sigma}=c_q(z,\Sigma)\}=0\) and
+\(\PP\{T_{z,\Sigma}\le c_q(z,\Sigma)\}=q\).  It is also strictly
+increasing on \([0,\infty)\): if \(0\le a<b\), then
+\(F_{z,\Sigma}(b)>F_{z,\Sigma}(a)\).
+\end{lemma}
+
+\begin{proof}
+The displayed projection formula is the Euclidean projection onto the closed
+half-space \(H_z\), so the two integrals partition the sample space into the
+inside and outside events and give exactly the distribution function of
+\(T_{z,\Sigma}\).  Distribution functions are nondecreasing and
+right-continuous.  Since the quadratic form is nonnegative and finite almost
+surely, \(F_{z,\Sigma}(c)=0\) for \(c<0\) and
+\(\lim_{c\to\infty}F_{z,\Sigma}(c)=1\), which makes the displayed lower
+quantile finite for every \(0<q<1\).  The two lower-quantile inequalities are
+the standard consequences of the definition of
+\(\inf\{c:F_{z,\Sigma}(c)\ge q\}\) and right-continuity.
+
+It remains only to record why no atom is hidden in the projection.  On \(H_z\),
+the statistic is the nonzero quadratic polynomial \(u^\top\Sigma^{-1}u\).  On
+\(H_z^c\), the projection is the linear map
+\[
+L_z u=u-\frac{n_z^\top u}{\|n_z\|^2}n_z
+\]
+and the statistic is the nonzero quadratic polynomial
+\(u^\top L_z^\top\Sigma^{-1}L_z u\).  For each fixed \(c\), the corresponding
+level set in either half-plane has two-dimensional Lebesgue measure zero:
+for \(c>0\) it is contained in a conic section, and for \(c=0\) it is a line
+or the origin.  The full-rank Gaussian law has a Lebesgue density, so
+\(\PP\{T_{z,\Sigma}=c\}=0\) for every \(c\).  Therefore the lower quantile is
+an exact \(q\)-quantile.  To see strict increase, fix \(0\le a<b\).  The
+half-space \(H_z\) has nonempty interior, and the open set
+\[
+\{u\in\operatorname{int}H_z:a<u^\top\Sigma^{-1}u<b\}
+\]
+is nonempty.  On this set \(T_{z,\Sigma}=u^\top\Sigma^{-1}u\), and the
+full-rank Gaussian density is strictly positive.  Hence
+\(\PP\{a<T_{z,\Sigma}<b\}>0\), which proves the claimed strict increase.
+\end{proof}
+
+\ifdefined\SUPPLEMENTARYFULLPROTOCOLS
+\begin{algorithmiclemma}[Transcript certificate for a finite diagonal comparison]\label{thm:certified-diagonal-inference-main}\label{prop:projected-gaussian-certificate-interface-main}
+Fix \(0<\alpha<1\), put \(q_\alpha=1-\alpha\), and fix a reported exchange-diagonal
+candidate \(z_\star\in(0,1)\).  A theorem-level finite diagonal comparison
+certificate for this candidate is the single finite tuple
+\[
+\mathcal C(z_\star,\alpha,N)
+=\bigl([z],[\theta],[\Sigma_\sigma],[I_\tau],
+[I_{\det}],[w],[L,U],[Q]\bigr),
+\]
+together with the branch-specific auxiliary interval \([q]\) or
+\([a_{\rm rn}]\) only in the rank-one non-normal case.  The tuple is mandatory:
+without the branch entries, the critical-value bracket, and the statistic
+enclosure in the same displayed transcript, the article has only an
+asymptotic theorem or a diagnostic calculation, not a finite transcript
+validating a realized accept/reject/undecided output.  The tuple entries have
+the following meanings:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.4em,itemsep=0.25em]
+\item a point or interval input enclosure \([z]\Subset(0,1)\) with
+\(z_\star\in[z]\), and an outward-rounded enclosure \([\theta]\) of
+\(\theta=-\log z_\star\);
+\item outward-rounded interval enclosures for the entries of the finite
+D-MAP covariance
+\[
+\Sigma_\sigma(z_\star)
+=D\Phi(\Rinc(z_\star))\Sigma_r(z_\star)D\Phi(\Rinc(z_\star))^\top
+\]
+from \eqref{eq:dmap-diagonal-sigma-finite-main};
+\item the branch intervals
+\[
+[I_\tau]\supset\operatorname{tr}\Sigma_\sigma(z_\star),\qquad
+[I_{\det}]\supset\det\Sigma_\sigma(z_\star),\qquad
+[w]\supset\Sigma_\sigma(z_\star)(1,z_\star)^\top,
+\]
+and, when needed for the rank-one non-normal branch, the scale enclosure
+\([a_{\rm rn}]\) of
+\eqref{eq:diagonal-rank-one-nonnormal-scale-certificate-main};
+\item an explicit rank margin \(\eta>0\) proving exactly one of the branch
+alternatives in \Cref{def:dmap-diagonal-rank-certificate-main};
+\item an outward-rounded statistic enclosure \([Q]=[[Q]^-,[Q]^+]\) with
+\(Q(z_\star)\in[Q]\);
+\item a certified critical-value bracket \([L,U]\), \(L<U\), for the same
+branch and the same candidate, obtained either from the certified ideal-CDF
+route or from a one-sided DKW simulation route.
+\end{enumerate}
+Thus all branch, quantile, and statistic comparisons are made by the single
+object \(\mathcal C(z_\star,\alpha,N)\); algorithms may produce its entries,
+but no algorithmic intermediate is itself a theorem-level certificate unless
+it appears in this tuple or in the stated rank-one non-normal addendum.  In
+particular, a printed population branch certificate without \([L,U]\) and
+\([Q]\) does not license a finite comparison for a realized record.  The branch
+item is passed only by one of the four mutually exclusive tests:
+\[
+[I_{\det}]\subset[\eta,\infty)\quad\text{(full rank),}
+\]
+\[
+[I_{\det}]=[0,0],\quad [I_\tau]\subset[\eta,\infty),\quad
+[w]=\{0\}
+\quad\text{(rank one, normal range),}
+\]
+\[
+[I_{\det}]=[0,0],\quad [I_\tau]\subset[\eta,\infty),\quad
+[q]\subset[\eta,\infty),\quad [a_{\rm rn}]\Subset(0,1]
+\quad\text{(rank one, non-normal range),}
+\]
+or exact entrywise \(\Sigma_\sigma(z_\star)=0\) for the zero-covariance
+branch.  If none of these finite tests is certified, the transcript status is
+\[
+\text{\rm undecided: branch not certified}.
+\]
+
+For an ideal-CDF transcript, let \(F_{z_\star,\Sigma}\) denote the
+projected-Gaussian CDF for the certified branch covariance \(\Sigma\), using
+the full-rank formula of
+\Cref{lem:deterministic-full-rank-projected-gaussian-quantile-main}, the
+rank-one non-normal formula
+\eqref{eq:rank-one-nonnormal-cdf-main}, the rank-one normal mixture in
+\Cref{thm:projected-gaussian-continuity-degeneracy-main}, or the
+zero-covariance degenerate law as appropriate.  The critical-value transcript
+must contain outward-rounded CDF enclosures satisfying
+\[
+F^-(c)\le F_{z_\star,\Sigma}(c)\le F^+(c)
+\]
+at its displayed rational endpoints and
+\begin{equation}\label{eq:certified-diagonal-critical-bracket-main}
+F^+(L)<q_\alpha\le F^-(U).
+\end{equation}
+In the full-rank submitted branch this means explicitly that the same tuple
+\(\mathcal C(z_\star,\alpha,N)\) proves
+\[
+[I_{\det}]\subset[\eta,\infty),
+\qquad
+F_N^+(L)<q_\alpha\le F_N^-(U),
+\qquad
+Q(z_\star)\in[Q],
+\]
+where \(F_N^\pm\) are the displayed outward-rounded CDF enclosures for the
+retained full-rank projected-Gaussian law.  The finite comparison is then
+performed only against the retained bracket endpoints \(L,U\), not against an
+unbracketed floating-point quantile.
+Then the exact lower projected-Gaussian critical value
+\[
+c_{q_\alpha}(z_\star,\Sigma):=\inf\{c:F_{z_\star,\Sigma}(c)\ge q_\alpha\}
+\]
+satisfies
+\[
+L<c_{q_\alpha}(z_\star,\Sigma)\le U.
+\]
+Consequently the finite theorem-level transcript validates exactly the
+following comparison:
+\[
+[Q]^+\le L
+\quad\Longrightarrow\quad
+\text{\rm transcript-valid accept of } Q(z_\star)\le c_{q_\alpha}(z_\star,\Sigma),
+\]
+\[
+[Q]^->U
+\quad\Longrightarrow\quad
+\text{\rm transcript-valid reject of } Q(z_\star)\le c_{q_\alpha}(z_\star,\Sigma),
+\]
+and in every remaining case
+\[
+\text{\rm transcript-valid undecided: } Q(z_\star)-c_{q_\alpha}(z_\star,\Sigma)
+\in [[Q]^--U,\,[Q]^+-L].
+\]
+A midpoint \(m\in(L,U)\) for which \(F^-(m)<q_\alpha\le F^+(m)\) is therefore only
+an undecided midpoint inside a retained critical-value bracket; it is not an
+equality certificate and not an accept/reject decision.  This transcript
+validation theorem is separate from the fixed-null probability theorem
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}: Theorem~E supplies an
+asymptotic ideal conditional critical value, while
+\(\mathcal C(z_\star,\alpha,N)\) is the additional finite record-specific
+evidence needed before any realized comparison can be printed.
+
+For a DKW simulation transcript, the supplied critical value \(\widehat c\)
+must satisfy the displayed one-sided auxiliary domination statement
+\[
+\PP^\ast\{\widehat c\ge c^{-}_{q_\alpha,N}(z_\star)\}\ge1-\delta_N,
+\]
+where \(c^{-}_{q_\alpha,N}(z_\star)\) is the ideal lower conditional
+projected-Gaussian quantile for the same retained branch.  Conditional on that
+auxiliary domination event, the exact finite transcript implication is
+\[
+[Q]^+\le\widehat c\Rightarrow\text{\rm transcript-valid DKW accept},\qquad
+[Q]^->\widehat c\Rightarrow\text{\rm transcript-valid DKW reject},
+\]
+and otherwise \(\text{\rm undecided}\).  The probability attached to this
+route is only the stated auxiliary \(P_N^\ast\) domination probability; record
+coverage is obtained only by combining that product-space auxiliary statement
+with the fixed-null asymptotic event of
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}.
+
+If the candidate is not pre-specified, if \(z_\star\notin[z]\), if any branch
+interval or rank margin is absent, if the critical-value bracket is for a
+different candidate or branch, or if \([Q]\) is missing, the transcript status
+is only
+\[
+\text{\rm undecided: no certified finite diagonal inference}.
+\]
+In the submitted manuscript the only attached paper-level branch certificate
+is the singleton certificate \(z_\star=1/2\) in
+\Cref{lem:z-half-diagonal-branch-certificate-main}; all other diagonal
+candidate displays are diagnostics unless they attach their own finite
+certificate data satisfying this theorem.  In particular, the singleton
+branch transcript in
+\Cref{app:self-contained-diagonal-branch-certificate-main} is not this tuple:
+it has \([z]\), \([\theta]\), \([\Sigma_\sigma]\), \([I_\tau]\),
+\([I_{\det}]\), and \([w]\), but deliberately has no record-specific
+\([L,U]\) and no realized statistic enclosure \([Q]\).
+\end{algorithmiclemma}
+
+\begin{proof}
+The branch portion is exactly the finite rank/range classification certified
+by \Cref{def:dmap-diagonal-rank-certificate-main} and justified by
+\Cref{lem:diagonal-interval-branch-certificate-main,lem:dmap-diagonal-covariance-alternatives-main}.
+The interval enclosures contain the actual covariance and branch quantities,
+and the margin \(\eta\) or exact zero identities select one population branch.
+Without such a branch, the projected-Gaussian law used by the critical-value
+calculation is not certified, so no accept/reject implication is licensed.
+
+Assume first that the ideal-CDF transcript is attached.  From
+\eqref{eq:certified-diagonal-critical-bracket-main},
+\[
+F_{z_\star,\Sigma}(L)\le F^+(L)<q_\alpha
+\le F^-(U)\le F_{z_\star,\Sigma}(U).
+\]
+By the definition of the lower quantile this implies
+\[
+L<c_{q_\alpha}(z_\star,\Sigma)\le U.
+\]
+Since \(Q(z_\star)\in[Q]\), the implication
+\([Q]^+\le L\) gives \(Q(z_\star)<c_{q_\alpha}(z_\star,\Sigma)\), and the implication
+\([Q]^->U\) gives \(Q(z_\star)>c_{q_\alpha}(z_\star,\Sigma)\).  If neither separation
+holds, the certified information only bounds the difference by
+\([[Q]^--U,[Q]^+-L]\), which may contain zero; hence the only rigorous finite
+transcript output is undecided.  The certified CDF and quantile bracketing routines used
+to produce such endpoint inequalities are
+\Cref{thm:certified-projected-gaussian-quantile-algorithm-main,lem:certified-deterministic-projected-gaussian-quantile-main,lem:certified-rank-one-nonnormal-projected-gaussian-quantile-main};
+the rank-one normal and zero-covariance cases use the explicit laws stated in
+\Cref{thm:projected-gaussian-continuity-degeneracy-main}.
+
+For the simulated route, the displayed DKW statement is a one-sided
+certificate that the simulated critical value dominates the ideal conditional
+critical value on an auxiliary event of probability at least
+\(1-\delta_N\).  On that auxiliary event, the same interval comparison of
+\([Q]\) with the supplied critical value proves the stated transcript-valid
+accept, reject, or undecided implication.  The domination probability is conditional on the
+auxiliary Gaussian simulation, so its record-level interpretation is exactly
+the product-space statement proved in
+\Cref{lem:conditional-monte-carlo-quantile-main}, combined separately with
+\Cref{thm:e-fixed-candidate-exchange-diagonal-main}; it is not a finite-sample
+coverage claim for the retained record alone.
+\end{proof}
+\else
+\begin{remark}[Supplementary finite-comparison certificate interface]\label{thm:certified-diagonal-inference-main}\label{prop:projected-gaussian-certificate-interface-main}
+The finite tuple that would be needed for a realized diagonal
+accept/reject/undecided comparison is supplementary implementation material,
+not part of the delivered main theorem chain.  The main article uses only the
+population branch certificate at \(z_0=1/2\) and the ideal fixed-null
+asymptotics of Theorem~E.  It prints no record-specific critical-value bracket
+\([L,U]\), no statistic enclosure \([Q]\), and no complete finite comparison
+tuple.
+\end{remark}
+\fi
+
+\fi
+\begin{lemma}[Projected-Gaussian continuity and rank degeneracy]\label{thm:projected-gaussian-continuity-degeneracy-main}
+Fix \(0<z<1\), put
+\[
+n_z=(-z,1)^\top,\qquad H_z=\{h:n_z^\top h\le0\},
+\]
+and let
+\[
+T_z=(\Pi_{H_z}Z)^\top\Sigma^+\Pi_{H_z}Z,
+\qquad Z\sim\mathcal N(0,\Sigma),
+\]
+where \(\Sigma\) is a nonnegative definite \(2\times2\) matrix.  Then the
+distribution of \(T_z\) is continuous in the following cases:
+\[
+\operatorname{rank}\Sigma=2,
+\qquad\text{or}\qquad
+\operatorname{rank}\Sigma=1
+\text{ and }
+\operatorname{Range}\Sigma\ne \operatorname{span}\{n_z\}.
+\]
+If \(\operatorname{rank}\Sigma=1\) and
+\(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), then
+\[
+\PP(T_z=0)=\frac12
+\]
+and \(T_z\) has no atom on \((0,\infty)\).  More precisely,
+\[
+T_z\sim \frac12\delta_0+\frac12\chi^2_1 .
+\]
+Equivalently,
+\[
+\PP(T_z=0)=\frac12,\qquad
+\PP(T_z\le t)=\frac12+\frac12F_{\chi^2_1}(t),\quad t>0.
+\]
+Consequently, for a lower quantile level \(0<p_c<1\), the lower
+\(p_c\)-quantile is
+\[
+c_{p_c}=0\quad\text{if }p_c\le\frac12,\qquad
+c_{p_c}=F_{\chi^2_1}^{-1}(2p_c-1)\quad\text{if }p_c>\frac12,
+\]
+and the positive-quantile case is a continuity point of the law of \(T_z\).  If
+\(\Sigma=0\), then
+\(T_z=0\) almost surely.  Consequently the continuity condition in
+\Cref{lem:projected-gaussian-bootstrap-halfspace-main} is automatic except
+for the zero covariance case and for the rank-one case in which the retained
+Gaussian direction is normal to the exchange-diagonal tangent half-space; in
+that rank-one normal case the only discontinuity is the atom at zero.
+\end{lemma}
+
+\begin{proof}
+If \(\Sigma=0\), the assertion is immediate.  Suppose first that
+\(\operatorname{rank}\Sigma=2\).  The Gaussian law has a Lebesgue density on
+\(\RR^2\).  On \(H_z\), the statistic is the nonzero quadratic form
+\(u^\top\Sigma^+u\).  On \(H_z^c\), the projection is the linear map
+\[
+L_z u=u-\frac{n_z^\top u}{\|n_z\|^2}n_z
+\]
+onto the boundary line \(n_z^\top h=0\), and the statistic is the quadratic
+form \(u^\top L_z^\top\Sigma^+L_z u\), not identically zero on that half-plane.
+For each fixed \(c\), the level set of either nonzero quadratic polynomial has
+Lebesgue measure zero.  Hence \(\PP(T_z=c)=0\) for every \(c\).
+
+Now let \(\operatorname{rank}\Sigma=1\).  Write
+\(\Sigma=\lambda vv^\top\), where \(\lambda>0\) and \(\|v\|=1\).  Then
+\(Z=\xi v\), with \(\xi\sim\mathcal N(0,\lambda)\), and
+\[
+\Sigma^+=\lambda^{-1}vv^\top .
+\]
+If \(n_z^\top v=0\), the line
+\(\operatorname{span}\{v\}\) lies in the boundary of \(H_z\), so
+\(T_z=\xi^2/\lambda\), which has a continuous \(\chi^2_1\) law.  If
+\(n_z^\top v\ne0\), one half-line is already in \(H_z\), where again
+\(T_z=\xi^2/\lambda\).  On the other half-line,
+\[
+\Pi_{H_z}(\xi v)=
+\xi\left(v-\frac{n_z^\top v}{\|n_z\|^2}n_z\right).
+\]
+The corresponding coefficient in the seminorm \(\Sigma^+\) is
+\[
+\lambda^{-1}
+\left\{v^\top\left(v-\frac{n_z^\top v}{\|n_z\|^2}n_z\right)\right\}^2 .
+\]
+This coefficient is positive unless \(v\) is parallel to \(n_z\).  Therefore,
+when \(\operatorname{Range}\Sigma\ne\operatorname{span}\{n_z\}\), \(T_z\) is
+a two-sided mixture of positive multiples of \(\xi^2\) and has no atoms.  When
+  \(\operatorname{Range}\Sigma=\operatorname{span}\{n_z\}\), the outside
+  half-line projects to the origin and contributes mass \(1/2\) at zero, while
+  the inside half-line gives \(T_z=\xi^2/\lambda\).  Conditional on this
+  half-line, \(\xi^2/\lambda\) has the \(\chi^2_1\) law.  Hence the distribution
+  is \(\frac12\delta_0+\frac12\chi^2_1\), and the stated lower-quantile split
+  follows immediately from its distribution function
+  \(F(t)=1/2+\PP\{\chi^2_1\le t\}/2\) for \(t>0\).  This proves the rank-one
+  alternatives.
+\end{proof}
+
+\begin{proposition}[Computable diagonal covariance]\label{prop:computable-diagonal-covariance-main}
+Work at a fixed constrained D-MAP exchange-diagonal population point
+\(\sigma_z=(2z,z^2)\), \(0<z<1\), equivalently \(p=s=z\).  Put
+\[
+\theta=-\log z.
+\]
+Then the diagonal Palm gap law is
+\begin{equation}\label{eq:diagonal-gap-mass-computable-main}
+g_k=\PP(G=k)
+=z^k\{(1-z)(1+\theta k)-\theta z\},\qquad k\ge0 .
+\end{equation}
+In particular
+\[
+g_0=(1-z)-\theta z,\qquad
+g_1=z\{(1-z)(1+\theta)-\theta z\}.
+\]
+Define
+\[
+\mu=\frac1{1-z}+\frac{\theta z}{(1-z)^2},
+\qquad
+\nu=\frac{1+z}{(1-z)^2}
+     +\frac{\theta z(3+z)}{(1-z)^3},
+\qquad
+m_2=g_1+g_0^2 .
+\]
+Then the three inclusion coordinates at this diagonal point are
+\[
+\Rinc(z)=\frac1\mu(1,g_0,m_2)^\top ,
+\]
+and the quotient denominator is
+\[
+\Delta_{\mathrm{inv}}(z)=r_1(z)-r_0(z)^2
+=-\frac{\theta^2z^2(1-z)^2}{(1-z+\theta z)^2}<0 .
+\]
+For the cycle reward variables
+\begin{equation}\label{eq:diagonal-cycle-reward-y-main}
+U_j=\left(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\right)^\top,
+\qquad
+L_j=G_j+1,\qquad
+Y_j=U_j-\Rinc(z)L_j ,
+\end{equation}
+the \(Y_j\) sequence is one-dependent, centered, and has covariance
+\begin{equation}\label{eq:diagonal-sigma-r-y-main}
+\Sigma_r(z)=\frac1{\mu(z)}
+\left[\operatorname{Var}(Y_0)+\operatorname{Cov}(Y_0,Y_1)
++\operatorname{Cov}(Y_1,Y_0)\right].
+\end{equation}
+Every entry in \eqref{eq:diagonal-sigma-r-y-main} is an absolutely convergent
+finite or double sum under the explicit masses \eqref{eq:diagonal-gap-mass-computable-main};
+indeed the indicators in \(U_j\) restrict the nontrivial terms to
+\(G_j\in\{0,1\}\), while the factors containing \(L_j\) are sums of
+polynomials in \(k\) against \(g_k=O(kz^k)\).
+Let
+\[
+A_z=
+\begin{pmatrix}
+1&g_0&m_2\\
+g_0&g_0&g_0^2\\
+m_2&g_0^2&m_2
+\end{pmatrix},
+\quad
+e_z=
+\begin{pmatrix}
+\mu\\ g_0\\ 2g_1+g_0^2
+\end{pmatrix},
+\quad
+d_z=
+\begin{pmatrix}
+\mu\\ \mu g_0\\ \mu g_1+g_0^2
+\end{pmatrix},
+\]
+and
+\[
+B_z=
+\begin{pmatrix}
+1&g_0&m_2\\
+g_0&g_0^2&g_0m_2\\
+m_2&g_0(g_1+g_0)&g_1^2+g_1g_0^2+g_0^3
+\end{pmatrix}.
+\]
+With \(R=\Rinc(z)\), the complete-cycle inclusion covariance on the exchange
+diagonal is the finite expression
+\begin{equation}\label{eq:dmap-diagonal-sigma-r-finite-main}
+\Sigma_r(z)=\frac1\mu\left\{
+A_z-e_zR^\top-Re_z^\top+\nu RR^\top
++B_z-d_zR^\top+B_z^\top-Rd_z^\top
+\right\}.
+\end{equation}
+Consequently the actual diagonal covariance used by the projected-Gaussian
+statistic is the reproducible \(2\times2\) matrix
+\begin{equation}\label{eq:dmap-diagonal-sigma-finite-main}
+\Sigma_\sigma(z)=D\Phi(\Rinc(z))\,\Sigma_r(z)\,D\Phi(\Rinc(z))^\top
+\end{equation}
+where \(D\Phi\) is the explicit Jacobian in
+\eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main}, evaluated at
+the displayed \(\Rinc(z)\).  No infinite covariance-tail truncation or simulation
+input is hidden in \eqref{eq:dmap-diagonal-sigma-finite-main}: for a fixed
+\(z\), all entries are obtained by ordinary arithmetic from
+\((z,\theta,g_0,g_1)\), equivalently from the absolutely convergent
+finite/double sums in \eqref{eq:diagonal-sigma-r-y-main}.
+\end{proposition}
+
+\begin{proof}
+On the equal-rate diagonal the gap law is the one in
+\eqref{eq:equal-rate-dictionary-main}, which gives
+\eqref{eq:diagonal-gap-mass-computable-main}.  Hence
+\[
+\EE(G+1)=\sum_{k\ge0}\PP(G\ge k)=\mu,\qquad
+\EE(G+1)^2=\sum_{k\ge0}(2k+1)\PP(G\ge k)=\nu ,
+\]
+which gives the displayed closed forms by summing the two elementary geometric
+series and their first two derivatives.
+
+For the inclusion-cycle reward in
+\Cref{lem:three-inclusion-clt-reduction-main},
+\[
+U_j=\left(1,\mathbf1_{\{G_j=0\}},
+\mathbf1_{\{G_j=1\}}+\mathbf1_{\{G_j=0,G_{j+1}=0\}}\right)^\top .
+\]
+Since the gaps are i.i.d., \(\EE U_j=(1,g_0,g_1+g_0^2)^\top\), proving
+\(\Rinc(z)=\EE U_j/\mu\).  The quotient denominator formula follows by direct
+substitution and simplification; it is strictly negative because
+\(0<z<1\) and \(\theta>0\).
+
+The matrix \(A_z\) is \(\EE(U_0U_0^\top)\), \(e_z=\EE((G_0+1)U_0)\), and
+\(B_z=\EE(U_0U_1^\top)\).  The vector \(d_z=\EE(U_0(G_1+1))\); the only
+non-factorized entry is the third component, where
+\[
+\EE\{(\mathbf1_{\{G_0=1\}}+\mathbf1_{\{G_0=0,G_1=0\}})(G_1+1)\}
+=\mu g_1+g_0^2 .
+\]
+Writing \(Y_j=U_j-\Rinc(z)(G_j+1)\), the reward sequence is one-dependent and
+\[
+\Sigma_r(z)
+=\frac1\mu\{\EE(Y_0Y_0^\top)+\EE(Y_0Y_1^\top)+\EE(Y_1Y_0^\top)\}.
+\]
+Expanding the three expectations gives exactly
+\eqref{eq:dmap-diagonal-sigma-r-finite-main}.  The last display is then the
+delta-method sandwich for the symmetric quotient coordinates
+\(\Phi(\Rinc(z))=(p+s,ps)\), whose Jacobian was computed in
+\eqref{eq:lambda-gradient-main}--\eqref{eq:phi-jacobian-main}.
+\end{proof}
+
+The main theorem uses
+\Cref{lem:dmap-diagonal-covariance-alternatives-main} only through the printed
+branch certificate in
+\Cref{app:self-contained-diagonal-branch-certificate-main}.  The complete
+interval transcript and the outward-rounded verifier are deliberately outside
+the mathematical flow of this section; see
+\Cref{def:dmap-diagonal-rank-certificate-main,lem:diagonal-interval-branch-certificate-main,rem:worked-diagonal-branch-certificate-main}.
+
+\paragraph{Model verification.}
+We now specialize the generic renewal tools to the standing record experiment
+of \Cref{ass:fixed-sampled-boundary-record-main}.  The exponential-tail lemma
+verifies the renewal hypothesis for this model.  Theorem~C then states the
+exact finite-record statistic for the three inclusion coordinates and applies
+the generic complete-cycle CLT to that statistic.
+
+\begin{lemma}[Killed-leakage gap exponential moment]\label{lem:killed-leakage-gap-exponential-moment-main}
+Under \Cref{ass:fixed-sampled-boundary-record-main}, set
+\[
+r=\max\{p,s\}<1 .
+\]
+If \(p\ne s\), then there is a finite constant \(C\), depending only on the
+fixed constrained D-MAP setting, such that
+\[
+g_k\le Cr^k\qquad(k\ge0).
+\]
+If \(p=s=r\), then there is a finite constant \(C\), depending only on the
+fixed constrained D-MAP setting, such that
+\[
+g_k\le C(1+k)r^k\qquad(k\ge0).
+\]
+Equivalently, in all cases, for every \(\bar r\in(r,1)\) there is a finite
+constant \(C_{\bar r}\) such that
+\[
+g_k\le C_{\bar r}\bar r^k\qquad(k\ge0).
+\]
+Consequently, for every
+\[
+0<\eta<-\log r,
+\]
+the gap and cycle length satisfy
+\[
+\EE e^{\eta G}<\infty,\qquad
+\EE e^{\eta (G+1)}<\infty .
+\]
+Thus the regenerative exponential-moment hypothesis used below is a verified
+consequence of the killed-leakage model, not an additional assumption.
+\end{lemma}
+
+\begin{proof}
+When \(p\ne s\), the displayed unequal-rate formula
+\eqref{eq:gap-closed-main} gives
+\[
+|g_k|
+\le
+\left|\frac{\kappa_{\mathrm r}(1-p)}{\kappa_{\mathrm r}-\Gamma}\right|p^k
++
+\left|\frac{\Gamma(1-s)}{\kappa_{\mathrm r}-\Gamma}\right|s^k
+\le C_1(p^k+s^k)
+\le 2C_1r^k .
+\]
+Since \(g_k\ge0\), this is the stated unequal-rate bound.
+
+On the equal-rate diagonal \(p=s=r=e^{-\Gamma\Delta\tau}\), write
+\(y=\Gamma\Delta\tau\).  The equal-rate dictionary
+\eqref{eq:equal-rate-dictionary-main} gives
+\[
+g_k=r^k\bigl((1-r)(1+yk)-yr\bigr).
+\]
+Hence \(|g_k|\le C_2(1+k)r^k\), proving the stated equal-rate bound.
+
+The slack-rate formulation follows from these two bounds.  In the unequal-rate
+case \(r^k\le\bar r^k\).  In the equal-rate case, with
+\(q=r/\bar r<1\),
+\[
+(1+k)r^k=(1+k)q^k\bar r^k
+\le \left(\sup_{m\ge0}(1+m)q^m\right)\bar r^k,
+\]
+and the supremum is finite.  Absorbing the displayed finite factors into
+\(C_{\bar r}\) gives the claimed envelope.
