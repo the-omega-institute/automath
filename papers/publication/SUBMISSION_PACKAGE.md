@@ -47,9 +47,17 @@ A9 的外审把这条代价说透了。审稿人写道：
 - [ ] `supplement.pdf` 是否为**清空 `.aux` 后从零重建**的产物？（增量编译会靠陈旧辅助文件报假成功）
 - [ ] 正文对补充材料的**硬编码编号**是否与补充材料实际编号一致？`\suppref{Theorem~1.11}` 这类写法编号写错**不触发任何 LaTeX 告警**，须逐条按编号与类型核对
 - [ ] 验证脚本能否在干净环境跑通？输出是否已随包提交？
-- [ ] `SHA256SUMS` 是否为 **LF 换行**？CRLF 会让 `sha256sum -c` 在 Linux/macOS 上全条报错
-      （审稿人正是在那里跑），而在 Windows 上自检却"全部通过"。同时须在 `REPRODUCE.md`
-      注明该文件应在**论文根目录**下校验，因为其中路径相对根目录
+- [ ] **归档验证输出里有没有墙钟计时？**(`elapsed_seconds`、`runtime`、时间戳)
+      有就必须去掉：它让哈希按构造不可能稳定，审稿人**照我们的邀请重跑一次脚本**就会
+      看到校验失败。判据是把 verifier **连跑两次，归档输出须字节一致**
+- [ ] `SHA256SUMS` 是否为 **LF 换行**，且论文目录下有 `.gitattributes` 把
+      `artifacts/` 与 `scripts/` 钉为 `eol=lf`？本仓库 `core.autocrlf=true`，
+      工作区是 CRLF 而审稿人在 Linux 上拿到的是 LF，**两边哈希的字节不同**；
+      用 `git check-attr text eol -- <file>` 确认确实生效
+- [ ] 统一约定：清单路径**相对 `artifacts/`**，以 `cd artifacts && sha256sum -c SHA256SUMS`
+      校验，并在 `artifacts/REPRODUCE.md` 写明目录、命令与预期 OK 行数
+
+  参考实现：`2026_upper_fibers_witness_covers_fibonacci_apparition_fq`
 - [ ] 期刊是否允许补充材料？若不允许，须把被迁出的内容**移回正文**，而不是留下悬空指针
 
 ## 已压缩论文的现状

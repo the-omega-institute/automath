@@ -1,0 +1,74 @@
+Make the reproducibility manifests consistent and actually verifiable across the papers
+listed below. Do not ask for design approval, do not run any brainstorming or approval
+workflow, do not change any mathematics, theorem statement or proof, and do not edit any
+manuscript .tex file. This is a reproducibility-packaging task only. Proceed directly.
+
+REFERENCE IMPLEMENTATION (already done, copy it exactly):
+  papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+Study its .gitattributes, artifacts/SHA256SUMS and artifacts/REPRODUCE.md first, then
+reproduce the same setup in each paper below.
+
+WHY THIS MATTERS. A referee reran one of our verification scripts and the checksum failed,
+because the archived output embedded a wall-clock timing (elapsed_seconds), so its hash
+changed on every run. Separately, this repository has core.autocrlf=true, so the working
+tree holds CRLF while a referee on Linux or macOS hashes LF - the digests then match
+neither. A manifest that fails to verify is worse than no manifest: it advertises machine
+verification and then visibly breaks.
+
+PAPERS TO FIX (paths under papers/publication/):
+
+  2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa          - no manifest
+  2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds    - no manifest
+  2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams - no manifest
+  2026_detector_shells_click_record_kms_jphyscomm               - no manifest
+  2026_homological_visibility_gluing_obstructions_state_forcing_apal - no manifest
+  2026_prime_languages_finite_state_obstructions_monatshefte    - manifest exists, 8
+      entries, CRLF, paths relative to the PAPER ROOT
+  2026_finite_parts_dynamical_zeta_shifts_finite_type_etds      - manifest exists, 14
+      entries, LF, paths relative to the PAPER ROOT
+
+FOR EACH PAPER:
+
+ 1. DETERMINISM FIRST. Inspect every archived verification output (artifacts/*.txt and
+    similar) and every artifacts/verify*.py that writes one. Remove wall-clock timings -
+    elapsed_seconds, runtime, duration, timestamps, dates - from the text WRITTEN TO the
+    archived file. Timing may still print to stdout. Keep Python and library versions,
+    counts, ranges, and pass/fail information. Do not change any computation or any
+    numerical result.
+
+ 2. PROVE DETERMINISM. Run each verifier TWICE and confirm the archived outputs are
+    byte-identical between the two runs. Report the sha256 of each archived output from
+    both runs. If a file is still not reproducible, say so explicitly and name the cause;
+    do not paper over it.
+
+ 3. Add a project-local .gitattributes in the paper directory pinning the reproducibility
+    files to LF, following the reference paper. Confirm with
+       git check-attr text eol -- <one artifacts file>
+    that it reports "eol: lf", and report that output.
+
+ 4. Generate or regenerate artifacts/SHA256SUMS with LF line endings. ADOPT ONE
+    CONVENTION for every paper: paths relative to the artifacts/ directory, verified by
+       cd artifacts && sha256sum -c SHA256SUMS
+    For the two papers whose manifests currently use paper-root-relative paths, convert
+    them to this convention. Cover the verification scripts, the unit tests, the archived
+    outputs, the literature check, and the reproduction instructions.
+
+ 5. Ensure artifacts/REPRODUCE.md exists and documents: what to install, what commands to
+    run, expected output, and a checksum section giving the exact directory, the exact
+    command, and the expected number of OK lines.
+
+ 6. Verify end to end from a clean state and report, per paper, the exact count of OK
+    lines and of failures. The count must be zero failures.
+
+CONSTRAINTS:
+ - Do not modify any manuscript .tex file, theorem, proof, or number.
+ - Do not alter what any verifier computes; only what it writes into the archived text.
+ - No revision marks anywhere: never write "revised", "corrected", "in this version", or
+   refer to earlier drafts.
+ - If a paper has no verification scripts at all, say so and skip it rather than inventing
+   artifacts.
+
+FINAL REPORT, per paper: which timings you removed, the two-run byte-identity check with
+hashes, the git check-attr output, the manifest entry count and OK count, and whether
+REPRODUCE.md was created or updated. Be explicit about anything you could not make
+deterministic.
