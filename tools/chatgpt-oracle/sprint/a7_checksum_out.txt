@@ -1,0 +1,3451 @@
+OpenAI Codex v0.147.0
+--------
+workdir: D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+model: gpt-5.6-sol
+provider: chrono
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a00283-f057-7192-a5ce-143df9ea6e6b
+--------
+user
+One reproducibility defect to fix. Do not ask for design approval, do not run any
+brainstorming or approval workflow, do not change any mathematics, theorem statement or
+proof, and do not touch any .tex file except REPRODUCE.md-style documentation. Proceed
+directly.
+
+PROBLEM. artifacts/SHA256SUMS does not verify. Checked independently:
+
+  cd artifacts && sha256sum -c SHA256SUMS
+    -> 11 OK, 1 FAILED: finite_verification.txt
+
+The cause is that the archived verifier output embeds a wall-clock timing. Running
+artifacts/verify_finite_claims.py rewrites artifacts/finite_verification.txt, and the
+only difference between runs is a line of the form
+
+    elapsed_seconds = 3.607     ->     elapsed_seconds = 3.626
+
+so the file's SHA256 changes on every run and the manifest can NEVER be stable. A referee
+who reruns the script - exactly what we invite them to do - gets a failing checksum, which
+destroys the machine-verification credibility the manifest exists to establish.
+
+artifacts/deepening_delta_verification.txt has the same problem; check it too.
+
+REQUIRED:
+
+ 1. Make the archived verification outputs DETERMINISTIC. Remove wall-clock timing
+    (elapsed_seconds, runtime, or any similar measured duration) from the text that is
+    written to the archived .txt outputs. Timing may still be printed to stdout if useful,
+    but it must not enter the archived file that gets hashed. Do not remove any
+    mathematical content, counts, ranges, or pass/fail information. Keep the recorded
+    Python and SymPy versions - those are legitimately informative and stable for a given
+    environment.
+ 2. Re-run every artifacts/verify*.py so the archived outputs are regenerated in their new
+    deterministic form, then run each one a SECOND time and confirm byte-for-byte that the
+    archived outputs are identical across the two runs. Report that check explicitly.
+ 3. Regenerate artifacts/SHA256SUMS with UNIX (LF) line endings.
+ 4. Decide and document ONE convention, then follow it: the paths inside SHA256SUMS are
+    currently relative to the artifacts/ directory (they include entries such as
+    ../scripts/verify_squarefree_slice.py). Keep that, but state plainly in REPRODUCE.md
+    which directory the check must be run from, with the exact command, for example:
+
+        cd artifacts && sha256sum -c SHA256SUMS
+
+    REPRODUCE.md currently says nothing about the checksum file at all, so a referee
+    cannot know. Add a short section covering: which directory, the exact command, and the
+    expected number of OK lines.
+ 5. Verify the manifest end to end from a clean state and report the exact count of OK
+    lines and of failures.
+
+Note for context, not something to fix here: this repository has core.autocrlf=true, so
+text files are checked out with CRLF on Windows while a referee on Linux or macOS will
+have LF. Hashes computed over CRLF bytes will not match LF bytes. If you can make the
+manifest robust to that - for instance by hashing only files that are already binary-safe,
+or by documenting that the check must be run on a checkout with LF endings - do so and say
+which choice you made. Do not silently leave it ambiguous.
+
+Then:
+ - Confirm the paper still builds: clean rebuild with .aux removed, alternating article and
+   supplement passes, latexmk -pdfxe exit 0, zero undefined references, zero undefined
+   citations, zero multiply-defined labels for both documents.
+ - Re-run artifacts/test_*.py and report pass counts.
+ - No revision marks anywhere.
+ - Report: what you removed from the archived outputs, the byte-identical rerun check, the
+   final manifest verification counts, and the REPRODUCE.md wording you added.
+
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+codex
+I’m fixing this in place. I’ll first inspect the verifier/output relationships and repository instructions, then make the narrow determinism and documentation changes, regenerate and compare all verification artifacts twice, rebuild both documents, run artifact tests, and verify the final manifest counts. I’ll use the systematic-debugging, test-driven-development, and verification-before-completion procedures for the defect and evidence gathering; none requires a design approval step.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\test-driven-development\\SKILL.md'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\verification-before-completion\\SKILL.md'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\systematic-debugging\\SKILL.md'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\using-superpowers\\SKILL.md'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+ succeeded in 157ms:
+---
+name: test-driven-development
+description: Use when implementing any feature or bugfix, before writing implementation code
+---
+
+# Test-Driven Development (TDD)
+
+## Overview
+
+Write the test first. Watch it fail. Write minimal code to pass.
+
+**Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+
+**Violating the letter of the rules is violating the spirit of the rules.**
+
+## When to Use
+
+**Always:**
+- New features
+- Bug fixes
+- Refactoring
+- Behavior changes
+
+**Exceptions (ask your human partner):**
+- Throwaway prototypes
+- Generated code
+- Configuration files
+
+Thinking "skip TDD just this once"? Stop. That's rationalization.
+
+## The Iron Law
+
+```
+NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+```
+
+Write code before the test? Delete it. Start over.
+
+**No exceptions:**
+- Don't keep it as "reference"
+- Don't "adapt" it while writing tests
+- Don't look at it
+- Delete means delete
+
+Implement fresh from tests. Period.
+
+## Red-Green-Refactor
+
+```dot
+digraph tdd_cycle {
+    rankdir=LR;
+    red [label="RED\nWrite failing test", shape=box, style=filled, fillcolor="#ffcccc"];
+    verify_red [label="Verify fails\ncorrectly", shape=diamond];
+    green [label="GREEN\nMinimal code", shape=box, style=filled, fillcolor="#ccffcc"];
+    verify_green [label="Verify passes\nAll green", shape=diamond];
+    refactor [label="REFACTOR\nClean up", shape=box, style=filled, fillcolor="#ccccff"];
+    next [label="Next", shape=ellipse];
+
+    red -> verify_red;
+    verify_red -> green [label="yes"];
+    verify_red -> red [label="wrong\nfailure"];
+    green -> verify_green;
+    verify_green -> refactor [label="yes"];
+    verify_green -> green [label="no"];
+    refactor -> verify_green [label="stay\ngreen"];
+    verify_green -> next;
+    next -> red;
+}
+```
+
+### RED - Write Failing Test
+
+Write one minimal test showing what should happen.
+
+<Good>
+```typescript
+test('retries failed operations 3 times', async () => {
+  let attempts = 0;
+  const operation = () => {
+    attempts++;
+    if (attempts < 3) throw new Error('fail');
+    return 'success';
+  };
+
+  const result = await retryOperation(operation);
+
+  expect(result).toBe('success');
+  expect(attempts).toBe(3);
+});
+```
+Clear name, tests real behavior, one thing
+</Good>
+
+<Bad>
+```typescript
+test('retry works', async () => {
+  const mock = jest.fn()
+    .mockRejectedValueOnce(new Error())
+    .mockRejectedValueOnce(new Error())
+    .mockResolvedValueOnce('success');
+  await retryOperation(mock);
+  expect(mock).toHaveBeenCalledTimes(3);
+});
+```
+Vague name, tests mock not code
+</Bad>
+
+**Requirements:**
+- One behavior
+- Clear name
+- Real code (no mocks unless unavoidable)
+
+### Verify RED - Watch It Fail
+
+**MANDATORY. Never skip.**
+
+```bash
+npm test path/to/test.test.ts
+```
+
+Confirm:
+- Test fails (not errors)
+- Failure message is expected
+- Fails because feature missing (not typos)
+
+**Test passes?** You're testing existing behavior. Fix test.
+
+**Test errors?** Fix error, re-run until it fails correctly.
+
+### GREEN - Minimal Code
+
+Write simplest code to pass the test.
+
+<Good>
+```typescript
+async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
+  for (let i = 0; i < 3; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i === 2) throw e;
+    }
+  }
+  throw new Error('unreachable');
+}
+```
+Just enough to pass
+</Good>
+
+<Bad>
+```typescript
+async function retryOperation<T>(
+  fn: () => Promise<T>,
+  options?: {
+    maxRetries?: number;
+    backoff?: 'linear' | 'exponential';
+    onRetry?: (attempt: number) => void;
+  }
+): Promise<T> {
+  // YAGNI
+}
+```
+Over-engineered
+</Bad>
+
+Don't add features, refactor other code, or "improve" beyond the test.
+
+### Verify GREEN - Watch It Pass
+
+**MANDATORY.**
+
+```bash
+npm test path/to/test.test.ts
+```
+
+Confirm:
+- Test passes
+- Other tests still pass
+- Output pristine (no errors, warnings)
+
+**Test fails?** Fix code, not test.
+
+**Other tests fail?** Fix now.
+
+### REFACTOR - Clean Up
+
+After green only:
+- Remove duplication
+- Improve names
+- Extract helpers
+
+Keep tests green. Don't add behavior.
+
+### Repeat
+
+Next failing test for next feature.
+
+## Good Tests
+
+| Quality | Good | Bad |
+|---------|------|-----|
+| **Minimal** | One thing. "and" in name? Split it. | `test('validates email and domain and whitespace')` |
+| **Clear** | Name describes behavior | `test('test1')` |
+| **Shows intent** | Demonstrates desired API | Obscures what code should do |
+
+## Why Order Matters
+
+**"I'll write tests after to verify it works"**
+
+Tests written after code pass immediately. Passing immediately proves nothing:
+- Might test wrong thing
+- Might test implementation, not behavior
+- Might miss edge cases you forgot
+- You never saw it catch the bug
+
+Test-first forces you to see the test fail, proving it actually tests something.
+
+**"I already manually tested all the edge cases"**
+
+Manual testing is ad-hoc. You think you tested everything but:
+- No record of what you tested
+- Can't re-run when code changes
+- Easy to forget cases under pressure
+- "It worked when I tried it" â‰  comprehensive
+
+Automated tests are systematic. They run the same way every time.
+
+**"Deleting X hours of work is wasteful"**
+
+Sunk cost fallacy. The time is already gone. Your choice now:
+- Delete and rewrite with TDD (X more hours, high confidence)
+- Keep it and add tests after (30 min, low confidence, likely bugs)
+
+The "waste" is keeping code you can't trust. Working code without real tests is technical debt.
+
+**"TDD is dogmatic, being pragmatic means adapting"**
+
+TDD IS pragmatic:
+- Finds bugs before commit (faster than debugging after)
+- Prevents regressions (tests catch breaks immediately)
+- Documents behavior (tests show how to use code)
+- Enables refactoring (change freely, tests catch breaks)
+
+"Pragmatic" shortcuts = debugging in production = slower.
+
+**"Tests after achieve the same goals - it's spirit not ritual"**
+
+No. Tests-after answer "What does this do?" Tests-first answer "What should this do?"
+
+Tests-after are biased by your implementation. You test what you built, not what's required. You verify remembered edge cases, not discovered ones.
+
+Tests-first force edge case discovery before implementing. Tests-after verify you remembered everything (you didn't).
+
+30 minutes of tests after â‰  TDD. You get coverage, lose proof tests work.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|--------|---------|
+| "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
+| "I'll test after" | Tests passing immediately prove nothing. |
+| "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
+| "Already manually tested" | Ad-hoc â‰  systematic. No record, can't re-run. |
+| "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
+| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
+| "Need to explore first" | Fine. Throw away exploration, start with TDD. |
+| "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
+| "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
+| "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
+| "Existing code has no tests" | You're improving it. Add tests for existing code. |
+
+## Red Flags - STOP and Start Over
+
+- Code before test
+- Test after implementation
+- Test passes immediately
+- Can't explain why test failed
+- Tests added "later"
+- Rationalizing "just this once"
+- "I already manually tested it"
+- "Tests after achieve the same purpose"
+- "It's about spirit not ritual"
+- "Keep as reference" or "adapt existing code"
+- "Already spent X hours, deleting is wasteful"
+- "TDD is dogmatic, I'm being pragmatic"
+- "This is different because..."
+
+**All of these mean: Delete code. Start over with TDD.**
+
+## Example: Bug Fix
+
+**Bug:** Empty email accepted
+
+**RED**
+```typescript
+test('rejects empty email', async () => {
+  const result = await submitForm({ email: '' });
+  expect(result.error).toBe('Email required');
+});
+```
+
+**Verify RED**
+```bash
+$ npm test
+FAIL: expected 'Email required', got undefined
+```
+
+**GREEN**
+```typescript
+function submitForm(data: FormData) {
+  if (!data.email?.trim()) {
+    return { error: 'Email required' };
+  }
+  // ...
+}
+```
+
+**Verify GREEN**
+```bash
+$ npm test
+PASS
+```
+
+**REFACTOR**
+Extract validation for multiple fields if needed.
+
+## Verification Checklist
+
+Before marking work complete:
+
+- [ ] Every new function/method has a test
+- [ ] Watched each test fail before implementing
+- [ ] Each test failed for expected reason (feature missing, not typo)
+- [ ] Wrote minimal code to pass each test
+- [ ] All tests pass
+- [ ] Output pristine (no errors, warnings)
+- [ ] Tests use real code (mocks only if unavoidable)
+- [ ] Edge cases and errors covered
+
+Can't check all boxes? You skipped TDD. Start over.
+
+## When Stuck
+
+| Problem | Solution |
+|---------|----------|
+| Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
+| Test too complicated | Design too complicated. Simplify interface. |
+| Must mock everything | Code too coupled. Use dependency injection. |
+| Test setup huge | Extract helpers. Still complex? Simplify design. |
+
+## Debugging Integration
+
+Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
+
+Never fix bugs without a test.
+
+## Testing Anti-Patterns
+
+When adding mocks or test utilities, read @testing-anti-patterns.md to avoid common pitfalls:
+- Testing mock behavior instead of real behavior
+- Adding test-only methods to production classes
+- Mocking without understanding dependencies
+
+## Final Rule
+
+```
+Production code â†’ test exists and failed first
+Otherwise â†’ not TDD
+```
+
+No exceptions without your human partner's permission.
+
+
+ succeeded in 153ms:
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, skip this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## Instruction Priority
+
+Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+
+1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) â€” highest priority
+2. **Superpowers skills** â€” override default system behavior where they conflict
+3. **Default system prompt** â€” lowest priority
+
+If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
+
+## How to Access Skills
+
+**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to youâ€”follow it directly. Never use the Read tool on skill files.
+
+**In Copilot CLI:** Use the `skill` tool. Skills are auto-discovered from installed plugins. The `skill` tool works the same as Claude Code's `Skill` tool.
+
+**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
+
+**In other environments:** Check your platform's documentation for how skills are loaded.
+
+## Platform Adaptation
+
+Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
+
+# Using Skills
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+
+```dot
+digraph skill_flow {
+    "User message received" [shape=doublecircle];
+    "About to EnterPlanMode?" [shape=doublecircle];
+    "Already brainstormed?" [shape=diamond];
+    "Invoke brainstorming skill" [shape=box];
+    "Might any skill apply?" [shape=diamond];
+    "Invoke Skill tool" [shape=box];
+    "Announce: 'Using [skill] to [purpose]'" [shape=box];
+    "Has checklist?" [shape=diamond];
+    "Create TodoWrite todo per item" [shape=box];
+    "Follow skill exactly" [shape=box];
+    "Respond (including clarifications)" [shape=doublecircle];
+
+    "About to EnterPlanMode?" -> "Already brainstormed?";
+    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
+    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
+    "Invoke brainstorming skill" -> "Might any skill apply?";
+
+    "User message received" -> "Might any skill apply?";
+    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
+    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
+    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
+    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
+    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
+    "Has checklist?" -> "Follow skill exactly" [label="no"];
+    "Create TodoWrite todo per item" -> "Follow skill exactly";
+}
+```
+
+## Red Flags
+
+These thoughts mean STOPâ€”you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept â‰  using the skill. Invoke it. |
+
+## Skill Priority
+
+When multiple skills could apply, use this order:
+
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+
+"Let's build X" â†’ brainstorming first, then implementation skills.
+"Fix this bug" â†’ debugging first, then domain-specific skills.
+
+## Skill Types
+
+**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+
+**Flexible** (patterns): Adapt principles to context.
+
+The skill itself tells you which.
+
+## User Instructions
+
+Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+
+
+ succeeded in 161ms:
+---
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+---
+
+# Verification Before Completion
+
+## Overview
+
+Claiming work is complete without verification is dishonesty, not efficiency.
+
+**Core principle:** Evidence before claims, always.
+
+**Violating the letter of this rule is violating the spirit of this rule.**
+
+## The Iron Law
+
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+```
+
+If you haven't run the verification command in this message, you cannot claim it passes.
+
+## The Gate Function
+
+```
+BEFORE claiming any status or expressing satisfaction:
+
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
+
+Skip any step = lying, not verifying
+```
+
+## Common Failures
+
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
+
+## Red Flags - STOP
+
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence â‰  evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter â‰  compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion â‰  excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+âœ… [Run test command] [See: 34/34 pass] "All tests pass"
+âŒ "Should pass now" / "Looks correct"
+```
+
+**Regression tests (TDD Red-Green):**
+```
+âœ… Write â†’ Run (pass) â†’ Revert fix â†’ Run (MUST FAIL) â†’ Restore â†’ Run (pass)
+âŒ "I've written a regression test" (without red-green verification)
+```
+
+**Build:**
+```
+âœ… [Run build] [See: exit 0] "Build passes"
+âŒ "Linter passed" (linter doesn't check compilation)
+```
+
+**Requirements:**
+```
+âœ… Re-read plan â†’ Create checklist â†’ Verify each â†’ Report gaps or completion
+âŒ "Tests pass, phase complete"
+```
+
+**Agent delegation:**
+```
+âœ… Agent reports success â†’ Check VCS diff â†’ Verify changes â†’ Report actual state
+âŒ Trust agent report
+```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion â†’ redirect â†’ rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
+
+## The Bottom Line
+
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
+
+
+ succeeded in 154ms:
+---
+name: systematic-debugging
+description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+---
+
+# Systematic Debugging
+
+## Overview
+
+Random fixes waste time and create new bugs. Quick patches mask underlying issues.
+
+**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
+
+**Violating the letter of this process is violating the spirit of debugging.**
+
+## The Iron Law
+
+```
+NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
+```
+
+If you haven't completed Phase 1, you cannot propose fixes.
+
+## When to Use
+
+Use for ANY technical issue:
+- Test failures
+- Bugs in production
+- Unexpected behavior
+- Performance problems
+- Build failures
+- Integration issues
+
+**Use this ESPECIALLY when:**
+- Under time pressure (emergencies make guessing tempting)
+- "Just one quick fix" seems obvious
+- You've already tried multiple fixes
+- Previous fix didn't work
+- You don't fully understand the issue
+
+**Don't skip when:**
+- Issue seems simple (simple bugs have root causes too)
+- You're in a hurry (rushing guarantees rework)
+- Manager wants it fixed NOW (systematic is faster than thrashing)
+
+## The Four Phases
+
+You MUST complete each phase before proceeding to the next.
+
+### Phase 1: Root Cause Investigation
+
+**BEFORE attempting ANY fix:**
+
+1. **Read Error Messages Carefully**
+   - Don't skip past errors or warnings
+   - They often contain the exact solution
+   - Read stack traces completely
+   - Note line numbers, file paths, error codes
+
+2. **Reproduce Consistently**
+   - Can you trigger it reliably?
+   - What are the exact steps?
+   - Does it happen every time?
+   - If not reproducible â†’ gather more data, don't guess
+
+3. **Check Recent Changes**
+   - What changed that could cause this?
+   - Git diff, recent commits
+   - New dependencies, config changes
+   - Environmental differences
+
+4. **Gather Evidence in Multi-Component Systems**
+
+   **WHEN system has multiple components (CI â†’ build â†’ signing, API â†’ service â†’ database):**
+
+   **BEFORE proposing fixes, add diagnostic instrumentation:**
+   ```
+   For EACH component boundary:
+     - Log what data enters component
+     - Log what data exits component
+     - Verify environment/config propagation
+     - Check state at each layer
+
+   Run once to gather evidence showing WHERE it breaks
+   THEN analyze evidence to identify failing component
+   THEN investigate that specific component
+   ```
+
+   **Example (multi-layer system):**
+   ```bash
+   # Layer 1: Workflow
+   echo "=== Secrets available in workflow: ==="
+   echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+
+   # Layer 2: Build script
+   echo "=== Env vars in build script: ==="
+   env | grep IDENTITY || echo "IDENTITY not in environment"
+
+   # Layer 3: Signing script
+   echo "=== Keychain state: ==="
+   security list-keychains
+   security find-identity -v
+
+   # Layer 4: Actual signing
+   codesign --sign "$IDENTITY" --verbose=4 "$APP"
+   ```
+
+   **This reveals:** Which layer fails (secrets â†’ workflow âœ“, workflow â†’ build âœ—)
+
+5. **Trace Data Flow**
+
+   **WHEN error is deep in call stack:**
+
+   See `root-cause-tracing.md` in this directory for the complete backward tracing technique.
+
+   **Quick version:**
+   - Where does bad value originate?
+   - What called this with bad value?
+   - Keep tracing up until you find the source
+   - Fix at source, not at symptom
+
+### Phase 2: Pattern Analysis
+
+**Find the pattern before fixing:**
+
+1. **Find Working Examples**
+   - Locate similar working code in same codebase
+   - What works that's similar to what's broken?
+
+2. **Compare Against References**
+   - If implementing pattern, read reference implementation COMPLETELY
+   - Don't skim - read every line
+   - Understand the pattern fully before applying
+
+3. **Identify Differences**
+   - What's different between working and broken?
+   - List every difference, however small
+   - Don't assume "that can't matter"
+
+4. **Understand Dependencies**
+   - What other components does this need?
+   - What settings, config, environment?
+   - What assumptions does it make?
+
+### Phase 3: Hypothesis and Testing
+
+**Scientific method:**
+
+1. **Form Single Hypothesis**
+   - State clearly: "I think X is the root cause because Y"
+   - Write it down
+   - Be specific, not vague
+
+2. **Test Minimally**
+   - Make the SMALLEST possible change to test hypothesis
+   - One variable at a time
+   - Don't fix multiple things at once
+
+3. **Verify Before Continuing**
+   - Did it work? Yes â†’ Phase 4
+   - Didn't work? Form NEW hypothesis
+   - DON'T add more fixes on top
+
+4. **When You Don't Know**
+   - Say "I don't understand X"
+   - Don't pretend to know
+   - Ask for help
+   - Research more
+
+### Phase 4: Implementation
+
+**Fix the root cause, not the symptom:**
+
+1. **Create Failing Test Case**
+   - Simplest possible reproduction
+   - Automated test if possible
+   - One-off test script if no framework
+   - MUST have before fixing
+   - Use the `superpowers:test-driven-development` skill for writing proper failing tests
+
+2. **Implement Single Fix**
+   - Address the root cause identified
+   - ONE change at a time
+   - No "while I'm here" improvements
+   - No bundled refactoring
+
+3. **Verify Fix**
+   - Test passes now?
+   - No other tests broken?
+   - Issue actually resolved?
+
+4. **If Fix Doesn't Work**
+   - STOP
+   - Count: How many fixes have you tried?
+   - If < 3: Return to Phase 1, re-analyze with new information
+   - **If â‰¥ 3: STOP and question the architecture (step 5 below)**
+   - DON'T attempt Fix #4 without architectural discussion
+
+5. **If 3+ Fixes Failed: Question Architecture**
+
+   **Pattern indicating architectural problem:**
+   - Each fix reveals new shared state/coupling/problem in different place
+   - Fixes require "massive refactoring" to implement
+   - Each fix creates new symptoms elsewhere
+
+   **STOP and question fundamentals:**
+   - Is this pattern fundamentally sound?
+   - Are we "sticking with it through sheer inertia"?
+   - Should we refactor architecture vs. continue fixing symptoms?
+
+   **Discuss with your human partner before attempting more fixes**
+
+   This is NOT a failed hypothesis - this is a wrong architecture.
+
+## Red Flags - STOP and Follow Process
+
+If you catch yourself thinking:
+- "Quick fix for now, investigate later"
+- "Just try changing X and see if it works"
+- "Add multiple changes, run tests"
+- "Skip the test, I'll manually verify"
+- "It's probably X, let me fix that"
+- "I don't fully understand but this might work"
+- "Pattern says X but I'll adapt it differently"
+- "Here are the main problems: [lists fixes without investigation]"
+- Proposing solutions before tracing data flow
+- **"One more fix attempt" (when already tried 2+)**
+- **Each fix reveals new problem in different place**
+
+**ALL of these mean: STOP. Return to Phase 1.**
+
+**If 3+ fixes failed:** Question the architecture (see Phase 4.5)
+
+## your human partner's Signals You're Doing It Wrong
+
+**Watch for these redirections:**
+- "Is that not happening?" - You assumed without verifying
+- "Will it show us...?" - You should have added evidence gathering
+- "Stop guessing" - You're proposing fixes without understanding
+- "Ultrathink this" - Question fundamentals, not just symptoms
+- "We're stuck?" (frustrated) - Your approach isn't working
+
+**When you see these:** STOP. Return to Phase 1.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|--------|---------|
+| "Issue is simple, don't need process" | Simple issues have root causes too. Process is fast for simple bugs. |
+| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check thrashing. |
+| "Just try this first, then investigate" | First fix sets the pattern. Do it right from the start. |
+| "I'll write test after confirming fix works" | Untested fixes don't stick. Test first proves it. |
+| "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
+| "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
+| "I see the problem, let me fix it" | Seeing symptoms â‰  understanding root cause. |
+| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
+
+## Quick Reference
+
+| Phase | Key Activities | Success Criteria |
+|-------|---------------|------------------|
+| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |
+| **2. Pattern** | Find working examples, compare | Identify differences |
+| **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |
+| **4. Implementation** | Create test, fix, verify | Bug resolved, tests pass |
+
+## When Process Reveals "No Root Cause"
+
+If systematic investigation reveals issue is truly environmental, timing-dependent, or external:
+
+1. You've completed the process
+2. Document what you investigated
+3. Implement appropriate handling (retry, timeout, error message)
+4. Add monitoring/logging for future investigation
+
+**But:** 95% of "no root cause" cases are incomplete investigation.
+
+## Supporting Techniques
+
+These techniques are part of systematic debugging and available in this directory:
+
+- **`root-cause-tracing.md`** - Trace bugs backward through call stack to find original trigger
+- **`defense-in-depth.md`** - Add validation at multiple layers after finding root cause
+- **`condition-based-waiting.md`** - Replace arbitrary timeouts with condition polling
+
+**Related skills:**
+- **superpowers:test-driven-development** - For creating failing test case (Phase 4, Step 1)
+- **superpowers:verification-before-completion** - Verify fix worked before claiming success
+
+## Real-World Impact
+
+From debugging sessions:
+- Systematic approach: 15-30 minutes to fix
+- Random fixes approach: 2-3 hours of thrashing
+- First-time fix rate: 95% vs 40%
+- New bugs introduced: Near zero vs common
+
+
+  → Inspect repository instructions, verifier/output mappings, current timing fields, manifest, and build/test commands
+  • Add a failing determinism regression check and confirm the root cause
+  • Remove archived timing fields and document checksum convention/LF policy
+  • Run every verifier twice and prove archived outputs are byte-identical
+  • Regenerate LF-only SHA256SUMS and verify it end to end
+  • Run artifact tests and clean alternating article/supplement XeLaTeX builds; audit logs
+  • Review diff and report exact evidence and wording
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -Force | Select-Object Name,Mode,Length; rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'GEMINI.md' -g 'REPRODUCE.md' -g 'artifacts/verify*.py' -g 'artifacts/test_*.py' -g 'artifacts/*.txt' -g 'artifacts/SHA256SUMS'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short; git config --get core.autocrlf; git log -5 --oneline' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n -i \"elapsed|runtime|duration|perf_counter|monotonic|time\\(\" artifacts REPRODUCE.md; Get-Content -Raw artifacts\\SHA256SUMS; Get-Content -Raw REPRODUCE.md" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+2026-08-14T23:03:45.063695Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.3 seconds
+Output:
+artifacts\compute_birth_layer_table.py:134:    t0 = time.time()
+artifacts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+artifacts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+artifacts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\deepening_delta_verification.txt:29:  elapsed_seconds = 1.051
+artifacts\finite_verification.txt:69:  elapsed_seconds = 3.607
+artifacts\verify_finite_claims.py:1159:    started = time.time()
+artifacts\verify_finite_claims.py:1547:    elapsed = time.time() - started
+artifacts\verify_finite_claims.py:1669:            f"  elapsed_seconds = {elapsed:.3f}",
+1303b44227f1f41a1909164b506c94f2130e4e38dd7b1f2d44f93ca3f96238c2  compute_birth_layer_table.py
+96db8ffe7d3649cfaa5291d2687f4528514d2e5fc8b0da835cbaba821224bfbc  verify_finite_claims.py
+cbb86026a96e58e34bf4ee8c18ea1f590be927853054b404f17174bd09eea5be  test_verify_finite_claims.py
+39e4bc77a978a533847bd15c6fac7507ba0768fc7478498d1fd3ae26662c37df  fibonacci_factorizations_2_210.tsv
+443fa4141ed6dfe2f13a570f8d8af3e34bc62a1ca8eeccf48e80dc6b41e0c016  tab_birth_layer_data.tex
+ae2368f06ca9edca854ad2b91efef1b9fa104f8dfaf8c164639c033785f39ddc  birth_layer_table_output.txt
+a50a5cf6c74e2ed1631eb61b27abde7b4e6c1ef77966e20c8bde0bf79681451d  finite_verification.txt
+a8c06e2b01e32df4784e9e674987a2b05da4255ac2b09e03a38a1b03398930bc  REPRODUCE.md
+0a29067f90288337441f001cf428830f9b1108582338046e05532697860a5cc4  squarefree_slice_verification.txt
+12c931c0ca996a9a3607006310f7fcfc5b46fdf893fc03d0789b05f3e631596f  named_problem_audit.md
+448c76128161d4bf807cb1bc5be280af03d4cb7ba34daf4a2df448b9a14c56e1  ../scripts/verify_squarefree_slice.py
+f052fec6fc6e5bec0b7fc593a5d13398f43a73244c0ba71ba85f948ced78fe42  ../scripts/test_verify_squarefree_slice.py
+
+rg: REPRODUCE.md: The system cannot find the file specified. (os error 2)
+Get-Content : Cannot find path 
+'D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\REPRODUCE.md' because 
+it does not exist.
+At line:2 char:130
++ ...  Get-Content -Raw artifacts\SHA256SUMS; Get-Content -Raw REPRODUCE.md
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\omega\automa...fq\REPRODUCE.md:String) [Get-Content], ItemNotFoundEx 
+   ception
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
+
+ exited 1 in 270ms:
+artifacts\compute_birth_layer_table.py:134:    t0 = time.time()
+artifacts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+artifacts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+artifacts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\deepening_delta_verification.txt:29:  elapsed_seconds = 1.051
+artifacts\finite_verification.txt:69:  elapsed_seconds = 3.607
+artifacts\verify_finite_claims.py:1159:    started = time.time()
+artifacts\verify_finite_claims.py:1547:    elapsed = time.time() - started
+artifacts\verify_finite_claims.py:1669:            f"  elapsed_seconds = {elapsed:.3f}",
+1303b44227f1f41a1909164b506c94f2130e4e38dd7b1f2d44f93ca3f96238c2  compute_birth_layer_table.py
+96db8ffe7d3649cfaa5291d2687f4528514d2e5fc8b0da835cbaba821224bfbc  verify_finite_claims.py
+cbb86026a96e58e34bf4ee8c18ea1f590be927853054b404f17174bd09eea5be  test_verify_finite_claims.py
+39e4bc77a978a533847bd15c6fac7507ba0768fc7478498d1fd3ae26662c37df  fibonacci_factorizations_2_210.tsv
+443fa4141ed6dfe2f13a570f8d8af3e34bc62a1ca8eeccf48e80dc6b41e0c016  tab_birth_layer_data.tex
+ae2368f06ca9edca854ad2b91efef1b9fa104f8dfaf8c164639c033785f39ddc  birth_layer_table_output.txt
+a50a5cf6c74e2ed1631eb61b27abde7b4e6c1ef77966e20c8bde0bf79681451d  finite_verification.txt
+a8c06e2b01e32df4784e9e674987a2b05da4255ac2b09e03a38a1b03398930bc  REPRODUCE.md
+0a29067f90288337441f001cf428830f9b1108582338046e05532697860a5cc4  squarefree_slice_verification.txt
+12c931c0ca996a9a3607006310f7fcfc5b46fdf893fc03d0789b05f3e631596f  named_problem_audit.md
+448c76128161d4bf807cb1bc5be280af03d4cb7ba34daf4a2df448b9a14c56e1  ../scripts/verify_squarefree_slice.py
+f052fec6fc6e5bec0b7fc593a5d13398f43a73244c0ba71ba85f948ced78fe42  ../scripts/test_verify_squarefree_slice.py
+
+rg: REPRODUCE.md: The system cannot find the file specified. (os error 2)
+Get-Content : Cannot find path 
+'D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\REPRODUCE.md' because 
+it does not exist.
+At line:2 char:130
++ ...  Get-Content -Raw artifacts\SHA256SUMS; Get-Content -Raw REPRODUCE.md
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\omega\automa...fq\REPRODUCE.md:String) [Get-Content], ItemNotFoundEx 
+   ception
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
+
+codex
+The reported failure reproduces in the source and archived files: `verify_finite_claims.py` appends `elapsed_seconds` to the file it hashes, while `deepening_delta_verification.txt` also contains timing. `REPRODUCE.md` is under `artifacts/`, so I’m resolving all verifier-to-output mappings there and checking repository-specific instructions before editing.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -Force | Select-Object Name,Mode,Length; rg --files | rg '("'^|/|'"\\\\)(AGENTS|CLAUDE|GEMINI)\\.md"'$|REPRODUCE'"\\.md"'$|artifacts['"\\\\/]verify.*\\.py"'$|artifacts['"\\\\/]test_.*\\.py"'$|artifacts['"\\\\/].*\\.txt"'$|SHA256SUMS$'"'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git status --short; Write-Output ('core.autocrlf=' + (git config --get core.autocrlf)); git log -5 --oneline" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw artifacts\\REPRODUCE.md; Get-Content -Raw artifacts\\SHA256SUMS" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n -i \"elapsed|runtime|duration|perf_counter|monotonic|time\\(\" artifacts scripts; rg -n \"verification\\.txt|write_text|open\\(|Path\\(\" artifacts\\verify*.py scripts\\verify*.py" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+ succeeded in 184ms:
+# Reproducing the finite computations
+
+This directory is the computational supplement for the manuscript. All
+integer arithmetic is exact. The verification was run with:
+
+- Python 3.10.11;
+- SymPy 1.13.1;
+- SymPy's `factorint` integer-factorization routine.
+
+The factorization cost is not part of any theorem or complexity claim. The
+archive `fibonacci_factorizations_2_210.tsv` records every exact factorization
+of `F_n` used for `2 <= n <= 210`; the verifier checks that every row
+multiplies back to the stated Fibonacci number.
+
+## Files
+
+- `compute_birth_layer_table.py`: exhaustive divisor/rank enumeration for
+  `2 <= n <= 30` and generation of the TeX table.
+- `verify_finite_claims.py`: independent direct and structural computations,
+  finite-bound checks, exact minimal-cover and connected-cover enumeration,
+  theta-normalized and discrete local-limit checks, rank-pure sector checks,
+  exact total and connected support-spectrum checks and the extremal
+  atomic-product count,
+  rank-window deaggregation and squarefree pigeonhole checks, complete
+  weighted rank-pure product membership and the strict ladder example at
+  `n=91`, refined
+  private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
+  radical checks, the finite Jarden consequence, exact-rank prime existence
+  through rank 210, a prime inverse-ray prefix, the exceptional path to the
+  fixed point 12, environment reporting, and
+  factorization-archive generation and validation.
+- `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
+  finite bounds, archive round trip, and report contents.
+- `../scripts/verify_squarefree_slice.py`: independent enumeration of
+  weighted minimal covers and rank-pure prime products for the canonical
+  squarefree exact-fiber slice.
+- `../scripts/test_verify_squarefree_slice.py`: unit tests for the sharp
+  fixed-total-weight bound, its unique equality profile for `k >= 3` and
+  nonuniqueness at `k = 2`, support incidence, and the squarefree-slice set
+  equality.
+- `squarefree_slice_verification.txt`: complete report for the new sharpness
+  and squarefree-fiber checks.
+- `named_problem_audit.md`: primary-source quotations, current-status checks,
+  and exact mappings from five printed open problems to the manuscript.
+- `fibonacci_factorizations_2_210.tsv`: exact factorization input/archive.
+- `tab_birth_layer_data.tex`: generated table included in the manuscript.
+- `birth_layer_table_output.txt`: complete stdout from table generation.
+- `finite_verification.txt`: complete stdout report from the verification run.
+- `SHA256SUMS`: SHA-256 digest of every reproducibility file listed above.
+
+## Commands
+
+Run these commands from the manuscript directory:
+
+```powershell
+python -m unittest discover -s artifacts -p "test_verify_finite_claims.py" -v
+Push-Location scripts; python -m unittest -v test_verify_squarefree_slice.py; Pop-Location
+python artifacts\compute_birth_layer_table.py
+python artifacts\verify_finite_claims.py --exhaustive-max 60 --scalable-max 210 --output artifacts\finite_verification.txt --factorizations-output artifacts\fibonacci_factorizations_2_210.tsv
+python scripts\verify_squarefree_slice.py --max-index 210 --output artifacts\squarefree_slice_verification.txt
+```
+
+The first verification route enumerates every divisor of `F_n`, computes its
+rank directly, and minimizes the resulting birth layer. On `2 <= n <= 60`,
+the second route constructs the upper fiber from the maximal proper Fibonacci
+divisors and constructs the minimal elements from the witness threshold
+conditions. The report compares the actual sets, not only their cardinalities:
+
+```text
+B_n direct = B_n upper fiber: 59/59 set equalities
+M_n direct = M_n witness: 59/59 set equalities
+```
+
+For `61 <= n <= 210`, the structural route checks the stated finite upper and
+lower bounds. On every layer `3 <= n <= 210`, it also enumerates the rank-pure
+sector (all layers in this range have at most four prime coordinates), checks
+the exact-rank-prime Mobius formula on every nonempty support, and verifies that
+every canonical and weighted rank-pure product belongs to the independently
+constructed minimal-generator set. It also confirms that the rank-pure sector
+is strict at `n=91`, where `169` is a ladder generator. The exact
+Hearne--Wagner and connected-cover counts are
+cross-checked against direct cover enumeration for `1 <= k <= 4`. Exact counts
+through `k=80` also check convergence to the parity-dependent theta
+normalization, the connected-cover ratio, and the central discrete local
+limit. On every `3 <= n <= 210` layer the report also checks the pointwise
+rank-window deaggregation inequalities and the refined private-coordinate
+upper bound; on every squarefree layer it checks the exact-rank partition and
+the BLMS pigeonhole inequality. It also reconstructs the fibotomic integer on
+every rank in this range, verifies its exact-rank radical divisibility and the
+rank-congruence spacing used in the entropy bound, and checks `a(10p) >= 2`
+for the five eligible prime values with `10p <= 210`. In addition, it extracts
+the positive-coordinate rank hypergraph of every minimal generator, verifies
+the total and connected support spectra on all 208 layers, and checks that the
+top-support slice has the product cardinality of its singleton diagonal atomic
+families. It confirms that the only empty exact-rank prime fibers on
+`3 <= d <= 210` are `d=6,12`, verifies
+`7 <- 13 <- 233 <- 139801`, and checks `7 -> 8 -> 6 -> 12` by direct modular
+rank computation. These finite checks support, but do not prove, the infinite
+inverse-ray theorem; infinitude uses the classical exact-rank existence
+theorem. These finite checks do not resolve the
+asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
+connected and disconnected arithmetic sectors without those hypotheses.
+
+The squarefree-slice verifier independently enumerates all irredundant covers
+for `1 <= k <= 4`, checks 36 exact full-support equality profiles for the
+sharp weighted-cover lower bound, and compares direct rank-pure products with
+the squarefree elements of the independently constructed `M_n` for every
+squarefree `3 <= n <= 210`. The stored run contains 127 set equalities and 427
+squarefree minimal generators. These checks do not show that the abstract
+fixed-total extremizer is realizable by Fibonacci exact-rank primes.
+
+To verify the checksums in PowerShell:
+
+```powershell
+Get-Content artifacts\SHA256SUMS | ForEach-Object {
+    $hash, $name = $_ -split '  ', 2
+    if ((Get-FileHash -Algorithm SHA256 (Join-Path artifacts $name)).Hash.ToLower() -ne $hash) {
+        throw "checksum mismatch: $name"
+    }
+}
+```
+
+1303b44227f1f41a1909164b506c94f2130e4e38dd7b1f2d44f93ca3f96238c2  compute_birth_layer_table.py
+96db8ffe7d3649cfaa5291d2687f4528514d2e5fc8b0da835cbaba821224bfbc  verify_finite_claims.py
+cbb86026a96e58e34bf4ee8c18ea1f590be927853054b404f17174bd09eea5be  test_verify_finite_claims.py
+39e4bc77a978a533847bd15c6fac7507ba0768fc7478498d1fd3ae26662c37df  fibonacci_factorizations_2_210.tsv
+443fa4141ed6dfe2f13a570f8d8af3e34bc62a1ca8eeccf48e80dc6b41e0c016  tab_birth_layer_data.tex
+ae2368f06ca9edca854ad2b91efef1b9fa104f8dfaf8c164639c033785f39ddc  birth_layer_table_output.txt
+a50a5cf6c74e2ed1631eb61b27abde7b4e6c1ef77966e20c8bde0bf79681451d  finite_verification.txt
+a8c06e2b01e32df4784e9e674987a2b05da4255ac2b09e03a38a1b03398930bc  REPRODUCE.md
+0a29067f90288337441f001cf428830f9b1108582338046e05532697860a5cc4  squarefree_slice_verification.txt
+12c931c0ca996a9a3607006310f7fcfc5b46fdf893fc03d0789b05f3e631596f  named_problem_audit.md
+448c76128161d4bf807cb1bc5be280af03d4cb7ba34daf4a2df448b9a14c56e1  ../scripts/verify_squarefree_slice.py
+f052fec6fc6e5bec0b7fc593a5d13398f43a73244c0ba71ba85f948ced78fe42  ../scripts/test_verify_squarefree_slice.py
+
+
+2026-08-14T23:03:56.340018Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+scripts\verify_deepening_delta.py:411:    started = time.time()
+scripts\verify_deepening_delta.py:512:    elapsed = time.time() - started
+scripts\verify_deepening_delta.py:565:            f"  elapsed_seconds = {elapsed:.3f}",
+scripts\compute_birth_layer_table.py:134:    t0 = time.time()
+scripts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+scripts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+scripts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\compute_birth_layer_table.py:134:    t0 = time.time()
+artifacts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+artifacts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+artifacts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\deepening_delta_verification.txt:29:  elapsed_seconds = 1.051
+artifacts\finite_verification.txt:69:  elapsed_seconds = 3.607
+artifacts\verify_finite_claims.py:1159:    started = time.time()
+artifacts\verify_finite_claims.py:1547:    elapsed = time.time() - started
+artifacts\verify_finite_claims.py:1669:            f"  elapsed_seconds = {elapsed:.3f}",
+rg: artifacts\verify*.py: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+rg: scripts\verify*.py: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+
+ exited 1 in 196ms:
+scripts\verify_deepening_delta.py:411:    started = time.time()
+scripts\verify_deepening_delta.py:512:    elapsed = time.time() - started
+scripts\verify_deepening_delta.py:565:            f"  elapsed_seconds = {elapsed:.3f}",
+scripts\compute_birth_layer_table.py:134:    t0 = time.time()
+scripts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+scripts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+scripts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\compute_birth_layer_table.py:134:    t0 = time.time()
+artifacts\compute_birth_layer_table.py:152:        elapsed = time.time() - t0
+artifacts\compute_birth_layer_table.py:155:              f"M_n={{{M_n_str}}}  [{elapsed:.1f}s]")
+artifacts\compute_birth_layer_table.py:201:    print(f"\nTotal time: {time.time() - t0:.1f}s")
+artifacts\deepening_delta_verification.txt:29:  elapsed_seconds = 1.051
+artifacts\finite_verification.txt:69:  elapsed_seconds = 3.607
+artifacts\verify_finite_claims.py:1159:    started = time.time()
+artifacts\verify_finite_claims.py:1547:    elapsed = time.time() - started
+artifacts\verify_finite_claims.py:1669:            f"  elapsed_seconds = {elapsed:.3f}",
+rg: artifacts\verify*.py: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+rg: scripts\verify*.py: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -Force | Select-Object Name,Mode,Length; rg --files | Select-String -Pattern '(AGENTS|CLAUDE|GEMINI)\\.md"'$|REPRODUCE'"\\.md"'$|artifacts['"\\\\/]verify.*\\.py"'$|artifacts['"\\\\/]test_.*\\.py"'$|artifacts['"\\\\/].*\\.txt"'$|SHA256SUMS$'"'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git status --short; Write-Output ('core.autocrlf=' + (git config --get core.autocrlf)); git log -5 --oneline" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw artifacts\\REPRODUCE.md; Get-Content -Raw artifacts\\SHA256SUMS" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem artifacts,scripts -Filter 'verify*.py' | ForEach-Object { Write-Output ('FILE ' + "'$_.FullName); Select-String -Path $_.FullName -Pattern '"'verification\\.txt|write_text|open\\(|Path\\(' }" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+ succeeded in 156ms:
+# Reproducing the finite computations
+
+This directory is the computational supplement for the manuscript. All
+integer arithmetic is exact. The verification was run with:
+
+- Python 3.10.11;
+- SymPy 1.13.1;
+- SymPy's `factorint` integer-factorization routine.
+
+The factorization cost is not part of any theorem or complexity claim. The
+archive `fibonacci_factorizations_2_210.tsv` records every exact factorization
+of `F_n` used for `2 <= n <= 210`; the verifier checks that every row
+multiplies back to the stated Fibonacci number.
+
+## Files
+
+- `compute_birth_layer_table.py`: exhaustive divisor/rank enumeration for
+  `2 <= n <= 30` and generation of the TeX table.
+- `verify_finite_claims.py`: independent direct and structural computations,
+  finite-bound checks, exact minimal-cover and connected-cover enumeration,
+  theta-normalized and discrete local-limit checks, rank-pure sector checks,
+  exact total and connected support-spectrum checks and the extremal
+  atomic-product count,
+  rank-window deaggregation and squarefree pigeonhole checks, complete
+  weighted rank-pure product membership and the strict ladder example at
+  `n=91`, refined
+  private-coordinate upper bounds, fibotomic rank-entropy and exact-rank
+  radical checks, the finite Jarden consequence, exact-rank prime existence
+  through rank 210, a prime inverse-ray prefix, the exceptional path to the
+  fixed point 12, environment reporting, and
+  factorization-archive generation and validation.
+- `test_verify_finite_claims.py`: unit tests for the arithmetic routines,
+  finite bounds, archive round trip, and report contents.
+- `../scripts/verify_squarefree_slice.py`: independent enumeration of
+  weighted minimal covers and rank-pure prime products for the canonical
+  squarefree exact-fiber slice.
+- `../scripts/test_verify_squarefree_slice.py`: unit tests for the sharp
+  fixed-total-weight bound, its unique equality profile for `k >= 3` and
+  nonuniqueness at `k = 2`, support incidence, and the squarefree-slice set
+  equality.
+- `squarefree_slice_verification.txt`: complete report for the new sharpness
+  and squarefree-fiber checks.
+- `named_problem_audit.md`: primary-source quotations, current-status checks,
+  and exact mappings from five printed open problems to the manuscript.
+- `fibonacci_factorizations_2_210.tsv`: exact factorization input/archive.
+- `tab_birth_layer_data.tex`: generated table included in the manuscript.
+- `birth_layer_table_output.txt`: complete stdout from table generation.
+- `finite_verification.txt`: complete stdout report from the verification run.
+- `SHA256SUMS`: SHA-256 digest of every reproducibility file listed above.
+
+## Commands
+
+Run these commands from the manuscript directory:
+
+```powershell
+python -m unittest discover -s artifacts -p "test_verify_finite_claims.py" -v
+Push-Location scripts; python -m unittest -v test_verify_squarefree_slice.py; Pop-Location
+python artifacts\compute_birth_layer_table.py
+python artifacts\verify_finite_claims.py --exhaustive-max 60 --scalable-max 210 --output artifacts\finite_verification.txt --factorizations-output artifacts\fibonacci_factorizations_2_210.tsv
+python scripts\verify_squarefree_slice.py --max-index 210 --output artifacts\squarefree_slice_verification.txt
+```
+
+The first verification route enumerates every divisor of `F_n`, computes its
+rank directly, and minimizes the resulting birth layer. On `2 <= n <= 60`,
+the second route constructs the upper fiber from the maximal proper Fibonacci
+divisors and constructs the minimal elements from the witness threshold
+conditions. The report compares the actual sets, not only their cardinalities:
+
+```text
+B_n direct = B_n upper fiber: 59/59 set equalities
+M_n direct = M_n witness: 59/59 set equalities
+```
+
+For `61 <= n <= 210`, the structural route checks the stated finite upper and
+lower bounds. On every layer `3 <= n <= 210`, it also enumerates the rank-pure
+sector (all layers in this range have at most four prime coordinates), checks
+the exact-rank-prime Mobius formula on every nonempty support, and verifies that
+every canonical and weighted rank-pure product belongs to the independently
+constructed minimal-generator set. It also confirms that the rank-pure sector
+is strict at `n=91`, where `169` is a ladder generator. The exact
+Hearne--Wagner and connected-cover counts are
+cross-checked against direct cover enumeration for `1 <= k <= 4`. Exact counts
+through `k=80` also check convergence to the parity-dependent theta
+normalization, the connected-cover ratio, and the central discrete local
+limit. On every `3 <= n <= 210` layer the report also checks the pointwise
+rank-window deaggregation inequalities and the refined private-coordinate
+upper bound; on every squarefree layer it checks the exact-rank partition and
+the BLMS pigeonhole inequality. It also reconstructs the fibotomic integer on
+every rank in this range, verifies its exact-rank radical divisibility and the
+rank-congruence spacing used in the entropy bound, and checks `a(10p) >= 2`
+for the five eligible prime values with `10p <= 210`. In addition, it extracts
+the positive-coordinate rank hypergraph of every minimal generator, verifies
+the total and connected support spectra on all 208 layers, and checks that the
+top-support slice has the product cardinality of its singleton diagonal atomic
+families. It confirms that the only empty exact-rank prime fibers on
+`3 <= d <= 210` are `d=6,12`, verifies
+`7 <- 13 <- 233 <- 139801`, and checks `7 -> 8 -> 6 -> 12` by direct modular
+rank computation. These finite checks support, but do not prove, the infinite
+inverse-ray theorem; infinitude uses the classical exact-rank existence
+theorem. These finite checks do not resolve the
+asymptotic behavior of `R(n)`, establish (H2) or (BW), or compare the total
+connected and disconnected arithmetic sectors without those hypotheses.
+
+The squarefree-slice verifier independently enumerates all irredundant covers
+for `1 <= k <= 4`, checks 36 exact full-support equality profiles for the
+sharp weighted-cover lower bound, and compares direct rank-pure products with
+the squarefree elements of the independently constructed `M_n` for every
+squarefree `3 <= n <= 210`. The stored run contains 127 set equalities and 427
+squarefree minimal generators. These checks do not show that the abstract
+fixed-total extremizer is realizable by Fibonacci exact-rank primes.
+
+To verify the checksums in PowerShell:
+
+```powershell
+Get-Content artifacts\SHA256SUMS | ForEach-Object {
+    $hash, $name = $_ -split '  ', 2
+    if ((Get-FileHash -Algorithm SHA256 (Join-Path artifacts $name)).Hash.ToLower() -ne $hash) {
+        throw "checksum mismatch: $name"
+    }
+}
+```
+
+1303b44227f1f41a1909164b506c94f2130e4e38dd7b1f2d44f93ca3f96238c2  compute_birth_layer_table.py
+96db8ffe7d3649cfaa5291d2687f4528514d2e5fc8b0da835cbaba821224bfbc  verify_finite_claims.py
+cbb86026a96e58e34bf4ee8c18ea1f590be927853054b404f17174bd09eea5be  test_verify_finite_claims.py
+39e4bc77a978a533847bd15c6fac7507ba0768fc7478498d1fd3ae26662c37df  fibonacci_factorizations_2_210.tsv
+443fa4141ed6dfe2f13a570f8d8af3e34bc62a1ca8eeccf48e80dc6b41e0c016  tab_birth_layer_data.tex
+ae2368f06ca9edca854ad2b91efef1b9fa104f8dfaf8c164639c033785f39ddc  birth_layer_table_output.txt
+a50a5cf6c74e2ed1631eb61b27abde7b4e6c1ef77966e20c8bde0bf79681451d  finite_verification.txt
+a8c06e2b01e32df4784e9e674987a2b05da4255ac2b09e03a38a1b03398930bc  REPRODUCE.md
+0a29067f90288337441f001cf428830f9b1108582338046e05532697860a5cc4  squarefree_slice_verification.txt
+12c931c0ca996a9a3607006310f7fcfc5b46fdf893fc03d0789b05f3e631596f  named_problem_audit.md
+448c76128161d4bf807cb1bc5be280af03d4cb7ba34daf4a2df448b9a14c56e1  ../scripts/verify_squarefree_slice.py
+f052fec6fc6e5bec0b7fc593a5d13398f43a73244c0ba71ba85f948ced78fe42  ../scripts/test_verify_squarefree_slice.py
+
+
+ succeeded in 227ms:
+FILE D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\verify_finite_claims.py
+
+artifacts\verify_finite_claims.py:145:    path.write_text("\n".join(lines) + "\n", encoding="ascii")
+artifacts\verify_finite_claims.py:1692:        default=Path("artifacts/finite_verification.txt"),
+artifacts\verify_finite_claims.py:1697:        default=Path("artifacts/fibonacci_factorizations_2_210.tsv"),
+artifacts\verify_finite_claims.py:1705:    args.output.write_text(report, encoding="ascii")
+FILE D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_deepening_delta.py
+scripts\verify_deepening_delta.py:86:    path.write_text("\n".join(lines) + "\n", encoding="ascii")
+scripts\verify_deepening_delta.py:588:        default=Path("artifacts/finite_verification.txt"),
+scripts\verify_deepening_delta.py:593:        default=Path("artifacts/fibonacci_factorizations_2_210.tsv"),
+scripts\verify_deepening_delta.py:601:    args.output.write_text(report, encoding="ascii")
+FILE D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_squarefree_slice.py
+scripts\verify_squarefree_slice.py:201:        default=Path("artifacts/squarefree_slice_verification.txt"),
+scripts\verify_squarefree_slice.py:206:    args.output.write_text(report, encoding="ascii")
+
+
+
+ succeeded in 260ms:
+
+Name                                         Mode   Length 
+----                                         ----   ------ 
+.pytest_cache                                d-----        
+artifacts                                    d-----        
+generated                                    d-----        
+scripts                                      d-----        
+tmp                                          d-----        
+cross_paper_dedup.md                         -a---- 1164   
+env_map.tmp.txt                              -a---- 36031  
+main.aux                                     -a---- 16322  
+main.bbl                                     -a---- 8284   
+main.blg                                     -a---- 1058   
+main.fdb_latexmk                             -a---- 14896  
+main.fls                                     -a---- 18987  
+main.log                                     -a---- 21744  
+main.out                                     -a---- 2504   
+main.pdf                                     -a---- 258443 
+main.tex                                     -a---- 957    
+main.xdv                                     -a---- 720140 
+next_A7.txt                                  -a---- 3198   
+next_A7_r2.txt                               -a---- 1972   
+next_A7_r3.txt                               -a---- 1958   
+next_A7_r4.txt                               -a---- 2863   
+next_A7_r5.txt                               -a---- 2765   
+next_A7_r6.txt                               -a---- 6566   
+next_A7_r7.txt                               -a---- 2746   
+oracle_stage_a_escalation.json               -a---- 11640  
+preamble.tex                                 -a---- 865    
+references_local.bib                         -a---- 14207  
+research_directive.md                        -a---- 8536   
+REVISION_PLAN_FQ.md                          -a---- 2027   
+scope_contract.json                          -a---- 6683   
+scope_contract.md                            -a---- 7133   
+sec_arithmetic_secondary_bounds.tex          -a---- 3872   
+sec_birth_layers_witness_covers.tex          -a---- 14140  
+sec_connected_dominance_criterion.tex        -a---- 5566   
+sec_connected_factorization.tex              -a---- 6212   
+sec_connected_secondary_consequences.tex     -a---- 4226   
+sec_four_coordinate_classification.tex       -a---- 12063  
+sec_frontmatter.tex                          -a---- 3102   
+sec_further_questions.tex                    -a---- 2308   
+sec_introduction.tex                         -a---- 12623  
+sec_low_support_classification.tex           -a---- 22381  
+sec_low_support_framework.tex                -a---- 23321  
+sec_numerical_evidence.tex                   -a---- 8641   
+sec_odd_layer_minimal_covers.tex             -a---- 1917   
+sec_preliminaries.tex                        -a---- 7186   
+sec_prime_inverse_dynamics.tex               -a---- 5281   
+sec_prime_power_atomic_structure.tex         -a---- 6080   
+sec_rank_pure_secondary_asymptotics.tex      -a---- 5638   
+sec_rank_pure_universality.tex               -a---- 18680  
+sec_rank_window_and_fibotomic_interface.tex  -a---- 11972  
+sec_sharp_support_budget.tex                 -a---- 9047   
+sec_support_entropy_arithmetic_interface.tex -a---- 18138  
+sec_support_examples_and_substructures.tex   -a---- 6045   
+sec_support_grammar.tex                      -a---- 3706   
+sec_table_source_note.tex                    -a---- 413    
+sec_three_coordinate_finite_check.tex        -a---- 4874   
+sec_visible_rank_sum_bounds.tex              -a---- 3194   
+semantic_overlap_blockers.json               -a---- 1284894
+semantic_overlap_blockers.md                 -a---- 2673   
+split_candidates.json                        -a---- 5965   
+stage_a_audit.json                           -a---- 9278   
+supplement.aux                               -a---- 13900  
+supplement.bbl                               -a---- 2836   
+supplement.blg                               -a---- 1047   
+supplement.fdb_latexmk                       -a---- 16135  
+supplement.fls                               -a---- 21416  
+supplement.log                               -a---- 31601  
+supplement.out                               -a---- 2334   
+supplement.pdf                               -a---- 287496 
+supplement.tex                               -a---- 1783   
+supplement.xdv                               -a---- 834120 
+theorem_env_summary.tmp.txt                  -a---- 32474  
+theorem_extract.txt                          -a---- 63774  
+theorem_inventory.json                       -a---- 25712  
+theorem_inventory.md                         -a---- 8730   
+xelatex_final1.out                           -a---- 12748  
+xelatex_final2.out                           -a---- 11510  
+xelatex_run1.out                             -a---- 12580  
+xelatex_run2.out                             -a---- 12580  
+xelatex_verify.out                           -a---- 11870  
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+                                                           
+
+
+
+ succeeded in 291ms:
+ D ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/cover_letter_apal.txt
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/main.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_appendix.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_branch_aggregation.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_branch_contextuality.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_conclusion.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_gerbe_obstruction.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_homological_visibility.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_homological_visibility_intrinsic.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_introduction.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/sec_preliminaries.tex
+ M ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/supplement.tex
+ M ../../../tools/chatgpt-oracle/README.md
+ M ../../../tools/chatgpt-oracle/nyxid-worker/policy.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/policy.test.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/start-shared.ps1
+ M ../../../tools/chatgpt-oracle/nyxid-worker/start-worker.ps1
+ M ../../../tools/chatgpt-oracle/nyxid-worker/worker-static.test.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/worker.mjs
+ M ../../../tools/chatgpt-oracle/oracle_dispatch.py
+ M ../../../tools/chatgpt-oracle/oracle_pipeline.py
+ M ../../../tools/chatgpt-oracle/paper_refill.py
+ M ../../../tools/chatgpt-oracle/pipeline_health.py
+ M ../../../tools/chatgpt-oracle/pipeline_supervisor.py
+ M ../../../tools/chatgpt-oracle/sprint/a5_nishioka2_out.txt
+ M ../../../tools/chatgpt-oracle/sprint/a7_repair_out.txt
+ M ../../../tools/chatgpt-oracle/sprint/a9_repair_out.txt
+ M ../../../tools/chatgpt-oracle/tests/test_nyxid_oracle_scripts_static.py
+ M ../../../tools/chatgpt-oracle/tests/test_pipeline_supervisor.py
+?? ../../../artifacts/
+?? ../../../bash.exe.stackdump
+?? ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/cover_letter_cahiers.txt
+?? ../2026_homological_visibility_gluing_obstructions_state_forcing_apal/submission_metadata.md
+?? ../../../tools/FKST_THEOREM_MINING_HANDOFF.md
+?? ../../../tools/chatgpt-oracle/nyxid-worker/nyxid-via-warp.ps1
+?? ../../../tools/chatgpt-oracle/sprint/a7_checksum_out.txt
+?? ../../../tools/chatgpt-oracle/sprint/a7_checksum_task.txt
+core.autocrlf=true
+0da4ab81f [finite_parts] the standard Nishioka theorem is linear and does not reach our quadratic equation
+da39a134d [upper_fibers] the invoked supplement results are now numbered statements in the article, and Wagner is credited
+3ed71c695 board: tick 33 — the standard Nishioka theorem is linear and does not cover our quadratic equation
+fbc7d9426 board: tick 32 — A8 and A5 land; Keiji Nishioka 1985 original text remains unverifiable
+4d9cb6719 [finite_parts] Nishioka is two people; the paper had merged them at the point where it concedes priority
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'GEMINI.md' -g '"'!tmp/**'"'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem artifacts,scripts -Filter 'verify*.py' | Select-Object FullName; Get-ChildItem artifacts,scripts -Filter 'test_*.py' | Select-Object FullName" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$p='"'artifacts\\verify_finite_claims.py'; Get-Content "'$p | Select-Object -Skip 1135 -First 45; Get-Content $p | Select-Object -Skip 1530 -First 155' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$p='"'scripts\\verify_deepening_delta.py'; Get-Content "'$p | Select-Object -Skip 390 -First 230' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw artifacts\\test_verify_finite_claims.py; Get-Content -Raw scripts\\test_verify_squarefree_slice.py; if (Test-Path scripts\\test_verify_deepening_delta.py) { Get-Content -Raw scripts\\test_verify_deepening_delta.py }" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git ls-files --eol artifacts scripts | Select-String -Pattern 'verify|REPRODUCE|SHA256|\\.txt|\\.tsv|\\.md'" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n \"latexmk|pdfxe|supplement|undefined references|multiply-defined|Citation.*undefined\" -g '*.md' -g '*.ps1' -g '*.sh' ." in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+2026-08-14T23:04:17.004236Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+
+ exited 1 in 190ms:
+ succeeded in 206ms:
+#!/usr/bin/env python3
+"""Regression tests for the Deepening Delta verification battery."""
+
+import math
+import tempfile
+import unittest
+from pathlib import Path
+
+from sympy import factorint
+
+from verify_finite_claims import (
+    atomic_family_multiplicity,
+    bell_number,
+    bicolored_graph_count,
+    classify_support_three,
+    connected_minimal_cover_count,
+    exact_rank_primes,
+    exact_rank_prime_count,
+    expected_connected_support_spectrum,
+    expected_support_spectrum,
+    extremal_support_product_count,
+    factorint_fibonacci,
+    fibonacci_rank,
+    fibotomic_error_bound,
+    fibotomic_rank_entropy_data,
+    four_coordinate_counterexample_data,
+    four_coordinate_orbit_summary,
+    load_factorization_archive,
+    local_limit_probability,
+    minimal_cover_count,
+    minimal_cover_counts_by_size,
+    omega,
+    omega_big,
+    private_cover_lower_bound,
+    private_cover_upper_bound,
+    prime_inverse_ray_prefix,
+    rank_window_deaggregation_data,
+    rank_pure_sector,
+    run_battery,
+    support_spectra,
+    theta_constant,
+    theta_normalized_cover_ratio,
+    upper_fiber_exhaustive,
+    upper_fiber_threshold,
+    refined_private_cover_upper_bound,
+    write_factorization_archive,
+)
+
+
+class FiniteClaimTests(unittest.TestCase):
+    def test_exact_rank_prime_existence_and_inverse_ray(self):
+        missing = tuple(
+            rank for rank in range(3, 211) if not exact_rank_primes(rank)
+        )
+        self.assertEqual(missing, (6, 12))
+
+        ray = prime_inverse_ray_prefix(7, 3)
+        self.assertEqual(ray, (7, 13, 233, 139801))
+        self.assertEqual(
+            tuple(fibonacci_rank(prime) for prime in ray[1:]),
+            ray[:-1],
+        )
+        self.assertEqual(
+            tuple(fibonacci_rank(value) for value in (7, 8, 6)),
+            (8, 6, 12),
+        )
+
+    def test_four_coordinate_witness_kernel_orbits(self):
+        summary = four_coordinate_orbit_summary()
+        self.assertTrue(summary.claimed_representatives_match)
+        self.assertEqual(summary.orbit_count, 24)
+        self.assertEqual(summary.labelled_count, 243)
+        self.assertEqual(summary.t_connected_orbit_count, 13)
+        self.assertEqual(summary.t_connected_labelled_count, 133)
+        self.assertEqual(summary.t_disconnected_orbit_count, 11)
+        self.assertEqual(summary.t_disconnected_labelled_count, 110)
+        self.assertEqual(
+            summary.t_connected_orbit_sizes,
+            (1, 4, 6, 12, 6, 12, 12, 24, 24, 4, 12, 12, 4),
+        )
+        self.assertEqual(
+            summary.t_disconnected_orbit_sizes,
+            (3, 12, 12, 4, 12, 12, 24, 12, 6, 12, 1),
+        )
+
+    def test_positive_support_connectivity_is_strict_at_n3465(self):
+        data = four_coordinate_counterexample_data()
+        self.assertEqual(data.n, 3465)
+        self.assertEqual(data.m, 8_644_661_177)
+        self.assertEqual(data.ranks, (9, 15, 21, 33))
+        self.assertEqual(
+            data.full_supports,
+            (
+                frozenset({0}),
+                frozenset({1}),
+                frozenset({2}),
+                frozenset({3}),
+            ),
+        )
+        self.assertEqual(
+            data.positive_supports,
+            (
+                frozenset({0}),
+                frozenset({0, 1}),
+                frozenset({0, 2}),
+                frozenset({0, 3}),
+            ),
+        )
+        self.assertEqual(data.lowered_lcms, (1155, 693, 495, 315))
+        self.assertFalse(data.full_support_connected)
+        self.assertTrue(data.positive_support_connected)
+
+    def test_exact_total_and_connected_support_spectra(self):
+        expected = {
+            12: ((1, 2), (1,)),
+            18: ((1, 2), (1, 2)),
+            24: ((1, 2), (1, 2)),
+            30: ((1, 2), (1, 2)),
+            60: ((1, 2, 3), (1, 2)),
+            105: ((1, 2, 3), (1, 2)),
+            180: ((1, 2, 3), (1, 2, 3)),
+            210: ((1, 2, 3), (1, 2, 3)),
+        }
+        for n, spectra in expected.items():
+            with self.subTest(n=n):
+                self.assertEqual(support_spectra(n), spectra)
+                self.assertEqual(expected_support_spectrum(n), spectra[0])
+                self.assertEqual(
+                    expected_connected_support_spectrum(n), spectra[1]
+                )
+
+    def test_extremal_support_slice_has_atomic_product_count(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                total, _ = support_spectra(n)
+                actual = sum(
+                    omega(m) == omega(n)
+                    for m in upper_fiber_threshold(n).minimal_generators
+                )
+                self.assertEqual(actual, extremal_support_product_count(n))
+                self.assertEqual(omega(n) in total, actual > 0)
+
+    def test_fibotomic_rank_entropy_and_rank_congruences_through_120(self):
+        error_bound = fibotomic_error_bound()
+        for rank in range(3, 121):
+            with self.subTest(rank=rank):
+                data = fibotomic_rank_entropy_data(rank)
+                self.assertEqual(
+                    len(data.exact_rank_primes), exact_rank_prime_count(rank)
+                )
+                self.assertEqual(
+                    data.exact_rank_radical,
+                    math.prod(data.exact_rank_primes),
+                )
+                self.assertEqual(
+                    data.fibotomic_value % data.exact_rank_radical, 0
+                )
+                self.assertLessEqual(
+                    data.entropy_lower_bound,
+                    math.log(data.fibotomic_value) + 1e-12,
+                )
+                self.assertLessEqual(abs(data.binet_error), error_bound)
+                for index, prime in enumerate(data.exact_rank_primes, start=1):
+                    self.assertGreaterEqual(
+                        prime, rank * math.ceil(index / 2) - 1
+                    )
+                    if prime not in (2, 5):
+                        self.assertTrue(
+                            (prime - 1) % rank == 0
+                            or (prime + 1) % rank == 0
+                        )
+
+    def test_jarden_exact_rank_consequence_in_available_range(self):
+        for prime in (7, 11, 13, 17, 19):
+            with self.subTest(prime=prime):
+                self.assertGreaterEqual(exact_rank_prime_count(10 * prime), 2)
+
+    def test_rank_window_deaggregation_bounds_through_120(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                data = rank_window_deaggregation_data(n)
+                self.assertLessEqual(data.prime_window_maximum, data.multiplicity)
+                self.assertLessEqual(
+                    data.multiplicity, data.prime_window_maximum + 1
+                )
+                self.assertLessEqual(data.visible_rank_maximum, data.multiplicity)
+                self.assertLessEqual(
+                    data.multiplicity,
+                    1 + data.visible_rank_maximum * data.exponent_product,
+                )
+                self.assertGreaterEqual(
+                    math.log(data.multiplicity)
+                    - math.log(data.visible_rank_maximum),
+                    0.0,
+                )
+                self.assertLessEqual(
+                    math.log(data.multiplicity)
+                    - math.log(data.visible_rank_maximum),
+                    math.log(2) + data.exponent_cost + 1e-12,
+                )
+
+    def test_squarefree_exact_rank_partition_and_blms_pigeonhole(self):
+        checks = 0
+        for n in range(3, 121):
+            factors = factorint(n)
+            if any(exponent != 1 for exponent in factors.values()):
+                continue
+            data = rank_window_deaggregation_data(n)
+            exact_rank_total = sum(
+                exact_rank_prime_count(d)
+                for d in range(1, n + 1)
+                if n % d == 0
+            )
+            self.assertEqual(exact_rank_total, len(factorint_fibonacci(n)))
+            self.assertGreaterEqual(
+                data.multiplicity,
+                exact_rank_total / (2 ** omega(n) - 1),
+            )
+            checks += 1
+        self.assertEqual(checks, 73)
+
+    def test_refined_private_cover_bound_and_boundary_convention(self):
+        self.assertEqual(atomic_family_multiplicity(2), 1)
+        self.assertEqual(refined_private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(refined_private_cover_upper_bound(2, 1), 10)
+        self.assertEqual(refined_private_cover_upper_bound(3, 1), 50)
+        for support_size in range(1, 20):
+            for multiplicity in (1, 2, 5):
+                self.assertLessEqual(
+                    refined_private_cover_upper_bound(support_size, multiplicity),
+                    multiplicity**support_size
+                    * refined_private_cover_upper_bound(support_size, 1),
+                )
+
+    def test_minimal_cover_formula_and_connected_counts(self):
+        self.assertEqual(
+            tuple(minimal_cover_count(k) for k in range(1, 7)),
+            (1, 2, 8, 49, 462, 6424),
+        )
+        self.assertEqual(minimal_cover_counts_by_size(5), (1, 90, 305, 65, 1))
+        self.assertEqual(
+            tuple(connected_minimal_cover_count(k) for k in range(1, 6)),
+            (1, 1, 4, 23, 241),
+        )
+        self.assertEqual(bicolored_graph_count(4), 162)
+
+    def test_theta_asymptotic_and_local_limit_numerically(self):
+        self.assertAlmostEqual(theta_constant(0), 2.128936827211877, places=14)
+        self.assertAlmostEqual(theta_constant(1), 2.128931250513028, places=14)
+        for parity in (0, 1):
+            ratios = [
+                theta_normalized_cover_ratio(k)
+                for k in range(20 + parity, 81, 2)
+            ]
+            self.assertLess(abs(ratios[-1] - 1.0), abs(ratios[0] - 1.0))
+            self.assertLess(abs(ratios[-1] - 1.0), 0.02)
+        for d in (-2, -1, 0, 1, 2):
+            even_actual, even_limit = local_limit_probability(80, d)
+            odd_actual, odd_limit = local_limit_probability(81, d)
+            self.assertLess(abs(even_actual - even_limit), 0.01)
+            self.assertLess(abs(odd_actual - odd_limit), 0.01)
+
+    def test_rank_pure_sector_handles_exceptional_and_odd_layers(self):
+        even = rank_pure_sector(30)
+        self.assertEqual(even.coordinate_count, 3)
+        self.assertEqual(even.exceptional_support_count, 2)
+        self.assertEqual(even.minimal_cover_count, 8)
+        self.assertEqual(even.admissible_cover_count, 3)
+        self.assertEqual(even.canonical_product_count, 3)
+
+        odd = rank_pure_sector(105)
+        self.assertEqual(odd.coordinate_count, 3)
+        self.assertEqual(odd.exceptional_support_count, 0)
+        self.assertEqual(odd.minimal_cover_count, 8)
+        self.assertEqual(odd.admissible_cover_count, 8)
+        self.assertEqual(odd.canonical_product_count, 8)
+
+    def test_rank_pure_products_are_independent_minimal_generators(self):
+        for n in (30, 42, 105, 210):
+            with self.subTest(n=n):
+                sector = rank_pure_sector(n)
+                actual = set(upper_fiber_threshold(n).minimal_generators)
+                self.assertEqual(
+                    sector.canonical_product_count,
+                    len(sector.canonical_products),
+                )
+                self.assertTrue(set(sector.canonical_products).issubset(actual))
+                self.assertEqual(
+                    sector.weighted_product_count,
+                    len(sector.all_products),
+                )
+                self.assertTrue(set(sector.all_products).issubset(actual))
+                self.assertGreaterEqual(
+                    sector.weighted_product_count,
+                    sector.canonical_product_count,
+                )
+
+    def test_odd_squarefree_layer_can_have_a_ladder_generator(self):
+        sector = rank_pure_sector(91)
+        actual = set(upper_fiber_threshold(91).minimal_generators)
+        self.assertEqual(sector.weighted_product_count, 3)
+        self.assertEqual(len(actual), 4)
+        self.assertTrue(set(sector.all_products).issubset(actual))
+        self.assertNotIn(169, sector.all_products)
+        self.assertIn(169, actual)
+        report = run_battery(30, 91)
+        self.assertIn(
+            "n=91 ladder separation: #R_91^rp = 3 < #M_91 = 4; "
+            "169 in M_91 \\\\ R_91^rp",
+            report,
+        )
+
+    def test_corrected_n30_data_and_types(self):
+        exhaustive = upper_fiber_exhaustive(30)
+        threshold = upper_fiber_threshold(30)
+
+        expected = (20, 22, 31, 244, 671)
+        self.assertEqual(exhaustive.a_count, 52)
+        self.assertEqual(exhaustive.minimal_generators, expected)
+        self.assertEqual(threshold.a_count, 52)
+        self.assertEqual(threshold.minimal_generators, expected)
+
+        realized = {
+            classify_support_three(m, 30) for m in expected
+        }
+        self.assertEqual(
+            realized,
+            {"Gamma_1", "Gamma_4", "Gamma_5", "Gamma_7", "Gamma_8"},
+        )
+        self.assertTrue(
+            {"Gamma_3", "Gamma_6", "Gamma_9"}.isdisjoint(realized)
+        )
+
+    def test_independent_methods_agree_through_30(self):
+        for n in range(2, 31):
+            with self.subTest(n=n):
+                exhaustive = upper_fiber_exhaustive(n)
+                threshold = upper_fiber_threshold(n)
+                self.assertEqual(exhaustive.a_count, threshold.a_count)
+                self.assertEqual(
+                    exhaustive.minimal_generators,
+                    threshold.minimal_generators,
+                )
+
+    def test_finite_growth_bounds_through_50(self):
+        for n in range(3, 51):
+            with self.subTest(n=n):
+                result = upper_fiber_threshold(n)
+                k = omega(n)
+                big_omega = omega_big(factorint_fibonacci(n))
+                subset_bound = sum(
+                    math.comb(big_omega, r)
+                    for r in range(0, min(k, big_omega) + 1)
+                )
+                self.assertLessEqual(len(result.minimal_generators), subset_bound)
+                self.assertLessEqual(len(result.minimal_generators), n**k)
+                if n % 2 == 1:
+                    self.assertGreaterEqual(
+                        len(result.minimal_generators), bell_number(k)
+                    )
+
+    def test_private_cover_bounds_through_120(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                result = upper_fiber_threshold(n)
+                k = omega(n)
+                count = len(result.minimal_generators)
+                multiplicity = atomic_family_multiplicity(n)
+                self.assertGreaterEqual(multiplicity, 1)
+                if k >= 3:
+                    self.assertGreaterEqual(count, private_cover_lower_bound(k))
+                self.assertLessEqual(
+                    count, private_cover_upper_bound(k, multiplicity)
+                )
+
+    def test_private_cover_bounds_have_the_claimed_finite_values(self):
+        self.assertEqual(private_cover_lower_bound(3), 1)
+        self.assertEqual(private_cover_lower_bound(4), 9)
+        self.assertEqual(private_cover_lower_bound(5), 27)
+        self.assertEqual(private_cover_lower_bound(6), 343)
+        self.assertEqual(private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(private_cover_upper_bound(2, 1), 12)
+
+    def test_factorization_archive_round_trip_through_30(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "fibonacci_factorizations_2_30.tsv"
+            write_factorization_archive(path, 30)
+            archive = load_factorization_archive(path, 30)
+            self.assertEqual(archive[2], tuple())
+            self.assertEqual(archive[30], factorint_fibonacci(30))
+            text = path.read_text(encoding="ascii")
+            self.assertIn("python_version\tsympy_version", text)
+            self.assertIn("30\t832040\t2^3*5*11*31*61", text)
+
+    def test_report_documents_set_equalities_and_versions(self):
+        report = run_battery(30, 30)
+        self.assertIn("B_n direct = B_n upper fiber: 29/29 set equalities", report)
+        self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+        self.assertIn("Rank-pure layers checked: 28", report)
+        self.assertIn("Odd layers realizing all minimal covers: 14/14", report)
+        self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
+        self.assertIn("Rank-pure weighted products in M_n: 28/28 layer checks", report)
+        self.assertIn("Exact total support spectra: 28/28", report)
+        self.assertIn("Exact connected support spectra: 28/28", report)
+        self.assertIn("Extremal atomic-product counts: 28/28", report)
+        self.assertIn(
+            "Four-coordinate witness kernels: 24 orbits / 243 labelled",
+            report,
+        )
+        self.assertIn(
+            "T-connected kernels: 13 orbits / 133 labelled; "
+            "T-disconnected kernels: 11 orbits / 110 labelled",
+            report,
+        )
+        self.assertIn(
+            "n=3465 support separation: ranks (9, 15, 21, 33); "
+            "T-support disconnected; positive support connected",
+            report,
+        )
+        self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
+        self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
+        self.assertIn("Rank-window deaggregation inequalities: 28/28", report)
+        self.assertIn("Squarefree BLMS pigeonhole inequalities: 17/17", report)
+        self.assertIn("Refined private-cover upper bounds: 28/28", report)
+        self.assertIn("Fibotomic rank-entropy inequalities: 28/28", report)
+        self.assertIn("Fibotomic exact-rank radical divisibilities: 28/28", report)
+        self.assertIn("Jarden a(10p) >= 2 checks: 0/0", report)
+        self.assertIn(
+            "Exact-rank prime existence on 3 <= d <= 30: 26/26 "
+            "nonexceptional ranks",
+            report,
+        )
+        self.assertIn("Exceptional empty prime fibers: ranks 6 and 12", report)
+        self.assertIn(
+            "Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
+            report,
+        )
+        self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+        self.assertIn("Python version:", report)
+        self.assertIn("SymPy version:", report)
+        self.assertNotIn("Deepening Delta", report)
+        self.assertNotIn("counterexample battery", report.lower())
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+#!/usr/bin/env python3
+"""Regression tests for the squarefree-fiber and sharpness verifier."""
+
+import itertools
+import unittest
+
+try:
+    from .verify_squarefree_slice import (
+        extremal_full_support_profile,
+        minimal_covers,
+        rank_pure_products,
+        sharp_mass_lower_bound,
+        squarefree_minimal_generators,
+        weighted_cover_partition,
+    )
+except ImportError:
+    from verify_squarefree_slice import (
+        extremal_full_support_profile,
+        minimal_covers,
+        rank_pure_products,
+        sharp_mass_lower_bound,
+        squarefree_minimal_generators,
+        weighted_cover_partition,
+    )
+
+
+class SquarefreeSliceTests(unittest.TestCase):
+    def test_every_nonempty_subset_occurs_in_a_minimal_cover(self):
+        for size in range(1, 5):
+            vertex_set = frozenset(range(size))
+            covers = minimal_covers(size)
+            for subset_size in range(1, size + 1):
+                for subset in itertools.combinations(vertex_set, subset_size):
+                    self.assertTrue(
+                        any(frozenset(subset) in cover for cover in covers)
+                    )
+
+    def test_sharp_mass_bound_for_small_integer_profiles(self):
+        for size in range(1, 4):
+            subsets = tuple(
+                subset
+                for subset_size in range(1, size + 1)
+                for subset in map(frozenset, itertools.combinations(range(size), subset_size))
+            )
+            baseline_mass = len(subsets)
+            for excess_locations in itertools.product(range(len(subsets)), repeat=3):
+                weights = {subset: 1 for subset in subsets}
+                for location in excess_locations:
+                    weights[subsets[location]] += 1
+                partition = weighted_cover_partition(size, weights)
+                self.assertGreaterEqual(
+                    partition,
+                    sharp_mass_lower_bound(size, baseline_mass + 3),
+                )
+
+    def test_full_support_profile_attains_the_bound(self):
+        for size in range(1, 5):
+            baseline_mass = 2**size - 1
+            for excess in (0, 1, 5, 17):
+                total_mass = baseline_mass + excess
+                weights = extremal_full_support_profile(size, total_mass)
+                self.assertEqual(
+                    weighted_cover_partition(size, weights),
+                    sharp_mass_lower_bound(size, total_mass),
+                )
+
+    def test_equality_profile_is_unique_from_k_three(self):
+        excess = 3
+        for size in (3, 4):
+            subsets = tuple(
+                subset
+                for subset_size in range(1, size + 1)
+                for subset in map(frozenset, itertools.combinations(range(size), subset_size))
+            )
+            full_support = frozenset(range(size))
+            lower_bound = sharp_mass_lower_bound(size, len(subsets) + excess)
+            equality_profiles = set()
+            for excess_locations in itertools.combinations_with_replacement(
+                range(len(subsets)), excess
+            ):
+                weights = {subset: 1 for subset in subsets}
+                for location in excess_locations:
+                    weights[subsets[location]] += 1
+                if weighted_cover_partition(size, weights) == lower_bound:
+                    equality_profiles.add(tuple(weights[subset] for subset in subsets))
+            expected = {tuple(1 + excess if subset == full_support else 1 for subset in subsets)}
+            self.assertEqual(equality_profiles, expected)
+
+        size = 2
+        subsets = tuple(
+            subset
+            for subset_size in range(1, size + 1)
+            for subset in map(frozenset, itertools.combinations(range(size), subset_size))
+        )
+        singleton_profile = {subset: 1 for subset in subsets}
+        singleton_profile[frozenset({0})] += excess
+        self.assertEqual(
+            weighted_cover_partition(size, singleton_profile),
+            sharp_mass_lower_bound(size, len(subsets) + excess),
+        )
+
+    def test_rank_pure_products_equal_squarefree_minima(self):
+        squarefree_indices = (
+            3,
+            5,
+            6,
+            7,
+            10,
+            15,
+            21,
+            30,
+            35,
+            42,
+            55,
+            66,
+            70,
+            78,
+            105,
+        )
+        for n in squarefree_indices:
+            with self.subTest(n=n):
+                self.assertEqual(
+                    rank_pure_products(n),
+                    squarefree_minimal_generators(n),
+                )
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+#!/usr/bin/env python3
+"""Regression tests for the Deepening Delta verification battery."""
+
+import math
+import tempfile
+import unittest
+from pathlib import Path
+
+from verify_deepening_delta import (
+    atomic_family_multiplicity,
+    bell_number,
+    classify_support_three,
+    factorint_fibonacci,
+    load_factorization_archive,
+    omega,
+    omega_big,
+    private_cover_lower_bound,
+    private_cover_upper_bound,
+    run_battery,
+    upper_fiber_exhaustive,
+    upper_fiber_threshold,
+    write_factorization_archive,
+)
+
+
+class DeepeningDeltaTests(unittest.TestCase):
+    def test_corrected_n30_data_and_types(self):
+        exhaustive = upper_fiber_exhaustive(30)
+        threshold = upper_fiber_threshold(30)
+
+        expected = (20, 22, 31, 244, 671)
+        self.assertEqual(exhaustive.a_count, 52)
+        self.assertEqual(exhaustive.minimal_generators, expected)
+        self.assertEqual(threshold.a_count, 52)
+        self.assertEqual(threshold.minimal_generators, expected)
+
+        realized = {
+            classify_support_three(m, 30) for m in expected
+        }
+        self.assertEqual(
+            realized,
+            {"Gamma_1", "Gamma_4", "Gamma_5", "Gamma_7", "Gamma_8"},
+        )
+        self.assertTrue(
+            {"Gamma_3", "Gamma_6", "Gamma_9"}.isdisjoint(realized)
+        )
+
+    def test_independent_methods_agree_through_30(self):
+        for n in range(2, 31):
+            with self.subTest(n=n):
+                exhaustive = upper_fiber_exhaustive(n)
+                threshold = upper_fiber_threshold(n)
+                self.assertEqual(exhaustive.a_count, threshold.a_count)
+                self.assertEqual(
+                    exhaustive.minimal_generators,
+                    threshold.minimal_generators,
+                )
+
+    def test_finite_growth_bounds_through_50(self):
+        for n in range(3, 51):
+            with self.subTest(n=n):
+                result = upper_fiber_threshold(n)
+                k = omega(n)
+                big_omega = omega_big(factorint_fibonacci(n))
+                subset_bound = sum(
+                    math.comb(big_omega, r)
+                    for r in range(0, min(k, big_omega) + 1)
+                )
+                self.assertLessEqual(len(result.minimal_generators), subset_bound)
+                self.assertLessEqual(len(result.minimal_generators), n**k)
+                if n % 2 == 1:
+                    self.assertGreaterEqual(
+                        len(result.minimal_generators), bell_number(k)
+                    )
+
+    def test_private_cover_bounds_through_120(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                result = upper_fiber_threshold(n)
+                k = omega(n)
+                count = len(result.minimal_generators)
+                multiplicity = atomic_family_multiplicity(n)
+                self.assertGreaterEqual(multiplicity, 1)
+                if k >= 3:
+                    self.assertGreaterEqual(count, private_cover_lower_bound(k))
+                self.assertLessEqual(
+                    count, private_cover_upper_bound(k, multiplicity)
+                )
+
+    def test_private_cover_bounds_have_the_claimed_finite_values(self):
+        self.assertEqual(private_cover_lower_bound(3), 1)
+        self.assertEqual(private_cover_lower_bound(4), 9)
+        self.assertEqual(private_cover_lower_bound(5), 27)
+        self.assertEqual(private_cover_lower_bound(6), 343)
+        self.assertEqual(private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(private_cover_upper_bound(2, 1), 12)
+
+    def test_factorization_archive_round_trip_through_30(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "fibonacci_factorizations_2_30.tsv"
+            write_factorization_archive(path, 30)
+            archive = load_factorization_archive(path, 30)
+            self.assertEqual(archive[2], tuple())
+            self.assertEqual(archive[30], factorint_fibonacci(30))
+            text = path.read_text(encoding="ascii")
+            self.assertIn("python_version\tsympy_version", text)
+            self.assertIn("30\t832040\t2^3*5*11*31*61", text)
+
+    def test_report_documents_set_equalities_and_versions(self):
+        report = run_battery(30, 30)
+        self.assertIn("B_n direct = B_n upper fiber: 29/29 set equalities", report)
+        self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+        self.assertIn("Python version:", report)
+        self.assertIn("SymPy version:", report)
+        self.assertNotIn("Deepening Delta", report)
+        self.assertNotIn("counterexample battery", report.lower())
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+
+ succeeded in 250ms:
+
+FullName                                                                                                               
+--------                                                                                                               
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\verify_finit...
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_deepeni...
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_squaref...
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\test_verify_...
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\test_verify_de...
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\test_verify_sq...
+
+
+
+ succeeded in 266ms:
+            if valuation(divisor, prime) == exponent
+        )
+        if not full_support:
+            continue
+        count = exact_rank_prime_count(divisor)
+        visible_counts.append(count)
+        window_totals[full_support] = window_totals.get(full_support, 0) + count
+    return RankWindowDeaggregationData(
+        n=n,
+        visible_rank_maximum=max([1, *visible_counts]),
+        prime_window_maximum=max(window_totals.values(), default=0),
+        multiplicity=atomic_family_multiplicity(n),
+        exponent_product=math.prod(n_factors.values()),
+        exponent_cost=sum(math.log(exponent) for exponent in n_factors.values()),
+    )
+
+
+def run_battery(exhaustive_max: int, scalable_max: int) -> str:
+    if exhaustive_max < 30:
+        raise ValueError("exhaustive_max must be at least 30")
+    if scalable_max < exhaustive_max:
+        raise ValueError("scalable_max must be at least exhaustive_max")
+
+    started = time.time()
+    failures = []
+    counterexamples = []
+    results = {}
+    birth_layer_set_equalities = 0
+    minimal_generator_set_equalities = 0
+    rank_pure_layers = 0
+    rank_pure_membership_layers = 0
+    rank_pure_weighted_membership_layers = 0
+    odd_rank_pure_layers = 0
+    odd_complete_realizations = 0
+    deaggregation_layers = 0
+    deaggregation_checks = 0
+    squarefree_layers = 0
+    squarefree_pigeonhole_checks = 0
+    refined_private_bound_checks = 0
+    fibotomic_layers = 0
+    fibotomic_entropy_checks = 0
+    fibotomic_radical_checks = 0
+    jarden_layers = 0
+    jarden_checks = 0
+    support_spectrum_checks = 0
+                math.log(len(results[n].minimal_generators)) for n in high_support
+            ) / sum(entropy_constant * omega(n) ** 2 for n in high_support)
+            ratio_text = f"; private-entropy ratio = {cumulative_ratio:.6f}"
+        else:
+            ratio_text = "; private-entropy ratio = n/a"
+        growth_lines.append(
+            f"  n <= {bound:>3}: max #M_n = {max_count} at n={max_n}; "
+            f"mean(log #M_n) = {mean_log:.6f}{ratio_text}"
+        )
+
+    multiplicities = {
+        n: atomic_family_multiplicity(n) for n in range(3, scalable_max + 1)
+    }
+    max_r_n = max(multiplicities, key=multiplicities.get)
+    support_four = results.get(210)
+
+    elapsed = time.time() - started
+    lines = [
+        "Finite verification report",
+        "==========================",
+        f"Exact exhaustive divisor/rank range: 2 <= n <= {exhaustive_max}",
+        f"Finite claim-check range: 2 <= n <= {scalable_max}",
+        f"Python version: {platform.python_version()}",
+        f"SymPy version: {sympy_version}",
+        "Factorization algorithm: SymPy factorint over exact Python integers",
+        "Set comparisons on the exhaustive range:",
+        f"  B_n direct = B_n upper fiber: {birth_layer_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
+        f"  M_n direct = M_n witness: {minimal_generator_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
+        "",
+        "Rank-pure universality checks:",
+        f"  Minimal-cover formula = direct enumeration (k <= 4): "
+        f"{cover_formula_checks}/4",
+        f"  Connected-cover inversion = direct enumeration (k <= 4): "
+        f"{connected_cover_checks}/4",
+        f"  Rank-pure layers checked: {rank_pure_layers}",
+        f"  Exact-rank Mobius counts checked on every nonempty support",
+        f"  Rank-pure canonical products in M_n: {rank_pure_membership_layers}/"
+        f"{rank_pure_layers} layer checks",
+        f"  Rank-pure weighted products in M_n: "
+        f"{rank_pure_weighted_membership_layers}/{rank_pure_layers} "
+        "layer checks",
+        f"  Odd layers realizing all minimal covers: {odd_complete_realizations}/"
+        f"{odd_rank_pure_layers}",
+        f"  Exact total support spectra: {support_spectrum_checks}/"
+        f"{deaggregation_layers}",
+        f"  Exact connected support spectra: {connected_support_spectrum_checks}/"
+        f"{deaggregation_layers}",
+        f"  Extremal atomic-product counts: {extremal_slice_checks}/"
+        f"{deaggregation_layers}",
+        f"  Four-coordinate witness kernels: "
+        f"{four_coordinate_summary.orbit_count} orbits / "
+        f"{four_coordinate_summary.labelled_count} labelled",
+        f"  T-connected kernels: "
+        f"{four_coordinate_summary.t_connected_orbit_count} orbits / "
+        f"{four_coordinate_summary.t_connected_labelled_count} labelled; "
+        f"T-disconnected kernels: "
+        f"{four_coordinate_summary.t_disconnected_orbit_count} orbits / "
+        f"{four_coordinate_summary.t_disconnected_labelled_count} labelled",
+        f"  n=3465 support separation: ranks "
+        f"{four_coordinate_counterexample.ranks}; T-support disconnected; "
+        "positive support connected",
+        "  Exact minimal-cover values C_k (1 <= k <= 6): "
+        + str(tuple(minimal_cover_count(k) for k in range(1, 7))),
+        "  Connected-cover ratios D_k/C_k at k=20,40,80: "
+        + ", ".join(
+            f"{connected_minimal_cover_count(k) / minimal_cover_count(k):.12f}"
+            for k in (20, 40, 80)
+        ),
+        "  Theta-normalized C_k ratios at k=20,40,80: "
+        + ", ".join(
+            f"{theta_normalized_cover_ratio(k):.12f}" for k in (20, 40, 80)
+        ),
+        "  Central local-limit errors at k=40,80 (d=0): "
+        + ", ".join(
+            f"{abs(local_limit_probability(k, 0)[0] - local_limit_probability(k, 0)[1]):.3e}"
+            for k in (40, 80)
+        ),
+        f"  Rank-window deaggregation inequalities: {deaggregation_checks}/"
+        f"{deaggregation_layers}",
+        f"  Squarefree BLMS pigeonhole inequalities: "
+        f"{squarefree_pigeonhole_checks}/{squarefree_layers}",
+        f"  Refined private-cover upper bounds: {refined_private_bound_checks}/"
+        f"{deaggregation_layers}",
+        f"  Fibotomic rank-entropy inequalities: {fibotomic_entropy_checks}/"
+        f"{fibotomic_layers}",
+        f"  Fibotomic exact-rank radical divisibilities: "
+        f"{fibotomic_radical_checks}/{fibotomic_layers}",
+        f"  Jarden a(10p) >= 2 checks: {jarden_checks}/{jarden_layers}",
+        *ladder_separation_lines,
+        "",
+        "Prime inverse-dynamics checks:",
+        f"  Exact-rank prime existence on 3 <= d <= {scalable_max}: "
+        f"{nonexceptional_exact_rank_checks}/"
+        f"{nonexceptional_exact_rank_checks} nonexceptional ranks",
+        "  Exceptional empty prime fibers: ranks 6 and 12",
+        "  Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
+        "  Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12",
+        "",
+        "Corrected n=30 data:",
+        f"  A(30) = {n30.a_count}",
+        f"  M_30 = {n30.minimal_generators}",
+        f"  realized types = {realized_types}",
+        f"  excluded types = {excluded_types}",
+        "",
+        "Growth-law checks:",
+        "  finite upper bound: #M_n <= sum_{r<=omega(n)} binom(Omega(F_n), r)",
+        "  simplified upper bound: #M_n <= n^omega(n)",
+        "  odd-layer lower bound: #M_n >= Bell(omega(n))",
+        "  private-cover lower bound (k>=3): #M_n >= "
+        "(2^floor(k/2)-1)^ceil(k/2)",
+        "  private-cover upper bound: sum_{r<=k} binom(k,r) "
+        "(2R(n))^r 2^{r(k-r)}",
+        *growth_lines,
+        f"  max rank-window multiplicity R(n) = {multiplicities[max_r_n]} "
+        f"at n={max_r_n}",
+        *(
+            [
+                f"  first support-four layer n=210: #M_210 = "
+                f"{len(support_four.minimal_generators)}, R(210) = "
+                f"{multiplicities[210]}, lower bound = "
+                f"{private_cover_lower_bound(4)}"
+            ]
+            if support_four is not None
+            else []
+        ),
+        "",
+        "Finite claim checks:",
+        f"  failures = {len(failures)}",
+        f"  counterexamples = {len(counterexamples)}",
+    ]
+    if failures:
+        lines.extend(f"  FAILURE: {failure}" for failure in failures)
+    if counterexamples:
+        lines.extend(f"  COUNTEREXAMPLE: {item}" for item in counterexamples)
+    lines.extend(
+        [
+            f"  elapsed_seconds = {elapsed:.3f}",
+            "",
+            "RESULT: "
+            + (
+                "PASS (0 failures / 0 counterexamples)"
+                if not failures and not counterexamples
+                else "FAIL"
+            ),
+        ]
+    )
+    report = "\n".join(lines) + "\n"
+    if failures or counterexamples:
+        raise AssertionError(report)
+    return report
+
+
+def main() -> None:
+
+ succeeded in 259ms:
+            essential = frozenset(
+                i
+                for i in full
+                if valuation(lower_rank, coordinates[i]) < n_factors[coordinates[i]]
+            )
+            if essential:
+                key = (essential, full)
+                family_counts[key] = family_counts.get(key, 0) + 1
+
+    if not family_counts:
+        raise AssertionError(f"no effective atomic family at n={n}")
+    return max(family_counts.values())
+
+
+def run_battery(exhaustive_max: int, scalable_max: int) -> str:
+    if exhaustive_max < 30:
+        raise ValueError("exhaustive_max must be at least 30")
+    if scalable_max < exhaustive_max:
+        raise ValueError("scalable_max must be at least exhaustive_max")
+
+    started = time.time()
+    failures = []
+    counterexamples = []
+    results = {}
+    birth_layer_set_equalities = 0
+    minimal_generator_set_equalities = 0
+
+    for n in range(2, scalable_max + 1):
+        threshold = upper_fiber_threshold(n)
+        results[n] = threshold
+        if n <= exhaustive_max:
+            exhaustive = upper_fiber_exhaustive(n)
+            birth_layer_set_equalities += 1
+            if exhaustive.a_count != threshold.a_count:
+                failures.append(
+                    f"n={n}: A mismatch {exhaustive.a_count} != {threshold.a_count}"
+                )
+            if exhaustive.minimal_generators != threshold.minimal_generators:
+                failures.append(f"n={n}: minimal-generator methods disagree")
+            else:
+                minimal_generator_set_equalities += 1
+
+        if n >= 3:
+            count = len(threshold.minimal_generators)
+            k = omega(n)
+            multiplicity = atomic_family_multiplicity(n)
+            big_omega = omega_big(factorint_fibonacci(n))
+            subset_bound = sum(
+                math.comb(big_omega, r)
+                for r in range(0, min(k, big_omega) + 1)
+            )
+            if count > subset_bound:
+                counterexamples.append(
+                    f"n={n}: #M={count} exceeds subset bound {subset_bound}"
+                )
+            if count > n**k:
+                counterexamples.append(f"n={n}: #M={count} exceeds n^omega={n**k}")
+            if n % 2 == 1 and count < bell_number(k):
+                counterexamples.append(
+                    f"n={n}: #M={count} below Bell({k})={bell_number(k)}"
+                )
+            if k >= 3 and count < private_cover_lower_bound(k):
+                counterexamples.append(
+                    f"n={n}: #M={count} below private-cover bound "
+                    f"{private_cover_lower_bound(k)}"
+                )
+            private_upper = private_cover_upper_bound(k, multiplicity)
+            if count > private_upper:
+                counterexamples.append(
+                    f"n={n}: #M={count} exceeds private-cover upper bound "
+                    f"{private_upper} with R(n)={multiplicity}"
+                )
+
+    expected_m30 = (20, 22, 31, 244, 671)
+    n30 = results[30]
+    if n30.a_count != 52 or n30.minimal_generators != expected_m30:
+        failures.append(
+            f"n=30 correction failed: A={n30.a_count}, M={n30.minimal_generators}"
+        )
+    realized_types = tuple(sorted(classify_support_three(m, 30) for m in expected_m30))
+    expected_types = ("Gamma_1", "Gamma_4", "Gamma_5", "Gamma_7", "Gamma_8")
+    if realized_types != expected_types:
+        failures.append(f"n=30 type mismatch: {realized_types}")
+    excluded_types = ("Gamma_3", "Gamma_6", "Gamma_9")
+    if not set(excluded_types).isdisjoint(realized_types):
+        counterexamples.append("n=30 realizes a claimed excluded type")
+
+    checkpoints = sorted(
+        set([30, exhaustive_max, scalable_max] + list(range(50, scalable_max + 1, 50)))
+    )
+    growth_lines = []
+    for bound in checkpoints:
+        if bound > scalable_max:
+            continue
+        values = [
+            (n, len(results[n].minimal_generators)) for n in range(3, bound + 1)
+        ]
+        max_n, max_count = max(values, key=lambda item: item[1])
+        mean_log = sum(math.log(count) for _, count in values) / len(values)
+        high_support = [
+            n for n, _ in values if omega(n) >= 3
+        ]
+        entropy_constant = math.log(2) / 4
+        if high_support:
+            cumulative_ratio = sum(
+                math.log(len(results[n].minimal_generators)) for n in high_support
+            ) / sum(entropy_constant * omega(n) ** 2 for n in high_support)
+            ratio_text = f"; private-entropy ratio = {cumulative_ratio:.6f}"
+        else:
+            ratio_text = "; private-entropy ratio = n/a"
+        growth_lines.append(
+            f"  n <= {bound:>3}: max #M_n = {max_count} at n={max_n}; "
+            f"mean(log #M_n) = {mean_log:.6f}{ratio_text}"
+        )
+
+    multiplicities = {
+        n: atomic_family_multiplicity(n) for n in range(3, scalable_max + 1)
+    }
+    max_r_n = max(multiplicities, key=multiplicities.get)
+    support_four = results.get(210)
+
+    elapsed = time.time() - started
+    lines = [
+        "Finite verification report",
+        "==========================",
+        f"Exact exhaustive divisor/rank range: 2 <= n <= {exhaustive_max}",
+        f"Finite claim-check range: 2 <= n <= {scalable_max}",
+        f"Python version: {platform.python_version()}",
+        f"SymPy version: {sympy_version}",
+        "Factorization algorithm: SymPy factorint over exact Python integers",
+        "Set comparisons on the exhaustive range:",
+        f"  B_n direct = B_n upper fiber: {birth_layer_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
+        f"  M_n direct = M_n witness: {minimal_generator_set_equalities}/"
+        f"{exhaustive_max - 1} set equalities",
+        "",
+        "Corrected n=30 data:",
+        f"  A(30) = {n30.a_count}",
+        f"  M_30 = {n30.minimal_generators}",
+        f"  realized types = {realized_types}",
+        f"  excluded types = {excluded_types}",
+        "",
+        "Growth-law checks:",
+        "  finite upper bound: #M_n <= sum_{r<=omega(n)} binom(Omega(F_n), r)",
+        "  simplified upper bound: #M_n <= n^omega(n)",
+        "  odd-layer lower bound: #M_n >= Bell(omega(n))",
+        "  private-cover lower bound (k>=3): #M_n >= "
+        "(2^floor(k/2)-1)^ceil(k/2)",
+        "  private-cover upper bound: sum_{r<=k} binom(k,r) "
+        "(2R(n))^r 2^{r(k-r)}",
+        *growth_lines,
+        f"  max rank-window multiplicity R(n) = {multiplicities[max_r_n]} "
+        f"at n={max_r_n}",
+        *(
+            [
+                f"  first support-four layer n=210: #M_210 = "
+                f"{len(support_four.minimal_generators)}, R(210) = "
+                f"{multiplicities[210]}, lower bound = "
+                f"{private_cover_lower_bound(4)}"
+            ]
+            if support_four is not None
+            else []
+        ),
+        "",
+        "Finite claim checks:",
+        f"  failures = {len(failures)}",
+        f"  counterexamples = {len(counterexamples)}",
+    ]
+    if failures:
+        lines.extend(f"  FAILURE: {failure}" for failure in failures)
+    if counterexamples:
+        lines.extend(f"  COUNTEREXAMPLE: {item}" for item in counterexamples)
+    lines.extend(
+        [
+            f"  elapsed_seconds = {elapsed:.3f}",
+            "",
+            "RESULT: "
+            + (
+                "PASS (0 failures / 0 counterexamples)"
+                if not failures and not counterexamples
+                else "FAIL"
+            ),
+        ]
+    )
+    report = "\n".join(lines) + "\n"
+    if failures or counterexamples:
+        raise AssertionError(report)
+    return report
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--exhaustive-max", type=int, default=60)
+    parser.add_argument("--scalable-max", type=int, default=210)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/finite_verification.txt"),
+    )
+    parser.add_argument(
+        "--factorizations-output",
+        type=Path,
+        default=Path("artifacts/fibonacci_factorizations_2_210.tsv"),
+    )
+    args = parser.parse_args()
+
+    report = run_battery(args.exhaustive_max, args.scalable_max)
+    write_factorization_archive(args.factorizations_output, args.scalable_max)
+    load_factorization_archive(args.factorizations_output, args.scalable_max)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="ascii")
+    print(report, end="")
+    print(f"Saved report: {args.output}")
+    print(f"Saved factorization archive: {args.factorizations_output}")
+
+
+if __name__ == "__main__":
+    main()
+
+ succeeded in 282ms:
+.\artifacts\REPRODUCE.md:3:This directory is the computational supplement for the manuscript. All
+.\artifacts\oracle_review_r1.md:268:M6: Supply a reproducible computational supplement
+.\theorem_inventory.md:3:This inventory classifies the article/supplement split. The main article is
+.\theorem_inventory.md:20:  classifications, and their finite checks now live in `supplement.tex`.
+
+ succeeded in 294ms:
+
+i/lf    w/lf    attr/                 	artifacts/REPRODUCE.md
+i/lf    w/lf    attr/                 	artifacts/SHA256SUMS
+i/lf    w/crlf  attr/                 	artifacts/birth_layer_table_output.txt
+i/lf    w/crlf  attr/                 	artifacts/deepening_delta_verification.txt
+i/lf    w/crlf  attr/                 	artifacts/fibonacci_factorizations_2_210.tsv
+i/lf    w/crlf  attr/                 	artifacts/finite_verification.txt
+i/lf    w/lf    attr/                 	artifacts/literature_check.md
+i/lf    w/lf    attr/                 	artifacts/named_problem_audit.md
+i/lf    w/crlf  attr/                 	artifacts/oracle_review_r1.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r2.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r3.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r4.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r5.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r6.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_r7.md
+i/lf    w/lf    attr/                 	artifacts/oracle_sprint_A7_referee.md
+i/lf    w/crlf  attr/                 	artifacts/squarefree_slice_verification.txt
+i/lf    w/lf    attr/                 	artifacts/test_verify_finite_claims.py
+i/lf    w/lf    attr/                 	artifacts/verify_finite_claims.py
+i/lf    w/lf    attr/                 	scripts/test_verify_deepening_delta.py
+i/lf    w/lf    attr/                 	scripts/test_verify_squarefree_slice.py
+i/lf    w/lf    attr/                 	scripts/verify_deepening_delta.py
+i/lf    w/lf    attr/                 	scripts/verify_squarefree_slice.py
+
+
+
+codex
+The scope is now clear: there are three verifier programs, and only the finite and deepening reports contain measured time; the squarefree report is already deterministic. I will add regression assertions to both existing report tests that forbid timing fields while retaining the Python/SymPy assertions, observe them fail, then remove only the timing capture/report lines. I will preserve the manifest’s current 12-path convention and document that exact count, while making the reproducibility tree LF-stable through Git attributes rather than hashing platform-dependent CRLF bytes.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -Force -Name .gitattributes; Get-ChildItem .. -Force -Name .gitattributes; Get-ChildItem ..\\.. -Force -Name .gitattributes; git check-attr text eol -- artifacts/verify_finite_claims.py artifacts/finite_verification.txt artifacts/REPRODUCE.md scripts/verify_squarefree_slice.py" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'sha256sum -c artifacts/SHA256SUMS' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-FileHash -Algorithm SHA256 artifacts\\finite_verification.txt,artifacts\\deepening_delta_verification.txt,artifacts\\SHA256SUMS | Format-Table -AutoSize; "'$files = Get-ChildItem artifacts,scripts -Filter '"'verify*.py'; foreach ("'$f in $files) { Write-Output ('"'--- ' + "'$f.FullName); Select-String -Path $f.FullName -Pattern '"'"'^import time$|elapsed|runtime|duration|time'"\\.' }" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git show HEAD:papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/.gitattributes 2>$null; git show HEAD:.gitattributes 2>$null' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content artifacts\\test_verify_finite_claims.py | Select-Object -Last 80; Get-Content scripts\\test_verify_deepening_delta.py | Select-Object -Last 45" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content scripts\\verify_squarefree_slice.py | Select-Object -Skip 120 -First 105" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+2026-08-14T23:04:46.329740Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+compute_birth_layer_table.py: FAILED open or read
+verify_finite_claims.py: FAILED open or read
+test_verify_finite_claims.py: FAILED open or read
+fibonacci_factorizations_2_210.tsv: FAILED open or read
+tab_birth_layer_data.tex: FAILED open or read
+birth_layer_table_output.txt: FAILED open or read
+finite_verification.txt: FAILED open or read
+REPRODUCE.md: FAILED open or read
+squarefree_slice_verification.txt: FAILED open or read
+named_problem_audit.md: FAILED open or read
+../scripts/verify_squarefree_slice.py: FAILED open or read
+../scripts/test_verify_squarefree_slice.py: FAILED open or read
+/usr/bin/sha256sum: compute_birth_layer_table.py: No such file or directory
+/usr/bin/sha256sum: verify_finite_claims.py: No such file or directory
+/usr/bin/sha256sum: test_verify_finite_claims.py: No such file or directory
+/usr/bin/sha256sum: fibonacci_factorizations_2_210.tsv: No such file or directory
+/usr/bin/sha256sum: tab_birth_layer_data.tex: No such file or directory
+/usr/bin/sha256sum: birth_layer_table_output.txt: No such file or directory
+/usr/bin/sha256sum: finite_verification.txt: No such file or directory
+/usr/bin/sha256sum: REPRODUCE.md: No such file or directory
+/usr/bin/sha256sum: squarefree_slice_verification.txt: No such file or directory
+/usr/bin/sha256sum: named_problem_audit.md: No such file or directory
+/usr/bin/sha256sum: ../scripts/verify_squarefree_slice.py: No such file or directory
+/usr/bin/sha256sum: ../scripts/test_verify_squarefree_slice.py: No such file or directory
+/usr/bin/sha256sum: WARNING: 12 listed files could not be read
+
+ exited 1 in 178ms:
+compute_birth_layer_table.py: FAILED open or read
+verify_finite_claims.py: FAILED open or read
+test_verify_finite_claims.py: FAILED open or read
+fibonacci_factorizations_2_210.tsv: FAILED open or read
+tab_birth_layer_data.tex: FAILED open or read
+birth_layer_table_output.txt: FAILED open or read
+finite_verification.txt: FAILED open or read
+REPRODUCE.md: FAILED open or read
+squarefree_slice_verification.txt: FAILED open or read
+named_problem_audit.md: FAILED open or read
+../scripts/verify_squarefree_slice.py: FAILED open or read
+../scripts/test_verify_squarefree_slice.py: FAILED open or read
+/usr/bin/sha256sum: compute_birth_layer_table.py: No such file or directory
+/usr/bin/sha256sum: verify_finite_claims.py: No such file or directory
+/usr/bin/sha256sum: test_verify_finite_claims.py: No such file or directory
+/usr/bin/sha256sum: fibonacci_factorizations_2_210.tsv: No such file or directory
+/usr/bin/sha256sum: tab_birth_layer_data.tex: No such file or directory
+/usr/bin/sha256sum: birth_layer_table_output.txt: No such file or directory
+/usr/bin/sha256sum: finite_verification.txt: No such file or directory
+/usr/bin/sha256sum: REPRODUCE.md: No such file or directory
+/usr/bin/sha256sum: squarefree_slice_verification.txt: No such file or directory
+/usr/bin/sha256sum: named_problem_audit.md: No such file or directory
+/usr/bin/sha256sum: ../scripts/verify_squarefree_slice.py: No such file or directory
+/usr/bin/sha256sum: ../scripts/test_verify_squarefree_slice.py: No such file or directory
+/usr/bin/sha256sum: WARNING: 12 listed files could not be read
+
+2026-08-14T23:04:46.374665Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+
+ exited 1 in 208ms:
+ succeeded in 273ms:
+artifacts/verify_finite_claims.py: text: unspecified
+artifacts/verify_finite_claims.py: eol: unspecified
+artifacts/finite_verification.txt: text: unspecified
+artifacts/finite_verification.txt: eol: unspecified
+artifacts/REPRODUCE.md: text: unspecified
+artifacts/REPRODUCE.md: eol: unspecified
+scripts/verify_squarefree_slice.py: text: unspecified
+scripts/verify_squarefree_slice.py: eol: unspecified
+Get-ChildItem : Cannot find path 
+'D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\.gitattributes' because 
+it does not exist.
+At line:2 char:1
++ Get-ChildItem -Force -Name .gitattributes; Get-ChildItem .. -Force -N ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\omega\automa...\.gitattributes:String) [Get-ChildItem], ItemNotFound 
+   Exception
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetChildItemCommand
+ 
+
+ succeeded in 252ms:
+                count = len(result.minimal_generators)
+                multiplicity = atomic_family_multiplicity(n)
+                self.assertGreaterEqual(multiplicity, 1)
+                if k >= 3:
+                    self.assertGreaterEqual(count, private_cover_lower_bound(k))
+                self.assertLessEqual(
+                    count, private_cover_upper_bound(k, multiplicity)
+                )
+
+    def test_private_cover_bounds_have_the_claimed_finite_values(self):
+        self.assertEqual(private_cover_lower_bound(3), 1)
+        self.assertEqual(private_cover_lower_bound(4), 9)
+        self.assertEqual(private_cover_lower_bound(5), 27)
+        self.assertEqual(private_cover_lower_bound(6), 343)
+        self.assertEqual(private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(private_cover_upper_bound(2, 1), 12)
+
+    def test_factorization_archive_round_trip_through_30(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "fibonacci_factorizations_2_30.tsv"
+            write_factorization_archive(path, 30)
+            archive = load_factorization_archive(path, 30)
+            self.assertEqual(archive[2], tuple())
+            self.assertEqual(archive[30], factorint_fibonacci(30))
+            text = path.read_text(encoding="ascii")
+            self.assertIn("python_version\tsympy_version", text)
+            self.assertIn("30\t832040\t2^3*5*11*31*61", text)
+
+    def test_report_documents_set_equalities_and_versions(self):
+        report = run_battery(30, 30)
+        self.assertIn("B_n direct = B_n upper fiber: 29/29 set equalities", report)
+        self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+        self.assertIn("Rank-pure layers checked: 28", report)
+        self.assertIn("Odd layers realizing all minimal covers: 14/14", report)
+        self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
+        self.assertIn("Rank-pure weighted products in M_n: 28/28 layer checks", report)
+        self.assertIn("Exact total support spectra: 28/28", report)
+        self.assertIn("Exact connected support spectra: 28/28", report)
+        self.assertIn("Extremal atomic-product counts: 28/28", report)
+        self.assertIn(
+            "Four-coordinate witness kernels: 24 orbits / 243 labelled",
+            report,
+        )
+        self.assertIn(
+            "T-connected kernels: 13 orbits / 133 labelled; "
+            "T-disconnected kernels: 11 orbits / 110 labelled",
+            report,
+        )
+        self.assertIn(
+            "n=3465 support separation: ranks (9, 15, 21, 33); "
+            "T-support disconnected; positive support connected",
+            report,
+        )
+        self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
+        self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
+        self.assertIn("Rank-window deaggregation inequalities: 28/28", report)
+        self.assertIn("Squarefree BLMS pigeonhole inequalities: 17/17", report)
+        self.assertIn("Refined private-cover upper bounds: 28/28", report)
+        self.assertIn("Fibotomic rank-entropy inequalities: 28/28", report)
+        self.assertIn("Fibotomic exact-rank radical divisibilities: 28/28", report)
+        self.assertIn("Jarden a(10p) >= 2 checks: 0/0", report)
+        self.assertIn(
+            "Exact-rank prime existence on 3 <= d <= 30: 26/26 "
+            "nonexceptional ranks",
+            report,
+        )
+        self.assertIn("Exceptional empty prime fibers: ranks 6 and 12", report)
+        self.assertIn(
+            "Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
+            report,
+        )
+        self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+        self.assertIn("Python version:", report)
+        self.assertIn("SymPy version:", report)
+        self.assertNotIn("Deepening Delta", report)
+        self.assertNotIn("counterexample battery", report.lower())
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+    def test_private_cover_bounds_through_120(self):
+        for n in range(3, 121):
+            with self.subTest(n=n):
+                result = upper_fiber_threshold(n)
+                k = omega(n)
+                count = len(result.minimal_generators)
+                multiplicity = atomic_family_multiplicity(n)
+                self.assertGreaterEqual(multiplicity, 1)
+                if k >= 3:
+                    self.assertGreaterEqual(count, private_cover_lower_bound(k))
+                self.assertLessEqual(
+                    count, private_cover_upper_bound(k, multiplicity)
+                )
+
+    def test_private_cover_bounds_have_the_claimed_finite_values(self):
+        self.assertEqual(private_cover_lower_bound(3), 1)
+        self.assertEqual(private_cover_lower_bound(4), 9)
+        self.assertEqual(private_cover_lower_bound(5), 27)
+        self.assertEqual(private_cover_lower_bound(6), 343)
+        self.assertEqual(private_cover_upper_bound(1, 1), 2)
+        self.assertEqual(private_cover_upper_bound(2, 1), 12)
+
+    def test_factorization_archive_round_trip_through_30(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "fibonacci_factorizations_2_30.tsv"
+            write_factorization_archive(path, 30)
+            archive = load_factorization_archive(path, 30)
+            self.assertEqual(archive[2], tuple())
+            self.assertEqual(archive[30], factorint_fibonacci(30))
+            text = path.read_text(encoding="ascii")
+            self.assertIn("python_version\tsympy_version", text)
+            self.assertIn("30\t832040\t2^3*5*11*31*61", text)
+
+    def test_report_documents_set_equalities_and_versions(self):
+        report = run_battery(30, 30)
+        self.assertIn("B_n direct = B_n upper fiber: 29/29 set equalities", report)
+        self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+        self.assertIn("Python version:", report)
+        self.assertIn("SymPy version:", report)
+        self.assertNotIn("Deepening Delta", report)
+        self.assertNotIn("counterexample battery", report.lower())
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+ succeeded in 259ms:
+    """Construct the rank-pure products directly from exact-rank prime covers."""
+    n_factors = factorint(n)
+    if any(exponent != 1 for exponent in n_factors.values()):
+        raise ValueError("rank-pure converse verifier requires squarefree n")
+    coordinates = tuple(sorted(n_factors))
+    primes_by_rank = _exact_rank_primes(n)
+    products = set()
+    for cover in minimal_covers(len(coordinates)):
+        ranks = tuple(
+            _product(coordinates[index] for index in support)
+            for support in cover
+        )
+        choices = []
+        fillable = True
+        for rank in ranks:
+            primes = primes_by_rank.get(rank, tuple())
+            if not primes:
+                fillable = False
+                break
+            choices.append(primes)
+        if not fillable:
+            continue
+        for selected in itertools.product(*choices):
+            products.add(_product(selected))
+    return tuple(sorted(products))
+
+
+def run_battery(max_index: int) -> str:
+    """Run exhaustive combinatorial checks and squarefree Fibonacci comparisons."""
+    if max_index < 30:
+        raise ValueError("max_index must be at least 30")
+    profile_checks = 0
+    for size in range(1, 5):
+        baseline_mass = 2**size - 1
+        for excess in range(9):
+            total_mass = baseline_mass + excess
+            profile = extremal_full_support_profile(size, total_mass)
+            actual = weighted_cover_partition(size, profile)
+            expected = sharp_mass_lower_bound(size, total_mass)
+            if actual != expected:
+                raise AssertionError(
+                    f"sharp profile failed for size={size}, mass={total_mass}"
+                )
+            profile_checks += 1
+
+    checked_indices = []
+    checked_elements = 0
+    for n in range(3, max_index + 1):
+        if any(exponent != 1 for exponent in factorint(n).values()):
+            continue
+        expected = squarefree_minimal_generators(n)
+        actual = rank_pure_products(n)
+        if actual != expected:
+            raise AssertionError(
+                f"squarefree slice failed at n={n}: {actual} != {expected}"
+            )
+        checked_indices.append(n)
+        checked_elements += len(actual)
+
+    lines = [
+        "Squarefree-fiber and weighted-cover verification",
+        "=================================================",
+        "Weighted minimal-cover equality profiles: sizes 1 <= k <= 4,",
+        "  excess masses 0 <= E <= 8",
+        f"  exact equality checks = {profile_checks}",
+        f"Squarefree Fibonacci indices: 3 <= n <= {max_index}",
+        f"  indices checked = {len(checked_indices)}",
+        f"  rank-pure/squarefree set equalities = {len(checked_indices)}",
+        f"  squarefree minimal generators compared = {checked_elements}",
+        "RESULT: PASS (0 failures / 0 counterexamples)",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--max-index", type=int, default=210)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/squarefree_slice_verification.txt"),
+    )
+    args = parser.parse_args()
+    report = run_battery(args.max_index)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="ascii")
+    print(report, end="")
+    print(f"Saved report: {args.output}")
+
+
+if __name__ == "__main__":
+    main()
+
+ succeeded in 310ms:
+
+Algorithm Hash                                                             Path                                        
+--------- ----                                                             ----                                        
+SHA256    63BC11777F37E839AF2EE0A05223308D63CC852989C700F9ACFD33D8B5C0A002 D:\omega\automath\papers\publication\2026...
+SHA256    76644431892E874518140EE4CADD8F0CFD54054CFD82CA3D0F29F09808E9ADDE D:\omega\automath\papers\publication\2026...
+SHA256    B314AAA452D2004F60334A89F1E6EF04D326280AF885BD75DE14106C2FF830D7 D:\omega\automath\papers\publication\2026...
+
+
+--- D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\verify_finite_claims.py
+
+artifacts\verify_finite_claims.py:21:import time
+artifacts\verify_finite_claims.py:1159:    started = time.time()
+artifacts\verify_finite_claims.py:1547:    elapsed = time.time() - started
+artifacts\verify_finite_claims.py:1669:            f"  elapsed_seconds = {elapsed:.3f}",
+--- D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_deepening_delta.py
+scripts\verify_deepening_delta.py:21:import time
+scripts\verify_deepening_delta.py:411:    started = time.time()
+scripts\verify_deepening_delta.py:512:    elapsed = time.time() - started
+scripts\verify_deepening_delta.py:565:            f"  elapsed_seconds = {elapsed:.3f}",
+--- D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\verify_squarefree_slice.py
+
+
+
+codex
+I’m adding the two minimal regression assertions now. They exercise the public `run_battery()` reports and require that archived content retain version metadata but contain no `elapsed_seconds`, `runtime`, or `duration` fields. After the expected failures, I’ll make only the source-level timing removal and LF-output changes.
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\test_verify_finite_claims.py
+D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\test_verify_deepening_delta.py
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n '"'^class '"' artifacts\\test_verify_finite_claims.py scripts\\test_verify_deepening_delta.py" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest test_verify_finite_claims.FiniteVerificationTests.test_report_documents_set_equalities_and_versions -v' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest test_verify_deepening_delta.DeepeningDeltaTests.test_report_documents_set_equalities_and_versions -v' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts
+ succeeded in 170ms:
+scripts\test_verify_deepening_delta.py:26:class DeepeningDeltaTests(unittest.TestCase):
+artifacts\test_verify_finite_claims.py:50:class FiniteClaimTests(unittest.TestCase):
+
+ exited 1 in 748ms:
+test_report_documents_set_equalities_and_versions (test_verify_deepening_delta.DeepeningDeltaTests) ... FAIL
+
+======================================================================
+FAIL: test_report_documents_set_equalities_and_versions (test_verify_deepening_delta.DeepeningDeltaTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\test_verify_deepening_delta.py", line 115, in test_report_documents_set_equalities_and_versions
+    self.assertNotIn("elapsed_seconds", report.lower())
+AssertionError: 'elapsed_seconds' unexpectedly found in "finite verification report\n==========================\nexact exhaustive divisor/rank range: 2 <= n <= 30\nfinite claim-check range: 2 <= n <= 30\npython version: 3.10.11\nsympy version: 1.13.1\nfactorization algorithm: sympy factorint over exact python integers\nset comparisons on the exhaustive range:\n  b_n direct = b_n upper fiber: 29/29 set equalities\n  m_n direct = m_n witness: 29/29 set equalities\n\ncorrected n=30 data:\n  a(30) = 52\n  m_30 = (20, 22, 31, 244, 671)\n  realized types = ('gamma_1', 'gamma_4', 'gamma_5', 'gamma_7', 'gamma_8')\n  excluded types = ('gamma_3', 'gamma_6', 'gamma_9')\n\ngrowth-law checks:\n  finite upper bound: #m_n <= sum_{r<=omega(n)} binom(omega(f_n), r)\n  simplified upper bound: #m_n <= n^omega(n)\n  odd-layer lower bound: #m_n >= bell(omega(n))\n  private-cover lower bound (k>=3): #m_n >= (2^floor(k/2)-1)^ceil(k/2)\n  private-cover upper bound: sum_{r<=k} binom(k,r) (2r(n))^r 2^{r(k-r)}\n  n <=  30: max #m_n = 5 at n=30; mean(log #m_n) = 0.373230; private-entropy ratio = 1.031968\n  max rank-window multiplicity r(n) = 2 at n=19\n\nfinite claim checks:\n  failures = 0\n  counterexamples = 0\n  elapsed_seconds = 0.000\n\nresult: pass (0 failures / 0 counterexamples)\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)
+
+ exited 1 in 748ms:
+2026-08-14T23:05:46.742299Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.7 seconds
+Output:
+test_report_documents_set_equalities_and_versions (test_verify_deepening_delta.DeepeningDeltaTests) ... FAIL
+
+======================================================================
+FAIL: test_report_documents_set_equalities_and_versions (test_verify_deepening_delta.DeepeningDeltaTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\scripts\test_verify_deepening_delta.py", line 115, in test_report_documents_set_equalities_and_versions
+    self.assertNotIn("elapsed_seconds", report.lower())
+AssertionError: 'elapsed_seconds' unexpectedly found in "finite verification report\n==========================\nexact exhaustive divisor/rank range: 2 <= n <= 30\nfinite claim-check range: 2 <= n <= 30\npython version: 3.10.11\nsympy version: 1.13.1\nfactorization algorithm: sympy factorint over exact python integers\nset comparisons on the exhaustive range:\n  b_n direct = b_n upper fiber: 29/29 set equalities\n  m_n direct = m_n witness: 29/29 set equalities\n\ncorrected n=30 data:\n  a(30) = 52\n  m_30 = (20, 22, 31, 244, 671)\n  realized types = ('gamma_1', 'gamma_4', 'gamma_5', 'gamma_7', 'gamma_8')\n  excluded types = ('gamma_3', 'gamma_6', 'gamma_9')\n\ngrowth-law checks:\n  finite upper bound: #m_n <= sum_{r<=omega(n)} binom(omega(f_n), r)\n  simplified upper bound: #m_n <= n^omega(n)\n  odd-layer lower bound: #m_n >= bell(omega(n))\n  private-cover lower bound (k>=3): #m_n >= (2^floor(k/2)-1)^ceil(k/2)\n  private-cover upper bound: sum_{r<=k} binom(k,r) (2r(n))^r 2^{r(k-r)}\n  n <=  30: max #m_n = 5 at n=30; mean(log #m_n) = 0.373230; private-entropy ratio = 1.031968\n  max rank-window multiplicity r(n) = 2 at n=19\n\nfinite claim checks:\n  failures = 0\n  counterexamples = 0\n  elapsed_seconds = 0.000\n\nresult: pass (0 failures / 0 counterexamples)\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)
+
+FiniteVerificationTests (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: FiniteVerificationTests (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: module 'test_verify_finite_claims' has no attribute 'FiniteVerificationTests'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+
+2026-08-14T23:05:46.742535Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.7 seconds
+Output:
+FiniteVerificationTests (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: FiniteVerificationTests (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: module 'test_verify_finite_claims' has no attribute 'FiniteVerificationTests'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest test_verify_finite_claims.FiniteVerificationTests.test_report_documents_set_equalities_and_versions -v' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts
+2026-08-14T23:05:53.445014Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.6 seconds
+Output:
+FiniteVerificationTests (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: FiniteVerificationTests (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: module 'test_verify_finite_claims' has no attribute 'FiniteVerificationTests'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+
+ exited 1 in 634ms:
+FiniteVerificationTests (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: FiniteVerificationTests (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: module 'test_verify_finite_claims' has no attribute 'FiniteVerificationTests'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n '"'^class '"' artifacts\\test_verify_finite_claims.py" in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq
+ succeeded in 139ms:
+50:class FiniteClaimTests(unittest.TestCase):
+
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest test_verify_finite_claims.FiniteClaimTests.test_report_documents_set_equalities_and_versions -v' in D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts
+2026-08-14T23:06:03.452338Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 1 seconds
+Output:
+test_report_documents_set_equalities_and_versions (test_verify_finite_claims.FiniteClaimTests) ... FAIL
+
+======================================================================
+FAIL: test_report_documents_set_equalities_and_versions (test_verify_finite_claims.FiniteClaimTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\test_verify_finite_claims.py", line 441, in test_report_documents_set_equalities_and_versions
+    self.assertNotIn("elapsed_seconds", report.lower())
+AssertionError: 'elapsed_seconds' unexpectedly found in "finite verification report\n==========================\nexact exhaustive divisor/rank range: 2 <= n <= 30\nfinite claim-check range: 2 <= n <= 30\npython version: 3.10.11\nsympy version: 1.13.1\nfactorization algorithm: sympy factorint over exact python integers\nset comparisons on the exhaustive range:\n  b_n direct = b_n upper fiber: 29/29 set equalities\n  m_n direct = m_n witness: 29/29 set equalities\n\nrank-pure universality checks:\n  minimal-cover formula = direct enumeration (k <= 4): 4/4\n  connected-cover inversion = direct enumeration (k <= 4): 4/4\n  rank-pure layers checked: 28\n  exact-rank mobius counts checked on every nonempty support\n  rank-pure canonical products in m_n: 28/28 layer checks\n  rank-pure weighted products in m_n: 28/28 layer checks\n  odd layers realizing all minimal covers: 14/14\n  exact total support spectra: 28/28\n  exact connected support spectra: 28/28\n  extremal atomic-product counts: 28/28\n  four-coordinate witness kernels: 24 orbits / 243 labelled\n  t-connected kernels: 13 orbits / 133 labelled; t-disconnected kernels: 11 orbits / 110 labelled\n  n=3465 support separation: ranks (9, 15, 21, 33); t-support disconnected; positive support connected\n  exact minimal-cover values c_k (1 <= k <= 6): (1, 2, 8, 49, 462, 6424)\n  connected-cover ratios d_k/c_k at k=20,40,80: 0.988353207065, 0.999977053401, 0.999999999956\n  theta-normalized c_k ratios at k=20,40,80: 0.876215996056, 0.966311273143, 0.982649180412\n  central local-limit errors at k=40,80 (d=0): 1.627e-02, 8.294e-03\n  rank-window deaggregation inequalities: 28/28\n  squarefree blms pigeonhole inequalities: 17/17\n  refined private-cover upper bounds: 28/28\n  fibotomic rank-entropy inequalities: 28/28\n  fibotomic exact-rank radical divisibilities: 28/28\n  jarden a(10p) >= 2 checks: 0/0\n\nprime inverse-dynamics checks:\n  exact-rank prime existence on 3 <= d <= 30: 26/26 nonexceptional ranks\n  exceptional empty prime fibers: ranks 6 and 12\n  reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801\n  exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12\n\ncorrected n=30 data:\n  a(30) = 52\n  m_30 = (20, 22, 31, 244, 671)\n  realized types = ('gamma_1', 'gamma_4', 'gamma_5', 'gamma_7', 'gamma_8')\n  excluded types = ('gamma_3', 'gamma_6', 'gamma_9')\n\ngrowth-law checks:\n  finite upper bound: #m_n <= sum_{r<=omega(n)} binom(omega(f_n), r)\n  simplified upper bound: #m_n <= n^omega(n)\n  odd-layer lower bound: #m_n >= bell(omega(n))\n  private-cover lower bound (k>=3): #m_n >= (2^floor(k/2)-1)^ceil(k/2)\n  private-cover upper bound: sum_{r<=k} binom(k,r) (2r(n))^r 2^{r(k-r)}\n  n <=  30: max #m_n = 5 at n=30; mean(log #m_n) = 0.373230; private-entropy ratio = 1.031968\n  max rank-window multiplicity r(n) = 2 at n=19\n\nfinite claim checks:\n  failures = 0\n  counterexamples = 0\n  elapsed_seconds = 0.336\n\nresult: pass (0 failures / 0 counterexamples)\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.438s
+
+FAILED (failures=1)
+
+ exited 1 in 1029ms:
+test_report_documents_set_equalities_and_versions (test_verify_finite_claims.FiniteClaimTests) ... FAIL
+
+======================================================================
+FAIL: test_report_documents_set_equalities_and_versions (test_verify_finite_claims.FiniteClaimTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_upper_fibers_witness_covers_fibonacci_apparition_fq\artifacts\test_verify_finite_claims.py", line 441, in test_report_documents_set_equalities_and_versions
+    self.assertNotIn("elapsed_seconds", report.lower())
+AssertionError: 'elapsed_seconds' unexpectedly found in "finite verification report\n==========================\nexact exhaustive divisor/rank range: 2 <= n <= 30\nfinite claim-check range: 2 <= n <= 30\npython version: 3.10.11\nsympy version: 1.13.1\nfactorization algorithm: sympy factorint over exact python integers\nset comparisons on the exhaustive range:\n  b_n direct = b_n upper fiber: 29/29 set equalities\n  m_n direct = m_n witness: 29/29 set equalities\n\nrank-pure universality checks:\n  minimal-cover formula = direct enumeration (k <= 4): 4/4\n  connected-cover inversion = direct enumeration (k <= 4): 4/4\n  rank-pure layers checked: 28\n  exact-rank mobius counts checked on every nonempty support\n  rank-pure canonical products in m_n: 28/28 layer checks\n  rank-pure weighted products in m_n: 28/28 layer checks\n  odd layers realizing all minimal covers: 14/14\n  exact total support spectra: 28/28\n  exact connected support spectra: 28/28\n  extremal atomic-product counts: 28/28\n  four-coordinate witness kernels: 24 orbits / 243 labelled\n  t-connected kernels: 13 orbits / 133 labelled; t-disconnected kernels: 11 orbits / 110 labelled\n  n=3465 support separation: ranks (9, 15, 21, 33); t-support disconnected; positive support connected\n  exact minimal-cover values c_k (1 <= k <= 6): (1, 2, 8, 49, 462, 6424)\n  connected-cover ratios d_k/c_k at k=20,40,80: 0.988353207065, 0.999977053401, 0.999999999956\n  theta-normalized c_k ratios at k=20,40,80: 0.876215996056, 0.966311273143, 0.982649180412\n  central local-limit errors at k=40,80 (d=0): 1.627e-02, 8.294e-03\n  rank-window deaggregation inequalities: 28/28\n  squarefree blms pigeonhole inequalities: 17/17\n  refined private-cover upper bounds: 28/28\n  fibotomic rank-entropy inequalities: 28/28\n  fibotomic exact-rank radical divisibilities: 28/28\n  jarden a(10p) >= 2 checks: 0/0\n\nprime inverse-dynamics checks:\n  exact-rank prime existence on 3 <= d <= 30: 26/26 nonexceptional ranks\n  exceptional empty prime fibers: ranks 6 and 12\n  reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801\n  exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12\n\ncorrected n=30 data:\n  a(30) = 52\n  m_30 = (20, 22, 31, 244, 671)\n  realized types = ('gamma_1', 'gamma_4', 'gamma_5', 'gamma_7', 'gamma_8')\n  excluded types = ('gamma_3', 'gamma_6', 'gamma_9')\n\ngrowth-law checks:\n  finite upper bound: #m_n <= sum_{r<=omega(n)} binom(omega(f_n), r)\n  simplified upper bound: #m_n <= n^omega(n)\n  odd-layer lower bound: #m_n >= bell(omega(n))\n  private-cover lower bound (k>=3): #m_n >= (2^floor(k/2)-1)^ceil(k/2)\n  private-cover upper bound: sum_{r<=k} binom(k,r) (2r(n))^r 2^{r(k-r)}\n  n <=  30: max #m_n = 5 at n=30; mean(log #m_n) = 0.373230; private-entropy ratio = 1.031968\n  max rank-window multiplicity r(n) = 2 at n=19\n\nfinite claim checks:\n  failures = 0\n  counterexamples = 0\n  elapsed_seconds = 0.336\n\nresult: pass (0 failures / 0 counterexamples)\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.438s
+
+FAILED (failures=1)
+
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+index 050ffaff9abfae2ea7cb1771530fc2bed8a9c8f3..df669730177f0c98de4acdc6ed0b67b6655e07f7
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/test_verify_finite_claims.py
+@@ -438,6 +438,9 @@
+         self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+diff --git a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+index 5f1a3da9466cd41282b6f50f7fcc0fa3d25e8633..fc52302698703f72541c99557a5c7786789dab32
+--- a/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
++++ b/papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq/scripts/test_verify_deepening_delta.py
+@@ -112,6 +112,9 @@
+         self.assertIn("M_n direct = M_n witness: 29/29 set equalities", report)
+         self.assertIn("Python version:", report)
+         self.assertIn("SymPy version:", report)
++        self.assertNotIn("elapsed_seconds", report.lower())
++        self.assertNotIn("runtime", report.lower())
++        self.assertNotIn("duration", report.lower())
+         self.assertNotIn("Deepening Delta", report)
+         self.assertNotIn("counterexample battery", report.lower())
+ 
+

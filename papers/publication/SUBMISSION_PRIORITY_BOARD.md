@@ -16,14 +16,17 @@
 
 | 篇 | 页 | 状态 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | 67 | ✅ 已修已提交 | **Potential Analysis** |
-| **A3** `sharp_three_window` | **57** | ✅ 已修已提交 | **DCDS-A**(无须降投) |
-| **A4** `prime_languages` | 25+43 | ✅ 投稿包已复核 | Monatshefte |
-| **A5** `finite_parts` | 33+19 | ✅ 已修已提交(Nishioka 拆分) | ETDS |
-| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修已提交(定理 36→33) | **JNT** |
-| **A7** `upper_fibers` | 27 | codex 修复中 | Fibonacci Quarterly |
-| **A8** `detector_shells` | **49+19** | ✅ 已修已提交(186→68 页) | **Methodology and Computing in Applied Probability** |
-| **A9** `homological_visibility` | 48+50 | codex 修复中 | **Cahiers de Topologie** |
+| **A2** `cayley_chebyshev` | 67 | ✅ 已修 | **Potential Analysis** |
+| **A3** `sharp_three_window` | **57** | ✅ 已修 | **DCDS-A**(无须降投) |
+| **A4** `prime_languages` | 25+43 | ✅ 已复核 | Monatshefte |
+| **A5** `finite_parts` | 33+19 | ✅ 已修(Nishioka 拆分 + 线性/非线性界定) | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修(定理 36→33) | **JNT** |
+| **A7** `upper_fibers` | **33+36** | ✅ 已修;校验和修复中 | Fibonacci Quarterly |
+| **A8** `detector_shells` | **49+19** | ✅ 已修(186→68 页) | **Methodology and Computing in Applied Probability** |
+| **A9** `homological_visibility` | **34+6** | ✅ 已修(48+50→34+6) | **Cahiers de Topologie** |
+
+**八篇全部完成外审并修复入库。**
+
 
 **七篇外审全部走完;六篇已修复入库,余 A7、A9 在改。**
 
@@ -45,13 +48,16 @@
 
 
 
-> **TICK 33 — 用一份开放获取文献把 Nishioka 缺口收窄,并确认署名判断没错**。池子空闲;A7、A9 修复中(A9 日志已 33 MB,正在把核心证明搬回正文);无孤儿进程,内存 1.99 GB。
+> **TICK 34 — A9 收尾,八篇全部修复入库**。池子空闲无在飞任务;仅 A7 校验和修复在跑;内存 1.61 GB,无孤儿。
 >
-> Keiji Nishioka 1985 原文仍拿不到(Springer 订阅墙、Unpaywall 无 OA;未走盗版站点)。但找到一份可逐字核对的开放获取陈述:**Bell–Coons–Rowland**, arXiv:1210.2070v2, **Corollary 8** —— "$k$-Mahler 函数若代数则有理",出处标为 **Ku. Nishioka**, *Mahler Functions and Transcendence*, LNM **1631**, Springer 1996, **Theorem 5.1.7**。("Ku." 即 Kumiko;该领域用 Ku./Ke. 区分二人,这个惯例我们也该采用。)
+> **A9 由 48+50 页降到 34+6 页**,而且降的是对的部分:两条承载原创性的定理(representative-rigid terminal、prescribed-image prestack 构造)**连同证明搬回正文**,附录只留辅助材料。审稿人原话是"补充材料不是一篇独立的第二论文,它装着核心证明"——现在补充材料自己写明正文含完整证明。
 >
-> **但它顶替不了。** Corollary 8 针对的是由**线性**方程 $\sum_j a_j(z)F(z^{k^j})=0$ 定义的 $k$-Mahler 函数,而我们的 $F(z^2)=H(z)^{-1}F(z)^2$ **关于 $F$ 是二次的**,不在该类中。这反过来**佐证 Keiji 才是正确署名**:他 1985 年处理的类 $f(z^p)=\mathscr R(z,f(z))$($\mathscr R$ 有理)正是非线性类;审稿人说 Ostrowski 1968 只管线性乘性方程,也对得上。
+> **Giraud 补在了该补的地方**:此前全文六处只引 `[Chap.~IV]`(按 $H^2$ 的分类),现于构造处引 `\cite[III, Prop.~2.1.5.3]{Giraud1971}`,并标明"是输入,不是原创性主张"。Section 5 的 connected-overlap 假设已显式化,wedge 推论对其开星站点逐一验证,**主结论未变**。
 >
-> 所以缺口收窄而未闭合:**Keiji 1985 仍承重、仍未核验**。已派 agent 补上 Ku. Nishioka Thm 5.1.7 作线性情形对照,并明写我们的方程非线性故线性定理不适用——既堵住"为何不直接引标准 Nishioka 定理"的追问,也把两位 Nishioka 的分工讲清楚;同时明令**不得写出任何暗示已核对 Keiji 原文的措辞**。
+> **crossed-module 路线在正文中正式关闭**,写明确切理由:本文自"gerbe $H^2$ 类及其 Čech 代表已给定"之后才开始,既无源侧三次链模型,也无比较上链。TAC 已弃(审稿人给的是现在 <5%、照修订做完仍 <10%),改投 Cahiers,APAL 投稿信删除。
+>
+> **一处口径更正**:我上轮说 A4 与 A5 的 `SHA256SUMS`"各 14/14"。A5 确为 14/14,**A4 只有 8 条,是 8/8** —— 条目数我说错了。全仓清单实况:A4 8/8、A5 14/14(两者均须在论文根目录、清单去 CRLF 后才通过),A7 11/12(计时不确定性,修复中),**A2、A3、A6、A8、A9 根本没有清单**。
+
 
 
 

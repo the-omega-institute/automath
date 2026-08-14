@@ -1,0 +1,63 @@
+One reproducibility defect to fix. Do not ask for design approval, do not run any
+brainstorming or approval workflow, do not change any mathematics, theorem statement or
+proof, and do not touch any .tex file except REPRODUCE.md-style documentation. Proceed
+directly.
+
+PROBLEM. artifacts/SHA256SUMS does not verify. Checked independently:
+
+  cd artifacts && sha256sum -c SHA256SUMS
+    -> 11 OK, 1 FAILED: finite_verification.txt
+
+The cause is that the archived verifier output embeds a wall-clock timing. Running
+artifacts/verify_finite_claims.py rewrites artifacts/finite_verification.txt, and the
+only difference between runs is a line of the form
+
+    elapsed_seconds = 3.607     ->     elapsed_seconds = 3.626
+
+so the file's SHA256 changes on every run and the manifest can NEVER be stable. A referee
+who reruns the script - exactly what we invite them to do - gets a failing checksum, which
+destroys the machine-verification credibility the manifest exists to establish.
+
+artifacts/deepening_delta_verification.txt has the same problem; check it too.
+
+REQUIRED:
+
+ 1. Make the archived verification outputs DETERMINISTIC. Remove wall-clock timing
+    (elapsed_seconds, runtime, or any similar measured duration) from the text that is
+    written to the archived .txt outputs. Timing may still be printed to stdout if useful,
+    but it must not enter the archived file that gets hashed. Do not remove any
+    mathematical content, counts, ranges, or pass/fail information. Keep the recorded
+    Python and SymPy versions - those are legitimately informative and stable for a given
+    environment.
+ 2. Re-run every artifacts/verify*.py so the archived outputs are regenerated in their new
+    deterministic form, then run each one a SECOND time and confirm byte-for-byte that the
+    archived outputs are identical across the two runs. Report that check explicitly.
+ 3. Regenerate artifacts/SHA256SUMS with UNIX (LF) line endings.
+ 4. Decide and document ONE convention, then follow it: the paths inside SHA256SUMS are
+    currently relative to the artifacts/ directory (they include entries such as
+    ../scripts/verify_squarefree_slice.py). Keep that, but state plainly in REPRODUCE.md
+    which directory the check must be run from, with the exact command, for example:
+
+        cd artifacts && sha256sum -c SHA256SUMS
+
+    REPRODUCE.md currently says nothing about the checksum file at all, so a referee
+    cannot know. Add a short section covering: which directory, the exact command, and the
+    expected number of OK lines.
+ 5. Verify the manifest end to end from a clean state and report the exact count of OK
+    lines and of failures.
+
+Note for context, not something to fix here: this repository has core.autocrlf=true, so
+text files are checked out with CRLF on Windows while a referee on Linux or macOS will
+have LF. Hashes computed over CRLF bytes will not match LF bytes. If you can make the
+manifest robust to that - for instance by hashing only files that are already binary-safe,
+or by documenting that the check must be run on a checkout with LF endings - do so and say
+which choice you made. Do not silently leave it ambiguous.
+
+Then:
+ - Confirm the paper still builds: clean rebuild with .aux removed, alternating article and
+   supplement passes, latexmk -pdfxe exit 0, zero undefined references, zero undefined
+   citations, zero multiply-defined labels for both documents.
+ - Re-run artifacts/test_*.py and report pass counts.
+ - No revision marks anywhere.
+ - Report: what you removed from the archived outputs, the byte-identical rerun check, the
+   final manifest verification counts, and the REPRODUCE.md wording you added.
