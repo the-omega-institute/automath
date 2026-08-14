@@ -1,0 +1,461 @@
+We next show that, even in algebraic degree three, the future-only inverse lengths at
+injective apertures have no uniform bound.  Bassino's classification
+\cite{Bassino2002} contains the cubic Pisot family and its finite expansion
+of one used below.  We include a direct verification of those input data so
+that the new part of the argument is visibly confined to the sliding
+collision depth.
+
+For $n\ge4$, put
+\begin{equation}
+M_n(x)=x^3-(n+2)x^2+2nx-n
+\label{eq:cubic-unbounded-polynomial}
+\end{equation}
+and define the word
+\begin{equation}
+w_n=n\,1\,2\cdots(n-2)\,n\,1\,0\,
+(n-1)(n-2)\cdots2\,0\,n.
+\label{eq:cubic-unbounded-parry-word}
+\end{equation}
+Thus $|w_n|=2n+2$.
+
+\begin{lemma}[Bassino's cubic family: direct verification of the required data]
+\label{lem:cubic-unbounded-family-data}
+The polynomial $M_n$ has a unique real root $\beta_n$, this root belongs to
+$(n,n+1)$, and $\beta_n$ is a nonintegral cubic Pisot number.  Moreover,
+\[
+d_{\beta_n}(1)=w_n0^\infty.
+\]
+If $(Q_j)$ denotes its Parry--Bertrand language counts, then, for
+$0\le r\le n-1$,
+\begin{align}
+Q_0&=1,\qquad Q_1=n+1,\qquad Q_2=n^2+n+2,
+\label{eq:cubic-unbounded-initial-Q}\\
+Q_r&=(n+2)Q_{r-1}-2nQ_{r-2}+nQ_{r-3}
+\qquad(3\le r\le n-1).
+\label{eq:cubic-unbounded-Q-recurrence}
+\end{align}
+In particular $Q_{j+1}>nQ_j$ throughout this range.
+\end{lemma}
+
+\begin{proof}
+One has
+\[
+M_n(n)=-n<0,
+\qquad
+M_n(n+1)=n^2-n-1>0.
+\]
+The identity
+\[
+M_n(x)=x^2(x-2)-n(x-1)^2
+\]
+shows that $M_n(x)<0$ for $x\le n$.  Indeed this is immediate for
+$x\le2$, while for $2<x\le n$ one uses
+\[
+\frac{x^2(x-2)}{(x-1)^2}
+=x-\frac{x}{(x-1)^2}<x\le n.
+\]
+If all three roots were real, every root other than the one in $(n,n+1)$
+would also have to exceed $n$; their sum could then not equal $n+2$.
+Consequently $\beta_n$ is the unique real root.  A reducible monic cubic
+over $\mathbb Z$ has an integral root, which is impossible because the only
+real root lies strictly between consecutive integers.  Thus $M_n$ is
+irreducible.  Its two remaining roots are conjugate, and their common
+modulus is
+\[
+\sqrt{\frac{n}{\beta_n}}<1
+\]
+by the product of the roots.  This proves the asserted Pisot and degree
+statements.
+
+Let $P_{w_n}(x)=x^{2n+2}-\sum_{i=1}^{2n+2}(w_n)_i
+x^{2n+2-i}$ be the Parry polynomial of the displayed word.  Direct
+multiplication gives the polynomial identity
+\begin{equation}
+P_{w_n}(x)
+=M_n(x)\frac{(x^n-1)(x^{n+1}-1)}{(x-1)^2}.
+\label{eq:cubic-unbounded-parry-factorization}
+\end{equation}
+Hence $w_n$ represents one in base $\beta_n$.  The digit $n$ occurs only
+at the first, the $n$th, and the last positions.  The suffix beginning at
+the $n$th position starts with $n10$, whereas $w_n$ starts with $n12$;
+the last suffix is $n0^\infty$.  Every other proper suffix starts with a
+digit below $n$.  All proper suffixes are therefore lexicographically
+smaller than $w_n0^\infty$, so Parry's criterion gives the claimed greedy
+expansion.
+
+For $r\le n-1$, its first $r$ digits are $t_1=n$ and $t_i=i-1$ for
+$2\le i\le r$.  Formula~\eqref{eq:simple-parry-Q} becomes
+\begin{equation}
+Q_r=1+nQ_{r-1}+\sum_{i=2}^r(i-1)Q_{r-i}.
+\label{eq:cubic-unbounded-positive-Q}
+\end{equation}
+This gives \eqref{eq:cubic-unbounded-initial-Q}, proves $Q_r>nQ_{r-1}$,
+and, by subtracting the formula at the preceding three indices, gives
+\eqref{eq:cubic-unbounded-Q-recurrence}.
+\end{proof}
+
+For the next lemma write $S_k=\sum_{j=0}^kQ_j$ and
+$D_k=Q_k-nQ_{k-1}$.  Formula
+\eqref{eq:cubic-unbounded-positive-Q} and the cubic recurrence give,
+respectively,
+\begin{align}
+D_k&=1+\sum_{i=2}^k(i-1)Q_{k-i},
+\label{eq:cubic-unbounded-D-positive}\\
+D_k&=2Q_{k-2}-(n-2)Q_{k-3}+2S_{k-4}
+\qquad(k\ge3),
+\label{eq:cubic-unbounded-D-alternate}
+\end{align}
+where $S_{-1}=0$.
+
+\begin{lemma}[Parameter-uniform two-window carry exclusion]
+\label{lem:cubic-unbounded-two-window}
+Let $n\ge4$ and $2\le r\le n-1$.  If
+$e_0,\ldots,e_r\in[-n,n]\cap\mathbb Z$ and
+\[
+\sum_{j=0}^{r-1}Q_je_j=c_0Q_r,
+\qquad
+\sum_{j=0}^{r-1}Q_je_{j+1}=c_1Q_r
+\]
+for integers $c_0,c_1$, then $c_0,c_1\in\{-1,0,1\}$ and $c_1=0$.
+\end{lemma}
+
+\begin{proof}
+Since $Q_{j+1}>nQ_j$, geometric summation gives
+\begin{equation}
+S_k<\frac{n}{n-1}Q_k.
+\label{eq:cubic-unbounded-geometric-bound}
+\end{equation}
+It follows that $nS_{r-1}<2Q_r$, so every carry is in
+$\{-1,0,1\}$.  We also record the possible last digit of one window.  If
+the carry is zero, \eqref{eq:cubic-unbounded-geometric-bound} gives
+$nS_{r-2}<2Q_{r-1}$, so the last digit belongs to $\{-1,0,1\}$.
+For a carry equal to one, the last digit is $n$.  To see this, note first
+that, for $r\ge3$,
+\[
+D_r+D_{r-1}>Q_{r-2}+3Q_{r-3}>(n+3)Q_{r-3}
+>nS_{r-3}.
+\]
+Together with $Q_{r-1}=nQ_{r-2}+D_{r-1}$, this says
+\begin{equation}
+Q_r-(n-1)Q_{r-1}>nS_{r-2}.
+\label{eq:cubic-unbounded-last-digit-gap}
+\end{equation}
+The case $r=2$ follows directly from
+$Q_2-(n-1)Q_1=n+3>n$.  Thus a last digit at most $n-1$ cannot produce
+the sum $Q_r$.  Sign symmetry gives last digit $-n$ for carry $-1$.
+
+Suppose now, toward a contradiction, that $c_1=1$; the negative case is
+obtained by changing all signs.  Put $f_j=e_{j+1}$ for
+$0\le j\le r-2$.  The last-digit conclusion gives $e_r=n$, and hence
+\begin{equation}
+A:=\sum_{j=0}^{r-2}Q_jf_j=D_r.
+\label{eq:cubic-unbounded-prefix-D}
+\end{equation}
+Set $B=\sum_{j=0}^{r-2}Q_{j+1}f_j$.  We shall prove
+\begin{equation}
+n<B<Q_r-n.
+\label{eq:cubic-unbounded-shifted-gap}
+\end{equation}
+The two small apertures are direct.  If $r=2$, then $f_0=2$ and
+\[
+B=2(n+1),\qquad B-n=n+2>0,qquad
+Q_2-B-n=n(n-2)>0.
+\]
+If $r=3$, equation
+$f_0+(n+1)f_1=n+4$ and the digit bounds give
+\[
+(f_0,f_1)=(3,1)\quad\hbox{or}\quad(2-n,2).
+\]
+The corresponding values are
+\[
+B_1=n^2+4n+5,
+\qquad
+B_2=n^2+3n+6.
+\]
+Both exceed $n$, while
+\[
+Q_3-B_1-n=n^3-2n-1>0,
+\qquad
+Q_3-B_2-n=n^3-n-2>0.
+\]
+Thus \eqref{eq:cubic-unbounded-shifted-gap} holds at $r=2,3$.
+The uniform argument starts at $r=4$; in particular, there is no
+uncovered small aperture.
+
+Assume $r\ge4$.  Let $\alpha,\overline\alpha$ be the nonreal conjugates
+of $\beta=\beta_n$, and put
+\[
+s=\alpha+\overline\alpha=n+2-\beta,
+\qquad p=\alpha\overline\alpha=\frac n\beta.
+\]
+Since $n<\beta<n+1$,
+\begin{equation}
+0<\frac{n}{n+1}<p<1.
+\label{eq:cubic-unbounded-p-range}
+\end{equation}
+For $u_j=Q_{j+1}-\beta Q_j$, the cubic recurrence with its dominant
+$\beta$ component removed gives
+\[
+u_{j+2}=su_{j+1}-pu_j.
+\]
+Set $c=p-s^2/4$.  The conjugates are nonreal, so $c>0$.  Define
+\[
+I_j=u_{j+1}^2-su_ju_{j+1}+pu_j^2.
+\]
+Direct substitution of the recurrence gives
+\begin{align*}
+I_{j+1}
+&=(su_{j+1}-pu_j)^2
+  -su_{j+1}(su_{j+1}-pu_j)+pu_{j+1}^2\\
+&=p\bigl(u_{j+1}^2-su_ju_{j+1}+pu_j^2\bigr)
+=pI_j.
+\end{align*}
+Thus $I_j=p^jI_0$.  Its two exact completed-square forms are
+\begin{align*}
+I_j&=\left(u_{j+1}-\frac{s}{2}u_j\right)^2
+ +cu_j^2,\\
+I_j&=p\left(u_j-\frac{s}{2p}u_{j+1}\right)^2
+ +\frac{c}{p}u_{j+1}^2.
+\end{align*}
+Finally, direct substitution of $M_n(\beta)=0$ gives
+\[
+4c-I_0
+=\frac{(\beta-n)(2\beta+n-4)}{\beta}>0.
+\]
+It follows from the first completed square that
+\[
+u_j^2\le\frac{I_j}{c}=p^j\frac{I_0}{c}<4p^j\le4,
+\]
+and from the second that
+\[
+u_{j+1}^2\le\frac{pI_j}{c}
+=p^{j+1}\frac{I_0}{c}<4p^{j+1}<4.
+\]
+Thus $|u_j|<2$ throughout the required range.  Since
+$|f_j|\le n$, this yields
+\begin{equation}
+|B-\beta D_r|
+=\left|\sum_{j=0}^{r-2}u_jf_j\right|<2n(r-1).
+\label{eq:cubic-unbounded-conjugate-error}
+\end{equation}
+
+The positive formula for $D_r$ gives $D_r>Q_{r-2}\ge Q_2$.  Since
+$r\le n-1$ and $\beta>n$, the lower margin is explicitly
+\begin{align*}
+B-n
+&>nQ_2-2n(r-1)-n\\
+&\ge nQ_2-2n(n-2)-n\\
+&=n^3-n^2+5n
+=n(n^2-n+5)>0.
+\end{align*}
+For the upper bound, \eqref{eq:cubic-unbounded-geometric-bound} and
+$Q_{r-3}>nQ_{r-4}$ give
+\[
+2S_{r-4}<\frac{2}{n-1}Q_{r-3}
+\le(n-2)Q_{r-3}.
+\]
+Thus \eqref{eq:cubic-unbounded-D-alternate} yields
+$D_r<2Q_{r-2}<Q_{r-1}/2$.  Using $\beta-1<n$,
+\[
+Q_r-\beta D_r
+=nQ_{r-1}-(\beta-1)D_r
+>\frac n2Q_{r-1}.
+\]
+As $Q_{r-1}\ge Q_3=n^3+n^2+3n+4$, the upper margin is therefore
+\begin{align*}
+Q_r-B-n
+&>\frac n2Q_{r-1}-2n(r-1)-n\\
+&\ge\frac n2Q_3-2n(n-2)-n\\
+&=\frac n2\bigl(n^3+n^2-n+10\bigr)>0.
+\end{align*}
+The last polynomial is positive for $n\ge4$: its derivative
+$3n^2+2n-1$ is positive there, and its value at $4$ is positive.
+This proves \eqref{eq:cubic-unbounded-shifted-gap} uniformly for
+$4\le r\le n-1$.
+
+The first window sum is $e_0+B$.  By
+\eqref{eq:cubic-unbounded-shifted-gap} and $|e_0|\le n$, it lies strictly
+between $0$ and $Q_r$, contradicting its membership in $Q_r\mathbb Z$.
+Therefore $c_1=0$.
+\end{proof}
+
+For $L\ge1$, let $\mathcal K_{n,r,L}$ be the set obtained from
+$\mathcal N_{\beta_n,r,L}$ by allowing the first coordinate to vanish.
+Thus it consists of all $e\in[-n,n]^{r+L-1}\cap\mathbb Z^{r+L-1}$ whose
+$L$ sliding sums vanish modulo $Q_r$.  Define
+\[
+E_{n,2}=(2,n),
+\qquad
+E_{n,3}=(n-2,-2,-n,1),
+\qquad
+E_{n,r+1}=(-2,E_{n,r},0)\quad(r\ge3).
+\]
+
+\begin{lemma}[Exact terminal collision paths]
+\label{lem:cubic-unbounded-terminal-paths}
+For every $n\ge4$ and $2\le r\le n-1$,
+\begin{equation}
+\mathcal K_{n,r,r-1}=\{0,\ E_{n,r},\ -E_{n,r}\},
+\qquad
+\mathcal K_{n,r,r}=\{0\}.
+\label{eq:cubic-unbounded-terminal-classification}
+\end{equation}
+For $r\ge3$, the exact window sums of $E_{n,r}$ are
+$-Q_r,0,\ldots,0$.
+\end{lemma}
+
+\begin{proof}
+The identity \eqref{eq:cubic-unbounded-D-alternate} is equivalently
+\begin{equation}
+-2\sum_{j=0}^{k-4}Q_j+(n-2)Q_{k-3}-2Q_{k-2}
+-nQ_{k-1}+Q_k=0
+\label{eq:cubic-unbounded-zero-word}
+\end{equation}
+for $k\ge3$; for $k=2$ the corresponding identity is
+$-2-nQ_1+Q_2=0$.  Sliding these identities through the displayed vector
+$E_{n,r}$ proves directly that its window sums are $-Q_r,0,\ldots,0$.
+The vector $E_{n,2}$ has its sole sum equal to $Q_2$.
+
+We prove the classification by induction on $r$.  At $r=2$, the bound
+$|e_0+(n+1)e_1|<2Q_2$ shows
+\[
+\mathcal K_{n,2,1}=\{(0,0),\ \pm(2,n)\}.
+\]
+For two windows, Lemma~\ref{lem:cubic-unbounded-two-window} makes the
+second carry zero.  Then $e_1+(n+1)e_2=0$ forces $e_1=e_2=0$, and the
+first congruence forces $e_0=0$.  Hence
+$\mathcal K_{n,2,2}=\{0\}$.
+
+The case $r=3$ can also be read without any omitted branch.  In a
+two-window path the second carry is zero, so
+\[
+e_1+(n+1)e_2+Q_2e_3=0.
+\]
+The last-digit bound in the preceding lemma gives
+$e_3\in\{-1,0,1\}$.  If $e_3=0$, division by $Q_1=n+1>n$ gives
+$e_1=e_2=0$; if $e_3=1$, it gives $(e_1,e_2)=(-2,-n)$; the remaining
+case is its negative.  The first congruence then determines
+$e_0=n-2$, $0$, or $2-n$, respectively.  Thus
+$\mathcal K_{n,3,2}=\{0,\pm E_{n,3}\}$.  For three windows, apply the
+already proved $r=2$ two-window classification to the middle vector
+$(e_1,e_2,e_3)$.  It gives $(e_1,e_2,e_3)=0$; the last original window
+then gives $Q_2e_4=0$, and the first gives $e_0=0$.  Hence
+$\mathcal K_{n,3,3}=\{0\}$.
+
+Now let $r\ge4$ and assume both assertions at aperture $r-1$.  Take
+$e=(e_0,\ldots,e_{2r-3})\in\mathcal K_{n,r,r-1}$, and write
+\begin{equation}
+W_t:=\sum_{j=0}^{r-1}Q_je_{t+j}=c_tQ_r
+\qquad(0\le t\le r-2).
+\label{eq:cubic-unbounded-induction-windows}
+\end{equation}
+Repeated application of Lemma~\ref{lem:cubic-unbounded-two-window} gives
+$c_1=\cdots=c_{r-2}=0$.  Remove $e_0$ and $e_{2r-3}$ and denote the
+middle vector by
+\[
+x=(e_1,\ldots,e_{2r-4}).
+\]
+It has length $2r-4$, the length required for $r-2$ windows of aperture
+$r-1$.  For $0\le t\le r-3$, its $t$th reduced window is the original
+zero-carry window $W_{t+1}$ with its last term removed:
+\begin{equation}
+V_t:=\sum_{j=0}^{r-2}Q_je_{t+1+j}
+=-Q_{r-1}e_{t+r}.
+\label{eq:cubic-unbounded-reduced-window}
+\end{equation}
+Every $V_t$ is therefore a multiple of $Q_{r-1}$, so induction gives
+\[
+x\in\mathcal K_{n,r-1,r-2}
+=\{0,E_{n,r-1},-E_{n,r-1}\}.
+\]
+Write $z=e_{2r-3}$ for the omitted final coordinate.  The last original
+zero-carry window is
+\begin{equation}
+V_{r-3}+Q_{r-1}z=0.
+\label{eq:cubic-unbounded-final-coordinate}
+\end{equation}
+For each of the three possible middle vectors, its last reduced window
+sum is zero; hence \eqref{eq:cubic-unbounded-final-coordinate} gives
+$z=0$.
+
+It remains to determine the initial coordinate and to exclude all other
+first carries.  Put
+\[
+B(x):=\sum_{j=1}^{r-1}Q_je_j.
+\]
+The already verified window sums of
+$E_{n,r}=(-2,E_{n,r-1},0)$ give
+\[
+\begin{array}{c|ccc}
+x&0&E_{n,r-1}&-E_{n,r-1}\\ \hline
+B(x)&0&2-Q_r&Q_r-2.
+\end{array}
+\]
+The first window equation is
+\begin{equation}
+e_0+B(x)=c_0Q_r.
+\label{eq:cubic-unbounded-first-coordinate}
+\end{equation}
+Because $|e_0|\le n$ and $Q_r\ge Q_2>n+2$, it has exactly the following
+solutions:
+\[
+\begin{array}{c|c|c|c|c}
+x&z&c_0&e_0&e\\ \hline
+0&0&0&0&0\\
+E_{n,r-1}&0&-1&-2&E_{n,r}\\
+-E_{n,r-1}&0&1&2&-E_{n,r}.
+\end{array}
+\]
+No different first carry supplies another admissible initial coordinate.
+This proves the first classification.
+
+Finally take
+$e=(e_0,\ldots,e_{2r-2})\in\mathcal K_{n,r,r}$ and write its carries as
+$c_0,\ldots,c_{r-1}$.  Repeated use of
+Lemma~\ref{lem:cubic-unbounded-two-window} gives
+$c_1=\cdots=c_{r-1}=0$.  Remove $e_0$ and $e_{2r-2}$.  Formula
+\eqref{eq:cubic-unbounded-reduced-window}, now for
+$0\le t\le r-2$, shows explicitly that
+\[
+(e_1,\ldots,e_{2r-3})\in\mathcal K_{n,r-1,r-1}=\{0\}.
+\]
+The last original window consequently reads
+$Q_{r-1}e_{2r-2}=0$, so $e_{2r-2}=0$.  The first window then reads
+$e_0=c_0Q_r$.  Since $|e_0|\le n<Q_r$, it follows that
+$e_0=c_0=0$.  Thus $\mathcal K_{n,r,r}=\{0\}$, with every carry and
+coordinate exhausted.
+\end{proof}
+
+\begin{theorem}[Bassino family: unbounded future-only inverse length]
+\label{thm:cubic-unbounded-causal-depth}
+For Bassino's family, let $n\ge4$, let $\beta_n\in(n,n+1)$ be the root of
+\eqref{eq:cubic-unbounded-polynomial} and put $m_n=n-1$.  Then $\beta_n$
+is a nonintegral cubic simple-Parry Pisot number, $\Phi_{\beta_n,m_n}$ is
+injective, and
+\begin{equation}
+\ell_{\rm cau}(\beta_n,m_n)=n-1.
+\label{eq:cubic-unbounded-causal-length}
+\end{equation}
+Consequently
+\[
+\sup\left\{\ell_{\rm cau}(\beta,m):
+\substack{\beta\text{ nonintegral cubic simple-Parry Pisot},\\
+m\ge2,\ \Phi_{\beta,m}\text{ injective}}\right\}=\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:cubic-unbounded-family-data} supplies all base and language
+hypotheses.  At $r=m_n$, Lemma
+\ref{lem:cubic-unbounded-terminal-paths} gives
+\[
+\mathcal N_{\beta_n,r,r-1}=\{E_{n,r},-E_{n,r}\},
+\qquad
+\mathcal N_{\beta_n,r,r}=\varnothing.
+\]
+The exact collision criterion, Theorem
+\ref{thm:simple-parry-causal-collision}, now gives
+$\ell_{\rm cau}(\beta_n,m_n)=m_n=n-1$.  Its finiteness implies
+injectivity by Corollary~\ref{cor:simple-parry-causal-completeness}, and
+letting $n$ tend to infinity proves the last assertion.
+\end{proof}

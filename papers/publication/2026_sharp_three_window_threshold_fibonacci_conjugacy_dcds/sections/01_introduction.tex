@@ -1,209 +1,162 @@
 \section{Introduction}\label{sec:intro}
 
-Finite-window recodings may identify words when a single window is observed
-and nevertheless become injective when consecutive windows overlap.  We
-determine the exact overlap threshold for a cyclic rank recoding attached to
-every quadratic Pisot $\beta$-language, and we prove that its optimal causal
-inverse length is unbounded already among cubic simple-Parry Pisot bases.
+Finite-window factor codes can collapse individual words and nevertheless
+become invertible when successive windows overlap.  For subshifts generated
+by $\beta$-expansions, this raises a concrete classification problem: how many
+overlapping cyclic rank windows are needed before the full digit shift is
+recovered, and how much future output is required by an inverse with memory
+zero?  We answer the threshold problem for every quadratic Pisot base and
+show that the optimal future depth is already unbounded in algebraic degree
+three.  The resulting statements concern finite-type images, Fischer covers,
+follower separation, and exact Markov order, which are the natural symbolic
+dynamical invariants of the construction.
 
-The construction is an ordered-language construction.  For each length $m$,
-we reverse the legal greedy $\beta$-words, order them lexicographically (or,
-equivalently, order the unreversed words colexicographically), and identify
-them with the integer interval $\{0,\ldots,Q_m(\beta)-1\}$.  The same weighted
-rank formula is evaluated on the full digit cube and reduced cyclically modulo
-$Q_m(\beta)$.  The residue is then returned to the corresponding legal word.
-We call this operation a \emph{cyclic language-rank recoding}.
+Fix a greedy $\beta$-language and let $Q_m(\beta)$ be the number of its legal
+words of length $m$.  Reverse those words, order them lexicographically, and
+identify them with $\{0,\ldots,Q_m(\beta)-1\}$.  Equivalently, order the
+unreversed words colexicographically.  Evaluate the same positional rank on
+the full digit cube, reduce it modulo $Q_m(\beta)$, return the legal word with
+that residue, and overlap the resulting windows along the shift.  We call
+this map a \emph{cyclic language-rank recoding}.
 
-This terminology is essential.  The congruence is a congruence of integer
-language ranks, not of numerical $\beta$-values.  In particular, the paper
-does not construct a quotient of $\mathbb Z[\beta]$ and does not prove that an
-input word and its recoded word represent the same real number.  For example,
-if $\beta^2-3\beta+1=0$, then $(Q_0,Q_1,Q_2)=(1,3,8)$ and the rank of $(2,2)$
-is $2+2Q_1=8$.  Thus the cyclic rank recoding sends $(2,2)$ to $(0,0)$, but
-this says only that the two language ranks are congruent modulo $8$; it does
-not assert $2+2\beta\equiv0$ in any arithmetic quotient.  Standard
-$\beta$-normalization and finite-transducer results therefore provide
-important context but concern a different operation
+The positional rank is established numeration theory.  Bertrand--Mathis,
+Bruy\`ere--Hansel, and Lecomte--Rigo develop nonintegral-base and
+ordered-language numeration \cite{BertrandMathis1989,BruyereHansel1997,
+LecomteRigo2001}; Parry's admissibility theorem supplies the canonical greedy
+language \cite{Parry1960}.  Charlier--Cisternino--Stipulanti correct the
+classification of Bertrand systems and distinguish, for a simple-Parry base,
+the canonical system determined by $d_\beta^*(1)$ from the noncanonical
+system generated directly by the finite word $d_\beta(1)$
+\cite{CharlierCisterninoStipulanti2022}.  We always use the canonical
+language.  Proposition~\ref{prop:parry-rank-bijection} gives a self-contained
+two-chamber interval proof of this standard positional rank because its exact
+endpoints enter the later estimates.  The map-specific operation begins only
+with cyclic reduction of the fixed-length rank and sliding overlap.
+
+This distinction also separates the construction from numerical
+$\beta$-normalization.  The congruence is a congruence of integer language
+ranks, not of values in $\mathbb Z[\beta]$.  For instance, if
+$\beta^2-3\beta+1=0$, then $(Q_0,Q_1,Q_2)=(1,3,8)$ and the rank of $(2,2)$ is
+$2+2Q_1=8$.  Its cyclic recoding is therefore $(0,0)$, but no equality
+$2+2\beta=0$ is asserted.  Finite-transducer normalization results provide
+important context while studying a different map
 \cite{Frougny1992,FrougnySolomyak1992,BerendFrougny1994,FrougnySteiner2008}.
 
-Every quadratic Pisot minimal polynomial belongs to one of the two chambers
+\medskip
+\noindent\textbf{Quadratic classification.}
+Every quadratic Pisot minimal polynomial belongs to one of two chambers,
 \[
 P^-_{a,b}(x)=x^2-ax-b,\quad a\ge b\ge1,
 \qquad
-P^+_{a,b}(x)=x^2-ax+b,\quad a\ge3,\ 1\le b\le a-2.
+P^+_{a,b}(x)=x^2-ax+b,\quad a\ge3,\quad 1\le b\le a-2.
 \]
-For the cyclic rank recoding $\Phi_{\beta,m}$, let $m_*(\beta)$ be the least
-nontrivial aperture $m\ge2$ for which the sliding map is a topological
-conjugacy from the full digit shift onto its finite-type image.  Our main
-result, Theorem~\ref{thm:full-quadratic-pisot-threshold}, is
+Let $m_*(\beta)$ be the least aperture $m\ge2$ for which the sliding cyclic
+rank recoding is a topological conjugacy from the full digit shift onto its
+finite-type image.  Theorem~\ref{thm:full-quadratic-pisot-threshold} gives the
+complete classification
 \[
 m_*(\beta)=3
 \quad\Longleftrightarrow\quad
 \operatorname{minpoly}(\beta)\in
 \{x^2-ax-a:a\ge1\}\cup\{x^2-ax+1:a\ge3\},
 \]
-and $m_*(\beta)=2$ otherwise.  At every aperture at or above threshold, the
-finite-block maps are injective and
+with $m_*(\beta)=2$ otherwise.  To the authors' knowledge, the exact
+threshold for this cyclic fixed-length language-rank recoding has not
+previously been determined.  The claim is deliberately restricted to this
+map and is not a claim about $\beta$-normalization in general.
+
+At every aperture at or above threshold,
 \[
-|\mathcal L_n(Y_{\beta,m})|
-=(\lfloor\beta\rfloor+1)^{n+m-1}\qquad(n\ge m).
+|\mathcal L_N(Y_{\beta,m})|
+=(\lfloor\beta\rfloor+1)^{N+m-1}\qquad(N\ge m).
 \]
-The inverse has memory zero and finite anticipation.
+The proof rests on a parameter-uniform nearest-multiple separation in both
+quadratic chambers and the resulting bounded sliding-congruence lemma.  It
+also identifies the exact extremal bases rather than only producing an upper
+bound for the aperture.
 
-The threshold alone does not describe the local information content of the
-recoding.  Theorem~\ref{thm:quadratic-aperture-two-duality} shows that
-aperture two identifies a positive- and a negative-conjugate chamber member
-pointwise, while aperture three first separates them.
-Theorem~\ref{thm:quadratic-optimal-causal-inverse} gives the exact
-anticipation two in the positive chamber at every $m\ge3$ and anticipation
-one in the negative chamber at $m=3$.  The corresponding parameter-uniform
-negative statement for $m\ge4$ remains open.  The critical extremizers all
-have the same
-two-fixed-point strictly sofic normal form, and
-Theorem~\ref{thm:quadratic-exact-local-order} proves that both the onset of
-finite-block injectivity and the Markov step are exactly $m$.
+\medskip
+\noindent\textbf{Exact local structure.}
+The threshold has a sharp finite-block and presentation-theoretic form.
+Theorem~\ref{thm:quadratic-exact-local-order} proves simultaneously that
+finite-block injectivity first occurs at block length $N=m$, that the natural
+overlap presentation is the right Fischer cover with exactly
+$(\lfloor\beta\rfloor+1)^{m-1}$ states, and that the image in its fixed output
+alphabet is $m$-step but not $(m-1)$-step.  These conclusions use standard
+Fischer--Krieger and resolving-cover theory
+\cite{Fischer1975,Krieger1984,LindMarcus1995}; the new content is the exact
+identification and order for this arithmetic family.  Theorem
+\ref{thm:quadratic-aperture-two-duality} gives the associated cross-chamber
+compression at aperture two, and Theorem
+\ref{thm:quadratic-critical-normal-form} identifies the unique two-point
+fiber and its strictly sofic normal form at the critical parameters.
 
-The quadratic threshold bound does not imply a uniform bound on decoding
-depth in higher degree.  In
-Theorem~\ref{thm:simple-parry-causal-collision} we identify the controlling
-finite object: a bounded-difference collision graph, equivalently a banded
-Toeplitz system of congruences modulo $Q_m$.  Corollary
-\ref{cor:simple-parry-causal-completeness} shows that every injective
-nonintegral simple-Parry rank fold has a finite future-only inverse and that every
-failure of injectivity has a bounded periodic witness.  Theorem
-\ref{thm:cubic-unbounded-causal-depth} then proves that no degree-three
-uniform bound exists.  For the root $\beta_n\in(n,n+1)$ of
+The Fibonacci and boundary-modified metallic cases provide the prototype.
+At the golden base the three-window decoder is explicit, while at aperture
+two the two constant raw sequences form the sole nontrivial path-space fiber.
+For the constant-type family
+\[
+\beta_A=\frac{A+\sqrt{A^2+4}}2,
+\qquad Q_{j+2}=AQ_{j+1}+Q_j,
+\]
+the threshold is three only for $A=1$ and is two for every $A\ge2$.  The
+weights and boundary convention differ from standard Ostrowski numeration;
+that relationship is recorded without identifying the two systems.
+
+\medskip
+\noindent\textbf{Degree-three unboundedness.}
+For an injective recoding define $\ell_{\rm cau}(\beta,m)-1$ to be the least
+anticipation of an inverse sliding-block code with memory zero.  This is a
+directional optimum, not a generic name for right-closing delay.  For every
+$n\ge4$, let $\beta_n\in(n,n+1)$ be the real root of
 \[
 x^3-(n+2)x^2+2nx-n
 \]
-at aperture $m_n=n-1$, the fold is injective and its optimal causal inverse
-uses exactly $n-1$ consecutive outputs.  Bassino's cubic expansion
-classification supplies the published simple-Parry data
-\cite{Bassino2002}; the new step is a parameter-uniform carry exclusion and
-an exact terminal-path induction in the modulus-$Q_m$ collision graph.
-Theorem~\ref{thm:simple-parry-aperture-two} gives a complete aperture-two
-trichotomy from the second Parry digit, including the exact constant branch
-pair in the noninjective case.  The graph criterion, causal completeness, and
-aperture-two trichotomy do not require the base to be Pisot; Proposition
-\ref{prop:nonpisot-simple-parry-scope} proves that this hypothesis removal is
-strict by an explicit non-Pisot simple-Parry example.
-
-The negative norm-one subfamily is the boundary-modified constant-type
-recurrence model
+and put $m_n=n-1$.  Bassino established this cubic simple-Parry Pisot family
+and its expansion of one \cite{Bassino2002}.  Theorem
+\ref{thm:cubic-unbounded-causal-depth} proves the new map-specific assertion
 \[
-\beta_A=\frac{A+\sqrt{A^2+4}}2,\qquad
-Q_0=1,\quad Q_1=A+1,\quad Q_{j+2}=AQ_{j+1}+Q_j.
+\ell_{\rm cau}(\beta_n,m_n)=n-1.
 \]
-Its digit strings obey the Ostrowski local constraint
-$x_k=A\Rightarrow x_{k-1}=0$.  The model is not identified with standard
-Ostrowski numeration: its weights are $q_j+q_{j-1}$ rather than the convergent
-denominators $q_j$, and its boundary convention permits the lowest digit to
-equal $A$; see Lemma~\ref{lem:constant-type-ostrowski-origin}.  In this
-subfamily,
-\[
-m_*(\beta_A)=3\quad(A=1),
-\qquad
-m_*(\beta_A)=2\quad(A\ge2).
-\]
+Thus exact memory-zero inverse anticipation is unbounded already within
+algebraic degree three.  A parameter-uniform two-window carry exclusion and
+an exhaustive terminal-path induction provide the lower and upper bounds.
 
-At $A=1$ the ranks are the Fibonacci ranks of binary words with no adjacent
-ones.  The three-window decoder is explicit, while at aperture two the two
-constant raw sequences form the sole nontrivial path-space fiber.  The natural
-overlap graph above threshold is also identified with the right Fischer cover
-of the image shift in its presented output alphabet.  The resulting
-$2^{m-1}$ state count is canonical for that labeled shift presentation; it is
-not invariant under arbitrary topological conjugacy, since the same image
-shift is conjugate to the binary full shift.
+The proof uses a classical decision in a specialized form.  Pair graphs,
+bundle graphs, and fiber products encode pairs of input paths with the same
+output; reachable off-diagonal cycles decide noninjectivity and yield
+periodic witnesses.  This tradition includes tessellation automata,
+one-dimensional cellular automata, and symbolic factor maps
+\cite{AmorosoPatt1972,Richardson1972,Nasu1977,Head1989,LindMarcus1995,
+Nasu1995}.  Finite decoder-window bounds and resolving maps are likewise
+classical \cite{Ashley1988,Ashley1991,Ashley1996}.  Theorem
+\ref{thm:simple-parry-causal-collision} applies that decision after an exact
+arithmetic quotient: an input pair is replaced by its coordinatewise
+difference in $[-d,d]^{m-1}$.  For cyclic Parry ranks this quotient retains
+all collisions, computes $\ell_{\rm cau}$ by a longest-path formula, and has
+an explicit state bound.  Corollary
+\ref{cor:simple-parry-causal-completeness} uses the unique predecessor of the
+zero difference state to strengthen the general inverse conclusion to a
+future-only inverse.  Theorem~\ref{thm:simple-parry-aperture-two} then gives
+the exact aperture-two trichotomy.  These arithmetic quotient and depth
+computations are the contribution; the pair-graph/cycle decision itself is
+not.
 
-The closest general framework is ordered numeration on languages.
-Lecomte--Rigo assign integers by genealogically ordering an arbitrary
-infinite regular language, and Bruy\`ere--Hansel study recognizability in
-Bertrand numeration systems
-\cite{BruyereHansel1997,LecomteRigo2001}.  Bertrand--Mathis and Loraud connect
-the admissible languages with $\beta$-shifts
-\cite{BertrandMathis1986,Loraud1995}.
-Classical $\beta$-expansion and $\beta$-shift results establish the greedy
-language, its dynamical realization, and automata-theoretic properties
-\cite{Renyi1957,ItoTakahashi1974,Parry1960,Blanchard1989,FrougnySolomyak1992}.
-These works already supply the ordered-language, recognizability, and
-admissibility stages.  The additional operation studied here is only the
-cyclic reduction of the fixed-length rank modulo the number of length-$m$
-legal words, followed by sliding overlap; we have not found this threshold
-problem in the cited frameworks.
+The three headline results therefore form a single dynamical narrative.  The
+quadratic theorem classifies every Pisot base in degree two and fixes its
+finite-type onset and canonical right-resolving presentation.  The
+simple-Parry difference quotient isolates the arithmetic responsible for
+future decoding.  Bassino's cubic family then shows that the uniform
+quadratic behavior breaks immediately in degree three.
 
-The main contributions can therefore be separated from their standard
-inputs as follows.
-\begin{center}
-\renewcommand{\arraystretch}{1.16}
-\begin{tabular}{p{0.26\textwidth}p{0.35\textwidth}p{0.29\textwidth}}
-\toprule
-Result & Closest established framework & Additional result proved here\\
-\midrule
-Theorem~\ref{thm:full-quadratic-pisot-threshold} &
-Greedy $\beta$-languages and their shift/automaton realizations
-\cite{Renyi1957,ItoTakahashi1974,Parry1960,Blanchard1989,BerendFrougny1994} &
-The exact overlap threshold for the newly defined cyclic rank recoding in both
-quadratic Pisot chambers.\\
-Proposition~\ref{prop:parry-rank-bijection} &
-Ordered regular-language numeration and Bertrand systems
-\cite{BertrandMathis1986,BruyereHansel1997,LecomteRigo2001} &
-The coupled interval-rank proof for the two quadratic Parry languages and its
-use under cyclic reduction.\\
-Theorem~\ref{thm:metallic-family-block-bijection} &
-Ostrowski local constraints and constant recurrences
-\cite{Ostrowski1922,HieronymiTerry2018} &
-An all-aperture block-injectivity argument for the boundary-modified model.\\
-Theorem~\ref{thm:block-invertibility} &
-Resolving sliding-block presentations
-\cite{Hedlund1969,LindMarcus1995,Nasu1995} &
-The sharp three-window Fibonacci decoder on the full binary cube.\\
-Theorem~\ref{thm:fischer-cover-stabilized-image} &
-Fischer--Krieger cover theory
-\cite{Fischer1975,Krieger1984,LindMarcus1995} &
-Identification of the concrete overlap presentation in the stabilized output
-alphabet.\\
-Theorems~\ref{thm:quadratic-aperture-two-duality} and
-\ref{thm:quadratic-optimal-causal-inverse} &
-Parry languages, local codes, and bounded polynomial multiples
-\cite{Parry1960,LindMarcus1995,DrungilasEtAl2018} &
-Exact cross-chamber loss of identifiability, the positive-chamber optimal
-causal length, and the negative aperture-three optimum.\\
-Theorems~\ref{thm:quadratic-critical-normal-form} and
-\ref{thm:quadratic-exact-local-order} &
-Near-Markov sofic shifts and Fischer covers
-\cite{Fischer1975,Krieger1984,MarcusMeyerovitchWu2026} &
-The family-specific critical normal form, exact finite-block onset, exact
-Markov step, and full-parameter Fischer-cover state count.\\
-Theorem~\ref{thm:simple-parry-causal-collision},
-Corollary~\ref{cor:simple-parry-causal-completeness},
-Theorem~\ref{thm:simple-parry-aperture-two}, and
-Corollary~\ref{cor:no-bounded-order-causal-comparison} &
-Parry--Bertrand languages, fiber-product graphs, and restricted-coefficient
-polynomial multiples
-\cite{Parry1960,CharlierCisterninoStipulanti2022,LindMarcus1995,
-DrungilasEtAl2018,Bassino2002} &
-The exact bounded sliding-congruence depth, causal completeness, periodic
-failure certificates, the aperture-two trichotomy, and explicit
-higher-degree separations from bounded-multiple order.\\
-Theorem~\ref{thm:cubic-unbounded-causal-depth} &
-Cubic Pisot expansions of one \cite{Bassino2002} &
-An explicit cubic family with injective apertures and unbounded exact causal
-inverse length.\\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Section~\ref{sec:stabilization} develops the finite Fibonacci rank recoding.
-Sections~\ref{sec:stab:conjugacy} and the following branch-locus section prove
-the sharp Fibonacci decoder and the two-window exception.
-Section~\ref{sec:metallic-cover} treats the boundary-modified constant-type
-family and its Fischer cover.  Section~\ref{sec:quadratic-pisot-extension}
-proves the two-chamber theorem and gives four worked nonmetallic examples.
-Section~\ref{sec:simple-parry-causal-obstructions} proves the higher-degree
-causal obstruction formula, the unbounded cubic theorem, and the
-causal-completeness and aperture-two classifications.  The bounded-multiple
-counterexamples are retained there as secondary consequences.
-Section~\ref{sec:discussion} records the scope and remaining interfaces.
-Routine source-law, entropy, Blackwell-equivalence, pressure, fiber-moment,
-discrepancy, and geometric consequences have been moved to the separate
-supplementary material; none is used in the threshold proofs.
+Section~\ref{sec:stabilization} defines the Fibonacci rank recoding, and the
+following sections establish its decoder and critical branch locus.  Section
+\ref{sec:metallic-cover} treats the metallic prototype.  Section
+\ref{sec:quadratic-pisot-extension} proves the full quadratic classification
+and exact local structure.  Section
+\ref{sec:simple-parry-causal-obstructions} first separates the classical
+pair-graph input from the arithmetic difference quotient and then proves the
+cubic unbounded-depth theorem.  Section~\ref{sec:discussion} records the
+remaining map-specific interfaces.  Entropy, Blackwell-equivalence,
+pressure, Fourier fiber statistics, discrepancy, and geometric consequences
+are kept outside the main proof chain in the supplementary material.
