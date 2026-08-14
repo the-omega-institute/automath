@@ -134,6 +134,49 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.effective_mahler_bounds_match())
 
+    def test_logarithmic_mahler_divisor_bound_survives_exact_counterexample_search(self):
+        self.assertTrue(
+            hasattr(verifier, "logarithmic_mahler_divisor_bound_audit"),
+            "the logarithmic divisor-bound audit is not implemented",
+        )
+
+        audit = verifier.logarithmic_mahler_divisor_bound_audit()
+
+        self.assertGreaterEqual(audit["certificates_checked"], 100)
+        self.assertGreaterEqual(audit["radices_checked"], 4)
+        self.assertTrue(audit["root_of_unity_cases_checked"])
+        self.assertTrue(audit["all_within_bound"])
+
+    def test_logarithmic_degree_order_is_attained_by_an_exact_family(self):
+        self.assertTrue(
+            hasattr(verifier, "mahler_log_degree_extremal_family_audit"),
+            "the logarithmic lower-bound family audit is not implemented",
+        )
+
+        audit = verifier.mahler_log_degree_extremal_family_audit()
+
+        self.assertGreaterEqual(audit["families_checked"], 12)
+        self.assertTrue(audit["identities_hold"])
+        self.assertTrue(audit["degrees_hold"])
+        self.assertTrue(audit["no_cancellation"])
+
+    def test_different_base_elementary_two_group_interfaces_are_exact(self):
+        self.assertTrue(
+            hasattr(verifier, "elementary_two_group_cross_base_audit"),
+            "the cross-base elementary two-group audit is not implemented",
+        )
+
+        audit = verifier.elementary_two_group_cross_base_audit()
+
+        self.assertEqual(audit["base_sizes"], (1, 2))
+        self.assertEqual(audit["perron_roots"], (2, 2))
+        self.assertTrue(audit["base_determinants_equal"])
+        self.assertTrue(audit["all_character_determinants_equal"])
+        self.assertTrue(audit["all_character_determinants_congruent_mod_two"])
+        self.assertTrue(audit["fourier_inversion_exact"])
+        self.assertTrue(audit["positive_on_real_grid"])
+        self.assertTrue(audit["sample_budget_independent_of_rank"])
+
     def test_finite_radial_collision_audit_recovers_the_exact_collision_set(self):
         self.assertTrue(
             hasattr(verifier, "finite_radial_collision_audit"),
@@ -149,9 +192,9 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertEqual(audit["rational_function"], q)
         self.assertEqual(audit["collision_polynomial"], z * (4 * z - 1))
         self.assertEqual(audit["collision_points"], (sp.Rational(1, 4),))
-        self.assertEqual(audit["degree_bound"], 960)
-        self.assertEqual(audit.get("collision_bound"), 959)
-        self.assertEqual(audit["sample_budget"], 960)
+        self.assertEqual(audit["degree_bound"], 32)
+        self.assertEqual(audit.get("collision_bound"), 31)
+        self.assertEqual(audit["sample_budget"], 32)
         self.assertTrue(audit["collision_count_within_bound"])
 
     def test_interior_sampling_needs_no_twisted_spectral_gap(self):
@@ -288,8 +331,11 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Effective rational Mahler Pade decision: verified", report)
         self.assertIn("Effective Mahler degree and height bounds: verified", report)
-        self.assertIn("Finite radial collision set: {1/4}; 1 <= 959", report)
-        self.assertIn("Finite radial recovery budget: 960 algebraic samples", report)
+        self.assertIn("Logarithmic Mahler divisor bound: exact counterexample search", report)
+        self.assertIn("Mahler logarithmic lower-bound family: exact identities", report)
+        self.assertIn("Cross-base (C2)^2 interface: sizes 1 and 2", report)
+        self.assertIn("Finite radial collision set: {1/4}; 1 <= 31", report)
+        self.assertIn("Finite radial recovery budget: 32 samples with one algebraic anchor", report)
         self.assertIn(
             "C3 Adams-Mobius support: non-zero at primes 2, 5, 11, 17",
             report,

@@ -246,8 +246,8 @@ The numerator tends to one because \(R(0)=1\), proving
 
 We now prove that the converse in
 \eqref{eq:positive-rational-certificate-kernel} holds at every interior
-algebraic point for determinant ratios arising from two sign blocks on one
-base, and also at the Perron endpoint under the strict gap.  The argument has
+algebraic point for parity-compatible determinant ratios over one or two
+bases, and also at a common Perron endpoint under the strict gap.  The argument has
 two arithmetic inputs.  The first is the Dieudonn\'e--Dwork integrality
 criterion; the second is Nishioka's published special-value theorem for
 implicit Mahler equations.  We isolate the parts specific to the present
@@ -255,12 +255,12 @@ determinant setting.
 
 \begin{lemma}[Integral critical Mahler product]
 \label{lem:critical-mahler-integrality}
-Let \(B,B'\) be integer matrices such that \(B\equiv B'\pmod 2\), put
+Let \(P_0,P_1\in\ZZ[z]\) have constant term one and satisfy
+\(P_0\equiv P_1\pmod2\).  Put
 \[
- P_0(z)=\det(I-zB),\qquad P_1(z)=\det(I-zB'),\qquad
  H(z)=\frac{P_0(z)}{P_1(z)},
 \]
-and suppose that both determinant polynomials are zero-free on \(\abs z<r\),
+and suppose that both polynomials are zero-free on \(\abs z<r\),
 where \(0<r\le1\).  On this disk define
 \begin{equation}\label{eq:critical-mahler-product}
  F(z)=\prod_{\nu\ge0}H(z^{2^\nu})^{2^{-\nu-1}},
@@ -276,7 +276,7 @@ and \(F\in\ZZ[[z]]\).
 \begin{proof}
 Normal convergence of the logarithmic series on compact subdisks proves the
 analytic assertions and shifting the product proves
-\eqref{eq:critical-mahler-equation}.  The determinant congruence gives
+\eqref{eq:critical-mahler-equation}.  The assumed congruence gives
 \(P_0\equiv P_1\pmod2\), hence
 \[
  H(z)^{-1}\in1+2z\ZZ_2[[z]].
@@ -448,14 +448,19 @@ Apply \Cref{lem:rational-mahler-saturation}, and then use the normalized
 injectivity proved in \Cref{prop:rational-mahler-certificate} for uniqueness.
 \end{proof}
 
-\begin{theorem}[Interior determinant lifting and endpoint extension]
+\begin{theorem}[Two-base interior determinant lifting and endpoint extension]
 \label{thm:determinant-boundary-lifting}
-Let \(A\) be a primitive non-negative integer matrix with Perron root
-\(\lambda>1\), and put \(x=\lambda^{-1}\).  Let \(B,B'\) be integer matrices
-of the same size such that, entrywise,
+Let \(A,A'\) be primitive non-negative integer matrices, not necessarily of
+the same size, with Perron roots \(\lambda,\lambda'>1\), and suppose that
 \[
- \abs{B_{ij}},\abs{B'_{ij}}\le A_{ij},
- \qquad B_{ij}\equiv B'_{ij}\equiv A_{ij}\pmod2,
+ \det(I-zA)=\det(I-zA').
+\]
+Put \(x=\min\{\lambda^{-1},(\lambda')^{-1}\}\).  Let \(B,B'\) be integer
+matrices of the respective sizes of \(A,A'\) such that, entrywise,
+\[
+ \abs{B_{ij}}\le A_{ij},\quad B_{ij}\equiv A_{ij}\pmod2,
+ \qquad
+ \abs{B'_{ij}}\le A'_{ij},\quad B'_{ij}\equiv A'_{ij}\pmod2,
 \]
 and set
 \[
@@ -471,19 +476,24 @@ equivalent:
   \qquad H(z)=\frac{R(z^2)}{R(z)^2}.
  \]
 \end{enumerate}
-If \(\rad(B),\rad(B')<\lambda\), the equivalence also holds at \(y=x\).
+If \(\rad(B)<\lambda\) and \(\rad(B')<\lambda'\), the equivalence also
+holds at \(y=x\).
 \end{theorem}
 
 \begin{proof}
 The Perron-weighted norm estimate in the proof of
-\Cref{lem:perron-weighted-domination}, now using
-\(\abs{B_{ij}},\abs{B'_{ij}}\le A_{ij}\), gives
-\(\rad(B),\rad(B')\le\lambda\).  If \(y<x\), choose
-\(r\) with \(y<r<x\); if \(y=x\) and both strict gaps hold, choose \(r\) with
-\(x<r<1\) below both reciprocal spectral radii.  In either case both determinant
+\Cref{lem:perron-weighted-domination}, applied separately to the two bases,
+gives \(\rad(B)\le\lambda\) and \(\rad(B')\le\lambda'\).  If \(y<x\), choose
+\(r\) with \(y<r<x\); if \(y=x\) and both strict gaps hold, choose \(r>y\)
+below both reciprocal spectral radii.  In either case both determinant
 polynomials are non-zero on \(\abs z<r\).  They are real, non-zero on
 \([0,y]\), and equal one at zero, so they are positive there and \(H>0\) on
-that interval.  Define \(F\) by \eqref{eq:critical-mahler-product}.  By
+that interval.  Moreover,
+\[
+ \det(I-zB)\equiv\det(I-zA)=\det(I-zA')
+ \equiv\det(I-zB')\pmod2.
+\]
+Define \(F\) by \eqref{eq:critical-mahler-product}.  By
 \Cref{lem:critical-mahler-integrality}, it is analytic on \(\abs z<r\), has
 integer coefficients, and satisfies \eqref{eq:critical-mahler-equation}.
 Crucially, the product normalization is
@@ -590,6 +600,107 @@ strict gaps, and realizes
 \]
 \end{remark}
 
+\begin{proposition}[Logarithmic divisor bound for multiplicative Mahler coboundaries]
+\label{prop:logarithmic-mahler-divisor-bound}
+For an integer \(p\ge2\) and \(D\ge1\), define
+\begin{equation}\label{eq:logarithmic-mahler-bound-definition}
+ m_p(D):=\min\{m\ge1:p^m(p-1)\ge2D\},
+ \qquad
+ b_p(D):=\left\lceil\frac{2D}{p}m_p(D)\right\rceil.
+\end{equation}
+Let \(P_0,P_1\in\QQ[z]\) be coprime, with constant term one and
+\(D=\deg P_0+\deg P_1>0\).  If a normalized rational function
+\[
+ R=\frac AB\in\QQ(z)^\times,
+ \qquad (A,B)=1,\qquad A(0)=B(0)=1,
+\]
+satisfies
+\begin{equation}\label{eq:p-mahler-coboundary}
+ \frac{P_0(z)}{P_1(z)}=\frac{R(z^p)}{R(z)^p},
+\end{equation}
+then
+\begin{equation}\label{eq:logarithmic-mahler-degree-bound}
+ \deg A+\deg B\le b_p(D).
+\end{equation}
+If \(P_0/P_1\ne1\), the equation \(R(z)=1\) has at most
+\(b_p(D)-1\) distinct non-zero complex solutions.  In particular,
+\begin{equation}\label{eq:binary-logarithmic-mahler-degree-bound}
+ b_2(D)=D\lceil\log_2(2D)\rceil.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For \(\alpha\in\overline{\QQ}^{\times}\), let
+\[
+ e(\alpha)=\operatorname{ord}_{z=\alpha}(P_0/P_1),
+ \qquad r(\alpha)=\operatorname{ord}_{z=\alpha}R.
+\]
+The reduced input has
+\(\sum_\alpha\abs{e(\alpha)}=D\), while
+\(\sum_\alpha\abs{r(\alpha)}=\deg A+\deg B\).  Taking divisors in
+\eqref{eq:p-mahler-coboundary} gives
+\begin{equation}\label{eq:p-mahler-divisor-recurrence}
+ e(\alpha)=r(\alpha^p)-pr(\alpha).
+\end{equation}
+Iteration along the forward \(p\)-power orbit yields
+\[
+ r(\alpha)=p^{-n}r(\alpha^{p^n})
+ -\sum_{j=0}^{n-1}p^{-j-1}e(\alpha^{p^j}).
+\]
+The first term tends to zero because \(r\) has finite support.  This remains
+true on a periodic root-of-unity orbit, since the numerator is bounded and
+the factor \(p^{-n}\) tends to zero.  Hence
+\begin{equation}\label{eq:p-mahler-forward-inversion}
+ r(\alpha)=-\sum_{j\ge0}p^{-j-1}e(\alpha^{p^j}).
+\end{equation}
+
+Put \(S=\operatorname{supp}r\) and
+\(T=\sum_\alpha\abs{r(\alpha)}\).  For every \(j\),
+the map \(\alpha\mapsto\alpha^{p^j}\) on
+\(\overline{\QQ}^{\times}\) is exactly \(p^j\)-to-one.  Splitting
+\eqref{eq:p-mahler-forward-inversion} at \(m=m_p(D)\), using
+\(\#S\le T\) and \(\max_\alpha\abs{e(\alpha)}\le D\), gives
+\begin{align*}
+ T
+ &\le \sum_{j=0}^{m-1}p^{-j-1}
+       \sum_{\alpha\in S}\abs{e(\alpha^{p^j})}
+   +\sum_{\alpha\in S}\sum_{j\ge m}
+       p^{-j-1}\abs{e(\alpha^{p^j})}\\
+ &\le \frac{mD}{p}+\frac{TD}{p^m(p-1)}
+ \le \frac{mD}{p}+\frac T2.
+\end{align*}
+Thus \(T\le2mD/p\); integrality of \(T\) proves
+\eqref{eq:logarithmic-mahler-degree-bound}.
+
+Normalized injectivity of the coboundary map, proved in
+\Cref{prop:rational-mahler-certificate}, shows that \(P_0/P_1\ne1\) implies
+\(R\ne1\).  The non-zero polynomial \(A-B\) has degree at most
+\(\deg A+\deg B\) and vanishes at zero.  It therefore has at most
+\(b_p(D)-1\) distinct non-zero roots.  Formula
+\eqref{eq:binary-logarithmic-mahler-degree-bound} follows directly from
+\eqref{eq:logarithmic-mahler-bound-definition}.
+\end{proof}
+
+\begin{remark}[The logarithmic order cannot be improved from divisor data alone]
+\label{rem:logarithmic-mahler-degree-sharpness}
+Let \(Q\in\QQ[z]\) have degree \(q>0\) and \(Q(0)=1\), and suppose that
+\(Q(z^{p^{J+1}})\) and \(Q(z)\) are coprime.  Then
+\[
+ R_J(z):=\prod_{j=0}^{J}Q(z^{p^j})^{p^{J-j}}
+\]
+satisfies
+\[
+ \frac{R_J(z^p)}{R_J(z)^p}
+ =\frac{Q(z^{p^{J+1}})}{Q(z)^{p^{J+1}}},
+ \qquad
+ \deg R_J=(J+1)p^Jq,\qquad D=2p^{J+1}q.
+\]
+The coprimality hypothesis holds, for example, for \(Q(z)=1-2z\).
+Consequently these normalized rational coboundaries have certificate degree
+of order \(D\log D\).  Thus no \(o(D\log D)\) bound can follow from the
+rational divisor equation without additional realizability restrictions.
+\end{remark}
+
 The preceding lifting theorem supplies a rational certificate abstractly.  We
 now show that its existence and the certificate itself are decidable by a
 single finite Pad\'e calculation.  For an integral polynomial \(P\), write
@@ -606,7 +717,7 @@ If \(D=0\), then \(P_0=P_1=1\), and the unique normalized solution is
 \begin{equation}\label{eq:effective-mahler-bounds}
  L=\lfloor\log_2D\rfloor,
  \qquad
- N=D^2(2^{L+1}-1)<2D^3,
+ N=b_2(D)=D\lceil\log_2(2D)\rceil,
 \end{equation}
 and
 \begin{equation}\label{eq:effective-mahler-height-bound}
@@ -634,7 +745,8 @@ it satisfies
  \qquad
  \max\{h(A),h(B)\}\le K.
 \end{equation}
-In particular, \(\max\{\deg A,\deg B\}<2D^3\).  Two necessary conditions
+ In particular, \(\max\{\deg A,\deg B\}\le
+ D\lceil\log_2(2D)\rceil\).  Two necessary conditions
 are
 \begin{equation}\label{eq:effective-mahler-obstructions}
  d_0=d_1,
@@ -680,7 +792,9 @@ Thus the procedure requires neither factorization over
 \end{theorem}
 
 \begin{proof}
-Suppose first that \(R\) exists.  For
+Suppose first that \(R\) exists.  The degree estimate is
+\Cref{prop:logarithmic-mahler-divisor-bound} with \(p=2\).  For the height
+estimate, retain the following support information.  For
 \(\alpha\in\overline{\QQ}^{\times}\), set
 \[
  r(\alpha)=\operatorname{ord}_{z=\alpha}R,
@@ -698,7 +812,7 @@ Along the forward square orbit, write \(r_j=r(\alpha^{2^j})\) and
 \]
 The divisor of \(R\) has finite support, so \(r_m\) is bounded.  Letting
 \(m\to\infty\), and using \(\abs{e_j}\le D\), gives
-\(\abs{r(\alpha)}\le D\).  If \(r(\alpha)\ne0\), the forward orbit must
+    \(\abs{r(\alpha)}\le D\).  If \(r(\alpha)\ne0\), the forward orbit must
 meet the support of \(e\).  If \(k\) is its first such index, then
 \(r_{j+1}=2r_j\) for \(j<k\); hence
 \[
@@ -715,9 +829,9 @@ lies in \(\ZZ[z]\).  The multiplicity bound above therefore gives
 \[
  A(z)B(z)\mid W(z)^D\quad\hbox{in }\ZZ[z].
 \]
-Since
-\(\deg W=D(2^{L+1}-1)\), this proves the degree bound in
-\eqref{eq:effective-mahler-output-bounds}.
+ This divisibility will be used only for the height estimate; the sharper degree
+ bound has already been obtained from
+ \Cref{prop:logarithmic-mahler-divisor-bound}.
 
 Let \(M(\,\cdot\,)\) denote Mahler measure.  The standard estimates
 \[
@@ -838,7 +952,7 @@ Assume that
 normalized rational certificate for \(P_0/P_1\), using integer coefficient
 recursion before the Pad\'e step.  Uniformly,
 \begin{equation}\label{eq:same-base-effective-input-bounds}
- D\le2n,\qquad N<16n^3,\qquad
+ D\le2n,\qquad N\le2n\lceil\log_2(4n)\rceil,\qquad
  h(P_0),h(P_1)\le n\log(na_*),
 \end{equation}
 and one may use
@@ -899,8 +1013,7 @@ Equivalently, \(H=\zeta_{\widetilde X_{\tau'}}/
 If \(D=0\), then the two labellings have identical primitive
 length--class profiles.  If \(D>0\), define
 \[
- L=\lfloor\log_2D\rfloor,
- \qquad N=D^2(2^{L+1}-1).
+ N=D\lceil\log_2(2D)\rceil.
 \]
 \begin{equation}\label{eq:finite-radial-algebraic-collision-bound}
  \#\{y\in\overline{\QQ}\cap(0,x):
@@ -920,13 +1033,15 @@ for which \(H(z)=R(z^2)/R(z)^2\).  The complete real collision set is then
  \{y\in(0,x):\Delta_\varepsilon(y)=0\}
  =\{y\in(0,x):A_0(y)-B_0(y)=0\}.
 \end{equation}
+In this case the complete real collision set has at most \(N-1\) elements.
 Consequently, if \(v\) is the size of the base matrix and
 \[
- N_*=(2v)^2\bigl(2^{\lfloor\log_2(2v)\rfloor+1}-1\bigr)<16v^3,
+ N_*=2v\lceil\log_2(4v)\rceil,
 \]
-then equality at any \(N_*\) distinct algebraic radii
+then equality at any \(N_*\) distinct radii
 \(y_1,\ldots,y_{N_*}\in(0,x)\), meaning
-\(\Delta_\varepsilon(y_i)=0\) for every \(i\), forces
+\(\Delta_\varepsilon(y_i)=0\) for every \(i\), at least one of which is
+algebraic, forces
 \[
  p_{n,C}(\tau)=p_{n,C}(\tau')
  \qquad(n\ge1,\ C\in\operatorname{Conj}(C_2)).
@@ -996,8 +1111,9 @@ roots, proving \eqref{eq:finite-radial-algebraic-collision-bound}.
 Each determinant has degree at most \(v\), so reduction gives \(D\le2v\).
 The displayed function defining \(N\) is increasing in the positive integer
 \(D\); hence \(N\le N_*\).  If \(\Delta_\varepsilon\) vanished at \(N_*\)
-distinct algebraic radii while \(H\ne1\), the bound \(N-1<N_*\) would be
-contradicted.  Thus \(H=1\), and the periodic data dictionary gives the
+distinct radii, one of which is algebraic, the complete real collision-set
+bound \(N-1<N_*\) would be contradicted when \(H\ne1\).  Thus \(H=1\), and
+the periodic data dictionary gives the
 asserted recovery.  Finally, for \(C_2=\{e,s\}\)
 the fixed base gives equality of the scalar coordinate, while
 \(\mathbf1_{\{e\}}=(\mathbf1+\varepsilon)/2\) and
@@ -1011,6 +1127,111 @@ determinants are zero-free on a disk strictly larger than \(\abs z\le x\).
 The identity \eqref{eq:finite-radial-boundary-identity}, the lifting theorem,
 and the rational telescoping formula then hold also at \(x\).  The same proof
 therefore gives every asserted endpoint extension.
+\end{proof}
+
+\begin{theorem}[Dimension-free sampling for elementary two-groups]
+\label{thm:elementary-two-group-finite-sampling}
+Let \(E=(C_2)^r\), with \(r\ge0\).  Let
+\(\tau:E(\Gamma)\to E\) and \(\tau':E(\Gamma')\to E\) be one-step
+cocycles over primitive non-negative integral base matrices \(A,A'\), whose
+sizes are at most \(V\) and whose Perron roots \(\lambda,\lambda'>1\) need
+not agree.  Put
+\[
+ x=\min\{\lambda^{-1},(\lambda')^{-1}\},
+ \qquad M(V)=2V\lceil\log_2(4V)\rceil.
+\]
+For \(g\in E\), define
+\[
+ \mathcal E_g^\tau(y)=\sum_{n\ge1}p_{n,g}(\tau)\log(1-y^n),
+ \qquad 0<y<x,
+\]
+and define \(\mathcal E_g^{\tau'}\) analogously.  Suppose that
+\[
+ \mathcal E_g^\tau(y_i)=\mathcal E_g^{\tau'}(y_i)
+ \qquad(g\in E,\ 1\le i\le M(V))
+\]
+at \(M(V)\) distinct radii in \((0,x)\), at least one of which is
+algebraic.  Then
+\[
+ p_{n,g}(\tau)=p_{n,g}(\tau')
+ \qquad(n\ge1,\ g\in E).
+\]
+In particular, the sample count is independent of \(r\), and neither a common
+base presentation nor a strict spectral gap for the non-trivial character
+blocks is required.
+\end{theorem}
+
+\begin{proof}
+Absolute convergence follows for each system from the periodic-point estimate
+used in \Cref{thm:finite-radial-sampling}.  Summing the assumed identities over
+\(g\in E\) gives, at every sampled radius,
+\[
+ \log\det(I-y_iA)=\sum_{g\in E}\mathcal E_g^\tau(y_i)
+ =\sum_{g\in E}\mathcal E_g^{\tau'}(y_i)
+ =\log\det(I-y_iA').
+\]
+Both determinants are positive on \((0,x)\).  Their difference has degree at
+most \(V\), vanishes at the \(M(V)\ge V\) distinct non-zero sample points,
+and also vanishes at zero.  Hence
+\begin{equation}\label{eq:elementary-two-group-base-determinant-equality}
+ \det(I-zA)=\det(I-zA').
+\end{equation}
+
+Every \(\chi\in\widehat E\) takes values in \(\{\pm1\}\).  Let
+\(B_{\chi,\tau}\) and \(B_{\chi,\tau'}\) be the corresponding character
+blocks and put
+\[
+ H_\chi(z)=\frac{\det(I-zB_{\chi,\tau})}
+                  {\det(I-zB_{\chi,\tau'})}.
+\]
+Since \(\chi(g)\equiv1\pmod2\), entrywise reduction gives
+\[
+ B_{\chi,\tau}\equiv A\pmod2,
+ \qquad B_{\chi,\tau'}\equiv A'\pmod2.
+\]
+Together with \eqref{eq:elementary-two-group-base-determinant-equality}, this
+is precisely the parity input in
+\Cref{thm:determinant-boundary-lifting}; the two blocks need not have the same
+size.
+
+Fourier transformation of the sampled class-profile identities gives
+\[
+ \Delta_\chi(y_i):=
+ \sum_{g\in E}\chi(g)
+ \bigl(\mathcal E_g^\tau(y_i)-\mathcal E_g^{\tau'}(y_i)\bigr)=0.
+\]
+For the trivial character this is already
+\eqref{eq:elementary-two-group-base-determinant-equality}.  For non-trivial
+\(\chi\), one has \(\chi^m=\chi\) for odd \(m\) and
+\(\chi^m=\mathbf1\) for even \(m\).  The Adams--M\"obius calculation in
+\eqref{eq:finite-radial-boundary-identity}, with the now common trivial
+determinant coordinate, therefore gives
+\[
+ \Delta_\chi(y)=\sum_{j\ge0}2^{-j}\log H_\chi(y^{2^j}).
+\]
+
+Choose an algebraic sampled radius \(y_0\).  If \(H_\chi\ne1\),
+\Cref{thm:determinant-boundary-lifting} supplies the unique normalized
+\(R_\chi\in\QQ(z)^\times\) such that
+\[
+ H_\chi(z)=\frac{R_\chi(z^2)}{R_\chi(z)^2},
+ \qquad R_\chi(y_0)=1.
+\]
+Write the reduced ratio \(H_\chi=P_{0,\chi}/P_{1,\chi}\) and put
+\(D_\chi=\deg P_{0,\chi}+\deg P_{1,\chi}\).  Both character determinants
+have degree at most \(V\), so \(D_\chi\le2V\).  By
+\Cref{prop:logarithmic-mahler-divisor-bound} and the positive telescoping
+identity in \Cref{prop:rational-mahler-certificate}, all real zeros of
+\(\Delta_\chi\) lie among the non-zero roots of \(R_\chi-1\), of which there
+are at most
+\[
+ D_\chi\lceil\log_2(2D_\chi)\rceil-1
+ \le M(V)-1.
+\]
+The \(M(V)\) sampled zeros are therefore impossible.  Thus \(H_\chi=1\)
+for every character \(\chi\).  The cross-base periodic-data dictionary in
+\Cref{prop:comparison-dictionary}, followed by character Fourier inversion,
+now gives equality of every primitive length--element count.
 \end{proof}
 
 \begin{remark}[Located obstruction for general finite groups]

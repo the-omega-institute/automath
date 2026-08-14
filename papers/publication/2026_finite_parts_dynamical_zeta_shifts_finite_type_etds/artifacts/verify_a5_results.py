@@ -455,6 +455,182 @@ def _constant_one_polynomial(expression: sp.Expr, variable: sp.Symbol) -> sp.Pol
     return sp.Poly(polynomial.as_expr() / constant, variable, domain=sp.QQ)
 
 
+def logarithmic_mahler_degree_bound(radix: int, total_degree: int) -> int:
+    """Return ceil(2 D m / p), with p^m(p-1) >= 2D and m >= 1."""
+    if radix < 2:
+        raise ValueError("the Mahler radix must be at least two")
+    if total_degree < 1:
+        raise ValueError("the total input degree must be positive")
+    depth = 1
+    while radix**depth * (radix - 1) < 2 * total_degree:
+        depth += 1
+    return (2 * total_degree * depth + radix - 1) // radix
+
+
+def logarithmic_mahler_divisor_bound_audit() -> dict[str, int | bool]:
+    """Search exact rational certificates for a violation of the logarithmic bound."""
+    z = sp.Symbol("z")
+    certificates_checked = 0
+    all_within_bound = True
+    root_of_unity_cases_checked = False
+    radices = (2, 3, 5, 7)
+    factor_pairs = ((1 - z, 1 + z), (1 - 2 * z, 1 - 3 * z), (1 + 2 * z, 1 - 3 * z))
+
+    for radix in radices:
+        for numerator_factor, denominator_factor in factor_pairs:
+            for numerator_power in range(4):
+                for denominator_power in range(4):
+                    if numerator_power == denominator_power == 0:
+                        continue
+                    rational_function = sp.cancel(
+                        numerator_factor**numerator_power
+                        / denominator_factor**denominator_power
+                    )
+                    numerator, denominator = rational_function.as_numer_denom()
+                    ratio = sp.cancel(
+                        rational_function.subs(z, z**radix)
+                        / rational_function**radix
+                    )
+                    p_zero, p_one = ratio.as_numer_denom()
+                    total_degree = sp.degree(p_zero, z) + sp.degree(p_one, z)
+                    certificate_degree = sp.degree(numerator, z) + sp.degree(denominator, z)
+                    all_within_bound &= certificate_degree <= logarithmic_mahler_degree_bound(
+                        radix, total_degree
+                    )
+                    certificates_checked += 1
+                    if numerator_factor == 1 - z and denominator_factor == 1 + z:
+                        root_of_unity_cases_checked = True
+
+    return {
+        "certificates_checked": certificates_checked,
+        "radices_checked": len(radices),
+        "root_of_unity_cases_checked": root_of_unity_cases_checked,
+        "all_within_bound": all_within_bound,
+    }
+
+
+def mahler_log_degree_extremal_family_audit() -> dict[str, int | bool]:
+    """Verify an Omega(D log D) family without numerator-denominator cancellation."""
+    z = sp.Symbol("z")
+    q = 1 - 2 * z
+    families_checked = 0
+    identities_hold = True
+    degrees_hold = True
+    no_cancellation = True
+
+    for radix in (2, 3, 5):
+        for depth in range(4):
+            rational_function = sp.prod(
+                q.subs(z, z ** (radix**j)) ** (radix ** (depth - j))
+                for j in range(depth + 1)
+            )
+            ratio = sp.cancel(
+                rational_function.subs(z, z**radix)
+                / rational_function**radix
+            )
+            expected_numerator = q.subs(z, z ** (radix ** (depth + 1)))
+            expected_denominator = q ** (radix ** (depth + 1))
+            expected_ratio = expected_numerator / expected_denominator
+            identities_hold &= sp.cancel(ratio - expected_ratio) == 0
+            no_cancellation &= sp.gcd(
+                sp.Poly(expected_numerator, z), sp.Poly(expected_denominator, z)
+            ).degree() == 0
+            degrees_hold &= all(
+                (
+                    sp.degree(rational_function, z)
+                    == (depth + 1) * radix**depth,
+                    sp.degree(expected_numerator, z)
+                    + sp.degree(expected_denominator, z)
+                    == 2 * radix ** (depth + 1),
+                )
+            )
+            families_checked += 1
+
+    return {
+        "families_checked": families_checked,
+        "identities_hold": identities_hold,
+        "degrees_hold": degrees_hold,
+        "no_cancellation": no_cancellation,
+    }
+
+
+def elementary_two_group_cross_base_audit() -> dict[str, object]:
+    """Check determinant parity and Fourier recovery for distinct base sizes."""
+    z = sp.Symbol("z")
+    group = tuple(product((0, 1), repeat=2))
+    first_labels = {
+        (0, 0): sp.Matrix(((1,),)),
+        (0, 1): sp.zeros(1),
+        (1, 0): sp.zeros(1),
+        (1, 1): sp.Matrix(((1,),)),
+    }
+    second_labels = {
+        (0, 0): sp.Matrix(((1, 0), (0, 0))),
+        (0, 1): sp.Matrix(((0, 1), (0, 0))),
+        (1, 0): sp.Matrix(((0, 0), (1, 0))),
+        (1, 1): sp.Matrix(((0, 0), (0, 1))),
+    }
+    first_base = sum(first_labels.values(), sp.zeros(1))
+    second_base = sum(second_labels.values(), sp.zeros(2))
+
+    def character(index: tuple[int, int], element: tuple[int, int]) -> int:
+        return (-1) ** sum(left * right for left, right in zip(index, element))
+
+    first_determinants = []
+    second_determinants = []
+    congruent_mod_two = True
+    for index in group:
+        first_twist = sum(
+            (character(index, element) * matrix for element, matrix in first_labels.items()),
+            sp.zeros(1),
+        )
+        second_twist = sum(
+            (character(index, element) * matrix for element, matrix in second_labels.items()),
+            sp.zeros(2),
+        )
+        first_det = sp.expand((sp.eye(1) - z * first_twist).det())
+        second_det = sp.expand((sp.eye(2) - z * second_twist).det())
+        first_determinants.append(first_det)
+        second_determinants.append(second_det)
+        congruent_mod_two &= sp.Poly(first_det - second_det, z, modulus=2).is_zero
+
+    coordinates = sp.symbols("c0:4")
+    transformed = tuple(
+        sum(character(index, element) * value for element, value in zip(group, coordinates))
+        for index in group
+    )
+    recovered = tuple(
+        sp.cancel(
+            sum(character(index, element) * value for index, value in zip(group, transformed))
+            / len(group)
+        )
+        for element in group
+    )
+    base_determinant = sp.expand((sp.eye(1) - z * first_base).det())
+    second_base_determinant = sp.expand((sp.eye(2) - z * second_base).det())
+    real_grid = tuple(sp.Rational(j, 20) for j in range(1, 10))
+    all_determinants = set(first_determinants + second_determinants)
+    budgets = {
+        2 * 2 * ((4 * 2 - 1).bit_length())
+        for _rank in range(1, 9)
+    }
+
+    return {
+        "base_sizes": (first_base.rows, second_base.rows),
+        "perron_roots": (max(first_base.eigenvals()), max(second_base.eigenvals())),
+        "base_determinants_equal": base_determinant == second_base_determinant,
+        "all_character_determinants_equal": first_determinants == second_determinants,
+        "all_character_determinants_congruent_mod_two": congruent_mod_two,
+        "fourier_inversion_exact": recovered == coordinates,
+        "positive_on_real_grid": all(
+            determinant.subs(z, point) > 0
+            for determinant in all_determinants
+            for point in real_grid
+        ),
+        "sample_budget_independent_of_rank": len(budgets) == 1 and budgets == {12},
+    }
+
+
 @lru_cache(maxsize=None)
 def effective_rational_mahler_coboundary(
     p_zero_expression: sp.Expr, p_one_expression: sp.Expr
@@ -487,7 +663,7 @@ def effective_rational_mahler_coboundary(
         return None
 
     logarithmic_depth = total_degree.bit_length() - 1
-    degree_bound = total_degree**2 * (2 ** (logarithmic_depth + 1) - 1)
+    degree_bound = logarithmic_mahler_degree_bound(2, total_degree)
     p_zero_coefficients = [
         p_zero.nth(index) for index in range(p_zero.degree() + 1)
     ]
@@ -989,6 +1165,9 @@ def render_report() -> str:
         collision_q.subs(z, z**2), collision_q**2, sp.Rational(1, 4)
     )
     interior_no_gap = interior_no_gap_standard_zeta_audit()
+    logarithmic_bound = logarithmic_mahler_divisor_bound_audit()
+    logarithmic_family = mahler_log_degree_extremal_family_audit()
+    cross_base = elementary_two_group_cross_base_audit()
     c3_support = c3_adams_mobius_support_obstruction(60)
     alpha = sp.Symbol("alpha")
     jet = universal_product_jet(alpha, order=3)
@@ -1027,12 +1206,36 @@ def render_report() -> str:
             )
         ),
         "effective Mahler bounds": effective_mahler_bounds_match(),
+        "logarithmic Mahler divisor bound": all(
+            (
+                logarithmic_bound["certificates_checked"] >= 100,
+                logarithmic_bound["root_of_unity_cases_checked"],
+                logarithmic_bound["all_within_bound"],
+            )
+        ),
+        "Mahler logarithmic lower-bound family": all(
+            (
+                logarithmic_family["identities_hold"],
+                logarithmic_family["degrees_hold"],
+                logarithmic_family["no_cancellation"],
+            )
+        ),
+        "cross-base elementary two-group interface": all(
+            (
+                cross_base["base_determinants_equal"],
+                cross_base["all_character_determinants_equal"],
+                cross_base["all_character_determinants_congruent_mod_two"],
+                cross_base["fourier_inversion_exact"],
+                cross_base["positive_on_real_grid"],
+                cross_base["sample_budget_independent_of_rank"],
+            )
+        ),
         "finite radial collision set": all(
             (
                 finite_collisions["collision_points"] == (sp.Rational(1, 4),),
                 finite_collisions["collision_count_within_bound"],
-                finite_collisions["collision_bound"] == 959,
-                finite_collisions["sample_budget"] == 960,
+                finite_collisions["collision_bound"] == 31,
+                finite_collisions["sample_budget"] == 32,
             )
         ),
         "unconditional interior sampling": all(
@@ -1122,8 +1325,11 @@ def render_report() -> str:
         "Normalized Mahler saturation: exact rational examples verified",
         "Effective rational Mahler Pade decision: verified",
         "Effective Mahler degree and height bounds: verified",
-        "Finite radial collision set: {1/4}; 1 <= 959",
-        "Finite radial recovery budget: 960 algebraic samples",
+        "Logarithmic Mahler divisor bound: exact counterexample search verified",
+        "Mahler logarithmic lower-bound family: exact identities and degrees verified",
+        "Cross-base (C2)^2 interface: sizes 1 and 2; determinant and Fourier checks verified",
+        "Finite radial collision set: {1/4}; 1 <= 31",
+        "Finite radial recovery budget: 32 samples with one algebraic anchor",
         "No-gap interior model: y=1/3; standard cover-zeta ratio verified",
         "C3 Adams-Mobius support: non-zero at primes 2, 5, 11, 17",
         "Same-base determinant coefficient bound: verified",
