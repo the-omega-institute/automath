@@ -16,21 +16,23 @@
 
 | 篇 | 轮次 | 页 | 档位(独立评估 / agent 自评天花板) | **PRIMARY** | 在飞任务 |
 |---|:--:|---|---|---|---|
-| **A2** `cayley_chebyshev` | r7 | 61 | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 执行中 |
-| **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 空闲 |
-| **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | 空闲 |
+| **A2** `cayley_chebyshev` | r7 | **65** | TIER-3 / 强 TIER-3、临界 TIER-2 | **JFA** | 提问稿待派 |
+| **A3** `sharp_three_window` | r5 | 63 | TIER-4 | **DCDS-A** | 提问稿生成中 |
+| **A4** `prime_languages` | r5 | 22 | TIER-3 | **Monatshefte** | 提问稿生成中 |
 | **A5** `finite_parts` | r8 | 28 | TIER-3 / 上 TIER-3 | **DCDS** | 执行中 |
-| **A6** `zeckendorf_fibers` | r9 | 59 | TIER-3 | **JNT** | 空闲 |
-| **A7** `upper_fibers` | r6 | 26+32 | TIER-4 | **Fibonacci Quarterly** | 空闲 |
+| **A6** `zeckendorf_fibers` | r9 | 59 | TIER-3 | **JNT** | 提问稿生成中 |
+| **A7** `upper_fibers` | r6 | 26+32 | TIER-4 | **Fibonacci Quarterly** | 提问稿生成中 |
 | **A8** `detector_shells` | r9 | 61 | TIER-4 | **Stochastic Models** | `ad5ce98e` |
-| **A9** `homological_visibility` | — | 96 | TIER-4 待 Oracle 重估 | TAC / Logic and Analysis | 提问稿生成中 |
+| **A9** `homological_visibility` | **r1** | 96 | TIER-4 待重估 | TAC / Logic and Analysis | `20a5e73f` |
 
 
 
 
-> **TICK 11 — A9 表述障碍已清除**。改名第三轮完成（前两轮均中断在半途）：`realization` 198→7、`slice` 133→105、`bouquet` 19→1。**残留逐条核实无误**：7 处 realization 全是单纯复形/覆盖神经的**几何实现**（拓扑标准术语，非模型论含义）；slice 全部指范畴论 slice category/site $\mathcal C/a$；唯一 bouquet 已在首次出现处定义为 $igvee_{j=1}^{eta}S^2$。**数学未动**：定理环境仍 159，编译 exit 0、96 页、零未定义。**APAL 拒稿所指的那道障碍已消除**。成功关键是本轮要求**逐文件编译**而非最后统一编译。
+
+> **TICK 12 — A2 全阶合成定理证成入库**。`thm:all-order-stable-first-unmatched-moment` 与 `lem:all-order-stable-critical-remainder` 已整合：把一维 Cauchy 核任意阶首失配矩的平方型 KL 渐近，与任意维稳定核**仅 $r=2$** 的临界 $L^q$ 余项/Bregman 转移/最优矩指数，合成为全阶定理并给出统一最优性。验证脚本核对 $r=2,\dots,8$ 全阶指数代数，`RESULT: PASS`、11 测试、65 页零未定义。**Johnson 的限制已显式写入正文**（只达对称稳定指数下的有限方差情形，非完整解决），口径未被升格。
 >
-> A9 现可送 Oracle 问升档，提问稿已在生成，并写明：$H^1/H^2$ 次数错配已封死明显桥接，请问是否存在**任何**路径让本机器对领域既有对象（高阶 gerbe、2-torsor、叠的障碍理论等以导出 $H^2$ band 障碍为自然不变量的场景）说话；若无，请给诚实天花板与投稿建议。
+> **A9 首次送 Oracle**（`20a5e73f`）——表述修好后第一次让专家读到数学。A3/A4/A6/A7 的新式提问稿并发生成，并按前两轮教训加了一条要求：**每条建议须附带"如何证伪它"的具体检验点，并标出哪些步骤专家自己没有验证过**。带自我证伪测试的建议，比自信的建议有价值得多。
+
 
 
 
