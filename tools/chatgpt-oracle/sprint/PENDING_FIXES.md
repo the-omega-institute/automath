@@ -49,3 +49,29 @@ Keiji Nishioka 另有 Nagoya Math. J. **109** (1988) 63–67 的 Painlevé 论�
   `10.1016/j.aim.2004.06.011`。
 
 Hu 那条（TAMS，黄金分割 Bernoulli 卷积的局部维数）尚未独立核实，引用前须补。
+
+## A8 `detector_shells` — 审稿人指认的三条先验工作，独立核实结果
+
+**核实通过，但审稿人的署名不全**：
+
+- Ramírez-Cobo, Lillo **& Wiper**, *Nonidentifiability of the Two-State Markovian
+  Arrival Process*, J. Appl. Probab. **47**(3) (2010) 630–649,
+  `10.1239/jap/1285335400`。审稿人写作"Ramírez-Cobo–Lillo",**漏了 Wiper**,著录时
+  须补上。该文主题正是 MAP$_2$ 的不可识别性,与我们的二态 fibre 弧直接同域,
+  确属必须逐式比较的对象。
+  注意 Crossref 有两条 DOI 指向同一篇(另一条 `10.1017/s0021900200006975`),
+  以 `10.1239/jap/1285335400` 为准。
+  同组另有 *Identifiability of the MAP$_2$/G/1 queueing system*, TOP **22**(1)
+  (2014) 274–289, `10.1007/s11750-012-0254-8`,以及 *Bayesian Analysis of the
+  Stationary MAP$_2$*, Bayesian Anal. **12**(4) (2017), `10.1214/16-ba1026`。
+
+**未能独立核实，引用前必须自行确认**：
+
+- **Bickel–Kwon**(known-marginal Markov tangent 与 additive projection)。
+  Crossref、OpenAlex、Semantic Scholar、DBLP 四处均查不到。推测为
+  Statistica Sinica 2001 年那篇(该刊早期卷次 Crossref 收录很差),但**这是推测,
+  不是核实**。审稿人称漏引它是本轮优先权审计最重要的发现,所以这条**不能凭印象
+  著录** —— 必须先确认确切出处(刊名、卷、页、年)与定理内容,再写进论文。
+  若无法确认,宁可在正文中以"据审稿意见指出的先验结果"方式谨慎处理,也不要
+  编造一条参考文献。
+- **He–Zhang** 的 generalized-Erlang / Coxian 理论,同样尚未核实。
