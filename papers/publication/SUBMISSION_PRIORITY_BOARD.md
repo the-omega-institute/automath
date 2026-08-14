@@ -37,13 +37,14 @@
 
 
 
-> **TICK 27 — 八篇全部在动，零闲置**。池子 3/6 在飞、队列 0;codex ×4(A2/A3/A6 修复,A4+A5 封装)。内存 1.19 GB 空闲、硬缺页 3/s、无孤儿进程,本 tick 不再加派。
+> **TICK 28 — 独立核实审稿人的引文，抓到我们自己的一处署名错误**。三份外审均在 `waiting_response`(A7 `6496b45e`、A8 `6dd1a961`、A9 `226c441b`),四个 codex 仍在跑,无可收割;内存 1.07 GB,不加派。
 >
-> **A4/A5 进入投稿包封装。** 依 `SUBMISSION_PACKAGE.md` 逐项核验:补充材料 PDF(article 与 supplement 互相引用时 xr-hyper 须**交替编译**,单向构建永远到不了零未定义引用)、脚本、测试、存档输出、`literature_check.md`、`REPRODUCE.md`、cover letter。重点核 `\suppref` 的**硬编码编号**——它是纯超链接,编号写错**不触发任何 LaTeX 告警**,须逐条按编号与环境类型比对。
+> 我们正在**依据审稿人给的文献删除和降级定理**,而这些文献此前从未独立核实过。本 tick 逐条查 Crossref:
 >
-> **本 tick 两个工具坑**(均已定位并写入记忆):codex 打印 `patch: completed` 但文件不落盘 —— 从日志 patch hunk 反解重建,13704 字节与监控先前所见完全一致;codex 停在 `superpowers:brainstorming` 审批门上**零改动**,而 `git status` 因上一轮遗留改动看起来像干了活,**须按 mtime 而非 git status 判定**。
+> **A5 抓到实错**。`Nishioka` 是**两个人**,我们当成了一个 —— `references.bib` 两条都写 `K.~Nishioka`,正文还以单数合指("both Nishioka theorems")。实际是 **Kumiko** Nishioka(J. Austral. Math. Soc. A **33** (1982) 386–393)与 **Keiji** Nishioka(Arch. Math. **44** (1985) 330–335);Keiji 另有 Nagoya Math. J. **109** 的 Painlevé 论文,确非同一人。期刊卷页我们都对,错的是作者身份。**这正是审稿人要我们让出优先权的那一处**,而他自己也只写"K. Nishioka 1985",所以这处只能我们自己发现。A5 当前有 agent 在改,未并发改动,已记入 `PENDING_FIXES.md`。
 >
-> **A2 的真实增量**:审稿人判断现有证明**看起来本就覆盖 $r=1$**,我们只是没解释为何排除;纳入定理是扩大结果而非机械追加。
+> **A6 四条引文全部属实**,可放心据以删改;但有一处年份陷阱:Lau–Ngai 的 DOI 是 `aima.1998.1773` 而**卷次为 Adv. Math. 141 (1999)**,不可照审稿人的"1998"著录。Hu 那条尚未核实,引用前须补。
+
 
 
 
