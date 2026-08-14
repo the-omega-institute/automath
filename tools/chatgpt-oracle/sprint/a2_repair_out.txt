@@ -1,0 +1,691 @@
+OpenAI Codex v0.147.0
+--------
+workdir: D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+model: gpt-5.6-sol
+provider: chrono
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a00227-2c7e-7611-aa35-1d138c648ff6
+--------
+user
+Read artifacts/oracle_sprint_A2_referee.md (or
+../../../tools/chatgpt-oracle/sprint/result_A2_referee.md) in full first — it is the
+referee report and it is correct. Execute its required repairs. Do not ask for design
+approval, do not run any brainstorming or approval workflow, and do not add new
+theorems beyond the one extension explicitly named in (2) below. Proceed directly to
+editing.
+
+Verdict: reject in the present form; he does not object to resubmission elsewhere after
+the priority is redefined, the mechanistic results are supplied, and the paper is
+rewritten. His findings:
+
+(1) PRIORITY. We omitted Chen-Niles-Weed on the exact KL asymptotics of an arbitrary
+    first unmatched moment under Gaussian smoothing — a prior result that corresponds
+    structurally and directly to our theorem. He calls this a rejection-level literature
+    positioning defect, because as written the reader believes the mechanism "an
+    arbitrary first unmatched moment controls the leading KL term" originates here. It
+    does not. Verify our current text actually credits this correctly and states the
+    boundary; if it does not, fix it.
+    After deducting it, what remains credibly ours is: pushing the Gaussian mechanism to
+    heavy-tailed isotropic stable kernels; determining the critical absolute-moment
+    exponent; proving endpoint sufficiency; and uniform sharpness over the full moment
+    class. Note the honest contrast to state: Chen-Niles-Weed assume more (sub-Gaussian
+    tails); we exclude alpha = 2 but for 0 < alpha < 2 we determine a far weaker and
+    optimal moment condition. State this comparison explicitly rather than leaving it
+    implicit.
+
+(2) THE r = 1 GAP — this is the one place to gain, so do it properly. The exclusion of
+    r = 1 currently has no mathematical justification. The referee's judgement is that
+    the existing proof appears to cover r = 1 already and we simply never explained the
+    exclusion. He says only two things remove the objection: bring r = 1 inside the same
+    theorem, or state precisely which step fails irreparably. TRY THE FIRST. Work through
+    the proof at r = 1 and, if it goes through, extend the theorem statement to include
+    it and adjust every downstream statement and the abstract. Only if it genuinely
+    fails, identify the exact step and say so in the text. Do not leave "we do not treat
+    r = 1" standing.
+
+(3) MECHANISM HIDDEN IN "STANDARD ESTIMATES". The denominator positivity mechanism —
+    important to the theorem — is currently buried. Write it out: the denominator
+    quotient does not need L-infinity convergence to 1, only a uniform positive lower
+    bound, mass normalisation, and L^1 convergence, and these follow in the proof from
+    the bounded gradient of log p_1, Jensen, and L^1 continuity of translation. Make that
+    explicit in the text instead of citing "standard estimates".
+
+(4) SHARPNESS SECTION IS OVER-COMPRESSED. The construction is correct, but the key
+    probability separation, the distance control over all opposite-sign atoms, and the
+    Bernoulli KL lower bound are too compressed to verify. State the Bernoulli lower
+    bound formally as its own lemma, and split out the moving-ball estimate and the
+    Bernoulli data handling as separate lemmas. Keep the counterexample explicit: for
+    d + alpha > 2r we construct an example with a finite nonzero r-th difference tensor
+    for which a moment hypothesis below the critical exponent cannot control normalised
+    KL — this is a construction, not merely a limitation of one proof method.
+
+(5) VENUE. His assessment: this is a strong specialist-journal result; submitting to JFA
+    with Theorem 4.19 as the core is a legitimate attempt but rejection is significantly
+    more likely than acceptance, and the current priority statement cannot securely
+    support a JFA acceptance. After the repairs above, recommend a specific target
+    journal in the manuscript's submission_metadata.md and write a matching cover letter.
+    Choose the venue by fit and justify the choice in submission_metadata.md.
+
+Rules, all mandatory:
+ - Compile after EVERY file you finish, never batched at the end.
+ - Keep every .tex under 800 lines; split if needed.
+ - Final state: latexmk -pdfxe exit 0, zero undefined references, zero undefined
+   citations, zero multiply-defined labels, on a CLEAN rebuild with .aux removed.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts.
+ - No revision marks: never write "revised", "corrected", "in this version", or refer to
+   earlier drafts.
+ - Report at the end: whether r = 1 was brought inside the theorem or provably fails and
+   where; the new lemma structure in the sharpness section; page and theorem counts
+   before and after; the chosen venue and why; and compile/test results.
+
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+codex
+I’m going straight into the referee-mandated edits. I’ll first read the required operating instructions and then the referee report in full before inspecting or changing any manuscript file; I will not run brainstorming, design approval, or other approval workflows.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\using-superpowers\\SKILL.md'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 147ms:
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, skip this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## Instruction Priority
+
+Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+
+1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) â€” highest priority
+2. **Superpowers skills** â€” override default system behavior where they conflict
+3. **Default system prompt** â€” lowest priority
+
+If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
+
+## How to Access Skills
+
+**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to youâ€”follow it directly. Never use the Read tool on skill files.
+
+**In Copilot CLI:** Use the `skill` tool. Skills are auto-discovered from installed plugins. The `skill` tool works the same as Claude Code's `Skill` tool.
+
+**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
+
+**In other environments:** Check your platform's documentation for how skills are loaded.
+
+## Platform Adaptation
+
+Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
+
+# Using Skills
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+
+```dot
+digraph skill_flow {
+    "User message received" [shape=doublecircle];
+    "About to EnterPlanMode?" [shape=doublecircle];
+    "Already brainstormed?" [shape=diamond];
+    "Invoke brainstorming skill" [shape=box];
+    "Might any skill apply?" [shape=diamond];
+    "Invoke Skill tool" [shape=box];
+    "Announce: 'Using [skill] to [purpose]'" [shape=box];
+    "Has checklist?" [shape=diamond];
+    "Create TodoWrite todo per item" [shape=box];
+    "Follow skill exactly" [shape=box];
+    "Respond (including clarifications)" [shape=doublecircle];
+
+    "About to EnterPlanMode?" -> "Already brainstormed?";
+    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
+    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
+    "Invoke brainstorming skill" -> "Might any skill apply?";
+
+    "User message received" -> "Might any skill apply?";
+    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
+    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
+    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
+    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
+    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
+    "Has checklist?" -> "Follow skill exactly" [label="no"];
+    "Create TodoWrite todo per item" -> "Follow skill exactly";
+}
+```
+
+## Red Flags
+
+These thoughts mean STOPâ€”you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept â‰  using the skill. Invoke it. |
+
+## Skill Priority
+
+When multiple skills could apply, use this order:
+
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+
+"Let's build X" â†’ brainstorming first, then implementation skills.
+"Fix this bug" â†’ debugging first, then domain-specific skills.
+
+## Skill Types
+
+**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+
+**Flexible** (patterns): Adapt principles to context.
+
+The skill itself tells you which.
+
+## User Instructions
+
+Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+
+
+codex
+The operating skill confirms that direct user instructions take precedence, so I am skipping the brainstorming and approval workflows exactly as requested. I’m now reading the referee report itself in full, before any manuscript inspection.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$primary = '"'artifacts\\oracle_sprint_A2_referee.md'; "'$fallback = '"'..\\..\\..\\tools\\chatgpt-oracle\\sprint\\result_A2_referee.md'; if (Test-Path -LiteralPath "'$primary) { Get-Content -Raw -LiteralPath $primary } elseif (Test-Path -LiteralPath $fallback) { Get-Content -Raw -LiteralPath $fallback } else { throw '"'Referee report not found at either required path.' }" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 171ms:
+å®¡ç¨¿è£å†³
+å»ºè®®ï¼šçŽ°ç‰ˆæœ¬æ‹’ç¨¿ï¼›ä¸åå¯¹åœ¨é‡æ–°ç•Œå®šä¼˜å…ˆæƒã€è¡¥è¶³æœºåˆ¶æ€§ç»“æžœå¹¶æ•´ä½“é‡å†™åŽå¦è¡ŒæŠ•ç¨¿ã€‚
+æ‹’ç¨¿ç†ç”±å¹¶éžå‘çŽ°äº†è¯¥å®šç†çš„åä¾‹ã€‚å°±æ‰€æä¾›æ–‡æœ¬è€Œè¨€ï¼Œå®šç† 4.19 çš„ä¸»è¦è¯æ˜Žé“¾æ¡åœ¨æ•°å­¦ä¸Šæ˜¯é—­åˆçš„ï¼Œæˆ‘æœªå‘çŽ°è¶³ä»¥æŽ¨ç¿»ç»“è®ºçš„é”™è¯¯ã€‚å†³å®šæ€§é—®é¢˜æœ‰äºŒï¼š
+ç¬¬ä¸€ï¼Œç¨¿ä»¶é—æ¼äº†ä¸€ä¸ªä¸Žæœ¬å®šç†åœ¨ç»“æž„ä¸Šç›´æŽ¥å¯¹åº”çš„å…ˆè¡Œç»“æžœï¼šChenâ€“Niles-Weed å…³äºŽ Gaussian å¹³æ»‘ä¸‹ä»»æ„é¦–ä¸ªå¤±é…çŸ©çš„ç²¾ç¡® KL æ¸è¿‘ã€‚å› æ­¤ï¼Œâ€œä»»æ„é¦–å¤±é…é˜¶çš„æ˜¾å¼æ­£å¼ é‡ç³»æ•°â€ä¸èƒ½ä½œä¸ºæœ¬æ–‡ç‹¬ç«‹é¦–åˆ›ç‚¹ã€‚è¯¥é—æ¼æ”¹å˜äº†è®ºæ–‡çš„æ ¸å¿ƒä¼˜å…ˆæƒå™è¿°ï¼Œè€Œä¸æ˜¯ä¸€èˆ¬æ€§çš„è¡¥å……å¼•æ–‡é—®é¢˜ã€‚
+ç¬¬äºŒï¼Œåœ¨æ­£ç¡®æ‰£é™¤è¿™ä¸€å…ˆè¡Œç»“æžœä¹‹åŽï¼Œæœ¬æ–‡å¯ä¿¡çš„æ–°å†…å®¹æ˜¯ï¼š**å°† Gaussian æœºåˆ¶æŽ¨è¿›åˆ°é‡å°¾å„å‘åŒæ€§ç¨³å®šæ ¸ï¼Œç¡®å®šä¸´ç•Œç»å¯¹çŸ©æŒ‡æ•°ï¼Œè¯æ˜Žç«¯ç‚¹å……åˆ†ï¼Œå¹¶ç»™å‡ºå®Œæ•´çŸ©ç±»ä¸Šçš„ç»Ÿä¸€é”æ€§ã€‚**è¿™æ˜¯æœ‰å®žè´¨ä»·å€¼çš„ç»“æžœï¼Œä½†ä»¥ç›®å‰çš„ç‰¹æ®Šæ ¸å®šç†åŠå…¶è¯æ˜Žæœºåˆ¶ï¼Œå°šä¸è¶³ä»¥ç¨³å¦¥è¾¾åˆ° JFA çš„æ ‡å‡†ã€‚
+
+1. æ­£ç¡®æ€§å®¡æŸ¥
+1.1 æˆ‘æœªå‘çŽ°è‡´å‘½æ•°å­¦é”™è¯¯
+å®šç†çš„è¯æ˜Žå®žé™…ç”±ä¸‰ä¸ªéƒ¨åˆ†ç»„æˆï¼šä¸´ç•Œå•†ä½™é¡¹ã€åŒèƒŒæ™¯ Bregman ä¼ é€’ã€ç¨€ç–è¿œè·æž„é€ ã€‚æ­£æ–‡å¯¹æ­¤ç»™å‡ºäº†å®žè´¨è¯æ˜Žï¼Œè€Œéžä»…æœ‰å£°æ˜Žã€‚å®šç†åŠé”æ€§èŒƒå›´è§ Theorem 4.19ï¼›å…¶è¯æ˜Žæ˜Žç¡®ä¿ç•™äº† r<jâ‰¤âŒŠpâŒ‹ çš„ä¸­é—´ Taylor æ¨¡å¼ï¼Œè€Œæœªé”™è¯¯åœ°å°†å…¶å¹¶å…¥ä½™é¡¹ã€‚ 
+ä¸´ç•Œå•†ä½™é¡¹ã€‚ Lemma 4.17 é‡‡ç”¨
+q=min{2,1+d+Î±2râ€‹},p=q2râ€‹,
+å¹¶ä»¤ m=âŒŠpâŒ‹ã€‚å±€éƒ¨ Taylor ä½™é¡¹å…·æœ‰ m+1>p çš„æ­£è£•é‡ï¼›è¿œå¹³ç§»çš„ Lq(Î©Î±,dâ€‹) å¢žé•¿åˆ™ç”±
+(d+Î±)(1âˆ’q1â€‹)â‰¤p
+æŽ§åˆ¶ï¼Œåœ¨éž Hilbert åŒºåŸŸå–ç­‰å·ã€‚ç”±æ­¤å¾—åˆ° o(sâˆ’p) çš„ä¸´ç•Œä½™é¡¹ï¼Œè€Œä¸æ˜¯ä»…æœ‰ O(sâˆ’p)ã€‚è¿™ä¸€æŒ‡æ•°é…åˆæ˜¯æ­£ç¡®çš„ï¼ŒåŒ…æ‹¬ p ä¸ºæ•´æ•°çš„ç«¯ç‚¹ã€‚ 
+åŒèƒŒæ™¯ KL ä¼ é€’ã€‚ Lemma 4.18 æ‰€éœ€çš„ä¸¤ä¸ªå…³é”®ç­‰å¼æ˜¯ pq=2r ä¸Ž pâ‰¥rã€‚ç¬¬ä¸€é¡¹çº¿æ€§åŒ–è¯¯å·®ä¸º o(sâˆ’râˆ’p)ï¼Œç¬¬äºŒé¡¹éžçº¿æ€§ä½™å·®ä¸º o(sâˆ’pq)ï¼›äºŒè€…ç¡®å®žéƒ½æ˜¯ o(sâˆ’2r)ã€‚åˆ†æ¯å•†ä¸è¦æ±‚ Lâˆž æ”¶æ•›åˆ° 1ï¼Œåªè¦æ±‚ç»Ÿä¸€æ­£ä¸‹ç•Œã€è´¨é‡å½’ä¸€åŒ–åŠ L1 æ”¶æ•›ï¼Œè¿™äº›æ¡ä»¶åœ¨å®šç†è¯æ˜Žä¸­ç”±æœ‰ç•Œçš„ âˆ‡logp1â€‹ã€Jensen ä¸ç­‰å¼å’Œ L1 å¹³ç§»è¿žç»­æ€§èŽ·å¾—ã€‚æ­¤å¤„æœªè§å¾ªçŽ¯è®ºè¯ã€‚ 
+ç³»æ•°çš„ä¸¥æ ¼æ­£æ€§ã€‚ è‹¥ BÎ”râ€‹â€‹=0ï¼Œåˆ™ç›¸åº”çš„å¸¸ç³»æ•°é½æ¬¡å¾®åˆ†ç®—å­æ¶ˆåŽ»ç¨³å®šå¯†åº¦ã€‚Fourier å˜æ¢åŽå¾—åˆ°ä¸€ä¸ªé½æ¬¡å¤šé¡¹å¼ä¹˜ä»¥å¤„å¤„éžé›¶çš„ç¨³å®šç‰¹å¾å‡½æ•°ï¼›å› æ­¤å¤šé¡¹å¼æ’ä¸ºé›¶ï¼Œä¸Žéžé›¶å¼ é‡å‡è®¾çŸ›ç›¾ã€‚è¯¥è®ºè¯åŒæ—¶ç»™å‡ºå¼ é‡äºŒæ¬¡åž‹çš„éžé€€åŒ–æ€§ã€‚æœ‰é™æ€§åˆ™ç›´æŽ¥æ¥è‡ªå„é˜¶å¯¼æ•°ä¸Žå¯†åº¦ä¹‹å•†æœ‰ç•Œã€‚
+ç»Ÿä¸€é”æ€§ã€‚ æœ‰é™å·®åˆ†å—é€å—æ¶ˆåŽ»æ‰€æœ‰ä½ŽäºŽ r é˜¶çš„çŸ©ï¼Œå¹¶åœ¨ r é˜¶ç•™ä¸‹éžé›¶å®šå‘å¼ é‡ï¼›ç¨€ç–æƒé‡ä¿è¯ Ï é˜¶ç»å¯¹çŸ©æœ‰é™ã€‚ä»¥æ­£å—ä¸­çš„ç«¯ç‚¹åŽŸå­ä¸ºä¸­å¿ƒé€‰æ‹©ç§»åŠ¨çƒï¼Œå†å€ŸåŠ© lacunary åŠå¾„å°†åˆ†æ¯å¾‹çš„å…¨éƒ¨åŽŸå­æŽ’é™¤åˆ°è·ç¦» â‰Rjâ€‹ ä¹‹å¤–ï¼Œæ•°æ®å¤„ç†ç»™å‡º KL ä¸‹ç•Œã€‚æœ€ç»ˆæŒ‡æ•°
+2râˆ’Ïq>0
+æ°å¥½ç­‰ä»·äºŽ Ï<pã€‚è¿™ä¸€æž„é€ åœ¨ Ï=r çš„è¾¹ç•Œä¹Ÿä»ç„¶ç»™å‡ºæœ‰é™ã€éžé›¶çš„ r é˜¶å·®å¼ é‡ã€‚ 
+å› æ­¤ï¼Œæˆ‘ä¸ä¼šä»¥â€œå®šç†é”™è¯¯â€ä¸ºç”±å»ºè®®æ‹’ç¨¿ã€‚
+1.2 å°šé¡»è¡¥è¶³çš„æ­£ç¡®æ€§é—­åˆ
+ä¸‹åˆ—é—®é¢˜ç›®å‰ä¸æ˜¯å·²è¯†åˆ«çš„åä¾‹ï¼Œä½†åœ¨æ­£å¼å‘è¡¨å‰å¿…é¡»æ¶ˆé™¤ã€‚
+ç¬¬ä¸€ï¼Œç¨³å®šå¯†åº¦è¾“å…¥çš„å¼•ç”¨å°šä¸å¤Ÿç²¾ç¡®ã€‚ ç¨¿ä»¶å°†å…¨å±€åŒä¾§å¯†åº¦ç•Œã€ä»»æ„é˜¶å¯¼æ•°è¡°å‡ä»¥åŠå¯¼æ•°å•†æœ‰ç•Œä¸€å¹¶å½’äºŽ Ishigeâ€“Kawakamiâ€“Michihisa çš„æ€§è´¨ (G)ã€‚ç›¸å…³æ–‡çŒ®ç¡®å®žç»™å‡ºç¨³å®šåŸºæœ¬è§£çš„æ­£æ€§ã€ç¼©æ”¾å¾‹å’Œå„é˜¶å¯¼æ•°çš„å¤šé¡¹å¼è¡°å‡ï¼›åŽç»­ refined paper ä¹Ÿæ˜Žç¡®åˆ—å‡ºè¿™äº›æ€§è´¨ã€‚arXiv ç„¶è€Œï¼Œæ­£æ–‡ä½¿ç”¨çš„å…¨å±€ä¸‹ç•Œ
+p1â€‹(y)â‰¥c(1+âˆ£yâˆ£)âˆ’dâˆ’Î±
+ä»¥åŠç”±æ­¤å¯¼å‡ºçš„
+âˆ¥âˆ‡logp1â€‹âˆ¥âˆžâ€‹<âˆž
+åº”å½“ä½œä¸ºä¸€ä¸ªç‹¬ç«‹å¼•ç†å†™å‡ºï¼Œå¹¶è¯´æ˜Žå®ƒå¦‚ä½•ç”±å°¾éƒ¨ä¸‹ç•Œã€ä¸¥æ ¼æ­£æ€§åŠç´§é›†ä¸Šçš„æœ€å°å€¼æ‹¼åˆè€Œæˆã€‚å½“å‰å†™æ³•è™½å¯è¡¥å…¨ï¼Œä½†å°†å®šç†çš„é‡è¦åˆ†æ¯æ­£æ€§æœºåˆ¶éšè—åœ¨â€œstandard estimatesâ€ä¸­ã€‚ç¨¿ä»¶ç›®å‰çš„ä½¿ç”¨ä½ç½®è§ Lemma 4.14ã€‚
+è¶³ä»¥æ¶ˆé™¤æ­¤å¼‚è®®çš„ä¿®æ”¹æ˜¯ï¼šç»™å‡ºä¸€ä¸ªå®Œæ•´çš„â€œç¨³å®šæ ¸è¾“å…¥å‘½é¢˜â€ï¼Œé€é¡¹åˆ—æ˜Žå¯†åº¦ä¸Šä¸‹ç•Œã€å¯¼æ•°ç•Œã€å¯¼æ•°å•†ç•Œå’Œ L1 å¹³ç§»è¿žç»­æ€§ï¼Œå¹¶å¯¹ä»»æ„ç¨³å®šå°ºåº¦å‚æ•°è¯´æ˜Žå¸¸æ•°å¦‚ä½•å˜åŒ–ã€‚
+ç¬¬äºŒï¼Œé”æ€§è¯æ˜Žä¸­çš„ Bernoulli ä¸‹ç•Œåº”æ­£å¼é™ˆè¿°ã€‚ è¯æ˜Žç›®å‰ä»¥â€œchoose Îºâ€å’Œæ•°æ®å¤„ç†æ¦‚æ‹¬ä»Žä¸¤é¡¹ç§»åŠ¨é›†åˆæ¦‚çŽ‡åˆ° DKLâ€‹â‰¥cwjâ€‹ çš„æ­¥éª¤ã€‚è¯¥æ­¥éª¤æ­£ç¡®ï¼Œä½†å¯¹äºŽå®šç†çš„æœ€ä¼˜æ€§éƒ¨åˆ†ä¸å®œä»…ä¿ç•™ä¸ºè¡Œé—´æŽ¨æ–­ã€‚åº”å¢žåŠ ä¸€ä¸ªç»Ÿä¸€å¸¸æ•°å¼•ç†ï¼šè‹¥ uâ‰¥awã€vâ‰¤bw ä¸” b<aï¼Œåˆ™åœ¨ w è¶³å¤Ÿå°æ—¶
+DKLâ€‹(Ber(u)âˆ¥Ber(v))â‰¥c(a,b)w.
+åŒæ—¶åº”é›†ä¸­éªŒè¯åŽç»§å—ã€å‰é©±å—å’ŒåŒå—åŽŸå­çš„è·ç¦»ä¸‹ç•Œï¼Œè€Œä¸æ˜¯åˆ†æ•£åœ¨å™è¿°ä¸­ã€‚
+ç¬¬ä¸‰ï¼Œr=1 çš„æŽ’é™¤ç›®å‰æ²¡æœ‰æ•°å­¦æœºåˆ¶ä¸Šçš„è¯´æ˜Žã€‚ ä»ŽçŽ°æœ‰ Lemmas 4.17â€“4.18 çœ‹ï¼Œä»¤
+q1,Î±,dâ€‹=min{2,1+d+Î±2â€‹},p1,Î±,dâ€‹=q1,Î±,dâ€‹2â€‹
+åŽï¼Œè¯æ˜Žä¼¼ä¹Žé€å­—é€‚ç”¨ï¼šæœ‰é™ p-çŸ©ç»™å‡ºä¸€é˜¶çŸ©ï¼Œå±€éƒ¨ä½™é¡¹ä»æœ‰ m+1>pï¼ŒåŒèƒŒæ™¯è¯¯å·®ä»æ»¡è¶³ pq=2ï¼Œä¸€é˜¶æœ‰é™å·®åˆ†å—ä¹Ÿå¯æ‰¿æ‹…é”æ€§æž„é€ ã€‚æ•…ç›®å‰çš„æŽ’é™¤æ˜¾å¾—æ˜¯æœªå®Œæˆï¼Œè€Œéžç»“æž„æ€§è¾¹ç•Œã€‚
+è¶³ä»¥æ¶ˆé™¤æ­¤å¼‚è®®çš„æ–¹å¼åªæœ‰ä¸¤ç§ï¼šå°† r=1 çº³å…¥åŒä¸€å®šç†ï¼›æˆ–è€…æ˜Žç¡®æŒ‡å‡ºçŽ°æœ‰è¯æ˜Žåœ¨å“ªä¸€æ¡ä¸å¯ä¿®å¤åœ°å¤±æ•ˆã€‚ä»…å£°æ˜Žâ€œä¸å¤„ç† r=1â€ä¸è¶³ä»¥è§£é‡Šè¿™ä¸€è‡ªç„¶ç¼ºå£ã€‚
+
+2. æ–°é¢–æ€§å®¡æŸ¥
+2.1 æœ€æŽ¥è¿‘çš„ç›´æŽ¥å…ˆè¡Œç»“æžœè¢«é—æ¼
+Chen ä¸Ž Niles-Weed çš„ Asymptotics of Smoothed Wasserstein Distances å·²ç»è¯æ˜Žï¼šè‹¥ä¸¤å¾‹åœ¨ Rd ä¸Šçš„çŸ©å¼ é‡åŒ¹é…åˆ°é˜¶ nï¼Œåœ¨é˜¶ n+1 é¦–æ¬¡å¤±é…ï¼Œå¹¶æ»¡è¶³ Gaussian æŒ‡æ•°å°¾æ¡ä»¶ï¼Œåˆ™ Gaussian å¹³æ»‘åŽçš„ KL æ•£åº¦å…·æœ‰ç²¾ç¡®é¦–é¡¹
+tâ†’âˆžlimâ€‹tn+1DKLâ€‹(Î¼âˆ—Ïtâ€‹âˆ¥Î½âˆ—Ïtâ€‹)=21â€‹âˆ£Î³âˆ£=n+1âˆ‘â€‹Î³!âˆ£mÎ³â€‹(Î¼)âˆ’mÎ³â€‹(Î½)âˆ£2â€‹.
+è¯¥ç»“æžœåŒæ—¶è¦†ç›–ä»»æ„ç»´æ•°å’Œä»»æ„é¦–å¤±é…é˜¶ã€‚arXiv+1
+ä»¤ n=râˆ’1 å¹¶ä»¥ç©ºé—´å°ºåº¦ s=tâ€‹ å‚æ•°åŒ– Gaussian æ ¸ï¼Œå³å¾—åˆ° sâˆ’2r çš„è¡°å‡ã€‚å…¶ Hermite ç³»æ•°æ­£æ˜¯ Gaussian æƒ…å½¢ä¸‹
+21â€‹âˆ«â€‹g(âˆ’1)râ€‹âˆ£Î³âˆ£=râˆ‘â€‹Î³!Î”mÎ³â€‹â€‹âˆ‚Î³gâ€‹2g
+çš„æ­£äºŒæ¬¡åž‹ã€‚æ¢è¨€ä¹‹ï¼Œæœ¬æ–‡çš„â€œé¦–å¤±é…å¼ é‡â€”å¹³æ–¹èƒ½é‡â€”KL ä¸»é¡¹â€ç»“æž„åœ¨ Î±=2 æ—¶å·²æœ‰ç›´æŽ¥å…ˆä¾‹ï¼›è¿™ä¸æ˜¯ä»…åœ¨ç²¾ç¥žä¸Šç›¸è¿‘çš„ç»“æžœï¼Œè€Œæ˜¯åŒä¸€å…¬å¼ä½“ç³»çš„ Gaussian è¾¹ç•Œæƒ…å½¢ã€‚Chenâ€“Niles-Weed çš„å‡è®¾è¾ƒå¼ºï¼Œè¦æ±‚æ¬¡ Gaussian å°¾ï¼›æœ¬æ–‡åˆ™ä¸åŒ…å« Î±=2ï¼Œä½†åœ¨ 0<Î±<2 ä¸‹ç¡®å®šäº†è¿œå¼±å¾—å¤šä¸”æœ€ä¼˜çš„çŸ©æ¡ä»¶ã€‚arXiv+1
+ç¨¿ä»¶ç›®å‰å°†â€œæœ€è¿‘çš„åˆ†æ•°æ‰©æ•£å…ˆè¡Œæ–‡çŒ®â€é™å®šä¸º Ishigeâ€“Kawakamiâ€“Michihisa åŠå…¶åŽç»­ï¼Œå¹¶æ®æ­¤å¼ºè°ƒæ—¢æœ‰å·¥ä½œæ²¡æœ‰ KL ä¼ é€’ï¼›è¯¥æ¯”è¾ƒæœ¬èº«å¯¹åˆ†æ•°æ‰©æ•£æ–‡çŒ®æ˜¯åŸºæœ¬å‡†ç¡®çš„ï¼Œä½†å®ƒå¿½ç•¥äº† Gaussian å¹³æ»‘ä¸‹å·²ç»å­˜åœ¨çš„ç›´æŽ¥ KL é¦–å¤±é…çŸ©å®šç†ã€‚ è¿™æ˜¯æ‹’ç¨¿çº§åˆ«çš„æ–‡çŒ®å®šä½ç¼ºé™·ï¼šå®ƒä½¿è¯»è€…è¯¯ä»¥ä¸ºâ€œä»»æ„é¦–å¤±é…çŸ©æŽ§åˆ¶ KL ä¸»é¡¹â€çš„æœºåˆ¶æœ¬èº«å§‹äºŽæœ¬æ–‡ã€‚
+2.2 æœ¬æ–‡ç›¸å¯¹äºŽå…ˆè¡Œç»“æžœçš„çœŸå®žå¢žé‡
+åœ¨ä¿®æ­£ä¸Šè¿°ä¼˜å…ˆæƒåŽï¼Œæˆ‘è®¤ä¸ºä¸‹åˆ—éƒ¨åˆ†ä»æœ‰ç›¸å½“å¯èƒ½æ˜¯æ–°çš„ã€‚
+
+
+ä»Ž Gaussian çƒ­æ ¸æŽ¨è¿›åˆ°æ‰€æœ‰å„å‘åŒæ€§ä¸¥æ ¼ Î±-ç¨³å®šæ ¸ï¼Œ0<Î±<2ã€‚ Chenâ€“Niles-Weed çš„è¯æ˜Žé«˜åº¦ä¾èµ– Gaussian/Hermite ç»“æž„å’ŒæŒ‡æ•°å°¾å‡è®¾ï¼›æœ¬æ–‡ä»¥ç¨³å®šæ ¸å¯¼æ•°å•†åŠä¸´ç•Œ Lq(Î©Î±,dâ€‹) ç©ºé—´æ›¿ä»£è¿™ä¸€ç»“æž„ã€‚
+
+
+ç¡®å®šå®Œæ•´ç»å¯¹çŸ©ç±»ä¸Šçš„æœ€ä¼˜ç»Ÿä¸€å……åˆ†æŒ‡æ•°
+pr,Î±,dâ€‹=max{r,d+Î±+2r2r(d+Î±)â€‹}.
+è¿™ä¸æ˜¯å…ˆè¡Œ Gaussian å®šç†çš„å½¢å¼æ›¿æ¢ã€‚å®ƒåæ˜ äº†ç¨³å®šæ ¸è¿œå¹³ç§»åœ¨åŠ æƒå•†ç©ºé—´ä¸­çš„å¢žé•¿ï¼Œå¹¶å‡ºçŽ° d+Î±=2r çš„ Hilbert/éž Hilbert åˆ†ç•Œã€‚
+
+
+ç«¯ç‚¹å……åˆ†æ€§ã€‚ ä¸´ç•ŒçŸ©æ°ä¸º pr,Î±,dâ€‹ æ—¶ï¼Œä½™é¡¹æ˜¯ little-oï¼Œè€Œéžä»…æœ‰å¼±åž‹æˆ– Îµ-æŸå¤±ã€‚è¯¥ç«¯ç‚¹æ˜¯å®šç†æœ€æœ‰ä»·å€¼çš„è§£æžå†…å®¹ä¹‹ä¸€ã€‚
+
+
+å®Œæ•´çŸ©ç±»ç»Ÿä¸€é”æ€§ã€‚ åœ¨ d+Î±>2r æ—¶ï¼Œæœ¬æ–‡ä¸æ˜¯ä»…è¡¨æ˜ŽæŸä¸ªè¯æ˜Žæ–¹æ³•è¦æ±‚ p-çŸ©ï¼Œè€Œæ˜¯æž„é€ å…·æœ‰æœ‰é™ã€éžé›¶ r é˜¶å·®å¼ é‡çš„åä¾‹ï¼Œä½¿ä½ŽäºŽä¸´ç•ŒæŒ‡æ•°çš„çŸ©å‡è®¾æ— æ³•æŽ§åˆ¶å½’ä¸€åŒ– KLã€‚è¯¥éƒ¨åˆ†æ˜Žæ˜¾è¶…å‡ºå¯†åº¦å±‚æ¸è¿‘å±•å¼€ã€‚
+
+
+Ishigeâ€“Kawakamiâ€“Michihisa çš„å·¥ä½œå¤„ç†å¸¦æƒçŸ©åˆå€¼ä¸‹åˆ†æ•°æ‰©æ•£è§£çš„å¯†åº¦æ¸è¿‘åŠå…¶é«˜é˜¶å¯¼æ•°ä¿®æ­£ï¼›åŽç»­ Ishigeâ€“Kawakami è¿›ä¸€æ­¥å¤„ç†é«˜é˜¶ã€éžé½æ¬¡å’Œéžçº¿æ€§å±•å¼€ã€‚è¿™äº›ç»“æžœæä¾›æœ¬æ–‡ä½¿ç”¨çš„å¯†åº¦å±‚åŸºç¡€ï¼Œä½†æ²¡æœ‰ç»™å‡ºä¸¤èƒŒæ™¯ KL é¦–é¡¹æˆ–æœ€ä¼˜ç»Ÿä¸€çŸ©æŒ‡æ•°ã€‚å·¥ä¸šä¸Žåº”ç”¨æ•°å­¦å­¦ä¼š+1 ç¨³å®šå¾‹ç›¸å¯¹ç†µçš„å¦ä¸€æ¡æ—¢æœ‰æ–‡çŒ®ï¼Œä¾‹å¦‚ Bobkovâ€“Chistyakovâ€“GÃ¶tzeï¼Œç ”ç©¶çš„æ˜¯ç‹¬ç«‹åŒåˆ†å¸ƒå’Œå‘ç¨³å®šå¾‹çš„ç›¸å¯¹ç†µæ”¶æ•›ï¼Œè€Œéžä¸¤ä¸ªå›ºå®šè¾“å…¥ç»åŒä¸€ç¨³å®šæ ¸å¹³æ»‘åŽçš„é¦–å¤±é…çŸ©æ¸è¿‘ã€‚arXiv
+å› æ­¤ï¼Œæ­£ç¡®çš„æ–°é¢–æ€§å®šä½åº”å½“æ˜¯ï¼š
+
+æœ¬æ–‡ä¸æ˜¯é¦–æ¬¡å‘çŽ°â€œé¦–å¤±é…çŸ©äº§ç”Ÿ KL å¹³æ–¹ä¸»é¡¹â€ï¼›æœ¬æ–‡é¦–æ¬¡åœ¨é‡å°¾ç¨³å®šå¹³æ»‘ä¸­ç¡®å®šè¯¥ä¸»é¡¹æˆç«‹æ‰€éœ€çš„ä¸´ç•Œå®Œæ•´çŸ©æŒ‡æ•°ï¼Œå¹¶è¯æ˜Žå…¶ç«¯ç‚¹å……åˆ†å’Œç»Ÿä¸€é”æ€§ã€‚
+
+è¿™ä»æ˜¯å¯å‘è¡¨çš„å®žè´¨å¢žé‡ï¼Œä½†ä¸Žå½“å‰ç¨¿ä»¶æ‰€æš—ç¤ºçš„é¦–åˆ›èŒƒå›´æœ‰æ˜¾è‘—å·®åˆ«ã€‚
+
+3. æ˜¯å¦è¾¾åˆ° JFA æ ‡å‡†
+3.1 çŽ°æœ‰å®šç†å•ç‹¬ä¸è¶³ä»¥ç¨³å¦¥è¾¾åˆ°
+æ‰£é™¤ Gaussian å…ˆè¡Œç»“æžœåŽï¼Œè¯æ˜Žçš„æ ¸å¿ƒæœºåˆ¶å¯æ¦‚æ‹¬ä¸ºï¼š
+ç¨³å®šæ ¸å°¾ç•Œä¸Žå¯¼æ•°ç•ŒâŸ¹ä¸´ç•ŒÂ LqÂ å•†ä½™é¡¹âŸ¹å±€éƒ¨Â BregmanÂ äºŒæ¬¡åŒ–âŸ¹KLÂ ä¸»é¡¹,
+å†ä»¥æœ‰é™å·®åˆ†å—å’Œç¨€ç–åŽŸå­è¯æ˜ŽçŸ©æŒ‡æ•°é”æ€§ã€‚
+è¿™å¥—æœºåˆ¶æ­£ç¡®ä¸”ç²¾å·§ï¼Œä½†å…¶å›°éš¾é›†ä¸­åœ¨ä¸´ç•ŒæŒ‡æ•°é…åˆä¸Žåä¾‹è®¾è®¡ï¼›å®ƒå°šæœªè¢«æå‡ä¸ºä¸€ä¸ªå…·æœ‰æ›´å¹¿é€‚ç”¨æ€§çš„å‡½æ•°åˆ†æžåŽŸç†ã€‚Lemma 4.18 æœ¬èº«æ˜¯çŸ­çš„å±€éƒ¨å‡¸æ€§ä¼°è®¡ï¼ŒLemma 4.17 åˆ™ä¸»è¦å°†å·²çŸ¥ç¨³å®šå¯†åº¦å°¾ç•Œä»£å…¥ Taylorâ€“Minkowski æ¡†æž¶ã€‚å°± JFA çš„æ ‡å‡†è€Œè¨€ï¼Œä¸€ä¸ªç‰¹æ®Šæ ¸æ—ä¸­çš„ sharp theorem å¯ä»¥è¾¾åˆ°é—¨æ§›ï¼Œä½†é€šå¸¸éœ€è¦æ›´å¼ºçš„ç»“æž„æ€§ç»“è®ºï¼Œè€Œä¸ä»…æ˜¯å¯¹ Gaussian å…ˆä¾‹çš„é‡å°¾æœ€ä¼˜åŒ–ã€‚
+æˆ‘ä¼šå°†è¯¥ç»“æžœè¯„ä»·ä¸ºå¼ºçš„ä¸“é—¨æœŸåˆŠç»“æžœï¼›è‹¥ä»…ä»¥ Theorem 4.19 ä¸ºæ ¸å¿ƒï¼ŒæŠ•ç¨¿ JFA å±žäºŽåˆç†è¯•æŠ•ï¼Œä½†æ‹’ç¨¿æ¦‚çŽ‡æ˜¾è‘—é«˜äºŽæŽ¥æ”¶æ¦‚çŽ‡ã€‚é—æ¼ Chenâ€“Niles-Weed åŽï¼ŒçŽ°ç‰ˆæœ¬åˆ™ä¸å…·å¤‡é€ä¿®æ”¹çš„æ¡ä»¶ã€‚
+3.2 ä½•ç§å¢žåŠ è¶³ä»¥æ”¹å˜è£å†³
+ä¸‹åˆ—ä¸¤ä¸ªå¢žå¼ºæ–¹æ¡ˆä¸­ï¼Œè‡³å°‘å®Œæˆä¸€ä¸ªï¼Œæ‰å¯èƒ½ä½¿æˆ‘æ”¹å˜å¯¹ JFA å±‚çº§çš„åˆ¤æ–­ã€‚
+æ–¹æ¡ˆ Aï¼šä»»æ„é˜¶çš„å›ºå®šå¾‹å¯¹éžçº¿æ€§å°¾ç¼ºé™·åˆ†è§£
+ç¨¿ä»¶å·²ç»åœ¨åæ–¹å·®é˜¶ç»™å‡ºæœ‰é™äºŒé˜¶çŸ©ä¸‹çš„ law-by-law åˆ†è§£ï¼Œå°†é€šç”¨äºŒæ¬¡é¡¹ä¸Žæœªå±•å¼€è¿œå°¾çš„éžè´Ÿ Î¦-èƒ½é‡åˆ†ç¦»ï¼Œå¹¶ä»¥è¯¥èƒ½é‡çš„æ¶ˆå¤±ä½œä¸ºç²¾ç¡®å……è¦æ¡ä»¶ã€‚
+åº”å°†å…¶æŽ¨å¹¿ä¸ºï¼šå¯¹ä»»æ„ râ‰¥1ã€ä¸¤å¾‹åŒ¹é…å…¨éƒ¨ä½ŽäºŽ r é˜¶çš„çŸ©ã€ä»…å‡è®¾æœ‰é™ r é˜¶çŸ©ï¼Œæž„é€ é€‚å½“çš„ä¸¤èƒŒæ™¯å°¾åŠ¿ VÎ½,Î·,s(r)â€‹ï¼Œå¹¶è¯æ˜Ž
+DKLâ€‹(psâ€‹âˆ—Î½âˆ¥psâ€‹âˆ—Î·)=QÎ±,d,râ€‹(Î”râ€‹)sâˆ’2r+EÎ½,Î·,râ€‹(s)+o(sâˆ’2r),
+å…¶ä¸­ EÎ½,Î·,râ€‹(s)â‰¥0ï¼Œä¸”
+s2rDKLâ€‹â†’QÎ±,d,râ€‹(Î”râ€‹)âŸºs2rEÎ½,Î·,râ€‹(s)â†’0.
+è¿™å°†æŠŠå½“å‰çš„â€œçŸ©ç±»å……åˆ†æ¡ä»¶ä¸Žç»Ÿä¸€åä¾‹â€æå‡ä¸ºä»»æ„é˜¶çš„å›ºå®šå¾‹å¯¹ç²¾ç¡®ç•Œé¢ï¼Œå¹¶è¯´æ˜Žä¸´ç•ŒæŒ‡æ•°ç©¶ç«ŸæŽ§åˆ¶äº†ä»€ä¹ˆéžçº¿æ€§å°¾éšœç¢ã€‚å®ƒä¼šæ˜¾è‘—å¢žåŠ å®šç†çš„æ¦‚å¿µæ·±åº¦ã€‚
+æ–¹æ¡ˆ Bï¼šæŠ½è±¡æ ¸ä¸ŽæŠ½è±¡æ•£åº¦å®šç†
+å°†ç¨³å®šå¯†åº¦æ›¿æ¢ä¸ºæ»¡è¶³æ˜Žç¡®å‡è®¾çš„æ ¸ç±»ï¼Œä¾‹å¦‚ï¼š
+
+
+å°¾æŒ‡æ ‡ä¸º Î² çš„åŒä¾§å¤šé¡¹å¼å¯†åº¦ç•Œï¼›
+
+
+æ‰€éœ€é˜¶æ•°çš„å¯¼æ•°å•†æœ‰ç•Œï¼›
+
+
+å¹³ç§»å•†åœ¨ Lq(Î©) ä¸­å…·æœ‰ç²¾ç¡®å¢žé•¿æŒ‡æ•°ï¼›
+
+
+å¯¹æ•°æ¢¯åº¦æœ‰ç•Œæˆ–å…·æœ‰å¯æ›¿ä»£çš„åˆ†æ¯æ­£æ€§æ¡ä»¶ã€‚
+
+
+åœ¨æ­¤æ ¸ç±»ä¸Šè¯æ˜Žç»Ÿä¸€çš„é¦–å¤±é…å®šç†ï¼Œå¹¶å°† Gaussian æ ¸ã€å„å‘åŒæ€§ç¨³å®šæ ¸ã€å…·æœ‰éžé€€åŒ–è°±å¯†åº¦çš„å„å‘å¼‚æ€§ç¨³å®šæ ¸åˆ—ä¸ºæŽ¨è®ºï¼›åŒæ—¶æŠŠ KL æŽ¨å¹¿è‡³ä¸€ç±»æ»¡è¶³ Ï†â€²â€²(1)>0 å’Œä¸´ç•Œ q-å¢žé•¿æ¡ä»¶çš„ CsiszÃ¡râ€“Bregman æ•£åº¦ã€‚Gaussian æƒ…å½¢åº”ä½œä¸º Î±=2 æˆ–æŒ‡æ•°å°¾åˆ†æ”¯çº³å…¥åŒä¸€æ¡†æž¶ï¼Œå¹¶æ˜Žç¡®æ¢å¤ Chenâ€“Niles-Weed çš„ç³»æ•°ã€‚
+è¿™æ ·çš„ç»“æžœä¼šæŠŠç›®å‰çš„æŒ‡æ•°è®¡ç®—æå‡ä¸ºä¸€ä¸ªå¯è¿ç§»çš„å‡½æ•°åˆ†æžæœºåˆ¶ï¼Œæ›´ç¬¦åˆ JFA çš„å®šä½ã€‚
+ä»…å¢žåŠ æ›´å¤šå‚æ•°ç½‘æ ¼éªŒè¯ã€æ›´å¤šæœ‰é™é˜¶æ˜¾å¼ç³»æ•°æˆ–è‹¥å¹²æ–°åä¾‹ï¼Œä¸è¶³ä»¥è§£å†³å±‚çº§é—®é¢˜ã€‚
+
+4. å¿…è¦ä¿®æ”¹æ¸…å•åŠæ¶ˆé™¤æ ‡å‡†
+4.1 ç›´æŽ¥å…ˆè¡Œæ–‡çŒ®ä¸Žä¼˜å…ˆæƒ
+å¼‚è®®ã€‚ æœªå¼•ç”¨ Chenâ€“Niles-Weedï¼Œä¸”å°†ä»»æ„é˜¶é¦–å¤±é… KL ç³»æ•°ä½œä¸ºæ— å‰ä¾‹çš„æ–°æœºåˆ¶ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ åœ¨æ‘˜è¦ã€å¼•è¨€ã€å®šç†å‰è¯´æ˜ŽåŠç›¸å…³å·¥ä½œä¸­åŠ å…¥é€å…¬å¼æ¯”è¾ƒï¼š
+
+
+Gaussian æ—¶é—´ t ä¸Žæœ¬æ–‡ç©ºé—´å°ºåº¦ s=tâ€‹ çš„å¯¹åº”ï¼›
+
+
+n=râˆ’1 çš„é˜¶æ•°å¯¹åº”ï¼›
+
+
+Hermite äºŒæ¬¡åž‹ä¸Ž QÎ±,d,râ€‹ çš„å¯¹åº”ï¼›
+
+
+å…ˆè¡Œç»“æžœçš„æ¬¡ Gaussian å°¾å‡è®¾ï¼›
+
+
+æœ¬æ–‡æ–°å¢žçš„ç¨³å®šæ ¸ã€ä¸´ç•ŒçŸ©ç«¯ç‚¹ä¸Žç»Ÿä¸€é”æ€§ã€‚
+
+
+æ‘˜è¦ä¸­åº”åˆ é™¤æˆ–é™å®šä»»ä½•æš—ç¤ºâ€œä»»æ„é¦–å¤±é…å¼ é‡ KL ä¸»é¡¹æœ¬èº«é¦–æ¬¡èŽ·å¾—â€çš„è¡¨è¿°ã€‚
+4.2 æœ€ä¼˜æ€§çš„é€»è¾‘åˆ†ç±»
+å¼‚è®®ã€‚ â€œpr,Î±,dâ€‹ æ˜¯æœ€ä¼˜ç»Ÿä¸€å……åˆ†æŒ‡æ•°â€åŒ…å«ä¸¤ä¸ªæ€§è´¨ä¸åŒçš„åŒºåŸŸï¼š
+
+
+d+Î±>2rï¼šå­˜åœ¨å…·æœ‰æœ‰é™ã€éžé›¶ r é˜¶å¼ é‡çš„çœŸæ­£ KL çˆ†ç ´åä¾‹ï¼›
+
+
+d+Î±â‰¤2rï¼šp=rï¼Œä½ŽäºŽ r çš„é—®é¢˜åªæ˜¯ç›®æ ‡å¼ é‡åœ¨å®Œæ•´çŸ©ç±»ä¸Šæœªå¿…æœ‰å®šä¹‰ã€‚
+
+
+è™½ç„¶å®šç†æ­£æ–‡å·²ä½œåŒºåˆ†ï¼Œä½†æ‘˜è¦å’Œå®£ä¼ æ€§é™ˆè¿°å®¹æ˜“æŠŠä¸¤è€…éƒ½è¡¨è¿°ä¸ºè§£æžé”æ€§ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å°†ç»“è®ºç»Ÿä¸€æ”¹å†™ä¸ºï¼š
+
+
+éž Hilbert åŒºåŸŸï¼šanalytic uniform sharpnessï¼›
+
+
+Hilbert åŒºåŸŸï¼šcoefficient-domain minimalityï¼›
+
+
+ä¸å£°ç§°åŽä¸€æƒ…å½¢å­˜åœ¨â€œå¼ é‡å·²å®šä¹‰ä½† KL ä¸»é¡¹å¤±è´¥â€çš„åä¾‹ã€‚
+
+
+4.3 ç¨³å®šæ ¸è¾“å…¥çš„è‡ªè¶³æ€§
+å¼‚è®®ã€‚ å¤–éƒ¨æ ¸ä¼°è®¡ä¸Žå®žé™…ä½¿ç”¨çš„å…¨å±€å•†ç•Œä¹‹é—´ç¼ºå°‘æ˜¾å¼æ¡¥æ¢ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å¢žåŠ ä¸€ä¸ªå¯ç›´æŽ¥å¼•ç”¨çš„æ ¸å‘½é¢˜ï¼Œå¹¶åœ¨è¯æ˜Žä¸­åªå¼•ç”¨è¯¥å‘½é¢˜ï¼›å¯¹æ¯ä¸€ç»“è®ºæ ‡æ˜Žå…·ä½“åŽŸå§‹å‡ºå¤„æˆ–ç»™å‡ºä¸¤ä¸‰è¡ŒæŽ¨å¯¼ã€‚ç‰¹åˆ«éœ€è¦å•ç‹¬å†™å‡ºï¼š
+p1â€‹(y)âˆ£âˆ‚Î³p1â€‹(y)âˆ£â€‹â‰¤CÎ³â€‹(1+âˆ£yâˆ£)âˆ’âˆ£Î³âˆ£,âˆ¥âˆ‡logp1â€‹âˆ¥âˆžâ€‹<âˆž.
+4.4 r=1 çš„å¤„ç†
+å¼‚è®®ã€‚ çŽ°æœ‰è¯æ˜Žçœ‹æ¥å¯ä»¥è¦†ç›– r=1ï¼Œä½†ç¨¿ä»¶æ²¡æœ‰è§£é‡ŠæŽ’é™¤åŽŸå› ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å°† r=1 çº³å…¥ï¼›æˆ–è€…ç»™å‡ºæ˜Žç¡®åä¾‹æˆ–å¤±è´¥å¼•ç†ï¼Œè¯´æ˜Žä¸ºä½• r=1 éœ€è¦ä¸åŒæœºåˆ¶ã€‚ä»…ç§°å…¶â€œä¸åœ¨æœ¬æ–‡èŒƒå›´â€ä¸èƒ½å……åˆ†å›žåº”è¿™ä¸€ç»“æž„æ€§ç¼ºå£ã€‚
+4.5 é”æ€§æž„é€ çš„å½¢å¼åŒ–
+å¼‚è®®ã€‚ æž„é€ æ­£ç¡®ï¼Œä½†ç›®å‰å…³é”®æ¦‚çŽ‡åˆ†ç¦»ã€å…¨éƒ¨å¼‚å·åŽŸå­çš„è·ç¦»æŽ§åˆ¶å’Œ Bernoulli KL ä¸‹ç•Œè¿‡äºŽåŽ‹ç¼©ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å°†æœ‰é™å·®åˆ†å—çš„ä»¥ä¸‹æ€§è´¨æ±‡æ€»ä¸ºä¸€ä¸ªå‘½é¢˜ï¼š
+âˆ«xÎ³d(AR+â€‹âˆ’ARâˆ’â€‹)=0(âˆ£Î³âˆ£<r),
+âˆ«(eâ‹…x)rd(AR+â€‹âˆ’ARâˆ’â€‹)=21âˆ’rr!Rr,
+å¹¶å°†ç§»åŠ¨çƒä¼°è®¡åŠ Bernoulli æ•°æ®å¤„ç†å¦åˆ—ä¸ºå¼•ç†ã€‚éšåŽé”æ€§å®šç†åªéœ€è°ƒç”¨è¿™ä¸¤ä¸ªç»“æžœã€‚
+4.6 å®šç†ç³»æ•°çš„åæ ‡æ— å…³è¡¨è¿°
+å¼‚è®®ã€‚ QÎ±,d,râ€‹ ç›®å‰ä»¥å¤šé‡æŒ‡æ ‡åæ ‡è¡¨ç¤ºï¼Œè™½æ— é”™è¯¯ï¼Œä½†â€œå¼ é‡ç³»æ•°â€è¿™ä¸€ç§°è°“å°šæœªç”±ä¸å˜è¡¨è¿°æ”¯æŒã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å°† Î”râ€‹ è§†ä¸º Symr(Rd) ä¸­çš„å¯¹ç§°å¼ é‡ï¼Œå†™æˆ
+BÎ”râ€‹â€‹=r!p1â€‹(âˆ’1)râ€‹âŸ¨Î”râ€‹,Drp1â€‹âŸ©,
+å¹¶è¯æ˜Ž Q å¯¹æ­£äº¤åæ ‡å˜æ¢ä¸å˜ã€‚å¯¹å„å‘åŒæ€§æ ¸ï¼Œè¿˜åº”è¯´æ˜Žè¯¥äºŒæ¬¡åž‹åœ¨ Symr çš„è°ƒå’Œåˆ†è§£ä¸Šçš„ç»“æž„ï¼›å³ä½¿ä¸è®¡ç®—æ‰€æœ‰ç‰¹å¾å€¼ï¼Œä¹Ÿè‡³å°‘åº”ç»™å‡ºä¸å˜æ€§å’Œæ­£å®šæ€§ã€‚
+4.7 æœºå™¨éªŒè¯çš„åœ°ä½
+å¼‚è®®ã€‚ æ‰€è¿°è„šæœ¬åªæ£€æŸ¥æŒ‡æ•°æ’ç­‰å¼å’Œæœ‰é™å·®åˆ†æ¶ˆåŽ»ï¼Œä¸èƒ½å¢žåŠ å¯¹ä¸´ç•ŒæŽ§åˆ¶æ”¶æ•›ã€Bregman ä¼ é€’æˆ– KL ä¸‹ç•Œçš„å¯ä¿¡åº¦ã€‚
+æ¶ˆé™¤æ–¹å¼ã€‚ å°†å…¶é™ä¸ºå¯å¤çŽ°æ€§é™„æ³¨ï¼Œä¸åº”åœ¨æ‘˜è¦ã€ä¸»å®šç†è´¡çŒ®æˆ–æ­£ç¡®æ€§è®ºè¯ä¸­æ‰¿æ‹…è¯æ®åŠŸèƒ½ã€‚æ­£å¼è¯æ˜Žå¿…é¡»å®Œå…¨ç‹¬ç«‹äºŽè¯¥è„šæœ¬ã€‚
+4.8 ç¨¿ä»¶ç»“æž„
+å¼‚è®®ã€‚ å½“å‰ç¨¿ä»¶åŒæ—¶æ‰¿è½½ Cayleyâ€“Poisson é«˜é˜¶ç³»æ•°ã€ç¨³å®šæ ¸çŸ©æŒ‡æ•°ã€å›ºå®šå¾‹å°¾ç¼ºé™·ã€Cauchy Bregman æ’ç­‰å¼ä»¥åŠ RKHS æ ¼ç‚¹æŠ•å½±ç­‰å¤šä¸ªç›¸å¯¹ç‹¬ç«‹çš„é¡¹ç›®ï¼›æ‘˜è¦æœ¬èº«å³æ˜¾ç¤ºè¿™ç§å¤šä¸­å¿ƒç»“æž„ã€‚  
+æ¶ˆé™¤æ–¹å¼ã€‚ è‹¥ä»¥ç¨³å®šæ ¸å®šç†æŠ• JFAï¼Œåº”ä½¿â€œä¸´ç•Œå•†ç©ºé—´â€”éžçº¿æ€§æ•£åº¦ä¼ é€’â€”æœ€ä¼˜çŸ©æŒ‡æ•°â€”å›ºå®šå¾‹å°¾ç¼ºé™·â€æˆä¸ºå•ä¸€ä¸»çº¿ã€‚ä¸Žæ­¤ä¸»çº¿æ— ç›´æŽ¥é€»è¾‘ä¾èµ–çš„ Cayley å¸¸æ•°é¡¹ä»£æ•°å’Œæ ¼ç‚¹ RKHS ç»“æžœåº”æ‹†åˆ†ï¼Œæˆ–è‡³å°‘ç§»å‡ºä¸»ç¨¿ã€‚å½“å‰ç»„åˆæ–¹å¼ä¼šå‰Šå¼±è€Œéžå¢žå¼º Theorem 4.19 çš„å½±å“ã€‚
+
+æœ€ç»ˆè¯„ä»·
+
+
+æ­£ç¡®æ€§ï¼š åœ¨æ‰€å¼•ç”¨çš„ç¨³å®šå¯†åº¦ä¼°è®¡å¾—åˆ°ç²¾ç¡®é—­åˆçš„å‰æä¸‹ï¼Œå®šç†å¾ˆå¯èƒ½æ­£ç¡®ï¼›æˆ‘æœªè¯†åˆ«å‡ºåä¾‹æˆ–è‡´å‘½è¯æ˜Žç¼ºå£ã€‚
+
+
+æ–°é¢–æ€§ï¼š å½“å‰è¡¨è¿°é«˜ä¼°äº†æ–°é¢–æ€§ã€‚Gaussian å¹³æ»‘ä¸‹ä»»æ„é˜¶é¦–å¤±é…çŸ©çš„ç²¾ç¡® KL ä¸»é¡¹å·²æœ‰ Chenâ€“Niles-Weed å®šç†ã€‚æœ¬æ–‡çœŸå®žè€Œæœ‰ä»·å€¼çš„æ–°å†…å®¹æ˜¯é‡å°¾ç¨³å®šæ ¸çš„ä¸´ç•ŒçŸ©æŒ‡æ•°ã€ç«¯ç‚¹å……åˆ†æ€§ä¸Žå®Œæ•´çŸ©ç±»ç»Ÿä¸€é”æ€§ã€‚
+
+
+JFA é€‚æ ¼æ€§ï¼š çŽ°ç‰ˆæœ¬ä¸è¶³ã€‚å†³å®šæ€§ç†ç”±æ˜¯ç›´æŽ¥å…ˆè¡Œæ–‡çŒ®é—æ¼ä»¥åŠå‰©ä½™æœºåˆ¶å°šåœç•™åœ¨å„å‘åŒæ€§ç¨³å®šæ ¸ç‰¹ä¾‹ã€‚è¯¥ç»“æžœæœ¬èº«å…·å¤‡å¼ºä¸“é—¨æœŸåˆŠä»·å€¼ï¼Œä½†æ— æ³•ä»¥ç›®å‰çš„ä¼˜å…ˆæƒé™ˆè¿°ç¨³å¦¥æ”¯æ’‘ JFA æŽ¥æ”¶ã€‚
+
+
+ä¿®æ”¹é—¨æ§›ï¼š ä»…ä¿®æ­£æ–‡çŒ®å’Œè¡¥å……æŠ€æœ¯ç»†èŠ‚å¯ä½¿å®šç†æˆä¸ºå¯ä¿¡ã€å¯å‘è¡¨çš„ç»“æžœï¼Œä½†ä¸è¶³ä»¥æ˜¾è‘—æ”¹å˜ JFA å±‚çº§åˆ¤æ–­ã€‚è¦è¾¾åˆ°è¯¥å±‚çº§ï¼Œæœ€æœ‰æ•ˆçš„å¢žåŠ æ˜¯ä»»æ„é˜¶çš„ law-by-law éžè´Ÿå°¾ç¼ºé™·åˆ†è§£ï¼Œæˆ–è¦†ç›– Gaussianã€ç¨³å®šåŠæ›´ä¸€èˆ¬æ ¸ä¸Žæ•£åº¦çš„æŠ½è±¡æœºåˆ¶å®šç†ã€‚
+
+
+codex
+The report is fully read. It adds two self-containment points that support the user’s five requested repairs: make the stable-kernel estimates explicit where used, and keep the sharpness claim analytically distinct from coefficient-domain minimality. I’ll preserve the “no new theorems” constraint: the only theorem-level change will be admitting \(r=1\); the required mechanism and sharpness formalization will be lemmas/proof detail.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short; git branch --show-current' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '*.tex' -g '*.bib' -g 'submission_metadata.md' -g 'artifacts/verify*.py' -g 'artifacts/test_*.py' -g 'latexmkrc' -g '*.cls' -g '*.sty'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -File -Filter *.tex | ForEach-Object { '{0}"'`t{1}'"' -f "'$_.Name, (Get-Content -LiteralPath $_.FullName).Count }; Get-ChildItem -Recurse -File -Filter *.tex | Where-Object { $_.DirectoryName -ne (Get-Location).Path } | ForEach-Object { '"'{0}"'`t{1}'"' -f "'$_.FullName, (Get-Content -LiteralPath $_.FullName).Count }' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-ChildItem -Force | Select-Object Mode,Length,LastWriteTime,Name' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 230ms:
+supplement_relocated_support.tex
+supplement_optional_missing_top_moment_tails.tex
+supplement_optional_coefficient_appendices.tex
+supplement.tex
+submission_source\sec_preliminaries.tex
+submission_source\sec_introduction.tex
+submission_source\sec_haar_pullback.tex
+submission_source\sec_entropy_n4_defect.tex
+submission_source\sec_entropy_core_main.tex
+submission_source\sec_entropy_asymptotics.tex
+submission_source\sec_doob_phi_entropy.tex
+submission_source\sec_cayley_gate.tex
+submission_source\sec_appendix_conditional_tails.tex
+submission_source\sec_appendix.tex
+submission_source\main.tex
+sec_verified_A2_results.tex
+sec_supplement_doob_phi_closure.tex
+sec_supplement_appendix_bookkeeping.tex
+sec_strip_lattice.tex
+sec_strip_30_cardinal_observation.tex
+sec_strip_20_symbol_sampling.tex
+sec_strip_10_hardy_aux_lattice.tex
+sec_strip_00_poisson_image.tex
+sec_stable_entropy_spine.tex
+sec_preliminaries.tex
+sec_introduction.tex
+sec_haar_pullback.tex
+sec_gram_space.tex
+sec_finite_phase_sampling.tex
+sec_entropy_n4_defect.tex
+sec_entropy_core_main.tex
+sec_entropy_asymptotics.tex
+sec_entropy_40_stability.tex
+sec_entropy_30_eighth_defect_layer.tex
+sec_entropy_20_finite_moment_remainders.tex
+sec_entropy_10_normalization_modes.tex
+sec_doob_phi_entropy.tex
+sec_covariance_proxy_defect.tex
+sec_cayley_gate.tex
+sec_appendix_entropy_constants.tex
+sec_appendix_conditional_tails.tex
+sec_appendix.tex
+observation_lattice_reconstruction_note.tex
+main.tex
+bibliography_supplement_extra.tex
+bibliography_stable.tex
+bibliography_shared.tex
+artifacts\verify_oracle_A2.py
+artifacts\verify_moment_equivalence.py
+artifacts\verify_boundary_regular_variation.py
+artifacts\test_verify_stable_spine.py
+artifacts\test_verify_oracle_A2.py
+artifacts\test_verify_moment_equivalence.py
+
+ succeeded in 324ms:
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_conclusion.tex
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_local_spectrum.tex
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_references.tex
+ M ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_standard_thermodynamics.tex
+ M ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05b_quadratic_pisot_extension.tex
+ M ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05c_simple_parry_causal_obstructions.tex
+ M ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/bibliography.tex
+ M ../../../tools/chatgpt-oracle/README.md
+ M ../../../tools/chatgpt-oracle/nyxid-worker/policy.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/policy.test.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/start-shared.ps1
+ M ../../../tools/chatgpt-oracle/nyxid-worker/start-worker.ps1
+ M ../../../tools/chatgpt-oracle/nyxid-worker/worker-static.test.mjs
+ M ../../../tools/chatgpt-oracle/nyxid-worker/worker.mjs
+ M ../../../tools/chatgpt-oracle/oracle_dispatch.py
+ M ../../../tools/chatgpt-oracle/oracle_pipeline.py
+ M ../../../tools/chatgpt-oracle/paper_refill.py
+ M ../../../tools/chatgpt-oracle/pipeline_health.py
+ M ../../../tools/chatgpt-oracle/pipeline_supervisor.py
+ M ../../../tools/chatgpt-oracle/sprint/a3_repair_out.txt
+ M ../../../tools/chatgpt-oracle/sprint/task_A7_ref
+ M ../../../tools/chatgpt-oracle/sprint/task_A8_ref
+ M ../../../tools/chatgpt-oracle/tests/test_nyxid_oracle_scripts_static.py
+ M ../../../tools/chatgpt-oracle/tests/test_pipeline_supervisor.py
+?? ../../../artifacts/
+?? ../../../bash.exe.stackdump
+?? ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/artifacts/bernoulli_convolution_priority_audit.md
+?? ../2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/next_A6_referee.txt
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/next_A3_r5.txt
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/next_A3_referee.txt
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05b_quadratic_pisot_local_structure.tex
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05b_quadratic_pisot_separation.tex
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05c_bassino_cubic_depth.tex
+?? ../2026_sharp_three_window_threshold_fibonacci_conjugacy_dcds/sections/05c_secondary_comparisons.tex
+?? ../../../tools/FKST_THEOREM_MINING_HANDOFF.md
+?? ../../../tools/chatgpt-oracle/nyxid-worker/nyxid-via-warp.ps1
+?? ../../../tools/chatgpt-oracle/sprint/a2_repair_out.txt
+?? ../../../tools/chatgpt-oracle/sprint/a2_repair_task.txt
+?? ../../../tools/chatgpt-oracle/sprint/a6_repair2_out.txt
+?? ../../../tools/chatgpt-oracle/sprint/a6_repair2_task.txt
+dev-automation-integration
+
+ succeeded in 361ms:
+
+Mode   Length  LastWriteTime         Name                                             
+----   ------  -------------         ----                                             
+d-----         8/2/2026 12:49:54 AM  .pytest_cache                                    
+d-----         8/15/2026 3:05:31 AM  artifacts                                        
+d-----         7/3/2026 6:33:10 PM   certificates                                     
+d-----         7/6/2026 11:16:36 AM  submission_source                                
+d-----         8/8/2026 12:44:13 PM  tmp                                              
+-a---- 218046  5/16/2026 10:25:52 AM .core_contexts.txt                               
+-a---- 62882   5/16/2026 10:09:18 AM .current_envs.live.json                          
+-a---- 23837   5/16/2026 9:52:52 AM  .current_envs.tmp.json                           
+-a---- 64156   5/16/2026 2:00:43 PM  .env_blocks_current.json                         
+-a---- 166438  5/16/2026 2:41:10 PM  .env_blocks_for_inventory.json                   
+-a---- 114646  5/16/2026 10:24:43 AM .env_extract_run.txt                             
+-a---- 35832   5/16/2026 2:00:11 PM  .env_summary_current.txt                         
+-a---- 10431   5/16/2026 11:51:06 AM .inventory_current_index.txt                     
+-a---- 45137   5/16/2026 1:15:30 PM  .inventory_entries_compact.json                  
+-a---- 43273   5/16/2026 6:21:22 AM  .inventory_envs.json                             
+-a---- 108783  5/16/2026 11:09:02 AM .inventory_envs_fresh.json                       
+-a---- 10549   5/16/2026 2:59:00 PM  .inventory_env_index.tsv                         
+-a---- 16940   5/16/2026 10:24:53 AM .scope_summary.txt                               
+-a---- 77292   5/16/2026 1:02:25 PM  .stage_a_env_extract.json                        
+-a---- 127313  5/16/2026 1:59:41 PM  .stage_a_env_extract_current.json                
+-a---- 106803  5/16/2026 1:27:14 PM  .stage_a_inventory_extracted.json                
+-a---- 10198   5/16/2026 1:02:34 PM  .stage_a_label_map.txt                           
+-a---- 10938   5/16/2026 1:28:49 PM  .stage_a_label_table.txt                         
+-a---- 29248   5/16/2026 1:02:53 PM  .stage_a_scope_labels.txt                        
+-a---- 88974   5/15/2026 3:22:11 PM  .theorem_entries.tmp.json                        
+-a---- 47654   5/16/2026 10:25:08 AM .theorem_inventory_scan.json                     
+-a---- 58634   5/15/2026 8:11:44 PM  .theorem_surface_review.txt                      
+-a---- 19641   8/15/2026 3:13:29 AM  bibliography_shared.tex                          
+-a---- 1321    8/10/2026 3:50:29 PM  bibliography_stable.tex                          
+-a---- 3169    8/10/2026 3:49:00 PM  bibliography_supplement_extra.tex                
+-a---- 93172   5/16/2026 6:55:06 AM  env_extract.txt                                  
+-a---- 13478   5/16/2026 7:47:39 AM  extract_sec_doob_phi_entropy.tex_401_725.txt     
+-a---- 15815   5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_1070_1455.txt
+-a---- 9146    5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_1448_1648.txt
+-a---- 9803    5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_1599_1788.txt
+-a---- 12706   5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_1820_2135.txt
+-a---- 7902    5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_2292_2525.txt
+-a---- 3668    5/16/2026 7:47:39 AM  extract_sec_entropy_asymptotics.tex_720_815.txt  
+-a---- 8772    5/16/2026 7:47:39 AM  extract_sec_gram_space.tex_304_530.txt           
+-a---- 5788    5/16/2026 7:47:39 AM  extract_sec_gram_space.tex_33_210.txt            
+-a---- 7397    5/16/2026 7:47:39 AM  extract_sec_gram_space.tex_564_760.txt           
+-a---- 9105    5/16/2026 7:47:39 AM  extract_sec_strip_lattice.tex_1243_1445.txt      
+-a---- 9706    5/16/2026 7:47:39 AM  extract_sec_strip_lattice.tex_274_545.txt        
+-a---- 7824    5/16/2026 7:47:39 AM  extract_sec_strip_lattice.tex_659_850.txt        
+-a---- 8175    5/16/2026 7:47:39 AM  extract_sec_strip_lattice.tex_969_1165.txt       
+-a---- 169320  5/16/2026 8:50:26 AM  key_ranges.txt                                   
+-a---- 15781   6/23/2026 8:12:36 PM  literature_audit.md                              
+-a---- 42753   8/15/2026 3:22:53 AM  main.aux                                         
+-a---- 16129   8/15/2026 3:22:53 AM  main.fdb_latexmk                                 
+-a---- 20318   8/15/2026 3:22:53 AM  main.fls                                         
+-a---- 24102   8/15/2026 3:22:53 AM  main.log                                         
+-a---- 7387    8/15/2026 3:22:53 AM  main.out                                         
+-a---- 466210  8/15/2026 3:22:53 AM  main.pdf                                         
+-a---- 5980    8/15/2026 3:22:12 AM  main.tex                                         
+-a---- 1382504 8/15/2026 3:22:53 AM  main.xdv                                         
+-a---- 2784    8/3/2026 2:22:24 AM   next_A2.txt                                      
+-a---- 2477    8/3/2026 2:38:08 PM   next_A2_r2.txt                                   
+-a---- 2825    8/8/2026 5:48:19 AM   next_A2_r3.txt                                   
+-a---- 1851    8/8/2026 6:20:25 AM   next_A2_r4.txt                                   
+-a---- 3520    8/8/2026 9:36:03 AM   next_A2_r5.txt                                   
+-a---- 8355    8/14/2026 11:36:29 PM next_A2_r6.txt                                   
+-a---- 4203    8/15/2026 1:09:23 AM  next_A2_r7.txt                                   
+-a---- 5123    8/15/2026 2:40:18 AM  next_A2_referee.txt                              
+-a---- 8755    7/6/2026 7:12:36 AM   observation_lattice_reconstruction_note.tex      
+-a---- 10068   5/14/2026 9:03:19 PM  oracle_stage_a_escalation.json                   
+-a---- 1723    8/10/2026 3:50:44 PM  README.md                                        
+-a---- 9981    8/1/2026 8:21:24 PM   research_directive.md                            
+-a---- 15863   6/23/2026 7:27:11 PM  scope_contract.json                              
+-a---- 25648   8/10/2026 3:50:29 PM  scope_contract.md                                
+-a---- 23332   8/15/2026 3:19:21 AM  sec_appendix.tex                                 
+-a---- 8281    8/2/2026 5:24:56 PM   sec_appendix_conditional_tails.tex               
+-a---- 4603    7/6/2026 7:12:36 AM   sec_appendix_entropy_constants.tex               
+-a---- 1704    7/3/2026 2:50:09 AM   sec_cayley_gate.tex                              
+-a---- 17093   8/8/2026 9:36:50 AM   sec_covariance_proxy_defect.tex                  
+-a---- 57754   8/14/2026 5:09:37 PM  sec_doob_phi_entropy.tex                         
+-a---- 37719   7/6/2026 7:12:36 AM   sec_entropy_10_normalization_modes.tex           
+-a---- 90911   7/6/2026 7:12:36 AM   sec_entropy_20_finite_moment_remainders.tex      
+-a---- 33262   8/8/2026 12:25:28 PM  sec_entropy_30_eighth_defect_layer.tex           
+-a---- 9724    7/6/2026 7:12:36 AM   sec_entropy_40_stability.tex                     
+-a---- 105     7/4/2026 2:30:43 AM   sec_entropy_asymptotics.tex                      
+-a---- 96505   8/8/2026 10:25:53 PM  sec_entropy_core_main.tex                        
+-a---- 3307    7/6/2026 1:27:21 AM   sec_entropy_n4_defect.tex                        
+-a---- 8852    7/6/2026 7:12:36 AM   sec_finite_phase_sampling.tex                    
+-a---- 19534   8/8/2026 11:42:56 AM  sec_gram_space.tex                               
+-a---- 5239    8/8/2026 11:38:17 AM  sec_haar_pullback.tex                            
+-a---- 33710   8/15/2026 3:15:33 AM  sec_introduction.tex                             
+-a---- 5599    7/6/2026 2:57:45 AM   sec_preliminaries.tex                            
+-a---- 267     8/10/2026 4:11:07 PM  sec_stable_entropy_spine.tex                     
+-a---- 6656    8/8/2026 11:41:11 AM  sec_strip_00_poisson_image.tex                   
+-a---- 15451   8/8/2026 11:22:41 AM  sec_strip_10_hardy_aux_lattice.tex               
+-a---- 13466   8/8/2026 11:42:56 AM  sec_strip_20_symbol_sampling.tex                 
+-a---- 20044   8/8/2026 11:40:52 AM  sec_strip_30_cardinal_observation.tex            
+-a---- 2526    7/6/2026 5:55:00 AM   sec_strip_lattice.tex                            
+-a---- 1454    7/6/2026 7:12:36 AM   sec_supplement_appendix_bookkeeping.tex          
+-a---- 33926   7/6/2026 7:12:36 AM   sec_supplement_doob_phi_closure.tex              
+-a---- 71636   8/15/2026 3:19:50 AM  sec_verified_A2_results.tex                      
+-a---- 5522    6/23/2026 7:56:29 PM  split_candidates.json                            
+-a---- 976     6/23/2026 8:21:29 PM  stage_a_audit.json                               
+-a---- 24433   8/14/2026 5:11:07 PM  supplement.aux                                   
+-a---- 15105   8/14/2026 5:11:07 PM  supplement.fdb_latexmk                           
+-a---- 18399   8/14/2026 5:11:07 PM  supplement.fls                                   
+-a---- 29005   8/14/2026 5:11:07 PM  supplement.log                                   
+-a---- 2631    8/14/2026 5:11:07 PM  supplement.out                                   
+-a---- 284097  8/14/2026 5:11:07 PM  supplement.pdf                                   
+-a---- 2718    8/10/2026 4:03:28 PM  supplement.tex                                   
+-a---- 712816  8/14/2026 5:11:07 PM  supplement.xdv                                   
+-a---- 29106   7/6/2026 6:53:47 AM   supplement_optional_coefficient_appendices.tex   
+-a---- 23195   7/6/2026 6:53:47 AM   supplement_optional_missing_top_moment_tails.tex 
+-a---- 764     8/10/2026 4:03:28 PM  supplement_relocated_support.tex                 
+-a---- 93890   5/16/2026 5:57:15 AM  theorem_entries_fresh.tmp.json                   
+-a---- 42230   5/16/2026 6:53:42 AM  theorem_envs_scan.tmp.json                       
+-a---- 37834   8/1/2026 9:44:07 PM   theorem_inventory.json                           
+-a---- 8372    8/1/2026 9:44:07 PM   theorem_inventory.md                             
+-a---- 52300   5/16/2026 8:18:29 AM  theorem_inventory_scan.tmp.json                  
+-a---- 108712  5/16/2026 7:45:58 AM  theorem_scan_current.json                        
+-a---- 8372    5/16/2026 7:46:13 AM  theorem_scan_labels.txt                          
+-a---- 151476  5/16/2026 8:49:12 AM  theorem_statements_extract.txt                   
+
+
+
+ succeeded in 956ms:
+bibliography_shared.tex`t497
+bibliography_stable.tex`t36
+bibliography_supplement_extra.tex`t90
+main.tex`t154
+observation_lattice_reconstruction_note.tex`t224
+sec_appendix.tex`t577
+sec_appendix_conditional_tails.tex`t236
+sec_appendix_entropy_constants.tex`t113
+sec_cayley_gate.tex`t46
+sec_covariance_proxy_defect.tex`t475
+sec_doob_phi_entropy.tex`t1593
+sec_entropy_10_normalization_modes.tex`t1049
+sec_entropy_20_finite_moment_remainders.tex`t2578
+sec_entropy_30_eighth_defect_layer.tex`t978
+sec_entropy_40_stability.tex`t254
+sec_entropy_asymptotics.tex`t2
+sec_entropy_core_main.tex`t2876
+sec_entropy_n4_defect.tex`t110
+sec_finite_phase_sampling.tex`t242
+sec_gram_space.tex`t607
+sec_haar_pullback.tex`t115
+sec_introduction.tex`t788
+sec_preliminaries.tex`t169
+sec_stable_entropy_spine.tex`t5
+sec_strip_00_poisson_image.tex`t177
+sec_strip_10_hardy_aux_lattice.tex`t456
+sec_strip_20_symbol_sampling.tex`t359
+sec_strip_30_cardinal_observation.tex`t507
+sec_strip_lattice.tex`t57
+sec_supplement_appendix_bookkeeping.tex`t27
+sec_supplement_doob_phi_closure.tex`t899
+sec_verified_A2_results.tex`t1851
+supplement.tex`t85
+supplement_optional_coefficient_appendices.tex`t739
+supplement_optional_missing_top_moment_tails.tex`t678
+supplement_relocated_support.tex`t17
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\main.tex`t556
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_appendix.tex`t533
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_appendix_conditional_tails.tex`t76
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_cayley_gate.tex`t46
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_doob_phi_entropy.tex`t1405
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_entropy_asymptotics.tex`t2
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_entropy_core_main.tex`t2625
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_entropy_n4_defect.tex`t110
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_haar_pullback.tex`t109
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_introduction.tex`t429
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\submission_source\sec_preliminaries.tex`t169
+D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa\tmp\pdfs\chen_niles_weed_2005.00738v2.tex`t1468
+
+codex
+The working tree has unrelated changes outside this paper; I will not touch them. The active paper is modular, but several legacy/source-copy `.tex` files already exceed 800 lines, so I’m first identifying the actual build graph and whether those copies are submission inputs or archives. I’m also recording the current PDF page count and theorem inventory before edits.

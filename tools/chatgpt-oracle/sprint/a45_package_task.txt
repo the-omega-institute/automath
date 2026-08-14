@@ -1,0 +1,54 @@
+Two papers are repaired, verified and idle. Make both actually submittable. Do not ask
+for design approval, do not run any brainstorming or approval workflow, and do not
+change any mathematics. Proceed directly.
+
+Papers (paths relative to D:\omega\automath\papers\publication):
+  P1 = 2026_prime_languages_finite_state_obstructions_monatshefte   (target: Monatshefte)
+  P2 = 2026_finite_parts_dynamical_zeta_shifts_finite_type_etds     (target: DCDS or ETDS)
+
+Read papers/publication/SUBMISSION_PACKAGE.md first. It exists because an external
+referee on P1 wrote that the only attachment he actually received was the main PDF —
+the supplement, the Python scripts, the unit tests and the archived outputs were never
+sent, so he could only make a procedural judgement and we got zero credit for the
+machine verification we had built. Do not let that repeat.
+
+For EACH of the two papers, produce and verify the complete submission bundle:
+
+ 1. main.pdf — clean rebuild, .aux removed first, latexmk -pdfxe exit 0, zero undefined
+    references, zero undefined citations, zero multiply-defined labels.
+ 2. supplement.pdf if the paper has a supplement — same clean-rebuild standard. Note
+    that when the article and the supplement cross-reference each other, xr-hyper needs
+    ALTERNATING passes; a one-way build never reaches zero undefined references.
+ 3. Every artifacts/verify*.py and artifacts/test_*.py present and runnable.
+ 4. Archived verification output committed as text, so a referee can read the conclusion
+    without running anything.
+ 5. artifacts/literature_check.md current and consistent with the paper's present
+    priority narrative. For P2 that narrative is now NARROWER than it used to be:
+    Ostrowski (1968) treats the linear multiplicative equation, and Nishioka (1985)
+    directly implies that an algebraic solution of F(z^2) = H(z)^{-1} F(z)^2 is rational.
+    What remains ours is only parity-compatible algebraic collision lifting, effective
+    rational-coboundary bounds and reconstruction, and the cross-base elementary-two-group
+    result. Make sure literature_check.md says exactly that and does not overclaim.
+ 6. REPRODUCE.md — what to install, what commands to run, what output to expect.
+ 7. submission_metadata.md and a cover letter matching the actual target journal.
+
+Then run the pre-submission checks and REPORT the result of each, per paper:
+ - Every pointer in the main text that refers to the supplement: does its target exist
+   in the bundle?
+ - HARDCODED supplement numbers. \suppref{Theorem~1.11}-style pointers are plain
+   hyperlinks, so a WRONG number produces no LaTeX warning at all and the
+   undefined-reference check cannot see it. Check every one of them by number AND by
+   environment type against the supplement's actual numbering, and fix mismatches. On a
+   sibling paper these were all stale and nothing flagged it.
+ - Does the target journal accept supplementary material? If it does not, the migrated
+   content must be moved BACK into the main text — never leave a dangling pointer.
+ - Do the scripts run in a clean environment, and is their output in the bundle?
+ - Regenerate artifacts/SHA256SUMS if the paper has one.
+
+Rules: keep every .tex under 800 lines; no revision marks anywhere ("revised",
+"corrected", "in this version", references to earlier drafts); do not modify any theorem
+statement or proof.
+
+Final report, per paper: page counts, the checklist result item by item, every stale
+\suppref number you found and fixed, test pass counts, and a plain yes/no on whether the
+bundle is ready to send.

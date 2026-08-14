@@ -14,16 +14,16 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 页 | referee 裁决 | 优先权问题 | **去向** |
+| 篇 | 页 | 当前动作 | 在飞 id | **去向** |
 |---|--:|---|---|---|
-| **A2** `cayley_chebyshev` | 66 | **拒稿** | 漏引 Chen–Niles-Weed → 已重写 | 强专门期刊；仅以 Thm 4.19 投 JFA 拒稿概率显著高于接收 |
-| **A3** `sharp_three_window` | 63 | Major Revision | 碰撞图判定属经典 pair-graph 传统 | **DCDS-A**（须动力系统导向重构）；备选 TCS |
-| **A4** `prime_languages` | **25** | Major Revision → **已修** | SMFK 比较已深化 | Monatshefte |
-| **A5** `finite_parts` | **33** | 重投 → **已修** | Ostrowski(1968)、Nishioka(1985) 直接蕴含；新颖性收窄至三项 | DCDS/ETDS |
-| **A6** `zeckendorf_fibers` | 59 | **拒稿** | 黄金分割 Bernoulli 卷积正 $q$ 压力早三十年 | **JNT**（修复中） |
-| **A7** `upper_fibers` | 27 | 外审在途 | — | Fibonacci Quarterly（已解决 FJMV 两问题）|
-| **A8** `detector_shells` | 62 | 外审在途 | — | Stochastic Models（尖锐边界已恢复）|
-| **A9** `homological_visibility` | **48**+50 | 外审在途 | — | 表述障碍已清除，期刊待定 |
+| **A2** `cayley_chebyshev` | 66 | codex 修复中（$r=1$ 纳入定理、分母正性机制、锐性拆引理） | — | 强专门期刊（JFA 拒稿概率显著高于接收）|
+| **A3** `sharp_three_window` | 63 | codex 修复中（优先权 + Lemma 5.3/6.7/6.8 + 三次根计数） | — | **DCDS-A**（无须降投）；备选 TCS |
+| **A4** `prime_languages` | 25 | 投稿包封装中 | — | Monatshefte |
+| **A5** `finite_parts` | 33 | 投稿包封装中 | — | DCDS / ETDS |
+| **A6** `zeckendorf_fibers` | 59 | codex 修复中（按 Bernoulli 卷积文献重定主定理、改投） | — | **JNT** |
+| **A7** `upper_fibers` | 27 | 外审在飞 | `6496b45e` | Fibonacci Quarterly |
+| **A8** `detector_shells` | 62 | 外审在飞 | `6dd1a961` | Stochastic Models |
+| **A9** `homological_visibility` | 48+50 | 外审在飞（压缩后重新评档） | `226c441b` | 待定 |
 
 
 
@@ -36,13 +36,15 @@
 
 
 
-> **TICK 26 — 队列清空，补上三个缺口**。在飞任务全部收回，无一遗留。缺口有三：A9 压缩后未重新评档、A7 与 A8 从未走过外审轮。已派 codex 写这三份外审问题。
+
+> **TICK 27 — 八篇全部在动，零闲置**。池子 3/6 在飞、队列 0;codex ×4(A2/A3/A6 修复,A4+A5 封装)。内存 1.19 GB 空闲、硬缺页 3/s、无孤儿进程,本 tick 不再加派。
 >
-> **A6 进入修复**。审稿人明确写道他**没有发现任何一个可立即构成反例的核心公式**——拒稿理由是另外两条：优先权叙述实质性错误（Sidorov–Vershik 的 $f_m(k)$ 与我们的有限 Fibonacci 子集和系数只差一个索引平移；Hu 在 TAMS、Lau–Ngai 1998 给出 $q>0$ 的 $L^q$ 谱、Feng 扩到全实 $q$ 并指出负 $q$ 处相变），以及两处承重证明未达可核验标准（Lemma 5.7 的 Stern–Brocot/Knauf 规范化转移、Theorem 5.12 的参数一致渐近与无界代价截断）。任务书要求：按上述文献重新界定主定理，**无存活新颖性的定理降为一致性检查或删除，不得制造替代主张**；两处证明或补全或减弱并向下游传播；改投 JNT。
+> **A4/A5 进入投稿包封装。** 依 `SUBMISSION_PACKAGE.md` 逐项核验:补充材料 PDF(article 与 supplement 互相引用时 xr-hyper 须**交替编译**,单向构建永远到不了零未定义引用)、脚本、测试、存档输出、`literature_check.md`、`REPRODUCE.md`、cover letter。重点核 `\suppref` 的**硬编码编号**——它是纯超链接,编号写错**不触发任何 LaTeX 告警**,须逐条按编号与环境类型比对。
 >
-> **A2 定档**。审稿人的话是：这是一个**强的专门期刊结果**，若仅以 Theorem 4.19 为核心投 JFA 是合理试投，但拒稿概率显著高于接收概率。JFA 不再作为默认去向。
+> **本 tick 两个工具坑**(均已定位并写入记忆):codex 打印 `patch: completed` 但文件不落盘 —— 从日志 patch hunk 反解重建,13704 字节与监控先前所见完全一致;codex 停在 `superpowers:brainstorming` 审批门上**零改动**,而 `git status` 因上一轮遗留改动看起来像干了活,**须按 mtime 而非 git status 判定**。
 >
-> **A3 有明确路径**。修正优先权并补全证明后，真正的新增量足以支撑 DCDS-A：全部二次 Pisot 基数的精确阈值、精确有限块起点与 Markov 阶；simple-Parry 算术差分图的特殊压缩与孔径二分类；Bassino 三次族上的精确无界未来解码深度。**无须主动降投。**
+> **A2 的真实增量**:审稿人判断现有证明**看起来本就覆盖 $r=1$**,我们只是没解释为何排除;纳入定理是扩大结果而非机械追加。
+
 
 
 
