@@ -1,5 +1,111 @@
 # Literature and Novelty Check
 
+
+## Full bibliography verification (15 August 2026)
+
+This audit supersedes the verification status implied by the earlier thematic
+searches. All 84 entries in `references.bib` were checked individually. For
+the 74 entries carrying a DOI, the DOI and returned title were checked against
+Crossref first, with OpenAlex or Semantic Scholar as fallbacks. For the 10
+entries without a DOI, exact title and first-author matches were sought in
+Crossref, OpenAlex, or Semantic Scholar; three arXiv records were additionally
+confirmed from the arXiv Atom API by identifier, full title, and authors.
+Database rate limits were not treated as negative evidence. The result is 81
+verified entries and 3 entries left explicitly unverified; none was deleted or
+replaced.
+
+| BibTeX key | Title and first author | Identifier | Result | Evidence |
+|---|---|---|---|---|
+| `AtiyahTall1969GroupRepresentationsLambdaRings` | Group representations, (lambda)-rings and the (J)-homomorphism; M. F. Atiyah | DOI `10.1016/0040-9383(69)90015-9` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `AdachiSunada1987TwistedPF` | Twisted Perron--Frobenius theorem and $L$-functions; T. Adachi | DOI `10.1016/0022-1236(87)90014-0` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `AdlerKitchensMarcus1985FiniteGroupActions` | Finite group actions on shifts of finite type; R. L. Adler | DOI `10.1017/s0143385700002728` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ArangoPinerosKeliherKeyes2022ChebotarevMertens` | Mertens' theorem for Chebotarev sets; S. Arango-Pi neros | DOI `10.1142/s1793042122500932` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Baladi2018DynamicalZeta` | Dynamical Zeta Functions and Dynamical Determinants for Hyperbolic Maps; V. Baladi | DOI `10.1007/978-3-319-77661-3` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `BertheGouletOuelletNybergBroddaPerrinPetersen2026GroupLanguages` | Density of group languages in shift spaces; V. Berthe | DOI `10.1017/etds.2026.10318` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `BertheGouletOuelletPerrin2025RationalLanguagesDensity` | Density of Rational Languages Under Shift Invariant Measures; V. Berthe | DOI `10.4230/lipics.icalp.2025.143` | Verified | Semantic Scholar DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `BowenLanford1970Zeta` | Zeta functions of restrictions of the shift transformation; R. Bowen | No DOI | Verified | Crossref title/author; title and first author matched. |
+| `BoyleSchmieding2017FiniteGroupExtensions` | Finite group extensions of shifts of finite type: $K$-theory, Parry and Livsic; M. Boyle | DOI `10.1017/etds.2015.87` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `BoyleCarlsenEilers2020FlowEquivalenceGSFT` | Flow equivalence of $G$-SFTs; M. Boyle | DOI `10.1090/tran/7981` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Coles2025VassilievWritheAxiomA` | Vassiliev invariants and writhe for periodic orbits of Axiom A flows; S. Coles | DOI `10.1017/etds.2025.7` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `CrismaleDelVecchioGrisetaRossi2025NoncommutativeSkewProduct` | Non-commutative skew-product extension dynamical systems; V. Crismale | DOI `10.1017/etds.2025.9` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `DeJong2026PeriodicOrbitLengths` | On sets of periodic orbit lengths in finitely presented dynamical systems; H. de Jong | DOI `10.1017/etds.2026.10313` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Epperlein2026FreeInertGSFTs` | Eventual conjugacy of free inert $G$-SFTs; J. Epperlein | DOI `10.1017/etds.2026.10309` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `DougallSharp2021AnosovGrowthGroupExtensions` | Anosov flows, growth rates on covers and group extensions of subshifts; R. Dougall | DOI `10.1007/s00222-020-00994-3` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Hashimoto1989ZetaFiniteGraphs` | Zeta functions of finite graphs and representations of $p$-adic groups; K.-I. Hashimoto | No DOI | Verified | Crossref title/author; title and first author matched. |
+| `Hashimoto1990ZetaLFunctionsFiniteGraphs` | On zeta and $L$-functions of finite graphs; K.-I. Hashimoto | DOI `10.1142/s0129167x90000204` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Hashimoto1992ArtinDensityPrimeCycles` | Artin type $L$-functions and the density theorem for prime cycles on finite graphs; K.-I. Hashimoto | DOI `10.1142/s0129167x92000370` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `HasegawaSaito2016GraphMertens` | On graph theory Mertens' theorems; T. Hasegawa | DOI `10.1007/s00373-016-1710-2` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Fiebig1993PeriodicFiniteGroupActions` | Periodic points and finite group actions on shifts of finite type; U.-R. Fiebig | DOI `10.1017/s0143385700007495` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Fried1983PeriodicPointsTwistedCoefficients` | Periodic points and twisted coefficients; D. Fried | DOI `10.1007/bfb0061419` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Fried1983HomologicalIdentitiesClosedOrbits` | Homological identities for closed orbits; D. Fried | DOI `10.1007/bf01389105` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `SilverWilliams2005InvariantFiniteGroupActions` | An invariant of finite group actions on shifts of finite type; D. S. Silver | DOI `10.1017/s0143385705000246` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Humbert2025FirstRuelleResonance` | First Ruelle resonance for an Anosov flow with smooth potential; T. Humbert | DOI `10.1017/etds.2024.131` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `LindMarcus1995` | An Introduction to Symbolic Dynamics and Coding; D. Lind | DOI `10.1017/9781108899727` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Matsumoto2016ExtensionsSubshiftsFiniteGroups` | On extensions of subshifts by finite groups; K. Matsumoto | DOI `10.1080/14689367.2016.1278430` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `KatsudaSunada1990ClosedOrbitsHomology` | Closed orbits in homology classes; A. Katsuda | DOI `10.1007/bf02699875` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Jaerisch2015GroupExtendedMarkovSystems` | Group-extended Markov systems, amenability, and the Perron--Frobenius operator; J. Jaerisch | DOI `10.1090/s0002-9939-2014-12237-4` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Jaerisch2016RecurrencePressureGroupExtensions` | Recurrence and pressure for group extensions; J. Jaerisch | DOI `10.1017/etds.2014.54` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Knutson1973LambdaRings` | (lambda)-Rings and the Representation Theory of the Symmetric Group; D. Knutson | DOI `10.1007/bfb0069217` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Lalley1987DistributionPeriodicOrbits` | Distribution of periodic orbits of symbolic and Axiom A flows; S. P. Lalley | DOI `10.1016/0196-8858(87)90012-1` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Manning1971Axiom` | Axiom A diffeomorphisms have rational zeta functions; A. Manning | DOI `10.1112/blms/3.2.215` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `MeslizaNoorani1999FrobeniusMertens` | Teorem Mertens Bagi Orbit--Orbit Tertutup Subanjakan Mengikut Kelas Frobenius; Mesliza Mohamed | DOI `10.11113/matematika.v15.n.482` | **Unverified** | The official journal PDF confirms title, authors, volume, year, and pages, but DOI `10.11113/matematika.v15.n.482` returned no Crossref record; OpenAlex and Semantic Scholar requests were rate-limited, and Crossref title/author search found no match. DOI mapping unconfirmed. |
+| `Noorani1995ChebotarevFiniteExtensions` | Teorem Chebotarev Untuk Perluasan Kumpulan Terhingga Bagi Anjakan Terhingga; M. S. M. Noorani | No DOI | **Unverified** | No DOI recorded. Exact title/author searches in Crossref returned no match; OpenAlex and Semantic Scholar were queried but rate-limited; an exact-title web search found no authoritative record. |
+| `ArtinMazur1965PeriodicPoints` | On periodic points; M. Artin | DOI `10.2307/1970384` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Parry1983PrimeOrbit` | An analogue of the prime number theorem for closed orbits of shifts of finite type and their suspensions; W. Parry | DOI `10.1007/bf02760669` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Sharp1991Mertens` | An analogue of Mertens' theorem for closed orbits of Axiom A flows; R. Sharp | DOI `10.1007/bf01237365` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `MetropolisRota1983Necklaces` | Witt vectors and the algebra of necklaces; N. Metropolis | DOI `10.1016/0001-8708(83)90035-x` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `DressSiebeneicher1988BurnsideRing` | The Burnside ring of profinite groups and the Witt vector construction; A. W. M. Dress | DOI `10.1016/0001-8708(88)90055-x` | Verified | Crossref title/author; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `NooraniParry1992ChebotarevShifts` | A Chebotarev theorem for finite homogeneous extensions of shifts; M. S. M. Noorani | DOI `10.1007/bf02584816` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Noorani1997HomogeneousExtensionsMarkov` | Ergodicity and weak-mixing of homogeneous extensions of measure-preserving transformations with applications to Markov shifts; M. S. M. Noorani | DOI `10.1007/bf01305969` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Noorani2003ClosedOrbitsToral` | Closed orbits of ((G,tau))-extension of ergodic toral automorphisms; M. S. M. Noorani | DOI `10.1155/s0161171203208164` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `OHare2025FiniteDataRigidity` | Finite data rigidity for one-dimensional expanding maps; T. A. O'Hare | DOI `10.1017/etds.2024.83` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `NordinNoorani2021BouquetDyckOrbitGrowth` | Orbit growth of shift spaces induced by bouquet graphs and Dyck shifts; A. Nordin | DOI `10.3390/math9111268` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `NordinNooraniMohd2024OrbitGrowthSoficPFT` | Orbit growth of sofic shifts and periodic-finite-type shifts; A. Nordin | DOI `10.1007/s12346-024-01055-3` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `NordinNooraniMohd2025SoficDyckOrbitGrowth` | A certain class of sofic-Dyck shifts and its orbit growth; A. Nordin | DOI `10.1007/s00605-025-02094-x` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Parry1999LivsicNonAbelian` | The Livsic periodic point theorem for non-abelian cocycles; W. Parry | DOI `10.1017/s0143385799146789` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ParryPollicott1997LivsicCompactLie` | The Livsic cocycle equation for compact Lie group extensions of hyperbolic systems; W. Parry | DOI `10.1112/s0024610797005474` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ParryPollicott1986Chebotarev` | The Chebotarov theorem for Galois coverings of Axiom A flows; W. Parry | DOI `10.1017/s0143385700003333` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ParryPollicott1990Zeta` | Zeta Functions and the Periodic Orbit Structure of Hyperbolic Dynamics; W. Parry | No DOI | Verified | Semantic Scholar title; title and first author matched. |
+| `ParryPollicott2008BauerSkewProducts` | An analogue of Bauer's theorem for closed orbits of skew products; W. Parry | DOI `10.1017/s0143385707000557` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `PollicottSharp2007Chebotarev` | Chebotarev-type theorems in homology classes; M. Pollicott | DOI `10.1090/s0002-9939-07-08923-x` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `PollicottSharp2008ArtinReciprocitySkewProducts` | Addendum: an analogue of Artin reciprocity for closed orbits of skew products; M. Pollicott | DOI `10.1017/s0143385707000569` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Sharp1993ClosedOrbitsHomologyAnosov` | Closed orbits in homology classes for Anosov flows; R. Sharp | DOI `10.1017/s0143385700007434` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Seneta2006NonnegativeMatrices` | Non-negative Matrices and Markov Chains; E. Seneta | DOI `10.1007/0-387-32792-4` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Wielandt1950Unzerlegbare` | Unzerlegbare, nicht negative Matrizen; H. Wielandt | DOI `10.1007/bf02230720` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Sunada1986LFunctionsGeometry` | $L$-functions in geometry and some applications; T. Sunada | DOI `10.1007/bfb0075662` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Wehrhahn1990AperiodicRings` | Aperiodic rings, necklace rings, and Witt vectors; R. Wehrhahn | DOI `10.1016/0001-8708(90)90002-5` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Ruelle1976ZetaExpanding` | Zeta-functions for expanding maps and Anosov flows; D. Ruelle | DOI `10.1007/bf01403069` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `AdamczewskiFaverjon2018MahlerSeveralVariablesII` | Mahler's method in several variables II: Applications to base change problems and finite automata; B. Adamczewski | No DOI | Verified | arXiv title/author; title and first author matched. |
+| `Greuel2000ImplicitMahler` | Algebraic independence of the values of Mahler functions satisfying implicit functional equations; B. Greuel | DOI `10.4064/aa-93-1-1-20` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Nishioka1982MahlerFunctionValues` | On a problem of Mahler for transcendency of function values; Kumiko Nishioka | DOI `10.1017/s1446788700018814` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Nishioka1985AlgebraicSolutions` | Algebraic function solutions of a certain class of functional equations; Keiji Nishioka | DOI `10.1007/bf01235775` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Nishioka1996MahlerFunctions` | Mahler Functions and Transcendence; Kumiko Nishioka | No DOI | Verified | Crossref title/author; title and first author matched. |
+| `Ostrowski1968AlgebraicSolutions` | Uber algebraische Losungen (Phi) der Funktionalgleichung (Phi(varphi(x))=g(x)Phi(x)), fur rationale (g(x)); A. Ostrowski | DOI `10.1007/bf01817565` | **Unverified** | DOI resolves in Crossref, but its metadata title is the Oberwolfach conference report rather than the cited article title; exact title/author searching did not give an unambiguous entry-level match, and Semantic Scholar was rate-limited. |
+| `ChyzakDreyfusDumasMezzarobba2018MahlerSolutions` | Computing solutions of linear Mahler equations; F. Chyzak | DOI `10.1090/mcom/3359` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ChyzakDreyfusDumasMezzarobba2025FirstOrderFactors` | First-order factors of linear Mahler operators; F. Chyzak | DOI `10.1016/j.jsc.2025.102424` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `ArrecheZhang2022MahlerResidues` | Mahler discrete residues and summability for rational functions; C. E. Arreche | DOI `10.1145/3476446.3536186` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Pegis1996NonlinearMahler` | Rational solutions of a nonlinear functional equation related to Mahler's equation; C. Pegis | DOI `10.1006/jmaa.1996.0156` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `BellCoonsRowland2013MahlerDichotomy` | The rational-transcendental dichotomy of Mahler functions; J. P. Bell | No DOI | Verified | arXiv title/author; title and first author matched. |
+| `PomeratStraub2024RootsPowerSeries` | Criteria for the integrality of $n$th roots of power series; J. Pomerat | DOI `10.4064/aa230425-4-4` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Topfer1998ZeroOrderMahler` | Zero order estimates for functions satisfying generalized functional equations of Mahler type; T. Topfer | DOI `10.4064/aa-85-1-1-12` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Lam2025ValuationProducts` | Transcendence and algebraic independence of a family of $p$-adic valuation generating functions; K. Lam | No DOI | Verified | arXiv title/author; title and first author matched. |
+| `Stadlbauer2013KestenCriterionTMC` | An extension of Kestens criterion for amenability to topological Markov chains; M. Stadlbauer | DOI `10.1016/j.aim.2012.12.004` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Ruelle1978Thermodynamic` | Thermodynamic Formalism; D. Ruelle | No DOI | Verified | Semantic Scholar title; title and first author matched. |
+| `StarkTerras1996FiniteGraphsCoverings` | Zeta functions of finite graphs and coverings; H. M. Stark | DOI `10.1006/aima.1996.0050` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `StarkTerras2000FiniteGraphsCoveringsII` | Zeta functions of finite graphs and coverings, Part II; H. M. Stark | DOI `10.1006/aima.2000.1917` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `StarkTerras2007FiniteGraphsCoveringsIII` | Zeta functions of finite graphs and coverings, III; H. M. Stark | DOI `10.1016/j.aim.2006.03.002` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Serre1977LinearRepresentations` | Linear Representations of Finite Groups; J.-P. Serre | DOI `10.1007/978-1-4684-9458-7` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `CavaleriDAngeliDonno2021BalanceGainGraphs` | A group representation approach to balance of gain graphs; M. Cavaleri | DOI `10.1007/s10801-020-00977-w` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `CavaleriDonno2022Cospectrality` | On cospectrality of gain graphs; M. Cavaleri | DOI `10.1515/spma-2022-0169` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `AbiadBelardoKhramova2024Switching` | A switching method for constructing cospectral gain graphs; A. Abiad | DOI `10.1016/j.disc.2023.113838` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Zaslavsky1989BiasedGraphs` | Biased graphs. I. Bias, balance, and gains; T. Zaslavsky | DOI `10.1016/0095-8956(89)90063-4` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `GrossTucker1987TopologicalGraphTheory` | Topological Graph Theory; J. L. Gross | No DOI | Verified | Semantic Scholar title; title and first author matched. |
+
+The three unverified rows remain in the bibliography exactly as received. The
+Mesliza--Noorani bibliographic record itself is supported by the official
+journal PDF, but the DOI could not be validated in the required services. The
+Ostrowski DOI may identify a containing conference report rather than an
+article-level record; that ambiguity is reported rather than silently changed.
 Date of search: checked through 15 August 2026 (Asia/Singapore).
 
 ## Frobenius-class product and Axiom A flow audit (8 August 2026)
@@ -271,9 +377,13 @@ supersedes any broader wording in earlier audit notes:
 - Springer keeps the cited 1985 pages 330--335 behind subscription, and
   Unpaywall reported no open-access copy; this audit does not record a
   first-hand check of the printed text.
-- The paper's claimed contribution is limited to parity-compatible algebraic
-  collision lifting, effective rational-coboundary bounds and reconstruction,
-  and the cross-base elementary-two-group result.
+- The paper's claimed Mahler contribution is limited to the input-only divisor
+  estimate for the multiplicative certificate, its sharp lower-bound family
+  and realizable transfer, and the supporting explicit height and fixed-base
+  integer bit analysis. Bare existence and decidability are prior, and the
+  Pade step is largely standard rational reconstruction after a degree cap is
+  known. The tier-carrying claim is the cross-base odd-Adams-invariant
+  abelian-two-group dynamical inverse theorem.
 
 In particular, the paper does not claim originality for the general
 algebraic-solution rationality theorem, for the fixed-label Euler coordinate,
@@ -331,9 +441,11 @@ solution of `(sigma-1)u=f` satisfies
 solution space by the original affine equation.
 
 The converse is also effective, so this is a reduction rather than a
-one-way necessary condition.  A rational solution `u` of (1) comes from a
-normalized `R in Q(z)` exactly when `u/z` is regular at zero, has no
-polynomial part, and has only simple poles with integer residues.  Necessity
+one-way necessary condition. Additive solutions are determined only up to a
+constant. After replacing `u` by its unique representative with `u(0)=0`, it
+comes from a normalized `R in Q(z)` exactly when `u/z` is regular at zero,
+has no polynomial part, and has only simple finite poles with integer
+residues. Necessity
 is the standard partial-fraction form of a rational logarithmic derivative.
 For sufficiency, Galois invariance groups poles with the same integer residue
 into rational irreducible factors; their normalized product gives
@@ -343,9 +455,10 @@ one, so it is identically one.
 
 Consequently, bare decidability of the multiplicative rational-solution
 problem is already subsumed after this non-obvious transformation.  The
-defensible effective contribution of the revised theorem is narrower: an
-input-only degree bound of sharp order `D log D`, an explicit height bound,
-computable coefficient numerator and denominator bounds, direct recovery by
-one normalized affine Pade system, exact rejection, and polynomial bit
-complexity for fixed `p`.  No finite search certifies absolute priority for
-each of those quantitative refinements separately.
+nontrivial surviving core is the input-only degree bound of sharp order
+`D log D` for the multiplicative certificate itself, together with its lower-
+bound family and dynamically realizable transfer. The explicit height and
+fixed-`p` integer bit bounds are useful quantitative additions. The affine
+Pade calculation is a direct implementation of standard rational
+reconstruction once the degree cap is known, and exact rejection is necessary
+for correctness rather than a separate novelty claim.

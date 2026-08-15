@@ -35,10 +35,12 @@ rational critical p-Mahler lifting theorem combines an elementary
 linear-exponent denominator estimate with Kumiko Nishioka's special-value
 theorem and the cited algebraic-solution rationality result of Keiji
 Nishioka. Determinant parity gives a stronger integral refinement but is not
-needed for lifting. A divisor l1 estimate gives an O(D log D) certificate
-degree bound and one finite Pade system reconstructs or rejects the
-certificate. The degree order is sharp on standard realizable C2-cover zeta
-ratios. A second standard-cover family gives m exact rational collisions on
+needed for lifting. For the multiplicative certificate itself, an input-only
+divisor estimate gives an O(D log D) degree bound in terms of the reduced
+input degree alone. Its order is sharp abstractly and on standard realizable
+C2-cover zeta ratios. Explicit height and fixed-p bit bounds are supporting
+quantitative consequences; the Pade step is rational reconstruction after a
+degree cap is known. A second standard-cover family gives m exact rational collisions on
 4m+2 vertices and hence an Omega(V) sampling lower bound. For general finite
 groups, recovery holds from a radial set with an interior accumulation point;
 already for C3, Adams--Mobius inversion exhibits the obstruction to a finite
@@ -68,6 +70,24 @@ Competing interests: The authors declare none.
 The same files are unpacked under `submission_bundle/` so portal upload does
 not hide the scripts or their readable outputs inside an archive.
 
+## Venue and paper architecture
+
+ETDS remains a defensible ambitious submission because the principal result
+is the dynamical inverse theorem: finite radial determination of represented
+periodic data for odd-Adams-invariant finite abelian two-group extensions,
+with cross-base recovery, rank- and exponent-independent radial depth, exact
+collisions, and realizable lower bounds. This is a central dynamical problem
+at the interface with number theory and combinatorics. The Mahler theorem is a
+strong supporting theorem that improves the paper's completeness and
+effectivity; it does not carry the journal-tier case.
+
+A symbolic-computation venue is not a better home for the present whole
+paper, whose headline and standard conclusion are dynamical. A focused
+functional-equations extraction was considered, but splitting was declined:
+the quantitative Mahler result is more meaningful here because its sharpness
+is realized by standard C2-cover zeta ratios, while the dynamics paper uses
+the result as its effective arithmetic engine.
+
 ## Supplement policy
 
 Checked 2026-08-15 against the ETDS "Preparing your materials" instructions:
@@ -87,9 +107,12 @@ originality claim for that implication. The parity-free lifting theorem is
 explicitly the combination of Kumiko Nishioka's 1982 special-value theorem,
 the cited Keiji Nishioka result, and an elementary denominator estimate. The
 claimed contribution is limited to parity-compatible algebraic collision
-lifting in the dynamical setting, effective rational-coboundary bounds and
-reconstruction, the cross-base odd-Adams-invariant abelian 2-group theorem,
-and the realizable certificate-degree and linear sampling lower bounds.
+lifting in the dynamical setting, the input-only multiplicative-certificate
+divisor estimate and its sharp lower-bound family, the supporting height and
+fixed-p bit estimates, the cross-base odd-Adams-invariant abelian 2-group
+theorem, and the realizable certificate-degree and linear sampling lower
+bounds. Bare existence and decidability are prior; once a degree bound is
+known, the Pade step is largely standard rational reconstruction.
 
 ## Verified expected results
 

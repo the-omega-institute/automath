@@ -6,8 +6,10 @@ This directory builds two related papers.
   determination for odd-Adams-invariant extensions by arbitrary finite
   abelian 2-groups over possibly different bases, without a twisted-gap
   hypothesis in the open Perron interval. It also contains the parity-free
-  rational critical Mahler lifting theorem, effective certificate bounds,
-  and realizable lower-bound families on standard `C2` covers.
+  rational critical Mahler lifting theorem, a sharp input-only divisor bound
+  for its multiplicative certificate, and realizable lower-bound families on
+  standard `C2` covers. Height and fixed-base bit bounds are recorded as
+  supporting effective consequences.
 - `supplement.tex` contains the Adams-corrected Frobenius-class product
   constant, quotient-cover refinements, and the exact strict-gap `S3`
   witness. These results are logically separate from the inverse theorem.
