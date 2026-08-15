@@ -14,16 +14,17 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 页 | 升档结果(全部经独立复核) | **去向** |
+| 篇 | 页 | 状态 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | 79+33 | ✅ 抽象核定理 + 闭包(仿射/张量积/混合);外审确认无错误步骤 | **JFA** |
-| **A3** `sharp_three_window` | **65+15** | ✅ **线性因果深度,一致于标准 Pisot numeration 系统**;$C_U$ 有效可算;固定 $	heta$ 给匹配下界 | DCDS-A |
-| **A4** `prime_languages` | 27+43 | ✅ weak-Perron 分类($\sqrt{pq}$ 见证)+ 去 (U3);送审中 | Monatshefte |
-| **A5** `finite_parts` | **42+19** | ✅ **parity 非必要(我方主张有误,已更正)** + $\Omega(V)$ 下界 + 可实现尖锐 | ETDS |
-| **A6** `zeckendorf_fibers` | 65+20 | 定理正确、防作弊守住,但**漏引 Dushistova 2007** → 重构为更正/调和定理(codex 中) | JNT |
-| **A7** `upper_fibers` | 33+36 | ⛔ 天花板($P_M$<3%) | Fibonacci Quarterly |
-| **A8** `detector_shells` | 59+19 | ✅ 标准相型族 $N^{-1/4}$ matching minimax | MCAP |
-| **A9** `homological_visibility` | **37+6** | ✅ **Terminal torsor obstruction**(审稿人确认并加强)+ 方案 A | Cahiers |
+| **A2** `cayley_chebyshev` | 79+33 | ✅ 抽象核定理 + 闭包;外审:JFA credible | **JFA** |
+| **A3** `sharp_three_window` | 65+15 | ✅ 线性因果深度,一致于标准 Pisot 系统 | DCDS-A |
+| **A4** `prime_languages` | 27+43 | 外审:无致命错误;**漏引 Charlier–Kreczman 2025**+残差分析过压缩 → 修复中 | Monatshefte |
+| **A5** `finite_parts` | 42+19 | ✅ parity 更正 + $\Omega(V)$ 下界 | ETDS |
+| **A6** `zeckendorf_fibers` | **69+20** | ✅ **重构为对 Dushistova 的更正定理**(定位其 Lemma 7, pp.668–669) | JNT |
+| **A7** `upper_fibers` | 33+36 | ⛔ 天花板 | Fibonacci Quarterly |
+| **A8** `detector_shells` | 59+19 | 外审:机制成立,但**一条结论为假** + 三处缺口 → 修复中 | MCAP |
+| **A9** `homological_visibility` | 37+6 | ✅ Terminal torsor obstruction + 方案 A | Cahiers |
+
 
 
 
@@ -57,15 +58,14 @@
 
 
 
-> **TICK 57 — 七篇升档工作全部落地并复核;第七次优先权遗漏,这次出在新产出上**。池子 1/6(A4 送审在飞);codex 跑 A6 调和;内存 2.18 GB、无孤儿。
+> **TICK 58 — A6 重构为更正定理并复核入库;A4/A8 修复中**。池子空闲;codex 跑 A8、A4 修复;内存 2.0 GB、无孤儿。
 >
-> **A3 量化对了**:(A1) 覆盖**一般严格递增 Pisot numeration 系统**(允许非标准初值、Condition F),摘要写 "uniform over standard Pisot numeration systems",**没有被收窄到我们自己的族** —— 那正是我在任务书里点名的失败模式。$C_U$ 经**有效根隔离**从递推、规范数字集与有界零规范化自动机算出,而非重新数差分顶点(旧的指数界 $(2d_U+1)^{m-1}$ 正是那么来的)。固定 $	heta$ 结果成为**匹配下界**而非孤例。
+> **A6 现在主张的是"更正",不是"新渐近"** —— 这比原主张更锋利,也更站得住。Dushistova 与 Moshchevitin–Zhigljavsky 已进摘要、贡献边界与定理讨论;Proposition 6.4 给出两对象的逐项同一化;Lemma 6.5 是端点更正;常数并列显示(她 $R_s+2R_s^2$,本文 $2R_s^2$)。
 >
-> **A9 的 no-go 被审稿人接受并加强**,已入正文为 **Terminal torsor obstruction** 定理;方案 A 采纳(标记映射**取代**而非削弱旧条款),方案 B 以"**not adopted**"的 remark 记录、不混用。档位如实未抬:他说这条更正不实质提升档位。
+> **声称一篇已发表的 Sbornik 定理有误,是按唯一负责任的方式做的**:定位到**她的 Lemma 7, pp. 668–669**;正文明写该更正**只涉及该定理的首项系数,不涉及她论文的其他结果**;并记录沿用了**与已发表版本相同的 empty-continuant、末位数字、指数约定** —— 即先排除了"只是约定不同"这个替代解释,才断定是记账错误。任务书原本允许相反结论:若查明是约定差异,须写在报告第一行并改述。
 >
-> **A6 第七次优先权遗漏,且是本次会话新产出的工作**。数学全过(continuant 证明正确、$b_C=8$ 正确、**防作弊条款确实守住**),但 **Dushistova 2007(Sbornik: Math. 198, 661–690, Brocot 序列)定义了同一个对象且给出更强渐近**,首项常数不一致(她 $R_s+2R_s^2$,我们 $2R_s^2$)。审稿人认为**我们很可能改正了她的端点记账错误** —— 若属实比"新渐近"更锋利。已派工重构为**更正与调和定理**,并加护栏:声称已发表定理有误必须精确狭窄可核,**若查明只是约定差异必须写在报告第一行并改述**。
->
-> **七篇七次优先权遗漏,模式已明确**:不是历史马虎,而是**宣称对象为新之前,前驱文献检索力度不够**。
+> **本次会话两次在新产出上撞优先权**(A6 的 Dushistova、A4 的 Charlier–Kreczman 2025-12),八篇累计八次。这已不是历史包袱,而是**宣称"新"之前的前驱检索强度不足**。A4 的任务书据此加了一条:**先读对方论文再写比较,若重叠比审稿人说的更大,照实报,不许把比较调得对我们有利**。
+
 
 
 
