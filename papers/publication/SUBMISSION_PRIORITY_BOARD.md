@@ -17,7 +17,7 @@
 | 篇 | 页 | 最新裁决 | **去向** |
 |---|--:|---|---|
 | **A2** `cayley_chebyshev` | 79+33 | JFA credible;抽象核定理 + 闭包 | **JFA** |
-| **A3** `sharp_three_window` | 65+15 | 定理 A 已证已复核;**回验在飞** `6c70283d` | DCDS-A |
+| **A3** `sharp_three_window` | 64+15 | ✅ **升档裁定维持(依证明);Condition F 已删** | **TAMS**(ETDS 备选;DCDS-A 保守)|
 | **A4** `prime_languages` | 29+43 | ✅ **minor revision, publishable thereafter** | Monatshefte |
 | **A5** `finite_parts` | 42+19 | parity 更正 + $\Omega(V)$ 下界 | ETDS |
 | **A6** `zeckendorf_fibers` | 69+20 | ✅ **更正确认成立;优先权异议撤销;审稿人反对降投** | **Transactions**(JNT/ETDS 备选) |
@@ -59,20 +59,17 @@
 
 
 
-> **TICK 70 — 第三代提问("领域标准对象")四篇全部投出;A3 终修在 codex 手里。**
+> **TICK 71 — A3 终修独立复核通过并提交 `89e376c14`;A2/A8 补投第三代提问。** 池 4/6,四份问答全部 `waiting_response`、worker 19–49 秒前活跃,无可收割。
 >
-> | 篇 | 在飞 task id | 状态 |
-> |---|---|---|
-> | A4 `prime_languages` | `3b6b5991-740c-4e6f-bed5-d4d0a957a1cd` | waiting_response |
-> | A7 `upper_fibers` | `8ca43d8c-b3f5-4360-897a-048ba8e78d34` | waiting_response |
-> | A5 `finite_parts` | `34c44294-2678-4a31-80b7-7dae3d6c496d` | 重发(首次 `extraction_failure`) |
-> | A9 `homological_visibility` | `47eb976a-6e06-4e7a-b4d6-a2f9ed3c1ba6` | dispatched |
+> **Condition F 是真删,不是删漏。** 我自己查过:定理陈述与外审要求逐字一致;节内标准假设没有把它从后门放回;$K_U^*=\lceil d_UA_U/(b_U(eta-1))ceil$ 由有效增长不等式直接给出进位区间;$\delta_U^*>0$ 由 $eta$ 无理($l
+e0$)与整数性($l=0$)两支得到。有界零自动机只剩"可选数值锐化",明写**既非假设也非逻辑输入**。剩余 Condition F 字样全在论证其不被需要(含 $x^3-3x^2+2x-1$ 这个 Pisot 但不满足 F 的反例)。
 >
-> 这一代问题打的是历次报告共同的诊断:**我们的定理关于本文定义的对象,升档要求关于领域自身研究的对象**。给外审看的是**机器映射**(每个装置吃什么吐什么)而非结果清单,并先要他**修正我们列的标准对象清单**再逐项判"机器碰到没有"。硬检验:**目标定理须能在不使用本文任何自造术语的前提下陈述** —— 堵死"把自家结果换古典腔调重述"这个假阳性。
+> **独立复核**(未采信 agent 自述):`latexmk -C` 后从零重建两份文档均 exit 0,未定义引用/引文/重复标签皆 0,64+15 页;测试 10+22=**32 通过**;三个 verifier **0 failures**;`SHA256SUMS` **11/11 OK**、LF,且我跑完后 `git status -- artifacts` 仍干净;最长 `.tex` 770 行;无修订痕迹。
 >
-> codex 三处把模板推得更狠:A5 把该检验落成**术语黑名单**并预封三个夸大出口(扭曲行列式全等不得读作共轭/强移位等价/上同调等价;$\Omega(D\log D)$ 证书族不得膨胀成 $\Omega(V\log V)$,已证只有 $\Omega(V)$);A7 要求把"残余贡献是否仍属重新包装"当作未决问题;A4 写死 Charlier–Kreczman 限定(其 Prop 10 / Remark 12 已含那步余类增长,故渐近机制的优先权不属我们)。
+> ⚠️ **投 TAMS 前的硬前置:本篇仍挂在 DCDS 审稿中**(`submission_receipt.md`:Paper ID `260511-Zhang-2`,2026-05-11 投出,Under Review)。codex 未擅自声明独家性,而是在 metadata 记了前置条件、cover letter 回避了"未在他处审议"的措辞 —— 处理正确,但**撤稿与否需作者决定**。
 >
-> **A3**:codex 正执行外审送上门的第 (c) 条杠杆 —— 删 Condition F / zero preservation(他称 (A1) 证明从未用到,并给出 $K_U^*$ 有限进位区间替代)。已设反向闸:**若发现某步真依赖它,不许删,报告是哪一步。**
+> A2(JFA)、A8(Bernoulli)已派 codex 生成第三代问题:它们虽有 tier-2 背书,但**从未被问过领域标准对象这一层**。
+
 
 
 
