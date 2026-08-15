@@ -6,9 +6,10 @@
 - Article type: Original Paper
 - Submission components: main article, supplementary material, cover letter
 
-The journal is selected because the manuscript's central objects are a
-constrained D-MAP, its renewal law, phase-type and weak-equivalence fibres,
-quotient inversion, and fixed-setting inference for dependent event records.
+The journal is selected because the manuscript's central object is singular
+stationary-record inference for sampled generalized-Erlang and serial
+discrete phase-type renewals, with the constrained D-MAP as its two-state
+instance.
 The sampled counter supplies a kernel realization; it is not presented as an
 independently analysed physical system. Stochastic Models is a possible
 alternative only under a narrower treatment that further compresses the
@@ -16,7 +17,7 @@ statistical material and expands the D-MAP/phase-type structural analysis.
 
 ## Manuscript
 
-- Title: Renewal laws, quotient inversion, and Markovian fibres for a killed-reset D-MAP
+- Title: Stationary double-pole inference for sampled generalized-Erlang renewal records
 - Authors: Haobo Ma; Wenlin Zhang
 - Corresponding author: Wenlin Zhang
 - Corresponding email: e1327962@u.nus.edu
@@ -25,32 +26,27 @@ statistical material and expands the D-MAP/phase-type structural analysis.
 
 ## Abstract
 
-We study a two-state killed-reset discrete-time Markovian arrival process
-(D-MAP) through its stationary binary output. The deterministic post-arrival
-reset makes the visible process renewal but does not make the hidden
-representation identifiable. We derive the Palm gap law, its increasing
-zero-run hazard, the one-mode covariance tail, the exact 1-dependence
-criterion, and finite-word probabilities. Three visible inclusion
-probabilities give a rational inverse to the symmetric survival coordinates.
-This three-inclusion formula is presented as a candidate original result
-pending complete reduction against canonical DMAP2 coordinates; it identifies
-the unordered survival pair, not a labelled realization. Intersecting the
-weak-equivalence class with the killed-reset Markov cone gives an explicit
-two-state fibre arc whose endpoints are rate-swapped triangular kernels. For
-minimal interior higher-state kernels, the fibre contains a local
-positivity-preserving similarity manifold, while the pure serial result is a
-finite-coordinate sampled-tail specialization of generalized-Erlang and
-Coxian theory. For a fixed model and complete-cycle convention, we establish
-a three-inclusion central limit theorem, a complete-visible-law specification
-test, a root-free physical-image test, and a quotient delta method. Abstract
-Markov-Palm tangent calculations, moving-dimensional Gaussian coupling, an
-exact complete-Palm-gap split experiment, and a pointwise projection example
-are placed in the supplement.
+We determine the stationary-record limit experiment when two rates collide in
+a sampled generalized-Erlang, equivalently serial discrete phase-type, renewal
+process. For fixed serial order, one isolated double collision, compact
+positive rate sets, uniformly separated remaining rates, and known sampling
+interval, the identifiable collision coordinate is the squared
+half-separation. The exact stationary likelihood, including equilibrium age
+and residual-life factors and random renewal stopping, is uniformly locally
+asymptotically normal in the nuisance coordinates and squared separation at
+rate N^{-1/2}. A sampled pole-order argument proves uniform information
+nondegeneracy. The Gaussian half-space experiment yields an efficient
+one-sided collision test, and a recurrence estimator together with a
+contiguity lower bound gives the matching N^{-1/4} minimax rate for the
+unordered rate multiset. The centre and noncolliding rates remain root-N. We
+first prove the complete stationary experiment for the present two-state
+sampled counter and then the fixed-order serial theorem. Existing two-state
+population algebra and fixed-setting diagnostics are retained as complements.
 
 ## Keywords
 
-constrained D-MAP; phase-type identifiability; weak equivalence; similarity
-orbit; renewal process; quotient inversion; specification testing
+generalized-Erlang distribution; serial phase type; singular LAN; minimax
+rate; stationary renewal record; double pole; constrained D-MAP
 
 ## Priority And Scope
 
@@ -59,7 +55,7 @@ orbit; renewal process; quotient inversion; specification testing
 - The weak-equivalence comparison uses Ramirez-Cobo and Lillo as a formula-level antecedent.
 - The serial phase-type comparison uses He-Zhang generalized-Erlang and Coxian theory as a formula-level antecedent.
 - Sorted-root and log-rate limits are consequences of the quotient delta method, not independent major contributions.
-- The supplement's singular likelihood statement is an exact product experiment for independent complete Palm gaps; it does not claim stationary-record endpoint equivalence.
+- The supplement's singular likelihood statement remains an exact product experiment for independent complete Palm gaps; the new main Theorems F-G separately prove the stationary-record experiment.
 
 ## Declarations
 

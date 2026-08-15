@@ -168,19 +168,18 @@ numeration system in the literature.
 \begin{definition}[Canonical eventually recurrent numeration]
   \label{def:canonical-eventually-recurrent-numeration}
   A canonical eventually recurrent numeration system consists of:
-  \begin{enumerate}[label=\textup{(U\arabic*)}]
-    \item a strictly increasing sequence of positive integers
+  \begin{enumerate}[label={}]
+    \item[\textup{(U1)}] a strictly increasing sequence of positive integers
     \(U=(U_n)_{n\ge0}\) and a finite digit alphabet
     \(A\subseteq\NN\) containing \(0\);
-    \item an LSD-first language \(\mathcal R_U\subseteq A^\ast\), with
+    \item[\textup{(U2)}] an LSD-first language
+    \(\mathcal R_U\subseteq A^\ast\), with
     \[
       \val_U(x_0\cdots x_{m-1})
         :=\sum_{j=0}^{m-1}x_jU_j,
     \]
     for which \(\val_U:\mathcal R_U\to\NN_{\ge1}\) is a bijection;
-    \item strict length ordering: if \(r,s\in\mathcal R_U\) and
-    \(\abs r<\abs s\), then \(\val_U(r)<\val_U(s)\);
-    \item integers \(J\ge0,d\ge1,a_0,\ldots,a_{d-1}\), with
+    \item[\textup{(U4)}] integers \(J\ge0,d\ge1,a_0,\ldots,a_{d-1}\), with
     \(a_0\ne0\), such that
     \[
       U_{n+d}=a_0U_n+a_1U_{n+1}+\cdots+a_{d-1}U_{n+d-1}
@@ -189,7 +188,9 @@ numeration system in the literature.
   \end{enumerate}
   Relative to this recurrence witness, it is a \emph{unit system} if
   \(\abs{a_0}=1\). No regularity of \(\mathcal R_U\) is included in
-  this definition.
+  this definition, and no comparison between the values of canonical words
+  of different lengths is assumed. The label \textup{(U4)} is retained to
+  preserve the numbering of the recurrence hypothesis used throughout.
 \end{definition}
 
 \begin{lemma}[Affine recurrence block action]
@@ -260,7 +261,8 @@ synchronously at \(2k\) factors \cite[Lemma~3.2]{SekiEtAl1991}. The
 
 \begin{theorem}[Synchronized local-congruence orbit]
   \label{thm:mcfl-synchronized-congruence-orbit}
-  Let \((U,A,\mathcal R_U)\) satisfy \textup{(U1)--(U4)}, and let
+  Let \((U,A,\mathcal R_U)\) satisfy \textup{(U1)}, \textup{(U2)}, and
+  \textup{(U4)}, and let
   \(L\subseteq\mathcal R_U\) be an infinite \(k\)-MCFL. There are words
   \[
     \begin{gathered}
@@ -277,7 +279,8 @@ synchronously at \(2k\) factors \cite[Lemma~3.2]{SekiEtAl1991}. The
   \[
     \sum_{j=1}^k(\abs{v_j}+\abs{s_j})>0,
   \]
-  and \(N(t):=\val_U(W(t))\) is strictly increasing. Moreover, for
+  and the positive integers \(N(t):=\val_U(W(t))\) are pairwise distinct.
+  Moreover, for
   every \(q\ge2\) with \(\gcd(q,a_0)=1\), there is \(H(q)\ge1\) such
   that
   \[
@@ -328,9 +331,25 @@ synchronously at \(2k\) factors \cite[Lemma~3.2]{SekiEtAl1991}. The
     \abs{W(t+1)}-\abs{W(t)}
       =\sum_{j=1}^k(\abs{v_j}+\abs{s_j})>0.
   \]
-  Both words are canonical, so \textup{(U3)} gives
-  \(N(t+1)>N(t)\).
+  Thus the words \(W(t)\) have pairwise distinct lengths. They are
+  canonical, and injectivity in \textup{(U2)} makes the values \(N(t)\)
+  pairwise distinct.
 \end{proof}
+
+\paragraph{Length-order audit.}
+The preceding proof is the only place where strict ordering by canonical
+length was used in the original argument. Its later appearances were
+consequences of the resulting value monotonicity, and are discharged as
+follows. In \Cref{thm:mcfl-local-adic-fingerprint}, pairwise distinctness
+separates a return point from the original point. In
+\Cref{lem:s-unit-increasing-recurrence-rigidity,thm:bounded-outside-support-geometric-ray},
+the extracted recurrence needs only pairwise distinct positive terms. In
+\Cref{thm:unit-mcfl-deep-congruence-chain}, a sufficiently large multiple
+of a return time selects a value larger than the current one. The same
+finite-below-current-value argument supplies every increasing choice in
+\Cref{thm:unit-mcfl-divisibility-tree}. These exhaust the downstream uses;
+the strict increase of the place-value sequence in \textup{(U1)} is a
+separate hypothesis and remains in force.
 
 \begin{lemma}[Explicit grammar for a synchronized ray]
   \label{lem:synchronized-ray-linear-mcfg}
@@ -410,9 +429,9 @@ obstruction.
 \begin{proof}
   Let \(N(t)\in Y\), and let its basic neighborhood be specified modulo
   an allowed \(q\). If \(q=1\), take any later orbit point. If \(q\ge2\),
-  \Cref{thm:mcfl-synchronized-congruence-orbit} gives
-  \(N(t+H(q))\equiv N(t)\pmod q\), and strict increase makes these points
-  distinct. Thus \(Y\) has no isolated point.
+    \Cref{thm:mcfl-synchronized-congruence-orbit} gives
+    \(N(t+H(q))\equiv N(t)\pmod q\). The two parameters differ, and the
+    orbit values are pairwise distinct. Thus \(Y\) has no isolated point.
 
   The allowed congruences separate distinct positive integers: for
   \(m\ne n\), choose a prime outside the finite set \(S\) that does not
@@ -618,4 +637,3 @@ every \(n\ge J_{\mathrm r}\), and put
 \[
   S_{\mathrm r}=\{p:p\text{ is prime and }p\mid c_0\}.
 \]
-

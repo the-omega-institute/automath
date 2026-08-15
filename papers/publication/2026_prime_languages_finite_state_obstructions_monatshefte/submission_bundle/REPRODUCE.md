@@ -41,6 +41,8 @@ Expected conclusion:
 ```text
 systems checked: 6
 affine action cases: 2282
+weak-Perron radical cases: 18
+length-order-free selection cases: 1
 congruence failures: 0
 OVERALL: PASS
 ```
@@ -50,16 +52,16 @@ verifier exits nonzero if a total drifts.
 
 ## Unit tests
 
-Run the artifact-local suite:
+Run the artifact-local suite and regenerate its timing-free LF transcript:
 
 ```powershell
-python -m unittest -v artifacts.test_verify_pisot_pumping
+python artifacts/run_unit_tests.py --output artifacts/unittest_output.txt
 ```
 
 Expected summary:
 
 ```text
-Ran 19 tests
+Ran 21 tests
 OK
 ```
 
@@ -68,16 +70,15 @@ The complete transcript is archived as `artifacts/unittest_output.txt`.
 ## Integrity
 
 `artifacts/SHA256SUMS` covers the verifier, unit tests, archived outputs,
-literature audit, reproduction instructions, and submission documents. Verify
-it in PowerShell with:
+literature audit, artifact-local reproduction instructions, and LF policy.
+Paths are relative to the `artifacts` directory. Verify from the paper
+directory with exactly:
 
-```powershell
-Get-Content artifacts/SHA256SUMS | ForEach-Object {
-    $hash, $name = $_ -split '  ', 2
-    $actual = (Get-FileHash -Algorithm SHA256 $name).Hash.ToLower()
-    if ($actual -ne $hash) { throw "checksum mismatch: $name" }
-}
+```sh
+cd artifacts && sha256sum -c SHA256SUMS
 ```
+
+A successful check prints exactly 8 `OK` lines and no failures.
 
 These finite checks support reproducibility; the mathematical proofs do not
 infer universal statements from sampled cases.

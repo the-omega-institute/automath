@@ -21,10 +21,12 @@ The deterministic verifier is expected to report:
 - tail-prefix action cases: 63;
 - geometric ray cases: 13;
 - linear Perron classification cases: 6;
+- weak-Perron radical cases: 18;
+- length-order-free selection cases: 1;
 - geometric-ratio and Evertse support cases: 4 each;
 - every recorded failure count: 0;
 - final status: `OVERALL: PASS`.
 
-The unit-test archive must report 19 tests and `OK`. The verifier contains
+The unit-test archive must report 21 tests and `OK`. The verifier contains
 exact expected totals and exits nonzero if any archived count drifts. Neither
 script uses the network or randomness.

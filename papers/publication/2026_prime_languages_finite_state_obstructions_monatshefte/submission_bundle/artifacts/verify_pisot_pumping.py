@@ -24,7 +24,7 @@ from typing import Iterable, Sequence
 Matrix = tuple[tuple[int, ...], ...]
 Word = tuple[int, ...]
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.1.0"
 EXPECTED_REPORT_COUNTS = {
     "systems_checked": 6,
     "affine_cases": 2282,
@@ -42,6 +42,10 @@ EXPECTED_REPORT_COUNTS = {
     "geometric_ray_failures": 0,
     "linear_perron_classification_cases": 6,
     "linear_perron_classification_failures": 0,
+    "weak_perron_radical_cases": 18,
+    "weak_perron_radical_failures": 0,
+    "length_order_free_selection_cases": 1,
+    "length_order_free_selection_failures": 0,
     "geometric_ratio_support_cases": 4,
     "geometric_ratio_support_failures": 0,
     "evertse_support_bound_cases": 4,
@@ -110,6 +114,36 @@ def evertse_prime_ideal_norm_bound(
 
 def system_by_name(name: str) -> LinearSystem:
     return next(system for system in SYSTEMS if system.name == name)
+
+
+def mixed_radix_weak_perron_system(
+    left_radix: int, right_radix: int
+) -> LinearSystem:
+    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
+    if left_radix < 2 or right_radix < 2:
+        raise ValueError("both radices must be at least two")
+    product_radix = left_radix * right_radix
+    return LinearSystem(
+        name=f"mixed_radix_{left_radix}_{right_radix}",
+        polynomial=f"x^2-{product_radix}",
+        recurrence=(product_radix, 0),
+        initials=(1, left_radix),
+        max_digit=max(left_radix, right_radix) - 1,
+    )
+
+
+def select_increasing_return(
+    values: Sequence[int], start_index: int, return_time: int
+) -> int:
+    """Select a later return whose value exceeds the value at the start."""
+    if return_time < 1 or not 0 <= start_index < len(values):
+        raise ValueError("the start index and return time must be valid")
+    if any(value < 1 for value in values) or len(set(values)) != len(values):
+        raise ValueError("return-orbit values must be positive and pairwise distinct")
+    for index in range(start_index + return_time, len(values), return_time):
+        if values[index] > values[start_index]:
+            return index
+    raise LookupError("the finite sample contains no increasing return")
 
 
 def identity(size: int) -> Matrix:
@@ -837,6 +871,25 @@ def run_verification() -> dict[str, object]:
         system.name: has_bounded_outside_support_mcfl(system)
         for system in SYSTEMS
     }
+    weak_perron_examples = ((2, 3), (2, 5), (3, 5))
+    weak_perron_radical_cases = 6 * len(weak_perron_examples)
+    weak_perron_radical_failures = 0
+    for left_radix, right_radix in weak_perron_examples:
+        system = mixed_radix_weak_perron_system(left_radix, right_radix)
+        product_radix = left_radix * right_radix
+        for exponent in range(6):
+            ray_word = (0,) * (2 * exponent) + (1,)
+            weak_perron_radical_failures += int(
+                value(system, ray_word) != product_radix**exponent
+                or not is_canonical(system, ray_word)
+            )
+    length_order_free_selection_cases = 1
+    length_order_free_selection_failures = int(
+        select_increasing_return(
+            (10, 5, 7, 1, 9, 2, 16), start_index=0, return_time=2
+        )
+        != 6
+    )
     ratio_support_examples = (
         (2, 5, 8, None),
         (2, 5, 6, 3),
@@ -881,6 +934,10 @@ def run_verification() -> dict[str, object]:
         "linear_perron_classification_failures": int(
             perron_decisions != expected_perron_decisions
         ),
+        "weak_perron_radical_cases": weak_perron_radical_cases,
+        "weak_perron_radical_failures": weak_perron_radical_failures,
+        "length_order_free_selection_cases": length_order_free_selection_cases,
+        "length_order_free_selection_failures": length_order_free_selection_failures,
         "geometric_ratio_support_cases": len(ratio_support_examples),
         "geometric_ratio_support_failures": ratio_support_failures,
         "evertse_support_bound_cases": len(evertse_support_examples),
@@ -927,6 +984,14 @@ def _format_report(
         f"{report['linear_perron_classification_cases']}",
         "linear Perron classification failures: "
         f"{report['linear_perron_classification_failures']}",
+        "weak-Perron radical cases: "
+        f"{report['weak_perron_radical_cases']}",
+        "weak-Perron radical failures: "
+        f"{report['weak_perron_radical_failures']}",
+        "length-order-free selection cases: "
+        f"{report['length_order_free_selection_cases']}",
+        "length-order-free selection failures: "
+        f"{report['length_order_free_selection_failures']}",
         "geometric ratio support cases: "
         f"{report['geometric_ratio_support_cases']}",
         "geometric ratio support failures: "
@@ -957,6 +1022,8 @@ def _format_report(
         "tail_prefix_failures",
         "geometric_ray_failures",
         "linear_perron_classification_failures",
+        "weak_perron_radical_failures",
+        "length_order_free_selection_failures",
         "geometric_ratio_support_failures",
         "evertse_support_bound_failures",
     )
@@ -978,7 +1045,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     if arguments.output is None:
         print(formatted)
     else:
-        arguments.output.write_text(formatted + "\n", encoding="utf-8")
+        arguments.output.write_text(
+            formatted + "\n", encoding="utf-8", newline="\n"
+        )
     return 0
 
 

@@ -85,6 +85,38 @@ class PisotPumpingVerifierTests(unittest.TestCase):
             [1, 4, 15, 55, 200, 725, 2625, 9500],
         )
 
+    def test_nonintegral_weak_perron_mixed_radix_family(self):
+        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
+        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
+            with self.subTest(radices=(left_radix, right_radix)):
+                system = verifier.mixed_radix_weak_perron_system(
+                    left_radix, right_radix
+                )
+                product_radix = left_radix * right_radix
+                expected_weights = [
+                    product_radix ** (index // 2)
+                    * (left_radix if index % 2 else 1)
+                    for index in range(10)
+                ]
+                self.assertEqual(verifier.weights(system, 10), expected_weights)
+                self.assertEqual(system.recurrence, (product_radix, 0))
+                self.assertEqual(
+                    [
+                        verifier.value(system, (0,) * (2 * exponent) + (1,))
+                        for exponent in range(6)
+                    ],
+                    [product_radix**exponent for exponent in range(6)],
+                )
+
+    def test_increasing_selection_needs_only_distinct_positive_values(self):
+        self.assertTrue(hasattr(verifier, "select_increasing_return"))
+        values = (10, 5, 7, 1, 9, 2, 16)
+
+        self.assertEqual(
+            verifier.select_increasing_return(values, start_index=0, return_time=2),
+            6,
+        )
+
     def test_geometric_ratio_uses_only_tail_primes(self):
         self.assertIsNone(
             verifier.geometric_ratio_support_obstruction(
@@ -203,6 +235,12 @@ class PisotPumpingVerifierTests(unittest.TestCase):
         self.assertEqual(report["geometric_ray_failures"], 0)
         self.assertEqual(report["linear_perron_classification_cases"], 6)
         self.assertEqual(report["linear_perron_classification_failures"], 0)
+        self.assertIn("weak_perron_radical_cases", report)
+        self.assertEqual(report["weak_perron_radical_cases"], 18)
+        self.assertEqual(report["weak_perron_radical_failures"], 0)
+        self.assertIn("length_order_free_selection_cases", report)
+        self.assertEqual(report["length_order_free_selection_cases"], 1)
+        self.assertEqual(report["length_order_free_selection_failures"], 0)
         self.assertEqual(report["geometric_ratio_support_cases"], 4)
         self.assertEqual(report["geometric_ratio_support_failures"], 0)
         self.assertEqual(report["evertse_support_bound_cases"], 4)

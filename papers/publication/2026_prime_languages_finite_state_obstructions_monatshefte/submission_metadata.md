@@ -59,7 +59,7 @@ associated with the submitted project.
 - `supplement.pdf`: same clean-build standard.
 - Verifier: 6 systems, 2282 affine cases, zero failure counters, final line
   `OVERALL: PASS`.
-- Unit tests: 19 tests, final result `OK`.
+- Unit tests: 21 tests, final result `OK`.
 - Integrity: every digest in `artifacts/SHA256SUMS` matches.
 
 Before completing the portal submission, open every attachment through the

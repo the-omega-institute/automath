@@ -30,6 +30,6 @@ Corollary 1.19. Each number and environment type matches the final supplement.
 ## Required referee-readable conclusions
 
 - `artifacts/pisot_pumping_output.txt` ends with `OVERALL: PASS`.
-- `artifacts/unittest_output.txt` reports 19 tests and `OK`.
+- `artifacts/unittest_output.txt` reports 21 tests and `OK`.
 - `artifacts/literature_check.md` records the priority boundary.
 - `artifacts/SHA256SUMS` verifies the submitted scripts and text records.

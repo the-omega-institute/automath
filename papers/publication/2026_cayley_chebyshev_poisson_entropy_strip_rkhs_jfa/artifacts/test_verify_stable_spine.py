@@ -71,9 +71,10 @@ class StableSpineManuscriptTests(unittest.TestCase):
             r"H'(t)",
             r"H''(t)",
             r"H'''(t)",
-            r"\|A_s^\lambda-1\|_{L^1(\Omega_{\alpha,d})}",
-            r"\|A_s^\nu-A_s^\eta\|_{L^1(\Omega_{\alpha,d})}",
-            r"\label{eq:arbitrary-tail-proxy-positive-entropy-finite}",
+            r"\|A_{p,s}^\lambda-1\|_1",
+            r"\|A_{p,s}^\nu-A_{p,s}^\eta\|_1",
+            r"\label{eq:abstract-tail-normalized-proxy-entropy}",
+            "Bounded-score translate entropy",
             r"\label{cor:arbitrary-tail-defect-positive-moment-condition}",
             r"\label{cor:arbitrary-tail-defect-nonvacuousness}",
         )
@@ -84,19 +85,27 @@ class StableSpineManuscriptTests(unittest.TestCase):
         source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
         required = (
             "Abstract positive tail-jet kernel theorem",
+            r"\label{thm:abstract-positive-tail-jet-kernel}",
             r"\omega_{p,r}(t)",
-            "Isotropic stable kernels",
+            "Closure and verified kernel classes",
+            "invertible affine images",
+            "finite tensor products",
+            "finite positive mixtures",
             "Poisson kernel",
-            "Multivariate Student kernels",
-            "Gaussian obstruction",
+            "multivariate Student kernel",
+            "Gaussian mechanism boundary",
             r"\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma",
-            "specialization is exactly Theorem",
+            "bounded-score/additive branch",
+            "unbounded-score/multiplicative or exponential-score",
         )
         for text in required:
             self.assertIn(text, source)
 
-        self.assertIn(r"\newtheorem*{unnumberedtheorem}{Theorem}",
-                      (ROOT / "main.tex").read_text(encoding="utf-8"))
+        self.assertNotIn(r"\textup{(K3)}", source)
+        self.assertIn(
+            r"\begin{corollary}[Stable specialization:",
+            source,
+        )
 
     def test_fixed_scale_robustness_scope_and_rigidity_are_explicit(self) -> None:
         source = read_tex_source(ROOT / "sec_verified_A2_results.tex")

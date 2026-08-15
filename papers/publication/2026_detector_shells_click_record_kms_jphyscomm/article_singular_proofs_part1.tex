@@ -1,0 +1,223 @@
+\subsection{Stationary likelihood reduction and the two-state proof}
+\label{subsec:stationary-renewal-lan-proof-main}
+
+We use the following renewal lemma with a finite-dimensional parameter
+\(q\).  Its uniform formulation is included because replacing a deterministic
+number of Palm gaps by the stationary record is essential here.
+
+\begin{lemma}[Compact-uniform stationary renewal LAN]
+\label{lem:compact-uniform-stationary-renewal-lan-main}
+Let \(\mathcal Q_0\) be compact.  Suppose that, on a fixed one-sided
+neighbourhood of \(\mathcal Q_0\), the integer-valued Palm gap masses
+\(g_q(k)>0\) satisfy the following bounds for some \(r<1\):
+\[
+ \sup_q g_q(k)\le C(1+k)^m r^k,
+ \qquad
+ \sup_q|\partial_q^a\log g_q(k)|\le C_a(1+k)^{m_a},
+ \quad 1\le |a|\le3.
+\tag{SL1}
+\]
+Assume the same type of polynomial bound for the first two derivatives of
+\(\log S_q(k)\), where \(S_q(k)=\sum_{j\ge k}g_q(j)\), and put
+\(\mu_q=\sum_{k\ge0}S_q(k)\).  If
+\[
+ I(q)=\mu_q^{-1}\sum_{k\ge0}g_q(k)
+ \dot\ell_q(k)\dot\ell_q(k)^\top,
+ \qquad \dot\ell_q=\nabla_q\log g_q,
+\tag{SL2}
+\]
+is positive definite on \(\mathcal Q_0\), then the stationary binary renewal
+record is LAN, uniformly over \(q\in\mathcal Q_0\) and bounded admissible
+local vectors \(h\):
+\[
+ \log\frac{dP_{q+h/\sqrt N}^{(N)}}{dP_q^{(N)}}
+ =h^\top\Delta_{N,q}-\frac12h^\top I(q)h+o_{P_q}(1),
+ \qquad
+ \Delta_{N,q}\Rightarrow\mathcal N\{0,I(q)\}.
+\tag{SL3}
+\]
+The convergence of the central sequence and the remainder are compact-uniform.
+The conclusion remains valid when some coordinates of \(h\) are restricted
+to a closed convex cone.
+\end{lemma}
+
+\begin{proof}
+Let the clicks in \([0,N-1]\) be
+\(0\le C_1<\cdots<C_J<N\), set
+\[
+ A=C_1,\qquad R=N-1-C_J,
+ \qquad G_j=C_{j+1}-C_j-1\quad(1\le j<J).
+\]
+For \(J\ge1\), stationary Palm inversion gives the exact record probability
+\[
+ P_q^{(N)}(A_0,\ldots,A_{N-1})
+ =\frac1{\mu_q}S_q(A)
+   \prod_{j=1}^{J-1}g_q(G_j)S_q(R).
+\tag{SL4}
+\]
+Indeed, \(S_q(A)/\mu_q\) is the equilibrium forward-recurrence mass of the
+first click, the displayed gaps are complete Palm cycles, and after the last
+click the absence of another click contributes \(S_q(R)\).  The no-click
+event is bounded by \(CN^{m+1}r^N\), uniformly in \(q\), by summing over the
+equilibrium cycle containing the whole window.
+
+The common exponential envelope gives, uniformly in \(q\),
+\[
+ J/N\longrightarrow1/\mu_q,qquad
+ J=N/\mu_q+O_{P_q}(\sqrt N),qquad
+ \max\{A,R,G_1,\ldots,G_{J-1}\}=O_{P_q}(\log N).
+\tag{SL5}
+\]
+The first assertion is the uniform renewal law of large numbers; the second
+follows from the uniform finite-variance renewal CLT or maximal inequality;
+and the last follows by a union bound from \textup{(SL1)}.  The polynomial
+log-tail derivative bound and \textup{(SL5)} imply, for bounded \(h\),
+\[
+ \log\frac{\mu_q}{\mu_{q+h/\sqrt N}}
+ +\log\frac{S_{q+h/\sqrt N}(A)}{S_q(A)}
+ +\log\frac{S_{q+h/\sqrt N}(R)}{S_q(R)}=o_{P_q}(1)
+\tag{SL6}
+\]
+uniformly.  Thus the stationary endpoints do not alter the local experiment.
+
+Taylor expansion of the complete-gap part of \textup{(SL4)} yields
+\[
+ \frac1{\sqrt N}\sum_{j=1}^{J-1}h^\top\dot\ell_q(G_j)
+ +\frac1{2N}\sum_{j=1}^{J-1}
+ h^\top\ddot\ell_q(G_j)h+o_{P_q}(1).
+\tag{SL7}
+\]
+The third-order remainder is uniform because \textup{(SL1)} supplies a
+common integrable polynomial envelope, so its expectation is \(O(N^{-1/2})\).
+Differentiating \(\sum_kg_q(k)=1\), justified by \textup{(SL1)}, gives
+\[
+ \EE_q\dot\ell_q(G)=0,qquad
+ \EE_q\ddot\ell_q(G)=-\EE_q\{
+ \dot\ell_q(G)\dot\ell_q(G)^\top\}.
+\tag{SL8}
+\]
+The uniform law of large numbers, \textup{(SL5)}, and \textup{(SL8)} turn the
+second term in \textup{(SL7)} into \(-h^\top I(q)h/2+o_P(1)\).
+The stopped i.i.d. score CLT gives
+\[
+ \Delta_{N,q}:=N^{-1/2}\sum_{j=1}^{J-1}\dot\ell_q(G_j)
+ \Rightarrow\mathcal N\{0,I(q)\}.
+\tag{SL9}
+\]
+All assertions are uniform by the subsequence criterion: every sequence in
+the compact base set has a convergent subsequence, and the common exponential
+and polynomial envelopes give Lindeberg, uniform integrability, endpoint
+control, and the Taylor remainder along it.  Combining
+\textup{(SL4)}--\textup{(SL9)} proves \textup{(SL3)}.  Restricting local
+coordinates to a cone changes only the parameter set of the limit experiment.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:stationary-two-state-collision-main}]
+Let \(W=X_1+X_2\), where the two independent exponential holding times have
+rates \(c+d\) and \(c-d\).  Its Laplace transform and the transform of its
+continuous survival function are
+\[
+ \phi_{c,\delta}(s)
+ =\frac{c^2-\delta}{(s+c)^2-\delta},
+ \qquad
+ H_{c,\delta}(s)=\frac{1-\phi_{c,\delta}(s)}s.
+\tag{T21}
+\]
+Differentiation at \(\delta=0\) gives exactly \textup{(SC5)} and
+\[
+ \partial_cH_{c,0}(s)=-\frac{2c}{(s+c)^3}.
+\tag{T22}
+\]
+Inverse Laplace transformation and sampling at \(t=k\Delta\tau\) show that
+\(\partial_\delta S_{c,0}(k)\) has a nonzero cubic coefficient at
+\(e^{-c\Delta\tau k}\), whereas \(\partial_cS_{c,0}(k)\) has degree two.
+Taking first differences preserves linear independence.  Since every
+\(g_{c,0}(k)>0\), a linear combination of the two scores can vanish in
+\(L^2(g_{c,0})\) only if the corresponding linear combination of the mass
+derivatives, hence of the tail derivatives, vanishes at every \(k\).  The
+distinct polynomial degrees then force both coefficients to be zero.  This
+proves pointwise positive definiteness in \textup{(SC3)}.
+
+On \([\varepsilon,M]\), partial-fraction inversion gives common bounds
+\[
+ |\partial_c^a\partial_\delta^b S_{c,\delta}(k)|
+ \le C_{a,b}(1+k)^{m_{a,b}}e^{-\varepsilon\Delta\tau k/2}
+\tag{T23}
+\]
+on a fixed neighbourhood with \(c\pm\sqrt\delta>0\).  The corresponding
+log-mass and log-tail derivatives have polynomial bounds; alternatively these
+bounds follow by differentiating the convolution law and conditioning on
+\(W>k\Delta\tau\) or on the sampled absorption bin.  Continuity of
+\(I_2(c)\), dominated by \textup{(T23)}, and compactness now give
+\textup{(SC6)}.  Applying
+\Cref{lem:compact-uniform-stationary-renewal-lan-main} with
+\(q=(c,\delta)\) proves \textup{(SC4)} and the half-plane limit.
+
+For completeness, the efficient central sequence for the collision
+coordinate is
+\[
+ \Delta_{\delta\cdot c,N}
+ =\Delta_{\delta,N}-I_{\delta c}I_{cc}^{-1}\Delta_{c,N},
+ \qquad \Var(\Delta_{\delta\cdot c,N})\longrightarrow J_2(c).
+\tag{T24}
+\]
+Replacing \(c\) and the information entries by compact-uniform consistent
+null estimators changes the standardized statistic by \(o_P(1)\).  The third
+lemma gives mean \(v\sqrt{J_2(c)}\) under the local alternative.  The
+Neyman--Pearson lemma in the residual one-dimensional Gaussian shift gives
+\textup{(SC8)} and its envelope; the one-sided likelihood-ratio statistic is
+the square of the positive part of the same standardized score.  This is the
+standard Gaussian-cone conclusion
+\cite{Chernoff1954LikelihoodRatio,SelfLiang1987NonstandardLRT,
+vanDerVaart1998AsymptoticStatistics}.
+
+We next give an explicit rate-attaining estimator.  From the complete gaps in
+the stationary record define
+\[
+ \widehat S_k=K_N^{-1}\sum_{j=1}^{K_N}\mathbf1_{\{G_j\ge k\}},
+ \qquad 0\le k\le3,
+\tag{T25}
+\]
+with an arbitrary fixed value on \(K_N=0\).  The endpoint deletion and the
+stopped i.i.d. CLT give
+\(\max_{k\le3}|\widehat S_k-S_k|=O_P(N^{-1/2})\) uniformly.  The order-two
+tail recurrence is
+\[
+ S_{k+2}-A S_{k+1}+B S_k=0,qquad
+ A=z_1+z_2,quad B=z_1z_2,quad z_i=e^{-\theta_i\Delta\tau}.
+\tag{T26}
+\]
+Its leading Hankel matrix is nonsingular at the double pole by
+\Cref{cor:nstate-serial-all-collision-identifiability-main}; compactness makes
+the inverse uniform.  Solving the empirical version of \textup{(T26)} gives
+\((\widehat A,\widehat B)-(A,B)=O_P(N^{-1/2})\).
+
+In a neighbourhood of \(A=2z,B=z^2\), the functions
+\[
+ c=-\frac1{2\Delta\tau}\log B,qquad
+ \delta=\frac1{(\Delta\tau)^2}
+ \left[\operatorname{arcosh}\left(\frac{A}{2\sqrt B}\right)\right]^2
+\tag{T27}
+\]
+are real analytic after continuing the square of \(\operatorname{arcosh}\)
+through one.  Let \(\widetilde\delta_N\) be this analytic continuation and
+put \(\widehat\delta_N=(\widetilde\delta_N)^+\).  Then
+\[
+ \widehat c_N-c_N=O_P(N^{-1/2}),qquad
+ \widehat\delta_N-\delta_N=O_P(N^{-1/2})
+\tag{T28}
+\]
+uniformly on bounded collision alternatives.  Because
+\(|\sqrt{x^+}-\sqrt{y}|\le\sqrt{|x-y|}\) for \(y\ge0\), the pair
+\(\{\!\{\widehat c_N\pm\sqrt{\widehat\delta_N}\}\!\}\) satisfies
+\textup{(SC9)}.
+
+Finally compare \(v=0\) and \(v=v_0\).  Their rate multisets are separated
+by \(\sqrt{v_0}N^{-1/4}\), while \textup{(SC4)} makes the two sequences of
+record laws mutually contiguous and gives a nondegenerate finite Gaussian
+likelihood ratio.  If an estimator made the two probabilities in
+\textup{(SC10)} tend to zero for an \(a<\sqrt{v_0}/2\), assigning the record
+to the closer of the two candidate multisets would consistently distinguish
+these contiguous experiments, a contradiction.  This proves
+\textup{(SC10)} and completes the two-state result.
+\end{proof}

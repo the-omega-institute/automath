@@ -41,6 +41,8 @@ Expected conclusion:
 ```text
 systems checked: 6
 affine action cases: 2282
+weak-Perron radical cases: 18
+length-order-free selection cases: 1
 congruence failures: 0
 OVERALL: PASS
 ```
@@ -59,7 +61,7 @@ python artifacts/run_unit_tests.py --output artifacts/unittest_output.txt
 Expected summary:
 
 ```text
-Ran 19 tests
+Ran 21 tests
 OK
 ```
 

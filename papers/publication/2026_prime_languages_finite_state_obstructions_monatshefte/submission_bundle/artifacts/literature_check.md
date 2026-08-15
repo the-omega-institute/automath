@@ -297,7 +297,8 @@ recorded as failures, not as negative results.
 
 The proposed decision target does not define a new problem for the class
 proved in the manuscript. Theorem~3.18 proves that the prime representation
-language of every system satisfying (U1)--(U4) is MCF-immune, and Euclid's
+language of every system satisfying (U1), (U2), and (U4) is MCF-immune, and
+Euclid's
 theorem plus canonical representation makes that language infinite.
 Consequently it is never an MCFL. For effectively presented regular canonical
 linear Pisot U-systems, the requested terminating algorithm is therefore the
@@ -403,7 +404,8 @@ Tarasov--Vyalyi's equivalence between an orbit-hitting problem and a regular-
 language intersection problem, together with the still-open general Skolem
 problem surveyed by Ouaknine--Worrell. Bell et al. prove undecidability for
 unrestricted multiplicative matrix equations, but their matrices do not
-preserve the companion-form digit action or canonical conditions (U1)--(U3),
+preserve the companion-form digit action or canonical conditions (U1), (U2),
+and (U4),
 so this is not an undecidability result for the manuscript's promise class.
 
 The attempted full decision procedure stops at witness compression. For a
@@ -415,8 +417,33 @@ two words with the same DFA endpoints can have different affine recurrence
 matrices, and replacing one by the other can destroy `N(t+1)=b N(t)`. No
 located result provides this bound, and no promise-preserving reduction was
 obtained. General decidability, undecidability, and hardness therefore remain
-open; only the existing positive semidecision and the linear Pisot decision
-theorem are integrated.
+open; only the existing positive semidecision and the weak-Perron algebraic
+classification are integrated.
+
+## Weak-Perron and length-order extension audit (2026-08-15)
+
+Crossref metadata confirmed D. A. Lind, "The entropies of topological
+Markov shifts and a related class of algebraic integers," Ergodic Theory
+and Dynamical Systems 4 (1984), 283--300,
+doi:10.1017/S0143385700002443. The standard weak-Perron characterization
+used in the revised article is the spectral-radius characterization for
+nonnegative integral matrices; Perron--Frobenius periodicity then implies
+that a positive power coalesces all conjugates of maximal modulus.
+
+The revised classification is not a claim of general decidability. It proves
+the five-way equivalence between bounded outside support, a geometric
+synchronized scheme, an integral positive power of the weak Perron number,
+divisibility of a binomial by the minimal tail polynomial, and eventual
+scalar periodicity. The alternating-radix family with successive radices
+\(p,q\ge2\) and nonsquare \(pq\) provides regular nonintegral members with
+minimal polynomial \(X^2-pq\).
+
+Crossref metadata also confirmed D. Caucal and M. Le Gonidec,
+"Context-Free Sequences," ICTAC 2014, Lecture Notes in Computer Science
+8687, pp. 259--276, doi:10.1007/978-3-319-10882-7_16. The revised article
+names the nearby degeneracy/Cobham-extension problem only as an open
+interface. Its one-orbit existential conclusion does not compare the global
+structure of one set in two multiplicatively independent representations.
 
 ## Submission consistency check (2026-08-15)
 
@@ -427,7 +454,7 @@ Schutzenberger results as prior inputs. The retained claims are limited to the
 recurrence-language combination stated with its canonical-presentation
 hypotheses, the deleted-prime local rank calculation, the nonunit escape
 dichotomy, the geometric-ray characterization, and the stated unit and
-Perron-recurrence consequences. The separately submitted finite-state results
+weak-Perron consequences. The separately submitted finite-state results
 remain in Supplementary Information and are compared explicitly with Shen and
 Dubbe. No broader priority claim is made for fixed-base prime CF-immunity or
 for arbitrary objects called Pisot numeration systems.
