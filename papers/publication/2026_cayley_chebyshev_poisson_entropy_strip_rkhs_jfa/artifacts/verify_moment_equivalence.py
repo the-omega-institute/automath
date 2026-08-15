@@ -17,7 +17,9 @@ import argparse
 import itertools
 import json
 import math
+import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Dict, Iterable, List, Sequence, Tuple
 
 import numpy as np
@@ -324,15 +326,22 @@ def _format_report(report: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def main() -> int:
+def main(argv=()) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--quick", action="store_true", help="smaller deterministic test battery")
     parser.add_argument("--json", action="store_true", help="emit JSON instead of the text report")
-    args = parser.parse_args()
+    parser.add_argument("--output", type=Path, help="write the report with LF line endings")
+    args = parser.parse_args(argv)
     report = run_battery(quick=args.quick)
-    print(json.dumps(report, indent=2) if args.json else _format_report(report), end="")
+    formatted = json.dumps(report, indent=2) if args.json else _format_report(report)
+    if args.output is None:
+        print(formatted, end="")
+    else:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(formatted, encoding="utf-8", newline="\n")
+        print(formatted, end="")
     return 0 if not report["failed_checks"] and not report["counterexamples"] else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

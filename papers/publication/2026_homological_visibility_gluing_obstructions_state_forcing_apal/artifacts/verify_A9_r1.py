@@ -5,10 +5,15 @@ NWW's displayed Cechization formula.  They do not prove either open
 crossed-module comparison in NWW, Problems 8.1(b) and 8.2.
 """
 
+import argparse
+import sys
+from contextlib import redirect_stdout
 from fractions import Fraction
 from functools import reduce
+from io import StringIO
 from itertools import combinations, product
 from math import gcd
+from pathlib import Path
 
 
 def _continuous_three_cocycle(a, b, c):
@@ -249,7 +254,7 @@ def action_lift_peiffer_counterexample():
     }
 
 
-def main():
+def _run_verification():
     real = check_real_cechization_identities()
     finite = check_finite_quotient_claims()
     generators = check_generator_bound_classification()
@@ -263,5 +268,22 @@ def main():
     print("OPEN comparisons intentionally unverified: NWW Problems 8.1(b), 8.2(a), 8.2(b)")
 
 
+def main(argv=()):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        _run_verification()
+        return
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

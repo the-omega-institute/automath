@@ -12,8 +12,13 @@ The checks are deterministic:
 
 from __future__ import annotations
 
+import argparse
 import math
+import sys
+from contextlib import redirect_stdout
 from dataclasses import dataclass
+from io import StringIO
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
@@ -274,7 +279,7 @@ def counterexample_search() -> Dict[str, object]:
     }
 
 
-def main() -> int:
+def _run_verification() -> int:
     sections = {
         "laurent_constants": verify_constants(),
         "tauberian_moments": verify_moments(),
@@ -306,5 +311,22 @@ def main() -> int:
     return 0 if not failures else 1
 
 
+def main(argv=()) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        return _run_verification()
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

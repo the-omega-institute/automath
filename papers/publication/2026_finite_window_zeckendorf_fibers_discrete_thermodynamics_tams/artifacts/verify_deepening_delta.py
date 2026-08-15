@@ -6,7 +6,10 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import sys
 from collections import Counter
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 
@@ -191,13 +194,17 @@ def empirical_ldp_audit(
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     with output_csv.open("w", newline="", encoding="ascii") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["m", "alpha", "empirical_rate"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["m", "alpha", "empirical_rate"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(csv_rows)
     return failures, messages
 
 
-def main() -> int:
+def _run_verification(argv=()) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-m", type=int, default=28)
     parser.add_argument(
@@ -205,7 +212,7 @@ def main() -> int:
         type=Path,
         default=Path(__file__).with_name("ldp_rate_shape.csv"),
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.max_m < 13:
         parser.error("--max-m must be at least 13")
 
@@ -274,7 +281,7 @@ def main() -> int:
     print(f"top_8_levels_at_m={args.max_m}: {final_top_levels}")
     for message in ldp_messages:
         print(message)
-    print(f"empirical_rate_csv={args.rate_csv}")
+    print(f"empirical_rate_csv={args.rate_csv.name}")
     print(f"failures={failures}")
     print(f"counterexamples={counterexamples}")
     if failures == 0 and counterexamples == 0:
@@ -284,5 +291,22 @@ def main() -> int:
     return 1
 
 
+def main(argv=()) -> int:
+    output_parser = argparse.ArgumentParser(add_help=False)
+    output_parser.add_argument("--output", type=Path)
+    archive_args, remaining = output_parser.parse_known_args(argv)
+    if archive_args.output is None:
+        return _run_verification(remaining)
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification(remaining)
+    report = capture.getvalue()
+    archive_args.output.parent.mkdir(parents=True, exist_ok=True)
+    archive_args.output.write_text(report, encoding="ascii", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

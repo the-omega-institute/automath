@@ -7,8 +7,13 @@ lossless because Val_{A,m} is bijective on the legal language X_m^(A).
 
 from __future__ import annotations
 
+import argparse
+import sys
+from contextlib import redirect_stdout
+from io import StringIO
 from itertools import product
 from math import sqrt
+from pathlib import Path
 
 
 MAIN_CASES = (
@@ -107,7 +112,7 @@ def predicted_injective(a: int, m: int) -> bool:
     return (a, m) != (1, 2)
 
 
-def main() -> int:
+def _run_verification() -> int:
     failures = 0
     counterexamples = 0
     injective_cases_searched = 0
@@ -230,5 +235,22 @@ def main() -> int:
     return 0 if failures == 0 and counterexamples == 0 else 1
 
 
+def main(argv=()) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        return _run_verification()
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

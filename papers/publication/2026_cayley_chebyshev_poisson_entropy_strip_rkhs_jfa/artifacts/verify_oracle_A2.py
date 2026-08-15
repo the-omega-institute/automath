@@ -10,7 +10,11 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
+from contextlib import redirect_stdout
 from dataclasses import dataclass
+from io import StringIO
+from pathlib import Path
 from typing import Callable, Iterable, Sequence
 
 import mpmath as mp
@@ -1161,10 +1165,10 @@ def run(quick: bool) -> list[Check]:
     )
 
 
-def main() -> int:
+def _run_verification(argv=()) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--quick", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     checks = run(args.quick)
     print("ORACLE A2 INDEPENDENT VERIFICATION")
     for check in checks:
@@ -1176,5 +1180,22 @@ def main() -> int:
     return 0 if not failures else 1
 
 
+def main(argv=()) -> int:
+    output_parser = argparse.ArgumentParser(add_help=False)
+    output_parser.add_argument("--output", type=Path)
+    archive_args, remaining = output_parser.parse_known_args(argv)
+    if archive_args.output is None:
+        return _run_verification(remaining)
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification(remaining)
+    report = capture.getvalue()
+    archive_args.output.parent.mkdir(parents=True, exist_ok=True)
+    archive_args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

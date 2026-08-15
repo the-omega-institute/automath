@@ -978,7 +978,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     if arguments.output is None:
         print(formatted)
     else:
-        arguments.output.write_text(formatted + "\n", encoding="utf-8")
+        arguments.output.write_text(
+            formatted + "\n", encoding="utf-8", newline="\n"
+        )
     return 0
 
 

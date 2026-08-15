@@ -812,7 +812,7 @@ def exact_maximum_fiber(m: int, fib: list[int]) -> int:
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="ascii") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -1441,8 +1441,8 @@ def main() -> int:
     write_csv(args.rate_csv, ["m", "alpha", "I_m"], rate_rows)
     messages.extend(
         [
-            f"pressure_csv={args.pressure_csv.resolve()}",
-            f"rate_csv={args.rate_csv.resolve()}",
+            f"pressure_csv={args.pressure_csv.name}",
+            f"rate_csv={args.rate_csv.name}",
             f"failures={failures}",
             "RESULT: 0 numerical failures / full-LDP orbit-padding audit passed"
             if failures == 0
@@ -1451,7 +1451,7 @@ def main() -> int:
     )
     report = "\n".join(messages) + "\n"
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(report, encoding="ascii")
+    args.report.write_text(report, encoding="ascii", newline="\n")
     print(report, end="")
     return 0 if failures == 0 else 1
 

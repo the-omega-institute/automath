@@ -8,11 +8,16 @@ does not discard output information.
 
 from __future__ import annotations
 
+import argparse
+import sys
 from collections import Counter
+from contextlib import redirect_stdout
 from dataclasses import dataclass
 from fractions import Fraction
+from io import StringIO
 from itertools import product
 from math import sqrt
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -291,7 +296,7 @@ def verification_cases() -> tuple[QuadraticPisot, ...]:
     return tuple(negative + positive)
 
 
-def main() -> int:
+def _run_verification() -> int:
     failures = 0
     counterexamples = 0
     cases = verification_cases()
@@ -469,5 +474,22 @@ def main() -> int:
     return 0 if failures == 0 and counterexamples == 0 else 1
 
 
+def main(argv=()) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        return _run_verification()
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

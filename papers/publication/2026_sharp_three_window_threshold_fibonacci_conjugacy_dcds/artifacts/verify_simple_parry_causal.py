@@ -7,7 +7,12 @@ finite greedy expansion d_beta(1)=t_1...t_p 0^infinity.
 
 from __future__ import annotations
 
+import argparse
+import sys
+from contextlib import redirect_stdout
+from io import StringIO
 from itertools import product
+from pathlib import Path
 
 
 def cubic_family_digits(n: int) -> tuple[int, ...]:
@@ -371,7 +376,7 @@ def non_pisot_simple_parry_claims() -> dict[str, object]:
     }
 
 
-def main() -> int:
+def _run_verification() -> int:
     failures = 0
     print("Simple-Parry causal-obstruction verification")
     print("Exact integer arithmetic; difference alphabet [-d,d].")
@@ -530,5 +535,22 @@ def main() -> int:
     return 0 if failures == 0 else 1
 
 
+def main(argv=()) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        return _run_verification()
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

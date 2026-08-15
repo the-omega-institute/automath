@@ -12,8 +12,13 @@ exchange expansion and information series.
 
 from __future__ import annotations
 
+import argparse
 import itertools
 import math
+import sys
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
 from statistics import NormalDist
 from typing import Iterable
 
@@ -807,7 +812,7 @@ def _maximum(values: Iterable[float]) -> float:
     return max(abs(value) for value in values)
 
 
-def main() -> None:
+def _run_verification() -> None:
     residuals = []
     spectral_violations = []
     lower = -math.exp(-2.0)
@@ -1225,5 +1230,22 @@ def main() -> None:
     )
 
 
+def main(argv=()) -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        _run_verification()
+        return
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="utf-8", newline="\n")
+    print(report, end="")
+
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

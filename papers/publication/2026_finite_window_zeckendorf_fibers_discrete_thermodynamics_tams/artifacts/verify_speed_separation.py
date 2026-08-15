@@ -9,6 +9,9 @@ an explicit differentiated periodic-Bernoulli remainder bound.
 
 from __future__ import annotations
 
+import argparse
+import sys
+from contextlib import redirect_stdout
 from dataclasses import dataclass
 from decimal import (
     Decimal,
@@ -19,7 +22,9 @@ from decimal import (
     localcontext,
 )
 from fractions import Fraction
+from io import StringIO
 from math import factorial, gcd
+from pathlib import Path
 
 import numpy as np
 from numba import njit, prange
@@ -520,7 +525,7 @@ def build_certificate() -> SpeedCertificate:
     )
 
 
-def main() -> int:
+def _run_verification() -> int:
     failures: list[str] = []
 
     dyadic_values = [dyadic_cost(exponent) for exponent in range(1, 26)]
@@ -628,5 +633,22 @@ def main() -> int:
     return 0
 
 
+def main(argv=()) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None:
+        return _run_verification()
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        status = _run_verification()
+    report = capture.getvalue()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(report, encoding="ascii", newline="\n")
+    print(report, end="")
+    return status
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

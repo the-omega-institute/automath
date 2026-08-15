@@ -31,8 +31,13 @@ positive rates, including collision strata.
 
 from __future__ import annotations
 
+import argparse
 import itertools
+import sys
+from contextlib import redirect_stdout
 from dataclasses import dataclass
+from io import StringIO
+from pathlib import Path
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -604,7 +609,7 @@ def report_example(rates: tuple[float, ...], search_starts: int = 80) -> None:
     print()
 
 
-def main() -> None:
+def _run_verification() -> None:
     print("Sharp killed-reset D-MAP identifiability dichotomy verification")
     print("delta=1; all searches use deterministic random seeds")
     print()
@@ -711,5 +716,37 @@ def main() -> None:
     print("  identifiability boundary; the exact boundary is the Markovian orbit fibre.")
 
 
+def _two_state_report(report: str) -> str:
+    section_start = report.index("Complete physical two-state killed-reset fibre diagnostics")
+    section_end = report.index("\nn=2 serial killed-reset example", section_start)
+    conclusion_start = report.index("NUMERICAL CONCLUSION")
+    conclusion_lines = report[conclusion_start:].splitlines()[:5]
+    return report[section_start:section_end].rstrip() + "\n\n" + "\n".join(conclusion_lines) + "\n"
+
+
+def main(argv=()) -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--two-state-output", type=Path)
+    args = parser.parse_args(argv)
+    if args.output is None and args.two_state_output is None:
+        _run_verification()
+        return
+
+    capture = StringIO()
+    with redirect_stdout(capture):
+        _run_verification()
+    report = capture.getvalue()
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(report, encoding="utf-8", newline="\n")
+    if args.two_state_output is not None:
+        args.two_state_output.parent.mkdir(parents=True, exist_ok=True)
+        args.two_state_output.write_text(
+            _two_state_report(report), encoding="utf-8", newline="\n"
+        )
+    print(report, end="")
+
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
