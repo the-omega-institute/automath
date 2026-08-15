@@ -23,7 +23,7 @@
 | **A6** `zeckendorf_fibers` | 69+20 | **64%:Brocot 分数全变差凝聚定理**(在改)| **Transactions**(JNT/ETDS 备选) |
 | **A7** `upper_fibers` | **36+36** | ✅ 定理入库;**查出第二条伪造引用并删** | **Fibonacci Quarterly**(档位不变)|
 | **A8** `detector_shells` | **72+19** | ✅ 锥面已限定;**7 条 DOI 指向他人论文,已修** | **SPA(诚实首投)**;Bernoulli 高风险 |
-| **A9** `homological_visibility` | 38+6 | ⛔ 天花板;范围更正已完成入库 | Cahiers |
+| **A9** `homological_visibility` | 38+6 | ⛔ 天花板;**6 条引用指向他人论文,已修** | Cahiers |
 
 
 
@@ -59,13 +59,20 @@
 
 
 
-> **TICK 90 — A9 审计仍在跑;本 tick 抽核它声称"无误"的那 30 条,以检验其肯定判断而非只查其否定判断。**
+> **TICK 91 — A9 审计完成入库 `da8ad4031`。八篇文献表全部查完,八篇工作树全部干净。**
 >
-> 抽三条,均属实:Neeb–Wagemann–Wockel《Making lifting obstructions explicit》PLMS **106(3) 589–620**(即该篇 NWW 闭合所引);Hodges《Compositional semantics for a language of imperfect information》Log. J. IGPL **5(4) 539–563 (1997)**;Abramsky–Puljujärvi–Väänänen《Team semantics and independence notions in quantum physics》Bull. Symb. Log. **32(1) 82–135 (2025)**。
+> **A9:45 条中 12 条须更正,其中 6 条是 DOI/eprint 指向完全不同的文章。** 最严重的 `OkayTyhurstRaussendorf2018`,其 DOI `10.1007/s11005-018-1054-3` **经我复查确为** Ferapontov–Pavlov–Vitolo《Systems of conservation laws with third-order Hamiltonian structures》(Lett. Math. Phys. 108(6)) —— 与内容毫无关系;三条 arXiv eprint 分别指向一篇刚性定理、一篇神经网络、一篇并行计算论文。另有 `BerghSchnurer2021` 名字写错(Oliver 应为 Olaf)。
 >
-> 连同上一 tick 的四条,本篇已由我独立核过 **7 条**:它标为须更正的 4 条全部成立、标为无误的 3 条也全部成立。其判断在两个方向上都经得住抽查 —— 这与只查它报的问题不同,后者无法发现"漏报"。
+> **Okay–Raussendorf 那条缝合已按我的诊断拆为两条正确署名记录**;但它**零引用点**(我自己 grep 确认),故逐处决定表无从产生 —— agent 如实报告了这一偏离而非硬凑一张表。该条从未承重。
 >
-> 无可派新工(八篇中七篇已入库,第八篇正由其唯一 agent 处理)。池 0/6,内存 0.90 GB、缺页 97/s,无孤儿。
+> **第三个坏 Stacks tag**:`00W3` 实为 Example 7.10.2(只说终对象预层是层),被用于扁平化步骤,已改为 `00WK`(Lemma 7.10.16)。它明确交代 **`00WK` 是抓取并阅读 tag 原文核实的,不是由与 `00W1` 相邻推断** —— 这正是我追问的一点,本篇已在 `04TU`、`06NY` 上错过两次。
+>
+> **第 13 处错误只存在于投稿压缩包**:`BarbosaKharoofOkay2024` 在归档副本里作者名是**编造的**(Francisco Barbosa / Hamed Kharoof,实为 Rui Soares Barbosa / Aziz Kharoof),而根目录 `.bib` 是对的。这类"主文件正确、归档副本错误"最难发现,现已逐字节统一。
+>
+> **八篇文献审计总账**:2 条伪造(A2、A7)+ 1 条实为伪造元数据(A2 的 Yoshida2017)、**约 25 条 DOI 指向他人论文**(A2 三条、A8 七条、A9 六条、A3 一条不存在 DOI + 一条错配,余为年份/页码/作者级)、3 个错误 Stacks tag、2 处归档副本与主文件不一致。**A4 是唯一完全干净的一篇。**
+>
+> 三次审计共同暴露:OpenAlex 全程配额为零、Google Books 全数 429、Semantic Scholar 多数 429 —— **预期的跨源冗余从未达成**,且 Crossref 对五个**有效** DOI 返回 404(两条 Dagstuhl、三条 arXiv),改由出版社/官方存档确认。服务失败一律未当作反证。
+
 
 
 
