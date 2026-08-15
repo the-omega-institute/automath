@@ -59,15 +59,14 @@
 
 
 
-> **TICK 89 — A9 审计未完,不提交;独立核实其中期发现,并纠正它对其中一条的诊断。**
+> **TICK 90 — A9 审计仍在跑;本 tick 抽核它声称"无误"的那 30 条,以检验其肯定判断而非只查其否定判断。**
 >
-> 中期结果:45 条中 30 条无误、**12 条须更正**、3 条未核、**无伪造**。我抽核四条,**全部支持它的判断**:`10.1016/j.jlamp.2021.100661` 解析不到,正解为 Abramsky–Carù, Phil. Trans. R. Soc. A **377(2157):20190036 (2019)**;`10.22331/q-2020-01-05-217` 确为 Okay–Raussendorf《Homotopical approach》*Quantum* **4:217 (2020)**;旧书目 DOI `…4574-5` 解析不到,正解为 Brylinski《Loop Spaces, Characteristic Classes and Geometric Quantization》(Birkhäuser 1993);Aasnæss 正解为 EPTCS **318:242–253 (2020)**,非其所标 arXiv 2207.06065 (2022)。
+> 抽三条,均属实:Neeb–Wagemann–Wockel《Making lifting obstructions explicit》PLMS **106(3) 589–620**(即该篇 NWW 闭合所引);Hodges《Compositional semantics for a language of imperfect information》Log. J. IGPL **5(4) 539–563 (1997)**;Abramsky–Puljujärvi–Väänänen《Team semantics and independence notions in quantum physics》Bull. Symb. Log. **32(1) 82–135 (2025)**。
 >
-> **但我改了它对 Okay–Raussendorf 那条的诊断,并在其定稿前发回。** 那不是"引错期刊":我们挂的 `10.26421/QIC17.13-14-5` **能解析,且指向另一篇真论文** —— Okay–Roberts–Bartlett–Raussendorf《Topological proofs of contextuality in quantum mechanics》QIC 17(13&14) **1135–1166** (2017)。该条目实为**两篇真论文的缝合**:标题取自 2020 年 Quantum 那篇(两作者),期刊与 DOI 取自 2017 年 QIC 那篇(四作者),页码亦多写至 1170。故**不得默认改投 Quantum 那篇**:依赖面向 MBQC 的上同调/拓扑框架的句子应引 2017 QIC,依赖对易结构判据与 Arkhipov 推广的句子才引 2020 Quantum,若不同句子各需其一则须拆为两条并各自署名。已要求逐处报告决定,且若某句两篇皆不支持须直说。
+> 连同上一 tick 的四条,本篇已由我独立核过 **7 条**:它标为须更正的 4 条全部成立、标为无误的 3 条也全部成立。其判断在两个方向上都经得住抽查 —— 这与只查它报的问题不同,后者无法发现"漏报"。
 >
-> 另要求它交代 Stacks Project 的 `00WK` 是**读 tag 本身核实**还是由与 `00W1` 相邻推断 —— 本篇已在 `04TU`、`06NY` 上栽过两次,不接受推断。
->
-> 该篇另发现的坏 tag:`00W3` 被用于扁平化 sheafification/plus 构造判据,正解为 `00WK`;`02ZP` 与 `042Y` 经查用法正确。审计自身局限:Google Books 全部 11 次书目查询返回 429,书目改走 OpenLibrary/出版社记录,该类冗余未达成。
+> 无可派新工(八篇中七篇已入库,第八篇正由其唯一 agent 处理)。池 0/6,内存 0.90 GB、缺页 97/s,无孤儿。
+
 
 
 
