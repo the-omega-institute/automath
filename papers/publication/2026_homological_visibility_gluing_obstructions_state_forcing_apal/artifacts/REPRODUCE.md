@@ -19,7 +19,8 @@ OPEN comparisons intentionally unverified: NWW Problems 8.1(b), 8.2(a), 8.2(b)
 
 The verifier exits zero. Its counterexample line is an expected finite check,
 not a verification failure. The report uses Unix LF and contains no clock or
-date fields. This artifact directory has no separate literature-check file.
+date fields. The separate priority audit is recorded in
+`artifacts/literature_check.md`.
 
 ## Checksum verification
 
@@ -30,5 +31,5 @@ directory, run exactly:
 cd artifacts && sha256sum -c SHA256SUMS
 ```
 
-A successful check prints exactly 5 `OK` lines and no failures. The
+A successful check prints exactly 6 `OK` lines and no failures. The
 project-local `.gitattributes` pins every file covered by the manifest to LF.
