@@ -306,6 +306,66 @@ def critical_mahler_integrality_matches(order: int = 24) -> bool:
     )
 
 
+def rational_critical_denominator_audit(order: int = 12) -> dict[str, object]:
+    """Check the (p q)^(2n-1) denominator bound for rational p-products."""
+    z = sp.Symbol("z")
+    p_zero = 1 + z / 2 + z**2 / 3
+    p_one = 1 - z / 5
+    denominators = [
+        int(sp.denom(coefficient))
+        for polynomial in (p_zero, p_one)
+        for coefficient in sp.Poly(polynomial, z).all_coeffs()
+    ]
+    q = 1
+    for denominator in denominators:
+        q = sp.ilcm(q, denominator)
+
+    all_bounds_hold = True
+    nonintegral_coefficient_seen = False
+    radices = (2, 3, 4, 5)
+    for radix in radices:
+        coefficients = [sp.Integer(1)]
+        for degree in range(1, order + 1):
+            unknown = sp.Symbol(f"f_{degree}")
+            truncated = sum(
+                coefficient * z**index
+                for index, coefficient in enumerate(coefficients)
+            ) + unknown * z**degree
+            coefficient_equation = sp.expand(
+                p_one * truncated**radix
+                - p_zero * truncated.subs(z, z**radix)
+            ).coeff(z, degree)
+            linear_coefficient = coefficient_equation.coeff(unknown)
+            value = sp.cancel(
+                -coefficient_equation.subs(unknown, 0) / linear_coefficient
+            )
+            coefficients.append(value)
+            scaled = sp.cancel((radix * q) ** (2 * degree - 1) * value)
+            all_bounds_hold &= bool(scaled.is_Integer)
+            nonintegral_coefficient_seen |= not bool(value.is_Integer)
+
+        truncated = sum(
+            coefficient * z**index
+            for index, coefficient in enumerate(coefficients)
+        )
+        residual = sp.series(
+            p_one * truncated**radix
+            - p_zero * truncated.subs(z, z**radix),
+            z,
+            0,
+            order + 1,
+        ).removeO()
+        all_bounds_hold &= sp.expand(residual) == 0
+
+    return {
+        "radices": radices,
+        "order": order,
+        "clearing_denominator": q,
+        "all_bounds_hold": all_bounds_hold,
+        "nonintegral_coefficient_seen": nonintegral_coefficient_seen,
+    }
+
+
 def nishioka_special_value_specialization() -> dict[str, object]:
     """Audit the exact parameters used for Kumiko Nishioka's 1982 theorem.
 
@@ -551,6 +611,179 @@ def mahler_log_degree_extremal_family_audit() -> dict[str, int | bool]:
         "identities_hold": identities_hold,
         "degrees_hold": degrees_hold,
         "no_cancellation": no_cancellation,
+    }
+
+
+def realizable_multicollision_family_audit(max_m: int = 4) -> dict[str, object]:
+    """Check the parametric standard-cover collision identities exactly."""
+    z = sp.Symbol("z")
+    vertex_counts: list[int] = []
+    collision_counts: list[int] = []
+    determinant_identities_hold = True
+    all_radii_in_perron_interval = True
+    same_base_realization_holds = True
+    strict_gap_certified = True
+
+    for m in range(1, max_m + 1):
+        n = 2 * m + 1
+        size = 2 * n
+        scales = [64 * (m + 1) + 4 * index for index in range(1, m + 1)]
+        c_matrix = sp.zeros(n)
+        for index, scale in enumerate(scales, 1):
+            c_matrix[index - 1, index] = -4
+            c_matrix[index - 1, m + index] = scale
+            c_matrix[m + index, index] = scale
+        c_matrix[m, 0] = -4
+
+        q_polynomial = sp.expand((sp.eye(n) - z * c_matrix).det())
+        expected_q = sp.expand(
+            1 + 4 * z * sp.prod(-4 * z + scale**2 * z**2 for scale in scales)
+        )
+        first_block = sp.zeros(size)
+        first_block[:n, n:] = c_matrix / 2
+        first_block[n:, :n] = 2 * sp.eye(n)
+        second_block = sp.diag(c_matrix, c_matrix)
+        first_determinant = sp.expand((sp.eye(size) - z * first_block).det())
+        second_determinant = sp.expand((sp.eye(size) - z * second_block).det())
+        determinant_identities_hold &= all(
+            (
+                q_polynomial == expected_q,
+                first_determinant == sp.expand(q_polynomial.subs(z, z**2)),
+                second_determinant == sp.expand(q_polynomial**2),
+            )
+        )
+
+        base_entry = scales[-1]
+        base = sp.ones(size) * base_entry
+        compatibility = all(
+            bool(
+                block[row, column].is_Integer
+                and (base[row, column] - block[row, column]) % 2 == 0
+                and abs(block[row, column]) <= base[row, column]
+            )
+            for block in (first_block, second_block)
+            for row in range(size)
+            for column in range(size)
+        )
+        same_base_realization_holds &= compatibility
+        strict_gap_certified &= all(
+            any(
+                abs(block[row, column]) < base[row, column]
+                for row in range(size)
+                for column in range(size)
+            )
+            for block in (first_block, second_block)
+        )
+
+        radii = tuple(sp.Rational(4, scale**2) for scale in scales)
+        perron_root = base_entry * size
+        all_radii_in_perron_interval &= all(
+            0 < radius < sp.Rational(1, perron_root) for radius in radii
+        )
+        collisions = tuple(
+            radius for radius in radii if q_polynomial.subs(z, radius) == 1
+        )
+        vertex_counts.append(size)
+        collision_counts.append(len(collisions))
+
+    return {
+        "vertex_counts": tuple(vertex_counts),
+        "collision_counts": tuple(collision_counts),
+        "determinant_identities_hold": determinant_identities_hold,
+        "all_radii_in_perron_interval": all_radii_in_perron_interval,
+        "same_base_realization_holds": same_base_realization_holds,
+        "strict_gap_certified": strict_gap_certified,
+    }
+
+
+def _integral_companion_for_reciprocal(polynomial: sp.Expr) -> sp.Matrix:
+    """Return C with det(I-zC)=polynomial for a normalized integral input."""
+    z = sp.Symbol("z")
+    poly = sp.Poly(polynomial, z)
+    degree = max(1, poly.degree())
+    coefficients = [sp.Integer(poly.nth(index)) for index in range(degree + 1)]
+    companion = sp.zeros(degree)
+    for row in range(1, degree):
+        companion[row, row - 1] = 1
+    for row in range(degree):
+        companion[row, degree - 1] = -coefficients[degree - row]
+    return companion
+
+
+def realizable_logarithmic_certificate_family_audit(
+    max_depth: int = 4,
+) -> dict[str, object]:
+    """Check companion realizations of the dyadic Omega(V log V) certificates."""
+    z, t = sp.symbols("z t")
+    q_polynomial = 1 - 2 * z
+    vertex_counts: list[int] = []
+    relative_realizations_hold = True
+    certificate_degrees_hold = True
+    zeta_ratios_nontrivial = True
+
+    for depth in range(max_depth + 1):
+        vertex_count = 2 ** (depth + 1)
+        numerator = sp.expand(q_polynomial.subs(z, z**vertex_count))
+        denominator = sp.expand(q_polynomial**vertex_count)
+        first = _integral_companion_for_reciprocal(numerator)
+        second = _integral_companion_for_reciprocal(denominator)
+        same_parity = all(
+            (first[row, column] - second[row, column]) % 2 == 0
+            for row in range(vertex_count)
+            for column in range(vertex_count)
+        )
+
+        base = sp.zeros(vertex_count)
+        for row in range(vertex_count):
+            for column in range(vertex_count):
+                bound = max(abs(first[row, column]), abs(second[row, column]))
+                candidate = int(bound) + 1
+                if candidate % 2 != int(first[row, column]) % 2:
+                    candidate += 1
+                base[row, column] = candidate
+        realizable = same_parity and all(
+            bool(
+                base[row, column] > abs(block[row, column])
+                and (base[row, column] - block[row, column]) % 2 == 0
+            )
+            for block in (first, second)
+            for row in range(vertex_count)
+            for column in range(vertex_count)
+        )
+        expected_first_charpoly = sp.expand(
+            t**vertex_count * numerator.subs(z, 1 / t)
+        )
+        expected_second_charpoly = sp.expand(
+            t**vertex_count * denominator.subs(z, 1 / t)
+        )
+        relative_realizations_hold &= all(
+            (
+                realizable,
+                sp.expand(first.charpoly(t).as_expr())
+                == expected_first_charpoly,
+                sp.expand(second.charpoly(t).as_expr())
+                == expected_second_charpoly,
+            )
+        )
+
+        certificate = sp.prod(
+            q_polynomial.subs(z, z ** (2**index))
+            ** (2 ** (depth - index))
+            for index in range(depth + 1)
+        )
+        certificate_degrees_hold &= (
+            sp.degree(certificate, z)
+            == (depth + 1) * 2**depth
+            == vertex_count * (depth + 1) // 2
+        )
+        zeta_ratios_nontrivial &= sp.cancel(numerator / denominator - 1) != 0
+        vertex_counts.append(vertex_count)
+
+    return {
+        "vertex_counts": tuple(vertex_counts),
+        "relative_realizations_hold": relative_realizations_hold,
+        "certificate_degrees_hold": certificate_degrees_hold,
+        "zeta_ratios_nontrivial": zeta_ratios_nontrivial,
     }
 
 
@@ -1167,6 +1400,9 @@ def render_report() -> str:
     interior_no_gap = interior_no_gap_standard_zeta_audit()
     logarithmic_bound = logarithmic_mahler_divisor_bound_audit()
     logarithmic_family = mahler_log_degree_extremal_family_audit()
+    denominator_audit = rational_critical_denominator_audit()
+    multicollision_audit = realizable_multicollision_family_audit()
+    realizable_log_audit = realizable_logarithmic_certificate_family_audit()
     cross_base = elementary_two_group_cross_base_audit()
     c3_support = c3_adams_mobius_support_obstruction(60)
     alpha = sp.Symbol("alpha")
@@ -1183,6 +1419,12 @@ def render_report() -> str:
         ),
         "critical Mahler normalization": critical_mahler_normalization_matches(),
         "critical Mahler integrality": critical_mahler_integrality_matches(),
+        "rational critical Mahler denominators": all(
+            (
+                denominator_audit["all_bounds_hold"],
+                denominator_audit["nonintegral_coefficient_seen"],
+            )
+        ),
         "critical zero-estimate pullback": critical_zero_estimate_pullback_matches(),
         "Kumiko Nishioka specialization": all(
             (
@@ -1218,6 +1460,22 @@ def render_report() -> str:
                 logarithmic_family["identities_hold"],
                 logarithmic_family["degrees_hold"],
                 logarithmic_family["no_cancellation"],
+            )
+        ),
+        "realizable multi-collision family": all(
+            (
+                multicollision_audit["determinant_identities_hold"],
+                multicollision_audit["all_radii_in_perron_interval"],
+                multicollision_audit["same_base_realization_holds"],
+                multicollision_audit["strict_gap_certified"],
+                multicollision_audit["collision_counts"] == (1, 2, 3, 4),
+            )
+        ),
+        "realizable logarithmic certificates": all(
+            (
+                realizable_log_audit["relative_realizations_hold"],
+                realizable_log_audit["certificate_degrees_hold"],
+                realizable_log_audit["zeta_ratios_nontrivial"],
             )
         ),
         "cross-base elementary two-group interface": all(
@@ -1320,6 +1578,7 @@ def render_report() -> str:
         "Diagonal same-base Mahler subclass: compatibility and strict gap verified",
         "Critical Mahler normalization: squared product on 49 real points; unsquared identity refuted",
         "Critical Mahler integrality: 24 integer coefficients and equation verified",
+        "Rational critical p-Mahler denominators: p=2,3,4,5; exponent 2n-1 verified",
         "Critical zero-estimate pullback: exact identity, bidegrees, and finite-rank bound verified",
         "Kumiko Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8",
         "Normalized Mahler saturation: exact rational examples verified",
@@ -1327,6 +1586,8 @@ def render_report() -> str:
         "Effective Mahler degree and height bounds: verified",
         "Logarithmic Mahler divisor bound: exact counterexample search verified",
         "Mahler logarithmic lower-bound family: exact identities and degrees verified",
+        "Realizable multi-collisions: m=1,2,3,4 on 6,10,14,18 vertices",
+        "Realizable logarithmic certificates: V=2,4,8,16,32",
         "Cross-base (C2)^2 interface: sizes 1 and 2; determinant and Fourier checks verified",
         "Finite radial collision set: {1/4}; 1 <= 31",
         "Finite radial recovery budget: 32 samples with one algebraic anchor",
@@ -1348,7 +1609,7 @@ def render_report() -> str:
 def main() -> None:
     report = render_report()
     output = Path(__file__).with_name("verify_a5_results_output.txt")
-    output.write_text(report, encoding="ascii")
+    output.write_text(report, encoding="ascii", newline="\n")
     print(report, end="")
 
 

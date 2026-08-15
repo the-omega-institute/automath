@@ -51,15 +51,14 @@ The reports are `artifacts/verify_a5_results_output.txt` and
 ## Unit tests
 
 ```powershell
-.\.venv-reproduce\Scripts\python -m unittest -v `
-  artifacts.test_verify_a5_results `
-  artifacts.test_verify_twisted_determinant_rigidity
+.\.venv-reproduce\Scripts\python artifacts/run_unit_tests.py `
+  --output artifacts/unittest_output.txt
 ```
 
 Expected summary:
 
 ```text
-Ran 37 tests
+Ran 40 tests
 OK
 ```
 
@@ -71,7 +70,7 @@ The full transcript is archived as `artifacts/unittest_output.txt`.
 .\.venv-reproduce\Scripts\python certificates/s3_log_certificates.py `
   --write-cert certificates/s3_log_certificates.cert
 .\.venv-reproduce\Scripts\python certificates/s3_log_certificates.py `
-  > certificates/s3_log_certificates.run.txt
+  --write-cert certificates/s3_log_certificates.run.txt
 ```
 
 The second command's standard output is archived as
@@ -83,16 +82,15 @@ fixed-label windows verified
 
 ## Integrity
 
-From the paper root directory, verify every archived input and output listed in
-`artifacts/SHA256SUMS`; all paths in that file are relative to the paper root:
+Paths in `artifacts/SHA256SUMS` are relative to the `artifacts` directory,
+including its `../certificates/...` and `../.gitattributes` entries. From the
+paper directory, run exactly:
 
-```powershell
-Get-Content artifacts/SHA256SUMS | ForEach-Object {
-    $hash, $name = $_ -split '  ', 2
-    $actual = (Get-FileHash -Algorithm SHA256 $name).Hash.ToLower()
-    if ($actual -ne $hash) { throw "checksum mismatch: $name" }
-}
+```sh
+cd artifacts && sha256sum -c SHA256SUMS
 ```
+
+A successful check prints exactly 15 `OK` lines and no failures.
 
 The scripts are independent exact consistency checks. The article and
 Supplementary Material do not use finite computation as a substitute for a

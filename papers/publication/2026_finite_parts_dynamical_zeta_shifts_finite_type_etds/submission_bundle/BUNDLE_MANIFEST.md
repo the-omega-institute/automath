@@ -31,7 +31,7 @@ supplement pointer. The named companion PDF exists in this bundle.
 - `artifacts/verify_a5_results_output.txt` ends with `STATUS: PASS`.
 - `artifacts/verify_twisted_determinant_rigidity_output.txt` ends with
   `STATUS: PASS`.
-- `artifacts/unittest_output.txt` reports 37 tests and `OK`.
+- `artifacts/unittest_output.txt` reports 40 tests and `OK`.
 - `certificates/s3_log_certificates.run.txt` ends with
   `fixed-label windows verified`.
 - `artifacts/literature_check.md` states the narrow priority boundary involving

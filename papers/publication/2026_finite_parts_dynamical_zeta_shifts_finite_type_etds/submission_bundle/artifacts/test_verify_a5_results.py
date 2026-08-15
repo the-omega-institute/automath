@@ -52,6 +52,14 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.critical_mahler_integrality_matches(order=24))
 
+    def test_rational_critical_products_have_the_stated_denominator_exponent(self):
+        audit = verifier.rational_critical_denominator_audit()
+
+        self.assertEqual(audit["radices"], (2, 3, 4, 5))
+        self.assertEqual(audit["order"], 12)
+        self.assertTrue(audit["all_bounds_hold"])
+        self.assertTrue(audit["nonintegral_coefficient_seen"])
+
     def test_critical_zero_estimate_pullback_identity_and_degree_bounds(self):
         self.assertTrue(
             hasattr(verifier, "critical_zero_estimate_pullback_matches"),
@@ -159,6 +167,24 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertTrue(audit["identities_hold"])
         self.assertTrue(audit["degrees_hold"])
         self.assertTrue(audit["no_cancellation"])
+
+    def test_parametric_standard_cover_family_has_m_exact_collisions(self):
+        audit = verifier.realizable_multicollision_family_audit()
+
+        self.assertEqual(audit["vertex_counts"], (6, 10, 14, 18))
+        self.assertEqual(audit["collision_counts"], (1, 2, 3, 4))
+        self.assertTrue(audit["determinant_identities_hold"])
+        self.assertTrue(audit["all_radii_in_perron_interval"])
+        self.assertTrue(audit["same_base_realization_holds"])
+        self.assertTrue(audit["strict_gap_certified"])
+
+    def test_logarithmic_certificate_family_has_companion_realizations(self):
+        audit = verifier.realizable_logarithmic_certificate_family_audit()
+
+        self.assertEqual(audit["vertex_counts"], (2, 4, 8, 16, 32))
+        self.assertTrue(audit["relative_realizations_hold"])
+        self.assertTrue(audit["certificate_degrees_hold"])
+        self.assertTrue(audit["zeta_ratios_nontrivial"])
 
     def test_different_base_elementary_two_group_interfaces_are_exact(self):
         self.assertTrue(
@@ -326,6 +352,7 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Diagonal same-base Mahler subclass: compatibility", report)
         self.assertIn("Critical Mahler normalization: squared product on 49 real points", report)
         self.assertIn("Critical Mahler integrality: 24 integer coefficients", report)
+        self.assertIn("Rational critical p-Mahler denominators: p=2,3,4,5", report)
         self.assertIn("Critical zero-estimate pullback: exact identity, bidegrees", report)
         self.assertIn("Kumiko Nishioka specialization: p=2, N=0, n=1, m=M=2, L=1; 4<8", report)
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
@@ -333,6 +360,8 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Effective Mahler degree and height bounds: verified", report)
         self.assertIn("Logarithmic Mahler divisor bound: exact counterexample search", report)
         self.assertIn("Mahler logarithmic lower-bound family: exact identities", report)
+        self.assertIn("Realizable multi-collisions: m=1,2,3,4 on 6,10,14,18 vertices", report)
+        self.assertIn("Realizable logarithmic certificates: V=2,4,8,16,32", report)
         self.assertIn("Cross-base (C2)^2 interface: sizes 1 and 2", report)
         self.assertIn("Finite radial collision set: {1/4}; 1 <= 31", report)
         self.assertIn("Finite radial recovery budget: 32 samples with one algebraic anchor", report)

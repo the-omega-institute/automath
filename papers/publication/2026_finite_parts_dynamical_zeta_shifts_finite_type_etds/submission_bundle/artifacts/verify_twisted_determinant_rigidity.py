@@ -730,7 +730,7 @@ def render_report() -> str:
 def main() -> None:
     report = render_report()
     output = Path(__file__).with_name("verify_twisted_determinant_rigidity_output.txt")
-    output.write_text(report, encoding="ascii")
+    output.write_text(report, encoding="ascii", newline="\n")
     print(report, end="")
 
 

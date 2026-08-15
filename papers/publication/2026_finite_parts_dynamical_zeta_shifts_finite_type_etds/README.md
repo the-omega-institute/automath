@@ -1,27 +1,30 @@
-# Finite radial determination for binary SFT extensions
+# Finite radial determination for abelian two-group SFT extensions
 
 This directory builds two related papers.
 
-- `main.tex` is the inverse-theorem manuscript. Its spine is the effective
-  finite radial sampling theorem for same-base `C2` extensions without a
-  twisted-gap hypothesis in the open Perron interval, the exact determinant
-  lifting theorem, and the explicit obstruction to
-  extending the method to arbitrary finite groups.
+- `main.tex` is the inverse-theorem manuscript. Its spine is finite radial
+  determination for odd-Adams-invariant extensions by arbitrary finite
+  abelian 2-groups over possibly different bases, without a twisted-gap
+  hypothesis in the open Perron interval. It also contains the parity-free
+  rational critical Mahler lifting theorem, effective certificate bounds,
+  and realizable lower-bound families on standard `C2` covers.
 - `supplement.tex` contains the Adams-corrected Frobenius-class product
   constant, quotient-cover refinements, and the exact strict-gap `S3`
   witness. These results are logically separate from the inverse theorem.
 
-The proved uniform sampling budget in the main paper is
+For base matrices of size at most `V`, the proved uniform sampling budget is
 
 ```text
-B(v,C2) = (2v)^2 (2^(floor(log2(2v))+1) - 1) < 16 v^3.
+M(V) = 2 V ceil(log2(4V)).
 ```
 
-The budget is unconditional for algebraic radii in
-`0 < y < lambda^(-1)`. A strict twisted gap is required only to admit the
-endpoint `y = lambda^(-1)`. In the binary case the determinant ratio used by
-the algorithm is exactly the ratio of the ordinary Artin-Mazur zeta functions
-of the two standard covers.
+The radii lie in the common open Perron interval and at least one is
+algebraic. A strict twisted gap is required only for the binary endpoint
+extension. The theorem is automatic for elementary 2-groups and covers
+genuine higher 2-power holonomy under odd-Adams invariance. A standard-cover
+family gives an `Omega(V)` sampling lower bound, while a separate realizable
+family shows that the `O(D log D)` Mahler certificate-degree bound has the
+correct order.
 
 No finite polynomial sampling bound is claimed for every finite group. The
 paper locates the obstruction already at `C3`: Adams--Mobius inversion has
