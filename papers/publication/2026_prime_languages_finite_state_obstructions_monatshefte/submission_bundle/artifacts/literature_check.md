@@ -820,5 +820,39 @@ the original concatenated positional value would additionally require a map
 outside the coordinatewise valuation in their theorem. Their result likewise
 does not settle nonregular poly-slender context-free representation
 languages. The revised introduction and Remark 3.3 state both the broader
-regular scope and this remaining interface boundary, while retaining the
-absence of a quantitative bound as a limitation of Theorem 3.2.
+regular scope and this remaining interface boundary. This was the state before
+the effective-presentation refinement recorded below.
+
+## Effective two-system refinement audit (2026-08-16)
+
+The new citation was checked before it was added. Crossref DOI
+`10.1090/S0002-9939-2015-12499-9` returned the exact title *Intersections of
+recurrence sequences* and lead author Michael Bennett, with Akos Pinter
+second, *Proceedings of the American Mathematical Society* 143 (2015), no. 6,
+pp. 2347--2353. The manuscript cites this paper only for its accessible
+restatement of the integral-recurrence, unique-dominant-root hypotheses.
+
+The constructive paired-loop citation was also rechecked. Crossref DOI
+`10.1016/0304-3975(94)00042-5` returns *On a conjecture about slender
+context-free languages* and lead/sole author Lucian Ilie; Crossref DOI
+`10.1080/00207168308803373` returns *Semi-discrete context-free languages*
+and lead author M. Latteux. The complete official NUMDAM scan of Ilie,
+Rozenberg, and Salomaa, *A characterization of poly-slender context-free
+languages*, was read again. Its introduction attributes the finite paired-loop
+construction independently to Latteux--Thierrin and Ilie, and its Theorem 7
+states exactly that a context-free language is 0-poly-slender if and only if it
+is a finite union of 1-Dyck loops. The effective statement uses the
+constructive form of those finite grammar transformations; it does not claim a
+compact bound on the number or lengths of the resulting loops.
+
+The earlier Mignotte full-text sourcing limitation remains recorded rather
+than being silently upgraded. Crossref DOI
+`10.1016/0304-3975(78)90043-9` again returned the exact title *Intersection
+des images de certaines suites recurrentes lineaires* and lead/sole author M.
+Mignotte, together with the Elsevier text-mining links. Direct Elsevier
+full-text retrieval still required an API entitlement, and the public article
+download returned an access page rather than the 1978 PDF. Accordingly this
+audit does not claim that the original full text was newly read. The effective
+section states the threshold output explicitly, keeps every eventual-recurrence
+shift in the input/output data, and uses Bennett--Pinter only as the accessible
+published check on the dominant-root hypotheses.

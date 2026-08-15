@@ -25,8 +25,9 @@ context-free languages, by Latteux--Thierrin
 \cite{Ilie1994}.
 
 Mignotte's common-value theorem concerns two rational-integer linear
-recurrence sequences. In its dominant-root form, each sequence has an
-expansion
+recurrence sequences. We use the following precise dominant-root form. The
+input consists of ordinary recurrences indexed from (0), together with
+expansions
 \[
   A_n=a\lambda^n+\sum_{i=2}^s P_i(n)\lambda_i^n,
   \qquad
@@ -39,9 +40,21 @@ algebraic, \(\lambda,\kappa>1\), and
   \abs{\kappa_j}<\kappa
 \)
 for all remaining characteristic roots. If \(\lambda\) and \(\kappa\)
-are multiplicatively independent, then \(A_n=B_m\) has only finitely many
-pairs of nonnegative integer solutions; the proof is effective
-\cite{Mignotte1978Intersection}. We use exactly this finiteness conclusion.
+are multiplicatively independent, Mignotte's proof effectively produces an
+integer \(M(A,B)\) such that
+\begin{equation}
+  A_n=B_m,\quad n\ge M(A,B)
+  \quad\Longrightarrow\quad
+  a\lambda^n=b\kappa^m.
+  \label{eq:mignotte-effective-threshold}
+\end{equation}
+The same assertion with the sequences interchanged produces \(M(B,A)\).
+In particular \(A_n=B_m\) has only finitely many nonnegative integer
+solutions \cite{Mignotte1978Intersection}; Bennett--Pint\'er give an
+accessible published restatement of the integral-recurrence,
+unique-dominant-root hypotheses \cite{BennettPinter2015}. The qualitative
+theorem below uses only finiteness. The effective refinement retains the two
+thresholds in \eqref{eq:mignotte-effective-threshold}.
 
 The next lemma supplies the hypothesis that is not a consequence merely of
 the root-growth squeeze.
@@ -211,6 +224,185 @@ For \(X\subseteq\NN_{\ge1}\), write
   a contradiction.
 \end{proof}
 
+\subsection{Effective refinement}
+
+We now retain the finite data suppressed in the preceding proof. This is an
+effectivity statement from complete presentations, not a uniform estimate in
+a few size parameters.
+
+\begin{definition}[Effective two-system presentation]
+  \label{def:effective-two-system-presentation}
+  An \emph{effective two-system presentation} consists of the following
+  finite data, subject to the hypotheses of
+  \Cref{thm:slender-cfl-cobham}.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item For each of \(U\) and \(V\), it gives the digit alphabet, the
+      initial values, integer recurrence coefficients, and an individual
+      valid recurrence threshold. It also gives the least eventual
+      polynomial, its distinguished real root by an isolating interval, and
+      the certificate that this polynomial is the minimal polynomial of the
+      relevant weak Perron number.
+    \item For each full representation language it gives either a
+      context-free grammar, promised to generate that slender language, or
+      an exact finite cover by words
+      \(
+        u v^n w x^n y
+      \)
+      with \(n\ge0\). In the grammar case, the constructive form of the
+      slender-language theorem computes such a cover from the grammar
+      \cite{LatteuxThierrin1983,Ilie1994}; the resulting paired-loop form is
+      the one recorded in \cite[Theorem~7]{IlieRozenbergSalomaa2000}.
+  \end{enumerate}
+  The promises include validity and uniqueness of the represented words and
+  exact equality with \(\operatorname{Rep}_U(X)\) and
+  \(\operatorname{Rep}_V(X)\). Algebraic numbers are represented by their
+  minimal polynomials and isolating data. Thus exact arithmetic, comparison
+  of algebraic moduli, and root-of-unity tests are effective.
+\end{definition}
+
+The recurrence threshold in (i) belongs to that one presentation; no common
+threshold for the two systems, or for different paired loops, is assumed.
+Likewise, in (ii) a grammar is a promised input. The assertion is not that an
+arbitrary grammar can first be recognized as slender without using that
+promise.
+
+\begin{lemma}[Effective dominant-root transfer]
+  \label{lem:effective-paired-loop-transfer}
+  From the effective recurrence data for \(U\) and one nonconstant valid
+  paired loop
+  \[
+    z_n=u v^n w x^n y,\qquad D=\abs v+\abs x>0,
+  \]
+  one can compute an integer \(h\ge1\) and, for every \(0\le r<h\), the
+  following finite package:
+  \begin{enumerate}[label=\textup{(\alph*)}]
+    \item an individual shift \(s_r\ge0\);
+    \item integer recurrence coefficients and enough integer initial values
+      to define, from index \(0\), the sequence
+      \[
+        A_r(t)=\val_U(z_{h(t+s_r)+r})\qquad(t\ge0);
+      \]
+    \item its unique positive dominant root
+      \(\Lambda=\alpha^{hD}\), its algebraic dominant coefficient
+      \(c_r>0\), and computable algebraic numbers
+      \(C_r>0\) and \(1\le\rho_r<\Lambda\) such that
+      \begin{equation}
+        \abs{A_r(t)-c_r\Lambda^t}\le C_r\rho_r^t
+        \qquad(t\ge0).
+        \label{eq:effective-loop-error}
+      \end{equation}
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  All constructions occur in a computable number field containing the roots
+  of the supplied minimal polynomial. Compute its conjugates on the circle
+  of radius \(\alpha\), test the quotients of peripheral conjugates for being
+  roots of unity, and take for \(h\) a common multiple of their orders. This
+  is the effective version of the power choice in
+  \Cref{lem:paired-loop-dominant-root-transfer}.
+
+  The supplied recurrence threshold is now handled separately for this
+  loop. If \(v\ne\varepsilon\), compute how many initial copies of \(v\) are
+  needed for the remaining repeated action to start in the stationary
+  recurrence range and absorb those copies into the fixed prefix. If
+  \(v=\varepsilon\), then \(x\ne\varepsilon\), and do the same with the
+  first copies of \(x\). For each residue \(r\), increase the parameter to
+  the least resulting value congruent to \(r\pmod h\); this gives the
+  recorded, loop- and residue-dependent shift \(s_r\). Every excluded
+  parameter is thereby explicit and finite.
+
+  Form the integral affine block matrices from
+  \eqref{eq:paired-loop-affine-block-form} and the actual powering matrix
+  \(M_v^{\mathsf T}\otimes M_x\), with the one-factor version when a pumped
+  block is empty. Applying Cayley--Hamilton to the scalar value functional
+  gives integer recurrence coefficients and a computable order; direct
+  evaluation gives that many initial values. Exact spectral decomposition
+  of its \(h\)-th power gives the coefficient \(c_r\) and all remaining
+  algebraic roots and Jordan polynomials. The proof of
+  \Cref{lem:paired-loop-dominant-root-transfer} shows that \(c_r\ne0\): the
+  greedy length squeeze uses the supplied recurrence threshold and the two
+  fixed index residues belonging to this particular loop. Since the values
+  are positive, the coefficient is positive.
+
+  Finally compute a real algebraic \(\rho_r\) strictly between the largest
+  modulus of a remaining root and \(\Lambda\). The coefficients and degrees
+  of the finitely many Jordan polynomials are explicit. Bounding
+  \(t^e q^t\) for each \(q<1\), and enlarging the constant to cover the
+  finitely many small indices, effectively produces \(C_r\) in
+  \eqref{eq:effective-loop-error}. Thus the output is an ordinary recurrence
+  beginning at \(0\), not an eventual recurrence with an unrecorded prefix.
+\end{proof}
+
+For the next statement, apply the lemma to all nonconstant loops. Index the
+resulting recurrence sequences by finite sets \(P\) and \(Q\): write
+\[
+  A_p(t)=c_p\Lambda_p^t+O(\rho_p^t),\qquad
+  B_q(m)=d_qK_q^m+O(\sigma_q^m),
+  \quad p\in P,\ q\in Q,
+\]
+with every coefficient and error bound supplied by the effective packages.
+Let \(E_U\) and \(E_V\) be the finite sets of values represented by all
+zero-pump loops and by every parameter discarded in forming these packages,
+and put \(E=E_U\cup E_V\). These sets are computed by direct evaluation.
+
+\begin{theorem}[Effective cardinality bound]
+  \label{thm:effective-slender-cfl-cardinality}
+  From an effective two-system presentation for \(X\), one can compute an
+  upper bound for \(\abs X\). More precisely, set
+  \[
+    M_{pq}=M(A_p,B_q),\qquad N_{pq}=M(B_q,A_p).
+  \]
+  Then the integer
+  \begin{equation}
+    \mathcal B=\abs E+
+      \sum_{p\in P}\sum_{q\in Q}(M_{pq}N_{pq}+1)
+    \label{eq:effective-global-cardinality-bound}
+  \end{equation}
+  is computable from the presentation and satisfies \(\abs X\le\mathcal B\).
+\end{theorem}
+
+\begin{proof}
+  Fix \(p\in P\) and \(q\in Q\). Their dominant roots are positive powers
+  of \(\alpha\) and \(\beta\), respectively, and hence are
+  multiplicatively independent. The effective Mignotte thresholds in
+  \eqref{eq:mignotte-effective-threshold}, applied in both orders, imply that
+  every solution of \(A_p(t)=B_q(m)\) outside
+  \[
+    0\le t<M_{pq},\qquad 0\le m<N_{pq}
+  \]
+  satisfies
+  \begin{equation}
+    c_p\Lambda_p^t=d_qK_q^m.
+    \label{eq:effective-leading-term-equality}
+  \end{equation}
+  Equation \eqref{eq:effective-leading-term-equality} has at most one
+  nonnegative integer solution: two distinct solutions would give
+  \(
+    \Lambda_p^{t_1-t_2}=K_q^{m_1-m_2}
+  \), contrary to multiplicative independence. The finite rectangle contains
+  at most \(M_{pq}N_{pq}\) pairs. Therefore
+  \[
+    \#\{(t,m):A_p(t)=B_q(m)\}\le M_{pq}N_{pq}+1.
+  \]
+
+  If \(x\in X\setminus E\), its unique \(U\)-representation lies in the
+  retained tail of some \(U\)-loop and its unique \(V\)-representation lies
+  in the retained tail of some \(V\)-loop. Thus \(x=A_p(t)=B_q(m)\) for some
+  \(p,q,t,m\). Summing the pair bounds and adding \(E\) gives
+  \eqref{eq:effective-global-cardinality-bound}. Repeated values or overlap
+  among loops are only overcounted.
+\end{proof}
+
+The input to \(\mathcal B\) is the full recurrence and loop data: it includes
+the individual recurrence thresholds and initial values, the actual fixed
+and pumped words, the affine and tensor matrices, the algebraic dominant
+coefficients, spectral gaps, and Mignotte's effective constants. We do not
+extract a closed expression in grammar size, recurrence heights, or block
+lengths. In particular, no uniformity is being inferred from the finitely
+many prefixes: each discarded prefix and each shift \(s_r\) is computed and
+entered in \(E\).
+
 \begin{remark}[Priority and scope]
   \label{rem:slender-cobham-priority}
   Three existing Cobham statements delimit the result. The natural published
@@ -228,8 +420,12 @@ For \(X\subseteq\NN_{\ge1}\), write
   representation languages may have polynomial rather than bounded word
   growth; in particular it covers the regular poly-slender integer-base
   shadow. Their theorem is strictly stronger on the overlap and broader in
-  this regular direction, while the present theorem supplies no quantitative
-  bound.
+  this regular direction. The effective result above computes a cardinality
+  bound from the complete recurrence and paired-loop data, but it does not
+  close the quantitative gap: Albayrak--Bell give a closed expression in the
+  bases, dimension, and numbers of states of the minimal automata. They also
+  distinguish that cardinality estimate from the separate task of actually
+  computing the intersection; we make the same distinction here.
 
   Second, Durand proves that a sequence which is simultaneously
   \(\alpha\)- and \(\beta\)-substitutive for multiplicatively independent
