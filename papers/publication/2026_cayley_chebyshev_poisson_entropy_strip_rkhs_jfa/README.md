@@ -1,11 +1,11 @@
 # Stable-Kernel Entropy at Large Scale
 
-This directory now contains a focused article and a separately compiled
-archive of the former omnibus manuscript.
+This directory contains the article and a separately compiled supplementary
+archive.
 
 ## Active Article
 
-Compile **main.tex**. Its single theorem spine is:
+Compile **main.tex**. Its central theorem spine is:
 
 1. the critical stable-translation quotient estimate;
 2. the optimal uniform sufficient moment exponent
@@ -14,9 +14,13 @@ Compile **main.tex**. Its single theorem spine is:
    \]
 3. the finite-covariance law-by-law decomposition into the quadratic
    covariance energy and the nonlinear raw-tail energy.
+4. relative-entropy dissipation and an integral representation for two
+   symmetric stable heat flows from measure data.
 
-The article sources are **main.tex**, **sec_introduction.tex**,
-**sec_stable_entropy_spine.tex**, and **bibliography_stable.tex**.
+The fractional-heat theorem and its pilot calculation are in
+**sec_fractional_heat_relative_entropy.tex**.  The Cayley coefficient
+calculus remains a separate arc, while the RKHS/lattice results are
+secondary harmonic-analysis and sampling applications.
 
 The literature audit is **artifacts/literature_check.md**. The structural and
 theorem-interface verifier is **artifacts/test_verify_stable_spine.py**.

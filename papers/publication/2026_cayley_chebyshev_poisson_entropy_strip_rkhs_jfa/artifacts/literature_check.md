@@ -313,3 +313,63 @@ No indexed source located in this audit states the combined heavy-tailed
 theorem with its critical moment threshold and sharpness.  This revised
 conclusion concerns only that surviving increment; arbitrary-order
 first-unmatched KL asymptotics themselves are not claimed as new.
+
+## Two-Stable-Heat-Flow Dissipation Search
+
+Checked 2026-08-15 (Asia/Singapore), before adding Theorem
+thm:two-stable-heat-flow-relative-entropy.  The target was the exact
+moving-denominator theorem for
+\[
+ D_{\rm KL}(p_t*\mu\Vert p_t*\nu),
+\]
+including a measure-data domain, rigorous noncompact fractional Green
+pairings, the endpoint at infinity, and the stable-reference integral
+representation requested in Johnson's Open Problem 4.
+
+Direct arXiv API searches were run for "relative entropy" AND "fractional
+heat" (one unrelated SPDE record), "relative entropy dissipation" AND
+"fractional Laplacian" (zero records), "stable heat flow" AND entropy
+(zero records), and "symmetric stable" AND "de Bruijn" (Johnson's paper
+only).  Crossref bibliographic searches for the same combinations returned
+the local-diffusion comparator *A Dissipation of Relative Entropy by
+Diffusion Flows*, stable-limit entropy papers, and unrelated fractional
+models; they did not return a two-stable-heat-flow theorem.  The earlier
+Semantic Scholar and zbMATH checks of Johnson and the nearest
+fractional-diffusion records are documented above; neither index supplied
+the target theorem.
+
+The pure-jump search was intentionally broader.  The arXiv query
+"Hardy-Stein" returned 14 records, including Banuelos--Bogdan--Luks,
+Gutowski, Bogdan--Gutowski--Pietruska-Paluba, and
+Gutowski--Kwasnicki.  The query "Sobolev-Bregman" returned four records,
+including the nonlinear Douglas and Beurling--Deny papers already cited.
+These works establish broad one-function, polarized, and Sobolev--Bregman
+identities, so the manuscript makes no discovery claim for the two-point
+logarithmic jump algebra.
+
+The closest additional record is T. Klimsiak and A. Rozkosz,
+*Nonlinear Hardy--Stein type identities for harmonic functions relative to
+symmetric integro-differential operators*, arXiv:2507.18308.  Its abstract
+and Sections 4--6 were inspected through the arXiv HTML rendering.  It proves
+conditional Hardy--Stein identities for ratios of harmonic functions and
+general convex functions, including purely nonlocal examples.  This makes
+the ratio/Bregman algebra an explicit prior-art boundary.  It does not state
+the parabolic evolution of two simultaneous stable heat flows, compact-time
+quotient estimates for measure initial data, the finite
+$(d+\alpha)$-moment domain, separate noncompact Green-pairing limits, or the
+$t=\infty$ and $q\downarrow0$ entropy closures.
+
+Johnson's arXiv:1310.2045 was re-inspected at the theorem and open-problem
+level.  His differential stable de Bruijn identity uses an
+integration-by-parts qualification, and Open Problem 4 asks for a
+representation of $D(f\Vert g_s^{(\alpha)})$ as an integral.  No later
+indexed source located in this search supplies that representation.
+
+Accordingly, the novelty claim written in the manuscript is only the exact
+moving-denominator parabolic theorem for symmetric stable heat flows from
+measure data, its explicit sufficient moment domain, the rigorous
+noncompact and endpoint closures, and the connection to Johnson's integral
+representation.  The exponent $d+\alpha$ is not claimed optimal.  No claim
+is made for all isotropic unimodal Levy semigroups or all subordinate
+Brownian motions.  This remains a documented negative search, not proof of
+absence from every publication.

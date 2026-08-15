@@ -28,9 +28,11 @@ Gaussian heat flow, not Johnson's stable interpolation.
 2. **Johnson, Open Problem 4 (integral representation).** Exact quote:
    "It would be of interest to provide a similar
    representation of $D(f \Vert g_s^{(\alpha)})$ as an integral, using (17)."
-   **No later source located. Finite-variance Cauchy case proved** in
-   Theorem `thm:johnson-cauchy-integral-representation` of this manuscript;
-   the general symmetric-stable question remains open in the searched record.
+   **No later source located. General symmetric-stable measure-data
+   representation proved** in Theorem
+   `thm:two-stable-heat-flow-relative-entropy` of this manuscript under a
+   finite $(d+\alpha)$-th absolute-moment hypothesis.  The older
+   finite-variance Cauchy theorem is retained as a specialization.
 
 3. **Johnson, Open Problem 6 (remove symmetry).** Exact quote:
    "Finally, it would be of interest to extend all this work to
@@ -82,6 +84,7 @@ Gaussian heat flow, not Johnson's stable interpolation.
 
 Route A, Johnson Open Problem 4, has the best probability-impact product
 because the required flow is canonically present and both endpoints can be
-closed. The proved result is explicitly the finite-variance Cauchy case, not
-a solution of the full symmetric $\alpha$-stable problem. Problems 1 and 6
+closed.  The resulting theorem gives the symmetric $\alpha$-stable
+measure-data integral representation under the stated sufficient moment
+domain.  It does not address non-symmetric stable laws, and Problems 1 and 6
 require machinery absent from the paper.

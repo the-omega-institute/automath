@@ -1,0 +1,453 @@
+\section{Relative Entropy Dissipation for Two Stable Heat Flows}
+\label{sec:fractional-heat-relative-entropy}
+
+Let \(d\ge1\), \(0<\alpha<2\), and let \((p_t)_{t>0}\) be the
+isotropic symmetric \(\alpha\)-stable heat kernel on \(\RR^d\), normalized by
+\begin{equation}\label{eq:stable-heat-fourier-normalization}
+ \widehat p_t(\xi)=e^{-t|\xi|^\alpha},
+ \qquad p_t(x)=t^{-d/\alpha}p_1(t^{-1/\alpha}x).
+\end{equation}
+Thus \(\partial_t p_t=-(-\Delta)^{\alpha/2}p_t\), where
+\begin{equation}\label{eq:fractional-laplacian-normalization}
+ (-\Delta)^{\alpha/2}\varphi(x)
+ =c_{d,\alpha}\operatorname{p.v.}\int_{\RR^d}
+ \frac{\varphi(x)-\varphi(y)}{|x-y|^{d+\alpha}}\dd y,
+ \qquad
+ c_{d,\alpha}
+ =\frac{\alpha2^{\alpha-1}
+ \Gamma((d+\alpha)/2)}{\pi^{d/2}\Gamma(1-\alpha/2)}.
+\end{equation}
+The stable-kernel estimates used below are recorded in
+Proposition~\ref{prop:stable-kernel-input-package}.  In particular, with
+\(\beta=d+\alpha\),
+\begin{equation}\label{eq:stable-heat-section-kernel-package}
+ p_1(x)\asymp(1+|x|)^{-\beta},\qquad
+ |D^kp_1(x)|\lesssim(1+|x|)^{-\beta-k}\quad(k=1,2).
+\end{equation}
+Put \(S_{\alpha,d}:=\|\nabla\log p_1\|_\infty<\infty\) and
+\begin{equation}\label{eq:stable-log-bregman-definition}
+ \Lambda(a,b):=a\log\frac ab-a+b,
+ \qquad a,b>0.
+\end{equation}
+
+The following pilot calculation is stated separately because it is the
+point at which the moment domain and the jump singularity first meet.
+
+\begin{lemma}[Stable quotient pilot lemma]
+\label{lem:stable-quotient-pilot}
+Let \(\lambda\) be a probability measure on \(\RR^d\) with finite
+\((d+\alpha)\)-th absolute moment, and set
+\[
+ Q_t^\lambda(y):=\int_{\RR^d}
+ \frac{p_1(y-x/t^{1/\alpha})}{p_1(y)}\,\lambda(\dd x).
+\]
+For every \(0<a<b<\infty\), there are constants
+\(0<c_{a,b,\lambda}\le C_{a,b,\lambda}<\infty\) such that
+\begin{equation}\label{eq:pilot-two-sided-score-bounds}
+ c_{a,b,\lambda}\le Q_t^\lambda(y)\le C_{a,b,\lambda},
+ \qquad
+ |\nabla\log Q_t^\lambda(y)|\le2S_{\alpha,d}
+\end{equation}
+for all \(t\in[a,b]\) and \(y\in\RR^d\).  If \(\mu,\nu\) are two such
+measures, \(t>0\) is fixed, and \(u=Q_t^\mu/Q_t^\nu\), then
+\begin{equation}\label{eq:pilot-bregman-integral-finite}
+ \iint_{\RR^d\times\RR^d}
+ \frac{p_1(y)Q_t^\nu(y)\Lambda(u(y),u(z))}
+ {|y-z|^{d+\alpha}}\dd z\dd y<\infty.
+\end{equation}
+No moment margin beyond \(d+\alpha\) is required.
+\end{lemma}
+
+\begin{proof}
+The two-sided density bound in
+\eqref{eq:stable-heat-section-kernel-package} and
+\(1+|y|\le(1+|y-w|)(1+|w|)\) give
+\begin{equation}\label{eq:pilot-polynomial-quotient}
+ \frac{p_1(y-w)}{p_1(y)}\le C(1+|w|)^\beta.
+\end{equation}
+With \(w=x/t^{1/\alpha}\) and \(t\ge a\), averaging
+\eqref{eq:pilot-polynomial-quotient} gives the upper bound in
+\eqref{eq:pilot-two-sided-score-bounds}; this is the only place in the
+pilot at which the \(\beta=d+\alpha\) moment is used.
+
+Since \(\log p_1\) is \(S_{\alpha,d}\)-Lipschitz,
+\[
+ \frac{p_1(y-w)}{p_1(y)}\ge e^{-S_{\alpha,d}|w|}.
+\]
+Consequently
+\[
+ Q_t^\lambda(y)\ge
+ \int e^{-S_{\alpha,d}a^{-1/\alpha}|x|}\lambda(\dd x)>0,
+\]
+uniformly in \(t\in[a,b]\) and \(y\).  If
+\(A_t(y)=\int p_1(y-x/t^{1/\alpha})\lambda(\dd x)\), then differentiation
+under the integral and positivity show that
+\[
+ \nabla\log A_t(y)
+ =\frac{\int p_1(y-x/t^{1/\alpha})
+ \nabla\log p_1(y-x/t^{1/\alpha})\lambda(\dd x)}{A_t(y)}.
+\]
+Its norm is at most \(S_{\alpha,d}\), and subtracting
+\(\nabla\log p_1(y)\) proves the score bound.
+
+For the last assertion, the preceding bounds give constants
+\(0<m\le u\le M<\infty\), while
+\(|\nabla\log u|\le4S_{\alpha,d}\).  Hence
+\begin{equation}\label{eq:pilot-u-lipschitz}
+ |u(y)-u(z)|\le4MS_{\alpha,d}|y-z|.
+\end{equation}
+Taylor's theorem for \(r\mapsto r\log r-r\), whose second derivative is
+\(1/r\), gives
+\begin{equation}\label{eq:pilot-lambda-quadratic}
+ 0\le\Lambda(r,s)\le\frac{|r-s|^2}{2m}
+ \qquad(r,s\in[m,M]).
+\end{equation}
+Thus the integrand in \eqref{eq:pilot-bregman-integral-finite}, without its
+probability weight, is bounded by \(C|y-z|^{2-d-\alpha}\) when
+\(|y-z|\le1\), and by \(C|y-z|^{-d-\alpha}\) when
+\(|y-z|>1\).  Both kernels are integrable in the \(z\)-variable because
+\(\alpha<2\) and \(\alpha>0\).  Finally,
+\(p_1(y)Q_t^\nu(y)\dd y\) is a probability measure.  Tonelli's theorem
+proves \eqref{eq:pilot-bregman-integral-finite}.
+\end{proof}
+
+Here is the field-facing consequence.  It concerns two simultaneous
+fractional heat flows and does not use the proxy or coefficient terminology
+of the other sections.
+
+\begin{theorem}[Relative entropy dissipation for two symmetric stable heat flows]
+\label{thm:two-stable-heat-flow-relative-entropy}
+Let \(d\ge1\), \(0<\alpha<2\), and use the normalization
+\eqref{eq:stable-heat-fourier-normalization}--
+\eqref{eq:fractional-laplacian-normalization}.  Let \(\mu\) and \(\nu\) be
+probability measures on \(\RR^d\) satisfying
+\begin{equation}\label{eq:stable-flow-moment-hypothesis}
+ \int_{\RR^d}|x|^{d+\alpha}\mu(\dd x)
+ +\int_{\RR^d}|x|^{d+\alpha}\nu(\dd x)<\infty.
+\end{equation}
+For \(t>0\), define
+\[
+ f_t=p_t*\mu,\qquad g_t=p_t*\nu,\qquad
+ u_t=\frac{f_t}{g_t},\qquad
+ H(t)=D_{\rm KL}(f_t\|g_t),
+\]
+and
+\begin{equation}\label{eq:stable-flow-dissipation-definition}
+ I_{\alpha,d}(t):=c_{d,\alpha}
+ \iint_{\RR^d\times\RR^d}
+ \frac{g_t(x)\Lambda(u_t(x),u_t(y))}{|x-y|^{d+\alpha}}
+ \dd y\dd x.
+\end{equation}
+Then all of the following hold.
+
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item For every compact interval \([a,b]\subset(0,\infty)\), there are
+constants
+\[
+ 0<m_{a,b}\le M_{a,b}<\infty,\qquad L_{a,b}<\infty,
+\]
+such that
+\begin{equation}\label{eq:stable-flow-compact-window-domain}
+ m_{a,b}\le u_t(x)\le M_{a,b},\qquad
+ |\nabla\log u_t(x)|\le L_{a,b}
+\end{equation}
+for all \(t\in[a,b]\) and \(x\in\RR^d\).
+
+\item The quantity \(I_{\alpha,d}(t)\) is finite for every \(t>0\) and is
+locally integrable on \((0,\infty)\).
+
+\item The function \(H\) is locally absolutely continuous on
+\((0,\infty)\), and
+\begin{equation}\label{eq:stable-flow-debruijn-identity}
+ H'(t)=-I_{\alpha,d}(t)
+\end{equation}
+for almost every \(t>0\).
+
+\item One has
+\begin{equation}\label{eq:stable-flow-w1-decay}
+ H(t)\le S_{\alpha,d}t^{-1/\alpha}W_1(\mu,\nu),
+\end{equation}
+and consequently \(H(t)\to0\) as \(t\to\infty\).
+
+\item For every \(t>0\),
+\begin{equation}\label{eq:stable-flow-tail-integral}
+ D_{\rm KL}(p_t*\mu\|p_t*\nu)
+ =\int_t^\infty I_{\alpha,d}(s)\dd s.
+\end{equation}
+
+\item There is also a stable-reference version.  Let \(s_0>0\), let
+\(\mu\) be a probability measure with finite \((d+\alpha)\)-th absolute
+moment, and put
+\[
+ f_q=p_q*\mu,\qquad g_q=p_{q+s_0},\qquad q>0.
+\]
+The conclusions in \textup{(ii)} and \textup{(iii)}, and the tail identity
+\begin{equation}\label{eq:stable-reference-tail-integral}
+ D_{\rm KL}(p_q*\mu\|p_{q+s_0})
+ =\int_q^\infty I_{\alpha,d}^{(s_0)}(r)\dd r,
+\end{equation}
+hold with this pair, where \(I_{\alpha,d}^{(s_0)}\) is
+\eqref{eq:stable-flow-dissipation-definition} with \(g_r=p_{r+s_0}\).
+If \(\mu\) has a density and
+\(D_{\rm KL}(\mu\|p_{s_0})<\infty\), then
+\begin{align}
+ D_{\rm KL}(\mu\|p_{s_0})
+ &=c_{d,\alpha}\int_0^\infty
+ \iint_{\RR^d\times\RR^d}
+ \frac{p_{q+s_0}(x)}{|x-y|^{d+\alpha}}\notag\\
+ &\qquad\times
+ \Lambda\left(
+ \frac{(p_q*\mu)(x)}{p_{q+s_0}(x)},
+ \frac{(p_q*\mu)(y)}{p_{q+s_0}(y)}
+ \right)\dd y\dd x\dd q.\label{eq:stable-reference-integral-representation}
+\end{align}
+In dimension one, let \(X\sim\mu\), let \(Z_{s_0}^{(\alpha)}\) be
+independent of \(X\) with density \(p_{s_0}\), and let \(h_t\) be the density
+of
+\begin{equation}\label{eq:johnson-stable-interpolation}
+ X_t=(1-t)^{1/\alpha}X+t^{1/\alpha}Z_{s_0}^{(\alpha)},
+ \qquad 0<t<1.
+\end{equation}
+Writing \(v_t=h_t/p_{s_0}\), the change of variables
+\(q=s_0t/(1-t)\) turns
+\eqref{eq:stable-reference-integral-representation} into
+\begin{equation}\label{eq:johnson-stable-interpolation-representation}
+ D_{\rm KL}(\mu\|p_{s_0})
+ =c_{1,\alpha}s_0\int_0^1\frac1{1-t}
+ \iint_{\RR^2}
+ \frac{p_{s_0}(x)\Lambda(v_t(x),v_t(y))}
+ {|x-y|^{1+\alpha}}\dd y\dd x\dd t.
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+We first isolate the noncompact Green-pairing fact used in the proof.  It is
+the step for which cancellation at infinity cannot be replaced by a formal
+generator calculation.
+
+\begin{lemma}[Annular fractional Green closure]
+\label{lem:annular-fractional-green-closure}
+For \(0<\varepsilon<1<R\), define
+\[
+ A_{\varepsilon,R}\varphi(x)
+ :=c_{d,\alpha}\int_{\varepsilon<|x-y|<R}
+ \frac{\varphi(x)-\varphi(y)}{|x-y|^{d+\alpha}}\dd y.
+\]
+If \(\varphi\in W^{2,1}(\RR^d)\), then
+\begin{equation}\label{eq:annular-generator-l1-limit}
+ A_{\varepsilon,R}\varphi\longrightarrow
+ (-\Delta)^{\alpha/2}\varphi
+ \quad\hbox{in }L^1(\RR^d)
+\end{equation}
+as \(\varepsilon\downarrow0\) and \(R\uparrow\infty\).  If
+\(\psi\in L^\infty(\RR^d)\), then at every finite annulus
+\begin{equation}\label{eq:finite-annulus-green-formula}
+ \int\psi A_{\varepsilon,R}\varphi
+ =\frac{c_{d,\alpha}}2
+ \iint_{\varepsilon<|x-y|<R}
+ \frac{(\varphi(x)-\varphi(y))(\psi(x)-\psi(y))}
+ {|x-y|^{d+\alpha}}\dd y\dd x.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Symmetry in the increment \(h\) writes the small-jump part in terms of
+\(2\varphi(x)-\varphi(x+h)-\varphi(x-h)\).  The integral form of the
+second-order Taylor remainder yields
+\[
+ \|2\varphi-\varphi(\mathord\cdot+h)
+ -\varphi(\mathord\cdot-h)\|_1
+ \le |h|^2\|D^2\varphi\|_1.
+\]
+Hence the omitted ball of radius \(\varepsilon\) is bounded in \(L^1\) by
+\[
+ C\|D^2\varphi\|_1\int_0^\varepsilon r^{1-\alpha}\dd r
+ \longrightarrow0.
+\]
+The omitted region \(|h|>R\) is bounded by
+\(C\|\varphi\|_1\int_R^\infty r^{-1-\alpha}\dd r\to0\).
+This proves \eqref{eq:annular-generator-l1-limit}, first on smooth
+functions and then on \(W^{2,1}\) by the same estimates.  On a finite
+annulus all terms are absolutely integrable because \(\varphi\in L^1\) and
+\(\psi\) is bounded.  Exchanging \(x\) and \(y\) in one copy of the
+integral proves \eqref{eq:finite-annulus-green-formula}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:two-stable-heat-flow-relative-entropy}]
+Write \(x=t^{1/\alpha}y\).  The scaling in
+\eqref{eq:stable-heat-fourier-normalization} gives
+\[
+ \frac{f_t(t^{1/\alpha}y)}{p_t(t^{1/\alpha}y)}=Q_t^\mu(y),
+ \qquad
+ \frac{g_t(t^{1/\alpha}y)}{p_t(t^{1/\alpha}y)}=Q_t^\nu(y).
+\]
+Lemma~\ref{lem:stable-quotient-pilot} therefore gives the two-sided bounds
+in \eqref{eq:stable-flow-compact-window-domain}.  It also gives
+\[
+ |\nabla_x\log u_t(x)|
+ \le4S_{\alpha,d}t^{-1/\alpha}
+ \le4S_{\alpha,d}a^{-1/\alpha},
+\]
+which proves \textup{(i)}.
+
+On a fixed compact time window, write \(m,M,L\) for the constants in
+\eqref{eq:stable-flow-compact-window-domain}.  Since
+\(|\nabla u_t|\le ML\), \eqref{eq:pilot-lambda-quadratic} gives
+\begin{equation}\label{eq:stable-flow-bregman-majorant}
+ 0\le\Lambda(u_t(x),u_t(y))\le
+ C\min\{|x-y|^2,1\}.
+\end{equation}
+The constant is uniform on the window.  Integrating first in \(y\) and then
+against the probability density \(g_t(x)\) proves that
+\(I_{\alpha,d}(t)\) is finite and locally bounded.  This proves
+\textup{(ii)} and also supplies an integrable majorant for every annular
+cutoff below.
+
+The derivative estimate in
+\eqref{eq:stable-heat-section-kernel-package}, together with scaling, gives
+\begin{equation}\label{eq:stable-kernel-relative-time-derivative}
+ |\partial_t p_t(x)|\le C_{d,\alpha}t^{-1}p_t(x).
+\end{equation}
+Indeed, differentiating \(t^{-d/\alpha}p_1(t^{-1/\alpha}x)\) reduces this to
+the boundedness of
+\(|y||\nabla p_1(y)|/p_1(y)\).  Convolution gives the same relative bound
+for \(f_t\) and \(g_t\).  The compact quotient range then permits
+differentiation of the pointwise entropy integrand.  On
+\([a,b]\times\RR^d\), the absolute value of that derivative is bounded by
+\(C(f_t+g_t)\), whose space-time integral is \(2C(b-a)\).  Fubini's theorem
+and the one-dimensional fundamental theorem for absolutely continuous
+functions therefore give local absolute continuity of \(H\) and, for almost
+every \(t\),
+\begin{equation}\label{eq:stable-flow-l1-chain-rule}
+ H'(t)=\int_{\RR^d}\log u_t\,\partial_t f_t\dd x
+ -\int_{\RR^d}(u_t-1)\partial_tg_t\dd x
+ =-\int\log u_t\,Af_t+\int u_t\,Ag_t,
+\end{equation}
+where \(A=(-\Delta)^{\alpha/2}\).  This also proves local absolute
+continuity directly.
+
+For each fixed \(t>0\), stable smoothing gives
+\(f_t,g_t\in W^{2,1}(\RR^d)\).  Apply
+Lemma~\ref{lem:annular-fractional-green-closure} first with
+\((\varphi,\psi)=(f_t,\log u_t)\) and then with
+\((\varphi,\psi)=(g_t,u_t)\).  The two individual left sides converge by
+\eqref{eq:annular-generator-l1-limit}, because \(u_t\) and
+\(\log u_t\) are bounded.  At a finite annulus their difference is
+\begin{align*}
+ &-\frac{c_{d,\alpha}}2\iint
+ \frac{(g_xu_x-g_yu_y)(\log u_x-\log u_y)
+ -(g_x-g_y)(u_x-u_y)}{|x-y|^{d+\alpha}}\dd y\dd x\\
+ &=-\frac{c_{d,\alpha}}2\iint
+ \frac{g_x\Lambda(u_x,u_y)+g_y\Lambda(u_y,u_x)}
+ {|x-y|^{d+\alpha}}\dd y\dd x,
+\end{align*}
+where the integrations are over
+\(\varepsilon<|x-y|<R\).  Exchanging \(x,y\) in the second summand makes
+this the negative of the one-sided annular version of
+\eqref{eq:stable-flow-dissipation-definition}.  The majorant
+\eqref{eq:stable-flow-bregman-majorant} removes both annular cutoffs by
+dominated convergence.  Thus both noncompact Green pairings close
+separately and
+\(H'(t)=-I_{\alpha,d}(t)\).  No cancellation has been invoked before the
+two \(L^1\) generator limits exist.  This proves \textup{(iii)}.
+
+For any coupling \(\pi\) of \(\mu\) and \(\nu\), joint convexity of relative
+entropy and the Lipschitz bound for \(\log p_t\) give
+\begin{align*}
+ H(t)
+ &\le\int D_{\rm KL}
+ \bigl(p_t(\mathord\cdot-x)\|p_t(\mathord\cdot-y)\bigr)
+ \pi(\dd x,\dd y)\\
+ &\le S_{\alpha,d}t^{-1/\alpha}
+ \int|x-y|\pi(\dd x,\dd y).
+\end{align*}
+Taking the infimum over \(\pi\) proves \eqref{eq:stable-flow-w1-decay}.
+The moment hypothesis implies finite first moments, so the right side tends
+to zero.  This is \textup{(iv)}.  Integrating
+\eqref{eq:stable-flow-debruijn-identity} from \(t\) to \(T\), and then using
+nonnegativity and \(H(T)\to0\), proves \textup{(v)}.
+
+It remains to treat the stable reference.  On every compact \(q\)-window,
+the quotient \((p_q*\mu)/p_q\) has the bounds in the pilot lemma.  The ratio
+\(p_{q+s_0}/p_q\) and its reciprocal are uniformly bounded there by
+\eqref{eq:stable-heat-section-kernel-package} and scaling; their logarithmic
+gradients are uniformly bounded as well.  Hence the compact-window proof
+above applies to \(f_q=p_q*\mu\), \(g_q=p_{q+s_0}\), even though the stable
+law \(p_{s_0}\dd x\) need not have a \((d+\alpha)\)-moment.
+
+For any \(q_0>0\), the corresponding quotient \(f_q/g_q\) is bounded above
+and below uniformly for all \(q\ge q_0\).  Moreover,
+\begin{align*}
+ \|p_q*\mu-p_q\|_1
+ &\le\int\|p_1(\mathord\cdot-x/q^{1/\alpha})-p_1\|_1\mu(\dd x)
+ \longrightarrow0,\\
+ \|p_{q+s_0}-p_q\|_1&\longrightarrow0.
+\end{align*}
+The first limit is dominated convergence and \(L^1\)-translation
+continuity; the second is \(L^1\)-continuity of dilations.  On a fixed
+compact quotient range, \(r\log r-r+1\le C|r-1|\).  Therefore
+\(D_{\rm KL}(p_q*\mu\|p_{q+s_0})\to0\), which proves
+\eqref{eq:stable-reference-tail-integral} by the already established local
+identity.
+
+Suppose now that the initial relative entropy is finite.  Convolution by
+\(p_q\) is a Markov kernel, so data processing gives
+\[
+ D_{\rm KL}(p_q*\mu\|p_q*p_{s_0})
+ \le D_{\rm KL}(\mu\|p_{s_0}).
+\]
+As \(q\downarrow0\), both arguments on the left converge weakly to the
+corresponding arguments on the right.  Lower semicontinuity of relative
+entropy supplies the reverse liminf inequality.  Hence
+\begin{equation}\label{eq:stable-reference-small-time-kl-limit}
+ D_{\rm KL}(p_q*\mu\|p_{q+s_0})
+ \longrightarrow D_{\rm KL}(\mu\|p_{s_0}).
+\end{equation}
+Letting \(q\downarrow0\) in
+\eqref{eq:stable-reference-tail-integral} and using monotone convergence
+proves \eqref{eq:stable-reference-integral-representation}.
+
+Finally set \(r=(1-t)^{1/\alpha}\) and
+\(q=s_0t/(1-t)\).  The density in
+\eqref{eq:johnson-stable-interpolation} and the stable reference satisfy
+\[
+ h_t(x)=r^{-1}(p_q*\mu)(x/r),\qquad
+ p_{s_0}(x)=r^{-1}p_{q+s_0}(x/r).
+\]
+Thus \(v_t(x)=u_q(x/r)\).  The spatial change of variables in the jump form
+gives \(I_{\alpha,1}^{(s_0)}(q)=(1-t)\) times the double integral in
+\eqref{eq:johnson-stable-interpolation-representation}, while
+\(\dd q=s_0(1-t)^{-2}\dd t\).  This proves that representation and
+completes \textup{(vi)}.
+\end{proof}
+
+\begin{remark}[Domain and novelty boundary]
+\label{rem:stable-flow-domain-novelty-boundary}
+The exponent \(d+\alpha\) is a transparent sufficient hypothesis, not an
+optimality claim.  It is natural here because the stable tail has precisely
+that exponent and the worst-case translate quotient in
+\eqref{eq:pilot-polynomial-quotient} grows like
+\((1+|x|)^{d+\alpha}\).  The proof genuinely uses this moment only to obtain
+the uniform upper quotient bound; the lower quotient bound uses much less,
+and the endpoint estimate in \textup{(iv)} uses only first moments.  It
+remains open here whether the dissipation identity holds under finite first
+moment, finite initial relative entropy, or a direct Dirichlet-form domain
+condition.
+
+The two-point logarithmic algebra is not new.  Broad Hardy--Stein,
+polarized, nonlinear Douglas, and Sobolev--Bregman identities for pure-jump
+forms are already available
+\cite{BanuelosBogdanLuks2016HardyStein,Gutowski2023HardySteinPureJump,
+BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas,
+GutowskiKwasnicki2025BeurlingDenySobolevBregman,
+BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein}; conditional
+Hardy--Stein identities also treat ratios of harmonic functions and general
+convex functions \cite{KlimsiakRozkosz2025ConditionalHardyStein}.  The claim
+of Theorem~\ref{thm:two-stable-heat-flow-relative-entropy} is narrower: the
+moving-denominator parabolic theorem for two stable heat flows from measure
+data, its explicit sufficient moment domain, the noncompact Green-pairing
+and \(t=\infty\) closures, and the resulting integral representation posed
+in \cite[Open Problem~4]{Johnson2013StableDeBruijn}.  The theorem does not
+extend to all isotropic unimodal L\'evy semigroups or all subordinate
+Brownian motions.
+\end{remark}

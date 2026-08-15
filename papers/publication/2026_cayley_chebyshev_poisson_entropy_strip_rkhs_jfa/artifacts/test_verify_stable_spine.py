@@ -26,6 +26,7 @@ class StableSpineManuscriptTests(unittest.TestCase):
         main = (ROOT / "main.tex").read_text(encoding="utf-8")
 
         self.assertIn(r"\input{sec_verified_A2_results}", main)
+        self.assertIn(r"\input{sec_fractional_heat_relative_entropy}", main)
         self.assertIn(r"\input{bibliography_shared}", main)
         self.assertNotIn(r"\input{sec_stable_entropy_spine}", main)
         for article_input in (
@@ -148,6 +149,45 @@ class StableSpineManuscriptTests(unittest.TestCase):
         for index in ("arXiv", "Crossref", "Semantic Scholar", "zbMATH"):
             self.assertIn(index, audit)
         self.assertIn("Ishige--Kawakami--Michihisa", audit)
+        self.assertIn("Klimsiak and A. Rozkosz", audit)
+
+    def test_two_stable_flow_theorem_has_pilot_six_parts_and_domain_closure(
+        self,
+    ) -> None:
+        source = (ROOT / "sec_fractional_heat_relative_entropy.tex").read_text(
+            encoding="utf-8"
+        )
+        required = (
+            r"\label{lem:stable-quotient-pilot}",
+            r"\label{thm:two-stable-heat-flow-relative-entropy}",
+            r"\widehat p_t(\xi)=e^{-t|\xi|^\alpha}",
+            r"c_{d,\alpha}",
+            r"\Gamma(1-\alpha/2)",
+            r"\Lambda(a,b):=a\log\frac ab-a+b",
+            r"\label{eq:stable-flow-compact-window-domain}",
+            r"\label{eq:stable-flow-dissipation-definition}",
+            r"\label{eq:stable-flow-debruijn-identity}",
+            r"\label{eq:stable-flow-w1-decay}",
+            r"\label{eq:stable-flow-tail-integral}",
+            r"\label{eq:stable-reference-integral-representation}",
+            r"\label{eq:johnson-stable-interpolation-representation}",
+            r"\label{lem:annular-fractional-green-closure}",
+            r"A_{\varepsilon,R}\varphi\longrightarrow",
+            r"f_t,g_t\in W^{2,1}(\RR^d)",
+            "both noncompact Green pairings close",
+            "No moment margin beyond",
+            "transparent sufficient hypothesis",
+            "optimality claim",
+            "does not",
+            "extend to all isotropic unimodal",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        theorem = source.split(
+            r"\label{thm:two-stable-heat-flow-relative-entropy}", 1
+        )[1].split(r"\end{theorem}", 1)[0]
+        self.assertEqual(theorem.count(r"\item"), 6)
 
     def test_named_problem_audit_records_printed_questions_and_status(self) -> None:
         audit = (ROOT / "artifacts" / "tier2_named_problem_audit.md").read_text(
@@ -161,7 +201,8 @@ class StableSpineManuscriptTests(unittest.TestCase):
             "Johnson, Open Problem 6",
             "more general (non-symmetric) families of stable laws",
             "No later source located",
-            "Finite-variance Cauchy case proved",
+            "General symmetric-stable measure-data",
+            "representation proved",
         )
         for text in required:
             self.assertIn(text, audit)
