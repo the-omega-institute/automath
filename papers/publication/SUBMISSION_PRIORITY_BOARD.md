@@ -16,13 +16,13 @@
 
 | 篇 | 页 | 最新裁决 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | **86+33** | ✅ **定理通过外审技术审查;JFA 由"彩票"升为认真投稿** | **JFA** |
+| **A2** `cayley_chebyshev` | **87+33** | ✅ 签字项完成;**查出 1 条伪造 + 3 条错配引用并修** | **JFA** |
 | **A3** `sharp_three_window` | **67+15** | ✅ 有界 $U$-零表示线性瞬态界已证并复核 | **TAMS**(重估在飞)|
 | **A4** `prime_languages` | **33+43** | ✅ **slender-CFL Cobham 定理已证并复核** | Monatshefte(可重估)|
 | **A5** `finite_parts` | 43+19 | ✅ Mahler 定理成立但**降为支撑性而非承载档位** | ETDS(不拆分)|
 | **A6** `zeckendorf_fibers` | 69+20 | **64%:Brocot 分数全变差凝聚定理**(在改)| **Transactions**(JNT/ETDS 备选) |
 | **A7** `upper_fibers` | **36+36** | ✅ 定理正确、系数更正获背书;Kiss 1988 比较已补 | **Fibonacci Quarterly**(档位不变)|
-| **A8** `detector_shells` | **70+19** | ✅ 等价定理经外审确认(核心 0.95);锥面一句待限定 | **SPA(诚实首投)**;Bernoulli 高风险 |
+| **A8** `detector_shells` | **72+19** | ✅ 锥面已限定;**7 条 DOI 指向他人论文,已修** | **SPA(诚实首投)**;Bernoulli 高风险 |
 | **A9** `homological_visibility` | 38+6 | ⛔ 天花板;范围更正已完成入库 | Cahiers |
 
 
@@ -59,13 +59,18 @@
 
 
 
-> **TICK 84 — 内存 0.84 GB、三个 agent 在跑,故不加派;改用零 agent 成本的方式亲自核 DOI。**
+> **TICK 85 — 引用审计成为本轮主线:两篇查完,两篇都是脏的。A2 `83e56e5dd`、A8 `08b192041` 已入库。**
 >
-> **本轮 agent 新加的引用五查五实**,与索引逐字相符:Granville《Primitive prime factors in second-order linear recurrence sequences》Acta Arith. **155(4) 431–452 (2012)**;Kiss《Primitive Divisors of Lucas Numbers》Springer《Applications of Fibonacci Numbers》**1988, 29–38**;Mignotte《Intersection des images de certaines suites récurrentes linéaires》TCS **7(1) 117–121 (1978)**;Ilie–Rozenberg–Salomaa《A characterization of poly-slender context-free languages》RAIRO ITA **34(1) 77–86 (2000)**;以及一条格式异常的 2025 年 FQ 条目(Fitzgibbons–Javaheri–Miller–Verga)亦属实。
+> **A2**:那条伪造条目已从两处文献表副本与全部四个引用点清除,**逐处判断而非一刀替换**(引言那处原句比伪造引用能支撑的更宽,改写了句子而非换引用)。审计另查出三条:`Yoshida2017` **实为第二处伪造**(首字母、标题、期号、文章号全错,DOI 指向无关的 Guo 等人论文);`Blachman1965` 与 `BakryCoulhonLedouxSaloffCoste1995` 的 DOI **各自指向别的论文**。三条更正我独立重查确认。Bertoin、Csiszár、De Bruijn 1953、Feller 四条前 DOI 时代经典**原样保留并公开标注未核**。
 >
-> **结论:那条伪造引用是遗留条目,不是本次冲刺产生的。** 本次冲刺的 agent 在引用上是准确的;风险集中在更早轮次留下的条目。A4 / A7 / A9 三篇合计另有约 **85 个未核 DOI**(34 / 32 / 25),须做整表核查 —— 内存宽裕后即派,A2 / A5 / A8 的派工里已包含该项。
+> **A8**:**七条 DOI 能解析但指向完全不同的论文**(Petrie 1969、Erickson 1970、Gurvits–Ledoux 2005、Finesso–Grassi–Spreij 2010、Pyke 1961、Çınlar 1969、Yu–Fessler 2000),已全部按 Crossref 更正,我抽核两条无误。这类错误比彻底伪造更隐蔽 —— DOI 点得开,打开的是别人的文章。该 agent 还**主动报告了对自己不利的三点**:构建日志被它删故无法自证编译结果(我因此从零重建)、清理不彻底、以及**跨源冗余实际未达成**(OpenAlex 配额耗尽、S2 返回 429,审计实为 Crossref+arXiv 单源)。该限制已写入提交说明而非抹去。
 >
-> A3 重估 `7d5ba223` 仍在飞;codex 侧 A2 引用审计、A5 配重、A8 锥面修订三件在跑,无可收割。
+> 锥面那句已按外审原意限定;档位**改投 SPA**,Bernoulli 记为"数学够格、架构高风险",不硬冲;790 行文件拆为三份。
+>
+> **A4、A7 的整表审计已派**(各约 34 / 32 个 DOI)。八篇中已有两篇证实为脏,遗留文献表整体不可信,故其余各篇均须走同一流程。A9 的 25 个 DOI 排下一轮。
+>
+> A3 重估 `7d5ba223` 仍在飞:worker `..._1_tab_3` **28 秒前活跃**持有,是真在跑,不按耗时误杀。
+
 
 
 

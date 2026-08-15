@@ -1,0 +1,69 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow. Proceed directly.
+This is a bibliographic integrity audit. Do not change any mathematics.
+
+WHY THIS IS BEING RUN. Two sibling papers in this family were audited this way and both were
+dirty. In one, an entry was entirely fabricated - a plausible title, a DOI that resolves to
+nothing, and author initials shuffled from a real paper on the same topic - and it had survived
+several expert referee rounds, with the referee himself describing it as "a different article by
+those authors". The same audit then found three more entries whose DOIs resolved to completely
+different papers. In the second paper, seven DOIs resolved to entirely different papers. Referees
+check mathematics; they do not check whether your citations exist. Assume nothing in this
+bibliography is correct until an index says so.
+
+WHAT TO DO
+
+ 1. Extract every bibliography entry in this paper, including any copy under a submission bundle
+    or submission source directory. Report the total count.
+
+ 2. For every entry that carries a DOI, resolve the DOI against Crossref and COMPARE THE RETURNED
+    TITLE AND LEAD AUTHOR with what the entry claims. A DOI that resolves is not enough - the
+    failure mode found in the sibling papers was DOIs that resolve correctly but point at someone
+    else's article. Where Crossref is unavailable or empty, try OpenAlex and Semantic Scholar.
+
+ 3. For every entry without a DOI, search by exact title and author in Crossref, OpenAlex or
+    Semantic Scholar, or against the official publisher, PMLR, arXiv or journal archive record.
+
+ 4. Classify each entry as one of: confirmed; confirmed after metadata correction, stating the old
+    and new values; or unverified.
+
+ 5. CORRECT metadata that is demonstrably wrong against the index record - wrong DOI, wrong year,
+    wrong volume, wrong initials, wrong title. Do not change the intellectual content of any
+    sentence that cites it unless the correction changes what the source actually says, in which
+    case fix the sentence too and say so.
+
+ 6. DELETE an entry only if it is demonstrably fabricated - no index has it, its DOI resolves to
+    nothing or to an unrelated work, and no plausible near-match exists. If you delete one,
+    resolve every \cite of it individually: read the surrounding sentence, and either cite a
+    verified source that genuinely supports the claim, or rewrite the sentence so it no longer
+    needs the citation. Do not blanket-substitute one key for another.
+
+ 7. NEVER invent a replacement citation, and never silently drop an entry you merely could not
+    confirm. Anything unverified stays in the bibliography unchanged and is listed in
+    artifacts/literature_check.md with the exact searches you tried and their outcomes. Pre-DOI
+    classics and obscure proceedings legitimately fail this check; that is fine and must be
+    recorded rather than hidden.
+
+ 8. RECORD THE AUDIT'S OWN LIMITATIONS. If an index was rate-limited or unavailable, say so
+    explicitly and say which entries were therefore checked against fewer sources than intended.
+    A service failure is NOT negative evidence about a citation. Note explicitly if the intended
+    cross-source redundancy was not achieved.
+
+ 9. Write the full per-entry verification table into artifacts/literature_check.md, appended to
+    whatever is already recorded there. Keep existing sourcing-gap records intact.
+
+RULES:
+ - Do not weaken, restate or renumber any theorem. This audit touches citations only.
+ - Keep every .tex under 800 lines.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in every document.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the paper
+   directory, and remove any stale ones you find.
+ - Do NOT delete build logs before reporting - they are needed to confirm the compile claims.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the total entry count; the full verification table; every correction with old and new
+values; every deletion with the four citation decisions that followed it; every unverified entry
+with what was tried; the audit's own limitations including any index that was unavailable; page
+and theorem counts before and after; compile and test results.
