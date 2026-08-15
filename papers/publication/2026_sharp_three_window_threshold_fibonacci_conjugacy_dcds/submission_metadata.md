@@ -3,9 +3,18 @@
 Primary target: Transactions of the American Mathematical Society (TAMS)
 
 Venue framing: ambitious first submission; acceptance is not presumed, and a
-referee may regard the cyclic rank map as specialized.
+referee may regard the cyclic rank map as specialized. The bounded-zero
+theorem makes TAMS somewhat more defensible because the manuscript is no
+longer wholly about a bespoke cyclic rank-fold, but TAMS is still neither a
+natural nor a secure placement, and this is not a tier change. The paper is
+still 67 pages with 52 numbered results, while its title and most of its
+architecture remain centered on cyclic language-rank recoding. A hostile
+referee can therefore still ask whether the narrow field-level theorem is
+large enough relative to the total package.
 
-Strong natural alternative: Ergodic Theory and Dynamical Systems (ETDS)
+Strong natural alternative: Ergodic Theory and Dynamical Systems (ETDS),
+which remains the venue where the full symbolic-dynamical package is most
+naturally valued.
 
 Conservative alternative: Discrete and Continuous Dynamical Systems - Series A
 (DCDS-A)

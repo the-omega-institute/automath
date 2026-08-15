@@ -8,6 +8,63 @@ test the first apertures at and beyond the computed contraction thresholds.
 from __future__ import annotations
 
 
+def overlap_edges(
+    initial: tuple[int, int, int], coefficient_bound: int, aperture: int
+) -> set[tuple[int, int, int]]:
+    """Enumerate aperture-two edges and their completing coefficients."""
+
+    assert aperture == 2
+    u = recurrence(initial, aperture + 1)
+    edges: set[tuple[int, int, int]] = set()
+    for source in range(-coefficient_bound, coefficient_bound + 1):
+        for target in range(-coefficient_bound, coefficient_bound + 1):
+            body_value = source * u[0] + target * u[1]
+            if body_value % u[aperture] == 0:
+                edges.add((source, target, -body_value // u[aperture]))
+    return edges
+
+
+def unanchored_chain_regression() -> None:
+    """Check the nonstandard example that forces the anchored formulation."""
+
+    edges = overlap_edges((1, 2, 4), coefficient_bound=2, aperture=2)
+    expected = {
+        (-2, -1, 1),
+        (-2, 1, 0),
+        (0, -2, 1),
+        (0, 0, 0),
+        (0, 2, -1),
+        (2, -1, 0),
+        (2, 1, -1),
+    }
+    assert edges == expected, (edges, expected)
+
+    adjacency = {
+        vertex: {target for source, target, _ in edges if source == vertex}
+        for vertex in range(-2, 3)
+    }
+    assert 0 in adjacency[0]
+    assert 2 in adjacency[0]
+    assert 1 in adjacency[2]
+    assert not adjacency[1]
+
+    for start in (-2, -1, 1, 2):
+        active: set[int] = set()
+        finished: set[int] = set()
+
+        def visit(vertex: int) -> None:
+            assert vertex not in active, (start, vertex)
+            if vertex in finished:
+                return
+            active.add(vertex)
+            for target in adjacency[vertex]:
+                visit(target)
+            active.remove(vertex)
+            finished.add(vertex)
+
+        visit(start)
+
+
 def recurrence(initial: tuple[int, int, int], length: int) -> list[int]:
     values = list(initial)
     while len(values) < length:
@@ -91,7 +148,12 @@ def main() -> None:
         ((1, 2, 4), 3, 10): 27745,
     }
 
-    passed = 0
+    unanchored_chain_regression()
+    passed = 1
+    print(
+        "PASS initial=(1, 2, 4) D=2 m=2 "
+        "unanchored-chain regression edges=7"
+    )
     for (initial, coefficient_bound, aperture), expected_count in cases.items():
         count, violations = adjacent_solutions(initial, coefficient_bound, aperture)
         assert count == expected_count, (
@@ -113,7 +175,7 @@ def main() -> None:
             f"adjacent_solutions={count} violations={violations}"
         )
 
-    print(f"PASS: {passed}/{len(cases)} arbitrary-D adjacent-collapse cases")
+    print(f"PASS: {passed}/{len(cases) + 1} arbitrary-D regression cases")
 
 
 if __name__ == "__main__":

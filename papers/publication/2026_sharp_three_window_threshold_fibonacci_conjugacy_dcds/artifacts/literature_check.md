@@ -41,7 +41,7 @@ not proof that no unpublished or differently worded result exists.
 
 2. C. Frougny, *Representations of numbers and finite automata*, Math.
    Systems Theory **25** (1992), 37-60. DOI:
-   `10.1007/BF01305290`. No arXiv record located. Used only for the established
+   `10.1007/BF01368783`. No arXiv record located. Used only for the established
    finite-automaton normalization context; its automata are not presented as
    the cyclic rank-modulo-`Q_m` maps classified here.
 
@@ -441,3 +441,109 @@ non-Pisot simple-Parry polynomial `x^4-2x^3-2`, for which
 `d_beta(1)=2002 0^infinity` and `ell_cau(beta,2)=2`.  This is a genuine
 hypothesis removal, but it does not solve a named problem and does not by
 itself move the paper to Tier 2.
+
+## Full bibliography identity audit
+
+Checked: 2026-08-15 (Asia/Singapore).
+
+The 65 entries in `sections/bibliography.tex` were parsed individually.  For
+every printed DOI, the Crossref work record was fetched by DOI and its title
+and lead author were compared with the entry.  For every entry without a DOI,
+Crossref was searched by the full bibliographic citation and then, where the
+top hit was not exact, by title and lead author.  Exact arXiv Atom records and
+zbMATH Open records were used for the remaining preprints and non-Crossref
+items.  A Crossref or search hit counted as verified only when both title and
+lead author agreed.
+
+| Key | Identifier checked or found | Title/lead-author result |
+|---|---|---|
+| `Akiyama2000` | Crossref `10.1515/9783110801958.11` | Exact: *Cubic Pisot units with finite beta expansions* / Akiyama |
+| `AmorosoPatt1972` | printed DOI `10.1016/S0022-0000(72)80013-8` | Exact / Amoroso |
+| `AlloucheShallit2003` | Crossref `10.1017/CBO9780511546563` | Exact: *Automatic Sequences* / Allouche |
+| `Ashley1991` | Crossref `10.1017/S0143385700006118` | Exact / Ashley |
+| `Ashley1988` | printed DOI `10.1109/18.6020` | Exact / Ashley |
+| `Ashley1996` | printed DOI `10.1109/18.556684` | Exact / Ashley |
+| `BaakeGrimm2013` | Crossref `10.1017/CBO9781139025256` | Exact: *Aperiodic Order* / Baake |
+| `BaakeRobertsYassawi2018` | Crossref `10.3934/dcds.2018036` | Exact / Baake |
+| `BanksOprochaStanley2015` | Crossref `10.3934/dcds.2015.35.4743` | Exact / Banks |
+| `Bassino2002` | printed DOI `10.1007/3-540-45995-2_17` | Exact / Bassino |
+| `Berstel2001` | Crossref `10.1051/ita:2001127` | Exact / Berstel |
+| `Berthe2001Ostrowski` | Crossref `10.36045/bbms/1102714170` | Exact / Berthe |
+| `BertheRigo2010` | Crossref `10.1017/CBO9780511777653` | Exact / Berthe (editor) |
+| `BertheFrougnyRigoSakarovitch2019` | printed DOI `10.1016/j.aam.2020.102062` | Exact / Berthe |
+| `BertheSteinerThuswaldner2019` | Crossref `10.5802/aif.3273` | Exact / Berthe |
+| `BertrandMathis1986` | Crossref `10.24033/bsmf.2058` | Exact / Bertrand-Mathis |
+| `BertrandMathis1989` | printed DOI `10.1007/BF01952053` | Exact / Bertrand-Mathis |
+| `BerendFrougny1994` | Crossref `10.1007/BF01578846` | Exact / Berend |
+| `Blanchard1989` | Crossref `10.1016/0304-3975(89)90038-8` | Exact / Blanchard |
+| `Boyle1983` | Crossref `10.1017/S0143385700002133` | Exact / Boyle |
+| `BoyleKitchensMarcus1985` | Crossref `10.1090/S0002-9939-1985-0806078-7` | Exact / Boyle |
+| `BruyereHansel1997` | printed DOI `10.1016/S0304-3975(96)00260-5` | Exact / Bruyere |
+| `CharlierCisterninoStipulanti2022` | printed DOI `10.1007/978-3-031-05578-2_8` | Exact / Charlier |
+| `CartonSudberyYassawi2026` | arXiv `2606.30496v2` | Exact / Carton; no DOI in the checked record |
+| `CoverThomas2006` | Crossref `10.1002/047174882X` | Exact: *Elements of Information Theory* / Cover |
+| `DrmotaTichy1997` | Crossref `10.1007/BFb0093404` | Exact / Drmota |
+| `DrungilasEtAl2018` | zbMATH document `6982157` | Exact / Drungilas; printed DOI was invalid and was removed |
+| `Fischer1975` | Crossref `10.1007/BF01319913` | Exact / Fischer |
+| `Frougny1992` | Crossref `10.1007/BF01368783` | Exact / Frougny |
+| `FrougnySakarovitch1991` | printed DOI `10.1007/BFb0020787` | Exact / Frougny |
+| `FrougnySolomyak1992` | Crossref `10.1017/S0143385700007057` | Exact / Frougny |
+| `FrougnySteiner2008` | printed DOI `10.1515/JMC.2008.017` | Exact / Frougny |
+| `HejdaSteiner2018` | printed DOI `10.4064/aa8260-11-2017` | Exact / Hejda |
+| `Gray2011` | Crossref `10.1007/978-1-4419-7970-4` | Exact / Gray |
+| `Hedlund1969` | Crossref `10.1007/BF01691062` | Exact / Hedlund |
+| `Head1989` | zbMATH document `4197448` | Exact / Head; no DOI in the checked record |
+| `HieronymiTerry2018` | Crossref `10.1215/00294527-2017-0027` | Exact / Hieronymi |
+| `ItoTakahashi1974` | Crossref `10.2969/jmsj/02610033` | Exact / Ito |
+| `Jagannathan2021` | Crossref `10.1103/RevModPhys.93.045001` | Exact / Jagannathan |
+| `Kalle2014` | printed DOI `10.1017/etds.2012.127` | Exact / Kalle |
+| `Johansen2011` | Crossref `10.4171/DM/328` | Exact / Johansen |
+| `Kitchens1998` | Crossref `10.1007/978-3-642-58822-8` | Exact: *Symbolic Dynamics* / Kitchens |
+| `Koshy2001` | Crossref `10.1002/9781118033067` | Exact / Koshy |
+| `Krieger1984` | Crossref `10.1007/BF02760631` | Exact / Krieger |
+| `Krieger1987` | Crossref `10.1007/BF02790789` | Exact / Krieger |
+| `KuipersNiederreiter1974` | zbMATH document `3440485` | Exact / Kuipers; Open Library also matched both authors |
+| `LindMarcus1995` | Crossref `10.1017/CBO9780511626302` | Exact / Lind |
+| `LecomteRigo2001` | printed DOI `10.1007/s002240010014` | Exact / Lecomte |
+| `Loraud1995` | Crossref `10.5802/jtnb.153` | Exact / Loraud |
+| `Lothaire2002` | Crossref `10.1017/CBO9781107326019` | Exact / Lothaire |
+| `MarcusMeyerovitchWu2026` | arXiv `2606.25475v1` | Exact / Marcus; no DOI in the checked record |
+| `Moody2000` | Crossref `10.1007/978-3-662-04253-3_6` | Exact / Moody |
+| `MorseHedlund1940` | Crossref `10.2307/2371431` | Exact / Morse |
+| `Nasu1995` | Crossref `10.1090/memo/0546` | Exact / Nasu |
+| `Nasu1977` | printed DOI `10.1007/BF01768485` | Exact / Nasu |
+| `Ostrowski1922` | Crossref `10.1007/BF02940581` | Exact / Ostrowski |
+| `Parry1960` | printed DOI `10.1007/BF02020954` | Exact / Parry |
+| `Queffelec2010` | Crossref `10.1007/978-3-642-11212-6` | Exact / Queffelec |
+| `Renyi1957` | Crossref `10.1007/BF02020331` | Exact / Renyi |
+| `Richardson1972` | printed DOI `10.1016/S0022-0000(72)80009-6` | Exact / Richardson |
+| `Schmidt1980` | printed DOI `10.1112/blms/12.4.269` | Exact / Schmidt |
+| `Shechtman1984` | Crossref `10.1103/PhysRevLett.53.1951` | Exact / Shechtman |
+| `Stanley2012` | Crossref `10.1017/CBO9781139058520` | Exact / Stanley |
+| `Walters1982` | Crossref `10.1007/978-1-4612-5775-2` | Exact / Walters |
+| `Zeckendorf1972` | zbMATH document `3397597` | Exact / Zeckendorf; no DOI in the checked record |
+
+### Corrections and limitations
+
+- The bibliography originally printed `10.4134/BKMS.b170831` for
+  `DrungilasEtAl2018`.  Crossref returned HTTP 404, the DOI registration-
+  agency endpoint said `DOI does not exist`, and direct resolution returned
+  HTTP 404.  zbMATH document `6982157` independently confirms the title,
+  authors, journal, volume, year, and pages, so only the invalid DOI was
+  removed; the genuine article was retained.
+- An earlier paragraph in this artifact attached `10.1007/BF01305290` to
+  Frougny's 1992 article.  Crossref shows that DOI belongs to V. Kurylev's
+  1983 paper on a shortwave source and the Laplace operator.  The correct
+  Crossref record for Frougny is `10.1007/BF01368783`, and the paragraph above
+  has been corrected.
+- No bibliography entry was deleted, and no unverified replacement was
+  invented.  All 17 DOIs remaining in the bibliography match Crossref title
+  and lead-author metadata.  The other 48 entries have exact title/lead-
+  author confirmation from Crossref, arXiv, or zbMATH.
+- OpenAlex returned HTTP 429 for the attempted secondary checks of the
+  Drungilas, Head, Kuipers--Niederreiter, Queffelec, and Zeckendorf records.
+  Semantic Scholar likewise returned HTTP 429 for the Drungilas, Head,
+  Kuipers--Niederreiter, and Zeckendorf searches.  Thus the intended
+  Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+  records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+  identified in the table are the successful alternative sources.
