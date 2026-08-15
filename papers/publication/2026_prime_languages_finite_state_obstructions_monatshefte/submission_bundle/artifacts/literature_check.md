@@ -712,3 +712,67 @@ No entry remains unverified.
   publisher capitalization was assessed manually. Online-first years in
   Crossref were not substituted for the cited print-volume years (notably
   Bourgain 2013/2015, Dusart 2018, and Swaenepoel 2020).
+
+## Incremental Cobham-positioning audit (2026-08-15)
+
+This audit was made before adding the three comparison citations used in the
+revised introduction and Remark 3.3. The cited papers themselves, rather than
+secondary summaries, were checked for the hypotheses and conclusions below.
+
+| Citation key | Required metadata check | Result |
+|---|---|---|
+| `AlbayrakBell2023` | The official arXiv record for `2304.09223v1` returned the exact title *Quantitative estimates for the size of an intersection of sparse automatic sets* and lead author Seda Albayrak. Crossref DOI `10.1016/j.tcs.2023.114144` returned the same title and lead author, with Jason P. Bell second, *Theoretical Computer Science* 977 (2023), article 114144. | Confirmed |
+| `Durand2011CobhamSubstitutions` | The official arXiv record for `1010.4009v1` returned the exact title *Cobham's theorem for substitutions* and lead/sole author Fabien Durand. Crossref DOI `10.4171/JEMS/294` returned the same title and author, JEMS 13 (2011), no. 6, pp. 1799-1814. | Confirmed |
+| `CharlierLeroyRigo2013CobhamANS` | Semantic Scholar record `1d76992ac15cc5c8f483d124d2459bd647d1a4dd` returned the exact title *Cobham's theorem for abstract numeration systems* and identified Charlier as lead author. The ORBilu author-preprint record `10993/11668` supplied the full author order Emilie Charlier, Julien Leroy, Michel Rigo and the 2013 date. | Confirmed |
+
+The full 14-page Albayrak--Bell arXiv paper was read. Its Theorem 1.1 says that
+if \(k\) and \(\ell\) are multiplicatively independent integers and \(X\) is a
+sparse \(k\)-automatic subset of \(\mathbb N^d\) while \(Y\) is a sparse
+\(\ell\)-automatic subset, then \(X\cap Y\) is finite with an effectively
+computable bound from the bases, dimension, and minimal automata. Theorem 4.1
+gives a closed explicit state-count bound. Taking \(X=Y\) yields simultaneous
+sparse automatic finiteness. Since a slender regular integer-base
+representation language is sparse, this contains the regular integer-base
+specialization of Theorem 3.2 and is strictly stronger on that specialization:
+it permits general sparse regular languages and supplies a quantitative bound,
+whereas Theorem 3.2 supplies finiteness only.
+
+The full Durand paper was read from arXiv `1010.4009v1` and checked against the
+published metadata. Its Theorem 1 assumes that the same finite-alphabet
+sequence is both \(\alpha\)-substitutive and \(\beta\)-substitutive, where
+\(\alpha\) and \(\beta\) are multiplicatively independent Perron numbers, and
+concludes that the sequence is ultimately periodic. This conclusion is
+stronger than finiteness after a sparsity hypothesis, but its recognition
+interface is a substitutive characteristic sequence. A genuinely nonregular
+slender context-free representation language does not supply that hypothesis.
+
+The complete 2013 Charlier--Leroy--Rigo author preprint was checked at ORBilu.
+Definitions 33 and 34 require an abstract numeration system to be built from an
+infinite regular language ordered genealogically and require the represented
+subset to have a regular representation language. Definition 47 makes two
+exponential systems independent when their dominant language-growth
+eigenvalues are multiplicatively independent. Theorem 49 concludes that a set
+recognized in two independent abstract numeration systems is a finite union of
+arithmetic progressions; Theorem 52 is the two-exponential-system case. The
+authors' peer-reviewed 2015 paper *An analogue of Cobham's theorem for graph
+directed iterated function systems* (DOI `10.1016/j.aim.2015.04.008`) was also
+checked and is a different result about recognizable real sets, self-similarity,
+and graph-directed iterated function systems. The abstract-numeration theorem
+is therefore cited to the 2013 preprint, not to the 2015 paper.
+
+The statement-by-statement boundary is as follows. Albayrak--Bell subsume the
+regular integer-base shadow and improve it quantitatively. Durand and
+Charlier--Leroy--Rigo cover the Perron-substitutive and regular
+abstract-numeration shadows, with ultimate-periodicity conclusions. None of
+the three accepts a full representation language that is slender context-free
+but nonregular, and an arbitrary weak-Perron positional system need not provide
+the regular canonical/genealogical interface used by the older recognition
+theorems. The novelty retained by Theorem 3.2 is thus the nonregular passage,
+implemented by Lemma 3.1: paired word loops are transferred to numerical
+recurrences with unique positive dominant roots despite peripheral collisions,
+Jordan factors, and cancellation. No quantitative bound is claimed.
+
+The Semantic Scholar Graph API returned HTTP 429 during a direct JSON follow-up
+for the Charlier--Leroy--Rigo record; the indexed Semantic Scholar result and
+the ORBilu full-text record were available. OpenAlex had exhausted its daily
+budget. These service failures were not treated as negative evidence.
