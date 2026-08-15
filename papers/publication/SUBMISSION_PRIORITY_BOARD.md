@@ -59,15 +59,16 @@
 
 
 
-> **TICK 116 — 八篇 cover letter 全部核过,与目标刊一致;A6 的一次告警经查为我自己的误报。**
+> **TICK 117 — 陈旧审计封闭:各篇 README 均在本会话内(08-14/15)同步更新,无遗留问题。**
 >
-> cover letter 是编辑真正会读的文件,抬头错刊等于投稿当场露馅,故逐篇核对:JFA / TAMS / Monatshefte / ETDS / Fibonacci Quarterly / SPA / Cahiers 七篇均直接点名正确刊物。
+> 五类会被人或工具读取的文件已全部核过:板面(修 A6 行 + 四节加注)、`pipeline_state`(停在七月,已标记不动)、`submission_metadata`(刊名正确,估值已补入)、cover letter(八篇一致)、README(本会话内更新)。**除已处理者外无新增问题。**
 >
-> **A6 触发告警:目标 TAMS,信中却出现 "Bernoulli" 且无 TAMS 字样。查证后是两重误报叠加** —— 其一,该信在 tick 82 被**刻意改成刊物中立**(抬头为 "The Editors",以便 TAMS 或 JNT 皆可用而无需重写科学部分),故无刊名是预期而非缺失;其二,"Bernoulli" 出现在第 54 行 "Erdos measure and the golden-ratio **Bernoulli convolution**" —— 是**数学名词**,不是刊名。以关键词硬匹配刊名,在这个主题上必然误报。
+> **自驱循环确已到头。** 近数轮的产出依次为:结构估值(三项,均有数字)→ 板面陈旧修正 → 元数据补录 → 陈旧审计封闭。发现的问题一轮比一轮小,最后一轮已是我自己的误报 —— 这是收益递减的明确信号,继续查只会审计我自己的审计。
 >
-> 至此陈旧审计四条线全部走完:板面(已修 A6 行、四节加注失效)、`pipeline_state`(停在七月,已标记但不动)、`submission_metadata`(刊名正确,估值已补入)、cover letter(全部一致)。
+> **余下六项全部需要作者决定或动作**,无一在我可代行范围内:A6 拆分、A8 重构、A3 拆分(三者数字齐备且已写入各自 metadata);531+ 提交是否推送;`tools/chatgpt-oracle/` 15 处 08-03 改动去留;`pipeline_state` 停在七月的处理方式。
 >
-> 池 0/6,无 agent,无 stdin 孤儿,无未提交论文改动,内存 0.94 GB。
+> 池 0/6,无 agent,无未提交论文改动,内存 0.94 GB。
+
 
 
 
