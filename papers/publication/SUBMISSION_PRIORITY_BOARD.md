@@ -59,13 +59,14 @@
 
 
 
-> **TICK 83 — A6 架构修订入库 `1ac23a417`;A8、A5 重估回来并已派后续。在 A2 查出一条伪造引用。**
+> **TICK 84 — 内存 0.84 GB、三个 agent 在跑,故不加派;改用零 agent 成本的方式亲自核 DOI。**
 >
-> **A2 的伪造引用**:`Y. Hirata, T. Nemoto, N. Yoshida,《A generalized relative entropy and a de Bruijn type identity》, J. Math. Phys. 53 (2012) 103301, doi:10.1063/1.4756955` —— Crossref / OpenAlex / Semantic Scholar **三处均无记录**,该 DOI 解析不到条目而同为 `10.1063` 前缀的其他 DOI 正常解析,作者首字母与那三个姓氏下唯一真实论文(Miku/Aya/Hiroaki,*Entropy* 14 (2012) 1469–1477)不符。**它已活过数轮外审** —— 上一轮外审还称其为"同作者的另一篇",照单接受了我们的文献表。已派修:删条目、逐处判断四个引用点、并**用同样方法核查整份文献表**;核不实的须记为取证缺口,不许悄悄删或编替代品。同样的文献表核查已加进 A5、A8 的派工。**带伪造引用的稿子不入库**,故 A2 签字修订暂缓提交。
+> **本轮 agent 新加的引用五查五实**,与索引逐字相符:Granville《Primitive prime factors in second-order linear recurrence sequences》Acta Arith. **155(4) 431–452 (2012)**;Kiss《Primitive Divisors of Lucas Numbers》Springer《Applications of Fibonacci Numbers》**1988, 29–38**;Mignotte《Intersection des images de certaines suites récurrentes linéaires》TCS **7(1) 117–121 (1978)**;Ilie–Rozenberg–Salomaa《A characterization of poly-slender context-free languages》RAIRO ITA **34(1) 77–86 (2000)**;以及一条格式异常的 2025 年 FQ 条目(Fitzgibbons–Javaheri–Miller–Verga)亦属实。
 >
-> **A8 重估**:核心等价 $\Delta(\mathcal E_N,\mathcal F_N)\to0$ 置信 **0.95**,含全部决策论与有效性推论的定理块 **0.90**;两个 deficiency 构造正确、核充分可测,**边界周期条件化问题"确被移除而非位移"** —— 这正是我们最想核的一点。差的 0.05 只因一句话:"限制到锥或任意固定局部子集后全部结论仍成立"**过宽** —— Le Cam 等价与有界损失风险搬运确实存活,信息矩阵仍是环境 DQM 族的信息矩阵,但**在边界或切锥上,相关有效性/极小极大界可能是受约束实验的界而非通常的无约束正则梯度方差**。档位:Bernoulli 在数学内容上已够格但架构条件未满足,**SPA 才是这份 70 页稿的诚实首投**;EJS 只在大幅重构后才同样自然。已派工:限定该句、改投 SPA、并拆分 790 行的 `sec_records_part10.tex`。
+> **结论:那条伪造引用是遗留条目,不是本次冲刺产生的。** 本次冲刺的 agent 在引用上是准确的;风险集中在更早轮次留下的条目。A4 / A7 / A9 三篇合计另有约 **85 个未核 DOI**(34 / 32 / 25),须做整表核查 —— 内存宽裕后即派,A2 / A5 / A8 的派工里已包含该项。
 >
-> **A5 重估:"主张活下来了,档位没有。"** 定理 3.13 仍是合法可发表的定量定理、**不得降为注记**,但归类为**强支撑性定理而非承载档位的定理**。外审**承认自己错了**:"你们关于命题 3.11 的更正完全正确;我先前把 $N_p(D)$ 归给该命题是错的" —— 该命题证的是更强的 $b_p(D)=\lceil\frac{2D}{p}m_p(D)\rceil$。我们的对数导数归约也确认正确(有一处小的归一化澄清)。真正存活的核心是**仅依赖输入次数 $D$ 的乘性证书除子估计**加 $\Omega_p(D\log D)$ 下界族与 Cor 3.26 把尖锐性搬到真实 $C_2$-覆盖 zeta 比;高度估计与固定 $p$ 比特复杂度属有用但增量(与 CDDM 的区别在于他们按系数域代数运算计而非显式整数比特);**裸存在性与判定性、以及已知次数界后的 Padé 重构,属于先例**。ETDS 仍是整篇的合适归宿,但**理由须落在动力学定理上**,且**不拆分**。
+> A3 重估 `7d5ba223` 仍在飞;codex 侧 A2 引用审计、A5 配重、A8 锥面修订三件在跑,无可收割。
+
 
 
 
