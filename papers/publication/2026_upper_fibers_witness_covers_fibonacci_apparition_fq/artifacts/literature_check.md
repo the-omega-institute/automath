@@ -239,3 +239,65 @@ sufficient: ladder atoms can occur even at odd squarefree indices, as
 $\alpha(13)=7$ and $\alpha(13^2)=91$ show. The previous maximum-window
 condition $\log R(n)=o(\omega(n))$ remains sufficient but is not presented as
 necessary. Database non-detection is not a proof of priority.
+
+## Large Primitive Divisor / Fibonacci-Wieferich Alternative
+
+Checked 2026-08-15 before adding the theorem. The audit tested the pointwise
+statement
+
+`no Fibonacci-Wieferich prime => P_prim(F_n) >= n^(2-o(1))`
+
+and the equivalent alternative saying that every sufficiently large rank has
+either a primitive divisor at least `n^(2-epsilon)` or a repeated primitive
+divisor at that exact rank. Searches covered arXiv, Crossref, Semantic Scholar,
+and zbMATH Open under the vocabularies primitive divisor, primitive part,
+characteristic part, greatest/largest primitive factor, Wall--Sun--Sun,
+Fibonacci-Wieferich, and Wieferich-type Lucas divisor. The relevant primary
+texts and citation chains were then checked.
+
+- Hong, *On big primitive divisors of Fibonacci numbers*, arXiv:2312.04354v2,
+  DOI `10.1007/s11139-025-01068-9`, proves the explicit fixed-linear-exclusion
+  theorem: for every fixed positive integer `kappa`, sufficiently large `F_n`
+  has a primitive divisor outside `n+-1,...,kappa*n+-1`, hence at least
+  `(kappa+1)n-1`. It contains no Wall--Sun--Sun, Fibonacci-Wieferich, or
+  repeated-primitive-factor alternative.
+- Stewart, *On divisors of Lucas and Lehmer numbers*, arXiv:1008.1274, DOI
+  `10.1007/s11511-013-0105-y`, was read together with its account and reference
+  chain for Stewart's 1977 paper and the 1981 and 1983 continuations. Its
+  unconditional greatest-prime-factor theorem has size
+  `n*exp(log(n)/(104*loglog(n)))`; the earlier Stewart papers supply primitive
+  existence, multiplicity, or growing-prime-factor estimates. No inspected
+  theorem or recorded corollary links the absence of exceptional rank lifting
+  to a pointwise exponent `2-o(1)`.
+- Granville, *Primitive prime factors in second-order linear recurrence
+  sequences*, arXiv:1212.6306, DOI `10.4064/aa155-4-7`, was checked in full,
+  including the source of Corollaries 3 and 4. Those corollaries give the
+  classical primitive-part input used here: characteristic primes occur in the
+  Lucas cyclotomic factor with their full exponents, and the remaining factor
+  is at most one prime dividing the index (apart from the excluded indices 6
+  and 12). Granville studies odd primitive multiplicity and explicitly leaves
+  the Fibonacci parity case open; he does not state the present size/lifting
+  alternative.
+- Klaska, *Donald Dines Wall's Conjecture*, DOI
+  `10.1080/00150517.2018.12427720`, was read in full, along with the later
+  Wall-conjecture discussion in Trojovska, DOI `10.3390/math8050773`. These
+  survey the equivalent exceptional-lifting criteria, computational searches,
+  and applications to perfect powers and Fermat's Last Theorem. Neither
+  records a conditional near-quadratic largest primitive divisor.
+
+The audit found one close predecessor that must be distinguished explicitly.
+P. Kiss, *Wieferich-type prime divisors of Lucas numbers*, *Matematikai Lapok*
+34 (1987), 93--98, proves that if the greatest primitive divisor of a Lucas
+term is below `n^(1+delta)` for almost all indices, for a fixed
+`0 < delta < 1`, then a positive-density set of indices has a term divisible
+by a Wieferich-type prime. This is a global almost-all implication; the
+Wieferich-type divisor need not be primitive at the displayed index. It gives
+neither an every-large-index alternative nor the contrapositive
+`P_prim(F_n) >= n^(2-o(1))` under the nonexistence of Fibonacci-Wieferich
+primes.
+
+Verdict: no checked source records the proposed pointwise alternative or its
+conditional `n^(2-o(1))` corollary. The theorem survives this literature audit.
+This negative result is evidence from the stated corpora and primary citation
+chains, not a proof of global priority; the Kiss theorem is cited in the
+manuscript as the closest located precursor.
