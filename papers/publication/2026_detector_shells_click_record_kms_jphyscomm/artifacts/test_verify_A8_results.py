@@ -1,9 +1,14 @@
 import math
+import re
 import unittest
+from pathlib import Path
 
 import numpy as np
 
 from artifacts import verify_A8_results as verify
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhysicalImageTests(unittest.TestCase):
@@ -443,6 +448,53 @@ class SingularExchangeExperimentChecks(unittest.TestCase):
                 sigma_shift = verify.singular_symmetric_shift(z, h, 100_000_000)
                 self.assertAlmostEqual(sigma_shift[0], 0.0, places=14)
                 self.assertLess(abs(sigma_shift[1] + h**2), 2e-12)
+
+
+class TheoremGCompletionChecks(unittest.TestCase):
+    def setUp(self):
+        self.results = (ROOT / "article_singular_results.tex").read_text(
+            encoding="utf-8"
+        )
+        self.uniform = (ROOT / "article_singular_uniform_lemmas.tex").read_text(
+            encoding="utf-8"
+        )
+        self.proof = (ROOT / "article_singular_proofs_part2.tex").read_text(
+            encoding="utf-8"
+        )
+
+    def test_theorem_g_claims_only_the_finite_record_score_test(self):
+        theorem_g = self.results.split(
+            "\\label{thm:stationary-serial-double-pole-main}", 1
+        )[1].split("\\end{paperthm}", 1)[0]
+        theorem_g = re.sub(r"\s+", " ", theorem_g)
+        self.assertNotIn("or the local likelihood-ratio test", theorem_g)
+        self.assertIn(
+            "The residualized score test is uniformly asymptotically level",
+            theorem_g,
+        )
+        self.assertIn("limiting Gaussian experiment", self.results)
+
+    def test_recurrence_fit_has_thresholded_total_definition(self):
+        self.assertIn("\\widehat H_N", self.proof)
+        self.assertIn("\\widehat s_N", self.proof)
+        self.assertIn("N^{-1/2}", self.proof)
+        self.assertIn("a^\\ast", self.proof)
+
+    def test_score_test_has_information_formula_and_nonrejecting_gate(self):
+        self.assertIn("I_N(\\eta)", self.results)
+        self.assertIn("J_N(\\eta)", self.results)
+        self.assertIn("\\lambda_{\\min}", self.results)
+        self.assertIn("\\phi_N=0", self.results)
+
+    def test_atlas_overlap_compatibility_is_proved(self):
+        self.assertIn("argument-principle count would be two", self.proof)
+        self.assertIn("same two nearby roots", self.proof)
+        self.assertIn("numerical ordering", self.proof)
+
+    def test_multiset_distance_is_only_eventually_exact_for_n_above_two(self):
+        self.assertIn("for all sufficiently large", self.uniform)
+        self.assertIn("c_0/2", self.uniform)
+        self.assertIn("(2\\sqrt{v_0}/c_0)^4", self.uniform)
 
 
 class SamplingBiasTests(unittest.TestCase):

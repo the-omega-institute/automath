@@ -15,7 +15,7 @@ python artifacts/verify_A8_results.py --output artifacts/verify_A8_results_outpu
 python artifacts/verify_nstate_identifiability.py --output artifacts/verify_nstate_identifiability_output.txt --two-state-output artifacts/verify_two_state_fibre_output.txt
 ```
 
-The unit suite prints `Ran 53 tests` followed by `OK`. The first report begins
+The unit suite prints `Ran 58 tests` followed by `OK`. The first report begins
 with `A8 sampled-counter verification` and ends with a finite tested
 information range. The second begins with
 `Sharp killed-reset D-MAP identifiability dichotomy verification` and ends with
