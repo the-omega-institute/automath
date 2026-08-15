@@ -480,6 +480,19 @@
   \(\mathcal P_U\) infinite.
 \end{proof}
 
+\paragraph{Greedy length interval.}
+For a standard greedy linear numeration basis with \(U_0=1\), a positive
+integer has a canonical greedy word of length \(m\) if and only if it lies
+in the half-open interval
+\[
+  [U_{m-1},U_m).
+\]
+Indeed, the greedy algorithm chooses the least threshold \(U_m\) strictly
+larger than the represented integer; minimality of \(m\) gives the lower
+bound, and the choice of \(U_m\) gives the upper bound. This is a property
+of the standard greedy subclass, not an assumption on the ambient
+canonical eventually recurrent systems.
+
 \begin{corollary}[Linear numeration bases with Perron recurrence]
   \label{cor:linear-perron-prime-cf-immunity}
   Let \(U=(U_n)_{n\ge0}\) be a standard greedy linear numeration basis in
@@ -611,7 +624,11 @@
   polynomial \(\mu_U\) is the minimal polynomial of a weak Perron number
   \(\beta>1\), meaning that every conjugate \(\beta'\) satisfies
   \(\abs{\beta'}\le\beta\). Let \(S_{\mathrm r}\) be the set of prime
-  divisors of \(\mu_U(0)\). Then the following are equivalent:
+  divisors of \(\mu_U(0)\). The residue-growth step below is a
+  coefficient-level specialization of the quotient-limit mechanism in
+  \cite[Proposition~10 and Remark~12]{CharlierKreczman2025}; the
+  prime-support/MCFL equivalence is not contained there. With this
+  attribution understood, the following are equivalent:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item There exist \(k<\infty\) and an infinite \(k\)-MCFL
     \(L\subseteq\mathcal R_U\) such that
@@ -651,47 +668,7 @@
   The equivalence of \textup{(i)} and \textup{(ii)} is
   \Cref{thm:bounded-outside-support-geometric-ray}.
 
-  We first establish the asymptotic needed for
-  \textup{(ii)}\(\Rightarrow\)\textup{(iii)}. The standard spectral
-  characterization of weak Perron numbers realizes \(\beta\) as the
-  spectral radius of a nonnegative integral matrix \cite{Lind1984}.
-  Perron--Frobenius periodicity for its irreducible diagonal blocks gives
-  an \(h\ge1\) such that \(\beta^h\) is Perron. Thus, for every conjugate
-  \(\gamma\) of \(\beta\) with \(\abs\gamma=\beta\), one has
-  \(\gamma^h=\beta^h\), while conjugates of smaller modulus remain strictly
-  smaller after taking \(h\)-th powers.
-
-  Since \(\mu_U\) is irreducible over \(\mathbb Q\), it is separable. Over
-  a splitting field, from the tail threshold onward,
-  \[
-    U_n=\sum_{\gamma}A_\gamma\gamma^n,
-  \]
-  where \(\gamma\) runs over the conjugates of \(\beta\). Uniqueness of
-  this expansion and rationality of \(U_n\) show that Galois automorphisms
-  carry \(A_\beta\) to the corresponding \(A_\gamma\). If
-  \(A_\beta=0\), all coefficients vanish, contradicting minimality of the
-  tail annihilator. Put \(\rho=\beta^h\). For each
-  \(r\in\{0,\ldots,h-1\}\), collection of the maximal-modulus terms gives
-  \[
-    U_{hn+r}=C_r\rho^n+o(\rho^n),\qquad
-    C_r=\sum_{\abs\gamma=\beta}A_\gamma\gamma^r.
-  \]
-  These formulas apply once \(hn+r\) is beyond the tail threshold.
-  Positivity of \(U_{hn+r}\) gives \(C_r\ge0\). At least one \(C_r\) is
-  nonzero: otherwise the maximal-modulus contribution would vanish on all
-  residues, and the Vandermonde independence of the distinct numbers
-  \(\gamma/\beta\) would force \(A_\beta=0\).
-
-  Strict increase of the place values now forces every \(C_r\) to be
-  positive. Indeed, if \(C_r>0\) and \(r<h-1\), the inequality
-  \(U_{hn+r}<U_{hn+r+1}\), divided by \(\rho^n\), rules out
-  \(C_{r+1}=0\). For \(r=h-1\), the inequality
-  \(U_{hn+h-1}<U_{h(n+1)}\) similarly rules out \(C_0=0\). Positivity
-  therefore propagates cyclically from a nonzero \(C_r\). It follows on
-  every residue class, and hence globally, that
-  \[
-    \lim_{n\to\infty}U_n^{1/n}=\beta.
-  \]
+  \input{sec_pisot_weak_perron_analysis}
 
   Suppose now that \textup{(ii)} holds, and write
   \[
@@ -704,15 +681,27 @@
   \[
     U_{L+Dt-1}\le cb^t<U_{L+Dt}.
   \]
-  Taking \(t\)-th roots yields \(b=\beta^D\), which is \textup{(iii)}
-  with \(m=D\) and \(B=b\).
+  For \(k_t=L+Dt\), the root limit gives
+  \[
+    U_{k_t}^{1/t}
+      =\left(U_{k_t}^{1/k_t}\right)^{k_t/t}\longrightarrow\beta^D,
+    \qquad
+    U_{k_t-1}^{1/t}
+      =\left(U_{k_t-1}^{1/(k_t-1)}\right)^{(k_t-1)/t}
+       \longrightarrow\beta^D.
+  \]
+  Since \((cb^t)^{1/t}\to b\), taking \(t\)-th roots in the preceding
+  squeeze yields \(b=\beta^D\). This is \textup{(iii)} with \(m=D\) and
+  \(B=b\).
 
   Conditions \textup{(iii)} and \textup{(iv)} are equivalent because
-  \(\mu_U\) is the minimal polynomial of \(\beta\). Conditions
-  \textup{(iv)} and \textup{(v)} are equivalent by minimality of the tail
-  recurrence polynomial: divisibility by \(X^m-B\) makes that polynomial
-  annihilate the tail, while any polynomial annihilating the tail is
-  divisible by \(\mu_U\).
+  \(\beta^m=B\) says exactly that the minimal polynomial \(\mu_U\) of
+  \(\beta\) divides \(X^m-B\) in \(\mathbb Q[X]\). Conditions
+  \textup{(iv)} and \textup{(v)} are equivalent by the definition of
+  \(\mu_U\) as the monic generator of \(I_U^{\mathrm{tail}}\): the
+  divisibility \(\mu_U\mid X^m-B\) puts \(X^m-B\) in that ideal and gives
+  \(U_{n+m}=BU_n\) eventually, while an eventual identity of this form
+  puts \(X^m-B\) in the ideal and hence forces the divisibility.
 
   Finally, assume \textup{(v)} and enlarge \(n_0\), if necessary, so that
   \(n_0\ge J_{\mathrm r}\). The greedy representation of \(U_n\), in the

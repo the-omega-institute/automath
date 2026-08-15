@@ -429,6 +429,40 @@ doi:10.1017/S0143385700002443. The standard weak-Perron characterization
 used in the revised article is the spectral-radius characterization for
 nonnegative integral matrices; Perron--Frobenius periodicity then implies
 that a positive power coalesces all conjugates of maximal modulus.
+Crossref metadata also confirmed H. Brunotte, "Algebraic properties of weak
+Perron numbers," Tatra Mountains Mathematical Publications 56 (2013),
+27--33, doi:10.2478/tmmp-2013-0023, which directly treats the algebraic
+power characterization used in the residue proof.
+
+The complete 51-page arXiv v1 of E. Charlier and S. Kreczman, "Numeration
+systems without a dominant root and regularity," arXiv:2512.13180v1,
+15 December 2025, was read for this audit. It removes Hollander's
+dominant-root restriction by associating periodic alternate real bases to
+positional systems and gives a full characterization of regularity through
+the graph of greedy and quasi-greedy expansions of 1 in shifted alternate
+bases. Its general procedure is a semidecision because Parry periodicity is
+not decidable in general; it becomes a decision procedure when the
+associated alternate base is known to be Parry. Proposition 10 derives
+residue-class consecutive-quotient limits for a positional system whose
+whole numeration language is regular. Remark 12 is closer to the present
+weak-Perron proof: for an arbitrary linear recurrence, if its dominating
+eigenvalues have equal p-th powers, then eventual increase of the term
+moduli gives convergence of U_n/U_{n-p} to that common power.
+
+In the manuscript's irreducible weak-Perron setting, separability makes all
+peripheral multiplicities equal, weak-Perron periodicity makes their h-th
+powers equal, and strict increase gives the eventual-increase hypothesis.
+Thus Charlier--Kreczman already contain the asymptotic root-growth mechanism
+needed for the greedy length squeeze, in essentially equivalent
+quotient-limit form. The overlap is substantial at that step and the
+mechanism is not claimed as new. Their paper does not discuss MCFLs, bounded
+prime support, synchronized geometric schemes, Evertse's quotient theorem,
+or the five-way radical/scalar-periodicity classification. The remaining
+novel claim is therefore the interface from bounded outside-prime support on
+an infinite finite-fan-out MCFL to a geometric synchronized ray, and the
+classification of that phenomenon under the weak-Perron greedy hypotheses.
+Conversely, the manuscript does not reproduce Charlier--Kreczman's global
+regularity characterization.
 
 The revised classification is not a claim of general decidability. It proves
 the five-way equivalence between bounded outside support, a geometric
@@ -447,14 +481,16 @@ structure of one set in two multiplicatively independent representations.
 
 ## Submission consistency check (2026-08-15)
 
-The article's present priority narrative remains consistent with this audit.
-It treats the Seki weak pumping lemma, Broughan's adic classifications,
-Evertse's quotient theorem, and the fixed-base Hartmanis--Shank and
-Schutzenberger results as prior inputs. The retained claims are limited to the
-recurrence-language combination stated with its canonical-presentation
-hypotheses, the deleted-prime local rank calculation, the nonunit escape
-dichotomy, the geometric-ray characterization, and the stated unit and
-weak-Perron consequences. The separately submitted finite-state results
-remain in Supplementary Information and are compared explicitly with Shen and
-Dubbe. No broader priority claim is made for fixed-base prime CF-immunity or
-for arbitrary objects called Pisot numeration systems.
+The article's present priority narrative is consistent with this audit. It
+treats the Seki weak pumping lemma, Broughan's adic classifications,
+Evertse's quotient theorem, Charlier--Kreczman's residue-growth mechanism,
+and the fixed-base Hartmanis--Shank and Schutzenberger results as prior
+inputs. The retained claims are limited to the recurrence-language
+combination stated with its canonical-presentation hypotheses, the
+deleted-prime local rank calculation, the nonunit escape dichotomy, the
+geometric-ray characterization, and the stated unit and weak-Perron
+classification consequences. The separately submitted finite-state results
+remain in Supplementary Information and are compared explicitly with Shen
+and Dubbe. No broader priority claim is made for fixed-base prime CF-immunity,
+for arbitrary objects called Pisot numeration systems, or for the
+equal-peripheral-modulus quotient/root-growth mechanism.
