@@ -9,12 +9,15 @@ approximations.
 
 ```sh
 python -m unittest discover -s artifacts -p "test_*.py" -v
+python artifacts/test_bounded_zero_arbitrary_D.py
 python artifacts/verify_metallic_threshold.py --output artifacts/metallic_threshold_verification.txt
 python artifacts/verify_quadratic_pisot_threshold.py --output artifacts/quadratic_pisot_threshold_verification.txt
 python artifacts/verify_simple_parry_causal.py --output artifacts/simple_parry_causal_verification.txt
 ```
 
-The unit suite prints `Ran 32 tests` followed by `OK`. The simple-Parry suite
+The unit suite prints `Ran 32 tests` followed by `OK`.  The arbitrary-
+coefficient falsification battery prints `PASS: 12/12 arbitrary-D
+adjacent-collapse cases`. The simple-Parry suite
 includes exact fixed-theta terminal words through aperture 14 and complete
 collision-graph counts through aperture 10. The verifier conclusions
 are:
@@ -37,5 +40,5 @@ directory, run exactly:
 cd artifacts && sha256sum -c SHA256SUMS
 ```
 
-A successful check prints exactly 11 `OK` lines and no failures. The
+A successful check prints exactly 12 `OK` lines and no failures. The
 project-local `.gitattributes` pins every file covered by the manifest to LF.

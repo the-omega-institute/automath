@@ -37,6 +37,19 @@ $\Phi_{U,m}$, by the output windows at times $0,\ldots,L-1$; set it to
 $\infty$ if no such $L$ exists.  Thus $\ell_{\rm cau}(U,m)-1$ is the least
 anticipation of an inverse constrained to have memory zero.
 
+If each output word is relabeled by its canonical rank in
+$\mathbb Z/u_m\mathbb Z$, the local rule is
+\[
+(x_0,\ldots,x_{m-1})\longmapsto
+\sum_{j=0}^{m-1}u_jx_j\pmod {u_m}.
+\]
+Thus the word-valued rule is a symbolwise bijective relabeling of a modular
+weighted sliding block code.  The weights, the modulus $u_m$, and their
+variation with $m$ are specific to the present family.  This is not a linear
+cellular automaton: in general $D_U$ is only a digit subset of
+$\mathbb Z/u_m\mathbb Z$, not a module on which the rule is a group
+endomorphism.
+
 The scope is not a disguised standard-initial-value convention.  For
 example, standard $k$-bonacci initial conditions begin $1,1,\ldots$ and fail
 strict increase, whereas the customary shift beginning $1,2,\ldots$ belongs
@@ -54,6 +67,10 @@ Put $\Delta_U=[-d_U,d_U]\cap\mathbb Z$ and, for $L\ge1$, set
  \ (0\le t<L)\right\}.
 \label{eq:pisot-bad-sliding-set}
 \end{equation}
+Equivalently, $\mathcal N_{U,m,L}$ is the finite-block kernel of the
+$L$-row banded Toeplitz operator with kernel
+$(u_0,\ldots,u_{m-1})$ over $\mathbb Z/u_m\mathbb Z$, restricted by
+$e_0\ne0$ and by the coefficient bound $\Delta_U$.
 Every row in this system has a uniquely defined carry $k_t\in\mathbb Z$:
 \begin{equation}
 \sum_{j=0}^{m-1}u_je_{t+j}=k_tu_m.
@@ -431,7 +448,7 @@ holds for every $m\ge4$.  Lemma
 is immediate.
 \end{proof}
 
-\begin{corollary}[Global bounded-zero strip dichotomy]
+\begin{corollary}[Global overlap dichotomy for bounded zero representations]
 \label{cor:pisot-zero-strip-synchronization}
 For a fixed strictly increasing Pisot numeration $U$ as in the theorem and an
 aperture $m\ge2$,
@@ -439,9 +456,11 @@ consider all bounded zero words of length $m+1$ of the form
 \[
 [e_t,\ldots,e_{t+m-1},-k_t]_U=0
 \]
-which overlap one digit at a time.  Exactly one of the following global
-alternatives holds: some strip with a nonzero difference has a finite prefix
-followed by a periodic bounded zero representation; or every nonzero strip
+which overlap one digit at a time.  Each row is a standard bounded
+$U$-representation of zero; only its organization into this one-position
+overlap chain is specific here.  Exactly one of the following global
+alternatives holds: some chain with a nonzero coefficient has a finite prefix
+followed by a periodic bounded zero representation; or every nonzero chain
 has fewer than $(C_U+1)m$ rows.  The latter bound has sharp order $\Theta(m)$
 for $U_\theta$.
 \end{corollary}
@@ -451,10 +470,182 @@ The overlapping rows are exactly paths in $\Gamma_{U,m}$ by
 \eqref{eq:pisot-zero-word-bridge}.  A cycle reachable from $B_{U,m}$ gives
 the first alternative by repeating the cycle.  If no such cycle is
 reachable, \eqref{eq:pisot-linear-A1} bounds every path from $B_{U,m}$.
-Unless a strip is zero, at most $m-1$ initial shifts pass before one of its
+Unless a chain is zero, at most $m-1$ initial shifts pass before one of its
 nonzero coordinates occupies the first position, after which fewer than
 $C_Um$ further rows are possible.  The two alternatives are mutually
-exclusive because the periodic tail makes strips arbitrarily long.  The
+exclusive because the periodic tail makes chains arbitrarily long.  The
 words $E_m$ in \eqref{eq:pisot-linear-A3} give the matching lower order for
 $U_\theta$.
 \end{proof}
+
+We now detach the contraction argument from the canonical digit-difference
+alphabet.  Fix $D\ge1$ and retain the effective Binet and growth data in
+\eqref{eq:pisot-binet}--\eqref{eq:pisot-effective-growth}.  Put
+\begin{equation}
+K_{U,D}=\left\lceil\frac{DA_U}{b_U(\beta-1)}\right\rceil
+\label{eq:bounded-zero-carry-bound}
+\end{equation}
+and
+\begin{equation}
+\delta_{U,D}=\min\left\{|a+k-\beta l|:
+ |a|\le D,\ |k|,|l|\le K_{U,D},\ a+k-\beta l\ne0\right\}.
+\label{eq:bounded-zero-separation}
+\end{equation}
+The variables in this minimum are integers.  Since $\beta$ is irrational,
+$\delta_{U,D}>0$, and exact algebraic-number comparison computes it.  Define
+\begin{align}
+M_{U,D}&=\frac1{c_0}\sum_{i=1}^{s-1}|c_i|
+ \left(\frac{D}{1-|\beta_i|}+K_{U,D}\right),\nonumber\\
+B_{U,D}&=D+(1+\beta)M_{U,D},
+\label{eq:bounded-zero-conjugate-bound}
+\end{align}
+and
+\begin{equation}
+m_0(U,D)=\min\{m\ge2:\beta^m\delta_{U,D}>B_{U,D}\}.
+\label{eq:bounded-zero-contraction-threshold}
+\end{equation}
+All these constants are effective from $U$ and $D$.
+
+\begin{lemma}[Adjacent collapse for an arbitrary bounded coefficient alphabet]
+\label{lem:bounded-zero-arbitrary-alphabet-collapse}
+Let $U$ satisfy the integral recurrence whose characteristic polynomial is
+the minimal polynomial of a nonintegral Pisot number $\beta$, and fix
+$D\ge1$.  If $m\ge m_0(U,D)$, coefficients
+$e_t,\ldots,e_{t+m}\in[-D,D]\cap\mathbb Z$, and integers $k_t,k_{t+1}$
+satisfy
+\[
+\sum_{j=0}^{m-1}u_je_{t+j}=k_tu_m,
+\qquad
+\sum_{j=0}^{m-1}u_je_{t+1+j}=k_{t+1}u_m,
+\]
+then
+\[
+k_{t+1}=0,\qquad e_{t+m}=-k_t.
+\]
+\end{lemma}
+
+\begin{proof}
+The growth bounds give, for either row,
+\[
+|k_t|\le D\frac{\sum_{j<m}u_j}{u_m}
+ <\frac{DA_U}{b_U(\beta-1)}\le K_{U,D},
+\]
+and similarly $|k_{t+1}|\le K_{U,D}$.  For every embedding set
+\[
+A_{t,i}=\sum_{j=0}^{m-1}e_{t+j}\beta_i^j-k_t\beta_i^m.
+\]
+The recurrence and its Binet expansion give $\sum_i c_iA_{t,i}=0$.
+For $i\ge1$,
+\[
+|A_{t,i}|\le\frac{D}{1-|\beta_i|}+K_{U,D},
+\]
+so $|A_{t,0}|\le M_{U,D}$, and the same holds at $t+1$.
+Direct subtraction of the adjacent dominant-embedding sums gives the exact
+identity
+\begin{equation}
+\beta^m(e_{t+m}+k_t-\beta k_{t+1})
+=\beta A_{t+1,0}-A_{t,0}+e_t.
+\label{eq:bounded-zero-adjacent-identity}
+\end{equation}
+The right side has modulus at most $B_{U,D}$.  If the parenthesis on the
+left were nonzero, \eqref{eq:bounded-zero-separation} and
+\eqref{eq:bounded-zero-contraction-threshold} would make the left side
+strictly larger than $B_{U,D}$, a contradiction.  Hence
+$e_{t+m}+k_t=\beta k_{t+1}$.  Irrationality of $\beta$ and integrality of
+the three coefficients force $k_{t+1}=0$ and $e_{t+m}=-k_t$.
+\end{proof}
+
+\begin{theorem}[Linear transient bound for bounded $U$-representations of zero]
+\label{thm:bounded-zero-linear-transient}
+Let $U=(u_n)_{n\ge0}$ be a strictly increasing sequence of positive integers
+with $u_0=1$, satisfying the integral recurrence whose characteristic
+polynomial is the minimal polynomial of a nonintegral Pisot number $\beta$.
+Fix $D\ge1$.  For $m\ge2$, let $G_m(U,D)$ be the directed graph with vertex
+set
+\[
+([-D,D]\cap\mathbb Z)^{m-1}.
+\]
+There is an edge
+\[
+(e_0,\ldots,e_{m-2})\longrightarrow
+(e_1,\ldots,e_{m-2},e_{m-1})
+\]
+if and only if there is an integer $c$ such that
+\begin{equation}
+e_0u_0+e_1u_1+\cdots+e_{m-1}u_{m-1}+cu_m=0.
+\label{eq:bounded-zero-overlap-edge}
+\end{equation}
+Then there is an effectively computable $C(U,D)<\infty$ such that, for every
+$m\ge2$, if no directed cycle of $G_m(U,D)$ is reachable from a vertex whose
+first coordinate is nonzero, every directed path beginning at such a vertex
+has fewer than $C(U,D)m$ edges.
+
+Equivalently, for every $m$, either there is an ultimately periodic infinite
+one-position overlap chain of bounded $U$-representations of zero containing
+a nonzero exposed coefficient, or every such nonzero chain terminates after
+fewer than $C(U,D)m$ overlaps.  The graphs are finite-state recognizers of
+these overlap chains, and their edges are bounded $U$-representations of
+zero by \eqref{eq:bounded-zero-overlap-edge}.
+
+The linear order is sharp.  For the fixed recurrence
+\[
+u_0=1,\quad u_1=2,\quad u_2=4,\qquad
+u_{n+3}=2u_{n+2}-u_{n+1}+u_n,
+\]
+whose leading root is the Pisot root of $x^3-2x^2+x-1$, and for $D=1$, the
+maximum finite path length is at least $m-3$ for every $m\ge4$.
+\end{theorem}
+
+\begin{proof}
+For an edge at time $t$, write $k_t=-c$ in
+\eqref{eq:bounded-zero-overlap-edge}.  The growth estimate gives
+$|k_t|\le K_{U,D}$ uniformly in $m$.  Suppose first that
+$m\ge m_0(U,D)$.  Along any path of at least two edges, Lemma
+\ref{lem:bounded-zero-arbitrary-alphabet-collapse}, applied to each adjacent
+pair, gives
+\[
+k_1=k_2=\cdots=0,\qquad
+e_m=-k_0,\qquad e_{m+1}=e_{m+2}=\cdots=0.
+\]
+A path of $m+1$ edges therefore reaches the all-zero vertex.  That vertex
+has a loop, so such a path would make a directed cycle reachable from its
+initial vertex.  Under the hypothesis of the theorem, every path has at
+most $m$ edges for $m\ge m_0(U,D)$.
+
+For each of the finitely many $2\le m<m_0(U,D)$, the graph is finite.  When
+no cycle is reachable from the first-coordinate-nonzero vertices, exact
+acyclic longest-path search computes the maximum $p_{U,D}(m)$; set it to
+zero otherwise.  Thus, for example,
+\[
+C(U,D)=\max\left(2,
+ \max_{2\le m<m_0(U,D)}
+ \left\lceil\frac{1+p_{U,D}(m)}m\right\rceil\right)
+\]
+is effective and has the required property, with the inner maximum understood
+as zero when $m_0(U,D)=2$.
+
+For sharpness, the coefficient words $E_m$ in
+\eqref{eq:theta-terminal-word} satisfy the integer recurrence relations
+classified in \eqref{eq:theta-suffix-renormalization}--
+\eqref{eq:theta-five-tail-table}.  Read only as coefficient words, they give
+paths in $G_m(U,1)$ of length
+$2\lfloor m/2\rfloor-2\ge m-3$.  The next bounded-coefficient path set is
+empty by the same exact terminal calculation, so no reachable cycle occurs.
+This conclusion uses the recurrence identities alone, independently of any
+realization of the coefficients as differences of raw words.
+\end{proof}
+
+\begin{remark}[Logical boundary of the standard-object theorem]
+\label{rem:bounded-zero-standard-object-boundary}
+The statement and proof of Theorem~\ref{thm:bounded-zero-linear-transient}
+use only a fixed Pisot recurrence, bounded integer coefficients, the
+distinguished weight $u_m$, and one-position overlaps of bounded
+$U$-representations of zero.  They use no canonical rank bijection, legal-word
+alphabet, cyclic reduction map, positive/negative realization of
+coefficients, image shift, or inverse decoder.  The distinguished modulus
+$u_m$ and consecutive recurrence weights remain essential: replacing $u_m$
+by an unrelated modulus destroys \eqref{eq:bounded-zero-adjacent-identity}.
+The theorem therefore does not concern numerical $\beta$-normalization,
+successor carry propagation, general synchronized transductions, general
+right-closing maps, or a broad class of sliding block codes.
+\end{remark}

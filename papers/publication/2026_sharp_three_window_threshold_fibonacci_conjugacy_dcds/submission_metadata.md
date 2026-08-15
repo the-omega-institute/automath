@@ -45,7 +45,11 @@ algebraic separation, and contraction in the Pisot conjugates rather than an
 exponential state count. The order is sharp in one fixed binary cubic system:
 for the leading root theta of x^3-2x^2+x-1, every m at least 4 is injective and
 the exact inverse length is 2 floor(m/2)-1, with penultimate obstruction set
-exactly {+/- E_m} and the next set empty. We also classify the overlap
+exactly {+/- E_m} and the next set empty. Independently of the cyclic code,
+we prove that for every fixed coefficient bound D, the finite overlap graph
+of bounded U-representations of zero either has a reachable cycle or has
+transient length less than C(U,D)m; this order is sharp for a fixed cubic
+recurrence over {-1,0,1}. We also classify the overlap
 threshold for every quadratic Pisot base, identify exact Fischer covers and
 Markov orders, and give an exact arithmetic pair-graph quotient for
 nonintegral simple-Parry bases. The results concern this cyclic language-rank
