@@ -1,12 +1,14 @@
 \section{Fixed-base linear depth for Pisot numeration}
 \label{sec:pisot-linear-depth}
 
-We now pass from Parry families to a fixed standard numeration system.  A
-Pisot numeration system is a sequence $U=(u_j)_{j\ge0}$ of positive integers
+We begin with the fixed-system theorem.  A Pisot linear numeration system is
+a sequence $U=(u_j)_{j\ge0}$ of positive integers
 which satisfies the integral recurrence whose characteristic polynomial is
 the minimal polynomial of a Pisot number; the initial values need not be the
-standard ones.  We assume throughout this section that $U$ is strictly
-increasing and $u_0=1$.  Let
+standard ones.  Here ``standard'' has its technical meaning
+$u_{-1}=\cdots=u_{-d+1}=0$, $u_0=1$; we do not use it as a synonym for the
+larger class considered below.  We assume throughout this section that $U$
+is strictly increasing and $u_0=1$.  Let
 \[
 D_U=\{0,\ldots,d_U\}
 \]
@@ -29,8 +31,20 @@ maps $X_{U,m}$ bijectively onto $\{0,\ldots,u_m-1\}$.  Define
 \label{eq:pisot-canonical-fold}
 \end{equation}
 and let $\Phi_{U,m}$ be the corresponding sliding code on
-$D_U^{\mathbb Z}$.  We use the convention in
-\eqref{eq:simple-parry-causal-length} for $\ell_{\rm cau}(U,m)$.
+$D_U^{\mathbb Z}$.  Define $\ell_{\rm cau}(U,m)$ to be the least $L\ge1$ for
+which the raw digit at time zero is determined, on the image of
+$\Phi_{U,m}$, by the output windows at times $0,\ldots,L-1$; set it to
+$\infty$ if no such $L$ exists.  Thus $\ell_{\rm cau}(U,m)-1$ is the least
+anticipation of an inverse constrained to have memory zero.
+
+The scope is not a disguised standard-initial-value convention.  For
+example, standard $k$-bonacci initial conditions begin $1,1,\ldots$ and fail
+strict increase, whereas the customary shift beginning $1,2,\ldots$ belongs
+to the present class.  Nor do we assume Condition~F: that would be a genuine
+restriction, since the principal root of $x^3-3x^2+2x-1$ is Pisot but does
+not satisfy Condition~F \cite[Theorem~3]{Akiyama2000}.  The equivalence of
+Condition~F with zero preservation is proved in
+\cite{CartonSudberyYassawi2026}, but neither property is used below.
 
 Put $\Delta_U=[-d_U,d_U]\cap\mathbb Z$ and, for $L\ge1$, set
 \begin{equation}
@@ -77,13 +91,16 @@ $\Gamma_{U,m}$ is reachable from $B_{U,m}$.
 \end{lemma}
 
 \begin{proof}
-The proof of Theorem~\ref{thm:simple-parry-causal-collision} uses only the
-bijection between normal words and the residue interval, together with the
-fact that every $e\in\Delta_U$ is the difference of its positive and
-negative parts in $D_U$.  Those two facts hold here, so the same quotient of
-the classical pair graph gives \eqref{eq:pisot-exact-depth} and
-\eqref{eq:pisot-longest-path}.  A nonzero bi-infinite path is again realized
-by two raw points, and a reachable cycle can be repeated periodically.
+Two folded windows agree exactly when the difference of their raw values is
+divisible by $u_m$, because the canonical normal words represent
+$0,\ldots,u_m-1$ bijectively.  Every $e\in\Delta_U$ is realized as a
+difference of two digits by taking its positive and negative parts in
+$D_U$.  Hence two output $L$-blocks with distinct initial raw digits are
+equivalent to a vector in $\mathcal N_{U,m,L}$, with no lost collisions.
+Reading consecutive difference windows gives precisely the paths from
+$B_{U,m}$ in $\Gamma_{U,m}$, proving \eqref{eq:pisot-exact-depth} and
+\eqref{eq:pisot-longest-path}.  A reachable nonzero cycle can be repeated
+periodically and is realized by two raw points.
 
 It remains only to note why injectivity rules out the zero loop as a
 reachable cycle.  If $d_U\ge u_m$, the constant nonzero difference sequence
@@ -117,17 +134,14 @@ finite prefix.
 
 Set
 \begin{equation}
-\widehat K_U=
+K_U^{*}=
 \left\lceil\frac{d_UA_U}{b_U(\beta-1)}\right\rceil.
 \label{eq:pisot-analytic-carry-bound}
 \end{equation}
-The bounded-zero normalization automaton may now be intersected with the
-finite terminal alphabet $[-\widehat K_U,\widehat K_U]$.  Let
-$\mathcal K_U$ be the set of terminal carries $k$ for which that automaton
-accepts a word of the form in \eqref{eq:pisot-zero-word-bridge}, and put
-$K_U=\max_{k\in\mathcal K_U}|k|$.  Finite automaton reachability computes
-this set.  Equation \eqref{eq:pisot-effective-growth} shows directly that
-every carry in \eqref{eq:pisot-window-carry} belongs to it, since
+Equation \eqref{eq:pisot-effective-growth} shows directly, without a
+normalization automaton or a zero-preservation hypothesis, that every carry
+in \eqref{eq:pisot-window-carry} lies in the integer interval
+$[-K_U^{*},K_U^{*}]$, since
 \[
 |k_t|\le d_U\frac{\sum_{j<m}u_j}{u_m}
 <\frac{d_UA_U}{b_U(\beta-1)}.
@@ -135,14 +149,14 @@ every carry in \eqref{eq:pisot-window-carry} belongs to it, since
 
 For nonintegral $\beta$, define the effective positive separation
 \begin{equation}
-\delta_U=\min\left\{|a+k-\beta l|:
- a\in\Delta_U,\ k,l\in\mathcal K_U,\ a+k-\beta l\ne0\right\}
+\delta_U^{*}=\min\left\{|a+k-\beta l|:
+ a\in\Delta_U,\ |k|,|l|\le K_U^{*},\ a+k-\beta l\ne0\right\}
 \label{eq:pisot-effective-separation}
 \end{equation}
 and
 \begin{equation}
 M_U=\frac1{c_0}\sum_{i=1}^{s-1}|c_i|
- \left(\frac{d_U}{1-|\beta_i|}+K_U\right),
+ \left(\frac{d_U}{1-|\beta_i|}+K_U^{*}\right),
 \qquad
 B_U=d_U+(1+\beta)M_U.
 \label{eq:pisot-conjugate-bound}
@@ -153,9 +167,15 @@ $a+k$, while for $l=0$ every nonzero value has modulus at least one.  All
 comparisons are comparisons of algebraic numbers and are effective.
 Finally let
 \begin{equation}
-m_U=\min\{m\ge2:\beta^m\delta_U>B_U\}.
+m_U=\min\{m\ge2:\beta^m\delta_U^{*}>B_U\}.
 \label{eq:pisot-contraction-threshold}
 \end{equation}
+
+For a fixed $U$, the classical finite automaton recognizing bounded zero
+representations over a fixed alphabet may be used to discard interval values
+that never occur \cite{Frougny1992,CartonSudberyYassawi2026}.  This can sharpen
+the numerical value of $C_U$ below, but it is neither a hypothesis nor a
+logical input to the proof.
 
 \begin{lemma}[Adjacent-window Pisot contraction]
 \label{lem:pisot-adjacent-window-contraction}
@@ -176,7 +196,7 @@ Substitution of \eqref{eq:pisot-binet} into
 \eqref{eq:pisot-window-carry} gives
 $\sum_i c_iA_{t,i}=0$.  For $i\ge1$,
 \[
-|A_{t,i}|\le \frac{d_U}{1-|\beta_i|}+K_U,
+ |A_{t,i}|\le \frac{d_U}{1-|\beta_i|}+K_U^{*},
 \]
 and therefore $|A_{t,0}|\le M_U$.  Direct subtraction of two adjacent
 dominant-embedding sums yields
@@ -202,22 +222,16 @@ C_U=\max\left(2,
 \label{eq:effective-linear-constant}
 \end{equation}
 Here and below the inner maximum is zero if $m_U=2$.
-This is a finite, effective recipe from the recurrence, the canonical digit
-set, and the bounded-zero normalization automaton.  The large-aperture part
+This is a finite, effective recipe from the recurrence and the canonical
+digit set.  The large-aperture part
 of the recipe is the Pisot contraction estimate, not a count of the
 $(2d_U+1)^{m-1}$ difference vertices.
 
 \begin{theorem}[Fixed-base linear causal depth and sharpness for Pisot numeration]
 \label{thm:pisot-linear-depth-sharpness}
-Let $U=(u_j)_{j\ge0}$ be a strictly increasing Pisot numeration system,
-with nonstandard initial values allowed, $u_0=1$, canonical greedy digit set
-$D_U=\{0,\ldots,d_U\}$, and canonical normal words
-\eqref{eq:pisot-canonical-words}.  Assume that $U$ preserves zeros, or,
-equivalently, that its leading Pisot root satisfies Condition~F.  Then the
-constant $C_U<\infty$ defined above (by
-\eqref{eq:effective-linear-constant} in the nonintegral case) is effectively
-computable from the recurrence, the canonical digit set, and the bounded-zero
-normalization automaton, and, for every $m\ge2$,
+Let $U$ be any strictly increasing Pisot numeration system with $u_0=1$,
+canonical greedy digit set and canonical normal words.  Then there is an
+effectively computable $C_U<\infty$ such that, for every $m\ge2$,
 \begin{equation*}
 \Phi_{U,m}\text{ injective}
 \quad\Longrightarrow\quad
@@ -266,8 +280,9 @@ Consequently
 \[
 \lim_{m\to\infty}\frac{\ell_{\rm cau}(\theta,m)}m=1,
 \]
-so the fixed-system linear upper bound cannot be improved to $o(m)$ in
-growth order.
+so no theorem valid for every fixed system in the class of \textup{(A1)} can
+replace $O_U(m)$ by $o(m)$.  This does not assert that the computed $C_U$ is
+numerically optimal or that coefficient one is universal across systems.
 \end{theorem}
 
 \begin{proof}
@@ -297,13 +312,8 @@ gives
 1=\theta^{-1}+\theta^{-2}+\theta^{-4},
 \]
 and every proper suffix of $1101\,0^\infty$ is lexicographically smaller.
-Parry's criterion therefore gives $d_\theta(1)=1101\,0^\infty$.  The
-polynomial has the form $x^3-ax^2-bx-1$ with $a=2$ and $b=-1$.
-Akiyama's classification of cubic Pisot units with finite beta expansions
-therefore gives Condition~F, since $a\ge1$ and
-$-1\le b\le a+1$ \cite[Theorem~3]{Akiyama2000}.  Consequently
-$U_\theta$ preserves zeros.  The canonical language counts are exactly
-\eqref{eq:theta-count-recurrence}.
+Parry's criterion therefore gives $d_\theta(1)=1101\,0^\infty$, and the
+canonical language counts are exactly \eqref{eq:theta-count-recurrence}.
 In particular, the digit and difference alphabets are $\{0,1\}$ and
 $\{-1,0,1\}$.  The recurrence also implies the positive recurrence
 $Q_{n+4}=Q_{n+3}+Q_{n+2}+Q_n$.  Thus
@@ -423,7 +433,8 @@ is immediate.
 
 \begin{corollary}[Global bounded-zero strip dichotomy]
 \label{cor:pisot-zero-strip-synchronization}
-For a fixed zero-preserving Pisot numeration $U$ and an aperture $m\ge2$,
+For a fixed strictly increasing Pisot numeration $U$ as in the theorem and an
+aperture $m\ge2$,
 consider all bounded zero words of length $m+1$ of the form
 \[
 [e_t,\ldots,e_{t+m-1},-k_t]_U=0
