@@ -1,0 +1,107 @@
+Read artifacts/oracle_sprint_A3_confirm.md in full first. Do not ask for design approval, do not
+run any brainstorming or approval workflow. Proceed directly to editing.
+
+THEOREM A SURVIVES THE AUDIT AND THE TIER RAISE IS UPHELD ON THE PROOF, not merely on his earlier
+commitment. He verified (A1) including the graph-reachability step and the effectivity of C_U; he
+verified (A2)-(A3) as genuinely sharp in growth order; he independently reconstructed the
+collision graph for every 4 <= m <= 10 rather than relying on our verifier and confirms the
+penultimate obstruction set is exactly {+-E_m} with the next set empty; and he confirms the class
+is a recognized Pisot numeration class, NOT our own family in disguise. Do not weaken, restate or
+renumber A1, A2 or A3. Do not narrow the scope.
+
+He requires four changes before a TAMS submission. Make all four, taking exact formulas and
+wording from his report.
+
+ 1. REMOVE CONDITION F FROM (A1) - THIS IS THE MAIN ITEM AND IT STRENGTHENS THE THEOREM.
+    He states the displayed proof never uses Condition F, zero preservation, or the
+    bounded-zero automaton, and gives the explicit replacement: define
+
+        K_U^* = ceil( d_U A_U / (b_U (beta - 1)) )
+
+    and take all integers |k|, |l| <= K_U^* in the separation constant
+
+        delta_U^* = min{ |a + k - beta l| : a in Delta_U, |k|,|l| <= K_U^*, a + k - beta l != 0 }.
+
+    This is a finite, effective, positive minimum and every actual carry lies in that interval.
+    Replacing K_U by K_U^* in M_U, B_U and m_U reproduces Lemma 7.2 verbatim. Do this, and
+    restate (A1) in his stronger form:
+
+        Let U be any strictly increasing Pisot numeration system with u_0 = 1, canonical greedy
+        digit set and canonical normal words. Then there is an effectively computable C_U < infinity
+        such that Phi_{U,m} injective implies l_cau(U,m) <= C_U m.
+
+    The automaton-derived carry set may REMAIN as an optional sharpening of the numerical value
+    of C_U, but it must no longer be a hypothesis or a logical input. Verify for yourself that
+    Condition F is genuinely unused before removing it - if you find any step that does depend on
+    it, do NOT remove it, and report exactly which step and why. That report is more valuable
+    than compliance.
+
+ 2. THE WORD "STANDARD" IS TERMINOLOGICALLY WRONG. In current Pisot-numeration usage "standard"
+    has the technical meaning u_{-1} = ... = u_{-d+1} = 0, u_0 = 1, whereas we simultaneously say
+    "standard" and allow nonstandard initial values. After change 1 the correct wording is
+    "uniform over every fixed strictly increasing Pisot linear numeration system". If for any
+    reason Condition F cannot be removed, the correct wording is instead "uniform over every fixed
+    strictly increasing zero-preserving Pisot numeration system, with nonstandard initial values
+    allowed". Fix this in the abstract and everywhere else the loose phrasing appears.
+    Note also his two qualifications: Condition F is a real restriction (the principal root of
+    x^3 - 3x^2 + 2x - 1 is a Pisot root without it), and some iconic systems in the strict standard
+    convention begin 1,1,... and fail strict increase until shifted to 1,2,....
+
+ 3. ADD A CONCENTRATED PRIORITY COMPARISON as a dedicated paragraph, not scattered across the
+    introduction. He is explicit that given this manuscript's previous priority problems, leaving
+    Ashley's title unanswered is unnecessarily risky. Cover, with his stated reasons for why each
+    does NOT subsume A1:
+      - Frougny (finite-automaton normalization and addition in Pisot bases) and Berend-Frougny:
+        finite-state computability, not an aperture-linear optimal inverse window.
+      - Zero-representation automata: regularity of bounded zero automata is classical; it does
+        not bound the survival time of our overlapping congruence strips by C_U m.
+      - Carton-Sudbery-Yassawi (zero preservation <-> Condition F): the closest methodological
+        precedent; no cyclic rank map, no collision graph, no future-only inverse, no O(m)
+        survival-depth theorem.
+      - Ashley's linear-bound papers: THE MOST LIKELY SOURCE OF A MISTAKEN PRIORITY OBJECTION.
+        His bounds are linear in the number of states of a presenting graph; our natural
+        pair/difference presentations have exponentially many aperture-m states, so a
+        state-count-linear theorem would still be exponential in m. Say this explicitly.
+      - Frougny-Sakarovitch bounded-delay synchronization: a structural conversion theorem under a
+        bounded-delay hypothesis, not a deduction of O(m) delay from injectivity.
+      - Classical pair/fiber graphs: the generic difference-graph count gives (2 d_U + 1)^{m-1} - 1,
+        exponential, not the new aperture-linear estimate.
+    Read each of these before writing the comparison. If any overlap is larger than he suggests,
+    say so plainly in your report - do not tune the comparison to flatter us.
+
+ 4. MOVE A1-A3 MORE VISIBLY TO THE FRONT and shorten material that obscures the fixed-system
+    theorem.
+
+NOVELTY WORDING. He signs off on the cautious form: "To the authors' knowledge, this is the first
+aperture-linear inverse-depth bound for cyclic language-rank recodings over fixed Pisot numeration
+systems." Use that. He explicitly declines to endorse an unqualified "first linear decoder bound"
+because several older titles sound dangerously close. Do not upgrade the claim.
+
+VENUE. Retarget to TAMS as the ambitious first submission, with ETDS recorded as the strong and
+natural alternative; DCDS-A is now conservative rather than aspirational. Update submission
+metadata and cover letter accordingly. He is explicit that acceptance at TAMS is not likely or
+routine - a referee may still regard the map as specialized - so write the cover letter
+confidently but without claiming the result is more general than it is.
+
+PRESERVE. The sharpness statement in his exact form: no theorem valid for every fixed system in
+the A1 class can replace O_U(m) by o(m). It does NOT claim the computed C_U is numerically optimal
+or that coefficient 1 is universal. Keep the limitation he restates: this is a theorem about our
+cyclic language-rank recoding, not about numerical beta-normalization in general, arbitrary
+beta-transformations, or all Pisot symbolic dynamics. Keep the computational batteries relegated
+to regression testing with the existing statement that they are not certificates for the
+parameter-uniform theorem.
+
+RULES:
+ - Every claim proved at referee standard; numerics are sanity checks, never a substitute.
+ - Keep every .tex under 800 lines; split if needed.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change; confirm zero failures from artifacts/.
+ - No revision marks anywhere.
+
+REPORT: whether Condition F was genuinely removable and the verbatim restated (A1); the K_U^* and
+delta_U^* as typeset and the confirmation that Lemma 7.2 goes through; the corrected scope
+wording everywhere it appears; the priority paragraph as written including your own assessment of
+each overlap; what moved to the front and what was shortened; the venue framing changes; page and
+theorem counts before and after; compile and test results.
