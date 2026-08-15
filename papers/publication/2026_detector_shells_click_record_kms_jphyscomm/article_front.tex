@@ -1,12 +1,17 @@
 \begin{abstract}
 We determine the stationary-record limit experiment when two rates collide in
-a sampled generalized-Erlang, equivalently serial discrete phase-type, renewal
+a sampled generalized-Erlang, or serial discrete phase-type, renewal
 process.  For fixed serial order, one isolated double collision, compact
 positive rate sets, uniformly separated remaining rates, and known sampling
 interval, the smooth identifiable coordinate is the squared half-separation
-\(\delta=\{(\theta_1-\theta_2)/2\}^2\).  The exact stationary likelihood,
-including equilibrium age and residual-life factors and random renewal
-stopping, is uniformly locally asymptotically normal in the regular nuisance
+\(\delta=\{(\theta_1-\theta_2)/2\}^2\).  More generally, we prove local
+asymptotic equivalence, in Le Cam distance, between a deterministic window of
+a stationary lattice renewal indicator and an undershot fixed-size i.i.d.
+sample from its Palm interarrival law.  On records containing a renewal, the
+exact stationary likelihood factorization includes the forward-recurrence
+(residual-life) and backward-recurrence (age) factors and random renewal
+stopping; the all-zero record is a separate uniformly negligible atom.  The
+collision experiment is uniformly locally asymptotically normal in the regular nuisance
 coordinates and \(\delta\) at rate \(N^{-1/2}\).  The collision derivative has
 an exact fourth-order pole and a nonzero
 \(k^3e^{-\lambda\Delta\tau k}\) sampled component; this proves uniform
@@ -47,7 +52,11 @@ the squared half-separation, so root-\(N\) inference in that quotient becomes
 \(N^{-1/4}\) recovery of the unordered roots.  Theorems~F and G prove this for
 the actual stationary binary record, including renewal stopping and censored
 endpoint cycles, and match the estimation upper bound with a contiguity lower
-bound.
+bound.  A preceding experiment-equivalence theorem first shows, for a general
+local class of stationary lattice renewal laws, that the deterministic window
+is asymptotically equivalent to an i.i.d. sample of
+\(\lfloor N/\mu_0-N^\gamma\rfloor\) Palm interarrivals for every
+\(\gamma\in(1/2,1)\).
 
 The original applied-probability question remains as the two-state instance:
 what the binary arrival record of a constrained D-MAP determines when every
@@ -62,8 +71,12 @@ sampling interval of length \(\Delta\tau\), an attempt clock has rate
 \(\Gamma\) and a recovery clock has rate \(\kappa_{\mathrm r}\).  A marked
 transition is latched in \(D\) until the next boundary.  This construction is
 only a realization of the probability model: the results concern the labelled
-kernels and their visible binary law.  Allowing a marked transition into
-\(R\) changes the model and removes the deterministic regeneration used below.
+kernels and their visible binary law.  Its deterministic restart is a
+special case of the essential rank-one condition \(T_1=c\beta\): a fixed
+nondegenerate post-click law \(\beta\) would also regenerate.  Arbitrary
+marked leakage into \(R\) no longer guarantees renewal; the present proof
+fails precisely when the normalized post-click law depends on the pre-click
+state.
 
 Classical MAP and D-MAP theory supplies the arrival-process framework
 \cite{Neuts1979MAP,Lucantoni1991BMAP,AlfaNeuts1995DMAP}.  Zamparo's
@@ -96,7 +109,7 @@ original statements and roles:
 \toprule
 Result & Statement & Logical dependence \\
 \midrule
-A & Killed-reset record law & Assumption~1.1 and deterministic post-click reset. \\
+A & Killed-reset record law & Assumption~1.1 and its rank-one marked kernel, specialized to deterministic post-click state \(D\). \\
 B & Candidate three-inclusion quotient inverse & Theorem~A and the nonzero covariance chart. \\
 C & Fixed-setting inclusion CLT & Theorem~A, complete retained cycles, and stopped separated batches. \\
 D & Complete-visible-law specification test & Theorem~A for the null word law; its finite-range local conclusion uses the declared Markov-gap path. \\
@@ -152,6 +165,13 @@ theorems.
 \end{assumption}
 
 \subsection{Scope of finite-record reports}\label{subsec:finite-record-report-scope-main}
+
+The observation throughout is a stationary binary renewal indicator on
+\(\mathbb Z\).  Its interrenewal mass is obtained by binning the serial
+absorption time.  The reset-and-boundary protocol excludes any further
+post-click renewal within the same bin by construction.  The results are not
+statements about generic discretely observed event data, interval counts that
+can contain multiple arrivals, or sampled hidden point processes.
 
 The retained-record limits are fixed-setting asymptotic statements inside the
 stationary law specified in \Cref{ass:model-inference-contract-main}.  The
@@ -250,7 +270,7 @@ entries.  These mutually exclusive cases exhaust each row, since
 \(s+a+b=1\) and \(p+(1-p)=1\).
 \end{proof}
 
-\begin{proposition}[Fragility under non-killed one-labelled leakage]\label{prop:model-fragility-boundary-reset-main}
+\begin{proposition}[Rank-one regeneration boundary under one-labelled leakage]\label{prop:model-fragility-boundary-reset-main}
 The killed-leakage convention in
 \Cref{ass:model-inference-contract-main} is not a removable presentation
 choice.  It is a structural hypothesis behind the renewal law, quotient
@@ -261,15 +281,31 @@ same visible convention
 (\widetilde T_i)_{XY}
 =\PP(A_n=i,H_{n+1}=Y\mid H_n=X),\qquad X,Y\in\{R,D\},
 \]
-but suppose that either
+and put \(c=\widetilde T_1\mathbf1\).  If a probability row \(\beta\)
+satisfies
 \[
-\widetilde T_1(R,R)>0
-\qquad\hbox{or}\qquad
-\widetilde T_1(D,R)>0 .
+ \widetilde T_1=c\beta,
+\tag{R1}
 \]
-Then a click no longer forces the next hidden state to be the deterministic
-state \(D\).  Consequently the click epochs are not regeneration epochs in
-general.  In particular, the Palm renewal product
+then every click restarts the hidden chain from \(\beta\), independently of
+the pre-click state.  The click epochs are regeneration epochs and their Palm
+zero-run mass is
+\[
+ \widetilde g_k=\beta\widetilde T_0^k
+                  \widetilde T_1\mathbf1,\qquad k\ge0.
+\tag{R2}
+\]
+Condition \textup{(R1)} permits \(\beta\) to have positive mass on both
+states; deterministic restart at \(D\) is this model's specialization.
+
+If the normalized post-click rows
+\[
+ \frac{\widetilde T_1(X,\cdot)}
+      {\widetilde T_1(X,\cdot)\mathbf1}
+\tag{R3}
+\]
+differ between pre-click states having positive marked-row mass, then the
+fixed-restart argument is unavailable.  In particular, the Palm renewal product
 \[
 \PP(B\subset\Xi)=\rho\prod_j u_{i_{j+1}-i_j}
 \]
@@ -287,36 +323,31 @@ or the quotient recovery
 Therefore Theorems~A and B, and Theorems~C--E wherever they use the same
 renewal law, inverse, or covariance route, fail to be valid generic
 sampled-counter or generic D-MAP(2) statements unless additional hypotheses
-restore a deterministic post-click reset or supply a replacement regeneration
-theory.
+restore the rank-one restart or supply a replacement regeneration theory.
+A positive marked entry into \(R\), by itself, does not imply failure:
+arbitrary leakage need not regenerate, but rank-one leakage can.
 \end{proposition}
 
 \begin{proof}
-The proofs of the lettered results use the following deterministic post-click fact:
-on every event \(\{A_n=1\}\), the next hidden state is \(H_{n+1}=D\).  In the
-kernel notation this is exactly
-\(T_1(R,R)=T_1(D,R)=0\).  It makes each observed click a reset to the same
-state \(D\), so the post-click future starts from the fixed vector \(e_D\),
-independently of the pre-click hidden state and of the earlier visible record.
+The proof of Theorem~A starts from the general factorization
+\(T_1=c\beta\).  Conditional on a click from any row with positive marked
+mass, division by that mass leaves the same distribution \(\beta\).  The
+Markov property then makes the post-click future independent of the pre-click
+state and proves \textup{(R2)}.  In the present kernel,
+\(\beta=e_D^\top\) because \(T_1(R,R)=T_1(D,R)=0\).
 The inter-click zero runs are then i.i.d. under the Palm law, their tail is
-computed by iterating \(T_0\) from \(e_D\), and inclusion probabilities factor
+computed by iterating \(T_0\) from \(e_D^\top\), and inclusion probabilities factor
 as the displayed renewal product.
 
-If \(\widetilde T_1(R,R)>0\), a click from \(R\) can leave the next hidden
-state equal to \(R\).  If \(\widetilde T_1(D,R)>0\), a click from \(D\) can
-leave the next hidden state equal to \(R\).  Whenever either transition has
-positive probability, conditioning on \(A_n=1\) need not put \(H_{n+1}\) at
-the deterministic state \(D\); it produces a post-click distribution that can
-depend on the pre-click hidden state and on the stationary mixture at the
-click time.  The D-MAP property by itself only records labelled Markov
-transitions.  It does not turn this state-dependent post-click mixture into
-the fixed Palm restart required for a renewal record.
+Conversely, the rows in \textup{(R3)} are exactly the conditional post-click
+laws.  If they differ, the post-click distribution retains pre-click-state
+information.  The D-MAP property alone then does not supply the fixed Palm
+restart used by the renewal proof.
 
-The continuous same-bin recovery comparator is a concrete instance: the paths
-``click--recover'' from \(R\) and ``recover--click--recover'' from \(D\) give
-positive entries \(\widetilde T_1(R,R)\) and
-\(\widetilde T_1(D,R)\).  The Palm gap law is therefore no longer a consequence
-of the labelled kernel without extra assumptions.  The renewal product
+In a continuous same-bin recovery comparator, paths ending in either hidden
+state can make both columns of \(\widetilde T_1\) positive.  Renewal then
+requires the additional proportional-row check \textup{(R1)}; it is no
+longer a consequence of the protocol description alone.  The renewal product
 formulas and the covariance transfer lemma are downstream of that Palm renewal
 law, while the quotient inverse in Theorem~B explicitly divides the covariance
 identity \(r_2-r_0^2=\rho(a-\rho)\lambda_{\rm hid}\) by
@@ -330,5 +361,5 @@ constrained D-MAP(2) subfamily and adds the stationary collision Theorems~F
 and G.  Supporting lemmas, propositions, corollaries, certificate interfaces,
 and algorithms prove or apply these seven statements.  The killed-leakage dependency is
 explicit in \Cref{prop:model-fragility-boundary-reset-main}: if same-bin
-recovery after a click is retained in the one-labelled kernel, this theorem
-chain is not the applicable theorem chain.
+recovery after a click is retained, this theorem chain applies only after the
+resulting marked kernel is shown to retain the rank-one restart property.

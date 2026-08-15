@@ -488,3 +488,48 @@ application: the independent-block Helmert moment calculation, its uniform
 local-null covariance comparison, the calendar-stopping transfer, and the
 resulting equivalence `n S_J^2 -> infinity`. The general `Z_2`--`W_2`, Stein,
 Rosenthal--Burkholder, and Yurinskii results remain cited background.
+
+## Stationary-renewal equivalence and super-resolution boundary, 2026-08-15
+
+The follow-up priority search used Crossref, the arXiv Atom API, Semantic
+Scholar metadata, and the complete arXiv text of the statistical microscopy
+comparator. OpenAlex returned a daily-budget rate-limit response and is not
+used as negative evidence. The search is a scoped comparison, not proof of
+absence from all regenerative de-Poissonization or older Le Cam literature.
+
+Crossref and the arXiv API identify D. Batenkov, G. Goldman, and Y. Yomdin,
+"Super-resolution of near-colliding point sources," *Information and
+Inference* **10**(2), 515--572 (2021), DOI
+`10.1093/imaiai/iaaa005`, arXiv:`1904.09186v2`. It observes spectral data in
+bandwidth `Omega` with absolute deterministic error at most `epsilon`. For a
+cluster of at most `p` nodes, it proves cluster-node minimax error of order
+`Omega^{-1} SRF^{2p-1} epsilon` and amplitude error of order
+`SRF^{2p-1} epsilon`, under its stated noise threshold. This is the relevant
+clustered-source minimax comparator, but its Fourier forward map, bounded-error
+experiment, amplitude parameters, and losses differ from renewal
+interarrivals.
+
+Crossref and Semantic Scholar identify G. Kulaitis, A. Munk, and F. Werner,
+"What is resolution? A statistical minimax testing perspective on
+superresolution microscopy," *Annals of Statistics* **49**(4) (2021), DOI
+`10.1214/20-AOS2037`, arXiv:`2005.07450v2`. The complete arXiv text was
+checked, including Theorems 2.4 and 3.4. The paper tests one point-spread
+function against two equally weighted translates with the same total
+intensity. Its Poisson and variance-stabilized Gaussian detection separation
+is proportional to `t^{-1/4}` with an explicit point-spread-function
+curvature constant; its homogeneous Gaussian boundary also depends on pixel
+count. The shared fourth-root behavior is a genuine statistical comparator
+for quadratic source separation, but it does not transfer a minimax theorem
+to a stationary renewal record.
+
+Crossref also confirms R. D. Gill and N. Keiding, "Product-limit estimators of
+the gap time distribution of a renewal process under different sampling
+patterns," *Lifetime Data Analysis* **16**(4), 571--579 (2010), DOI
+`10.1007/s10985-010-9156-y`. That paper is the direct stationary-renewal
+sampling-pattern comparator. No exact two-way Le Cam equivalence between a
+deterministic stationary lattice-renewal window and an undershot fixed-size
+Palm interarrival sample was found in the sources checked for this round.
+Accordingly, the manuscript states the new theorem locally, permits its
+randomizations to use the fixed centre `p_0`, retains the exponential-moment
+and equilibrium-delay Hellinger hypotheses, and makes no global adaptive
+equivalence claim.
