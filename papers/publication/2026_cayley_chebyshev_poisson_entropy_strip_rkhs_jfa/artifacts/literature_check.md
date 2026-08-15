@@ -318,7 +318,7 @@ first-unmatched KL asymptotics themselves are not claimed as new.
 
 Checked 2026-08-15 (Asia/Singapore), before adding Theorem
 thm:two-stable-heat-flow-relative-entropy.  The target was the exact
-moving-denominator theorem for
+stable-continuum measure-data and endpoint theorem for
 \[
  D_{\rm KL}(p_t*\mu\Vert p_t*\nu),
 \]
@@ -359,17 +359,162 @@ quotient estimates for measure initial data, the finite
 $(d+\alpha)$-moment domain, separate noncompact Green-pairing limits, or the
 $t=\infty$ and $q\downarrow0$ entropy closures.
 
-Johnson's arXiv:1310.2045 was re-inspected at the theorem and open-problem
-level.  His differential stable de Bruijn identity uses an
-integration-by-parts qualification, and Open Problem 4 asks for a
-representation of $D(f\Vert g_s^{(\alpha)})$ as an integral.  No later
-indexed source located in this search supplies that representation.
+The reassessment added two priority lines omitted from the initial search.
+For positive solutions of the same forward Kolmogorov equation on a finite
+or countable state space, B. Hilder, M. A. Peletier, U. Sharma, and O. Tse,
+*An inequality connecting entropy distance, Fisher Information and large
+deviations*, Stochastic Processes and their Applications 130 (2020),
+2596--2638, DOI 10.1016/j.spa.2019.07.012, write the one-sided Bregman sum for
+the two-solution entropy derivative.  They trace entropy contraction to
+J. Voigt, *Stochastic operators, information, and entropy*, Communications in
+Mathematical Physics 81 (1981), 31--38, DOI 10.1007/BF01941799.  This is the
+discrete analogue of the present integrand.  M. Hirata, A. Nemoto, and
+H. Yoshida, *An Integral Representation of the Relative Entropy*, Entropy 14
+(2012), 1469--1477, DOI 10.3390/e14081469, give the Gaussian moving-reference
+de Bruijn precedent and an integral representation.  No separate matching
+*Journal of Mathematical Physics* record was located in the bibliography
+integrity audit below.
 
-Accordingly, the novelty claim written in the manuscript is only the exact
-moving-denominator parabolic theorem for symmetric stable heat flows from
-measure data, its explicit sufficient moment domain, the rigorous
-noncompact and endpoint closures, and the connection to Johnson's integral
-representation.  The exponent $d+\alpha$ is not claimed optimal.  No claim
-is made for all isotropic unimodal Levy semigroups or all subordinate
-Brownian motions.  This remains a documented negative search, not proof of
-absence from every publication.
+Johnson's arXiv:1310.2045 was re-inspected at the theorem and open-problem
+level.  His Theorem 5.1 gives a derivative formula along the same stable
+interpolation through an MMSE-type score/Fisher-score pairing, and Open
+Problem 4 asks for a representation of $D(f\Vert g_s^{(\alpha)})$ as an
+integral specifically using his formula (17).  The manuscript proves an
+exact nonlocal Bregman representation under its stated domain, but does not
+identify that jump-form integrand with Johnson's score pairing.
+
+Accordingly, the novelty claim written in the manuscript is the
+stable-continuum measure-data domain and endpoint theorem for the classical
+two-solution entropy-production identity, including the rigorous noncompact
+Green closures.  It also provides an exact nonlocal Bregman integral
+representation along Johnson's interpolation under the stated domain, not a
+claim to solve Open Problem 4 in the specific form using (17).  The exponent
+$d+\alpha$ is not claimed optimal.  No claim is made for all isotropic
+unimodal Levy semigroups or all subordinate Brownian motions.  This remains
+a documented negative search, not proof of absence from every publication.
+
+## Bibliography-Wide Integrity Audit
+
+Checked 2026-08-15 (Asia/Singapore). Every DOI in
+`bibliography_shared.tex` was requested from the Crossref `/works/<DOI>`
+endpoint and the returned title and authors were compared with the entry.
+Every entry without a DOI was searched by title and author in Crossref or
+Semantic Scholar. OpenAlex was also attempted, but its API returned a daily
+budget-exhausted HTTP 429 response and is not counted as a successful check.
+
+The requested `HirataNemotoYoshida2012RelativeEntropy` entry failed exactly:
+Crossref returned HTTP 404 for DOI `10.1063/1.4756955`, while title searches
+produced no matching title-and-author record. It was removed. Three
+additional DOI/metadata defects and one year mismatch were corrected only
+after exact Crossref records were retrieved:
+
+| Entry | Defect found | Verified correction |
+|---|---|---|
+| `Blachman1965` | DOI `10.1109/TIT.1965.1053750` resolves to an unrelated paper by Bello. | Crossref confirms Blachman's title and author at DOI `10.1109/TIT.1965.1053768`. |
+| `BakryCoulhonLedouxSaloffCoste1995` | DOI `10.1512/iumj.1995.44.2001` resolves to an unrelated paper by Cox and Zuazua. | Crossref confirms the four authors and title at DOI `10.1512/iumj.1995.44.2019`. |
+| `Yoshida2017RelativeEntropyDiffusion` | The cited initials, title, issue, article number, and DOI did not match any record; DOI `10.3390/e19070323` is an unrelated paper by Guo et al. | Crossref confirms H. Yoshida, *A Dissipation of Relative Entropy by Diffusion Flows*, Entropy 19 (2017), no. 1, 9, DOI `10.3390/e19010009`. |
+| `MasonHandscomb2002` | The entry gave 2003. | Crossref's title-and-author record is dated 2002-09-17; the bibliography year was corrected to 2002. |
+
+### Full Entry Table
+
+`Verified` means that the index record matched both title and authors.
+`Unverified` is an index-sourcing gap, not an assertion that the work is
+nonexistent.
+
+| Key | Identifier or search | Index evidence | Status |
+|---|---|---|---|
+| `AliSilvey1966Divergence` | title + Ali/Silvey | Crossref and Semantic Scholar exact match | Verified |
+| `Applebaum2009LevyProcesses` | title + Applebaum | Crossref exact book record, DOI `10.1017/CBO9780511809781` | Verified |
+| `ArtsteinBallBartheNaor2004` | title + four authors | Crossref and Semantic Scholar exact match | Verified |
+| `AtarWeissman2012PoissonChannel` | `10.1109/TIT.2011.2172572` | Crossref title/authors match | Verified |
+| `AnkerPapageorgiouZhang2023HeatSymmetricSpaces` | `10.1016/j.jfa.2022.109828` | Crossref title/authors match | Verified |
+| `Barron1986` | title + Barron | Crossref exact match, DOI `10.1214/aop/1176992632` | Verified |
+| `Blachman1965` | `10.1109/TIT.1965.1053768` | Crossref title/author match after correction | Verified |
+| `BanuelosBogdanLuks2016HardyStein` | `10.1112/jlms/jdw042` | Crossref title/authors match | Verified |
+| `BanuelosKim2019HardySteinNonsymmetric` | `10.1016/j.jmaa.2019.123383` | Crossref authors and journal-title variant match; variant is noted in entry | Verified |
+| `Bertoin1996LevyProcesses` | title + Bertoin | Crossref returned reviews, not a direct book record; Semantic Scholar returned a different same-title work | Unverified |
+| `BinghamGoldieTeugels1987RegularVariation` | `10.1017/CBO9780511721434` | Crossref title/authors match | Verified |
+| `BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein` | `10.1016/j.jfa.2025.110827` | Crossref title/authors match | Verified |
+| `BogdanGrzywnyPietruskaPalubaRutkowski2023NonlinearNonlocalDouglas` | `10.1007/s00526-023-02458-x` | Crossref title/authors match | Verified |
+| `BobkovGotzeRenyiSurvey2025` | `10.1214/25-PS30` | Crossref title/authors match | Verified |
+| `BobkovGotzeEsscher2025` | `10.1016/j.jfa.2025.110999` | Crossref title/authors match | Verified |
+| `BobkovChistyakovGotze2013StableEntropy` | `10.1007/s10959-011-0377-0` | Crossref title/authors match | Verified |
+| `BobkovGozlanRobertoSamson2014LogSobolevDeficit` | `10.1016/j.jfa.2014.09.016` | Crossref title/authors match | Verified |
+| `BrigatiDolbeaultSimonov2024LogSobolev` | `10.1016/j.jfa.2024.110562` | Crossref title/authors match | Verified |
+| `Bregman1967` | `10.1016/0041-5553(67)90040-7` | Crossref title/author match | Verified |
+| `BakryCoulhonLedouxSaloffCoste1995` | `10.1512/iumj.1995.44.2019` | Crossref title/authors match after correction | Verified |
+| `Chafai2004PhiEntropies` | `10.1215/kjm/1250283556` | Crossref title/author match | Verified |
+| `Carlen2025LogHLS` | `10.1016/j.jfa.2024.110818` | Crossref title/author match | Verified |
+| `ChenChewiNilesWeed2021MixtureLogSobolev` | `10.1016/j.jfa.2021.109236` | Crossref title/authors match | Verified |
+| `ChenNilesWeed2022SmoothedWasserstein` | `10.1007/s11118-020-09895-9` | Crossref title/authors match | Verified |
+| `ChengThalmaierWang2023EntropySteinTransport` | `10.1016/j.jfa.2023.109997` | Crossref title/authors match | Verified |
+| `CoverThomas2006` | title + Cover/Thomas | Crossref exact book record | Verified |
+| `Csiszar1967` | title + Csiszar | Crossref returned unrelated records; Semantic Scholar exact-match and bulk searches returned no record | Unverified |
+| `DeBruijn1953` | title + de Bruijn | Crossref returned unrelated records; Semantic Scholar exact-match search returned no record | Unverified |
+| `DonskerVaradhan1975AsymptoticI` | `10.1002/cpa.3160280102` | Crossref title/authors match | Verified |
+| `DupuisEllis1997WeakConvergence` | title + Dupuis/Ellis | Crossref exact book record, DOI `10.1002/9781118165904` | Verified |
+| `DuoandikoetxeaZuazua1992` | title + two authors | Semantic Scholar exact match, 1992, both authors | Verified |
+| `EldanMikulincer2020ShannonStam` | `10.1007/s00440-020-00967-w` | Crossref title/authors match | Verified |
+| `ErbarHuesmannJalowyMuller2025StationaryPointTransport` | `10.1016/j.jfa.2025.110974` | Crossref title/authors match | Verified |
+| `Erbar2014JumpEntropy` | `10.1214/12-AIHP537` | Crossref title/author match | Verified |
+| `EscobedoZuazua1991` | `10.1016/0022-1236(91)90105-E` | Crossref title/authors match | Verified |
+| `Feller1971` | title + Feller | Crossref and Semantic Scholar returned book-review records, not a direct record for the cited second edition | Unverified |
+| `FageotFallahHorel2022EntropicCompressibilityLevy` | `10.1109/TIT.2022.3167863` | Crossref title/authors match | Verified |
+| `FilaIshigeKawakami2012PoissonKernel` | `10.3934/cpaa.2012.11.1285` | Crossref title/authors match | Verified |
+| `GuoShamaiVerdu2008PoissonChannel` | `10.1109/TIT.2008.920206` | Crossref title/authors match | Verified |
+| `GozlanHerryPeccati2021PointMeasureTransport` | `10.1016/j.jfa.2021.109141` | Crossref title/authors match | Verified |
+| `GolubWelsch1969GaussQuadrature` | `10.1090/S0025-5718-69-99647-1` | Crossref title/authors match | Verified |
+| `GhourchianAminiGohari2018InnovationCompressibility` | `10.1109/TIT.2018.2822660` | Crossref title/authors match | Verified |
+| `Gutowski2023HardySteinPureJump` | `10.4064/ba230404-1-6` | Crossref title/author match | Verified |
+| `GutowskiKwasnicki2025BeurlingDenySobolevBregman` | `10.1016/j.na.2025.113808` | Crossref title/authors match | Verified |
+| `HilderPeletierSharmaTse2020EntropyDistance` | `10.1016/j.spa.2019.07.012` | Crossref title/authors match | Verified |
+| `HirataNemotoYoshida2012IntegralRepresentation` | `10.3390/e14081469` | Crossref title/authors match | Verified |
+| `HultLindskog2006RegularVariation` | `10.2298/PIM0694121H` | Crossref title/authors match | Verified |
+| `IshigeKawakamiMichihisa2017` | `10.1137/16M1101428` | Crossref title/authors match | Verified |
+| `IshigeKawakamiMichihisa2022RefinedFractional` | `10.1007/s10884-022-10224-4` | Crossref title/authors match | Verified |
+| `Iwabuchi2015CriticalBurgersPoisson` | `10.1016/j.anihpc.2014.03.002` | Crossref title/author match | Verified |
+| `JohnsonBarron2004` | title + Johnson/Barron | Crossref exact match, DOI `10.1007/s00440-004-0344-0` | Verified |
+| `Johnson2013StableDeBruijn` | title + Johnson | Semantic Scholar exact match, arXiv `1310.2045` | Verified |
+| `KlimsiakRozkosz2025ConditionalHardyStein` | title + two authors | Semantic Scholar exact match, arXiv `2507.18308` | Verified |
+| `KentTyler1988WrappedCauchy` | `10.1080/02664768800000029` | Crossref title/authors match | Verified |
+| `KatoJones2010MobiusCircle` | `10.1198/jasa.2009.tm08313` | Crossref title/authors match | Verified |
+| `KatoMcCullagh2020SphereCauchyMobius` | `10.3150/20-BEJ1222` | Crossref title/authors match | Verified |
+| `Kwasnicki2017` | `10.1515/fca-2017-0002` | Crossref title/author match | Verified |
+| `KullbackLeibler1951` | `10.1214/aoms/1177729694` | Crossref title/authors match | Verified |
+| `LopezRiveraShenfeld2025PoissonTransport` | `10.1016/j.jfa.2025.110864` | Crossref title/authors match | Verified |
+| `MasonHandscomb2002` | title + Mason/Handscomb | Crossref exact book record, DOI `10.1201/9781420036114` | Verified after year correction |
+| `MadimanBarron2007` | title + Madiman/Barron | Crossref exact match, DOI `10.1109/tit.2007.899484` | Verified |
+| `Morimoto1963Markov` | title + Morimoto | Crossref exact match, DOI `10.1143/jpsj.18.328` | Verified |
+| `Maas2011EntropyMarkov` | `10.1016/j.jfa.2011.06.009` | Crossref title/author match | Verified |
+| `McCullagh1996CauchyMobius` | `10.1214/aos/1032894465` | Crossref title/author match | Verified |
+| `McCullagh1992CauchyModels` | `10.1093/biomet/79.2.247` | Crossref title/author match | Verified |
+| `MenkovskiPortegiesRavelonanosy2024HeatKernelEntropy` | `10.1016/j.acha.2024.101642` | Crossref title/authors match | Verified |
+| `NielsenOkamura2023Cauchy` | `10.1109/TIT.2022.3231645` | Crossref title/authors match | Verified |
+| `Nielsen2020CauchyVoronoi` | `10.3390/e22070713` | Crossref title/author match | Verified |
+| `NourdinPeccatiSwan2014EntropyFourthMoment` | `10.1016/j.jfa.2013.09.017` | Crossref title/authors match | Verified |
+| `OttoVillani2000` | title + Otto/Villani | Crossref exact match, DOI `10.1006/jfan.1999.3557` | Verified |
+| `Papageorgiou2024FractionalLargeTime` | `10.1007/s11118-023-10109-1` | Crossref title/author match | Verified |
+| `Vazquez2018FractionalHeatEuclidean` | `10.1080/17476933.2017.1393807` | Crossref title/author match | Verified |
+| `Sato1999LevyProcesses` | title + Sato | Semantic Scholar exact title/author/year match | Verified |
+| `Stam1959` | `10.1016/S0019-9958(59)90348-1` | Crossref title/author match | Verified |
+| `Stein1971` | title + Stein/Weiss | Crossref exact book record, DOI `10.1515/9781400883899` | Verified |
+| `Toscani2016StableEntropy` | `10.1007/s10955-016-1619-4` | Crossref title/author match | Verified |
+| `Vajda1989TheoryDivergence` | title + Vajda | Semantic Scholar exact title/author/year match | Verified |
+| `Verdu2023Cauchy` | `10.3390/e25020346` | Crossref title/author match | Verified |
+| `Verdu2010Mismatched` | `10.1109/TIT.2010.2050800` | Crossref title/author match | Verified |
+| `Voigt1981StochasticOperators` | `10.1007/BF01941799` | Crossref title/author match | Verified |
+| `Yoshida2017RelativeEntropyDiffusion` | `10.3390/e19010009` | Crossref title/author match after replacement of invalid metadata | Verified |
+
+### Unverified Entries and Searches Tried
+
+The four entries below were retained unchanged. They are common references,
+but this audit did not locate a direct index record matching the exact cited
+edition or article. No replacement metadata was inferred from reviews or
+near matches.
+
+| Key | Searches tried | Outcome |
+|---|---|---|
+| `Bertoin1996LevyProcesses` | Crossref title/Bertoin/1996 query and exact DOI retry for `10.1017/CBO9780511627796`; Semantic Scholar exact-match and bulk searches; OpenAlex fallback | Crossref returned HTTP 404 for that DOI, reviews, and unrelated Bertoin articles; Semantic Scholar's top same-title result was by R. Wolpert; OpenAlex returned HTTP 429. |
+| `Csiszar1967` | Spaced Crossref title-and-author retry; Semantic Scholar exact-match and broad bulk queries; OpenAlex fallback | Crossref results were unrelated; Semantic Scholar returned HTTP 404 or no exact result; OpenAlex returned HTTP 429. |
+| `DeBruijn1953` | Spaced Crossref exact-title/de Bruijn/year retry; Semantic Scholar exact-match and broad bulk queries; OpenAlex fallback | Crossref results were unrelated; Semantic Scholar returned HTTP 404 or no exact result; OpenAlex returned HTTP 429. |
+| `Feller1971` | Spaced Crossref title/Feller/1971 query; Semantic Scholar exact-title and bulk queries; OpenAlex fallback | Crossref and Semantic Scholar returned book-review records rather than a direct record for the cited second edition; the final Semantic Scholar retry and OpenAlex returned HTTP 429. |

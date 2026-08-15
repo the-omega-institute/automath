@@ -28,11 +28,14 @@ Gaussian heat flow, not Johnson's stable interpolation.
 2. **Johnson, Open Problem 4 (integral representation).** Exact quote:
    "It would be of interest to provide a similar
    representation of $D(f \Vert g_s^{(\alpha)})$ as an integral, using (17)."
-   **No later source located. General symmetric-stable measure-data
-   representation proved** in Theorem
-   `thm:two-stable-heat-flow-relative-entropy` of this manuscript under a
-   finite $(d+\alpha)$-th absolute-moment hypothesis.  The older
-   finite-variance Cauchy theorem is retained as a specialization.
+   **No later source located. Exact nonlocal Bregman representation proved**
+   in Theorem `thm:two-stable-heat-flow-relative-entropy` of this manuscript
+   under a finite $(d+\alpha)$-th absolute-moment hypothesis and finite
+   initial relative entropy.  The manuscript does not identify its jump-form
+   integrand with Johnson's MMSE-score/Fisher-score pairing and therefore does
+   not claim to solve the problem in the specific form "using (17)."  The
+   older finite-variance Cauchy theorem resolves that case in an equivalent
+   nonlocal form.
 
 3. **Johnson, Open Problem 6 (remove symmetry).** Exact quote:
    "Finally, it would be of interest to extend all this work to
@@ -52,7 +55,9 @@ Gaussian heat flow, not Johnson's stable interpolation.
   was to conjugate Johnson's interpolation to
   $(P_q*\mu,P_q*P_s)$ and close the $q\downarrow0$ endpoint. The new theorem
   proves exactly that for every finite-variance input, with extended-valued
-  relative entropy allowed.
+  relative entropy allowed.  The general stable theorem provides an exact
+  nonlocal Bregman integral; equating it with Johnson's score-form derivative
+  wherever both apply is not proved in the manuscript.
 - Problem 6: the stable-kernel theorems use isotropic symmetric densities and
   the Bregman proof uses a symmetric jump kernel. A skew-stable heat kernel,
   its nonsymmetric generator/adjoint pairing, and replacement domain bounds

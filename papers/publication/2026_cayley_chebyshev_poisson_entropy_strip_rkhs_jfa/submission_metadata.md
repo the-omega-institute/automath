@@ -11,16 +11,16 @@ thematically natural probability alternative.
 
 ## Fit Rationale
 
-The paper's central increment is an arbitrary-order, law-by-law relative
-entropy decomposition for isotropic strictly stable smoothing.  Under only
-finite moments of the first unmatched order, it separates the universal
-quadratic tensor coefficient from the KL divergence of two explicit positive
-tail-jet proxies and makes vanishing of that proxy divergence the exact
-coefficient-attainment criterion.  The proof rests on critical weighted
-translate estimates, \(L^1/L^\infty/L^q\) transfer, Bregman geometry, and a
-two-background Hessian argument.  This analytic architecture and its
-nonlocal-semigroup applications make the Journal of Functional Analysis a
-defensible first target.
+The paper's organizing increment is the stable-continuum measure-data domain
+and endpoint theorem for the classical two-solution entropy-production
+identity.  It proves the positive-time quotient bounds for two simultaneous
+symmetric stable heat flows, closes the two noncompact Green pairings
+separately, and obtains exact endpoint and stable-reference integral
+representations.  The paper also gives an arbitrary-order law-by-law relative
+entropy decomposition for stable smoothing.  Critical weighted translate
+estimates, \(L^1/L^\infty/L^q\) transfer, Bregman geometry, and a two-background
+Hessian argument make the Journal of Functional Analysis the intended first
+target.
 
 The priority boundary is narrow.  Chen and Niles-Weed's arbitrary-order
 Gaussian first-unmatched-moment KL asymptotics are prior work.  All-order
@@ -31,12 +31,9 @@ proxy-KL decomposition under only finite \(r\)-th moments, with its exact
 vanishing criterion.  The manuscript makes no uniqueness or canonicity claim
 for the proxy.
 
-Acceptance at JFA remains uncertain on presentation, breadth, and priority.
-The uncertainty is not that the central increment is below the journal's
-theorem-level standard.  The Annales de l'Institut Henri Poincare,
-Probabilites et Statistiques remains a natural alternative because the
-results also address stable laws, moment thresholds, and entropy asymptotics
-as probability questions.
+The Annales de l'Institut Henri Poincare, Probabilites et Statistiques remains
+a natural alternative because the results also address stable laws, moment
+thresholds, and entropy asymptotics as probability questions.
 
 ## Submission Package
 
@@ -50,6 +47,6 @@ as probability questions.
 
 - Primary: 47D07, 60E10
 - Secondary: 94A17, 42A38
-- Keywords: isotropic stable kernel; relative entropy asymptotics;
-  law-by-law tail-defect energy; first unmatched moment; optimal moment
-  exponent; fractional diffusion; Bregman divergence
+- Keywords: symmetric stable heat flow; relative entropy dissipation;
+  nonlocal Bregman form; isotropic stable kernel; relative entropy
+  asymptotics; first unmatched moment; optimal moment exponent

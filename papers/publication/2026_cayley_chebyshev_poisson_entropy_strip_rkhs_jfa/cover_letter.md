@@ -1,8 +1,17 @@
 Dear Editors of the *Journal of Functional Analysis*,
 
-Please consider the manuscript **"Cayley--Poisson Entropy and Optimal
-Stable-Kernel Moment Exponents"** for publication in the *Journal of
-Functional Analysis*.
+Please consider the manuscript **"Stable-Flow Relative Entropy Dissipation
+and Optimal Stable-Kernel Moment Exponents"** for publication in the
+*Journal of Functional Analysis*.
+
+The paper's organizing theorem proves relative-entropy dissipation for two
+simultaneous symmetric stable heat flows from probability-measure data.  It
+establishes the positive-time quotient domain, closes the two noncompact
+Green pairings separately, and closes the endpoint at infinity to obtain an
+exact tail-integral representation.  The two-solution entropy-production
+identity is classical; the contribution is its stable-continuum measure-data
+domain and endpoint theorem, including a stable-reference nonlocal Bregman
+representation under the stated domain.
 
 The paper studies large-scale relative entropy after smoothing by isotropic
 strictly alpha-stable kernels.  Suppose two probability laws on
@@ -34,13 +43,13 @@ the nonnegative law-by-law proxy-KL decomposition under stable smoothing,
 with only finite \(r\)-th moments and the exact vanishing criterion described
 above.  We make no claim that the proxy is unique or canonical.
 
-The manuscript fits JFA through its critical weighted translate estimates,
-\(L^1/L^\infty/L^q\) entropy transfer, positive proxy construction, Bregman
-geometry, and nonlocal semigroup applications.  These functional-analytic
-methods drive both the optimal moment theorem and the law-specific
-decomposition.  *Annales de l'Institut Henri Poincare, Probabilites et
-Statistiques* would be the thematically natural probability alternative, but
-the present analytic architecture makes JFA the intended first submission.
+The manuscript fits JFA through its nonlocal semigroup closures, critical
+weighted translate estimates, \(L^1/L^\infty/L^q\) entropy transfer, positive
+proxy construction, and Bregman geometry.  These functional-analytic methods
+drive both the stable-flow theorem and the entropy-asymptotic results.
+*Annales de l'Institut Henri Poincare, Probabilites et Statistiques* would be
+the thematically natural probability alternative, but the present analytic
+architecture makes JFA the intended first submission.
 
 The manuscript is original, is not under consideration elsewhere, and all
 authors have approved its submission.  Supplementary material contains the

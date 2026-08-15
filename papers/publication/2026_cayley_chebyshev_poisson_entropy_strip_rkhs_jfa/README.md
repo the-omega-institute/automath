@@ -7,15 +7,15 @@ archive.
 
 Compile **main.tex**. Its central theorem spine is:
 
-1. the critical stable-translation quotient estimate;
-2. the optimal uniform sufficient moment exponent
+1. relative-entropy dissipation, separate noncompact Green closure, and the
+   endpoint representation for two symmetric stable heat flows;
+2. the critical stable-translation quotient estimate;
+3. the optimal uniform sufficient moment exponent
    \[
    p_{\alpha,d}=\max\left\{2,\frac{4(d+\alpha)}{d+\alpha+4}\right\};
    \]
-3. the finite-covariance law-by-law decomposition into the quadratic
+4. the finite-covariance law-by-law decomposition into the quadratic
    covariance energy and the nonlinear raw-tail energy.
-4. relative-entropy dissipation and an integral representation for two
-   symmetric stable heat flows from measure data.
 
 The fractional-heat theorem and its pilot calculation are in
 **sec_fractional_heat_relative_entropy.tex**.  The Cayley coefficient

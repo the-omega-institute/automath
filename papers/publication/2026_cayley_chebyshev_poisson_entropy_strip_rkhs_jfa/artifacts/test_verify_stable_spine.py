@@ -179,7 +179,16 @@ class StableSpineManuscriptTests(unittest.TestCase):
             "transparent sufficient hypothesis",
             "optimality claim",
             "does not",
-            "extend to all isotropic unimodal",
+            "all isotropic unimodal",
+            r"Af_t=-\partial_t f_t",
+            r"Ag_t=-\partial_t g_t",
+            r"\int A_{\varepsilon,R}g_t\dd x=0",
+            r"\int Ag_t\dd x=0",
+            r"\int(u_t-1)Ag_t",
+            r"finite-first-moment consequence",
+            r"W_1(\mu,\nu)",
+            "stable-continuum measure-data domain and endpoint theorem",
+            "we do not identify the",
         )
         for text in required:
             self.assertIn(text, source)
@@ -201,8 +210,9 @@ class StableSpineManuscriptTests(unittest.TestCase):
             "Johnson, Open Problem 6",
             "more general (non-symmetric) families of stable laws",
             "No later source located",
-            "General symmetric-stable measure-data",
-            "representation proved",
+            "Exact nonlocal Bregman representation proved",
+            "not claim to solve the problem in the specific form",
+            '"using (17)."',
         )
         for text in required:
             self.assertIn(text, audit)
@@ -230,6 +240,38 @@ class StableSpineManuscriptTests(unittest.TestCase):
             r"Theorem~\ref{thm:johnson-cauchy-integral-representation}", intro
         )
         self.assertIn(r"the finite-variance Cauchy statement proved in", intro)
+
+    def test_stable_flow_leads_framing_and_priority_repairs_are_present(
+        self,
+    ) -> None:
+        main = (ROOT / "main.tex").read_text(encoding="utf-8")
+        intro = (ROOT / "sec_introduction.tex").read_text(encoding="utf-8")
+        bibliography = (ROOT / "bibliography_shared.tex").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn(
+            r"\title[Stable-Flow Entropy Dissipation]{Stable-Flow Relative Entropy",
+            main,
+        )
+        self.assertLess(
+            main.index("For two probability measures"),
+            main.index("Arbitrary-order first unmatched moment"),
+        )
+        self.assertLess(
+            intro.index(r"\input{sec_introduction_fractional_heat.tex}"),
+            intro.index("The principal unconditional result"),
+        )
+        self.assertIn(r"\input{sec_introduction_comparison.tex}", intro)
+
+        for key in (
+            "HilderPeletierSharmaTse2020EntropyDistance",
+            "Voigt1981StochasticOperators",
+            "HirataNemotoYoshida2012IntegralRepresentation",
+        ):
+            self.assertIn(rf"\bibitem{{{key}}}", bibliography)
+
+        self.assertNotIn("HirataNemotoYoshida2012RelativeEntropy", bibliography)
 
 
 if __name__ == "__main__":
