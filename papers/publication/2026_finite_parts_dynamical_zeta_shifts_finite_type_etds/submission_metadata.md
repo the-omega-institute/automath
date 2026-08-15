@@ -97,6 +97,6 @@ and the realizable certificate-degree and linear sampling lower bounds.
   undefined citations, or multiply defined labels.
 - `verify_a5_results.py` ends with `STATUS: PASS`.
 - `verify_twisted_determinant_rigidity.py` ends with `STATUS: PASS`.
-- The combined unit suite runs 40 tests and ends with `OK`.
+- The combined unit suite runs 41 tests and ends with `OK`.
 - The exact S3 program ends with `fixed-label windows verified`.
 - Every digest in `artifacts/SHA256SUMS` matches.

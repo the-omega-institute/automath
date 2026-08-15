@@ -17,11 +17,11 @@ python certificates/s3_log_certificates.py --write-cert certificates/s3_log_cert
 python certificates/s3_log_certificates.py --write-cert certificates/s3_log_certificates.run.txt
 ```
 
-Both verifier reports end with `STATUS: PASS`. The test runner executes 40
+Both verifier reports end with `STATUS: PASS`. The test runner executes 41
 tests and the archived transcript ends with:
 
 ```text
-Ran 40 tests
+Ran 41 tests
 
 OK
 ```

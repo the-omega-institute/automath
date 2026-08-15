@@ -527,6 +527,18 @@ def logarithmic_mahler_degree_bound(radix: int, total_degree: int) -> int:
     return (2 * total_degree * depth + radix - 1) // radix
 
 
+def effective_mahler_degree_bound(radix: int, total_degree: int) -> int:
+    """Return ceil(p D m_p(D)/2), the uniform reconstruction bound."""
+    if radix < 2:
+        raise ValueError("the Mahler radix must be at least two")
+    if total_degree < 1:
+        raise ValueError("the total input degree must be positive")
+    depth = 1
+    while radix**depth * (radix - 1) < 2 * total_degree:
+        depth += 1
+    return (radix * total_degree * depth + 1) // 2
+
+
 def logarithmic_mahler_divisor_bound_audit() -> dict[str, int | bool]:
     """Search exact rational certificates for a violation of the logarithmic bound."""
     z = sp.Symbol("z")
@@ -866,9 +878,11 @@ def elementary_two_group_cross_base_audit() -> dict[str, object]:
 
 @lru_cache(maxsize=None)
 def effective_rational_mahler_coboundary(
-    p_zero_expression: sp.Expr, p_one_expression: sp.Expr
+    p_zero_expression: sp.Expr, p_one_expression: sp.Expr, radix: int = 2
 ) -> dict[str, sp.Expr | int] | None:
-    """Decide P0/P1=R(z^2)/R(z)^2 by the finite Pade criterion."""
+    """Decide P0/P1=R(z^p)/R(z)^p by the finite Pade criterion."""
+    if radix < 2:
+        raise ValueError("the Mahler radix must be at least two")
     z = sp.Symbol("z")
     p_zero = sp.Poly(p_zero_expression, z, domain=sp.ZZ)
     p_one = sp.Poly(p_one_expression, z, domain=sp.ZZ)
@@ -888,44 +902,23 @@ def effective_rational_mahler_coboundary(
         }
     if p_zero.degree() != p_one.degree():
         return None
-    maximum_degree = max(p_zero.degree(), p_one.degree())
-    if any(
-        (p_zero.nth(index) - p_one.nth(index)) % 2
-        for index in range(maximum_degree + 1)
-    ):
-        return None
-
-    logarithmic_depth = total_degree.bit_length() - 1
-    degree_bound = logarithmic_mahler_degree_bound(2, total_degree)
-    p_zero_coefficients = [
-        p_zero.nth(index) for index in range(p_zero.degree() + 1)
-    ]
-    p_one_coefficients = [
-        p_one.nth(index) for index in range(p_one.degree() + 1)
-    ]
+    logarithmic_depth = 0
+    power = 1
+    while power * radix <= total_degree:
+        power *= radix
+        logarithmic_depth += 1
+    degree_bound = effective_mahler_degree_bound(radix, total_degree)
     series_coefficients = [sp.Integer(1)]
     for degree in range(1, 2 * degree_bound + 1):
-        right_hand_side = sum(
-            p_one_coefficients[index] * series_coefficients[(degree - index) // 2]
-            for index in range(min(degree, p_one.degree()) + 1)
-            if (degree - index) % 2 == 0
+        known_series = sum(
+            coefficient * z**index
+            for index, coefficient in enumerate(series_coefficients)
         )
-        known_square = sp.Integer(0)
-        for index in range(min(degree, p_zero.degree()) + 1):
-            residual_degree = degree - index
-            for left_degree in range(residual_degree + 1):
-                right_degree = residual_degree - left_degree
-                if index == 0 and (
-                    (left_degree == 0 and right_degree == degree)
-                    or (left_degree == degree and right_degree == 0)
-                ):
-                    continue
-                known_square += (
-                    p_zero_coefficients[index]
-                    * series_coefficients[left_degree]
-                    * series_coefficients[right_degree]
-                )
-        series_coefficients.append(sp.cancel((right_hand_side - known_square) / 2))
+        recurrence_numerator = sp.expand(
+            p_one.as_expr() * known_series.subs(z, z**radix)
+            - p_zero.as_expr() * known_series**radix
+        ).coeff(z, degree)
+        series_coefficients.append(sp.cancel(recurrence_numerator / radix))
 
     denominator_variables = sp.symbols(f"b1:{degree_bound + 1}")
     denominator_coefficients = (sp.Integer(1),) + denominator_variables
@@ -961,8 +954,8 @@ def effective_rational_mahler_coboundary(
     numerator = _constant_one_polynomial(numerator, z).as_expr()
     denominator = _constant_one_polynomial(denominator, z).as_expr()
     identity = sp.expand(
-        p_zero.as_expr() * numerator**2 * denominator.subs(z, z**2)
-        - p_one.as_expr() * numerator.subs(z, z**2) * denominator**2
+        p_zero.as_expr() * numerator**radix * denominator.subs(z, z**radix)
+        - p_one.as_expr() * numerator.subs(z, z**radix) * denominator**radix
     )
     if identity != 0:
         return None
@@ -985,7 +978,36 @@ def effective_rational_mahler_coboundary(
         "denominator": denominator,
         "degree_bound": degree_bound,
         "height_bound": height_bound,
+        "radix": radix,
     }
+
+
+def general_p_effective_reconstruction_matches() -> bool:
+    """Check exact reconstruction and the logarithmic-derivative reduction."""
+    z = sp.Symbol("z")
+    for radix in (2, 3, 4, 5):
+        rational_function = 1 + 2 * z
+        ratio = sp.cancel(
+            rational_function.subs(z, z**radix) / rational_function**radix
+        )
+        p_zero, p_one = ratio.as_numer_denom()
+        p_zero = _constant_one_polynomial(p_zero, z).as_expr()
+        p_one = _constant_one_polynomial(p_one, z).as_expr()
+        result = effective_rational_mahler_coboundary(
+            p_zero, p_one, radix
+        )
+        if result is None or result["rational_function"] != rational_function:
+            return False
+        h = sp.cancel(p_zero / p_one)
+        u = sp.cancel(z * sp.diff(rational_function, z) / rational_function)
+        additive_residual = sp.cancel(
+            u.subs(z, z**radix)
+            - u
+            - z * sp.diff(h, z) / (radix * h)
+        )
+        if additive_residual != 0:
+            return False
+    return True
 
 
 def effective_mahler_bounds_match() -> bool:
@@ -1448,6 +1470,7 @@ def render_report() -> str:
             )
         ),
         "effective Mahler bounds": effective_mahler_bounds_match(),
+        "general-p effective reconstruction": general_p_effective_reconstruction_matches(),
         "logarithmic Mahler divisor bound": all(
             (
                 logarithmic_bound["certificates_checked"] >= 100,
@@ -1584,6 +1607,7 @@ def render_report() -> str:
         "Normalized Mahler saturation: exact rational examples verified",
         "Effective rational Mahler Pade decision: verified",
         "Effective Mahler degree and height bounds: verified",
+        "General-p effective reconstruction: p=2,3,4,5 and logarithmic derivative verified",
         "Logarithmic Mahler divisor bound: exact counterexample search verified",
         "Mahler logarithmic lower-bound family: exact identities and degrees verified",
         "Realizable multi-collisions: m=1,2,3,4 on 6,10,14,18 vertices",

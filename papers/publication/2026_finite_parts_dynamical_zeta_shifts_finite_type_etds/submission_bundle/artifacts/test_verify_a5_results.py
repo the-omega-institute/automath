@@ -142,6 +142,9 @@ class OracleA5ResultTests(unittest.TestCase):
         )
         self.assertTrue(verifier.effective_mahler_bounds_match())
 
+    def test_general_p_pade_and_logarithmic_derivative_reduction(self):
+        self.assertTrue(verifier.general_p_effective_reconstruction_matches())
+
     def test_logarithmic_mahler_divisor_bound_survives_exact_counterexample_search(self):
         self.assertTrue(
             hasattr(verifier, "logarithmic_mahler_divisor_bound_audit"),
@@ -358,6 +361,7 @@ class OracleA5ResultTests(unittest.TestCase):
         self.assertIn("Normalized Mahler saturation: exact rational examples", report)
         self.assertIn("Effective rational Mahler Pade decision: verified", report)
         self.assertIn("Effective Mahler degree and height bounds: verified", report)
+        self.assertIn("General-p effective reconstruction: p=2,3,4,5", report)
         self.assertIn("Logarithmic Mahler divisor bound: exact counterexample search", report)
         self.assertIn("Mahler logarithmic lower-bound family: exact identities", report)
         self.assertIn("Realizable multi-collisions: m=1,2,3,4 on 6,10,14,18 vertices", report)

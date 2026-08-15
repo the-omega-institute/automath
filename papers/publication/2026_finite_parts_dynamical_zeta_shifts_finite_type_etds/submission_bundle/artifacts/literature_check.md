@@ -280,3 +280,72 @@ algebraic-solution rationality theorem, for the fixed-label Euler coordinate,
 for Frobenius-class products or equidistribution, or for the general
 periodic-data dictionary. This boundary matches the introduction and
 conclusion of the present manuscript.
+
+## General-p multiplicative Mahler priority correction (15 August 2026)
+
+A new search was made before extending the effective theorem from `p=2` to
+arbitrary fixed `p >= 2`.  It covered the arXiv API, Crossref, the full texts
+of arXiv:1612.05518 and arXiv:2403.11545, the author-hosted full text of the
+ISSAC 2022 paper below, zbMATH/Open search results, and exact-title web
+searches for combinations of `rational solutions`, `Mahler equation`,
+`multiplicative`, `summability`, `Riccati`, and `first-order factors`.
+OpenAlex returned a depleted daily API budget and ACM's landing page returned
+a browser challenge, so neither was treated as negative evidence.  Crossref
+metadata and the author-hosted paper supplied the primary record instead.
+
+The decisive antecedents are:
+
+- F. Chyzak, T. Dreyfus, P. Dumas, and M. Mezzarobba, *Computing
+  solutions of linear Mahler equations*, Math. Comp. 87 (2018), 2977--3021,
+  DOI `10.1090/mcom/3359`, arXiv:`1612.05518`.  Its abstract and Section 3
+  give algorithms for rational solutions of linear Mahler equations.
+- C. E. Arreche and Y. Zhang, *Mahler Discrete Residues and Summability for
+  Rational Functions*, ISSAC 2022, 525--533, DOI
+  `10.1145/3476446.3536186`.  Its abstract and Main Theorem give a complete
+  effective obstruction to deciding whether a given rational `f(z)` equals
+  `g(z^p)-g(z)` for rational `g`.  Its introduction explicitly notes that
+  the 2018 linear-Mahler rational-solution algorithm also decides this
+  certificate problem.
+- F. Chyzak, T. Dreyfus, P. Dumas, and M. Mezzarobba, *First-order factors
+  of linear Mahler operators*, J. Symbolic Comput. 130 (2025), 102424, DOI
+  `10.1016/j.jsc.2025.102424`, arXiv:`2403.11545`.  Its Riccati monomials are
+  products of successive shifts.  It is adjacent, but it is not needed for
+  the reduction below.
+- C. Pegis, *Rational Solutions of a Nonlinear Functional Equation Related
+  to Mahler's Equation*, J. Math. Anal. Appl. 199 (1996), 489--494, DOI
+  `10.1006/jmaa.1996.0156`, treats the different equation
+  `F(z^2)=A F(z)+B+C/F(z)` with constant coefficients.
+
+The multiplicative decision problem is not formally separate from the first
+two algorithms.  Put `H=P0/P1`, let `sigma f(z)=f(z^p)`, and define
+`u=z R'/R`.  Direct logarithmic differentiation proves
+
+```
+(sigma-1)u = (z/p) H'/H.                                      (1)
+```
+
+Thus Arreche--Zhang directly decides and constructs the possible `u`.  The
+2018 homogeneous algorithm also applies: for nonzero right-hand side `f`, any
+solution of `(sigma-1)u=f` satisfies
+`(sigma-(sigma f)/f)(sigma-1)u=0`, after which one filters the rational
+solution space by the original affine equation.
+
+The converse is also effective, so this is a reduction rather than a
+one-way necessary condition.  A rational solution `u` of (1) comes from a
+normalized `R in Q(z)` exactly when `u/z` is regular at zero, has no
+polynomial part, and has only simple poles with integer residues.  Necessity
+is the standard partial-fraction form of a rational logarithmic derivative.
+For sufficiency, Galois invariance groups poles with the same integer residue
+into rational irreducible factors; their normalized product gives
+`R'/R=u/z` and `R(0)=1`.  Equation (1) then says that
+`R(z^p)/(H(z)R(z)^p)` has zero logarithmic derivative.  Its value at zero is
+one, so it is identically one.
+
+Consequently, bare decidability of the multiplicative rational-solution
+problem is already subsumed after this non-obvious transformation.  The
+defensible effective contribution of the revised theorem is narrower: an
+input-only degree bound of sharp order `D log D`, an explicit height bound,
+computable coefficient numerator and denominator bounds, direct recovery by
+one normalized affine Pade system, exact rejection, and polynomial bit
+complexity for fixed `p`.  No finite search certifies absolute priority for
+each of those quantitative refinements separately.

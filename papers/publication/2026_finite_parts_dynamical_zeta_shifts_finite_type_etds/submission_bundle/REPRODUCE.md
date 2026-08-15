@@ -58,7 +58,7 @@ The reports are `artifacts/verify_a5_results_output.txt` and
 Expected summary:
 
 ```text
-Ran 40 tests
+Ran 41 tests
 OK
 ```
 
