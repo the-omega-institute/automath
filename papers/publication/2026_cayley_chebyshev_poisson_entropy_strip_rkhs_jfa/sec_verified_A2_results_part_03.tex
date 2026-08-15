@@ -513,6 +513,8 @@ difference of their raw-tail potentials is signed.  Applying \(\Phi\) to that
 difference would therefore neither be well-defined in general nor preserve
 nonnegativity.  The following relative \(\Phi\)-energy is the replacement.
 
+\input{sec_two_background_kl_lemma}
+
 \begin{theorem}[Arbitrary-order law-by-law tail-defect decomposition]
 \label{thm:stable-arbitrary-order-law-by-law-decomposition}
 Let \(d\ge1\), \(0<\alpha<2\), and let \(r\ge1\) be an integer.  Let
@@ -546,7 +548,7 @@ densities
  k_{r,s}^\lambda(x)=s^{-d}p_1^{(\alpha,d)}(x/s)
                     A_s^\lambda(x/s).
 \]
-The nonnegative raw-tail defect energy
+ The explicit nonnegative tail-defect energy
 \begin{align}
  \mathcal E_{r,s}(\nu,\eta)
  &:=D_{\rm KL}(k_{r,s}^\nu\|k_{r,s}^\eta)\notag\\
@@ -631,71 +633,114 @@ Translation preserves mass, so
  \int V_s^\lambda\dd\Omega_{\alpha,d}=\tau_s^\lambda.
 \]
 Also \(\int B_j^\lambda\dd\Omega_{\alpha,d}=0\), by integration of the
-derivatives in \eqref{eq:all-order-stable-moment-modes}.  Since
-\(\|C_{r-1,s}\|_\infty=o(1)\), these facts and
-\eqref{eq:arbitrary-tail-mass-smallness} prove the asserted positivity and
-normalization of \(A_s^\lambda\).  Finiteness of the entropy terms follows
-as in the proof of Theorem~\ref{thm:stable-law-by-law-decomposition}: the
-stable translation entropy is bounded by
-\(C+(d+\alpha)\log(1+|x|/s)\), which is integrable under the finite first
-moment implied by \eqref{eq:arbitrary-tail-moment-hypotheses}.
-
-It remains to separate the leading modes from two different tail
-backgrounds.  We record the needed estimate directly.  Put
-\(\epsilon=s^{-r}\), \(U_\lambda=\epsilon B_r^\lambda\), and abbreviate
-\(A_\nu=A_s^\nu\), \(A_\eta=A_s^\eta\).  All these backgrounds, as well as
-\(q_s^\lambda\), are bounded below by a positive constant for large \(s\).
-For the last assertion, the bounded log-gradient of \(p_1\) and Jensen's
-inequality give
-\[
- q_s^\lambda(y)\ge
- \exp\{-\|\nabla\log p_1\|_\infty\EE_\lambda|X|/s\}\longrightarrow1
-\]
-uniformly in \(y\).  Since
-\(\int(V_s^\nu+V_s^\eta)\dd\Omega_{\alpha,d}=o(\epsilon)\), the mean-value
-theorem for
-\(f(a,b)=a\log(a/b)-a+b\), together with
-\eqref{eq:arbitrary-tail-remainder-smallness}, yields
-\begin{equation}\label{eq:arbitrary-tail-remove-remainders}
- \int f(q_s^\nu,q_s^\eta)\dd\Omega_{\alpha,d}
- =\int f(A_\nu+U_\nu,A_\eta+U_\eta)\dd\Omega_{\alpha,d}
-  +o(\epsilon^2).
+derivatives in \eqref{eq:all-order-stable-moment-modes}.  Therefore
+\begin{equation}\label{eq:arbitrary-tail-proxy-normalization}
+ \int A_s^\lambda\dd\Omega_{\alpha,d}=1.
 \end{equation}
-Explicitly, along the joining segments both first derivatives of \(f\) are
-bounded by
-\(C\{\epsilon+V_s^\nu+V_s^\eta\}\); integration bounds the error by
-\[
- C\epsilon(\|R_s^\nu\|_1+\|R_s^\eta\|_1)
- +C(\|R_s^\nu\|_\infty+\|R_s^\eta\|_\infty)
-   (\tau_s^\nu+\tau_s^\eta)=o(\epsilon^2).
-\]
+Moreover,
+\begin{equation}\label{eq:arbitrary-tail-proxy-positive-lower-bound}
+ \inf_yA_s^\lambda(y)
+ \ge1-\|C_{r-1,s}\|_\infty-\tau_s^\lambda\longrightarrow1,
+\end{equation}
+because \(V_s^\lambda\ge0\),
+\(\|C_{r-1,s}\|_\infty=O(s^{-1})\) (with value zero when \(r=1\)), and
+\eqref{eq:arbitrary-tail-mass-smallness} holds.  This proves positivity,
+including at \(r=1\), and gives a common lower bound such as \(1/2\).
 
-Now expand the last integral in \(t\) along
-\((A_\nu+tU_\nu,A_\eta+tU_\eta)\), \(0\le t\le1\).  Its first derivative
-at zero is
+We next prove proxy-entropy finiteness without appealing to the covariance
+case.  The two-sided stable-density bound in
+Proposition~\ref{prop:stable-kernel-input-package} and
+\(1+|w+z|\le(1+|w|)(1+|z|)\) give
+\begin{equation}\label{eq:arbitrary-tail-stable-translate-entropy}
+ D_{\rm KL}\!\left(p_1(\mathord\cdot-z)\,\middle\|\,p_1\right)
+ \le C_{\alpha,d}+(d+\alpha)\log(1+|z|).
+\end{equation}
+If \(\tau_s^\lambda>0\), write \(V_s^\lambda=\tau_s^\lambda Q_s^\lambda\),
+where \(Q_s^\lambda\) is the quotient, relative to \(p_1\), of the
+normalized exterior translate mixture.  Convexity of relative entropy and
+\eqref{eq:arbitrary-tail-stable-translate-entropy} imply
+\begin{align}
+ \int Q_s^\lambda\log Q_s^\lambda\dd\Omega_{\alpha,d}
+ &\le\frac1{\tau_s^\lambda}\int_{|x|>s}
+ \left\{C_{\alpha,d}+(d+\alpha)\log(1+|x|/s)\right\}
+ \lambda(\dd x)\notag\\
+ &<\infty,
+ \label{eq:arbitrary-tail-normalized-proxy-entropy}
+\end{align}
+since \(\log(1+|x|/s)\le |x|/s\) and the assumed \(r\)-th moment, with
+\(r\ge1\), supplies a finite first moment.  For \(0\le\tau\le1\),
+\(\Phi(\tau q)\le\tau q\log(1+q)\); hence
+\eqref{eq:arbitrary-tail-normalized-proxy-entropy}, together with the bound
+of the negative part of \(q\log q\), proves
+\begin{equation}\label{eq:arbitrary-tail-potential-entropy-finite}
+ \int\Phi(V_s^\lambda)\dd\Omega_{\alpha,d}<\infty.
+\end{equation}
+The conclusion is immediate when \(\tau_s^\lambda=0\).
+
+For large \(s\), \(|C_{r-1,s}-\tau_s^\lambda|\le1/2\), so
+\(A_s^\lambda\le3/2+V_s^\lambda\).  The elementary bound
 \[
- \int\left\{U_\nu\log\frac{A_\nu}{A_\eta}
- +U_\eta\left(1-\frac{A_\nu}{A_\eta}\right)\right\}
- \dd\Omega_{\alpha,d}=o(\epsilon^2),
+ (u+v)\log^+(u+v)\le C\{1+v+\Phi(v)\},
+ \qquad 0\le u\le3/2,\quad v\ge0,
 \]
-because the coefficients are bounded by \(C|A_\nu-A_\eta|\) and
-\(\|A_\nu-A_\eta\|_1=o(\epsilon)\).  The second derivative at zero is
+and \eqref{eq:arbitrary-tail-potential-entropy-finite} show that
+\begin{equation}\label{eq:arbitrary-tail-proxy-positive-entropy-finite}
+ \int A_s^\lambda\log^+A_s^\lambda\dd\Omega_{\alpha,d}<\infty.
+\end{equation}
+Finally \(A_s^\eta\ge1/2\).  The positive part of
+\(A_s^\nu\log(A_s^\nu/A_s^\eta)\) is bounded by
+\(A_s^\nu\log^+(2A_s^\nu)\), while its negative part is bounded in absolute
+integral by \(e^{-1}\int A_s^\eta\dd\Omega_{\alpha,d}=e^{-1}\).
+Thus \(\mathcal E_{r,s}(\nu,\eta)<\infty\), as asserted.
+
+It remains to verify, rather than assume, the hypotheses of the abstract
+two-background KL perturbation lemma.  Put
+\(\epsilon_s=s^{-r}\), take
 \[
- \int\left\{\frac{U_\nu^2}{A_\nu}
- -\frac{2U_\nu U_\eta}{A_\eta}
- +\frac{A_\nu U_\eta^2}{A_\eta^2}\right\}
- \dd\Omega_{\alpha,d}
- =\int(U_\nu-U_\eta)^2\dd\Omega_{\alpha,d}+o(\epsilon^2).
+ (A_{1,s},A_{2,s})=(A_s^\nu,A_s^\eta),\qquad
+ (B_{1,s},B_{2,s})=(B_r^\nu,B_r^\eta),
+ \qquad (R_{1,s},R_{2,s})=(R_s^\nu,R_s^\eta).
 \]
-To justify the last equality, use the uniform lower bounds and
-\[
- \|A_\lambda-1\|_1
- \le\|C_{r-1,s}\|_\infty+2\tau_s^\lambda=o(1).
-\]
-The third derivative is bounded in absolute value by
-\(C\epsilon^3(1+A_\nu)\), whose integral is \(O(\epsilon^3)\).
-Taylor's theorem and \eqref{eq:arbitrary-tail-remove-remainders} therefore
-give
+The modes \(B_r^\lambda\) are bounded by
+\eqref{eq:arbitrary-tail-mode-bounds}, and their integrals vanish.  The first
+requested background estimate follows directly from the common jet and the
+exact tail normalization:
+\begin{align}
+ \|A_s^\lambda-1\|_{L^1(\Omega_{\alpha,d})}
+ &\le\|C_{r-1,s}\|_{L^1(\Omega_{\alpha,d})}
+      +\|V_s^\lambda-\tau_s^\lambda\|_{L^1(\Omega_{\alpha,d})}\notag\\
+ &\le \sum_{j=1}^{r-1}s^{-j}\|B_j^\lambda\|_{L^1(\Omega_{\alpha,d})}
+      +2\tau_s^\lambda=o(1).
+ \label{eq:arbitrary-tail-background-to-one}
+\end{align}
+For \(r=1\), the sum is empty and the same proof applies.  For the second
+background estimate, the common jet cancels exactly, and therefore
+\begin{align}
+ \|A_s^\nu-A_s^\eta\|_{L^1(\Omega_{\alpha,d})}
+ &\le\|V_s^\nu-V_s^\eta\|_{L^1(\Omega_{\alpha,d})}
+       +|\tau_s^\nu-\tau_s^\eta|\notag\\
+ &\le2(\tau_s^\nu+\tau_s^\eta)=o(s^{-r}).
+ \label{eq:arbitrary-tail-two-background-separation}
+\end{align}
+This is the place where retaining the common lower-order jet removes every
+interior contribution from the difference of the backgrounds.
+
+The proxy lower bound is \eqref{eq:arbitrary-tail-proxy-positive-lower-bound}.
+For the actual quotient, the bounded logarithmic gradient of \(p_1\) gives
+\(F_y(z)\ge e^{-L|z|}\), uniformly in \(y\).  Jensen's inequality then yields
+\begin{equation}\label{eq:arbitrary-tail-quotient-positive-lower-bound}
+ q_s^\lambda(y)
+ \ge\int e^{-L|x|/s}\lambda(\dd x)
+ \ge e^{-L\EE_\lambda|X|/s}\longrightarrow1
+\end{equation}
+uniformly in \(y\).  Thus the actual quotients have a common positive lower
+bound.  Their exact split is
+\(q_s^\lambda=A_s^\lambda+\epsilon_sB_r^\lambda+R_s^\lambda\),
+and \eqref{eq:arbitrary-tail-remainder-smallness} supplies the required
+\(L^1\) and \(L^\infty\) smallness.  Finally,
+\eqref{eq:arbitrary-tail-proxy-positive-entropy-finite} verifies the finite
+positive entropy hypothesis.  All hypotheses of the two-background KL
+perturbation lemma are now proved.  Its conclusion gives
 \[
  D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
  =\mathcal E_{r,s}(\nu,\eta)
@@ -719,5 +764,7 @@ relative \(\Phi\)-energy.  When \(r=2\), \(\eta=\delta_0\), and \(\nu\) is
 centred, this energy is \(\int\Phi(V_s^\nu-\tau_s^\nu)\dd\Omega_{\alpha,d}\),
 which differs from the energy in
 Theorem~\ref{thm:stable-law-by-law-decomposition} by \(o(s^{-4})\), as shown
-in \eqref{eq:stable-remove-mass}.
+ in \eqref{eq:stable-remove-mass}.
 \end{proof}
+
+\input{sec_arbitrary_order_tail_defect_corollaries}

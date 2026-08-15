@@ -64,6 +64,32 @@ class StableSpineManuscriptTests(unittest.TestCase):
         )
         self.assertEqual(occurrences, 1)
 
+    def test_arbitrary_order_proxy_proof_closure_is_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            "Two-background KL perturbation",
+            r"H'(t)",
+            r"H''(t)",
+            r"H'''(t)",
+            r"\|A_s^\lambda-1\|_{L^1(\Omega_{\alpha,d})}",
+            r"\|A_s^\nu-A_s^\eta\|_{L^1(\Omega_{\alpha,d})}",
+            r"\label{eq:arbitrary-tail-proxy-positive-entropy-finite}",
+            r"\label{cor:arbitrary-tail-defect-positive-moment-condition}",
+            r"\label{cor:arbitrary-tail-defect-nonvacuousness}",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+    def test_active_tex_sources_obey_presentation_constraints(self) -> None:
+        for path in ROOT.glob("*.tex"):
+            source = path.read_text(encoding="utf-8")
+            self.assertLess(
+                len(source.splitlines()),
+                800,
+                f"{path.name} must remain below 800 lines",
+            )
+            self.assertNotRegex(source, r"(?i)TODO[^\n]*revision")
+
     def test_literature_audit_names_all_requested_indexes(self) -> None:
         audit = (ROOT / "artifacts" / "literature_check.md").read_text(
             encoding="utf-8"

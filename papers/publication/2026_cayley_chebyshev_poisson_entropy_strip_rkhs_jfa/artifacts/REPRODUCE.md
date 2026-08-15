@@ -17,7 +17,7 @@ python artifacts/verify_moment_equivalence.py --output artifacts/verify_moment_e
 python artifacts/verify_oracle_A2.py --output artifacts/verify_oracle_A2_output.txt
 ```
 
-The unit suite prints `Ran 11 tests` followed by `OK`. The three archived
+The unit suite prints `Ran 13 tests` followed by `OK`. The three archived
 reports end with, respectively:
 
 ```text
