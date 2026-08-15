@@ -80,6 +80,24 @@ class StableSpineManuscriptTests(unittest.TestCase):
         for text in required:
             self.assertIn(text, source)
 
+    def test_abstract_kernel_theorem_and_membership_audit_are_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            "Abstract positive tail-jet kernel theorem",
+            r"\omega_{p,r}(t)",
+            "Isotropic stable kernels",
+            "Poisson kernel",
+            "Multivariate Student kernels",
+            "Gaussian obstruction",
+            r"\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma",
+            "specialization is exactly Theorem",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        self.assertIn(r"\newtheorem*{unnumberedtheorem}{Theorem}",
+                      (ROOT / "main.tex").read_text(encoding="utf-8"))
+
     def test_fixed_scale_robustness_scope_and_rigidity_are_explicit(self) -> None:
         source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
         required = (
