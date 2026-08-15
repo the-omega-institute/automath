@@ -58,15 +58,16 @@
 
 
 
-> **TICK 60 — A8 收尾,八篇本轮升档循环全部走完**。池子空闲、**无 agent 在跑**、无孤儿、内存 1.36 GB。
+> **TICK 61 — 四篇改完从未回验,先送最该验的两篇**。池子空闲、无 agent、工作区干净、内存 2.06 GB。
 >
-> **A8 那条为假的结论已改正**:恢复改述为**无序 multiset**、误差以**最优匹配距离**度量,正文写明该度量**保留重数**;**不再主张带标签恢复**。这是审稿人给的第二条出路,选它是因为它把主张缩到实际证得的范围,而不是靠排序把问题绕过去。
+> 八篇升档循环虽已走完,但 **A4/A6/A8/A9 按裁决所做的修复无一回验**。本 tick 先送两篇,理由是它们的风险性质不同于其他:
 >
-> **五条引理都以引理形式落实**,不是口头保证:Uniform sampled-bin/sampled-tail derivatives、Uniform stopped renewal-score CLT/LLN(这两条决定 compact-uniform LAN 是否成立)、Efficient-score plug-in equicontinuity、Measurable finite-atlas quotient estimator(处理递推估计量)、Two-point threshold-risk lower bound。
+> **A6 必须先验**。我们现在是**在正式稿件里主张一篇已发表的 Sbornik 定理有错**。这比漏引严重得多 —— 漏引是我们欠人家,判错则是我们冤枉人家。问题里写明:"若这条更正是错的,我们宁愿撤回,也不愿发表一项对已发表论文的无据指控;**直截了当的驳回是你能给的最有用的答复**",并请他逐条核 Lemma 6.5 对她的 Lemma 7、核 Proposition 6.4 的同一化是否精确、核我们把错误**限定在首项系数**是否公允(有没有低估或夸大其范围)。
 >
-> 优先权比较写成**对照**而非罗列:Chen / Ho–Nguyen / Heinrich–Kahn 对混合奇异速率与局部 minimax,Batenkov–Yomdin 与 Akinshin–Goldman–Yomdin 对 confluent/近碰撞 Prony 不稳定性,Jorgensen–Johnson 对周期门控死时间正则 LAN —— 每条都写明他们给什么、我们给什么。
+> **A8 要看他签不签字**。他上轮明说"**不能签署 Theorem G 已证明**"。现在那条为假的结论已改为无序 multiset + 最优匹配距离,他点名的两条决定性引理(uniform sampled-bin/tail 导数、uniform stopped renewal-score CLT/LLN)与另三条都已补齐。问题直接问:**现在签不签?不签就点名还差什么,并说明是否应进一步削弱陈述而非辩护**。
 >
-> **本轮八篇的升档循环至此全部走完**:提问→路线图→做→送审→按裁决修→复核入库。A7 按其自身数字全程未派工。
+> A4、A9 的回验排在其后 —— 它们的修改是"补比较""换表述",风险低于"指控他人有错"与"定理是否成立"。
+
 
 
 
