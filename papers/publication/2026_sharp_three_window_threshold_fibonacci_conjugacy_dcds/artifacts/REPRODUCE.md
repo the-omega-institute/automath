@@ -14,7 +14,9 @@ python artifacts/verify_quadratic_pisot_threshold.py --output artifacts/quadrati
 python artifacts/verify_simple_parry_causal.py --output artifacts/simple_parry_causal_verification.txt
 ```
 
-The unit suite prints `Ran 30 tests` followed by `OK`. The verifier conclusions
+The unit suite prints `Ran 32 tests` followed by `OK`. The simple-Parry suite
+includes exact fixed-theta terminal words through aperture 14 and complete
+collision-graph counts through aperture 10. The verifier conclusions
 are:
 
 ```text

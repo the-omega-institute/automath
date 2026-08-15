@@ -1,0 +1,449 @@
+\section{Fixed-base linear depth for Pisot numeration}
+\label{sec:pisot-linear-depth}
+
+We now pass from Parry families to a fixed standard numeration system.  A
+Pisot numeration system is a sequence $U=(u_j)_{j\ge0}$ of positive integers
+which satisfies the integral recurrence whose characteristic polynomial is
+the minimal polynomial of a Pisot number; the initial values need not be the
+standard ones.  We assume throughout this section that $U$ is strictly
+increasing and $u_0=1$.  Let
+\[
+D_U=\{0,\ldots,d_U\}
+\]
+be its canonical greedy digit set.  The canonical greedy $U$-normal words of
+length $m$ are
+\begin{equation}
+X_{U,m}=\left\{x\in D_U^m:
+ \sum_{j=0}^k x_ju_j<u_{k+1}\quad(0\le k<m)\right\}.
+\label{eq:pisot-canonical-words}
+\end{equation}
+Thus
+\[
+\Val_{U,m}(x)=\sum_{j=0}^{m-1}x_ju_j
+\]
+maps $X_{U,m}$ bijectively onto $\{0,\ldots,u_m-1\}$.  Define
+\begin{equation}
+\Fold_{U,m}(w)=
+(\Val_{U,m}|_{X_{U,m}})^{-1}
+       (\Val_{U,m}(w)\bmod u_m)
+\label{eq:pisot-canonical-fold}
+\end{equation}
+and let $\Phi_{U,m}$ be the corresponding sliding code on
+$D_U^{\mathbb Z}$.  We use the convention in
+\eqref{eq:simple-parry-causal-length} for $\ell_{\rm cau}(U,m)$.
+
+Put $\Delta_U=[-d_U,d_U]\cap\mathbb Z$ and, for $L\ge1$, set
+\begin{equation}
+\mathcal N_{U,m,L}=\left\{e\in\Delta_U^{m+L-1}:
+ e_0\ne0,\quad
+ \sum_{j=0}^{m-1}u_je_{t+j}\equiv0\pmod {u_m}
+ \ (0\le t<L)\right\}.
+\label{eq:pisot-bad-sliding-set}
+\end{equation}
+Every row in this system has a uniquely defined carry $k_t\in\mathbb Z$:
+\begin{equation}
+\sum_{j=0}^{m-1}u_je_{t+j}=k_tu_m.
+\label{eq:pisot-window-carry}
+\end{equation}
+Equivalently,
+\begin{equation}
+[e_t,e_{t+1},\ldots,e_{t+m-1},-k_t]_U=0,
+\label{eq:pisot-zero-word-bridge}
+\end{equation}
+where the last coordinate has weight $u_m$.  This is the promised bridge to
+the standard language of bounded zero representations; it is not an
+identification with numerical $\beta$-normalization.
+
+\begin{lemma}[Exact collision quotient for $U$]
+\label{lem:pisot-exact-collision-quotient}
+For every $m\ge2$,
+\begin{equation}
+\ell_{\rm cau}(U,m)
+=\min\{L\ge1:\mathcal N_{U,m,L}=\varnothing\}.
+\label{eq:pisot-exact-depth}
+\end{equation}
+Let $\Gamma_{U,m}$ have vertex set $\Delta_U^{m-1}$ and an edge
+$(v_0,\ldots,v_{m-2})\to(v_1,\ldots,v_{m-2},a)$ exactly when
+\[
+\sum_{j=0}^{m-2}u_jv_j+u_{m-1}a\equiv0\pmod {u_m}.
+\]
+If $B_{U,m}$ is the set of vertices with first coordinate nonzero, then
+\begin{equation}
+\ell_{\rm cau}(U,m)=1+\sup\{\text{edge length of a path from }B_{U,m}\}.
+\label{eq:pisot-longest-path}
+\end{equation}
+Moreover, $\Phi_{U,m}$ is injective if and only if no directed cycle of
+$\Gamma_{U,m}$ is reachable from $B_{U,m}$.
+\end{lemma}
+
+\begin{proof}
+The proof of Theorem~\ref{thm:simple-parry-causal-collision} uses only the
+bijection between normal words and the residue interval, together with the
+fact that every $e\in\Delta_U$ is the difference of its positive and
+negative parts in $D_U$.  Those two facts hold here, so the same quotient of
+the classical pair graph gives \eqref{eq:pisot-exact-depth} and
+\eqref{eq:pisot-longest-path}.  A nonzero bi-infinite path is again realized
+by two raw points, and a reachable cycle can be repeated periodically.
+
+It remains only to note why injectivity rules out the zero loop as a
+reachable cycle.  If $d_U\ge u_m$, the constant nonzero difference sequence
+$e_t=u_m$ belongs to $\Delta_U^{\mathbb Z}$ and every window sum is divisible
+by $u_m$; hence $\Phi_{U,m}$ is noninjective and the difference graph has a
+nonzero loop.  In the only remaining case, $d_U<u_m$.  If a vertex has an
+edge to the zero vertex, its overlap coordinates vanish and its first
+coordinate $a$ satisfies $a\equiv0\pmod {u_m}$.  The bound $|a|\le d_U<u_m$
+then gives $a=0$, so the zero vertex is its own unique predecessor.  This
+proves the last assertion without imposing a restriction on the allowed
+nonstandard initial values.
+\end{proof}
+
+We next make the contraction constant explicit.  Let
+$\beta=\beta_0,\beta_1,\ldots,\beta_{s-1}$ be the roots of the minimal
+polynomial, with $\beta>1$ and $|\beta_i|<1$ for $i\ge1$.  The recurrence and
+the initial values effectively give algebraic numbers $c_i$ such that
+\begin{equation}
+u_n=\sum_{i=0}^{s-1}c_i\beta_i^n,
+\qquad c_0>0.
+\label{eq:pisot-binet}
+\end{equation}
+Effective root isolation gives positive algebraic bounds $b_U,A_U$ with
+\begin{equation}
+b_U\beta^n\le u_n\le A_U\beta^n\qquad(n\ge0).
+\label{eq:pisot-effective-growth}
+\end{equation}
+Indeed, isolate a point after which the total conjugate contribution in
+\eqref{eq:pisot-binet} is at most $c_0\beta^n/2$, and inspect the remaining
+finite prefix.
+
+Set
+\begin{equation}
+\widehat K_U=
+\left\lceil\frac{d_UA_U}{b_U(\beta-1)}\right\rceil.
+\label{eq:pisot-analytic-carry-bound}
+\end{equation}
+The bounded-zero normalization automaton may now be intersected with the
+finite terminal alphabet $[-\widehat K_U,\widehat K_U]$.  Let
+$\mathcal K_U$ be the set of terminal carries $k$ for which that automaton
+accepts a word of the form in \eqref{eq:pisot-zero-word-bridge}, and put
+$K_U=\max_{k\in\mathcal K_U}|k|$.  Finite automaton reachability computes
+this set.  Equation \eqref{eq:pisot-effective-growth} shows directly that
+every carry in \eqref{eq:pisot-window-carry} belongs to it, since
+\[
+|k_t|\le d_U\frac{\sum_{j<m}u_j}{u_m}
+<\frac{d_UA_U}{b_U(\beta-1)}.
+\]
+
+For nonintegral $\beta$, define the effective positive separation
+\begin{equation}
+\delta_U=\min\left\{|a+k-\beta l|:
+ a\in\Delta_U,\ k,l\in\mathcal K_U,\ a+k-\beta l\ne0\right\}
+\label{eq:pisot-effective-separation}
+\end{equation}
+and
+\begin{equation}
+M_U=\frac1{c_0}\sum_{i=1}^{s-1}|c_i|
+ \left(\frac{d_U}{1-|\beta_i|}+K_U\right),
+\qquad
+B_U=d_U+(1+\beta)M_U.
+\label{eq:pisot-conjugate-bound}
+\end{equation}
+The minimum in \eqref{eq:pisot-effective-separation} is positive: if
+$l\ne0$, irrationality of $\beta$ prevents equality with the integer
+$a+k$, while for $l=0$ every nonzero value has modulus at least one.  All
+comparisons are comparisons of algebraic numbers and are effective.
+Finally let
+\begin{equation}
+m_U=\min\{m\ge2:\beta^m\delta_U>B_U\}.
+\label{eq:pisot-contraction-threshold}
+\end{equation}
+
+\begin{lemma}[Adjacent-window Pisot contraction]
+\label{lem:pisot-adjacent-window-contraction}
+Suppose that $\beta$ is nonintegral, $m\ge m_U$, and two consecutive rows
+of \eqref{eq:pisot-window-carry} hold.  Then
+\begin{equation}
+k_{t+1}=0,\qquad e_{t+m}=-k_t.
+\label{eq:pisot-carry-collapse}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For each embedding define
+\[
+A_{t,i}=\sum_{j=0}^{m-1}e_{t+j}\beta_i^j-k_t\beta_i^m.
+\]
+Substitution of \eqref{eq:pisot-binet} into
+\eqref{eq:pisot-window-carry} gives
+$\sum_i c_iA_{t,i}=0$.  For $i\ge1$,
+\[
+|A_{t,i}|\le \frac{d_U}{1-|\beta_i|}+K_U,
+\]
+and therefore $|A_{t,0}|\le M_U$.  Direct subtraction of two adjacent
+dominant-embedding sums yields
+\begin{equation}
+\beta^m(e_{t+m}+k_t-\beta k_{t+1})
+=\beta A_{t+1,0}-A_{t,0}+e_t.
+\label{eq:pisot-adjacent-binet-identity}
+\end{equation}
+The right side has modulus at most $B_U$.  By
+\eqref{eq:pisot-effective-separation} and
+\eqref{eq:pisot-contraction-threshold}, the parenthesis on the left must
+vanish.  Since $e_{t+m}+k_t$ and $k_{t+1}$ are integers and $\beta$ is
+irrational, this is possible only in \eqref{eq:pisot-carry-collapse}.
+\end{proof}
+
+In the degree-one case set $C_U=1$.  Otherwise, for $2\le m<m_U$, let
+$p_U(m)$ be the maximum edge length of a path from $B_{U,m}$ when no directed
+cycle is reachable from $B_{U,m}$, and put $p_U(m)=0$ otherwise.  This finite
+list is computed by exact acyclic longest-path searches.  Define
+\begin{equation}
+C_U=\max\left(2,
+ \max_{2\le m<m_U}\left\lceil\frac{1+p_U(m)}m\right\rceil\right).
+\label{eq:effective-linear-constant}
+\end{equation}
+Here and below the inner maximum is zero if $m_U=2$.
+This is a finite, effective recipe from the recurrence, the canonical digit
+set, and the bounded-zero normalization automaton.  The large-aperture part
+of the recipe is the Pisot contraction estimate, not a count of the
+$(2d_U+1)^{m-1}$ difference vertices.
+
+\begin{theorem}[Fixed-base linear causal depth and sharpness for Pisot numeration]
+\label{thm:pisot-linear-depth-sharpness}
+Let $U=(u_j)_{j\ge0}$ be a strictly increasing Pisot numeration system,
+with nonstandard initial values allowed, $u_0=1$, canonical greedy digit set
+$D_U=\{0,\ldots,d_U\}$, and canonical normal words
+\eqref{eq:pisot-canonical-words}.  Assume that $U$ preserves zeros, or,
+equivalently, that its leading Pisot root satisfies Condition~F.  Then the
+constant $C_U<\infty$ defined above (by
+\eqref{eq:effective-linear-constant} in the nonintegral case) is effectively
+computable from the recurrence, the canonical digit set, and the bounded-zero
+normalization automaton, and, for every $m\ge2$,
+\begin{equation*}
+\Phi_{U,m}\text{ injective}
+\quad\Longrightarrow\quad
+\ell_{\rm cau}(U,m)\le C_Um.
+\tag{A1}\label{eq:pisot-linear-A1}
+\end{equation*}
+Equivalently, if no first-coordinate-nonzero state of $\Gamma_{U,m}$ can
+reach a directed cycle, every directed path from that initial state set has
+length at most $C_Um-1$.
+
+Let $\theta$ be the real root of
+\[
+x^3-2x^2+x-1
+\]
+and let $U_\theta=(Q_j(\theta))_{j\ge0}$ be given by
+\begin{equation}
+Q_0(\theta)=1,\quad Q_1(\theta)=2,\quad Q_2(\theta)=4,
+\quad Q_{j+3}(\theta)=2Q_{j+2}(\theta)-Q_{j+1}(\theta)+Q_j(\theta).
+\label{eq:theta-count-recurrence}
+\end{equation}
+For every $m\ge4$,
+\begin{equation*}
+\Phi_{\theta,m}\text{ is injective},\qquad
+\ell_{\rm cau}(\theta,m)=2\left\lfloor\frac m2\right\rfloor-1.
+\tag{A2}\label{eq:pisot-linear-A2}
+\end{equation*}
+More precisely, if
+$\lambda_m=2\lfloor m/2\rfloor-1$, then
+\begin{equation*}
+\mathcal N_{\theta,m,\lambda_m-1}=\{E_m,-E_m\}\ne\varnothing,
+\qquad
+\mathcal N_{\theta,m,\lambda_m}=\varnothing,
+\tag{A3}\label{eq:pisot-linear-A3}
+\end{equation*}
+where, writing concatenation by juxtaposition and changing every sign by a
+prefixed minus,
+\begin{equation}
+\begin{gathered}
+E_4=(1,-1,-1,-1,1),\\
+E_m=(1,0,-E_{m-2},0,0)\quad(m\ge6\text{ even}),\\
+E_m=(E_{m-1},0)\quad(m\ge5\text{ odd}).
+\end{gathered}
+\label{eq:theta-terminal-word}
+\end{equation}
+Consequently
+\[
+\lim_{m\to\infty}\frac{\ell_{\rm cau}(\theta,m)}m=1,
+\]
+so the fixed-system linear upper bound cannot be improved to $o(m)$ in
+growth order.
+\end{theorem}
+
+\begin{proof}
+We first prove \eqref{eq:pisot-linear-A1}.  The degree-one case is
+$u_j=b^j$, $D_U=\{0,\ldots,b-1\}$; its fold is the identity and
+$\ell_{\rm cau}(U,m)=1$.  Suppose that $\beta$ is nonintegral and
+$m\ge m_U$.  If a vector in $\mathcal N_{U,m,L}$ has $L\ge2$, apply
+Lemma~\ref{lem:pisot-adjacent-window-contraction} for
+$0\le t\le L-2$.  It gives
+\[
+k_1=\cdots=k_{L-1}=0,\qquad
+e_m=-k_0,\qquad e_{m+1}=\cdots=e_{m+L-2}=0.
+\]
+If $L=m+1$, the terminal difference vertex is therefore zero.  It cannot
+be reached from $B_{U,m}$ when no directed cycle is reachable, because the
+zero vertex has a loop.  Hence every such path has at most $m$ edges and
+$\ell_{\rm cau}(U,m)\le m+1\le2m$.  The finitely many smaller apertures are
+covered by the definition of $C_U$.  Lemma
+\ref{lem:pisot-exact-collision-quotient} gives both formulations of
+\eqref{eq:pisot-linear-A1}.
+
+We turn to $\theta$.  The polynomial is negative at $7/4$, positive at
+$351/200$, and has only one real zero; the product of the two nonreal roots
+has modulus $1/\theta$.  Thus $\theta$ is Pisot.  Its defining equation
+gives
+\[
+1=\theta^{-1}+\theta^{-2}+\theta^{-4},
+\]
+and every proper suffix of $1101\,0^\infty$ is lexicographically smaller.
+Parry's criterion therefore gives $d_\theta(1)=1101\,0^\infty$.  The
+polynomial has the form $x^3-ax^2-bx-1$ with $a=2$ and $b=-1$.
+Akiyama's classification of cubic Pisot units with finite beta expansions
+therefore gives Condition~F, since $a\ge1$ and
+$-1\le b\le a+1$ \cite[Theorem~3]{Akiyama2000}.  Consequently
+$U_\theta$ preserves zeros.  The canonical language counts are exactly
+\eqref{eq:theta-count-recurrence}.
+In particular, the digit and difference alphabets are $\{0,1\}$ and
+$\{-1,0,1\}$.  The recurrence also implies the positive recurrence
+$Q_{n+4}=Q_{n+3}+Q_{n+2}+Q_n$.  Thus
+$2Q_{n+1}-3Q_n>0$ follows from its four positive initial values.  Starting
+with $Q_0<2Q_1$ and using
+$\sum_{j<m+1}Q_j<3Q_m<2Q_{m+1}$ then gives
+\begin{equation}
+\sum_{j<m}Q_j(\theta)<2Q_m(\theta),
+\label{eq:theta-carry-one}
+\end{equation}
+so every window carry belongs to $\{-1,0,1\}$.
+
+For completeness, we verify the contraction threshold rather than invoking
+an unspecified asymptotic.  If $\rho,\overline\rho$ are the nonreal roots,
+write
+\[
+Q_n=c_\theta\theta^n+c_\rho\rho^n+\overline{c_\rho}\,\overline\rho^n.
+\]
+The rational isolating interval above and the residue formula for the
+generating function
+\[
+\sum_{n\ge0}Q_nz^n=\frac{1+z^2}{1-2z+z^2-z^3}
+\]
+give
+\[
+1.26<c_\theta<1.27,\qquad |c_\rho|<0.19,\qquad |\rho|<0.756.
+\]
+Here $c_\alpha=(\alpha^2+1)/(3\alpha^2-4\alpha+1)$ for every root
+$\alpha$, and $|\rho|=\theta^{-1/2}$.  Thus all displayed decimals are
+terminating rational bounds obtained by substitution of the endpoints
+$7/4$ and $351/200$ and exact rational arithmetic.
+Hence the dominant-embedding error in the proof of Lemma
+\ref{lem:pisot-adjacent-window-contraction} is less than $1.54$.  Here
+$\delta_\theta=2-\theta>0.245$, and
+\[
+\theta^6\delta_\theta>7.03
+>1+(1+\theta)1.54.
+\]
+It follows that \eqref{eq:pisot-carry-collapse} holds for every $m\ge6$.
+The apertures $m=4,5$ will be included in the exact terminal check below.
+
+It remains to classify the longest paths.  Fix $m\ge6$ and a vector with
+at least two collision rows.  After the carry collapse, all its coordinates
+beyond $m$ vanish except possibly $e_m=-k_0$.  Define the full suffix sums
+\[
+R_t=\sum_{j\ge0}Q_j(\theta)e_{t+j}.
+\]
+Every collision row with $t\ge1$ is now $R_t=0$, and the first row together
+with $e_m=-k_0$ gives $R_0=0$.  The recurrence implies the exact identity
+\begin{equation}
+R_t=e_t+e_{t+2}+2R_{t+1}-R_{t+2}+R_{t+3}.
+\label{eq:theta-suffix-renormalization}
+\end{equation}
+Thus four consecutive zero suffix sums force $e_t=-e_{t+2}$.
+
+Let first $m$ be even and take $L=m-2=\lambda_m-1$.  We have
+$R_t=0$ for $0\le t\le m-3$.  The terminal equation is
+\[
+e_{m-3}+2e_{m-2}+4e_{m-1}+7e_m=0.
+\]
+In $\{-1,0,1\}^4$ its complete solution set is
+\begin{equation}
+(0,0,0,0),\qquad \pm(1,1,1,-1).
+\label{eq:theta-four-tail-table}
+\end{equation}
+The zero tail propagates backwards to the zero word.  From a nonzero tail,
+the equations $R_{m-4}=R_{m-5}=0$ give respectively
+$e_{m-4}=-e_{m-3}$ and $e_{m-5}=0$; then
+\eqref{eq:theta-suffix-renormalization} propagates the alternating pair
+uniquely to the left.  This is precisely the recursion
+\eqref{eq:theta-terminal-word}, and both signs occur.  Hence the first set
+in \eqref{eq:pisot-linear-A3} is $\{\pm E_m\}$.  With one more row, the
+terminal equation is
+\[
+e_{m-2}+2e_{m-1}+4e_m=0,
+\]
+whose only solution in $\{-1,0,1\}^3$ is zero.  Backward propagation then
+contradicts $e_0\ne0$.  Thus $\mathcal N_{\theta,m,\lambda_m}$ is empty.
+
+Now let $m$ be odd and take $L=m-3=\lambda_m-1$.  The terminal five-digit
+equation has, up to sign, exactly the following solutions:
+\begin{equation}
+(0,0,0,0,0),\quad
+(1,1,1,-1,0),\quad
+(1,0,1,1,-1),\quad
+(1,-1,-1,-1,1).
+\label{eq:theta-five-tail-table}
+\end{equation}
+Successive solution of $R_{m-5}=0$ gives respectively
+$0,-1,0,0$ for the preceding digit.  Since $m-5$ is even,
+\eqref{eq:theta-suffix-renormalization} propagates this digit to $e_0$ up
+to sign.  The zero tail and the last two nonzero tails therefore give
+$e_0=0$; only $\pm(1,1,1,-1,0)$ survive.  They give exactly the even
+terminal word for aperture $m-1$ followed by zero, namely $\pm E_m$.
+With one more row the terminal four-digit alternatives are
+\eqref{eq:theta-four-tail-table}; now $m-5$ has even parity and its forced
+zero propagates to $e_0$.  Hence the next obstruction set is empty.
+
+For $m=4,5$, successive exact division in the two or three window
+congruences gives
+\[
+\begin{array}{c|c|c|c}
+m&Q_m&\mathcal N_{\theta,m,\lambda_m-1}
+&\mathcal N_{\theta,m,\lambda_m}\\ \hline
+4&12&\{\pm(1,-1,-1,-1,1)\}&\varnothing\\
+5&21&\{\pm(1,-1,-1,-1,1,0)\}&\varnothing.
+\end{array}
+\]
+This is an exhaustive integer calculation: in each row the quotient is in
+$\{-1,0,1\}$ by \eqref{eq:theta-carry-one}, and the last digit determines
+the preceding bounded digit successively.  Thus \eqref{eq:pisot-linear-A3}
+holds for every $m\ge4$.  Lemma
+\ref{lem:pisot-exact-collision-quotient} now gives
+\eqref{eq:pisot-linear-A2}, including injectivity, and the limiting statement
+is immediate.
+\end{proof}
+
+\begin{corollary}[Global bounded-zero strip dichotomy]
+\label{cor:pisot-zero-strip-synchronization}
+For a fixed zero-preserving Pisot numeration $U$ and an aperture $m\ge2$,
+consider all bounded zero words of length $m+1$ of the form
+\[
+[e_t,\ldots,e_{t+m-1},-k_t]_U=0
+\]
+which overlap one digit at a time.  Exactly one of the following global
+alternatives holds: some strip with a nonzero difference has a finite prefix
+followed by a periodic bounded zero representation; or every nonzero strip
+has fewer than $(C_U+1)m$ rows.  The latter bound has sharp order $\Theta(m)$
+for $U_\theta$.
+\end{corollary}
+
+\begin{proof}
+The overlapping rows are exactly paths in $\Gamma_{U,m}$ by
+\eqref{eq:pisot-zero-word-bridge}.  A cycle reachable from $B_{U,m}$ gives
+the first alternative by repeating the cycle.  If no such cycle is
+reachable, \eqref{eq:pisot-linear-A1} bounds every path from $B_{U,m}$.
+Unless a strip is zero, at most $m-1$ initial shifts pass before one of its
+nonzero coordinates occupies the first position, after which fewer than
+$C_Um$ further rows are possible.  The two alternatives are mutually
+exclusive because the periodic tail makes strips arbitrarily long.  The
+words $E_m$ in \eqref{eq:pisot-linear-A3} give the matching lower order for
+$U_\theta$.
+\end{proof}

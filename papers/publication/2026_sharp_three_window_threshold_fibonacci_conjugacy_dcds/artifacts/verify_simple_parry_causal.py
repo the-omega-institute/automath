@@ -309,6 +309,39 @@ def periodic_collision(
     )
 
 
+def theta_terminal_vector(m: int) -> tuple[int, ...]:
+    """Return the positive-first extremal word E_m for the fixed cubic base."""
+    if m < 4:
+        raise ValueError("the fixed-theta theorem begins at aperture m=4")
+    even_aperture = m if m % 2 == 0 else m - 1
+    core = (1, -1, -1, -1, 1)
+    for aperture in range(6, even_aperture + 1, 2):
+        core = (1, 0) + tuple(-entry for entry in core)
+        if len(core) != aperture + 1:
+            raise AssertionError("the two-step terminal recursion lost its aperture")
+    vector = core + (0,) * (even_aperture - 4)
+    if m % 2:
+        vector += (0,)
+    return vector
+
+
+def theta_terminal_claims(m: int) -> dict[str, int | bool]:
+    """Check the exact fixed-theta terminal obstruction at one aperture."""
+    if m < 4:
+        raise ValueError("the fixed-theta theorem begins at aperture m=4")
+    digits = (1, 1, 0, 1)
+    causal_length = 2 * (m // 2) - 1
+    analysis = collision_graph_analysis(digits, m)
+    return {
+        "terminal_count": collision_graph_bad_path_count(
+            digits, m, causal_length - 1
+        ),
+        "next_count": collision_graph_bad_path_count(digits, m, causal_length),
+        "causal_length": analysis["causal_length"],
+        "injective": analysis["injective"],
+    }
+
+
 def p_bonacci_claims(p: int) -> dict[str, int]:
     if p < 3:
         raise ValueError("the high-degree family begins at p=3")
@@ -498,6 +531,25 @@ def _run_verification() -> int:
         print(
             f"  n={n}, m={aperture}: causal={analysis['causal_length']}, "
             f"terminal paths={terminal_counts} [{status}]"
+        )
+        failures += not passed
+
+    print()
+    print("Fixed binary cubic sharpness battery:")
+    for aperture in range(4, 11):
+        result = theta_terminal_claims(aperture)
+        expected_length = 2 * (aperture // 2) - 1
+        passed = result == {
+            "terminal_count": 2,
+            "next_count": 0,
+            "causal_length": expected_length,
+            "injective": True,
+        }
+        status = "PASS" if passed else "FAIL"
+        print(
+            f"  m={aperture}: causal={result['causal_length']}, "
+            f"terminal paths=({result['terminal_count']}, "
+            f"{result['next_count']}) [{status}]"
         )
         failures += not passed
 

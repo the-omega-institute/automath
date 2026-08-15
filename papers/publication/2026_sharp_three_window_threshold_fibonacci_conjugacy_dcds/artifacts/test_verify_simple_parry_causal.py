@@ -5,6 +5,8 @@ import unittest
 
 import numpy as np
 
+import verify_simple_parry_causal as verifier
+
 from verify_simple_parry_causal import (
     aperture_two_claims,
     bad_blocks,
@@ -25,6 +27,35 @@ from verify_simple_parry_causal import (
 
 
 class SimpleParryCausalTests(unittest.TestCase):
+    def test_fixed_theta_terminal_words_have_the_exact_obstruction_counts(self):
+        terminal_vector = getattr(verifier, "theta_terminal_vector", lambda _m: None)
+        terminal_claims = getattr(verifier, "theta_terminal_claims", lambda _m: {})
+        for m in range(4, 11):
+            vector = terminal_vector(m)
+            self.assertIsNotNone(vector)
+            self.assertEqual(len(vector), m + 2 * (m // 2 - 1) - 1)
+            claims = terminal_claims(m)
+            self.assertEqual(claims["terminal_count"], 2)
+            self.assertEqual(claims["next_count"], 0)
+            self.assertEqual(claims["causal_length"], 2 * (m // 2) - 1)
+            self.assertTrue(claims["injective"])
+
+    def test_fixed_theta_words_satisfy_the_cubic_recurrence_and_congruences(self):
+        terminal_vector = getattr(verifier, "theta_terminal_vector", lambda _m: None)
+        for m in range(4, 15):
+            q = q_sequence((1, 1, 0, 1), m)
+            self.assertEqual(q[:3], [1, 2, 4])
+            for j in range(m - 2):
+                self.assertEqual(q[j + 3], 2 * q[j + 2] - q[j + 1] + q[j])
+            vector = terminal_vector(m)
+            self.assertIsNotNone(vector)
+            length = 2 * (m // 2) - 2
+            weighted = [
+                sum(q[j] * vector[t + j] for j in range(m))
+                for t in range(length)
+            ]
+            self.assertTrue(all(value % q[m] == 0 for value in weighted))
+
     def test_collision_theorems_do_not_require_the_pisot_hypothesis(self):
         result = non_pisot_simple_parry_claims()
         self.assertEqual(result["digits"], (2, 0, 0, 2))
