@@ -147,6 +147,20 @@ second Kiss paper (1990) averages reciprocal sums of primitive divisors; it is
 not an average theorem for their number. The manuscript now credits this
 boundary explicitly.
 
+Source-access note (2026-08-15): the full text of Kiss's 1988 chapter was not
+obtained. The Springer DOI page exposed only the opening of the abstract and
+the chapter PDF required access; Google Books exposed a searchable scan but
+restricted the page images. The scan's searchable OCR identifies the relevant
+result as Theorem 2 and verifies its hypotheses: a nondegenerate Lucas
+sequence, a real parameter `0 < lambda < 1`, and sufficiently large `x`. It
+defines the set of indices `n <= x` for which `R_n` has a primitive prime-power
+factor exceeding `n^(2-lambda)` and gives a positive linear lower bound for
+that set. The following page explicitly says that the result does not decide
+whether the prime bases or the exponents are large. The comparison in Remark
+6.7 uses only these verifiable publisher and searchable-scan data; it does not
+present the chapter as having been read in full or use the OCR-obscured exact
+density constant.
+
 Bilu--Hanrot--Voutier proves existence for all Lucas and Lehmer indices above
 30 and classifies the defective cases below 31. In the present Fibonacci
 argument it supplies existence of one exact-rank prime at the required
