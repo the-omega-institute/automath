@@ -80,6 +80,30 @@ class StableSpineManuscriptTests(unittest.TestCase):
         for text in required:
             self.assertIn(text, source)
 
+    def test_fixed_scale_robustness_scope_and_rigidity_are_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            r"((\chi^\nu,\chi^\eta),H)",
+            "No relation between",
+            "Sharpness of the inner exclusion",
+            r"\tau_{s,\chi}^\lambda=\kappa",
+            r"(1+\kappa^2)\mathcal Q_{\alpha,d,r}(\Delta_r)",
+            r"\widetilde A_s^{\lambda;\boldsymbol\chi,H}",
+            r"\widetilde{\mathcal E}_{r,s}^{\boldsymbol\chi,H}",
+            "normalization rules other than",
+            "Asymptotic coefficient rigidity inside a prescribed ansatz",
+            "not a uniqueness, canonicity, or entropy-minimality theorem",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        abstract = (ROOT / "main.tex").read_text(encoding="utf-8")
+        intro = read_tex_source(ROOT / "sec_introduction.tex")
+        self.assertIn("either additive or multiplicative mass normalization", abstract)
+        self.assertIn("not every reasonable", intro)
+        self.assertNotIn("robust at its full resolution", intro)
+        self.assertNotIn("partial rigidity", abstract + intro + source)
+
     def test_active_tex_sources_obey_presentation_constraints(self) -> None:
         for path in ROOT.glob("*.tex"):
             source = path.read_text(encoding="utf-8")
