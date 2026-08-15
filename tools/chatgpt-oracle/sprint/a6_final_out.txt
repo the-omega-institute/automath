@@ -12591,3 +12591,2225 @@ codex
 The safety hook rejected the cleanup command because it used computed path variables. I’ll use the already verified absolute filenames directly, with no recursive deletion or wildcard.
 exec
 "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Item -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs\\main-page-59.png','D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs\\main-page-60.png' | Select-Object FullName,Length" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 254ms:
+
+FullName                                                                                                               
+--------                                                                                                               
+D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\tmp\pdfs\main...
+D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\tmp\pdfs\main...
+
+
+
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..70bcdc2c665c3ffc8e74d091ec280971dc663fb6
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled
++canonical convolution, counts that endpoint twice, and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Remove-Item -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs\\main-page-59.png','D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs\\main-page-60.png'; 'Temporary PDF review PNGs removed'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 194ms:
+Temporary PDF review PNGs removed
+
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..70bcdc2c665c3ffc8e74d091ec280971dc663fb6
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled
++canonical convolution, counts that endpoint twice, and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+2026-08-15T06:21:57.648093Z ERROR codex_core::tools::router: error=`"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "if((Test-Path -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs') -and -not (Get-ChildItem -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs' -Force)){Remove-Item -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs'}; 'Temporary PDF review directory absent or removed'"` rejected: blocked by policy
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "if((Test-Path -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs') -and -not (Get-ChildItem -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs' -Force)){Remove-Item -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs'}; 'Temporary PDF review directory absent or removed'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ declined in 0ms:
+`"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "if((Test-Path -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs') -and -not (Get-ChildItem -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs' -Force)){Remove-Item -LiteralPath 'D:\\omega\\automath\\papers\\publication\\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\\tmp\\pdfs'}; 'Temporary PDF review directory absent or removed'"` rejected: blocked by policy
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..70bcdc2c665c3ffc8e74d091ec280971dc663fb6
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled
++canonical convolution, counts that endpoint twice, and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git diff -- README.md cover_letter_tams.txt main.tex sec_arithmetic_critical.tex sec_introduction.tex submission_metadata.md' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git status --short -- README.md cover_letter_tams.txt main.tex sec_arithmetic_critical.tex sec_introduction.tex submission_metadata.md artifacts; if(Test-Path -LiteralPath 'tmp\\pdfs'){ 'tmp/pdfs remaining entries: '+@(Get-ChildItem -LiteralPath 'tmp\\pdfs' -Force).Count }else{'tmp/pdfs absent'}" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$mp=(pdfinfo main.pdf|Select-String '"'"'^Pages:'"').Line.Trim();"'$sp=(pdfinfo supplement.pdf|Select-String '"'"'^Pages:'"').Line.Trim();"'$mt=(Select-String -LiteralPath main.aux -Pattern '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}.*\\[theorem\\]'|ForEach-Object{if("'$_.Line-match '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}'){"'$Matches[1]}}|Sort-Object -Unique).Count;$st=(Select-String -LiteralPath supplement.aux -Pattern '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}.*\\[theorem\\]'|ForEach-Object{if("'$_.Line-match '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}'){"'$Matches[1]}}|Sort-Object -Unique).Count;'"'main {0}, theorems={1}; supplement {2}, theorems={3}' -f "'$mp,$mt,$sp,$st' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$old=@(rg -n -i --glob '"'"'!artifacts/oracle_sprint_A6_confirm.md'"' --glob '"'!tmp/**'"' --glob '"'!next_A6*'"' 'endpoint loss' .);'old_phrase_nonarchival='+"'$old.Count;$eq=@(rg -n '"'R_0\\(w\\)=\\\\Sigma_1\\(w\\)\\+2\\\\Sigma_2\\(w\\)' sec_arithmetic_critical.tex);'finite_identity_source_hits='+"'$eq.Count;$anti=@(rg -n '"'proof does not assume the regular variation later used by the renewal' sec_introduction.tex);'anti_cheating_hits='+"'$anti.Count;$marks=@(rg -n -i --glob '"'*.tex' --glob '*.md' --glob '*.txt' --glob '"'!artifacts/oracle*'"' --glob '"'!next_A6*'"' '\\\\(added|deleted|replaced|todo|marginpar)|trackchanges|changes\\{|revision marks?' .);'revision_mark_hits='+"'$marks.Count;$over=@();foreach($p in(rg --files -g '"'*.tex' -g '"'!tmp/**'"')){if((Get-Content -LiteralPath "'$p).Count -ge 800){$over+=$p}};'"'tex_over_limit='+"'$over.Count;if($old.Count -or $eq.Count-ne1 -or $anti.Count-ne1 -or $marks.Count -or $over.Count){exit 1}' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 212ms:
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f93..2c1ecf03d 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@ The main contribution consists of:
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf..70bcdc2c6 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@ fixed-digit-sum continuant asymptotic, and the resulting stable second-order
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled
++canonical convolution, counts that endpoint twice, and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index e6f23724e..462924fb2 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@ and recover those results in Fibonacci-partition coordinates.  The arithmetic
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465..dd0375bfe 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@ proves all four identities and the three contributions in
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 83607a70b..5bd9131fe 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@ Dushistova's study of Brocot partitions.  Dushistova's auxiliary Theorem~3
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f993..64d3ffe76 100644
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@ b_{2d+1}(s)=\sigma_{s/2}(d+1).
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@ critical finite-size laws and coexistence laws, the finite-layer
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@ and the recurrence \(D_m=D_{m-2}+D_{m-4}\) holds for \(m\ge6\).
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md', LF will be replaced by CRLF the next time Git touches it
+
+ succeeded in 251ms:
+ M README.md
+ M cover_letter_tams.txt
+ M main.tex
+ M sec_arithmetic_critical.tex
+ M sec_introduction.tex
+ M submission_metadata.md
+tmp/pdfs remaining entries: 14
+
+ succeeded in 360ms:
+old_phrase_nonarchival=0
+finite_identity_source_hits=1
+anti_cheating_hits=1
+revision_mark_hits=0
+tex_over_limit=0
+
+ succeeded in 775ms:
+main Pages:           69, theorems=17; supplement Pages:           20, theorems=9
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..70bcdc2c665c3ffc8e74d091ec280971dc663fb6
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled
++canonical convolution, counts that endpoint twice, and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+codex
+The final diff is scoped to six intended files. One source-only line wrap in the plain-text cover letter split “doubled canonical convolution” awkwardly; I’m cleaning that wrap, then I’ll run the last fresh diff, log, checksum, and requirement checks before reporting.
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams\cover_letter_tams.txt
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..fb3a87cd5a05d181d72fc82088499f8c04ee10df
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled canonical convolution, counts that endpoint twice,
++and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..fb3a87cd5a05d181d72fc82088499f8c04ee10df
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled canonical convolution, counts that endpoint twice,
++and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex
+$m=$LASTEXITCODE
+latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex
+$s=$LASTEXITCODE
+'"'main_exit={0} supplement_exit={1}' -f "'$m,$s
+if($m -ne 0 -or $s -ne 0){exit 1}' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$pat='"'undefined references|undefined citations|Citation .* undefined|Reference .* undefined|multiply defined|multiply-defined|There were undefined|Label .* multiply';foreach("'$f in @('"'main.log','supplement.log')){"'$n=@(Select-String -LiteralPath $f -Pattern $pat -CaseSensitive:$false).Count;'"'{0}: forbidden_diagnostics={1}' -f "'$f,$n;if($n){exit 1}}' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git diff --check -- README.md cover_letter_tams.txt main.tex sec_arithmetic_critical.tex sec_introduction.tex submission_metadata.md' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$old=@(rg -n -i --glob '"'"'!artifacts/oracle_sprint_A6_confirm.md'"' --glob '"'!tmp/**'"' --glob '"'!next_A6*'"' 'endpoint loss' .);"'$eq=@(rg -n '"'R_0\\(w\\)=\\\\Sigma_1\\(w\\)\\+2\\\\Sigma_2\\(w\\)' sec_arithmetic_critical.tex);"'$anti=@(rg -n '"'proof does not assume the regular variation later used by the renewal' sec_introduction.tex);"'$marks=@(rg -n -i --glob '"'*.tex' --glob '*.md' --glob '*.txt' --glob '"'!artifacts/oracle*'"' --glob '"'!next_A6*'"' '\\\\(added|deleted|replaced|todo|marginpar)|trackchanges|changes\\{|revision marks?' .);"'$over=@();foreach($p in(rg --files -g '"'*.tex' -g '"'!tmp/**'"')){if((Get-Content -LiteralPath "'$p).Count-ge800){$over+=$p}};'"'old_phrase_nonarchival={0} identity_hits={1} anti_cheating_hits={2} revision_mark_hits={3} tex_over_limit={4}' -f "'$old.Count,$eq.Count,$anti.Count,$marks.Count,$over.Count;if($old.Count-or$eq.Count-ne1-or$anti.Count-ne1-or$marks.Count-or$over.Count){exit 1}' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$astatus=@(git status --short -- artifacts .gitattributes);'"'artifact_changed_paths={0}' -f "'$astatus.Count;$astatus;Push-Location artifacts;$out=sha256sum -c SHA256SUMS;$ec=$LASTEXITCODE;Pop-Location;$ok=@($out|Where-Object{$_-match'"': OK"'$'"'}).Count;"'$bad=@($out|Where-Object{$_-notmatch'"': OK"'$'"'}).Count;'checksum_ok={0} checksum_non_ok={1}' -f "'$ok,$bad;$b=[IO.File]::ReadAllBytes((Resolve-Path '"'artifacts\\SHA256SUMS'));'manifest_CR={0} manifest_LF={1}' -f @("'$b|Where-Object{$_-eq13}).Count,@($b|Where-Object{$_-eq10}).Count;if($ec-ne0-or$bad-ne0-or@($b|Where-Object{$_-eq13}).Count-ne0-or$astatus.Count-ne0){exit 1}' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$mp=((pdfinfo main.pdf|Select-String '"'"'^Pages:'"').Line -replace '\\s+',' ').Trim();"'$sp=((pdfinfo supplement.pdf|Select-String '"'"'^Pages:'"').Line -replace '\\s+',' ').Trim();"'$mt=(Select-String -LiteralPath main.aux -Pattern '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}.*\\[theorem\\]'|ForEach-Object{if("'$_.Line-match'"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}'){"'$Matches[1]}}|Sort-Object -Unique).Count;$st=(Select-String -LiteralPath supplement.aux -Pattern '"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}.*\\[theorem\\]'|ForEach-Object{if("'$_.Line-match'"'\\\\newlabel\\{(["'^@}]+)@cref'"\\}'){"'$Matches[1]}}|Sort-Object -Unique).Count;'"'main {0} theorems={1}; supplement {2} theorems={3}' -f "'$mp,$mt,$sp,$st' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n 'loss of the restriction|R_0\\(w\\)|The primary submission target|submission target is|Transactions of the American Mathematical Society|If \\*Transactions\\* declines' main.tex sec_arithmetic_critical.tex sec_introduction.tex cover_letter_tams.txt submission_metadata.md README.md" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git status --short -- README.md cover_letter_tams.txt main.tex sec_arithmetic_critical.tex sec_introduction.tex submission_metadata.md artifacts; 'temp59_exists={0} temp60_exists={1}' -f (Test-Path -LiteralPath 'tmp\\pdfs\\main-page-59.png'),(Test-Path -LiteralPath 'tmp\\pdfs\\main-page-60.png')" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 191ms:
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md', LF will be replaced by CRLF the next time Git touches it
+
+ succeeded in 194ms:
+submission_metadata.md:5:Transactions of the American Mathematical Society
+submission_metadata.md:105:The primary submission target is *Transactions of the American Mathematical
+submission_metadata.md:110:correspondences. If *Transactions* declines on breadth or significance rather
+submission_metadata.md:169:- Transactions of the American Mathematical Society cover letter
+README.md:5:compiled supplement. The submission target is *Transactions of the American
+README.md:34:  the correction of the loss of the restriction \(u>1\), causing an endpoint
+cover_letter_tams.txt:2:Transactions of the American Mathematical Society
+cover_letter_tams.txt:17:the sums term by term and localizes the loss of the restriction u > 1, causing
+sec_arithmetic_critical.tex:170: R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
+main.tex:93:  the two sums term by term and correct the loss of the restriction \(u>1\),
+
+ succeeded in 255ms:
+main.log: forbidden_diagnostics=0
+supplement.log: forbidden_diagnostics=0
+
+ succeeded in 267ms:
+ M README.md
+ M cover_letter_tams.txt
+ M main.tex
+ M sec_arithmetic_critical.tex
+ M sec_introduction.tex
+ M submission_metadata.md
+temp59_exists=False temp60_exists=False
+
+ succeeded in 373ms:
+old_phrase_nonarchival=0 identity_hits=1 anti_cheating_hits=1 revision_mark_hits=0 tex_over_limit=0
+
+ succeeded in 394ms:
+artifact_changed_paths=0
+checksum_ok=15 checksum_non_ok=0
+manifest_CR=0 manifest_LF=15
+
+ succeeded in 740ms:
+main Pages: 69 theorems=17; supplement Pages: 20 theorems=9
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+ succeeded in 1339ms:
+Rc files read:
+  NONE
+Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+Latexmk: Nothing to do for 'main.tex'.
+Latexmk: All targets (main.xdv main.pdf) are up-to-date
+
+Rc files read:
+  NONE
+Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+Latexmk: Nothing to do for 'supplement.tex'.
+Latexmk: All targets (supplement.xdv supplement.pdf) are up-to-date
+
+main_exit=0 supplement_exit=0
+latexmk: critical issue: You are running MiKTeX on an unsupported version of Windows.
+latexmk: critical issue: You are running MiKTeX on an unsupported version of Windows.
+
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..fb3a87cd5a05d181d72fc82088499f8c04ee10df
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled canonical convolution, counts that endpoint twice,
++and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+All requested edits and verification are complete. Builds, logs, visual PDF review, Python tests/verifiers, checksum audit, source invariants, and final diff checks passed.
+  ✓ Record baseline page/theorem counts and inspect the exact abstract, Lemma 6.5, venue metadata, and build configuration
+  ✓ Edit the old wording, display the finite identity, make the four-part overcount mechanism explicit, and restore TAMS-first venue framing
+  ✓ Run source-level audits, enforce the 800-line limit, and inspect the resulting diff
+  ✓ Alternating clean rebuilds of main and supplement with auxiliary files removed; audit references, citations, and labels
+  ✓ Run every artifacts/verify*.py and artifacts/test_*.py, regenerate LF SHA256SUMS if needed, and verify the artifacts tree
+  ✓ Report every location changed, exact typeset identity, mechanism/venue wording, counts, builds, and test pass totals
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..fb3a87cd5a05d181d72fc82088499f8c04ee10df
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled canonical convolution, counts that endpoint twice,
++and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+codex
+Implemented the confirmed correction and restored TAMS-first submission framing. No theorem was weakened, restated, or renumbered; all recovery propositions, priority wording, localization, and the denominator-layer anti-cheating statement remain intact.
+
+**Correction Wording**
+
+The active paper and submission materials now use:
+
+> “loss of the restriction \(u>1\), causing an endpoint overcount”
+
+There are zero remaining active occurrences of “endpoint loss.” The phrase remains only where it is quoted in the archival oracle report [oracle_sprint_A6_confirm.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/artifacts/oracle_sprint_A6_confirm.md:50), which was deliberately left unchanged as source evidence.
+
+The mechanism is now explicit:
+
+- Dushistova separates the \(u=1\) term and replaces the \(u>1\) left-context sum by twice the canonical convolution \(\Sigma_2\).
+- The displayed definition of \(\Sigma_2\) drops the restriction \(u>1\).
+- The empty canonical left context \(u=0\) is therefore included.
+- Because the whole convolution \(\Sigma_2\) is doubled, that endpoint is counted twice rather than once.
+- The excess is exactly \(R_s\), giving the corrected coefficient \(2R_s^2\).
+
+This appears in the abstract, introduction, Lemma 6.5 proof, cover letter, metadata, and README.
+
+**Finite Identity**
+
+Lemma 6.5 now displays, unnumbered so existing equation numbers do not shift,
+
+\[
+R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
+       -\sum_{v\le w}\sigma_\beta(v).
+\]
+
+The surrounding text explicitly extends \(\sigma_\beta(0)=1\) and \(\sigma_\beta(1)=0\), identifies the subtraction as one empty-left-context contribution, and records that it tends to \(R_s\). The rendered equation was visually inspected on page 60 of the rebuilt main PDF; it is legible, aligned, and unclipped.
+
+**Locations Changed**
+
+- [main.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex:93): replaced “endpoint loss” in the abstract with the confirmed wording.
+- [sec_introduction.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex:566): made the restriction loss, doubled empty context, twice-counted endpoint, and exact \(R_s\) excess explicit while retaining the narrow Lemma 7/Theorem 3 localization.
+- [sec_arithmetic_critical.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex:159): strengthened Lemma 6.5’s proof and added the exact finite identity at line 170.
+- [cover_letter_tams.txt](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt:2): changed the addressee to Transactions, made the mechanism explicit at line 17, and framed the combined correction, independent proof, critical renewal constants, finite-size terms, stable law, LDPs, and fiber identities as the central contribution.
+- [submission_metadata.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md:5): restored Transactions as the primary journal, strengthened the correction summary at line 74, added venue positioning at line 103, and corrected the cover-letter entry.
+- [README.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md:5): restored the TAMS target and recorded JNT and ETDS as alternatives only if Transactions declines on breadth or significance rather than correctness; the contribution list now uses the confirmed mechanism wording at line 33.
+
+**Counts**
+
+| Document | Pages Before | Pages After | Theorems Before | Theorems After |
+|---|---:|---:|---:|---:|
+| Main article | 69 | 69 | 17 | 17 |
+| Supplement | 20 | 20 | 9 | 9 |
+
+All manuscript and supplement `.tex` sources remain below 800 lines; the largest is 600 lines. No revision-mark constructs are present.
+
+**Build And Tests**
+
+- Removed `main.aux` and `supplement.aux`, then rebuilt main followed by supplement.
+- `latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex`: exit 0.
+- `latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex`: exit 0.
+- Final logs: zero undefined references, zero undefined citations, and zero multiply-defined labels in both documents.
+- MiKTeX emitted its existing nonfatal unsupported-Windows-version warning, but both builds completed successfully with exit 0.
+- Two `artifacts/test_*.py` modules: 20/20 tests passed.
+- Three `artifacts/verify*.py` scripts: 3/3 passed.
+- Deepening-delta verifier: 0 failures, 0 counterexamples.
+- Real-tilt verifier: 0 numerical failures; full-LDP orbit-padding audit passed.
+- Speed-separation verifier: `STATUS: PASS`, empty failure list.
+- Artifact outputs reproduced byte-for-byte, so `artifacts/SHA256SUMS` did not require regeneration.
+- Checksum verification: 15/15 entries `OK`, zero failures.
+- `SHA256SUMS` remains LF-only: 0 CR bytes, 15 LF bytes.
+- Final `git diff --check`: clean apart from Git’s informational Windows line-ending warnings.
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+index 016876f931c71e553a530c9bdfe41fe9bad4a8ff..2c1ecf03d8ac711aca9bf12c7961a20f3cf78661
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md
+@@ -2,7 +2,10 @@
+ 
+ This directory contains the main manuscript `Arithmetic Criticality and Large
+ Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
+-compiled supplement. The submission target is the *Journal of Number Theory*.
++compiled supplement. The submission target is *Transactions of the American
++Mathematical Society*. If it declines on breadth or significance rather than
++correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
+ 
+ ## Scope
+ 
+@@ -28,9 +31,10 @@
+ - the arithmetic critical point, critical Gibbs law, and full finite-layer
+   LDP on a single standard Fibonacci partition layer;
+ - the exact identification with Dushistova's fixed-digit-sum continuant sum,
+-  the endpoint correction of its printed leading coefficient from
+-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+-  and the critical renewal/Fibonacci transfer;
++  the correction of the loss of the restriction \(u>1\), causing an endpoint
++  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
++  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
++  renewal/Fibonacci transfer;
+ - the joint generation-cost and log-multiplicity LDP, including its affine
+   two-dimensional coexistence face;
+ - the residue and affine fiber correspondence;
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+index a474902bf5fc7cf85a7411a3b445f04531b1c959..fb3a87cd5a05d181d72fc82088499f8c04ee10df
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt
+@@ -1,5 +1,5 @@
+ The Editors
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ Dear Editors,
+ 
+@@ -14,13 +14,16 @@
+ critical laws beyond the leading constants 2/mu_C and 4/mu_C. Following the
+ global Farey-tree work of Moshchevitin and Zhigljavsky, Dushistova treated the
+ identical local sum and stated a fuller expansion. The manuscript identifies
+-the sums term by term and localizes an endpoint bookkeeping error in the proof
+-of her Lemma 7: the published leading coefficient R_s+2R_s^2 becomes
+-2R_s^2. The correction is restricted to that coefficient; no broader claim
+-about her paper is made. The new downstream contribution is the critical
+-renewal/Fibonacci transfer. The paper also proves uniform coexistence laws,
+-finite-layer large deviations at the nonexposed slopes, and exact
+-finite-window fiber identities.
++the sums term by term and localizes the loss of the restriction u > 1, causing
++an endpoint overcount, in the proof of her Lemma 7. This includes the empty
++left context in the doubled canonical convolution, counts that endpoint twice,
++and produces excess R_s;
++the published leading coefficient R_s+2R_s^2 therefore becomes 2R_s^2. The
++correction is restricted to that coefficient; no broader claim about her paper
++is made. Together, the corrected arithmetic input, its independent proof, the
++exact critical renewal constants, the noninteger finite-size terms, the stable
++law, the one-layer and finite-window large deviations, and the exact fiber
++identities form the paper's central contribution.
+ 
+ The pressure framework is attributed directly to the existing theory of the
+ Erdos measure and the golden-ratio Bernoulli convolution. Sidorov and Vershik's
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+index 6128fb9c2a316579a969571d6f424241cd9b439c..21be271088280b9274a7bdc1cda8e9435de2462b
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex
+@@ -90,8 +90,9 @@
+   \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  Following the Farey-tree entropy
+   work of Moshchevitin--Zhigljavsky, Dushistova studied the identical
+   fixed-digit-sum continuant sum and stated a fuller expansion.  We identify
+-  the two sums term by term, correct an endpoint loss in her printed leading
+-  coefficient from \(R_s+2R_s^2\) to \(2R_s^2\), and give a shorter
++  the two sums term by term and correct the loss of the restriction \(u>1\),
++  causing an endpoint overcount: her printed leading coefficient
++  \(R_s+2R_s^2\) becomes \(2R_s^2\).  We also give a shorter
+   one-large-partial-quotient proof of the local denominator-layer law
+   \(b_{2d+1}(s)\sim2\{\zeta(s-1)/\zeta(s)\}^2d^{-s}\) for every fixed
+   \(s>2\) \cite{MoshchevitinZhigljavsky2004,Dushistova2007}.  At criticality
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+index 88b661465357fc7139417ac9a624f421582e704c..dd0375bfe78b15497855526451d210837cbb030e
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex
+@@ -157,15 +157,24 @@
+ \eqref{eq:left-context-endpoint-cases}.
+ 
+ The precise loss in the published argument occurs in the proof of
+-Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}.  After separating
+-the \(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
+-canonical convolution denoted there by \(\Sigma_2\).  In the displayed
+-definition of \(\Sigma_2\), the restriction \(u>1\) has disappeared, so the
+-empty canonical context \(u=0\) is included; meanwhile the original \(u=0\)
+-case is not retained separately.  Thus the printed split contributes
+-\(R_s+2R_s^2\), an excess of exactly \(R_s\).  Retaining the three endpoint
+-classes gives \(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the
+-same empty-continuant, final-digit, and exponent conventions as the published
++Dushistova's Lemma~7 \cite[pp.~668--669]{Dushistova2007}: it is the loss of
++the restriction \(u>1\), causing an endpoint overcount.  After separating the
++\(u=1\) term, the proof replaces the \(u>1\) left-context sum by twice a
++canonical convolution denoted there by \(\Sigma_2\).  Its displayed definition
++drops the restriction \(u>1\), thereby including the empty canonical left
++context \(u=0\).  Because the whole convolution \(\Sigma_2\) is doubled, that
++endpoint is consequently counted twice rather than once.  With Dushistova's
++finite-cutoff notation, and extending \(\sigma_\beta(0)=1\) and
++\(\sigma_\beta(1)=0\), the exact finite identity is
++\[
++ R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
++        -\sum_{v\le w}\sigma_\beta(v).
++\]
++The subtraction removes exactly one empty-left-context contribution.  As
++\(w\to\infty\), that contribution tends to \(R_s\), so the printed split has
++excess exactly \(R_s\).  Retaining the three endpoint classes gives
++\(R_s+R_s+2(R_s-1)R_s=2R_s^2\).  This localization uses the same
++empty-continuant, final-digit, and exponent conventions as the published
+ paper, so the discrepancy is not a normalization change.
+ \end{proof}
+ 
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+index 064cabc9356c31debf5d5998f2c688c5a18ba40e..cfb8f1a18093a13a7b4cde7567ef90b98bec6898
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex
+@@ -564,10 +564,13 @@
+ \mathcal K(\mathbf a)^{-2\beta}\), exactly the local continuant sum used here,
+ and states a fuller expansion.  \Cref{prop:dushistova-exact-identification}
+ compares the conventions term by term.  Her printed leading coefficient is
+-\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the excess
+-\(R_s\) to the \(u=0,1,>1\) split in the proof of her Lemma~7 and proves the
+-corrected coefficient \(2R_s^2\).  The claim is deliberately narrow: it
+-concerns that leading coefficient, not Dushistova's paper as a whole.
++\(R_s+2R_s^2\); \Cref{lem:dushistova-endpoint-correction} localizes the loss of
++the restriction \(u>1\), causing an endpoint overcount, to the proof of her
++Lemma~7.  The empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\); the corrected coefficient is \(2R_s^2\).  The claim is deliberately
++narrow: it concerns that leading coefficient, not Dushistova's paper as a
++whole.
+ The critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+ Liehl, as recorded in the quantitative modern treatment of
+ Aistleitner--Borda--Hauke
+diff --git a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+index 04ab2f9935038bafbfe235fbf39ffa3c123e845b..64d3ffe76d8498985b5d96e5eff73aa851a3890f
+--- a/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
++++ b/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md
+@@ -2,7 +2,7 @@
+ 
+ ## Journal
+ 
+-Journal of Number Theory
++Transactions of the American Mathematical Society
+ 
+ ## Title
+ 
+@@ -73,8 +73,11 @@
+ 
+ Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+ contexts of digit sums zero, one, and greater than one gives the corrected
+-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+-proof of her Lemma 7 and makes no broader claim about that paper.
++coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
++of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
++Lemma 7: the empty left context is included in the doubled canonical
++convolution, so that endpoint is counted twice and the excess is exactly
++\(R_s\). It makes no broader claim about that paper.
+ 
+ With
+ 
+@@ -97,6 +100,17 @@
+ nonexposed-slope lower bounds, and the exact finite-window correspondences and
+ identities.
+ 
++## Venue Positioning
++
++The primary submission target is *Transactions of the American Mathematical
++Society*. The case for that venue is the combined correction-and-extension:
++the exact reconciliation and independent arithmetic proof feed the critical
++renewal constants, noninteger finite-size corrections, stable-law consequence,
++one-layer and finite-window large deviations, and exact finite
++correspondences. If *Transactions* declines on breadth or significance rather
++than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
++Systems* are the natural alternatives.
++
+ ## Exact Scope Of Finite Formulas
+ 
+ The affine fiber--partition correspondence and partition-difference formula
+@@ -152,4 +166,4 @@
+ - `main.tex` and its section inputs: main article
+ - `supplement.tex`: separately compiled supplement
+ - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
+-- Journal of Number Theory cover letter
++- Transactions of the American Mathematical Society cover letter
+
+tokens used
+166,100
+Implemented the confirmed correction and restored TAMS-first submission framing. No theorem was weakened, restated, or renumbered; all recovery propositions, priority wording, localization, and the denominator-layer anti-cheating statement remain intact.
+
+**Correction Wording**
+
+The active paper and submission materials now use:
+
+> “loss of the restriction \(u>1\), causing an endpoint overcount”
+
+There are zero remaining active occurrences of “endpoint loss.” The phrase remains only where it is quoted in the archival oracle report [oracle_sprint_A6_confirm.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/artifacts/oracle_sprint_A6_confirm.md:50), which was deliberately left unchanged as source evidence.
+
+The mechanism is now explicit:
+
+- Dushistova separates the \(u=1\) term and replaces the \(u>1\) left-context sum by twice the canonical convolution \(\Sigma_2\).
+- The displayed definition of \(\Sigma_2\) drops the restriction \(u>1\).
+- The empty canonical left context \(u=0\) is therefore included.
+- Because the whole convolution \(\Sigma_2\) is doubled, that endpoint is counted twice rather than once.
+- The excess is exactly \(R_s\), giving the corrected coefficient \(2R_s^2\).
+
+This appears in the abstract, introduction, Lemma 6.5 proof, cover letter, metadata, and README.
+
+**Finite Identity**
+
+Lemma 6.5 now displays, unnumbered so existing equation numbers do not shift,
+
+\[
+R_0(w)=\Sigma_1(w)+2\Sigma_2(w)
+       -\sum_{v\le w}\sigma_\beta(v).
+\]
+
+The surrounding text explicitly extends \(\sigma_\beta(0)=1\) and \(\sigma_\beta(1)=0\), identifies the subtraction as one empty-left-context contribution, and records that it tends to \(R_s\). The rendered equation was visually inspected on page 60 of the rebuilt main PDF; it is legible, aligned, and unclipped.
+
+**Locations Changed**
+
+- [main.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/main.tex:93): replaced “endpoint loss” in the abstract with the confirmed wording.
+- [sec_introduction.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_introduction.tex:566): made the restriction loss, doubled empty context, twice-counted endpoint, and exact \(R_s\) excess explicit while retaining the narrow Lemma 7/Theorem 3 localization.
+- [sec_arithmetic_critical.tex](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/sec_arithmetic_critical.tex:159): strengthened Lemma 6.5’s proof and added the exact finite identity at line 170.
+- [cover_letter_tams.txt](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/cover_letter_tams.txt:2): changed the addressee to Transactions, made the mechanism explicit at line 17, and framed the combined correction, independent proof, critical renewal constants, finite-size terms, stable law, LDPs, and fiber identities as the central contribution.
+- [submission_metadata.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/submission_metadata.md:5): restored Transactions as the primary journal, strengthened the correction summary at line 74, added venue positioning at line 103, and corrected the cover-letter entry.
+- [README.md](D:/omega/automath/papers/publication/2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams/README.md:5): restored the TAMS target and recorded JNT and ETDS as alternatives only if Transactions declines on breadth or significance rather than correctness; the contribution list now uses the confirmed mechanism wording at line 33.
+
+**Counts**
+
+| Document | Pages Before | Pages After | Theorems Before | Theorems After |
+|---|---:|---:|---:|---:|
+| Main article | 69 | 69 | 17 | 17 |
+| Supplement | 20 | 20 | 9 | 9 |
+
+All manuscript and supplement `.tex` sources remain below 800 lines; the largest is 600 lines. No revision-mark constructs are present.
+
+**Build And Tests**
+
+- Removed `main.aux` and `supplement.aux`, then rebuilt main followed by supplement.
+- `latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex`: exit 0.
+- `latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex`: exit 0.
+- Final logs: zero undefined references, zero undefined citations, and zero multiply-defined labels in both documents.
+- MiKTeX emitted its existing nonfatal unsupported-Windows-version warning, but both builds completed successfully with exit 0.
+- Two `artifacts/test_*.py` modules: 20/20 tests passed.
+- Three `artifacts/verify*.py` scripts: 3/3 passed.
+- Deepening-delta verifier: 0 failures, 0 counterexamples.
+- Real-tilt verifier: 0 numerical failures; full-LDP orbit-padding audit passed.
+- Speed-separation verifier: `STATUS: PASS`, empty failure list.
+- Artifact outputs reproduced byte-for-byte, so `artifacts/SHA256SUMS` did not require regeneration.
+- Checksum verification: 15/15 entries `OK`, zero failures.
+- `SHA256SUMS` remains LF-only: 0 CR bytes, 15 LF bytes.
+- Final `git diff --check`: clean apart from Git’s informational Windows line-ending warnings.

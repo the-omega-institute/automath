@@ -1,0 +1,102 @@
+Read artifacts/oracle_sprint_A3_stdobj.md in full first. Do not ask for design approval, do not
+run any brainstorming or approval workflow.
+
+An external expert audited which objects OF THE FIELD this paper's machinery reaches. His verdict
+has two halves and you must respect both.
+
+THE NEGATIVE HALF, WHICH IS NOT NEGOTIABLE. The machinery does NOT bridge to numerical
+beta-normalization, the beta-transformation, carry propagation for normalization or successor,
+general right-closing maps, general synchronized transductions, or a recognized broad class of
+sliding block codes. The decisive mismatch is not terminology: our local equality is equality of
+integer language ranks modulo u_m, whereas numerical normalization concerns equality of values in
+Z[beta] or of represented reals. He confirms the manuscript already states this correctly and
+supplies an explicit counterexample against any silent identification. Do not attempt any of
+those, and do not let the new material blur that boundary.
+
+THE POSITIVE HALF, AT 0.90 PROBABILITY. There is one genuine crossing into a standard object:
+a quantitative theorem about BOUNDED U-REPRESENTATIONS OF ZERO in Pisot linear numeration
+systems, together with their finite-state recognition. Corollary 2.4 already exposes the bridge,
+but only for the canonical difference alphabet attached to our code. The task is to free it.
+
+THE MISSING LEMMA - adjacent collapse for an ARBITRARY bounded coefficient alphabet. Take the
+exact statement from his report. Let U and beta be as in the theorem and fix D >= 1. There is an
+effectively computable m_0 = m_0(U,D) such that for m >= m_0, coefficients e_t,...,e_{t+m} in
+[-D,D] and integers k_t, k_{t+1} satisfying the two adjacent window relations, the collapse
+k_{t+1} = 0, e_{t+m} = -k_t holds. The reused ingredients are already in the paper and he lists
+them: the effective growth bounds b_U beta^n <= u_n <= A_U beta^n; the uniform quotient-carry
+bound |k_t| <= K_{U,D} = ceil(D A_U / (b_U (beta-1))); the finite algebraic separation
+delta_{U,D} = min{ |a + k - beta l| : |a| <= D, |k|,|l| <= K_{U,D}, a + k - beta l != 0 } > 0; the
+contracting-embedding bound for A_{t,i}; the exact adjacent relation
+beta^m (e_{t+m} + k_t - beta k_{t+1}) = beta A_{t+1,0} - A_{t,0} + e_t; and finite small-m
+patching by exact longest-path search.
+
+Note that this is the same architecture as the existing proof with d_U replaced by an arbitrary
+D. Verify that for yourself rather than assuming it - if some step genuinely needs the digit
+structure and not merely a bound, report exactly which step.
+
+THEN THE THEOREM, following his proof chain: build the overlap graph whose edges are length-m
+coefficient words extending by one bounded quotient coefficient to a U-representation of zero;
+bound all quotient coefficients uniformly in m; apply the collapse lemma so that along any path
+of at least two edges all intermediate carries vanish; conclude that a path of m+1 edges reaches
+the all-zero state, which carries a loop, contradicting the no-reachable-cycle hypothesis; patch
+the finitely many smaller m by exact longest-path search to get C(U,D). Sharpness is already
+supplied by the fixed cubic example, whose {-1,0,1}-coefficient paths have length m - O(1)
+independently of any interpretation as collisions of two raw words.
+
+THE POINT OF THE EXERCISE is that the statement must mention only a fixed Pisot recurrence,
+bounded integer coefficients, and bounded U-representations of zero. It must NOT presuppose that
+the coefficients arise as differences of raw digits, and must not use the legal representation
+language, the consecutive rank interval, the local output alphabet, or a factor code. He lists
+exactly what disappears: the canonical rank bijection, the legal-word alphabet, cyclic reduction
+as a defined map, positive/negative realization of every coefficient, and the image shift and
+inverse decoder. If any of those is still needed, the theorem has not reached the standard object
+and you should say so rather than dress it up.
+
+RUN HIS FALSIFICATION TEST FIRST. Use the non-Condition-F Pisot root of x^3 - 3x^2 + 2x - 1 with
+a strictly increasing associated recurrence beginning at u_0 = 1, and take D = 2 and D = 3. For
+each m just beyond the computed contraction threshold, check the collapse conclusion directly.
+He names the residual uncertainty precisely: whether an overlooked boundary case for arbitrary D,
+especially with nonstandard initial values, needs an extra finite family of exceptions or a
+slightly modified starting-state condition. If the test exposes such a case, state the theorem
+with the exception rather than suppressing it.
+
+ALSO APPLY HIS TERMINOLOGY CORRECTIONS. He shows several of our named objects are standard things
+renamed, and the paper should say so:
+ - After output relabeling the local map is (x_0,...,x_{m-1}) -> sum u_j x_j mod u_m, i.e. a
+   symbolwise bijective relabeling of a modular weighted sliding block code. What is genuinely
+   ours is the choice of weights, the modulus u_m, and the parameterized family as m varies. Note
+   it is NOT a standard linear cellular automaton, since the input alphabet is only the digit
+   subset {0,...,d_U} of Z/u_m Z, not a module on which the rule is a group endomorphism.
+ - "Future-only inverse length" is exactly one plus the least anticipation of an inverse sliding
+   block code with memory zero - standard under that imposed convention, and not the same as
+   right-closing delay or a general closing constant.
+ - The obstruction sets are finite-block kernels of a banded Toeplitz operator over Z/u_m Z with
+   first coordinate nonzero; call them that.
+ - The graphs are coordinatewise-difference quotients of classical pair or fiber-product graphs;
+   the graph principle, reachable-cycle test and longest-path interpretation are all standard.
+ - "Bounded-zero strips": each row is a standard bounded U-representation of zero; what is ours
+   is only the one-position overlap chain indexed by t.
+
+PRESERVE: (A1) in its current Condition-F-free form for every strictly increasing Pisot linear
+numeration system; (A2)-(A3) and the fixed-system sharpness statement; the settled priority
+paragraph naming Frougny, Berend-Frougny, the classical bounded-zero automata,
+Carton-Sudbery-Yassawi, Ashley, Frougny-Sakarovitch and the classical pair/fiber graphs; and the
+approved cautious novelty sentence. Do not upgrade any claim.
+
+RULES:
+ - Every claim proved at referee standard; numerics are sanity checks, never a substitute.
+ - Do not weaken, restate or renumber existing theorems.
+ - Keep every .tex under 800 lines; split if needed.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change; confirm zero failures from artifacts/.
+ - No revision marks anywhere. Do not leave any planning or log file in the paper directory.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`: it
+   is global across concurrently running agents and can attach to a different paper's session.
+
+REPORT: the falsification test result FIRST, including whether any exceptional family appeared;
+the collapse lemma for arbitrary D and whether any step needed digit structure rather than a
+bound; the theorem as typeset, with an explicit check that none of the five listed
+manuscript-specific inputs survives in its statement; the terminology corrections as applied;
+page and theorem counts before and after; compile and test results.
