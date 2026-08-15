@@ -59,15 +59,16 @@
 
 
 
-> **TICK 115 — 八篇 `submission_metadata.md` 目标刊全部正确;但查出估值裁决未写入其中,已派工补。**
+> **TICK 116 — 八篇 cover letter 全部核过,与目标刊一致;A6 的一次告警经查为我自己的误报。**
 >
-> 逐篇核对目标刊,与板面一致:JFA / TAMS / Monatshefte / ETDS / TAMS / Fibonacci Quarterly / SPA / Cahiers。**无陈旧。**
+> cover letter 是编辑真正会读的文件,抬头错刊等于投稿当场露馅,故逐篇核对:JFA / TAMS / Monatshefte / ETDS / Fibonacci Quarterly / SPA / Cahiers 七篇均直接点名正确刊物。
 >
-> **但有一处信息断层**:A6、A8、A3 的估值裁决**晚于各自 metadata 的最后一次编辑**,故那三份只记着现状目标,未记"拆分/重构可显著提高概率"。结论保存在各篇 `artifacts/oracle_sprint_*_value.md`,却不在投稿人真正会读的那一页 —— 若日后据 metadata 备稿,会看到 A6"TAMS 35–45%"而不知拆分后为 55–65%。
+> **A6 触发告警:目标 TAMS,信中却出现 "Bernoulli" 且无 TAMS 字样。查证后是两重误报叠加** —— 其一,该信在 tick 82 被**刻意改成刊物中立**(抬头为 "The Editors",以便 TAMS 或 JNT 皆可用而无需重写科学部分),故无刊名是预期而非缺失;其二,"Bernoulli" 出现在第 54 行 "Erdos measure and the golden-ratio **Bernoulli convolution**" —— 是**数学名词**,不是刊名。以关键词硬匹配刊名,在这个主题上必然误报。
 >
-> 已派工在三份 metadata 各加一段清晰界定的交叉引用:**不改现有目标**(现状目标对当下稿件仍然正确)、标注为"待作者决定的已评估替代方案"、**数字逐字照抄不得四舍五入或平均**、并给出报告路径。任务限定只动这三份 metadata —— 不碰 `.tex`、cover letter、artifacts,不重建 PDF、不重算校验和。
+> 至此陈旧审计四条线全部走完:板面(已修 A6 行、四节加注失效)、`pipeline_state`(停在七月,已标记但不动)、`submission_metadata`(刊名正确,估值已补入)、cover letter(全部一致)。
 >
-> 池 0/6,codex 一个 agent,内存 0.98 GB,无未提交论文改动。
+> 池 0/6,无 agent,无 stdin 孤儿,无未提交论文改动,内存 0.94 GB。
+
 
 
 
