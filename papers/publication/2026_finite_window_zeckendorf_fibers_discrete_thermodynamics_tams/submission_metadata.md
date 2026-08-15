@@ -33,9 +33,12 @@ by
 \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
 \]
 
-derives the critical finite-size constants \(2/\mu_C\) and \(4/\mu_C\),
-proves uniform coexistence limits and finite-layer large deviations at
-nonexposed slopes, and establishes exact finite-window fiber identities. On
+proves the low-temperature denominator-layer asymptotic with its explicit
+one-large-partial-quotient context sum, and derives the critical cost tail and
+the second-order \(m^{3-\sigma_0}\) corrections beyond the leading constants
+\(2/\mu_C\) and \(4/\mu_C\). It also proves uniform coexistence limits and
+finite-layer large deviations at nonexposed slopes, and establishes exact
+finite-window fiber identities. On
 each fixed finite prime support it retains an exact rational coefficient
 generating function. It asserts no directional coefficient asymptotic and no
 quenched-velocity asymptotic.
@@ -72,9 +75,10 @@ P(t)=t\log 2-\tau_\mu(t)\log\varphi.
 Accordingly, the all-real pressure formula and the frozen negative branch are
 recorded as attributed recovery and consistency results. The surviving
 contributions are the arithmetic evaluation of the critical point, the
-one-sided critical moment, the critical finite-size constants and coexistence
-laws, the finite-layer nonexposed-slope lower bounds, and the exact
-finite-window correspondences and identities.
+one-sided critical moment, the local denominator-layer theorem and explicit
+context constant, the stable second-order critical finite-size laws and
+coexistence laws, the finite-layer nonexposed-slope lower bounds, and the
+exact finite-window correspondences and identities.
 
 ## Exact Scope Of Finite Formulas
 

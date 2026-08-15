@@ -27,6 +27,9 @@ The main contribution consists of:
   Bernoulli-convolution \(L^q\)-spectrum to Fibonacci partition layers;
 - the arithmetic critical point, critical Gibbs law, and full finite-layer
   LDP on a single standard Fibonacci partition layer;
+- the low-temperature denominator-layer asymptotic with an explicit
+  one-large-partial-quotient context sum, the critical cost tail, and the
+  spectrally positive stable domain of attraction;
 - the joint generation-cost and log-multiplicity LDP, including its affine
   two-dimensional coexistence face;
 - the residue and affine fiber correspondence;
@@ -34,7 +37,8 @@ The main contribution consists of:
 - the exact two-layer interval identity and transferred extremal theorem;
 - the uniform Weinstein layer-count lemma and the finite-layer recovery of the
   known negative-temperature frozen branch;
-- the linear critical finite-size law and uniform critical coexistence limit;
+- the second-order critical finite-size laws, with the noninteger
+  (m^{3-\sigma_0}) correction, and the uniform critical coexistence limit;
 - the full real-tilt large deviation principle across the freezing corner;
 - the exact finite-prime-support coefficient interface and the explicit
   heavy-cost obstruction at the active cutoff.
