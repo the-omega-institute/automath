@@ -9098,3 +9098,1748 @@ f3495dd6e9e72802a3bd1e9501b9ed61476f72f77f63a8a73228fe1eb325ada5  ../.gitattribu
  987: if __name__ == "__main__":
  988:     raise SystemExit(main())
 
+codex
+I’m beginning with two failing artifact tests: one demands the nonintegral alternating-radix family and its exact geometric ray, and one demands increasing selection from a pairwise-distinct but non-monotone return orbit. These are finite sanity checks only; the manuscript proof will remain independent of them.
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..105703b94e2b9b03c34fa1c4c0a28f8325a900f3
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,36 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..105703b94e2b9b03c34fa1c4c0a28f8325a900f3
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,36 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_nonintegral_weak_perron_mixed_radix_family artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_increasing_selection_needs_only_distinct_positive_values -v' in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte
+2026-08-15T03:26:37.301953Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.3 seconds
+Output:
+test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... ERROR
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(2, 3))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(2, 5))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(3, 5))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 114, in test_increasing_selection_needs_only_distinct_positive_values
+    verifier.select_increasing_return(values, start_index=0, return_time=2),
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'select_increasing_return'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=4)
+
+ exited 1 in 289ms:
+test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... ERROR
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(2, 3))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(2, 5))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) (radices=(3, 5))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 91, in test_nonintegral_weak_perron_mixed_radix_family
+    system = verifier.mixed_radix_weak_perron_system(
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'mixed_radix_weak_perron_system'
+
+======================================================================
+ERROR: test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 114, in test_increasing_selection_needs_only_distinct_positive_values
+    verifier.select_increasing_return(values, start_index=0, return_time=2),
+AttributeError: module 'artifacts.verify_pisot_pumping' has no attribute 'select_increasing_return'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=4)
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..105703b94e2b9b03c34fa1c4c0a28f8325a900f3
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,36 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+codex
+The red run failed for the intended reason, but as missing-attribute errors rather than assertion failures. I’m tightening the tests so the red state is an explicit failed contract, then I’ll add only the two minimal helpers needed to make them pass.
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..2c4d3bdacbf2165d2b7e8c325d3f1b5839382b29
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..2c4d3bdacbf2165d2b7e8c325d3f1b5839382b29
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_nonintegral_weak_perron_mixed_radix_family artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_increasing_selection_needs_only_distinct_positive_values -v' in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte
+2026-08-15T03:26:59.317233Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+
+======================================================================
+FAIL: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 89, in test_nonintegral_weak_perron_mixed_radix_family
+    self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 112, in test_increasing_selection_needs_only_distinct_positive_values
+    self.assertTrue(hasattr(verifier, "select_increasing_return"))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (failures=2)
+
+ exited 1 in 210ms:
+test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+
+======================================================================
+FAIL: test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 89, in test_nonintegral_weak_perron_mixed_radix_family
+    self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 112, in test_increasing_selection_needs_only_distinct_positive_values
+    self.assertTrue(hasattr(verifier, "select_increasing_return"))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (failures=2)
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..2c4d3bdacbf2165d2b7e8c325d3f1b5839382b29
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 13, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\verify_pisot_pumping.py
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..0bf9981c6b7fa38eff11204c411a73c4e65c4c2e
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..0bf9981c6b7fa38eff11204c411a73c4e65c4c2e
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_nonintegral_weak_perron_mixed_radix_family artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_increasing_selection_needs_only_distinct_positive_values -v' in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte
+ succeeded in 226ms:
+test_nonintegral_weak_perron_mixed_radix_family (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... ok
+test_increasing_selection_needs_only_distinct_positive_values (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..0bf9981c6b7fa38eff11204c411a73c4e65c4c2e
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+codex
+The two focused checks are green. I’m now wiring them into the archived verifier report with explicit case and failure counters, so the final artifact transcript records the new weak-Perron and length-order-free coverage rather than leaving it implicit in unit tests.
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_full_verification_suite_has_no_congruence_failures -v' in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte
+2026-08-15T03:27:53.822532Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.5 seconds
+Output:
+test_full_verification_suite_has_no_congruence_failures (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+
+======================================================================
+FAIL: test_full_verification_suite_has_no_congruence_failures (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 238, in test_full_verification_suite_has_no_congruence_failures
+    self.assertIn("weak_perron_radical_cases", report)
+AssertionError: 'weak_perron_radical_cases' not found in {'systems_checked': 6, 'affine_cases': 2282, 'pump_witnesses': 5, 'congruence_failures': 0, 'synchronized_orbit_cases': 159, 'local_layer_isolation_failures': 0, 'deep_chain_failures': 0, 'divisibility_tree_failures': 0, 'inflated_fibonacci_cases': 1418, 'inflated_fibonacci_failures': 0, 'tail_prefix_cases': 63, 'tail_prefix_failures': 0, 'geometric_ray_cases': 13, 'geometric_ray_failures': 0, 'linear_perron_classification_cases': 6, 'linear_perron_classification_failures': 0, 'geometric_ratio_support_cases': 4, 'geometric_ratio_support_failures': 0, 'evertse_support_bound_cases': 4, 'evertse_support_bound_failures': 0, 'witnesses': [{'system': 'fibonacci', 'original_word': '0100001', 'original_value': 23, 'cuts': (2, 3, 4, 5), 'return_time': 1104, 'pump_exponent': 1105, 'pumped_length': 2215, 'pumped_value': 5849594909548353221433349745614763420364288257771130366342499514592052565810865740598663202112996846747774475793472311934132419145108411186219102725671347953723467175617482764241177290953979181520839777581723846480354023152969137651567555907776569926002425681579563811579010451925609803624730226249331027810964979251262641701361519259819532913973209506784202044911129474766693530850855406718572705854311992557155174157597592410263869630325518318429604952144023639, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'pell', 'original_word': '1001', 'original_value': 13, 'cuts': (1, 2, 2, 3), 'return_time': 28, 'pump_exponent': 29, 'pumped_length': 60, 'pumped_value': 32733777552734744709301, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'tribonacci', 'original_word': '0001', 'original_value': 7, 'cuts': (0, 1, 1, 2), 'return_time': 336, 'pump_exponent': 337, 'pumped_length': 676, 'pumped_value': 49466053996715594854672691954577680715127740277040097633588674837860868058715660860454523596736516628713266540610882115460472167746170373792107586410882811640698514951922778809287, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'quadratic_nonunit', 'original_word': '1001', 'original_value': 23, 'cuts': (1, 2, 2, 3), 'return_time': 506, 'pump_exponent': 507, 'pumped_length': 1016, 'pumped_value': 117073903024540332145460999314714862361492752428567519075565845577168230152169735557755278828303357440907463768524961919919381980058524189392400965637387541837302008687060638870154139271648326889058611140144125799810316215383560232365994271327779182702374782102706710070461181342166945377775564700375899841127482320844041294490419105116076913406964584648673852274922161288267295859231275357958335804078643667449131185552053964455258866931728385, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'integer_base_2', 'original_word': '10001', 'original_value': 17, 'cuts': (1, 2, 2, 3), 'return_time': 136, 'pump_exponent': 137, 'pumped_length': 277, 'pumped_value': 121416805764108066932466369176469931665150427440758720078238275608681517825325531137, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}], 'counterexample': {'system': 'quadratic_nonunit', 'polynomial': 'x^2-2x-2', 'modulus': 2, 'trailing_coefficient': 2, 'block': '0', 'determinant': -2, 'invertible': False}}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.237s
+
+FAILED (failures=1)
+
+ exited 1 in 466ms:
+test_full_verification_suite_has_no_congruence_failures (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... FAIL
+
+======================================================================
+FAIL: test_full_verification_suite_has_no_congruence_failures (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\test_verify_pisot_pumping.py", line 238, in test_full_verification_suite_has_no_congruence_failures
+    self.assertIn("weak_perron_radical_cases", report)
+AssertionError: 'weak_perron_radical_cases' not found in {'systems_checked': 6, 'affine_cases': 2282, 'pump_witnesses': 5, 'congruence_failures': 0, 'synchronized_orbit_cases': 159, 'local_layer_isolation_failures': 0, 'deep_chain_failures': 0, 'divisibility_tree_failures': 0, 'inflated_fibonacci_cases': 1418, 'inflated_fibonacci_failures': 0, 'tail_prefix_cases': 63, 'tail_prefix_failures': 0, 'geometric_ray_cases': 13, 'geometric_ray_failures': 0, 'linear_perron_classification_cases': 6, 'linear_perron_classification_failures': 0, 'geometric_ratio_support_cases': 4, 'geometric_ratio_support_failures': 0, 'evertse_support_bound_cases': 4, 'evertse_support_bound_failures': 0, 'witnesses': [{'system': 'fibonacci', 'original_word': '0100001', 'original_value': 23, 'cuts': (2, 3, 4, 5), 'return_time': 1104, 'pump_exponent': 1105, 'pumped_length': 2215, 'pumped_value': 5849594909548353221433349745614763420364288257771130366342499514592052565810865740598663202112996846747774475793472311934132419145108411186219102725671347953723467175617482764241177290953979181520839777581723846480354023152969137651567555907776569926002425681579563811579010451925609803624730226249331027810964979251262641701361519259819532913973209506784202044911129474766693530850855406718572705854311992557155174157597592410263869630325518318429604952144023639, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'pell', 'original_word': '1001', 'original_value': 13, 'cuts': (1, 2, 2, 3), 'return_time': 28, 'pump_exponent': 29, 'pumped_length': 60, 'pumped_value': 32733777552734744709301, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'tribonacci', 'original_word': '0001', 'original_value': 7, 'cuts': (0, 1, 1, 2), 'return_time': 336, 'pump_exponent': 337, 'pumped_length': 676, 'pumped_value': 49466053996715594854672691954577680715127740277040097633588674837860868058715660860454523596736516628713266540610882115460472167746170373792107586410882811640698514951922778809287, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'quadratic_nonunit', 'original_word': '1001', 'original_value': 23, 'cuts': (1, 2, 2, 3), 'return_time': 506, 'pump_exponent': 507, 'pumped_length': 1016, 'pumped_value': 117073903024540332145460999314714862361492752428567519075565845577168230152169735557755278828303357440907463768524961919919381980058524189392400965637387541837302008687060638870154139271648326889058611140144125799810316215383560232365994271327779182702374782102706710070461181342166945377775564700375899841127482320844041294490419105116076913406964584648673852274922161288267295859231275357958335804078643667449131185552053964455258866931728385, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}, {'system': 'integer_base_2', 'original_word': '10001', 'original_value': 17, 'cuts': (1, 2, 2, 3), 'return_time': 136, 'pump_exponent': 137, 'pumped_length': 277, 'pumped_value': 121416805764108066932466369176469931665150427440758720078238275608681517825325531137, 'quotient_mod_original': 1, 'canonical_before': True, 'canonical_after': True}], 'counterexample': {'system': 'quadratic_nonunit', 'polynomial': 'x^2-2x-2', 'modulus': 2, 'trailing_coefficient': 2, 'block': '0', 'determinant': -2, 'invertible': False}}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.237s
+
+FAILED (failures=1)
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..9db4c2dedba377ba04ed208937e850c9286f532b
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -112,6 +112,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\artifacts\verify_pisot_pumping.py
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..903aa443355a516442b743f18c9ba98e69005166
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -24,7 +24,7 @@
+ Matrix = tuple[tuple[int, ...], ...]
+ Word = tuple[int, ...]
+ 
+-SCRIPT_VERSION = "1.0.0"
++SCRIPT_VERSION = "1.1.0"
+ EXPECTED_REPORT_COUNTS = {
+     "systems_checked": 6,
+     "affine_cases": 2282,
+@@ -42,6 +42,10 @@
+     "geometric_ray_failures": 0,
+     "linear_perron_classification_cases": 6,
+     "linear_perron_classification_failures": 0,
++    "weak_perron_radical_cases": 18,
++    "weak_perron_radical_failures": 0,
++    "length_order_free_selection_cases": 1,
++    "length_order_free_selection_failures": 0,
+     "geometric_ratio_support_cases": 4,
+     "geometric_ratio_support_failures": 0,
+     "evertse_support_bound_cases": 4,
+@@ -112,6 +116,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+@@ -837,6 +871,25 @@
+         system.name: has_bounded_outside_support_mcfl(system)
+         for system in SYSTEMS
+     }
++    weak_perron_examples = ((2, 3), (2, 5), (3, 5))
++    weak_perron_radical_cases = 6 * len(weak_perron_examples)
++    weak_perron_radical_failures = 0
++    for left_radix, right_radix in weak_perron_examples:
++        system = mixed_radix_weak_perron_system(left_radix, right_radix)
++        product_radix = left_radix * right_radix
++        for exponent in range(6):
++            ray_word = (0,) * (2 * exponent) + (1,)
++            weak_perron_radical_failures += int(
++                value(system, ray_word) != product_radix**exponent
++                or not is_canonical(system, ray_word)
++            )
++    length_order_free_selection_cases = 1
++    length_order_free_selection_failures = int(
++        select_increasing_return(
++            (10, 5, 7, 1, 9, 2, 16), start_index=0, return_time=2
++        )
++        != 6
++    )
+     ratio_support_examples = (
+         (2, 5, 8, None),
+         (2, 5, 6, 3),
+@@ -881,6 +934,10 @@
+         "linear_perron_classification_failures": int(
+             perron_decisions != expected_perron_decisions
+         ),
++        "weak_perron_radical_cases": weak_perron_radical_cases,
++        "weak_perron_radical_failures": weak_perron_radical_failures,
++        "length_order_free_selection_cases": length_order_free_selection_cases,
++        "length_order_free_selection_failures": length_order_free_selection_failures,
+         "geometric_ratio_support_cases": len(ratio_support_examples),
+         "geometric_ratio_support_failures": ratio_support_failures,
+         "evertse_support_bound_cases": len(evertse_support_examples),
+@@ -927,6 +984,14 @@
+         f"{report['linear_perron_classification_cases']}",
+         "linear Perron classification failures: "
+         f"{report['linear_perron_classification_failures']}",
++        "weak-Perron radical cases: "
++        f"{report['weak_perron_radical_cases']}",
++        "weak-Perron radical failures: "
++        f"{report['weak_perron_radical_failures']}",
++        "length-order-free selection cases: "
++        f"{report['length_order_free_selection_cases']}",
++        "length-order-free selection failures: "
++        f"{report['length_order_free_selection_failures']}",
+         "geometric ratio support cases: "
+         f"{report['geometric_ratio_support_cases']}",
+         "geometric ratio support failures: "
+@@ -957,6 +1022,8 @@
+         "tail_prefix_failures",
+         "geometric_ray_failures",
+         "linear_perron_classification_failures",
++        "weak_perron_radical_failures",
++        "length_order_free_selection_failures",
+         "geometric_ratio_support_failures",
+         "evertse_support_bound_failures",
+     )
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..903aa443355a516442b743f18c9ba98e69005166
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -24,7 +24,7 @@
+ Matrix = tuple[tuple[int, ...], ...]
+ Word = tuple[int, ...]
+ 
+-SCRIPT_VERSION = "1.0.0"
++SCRIPT_VERSION = "1.1.0"
+ EXPECTED_REPORT_COUNTS = {
+     "systems_checked": 6,
+     "affine_cases": 2282,
+@@ -42,6 +42,10 @@
+     "geometric_ray_failures": 0,
+     "linear_perron_classification_cases": 6,
+     "linear_perron_classification_failures": 0,
++    "weak_perron_radical_cases": 18,
++    "weak_perron_radical_failures": 0,
++    "length_order_free_selection_cases": 1,
++    "length_order_free_selection_failures": 0,
+     "geometric_ratio_support_cases": 4,
+     "geometric_ratio_support_failures": 0,
+     "evertse_support_bound_cases": 4,
+@@ -112,6 +116,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+@@ -837,6 +871,25 @@
+         system.name: has_bounded_outside_support_mcfl(system)
+         for system in SYSTEMS
+     }
++    weak_perron_examples = ((2, 3), (2, 5), (3, 5))
++    weak_perron_radical_cases = 6 * len(weak_perron_examples)
++    weak_perron_radical_failures = 0
++    for left_radix, right_radix in weak_perron_examples:
++        system = mixed_radix_weak_perron_system(left_radix, right_radix)
++        product_radix = left_radix * right_radix
++        for exponent in range(6):
++            ray_word = (0,) * (2 * exponent) + (1,)
++            weak_perron_radical_failures += int(
++                value(system, ray_word) != product_radix**exponent
++                or not is_canonical(system, ray_word)
++            )
++    length_order_free_selection_cases = 1
++    length_order_free_selection_failures = int(
++        select_increasing_return(
++            (10, 5, 7, 1, 9, 2, 16), start_index=0, return_time=2
++        )
++        != 6
++    )
+     ratio_support_examples = (
+         (2, 5, 8, None),
+         (2, 5, 6, 3),
+@@ -881,6 +934,10 @@
+         "linear_perron_classification_failures": int(
+             perron_decisions != expected_perron_decisions
+         ),
++        "weak_perron_radical_cases": weak_perron_radical_cases,
++        "weak_perron_radical_failures": weak_perron_radical_failures,
++        "length_order_free_selection_cases": length_order_free_selection_cases,
++        "length_order_free_selection_failures": length_order_free_selection_failures,
+         "geometric_ratio_support_cases": len(ratio_support_examples),
+         "geometric_ratio_support_failures": ratio_support_failures,
+         "evertse_support_bound_cases": len(evertse_support_examples),
+@@ -927,6 +984,14 @@
+         f"{report['linear_perron_classification_cases']}",
+         "linear Perron classification failures: "
+         f"{report['linear_perron_classification_failures']}",
++        "weak-Perron radical cases: "
++        f"{report['weak_perron_radical_cases']}",
++        "weak-Perron radical failures: "
++        f"{report['weak_perron_radical_failures']}",
++        "length-order-free selection cases: "
++        f"{report['length_order_free_selection_cases']}",
++        "length-order-free selection failures: "
++        f"{report['length_order_free_selection_failures']}",
+         "geometric ratio support cases: "
+         f"{report['geometric_ratio_support_cases']}",
+         "geometric ratio support failures: "
+@@ -957,6 +1022,8 @@
+         "tail_prefix_failures",
+         "geometric_ray_failures",
+         "linear_perron_classification_failures",
++        "weak_perron_radical_failures",
++        "length_order_free_selection_failures",
+         "geometric_ratio_support_failures",
+         "evertse_support_bound_failures",
+     )
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests.test_full_verification_suite_has_no_congruence_failures -v' in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte
+ succeeded in 470ms:
+test_full_verification_suite_has_no_congruence_failures (artifacts.test_verify_pisot_pumping.PisotPumpingVerifierTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.235s
+
+OK
+
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..903aa443355a516442b743f18c9ba98e69005166
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -24,7 +24,7 @@
+ Matrix = tuple[tuple[int, ...], ...]
+ Word = tuple[int, ...]
+ 
+-SCRIPT_VERSION = "1.0.0"
++SCRIPT_VERSION = "1.1.0"
+ EXPECTED_REPORT_COUNTS = {
+     "systems_checked": 6,
+     "affine_cases": 2282,
+@@ -42,6 +42,10 @@
+     "geometric_ray_failures": 0,
+     "linear_perron_classification_cases": 6,
+     "linear_perron_classification_failures": 0,
++    "weak_perron_radical_cases": 18,
++    "weak_perron_radical_failures": 0,
++    "length_order_free_selection_cases": 1,
++    "length_order_free_selection_failures": 0,
+     "geometric_ratio_support_cases": 4,
+     "geometric_ratio_support_failures": 0,
+     "evertse_support_bound_cases": 4,
+@@ -112,6 +116,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+@@ -837,6 +871,25 @@
+         system.name: has_bounded_outside_support_mcfl(system)
+         for system in SYSTEMS
+     }
++    weak_perron_examples = ((2, 3), (2, 5), (3, 5))
++    weak_perron_radical_cases = 6 * len(weak_perron_examples)
++    weak_perron_radical_failures = 0
++    for left_radix, right_radix in weak_perron_examples:
++        system = mixed_radix_weak_perron_system(left_radix, right_radix)
++        product_radix = left_radix * right_radix
++        for exponent in range(6):
++            ray_word = (0,) * (2 * exponent) + (1,)
++            weak_perron_radical_failures += int(
++                value(system, ray_word) != product_radix**exponent
++                or not is_canonical(system, ray_word)
++            )
++    length_order_free_selection_cases = 1
++    length_order_free_selection_failures = int(
++        select_increasing_return(
++            (10, 5, 7, 1, 9, 2, 16), start_index=0, return_time=2
++        )
++        != 6
++    )
+     ratio_support_examples = (
+         (2, 5, 8, None),
+         (2, 5, 6, 3),
+@@ -881,6 +934,10 @@
+         "linear_perron_classification_failures": int(
+             perron_decisions != expected_perron_decisions
+         ),
++        "weak_perron_radical_cases": weak_perron_radical_cases,
++        "weak_perron_radical_failures": weak_perron_radical_failures,
++        "length_order_free_selection_cases": length_order_free_selection_cases,
++        "length_order_free_selection_failures": length_order_free_selection_failures,
+         "geometric_ratio_support_cases": len(ratio_support_examples),
+         "geometric_ratio_support_failures": ratio_support_failures,
+         "evertse_support_bound_cases": len(evertse_support_examples),
+@@ -927,6 +984,14 @@
+         f"{report['linear_perron_classification_cases']}",
+         "linear Perron classification failures: "
+         f"{report['linear_perron_classification_failures']}",
++        "weak-Perron radical cases: "
++        f"{report['weak_perron_radical_cases']}",
++        "weak-Perron radical failures: "
++        f"{report['weak_perron_radical_failures']}",
++        "length-order-free selection cases: "
++        f"{report['length_order_free_selection_cases']}",
++        "length-order-free selection failures: "
++        f"{report['length_order_free_selection_failures']}",
+         "geometric ratio support cases: "
+         f"{report['geometric_ratio_support_cases']}",
+         "geometric ratio support failures: "
+@@ -957,6 +1022,8 @@
+         "tail_prefix_failures",
+         "geometric_ray_failures",
+         "linear_perron_classification_failures",
++        "weak_perron_radical_failures",
++        "length_order_free_selection_failures",
+         "geometric_ratio_support_failures",
+         "evertse_support_bound_failures",
+     )
+
+codex
+I’m editing the core axioms and proof chain now. `(U1)`, `(U2)`, and `(U4)` will retain their labels; `(U3)` is removed without renumbering, Theorem 2.7 will assert pairwise-distinct values, Lemma 2.15 will require only pairwise distinctness, and the two unit constructions will make increasing selections by taking suitable multiples of a return time.
+2026-08-15T03:29:12.814264Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in D:\omega\automath\papers\publication\2026_prime_languages_finite_state_obstructions_monatshefte\sec_pisot_part1.tex:
+  egin{enumerate}[label=\textup{(U\arabic*)}]
+    \item a strictly increasing sequence of positive integers
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+index fd5bfba5260cd94ecc23b3f81fd09d439ca4d64b..1f4112e377a1f9738479ce6a658dba72fc538289
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/test_verify_pisot_pumping.py
+@@ -85,6 +85,38 @@
+             [1, 4, 15, 55, 200, 725, 2625, 9500],
+         )
+ 
++    def test_nonintegral_weak_perron_mixed_radix_family(self):
++        self.assertTrue(hasattr(verifier, "mixed_radix_weak_perron_system"))
++        for left_radix, right_radix in ((2, 3), (2, 5), (3, 5)):
++            with self.subTest(radices=(left_radix, right_radix)):
++                system = verifier.mixed_radix_weak_perron_system(
++                    left_radix, right_radix
++                )
++                product_radix = left_radix * right_radix
++                expected_weights = [
++                    product_radix ** (index // 2)
++                    * (left_radix if index % 2 else 1)
++                    for index in range(10)
++                ]
++                self.assertEqual(verifier.weights(system, 10), expected_weights)
++                self.assertEqual(system.recurrence, (product_radix, 0))
++                self.assertEqual(
++                    [
++                        verifier.value(system, (0,) * (2 * exponent) + (1,))
++                        for exponent in range(6)
++                    ],
++                    [product_radix**exponent for exponent in range(6)],
++                )
++
++    def test_increasing_selection_needs_only_distinct_positive_values(self):
++        self.assertTrue(hasattr(verifier, "select_increasing_return"))
++        values = (10, 5, 7, 1, 9, 2, 16)
++
++        self.assertEqual(
++            verifier.select_increasing_return(values, start_index=0, return_time=2),
++            6,
++        )
++
+     def test_geometric_ratio_uses_only_tail_primes(self):
+         self.assertIsNone(
+             verifier.geometric_ratio_support_obstruction(
+@@ -203,6 +235,12 @@
+         self.assertEqual(report["geometric_ray_failures"], 0)
+         self.assertEqual(report["linear_perron_classification_cases"], 6)
+         self.assertEqual(report["linear_perron_classification_failures"], 0)
++        self.assertIn("weak_perron_radical_cases", report)
++        self.assertEqual(report["weak_perron_radical_cases"], 18)
++        self.assertEqual(report["weak_perron_radical_failures"], 0)
++        self.assertIn("length_order_free_selection_cases", report)
++        self.assertEqual(report["length_order_free_selection_cases"], 1)
++        self.assertEqual(report["length_order_free_selection_failures"], 0)
+         self.assertEqual(report["geometric_ratio_support_cases"], 4)
+         self.assertEqual(report["geometric_ratio_support_failures"], 0)
+         self.assertEqual(report["evertse_support_bound_cases"], 4)
+diff --git a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+index 35ca5c7b065c7f59f0df4a7ab652067dcc9d124c..903aa443355a516442b743f18c9ba98e69005166
+--- a/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
++++ b/papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+@@ -24,7 +24,7 @@
+ Matrix = tuple[tuple[int, ...], ...]
+ Word = tuple[int, ...]
+ 
+-SCRIPT_VERSION = "1.0.0"
++SCRIPT_VERSION = "1.1.0"
+ EXPECTED_REPORT_COUNTS = {
+     "systems_checked": 6,
+     "affine_cases": 2282,
+@@ -42,6 +42,10 @@
+     "geometric_ray_failures": 0,
+     "linear_perron_classification_cases": 6,
+     "linear_perron_classification_failures": 0,
++    "weak_perron_radical_cases": 18,
++    "weak_perron_radical_failures": 0,
++    "length_order_free_selection_cases": 1,
++    "length_order_free_selection_failures": 0,
+     "geometric_ratio_support_cases": 4,
+     "geometric_ratio_support_failures": 0,
+     "evertse_support_bound_cases": 4,
+@@ -112,6 +116,36 @@
+     return next(system for system in SYSTEMS if system.name == name)
+ 
+ 
++def mixed_radix_weak_perron_system(
++    left_radix: int, right_radix: int
++) -> LinearSystem:
++    """Return the alternating-radix system with weak-Perron root sqrt(pq)."""
++    if left_radix < 2 or right_radix < 2:
++        raise ValueError("both radices must be at least two")
++    product_radix = left_radix * right_radix
++    return LinearSystem(
++        name=f"mixed_radix_{left_radix}_{right_radix}",
++        polynomial=f"x^2-{product_radix}",
++        recurrence=(product_radix, 0),
++        initials=(1, left_radix),
++        max_digit=max(left_radix, right_radix) - 1,
++    )
++
++
++def select_increasing_return(
++    values: Sequence[int], start_index: int, return_time: int
++) -> int:
++    """Select a later return whose value exceeds the value at the start."""
++    if return_time < 1 or not 0 <= start_index < len(values):
++        raise ValueError("the start index and return time must be valid")
++    if any(value < 1 for value in values) or len(set(values)) != len(values):
++        raise ValueError("return-orbit values must be positive and pairwise distinct")
++    for index in range(start_index + return_time, len(values), return_time):
++        if values[index] > values[start_index]:
++            return index
++    raise LookupError("the finite sample contains no increasing return")
++
++
+ def identity(size: int) -> Matrix:
+     return tuple(
+         tuple(1 if row == column else 0 for column in range(size))
+@@ -837,6 +871,25 @@
+         system.name: has_bounded_outside_support_mcfl(system)
+         for system in SYSTEMS
+     }
++    weak_perron_examples = ((2, 3), (2, 5), (3, 5))
++    weak_perron_radical_cases = 6 * len(weak_perron_examples)
++    weak_perron_radical_failures = 0
++    for left_radix, right_radix in weak_perron_examples:
++        system = mixed_radix_weak_perron_system(left_radix, right_radix)
++        product_radix = left_radix * right_radix
++        for exponent in range(6):
++            ray_word = (0,) * (2 * exponent) + (1,)
++            weak_perron_radical_failures += int(
++                value(system, ray_word) != product_radix**exponent
++                or not is_canonical(system, ray_word)
++            )
++    length_order_free_selection_cases = 1
++    length_order_free_selection_failures = int(
++        select_increasing_return(
++            (10, 5, 7, 1, 9, 2, 16), start_index=0, return_time=2
++        )
++        != 6
++    )
+     ratio_support_examples = (
+         (2, 5, 8, None),
+         (2, 5, 6, 3),
+@@ -881,6 +934,10 @@
+         "linear_perron_classification_failures": int(
+             perron_decisions != expected_perron_decisions
+         ),
++        "weak_perron_radical_cases": weak_perron_radical_cases,
++        "weak_perron_radical_failures": weak_perron_radical_failures,
++        "length_order_free_selection_cases": length_order_free_selection_cases,
++        "length_order_free_selection_failures": length_order_free_selection_failures,
+         "geometric_ratio_support_cases": len(ratio_support_examples),
+         "geometric_ratio_support_failures": ratio_support_failures,
+         "evertse_support_bound_cases": len(evertse_support_examples),
+@@ -927,6 +984,14 @@
+         f"{report['linear_perron_classification_cases']}",
+         "linear Perron classification failures: "
+         f"{report['linear_perron_classification_failures']}",
++        "weak-Perron radical cases: "
++        f"{report['weak_perron_radical_cases']}",
++        "weak-Perron radical failures: "
++        f"{report['weak_perron_radical_failures']}",
++        "length-order-free selection cases: "
++        f"{report['length_order_free_selection_cases']}",
++        "length-order-free selection failures: "
++        f"{report['length_order_free_selection_failures']}",
+         "geometric ratio support cases: "
+         f"{report['geometric_ratio_support_cases']}",
+         "geometric ratio support failures: "
+@@ -957,6 +1022,8 @@
+         "tail_prefix_failures",
+         "geometric_ray_failures",
+         "linear_perron_classification_failures",
++        "weak_perron_radical_failures",
++        "length_order_free_selection_failures",
+         "geometric_ratio_support_failures",
+         "evertse_support_bound_failures",
+     )
+
