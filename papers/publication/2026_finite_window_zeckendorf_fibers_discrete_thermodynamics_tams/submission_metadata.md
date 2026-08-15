@@ -33,8 +33,10 @@ by
 \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
 \]
 
-proves the low-temperature denominator-layer asymptotic with its explicit
-one-large-partial-quotient context sum, and derives the critical cost tail and
+identifies the local denominator-layer sum exactly with Dushistova's
+fixed-digit-sum continuant sum, corrects its printed leading coefficient from
+\(R_s+2R_s^2\) to \(2R_s^2\), and gives a simplified
+one-large-partial-quotient proof. It then derives the critical cost tail and
 the second-order \(m^{3-\sigma_0}\) corrections beyond the leading constants
 \(2/\mu_C\) and \(4/\mu_C\). It also proves uniform coexistence limits and
 finite-layer large deviations at nonexposed slopes, and establishes exact
@@ -60,6 +62,20 @@ convolution. Lau and Ngai determined its positive-\(q\) \(L^q\)-spectrum.
 Feng--Olivier and Feng determined the all-real spectrum and its negative
 first-order phase transition.
 
+Moshchevitin and Zhigljavsky studied the global entropy of Farey-tree
+partitions. Dushistova subsequently defined the identical fixed-digit-sum
+continuant sum and stated a fuller expansion. Under \(s=2\beta\) and
+\(n=d+1\), the exact identity is
+
+\[
+b_{2d+1}(s)=\sigma_{s/2}(d+1).
+\]
+
+Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
+contexts of digit sums zero, one, and greater than one gives the corrected
+coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
+proof of her Lemma 7 and makes no broader claim about that paper.
+
 With
 
 \[
@@ -75,10 +91,11 @@ P(t)=t\log 2-\tau_\mu(t)\log\varphi.
 Accordingly, the all-real pressure formula and the frozen negative branch are
 recorded as attributed recovery and consistency results. The surviving
 contributions are the arithmetic evaluation of the critical point, the
-one-sided critical moment, the local denominator-layer theorem and explicit
-context constant, the stable second-order critical finite-size laws and
-coexistence laws, the finite-layer nonexposed-slope lower bounds, and the
-exact finite-window correspondences and identities.
+one-sided critical moment, the corrected local denominator-layer constant and
+simplified proof, the new renewal/Fibonacci transfer to stable second-order
+critical finite-size laws and coexistence laws, the finite-layer
+nonexposed-slope lower bounds, and the exact finite-window correspondences and
+identities.
 
 ## Exact Scope Of Finite Formulas
 

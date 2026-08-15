@@ -27,9 +27,10 @@ The main contribution consists of:
   Bernoulli-convolution \(L^q\)-spectrum to Fibonacci partition layers;
 - the arithmetic critical point, critical Gibbs law, and full finite-layer
   LDP on a single standard Fibonacci partition layer;
-- the low-temperature denominator-layer asymptotic with an explicit
-  one-large-partial-quotient context sum, the critical cost tail, and the
-  spectrally positive stable domain of attraction;
+- the exact identification with Dushistova's fixed-digit-sum continuant sum,
+  the endpoint correction of its printed leading coefficient from
+  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
+  and the critical renewal/Fibonacci transfer;
 - the joint generation-cost and log-multiplicity LDP, including its affine
   two-dimensional coexistence face;
 - the residue and affine fiber correspondence;
@@ -50,6 +51,13 @@ transfer, direct quadratic recurrence, and high-tilt consequences are in
 The fixed finite-prime-support result is an exact rational generating-function
 interface only. No directional coefficient asymptotic or quenched-velocity
 law is asserted.
+
+The arithmetic priority line is explicit: Moshchevitin--Zhigljavsky are the
+global Farey-tree predecessor, and Dushistova previously treated the identical
+local sum and its polynomial order. The manuscript's arithmetic novelty claim
+is limited to the leading-constant correction and simplified proof; the
+critical cost tail, stable law, and finite-size terms are downstream transfers
+from that corrected local input.
 
 The affine fiber--partition correspondence is stated for \(m\ge1\). In the
 generic maximizing-residue formulas, \(I_{2k+1}\) is defined for \(k\ge5\),
