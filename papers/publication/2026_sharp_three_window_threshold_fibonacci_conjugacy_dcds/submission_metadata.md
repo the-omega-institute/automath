@@ -110,3 +110,25 @@ Submission hygiene:
   DCDS submission package.
 - Confirm the prior DCDS status before submission.
 - Do not click the final legal submit button without author review.
+
+## Assessed Structural Alternative - Awaiting Author Decision
+
+This is additional decision information only; it does not change the recorded
+target or status above. The assessor's definite verdict was to **SPLIT**, and
+he stated explicitly that the residual scope objection is a correctable
+packaging defect rather than the price of scope. Extracted Article A - the
+Section 2 package: the fixed-system theorem, its sharpness, and the
+arbitrary-alphabet bounded-zero theorem - was estimated at 20-24 pages plus
+4-6 pages of technical audit material, with TAMS 53 percent and ETDS 74
+percent. The article as assembled was assessed at 38 percent at TAMS and 58
+percent at ETDS. A theorem-first recast without splitting, at 40-44 pages, was
+assessed at 47 and 68 percent, and the assessor judged that it leaves value on
+the table.
+
+The assessor records no mathematical cost: the proof of the fixed-system
+sharpness is already self-contained in Section 2, and about two pages of
+comparative context plus a citation to the companion paper suffice. His
+author-level decision was: split now, title the first paper around linear
+overlap transients for bounded zero representations, keep the complete fixed
+cubic sharpness proof in it, and submit to ETDS. Full report:
+`artifacts/oracle_sprint_A3_structure_value.md`.

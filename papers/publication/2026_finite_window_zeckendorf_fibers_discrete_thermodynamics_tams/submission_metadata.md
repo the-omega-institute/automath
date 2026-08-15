@@ -204,3 +204,21 @@ and the recurrence \(D_m=D_{m-2}+D_{m-4}\) holds for \(m\ge6\).
 - `supplement.tex`: separately compiled supplement
 - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
 - Transactions of the American Mathematical Society cover letter
+
+## Assessed Structural Alternative - Awaiting Author Decision
+
+This is additional decision information only; it does not change the recorded
+target or status above. The assessor's definite verdict was to **SPLIT**.
+Paper A - Brocot condensation, the Dushistova correction, and only those
+Fibonacci consequences that genuinely depend on the scalar denominator-layer
+asymptotic - was estimated at 30-34 pages, with TAMS 55-65 percent and JNT
+82-90 percent. Paper B - the autonomous finite-window identities, extremal
+transfers, pressure recoveries and large-deviation package - was estimated at
+42-48 pages, with TAMS 10-20 percent and JNT 50-65 percent, and remains
+independently publishable.
+
+The present combined 73-page article was assessed at 35-45 percent at TAMS,
+with JNT the predicted median. A single article plus large supplement was
+assessed at 45-55 percent and explicitly **NOT recommended**. The assessor's
+author-level decision was: two papers, Paper A to TAMS first, Paper B to JNT.
+Full report: `artifacts/oracle_sprint_A6_split_value.md`.

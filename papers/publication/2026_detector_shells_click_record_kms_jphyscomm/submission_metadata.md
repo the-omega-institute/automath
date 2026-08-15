@@ -74,3 +74,21 @@ rate; stationary renewal record; double pole; constrained D-MAP
 - Competing interests: none declared.
 - Supplementary material: yes.
 - Computational material: algebraic regression scripts and an interval certificate accompany the source package.
+
+## Assessed Structural Alternative - Awaiting Author Decision
+
+This is additional decision information only; it does not change the recorded
+target or status above. The assessor's definite verdict was to **RECAST**
+around experiment equivalence, LAN, efficient testing and minimax recovery,
+and submit to EJS. Estimated acceptance for the current 72-page article: EJS
+24, SPA 39, Bernoulli 7 percent; for the recast article: EJS 51, SPA 44,
+Bernoulli 21 percent, each with roughly plus or minus 7 points. The recast
+therefore reorders the venues from SPA > EJS > Bernoulli to EJS > SPA >
+Bernoulli.
+
+The assessor states that the recast does not weaken Theorem G **PROVIDED** the
+serial recurrence and pole-order ingredients remain in the main article, and
+that the record-to-sample coupling proof must stay in the main article. The
+Bernoulli figure assumes the main paper is brought within about 25 pages; at
+31-35 pages it falls to 11-13 percent. Full report:
+`artifacts/oracle_sprint_A8_recast_value.md`.
