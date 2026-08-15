@@ -1,0 +1,107 @@
+Read artifacts/oracle_sprint_A8_stdobj.md in full first. Do not ask for design approval, do not
+run any brainstorming or approval workflow.
+
+An external expert audited which objects OF THE FIELD this paper's machinery can reach. He
+confirms the account of the machinery including the repaired Theorem G, and identifies one
+genuinely field-level theorem at 70 percent that is not a renaming of Theorem G.
+
+TARGET - local asymptotic equivalence, in Le Cam distance, between observing a stationary lattice-
+renewal process in a long deterministic window and observing an asymptotically equivalent i.i.d.
+sample from its Palm interarrival law. Take the exact formulation, the two deficiency directions,
+and the constants from his report. It is a theorem about stationary renewal experiments, not about
+generalized-Erlang collisions; it is logically STRONGER than the manuscript's LAN lemma, and it
+transfers bounded-loss decision theory and semiparametric efficiency between the two observation
+schemes.
+
+He also states this is approximately the OUTER BOUNDARY of the present machinery. Do NOT attempt
+Markov-renewal or generic MAP observations - those need a different likelihood argument. Do NOT
+choose "Theorem G for a somewhat larger phase-type class" instead: general acyclic or
+matrix-exponential models bring positive-realization geometry, possible pole cancellation, non-IFR
+tails and parameter-dependent hidden paths, which is a separate representation-and-singularity
+project rather than an extension of this proof.
+
+He lists which existing results feed the proof: the exact equilibrium-renewal factorization
+including the no-renewal bound; the uniform renewal-count estimate K_N = N/mu + O_P(sqrt N), which
+since gamma > 1/2 gives K_N >= m_N with probability tending uniformly to one; uniform exponential
+control of complete gaps and endpoint variables; the relative log-mass and log-tail derivative
+bounds, which give the O(N^{-1}) Hellinger bounds for both the interarrival and equilibrium-delay
+distributions; the negligibility of equilibrium boundary likelihood increments; and the stopped-
+score CLT and LLN, which recover the information and efficiency corollaries once experiment
+equivalence is established. Verify each against the manuscript before using it.
+
+THE ACTUAL DIFFICULTY, in his words, is not the renewal probability theory. It is writing the two
+deficiencies with FULLY UNIFORM MEASURABLE KERNELS and avoiding an unnoticed boundary-cycle
+conditioning issue. The N^gamma undershoot with gamma > 1/2 is specifically what removes that
+issue in the record-to-i.i.d. direction. Handle that construction explicitly and do not gloss it.
+The stated probability assumes: a lattice renewal indicator is the observation; the local centre
+p_0 may be used by the Le Cam randomizations, as is standard for a local experiment; the common
+exponential-moment and equilibrium-delay Hellinger hypotheses are retained; no global adaptive
+equivalence over an unknown compact parameter space is claimed. Keep all four; do not quietly
+strengthen the claim past them.
+
+FIVE CORRECTIONS TO THE MANUSCRIPT THAT HE IDENTIFIED. Apply all of them.
+
+ 1. THE ESSENTIAL RESET CONDITION IS RANK-ONE, NOT NECESSARILY DETERMINISTIC. The proof uses that
+    the marked kernel has the form T_1 = c beta, so the post-event hidden distribution beta is
+    independent of the pre-event state; beta being a point mass at D is a specialization. So
+    "allowing leakage into another state destroys renewal" is TOO CATEGORICAL. What is true:
+    arbitrary leakage no longer implies renewal; leakage making the normalized post-click
+    distribution depend on the pre-click state destroys the proof; but a rank-one marked kernel
+    with mass on both states could still regenerate. Fix every place that overstates this.
+ 2. THE DISPLAYED STATIONARY LIKELIHOOD HAS A DOMAIN QUALIFICATION. The product factorization
+    holds for a record containing at least one renewal; the all-zero record has a separate
+    probability. The manuscript proves a uniform polynomial-exponential bound making it negligible
+    for the local experiment, so Theorems F and G are unaffected - but the formula must not be
+    called the exact likelihood on the entire sample space.
+ 3. THE ENDPOINT NAMES ARE REVERSED RELATIVE TO STANDARD RENEWAL TERMINOLOGY. With our
+    definitions, A = C_1 is the distance from the left boundary to the next renewal, which is
+    ordinarily the FORWARD recurrence time or residual life; R = N - 1 - C_J is the time from the
+    last renewal to the right boundary, ordinarily the BACKWARD recurrence time or age. The
+    formulas are unaffected, but a paper rebuilt around stationary-renewal inference must use the
+    field-standard names, as Gill and Keiding do. Rename throughout.
+ 4. THE ENDPOINT FACTORS ARE NOT THEMSELVES o_P(1). What is o_P(1) is the increment of their
+    logarithms in a root-N local likelihood ratio. Neither S(A), S(R) nor mu^{-1} is generally
+    close to zero or one. State the local-log-ratio assertion, which is what is actually proved.
+ 5. THE OBSERVATION OBJECT IS A LATTICE RENEWAL INDICATOR, not generic discretely observed event
+    data. After the reset-and-boundary construction the observation is a stationary binary renewal
+    process on Z with interrenewal mass obtained by binning the absorption time, and the model
+    excludes multiple within-bin post-click renewals by construction. Say so where the scope is
+    described.
+
+PRIORITY - HE ASKS FOR ONE ADDITION BEFORE THE PRESENT PRIORITY SENTENCE CAN STAND. The manuscript's
+comparison reaches confluent Prony conditioning but stops short of the statistical literature. Add
+a real comparison with statistical clustered-source and super-resolution minimax work. Search it
+properly and report what you find; this paper family has already accumulated eight priority
+omissions.
+
+RECORD THE CEILING HONESTLY. He states the correct remaining objection even after the target is
+proved: the broad theorem removes the stationary-window and random-cycle-count difficulty but does
+NOT broaden the singular geometry. Theorem G would become a sharp application of an i.i.d.
+Palm-interarrival experiment, but the singular part still concerns a fixed serial order, one
+isolated real double pole, all other poles simple and uniformly separated, a known sampling
+interval, and a very special positive realization in which every phase is traversed. The paper
+would still not characterize when a general phase-type or matrix-exponential renewal law has a
+quadratic identifiable collision coordinate, what happens under residue cancellation, how
+positivity restricts root splitting, or which minimax rates occur for multiple, defective or
+complex pole clusters. Write that limitation into the discussion. Do not conceal it.
+
+PRESERVE: the Bickel-Kwon, Ramirez-Cobo-Lillo-Wiper, Meszaros-Telek and He-Zhang attributions and
+the "candidate original result pending complete reduction" qualification, all outside our novelty
+ledger; G(iii) as the residualized score test with the likelihood-ratio coincidence only in the
+limiting Gaussian half-space experiment; the two-point multiset distance as eventually exact with
+its explicit threshold; and the total definitions and gating added in the previous round.
+
+RULES:
+ - Every claim proved at referee standard; numerics are sanity checks, never a substitute.
+ - Do not weaken, restate or renumber Theorems A-G beyond what these corrections require.
+ - Keep every .tex under 800 lines; split if needed.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change; confirm zero failures from artifacts/.
+ - No revision marks anywhere.
+
+REPORT: the super-resolution / clustered-source priority findings first; the equivalence theorem as
+typeset, with the two deficiency bounds and how the uniform measurable kernels were constructed;
+how the boundary-cycle conditioning issue was avoided; the five corrections as applied; the ceiling
+paragraph as written; page and theorem counts before and after; compile and test results.
