@@ -556,3 +556,159 @@ remain in Supplementary Information and are compared explicitly with Shen
 and Dubbe. No broader priority claim is made for fixed-base prime CF-immunity,
 for arbitrary objects called Pisot numeration systems, or for the
 equal-peripheral-modulus quotient/root-growth mechanism.
+
+## Bibliographic integrity audit (2026-08-15)
+
+### Scope, counts, and method
+
+The bibliography contains 78 distinct entries. Before synchronization, those
+entries occurred 374 times across five physical representations: 78 in
+`references.tex`, 78 in `submission_bundle/references.tex`, 78 in
+`submission_bundle/source.zip`, 70 in the stale top-level
+`submission_bundle.zip`, and the same 70 in the `source.zip` nested in that
+top-level archive. The 70 archived keys were a strict subset of the current 78;
+they introduced no additional distinct work. After this audit, all five
+representations contain the same 78 entries (390 physical occurrences).
+
+For each DOI entry, `CR-DOI` below means a direct Crossref REST request to
+`https://api.crossref.org/works/{DOI}` followed by comparison of the returned
+title and first author with the bibliography. For each entry without a DOI,
+`CR-T/A` means a Crossref request with the entry's exact title in
+`query.title` and lead author in `query.author`. Fuzzy top hits were never
+accepted as confirmation. `DBLP-T/A`, `zbMATH-T/A`, and `S2-T/A` mean exact
+title/author searches in those indexes. `arXiv-ID` means the official arXiv
+Atom record for the cited identifier. Publisher or archive checks name the
+official source explicitly. A DOI discovered for an entry that did not claim
+one was used as verification evidence; omission of an otherwise optional DOI
+was not treated as incorrect metadata.
+
+### Per-entry verification table
+
+| Key | Identifier or exact search and returned record | Classification |
+|---|---|---|
+| `AkshayBazilleGenestVahanwala2024` | CR-DOI `10.46298/lmcs-20(2:11)2024` returned *On Robustness for the Skolem, Positivity and Ultimate Positivity Problems*, S. Akshay. | Confirmed |
+| `Allen1968` | CR-DOI `10.1016/S0022-0000(68)80038-8` returned *On a characterization of the nonregular set of primes*, Dennis Allen. | Confirmed |
+| `AlloucheShallit2003` | CR-DOI `10.1017/CBO9780511546563` returned *Automatic Sequences*, Jean-Paul Allouche. | Confirmed |
+| `ArtinMazur1965` | CR-T/A `On periodic points` + `M. Artin` returned the same title and M. Artin, DOI `10.2307/1970384`. | Confirmed |
+| `Bell2020UpperDensity` | CR-T/A `The upper density of an automatic set is rational` + `J. P. Bell` returned the same title and Jason P. Bell, DOI `10.5802/jtnb.1135`. | Confirmed |
+| `BellEtAl2008MatrixEquations` | CR-DOI `10.1142/S0218196708004925` returned *Matrix Equations and Hilbert's Tenth Problem*, Paul Bell. | Confirmed |
+| `Berstel1973` | DBLP-T/A returned the exact title and Jean Berstel, pp. 345-358, ICALP 1972; OpenLibrary ISBN `0720420741` confirmed North-Holland publication in 1973. | Confirmed |
+| `BerstelReutenauer2011` | CR-T/A `Noncommutative Rational Series with Applications` + `J. Berstel` returned the same book and Jean Berstel, DOI `10.1017/CBO9780511760860`. | Confirmed |
+| `BertheGouletPerrin2025` | S2-T/A and DBLP-T/A returned the exact title and Valerie Berthe; the Dagstuhl record confirmed LIPIcs 334, article 143, DOI `10.4230/LIPIcs.ICALP.2025.143`. | Confirmed |
+| `BodirskyGaertnerVonOertzenSchwinghammer2004` | CR-T/A returned the exact title and Manuel Bodirsky, pp. 262-270, DOI `10.1007/978-3-540-24698-5_30`. | Confirmed |
+| `BowenLanford1970` | CR-T/A returned the exact title and R. Bowen, DOI `10.1090/pspum/014/9985`; Crossref gives pp. 43-49. | Confirmed after metadata correction |
+| `Bourgain2013PrescribedDigits` | CR-T/A returned the exact title and Jean Bourgain, Israel J. Math. 194, pp. 935-955, DOI `10.1007/s11856-012-0104-2`. | Confirmed |
+| `Bourgain2015PrescribedDigitsII` | CR-T/A returned the exact title and Jean Bourgain, Israel J. Math. 206, pp. 165-182, DOI `10.1007/s11856-014-1129-5`. | Confirmed |
+| `BruyereHansel1997` | CR-DOI `10.1016/S0304-3975(96)00260-5` returned *Bertrand numeration systems and recognizability*, Veronique Bruyere. | Confirmed |
+| `Broughan2003` | CR-DOI `10.4153/CJM-2003-030-3` returned *Adic Topologies for the Rational Integers*, Kevin A. Broughan. | Confirmed |
+| `Brunotte2013` | CR-DOI `10.2478/tmmp-2013-0023` returned *Algebraic Properties of Weak Perron Numbers*, Horst Brunotte. | Confirmed |
+| `BugeaudEvertse2017` | CR-DOI `10.1112/S0025579317000298` returned *S-parts of terms of integer linear recurrence sequences*, Yann Bugeaud. | Confirmed |
+| `BustosKellendonkYassawi2025` | CR-DOI `10.1007/s00605-024-02053-y` returned *Almost automorphic and bijective factors of substitution shifts*, Alvaro Bustos-Gajardo. | Confirmed |
+| `BhowmikSuzuki2024` | arXiv-ID `2406.13334` returned the exact title and Gautami Bhowmik, with Yuta Suzuki, published 2024-06-19. | Confirmed |
+| `Buchi1960` | CR-T/A `Weak second-order arithmetic and finite automata` + `J. R. Buchi` returned the same title and J. Richard Buchi, DOI `10.1002/malq.19600060105`. | Confirmed |
+| `Carlson1921` | CR-T/A `Uber Potenzreihen mit ganzzahligen Koeffizienten` + `F. Carlson` returned the same title and Fritz Carlson, DOI `10.1007/BF01378331`. | Confirmed |
+| `CaucalLeGonidec2014` | CR-DOI `10.1007/978-3-319-10882-7_16` returned *Context-Free Sequences*, Didier Caucal. | Confirmed |
+| `CharlierRampersad2011` | CR-T/A `The growth function of S-recognizable sets` + `E. Charlier` returned the same title and Emilie Charlier, DOI `10.1016/j.tcs.2011.05.057`. | Confirmed |
+| `CharlierCisternino2021` | CR-DOI `10.1007/s00605-021-01598-6` returned *Expansions in Cantor real bases*, Emilie Charlier. | Confirmed |
+| `CharlierKreczman2025` | arXiv-ID `2512.13180` returned the exact title and Emilie Charlier, with Savinien Kreczman, published 2025-12-15. | Confirmed |
+| `CharlierRampersadRigoWaxweiler2010` | DBLP-T/A returned the exact title, Emilie Charlier as lead author, all four claimed authors, Integers 11B (2011), article A4. | Confirmed |
+| `Cobham1969` | CR-DOI `10.1007/BF01746527` returned *On the base-dependence of sets of numbers recognizable by finite automata*, Alan Cobham. | Confirmed |
+| `DrmotaMauduitRivat2009` | CR-T/A returned the exact title and Michael Drmota, Compos. Math. 145, pp. 271-292, DOI `10.1112/S0010437X08003898`. | Confirmed |
+| `DrmotaMuellnerSpiegelhofer2021` | CR-DOI `10.1090/memo/1537` returned *Primes as Sums of Fibonacci Numbers*, Michael Drmota; the record confirms the 2025 Memoirs publication cited alongside the 2021 arXiv version. | Confirmed |
+| `Dubbe2024` | CR-DOI `10.1016/j.tcs.2025.115480` returned *The automaticity of the set of primes*, Thomas Dubbe. | Confirmed |
+| `DuncanElderFrenkelLiu2026` | CR-DOI `10.1142/S0218196726500463` returned the exact title and Andrew Duncan; the full author list is Duncan, Murray Elder, Lisa Frenkel, and Mengfan Lyu. | Confirmed |
+| `Dusart2018` | CR-DOI `10.1007/s11139-016-9839-4` returned *Explicit estimates of some functions over primes*, Pierre Dusart, Ramanujan J. 45, pp. 227-251. | Confirmed |
+| `Estermann1928` | CR-T/A returned the exact title and T. Estermann, Proc. LMS s2-27, pp. 435-448, DOI `10.1112/PLMS/S2-27.1.435`. | Confirmed |
+| `Evertse1984` | zbMATH-T/A and the Numdam journal scan returned the exact title and Jan-Hendrik Evertse, Compos. Math. 53 (1984), pp. 225-244. | Confirmed |
+| `EismanRavikumar2005` | DBLP-T/A returned the exact title, Gerry Eisman and Bala Ravikumar, ACSC 2005, pp. 219-228. | Confirmed |
+| `Fabre1995` | CR-DOI `10.1016/0304-3975(95)91132-A` returned *Substitutions et beta-systemes de numeration*, Stephane Fabre. | Confirmed |
+| `FlajoletSedgewick2009` | CR-T/A `Analytic Combinatorics` + `P. Flajolet` returned the same book and Philippe Flajolet, DOI `10.1017/CBO9780511801655`. | Confirmed |
+| `Frougny1992` | CR-DOI `10.1007/BF01368783` returned *Representations of numbers and finite automata*, Christiane Frougny. | Confirmed |
+| `FrougnySolomyak1992` | CR-DOI `10.1017/S0143385700007057` returned *Finite beta-expansions*, Christiane Frougny. | Confirmed |
+| `HanselPerrin1989` | CR-T/A returned the exact title and G. Hansel, TCS 65, pp. 171-188, DOI `10.1016/0304-3975(89)90042-X`. | Confirmed |
+| `HardyWright2008` | OpenLibrary ISBN `9780199219865` returned the exact title, G. H. Hardy and Edward M. Wright, Oxford University Press, 2008. | Confirmed |
+| `HartmanisShank1968` | CR-DOI `10.1145/321466.321470` returned *On the Recognition of Primes by Automata*, J. Hartmanis. | Confirmed |
+| `KanazawaKobeleMichaelisSalvatiYoshinaka2014` | CR-DOI `10.1007/S00224-014-9534-Z` returned *The Failure of the Strong Pumping Lemma for Multiple Context-Free Languages*, Makoto Kanazawa. | Confirmed |
+| `Kitchens1998` | Crossref book DOI `10.1007/978-3-642-58822-8` returned *Symbolic Dynamics*, Bruce P. Kitchens, Springer, 1998; the subtitle matches the cited edition. | Confirmed |
+| `Koga2019Density` | CR-T/A returned the exact title and Toshihiro Koga, Fundamenta Informaticae 168, pp. 45-49, DOI `10.3233/FI-2019-1823`. | Confirmed |
+| `Kozik2005Conditional` | CR-T/A returned the exact title and Jakub Kozik, ENTCS 140, pp. 67-79, DOI `10.1016/j.entcs.2005.06.023`. | Confirmed |
+| `LecomteRigo2001` | CR-DOI `10.1007/S002240010014` returned *Numeration Systems on a Regular Language*, P. B. A. Lecomte; volume 34 and pp. 27-44 match. | Confirmed |
+| `Lekkerkerker1952` | Exact title search in Crossref returned no match; OpenAlex returned HTTP 429. zbMATH author/title search `au:lekkerkerker & ti:fibonacci` returned C. G. Lekkerkerker, Simon Stevin 29 (1952), pp. 190-195, matching the cited Dutch original. | Confirmed |
+| `MaesRigo2002` | S2-T/A returned the exact title and the JALC DOI `10.25596/jalc-2002-351`; the official JALC page gives Michel Rigo first and Arnaud Maes second. | Confirmed after metadata correction |
+| `Lind1984` | CR-DOI `10.1017/S0143385700002443` returned the exact title and D. A. Lind. | Confirmed |
+| `LindMarcus1995` | CR-T/A returned the exact book title and Douglas Lind, DOI `10.1017/CBO9780511626302`. | Confirmed |
+| `MinskyPapert1966` | CR-DOI `10.1145/321328.321337` returned *Unrecognizable Sets of Numbers*, Marvin Minsky. | Confirmed |
+| `MauduitRivat2010` | CR-T/A returned the exact title and Christian Mauduit, Ann. of Math. 171, pp. 1591-1646, DOI `10.4007/ANNALS.2010.171.1591`. | Confirmed |
+| `Maynard2019` | CR-T/A returned the exact title and James Maynard, Invent. Math. 217, pp. 127-218, DOI `10.1007/S00222-019-00865-6`. | Confirmed |
+| `Montoya2025Relative` | CR-T/A returned the exact title and J. Andres Montoya, pp. 166-179, DOI `10.1007/978-3-031-97100-6_12`. | Confirmed |
+| `Ogden1968` | CR-DOI `10.1007/BF01694004` returned *A helpful result for proving inherent ambiguity*, William Ogden. | Confirmed |
+| `OgdenRossWinklmann1985` | CR-DOI `10.1137/0214031` returned *An Interchange Lemma for Context-Free Languages*, William Ogden. | Confirmed |
+| `Muellner2017` | CR-T/A returned the exact title and Clemens Mullner, Duke Math. J. 166, DOI `10.1215/00127094-2017-0024`. | Confirmed |
+| `Ilie1994` | CR-DOI `10.1016/0304-3975(94)00042-5` returned the exact title and Lucian Ilie; Crossref gives combined issue 1-2. | Confirmed after metadata correction |
+| `IlieRozenbergSalomaa2000` | CR-DOI `10.1051/ita:2000100` returned the exact title and Lucian Ilie. | Confirmed |
+| `LatteuxThierrin1983` | CR-T/A returned *Semi-discrete context-free languages*, M. Latteux, Int. J. Comput. Math. 14, pp. 3-18, DOI `10.1080/00207168308803373`. | Confirmed after metadata correction |
+| `Mignotte1978Intersection` | CR-DOI `10.1016/0304-3975(78)90043-9` returned the exact title and M. Mignotte. | Confirmed |
+| `PerrinPin2004` | OpenLibrary ISBN `9780125321112` returned *Infinite Words*, Dominique Perrin and Jean-Eric Pin, Elsevier, 2004, matching the full cited subtitle. | Confirmed |
+| `Polya1923` | CR-T/A returned the exact title and G. Polya, Proc. LMS s2-21, pp. 22-38, DOI `10.1112/PLMS/S2-21.1.22`. | Confirmed |
+| `OuaknineWorrell2012` | CR-DOI `10.1007/978-3-642-33512-9_3` returned *Decision Problems for Linear Recurrence Sequences*, Joel Ouaknine. | Confirmed |
+| `RosserSchoenfeld1962` | CR-T/A returned the exact title and J. Barkley Rosser, Illinois J. Math. 6, DOI `10.1215/IJM/1255631807`. | Confirmed |
+| `Rigo2014Vol1` | CR-T/A returned *Formal Languages, Automata and Numeration Systems 1*, Michel Rigo, DOI `10.1002/9781119008200`; the cited subtitle identifies volume 1. | Confirmed |
+| `Rigo2014Vol2` | CR-T/A returned *Formal Languages, Automata and Numeration Systems 2*, Michel Rigo, DOI `10.1002/9781119042853`; the cited subtitle identifies volume 2. | Confirmed |
+| `SalomaaSoittola1978` | CR-T/A returned the exact title and Arto Salomaa, DOI `10.1007/978-1-4612-6264-0`. | Confirmed |
+| `Schutzenberger1968` | CR-DOI `10.1145/321450.321461` returned *A Remark on Acceptable Sets of Numbers*, Marcel Paul Schutzenberger. | Confirmed |
+| `SekiEtAl1991` | CR-DOI `10.1016/0304-3975(91)90374-B` returned *On multiple context-free grammars*, Hiroyuki Seki. | Confirmed |
+| `Shallit1996` | CR-T/A returned the exact title and Jeffrey Shallit, J. Theor. Nombres Bordeaux 8, pp. 347-367, DOI `10.5802/JTNB.173`. | Confirmed |
+| `Shen2022` | CR-DOI `10.1016/j.tcs.2022.04.027` returned *Prime automata do not exist*, Zhao Shen. | Confirmed |
+| `Sinya2021` | S2-T/A and CR-DOI `10.1007/978-3-030-67731-2_6` returned the exact title and Ryoma Sin'ya, SOFSEM 2021, pp. 74-88. | Confirmed |
+| `Swaenepoel2020PreassignedDigits` | CR-T/A returned the exact title and Cathy Swaenepoel, Proc. LMS 121, pp. 83-151, DOI `10.1112/PLMS.12314`. | Confirmed |
+| `TarasovVyalyi2011` | CR-DOI `10.1007/978-3-642-20712-9_24` returned *Orbits of Linear Maps and Regular Languages*, Sergey Tarasov. | Confirmed |
+| `Yuen2022` | arXiv-ID `2203.16088` returned the exact title and Jason Yuen, published 2022-03-30. | Confirmed |
+| `Zeckendorf1972` | Exact title search in Crossref returned no match and OpenAlex returned HTTP 429; zbMATH-T/A returned the exact French title, E. Zeckendorf, Bull. Soc. R. Sci. Liege 41 (1972), pp. 179-182. | Confirmed |
+
+### Corrections and citation decisions
+
+Four metadata values were corrected in every source/package copy:
+
+- `BowenLanford1970`: pages `43--50` -> `43--49` (Crossref DOI
+  `10.1090/pspum/014/9985`).
+- `Ilie1994`: issue `no. 2` -> `no. 1--2` (Crossref DOI
+  `10.1016/0304-3975(94)00042-5`).
+- `MaesRigo2002`: author order `A. Maes and M. Rigo` ->
+  `M. Rigo and A. Maes` (official JALC record and DOI
+  `10.25596/jalc-2002-351`).
+- `LatteuxThierrin1983`: title `Semidiscrete context-free languages` ->
+  `Semi-discrete context-free languages` (publisher/Crossref DOI
+  `10.1080/00207168308803373`).
+
+No intellectual claim, theorem, citation key, or citing sentence changed.
+No entry was deleted: every entry has a matching index, publisher, arXiv, or
+journal-archive record, so there are no deletion-related citation decisions.
+No entry remains unverified.
+
+### Audit limitations and service failures
+
+- Crossref direct DOI resolution succeeded for all 34 DOI-bearing entries.
+  Those entries were checked against Crossref as the primary index; because
+  none was unavailable or empty, the protocol's OpenAlex/Semantic Scholar
+  fallback was not triggered. Accordingly, cross-source redundancy was not
+  achieved for every DOI-bearing entry, although title and lead-author
+  identity was checked for every DOI.
+- OpenAlex returned HTTP 429 for every attempted non-DOI exact-title query.
+  It supplied no usable evidence for any of the 44 non-DOI entries. Each such
+  entry was therefore checked using Crossref plus an official/index source
+  where available, rather than Crossref plus OpenAlex.
+- Semantic Scholar was also rate-limited. It succeeded only for
+  `BertheGouletPerrin2025`, `MaesRigo2002`, and `Sinya2021`; it returned HTTP
+  429 for `Berstel1973`, `BhowmikSuzuki2024`, `CharlierKreczman2025`,
+  `CharlierRampersadRigoWaxweiler2010`, `Evertse1984`,
+  `EismanRavikumar2005`, `Kitchens1998`, `Lekkerkerker1952`, `PerrinPin2004`,
+  `Rigo2014Vol1`, `Yuen2022`, and `Zeckendorf1972`.
+- Crossref rate-limited several later fuzzy follow-up requests after the
+  direct DOI pass. The affected entries were `BhowmikSuzuki2024`,
+  `CharlierKreczman2025`, `PerrinPin2004`, and `Zeckendorf1972`; their official
+  arXiv, book, or zbMATH records supplied the verification instead. Service
+  failures were not treated as negative evidence.
+- Exact-title normalization across TeX accents, mathematical markup, and
+  publisher capitalization was assessed manually. Online-first years in
+  Crossref were not substituted for the cited print-volume years (notably
+  Bourgain 2013/2015, Dusart 2018, and Swaenepoel 2020).
