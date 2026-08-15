@@ -6621,3 +6621,409 @@ sec_introduction_abstract_kernel.tex:1:The theorem is a specialization of the un
   64: forces \eqref{eq:arbitrary-tail-defect-unbounded-limsup}.
   65: \end{proof}
 
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "pdftotext -layout main.pdf - | Select-String -Pattern '"'^'"\\s*(Main )?Theorem\\s+[A-Z0-9]' | ForEach-Object { "'$_.Line }; '"'COUNT=' + ((pdftotext -layout main.pdf - | Select-String -Pattern '"'^'"\\s*(Main )?Theorem\\s+[A-Z0-9]').Count)" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "pdftotext -layout supplement.pdf - | Select-String -Pattern '"'^'"\\s*(Main )?Theorem\\s+[A-Z0-9]' | ForEach-Object { "'$_.Line }; '"'COUNT=' + ((pdftotext -layout supplement.pdf - | Select-String -Pattern '"'^'"\\s*(Main )?Theorem\\s+[A-Z0-9]').Count)" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw -LiteralPath 'artifacts/test_verify_stable_spine.py'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n -g '*.tex' '\\\\begin\\{unnumberedtheorem\\}|\\\\begin\\{theorem\\}|\\\\begin\\{maintheorem\\}' | Measure-Object | ForEach-Object { 'All project source theorem env occurrences=' + "'$_.Count }; rg -n -g '"'*.tex' '\\\\begin\\{unnumberedtheorem\\}'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 175ms:
+from pathlib import Path
+import re
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
+
+
+def read_tex_source(path: Path) -> str:
+    """Read a TeX source together with any local input wrappers."""
+
+    source = path.read_text(encoding="utf-8")
+
+    def expand(match: re.Match[str]) -> str:
+        child = ROOT / match.group(1)
+        if child.suffix == "":
+            child = child.with_suffix(".tex")
+        return read_tex_source(child)
+
+    return INPUT_RE.sub(expand, source)
+
+
+class StableSpineManuscriptTests(unittest.TestCase):
+    def test_main_article_keeps_the_restored_article_architecture(self) -> None:
+        main = (ROOT / "main.tex").read_text(encoding="utf-8")
+
+        self.assertIn(r"\input{sec_verified_A2_results}", main)
+        self.assertIn(r"\input{bibliography_shared}", main)
+        self.assertNotIn(r"\input{sec_stable_entropy_spine}", main)
+        for article_input in (
+            r"\input{sec_entropy_asymptotics}",
+            r"\input{sec_entropy_30_eighth_defect_layer}",
+            r"\input{sec_gram_space}",
+            r"\input{sec_strip_00_poisson_image}",
+            r"\input{sec_strip_20_symbol_sampling}",
+            r"\input{sec_strip_30_cardinal_observation}",
+        ):
+            self.assertIn(article_input, main)
+
+    def test_stable_tail_decomposition_is_stated_and_proved(self) -> None:
+        theorem_path = ROOT / "sec_verified_A2_results.tex"
+        theorem_source = read_tex_source(theorem_path)
+
+        required = (
+            r"\label{thm:stable-law-by-law-decomposition}",
+            r"\mathcal Q_{\alpha,d}(\Sigma)s^{-4}",
+            r"\int_{\{|x|>s\}}",
+            r"\frac{p_1^{(\alpha,d)}(y-x/s)}",
+            r"\Phi(V_s^\nu)",
+            r"o(s^{-4})",
+            r"\|R_s\|_\infty+\|R_s\|_{L^1(\Omega_{\alpha,d})}=o(s^{-2})",
+            r"\int V_s^\nu\dd\Omega_{\alpha,d}=\tau_s",
+            r"No regular-variation, absolute-continuity, or moment hypothesis above order two",
+        )
+        for text in required:
+            self.assertIn(text, theorem_source)
+
+    def test_decomposition_theorem_has_one_source(self) -> None:
+        label = r"\label{thm:stable-law-by-law-decomposition}"
+        sources = list(ROOT.glob("*.tex"))
+        occurrences = sum(
+            path.read_text(encoding="utf-8").count(label) for path in sources
+        )
+        self.assertEqual(occurrences, 1)
+
+    def test_arbitrary_order_proxy_proof_closure_is_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            "Two-background KL perturbation",
+            r"H'(t)",
+            r"H''(t)",
+            r"H'''(t)",
+            r"\|A_s^\lambda-1\|_{L^1(\Omega_{\alpha,d})}",
+            r"\|A_s^\nu-A_s^\eta\|_{L^1(\Omega_{\alpha,d})}",
+            r"\label{eq:arbitrary-tail-proxy-positive-entropy-finite}",
+            r"\label{cor:arbitrary-tail-defect-positive-moment-condition}",
+            r"\label{cor:arbitrary-tail-defect-nonvacuousness}",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+    def test_abstract_kernel_theorem_and_membership_audit_are_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            "Abstract positive tail-jet kernel theorem",
+            r"\omega_{p,r}(t)",
+            "Isotropic stable kernels",
+            "Poisson kernel",
+            "Multivariate Student kernels",
+            "Gaussian obstruction",
+            r"\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma",
+            "specialization is exactly Theorem",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        self.assertIn(r"\newtheorem*{unnumberedtheorem}{Theorem}",
+                      (ROOT / "main.tex").read_text(encoding="utf-8"))
+
+    def test_fixed_scale_robustness_scope_and_rigidity_are_explicit(self) -> None:
+        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        required = (
+            r"((\chi^\nu,\chi^\eta),H)",
+            "No relation between",
+            "Sharpness of the inner exclusion",
+            r"\tau_{s,\chi}^\lambda=\kappa",
+            r"(1+\kappa^2)\mathcal Q_{\alpha,d,r}(\Delta_r)",
+            r"\widetilde A_s^{\lambda;\boldsymbol\chi,H}",
+            r"\widetilde{\mathcal E}_{r,s}^{\boldsymbol\chi,H}",
+            "normalization rules other than",
+            "Asymptotic coefficient rigidity inside a prescribed ansatz",
+            "not a uniqueness, canonicity, or entropy-minimality theorem",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        abstract = (ROOT / "main.tex").read_text(encoding="utf-8")
+        intro = read_tex_source(ROOT / "sec_introduction.tex")
+        self.assertIn("either additive or multiplicative mass normalization", abstract)
+        self.assertIn("not every reasonable", intro)
+        self.assertNotIn("robust at its full resolution", intro)
+        self.assertNotIn("partial rigidity", abstract + intro + source)
+
+    def test_active_tex_sources_obey_presentation_constraints(self) -> None:
+        for path in ROOT.glob("*.tex"):
+            source = path.read_text(encoding="utf-8")
+            self.assertLess(
+                len(source.splitlines()),
+                800,
+                f"{path.name} must remain below 800 lines",
+            )
+            self.assertNotRegex(source, r"(?i)TODO[^\n]*revision")
+
+    def test_literature_audit_names_all_requested_indexes(self) -> None:
+        audit = (ROOT / "artifacts" / "literature_check.md").read_text(
+            encoding="utf-8"
+        )
+        for index in ("arXiv", "Crossref", "Semantic Scholar", "zbMATH"):
+            self.assertIn(index, audit)
+        self.assertIn("Ishige--Kawakami--Michihisa", audit)
+
+    def test_named_problem_audit_records_printed_questions_and_status(self) -> None:
+        audit = (ROOT / "artifacts" / "tier2_named_problem_audit.md").read_text(
+            encoding="utf-8"
+        )
+        required = (
+            "Johnson, Open Problem 1",
+            "corresponding result for the MMSE score",
+            "Johnson, Open Problem 4",
+            "representation of $D(f \\Vert g_s^{(\\alpha)})$ as an integral",
+            "Johnson, Open Problem 6",
+            "more general (non-symmetric) families of stable laws",
+            "No later source located",
+            "Finite-variance Cauchy case proved",
+        )
+        for text in required:
+            self.assertIn(text, audit)
+
+    def test_cauchy_interpolation_integral_representation_is_complete(self) -> None:
+        source = read_tex_source(ROOT / "sec_doob_phi_entropy.tex")
+        required = (
+            r"\label{thm:johnson-cauchy-integral-representation}",
+            r"g_q=P_{q+s}=P_q*P_s",
+            r"D_{\rm KL}(\mu\|P_s)",
+            r"\int_0^\infty \mathcal J_{\mu,s}(q)\dd q",
+            r"q=\frac{st}{1-t}",
+            r"\frac{s}{(1-t)^2}",
+            r"joint lower semicontinuity",
+            r"data-processing inequality",
+            r"\|u_q-1\|_\infty\longrightarrow0",
+            r"Proposition~\ref{prop:compact-window-bregman-identity}",
+        )
+        for text in required:
+            self.assertIn(text, source)
+
+        intro = (ROOT / "sec_introduction.tex").read_text(encoding="utf-8")
+        self.assertIn(r"Johnson's integral-representation problem", intro)
+        self.assertNotIn(
+            r"Theorem~\ref{thm:johnson-cauchy-integral-representation}", intro
+        )
+        self.assertIn(r"the finite-variance Cauchy statement proved in", intro)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+ succeeded in 257ms:
+All project source theorem env occurrences=63
+sec_abstract_kernel_tail_decomposition.tex:42:\begin{unnumberedtheorem}[Abstract positive tail-jet kernel theorem]
+
+ succeeded in 490ms:
+Theorem 3.12.
+Theorem S1.10 (Finite-variance domain and endpoint theorem). Let  be a probability measure
+Theorem S1.11 (Cauchy case of Johnson's integral-representation problem). Fix s > 0, and
+Theorem S1.15 (Coefficient identification through order six). Let  have mean �, finite vari-
+Theorem A: fixed-law         Entropy and log-Sobolev         [67, 17, 14]         These papers concern entropy
+Theorem A: fixed-law                                                              kernel, and evaluates the matched
+Theorem A: coefficient       R�nyi/KL information and                             input law smoothed by Pt, and the
+Theorem B: finite-moment     theorems quantify distance
+Theorem 4.23: first          theorems identify asymptotic    48]                  fourth-moment identity recorded here
+Theorem B: optimal           Chen�Niles-Weed prove the [24,                       The comparator estimates the evolved
+Theorem B: the specific                                                           transfers that quotient expansion
+    Theorem C: finite-variance Polarized Hardy�Stein and    [12, 44]   The underlying
+Theorem 1.5.11].
+COUNT=13
+
+ succeeded in 863ms:
+Theorem 4.23 gives the s-2r quadratic tensor coefficient for two arbitrary inputs matching all
+theorem recalled above uses a different weighted Hermite mechanism; it is not presented as
+Theorem 5.1 gives an asymptotically exact finite-covariance characterization of this distinction.
+Main Theorem A (Analytic variance threshold and coefficient-domain minimality). Let  be
+Main Theorem B (Multidimensional Poisson jets and stable-kernel moment exponent). Let
+Main Theorem C (Domain and endpoint closure for Cauchy relative entropy). Let  be a
+Theorem 3.3 (Cayley�Chebyshev mode formula). Let Un be the Chebyshev polynomial of the
+Theorem 3.5 (Universal entropy coefficients). The coefficient of t-k in the formal expression
+Theorem 3.6 (Finite Fourier algorithm for mode integrals). Define Qn(e2i) = un(tan ).
+Theorem 3.12, with N = m, identifies this finite number as the actual t-2m coefficient in the
+Theorem 3.12 (Finite-moment Poisson entropy transfer and coefficient formula). Let N  2,
+Theorem 3.16 (Regularly varying missing-moment boundary layer). Let N  3, put p = 2N -2,
+Theorem 3.18 (Sharp analytic variance threshold for the leading KL coefficient). Let  have
+Theorem 3.22 (Covariance algebra under finite covariance). Let d  1, and let  be a probability
+Theorem 3.24 (Second-order quotient criterion for the KL coefficient). Let d  1, and let 
+Theorem 4.1 (First-channel closure and the even-moment hierarchy). Let  be a probability
+Theorem 4.3 (Critical vague tails do not identify the leading entropy). Fix d  4, and set
+Theorem 3.24, now gives the first limit in (4.11). Notice also that the whole construction is
+Theorem 4.4 (First unmatched moment for Poisson relative entropy). Let r  2, and let , 
+Theorem 4.5 (Gaussian-comparison entropy threshold). Let n  1, and let  be a probability
+Theorem 4.4, with r = 2n, now proves (4.19). If the norm in (4.22) vanishes, then  is itself
+Theorem 4.5 and use 4-4  6  = 5/64. In the symmetric case, exactness through degree three and
+Theorem 4.8 (Square boundary at a missing Gaussian moment). Let n  2, put p = 2n, and
+Theorem 4.10 (Sharp absolute-moment condition for the L2 quotient). Let  be a centred
+Theorem 4.11 (Low-dimensional finite-covariance entropy threshold). Let 1  d  3, and let
+Theorem 4.17 (Optimal uniform sufficient moment exponent for stable KL asymptotics). Let
+theorem below contributes the heavy-tailed range 0 <  < 2, the critical complete-moment
+Theorem 4.23 (All-order first unmatched tensor under stable smoothing). Let d  1, 0 <  <
+Theorem 4.23 therefore gives (4.66) and (4.67). If this moment difference vanishes,  = Gn,
+Theorem 4.25 (Stable law-by-law tail decomposition). Let d  1, 0 <  < 2, and let  be a
+theorem applies to each isotropic strictly -stable density, 0 <  < 2, to the Poisson kernel in
+Theorem 4.27 (Arbitrary-order law-by-law tail-defect decomposition). Let d  1, 0 <  < 2,
+Theorem 4.25 by o(s-4), as shown in (4.80).
+Theorem 4.27, suppose in addition that r = 0 and
+theorem for all positive proxy constructions.
+Theorem 5.1 (Covariance-proxy defect decomposition). Let d  1, and let  be a probability
+Theorem 5.2 (Raw-tail Poisson-energy decomposition). Let d  1, and let  be a probability law
+Theorem 6.1 (The mode Gram kernel). For every ,   R,
+Theorem 6.2 (The mode space and its RKHS completion). Let
+   Theorem 6.1 shows that
+Theorem 6.4 (Observation channels as evaluation functionals). Let  be a probability measure
+theorem below is this lattice projection applied to secant profiles: the samples determine the
+Theorem 7.4 (Integer-orbit projection of Poisson observation channels). Let  be a probability
+Theorem 6.4. Put
+COUNT=44
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'function Expand-Tex([string]$Path, [hashtable]$Seen) { $full=(Resolve-Path -LiteralPath $Path).Path; if ($Seen.ContainsKey($full)) { return '"'' }; "'$Seen[$full]=$true; $text=Get-Content -Raw -LiteralPath $full; $dir=Split-Path -Parent $full; return [regex]::Replace($text, '"'\\\\input\\{(["'^}]+)'"\\}', { param("'$m) $child=$m.Groups[1].Value; if (-not [IO.Path]::HasExtension($child)) {$child += '"'.tex'}; "'$childPath=Join-Path $dir $child; if (Test-Path -LiteralPath $childPath) { Expand-Tex $childPath $Seen } else { $m.Value } }) }; foreach($root in @('"'main.tex','supplement.tex')) { "'$expanded=Expand-Tex $root @{}; $theorems=([regex]::Matches($expanded,'"'\\\\begin\\{theorem\\}')).Count; "'$mainTheorems=([regex]::Matches($expanded,'"'\\\\begin\\{maintheorem\\}')).Count; "'$unnumbered=([regex]::Matches($expanded,'"'\\\\begin\\{unnumberedtheorem\\}')).Count; \""'$root numbered theorem statements=$($theorems+$mainTheorems); ordinary=$theorems; main=$mainTheorems; unnumbered=$unnumbered" }' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 536ms:
+main.tex numbered theorem statements=31; ordinary=28; main=3; unnumbered=1
+supplement.tex numbered theorem statements=3; ordinary=3; main=0; unnumbered=0
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n '\\\\begin\\{(theorem|proposition|lemma|corollary|remark)\\}|\\\\label\\{' sec_tail_proxy_convention_robustness.tex | Select-Object -First 80" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+2026-08-15T03:32:09.748838Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+
+ exited 1 in 182ms:
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'sec_tail_proxy_convention_robustness.tex' -TotalCount 80" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 169ms:
+Assume throughout the hypotheses and notation of
+Theorem~\ref{thm:stable-arbitrary-order-law-by-law-decomposition}.  For
+\(\lambda\in\{\nu,\eta\}\), let
+\(\chi^\lambda=(\chi_s^\lambda)_{s>0}\).  Call
+\((\boldsymbol\chi,H)=((\chi^\nu,\chi^\eta),H)\) an admissible fixed-scale
+tail-jet convention if there are common constants
+\(0<a<b<\infty\), independent of \(s\) and \(\lambda\), such that
+\[
+ 0\le\chi_s^\lambda\le1,\qquad
+ \chi_s^\lambda(z)=0\quad(|z|\le a),\qquad
+ \chi_s^\lambda(z)=1\quad(|z|\ge b),
+\]
+where every \(\chi_s^\lambda:\RR^d\to[0,1]\) is measurable, and if
+\[
+ \int H_s\dd\Omega_{\alpha,d}=0,
+ \qquad
+ \sup_s\bigl(\|H_s\|_\infty+
+        \|H_s\|_{L^1(\Omega_{\alpha,d})}\bigr)<\infty.
+\]
+The function \(H_s\) is common to the two laws.  No relation between
+\(\chi_s^\nu\) and \(\chi_s^\eta\) is required beyond their common fixed
+inner and outer radii.
+
+\paragraph{Sharpness of the inner exclusion.}
+The condition that the profiles vanish near the origin is mathematically
+necessary at the resolution under study.  Indeed, let a smooth profile
+\(\chi\) equal a constant \(\kappa\in(0,1]\) on a neighbourhood of zero and
+then rise to one, and let \(\nu,\eta\) be compactly supported, match below
+order \(r\), and satisfy \(\Delta_r\ne0\).  For all large \(s\),
+the corresponding additively normalized proxy with \(H=0\) satisfies
+\[
+ \tau_{s,\chi}^\lambda=\kappa,
+ \qquad V_{s,\chi}^\lambda=\kappa q_s^\lambda,
+ \qquad
+ A_s^\lambda=1+C_{r-1,s}+\kappa(q_s^\lambda-1).
+\]
+Consequently,
+\[
+ A_s^\nu-A_s^\eta
+ =\kappa s^{-r}B_{\Delta_r}+o(s^{-r})
+ \quad\hbox{in }L^\infty\cap L^1(\Omega_{\alpha,d}),
+ \qquad \inf A_s^\eta\longrightarrow1.
+\]
+The quadratic KL expansion therefore gives
+\[
+ D_{\rm KL}(A_s^\nu\|A_s^\eta)
+ =\kappa^2\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}
+   +o(s^{-2r}),
+\]
+whereas Theorem~\ref{thm:all-order-stable-first-unmatched-moment} gives the
+actual smoothed entropy coefficient
+\(\mathcal Q_{\alpha,d,r}(\Delta_r)\).  Thus adding the universal quadratic
+term to this proxy entropy would give the false coefficient
+\((1+\kappa^2)\mathcal Q_{\alpha,d,r}(\Delta_r)\).  The retained raw tail has
+absorbed a fixed fraction of the local order-\(r\) energy; the admissible
+class boundary is not a proof artifact.
+
+\begin{unnumberedproposition}[Robustness of the positive tail-jet convention]
+Define, for \(\lambda\in\{\nu,\eta\}\),
+\begin{align*}
+ \tau_{s,\chi^\lambda}^\lambda
+  &:=\int\chi_s^\lambda(x/s)\lambda(\dd x),\\
+ V_{s,\chi^\lambda}^\lambda(y)
+  &:=\int\chi_s^\lambda(x/s)F_y^{(\alpha,d)}(x/s)\lambda(\dd x),\\
+ A_s^{\lambda;\boldsymbol\chi,H}
+  &:=1+C_{r-1,s}+V_{s,\chi^\lambda}^\lambda-
+       \tau_{s,\chi^\lambda}^\lambda+s^{-r}H_s,\\
+ \widetilde A_s^{\lambda;\boldsymbol\chi,H}
+  &:=\frac{1+C_{r-1,s}+V_{s,\chi^\lambda}^\lambda+s^{-r}H_s}
+          {1+\tau_{s,\chi^\lambda}^\lambda}.
+\end{align*}
+These are, respectively, the additive and multiplicative mass
+normalizations.  For all sufficiently large \(s\), both pairs are positive
+probability densities relative to \(\Omega_{\alpha,d}\).  Their relative
+entropies
+\[
+ \mathcal E_{r,s}^{\boldsymbol\chi,H}(\nu,\eta)
+ :=\int A_s^{\eta;\boldsymbol\chi,H}
+ \Phi\!\left(
+  \frac{A_s^{\nu;\boldsymbol\chi,H}
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$i=0; Get-Content -LiteralPath '"'sec_introduction.tex' | ForEach-Object { "'$i++; if ($i -ge 150 -and $i -le 190) { '"'{0,4}: {1}' -f "'$i, $_ } }' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 192ms:
+ 150: \]
+ 151: Theorem~\ref{thm:all-order-stable-first-unmatched-moment} gives the
+ 152: \(s^{-2r}\) quadratic tensor coefficient for two arbitrary inputs matching
+ 153: all lower moments, under the endpoint \(p_{r,\alpha,d}\)-moment, and proves
+ 154: that no smaller absolute-moment exponent works uniformly over the complete
+ 155: moment class: for \(d+\alpha>2r\) this is analytic uniform sharpness on
+ 156: pairs with a finite nonzero order-\(r\) tensor, whereas for
+ 157: \(d+\alpha\le2r\) the value \(p_{r,\alpha,d}=r\) is only coefficient-domain
+ 158: minimality below order \(r\).
+ 159: 
+ 160: The exact law-by-law interface also holds at every order.  Under only finite
+ 161: \(r\)th moments and matching below \(r\),
+ 162: Theorem~\ref{thm:stable-arbitrary-order-law-by-law-decomposition} retains
+ 163: the common lower-order Taylor jet and each law's unexpanded exterior
+ 164: translate mixture in positive densities \(k_{r,s}^\nu,k_{r,s}^\eta\).  It
+ 165: proves
+ 166: \[
+ 167:  D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
+ 168:  =\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}
+ 169:  +D_{\rm KL}(k_{r,s}^\nu\|k_{r,s}^\eta)+o(s^{-2r}).
+ 170: \]
+ 171: \input{sec_introduction_abstract_kernel}
+ 172: \input{sec_introduction_proxy_robustness}
+ 173: Thus the universal coefficient is attained exactly when the nonnegative
+ 174: tail-proxy entropy is \(o(s^{-2r})\).  At covariance order against the
+ 175: point mass at the common mean this reduces, up to \(o(s^{-4})\), to the
+ 176: one-sided raw-tail \(\Phi\)-energy in
+ 177: Theorem~\ref{thm:stable-law-by-law-decomposition}.  When
+ 178: \(d+\alpha\le4\), finite covariance forces that energy to vanish at the
+ 179: required scale; when \(d+\alpha>4\), it is a genuinely additional
+ 180: law-by-law condition.  The infinite
+ 181: critical-moment boundary is genuinely different: Theorem
+ 182: \ref{thm:critical-vague-tail-nonidentifiability} constructs two laws with the
+ 183: same smooth multivariate regularly varying tail data and the same covariance,
+ 184: one attaining the covariance coefficient and the other having unbounded
+ 185: scaled entropy along a subsequence.
+ 186: Theorem~\ref{thm:covariance-proxy-defect-decomposition} gives an
+ 187: asymptotically exact
+ 188: finite-covariance characterization of this distinction.  If
+ 189: \(k_{\Sigma,t}\) denotes the positive Poisson density obtained by adjoining
+ 190: the normalized quadratic mode \(t^{-2}b_\Sigma\) to the matched reference,
+
