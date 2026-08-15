@@ -16,14 +16,17 @@
 
 | 篇 | 页 | 状态 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | 67 | ✅ 已修 | **Potential Analysis** |
-| **A3** `sharp_three_window` | **57** | ✅ 已修 | **DCDS-A**(无须降投) |
+| **A2** `cayley_chebyshev` | 69 | **门槛已达**;外审确认无反例、无错误步骤;收尾中 | **JFA**(审稿人:defensible, not an overreach);备选 AIHP |
+| **A3** `sharp_three_window` | 57 | ✅ 已修 | DCDS-A(无须降投) |
 | **A4** `prime_languages` | 25+43 | ✅ 已复核 | Monatshefte |
-| **A5** `finite_parts` | 33+19 | ✅ 已修(Nishioka 拆分 + 线性/非线性界定) | ETDS |
-| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修(定理 36→33) | **JNT** |
-| **A7** `upper_fibers` | **33+36** | ✅ 已修;校验和修复中 | Fibonacci Quarterly |
-| **A8** `detector_shells` | **49+19** | ✅ 已修(186→68 页) | **Methodology and Computing in Applied Probability** |
-| **A9** `homological_visibility` | **34+6** | ✅ 已修(48+50→34+6) | **Cahiers de Topologie** |
+| **A5** `finite_parts` | 33+19 | ✅ 已修 | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修 | JNT |
+| **A7** `upper_fibers` | 33+36 | ✅ 已修 | Fibonacci Quarterly |
+| **A8** `detector_shells` | 49+19 | ✅ 已修 | MCAP |
+| **A9** `homological_visibility` | 34+6 | ✅ 已修 | Cahiers de Topologie |
+
+**八篇外审全部走完并修复入库;A2 是唯一拿到"不因数学正确性拒稿"的一篇。**
+
 
 **八篇全部完成外审并修复入库。**
 
@@ -48,15 +51,22 @@
 
 
 
-> **TICK 39 — A2 任意阶定理已入库并送外审;内存告警查明是 Dell SupportAssist,不是我们**。池子空闲;仅 A2 外审问题撰写在跑。
+> **TICK 40 — 记下 A2 的"超越 JFA"路线图,别让它淹没在 tick 流里**。池子空闲;仅 A2 收尾在跑;内存 848 MB、无孤儿;无可收割。
 >
-> **A2 拿到了审稿人指名的那个增量**(`ce85dddbf`),而且把 $r\ge3$ 的障碍点명出来而非绕开:两分布时 $V_s^
-u-V_s^\eta$ **变号**,直接作用 $\Phi$ 会跑出定义域 $(-1,\infty)$。解法是保留**公共低阶 jet** $C_{r-1,s}$(两者相同,**正因为 $r$ 以下的矩相等**),令 $A_s^\lambda=1+C_{r-1,s}+V_s^\lambda-	au_s^\lambda$ 对大 $s$ 为正且积分为一,**成为真概率密度**,再把缺陷能量取为二者的 KL 散度 —— **非负性由构造给出,不靠不等式**。双背景展开:一阶变分 $o(s^{-2r})$,Hessian 给 $	frac12 s^{-2r}\int(B_r^
-u-B_r^\eta)^2 d\Omega$,三阶余项 $O(s^{-3r})$。$r=2$、$\eta=\delta_0$ 时与旧单边能量相差 $o(s^{-4})$,原精度下复现。
+> 审稿人最终三句话:**Correctness — 定理实质正确,(a)–(e) 五个步骤无一为假;Proof status — 现写法尚不可接受,缺的是一条紧凑但必要的分析引理加显式有限性论证;Threshold — 已达。** 并特别写明:共享低阶 jet 是这个"任意阶、law-by-law、非负缺陷分解"的**内在组成部分,不是规避变号尾障碍的手法**。
 >
-> 能独立核的都核了(69 页、三项缺陷全 0、三 verifier PASS、11 测试、清单 13/13、无定理被削弱、**未新增数值脚本**)。**但证明本身我核不了**,而这恰是最可能改变去向的主张 —— 且本项目的历史是 Oracle 的**诊断**可靠、**建设性建议**反复翻车(A6 最优推荐两次被证伪、A4 的 $\Sigma^0_1$ 主张 6 条 WRONG)。故提交信写明 **This has not been refereed**,已送同一位专家逐条查正性、积分归一、一阶变分阶数、Hessian 辨识、三阶余项,并追问优先权。
+> 他另给了**五条超越 "JFA-defensible" 的路线**,任一条即为实质提升:
 >
-> **内存 371 MB,低于 0.6 GB 线,但按规则减并发在此处是错的。** 查明占用大户是 **Dell SupportAssist**:`ServiceShell.exe` 1407 MB + `SupportAssistAgent.exe` 404 MB,合计 **1.81 GB**,8/12 03:35 起跑,与本项目无关;我们唯一在跑的 agent 连前十都没进。硬缺页 31.8/s,远低于 1000/s,系统未在颠簸。**杀掉自己唯一的 agent 只会损失工作而留下真正的占用者**,故未动;这与此前爱思助手是同一类问题,需提权处理,交由用户决定。
+> 1. 覆盖稳定、Gaussian、Poisson 及其他多项式尾核的**抽象核定理**(即当初两选项中的第二个);
+> 2. 由 KL **推广到一类光滑 $f$-散度**;
+> 3. **稳健性**:合理改变截断或代理约定,只使 $\mathcal E_{r,s}$ 变化 $o(s^{-2r})$;
+> 4. 正尾-jet 代理的**部分唯一性或极小性刻画**;
+> 5. **最优 Gaussian 端点表述**:精确指出每个 $r$ 下使代理熵有限的矩假设。
+>
+> 收束语才是关键:**"这些会让机制本身、而不是它的一次极成功实现,成为中心定理。"**
+>
+> 两点值得注意:第 3 条与本轮已强制补入的非空性推论同源,是最近的下一步;第 4 条与强制项"删除一切 canonical/唯一措辞"正好互补 —— 现在要求我们**放弃**的那个说法,正是第 4 条能**挣回来**的东西。
+
 
 
 
