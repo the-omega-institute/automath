@@ -18,7 +18,7 @@
 |---|--:|---|---|
 | **A2** `cayley_chebyshev` | **87+33** | ✅ 签字项完成;**查出 1 条伪造 + 3 条错配引用并修** | **JFA** |
 | **A3** `sharp_three_window` | **67+15** | ✅ 假陈述已锚定修正(反例三方复算一致) | TAMS(档位未跳)|
-| **A4** `prime_languages` | **33+43** | ✅ Cobham 定理已证;**文献表 78 条经查干净** | Monatshefte |
+| **A4** `prime_languages` | **33+43** | ✅ Cobham 定理已证;文献表干净;**重估在飞** `4dba0bdc` | Monatshefte(待重估)|
 | **A5** `finite_parts` | 43+19 | ✅ 已按三层重新配重;文献 81/84 已核 | ETDS(理由落在动力学定理)|
 | **A6** `zeckendorf_fibers` | 69+20 | **64%:Brocot 分数全变差凝聚定理**(在改)| **Transactions**(JNT/ETDS 备选) |
 | **A7** `upper_fibers` | **36+36** | ✅ 定理入库;**查出第二条伪造引用并删** | **Fibonacci Quarterly**(档位不变)|
@@ -59,19 +59,14 @@
 
 
 
-> **TICK 91 — A9 审计完成入库 `da8ad4031`。八篇文献表全部查完,八篇工作树全部干净。**
+> **TICK 92 — 补上唯一被漏掉的一步:A4 的档位重估。** 其余七篇在定理闭合后都做过重估,只有 A4 没有 —— 它的 slender-CFL Cobham 定理入库后板上一直写着"可重估"却未执行。已投 `4dba0bdc-0e08-4b5c-a377-9f83b951f3fa`。
 >
-> **A9:45 条中 12 条须更正,其中 6 条是 DOI/eprint 指向完全不同的文章。** 最严重的 `OkayTyhurstRaussendorf2018`,其 DOI `10.1007/s11005-018-1054-3` **经我复查确为** Ferapontov–Pavlov–Vitolo《Systems of conservation laws with third-order Hamiltonian structures》(Lett. Math. Phys. 108(6)) —— 与内容毫无关系;三条 arXiv eprint 分别指向一篇刚性定理、一篇神经网络、一篇并行计算论文。另有 `BerghSchnurer2021` 名字写错(Oliver 应为 Olaf)。
+> 问题聚焦在他自己标出的两个风险上,而非泛泛请他重评:**技术风险**是主根转移引理(要求他去看引理本身而不是定理陈述,并逐条回应外围碰撞、Jordan 因子、相消这三点是否真被堵住);**研究风险**是优先权(他说过"没找到不等于新",故请他在看过检索覆盖面后判断,thin/slender 语言的专家会不会说这由已知结果推出)。同时问 Monatshefte 是否仍是正确档位,并明写"若结论是维持不变,直说,我们宁可要这个也不要恭维"。
 >
-> **Okay–Raussendorf 那条缝合已按我的诊断拆为两条正确署名记录**;但它**零引用点**(我自己 grep 确认),故逐处决定表无从产生 —— agent 如实报告了这一偏离而非硬凑一张表。该条从未承重。
+> 一并告知了那处诚实缺口:Mignotte 原文 Elsevier 全文本网络不可达,其陈述经 Crossref 元数据与 Kiss 的published 表述交叉核对,**未直接阅读**。
 >
-> **第三个坏 Stacks tag**:`00W3` 实为 Example 7.10.2(只说终对象预层是层),被用于扁平化步骤,已改为 `00WK`(Lemma 7.10.16)。它明确交代 **`00WK` 是抓取并阅读 tag 原文核实的,不是由与 `00W1` 相邻推断** —— 这正是我追问的一点,本篇已在 `04TU`、`06NY` 上错过两次。
->
-> **第 13 处错误只存在于投稿压缩包**:`BarbosaKharoofOkay2024` 在归档副本里作者名是**编造的**(Francisco Barbosa / Hamed Kharoof,实为 Rui Soares Barbosa / Aziz Kharoof),而根目录 `.bib` 是对的。这类"主文件正确、归档副本错误"最难发现,现已逐字节统一。
->
-> **八篇文献审计总账**:2 条伪造(A2、A7)+ 1 条实为伪造元数据(A2 的 Yoshida2017)、**约 25 条 DOI 指向他人论文**(A2 三条、A8 七条、A9 六条、A3 一条不存在 DOI + 一条错配,余为年份/页码/作者级)、3 个错误 Stacks tag、2 处归档副本与主文件不一致。**A4 是唯一完全干净的一篇。**
->
-> 三次审计共同暴露:OpenAlex 全程配额为零、Google Books 全数 429、Semantic Scholar 多数 429 —— **预期的跨源冗余从未达成**,且 Crossref 对五个**有效** DOI 返回 404(两条 Dagstuhl、三条 arXiv),改由出版社/官方存档确认。服务失败一律未当作反证。
+> 池 0/6→1/6,内存 1.19 GB、缺页 0,无 agent 运行。八篇工作树全部干净,508 提交待推送。
+
 
 
 
