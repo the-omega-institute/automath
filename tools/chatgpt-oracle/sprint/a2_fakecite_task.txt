@@ -1,0 +1,79 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow. Proceed directly
+to editing. This is a bibliographic integrity fix and it is urgent.
+
+A FABRICATED CITATION IS PRESENT IN THE BIBLIOGRAPHY AND MUST BE REMOVED.
+
+The entry is
+
+  \bibitem{HirataNemotoYoshida2012RelativeEntropy}
+  Y.~Hirata, T.~Nemoto, and N.~Yoshida.
+  \newblock A generalized relative entropy and a de Bruijn type identity.
+  \newblock \emph{J. Math. Phys.} 53 (2012), no.~10, 103301.
+  \newblock doi:10.1063/1.4756955.
+
+It does not exist. It was checked against Crossref, OpenAlex and Semantic Scholar and appears in
+none of them. The DOI 10.1063/1.4756955 returns no Crossref record, while other AIP DOIs with the
+same 10.1063 prefix resolve normally, so this is not an indexing-coverage artefact. Two separate
+title searches returned nothing. The author initials Y./T./N. also do not match the only real
+paper by those three surnames.
+
+The real paper, which IS verified in all three indexes, is the one already added in the same
+bibliography:
+
+  \bibitem{HirataNemotoYoshida2012IntegralRepresentation}
+  M.~Hirata, A.~Nemoto, and H.~Yoshida.
+  \newblock An integral representation of the relative entropy.
+  \newblock \emph{Entropy} 14 (2012), no.~8, 1469--1477.
+  \newblock doi:10.3390/e14081469.
+
+Its abstract states that it gives another proof of the de Bruijn type identity between the
+relative entropy and the relative Fisher information with the reference moving, and derives an
+integral representation of the relative entropy. That is exactly the content for which the
+fabricated entry was being cited.
+
+WHAT TO DO
+
+ 1. Delete the \bibitem{HirataNemotoYoshida2012RelativeEntropy} entry from
+    bibliography_shared.tex.
+
+ 2. Remove the key HirataNemotoYoshida2012RelativeEntropy from every \cite where it appears. It
+    currently occurs in four places: sec_appendix.tex line 223, sec_doob_phi_entropy_part_01.tex
+    line 116, sec_introduction.tex line 308, and supplement_optional_coefficient_appendices.tex
+    line 185. Search the whole directory including submission_bundle to be sure that is all of
+    them.
+
+ 3. In each of those four places, READ the surrounding sentence and decide what it actually needs.
+    Where the sentence is about the moving-reference de Bruijn identity or an integral
+    representation of relative entropy, cite HirataNemotoYoshida2012IntegralRepresentation
+    instead - and if that key is already in the same \cite list, simply drop the fabricated key
+    without adding anything. Where the sentence claims something the real paper does not support,
+    rewrite the sentence rather than swapping in a citation that does not cover it. Report each of
+    the four decisions individually.
+
+ 4. VERIFY THE REST OF THE BIBLIOGRAPHY THE SAME WAY. If one fabricated entry survived this long,
+    others may be present. Check every entry that carries a DOI against Crossref, OpenAlex or
+    Semantic Scholar, and check every entry without a DOI against at least one index by title and
+    author. Report a table of what you checked and what failed. For anything you cannot confirm,
+    do NOT silently delete it and do NOT invent a replacement - list it in
+    artifacts/literature_check.md as unverified, with what you tried, exactly as the Kiss and
+    Mignotte sourcing gaps are recorded in the sibling papers.
+
+ 5. Do not add any new citation that you have not personally verified in an index.
+
+PRESERVE everything else from the current revision: the equation (4.24) justification, the
+corrected moment-use wording, the Voigt and Hilder-Peletier-Sharma-Tse precedents, the qualified
+Johnson language with no comparison corollary, the new title and abstract ordering, and the
+introduction split. Do not weaken, restate or renumber Theorem 4.2 or any other theorem.
+
+RULES:
+ - Keep every .tex under 800 lines.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change.
+ - No revision marks anywhere. Do not leave any planning or log file in the paper directory.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: confirmation that the fabricated entry is gone and every citation of it resolved, with the
+four individual decisions; the full bibliography verification table including anything that failed
+or could not be confirmed; page and theorem counts; compile and test results.
