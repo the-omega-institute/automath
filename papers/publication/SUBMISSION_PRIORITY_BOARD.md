@@ -59,11 +59,14 @@
 
 
 
-> **TICK 96 — 池已空(八篇 Oracle 工作全部结束);A4 定位修复在跑,期间补进一条关键事实。**
+> **TICK 97 — 等待 A4 定位修复;确认上一 tick 发出的 TCS 版信息已被采纳,并厘清该缺口的性质。**
 >
-> 查得 Albayrak–Bell **有已发表版**:*Theoretical Computer Science* **977 (2023), 114144**,DOI `10.1016/j.tcs.2023.114144`。已发给在跑的 agent,要求以该版为主引、勿只引预印本。两点后果一并写入:其一,它就发在 **TCS**,与本篇已引的 Mignotte 1978、Ilie 1994、Latteux–Thierrin 1983 同刊 —— 属于本文**理应知悉**的文献,比较须以"知情定位"而非"迟到发现"的语气写;其二,其结论是对 $\mathbb N^d$ 的子集陈述而非仅 $\mathbb N$,**须核其多维版本是否覆盖了比一维读法更多的我们的情形**,若是则如实报告,不得为讨好我们而调整。
+> agent 已按已发表版写入:`\bibitem{AlbayrakBell2023}`,`doi:10.1016/j.tcs.2023.114144`,非预印本。
 >
-> 池 0/6,codex 一个 agent,内存 0.75 GB、缺页 46.5,无孤儿。八篇中七篇工作树干净,第八篇正由其唯一 agent 处理。
+> **更要紧的一点:该篇原本就引着另两条 Cobham 文献** —— `CharlierLeroyRigo2013CobhamANS`(抽象数系 Cobham 定理)与 `Durand2011CobhamSubstitutions`(代换 Cobham 定理),外加 `Cobham1969`。故此缺口**是定位问题,不是漏引**:该比较的对象一直在文献表内,只是从未做过逐条陈述级比较。复核时须查 Remark 3.3 是否真对这三条加 Albayrak–Bell 逐条比较,而非泛泛提及。
+>
+> 池 0/6,codex 一个 agent,内存 0.81 GB、缺页 3,**无 stdin 模式 python 孤儿**。七篇工作树干净。
+
 
 
 
