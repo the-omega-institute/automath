@@ -16,12 +16,12 @@
 
 | 篇 | 页 | 最新裁决 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | **86+33** | ✅ **稳定热流相对熵耗散定理已证(先导通过)** | **JFA** |
+| **A2** `cayley_chebyshev` | **86+33** | ✅ **定理通过外审技术审查;JFA 由"彩票"升为认真投稿** | **JFA** |
 | **A3** `sharp_three_window` | 64+15 | ✅ **升档裁定维持(依证明);Condition F 已删** | **TAMS**(ETDS 备选;DCDS-A 保守)|
 | **A4** `prime_languages` | **33+43** | ✅ **slender-CFL Cobham 定理已证并复核** | Monatshefte(可重估)|
 | **A5** `finite_parts` | 43+19 | ✅ 一般 $p$ Mahler 有效定理;**可归约性已承认非掩盖** | ETDS |
 | **A6** `zeckendorf_fibers` | 69+20 | **64%:Brocot 分数全变差凝聚定理**(在改)| **Transactions**(JNT/ETDS 备选) |
-| **A7** `upper_fibers` | **36+36** | ✅ **本原素因子/Wall–Sun–Sun 二择一已证并复核** | FQ(重估在飞)|
+| **A7** `upper_fibers` | **36+36** | ✅ 定理正确、系数更正获背书;Kiss 1988 比较已补 | **Fibonacci Quarterly**(档位不变)|
 | **A8** `detector_shells` | **70+19** | ✅ **Le Cam 局部等价定理已证并复核** | **Bernoulli** / EJS / SPA / SISP |
 | **A9** `homological_visibility` | 38+6 | ⛔ 天花板;范围更正已完成入库 | Cahiers |
 
@@ -59,13 +59,17 @@
 
 
 
-> **TICK 79 — 内存阈值被突破,但已查明并非本冲刺所致;本 tick 不新增 agent,不误杀在跑工作。**
+> **TICK 80 — A2 重估是本次冲刺最强的档位结果;A7 Kiss 1988 补正入库 `05a45d3b5`。**
 >
-> 硬缺页连采五次为 5256 / 14585 / 15261 / 5283 / 2888 每秒,**持续超 1000/s 界**,可用内存在 0.77–1.10 GB 徘徊。按规则应减并发,故先查元凶再动手:两个 codex agent 各 **80 MB**、守护 8 MB,全部 python 均为 MCP server(1–15 MB),**合计约 213 MB**;无 stdin 模式 python 孤儿。真正占用在环境侧 —— `vmmemWSL` 707 MB、`claude` 585 MB、Windows Defender 433 MB、Cursor 636 MB、Chrome 与 Lark 各数百 MB。**杀 agent 既救不了抖动,又会毁掉在跑的 A3、A7 工作**,故采取符合规则本意的做法:维持现有并发、本 tick 不新增。
+> **A2:定理通过技术审查,JFA 由"可辩护的彩票"升为"认真的投稿"。** 他逐项核过:先导引理如所述通过,$d+\alpha$ 矩**恰在所声称的端点上够用、无隐藏余量**;非紧 Green 闭合成立,**无无穷远形式相消**,有限环形代数的符号与因子正确、无遗漏 $1/2$;局部绝对连续、$W_1$ 端点、稳定参考版本(其参考律本身**不需要**有限 $d+\alpha$ 矩)与 $d=1$ 变量替换的标度全部正确。六项结论无一被削弱。他**不主张**把这份 86 页合稿投更高的综合刊。
+> 签字前六项已派工:(4.24) 处补一行 $\int Ag_t=0$ 的理由(由 $\int A_{\varepsilon,R}g_t=0$ 与引理 4.3 的 $L^1$ 收敛得出)并写明 $Af_t=-\partial_tf_t$;更正"仅用一次"的措辞(第 (iv) 部分用到由该矩推出的**有限一阶矩**,但不用 $d+\alpha$ 指数本身);补两条先例 —— Hilder–Peletier–Sharma–Tse 的离散两解恒等式(可溯至 Voigt 1981)与 **Hirata–Nemoto–Yoshida 2012 Entropy** 那篇(现引的 [46] 是同作者的**另一篇**);Johnson 措辞降级为"以等价的非局部形式解决",不得声称按其 (17) 解决 Open Problem 4;**重排架构**(标题完全未提稳定流耗散、摘要仍以旧定理开篇 —— 他称这是走向 major revision 最可能的路径);并拆分 799 行的 `sec_introduction.tex`。
 >
-> 一条可交由作者处理的实招:Defender 实时扫描很可能在跟踪 LaTeX 构建产生的大量 `.aux/.pdf/.log` 写入;把 `papers/publication` 加入排除项可同时缓解内存与构建耗时(需提权)。与 Dell SupportAssist 占 1.81 GB 同属需作者操作的项。
+> **A7:定理正确、系数更正获明确背书、档位不变**(仍 FQ,不进 JNT)。Kiss 1988 比较已补入 Remark 6.7,并**如实记录未取得全文**:Springer 仅给 DOI 与部分摘要,Google Books 限制页面图像,经可搜索 OCR 确认为 Theorem 2 及其假设,**被遮挡的密度常数未重构、未使用**。本篇第二处在案取证缺口(前一处 Mignotte)。
 >
-> 在飞:A2 重估 `bb7ca59e`(池 1/6);codex 侧 A3 有界零推广、A7 Kiss 1988 比较。无可收割。
+> **一件与本冲刺无关但需知情的事**:`tools/chatgpt-oracle/` 下 14 个文件、343 行未提交改动,时间戳 **08-03**,早于本会话十二天。我全程把 `git add` 限定在单篇论文目录,未将其扫入任何提交。
+>
+> 内存已自行恢复(2.5 GB、缺页近零)—— 上一 tick 顶住未杀 agent 的判断得到验证。在跑:A3 有界零推广、A2 签字修订。
+
 
 
 
