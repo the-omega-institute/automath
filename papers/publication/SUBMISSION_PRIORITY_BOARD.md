@@ -59,21 +59,16 @@
 
 
 
-> **TICK 114 — 把"状态文件与现实脱节"这条线查完:`pipeline_state/` 全部停在 05-14 至 07-11,但性质与板面不同,故只报不动。**
+> **TICK 115 — 八篇 `submission_metadata.md` 目标刊全部正确;但查出估值裁决未写入其中,已派工补。**
 >
-> 三份抽查与现实的落差:
+> 逐篇核对目标刊,与板面一致:JFA / TAMS / Monatshefte / ETDS / TAMS / Fibonacci Quarterly / SPA / Cahiers。**无陈旧。**
 >
-> | 篇 | 状态文件记 | 实际 |
-> |---|---|---|
-> | A2 `cayley_chebyshev` | stage **C**, round 1, JFA | 签字项完成、伪造引用已清;JFA"认真的投稿" |
-> | A8 `detector_shells` | stage **B**, round 1, "retarget physics-math venue" | Le Cam 等价定理已证;**估值裁决重构后投 EJS(51%)** |
-> | A6 `zeckendorf_fibers` | stage **A**, round 0, TAMS | Brocot 凝聚定理已证;**估值裁决拆分,A 篇 TAMS 55–65%** |
+> **但有一处信息断层**:A6、A8、A3 的估值裁决**晚于各自 metadata 的最后一次编辑**,故那三份只记着现状目标,未记"拆分/重构可显著提高概率"。结论保存在各篇 `artifacts/oracle_sprint_*_value.md`,却不在投稿人真正会读的那一页 —— 若日后据 metadata 备稿,会看到 A6"TAMS 35–45%"而不知拆分后为 55–65%。
 >
-> **但这不是我造成的疏漏,也不该由我改**:本轮全程用 `oracle ask` + codex agent 手动驱动,**`oracle_pipeline.py` 一次未运行**,其拥有的状态文件自然未被触碰。与板面不同 —— 板是我在维护却维护错了,这些是另一套工具的私有状态。
+> 已派工在三份 metadata 各加一段清晰界定的交叉引用:**不改现有目标**(现状目标对当下稿件仍然正确)、标注为"待作者决定的已评估替代方案"、**数字逐字照抄不得四舍五入或平均**、并给出报告路径。任务限定只动这三份 metadata —— 不碰 `.tex`、cover letter、artifacts,不重建 PDF、不重算校验和。
 >
-> **风险须知**:日后若运行该管线,它会**从七月状态续跑**(A6 会被当作 stage A round 0 重做、A8 会照"retarget physics-math venue"行事)。我不手改的理由有三:不熟其 schema,手改可能损坏;它是作者的自动化,弄坏比陈旧更糟;且既有记录表明手动重置会被 git-rebuild 覆盖。**这是第六项需要作者知情的事,处理方式由作者定。**
->
-> 池 0/6,无 agent,无未提交论文改动,内存 0.98 GB。
+> 池 0/6,codex 一个 agent,内存 0.98 GB,无未提交论文改动。
+
 
 
 
