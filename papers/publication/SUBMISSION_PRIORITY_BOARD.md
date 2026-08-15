@@ -22,7 +22,7 @@
 | **A5** `finite_parts` | 42+19 | ✅ parity 更正 + $\Omega(V)$ 下界 | ETDS |
 | **A6** `zeckendorf_fibers` | **69+20** | ✅ **重构为对 Dushistova 的更正定理**(定位其 Lemma 7, pp.668–669) | JNT |
 | **A7** `upper_fibers` | 33+36 | ⛔ 天花板 | Fibonacci Quarterly |
-| **A8** `detector_shells` | 59+19 | 外审:机制成立,但**一条结论为假** + 三处缺口 → 修复中 | MCAP |
+| **A8** `detector_shells` | **64+19** | ✅ 为假结论改为**无序 multiset + 最优匹配距离**;五条引理补齐 | MCAP |
 | **A9** `homological_visibility` | 37+6 | ✅ Terminal torsor obstruction + 方案 A | Cahiers |
 
 
@@ -58,15 +58,16 @@
 
 
 
-> **TICK 59 — A4 复核入库,而它交回的是一条对我们不利的更正**。池子空闲;codex 仅剩 A8 修复;内存 1.72 GB、无孤儿。
+> **TICK 60 — A8 收尾,八篇本轮升档循环全部走完**。池子空闲、**无 agent 在跑**、无孤儿、内存 1.36 GB。
 >
-> 任务书要求"**先读对方论文再写比较,若重叠比审稿人说的更大,照实报,不许调得对我们有利**"。agent **读完 51 页原文**后交回的结论正是更不利的那个:
+> **A8 那条为假的结论已改正**:恢复改述为**无序 multiset**、误差以**最优匹配距离**度量,正文写明该度量**保留重数**;**不再主张带标签恢复**。这是审稿人给的第二条出路,选它是因为它把主张缩到实际证得的范围,而不是靠排序把问题绕过去。
 >
-> 审稿人说 Charlier–Kreczman"实质重叠"我们的渐近机制;实际是 —— 他们的 **Remark 12** 给出任意线性递推在"主导特征值有公共 $p$ 次幂 + 项模最终递增"下的逆向商极限机制,而在我们 Theorem 2.25 的假设下这三条**全部成立**(可分性 → 相等周边重数,weak-Perron 周期性 → 公共幂,严格递增 → 最终递增)。**故我们的渐近机制可由他们的结果导出**,不是相邻而是可推出。
+> **五条引理都以引理形式落实**,不是口头保证:Uniform sampled-bin/sampled-tail derivatives、Uniform stopped renewal-score CLT/LLN(这两条决定 compact-uniform LAN 是否成立)、Efficient-score plug-in equicontinuity、Measurable finite-atlas quotient estimator(处理递推估计量)、Two-point threshold-risk lower bound。
 >
-> 比较写得对称而非防守:他们不处理 MCFL 子语言、有界素支撑、同步几何格式、Evertse 商刚性、五路 radical/标量周期性分类;我们不刻画整个贪心语言的正则性。**存活的是**从无限有限扇出 MCFL 上的有界外素支撑到精确同步格式这一步。引用已进主结果引言、专门的前作讨论、以及 Theorem 2.25 陈述处。
+> 优先权比较写成**对照**而非罗列:Chen / Ho–Nguyen / Heinrich–Kahn 对混合奇异速率与局部 minimax,Batenkov–Yomdin 与 Akinshin–Goldman–Yomdin 对 confluent/近碰撞 Prony 不稳定性,Jorgensen–Johnson 对周期门控死时间正则 LAN —— 每条都写明他们给什么、我们给什么。
 >
-> 天花板经改写后完好(`main.tex:47` "still extracts only one synchronized orbit"),这是我另一处担心的地方 —— 新的引用讨论最容易把限制说糊。
+> **本轮八篇的升档循环至此全部走完**:提问→路线图→做→送审→按裁决修→复核入库。A7 按其自身数字全程未派工。
+
 
 
 
