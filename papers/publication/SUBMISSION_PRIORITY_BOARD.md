@@ -18,7 +18,7 @@
 |---|--:|---|---|
 | **A2** `cayley_chebyshev` | **87+33** | ✅ 签字项完成;**查出 1 条伪造 + 3 条错配引用并修** | **JFA** |
 | **A3** `sharp_three_window` | **67+15** | ✅ 假陈述已锚定修正(反例三方复算一致) | TAMS(档位未跳)|
-| **A4** `prime_languages` | **33+43** | ⚠️ 定理成立(0.92);**正则整数基情形已被 Albayrak–Bell 覆盖**,定位在修 | **Monatshefte**(档位不变)|
+| **A4** `prime_languages` | **34+43** | ✅ 定位已补:逐条比较 Albayrak–Bell / Durand / Charlier–Leroy–Rigo | **Monatshefte**(档位不变)|
 | **A5** `finite_parts` | 43+19 | ✅ 已按三层重新配重;文献 81/84 已核 | ETDS(理由落在动力学定理)|
 | **A6** `zeckendorf_fibers` | 69+20 | **64%:Brocot 分数全变差凝聚定理**(在改)| **Transactions**(JNT/ETDS 备选) |
 | **A7** `upper_fibers` | **36+36** | ✅ 定理入库;**查出第二条伪造引用并删** | **Fibonacci Quarterly**(档位不变)|
@@ -59,13 +59,14 @@
 
 
 
-> **TICK 97 — 等待 A4 定位修复;确认上一 tick 发出的 TCS 版信息已被采纳,并厘清该缺口的性质。**
+> **TICK 98 — A4 定位修复复核入库 `e0c658aea`。八篇工作树全部干净,本轮全部工作收尾。**
 >
-> agent 已按已发表版写入:`\bibitem{AlbayrakBell2023}`,`doi:10.1016/j.tcs.2023.114144`,非预印本。
+> **agent 未回报,但工作已完成且经我独立复核。** codex 进程已退出、文件最后写入距今 11 分钟、无完成通知 —— 我没有据此推定成败,而是直接查实质与构建:比较段按**具体编号结果**写成(Albayrak–Bell Theorems 1.1 与 4.1;Durand Theorem 1;Charlier–Leroy–Rigo Definitions 33/34/47 与 Theorem 49),并明写其**包含我们定理的正则整数基特化且在该处更强,因我们不提供定量界** —— 局限写成我们的局限,未粉饰为差异优势。引用取**已发表 TCS 版**,且在 arXiv 与 Crossref 两处核过,记录在案,并注明**全文 14 页已读**。
 >
-> **更要紧的一点:该篇原本就引着另两条 Cobham 文献** —— `CharlierLeroyRigo2013CobhamANS`(抽象数系 Cobham 定理)与 `Durand2011CobhamSubstitutions`(代换 Cobham 定理),外加 `Cobham1969`。故此缺口**是定位问题,不是漏引**:该比较的对象一直在文献表内,只是从未做过逐条陈述级比较。复核时须查 Remark 3.3 是否真对这三条加 Albayrak–Bell 逐条比较,而非泛泛提及。
+> 复核:两文档从零重建 exit 0、0 未定义;34+43 页;verifier `OVERALL: PASS`;单元测试通过;SHA256SUMS 8/8;无修订痕迹、无遗留计划文件;档位与 cover letter 未动。
 >
-> 池 0/6,codex 一个 agent,内存 0.81 GB、缺页 3,**无 stdin 模式 python 孤儿**。七篇工作树干净。
+> **八篇至此全部走完**:第三代提问 → 具名可达定理 → 独立复核入库 → 档位重估 → 按裁决修复 → 文献表全表审计。Oracle 池空,无 agent 运行,无未提交论文改动。
+
 
 
 
