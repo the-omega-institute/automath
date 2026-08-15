@@ -1,0 +1,1570 @@
+OpenAI Codex v0.147.0
+--------
+workdir: D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+model: gpt-5.6-sol
+provider: chrono
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a00362-aac4-78b1-9140-7772ef34dbc5
+--------
+user
+Write a question putting the NEW abstract kernel theorem of this paper to the external
+expert as a referee, and write it ONLY to
+tools/chatgpt-oracle/sprint/ask/A2_kernel.txt (relative to D:\omega\automath). No preamble,
+no commentary, no other files. Self-contained: he sees only your text plus main.pdf.
+
+BACKGROUND to state honestly and briefly:
+
+He has already reviewed this paper three times. He accepted Theorem 4.27, the arbitrary-order
+law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold he named; he
+accepted the proof closure, the non-vacuousness corollary, the convention robustness result
+and the asymptotic coefficient rigidity statement, finding no false step in any of them; and
+he judged that the mechanism "reads as a central theorem rather than an isolated successful
+construction", with a JFA submission credible.
+
+He then listed five things that would each be a substantial further improvement, and said
+they would make the mechanism itself the central theorem. His FIRST was an abstract kernel
+theorem encompassing stable, Gaussian, Poisson and other polynomial-tail kernels - the same
+thing he originally named as option (b) of the tier threshold. This round attempted exactly
+that.
+
+State the new results precisely, reading them from sec_abstract_kernel_tail_decomposition.tex
+and sec_introduction_abstract_kernel.tex:
+
+ - the abstract positive tail-jet kernel theorem, with its full hypothesis list, labelled as
+   the manuscript labels them, including (K1);
+ - the verified-kernels proposition: isotropic strictly alpha-stable densities for
+   0 < alpha < 2, the Poisson kernel in every dimension, and every multivariate Student
+   kernel, noting that within the Student family only beta = d+1 is the Poisson/stable case,
+   so the class contains members that are not the kernel the proof was built on;
+ - that the stable specialisation uses the existing F_y, moment modes, proxies, energy and
+   quadratic form and therefore reproduces Theorem 4.27 unchanged;
+ - the Gaussian obstruction, in full: for the standard Gaussian, partial^gamma g / g =
+   (-1)^{|gamma|} H_gamma and grad log g(y) = -y, so the normalised derivatives are unbounded
+   and (K1) fails at its first derivative; the translate quotient exp(y.z - |z|^2/2) has
+   infimum zero for every z != 0, removing the uniform lower bound the two-background
+   expansion needs; and the concrete failure in dimension one at r = 2, where for nu = delta_m
+   and eta = (delta_{m-a} + delta_{m+a})/2 the tails eventually vanish and both prescribed
+   proxies equal 1 + m y / s, negative on a half-line, so proxy positivity, the background
+   lower bound and the bounded cubic remainder fail at the same additive-jet step. State also
+   that Gaussian translate entropy is NOT the obstruction for r >= 2, being |z|^2/2.
+
+Say that these are analytic proofs with no numerical support, and that the existing scripts
+are sanity checks only.
+
+Then ask him, as a referee:
+ 1. Is the abstract theorem correct? Name any step he cannot follow or believes wrong.
+ 2. Is the hypothesis set genuinely minimal and genuinely abstract, or is it a restatement of
+    what the stable proof needed, dressed as axioms? This is the question we most want
+    answered, and it is the same trap he checked for on the admissible class last round. Ask
+    him directly whether any hypothesis is doing no work, whether any could be weakened, and
+    whether the verified members are enough to show the class is not built around one kernel.
+ 3. He asked for stable, Gaussian, Poisson and other polynomial-tail kernels. We have stable,
+    Poisson and Student, and Gaussian is excluded with a counterexample rather than covered.
+    Does the sharp Gaussian exclusion satisfy what he asked, or does it fall short of it? If
+    the mechanism genuinely cannot reach Gaussian smoothing, is that itself a result worth
+    stating prominently, or a limitation that caps the paper?
+ 4. Is the Gaussian counterexample correct and does it prove what we claim it proves?
+ 5. With Theorem 4.27, the corollaries, the robustness and rigidity statements, and now this
+    abstract theorem, is the mechanism the central theorem in the sense he meant? What is the
+    honest venue judgement now, and what would still be required?
+
+Tell him a hard rejection with reasons is more useful than a soft acceptance, that we would
+rather learn the abstraction is hollow now than after submission, and that every objection
+should come with what would resolve it.
+
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\using-superpowers\\SKILL.md'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 143ms:
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, skip this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## Instruction Priority
+
+Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+
+1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) â€” highest priority
+2. **Superpowers skills** â€” override default system behavior where they conflict
+3. **Default system prompt** â€” lowest priority
+
+If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
+
+## How to Access Skills
+
+**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to youâ€”follow it directly. Never use the Read tool on skill files.
+
+**In Copilot CLI:** Use the `skill` tool. Skills are auto-discovered from installed plugins. The `skill` tool works the same as Claude Code's `Skill` tool.
+
+**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
+
+**In other environments:** Check your platform's documentation for how skills are loaded.
+
+## Platform Adaptation
+
+Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
+
+# Using Skills
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+
+```dot
+digraph skill_flow {
+    "User message received" [shape=doublecircle];
+    "About to EnterPlanMode?" [shape=doublecircle];
+    "Already brainstormed?" [shape=diamond];
+    "Invoke brainstorming skill" [shape=box];
+    "Might any skill apply?" [shape=diamond];
+    "Invoke Skill tool" [shape=box];
+    "Announce: 'Using [skill] to [purpose]'" [shape=box];
+    "Has checklist?" [shape=diamond];
+    "Create TodoWrite todo per item" [shape=box];
+    "Follow skill exactly" [shape=box];
+    "Respond (including clarifications)" [shape=doublecircle];
+
+    "About to EnterPlanMode?" -> "Already brainstormed?";
+    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
+    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
+    "Invoke brainstorming skill" -> "Might any skill apply?";
+
+    "User message received" -> "Might any skill apply?";
+    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
+    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
+    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
+    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
+    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
+    "Has checklist?" -> "Follow skill exactly" [label="no"];
+    "Create TodoWrite todo per item" -> "Follow skill exactly";
+}
+```
+
+## Red Flags
+
+These thoughts mean STOPâ€”you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept â‰  using the skill. Invoke it. |
+
+## Skill Priority
+
+When multiple skills could apply, use this order:
+
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+
+"Let's build X" â†’ brainstorming first, then implementation skills.
+"Fix this bug" â†’ debugging first, then domain-specific skills.
+
+## Skill Types
+
+**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+
+**Flexible** (patterns): Adapt principles to context.
+
+The skill itself tells you which.
+
+## User Instructions
+
+Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\brainstorming\\SKILL.md'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 157ms:
+---
+name: brainstorming
+description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+---
+
+# Brainstorming Ideas Into Designs
+
+Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
+
+Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+
+<HARD-GATE>
+Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+</HARD-GATE>
+
+## Anti-Pattern: "This Is Too Simple To Need A Design"
+
+Every project goes through this process. A todo list, a single-function utility, a config change â€” all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+
+## Checklist
+
+You MUST create a task for each of these items and complete them in order:
+
+1. **Explore project context** â€” check files, docs, recent commits
+2. **Offer visual companion** (if topic will involve visual questions) â€” this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+3. **Ask clarifying questions** â€” one at a time, understand purpose/constraints/success criteria
+4. **Propose 2-3 approaches** â€” with trade-offs and your recommendation
+5. **Present design** â€” in sections scaled to their complexity, get user approval after each section
+6. **Write design doc** â€” save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+7. **Spec self-review** â€” quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+8. **User reviews written spec** â€” ask user to review the spec file before proceeding
+9. **Transition to implementation** â€” invoke writing-plans skill to create implementation plan
+
+## Process Flow
+
+```dot
+digraph brainstorming {
+    "Explore project context" [shape=box];
+    "Visual questions ahead?" [shape=diamond];
+    "Offer Visual Companion\n(own message, no other content)" [shape=box];
+    "Ask clarifying questions" [shape=box];
+    "Propose 2-3 approaches" [shape=box];
+    "Present design sections" [shape=box];
+    "User approves design?" [shape=diamond];
+    "Write design doc" [shape=box];
+    "Spec self-review\n(fix inline)" [shape=box];
+    "User reviews spec?" [shape=diamond];
+    "Invoke writing-plans skill" [shape=doublecircle];
+
+    "Explore project context" -> "Visual questions ahead?";
+    "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
+    "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
+    "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Propose 2-3 approaches";
+    "Propose 2-3 approaches" -> "Present design sections";
+    "Present design sections" -> "User approves design?";
+    "User approves design?" -> "Present design sections" [label="no, revise"];
+    "User approves design?" -> "Write design doc" [label="yes"];
+    "Write design doc" -> "Spec self-review\n(fix inline)";
+    "Spec self-review\n(fix inline)" -> "User reviews spec?";
+    "User reviews spec?" -> "Write design doc" [label="changes requested"];
+    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+}
+```
+
+**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+
+## The Process
+
+**Understanding the idea:**
+
+- Check out the current project state first (files, docs, recent commits)
+- Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
+- If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec â†’ plan â†’ implementation cycle.
+- For appropriately-scoped projects, ask questions one at a time to refine the idea
+- Prefer multiple choice questions when possible, but open-ended is fine too
+- Only one question per message - if a topic needs more exploration, break it into multiple questions
+- Focus on understanding: purpose, constraints, success criteria
+
+**Exploring approaches:**
+
+- Propose 2-3 different approaches with trade-offs
+- Present options conversationally with your recommendation and reasoning
+- Lead with your recommended option and explain why
+
+**Presenting the design:**
+
+- Once you believe you understand what you're building, present the design
+- Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
+- Ask after each section whether it looks right so far
+- Cover: architecture, components, data flow, error handling, testing
+- Be ready to go back and clarify if something doesn't make sense
+
+**Design for isolation and clarity:**
+
+- Break the system into smaller units that each have one clear purpose, communicate through well-defined interfaces, and can be understood and tested independently
+- For each unit, you should be able to answer: what does it do, how do you use it, and what does it depend on?
+- Can someone understand what a unit does without reading its internals? Can you change the internals without breaking consumers? If not, the boundaries need work.
+- Smaller, well-bounded units are also easier for you to work with - you reason better about code you can hold in context at once, and your edits are more reliable when files are focused. When a file grows large, that's often a signal that it's doing too much.
+
+**Working in existing codebases:**
+
+- Explore the current structure before proposing changes. Follow existing patterns.
+- Where existing code has problems that affect the work (e.g., a file that's grown too large, unclear boundaries, tangled responsibilities), include targeted improvements as part of the design - the way a good developer improves code they're working in.
+- Don't propose unrelated refactoring. Stay focused on what serves the current goal.
+
+## After the Design
+
+**Documentation:**
+
+- Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+  - (User preferences for spec location override this default)
+- Use elements-of-style:writing-clearly-and-concisely skill if available
+- Commit the design document to git
+
+**Spec Self-Review:**
+After writing the spec document, look at it with fresh eyes:
+
+1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
+2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
+3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
+4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+
+Fix any issues inline. No need to re-review â€” just fix and move on.
+
+**User Review Gate:**
+After the spec review loop passes, ask the user to review the written spec before proceeding:
+
+> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+
+Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+
+**Implementation:**
+
+- Invoke the writing-plans skill to create a detailed implementation plan
+- Do NOT invoke any other skill. writing-plans is the next step.
+
+## Key Principles
+
+- **One question at a time** - Don't overwhelm with multiple questions
+- **Multiple choice preferred** - Easier to answer than open-ended when possible
+- **YAGNI ruthlessly** - Remove unnecessary features from all designs
+- **Explore alternatives** - Always propose 2-3 approaches before settling
+- **Incremental validation** - Present design, get approval before moving on
+- **Be flexible** - Go back and clarify when something doesn't make sense
+
+## Visual Companion
+
+A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool â€” not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
+
+**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
+> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. This feature is still new and can be token-intensive. Want to try it? (Requires opening a local URL)"
+
+**This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. The message should contain ONLY the offer above and nothing else. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
+
+**Per-question decision:** Even after the user accepts, decide FOR EACH QUESTION whether to use the browser or the terminal. The test: **would the user understand this better by seeing it than reading it?**
+
+- **Use the browser** for content that IS visual â€” mockups, wireframes, layout comparisons, architecture diagrams, side-by-side visual designs
+- **Use the terminal** for content that is text â€” requirements questions, conceptual choices, tradeoff lists, A/B/C/D text options, scope decisions
+
+A question about a UI topic is not automatically a visual question. "What does personality mean in this context?" is a conceptual question â€” use the terminal. "Which wizard layout works better?" is a visual question â€” use the browser.
+
+If they agree to the companion, read the detailed guide before proceeding:
+`skills/brainstorming/visual-companion.md`
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files | rg 'sec_(abstract_kernel_tail_decomposition|introduction_abstract_kernel)\\.tex"'$'"'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+2026-08-15T03:06:51.605716Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+
+ exited 1 in 207ms:
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files | rg 'abstract_kernel'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 223ms:
+sec_introduction_abstract_kernel.tex
+sec_abstract_kernel_tail_decomposition.tex
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_abstract_kernel_tail_decomposition.tex'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_introduction_abstract_kernel.tex'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 176ms:
+\subsection*{The positive tail-jet mechanism for an abstract kernel}
+
+We now separate the kernel properties from their stable implementation.  Fix
+an integer \(r\ge1\).  A strictly positive probability density
+\(p\in C^r(\RR^d)\) will be called \emph{tail-jet admissible of order \(r\)}
+if the following three conditions hold.
+\begin{enumerate}[label=\textup{(K\arabic*)},leftmargin=2.8em]
+\item For every multi-index \(\gamma\) with \(1\le|\gamma|\le r\),
+\[
+ \left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
+\]
+\item The top normalized derivative has the quotient translation modulus
+\[
+ \omega_{p,r}(t):=
+ \max_{|\gamma|=r}\ \sup_{|h|\le t}
+ \left\|\frac{\partial^\gamma p(\mathord\cdot-h)
+                   -\partial^\gamma p}{p}\right\|_\infty,
+ \qquad 0<t\le1,
+\]
+finite for \(0<t\le1\) and satisfying
+\(\omega_{p,r}(t)\to0\) as \(t\downarrow0\).
+\item The translate entropy is finite and, for some \(C_{p,r}<\infty\),
+\[
+ \mathsf H_p(z):=
+ D_{\rm KL}\bigl(p(\mathord\cdot-z)\|p\bigr)
+ \le C_{p,r}(1+|z|^r),\qquad z\in\RR^d.
+\]
+\end{enumerate}
+Put \(p_s(x)=s^{-d}p(x/s)\),
+\(\Omega_p(\dd y)=p(y)\dd y\), and
+\[
+ F_y^p(z)=\frac{p(y-z)}{p(y)}.
+\]
+For a law \(\lambda\) with finite \(r\)th absolute moment define
+\[
+ B_{p,j}^\lambda(y):=
+ \frac{(-1)^j}{p(y)}
+ \sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}
+ \partial^\gamma p(y),\qquad 1\le j\le r.
+\]
+
+\begin{unnumberedtheorem}[Abstract positive tail-jet kernel theorem]
+Let \(p\) be tail-jet admissible of order \(r\), and let \(\nu,\eta\) be
+probability laws on \(\RR^d\) such that
+\[
+ m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
+ \qquad \int |x|^r(\nu+\eta)(\dd x)<\infty.
+\]
+For \(\lambda\in\{\nu,\eta\}\), set
+\[
+ \tau_s^\lambda=\lambda(|x|>s),\qquad
+ V_{p,s}^\lambda(y)=
+ \int_{|x|>s}F_y^p(x/s)\lambda(\dd x),
+\]
+and let the common retained jet and the two proxies be
+\begin{align*}
+ C_{p,r-1,s}
+ &=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
+  =\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,\\
+ A_{p,s}^\lambda
+ &=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda.
+\end{align*}
+The sum is empty when \(r=1\).  For all sufficiently large \(s\), both
+\(A_{p,s}^\lambda\) are positive probability densities relative to
+\(\Omega_p\).  Thus
+\[
+ k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
+\]
+are probability densities and the finite, nonnegative proxy energy
+\[
+ \mathcal E_{p,r,s}(\nu,\eta)
+ :=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
+\]
+is well defined.  If
+\(\Delta_r=\int x^{\otimes r}(\nu-\eta)(\dd x)\), put
+\[
+ B_{p,\Delta_r}(y)=
+ \frac{(-1)^r}{r!p(y)}\langle\Delta_r,D^rp(y)\rangle,
+ \qquad
+ \mathcal Q_{p,r}(\Delta_r)
+ =\frac12\int B_{p,\Delta_r}^2\dd\Omega_p.
+\]
+Then
+\[
+ D_{\rm KL}(p_s*\nu\|p_s*\eta)
+ =\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+  +\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
+\]
+Moreover \(\mathcal Q_{p,r}\) is finite and positive definite on
+\(\operatorname{Sym}^r(\RR^d)\), and hence, law by law,
+\[
+ s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)
+ \longrightarrow\mathcal Q_{p,r}(\Delta_r)
+ \quad\Longleftrightarrow\quad
+ s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\longrightarrow0.
+\]
+\end{unnumberedtheorem}
+
+\begin{proof}
+We give every kernel-dependent step.  Let
+\[
+ \mathsf B_{p,j}(y,z)=
+ \frac{(-1)^j}{j!p(y)}\langle D^jp(y),z^{\otimes j}\rangle,
+ \qquad \mathsf B_{p,0}=1.
+\]
+Condition \textup{(K1)} gives, for \(1\le j\le r\),
+\[
+ \|\mathsf B_{p,j}(\mathord\cdot,z)\|_\infty
+ +\|\mathsf B_{p,j}(\mathord\cdot,z)\|_{L^1(\Omega_p)}
+ \le C_{p,r}|z|^j.
+\]
+It also gives \(D^rp\in L^1\).  Consequently ordinary translation
+continuity in \(L^1\), the integral Taylor formula, and \textup{(K2)} imply
+that, for \(|z|\le1\),
+\begin{align*}
+ &\left\|F_\cdot^p(z)-\sum_{j=0}^r
+       \mathsf B_{p,j}(\mathord\cdot,z)\right\|_\infty
+ +\left\|F_\cdot^p(z)-\sum_{j=0}^r
+       \mathsf B_{p,j}(\mathord\cdot,z)\right\|_{L^1(\Omega_p)}\\
+ &\hspace{35mm}\le \varepsilon_{p,r}(|z|)|z|^r,
+\end{align*}
+where \(\varepsilon_{p,r}\) is bounded on \([0,1]\) and tends to zero at
+zero.  Indeed, after subtracting the degree-\(r\) Taylor polynomial, the
+uniform remainder is bounded by a constant times
+\(|z|^r\omega_{p,r}(|z|)\).  After multiplication by \(p(y)\), the
+\(L^1(\Omega_p)\) remainder is bounded by a constant times
+\[
+ |z|^r\max_{|\gamma|=r}\sup_{|h|\le|z|}
+ \|\partial^\gamma p(\mathord\cdot-h)-\partial^\gamma p\|_1,
+\]
+which is \(o(|z|^r)\).  This proves the required local Taylor statement
+without a derivative of order \(r+1\).
+
+Define the actual quotient
+\[
+ q_{p,s}^\lambda(y)=\int F_y^p(x/s)\lambda(\dd x).
+\]
+Splitting at \(|x|=s\), retaining the exterior translate exactly, and using
+the moments gives
+\[
+ q_{p,s}^\lambda
+ =A_{p,s}^\lambda+s^{-r}B_{p,r}^\lambda+R_{p,s}^\lambda,
+ \qquad
+ \|R_{p,s}^\lambda\|_\infty
+ +\|R_{p,s}^\lambda\|_{L^1(\Omega_p)}=o(s^{-r}).
+\]
+For completeness, after multiplication by \(s^r\) the interior Taylor
+remainder is dominated by \(C|x|^r\) and converges pointwise to zero.  Every
+discarded exterior mode satisfies
+\[
+ s^{-j}\int_{|x|>s}|x|^j\lambda(\dd x)
+ \le s^{-r}\int_{|x|>s}|x|^r\lambda(\dd x)=o(s^{-r}),
+ \qquad j\le r.
+\]
+The same tail-moment estimate gives \(\tau_s^\lambda=o(s^{-r})\).
+
+Translation preserves mass.  Hence \(V_{p,s}^\lambda\ge0\),
+\(\int V_{p,s}^\lambda\dd\Omega_p=\tau_s^\lambda\), and integration of
+the distributional derivatives of the integrable density \(p\) gives
+\(\int B_{p,j}^\lambda\dd\Omega_p=0\).  Therefore each proxy has mass one,
+and
+\[
+ \inf_yA_{p,s}^\lambda(y)
+ \ge1-\|C_{p,r-1,s}\|_\infty-\tau_s^\lambda\longrightarrow1.
+\]
+This is both proxy normalization and proxy positivity; no tail comparison is
+used.
+
+We next verify entropy finiteness.  When \(\tau_s^\lambda>0\), convexity of
+relative entropy and \textup{(K3)} give, for the normalized exterior mixture
+quotient \(Q_{p,s}^\lambda=V_{p,s}^\lambda/\tau_s^\lambda\),
+\[
+ \int Q_{p,s}^\lambda\log Q_{p,s}^\lambda\dd\Omega_p
+ \le\frac{C_{p,r}}{\tau_s^\lambda}
+ \int_{|x|>s}\{1+|x/s|^r\}\lambda(\dd x)<\infty.
+\]
+The elementary inequalities
+\(\Phi(\tau q)\le\tau q\log(1+q)\) for \(0\le\tau\le1\), and
+\[
+ (u+v)\log^+(u+v)\le C\{1+v+\Phi(v)\},
+ \qquad 0\le u\le3/2,\quad v\ge0,
+\]
+then show
+\(\int A_{p,s}^\lambda\log^+A_{p,s}^\lambda\dd\Omega_p<\infty\).
+The case \(\tau_s^\lambda=0\) is immediate.  Since the two proxies have a
+common positive lower bound, their relative entropy is finite.
+
+It remains to identify the quadratic term.  Condition \textup{(K1)} at
+order one says \(\|\nabla\log p\|_\infty=L<\infty\).  Thus
+\[
+ F_y^p(z)\ge e^{-L|z|},\qquad
+ q_{p,s}^\lambda(y)
+ \ge e^{-L\int|x|\lambda(\dd x)/s}\longrightarrow1
+\]
+uniformly in \(y\).  The backgrounds tend to one in \(L^1(\Omega_p)\), and
+their common jet cancels, so
+\begin{align*}
+ \|A_{p,s}^\lambda-1\|_1
+ &\le\sum_{j=1}^{r-1}s^{-j}\|B_{p,j}^\lambda\|_1
+      +2\tau_s^\lambda=o(1),\\
+ \|A_{p,s}^\nu-A_{p,s}^\eta\|_1
+ &\le2(\tau_s^\nu+\tau_s^\eta)=o(s^{-r}).
+\end{align*}
+All hypotheses of the two-background KL perturbation lemma are now
+satisfied with \(\epsilon_s=s^{-r}\).  Its Hessian and cubic-remainder
+calculation gives
+\[
+ D_{\rm KL}(p_s*\nu\|p_s*\eta)
+ =\mathcal E_{p,r,s}(\nu,\eta)
+  +\frac{s^{-2r}}2\int
+       (B_{p,r}^\nu-B_{p,r}^\eta)^2\dd\Omega_p+o(s^{-2r}).
+\]
+The moment identity makes the difference in the integral exactly
+\(B_{p,\Delta_r}\), proving the decomposition.
+
+Finiteness of \(\mathcal Q_{p,r}\) follows from \textup{(K1)}.  If it
+vanishes, then
+\[
+ \sum_{|\gamma|=r}\frac{\Delta m_\gamma}{\gamma!}
+ \partial^\gamma p=0
+\]
+almost everywhere.  Fourier transformation gives
+\(P(i\xi)\widehat p(\xi)=0\), where \(P\) is the corresponding homogeneous
+polynomial.  Since \(\widehat p(0)=1\), continuity makes \(\widehat p\)
+nonzero on a neighborhood of zero.  Thus \(P\) vanishes on an open set and
+is identically zero.  Hence \(\Delta_r=0\), proving positive definiteness.
+Nonnegativity of the proxy KL energy proves the final equivalence.
+\end{proof}
+
+The hypotheses above are arranged by proof function, not by tail class.
+Condition \textup{(K1)} defines and bounds the retained modes, makes their
+integrals vanish, and supplies the logarithmic-gradient lower bound.
+Condition \textup{(K2)} is exactly the uniform little-\(o\) Taylor remainder;
+the \(L^1\) counterpart is automatic because \textup{(K1)} puts \(D^rp\) in
+\(L^1\).  Condition \textup{(K3)} is used only to make the retained-tail and
+proxy entropies finite.  Neither decay, regular variation, a semigroup law,
+radial symmetry, nor isotropy is assumed.  Isotropy merely adds orthogonal
+invariance of \(\mathcal Q_{p,r}\).
+
+\begin{unnumberedproposition}[Verified kernels and the Gaussian boundary]
+For every order \(r\ge1\), the abstract theorem applies to each isotropic
+strictly \(\alpha\)-stable density, \(0<\alpha<2\), to the Poisson kernel in
+every dimension, and to every multivariate Student kernel
+\[
+ p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
+\]
+For the stable density, the specialization is exactly Theorem
+\ref{thm:stable-arbitrary-order-law-by-law-decomposition}, with identical
+proxies, energy, and quadratic form.  The standard Gaussian density is not
+tail-jet admissible: \textup{(K1)} and \textup{(K2)} fail, and the additive
+retained common jet need not be positive.  Thus the abstract theorem makes no
+Gaussian claim.
+\end{unnumberedproposition}
+
+\begin{proof}
+\emph{Isotropic stable kernels.}
+Proposition~\ref{prop:stable-kernel-input-package} gives, with
+\(\beta=d+\alpha\),
+\[
+ p(y)\asymp(1+|y|)^{-\beta},\qquad
+ |\partial^\gamma p(y)|\le C_\gamma
+ (1+|y|)^{-\beta-|\gamma|}.
+\]
+This proves \textup{(K1)}.  For \(|h|\le1\), the mean-value theorem, the
+bound at order \(r+1\), and
+\(1+|y|\le2(1+|y-th|)\) give
+\[
+ \frac{|\partial^\gamma p(y-h)-\partial^\gamma p(y)|}{p(y)}
+ \le C|h|,\qquad |\gamma|=r,\quad 0\le t\le1,
+\]
+so \textup{(K2)} holds.  The two-sided density estimate also gives
+\[
+ \mathsf H_p(z)\le C+(d+\alpha)\log(1+|z|),
+\]
+which is \textup{(K3)} for every \(r\ge1\).  The abstract definitions of
+\(F_y^p\), \(B_{p,j}^\lambda\), \(A_{p,s}^\lambda\), and
+\(\mathcal Q_{p,r}\) are respectively the definitions used in
+Theorem~\ref{thm:stable-arbitrary-order-law-by-law-decomposition}.  Hence
+that theorem is precisely this specialization, not a weakened consequence.
+
+\emph{Poisson kernel.}
+At unit height the Poisson kernel on \(\RR^d\) is
+\[
+ P_1^{(d)}(y)=c_d(1+|y|^2)^{-(d+1)/2}.
+\]
+The derivative calculation in the next paragraph with \(\beta=d+1\)
+verifies \textup{(K1)} and \textup{(K2)}, while the displayed entropy bound
+there verifies \textup{(K3)}.  Its spatial dilates are exactly
+\(P_s^{(d)}(x)=c_ds(s^2+|x|^2)^{-(d+1)/2}\).  This is also the
+\(\alpha=1\) stable member, but the rational formula proves membership
+directly, without stable-density estimates.
+
+\emph{Multivariate Student kernels.}
+Let \(\beta>d\).  Repeated differentiation shows that every normalized
+derivative \(\partial^\gamma p_{\beta,d}/p_{\beta,d}\) is a finite sum of
+terms
+\[
+ c_{\gamma,k}\,
+ \frac{y^{\delta_{\gamma,k}}}{(1+|y|^2)^{k}},
+ \qquad |\delta_{\gamma,k}|\le2k,
+\]
+and is therefore bounded.  The same statement one order higher, together
+with
+\[
+ \frac{p_{\beta,d}(y-th)}{p_{\beta,d}(y)}\le C_{\beta,d},
+ \qquad |h|\le1,\quad 0\le t\le1,
+\]
+and the mean-value theorem gives \(\omega_{p,r}(t)\le Ct\).  Finally,
+\[
+ \sqrt{1+|w+z|^2}
+ \le\sqrt{1+|w|^2}+|z|
+ \le(1+|z|)\sqrt{1+|w|^2},
+\]
+so
+\[
+ \log\frac{p_{\beta,d}(w)}{p_{\beta,d}(w+z)}
+ \le\beta\log(1+|z|).
+\]
+Integration against \(p_{\beta,d}(w)\dd w\) proves \textup{(K3)}.
+This supplies a nonstable polynomial-tail family for every \(\beta>d\);
+only the value \(\beta=d+1\) is the Poisson/stable case.
+
+\emph{Gaussian obstruction.}
+For the standard Gaussian \(g\),
+\[
+ \partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
+ \qquad \nabla\log g(y)=-y,
+\]
+so the normalized derivatives are unbounded and \textup{(K1)} fails at its
+first derivative.  The translate quotient
+\[
+ F_y^g(z)=\exp\{y\mathbin\cdot z-|z|^2/2\}
+\]
+has infimum zero for every \(z\ne0\); hence the uniform lower bound for the
+actual quotients used by the two-background expansion is unavailable.  The
+proxy failure is already explicit in dimension one at \(r=2\).  Take
+\(\nu=\delta_m\) and
+\(\eta=(\delta_{m-a}+\delta_{m+a})/2\), where \(m\ne0\) and \(a>0\).
+They have the same moments below order two.  For \(s>|m|+a\) the retained
+tails vanish, while the common first Gaussian mode is \(my\); therefore both
+prescribed proxies equal \(1+my/s\), which is negative on a half-line.
+Thus proxy positivity, the background lower bound, and the bounded cubic
+remainder all fail at the same additive-jet step.  Gaussian translate entropy
+itself is not the obstruction when \(r\ge2\), since
+\(\mathsf H_g(z)=|z|^2/2\).  Weighted Hermite arguments can and do prove
+Gaussian first-unmatched-moment asymptotics under stronger input hypotheses,
+as recalled above, but they are not instances of this positive additive
+tail-proxy mechanism.
+\end{proof}
+
+
+ succeeded in 180ms:
+The theorem is a specialization of the unnumbered abstract kernel theorem
+that precedes it.  For a strictly positive density \(p\), the proof uses only
+bounded normalized derivatives through order \(r\), uniform
+translation-continuity of the normalized order-\(r\) derivative, and an
+order-\(r\) bound on the entropy of a translate of \(p\).  These conditions
+hold for all isotropic strictly stable densities, for the Poisson kernel, and
+for every multivariate Student density \(c_{\beta,d}(1+|y|^2)^{-\beta/2}\),
+\(\beta>d\).  No tail asymptotic or regular variation enters the abstract
+proof.  The Gaussian density does not satisfy the bounded normalized-jet
+condition: its normalized derivatives are Hermite polynomials, and an
+additive common jet need not remain positive.  Thus the Gaussian
+first-unmatched-moment theorem recalled above uses a different weighted
+Hermite mechanism; it is not presented as a member of the positive
+tail-proxy theorem.
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Test-Path 'D:\\omega\\automath\\tools\\chatgpt-oracle\\sprint\\ask\\A2_kernel.txt'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 144ms:
+False
+
+apply patch
+patch: completed
+D:\omega\automath\tools\chatgpt-oracle\sprint\ask\A2_kernel.txt
+diff --git a/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..28e5c2fe57cafc8135158500f673170efc249c7f
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+@@ -0,0 +1,116 @@
++You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
++
++The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
++
++(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
++$$
++\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
++$$
++
++(K2) The top normalized derivative has the quotient translation modulus
++$$
++\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
++\left\|\frac{\partial^\gamma p(\cdot-h)-\partial^\gamma p}{p}\right\|_\infty,
++\qquad 0<t\leq1,
++$$
++finite for $0<t\leq1$ and satisfying $\omega_{p,r}(t)\to0$ as $t\downarrow0$.
++
++(K3) The translate entropy is finite and, for some $C_{p,r}<\infty$,
++$$
++\mathsf H_p(z):=D_{\rm KL}\bigl(p(\cdot-z)\|p\bigr)
++\leq C_{p,r}(1+|z|^r),\qquad z\in\mathbb R^d.
++$$
++
++Put $p_s(x)=s^{-d}p(x/s)$, $\Omega_p(dy)=p(y)\,dy$, and $F_y^p(z)=p(y-z)/p(y)$. For a law $\lambda$ with finite $r$th absolute moment define
++$$
++B_{p,j}^\lambda(y)=\frac{(-1)^j}{p(y)}
++\sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}\partial^\gamma p(y),
++\qquad 1\leq j\leq r.
++$$
++If probability laws $\nu,\eta$ satisfy
++$$
++m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
++\qquad \int |x|^r(\nu+\eta)(dx)<\infty,
++$$
++set, for $\lambda\in\{\nu,\eta\}$,
++$$
++\tau_s^\lambda=\lambda(|x|>s),\qquad
++V_{p,s}^\lambda(y)=\int_{|x|>s}F_y^p(x/s)\lambda(dx),
++$$
++and define the common retained jet and the two proxies by
++$$
++C_{p,r-1,s}=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
++=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,
++\qquad
++A_{p,s}^\lambda=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda,
++$$
++with the sum empty for $r=1$. The theorem says that, for all sufficiently large $s$, both $A_{p,s}^\lambda$ are positive probability densities relative to $\Omega_p$. Consequently
++$$
++k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
++$$
++are probability densities and
++$$
++\mathcal E_{p,r,s}(\nu,\eta)
++:=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
++$$
++is finite and nonnegative. If
++$$
++\Delta_r=\int x^{\otimes r}(\nu-\eta)(dx),\qquad
++B_{p,\Delta_r}(y)=\frac{(-1)^r}{r!p(y)}
++\langle\Delta_r,D^rp(y)\rangle,
++$$
++and
++$$
++\mathcal Q_{p,r}(\Delta_r)=\frac12\int B_{p,\Delta_r}^2\,d\Omega_p,
++$$
++then
++$$
++D_{\rm KL}(p_s*\nu\|p_s*\eta)
++=\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+++\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
++$$
++Moreover, $\mathcal Q_{p,r}$ is finite and positive definite on $\operatorname{Sym}^r(\mathbb R^d)$, and hence, law by law,
++$$
++s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)\to\mathcal Q_{p,r}(\Delta_r)
++\quad\Longleftrightarrow\quad
++s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\to0.
++$$
++
++The manuscript explicitly assigns a separate proof function to each hypothesis: (K1) defines and bounds the retained modes, makes their integrals vanish, and supplies the bounded-logarithmic-gradient lower bound; (K2) supplies the uniform little-$o$ Taylor remainder, with its $L^1$ counterpart following from (K1); and (K3) is used only to make the retained-tail and proxy entropies finite. The theorem assumes no decay law, regular variation, semigroup structure, radial symmetry, or isotropy.
++
++The accompanying unnumbered proposition, "Verified kernels and the Gaussian boundary," proves that the theorem applies, for every $r\geq1$, to every isotropic strictly $\alpha$-stable density with $0<\alpha<2$, to the Poisson kernel in every dimension, and to every multivariate Student kernel
++$$
++p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
++$$
++Within the Student family, only $\beta=d+1$ is the Poisson/stable case. Thus the verified class contains polynomial-tail members that are not the kernel on which the original proof was built. For a stable density, the specialization uses exactly the paper's existing $F_y$, moment modes, proxies, energy, and quadratic form, and therefore reproduces Theorem 4.27 unchanged rather than merely implying a weakened version of it.
++
++The proposition also gives a sharp obstruction for the standard Gaussian $g$. One has
++$$
++\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
++\qquad \nabla\log g(y)=-y,
++$$
++so the normalized derivatives are unbounded and (K1) already fails at the first derivative. Its translate quotient is
++$$
++F_y^g(z)=\exp\{y\cdot z-|z|^2/2\},
++$$
++whose infimum over $y$ is zero for every $z\neq0$; this removes the uniform lower bound required by the two-background expansion. The additive proxy itself fails concretely in dimension one at $r=2$: with $\nu=\delta_m$ and $\eta=(\delta_{m-a}+\delta_{m+a})/2$, where $m\neq0$ and $a>0$, the two laws match all moments below order two. For $s>|m|+a$ their retained tails vanish, and both prescribed proxies are
++$$
++1+\frac{my}{s},
++$$
++which is negative on a half-line. Thus proxy positivity, the background lower bound, and the bounded cubic remainder fail at the same additive-jet step. Gaussian translate entropy is not the obstruction for $r\geq2$, since $\mathsf H_g(z)=|z|^2/2$. The claim is not that Gaussian first-unmatched-moment asymptotics are false; weighted Hermite methods can prove them under stronger input assumptions. The claim is that they are not instances of this positive additive tail-proxy mechanism.
++
++All of these arguments are analytic. There is no numerical support for the theorem, the kernel verifications, or the Gaussian exclusion; the existing scripts are sanity checks only.
++
++Please assess the following as a referee:
++
++1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
++
++2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
++
++3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
++
++4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
++
++5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
++
++A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..28e5c2fe57cafc8135158500f673170efc249c7f
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+@@ -0,0 +1,116 @@
++You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
++
++The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
++
++(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
++$$
++\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
++$$
++
++(K2) The top normalized derivative has the quotient translation modulus
++$$
++\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
++\left\|\frac{\partial^\gamma p(\cdot-h)-\partial^\gamma p}{p}\right\|_\infty,
++\qquad 0<t\leq1,
++$$
++finite for $0<t\leq1$ and satisfying $\omega_{p,r}(t)\to0$ as $t\downarrow0$.
++
++(K3) The translate entropy is finite and, for some $C_{p,r}<\infty$,
++$$
++\mathsf H_p(z):=D_{\rm KL}\bigl(p(\cdot-z)\|p\bigr)
++\leq C_{p,r}(1+|z|^r),\qquad z\in\mathbb R^d.
++$$
++
++Put $p_s(x)=s^{-d}p(x/s)$, $\Omega_p(dy)=p(y)\,dy$, and $F_y^p(z)=p(y-z)/p(y)$. For a law $\lambda$ with finite $r$th absolute moment define
++$$
++B_{p,j}^\lambda(y)=\frac{(-1)^j}{p(y)}
++\sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}\partial^\gamma p(y),
++\qquad 1\leq j\leq r.
++$$
++If probability laws $\nu,\eta$ satisfy
++$$
++m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
++\qquad \int |x|^r(\nu+\eta)(dx)<\infty,
++$$
++set, for $\lambda\in\{\nu,\eta\}$,
++$$
++\tau_s^\lambda=\lambda(|x|>s),\qquad
++V_{p,s}^\lambda(y)=\int_{|x|>s}F_y^p(x/s)\lambda(dx),
++$$
++and define the common retained jet and the two proxies by
++$$
++C_{p,r-1,s}=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
++=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,
++\qquad
++A_{p,s}^\lambda=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda,
++$$
++with the sum empty for $r=1$. The theorem says that, for all sufficiently large $s$, both $A_{p,s}^\lambda$ are positive probability densities relative to $\Omega_p$. Consequently
++$$
++k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
++$$
++are probability densities and
++$$
++\mathcal E_{p,r,s}(\nu,\eta)
++:=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
++$$
++is finite and nonnegative. If
++$$
++\Delta_r=\int x^{\otimes r}(\nu-\eta)(dx),\qquad
++B_{p,\Delta_r}(y)=\frac{(-1)^r}{r!p(y)}
++\langle\Delta_r,D^rp(y)\rangle,
++$$
++and
++$$
++\mathcal Q_{p,r}(\Delta_r)=\frac12\int B_{p,\Delta_r}^2\,d\Omega_p,
++$$
++then
++$$
++D_{\rm KL}(p_s*\nu\|p_s*\eta)
++=\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+++\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
++$$
++Moreover, $\mathcal Q_{p,r}$ is finite and positive definite on $\operatorname{Sym}^r(\mathbb R^d)$, and hence, law by law,
++$$
++s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)\to\mathcal Q_{p,r}(\Delta_r)
++\quad\Longleftrightarrow\quad
++s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\to0.
++$$
++
++The manuscript explicitly assigns a separate proof function to each hypothesis: (K1) defines and bounds the retained modes, makes their integrals vanish, and supplies the bounded-logarithmic-gradient lower bound; (K2) supplies the uniform little-$o$ Taylor remainder, with its $L^1$ counterpart following from (K1); and (K3) is used only to make the retained-tail and proxy entropies finite. The theorem assumes no decay law, regular variation, semigroup structure, radial symmetry, or isotropy.
++
++The accompanying unnumbered proposition, "Verified kernels and the Gaussian boundary," proves that the theorem applies, for every $r\geq1$, to every isotropic strictly $\alpha$-stable density with $0<\alpha<2$, to the Poisson kernel in every dimension, and to every multivariate Student kernel
++$$
++p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
++$$
++Within the Student family, only $\beta=d+1$ is the Poisson/stable case. Thus the verified class contains polynomial-tail members that are not the kernel on which the original proof was built. For a stable density, the specialization uses exactly the paper's existing $F_y$, moment modes, proxies, energy, and quadratic form, and therefore reproduces Theorem 4.27 unchanged rather than merely implying a weakened version of it.
++
++The proposition also gives a sharp obstruction for the standard Gaussian $g$. One has
++$$
++\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
++\qquad \nabla\log g(y)=-y,
++$$
++so the normalized derivatives are unbounded and (K1) already fails at the first derivative. Its translate quotient is
++$$
++F_y^g(z)=\exp\{y\cdot z-|z|^2/2\},
++$$
++whose infimum over $y$ is zero for every $z\neq0$; this removes the uniform lower bound required by the two-background expansion. The additive proxy itself fails concretely in dimension one at $r=2$: with $\nu=\delta_m$ and $\eta=(\delta_{m-a}+\delta_{m+a})/2$, where $m\neq0$ and $a>0$, the two laws match all moments below order two. For $s>|m|+a$ their retained tails vanish, and both prescribed proxies are
++$$
++1+\frac{my}{s},
++$$
++which is negative on a half-line. Thus proxy positivity, the background lower bound, and the bounded cubic remainder fail at the same additive-jet step. Gaussian translate entropy is not the obstruction for $r\geq2$, since $\mathsf H_g(z)=|z|^2/2$. The claim is not that Gaussian first-unmatched-moment asymptotics are false; weighted Hermite methods can prove them under stronger input assumptions. The claim is that they are not instances of this positive additive tail-proxy mechanism.
++
++All of these arguments are analytic. There is no numerical support for the theorem, the kernel verifications, or the Gaussian exclusion; the existing scripts are sanity checks only.
++
++Please assess the following as a referee:
++
++1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
++
++2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
++
++3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
++
++4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
++
++5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
++
++A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\verification-before-completion\\SKILL.md'" in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 150ms:
+---
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+---
+
+# Verification Before Completion
+
+## Overview
+
+Claiming work is complete without verification is dishonesty, not efficiency.
+
+**Core principle:** Evidence before claims, always.
+
+**Violating the letter of this rule is violating the spirit of this rule.**
+
+## The Iron Law
+
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+```
+
+If you haven't run the verification command in this message, you cannot claim it passes.
+
+## The Gate Function
+
+```
+BEFORE claiming any status or expressing satisfaction:
+
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
+
+Skip any step = lying, not verifying
+```
+
+## Common Failures
+
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
+
+## Red Flags - STOP
+
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence â‰  evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter â‰  compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion â‰  excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+âœ… [Run test command] [See: 34/34 pass] "All tests pass"
+âŒ "Should pass now" / "Looks correct"
+```
+
+**Regression tests (TDD Red-Green):**
+```
+âœ… Write â†’ Run (pass) â†’ Revert fix â†’ Run (MUST FAIL) â†’ Restore â†’ Run (pass)
+âŒ "I've written a regression test" (without red-green verification)
+```
+
+**Build:**
+```
+âœ… [Run build] [See: exit 0] "Build passes"
+âŒ "Linter passed" (linter doesn't check compilation)
+```
+
+**Requirements:**
+```
+âœ… Re-read plan â†’ Create checklist â†’ Verify each â†’ Report gaps or completion
+âŒ "Tests pass, phase complete"
+```
+
+**Agent delegation:**
+```
+âœ… Agent reports success â†’ Check VCS diff â†’ Verify changes â†’ Report actual state
+âŒ Trust agent report
+```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion â†’ redirect â†’ rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
+
+## The Bottom Line
+
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
+
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..28e5c2fe57cafc8135158500f673170efc249c7f
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+@@ -0,0 +1,116 @@
++You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
++
++The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
++
++(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
++$$
++\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
++$$
++
++(K2) The top normalized derivative has the quotient translation modulus
++$$
++\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
++\left\|\frac{\partial^\gamma p(\cdot-h)-\partial^\gamma p}{p}\right\|_\infty,
++\qquad 0<t\leq1,
++$$
++finite for $0<t\leq1$ and satisfying $\omega_{p,r}(t)\to0$ as $t\downarrow0$.
++
++(K3) The translate entropy is finite and, for some $C_{p,r}<\infty$,
++$$
++\mathsf H_p(z):=D_{\rm KL}\bigl(p(\cdot-z)\|p\bigr)
++\leq C_{p,r}(1+|z|^r),\qquad z\in\mathbb R^d.
++$$
++
++Put $p_s(x)=s^{-d}p(x/s)$, $\Omega_p(dy)=p(y)\,dy$, and $F_y^p(z)=p(y-z)/p(y)$. For a law $\lambda$ with finite $r$th absolute moment define
++$$
++B_{p,j}^\lambda(y)=\frac{(-1)^j}{p(y)}
++\sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}\partial^\gamma p(y),
++\qquad 1\leq j\leq r.
++$$
++If probability laws $\nu,\eta$ satisfy
++$$
++m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
++\qquad \int |x|^r(\nu+\eta)(dx)<\infty,
++$$
++set, for $\lambda\in\{\nu,\eta\}$,
++$$
++\tau_s^\lambda=\lambda(|x|>s),\qquad
++V_{p,s}^\lambda(y)=\int_{|x|>s}F_y^p(x/s)\lambda(dx),
++$$
++and define the common retained jet and the two proxies by
++$$
++C_{p,r-1,s}=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
++=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,
++\qquad
++A_{p,s}^\lambda=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda,
++$$
++with the sum empty for $r=1$. The theorem says that, for all sufficiently large $s$, both $A_{p,s}^\lambda$ are positive probability densities relative to $\Omega_p$. Consequently
++$$
++k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
++$$
++are probability densities and
++$$
++\mathcal E_{p,r,s}(\nu,\eta)
++:=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
++$$
++is finite and nonnegative. If
++$$
++\Delta_r=\int x^{\otimes r}(\nu-\eta)(dx),\qquad
++B_{p,\Delta_r}(y)=\frac{(-1)^r}{r!p(y)}
++\langle\Delta_r,D^rp(y)\rangle,
++$$
++and
++$$
++\mathcal Q_{p,r}(\Delta_r)=\frac12\int B_{p,\Delta_r}^2\,d\Omega_p,
++$$
++then
++$$
++D_{\rm KL}(p_s*\nu\|p_s*\eta)
++=\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+++\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
++$$
++Moreover, $\mathcal Q_{p,r}$ is finite and positive definite on $\operatorname{Sym}^r(\mathbb R^d)$, and hence, law by law,
++$$
++s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)\to\mathcal Q_{p,r}(\Delta_r)
++\quad\Longleftrightarrow\quad
++s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\to0.
++$$
++
++The manuscript explicitly assigns a separate proof function to each hypothesis: (K1) defines and bounds the retained modes, makes their integrals vanish, and supplies the bounded-logarithmic-gradient lower bound; (K2) supplies the uniform little-$o$ Taylor remainder, with its $L^1$ counterpart following from (K1); and (K3) is used only to make the retained-tail and proxy entropies finite. The theorem assumes no decay law, regular variation, semigroup structure, radial symmetry, or isotropy.
++
++The accompanying unnumbered proposition, "Verified kernels and the Gaussian boundary," proves that the theorem applies, for every $r\geq1$, to every isotropic strictly $\alpha$-stable density with $0<\alpha<2$, to the Poisson kernel in every dimension, and to every multivariate Student kernel
++$$
++p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
++$$
++Within the Student family, only $\beta=d+1$ is the Poisson/stable case. Thus the verified class contains polynomial-tail members that are not the kernel on which the original proof was built. For a stable density, the specialization uses exactly the paper's existing $F_y$, moment modes, proxies, energy, and quadratic form, and therefore reproduces Theorem 4.27 unchanged rather than merely implying a weakened version of it.
++
++The proposition also gives a sharp obstruction for the standard Gaussian $g$. One has
++$$
++\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
++\qquad \nabla\log g(y)=-y,
++$$
++so the normalized derivatives are unbounded and (K1) already fails at the first derivative. Its translate quotient is
++$$
++F_y^g(z)=\exp\{y\cdot z-|z|^2/2\},
++$$
++whose infimum over $y$ is zero for every $z\neq0$; this removes the uniform lower bound required by the two-background expansion. The additive proxy itself fails concretely in dimension one at $r=2$: with $\nu=\delta_m$ and $\eta=(\delta_{m-a}+\delta_{m+a})/2$, where $m\neq0$ and $a>0$, the two laws match all moments below order two. For $s>|m|+a$ their retained tails vanish, and both prescribed proxies are
++$$
++1+\frac{my}{s},
++$$
++which is negative on a half-line. Thus proxy positivity, the background lower bound, and the bounded cubic remainder fail at the same additive-jet step. Gaussian translate entropy is not the obstruction for $r\geq2$, since $\mathsf H_g(z)=|z|^2/2$. The claim is not that Gaussian first-unmatched-moment asymptotics are false; weighted Hermite methods can prove them under stronger input assumptions. The claim is that they are not instances of this positive additive tail-proxy mechanism.
++
++All of these arguments are analytic. There is no numerical support for the theorem, the kernel verifications, or the Gaussian exclusion; the existing scripts are sanity checks only.
++
++Please assess the following as a referee:
++
++1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
++
++2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
++
++3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
++
++4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
++
++5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
++
++A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$target = '"'D:\\omega\\automath\\tools\\chatgpt-oracle\\sprint\\ask\\A2_kernel.txt'; "'$text = Get-Content -Raw -LiteralPath $target; [pscustomobject]@{ Exists = Test-Path -LiteralPath $target; Length = $text.Length; Lines = ($text -split "`r?`n").Count; HasK1 = $text.Contains('"'(K1)'); HasK2 = "'$text.Contains('"'(K2)'); HasK3 = "'$text.Contains('"'(K3)'); HasTheorem = "'$text.Contains('"'Abstract positive tail-jet kernel theorem'); HasGaussianExample = "'$text.Contains('"'1+\\frac{my}{s}'); HasFiveQuestions = "'$text.Contains('"'5. Taking Theorem 4.27'); HasHardRejection = "'$text.Contains('"'A hard rejection with reasons is more useful to us than a soft acceptance.') } | Format-List; Get-Content -LiteralPath "'$target | Select-Object -First 12; Get-Content -LiteralPath $target | Select-Object -Last 12' in D:\omega\automath\papers\publication\2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+ succeeded in 202ms:
+
+
+Exists             : True
+Length             : 8553
+Lines              : 117
+HasK1              : True
+HasK2              : True
+HasK3              : True
+HasTheorem         : True
+HasGaussianExample : True
+HasFiveQuestions   : True
+HasHardRejection   : True
+
+
+
+You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
+
+The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
+
+(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
+$$
+\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
+$$
+
+(K2) The top normalized derivative has the quotient translation modulus
+$$
+\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
+
+1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
+
+2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
+
+3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
+
+4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
+
+5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
+
+A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..28e5c2fe57cafc8135158500f673170efc249c7f
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+@@ -0,0 +1,116 @@
++You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
++
++The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
++
++(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
++$$
++\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
++$$
++
++(K2) The top normalized derivative has the quotient translation modulus
++$$
++\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
++\left\|\frac{\partial^\gamma p(\cdot-h)-\partial^\gamma p}{p}\right\|_\infty,
++\qquad 0<t\leq1,
++$$
++finite for $0<t\leq1$ and satisfying $\omega_{p,r}(t)\to0$ as $t\downarrow0$.
++
++(K3) The translate entropy is finite and, for some $C_{p,r}<\infty$,
++$$
++\mathsf H_p(z):=D_{\rm KL}\bigl(p(\cdot-z)\|p\bigr)
++\leq C_{p,r}(1+|z|^r),\qquad z\in\mathbb R^d.
++$$
++
++Put $p_s(x)=s^{-d}p(x/s)$, $\Omega_p(dy)=p(y)\,dy$, and $F_y^p(z)=p(y-z)/p(y)$. For a law $\lambda$ with finite $r$th absolute moment define
++$$
++B_{p,j}^\lambda(y)=\frac{(-1)^j}{p(y)}
++\sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}\partial^\gamma p(y),
++\qquad 1\leq j\leq r.
++$$
++If probability laws $\nu,\eta$ satisfy
++$$
++m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
++\qquad \int |x|^r(\nu+\eta)(dx)<\infty,
++$$
++set, for $\lambda\in\{\nu,\eta\}$,
++$$
++\tau_s^\lambda=\lambda(|x|>s),\qquad
++V_{p,s}^\lambda(y)=\int_{|x|>s}F_y^p(x/s)\lambda(dx),
++$$
++and define the common retained jet and the two proxies by
++$$
++C_{p,r-1,s}=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
++=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,
++\qquad
++A_{p,s}^\lambda=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda,
++$$
++with the sum empty for $r=1$. The theorem says that, for all sufficiently large $s$, both $A_{p,s}^\lambda$ are positive probability densities relative to $\Omega_p$. Consequently
++$$
++k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
++$$
++are probability densities and
++$$
++\mathcal E_{p,r,s}(\nu,\eta)
++:=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
++$$
++is finite and nonnegative. If
++$$
++\Delta_r=\int x^{\otimes r}(\nu-\eta)(dx),\qquad
++B_{p,\Delta_r}(y)=\frac{(-1)^r}{r!p(y)}
++\langle\Delta_r,D^rp(y)\rangle,
++$$
++and
++$$
++\mathcal Q_{p,r}(\Delta_r)=\frac12\int B_{p,\Delta_r}^2\,d\Omega_p,
++$$
++then
++$$
++D_{\rm KL}(p_s*\nu\|p_s*\eta)
++=\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+++\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
++$$
++Moreover, $\mathcal Q_{p,r}$ is finite and positive definite on $\operatorname{Sym}^r(\mathbb R^d)$, and hence, law by law,
++$$
++s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)\to\mathcal Q_{p,r}(\Delta_r)
++\quad\Longleftrightarrow\quad
++s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\to0.
++$$
++
++The manuscript explicitly assigns a separate proof function to each hypothesis: (K1) defines and bounds the retained modes, makes their integrals vanish, and supplies the bounded-logarithmic-gradient lower bound; (K2) supplies the uniform little-$o$ Taylor remainder, with its $L^1$ counterpart following from (K1); and (K3) is used only to make the retained-tail and proxy entropies finite. The theorem assumes no decay law, regular variation, semigroup structure, radial symmetry, or isotropy.
++
++The accompanying unnumbered proposition, "Verified kernels and the Gaussian boundary," proves that the theorem applies, for every $r\geq1$, to every isotropic strictly $\alpha$-stable density with $0<\alpha<2$, to the Poisson kernel in every dimension, and to every multivariate Student kernel
++$$
++p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
++$$
++Within the Student family, only $\beta=d+1$ is the Poisson/stable case. Thus the verified class contains polynomial-tail members that are not the kernel on which the original proof was built. For a stable density, the specialization uses exactly the paper's existing $F_y$, moment modes, proxies, energy, and quadratic form, and therefore reproduces Theorem 4.27 unchanged rather than merely implying a weakened version of it.
++
++The proposition also gives a sharp obstruction for the standard Gaussian $g$. One has
++$$
++\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
++\qquad \nabla\log g(y)=-y,
++$$
++so the normalized derivatives are unbounded and (K1) already fails at the first derivative. Its translate quotient is
++$$
++F_y^g(z)=\exp\{y\cdot z-|z|^2/2\},
++$$
++whose infimum over $y$ is zero for every $z\neq0$; this removes the uniform lower bound required by the two-background expansion. The additive proxy itself fails concretely in dimension one at $r=2$: with $\nu=\delta_m$ and $\eta=(\delta_{m-a}+\delta_{m+a})/2$, where $m\neq0$ and $a>0$, the two laws match all moments below order two. For $s>|m|+a$ their retained tails vanish, and both prescribed proxies are
++$$
++1+\frac{my}{s},
++$$
++which is negative on a half-line. Thus proxy positivity, the background lower bound, and the bounded cubic remainder fail at the same additive-jet step. Gaussian translate entropy is not the obstruction for $r\geq2$, since $\mathsf H_g(z)=|z|^2/2$. The claim is not that Gaussian first-unmatched-moment asymptotics are false; weighted Hermite methods can prove them under stronger input assumptions. The claim is that they are not instances of this positive additive tail-proxy mechanism.
++
++All of these arguments are analytic. There is no numerical support for the theorem, the kernel verifications, or the Gaussian exclusion; the existing scripts are sanity checks only.
++
++Please assess the following as a referee:
++
++1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
++
++2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
++
++3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
++
++4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
++
++5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
++
++A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+codex
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..28e5c2fe57cafc8135158500f673170efc249c7f
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A2_kernel.txt
+@@ -0,0 +1,116 @@
++You have already reviewed this paper three times. In the previous round, you accepted Theorem 4.27, the arbitrary-order, law-by-law nonnegative tail-defect decomposition, as meeting the tier threshold you had named. You also accepted the proof closure, the non-vacuousness corollary, the convention-robustness result, and the asymptotic coefficient-rigidity statement, finding no false step in any of them. You judged that the mechanism "reads as a central theorem rather than an isolated successful construction" and that a JFA submission was credible. You then listed five developments, each of which would be a substantial further improvement and would make the mechanism itself the central theorem. The first was an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other polynomial-tail kernels, the same development you originally identified as option (b) of the tier threshold. This revision attempts exactly that first development.
++
++The new result is the unnumbered "Abstract positive tail-jet kernel theorem." Fix an integer $r\geq 1$. A strictly positive probability density $p\in C^r(\mathbb R^d)$ is called tail-jet admissible of order $r$ if:
++
++(K1) For every multi-index $\gamma$ with $1\leq |\gamma|\leq r$,
++$$
++\left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
++$$
++
++(K2) The top normalized derivative has the quotient translation modulus
++$$
++\omega_{p,r}(t):=\max_{|\gamma|=r}\ \sup_{|h|\leq t}
++\left\|\frac{\partial^\gamma p(\cdot-h)-\partial^\gamma p}{p}\right\|_\infty,
++\qquad 0<t\leq1,
++$$
++finite for $0<t\leq1$ and satisfying $\omega_{p,r}(t)\to0$ as $t\downarrow0$.
++
++(K3) The translate entropy is finite and, for some $C_{p,r}<\infty$,
++$$
++\mathsf H_p(z):=D_{\rm KL}\bigl(p(\cdot-z)\|p\bigr)
++\leq C_{p,r}(1+|z|^r),\qquad z\in\mathbb R^d.
++$$
++
++Put $p_s(x)=s^{-d}p(x/s)$, $\Omega_p(dy)=p(y)\,dy$, and $F_y^p(z)=p(y-z)/p(y)$. For a law $\lambda$ with finite $r$th absolute moment define
++$$
++B_{p,j}^\lambda(y)=\frac{(-1)^j}{p(y)}
++\sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}\partial^\gamma p(y),
++\qquad 1\leq j\leq r.
++$$
++If probability laws $\nu,\eta$ satisfy
++$$
++m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
++\qquad \int |x|^r(\nu+\eta)(dx)<\infty,
++$$
++set, for $\lambda\in\{\nu,\eta\}$,
++$$
++\tau_s^\lambda=\lambda(|x|>s),\qquad
++V_{p,s}^\lambda(y)=\int_{|x|>s}F_y^p(x/s)\lambda(dx),
++$$
++and define the common retained jet and the two proxies by
++$$
++C_{p,r-1,s}=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\nu
++=\sum_{j=1}^{r-1}s^{-j}B_{p,j}^\eta,
++\qquad
++A_{p,s}^\lambda=1+C_{p,r-1,s}+V_{p,s}^\lambda-\tau_s^\lambda,
++$$
++with the sum empty for $r=1$. The theorem says that, for all sufficiently large $s$, both $A_{p,s}^\lambda$ are positive probability densities relative to $\Omega_p$. Consequently
++$$
++k_{p,r,s}^\lambda(x)=s^{-d}p(x/s)A_{p,s}^\lambda(x/s)
++$$
++are probability densities and
++$$
++\mathcal E_{p,r,s}(\nu,\eta)
++:=D_{\rm KL}(k_{p,r,s}^\nu\|k_{p,r,s}^\eta)
++$$
++is finite and nonnegative. If
++$$
++\Delta_r=\int x^{\otimes r}(\nu-\eta)(dx),\qquad
++B_{p,\Delta_r}(y)=\frac{(-1)^r}{r!p(y)}
++\langle\Delta_r,D^rp(y)\rangle,
++$$
++and
++$$
++\mathcal Q_{p,r}(\Delta_r)=\frac12\int B_{p,\Delta_r}^2\,d\Omega_p,
++$$
++then
++$$
++D_{\rm KL}(p_s*\nu\|p_s*\eta)
++=\mathcal Q_{p,r}(\Delta_r)s^{-2r}
+++\mathcal E_{p,r,s}(\nu,\eta)+o(s^{-2r}).
++$$
++Moreover, $\mathcal Q_{p,r}$ is finite and positive definite on $\operatorname{Sym}^r(\mathbb R^d)$, and hence, law by law,
++$$
++s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)\to\mathcal Q_{p,r}(\Delta_r)
++\quad\Longleftrightarrow\quad
++s^{2r}\mathcal E_{p,r,s}(\nu,\eta)\to0.
++$$
++
++The manuscript explicitly assigns a separate proof function to each hypothesis: (K1) defines and bounds the retained modes, makes their integrals vanish, and supplies the bounded-logarithmic-gradient lower bound; (K2) supplies the uniform little-$o$ Taylor remainder, with its $L^1$ counterpart following from (K1); and (K3) is used only to make the retained-tail and proxy entropies finite. The theorem assumes no decay law, regular variation, semigroup structure, radial symmetry, or isotropy.
++
++The accompanying unnumbered proposition, "Verified kernels and the Gaussian boundary," proves that the theorem applies, for every $r\geq1$, to every isotropic strictly $\alpha$-stable density with $0<\alpha<2$, to the Poisson kernel in every dimension, and to every multivariate Student kernel
++$$
++p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d.
++$$
++Within the Student family, only $\beta=d+1$ is the Poisson/stable case. Thus the verified class contains polynomial-tail members that are not the kernel on which the original proof was built. For a stable density, the specialization uses exactly the paper's existing $F_y$, moment modes, proxies, energy, and quadratic form, and therefore reproduces Theorem 4.27 unchanged rather than merely implying a weakened version of it.
++
++The proposition also gives a sharp obstruction for the standard Gaussian $g$. One has
++$$
++\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma,
++\qquad \nabla\log g(y)=-y,
++$$
++so the normalized derivatives are unbounded and (K1) already fails at the first derivative. Its translate quotient is
++$$
++F_y^g(z)=\exp\{y\cdot z-|z|^2/2\},
++$$
++whose infimum over $y$ is zero for every $z\neq0$; this removes the uniform lower bound required by the two-background expansion. The additive proxy itself fails concretely in dimension one at $r=2$: with $\nu=\delta_m$ and $\eta=(\delta_{m-a}+\delta_{m+a})/2$, where $m\neq0$ and $a>0$, the two laws match all moments below order two. For $s>|m|+a$ their retained tails vanish, and both prescribed proxies are
++$$
++1+\frac{my}{s},
++$$
++which is negative on a half-line. Thus proxy positivity, the background lower bound, and the bounded cubic remainder fail at the same additive-jet step. Gaussian translate entropy is not the obstruction for $r\geq2$, since $\mathsf H_g(z)=|z|^2/2$. The claim is not that Gaussian first-unmatched-moment asymptotics are false; weighted Hermite methods can prove them under stronger input assumptions. The claim is that they are not instances of this positive additive tail-proxy mechanism.
++
++All of these arguments are analytic. There is no numerical support for the theorem, the kernel verifications, or the Gaussian exclusion; the existing scripts are sanity checks only.
++
++Please assess the following as a referee:
++
++1. Is the abstract positive tail-jet kernel theorem correct? Please identify any step in its proof that you cannot follow or believe is wrong, rather than giving only a global verdict.
++
++2. Most importantly, is this hypothesis set genuinely minimal and genuinely abstract, or is it merely a restatement of what the stable proof happened to need, dressed as axioms? This is the same trap you checked for in the admissible class in the previous round. Does any hypothesis do no actual work? Can any hypothesis be weakened without losing the conclusion? Are the stable, Poisson, and full Student families enough to demonstrate that the class is not built around one kernel, particularly given that only $\beta=d+1$ in the Student family is Poisson/stable?
++
++3. You asked for stable, Gaussian, Poisson, and other polynomial-tail kernels. The theorem covers stable, Poisson, and Student kernels, while Gaussian smoothing is excluded by a counterexample rather than included. Does this sharp Gaussian exclusion satisfy the substance of what you asked for, or does it fall short? If this mechanism genuinely cannot reach Gaussian smoothing, is identifying that boundary itself a result worth stating prominently, or is it a limitation that caps the paper?
++
++4. Is the Gaussian counterexample correct, and does it prove exactly what the manuscript claims it proves? In particular, does it establish failure of the positive additive tail-proxy mechanism, without overclaiming failure of Gaussian moment asymptotics by other methods?
++
++5. Taking Theorem 4.27 together with its non-vacuousness corollary, the convention-robustness and coefficient-rigidity statements, and now the abstract theorem and its verified kernel class, is the mechanism now the central theorem in the sense you meant? What is your honest venue judgment at this point, and what would still be required?
++
++A hard rejection with reasons is more useful to us than a soft acceptance. We would rather learn now that the abstraction is hollow than learn it after submission. Please attach to every objection a concrete account of what would resolve it: a missing lemma or estimate, a weakened or replaced hypothesis, an additional genuinely distinct kernel, a narrower claim, a structural rewrite, or some other specific remedy.
+
+tokens used
+44,938
+
