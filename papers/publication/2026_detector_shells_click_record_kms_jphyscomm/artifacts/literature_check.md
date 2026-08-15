@@ -533,3 +533,149 @@ Accordingly, the manuscript states the new theorem locally, permits its
 randomizations to use the fixed centre `p_0`, retains the exponential-moment
 and equilibrium-delay Hellinger hypotheses, and makes no global adaptive
 equivalence claim.
+
+## Full bibliography identity audit, 2026-08-15
+
+Every DOI was resolved through Crossref and compared with the cited title and lead author. Entries without a DOI were searched by title and author using Crossref or checked against the official PMLR, Statistica Sinica, or arXiv record. OpenAlex could not be used because its daily API budget was exhausted; Semantic Scholar returned HTTP 429. Those service failures are not used as negative evidence.
+
+Summary: **137 entries checked; 136 confirmed; 1 unverified.** The unverified entry remains in `references.tex`. No entry was deleted and no replacement was invented.
+
+| Citation key | DOI or lookup key | Verification source | Result | Evidence / action |
+|---|---|---|---|---|
+| `BaumPetrie1966` | `10.1214/aoms/1177699147` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BaumEtAl1970Maximization` | `10.1214/aoms/1177697196` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Petrie1969HMM` | `10.1214/aoms/1177697807` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1214/aoms/1177697809 -> 10.1214/aoms/1177697807 after exact title/author lookup. |
+| `BlackwellKoopmans1957` | `10.1214/aoms/1177706802` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Gilbert1959` | `10.1214/aoms/1177706199` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BurkeRosenblatt1958MarkovianFunction` | `10.1214/aoms/1177706444` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `KemenySnell1960FiniteMarkovChains` | `No DOI` | Crossref title/author search | Confirmed | Exact book title and Kemeny--Snell authorship matched; no DOI is supplied for the cited 1960 edition. |
+| `Dharmadhikari1963Functions` | `10.1214/aoms/1177704025` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Dharmadhikari1963Sufficient` | `10.1214/aoms/1177704026` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Heller1965` | `10.1214/aoms/1177700000` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `FoxRubin1968` | `10.1214/aoms/1177698326` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Erickson1970` | `10.1214/aoms/1177696962` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1214/aoms/1177696978 -> 10.1214/aoms/1177696962 after exact title/author lookup. |
+| `GurvitsLedoux2005` | `10.1016/j.laa.2005.02.007` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1016/j.laa.2005.02.009 -> 10.1016/j.laa.2005.02.007 after exact title/author lookup. |
+| `FinessoGrassiSpreij2010` | `10.1007/s00498-010-0050-7` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1007/s00498-011-0066-7 -> 10.1007/s00498-010-0050-7 after exact title/author lookup. |
+| `AllmanMatiasRhodes2009HMMIdentifiability` | `10.1214/09-AOS689` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HsuKakadeZhang2012SpectralHMM` | `10.1016/j.jcss.2011.12.025` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AnandkumarHsuKakade2012MomentsHMM` | `No DOI` | Official PMLR index | Confirmed | Title, all three authors, volume 23, and pages 33.1--33.34 matched. |
+| `Rabiner1989HMMTutorial` | `10.1109/5.18626` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `EphraimMerhav2002HiddenMarkovProcesses` | `10.1109/TIT.2002.1003838` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Pyke1961MarkovRenewal` | `10.1214/aoms/1177704863` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1214/aoms/1177704859 -> 10.1214/aoms/1177704863 after exact title/author lookup. |
+| `Cinlar1969MarkovRenewal` | `10.2307/1426216` | Crossref DOI metadata | Confirmed | Corrected DOI 10.2307/1426219 -> 10.2307/1426216 after exact title/author lookup. |
+| `Cinlar1975MarkovRenewalSurvey` | `10.1287/mnsc.21.7.727` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Neuts1979MAP` | `10.2307/3213143` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Lucantoni1991BMAP` | `10.1080/15326349108807174` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `LucantoniMeierHellsternNeuts1990Vacations` | `10.2307/1427464` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AlfaNeuts1995DMAP` | `10.1287/trsc.29.2.109` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HeNeuts1998MarkedTransitions` | `10.1016/S0304-4149(97)00109-9` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `LatoucheRamaswami1999MatrixAnalytic` | `10.1137/1.9780898719734` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BladtNielsen2017MatrixExponential` | `10.1007/978-1-4939-7049-0` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Chakravarthy2010MAPSurvey` | `10.1002/9780470400531.eorms0499` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Ryden1996Aggregated` | `10.2307/3215346` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AsanjaraniNazarathy2022MAP` | `10.1017/S1446181122000013` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AsanjaraniHautphenneNazarathy2026StructuredMAPMoments` | `10.1016/j.peva.2026.102562` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BodrogHeindlHorvathTelek2008MAP2Canonical` | `10.1016/j.ejor.2007.06.020` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MeszarosTelek2013DiscreteMAP2Canonical` | `10.1007/978-3-642-40725-3_8` | Crossref DOI metadata | Confirmed | Crossref metadata matched; the TeX citation now uses a literal underscore in the DOI URL target. |
+| `TelekHorvath2007MinimalMAP` | `10.1016/j.peva.2007.06.001` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BobbioEtAl2003AcyclicDPH` | `10.1016/S0166-5316(03)00044-0` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `PappTelek2013DiscretePHCanonical` | `No DOI` | Crossref/arXiv/web title-author searches | UNVERIFIED | No exact record found. Crossref returned a different 2015 order-3 paper; arXiv and exact-title web searches found no match. OpenAlex was daily-budget rate-limited and Semantic Scholar returned HTTP 429. Entry retained unchanged. |
+| `MeszarosPappTelek2014Traffic` | `10.2478/amcs-2014-0034` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HeZhang2009GeneralizedErlang` | `10.1007/s10255-008-8827-x` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HeZhang2008MinimalCoxian` | `10.1287/ijoc.1070.0228` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Cumani1982CanonicalFailure` | `10.1016/0026-2714(82)90033-6` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `OCinneide1991InvariantPolytopes` | `10.2307/1427620` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Kalman1963LinearSystems` | `10.1137/0301010` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `KrauseWalenta2025SPADRecovery` | `arXiv:2507.10361` | arXiv title/author lookup | Confirmed | arXiv:2507.10361 matched Jan Krause and Nino Walenta. |
+| `RamirezCoboLilloWiper2010MAP2Nonidentifiability` | `10.1239/jap/1285335400` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `RamirezCoboLillo2012WeakEquivalentMAP` | `10.1007/s11009-011-9227-x` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `OCinneide1989PhaseTypeNonuniqueness` | `10.1080/15326348908807108` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BickelKwon2001Semiparametric` | `No DOI` | Official Statistica Sinica archive | Confirmed | Volume 11(4) page matched Peter J. Bickel and Jaimyoung Kwon with the cited title. |
+| `RizkBurkeWalsh2019CoxianNonuniqueness` | `arXiv:1901.03849` | arXiv title/author lookup | Confirmed | arXiv:1901.03849v2 matched Jean Rizk, Kevin Burke, and Cathal Walsh. |
+| `RadulescuEtAl2025TimeToEventIdentifiability` | `10.1007/s11538-024-01385-y` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `KunisRoemerVonDerOhe2020Prony` | `10.1016/j.aam.2020.102044` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `PitmanYou2021` | `arXiv:2105.08255` | arXiv title/author lookup | Confirmed | arXiv:2105.08255 matched Jim Pitman and Zhiyi You. |
+| `Zamparo2022RenewalBinary` | `10.1007/s10955-022-02893-8` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `VollmarEtAl2024Memory` | `10.1088/1751-8121/ad6d1e` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HartichGodec2021EmergentMemory` | `10.1103/PhysRevX.11.041047` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MartinezBiskerHorowitzParrondo2019InferringBrokenDetailedBalance` | `10.1038/s41467-019-11051-w` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `SuarezEtAl2021MSMCanCannot` | `10.1021/acs.jctc.0c01154` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `SartoreTeichmannStock2025MarkovType` | `10.1021/acs.jctc.4c01630` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `ZhaoMakarovGodec2025MarkovStateHolography` | `10.1088/1367-2630/ae24a2` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `ZhaoHartichGodec2024Memory` | `10.1103/PhysRevLett.132.147101` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `LoosGodec2025NonMarkovianEffects` | `10.1088/1751-8121/add8ce` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MeyerBrandner2026WeakMemory` | `10.1103/kdhy-66b6` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Brandner2025WeakMemoryPRE` | `10.1103/PhysRevE.111.014137` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `VanDerMeerErtelSeifert2022TransitionWTD` | `10.1103/PhysRevX.12.031025` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `DiTerlizziEtAl2024VarianceSumRule` | `10.1126/science.adh1823` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `GhosalBisker2022PartialLangevin` | `10.1039/D2CP03064K` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HarunariDuttaPolettiniRoldan2022VisibleTransitions` | `10.1103/PhysRevX.12.041026` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `VanDerMeerDeguntherSeifert2023Snippets` | `10.1103/PhysRevLett.130.257101` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `VanDerMeerSaito2025FaultyCoarseGraining` | `10.1103/p3zx-7txy` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MaierFritzSeifert2026SemiMarkovLD` | `10.1103/44r5-fjdm` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MaierHaslerSeifert2026Blackouts` | `10.1103/p8yf-12yz` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MaierSeifertVanderMeer2025HiddenPaths` | `10.1103/p4k1-1dvb` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BauerSeifertVanderMeer2025Stroboscopic` | `10.1088/1751-8121/adbc52` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `FritzErtelSeifert2025ImperfectObservations` | `10.1103/PhysRevE.111.044106` | Crossref DOI metadata | Confirmed | DOI and authors matched; citation title aligned to the Crossref published title. |
+| `Parry1964` | `10.1090/S0002-9947-1964-0161372-1` | Crossref DOI metadata | Confirmed | Exact title/author lookup confirmed and added DOI 10.1090/S0002-9947-1964-0161372-1. |
+| `LindMarcus1995` | `10.1017/CBO9780511626302` | Crossref DOI metadata | Confirmed | Exact title/author lookup confirmed and added DOI 10.1017/CBO9780511626302. |
+| `Chernoff1954LikelihoodRatio` | `10.1214/aoms/1177728725` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Shapiro1987MetricProjection` | `10.1090/S0002-9939-1987-0866441-7` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Geyer1994ConstrainedM` | `10.1214/aos/1176325768` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `SelfLiang1987NonstandardLRT` | `10.1080/01621459.1987.10478472` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Andrews1999BoundaryEstimation` | `10.1111/1468-0262.00082` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Andrews2001BoundaryTesting` | `10.1111/1468-0262.00210` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `vanDerVaart1998AsymptoticStatistics` | `10.1017/CBO9780511802256` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `LeCamYang2000` | `10.1007/978-1-4612-1166-2` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Massart1990DKW` | `10.1214/aop/1176990746` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `FangSantos2019DirectionalDifferentiability` | `10.1093/restud/rdy049` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `FangSeo2021ProjectionTests` | `10.3982/ECTA17764` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Fang2021UnifyingShape` | `arXiv:2107.12494` | arXiv title/author lookup | Confirmed | arXiv:2107.12494 matched Zheng Fang. |
+| `ChenFang2019FirstOrderDegeneracy` | `10.1016/j.jeconom.2019.01.011` | Crossref DOI metadata | Confirmed | Exact title/author lookup confirmed and added DOI 10.1016/j.jeconom.2019.01.011. |
+| `WangYeChen2024NonconvexBoundary` | `10.1093/biomet/asad062` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Li2025ProximalBootstrap` | `10.1016/j.jspi.2024.106245` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `CavaliereNielsenPedersenRahbek2022BoundaryBootstrap` | `10.1016/j.jeconom.2020.05.006` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `VatsFlegalJones2019Multivariate` | `10.1093/biomet/asz002` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `FlegalJones2010BatchMeansSpectral` | `10.1214/09-AOS735` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `GlynnIglehart1990STS` | `10.1287/moor.15.1.1` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `GlynnWhitt1991BatchMeans` | `10.1016/0167-6377(91)90019-L` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AlexopoulosGoldsman2004Batch` | `10.1145/974734.974738` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Whitt1982RenewalApproximation` | `10.1287/opre.30.1.125` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AsmussenGlynn2007` | `10.1007/978-0-387-69033-9` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Janson2024RenewalCLT` | `10.1016/j.spl.2023.109948` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `GillKeiding2010RenewalSampling` | `10.1007/s10985-010-9156-y` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `ZhaoNagaraja2011WindowCensoredRenewal` | `10.1007/s10463-009-0252-2` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `ErtelSeifert2024BlurredTransitions` | `10.1103/PhysRevE.109.054109` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `TancrediEtAl2024ConstrainedHMM` | `10.1088/1367-2630/ad5def` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HilderSharma2024CoarseGraining` | `10.1137/22M1473996` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Schilling2022CoarseGrained` | `10.1016/j.physrep.2022.04.006` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Muller1973` | `10.1016/0029-554X(73)90773-8` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `CantorTeich1975` | `10.1364/JOSA.65.000786` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `YuFessler2000` | `10.1088/0031-9155/45/7/324` | Crossref DOI metadata | Confirmed | Corrected DOI 10.1088/0031-9155/45/7/323 -> 10.1088/0031-9155/45/7/324 after exact title/author lookup. |
+| `SarbaziSafariHaas2018LongDeadTime` | `10.1109/GLOCOM.2018.8647814` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `GronbergDanielssonSjolin2018Nonparalyzable` | `10.1002/mp.13063` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `MeeksSiegel2008DeadTime` | `10.1119/1.2870432` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Hadfield2009` | `10.1038/nphoton.2009.230` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `EisamanEtAl2011` | `10.1063/1.3610677` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `StrakaEtAl2020SPADCounting` | `10.1109/JLT.2020.2994654` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `KirchhoffEtAl2025Deadtime` | `10.1364/AO.543305` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `JorgensenJohnson2026DED` | `arXiv:2605.23210` | arXiv title/author lookup | Confirmed | arXiv:2605.23210 matched Frederic J. N. Jorgensen and Steven G. Johnson. |
+| `Chen1995FiniteMixtureRate` | `10.1214/aos/1176324464` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HoNguyen2019SingularityStructures` | `10.1137/18M122947X` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `HeinrichKahn2018FiniteMixtureMinimax` | `10.1214/17-AOS1641` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BatenkovYomdin2013ConfluentProny` | `10.1137/110836584` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AkinshinGoldmanYomdin2021NearCollidingProny` | `10.1090/mcom/3571` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BatenkovGoldmanYomdin2021SuperResolution` | `10.1093/imaiai/iaaa005` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `KulaitisMunkWerner2021Resolution` | `10.1214/20-AOS2037` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `RyabkoRyabko2010ErgodicInference` | `10.1109/TIT.2009.2039169` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Ryabko2012StationaryTesting` | `10.1080/02331888.2012.719511` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `AgustinPena2005RecurrentGOF` | `10.1016/j.jspi.2004.03.022` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `TitmanSharples2008MarkovGOF` | `10.1002/sim.3033` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `SkaugTjostheim1993SerialIndependence` | `10.1093/biomet/80.3.591` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `DedeckerMerlevede2003HilbertCLT` | `10.1016/S0304-4149(03)00115-7` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `DacunhaCastelleGassiat1997LocallyConic` | `10.1051/ps:1997111` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `LiuShao2003LossIdentifiability` | `10.1214/aos/1056562463` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Pinelis1994OptimalMartingaleBounds` | `10.1214/aop/1176988477` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `Meckes2009MultivariateStein` | `10.1214/09-IMSCOLL511` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `BolbotowskiBouchitte2026ZolotarevWasserstein` | `10.1007/s00440-026-01527-4` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |
+| `CattaneoMasiniUnderwood2025Yurinskii` | `10.1214/25-AOS2538` | Crossref DOI metadata | Confirmed | DOI resolved in Crossref; returned title and lead-author metadata matched the citation. |

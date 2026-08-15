@@ -2,18 +2,28 @@
 
 ## Journal
 
-- Target journal: Methodology and Computing in Applied Probability
+- Target journal: Stochastic Processes and their Applications (SPA)
 - Article type: Original Paper
 - Submission components: main article, supplementary material, cover letter
 
-The journal is selected because the manuscript's central object is singular
-stationary-record inference for sampled generalized-Erlang and serial
-discrete phase-type renewals, with the constrained D-MAP as its two-state
-instance.
-The sampled counter supplies a kernel realization; it is not presented as an
-independently analysed physical system. Stochastic Models is a possible
-alternative only under a narrower treatment that further compresses the
-statistical material and expands the D-MAP/phase-type structural analysis.
+SPA is the honest first target for the manuscript as assembled. Its present
+architecture retains renewal observation, stationary censoring, D-MAP
+realization, phase-type structure, representation and diagnostic results, and
+singular inference; this combination fits a journal devoted to the theory and
+applications of stochastic processes.
+
+Bernoulli is defensible on mathematical content because the manuscript now
+contains a two-sided local experiment-equivalence theorem as well as the
+singular stationary-renewal application. It remains an intentionally high-risk
+target on the present architecture: the mathematical case for Bernoulli
+improved, while the editorial case did not. The earlier condition that the
+article be sharply rebuilt around its central statistical results has not been
+satisfied.
+
+The Electronic Journal of Statistics becomes at least as natural as SPA only
+under a recast around experiment equivalence, LAN, efficient testing, and
+minimax recovery, with most representation and diagnostic material removed
+from the main article. That recast has not been performed.
 
 ## Manuscript
 
