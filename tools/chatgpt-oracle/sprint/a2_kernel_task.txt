@@ -1,0 +1,70 @@
+A research task. Do not ask for design approval, do not run any brainstorming or approval
+workflow. Proceed directly to work.
+
+TARGET. The referee listed five routes, any one of which would be a substantial further
+improvement, and said what unites them: they "would make the mechanism itself, rather than
+one highly successful implementation of it, the central theorem." His first, and the same
+thing he originally named as option (b) of the tier threshold, is:
+
+  an abstract kernel theorem encompassing stable, Gaussian, Poisson, and other
+  polynomial-tail kernels.
+
+Pursue that.
+
+FRAME IT AS AN ABSTRACTION, NOT A GENERALISATION SWEEP. The productive question is not
+"can we redo the proof for more kernels one at a time", it is: WHICH PROPERTIES OF THE
+KERNEL DOES THE MECHANISM ACTUALLY USE? Go through the existing argument for the stable
+kernel - Theorem 4.27, the standalone two-background KL perturbation lemma, the proxy
+positivity and normalization, the o(s^{-r}) background estimates, the Hessian
+identification, the cubic remainder - and extract the minimal hypotheses on the smoothing
+kernel that each step genuinely requires. Candidates to check, not to assume: bounded
+gradient of log p_1, L^1 translation continuity, the moment-mode expansion structure, decay
+or regular variation of the tail, and whatever makes the retained common jet well defined.
+
+Then state and prove an abstract theorem under exactly those hypotheses, and verify
+membership for the concrete cases:
+  - isotropic alpha-stable, 0 < alpha < 2, which must reduce to the existing theorem;
+  - Gaussian, which the paper currently excludes (alpha = 2) - say clearly whether the
+    abstract hypotheses cover it, and if so what the statement gives there, and if not,
+    exactly which hypothesis fails;
+  - Poisson;
+  - at least one further polynomial-tail kernel.
+
+A clean, minimal hypothesis set with three or four verified members is worth far more than
+a broad-sounding theorem with one member.
+
+HONEST OUTCOMES, in order of value:
+ 1. An abstract theorem with minimal hypotheses and several verified members.
+ 2. An abstract theorem whose hypotheses are honest but which only one or two known kernels
+    satisfy - state that plainly, and say which natural kernels fail and at which step.
+ 3. A precise identification of the obstruction: the mechanism does NOT abstract, and here
+    is the step that is irreducibly stable-specific. State this in the FIRST LINE of your
+    report if it is the outcome. This is a real result and is much more valuable than a
+    vacuous abstraction.
+
+Do NOT produce a theorem whose hypotheses are simply a restatement of "the stable kernel
+works", i.e. a hypothesis list assembled by reading off what the stable proof needed and
+that no other kernel is shown to satisfy. That is the failure mode here, and the referee
+will see it immediately - he caught the analogous risk on the admissible class last round
+and asked whether it was gerrymandered.
+
+RULES:
+ - Every claim proved at referee standard. Numerics are sanity checks and never substitute
+   for proof.
+ - Do not weaken, restate or renumber any existing theorem. Theorem 4.27 and Corollaries
+   4.28, 4.29 keep their numbers; leave new results unnumbered if that preserves numbering.
+ - Do not touch the venue or priority wording, and do not reinstate any canonicity or
+   uniqueness language.
+ - Keep every .tex under 800 lines; split if needed.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Any
+   archived output must stay deterministic - no wall-clock timings, two consecutive runs
+   byte-identical. Regenerate artifacts/SHA256SUMS (LF) if artifacts change and confirm zero
+   failures from the artifacts directory.
+ - No revision marks anywhere.
+
+REPORT: the minimal hypothesis set; which of stable, Gaussian, Poisson and your fourth
+kernel satisfy it, with the verification for each; for any that fail, the exact step that
+fails; whether the stable case reduces to Theorem 4.27 as it must; page and theorem counts
+before and after; and compile and test results.
