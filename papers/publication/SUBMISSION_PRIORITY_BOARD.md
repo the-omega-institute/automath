@@ -14,16 +14,17 @@
 
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
-| 篇 | 页 | 升档目标结果 | **去向** |
+| 篇 | 页 | 升档结果(全部经独立复核) | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | 79+33 | ✅ 抽象核定理(闭包:仿射/张量积/混合)+ 稳健性 + 系数刚性;**(K3) 冗余已删** | **JFA**(审稿人:credible)|
-| **A3** `sharp_three_window` | 57+15 | 定理 A(Pisot 固定基数线性深度),0.35,codex 在跑 | DCDS-A |
-| **A4** `prime_languages` | **27+43** | ✅ **weak-Perron 分类**(类含 $\sqrt{pq}$,严格 Perron 够不到)+ 去 (U3) | Monatshefte |
-| **A5** `finite_parts` | 33+19 | parity 更正 + 奇 Adams 不变,codex 在跑 | ETDS |
-| **A6** `zeckendorf_fibers` | **65+20** | ✅ **算术临界稳定更新**($b_C=8$ 显式,未假设正则变差);送审中 | JNT |
-| **A7** `upper_fibers` | 33+36 | ⛔ 天花板($P_M$ 全 <3%,门槛 20%) | Fibonacci Quarterly |
-| **A8** `detector_shells` | **59+19** | ✅ **标准相型族 $N^{-1/4}$ matching minimax**(上下界俱全);送审中 | MCAP |
-| **A9** `homological_visibility` | 34+6 | ⚑ **no-go:审稿人所提定理反而逼出 $H^1=0$**;送审中 | Cahiers |
+| **A2** `cayley_chebyshev` | 79+33 | ✅ 抽象核定理 + 闭包(仿射/张量积/混合);外审确认无错误步骤 | **JFA** |
+| **A3** `sharp_three_window` | **65+15** | ✅ **线性因果深度,一致于标准 Pisot numeration 系统**;$C_U$ 有效可算;固定 $	heta$ 给匹配下界 | DCDS-A |
+| **A4** `prime_languages` | 27+43 | ✅ weak-Perron 分类($\sqrt{pq}$ 见证)+ 去 (U3);送审中 | Monatshefte |
+| **A5** `finite_parts` | **42+19** | ✅ **parity 非必要(我方主张有误,已更正)** + $\Omega(V)$ 下界 + 可实现尖锐 | ETDS |
+| **A6** `zeckendorf_fibers` | 65+20 | 定理正确、防作弊守住,但**漏引 Dushistova 2007** → 重构为更正/调和定理(codex 中) | JNT |
+| **A7** `upper_fibers` | 33+36 | ⛔ 天花板($P_M$<3%) | Fibonacci Quarterly |
+| **A8** `detector_shells` | 59+19 | ✅ 标准相型族 $N^{-1/4}$ matching minimax | MCAP |
+| **A9** `homological_visibility` | **37+6** | ✅ **Terminal torsor obstruction**(审稿人确认并加强)+ 方案 A | Cahiers |
+
 
 
 
@@ -56,15 +57,16 @@
 
 
 
-> **TICK 55 — 四份成果送审;一次真实的内存颠簸,减对了地方**。池子 3/6(A6 更新定理 `0259ef4b`、A9 no-go `f2dbacd0`、A8 奇异实验 `8ddae74c` 在飞);codex 跑 A3、A5 及 A4 送审问题;内存 2.0 GB、硬缺页 42/s、无孤儿;无可收割。
+> **TICK 57 — 七篇升档工作全部落地并复核;第七次优先权遗漏,这次出在新产出上**。池子 1/6(A4 送审在飞);codex 跑 A6 调和;内存 2.18 GB、无孤儿。
 >
-> **内存告警这次是真的**:硬缺页一度 **19405/s(阈值 19 倍)**。但查归属后,占用大户是 **A5 自己的 unittest 套件(1.46 GB)** —— 由在跑 agent 派生的正经工作,杀掉会打断其验证;vmmemWSL 是必需的中继;ServiceShell 与本项目无关。
+> **A3 量化对了**:(A1) 覆盖**一般严格递增 Pisot numeration 系统**(允许非标准初值、Condition F),摘要写 "uniform over standard Pisot numeration systems",**没有被收窄到我们自己的族** —— 那正是我在任务书里点名的失败模式。$C_U$ 经**有效根隔离**从递推、规范数字集与有界零规范化自动机算出,而非重新数差分顶点(旧的指数界 $(2d_U+1)^{m-1}$ 正是那么来的)。固定 $	heta$ 结果成为**匹配下界**而非孤例。
 >
-> **真正该减的是我自己重复的监控**:`bq0chi104` 与 `byibhuca2` 轮询同一批对象,而前者覆盖的 A8/A9 升档工作已完成,是后者真子集,纯属白烧。停掉后 **550 MB → 825 MB、硬缺页 19405 → 0**,**未牺牲任何生产性工作**。
+> **A9 的 no-go 被审稿人接受并加强**,已入正文为 **Terminal torsor obstruction** 定理;方案 A 采纳(标记映射**取代**而非削弱旧条款),方案 B 以"**not adopted**"的 remark 记录、不混用。档位如实未抬:他说这条更正不实质提升档位。
 >
-> 教训记下:**监控本身有成本**,重叠监控不只是冗余,在这台机器上会直接把系统推进颠簸;新开监控前先停掉被覆盖的旧监控。上一次内存告警我差点去杀 agent,这次先查归属再动手。
+> **A6 第七次优先权遗漏,且是本次会话新产出的工作**。数学全过(continuant 证明正确、$b_C=8$ 正确、**防作弊条款确实守住**),但 **Dushistova 2007(Sbornik: Math. 198, 661–690, Brocot 序列)定义了同一个对象且给出更强渐近**,首项常数不一致(她 $R_s+2R_s^2$,我们 $2R_s^2$)。审稿人认为**我们很可能改正了她的端点记账错误** —— 若属实比"新渐近"更锋利。已派工重构为**更正与调和定理**,并加护栏:声称已发表定理有误必须精确狭窄可核,**若查明只是约定差异必须写在报告第一行并改述**。
 >
-> **A4 送审**:weak-Perron 分类与去 (U3) 已证已复核但未经外审,本 tick 补上。问题里把他设的强制条件原样交回请他判 —— 类是否"在玩具例子之外非空",我们的答案是 $\sqrt{pq}$ 的 alternating-radix 见证(共轭模相等,严格 Perron 禁止、弱 Perron 容纳);并明说**未主张天花板已被移除**。
+> **七篇七次优先权遗漏,模式已明确**:不是历史马虎,而是**宣称对象为新之前,前驱文献检索力度不够**。
+
 
 
 
