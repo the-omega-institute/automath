@@ -3,9 +3,10 @@
 This directory contains the main manuscript `Condensation in
 Denominator-Weighted Brocot Fractions and Fibonacci Partition Thermodynamics`
 and a separately compiled supplement. The submission target is *Transactions
-of the American Mathematical Society*. If it declines on breadth or
-significance rather than correctness, *Journal of Number Theory* and
-*Ergodic Theory and Dynamical Systems* are the natural alternatives.
+of the American Mathematical Society* as an ambitious first test. *Journal of
+Number Theory* is the predicted natural level. *Ergodic Theory and Dynamical
+Systems* is a less natural alternative because the new centerpiece is
+arithmetic and probabilistic rather than dynamical.
 
 ## Scope
 
@@ -24,7 +25,8 @@ Feng; Hu is cited for the early local-dimension theory. The all-real pressure
 and frozen branch are recorded as finite-layer recovery and consistency
 results.
 
-The main contribution consists of:
+The central Brocot theorem and its downstream or exact-transfer package
+consist of:
 
 - a total-variation condensation theorem for denominator-weighted Brocot
   fractions of fixed order, including the explicit defect law, joint location

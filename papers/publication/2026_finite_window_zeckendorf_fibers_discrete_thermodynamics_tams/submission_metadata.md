@@ -120,13 +120,32 @@ identities.
 ## Venue Positioning
 
 The primary submission target is *Transactions of the American Mathematical
-Society*. The case for that venue is the combined correction-and-extension:
-the exact reconciliation and independent arithmetic proof feed the critical
-renewal constants, noninteger finite-size corrections, stable-law consequence,
-one-layer and finite-window large deviations, and exact finite
-correspondences. If *Transactions* declines on breadth or significance rather
-than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
-Systems* are the natural alternatives.
+Society*, as an honest ambitious test rather than the predicted outcome. The
+current external assessment places technical correctness of the condensation
+theorem at 92--95 percent, survival of the novelty boundary before an informed
+specialist referee at 75--80 percent, and the probability that the complete
+73-page package clears the *Transactions* significance and coherence bar at
+roughly 35--45 percent. The principal editorial risk is architecture and
+significance density, not a gap in Theorem 2.1 or direct subsumption by the
+product-weight condensation literature.
+
+The most natural median outcome is *Journal of Number Theory*. That venue is
+the predicted natural level for the arithmetic continued-fraction theorem,
+the Dushistova correction, and the downstream Fibonacci partition results.
+*Ergodic Theory and Dynamical Systems* is demoted below it: the manuscript
+attributes the all-real pressure and its phase transition to prior work and
+disclaims new pointwise local dimensions, multifractal spectra, finite-type
+neighbour graphs, net intervals, transition matrices, normalization
+transducers, transfer operators, and Stern--Brocot multifractal results. The
+new centerpiece is therefore arithmetic and probabilistic rather than
+dynamical. Nothing in the present package supports a venue above
+*Transactions*.
+
+In the assessor's summary, this is "a strong number-theory paper with a real,
+novel structural centerpiece; a credible but borderline TAMS paper; and a
+very strong JNT paper." The corresponding submission judgment is:
+"Transactions is now the right level to test, but not the level I would
+predict."
 
 ## Exact Scope Of Finite Formulas
 
