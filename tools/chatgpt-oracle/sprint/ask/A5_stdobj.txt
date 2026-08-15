@@ -1,0 +1,249 @@
+Please read main.pdf closely and answer as an external expert in symbolic dynamics, finite-group extensions of shifts of finite type, dynamical zeta functions, and (where relevant) Mahler's method. This is not a request for a journal recommendation or for more results formulated inside the manuscript's own vocabulary. It is an audit of whether the paper's existing machinery can be redirected toward an object that the field already recognizes and studies independently of this paper.
+
+The manuscript is titled "Finite radial determination of Frobenius profiles for odd-Adams-invariant abelian two-group extensions of shifts of finite type." It is being positioned as a Research Article for Ergodic Theory and Dynamical Systems. It is not an accepted paper. It has been revised through referee rounds. One earlier version claimed that determinant parity was essential to the algebraic-collision lifting step; that claim was false. The current version corrects it: the parity-free lifting uses the coefficient-denominator estimate together with Kumiko Nishioka's 1982 special-value theorem and Keiji Nishioka's 1985 algebraic-solution rationality result, while parity plus the Dieudonne--Dwork criterion supplies only a stronger integrality refinement. The current version also adds a realizable Omega(V) sampling lower bound. The principal priority objection already raised is real and must remain visible: algebraic-solution rationality is supplied by Keiji Nishioka's prior theorem, the special-value input is Kumiko Nishioka's, the fixed-class/fixed-label Euler product is implicit in the earlier Frobenius-class Mertens literature, and the determinant/trace/periodic-data dictionary is standard. The paper now disclaims originality for those inputs. Please judge the present paper, not the superseded parity claim, but do not restore any of those prior ingredients to its novelty ledger.
+
+1. THE MACHINERY ACTUALLY PRESENT IN THE PAPER
+
+The following is a machinery map, not a list of claimed theorems. Check it against main.pdf and correct any error before using it.
+
+(i) Finite-state representation blocks and Perron domination.
+
+Input: a primitive nonnegative integral adjacency matrix A with Perron root lambda > 1, a one-step finite-group edge cocycle tau, and a finite-dimensional unitary representation rho of G.
+
+Operation: form the block matrix
+
+    (A_rho)_{ij} = sum_{e:i->j} rho(tau(e))
+
+and the ordinary commutative determinant polynomial
+
+    P_rho(z) = det(I-z A_rho).
+
+Using a positive Perron eigenvector of A and unitarity, the paper puts a weighted sup norm on block vectors and proves
+
+    ||A_rho||_v <= lambda,
+    rad(A_rho) <= lambda,
+    |Tr(A_rho^n)| <= |V| dim(rho) lambda^n.
+
+Output: control of traces and convergence, and zero-freeness of P_rho in the open Perron disk. A strict inequality rad(A_rho) < lambda for nontrivial rho supplies radial continuation at the Perron endpoint. It does not make the raw class Euler profiles finite there.
+
+(ii) Trace--determinant and character transforms.
+
+Input: the family {P_rho} and the periodic holonomies of the cocycle.
+
+Operation: expand
+
+    -Log_0 P_rho(z) = sum_{n>=1} Tr(A_rho^n) z^n/n
+
+and use the irreducible character table to pass between represented traces and period-n point counts by holonomy conjugacy class. Then use the triangular necklace/Witt relation between period-n point counts and primitive-orbit counts.
+
+Output: the standard equivalence among equality of all twisted determinant polynomials, equality of all represented trace sequences, equality of all conjugacy-class periodic-point counts, and equality of all primitive length--conjugacy-class counts. The paper explicitly says that this is periodic-data equivalence, not topological conjugacy, strong shift equivalence, cocycle cohomology, or switching equivalence.
+
+(iii) Adams--Mobius conversion between periodic and fixed-label logarithms.
+
+Input: the periodic Artin logarithms
+
+    L_phi(z) = sum_gamma sum_{r>=1} phi(g_gamma^r) z^{r|gamma|}/r,
+
+which are finite linear combinations of -Log_0 P_rho, and the Adams operations psi^m phi(g) = phi(g^m).
+
+Operation: apply necklace/Witt Mobius inversion with the Adams action:
+
+    Pi_phi(z) = sum_{m>=1} mu(m) L_{psi^m phi}(z^m)/m,
+
+    F_phi(z) = sum_{r>=1} Pi_phi(z^r)/r
+             = sum_{r,m>=1} mu(m) L_{psi^m phi}(z^{rm})/(rm).
+
+Output: the fixed primitive-label logarithm F_phi, and hence the logarithms of fixed Frobenius-class Euler products, from determinant values at all power substitutions z^k. This step also isolates the exact obstruction to replacing F_phi by the usual periodic Artin logarithm L_phi: repetitions act on g_gamma by g_gamma -> g_gamma^r.
+
+(iv) Separation and dyadic collapse for abelian 2-groups.
+
+Input: two cocycles over possibly different primitive bases, the full vector of element-indexed values at a radius, and, for a finite abelian 2-group, the condition
+
+    P_{chi^u,tau}(z) = P_{chi,tau}(z)
+
+for every character chi and every odd u, separately for each cocycle.
+
+Operation: sum the element coordinates to recover equality of the two base determinant polynomials (their degrees are at most V), then Fourier transform the remaining coordinates. Odd-Adams invariance makes the odd-divisor Mobius sums cancel, leaving only powers of 2:
+
+    Delta_chi(z)
+      = -sum_{j>=0} 2^{-j} Log_0 H_chi(z^{2^j})
+        +sum_{j>=1} 2^{-j} Log_0 H_{chi^2}(z^{2^j}),
+
+where H_chi is the ratio of the two character determinant polynomials. Induction on the order of chi removes the second term after the chi^2 channel has been recovered.
+
+Output: each remaining character comparison becomes a one-variable dyadic multiplicative functional equation. The cancellation is automatic for G=(C_2)^r. For higher-exponent abelian 2-groups it is an actual restriction, although the manuscript gives C_4 and C_{2^s} examples with genuine higher-order holonomy. For C_3, and for generic C_4 outside this restriction, the same Adams--Mobius coefficients survive at infinitely many arithmetically distributed powers and couple several determinant ratios; the one-variable dyadic reduction fails.
+
+(v) Algebraic special-value lifting.
+
+Input: a rational function H in Q(z)^x with H(0)=1, zero-free on a disk, and the critical product
+
+    F_{H,p}(z) = product_{nu>=0} H(z^{p^nu})^{p^{-nu-1}},
+
+which satisfies F_{H,p}(z)^p = H(z)F_{H,p}(z^p). In the dynamical application p=2, positivity on a real radial segment turns equality of the relevant logarithmic coordinate at an algebraic radius y into F_{H,2}(y)=1.
+
+Operation: a coefficient recursion gives, after q clears the coefficients of the reduced numerator and denominator of H,
+
+    (pq)^{2n-1} f_n in Z,
+    log d_h <= (2h-1) log(pq).
+
+Cauchy bounds give linear coefficient heights. Kumiko Nishioka's special-value theorem, with the manuscript's checked parameters N=0, n=1, m=M=p, U=L=1 and p^2 < p^3, turns algebraicity of F_{H,p}(y) into algebraicity of the function. Keiji Nishioka's cited nonlinear algebraic-solution theorem then makes it rational.
+
+Output: a unique normalized R in Q(z)^x with
+
+    H(z) = R(z^p)/R(z)^p,
+    R(0)=1,
+
+and, in the positive real application, the collision condition is equivalent to R(y)=1. Parity is not consumed by this lifting chain. When P_0 == P_1 mod 2, the Dieudonne--Dwork criterion separately produces integral Taylor coefficients.
+
+(vi) Divisor control, zero counting, and finite reconstruction.
+
+Input: a reduced rational identity P_0/P_1 = R(z^p)/R(z)^p of total input degree D.
+
+Operation: take zero/pole orders to obtain
+
+    e(alpha) = r(alpha^p)-p r(alpha),
+
+invert this recurrence along forward p-power orbits, and bound the l_1 norm of the divisor of R. For p=2 this gives
+
+    deg numerator(R) + deg denominator(R)
+      <= D ceil(log_2(2D)).
+
+The normalized formal solution is computed recursively through degree 2N, a single affine Pade system of size N is solved, common factors are cancelled, and one polynomial identity accepts or rejects the result.
+
+Output: an effective rational-coboundary decision/reconstruction procedure, an explicit height bound, and the fact that all real comparison zeros are roots of numerator(R)-denominator(R). For nonconstant H there are at most
+
+    D ceil(log_2(2D))-1
+
+nonzero such roots. This is the source of the manuscript's 2V ceil(log_2(4V)) sampling budget, not a direct consequence of the degree of an SFT zeta function.
+
+(vii) Positive realization and explicit separation examples.
+
+Input: two integer polynomials P_0,P_1 with constant term 1 and P_0 == P_1 mod 2, or a chosen polynomial Q with a controlled factorization.
+
+Operation: realize P_0,P_1 as det(I-zC_i) using integral companion matrices; choose a positive integral matrix A, in the common parity class, that strictly dominates |C_i| entrywise; then (A+C_i)/2 and (A-C_i)/2 are the edge-count matrices of a C_2-cocycle and strict Perron--Frobenius monotonicity gives rad(C_i)<rad(A). For the multicollision family the paper builds Q_m and block matrices with
+
+    det(I-zB_m)=Q_m(z^2),
+    det(I-zB'_m)=Q_m(z)^2,
+
+and chooses rational y_{m,i} with Q_m(y_{m,i})=1.
+
+Output: standard two-sheeted SFT covers whose ordinary zeta-function ratio is the prescribed determinant ratio; an exact four-vertex centered endpoint collision; m distinct rational open-interval comparison zeros on a common positive (4m+2)-vertex base; the lower bound
+
+    N_{C_2}(V) >= floor((V-2)/4)+1;
+
+and a separate realizable family showing Omega(D log D) certificate degree. The manuscript correctly does not claim Omega(V log V) positive real comparison zeros.
+
+2. KEEP THE PAPER'S OBJECTS AND THE FIELD'S OBJECTS SEPARATE
+
+Here is my provisional separation. Correct it before drawing any conclusion.
+
+(a) Objects defined, packaged, or specially named by this manuscript for its inverse problem
+
+1. The radial class/element Euler profiles
+
+       E_C(y) = sum_{n>=1} p_{n,C} log(1-y^n)
+
+   and their finite vectors at selected radii.
+
+2. The centered Perron profile
+
+       E_C^o(y) = E_C(y)-(|C|/|G|)log det(I-yA),
+
+   used to remove the common divergent trivial channel at an endpoint.
+
+3. "Finite radial determination," the associated comparison/collision sets, the sampling number N_{C_2}(V), and the phrase "one algebraic anchor." These package a new inverse-data question; they are not standard conjugacy invariants merely because they are built from standard orbit counts.
+
+4. The condition labelled (OA), namely odd-Adams invariance of each character determinant family, as a selected class on which the Adams--Mobius system collapses.
+
+5. The paper's "dyadic boundary functional," "positive rational Mahler certificate," and normalized certificate R attached to a radial comparison. Rational Mahler coboundaries and multiplicative functional equations are not invented here, but this certificate vocabulary and its use as the classifier of profile collisions are paper-specific packaging.
+
+6. The fixed-label coordinate F_phi as the paper's principal coordinate. This must not be presented as a wholly new field object: the manuscript itself says that -F_{1_C} is the logarithm of the fixed-class Euler product already implicit in Mohamed--Noorani's 1999 Mertens product. What is paper-specific is its explicit Adams--Mobius determinant readout and its use in this finite-special-value inverse problem.
+
+7. The particular "complete real collision set" identification through R(y)=1 and the O(V log V) radial-location budget.
+
+(b) Candidate standard objects, with their standard names, found in the surrounding literature
+
+1. Mixing shifts of finite type, their nonnegative integral adjacency matrices, and their topological conjugacy invariants; periodic-point sequences and Artin--Mazur zeta functions are standard but incomplete conjugacy invariants.
+
+2. The Artin--Mazur/Ruelle dynamical zeta function of an SFT (the usual periodic-orbit zeta, rational and equal to det(I-zA)^{-1} in this setting), and representation-twisted Artin or Ruelle L-functions/determinants for finite-group extensions.
+
+3. Locally constant finite-group cocycles and skew-product extensions over SFTs; cocycle cohomology/Livsic equivalence, switching or gauge equivalence, G-SFTs/G-primitive matrices, represented trace or conjugacy-class trace series, and periodic holonomy/Frobenius-class data.
+
+4. Prime-orbit/Chebotarev counting in prescribed Frobenius classes and class-restricted Mertens products for finite covers of symbolic or hyperbolic systems.
+
+5. Strong shift equivalence over Z_+, shift equivalence, dimension groups, and the Williams classification/problem. These concern conjugacy or its algebraic surrogates, not mere equality of determinant polynomials. The historical "Williams problem" needs to be named precisely and not treated as still open in a form known to be false.
+
+6. Bowen--Franks groups and flow equivalence of SFTs (including the corresponding G-SFT/finite-group-extension questions). A Bowen--Franks group is not a complete topological-conjugacy invariant, and the present manuscript does not compute or control it.
+
+7. The Boyle--Schmieding realization problems for determinant polynomials, trace series, and conjugacy-class trace series arising from G-primitive matrices. The manuscript starts from already realized extensions and proves injectivity/compression statements between them; that is not a characterization of the image of a positivity-realization map.
+
+8. Mahler functions, Mahler's method, algebraic special values, rational solutions of Mahler functional equations, and effective algorithms for linear Mahler equations or Mahler--Riccati-type equations. The manuscript's equation is the nonlinear critical multiplicative equation F(z^p)=F(z)^p/H(z), not a general linear Mahler equation.
+
+9. Adams operations on representation rings and lambda-rings, together with necklace/Witt-vector transforms. The manuscript uses psi^m chi(g)=chi(g^m) and classical Mobius inversion, but does not prove a structural theorem about lambda-rings.
+
+10. The Dieudonne--Dwork lemma/criterion for integrality of power series. This is the standard object actually used. "Dieudonne determinants" should be struck from this inventory unless you find a genuine noncommutative determinant issue in main.pdf: every determinant formed in the manuscript is an ordinary determinant of a complex or integral matrix, and the Dieudonne--Dwork integrality criterion is not a Dieudonne determinant.
+
+11. Gain/voltage graphs, switching classes, and fundamental-cycle gains. The appendix recalls the standard switching criterion but expressly does not deduce switching from determinant equality.
+
+3. CORRECT THE STANDARD INVENTORY FIRST
+
+Before proposing any theorem, rewrite list (b). Add the standard objects that a current survey or specialist paper in symbolic dynamics, finite-group SFT extensions, dynamical zeta functions, or Mahler theory would naturally use and that are genuinely close enough to this machinery to matter. Strike anything I have wrongly promoted from a passing citation, anything not actually standard under the name given, and anything belonging only to list (a). If an item is standard but too remote from the paper to be a serious target, retain it only with the label "standard but remote." Correct in particular the status and precise formulation of the Williams problem, the role of Bowen--Franks groups, the relation between Artin--Mazur and Ruelle zeta functions in the SFT setting, and the Dieudonne--Dwork/Dieudonne-determinant distinction.
+
+Then give an inventory table with one row for every object on your corrected list and these columns:
+
+    standard object;
+    where it sits in the field;
+    verdict: YES / PARTIALLY / NO;
+    exactly what machinery (i)--(vii) says about it;
+    if PARTIALLY, the exact missing bridge;
+    if NO, the structural reason the machinery does not see it.
+
+Do not count "it is mentioned," "it is used as input," or "the manuscript gives a new name to data derived from it" as YES. In particular, press hard on the following point: the sampled-radius profile identification is stated for profiles introduced by this paper. Does it imply any statement about Artin--Mazur or Ruelle zeta functions, finite-group-extension periodic data, cocycle cohomology, topological conjugacy, strong shift equivalence, Bowen--Franks groups, flow equivalence, a Boyle--Schmieding realization problem, or a standard class of Mahler functions in the form those subjects actually use? A ratio of standard zeta functions occurring inside the proof is not by itself a new theorem about zeta functions.
+
+4. THE CENTRAL DEMAND: ONE THEOREM ABOUT A STANDARD OBJECT
+
+After correcting the inventory, name the strongest theorem about an object on your corrected list that machinery (i)--(vii) could plausibly reach. State it fully as a theorem, including hypotheses and conclusion.
+
+The target theorem must be statable WITHOUT USING ANY TERM THIS MANUSCRIPT INVENTED. If stating it requires the manuscript's vocabulary, it is not a theorem about the field's objects and it does not qualify. Write the theorem statement out under that constraint so that the test is visibly met.
+
+In particular, the statement may not hide behind the phrases "radial profile," "centered profile," "finite radial determination," "collision radius," "algebraic anchor," "dyadic boundary functional," or "Mahler certificate." Nor may it simply rename one of those notions with classical-sounding words. It must use independently standard objects and standard relations among them. Writing the same sampled-profile theorem in terms of a newly named generating function, or observing again that H is a ratio of two Artin--Mazur zeta functions, fails the test.
+
+If your best candidate uses ordinary or twisted dynamical zeta functions, say what standard property of those functions is proved beyond the manuscript's existing restatement. If it concerns SFT conjugacy or finite-group extensions, identify the standard equivalence relation or invariant reached. If it concerns Mahler theory, identify the recognized class of functional equations or standard algorithmic/special-value problem advanced, and separate that advance from the two cited Nishioka inputs. If it concerns realization, it must say something about which candidate invariants arise from positive/G-primitive matrices, not merely compare two examples already realized.
+
+5. FEASIBILITY AUDIT FOR THAT ONE TARGET
+
+For the theorem you state, give all of the following:
+
+1. The exact lemmas, identities, or estimates in main.pdf that feed the proof. Refer to their theorem/lemma numbers or displayed formulas as printed in main.pdf, and explain the direction of use rather than merely listing them.
+
+2. The single most important missing ingredient. State it precisely enough that another researcher could recognize when it had been proved.
+
+3. A proof architecture showing which steps are already present, which require modification, and which are genuinely new.
+
+4. A classification: (A) difficult but natural extension of the current proof, (B) major new argument sharing some present machinery, or (C) a different research project for which this manuscript supplies only background.
+
+5. A success probability as one integer from 0 to 100 percent for obtaining the stated theorem with a serious but bounded revision/research effort. Give the two or three facts that most strongly determine that number. Do not use a verbal probability range in place of the number.
+
+6. If the probability is below 25 percent, also state the strongest weaker theorem about the same standard object that clears the no-invented-vocabulary test and has probability at least 50 percent. If no such weaker theorem exists, say so.
+
+6. THE REMAINING OBJECTION
+
+Assume the target theorem were proved and integrated correctly. What would then be the strongest remaining objection to this paper as an ETDS research article? State one objection, not a diffuse list. Say whether it is a correctness objection, a priority objection, a depth/scope objection, or an exposition/positioning objection, and identify the exact result or dependency that makes it survive.
+
+CONSTRAINTS ON YOUR ANSWER
+
+- Do not answer the tier question by recommending a lower-tier journal. We are asking what to prove, not where to submit.
+
+- Do not propose adding further theorems of the kind already present. Mechanical accumulation moved nothing across eight papers and left most of them with priority omissions, because exact statements composed from standard equivalences carry little independent priority.
+
+- Do not accept a restatement of one of the manuscript's results in classical-sounding language as though it were a theorem about the field's objects. That is the principal failure mode being tested.
+
+- Do not credit the manuscript with Keiji Nishioka's algebraic-solution rationality theorem, Kumiko Nishioka's special-value theorem, the fixed-class Euler product, the character table, necklace/Witt inversion, or the standard determinant/periodic-data dictionary.
+
+- Do not treat equality of all twisted determinants as topological conjugacy, strong shift equivalence, cocycle cohomology, or switching. Main.pdf explicitly disclaims those implications.
+
+- Do not turn the Omega(D log D) certificate-degree family into an Omega(V log V) positive-collision lower bound. The actual realizable sampling lower bound proved is only Omega(V).
+
+- An honest exit is required and is valuable. If machinery (i)--(vii) genuinely says nothing nontrivial about any standard object beyond inserting standard objects into a theorem about the manuscript's own sampled profiles, say so plainly. Name the structural feature that confines it: for example, dependence on nonstandard special-value data, loss of marked-orbit information, comparison only after realization, failure to control positivity or strong shift equivalence, or confinement to a scalar dyadic Mahler orbit. A well-argued ceiling is useful; vague encouragement is not.
+
+Please organize the answer in this order: corrected standard-object list; YES/PARTIALLY/NO inventory; one constrained theorem statement; feasibility audit with a numerical probability; strongest remaining objection; honest-exit statement if applicable.
