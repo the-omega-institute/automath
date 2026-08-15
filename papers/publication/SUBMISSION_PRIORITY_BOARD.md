@@ -16,14 +16,15 @@
 
 | 篇 | 页 | 状态 | **去向** |
 |---|--:|---|---|
-| **A2** `cayley_chebyshev` | **72+33** | ✅ **收尾完成**;外审:无反例、门槛已达 | **JFA**(defensible, not an overreach);备选 AIHP |
-| **A3** `sharp_three_window` | 57+15 | ✅ 已修 | DCDS-A(无须降投) |
-| **A4** `prime_languages` | 25+43 | ✅ 已复核 | Monatshefte |
-| **A5** `finite_parts` | 33+19 | ✅ 已修 | ETDS |
-| **A6** `zeckendorf_fibers` | 59+20 | ✅ 已修 | JNT |
-| **A7** `upper_fibers` | 33+36 | ✅ 已修 | Fibonacci Quarterly |
-| **A8** `detector_shells` | 49+19 | ✅ 已修 | MCAP |
-| **A9** `homological_visibility` | 34+6 | ✅ 已修;文献核查已补 | Cahiers de Topologie |
+| **A2** `cayley_chebyshev` | **75+33** | 门槛已达 + 非空性 + 约定稳健性 + 部分刚性;后两项送审中 | **JFA**;备选 AIHP |
+| **A3** `sharp_three_window` | 57+15 | ✅ | DCDS-A |
+| **A4** `prime_languages` | 25+43 | ✅ | Monatshefte |
+| **A5** `finite_parts` | 33+19 | ✅ | ETDS |
+| **A6** `zeckendorf_fibers` | 59+20 | ✅ | JNT |
+| **A7** `upper_fibers` | 33+36 | ✅ | Fibonacci Quarterly |
+| **A8** `detector_shells` | 49+19 | ✅ | MCAP |
+| **A9** `homological_visibility` | 34+6 | ✅ | Cahiers de Topologie |
+
 
 **八篇外审全部走完、全部修复入库、投稿包七项齐备。A2 是唯一从拒稿走到 tier-2 的一篇。**
 
@@ -54,21 +55,14 @@
 
 
 
-> **TICK 43 — 七篇终态复扫,全绿**。池子空闲;仅 A2 稳健性在跑(日志 3.2 MB);内存 1.01 GB、无孤儿;无可收割。
+> **TICK 44 — 稳健性与部分刚性入库,并立刻送审**。池子空闲、**无 agent 在跑**、无孤儿、内存 1.27 GB。
 >
-> 每篇在各自提交时都验过,但**从未在全部落地后做一次终态复扫** —— 而其间 A5 补过署名与 Nishioka 对照、A9 补过文献核查、A3/A5 重建过补充材料,**任何一次编辑都可能悄悄作废先前生成的清单**。A2 有 agent 在改,排除在外,其余七篇结果:
+> **稳健性通过了我设的那道检验**(`964b17f63`)。复核重点不是"证没证出来",而是 **admissible class 是否被裁剪成刚好能证的那一个**。它经得起查:我点名要求必须在类内的两项都在(尺度变换 $s	o cs$ 的全体硬截断、光滑径向截断 $	heta(|x|/(c_s s))$),此外还含**任意可测、非径向、依赖 $s$ 的环带内过渡**,以及经 $H_s$ 的**无穷维规范族**。替换约定只使 $\mathcal E_{r,s}$ 变化 $o(s^{-2r})$,精确消失判据与 Hessian 常数不变。
 >
-> | 篇 | 正文 | 补充 | 缺陷 | 清单 |
-> |---|--:|--:|:--:|:--:|
-> | A3 `sharp_three_window` | 57p | 15p | 0/0/0 | 11 OK |
-> | A4 `prime_languages` | 25p | 43p | 0/0/0 | 8 OK |
-> | A5 `finite_parts` | 33p | 19p | 0/0/0 | 15 OK |
-> | A6 `zeckendorf_fibers` | 59p | 20p | 0/0/0 | 15 OK |
-> | A7 `upper_fibers` | 33p | 36p | 0/0/0 | 15 OK |
-> | A8 `detector_shells` | 49p | 19p | 0/0/0 | 10 OK |
-> | A9 `homological_visibility` | 34p | 6p | 0/0/0 | 6 OK |
+> **第 4 条(部分刚性)也到手,且是带边界的**:低阶公共 jet 在有界公共 $r$ 阶规范下被强制、$-	au_{s,\chi}$ 由归一化强制、法差 $r$ 阶模与 Hessian 渐近被强制;**明确不做**选定截断、不消除公共规范、不覆盖该 ansatz 之外的代理、不建立整体 canonicity、不证熵极小性 —— 这份"不做什么"写在**正文**里。**笼统非唯一性声明保留**,上一轮删掉的 canonicity 不是被悄悄装回,而是换成了边界清晰的弱陈述。
 >
-> **七篇正文与补充材料 PDF 全部就位、未定义引用/引文/重复标签各自全 0、清单零失败。** 后续编辑没有作废任何清单 —— 因为每次补充修改的任务书里都要求重新生成清单,这条纪律起了作用。
+> **已按同一纪律送审。** 上一条定理正是因为"提交时标注未经外审、随后被专家逐条确认"才敢信;这两条同样未经外审,故立刻送回同一位专家。问题里最想问的一条已写明:**这个 admissible class 是真的宽,还是为可证性而量身定制?** 并追问:有没有读者理应期待被覆盖、而该类排除在外的自然约定变更;若某个被排除的变更**真会在 $s^{-2r}$ 阶改变 $\mathcal E_{r,s}$**,那就不是类的缺口,而是**对稳健性的反例**。
+
 
 
 
