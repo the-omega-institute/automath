@@ -1,0 +1,2145 @@
+OpenAI Codex v0.147.0
+--------
+workdir: D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+model: gpt-5.6-sol
+provider: chrono
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0038b-5c85-7720-b78d-41840f7a0d2a
+--------
+user
+Write a question putting the NEW arithmetic critical stable-renewal theorem to the external
+expert as a referee, and write it ONLY to
+tools/chatgpt-oracle/sprint/ask/A6_renewal.txt (relative to D:\omega\automath). No preamble,
+no commentary, no other files. Self-contained: he sees only your text plus main.pdf.
+
+BACKGROUND, stated honestly. He rejected this paper for TAMS, writing that even if the proofs
+were fully repaired and the priority fully rewritten he expected the final verdict to remain
+reject. The priority repairs were made: Sidorov-Vershik, Hu, Lau-Ngai, Feng-Olivier and Feng
+are credited, the all-real pressure and frozen-half-line statements were demoted to
+attributed recovery propositions, and the title and abstract were rebuilt so the concessions
+come first. He was then asked what single theorem would raise the tier, and he named this one,
+at 35 percent to prove and 70 percent to survive a literature audit. It is now proved.
+
+State the theorem precisely, reading it from sec_arithmetic_critical.tex and the introduction:
+
+ - the critical letter law P{(C,H) = (c(p/q), log q)} = q^{-sigma_0}, so
+   P(C = 2d+1) = b_{2d+1}(sigma_0);
+ - (T1) b_{2d+1}(sigma_0) ~ b_C d^{-sigma_0};
+ - (T2) P(C > x) ~ K_C x^{1-sigma_0}, with the constant relation as the manuscript states it;
+ - the explicit value b_C = 8, presented as an absolutely convergent continuant context sum
+   rather than as the limit in (T1);
+ - the renewal consequences: C in the domain of attraction of the spectrally positive
+   (sigma_0 - 1)-stable law, and the second-order expansions of u_j, Z_m^R and S_{-sigma_0}
+   carrying the m^{3-sigma_0} correction.
+
+State the proof strategy as the manuscript does: isolate the unique partial quotient
+exceeding n/2, obtain its left-right context sum by dominated convergence, and show
+separately that the two n^delta-large-digit regime and the all-moderate greedy-block regime
+contribute o(n^{-s}), which also removes local lattice and semistable oscillations.
+
+CRITICALLY, state that his own anti-cheating condition was respected and say where: he
+required that this count only if the hard arithmetic tail estimate is proved in its own right
+and NOT if regular variation is assumed and standard renewal theory applied on top. The
+manuscript states in its introduction that the local denominator-layer theorem is a separate
+arithmetic result whose proof does not assume the regular variation later used by the renewal
+transfer. Quote that.
+
+Say the theorem is analytic with no numerical support, and that the existing scripts are
+sanity checks only.
+
+Then ask him, as a referee:
+ 1. Is the proof correct? Name any step he cannot follow or believes wrong, in particular the
+    dominated-convergence extraction of the context sum, the o(n^{-s}) bounds on the two
+    excluded regimes, and the claim that these remove lattice and semistable oscillation.
+ 2. Is b_C = 8 correct, and is the context sum genuinely absolutely convergent and explicit in
+    the sense he demanded?
+ 3. Was the anti-cheating condition genuinely met, or does regular variation enter somewhere
+    by the back door?
+ 4. He estimated 70 percent that this survives a literature audit as new. Having now seen it,
+    what is the nearest prior work, and does the claim hold? Treat this as the most important
+    question: six of our seven papers were found to have priority omissions.
+ 5. With this theorem in place, what is the honest tier and venue judgement now - and
+    specifically, does it change the TAMS verdict he previously expected to remain reject?
+
+Tell him a hard rejection with reasons is more useful than a soft acceptance, and that every
+objection should come with what would resolve it.
+
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\using-superpowers\\SKILL.md'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 149ms:
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, skip this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## Instruction Priority
+
+Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+
+1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) â€” highest priority
+2. **Superpowers skills** â€” override default system behavior where they conflict
+3. **Default system prompt** â€” lowest priority
+
+If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
+
+## How to Access Skills
+
+**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to youâ€”follow it directly. Never use the Read tool on skill files.
+
+**In Copilot CLI:** Use the `skill` tool. Skills are auto-discovered from installed plugins. The `skill` tool works the same as Claude Code's `Skill` tool.
+
+**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
+
+**In other environments:** Check your platform's documentation for how skills are loaded.
+
+## Platform Adaptation
+
+Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
+
+# Using Skills
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+
+```dot
+digraph skill_flow {
+    "User message received" [shape=doublecircle];
+    "About to EnterPlanMode?" [shape=doublecircle];
+    "Already brainstormed?" [shape=diamond];
+    "Invoke brainstorming skill" [shape=box];
+    "Might any skill apply?" [shape=diamond];
+    "Invoke Skill tool" [shape=box];
+    "Announce: 'Using [skill] to [purpose]'" [shape=box];
+    "Has checklist?" [shape=diamond];
+    "Create TodoWrite todo per item" [shape=box];
+    "Follow skill exactly" [shape=box];
+    "Respond (including clarifications)" [shape=doublecircle];
+
+    "About to EnterPlanMode?" -> "Already brainstormed?";
+    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
+    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
+    "Invoke brainstorming skill" -> "Might any skill apply?";
+
+    "User message received" -> "Might any skill apply?";
+    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
+    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
+    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
+    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
+    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
+    "Has checklist?" -> "Follow skill exactly" [label="no"];
+    "Create TodoWrite todo per item" -> "Follow skill exactly";
+}
+```
+
+## Red Flags
+
+These thoughts mean STOPâ€”you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept â‰  using the skill. Invoke it. |
+
+## Skill Priority
+
+When multiple skills could apply, use this order:
+
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+
+"Let's build X" â†’ brainstorming first, then implementation skills.
+"Fix this bug" â†’ debugging first, then domain-specific skills.
+
+## Skill Types
+
+**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+
+**Flexible** (patterns): Adapt principles to context.
+
+The skill itself tells you which.
+
+## User Instructions
+
+Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\brainstorming\\SKILL.md'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 178ms:
+---
+name: brainstorming
+description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+---
+
+# Brainstorming Ideas Into Designs
+
+Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
+
+Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+
+<HARD-GATE>
+Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+</HARD-GATE>
+
+## Anti-Pattern: "This Is Too Simple To Need A Design"
+
+Every project goes through this process. A todo list, a single-function utility, a config change â€” all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+
+## Checklist
+
+You MUST create a task for each of these items and complete them in order:
+
+1. **Explore project context** â€” check files, docs, recent commits
+2. **Offer visual companion** (if topic will involve visual questions) â€” this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+3. **Ask clarifying questions** â€” one at a time, understand purpose/constraints/success criteria
+4. **Propose 2-3 approaches** â€” with trade-offs and your recommendation
+5. **Present design** â€” in sections scaled to their complexity, get user approval after each section
+6. **Write design doc** â€” save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+7. **Spec self-review** â€” quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+8. **User reviews written spec** â€” ask user to review the spec file before proceeding
+9. **Transition to implementation** â€” invoke writing-plans skill to create implementation plan
+
+## Process Flow
+
+```dot
+digraph brainstorming {
+    "Explore project context" [shape=box];
+    "Visual questions ahead?" [shape=diamond];
+    "Offer Visual Companion\n(own message, no other content)" [shape=box];
+    "Ask clarifying questions" [shape=box];
+    "Propose 2-3 approaches" [shape=box];
+    "Present design sections" [shape=box];
+    "User approves design?" [shape=diamond];
+    "Write design doc" [shape=box];
+    "Spec self-review\n(fix inline)" [shape=box];
+    "User reviews spec?" [shape=diamond];
+    "Invoke writing-plans skill" [shape=doublecircle];
+
+    "Explore project context" -> "Visual questions ahead?";
+    "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
+    "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
+    "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Propose 2-3 approaches";
+    "Propose 2-3 approaches" -> "Present design sections";
+    "Present design sections" -> "User approves design?";
+    "User approves design?" -> "Present design sections" [label="no, revise"];
+    "User approves design?" -> "Write design doc" [label="yes"];
+    "Write design doc" -> "Spec self-review\n(fix inline)";
+    "Spec self-review\n(fix inline)" -> "User reviews spec?";
+    "User reviews spec?" -> "Write design doc" [label="changes requested"];
+    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+}
+```
+
+**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+
+## The Process
+
+**Understanding the idea:**
+
+- Check out the current project state first (files, docs, recent commits)
+- Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
+- If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec â†’ plan â†’ implementation cycle.
+- For appropriately-scoped projects, ask questions one at a time to refine the idea
+- Prefer multiple choice questions when possible, but open-ended is fine too
+- Only one question per message - if a topic needs more exploration, break it into multiple questions
+- Focus on understanding: purpose, constraints, success criteria
+
+**Exploring approaches:**
+
+- Propose 2-3 different approaches with trade-offs
+- Present options conversationally with your recommendation and reasoning
+- Lead with your recommended option and explain why
+
+**Presenting the design:**
+
+- Once you believe you understand what you're building, present the design
+- Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
+- Ask after each section whether it looks right so far
+- Cover: architecture, components, data flow, error handling, testing
+- Be ready to go back and clarify if something doesn't make sense
+
+**Design for isolation and clarity:**
+
+- Break the system into smaller units that each have one clear purpose, communicate through well-defined interfaces, and can be understood and tested independently
+- For each unit, you should be able to answer: what does it do, how do you use it, and what does it depend on?
+- Can someone understand what a unit does without reading its internals? Can you change the internals without breaking consumers? If not, the boundaries need work.
+- Smaller, well-bounded units are also easier for you to work with - you reason better about code you can hold in context at once, and your edits are more reliable when files are focused. When a file grows large, that's often a signal that it's doing too much.
+
+**Working in existing codebases:**
+
+- Explore the current structure before proposing changes. Follow existing patterns.
+- Where existing code has problems that affect the work (e.g., a file that's grown too large, unclear boundaries, tangled responsibilities), include targeted improvements as part of the design - the way a good developer improves code they're working in.
+- Don't propose unrelated refactoring. Stay focused on what serves the current goal.
+
+## After the Design
+
+**Documentation:**
+
+- Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+  - (User preferences for spec location override this default)
+- Use elements-of-style:writing-clearly-and-concisely skill if available
+- Commit the design document to git
+
+**Spec Self-Review:**
+After writing the spec document, look at it with fresh eyes:
+
+1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
+2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
+3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
+4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+
+Fix any issues inline. No need to re-review â€” just fix and move on.
+
+**User Review Gate:**
+After the spec review loop passes, ask the user to review the written spec before proceeding:
+
+> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+
+Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+
+**Implementation:**
+
+- Invoke the writing-plans skill to create a detailed implementation plan
+- Do NOT invoke any other skill. writing-plans is the next step.
+
+## Key Principles
+
+- **One question at a time** - Don't overwhelm with multiple questions
+- **Multiple choice preferred** - Easier to answer than open-ended when possible
+- **YAGNI ruthlessly** - Remove unnecessary features from all designs
+- **Explore alternatives** - Always propose 2-3 approaches before settling
+- **Incremental validation** - Present design, get approval before moving on
+- **Be flexible** - Go back and clarify when something doesn't make sense
+
+## Visual Companion
+
+A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool â€” not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
+
+**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
+> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. This feature is still new and can be token-intensive. Want to try it? (Requires opening a local URL)"
+
+**This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. The message should contain ONLY the offer above and nothing else. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
+
+**Per-question decision:** Even after the user accepts, decide FOR EACH QUESTION whether to use the browser or the terminal. The test: **would the user understand this better by seeing it than reading it?**
+
+- **Use the browser** for content that IS visual â€” mockups, wireframes, layout comparisons, architecture diagrams, side-by-side visual designs
+- **Use the terminal** for content that is text â€” requirements questions, conceptual choices, tradeoff lists, A/B/C/D text options, scope decisions
+
+A question about a UI topic is not automatically a visual question. "What does personality mean in this context?" is a conceptual question â€” use the terminal. "Which wizard layout works better?" is a visual question â€” use the browser.
+
+If they agree to the companion, read the detailed guide before proceeding:
+`skills/brainstorming/visual-companion.md`
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files -g 'sec_arithmetic_critical.tex' -g '*intro*.tex' -g 'main.tex' -g 'AGENTS.md' -g 'CLAUDE.md' -g 'GEMINI.md'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 167ms:
+sec_introduction.tex
+main.tex
+sec_arithmetic_critical.tex
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_arithmetic_critical.tex'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_introduction.tex'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n \"b_C|K_C|sigma_0|stable|renewal|m\\"'^'"\\{|3-\\\\sigma|context sum|regular variation|anti-cheat|semistable|oscillation|partial quotient|greedy-block|moderate\" main.tex sec_*.tex" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+2026-08-15T03:51:29.429095Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+main.tex:90:  \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  A one-large-partial-quotient
+main.tex:93:  \(s>2\).  At criticality its explicit context constant is \(b_C=8\); the
+main.tex:94:  resulting stable-renewal expansion gives the first noninteger correction of
+main.tex:95:  order \(m^{3-\sigma_0}\) to the one-layer and finite-window partition sums.
+main.tex:98: uniform law on \(\mathcal I_m\), \(m^{-1}\log R(n)\) satisfies a full large
+main.tex:102:face.  The inputs specific to these refinements are a weighted renewal identity
+rg: sec_*.tex: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+
+ exited 1 in 210ms:
+main.tex:90:  \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\).  A one-large-partial-quotient
+main.tex:93:  \(s>2\).  At criticality its explicit context constant is \(b_C=8\); the
+main.tex:94:  resulting stable-renewal expansion gives the first noninteger correction of
+main.tex:95:  order \(m^{3-\sigma_0}\) to the one-layer and finite-window partition sums.
+main.tex:98: uniform law on \(\mathcal I_m\), \(m^{-1}\log R(n)\) satisfies a full large
+main.tex:102:face.  The inputs specific to these refinements are a weighted renewal identity
+rg: sec_*.tex: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_arithmetic_critical.tex'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 173ms:
+\begin{theorem}[Arithmetic denominator-layer theorem]
+\label{thm:arithmetic-denominator-layer}
+For a finite word \(\mathbf a=(a_1,\ldots,a_r)\) of positive integers, let
+\(\mathcal K(\mathbf a)\) be its regular continuant, with
+\[
+ \begin{gathered}
+  \mathcal K(\varnothing)=1,\qquad \mathcal K(a_1)=a_1,\\
+  \mathcal K(a_1,\ldots,a_r)
+  =a_r\mathcal K(a_1,\ldots,a_{r-1})
+   +\mathcal K(a_1,\ldots,a_{r-2}).
+ \end{gathered}
+\]
+Put
+\[
+ \begin{aligned}
+  \mathcal C_{\rm L}&:=\{\varnothing\}\cup
+   \bigcup_{r\ge1}\mathbb N^r,\\
+  \mathcal C_{\rm R}&:=\{\varnothing\}\cup
+   \{(a_1,\ldots,a_r):r\ge1,\ a_i\ge1,\ a_r\ge2\}.
+ \end{aligned}
+\]
+Then, for every fixed \(s>2\),
+\begin{equation}
+ b_{2d+1}(s)\sim b(s)d^{-s}\qquad(d\to\infty),
+ \label{eq:low-temperature-local-layer}
+\end{equation}
+where the constant is the absolutely convergent one-large-partial-quotient
+context sum
+\begin{equation}
+ \begin{aligned}
+ b(s)
+ &: =\sum_{\mathbf u\in\mathcal C_{\rm L}}
+       \sum_{\mathbf v\in\mathcal C_{\rm R}}
+       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}\\
+ &=2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2>0.
+ \end{aligned}
+ \label{eq:one-large-partial-quotient-context-sum}
+\end{equation}
+In particular, this identifies the polynomial scale of every fixed
+low-temperature denominator layer; no tail hypothesis is used in
+\eqref{eq:low-temperature-local-layer}.
+\end{theorem}
+
+\begin{proof}
+Write \(|\mathbf a|_1=a_1+\cdots+a_r\), with
+\(|\varnothing|_1=0\).  The canonical regular continued fraction of a reduced
+\(p/q\in(0,1)\) is
+\[
+ \frac pq=[0;a_1,\ldots,a_r],
+ \qquad a_i\ge1,\quad a_r\ge2,
+\]
+and its denominator is \(\mathcal K(a_1,\ldots,a_r)\).  The conversion formula
+used in the proof of \Cref{thm:all-real-pressure} gives
+\[
+ d(p/q)=|\mathbf a|_1-1.
+\]
+Consequently, on putting \(n=d+1\), the left side of
+\eqref{eq:low-temperature-local-layer} is
+\begin{equation}
+ A_n(s):=
+ \sum_{\substack{\mathbf a\in\mathcal C_{\rm R}\\|\mathbf a|_1=n}}
+ \mathcal K(\mathbf a)^{-s}.
+ \label{eq:regular-continuant-layer}
+\end{equation}
+
+We first evaluate the context mass.  Canonical words in
+\(\mathcal C_{\rm R}\) with
+denominator \(q\) parameterize the \(\phi_{\rm E}(q)\) reduced fractions in
+\((0,1)\).  Hence, for \(s>2\),
+\begin{equation}
+ R_s:=\sum_{\mathbf v\in\mathcal C_{\rm R}}\mathcal K(\mathbf v)^{-s}
+ =1+\sum_{q\ge2}\frac{\phi_{\rm E}(q)}{q^s}
+ =\frac{\zeta(s-1)}{\zeta(s)}<\infty.
+ \label{eq:right-continuant-context-mass}
+\end{equation}
+Every nonempty positive word either ends in a digit at least two or has the
+form \((a_1,\ldots,a_{r-1},1)\).  The usual terminal move
+\[
+ (a_1,\ldots,a_{r-1},1)
+ \longleftrightarrow
+ (a_1,\ldots,a_{r-1}+1)
+\]
+preserves the continuant.  It pairs the two regular expansions of every
+nonempty canonical word; it also pairs \((1)\) with \(\varnothing\).  Therefore
+\begin{equation}
+ L_s:=\sum_{\mathbf u\in\mathcal C_{\rm L}}\mathcal K(\mathbf u)^{-s}
+ =2R_s.
+ \label{eq:left-continuant-context-mass}
+\end{equation}
+This proves the absolute convergence and the evaluation in
+\eqref{eq:one-large-partial-quotient-context-sum}.
+
+It remains to prove that this context sum is the whole local main term.  We
+give the cutoff argument, including the multiple-large-digit and moderate
+parts.  The continuant concatenation formula implies, for finite positive
+words \(\mathbf u,\mathbf v\),
+\begin{equation}
+ \mathcal K(\mathbf u\mathbf v)
+ \ge \mathcal K(\mathbf u)\mathcal K(\mathbf v).
+ \label{eq:continuant-concatenation-lower-bound}
+\end{equation}
+Moreover, with the two contexts fixed and \(a\to\infty\), multilinearity of
+the tridiagonal determinant defining the continuant gives
+\begin{equation}
+ \mathcal K(\mathbf u,a,\mathbf v)
+ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1).
+ \label{eq:continuant-large-digit-affine}
+\end{equation}
+
+Let \(P_n(s)\) be the part of \eqref{eq:regular-continuant-layer} coming from
+words having a digit greater than \(n/2\).  Such a digit is unique.  Cutting
+there is a bijection with pairs
+\((\mathbf u,\mathbf v)\in\mathcal C_{\rm L}\times\mathcal C_{\rm R}\)
+satisfying
+\(|\mathbf u|_1+|\mathbf v|_1<n/2\), the middle digit being
+\(a=n-|\mathbf u|_1-|\mathbf v|_1\).  Equations
+\eqref{eq:continuant-concatenation-lower-bound} and
+\eqref{eq:continuant-large-digit-affine} give, respectively,
+\[
+ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
+ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
+\]
+and pointwise convergence of the left side to
+\(\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}\).  Dominated
+convergence, using \eqref{eq:right-continuant-context-mass}--
+\eqref{eq:left-continuant-context-mass}, therefore yields
+\begin{equation}
+ n^sP_n(s)\longrightarrow L_sR_s=b(s).
+ \label{eq:principal-large-digit-limit}
+\end{equation}
+
+We now show that the complementary words have total weight \(o(n^{-s})\).
+Choose
+\begin{equation}
+ \frac{s}{2(s-1)}<\delta<1,
+ \qquad h=\lfloor n^\delta\rfloor,
+ \label{eq:large-digit-cutoff}
+\end{equation}
+and set
+\[
+ \eta_s(h):=
+ \sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
+ \mathcal K(\mathbf u)^{-s}.
+\]
+By \eqref{eq:left-continuant-context-mass}, \(\eta_s(h)\to0\).  A word having
+at least two digits not smaller than \(h\) can be cut at its first two such
+digits.  After dropping the restrictions on the three intervening contexts,
+\eqref{eq:continuant-concatenation-lower-bound} bounds its total weight by
+\begin{equation}
+ L_s^2R_s
+ \left(\sum_{a\ge h}a^{-s}\right)^2
+ =O_s(h^{2-2s})=o(n^{-s}),
+ \label{eq:two-large-digits-negligible}
+\end{equation}
+where the last equality is precisely the first inequality in
+\eqref{eq:large-digit-cutoff}.
+
+For completeness, consider a word all of whose digits are smaller than
+\(h\).  Greedily divide it into consecutive blocks: close a block as soon as
+its digit sum reaches \(h\), and leave the last remainder unclosed.  Every
+closed block has digit sum in \([h,2h)\), and a word of digit sum at least
+\(N\) has at least \(\lfloor N/(2h)\rfloor-1\) closed blocks.  The
+concatenation bound and the uniqueness of the greedy decomposition show that
+the total continuant weight of all such words is at most
+\begin{equation}
+ \frac{L_s}{1-\eta_s(h)}
+ \eta_s(h)^{\lfloor N/(2h)\rfloor-1}
+ \label{eq:moderate-block-bound}
+\end{equation}
+for all sufficiently large \(h\).  When \(N\ge n/4\), this is
+\(o(n^{-A})\) for every fixed \(A>0\), because \(n/h\to\infty\) and
+\(\eta_s(h)\to0\).
+
+The words not counted by \(P_n(s)\) and not covered by
+\eqref{eq:two-large-digits-negligible} have at most one digit at least \(h\).
+If there is none, apply \eqref{eq:moderate-block-bound} with \(N=n\).  If
+there is exactly one, its value is at most \(n/2\), so the two surrounding
+moderate contexts have combined digit sum at least \(n/2\); one has digit sum
+at least \(n/4\).  Cutting at the exceptional digit, summing its weight
+\(a^{-s}\), and applying \eqref{eq:moderate-block-bound} to that long context
+again gives \(o(n^{-A})\) for every fixed \(A\).  Together with
+\eqref{eq:two-large-digits-negligible}, this proves
+\[
+ A_n(s)-P_n(s)=o(n^{-s}).
+\]
+Combining this with \eqref{eq:principal-large-digit-limit}, and replacing
+\(n=d+1\) by \(d\), proves \eqref{eq:low-temperature-local-layer}.
+\end{proof}
+
+\begin{theorem}[Arithmetic critical stable renewal]
+\label{thm:arithmetic-critical-stable-renewal}
+Put \(\alpha:=\sigma_0-1\in(1,2)\), and under the critical letter law put
+\[
+ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}.
+\]
+Then \(\Pr\{C=2d+1\}=b_{2d+1}(\sigma_0)\), and the explicit constants
+\begin{equation}
+ \begin{aligned}
+ b_C&:=
+ \sum_{\mathbf u\in\mathcal C_{\rm L}}
+ \sum_{\mathbf v\in\mathcal C_{\rm R}}
+ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
+ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2=8,\\
+ K_C&:=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
+ =\frac{2^{\sigma_0+2}}{\sigma_0-1}
+ \end{aligned}
+ \label{eq:critical-tail-constants}
+\end{equation}
+are positive.  The double series defining \(b_C\) is absolutely convergent,
+and
+\begin{align}
+ b_{2d+1}(\sigma_0)&\sim b_Cd^{-\sigma_0},
+ &&d\to\infty,
+ \label{eq:critical-letter-local-tail}\\
+ \Pr\{C>x\}
+ &=\sum_{q\ge2}q^{-\sigma_0}
+   \card{\{1\le p<q:(p,q)=1,\ c(p/q)>x\}},\notag\\
+ &\sim K_Cx^{1-\sigma_0},
+ &&x\to\infty.
+ \label{eq:critical-letter-tail}
+\end{align}
+If \(u_j=u_j(\sigma_0)\) is the renewal sequence in
+\eqref{eq:weighted-renewal-coefficients}, then
+\begin{equation}
+ u_j=\frac1{\mu_C}
+ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
+ +o(j^{2-\sigma_0}).
+ \label{eq:critical-renewal-second-order}
+\end{equation}
+Consequently,
+\begin{align}
+ Z_m^R(-\sigma_0)
+ &=\frac{2m}{\mu_C}
+ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}
+   m^{3-\sigma_0}+o(m^{3-\sigma_0}),
+ \label{eq:standard-layer-critical-second-order}\\
+ S_{-\sigma_0}(m)
+ &=\frac{4m}{\mu_C}
+ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}
+   m^{3-\sigma_0}+o(m^{3-\sigma_0}).
+ \label{eq:finite-window-critical-second-order}
+\end{align}
+Finally, \(C\) belongs to the domain of attraction of a spectrally positive
+\(\alpha\)-stable law.  More precisely, if \(a_n>0\) is chosen so that
+\(n\Pr\{C>a_n\}\to1\), then for independent copies \(C_1,C_2,\ldots\),
+\begin{equation}
+ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
+ \xrightarrow{\mathrm d}\mathcal S_\alpha,
+ \label{eq:critical-cost-stable-domain}
+\end{equation}
+where \(\mathcal S_\alpha\) is the spectrally positive \(\alpha\)-stable law
+whose L\'evy measure has density \(\alpha x^{-\alpha-1}\) on \((0,\infty)\).
+\end{theorem}
+
+\begin{proof}
+The critical equation \eqref{eq:weighted-renewal-at-one} makes the displayed
+letter law a probability measure.  The local estimate
+\eqref{eq:critical-letter-local-tail} and the context-sum evaluation in
+\eqref{eq:critical-tail-constants} are \Cref{thm:arithmetic-denominator-layer}
+at \(s=\sigma_0\).  Direct summation of that local estimate gives
+\[
+ \Pr\{C>x\}
+ =\sum_{d>(x-1)/2}b_{2d+1}(\sigma_0)
+ \sim\frac{b_C}{\sigma_0-1}
+      \left(\frac{x}{2}\right)^{1-\sigma_0},
+\]
+which is \eqref{eq:critical-letter-tail} with the stated \(K_C\).  Thus
+regular variation is a conclusion of the arithmetic continuant estimate, not
+an assumption.
+
+The distribution of \(C\) has span one, finite mean \(\mu_C\), and tail
+\(K_Cj^{-\alpha}\), with \(1<\alpha<2\).  The finite-mean case of the
+discrete renewal-sequence theorem \cite{OmeyVanGulck2015} applies.  To make
+its constant explicit, write \(\overline F(j)=\Pr\{C>j\}\).  The tail-sum
+identity and the Abelian theorem for power series give, as \(z\uparrow1\),
+\begin{align*}
+ 1-B_{\sigma_0}(z)
+ &=(1-z)\sum_{j\ge0}\overline F(j)z^j,\\
+ \sum_{j\ge0}\overline F(j)z^j
+ &=\mu_C+K_C\Gamma(1-\alpha)(1-z)^{\alpha-1}
+   +o((1-z)^{\alpha-1}).
+\end{align*}
+Since \(U_{\sigma_0}(z)=\{1-B_{\sigma_0}(z)\}^{-1}\), it follows that
+\[
+ U_{\sigma_0}(z)
+ =\frac1{\mu_C(1-z)}
+ -\frac{K_C\Gamma(1-\alpha)}{\mu_C^2}(1-z)^{\alpha-2}
+ +o((1-z)^{\alpha-2}).
+\]
+The cited arithmetic coefficient theorem, using the span-one hypothesis,
+transfers this expansion locally.  As
+\(\Gamma(2-\alpha)=(1-\alpha)\Gamma(1-\alpha)\), it gives
+\[
+ u_j-\frac1{\mu_C}
+ \sim\frac{K_C}{\mu_C^2(\alpha-1)}j^{1-\alpha};
+\]
+see also the generating-function remainder argument for the arithmetic
+renewal theorem in \cite[Ch.~XI]{Feller1971}.  Substitution of
+\(\alpha=\sigma_0-1\) proves
+\eqref{eq:critical-renewal-second-order}.  Summing it and using
+\[
+ \sum_{j=1}^{m-1}j^{2-\sigma_0}
+ \sim\frac{m^{3-\sigma_0}}{3-\sigma_0}
+\]
+in the exact identities \eqref{eq:standard-layer-renewal} and
+\eqref{eq:weighted-window-renewal} proves
+\eqref{eq:standard-layer-critical-second-order} and
+\eqref{eq:finite-window-critical-second-order}; the boundary terms are
+\(O(1)=o(m^{3-\sigma_0})\).
+
+Finally, \eqref{eq:critical-letter-tail}, finite mean, and the absence of a
+negative tail are precisely the one-sided domain-of-attraction conditions for
+an \(\alpha\)-stable law with the normalization in
+\eqref{eq:critical-cost-stable-domain}; see \cite[Ch.~XVII]{Feller1971}.
+\end{proof}
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'sec_introduction.tex'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 150ms:
+\section{Introduction}\label{sec:introduction}
+
+Let \(F_0=0\), \(F_1=F_2=1\), and
+\(F_{j+2}=F_{j+1}+F_j\), and put
+\(\varphi=(1+\sqrt5)/2\).  Let \(R(n)\) be the classical Fibonacci
+partition function: the number of partitions of \(n\) into distinct
+Fibonacci numbers, with the two unit terms identified.  Our main
+thermodynamic results concern \(R\) on the standard layers
+\[
+ \mathcal I_m=[F_{m+1}-1,F_{m+2}-1).
+\]
+The moment pressure for every real tilt and its first-order transition are
+already contained, under an affine normalization, in the golden-ratio
+Bernoulli-convolution literature \cite{LauNgai1998,FengOlivier2003,Feng2005}.
+We make that normalization explicit and use it as the starting point for
+finite-window identities, arithmetic critical refinements, and full
+large-deviation lower bounds for \(m^{-1}\log R(n)\) under the uniform law on
+\(\mathcal I_m\).
+
+A finite-window Zeckendorf fold gives an exact finite model for this standard
+object.  A word
+\(\omega\in\{0,1\}^m\) determines the raw sum
+\[
+  N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}.
+\]
+We consider the finite-window fold obtained by reducing this sum modulo
+\(F_{m+2}\) and taking the unique legal Zeckendorf word in the visible
+window.  If \(d_m(x)\) is the cardinality of the fiber over a legal word
+\(x\), the corresponding finite problem is to identify the multiset
+\(\{d_m(x):x\in X_m\}\) and its extremal and moment statistics.
+
+The bridge is exact: the complete fiber list is the list of \(R\) on
+\(\mathcal I_m\sqcup\mathcal I_{m+1}\).  A second correspondence is an affine
+reindexing of a finite subset-sum spectrum.  Both are finite identities and
+do not require a normalization transducer.
+
+\subsection{Main results}
+
+Put \(R(n)=0\) for \(n<0\).  Let \(\sigma_0>2\) be the unique solution of
+\[
+ \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2;
+ \qquad \sigma_0=2.4787507857\ldots.
+\]
+For \(t>-\sigma_0\), let \(P(t)>0\) be the unique solution of
+\[
+ \sum_{q\ge2}\sum_{\substack{1\le p<q\\(p,q)=1}}
+ q^t e^{-P(t)c(p/q)}=1,
+\]
+where \(c(p/q)\) is the odd continued-fraction cost defined before
+\Cref{prop:weighted-generator-renewal}, and put \(P(t)=0\) for
+\(t\le-\sigma_0\).  Set
+\[
+ \begin{gathered}
+ \mu_C:=\sum_{q\ge2}\sum_{\substack{1\le p<q\\(p,q)=1}}
+ c(p/q)q^{-\sigma_0},\\
+ v_c:=\frac{\displaystyle
+ \sum_{q\ge2}\sum_{\substack{1\le p<q\\(p,q)=1}}
+ q^{-\sigma_0}\log q}{\mu_C},
+ \qquad
+ t_c:=-\sigma_0,\qquad
+ \alpha_+:=\frac12\log\varphi.
+ \end{gathered}
+\]
+Define
+\[
+ Z_m^R(t):=\sum_{n\in\mathcal I_m}R(n)^t.
+\]
+
+The arithmetic input at the critical point is a local theorem, rather than a
+tail assumption.  For every fixed \(s>2\),
+\begin{equation}
+ b_{2d+1}(s)
+ \sim2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2d^{-s}.
+ \label{eq:introduction-low-temperature-layer}
+\end{equation}
+Its proof cuts a canonical regular continued fraction at its unique large
+partial quotient and gives the constant as an absolutely convergent left--right
+continuant context sum.  At \(s=\sigma_0\), this constant is \(b_C=8\), and
+\begin{equation}
+ \Pr\{C>x\}\sim K_Cx^{1-\sigma_0},
+ \qquad K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C.
+ \label{eq:introduction-critical-cost-tail}
+\end{equation}
+Consequently, \Cref{thm:arithmetic-critical-stable-renewal} proves
+\begin{equation}
+ Z_m^R(-\sigma_0)
+ =\frac{2m}{\mu_C}
+ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
+ +o(m^{3-\sigma_0}),
+ \label{eq:introduction-standard-critical-second-order}
+\end{equation}
+with the corresponding coefficient doubled for \(S_{-\sigma_0}(m)\).  The
+critical cost also lies in the domain of attraction of a spectrally positive
+\((\sigma_0-1)\)-stable law.  Regular variation in these statements is derived
+from \eqref{eq:introduction-low-temperature-layer}; it is not assumed.
+
+\begin{theoremA}[One-layer Fibonacci partition thermodynamics]
+For every \(t\in\RR\),
+\[
+ \lim_{m\to\infty}\frac1m\log Z_m^R(t)=P(t).
+\]
+For \(s>\sigma_0\),
+\[
+ Z_m^R(-s)\longrightarrow
+ \frac2{2-\zeta(s-1)/\zeta(s)}-1,
+\]
+whereas \(Z_m^R(-\sigma_0)\sim2m/\mu_C\).  Under the critical Gibbs law
+proportional to \(R(n)^{-\sigma_0}\), the normalized log multiplicity and
+generating-layer cost converge jointly to \((v_cU,U)\), with \(U\) uniform on
+\([0,1]\).
+
+If \(\mathbf N_m\) is uniform on \(\mathcal I_m\), then
+\(m^{-1}\log R(\mathbf N_m)\) satisfies a full large deviation principle
+with good rate function
+\[
+ I(\alpha)=\sup_{t\in\RR}\{t\alpha-P(t)+\log\varphi\}.
+\]
+Its effective domain is \([0,\alpha_+]\), and
+\(I(\alpha)=\log\varphi-\sigma_0\alpha\) on \([0,v_c]\).
+\end{theoremA}
+
+This is \Cref{thm:standard-fibonacci-thermodynamics}.  Its pressure assertion
+is the Lau--Ngai/Feng spectrum under
+\eqref{eq:erdos-pressure-dictionary}; it is included to normalize the critical
+finite-size law and the uniform-layer LDP.  The latter statements use the
+one-layer orbit weights \(2,1\), rather than a deduction from the two-layer
+fiber mixture.
+
+The same renewal representation retains the normalized generating cost
+\(B_m^R=m^{-1}\ell_m^R(\mathbf N_m)\).
+\Cref{thm:joint-cost-reward-ldp} proves a full LDP for
+\((B_m^R,Y_m^R)\).  Its rate is
+\[
+ J(\beta,\alpha)=
+ (1-\beta)\log\varphi+\beta I(\alpha/\beta)
+ \quad(0<\beta\le1,\ 0\le\alpha\le\beta\alpha_+),
+\]
+with \(J(0,0)=\log\varphi\) and \(J=+\infty\) elsewhere.  In particular,
+\[
+ J(\beta,\alpha)=\log\varphi-\sigma_0\alpha
+ \qquad(0\le\alpha\le\beta v_c),
+\]
+so coexistence is an affine face of the joint rate surface rather than an
+artifact of one-dimensional projection.  Fixed-cost exponential tilting
+supplies the strictly convex part; an exact one- or two-letter low-reward
+suffix fills every sufficiently large remaining cost on the affine face.
+
+For the exact finite-window model, put
+\(R^\dagger(n)=R(n)+R(n-1)\).  Let
+\[
+  \widetilde d_m(n)=[z^n]\prod_{j=1}^m(1+z^{F_j}),
+  \qquad 0\le n<F_{m+2}.
+\]
+For residues modulo \(F_{m+2}\), define
+\[
+  \pi_m(n)\equiv F_{m+1}n+F_{m+1}-1\pmod{F_{m+2}}.
+\]
+
+\begin{theoremB}[Affine fiber--partition correspondence]
+For every \(m\ge1\), the map \(\pi_m\) is a permutation and
+\[
+  d_m^\#(\pi_m(n))
+  =\widetilde d_m(n)
+  =R^\dagger(n)-R^\dagger(n-F_{m+1})
+  \qquad(0\le n<F_{m+2}).
+\]
+\end{theoremB}
+
+This combines \Cref{thm:affine-transfer,thm:partition-difference}.  It gives a
+pointwise correspondence, not only an equality of aggregate moments.
+
+There is also a direct interval description:
+\[
+ d_m^\#(r)=
+ \begin{cases}
+ R(F_{m+2}+r),&0\le r\le F_{m+1}-2,\\
+ R(r),&F_{m+1}-1\le r<F_{m+2}.
+ \end{cases}
+\]
+The known extremal classification of Koc\'abov\'a, Mas\'akov\'a, and
+Pelantov\'a can therefore be transferred exactly after an explicit change of
+Fibonacci convention.
+
+\begin{theoremC}[Interval identity and largest fibers]
+Let \(D_m=\max_{x\in X_m}d_m(x)\).  Then
+\[
+ D_0=D_1=1,\qquad D_{2k}=F_{k+2}\ (k\ge0),\qquad
+ D_{2k+1}=2F_{k+1}\ (k\ge1),
+\]
+and \(D_m=D_{m-2}+D_{m-4}\) for every \(m\ge6\).  The maximizing residues,
+including the exceptional initial cases, are given in
+\Cref{thm:unconditional-extremal-fibers}.
+\end{theoremC}
+
+For a real tilt \(t\), put
+\[
+  S_t(m)=\sum_{x\in X_m}d_m(x)^t.
+\]
+The identity
+\[
+  \lim_{m\to\infty}\frac1m\log S_t(m)=0
+  \qquad(t\le-\sigma_0)
+\]
+is recorded in \Cref{prop:negative-temperature-freezing} as a finite-layer
+recovery of the frozen branch proved by Feng--Olivier and Feng
+\cite{FengOlivier2003,Feng2005}.  The renewal coordinates evaluate the
+boundary arithmetically and supply the finite-size consequences below.
+
+The fixed-level information is sharper than the exponential pressure.  Put
+\(C_m(k)=\card{\{x\in X_m:d_m(x)=k\}}\), and let \(\Psi(k)\) be Weinstein's
+number of generating orbits at level \(k\).
+
+\begin{theoremE}[Local spectrum and critical Gibbs law]
+For \(m\ge1\), \(C_m(1)=2\), while for \(k\ge2\),
+\[
+ C_m(k)\le4\Psi(k),
+ \qquad C_m(k)=4\Psi(k)\quad(m\ge2k).
+\]
+For every \(s>\sigma_0\),
+\[
+ S_{-s}(m)\longrightarrow
+ \mathcal Z(s):=\frac4{2-\zeta(s-1)/\zeta(s)}-2.
+\]
+This is the exact convergence range for the unnormalized sums.  The function
+\(\mathcal Z\) has a simple pole at \(\sigma_0\), and the corresponding
+fiber-level Gibbs measures converge in total variation with explicit
+critical logarithmic moments.
+At the endpoint itself,
+\[
+ S_{-\sigma_0}(m)\sim\frac{4m}{\mu_C}.
+\]
+Under the finite-window Gibbs law proportional to
+\(d_m(x)^{-\sigma_0}\), the normalized pair consisting of log multiplicity
+and generating-layer cost converges in distribution to
+\((v_cU,U)\), where \(U\) is uniform on \([0,1]\).
+\end{theoremE}
+
+The complete statements are
+\Cref{thm:local-fiber-spectrum,thm:spectral-partition-function,thm:critical-gibbs-spectrum,thm:critical-finite-window-gibbs}.
+They separate an unnormalized critical phenomenon inside the region where
+the exponential pressure vanishes.
+
+\begin{theoremF}[Orbit growth and arithmetic critical refinements]
+With
+\[
+ \kappa=-\left.\frac{d}{ds}\frac{\zeta(s-1)}{\zeta(s)}
+ \right|_{s=\sigma_0},
+\]
+one has
+\[
+ \sum_{k\le x}\Psi(k)\sim
+ \frac{x^{\sigma_0}}{\sigma_0\kappa}.
+\]
+Moreover, if
+\(\beta_*=\log\varphi/\log(2/\varphi)=2.2705594539\ldots\), then
+\[
+ \liminf_{m\to\infty}\frac1m\log S_t(m)>0
+ \qquad(t>-\beta_*).
+\]
+At the known critical point \(t_c=-\sigma_0\), the renewal equation becomes
+\[
+ \sum_{q\ge2}\frac{\phi_{\rm E}(q)}{q^{\sigma_0}}=1,
+ \qquad
+ \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
+\]
+and the positive-phase one-sided derivative is the explicitly convergent
+ratio
+\[
+ P'_+(t_c)=
+ \frac{\displaystyle\sum_{q\ge2}\phi_{\rm E}(q)q^{-\sigma_0}\log q}
+      {\displaystyle\sum_{q\ge2}\sum_{\substack{1\le p<q\\(p,q)=1}}
+       c(p/q)q^{-\sigma_0}}.
+\]
+\end{theoremF}
+
+The all-real existence, implicit branch, frozen phase, and derivative corner
+come from Feng's spectrum theorem \cite[Thm.~1.3]{Feng2005} and the
+Erd\H{o}s-measure phase transition of Feng--Olivier
+\cite[Thms.~2.9--2.10 and App.~A]{FengOlivier2003}.  The theorem above retains
+only the Tauberian orbit law, the totient evaluation of the critical equation,
+and the one-sided critical moment in the present renewal coordinates.
+
+Let \(\mathbf X_m\) be uniformly distributed on \(X_m\), and put
+\[
+ Y_m=m^{-1}\log d_m(\mathbf X_m).
+\]
+
+\begin{theoremG}[Full large deviations across the freezing corner]
+The sequence \((Y_m)\) satisfies a large deviation principle with speed
+\(m\) and good rate function
+\[
+ I(\alpha)=\sup_{t\in\RR}\{t\alpha-P(t)+\log\varphi\}.
+\]
+Its effective domain is \([0,\alpha_+]\), and
+\[
+ I(\alpha)=\log\varphi-\sigma_0\alpha
+ \qquad(0\le\alpha\le v_c).
+\]
+For every \(0<\alpha<v_c\), the probabilities of shrinking neighborhoods
+have the exact exponential rate \(-I(\alpha)\).
+\end{theoremG}
+
+The complete statement and proof are given in \Cref{thm:full-fiber-ldp}.
+The new orbit-filling step fills both parities of every sufficiently large
+target layer while preserving the source multiplicity.
+
+For a fixed finite set of primes, \Cref{prop:prime-support-interface} gives
+the exact joint generating function for multiplier exponents and generator
+cost and transfers it to \(C_m(k)\) with the active boundary weights
+\(4,3,1\).  We do not assert a directional coefficient or quenched-velocity
+asymptotic: the needed parameter-uniform smooth-point estimate and uniform
+integrability for the unbounded cost are not supplied by the cited ACSV
+results.  \Cref{rem:prime-support-local-open-interface} records the exact
+remaining analytic input.
+
+The proof of \Cref{prop:negative-temperature-freezing} includes a separate
+layer-count lemma transferring Weinstein's convention \(f_j=F_{j+1}\).  It
+distinguishes the levels \(k=1,2\), endpoints, early layers, and the eventual
+equality asserted in Weinstein's theorem.
+
+The pressure corner prevents a direct full application of the
+G\"artner--Ellis theorem: its lower-bound conclusion does not cover slopes
+strictly between the one-sided derivatives at \(-\sigma_0\).  The
+orbit-filling argument in \Cref{thm:full-fiber-ldp} supplies those missing
+local lower bounds and proves the full large deviation principle, with an
+affine rate on the coexistence interval.
+
+\subsection{Contribution boundary}
+
+For auditability, the dependency boundary is summarized before the detailed
+discussion.
+\noindent\textbf{Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a.}
+Imported: extremal values and maximizing integers for the ordinary Fibonacci
+partition function.  Proved here from that input: exact convention and
+interval transfer to all maximizing finite-window residues.
+
+\noindent\textbf{Weinstein.}
+Imported: the free generator monoid, multiplier product, orbit decomposition,
+and eventual layer stabilization.  Proved here from that input: the uniform
+early-layer bound, weighted cost renewal, exact finite-window transfer, and
+the prime-support coefficient interface.
+
+\noindent\textbf{Erd\H{o}s measure and Bernoulli convolutions.}
+Sidorov--Vershik use Fibonacci numbers
+\(F^{\rm SV}_1=1,F^{\rm SV}_2=2\), hence
+\(F^{\rm SV}_j=F_{j+1}\) in our convention.  Their level-\(m\) frequency is
+therefore exactly
+\begin{align*}
+ f_m^{\rm SV}(k)
+ &=\#\left\{\boldsymbol\varepsilon\in\{0,1\}^m:
+   \sum_{j=1}^m\varepsilon_jF_j^{\rm SV}=k\right\}\\
+ &=[z^k]\prod_{j=1}^m(1+z^{F_{j+1}})\\
+ &=\#\{\omega\in\{0,1\}^m:N_m(\omega)=k\}.
+\end{align*}
+Thus the difference is the index shift \(F_j^{\rm SV}=F_{j+1}\), not a
+different counting object.  They identify \(2^{-m}f_m^{\rm SV}(k)\) with the
+finite masses approximating the Erd\H{o}s measure
+\cite[Sec.~3]{SidorovVershik1998}.  Hu studied its golden-ratio local dimensions
+\cite{Hu1997}; Lau--Ngai gave the exact \(L^q\)-spectrum for \(q>0\)
+\cite{LauNgai1998}; Feng--Olivier and Feng gave the complete real spectrum and
+the negative first-order transition \cite{FengOlivier2003,Feng2005}.  These
+are imported results, not merely related background.
+
+If \(\mu\) denotes the golden-ratio Bernoulli convolution and
+\(\tau_\mu(t)\) uses the convention
+\(\tau_\mu(t)=\lim \log\sum_I\mu(I)^t/\log|I|\), then the level masses are
+\(2^{-m}\) times the finite Fibonacci representation counts.  Since the net
+scale is \(\varphi^{-m}\), the exact exponential-rate dictionary is
+\begin{equation}
+ P(t)=t\log2-\tau_\mu(t)\log\varphi.
+ \label{eq:erdos-pressure-dictionary}
+\end{equation}
+Thus the all-real pressure, its positive implicit branch, the negative frozen
+branch, the first-order corner, and the generic Legendre multifractal
+description are prior results.  The present paper adds the exact
+  finite-window/fiber correspondences, evaluates Feng's implicit critical
+  condition as \(\zeta(\sigma_0-1)/\zeta(\sigma_0)=2\), proves the local
+  low-temperature denominator-layer law with its explicit continuant context
+  constant, obtains the stable second-order critical terms and uniform
+  coexistence law, and proves the stated finite-layer nonexposed-slope lower
+  bounds.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}p{0.13\textwidth}p{0.28\textwidth}p{0.22\textwidth}p{0.30\textwidth}@{}}
+\toprule
+Item & Imported result & Normalization & Surviving contribution\\
+\midrule
+Theorem A & Lau--Ngai/Feng pressure and Feng--Olivier phase transition &
+\(P(t)=t\log2-\tau_\mu(t)\log\varphi\) & \(2/\mu_C\), one-layer coexistence,
+and uniform-layer nonexposed-slope LDP\\
+Theorem B & Sidorov--Vershik finite frequencies &
+\(F_j^{\rm SV}=F_{j+1}\) and the affine residue permutation & Pointwise fold
+and partition-difference identities\\
+Theorem C & Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a extremal classification &
+conversion to the present Fibonacci convention and intervals & Every
+maximizing residue and finite-window recurrence\\
+Pressure recovery & Lau--Ngai, Feng--Olivier, and Feng &
+\eqref{eq:erdos-pressure-dictionary} & zeta critical equation and one-sided
+critical moment\\
+Local layer & Canonical continued-fraction dictionary & regular
+continuant contexts & local \(d^{-s}\) law, critical stable tail, and
+\(m^{3-\sigma_0}\) correction\\
+Theorem E & Weak-Gibbs phase-transition theory & finite-window layer weights
+\(4,3,1\) & \(4/\mu_C\), total-variation limit, and finite-window coexistence\\
+Theorem F & Weinstein free monoid and Dirichlet series & continued-fraction
+cost and totient sum & Tauberian constant and arithmetic critical evaluation\\
+Theorem G & G\"artner--Ellis exposed-slope bounds & uniform finite layers &
+parity-complete orbit filling at nonexposed slopes\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Kesseb\"ohmer--Stratmann; Fiala--Kleban--\"Ozl\"uk.}
+Imported: Stern--Brocot/Knauf denominator pressure.  It supplies an alternate
+derivation of the already known pressure formula in the renewal coordinates
+needed for the finite-size arguments.  The polynomial denominator-layer
+asymptotic \eqref{eq:introduction-low-temperature-layer}, including its
+explicit context constant and the elimination of multiple-large-digit and
+moderate-digit contributions, is proved here and is not a pressure
+consequence.
+
+\noindent\textbf{Feller; Wiener--Ikehara; G\"artner--Ellis.}
+Imported: classical renewal, Tauberian, and exposed-slope large-deviation
+tools.  Proved here from those inputs after the arithmetic tail theorem: the
+stable second-order critical finite-size laws, uniform coexistence limit, and
+orbit-filling lower bounds at nonexposed slopes.
+
+The residue characterization in \Cref{thm:residue-fibers} is a direct
+restatement of the fold definition, and \Cref{thm:fourier-inversion} is the
+standard character-orthogonality formula.  The finite-window contributions in
+\Cref{sec:residue-affine} are the explicit reversal--complement bijection and
+affine residue permutation of \Cref{thm:affine-transfer}, together with the
+pointwise fiber formula in \Cref{thm:partition-difference}; the latter follows
+by truncating the indexed Fibonacci partition generating function.  The
+two-interval fiber identity in \Cref{thm:fiber-partition-interval} is also
+specific to the finite-window fold.
+
+The values and maximizing residues in
+\Cref{thm:unconditional-extremal-fibers} are not a new extremal classification:
+they are the exact convention-and-interval transfer of Theorems~4.7 and~5.3 of
+Koc\'abov\'a, Mas\'akov\'a, and Pelantov\'a
+\cite{KocabovaMasakovaPelantova2005};
+\Cref{cor:extremal-fiber-recurrence} is then an immediate Fibonacci-recurrence
+consequence.  The additional ingredient in the negative-tilt argument is the
+uniform early-layer estimate proved from Weinstein's orbit formulas.  That
+estimate, which strengthens eventual layer stabilization to a bound valid in
+every layer, yields \Cref{prop:negative-temperature-freezing}.  The local
+microcanonical limit and the exact unnormalized
+partition function in \Cref{sec:local-spectrum} combine this finite-window
+two-layer identity with Weinstein's published orbit decomposition.  The
+Wiener--Ikehara theorem itself is classical \cite{Korevaar2004};
+\Cref{thm:psi-tauberian} is its application to the specific orbit Dirichlet
+series, and \Cref{thm:pressure-transition-strip} is a separate finite-window
+Jensen and maximum-level estimate.  Weinstein's free-monoid bijection,
+multiplier multiplicativity, orbit decomposition, and largest-index formula
+are published
+  \cite[Prop.~3.3 and Thms.~3.8, 5.1, and 10.3]{Weinstein2016}; none of
+  these mechanisms is claimed here.  The Stern--Brocot/Knauf denominator
+  pressure is likewise published.  The weighted length renewal in
+  \Cref{prop:weighted-generator-renewal} and its exact finite-window transfer
+  are additional steps here; the resulting pressure is the
+  Bernoulli-convolution spectrum under \eqref{eq:erdos-pressure-dictionary},
+  not a new pressure theorem.  The local denominator-layer theorem
+  \Cref{thm:arithmetic-denominator-layer} is a separate arithmetic result; its
+  proof does not assume the regular variation later used by the renewal
+  transfer.
+The one-layer pressure, critical Gibbs law, and LDP in
+\Cref{thm:standard-fibonacci-thermodynamics} are consequences for the
+standard function \(R\) itself.  Their lower-bound proof uses the one-layer
+orbit weights directly and does not infer componentwise behavior from the
+two-layer fiber mixture.
+The standard large-deviation upper bound and the lower bounds at exposed
+slopes are separated in \Cref{thm:full-fiber-ldp} from the new finite-window
+orbit-filling argument, which supplies the missing lower bounds at the
+nonexposed coexistence slopes.
+The marked critical renewal identity is a bivariate restatement of
+\Cref{prop:weighted-generator-renewal}, whereas its conditional consequences
+are additional finite-window results.  The arithmetic renewal theorem and
+Blackwell's renewal theorem are classical inputs and are not reproved; the
+stable second-order coefficients and uniform coexistence law are their
+finite-window transfers through the exact boundary identities after the
+critical cost tail has been proved arithmetically.
+
+The separately compiled supplement keeps the conditional arithmetic and
+integer-moment consequences outside the main theorem spine.  It labels the
+moment constants as transfers of Sanna's theorem and the governing quadratic
+cubic as already present in work of Chow and Jones \cite{ChowJones2024}.
+
+\subsection{Related work}
+
+The uniqueness theorem underlying the legal expansion is due to Zeckendorf
+\cite{Zeckendorf1972}; Lekkerkerker's work provides classical background on
+the same numeration system \cite{Lekkerkerker1952}.  Berstel developed the
+normalization and automata viewpoint for Fibonacci representations
+\cite{Berstel2001}.  The representation-counting function itself has been
+studied through recurrence formulas, partition identities, extremal bounds,
+and automata by Carlitz \cite{Carlitz1968}, Robbins \cite{Robbins1996},
+Bicknell-Johnson and Fielder \cite{BicknellJohnsonFielder1999}, Stockmeyer
+\cite{Stockmeyer2008}, Chow and Slattery \cite{ChowSlattery2021}, and Shallit
+\cite{Shallit2021}.  Weinstein's orbit and level-set analysis
+\cite{Weinstein2016} and the exact extremal classification of Koc\'abov\'a,
+Mas\'akov\'a, and Pelantov\'a \cite{KocabovaMasakovaPelantova2005} are the
+specific inputs to \Cref{sec:extremal-ldp}.  Sanna proved the power-sum
+asymptotics used here and the endpoint law
+\(\lim_{q\to\infty}\lambda_q^{1/q}=\varphi^{1/2}\)
+\cite[Thms.~1.1 and~1.2]{Sanna2025}.  Zhou gives a broader treatment of
+representation functions for related numeration systems and, in particular,
+resolves the logarithmic-average conjecture of Chow and Slattery
+\cite[Cor.~1.5]{Zhou2023}.
+Chow and Jones obtained the same cubic that appears in the quadratic
+finite-window recurrence in their analysis of the variance of the partition
+function \cite{ChowJones2024}.
+The probabilistic version of these finite counts is the Erd\H{o}s measure:
+Sidorov and Vershik identify its level masses as normalized Fibonacci
+representation frequencies \cite{SidorovVershik1998}.  Hu's local-dimension
+analysis \cite{Hu1997}, Lau and Ngai's exact positive-\(q\) spectrum
+\cite{LauNgai1998}, Feng and Olivier's weak-Gibbs phase-transition theorem
+\cite{FengOlivier2003}, and Feng's explicit all-real golden-ratio formula
+\cite{Feng2005} are the direct priority line for the pressure in this paper.
+The Stern--Brocot pressure and its Knauf-model realization are taken from
+Kesseb\"ohmer--Stratmann and Fiala--Kleban--\"Ozl\"uk
+\cite{KessebohmerStratmann2007,FialaKlebanOzluk2003}.  The earlier
+Stern--Brocot multifractal theorem of Kesseb\"ohmer and Stratmann
+\cite{KessebohmerStratmann2004} concerns interval growth rates, rather than
+Fibonacci partition multiplicities or the finite-window uniform law.  The
+critical continued-fraction moment uses the fixed-denominator mean theorem of Panov and
+Liehl, as recorded in the quantitative modern treatment of
+Aistleitner--Borda--Hauke
+\cite{Panov1982,Liehl1983,AistleitnerBordaHauke2023}.
+
+\subsection{Organization}
+
+\Cref{sec:preliminaries} defines the finite-window fold and fixes notation.
+\Cref{sec:residue-affine} proves the residue, affine, and partition-difference
+formulas.  \Cref{sec:extremal-ldp} proves the interval identity, transfers the
+extremal classification, records the finite-layer recovery of the frozen
+branch, and isolates the large-deviation interface at the pressure corner.
+\Cref{sec:local-spectrum} proves local spectral stabilization, the exact
+unnormalized partition function and Gibbs law, the orbit-count Tauberian
+asymptotic, the pressure dictionary and arithmetic critical refinements, and
+the full large deviation principle across the pressure corner.
+\Cref{sec:standard-thermodynamics} proves the one-layer pressure, critical
+law, scalar LDP, and joint generation-cost/multiplicity LDP for the classical
+Fibonacci partition function itself.
+The separately compiled supplement
+contains conditional arithmetic refinements, the dyadic ray, and the integer
+moment transfer.
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$target = '"'D:\\omega\\automath\\tools\\chatgpt-oracle\\sprint\\ask\\A6_renewal.txt'; if (Test-Path -LiteralPath "'$target) { Get-Content -Raw -LiteralPath $target } else { Get-Item -LiteralPath (Split-Path -Parent $target) | Select-Object -ExpandProperty FullName }' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 205ms:
+D:\omega\automath\tools\chatgpt-oracle\sprint\ask
+
+apply patch
+patch: completed
+D:\omega\automath\tools\chatgpt-oracle\sprint\ask\A6_renewal.txt
+diff --git a/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d7476379b5c76e6d4e97a6dac8dd72161b70644
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+@@ -0,0 +1,133 @@
++Please reassess the attached manuscript as an external referee, focusing first on the new arithmetic critical stable-renewal theorem and its claim to novelty.
++
++Background, stated without softening it: you previously recommended rejection of this paper from TAMS. You wrote that, even if the proofs were fully repaired and the priority discussion fully rewritten, you expected your final verdict to remain reject. The priority repairs have now been made. Sidorov--Vershik, Hu, Lau--Ngai, Feng--Olivier, and Feng are explicitly credited; the all-real pressure theorem and frozen-half-line statements have been demoted to attributed recovery propositions; and the title and abstract have been rebuilt so that these concessions come first. When subsequently asked what single theorem could raise the paper's tier, you identified the arithmetic critical stable-renewal theorem below, assigning roughly a 35% chance that it could be proved and a 70% chance that, if proved, it would survive a literature audit as genuinely new. The manuscript now claims a proof.
++
++Here is the theorem and the arithmetic input on which it rests. Let \(\sigma_0>2\) be the unique solution of
++\[
++  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
++\]
++and put \(\alpha=\sigma_0-1\in(1,2)\). Under the critical letter law,
++\[
++ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}
++\]
++for every reduced \(p/q\in(0,1)\), where \(c(p/q)\) is the manuscript's odd continued-fraction cost. If
++\[
++ b_{2d+1}(s):=
++ \sum_{\substack{q\ge2,\ 1\le p<q,\ (p,q)=1\\c(p/q)=2d+1}}q^{-s},
++\]
++then
++\[
++ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0).
++\]
++The claimed local arithmetic estimate is
++\[
++ \tag{T1} b_{2d+1}(\sigma_0)\sim b_Cd^{-\sigma_0}\qquad(d\to\infty),
++\]
++and its direct summation gives
++\[
++ \tag{T2} \Pr\{C>x\}\sim K_Cx^{1-\sigma_0}\qquad(x\to\infty),
++\]
++with
++\[
++ K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
++     =\frac{2^{\sigma_0+2}}{\sigma_0-1}.
++\]
++
++Crucially, \(b_C\) is not merely named as the limit implicit in (T1). It is presented and evaluated independently as the absolutely convergent continuant context sum
++\[
++ b_C:=
++ \sum_{\mathbf u\in\mathcal C_{\rm L}}
++ \sum_{\mathbf v\in\mathcal C_{\rm R}}
++ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
++ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2
++ =8.
++\]
++Here \(\mathcal K\) is the regular continuant, \(\mathcal C_{\rm L}\) consists of the empty word and all finite positive-integer words, and \(\mathcal C_{\rm R}\) consists of the empty word and all such nonempty words whose final digit is at least two. More generally, the manuscript proves for every fixed \(s>2\) that
++\[
++ b_{2d+1}(s)\sim b(s)d^{-s},\qquad
++ b(s)=\sum_{\mathbf u\in\mathcal C_{\rm L}}
++       \sum_{\mathbf v\in\mathcal C_{\rm R}}
++       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
++ =2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2.
++\]
++
++The renewal consequences are also part of the theorem. Writing \(\mu_C=\mathbb E C\) and
++\[
++ u_j:=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}
++\]
++for the renewal sequence, the manuscript claims
++\[
++ u_j=\frac1{\mu_C}
++ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
++ +o(j^{2-\sigma_0}).
++\]
++For the one-layer Fibonacci partition sum
++\(Z_m^R(t)=\sum_{n\in\mathcal I_m}R(n)^t\) and the finite-window fiber sum
++\(S_t(m)=\sum_{x\in X_m}d_m(x)^t\), the exact renewal identities then give
++\[
++ Z_m^R(-\sigma_0)
++ =\frac{2m}{\mu_C}
++ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}),
++\]
++and
++\[
++ S_{-\sigma_0}(m)
++ =\frac{4m}{\mu_C}
++ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}).
++\]
++In addition, \(C\) is claimed to lie in the domain of attraction of a spectrally positive \((\sigma_0-1)\)-stable law: if \(a_n>0\) is chosen so that \(n\Pr\{C>a_n\}\to1\), then
++\[
++ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
++ \xrightarrow{\mathrm d}\mathcal S_{\sigma_0-1},
++\]
++where the Levy measure of \(\mathcal S_{\sigma_0-1}\) has density
++\((\sigma_0-1)x^{-\sigma_0}\) on \((0,\infty)\).
++
++The proof strategy for the hard arithmetic step is as follows. A canonical regular continued fraction \([0;a_1,\ldots,a_r]\), with \(a_r\ge2\), has denominator \(\mathcal K(a_1,\ldots,a_r)\) and layer parameter \(d=a_1+\cdots+a_r-1\). With \(n=d+1\), the proof first isolates a digit exceeding \(n/2\), which is necessarily unique. Cutting at that digit gives left and right contexts \((\mathbf u,\mathbf v)\), with middle digit \(a=n-|\mathbf u|_1-|\mathbf v|_1\). The affine large-digit formula
++\[
++ \mathcal K(\mathbf u,a,\mathbf v)
++ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1)
++\]
++gives pointwise convergence, while continuant concatenation gives the summable majorant
++\[
++ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
++ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
++\]
++Dominated convergence therefore extracts the full left--right context sum.
++
++The proof then treats the complement rather than assuming it negligible. Choose
++\(s/[2(s-1)]<\delta<1\) and \(h=\lfloor n^\delta\rfloor\). Words with two digits at least \(h\) have total weight
++\[
++ O_s(h^{2-2s})=o(n^{-s}).
++\]
++For words with all digits below \(h\), a greedy decomposition closes a block once its digit sum reaches \(h\). If
++\[
++ \eta_s(h)=\sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
++ \mathcal K(\mathbf u)^{-s},
++\]
++then \(\eta_s(h)\to0\), and the total weight of moderate words with digit sum at least \(N\) is bounded by
++\[
++ \frac{L_s}{1-\eta_s(h)}
++ \eta_s(h)^{\lfloor N/(2h)\rfloor-1},
++\]
++which is \(o(n^{-A})\) for every fixed \(A\) when \(N\ge n/4\). The remaining case, with exactly one \(h\)-large digit but no digit exceeding \(n/2\), leaves a moderate context of digit sum at least \(n/4\) and is controlled by the same bound. Thus both the two-\(n^\delta\)-large-digit regime and the all-moderate greedy-block regime are \(o(n^{-s})\). The manuscript treats this local estimate as excluding residual local lattice modulation and semistable/log-periodic oscillation, rather than averaging such effects away in a tail theorem.
++
++Your anti-cheating condition was that this result should count only if the hard arithmetic tail estimate were proved in its own right, and not if regular variation were assumed and standard renewal theory merely applied on top. The manuscript explicitly says in its introduction: "The local denominator-layer theorem \(\Cref{thm:arithmetic-denominator-layer}\) is a separate arithmetic result; its proof does not assume the regular variation later used by the renewal transfer." Consistently with that statement, (T1) is proved first by the continuant argument above, (T2) is then obtained by direct summation, and only after that are classical arithmetic renewal and stable-domain-of-attraction results invoked. Please verify the dependency rather than accepting the prose assertion.
++
++The theorem and proof are analytic. No numerical experiment is offered as support for (T1), (T2), \(b_C=8\), or the renewal expansion. The existing scripts are sanity checks only and are not part of the evidence for the theorem.
++
++Please answer the following as a referee, with precise references to any relevant location in the manuscript or literature.
++
++1. Is the proof correct? Name every step that you cannot follow or believe is wrong. In particular, audit (i) the dominated-convergence extraction of the context sum, including the claimed bijection and majorant; (ii) the \(o(n^{-s})\) estimates for the two excluded regimes; and (iii) the claim that these estimates eliminate local lattice or semistable oscillations rather than merely failing to detect them.
++
++2. Is \(b_C=8\) correct? Is the double continuant context series genuinely absolutely convergent, and is its evaluation sufficiently explicit in the sense you demanded, rather than a circular repackaging of the limit in (T1)?
++
++3. Was the anti-cheating condition genuinely met? Trace the logical dependencies and identify any point at which regular variation, a tail asymptotic, or an equivalent hypothesis enters by the back door before the local arithmetic estimate has been proved.
++
++4. You previously estimated a 70% chance that this theorem, if proved, would survive a literature audit as new. Having now seen the statement and proof, what is the nearest prior work, and does the novelty claim survive? Please treat this as the most important question. Six of our seven papers were found to have priority omissions, so a broad and adversarial audit is more valuable than a narrow citation check. In particular, distinguish prior continuant/Stern--Brocot denominator-pressure results, subexponential or one-big-jump asymptotics, arithmetic renewal theorems, and stable-domain results from the specific local denominator-layer asymptotic with the explicit context constant and its finite-window \(m^{3-\sigma_0}\) transfer.
++
++5. With this theorem in place, what is the honest tier and venue judgment now? Specifically, does it change the TAMS verdict that you previously expected to remain reject even after proof and priority repairs? If not, state what mathematical or expository deficit still controls the decision; if so, state the strongest venue tier you now regard as realistic.
++
++A hard rejection with concrete reasons is more useful than a soft acceptance. For every objection, please state what evidence, correction, or additional argument would resolve it.
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d7476379b5c76e6d4e97a6dac8dd72161b70644
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+@@ -0,0 +1,133 @@
++Please reassess the attached manuscript as an external referee, focusing first on the new arithmetic critical stable-renewal theorem and its claim to novelty.
++
++Background, stated without softening it: you previously recommended rejection of this paper from TAMS. You wrote that, even if the proofs were fully repaired and the priority discussion fully rewritten, you expected your final verdict to remain reject. The priority repairs have now been made. Sidorov--Vershik, Hu, Lau--Ngai, Feng--Olivier, and Feng are explicitly credited; the all-real pressure theorem and frozen-half-line statements have been demoted to attributed recovery propositions; and the title and abstract have been rebuilt so that these concessions come first. When subsequently asked what single theorem could raise the paper's tier, you identified the arithmetic critical stable-renewal theorem below, assigning roughly a 35% chance that it could be proved and a 70% chance that, if proved, it would survive a literature audit as genuinely new. The manuscript now claims a proof.
++
++Here is the theorem and the arithmetic input on which it rests. Let \(\sigma_0>2\) be the unique solution of
++\[
++  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
++\]
++and put \(\alpha=\sigma_0-1\in(1,2)\). Under the critical letter law,
++\[
++ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}
++\]
++for every reduced \(p/q\in(0,1)\), where \(c(p/q)\) is the manuscript's odd continued-fraction cost. If
++\[
++ b_{2d+1}(s):=
++ \sum_{\substack{q\ge2,\ 1\le p<q,\ (p,q)=1\\c(p/q)=2d+1}}q^{-s},
++\]
++then
++\[
++ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0).
++\]
++The claimed local arithmetic estimate is
++\[
++ \tag{T1} b_{2d+1}(\sigma_0)\sim b_Cd^{-\sigma_0}\qquad(d\to\infty),
++\]
++and its direct summation gives
++\[
++ \tag{T2} \Pr\{C>x\}\sim K_Cx^{1-\sigma_0}\qquad(x\to\infty),
++\]
++with
++\[
++ K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
++     =\frac{2^{\sigma_0+2}}{\sigma_0-1}.
++\]
++
++Crucially, \(b_C\) is not merely named as the limit implicit in (T1). It is presented and evaluated independently as the absolutely convergent continuant context sum
++\[
++ b_C:=
++ \sum_{\mathbf u\in\mathcal C_{\rm L}}
++ \sum_{\mathbf v\in\mathcal C_{\rm R}}
++ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
++ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2
++ =8.
++\]
++Here \(\mathcal K\) is the regular continuant, \(\mathcal C_{\rm L}\) consists of the empty word and all finite positive-integer words, and \(\mathcal C_{\rm R}\) consists of the empty word and all such nonempty words whose final digit is at least two. More generally, the manuscript proves for every fixed \(s>2\) that
++\[
++ b_{2d+1}(s)\sim b(s)d^{-s},\qquad
++ b(s)=\sum_{\mathbf u\in\mathcal C_{\rm L}}
++       \sum_{\mathbf v\in\mathcal C_{\rm R}}
++       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
++ =2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2.
++\]
++
++The renewal consequences are also part of the theorem. Writing \(\mu_C=\mathbb E C\) and
++\[
++ u_j:=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}
++\]
++for the renewal sequence, the manuscript claims
++\[
++ u_j=\frac1{\mu_C}
++ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
++ +o(j^{2-\sigma_0}).
++\]
++For the one-layer Fibonacci partition sum
++\(Z_m^R(t)=\sum_{n\in\mathcal I_m}R(n)^t\) and the finite-window fiber sum
++\(S_t(m)=\sum_{x\in X_m}d_m(x)^t\), the exact renewal identities then give
++\[
++ Z_m^R(-\sigma_0)
++ =\frac{2m}{\mu_C}
++ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}),
++\]
++and
++\[
++ S_{-\sigma_0}(m)
++ =\frac{4m}{\mu_C}
++ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}).
++\]
++In addition, \(C\) is claimed to lie in the domain of attraction of a spectrally positive \((\sigma_0-1)\)-stable law: if \(a_n>0\) is chosen so that \(n\Pr\{C>a_n\}\to1\), then
++\[
++ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
++ \xrightarrow{\mathrm d}\mathcal S_{\sigma_0-1},
++\]
++where the Levy measure of \(\mathcal S_{\sigma_0-1}\) has density
++\((\sigma_0-1)x^{-\sigma_0}\) on \((0,\infty)\).
++
++The proof strategy for the hard arithmetic step is as follows. A canonical regular continued fraction \([0;a_1,\ldots,a_r]\), with \(a_r\ge2\), has denominator \(\mathcal K(a_1,\ldots,a_r)\) and layer parameter \(d=a_1+\cdots+a_r-1\). With \(n=d+1\), the proof first isolates a digit exceeding \(n/2\), which is necessarily unique. Cutting at that digit gives left and right contexts \((\mathbf u,\mathbf v)\), with middle digit \(a=n-|\mathbf u|_1-|\mathbf v|_1\). The affine large-digit formula
++\[
++ \mathcal K(\mathbf u,a,\mathbf v)
++ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1)
++\]
++gives pointwise convergence, while continuant concatenation gives the summable majorant
++\[
++ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
++ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
++\]
++Dominated convergence therefore extracts the full left--right context sum.
++
++The proof then treats the complement rather than assuming it negligible. Choose
++\(s/[2(s-1)]<\delta<1\) and \(h=\lfloor n^\delta\rfloor\). Words with two digits at least \(h\) have total weight
++\[
++ O_s(h^{2-2s})=o(n^{-s}).
++\]
++For words with all digits below \(h\), a greedy decomposition closes a block once its digit sum reaches \(h\). If
++\[
++ \eta_s(h)=\sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
++ \mathcal K(\mathbf u)^{-s},
++\]
++then \(\eta_s(h)\to0\), and the total weight of moderate words with digit sum at least \(N\) is bounded by
++\[
++ \frac{L_s}{1-\eta_s(h)}
++ \eta_s(h)^{\lfloor N/(2h)\rfloor-1},
++\]
++which is \(o(n^{-A})\) for every fixed \(A\) when \(N\ge n/4\). The remaining case, with exactly one \(h\)-large digit but no digit exceeding \(n/2\), leaves a moderate context of digit sum at least \(n/4\) and is controlled by the same bound. Thus both the two-\(n^\delta\)-large-digit regime and the all-moderate greedy-block regime are \(o(n^{-s})\). The manuscript treats this local estimate as excluding residual local lattice modulation and semistable/log-periodic oscillation, rather than averaging such effects away in a tail theorem.
++
++Your anti-cheating condition was that this result should count only if the hard arithmetic tail estimate were proved in its own right, and not if regular variation were assumed and standard renewal theory merely applied on top. The manuscript explicitly says in its introduction: "The local denominator-layer theorem \(\Cref{thm:arithmetic-denominator-layer}\) is a separate arithmetic result; its proof does not assume the regular variation later used by the renewal transfer." Consistently with that statement, (T1) is proved first by the continuant argument above, (T2) is then obtained by direct summation, and only after that are classical arithmetic renewal and stable-domain-of-attraction results invoked. Please verify the dependency rather than accepting the prose assertion.
++
++The theorem and proof are analytic. No numerical experiment is offered as support for (T1), (T2), \(b_C=8\), or the renewal expansion. The existing scripts are sanity checks only and are not part of the evidence for the theorem.
++
++Please answer the following as a referee, with precise references to any relevant location in the manuscript or literature.
++
++1. Is the proof correct? Name every step that you cannot follow or believe is wrong. In particular, audit (i) the dominated-convergence extraction of the context sum, including the claimed bijection and majorant; (ii) the \(o(n^{-s})\) estimates for the two excluded regimes; and (iii) the claim that these estimates eliminate local lattice or semistable oscillations rather than merely failing to detect them.
++
++2. Is \(b_C=8\) correct? Is the double continuant context series genuinely absolutely convergent, and is its evaluation sufficiently explicit in the sense you demanded, rather than a circular repackaging of the limit in (T1)?
++
++3. Was the anti-cheating condition genuinely met? Trace the logical dependencies and identify any point at which regular variation, a tail asymptotic, or an equivalent hypothesis enters by the back door before the local arithmetic estimate has been proved.
++
++4. You previously estimated a 70% chance that this theorem, if proved, would survive a literature audit as new. Having now seen the statement and proof, what is the nearest prior work, and does the novelty claim survive? Please treat this as the most important question. Six of our seven papers were found to have priority omissions, so a broad and adversarial audit is more valuable than a narrow citation check. In particular, distinguish prior continuant/Stern--Brocot denominator-pressure results, subexponential or one-big-jump asymptotics, arithmetic renewal theorems, and stable-domain results from the specific local denominator-layer asymptotic with the explicit context constant and its finite-window \(m^{3-\sigma_0}\) transfer.
++
++5. With this theorem in place, what is the honest tier and venue judgment now? Specifically, does it change the TAMS verdict that you previously expected to remain reject even after proof and priority repairs? If not, state what mathematical or expository deficit still controls the decision; if so, state the strongest venue tier you now regard as realistic.
++
++A hard rejection with concrete reasons is more useful than a soft acceptance. For every objection, please state what evidence, correction, or additional argument would resolve it.
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw 'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\verification-before-completion\\SKILL.md'" in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 134ms:
+---
+name: verification-before-completion
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+---
+
+# Verification Before Completion
+
+## Overview
+
+Claiming work is complete without verification is dishonesty, not efficiency.
+
+**Core principle:** Evidence before claims, always.
+
+**Violating the letter of this rule is violating the spirit of this rule.**
+
+## The Iron Law
+
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+```
+
+If you haven't run the verification command in this message, you cannot claim it passes.
+
+## The Gate Function
+
+```
+BEFORE claiming any status or expressing satisfaction:
+
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
+
+Skip any step = lying, not verifying
+```
+
+## Common Failures
+
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
+| Regression test works | Red-green cycle verified | Test passes once |
+| Agent completed | VCS diff shows changes | Agent reports "success" |
+| Requirements met | Line-by-line checklist | Tests passing |
+
+## Red Flags - STOP
+
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence â‰  evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter â‰  compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion â‰  excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
+
+## Key Patterns
+
+**Tests:**
+```
+âœ… [Run test command] [See: 34/34 pass] "All tests pass"
+âŒ "Should pass now" / "Looks correct"
+```
+
+**Regression tests (TDD Red-Green):**
+```
+âœ… Write â†’ Run (pass) â†’ Revert fix â†’ Run (MUST FAIL) â†’ Restore â†’ Run (pass)
+âŒ "I've written a regression test" (without red-green verification)
+```
+
+**Build:**
+```
+âœ… [Run build] [See: exit 0] "Build passes"
+âŒ "Linter passed" (linter doesn't check compilation)
+```
+
+**Requirements:**
+```
+âœ… Re-read plan â†’ Create checklist â†’ Verify each â†’ Report gaps or completion
+âŒ "Tests pass, phase complete"
+```
+
+**Agent delegation:**
+```
+âœ… Agent reports success â†’ Check VCS diff â†’ Verify changes â†’ Report actual state
+âŒ Trust agent report
+```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion â†’ redirect â†’ rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
+
+## The Bottom Line
+
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
+
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d7476379b5c76e6d4e97a6dac8dd72161b70644
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+@@ -0,0 +1,133 @@
++Please reassess the attached manuscript as an external referee, focusing first on the new arithmetic critical stable-renewal theorem and its claim to novelty.
++
++Background, stated without softening it: you previously recommended rejection of this paper from TAMS. You wrote that, even if the proofs were fully repaired and the priority discussion fully rewritten, you expected your final verdict to remain reject. The priority repairs have now been made. Sidorov--Vershik, Hu, Lau--Ngai, Feng--Olivier, and Feng are explicitly credited; the all-real pressure theorem and frozen-half-line statements have been demoted to attributed recovery propositions; and the title and abstract have been rebuilt so that these concessions come first. When subsequently asked what single theorem could raise the paper's tier, you identified the arithmetic critical stable-renewal theorem below, assigning roughly a 35% chance that it could be proved and a 70% chance that, if proved, it would survive a literature audit as genuinely new. The manuscript now claims a proof.
++
++Here is the theorem and the arithmetic input on which it rests. Let \(\sigma_0>2\) be the unique solution of
++\[
++  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
++\]
++and put \(\alpha=\sigma_0-1\in(1,2)\). Under the critical letter law,
++\[
++ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}
++\]
++for every reduced \(p/q\in(0,1)\), where \(c(p/q)\) is the manuscript's odd continued-fraction cost. If
++\[
++ b_{2d+1}(s):=
++ \sum_{\substack{q\ge2,\ 1\le p<q,\ (p,q)=1\\c(p/q)=2d+1}}q^{-s},
++\]
++then
++\[
++ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0).
++\]
++The claimed local arithmetic estimate is
++\[
++ \tag{T1} b_{2d+1}(\sigma_0)\sim b_Cd^{-\sigma_0}\qquad(d\to\infty),
++\]
++and its direct summation gives
++\[
++ \tag{T2} \Pr\{C>x\}\sim K_Cx^{1-\sigma_0}\qquad(x\to\infty),
++\]
++with
++\[
++ K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
++     =\frac{2^{\sigma_0+2}}{\sigma_0-1}.
++\]
++
++Crucially, \(b_C\) is not merely named as the limit implicit in (T1). It is presented and evaluated independently as the absolutely convergent continuant context sum
++\[
++ b_C:=
++ \sum_{\mathbf u\in\mathcal C_{\rm L}}
++ \sum_{\mathbf v\in\mathcal C_{\rm R}}
++ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
++ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2
++ =8.
++\]
++Here \(\mathcal K\) is the regular continuant, \(\mathcal C_{\rm L}\) consists of the empty word and all finite positive-integer words, and \(\mathcal C_{\rm R}\) consists of the empty word and all such nonempty words whose final digit is at least two. More generally, the manuscript proves for every fixed \(s>2\) that
++\[
++ b_{2d+1}(s)\sim b(s)d^{-s},\qquad
++ b(s)=\sum_{\mathbf u\in\mathcal C_{\rm L}}
++       \sum_{\mathbf v\in\mathcal C_{\rm R}}
++       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
++ =2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2.
++\]
++
++The renewal consequences are also part of the theorem. Writing \(\mu_C=\mathbb E C\) and
++\[
++ u_j:=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}
++\]
++for the renewal sequence, the manuscript claims
++\[
++ u_j=\frac1{\mu_C}
++ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
++ +o(j^{2-\sigma_0}).
++\]
++For the one-layer Fibonacci partition sum
++\(Z_m^R(t)=\sum_{n\in\mathcal I_m}R(n)^t\) and the finite-window fiber sum
++\(S_t(m)=\sum_{x\in X_m}d_m(x)^t\), the exact renewal identities then give
++\[
++ Z_m^R(-\sigma_0)
++ =\frac{2m}{\mu_C}
++ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}),
++\]
++and
++\[
++ S_{-\sigma_0}(m)
++ =\frac{4m}{\mu_C}
++ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}).
++\]
++In addition, \(C\) is claimed to lie in the domain of attraction of a spectrally positive \((\sigma_0-1)\)-stable law: if \(a_n>0\) is chosen so that \(n\Pr\{C>a_n\}\to1\), then
++\[
++ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
++ \xrightarrow{\mathrm d}\mathcal S_{\sigma_0-1},
++\]
++where the Levy measure of \(\mathcal S_{\sigma_0-1}\) has density
++\((\sigma_0-1)x^{-\sigma_0}\) on \((0,\infty)\).
++
++The proof strategy for the hard arithmetic step is as follows. A canonical regular continued fraction \([0;a_1,\ldots,a_r]\), with \(a_r\ge2\), has denominator \(\mathcal K(a_1,\ldots,a_r)\) and layer parameter \(d=a_1+\cdots+a_r-1\). With \(n=d+1\), the proof first isolates a digit exceeding \(n/2\), which is necessarily unique. Cutting at that digit gives left and right contexts \((\mathbf u,\mathbf v)\), with middle digit \(a=n-|\mathbf u|_1-|\mathbf v|_1\). The affine large-digit formula
++\[
++ \mathcal K(\mathbf u,a,\mathbf v)
++ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1)
++\]
++gives pointwise convergence, while continuant concatenation gives the summable majorant
++\[
++ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
++ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
++\]
++Dominated convergence therefore extracts the full left--right context sum.
++
++The proof then treats the complement rather than assuming it negligible. Choose
++\(s/[2(s-1)]<\delta<1\) and \(h=\lfloor n^\delta\rfloor\). Words with two digits at least \(h\) have total weight
++\[
++ O_s(h^{2-2s})=o(n^{-s}).
++\]
++For words with all digits below \(h\), a greedy decomposition closes a block once its digit sum reaches \(h\). If
++\[
++ \eta_s(h)=\sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
++ \mathcal K(\mathbf u)^{-s},
++\]
++then \(\eta_s(h)\to0\), and the total weight of moderate words with digit sum at least \(N\) is bounded by
++\[
++ \frac{L_s}{1-\eta_s(h)}
++ \eta_s(h)^{\lfloor N/(2h)\rfloor-1},
++\]
++which is \(o(n^{-A})\) for every fixed \(A\) when \(N\ge n/4\). The remaining case, with exactly one \(h\)-large digit but no digit exceeding \(n/2\), leaves a moderate context of digit sum at least \(n/4\) and is controlled by the same bound. Thus both the two-\(n^\delta\)-large-digit regime and the all-moderate greedy-block regime are \(o(n^{-s})\). The manuscript treats this local estimate as excluding residual local lattice modulation and semistable/log-periodic oscillation, rather than averaging such effects away in a tail theorem.
++
++Your anti-cheating condition was that this result should count only if the hard arithmetic tail estimate were proved in its own right, and not if regular variation were assumed and standard renewal theory merely applied on top. The manuscript explicitly says in its introduction: "The local denominator-layer theorem \(\Cref{thm:arithmetic-denominator-layer}\) is a separate arithmetic result; its proof does not assume the regular variation later used by the renewal transfer." Consistently with that statement, (T1) is proved first by the continuant argument above, (T2) is then obtained by direct summation, and only after that are classical arithmetic renewal and stable-domain-of-attraction results invoked. Please verify the dependency rather than accepting the prose assertion.
++
++The theorem and proof are analytic. No numerical experiment is offered as support for (T1), (T2), \(b_C=8\), or the renewal expansion. The existing scripts are sanity checks only and are not part of the evidence for the theorem.
++
++Please answer the following as a referee, with precise references to any relevant location in the manuscript or literature.
++
++1. Is the proof correct? Name every step that you cannot follow or believe is wrong. In particular, audit (i) the dominated-convergence extraction of the context sum, including the claimed bijection and majorant; (ii) the \(o(n^{-s})\) estimates for the two excluded regimes; and (iii) the claim that these estimates eliminate local lattice or semistable oscillations rather than merely failing to detect them.
++
++2. Is \(b_C=8\) correct? Is the double continuant context series genuinely absolutely convergent, and is its evaluation sufficiently explicit in the sense you demanded, rather than a circular repackaging of the limit in (T1)?
++
++3. Was the anti-cheating condition genuinely met? Trace the logical dependencies and identify any point at which regular variation, a tail asymptotic, or an equivalent hypothesis enters by the back door before the local arithmetic estimate has been proved.
++
++4. You previously estimated a 70% chance that this theorem, if proved, would survive a literature audit as new. Having now seen the statement and proof, what is the nearest prior work, and does the novelty claim survive? Please treat this as the most important question. Six of our seven papers were found to have priority omissions, so a broad and adversarial audit is more valuable than a narrow citation check. In particular, distinguish prior continuant/Stern--Brocot denominator-pressure results, subexponential or one-big-jump asymptotics, arithmetic renewal theorems, and stable-domain results from the specific local denominator-layer asymptotic with the explicit context constant and its finite-window \(m^{3-\sigma_0}\) transfer.
++
++5. With this theorem in place, what is the honest tier and venue judgment now? Specifically, does it change the TAMS verdict that you previously expected to remain reject even after proof and priority repairs? If not, state what mathematical or expository deficit still controls the decision; if so, state the strongest venue tier you now regard as realistic.
++
++A hard rejection with concrete reasons is more useful than a soft acceptance. For every objection, please state what evidence, correction, or additional argument would resolve it.
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$target = '"'D:\\omega\\automath\\tools\\chatgpt-oracle\\sprint\\ask\\A6_renewal.txt'; "'$text = Get-Content -Raw -LiteralPath $target; $checks = [ordered]@{ Exists = (Test-Path -LiteralPath $target -PathType Leaf); CriticalLaw = $text.Contains('"'\\Pr\\{(C,H)=(c(p/q),\\log q)\\}=q"'^{-'"\\sigma_0}'); T1 = "'$text.Contains('"'\\tag{T1}'); T2 = "'$text.Contains('"'\\tag{T2}'); Constant8 = "'$text.Contains('"'=8.'); ContextSum = "'$text.Contains('"'absolutely convergent continuant context sum'); RenewalU = "'$text.Contains('"'u_j=\\frac1{\\mu_C}'); ZCorrection = "'$text.Contains('"'Z_m"'^R(-'"\\sigma_0)'); SCorrection = "'$text.Contains('"'S_{-\\sigma_0}(m)'); StableLaw = "'$text.Contains('"'spectrally positive'); ProofRegimes = ("'$text.Contains('"'two-\\(n"'^'"\\delta\\)-large-digit regime') -and "'$text.Contains('"'all-moderate greedy-block regime')); AntiCheatingQuote = "'$text.Contains('"'its proof does not assume the regular variation later used by the renewal transfer.'); AnalyticOnly = "'$text.Contains('"'The theorem and proof are analytic.'); FiveQuestions = (("'$text -split "`n" | Where-Object { $_ -match '"'"'^[1-5]'"\\. ' }).Count -eq 5); HardRejection = "'$text.Contains('"'A hard rejection with concrete reasons is more useful than a soft acceptance.') }; "'$checks.GetEnumerator() | ForEach-Object { '"'{0}: {1}' -f "'$_.Key, $_.Value }; '"'Characters: {0}' -f "'$text.Length; if ($checks.Values -contains $false) { exit 1 }' in D:\omega\automath\papers\publication\2026_finite_window_zeckendorf_fibers_discrete_thermodynamics_tams
+ succeeded in 428ms:
+Exists: True
+CriticalLaw: True
+T1: True
+T2: True
+Constant8: True
+ContextSum: True
+RenewalU: True
+ZCorrection: True
+SCorrection: True
+StableLaw: True
+ProofRegimes: True
+AntiCheatingQuote: True
+AnalyticOnly: True
+FiveQuestions: True
+HardRejection: True
+Characters: 9315
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d7476379b5c76e6d4e97a6dac8dd72161b70644
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+@@ -0,0 +1,133 @@
++Please reassess the attached manuscript as an external referee, focusing first on the new arithmetic critical stable-renewal theorem and its claim to novelty.
++
++Background, stated without softening it: you previously recommended rejection of this paper from TAMS. You wrote that, even if the proofs were fully repaired and the priority discussion fully rewritten, you expected your final verdict to remain reject. The priority repairs have now been made. Sidorov--Vershik, Hu, Lau--Ngai, Feng--Olivier, and Feng are explicitly credited; the all-real pressure theorem and frozen-half-line statements have been demoted to attributed recovery propositions; and the title and abstract have been rebuilt so that these concessions come first. When subsequently asked what single theorem could raise the paper's tier, you identified the arithmetic critical stable-renewal theorem below, assigning roughly a 35% chance that it could be proved and a 70% chance that, if proved, it would survive a literature audit as genuinely new. The manuscript now claims a proof.
++
++Here is the theorem and the arithmetic input on which it rests. Let \(\sigma_0>2\) be the unique solution of
++\[
++  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
++\]
++and put \(\alpha=\sigma_0-1\in(1,2)\). Under the critical letter law,
++\[
++ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}
++\]
++for every reduced \(p/q\in(0,1)\), where \(c(p/q)\) is the manuscript's odd continued-fraction cost. If
++\[
++ b_{2d+1}(s):=
++ \sum_{\substack{q\ge2,\ 1\le p<q,\ (p,q)=1\\c(p/q)=2d+1}}q^{-s},
++\]
++then
++\[
++ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0).
++\]
++The claimed local arithmetic estimate is
++\[
++ \tag{T1} b_{2d+1}(\sigma_0)\sim b_Cd^{-\sigma_0}\qquad(d\to\infty),
++\]
++and its direct summation gives
++\[
++ \tag{T2} \Pr\{C>x\}\sim K_Cx^{1-\sigma_0}\qquad(x\to\infty),
++\]
++with
++\[
++ K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
++     =\frac{2^{\sigma_0+2}}{\sigma_0-1}.
++\]
++
++Crucially, \(b_C\) is not merely named as the limit implicit in (T1). It is presented and evaluated independently as the absolutely convergent continuant context sum
++\[
++ b_C:=
++ \sum_{\mathbf u\in\mathcal C_{\rm L}}
++ \sum_{\mathbf v\in\mathcal C_{\rm R}}
++ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
++ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2
++ =8.
++\]
++Here \(\mathcal K\) is the regular continuant, \(\mathcal C_{\rm L}\) consists of the empty word and all finite positive-integer words, and \(\mathcal C_{\rm R}\) consists of the empty word and all such nonempty words whose final digit is at least two. More generally, the manuscript proves for every fixed \(s>2\) that
++\[
++ b_{2d+1}(s)\sim b(s)d^{-s},\qquad
++ b(s)=\sum_{\mathbf u\in\mathcal C_{\rm L}}
++       \sum_{\mathbf v\in\mathcal C_{\rm R}}
++       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
++ =2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2.
++\]
++
++The renewal consequences are also part of the theorem. Writing \(\mu_C=\mathbb E C\) and
++\[
++ u_j:=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}
++\]
++for the renewal sequence, the manuscript claims
++\[
++ u_j=\frac1{\mu_C}
++ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
++ +o(j^{2-\sigma_0}).
++\]
++For the one-layer Fibonacci partition sum
++\(Z_m^R(t)=\sum_{n\in\mathcal I_m}R(n)^t\) and the finite-window fiber sum
++\(S_t(m)=\sum_{x\in X_m}d_m(x)^t\), the exact renewal identities then give
++\[
++ Z_m^R(-\sigma_0)
++ =\frac{2m}{\mu_C}
++ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}),
++\]
++and
++\[
++ S_{-\sigma_0}(m)
++ =\frac{4m}{\mu_C}
++ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}).
++\]
++In addition, \(C\) is claimed to lie in the domain of attraction of a spectrally positive \((\sigma_0-1)\)-stable law: if \(a_n>0\) is chosen so that \(n\Pr\{C>a_n\}\to1\), then
++\[
++ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
++ \xrightarrow{\mathrm d}\mathcal S_{\sigma_0-1},
++\]
++where the Levy measure of \(\mathcal S_{\sigma_0-1}\) has density
++\((\sigma_0-1)x^{-\sigma_0}\) on \((0,\infty)\).
++
++The proof strategy for the hard arithmetic step is as follows. A canonical regular continued fraction \([0;a_1,\ldots,a_r]\), with \(a_r\ge2\), has denominator \(\mathcal K(a_1,\ldots,a_r)\) and layer parameter \(d=a_1+\cdots+a_r-1\). With \(n=d+1\), the proof first isolates a digit exceeding \(n/2\), which is necessarily unique. Cutting at that digit gives left and right contexts \((\mathbf u,\mathbf v)\), with middle digit \(a=n-|\mathbf u|_1-|\mathbf v|_1\). The affine large-digit formula
++\[
++ \mathcal K(\mathbf u,a,\mathbf v)
++ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1)
++\]
++gives pointwise convergence, while continuant concatenation gives the summable majorant
++\[
++ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
++ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
++\]
++Dominated convergence therefore extracts the full left--right context sum.
++
++The proof then treats the complement rather than assuming it negligible. Choose
++\(s/[2(s-1)]<\delta<1\) and \(h=\lfloor n^\delta\rfloor\). Words with two digits at least \(h\) have total weight
++\[
++ O_s(h^{2-2s})=o(n^{-s}).
++\]
++For words with all digits below \(h\), a greedy decomposition closes a block once its digit sum reaches \(h\). If
++\[
++ \eta_s(h)=\sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
++ \mathcal K(\mathbf u)^{-s},
++\]
++then \(\eta_s(h)\to0\), and the total weight of moderate words with digit sum at least \(N\) is bounded by
++\[
++ \frac{L_s}{1-\eta_s(h)}
++ \eta_s(h)^{\lfloor N/(2h)\rfloor-1},
++\]
++which is \(o(n^{-A})\) for every fixed \(A\) when \(N\ge n/4\). The remaining case, with exactly one \(h\)-large digit but no digit exceeding \(n/2\), leaves a moderate context of digit sum at least \(n/4\) and is controlled by the same bound. Thus both the two-\(n^\delta\)-large-digit regime and the all-moderate greedy-block regime are \(o(n^{-s})\). The manuscript treats this local estimate as excluding residual local lattice modulation and semistable/log-periodic oscillation, rather than averaging such effects away in a tail theorem.
++
++Your anti-cheating condition was that this result should count only if the hard arithmetic tail estimate were proved in its own right, and not if regular variation were assumed and standard renewal theory merely applied on top. The manuscript explicitly says in its introduction: "The local denominator-layer theorem \(\Cref{thm:arithmetic-denominator-layer}\) is a separate arithmetic result; its proof does not assume the regular variation later used by the renewal transfer." Consistently with that statement, (T1) is proved first by the continuant argument above, (T2) is then obtained by direct summation, and only after that are classical arithmetic renewal and stable-domain-of-attraction results invoked. Please verify the dependency rather than accepting the prose assertion.
++
++The theorem and proof are analytic. No numerical experiment is offered as support for (T1), (T2), \(b_C=8\), or the renewal expansion. The existing scripts are sanity checks only and are not part of the evidence for the theorem.
++
++Please answer the following as a referee, with precise references to any relevant location in the manuscript or literature.
++
++1. Is the proof correct? Name every step that you cannot follow or believe is wrong. In particular, audit (i) the dominated-convergence extraction of the context sum, including the claimed bijection and majorant; (ii) the \(o(n^{-s})\) estimates for the two excluded regimes; and (iii) the claim that these estimates eliminate local lattice or semistable oscillations rather than merely failing to detect them.
++
++2. Is \(b_C=8\) correct? Is the double continuant context series genuinely absolutely convergent, and is its evaluation sufficiently explicit in the sense you demanded, rather than a circular repackaging of the limit in (T1)?
++
++3. Was the anti-cheating condition genuinely met? Trace the logical dependencies and identify any point at which regular variation, a tail asymptotic, or an equivalent hypothesis enters by the back door before the local arithmetic estimate has been proved.
++
++4. You previously estimated a 70% chance that this theorem, if proved, would survive a literature audit as new. Having now seen the statement and proof, what is the nearest prior work, and does the novelty claim survive? Please treat this as the most important question. Six of our seven papers were found to have priority omissions, so a broad and adversarial audit is more valuable than a narrow citation check. In particular, distinguish prior continuant/Stern--Brocot denominator-pressure results, subexponential or one-big-jump asymptotics, arithmetic renewal theorems, and stable-domain results from the specific local denominator-layer asymptotic with the explicit context constant and its finite-window \(m^{3-\sigma_0}\) transfer.
++
++5. With this theorem in place, what is the honest tier and venue judgment now? Specifically, does it change the TAMS verdict that you previously expected to remain reject even after proof and priority repairs? If not, state what mathematical or expository deficit still controls the decision; if so, state the strongest venue tier you now regard as realistic.
++
++A hard rejection with concrete reasons is more useful than a soft acceptance. For every objection, please state what evidence, correction, or additional argument would resolve it.
+
+codex
+
+diff --git a/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d7476379b5c76e6d4e97a6dac8dd72161b70644
+--- /dev/null
++++ b/tools/chatgpt-oracle/sprint/ask/A6_renewal.txt
+@@ -0,0 +1,133 @@
++Please reassess the attached manuscript as an external referee, focusing first on the new arithmetic critical stable-renewal theorem and its claim to novelty.
++
++Background, stated without softening it: you previously recommended rejection of this paper from TAMS. You wrote that, even if the proofs were fully repaired and the priority discussion fully rewritten, you expected your final verdict to remain reject. The priority repairs have now been made. Sidorov--Vershik, Hu, Lau--Ngai, Feng--Olivier, and Feng are explicitly credited; the all-real pressure theorem and frozen-half-line statements have been demoted to attributed recovery propositions; and the title and abstract have been rebuilt so that these concessions come first. When subsequently asked what single theorem could raise the paper's tier, you identified the arithmetic critical stable-renewal theorem below, assigning roughly a 35% chance that it could be proved and a 70% chance that, if proved, it would survive a literature audit as genuinely new. The manuscript now claims a proof.
++
++Here is the theorem and the arithmetic input on which it rests. Let \(\sigma_0>2\) be the unique solution of
++\[
++  \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
++\]
++and put \(\alpha=\sigma_0-1\in(1,2)\). Under the critical letter law,
++\[
++ \Pr\{(C,H)=(c(p/q),\log q)\}=q^{-\sigma_0}
++\]
++for every reduced \(p/q\in(0,1)\), where \(c(p/q)\) is the manuscript's odd continued-fraction cost. If
++\[
++ b_{2d+1}(s):=
++ \sum_{\substack{q\ge2,\ 1\le p<q,\ (p,q)=1\\c(p/q)=2d+1}}q^{-s},
++\]
++then
++\[
++ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0).
++\]
++The claimed local arithmetic estimate is
++\[
++ \tag{T1} b_{2d+1}(\sigma_0)\sim b_Cd^{-\sigma_0}\qquad(d\to\infty),
++\]
++and its direct summation gives
++\[
++ \tag{T2} \Pr\{C>x\}\sim K_Cx^{1-\sigma_0}\qquad(x\to\infty),
++\]
++with
++\[
++ K_C=\frac{2^{\sigma_0-1}}{\sigma_0-1}b_C
++     =\frac{2^{\sigma_0+2}}{\sigma_0-1}.
++\]
++
++Crucially, \(b_C\) is not merely named as the limit implicit in (T1). It is presented and evaluated independently as the absolutely convergent continuant context sum
++\[
++ b_C:=
++ \sum_{\mathbf u\in\mathcal C_{\rm L}}
++ \sum_{\mathbf v\in\mathcal C_{\rm R}}
++ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-\sigma_0}
++ =2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2
++ =8.
++\]
++Here \(\mathcal K\) is the regular continuant, \(\mathcal C_{\rm L}\) consists of the empty word and all finite positive-integer words, and \(\mathcal C_{\rm R}\) consists of the empty word and all such nonempty words whose final digit is at least two. More generally, the manuscript proves for every fixed \(s>2\) that
++\[
++ b_{2d+1}(s)\sim b(s)d^{-s},\qquad
++ b(s)=\sum_{\mathbf u\in\mathcal C_{\rm L}}
++       \sum_{\mathbf v\in\mathcal C_{\rm R}}
++       \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
++ =2\left(\frac{\zeta(s-1)}{\zeta(s)}\right)^2.
++\]
++
++The renewal consequences are also part of the theorem. Writing \(\mu_C=\mathbb E C\) and
++\[
++ u_j:=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}
++\]
++for the renewal sequence, the manuscript claims
++\[
++ u_j=\frac1{\mu_C}
++ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
++ +o(j^{2-\sigma_0}).
++\]
++For the one-layer Fibonacci partition sum
++\(Z_m^R(t)=\sum_{n\in\mathcal I_m}R(n)^t\) and the finite-window fiber sum
++\(S_t(m)=\sum_{x\in X_m}d_m(x)^t\), the exact renewal identities then give
++\[
++ Z_m^R(-\sigma_0)
++ =\frac{2m}{\mu_C}
++ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}),
++\]
++and
++\[
++ S_{-\sigma_0}(m)
++ =\frac{4m}{\mu_C}
++ +\frac{4K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}m^{3-\sigma_0}
++ +o(m^{3-\sigma_0}).
++\]
++In addition, \(C\) is claimed to lie in the domain of attraction of a spectrally positive \((\sigma_0-1)\)-stable law: if \(a_n>0\) is chosen so that \(n\Pr\{C>a_n\}\to1\), then
++\[
++ \frac{C_1+\cdots+C_n-n\mu_C}{a_n}
++ \xrightarrow{\mathrm d}\mathcal S_{\sigma_0-1},
++\]
++where the Levy measure of \(\mathcal S_{\sigma_0-1}\) has density
++\((\sigma_0-1)x^{-\sigma_0}\) on \((0,\infty)\).
++
++The proof strategy for the hard arithmetic step is as follows. A canonical regular continued fraction \([0;a_1,\ldots,a_r]\), with \(a_r\ge2\), has denominator \(\mathcal K(a_1,\ldots,a_r)\) and layer parameter \(d=a_1+\cdots+a_r-1\). With \(n=d+1\), the proof first isolates a digit exceeding \(n/2\), which is necessarily unique. Cutting at that digit gives left and right contexts \((\mathbf u,\mathbf v)\), with middle digit \(a=n-|\mathbf u|_1-|\mathbf v|_1\). The affine large-digit formula
++\[
++ \mathcal K(\mathbf u,a,\mathbf v)
++ =a\mathcal K(\mathbf u)\mathcal K(\mathbf v)+O_{\mathbf u,\mathbf v}(1)
++\]
++gives pointwise convergence, while continuant concatenation gives the summable majorant
++\[
++ n^s\mathcal K(\mathbf u,a,\mathbf v)^{-s}
++ \le 2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
++\]
++Dominated convergence therefore extracts the full left--right context sum.
++
++The proof then treats the complement rather than assuming it negligible. Choose
++\(s/[2(s-1)]<\delta<1\) and \(h=\lfloor n^\delta\rfloor\). Words with two digits at least \(h\) have total weight
++\[
++ O_s(h^{2-2s})=o(n^{-s}).
++\]
++For words with all digits below \(h\), a greedy decomposition closes a block once its digit sum reaches \(h\). If
++\[
++ \eta_s(h)=\sum_{\substack{\mathbf u\in\mathcal C_{\rm L}\\|\mathbf u|_1\ge h}}
++ \mathcal K(\mathbf u)^{-s},
++\]
++then \(\eta_s(h)\to0\), and the total weight of moderate words with digit sum at least \(N\) is bounded by
++\[
++ \frac{L_s}{1-\eta_s(h)}
++ \eta_s(h)^{\lfloor N/(2h)\rfloor-1},
++\]
++which is \(o(n^{-A})\) for every fixed \(A\) when \(N\ge n/4\). The remaining case, with exactly one \(h\)-large digit but no digit exceeding \(n/2\), leaves a moderate context of digit sum at least \(n/4\) and is controlled by the same bound. Thus both the two-\(n^\delta\)-large-digit regime and the all-moderate greedy-block regime are \(o(n^{-s})\). The manuscript treats this local estimate as excluding residual local lattice modulation and semistable/log-periodic oscillation, rather than averaging such effects away in a tail theorem.
++
++Your anti-cheating condition was that this result should count only if the hard arithmetic tail estimate were proved in its own right, and not if regular variation were assumed and standard renewal theory merely applied on top. The manuscript explicitly says in its introduction: "The local denominator-layer theorem \(\Cref{thm:arithmetic-denominator-layer}\) is a separate arithmetic result; its proof does not assume the regular variation later used by the renewal transfer." Consistently with that statement, (T1) is proved first by the continuant argument above, (T2) is then obtained by direct summation, and only after that are classical arithmetic renewal and stable-domain-of-attraction results invoked. Please verify the dependency rather than accepting the prose assertion.
++
++The theorem and proof are analytic. No numerical experiment is offered as support for (T1), (T2), \(b_C=8\), or the renewal expansion. The existing scripts are sanity checks only and are not part of the evidence for the theorem.
++
++Please answer the following as a referee, with precise references to any relevant location in the manuscript or literature.
++
++1. Is the proof correct? Name every step that you cannot follow or believe is wrong. In particular, audit (i) the dominated-convergence extraction of the context sum, including the claimed bijection and majorant; (ii) the \(o(n^{-s})\) estimates for the two excluded regimes; and (iii) the claim that these estimates eliminate local lattice or semistable oscillations rather than merely failing to detect them.
++
++2. Is \(b_C=8\) correct? Is the double continuant context series genuinely absolutely convergent, and is its evaluation sufficiently explicit in the sense you demanded, rather than a circular repackaging of the limit in (T1)?
++
++3. Was the anti-cheating condition genuinely met? Trace the logical dependencies and identify any point at which regular variation, a tail asymptotic, or an equivalent hypothesis enters by the back door before the local arithmetic estimate has been proved.
++
++4. You previously estimated a 70% chance that this theorem, if proved, would survive a literature audit as new. Having now seen the statement and proof, what is the nearest prior work, and does the novelty claim survive? Please treat this as the most important question. Six of our seven papers were found to have priority omissions, so a broad and adversarial audit is more valuable than a narrow citation check. In particular, distinguish prior continuant/Stern--Brocot denominator-pressure results, subexponential or one-big-jump asymptotics, arithmetic renewal theorems, and stable-domain results from the specific local denominator-layer asymptotic with the explicit context constant and its finite-window \(m^{3-\sigma_0}\) transfer.
++
++5. With this theorem in place, what is the honest tier and venue judgment now? Specifically, does it change the TAMS verdict that you previously expected to remain reject even after proof and priority repairs? If not, state what mathematical or expository deficit still controls the decision; if so, state the strongest venue tier you now regard as realistic.
++
++A hard rejection with concrete reasons is more useful than a soft acceptance. For every objection, please state what evidence, correction, or additional argument would resolve it.
+
+tokens used
+57,334
+
