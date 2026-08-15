@@ -59,17 +59,21 @@
 
 
 
-> **TICK 67 — A3 裁决回来:Theorem A 通过审计,升档裁定"依证明而非依先前承诺"予以维持;并且他主动指出定理假设过多。** codex 终修在跑。
+> **TICK 70 — 第三代提问("领域标准对象")四篇全部投出;A3 终修在 codex 手里。**
 >
-> 他**没有采信我们的 verifier** —— 自己重建碰撞图,对每个 $4\le m\le 10$ 核出倒数第二层障碍集恰为 $\{\pm E_m\}$、下一层为空;也独立枚举了有界终端方程。类别经查是**公认的 Pisot 数系类,不是我们自家族的伪装**(这正是我们请他优先核的失效模式)。
+> | 篇 | 在飞 task id | 状态 |
+> |---|---|---|
+> | A4 `prime_languages` | `3b6b5991-740c-4e6f-bed5-d4d0a957a1cd` | waiting_response |
+> | A7 `upper_fibers` | `8ca43d8c-b3f5-4360-897a-048ba8e78d34` | waiting_response |
+> | A5 `finite_parts` | `34c44294-2678-4a31-80b7-7dae3d6c496d` | 重发(首次 `extraction_failure`) |
+> | A9 `homological_visibility` | `47eb976a-6e06-4e7a-b4d6-a2f9ed3c1ba6` | dispatched |
 >
-> **最重要的一条是他送上门的第 (c) 条杠杆 —— 去掉假设。** 他说 (A1) 的证明**从未用到** Condition F、zero preservation 或 bounded-zero 自动机,并给出显式替代:取有限进位区间 $K_U^*=\lceil d_UA_U/(b_U(eta-1))ceil$ 直接定义分离常数 $\delta_U^*$,Lemma 7.2 逐字成立。定理因此可加强为**对每个固定严格递增 Pisot 线性数系**成立。已要求 codex 先自行核实"确实没用到"再动手 —— 若发现某步真的依赖它,**不许删,报告是哪一步**,那份报告比顺从更有价值。
+> 这一代问题打的是历次报告共同的诊断:**我们的定理关于本文定义的对象,升档要求关于领域自身研究的对象**。给外审看的是**机器映射**(每个装置吃什么吐什么)而非结果清单,并先要他**修正我们列的标准对象清单**再逐项判"机器碰到没有"。硬检验:**目标定理须能在不使用本文任何自造术语的前提下陈述** —— 堵死"把自家结果换古典腔调重述"这个假阳性。
 >
-> 另三项:"standard" 是术语误用(该词在 Pisot 数系里特指 $u_{-1}=\dots=u_{-d+1}=0$,而我们同时说 standard 又允许非标准初值);补一段**集中的优先权比较**(Frougny / Berend–Frougny、zero 自动机、Carton–Sudbery–Yassawi、**Ashley** 的线性界、Frougny–Sakarovitch 有界延迟);把 A1–A3 更靠前。他点名 Ashley 是"最可能引发误判优先权异议的来源",理由写清:他的界线性于呈现图的**状态数**,而我们的 pair/difference 呈现有指数多个 aperture-$m$ 状态,故状态数线性仍是 $m$ 的指数。
+> codex 三处把模板推得更狠:A5 把该检验落成**术语黑名单**并预封三个夸大出口(扭曲行列式全等不得读作共轭/强移位等价/上同调等价;$\Omega(D\log D)$ 证书族不得膨胀成 $\Omega(V\log V)$,已证只有 $\Omega(V)$);A7 要求把"残余贡献是否仍属重新包装"当作未决问题;A4 写死 Charlier–Kreczman 限定(其 Prop 10 / Remark 12 已含那步余类增长,故渐近机制的优先权不属我们)。
 >
-> **档位**:ETDS 由"有希望"升为 **strong and natural**;**TAMS 成为可辩护的进取型首投**(他明说不等于容易接受);DCDS-A 现在属**保守**。不进 Annals/JAMS/Inventiones。新颖性只批准审慎措辞,拒绝无限定的 "first linear decoder bound"。
->
-> **tier-2 候选由 3 增至 4:A2 / A6 / A8 / A3。**
+> **A3**:codex 正执行外审送上门的第 (c) 条杠杆 —— 删 Condition F / zero preservation(他称 (A1) 证明从未用到,并给出 $K_U^*$ 有限进位区间替代)。已设反向闸:**若发现某步真依赖它,不许删,报告是哪一步。**
+
 
 
 
