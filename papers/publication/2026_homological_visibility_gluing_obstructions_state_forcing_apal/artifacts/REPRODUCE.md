@@ -31,5 +31,5 @@ directory, run exactly:
 cd artifacts && sha256sum -c SHA256SUMS
 ```
 
-A successful check prints exactly 6 `OK` lines and no failures. The
+A successful check prints exactly 7 `OK` lines and no failures. The
 project-local `.gitattributes` pins every file covered by the manifest to LF.
