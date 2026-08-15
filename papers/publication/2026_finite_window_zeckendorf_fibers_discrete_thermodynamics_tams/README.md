@@ -1,11 +1,11 @@
-# Arithmetic Criticality and Large Deviations for Fibonacci Partitions and Finite-Window Fibers
+# Condensation in Denominator-Weighted Brocot Fractions and Fibonacci Partition Thermodynamics
 
-This directory contains the main manuscript `Arithmetic Criticality and Large
-Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
-compiled supplement. The submission target is *Transactions of the American
-Mathematical Society*. If it declines on breadth or significance rather than
-correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
-Systems* are the natural alternatives.
+This directory contains the main manuscript `Condensation in
+Denominator-Weighted Brocot Fractions and Fibonacci Partition Thermodynamics`
+and a separately compiled supplement. The submission target is *Transactions
+of the American Mathematical Society*. If it declines on breadth or
+significance rather than correctness, *Journal of Number Theory* and
+*Ergodic Theory and Dynamical Systems* are the natural alternatives.
 
 ## Scope
 
@@ -26,6 +26,9 @@ results.
 
 The main contribution consists of:
 
+- a total-variation condensation theorem for denominator-weighted Brocot
+  fractions of fixed order, including the explicit defect law, joint location
+  limit, independent left/right contexts, and denominator factorization;
 - the exact indexing and normalization dictionary from the golden-ratio
   Bernoulli-convolution \(L^q\)-spectrum to Fibonacci partition layers;
 - the arithmetic critical point, critical Gibbs law, and full finite-layer
@@ -61,7 +64,9 @@ global Farey-tree predecessor, and Dushistova previously treated the identical
 local sum and its polynomial order. The manuscript's arithmetic novelty claim
 is limited to the leading-constant correction and simplified proof; the
 critical cost tail, stable law, and finite-size terms are downstream transfers
-from that corrected local input.
+from that corrected local input. Armendariz--Loulakis and Stufler are cited as
+general condensation comparators, but their product-weight hypotheses do not
+cover the nonmultiplicative continuant weight.
 
 The affine fiber--partition correspondence is stated for \(m\ge1\). In the
 generic maximizing-residue formulas, \(I_{2k+1}\) is defined for \(k\ge5\),

@@ -6,8 +6,8 @@ Transactions of the American Mathematical Society
 
 ## Title
 
-Arithmetic Criticality and Large Deviations for Fibonacci Partitions and
-Finite-Window Fibers
+Condensation in Denominator-Weighted Brocot Fractions and Fibonacci Partition
+Thermodynamics
 
 ## Authors
 
@@ -16,17 +16,26 @@ Finite-Window Fibers
 
 ## 2020 Mathematics Subject Classification
 
-11B39, 05A17, 60F10
+11A55, 11B39, 60F10, 05A17
 
 ## Keywords
 
-Fibonacci partition function; Erdos measure; Bernoulli convolution;
-Zeckendorf representation; large deviations
+Brocot fractions; continued fractions; continuants; condensation; Fibonacci
+partition function; large deviations
 
 ## Summary
 
-The manuscript studies the Fibonacci partition function and an exact
-finite-window Zeckendorf fold. It identifies the arithmetic critical parameter
+The manuscript's central result is a total-variation condensation theorem for
+canonical Brocot fractions of fixed order (n), sampled with probability
+proportional to the inverse (s)-th power of the denominator, (s>2). With
+probability tending to one there is a unique partial quotient larger than
+(n/2); its left and right words converge to explicit independent
+inverse-continuant laws. The theorem gives the exact defect distribution, the
+joint location/side-length limit, and an asymptotic denominator factorization.
+
+The same fixed-order estimate is the arithmetic input for the Fibonacci
+partition function and an exact finite-window Zeckendorf fold. It identifies
+the arithmetic critical parameter
 by
 
 \[
@@ -78,6 +87,14 @@ of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
 Lemma 7: the empty left context is included in the doubled canonical
 convolution, so that endpoint is counted twice and the excess is exactly
 \(R_s\). It makes no broader claim about that paper.
+
+Armendariz--Loulakis prove conditional product limits for independent
+subexponential variables, and Stufler proves total-variation condensation for
+product-weighted Gibbs partitions. Neither theorem applies directly here:
+\(\mathcal K(a_1,\ldots,a_r)^{-s}\) is not a product of component weights.
+The manuscript proves the required two-sided continuant factorization,
+summable domination, and negligibility of every noncondensed word before
+applying the discrete Scheffe lemma.
 
 With
 
@@ -164,6 +181,7 @@ and the recurrence \(D_m=D_{m-2}+D_{m-4}\) holds for \(m\ge6\).
 ## Submission Files
 
 - `main.tex` and its section inputs: main article
+- `sec_brocot_condensation.tex`: central fixed-order continued-fraction theorem
 - `supplement.tex`: separately compiled supplement
 - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
 - Transactions of the American Mathematical Society cover letter
