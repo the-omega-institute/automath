@@ -2,7 +2,10 @@
 
 This directory contains the main manuscript `Arithmetic Criticality and Large
 Deviations for Fibonacci Partitions and Finite-Window Fibers` and a separately
-compiled supplement. The submission target is the *Journal of Number Theory*.
+compiled supplement. The submission target is *Transactions of the American
+Mathematical Society*. If it declines on breadth or significance rather than
+correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
+Systems* are the natural alternatives.
 
 ## Scope
 
@@ -28,9 +31,10 @@ The main contribution consists of:
 - the arithmetic critical point, critical Gibbs law, and full finite-layer
   LDP on a single standard Fibonacci partition layer;
 - the exact identification with Dushistova's fixed-digit-sum continuant sum,
-  the endpoint correction of its printed leading coefficient from
-  \(R_s+2R_s^2\) to \(2R_s^2\), a simplified one-large-partial-quotient proof,
-  and the critical renewal/Fibonacci transfer;
+  the correction of the loss of the restriction \(u>1\), causing an endpoint
+  overcount in its printed leading coefficient from \(R_s+2R_s^2\) to
+  \(2R_s^2\), a simplified one-large-partial-quotient proof, and the critical
+  renewal/Fibonacci transfer;
 - the joint generation-cost and log-multiplicity LDP, including its affine
   two-dimensional coexistence face;
 - the residue and affine fiber correspondence;

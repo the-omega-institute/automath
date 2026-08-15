@@ -2,7 +2,7 @@
 
 ## Journal
 
-Journal of Number Theory
+Transactions of the American Mathematical Society
 
 ## Title
 
@@ -73,8 +73,11 @@ b_{2d+1}(s)=\sigma_{s/2}(d+1).
 
 Her printed leading coefficient is \(R_s+2R_s^2\); separating the left
 contexts of digit sums zero, one, and greater than one gives the corrected
-coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the
-proof of her Lemma 7 and makes no broader claim about that paper.
+coefficient \(2R_s^2\). The manuscript localizes this discrepancy to the loss
+of the restriction \(u>1\), causing an endpoint overcount, in the proof of her
+Lemma 7: the empty left context is included in the doubled canonical
+convolution, so that endpoint is counted twice and the excess is exactly
+\(R_s\). It makes no broader claim about that paper.
 
 With
 
@@ -96,6 +99,17 @@ simplified proof, the new renewal/Fibonacci transfer to stable second-order
 critical finite-size laws and coexistence laws, the finite-layer
 nonexposed-slope lower bounds, and the exact finite-window correspondences and
 identities.
+
+## Venue Positioning
+
+The primary submission target is *Transactions of the American Mathematical
+Society*. The case for that venue is the combined correction-and-extension:
+the exact reconciliation and independent arithmetic proof feed the critical
+renewal constants, noninteger finite-size corrections, stable-law consequence,
+one-layer and finite-window large deviations, and exact finite
+correspondences. If *Transactions* declines on breadth or significance rather
+than correctness, *Journal of Number Theory* and *Ergodic Theory and Dynamical
+Systems* are the natural alternatives.
 
 ## Exact Scope Of Finite Formulas
 
@@ -152,4 +166,4 @@ and the recurrence \(D_m=D_{m-2}+D_{m-4}\) holds for \(m\ge6\).
 - `main.tex` and its section inputs: main article
 - `supplement.tex`: separately compiled supplement
 - `sec_references.tex`: manually maintained bibliography; BibTeX is not used
-- Journal of Number Theory cover letter
+- Transactions of the American Mathematical Society cover letter
