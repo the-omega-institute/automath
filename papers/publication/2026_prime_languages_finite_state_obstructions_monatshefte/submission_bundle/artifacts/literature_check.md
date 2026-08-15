@@ -479,17 +479,79 @@ names the nearby degeneracy/Cobham-extension problem only as an open
 interface. Its one-orbit existential conclusion does not compare the global
 structure of one set in two multiplicatively independent representations.
 
+## Slender-context-free Cobham priority audit (2026-08-15)
+
+This audit was performed before adding the two-system theorem. Literal and
+title searches covered `slender context-free numeration Cobham`, `thin
+context-free language numeration`, `bounded context-free language numeration
+system`, `context-free automatic sequences Cobham`, `abstract numeration
+systems context-free`, `alternate numeration systems Cobham`, `linear
+numeration systems slender language`, and `pushdown automatic sequences
+degeneracy`. Exact-title and DOI searches were also run for the paired-loop
+classification and the recurrence common-value theorem. Sources and metadata
+were checked through Crossref, Semantic Scholar, the arXiv API, the Elsevier
+article API, and publisher or repository copies when available. Google Scholar
+subsequently rate-limited the shared address; no priority inference is made
+from that failure or from any null query.
+
+The closest language-theoretic source located was L. Ilie, G. Rozenberg, and
+A. Salomaa, "A characterization of poly-slender context-free languages,"
+RAIRO Theoretical Informatics and Applications 34 (2000), 77--86,
+doi:10.1051/ita:2000100. Its Theorem 7 states that a context-free language is
+0-poly-slender if and only if it is a finite union of 1-Dyck loops, i.e. sets
+of the form `{u v^n w x^n y : n >= 0}`. The paper attributes the original
+paired-loop characterization to M. Latteux and G. Thierrin, "Semidiscrete
+context-free languages," International Journal of Computer Mathematics 14
+(1983), 3--18, and an independent proof to L. Ilie, "On a conjecture about
+slender context-free languages," Theoretical Computer Science 132 (1994),
+427--434, doi:10.1016/0304-3975(94)00042-5. The same 2000 paper proves that a
+context-free language is poly-slender if and only if it is bounded and
+classifies the higher polynomial-growth cases by finite unions of higher
+Dyck loops. Those results do not themselves compare values in two numeration
+systems.
+
+The closest arithmetic source located was M. Mignotte, "Intersection des
+images de certaines suites recurrentes lineaires," Theoretical Computer
+Science 7 (1978), 117--121, doi:10.1016/0304-3975(78)90043-9. Publisher and
+Crossref metadata identify it as the common-value theorem for integer linear
+recurrences with multiplicatively independent dominating roots. P. Kiss,
+"On common terms of linear recurrences," Acta Mathematica Academiae
+Scientiarum Hungaricae 40 (1982), 119--123, states the same finiteness result
+after explicitly setting up integer recurrences with unique dominant roots.
+Schlickewei--Schmidt's later intersection theorem supplies a substantially
+broader qualitative classification, but it is not the historical source of
+this dominant-root finiteness input.
+
+The numeration search also returned the established slender-regular and
+abstract/alternate-numeration literature, including J. Shallit, "Numeration
+systems, linear recurrences, and regular sets," Information and Computation
+113 (1994), 331--347, and the Cobham-extension/context-free-sequence problem
+of Caucal--Le Gonidec already cited in the article. None of the located source
+titles, abstracts, theorem statements, or citation trails states the exact
+claim that one fixed set with slender context-free representation languages
+in two multiplicatively independent weak-Perron greedy linear numeration
+systems must be finite.
+
+Priority verdict: the exact target survives the completed search, but only as
+an unlocated statement, not as a novelty claim. Its proof must be presented as
+a different project built from the classical finite paired-loop cover and
+classical common-value finiteness. The negative search does not justify a
+claim of first proof, and the poly-slender/bounded setting remains outside the
+one-parameter argument.
+
 ## Submission consistency check (2026-08-15)
 
 The article's present priority narrative is consistent with this audit. It
 treats the Seki weak pumping lemma, Broughan's adic classifications,
 Evertse's quotient theorem, Charlier--Kreczman's residue-growth mechanism,
-and the fixed-base Hartmanis--Shank and Schutzenberger results as prior
-inputs. The retained claims are limited to the recurrence-language
+the fixed-base Hartmanis--Shank and Schutzenberger results, the
+Latteux--Thierrin--Ilie paired-loop classification, and Mignotte's
+common-value theorem as prior inputs. The retained claims are limited to the recurrence-language
 combination stated with its canonical-presentation hypotheses, the
 deleted-prime local rank calculation, the nonunit escape dichotomy, the
 geometric-ray characterization, and the stated unit and weak-Perron
-classification consequences. The separately submitted finite-state results
+classification consequences, together with the separately proved
+slender-context-free two-system theorem. The separately submitted finite-state results
 remain in Supplementary Information and are compared explicitly with Shen
 and Dubbe. No broader priority claim is made for fixed-base prime CF-immunity,
 for arbitrary objects called Pisot numeration systems, or for the

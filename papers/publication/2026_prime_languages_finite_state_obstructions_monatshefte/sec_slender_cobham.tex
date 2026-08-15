@@ -1,0 +1,228 @@
+\section{A slender-context-free two-system theorem}
+\label{sec:slender-cobham}
+
+This section has a different architecture from the preceding one-system
+MCFL argument. It uses a global finite cover of each full representation
+language, turns every member of that cover into finitely many recurrence
+sequences, and invokes finiteness of common values. In particular, none of
+the finite-group return, deleted-prime, fixed-support quotient,
+geometric-subsequence, or divisibility-tree arguments enters the proof.
+
+We record the two external inputs with their hypotheses. A language \(L\)
+is \emph{slender} when
+\(\sup_n\#(L\cap A^n)<\infty\). In the terminology of
+Ilie--Rozenberg--Salomaa, this is \(0\)-poly-slender, and a \(1\)-Dyck loop
+is a language
+\[
+  \{u v^n w x^n y:n\ge0\}.
+\]
+Their Theorem~7 states that a context-free language is \(0\)-poly-slender
+if and only if it is a finite union of \(1\)-Dyck loops
+\cite[Theorem~7]{IlieRozenbergSalomaa2000}. The characterization was first
+proved, in the equivalent terminology of iterative or semidiscrete
+context-free languages, by Latteux--Thierrin
+\cite{LatteuxThierrin1983}, and independently by Ilie
+\cite{Ilie1994}.
+
+Mignotte's common-value theorem concerns two rational-integer linear
+recurrence sequences. In its dominant-root form, each sequence has an
+expansion
+\[
+  A_n=a\lambda^n+\sum_{i=2}^s P_i(n)\lambda_i^n,
+  \qquad
+  B_m=b\kappa^m+\sum_{j=2}^t Q_j(m)\kappa_j^m,
+\]
+where \(a,b\ne0\), the characteristic roots and coefficients are
+algebraic, \(\lambda,\kappa>1\), and
+\(
+  \abs{\lambda_i}<\lambda,
+  \abs{\kappa_j}<\kappa
+\)
+for all remaining characteristic roots. If \(\lambda\) and \(\kappa\)
+are multiplicatively independent, then \(A_n=B_m\) has only finitely many
+pairs of nonnegative integer solutions; the proof is effective
+\cite{Mignotte1978Intersection}. We use exactly this finiteness conclusion.
+
+The next lemma supplies the hypothesis that is not a consequence merely of
+the root-growth squeeze.
+
+\begin{lemma}[Dominant-root transfer for a paired greedy loop]
+  \label{lem:paired-loop-dominant-root-transfer}
+  Let \(U=(U_n)_{n\ge0}\) be a strictly increasing standard greedy linear
+  numeration sequence. Suppose that its least eventual recurrence
+  polynomial is the minimal polynomial \(\mu\) of a weak Perron number
+  \(\alpha>1\). If
+  \[
+    z_n=u v^n w x^n y\in\mathcal R_U\qquad(n\ge0)
+  \]
+  and \(D=\abs v+\abs x>0\), then there is \(h\ge1\) such that, for every
+  \(0\le r<h\), the integer sequence
+  \[
+    Z_r(t)=\val_U(z_{ht+r})\qquad(t\ge0)
+  \]
+  is eventually a linear recurrence whose least eventual characteristic
+  roots have the unique dominating root
+  \[
+    \alpha^{hD}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  We audit the actual affine matrices. Let \(C\) be the companion matrix of
+  \(\mu\). For a block \(b=b_1\cdots b_\ell\), multiplication of the digit
+  matrices in \Cref{lem:affine-recurrence-block-action} gives
+  \begin{equation}
+    M_b=
+    \begin{pmatrix}1&q_b\\0&C^\ell\end{pmatrix}
+    \label{eq:paired-loop-affine-block-form}
+  \end{equation}
+  for a row \(q_b\), with \(M_\varepsilon=I\). Because \(\mu\) is
+  irreducible over characteristic zero, it is separable, so \(C\) is
+  diagonalizable over a splitting field. Hence \(C^\ell\) is
+  diagonalizable even when distinct conjugates acquire the same
+  \(\ell\)-th power. The eigenvalues of \(M_b\) are \(1\) and
+  \(\gamma^\ell\), where \(\gamma\) runs over the conjugates of \(\alpha\).
+  If \(b\ne\varepsilon\), every peripheral eigenvalue has modulus
+  \(\alpha^\ell>1\), so it cannot collide with the affine eigenvalue \(1\).
+  Equation \eqref{eq:paired-loop-affine-block-form} then shows that its
+  peripheral generalized eigenspace is semisimple. Thus the affine row
+  creates neither a peripheral eigenvalue nor a peripheral Jordan block.
+
+  Discarding finitely many initial parameters puts the reading position
+  beyond the recurrence transient. If \(v\ne\varepsilon\), the represented
+  value is then a fixed scalar functional of
+  \[
+    M_x^n A M_v^n
+  \]
+  for one fixed matrix \(A\); if \(v=\varepsilon\), it is a fixed scalar
+  functional of \(M_x^n A\). This follows directly by reading the five
+  fixed blocks in LSD-first order; fixed initial powers used to cross the
+  transient are absorbed into \(A\). Vectorization in the first case gives
+  the actual powering matrix
+  \[
+    K=M_v^{\mathsf T}\otimes M_x,
+  \]
+  with the evident one-factor interpretation when one pumped block is
+  empty. Its spectral radius is \(\alpha^D\). Its peripheral eigenvalues
+  are exactly the products
+  \(
+    \gamma_1^{\abs v}\gamma_2^{\abs x}
+  \)
+  obtained from peripheral conjugates in the nonempty factors, and their
+  generalized eigenspaces are semisimple by the preceding paragraph and
+  the tensor-product Jordan formula.
+
+  Choose \(h\) from the weak-Perron power characterization, so that
+  \[
+    \abs\gamma=\alpha\quad\Longrightarrow\quad
+    \gamma^h=\alpha^h
+  \]
+  for every conjugate \(\gamma\). Every peripheral eigenvalue of \(K^h\) is then
+  the same positive number
+  \(
+    \Lambda=\alpha^{hD}
+  \), and the \(\Lambda\)-generalized eigenspace is still semisimple.
+  All other eigenvalues of \(K^h\) have modulus strictly below
+  \(\Lambda\). Cayley--Hamilton applied to the displayed scalar functional
+  therefore gives, for each residue \(r\),
+  \begin{equation}
+    Z_r(t)=c_r\Lambda^t+
+      \sum_j P_{r,j}(t)\xi_{r,j}^t,
+    \qquad \abs{\xi_{r,j}}<\Lambda.
+    \label{eq:paired-loop-spectral-expansion}
+  \end{equation}
+  This proves at matrix level that peripheral collisions coalesce to one
+  algebraic root and that no polynomial factor in \(t\) can accompany it.
+
+  It remains to audit cancellation by the actual value functional. The
+  word \(z_{ht+r}\) has length \(L_r+hDt\) for a fixed \(L_r\). Greedy
+  validity gives
+  \[
+    U_{L_r+hDt-1}\le Z_r(t)<U_{L_r+hDt}.
+  \]
+  The positive residue asymptotics
+  \eqref{eq:weak-perron-residue-asymptotic}--
+  \eqref{eq:weak-perron-positive-residues}, applied to these two fixed
+  index residues for the chosen period, show
+  \[
+    0<\liminf_{t\to\infty}\frac{Z_r(t)}{\Lambda^t}
+      \le
+      \limsup_{t\to\infty}\frac{Z_r(t)}{\Lambda^t}<\infty.
+  \]
+  In \eqref{eq:paired-loop-spectral-expansion} every lower-modulus term,
+  including all its possible Jordan polynomials, is \(o(\Lambda^t)\).
+  Consequently the spectral-projection coefficient \(c_r\) of the actual
+  affine value functional is nonzero (indeed positive). Total peripheral
+  cancellation is therefore impossible, and \(\Lambda\) survives as the
+  unique dominating root of the least scalar recurrence.
+\end{proof}
+
+For \(X\subseteq\NN_{\ge1}\), write
+\[
+  \operatorname{Rep}_U(X)
+    =\{z\in\mathcal R_U:\val_U(z)\in X\}.
+\]
+
+\begin{theorem}[Slender-context-free Cobham theorem]
+  \label{thm:slender-cfl-cobham}
+  Let \(U\) and \(V\) be strictly increasing standard greedy linear
+  numeration sequences whose least eventual recurrence polynomials are the
+  minimal polynomials of weak Perron numbers \(\alpha>1\) and \(\beta>1\),
+  respectively. Suppose that \(\alpha\) and \(\beta\) are multiplicatively
+  independent. If, for one set \(X\subseteq\NN_{\ge1}\), both full
+  representation languages
+  \[
+    \operatorname{Rep}_U(X)
+    \quad\hbox{and}\quad
+    \operatorname{Rep}_V(X)
+  \]
+  are slender context-free languages, then \(X\) is finite.
+\end{theorem}
+
+\begin{proof}
+  Suppose that \(X\) is infinite. The paired-loop classification gives
+  finite covers
+  \[
+    \begin{aligned}
+      \operatorname{Rep}_U(X)
+        &=\bigcup_{i=1}^a
+          \{u_i v_i^n w_i x_i^n y_i:n\ge0\},\\
+      \operatorname{Rep}_V(X)
+        &=\bigcup_{j=1}^b
+          \{u'_j(v'_j)^m w'_j(x'_j)^m y'_j:m\ge0\}.
+    \end{aligned}
+  \]
+  Loops with zero total pumped length are singletons and may be removed;
+  they cover only finitely many values. Apply
+  \Cref{lem:paired-loop-dominant-root-transfer} to every remaining loop.
+  After the finitely many residue restrictions, \(X\) is covered in each
+  system by finitely many integer recurrence sequences having respective
+  unique dominating roots
+  \[
+    \alpha^{h_i(\abs{v_i}+\abs{x_i})}
+    \quad\hbox{and}\quad
+    \beta^{k_j(\abs{v'_j}+\abs{x'_j})}.
+  \]
+  Infinitely many elements of \(X\) must lie in the intersection of the
+  images of one sequence from the first finite family and one from the
+  second. Their dominating roots are multiplicatively independent, since
+  they are positive powers of \(\alpha\) and \(\beta\). Mignotte's theorem
+  says that the equality of their terms has only finitely many index pairs,
+  a contradiction.
+\end{proof}
+
+\begin{remark}[Priority and scope]
+  \label{rem:slender-cobham-priority}
+  The dedicated search behind this statement covered thin, slender,
+  semidiscrete, poly-slender, and bounded context-free languages; paired
+  loops in numeration; Cobham theorems for linear, alternate, and abstract
+  numeration; and the context-free-sequence degeneracy problem. The closest
+  ingredients located were the paired-loop classification cited above,
+  the equivalence between poly-slender and bounded context-free languages
+  \cite[Theorems~1 and 6]{IlieRozenbergSalomaa2000}, and Mignotte's
+  common-value theorem. No source located in that search states the exact
+  two-system weak-Perron theorem above. This negative search result is not
+  a claim of priority. In particular, replacing slenderness by
+  poly-slenderness would require a genuinely multivariate argument for
+  finite unions of higher Dyck loops and is not asserted here.
+\end{remark}
