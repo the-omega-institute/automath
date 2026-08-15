@@ -1,0 +1,260 @@
+\subsection{Uniform score, stopping, plug-in, and two-point lemmas}
+\label{subsec:singular-uniform-lemmas-main}
+
+\begin{lemma}[Uniform sampled-bin and sampled-tail derivatives]
+\label{lem:uniform-sampled-bin-tail-score-main}
+For fixed \(n,\varepsilon,M,c_0\), and \(\Delta\tau>0\), there is a common
+physical one-sided neighbourhood \(\mathcal Q^+\) of
+\(\mathcal C_n(\varepsilon,M,c_0)\), in the coordinates
+\(q=(\eta,\delta)\), on which \(c\pm\sqrt\delta>0\) and, for every
+multi-index \(a\),
+\[
+\begin{aligned}
+ \sup_{q\in\mathcal Q^+}|\partial_q^a\log g_q(k)|
+ &\le C_a(1+k)^{2|a|},&& 1\le|a|\le3,\\
+ \sup_{q\in\mathcal Q^+}|\partial_q^a\log S_q(k)|
+ &\le C_a(1+k)^{2|a|},&& 1\le|a|\le2.
+\end{aligned}
+\tag{U1}
+\]
+All parameter derivatives extend continuously to \(\delta=0\).  In addition,
+\(g_q(k)\le C(1+k)^{n-1}r^k\) for a common \(r<1\).
+\end{lemma}
+
+\begin{proof}
+Compress the colliding holding times into \(Y=X_1+X_2\).  Relative to
+Lebesgue measure on \((0,\infty)^{n-1}\), the complete holding-time density is
+\[
+ f_q(y,x_3,\ldots,x_n)
+ =(c^2-\delta)e^{-cy}\frac{\sinh(\sqrt\delta\,y)}{\sqrt\delta}
+ \prod_{j=3}^n\theta_j e^{-\theta_jx_j},
+\tag{U2}
+\]
+where the quotient at \(\delta=0\) is \(y\).  Write
+\(\sinh(\sqrt\delta\,y)/\sqrt\delta=y h(\delta y^2)\), where
+\(h(x)=\sinh(\sqrt x)/\sqrt x\) is positive and analytic on
+\([0,\infty)\).  On a sufficiently small common neighbourhood,
+\(c^2-\delta\) and every rate are bounded away from zero.  The derivatives
+through order three of \(\log h(x)\) are bounded on \([0,\infty)\): they are
+continuous at zero by the power series, and their elementary hyperbolic
+expressions are bounded as \(x\to\infty\).  Differentiating \(\log f_q\)
+therefore gives, uniformly on \(\mathcal Q^+\),
+\[
+ |\partial_q^a\log f_q(y,x_3,\ldots,x_n)|
+ \le C_a\{1+(y+x_3+\cdots+x_n)^{2|a|}\},
+ \qquad 1\le |a|\le3.
+\tag{U3}
+\]
+
+Put \(W=Y+X_3+\cdots+X_n\).  Differentiation under the integral in a
+sampling bin expresses every derivative of \(\log g_q(k)\) through order
+three as a finite universal polynomial in conditional expectations of the
+complete-data derivatives in \textup{(U3)}, conditional on
+\(k\Delta\tau<W\le(k+1)\Delta\tau\).  On this event every nonnegative
+holding time is at most \((k+1)\Delta\tau\), which proves the first bound in
+\textup{(U1)}.  This argument controls the ratio by the bin probability
+itself and hence does not infer a relative bound from an absolute derivative
+bound.
+
+For the tail ratios, each exponential density is log-concave, convolution
+preserves log-concavity, and integration over a half-line shows that the
+survival function of \(W\) is log-concave.  Thus \(W\) is IFR and its residual
+life satisfies
+\[
+ \PP_q(W-t>x\mid W>t)\le \PP_q(W>x),\qquad t,x\ge0.
+\tag{U4}
+\]
+All rates on \(\mathcal Q^+\) exceed a common \(\underline\theta>0\), so
+\(W\) is stochastically dominated by an
+Erlang\((n,\underline\theta)\) variable.  Consequently, for every fixed
+integer \(m\),
+\[
+ \sup_{q\in\mathcal Q^+}\EE_q(W^m\mid W>t)
+ \le C_m(1+t)^m.
+\tag{U5}
+\]
+The same conditional-score polynomial argument, now conditional on
+\(W>k\Delta\tau\), proves the second bound in \textup{(U1)}.  Finally,
+stochastic domination by the Erlang variable gives the common
+polynomial-exponential mass envelope.  The envelopes justify every
+differentiation under the integral and continuity at \(\delta=0\).
+\end{proof}
+
+\begin{lemma}[Uniform stopped renewal-score CLT and LLN]
+\label{lem:uniform-stopped-renewal-score-main}
+Let \(\mathcal Q\) be compact and let the integer Palm gaps \(G\) have full
+support, a common exponential moment, and parameter-continuous masses.  Let a
+stationary binary renewal record of length \(N\) contain \(K_N\) complete
+gaps, with initial age \(A_N\) and terminal residual \(R_N\), and put
+\(D=G+1\), \(\mu_q=\EE_qD\).  Uniformly in \(q\in\mathcal Q\), and also for
+triangular arrays \(q_N\in\mathcal Q\),
+\[
+ K_N=N/\mu_{q_N}+O_{P_{q_N}}(\sqrt N),
+\qquad
+ \max\{A_N,R_N,G_1,\ldots,G_{K_N}\}=O_{P_{q_N}}(\log N).
+\tag{U6}
+\]
+If \(b_q(G)\in\RR^d\) is parameter-continuous,
+\(\EE_qb_q(G)=0\), and is bounded by a common polynomial in \(G\), then
+\[
+ \sup_{q\in\mathcal Q}d_{\rm BL}\!\left(
+ \mathcal L_q\!\left[N^{-1/2}\sum_{j=1}^{K_N}b_q(G_j)\right],
+ \mathcal N_d\!\left(0,\mu_q^{-1}\EE_q[b_qb_q^\top]\right)
+ \right)\longrightarrow0.
+\tag{U7}
+\]
+For every similarly dominated matrix reward \(H_q\),
+\[
+ N^{-1}\sum_{j=1}^{K_N}H_q(G_j)
+ -\mu_q^{-1}\EE_qH_q(G)\longrightarrow0
+\tag{U8}
+\]
+uniformly in probability.  If \(B_q\) has a common polynomial envelope, then
+\(N^{-3/2}\sum_{j=1}^{K_N}B_q(G_j)=o_P(1)\) uniformly.  These conclusions
+hold jointly and hence apply to the score, stopped Hessian, and third-order
+likelihood remainder under bounded root-\(N\) local triangular arrays.
+\end{lemma}
+
+\begin{proof}
+The common exponential moment gives uniform bounds for every moment of
+\(D\), with \(0<\inf_q\mu_q\le\sup_q\mu_q<\infty\).  For the ordinary
+renewal count, compare the partial sums of \(D_j-\mu_q\) at
+\(\lfloor N/\mu_q\pm x\sqrt N\rfloor\).  Chebyshev's inequality and
+Kolmogorov's maximal inequality give a bound \(C/x^2\), uniformly in \(q\),
+for deviation of the count by more than \(x\sqrt N\).  The stationary delay
+changes this count only through the initial incomplete cycle, which is
+\(O_P(\log N)\) by the bound below.  This proves the first part of
+\textup{(U6)} without requiring independence between a reward and its cycle
+length.
+
+The equilibrium formula
+\(\PP_q(A_N\ge t)=\mu_q^{-1}\sum_{j\ge t}S_q(j)\), and its terminal analogue,
+have a common exponential-polynomial bound.  There are at most \(N\) complete
+gaps because \(D\ge1\).  A union bound for those gaps and the two endpoint
+variables therefore makes the probability that the maximum exceeds
+\(C_0\log N\) tend to zero uniformly for sufficiently large \(C_0\).  This
+proves the second part of \textup{(U6)}.
+
+For \(m_N=\lfloor N/\mu_q\rfloor\), the triangular-array Lindeberg theorem
+applied to the deterministic sum of \(b_q(G_j)\) gives the normal law in
+\textup{(U7)}.  The common polynomial envelope and exponential moment verify
+Lindeberg uniformly.  Replacing \(m_N\) by \(K_N\) changes the sum by at most
+the maximum of centred partial sums over \(O_P(\sqrt N)\) indices.
+Kolmogorov's inequality makes that difference \(o_P(\sqrt N)\) uniformly;
+this is the stopped-score, or Anscombe, step.  The same replacement in a
+law of large numbers is \(o_P(N)\), proving \textup{(U8)}.  The last assertion
+follows from \(K_N=O_P(N)\) and uniform integrability of the envelope.
+
+To verify the displayed uniformity rather than only pointwise convergence,
+take an arbitrary parameter sequence.  Compactness supplies a convergent
+subsequence; parameter continuity plus the common exponential envelope gives
+convergence of the means, covariance matrices, Lindeberg terms, and all LLN
+integrals along it.  The preceding inequalities have constants independent of
+the subsequence.  Every subsequence therefore has a further subsequence with
+the asserted joint limits, which is the uniform subsequence criterion and
+also proves the triangular-array statement.
+\end{proof}
+
+\begin{lemma}[Efficient-score plug-in equicontinuity]
+\label{lem:efficient-score-plugin-main}
+On the canonically ordered collision stratum, write the one-cycle null scores
+as \(s_\eta\) and \(s_\delta\), and define
+\[
+ \psi_\eta=s_\delta-I_{\delta\eta}I_{\eta\eta}^{-1}s_\eta,
+ \qquad
+ \Delta_{{\rm eff},N}(\eta)=N^{-1/2}
+ \sum_{j=1}^{K_N}\psi_\eta(G_j).
+\tag{U9}
+\]
+For every fixed \(L<\infty\),
+\[
+ \sup_{\eta}\sup_{\|\eta'-\eta\|\le L/\sqrt N}
+ |\Delta_{{\rm eff},N}(\eta')-\Delta_{{\rm eff},N}(\eta)|
+ =o_{P_{\eta,0}}(1).
+\tag{U10}
+\]
+The conclusion also holds under bounded contiguous local alternatives.  The
+empirical calendar information and its Schur complement, evaluated anywhere
+in the same root-\(N\) ball, converge uniformly to \(I_n(\eta)\) and
+\(J_n(\eta)\).  Hence any measurable root-\(N\) null fit may be inserted in
+the standardized efficient central sequence with an \(o_P(1)\) change.
+\end{lemma}
+
+\begin{proof}
+Uniform nondegeneracy makes the projection coefficient in \textup{(U9)} twice
+continuously differentiable with polynomial score envelopes.  By construction,
+\[
+ \EE_{\eta,0}\psi_\eta=0,
+ \qquad \EE_{\eta,0}(\psi_\eta s_\eta^\top)=0.
+\tag{U11}
+\]
+Differentiating the first identity, justified by
+\Cref{lem:uniform-sampled-bin-tail-score-main}, gives
+\[
+ \EE_{\eta,0}(\partial_\eta\psi_\eta)
+ =-\EE_{\eta,0}(\psi_\eta s_\eta^\top)=0.
+\tag{U12}
+\]
+Thus the derivative of \(\Delta_{{\rm eff},N}\) is a normalized stopped sum
+of centred rewards and is \(O_P(1)\) uniformly by
+\Cref{lem:uniform-stopped-renewal-score-main}.  A second-order Taylor expansion
+over a ball of radius \(L/\sqrt N\) has first term \(O_P(N^{-1/2})\); its
+second term is bounded by
+\(N^{-1/2}O_P(N)O(N^{-1})=O_P(N^{-1/2})\).  This proves \textup{(U10)}.
+The stopped LLN applied to score outer products, followed by the same Taylor
+bound and continuity of matrix inversion on the uniformly positive-definite
+set, proves information consistency.  The normalization and the two
+stationary endpoint scores obey the same conclusion: their parameter
+increments are bounded by \(N^{-1/2}\) times a polynomial in
+\(\max(A_N,R_N)\), which is \(O_P(\log N)\) by \textup{(U6)}.  Thus they
+contribute \(o_P(1)\) uniformly to the plug-in difference.  Contiguity
+transfers every null \(o_P(1)\) assertion to bounded local alternatives.
+\end{proof}
+
+\begin{lemma}[Two-point threshold-risk lower bound]
+\label{lem:two-point-threshold-rate-main}
+Fix a collision base \((\eta_0,0)\), hold \(\eta_0\) fixed, and compare
+\(P_{0,N}=P_{\eta_0,0}^{(N)}\) with
+\(P_{1,N}=P_{\eta_0,v_0/\sqrt N}^{(N)}\), where \(v_0>0\).  Let
+\(\mathcal R_{i,N}\) be their unordered rate multisets.  Then
+\[
+ d_{\rm m}(\mathcal R_{0,N},\mathcal R_{1,N})
+ =\sqrt{v_0}\,N^{-1/4},
+\tag{U13}
+\]
+and, for every \(0<a<\sqrt{v_0}/2\),
+\[
+ \liminf_{N\to\infty}\inf_{\widehat{\mathcal R}_N}
+ \max_{i=0,1}P_{i,N}\!\left\{
+ N^{1/4}d_{\rm m}(\widehat{\mathcal R}_N,\mathcal R_{i,N})>a
+ \right\}
+ \ge \Phi_{\rm N}\!\left(
+ -\frac{v_0\sqrt{I_{\delta\delta}(\eta_0)}}2\right)>0.
+\tag{U14}
+\]
+Thus the lower conclusion is pointwise at a fixed base, uses two alternatives
+and threshold loss, and asserts optimality in rate rather than an exact
+minimax-risk theorem over a continuum of local parameters.
+\end{lemma}
+
+\begin{proof}
+The two balls of radius \(aN^{-1/4}\) around the candidates are disjoint by
+\textup{(U13)}.  Assigning an estimate to its nearer candidate therefore
+turns simultaneous success of an estimator into correct testing of
+\(P_{0,N}\) against \(P_{1,N}\).  The LAN likelihood ratio under \(P_{0,N}\)
+converges to
+\[
+ \exp\{v_0Z-\tfrac12v_0^2I_{\delta\delta}(\eta_0)\},
+ \qquad Z\sim\mathcal N(0,I_{\delta\delta}(\eta_0)).
+\tag{U15}
+\]
+Its limit has mean one; mutual contiguity makes the likelihood ratios uniformly
+integrable, so their total-variation distances converge to that of the two
+Gaussian shifts separated by
+\(v_0\sqrt{I_{\delta\delta}(\eta_0)}\).  For any test, its maximum error is at
+least its equal-prior average error, whose limiting infimum is
+\(\Phi_{\rm N}\{-v_0\sqrt{I_{\delta\delta}(\eta_0)}/2\}\).  Taking a
+measurable estimator within \(o(1)\) of the infimum at each \(N\) proves
+\textup{(U14)}.  Strict positivity also follows directly from mutual
+contiguity, but \textup{(U14)} records the quantitative Gaussian bound.
+\end{proof}

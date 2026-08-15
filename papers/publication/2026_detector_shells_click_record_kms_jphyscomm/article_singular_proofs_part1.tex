@@ -61,17 +61,17 @@ click the absence of another click contributes \(S_q(R)\).  The no-click
 event is bounded by \(CN^{m+1}r^N\), uniformly in \(q\), by summing over the
 equilibrium cycle containing the whole window.
 
-The common exponential envelope gives, uniformly in \(q\),
+\Cref{lem:uniform-stopped-renewal-score-main}, applied with
+\(K_N=J-1\), gives uniformly in \(q\),
 \[
  J/N\longrightarrow1/\mu_q,\qquad
  J=N/\mu_q+O_{P_q}(\sqrt N),\qquad
  \max\{A,R,G_1,\ldots,G_{J-1}\}=O_{P_q}(\log N).
 \tag{SL5}
 \]
-The first assertion is the uniform renewal law of large numbers; the second
-follows from the uniform finite-variance renewal CLT or maximal inequality;
-and the last follows by a union bound from \textup{(SL1)}.  The polynomial
-log-tail derivative bound and \textup{(SL5)} imply, for bounded \(h\),
+including for every bounded local triangular array.  Taylor's theorem for
+\(\log\mu_q\), the polynomial log-tail derivative bound, and
+\textup{(SL5)} imply, for bounded \(h\),
 \[
  \log\frac{\mu_q}{\mu_{q+h/\sqrt N}}
  +\log\frac{S_{q+h/\sqrt N}(A)}{S_q(A)}
@@ -87,8 +87,10 @@ Taylor expansion of the complete-gap part of \textup{(SL4)} yields
  h^\top\ddot\ell_q(G_j)h+o_{P_q}(1).
 \tag{SL7}
 \]
-The third-order remainder is uniform because \textup{(SL1)} supplies a
-common integrable polynomial envelope, so its expectation is \(O(N^{-1/2})\).
+The third-order remainder is uniform by the last assertion of
+\Cref{lem:uniform-stopped-renewal-score-main}: after the \(N^{-3/2}\)
+Taylor factor, the stopped sum of the common polynomial envelope is
+\(o_P(1)\).
 Differentiating \(\sum_kg_q(k)=1\), justified by \textup{(SL1)}, gives
 \[
  \EE_q\dot\ell_q(G)=0,\qquad
@@ -96,18 +98,16 @@ Differentiating \(\sum_kg_q(k)=1\), justified by \textup{(SL1)}, gives
  \dot\ell_q(G)\dot\ell_q(G)^\top\}.
 \tag{SL8}
 \]
-The uniform law of large numbers, \textup{(SL5)}, and \textup{(SL8)} turn the
-second term in \textup{(SL7)} into \(-h^\top I(q)h/2+o_P(1)\).
-The stopped i.i.d. score CLT gives
+The stopped Hessian LLN \textup{(U8)} and \textup{(SL8)} turn the second
+term in \textup{(SL7)} into \(-h^\top I(q)h/2+o_P(1)\).  The bounded-
+Lipschitz stopped-score CLT \textup{(U7)} gives
 \[
  \Delta_{N,q}:=N^{-1/2}\sum_{j=1}^{J-1}\dot\ell_q(G_j)
  \Rightarrow\mathcal N\{0,I(q)\}.
 \tag{SL9}
 \]
-All assertions are uniform by the subsequence criterion: every sequence in
-the compact base set has a convergent subsequence, and the common exponential
-and polynomial envelopes give Lindeberg, uniform integrability, endpoint
-control, and the Taylor remainder along it.  Combining
+The cited stopped-renewal lemma proves these assertions jointly and uniformly,
+including under the local triangular arrays.  Combining
 \textup{(SL4)}--\textup{(SL9)} proves \textup{(SL3)}.  Restricting local
 coordinates to a cone changes only the parameter set of the limit experiment.
 \end{proof}
@@ -138,17 +138,18 @@ derivatives, hence of the tail derivatives, vanishes at every \(k\).  The
 distinct polynomial degrees then force both coefficients to be zero.  This
 proves pointwise positive definiteness in \textup{(SC3)}.
 
-On \([\varepsilon,M]\), partial-fraction inversion gives common bounds
+On \([\varepsilon,M]\), partial-fraction inversion gives common absolute
+bounds
 \[
  |\partial_c^a\partial_\delta^b S_{c,\delta}(k)|
  \le C_{a,b}(1+k)^{m_{a,b}}e^{-\varepsilon\Delta\tau k/2}
 \tag{T23}
 \]
-on a fixed neighbourhood with \(c\pm\sqrt\delta>0\).  The corresponding
-log-mass and log-tail derivatives have polynomial bounds; alternatively these
-bounds follow by differentiating the convolution law and conditioning on
-\(W>k\Delta\tau\) or on the sampled absorption bin.  Continuity of
-\(I_2(c)\), dominated by \textup{(T23)}, and compactness now give
+on a fixed neighbourhood with \(c\pm\sqrt\delta>0\).  The relative log-mass
+and log-tail bounds do not follow from \textup{(T23)} alone; they follow from
+the conditional complete-data argument in
+\Cref{lem:uniform-sampled-bin-tail-score-main}, specialized to \(n=2\).
+Continuity of \(I_2(c)\), dominated by that lemma, and compactness now give
 \textup{(SC6)}.  Applying
 \Cref{lem:compact-uniform-stationary-renewal-lan-main} with
 \(q=(c,\delta)\) proves \textup{(SC4)} and the half-plane limit.
@@ -161,9 +162,10 @@ coordinate is
  \qquad \Var(\Delta_{\delta\cdot c,N})\longrightarrow J_2(c).
 \tag{T24}
 \]
-Replacing \(c\) and the information entries by compact-uniform consistent
-null estimators changes the standardized statistic by \(o_P(1)\).  The third
-lemma gives mean \(v\sqrt{J_2(c)}\) under the local alternative.  The
+Replacing \(c\) by the root-\(N\) null recurrence fit and the information
+entries by their empirical versions changes the standardized statistic by
+\(o_P(1)\), by \Cref{lem:efficient-score-plugin-main}.  Le Cam's third lemma
+gives mean \(v\sqrt{J_2(c)}\) under the local alternative.  The
 Neyman--Pearson lemma in the residual one-dimensional Gaussian shift gives
 \textup{(SC8)} and its envelope; the one-sided likelihood-ratio statistic is
 the square of the positive part of the same standardized score.  This is the
@@ -212,12 +214,8 @@ uniformly on bounded collision alternatives.  Because
 \(\{\!\{\widehat c_N\pm\sqrt{\widehat\delta_N}\}\!\}\) satisfies
 \textup{(SC9)}.
 
-Finally compare \(v=0\) and \(v=v_0\).  Their rate multisets are separated
-by \(\sqrt{v_0}N^{-1/4}\), while \textup{(SC4)} makes the two sequences of
-record laws mutually contiguous and gives a nondegenerate finite Gaussian
-likelihood ratio.  If an estimator made the two probabilities in
-\textup{(SC10)} tend to zero for an \(a<\sqrt{v_0}/2\), assigning the record
-to the closer of the two candidate multisets would consistently distinguish
-these contiguous experiments, a contradiction.  This proves
-\textup{(SC10)} and completes the two-state result.
+Finally apply \Cref{lem:two-point-threshold-rate-main} with \(n=2\).  It gives
+both the disjoint-ball reduction and the strictly positive Gaussian testing
+lower bound, and therefore proves \textup{(SC10)}.  This completes the
+two-state result.
 \end{proof}
