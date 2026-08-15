@@ -1,58 +1,95 @@
-Read artifacts/oracle_sprint_A3_referee.md (or
-../../../tools/chatgpt-oracle/sprint/result_A3_referee.md) in full first — it is the
-referee report for DCDS-A and it is correct. Execute its required repairs. Do not add
-new theorems.
+Read artifacts/oracle_sprint_A3_reassess.md in full first. Do not ask for design approval, do not
+run any brainstorming or approval workflow. Proceed directly to editing.
 
-Verdict: Major Revision. It becomes Reject-and-Resubmit if we will not restructure the
-priority narrative, the theorem hierarchy and the core proofs. Two blocks of work:
+THE CROSSING IS CONFIRMED GENUINE. The expert states that Lemma 2.5 really is detached from digit
+structure, that Theorem 2.6 makes exactly the right quantitative statement, and that he sees no
+hidden use of the canonical rank bijection, digit-word legality, the cyclic fold,
+positive/negative realization by raw digits, or the image shift and its decoder. He also accepts
+the sharpness transfer: although the words E_m were first found inside the collision problem, in
+Theorem 2.6 they are used only as bounded coefficient words satisfying the recurrence identities.
+The priority claim survives at roughly 0.82 - he did not find an aperture-linear bound for the
+longest acyclic transient of these overlap graphs, and says it does not follow routinely from
+regularity. Do not weaken, restate or renumber Lemma 2.5 or Theorem 2.6 beyond the two repairs
+below.
 
-(1) PRIORITY — one definite substantive omission. The collision-graph / directed-cycle /
-    invertibility decision used in Theorem 6.2 and Corollary 6.3 belongs to the classical
-    tradition of one-dimensional local codes, tessellation automata, cellular automata,
-    and fiber-product / pair-graph constructions. It CANNOT be presented as a new
-    framework of ours. Cite that tradition accurately and restate Theorem 6.2 /
-    Corollary 6.3 as an application of the classical decision to our setting, keeping as
-    ours only the part that genuinely is.
+TWO STATEMENT REPAIRS. THE SECOND IS A REAL ERROR IN THE PRINTED TEXT AND IS NOT OPTIONAL.
 
-(2) PROOFS — several parameter-uniform estimates and exhaustion steps are compressed to
-    the point where the referee will not sign off. Each of these must be written out in
-    full, and the referee states the consequence if we do not:
-      - Lemma 5.3. If not supplied, Theorem 5.5 and everything downstream — the exact
-        thresholds, the Fischer cover, the Markov order — lose their unified proof and
-        the verdict becomes reject. Include the natural-overlap-graph right-resolving
-        decomposition: two edges from the same source have rank difference h*Q_{m-1}
-        nonzero mod Q_m; the negative-sign chamber is direct, the positive-sign chamber
-        needs the already-proved ratio bound. Also supply the standard two-line step from
-        "a label word of length m-1 has two paths ending at different Fischer states" to
-        "that word is not intrinsically synchronizing": use follower-separatedness to pick
-        a successor belonging to only one terminal state, then use right-resolvingness to
-        exclude splicing the other path.
-      - Lemma 6.7 and Lemma 6.8. Without these, the key two-window exclusion in
-        Theorem 6.9 is not adequately proved and the cubic unbounded theorem is not
-        acceptable. The present text argues by verbal induction; that is not enough.
-      - The cubic root count: the manuscript proves one positive root and one negative
-        root in (-1,0), then simply asserts the remaining two roots are a non-real
-        conjugate pair. Prove it.
-    State explicitly that small apertures r = 2, 3 have no gap between them and the
-    uniform argument (the referee confirms there is none — make the text show it).
+ 1. MAKE THE TERMINAL COEFFICIENT EXPLICIT. In the edge definition the body coefficients lie in
+    [-D,D], but the completing coefficient c of u_m is not required by the statement to lie there.
+    The proof does establish |c| = |k_t| <= K_{U,D}. So each edge is a bounded U-representation of
+    zero over the mixed alphabet [-D,D]^m x [-K_{U,D}, K_{U,D}], not one with every coefficient
+    bounded by D. Insert immediately after the displayed edge condition, in his words:
 
-(3) RESTRUCTURE FOR DCDS-A. The referee says that after (1) and (2) the genuine increment
-    DOES support a DCDS-A paper, and that we should NOT downgrade the venue. The increment
-    is: exact thresholds for ALL quadratic Pisot bases, with exact finite-block onset and
-    Markov order; the special compression and the aperture dichotomy for the simple-Parry
-    arithmetic difference graph; and the exact unbounded future decoding depth on the
-    Bassino cubic family. Rewrite the introduction and the theorem hierarchy so that these
-    three are the headline results, in dynamical-systems language, since DCDS has published
-    finite-type classification of intermediate beta-shifts, follower/predecessor/extender
-    sets for classical beta-shifts, and canonical graph presentations of sofic shifts.
+      "The completing coefficient is unique and necessarily satisfies |c| <= K_{U,D}."
 
-Rules, all mandatory:
- - Compile after EVERY file you finish, not batched at the end.
+    This removes a predictable terminology objection - "bounded representation" must not be
+    readable as asserting |c| <= D.
+
+ 2. ANCHOR THE "EQUIVALENTLY" CLAUSE. AS PRINTED IT IS FALSE. The theorem passes from paths
+    beginning at a vertex with nonzero first coordinate to all overlap chains merely "containing a
+    nonzero exposed coefficient". He supplies an explicit counterexample built from our OWN
+    nonstandard example: take U = (1,2,4,9,...), D = 2, m = 2. The graph has vertices -2,-1,0,1,2
+    with an edge a -> b exactly when a + 2b = 0 mod 4, giving 0 -> 0, 0 -> 2, 2 -> 1, and 1
+    terminal. No directed cycle is reachable from a nonzero vertex, since +-2 lead to +-1 and
+    those are terminal. Yet for every N the chain
+
+      0 -> 0 -> ... -> 0 -> 2 -> 1     (N zero loops)
+
+    terminates, has arbitrarily large total length, and eventually contains a nonzero exposed
+    coefficient. Replace the clause with his corrected formulation:
+
+      "After shifting a chain so that its initial exposed coefficient is nonzero, either it
+      reaches a directed cycle, or it has fewer than C(U,D) m further overlaps."
+
+    VERIFY THE COUNTEREXAMPLE YOURSELF before rewriting - recompute the edge set for that U, D and
+    m and confirm the chain exists and that no cycle is reachable from a nonzero vertex. Add it to
+    the artifact battery as a regression case so the unanchored reading cannot return. If your
+    computation disagrees with his, STOP and report the disagreement rather than editing.
+
+VENUE DOES NOT CHANGE CATEGORY. TAMS becomes somewhat more defensible as an ambitious first
+submission - a referee can no longer accurately summarize the whole manuscript as exact analysis
+of a newly defined cyclic rank-fold, since the paper now contains a quantitative theorem about a
+standard numeration-theoretic relation valid for arbitrary bounded coefficient alphabets and
+independent of the code. But it is not a natural or secure placement, and this is NOT a tier jump.
+ETDS remains the strong natural alternative. Record that in submission_metadata.md without
+improving it, including his residual point that the paper is still 67 pages with 52 numbered
+results while its title and most of its architecture remain centered on the cyclic language-rank
+recoding, so a hostile referee can still ask whether the field-level theorem is large enough
+relative to the total package. Do not retarget and do not inflate the cover letter.
+
+USE HIS FORMULATION OF WHAT THE CROSSING IS, which is narrower than a general claim: the rows are
+classical bounded U-representations of zero, and the aperture-dependent overlap transient is the
+new quantity. Make sure the introduction says that rather than implying a general theorem about
+zero representations.
+
+PRESERVE: (A1) in its Condition-F-free form; (A2)-(A3) and the fixed-system sharpness statement;
+the settled priority paragraph naming Frougny, Berend-Frougny, the classical bounded-zero automata,
+Carton-Sudbery-Yassawi, Ashley, Frougny-Sakarovitch and the classical pair/fiber graphs; the
+approved cautious novelty sentence; the terminology corrections from the previous round; and the
+recorded negative half - that the machinery does not bridge to numerical beta-normalization, the
+beta-transformation, normalization or successor carry propagation, general right-closing maps,
+general synchronized transductions, or a broad class of sliding block codes.
+
+RULES:
+ - Every claim proved at referee standard; numerics are sanity checks, never a substitute.
  - Keep every .tex under 800 lines; split if needed.
- - Final state: latexmk -pdfxe exit 0, zero undefined references, zero undefined citations,
-   zero multiply-defined labels, on a CLEAN rebuild with .aux removed.
- - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts.
- - No revision marks: never write "revised", "corrected", "in this version", or refer to
-   earlier drafts.
- - Report at the end: which proofs you completed and which you had to weaken, the priority
-   restatement, page count before/after, and compile/test results.
+ - Alternating clean rebuild with .aux removed: latexmk -pdfxe exit 0, zero undefined
+   references, citations and multiply-defined labels in both documents.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS (LF) if artifacts change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the paper
+   directory. Do NOT delete build logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+ALSO: verify every DOI in the bibliography against Crossref, and every entry without a DOI by
+title and author, comparing the returned title and lead author with what the entry claims. A DOI
+that merely resolves is not enough - sibling papers in this family were found to contain one
+fabricated entry and ten DOIs pointing at entirely different articles. Correct what is
+demonstrably wrong, delete only what is demonstrably fabricated, never invent a replacement, and
+list anything unconfirmable in artifacts/literature_check.md with the searches tried. If an index
+is rate-limited, say so and note that the intended cross-source redundancy was not achieved.
+
+REPORT: your independent recomputation of the counterexample; the two repairs as typeset; the
+regression case added; the metadata changes; the full bibliography verification table with any
+corrections, deletions and unverified entries; page and theorem counts before and after; compile
+and test results.
