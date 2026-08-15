@@ -776,3 +776,49 @@ The Semantic Scholar Graph API returned HTTP 429 during a direct JSON follow-up
 for the Charlier--Leroy--Rigo record; the indexed Semantic Scholar result and
 the ORBilu full-text record were available. OpenAlex had exhausted its daily
 budget. These service failures were not treated as negative evidence.
+
+## Published-register and multidimensional follow-up (2026-08-15)
+
+Crossref DOI `10.1016/j.tcs.2023.114144` was checked again before the final
+positioning pass. It returns Seda Albayrak and Jason P. Bell, the exact title
+*Quantitative estimates for the size of an intersection of sparse automatic
+sets*, *Theoretical Computer Science* 977 (2023), article 114144. The
+bibliography already cited this published article as the primary reference;
+it did not cite the arXiv preprint alone, so no bibliographic-entry change was
+needed.
+
+The claimed journal register required one correction. Mignotte's 1978
+*Intersection des images de certaines suites recurrentes lineaires* and
+Ilie's 1994 *On a conjecture about slender context-free languages* are both
+published in *Theoretical Computer Science*, as recorded by Crossref and by
+the manuscript. Latteux--Thierrin's 1983 *Semi-discrete context-free
+languages* is not: Crossref DOI `10.1080/00207168308803373` places it in
+*International Journal of Computer Mathematics* 14, no. 1, pp. 3--18, which
+matches `references.tex`. The revised comparison therefore treats
+Albayrak--Bell as the natural published sparse-language benchmark without
+making the inaccurate claim that all three older inputs appeared in TCS.
+
+The full Albayrak--Bell paper was re-read for its multidimensional scope.
+Theorem 1.1 applies to sparse automatic subsets of \(\mathbb N^d\) for every
+positive integer \(d\), and Theorem 4.1 gives the explicit automaton-state
+bound. Section 1 defines a \(d\)-dimensional automatic set through a finite
+automaton over the synchronous padded alphabet \((\Sigma_k)^d\). Section 2
+defines sparsity by requiring the corresponding tuple language to be sparse
+regular; Proposition 2.1 allows general polynomial-growth bounded regular
+languages, not only slender ones. Thus the result is broader than a
+one-dimensional reading: besides the exact regular integer-base overlap with
+Theorem 3.2, it covers regular sparse, including regular poly-slender,
+integer-base tuple settings and does so quantitatively.
+
+This extra dimension does not cover more of the nonregular content of
+Theorem 3.2. A product or coordinate recoding is an Albayrak--Bell input only
+if its padded synchronous tuple language is itself sparse regular, and their
+coordinate evaluation remains ordinary integer-base valuation. A genuinely
+nonregular paired-loop representation language therefore does not become an
+automatic set merely by being described with several coordinates; recovering
+the original concatenated positional value would additionally require a map
+outside the coordinatewise valuation in their theorem. Their result likewise
+does not settle nonregular poly-slender context-free representation
+languages. The revised introduction and Remark 3.3 state both the broader
+regular scope and this remaining interface boundary, while retaining the
+absence of a quantitative bound as a limitation of Theorem 3.2.
