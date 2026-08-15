@@ -48,15 +48,16 @@
 
 
 
-> **TICK 37 — 中途查了推广 agent 的活,查出第三个可移植性地雷**。池子空闲;推广仍在跑(日志 2.6 MB,已动 7 篇 76 个文件);内存 1.13 GB、无孤儿;无可收割,也不能派工(A2 在它手里)。
+> **TICK 37 补 — 推广完成,八篇清单全部零失败;A6 的重心确认换对了**。
 >
-> 没有干等,而是**中途抽查**了它的改动范围,先确认没跑偏:七篇全覆盖,**没有碰任何正文 `.tex`**,符合任务书。
+> 八篇清单我逐一验过:A2 13、A3 11、A4 8、A5 15、A6 15、A7 15、A8 10、A9 5,**均零失败**;八篇全部有 `.gitattributes`,从仓库根 `git check-attr` 确认 **`eol: lf` 全部生效**;路径统一相对 `artifacts/`,统一用 `cd artifacts && sha256sum -c SHA256SUMS`;每篇都有 `artifacts/REPRODUCE.md`。**原先五篇根本没有清单。**
 >
-> 抽查时一处 diff 很可疑:`quadratic_pisot_threshold_verification.txt | Bin 10942 -> 5941 bytes` —— 归档输出**字节近乎减半**,而删一行 `elapsed_seconds` 只该少约 30 字节;git 还标了 `Bin`。追下去发现是反的:行数由 **77 增到 92**,内容没丢。**减半的原因是旧文件是 UTF-16 LE 带 BOM(文件头 `fffe`)、CRLF 换行**,新文件是纯 ASCII。
+> 过程中我自己误判两次,都在报出前查清:一次是把 `git check-attr` 的路径给错(在论文目录里传仓库相对路径),从根目录重查八篇全是 `lf`;一次是 `grep -cU $'$'` 数出八篇清单全含 CR —— 这与"清单能通过校验"矛盾(行尾带 CR 会让文件名解析失败),改用 `cat -A` 与 `file` 复核,行尾是 `$` 无 `^M`、`file` 报纯 ASCII,**是 grep 在该 shell 失灵,不是文件有问题**。
 >
-> 这是我此前没识别出的**第三个地雷**:Windows PowerShell 5.1 的 `>` 与 `Out-File` 默认写 UTF-16,而**审稿人在 Linux 上 `cat`/`grep` 只会得到乱码**,git 也会把归档输出当二进制。已扫全仓:UTF-16 归档输出**现存 0 个**,agent 已顺手全部规范化 —— 它做的比我要求的多,且方向正确。已把这条写进 `SUBMISSION_PACKAGE.md` 自检项(用 `file -b` 查),因为 PowerShell 的默认行为会让它反复出现。
+> **A6 的重心确认换对了。** 审稿人把稿件分了四层,并点名只有**第四层**有发表价值:临界点 zeta 方程、$2m/\mu_C$ 与 $4m/\mu_C$ 常数、均匀共存律、非暴露斜率局部下界、二维 LDP、严格非活跃有限素数支撑转移 —— 其中"临界有限尺寸常数与非暴露斜率构造"他明确说具有发表价值;而标题摘要原来的第一主轴"all-real pressure and first-order freezing transition"**在概念与公式上均已有重要先例**。核查修复后的稿件:标题已改为 **Arithmetic Criticality and Large Deviations for Fibonacci Partitions and Finite-Window Fibers**(旧主轴从标题消失),摘要**先讲让出、再讲存活** —— 开篇即写 Sidorov–Vershik 的频数就是同一组系数、压力是黄金分割 Bernoulli 卷积 $L^q$ 谱的仿射归一化、正 $q$ 归 Lau–Ngai、全实谱与负相变归 Feng–Olivier 与 Feng,"我们记录精确字典并在 Fibonacci 分拆坐标下**复现**这些结果"。
 >
-> 至此归档可复现性的四道关卡齐了:**计时不确定性、CRLF/LF、路径与目录约定、UTF-16 编码**。
+> **未确认项**:七篇的两次运行字节一致仍在后台自跑中,**结果出来前不提交** —— 上一轮 agent 报"12/12 matching"而实际 11/12,这条不能采信自述。
+
 
 
 
