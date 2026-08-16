@@ -7241,3 +7241,2019 @@ index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6
  \bibitem{Zeckendorf1972}
  E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
 
+codex
+The rebuilt `main.aux` now proves the requested equality: `25` printed keys and `25` source-cited keys, with both `printed − cited` and `cited − printed` empty. Both final logs are also free of undefined references, undefined citations, and multiply defined labels; the article remains 30 pages and the cover letter remains 1 page.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$checks = @(@('"'main.pdf',(pdftotext -enc UTF-8 'main.pdf' - | Out-String)), @('cover_letter.pdf',(pdftotext -enc UTF-8 'cover_letter.pdf' - | Out-String))); foreach ("'$item in $checks) { $name = $item[0]; $body = $item[1]; $citationMarkers = [regex]::Matches($body, '"'\\?\\?|\\[\\?\\]'); "'$filenames = [regex]::Matches($body, '"'(?i)\\b["'^'"\\s/\\\\]+\\.(tex|bib|aux|log|out|xdv|pdf|py|md|txt|fls|fdb_latexmk)\\b'); "'$commands = [regex]::Matches($body, '"'(?i)\\\\(?:cite|ref|eqref|label|input|include|bibitem|begin|end|section|subsection|operatorname|mathrm|textit|textbf)\\b|\\b(?:latexmk|xelatex|pdftotext)\\b'); \""'$name CITATION_MARKERS=$($citationMarkers.Count) FILENAMES=$($filenames.Count) PRINTED_COMMAND_NAMES=$($commands.Count)"; if ($citationMarkers.Count) { $citationMarkers.Value | Sort-Object -Unique }; if ($filenames.Count) { $filenames.Value | Sort-Object -Unique }; if ($commands.Count) { $commands.Value | Sort-Object -Unique } }' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+ succeeded in 414ms:
+main.pdf CITATION_MARKERS=0 FILENAMES=0 PRINTED_COMMAND_NAMES=0
+cover_letter.pdf CITATION_MARKERS=0 FILENAMES=0 PRINTED_COMMAND_NAMES=0
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+codex
+The text extracted directly from both PDFs has zero `??`/`[?]` markers, zero filename-like tokens, and zero leaked LaTeX/build command names. I’m now running the complete artifact suite: both `test_*.py` files through discovery and all three `verify*.py` programs, each against its recorded output.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python -m unittest discover -s artifacts -p "test_*.py" -v' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python artifacts/verify_metallic_threshold.py --output artifacts/metallic_threshold_verification.txt' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python artifacts/verify_quadratic_pisot_threshold.py --output artifacts/quadratic_pisot_threshold_verification.txt' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python artifacts/verify_simple_parry_causal.py --output artifacts/simple_parry_causal_verification.txt' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+ succeeded in 1037ms:
+Simple-Parry causal-obstruction verification
+Exact integer arithmetic; difference alphabet [-d,d].
+
+Parry recurrence battery:
+  t=(1, 1, 1): [1, 2, 4, 7, 13, 24, 44] [PASS]
+  t=(1, 0, 1): [1, 2, 3, 4, 6, 9, 13] [PASS]
+  t=(2, 1): [1, 3, 7, 17, 41, 99, 239] [PASS]
+
+Consecutive colex-rank battery (m=1,...,6):
+  30 finite languages checked
+
+Toeplitz / collision-graph equivalence battery:
+  t=(1, 1, 1), m=4: bad counts [2, 0, 0, 0]
+  t=(1, 0, 1), m=4: bad counts [12, 4, 2, 0]
+  t=(2, 1), m=3: bad counts [2, 0, 0, 0]
+  12 path-length comparisons checked
+
+Causal-completeness and aperture-two classification battery:
+  t=(1, 1, 1): c=2, ('local_bijection', 1, None) [PASS]
+  t=(2, 0, 1): c=1, ('two_output_inverse', 2, None) [PASS]
+  t=(1, 0, 1): c=1, ('constant_branch_pair', None, (1,)) [PASS]
+  t=(2, 1): c=1, ('two_output_inverse', 2, None) [PASS]
+  t=(2, 2): c=2, ('constant_branch_pair', None, (2,)) [PASS]
+  t=(1, 1, 1), m=4: {'injective': True, 'causal_length': 2, 'periodic_witness': None, 'zero_predecessor_is_unique': True, 'state_bound': 26} [PASS]
+  t=(1, 0, 1), m=3: {'injective': False, 'causal_length': None, 'periodic_witness': (1, 1, -1, -1), 'zero_predecessor_is_unique': True, 'state_bound': 8} [PASS]
+  t=(1, 0, 1), m=4: {'injective': True, 'causal_length': 4, 'periodic_witness': None, 'zero_predecessor_is_unique': True, 'state_bound': 26} [PASS]
+
+Pisot-hypothesis removal battery:
+  d_beta(1)=2002 0^infinity: max nondominant modulus=1.015735356177, m=2 causal=2 [PASS]
+
+Unbounded cubic causal-depth battery:
+  n=4, m=3: causal=3, terminal paths=(2, 0) [PASS]
+  n=5, m=4: causal=4, terminal paths=(2, 0) [PASS]
+  n=6, m=5: causal=5, terminal paths=(2, 0) [PASS]
+
+Fixed binary cubic sharpness battery:
+  m=4: causal=3, terminal paths=(2, 0) [PASS]
+  m=5: causal=3, terminal paths=(2, 0) [PASS]
+  m=6: causal=5, terminal paths=(2, 0) [PASS]
+  m=7: causal=5, terminal paths=(2, 0) [PASS]
+  m=8: causal=7, terminal paths=(2, 0) [PASS]
+  m=9: causal=7, terminal paths=(2, 0) [PASS]
+  m=10: causal=9, terminal paths=(2, 0) [PASS]
+
+p-bonacci unbounded-separation battery:
+  p=3: {'q_p': 7, 'q_p1': 13, 'bounded_multiple_order': 3, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+  p=4: {'q_p': 15, 'q_p1': 29, 'bounded_multiple_order': 4, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+  p=5: {'q_p': 31, 'q_p1': 61, 'bounded_multiple_order': 5, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+  p=6: {'q_p': 63, 'q_p1': 125, 'bounded_multiple_order': 6, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+  p=7: {'q_p': 127, 'q_p1': 253, 'bounded_multiple_order': 7, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+  p=8: {'q_p': 255, 'q_p1': 509, 'bounded_multiple_order': 8, 'one_output_bad': 2, 'two_output_bad': 0} [PASS]
+
+Cubic reverse-mismatch battery:
+  d_beta(1)=1010^infinity, m=4: {'bounded_multiple_order': 3, 'counts': [12, 4, 2, 0], 'positive_representatives': [6, 2, 1, 0], 'aperture_2_periodic_collision': True, 'aperture_3_periodic_collision': True} [PASS]
+
+SUMMARY: 0 failures
+
+ succeeded in 4512ms:
+test_aperture_two_duality_and_exact_aperture_three_separation (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_block_counts_detect_only_the_predicted_two_window_obstructions (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_critical_extremal_map_has_one_double_periodic_fiber (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_exact_threshold_loci (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_finite_block_injectivity_begins_exactly_at_the_aperture (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_minimal_polynomial_classification_covers_both_conjugate_signs (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_nearest_multiple_proof_obligations_in_both_chambers (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_nearest_multiple_separation_in_both_parameter_chambers (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_optimal_causal_decoder_lengths_are_two_and_three (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_parry_language_rank_is_a_consecutive_interval (test_quadratic_pisot_threshold.QuadraticPisotThresholdTests) ... ok
+test_aperture_two_has_exact_three_regime_classification (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_colex_rank_is_consecutive_on_simple_parry_languages (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_collision_graph_paths_equal_toeplitz_bad_blocks (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_collision_theorems_do_not_require_the_pisot_hypothesis (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_companion_polynomial_has_minimal_bounded_multiple_order (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_cubic_family_count_recurrence_and_extremal_paths (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_cubic_family_has_the_claimed_parry_word_and_factorization (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_cubic_family_has_unbounded_exact_causal_lengths (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_cubic_family_terminal_path_counts_match_the_classification (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_fixed_theta_terminal_words_have_the_exact_obstruction_counts (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_fixed_theta_words_satisfy_the_cubic_recurrence_and_congruences (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_gamma_aperture_three_has_a_period_four_collision (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_gamma_aperture_two_has_a_constant_collision (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_gamma_has_exact_causal_length_four_at_aperture_four (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_gamma_root_geometry_is_pisot (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_gamma_three_output_witness_dies_at_fourth_window (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_injective_folds_have_finite_causal_length_within_state_bound (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_noninjectivity_has_a_bounded_periodic_collision_witness (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_p_bonacci_family_has_causal_length_two (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_p_bonacci_roots_are_pisot_and_have_the_claimed_real_sign_parity (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_quadratic_aperture_two_cases_are_recovered (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+test_simple_parry_count_recurrences (test_verify_simple_parry_causal.SimpleParryCausalTests) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 4.067s
+
+OK
+
+ succeeded in 6293ms:
+Metallic threshold finite verification
+Model: beta_A=(A+sqrt(A^2+4))/2, integer A>=1
+Output words are encoded by canonical valuation residues modulo Q_m.
+
+Block-language battery (entry is |L_m| / raw-block count):
+  A=1, beta=1.618033988750: m=2: 7/8 [N]; m=3: 32/32 [I]; m=4: 128/128 [I]; m=5: 512/512 [I]
+  A=2, beta=2.414213562373: m=2: 27/27 [I]; m=3: 243/243 [I]; m=4: 2187/2187 [I]; m=5: 19683/19683 [I]
+  A=3, beta=3.302775637732: m=2: 64/64 [I]; m=3: 1024/1024 [I]; m=4: 16384/16384 [I]; m=5: 262144/262144 [I]
+  A=4, beta=4.236067977500: m=2: 125/125 [I]; m=3: 3125/3125 [I]; m=4: 78125/78125 [I]; m=5: 1953125/1953125 [I]
+  A=5, beta=5.192582403567: m=2: 216/216 [I]; m=3: 7776/7776 [I]; m=4: 279936/279936 [I]
+  A=6, beta=6.162277660168: m=2: 343/343 [I]; m=3: 16807/16807 [I]; m=4: 823543/823543 [I]
+  [I] injective finite-block map; [N] noninjective.
+
+Observed nontrivial thresholds over all tested apertures:
+  A=1: observed m*=3, predicted m*=3
+  A=2: observed m*=2, predicted m*=2
+  A=3: observed m*=2, predicted m*=2
+  A=4: observed m*=2, predicted m*=2
+  A=5: observed m*=2, predicted m*=2
+  A=6: observed m*=2, predicted m*=2
+
+Extended n=m+1 block-count battery:
+  A=1, m=3, n=4: 64 / 64
+  A=1, m=4, n=5: 256 / 256
+  A=1, m=5, n=6: 1024 / 1024
+  A=2, m=2, n=3: 81 / 81
+  A=2, m=3, n=4: 729 / 729
+  A=2, m=4, n=5: 6561 / 6561
+  A=3, m=2, n=3: 256 / 256
+  A=3, m=3, n=4: 4096 / 4096
+  A=3, m=4, n=5: 65536 / 65536
+  A=4, m=2, n=3: 625 / 625
+  A=4, m=3, n=4: 15625 / 15625
+  A=4, m=4, n=5: 390625 / 390625
+
+Golden block-bijection identity battery:
+  A=1, m=3, n=3: 32 / 32
+  A=1, m=3, n=4: 64 / 64
+  A=1, m=4, n=4: 128 / 128
+  A=1, m=4, n=5: 256 / 256
+  A=1, m=5, n=5: 512 / 512
+  A=1, m=5, n=6: 1024 / 1024
+  A=1, m=6, n=6: 2048 / 2048
+  A=1, m=6, n=7: 4096 / 4096
+
+Periodic-point / zeta-coefficient battery (n=1,...,6):
+  A=1, m=2: got=[1, 3, 7, 15, 31, 63]; expected=[1, 3, 7, 15, 31, 63]
+  A=2, m=2: got=[3, 9, 27, 81, 243, 729]; expected=[3, 9, 27, 81, 243, 729]
+  A=3, m=2: got=[4, 16, 64, 256, 1024, 4096]; expected=[4, 16, 64, 256, 1024, 4096]
+  A=4, m=2: got=[5, 25, 125, 625, 3125, 15625]; expected=[5, 25, 125, 625, 3125, 15625]
+
+Expected obstruction witness:
+  A=1, m=2: raw periodic points 0^Z and 1^Z both map to (00)^Z.
+  expected obstruction cases confirmed: 1
+  predicted-injective cases searched explicitly: 21
+
+SUMMARY: 0 failures / 0 counterexamples
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+ succeeded in 32772ms:
+Quadratic-Pisot Parry-rank fold verification
+Families: x^2-a*x-b (a>=b>=1) and x^2-a*x+b (a>=3, 1<=b<=a-2)
+Exact integer arithmetic; output blocks are encoded by canonical Parry ranks modulo Q_m.
+
+Parry-language rank battery: 210 cases checked
+
+Threshold and block-language battery (n=m):
+  x^2-1x-1    beta=1.618033988750 m*=3  m=2:7/8[N]; m=3:32/32[I]; m=4:128/128[I]
+  x^2-2x-1    beta=2.414213562373 m*=2  m=2:27/27[I]; m=3:243/243[I]; m=4:2187/2187[I]
+  x^2-2x-2    beta=2.732050807569 m*=3  m=2:26/27[N]; m=3:243/243[I]; m=4:2187/2187[I]
+  x^2-3x-1    beta=3.302775637732 m*=2  m=2:64/64[I]; m=3:1024/1024[I]; m=4:16384/16384[I]
+  x^2-3x-2    beta=3.561552812809 m*=2  m=2:64/64[I]; m=3:1024/1024[I]; m=4:16384/16384[I]
+  x^2-3x-3    beta=3.791287847478 m*=3  m=2:63/64[N]; m=3:1024/1024[I]; m=4:16384/16384[I]
+  x^2-4x-1    beta=4.236067977500 m*=2  m=2:125/125[I]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-4x-2    beta=4.449489742783 m*=2  m=2:125/125[I]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-4x-3    beta=4.645751311065 m*=2  m=2:125/125[I]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-4x-4    beta=4.828427124746 m*=3  m=2:124/125[N]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-5x-1    beta=5.192582403567 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-5x-2    beta=5.372281323269 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-5x-3    beta=5.541381265149 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-5x-4    beta=5.701562118716 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-5x-5    beta=5.854101966250 m*=3  m=2:215/216[N]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-6x-1    beta=6.162277660168 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-6x-2    beta=6.316624790355 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-6x-3    beta=6.464101615138 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-6x-4    beta=6.605551275464 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-6x-5    beta=6.741657386774 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-6x-6    beta=6.872983346207 m*=3  m=2:342/343[N]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-3x+1    beta=2.618033988750 m*=3  m=2:26/27[N]; m=3:243/243[I]; m=4:2187/2187[I]
+  x^2-4x+1    beta=3.732050807569 m*=3  m=2:63/64[N]; m=3:1024/1024[I]; m=4:16384/16384[I]
+  x^2-4x+2    beta=3.414213562373 m*=2  m=2:64/64[I]; m=3:1024/1024[I]; m=4:16384/16384[I]
+  x^2-5x+1    beta=4.791287847478 m*=3  m=2:124/125[N]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-5x+2    beta=4.561552812809 m*=2  m=2:125/125[I]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-5x+3    beta=4.302775637732 m*=2  m=2:125/125[I]; m=3:3125/3125[I]; m=4:78125/78125[I]
+  x^2-6x+1    beta=5.828427124746 m*=3  m=2:215/216[N]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-6x+2    beta=5.645751311065 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-6x+3    beta=5.449489742783 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-6x+4    beta=5.236067977500 m*=2  m=2:216/216[I]; m=3:7776/7776[I]; m=4:279936/279936[I]
+  x^2-7x+1    beta=6.854101966250 m*=3  m=2:342/343[N]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-7x+2    beta=6.701562118716 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-7x+3    beta=6.541381265149 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-7x+4    beta=6.372281323269 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-7x+5    beta=6.192582403567 m*=2  m=2:343/343[I]; m=3:16807/16807[I]; m=4:823543/823543[I]
+  x^2-8x+1    beta=7.872983346207 m*=3  m=2:511/512[N]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+  x^2-8x+2    beta=7.741657386774 m*=2  m=2:512/512[I]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+  x^2-8x+3    beta=7.605551275464 m*=2  m=2:512/512[I]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+  x^2-8x+4    beta=7.464101615138 m*=2  m=2:512/512[I]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+  x^2-8x+5    beta=7.316624790355 m*=2  m=2:512/512[I]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+  x^2-8x+6    beta=7.162277660168 m*=2  m=2:512/512[I]; m=3:32768/32768[I]; m=4:2097152/2097152[I]
+
+Extended block battery (n=m+1) on boundary and interior representatives:
+  x^2-1x-1, m=3, n=4: 64/64
+  x^2-1x-1, m=4, n=5: 256/256
+  x^2-4x-4, m=3, n=4: 15625/15625
+  x^2-4x-4, m=4, n=5: 390625/390625
+  x^2-6x-3, m=2, n=3: 2401/2401
+  x^2-6x-3, m=3, n=4: 117649/117649
+  x^2-6x-3, m=4, n=5: 5764801/5764801
+  x^2-3x+1, m=3, n=4: 729/729
+  x^2-3x+1, m=4, n=5: 6561/6561
+  x^2-6x+1, m=3, n=4: 46656/46656
+  x^2-6x+1, m=4, n=5: 1679616/1679616
+  x^2-6x+3, m=2, n=3: 1296/1296
+  x^2-6x+3, m=3, n=4: 46656/46656
+  x^2-6x+3, m=4, n=5: 1679616/1679616
+
+Exceptional two-window periodic-point battery (n=1,...,6):
+  x^2-1x-1: got=[1, 3, 7, 15, 31, 63]; expected=[1, 3, 7, 15, 31, 63]
+  x^2-4x-4: got=[4, 24, 124, 624, 3124, 15624]; expected=[4, 24, 124, 624, 3124, 15624]
+  x^2-3x+1: got=[2, 8, 26, 80, 242, 728]; expected=[2, 8, 26, 80, 242, 728]
+  x^2-7x+1: got=[6, 48, 342, 2400, 16806, 117648]; expected=[6, 48, 342, 2400, 16806, 117648]
+
+Aperture-two chamber-duality and aperture-three separation battery:
+  15 paired chambers checked: identical at m=2, exact separation at m=3
+
+Optimal causal-length and exact finite-block-onset battery:
+  12 parameter/aperture pairs checked: causal lengths 2/3 and delta=m
+
+Critical periodic-fiber battery:
+  24 parameter/period pairs checked: one double fiber, all others singleton
+
+Nearest-multiple separation battery:
+  15050 exact distances checked in both chambers
+
+Nearest-multiple proof-obligation battery:
+  1483 exact branch tables checked
+
+Counterexample search domain:
+  negative conjugate: 1<=a<=6, 1<=b<=a, m=2,3,4
+  positive conjugate: 3<=a<=8, 1<=b<=a-2, m=2,3,4
+  parameter pairs searched: 42
+SUMMARY: 0 failures / 0 unexpected collisions
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+codex
+All artifact checks passed: `32/32` unit tests and all three standalone verifiers, each with zero failures. The verifier reports remained deterministic; I’m updating only the literature audit’s checksum in `artifacts/SHA256SUMS`, preserving LF endings, then I’ll validate every manifest entry and run one final scoped diff/status audit.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short -- .; git diff --name-only -- artifacts; $hash = (Get-FileHash -Algorithm SHA256 '"'artifacts\\literature_check.md').Hash.ToLowerInvariant(); \"LITERATURE_SHA256="'$hash"; $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path '"'artifacts\\SHA256SUMS')); \"SHA256SUMS_CR_BYTES=\" + (("'$bytes | Where-Object { $_ -eq 13 }).Count); "SHA256SUMS_LF_BYTES=" + (($bytes | Where-Object { $_ -eq 10 }).Count)' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+ succeeded in 398ms:
+ M artifacts/literature_check.md
+ M sections/bibliography.tex
+papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+LITERATURE_SHA256=3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb
+SHA256SUMS_CR_BYTES=0
+SHA256SUMS_LF_BYTES=11
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+apply patch
+patch: completed
+D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds\artifacts\SHA256SUMS
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+index 8465e210944d1aa4807861812102be51db49de25..a676e24bacb7bc4ac3b21918b932cc7f872aa1d3
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+@@ -1,4 +1,4 @@
+-d1b80657a1d9f272fc96181cab1e616899e5992f22c306da0a08a470e19ceaa2  literature_check.md
++3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb  literature_check.md
+ 6fe427aed7354bcd764800eb34001f24cc33e913b59621a00f98d0fb1dff9d6b  metallic_threshold_verification.txt
+ eff534633f72711004b3a31acc1601ac6800ef5d2aef706ca3733e46b48e0800  oracle_sprint_A3_structure_value.md
+ abc7b03d45acf170494e6f0bb769191fc048c88acda5b639b03d6001136a6cf5  quadratic_pisot_threshold_verification.txt
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+index 8465e210944d1aa4807861812102be51db49de25..a676e24bacb7bc4ac3b21918b932cc7f872aa1d3
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+@@ -1,4 +1,4 @@
+-d1b80657a1d9f272fc96181cab1e616899e5992f22c306da0a08a470e19ceaa2  literature_check.md
++3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb  literature_check.md
+ 6fe427aed7354bcd764800eb34001f24cc33e913b59621a00f98d0fb1dff9d6b  metallic_threshold_verification.txt
+ eff534633f72711004b3a31acc1601ac6800ef5d2aef706ca3733e46b48e0800  oracle_sprint_A3_structure_value.md
+ abc7b03d45acf170494e6f0bb769191fc048c88acda5b639b03d6001136a6cf5  quadratic_pisot_threshold_verification.txt
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'sha256sum -c SHA256SUMS; $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path '"'SHA256SUMS')); \"CR_BYTES=\" + (("'$bytes | Where-Object { $_ -eq 13 }).Count); "LF_BYTES=" + (($bytes | Where-Object { $_ -eq 10 }).Count)' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds\artifacts
+ succeeded in 215ms:
+literature_check.md: OK
+metallic_threshold_verification.txt: OK
+oracle_sprint_A3_structure_value.md: OK
+quadratic_pisot_threshold_verification.txt: OK
+REPRODUCE.md: OK
+simple_parry_causal_verification.txt: OK
+test_quadratic_pisot_threshold.py: OK
+test_verify_simple_parry_causal.py: OK
+verify_metallic_threshold.py: OK
+verify_quadratic_pisot_threshold.py: OK
+verify_simple_parry_causal.py: OK
+CR_BYTES=0
+LF_BYTES=11
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+index 8465e210944d1aa4807861812102be51db49de25..a676e24bacb7bc4ac3b21918b932cc7f872aa1d3
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+@@ -1,4 +1,4 @@
+-d1b80657a1d9f272fc96181cab1e616899e5992f22c306da0a08a470e19ceaa2  literature_check.md
++3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb  literature_check.md
+ 6fe427aed7354bcd764800eb34001f24cc33e913b59621a00f98d0fb1dff9d6b  metallic_threshold_verification.txt
+ eff534633f72711004b3a31acc1601ac6800ef5d2aef706ca3733e46b48e0800  oracle_sprint_A3_structure_value.md
+ abc7b03d45acf170494e6f0bb769191fc048c88acda5b639b03d6001136a6cf5  quadratic_pisot_threshold_verification.txt
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+codex
+The checksum manifest now validates all `11/11` entries and contains zero CR bytes. I’m at the final evidence pass: confirming only the three permitted files changed, no revision markup or TeX sentinels exist, the PDFs/logs remain clean, the `main.aux`/source key sets still match, and neither `references.bib` nor any oracle artifact was touched.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "git diff --check -- .; \"CHANGED_FILES:\"; git status --short -- .; \"OUT_OF_SCOPE_OR_PROTECTED_DIFFS:\"; git diff --name-only -- references.bib 'artifacts/oracle_*.md'; \"REMOVED_KEYS_STILL_IN_PRINTED_BIB:\"; Select-String -Path 'sections\\bibliography.tex' -Pattern 'Ashley1988|Ashley1996|BaakeGrimm2013|Berstel2001|BertheFrougnyRigoSakarovitch2019|DrmotaTichy1997|Frougny1992|FrougnySteiner2008|Gray2011|Kalle2014|KuipersNiederreiter1974|Moody2000|MorseHedlund1940|Queffelec2010|Schmidt1980|Walters1982'; \"REVISION_MARKS_OR_SENTINELS:\"; Get-ChildItem -Recurse -File -Filter '*.tex' | Select-String -Pattern '\\\\iffalse|\\\\endinput|\\\\added\\b|\\\\deleted\\b|\\\\replaced\\b|\\\\todo\\b|\\\\color\\{red\\}|\\\\textcolor\\{red\\}'; "'$sourceFiles = Get-ChildItem -Recurse -File -Filter '"'*.tex' | Where-Object { "'$_.FullName -notmatch '"'\\\\sections\\\\bibliography\\.tex"'$'"' }; "'$sourceText = ($sourceFiles | ForEach-Object { Get-Content -Raw $_.FullName }) -join "`n"; $cited = [regex]::Matches($sourceText, '"'\\\\cite(?:\\[["'^'"\\]]*\\])?\\{(["'^}]*)'"\\}', 'Singleline') | ForEach-Object { "'$_.Groups[1].Value -split '"',' } | ForEach-Object { "'$_.Trim() } | Where-Object { $_ } | Sort-Object -Unique; $printed = [regex]::Matches((Get-Content -Raw '"'main.aux'), '\\\\bibcite\\{(["'^}]+)'"\\}') | ForEach-Object { "'$_.Groups[1].Value } | Sort-Object -Unique; "KEY_SET_AUDIT: printed=$($printed.Count) cited=$($cited.Count) printed_not_cited=$(($printed | Where-Object { $_ -notin $cited }).Count) cited_not_printed=$(($cited | Where-Object { $_ -notin $printed }).Count)"; $logHits = Select-String -Path '"'main.log','cover_letter.log' -Pattern 'Citation .* undefined|Reference .* undefined|undefined citations|undefined references|multiply[- ]defined|multiply defined labels' -CaseSensitive:"'$false; "LOG_PROHIBITED_WARNING_COUNT=$($logHits.Count)"; foreach ($pdf in @('"'main.pdf','cover_letter.pdf')) { "'$body = pdftotext -enc UTF-8 $pdf - | Out-String; $bad = [regex]::Matches($body, '"'\\?\\?|\\[\\?\\]|(?i)\\b["'^'"\\s/\\\\]+\\.(tex|bib|aux|log|out|xdv|pdf|py|md|txt|fls|fdb_latexmk)\\b|(?i)\\\\(?:cite|ref|eqref|label|input|include|bibitem|begin|end|section|subsection|operatorname|mathrm|textit|textbf)\\b|(?i)\\b(?:latexmk|xelatex|pdftotext)\\b'); "'$pages = (pdfinfo $pdf | Select-String '"'"'^Pages:'"').Line -replace '"'^Pages:'"\\s*',''; \""'$pdf pages=$pages pdf_text_prohibited_count=$($bad.Count)" }; "AUDIT_SECTION_LINE:"; Select-String -Path '"'artifacts\\literature_check.md' -Pattern '"'^## Post-revision orphan-reference cleanup$'"'; "'$shaBytes = [System.IO.File]::ReadAllBytes((Resolve-Path '"'artifacts\\SHA256SUMS')); \"SHA256SUMS_CR_BYTES=\" + (("'$shaBytes | Where-Object { $_ -eq 13 }).Count)' in D:\omega\automath\papers\publication\2026_cyclic_rank_thresholds_quadratic_simple_parry_etds
+ succeeded in 2039ms:
+CHANGED_FILES:
+ M artifacts/SHA256SUMS
+ M artifacts/literature_check.md
+ M sections/bibliography.tex
+OUT_OF_SCOPE_OR_PROTECTED_DIFFS:
+REMOVED_KEYS_STILL_IN_PRINTED_BIB:
+REVISION_MARKS_OR_SENTINELS:
+KEY_SET_AUDIT: printed=25 cited=25 printed_not_cited=0 cited_not_printed=0
+LOG_PROHIBITED_WARNING_COUNT=0
+main.pdf pages=30 pdf_text_prohibited_count=0
+cover_letter.pdf pages=1 pdf_text_prohibited_count=0
+AUDIT_SECTION_LINE:
+
+artifacts\literature_check.md:551:## Post-revision orphan-reference cleanup
+SHA256SUMS_CR_BYTES=0
+
+
+warning: in the working copy of 'papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex', LF will be replaced by CRLF the next time Git touches it
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+index 8465e210944d1aa4807861812102be51db49de25..a676e24bacb7bc4ac3b21918b932cc7f872aa1d3
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+@@ -1,4 +1,4 @@
+-d1b80657a1d9f272fc96181cab1e616899e5992f22c306da0a08a470e19ceaa2  literature_check.md
++3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb  literature_check.md
+ 6fe427aed7354bcd764800eb34001f24cc33e913b59621a00f98d0fb1dff9d6b  metallic_threshold_verification.txt
+ eff534633f72711004b3a31acc1601ac6800ef5d2aef706ca3733e46b48e0800  oracle_sprint_A3_structure_value.md
+ abc7b03d45acf170494e6f0bb769191fc048c88acda5b639b03d6001136a6cf5  quadratic_pisot_threshold_verification.txt
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+codex
+Removed all sixteen orphaned `\bibitem` entries from [sections/bibliography.tex](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex:1). None was re-cited: comparison with the pre-revision sources showed that every supporting claim had been removed with the deleted supplement or section files. No mathematics, theorem, section prose, or citation site was changed.
+
+**Disposition**
+
+| Key | Outcome | Reason |
+|---|---|---|
+| `Ashley1988` | Remove | Supported the deleted discussion of quantitative decoder-window theory. The surviving pair-graph paragraph does not make that claim. |
+| `Ashley1996` | Remove | Same deleted quantitative decoder-window discussion as `Ashley1988`. |
+| `BaakeGrimm2013` | Remove | Supported the deleted model-set geometry section and its unique-ergodicity/patch-frequency discussion. |
+| `Berstel2001` | Remove | Supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
+| `BertheFrougnyRigoSakarovitch2019` | Remove | Supported a deleted comparison with numerical normalization and carry propagation. |
+| `DrmotaTichy1997` | Remove | Supported a deleted discrepancy estimate in the certificates section. |
+| `Frougny1992` | Remove | Supported deleted Fibonacci-normalization and numerical-transducer comparisons. Its repaired DOI remains recorded in the literature audit and `references.bib`. |
+| `FrougnySteiner2008` | Remove | Supported the deleted comparison with minimal-weight/numerical normalization in Pisot bases. |
+| `Gray2011` | Remove | Supported deleted information-rate limit arguments in the measurement-theory section. |
+| `Kalle2014` | Remove | Supported a deleted secondary comparison involving multinacci expansions. |
+| `KuipersNiederreiter1974` | Remove | Supported the deleted discrepancy estimate in the certificates section. |
+| `Moody2000` | Remove | Supported the deleted model-set geometry section. |
+| `MorseHedlund1940` | Remove | Supported deleted Sturmian-readout claims. |
+| `Queffelec2010` | Remove | Supported the same deleted Sturmian-readout claims. |
+| `Schmidt1980` | Remove | Supported a deleted contextual statement that Pisot bases have eventually periodic expansions. The surviving paper directly assumes the stronger simple-Parry condition and does not rely on this statement. |
+| `Walters1982` | Remove | Supported a deleted variational-principle argument in the measurement-theory section. |
+
+There are no re-cited entries and therefore no new sentence requiring a restored citation. `references.bib` was left completely unchanged.
+
+**Bibliography Audit**
+
+After the clean rebuild, keys extracted from `main.aux` were compared with distinct keys parsed from every source `\cite`:
+
+| Measurement | Count |
+|---|---:|
+| Printed `\bibcite` keys from `main.aux` | 25 |
+| Distinct source citation keys | 25 |
+| Printed but uncited | 0 |
+| Cited but missing from the printed bibliography | 0 |
+
+Both key lists contain the same 25 keys exactly.
+
+The cleanup and all sixteen dispositions were appended under “Post-revision orphan-reference cleanup” in [artifacts/literature_check.md](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md:551). Existing sourcing limitations, identifier checks, and the corrected `Frougny1992` DOI record were preserved.
+
+**Build And Verification**
+
+- Page counts: article `30 -> 30`; cover letter `1 -> 1`.
+- Ran `latexmk -C` separately for the article and cover letter; the clean operations removed all generated PDFs and auxiliary files.
+- Rebuilt with `latexmk -pdfxe`: article stabilized after three XeLaTeX passes; cover letter stabilized after two.
+- Repeated the alternating article/cover-letter build commands; both exited `0` with “Nothing to do” and all targets current.
+- Final logs contain zero undefined references, zero undefined citations, and zero multiply defined labels.
+- `pdftotext` checks on both PDFs found zero `??`/`[?]` markers, zero filename-like strings, and zero leaked LaTeX or build-command names.
+- All input `.tex` files contain zero `\iffalse` blocks, zero `\endinput` commands, and zero revision-mark commands.
+- Unit suite: `32/32` tests passed.
+- `verify_metallic_threshold.py`: `0 failures / 0 counterexamples`.
+- `verify_quadratic_pisot_threshold.py`: `0 failures / 0 unexpected collisions`.
+- `verify_simple_parry_causal.py`: `0 failures`.
+- Regenerated [artifacts/SHA256SUMS](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS:1); all `11/11` entries validate, and the manifest has LF endings with zero CR bytes.
+- Final scoped diff contains only `sections/bibliography.tex`, `artifacts/literature_check.md`, and `artifacts/SHA256SUMS`.
+- No `artifacts/oracle_*.md`, out-of-scope file, or `references.bib` change was made. No commit was created.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+index 8465e210944d1aa4807861812102be51db49de25..a676e24bacb7bc4ac3b21918b932cc7f872aa1d3
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS
+@@ -1,4 +1,4 @@
+-d1b80657a1d9f272fc96181cab1e616899e5992f22c306da0a08a470e19ceaa2  literature_check.md
++3665d3c776fec506db53176b57ba7c1bb61d74b03e79aaaa0323429eea11e5fb  literature_check.md
+ 6fe427aed7354bcd764800eb34001f24cc33e913b59621a00f98d0fb1dff9d6b  metallic_threshold_verification.txt
+ eff534633f72711004b3a31acc1601ac6800ef5d2aef706ca3733e46b48e0800  oracle_sprint_A3_structure_value.md
+ abc7b03d45acf170494e6f0bb769191fc048c88acda5b639b03d6001136a6cf5  quadratic_pisot_threshold_verification.txt
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+index 63cfa8422f542ac37d4e497e23671688a500f1cb..6fcf3638ea43067451fe0c0345baf8b503afa448
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md
+@@ -547,3 +547,38 @@
+   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
+   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
+   identified in the table are the successful alternative sources.
++
++## Post-revision orphan-reference cleanup
++
++Checked: 2026-08-16 (Asia/Singapore).
++
++After the consequences supplement and seven section files were removed, the
++literal `thebibliography` still printed 41 entries although the surviving
++sources cited only 25 distinct keys.  The following 16 entries were removed
++from `sections/bibliography.tex`; none was re-cited because its supporting
++claim left the manuscript in the revision:
++
++| Key | Disposition and reason |
++|---|---|
++| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
++| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
++| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
++| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
++| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
++| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
++| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
++| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
++| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
++| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
++| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
++| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
++| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
++| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
++| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
++
++No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
++25 printed bibliography keys and the manuscript sources contain 25 distinct
++citation keys.  Both set differences are empty: there is no printed-but-
++uncited entry and no cited-but-missing entry.  `references.bib` was left
++unchanged as the directory's bibliographic record.
+diff --git a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+index e5545446326236f3aa0d57f258edcf77425ad241..0d3bdbaf1ee18a2b3f262a1d8ffa00c6ebfdd39c
+--- a/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
++++ b/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex
+@@ -7,37 +7,15 @@
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 448--464;
+ doi:10.1016/S0022-0000(72)80013-8.
+ 
+-\bibitem{Ashley1988}
+-J. J. Ashley, A linear bound for sliding-block decoder window size,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{34} (1988), 389--399;
+-doi:10.1109/18.6020.
+-
+ \bibitem{Ashley1991}
+ J. Ashley, Resolving factor maps for shifts of finite type with equal entropy, \textit{Ergod. Theory Dynam. Systems}, \textbf{11} (1991), 219--240.
+-
+-\bibitem{Ashley1996}
+-J. J. Ashley, A linear bound for sliding-block decoder window size. II,
+-\textit{IEEE Trans. Inform. Theory}, \textbf{42} (1996), 1913--1924;
+-doi:10.1109/18.556684.
+-
+-\bibitem{BaakeGrimm2013}
+-M. Baake and U. Grimm, \textit{Aperiodic Order. Vol. 1. A Mathematical Invitation}, Cambridge University Press, Cambridge, 2013.
+ 
+ \bibitem{Bassino2002}
+ F. Bassino, Beta-expansions for cubic Pisot numbers,
+ in \textit{LATIN 2002: Theoretical Informatics}, Lecture Notes in Computer
+ Science, Vol. 2286, Springer, Berlin, 2002, 141--152;
+ doi:10.1007/3-540-45995-2\_17.
+-
+-\bibitem{Berstel2001}
+-J. Berstel, An exercise on Fibonacci representations, \textit{RAIRO Theor. Inform. Appl.}, \textbf{35} (2001), 491--498.
+ 
+-\bibitem{BertheFrougnyRigoSakarovitch2019}
+-V. Berth\'e, C. Frougny, M. Rigo and J. Sakarovitch,
+-The carry propagation of the successor function,
+-\textit{Adv. in Appl. Math.}, \textbf{120} (2020), 102062;
+-arXiv:1907.01464, doi:10.1016/j.aam.2020.102062.
+-
+ \bibitem{BertrandMathis1989}
+ A. Bertrand-Mathis, Comment \'ecrire les nombres entiers dans une base qui
+ n'est pas enti\`ere,
+@@ -63,24 +41,9 @@
+ Science, Springer, Cham, 2022, 102--114;
+ arXiv:2202.04938, doi:10.1007/978-3-031-05578-2\_8.
+ 
+-\bibitem{DrmotaTichy1997}
+-M. Drmota and R. F. Tichy, \textit{Sequences, Discrepancies and Applications}, Lecture Notes in Mathematics, Vol. 1651, Springer, Berlin, 1997.
+-
+ \bibitem{Fischer1975}
+ R. Fischer, Sofic systems and graphs, \textit{Monatsh. Math.}, \textbf{80} (1975), 179--186.
+-
+-\bibitem{Frougny1992}
+-C. Frougny, Representations of numbers and finite automata, \textit{Math. Systems Theory}, \textbf{25} (1992), 37--60; doi:10.1007/BF01368783.
+ 
+-\bibitem{FrougnySteiner2008}
+-C. Frougny and W. Steiner, Minimal weight expansions in Pisot bases,
+-\textit{J. Math. Cryptology}, \textbf{2} (2008), 365--392;
+-arXiv:0803.2874, doi:10.1515/JMC.2008.017.
+-
+-\bibitem{Gray2011}
+-R. M. Gray, \textit{Entropy and Information Theory}, 2nd edition, Springer,
+-New York, 2011.
+-
+ \bibitem{Head1989}
+ T. Head, One-dimensional cellular automata: injectivity from unambiguity,
+ \textit{Complex Systems}, \textbf{3} (1989), no. 4.
+@@ -94,20 +57,12 @@
+ S. Ito and Y. Takahashi, Markov subshifts and realization of
+ $\beta$-expansions, \textit{J. Math. Soc. Japan}, \textbf{26} (1974), 33--55.
+ 
+-\bibitem{Kalle2014}
+-C. Kalle, Isomorphisms between positive and negative beta-transformations,
+-\textit{Ergodic Theory Dynam. Systems}, \textbf{34} (2014), 153--170;
+-arXiv:1203.4695, doi:10.1017/etds.2012.127.
+-
+ \bibitem{Kitchens1998}
+ B. P. Kitchens, \textit{Symbolic Dynamics. One-Sided, Two-Sided and Countable State Markov Shifts}, Springer, Berlin, 1998.
+ 
+ \bibitem{Krieger1984}
+ W. Krieger, On sofic systems I, \textit{Israel J. Math.}, \textbf{48} (1984), 305--330.
+ 
+-\bibitem{KuipersNiederreiter1974}
+-L. Kuipers and H. Niederreiter, \textit{Uniform Distribution of Sequences}, Wiley, New York, 1974.
+-
+ \bibitem{LecomteRigo2001}
+ P. B. A. Lecomte and M. Rigo, Numeration systems on a regular language,
+ \textit{Theory Comput. Systems}, \textbf{34} (2001), 27--44;
+@@ -124,11 +79,6 @@
+ M. Lothaire, \textit{Algebraic Combinatorics on Words}, Cambridge University Press, Cambridge, 2002.
+ 
+ \bibitem{MaZhang2026LinearOverlap} H. Ma and W. Zhang, Linear overlap transients for bounded zero representations in Pisot numeration: sharp inverse depth for cyclic rank recodings, companion manuscript, 2026.
+-\bibitem{Moody2000}
+-R. V. Moody, Model sets: A survey, in \textit{From Quasicrystals to More Complex Systems} (eds. F. Axel, F. D\'enoyer and J.-P. Gazeau), Springer, Berlin, 2000, 145--166.
+-
+-\bibitem{MorseHedlund1940}
+-M. Morse and G. A. Hedlund, Symbolic dynamics II. Sturmian trajectories, \textit{Amer. J. Math.}, \textbf{62} (1940), 1--42.
+ 
+ \bibitem{Nasu1977}
+ M. Nasu, Local maps inducing surjective global maps of one-dimensional
+@@ -142,9 +92,6 @@
+ \bibitem{Parry1960}
+ W. Parry, On the $\beta$-expansions of real numbers, \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{11} (1960), 401--416; doi:10.1007/BF02020954.
+ 
+-\bibitem{Queffelec2010}
+-M. Queff\'elec, \textit{Substitution Dynamical Systems--Spectral Analysis}, 2nd edition, Lecture Notes in Mathematics, Vol. 1294, Springer, Berlin, 2010.
+-
+ \bibitem{Renyi1957}
+ A. R\'enyi, Representations for real numbers and their ergodic properties,
+ \textit{Acta Math. Acad. Sci. Hungar.}, \textbf{8} (1957), 477--493.
+@@ -153,14 +100,6 @@
+ D. Richardson, Tessellations with local transformations,
+ \textit{J. Comput. System Sci.}, \textbf{6} (1972), 373--388;
+ doi:10.1016/S0022-0000(72)80009-6.
+-
+-\bibitem{Schmidt1980}
+-K. Schmidt, On periodic expansions of Pisot numbers and Salem numbers,
+-\textit{Bull. Lond. Math. Soc.}, \textbf{12} (1980), 269--278;
+-doi:10.1112/blms/12.4.269.
+-
+-\bibitem{Walters1982}
+-P. Walters, \textit{An Introduction to Ergodic Theory}, Graduate Texts in Mathematics, Vol. 79, Springer, New York, 1982.
+ 
+ \bibitem{Zeckendorf1972}
+ E. Zeckendorf, Repr\'esentation des nombres naturels par une somme de nombres de Fibonacci ou de nombres de Lucas, \textit{Bull. Soc. Roy. Sci. Li\`ege}, \textbf{41} (1972), 179--182.
+
+tokens used
+122,477
+Removed all sixteen orphaned `\bibitem` entries from [sections/bibliography.tex](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/sections/bibliography.tex:1). None was re-cited: comparison with the pre-revision sources showed that every supporting claim had been removed with the deleted supplement or section files. No mathematics, theorem, section prose, or citation site was changed.
+
+**Disposition**
+
+| Key | Outcome | Reason |
+|---|---|---|
+| `Ashley1988` | Remove | Supported the deleted discussion of quantitative decoder-window theory. The surviving pair-graph paragraph does not make that claim. |
+| `Ashley1996` | Remove | Same deleted quantitative decoder-window discussion as `Ashley1988`. |
+| `BaakeGrimm2013` | Remove | Supported the deleted model-set geometry section and its unique-ergodicity/patch-frequency discussion. |
+| `Berstel2001` | Remove | Supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
+| `BertheFrougnyRigoSakarovitch2019` | Remove | Supported a deleted comparison with numerical normalization and carry propagation. |
+| `DrmotaTichy1997` | Remove | Supported a deleted discrepancy estimate in the certificates section. |
+| `Frougny1992` | Remove | Supported deleted Fibonacci-normalization and numerical-transducer comparisons. Its repaired DOI remains recorded in the literature audit and `references.bib`. |
+| `FrougnySteiner2008` | Remove | Supported the deleted comparison with minimal-weight/numerical normalization in Pisot bases. |
+| `Gray2011` | Remove | Supported deleted information-rate limit arguments in the measurement-theory section. |
+| `Kalle2014` | Remove | Supported a deleted secondary comparison involving multinacci expansions. |
+| `KuipersNiederreiter1974` | Remove | Supported the deleted discrepancy estimate in the certificates section. |
+| `Moody2000` | Remove | Supported the deleted model-set geometry section. |
+| `MorseHedlund1940` | Remove | Supported deleted Sturmian-readout claims. |
+| `Queffelec2010` | Remove | Supported the same deleted Sturmian-readout claims. |
+| `Schmidt1980` | Remove | Supported a deleted contextual statement that Pisot bases have eventually periodic expansions. The surviving paper directly assumes the stronger simple-Parry condition and does not rely on this statement. |
+| `Walters1982` | Remove | Supported a deleted variational-principle argument in the measurement-theory section. |
+
+There are no re-cited entries and therefore no new sentence requiring a restored citation. `references.bib` was left completely unchanged.
+
+**Bibliography Audit**
+
+After the clean rebuild, keys extracted from `main.aux` were compared with distinct keys parsed from every source `\cite`:
+
+| Measurement | Count |
+|---|---:|
+| Printed `\bibcite` keys from `main.aux` | 25 |
+| Distinct source citation keys | 25 |
+| Printed but uncited | 0 |
+| Cited but missing from the printed bibliography | 0 |
+
+Both key lists contain the same 25 keys exactly.
+
+The cleanup and all sixteen dispositions were appended under “Post-revision orphan-reference cleanup” in [artifacts/literature_check.md](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/literature_check.md:551). Existing sourcing limitations, identifier checks, and the corrected `Frougny1992` DOI record were preserved.
+
+**Build And Verification**
+
+- Page counts: article `30 -> 30`; cover letter `1 -> 1`.
+- Ran `latexmk -C` separately for the article and cover letter; the clean operations removed all generated PDFs and auxiliary files.
+- Rebuilt with `latexmk -pdfxe`: article stabilized after three XeLaTeX passes; cover letter stabilized after two.
+- Repeated the alternating article/cover-letter build commands; both exited `0` with “Nothing to do” and all targets current.
+- Final logs contain zero undefined references, zero undefined citations, and zero multiply defined labels.
+- `pdftotext` checks on both PDFs found zero `??`/`[?]` markers, zero filename-like strings, and zero leaked LaTeX or build-command names.
+- All input `.tex` files contain zero `\iffalse` blocks, zero `\endinput` commands, and zero revision-mark commands.
+- Unit suite: `32/32` tests passed.
+- `verify_metallic_threshold.py`: `0 failures / 0 counterexamples`.
+- `verify_quadratic_pisot_threshold.py`: `0 failures / 0 unexpected collisions`.
+- `verify_simple_parry_causal.py`: `0 failures`.
+- Regenerated [artifacts/SHA256SUMS](D:/omega/automath/papers/publication/2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/SHA256SUMS:1); all `11/11` entries validate, and the manifest has LF endings with zero CR bytes.
+- Final scoped diff contains only `sections/bibliography.tex`, `artifacts/literature_check.md`, and `artifacts/SHA256SUMS`.
+- No `artifacts/oracle_*.md`, out-of-scope file, or `references.bib` change was made. No commit was created.

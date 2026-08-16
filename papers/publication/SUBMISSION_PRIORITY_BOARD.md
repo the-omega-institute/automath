@@ -23,7 +23,7 @@
 | **A5** | `finite_parts_..._etds` | **52+19** | **四条新定理已验证：三条无条件、两条条件于未核实的 (KN85)**；主定理经查也依赖 (KN85) 且未标明，修复中 | ETDS |
 | **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | **TAMS 审稿人裁决：Major revisions** | **TAMS** |
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **32+7** | **JNT 大修已执行并核实**：52+19 → 32+7；四个被取代的定理族直接删除 | **JNT** |
-| **A7** | `upper_fibers_..._fq` | 36+36 | Theorem 6.6 已证,新颖性 75-80%;评估者明言不进 JNT 档 | **Fibonacci Quarterly**(档位不变)|
+| **A7** | `upper_fibers_..._fq` | 33+36 | **Fibonacci Quarterly 审稿人裁决：REJECT AND RESUBMIT**，12 项重构中 | **Fibonacci Quarterly**（重构后）|
 | **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **32+22** | **EJS 小修已执行并核实**：第 4 节重排、三条补充结果陈述入主文、防御层清除 | **EJS 51%** |
 | **A8-B** | `detector_shells_..._jphyscomm` | 72+19 | 原装配版原样保留,作为被删材料的存放处 | **SPA 39%**(未改动)|
 | **A9** | `homological_visibility_..._apal` | **39+6** | 语境性跨界经评估判定不可得;边界节已补二次障碍文献线 + 等变无选择命题 | **Cahiers**(天花板已两次论证)|
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 202 — A3-B 收尾；A7 裁决回来且是第二篇退修重投；两篇大修已派。** 孤儿文献清理提交 fdbe644f0：十六条全删、**零条被“救活”**，bibliography.tex 为纯删除（0 插入/61 删除），无任何正文文件被打开，因此不存在编造依赖的句子。我独立复核：打印 25 / 被引 25 / 双向差集空；literature_check.md 零删除行（纯追加），Frougny DOI 修复与四处 429 速率限制记录均在。**A7：REJECT AND INVITE RESUBMISSION**，12 项。这是第二篇退修重投，而且 A7 正是板上记为"天花板已论证"的那一篇——天花板是对**定理**而言的（新颖性 75-80%、不进 JNT 档），但作为**稿件包**它是退稿。这正是对天花板论文也跑一遍录用问法的理由。项目包括：删去独立定理块以"定义一篇论文"、摘要整段重写、新颖性免责声明至少砍三分之二、第 7 节整节移出投稿件、重新平衡 36 页补充材料。已派 A7 重构与 A6-A（TAMS 大修）两个 agent。**两份任务书均携带全部八道核验**，包括本轮新增的三道：源码无抑制块、可复现包须与投稿一致、打印书目与被引键集双向一致（后者并明令不得往正文塞引用）。A6-A 的任务书另写明：不得把发育轮写入的假设逐条验证退回引用、Omey-Van Gulck 与 Panov-Liehl 作为外部黑箱是诚实的不得粉饰、且 r>=j 的平衡尾修正须存活。A9 第三次重发后仍 waiting_response。内存 1.17 GB、缺页 3.9、无孤儿。
 
 > **TICK 201 — A3-B 入库，A6-A 裁决到齐：九篇全部受检完毕。** A3-B 提交 39ec099e4（36+15 → 30 页，源码 -3061/+493，编号结果 64 → 29）。第一项的二选一取手艺路线且**未编造**：Theorem 4.8 对 m>=4 仍只给界、数学内容与改前逐字节相同。**本 tick 查出第八类缺陷**：删掉补充材料与七个节后，**16 条文献成为孤儿仍在打印**（打印 41、正文引 25）。因为书目是字面的 thebibliography 环境而非 BibTeX——BibTeX 会静默略去未引用条目，而 thebibliography 里每个 ibitem 无论是否被引都会印出来，所以 LaTeX 不给任何警告、日志全绿、逐页读也会滑过。**我头两次核查返回 0，是我的工具问题**（Python 递归 glob 未匹配到文件、首版 grep 模式也不对），换用 main.aux 的 bibcite 与源码 \cite 键集对比后与对方完全一致。清理已派，并明写**不得为"救活"条目而往正文塞引用**。**核验清单增至八条**：打印书目与被引键集须双向一致。**A6-A（TAMS）裁决：Major revisions**，已存 artifacts。至此九篇全部过了录用问法，分布：**两篇小修、六篇大修、一篇退修重投**，无一篇是"直接可投"。A9 第三次 extraction_failure 后已再次重发（f893974c-3ecf-4a85-802a-0ea39b3cf8c3）；A7 waiting_response。内存 1.44 GB、缺页 938、四 agent 在飞、无孤儿。
 
