@@ -356,6 +356,37 @@ changed.
   DOI entries.  Service failure was never treated as evidence that a citation
   was false.
 
+## Empirical-model boundary repair audit (16 August 2026)
+
+The following checks were performed specifically for the repair to
+sec_branch_contextuality.tex. For each cited record, the DOI or arXiv
+identifier was queried directly, and the returned title and lead author were
+compared with the manuscript and bibliography. A DOI was accepted only when
+Crossref returned the intended title and lead-author surname.
+
+| Citation key | Source queried and identifier | Title returned | Lead author returned | Resolution |
+|---|---|---|---|---|
+| AbramskyMansfieldSoaresBarbosa2012 | Crossref DOI record 10.4204/EPTCS.95.1 | *The Cohomology of Non-Locality and Contextuality* | Abramsky | DOI resolved to that article; existing record retained |
+| OkayRobertsBartlettRaussendorf2017 | Crossref DOI record 10.26421/QIC17.13-14-5; official arXiv exact-title result 1701.01888 | Crossref: *Topological proofs of contextuality in quantum mechanics*; arXiv: *Topological proofs of contextuality in quantum mechanics* | Crossref: Okay; arXiv: Cihan Okay | DOI and arXiv identifier both resolved to the four-author article; cited for the operator-phase H2 criterion |
+| Aasnaess2022 | Crossref DOI record 10.4204/EPTCS.318.15; official arXiv record 2005.00213 | *Cohomology and the Algebraic Structure of Contextuality in Measurement Based Quantum Computation* | Crossref: Aasnæss; arXiv: Sivert Aasnæss | DOI and arXiv identifier resolved to that article; cited for the partial-monoid formulation and Theorem 4.1 comparison |
+| Caru2017 | Crossref DOI record 10.4204/EPTCS.236.2; official arXiv record 1701.00656 | *On the Cohomology of Contextuality* | Crossref: Carù; arXiv: Giovanni Carù | DOI and arXiv identifier resolved to that article; its primary text contains the strong-contextuality counterexample in Section 4 and the odd-degree hierarchy/no-signalling vanishing result in Section 5 |
+| Caru2018 | official arXiv record 1807.04203 (no DOI claimed) | *Towards a complete cohomology invariant for non-locality and contextuality* | Giovanni Carù | arXiv identifier resolved to that preprint; its primary text states Theorem 8.4 for models satisfying the cyclic contextuality property |
+| OkayKharoofIpek2023 | Crossref DOI record 10.22331/q-2023-05-22-1009; official arXiv record 2204.06648 | Crossref: *Simplicial quantum contextuality*; arXiv: *Simplicial quantum contextuality* | Crossref: Okay; arXiv: Cihan Okay | DOI and arXiv identifier resolved to the Okay--Kharoof--Ipek article; added and cited for its simplicial H2 witness, Corollary 5.7 |
+
+The Aasnæss surname was compared as Aasnæss in both returned records, and the
+Carù surname was compared as Carù; the TeX encodings in references.bib render
+those same surnames.
+
+### Work not cited because it could not be identified safely
+
+The external assessment referred generically to a partial-group formulation
+without supplying a title or identifier. An official arXiv query for the
+exact phrase "partial group" together with "contextuality" returned no
+relevant contextuality work, only unrelated records. No paper was guessed
+from that description and no partial-group citation was added. The repaired
+text uses the verified commutative-partial-monoid formulation of Aasnæss and
+the verified simplicial formulation of Okay--Kharoof--Ipek instead.
+
 ### Build and invariant record
 
 Before the audit, `main.pdf` had 38 pages and `supplement.pdf` had 6 pages.
@@ -392,3 +423,27 @@ Artifact script results:
   160 classification cases; one pullback-direction check).  Its intentional
   Peiffer counterexample and explicitly open NWW comparisons are not failures.
 - `artifacts/test_verify_A9_r1.py`: exit 0; 5 tests run, 5 passed.
+
+### Boundary-repair rebuild and verification (16 August 2026)
+
+After the empirical-model boundary repair, the root bibliography contains 46
+records and the rendered main bibliography contains 17 cited entries. The
+main article has 12 theorem-like environments, including the new subordinate
+equivariant no-selection proposition, and the supplement has 1. The largest
+TeX source remains sec_homological_visibility.tex at 726 lines; every TeX
+source remains below 800 lines.
+
+Both documents were cleaned with latexmk -C and rebuilt in alternating
+XeLaTeX passes. Final forced latexmk -pdfxe -g runs exited 0 for main.tex and
+supplement.tex. The final PDFs contain 39 and 6 pages, respectively. Direct
+scans of main.log and supplement.log found zero undefined references, zero
+undefined citations, and zero multiply-defined labels. The final main.blg
+reports 17 entries and warning$ -- 0. The final build logs were retained.
+
+The complete artifact verification was rerun. The unit suite ran 5 tests and
+all 5 passed. The standalone verifier exited 0 with four PASS blocks:
+group-cocycle 6,561 cases, tau rewrite 6,561, Cech cocycle 59,049,
+factorization 2,935, exact-sequence 3,896, seven groups and 160
+classification cases, and one pullback-direction check. This is 79,170
+enumerated/check instances in total. Its displayed Peiffer counterexample and
+the three explicitly open NWW comparisons remain intentional non-failures.
