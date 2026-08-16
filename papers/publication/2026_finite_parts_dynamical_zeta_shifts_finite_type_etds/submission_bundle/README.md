@@ -8,8 +8,11 @@ This directory builds two related papers.
   hypothesis in the open Perron interval. It also contains the parity-free
   rational critical Mahler lifting theorem, a sharp input-only divisor bound
   for its multiplicative certificate, and realizable lower-bound families on
-  standard `C2` covers. Height and fixed-base bit bounds are recorded as
-  supporting effective consequences.
+  standard `C2` covers. It also proves an unconditional sharp squarefree
+  divisor bound, a collision--jet inequality, and odd-prime collision
+  constructions. The stronger prime-primary linear theorem is stated
+  conditionally on the explicit assumption `(KN85)` because the original
+  Keiji Nishioka 1985 statement has not been verified.
 - `supplement.tex` contains the Adams-corrected Frobenius-class product
   constant, quotient-cover refinements, and the exact strict-gap `S3`
   witness. These results are logically separate from the inverse theorem.

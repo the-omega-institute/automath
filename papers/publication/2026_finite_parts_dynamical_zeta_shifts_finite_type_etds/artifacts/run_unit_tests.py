@@ -12,6 +12,7 @@ from pathlib import Path
 
 MODULES = (
     "artifacts.test_verify_a5_results",
+    "artifacts.test_verify_linear_collision_claims",
     "artifacts.test_verify_twisted_determinant_rigidity",
 )
 

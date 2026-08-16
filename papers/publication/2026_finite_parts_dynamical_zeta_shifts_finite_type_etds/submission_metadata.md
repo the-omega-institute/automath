@@ -31,11 +31,12 @@ equality of every p_(n,g), provided that one sampled radius is algebraic.
 The number of radial locations is independent of the rank and exponent of G.
 The hypothesis is automatic for G=(C2)^r and permits genuine holonomy of
 orders 4, 8, and beyond. The inverse mechanism is arithmetic: a parity-free
-rational critical p-Mahler lifting theorem combines an elementary
-linear-exponent denominator estimate with Kumiko Nishioka's special-value
-theorem and the cited algebraic-solution rationality result of Keiji
-Nishioka. Determinant parity gives a stronger integral refinement but is not
-needed for lifting. For the multiplicative certificate itself, an input-only
+rational critical p-Mahler construction combines an elementary
+linear-exponent denominator estimate with Kumiko Nishioka's verified
+special-value theorem. The algebraic-to-rational implication attributed to
+Keiji Nishioka is isolated as the unverified assumption (KN85) in the
+conditional linear theorem. Determinant parity gives a stronger integral
+refinement. For the multiplicative certificate itself, an input-only
 divisor estimate gives an O(D log D) degree bound in terms of the reduced
 input degree alone. Its order is sharp abstractly and on standard realizable
 C2-cover zeta ratios. Explicit height and fixed-p bit bounds are supporting
@@ -45,6 +46,13 @@ degree cap is known. A second standard-cover family gives m exact rational colli
 groups, recovery holds from a radial set with an interior accumulation point;
 already for C3, Adams--Mobius inversion exhibits the obstruction to a finite
 bound by coupling determinant logarithms at infinitely many powers.
+
+The manuscript also gives an unconditional sharp squarefree Mahler bound, a
+collision--jet inequality, and odd-prime collision families with delayed
+first discrepancy. The stronger prime-primary linear theorem and the binary
+linear upper bound are conditional on the explicitly quoted assumption
+(KN85); they are not the headline and do not close the sampling order
+unconditionally.
 
 Keywords: one-sided edge shift; finite-group extension; inverse problem;
 Mahler function; twisted determinant; Adams operation; primitive orbit;
@@ -100,26 +108,27 @@ main manuscript.
 
 ## Priority boundary
 
-Ostrowski (1968) treats the linear multiplicative equation. The cited
-algebraic-solution rationality result of Keiji Nishioka (1985) supplies the
-rationality implication for `F(z^2)=H(z)^(-1)F(z)^2`; the submission makes no
-originality claim for that implication. The parity-free lifting theorem is
-explicitly the combination of Kumiko Nishioka's 1982 special-value theorem,
-the cited Keiji Nishioka result, and an elementary denominator estimate. The
+Ostrowski (1968) treats the linear multiplicative equation. Kumiko Nishioka's
+1982 special-value statement was checked directly. Keiji Nishioka's 1985
+bibliographic record is verified, but the original theorem statement is not:
+the pages are paywalled and the zbMATH review is only a secondary restatement.
+The precise algebraic-to-rational implication needed for the conditional
+linear theorem is quoted as assumption `(KN85)`. The
 claimed contribution is limited to parity-compatible algebraic collision
 lifting in the dynamical setting, the input-only multiplicative-certificate
 divisor estimate and its sharp lower-bound family, the supporting height and
 fixed-p bit estimates, the cross-base odd-Adams-invariant abelian 2-group
-theorem, and the realizable certificate-degree and linear sampling lower
-bounds. Bare existence and decidability are prior; once a degree bound is
-known, the Pade step is largely standard rational reconstruction.
+theorem, the unconditional squarefree and collision--jet estimates, and the
+realizable collision families. No priority claim is made from the antecedent
+search.
 
 ## Verified expected results
 
 - Both PDFs clean-build with XeLaTeX and have no undefined references,
   undefined citations, or multiply defined labels.
 - `verify_a5_results.py` ends with `STATUS: PASS`.
+- `verify_linear_collision_claims.py` ends with `STATUS: PASS`.
 - `verify_twisted_determinant_rigidity.py` ends with `STATUS: PASS`.
-- The combined unit suite runs 41 tests and ends with `OK`.
+- The combined unit suite runs 44 tests and ends with `OK`.
 - The exact S3 program ends with `fixed-label windows verified`.
 - Every digest in `artifacts/SHA256SUMS` matches.

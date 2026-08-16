@@ -36,16 +36,18 @@ undefined reference, undefined citation, or multiply-defined-label diagnostic.
 
 ```powershell
 .\.venv-reproduce\Scripts\python artifacts/verify_a5_results.py
+.\.venv-reproduce\Scripts\python artifacts/verify_linear_collision_claims.py
 .\.venv-reproduce\Scripts\python artifacts/verify_twisted_determinant_rigidity.py
 ```
 
-Each program rewrites its own archived text report and ends with:
+Each program ends with:
 
 ```text
 STATUS: PASS
 ```
 
-The reports are `artifacts/verify_a5_results_output.txt` and
+The reports are `artifacts/verify_a5_results_output.txt`,
+`artifacts/verify_linear_collision_claims_output.txt`, and
 `artifacts/verify_twisted_determinant_rigidity_output.txt`.
 
 ## Unit tests
@@ -58,7 +60,7 @@ The reports are `artifacts/verify_a5_results_output.txt` and
 Expected summary:
 
 ```text
-Ran 41 tests
+Ran 44 tests
 OK
 ```
 
@@ -90,7 +92,7 @@ paper directory, run exactly:
 cd artifacts && sha256sum -c SHA256SUMS
 ```
 
-A successful check prints exactly 15 `OK` lines and no failures.
+A successful check prints exactly 18 `OK` lines and no failures.
 
 The scripts are independent exact consistency checks. The article and
 Supplementary Material do not use finite computation as a substitute for a

@@ -1,6 +1,52 @@
 # Literature and Novelty Check
 
 
+## Nishioka source verification for the linear collision audit (16 August 2026)
+
+The two similarly named sources used by the scalar lifting theorem were
+checked separately.  They are by different authors and supply different
+steps.
+
+- **Kumiko Nishioka (1982):** *On a problem of Mahler for transcendency of
+  function values*, J. Austral. Math. Soc. Ser. A **33** (1982), 386--393,
+  DOI `10.1017/S1446788700018814`.  Crossref returns Kumiko Nishioka, volume
+  33, issue 3, and pages 386--393; Semantic Scholar resolves the same DOI and
+  links the Cambridge publisher PDF.  The Cambridge PDF was checked directly.
+  Its theorem on p. 387 treats a transcendental convergent power series
+  satisfying the algebraic equation (1.2), assumes coefficient-size and
+  common-denominator bounds `log [a_h], log d_h <= c h^L`, the orbit conditions
+  `T^i alpha != 0` and `g(T^i alpha) != 0`, and
+  `M(p+N)n^2 < p^(2+1/L)`, and concludes that `f(alpha)` is transcendental.
+  For the manuscript's equation, the checked substitution is
+  `Tz=z^p`, `Q_0=P_0`, `Q_1=-P_1 u^p`, `g=P_0`, and
+  `N=0, n=1, m=M=p, U=L=1`; the strict inequality is `p^2<p^3`.
+  The manuscript's linear coefficient-height and denominator bounds give the
+  printed growth hypothesis, while zero-freedom of `H=P_0/P_1` on the orbit
+  gives `P_0(alpha^(p^i)) != 0` and analyticity.  Thus this source supports the
+  algebraic-special-value implication used in the lifting theorem.
+
+- **Keiji Nishioka (1985):** *Algebraic function solutions of a certain class
+  of functional equations*, Arch. Math. (Basel) **44** (1985), 330--335,
+  DOI `10.1007/BF01235775`.  **BIBLIOGRAPHIC RECORD VERIFIED; STATEMENT NOT
+  VERIFIED.** Crossref and the official Springer record return Keiji Nishioka,
+  volume 44, issue 4, and pages 330--335.  The original pages are
+  subscription-only.  The prior exhausted retrieval finding is recorded in
+  `artifacts/oracle_nishioka_blocker.md`; no paywall workaround was attempted
+  in this pass.  John H. Loxton's zbMATH review Zbl `0568.12014` (`zbMATH`
+  document `3906608`) gives a secondary restatement, but it is a third-party
+  review and does not verify the original theorem's printed statement or
+  hypotheses.  Consequently it does not close the algebraic-to-rational step.
+  The exact one-variable statement still required is: for every integer
+  `p >= 2` and every `H in C(z)^*`, every convergent Laurent-series germ `F`
+  algebraic over `C(z)` and satisfying
+  `F(z^p)=F(z)^p/H(z)` belongs to `C(z)`.
+
+No priority conclusion is drawn from these checks.  Kumiko Nishioka's
+imported interface and both bibliographic attributions are verified; Keiji
+Nishioka's imported statement remains unverified.  None of this establishes
+novelty of the new divisor and collision arguments.
+
+
 ## Full bibliography verification (15 August 2026)
 
 This audit supersedes the verification status implied by the earlier thematic
@@ -78,7 +124,7 @@ replaced.
 | `AdamczewskiFaverjon2018MahlerSeveralVariablesII` | Mahler's method in several variables II: Applications to base change problems and finite automata; B. Adamczewski | No DOI | Verified | arXiv title/author; title and first author matched. |
 | `Greuel2000ImplicitMahler` | Algebraic independence of the values of Mahler functions satisfying implicit functional equations; B. Greuel | DOI `10.4064/aa-93-1-1-20` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
 | `Nishioka1982MahlerFunctionValues` | On a problem of Mahler for transcendency of function values; Kumiko Nishioka | DOI `10.1017/s1446788700018814` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
-| `Nishioka1985AlgebraicSolutions` | Algebraic function solutions of a certain class of functional equations; Keiji Nishioka | DOI `10.1007/bf01235775` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
+| `Nishioka1985AlgebraicSolutions` | Algebraic function solutions of a certain class of functional equations; Keiji Nishioka | DOI `10.1007/bf01235775` | **Bibliographic record verified; statement not verified** | Crossref and Springer metadata match. Original pages 330--335 are paywalled; Loxton's zbMATH review is only a secondary restatement. See `artifacts/oracle_nishioka_blocker.md`. |
 | `Nishioka1996MahlerFunctions` | Mahler Functions and Transcendence; Kumiko Nishioka | No DOI | Verified | Crossref title/author; title and first author matched. |
 | `Ostrowski1968AlgebraicSolutions` | Uber algebraische Losungen (Phi) der Funktionalgleichung (Phi(varphi(x))=g(x)Phi(x)), fur rationale (g(x)); A. Ostrowski | DOI `10.1007/bf01817565` | **Unverified** | DOI resolves in Crossref, but its metadata title is the Oberwolfach conference report rather than the cited article title; exact title/author searching did not give an unambiguous entry-level match, and Semantic Scholar was rate-limited. |
 | `ChyzakDreyfusDumasMezzarobba2018MahlerSolutions` | Computing solutions of linear Mahler equations; F. Chyzak | DOI `10.1090/mcom/3359` | Verified | Crossref DOI; DOI resolved and the returned title matches, allowing for mathematical markup and diacritics. |
@@ -370,20 +416,21 @@ supersedes any broader wording in earlier audit notes:
   Rowland, arXiv:1210.2070v2, Corollary 8, gives an open-access restatement and
   a new proof.
 - The equation `F(z^2) = H(z)^(-1) F(z)^2` is quadratic in `F` and therefore
-  outside that linear class. Keiji Nishioka's 1985 nonlinear class
-  `f(z^p) = R(z,f(z))` is the applicable result, with `p = 2` and
-  `R(z,Y) = Y^2/H(z)`. This algebraic-to-rational step is prior work and is not
-  a contribution of the paper.
+  outside that linear class. A secondary restatement attributes to Keiji
+  Nishioka's 1985 paper a nonlinear class broad enough to cover
+  `f(z^p) = f(z)^p/H(z)`. The original statement is not verified, so the new
+  linear theorem quotes this exact implication as the assumption `(KN85)`.
 - Springer keeps the cited 1985 pages 330--335 behind subscription, and
   Unpaywall reported no open-access copy; this audit does not record a
   first-hand check of the printed text.
 - The paper's claimed Mahler contribution is limited to the input-only divisor
-  estimate for the multiplicative certificate, its sharp lower-bound family
-  and realizable transfer, and the supporting explicit height and fixed-base
-  integer bit analysis. Bare existence and decidability are prior, and the
-  Pade step is largely standard rational reconstruction after a degree cap is
-  known. The tier-carrying claim is the cross-base odd-Adams-invariant
-  abelian-two-group dynamical inverse theorem.
+  estimates for the multiplicative certificate, the collision--jet
+  inequality, the sharp lower-bound family and realizable transfer, and the
+  supporting explicit height and fixed-base integer bit analysis. Bare
+  existence and decidability are prior, and the Pade step is largely standard
+  rational reconstruction after a degree cap is known. The headline remains
+  the cross-base odd-Adams-invariant abelian-two-group dynamical inverse
+  theorem with its `O(V log V)` radial budget.
 
 In particular, the paper does not claim originality for the general
 algebraic-solution rationality theorem, for the fixed-label Euler coordinate,
