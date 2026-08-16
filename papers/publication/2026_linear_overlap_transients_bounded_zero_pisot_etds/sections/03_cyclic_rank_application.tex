@@ -1,0 +1,160 @@
+\section{Cyclic rank recodings and the collision quotient}
+\label{sec:cyclic-rank-application}
+
+A Pisot linear numeration system is a sequence $U=(u_j)_{j\ge0}$ of positive
+integers satisfying the recurrence whose characteristic polynomial is the
+minimal polynomial of a Pisot number.  Its initial values need not be the
+standard ones.  Here ``standard'' has its technical meaning
+$u_{-1}=\cdots=u_{-d+1}=0$, $u_0=1$; we do not use it as a synonym for the
+larger class considered below.  Assume that $U$ is strictly increasing and
+$u_0=1$, and let
+\[
+D_U=\{0,\ldots,d_U\}
+\]
+be its canonical greedy digit set.  The canonical greedy $U$-normal words of
+length $m$ are
+\begin{equation}
+X_{U,m}=\left\{x\in D_U^m:
+ \sum_{j=0}^k x_ju_j<u_{k+1}\quad(0\le k<m)\right\}.
+\label{eq:pisot-canonical-words}
+\end{equation}
+Consequently
+\[
+\Val_{U,m}(x)=\sum_{j=0}^{m-1}x_ju_j
+\]
+maps $X_{U,m}$ bijectively onto $\{0,\ldots,u_m-1\}$.  Define
+\begin{equation}
+\Fold_{U,m}(w)=
+(\Val_{U,m}|_{X_{U,m}})^{-1}
+       (\Val_{U,m}(w)\bmod u_m)
+\label{eq:pisot-canonical-fold}
+\end{equation}
+and let $\Phi_{U,m}$ be the corresponding sliding code on
+$D_U^{\mathbb Z}$.  This is the cyclic language-rank recoding: each output
+word is the unique legal word having the cyclically reduced rank of the raw
+window.
+
+Define $\ell_{\rm cau}(U,m)$ to be the least $L\ge1$ for which the raw digit
+at time zero is determined, on the image of $\Phi_{U,m}$, by the output
+windows at times $0,\ldots,L-1$; set it to $\infty$ if no such $L$ exists.
+Thus $\ell_{\rm cau}(U,m)-1$ is the least anticipation of an inverse
+constrained to have memory zero.  Relabeling each output by its canonical
+rank turns the local rule into
+\[
+(x_0,\ldots,x_{m-1})\longmapsto
+\sum_{j=0}^{m-1}u_jx_j\pmod {u_m}.
+\]
+This symbolwise relabeling is bijective.  The rule is not a linear cellular
+automaton: in general $D_U$ is only a digit subset of
+$\mathbb Z/u_m\mathbb Z$, not a module on which the rule is a group
+endomorphism.
+
+Put $\Delta_U=[-d_U,d_U]\cap\mathbb Z$ and, for $L\ge1$, set
+\begin{equation}
+\mathcal N_{U,m,L}=\left\{e\in\Delta_U^{m+L-1}:
+ e_0\ne0,\quad
+ \sum_{j=0}^{m-1}u_je_{t+j}\equiv0\pmod {u_m}
+ \ (0\le t<L)\right\}.
+\label{eq:pisot-bad-sliding-set}
+\end{equation}
+Equivalently, $\mathcal N_{U,m,L}$ is the finite-block kernel of the
+$L$-row banded Toeplitz operator with kernel
+$(u_0,\ldots,u_{m-1})$ over $\mathbb Z/u_m\mathbb Z$, restricted by
+$e_0\ne0$ and by the coefficient bound $\Delta_U$.  Every row has a unique
+integer quotient $k_t$:
+\begin{equation}
+\sum_{j=0}^{m-1}u_je_{t+j}=k_tu_m.
+\label{eq:pisot-window-carry}
+\end{equation}
+Equivalently,
+\begin{equation}
+[e_t,e_{t+1},\ldots,e_{t+m-1},-k_t]_U=0,
+\label{eq:pisot-zero-word-bridge}
+\end{equation}
+where the last coordinate has weight $u_m$.  Thus every collision row is an
+edge of $G_m(U,d_U)$, with completing coefficient $-k_t$.
+
+\begin{lemma}[Exact collision quotient for $U$]
+\label{lem:pisot-exact-collision-quotient}
+For every $m\ge2$,
+\begin{equation}
+\ell_{\rm cau}(U,m)
+=\min\{L\ge1:\mathcal N_{U,m,L}=\varnothing\}.
+\label{eq:pisot-exact-depth}
+\end{equation}
+Let $\Gamma_{U,m}$ have vertex set $\Delta_U^{m-1}$ and an edge
+$(v_0,\ldots,v_{m-2})\to(v_1,\ldots,v_{m-2},a)$ exactly when
+\[
+\sum_{j=0}^{m-2}u_jv_j+u_{m-1}a\equiv0\pmod {u_m}.
+\]
+If $B_{U,m}$ is the set of vertices with first coordinate nonzero, then
+\begin{equation}
+\ell_{\rm cau}(U,m)=1+\sup\{\text{edge length of a path from }B_{U,m}\}.
+\label{eq:pisot-longest-path}
+\end{equation}
+Moreover, $\Phi_{U,m}$ is injective if and only if no directed cycle of
+$\Gamma_{U,m}$ is reachable from $B_{U,m}$.
+\end{lemma}
+
+\begin{proof}
+Two folded windows agree exactly when the difference of their raw values is
+divisible by $u_m$, because the canonical normal words represent
+$0,\ldots,u_m-1$ bijectively.  Every $e\in\Delta_U$ is realized as a
+difference of two digits by taking its positive and negative parts in
+$D_U$.  Hence two output $L$-blocks with distinct initial raw digits are
+equivalent to a vector in $\mathcal N_{U,m,L}$, with no lost collisions.
+Reading consecutive difference windows gives precisely the paths from
+$B_{U,m}$ in $\Gamma_{U,m}$, proving \eqref{eq:pisot-exact-depth} and
+\eqref{eq:pisot-longest-path}.  A reachable nonzero cycle can be repeated
+periodically and is realized by two raw points.
+
+It remains only to note why injectivity rules out the zero loop as a
+reachable cycle.  If $d_U\ge u_m$, the constant nonzero difference sequence
+$e_t=u_m$ belongs to $\Delta_U^{\mathbb Z}$ and every window sum is divisible
+by $u_m$; hence $\Phi_{U,m}$ is noninjective and the difference graph has a
+nonzero loop.  In the only remaining case, $d_U<u_m$.  If a vertex has an
+edge to the zero vertex, its overlap coordinates vanish and its first
+coordinate $a$ satisfies $a\equiv0\pmod {u_m}$.  The bound
+$|a|\le d_U<u_m$ gives $a=0$, so the zero vertex is its own unique
+predecessor.  This proves the last assertion without imposing a restriction
+on the allowed nonstandard initial values.
+\end{proof}
+
+\begin{corollary}[Aperture-linear future-only inverse depth]
+\label{cor:pisot-linear-causal-depth}
+Let $U$ be any strictly increasing Pisot numeration system with $u_0=1$,
+canonical greedy digit set and canonical normal words.  There is an
+effectively computable $C_U<\infty$ such that, for every $m\ge2$,
+\begin{equation*}
+\Phi_{U,m}\text{ injective}
+\quad\Longrightarrow\quad
+\ell_{\rm cau}(U,m)\le C_Um.
+\tag{A1}\label{eq:pisot-linear-A1}
+\end{equation*}
+Equivalently, if no first-coordinate-nonzero state of $\Gamma_{U,m}$ can
+reach a directed cycle, every directed path from that initial state set has
+length at most $C_Um-1$.
+\end{corollary}
+
+\begin{proof}
+If the Pisot root has degree one, then $u_j=b^j$,
+$D_U=\{0,\ldots,b-1\}$, the fold is the identity, and
+$\ell_{\rm cau}(U,m)=1$; take $C_U=1$.  Otherwise apply
+Theorem~\ref{thm:bounded-zero-linear-transient} with $D=d_U$.  Its graph is
+exactly $\Gamma_{U,m}$, because \eqref{eq:pisot-zero-word-bridge} is the
+edge condition \eqref{eq:bounded-zero-overlap-edge-theorem}.  By Lemma
+\ref{lem:pisot-exact-collision-quotient}, injectivity is equivalent to the
+absence of a reachable cycle and the causal length is one plus the longest
+path length.  Since the theorem gives fewer than $C(U,d_U)m$ edges, the
+integer path length is at most $C(U,d_U)m-1$.  Taking
+$C_U=C(U,d_U)$ proves both formulations.
+\end{proof}
+
+The scope is not a disguised standard-initial-value convention.  For
+example, standard $k$-bonacci initial conditions begin $1,1,\ldots$ and fail
+strict increase, whereas the customary shift beginning $1,2,\ldots$ belongs
+to the present class.  Nor is Condition~F assumed: the principal root of
+$x^3-3x^2+2x-1$ is Pisot but does not satisfy Condition~F
+\cite[Theorem~3]{Akiyama2000}.  The equivalence of Condition~F with zero
+preservation is proved in \cite{CartonSudberyYassawi2026}, but neither
+property enters the corollary.

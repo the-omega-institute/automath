@@ -116,7 +116,7 @@ least nontrivial aperture at which the cyclic Parry-rank fold from the full
 digit shift is a conjugacy onto its SFT image, together with the two extremal
 quadratic-Pisot loci.  Parry admissibility, Pisot normalization automata,
 periodic expansions, beta-tiles, and Pisot-substitution geometry are cited as
-prior results and are not reproved as new.  Because the Atom API itself was
+prior results and are not claimed here. Because the Atom API itself was
 rate-limited, the novelty conclusion remains a documented search conclusion,
 not a claim of exhaustive bibliographic nonexistence.
 
@@ -182,7 +182,7 @@ Crossref bibliographic and OpenAlex full-text searches were also run for
 sliding block inverse`, `Pisot causal inverse symbolic dynamics`, `restricted
 coefficient polynomial multiples`, `finite delay sliding block code inverse`,
 `simple Parry language rank`, and `multinacci Pisot number`.  Their relevant
-hits were the classical or established inputs, not predecessors of the new
+hits were the classical or established inputs, not predecessors of the
 map-specific statements:
 
 - K. Schmidt, *On Periodic Expansions of Pisot Numbers and Salem Numbers*,
@@ -251,7 +251,7 @@ or overlap-threshold predecessor.
 
 The defensible novelty boundary is therefore narrow.  Ordered regular-
 language numeration, Bertrand recognizability, cubic Pisot expansions, and
-simple-Parry admissibility are prior art.  The new cubic statement is the
+simple-Parry admissibility are prior art. The cubic statement is the
 parameter-uniform modulus-`Q_m` collision-depth theorem.  Its required
 all-parameter two-window carry exclusion and terminal-path induction are now
 proved in the manuscript; no novelty is claimed for Bassino's expansion data.
@@ -276,7 +276,7 @@ language rank`.  The exact mechanism queries returned no relevant record;
 the broad `sliding block code` query returned general Curtis--Hedlund--Lyndon
 and coding papers, not a cyclic rank-modulo-`Q_m` fold.  Crossref and Semantic
 Scholar returned HTTP 429 on the fresh broad searches.  This is an API rate
-limit, not a zero-result claim; the previously confirmed DOI metadata in this
+limit, not a zero-result claim; the confirmed DOI metadata in this
 file remains the Crossref evidence used for the named comparators.
 
 The zbMATH Open API returned Nasu's *Textile systems for endomorphisms and
@@ -421,7 +421,7 @@ status assertions below as of the audit date.
 - **(B):** the input full shift, greedy beta-language, Parry word, language
   counts, and colex ordered-language rank are standard.  The reduction modulo
   `Q_m` is bespoke.  Above threshold the image is canonically conjugate back
-  to a full shift, so it does not yield a new invariant of a standard
+  to a full shift, so it does not yield an additional invariant of a standard
   beta-system.  There is no canonical map to numerical beta-normalization.
 - **(C):** the Pisot hypothesis in the exact collision criterion, causal
   completeness, bounded-multiple order, and aperture-two trichotomy is an
@@ -446,14 +446,14 @@ itself move the paper to Tier 2.
 
 Checked: 2026-08-15 (Asia/Singapore).
 
-The 65 entries in `sections/bibliography.tex` were parsed individually.  For
-every printed DOI, the Crossref work record was fetched by DOI and its title
-and lead author were compared with the entry.  For every entry without a DOI,
-Crossref was searched by the full bibliographic citation and then, where the
-top hit was not exact, by title and lead author.  Exact arXiv Atom records and
-zbMATH Open records were used for the remaining preprints and non-Crossref
-items.  A Crossref or search hit counted as verified only when both title and
-lead author agreed.
+The 40 cited entries in `sections/bibliography.tex`, together with 25 sources
+used in the novelty searches above, were parsed individually. For every
+printed DOI, the Crossref work record was fetched by DOI and its title and lead
+author were compared with the entry. For every item without a DOI, Crossref
+was searched by full bibliographic citation and then, where the top hit was
+not exact, by title and lead author. Exact arXiv Atom records and zbMATH Open
+records were used for the remaining preprints and non-Crossref items. A hit
+counted as verified only when both title and lead author agreed.
 
 | Key | Identifier checked or found | Title/lead-author result |
 |---|---|---|
@@ -536,10 +536,10 @@ lead author agreed.
   1983 paper on a shortwave source and the Laplace operator.  The correct
   Crossref record for Frougny is `10.1007/BF01368783`, and the paragraph above
   has been corrected.
-- No bibliography entry was deleted, and no unverified replacement was
-  invented.  All 17 DOIs remaining in the bibliography match Crossref title
-  and lead-author metadata.  The other 48 entries have exact title/lead-
-  author confirmation from Crossref, arXiv, or zbMATH.
+- The active bibliography contains only the 40 cited entries. Every DOI in
+  that bibliography matches Crossref title and lead-author metadata; entries
+  without a DOI have exact title and lead-author confirmation from Crossref,
+  arXiv, or zbMATH.
 - OpenAlex returned HTTP 429 for the attempted secondary checks of the
   Drungilas, Head, Kuipers--Niederreiter, Queffelec, and Zeckendorf records.
   Semantic Scholar likewise returned HTTP 429 for the Drungilas, Head,

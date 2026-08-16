@@ -1,168 +1,122 @@
-\section{Introduction}\label{sec:intro}
+\section{Introduction}
+\label{sec:intro}
 
-Finite-window factor codes can collapse individual words and nevertheless
-become invertible when successive windows overlap.  For recodings generated
-by Pisot numeration, we ask how much future output is required by an inverse
-with memory zero.  Our principal result is an effective aperture-linear bound
-for every fixed strictly increasing Pisot linear numeration system, with no
-Condition~F or zero-preservation assumption.  A single fixed cubic system
-attains the linear growth order.
+Finite-window recodings can collapse individual input words and still become
+invertible when their outputs are overlapped.  This paper determines where
+that transition occurs, how much future output a memory-zero inverse needs,
+and what local shift structure remains at and below threshold for quadratic
+and simple-Parry beta-languages.
 
-Fix a greedy numeration language and let $u_m$ be the number of its legal
-words of length $m$.  Order those words colexicographically and identify them
-with $\{0,\ldots,u_m-1\}$.  Evaluate the same positional rank on the full
-digit cube, reduce it modulo $u_m$, return the legal word with that residue,
-and overlap the resulting windows along the shift.  We call the resulting
-sliding code a \emph{cyclic language-rank recoding}.  The positional rank is
-established numeration theory
+Let $X_m$ be the legal words of length $m$ in a greedy numeration language,
+ordered colexicographically.  Positional rank identifies $X_m$ with
+$\{0,\ldots,Q_m-1\}$, where $Q_m=|X_m|$.  We evaluate the same weighted rank
+on the full digit cube, reduce it modulo $Q_m$, and return the legal word with
+that residue.  Overlapping these cyclically recoded windows defines a sliding
+factor $\Phi_{\beta,m}$ and its image $Y_{\beta,m}$.  Positional rank belongs
+to Parry--Bertrand numeration theory
 \cite{BertrandMathis1989,BruyereHansel1997,LecomteRigo2001,
-CharlierCisterninoStipulanti2022}; cyclic reduction at a fixed length is the
-map-specific operation studied here.
+CharlierCisterninoStipulanti2022}; reduction modulo the finite-language count
+is the operation classified here.
 
-After relabeling each output word by its rank, the local rule is the modular
-weighted sliding block code
-\[
-(x_0,\ldots,x_{m-1})\longmapsto
-\sum_{j=0}^{m-1}u_jx_j\pmod {u_m}.
-\]
-The relabeling is symbolwise bijective.  The rule is not a linear cellular
-automaton, because its input alphabet is only the digit subset of
-$\mathbb Z/u_m\mathbb Z$, not a module on which the rule is a group
-endomorphism.  Likewise, $\ell_{\rm cau}-1$ is exactly the least anticipation
-of an inverse sliding block code constrained to have memory zero.  This is a
-standard invariant under that convention, not a right-closing delay or a
-general closing constant.
+The construction must not be confused with numerical
+$\beta$-normalization.  The congruences compare integer language ranks, not
+values in $\mathbb Z[\beta]$.  Nor is the rank-relabelled local rule a linear
+cellular automaton: the input alphabet is a proper digit subset of
+$\mathbb Z/Q_m\mathbb Z$, not a module on which the rule is a group
+endomorphism.
 
 \medskip
-\noindent\textbf{The fixed-system theorem and sharpness.}
-Let $U=(u_j)$ be any strictly increasing Pisot numeration system with
-$u_0=1$, canonical greedy digit set, and canonical normal words.  Theorem
-\ref{thm:pisot-linear-depth-sharpness}, stated and proved immediately after
-this introduction, gives an effectively computable $C_U<\infty$ such that
+\noindent\textbf{The Fibonacci model.}
+The first part develops the binary prototype completely.  The finite-window
+rank is the Fibonacci value
 \[
-\Phi_{U,m}\text{ injective}\quad\Longrightarrow\quad
-\ell_{\rm cau}(U,m)\le C_Um. \tag{A1}
+\sum_{j=0}^{m-1}F_{j+2}x_j\pmod {F_{m+2}},
 \]
-Every row carry is bounded directly by the recurrence growth constants.  A
-finite algebraic separation and the contracting conjugates then collapse
-adjacent carries beyond an effective aperture.  The finitely many smaller
-apertures are handled by exact acyclic longest-path searches.  Thus the proof
-does not use Condition~F, zero preservation, or a bounded-zero automaton, and
-it avoids the generic exponential vertex count $(2d_U+1)^{m-1}$.
-
-The same theorem fixes the binary cubic system associated with the leading
-root $\theta$ of $x^3-2x^2+x-1$ and proves, for every $m\ge4$,
-\[
-\Phi_{\theta,m}\text{ is injective},\qquad
-\ell_{\rm cau}(\theta,m)=2\lfloor m/2\rfloor-1. \tag{A2}
-\]
-More precisely, the penultimate obstruction set is exactly
-$\{E_m,-E_m\}$ and the next obstruction set is empty.  This is the signed
-terminal classification in \textup{(A3)}.  Consequently no theorem valid for
-every fixed system in the class of \textup{(A1)} can replace $O_U(m)$ by
-$o(m)$.  This is sharpness in growth order; it does not assert that the
-computed $C_U$ is numerically optimal or that coefficient one is universal.
-To the authors' knowledge, this is the first aperture-linear inverse-depth
-bound for cyclic language-rank recodings over fixed Pisot numeration systems.
-
-Theorem~\ref{thm:bounded-zero-linear-transient} then frees the contraction
-from the code's canonical difference alphabet.  For an arbitrary fixed
-$D\ge1$, it treats the finite overlap graph whose edges are bounded
-$U$-representations of zero with coefficients in $[-D,D]$ and a uniformly
-bounded terminal quotient coefficient.  Either a first-coordinate-nonzero
-state reaches a directed cycle, or every path from such a state has fewer
-than $C(U,D)m$ edges.  This is a quantitative finite-state theorem about the
-following narrow crossing: the rows are classical bounded
-$U$-representations of zero, and the aperture-dependent overlap transient is
-the new quantity.  Its statement uses no
-canonical rank, legal-word alphabet, cyclic reduction, digit-difference
-realization, image shift, or inverse decoder.  The fixed cubic words from
-\textup{(A3)}, read only as coefficient paths, show that the linear order is
-sharp already for $D=1$.
-
-The adjective ``standard'' is avoided here because it normally specifies the
-initial conditions $u_{-1}=\cdots=u_{-d+1}=0$, $u_0=1$.  We allow
-nonstandard initial values.  Some iconic systems with standard initial
-conditions begin $1,1,\ldots$ and enter the strictly increasing class only
-after the familiar shift to $1,2,\ldots$.  Condition~F would also be a real
-restriction: the principal root of $x^3-3x^2+2x-1$ is Pisot without
-Condition~F \cite[Theorem~3]{Akiyama2000}.
-
-The construction must be separated from numerical $\beta$-normalization.
-Our congruences compare integer language ranks, not values in
-$\mathbb Z[\beta]$.  For example, if $\beta^2-3\beta+1=0$, then
-$(Q_0,Q_1,Q_2)=(1,3,8)$ and the rank of $(2,2)$ is $8$, so its cyclic image
-is $(0,0)$; no equality $2+2\beta=0$ is asserted.  The theorem is about this
-cyclic language-rank recoding, not numerical $\beta$-normalization in general,
-arbitrary $\beta$-transformations, or all Pisot symbolic dynamics.
+and legal words contain no adjacent ones.  Lemma~\ref{lem:m3-decoder} gives
+an explicit decoder from three consecutive recoded windows.
+Theorem~\ref{thm:block-invertibility} proves that aperture three is the exact
+nontrivial threshold, while Proposition~\ref{prop:low-window-counterexamples}
+gives the sharp finite-block failures below onset.  At aperture two,
+Theorem~\ref{thm:m2-branch-locus} shows that the only nonsingleton fiber
+identifies the two constant binary points.  This model isolates the mechanism
+later seen at every extremal quadratic parameter.
 
 \medskip
-\noindent\textbf{Priority comparison.}
-The closest precedents do not subsume \textup{(A1)} for distinct quantitative
-reasons.  Frougny's finite-automaton normalization and addition results and
-the Berend--Frougny characterization establish finite-state computability in
-Pisot bases, not an aperture-linear optimal inverse window for a prescribed
-cyclic rank map \cite{Frougny1992,BerendFrougny1994}.  Regularity of bounded
-zero-representation automata is classical, including for Pisot systems
-without Condition~F, but regularity alone does not bound the survival time of
-one-position overlap chains by $C(U,D)m$
-\cite{Frougny1992,CartonSudberyYassawi2026}.  Carton--Sudbery--Yassawi's
-equivalence of zero preservation and Condition~F is the closest
-methodological precedent: it uses Pisot contraction on shifted bounded zero
-representations, but has no cyclic rank map, collision graph, future-only
-inverse, or $O(m)$ survival-depth theorem
-\cite{CartonSudberyYassawi2026}.  Ashley's linear-bound papers are the most
-likely source of a mistaken priority objection: their bounds concern
-encoders into constrained systems and are linear in the number of states of
-a presenting graph (with the relevant memory and anticipation parameters),
-whereas the natural pair/difference presentations here have exponentially
-many aperture-$m$ states; a state-count-linear theorem would therefore still
-be exponential in $m$ \cite{Ashley1988,Ashley1996}.  The
-Frougny--Sakarovitch bounded-delay theorem converts a rational relation already
-known to have bounded delay into a synchronized, letter-to-letter form; it
-does not deduce $O(m)$ delay from injectivity
-\cite{FrougnySakarovitch1991}.  Finally, classical pair and fiber graphs give
-reachable-cycle injectivity tests and finite inverse windows, but their
-generic difference-state count is $(2d_U+1)^{m-1}-1$, not the new
-aperture-linear estimate
-\cite{AmorosoPatt1972,Richardson1972,Nasu1977,Head1989,LindMarcus1995,
-Nasu1995}.  These precedents supply the automata and collision frameworks;
-none gives the quantitative implication \textup{(A1)}.
-
-\medskip
-\noindent\textbf{Quadratic and simple-Parry results.}
-For every quadratic Pisot base, Theorem
-\ref{thm:full-quadratic-pisot-threshold} classifies the least nontrivial
-aperture $m_*(\beta)$:
+\noindent\textbf{The quadratic classification.}
+Every quadratic Pisot number lies in one of the chambers
+\[
+x^2-ax-b,\quad a\ge b\ge1,
+\qquad\text{or}\qquad
+x^2-ax+b,\quad a\ge3,\ 1\le b\le a-2.
+\]
+After deriving the exact Parry words and rank recurrences, we prove a
+nearest-multiple separation and a bounded sliding-congruence lemma.  They
+lead to Theorem~\ref{thm:full-quadratic-pisot-threshold}:
 \[
 m_*(\beta)=3
 \quad\Longleftrightarrow\quad
 \operatorname{minpoly}(\beta)\in
 \{x^2-ax-a:a\ge1\}\cup\{x^2-ax+1:a\ge3\},
 \]
-and $m_*(\beta)=2$ otherwise.  At and above threshold, finite-block
-injectivity begins at length $m$, the natural overlap presentation is the
-right Fischer cover with $(\lfloor\beta\rfloor+1)^{m-1}$ states, and the
-image is exactly $m$-step, not $(m-1)$-step.  These are exact conclusions for
-the cyclic rank map, using standard Fischer--Krieger theory only as the
-presentation framework \cite{Fischer1975,Krieger1984,LindMarcus1995}.
+and $m_*(\beta)=2$ otherwise.  Thus the exceptional negative chamber is the
+metallic family, with its golden boundary member, and the exceptional
+positive chamber is its critical dual.
 
-For arbitrary nonintegral simple-Parry bases, without a Pisot hypothesis,
-Theorem~\ref{thm:simple-parry-causal-collision} quotients the classical pair
-graph by coordinatewise differences and obtains an exact longest-path formula
-for $\ell_{\rm cau}$.  The unique predecessor of the zero state upgrades the
-injective case to a future-only inverse.  Applied to Bassino's cubic
-simple-Parry Pisot family \cite{Bassino2002}, this gives injective apertures
-$m_n=n-1$ with exact depth $n-1$, a complementary varying-system
-unboundedness calculation.
+The classification includes more than the first injective aperture.
+Theorem~\ref{thm:quadratic-aperture-two-duality} gives the exact chamber
+duality and first separation.  Theorem
+\ref{thm:quadratic-optimal-causal-inverse} determines the positive-chamber
+future-only optimum and bounds the negative chamber.  Theorem
+\ref{thm:quadratic-critical-normal-form} identifies the two-fixed-point
+critical quotient.  Finally, Theorem
+\ref{thm:quadratic-exact-local-order} proves that finite-block injectivity
+begins exactly at length $m$, the natural overlap presentation is the right
+Fischer cover with $(\lfloor\beta\rfloor+1)^{m-1}$ states, and the image in
+the fixed output alphabet is exactly $m$-step, not $(m-1)$-step.  Standard
+Fischer--Krieger theory supplies the presentation framework
+\cite{Fischer1975,Krieger1984,LindMarcus1995}; the exact onset and follower
+separation are arithmetic conclusions of the cyclic rank map.
 
-The paper is organized with the structural result first.  Section
-\ref{sec:pisot-linear-depth} proves \textup{(A1)}--\textup{(A3)} and the
-arbitrary-alphabet bounded-zero theorem.  Sections
-\ref{sec:stabilization}--\ref{sec:metallic-cover} develop the Fibonacci and
-metallic prototypes.  Section~\ref{sec:quadratic-pisot-extension} proves the
-quadratic classification and exact local structure.  Section
-\ref{sec:simple-parry-causal-obstructions} develops the arithmetic difference
-quotient and the cubic varying-system theorem.  Supplementary material holds
-the entropy, Blackwell, pressure, fiber, discrepancy, and geometric
-consequences, none of which enters the parameter-uniform proof.
+\medskip
+\noindent\textbf{Simple-Parry quotients.}
+For an arbitrary nonintegral simple-Parry number, no Pisot hypothesis is
+needed for the graph reduction.  Theorem
+\ref{thm:simple-parry-causal-collision} quotients the classical pair graph by
+coordinatewise differences and proves that every bounded difference is
+realized.  The causal inverse length is one plus an exact longest path, and a
+reachable cycle is equivalent to noninjectivity.  Corollary
+\ref{cor:simple-parry-causal-completeness} uses the unique predecessor of the
+zero state to identify injectivity with finite future-only depth.
+Theorem~\ref{thm:simple-parry-aperture-two} gives the complete aperture-two
+trichotomy, while Proposition~\ref{prop:nonpisot-simple-parry-scope} records
+that the scope is genuinely larger than the Pisot class.
+
+Bassino's cubic family \cite{Bassino2002} then supplies a parameter-varying
+unboundedness theorem.  Lemmas~\ref{lem:cubic-unbounded-family-data}--
+\ref{lem:cubic-unbounded-terminal-paths} verify the Parry data, exclude the
+second carry, and classify the exact terminal paths.  Theorem
+\ref{thm:cubic-unbounded-causal-depth} obtains injective apertures
+$m_n=n-1$ with
+\[
+\ell_{\rm cau}(\beta_n,m_n)=n-1.
+\]
+This varies the system and complements, rather than duplicates, the
+fixed-system linear-order result.
+
+That fixed-system theorem appears in the companion article by the present
+authors, \emph{Linear overlap transients for bounded zero representations in
+Pisot numeration: sharp inverse depth for cyclic rank recodings}.  It proves
+an effective linear transient theorem for arbitrary bounded zero
+representations and derives an aperture-linear inverse bound from an exact
+collision quotient.  No theorem from that companion is used here.  The two
+papers share only the cyclic rank definition and the caution separating it
+from numerical normalization.
+
+Sections~\ref{sec:stabilization}--\ref{sec:stab:branch-and-conjugacy} give
+the Fibonacci model.  Section~\ref{sec:quadratic-pisot-extension} proves the
+quadratic classification and local structure; the short metallic subsection
+then records its constant-type specialization.  Section
+\ref{sec:simple-parry-causal-obstructions} proves the simple-Parry quotient,
+aperture-two trichotomy, and cubic unboundedness.  The supplementary material
+contains entropy, Blackwell, pressure, fiber, discrepancy, bounded-multiple,
+zeta, and geometric consequences; none enters the central proof chain.
