@@ -1,0 +1,71 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly and do the work.
+
+SCOPE: papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams ONLY, and within
+it essentially one proof. Another codex agent is working on two other papers concurrently. Touch
+nothing else.
+
+A PRINTED IDENTITY IN sec_arithmetic_critical.tex IS FALSE AS WRITTEN. It is an off-by-one, the
+conclusion survives it, and it must still be fixed: it is printed with an equals sign, so as it
+stands the paper asserts something untrue.
+
+In the proof introducing the equilibrium mass and its tail, the paper defines
+
+    p^e_j = \overline F(j-1) / \mu
+
+and then prints
+
+    \overline F^e(j) = \sum_{k>j} p^e_k = (1/\mu) \sum_{r>j} \overline F(r).
+
+Substituting r = k-1 in the middle sum: k ranges over k >= j+1, so r ranges over r >= j. The exact
+identity is therefore
+
+    \overline F^e(j) = (1/\mu) \sum_{r >= j} \overline F(r),
+
+with a lower limit of r >= j, not r > j. The omitted term is \overline F(j)/\mu, which is
+O(j^{-alpha}) against a sum of order j^{1-alpha}/(alpha-1), so it is lower order and the Karamata
+asymptotic and the final constant are unaffected. That is why this is a repair and not a
+recalculation.
+
+The same expression is printed a second time a few lines later, where discrete Karamata summation
+is applied to supply the constant. Fix BOTH occurrences.
+
+WHAT TO DO:
+ 1. Correct both printed identities to the r >= j form.
+ 2. Re-derive the Karamata step from the corrected expression and confirm in the text that the
+    constant is unchanged. If the cleanest presentation is to state the exact identity with r >= j
+    and then note that the j-th term is lower order before applying Karamata, do that - one short
+    sentence, no new numbered result.
+ 3. Check the rest of that proof and the surrounding lemma for any other index-boundary slip of the
+    same kind: every sum limit, every shifted-index substitution, every appeal to the renewal
+    sequence u_j versus v_j indexing. Report what you checked and what you found, including
+    "checked and correct" cases. This class of error travels in pairs.
+
+DO NOT change any theorem statement, any hypothesis, any constant, the page budget, or the
+structure. Do not add a numbered result. Do not restate the conclusion.
+
+WHILE YOU ARE IN THIS FILE, one presentational item from an independent audit: the proof of the
+critical law opens with a roadmap sentence, the corollary for the classical Fibonacci partition
+function opens by announcing that it repackages the main theorem, and a paragraph of the conclusion
+restates the two probabilistic outputs already given in the introduction. Those three passages are
+the only repetition the audit found. Tighten them if it can be done without losing information;
+skip any you judge is carrying its weight, and say which you skipped and why. Do not let this grow
+into a rewrite.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels.
+ - AFTER building, extract the text of the compiled PDF with pdftotext and read it. Confirm no
+   printed TeX command name survives anywhere (the previous run of this paper caught a literal
+   qquad this way), no ".tex" or ".pdf" appears in the body, and no reference renders as "??".
+   Log-based checks do not catch these; the extraction does.
+ - Re-run artifacts/verify_critical_constants.py and artifacts/test_verify_critical_constants.py;
+   report pass counts. Regenerate artifacts/SHA256SUMS with LF endings if artifacts change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the directory, and
+   do not leave a __pycache__ behind. Do NOT delete the build logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: both corrected identities verbatim; the corrected Karamata step and confirmation that the
+constant is unchanged; the full list of index boundaries you checked with their verdicts; which of
+the three repetition passages you tightened and which you left, with reasons; the PDF text
+extraction results; page count before and after; compile and verification results.
