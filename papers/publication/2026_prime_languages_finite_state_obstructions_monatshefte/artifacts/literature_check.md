@@ -856,3 +856,36 @@ audit does not claim that the original full text was newly read. The effective
 section states the threshold output explicitly, keeps every eventual-recurrence
 shift in the input/output data, and uses Bennett--Pinter only as the accessible
 published check on the dominant-root hypotheses.
+
+## Per-document bibliography split audit (2026-08-17)
+
+The two document input graphs were traced independently and transitively to
+fixpoint. The `main.tex` graph contains 27 distinct citation keys; the
+`finite_state_article.tex` graph contains 30. Five keys occur in both sets:
+`BruyereHansel1997`, `Frougny1992`, `HardyWright2008`, `LindMarcus1995`, and
+`Rigo2014Vol2`. Each retained `\bibitem` block was copied verbatim from the
+82-entry shared list, in its existing order, into `main_references.tex` or
+`finite_state_references.tex` as appropriate. The shared root `references.tex`
+was removed after both root documents stopped inputting it. No citation was
+added or restored, and no manuscript section text was changed.
+
+The following 30 entries were cited by neither document and were dropped from
+both per-document lists: `AkshayBazilleGenestVahanwala2024`, `Allen1968`,
+`ArtinMazur1965`, `BellEtAl2008MatrixEquations`, `BowenLanford1970`,
+`Bourgain2013PrescribedDigits`, `Bourgain2015PrescribedDigitsII`,
+`BustosKellendonkYassawi2025`, `BhowmikSuzuki2024`, `Buchi1960`,
+`CaucalLeGonidec2014`, `CharlierCisternino2021`, `Cobham1969`,
+`DrmotaMauduitRivat2009`, `DrmotaMuellnerSpiegelhofer2021`,
+`EismanRavikumar2005`, `FlajoletSedgewick2009`, `Kitchens1998`,
+`Lekkerkerker1952`, `MinskyPapert1966`, `MauduitRivat2010`, `Maynard2019`,
+`OgdenRossWinklmann1985`, `Muellner2017`, `OuaknineWorrell2012`,
+`Shallit1996`, `Sinya2021`, `Swaenepoel2020PreassignedDigits`,
+`TarasovVyalyi2011`, and `Yuen2022`.
+
+After a clean rebuild, `main.aux` prints 27 distinct bibliography keys against
+27 distinct keys cited by `main.tex` and its own transitive sources; both the
+printed-but-uncited and cited-but-missing differences are empty. Likewise,
+`finite_state_article.aux` prints 30 distinct keys against 30 distinct keys
+cited by that document and its own transitive sources, with both differences
+empty. The bibliography-only page reductions are 31 to 29 pages for
+`main.pdf` and 43 to 41 pages for `finite_state_article.pdf`.
