@@ -1,0 +1,77 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: the `submission_bundle/` directory of
+  papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte
+ONLY. Do NOT touch that paper's root sources - they are correct and committed. Do NOT touch any
+other paper. Two other codex agents are working on other papers concurrently.
+DO NOT MODIFY ANYTHING UNDER artifacts/oracle_*.md - archived external evidence.
+
+THE PROBLEM. `submission_bundle/` is git-tracked and hand-assembled - no script regenerates it. It
+is the artifact that would actually be sent to the journal, and it is now stale against the paper it
+is supposed to package. Concretely, at the time of writing:
+
+  - the bundle still contains its own `references.tex` with all 82 entries, from before the
+    bibliography was split per document;
+  - its `main.tex` line 61 still reads `\input{references}`;
+  - its `main.pdf` is still 31 pages, from before the editorial revision and the split;
+  - its `source.zip` and `reproducibility.zip` were built from the pre-revision state.
+
+Meanwhile the paper's root state, which is correct and committed, is: the Monatshefte article at 29
+pages inputting `main_references.tex` with exactly its own 27 cited entries; a separate companion
+article `finite_state_article.tex` at 41 pages inputting `finite_state_references.tex` with its own
+30; and `references.tex` deleted.
+
+So the defect that was just repaired in the paper is still present in the thing that would be
+submitted. That is the whole point of this task.
+
+WHAT TO DO.
+
+ 1. Work out what the bundle is supposed to contain, from what is already in it, and write that
+    down in your report. Do not guess from the paper directory - read the bundle's current file
+    list and infer its intended contract: which document, which sections, which artifacts, which
+    archives. Say explicitly whether the bundle is meant to carry only the Monatshefte article or
+    also the companion. If the evidence is ambiguous, say so and choose the narrower reading - the
+    submission is the Monatshefte article.
+
+ 2. Regenerate the bundle from the current root state so that it packages the article as it now
+    stands. Copy files verbatim from the root; do not re-edit content while copying, and do not
+    "improve" anything in transit. Replace the stale `references.tex` with the correct per-document
+    bibliography the article actually inputs, and update the input line to match.
+
+ 3. Rebuild the bundle's `main.pdf` inside the bundle, from the bundle's own copies, so that the
+    PDF a referee opens is generated from exactly the sources shipped beside it. Confirm the page
+    count matches the root article's 29 pages; if it does not, stop and report the discrepancy
+    rather than papering over it - a mismatch means the bundle is not a faithful copy.
+
+ 4. Rebuild `source.zip` and `reproducibility.zip` from the regenerated bundle contents. List what
+    each archive contains in your report. No archive may contain the deleted `references.tex`, any
+    file belonging only to the companion article, or any build artefact that is not intended to
+    ship.
+
+ 5. Verify the bundle exactly as the paper itself is verified, because it is a submission:
+      - printed bibliography keys from the bundle's own `.aux` equal the cited keys in the bundle's
+        own sources, difference empty in BOTH directions;
+      - `latexmk -pdfxe` exits 0 with zero undefined references, zero undefined citations and zero
+        multiply-defined labels;
+      - extract the PDF text with pdftotext: no "??", no ".tex" or ".pdf" in the body, no printed
+        TeX command name, no dangling pointer to material the bundle does not contain;
+      - no `\iffalse`, no `\endinput`, and no `\begin{comment}` in any shipped source.
+
+ 6. If any file in the bundle has no counterpart in the root - something that exists only in the
+    bundle - do NOT delete it silently. List it and say what you think it is. Hand-assembled
+    bundles sometimes carry a cover letter or a journal form that exists nowhere else, and losing
+    that is worse than leaving it stale.
+
+RULES:
+ - Change no mathematics. This is a packaging operation.
+ - No revision marks. Do not leave planning or scratch files. Do not commit.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+ - If you need to stop a process you started, kill only your own process tree. Never run an
+   image-wide taskkill on codex.exe or node.exe - a broad sweep earlier in this sprint killed three
+   unrelated agents and destroyed hours of work.
+
+REPORT: the bundle's inferred contract; the file-by-file list of what you regenerated, copied,
+replaced or left alone; anything present only in the bundle and your reading of it; the archive
+contents; page count and the per-document bibliography counts in both directions; compile and
+extraction results.
