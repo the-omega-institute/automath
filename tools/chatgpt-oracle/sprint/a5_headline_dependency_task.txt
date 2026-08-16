@@ -1,0 +1,89 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_finite_parts_dynamical_zeta_shifts_finite_type_etds ONLY. Other codex
+agents are working on different papers. Touch nothing else.
+DO NOT MODIFY ANYTHING UNDER artifacts/oracle_*.md. Those are archived external evidence.
+
+THE PROBLEM, AND IT IS THE PAPER'S MAIN CLAIM.
+
+The manuscript now quarantines an unverified premise, named (KN85), in the hypotheses of the
+conditional linear-rigidity theorem. Good. But the paper's HEADLINE theorem depends on the same
+premise and does not say so. The chain, verified by reading the sources:
+
+  thm:odd-adams-abelian-two-group-finite-sampling, whose proof at
+  sec_refocused_odd_adams_sampling.tex:174 reads "If H_chi != 1, [the general rational p-Mahler
+  lifting theorem] with p = 2 gives the unique normalized R_chi in Q(z)^x such that ..."
+    -> thm:general-rational-p-mahler-lifting, whose proof at
+       sec_refocused_boundary_collisions_part1.tex:548 ends "prop:algebraic-mahler-coboundary now
+       gives the unique normalized rational function R = F_{H,p}^{-1} ..."
+      -> prop:algebraic-mahler-coboundary, which is the algebraic-to-rational interface attributed
+         to Keiji Nishioka 1985 - the statement recorded in artifacts/literature_check.md as
+         "BIBLIOGRAPHIC RECORD VERIFIED; STATEMENT NOT VERIFIED" and in
+         artifacts/oracle_nishioka_blocker.md as unretrievable.
+
+A search for a parity-specific bypass found none: that proposition is the sole algebraic-to-rational
+step, and the p = 2 case routes through it.
+
+So the manuscript currently ships an asymmetry in which a new theorem honestly declares a dependency
+that the main theorem inherits silently. That is not acceptable, and it is worse than the original
+error because the dependency is now known.
+
+WHAT TO DO.
+
+ 1. Determine, and state in your report, the complete list of results in this manuscript whose proof
+    chains reach prop:algebraic-mahler-coboundary. Do this by following proofs, not by grepping for
+    the string KN85 - the point is precisely that the dependency is currently unmarked. Include
+    results in the supplement.
+
+ 2. For every result on that list, make the dependency explicit at the result itself, in the same
+    style already used for the conditional linear theorem: the hypothesis (KN85) named in the
+    statement, not a remark elsewhere. Use the wording already established in the manuscript so the
+    treatment is uniform.
+
+ 3. Say it once, clearly, where a reader meets the paper: in the abstract and in the introduction,
+    state that the sampling results rest on a named published statement whose printed form the
+    authors were unable to consult, that the exact statement required is quoted in the paper, and
+    that everything else is unconditional. Do not bury this and do not repeat it in every section -
+    one place at the front, plus the hypotheses themselves.
+
+ 4. Keep the honest separation visible: the sharp squarefree Mahler bound, the collision-jet
+    inequality and the odd-prime multi-collision theorem depend on no external input, and the
+    sampling corollary's lower bound is unconditional while its upper bound is not. A reader must be
+    able to see which parts stand on their own. If a clean way to present that is a short paragraph
+    listing what is and is not conditional, write it once.
+
+ 5. Reconsider the title honestly. If the paper's headline determination result is conditional, a
+    title asserting it flatly may overclaim. Decide, do it or leave it, and justify your choice in
+    the report. Do not invent a hedge that makes the title unreadable.
+
+DO NOT attempt to retrieve the 1985 text. A prior round exhausted that and paywalled retrieval is
+not to be worked around. DO NOT close the gap with a review, an abstract, a later paper's
+restatement, or an OCR snippet. If you find that some result on the list can be reproved without the
+1985 interface, that is a genuinely valuable outcome - prove it properly, at referee standard, and
+say so; otherwise mark the dependency and move on.
+
+DO NOT weaken or restate any theorem's mathematical content. This task adds hypotheses that were
+always implicitly there; it does not change what is proved.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels for
+   main and supplement.
+ - AFTER building, extract both PDFs with pdftotext and confirm: no printed TeX command name, no
+   ".tex" or ".pdf" in the body, no "??", and numbering ascending by first definition.
+ - Confirm no suppressed source: no \iffalse block and no \endinput in any .tex that is input by a
+   built document. A sibling paper in this repository shipped 1,103 lines of removed-but-suppressed
+   text with entirely clean logs.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS with LF endings if artifacts change.
+ - Fix the stray comma before "If" at the end of the (KN85) quote block in
+   sec_refocused_linear_collision_rigidity.tex while you are there.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file. Do not commit.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the complete dependency list with the proof path for each entry; the amended statement of
+the headline theorem verbatim; the abstract and introduction sentences as finally written; what you
+decided about the title and why; any result you were able to free from the 1985 interface, with its
+proof; page counts before and after; compile, extraction, numbering, suppression and verification
+results.
