@@ -17,7 +17,7 @@
 | 篇 | 目录 | 页 | 最新裁决 | **去向** |
 |---|---|--:|---|---|
 | **A2** | `cayley_chebyshev_..._jfa` | 87+33 | **JFA 审稿人裁决：REJECT AND RESUBMIT**——非数学问题：稿中含至少三篇独立论文、缺单一架构；须围绕 stable 脊柱重组 | **JFA**（重组后）|
-| **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **20+4** | **ETDS 审稿人裁决:ACCEPT WITH MINOR REVISIONS,明言无需新数学**;9 必需 + 2 可选修订中 | **ETDS**(75%,修后 77%)|
+| **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **18+0** | **ETDS 小修已执行并核实**：第 5 节删除、防御层清除、引言立 Theorem A/B/C、四页补充不再提交 | **ETDS 75–77%** |
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
 | **A5** | `finite_parts_..._etds` | 43+19 | 已按三层重新配重;文献 81/84 已核 | **ETDS**(理由落在动力学定理)|
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 189 — A3-A 九项修订完成并核实入库（d7c8a317a）。** 页数 20+4 降为 **18+0**，.tex 源码 1020 行降为 793 行——本次操作确实是删而非增。第 5 节与 S01 技术审计、supplementary_material.tex 均已删除；固定-变动系统对比移入引言，simple-Parry 依赖与阶锐性限定各成 Theorem 4.1 后的一条注记，伴随论文压到一句。引言现立 Theorem A/B/C，层次在第二页可见；第 3 节开头加了五句概念桥；标题改为 "Linear overlap transients and cyclic rank recodings in Pisot numeration"。**第 5 项（可能触及数学的那项）的处置**：四页补充判为编辑规则的第三类（扩展有限记录、复现命令、输出与哈希），不作为数学补充材料提交；其 24 项声称/计算逐条定位：19 项已在正文，5 项为例示或实现回归、无任何证明依赖之，精确根隔离则移入立方定理的证明。随后逐条核验了"任何定理不得依赖仅以机器输出存在的论证"，结果为无。**我方独立核实**：清洁重建 exit 0、undefined 全 0、18 页、PDF 正文抽取零泄漏、固定三次 28/28、任意 D 13/13（七边回归通过）、SHA 8/8。**一处需人工回补**：submission_metadata.md 被一并精简，丢失了长度区间、ETDS/TAMS 概率与伴随论文目录指针；这属流水线记账而非稿件内容，已按最新数字重写并记入"审计材料保留于 artifacts/、不属投稿件、无结果依赖之"。A8-A 四项修订仍在跑；A2 重组任务待派；A5 深研究 2bb0d4b1 仍 waiting_response。内存 1.05 GB、缺页 104。
 
 > **TICK 188 — 三篇 house-style 裁决到齐,结论分化,且三篇被独立诊断出同一种病。** A8-A(f00cdaba)与 A2(c3109c16)取回。**A8-A：ACCEPT WITH MINOR REVISIONS**——"不建议再来一轮数学,也不认为这是退修重投的案子"。他特别肯定第 2 节的 record-to-sample 耦合与反向续延核,以及 Proposition 3 的极点阶论证(它讲清了碰撞坐标上的正信息是模型特有事实而非一般锥形 LAN 的推论),二者须原样留在主文。四项必需：第 4 节重排(Estimator 7 移到 Theorem 4 之前、先定义残差化统计量与经验信息、把 score-chart/奇异块/Schur 补/回退门/默认不拒绝等机制**移出定理陈述但全部保留在构造与证明中**)；在主文印出被 Theorem 4 证明所用三条补充结果的**精确陈述**(DQM/包络、停止得分 CLT 与信息 LLN、插入等度连续),证明仍留补充；删除重复的防御性限定；大幅缩短讨论。**A2：REJECT AND RESUBMIT**——本组此前认定最强的一篇。他明言问题不在数学："若作者愿意拆分重组,我看不出需要新的旗舰定理。"病因是**稿中至少含三篇独立论文**(一维 Cauchy/Cayley 全阶熵系数篇、stable 半群耗散与最优矩指数篇、RKHS 与整数格采样篇),题名承诺 stable 而前 27 页几乎全是 Cauchy 与径向 Poisson 机器,一般 stable 定理到第 28 页才开始；第 7、8 节作者自述为次要却仍留在正文。要求围绕 stable 脊柱重组(Thm 4.2、5.17、5.23、5.27 与 Cor 5.30、锐性构造、至多一个简明应用),移出第 3 节大部、Cor 4.5-4.8、5.1、5.3 的 Gauss 求积、第 6 节首个 proxy 缺陷定理之后的大部、以及第 7、8 节全部,另成一到两篇。另一条直指我们刚"修好"的那个宏：**凡保留结果其证明仅为"见补充材料中某处"者,必须补上证明或删除**——tick 186 修的是文件名泄漏这一表层,真正的病是主文把证明外包。**三篇独立得出同一诊断**：A3-A"散文表现得像历次审计的记录"、A8-A"过度防御,同一组限制被反复陈述"、A2"每一段都像是为预先堵住某个假想异议而写"。这是我方流水线自身的指纹——每轮审稿追加的澄清逐层沉积,从环内看不见。已写入长期记忆(feedback_referee_round_scar_tissue),并在任务书里把本次操作明确定义为**删而非改**。已派 A8-A 修订(sprint/a8a_ejs_revision_task.txt)。A2 重组任务待派。A5 深研究 2bb0d4b1 仍 waiting_response。A3-A 九项修订仍在跑。内存 0.98 GB、缺页 276。
 
