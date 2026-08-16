@@ -1,0 +1,124 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly and do the work.
+
+SCOPE: papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams ONLY.
+Do not touch 2026_finite_window_zeckendorf_thermodynamics_jnt. Do not touch any other paper
+directory. Another agent is working on an unrelated paper in this repository at the same time.
+
+THE SPLIT IS DONE AND IS CORRECT. Paper A builds clean, its mathematics is right, and nothing was
+lost in the division. This task is not a rework. It is the development pass that the split did not
+include.
+
+THE PROBLEM. The external valuation that put Paper A at 55-65 percent at TAMS was explicitly
+conditional on "a genuine rewrite of the two papers rather than a mechanical division of the PDF",
+and it gave a section-by-section page budget:
+
+    5-6 pages   introduction, history, contribution boundary
+    ~8 pages    the Brocot condensation section
+    4-6 pages   setting up the minimal Weinstein generator renewal needed for the application
+    5-6 pages   the critical tail, renewal expansion, stable law, and Fibonacci consequences
+    3-4 pages   conclusion and references
+
+with the summary judgement "it should remain comfortably near 32 pages."
+
+What was actually produced is 19 pages:
+
+    Introduction                                    6   - in budget
+    Brocot condensation                             8   - in budget
+    The Fibonacci generator renewal (sec 3)         4   - bottom of budget
+    The arithmetic critical law (sec 4)             2   - budget was 5-6
+    Conclusion                                      1   - short
+    References                                      2
+
+The whole shortfall sits in Sections 3-5, and Section 4 is the one that matters: it is a single
+theorem, Theorem 4.1, with a proof of about fifty lines that discharges the second-order renewal
+step by citing Omey-Van Gulck and the domain-of-attraction step by citing Feller. Everything it
+claims is true and the spine items are present - the exact tail constant K_C, the regularly varying
+tail, the m^{3-sigma_0} correction, and the spectrally positive alpha-stable limit. But a TAMS
+referee reading Section 4 sees two pages in which the paper's own application is asserted and
+handed off to two external references.
+
+WHAT TO DO. Develop Sections 3, 4 and 5 to the assessed budget by writing out mathematics that is
+currently compressed or cited. DO NOT PAD. Every page you add must carry content a referee would
+want. If you cannot fill the budget honestly, fill what you can and say in your report exactly how
+far you got and why the remainder is not available - a 24-page paper of real content is a better
+outcome than a 32-page paper with three pages of restatement.
+
+Specific directions, in priority order:
+
+ 1. SECTION 4 IS THE PRIORITY. Give the critical tail its own derivation rather than a two-line
+    summation. State the second-order lattice renewal input as a numbered lemma with its hypotheses
+    written out in the paper's own notation - aperiodicity, span one, finite mean, tail regular
+    variation of index -(sigma_0 - 1) - and verify each hypothesis explicitly against the letter law
+    rather than asserting that "the hypotheses are therefore satisfied." The span-one argument
+    currently rests on one parenthetical about the costs of 1/2 and 1/3; make it a proof. Do the
+    same for the domain-of-attraction step: state the one-sided conditions being invoked, verify
+    them, and give the normalization a_n explicitly for this law rather than leaving it as "chosen
+    so that n Pr{C > a_n} -> 1". If a closed form or an asymptotic for a_n follows from the exact
+    tail constant, give it - that is exactly the kind of concreteness the assessor was pricing.
+
+ 2. THE FIBONACCI CONSEQUENCES ARE THE PART A REFEREE WILL LOOK FOR AND THEY ARE THE THINNEST.
+    The valuation lists as one of Paper A's five spine items "a stable-renewal and noninteger
+    finite-size consequence for the standard Fibonacci partition function." Paper A currently
+    delivers this as the expansion of Z_m^R(-sigma_0) inside Theorem 4.1. Separate it out and
+    develop it: state the consequence for the classical Fibonacci partition function as its own
+    numbered result, in the classical notation a reader of that literature uses, with the
+    noninteger exponent 3 - sigma_0 and its constant displayed; say what the correction term means
+    at the scale of the partition function; and give at least one concrete consistency check -
+    a limiting case, a numerical confirmation of the constant, or a comparison with the known
+    leading order. If you add a numerical check, add it as a script under artifacts/ with a test,
+    regenerate SHA256SUMS with LF endings, and record it in REPRODUCE.md.
+    Paper A currently ships zero verification scripts. A TAMS submission whose central new
+    asymptotic has no reproducible check is weaker than it needs to be, and this repository's
+    standard is that numerical results are generated by a script and reproducible.
+
+ 3. SECTION 3 to the top of its budget. The generator renewal setup is 4 pages against a 4-6 page
+    ask. Add what Section 4 actually consumes: state the weighted renewal identity in the form
+    Section 4 uses it, prove the exact identity rather than referring to it, and make the passage
+    from the one-layer form to the standard layer sum explicit.
+
+ 4. THE CONCLUSION at one page is too short to do its job. It should state the proved scope, the
+    limits, and the boundary with the companion paper - the assessor's own restraint point, that
+    these are structural consequences specific to the nonmultiplicative continuant model and not a
+    new universal condensation mechanism, belongs here in full, together with the disclaimer about
+    the remaining coefficients of the corrected asymptotic.
+
+ 5. THE INTRODUCTION is in budget and should stay near 6 pages. Do not expand it to reach a page
+    count. If Sections 3-5 grow, the contribution boundary paragraph may need one adjustment so the
+    stated architecture matches the article; make that adjustment and nothing more.
+
+PRESERVE, without exception:
+ - every existing numbered result, its number, its hypotheses and its strength. Theorem 4.1 may be
+   split into several numbered statements if that is the honest way to develop it, but no hypothesis
+   may be dropped and nothing may be strengthened;
+ - the exact tail constant b_C = 8 and K_C = 2^{sigma_0+2}/(sigma_0-1), and the identification of
+   b_C with 2 (zeta(sigma_0 - 1)/zeta(sigma_0))^2;
+ - the Dushistova identification and the endpoint correction exactly as stated, including the
+   disclaimer about the remaining coefficients;
+ - the two companion-paper references at the scope boundary in the introduction and conclusion, and
+   the statement that the two arguments are logically autonomous.
+
+RULES:
+ - Every claim proved at referee standard. Numerics are sanity checks, never a substitute for proof.
+ - Keep every .tex under 800 lines; split if needed.
+ - Clean rebuild: latexmk -C, remove .aux, alternating passes until latexmk -pdfxe exits 0 with zero
+   undefined references, zero undefined citations and zero multiply-defined labels.
+ - Any citation you add must be verified in Crossref, OpenAlex, Semantic Scholar or the official
+   arXiv record first, comparing returned title and lead author against what you write, and recorded
+   in artifacts/literature_check.md. This is not optional: two fabricated entries and roughly
+   twenty-five misdirected DOIs were found across sibling papers. You will likely need to cite the
+   second-order renewal theorem and the domain-of-attraction criterion precisely - quote the exact
+   statement numbers you rely on, and check that the numbering you cite is the numbering in the
+   edition you name.
+ - No revision marks anywhere: no "new", "expanded", "we have added". The article must read as
+   though it was always this article.
+ - Do not leave any planning, log or scratch file in the paper directory. Do NOT delete the build
+   logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the final page count and the per-section page table against the budget above; every numbered
+result added or split out, with its statement; how each hypothesis of the renewal and
+domain-of-attraction inputs was verified rather than asserted; the explicit form of a_n if you
+obtained one; the Fibonacci partition-function consequence as finally stated, with whatever
+consistency check you supplied; any part of the budget you could not fill honestly, and why;
+compile results and verification pass counts.
