@@ -400,42 +400,13 @@ class FiniteClaimTests(unittest.TestCase):
         self.assertIn("Odd layers realizing all minimal covers: 14/14", report)
         self.assertIn("Rank-pure canonical products in M_n: 28/28 layer checks", report)
         self.assertIn("Rank-pure weighted products in M_n: 28/28 layer checks", report)
-        self.assertIn("Exact total support spectra: 28/28", report)
-        self.assertIn("Exact connected support spectra: 28/28", report)
-        self.assertIn("Extremal atomic-product counts: 28/28", report)
-        self.assertIn(
-            "Four-coordinate witness kernels: 24 orbits / 243 labelled",
-            report,
-        )
-        self.assertIn(
-            "T-connected kernels: 13 orbits / 133 labelled; "
-            "T-disconnected kernels: 11 orbits / 110 labelled",
-            report,
-        )
-        self.assertIn(
-            "n=3465 support separation: ranks (9, 15, 21, 33); "
-            "T-support disconnected; positive support connected",
-            report,
-        )
         self.assertIn("Theta-normalized C_k ratios at k=20,40,80:", report)
-        self.assertIn("Central local-limit errors at k=40,80 (d=0):", report)
-        self.assertIn("Rank-window deaggregation inequalities: 28/28", report)
-        self.assertIn("Squarefree BLMS pigeonhole inequalities: 17/17", report)
-        self.assertIn("Refined private-cover upper bounds: 28/28", report)
-        self.assertIn("Fibotomic rank-entropy inequalities: 28/28", report)
-        self.assertIn("Fibotomic exact-rank radical divisibilities: 28/28", report)
-        self.assertIn("Jarden a(10p) >= 2 checks: 0/0", report)
-        self.assertIn(
-            "Exact-rank prime existence on 3 <= d <= 30: 26/26 "
-            "nonexceptional ranks",
-            report,
-        )
-        self.assertIn("Exceptional empty prime fibers: ranks 6 and 12", report)
-        self.assertIn(
-            "Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
-            report,
-        )
-        self.assertIn("Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12", report)
+        self.assertIn("Support-bound checks:", report)
+        self.assertIn("Table checkpoint at n=30:", report)
+        self.assertNotIn("Fibotomic", report)
+        self.assertNotIn("inverse-dynamics", report)
+        self.assertNotIn("Four-coordinate", report)
+        self.assertNotIn("realized types", report)
         self.assertIn("Python version:", report)
         self.assertIn("SymPy version:", report)
         self.assertNotIn("elapsed_seconds", report.lower())

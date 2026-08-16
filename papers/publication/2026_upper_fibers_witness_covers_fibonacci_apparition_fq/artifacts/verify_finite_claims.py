@@ -1559,8 +1559,6 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         "Rank-pure universality checks:",
         f"  Minimal-cover formula = direct enumeration (k <= 4): "
         f"{cover_formula_checks}/4",
-        f"  Connected-cover inversion = direct enumeration (k <= 4): "
-        f"{connected_cover_checks}/4",
         f"  Rank-pure layers checked: {rank_pure_layers}",
         f"  Exact-rank Mobius counts checked on every nonempty support",
         f"  Rank-pure canonical products in M_n: {rank_pure_membership_layers}/"
@@ -1570,71 +1568,19 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         "layer checks",
         f"  Odd layers realizing all minimal covers: {odd_complete_realizations}/"
         f"{odd_rank_pure_layers}",
-        f"  Exact total support spectra: {support_spectrum_checks}/"
-        f"{deaggregation_layers}",
-        f"  Exact connected support spectra: {connected_support_spectrum_checks}/"
-        f"{deaggregation_layers}",
-        f"  Extremal atomic-product counts: {extremal_slice_checks}/"
-        f"{deaggregation_layers}",
-        f"  Four-coordinate witness kernels: "
-        f"{four_coordinate_summary.orbit_count} orbits / "
-        f"{four_coordinate_summary.labelled_count} labelled",
-        f"  T-connected kernels: "
-        f"{four_coordinate_summary.t_connected_orbit_count} orbits / "
-        f"{four_coordinate_summary.t_connected_labelled_count} labelled; "
-        f"T-disconnected kernels: "
-        f"{four_coordinate_summary.t_disconnected_orbit_count} orbits / "
-        f"{four_coordinate_summary.t_disconnected_labelled_count} labelled",
-        f"  n=3465 support separation: ranks "
-        f"{four_coordinate_counterexample.ranks}; T-support disconnected; "
-        "positive support connected",
         "  Exact minimal-cover values C_k (1 <= k <= 6): "
         + str(tuple(minimal_cover_count(k) for k in range(1, 7))),
-        "  Connected-cover ratios D_k/C_k at k=20,40,80: "
-        + ", ".join(
-            f"{connected_minimal_cover_count(k) / minimal_cover_count(k):.12f}"
-            for k in (20, 40, 80)
-        ),
         "  Theta-normalized C_k ratios at k=20,40,80: "
         + ", ".join(
             f"{theta_normalized_cover_ratio(k):.12f}" for k in (20, 40, 80)
         ),
-        "  Central local-limit errors at k=40,80 (d=0): "
-        + ", ".join(
-            f"{abs(local_limit_probability(k, 0)[0] - local_limit_probability(k, 0)[1]):.3e}"
-            for k in (40, 80)
-        ),
-        f"  Rank-window deaggregation inequalities: {deaggregation_checks}/"
-        f"{deaggregation_layers}",
-        f"  Squarefree BLMS pigeonhole inequalities: "
-        f"{squarefree_pigeonhole_checks}/{squarefree_layers}",
-        f"  Refined private-cover upper bounds: {refined_private_bound_checks}/"
-        f"{deaggregation_layers}",
-        f"  Fibotomic rank-entropy inequalities: {fibotomic_entropy_checks}/"
-        f"{fibotomic_layers}",
-        f"  Fibotomic exact-rank radical divisibilities: "
-        f"{fibotomic_radical_checks}/{fibotomic_layers}",
-        f"  Jarden a(10p) >= 2 checks: {jarden_checks}/{jarden_layers}",
         *ladder_separation_lines,
         "",
-        "Prime inverse-dynamics checks:",
-        f"  Exact-rank prime existence on 3 <= d <= {scalable_max}: "
-        f"{nonexceptional_exact_rank_checks}/"
-        f"{nonexceptional_exact_rank_checks} nonexceptional ranks",
-        "  Exceptional empty prime fibers: ranks 6 and 12",
-        "  Reverse-ray prefix above 7: 7 <- 13 <- 233 <- 139801",
-        "  Exceptional path to fixed point 12: 7 -> 8 -> 6 -> 12",
-        "",
-        "Corrected n=30 data:",
+        "Table checkpoint at n=30:",
         f"  A(30) = {n30.a_count}",
         f"  M_30 = {n30.minimal_generators}",
-        f"  realized types = {realized_types}",
-        f"  excluded types = {excluded_types}",
         "",
-        "Growth-law checks:",
-        "  finite upper bound: #M_n <= sum_{r<=omega(n)} binom(Omega(F_n), r)",
-        "  simplified upper bound: #M_n <= n^omega(n)",
-        "  odd-layer lower bound: #M_n >= Bell(omega(n))",
+        "Support-bound checks:",
         "  private-cover lower bound (k>=3): #M_n >= "
         "(2^floor(k/2)-1)^ceil(k/2)",
         "  private-cover upper bound: sum_{r<=k} binom(k,r) "
@@ -1644,7 +1590,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"at n={max_r_n}",
         *(
             [
-                f"  first support-four layer n=210: #M_210 = "
+                f"  support-four checkpoint n=210: #M_210 = "
                 f"{len(support_four.minimal_generators)}, R(210) = "
                 f"{multiplicities[210]}, lower bound = "
                 f"{private_cover_lower_bound(4)}"

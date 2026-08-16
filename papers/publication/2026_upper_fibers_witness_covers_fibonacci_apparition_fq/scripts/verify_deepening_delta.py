@@ -521,16 +521,11 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"  M_n direct = M_n witness: {minimal_generator_set_equalities}/"
         f"{exhaustive_max - 1} set equalities",
         "",
-        "Corrected n=30 data:",
+        "Table checkpoint at n=30:",
         f"  A(30) = {n30.a_count}",
         f"  M_30 = {n30.minimal_generators}",
-        f"  realized types = {realized_types}",
-        f"  excluded types = {excluded_types}",
         "",
-        "Growth-law checks:",
-        "  finite upper bound: #M_n <= sum_{r<=omega(n)} binom(Omega(F_n), r)",
-        "  simplified upper bound: #M_n <= n^omega(n)",
-        "  odd-layer lower bound: #M_n >= Bell(omega(n))",
+        "Support-bound checks:",
         "  private-cover lower bound (k>=3): #M_n >= "
         "(2^floor(k/2)-1)^ceil(k/2)",
         "  private-cover upper bound: sum_{r<=k} binom(k,r) "
@@ -540,7 +535,7 @@ def run_battery(exhaustive_max: int, scalable_max: int) -> str:
         f"at n={max_r_n}",
         *(
             [
-                f"  first support-four layer n=210: #M_210 = "
+                f"  support-four checkpoint n=210: #M_210 = "
                 f"{len(support_four.minimal_generators)}, R(210) = "
                 f"{multiplicities[210]}, lower bound = "
                 f"{private_cover_lower_bound(4)}"
