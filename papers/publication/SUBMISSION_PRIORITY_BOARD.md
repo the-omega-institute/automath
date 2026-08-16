@@ -16,7 +16,7 @@
 
 | 篇 | 目录 | 页 | 最新裁决 | **去向** |
 |---|---|--:|---|---|
-| **A2** | `cayley_chebyshev_..._jfa` | 87+33 | 签字项完成;查出 1 条伪造 + 3 条错配引用并修 | **JFA** |
+| **A2** | `cayley_chebyshev_..._jfa` | 87+33 | **JFA 审稿人裁决：REJECT AND RESUBMIT**——非数学问题：稿中含至少三篇独立论文、缺单一架构；须围绕 stable 脊柱重组 | **JFA**（重组后）|
 | **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **20+4** | **ETDS 审稿人裁决:ACCEPT WITH MINOR REVISIONS,明言无需新数学**;9 必需 + 2 可选修订中 | **ETDS**(75%,修后 77%)|
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
