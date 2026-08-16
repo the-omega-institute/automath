@@ -49,3 +49,11 @@ The target order is EJS, then SPA, then Bernoulli.
 - No empirical data were used.
 - Supplementary material: yes.
 
+
+## Numbering
+
+All numbered environments share one counter, so the sequence runs Theorem 1,
+Proposition 2, Proposition 3, Estimator 4, Theorem 5, Corollary 6, Lemma 7 in
+order of appearance. The limit-experiment theorem is Theorem 5. The archived
+assessor reports in `artifacts/` refer to it as Theorem 4, which was its number
+before the estimator was moved ahead of it; no other result was renumbered.

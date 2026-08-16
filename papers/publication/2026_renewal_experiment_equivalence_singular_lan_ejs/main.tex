@@ -15,6 +15,16 @@
 \usepackage{xcolor}
 \usepackage[mathlines,switch]{lineno}
 
+% The mnemonic equation series (LE, SL, U, and so on) are deliberately
+% unnumbered by the ordinary equation counter.  The four ordinary equation
+% groups advance this parent counter in reading order.
+\newcounter{equationgroup}
+\numberwithin{equation}{equationgroup}
+\newcommand{\inputnumberedequations}[1]{%
+  \stepcounter{equationgroup}%
+  \input{#1}%
+}
+
 \hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
 \setstretch{2.0}
 \setlength{\parskip}{0.36em}
@@ -27,8 +37,7 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{estimator}{Estimator}
-\setcounter{estimator}{6}
+\newtheorem{estimator}[theorem]{Estimator}
 \theoremstyle{definition}
 \newtheorem*{definition*}{Definition}
 \newtheorem*{remark*}{Remark}
@@ -60,10 +69,10 @@
 \linenumbers
 \maketitle
 
-\input{sections/front}
+\inputnumberedequations{sections/front}
 \input{sections/equivalence}
-\input{sections/serial_coordinates}
-\input{sections/collision_theorem}
-\input{sections/main_proofs}
+\inputnumberedequations{sections/serial_coordinates}
+\inputnumberedequations{sections/collision_theorem}
+\inputnumberedequations{sections/main_proofs}
 \input{sections/discussion}
 \input{sections/end}
