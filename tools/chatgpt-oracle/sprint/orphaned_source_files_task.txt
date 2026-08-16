@@ -1,0 +1,68 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_homological_visibility_gluing_obstructions_state_forcing_apal ONLY.
+Do not modify any theorem, proof, section text or bibliography entry that a built document uses.
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere - archived external evidence.
+
+THE DEFECT. The editorial revision stopped inputting ten section files but left them tracked in the
+repository. They are not built, not referenced, and invisible to every check that works from the
+compiled documents - which is why a citation inside one of them resolves to no printed bibliography
+entry without producing any warning. The files:
+
+    sec_component_image_construction.tex
+    sec_component_image_construction_part2.tex
+    sec_gerbe_visible_strictification.tex
+    sec_information_states.tex
+    sec_mixed_component_construction.tex
+    sec_null_decomposition.tex
+    sec_null_decomposition_lifts.tex
+    sec_null_decomposition_part2.tex
+    sec_null_decomposition_rigidity.tex
+    sec_wedge_sphere_label_loss.tex
+
+Journals take source uploads. Shipping ten files that are not part of the paper invites the question
+of what they are, and a reader of the repository cannot tell which sources are live.
+
+WHAT TO DO. For each of the ten, decide between exactly two dispositions and state which and why:
+
+ - DELETE, if its content was genuinely superseded - absorbed into a surviving section, or cut as
+   part of the revision. This will be the common case. It remains recoverable from git history.
+ - RETAIN DELIBERATELY, if it carries material worth keeping for later work that has no home yet.
+   In that case it must not sit loose among the live sources: move it under a clearly named
+   directory such as `retired/`, and record in one short file there what each retained file is and
+   why it was kept. Do not leave a retained file where it looks like part of the paper.
+
+Do not invent a third option, and do not restore any of them to the build.
+
+BEFORE DECIDING, check for each file whether its content survives elsewhere. A file whose theorems
+were absorbed into a live section is a clear delete; a file carrying results that exist nowhere else
+is the case that needs the retain decision and your reasoning. Report that determination per file -
+this is the substance of the task, not the deletion itself.
+
+THEN VERIFY THE CONSEQUENCES, because removing files can break things that were quietly depending
+on them:
+
+ - rebuild both documents cleanly and confirm zero undefined references, zero undefined citations
+   and zero multiply-defined labels, and that the page counts are unchanged at 26 and 6;
+ - confirm the printed bibliography keys equal the cited keys in both directions, per document,
+   taking cited keys only from files the documents actually input. The Murray1996 phantom should
+   disappear as a consequence; if any NEW mismatch appears, that means a live section was depending
+   on something in a removed file - stop and report it rather than patching;
+ - confirm no remaining .tex in the directory is untracked-by-the-build: every source file present
+   should either be input by a built document or sit under the retired directory.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove auxiliaries, alternating passes until latexmk -pdfxe exits 0.
+ - Extraction check with pdftotext for filenames, printed command names and "??". pdftotext is
+   evidence, not an authority: if a glyph prevents it confirming something correct, report the
+   limitation and give page-image evidence rather than editing the manuscript.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS with LF endings if artifacts change.
+ - No revision marks. No scratch files. Do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: the per-file disposition with the reasoning and where the content survives; the retired
+directory's contents and its record file if you created one; confirmation that the Murray1996
+mismatch is gone and that no new mismatch appeared; page counts; compile, extraction and
+verification results.

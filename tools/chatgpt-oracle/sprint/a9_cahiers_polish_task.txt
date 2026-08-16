@@ -1,0 +1,64 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly. This is a small, bounded task with one terminology change, one file
+removal, and one question to answer rather than act on.
+
+SCOPE: papers/publication/2026_homological_visibility_gluing_obstructions_state_forcing_apal ONLY.
+Do not modify any theorem, hypothesis, proof or bibliography entry.
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere.
+Another agent may be working in this same directory on orphaned section files. Before you start,
+check `git status` for that directory; if section files are being added, removed or moved while you
+work, STOP and report rather than racing it. Your changes must not collide with that task.
+
+1. TERMINOLOGY: "band" in French.
+
+The new French résumé renders the band of a gerbe as "une bande constante finie". Giraud's own
+French term, in the very work this paper cites (Giraud, Cohomologie non abelienne, Chap. IV), is
+"le lien". A Cahiers editor is precisely the reader who knows that, and this journal's readership is
+the Giraud school.
+
+Change the résumé to use "lien" wherever it currently uses "bande" for the band of a gerbe,
+adjusting the grammar accordingly - "lien" is masculine, so agreements and articles must follow
+("un lien constant fini", "le lien"). Do NOT change the English "band" anywhere; the English term is
+correct and the manuscript is consistent in it.
+
+Before making the change, confirm from the cited source or a reliable reference that "lien" is
+indeed Giraud's term for this object and that it is the standard French usage, and say in your
+report what you checked. If you find that "bande" is also in current use and the change is a matter
+of taste rather than convention, say so and leave it alone - I would rather keep a defensible word
+than swap it on a guess.
+
+2. REMOVE A STALE ARTEFACT.
+
+`apal_submission_source.zip` sits in the directory. It is dated before the revision, it was built
+for the old APAL target, and the paper is now going to Cahiers - the cover letter beside it is
+`cover_letter_cahiers.txt`. It is not tracked by git, so removing it loses nothing recoverable.
+
+Before deleting, list its contents and confirm it holds nothing that exists nowhere else. If it does
+contain something unique, do not delete it - report what.
+
+3. ANSWER, DO NOT ACT: the directory name.
+
+The directory is named `..._apal` while the paper now targets Cahiers, and the archived assessor
+reports and cover letter are all Cahiers. Renaming a paper directory touches every path that refers
+to it, so do NOT rename it.
+
+Instead, report: every place inside the paper directory where the string "apal" appears in a file
+name or in file contents, and whether any of those occurrences would mislead a reader or a
+submission system. That inventory is what I need in order to decide whether a rename is worth it.
+
+RULES:
+ - Clean rebuild afterwards: latexmk -C, remove auxiliaries, alternating passes until latexmk -pdfxe
+   exits 0 with zero undefined references, zero undefined citations and zero multiply-defined labels
+   for both documents. Page counts should stay at 26 and 6; report them.
+ - Verify the résumé by extraction with `pdftotext -enc UTF-8`, NOT bare pdftotext. The default
+   encoding on this machine is Latin-1 and silently fails to match accented text, which makes
+   correct content look absent. If extraction still cannot confirm something that looks right in the
+   source, rasterize the page with pdftoppm and report the extraction limit - never edit the
+   manuscript to satisfy a check.
+ - Re-run artifacts/verify*.py and artifacts/test_*.py; report pass counts.
+ - No revision marks. No scratch files. Do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: what you checked about "lien" versus "bande" and the résumé sentence before and after; the
+zip's contents and whether you removed it; the full "apal" inventory with your read on which
+occurrences matter; page counts, compile, extraction and verification results.
