@@ -118,3 +118,25 @@ curl -A "mailto:<address>" -H "Accept: application/vnd.citationstyles.csl+json" 
 
 A DOI is sound only when the second command returns metadata whose title and lead author
 match the bibliography entry. Resolution alone is not sufficient, as Class A shows.
+
+## Entries carrying no DOI (386 distinct works)
+
+Checked separately, by bibliographic search on title and author. 200 have an indexed record and
+could carry a DOI; 84 return no Crossref match at all. **None of the 84 shows any sign of
+fabrication.** They are Zeckendorf 1972 in the Bulletin de la Societe Royale des Sciences de Liege,
+Lekkerkerker 1952 in Simon Stevin, Parry-Pollicott's Asterisque volume, Denjoy 1932, Renyi's 1961
+Berkeley Symposium paper, Milne's Etale Cohomology, Horn-Johnson, SGA 4 1/2, technical reports and
+workshop proceedings - works that are absent from Crossref because of what they are, not because
+they do not exist. Absence from an index is only evidence about the index.
+
+## arXiv identifiers
+
+Fifteen entries carry an arXiv identifier. One is wrong:
+
+| paper | key | identifier | cited as | what it actually is |
+|---|---|---|---|---|
+| `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `Caru2018` | `arXiv:1805.06735` | Towards a Complete Cohomology Invariant for Non-Locality and Contextuality | Properties of ferromagnetic Josephson junctions for memory applications - Caruso, Massarotti et al. |
+
+The remaining fourteen could not be checked: `export.arxiv.org` began returning HTTP 429 to this
+address partway through and did not recover. **They are unverified, not verified** - the check must
+be repeated before submission. Absence of a result here means the lookup failed, nothing more.
