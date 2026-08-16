@@ -1,0 +1,92 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_finite_parts_dynamical_zeta_shifts_finite_type_etds ONLY.
+Another codex agent may be working on a different paper concurrently. Touch nothing else.
+
+THIS IS A VERIFICATION TASK FIRST AND AN INTEGRATION TASK ONLY SECOND. Read that sentence again
+before you start editing anything.
+
+Read in full: artifacts/oracle_sprint_A5_deep_r1.md.
+
+WHAT IT CLAIMS. An external assessor, asked to do mathematics rather than assess, returned four
+claimed results built on this manuscript's machinery:
+  Theorem 2.1  - a sharp squarefree Mahler bound;
+  Theorem 3.1  - a collision-jet inequality;
+  Theorem 5.1  - prime-primary collision-jet rigidity;
+  Theorem 6.1  - odd-prime multi-collisions with delayed first discrepancy,
+plus Corollary 5.3. He self-reports correctness confidence 0.96 and novelty confidence 0.84, names
+the imported algebraic-special-value lifting interface as the step he is least sure of, and states
+that his novelty finding means "no antecedent was found in the checked literature", not that none
+exists.
+
+He further claims these should REPLACE the manuscript's present O(V log V) headline with a linear
+theorem, and that Corollary 5.3 closes the sampling-complexity order exactly.
+
+That is a large claim about our own central result, arriving from outside, unverified by us. It is
+exactly the kind of claim that must not be adopted on the strength of a confident write-up.
+
+PHASE ONE - VERIFY. Do not edit the manuscript during this phase.
+
+For each of Theorem 2.1, Theorem 3.1, Theorem 5.1, Corollary 5.3 and Theorem 6.1:
+
+ 1. Restate the claim precisely in the manuscript's own notation, and identify every hypothesis it
+    needs. Say explicitly which of those hypotheses the manuscript already establishes, which are
+    new assumptions, and which are imported from published work.
+ 2. Check the proof line by line. Where the argument invokes one of the manuscript's own results -
+    he cites the lifting theorem, the divisor identity, the Adams-Moebius collapse, the profile
+    coordinates - open that result and confirm it says what he uses it to say, with the same
+    hypotheses. A result used outside its stated hypotheses is a failure, not a detail.
+ 3. Give special attention to the step he himself flags: the application of the manuscript's
+    Theorem 3.8 after descending only the relative ratio H_chi to Q(z). Verify that Theorem 3.8's
+    printed hypotheses - rationality of H_chi, the zero-free orbit conditions, the coefficient-growth
+    hypotheses - are all genuinely satisfied by what he descends. If they are not, that is the
+    result's failure point and you must say so.
+ 4. Check the two imported external inputs against their actual statements: Kumiko Nishioka, J.
+    Austral. Math. Soc. Ser. A 33 (1982) 386-393, and Keiji Nishioka, Arch. Math. (Basel) 44 (1985)
+    330-335. These are two different authors; confirm you are attributing each statement to the
+    right one. Verify each reference in Crossref, OpenAlex, Semantic Scholar or the official record
+    and record the check in artifacts/literature_check.md. This repository has previously shipped
+    fabricated entries, so do not take the citation on trust.
+ 5. Where a claim is numerical or finite, write a script under artifacts/ that tests it, and run it.
+    In particular the squarefree bound and the collision-jet inequality should be checkable on small
+    cases. Report what you tested and what passed. A counterexample is a completely acceptable
+    outcome of this task and is more valuable than a confirmation.
+
+Then state, for each of the five results, one of: CONFIRMED, CONFIRMED WITH CORRECTION (and give the
+correction), UNVERIFIABLE AS STATED (and say which step blocked you), or REFUTED (and give the
+counterexample).
+
+PHASE TWO - INTEGRATE ONLY WHAT SURVIVED. If nothing survives, integrate nothing, report that, and
+stop; that is a legitimate and useful outcome.
+
+For the results you confirmed:
+ - Integrate them as a new section of the manuscript, in the manuscript's own notation and register,
+   with complete proofs written out - not a transcription of his prose.
+ - If Theorem 5.1 is confirmed, replace the O(V log V) headline with the linear statement, and
+   update the abstract, introduction and conclusion so the paper's stated main result matches what
+   it now proves. Do not leave the old bound standing as a second headline.
+ - If Corollary 5.3 is confirmed, state the sampling-complexity order as exactly closed, and say so
+   once, without a defensive paragraph around it.
+ - Attribute honestly: the imported Nishioka results are cited with their exact statements and
+   hypotheses; the new arguments are ours.
+ - Do NOT claim novelty in the text beyond what you verified. If the antecedent search is only "no
+   antecedent found", the manuscript must not assert priority; state the result and let it stand.
+
+RULES:
+ - Every claim proved at referee standard. Numerics are sanity checks, never a substitute for proof.
+ - Keep every .tex under 800 lines; split if needed.
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels.
+ - AFTER building, extract the PDF text with pdftotext and confirm no printed TeX command name, no
+   ".tex" or ".pdf" in the body, and no "??".
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS with LF endings if artifacts change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the directory.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the per-result verdict table with reasoning; the hypothesis audit for each; what you found
+at the Theorem 3.8 descent step; the two Nishioka references as verified, with which statement is
+attributed to which author; the scripts you wrote and their results; what you integrated and what
+you refused to integrate and why; whether the headline changed and what it now reads; page count
+before and after; compile, extraction and verification results.

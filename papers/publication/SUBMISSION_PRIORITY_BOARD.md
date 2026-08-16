@@ -20,11 +20,11 @@
 | **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **18+0** | **ETDS 小修已执行并核实**：第 5 节删除、防御层清除、引言立 Theorem A/B/C、四页补充不再提交 | **ETDS 75–77%** |
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
-| **A5** | `finite_parts_..._etds` | 43+19 | 已按三层重新配重;文献 81/84 已核 | **ETDS**(理由落在动力学定理)|
+| **A5** | `finite_parts_..._etds` | 43+19 | **深研究返回四条声称新定理**（自评正确性 0.96 / 新颖性 0.84），声称可将 O(V log V) 主结果换为线性；**已派独立验证，未验证前不采纳** | ETDS |
 | **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | 发育完成:19→27 页,更新与吸引域假设逐条验证,经典 Fibonacci 配分函数推论单列,新增数值校验确认 b_C=8 | **TAMS 55-65%**(JNT 82-90%)|
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **52+19** | **拆分已执行并核实**;回收压力与转移极值结果降为从属 | **JNT 50-65%**(TAMS-only 10-20%)|
 | **A7** | `upper_fibers_..._fq` | 36+36 | Theorem 6.6 已证,新颖性 75-80%;评估者明言不进 JNT 档 | **Fibonacci Quarterly**(档位不变)|
-| **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **33+22** | **EJS 审稿人裁决:ACCEPT WITH MINOR REVISIONS,不需再来一轮数学**;4 项必需修订中 | **EJS 51%** |
+| **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **32+22** | **EJS 小修已执行并核实**：第 4 节重排、三条补充结果陈述入主文、防御层清除 | **EJS 51%** |
 | **A8-B** | `detector_shells_..._jphyscomm` | 72+19 | 原装配版原样保留,作为被删材料的存放处 | **SPA 39%**(未改动)|
 | **A9** | `homological_visibility_..._apal` | **39+6** | 语境性跨界经评估判定不可得;边界节已补二次障碍文献线 + 等变无选择命题 | **Cahiers**(天花板已两次论证)|
 
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 190 — A8-A 修订入库；A5 深研究返回四条声称新定理，已派独立验证。** A8-A 提交 eb7048fd9：33→32 页；第 4 节重排使 Estimator 与残差化统计量先于定理定义，score-chart/奇异块/Schur 补/回退门/默认不拒绝移出定理陈述但**经核实仍全部存于构造与证明**（Schur 5 处、回退 2 处、奇异块与 score-chart 各 1 处）；三条补充结果的精确陈述已印入主文；防御性重复降到每项一次（fixed serial order / known sampling interval / phase-type 均为 1），而诚实限定未丢失——改以"两点阈值下界证明的是**阶**最优"的形式保留。独立核实：清洁重建 exit 0、三文档 undefined 全 0、32/22/1 页、PDF 正文抽取零泄漏、12/12 + 16/16 + SHA 5/5。**A5：深研究问法返回了实质内容**——Theorem 2.1 锐无平方因子 Mahler 界、Theorem 3.1 碰撞-射流不等式、Theorem 5.1 素-初碰撞-射流刚性、Theorem 6.1 奇素数多重碰撞，加 Corollary 5.3；自评正确性 0.96、新颖性 0.84，并自行点名最不确定的一步（仅将相对比 H_chi 降到 Q(z) 后应用本文 Theorem 3.8）。他声称这些结果应**把现有 O(V log V) 主结果换成线性定理**，并由 Corollary 5.3 精确封死采样复杂度阶。这是对我方中心结果的重大外部声称，**不得凭一份自信的写作采纳**。已派 codex 任务（sprint/a5_deep_verify_task.txt），结构为**先验证后集成**：验证阶段禁止编辑稿件，逐条给出 CONFIRMED / CONFIRMED WITH CORRECTION / UNVERIFIABLE AS STATED / REFUTED，需打开被引的本文内部定理核对其假设是否真被满足，对有限/数值声称需写脚本实测（并明言**反例是可接受且更有价值的结果**），且两条 Nishioka 文献分属不同作者（Kumiko 1982 / Keiji 1985）须分别核实。若无一存活，则不集成、如实上报。A2 重组任务仍待派。内存 1.11 GB、缺页 117。
 
 > **TICK 189 — A3-A 九项修订完成并核实入库（d7c8a317a）。** 页数 20+4 降为 **18+0**，.tex 源码 1020 行降为 793 行——本次操作确实是删而非增。第 5 节与 S01 技术审计、supplementary_material.tex 均已删除；固定-变动系统对比移入引言，simple-Parry 依赖与阶锐性限定各成 Theorem 4.1 后的一条注记，伴随论文压到一句。引言现立 Theorem A/B/C，层次在第二页可见；第 3 节开头加了五句概念桥；标题改为 "Linear overlap transients and cyclic rank recodings in Pisot numeration"。**第 5 项（可能触及数学的那项）的处置**：四页补充判为编辑规则的第三类（扩展有限记录、复现命令、输出与哈希），不作为数学补充材料提交；其 24 项声称/计算逐条定位：19 项已在正文，5 项为例示或实现回归、无任何证明依赖之，精确根隔离则移入立方定理的证明。随后逐条核验了"任何定理不得依赖仅以机器输出存在的论证"，结果为无。**我方独立核实**：清洁重建 exit 0、undefined 全 0、18 页、PDF 正文抽取零泄漏、固定三次 28/28、任意 D 13/13（七边回归通过）、SHA 8/8。**一处需人工回补**：submission_metadata.md 被一并精简，丢失了长度区间、ETDS/TAMS 概率与伴随论文目录指针；这属流水线记账而非稿件内容，已按最新数字重写并记入"审计材料保留于 artifacts/、不属投稿件、无结果依赖之"。A8-A 四项修订仍在跑；A2 重组任务待派；A5 深研究 2bb0d4b1 仍 waiting_response。内存 1.05 GB、缺页 104。
 

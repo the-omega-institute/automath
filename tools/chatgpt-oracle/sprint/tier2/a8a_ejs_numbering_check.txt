@@ -1,0 +1,1499 @@
+Reading additional input from stdin...
+OpenAI Codex v0.147.0
+--------
+workdir: D:\omega\automath
+model: gpt-5.6-sol
+provider: chrono
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a00aa1-2df4-7bd1-b338-87e6755a5e08
+--------
+user
+READ-ONLY. Do not edit, do not rebuild, do not commit. Scope: papers/publication/2026_renewal_experiment_equivalence_singular_lan_ejs only. Do not touch *cayley_chebyshev*.
+
+The audit found that after the Section 4 reordering, the PRINTED numbers appear out of order:
+- "Estimator 7" prints on page 17, BEFORE Theorem 4 (p.19), Corollary 5 and Lemma 6 (p.21).
+- Equations (3.17)-(3.21) print on pages 17-19, BEFORE equations (3.10)-(3.16) on pages 20-22.
+
+Answer these precisely:
+1. Is there any \setcounter, \addtocounter, \renewcommand of a counter, \tag, or manually forced
+   number in the paper sources used to hold these labels at their old values? Quote every such line
+   with file and line number.
+2. Does "Estimator" use its own theorem counter or share the main counter? Show the \newtheorem line.
+   If it has its own counter, why does the first Estimator print as number 7?
+3. Show the actual printed sequence of numbered environments in the main article in page order, as
+   extracted from the PDF: for each, the page, the printed label, and the printed number. I want to
+   see whether a reader encounters them in ascending or scrambled numeric order.
+4. Same for the equation numbers in Section 3/4 of the main article: printed sequence in page order.
+
+State plainly whether the numbering a reader sees is monotone. Do not fix anything.
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+codex
+I’ll perform a read-only source and rendered-PDF audit within the named paper directory. I’m using the `pdf` skill because the question depends on actual printed page order, and the required `superpowers:using-superpowers` workflow for selecting and applying skills; I will not edit, rebuild, or commit anything.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$paths = @('"'C:\\Users\\zwl62\\.agents\\skills\\superpowers\\using-superpowers\\SKILL.md','C:\\Users\\zwl62\\.codex\\skills\\pdf\\SKILL.md'); foreach ("'$p in $paths) { Write-Output "FILE: $p"; Get-Content -LiteralPath $p -Raw }' in D:\omega\automath
+ succeeded in 220ms:
+FILE: C:\Users\zwl62\.agents\skills\superpowers\using-superpowers\SKILL.md
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, skip this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## Instruction Priority
+
+Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+
+1. **User's explicit instructions** (CLAUDE.md, GEMINI.md, AGENTS.md, direct requests) â€” highest priority
+2. **Superpowers skills** â€” override default system behavior where they conflict
+3. **Default system prompt** â€” lowest priority
+
+If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
+
+## How to Access Skills
+
+**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to youâ€”follow it directly. Never use the Read tool on skill files.
+
+**In Copilot CLI:** Use the `skill` tool. Skills are auto-discovered from installed plugins. The `skill` tool works the same as Claude Code's `Skill` tool.
+
+**In Gemini CLI:** Skills activate via the `activate_skill` tool. Gemini loads skill metadata at session start and activates the full content on demand.
+
+**In other environments:** Check your platform's documentation for how skills are loaded.
+
+## Platform Adaptation
+
+Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
+
+# Using Skills
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+
+```dot
+digraph skill_flow {
+    "User message received" [shape=doublecircle];
+    "About to EnterPlanMode?" [shape=doublecircle];
+    "Already brainstormed?" [shape=diamond];
+    "Invoke brainstorming skill" [shape=box];
+    "Might any skill apply?" [shape=diamond];
+    "Invoke Skill tool" [shape=box];
+    "Announce: 'Using [skill] to [purpose]'" [shape=box];
+    "Has checklist?" [shape=diamond];
+    "Create TodoWrite todo per item" [shape=box];
+    "Follow skill exactly" [shape=box];
+    "Respond (including clarifications)" [shape=doublecircle];
+
+    "About to EnterPlanMode?" -> "Already brainstormed?";
+    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
+    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
+    "Invoke brainstorming skill" -> "Might any skill apply?";
+
+    "User message received" -> "Might any skill apply?";
+    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
+    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
+    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
+    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
+    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
+    "Has checklist?" -> "Follow skill exactly" [label="no"];
+    "Create TodoWrite todo per item" -> "Follow skill exactly";
+}
+```
+
+## Red Flags
+
+These thoughts mean STOPâ€”you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept â‰  using the skill. Invoke it. |
+
+## Skill Priority
+
+When multiple skills could apply, use this order:
+
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+
+"Let's build X" â†’ brainstorming first, then implementation skills.
+"Fix this bug" â†’ debugging first, then domain-specific skills.
+
+## Skill Types
+
+**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+
+**Flexible** (patterns): Adapt principles to context.
+
+The skill itself tells you which.
+
+## User Instructions
+
+Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+
+FILE: C:\Users\zwl62\.codex\skills\pdf\SKILL.md
+---
+name: "pdf"
+description: "Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks by rendering pages (Poppler) and use Python tools such as `reportlab`, `pdfplumber`, and `pypdf` for generation and extraction."
+---
+
+
+# PDF Skill
+
+## When to use
+- Read or review PDF content where layout and visuals matter.
+- Create PDFs programmatically with reliable formatting.
+- Validate final rendering before delivery.
+
+## Workflow
+1. Prefer visual review: render PDF pages to PNGs and inspect them.
+   - Use `pdftoppm` if available.
+   - If unavailable, install Poppler or ask the user to review the output locally.
+2. Use `reportlab` to generate PDFs when creating new documents.
+3. Use `pdfplumber` (or `pypdf`) for text extraction and quick checks; do not rely on it for layout fidelity.
+4. After each meaningful update, re-render pages and verify alignment, spacing, and legibility.
+
+## Temp and output conventions
+- Use `tmp/pdfs/` for intermediate files; delete when done.
+- Write final artifacts under `output/pdf/` when working in this repo.
+- Keep filenames stable and descriptive.
+
+## Dependencies (install if missing)
+Prefer `uv` for dependency management.
+
+Python packages:
+```
+uv pip install reportlab pdfplumber pypdf
+```
+If `uv` is unavailable:
+```
+python3 -m pip install reportlab pdfplumber pypdf
+```
+System tools (for rendering):
+```
+# macOS (Homebrew)
+brew install poppler
+
+# Ubuntu/Debian
+sudo apt-get install -y poppler-utils
+```
+
+If installation isn't possible in this environment, tell the user which dependency is missing and how to install it locally.
+
+## Environment
+No required environment variables.
+
+## Rendering command
+```
+pdftoppm -png $INPUT_PDF $OUTPUT_PREFIX
+```
+
+## Quality expectations
+- Maintain polished visual design: consistent typography, spacing, margins, and section hierarchy.
+- Avoid rendering issues: clipped text, overlapping elements, broken tables, black squares, or unreadable glyphs.
+- Charts, tables, and images must be sharp, aligned, and clearly labeled.
+- Use ASCII hyphens only. Avoid U+2011 (non-breaking hyphen) and other Unicode dashes.
+- Citations and references must be human-readable; never leave tool tokens or placeholder strings.
+
+## Final checks
+- Do not deliver until the latest PNG inspection shows zero visual or formatting defects.
+- Confirm headers/footers, page numbering, and section transitions look polished.
+- Keep intermediate files organized or remove them after final approval.
+
+
+codex
+The skill’s normal rendering workflow would create temporary PNGs, which would violate the user’s read-only instruction, so I will use only existing PDFs and read-only extraction/inspection tools. I’m first inventorying the scoped directory and identifying the main article source/PDF before tracing counter definitions and printed order.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg --files' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Command pdftotext,pdfinfo,pdftoppm -ErrorAction SilentlyContinue | Select-Object Name,Source | Format-Table -AutoSize' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-ChildItem -LiteralPath . -Force | Select-Object Mode,Length,LastWriteTime,Name | Format-Table -AutoSize' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+ succeeded in 162ms:
+cover_letter.tex
+main.tex
+references.tex
+supplementary.tex
+supplement\uniform_lemmas.tex
+supplement\two_state_model.tex
+supplement\estimator_atlas.tex
+supplement\direct_lan_two_state.tex
+submission_metadata.md
+sections\serial_coordinates.tex
+sections\main_proofs.tex
+sections\front.tex
+sections\equivalence.tex
+sections\end.tex
+sections\discussion.tex
+sections\collision_theorem.tex
+artifacts\verify_claims_output.txt
+artifacts\verify_claims.py
+artifacts\test_verify_claims.py
+artifacts\SHA256SUMS
+artifacts\REPRODUCE.md
+artifacts\oracle_sprint_A8A_venue_r1.md
+artifacts\oracle_sprint_A8A_style_r1.md
+artifacts\literature_check.md
+
+ succeeded in 225ms:
+
+Name          Source                                                                  
+----          ------                                                                  
+pdftotext.exe C:\Program Files\Git\mingw64\bin\pdftotext.exe                          
+pdfinfo.exe   C:\Users\zwl62\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdfinfo.exe 
+pdftoppm.exe  C:\Users\zwl62\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdftoppm.exe
+
+
+
+ succeeded in 235ms:
+
+Mode   Length LastWriteTime        Name                     
+----   ------ -------------        ----                     
+d-----        8/16/2026 6:22:40 PM .pytest_cache            
+d-----        8/16/2026 8:20:33 PM artifacts                
+d-----        8/16/2026 8:30:35 PM sections                 
+d-----        8/16/2026 6:08:23 PM supplement               
+-a---- 120    8/16/2026 6:11:20 PM .gitattributes           
+-a---- 213    8/16/2026 8:51:10 PM cover_letter.aux         
+-a---- 11413  8/16/2026 8:51:10 PM cover_letter.fdb_latexmk 
+-a---- 14227  8/16/2026 8:51:10 PM cover_letter.fls         
+-a---- 21765  8/16/2026 8:51:10 PM cover_letter.log         
+-a---- 0      8/16/2026 8:51:10 PM cover_letter.out         
+-a---- 16317  8/16/2026 8:51:10 PM cover_letter.pdf         
+-a---- 2300   8/16/2026 8:32:44 PM cover_letter.tex         
+-a---- 3640   8/16/2026 8:51:10 PM cover_letter.xdv         
+-a---- 12983  8/16/2026 8:51:05 PM main.aux                 
+-a---- 19958  8/16/2026 8:51:05 PM main.fdb_latexmk         
+-a---- 25212  8/16/2026 8:51:05 PM main.fls                 
+-a---- 31430  8/16/2026 8:51:05 PM main.log                 
+-a---- 2357   8/16/2026 8:51:05 PM main.out                 
+-a---- 167222 8/16/2026 8:51:05 PM main.pdf                 
+-a---- 2274   8/16/2026 8:25:42 PM main.tex                 
+-a---- 132988 8/16/2026 8:51:05 PM main.xdv                 
+-a---- 3923   8/16/2026 6:04:25 PM references.tex           
+-a---- 1995   8/16/2026 6:11:20 PM submission_metadata.md   
+-a---- 3908   8/16/2026 8:51:07 PM supplementary.aux        
+-a---- 16389  8/16/2026 8:51:07 PM supplementary.fdb_latexmk
+-a---- 21026  8/16/2026 8:51:07 PM supplementary.fls        
+-a---- 27160  8/16/2026 8:51:07 PM supplementary.log        
+-a---- 2404   8/16/2026 8:51:07 PM supplementary.out        
+-a---- 109537 8/16/2026 8:51:07 PM supplementary.pdf        
+-a---- 2187   8/16/2026 7:48:03 PM supplementary.tex        
+-a---- 928    8/16/2026 8:51:07 PM supplementary.toc        
+-a---- 67216  8/16/2026 8:51:07 PM supplementary.xdv        
+
+
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Select-String -LiteralPath main.fls -Pattern '"'^INPUT '"' | ForEach-Object { "'$_.Line }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n --glob '*.tex' '\\\\begin\\{(theorem|lemma|corollary|proposition|definition|remark|estimator|assumption|example)\\}|\\\\label\\{' main.tex sections references.tex" in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'pdfinfo main.pdf' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -LiteralPath main.tex | ForEach-Object -Begin {$i=0} -Process {$i++; '"'{0,5}: {1}' -f "'$i,$_}' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n --glob '*.tex' '\\\\(setcounter|addtocounter|tag\\*?|newtheorem|renewcommand)\\b|\\\\numberwithin\\b|\\\\counterwithin\\b|\\\\refstepcounter\\b|\\\\stepcounter\\b' ." in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+ succeeded in 191ms:
+sections\serial_coordinates.tex:6:\begin{proposition}[Confluent sampled-tail coordinates]
+sections\serial_coordinates.tex:7:\label{prop:serial-tail-coordinates-main}
+sections\equivalence.tex:2:\label{sec:renewal-equivalence-main}
+sections\equivalence.tex:31:\begin{theorem}[Local equivalence of a stationary renewal window and Palm interarrivals]
+sections\equivalence.tex:32:\label{thm:stationary-renewal-palm-equivalence-main}
+sections\collision_theorem.tex:42:\begin{proposition}[Isolated-double-pole score nondegeneracy]
+sections\collision_theorem.tex:43:\label{prop:sampled-double-pole-nondegeneracy-main}
+sections\collision_theorem.tex:139:\begin{estimator}[Measurable sampled-tail recurrence estimator]
+sections\collision_theorem.tex:140:\label{est:serial-collision-recurrence-main}
+sections\collision_theorem.tex:220:\begin{theorem}[Stationary isolated-double-pole limit experiment]
+sections\collision_theorem.tex:221:\label{thm:stationary-serial-double-pole-main}
+sections\collision_theorem.tex:282:\begin{corollary}[The two-state collision]
+sections\collision_theorem.tex:283:\label{cor:two-state-collision-main}
+sections\collision_theorem.tex:311:\begin{lemma}[Two-point threshold-risk lower bound]
+sections\collision_theorem.tex:312:\label{lem:two-point-threshold-rate-main}
+
+ succeeded in 192ms:
+.\supplementary.tex:24:\newtheorem{theorem}{Theorem}
+.\supplementary.tex:25:\newtheorem{proposition}[theorem]{Proposition}
+.\supplementary.tex:26:\newtheorem{lemma}[theorem]{Lemma}
+.\supplementary.tex:27:\newtheorem{corollary}[theorem]{Corollary}
+.\supplementary.tex:28:\newtheorem{assumption}[theorem]{Assumption}
+.\supplementary.tex:29:\renewcommand{\thetheorem}{S\arabic{theorem}}
+.\supplement\uniform_lemmas.tex:18:\tag{U1}
+.\supplement\uniform_lemmas.tex:30:\tag{U1a}
+.\supplement\uniform_lemmas.tex:41:\tag{U2}
+.\supplement\uniform_lemmas.tex:56:\tag{U3}
+.\supplement\uniform_lemmas.tex:75:\tag{U4}
+.\supplement\uniform_lemmas.tex:84:\tag{U5}
+.\supplement\uniform_lemmas.tex:108:\tag{U6}
+.\supplement\uniform_lemmas.tex:117:\tag{U7}
+.\supplement\uniform_lemmas.tex:123:\tag{U8}
+.\supplement\uniform_lemmas.tex:183:\tag{U9}
+.\supplement\uniform_lemmas.tex:190:\tag{U10}
+.\supplement\uniform_lemmas.tex:205:\tag{U11}
+.\supplement\uniform_lemmas.tex:212:\tag{U12}
+.\supplement\two_state_model.tex:13:\tag{M1}
+.\supplement\two_state_model.tex:22:\tag{M2}
+.\supplement\two_state_model.tex:28:\tag{M3}
+.\supplement\two_state_model.tex:65:\tag{M4}
+.\supplement\two_state_model.tex:73:\tag{M5}
+.\supplement\two_state_model.tex:80:\tag{M6}
+.\supplement\two_state_model.tex:102:\tag{M7}
+.\supplement\estimator_atlas.tex:10:\tag{E1}
+.\supplement\estimator_atlas.tex:17:\tag{E2}
+.\supplement\estimator_atlas.tex:25:\tag{E3}
+.\supplement\estimator_atlas.tex:31:\tag{E4}
+.\supplement\estimator_atlas.tex:50:\tag{E5}
+.\supplement\estimator_atlas.tex:57:\tag{E6}
+.\supplement\estimator_atlas.tex:70:\tag{E7}
+.\supplement\estimator_atlas.tex:76:\tag{E8}
+.\supplement\estimator_atlas.tex:100:\tag{E9}
+.\supplement\estimator_atlas.tex:116:\tag{E10}
+.\supplement\direct_lan_two_state.tex:18:\tag{SL1}
+.\supplement\direct_lan_two_state.tex:27:\tag{SL2}
+.\supplement\direct_lan_two_state.tex:37:\tag{SL3}
+.\supplement\direct_lan_two_state.tex:56:\tag{SL4}
+.\supplement\direct_lan_two_state.tex:73:\tag{SL5}
+.\supplement\direct_lan_two_state.tex:82:\tag{SL6}
+.\supplement\direct_lan_two_state.tex:93:\tag{SL7}
+.\supplement\direct_lan_two_state.tex:104:\tag{SL8}
+.\supplement\direct_lan_two_state.tex:112:\tag{SL9}
+.\supplement\direct_lan_two_state.tex:132:\tag{T21}
+.\supplement\direct_lan_two_state.tex:137:\tag{T22}
+.\supplement\direct_lan_two_state.tex:154:\tag{T23}
+.\supplement\direct_lan_two_state.tex:171:\tag{T24}
+.\supplement\direct_lan_two_state.tex:189:\tag{T25}
+.\supplement\direct_lan_two_state.tex:198:\tag{T26}
+.\supplement\direct_lan_two_state.tex:210:\tag{T27}
+.\supplement\direct_lan_two_state.tex:218:\tag{T28}
+.\main.tex:26:\newtheorem{theorem}{Theorem}
+.\main.tex:27:\newtheorem{proposition}[theorem]{Proposition}
+.\main.tex:28:\newtheorem{corollary}[theorem]{Corollary}
+.\main.tex:29:\newtheorem{lemma}[theorem]{Lemma}
+.\main.tex:30:\newtheorem{estimator}{Estimator}
+.\main.tex:31:\setcounter{estimator}{6}
+.\main.tex:33:\newtheorem*{definition*}{Definition}
+.\main.tex:34:\newtheorem*{remark*}{Remark}
+.\sections\collision_theorem.tex:16:\tag{3.1}
+.\sections\collision_theorem.tex:26:\tag{3.2}
+.\sections\collision_theorem.tex:39:\tag{3.3}
+.\sections\collision_theorem.tex:56:\tag{3.4}
+.\sections\collision_theorem.tex:62:\tag{3.5}
+.\sections\collision_theorem.tex:77:\tag{3.6}
+.\sections\collision_theorem.tex:85:\tag{3.7}
+.\sections\collision_theorem.tex:94:\tag{3.8}
+.\sections\collision_theorem.tex:127:\tag{3.9}
+.\sections\collision_theorem.tex:146:\tag{3.17}
+.\sections\collision_theorem.tex:159:\tag{3.18}
+.\sections\collision_theorem.tex:185:\tag{3.19}
+.\sections\collision_theorem.tex:197:\tag{3.20}
+.\sections\collision_theorem.tex:212:\tag{3.21}
+.\sections\collision_theorem.tex:239:\tag{3.10}
+.\sections\collision_theorem.tex:252:\tag{3.11}
+.\sections\collision_theorem.tex:259:\tag{3.12}
+.\sections\collision_theorem.tex:272:\tag{3.13}
+.\sections\collision_theorem.tex:293:\tag{3.14}
+.\sections\collision_theorem.tex:328:\tag{3.15}
+.\sections\collision_theorem.tex:349:\tag{3.16}
+.\sections\equivalence.tex:24:\tag{LE1}
+.\sections\equivalence.tex:42:\tag{LE2}
+.\sections\equivalence.tex:52:\tag{LE3}
+.\sections\equivalence.tex:59:\tag{LE4}
+.\sections\equivalence.tex:65:\tag{LE5}
+.\sections\equivalence.tex:72:\tag{LE6}
+.\sections\equivalence.tex:84:\tag{LE7}
+.\sections\equivalence.tex:91:\tag{LE8}
+.\sections\equivalence.tex:98:\tag{LE9}
+.\sections\equivalence.tex:106:\tag{LE10}
+.\sections\equivalence.tex:122:\tag{LE11}
+.\sections\equivalence.tex:129:\tag{LE12}
+.\sections\equivalence.tex:149:\tag{LE13}
+.\sections\equivalence.tex:168:\tag{LE14}
+.\sections\equivalence.tex:175:\tag{LE15}
+.\sections\equivalence.tex:183:\tag{LE16}
+.\sections\equivalence.tex:191:\tag{LE17}
+.\sections\equivalence.tex:229:\tag{LE18}
+.\sections\serial_coordinates.tex:16:\tag{2.1}
+.\sections\serial_coordinates.tex:21:\tag{2.2}
+.\sections\serial_coordinates.tex:38:\tag{2.3}
+.\sections\serial_coordinates.tex:56:\tag{2.4}
+.\sections\front.tex:121:\tag{1.1}
+.\sections\front.tex:132:\tag{1.2}
+.\sections\front.tex:138:\tag{1.3}
+.\sections\front.tex:148:\tag{1.4}
+.\sections\main_proofs.tex:92:\tag{4.1}
+.\sections\main_proofs.tex:101:\tag{4.2}
+.\sections\main_proofs.tex:109:\tag{4.3}
+.\sections\main_proofs.tex:137:\tag{4.4}
+.\sections\main_proofs.tex:145:\tag{4.5}
+.\sections\main_proofs.tex:164:\tag{4.9}
+
+ succeeded in 235ms:
+    1: \documentclass[12pt]{article}
+    2: \usepackage[a4paper,margin=1.15in]{geometry}
+    3: \usepackage[T1]{fontenc}
+    4: \usepackage{lmodern}
+    5: \usepackage{microtype}
+    6: \usepackage{amsmath,amssymb,amsthm,mathtools}
+    7: \usepackage{bm}
+    8: \usepackage{booktabs}
+    9: \usepackage{enumitem}
+   10: \usepackage{hyperref}
+   11: \usepackage{xr-hyper}
+   12: \usepackage[nameinlink,noabbrev]{cleveref}
+   13: \usepackage{setspace}
+   14: \usepackage{titlesec}
+   15: \usepackage{xcolor}
+   16: \usepackage[mathlines,switch]{lineno}
+   17: 
+   18: \hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
+   19: \setstretch{2.0}
+   20: \setlength{\parskip}{0.36em}
+   21: \setlength{\parindent}{1.25em}
+   22: \setlength{\emergencystretch}{2em}
+   23: \titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+   24: \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+   25: 
+   26: \newtheorem{theorem}{Theorem}
+   27: \newtheorem{proposition}[theorem]{Proposition}
+   28: \newtheorem{corollary}[theorem]{Corollary}
+   29: \newtheorem{lemma}[theorem]{Lemma}
+   30: \newtheorem{estimator}{Estimator}
+   31: \setcounter{estimator}{6}
+   32: \theoremstyle{definition}
+   33: \newtheorem*{definition*}{Definition}
+   34: \newtheorem*{remark*}{Remark}
+   35: 
+   36: \crefname{theorem}{theorem}{theorems}
+   37: \Crefname{theorem}{Theorem}{Theorems}
+   38: \crefname{proposition}{proposition}{propositions}
+   39: \Crefname{proposition}{Proposition}{Propositions}
+   40: \crefname{corollary}{corollary}{corollaries}
+   41: \Crefname{corollary}{Corollary}{Corollaries}
+   42: \crefname{lemma}{lemma}{lemmas}
+   43: \Crefname{lemma}{Lemma}{Lemmas}
+   44: \crefname{estimator}{estimator}{estimators}
+   45: \Crefname{estimator}{Estimator}{Estimators}
+   46: 
+   47: \newcommand{\RR}{\mathbb R}
+   48: \newcommand{\EE}{\mathbb E}
+   49: \newcommand{\PP}{\mathbb P}
+   50: \newcommand{\Var}{\operatorname{Var}}
+   51: \externaldocument{supplementary}[]
+   52: 
+   53: \title{Renewal-window equivalence and singular inference at a sampled double pole}
+   54: \author{Haobo Ma\thanks{CHRONOAI PTE. LTD., Singapore. Email: \href{mailto:auric@aelf.io}{auric@aelf.io}.}
+   55: \and Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \href{mailto:e1327962@u.nus.edu}{e1327962@u.nus.edu}.}}
+   56: \date{}
+   57: 
+   58: \begin{document}
+   59: \modulolinenumbers[1]
+   60: \linenumbers
+   61: \maketitle
+   62: 
+   63: \input{sections/front}
+   64: \input{sections/equivalence}
+   65: \input{sections/serial_coordinates}
+   66: \input{sections/collision_theorem}
+   67: \input{sections/main_proofs}
+   68: \input{sections/discussion}
+   69: \input{sections/end}
+
+ succeeded in 254ms:
+INPUT C:\Users\zwl62\AppData\Local\MiKTeX\miktex\data\le\xetex\xelatex.fmt
+INPUT main.tex
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\keyval.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\fontenc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\lmodern.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\lmodern.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\etoolbox\etoolbox.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype-xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype-xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype-xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\microtype.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsmath.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amstext.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsbsy.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsmath\amsopn.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amssymb.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\amsfonts.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mathtools.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\tools\calc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\mathtools\mhsetup.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\tools\bm.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\tools\bm.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\enumitem\enumitem.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\enumitem\enumitem.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hyperref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\kvdefinekeys\kvdefinekeys.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\pdfescape\pdfescape.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hycolor\hycolor.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\letltxmacro\letltxmacro.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\auxhook\auxhook.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\nameref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\refcount\refcount.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\gettitlestring\gettitlestring.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\kvoptions\kvoptions.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\pd1enc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\intcalc\intcalc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\puenc.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\url\url.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\zapfding\pzdr.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\bitset\bitset.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\bigintcalc\bigintcalc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\atbegshi\atbegshi.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\atbegshi-ltx.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\atbegshi-ltx.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hxetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hxetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\hxetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\stringenc\stringenc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\stringenc\stringenc.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\rerunfilecheck\rerunfilecheck.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\generic\uniquecounter\uniquecounter.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\xr-hyper.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\hyperref\xr-hyper.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\cleveref\cleveref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\cleveref\cleveref.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\setspace\setspace.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\setspace\setspace.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\titlesec\titlesec.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\titlesec\titlesec.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\xcolor\xcolor.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-def\xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-def\xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-def\xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lineno\lineno.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lineno\lineno.sty
+INPUT supplementary.aux
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-xetex.def
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-xetex.def
+INPUT .\main.aux
+INPUT .\main.aux
+INPUT main.aux
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\ts1cmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\ts1cmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\base\ts1cmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-cmr.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-cmr.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-cmr.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphicx.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\graphics.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\trig.sty
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\graphics\color.sty
+INPUT .\main.out
+INPUT .\main.out
+INPUT main.out
+INPUT main.out
+INPUT .\main.out
+INPUT .\main.out
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr17.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr6.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmss8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmr.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omllmm.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omllmm.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omllmm.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omslmsy.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omslmsy.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omslmsy.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omxlmex.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omxlmex.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\omxlmex.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmex10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsa.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsa.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsa.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msa.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msa.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msa.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsb.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsb.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\umsb.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msb.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msb.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-msb.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ts1-lmr10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy5.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ts1-lmr7.tfm
+INPUT .\sections\front.tex
+INPUT .\sections\front.tex
+INPUT .\sections\front.tex
+INPUT .\sections\front.tex
+INPUT sections\front.tex
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmbx10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr6.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi6.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy6.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx6.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy7.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmbx12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmbx12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmr12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmi12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmbx12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmmib10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmbsy10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\ueuf.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\ueuf.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\amsfonts\ueuf.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-euf.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-euf.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\microtype\mt-euf.cfg
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm10.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm7.tfm
+INPUT .\sections\equivalence.tex
+INPUT .\sections\equivalence.tex
+INPUT .\sections\equivalence.tex
+INPUT .\sections\equivalence.tex
+INPUT sections\equivalence.tex
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmri12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmss.fd
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmss12.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmss8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmss8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmri8.tfm
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmri7.tfm
+INPUT .\sections\serial_coordinates.tex
+INPUT .\sections\serial_coordinates.tex
+INPUT .\sections\serial_coordinates.tex
+INPUT .\sections\serial_coordinates.tex
+INPUT sections\serial_coordinates.tex
+INPUT .\sections\collision_theorem.tex
+INPUT .\sections\collision_theorem.tex
+INPUT .\sections\collision_theorem.tex
+INPUT .\sections\collision_theorem.tex
+INPUT sections\collision_theorem.tex
+INPUT C:\Users\zwl62\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr8.tfm
+INPUT .\sections\main_proofs.tex
+INPUT .\sections\main_proofs.tex
+INPUT .\sections\main_proofs.tex
+INPUT .\sections\main_proofs.tex
+INPUT sections\main_proofs.tex
+INPUT .\sections\discussion.tex
+INPUT .\sections\discussion.tex
+INPUT .\sections\discussion.tex
+INPUT .\sections\discussion.tex
+INPUT sections\discussion.tex
+INPUT .\sections\end.tex
+INPUT .\sections\end.tex
+INPUT .\sections\end.tex
+INPUT .\sections\end.tex
+INPUT sections\end.tex
+INPUT .\references.tex
+INPUT .\references.tex
+INPUT .\references.tex
+INPUT .\references.tex
+INPUT references.tex
+INPUT main.aux
+INPUT .\main.out
+INPUT .\main.out
+
+ succeeded in 476ms:
+Creator:         LaTeX with hyperref
+Producer:        MiKTeX-xdvipdfmx (20231124)
+CreationDate:    Sun Aug 16 20:51:05 2026 Malay Peninsula Standard Time
+Custom Metadata: no
+Metadata Stream: no
+Tagged:          no
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           32
+Encrypted:       no
+Page size:       595.28 x 841.89 pts (A4)
+Page rot:        0
+File size:       167222 bytes
+Optimized:       no
+PDF version:     1.5
+
+
+MiKTeX requires Windows 10 (or greater): https://miktex.org/announcement/legacy-windows-deprecation
+
+codex
+The source already shows the key mechanism: `Estimator` is declared independently and then explicitly initialized to 6, while the collision section manually tags every displayed equation, including the reordered `3.17`–`3.21` block before `3.10`–`3.16`. I’m now extracting each PDF page separately so the final tables reflect reader order rather than source-label metadata alone.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$patterns = @('"'"'^'"\\s*(Theorem|Proposition|Corollary|Lemma|Estimator)\\s+[0-9]+', '\\((3|4)\\.[0-9]+\\)'); for ("'$p = 1; $p -le 32; $p++) { $lines = & pdftotext -layout -f $p -l $p main.pdf - 2>$null; $hits = $lines | Where-Object { $line = $_; $patterns | Where-Object { $line -match $_ } }; if ($hits) { Write-Output "PDF_PAGE $p"; $hits | ForEach-Object { $_.TrimEnd() } } }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+ succeeded in 724ms:
+PDF_PAGE 13
+Proposition 2 (Confluent sampled-tail coordinates). Fix n  2, known  > 0, 232
+PDF_PAGE 14
+261  Cn(, M, c0) = (, , 3, . . . , n) :                  (3  i < j  n)  .  (3.1)
+PDF_PAGE 15
+c = 1 + 2 ,     =           1 - 2  2           = (c, 3, . . . , n)  Rn-1.      (3.2) 265
+,(k) = (,) log g,(k) (0,0) ,       In(0)   =    1       g0 ,0 (k), (k), (k) .  (3.3)  268
+Proposition 3 (Isolated-double-pole score nondegeneracy). On Cn(, M, c0), the 269
+                k3 e- k ,   k2 e- k ,      ke-jk (3  j  n).                    (3.4) 276
+                                 inf min{In(0)} > 0.                           (3.5) 278
+PDF_PAGE 16
+                    H,(s) = s 1 - (s + c)2 -  B(s) .                              (3.6)
+286                          s + 2                 cH,0(s)      =  -  2B(s)    ,  (3.7)
+287 and, for j  3,  j H,0(s)  =  -     2       (s   1       n   s      .          (3.8)
+289 In (3.8), differentiating j/(s + j) cancels its factor s against the outer 1/s; all
+295 sampling give exactly the components in (3.4), with nonzero coefficients.
+PDF_PAGE 17
+Finally, (3.6) is rational and analytic in (, ) on a common one-sided neighbour- 304
+                   sup |a,S,(k)|  Ca(1 + k)mae-k/2.                                (3.9) 307
+prove (3.5).                                                                       312
+Estimator 7 (Measurable sampled-tail recurrence estimator). Delete the two incom- 314
+                                      KN   0  k  2n - 1,  (3.17) 316
+PDF_PAGE 18
+323            N - N = OP (N -1/2),        N - N = OP (N -1/2).              (3.18)
+325 (3.13).
+PDF_PAGE 19
+                        IN ()       =  1  KN                                              (3.19) 337
+                                                        E0, min(I,N ) > 0,                (3.20) 340
+                                             JN (N )                                      (3.21) 342
+Theorem 4 (Stationary isolated-double-pole limit experiment). Fix n, , M, c0, 347
+separated as in (3.1).                                                                    351
+PDF_PAGE 20
+354  log                        N,0  -                                 (3.10)
+357 uniformly nondegenerate by (3.5).
+359                     Jn() = I - II-1I > 0.                          (3.11)
+360 The residualized-score test N in (3.21) has uniform asymptotic level . At (N , N ) =
+362                     1 - N{z1- - v Jn(0)}.                          (3.12)
+367  dm Rn,N , {{cN + N , cN - N , 3,N , . . . , n,N }} = OP (N -1/4)  (3.13)
+PDF_PAGE 21
+Corollary 5 (The two-state collision). For n = 2, the stratum restrictions on sepa- 373
+   L{F c,}(s) = s 1 - (s + c)2 -  ,               L{F c,}(s)       =            ,      (3.14) 375
+differentiation of (3.14) gives the displayed fourth- and third-order poles. Detailed 381
+Lemma 6 (Two-point threshold-risk lower bound). Fix a collision base (0, 0), hold 384
+PDF_PAGE 22
+390  lim inf inf max Pi,N N 1/4dm(RN , Ri,N ) > a          2           (3.15)
+400  exp{v0Z                 -  1  v02I  (0)},     Z  N (0, I(0)).     (3.16)
+404 equal-prior average error, whose limiting infimum is the right side of (3.15). Taking
+PDF_PAGE 25
+S,(k) = P,{W > k }, g,(k) = S,(k) - S,(k + 1).                                  (4.1) 446
+                       H2(gN ,N , g0,0) = O(N -1),                              (4.2) 451
+PDF_PAGE 26
+454  H2(eN ,N , e0,0) = O(N -1),      |�N ,N - �0,0| = O(N -1/2),  (4.3)
+459 calendar-time information is exactly In(0) in (3.3). The uniform i.i.d. LAN theo-
+466 record likelihood-ratio expansion in (3.10), Lemma S4 of the supplementary material
+469  �q Sq(C1) j=1 gq(Cj+1 - Cj - 1)Sq(N - 1 - CJ ),               (4.4)
+PDF_PAGE 27
+                                                 J -1                        (4.5) 473
+give the quadratic term and the uniform Gaussian limit in (3.10). Proposition 3 475
+For part (B), use the test constructed in (3.19)�(3.21). The finite-atlas fit is 477
+                         �,N = ,N - II-1,N ,                                 (4.9) 482
+sequence by oP (1) uniformly. The stopped LLN and (3.5) make GN asymptotically 486
+inactive. This proves (3.12) and uniform local level. The Neyman�Pearson lemma 487
+proves (3.18). Nonexpansive projection and the square-root inequality following Es- 490
+timator 7 yield (3.13), while uniform separation fixes the optimal matching with 491
+PDF_PAGE 28
+494 positive Gaussian lower bound in (3.15). The upper and lower statements together
+
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'for ($p = 1; $p -le 32; $p++) { $lines = & pdftotext -layout -f $p -l $p main.pdf - 2>$null; $hits = $lines | Where-Object { $_ -match '"'(Theorem|Proposition|Corollary|Lemma|Estimator)\\s+[0-9]+' }; if ("'$hits) { Write-Output "PDF_PAGE $p"; $hits | ForEach-Object { $_.TrimEnd() } } }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+ succeeded in 655ms:
+PDF_PAGE 6
+112 Theorem 1 (Local equivalence of a stationary renewal window and Palm interar-
+PDF_PAGE 12
+226 plies the stopped-score CLT and LLN; after Theorem 1, those results recover the
+227 calendar information and efficiency statements used in Theorem 4. No pole calcula-
+PDF_PAGE 13
+Proposition 2 (Confluent sampled-tail coordinates). Fix n  2, known  > 0, 232
+PDF_PAGE 15
+Proposition 3 (Isolated-double-pole score nondegeneracy). On Cn(, M, c0), the 269
+PDF_PAGE 17
+Estimator 7 (Measurable sampled-tail recurrence estimator). Delete the two incom- 314
+PDF_PAGE 18
+327 Proposition 2 gives root-N recurrence coefficients. Simple roots and the two-root
+PDF_PAGE 19
+Theorem 4 (Stationary isolated-double-pole limit experiment). Fix n, , M, c0, 347
+PDF_PAGE 20
+365 (C) Attainable and lower recovery rates. The measurable procedure in Estimator 7
+PDF_PAGE 21
+ordered separated rates remain root-N . At every fixed base, Lemma 6 gives a strictly 369
+Corollary 5 (The two-state collision). For n = 2, the stratum restrictions on sepa- 373
+rated rates are vacuous and Theorem 4 applies with  = c. In particular,                           374
+Proof. This is the specialization of Theorem 4 with the empty product B = 1. Direct 380
+Lemma 6 (Two-point threshold-risk lower bound). Fix a collision base (0, 0), hold 384
+PDF_PAGE 23
+5. Proof of the limit-experiment theorem            406
+PDF_PAGE 25
+Proof of Theorem 4. We first make the route from the stationary record to the local 443
+PDF_PAGE 26
+455 again uniformly. Thus every hypothesis of Theorem 1 holds on these arrays.
+462 is precisely the fixed-cone qualification in Theorem 1; the information remains that
+PDF_PAGE 27
+give the quadratic term and the uniform Gaussian limit in (3.10). Proposition 3 475
+inactive. This proves (3.12) and uniform local level. The Neyman�Pearson lemma 487
+PDF_PAGE 28
+493 with v = v0. Lemma 6 gives their eventual matching distance v0N -1/4 and the
+
+codex
+The PDF’s numbered-environment sequence is now confirmed as `Theorem 1, Proposition 2, Proposition 3, Estimator 7, Theorem 4, Corollary 5, Lemma 6`; the jump to 7 occurs before the main theorem counter reaches 4. I’m checking the proof-section displays and source contexts next to ensure no automatically numbered `4.6`–`4.8` or other forced-number mechanism is missed.
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$files = @('"'sections\\front.tex','sections\\equivalence.tex','sections\\serial_coordinates.tex','sections\\collision_theorem.tex','sections\\main_proofs.tex','sections\\discussion.tex','sections\\end.tex','references.tex'); foreach ("'$f in $files) { Write-Output "FILE: $f"; $i=0; Get-Content -LiteralPath $f | ForEach-Object { $i++; if ($_ -match '"'\\\\(setcounter|addtocounter|tag\\*?|renewcommand|numberwithin|counterwithin|refstepcounter|stepcounter)\\b') { '{0,5}: {1}' -f "'$i,$_ } } }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$f='"'sections\\main_proofs.tex'; "'$i=0; Get-Content -LiteralPath $f | ForEach-Object { $i++; '"'{0,5}: {1}' -f "'$i,$_ }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$f='"'sections\\collision_theorem.tex'; "'$i=0; Get-Content -LiteralPath $f | ForEach-Object { $i++; if ($i -ge 130 -and $i -le 360) { '"'{0,5}: {1}' -f "'$i,$_ } }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Select-String -LiteralPath main.aux -Pattern '"'^'"\\\\newlabel\\{(thm|prop|cor|lem|est):|"'^'"\\\\newlabel\\{eq:' | ForEach-Object { "'$_.Line }' in D:\omega\automath\papers\publication\2026_renewal_experiment_equivalence_singular_lan_ejs
+ succeeded in 186ms:
+\newlabel{thm:stationary-renewal-palm-equivalence-main}{{1}{6}{Local equivalence of a stationary renewal window and Palm interarrivals}{theorem.1}{}}
+\newlabel{thm:stationary-renewal-palm-equivalence-main@cref}{{[theorem][1][]1}{[1][6][]6}}
+\newlabel{prop:serial-tail-coordinates-main}{{2}{13}{Confluent sampled-tail coordinates}{theorem.2}{}}
+\newlabel{prop:serial-tail-coordinates-main@cref}{{[proposition][2][]2}{[1][13][]13}}
+\newlabel{prop:sampled-double-pole-nondegeneracy-main}{{3}{15}{Isolated-double-pole score nondegeneracy}{theorem.3}{}}
+\newlabel{prop:sampled-double-pole-nondegeneracy-main@cref}{{[proposition][3][]3}{[1][15][]15}}
+\newlabel{est:serial-collision-recurrence-main}{{7}{17}{Measurable sampled-tail recurrence estimator}{estimator.7}{}}
+\newlabel{est:serial-collision-recurrence-main@cref}{{[estimator][7][]7}{[1][17][]17}}
+\newlabel{thm:stationary-serial-double-pole-main}{{4}{19}{Stationary isolated-double-pole limit experiment}{theorem.4}{}}
+\newlabel{thm:stationary-serial-double-pole-main@cref}{{[theorem][4][]4}{[1][19][]19}}
+\newlabel{cor:two-state-collision-main}{{5}{21}{The two-state collision}{theorem.5}{}}
+\newlabel{cor:two-state-collision-main@cref}{{[corollary][5][]5}{[1][21][]21}}
+\newlabel{lem:two-point-threshold-rate-main}{{6}{21}{Two-point threshold-risk lower bound}{theorem.6}{}}
+\newlabel{lem:two-point-threshold-rate-main@cref}{{[lemma][6][]6}{[1][21][]21}}
+
+ succeeded in 201ms:
+    1: \section{Proof of the limit-experiment theorem}
+    2: 
+    3: The proof uses the following exact supplementary inputs.  Their proofs are
+    4: \Cref*{lem:uniform-sampled-bin-tail-score-main,lem:uniform-stopped-renewal-score-main,lem:efficient-score-plugin-main}
+    5: of the supplementary material.
+    6: 
+    7: \smallskip\noindent\textbf{DQM and envelope.}
+    8: For fixed \(n,\varepsilon,M,c_0\), and \(\Delta\tau>0\), there is a common
+    9: physical one-sided neighbourhood \(\mathcal Q^+\) of
+   10: \(\mathcal C_n(\varepsilon,M,c_0)\), in the coordinates
+   11: \(q=(\eta,\delta)\), on which \(c\pm\sqrt\delta>0\) and, for every
+   12: multi-index \(a\),
+   13: \[
+   14: \begin{aligned}
+   15:  \sup_{q\in\mathcal Q^+}|\partial_q^a\log g_q(k)|
+   16:  &\le C_a(1+k)^{2|a|},&& 1\le|a|\le3,\\
+   17:  \sup_{q\in\mathcal Q^+}|\partial_q^a\log S_q(k)|
+   18:  &\le C_a(1+k)^{2|a|},&& 1\le|a|\le2.
+   19: \end{aligned}
+   20: \]
+   21: All parameter derivatives extend continuously to \(\delta=0\), and
+   22: \(g_q(k)\le C(1+k)^{n-1}r^k\) for a common \(r<1\).  Writing
+   23: \(e_q(a)=S_q(a)/\mu_q\), the families \(g_q\) and \(e_q\) are uniformly
+   24: differentiable in quadratic mean.  Uniformly over base points on the collision
+   25: stratum and bounded physical root-\(N\) local arrays \(q_N\),
+   26: \[
+   27:  H^2(g_{q_N},g_{q_0})=O(N^{-1}),\qquad
+   28:  H^2(e_{q_N},e_{q_0})=O(N^{-1}),\qquad
+   29:  |\mu_{q_N}-\mu_{q_0}|=O(N^{-1/2}).
+   30: \]
+   31: 
+   32: \smallskip\noindent\textbf{Stopped-score CLT and information LLN.}
+   33: Let \(\mathcal Q\) be compact and let the integer Palm gaps \(G\) have full
+   34: support, a common exponential moment, and parameter-continuous masses.  Let a
+   35: stationary binary renewal record of length \(N\) contain \(K_N\) complete
+   36: gaps, with initial forward recurrence \(A_N\) and terminal backward recurrence
+   37: \(R_N\), and put \(D=G+1\), \(\mu_q=\EE_qD\).  Uniformly in
+   38: \(q\in\mathcal Q\), and for triangular arrays \(q_N\in\mathcal Q\),
+   39: \[
+   40:  K_N=N/\mu_{q_N}+O_{P_{q_N}}(\sqrt N),\qquad
+   41:  \max\{A_N,R_N,G_1,\ldots,G_{K_N}\}=O_{P_{q_N}}(\log N).
+   42: \]
+   43: If \(b_q(G)\in\RR^d\) is parameter-continuous, \(\EE_qb_q(G)=0\), and is
+   44: bounded by a common polynomial in \(G\), then
+   45: \[
+   46:  \sup_{q\in\mathcal Q}d_{\rm BL}\!\left(
+   47:  \mathcal L_q\!\left[N^{-1/2}\sum_{j=1}^{K_N}b_q(G_j)\right],
+   48:  \mathcal N_d\!\left(0,\mu_q^{-1}\EE_q[b_qb_q^\top]\right)
+   49:  \right)\longrightarrow0.
+   50: \]
+   51: For every similarly dominated matrix reward \(H_q\),
+   52: \[
+   53:  N^{-1}\sum_{j=1}^{K_N}H_q(G_j)
+   54:  -\mu_q^{-1}\EE_qH_q(G)\longrightarrow0
+   55: \]
+   56: uniformly in probability.  If \(B_q\) has a common polynomial envelope, then
+   57: \[
+   58:  N^{-3/2}\sum_{j=1}^{K_N}B_q(G_j)=o_P(1)
+   59: \]
+   60: uniformly.  These conclusions hold jointly and apply to the score, stopped
+   61: Hessian, and third-order likelihood remainder under bounded root-\(N\) local
+   62: triangular arrays.
+   63: 
+   64: \smallskip\noindent\textbf{Plug-in equicontinuity.}
+   65: On the canonically ordered collision stratum, write the one-cycle null scores
+   66: as \(s_\eta\) and \(s_\delta\), and define
+   67: \[
+   68:  \psi_\eta=s_\delta-I_{\delta\eta}I_{\eta\eta}^{-1}s_\eta,
+   69:  \qquad
+   70:  \Delta_{{\rm eff},N}(\eta)=N^{-1/2}
+   71:  \sum_{j=1}^{K_N}\psi_\eta(G_j).
+   72: \]
+   73: For every fixed \(L<\infty\),
+   74: \[
+   75:  \sup_\eta\sup_{\|\eta'-\eta\|\le L/\sqrt N}
+   76:  |\Delta_{{\rm eff},N}(\eta')-\Delta_{{\rm eff},N}(\eta)|
+   77:  =o_{P_{\eta,0}}(1).
+   78: \]
+   79: The conclusion also holds under bounded contiguous local alternatives.  The
+   80: empirical calendar information and its Schur complement, evaluated anywhere
+   81: in the same root-\(N\) ball, converge uniformly to \(I_n(\eta)\) and
+   82: \(J_n(\eta)\).  Hence any measurable root-\(N\) null fit may be inserted in
+   83: the standardized efficient central sequence with an \(o_P(1)\) change.
+   84: 
+   85: \begin{proof}[Proof of \Cref{thm:stationary-serial-double-pole-main}]
+   86: We first make the route from the stationary record to the local experiment
+   87: explicit.  The serial killed-reset construction gives a stationary renewal
+   88: indicator with
+   89: \[
+   90:  S_{\eta,\delta}(k)=\PP_{\eta,\delta}\{W>k\Delta\tau\},\qquad
+   91:  g_{\eta,\delta}(k)=S_{\eta,\delta}(k)-S_{\eta,\delta}(k+1).
+   92: \tag{4.1}
+   93: \]
+   94: The required uniform score bounds are supplied in the supplement.
+   95: Specifically, \Cref*{lem:uniform-sampled-bin-tail-score-main} of the supplementary material gives polynomial relative
+   96: derivative bounds through the orders required for DQM, together with a common
+   97: exponential envelope.  Along every bounded root-\(N\) local array, the DQM
+   98: expansion therefore gives
+   99: \[
+  100:  H^2(g_{\eta_N,\delta_N},g_{\eta_0,0})=O(N^{-1}),
+  101: \tag{4.2}
+  102: \]
+  103: uniformly.  The equilibrium residual-life mass is
+  104: \(e_{\eta,\delta}(a)=S_{\eta,\delta}(a)/\mu_{\eta,\delta}\).  The same
+  105: tail-derivative bounds and dominated differentiation give
+  106: \[
+  107:  H^2(e_{\eta_N,\delta_N},e_{\eta_0,0})=O(N^{-1}),\qquad
+  108:  |\mu_{\eta_N,\delta_N}-\mu_{\eta_0,0}|=O(N^{-1/2}),
+  109: \tag{4.3}
+  110: \]
+  111: again uniformly.  Thus every hypothesis of
+  112: \Cref{thm:stationary-renewal-palm-equivalence-main} holds on these arrays.
+  113: 
+  114: For any fixed \(\gamma\in(1/2,1)\), that theorem identifies the stationary
+  115: window experiment, in Le Cam distance, with
+  116: \(m_N=\lfloor N/\mu_{\eta_0,0}-N^\gamma\rfloor\) independent Palm gaps.
+  117: The i.i.d. DQM expansion has one-gap information
+  118: \(\sum_k g\dot\ell\dot\ell^\top\).  Since
+  119: \(m_N/N\to1/\mu_{\eta_0,0}\), its calendar-time information is exactly
+  120: \(I_n(\eta_0)\) in \textup{(3.3)}.  The uniform i.i.d. LAN theorem and the
+  121: two-sided deficiency comparison therefore yield convergence of the local
+  122: stationary experiments to the Gaussian shift on
+  123: \(\RR^{n-1}\times[0,\infty)\).  Restriction to \(v\ge0\) is precisely the
+  124: fixed-cone qualification in \Cref{thm:stationary-renewal-palm-equivalence-main};
+  125: the information remains that of the ambient DQM chart, while decisions are
+  126: made in the constrained experiment.
+  127: 
+  128: This equivalence route proves the experiment convergence without replacing
+  129: Palm gaps by gaps conditioned to fit in the observation window.  For the
+  130: explicit stationary-record likelihood-ratio expansion in \textup{(3.10)},
+  131: \Cref*{lem:compact-uniform-stationary-renewal-lan-main} of the supplementary material gives an independent
+  132: direct proof.  On a record with renewal sites
+  133: \(0\le C_1<\cdots<C_J<N\), that proof starts from the exact factorization
+  134: \[
+  135:  \frac1{\mu_q}S_q(C_1)
+  136:  \prod_{j=1}^{J-1}g_q(C_{j+1}-C_j-1)S_q(N-1-C_J),
+  137: \tag{4.4}
+  138: \]
+  139: handles the all-zero record separately, and proves that increments of the
+  140: two endpoint log tails and \(-\log\mu_q\), rather than the factors
+  141: themselves, are \(o_P(1)\).  Its stopped-score central sequence is
+  142: \[
+  143:  \Delta_{N,\eta_0}=N^{-1/2}
+  144:  \sum_{j=1}^{J-1}\dot\ell_{\eta_0,0}(C_{j+1}-C_j-1).
+  145: \tag{4.5}
+  146: \]
+  147: The stopped Hessian LLN and score CLT in
+  148: \Cref*{lem:uniform-stopped-renewal-score-main} of the supplementary material give the quadratic term and the
+  149: uniform Gaussian limit in \textup{(3.10)}.  Proposition
+  150: \ref{prop:sampled-double-pole-nondegeneracy-main} supplies the positive
+  151: definiteness needed in both routes, proving part~\textup{(A)}.
+  152: 
+  153: For part~\textup{(B)}, use the test constructed in
+  154: \textup{(3.19)}--\textup{(3.21)}.  The finite-atlas fit is Borel, and finite
+  155: sums, eigenvalues, and matrix inversion on the positive-definite gate preserve
+  156: measurability.  The off-gate convention therefore makes \(\phi_N\) total and
+  157: Borel on every binary record.
+  158: 
+  159: The population efficient central sequence is
+  160: \[
+  161:  \Delta_{\delta\cdot\eta,N}
+  162:  =\Delta_{\delta,N}
+  163:  -I_{\delta\eta}I_{\eta\eta}^{-1}\Delta_{\eta,N},
+  164: \tag{4.9}
+  165: \]
+  166: with null variance \(J_n>0\).  Le Cam's third lemma gives mean \(vJ_n\)
+  167: under \((\eta_0+u/\sqrt N,v/\sqrt N)\); the nuisance shift cancels.
+  168: \Cref*{lem:efficient-score-plugin-main} of the supplementary material shows that the root-\(N\) null fit and
+  169: empirical information change the standardized sequence by \(o_P(1)\)
+  170: uniformly.  The stopped LLN and \textup{(3.5)} make \(\mathcal G_N\)
+  171: asymptotically inactive.  This proves \textup{(3.12)} and uniform local level.
+  172: The Neyman--Pearson lemma after nuisance residualization in the Gaussian shift
+  173: gives the asserted power envelope.
+  174: 
+  175: For part~\textup{(C)}, the full construction in
+  176: \Cref*{sec:estimator-atlas-supp} of the supplementary material proves \textup{(3.18)}.  Nonexpansive
+  177: projection and the square-root inequality following
+  178: \Cref{est:serial-collision-recurrence-main} yield \textup{(3.13)}, while
+  179: uniform separation fixes the optimal matching with probability tending to
+  180: one.  Finally, at a fixed base hold \(\eta=\eta_0\) and compare \(v=0\) with
+  181: \(v=v_0\).  \Cref{lem:two-point-threshold-rate-main} gives their eventual
+  182: matching distance \(\sqrt{v_0}N^{-1/4}\) and the positive Gaussian lower
+  183: bound in \textup{(3.15)}.  The upper and lower statements together prove
+  184: attainability and pointwise local minimax optimality in rate.
+  185: \end{proof}
+
+ succeeded in 196ms:
+  130: relative bounds are proved separately in
+  131: \Cref*{lem:uniform-sampled-bin-tail-score-main} of the supplementary material by conditioning complete-data
+  132: scores on a bin or tail event.  Dominated summation makes the information
+  133: continuous.  Pointwise positive definiteness, continuity, and compactness
+  134: prove \textup{(3.5)}.
+  135: \end{proof}
+  136: 
+  137: \subsection{Recurrence estimator and residualized statistic}
+  138: 
+  139: \begin{estimator}[Measurable sampled-tail recurrence estimator]
+  140: \label{est:serial-collision-recurrence-main}
+  141: Delete the two incomplete endpoint cycles and let
+  142: \(G_1,\ldots,G_{K_N}\) be the complete zero-run gaps.  Form
+  143: \[
+  144:  \widehat S_k=K_N^{-1}\sum_{j=1}^{K_N}\mathbf1_{\{G_j\ge k\}},
+  145:  \qquad0\le k\le2n-1,
+  146: \tag{3.17}
+  147: \]
+  148: with fixed values when \(K_N=0\).  Solve the empirical Hankel recurrence on
+  149: its nonsingular gate, use a fixed fallback otherwise, and select measurably
+  150: from a finite analytic contour atlas separating the unique two-root cluster
+  151: from the \(n-2\) simple roots.  In the cluster, use its elementary symmetric
+  152: coordinates and transform them analytically to \((c,\widetilde\delta)\);
+  153: set \(\widehat\delta=(\widetilde\delta)^+\).  The resulting estimators are
+  154: total and Borel measurable and satisfy, uniformly over the compact stratum and
+  155: bounded local alternatives,
+  156: \[
+  157:  \widehat\eta_N-\eta_N=O_P(N^{-1/2}),\qquad
+  158:  \widehat\delta_N-\delta_N=O_P(N^{-1/2}).
+  159: \tag{3.18}
+  160: \]
+  161: The pair \(\widehat c_N\pm\sqrt{\widehat\delta_N}\), together with the
+  162: canonically ordered simple-rate estimates, gives \textup{(3.13)}.
+  163: \end{estimator}
+  164: 
+  165: The finite vector of empirical tail coordinates is root-\(N\), and
+  166: invertibility from \Cref{prop:serial-tail-coordinates-main} gives root-\(N\)
+  167: recurrence coefficients.  Simple roots and the two-root cluster have
+  168: compatible analytic charts, while \((c,\delta)\) are regular analytic cluster
+  169: coordinates.  Projection onto \([0,\infty)\) is nonexpansive, and
+  170: \(|\sqrt{x^+}-\sqrt y|\le\sqrt{|x-y|}\) for \(y\ge0\).  The finite-atlas
+  171: contour construction and measurability proof are in
+  172: \Cref*{sec:estimator-atlas-supp} of the supplementary material.
+  173: 
+  174: For the collision test, write the null one-cycle score as
+  175: \[
+  176:  s_{\eta,0}(k)=
+  177:  \begin{pmatrix}s_{\rm nuis}(k;\eta)\\s_\delta(k;\eta)\end{pmatrix}.
+  178: \]
+  179: Fix a compact null-coordinate neighbourhood \(\mathcal E_0\) whose interior
+  180: contains the stratum projection and whose closure lies in the common score
+  181: chart.  For \(\eta\in\mathcal E_0\), define the empirical calendar information
+  182: \[
+  183:  I_N(\eta)=\frac1N\sum_{j=1}^{K_N}
+  184:  s_{\eta,0}(G_j)s_{\eta,0}(G_j)^\top,
+  185: \tag{3.19}
+  186: \]
+  187: and set \(I_N(\eta)=0\) outside \(\mathcal E_0\).  Partition it according to
+  188: \((\eta,\delta)\), and define its empirical Schur complement by
+  189: \[
+  190:  J_N(\eta)=
+  191:  \begin{cases}
+  192:  I_{\delta\delta,N}-I_{\delta\eta,N}
+  193:  I_{\eta\eta,N}^{-1}I_{\eta\delta,N},
+  194:  &\eta\in\mathcal E_0,\ \lambda_{\min}(I_{\eta\eta,N})>0,\\
+  195:  0,&\text{otherwise}.
+  196:  \end{cases}
+  197: \tag{3.20}
+  198: \]
+  199: Let \(\widehat\eta_N\) be the recurrence fit and
+  200: \(\mathcal G_N=\{\widehat\eta_N\in\mathcal E_0,
+  201: J_N(\widehat\eta_N)>0\}\).  On \(\mathcal G_N\), put
+  202: \[
+  203: \begin{aligned}
+  204:  Z_N&=\frac{N^{-1/2}\sum_{j=1}^{K_N}
+  205:  \left[s_\delta(G_j;\widehat\eta_N)
+  206:  -I_{\delta\eta,N}(\widehat\eta_N)
+  207:  I_{\eta\eta,N}(\widehat\eta_N)^{-1}
+  208:  s_{\rm nuis}(G_j;\widehat\eta_N)\right]}
+  209:  {\sqrt{J_N(\widehat\eta_N)}},\\
+  210:  \phi_N&=\mathbf1_{\{Z_N>z_{1-\alpha}\}}.
+  211: \end{aligned}
+  212: \tag{3.21}
+  213: \]
+  214: The score-chart, singular-block, and nonpositive-Schur-complement gates make
+  215: the construction total: off \(\mathcal G_N\), set \(\phi_N=0\), the default
+  216: nonrejection.  These gates are uniformly asymptotically inactive.
+  217: 
+  218: \subsection{Limit experiment, efficient testing, and recovery}
+  219: 
+  220: \begin{theorem}[Stationary isolated-double-pole limit experiment]
+  221: \label{thm:stationary-serial-double-pole-main}
+  222: Fix \(n,\varepsilon,M,c_0\), known \(\Delta\tau>0\), and the serial positive
+  223: killed-reset realization \textup{(1.2)}--\textup{(1.3)}, and suppose
+  224: \(\mathcal C_n(\varepsilon,M,c_0)\ne\varnothing\).  Let
+  225: \(P_{\eta,\delta}^{(N)}\) be the stationary length-\(N\) binary renewal
+  226: record in this fixed serial order, at one isolated real double pole with all
+  227: other rates simple and separated as in \textup{(3.1)}.
+  228: 
+  229: \smallskip\noindent\textup{(A) Uniform LAN and the limit experiment.}
+  230: For bounded \(u\in\RR^{n-1}\) and \(v\in[0,\infty)\), uniformly over the
+  231: collision stratum,
+  232: \[
+  233:  \log\frac{dP_{\eta_0+u/\sqrt N,v/\sqrt N}^{(N)}}
+  234:  {dP_{\eta_0,0}^{(N)}}
+  235:  =\begin{pmatrix}u\\v\end{pmatrix}^{\!\top}\Delta_{N,\eta_0}
+  236:  -\frac12\begin{pmatrix}u\\v\end{pmatrix}^{\!\top}
+  237:  I_n(\eta_0)\begin{pmatrix}u\\v\end{pmatrix}
+  238:  +o_{P_{\eta_0,0}}(1),
+  239: \tag{3.10}
+  240: \]
+  241: where
+  242: \(\Delta_{N,\eta_0}\Rightarrow\mathcal N_n\{0,I_n(\eta_0)\}\)
+  243: uniformly in bounded-Lipschitz distance.  The local experiments converge to
+  244: the Gaussian shift on \(\RR^{n-1}\times[0,\infty)\), and the information is
+  245: uniformly nondegenerate by \textup{(3.5)}.
+  246: 
+  247: \smallskip\noindent\textup{(B) Efficient collision test.}
+  248: Partition \(I_n\) according to \((\eta,\delta)\) and set
+  249: \[
+  250:  J_n(\eta)=I_{\delta\delta}
+  251:  -I_{\delta\eta}I_{\eta\eta}^{-1}I_{\eta\delta}>0.
+  252: \tag{3.11}
+  253: \]
+  254: The residualized-score test \(\phi_N\) in \textup{(3.21)} has uniform
+  255: asymptotic level \(\alpha\).  At
+  256: \((\eta_N,\delta_N)=(\eta_0+u/\sqrt N,v/\sqrt N)\), its limiting power is
+  257: \[
+  258:  1-\Phi_{\rm N}\{z_{1-\alpha}-v\sqrt{J_n(\eta_0)}\}.
+  259: \tag{3.12}
+  260: \]
+  261: This is the Gaussian half-space power envelope among tests with uniform local
+  262: asymptotic level \(\alpha\).
+  263: 
+  264: \smallskip\noindent\textup{(C) Attainable and lower recovery rates.}
+  265: The measurable procedure in \Cref{est:serial-collision-recurrence-main}
+  266: gives root-\(N\) estimates of \(\eta\) and \(\delta\) and an induced rate
+  267: multiset \(\widehat{\mathcal R}_{n,N}\) satisfying
+  268: \[
+  269:  d_{\rm m}\!\left(\widehat{\mathcal R}_{n,N},
+  270:  \{\!\{c_N+\sqrt{\delta_N},c_N-\sqrt{\delta_N},
+  271:  \theta_{3,N},\ldots,\theta_{n,N}\}\!\}\right)=O_P(N^{-1/4})
+  272: \tag{3.13}
+  273: \]
+  274: uniformly over the compact stratum and bounded \((u,v)\).  The centre and
+  275: canonically ordered separated rates remain root-\(N\).  At every fixed base,
+  276: \Cref{lem:two-point-threshold-rate-main} gives a strictly positive lower
+  277: limit for threshold risk on two alternatives separated by
+  278: \(\sqrt{v_0}N^{-1/4}\).  Hence \(N^{-1/4}\) is uniformly attainable on the
+  279: stated bounded local families and pointwise locally minimax-optimal in rate.
+  280: \end{theorem}
+  281: 
+  282: \begin{corollary}[The two-state collision]
+  283: \label{cor:two-state-collision-main}
+  284: For \(n=2\), the stratum restrictions on separated rates are vacuous and
+  285: \Cref{thm:stationary-serial-double-pole-main} applies with \(\eta=c\).  In
+  286: particular,
+  287: \[
+  288:  \mathcal L\{\overline F_{c,\delta}\}(s)
+  289:  =\frac1s\left\{1-\frac{c^2-\delta}{(s+c)^2-\delta}\right\},
+  290: \quad
+  291:  \left.\partial_\delta\mathcal L\{\overline F_{c,\delta}\}(s)
+  292:  \right|_0=\frac{s+2c}{(s+c)^4},
+  293: \tag{3.14}
+  294: \]
+  295: whereas the centre derivative is \(-2c/(s+c)^3\).  Thus the stationary
+  296: two-state record has the Gaussian half-plane experiment on
+  297: \(\RR\times[0,\infty)\), the residualized test has power
+  298: \(1-\Phi_{\rm N}\{z_{1-\alpha}-v\sqrt{J_2(c)}\}\), and the unordered pair
+  299: is recoverable at the matching upper and fixed-base two-point lower rate
+  300: \(N^{-1/4}\).  The sign of the rate split is not identifiable.
+  301: \end{corollary}
+  302: 
+  303: \begin{proof}
+  304: This is the specialization of \Cref{thm:stationary-serial-double-pole-main}
+  305: with the empty product \(B_\eta=1\).  Direct differentiation of
+  306: \textup{(3.14)} gives the displayed fourth- and third-order poles.  Detailed
+  307: two-state tail, recurrence, score, and estimator calculations are recorded in
+  308: \Cref*{sec:two-state-calculations-supp} of the supplementary material.
+  309: \end{proof}
+  310: 
+  311: \begin{lemma}[Two-point threshold-risk lower bound]
+  312: \label{lem:two-point-threshold-rate-main}
+  313: Fix a collision base \((\eta_0,0)\), hold \(\eta_0\) fixed, and compare
+  314: \(P_{0,N}=P_{\eta_0,0}^{(N)}\) with
+  315: \(P_{1,N}=P_{\eta_0,v_0/\sqrt N}^{(N)}\), where \(v_0>0\).  Let their
+  316: unordered rate multisets be \(\mathcal R_{0,N}\) and \(\mathcal R_{1,N}\),
+  317: and put \(h_N=\sqrt{v_0}N^{-1/4}\).  For \(n=2\) their matching distance is
+  318: exactly \(h_N\) whenever the alternative is admissible.  For \(n>2\), the
+  319: same equality holds whenever \(h_N<c_0/2\), in particular for all sufficiently
+  320: large \(N\).  For every \(0<a<\sqrt{v_0}/2\),
+  321: \[
+  322:  \liminf_{N\to\infty}\inf_{\widehat{\mathcal R}_N}
+  323:  \max_{i=0,1}P_{i,N}\!\left\{
+  324:  N^{1/4}d_{\rm m}(\widehat{\mathcal R}_N,\mathcal R_{i,N})>a
+  325:  \right\}
+  326:  \ge \Phi_{\rm N}\!\left(
+  327:  -\frac{v_0\sqrt{I_{\delta\delta}(\eta_0)}}2\right)>0.
+  328: \tag{3.15}
+  329: \]
+  330: The conclusion is pointwise at a fixed base, uses two alternatives and
+  331: threshold loss, and asserts optimality in rate rather than an exact minimax
+  332: risk over a continuum.
+  333: \end{lemma}
+  334: 
+  335: \begin{proof}
+  336: Matching every unchanged separated rate to itself and the colliding entries to
+  337: \(c-h_N\) and \(c+h_N\) gives distance at most \(h_N\).  If \(n>2\) and
+  338: \(h_N<c_0/2\), every separated rate is at distance at least
+  339: \(c_0-h_N>h_N\) from either perturbed collision entry, so no matching through
+  340: a separated rate improves it.  The equality is immediate for \(n=2\).
+  341: 
+  342: The balls of radius \(aN^{-1/4}\) around the two candidates are disjoint.
+  343: Assigning an estimate to its nearer candidate turns simultaneous estimation
+  344: success into correct testing of \(P_{0,N}\) against \(P_{1,N}\).  Under
+  345: \(P_{0,N}\), the LAN likelihood ratio converges to
+  346: \[
+  347:  \exp\{v_0Z-\tfrac12v_0^2I_{\delta\delta}(\eta_0)\},
+  348:  \qquad Z\sim\mathcal N(0,I_{\delta\delta}(\eta_0)).
+  349: \tag{3.16}
+  350: \]
+  351: Its limit has mean one, and mutual contiguity makes the likelihood ratios
+  352: uniformly integrable.  Their total-variation distances therefore converge to
+  353: that of the two Gaussian shifts separated by
+  354: \(v_0\sqrt{I_{\delta\delta}(\eta_0)}\).  The maximum error of any test is at
+  355: least its equal-prior average error, whose limiting infimum is the right side
+  356: of \textup{(3.15)}.  Taking a measurable estimator within \(o(1)\) of the
+  357: infimum at each \(N\) proves the bound.
+  358: \end{proof}
+
+ succeeded in 253ms:
+FILE: sections\front.tex
+  121: \tag{1.1}
+  132: \tag{1.2}
+  138: \tag{1.3}
+  148: \tag{1.4}
+FILE: sections\equivalence.tex
+   24: \tag{LE1}
+   42: \tag{LE2}
+   52: \tag{LE3}
+   59: \tag{LE4}
+   65: \tag{LE5}
+   72: \tag{LE6}
+   84: \tag{LE7}
+   91: \tag{LE8}
+   98: \tag{LE9}
+  106: \tag{LE10}
+  122: \tag{LE11}
+  129: \tag{LE12}
+  149: \tag{LE13}
+  168: \tag{LE14}
+  175: \tag{LE15}
+  183: \tag{LE16}
+  191: \tag{LE17}
+  229: \tag{LE18}
+FILE: sections\serial_coordinates.tex
+   16: \tag{2.1}
+   21: \tag{2.2}
+   38: \tag{2.3}
+   56: \tag{2.4}
+FILE: sections\collision_theorem.tex
+   16: \tag{3.1}
+   26: \tag{3.2}
+   39: \tag{3.3}
+   56: \tag{3.4}
+   62: \tag{3.5}
+   77: \tag{3.6}
+   85: \tag{3.7}
+   94: \tag{3.8}
+  127: \tag{3.9}
+  146: \tag{3.17}
+  159: \tag{3.18}
+  185: \tag{3.19}
+  197: \tag{3.20}
+  212: \tag{3.21}
+  239: \tag{3.10}
+  252: \tag{3.11}
+  259: \tag{3.12}
+  272: \tag{3.13}
+  293: \tag{3.14}
+  328: \tag{3.15}
+  349: \tag{3.16}
+FILE: sections\main_proofs.tex
+   92: \tag{4.1}
+  101: \tag{4.2}
+  109: \tag{4.3}
+  137: \tag{4.4}
+  145: \tag{4.5}
+  164: \tag{4.9}
+FILE: sections\discussion.tex
+FILE: sections\end.tex
+FILE: references.tex
+
