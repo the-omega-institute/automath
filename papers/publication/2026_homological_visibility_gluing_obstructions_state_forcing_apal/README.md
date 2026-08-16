@@ -1,77 +1,63 @@
-# E1. Conservative Extension Chain and State Forcing
+# Finite-Site Component Gerbes, Terminal Rigidity, and Prescribed Realization
 
-## 当前定位
+## Current Position
 
-- 当前稿件路径：
-  `docs/papers/auric-golden-phi/publication/2026_conservative_extension_chain_state_forcing_apal`
-- 主论文源材料路径（本轮只读取，不改动）：
-  `docs/papers/auric-golden-phi/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence`
-- 目标期刊：Annals of Pure and Applied Logic (APAL)
-- 目标定位：
-  把主论文里已经出现但尚未被独立抽象成"逻辑/语义元定理"的内容，整理成可向数理逻辑期刊提交的独立论文。
+- Working directory: `papers/publication/2026_homological_visibility_gluing_obstructions_state_forcing_apal`.
+  The directory name is a legacy identifier; it is not the current title, scope,
+  or journal target and must not be renamed as part of documentation maintenance.
+- Target journal: Cahiers de Topologie et Geometrie Differentielle Categoriques.
+- Article: `main.pdf`, 26 pages.
+- Supplement: `supplement.pdf`, 6 pages.
+- Current structural authority: `submission_checklist.md`, checked against both
+  built documents on 2026-08-17.
 
-## 本轮修订要点
+## Article Scope
 
-### 1. 修复逻辑缺口
+The article studies abelian-banded prestack lifts of a presheaf on a finite
+site with a terminal object. The site, presheaf, band, prestack lift, and
+component classes are supplied inputs. The paper does not claim that these
+data arise canonically from a bare empirical model.
 
-- Theorem 4.26（component gerbe decomposition）：无条件整栈分解降级为带 branch constancy 假设的 corollary；无假设版本只保留"每个 visible branch 的 full substack 是 banded gerbe"。
-- Theorem 4.28（gerbe-null-semantics）：显式引入 global conservativity at the terminal fibre（stackification morphism 在终纤维上本质满），作为 $\mathfrak L_r(a)\neq\varnothing \Leftrightarrow \Sec_s(r)$ 的必要条件。
+The principal results are:
 
-### 2. Forcing 必要性定理
+1. Terminal rigidity for representative-rigid prestack lifts under slice
+   separatedness and an `H^1`-vanishing hypothesis.
+2. An explicit finite-good-cover construction realizing prescribed maps
+   `H_2(N, Z) -> A` as component-gerbe evaluations while controlling the
+   component presheaf, terminal fibre, and neutrality pattern.
+3. A two-component realization criterion on selected open-star covers of
+   wedges of 2-spheres.
 
-- 新增 Theorem（pointwise irreducibility of gluing predicates）：构造两个 admitted references，在 $\mathbb{L}_1$ 上不可区分，但在 $\mathbb{L}_2$ 上一个可 glue、另一个不可 glue。由此证明 $\CompSec_s$ 和 $\Sec_s$ 不是 information-state forcing 语言可定义的。
+The article also records the boundary with empirical-model obstructions and
+naturality along specified presentation comparisons. Standard component-gerbe
+and gerbe-classification inputs are credited to the classical literature; the
+paper-specific priority boundary is recorded in `artifacts/literature_check.md`.
 
-### 3. Abramsky--Brandenburger 联系
+## Current Source Structure
 
-- 精确界定 empirical-model 接口：每个有限 support presheaf 都函子性地产生 split realization stack，但其 Giraud 类全为零；AMB 障碍是由局部截面索引的相对 $H^1$ torsor 类，不是本文由全局 component 索引的 $H^2$ gerbe 类。因而 bouquet 的 $d(G)\le 2\beta$ 分类不自动转移到 empirical models。
+The article inputs, in order:
 
-### 4. 清除 "larger architecture ghost"
+- `sec_introduction.tex`
+- `sec_preliminaries.tex`
+- `sec_gerbe_obstruction.tex`
+- `sec_homological_visibility.tex`
+- `sec_homological_visibility_intrinsic.tex`
+- `sec_branch_aggregation.tex`
+- `sec_branch_contextuality.tex`
+- `sec_conclusion.tex`
+- `sec_presentation_appendix.tex` as Appendix A
 
-- 引言、预备知识、结论中的 "broader research program"、"eleven-layer architecture"、"larger conservative-extension architecture" 等措辞全部替换为自足四层链的表述。
+The supplement inputs only `sec_appendix.tex`, which contains Appendices A--C.
 
-### 5. 复杂性上界移至附录
+## Package Status
 
-- Section 5 中的 Finite-state complexity subsection 提取为独立附录。
-- 主文只保留 refinement monotonicity 与 visibility monotonicity。
-
-### 6. 文件拆分
-
-- `sec_null_decomposition.tex` 拆为三个文件（均 < 800 行）：
-  - `sec_null_decomposition.tex`：局部对象、层化、realization prestacks、typed readouts、structural absence、forcing necessity
-  - `sec_gerbe_obstruction.tex`：component gerbes、visible quotients、worked example
-  - `sec_homological_visibility.tex`：homological evaluation、intrinsic visibility、branch aggregation、contextuality
-
-## 已从主论文抽出的深层定理
-
-### 1. 信息状态层
-
-- 显式补出 `lifted soundness of pointwise reasoning`。
-- 显式补出 `canonical Kripke reduct`。
-- 显式补出 `Kripke recovery after atomization`。
-
-### 2. 局部对象层
-
-- 显式补出 `sheafification characterizes compatible local sectionability`。
-- 显式补出 `sheafification removes gluing failure`。
-- 抽象化写出 `typed readout`、`address before value`、`typed-readout persistence`。
-- 新增 `pointwise irreducibility of gluing predicates`。
-
-### 3. NULL 分解层
-
-- 显式补出 `classification after refinement`。
-- 显式补出 `finite model for the three absence modes`。
-- 保留并对齐 `gerbe semantics of gluing-level absence`（含 branch constancy 与 global conservativity 修补）。
-- 新增 `connection to sheaf-theoretic contextuality`。
-
-### 4. 多轴动态层
-
-- 保留 `non-retrocausal delayed classification`。
-- 保留 `explicit lifting principle`。
-- 保留 `value-preserving rewrites do not create facts`。
-- `finite-state complexity upper bounds` 移至附录。
-
-## 当前编译状态
-
-- 已执行：
-  `pdflatex -> bibtex -> pdflatex -> pdflatex`
-- 当前 `main.tex` 可成功编译出 PDF。
+- Both built documents compile and have resolved citations and cross-references.
+- Both authors, affiliations, and email addresses are present in the article and
+  supplement.
+- `cover_letter_cahiers.txt` is the cover letter currently present in the
+  repository.
+- `submission_checklist.md` records 10 of 11 checks as passing. The remaining
+  source-hygiene item is 29 unused entries in `references.bib`; it does not
+  create undefined citations or add those entries to the generated bibliography.
+- No repository record establishes an external submission date, handling editor,
+  or journal decision. Those fields remain unknown.
