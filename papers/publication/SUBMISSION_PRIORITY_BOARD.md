@@ -59,7 +59,8 @@
 
 
 
-> **TICK 177 — 空转,内存触线。** 池 0/6、无 agent、无 stdin 孤儿、无未提交论文改动。可用内存首采 0.54 GB(低于 0.6 阈值),复采 5 次为 0.59/0.56/0.71/0.83/0.89 GB、缺页 280/356/201/459/160 s^-1,已回升且缺页远低于 1000。占用前四:claude 758 MB、vmmemWSL 696 MB、MsMpEng 393 MB、Cursor 377 MB — 均非冲刺 agent,无可减并发项。六项待作者事项无变化,见 tick 117 条目。
+> **TICK 177 — 冲刺重启。** 作者授权了拆分与推送。598 个提交已推到 origin/dev-automation-integration(16efc6374..91d3230f0),远端与本地同步。三个 codex agent 在跑:A6 拆两篇(Paper A → 新目录 brocot_condensation_critical_fibonacci_renewal_tams,TAMS 55-65%;Paper B 原目录重建并改名 finite_window_zeckendorf_thermodynamics_jnt,JNT 50-65%)、A3 拆两篇(Article A → 新目录 linear_overlap_transients_bounded_zero_pisot_etds,ETDS 74%;Article B 原目录重建并改名 cyclic_rank_thresholds_quadratic_simple_parry_etds,ETDS 57%)、A8 改写(新目录 renewal_experiment_equivalence_singular_lan_ejs,EJS 51%,原 detector_shells 目录原样保留为被删材料的存放处)。任务书分别为 sprint/a6_split_task.txt、a3_split_task.txt、a8_recast_task.txt。三篇改完后须独立重跑 verifier 与 latexmk 清洁重建才提交。内存首采 0.54 GB 触线,复采回升到 1.40 GB、缺页 160-459,派工前已确认。
+
 
 
 
