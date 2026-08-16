@@ -1,0 +1,156 @@
+\section{The Fibonacci generator renewal}\label{sec:fibonacci-renewal}
+
+Let \(F_0=0,F_1=1\), and \(F_{j+2}=F_{j+1}+F_j\).  The classical Fibonacci
+partition function is
+\begin{equation}
+ R(N):=\card{\left\{(\varepsilon_j)_{j\ge0}\in\{0,1\}^{(\mathbb N)}:
+ N=\sum_{j\ge0}\varepsilon_jF_{j+2}\right\}},
+ \qquad N\ge0.
+ \label{eq:fibonacci-partition-function}
+\end{equation}
+Thus the available parts are \(1,2,3,5,\ldots\), each used at most once.
+For \(m\ge1\), put
+\begin{equation}
+ \mathcal I_m=[F_{m+1}-1,F_{m+2}-1)\cap\ZZ,
+ \qquad
+ Z_m^R(t):=\sum_{N\in\mathcal I_m}R(N)^t.
+ \label{eq:standard-fibonacci-layer}
+\end{equation}
+
+We use the generator coordinates of Weinstein
+\cite[Secs.~3--5]{Weinstein2016}.  His Fibonacci sequence
+\(f_0=f_1=1\) satisfies \(f_j=F_{j+1}\), so his half-open layer
+\([f_m-1,f_{m+1}-1)\) is exactly \(\mathcal I_m\), and his partition
+function is \(R\) in \eqref{eq:fibonacci-partition-function}.  We record the
+part of the parameterization needed for weighted sums.
+
+Let
+\[
+ \mathcal A=\{p/q:0<p<q,\ (p,q)=1\}.
+\]
+For \(p/q\in\mathcal A\), write its unique negative continued fraction as
+\[
+ \frac pq=
+ \cfrac1{e_1-\cfrac1{e_2-\ddots-\cfrac1{e_k}}},
+ \qquad e_i\ge2,
+\]
+and recall from \Cref{sec:brocot-condensation} that
+\[
+ d(p/q)=\sum_{i=1}^k(e_i-1),
+ \qquad c(p/q)=2d(p/q)+1.
+\]
+For real \(s\), define
+\begin{equation}
+ b_\ell(s)=\sum_{\substack{p/q\in\mathcal A\\c(p/q)=\ell}}q^{-s},
+ \qquad
+ B_s(z)=\sum_{\ell\ge1}b_\ell(s)z^\ell.
+ \label{eq:renewal-letter-series}
+\end{equation}
+Only odd costs occur.  The smallest costs are \(3\) and \(5\), represented
+by \(1/2\) and \(1/3\).
+
+Put
+\begin{equation}
+ u_0(s)=1,
+ \qquad
+ u_j(s)=\sum_{\ell=1}^jb_\ell(s)u_{j-\ell}(s)\quad(j\ge1).
+ \label{eq:weighted-renewal-coefficients}
+\end{equation}
+Equivalently, in formal power series,
+\begin{equation}
+ U_s(z):=\sum_{j\ge0}u_j(s)z^j=\frac1{1-B_s(z)}.
+ \label{eq:weighted-renewal-generating-function}
+\end{equation}
+
+\begin{proposition}[Weighted generator renewal]
+\label{prop:weighted-generator-renewal}
+For every real \(s\) and \(m\ge1\),
+\begin{equation}
+ Z_m^R(-s)
+ =1+u_m(s)+2\sum_{j=1}^{m-1}u_j(s)
+ =2\sum_{j=0}^{m-1}u_j(s)+u_m(s)-1.
+ \label{eq:standard-layer-renewal}
+\end{equation}
+Moreover, \(u_j(s)\) is exactly the total inverse-\(s\) weight of the
+Weinstein generators of cost \(j\).
+\end{proposition}
+
+\begin{proof}
+Under Weinstein's free-monoid bijection, a generating number \(g\)
+corresponds uniquely to a nonempty word
+\[
+ w=\frac{p_1}{q_1}\times\cdots\times\frac{p_r}{q_r}
+ \qquad(p_i/q_i\in\mathcal A).
+\]
+Proposition~3.3 and formula~(16) of
+\cite{Weinstein2016}, translated through the preceding Fibonacci convention,
+give
+\begin{equation}
+ R(g)=\prod_{i=1}^rq_i,
+ \qquad
+ L(g)=\sum_{i=1}^rc(p_i/q_i),
+ \label{eq:generator-weight-cost}
+\end{equation}
+where \(L(g)\) is the largest Zeckendorf index of \(g\).  Unique
+factorization in the free monoid and \eqref{eq:renewal-letter-series} show
+that the total weight \(R(g)^{-s}\) of generators with \(L(g)=j\) is the
+coefficient \(u_j(s)\).  They also prove
+\eqref{eq:weighted-renewal-generating-function}.
+
+It remains to count one generating orbit in a fixed half-open Fibonacci
+layer.  Weinstein's normal form consists of the four branches
+\([a]g,[a]\tau g,\sigma([a]g),\sigma([a]\tau g)\), with \(a\ge0\).  His
+formulas~(17)--(19) give the corresponding largest indices
+\[
+ \begin{array}{c|c}
+ \text{branch}&\text{largest index}\ \\ \hline
+ {}[a]g&L(g)+2a\\
+ {}[a]\tau g&L(g)+1+2a\\
+ \sigma({}[a]g)&L(g)+1+2a\\
+ \sigma({}[a]\tau g)&L(g)+2+2a.
+ \end{array}
+\]
+The two middle entries are distinct because the action is free.  Hence an
+orbit of generator cost \(j=L(g)\) contributes one point to
+\(\mathcal I_j\), two points to every \(\mathcal I_m\) with \(m>j\), and
+no point to earlier layers.  Distinct generators have disjoint orbits.
+There is in addition exactly one partition of multiplicity \(1\) in each
+\(\mathcal I_m\), namely its left endpoint.  Summing the orbit weights
+therefore gives the first expression in \eqref{eq:standard-layer-renewal};
+the second is algebraic rearrangement.
+\end{proof}
+
+The critical normalization follows directly from the totient Dirichlet
+series.  For \(s>2\), every denominator \(q\ge2\) occurs with its
+\(\varphi(q)\) reduced numerators, so Tonelli's theorem gives
+\begin{equation}
+ B_s(1)=\sum_{q\ge2}\frac{\varphi(q)}{q^s}
+ =\frac{\zeta(s-1)}{\zeta(s)}-1.
+ \label{eq:weighted-renewal-at-one}
+\end{equation}
+The right side decreases continuously from infinity to zero as \(s\) runs
+from \(2\) to infinity.  Thus there is a unique \(\sigma_0>2\) with
+\begin{equation}
+ \frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}=2,
+ \qquad B_{\sigma_0}(1)=1.
+ \label{eq:critical-renewal-normalization}
+\end{equation}
+
+At this exponent, \(b_j(\sigma_0)\) is an aperiodic probability law: its
+support contains \(3\) and \(5\).  Its mean
+\begin{equation}
+ \mu_C:=\sum_{q\ge2}\sum_{\substack{1\le p<q\\(p,q)=1}}
+ c(p/q)q^{-\sigma_0}
+ \label{eq:critical-cost-mean}
+\end{equation}
+is finite.  Indeed, conversion to the canonical regular continued fraction
+\([0;a_1,\ldots,a_r]\) gives
+\(c(p/q)=2(a_1+\cdots+a_r)-1\).  The fixed-denominator mean theorem of
+Panov and Liehl \cite{Panov1982,Liehl1983} bounds the sum of
+\(a_1+\cdots+a_r\) over reduced numerators by
+\(O(\varphi(q)(\log q)^2)\).  Therefore
+\[
+ \mu_C\ll\sum_{q\ge2}q^{1-\sigma_0}(\log q)^2<\infty.
+\]
+This verifies the finite-mean hypothesis used in the critical renewal
+argument below.
