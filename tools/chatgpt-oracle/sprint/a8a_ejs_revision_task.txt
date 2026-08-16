@@ -1,0 +1,96 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly and do the work.
+
+SCOPE: papers/publication/2026_renewal_experiment_equivalence_singular_lan_ejs ONLY. Another codex
+agent is working on a different paper concurrently. Touch nothing else.
+
+Read first, in full: artifacts/oracle_sprint_A8A_style_r1.md.
+
+THE VERDICT IS ACCEPT WITH MINOR REVISIONS. Writing as an EJS referee, the assessor states: "I do
+not recommend a further mathematical round, and I do not regard the paper as a reject-and-resubmit
+case." So add no theorem, generalize nothing, restore nothing from the retired 72-page article, and
+do not lengthen the paper. Everything below is organization and writing.
+
+He also praises two things that must survive untouched: the Section 2 record-to-sample coupling and
+reverse continuation kernel, including the explanation that the extracted gaps are NOT conditioned
+to fit the observation window; and the pole-order argument in Proposition 3, which makes clear that
+positive information in the collision coordinate is model-specific rather than a consequence of
+generic locally conic theory. Both stay in the main article, at their present level of detail.
+
+THE DIAGNOSIS. "The manuscript is excessively defensive. Its abstract, theorem statements, model
+paragraphs, and discussion repeatedly state what is not being claimed. The same restrictions - one
+isolated collision, fixed serial order, known sampling interval, and no general phase-type
+conclusion - are given several times." He calls the qualifications mathematically appropriate but
+rhetorically overrepresented, and names this the single objection most likely to harm the paper
+editorially: a reader finishes "with an unusually clear memory of what the authors decline to prove
+but a less immediate sense of the one general theorem and one singular application that they do
+prove."
+
+So the governing rule for this revision: each restriction is stated ONCE, where it belongs - in the
+hypotheses of the theorem it qualifies - and is not repeated in the abstract, the model paragraphs,
+the discussion, and the conclusion as well. The ceiling must remain visible and honest. It must
+stop being the loudest thing in the paper.
+
+THE REQUIRED CHANGES.
+
+ 1. REORGANIZE SECTION 4. This is his most important concrete item. At present Theorem 4 refers to
+    Estimator 7 before that estimator has been defined, and it incorporates the estimator's fallback
+    gates and measurability safeguards into the theorem statement itself. Fix as follows:
+      - move the recurrence estimator currently called "Estimator 7" BEFORE Theorem 4;
+      - define the residualized statistic and its empirical information before stating its power
+        result;
+      - REMOVE from the theorem statement the score-chart, singular-block, Schur-complement,
+        fallback and default-nonrejection mechanics;
+      - RETAIN all of that machinery in the construction and in the proof, where its role is
+        measurability and total definition. Nothing is deleted from the mathematics; it moves out
+        of the statement and into the construction.
+    The theorem should then state the limit experiment, the power envelope and the recovery
+    conclusion cleanly. Splitting Theorem 4 into separate limit-experiment, testing and recovery
+    statements is permitted and reasonable, but is not required if the reordering is done.
+
+ 2. PRINT THE SUPPLEMENTARY INPUTS IN THE MAIN ARTICLE. He accepts the main/supplement division in
+    both length and content, and explicitly does NOT ask for the long derivative estimates, the
+    contour-atlas bookkeeping, or the alternative likelihood proof to be moved in. But the exact
+    STATEMENTS of the supplementary results used in the proof of Theorem 4 must appear in the main
+    article, so a reader can see the precise uniform conclusions being invoked without opening the
+    supplement:
+      - the DQM/envelope result;
+      - the stopped-score CLT and the information LLN;
+      - the plug-in equicontinuity result.
+    Print the statements, keep the proofs in the supplement, and make the cross-reference exact.
+
+ 3. STRIP THE DEFENSIVE LAYER, under the governing rule above. Go through the abstract, the theorem
+    statements, the model paragraphs, the discussion and the conclusion, and remove the repetitions
+    of: one isolated collision; fixed serial order; known sampling interval; no general phase-type
+    conclusion; no exact continuum minimax constant. Keep each exactly once, in the hypotheses of
+    the result it governs, plus at most one consolidated ceiling sentence in the discussion.
+
+ 4. SHORTEN THE DISCUSSION SUBSTANTIALLY. It currently repeats the explanation of the two kernels,
+    the fixed-cone qualification and several limitations already given in the introduction and the
+    theorem sections. Reduce the super-resolution comparison to one related-work paragraph. The
+    discussion should interpret the results, not provide a second catalogue of claims and
+    non-claims.
+
+PRESERVE: every numbered result, its hypotheses and its strength; the record-to-sample coupling
+proof and the pole-order proof in the main article; the honest ceiling, stated once and clearly; the
+assessed venue - this paper is going to EJS and the earlier assessment already ruled out compressing
+it for Bernoulli.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels for
+   main, supplement and cover letter. Cross-document references must resolve to the RIGHT numbers
+   after the Section 4 reordering - check the printed numbers, not merely the absence of warnings.
+ - AFTER building, extract the text of every PDF with pdftotext and read it: no printed TeX command
+   name, no ".tex" or ".pdf" in the body, no "??". This paper had eleven filename leaks and three
+   literal qquad defects that log-based checks never caught, so verify by extraction.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS with LF endings if artifacts change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the directory. Do
+   NOT delete the build logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the reordered Section 4 table of contents with the new statement of Theorem 4 verbatim; the
+three supplementary statements as printed in the main article; a list of every defensive repetition
+you removed, with its old location; the new discussion length against the old; page counts before
+and after for both documents; compile, PDF-extraction and verification results.
