@@ -1,0 +1,69 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: exactly these three directories under papers/publication/ and nothing else.
+
+    2026_zeckendorf_folds_sturmian_rigidity_parry_divergence_etds
+    submitted_2026_folded_histograms_sampling_certificates_parry_mismatch_siads
+    submitted_2026_folded_rotation_histogram_etds
+
+You may READ theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence but must
+not modify anything there or anywhere else. DO NOT MODIFY ANY artifacts/oracle_*.md. Do not commit.
+
+THE PROBLEM. All three now build, but only because their `\bibliography` line reaches three levels
+up and out of the publication tree:
+
+    \bibliography{../../../theory/<...>/references,../../../theory/<...>/references_fibonacci,
+                  ../../../theory/<...>/references_internal_2025,references}
+
+That was the correct repair of a worse defect - the path had been stale since these papers moved out
+of theory/, so bibtex found nothing and every citation printed as [?]. But it is not where this
+should end, and two of the three are already submitted. A journal receives a source bundle
+containing the paper's own directory. It does not receive theory/. On the production desk these
+papers fail exactly as they failed here, and for the same reason: the build works on this machine
+and nowhere else. A sibling in the same batch,
+submitted_2026_resolution_folding_core_symbolic_dynamics_jnt, is already self-contained and is the
+model to follow.
+
+WHAT TO DO. Make each of the three self-contained.
+
+For each paper, determine the set of keys it actually cites. Copy exactly those entries into the
+paper's own references.bib, taking them verbatim from whichever theory bibliography currently
+supplies them. Then reduce the `\bibliography` line to `\bibliography{references}`.
+
+Copy only what is cited. These theory bibliographies are large shared files and importing them
+wholesale would leave each paper carrying hundreds of entries it never cites - this project has just
+spent several rounds removing exactly that kind of residue.
+
+Take the entries verbatim. Do not reformat, do not "improve" a title, do not add a DOI that the
+source entry does not carry. If an entry looks wrong to you, report it rather than fixing it here;
+these files have just been through a DOI audit and a silent divergence between the theory copy and
+the paper copy is worse than a known imperfection.
+
+If a cited key is supplied by none of the four bibliographies, say so and stop for that key rather
+than writing an entry from your own knowledge. That would be fabrication, and this project has an
+active rule against it.
+
+VERIFY, for every document root in each of the three directories:
+ - `latexmk -C <root> && latexmk -pdfxe -interaction=nonstopmode <root>` exits 0 with no other
+   arguments, no latexmkrc, no environment overrides;
+ - zero undefined citations, references, control sequences and multiply-defined labels, and zero
+   `Warning--` lines in the .blg;
+ - the page count is unchanged at 32, 37 and 32 respectively - report it if it is not;
+ - printed bibliography keys equal cited keys in both directions;
+ - `pdftotext -enc UTF-8` shows no "??" in the body;
+ - and the decisive one: confirm that no `.tex` in the directory still contains `../` inside a
+   `\bibliography`, `\input`, `\include` or `\includegraphics` argument. Self-contained means the
+   directory can be copied out on its own and still build.
+
+RULES:
+ - Change no theorem, proof, hypothesis or section prose. The bibliography line and references.bib
+   are the whole of the intended edit.
+ - No revision marks, no scratch files, do not commit.
+ - Write any prompt or working file you need under a filename unique to this run. A previous pair of
+   agents collided on a shared scratchpad filename and one of them ran with the other's scope.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: per paper, the number of keys cited and copied, which theory file each came from, any key
+you could not source, the final `\bibliography` line, the results of the `../` check, and the full
+compile and parity results.

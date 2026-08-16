@@ -82,11 +82,31 @@ Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Ze
 搬进 `papers/publication/` 后该路径指向 `papers/2026_golden_ratio_…`（不存在），
 bibtex 什么都找不到 → 全篇引用印成 `[?]`。改为 `../../../theory/…` 即解。
 
-⚠️ **待我裁决的新问题**：三篇仍指向 `../../../theory/…`，其中两篇是 **`submitted_*`**。
-已投稿论文必须**自包含** —— 书目在三层之外的私有 theory 树里，期刊拿投稿包根本编不出来。
-须改为本地 `references.bib`（`resolution_folding` 一篇已这样做，20 条目）。
-新增条目的 DOI 我已逐个查证：Csiszár `10.1214/aop/1176996454`、
-Frougny `10.1109/18.75263`、Amigó `10.1063/5.0167263` 均真实相符。
+**修复已完成并经我独立复核提交**（`0c0503f53` 六篇缺宏 / `8e1e83837` 四篇 `[?]`）：
+裸命令逐篇重建全部 exit=0，页数 44/38/38/41/25/25 与 32/37/32/399，
+未定义控制序列·交叉引用·引用·重复标签全 0，`.blg` 零 `Warning--`。
+
+`[?]` 根因：三篇共用**同一个**失败。`\bibliography` 指向 `../../2026_golden_ratio_…`，
+从 `papers/publication/<paper>/` 出发 `../../` 落在 `papers/`（该目录不存在），
+latexmk 发现声明的 `.bib` 一个都不在 → **直接跳过 BibTeX** → 所有 key 同时失败。
+一条路径，31/41 条警告。
+
+**图档丢失的根因**：`papers/publication/.gitignore` 的通配 `*.pdf` 是为构建产物写的，
+却连**论文必需的图档**一并吞掉。`fig_jitter_tilt.pdf` 与 `fig_fiber_distribution.pdf`
+在整个 git 历史中从未被跟踪 —— 这才是这几篇即使补上宏也编不出来的原因。
+现已随生成脚本一并入库；脚本参数（`windows=(5,8,12)`、`range(1<<window)`）与图注
+"$m=5,8,12$，对全部 $2^m$ 个二进制字精确枚举"逐字相符，为确定性计算。
+
+两处曾疑为"猜测"的改动，查证后**均不成立**：`\ScriptOK` 就定义在同目录 `main.tex:58`
+（是数学算子，本就该印出来，与审计标记 `\leanverified` 的空宏不同类）；
+`dAscoli2024ODEFormer` 的 ICLR 2024 出处经 **DBLP** 坐实（OpenReview 403、Crossref 无存档）。
+
+⚠️ **最后一项在飞**：三篇书目仍跨树指向 `../../../theory/…`，其中两篇 `submitted_*`。
+期刊只收论文自身目录，拿不到 `theory/` —— 与"命令行补宏"同类。
+任务 `self_contained_bibliography_task.txt`：只逐字搬运**实际引用**的条目（不整体导入，
+避免留下数百条不引用的残渣），搬不到的 key 只许报告不许自撰；
+验收含决定性一条 —— 目录内任何 `.tex` 的 `\bibliography`/`\input`/`\include`/`\includegraphics`
+参数中不得再出现 `../`。
 
 代理还查出审计本身的三处不足，均已核实并接受：`CostabelMcIntosh2010` 实有正确 DOI（审计误判为无解）；
 `Idziaszek` 在 FUN 而非 SPIRE；`Sanna2025` 的候选 DOI 只返回 slug 无作者，不达标准故删字段。
