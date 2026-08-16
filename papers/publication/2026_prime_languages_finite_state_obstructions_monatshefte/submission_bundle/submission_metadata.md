@@ -18,7 +18,7 @@ Authors:
 2. `reproducibility.zip`: scripts, unit tests, archived outputs, literature
    record, checksums, and `REPRODUCE.md`, designated Online Resource 1.
 3. `source.zip`: the LaTeX sources required to compile the primary manuscript,
-   together with `README.md`, `REPRODUCE.md`, and `references.tex`.
+   together with `README.md`, `REPRODUCE.md`, and `main_references.tex`.
 4. `cover_letter.txt`: journal-specific cover letter.
 5. `submission_metadata.md`: this upload manifest.
 
