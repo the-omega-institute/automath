@@ -1,5 +1,87 @@
 \section{Proof of the limit-experiment theorem}
 
+The proof uses the following exact supplementary inputs.  Their proofs are
+\Cref*{lem:uniform-sampled-bin-tail-score-main,lem:uniform-stopped-renewal-score-main,lem:efficient-score-plugin-main}
+of the supplementary material.
+
+\smallskip\noindent\textbf{DQM and envelope.}
+For fixed \(n,\varepsilon,M,c_0\), and \(\Delta\tau>0\), there is a common
+physical one-sided neighbourhood \(\mathcal Q^+\) of
+\(\mathcal C_n(\varepsilon,M,c_0)\), in the coordinates
+\(q=(\eta,\delta)\), on which \(c\pm\sqrt\delta>0\) and, for every
+multi-index \(a\),
+\[
+\begin{aligned}
+ \sup_{q\in\mathcal Q^+}|\partial_q^a\log g_q(k)|
+ &\le C_a(1+k)^{2|a|},&& 1\le|a|\le3,\\
+ \sup_{q\in\mathcal Q^+}|\partial_q^a\log S_q(k)|
+ &\le C_a(1+k)^{2|a|},&& 1\le|a|\le2.
+\end{aligned}
+\]
+All parameter derivatives extend continuously to \(\delta=0\), and
+\(g_q(k)\le C(1+k)^{n-1}r^k\) for a common \(r<1\).  Writing
+\(e_q(a)=S_q(a)/\mu_q\), the families \(g_q\) and \(e_q\) are uniformly
+differentiable in quadratic mean.  Uniformly over base points on the collision
+stratum and bounded physical root-\(N\) local arrays \(q_N\),
+\[
+ H^2(g_{q_N},g_{q_0})=O(N^{-1}),\qquad
+ H^2(e_{q_N},e_{q_0})=O(N^{-1}),\qquad
+ |\mu_{q_N}-\mu_{q_0}|=O(N^{-1/2}).
+\]
+
+\smallskip\noindent\textbf{Stopped-score CLT and information LLN.}
+Let \(\mathcal Q\) be compact and let the integer Palm gaps \(G\) have full
+support, a common exponential moment, and parameter-continuous masses.  Let a
+stationary binary renewal record of length \(N\) contain \(K_N\) complete
+gaps, with initial forward recurrence \(A_N\) and terminal backward recurrence
+\(R_N\), and put \(D=G+1\), \(\mu_q=\EE_qD\).  Uniformly in
+\(q\in\mathcal Q\), and for triangular arrays \(q_N\in\mathcal Q\),
+\[
+ K_N=N/\mu_{q_N}+O_{P_{q_N}}(\sqrt N),\qquad
+ \max\{A_N,R_N,G_1,\ldots,G_{K_N}\}=O_{P_{q_N}}(\log N).
+\]
+If \(b_q(G)\in\RR^d\) is parameter-continuous, \(\EE_qb_q(G)=0\), and is
+bounded by a common polynomial in \(G\), then
+\[
+ \sup_{q\in\mathcal Q}d_{\rm BL}\!\left(
+ \mathcal L_q\!\left[N^{-1/2}\sum_{j=1}^{K_N}b_q(G_j)\right],
+ \mathcal N_d\!\left(0,\mu_q^{-1}\EE_q[b_qb_q^\top]\right)
+ \right)\longrightarrow0.
+\]
+For every similarly dominated matrix reward \(H_q\),
+\[
+ N^{-1}\sum_{j=1}^{K_N}H_q(G_j)
+ -\mu_q^{-1}\EE_qH_q(G)\longrightarrow0
+\]
+uniformly in probability.  If \(B_q\) has a common polynomial envelope, then
+\[
+ N^{-3/2}\sum_{j=1}^{K_N}B_q(G_j)=o_P(1)
+\]
+uniformly.  These conclusions hold jointly and apply to the score, stopped
+Hessian, and third-order likelihood remainder under bounded root-\(N\) local
+triangular arrays.
+
+\smallskip\noindent\textbf{Plug-in equicontinuity.}
+On the canonically ordered collision stratum, write the one-cycle null scores
+as \(s_\eta\) and \(s_\delta\), and define
+\[
+ \psi_\eta=s_\delta-I_{\delta\eta}I_{\eta\eta}^{-1}s_\eta,
+ \qquad
+ \Delta_{{\rm eff},N}(\eta)=N^{-1/2}
+ \sum_{j=1}^{K_N}\psi_\eta(G_j).
+\]
+For every fixed \(L<\infty\),
+\[
+ \sup_\eta\sup_{\|\eta'-\eta\|\le L/\sqrt N}
+ |\Delta_{{\rm eff},N}(\eta')-\Delta_{{\rm eff},N}(\eta)|
+ =o_{P_{\eta,0}}(1).
+\]
+The conclusion also holds under bounded contiguous local alternatives.  The
+empirical calendar information and its Schur complement, evaluated anywhere
+in the same root-\(N\) ball, converge uniformly to \(I_n(\eta)\) and
+\(J_n(\eta)\).  Hence any measurable root-\(N\) null fit may be inserted in
+the standardized efficient central sequence with an \(o_P(1)\) change.
+
 \begin{proof}[Proof of \Cref{thm:stationary-serial-double-pole-main}]
 We first make the route from the stationary record to the local experiment
 explicit.  The serial killed-reset construction gives a stationary renewal
@@ -68,49 +150,11 @@ uniform Gaussian limit in \textup{(3.10)}.  Proposition
 \ref{prop:sampled-double-pole-nondegeneracy-main} supplies the positive
 definiteness needed in both routes, proving part~\textup{(A)}.
 
-For part~\textup{(B)}, write the null one-cycle score as
-\[
- s_{\eta,0}(k)=
- \begin{pmatrix}s_{\rm nuis}(k;\eta)\\s_\delta(k;\eta)\end{pmatrix}
-\]
-and choose, before observing the record, a compact null-coordinate
-neighbourhood \(\mathcal E_0\) whose interior contains the stratum projection
-and whose closure lies in the common score chart.  For \(\eta\in\mathcal E_0\)
-put
-\[
- I_N(\eta)=\frac1N\sum_{j=1}^{K_N}
- s_{\eta,0}(G_j)s_{\eta,0}(G_j)^\top
-\tag{4.6}
-\]
-and partition it as in \textup{(3.11)}.  Set \(I_N(\eta)=0\) outside
-\(\mathcal E_0\), and define
-\[
- J_N(\eta)=
- \begin{cases}
- I_{\delta\delta,N}-I_{\delta\eta,N}
- I_{\eta\eta,N}^{-1}I_{\eta\delta,N},
- &\eta\in\mathcal E_0,\ \lambda_{\min}(I_{\eta\eta,N})>0,\\
- 0,&\text{otherwise}.
- \end{cases}
-\tag{4.7}
-\]
-Let \(\widehat\eta_N\) be the fit in
-\Cref{est:serial-collision-recurrence-main} and
-\(\mathcal G_N=\{\widehat\eta_N\in\mathcal E_0,
-J_N(\widehat\eta_N)>0\}\).  On \(\mathcal G_N\), define
-\[
- Z_N=\frac{N^{-1/2}\sum_{j=1}^{K_N}
- \left[s_\delta(G_j;\widehat\eta_N)
- -I_{\delta\eta,N}(\widehat\eta_N)
- I_{\eta\eta,N}(\widehat\eta_N)^{-1}
- s_{\rm nuis}(G_j;\widehat\eta_N)\right]}
- {\sqrt{J_N(\widehat\eta_N)}}
-\tag{4.8}
-\]
-and set \(\phi_N=\mathbf1_{\{Z_N>z_{1-\alpha}\}}\); off the gate set
-\(\phi_N=0\).  The finite-atlas fit is Borel.  Finite sums, eigenvalues, and
-matrix inversion on the positive-definite gate preserve measurability, so
-\(\phi_N\) is total and Borel on every binary record.
+For part~\textup{(B)}, use the test constructed in
+\textup{(3.19)}--\textup{(3.21)}.  The finite-atlas fit is Borel, and finite
+sums, eigenvalues, and matrix inversion on the positive-definite gate preserve
+measurability.  The off-gate convention therefore makes \(\phi_N\) total and
+Borel on every binary record.
 
 The population efficient central sequence is
 \[
@@ -137,6 +181,5 @@ one.  Finally, at a fixed base hold \(\eta=\eta_0\) and compare \(v=0\) with
 \(v=v_0\).  \Cref{lem:two-point-threshold-rate-main} gives their eventual
 matching distance \(\sqrt{v_0}N^{-1/4}\) and the positive Gaussian lower
 bound in \textup{(3.15)}.  The upper and lower statements together prove
-attainability and pointwise local minimax optimality in rate, with no claim of
-an exact continuum minimax constant.
+attainability and pointwise local minimax optimality in rate.
 \end{proof}

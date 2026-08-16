@@ -1,6 +1,8 @@
 \section{The isolated-double-pole experiment}
 
-Fix \(n\ge2\), \(0<\varepsilon<M<\infty\), \(c_0>0\), and known
+\subsection{Collision coordinates and score nondegeneracy}
+
+Fix \(n\ge2\), \(0<\varepsilon<M<\infty\), \(c_0>0\), and
 \(\Delta\tau>0\).  The compact collision stratum is
 \[
 \mathcal C_n(\varepsilon,M,c_0)=
@@ -14,8 +16,7 @@ Fix \(n\ge2\), \(0<\varepsilon<M<\infty\), \(c_0>0\), and known
 \tag{3.1}
 \]
 The ordering is canonical only for the noncollision coordinates; it is not a
-labelling of physical serial states.  Only one real double pole is allowed,
-and all remaining rates are simple and uniformly separated.
+labelling of physical serial states.
 
 Near the stratum write
 \[
@@ -133,16 +134,97 @@ continuous.  Pointwise positive definiteness, continuity, and compactness
 prove \textup{(3.5)}.
 \end{proof}
 
+\subsection{Recurrence estimator and residualized statistic}
+
+\begin{estimator}[Measurable sampled-tail recurrence estimator]
+\label{est:serial-collision-recurrence-main}
+Delete the two incomplete endpoint cycles and let
+\(G_1,\ldots,G_{K_N}\) be the complete zero-run gaps.  Form
+\[
+ \widehat S_k=K_N^{-1}\sum_{j=1}^{K_N}\mathbf1_{\{G_j\ge k\}},
+ \qquad0\le k\le2n-1,
+\tag{3.17}
+\]
+with fixed values when \(K_N=0\).  Solve the empirical Hankel recurrence on
+its nonsingular gate, use a fixed fallback otherwise, and select measurably
+from a finite analytic contour atlas separating the unique two-root cluster
+from the \(n-2\) simple roots.  In the cluster, use its elementary symmetric
+coordinates and transform them analytically to \((c,\widetilde\delta)\);
+set \(\widehat\delta=(\widetilde\delta)^+\).  The resulting estimators are
+total and Borel measurable and satisfy, uniformly over the compact stratum and
+bounded local alternatives,
+\[
+ \widehat\eta_N-\eta_N=O_P(N^{-1/2}),\qquad
+ \widehat\delta_N-\delta_N=O_P(N^{-1/2}).
+\tag{3.18}
+\]
+The pair \(\widehat c_N\pm\sqrt{\widehat\delta_N}\), together with the
+canonically ordered simple-rate estimates, gives \textup{(3.13)}.
+\end{estimator}
+
+The finite vector of empirical tail coordinates is root-\(N\), and
+invertibility from \Cref{prop:serial-tail-coordinates-main} gives root-\(N\)
+recurrence coefficients.  Simple roots and the two-root cluster have
+compatible analytic charts, while \((c,\delta)\) are regular analytic cluster
+coordinates.  Projection onto \([0,\infty)\) is nonexpansive, and
+\(|\sqrt{x^+}-\sqrt y|\le\sqrt{|x-y|}\) for \(y\ge0\).  The finite-atlas
+contour construction and measurability proof are in
+\Cref*{sec:estimator-atlas-supp} of the supplementary material.
+
+For the collision test, write the null one-cycle score as
+\[
+ s_{\eta,0}(k)=
+ \begin{pmatrix}s_{\rm nuis}(k;\eta)\\s_\delta(k;\eta)\end{pmatrix}.
+\]
+Fix a compact null-coordinate neighbourhood \(\mathcal E_0\) whose interior
+contains the stratum projection and whose closure lies in the common score
+chart.  For \(\eta\in\mathcal E_0\), define the empirical calendar information
+\[
+ I_N(\eta)=\frac1N\sum_{j=1}^{K_N}
+ s_{\eta,0}(G_j)s_{\eta,0}(G_j)^\top,
+\tag{3.19}
+\]
+and set \(I_N(\eta)=0\) outside \(\mathcal E_0\).  Partition it according to
+\((\eta,\delta)\), and define its empirical Schur complement by
+\[
+ J_N(\eta)=
+ \begin{cases}
+ I_{\delta\delta,N}-I_{\delta\eta,N}
+ I_{\eta\eta,N}^{-1}I_{\eta\delta,N},
+ &\eta\in\mathcal E_0,\ \lambda_{\min}(I_{\eta\eta,N})>0,\\
+ 0,&\text{otherwise}.
+ \end{cases}
+\tag{3.20}
+\]
+Let \(\widehat\eta_N\) be the recurrence fit and
+\(\mathcal G_N=\{\widehat\eta_N\in\mathcal E_0,
+J_N(\widehat\eta_N)>0\}\).  On \(\mathcal G_N\), put
+\[
+\begin{aligned}
+ Z_N&=\frac{N^{-1/2}\sum_{j=1}^{K_N}
+ \left[s_\delta(G_j;\widehat\eta_N)
+ -I_{\delta\eta,N}(\widehat\eta_N)
+ I_{\eta\eta,N}(\widehat\eta_N)^{-1}
+ s_{\rm nuis}(G_j;\widehat\eta_N)\right]}
+ {\sqrt{J_N(\widehat\eta_N)}},\\
+ \phi_N&=\mathbf1_{\{Z_N>z_{1-\alpha}\}}.
+\end{aligned}
+\tag{3.21}
+\]
+The score-chart, singular-block, and nonpositive-Schur-complement gates make
+the construction total: off \(\mathcal G_N\), set \(\phi_N=0\), the default
+nonrejection.  These gates are uniformly asymptotically inactive.
+
+\subsection{Limit experiment, efficient testing, and recovery}
+
 \begin{theorem}[Stationary isolated-double-pole limit experiment]
 \label{thm:stationary-serial-double-pole-main}
 Fix \(n,\varepsilon,M,c_0\), known \(\Delta\tau>0\), and the serial positive
 killed-reset realization \textup{(1.2)}--\textup{(1.3)}, and suppose
 \(\mathcal C_n(\varepsilon,M,c_0)\ne\varnothing\).  Let
 \(P_{\eta,\delta}^{(N)}\) be the stationary length-\(N\) binary renewal
-record.  The conclusions below concern one isolated real double pole in this
-fixed serial order, with all other rates simple and separated as in
-\textup{(3.1)}.  They do not cover simultaneous collisions, unknown order,
-unknown \(\Delta\tau\), or nonserial phase-type representations.
+record in this fixed serial order, at one isolated real double pole with all
+other rates simple and separated as in \textup{(3.1)}.
 
 \smallskip\noindent\textup{(A) Uniform LAN and the limit experiment.}
 For bounded \(u\in\RR^{n-1}\) and \(v\in[0,\infty)\), uniformly over the
@@ -169,22 +251,15 @@ Partition \(I_n\) according to \((\eta,\delta)\) and set
  -I_{\delta\eta}I_{\eta\eta}^{-1}I_{\eta\delta}>0.
 \tag{3.11}
 \]
-There is a total measurable residualized-score test \(\phi_N\) of
-\(H_0:\delta=0\) against \(H_1:\delta>0\) with uniform asymptotic level
-\(\alpha\).  It uses the null recurrence fit from
-\Cref{est:serial-collision-recurrence-main}, empirical calendar information,
-and gives no rejection whenever that fit leaves a fixed common score chart,
-the empirical nuisance block is singular, or its empirical Schur complement
-is nonpositive.  This gate is uniformly asymptotically inactive.  At
+The residualized-score test \(\phi_N\) in \textup{(3.21)} has uniform
+asymptotic level \(\alpha\).  At
 \((\eta_N,\delta_N)=(\eta_0+u/\sqrt N,v/\sqrt N)\), its limiting power is
 \[
  1-\Phi_{\rm N}\{z_{1-\alpha}-v\sqrt{J_n(\eta_0)}\}.
 \tag{3.12}
 \]
 This is the Gaussian half-space power envelope among tests with uniform local
-asymptotic level \(\alpha\).  The residualized score coincides with the
-likelihood-ratio rule only in the limiting Gaussian experiment; no
-finite-record likelihood-ratio argmax transfer is asserted.
+asymptotic level \(\alpha\).
 
 \smallskip\noindent\textup{(C) Attainable and lower recovery rates.}
 The measurable procedure in \Cref{est:serial-collision-recurrence-main}
@@ -202,8 +277,6 @@ canonically ordered separated rates remain root-\(N\).  At every fixed base,
 limit for threshold risk on two alternatives separated by
 \(\sqrt{v_0}N^{-1/4}\).  Hence \(N^{-1/4}\) is uniformly attainable on the
 stated bounded local families and pointwise locally minimax-optimal in rate.
-This is not an exact asymptotic minimax-risk or sharp-constant theorem over a
-continuum of alternatives.
 \end{theorem}
 
 \begin{corollary}[The two-state collision]
@@ -283,41 +356,3 @@ least its equal-prior average error, whose limiting infimum is the right side
 of \textup{(3.15)}.  Taking a measurable estimator within \(o(1)\) of the
 infimum at each \(N\) proves the bound.
 \end{proof}
-
-\begin{estimator}[Measurable sampled-tail recurrence estimator]
-\label{est:serial-collision-recurrence-main}
-Delete the two incomplete endpoint cycles and let
-\(G_1,\ldots,G_{K_N}\) be the complete zero-run gaps.  Form
-\[
- \widehat S_k=K_N^{-1}\sum_{j=1}^{K_N}\mathbf1_{\{G_j\ge k\}},
- \qquad0\le k\le2n-1,
-\tag{3.17}
-\]
-with fixed values when \(K_N=0\).  Solve the empirical Hankel recurrence on
-its nonsingular gate, use a fixed fallback otherwise, and select measurably
-from a finite analytic contour atlas separating the unique two-root cluster
-from the \(n-2\) simple roots.  In the cluster, use its elementary symmetric
-coordinates and transform them analytically to \((c,\widetilde\delta)\);
-set \(\widehat\delta=(\widetilde\delta)^+\).  The resulting estimators are
-total and Borel measurable and satisfy, uniformly over the compact stratum and
-bounded local alternatives,
-\[
- \widehat\eta_N-\eta_N=O_P(N^{-1/2}),\qquad
- \widehat\delta_N-\delta_N=O_P(N^{-1/2}).
-\tag{3.18}
-\]
-The pair \(\widehat c_N\pm\sqrt{\widehat\delta_N}\), together with the
-canonically ordered simple-rate estimates, gives \textup{(3.13)}.
-\end{estimator}
-
-The mechanism in \Cref{est:serial-collision-recurrence-main} is short even
-though its total construction is technical.  The finite vector of empirical
-tail coordinates is root-\(N\); invertibility from
-\Cref{prop:serial-tail-coordinates-main} makes the recurrence coefficients
-root-\(N\).  Simple roots and the two-root cluster have compatible analytic
-charts, while \((c,\delta)\) are regular analytic cluster coordinates.
-Projection onto \([0,\infty)\) is nonexpansive, and
-\(|\sqrt{x^+}-\sqrt y|\le\sqrt{|x-y|}\) for \(y\ge0\), giving the
-fourth-root rate after taking square roots.  The finite-atlas contour proof,
-chart compatibility, exceptional-event fallbacks, and measurability details
-are in \Cref*{sec:estimator-atlas-supp} of the supplementary material.
