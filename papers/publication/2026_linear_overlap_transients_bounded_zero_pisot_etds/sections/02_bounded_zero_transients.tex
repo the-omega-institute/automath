@@ -54,6 +54,9 @@ $|c|\le K_{U,D}$: uniqueness follows from $u_m>0$, and
 |c|\le D\frac{\sum_{j<m}u_j}{u_m}
  <\frac{DA_U}{b_U(\beta-1)}.
 \]
+The proof compares adjacent edges through all embeddings of the Pisot field.
+The following constants bound the conjugate contributions and separate the
+finitely many possible dominant-embedding defects from zero.
 Define the effective positive separation
 \begin{equation}
 \delta_{U,D}=\min\left\{|a+k-\beta l|:
@@ -129,22 +132,8 @@ the three coefficients force $k_{t+1}=0$ and $e_{t+m}=-k_t$.
 Let $U=(u_n)_{n\ge0}$ be a strictly increasing sequence of positive integers
 with $u_0=1$, satisfying the integral recurrence whose characteristic
 polynomial is the minimal polynomial of a nonintegral Pisot number $\beta$.
-Fix $D\ge1$.  For $m\ge2$, let $G_m(U,D)$ be the directed graph with vertex
-set
-\[
-([-D,D]\cap\mathbb Z)^{m-1}.
-\]
-There is an edge
-\[
-(e_0,\ldots,e_{m-2})\longrightarrow
-(e_1,\ldots,e_{m-2},e_{m-1})
-\]
-if and only if there is an integer $c$ such that
-\begin{equation}
-e_0u_0+e_1u_1+\cdots+e_{m-1}u_{m-1}+cu_m=0.
-\label{eq:bounded-zero-overlap-edge-theorem}
-\end{equation}
-The completing coefficient is unique and necessarily satisfies
+Fix $D\ge1$, and let $G_m(U,D)$ be the graph defined above.  For every edge,
+the completing coefficient is unique and necessarily satisfies
 $|c|\le K_{U,D}$.
 Then there is an effectively computable $C(U,D)<\infty$ such that, for every
 $m\ge2$, if no directed cycle of $G_m(U,D)$ is reachable from a vertex whose
@@ -155,12 +144,12 @@ Equivalently, after shifting a chain so that its initial exposed coefficient
 is nonzero, either it reaches a directed cycle, or it has fewer than
 $C(U,D)m$ further overlaps.  The graphs are finite-state recognizers of these
 overlap chains, and their edges are bounded $U$-representations of zero by
-\eqref{eq:bounded-zero-overlap-edge-theorem}.
+\eqref{eq:bounded-zero-overlap-edge}.
 \end{theorem}
 
 \begin{proof}
 For an edge at time $t$, write $k_t=-c$ in
-\eqref{eq:bounded-zero-overlap-edge-theorem}.  The growth estimate gives
+\eqref{eq:bounded-zero-overlap-edge}.  The growth estimate gives
 $|k_t|\le K_{U,D}$ uniformly in $m$.  Suppose first that
 $m\ge m_0(U,D)$.  Along any path of at least two edges, Lemma
 \ref{lem:bounded-zero-arbitrary-alphabet-collapse}, applied to each adjacent
@@ -187,27 +176,30 @@ is effective and has the required property, with the inner maximum understood
 as zero when $m_0(U,D)=2$.
 \end{proof}
 
-The theorem also gives the useful global chain dichotomy.  Consider all
-bounded zero words of length $m+1$ that overlap one digit at a time.  Either
-some chain with a nonzero coefficient has a finite prefix followed by a
-periodic bounded zero representation, or every nonzero chain has fewer than
-$(C(U,D)+1)m$ rows.  Indeed, a reachable cycle gives the periodic tail.  In
-the absence of such a cycle, at most $m-1$ initial shifts pass before a
-nonzero coordinate occupies the first position, after which the theorem
+\begin{corollary}[Global chain dichotomy]
+\label{cor:bounded-zero-global-dichotomy}
+Under the hypotheses of Theorem~\ref{thm:bounded-zero-linear-transient}, fix
+$m\ge2$ and consider all bounded zero words of length $m+1$ that overlap one
+digit at a time.  Either some chain with a nonzero coefficient has a finite
+prefix followed by a periodic bounded zero representation, or every nonzero
+chain has fewer than $(C(U,D)+1)m$ rows.
+\end{corollary}
+
+\begin{proof}
+A reachable cycle gives the periodic tail.  In the absence of such a cycle,
+at most $m-1$ initial shifts pass before a nonzero coordinate occupies the
+first position, after which Theorem~\ref{thm:bounded-zero-linear-transient}
 bounds the remaining overlaps.  The alternatives are mutually exclusive
 because a periodic tail can be repeated to make arbitrarily long chains.
+\end{proof}
 
-\begin{remark}[Logical boundary of the standard-object theorem]
+\begin{remark}[Arithmetic scope]
 \label{rem:bounded-zero-standard-object-boundary}
-The statement and proof of Theorem~\ref{thm:bounded-zero-linear-transient}
-use only a fixed Pisot recurrence, bounded integer coefficients, the
-distinguished weight $u_m$, and one-position overlaps of bounded
-$U$-representations of zero.  They use no canonical rank bijection,
-legal-word alphabet, cyclic reduction map, positive/negative realization of
-coefficients, image shift, or inverse decoder.  The distinguished modulus
-$u_m$ and consecutive recurrence weights remain essential: replacing $u_m$
-by an unrelated modulus destroys \eqref{eq:bounded-zero-adjacent-identity}.
-The theorem therefore does not concern numerical $\beta$-normalization,
-successor carry propagation, general synchronized transductions, general
-right-closing maps, or a broad class of sliding block codes.
+Theorem~\ref{thm:bounded-zero-linear-transient} is independent of the cyclic
+rank construction of Section~\ref{sec:cyclic-rank-application}.  Its
+essential arithmetic features are the distinguished terminal weight $u_m$
+and the use of consecutive recurrence weights; replacing $u_m$ by an
+unrelated modulus removes the identity underlying Lemma
+\ref{lem:bounded-zero-arbitrary-alphabet-collapse}.  These features are what
+make the linear estimate available for the overlap graphs considered here.
 \end{remark}

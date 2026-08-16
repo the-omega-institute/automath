@@ -5,112 +5,99 @@ Bounded representations of zero are a standard finite-state object in
 Pisot numeration.  Their regularity supports normalization and arithmetic
 algorithms, but regularity by itself does not control how long an
 aperture-dependent chain of overlapping zero representations can remain
-transient.  We consider the following narrow quantitative question.  Fix a
-Pisot recurrence $U=(u_j)$ and a coefficient alphabet $[-D,D]\cap\mathbb Z$.
-At aperture $m$, use a length-$m$ coefficient word as a state transition
-exactly when it can be completed by a coefficient of the distinguished
-weight $u_m$ to represent zero.  Consecutive edges overlap by one position.
-How long can a path beginning with an exposed nonzero coefficient survive if
-it never reaches a cycle?
+transient.  We consider the following quantitative question.  Fix a Pisot
+recurrence $U=(u_j)$ and a coefficient alphabet $[-D,D]\cap\mathbb Z$.  At
+aperture $m$, use a length-$m$ coefficient word as a state transition exactly
+when it can be completed by a coefficient of the distinguished weight $u_m$
+to represent zero, and overlap consecutive edges by one position.  How long
+can a path beginning with an exposed nonzero coefficient survive if it never
+reaches a cycle?
 
-Our first main result, Theorem~\ref{thm:bounded-zero-linear-transient}, gives
-an effective linear answer.  There is a computable $C(U,D)<\infty$ such that
-every such transient has fewer than $C(U,D)m$ edges.  Equivalently, after a
-nonzero chain is anchored at its first exposed nonzero coefficient, it
-either enters a repeatable periodic tail or has only linearly many further
-overlaps.  The coefficient completing an edge is not assumed to belong to
-$[-D,D]$; it is proved to lie in a fixed interval
-$[-K_{U,D},K_{U,D}]$.  This mixed-alphabet point is essential to the correct
-edge formulation.
+\begin{theoremA}
+Let $U=(u_j)$ be strictly increasing with $u_0=1$, and suppose that its
+integral recurrence has as characteristic polynomial the minimal polynomial
+of a nonintegral Pisot number.  For every $D\ge1$ there is an effectively
+computable $C(U,D)<\infty$ such that, at every aperture $m\ge2$, if no
+directed cycle is reachable from a first-coordinate-nonzero vertex of the
+bounded-zero overlap graph, then every path from such a vertex has fewer
+than $C(U,D)m$ edges.
+\end{theoremA}
+
+\begin{theoremB}
+Let $U$ be any strictly increasing Pisot numeration system with $u_0=1$,
+canonical greedy digit set, and canonical normal words.  There is an
+effectively computable $C_U<\infty$ such that, for every $m\ge2$, injectivity
+of the cyclic language-rank recoding $\Phi_{U,m}$ implies
+\[
+\ell_{\rm cau}(U,m)\le C_Um.
+\]
+\end{theoremB}
+
+\begin{theoremC}
+Let $\theta$ be the leading root of $x^3-2x^2+x-1$ and let $U_\theta$ be the
+binary recurrence beginning $1,2,4$.  For every $m\ge4$, the recoding
+$\Phi_{\theta,m}$ is injective and
+\[
+\ell_{\rm cau}(\theta,m)=2\left\lfloor\frac m2\right\rfloor-1.
+\]
+The maximum path length from a first-coordinate-nonzero vertex of
+$G_m(U_\theta,1)$ is $2\lfloor m/2\rfloor-2$, so the linear order in
+Theorems~A and B is sharp.
+\end{theoremC}
+
+Theorem~A is proved in the precise form of
+Theorem~\ref{thm:bounded-zero-linear-transient}.  The coefficient completing
+an edge is not assumed to belong to $[-D,D]$; the proof gives the uniform
+bound $|c|\le K_{U,D}$.  This mixed-alphabet edge condition is what permits
+the overlap graph to record all bounded zero representations at aperture
+$m$.
 
 The mechanism is local.  Lemma
 \ref{lem:bounded-zero-arbitrary-alphabet-collapse} compares two consecutive
 zero representations under every algebraic embedding.  The contracting
-conjugates bound the nondominant sums, while a finite exact separation in the
-dominant embedding prevents any nonzero value of
-$e_{t+m}+k_t-\beta k_{t+1}$ once $m$ is large enough.  Irrationality then
-forces
-\[
-k_{t+1}=0,\qquad e_{t+m}=-k_t.
-\]
-Along a path, every quotient after the first vanishes and all later appended
-coefficients vanish after one exceptional position.  A path of $m+1$ edges
-therefore reaches the zero state, which already has a loop.  The finitely
-many smaller apertures are handled by exact acyclic longest-path searches.
-This gives an effective constant without counting all
-$(2D+1)^{m-1}$ states.
+conjugates bound the nondominant sums, while an effective finite separation
+in the dominant embedding forces every later quotient to vanish once the
+aperture crosses a computable threshold.  The path then reaches the zero
+loop within linearly many overlaps; the finitely many smaller apertures are
+handled by exact acyclic longest-path searches.  The argument uses only
+Pisot contraction and the recurrence weights and does not require
+Condition~F.
 
-The proof requires neither Condition~F nor preservation of leading zeros.
+For Theorem~B, order the legal length-$m$ words by canonical rank, extend the
+same positional rank to the full digit cube, reduce it modulo the number
+$u_m$ of legal words, and return the legal word with that residue.  Overlap
+these recoded windows along the shift.  Lemma
+\ref{lem:pisot-exact-collision-quotient} shows that the coordinatewise-
+difference quotient loses no collision: every bounded digit difference is
+realized by its positive and negative parts.  The quotient is exactly
+$G_m(U,d_U)$, the longest path from a first-coordinate-nonzero state is one
+less than the least future-only inverse window, and injectivity is equivalent
+to the absence of a reachable cycle.  Thus injectivity controls not only the
+existence of a finite inverse window, but its growth with the aperture.
+
 Finite-state recognition of bounded zero representations in Pisot systems is
-classical \cite{Frougny1992}, and recent work places zero preservation in a
-precise Condition~F framework \cite{CartonSudberyYassawi2026}.  Those results
-do not imply an aperture-linear survival bound for the moving overlap graphs
-considered here.  Conversely, our result does not assert finite expansion,
-normalization complexity, or a general synchronization theorem.  The
-distinguished terminal weight $u_m$ and consecutive recurrence weights are
-part of the statement.
-
-The second part applies the standard-object theorem to a symbolic recoding.
-For a strictly increasing Pisot numeration system, order the legal
-length-$m$ words by canonical rank, extend the same positional rank to the
-full digit cube, reduce it modulo the number $u_m$ of legal words, and return
-the legal word with that residue.  Overlap these recoded windows along the
-shift.  We call the resulting factor code a cyclic language-rank recoding.
-It is a congruence of integer language ranks, not numerical
-$\beta$-normalization in $\mathbb Z[\beta]$.
-
-Lemma~\ref{lem:pisot-exact-collision-quotient} proves that the
-coordinatewise-difference quotient of the pair graph loses no collision:
-every bounded digit difference is realized by its positive and negative
-parts.  The quotient is exactly the graph $G_m(U,d_U)$ from the first part.
-The longest path from a first-coordinate-nonzero state is exactly one less
-than the least future-only inverse window, and injectivity is equivalent to
-the absence of a reachable cycle.  Corollary
-\ref{cor:pisot-linear-causal-depth} therefore gives
-\[
-\Phi_{U,m}\text{ injective}
-\quad\Longrightarrow\quad
-\ell_{\rm cau}(U,m)\le C_Um. \tag{A1}
-\]
-This is a consequence of the bounded-zero theorem and the exact quotient,
-not the definitional center of the argument.
-
-Classical pair and fiber graphs supply reachable-cycle tests and finite
-inverse windows for injective local maps
+classical \cite{Frougny1992}, but it gives no aperture-linear survival bound
+for these moving overlap graphs.  Classical pair and fiber graphs supply
+reachable-cycle tests and finite inverse windows for injective local maps
 \cite{AmorosoPatt1972,Richardson1972,Nasu1977,Head1989,LindMarcus1995,
 Nasu1995}.  Their generic state-count bound is exponential in $m$ here.
 Likewise, Ashley's decoder-window estimates are linear in the number of
 states of a presenting graph, not in this aperture
-\cite{Ashley1988,Ashley1996}.  The bounded-delay theorem of
-Frougny and Sakarovitch starts from a rational relation already known to have
-bounded delay; it does not derive an $O(m)$ delay from injectivity
+\cite{Ashley1988,Ashley1996}.  The bounded-delay theorem of Frougny and
+Sakarovitch starts from a rational relation already known to have bounded
+delay; it does not derive an $O(m)$ delay from injectivity
 \cite{FrougnySakarovitch1991}.  The arithmetic adjacent-collapse lemma is
 what changes the scale from exponential to linear.
 
-Finally, Theorem~\ref{thm:fixed-cubic-sharpness} proves sharpness inside one
-fixed system.  Let $\theta$ be the leading root of
-$x^3-2x^2+x-1$ and use the binary recurrence beginning $1,2,4$.  For every
-$m\ge4$,
-\[
-\Phi_{\theta,m}\text{ is injective},\qquad
-\ell_{\rm cau}(\theta,m)=2\lfloor m/2\rfloor-1. \tag{A2}
-\]
-The proof classifies the penultimate obstruction set exactly as
-$\{E_m,-E_m\}$ and the next obstruction set as empty.  Read only as bounded
-coefficient words, the same $E_m$ give paths of length at least $m-3$ in
-$G_m(U_\theta,1)$.  One object therefore proves sharpness both for the
-inverse-depth corollary and for the bounded-zero transient theorem.
+Theorem~C supplies matching order within a single fixed system: the
+recurrence and alphabet remain fixed while the aperture grows.  Bassino's
+cubic construction instead varies the base with the desired inverse length
+\cite{Bassino2002}; varying-system unboundedness alone gives no lower growth
+order for a fixed recurrence.
 
-The article is organized in this logical order.  Section
-\ref{sec:bounded-zero-transients} defines the overlap chains, proves the
-arbitrary-alphabet collapse lemma, and proves the linear transient theorem.
-Section~\ref{sec:cyclic-rank-application} introduces cyclic ranks, proves the
-exact collision quotient, and deduces \textup{(A1)}.  Section
-\ref{sec:fixed-cubic-sharpness} proves \textup{(A2)}--\textup{(A3)} and the
-terminal classification.  Section~\ref{sec:comparative-context} records the
-limited comparison with the family-classification problem.  The companion
-article by the present authors, \emph{Exact overlap thresholds and
-future-only inverse depth for cyclic ranks of quadratic and simple-Parry
-beta-languages} \cite{MaZhang2026ExactOverlap}, contains the full Fibonacci,
-quadratic, and simple-Parry
-classification.
+Section~\ref{sec:bounded-zero-transients} proves Theorem~A, and
+Section~\ref{sec:cyclic-rank-application} identifies the exact collision
+quotient and proves Theorem~B.  Section~\ref{sec:fixed-cubic-sharpness}
+proves Theorem~C together with the terminal classification.  Related exact
+classifications for quadratic and simple-Parry systems are obtained in
+\cite{MaZhang2026ExactOverlap}; no result from that paper is used here.

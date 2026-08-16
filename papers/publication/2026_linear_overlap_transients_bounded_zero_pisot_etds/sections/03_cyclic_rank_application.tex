@@ -1,13 +1,20 @@
 \section{Cyclic rank recodings and the collision quotient}
 \label{sec:cyclic-rank-application}
 
+We now code the full shift on the canonical digit alphabet by replacing each
+raw length-$m$ window with the legal word of the same cyclic rank.  A
+future-only inverse recovers the raw symbol at time zero from output windows
+beginning at time zero, without using past output.  Equality of two folded
+windows says precisely that their raw ranks are congruent modulo $u_m$.
+Taking coordinatewise differences converts a run of such congruences into
+overlapping bounded representations of zero.  The exactness of this quotient
+is crucial: it identifies all collisions, so path length in the arithmetic
+graph measures inverse depth rather than merely bounding it.
+
 A Pisot linear numeration system is a sequence $U=(u_j)_{j\ge0}$ of positive
 integers satisfying the recurrence whose characteristic polynomial is the
-minimal polynomial of a Pisot number.  Its initial values need not be the
-standard ones.  Here ``standard'' has its technical meaning
-$u_{-1}=\cdots=u_{-d+1}=0$, $u_0=1$; we do not use it as a synonym for the
-larger class considered below.  Assume that $U$ is strictly increasing and
-$u_0=1$, and let
+minimal polynomial of a Pisot number.  We allow nonstandard initial values
+and assume that $U$ is strictly increasing with $u_0=1$.  Let
 \[
 D_U=\{0,\ldots,d_U\}
 \]
@@ -44,10 +51,7 @@ rank turns the local rule into
 (x_0,\ldots,x_{m-1})\longmapsto
 \sum_{j=0}^{m-1}u_jx_j\pmod {u_m}.
 \]
-This symbolwise relabeling is bijective.  The rule is not a linear cellular
-automaton: in general $D_U$ is only a digit subset of
-$\mathbb Z/u_m\mathbb Z$, not a module on which the rule is a group
-endomorphism.
+This symbolwise relabeling is bijective.
 
 Put $\Delta_U=[-d_U,d_U]\cap\mathbb Z$ and, for $L\ge1$, set
 \begin{equation}
@@ -142,7 +146,7 @@ $D_U=\{0,\ldots,b-1\}$, the fold is the identity, and
 $\ell_{\rm cau}(U,m)=1$; take $C_U=1$.  Otherwise apply
 Theorem~\ref{thm:bounded-zero-linear-transient} with $D=d_U$.  Its graph is
 exactly $\Gamma_{U,m}$, because \eqref{eq:pisot-zero-word-bridge} is the
-edge condition \eqref{eq:bounded-zero-overlap-edge-theorem}.  By Lemma
+edge condition \eqref{eq:bounded-zero-overlap-edge}.  By Lemma
 \ref{lem:pisot-exact-collision-quotient}, injectivity is equivalent to the
 absence of a reachable cycle and the causal length is one plus the longest
 path length.  Since the theorem gives fewer than $C(U,d_U)m$ edges, the
@@ -150,11 +154,9 @@ integer path length is at most $C(U,d_U)m-1$.  Taking
 $C_U=C(U,d_U)$ proves both formulations.
 \end{proof}
 
-The scope is not a disguised standard-initial-value convention.  For
-example, standard $k$-bonacci initial conditions begin $1,1,\ldots$ and fail
-strict increase, whereas the customary shift beginning $1,2,\ldots$ belongs
-to the present class.  Nor is Condition~F assumed: the principal root of
-$x^3-3x^2+2x-1$ is Pisot but does not satisfy Condition~F
-\cite[Theorem~3]{Akiyama2000}.  The equivalence of Condition~F with zero
-preservation is proved in \cite{CartonSudberyYassawi2026}, but neither
-property enters the corollary.
+The corollary applies to nonstandard initial values whenever the resulting
+sequence is strictly increasing; for example, the customary shifted
+$k$-bonacci sequence beginning $1,2,\ldots$ belongs to this class.  It also
+applies beyond Condition~F: the principal root of $x^3-3x^2+2x-1$ is Pisot
+but does not satisfy Condition~F \cite[Theorem~3]{Akiyama2000}.  The proof
+uses only the Pisot embeddings and the recurrence weights.
