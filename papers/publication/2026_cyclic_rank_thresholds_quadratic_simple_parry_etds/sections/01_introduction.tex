@@ -1,122 +1,190 @@
 \section{Introduction}
 \label{sec:intro}
 
-Finite-window recodings can collapse individual input words and still become
-invertible when their outputs are overlapped.  This paper determines where
-that transition occurs, how much future output a memory-zero inverse needs,
-and what local shift structure remains at and below threshold for quadratic
-and simple-Parry beta-languages.
+Finite-window recodings may collapse isolated input words and nevertheless
+become invertible after their outputs are overlapped.  We determine this
+transition for cyclic rank recodings of quadratic and simple-Parry
+$\beta$-languages, together with the amount of future output needed by a
+memory-zero inverse.
 
-Let $X_m$ be the legal words of length $m$ in a greedy numeration language,
-ordered colexicographically.  Positional rank identifies $X_m$ with
-$\{0,\ldots,Q_m-1\}$, where $Q_m=|X_m|$.  We evaluate the same weighted rank
-on the full digit cube, reduce it modulo $Q_m$, and return the legal word with
-that residue.  Overlapping these cyclically recoded windows defines a sliding
-factor $\Phi_{\beta,m}$ and its image $Y_{\beta,m}$.  Positional rank belongs
-to Parry--Bertrand numeration theory
+There are two scales in this question.  The aperture $m$ determines the raw
+window on which the local recoding acts.  Once that aperture is fixed, the
+future-only inverse length asks how many consecutive output symbols are
+needed to recover the raw symbol at the initial time.  The first scale is a
+threshold problem for overlapping finite windows; the second records the
+directional depth of the inverse.  Keeping them separate is essential here:
+the quadratic threshold has a closed classification, while the remaining
+negative-conjugate inverse-depth regime has the bounds stated below.
+
+For a general sliding block code, collisions are represented by paths in a
+fiber product: two input paths are followed in parallel while their output
+labels agree.  Global injectivity excludes nontrivial bi-infinite collision
+paths.  A future-only decoder imposes a stronger directional condition.  It
+requires every collision path whose two initial symbols differ to terminate
+after a uniformly bounded number of forward steps.  This distinction is
+particularly natural for greedy numeration languages, whose admissibility is
+specified from the most significant end but whose sliding code is read along
+the integer line.
+
+Let $X_m$ be the legal length-$m$ words in a greedy numeration language,
+ordered colexicographically, and put $Q_m=|X_m|$.  Positional rank identifies
+$X_m$ with $\{0,\ldots,Q_m-1\}$.  We evaluate the same weighted rank on the
+full digit cube, reduce it modulo $Q_m$, and return the legal word carrying
+that residue.  Overlapping these recoded windows defines a sliding factor
+$\Phi_{\beta,m}$ with image $Y_{\beta,m}$.  Positional ranks come from
+Parry--Bertrand numeration
 \cite{BertrandMathis1989,BruyereHansel1997,LecomteRigo2001,
-CharlierCisterninoStipulanti2022}; reduction modulo the finite-language count
-is the operation classified here.
+CharlierCisterninoStipulanti2022}; the cyclic reduction and its overlap
+structure are the objects studied here.  These are congruences of integer
+language ranks, not equalities of numerical $\beta$-values.
 
-The construction must not be confused with numerical
-$\beta$-normalization.  The congruences compare integer language ranks, not
-values in $\mathbb Z[\beta]$.  Nor is the rank-relabelled local rule a linear
-cellular automaton: the input alphabet is a proper digit subset of
-$\mathbb Z/Q_m\mathbb Z$, not a module on which the rule is a group
-endomorphism.
+The local rule is arithmetic, but injectivity is a collision problem.  In
+the quadratic case the language-count recurrence separates bounded sliding
+congruences directly.  In the simple-Parry case the same collision problem
+closes on a finite quotient of the classical pair graph.  The two parts of
+the paper are therefore different arithmetic realizations of one symbolic
+mechanism: a nonzero difference path records two raw inputs with the same
+overlapped output, and finite extinction of every such path gives a
+future-only decoder.
 
-\medskip
-\noindent\textbf{The Fibonacci model.}
-The first part develops the binary prototype completely.  The finite-window
-rank is the Fibonacci value
-\[
-\sum_{j=0}^{m-1}F_{j+2}x_j\pmod {F_{m+2}},
-\]
-and legal words contain no adjacent ones.  Lemma~\ref{lem:m3-decoder} gives
-an explicit decoder from three consecutive recoded windows.
-Theorem~\ref{thm:block-invertibility} proves that aperture three is the exact
-nontrivial threshold, while Proposition~\ref{prop:low-window-counterexamples}
-gives the sharp finite-block failures below onset.  At aperture two,
-Theorem~\ref{thm:m2-branch-locus} shows that the only nonsingleton fiber
-identifies the two constant binary points.  This model isolates the mechanism
-later seen at every extremal quadratic parameter.
+Concretely, equality of two folded output windows is a congruence modulo the
+language count $Q_m$.  Subtracting the two raw windows replaces the fiber
+product by a bounded difference sequence.  Consecutive equal outputs then
+give a banded system of sliding congruences with coefficients
+$Q_0,\ldots,Q_{m-1}$.  In degree two, the recurrence for these coefficients
+eliminates successive coordinates and reduces the problem to separation from
+the nearest multiple of $Q_m$.  For a general simple-Parry recurrence, the
+last $m-1$ differences form a finite state, and appending one coordinate is a
+directed edge.  Recurrence separation and the difference graph are thus two
+ways of organizing the same bounded collision equations.
 
-\medskip
-\noindent\textbf{The quadratic classification.}
-Every quadratic Pisot number lies in one of the chambers
-\[
-x^2-ax-b,\quad a\ge b\ge1,
-\qquad\text{or}\qquad
-x^2-ax+b,\quad a\ge3,\ 1\le b\le a-2.
-\]
-After deriving the exact Parry words and rank recurrences, we prove a
-nearest-multiple separation and a bounded sliding-congruence lemma.  They
-lead to Theorem~\ref{thm:full-quadratic-pisot-threshold}:
+\begin{introtheorem}[Quadratic threshold classification]
+Let $\beta$ be a quadratic Pisot number, and use the greedy language and
+cyclic Parry rank of Definition~\ref{def:quadratic-parry-fold}.  Then
 \[
 m_*(\beta)=3
 \quad\Longleftrightarrow\quad
 \operatorname{minpoly}(\beta)\in
 \{x^2-ax-a:a\ge1\}\cup\{x^2-ax+1:a\ge3\},
 \]
-and $m_*(\beta)=2$ otherwise.  Thus the exceptional negative chamber is the
-metallic family, with its golden boundary member, and the exceptional
-positive chamber is its critical dual.
+and $m_*(\beta)=2$ otherwise.  For every $m\ge m_*(\beta)$ and $n\ge m$,
+the length-$n$ block map is injective, $\Phi_{\beta,m}$ is a conjugacy onto
+its SFT image, and its inverse has memory zero and anticipation at most
+$m-1$.
+\end{introtheorem}
 
-The classification includes more than the first injective aperture.
-Theorem~\ref{thm:quadratic-aperture-two-duality} gives the exact chamber
-duality and first separation.  Theorem
-\ref{thm:quadratic-optimal-causal-inverse} determines the positive-chamber
-future-only optimum and bounds the negative chamber.  Theorem
-\ref{thm:quadratic-critical-normal-form} identifies the two-fixed-point
-critical quotient.  Finally, Theorem
-\ref{thm:quadratic-exact-local-order} proves that finite-block injectivity
-begins exactly at length $m$, the natural overlap presentation is the right
-Fischer cover with $(\lfloor\beta\rfloor+1)^{m-1}$ states, and the image in
-the fixed output alphabet is exactly $m$-step, not $(m-1)$-step.  Standard
-Fischer--Krieger theory supplies the presentation framework
-\cite{Fischer1975,Krieger1984,LindMarcus1995}; the exact onset and follower
-separation are arithmetic conclusions of the cyclic rank map.
+This is Theorem~\ref{thm:full-quadratic-pisot-threshold}.  The exceptional
+families are exactly the two loci where the aperture-two map identifies the
+constant zero and maximal-digit points.  Away from them, two consecutive
+outputs admit an explicit decoder.  At and above threshold, the same
+arithmetic gives finite-block onset, the right Fischer cover, and the Markov
+order of the image.  Future-only depth is more delicate: Theorem
+\ref{thm:quadratic-optimal-causal-inverse} gives the value three throughout
+the positive-conjugate chamber for $m\ge3$, the value two in the negative chamber at
+aperture three, and only
+$2\le\ell_{\rm cau}(\beta,m)\le m$ in the negative chamber for $m\ge4$.
 
-\medskip
-\noindent\textbf{Simple-Parry quotients.}
-For an arbitrary nonintegral simple-Parry number, no Pisot hypothesis is
-needed for the graph reduction.  Theorem
-\ref{thm:simple-parry-causal-collision} quotients the classical pair graph by
-coordinatewise differences and proves that every bounded difference is
-realized.  The causal inverse length is one plus an exact longest path, and a
-reachable cycle is equivalent to noninjectivity.  Corollary
-\ref{cor:simple-parry-causal-completeness} uses the unique predecessor of the
-zero state to identify injectivity with finite future-only depth.
-Theorem~\ref{thm:simple-parry-aperture-two} gives the complete aperture-two
-trichotomy, while Proposition~\ref{prop:nonpisot-simple-parry-scope} records
-that the scope is genuinely larger than the Pisot class.
+The hypotheses in this statement select the greedy Parry language and a
+rigid arithmetic setting.  Quadratic Pisot numbers occupy two
+parameter chambers according to the sign of the conjugate.  Their greedy
+Parry words give recurrences $Q_{j+2}=aQ_{j+1}\pm bQ_j$, and the associated
+colexicographic ranks fill the complete interval
+$\{0,\ldots,Q_m-1\}$.  This interval property makes cyclic reduction
+intrinsic to the language.  It also identifies the exceptional threshold
+loci: at aperture two the wrap parameter reaches the maximal digit exactly
+on the negative diagonal and the positive norm-one family.  The resulting
+constant-point collision disappears at aperture three by the common
+separation argument.
 
-Bassino's cubic family \cite{Bassino2002} then supplies a parameter-varying
-unboundedness theorem.  Lemmas~\ref{lem:cubic-unbounded-family-data}--
-\ref{lem:cubic-unbounded-terminal-paths} verify the Parry data, exclude the
-second carry, and classify the exact terminal paths.  Theorem
-\ref{thm:cubic-unbounded-causal-depth} obtains injective apertures
-$m_n=n-1$ with
+The dynamical conclusions use more than finite counting.  Once every
+length-$m$ output block determines its overlapping raw block, consecutive
+decodings glue to a sliding inverse and give a finite forbidden-word
+description of the image.  The same onset length synchronizes the natural
+overlap presentation, which identifies its right Fischer cover and Markov
+order.  At a critical aperture-two parameter the only unresolved path is the
+pair of constant points, producing a strictly sofic image with a single
+double periodic fiber.  These features explain why the threshold theorem is
+also a local-structure theorem for the image shift.
+
+The Fibonacci system is the smallest exceptional parameter.  Its explicit
+three-window decoder supplies a readable prototype for the general
+recurrence argument, while its aperture-two branch consists only of the two
+constant binary points.  The metallic family is recorded later as a direct
+quadratic specialization rather than as an independent classification.
+
+\begin{introtheorem}[Arithmetic difference quotient]
+Let $\beta$ be a nonintegral simple-Parry number and $m\ge2$.  In the finite
+graph $\Gamma_{\beta,m}$ on coordinate differences, the future-only inverse
+length is one plus the longest directed path beginning with nonzero first
+coordinate.  It is infinite exactly when such paths have unbounded length,
+and $\Phi_{\beta,m}$ is injective exactly when the graph has no nonzero
+bi-infinite path.  For simple-Parry ranks, injectivity is equivalent to
+finite future-only inverse length.
+\end{introtheorem}
+
+The full statement is Theorem~\ref{thm:simple-parry-causal-collision} and
+Corollary~\ref{cor:simple-parry-causal-completeness}.  It is a quotient of
+the standard fiber product by coordinatewise difference.  Every bounded
+difference is realized by two raw digits, so the quotient loses no
+collisions.  In particular it gives an exact depth formula rather than only
+an injectivity test, and the unique predecessor of the zero state supplies
+the future-only conclusion.  The aperture-two graph has at most three edge
+types, leading to Theorem~\ref{thm:simple-parry-aperture-two}; none of these
+arguments uses a Pisot estimate.
+
+The quotient graph retains the directional information needed for inversion.
+Its vertices are $(m-1)$-tuples of bounded coordinate differences, and an
+edge appends the next difference subject to one rank congruence.  A path that
+starts with nonzero first coordinate is precisely a pair of finite raw blocks
+whose first symbols are still indistinguishable.  Its length measures the
+delay before that ambiguity disappears.  Reachable cycles give periodic
+collisions; in the acyclic case the longest path gives the decoder length.
+For canonical simple-Parry ranks, the zero state has a unique predecessor,
+so injectivity forces every transient beginning with unequal initial symbols
+to terminate in finitely many steps.
+This converts the classical injectivity decision into a future-only inverse
+criterion with an explicit finite state bound.
+
+At aperture two the recurrence has exposed only its first nonleading
+coefficient.  The difference graph consequently has the zero edge and at
+most one symmetric pair of nonzero edges.  According to their endpoints,
+the fold is either a local bijection, has a two-output inverse, or has the
+single constant branch pair.  This trichotomy illustrates what the quotient
+adds to a pair-graph decision: it records both the existence and the exact
+lifetime of a collision.
+
+\begin{introtheorem}[Unbounded cubic depth]
+For $n\ge4$, let $\beta_n\in(n,n+1)$ be the cubic simple-Parry Pisot root of
+\[
+x^3-(n+2)x^2+2nx-n,
+\]
+and put $m_n=n-1$.  Then $\Phi_{\beta_n,m_n}$ is injective and
 \[
 \ell_{\rm cau}(\beta_n,m_n)=n-1.
 \]
-This varies the system and complements, rather than duplicates, the
-fixed-system linear-order result.
+Consequently future-only inverse lengths at injective apertures are
+unbounded among nonintegral cubic simple-Parry Pisot systems.
+\end{introtheorem}
 
-That fixed-system theorem appears in the companion article by the present
-authors, \emph{Linear overlap transients for bounded zero representations in
-Pisot numeration: sharp inverse depth for cyclic rank recodings} \cite{MaZhang2026LinearOverlap}.  It proves
-an effective linear transient theorem for arbitrary bounded zero
-representations and derives an aperture-linear inverse bound from an exact
-collision quotient.  No theorem from that companion is used here.  The two
-papers share only the cyclic rank definition and the caution separating it
-from numerical normalization.
+This family separates algebraic degree from inverse depth.  The bases all
+have degree three, but their relevant apertures and terminal collision paths
+grow with $n$.  A fixed cubic recurrence therefore supports paths whose
+extinction time is controlled by the arithmetic parameter.  The theorem
+shows that a degree bound alone cannot provide a uniform future-only inverse
+bound across systems.
+
+The proof, given in Theorem~\ref{thm:cubic-unbounded-causal-depth}, has two
+ingredients.  A carry-exclusion estimate forces every collision path
+after its first window into the zero-carry regime.  An induction then
+classifies the two terminal nonzero paths and shows that one more output
+eliminates both.  Bassino's expansion data identify the family; the
+unbounded depth comes from the collision analysis.
 
 Sections~\ref{sec:stabilization}--\ref{sec:stab:branch-and-conjugacy} give
-the Fibonacci model.  Section~\ref{sec:quadratic-pisot-extension} proves the
-quadratic classification and local structure; the short metallic subsection
-then records its constant-type specialization.  Section
-\ref{sec:simple-parry-causal-obstructions} proves the simple-Parry quotient,
-aperture-two trichotomy, and cubic unboundedness.  The supplementary material
-contains entropy, Blackwell, pressure, fiber, discrepancy, bounded-multiple,
-zeta, and geometric consequences; none enters the central proof chain.
+the common definitions and compressed Fibonacci prototype.  Section
+\ref{sec:quadratic-pisot-extension} proves the quadratic classification and
+its local consequences.  Section~\ref{sec:simple-parry-causal-obstructions}
+develops the difference quotient, aperture-two trichotomy, and cubic family.
+The conclusion is followed by appendices containing the finite arithmetic
+calculations.  The related fixed-system transient theorem is developed in the
+companion article \cite{MaZhang2026LinearOverlap}.
