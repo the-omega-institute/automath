@@ -1,34 +1,32 @@
 \section{Homological images and aggregate quotients}
 \label{sec:homological-images}
 
-Fix a finite simplicial complex \(N\), a finite abelian group \(A\), and a
-class \(\omega\in H^2(N,A)\).  The universal coefficient map is denoted by
-\[
- \operatorname{ev}_\omega:
- H_2(N,\mathbb Z)\longrightarrow A.
-\]
-Define its \emph{homological image} and \emph{homological cokernel} by
+Fix a finite simplicial complex \(N\), a finite abelian group \(A\), and
+\(\omega\in H^2(N,A)\).  Define
 \begin{equation}\label{eq:homological-image-cokernel}
- K_\omega:=\operatorname{Im}(\operatorname{ev}_\omega),
+ K_\omega:=\operatorname{Im}\bigl(
+ H_2(N,\mathbb Z)\xrightarrow{\operatorname{ev}_\omega}A\bigr),
  \qquad Q_\omega:=A/K_\omega.
 \end{equation}
-These definitions depend on the supplied finite presentation of the component
-gerbe.  Refinement and retrivialization transport them by UCT naturality, but
-no canonical identification along distinct comparison zigzags is asserted.
-The resulting freely generated presentation groupoid and its elementary
-naturality calculation are recorded in the technical appendix rather than
-promoted to an invariance theorem.
-
-For a finite family of component classes
-\((\omega_v)_{v\in V}\), put \(K_v=K_{\omega_v}\) and define
+For a nonempty finite family \((\omega_v)_{v\in V}\), put
+\(K_v=K_{\omega_v}\) and
 \begin{equation}\label{eq:aggregate-quotients}
  Q_{\mathrm{lab}}:=A\Big/\bigcap_{v\in V}K_v,
  \qquad
  Q_{\mathrm{com}}:=A\Big/\sum_{v\in V}K_v.
 \end{equation}
-The first quotient retains enough information to map to every componentwise
-quotient \(A/K_v\).  The second retains only characters which descend through
-every one of them.
+Thus the application chain is
+\[
+\begin{aligned}
+ \text{supplied gerbe class}&\longmapsto K_\omega
+ \longmapsto Q_{\mathrm{lab}}\longrightarrow Q_{\mathrm{com}}\\
+ &\longmapsto\text{rank condition}
+ \longmapsto\text{wedge realization}.
+\end{aligned}
+\]
+The definitions are attached to the supplied finite presentation.  Their
+naturality under a specified comparison is proved in
+Appendix~\ref{sec:presentation-naturality}.
 
 \begin{proposition}[UCT and aggregate subgroup package]
 \label{prop:uct-aggregate-package}
@@ -55,8 +53,7 @@ With the notation above:
       \[
       K_\omega=\mathop{\bigcap}_{\chi(K_\omega)=0}\ker\chi.
       \]
-\item For a nonempty finite family \((K_v)_{v\in V}\), there is a natural
-      short exact sequence
+\item There is a natural short exact sequence
       \begin{equation}\label{eq:aggregate-exact-sequence}
       0\longrightarrow
       \frac{\sum_vK_v}{\bigcap_vK_v}
@@ -83,289 +80,48 @@ With the notation above:
 \end{proposition}
 
 \begin{proof}
-Clause (i) is the cohomological universal coefficient theorem, natural in
-both \(N\) and \(A\) \cite[Sec.~3.1]{Hatcher2002}.  Its middle-to-right map
-evaluates a cohomology class on integral \(2\)-cycles, so its value at
-\(\omega\) is \(\operatorname{ev}_\omega\).  Exactness identifies the
-kernel with the Ext term.
+Clause (i) is the cohomological universal coefficient theorem
+\cite[Sec.~3.1]{Hatcher2002}; its right-hand map is evaluation on integral
+\(2\)-cycles, so exactness gives the assertion about \(K_\omega\).
 
-For a simplicial map \(f:N'\to N\), naturality is the commutative square
-\[
-\begin{CD}
-H^2(N,A) @>{\operatorname{ev}}>>
- \operatorname{Hom}(H_2(N,\mathbb Z),A)\\
-@V{f^*}VV @VV{(-)\circ f_*}V\\
-H^2(N',A) @>{\operatorname{ev}}>>
- \operatorname{Hom}(H_2(N',\mathbb Z),A).
-\end{CD}
-\]
-Thus
-\[
- \operatorname{ev}_{f^*\omega}
- =\operatorname{ev}_\omega\circ f_*.
-\]
-For a coefficient homomorphism \(\theta:A\to A'\), the corresponding
-identity is
-\[
- \operatorname{ev}_{\theta_*\omega}
- =\theta\circ\operatorname{ev}_\omega.
-\]
-These formulas are the only invariance input used for a specified
-presentation comparison.  The short exact UCT sequence may split as a
-sequence of groups, but no natural splitting is chosen.
+For (ii), \(q\circ\operatorname{ev}_\omega=0\) precisely when \(q\)
+vanishes on \(K_\omega\), which is the universal property of
+\(A/K_\omega\).  The same argument applies to characters.  If
+\(a\notin K_\omega\), finite Pontryagin duality supplies a character of
+\(A/K_\omega\) nonzero on the class of \(a\); its pullback separates
+\(a\) from the displayed intersection \cite{Terras1999}.
 
-For (ii), \(q\circ\operatorname{ev}_\omega=0\) says precisely that \(q\)
-vanishes on \(K_\omega\).  The universal property of the quotient gives a
-unique factorization through \(A/K_\omega\).  Apply the same observation to
-characters.  The intersection formula follows because characters of a
-finite abelian group separate points \cite{Terras1999}.
+For (iii), the inclusion
+\(\bigcap_vK_v\subseteq\sum_vK_v\) induces the displayed quotient map,
+whose kernel is \((\sum_vK_v)/(\bigcap_vK_v)\) by the third isomorphism
+theorem.  Finite Pontryagin duality sends quotients to annihilators and
+exchanges finite sums and intersections, giving the two dual formulas.
 
-For the last assertion, pass to the finite quotient \(A/K_\omega\).  If
-\(a\notin K_\omega\), then \(\bar a\ne0\) in that quotient.  Finite
-Pontryagin duality gives a character
-\[
- \bar\chi:A/K_\omega\longrightarrow\mathbb Q/\mathbb Z
-\]
-with \(\bar\chi(\bar a)\ne0\).  Its pullback \(\chi=\bar\chi q_\omega\)
-annihilates \(K_\omega\) but not \(a\).  Hence no element outside
-\(K_\omega\) belongs to the displayed intersection of kernels.  The reverse
-containment is immediate.
-
-The containment \(\bigcap_vK_v\subseteq\sum_vK_v\) gives the quotient map in
-\eqref{eq:aggregate-exact-sequence}.  By the third isomorphism theorem its
-kernel is
-\[
- \frac{\sum_vK_v}{\bigcap_vK_v},
-\]
-which proves exactness.  For finite abelian groups, annihilators exchange sums and
-intersections:
-\[
- \Big(\sum_vK_v\Big)^\perp=\bigcap_vK_v^\perp,
- \qquad
- \Big(\bigcap_vK_v\Big)^\perp=\sum_vK_v^\perp.
-\]
-Dualizing the two quotients proves the character formulas in (iii).
-
-The first annihilator identity does not require finiteness:
-\(\chi\) kills \(\sum_vK_v\) exactly when it kills every \(K_v\).  For the
-second, one inclusion is immediate:
-\[
- \sum_vK_v^\perp\subseteq\Big(\bigcap_vK_v\Big)^\perp.
-\]
-For finite groups, equality follows from exactness of Pontryagin duality.
-It may also be checked by cardinalities, using
-\[
- |H^\perp|=\frac{|A|}{|H|}
-\]
-and, for two subgroups,
-\[
- |K+L|\,|K\cap L|=|K|\,|L|.
-\]
-Induction gives the formula for a finite family.
-
-Under the hypotheses of (iv), the Ext term vanishes and UCT becomes
+Under the hypotheses of (iv), UCT gives
 \[
  H^2(N,A)\cong\operatorname{Hom}(\mathbb Z^\beta,A).
 \]
-The image of a homomorphism from \(\mathbb Z^\beta\) is generated by the
-images of the standard basis, so it has at most \(\beta\) generators.
-Conversely, given generators \(k_1,\dots,k_\beta\) of \(K\), allowing zeros
-when fewer are needed, the map
-\[
- (n_1,\dots,n_\beta)\longmapsto\sum_jn_jk_j
-\]
-has image \(K\).  Applying
-\Cref{thm:prescribed-component-image-construction} to a family of these maps
-gives their simultaneous object-level realization on the supplied fixed
-cover and band.
-
-The number \(d(K)\) can be read prime by prime.  If
-\[
- K\cong\bigoplus_p\bigoplus_{j=1}^{r_p}C_{p^{e_{p,j}}},
-\]
-then
-\[
- d(K)=\max_p r_p.
-\]
-Thus the condition in (iv) is not a bound on \(|K|\) or on its exponent.
-It is precisely the rank bound imposed by the \(\beta\) basis elements of
-\(H_2(N,\mathbb Z)\).  Once homomorphisms with the desired images have been
-chosen componentwise, simultaneous attainment is the prestack-level part
-supplied by \Cref{thm:prescribed-component-image-construction}.
+An image of \(\mathbb Z^\beta\) has at most \(\beta\) generators.
+Conversely, if \(K=\langle k_1,\dots,k_r\rangle\) with \(r\le\beta\), send
+the first \(r\) basis vectors to the displayed generators and the remaining
+ones to zero.  Applying
+\Cref{thm:prescribed-component-image-construction} to any finite family of
+these maps realizes the family simultaneously.
 \end{proof}
 
-\subsection*{How to read the aggregate quotients}
-
-There are canonical maps
-\[
- Q_{\mathrm{lab}}\longrightarrow A/K_v
- \qquad(v\in V),
-\]
-because \(\bigcap_wK_w\subseteq K_v\).  The product of these maps is
-injective:
-\begin{equation}\label{eq:labelled-product-embedding}
- A/\bigcap_vK_v
- \longrightarrow\prod_{v\in V}A/K_v,
- \qquad
- a+\bigcap_vK_v\longmapsto(a+K_v)_v.
-\end{equation}
-Its kernel consists of the elements lying in every \(K_v\).  Thus
-\(Q_{\mathrm{lab}}\) is the part of the coefficient group retained by all
-componentwise quotient values together.
-
-In the other direction, every componentwise quotient maps onto
-\(Q_{\mathrm{com}}\):
-\[
- A/K_v\longrightarrow A/\sum_wK_w,
-\]
-because \(K_v\subseteq\sum_wK_w\).  This is the largest quotient of \(A\)
-of the displayed form receiving the quotient map from every \(A/K_v\).
-The map in \eqref{eq:aggregate-exact-sequence} measures the loss between
-keeping the tuple of component values and keeping only their common quotient.
-
-On characters, the directions reverse.  A character of
-\(Q_{\mathrm{com}}\) must kill every \(K_v\), while a character of
-\(Q_{\mathrm{lab}}\) is a finite sum of characters each killing one of the
-component subgroups.  Written inside \(\widehat A\), these are precisely the
-two annihilator identities in the proposition.  This interpretation uses
-only the contravariance of finite duality.
-
-\subsection*{Evaluation at chain level}
-
-Choose a simplicial cocycle
-\(\alpha\in Z^2(N,A)\) representing \(\omega\).  If
-\[
- z=\sum_{\sigma\in N_2}n_\sigma\sigma
-\]
-is an integral \(2\)-cycle, then
-\begin{equation}\label{eq:chain-level-evaluation}
- \operatorname{ev}_\omega([z])
- =\langle\alpha,z\rangle
- =\sum_{\sigma\in N_2}n_\sigma\alpha(\sigma).
-\end{equation}
-Replacing \(\alpha\) by \(\alpha+\delta b\) changes the last expression by
-\[
- \langle\delta b,z\rangle
- =\langle b,\partial z\rangle=0.
-\]
-Replacing \(z\) by \(z+\partial c\) changes it by
-\[
- \langle\alpha,\partial c\rangle
- =\langle\delta\alpha,c\rangle=0.
-\]
-Thus \eqref{eq:chain-level-evaluation} depends only on the cohomology class
-and the homology class.  In the realization theorem,
-\(\alpha=\alpha_\lambda\) is also the triple-overlap defect of the
-\(\lambda\)-component gerbe, so the formula evaluates that defect directly
-on a \(2\)-cycle of the chosen nerve.
-
-This chain formula also explains why the coordinate subgroup
-\[
- H_\alpha=\langle\alpha(\sigma):\sigma\in N_2\rangle
-\]
-can be larger than \(K_\omega\).  Every value in \(K_\omega\) is an integral
-combination of cocycle coordinates, so \(K_\omega\subseteq H_\alpha\).
-But the coefficients in \eqref{eq:chain-level-evaluation} must satisfy the
-cycle equations.  An arbitrary combination of coordinates need not arise
-from a cycle.  Moreover, \(H_\alpha\) can change when \(\alpha\) is altered
-by a coboundary, whereas \(K_\omega\) cannot.
-
-\subsection*{Torsion and free-homology boundary cases}
-
-Suppose
-\[
- H_1(N,\mathbb Z)
- \cong\mathbb Z^r\oplus\bigoplus_{j=1}^t\mathbb Z/n_j\mathbb Z.
-\]
-The free summand contributes nothing to the Ext term, while
-\[
- \operatorname{Ext}^1(\mathbb Z/n_j\mathbb Z,A)
- \cong A/n_jA.
-\]
-Consequently,
-\begin{equation}\label{eq:explicit-ext-term}
- \operatorname{Ext}^1(H_1(N,\mathbb Z),A)
- \cong\bigoplus_{j=1}^t A/n_jA.
-\end{equation}
-If every multiplication map \(n_j:A\to A\) is surjective, the Ext term
-vanishes even though \(H_1\) has torsion.  For finite \(A\), shared primary
-torsion between \(H_1\) and \(A\) is what permits classes that evaluation on
-\(H_2\) cannot detect.
-
-For example, if
+The Ext term records the precise limit of homological visibility.  For
+example, suppose
 \[
  H_1(N,\mathbb Z)\cong\mathbb Z/2\mathbb Z,
  \qquad H_2(N,\mathbb Z)=0,
- \qquad A=\mathbb Z/2\mathbb Z,
+ \qquad A=\mathbb Z/2\mathbb Z.
 \]
-then \(H^2(N,A)\cong\mathbb Z/2\mathbb Z\) entirely through
-\eqref{eq:explicit-ext-term}.  The nonzero class defines a non-neutral
-banded gerbe, but
+Then
 \[
- \operatorname{ev}_\omega:0\longrightarrow A
+ H^2(N,A)\cong
+ \operatorname{Ext}^1(\mathbb Z/2\mathbb Z,\mathbb Z/2\mathbb Z)
+ \cong\mathbb Z/2\mathbb Z.
 \]
-has zero image and \(Q_\omega=A\).  The quotient does not detect neutrality
-in this case.
-
-At the opposite endpoint, if \(H_1(N,\mathbb Z)\) is free, the Ext term
-vanishes.  Then
-\[
- H^2(N,A)\longrightarrow\operatorname{Hom}(H_2(N,\mathbb Z),A)
-\]
-is an isomorphism.  A class has zero homological image only when it is zero.
-The wedge-of-spheres application lies in this regime.
-
-\subsection*{A two-component arithmetic check}
-
-Let
-\[
- A=\mathbb Z/12\mathbb Z,\qquad
- K_1=\langle4\rangle,\qquad
- K_2=\langle3\rangle.
-\]
-Then \(K_1\) has order \(3\), \(K_2\) has order \(4\), and
-\[
- K_1\cap K_2=0,\qquad K_1+K_2=A.
-\]
-Hence
-\[
- Q_{\mathrm{lab}}=A,\qquad Q_{\mathrm{com}}=0,
-\]
-and the kernel in \eqref{eq:aggregate-exact-sequence} is \(A\).  Both
-subgroups are cyclic, so each is the image of a homomorphism
-\(\mathbb Z\to A\).  On a nerve with
-\(H_2(N,\mathbb Z)\cong\mathbb Z\) and \(H_1(N,\mathbb Z)=0\), the
-prescribed-realization theorem places these supplied maps in two component
-gerbes of a single prestack on that fixed cover and band.
-
-By contrast, if \(A=\mathbb Z/8\mathbb Z\), any two nonzero subgroups are
-comparable:
-\[
- \langle4\rangle\subseteq\langle2\rangle\subseteq A.
-\]
-Their intersection cannot be zero.  Thus no two nonzero component images
-can satisfy \(K_1\cap K_2=0\) and \(K_1+K_2=A\).  This elementary contrast
-is the cyclic part of the arithmetic used in the next section.
-
-All clauses except the simultaneous prestack realization of the supplied
-maps on a fixed cover and band are standard formal consequences of UCT,
-finite duality, and subgroup arithmetic.  In particular,
-there is no separate information-theoretic theorem hidden in the fibres of
-these quotients.  Since a quotient fibre is a coset of its kernel, the minimum
-cardinality of an unrestricted auxiliary set capable of separating every
-fibre is simply the kernel cardinality.  For example,
-\[
- |q_\omega^{-1}(\bar a)|=|K_\omega|,
- \qquad
- \left|\ker(Q_{\mathrm{lab}}\to Q_{\mathrm{com}})\right|
- =\left|\frac{\sum_vK_v}{\bigcap_vK_v}\right|.
-\]
-
-The Ext clause also marks a limitation of the homological image.  If
-\(H_2(N,\mathbb Z)=0\) and
-\(\operatorname{Ext}^1(H_1(N,\mathbb Z),A)\ne0\), a nonzero gerbe class can
-have \(K_\omega=0\) and \(Q_\omega=A\).  For instance, an
-\(\mathbb RP^2\)-type nerve and suitable \(2\)-torsion coefficients exhibit
-this behavior.  Conversely, when \(H_1(N,\mathbb Z)\) is free, the Ext term
-vanishes and zero evaluation forces \(\omega=0\).  These are UCT boundary
-cases, not additional classification results.
+The nonzero class defines a non-neutral banded gerbe, but its evaluation map
+has zero domain, so \(K_\omega=0\) and \(Q_\omega=A\).  Evaluation on
+\(H_2\) therefore does not detect this gerbe class.

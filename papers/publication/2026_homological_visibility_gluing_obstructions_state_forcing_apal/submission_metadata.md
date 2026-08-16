@@ -6,7 +6,7 @@ Cahiers de Topologie et Geometrie Differentielle Categoriques
 
 ## Article
 
-**Title:** Finite-Site Component Gerbes and Homological Images
+**Title:** Finite-Site Component Gerbes, Terminal Rigidity, and Prescribed Realization
 
 **Authors:** Haobo Ma and Wenlin Zhang
 
@@ -17,30 +17,27 @@ Cahiers de Topologie et Geometrie Differentielle Categoriques
 - Haobo Ma: AELF PTE LTD., #14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981
 - Wenlin Zhang: National University of Singapore, Singapore
 
-**Article length:** 34 pages
+**Article length:** 26 pages
 
-**Public technical appendix:** 6 pages
+**Public technical supplement:** 6 pages
 
 ## Abstract
 
-For a stack, Giraud's component construction identifies the full substack
-over a global component section as its maximal component gerbe. We apply
-this standard construction to a banded prestack lift of a presheaf on a
-finite site. Under slice separatedness and terminal essential surjectivity,
-matching without amalgamation is equivalent to non-neutrality of every
-global component gerbe. A representative-rigidity theorem shows that a
-strictly pullback-stable choice of lift representatives forces terminal
-effectivity when the band has vanishing first cohomology. On a finite good
-cover with connected nonempty intersections and H_1(N,Z)=0, we give a
-self-contained Cech-cocycle prestack construction simultaneously controlling
-the component presheaf, terminal fibre, neutral labels, and prescribed
-evaluation maps H_2(N,Z) -> A. UCT and elementary subgroup arithmetic yield
-the aggregate quotients. For the selected open-star sites of a wedge of beta
-copies of S^2, a nonzero finite abelian group G occurs as the two-component
-comparison kernel with complementary nonzero images exactly when d(G) <=
-2 beta and G is not cyclic of prime-power order. This is a realization
-corollary for supplied lift data and does not transfer to bare empirical
-models.
+We study banded-prestack lifts of a presheaf on a finite site with terminal
+object. Under separatedness on terminal slice sites, a choice of lift
+representatives that is strictly stable under pullback imposes terminal
+rigidity: when the first cohomology of the abelian band vanishes, terminal
+essential surjectivity of stackification is equivalent to bijectivity of the
+terminal sheafification unit and to unique amalgamation of every strict
+matching family. For a finite good cover with connected nonempty
+intersections, a fixed finite constant band A, and H_1(N,Z)=0, we construct
+explicitly a prestack that simultaneously realizes prescribed evaluation
+maps H_2(N,Z) -> A while controlling its component presheaf, terminal fibre,
+and the neutral and non-neutral component gerbes. The construction recovers
+the prescribed maps as the evaluations of the actual triple-overlap defects.
+On selected open-star covers of a wedge of beta copies of S^2, it realizes a
+nonzero finite abelian group G by two complementary nonzero component images
+exactly when d(G) <= 2 beta and G is not cyclic of prime-power order.
 
 ## Classification
 
@@ -72,11 +69,11 @@ scoped as a corollary of that realization construction for selected open-star
 sites and supplied lift data.
 
 The article contains the complete proofs of terminal rigidity and prescribed
-realization. The separate public technical appendix is limited to
-presentation-comparison naturality, finite-group and Ext examples, a matrix
-workflow, and a narrow lower-language separation example. A companion paper
-is cited where its conditional gluing criterion overlaps; the present article
-does not claim that criterion as a new result.
+realization, together with an internal appendix proving naturality for the
+specified presentation comparisons used in the text. The separate technical
+supplement retains extended finite-group and Ext examples, a matrix workflow,
+and a narrow lower-language separation example. A companion paper is cited
+where its conditional gluing criterion overlaps.
 
 ## Declarations
 
