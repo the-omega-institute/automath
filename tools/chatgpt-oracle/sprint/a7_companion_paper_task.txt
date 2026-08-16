@@ -1,0 +1,100 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: create ONE new sibling directory under papers/publication/. Read from, but DO NOT MODIFY,
+papers/publication/2026_upper_fibers_witness_covers_fibonacci_apparition_fq - that paper is finished
+and committed. Other agents are working on other papers. Touch nothing else.
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere - archived external evidence.
+
+WHY THIS EXISTS. The Fibonacci Quarterly restructuring of the upper-fibers paper was a
+reject-and-resubmit repair, and its first required item was to define one paper by removing the
+independent theorem blocks. That was the right call for that submission and it has been carried out.
+But the removal deleted material that has independent value, and unlike the sibling cases in this
+project it was deleted rather than relocated - so it currently survives only in git history. That is
+the gap this task closes.
+
+The most important piece is the theorem in the deleted `sec_large_primitive_divisor_alternative.tex`:
+
+    Theorem (Large primitive divisor--Fibonacci--Wieferich alternative)
+
+An external assessment put the probability that this is a defensibly new publishable theorem at
+75-80 percent, with the proof risk described as essentially eliminated. It was the single largest
+research gain of this sprint, obtained after a run of assessments had put the paper's ceiling below
+three percent. It must not be left in git history alone.
+
+RECOVER THE MATERIAL. It is at commit 5231658ed^ (the parent of the restructuring commit). The
+deleted section files are:
+
+    sec_large_primitive_divisor_alternative.tex
+    sec_support_entropy_arithmetic_interface.tex
+    sec_rank_window_and_fibotomic_interface.tex
+    sec_prime_inverse_dynamics.tex
+    sec_further_questions.tex
+    sec_arithmetic_secondary_bounds.tex
+    sec_connected_dominance_criterion.tex
+    sec_connected_factorization.tex
+    sec_connected_secondary_consequences.tex
+    sec_four_coordinate_classification.tex
+    sec_low_support_classification.tex
+    sec_low_support_framework.tex
+    sec_odd_layer_minimal_covers.tex
+    sec_rank_pure_secondary_asymptotics.tex
+
+Retrieve them with `git show 5231658ed^:<path>`. Do NOT check out that commit and do not touch the
+working tree of the upper-fibers directory.
+
+WHAT TO BUILD. One coherent article, not a dump. Assemble it around the primitive-divisor /
+Fibonacci-Wieferich alternative as its centre, taking from the recovered files only what that centre
+needs plus whatever else genuinely coheres with it. Judge coherence honestly:
+
+ - if a recovered block belongs to the same story, include it and say why;
+ - if it does not, LEAVE IT OUT and say so. A tight paper carrying one real theorem beats a
+   portmanteau. You are not obliged to use all fourteen files, and reassembling everything would
+   repeat the very defect the restructuring removed;
+ - if what coheres is genuinely two separate stories, say so, build the one centred on the
+   primitive-divisor theorem, and list what the second would contain rather than building both.
+
+The new directory needs: main.tex plus its sections, a references file containing exactly the
+entries this paper cites, an artifacts/ directory with whatever verification the retained claims
+depend on, and a submission_metadata.md.
+
+CRITICAL ON METADATA: this paper has NOT been assessed. Do NOT invent a target journal, a page-count
+estimate, or an acceptance probability. Record its provenance - that it carries material developed
+alongside the Fibonacci Quarterly paper and separated from it when that paper was focused - and
+record that no venue assessment has been made. A sibling paper in this project was created the same
+way and its metadata states exactly that; follow it.
+
+MATHEMATICAL INTEGRITY:
+ - Every retained result keeps its hypotheses and its strength. Nothing may be strengthened in the
+   move, and nothing may quietly lose a hypothesis that lived in a file you did not carry over.
+ - If a retained proof depends on a lemma that stayed in the Fibonacci Quarterly paper, either
+   restate and prove it here, or cite that paper explicitly as a companion. Never leave a silent
+   gap. The companion is not yet published, so cite it as a companion manuscript with NO invented
+   arXiv number, DOI or URL.
+ - The recorded sourcing gaps and the removed fabricated citation must not come back. Check
+   artifacts/literature_check.md in the source paper: the fabricated Sanna entry must stay absent,
+   and the three keys whose sourcing was never resolved must not be presented as verified. If this
+   paper needs any of them, carry the gap record forward with the claim.
+ - Any citation you add beyond what the recovered files already carried must be verified in
+   Crossref, OpenAlex, Semantic Scholar or the official arXiv record first, comparing returned title
+   and lead author, and recorded in this paper's artifacts/literature_check.md.
+
+RULES:
+ - Every claim proved at referee standard. Numerics are sanity checks, never a substitute.
+ - Keep every .tex under 800 lines.
+ - Clean rebuild: latexmk -C, remove auxiliaries, alternating passes until latexmk -pdfxe exits 0
+   with zero undefined references, zero undefined citations and zero multiply-defined labels.
+ - After building, extract the PDF text with pdftotext: no "??", no ".tex" or ".pdf" in the body, no
+   printed TeX command name, numbering ascending by first definition, and printed bibliography keys
+   equal to cited keys in both directions. pdftotext is evidence, not an authority - if a glyph
+   prevents it confirming something correct, report the limitation and give page-image evidence
+   rather than editing the manuscript.
+ - No \iffalse, no \endinput, no \begin{comment} in any input file.
+ - No revision marks: the new paper must not read as an extraction. Do not leave planning or scratch
+   files. Do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: which recovered files you used and which you left out, with reasons; the new paper's title,
+table of contents and page count; every numbered result it carries and where each came from; every
+place it cites the Fibonacci Quarterly companion; the metadata verbatim; and the compile, extraction,
+numbering and bibliography results.
