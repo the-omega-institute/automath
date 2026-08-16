@@ -1,0 +1,65 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds and
+papers/publication/2026_joukowsky_elliptic_godel_lorentz_mahler_capacity ONLY. Other agents are
+working on other papers. DO NOT MODIFY ANY artifacts/oracle_*.md anywhere. Do not commit.
+
+DEFECT 1 - THE SCAN-PROJECTION PAPER DOES NOT BUILD FROM ITS OWN SOURCES.
+
+`sec_open_system.tex` uses `\leanverified{...}` at three places (lines 164, 574, 633). The macro is
+defined nowhere: not in main.tex, not in any section file, and there is no latexmkrc, no Makefile
+and no build script in the directory. A clean `latexmk -C` followed by `latexmk -pdfxe main` fails,
+producing a 7-page fragment with 53 undefined control sequences and 24 unresolved citations. The
+checked-in main.pdf is stale and does not correspond to these sources.
+
+This was found only because an independent rebuild was run. The previous agent obtained a green
+build by supplying the definition on the latexmk command line, which makes the paper look sound to
+whoever runs that exact command and broken to everyone else, including a journal's production desk.
+
+Establish what `\leanverified` is meant to do before you define it. It marks a result as having a
+corresponding machine-checked Lean proof, and it takes a Lean declaration name as its argument -
+here `paper_scan_projection_address_first_entry_escape_rate` and two others. Look at how sibling
+papers in papers/publication handle the same marker and follow whatever they do, so this paper is
+consistent with them rather than carrying a one-off invention. If no sibling defines it either,
+report that - it would mean the defect is wider than this paper and I need to know.
+
+Then define it in this paper's preamble so that a clean build works with no command-line arguments
+beyond `latexmk -pdfxe main`. Do not delete the three call sites to make the problem go away: the
+claim that these results are Lean-verified is content, and removing it silently would be a
+misrepresentation in the other direction. If you conclude the marker should not appear in this
+paper at all, say why and stop rather than deciding it yourself.
+
+Report the page count of the resulting document. The stale checked-in PDF is 20 pages; the real one
+will differ, and that difference is information, not a problem to be hidden.
+
+DEFECT 2 - A PARAPHRASED arXiv TITLE.
+
+In the joukowsky paper, `Trieu2024K3Mahler` cites arXiv:2412.00893 with the title "Mahler Measures
+and $L$-Functions of $K3$ Surfaces". The identifier is right and the author is right, but the
+registered title is different. Fetch the record, use the registered title verbatim, and correct the
+`journal = {arXiv preprint arXiv:2412.00893}` field to whatever form the sibling papers use for
+preprints. If the paper has since been published in a journal, cite the published version and add
+the DOI, verifying it as usual.
+
+VERIFY, for both papers:
+ - clean rebuild: latexmk -C, remove auxiliaries, alternating passes until latexmk -pdfxe exits 0
+   with zero undefined references, zero undefined citations, zero multiply-defined labels, and NO
+   command-line macro definitions or other invocation-specific arguments;
+ - printed bibliography keys equal cited keys in both directions;
+ - pdftotext -enc UTF-8 shows no "??" in the body.
+
+Also remove the stray `texput.fls`, `.fls` and `.log` artifacts sitting in the scan-projection
+directory - they are the debris of a failed run, not build products of this paper.
+
+RULES:
+ - Change no theorem, proof, hypothesis or section prose. The preamble definition and the one
+   bibliography entry are the whole of the intended edit.
+ - pdftotext -enc UTF-8 always; the default is Latin-1 here and reports present text as missing.
+   Extraction is evidence, not an authority.
+ - No revision marks, no scratch files, do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: what `\leanverified` does in the sibling papers and what you defined here; the exact
+latexmk invocation you used, verbatim, so I can repeat it; page counts before and after; the
+corrected Trieu entry; and the compile, parity and extraction results.

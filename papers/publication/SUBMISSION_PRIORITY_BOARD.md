@@ -31,9 +31,19 @@ Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Ze
 完整表与复现命令：`tools/chatgpt-oracle/sprint/citation_doi_audit.md`。
 修复任务：`tools/chatgpt-oracle/sprint/doi_repair_task.txt`，三个 codex 按目录分组并行，互不重叠。
 
-**修复进度（tick 231）**：组 1、组 2 已完成（11 篇），组 3 在跑（6 篇，含已投稿 JNT 篇）。
-我方独立复跑全库 DOI 校验：**A 类 0、B 类 0**，仅余 22 个 DataCite 标识符（arXiv/LIPIcs/Zenodo/
-figshare，本就不在 Crossref，均能解析）。清理重建复核在跑。
+**修复已完成（tick 232）**：三组共 17 篇、47 处条目全部修毕，已提交推送
+（`fe1375bf9`、`a6b6896a8`）。我方独立复核：全库 34 个 `.bib` 重抽取、500 个 DOI 重解析
+→ **A 类 0、B 类 0**；17 篇全部 `latexmk -C` 后从零重建，**16 篇通过**，页数与自述一致。
+其中 22 处不只是 DOI 错、**条目本身**（刊名、卷、期、页、年、作者名）也错。
+
+**由独立重建查出的新阻断项**：`scan_projection` **不能从自身源码编译** ——
+`sec_open_system.tex` 三处用 `\leanverified{}`，该宏全仓无定义，亦无 latexmkrc/Makefile；
+上一个 agent 是在 latexmk **命令行上补定义**才拿到绿灯，仓库内 `main.pdf` 已过期。
+清理重建实测：7 页残片、53 个未定义控制序列、24 个未解析引用。修复在飞。
+
+**新线索**：`BrumerKramer2019` 这个 key 并非笔误 —— 该 TAMS 论文确有 **2019 年勘误**
+（`10.1090/tran/7792`）。已投稿的 JNT 篇引用它，若所依赖的正是勘误改动之处则属内容问题。
+核查在飞，任务明确要求**若确有影响只许报告、不许改稿**。
 
 代理还查出审计本身的三处不足，均已核实并接受：`CostabelMcIntosh2010` 实有正确 DOI（审计误判为无解）；
 `Idziaszek` 在 FUN 而非 SPIRE；`Sanna2025` 的候选 DOI 只返回 slug 无作者，不达标准故删字段。
