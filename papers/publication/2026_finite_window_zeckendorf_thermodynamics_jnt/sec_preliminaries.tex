@@ -1,144 +1,77 @@
 \section{Finite-window fibers}\label{sec:preliminaries}
 
-Throughout, the Fibonacci numbers are indexed by
+Throughout,
 \[
-  F_0=0,
-  \qquad
-  F_1=F_2=1,
-  \qquad
-  F_{n+2}=F_{n+1}+F_n
-  \qquad (n\ge 0).
+ F_0=0,\qquad F_1=F_2=1,\qquad F_{n+2}=F_{n+1}+F_n\quad(n\ge0).
 \]
-
-\subsection{Stable words and the residue model}
-
-\begin{definition}[Stable words and visible values]
-\label{def:stable-words}
-For \(m\ge 0\), let
+For \(m\ge0\), let
 \[
-  \Omega_m:=\{0,1\}^m,
-  \qquad
-  X_m:=\{x\in\Omega_m:\ x_ix_{i+1}=0\text{ for }1\le i<m\}.
+ \Omega_m=\{0,1\}^m,
+ \qquad
+ X_m=\{x\in\Omega_m:x_ix_{i+1}=0\text{ for }1\le i<m\},
 \]
-For \(x\in X_m\), define
+and define
 \[
-  V_m(x):=\sum_{j=1}^m x_jF_{j+1}.
+ V_m(x)=\sum_{j=1}^m x_jF_{j+1},
+ \qquad
+ N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}.
 \]
-For \(\omega=\omega_1\cdots \omega_m\in\Omega_m\), define
-\[
-  N_m(\omega):=\sum_{j=1}^m \omega_jF_{j+1}.
-\]
-Thus \(\Omega_0=X_0=\{\varepsilon\}\), where \(\varepsilon\) is the empty word,
-and \(V_0(\varepsilon)=N_0(\varepsilon)=0\).
-\end{definition}
-
-\begin{proposition}[Visible values are complete]
-\label{prop:Vm-bijection}
-For every \(m\ge 0\), the map
-\[
-  V_m\colon X_m\longrightarrow \{0,1,\dots,F_{m+2}-1\}
-\]
-is a bijection.
-\end{proposition}
-
-\begin{proof}
-The zero word maps to \(0\), so it remains to treat
-\(n\in\{1,\dots,F_{m+2}-1\}\).  By Zeckendorf's theorem
-\cite{Zeckendorf1972}, \(n\) has a unique
-expansion as a sum of nonconsecutive Fibonacci numbers.  Because
-\(n<F_{m+2}\), that expansion cannot use the summand \(F_{m+2}\) or any larger
-Fibonacci number; therefore it uses only the weights \(F_2,\dots,F_{m+1}\),
-and hence determines a unique word \(x\in X_m\) with \(V_m(x)=n\).
-Conversely every \(x\in X_m\) is a stable expansion in those same weights, so
-\(V_m(x)\in\{0,\dots,F_{m+2}-1\}\).  Thus \(V_m\) is bijective.
-\end{proof}
+The empty word belongs to \(\Omega_0=X_0\), with both values equal to zero.
 
 \begin{definition}[Finite-window fold]
 \label{def:fold-map}
-For \(m\ge 0\), define
+For \(m\ge0\), define
 \[
-  \Fold_m(\omega):=
-  V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr),
-  \qquad \omega\in\Omega_m.
+ \Fold_m(\omega)=
+ V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr),
+ \qquad \omega\in\Omega_m,
 \]
-For \(x\in X_m\), define the fiber multiplicity
+and, for \(x\in X_m\), put
 \[
-  d_m(x):=\card{\Fold_m^{-1}(x)}.
+ d_m(x)=\card{\Fold_m^{-1}(x)}.
 \]
-In particular, \(\Fold_0(\varepsilon)=\varepsilon\) and
-\(d_0(\varepsilon)=1\).
+The proposition below supplies the asserted inverse.  In particular,
+\(\Fold_0(\varepsilon)=\varepsilon\) and \(d_0(\varepsilon)=1\).
 \end{definition}
 
-\begin{proposition}[Single overflow]
+\begin{proposition}[Finite-window residue model]
+\label{prop:Vm-bijection}
 \label{prop:single-overflow}
-For every \(m\ge0\) and every \(\omega\in\Omega_m\),
+\label{cor:residue-characterization}
+For every \(m\ge0\), the map
 \[
-  N_m(\omega)\le \sum_{j=1}^m F_{j+1}=F_{m+3}-2<2F_{m+2}.
+ V_m:X_m\longrightarrow\{0,1,\ldots,F_{m+2}-1\}
 \]
-Hence there exist unique integers \(b\in\{0,1\}\) and \(r\in[0,F_{m+2})\) such
-that
+is a bijection.  Moreover, every \(\omega\in\Omega_m\) has a unique
+decomposition
 \[
-  N_m(\omega)=bF_{m+2}+r,
+ N_m(\omega)=b_m(\omega)F_{m+2}+r,
+ \qquad b_m(\omega)\in\{0,1\},\quad 0\le r<F_{m+2},
 \]
-and
+and \(\Fold_m(\omega)=V_m^{-1}(r)\).  Consequently, if
+\(r_x=V_m(x)\), then
 \[
-  \Fold_m(\omega)=V_m^{-1}(r).
+ \Fold_m(\omega)=x
+ \quad\Longleftrightarrow\quad
+ N_m(\omega)\equiv r_x\pmod{F_{m+2}}.
 \]
-Equivalently, there is a unique overflow bit \(b_m(\omega)\in\{0,1\}\) such
-that
-\[
-  N_m(\omega)=V_m(\Fold_m(\omega))+b_m(\omega)F_{m+2}.
-\]
+Computing the full Zeckendorf expansion of \(N_m(\omega)\) and deleting its
+possible leading \(F_{m+2}\)-digit gives the same fold.
 \end{proposition}
 
 \begin{proof}
-The Fibonacci identity
-\(\sum_{j=1}^m F_{j+1}=F_{m+3}-2\) is standard, and
-\(F_{m+3}-2<F_{m+3}-1<F_{m+3}=F_{m+2}+F_{m+1}<2F_{m+2}\).  The displayed
-formula for \(\Fold_m\) is simply the definition.
-\end{proof}
+By Zeckendorf's theorem \cite{Zeckendorf1972}, every integer
+\(0\le n<F_{m+2}\) has a unique expansion using nonconsecutive parts among
+\(F_2,\ldots,F_{m+1}\).  This is exactly a word in \(X_m\), proving the
+bijection.
 
-\begin{remark}[Operational meaning of the fold]
-\label{rem:prefix-normalization}
-Because only one overflow can occur, the finite-window fold agrees with
-computing the full Zeckendorf expansion of \(N_m(\omega)\) and deleting the
-possible leading \(F_{m+2}\)-digit.
-The residue definition is the useful one for exact fiber analysis.
-\end{remark}
-
-\begin{corollary}[Residue characterization of fibers]
-\label{cor:residue-characterization}
-For \(x\in X_m\), write \(r_x:=V_m(x)\).  Then
+The Fibonacci sum identity gives
 \[
-  \Fold_m(\omega)=x
-  \iff
-  N_m(\omega)\equiv r_x \pmod{F_{m+2}}.
+ N_m(\omega)\le\sum_{j=1}^mF_{j+1}=F_{m+3}-2<2F_{m+2}.
 \]
-\end{corollary}
-
-\begin{proof}
-By definition,
-\(\Fold_m(\omega)=V_m^{-1}(N_m(\omega)\bmod F_{m+2})\), and \(V_m\) is
-bijective by \Cref{prop:Vm-bijection}.
+Euclidean division therefore produces the stated bit and residue.  The fold
+formula and the fiber congruence follow from the definition and bijectivity
+of \(V_m\).  Finally, the same bound permits at most the leading
+\(F_{m+2}\)-digit in the full Zeckendorf expansion, which proves the last
+assertion.
 \end{proof}
-
-\begin{table}[ht]
-\centering
-\caption{Notation used throughout the paper.  The letter \(q\) is reserved
-for a nonnegative integer moment order, whereas \(t\) denotes a real tilt.}
-\label{tab:notation}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Symbol & Meaning \\
-\midrule
-\(\Omega_m\), \(X_m\) & raw binary words and legal visible words \\
-\(\Fold_m\) & residue-defined finite-window fold \\
-\(d_m(x)\), \(d_m^\#(r)\) & fiber multiplicity, indexed by a word or residue \\
-\(\widetilde d_m(n)\) & coefficient of \(\prod_{j=1}^m(1+z^{F_j})\) \\
-\(R(n)\), \(R^\dagger(n)\) & ordinary and indexed Fibonacci partition counts \\
-\(S_q(m)\), \(S_t(m)\) & integer-order moment and real-tilt sum \\
-\(T_q^\dagger(N)\) & indexed partition power sum below \(N\) \\
-\(D_m\) & largest fiber multiplicity \\
-\bottomrule
-\end{tabular}
-\end{table}

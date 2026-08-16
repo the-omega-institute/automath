@@ -12,10 +12,8 @@ Assessed substantive editorial/referee probability:
 - TAMS considered alone for this article: 10--20%; TAMS is therefore not the first target
 - Respectable specialist venue: 80--90%
 
-Estimated published length: 42--48 pages. The 12-point AMS main-manuscript
-build is 52 pages, with a separately compiled 19-page supplement; the
-estimate refers to the denser published format and is a check rather than a
-target.
+The 12-point AMS build consists of a 32-page main article and a separately
+compiled 7-page technical appendix.
 
 2020 Mathematics Subject Classification: 11B39, 60F10, 05A17, 28A80
 
@@ -32,9 +30,8 @@ Scope boundary: this article contains the affine coefficient-spectrum
 correspondence, pointwise partition-difference formula, two-layer identity,
 finite-window transfer of the known extremal classification, exact local
 spectral stabilization, critical finite-window Gibbs and coexistence laws,
-the orbit-filling completion of the LDP, and the joint cost--multiplicity LDP.
-The recovered pressure and transferred extremal formulas are subordinate
-inputs and context.
+and the orbit-filling completion of the LDP. The recovered pressure and
+transferred extremal formulas are subordinate inputs and context.
 
 Citation status: all bibliography entries are carried unchanged from the
 source manuscript's cited bibliography. No external bibliographic citation

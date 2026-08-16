@@ -1,14 +1,15 @@
 # Finite-Window Zeckendorf Thermodynamics
 
 This directory contains the main article and its separately compiled
-supplement. The primary submission target is the *Journal of Number Theory*.
+technical appendix. The primary submission target is the *Journal of Number
+Theory*.
 
 The article studies exact finite-window Fibonacci coefficient spectra. Its
 main results are the affine coefficient-spectrum correspondence, the
 pointwise partition-difference formula, the exact two-layer identity, local
 spectral stabilization, critical finite-window Gibbs and coexistence laws,
-the completion of the large-deviation principle across the freezing corner,
-and the joint cost--multiplicity large-deviation principle. Pressure formulas
+and the completion of the large-deviation principle across the freezing
+corner. Pressure formulas
 from the golden-ratio Bernoulli-convolution literature and the transferred
 extremal classification are used as subordinate inputs, with their provenance
 stated in the manuscript.
@@ -21,7 +22,7 @@ consequences.
 ## Build
 
 The bibliography is written directly in `sec_references.tex`; BibTeX is not
-used. Build the main article before the supplement so `xr-hyper` can resolve
+used. Build the main article before the appendix so `xr-hyper` can resolve
 cross-document references:
 
 ```powershell
@@ -29,5 +30,5 @@ latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdfxe -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-The expected outputs are `main.pdf` and `supplement.pdf`. Reproduction commands
-for the computational checks are in `artifacts/REPRODUCE.md`.
+The expected outputs are `main.pdf` and `supplement.pdf`. Reproduction
+commands for the computational checks are in `artifacts/REPRODUCE.md`.
