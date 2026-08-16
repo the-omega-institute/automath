@@ -1,0 +1,80 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere. Do not commit. Touch only your assigned papers;
+another agent is working on the others.
+
+WHAT WAS FOUND. Every document root under papers/publication was rebuilt from scratch with no
+invocation-specific arguments. The audit is at tools/chatgpt-oracle/sprint/build_from_source_audit.md.
+Read it first. Several papers do not build from their own checked-in sources at all, and several
+others build but print unresolved citations. Most of the broken ones are already submitted.
+
+The reproducible build, and the only one that counts:
+
+    latexmk -C main && latexmk -pdfxe -interaction=nonstopmode main
+
+No command-line macro definitions. No environment overrides. No latexmkrc. If a document needs more
+than this, it is not fixed. A previous agent on a different paper obtained a green build by defining
+the missing macro on the command line; that is the failure this task exists to prevent, not a
+technique to copy.
+
+FAILURE PATTERN ONE - THE MISSING no-op MACRO.
+
+`\leanverified` is a house convention. Five papers define it identically:
+
+    \newcommand{\leanverified}[1]{}
+
+It takes a Lean declaration name and typesets nothing; the argument exists so the source records
+which results are machine-checked. Papers in your scope use it and never define it, so xelatex
+aborts and no PDF is produced.
+
+Add that exact definition to the preamble of each affected document root. Do NOT delete the call
+sites: the claim that those results are Lean-verified is content, and removing it silently would
+misrepresent the paper in the other direction. Match the siblings exactly rather than inventing a
+variant that prints something.
+
+Where a directory has more than one root that needs it (a main and a supplement, say), each root
+needs its own definition, as the siblings do.
+
+FAILURE PATTERN TWO - UNRESOLVED CITATIONS.
+
+Some documents exit 0 and produce a full-length PDF while printing citations as `[?]`. For each
+undefined key, find out what actually happened before changing anything. The usual causes:
+
+ - the key is defined in a bibliography the document does not load, or under a different spelling;
+ - the entry was dropped when a bibliography was rewritten;
+ - the citation is a leftover pointing at something the paper no longer discusses.
+
+The first two are repaired by restoring or correcting the entry. The third is repaired by removing
+the citation - but only after you have read the sentence and confirmed the paper no longer needs it.
+Report which cause applied to each key. Do not fabricate a bibliography entry to silence a warning:
+if you cannot establish what a key was meant to cite, say so and leave it, and I will handle it.
+
+Any DOI you add must be verified through doi.org content negotiation against title, author,
+container and year before you write it. A DOI that merely resolves is not verified - this project
+has just finished repairing 59 identifiers that resolved to the wrong paper or to nothing.
+
+A THIRD CASE, IF IT IS IN YOUR SCOPE. The auditable-pipeline paper's standalone
+`appendix_full_technical_ledger.tex` fails on `\ScriptOK`, which is not a house convention and is
+defined nowhere. Determine what it was meant to do before defining anything. If you cannot
+establish its intent, report that and leave the file alone rather than guessing - that document is
+a ledger rather than the paper, and a wrong guess there is worse than a known failure.
+
+VERIFY, for every document you touch and every other root in the same directory:
+ - the exact two-command build above exits 0;
+ - the log has zero undefined control sequences, zero undefined citations, zero undefined
+   references, zero multiply-defined labels;
+ - report the page count. Several of these have a stale checked-in PDF that no longer corresponds
+   to the sources, so the new count may differ - that difference is information, report it, do not
+   try to match the old number;
+ - `pdftotext -enc UTF-8` shows no "??" in the body.
+
+RULES:
+ - Change no theorem, proof, hypothesis or section prose. Preamble definitions and bibliography
+   entries are the intended edit.
+ - pdftotext -enc UTF-8 always; the default is Latin-1 here and reports present text as missing.
+ - No revision marks, no scratch files, do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: per paper, what was missing, what you added, the verbatim build command you used, page
+counts, and the full compile results. For citation repairs, the cause per key.

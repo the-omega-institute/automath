@@ -41,9 +41,41 @@ Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Ze
 上一个 agent 是在 latexmk **命令行上补定义**才拿到绿灯，仓库内 `main.pdf` 已过期。
 清理重建实测：7 页残片、53 个未定义控制序列、24 个未解析引用。修复在飞。
 
-**新线索**：`BrumerKramer2019` 这个 key 并非笔误 —— 该 TAMS 论文确有 **2019 年勘误**
-（`10.1090/tran/7792`）。已投稿的 JNT 篇引用它，若所依赖的正是勘误改动之处则属内容问题。
-核查在飞，任务明确要求**若确有影响只许报告、不许改稿**。
+**Brumer–Kramer 勘误：已结案，无影响**（`69175873f`）。该条目**引用它的地方一处也没有** ——
+全目录只出现在两个 `.bib` 里，任何 `.tex`/`.bbl`/`.aux` 中均无,从未进入印出的书目。
+故本文无任何论断依赖它，勘误够不着数学。key 已由 2019 正名为 2014，年份 2013→2014。
+
+---
+
+### ⛔ 全库"能否从自身源码编译"审计（2026-08-17，tick 232）— 比 DOI 更严重
+
+53 个目录、70 个文档全部 `latexmk -C` 后从零重建，**不带任何调用特定参数**。此检查从未跑过。
+完整报告：`tools/chatgpt-oracle/sprint/build_from_source_audit.md`。
+
+**7 个文档根本产不出 PDF**，其中 **5 个是已投稿论文的主文档**：
+
+| 论文 | 未定义宏 | 未解析引用 | 未解析交叉引用 |
+|---|--:|--:|--:|
+| `projection_ontological_mathematics_core_tams` | 17 | 36 | 143 |
+| `submitted_…_finite_window_rigidity_fibonacci_numeration_fq` | 33 | 15 | 111 |
+| `submitted_…_resolution_folding_core_symbolic_dynamics_jnt` | 33 | 15 | 111 |
+| `submitted_…_sharp_three_window_threshold_…_nonlinearity` | 1 | 42 | 144 |
+| `submitted_…_tilt_dynamics_cylinder_information_parry_measure_qtds` | 15 | 37 | 100 |
+| `submitted_…_zero_jitter_information_clocks_parry_gibbs_rigidity_jtp` | 15 | 37 | 100 |
+| `auditable_theory_to_paper_pipeline` / 独立附录账本 | 4（`\ScriptOK`）| 63 | 313 |
+
+除末条外凶手都是 `\leanverified` —— 本仓家规空宏，**5 篇定义、6 篇用而不定义**。
+
+**另 3 篇能编出全长 PDF 但把引用印成 `[?]`**：`zeckendorf_folds`(31)、
+`folded_histograms_siads`(41)、`folded_rotation_histogram`(31)。exit=0、页数正常，故无检查拦得住。
+
+**潜伏机制**：`papers/publication/.gitignore` 排除 `*.pdf`。磁盘上那份 PDF 一直有效且不受版本控制，
+源码却已飘走 —— 文档停止可编译而无人察觉，正是靠这个缝隙。
+
+**不算数的**：`sn-article.tex` 是随稿附带的 Springer Nature 模板，非稿件本身；
+`fibonacci_moduli` 失败的是 cover letter。
+
+修复任务：`tools/chatgpt-oracle/sprint/build_repair_task.txt`，两个 codex 分工在飞（6 篇缺宏 / 3 篇 `[?]` + `\ScriptOK`）。
 
 代理还查出审计本身的三处不足，均已核实并接受：`CostabelMcIntosh2010` 实有正确 DOI（审计误判为无解）；
 `Idziaszek` 在 FUN 而非 SPIRE；`Sanna2025` 的候选 DOI 只返回 slug 无作者，不达标准故删字段。
