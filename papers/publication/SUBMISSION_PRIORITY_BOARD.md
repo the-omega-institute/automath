@@ -59,7 +59,8 @@
 
 
 
-> **TICK 179 — 三篇新目录已成形,均未完工。** 2026_brocot_condensation_critical_fibonacci_renewal_tams(7 tex/1 pdf)、2026_linear_overlap_transients_bounded_zero_pisot_etds(3 tex/2 pdf)、2026_renewal_experiment_equivalence_singular_lan_ejs(4 tex/3 pdf) 三个目录已由各自 agent 建出并在编译;转录自上一 tick 增长约十倍(17.9/13.5/12.0 MB),三者均无 tokens used,不收割、不提交。Oracle 池 1/6 running,A9 跨界任务 26b0b8e8 处于 waiting_response。内存 0.73 GB、缺页 103,三 agent 下正常。
+> **TICK 179 — A8 改写完工并已独立核实入库。** 新论文 `2026_renewal_experiment_equivalence_singular_lan_ejs` 提交 b65417de9 并推送:主文 33 页、补充 22 页、投稿信 2 页,EJS 51%(装配版 24%)。独立核实(不采信 agent 自述):latexmk -C 后手工清空 .aux/.fls/.fdb_latexmk/.xdv/.out/.toc/.log,三遍交替重建全部 exit 0,三份文档 undefined ref / undefined cite / multiply-defined 均为 0;verify_claims.py 12/12,pytest 16/16,SHA256SUMS 5/5 OK;grep 复核被删装置(similarity-orbit、three-inclusion、physical-image、interval-arithmetic、specification test、delta method)在新目录零出现,table 环境零出现;record-to-sample 耦合证明与四阶极点计算确认留在主文。原 detector_shells 目录仅 submission_metadata.md 一处新增伴随论文条目,其余 242 个文件聚合哈希不变。A6、A3 两个 agent 仍在跑(A3 已 git mv 出 2026_cyclic_rank_thresholds_quadratic_simple_parry_etds,43 个文件在暂存区,属在飞状态,本次用 pathspec 限定提交以避开)。A9 跨界任务 26b0b8e8 仍 waiting_response。
+
 
 
 
