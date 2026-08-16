@@ -92,3 +92,12 @@ that the record-to-sample coupling proof must stay in the main article. The
 Bernoulli figure assumes the main paper is brought within about 25 pages; at
 31-35 pages it falls to 11-13 percent. Full report:
 `artifacts/oracle_sprint_A8_recast_value.md`.
+
+## Companion Statistics Article
+
+- Title: Renewal-window equivalence and singular inference at a sampled double pole
+- Directory: `papers/publication/2026_renewal_experiment_equivalence_singular_lan_ejs/`
+- Assessed acceptance: EJS 51 percent, SPA 44 percent, and Bernoulli 21 percent,
+  each plus or minus 7 points.
+- The Bernoulli figure assumes compression to approximately 25 pages; at
+  31--35 pages its assessed range is 11--13 percent.

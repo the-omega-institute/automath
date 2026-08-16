@@ -1,0 +1,110 @@
+\subsection{Latched sampling and rank-one regeneration}
+\label{sec:two-state-model-supp}
+
+This section records a compact realization of the \(n=2\) member.  It is
+included only to connect the serial absorption model to a binary renewal
+record; none of the limit-experiment arguments requires a broader two-state
+representation theory.
+
+\begin{assumption}[Latched two-state sampled counter]
+\label{ass:two-state-counter-supp}
+Fix \((\Gamma,\kappa_{\rm r},\Delta\tau)\in(0,\infty)^3\), put
+\[
+ p=e^{-\Gamma\Delta\tau},\qquad
+ s=e^{-\kappa_{\rm r}\Delta\tau},
+\tag{M1}
+\]
+and define
+\[
+ a=\int_0^{\Delta\tau}\kappa_{\rm r}e^{-\kappa_{\rm r}r}
+ \{1-e^{-\Gamma(\Delta\tau-r)}\}\,dr,
+\qquad
+ b=\int_0^{\Delta\tau}\kappa_{\rm r}e^{-\kappa_{\rm r}r}
+ e^{-\Gamma(\Delta\tau-r)}\,dr.
+\tag{M2}
+\]
+With hidden states ordered as \((R,D)\), the labelled zero and one kernels are
+\[
+ T_0=\begin{pmatrix}p&0\\b&s\end{pmatrix},\qquad
+ T_1=\begin{pmatrix}0&1-p\\0&a\end{pmatrix}.
+\tag{M3}
+\]
+The convention is
+\((T_i)_{XY}=\PP(A_m=i,H_{m+1}=Y\mid H_m=X)\), and formulas at
+\(\Gamma=\kappa_{\rm r}\) are interpreted by continuity.
+\end{assumption}
+
+\begin{lemma}[Boundary derivation of the kernels]
+\label{lem:two-state-kernel-derivation-supp}
+The matrices in \textup{(M3)} are the one-step kernels of the following
+protocol.  From \(R\), an exponential attempt clock of rate \(\Gamma\) either
+rings during the sampling interval, giving output one and latching the counter
+in \(D\) until the boundary, or does not ring, giving output zero and next
+state \(R\).  From \(D\), an exponential recovery clock of rate
+\(\kappa_{\rm r}\) either does not ring, or rings at time \(r\).  After a
+recovery, the attempt clock is run only for the remaining time
+\(\Delta\tau-r\); an attempt gives output one and latches in \(D\), while no
+attempt gives output zero and next state \(R\).  No post-click recovery or
+additional within-bin evolution is permitted.
+\end{lemma}
+
+\begin{proof}
+From \(R\), survival of the attempt clock gives \(T_0(R,R)=p\), and ringing
+gives \(T_1(R,D)=1-p\).  From \(D\), no recovery has probability \(s\) and
+gives \(T_0(D,D)=s\).  Conditional on recovery at \(r\), whose density is
+\(\kappa_{\rm r}e^{-\kappa_{\rm r}r}\), survival of the attempt clock for the
+remaining time gives the integral \(b=T_0(D,R)\), and its complement gives
+\(a=T_1(D,D)\).  The latching rule gives the two zero entries in the first
+column of \(T_1\).  These cases exhaust both rows because \(p+(1-p)=1\) and
+\(s+a+b=1\).
+\end{proof}
+
+\begin{proposition}[Rank-one regeneration and the Palm gap]
+\label{prop:rank-one-renewal-supp}
+For any finite labelled kernel \((\widetilde T_0,\widetilde T_1)\), suppose
+\[
+ \widetilde T_1=c\beta,qquad c=\widetilde T_1\mathbf1,
+\tag{M4}
+\]
+for a fixed probability row \(\beta\).  Every output one then restarts the
+hidden chain from \(\beta\), independently of its pre-event state.  The event
+epochs are renewal epochs and the Palm zero-run mass is
+\[
+ \widetilde g_k=\beta\widetilde T_0^k
+ \widetilde T_1\mathbf1,qquad k\ge0.
+\tag{M5}
+\]
+For \textup{(M3)}, \(T_1=(T_1\mathbf1)e_D^\top\), so \(\beta=e_D^\top\).
+Its Palm survival tail and mass are
+\[
+ S(k)=\PP\{X_\Gamma+X_{\kappa_{\rm r}}>k\Delta\tau\},
+ \qquad g_k=S(k)-S(k+1),
+\tag{M6}
+\]
+where the two variables are independent exponentials with the displayed
+rates.  Thus this model is exactly the \(n=2\) serial member in
+\textup{(1.1)}--\textup{(1.3)}.
+\end{proposition}
+
+\begin{proof}
+Condition \textup{(M4)} says that conditional on a marked transition, the
+post-event hidden distribution is always \(\beta\).  The strong Markov
+property at successive marked transitions therefore gives independent,
+identically distributed zero runs.  Starting from \(\beta\), exactly \(k\)
+zeros followed by a one has probability \textup{(M5)}.
+
+For \textup{(M3)}, both rows of \(T_1\), after normalization, are the point
+mass at \(D\), so the rank-one condition holds.  Starting just after a click,
+the counter must first recover and then attempt.  The continuous waiting time
+is consequently the independent sum in \textup{(M6)}.  For unequal rates,
+\[
+ S(k)=\frac{\Gamma e^{-\kappa_{\rm r}k\Delta\tau}
+ -\kappa_{\rm r}e^{-\Gamma k\Delta\tau}}
+ {\Gamma-\kappa_{\rm r}},
+\tag{M7}
+\]
+and its continuous limit at the common rate \(\lambda\) is
+\(S(k)=(1+\lambda k\Delta\tau)e^{-\lambda k\Delta\tau}\).  These are the
+two simple-pole and confluent double-pole forms used in
+\Cref{cor:two-state-collision-main}.
+\end{proof}
