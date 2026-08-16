@@ -1,6 +1,6 @@
 # Submission metadata
 
-Title: Brocot Condensation and Critical Fibonacci Renewal
+Title: Total-Variation Condensation in Denominator-Weighted Brocot Layers, with an Application to Critical Fibonacci Renewal
 
 Authors: Haobo Ma; Wenlin Zhang
 
@@ -14,7 +14,7 @@ Assessed substantive editorial/referee probability:
 - JNT fallback: 82--90% (central estimate 86%)
 
 Estimated published length: 30--34 pages. The 12-point AMS manuscript build
-is 19 pages; the estimate refers to the denser published format and is a
+is 20 pages; the estimate refers to the denser published format and is a
 check rather than a target.
 
 2020 Mathematics Subject Classification: 11A55, 11B39, 60F05, 60K05

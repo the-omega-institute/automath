@@ -1,4 +1,4 @@
-# Brocot Condensation and Critical Fibonacci Renewal
+# Total-Variation Condensation in Denominator-Weighted Brocot Layers, with an Application to Critical Fibonacci Renewal
 
 Build the article with latexmk -pdfxe main.tex.
 

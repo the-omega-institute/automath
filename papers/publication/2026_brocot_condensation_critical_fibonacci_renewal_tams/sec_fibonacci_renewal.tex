@@ -1,5 +1,12 @@
 \section{The Fibonacci generator renewal}\label{sec:fibonacci-renewal}
 
+Weinstein's free-generator classification supplies the coordinates and orbit
+branches used in this application.  We verify their indexing and weighted
+orbit count in \Cref{prop:weighted-generator-renewal}.  The denominator-layer
+asymptotic in \Cref{thm:arithmetic-denominator-layer} first enters in the
+local cost-tail calculation of \Cref{lem:critical-tail-summation}; the
+terminal application is \Cref{cor:classical-fibonacci-critical-asymptotic}.
+
 Let \(F_0=0,F_1=1\), and \(F_{j+2}=F_{j+1}+F_j\).  The classical Fibonacci
 partition function is
 \begin{equation}
@@ -71,20 +78,7 @@ word \(w=(x_1,\ldots,x_r)\in\mathcal A^r\), with
 \]
 and give the empty word cost zero and weight one.
 
-\begin{proposition}[Weighted generator renewal]
-\label{prop:weighted-generator-renewal}
-For every real \(s\) and \(m\ge1\),
-\begin{equation}
- Z_m^R(-s)
- =1+u_m(s)+2\sum_{j=1}^{m-1}u_j(s)
- =2\sum_{j=0}^{m-1}u_j(s)+u_m(s)-1.
- \label{eq:standard-layer-renewal}
-\end{equation}
-Moreover, \(u_j(s)\) is exactly the total inverse-\(s\) weight of the
-Weinstein generators of cost \(j\).
-\end{proposition}
-
-\begin{proof}
+\begin{proof}[Proof of \Cref{prop:weighted-generator-renewal}]
 Under Weinstein's free-monoid bijection, a generating number \(g\)
 corresponds uniquely to a nonempty word
 \[
@@ -140,26 +134,23 @@ The coefficient identity changes this one-orbit layer count into
 \eqref{eq:standard-layer-renewal}.
 \end{proof}
 
-\begin{corollary}[Layer generating function and adjacent layers]
-\label{cor:fibonacci-layer-generating-function}
-As a formal power series in \(z\),
+As formal power series consequences of
+\eqref{eq:standard-layer-renewal},
 \begin{equation}
  \sum_{m\ge1}Z_m^R(-s)z^m
  =\frac{(1+z)U_s(z)-1}{1-z}
  =\frac{1+z}{(1-z)(1-B_s(z))}-\frac1{1-z}.
  \label{eq:fibonacci-layer-generating-function}
 \end{equation}
-Equivalently, the change between two adjacent standard Fibonacci layers is
+and the change between adjacent standard Fibonacci layers is
 \begin{equation}
  Z_{m+1}^R(-s)-Z_m^R(-s)=u_m(s)+u_{m+1}(s),
  \qquad m\ge1.
  \label{eq:adjacent-fibonacci-layer-increment}
 \end{equation}
-\end{corollary}
-
-\begin{proof}
-Multiply the second identity in \eqref{eq:standard-layer-renewal} by \(z^m\)
-and sum over \(m\ge1\).  Formal rearrangement gives
+Indeed, multiplying the second identity in
+\eqref{eq:standard-layer-renewal} by \(z^m\) and summing over \(m\ge1\)
+gives
 \begin{align*}
  \sum_{m\ge1}Z_m^R(-s)z^m
  &=\frac{2z}{1-z}U_s(z)+U_s(z)-1-\frac z{1-z}\\
@@ -168,47 +159,25 @@ and sum over \(m\ge1\).  Formal rearrangement gives
 Inserting \eqref{eq:weighted-renewal-generating-function} proves the second
 form in \eqref{eq:fibonacci-layer-generating-function}.  Subtracting
 \eqref{eq:standard-layer-renewal} at \(m\) from the same identity at
-\(m+1\) gives \eqref{eq:adjacent-fibonacci-layer-increment}.  Thus the
-standard layer sum, its discrete layer derivative, and the renewal
-generating function are exact transforms of one another.
-\end{proof}
+\(m+1\) gives \eqref{eq:adjacent-fibonacci-layer-increment}.
 
-\begin{lemma}[Letter words and renewal coefficients]
-\label{lem:letter-word-renewal-coefficients}
+\paragraph{Renewal interpretation.}
 For every real \(s\) and \(j\ge0\),
 \begin{equation}
  u_j(s)=\sum_{r\ge0}
  \sum_{\substack{w\in\mathcal A^r\\c(w)=j}}Q(w)^{-s}.
  \label{eq:renewal-coefficient-word-sum}
 \end{equation}
-For fixed \(j\) the outer sum is finite.  If \(B_s(1)=1\), so that
-\(b_\ell(s)\) is a probability mass function, and if
+For fixed \(j\) the outer sum is finite because every letter has cost at
+least three.  This is the coefficient of \(z^j\) in
+\(\sum_{r\ge0}B_s(z)^r=U_s(z)\).  If \(B_s(1)=1\) and
 \(C_1,C_2,\ldots\) are independent with
-\(\Pr\{C_i=\ell\}=b_\ell(s)\), then
+\(\Pr\{C_i=\ell\}=b_\ell(s)\), the same Cauchy product gives
 \begin{equation}
  u_j(s)=\sum_{r\ge0}\Pr\{C_1+\cdots+C_r=j\}.
  \label{eq:probabilistic-renewal-mass}
 \end{equation}
-Here the term \(r=0\) is \(1\) for \(j=0\) and \(0\) otherwise.
-\end{lemma}
-
-\begin{proof}
-The coefficient of \(z^j\) in \(B_s(z)^r\) is
-\[
- \sum_{\substack{\ell_1+\cdots+\ell_r=j\\\ell_i\ge1}}
- b_{\ell_1}(s)\cdots b_{\ell_r}(s).
-\]
-Expanding each letter sum in
-\eqref{eq:renewal-letter-series} turns this expression into the inner sum
-in \eqref{eq:renewal-coefficient-word-sum}.  Every letter has cost at least
-three, so only \(r\le j/3\) can occur.  Summing over \(r\) and using the
-formal geometric series
-\(\sum_{r\ge0}B_s(z)^r=(1-B_s(z))^{-1}\) proves
-\eqref{eq:renewal-coefficient-word-sum}.  Under the normalization
-\(B_s(1)=1\), the same Cauchy product is the convolution probability for
-the sum of \(r\) independent costs, which gives
-\eqref{eq:probabilistic-renewal-mass}.
-\end{proof}
+where the term \(r=0\) is \(1\) for \(j=0\) and \(0\) otherwise.
 
 The critical normalization follows directly from the totient Dirichlet
 series.  For \(s>2\), every denominator \(q\ge2\) occurs with its
@@ -245,9 +214,9 @@ Panov and Liehl \cite{Panov1982,Liehl1983} bounds the sum of
 This verifies the finite-mean hypothesis used in the critical renewal
 argument below.
 
-Combining the normalization with
-\Cref{lem:letter-word-renewal-coefficients,prop:weighted-generator-renewal}
-puts the identity needed in the next section in purely probabilistic form.
+Combining the normalization with the renewal interpretation and
+\Cref{prop:weighted-generator-renewal} gives the probabilistic identity used
+in the next section.
 If \(S_0=0\) and \(S_r=C_1+\cdots+C_r\), then
 \begin{equation}
 \begin{aligned}
@@ -259,32 +228,3 @@ If \(S_0=0\) and \(S_r=C_1+\cdots+C_r\), then
 \end{aligned}
  \label{eq:critical-weighted-renewal-identity}
 \end{equation}
-Thus the Fibonacci layer is not merely comparable with a renewal sum: it
-is exactly a partial sum of the renewal mass, with the terminal renewal mass
-and the multiplicity-one endpoint displayed separately.
-
-There is also a pathwise form of the same identity.  Since every increment
-is at least three, the random count
-\[
- \mathcal N_m:=\card{\{r\ge0:S_r<m\}}
-\]
-is finite.  Tonelli's theorem and strict increase of \(S_r\) give
-\begin{align*}
- \EE\mathcal N_m
- &=\sum_{r\ge0}\Pr\{S_r<m\}
- =\sum_{j=0}^{m-1}u_j(\sigma_0),\\
- \Pr\{\text{\(m\) is a renewal epoch}\}
- &=u_m(\sigma_0).
-\end{align*}
-Consequently,
-\begin{equation}
- Z_m^R(-\sigma_0)
- =2\EE\mathcal N_m
-  +\Pr\{\text{\(m\) is a renewal epoch}\}-1.
- \label{eq:critical-layer-renewal-count}
-\end{equation}
-The factor two is the pair of noninitial orbit branches, the probability
-term is the single branch entering at layer \(m\), and the subtraction
-removes the extra copy of the multiplicity-one endpoint introduced by
-\(u_0=1\).  This identifies each term of the weighted layer formula before
-any asymptotic renewal theorem is applied.
