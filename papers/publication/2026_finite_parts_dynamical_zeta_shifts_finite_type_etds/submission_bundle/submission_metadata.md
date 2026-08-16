@@ -4,7 +4,7 @@ Journal: Ergodic Theory and Dynamical Systems
 
 Article type: Research Article
 
-Title: Finite radial determination of Frobenius profiles for odd-Adams-invariant abelian two-group extensions of shifts of finite type
+Title: Finite radial determination under a Mahler rationality hypothesis for odd-Adams-invariant abelian two-group extensions of shifts of finite type
 
 Authors:
 
@@ -24,8 +24,9 @@ Let G be a finite abelian 2-group, and assume that the twisted determinants
 of two one-step G-cocycles are invariant under every odd Adams operation.
 The cocycles lie over primitive edge shifts whose vertex counts are at most
 V; the bases need not be the same. For the primitive length-element counts
-p_(n,g), put E_g(y)=sum_(n>=1) p_(n,g) log(1-y^n). Without a twisted-gap
-hypothesis, equality of every element profile at
+p_(n,g), put E_g(y)=sum_(n>=1) p_(n,g) log(1-y^n). Assume the named statement
+(KN85) quoted in the paper. Without a twisted-gap hypothesis, equality of
+every element profile at
 2V ceil(log_2(4V)) distinct radii in the common open Perron interval forces
 equality of every p_(n,g), provided that one sampled radius is algebraic.
 The number of radial locations is independent of the rank and exponent of G.
@@ -33,10 +34,13 @@ The hypothesis is automatic for G=(C2)^r and permits genuine holonomy of
 orders 4, 8, and beyond. The inverse mechanism is arithmetic: a parity-free
 rational critical p-Mahler construction combines an elementary
 linear-exponent denominator estimate with Kumiko Nishioka's verified
-special-value theorem. The algebraic-to-rational implication attributed to
-Keiji Nishioka is isolated as the unverified assumption (KN85) in the
-conditional linear theorem. Determinant parity gives a stronger integral
-refinement. For the multiplicative certificate itself, an input-only
+special-value theorem. The finite-sampling and algebraic-collision upper
+bounds rest on (KN85), a named statement attributed to a published 1985 paper
+whose bibliographic record is verified but whose printed theorem the authors
+were unable to consult; the exact statement required is quoted in the paper.
+All results not explicitly carrying (KN85) are unconditional. Determinant
+parity gives a stronger integral refinement. For the multiplicative
+certificate itself, an input-only
 divisor estimate gives an O(D log D) degree bound in terms of the reduced
 input degree alone. Its order is sharp abstractly and on standard realizable
 C2-cover zeta ratios. Explicit height and fixed-p bit bounds are supporting
@@ -47,12 +51,12 @@ groups, recovery holds from a radial set with an interior accumulation point;
 already for C3, Adams--Mobius inversion exhibits the obstruction to a finite
 bound by coupling determinant logarithms at infinitely many powers.
 
-The manuscript also gives an unconditional sharp squarefree Mahler bound, a
-collision--jet inequality, and odd-prime collision families with delayed
-first discrepancy. The stronger prime-primary linear theorem and the binary
-linear upper bound are conditional on the explicitly quoted assumption
-(KN85); they are not the headline and do not close the sampling order
-unconditionally.
+In particular, the manuscript gives an unconditional sharp squarefree Mahler
+bound, a collision--jet inequality, and odd-prime collision families with delayed
+first discrepancy. The realizable sampling lower bound is also unconditional.
+The headline determination theorem, the stronger prime-primary linear theorem,
+and the binary upper bounds are conditional on the explicitly quoted
+assumption (KN85), so the sampling order is not closed unconditionally.
 
 Keywords: one-sided edge shift; finite-group extension; inverse problem;
 Mahler function; twisted determinant; Adams operation; primitive orbit;
@@ -81,8 +85,8 @@ not hide the scripts or their readable outputs inside an archive.
 ## Venue and paper architecture
 
 ETDS remains a defensible ambitious submission because the principal result
-is the dynamical inverse theorem: finite radial determination of represented
-periodic data for odd-Adams-invariant finite abelian two-group extensions,
+is the conditional dynamical inverse theorem: finite radial determination of
+represented periodic data for odd-Adams-invariant finite abelian two-group extensions,
 with cross-base recovery, rank- and exponent-independent radial depth, exact
 collisions, and realizable lower bounds. This is a central dynamical problem
 at the interface with number theory and combinatorics. The Mahler theorem is a
@@ -113,7 +117,8 @@ Ostrowski (1968) treats the linear multiplicative equation. Kumiko Nishioka's
 bibliographic record is verified, but the original theorem statement is not:
 the pages are paywalled and the zbMATH review is only a secondary restatement.
 The precise algebraic-to-rational implication needed for the conditional
-linear theorem is quoted as assumption `(KN85)`. The
+lifting and sampling results is quoted as assumption `(KN85)` in every result
+that uses it. The
 claimed contribution is limited to parity-compatible algebraic collision
 lifting in the dynamical setting, the input-only multiplicative-certificate
 divisor estimate and its sharp lower-bound family, the supporting height and
