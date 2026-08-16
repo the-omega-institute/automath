@@ -12,6 +12,28 @@
 
 深化冲刺（ChatGPT 5.6 sol pro chat 模式多轮追问 + codex 逐条检验 + 独立复核）。**一篇论文在 Oracle 开始复述已整合内容（即新一轮全判 `ALREADY-IN-PAPER`）时判定饱和、停跑**，此表随即记录其最终目标期刊。
 
+### ⛔ 全库 DOI 完整性审计（2026-08-17，tick 229）— 投稿前必须清零
+
+对 `papers/publication/` 下全部 34 个 `.bib`、1176 条目、517 个不同 DOI，逐个查 Crossref REST API，
+Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Zenodo/figshare 注册在 DataCite，
+不在 Crossref，靠第二遍区分）。**59 个 DOI 有缺陷，横跨 16 个论文目录**，分两类：
+
+| 类 | 现象 | 条数 | 危险处 |
+|---|---|--:|---|
+| **A** | DOI 能解析，但指向**另一篇完全无关的文献** | 24 | 编译、书目双向配平、任何"能否解析"的检查**全部通过** |
+| **B** | DOI **根本不存在** | 35 | 前缀正确、后缀近似而错，肉眼极难辨 |
+
+典型：JST 篇 `BrownFullerPittsReznikoff2024` 与 `JreisLefevre2024` **两条 DOI 互换**；
+`Ruelle1976` 指向 Lachaud 的 *Variations sur un thème de Mahler*；
+`KaniRosen1989`（**已投稿** JNT 篇）指向 1871 年 Geiser 的一则短记。
+被引文献本身都是真的，错的是标识符——这正是既有检查集全都看不见的一层。
+
+完整表与复现命令：`tools/chatgpt-oracle/sprint/citation_doi_audit.md`。
+修复任务：`tools/chatgpt-oracle/sprint/doi_repair_task.txt`，三个 codex 按目录分组并行，互不重叠。
+
+> 只有 `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` 与两篇派生新稿的书目零缺陷。
+> 已投稿的 `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` 有 3 个不存在 + 2 个错指，最急。
+
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
 | 篇 | 目录 | 页 | 最新裁决 | **去向** |
