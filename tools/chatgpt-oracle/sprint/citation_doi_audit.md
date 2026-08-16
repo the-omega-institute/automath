@@ -137,6 +137,15 @@ Fifteen entries carry an arXiv identifier. One is wrong:
 |---|---|---|---|---|
 | `2026_gluing_failure_visible_quotients_pure_ext_blind_spots_apal` | `Caru2018` | `arXiv:1805.06735` | Towards a Complete Cohomology Invariant for Non-Locality and Contextuality | Properties of ferromagnetic Josephson junctions for memory applications - Caruso, Massarotti et al. |
 
-The remaining fourteen could not be checked: `export.arxiv.org` began returning HTTP 429 to this
-address partway through and did not recover. **They are unverified, not verified** - the check must
-be repeated before submission. Absence of a result here means the lookup failed, nothing more.
+The remaining fourteen were checked on a later attempt, after the rate limit lapsed. Twelve match
+their entries. Two do not:
+
+| paper | key | identifier | cited as | what it actually is |
+|---|---|---|---|---|
+| `2026_auditable_theory_to_paper_pipeline` | `EMLZeckendorfRoute` | `arXiv:2603.21852` | Single-Primitive Universality Hierarchy and Finite-Fiber Certificates - Ma and Zhang | All elementary functions from a single binary operator - Odrzywolek |
+| `2026_joukowsky_elliptic_godel_lorentz_mahler_capacity` | `Trieu2024K3Mahler` | `arXiv:2412.00893` | Mahler Measures and L-Functions of K3 Surfaces | The Mahler measure of exact polynomials and special L-values of K3 surfaces - Trieu |
+
+The first is the worse of the two, and it is ours: an unpublished manuscript by this project's own
+authors has been given a third party's arXiv number. The same identifier is cited correctly, for
+Odrzywolek's paper, in `2026_single_primitive_universality_hierarchy`. The second is the right paper
+under a paraphrased title, which should be replaced by the registered one.
