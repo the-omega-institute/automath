@@ -18,10 +18,10 @@
 |---|---|--:|---|---|
 | **A2** | `cayley_chebyshev_..._jfa` | **32+0** | **重组已执行并核实**：87+33 → 32；stable 脊柱为唯一主线，正文不再指向任何补充证明 | **JFA**（待重新评）|
 | **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **18+0** | **ETDS 小修已执行并核实**：第 5 节删除、防御层清除、引言立 Theorem A/B/C、四页补充不再提交 | **ETDS 75–77%** |
-| **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
+| **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **30+0** | **ETDS 大修已执行并核实**：36+15 → 30；16 条孤儿文献清理中 | **ETDS** |
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
 | **A5** | `finite_parts_..._etds` | **52+19** | **四条新定理已验证：三条无条件、两条条件于未核实的 (KN85)**；主定理经查也依赖 (KN85) 且未标明，修复中 | ETDS |
-| **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | 发育完成:19→27 页,更新与吸引域假设逐条验证,经典 Fibonacci 配分函数推论单列,新增数值校验确认 b_C=8 | **TAMS 55-65%**(JNT 82-90%)|
+| **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | **TAMS 审稿人裁决：Major revisions** | **TAMS** |
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **32+7** | **JNT 大修已执行并核实**：52+19 → 32+7；四个被取代的定理族直接删除 | **JNT** |
 | **A7** | `upper_fibers_..._fq` | 36+36 | Theorem 6.6 已证,新颖性 75-80%;评估者明言不进 JNT 档 | **Fibonacci Quarterly**(档位不变)|
 | **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **32+22** | **EJS 小修已执行并核实**：第 4 节重排、三条补充结果陈述入主文、防御层清除 | **EJS 51%** |
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 201 — A3-B 入库，A6-A 裁决到齐：九篇全部受检完毕。** A3-B 提交 39ec099e4（36+15 → 30 页，源码 -3061/+493，编号结果 64 → 29）。第一项的二选一取手艺路线且**未编造**：Theorem 4.8 对 m>=4 仍只给界、数学内容与改前逐字节相同。**本 tick 查出第八类缺陷**：删掉补充材料与七个节后，**16 条文献成为孤儿仍在打印**（打印 41、正文引 25）。因为书目是字面的 thebibliography 环境而非 BibTeX——BibTeX 会静默略去未引用条目，而 thebibliography 里每个 ibitem 无论是否被引都会印出来，所以 LaTeX 不给任何警告、日志全绿、逐页读也会滑过。**我头两次核查返回 0，是我的工具问题**（Python 递归 glob 未匹配到文件、首版 grep 模式也不对），换用 main.aux 的 bibcite 与源码 \cite 键集对比后与对方完全一致。清理已派，并明写**不得为"救活"条目而往正文塞引用**。**核验清单增至八条**：打印书目与被引键集须双向一致。**A6-A（TAMS）裁决：Major revisions**，已存 artifacts。至此九篇全部过了录用问法，分布：**两篇小修、六篇大修、一篇退修重投**，无一篇是"直接可投"。A9 第三次 extraction_failure 后已再次重发（f893974c-3ecf-4a85-802a-0ea39b3cf8c3）；A7 waiting_response。内存 1.44 GB、缺页 938、四 agent 在飞、无孤儿。
 
 > **TICK 200 — 空转：四个 agent 均在飞，两发 Oracle 因 extraction_failure 已重发。** A3-B 修订、A5 主定理依赖标注、A4 大修三份转录均无 tokens used；不收割。A6-A 的 house-style（fb5ac1c9）仍 waiting_response；A7 与 A9 返回 extraction_failure（worker 端抓取失配，非协议问题），已取消并按原协议间隔 30 秒重发：A7 → 60b10b45-850c-45ed-b10a-a677cc747784、A9 → a37af77c-95ca-4f30-9172-25a8d91abaac。内存：首采缺页 3399/s，复采 143.7/32.6/50.4、内存 1.80→1.98 GB，仍属成批读入而非频繁换页（自由内存同时上升），四个 agent 均处中途，不减。无孤儿。本 tick 无实质产出，属正常等待状态。
 
