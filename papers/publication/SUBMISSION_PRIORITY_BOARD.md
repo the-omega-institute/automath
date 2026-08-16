@@ -31,6 +31,17 @@ Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Ze
 完整表与复现命令：`tools/chatgpt-oracle/sprint/citation_doi_audit.md`。
 修复任务：`tools/chatgpt-oracle/sprint/doi_repair_task.txt`，三个 codex 按目录分组并行，互不重叠。
 
+**修复进度（tick 231）**：组 1、组 2 已完成（11 篇），组 3 在跑（6 篇，含已投稿 JNT 篇）。
+我方独立复跑全库 DOI 校验：**A 类 0、B 类 0**，仅余 22 个 DataCite 标识符（arXiv/LIPIcs/Zenodo/
+figshare，本就不在 Crossref，均能解析）。清理重建复核在跑。
+
+代理还查出审计本身的三处不足，均已核实并接受：`CostabelMcIntosh2010` 实有正确 DOI（审计误判为无解）；
+`Idziaszek` 在 FUN 而非 SPIRE；`Sanna2025` 的候选 DOI 只返回 slug 无作者，不达标准故删字段。
+另有 14 条不只是 DOI 错、**条目本身**（卷期页作者刊名）也错，已按权威元数据订正。
+
+**arXiv 标识符另查出 2 处**（尚未修）：`EMLZeckendorfRoute` 把 Odrzywołek 的 arXiv 号安在**我方
+自己的未刊稿**上；`Trieu2024K3Mahler` 标题是转述而非注册标题。
+
 > 只有 `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` 与两篇派生新稿的书目零缺陷。
 > 已投稿的 `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` 有 3 个不存在 + 2 个错指，最急。
 
