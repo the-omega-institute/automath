@@ -7,271 +7,126 @@ ROOT = Path(__file__).resolve().parents[1]
 INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
 
 
-def read_tex_source(path: Path) -> str:
-    """Read a TeX source together with any local input wrappers."""
-
+def expand(path: Path, seen: set[Path] | None = None) -> str:
+    seen = set() if seen is None else seen
+    resolved = path.resolve()
+    if resolved in seen:
+        return ""
+    seen.add(resolved)
     source = path.read_text(encoding="utf-8")
 
-    def expand(match: re.Match[str]) -> str:
+    def replace(match: re.Match[str]) -> str:
         child = ROOT / match.group(1)
         if child.suffix == "":
             child = child.with_suffix(".tex")
-        return read_tex_source(child)
+        return expand(child, seen)
 
-    return INPUT_RE.sub(expand, source)
+    return INPUT_RE.sub(replace, source)
 
 
-class StableSpineManuscriptTests(unittest.TestCase):
-    def test_main_article_keeps_the_restored_article_architecture(self) -> None:
-        main = (ROOT / "main.tex").read_text(encoding="utf-8")
+class StableResubmissionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.main = (ROOT / "main.tex").read_text(encoding="utf-8")
+        cls.active = expand(ROOT / "main.tex")
 
-        self.assertIn(r"\input{sec_verified_A2_results}", main)
-        self.assertIn(r"\input{sec_fractional_heat_relative_entropy}", main)
-        self.assertIn(r"\input{bibliography_shared}", main)
-        self.assertNotIn(r"\input{sec_stable_entropy_spine}", main)
-        for article_input in (
-            r"\input{sec_entropy_asymptotics}",
-            r"\input{sec_entropy_30_eighth_defect_layer}",
-            r"\input{sec_gram_space}",
-            r"\input{sec_strip_00_poisson_image}",
-            r"\input{sec_strip_20_symbol_sampling}",
-            r"\input{sec_strip_30_cardinal_observation}",
+    def test_active_graph_is_stable_only(self) -> None:
+        required = (
+            r"\input{sec_fractional_heat_relative_entropy}",
+            r"\input{sec_verified_A2_results}",
+            r"\input{sec_sharpness_poisson_application}",
+            r"\input{sec_stable_convention_appendix}",
+        )
+        removed = (
+            "sec_cayley_gate",
+            "sec_haar_pullback",
+            "sec_entropy_asymptotics",
+            "sec_entropy_30_eighth_defect_layer",
+            "sec_gram_space",
+            "sec_strip_00_poisson_image",
+            "sec_strip_20_symbol_sampling",
+            "sec_strip_30_cardinal_observation",
+        )
+        for item in required:
+            self.assertIn(item, self.main)
+        for item in removed:
+            self.assertNotIn(item, self.main)
+
+    def test_no_supplement_or_relocation_interface_remains(self) -> None:
+        self.assertNotIn(r"\relocatedproof", self.active)
+        self.assertNotIn("Supplementary Material", self.active)
+        self.assertNotIn("supplement", self.main.lower())
+
+    def test_retained_flagship_results_are_present(self) -> None:
+        for label in (
+            "thm:two-stable-heat-flow-relative-entropy",
+            "thm:high-dimensional-kl-moment-threshold",
+            "thm:all-order-stable-first-unmatched-moment",
+            "thm:abstract-positive-tail-jet-kernel",
+            "thm:stable-arbitrary-order-law-by-law-decomposition",
         ):
-            self.assertIn(article_input, main)
+            self.assertEqual(self.active.count(rf"\label{{{label}}}"), 1)
 
-    def test_stable_tail_decomposition_is_stated_and_proved(self) -> None:
-        theorem_path = ROOT / "sec_verified_A2_results.tex"
-        theorem_source = read_tex_source(theorem_path)
-
+    def test_named_proof_chain_is_integrated(self) -> None:
         required = (
-            r"\label{thm:stable-law-by-law-decomposition}",
-            r"\mathcal Q_{\alpha,d}(\Sigma)s^{-4}",
-            r"\int_{\{|x|>s\}}",
-            r"\frac{p_1^{(\alpha,d)}(y-x/s)}",
-            r"\Phi(V_s^\nu)",
-            r"o(s^{-4})",
-            r"\|R_s\|_\infty+\|R_s\|_{L^1(\Omega_{\alpha,d})}=o(s^{-2})",
-            r"\int V_s^\nu\dd\Omega_{\alpha,d}=\tau_s",
-            r"No regular-variation, absolute-continuity, or moment hypothesis above order two",
-        )
-        for text in required:
-            self.assertIn(text, theorem_source)
-
-    def test_decomposition_theorem_has_one_source(self) -> None:
-        label = r"\label{thm:stable-law-by-law-decomposition}"
-        sources = list(ROOT.glob("*.tex"))
-        occurrences = sum(
-            path.read_text(encoding="utf-8").count(label) for path in sources
-        )
-        self.assertEqual(occurrences, 1)
-
-    def test_arbitrary_order_proxy_proof_closure_is_explicit(self) -> None:
-        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
-        required = (
+            "Stable critical translation remainder",
+            "Two-background critical Bregman transfer",
             "Two-background KL perturbation",
-            r"H'(t)",
-            r"H''(t)",
-            r"H'''(t)",
-            r"\|A_{p,s}^\lambda-1\|_1",
-            r"\|A_{p,s}^\nu-A_{p,s}^\eta\|_1",
-            r"\label{eq:abstract-tail-normalized-proxy-entropy}",
             "Bounded-score translate entropy",
-            r"\label{cor:arbitrary-tail-defect-positive-moment-condition}",
-            r"\label{cor:arbitrary-tail-defect-nonvacuousness}",
-        )
-        for text in required:
-            self.assertIn(text, source)
-
-    def test_abstract_kernel_theorem_and_membership_audit_are_explicit(self) -> None:
-        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
-        required = (
+            "Moving-ball probability separation",
+            "Annular fractional Green closure",
             "Abstract positive tail-jet kernel theorem",
-            r"\label{thm:abstract-positive-tail-jet-kernel}",
-            r"\omega_{p,r}(t)",
-            "Closure and verified kernel classes",
-            "invertible affine images",
-            "finite tensor products",
-            "finite positive mixtures",
-            "Poisson kernel",
-            "multivariate Student kernel",
-            "Gaussian mechanism boundary",
-            r"\partial^\gamma g/g=(-1)^{|\gamma|}H_\gamma",
-            "bounded-score/additive branch",
-            "unbounded-score/multiplicative or exponential-score",
         )
-        for text in required:
-            self.assertIn(text, source)
+        for title in required:
+            start = self.active.index(title)
+            self.assertIn(r"\begin{proof}", self.active[start:])
 
-        self.assertNotIn(r"\textup{(K3)}", source)
-        self.assertIn(
-            r"\begin{corollary}[Stable specialization:",
-            source,
-        )
-
-    def test_fixed_scale_robustness_scope_and_rigidity_are_explicit(self) -> None:
-        source = read_tex_source(ROOT / "sec_verified_A2_results.tex")
-        required = (
-            r"((\chi^\nu,\chi^\eta),H)",
-            "No relation between",
-            "Sharpness of the inner exclusion",
-            r"\tau_{s,\chi}^\lambda=\kappa",
-            r"(1+\kappa^2)\mathcal Q_{\alpha,d,r}(\Delta_r)",
-            r"\widetilde A_s^{\lambda;\boldsymbol\chi,H}",
-            r"\widetilde{\mathcal E}_{r,s}^{\boldsymbol\chi,H}",
-            "normalization rules other than",
-            "Asymptotic coefficient rigidity inside a prescribed ansatz",
-            "not a uniqueness, canonicity, or entropy-minimality theorem",
-        )
-        for text in required:
-            self.assertIn(text, source)
-
-        abstract = (ROOT / "main.tex").read_text(encoding="utf-8")
-        intro = read_tex_source(ROOT / "sec_introduction.tex")
-        self.assertIn("either additive or multiplicative mass normalization", abstract)
-        self.assertIn("not every reasonable", intro)
-        self.assertNotIn("robust at its full resolution", intro)
-        self.assertNotIn("partial rigidity", abstract + intro + source)
-
-    def test_active_tex_sources_obey_presentation_constraints(self) -> None:
-        for path in ROOT.glob("*.tex"):
-            source = path.read_text(encoding="utf-8")
-            self.assertLess(
-                len(source.splitlines()),
-                800,
-                f"{path.name} must remain below 800 lines",
-            )
-            self.assertNotRegex(source, r"(?i)TODO[^\n]*revision")
-
-    def test_literature_audit_names_all_requested_indexes(self) -> None:
-        audit = (ROOT / "artifacts" / "literature_check.md").read_text(
-            encoding="utf-8"
-        )
-        for index in ("arXiv", "Crossref", "Semantic Scholar", "zbMATH"):
-            self.assertIn(index, audit)
-        self.assertIn("Ishige--Kawakami--Michihisa", audit)
-        self.assertIn("Klimsiak and A. Rozkosz", audit)
-
-    def test_two_stable_flow_theorem_has_pilot_six_parts_and_domain_closure(
-        self,
-    ) -> None:
-        source = (ROOT / "sec_fractional_heat_relative_entropy.tex").read_text(
-            encoding="utf-8"
-        )
-        required = (
-            r"\label{lem:stable-quotient-pilot}",
-            r"\label{thm:two-stable-heat-flow-relative-entropy}",
-            r"\widehat p_t(\xi)=e^{-t|\xi|^\alpha}",
-            r"c_{d,\alpha}",
-            r"\Gamma(1-\alpha/2)",
-            r"\Lambda(a,b):=a\log\frac ab-a+b",
-            r"\label{eq:stable-flow-compact-window-domain}",
-            r"\label{eq:stable-flow-dissipation-definition}",
-            r"\label{eq:stable-flow-debruijn-identity}",
-            r"\label{eq:stable-flow-w1-decay}",
-            r"\label{eq:stable-flow-tail-integral}",
-            r"\label{eq:stable-reference-integral-representation}",
-            r"\label{eq:johnson-stable-interpolation-representation}",
-            r"\label{lem:annular-fractional-green-closure}",
-            r"A_{\varepsilon,R}\varphi\longrightarrow",
-            r"f_t,g_t\in W^{2,1}(\RR^d)",
-            "both noncompact Green pairings close",
-            "No moment margin beyond",
-            "transparent sufficient hypothesis",
-            "optimality claim",
-            "does not",
-            "all isotropic unimodal",
-            r"Af_t=-\partial_t f_t",
-            r"Ag_t=-\partial_t g_t",
-            r"\int A_{\varepsilon,R}g_t\dd x=0",
-            r"\int Ag_t\dd x=0",
-            r"\int(u_t-1)Ag_t",
-            r"finite-first-moment consequence",
-            r"W_1(\mu,\nu)",
-            "stable-continuum measure-data domain and endpoint theorem",
-            "we do not identify the",
-        )
-        for text in required:
-            self.assertIn(text, source)
-
-        theorem = source.split(
-            r"\label{thm:two-stable-heat-flow-relative-entropy}", 1
-        )[1].split(r"\end{theorem}", 1)[0]
-        self.assertEqual(theorem.count(r"\item"), 6)
-
-    def test_named_problem_audit_records_printed_questions_and_status(self) -> None:
-        audit = (ROOT / "artifacts" / "tier2_named_problem_audit.md").read_text(
-            encoding="utf-8"
-        )
-        required = (
-            "Johnson, Open Problem 1",
-            "corresponding result for the MMSE score",
-            "Johnson, Open Problem 4",
-            "representation of $D(f \\Vert g_s^{(\\alpha)})$ as an integral",
-            "Johnson, Open Problem 6",
-            "more general (non-symmetric) families of stable laws",
-            "No later source located",
-            "Exact nonlocal Bregman representation proved",
-            "not claim to solve the problem in the specific form",
-            '"using (17)."',
-        )
-        for text in required:
-            self.assertIn(text, audit)
-
-    def test_cauchy_interpolation_integral_representation_is_complete(self) -> None:
-        source = read_tex_source(ROOT / "sec_doob_phi_entropy.tex")
-        required = (
-            r"\label{thm:johnson-cauchy-integral-representation}",
-            r"g_q=P_{q+s}=P_q*P_s",
-            r"D_{\rm KL}(\mu\|P_s)",
-            r"\int_0^\infty \mathcal J_{\mu,s}(q)\dd q",
-            r"q=\frac{st}{1-t}",
-            r"\frac{s}{(1-t)^2}",
-            r"joint lower semicontinuity",
-            r"data-processing inequality",
-            r"\|u_q-1\|_\infty\longrightarrow0",
-            r"Proposition~\ref{prop:compact-window-bregman-identity}",
-        )
-        for text in required:
-            self.assertIn(text, source)
-
-        intro = (ROOT / "sec_introduction.tex").read_text(encoding="utf-8")
-        self.assertIn(r"Johnson's integral-representation problem", intro)
-        self.assertNotIn(
-            r"Theorem~\ref{thm:johnson-cauchy-integral-representation}", intro
-        )
-        self.assertIn(r"the finite-variance Cauchy statement proved in", intro)
-
-    def test_stable_flow_leads_framing_and_priority_repairs_are_present(
-        self,
-    ) -> None:
-        main = (ROOT / "main.tex").read_text(encoding="utf-8")
-        intro = (ROOT / "sec_introduction.tex").read_text(encoding="utf-8")
-        bibliography = (ROOT / "bibliography_shared.tex").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn(
-            r"\title[Stable-Flow Entropy Dissipation]{Stable-Flow Relative Entropy",
-            main,
-        )
-        self.assertLess(
-            main.index("For two probability measures"),
-            main.index("Arbitrary-order first unmatched moment"),
-        )
-        self.assertLess(
-            intro.index(r"\input{sec_introduction_fractional_heat.tex}"),
-            intro.index("The principal unconditional result"),
-        )
-        self.assertIn(r"\input{sec_introduction_comparison.tex}", intro)
-
-        for key in (
-            "HilderPeletierSharmaTse2020EntropyDistance",
-            "Voigt1981StochasticOperators",
-            "HirataNemotoYoshida2012IntegralRepresentation",
+    def test_abstract_has_requested_size_and_scope(self) -> None:
+        abstract = self.main.split(r"\begin{abstract}", 1)[1].split(
+            r"\end{abstract}", 1
+        )[0]
+        plain = re.sub(r"\\[A-Za-z]+(?:\[[^]]*\])?", " ", abstract)
+        plain = re.sub(r"[^A-Za-z0-9-]+", " ", plain)
+        words = [word for word in plain.split() if word]
+        self.assertGreaterEqual(len(words), 200)
+        self.assertLessEqual(len(words), 250)
+        for excluded in (
+            "Cayley",
+            "Laurent",
+            "rigidity",
+            "Gaussian mechanism",
+            "not claimed",
+            "no uniqueness",
         ):
-            self.assertIn(rf"\bibitem{{{key}}}", bibliography)
+            self.assertNotIn(excluded, abstract)
 
-        self.assertNotIn("HirataNemotoYoshida2012RelativeEntropy", bibliography)
+    def test_critical_exponent_is_stated_verbatim(self) -> None:
+        self.assertIn(
+            r"\frac{2r(d+\alpha)}{d+\alpha+2r}",
+            self.main + self.active,
+        )
+
+    def test_convention_machinery_is_reduced(self) -> None:
+        self.assertIn("hard or a smooth fixed-scale retention", self.active)
+        self.assertIn("additive or multiplicative normalization", self.active)
+        for excluded in (
+            "arbitrary measurable, nonradial",
+            "Asymptotic coefficient rigidity inside",
+            "infinite-dimensional family",
+        ):
+            self.assertNotIn(excluded, self.active)
+
+    def test_active_numbering_is_automatic(self) -> None:
+        self.assertNotRegex(self.active, r"\\tag\s*\{")
+        self.assertNotRegex(self.active, r"\\setcounter\s*\{")
+
+    def test_all_tex_sources_stay_below_limit(self) -> None:
+        for path in ROOT.glob("*.tex"):
+            self.assertLess(
+                len(path.read_text(encoding="utf-8").splitlines()),
+                800,
+                path.name,
+            )
 
 
 if __name__ == "__main__":

@@ -52,8 +52,8 @@ the thematically natural probability alternative, but the present analytic
 architecture makes JFA the intended first submission.
 
 The manuscript is original, is not under consideration elsewhere, and all
-authors have approved its submission.  Supplementary material contains the
-supporting coefficient and domain calculations referenced by the article.
+authors have approved its submission.  All proofs needed for the results in
+the article are included in the article and its integrated appendix.
 
 Sincerely,
 

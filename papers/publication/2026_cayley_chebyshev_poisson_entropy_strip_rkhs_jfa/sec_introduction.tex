@@ -1,649 +1,206 @@
-% sec_introduction.tex -- Introduction
 \section{Introduction}\label{sec:introduction}
 
-The Cayley transform
+Let \((p_t)_{t>0}\) be the symmetric \(\alpha\)-stable heat kernel on
+\(\RR^d\), normalized by
 \[
-\iota(x)=\frac{1+\ii x}{1-\ii x}
+ \widehat p_t(\xi)=e^{-t|\xi|^\alpha},\qquad 0<\alpha<2.
 \]
-identifies the one-point compactification of \(\RR\) with \(\TT\), and pulls
-normalized Haar measure back to the Cauchy law
+For probability measures \(\mu\) and \(\nu\), consider the two solutions
 \[
-\omega(\dd x)=\frac{1}{\pi(1+x^{2})}\dd x=P_1(x)\dd x .
+ f_t=p_t*\mu,\qquad g_t=p_t*\nu.
 \]
-This is the endpoint-normalized form of the classical Cauchy/wrapped-Cauchy
-M{\"o}bius correspondence in circular statistics
-\cite{KentTyler1988WrappedCauchy,McCullagh1992CauchyModels,
-McCullagh1996CauchyMobius,
-KatoJones2010MobiusCircle,KatoMcCullagh2020SphereCauchyMobius}.
-This normalization makes the fixed-law Poisson comparison
-\begin{equation}\label{eq:intro-main-functional}
-D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar{\gamma})\bigr)
+The first problem of this paper is to justify, for measure-valued initial
+data, the formal entropy calculation
+\begin{equation}\label{eq:intro-formal-entropy-derivative}
+ \frac{\dd}{\dd t}D_{\rm KL}(f_t\|g_t)
+ =-\frac{c_{d,\alpha}}2
+ \iint_{\RR^d\times\RR^d}
+ \Lambda\!\left(
+  \frac{f_t(x)}{g_t(x)},\frac{f_t(y)}{g_t(y)}
+ \right)
+ \frac{g_t(x)}{|x-y|^{d+\alpha}}\dd y\dd x,
 \end{equation}
-the object whose large-\(t\) behaviour is studied in Cayley--Chebyshev
-modes.  The input law \(\nu\) is fixed, \(\bar{\gamma}\) is its mean, and
-\(t\to\infty\) is the Poisson scale.
-
-The basic calculation is a quotient calculation.  Let
+where
 \[
-X_c=\gamma-\bar{\gamma}
+ \Lambda(a,b)=a\log(a/b)-a+b\ge0.
 \]
-be the centred translation variable.  With \(x=\bar{\gamma}+ty\), translation
-by \(X_c\) is encoded by
+The same identity for smooth compactly supported data follows from the
+symmetry of the fractional generator and the two-solution Bregman algebra.
+Two analytic obstructions arise for the present continuum problem.  First,
+the jump kernel \(|x-y|^{-d-\alpha}\) is singular on the diagonal, so the
+logarithmic Bregman form must be shown finite before it can represent the
+entropy derivative.  Second, the integrations by parts occur on all of
+\(\RR^d\).  The two resulting Green pairings have different weights and
+cannot be closed by writing a single formally vanishing boundary term.
+
+We resolve both points by combining compact-time quotient estimates with an
+annular truncation of the fractional generator.  Stable density bounds imply
+that, on each window \(t\in[a,b]\subset(0,\infty)\), the quotient
+\(f_t/g_t\) is bounded above and below and its logarithm is globally
+Lipschitz.  This controls the diagonal singularity.  The annular argument
+then closes the two Green pairings separately in \(L^1\).  Finally, a
+transport estimate gives decay of the entropy at the infinite-time endpoint,
+turning the local derivative identity into a tail formula.
+
+\begin{unnumberedtheorem}[Stable-flow dissipation and endpoint representation]
+Assume that \(\mu\) and \(\nu\) have finite \((d+\alpha)\)-th absolute
+moments.  Then \(D_{\rm KL}(f_t\|g_t)\) is finite for every \(t>0\), locally
+absolutely continuous, and its derivative is given almost everywhere by
+\eqref{eq:intro-formal-entropy-derivative}.  The dissipation is finite for
+every positive time and locally integrable, and
 \[
-R_\varepsilon(y)=\frac{1+y^2}{1+(y-\varepsilon)^2},
-\qquad \varepsilon=X_c/t .
+ D_{\rm KL}(f_t\|g_t)=\int_t^\infty \mathcal I_\alpha(f_q\|g_q)\dd q.
 \]
-The Cayley angle \(y=\tan\theta\) turns the Taylor coefficients of
-\(R_\varepsilon\) into finite trigonometric, equivalently Laurent, modes.
-After the matched Cauchy profile has been divided out, the quotient expansion
-is therefore reduced to finite mode algebra; the KL expansion is then the
-ordinary Taylor expansion of \((1+u)\log(1+u)-u\) in
-\(L^\infty\cap L^1(\omega)\).
+The conclusion includes the corresponding exact Bregman representation when
+the second solution is a moving stable reference and, under finite initial
+relative entropy, along Johnson's symmetric-stable interpolation.
+\end{unnumberedtheorem}
 
-\subsection*{Contribution}
+The full statement is Theorem~\ref{thm:two-stable-heat-flow-relative-entropy}.
+It records the compact-window domain, the precise dissipation, endpoint decay,
+and the stable-reference specialization in one place.  The proof uses only
+standard stable semigroup regularity beyond the quotient and annular closure
+estimates established here.
 
-\input{sec_introduction_fractional_heat.tex}
+\newpage
+\subsection*{Large-scale stable smoothing}
 
-The principal unconditional result is
-Theorem~\ref{thm:sharp-leading-kl-variance-threshold}.  For every law with
-finite mean and without a tail-class assumption, finite centred variance is
-equivalent to bounded \(t^4D_{\rm KL}\); the limit is \(\mu_2^2/8\) in the
-finite-variance case and \(+\infty\) otherwise.  The infinite-variance proof
-pairs the quotient with the bounded second Cayley mode and therefore does not
-use a formal Taylor expansion.
-
-The other principal analytic result is the regularly varying boundary theorem,
-Theorem~\ref{cor:main-body-conditional-missing-top-moment-tail}.  For \(N\ge3\),
-a centred law with two-sided regularly varying tails of index \(p=2N-2\) and
-divergent integrated slowly varying factor
-\(\ell_L(t)=\int^tL(s)\dd s/s\) satisfies
+The second problem concerns the amount of moment information required to
+turn a density expansion into a relative-entropy expansion.  Use the spatial
+scale
 \[
-t^{2N}\left\{H(t)-\sum_{j=2}^{N-1}A_{2j}(\nu)t^{-2j}\right\}
-\sim p(c_++c_-)\kappa_N\mu_2\ell_L(t),
-\qquad
-\kappa_N=(-1)^N(N-1)2^{-2N+2}.
+ p_s^{(\alpha,d)}(x)=s^{-d}p_1^{(\alpha,d)}(x/s).
 \]
-Equivalently, the residual normalized by the truncated boundary moment has
-limit \(\kappa_N\mu_2\).  This is a class-conditional analytic statement,
-without a density, symmetry, or monotonicity assumption; it is not an
-unconditional higher-order converse.
-
-The all-order coefficient algebra has a different logical status.  For every
-\(m\ge3\), the reduced universal polynomial satisfies
+Let \(\nu\) and \(\eta\) have matching tensor moments below an integer order
+\(r\ge1\), and write
 \[
-A_{2m}^{\rm form}
-=\kappa_m\mathfrak m_2\mathfrak m_{2m-2}
-+P_m(\mathfrak m_2,\ldots,\mathfrak m_{2m-3}),
-\qquad \kappa_m=(-1)^m(m-1)2^{-2m+2}\ne0.
+ \Delta_r=\int x^{\otimes r}(\nu-\eta)(\dd x)
+ \in\operatorname{Sym}^r(\RR^d).
 \]
-At \(m=2\), one instead has \(A_4^{\rm form}=\mathfrak m_2^2/8\).
-Thus \(\EE|X_c|^{2m-2}<\infty\) is sufficient to evaluate every monomial and
-is the minimal absolute-moment assumption that guarantees such evaluation
-uniformly over all centred laws.  Proposition~\ref{thm:sharp-moment-equivalence-hierarchy}
-is only this algebraic polynomial-domain minimality statement.  In particular,
-for \(m\ge3\) it is not an unconditional converse for the entropy remainder.
-
-The second theorem is multidimensional and finite-moment.  For
-\(L\ge d+1\), finite centred \(L\)-moment closes the large-translation
-remainder in the matched radial Poisson quotient, gives an explicit
-\(L^\infty\cap L^1(\Omega_d)\) jet, supplies the large-\(t\)
-entropy-existence package, and hence gives the tensor KL expansion through
-order \(L+2\).  The two-region expression is retained as the quantitative
-remainder bound; in this range the precise statement is the equivalence
-\(\mathcal R_{d,L}(t)=o(t^{-L})\) for the two-region functional defined below
-in Definition ``Two-region remainder functional,'' and the finite
-\(L\)-moment assumption.
-The restriction \(L\ge d+1\) is sharp for this \(L^\infty\) quotient
-topology, as shown by the spike construction below.  It is not claimed to be
-necessary for the leading KL coefficient in a weaker \(L^2(\Omega_d)\) or
-entropy topology.  Section~\ref{sec:verified-A2-results} treats those weaker
-topologies separately: the sharp moment exponent for the \(L^2\) quotient is
-\(\max\{2,(d+1)/2\}\); finite covariance is the exact leading-KL threshold
-for \(d\le3\); and finite covariance fails to control the leading KL scale
-for every \(d\ge4\).  For every isotropic strictly \(\alpha\)-stable
-kernel, the optimal uniform sufficient exponent among finite
-absolute-moment assumptions is
+The normalized translate quotient
 \[
- p_{\alpha,d}=\max\left\{2,
- \frac{4(d+\alpha)}{d+\alpha+4}\right\},
+ F_y(z)=\frac{p_1^{(\alpha,d)}(y-z)}{p_1^{(\alpha,d)}(y)}
 \]
-with the endpoint on the sufficient side; see
-Theorem~\ref{thm:high-dimensional-kl-moment-threshold}.  This optimization
-over moment classes is not a law-by-law necessity statement when
-\(d+\alpha>4\).  The Gaussian boundary of the first-unmatched mechanism is
-prior work.  Chen and Niles-Weed
-\cite[Theorem~2.5]{ChenNilesWeed2022SmoothedWasserstein} write
-\[
- \rho_t(x)=(2\pi t)^{-d/2}\exp(-|x|^2/(2t))
-\]
-and prove, under
-\(\EE e^{\delta|X-\EE X|^2}+\EE e^{\delta|Y-\EE Y|^2}<\infty\), that if
-the two laws first differ at order \(r=n+1\), then
-\begin{equation}\label{eq:intro-chen-niles-weed-kl}
- \lim_{t\to\infty}t^r
- D_{\rm KL}(\mu*\rho_t\|\eta*\rho_t)
- =\frac12\sum_{|\gamma|=r}
-   \frac{|m_\gamma(\mu)-m_\gamma(\eta)|^2}{\gamma!}.
-\end{equation}
-With the spatial scale \(s=\sqrt t\), this is an \(s^{-2r}\) law.  If
-\(g=\rho_1\), Gaussian Hermite orthogonality gives
-\[
- \frac12\int\left\{
-  \frac{(-1)^r}{g}\sum_{|\gamma|=r}
-  \frac{\Delta m_\gamma}{\gamma!}\partial^\gamma g
- \right\}^{\!2}g\,\dd y
- =\frac12\sum_{|\gamma|=r}\frac{|\Delta m_\gamma|^2}{\gamma!}.
-\]
-Thus the positive quadratic tensor coefficient at an arbitrary first
-unmatched order is not claimed here as a new mechanism.
-
-Our increment is the heavy-tailed extension.  For \(0<\alpha<2\), the
-Gaussian/Hermite and exponential-tail argument is replaced by a critical
-stable translate-quotient estimate.  This determines the weakest uniform
-complete-moment hypothesis, proves its endpoint with a little-\(o\)
-remainder, and gives analytic counterexamples below it in the non-Hilbert
-regime.  The mechanism holds at every first unmatched tensor order
-\(r\ge1\).  With
-\[
+has bounded Taylor jets but grows in the critical \(L^q\) space when
+\(|z|\) is large.  Balancing that growth with the quadratic order of relative
+entropy gives
+\begin{equation}\label{eq:intro-critical-moment-exponent}
  q_{r,\alpha,d}=\min\left\{2,1+\frac{2r}{d+\alpha}\right\},
  \qquad
- p_{r,\alpha,d}=\frac{2r}{q_{r,\alpha,d}},
-\]
-Theorem~\ref{thm:all-order-stable-first-unmatched-moment} gives the
-\(s^{-2r}\) quadratic tensor coefficient for two arbitrary inputs matching
-all lower moments, under the endpoint \(p_{r,\alpha,d}\)-moment, and proves
-that no smaller absolute-moment exponent works uniformly over the complete
-moment class: for \(d+\alpha>2r\) this is analytic uniform sharpness on
-pairs with a finite nonzero order-\(r\) tensor, whereas for
-\(d+\alpha\le2r\) the value \(p_{r,\alpha,d}=r\) is only coefficient-domain
-minimality below order \(r\).
-
-The exact law-by-law interface also holds at every order.  Under only finite
-\(r\)th moments and matching below \(r\),
-Corollary~\ref{thm:stable-arbitrary-order-law-by-law-decomposition} retains
-the common lower-order Taylor jet and each law's unexpanded exterior
-translate mixture in positive densities \(k_{r,s}^\nu,k_{r,s}^\eta\).  It
-proves
-\[
- D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
- =\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}
- +D_{\rm KL}(k_{r,s}^\nu\|k_{r,s}^\eta)+o(s^{-2r}).
-\]
-\input{sec_introduction_abstract_kernel}
-\input{sec_introduction_proxy_robustness}
-Thus the universal coefficient is attained exactly when the nonnegative
-tail-proxy entropy is \(o(s^{-2r})\).  At covariance order against the
-point mass at the common mean this reduces, up to \(o(s^{-4})\), to the
-one-sided raw-tail \(\Phi\)-energy in
-Theorem~\ref{thm:stable-law-by-law-decomposition}.  When
-\(d+\alpha\le4\), finite covariance forces that energy to vanish at the
-required scale; when \(d+\alpha>4\), it is a genuinely additional
-law-by-law condition.  The infinite
-critical-moment boundary is genuinely different: Theorem
-\ref{thm:critical-vague-tail-nonidentifiability} constructs two laws with the
-same smooth multivariate regularly varying tail data and the same covariance,
-one attaining the covariance coefficient and the other having unbounded
-scaled entropy along a subsequence.
-Theorem~\ref{thm:covariance-proxy-defect-decomposition} gives an
-asymptotically exact
-finite-covariance characterization of this distinction.  If
-\(k_{\Sigma,t}\) denotes the positive Poisson density obtained by adjoining
-the normalized quadratic mode \(t^{-2}b_\Sigma\) to the matched reference,
-then
-\[
- t^4H_d(t)=\mathcal Q_d(\Sigma)
- +t^4D_{\rm KL}(h_t\|k_{\Sigma,t})+o(1).
-\]
-Thus attainment of the covariance coefficient is equivalent to the
-vanishing of the complete nonlinear proxy defect.  This statement requires
-only finite covariance and does not impose a density or tail regularity on
-the original law.
-The leading multidimensional covariance formula is deliberately read through
-this analytic route.  Finite covariance alone determines the bounded quadratic
-mode \(b_\Sigma\) and the algebraic number \(\mathcal Q_d(\Sigma)\), but it
-does not by itself make \(\mathcal Q_d(\Sigma)\) the coefficient of
-\eqref{eq:intro-main-functional}.  It becomes the leading KL coefficient only
-after a quotient/existence bridge is in force, for example the
-\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\) package supplied here by
-finite \(L\)-moment with \(L\ge d+1\), or the separate second-order quotient
-criterion stated in Section~\ref{sec:entropy-asymptotics}.
-
-The nearest prior work for the heavy-tailed density estimates is
-Ishige--Kawakami--Michihisa
-\cite{IshigeKawakamiMichihisa2017} and the refined follow-up
-\cite{IshigeKawakamiMichihisa2022RefinedFractional}.  For every
-\(0<\alpha<2\) and weighted moment order \(K\ge0\), those works subtract
-moment-weighted derivatives of the stable heat kernel and prove scaled
-\(L^q\) and weighted \(L^1\) remainder decay for the resulting density
-expansion, including inhomogeneous and nonlinear refinements.  They do not
-control the matched density quotient in
-\(L^{q_{\alpha,d}}(p_1^{(\alpha,d)}\dd y)\) or transfer that critical
-estimate through relative entropy; those are the steps that produce
-\(p_{\alpha,d}\) here.  They also do not retain the unexpanded translate
-mixture beyond the smoothing scale as the nonlinear entropy energy in
-Theorem~\ref{thm:stable-law-by-law-decomposition}.
-In contrast, Chen--Niles-Weed give the direct Gaussian KL precedent
-\eqref{eq:intro-chen-niles-weed-kl}; the present comparison with the
-fractional-diffusion literature is only a comparison of the heavy-tailed
-analytic inputs and does not erase that priority.
-
-The novelty claim is correspondingly narrow.  Arbitrary-order Gaussian
-first-unmatched-moment KL asymptotics are prior work, and all-order
-stable/fractional density expansions are prior work.  To the best of our
-knowledge, what is new here is the nonnegative law-by-law decomposition under
-stable smoothing into the universal tensor coefficient and the KL divergence
-of two explicit positive tail-jet proxies, under only finite \(r\)-th
-moments, with proxy vanishing as an exact coefficient-attainment criterion.
-\input{sec_introduction_proxy_scope}
-
-\ifdefined\JFAArticleMain
-The full domain-closure motivation and comparison with the general
-two-solution Bregman calculus are in the Supplementary Material, in the
-paragraphs preceding ``Theorems.''
-\else
-The third theorem is a domain-and-endpoint result for the standard
-simultaneous-semigroup relative-entropy calculus.  For a symmetric jump
-generator
-\[
-(L_Jf)(x)=\int\{f(y)-f(x)\}J(x,y)\,\dd y,
-\qquad J(x,y)=J(y,x),
-\]
-and sufficiently regular positive solutions
-\(\partial_t h_t=L_Jh_t\), \(\partial_t g_t=L_Jg_t\), set
-\(u_t=h_t/g_t\).  The general generator identity is
-\begin{equation}\label{eq:intro-general-two-solution-generator-identity}
--\frac{\dd}{\dd t}D_{\rm KL}(h_t\|g_t)
-=\frac12\iint J(x,y)
-\left[g_t(x)\Lambda(u_t(x),u_t(y))
-+g_t(y)\Lambda(u_t(y),u_t(x))\right]\dd x\dd y.
+ p_{r,\alpha,d}=\frac{2r}{q_{r,\alpha,d}}
+ =\max\left\{r,\frac{2r(d+\alpha)}{d+\alpha+2r}\right\}.
 \end{equation}
-By exchanging \(x\) and \(y\) in the second term, the right side equals
-\[
-\iint J(x,y)g_t(x)\Lambda(u_t(x),u_t(y))\dd x\dd y.
-\]
-This is the logarithmic relative-\(\Phi\)-entropy identity for two solutions
-of the same symmetric jump semigroup; its Bregman differentiation is not
-claimed as new \cite{Chafai2004PhiEntropies,BakryCoulhonLedouxSaloffCoste1995}.
 
-Under finite centred variance, Theorem~\ref{thm:main-C} verifies that the
-moving matched Cauchy quotient lies in the domain of this identity on every
-compact time window, with the generator normalized as the symmetric
-\(1\)-stable Cauchy generator
-\cite{Feller1971,Bertoin1996LevyProcesses,Sato1999LevyProcesses,
-Applebaum2009LevyProcesses,Kwasnicki2017}.  The KL functional is then the
-tail integral of the resulting nonlocal dissipation.  Here both the quotient
-\[
-u_t=\frac{h_t}{g_t}
-\]
-and the reference density \(g_t=P_t(\cdot-\bar\gamma)\) move with \(t\).
-The logarithmic chain rule therefore first gives the two-pair identity
-\begin{equation}\label{eq:intro-two-pair-chain-rule}
-H'(t)=\langle \log u_t,\partial_t h_t\rangle
-      -\langle u_t-1,\partial_t g_t\rangle,
-\qquad H(t)=D_{\rm KL}(h_t\|g_t),
-\end{equation}
-not a single fixed-reference Dirichlet form.  Applying the Cauchy Green
-formula separately to the pairs \((h_t,\log u_t)\) and \((g_t,u_t)\), and
-using \(\int\partial_tg_t=0\), produces the algebraic difference
-\[
-(\rho_xa-\rho_yb)(\log a-\log b)-(\rho_x-\rho_y)(a-b)
-=\rho_x\Lambda(a,b)+\rho_y\Lambda(b,a),
-\]
-where \(a=u_t(x)\), \(b=u_t(y)\), \(\rho_x=g_t(x)\),
-\(\rho_y=g_t(y)\), and
-\(\Lambda(a,b)=a\log(a/b)-a+b\).  This is the logarithmic case of the
-Csisz{\'a}r--Morimoto--Ali--Silvey \(f\)-divergence/Bregman calculus
-\cite{AliSilvey1966Divergence,Csiszar1967,Morimoto1963Markov,
-Vajda1989TheoryDivergence,Bregman1967}.  The actual increment is to justify
-these formal pairings on the noncompact Cauchy state space: finite variance
-yields compact-window upper and lower quotient bounds, valid Green cutoffs,
-and integrable domination of the Bregman kernel.  The separate endpoint proof
-\(H(T)\to0\) then permits integration to infinity.
-
-The coefficient-domain and boundary-layer increments are separate from
-that dissipation identity.  De Bruijn identities, including stable variants,
-and Hardy--Stein formulas identify an entropy derivative or an integrated
-Bregman/Dirichlet form
-\cite{DeBruijn1953,Yoshida2017RelativeEntropyDiffusion,
-BanuelosBogdanLuks2016HardyStein,
-Gutowski2023HardySteinPureJump,
-BogdanGutowskiPietruskaPaluba2025PolarizedHardyStein,
-Johnson2013StableDeBruijn,Toscani2016StableEntropy,
-BobkovChistyakovGotze2013StableEntropy}.  They do not determine the large-time
-coefficient residual for a fixed input law against a moving matched Cauchy
-reference.  The analytic increments here are the unconditional bounded-mode
-converse at the variance threshold and the signed,
-truncated-moment-normalized residual within the stated regularly varying
-class.  The all-order Cayley--Laurent calculation instead supplies a finite
-polynomial-evaluation algorithm and its minimal universal absolute-moment
-assumption.
-\fi
-
-\subsection*{Theorems}\label{subsec:main-results}
-
-\begin{maintheorem}{Analytic variance threshold and coefficient-domain minimality}
-\label{thm:main-A}
-Let \(\nu\) be a probability law on \(\RR\) with finite mean
-\(\bar\gamma\), and put \(X_c=\gamma-\bar\gamma\).  No variance or tail
-assumption is imposed at this point.  Set
-\[
-H(t)=D_{\mathrm{KL}}\bigl(P_t*\nu\,\|\,P_t(\cdot-\bar\gamma)\bigr)
-\]
-with the extended nonnegative convention for relative entropy.  Then
-\[
-\EE X_c^2<\infty
-\quad\Longleftrightarrow\quad
-\limsup_{t\to\infty}t^4H(t)<\infty .
-\]
-If the variance is finite, then \(H(t)<\infty\) for every \(t>0\) and
-\[
-\lim_{t\to\infty}t^4H(t)=\frac{(\EE X_c^2)^2}{8};
-\]
-if it is infinite, then
-\[
-\lim_{t\to\infty}t^4H(t)=+\infty
-\]
-in the extended sense.  No compact-support, exponential-tail, or
-regular-variation hypothesis is used in this equivalence.
-
-For the higher universal coefficients, the conclusion is algebraic rather
-than an unconditional analytic converse.  For every \(m\ge3\), let
-\(A_{2m}^{\rm form}\) be the reduced universal polynomial defined by the
-constant-term rule below.  Then
-\begin{equation}\label{eq:main-A-moment-equivalence}
-A_{2m}^{\rm form}
-=\kappa_m\mathfrak m_2\mathfrak m_{2m-2}
-+P_m(\mathfrak m_2,\ldots,\mathfrak m_{2m-3}),
-\qquad
-\kappa_m=(-1)^m(m-1)2^{-2m+2}\ne0,
-\end{equation}
-At \(m=2\), \(A_4^{\rm form}=\mathfrak m_2^2/8\).  Consequently, for every
-\(m\ge2\),
-\(\EE|X_c|^{2m-2}<\infty\) is sufficient for the canonical Lebesgue
-evaluation of every monomial, and is minimal among absolute-moment
-assumptions that guarantee evaluation uniformly over all centred probability
-laws.  This statement uses the deliberately specified polynomial-evaluation
-domain of Definition~\ref{def:canonical-coefficient-finiteness}; for
-\(m\ge3\) it is not an unconditional converse for the entropy remainder.
-
-The supporting coefficient expansion has the exact moment hypothesis as
-follows.  Let \(N\ge2\), put \(L=2N-2\), and assume now that
-\(\EE|X_c|^L<\infty\).  With
-\[
-\begin{aligned}
-  \mu_n&=\int_{\RR} X_c^n\,\dd\nu(\gamma)\qquad(2\le n\le L),\\
-  h_t&=P_t*\nu,\qquad
-  g_t&=P_t(\cdot-\bar{\gamma}),
-\end{aligned}
-\]
-one has
-\[
-D_{\mathrm{KL}}(h_t\|g_t)
-=\sum_{m=2}^{N}A_{2m}(\nu)t^{-2m}+o(t^{-2N}).
-\]
-The coefficients are part of the statement.  For \(2\le m\le N\),
-\begin{equation}\label{eq:main-A-intro-coefficients}
-A_{2m}(\nu)=
-\sum_{r=2}^{m}
-\frac{(-1)^r}{r(r-1)}
-\sum_{\substack{n_1+\cdots+n_r=2m\\ n_j\ge2}}
-\mu_{n_1}\cdots\mu_{n_r}
-\,[z^0]\prod_{j=1}^r Q_{n_j}(z),
-\end{equation}
-where \([z^0]\) denotes constant Laurent coefficient and the
-Cayley--Chebyshev Laurent representative is fixed by the convention
-\begin{equation}\label{eq:main-A-intro-Qn}
-Q_n(z)=2^{-n}(-\ii)^n
-\sum_{\ell=1}^{n}\binom{n-1}{\ell-1}
-\bigl(z^\ell+(-1)^nz^{-\ell}\bigr)
-\qquad(n\ge1).
-\end{equation}
-Thus \(A_{2m}(\nu)\) is a universal polynomial in
-\(\mu_2,\ldots,\mu_{2m-2}\); the proof that
-\eqref{eq:main-A-intro-coefficients} is the entropy coefficient is supplied
-by Theorem~\ref{thm:poisson-kl-even-orders}.  All retained odd coefficients
-vanish, and the leading coefficient is
-\[
-A_4(\nu)=\frac{\mu_2^2}{8}.
-\]
-\end{maintheorem}
-
-\begin{maintheorem}{Multidimensional Poisson jets and stable-kernel moment exponent}
-\label{thm:main-B}
-Let \(d\ge1\), let \(L\in\NN\) satisfy \(L\ge d+1\), and let \(\nu\) be a
-probability measure on \(\RR^d\) with mean \(\bar\gamma\).  Put
-\[
-X_c=\gamma-\bar\gamma .
-\]
-Assume \(\EE |X_c|^L<\infty\).  Then the centred moments
-\[
-\mu_\alpha=\EE[X_c^\alpha]\qquad(|\alpha|\le L)
-\]
-are finite.  The explicit two-region condition used in the quotient proof is
-only the following one:
-\[
-\begin{aligned}
-\mathcal R_{d,L}(t)
-&:=t^{-(L+1)}\EE\!\left[
-|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}\right] \\
-&\quad{}+ t^{-L}\EE\!\left[
-|X_c|^L{\bf1}_{\{|X_c|>t\}}\right],
-\end{aligned}
-\]
-one has, in the stated range \(L\ge d+1\),
-\[
-\mathcal R_{d,L}(t)=o(t^{-L})
-\quad\Longleftrightarrow\quad
-\EE |X_c|^L<\infty .
-\]
-No broader equivalence between arbitrary two-region estimates and moment
-hypotheses is asserted.  The restriction \(L\ge d+1\) is sharp for this
-\(L^\infty\) quotient topology: for every integer \(1\le L<d+1\), the spike
-construction following Theorem~\ref{thm:second-order-quotient-kl-coefficient}
-gives a centred law with finite \(L\)th absolute moment whose quotient does
-not converge uniformly to one.  This does not establish necessity for a
-leading KL coefficient under a weaker \(L^2(\Omega_d)\) or entropy topology;
-the separate sharp \(L^2\) result and the dimension-dependent KL statements
-are Theorems~\ref{thm:multidim-l2-moment-threshold} and
-\ref{thm:low-dimensional-finite-covariance-threshold}, together with
-Proposition~\ref{prop:high-dimensional-finite-covariance-obstruction} and
-Theorem~\ref{thm:high-dimensional-kl-moment-threshold}.
-With
-\[
-h_t=P_t^{(d)}*\nu,\qquad
-g_t=P_t^{(d)}(\cdot-\bar\gamma),
-\]
-one has, for all sufficiently large \(t\),
-\[
-D_{\mathrm{KL}}(h_t\|g_t)
-=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
-+o(t^{-(L+2)}),
-\]
-where, for \(4\le m\le L+2\),
-\[
-\mathcal A_m^{(d)}(\nu)=
-\sum_{r=2}^{\lfloor m/2\rfloor}
-\frac{(-1)^r}{r(r-1)}
-\sum_{\substack{\alpha_1,\ldots,\alpha_r\in\NN_0^d\\
-|\alpha_1|+\cdots+|\alpha_r|=m\\
-2\le|\alpha_j|\le L\ \mathrm{for}\ 1\le j\le r}}
-\mu_{\alpha_1}\cdots\mu_{\alpha_r}
-\int_{\RR^d}\prod_{j=1}^r
-U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
-\]
-Here \(U_\alpha^{(d)}\) denotes the radial Poisson Taylor mode and
-\[
-\Omega_d(\dd y)
-=\frac{\Gamma((d+1)/2)}{\pi^{(d+1)/2}}
-(1+|y|^2)^{-(d+1)/2}\,\dd y
-\]
-is the \(t=1\) \(d\)-dimensional Poisson law.  The displayed formula is a
-finite universal tensor polynomial in the centred moments of orders
-\(2,\ldots,m-2\), and all retained odd coefficients vanish.
-For the leading retained coefficient, let
-\[
-\Sigma=\EE[X_cX_c^{\mathsf T}],\qquad
-\Sigma_0=\Sigma-\frac{\operatorname{tr}\Sigma}{d}I_d .
-\]
-Then
-\[
-\mathcal A_4^{(d)}(\nu)=\mathcal Q_d(\Sigma)
-=c_d^{\rm iso}(\operatorname{tr}\Sigma)^2
-+c_d^{\rm tr}\|\Sigma_0\|_{\rm HS}^2,
-\]
-with
-\[
-c_d^{\rm iso}=
-\frac{3(d+1)(7d+9)}
-{4d(d+3)(d+5)(d+7)},
-\qquad
-c_d^{\rm tr}=
-\frac{3(d+1)(d+3)}
-{4(d+5)(d+7)} .
-\]
-Equivalently,
-\[
-\mathcal Q_d(\Sigma)
-=\frac12\int_{\RR^d}b_\Sigma(y)^2\,\Omega_d(\dd y),
-\quad
-b_\Sigma(y)=
-\frac{d+1}{2}\left(
--\frac{\operatorname{tr}\Sigma}{1+|y|^2}
-+\frac{(d+3)y^{\mathsf T}\Sigma y}{(1+|y|^2)^2}
-\right).
-\]
-Separately, let \(0<\alpha<2\) and let
-\(p_s^{(\alpha,d)}(x)=s^{-d}p_1^{(\alpha,d)}(x/s)\) be any isotropic
-strictly \(\alpha\)-stable kernel.  If
-\[
- \EE|X_c|^{p_{\alpha,d}}<\infty,
- \qquad
- p_{\alpha,d}=\max\left\{2,
- \frac{4(d+\alpha)}{d+\alpha+4}\right\},
-\]
-then
-\[
- D_{\rm KL}\!\left(p_s^{(\alpha,d)}*\nu\,\middle\|\,
- p_s^{(\alpha,d)}(\mathord\cdot-\bar\gamma)\right)
- =\mathcal Q_{\alpha,d}(\Sigma)s^{-4}+o(s^{-4}),
-\]
-with \(\mathcal Q_{\alpha,d}\) defined in
-\eqref{eq:stable-leading-covariance-functional}.  The exponent is optimal
-as a uniform sufficient finite-moment hypothesis, including its endpoint;
-no smaller absolute-moment exponent works uniformly over its full moment
-class.
-
-More generally, let \(r\ge1\), let \(\nu,\eta\) be probability laws on
-\(\RR^d\), and assume that their tensor moments agree below order \(r\),
-their order-\(r\) tensor difference \(\Delta_r\) is nonzero, and both have
-finite \(p_{r,\alpha,d}\)th absolute moments, where
-\[
- q_{r,\alpha,d}=\min\left\{2,1+\frac{2r}{d+\alpha}\right\},
- \qquad
- p_{r,\alpha,d}=\frac{2r}{q_{r,\alpha,d}}.
-\]
-Then
+\begin{unnumberedtheorem}[Optimal first-unmatched-moment asymptotics]
+Suppose \(\Delta_r\ne0\) and both laws have finite
+\(p_{r,\alpha,d}\)-th absolute moments.  Then
 \[
  D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
  =\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}+o(s^{-2r}),
 \]
-where \(\mathcal Q_{\alpha,d,r}\) is the strictly positive quadratic
-functional in \eqref{eq:all-order-stable-leading-functional}.  The endpoint
-\(p_{r,\alpha,d}\) is optimal as a uniform sufficient absolute-moment
-exponent.  This extends the Gaussian theorem of Chen--Niles-Weed from
-sub-Gaussian inputs to heavy-tailed stable kernels with the critical complete
-moment assumption.  For \(d+\alpha>2r\), sharpness below the endpoint holds even
-among pairs with finite nonzero order-\(r\) tensor difference; below \(r\)
-the obstruction is instead that the coefficient need not be defined.  In
-dimension one, Corollary~\ref{cor:stable-gaussian-quadrature-threshold}
-converts this statement into a finite/infinite \(2n\)th-moment equivalence
-for Gaussian quadrature under every symmetric stable index.
+where \(\mathcal Q_{\alpha,d,r}\) is an orthogonally invariant
+positive-definite quadratic form on symmetric order-\(r\) tensors.  The
+endpoint in \eqref{eq:intro-critical-moment-exponent} is sufficient.  If
+\(d+\alpha>2r\), every exponent
+\(\rho\in[r,p_{r,\alpha,d})\) fails uniformly, even among pairs for which
+\(\Delta_r\) is finite and nonzero.  If \(d+\alpha\le2r\), the threshold is
+\(r\), while smaller moment assumptions do not define \(\Delta_r\) on the
+whole moment class.
+\end{unnumberedtheorem}
 
-Under the weaker, law-specific hypothesis
-\(\int|x|^r(\nu+\eta)(\dd x)<\infty\), define the positive tail-jet proxy
-densities \(k_{r,s}^\nu,k_{r,s}^\eta\) by
-\eqref{eq:arbitrary-tail-proxy-quotients}.  Then
-\[
+The order-two instance is
+Theorem~\ref{thm:high-dimensional-kl-moment-threshold}; the arbitrary-order
+statement is Theorem~\ref{thm:all-order-stable-first-unmatched-moment}.
+Their endpoint proof rests on the critical translate-remainder estimate in
+Lemma~\ref{lem:all-order-stable-critical-remainder} and a two-background
+Bregman transfer that needs only \(L^1\), rather than uniform, convergence of
+the moving denominator.  Sharpness is established by finite-difference
+moment blocks placed on recursively separated radii.  At the smoothing scale
+attached to one block, a moving ball detects probability of order equal to
+the block weight under one law and only a fixed smaller fraction under the
+other.  Data processing converts that separation into the required entropy
+lower bound.
+
+\subsection*{Positive tail jets}
+
+The exponent \(p_{r,\alpha,d}\) is optimal over moment classes, but it is not
+a law-by-law criterion.  Under finite \(r\)-th moments alone, the Taylor jet
+cannot absorb all mass at distances comparable with or larger than \(s\).
+Rather than discard that mass, we retain it in a positive proxy.  Each proxy
+contains the common Taylor jet below order \(r\), together with the original
+law's unexpanded translate mixture outside a fixed multiple of the smoothing
+scale.  Its small mass correction makes it a probability density.  The
+bounded normalized stable jets make the core uniformly positive, while the
+retained mixture is nonnegative.
+
+For these proxies \(A_s^\nu,A_s^\eta\), the exact asymptotic transaction is
+\begin{equation}\label{eq:intro-positive-tail-jet-preview}
  D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
- =\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}
- +D_{\rm KL}(k_{r,s}^\nu\|k_{r,s}^\eta)+o(s^{-2r}),
-\]
-and therefore
-\[
- s^{2r}D_{\rm KL}(p_s^{(\alpha,d)}*\nu\|p_s^{(\alpha,d)}*\eta)
- \to\mathcal Q_{\alpha,d,r}(\Delta_r)
- \quad\Longleftrightarrow\quad
- s^{2r}D_{\rm KL}(k_{r,s}^\nu\|k_{r,s}^\eta)\to0.
-\]
-This arbitrary-order criterion assumes no regular variation, absolute
-continuity, or moment above order \(r\).  Its order-two specialization
-recovers the one-sided raw-tail energy displayed above.
-\end{maintheorem}
+ =D_{\rm KL}(A_s^\nu\|A_s^\eta)
+  +\mathcal Q_{\alpha,d,r}(\Delta_r)s^{-2r}+o(s^{-2r}).
+\end{equation}
+The first term is nonnegative and retains the nonlinear interaction of the
+two tails.  Consequently, the universal first-unmatched coefficient is
+attained precisely when the rescaled proxy entropy vanishes.  This
+complements the moment-class theorem: the latter gives a checkable uniform
+hypothesis, whereas \eqref{eq:intro-positive-tail-jet-preview} identifies the
+remaining obstruction for each fixed pair of laws.
 
-\begin{maintheorem}{Domain and endpoint closure for Cauchy relative entropy}
-\label{thm:main-C}
-Let \(\nu\) be a probability measure on \(\RR\) with mean \(\bar{\gamma}\) and
-finite centred second moment.  Put
-\[
-\begin{aligned}
-h_t&=P_t*\nu,\\
-g_t&=P_t(\cdot-\bar{\gamma}),\\
-u_t&=h_t/g_t .
-\end{aligned}
-\]
-Define the Bregman kernel by
-\[
-\Lambda(\alpha,\beta)=\alpha\log\frac{\alpha}{\beta}-\alpha+\beta,
-\]
-and define the nonlocal Bregman dissipation by the nonnegative Lebesgue
-integral
-\[
-\mathcal I_\nu(t)
-=\frac1\pi\iint_{\RR^2}
-\frac{g_t(x)\Lambda(u_t(x),u_t(y))}{(x-y)^2}\dd x\dd y ,
-\]
-with the diagonal ignored.  For the Cauchy jump kernel
-\(J(x,y)=\{\pi(x-y)^2\}^{-1}\), this is exactly the right side of the
-general two-solution identity displayed in the Supplementary Material, in the
-paragraphs preceding ``Theorems.''  The assertion is
-that the matched quotient belongs to the required domain: \(\mathcal I_\nu\)
-is measurable and locally integrable on \((0,\infty)\).  More precisely, on every compact window
-\([a,b]\Subset(0,\infty)\), the quotient \(u_t\) satisfies the bounded
-Lipschitz estimates, Green-cutoff convergence, and integrable Bregman-kernel
-domination recorded in the Supplementary Material, Proposition ``Matched-Poisson domain and
-differentiation package.''  These bounds
-justify the general generator identity, while the separate endpoint result
-\(D_{\rm KL}(h_T\|g_T)\to0\) justifies passage from a finite time window to
-infinity.  Consequently, for every \(t>0\),
-\[
-D_{\mathrm{KL}}(h_t\|g_t)=\int_t^\infty \mathcal I_\nu(s)\,\dd s .
-\]
-The same domain theorem also resolves the finite-variance Cauchy case of
-Johnson's integral-representation problem in an equivalent nonlocal form
-\cite[Open Problem~4]{Johnson2013StableDeBruijn}.  If \(s>0\), \(\mu\) has
-finite second moment, and
-\[
-h_q=P_q*\mu,\qquad g_q=P_{q+s}=P_q*P_s,
-\]
-then the finite-variance Cauchy statement proved in the Supplementary Material gives
-\[
-D_{\rm KL}(\mu\|P_s)
-=\int_0^\infty\frac1\pi\iint_{\RR^2}
-\frac{g_q(x)\Lambda(h_q(x)/g_q(x),h_q(y)/g_q(y))}{(x-y)^2}
-\dd x\dd y\dd q .
-\]
-This follows from the exact dilation conjugacy
-\(q=st/(1-t)\) for Johnson's interpolation
-\((1-t)X+tZ_s\).  This statement remains the original \(\alpha=1\),
-finite-variance result and does not identify the nonlocal integrand with
-Johnson's score pairing.  The general symmetric-stable measure-data theorem
-and nonlocal Bregman representation are proved separately in
-Theorem~\ref{thm:two-stable-heat-flow-relative-entropy}.
-\end{maintheorem}
+Corollary~\ref{thm:stable-arbitrary-order-law-by-law-decomposition} proves
+\eqref{eq:intro-positive-tail-jet-preview}.  Its mechanism is not specific to
+regularly varying kernels.  Theorem~\ref{thm:abstract-positive-tail-jet-kernel}
+requires bounded normalized derivatives through order \(r\), bounded score,
+and translation continuity of the top normalized derivative.  Under these
+conditions the local tail-jet remainder is small simultaneously in
+\(L^\infty\) and \(L^1\), translate entropy grows at most linearly, and both
+proxies have finite relative entropy.  Stable kernels, the Poisson kernel,
+and multivariate Student kernels satisfy the criterion.  It is also preserved
+by invertible affine maps, finite products, and finite positive mixtures.
 
-\ifdefined\JFAArticleMain
-The comparison by mechanism, hypothesis ledger, and detailed organization
-guide are retained in the Supplementary Material.
-\else
-\input{sec_introduction_comparison.tex}
-\fi
+Hard and smooth fixed-scale retention, and additive and multiplicative mass
+normalization, give defects that differ by \(o(s^{-2r})\).  The precise
+robustness statement is Proposition~\ref{prop:stable-proxy-convention-robustness};
+its proof is included in the appendix.  No classification of all positive
+proxy conventions is intended.
+
+\newpage
+\subsection*{Relation to prior work and scope}
+
+The two-solution Bregman algebra behind
+\eqref{eq:intro-formal-entropy-derivative} is classical.  Nonlocal
+Hardy--Stein identities and entropy balances for jump processes provide the
+closest general framework
+\cite{BanuelosBogdanLuks2016HardyStein,Gutowski2023HardySteinPureJump,
+KlimsiakRozkosz2025ConditionalHardyStein}.  The contribution of
+Theorem~\ref{thm:two-stable-heat-flow-relative-entropy} is the
+stable-continuum measure-data domain, the separate closure of the noncompact
+Green pairings, and the endpoint identity.  Stable entropy methods and the
+symmetric-stable interpolation motivate the moving-reference specialization
+\cite{BobkovChistyakovGotze2013StableEntropy,Johnson2013StableDeBruijn,
+Toscani2016StableEntropy}.
+
+First-unmatched-moment asymptotics under Gaussian smoothing are prior work.
+All-order density expansions for fractional diffusion are also known
+\cite{IshigeKawakamiMichihisa2017,
+IshigeKawakamiMichihisa2022RefinedFractional}.  Our asymptotic contribution is
+the heavy-tailed critical exponent, its endpoint, uniform sharpness, and the
+positive law-by-law proxy decomposition.  The abstract kernel theorem covers
+the bounded-score additive branch used by stable and Student kernels; it does
+not cover Gaussian smoothing, whose normalized derivatives are unbounded.
+
+A separate article treats the Cauchy kernel through a Cayley--Laurent
+coefficient calculus.  It includes Gaussian quadrature and a Poisson
+observation-channel RKHS; none of those results is used here.
+
+\newpage
+\subsection*{Organization}
+
+Section~\ref{sec:stable-kernel-preliminaries} fixes the stable normalization,
+entropy notation, and elementary quotient bounds.  The stable-flow theorem
+and endpoint proof are in
+Section~\ref{sec:fractional-heat-relative-entropy}.  Sections~4 and~5 prove
+the critical translate estimates and the optimal moment asymptotics.
+Section~6 establishes the law-by-law and abstract positive tail-jet
+decompositions.  Section~7 records sharpness and one Poisson application.
+The appendix proves the convention invariance used in the main
+statement.

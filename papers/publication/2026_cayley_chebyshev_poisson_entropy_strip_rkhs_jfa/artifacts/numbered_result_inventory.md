@@ -1,0 +1,146 @@
+# Numbered Result Landing Inventory
+
+This inventory records the final landing paper for every numbered theorem-like environment, including numbered definitions and remarks.
+
+## Stable-Flow Relative Entropy Dissipation and Optimal Stable-Kernel Moment Exponents
+
+Count: 24 numbered environments.
+
+- 3.1 | Lemma: Stable quotient pilot lemma | page 7 | label: lem:stable-quotient-pilot
+- 3.2 | Theorem: Relative entropy dissipation for two symmetric stable heat flows | page 8 | label: thm:two-stable-heat-flow-relative-entropy
+- 3.3 | Lemma: Annular fractional Green closure | page 9 | label: lem:annular-fractional-green-closure
+- 3.4 | Remark: Domain and novelty boundary | page 11 | label: rem:stable-flow-domain-novelty-boundary
+- 4.1 | Proposition: Stable-kernel input package | page 12 | label: prop:stable-kernel-input-package
+- 4.2 | Lemma: Stable critical translation remainder | page 13 | label: lem:stable-critical-translation-remainder
+- 4.3 | Lemma: Critical Bregman perturbation bound | page 13 | label: lem:critical-lq-kl-perturbation
+- 5.1 | Theorem: Optimal uniform sufficient moment exponent for stable KL asymptotics | page 14 | label: thm:high-dimensional-kl-moment-threshold
+- 5.2 | Lemma: All-order stable critical remainder | page 15 | label: lem:all-order-stable-critical-remainder
+- 5.3 | Lemma: Two-background critical Bregman transfer | page 16 | label: lem:two-background-critical-bregman-transfer
+- 5.4 | Lemma: Finite-difference moment blocks | page 17 | label: lem:stable-finite-difference-blocks
+- 5.5 | Lemma: Moving-ball probability separation | page 17 | label: lem:stable-moving-ball-probability-separation
+- 5.6 | Lemma: Uniform Bernoulli relative-entropy separation | page 18 | label: lem:bernoulli-kl-linear-separation
+- 5.7 | Theorem: All-order first unmatched tensor under stable smoothing | page 18 | label: thm:all-order-stable-first-unmatched-moment
+- 6.1 | Theorem: Stable law-by-law tail decomposition | page 21 | label: thm:stable-law-by-law-decomposition
+- 6.2 | Remark: What the decomposition resolves | page 23 | label: unlabeled
+- 6.3 | Lemma: Two-background KL perturbation | page 23 | label: lem:two-background-kl-perturbation
+- 6.4 | Lemma: Zero mass of integrable density derivatives | page 24 | label: unlabeled
+- 6.5 | Lemma: Bounded-score translate entropy | page 24 | label: unlabeled
+- 6.6 | Theorem: Abstract positive tail-jet kernel theorem | page 25 | label: thm:abstract-positive-tail-jet-kernel
+- 6.7 | Proposition: Closure and verified kernel classes | page 27 | label: prop:tail-jet-kernel-closure-and-examples
+- 6.8 | Corollary: Stable specialization: arbitrary-order law-by-law tail-defect decomposition | page 28 | label: thm:stable-arbitrary-order-law-by-law-decomposition
+- 7.1 | Corollary: Poisson positive tail-jet decomposition | page 30 | label: cor:poisson-positive-tail-jet-decomposition
+- A.1 | Proposition: Robustness of the fixed-scale tail-jet convention | page 30 | label: prop:stable-proxy-convention-robustness
+
+## Cauchy--Poisson Entropy Coefficients, Gaussian Quadrature, and Lattice Observation
+
+Count: 109 numbered environments.
+
+- 2.1 | Lemma: KL bounded-test and Poisson quotient estimates | page 3 | label: lem:kl-bounded-test-and-poisson-quotient
+- 2.2 | Proposition: Cayley compactification | page 5 | label: prop:cayley-homeo
+- 2.3 | Proposition: Cauchy phase Jacobian | page 5 | label: prop:phase-derivative
+- 2.4 | Remark: Endpoint-normalized chart | page 6 | label: rem:haar-pullback-normalization
+- 3.1 | Lemma: Uniform one-dimensional Cayley Taylor remainder | page 7 | label: lem:uniform-one-dimensional-cayley-taylor-remainder
+- 3.2 | Lemma: Uniform derivative bound for the Cayley quotient | page 8 | label: lem:uniform-cayley-derivative-bound
+- 3.3 | Theorem: Cayley-Chebyshev mode formula | page 9 | label: thm:cayley-chebyshev-mode
+- 3.4 | Definition: Canonical coefficient finiteness | page 10 | label: def:canonical-coefficient-finiteness
+- 3.5 | Theorem: Universal entropy coefficients | page 10 | label: thm:universal-entropy-coefficients
+- 3.6 | Theorem: Finite Fourier algorithm for mode integrals | page 10 | label: thm:finite-fourier-mode-integral-algorithm
+- 3.7 | Proposition: Minimal absolute moment for universal polynomial evaluation | page 11 | label: thm:sharp-moment-equivalence-hierarchy
+- 3.8 | Lemma: Exact-moment density truncation | page 12 | label: lem:exact-moment-density-truncation
+- 3.9 | Proposition: Finite quotient jet implies KL coefficient jet | page 13 | label: prop:finite-quotient-jet-implies-kl-coefficient-jet
+- 3.10 | Lemma: Moving-scale Taylor transfer | page 14 | label: lem:moving-scale-taylor-transfer
+- 3.11 | Proposition: Finite density jet entropy transfer | page 15 | label: prop:finite-density-jet-entropy-transfer
+- 3.12 | Theorem: Finite-moment Poisson entropy transfer and coefficient formula | page 15 | label: thm:poisson-kl-even-orders
+- 3.13 | Lemma: Positive-margin quotient remainder and entropy transfer | page 16 | label: lem:positive-margin-quotient-remainder
+- 3.14 | Lemma: Lower moments do not identify the next even moment | page 18 | label: lem:lower-moment-realizability-obstruction
+- 3.15 | Proposition: Top-moment dependence of the universal coefficient | page 18 | label: prop:poisson-kl-moment-threshold-sharpness
+- 3.16 | Theorem: Regularly varying missing-moment boundary layer | page 19 | label: cor:main-body-conditional-missing-top-moment-tail
+- 3.17 | Lemma: Second-mode transform of a Cauchy translate | page 20 | label: lem:second-mode-cauchy-translate-transform
+- 3.18 | Theorem: Sharp analytic variance threshold for the leading KL coefficient | page 21 | label: thm:sharp-leading-kl-variance-threshold
+- 3.19 | Remark: Threshold clause and bounded-test scope | page 22 | label: unlabeled
+- 3.20 | Lemma: Local multidimensional quotient-Taylor remainder | page 22 | label: lem:local-multidim-quotient-taylor-remainder-core
+- 3.21 | Lemma: Parity of multidimensional Cayley-Poisson modes | page 23 | label: lem:multidim-cayley-poisson-mode-parity
+- 3.22 | Lemma: Global multidimensional quotient remainder | page 24 | label: lem:global-multidim-quotient-remainder-core
+- 3.23 | Definition: Large-$t$ entropy-existence clause | page 25 | label: def:multidim-ex-dl
+- 3.24 | Definition: Two-region remainder functional | page 26 | label: def:two-region-remainder-functional
+- 3.25 | Lemma: Two-region remainder is finite $L$-moment | page 26 | label: lem:two-region-remainder-equivalent-finite-moment
+- 3.26 | Proposition: Explicit two-region quotient remainder estimate | page 27 | label: thm:multidimensional-conditional-tail-density-quotient
+- 3.27 | Theorem: Finite-moment supply of the quotient jet | page 28 | label: thm:multidimensional-density-quotient
+- 3.28 | Proposition: Multidimensional quotient-to-KL transfer | page 28 | label: thm:multidimensional-poisson-entropy-jets
+- 3.29 | Remark: One-dimensional covariance normalization | page 29 | label: unlabeled
+- 3.30 | Proposition: Explicit-remainder form of the multidimensional KL jet | page 29 | label: thm:multidim-conditional-tail-poisson-kl-asymptotic
+- 3.31 | Corollary: Finite-moment multidimensional KL jet | page 30 | label: thm:multidim-finite-moment-poisson-kl-asymptotic
+- 3.32 | Remark: Two coefficient routes | page 31 | label: unlabeled
+- 3.33 | Lemma: Radial-angular contractions for the Cauchy weight | page 31 | label: lem:radial-angular-contractions
+- 3.34 | Theorem: Covariance algebra under finite covariance | page 32 | label: thm:multidim-covariance-algebra
+- 3.35 | Lemma: $L^2$ second-order entropy criterion | page 34 | label: lem:l2-second-order-entropy-criterion
+- 3.36 | Theorem: Second-order quotient criterion for the KL coefficient | page 35 | label: thm:second-order-quotient-kl-coefficient
+- 3.37 | Corollary: Actual leading multidimensional KL coefficient | page 36 | label: cor:finite-dplusone-moment-leading-multidim-coefficient
+- 3.38 | Corollary: Internal bridge: leading coefficient under $(\mathrm {MPJ}_{d,L})+(\mathrm {EX}_{d,L})$ | page 36 | label: cor:multidim-leading-kl-coefficient
+- 3.39 | Corollary: Finite-moment covariance coefficient for larger $L$ | page 37 | label: cor:multidim-finite-moment-covariance-coefficient
+- 4.1 | Lemma: Second-moment KL decay to the translated Poisson profile | page 39 | label: lem:poisson-second-moment-kl-decay
+- 4.2 | Lemma: Compact-window quotient bounds and Bregman majorant | page 40 | label: lem:matched-poisson-quotient-cauchy-bregman-domain
+- 4.3 | Lemma: Cauchy Green formula and constants | page 42 | label: lem:kl-main-generator-convention-domain
+- 4.4 | Lemma: Absolutely continuous logarithmic Nemytskii chain rule | page 43 | label: prop:abstract-cutoff-bregman-kl
+- 4.5 | Lemma: Annular cutoff and measurable Bregman dissipation | page 45 | label: lem:annular-cutoff-measurable-bregman-dissipation
+- 4.6 | Lemma: Annular Green limits close to the full Bregman form | page 46 | label: lem:annular-green-limits-close-to-full-bregman
+- 4.7 | Lemma: Poisson kernel $L^1$ absolute continuity and derivative bounds | page 47 | label: lem:poisson-kernel-l1-ac-bounds
+- 4.8 | Proposition: Bounded Lipschitz quotient implies $H'=-I$ | page 49 | label: prop:compact-window-bregman-identity
+- 4.9 | Proposition: Matched-Poisson domain and differentiation package | page 51 | label: prop:main-C-domain-differentiation-package
+- 4.10 | Theorem: Finite-variance domain and endpoint theorem | page 52 | label: thm:poisson-kl-doob-tail
+- 4.11 | Theorem: Cauchy nonlocal representation along Johnson's interpolation | page 52 | label: thm:johnson-cauchy-integral-representation
+- 4.12 | Remark: Tail-integral coefficient transfer | page 54 | label: rem:no-pointwise-dissipation-from-finite-moments
+- 4.13 | Proposition: Dissipation-tail and window-average coefficient transfer | page 54 | label: prop:dissipation-tail-coefficient-expansion
+- 4.14 | Lemma: Laurent constants for the sixth-order coefficient | page 56 | label: lem:sixth-order-coefficient-arithmetic
+- 4.15 | Theorem: Coefficient identification through order six | page 56 | label: thm:poisson-kl-sixth-coefficient
+- 4.16 | Lemma: Uniform Bernoulli relative-entropy separation | page 57 | label: lem:bernoulli-kl-linear-separation
+- 5.1 | Theorem: First-channel closure and the even-moment hierarchy | page 57 | label: thm:first-cayley-mode-closure
+- 5.2 | Lemma: Finite-covariance Fatou lower bound | page 59 | label: lem:finite-covariance-fatou-lower-bound
+- 5.3 | Theorem: Critical vague tails do not identify the leading entropy | page 59 | label: thm:critical-vague-tail-nonidentifiability
+- 5.4 | Theorem: First unmatched moment for Poisson relative entropy | page 61 | label: thm:moment-matched-poisson-kl
+- 5.5 | Theorem: Gaussian-comparison entropy threshold | page 61 | label: thm:gauss-poisson-kl-threshold
+- 5.6 | Remark: Classical optimal degree | page 62 | label: unlabeled
+- 5.7 | Corollary: Two-node fourth-moment coefficient | page 62 | label: cor:two-node-gauss-fourth-moment
+- 5.8 | Theorem: Square boundary at a missing Gaussian moment | page 63 | label: thm:gauss-regular-variation-square-law
+- 5.9 | Lemma: Large translations in the Cauchy quotient space | page 63 | label: lem:multidim-large-translation-l2-growth
+- 5.10 | Theorem: Sharp absolute-moment condition for the $L^2$ quotient | page 64 | label: thm:multidim-l2-moment-threshold
+- 5.11 | Theorem: Low-dimensional finite-covariance entropy threshold | page 65 | label: thm:low-dimensional-finite-covariance-threshold
+- 5.12 | Proposition: Finite covariance does not control high-dimensional KL | page 65 | label: prop:high-dimensional-finite-covariance-obstruction
+- 5.13 | Lemma: Critical translation remainder | page 66 | label: lem:critical-lq-translation-remainder
+- 5.14 | Lemma: Uniform Laurent representatives through order six | page 67 | label: lem:n4-uniform-laurent-representatives
+- 5.15 | Lemma: Laurent recurrence and coefficients through order eight | page 67 | label: lem:eighth-order-coefficient-arithmetic
+- 5.16 | Lemma: Substitution into $A_4$, $A_6$, and $A_8$ | page 67 | label: lem:n4-entropy-coefficient-substitution
+- 5.17 | Remark: Normalization and two-point checks | page 69 | label: unlabeled
+- 5.18 | Lemma: Eighth coefficient polynomial before coefficient identification | page 69 | label: lem:formal-seventh-eighth-coefficient
+- 5.19 | Theorem: Self-contained coefficient identification through order eight | page 69 | label: thm:poisson-kl-eighth
+- 5.20 | Definition: $N=4,\eta =1$ retained-order constants | page 71 | label: def:n4-finite-time-constant-dictionary
+- 5.21 | Theorem: Quantitative $N=4$ remainder under the seventh moment | page 72 | label: thm:poisson-kl-eighth-seventh-remainder
+- 5.22 | Remark: Sixth- and seventh-moment roles | page 73 | label: unlabeled
+- 5.23 | Corollary: Moment-jet factorization of the eighth-order coefficients | page 73 | label: cor:eighth-order-jet-factorization
+- 5.24 | Corollary: Moment-jet equality with seventh-moment remainder | page 73 | label: cor:eighth-order-jet-factorization-seventh-remainder
+- 5.25 | Corollary: A two-level defect ladder | page 73 | label: thm:poisson-defect-ladder
+- 5.26 | Corollary: Coefficient excess amplification | page 75 | label: thm:poisson-defect-amplification
+- 5.27 | Corollary: Symmetric two-point coefficient rigidity | page 76 | label: cor:poisson-two-point-defect-rigidity
+- 6.1 | Theorem: Covariance-proxy defect decomposition | page 77 | label: thm:covariance-proxy-defect-decomposition
+- 6.2 | Theorem: Raw-tail Poisson-energy decomposition | page 78 | label: thm:raw-tail-poisson-energy-decomposition
+- 6.3 | Corollary: Moving-annulus raw-tail criterion | page 80 | label: cor:moving-annulus-tail-criterion
+- 6.4 | Proposition: Thin-shell aggregation precedes the entropy nonlinearity | page 80 | label: prop:pre-phi-thin-shell-aggregation
+- 6.5 | Corollary: Proxy characterization at the critical vague boundary | page 81 | label: cor:critical-rv-proxy-characterization
+- 7.1 | Theorem: The mode Gram kernel | page 82 | label: thm:mode-gram-kernel
+- 7.2 | Corollary: Closed formulas for quadratic mode integrals | page 83 | label: cor:mode-quadratic-integrals
+- 7.3 | Lemma: Poisson-transform completeness of the secant modes | page 84 | label: lem:poisson-injectivity-weighted
+- 7.4 | Theorem: The mode space and its RKHS completion | page 85 | label: thm:mode-space-rkhs
+- 7.5 | Proposition: Centred Poisson reconstruction by Laplace uniqueness | page 86 | label: prop:poisson-central-two-channel
+- 7.6 | Corollary: Symmetric channel | page 87 | label: cor:poisson-symmetrization
+- 7.7 | Corollary: Symmetric case from the odd channel | page 87 | label: cor:poisson-symmetric-case
+- 7.8 | Theorem: Observation channels as evaluation functionals | page 87 | label: thm:poisson-channel-rkhs
+- 8.1 | Proposition: The mode Gram space as a Poisson image space | page 89 | label: prop:gram-space-poisson-image
+- 8.2 | Remark:  | page 90 | label: rem:poisson-image-framework
+- 8.3 | Proposition: Classical Hardy splitting of the Poisson strip model | page 90 | label: prop:poisson-hardy-splitting
+- 8.4 | Lemma: Integer projection for the Poisson strip kernel | page 91 | label: lem:auxiliary-uniform-lattice-projection
+- 8.5 | Lemma: Classical imported principal-symbol sampling criterion | page 95 | label: lem:imported-principal-symbol-sampling
+- 8.6 | Proposition: Explicit Poisson integer-orbit symbol | page 96 | label: prop:poisson-lattice-symbol
+- 8.7 | Corollary: Explicit lattice cardinal kernel and norm | page 99 | label: cor:poisson-cardinal-reconstruction
+- 8.8 | Lemma: Observation profile determines the centred law | page 101 | label: lem:observation-profile-determines-law
+- 8.9 | Theorem: Integer-orbit projection of Poisson observation channels | page 101 | label: thm:poisson-observation-lattice-sampling
+- A.1 | Lemma: Deterministic exact Laurent recurrence | page 105 | label: lem:appendix-d-deterministic-laurent-recurrence

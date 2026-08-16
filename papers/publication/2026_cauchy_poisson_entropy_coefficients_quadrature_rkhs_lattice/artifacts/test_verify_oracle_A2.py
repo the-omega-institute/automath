@@ -27,7 +27,7 @@ def read_tex_source(path: Path) -> str:
 
 
 class OracleA2VerificationTests(unittest.TestCase):
-    def test_stable_kernel_exponent_and_claim_interface(self) -> None:
+    def test_cauchy_coefficient_interface(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(CERTIFICATE), "--quick"],
             cwd=ROOT,
@@ -36,15 +36,14 @@ class OracleA2VerificationTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
-        self.assertIn("stable-kernel critical exponent algebra", completed.stdout)
-        self.assertIn("critical Bregman perturbation bound including q=2", completed.stdout)
+        self.assertIn("pointwise Cayley-mode differential recurrence", completed.stdout)
+        self.assertIn("first-mode Laplace resolvent identity", completed.stdout)
 
         manuscript = read_tex_source(ROOT / "sec_verified_A2_results.tex")
-        self.assertIn(r"\label{lem:stable-critical-translation-remainder}", manuscript)
-        self.assertIn("Optimal uniform sufficient moment exponent", manuscript)
-        self.assertNotIn("[Sharp high-dimensional KL moment threshold]", manuscript)
+        self.assertIn(r"\label{thm:first-cayley-mode-closure}", manuscript)
+        self.assertIn(r"\label{thm:moment-matched-poisson-kl}", manuscript)
 
-    def test_all_order_stable_first_unmatched_interface(self) -> None:
+    def test_gaussian_quadrature_interface(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(CERTIFICATE), "--quick"],
             cwd=ROOT,
@@ -53,31 +52,13 @@ class OracleA2VerificationTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
-        self.assertIn("all-order stable critical exponent algebra", completed.stdout)
-        self.assertIn("finite-difference moment-cancellation blocks", completed.stdout)
-        self.assertIn("global cosine Taylor remainder sign", completed.stdout)
-        self.assertIn("two-background critical Bregman transfer stress", completed.stdout)
+        self.assertIn("two-node Gauss fourth-moment KL constant", completed.stdout)
         self.assertIn("fourth-moment-matched KL constant", completed.stdout)
 
         manuscript = read_tex_source(ROOT / "sec_verified_A2_results.tex")
-        self.assertIn(
-            r"\label{lem:two-background-critical-bregman-transfer}",
-            manuscript,
-        )
-        self.assertIn(
-            r"\label{thm:all-order-stable-first-unmatched-moment}",
-            manuscript,
-        )
-        self.assertNotIn("Gaussian-quadrature", manuscript)
-        self.assertIn(r"q_{r,\alpha,d}", manuscript)
-        self.assertIn(r"p_{r,\alpha,d}", manuscript)
-        self.assertIn(r"let \(r\ge1\) be an integer", manuscript)
-        self.assertIn(r"\label{lem:stable-finite-difference-blocks}", manuscript)
-        self.assertIn(
-            r"\label{lem:stable-moving-ball-probability-separation}",
-            manuscript,
-        )
-        self.assertIn(r"\label{lem:bernoulli-kl-linear-separation}", manuscript)
+        self.assertIn(r"\label{thm:gauss-poisson-kl-threshold}", manuscript)
+        self.assertIn(r"\label{cor:two-node-gauss-fourth-moment}", manuscript)
+        self.assertIn(r"\label{thm:gauss-regular-variation-square-law}", manuscript)
 
     def test_certificate_and_manuscript_labels(self) -> None:
         completed = subprocess.run(
@@ -97,17 +78,24 @@ class OracleA2VerificationTests(unittest.TestCase):
         self.assertIn("moving-annulus potential comparability", completed.stdout)
         self.assertIn("pre-Phi thin-shell aggregation scaling", completed.stdout)
 
-        manuscript = read_tex_source(ROOT / "sec_verified_A2_results.tex")
+        manuscript = "\n".join(
+            read_tex_source(ROOT / name)
+            for name in (
+                "sec_verified_A2_results.tex",
+                "sec_covariance_proxy_defect.tex",
+            )
+        )
         for label in (
-            "lem:stable-critical-translation-remainder",
-            "thm:high-dimensional-kl-moment-threshold",
-            "lem:all-order-stable-critical-remainder",
-            "lem:two-background-critical-bregman-transfer",
-            "lem:stable-finite-difference-blocks",
-            "lem:stable-moving-ball-probability-separation",
-            "thm:all-order-stable-first-unmatched-moment",
-            "thm:stable-law-by-law-decomposition",
-            "thm:abstract-positive-tail-jet-kernel",
+            "thm:first-cayley-mode-closure",
+            "thm:moment-matched-poisson-kl",
+            "thm:gauss-poisson-kl-threshold",
+            "cor:two-node-gauss-fourth-moment",
+            "thm:gauss-regular-variation-square-law",
+            "thm:finite-covariance-proxy-defect-decomposition",
+            "cor:critical-rv-proxy-characterization",
+            "thm:raw-tail-poisson-energy-decomposition",
+            "cor:moving-annulus-tail-criterion",
+            "prop:pre-phi-thin-shell-aggregation",
         ):
             self.assertIn(r"\label{" + label + "}", manuscript)
 

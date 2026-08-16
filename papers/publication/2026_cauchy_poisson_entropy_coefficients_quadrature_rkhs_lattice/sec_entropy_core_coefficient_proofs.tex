@@ -1,0 +1,705 @@
+\begin{lemma}[Parity of multidimensional Cayley--Poisson modes]%
+\label{lem:multidim-cayley-poisson-mode-parity}
+For every \(d\ge1\) and every multiindex \(\alpha\in\NN_0^d\),
+\begin{equation}\label{eq:multidim-cayley-poisson-mode-parity}
+U_\alpha^{(d)}(-y)=(-1)^{|\alpha|}U_\alpha^{(d)}(y)
+\qquad(y\in\RR^d).
+\end{equation}
+Consequently, for any multiindices
+\(\alpha_1,\ldots,\alpha_r\),
+\begin{equation}\label{eq:multidim-cayley-poisson-product-parity}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y)=0
+\qquad\text{if }\ |\alpha_1|+\cdots+|\alpha_r|\text{ is odd}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The defining quotient satisfies
+\[
+F_{-y}(z)
+=\left(\frac{1+|y|^2}{1+|-y-z|^2}\right)^{(d+1)/2}
+=F_y(-z).
+\]
+Both sides are real analytic in \(z\) near \(0\).  Comparing the Taylor
+coefficients in
+\[
+F_{-y}(z)=\sum_{\alpha}U_\alpha^{(d)}(-y)z^\alpha,
+\qquad
+F_y(-z)=\sum_{\alpha}(-1)^{|\alpha|}U_\alpha^{(d)}(y)z^\alpha
+\]
+gives \eqref{eq:multidim-cayley-poisson-mode-parity}.  Multiplying this
+identity for \(\alpha_1,\ldots,\alpha_r\) gives
+\[
+\prod_{j=1}^r U_{\alpha_j}^{(d)}(-y)
+=(-1)^{|\alpha_1|+\cdots+|\alpha_r|}
+\prod_{j=1}^r U_{\alpha_j}^{(d)}(y).
+\]
+Since \(\Omega_d(\dd y)=c_d(1+|y|^2)^{-(d+1)/2}\dd y\) is invariant under
+\(y\mapsto-y\), the integral of the product is equal to its negative when
+the total order is odd, proving
+\eqref{eq:multidim-cayley-poisson-product-parity}.
+\end{proof}
+
+\medskip
+\noindent\textbf{Deterministic quotient remainder.}
+The next lemma is the analytic estimate used later to verify the named
+matched quotient jet from finite moments.  The quotient jet itself, including
+the entropy-existence clause, is defined in full immediately before the
+transfer proposition so the analytic input is visible at the point where it is
+used.
+
+\begin{lemma}[Global multidimensional quotient remainder]%
+\label{lem:global-multidim-quotient-remainder-core}
+Let \(d\ge1\), \(a=(d+1)/2\), and
+\[
+F_y(z)=\left(\frac{1+|y|^2}{1+|y-z|^2}\right)^a .
+\]
+For a multiindex \(\alpha\), put
+\[
+U_\alpha^{(d)}(y)=\frac1{\alpha!}\partial_z^\alpha F_y(0).
+\]
+If \(L\in\mathbb N\) and \(L\ge d+1\), then there is a constant
+\(C_{d,L}<\infty\), depending only on \(d\) and \(L\), such that
+\begin{equation}\label{eq:multidim-coefficient-bound}
+\sup_{y\in\RR^d}|U_\alpha^{(d)}(y)|\le C_{d,L}
+\qquad (|\alpha|\le L),
+\end{equation}
+\begin{equation}\label{eq:multidim-small-translation-remainder}
+\sup_{y\in\RR^d}\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}|z|^{L+1}
+\qquad (|z|\le1),
+\end{equation}
+and
+\begin{equation}\label{eq:multidim-large-translation-remainder}
+\sup_{y\in\RR^d}\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}|z|^{L}
+\qquad (|z|>1).
+\end{equation}
+Equivalently, for all \(y,z\),
+\begin{equation}\label{eq:multidim-global-translation-remainder}
+\left|
+F_y(z)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)z^\alpha
+\right|
+\le C_{d,L}\left(
+|z|^{L+1}{\bf1}_{\{|z|\le1\}}
+{}
++{}|z|^L{\bf1}_{\{|z|>1\}}
+\right).
+\end{equation}
+Consequently, if \(X\) is an \(\RR^d\)-valued random vector with
+\(\EE|X|^L<\infty\), \(\Omega_d\) is the Cauchy probability measure above,
+and
+\[
+r_t(y):=\EE\left[
+F_y(X/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X/t)^\alpha
+\right],
+\]
+then
+\begin{equation}\label{eq:multidim-integrated-remainder-bound}
+\|r_t\|_{L^\infty(\RR^d)}+\|r_t\|_{L^1(\Omega_d)}
+\le C_{d,L}t^{-L}\EE\left[
+|X|^L\frac{|X|}{t}{\bf1}_{\{|X|\le t\}}
+{}
++{}|X|^L{\bf1}_{\{|X|>t\}}
+\right]=o(t^{-L}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The coefficient bound \eqref{eq:multidim-coefficient-bound} and the
+small-translation remainder
+\eqref{eq:multidim-small-translation-remainder} are exactly
+Lemma~\ref{lem:local-multidim-quotient-taylor-remainder-core}.  Thus the
+constant in these two estimates depends only on \(d,L\).
+
+It remains to handle large translations.  Fix \(|z|>1\).  First suppose
+\(|y-z|\le |z|/2\).  Then \(|y|\le3|z|/2\), and hence
+\[
+F_y(z)\le (1+|y|^2)^a\le C_d|z|^{d+1}.
+\]
+On the complementary region \(|y-z|>|z|/2\), the elementary estimate
+\[
+1+|y|^2
+\le 2(1+|y-z|^2+|z|^2)
+\le 2(1+|z|^2)(1+|y-z|^2)
+\]
+gives
+\[
+F_y(z)
+\le 2^a(1+|z|^2)^a
+\le C_d|z|^{d+1}
+\qquad(|z|>1).
+\]
+Thus, uniformly in \(y\),
+\[
+\sup_y F_y(z)\le C_d|z|^{d+1}\le C_{d,L}|z|^L
+\qquad(|z|>1),
+\]
+where the last inequality is precisely where \(L\ge d+1\) is used.  The
+coefficient bound from the local lemma gives, again uniformly in \(y\),
+\[
+\sum_{|\alpha|\le L}|U_\alpha^{(d)}(y)|\,|z|^{|\alpha|}
+\le C_{d,L}\sum_{k=0}^{L}|z|^k
+\le C_{d,L}'|z|^L
+\qquad(|z|>1).
+\]
+Consequently
+\[
+\sup_y\left(
+|F_y(z)|
++\sum_{|\alpha|\le L}|U_\alpha^{(d)}(y)|\,|z|^{|\alpha|}
+\right)
+\le C_{d,L}|z|^L
+\qquad(|z|>1),
+\]
+which proves \eqref{eq:multidim-large-translation-remainder}.  Combining
+this estimate with the small-translation remainder proves the global form
+\eqref{eq:multidim-global-translation-remainder}.
+
+Set \(z=X/t\) in \eqref{eq:multidim-global-translation-remainder}.  Taking
+expectations gives the pointwise bound, uniform in \(y\),
+\[
+|r_t(y)|
+\le
+C_{d,L}\left[
+t^{-(L+1)}
+\EE\!\left(|X|^{L+1}{\bf1}_{\{|X|\le t\}}\right)
++t^{-L}
+\EE\!\left(|X|^L{\bf1}_{\{|X|>t\}}\right)
+\right].
+\]
+Equivalently,
+\[
+t^{-(L+1)}
+\EE\!\left(|X|^{L+1}{\bf1}_{\{|X|\le t\}}\right)
+=
+t^{-L}
+\EE\!\left[
+|X|^L\frac{|X|}{t}{\bf1}_{\{|X|\le t\}}
+\right]
+=o(t^{-L}).
+\]
+because \((|X|/t){\bf1}_{\{|X|\le t\}}\le1\) and converges pointwise to
+zero, while \(|X|^L\) is integrable.  Also
+\[
+t^{-L}\EE\!\left(|X|^L{\bf1}_{\{|X|>t\}}\right)=o(t^{-L})
+\]
+by the absolute continuity of the integral for the integrable function
+\(|X|^L\).  These two estimates are independent of \(y\), and therefore give
+the \(L^\infty\) part of \eqref{eq:multidim-integrated-remainder-bound}.
+The \(L^1(\Omega_d)\) part follows from the same uniform bound because
+\(\Omega_d\) is a probability measure.
+\end{proof}
+
+\medskip
+\noindent\textbf{Matched multidimensional quotient input.}
+For \(d\ge1\) and \(L\in\mathbb N\) with \(L\ge2\), put
+\[
+h_t=P_t^{(d)}*\nu,\qquad
+g_t=P_t^{(d)}(\cdot-\bar{\gamma}),\qquad
+\delta_t^{(d)}(y)=
+\frac{h_t(\bar{\gamma}+ty)}{g_t(\bar{\gamma}+ty)}-1,
+\]
+and \(\Phi(s)=(1+s)\log(1+s)-s\).
+
+\begin{definition}[Large-\(t\) entropy-existence clause]%
+\label{def:multidim-ex-dl}
+For the above \(h_t,g_t,\delta_t^{(d)}\), the condition
+\((\mathrm{EX}_{d,L})\) means that there is \(T<\infty\) such that, for every
+\(t\ge T\),
+\[
+1+\delta_t^{(d)}(y)>0,\qquad
+\int_{\RR^d}\delta_t^{(d)}(y)\,\Omega_d(\dd y)=0,\qquad
+\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y)<\infty,
+\]
+and that the matched KL integral is represented by
+\[
+D_{\rm KL}(h_t\|g_t)
+=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y).
+\]
+The symbol records only these large-\(t\) positivity, zero-mass,
+integrability, and change-of-variables assertions; it is not a moment
+hypothesis and it is not implied by the finite-covariance algebra below.
+\end{definition}
+
+We say that \((\nu,d,L)\) satisfies the matched Poisson quotient jet
+\((\mathrm{MPJ}_{d,L})\) when \(\nu\) is a probability law on \(\RR^d\), the
+mean \(\bar{\gamma}\) exists, the centred tensor moments
+\[
+\mu_\alpha=\int_{\RR^d}(\gamma-\bar{\gamma})^\alpha\,\dd\nu(\gamma)
+\qquad(2\le|\alpha|\le L)
+\]
+exist, and the scaled quotient has the \(L^\infty\cap L^1(\Omega_d)\) jet
+\begin{equation}\label{eq:mpj-dl-definition}
+\begin{aligned}
+(\mathrm{MPJ}_{d,L}):\qquad
+\delta_t^{(d)}(y)
+&=
+\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
++\rho_{L,t}^{(d)}(y),\\
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}
+&=o(t^{-L}),\qquad
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
+\end{aligned}
+\end{equation}
+Thus the input used in
+Proposition~\ref{thm:multidimensional-poisson-entropy-jets} has two parts:
+the quotient jet \((\mathrm{MPJ}_{d,L})\) and the entropy-existence clause
+\((\mathrm{EX}_{d,L})\).  The restriction \(L\ge d+1\) enters when the
+large-translation estimates are closed by the finite \(L\)-moment remainder
+estimate below.
+
+\subsubsection*{Multidimensional proof route}\leavevmode\par\smallskip
+The multidimensional proof has one analytic bridge.  For \(L\ge d+1\),
+\[
+\EE|X_c|^L<\infty
+\quad\Longleftrightarrow\quad
+\mathcal R_{d,L}(t)=o(t^{-L})
+\quad\Longrightarrow\quad
+(\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L}),
+\]
+and then Proposition~\ref{thm:multidimensional-poisson-entropy-jets} gives the
+KL tensor jet.  At order four this jet has
+\[
+\mathcal A_4^{(d)}(\nu)
+=\frac12\int_{\RR^d}(D_2^{(d)})^2\,\dd\Omega_d
+=\mathcal Q_d(\Sigma),
+\]
+where the last equality is the covariance algebra proved below.  Thus finite
+\(L\)-moment supplies the quotient/existence bridge and hence the actual
+leading KL coefficient.  Finite covariance by itself supplies only the
+algebraic quantity \(\mathcal Q_d(\Sigma)\).
+
+The equivalence displayed in this proof route refers only to the functional
+\(\mathcal R_{d,L}\) defined next.  It is not a statement that every
+two-region estimate, or every possible quotient remainder norm, is equivalent
+to finite \(L\)-moment.
+
+\begin{definition}[Two-region remainder functional]%
+\label{def:two-region-remainder-functional}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\).  Put
+\(X_c=\gamma-\bar{\gamma}\).  For \(t>0\), define \(\mathcal R_{d,L}(t)\) by
+\begin{equation}\label{eq:conditional-multidim-two-region-tail}
+\begin{aligned}
+\mathcal R_{d,L}(t)
+&:=t^{-(L+1)}\EE\!\left[
+|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}\right] \\
+&\quad{}+ t^{-L}\EE\!\left[
+|X_c|^L{\bf1}_{\{|X_c|>t\}}\right],
+\end{aligned}
+\end{equation}
+\end{definition}
+
+\begin{lemma}[Two-region remainder is finite \(L\)-moment]%
+\label{lem:two-region-remainder-equivalent-finite-moment}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\).  Put
+\(X_c=\gamma-\bar{\gamma}\).  Then
+\[
+\mathcal R_{d,L}(t)=o(t^{-L})
+\qquad(t\to\infty)
+\]
+is equivalent to \(\EE|X_c|^L<\infty\), with the convention that
+\(\mathcal R_{d,L}(t)<\infty\) for all sufficiently large \(t\).
+This is the only two-region equivalence used in the multidimensional
+finite-moment theorem.
+\end{lemma}
+
+\begin{proof}
+Assume first that \(\mathcal R_{d,L}(t)=o(t^{-L})\).  Choose \(t_0\) so large
+that the terms in \eqref{eq:conditional-multidim-two-region-tail} are finite.
+The bounded part \(\EE[|X_c|^L{\bf1}_{\{|X_c|\le t_0\}}]\) is finite, and
+the second term gives
+\[
+\EE[|X_c|^L{\bf1}_{\{|X_c|>t_0\}}]<\infty .
+\]
+Thus \(\EE|X_c|^L<\infty\).
+
+Conversely assume \(\EE|X_c|^L<\infty\).  The local term satisfies
+\[
+t^{-(L+1)}\EE[|X_c|^{L+1}{\bf1}_{\{|X_c|\le t\}}]
+=t^{-L}\EE\!\left[
+|X_c|^L\frac{|X_c|}{t}{\bf1}_{\{|X_c|\le t\}}
+\right]
+=o(t^{-L})
+\]
+by dominated convergence.  The tail term is
+\[
+t^{-L}\EE[|X_c|^L{\bf1}_{\{|X_c|>t\}}]=o(t^{-L})
+\]
+by tail integrability.
+\end{proof}
+
+The restriction \(L\ge d+1\) enters the deterministic large-translation
+estimates through \(\mathcal R_{d,L}\).  The next proposition is the explicit
+remainder estimate used by the finite-moment theorem; by
+Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment} it introduces
+no hypothesis beyond \(\EE|X_c|^L<\infty\) in the present range.
+
+\begin{proposition}[Explicit two-region quotient remainder estimate]%
+\label{thm:multidimensional-conditional-tail-density-quotient}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\).  Put
+\(X_c=\gamma-\bar{\gamma}\).  Assume
+\[
+\mathcal R_{d,L}(t)=o(t^{-L}).
+\]
+Equivalently, by Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment},
+this is exactly the finite \(L\)-moment condition
+\(\EE|X_c|^L<\infty\).  Define
+\[
+\begin{gathered}
+\mu_\alpha=\int_{\RR^d}X_c^\alpha\,\dd\nu(\gamma)
+\qquad(|\alpha|\le L).
+\end{gathered}
+\]
+Then, for
+\[
+\delta_t^{(d)}(y):=
+\frac{(P_t^{(d)}*\nu)(\bar{\gamma}+ty)}
+{P_t^{(d)}(ty)}-1,
+\]
+\begin{equation}\label{eq:multidim-density-quotient-expansion-main}
+\delta_t^{(d)}(y)=
+\sum_{2\le|\alpha|\le L}\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}
++\rho_{L,t}^{(d)}(y),
+\end{equation}
+where the remainder satisfies the explicit \(L^\infty\cap L^1(\Omega_d)\)
+bound
+\begin{equation}\label{eq:multidim-density-quotient-explicit-remainder}
+\begin{aligned}
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}
+&\le C_{d,L}\mathcal R_{d,L}(t)  \\
+&=o(t^{-L}).
+\end{aligned}
+\end{equation}
+Moreover \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\), so
+\((\mathrm{EX}_{d,L})\) holds for all sufficiently large \(t\).
+\end{proposition}
+
+\begin{proof}
+Put \(h_t=P_t^{(d)}*\nu\) and \(g_t=P_t^{(d)}(\cdot-\bar{\gamma})\).
+For \(x=\bar{\gamma}+ty\),
+\[
+\frac{P_t^{(d)}(x-\gamma)}{P_t^{(d)}(x-\bar{\gamma})}
+=
+\left(\frac{t^2+|x-\bar{\gamma}|^2}{t^2+|x-\gamma|^2}\right)^{(d+1)/2}
+=F_y(X_c/t).
+\]
+Thus
+\[
+\delta_t^{(d)}(y)=\int_{\RR^d}\{F_y(X_c/t)-1\}\,\dd\nu(\gamma).
+\]
+Subtract the Taylor polynomial through order \(L\).  The remainder
+\[
+\rho_{L,t}^{(d)}(y):=
+\int_{\RR^d}\left\{
+F_y(X_c/t)-\sum_{|\alpha|\le L}U_\alpha^{(d)}(y)(X_c/t)^\alpha
+\right\}\dd\nu(\gamma)
+\]
+satisfies \eqref{eq:multidim-density-quotient-explicit-remainder}.  Indeed,
+on \(|X_c|\le t\), Lemma~\ref{lem:global-multidim-quotient-remainder-core}
+gives the uniform Taylor remainder
+\[
+O\!\left(\left|\frac{X_c}{t}\right|^{L+1}\right).
+\]
+On \(|X_c|>t\), the large-translation part of the proof of that lemma gives
+\(\sup_yF_y(X_c/t)\le C_dt^{-(d+1)}|X_c|^{d+1}\), while the coefficient bound
+\eqref{eq:multidim-coefficient-bound} gives
+\[
+\sup_y\sum_{|\alpha|\le L}
+|U_\alpha^{(d)}(y)|\,|X_c/t|^{|\alpha|}
+\le C_{d,L}\sum_{k=0}^{L}t^{-k}|X_c|^k .
+\]
+Because \(L\ge d+1\) and \(|X_c|>t\),
+\[
+t^{-(d+1)}|X_c|^{d+1}\le t^{-L}|X_c|^L,
+\qquad
+t^{-k}|X_c|^k\le t^{-L}|X_c|^L\quad(0\le k\le L).
+\]
+Thus the first term of \(\mathcal R_{d,L}\) is the local Taylor remainder on
+\(|X_c|\le t\), while its single tail term controls both the Poisson quotient
+and every subtracted polynomial mode on \(|X_c|>t\).  The same pointwise
+bound controls both \(L^\infty\) and \(L^1(\Omega_d)\), since \(\Omega_d\) is a
+probability measure.
+
+The assumption on \(\mathcal R_{d,L}\) is exactly the assertion that the
+right side of \eqref{eq:multidim-density-quotient-explicit-remainder} is
+\(o(t^{-L})\).
+The constant term equals \(1\) and is removed by the definition of
+\(\delta_t^{(d)}\).  The first-order Taylor layer is
+\[
+\sum_{|\alpha|=1}\mu_\alpha U_\alpha^{(d)}(y)t^{-1}=0
+\]
+because \(\nu\) is centred.  The remaining Taylor terms give
+\eqref{eq:multidim-density-quotient-expansion-main}.
+
+The uniform \(O(t^{-2})\) bound is a consequence of this same \(L\)-jet, not
+of a separate order-two large-translation estimate.  Indeed, the coefficient
+bound \eqref{eq:multidim-coefficient-bound} gives
+\[
+\sup_{y\in\RR^d}
+\left|\sum_{2\le|\alpha|\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-|\alpha|}\right|
+\le C_{d,L,\nu}\sum_{k=2}^{L}t^{-k}
+=O(t^{-2}),
+\]
+and \(\|\rho_{L,t}^{(d)}\|_\infty=o(t^{-L})=O(t^{-2})\) because \(L\ge2\).
+Hence
+\(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).
+For all sufficiently large \(t\), therefore, \(\|\delta_t^{(d)}\|_\infty\le
+1/2\), so \(1+\delta_t^{(d)}\) is bounded above and below by positive
+constants.  Also
+\[
+\int_{\RR^d}\delta_t^{(d)}(y)\,\Omega_d(\dd y)
+=\int_{\RR^d}\{h_t(\bar{\gamma}+ty)-g_t(\bar{\gamma}+ty)\}t^d\,\dd y=0,
+\]
+because both densities have total mass one.  Since \(\Phi\) is bounded by a
+constant multiple of \(s^2\) on \(|s|\le1/2\), the integral
+\(\int\Phi(\delta_t^{(d)})\,\dd\Omega_d\) is finite for all large \(t\), and
+the change of variables \(x=\bar{\gamma}+ty\) gives the displayed KL
+representation in \((\mathrm{EX}_{d,L})\).
+\end{proof}
+
+\begin{theorem}[Finite-moment supply of the quotient jet]%
+\label{thm:multidimensional-density-quotient}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\) and finite
+centred \(L\)th absolute moment.  Then
+\(\mathcal R_{d,L}(t)=o(t^{-L})\), and the conclusions of
+Proposition~\ref{thm:multidimensional-conditional-tail-density-quotient}
+hold.
+In particular \(\nu\) satisfies \((\mathrm{MPJ}_{d,L})\) and
+\((\mathrm{EX}_{d,L})\) for all sufficiently large \(t\).
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment} gives
+\(\mathcal R_{d,L}(t)=o(t^{-L})\).  Applying
+Proposition~\ref{thm:multidimensional-conditional-tail-density-quotient} gives
+the stated quotient jet and entropy-existence package.
+\end{proof}
+
+\begin{proposition}[Multidimensional quotient-to-KL transfer]%
+\label{thm:multidimensional-poisson-entropy-jets}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge2\), let \(\nu\) be a
+probability law on \(\RR^d\), and assume that \((\nu,d,L)\) satisfies both
+\((\mathrm{MPJ}_{d,L})\) and \((\mathrm{EX}_{d,L})\).  Thus
+\[
+\delta_t^{(d)}(y)
+=\sum_{2\le\lvert\alpha\rvert\le L}
+\mu_\alpha U_\alpha^{(d)}(y)t^{-\lvert\alpha\rvert}
++\rho_{L,t}^{(d)}(y),
+\]
+with
+\[
+\lVert\rho_{L,t}^{(d)}\rVert_\infty+
+\lVert\rho_{L,t}^{(d)}\rVert_{L^1(\Omega_d)}=o(t^{-L}),
+\qquad
+\lVert\delta_t^{(d)}\rVert_\infty=O(t^{-2}).
+\]
+Then
+\[
+D_{\mathrm{KL}}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar{\gamma})\bigr)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where
+\[
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{\alpha_1,\ldots,\alpha_r\in\NN_0^d\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+2\le|\alpha_j|\le L\ \mathrm{for}\ 1\le j\le r}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\]
+Moreover, all odd retained coefficients vanish:
+\[
+\mathcal A_m^{(d)}(\nu)=0
+\qquad\text{for every odd }m,\quad 4\le m\le L+2.
+\]
+\end{proposition}
+
+\begin{remark}
+For \(d=1\), \(\Sigma_0=0\), \(\operatorname{tr}\Sigma=\mu_2\), and the
+quadratic form evaluated below gives \(c_1^{\rm iso}=1/8\).  Therefore, once
+the quotient-jet hypothesis of this proposition is in force,
+\(\mathcal A_4^{(1)}=A_4=\mu_2^2/8\), matching the one-dimensional
+Cayley--Chebyshev coefficient.
+\end{remark}
+
+\begin{proof}
+Write
+\[
+D_j^{(d)}(y)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y),\qquad
+d_t(y)=\sum_{j=2}^{L}D_j^{(d)}(y)t^{-j}.
+\]
+\((\mathrm{MPJ}_{d,L})\) gives
+\[
+\delta_t^{(d)}=d_t+\rho_{L,t}^{(d)},\qquad
+\|d_t\|_\infty=O(t^{-2}),\qquad
+\|\rho_{L,t}^{(d)}\|_\infty+
+\|\rho_{L,t}^{(d)}\|_{L^1(\Omega_d)}=o(t^{-L}),
+\]
+and also \(\|\delta_t^{(d)}\|_\infty=O(t^{-2})\).  Since
+\[
+P_t^{(d)}(ty)t^d\,\dd y=P_1^{(d)}(y)\dd y=\Omega_d(\dd y)
+\]
+and \((\mathrm{EX}_{d,L})\) gives the large-\(t\) entropy representation
+\[
+D_{\rm KL}\bigl(P_t^{(d)}*\nu\,\|\,P_t^{(d)}(\cdot-\bar{\gamma})\bigr)
+=\int_{\RR^d}\Phi(\delta_t^{(d)}(y))\,\Omega_d(\dd y),
+\]
+where \(\Phi(s)=(1+s)\log(1+s)-s\).
+By Proposition~\ref{prop:finite-quotient-jet-implies-kl-coefficient-jet},
+applied with \((E,\lambda)=(\RR^d,\Omega_d)\), \(J=L\), and
+\(b_j=D_j^{(d)}\), only pure powers of the finite quotient polynomial
+\(d_t\) contribute through order \(L+2\).  Collecting the coefficient of
+\(t^{-m}\) in
+\[
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}d_t(y)^r
+\]
+gives precisely the displayed formula for \(\mathcal A_m^{(d)}(\nu)\), and
+all omitted layers are \(o(t^{-(L+2)})\).  If \(m\) is odd, then every
+product integral in the displayed coefficient has odd total mode order
+\(m\), so Lemma~\ref{lem:multidim-cayley-poisson-mode-parity} makes it zero.
+Thus all retained odd coefficients vanish.
+\end{proof}
+
+\begin{proposition}[Explicit-remainder form of the multidimensional KL jet]%
+\label{thm:multidim-conditional-tail-poisson-kl-asymptotic}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\).  Put
+\(X_c=\gamma-\bar{\gamma}\).  Assume
+\(\mathcal R_{d,L}(t)=o(t^{-L})\); equivalently,
+\(\EE|X_c|^L<\infty\).  Set
+\[
+\begin{aligned}
+h_t&=P_t^{(d)}*\nu,\\
+g_t&=P_t^{(d)}(\cdot-\bar{\gamma}),
+\end{aligned}
+\]
+and define
+\[
+\mu_\alpha=\EE[X_c^\alpha]\qquad(|\alpha|\le L),
+\]
+which are finite by
+Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment}.  Then
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where
+\[
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{\alpha_1,\ldots,\alpha_r\in\NN_0^d\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+2\le|\alpha_j|\le L\ \mathrm{for}\ 1\le j\le r}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\]
+All odd retained coefficients vanish:
+\[
+\mathcal A_m^{(d)}(\nu)=0
+\qquad\text{for every odd }m,\quad 4\le m\le L+2.
+\]
+\end{proposition}
+
+\begin{proof}
+Proposition~\ref{thm:multidimensional-conditional-tail-density-quotient} proves
+that the remainder condition \(\mathcal R_{d,L}(t)=o(t^{-L})\) implies
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\), with density layers
+\[
+D_j^{(d)}(y;\nu)=\sum_{|\alpha|=j}\mu_\alpha U_\alpha^{(d)}(y).
+\]
+Proposition~\ref{thm:multidimensional-poisson-entropy-jets} applies to
+exactly that quotient jet and gives the displayed entropy expansion and
+coefficient formula.  The odd-coefficient cancellation is the
+Lemma~\ref{lem:multidim-cayley-poisson-mode-parity} consequence recorded in
+that proposition.  By
+Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment}, this is the
+same hypothesis as finite \(L\)-absolute moment in the present range.
+\end{proof}
+
+\begin{corollary}[Finite-moment multidimensional KL jet]%
+\label{thm:multidim-finite-moment-poisson-kl-asymptotic}%
+\label{cor:multidim-finite-moment-entropy-jet}
+Let \(d\ge1\), let \(L\in\mathbb N\) satisfy \(L\ge d+1\), and let \(\nu\) be
+a probability measure on \(\RR^d\) with mean \(\bar{\gamma}\) and finite centred
+\(L\)th absolute moment.  Set
+\[
+\begin{aligned}
+h_t&=P_t^{(d)}*\nu,\\
+g_t&=P_t^{(d)}(\cdot-\bar{\gamma}),
+\end{aligned}
+\]
+and define the centred variable and moments by
+\[
+\begin{aligned}
+X_c&=\gamma-\bar{\gamma},\\
+\mu_\alpha&=\EE[X_c^\alpha]\qquad(|\alpha|\le L).
+\end{aligned}
+\]
+Then
+\[
+D_{\mathrm{KL}}(h_t\|g_t)
+=\sum_{m=4}^{L+2}\mathcal A_m^{(d)}(\nu)t^{-m}
++o(t^{-(L+2)}),
+\]
+where
+\[
+\mathcal A_m^{(d)}(\nu)=
+\sum_{r=2}^{\lfloor m/2\rfloor}
+\frac{(-1)^r}{r(r-1)}
+\sum_{\substack{\alpha_1,\ldots,\alpha_r\in\NN_0^d\\
+|\alpha_1|+\cdots+|\alpha_r|=m\\
+2\le|\alpha_j|\le L\ \mathrm{for}\ 1\le j\le r}}
+\mu_{\alpha_1}\cdots\mu_{\alpha_r}
+\int_{\RR^d}\prod_{j=1}^r
+U_{\alpha_j}^{(d)}(y)\,\Omega_d(\dd y).
+\]
+All odd retained coefficients vanish:
+\[
+\mathcal A_m^{(d)}(\nu)=0
+\qquad\text{for every odd }m,\quad 4\le m\le L+2.
+\]
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:multidimensional-density-quotient} proves that the finite
+centred \(L\)th absolute moment hypothesis gives
+\((\mathrm{MPJ}_{d,L})+(\mathrm{EX}_{d,L})\), with the explicit
+\(\mathcal R_{d,L}\) remainder bound.  Applying
+Proposition~\ref{thm:multidimensional-poisson-entropy-jets} gives the
+displayed entropy expansion, coefficient formula, and, through
+Lemma~\ref{lem:multidim-cayley-poisson-mode-parity}, parity cancellation.
+No covariance contraction is used in this proof.
+\end{proof}
+
+\begin{remark}[Two coefficient routes]
+Corollary~\ref{thm:multidim-finite-moment-poisson-kl-asymptotic} proves
+the finite-moment multidimensional coefficient expansion.  Proposition
+\ref{thm:multidim-conditional-tail-poisson-kl-asymptotic} is the same
+finite-moment assertion written with the explicit remainder
+\(\mathcal R_{d,L}\), whose \(o(t^{-L})\) decay is equivalent to finite
+\(L\)-moment by
+Lemma~\ref{lem:two-region-remainder-equivalent-finite-moment}.  The leading
+coefficient route is the one stated at the start of this subsection.
+\end{remark}
