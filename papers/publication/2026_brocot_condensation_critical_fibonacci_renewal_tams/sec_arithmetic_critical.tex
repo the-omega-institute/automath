@@ -64,54 +64,334 @@ where the centered spectrally positive law \(\mathcal S_\alpha\) is fixed by
    (e^{itx}-1-itx)\alpha x^{-\alpha-1}\,dx.
  \label{eq:centered-stable-characteristic-exponent}
 \end{equation}
+In particular, the explicit choice
+\begin{equation}
+ a_n=(K_Cn)^{1/\alpha}
+ =\left(\frac{2^{\sigma_0+2}}{\sigma_0-1}n\right)^{1/(\sigma_0-1)}
+ \label{eq:explicit-critical-stable-normalization}
+\end{equation}
+satisfies the required tail normalization.
 \end{theorem}
 
-\begin{proof}
-Equation \eqref{eq:critical-renewal-normalization} makes the displayed
-letter law a probability measure.  The local estimate
-\eqref{eq:critical-letter-local-tail} is
-\Cref{thm:arithmetic-denominator-layer} at \(s=\sigma_0\), and
-\eqref{eq:brocot-context-masses} evaluates the absolutely convergent context
-sum in \eqref{eq:critical-tail-constants}.  Direct summation gives
-\[
- \Pr\{C>x\}
- =\sum_{d>(x-1)/2}b_{2d+1}(\sigma_0)
- \sim\frac{b_C}{\sigma_0-1}
-      \left(\frac{x}{2}\right)^{1-\sigma_0},
-\]
-which is \eqref{eq:critical-letter-tail}.  Thus regular variation is a
-consequence of the arithmetic continuant estimate.
+The proof is separated into the arithmetic tail calculation, the lattice
+renewal input, and the one-sided stable criterion.  This also fixes the
+normalizations at each transfer.
 
-Write \(\overline F(j)=\Pr\{C>j\}\).  The increments are nonnegative
-integers, their mean \(\mu_C\) is finite by
-\eqref{eq:critical-cost-mean}, and their span is one because the fractions
-\(1/2\) and \(1/3\) have costs \(3\) and \(5\).  The hypotheses of the
-second-order lattice renewal theorem of Omey and Van Gulck are therefore
-satisfied.  Their asymptotic
-\cite[Sec.~3.2]{OmeyVanGulck2015} is
+\begin{lemma}[From the local denominator layer to the cost tail]
+\label{lem:critical-tail-summation}
+At \(s=\sigma_0\), the context series defining \(b_C\) is absolutely
+convergent and
+\[
+ b_C=2\left(\frac{\zeta(\sigma_0-1)}{\zeta(\sigma_0)}\right)^2=8.
+\]
+If \(\alpha=\sigma_0-1\), then
 \begin{equation}
- u_j-\frac1\mu
- \sim\frac{j\overline F(j)}{\mu^2(\alpha-1)}
+ \overline F_C(x):=\Pr\{C>x\}
+ \sim \frac{2^\alpha b_C}{\alpha}x^{-\alpha}
+ =K_Cx^{-\alpha}.
+ \label{eq:tail-summation-expanded}
+\end{equation}
+In particular, \(\overline F_C\) is regularly varying with index
+\(-\alpha\).
+\end{lemma}
+
+\begin{proof}
+The two context masses in \eqref{eq:brocot-context-masses} are finite for
+every \(s>2\), so their product is the absolutely convergent double series
+in \eqref{eq:critical-tail-constants}.  Their product is \(2\rho_s^2\).
+At the critical point \(\rho_{\sigma_0}=2\), which proves \(b_C=8\).
+
+By \Cref{thm:arithmetic-denominator-layer}, with \(d\) denoting the
+negative-continuant depth,
+\[
+ \Pr\{C=2d+1\}=b_{2d+1}(\sigma_0)
+ =b_Cd^{-\sigma_0}(1+o(1)).
+\]
+For real \(x\), the inequality \(2d+1>x\) is equivalent to
+\(d>(x-1)/2\).  The integral comparison for a power sequence, or the
+discrete Karamata theorem, gives
+\[
+ \sum_{d>y}d^{-\sigma_0}
+ \sim\int_y^\infty t^{-\sigma_0}\,dt
+ =\frac{y^{1-\sigma_0}}{\sigma_0-1}.
+\]
+The same conclusion holds after multiplication by a sequence tending to
+\(b_C\): for any \(\varepsilon>0\), all sufficiently large summands lie
+between \((b_C-\varepsilon)d^{-\sigma_0}\) and
+\((b_C+\varepsilon)d^{-\sigma_0}\), and the finitely many omitted terms do
+not enter a tail.  Therefore
+\begin{align*}
+ \overline F_C(x)
+ &=\sum_{d>(x-1)/2}b_{2d+1}(\sigma_0)\\
+ &\sim\frac{b_C}{\sigma_0-1}
+       \left(\frac{x-1}{2}\right)^{1-\sigma_0}
+ =\frac{2^\alpha b_C}{\alpha}x^{-\alpha}.
+\end{align*}
+This is \eqref{eq:tail-summation-expanded}, and the last constant is
+\(K_C=2^{\sigma_0+2}/(\sigma_0-1)\).
+\end{proof}
+
+\begin{lemma}[Second-order lattice renewal input]
+\label{lem:second-order-lattice-renewal}
+Let \((p_j)_{j\ge1}\) be a probability mass function on the positive
+integers.  Suppose that
+\begin{enumerate}
+ \item \(\gcd\{j:p_j>0\}=1\), so the renewal law is aperiodic of span one;
+ \item \(\mu=\sum_{j\ge1}jp_j<\infty\);
+ \item its tail \(\overline F(j)=\sum_{k>j}p_k\) satisfies
+ \(\overline F(j)\sim Kj^{-\alpha}\), where \(K>0\) and
+ \(\alpha>1\).
+\end{enumerate}
+Define \(v_0=1\) and
+\(v_j=\sum_{k=1}^jp_kv_{j-k}\).  Then
+\begin{equation}
+ v_j=\frac1\mu+\frac{K}{\mu^2(\alpha-1)}j^{1-\alpha}
+      +o(j^{1-\alpha}).
  \label{eq:second-order-renewal-input}
 \end{equation}
-for an aperiodic nonnegative integer law of finite mean and tail regularly
-varying with index \(-\alpha\), \(\alpha>1\).  Taking
-\(\alpha=\sigma_0-1\) proves
-\eqref{eq:critical-renewal-second-order}.
+\end{lemma}
 
-Summing this expansion and using
+\begin{proof}
+Introduce the equilibrium mass and its tail
+\[
+ p^{\rm e}_j=\frac{\overline F(j-1)}\mu,
+ \qquad
+ \overline F^{\rm e}(j)
+ =\sum_{k>j}p^{\rm e}_k
+ =\frac1\mu\sum_{r>j}\overline F(r).
+\]
+The second-order assertion used here is the first displayed renewal
+asymptotic in Omey and Van Gulck
+\cite[Sec.~3.2, first assertion following Eq.~(8)]{OmeyVanGulck2015}:
+under the three hypotheses above,
+\begin{equation}
+ v_j-\frac1\mu\sim\frac{\overline F^{\rm e}(j)}\mu.
+ \label{eq:omey-vangulck-equilibrium-form}
+\end{equation}
+Their paper states the result for a tail regularly varying with index
+\(-\alpha\), \(\alpha>1\); their \(u_n\), \(\mu\), and
+\(\overline F_n\) are respectively \(v_j\), \(\mu\), and
+\(\overline F(j)\) here.  Discrete Karamata summation supplies the constant:
+\[
+ \overline F^{\rm e}(j)
+ =\frac1\mu\sum_{r>j}\overline F(r)
+ \sim\frac{K}{\mu(\alpha-1)}j^{1-\alpha}.
+\]
+Substitution in \eqref{eq:omey-vangulck-equilibrium-form} gives
+\eqref{eq:second-order-renewal-input}.  Thus neither the power nor its
+coefficient is hidden in the citation.
+\end{proof}
+
+\begin{proposition}[Verification for the critical letter law]
+\label{prop:critical-renewal-hypotheses}
+The mass function \(p_j=b_j(\sigma_0)\) satisfies every hypothesis of
+\Cref{lem:second-order-lattice-renewal}, with
+\[
+ \mu=\mu_C,\qquad \alpha=\sigma_0-1\in(1,2),\qquad K=K_C.
+\]
+Consequently \eqref{eq:critical-renewal-second-order} holds.
+\end{proposition}
+
+\begin{proof}
+First, \eqref{eq:weighted-renewal-at-one} and
+\eqref{eq:critical-renewal-normalization} give
+\[
+ \sum_{j\ge1}p_j=B_{\sigma_0}(1)=1,
+\]
+so this is a probability mass function.  Every cost is a positive odd
+integer.  More particularly, the negative continued fractions
+\(1/2=[0;2]_-\) and \(1/3=[0;3]_-\) have
+\[
+ c(1/2)=2(2-1)+1=3,\qquad
+ c(1/3)=2(3-1)+1=5,
+\]
+and their masses are \(2^{-\sigma_0}>0\) and
+\(3^{-\sigma_0}>0\).  Hence
+\[
+ \gcd\{j:p_j>0\}\mid\gcd(3,5)=1.
+\]
+The renewal span is therefore one.  Equivalently, sums of threes and fives
+contain every integer from eight onward, so the renewal epochs have no
+nontrivial period.  The fact that each individual increment is odd does not
+create a period, because the number of increments is not fixed.
+
+Second, the mean is exactly the series in
+\eqref{eq:critical-cost-mean}.  The Panov--Liehl estimate recorded after
+that equation gives
+\[
+ \mu_C\ll\sum_{q\ge2}q^{1-\sigma_0}(\log q)^2<\infty
+\]
+because \(\sigma_0>2\).  Thus the mean hypothesis is verified directly
+against the letter law, not inferred from its tail alone.
+
+Third, \(\rho_s=\zeta(s-1)/\zeta(s)\) decreases from infinity to one on
+\((2,\infty)\), while
+\(\rho_3=\zeta(2)/\zeta(3)<2\).  The defining equation
+\(\rho_{\sigma_0}=2\) therefore puts \(2<\sigma_0<3\), hence
+\(1<\alpha<2\).  Finally, \Cref{lem:critical-tail-summation} gives
+\(\overline F_C(j)\sim K_Cj^{-\alpha}\).  All three hypotheses of
+\Cref{lem:second-order-lattice-renewal} now hold.  Its conclusion is
+\[
+ u_j(\sigma_0)=\frac1{\mu_C}
+ +\frac{K_C}{\mu_C^2(\sigma_0-2)}j^{2-\sigma_0}
+ +o(j^{2-\sigma_0}),
+\]
+as claimed.
+\end{proof}
+
+\begin{lemma}[One-sided stable domain of attraction]
+\label{lem:one-sided-stable-domain}
+Let \(X\ge0\) have finite mean \(\mu\) and
+\(\Pr\{X>x\}\sim Kx^{-\alpha}\), where \(K>0\) and
+\(1<\alpha<2\).  Put \(a_n=(Kn)^{1/\alpha}\).  Then
+\begin{equation}
+ \frac{X_1+\cdots+X_n-n\mu}{a_n}
+ \xrightarrow{\rm d}S_\alpha,
+ \label{eq:generic-one-sided-stable-limit}
+\end{equation}
+where
+\[
+ \log\EE e^{itS_\alpha}
+ =\int_0^\infty(e^{itx}-1-itx)\alpha x^{-\alpha-1}\,dx.
+\]
+The limiting L\'evy measure has density
+\(\alpha x^{-\alpha-1}\) on \((0,\infty)\) and zero mass on
+\(( -\infty,0)\).
+\end{lemma}
+
+\begin{proof}
+The one-sided criterion is Feller's stable domain-of-attraction theorem
+\cite[Ch.~XVII, Sec.~5, Thm.~2]{Feller1971}.  We verify its tail balance
+and normalization explicitly.  Since \(a_n^\alpha=Kn\), for every \(x>0\),
+\begin{equation}
+ n\Pr\{X>a_nx\}\longrightarrow x^{-\alpha},
+ \qquad
+ n\Pr\{X<-a_nx\}=0.
+ \label{eq:stable-tail-balance}
+\end{equation}
+Thus the positive and negative tail-balance constants are one and zero.
+In particular \(n\Pr\{X>a_n\}\to1\).
+
+For completeness, the characteristic exponent follows directly from these
+conditions.  Let \(\nu_n=n\Pr\{X/a_n\in\cdot\}\).  Equation
+\eqref{eq:stable-tail-balance} gives vague convergence on
+\((0,\infty)\) to the measure
+\(\nu(dx)=\alpha x^{-\alpha-1}dx\).  The parts near zero and infinity can
+be removed uniformly.  Indeed, integration by parts and regular variation
+give
+\begin{align*}
+ \frac n{a_n^2}\EE[X^2\mathbf1_{\{X\le\varepsilon a_n\}}]
+ &\longrightarrow\frac{\alpha}{2-\alpha}\varepsilon^{2-\alpha},\\
+ \frac n{a_n}\EE[X\mathbf1_{\{X>Ma_n\}}]
+ &\longrightarrow\frac{\alpha}{\alpha-1}M^{1-\alpha}.
+\end{align*}
+The first bound tends to zero with \(\varepsilon\downarrow0\), and the
+second with \(M\to\infty\).  Since
+\(e^{itx}-1-itx=O(x^2)\) near zero and is \(O(1+x)\) at infinity, vague
+convergence extends to this compensated test function:
+\[
+ n\EE\left[e^{itX/a_n}-1-\frac{itX}{a_n}\right]
+ \longrightarrow
+ \int_0^\infty(e^{itx}-1-itx)\alpha x^{-\alpha-1}\,dx.
+\]
+Finally, \(n/a_n^2\to0\) because \(\alpha<2\).  Expanding the logarithm
+of the characteristic function therefore shows that centering by the full
+mean \(n\mu\) produces exactly the displayed exponent.  This proves
+\eqref{eq:generic-one-sided-stable-limit} and also shows why no negative
+tail term or unspecified scale factor remains.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:arithmetic-critical-stable-renewal}]
+Equation \eqref{eq:critical-renewal-normalization} makes the displayed
+letter weights a probability measure.  The local estimate and both tail
+constants follow from \Cref{lem:critical-tail-summation}.
+\Cref{prop:critical-renewal-hypotheses} gives
+\eqref{eq:critical-renewal-second-order} with every lattice-renewal
+hypothesis verified.
+
+Because \(2-\sigma_0\in(-1,0)\), summation of the renewal remainder is
+legitimate: if \(r_j=o(j^{2-\sigma_0})\), then for every
+\(\varepsilon>0\),
+\[
+ \left|\sum_{j=1}^{m-1}r_j\right|
+ \le O_\varepsilon(1)+\varepsilon
+      \sum_{j=1}^{m-1}j^{2-\sigma_0}
+ =o(m^{3-\sigma_0}).
+\]
+Also,
 \[
  \sum_{j=1}^{m-1}j^{2-\sigma_0}
- \sim\frac{m^{3-\sigma_0}}{3-\sigma_0}
+ \sim\frac{m^{3-\sigma_0}}{3-\sigma_0}.
 \]
-in the exact identity \eqref{eq:standard-layer-renewal} proves
-\eqref{eq:standard-layer-critical-second-order}; the endpoint terms are
-\(O(1)=o(m^{3-\sigma_0})\).
+Substitution in the exact identity
+\eqref{eq:critical-weighted-renewal-identity} gives
+\eqref{eq:standard-layer-critical-second-order}.  The terminal term
+\(u_m=O(1)\) and the endpoint \(-1\) are
+\(o(m^{3-\sigma_0})\).
 
-Finally, \eqref{eq:critical-letter-tail}, finite mean, and the absence of a
-negative tail are the one-sided domain-of-attraction conditions for an
-\(\alpha\)-stable law with the normalization and centering in
-\eqref{eq:critical-cost-stable-domain} and
-\eqref{eq:centered-stable-characteristic-exponent}; see
-\cite[Ch.~XVII]{Feller1971}.
+Finally, take \(X=C\) in \Cref{lem:one-sided-stable-domain}.  The finite
+mean was verified in \Cref{prop:critical-renewal-hypotheses}, and
+\Cref{lem:critical-tail-summation} supplies its tail with \(K=K_C\).
+This proves \eqref{eq:critical-cost-stable-domain} and
+\eqref{eq:centered-stable-characteristic-exponent}.  It also gives the
+explicit normalization \eqref{eq:explicit-critical-stable-normalization}.
 \end{proof}
+
+\begin{corollary}[Critical asymptotic for the classical Fibonacci partition function]
+\label{cor:classical-fibonacci-critical-asymptotic}
+Let \(R(N)\) count the representations of \(N\) as a sum of distinct
+members of \(F_2,F_3,\ldots\), as in
+\eqref{eq:fibonacci-partition-function}.  Then
+\begin{align}
+ &\sum_{F_{m+1}-1\le N<F_{m+2}-1}R(N)^{-\sigma_0}
+ \notag\\
+ &\qquad=\frac{2m}{\mu_C}
+ +\frac{2K_C}{\mu_C^2(\sigma_0-2)(3-\sigma_0)}
+  m^{3-\sigma_0}+o(m^{3-\sigma_0}).
+ \label{eq:classical-fibonacci-critical-asymptotic}
+\end{align}
+Equivalently, relative to the known linear renewal scale,
+\begin{equation}
+ \sum_{N\in\mathcal I_m}R(N)^{-\sigma_0}
+ =\frac{2m}{\mu_C}\left[
+ 1+\frac{K_C}{\mu_C(\sigma_0-2)(3-\sigma_0)}
+ m^{2-\sigma_0}+o(m^{2-\sigma_0})\right].
+ \label{eq:relative-fibonacci-critical-correction}
+\end{equation}
+The exponent \(3-\sigma_0\) lies strictly between zero and one.  Hence the
+second term diverges on the absolute partition-function scale, is smaller
+than the leading linear term, and cannot be absorbed into a bounded endpoint
+correction.
+\end{corollary}
+
+\begin{proof}
+The interval in \eqref{eq:classical-fibonacci-critical-asymptotic} is
+exactly \(\mathcal I_m\), so the left side is
+\(Z_m^R(-\sigma_0)\).  Equation
+\eqref{eq:standard-layer-critical-second-order} proves the first expansion.
+Factoring out \(2m/\mu_C\) gives
+\eqref{eq:relative-fibonacci-critical-correction}.  The inequalities
+\(2<\sigma_0<3\), already verified in
+\Cref{prop:critical-renewal-hypotheses}, give the stated scale comparison.
+\end{proof}
+
+\begin{remark}[Numerical consistency check]
+\label{rem:critical-constant-numerics}
+Solving the defining zeta equation gives
+\begin{align*}
+ \sigma_0&=2.478750785733960\ldots,&
+ 3-\sigma_0&=0.521249214266040\ldots,\\
+ K_C&=15.07798619025016\ldots.&&
+\end{align*}
+As an independent finite-sum check of the context constant, let
+\(\rho_Q=1+\sum_{q=2}^Q\varphi(q)q^{-\sigma_0}\).  The values of
+\(2\rho_Q^2\) for \(Q=10^3,10^4,10^5,10^6\) are respectively
+\begin{align*}
+ Q=10^3:\ &7.6323590814,& Q=10^4:\ &7.8769320348,\\
+ Q=10^5:\ &7.9590248673,& Q=10^6:\ &7.9863810907,
+\end{align*}
+consistent with the proved limit \(b_C=8\).  The computation is only a
+sanity check; the proof of the constant is the exact context evaluation in
+\Cref{lem:critical-tail-summation}.  The verification script and its unit
+test are included in the \texttt{artifacts} directory.
+\end{remark}
