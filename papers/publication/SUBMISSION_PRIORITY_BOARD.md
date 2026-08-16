@@ -21,10 +21,10 @@
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
 | **A5** | `finite_parts_..._etds` | 43+19 | 已按三层重新配重;文献 81/84 已核 | **ETDS**(理由落在动力学定理)|
-| **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **发育中** | 拆分已核实入库;首版 19 页低于估值所依据的 30-34 页,已派第二遍补第 3-5 节 | **TAMS 55-65%**(JNT 82-90%)|
+| **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | 发育完成:19→27 页,更新与吸引域假设逐条验证,经典 Fibonacci 配分函数推论单列,新增数值校验确认 b_C=8 | **TAMS 55-65%**(JNT 82-90%)|
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **52+19** | **拆分已执行并核实**;回收压力与转移极值结果降为从属 | **JNT 50-65%**(TAMS-only 10-20%)|
 | **A7** | `upper_fibers_..._fq` | 36+36 | Theorem 6.6 已证,新颖性 75-80%;评估者明言不进 JNT 档 | **Fibonacci Quarterly**(档位不变)|
-| **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **33+22** | **改写已执行并核实**;实验等价居首,表征与诊断装置整体删除 | **EJS 51%**(SPA 44%,Bernoulli 21%)|
+| **A8-A** | `renewal_experiment_equivalence_singular_lan_ejs` | **33+22** | **改写后复评:EJS 51% 守住**;不压到 25 页去投 Bernoulli;发现 PDF 渲染缺陷,修补中 | **EJS**(AoS/EJP/Bernoulli 均判为更差)|
 | **A8-B** | `detector_shells_..._jphyscomm` | 72+19 | 原装配版原样保留,作为被删材料的存放处 | **SPA 39%**(未改动)|
 | **A9** | `homological_visibility_..._apal` | **39+6** | 语境性跨界经评估判定不可得;边界节已补二次障碍文献线 + 等变无选择命题 | **Cahiers**(天花板已两次论证)|
 
@@ -63,7 +63,8 @@
 
 
 
-> **TICK 183 — A3-A 拆分后复评回来了:守住并略升,ETDS 确认,两处引文修补已派工。** Oracle c5ed1d8b 取回,存 sprint/result_A3A_venue_r1.md 与 artifacts/oracle_sprint_A3A_venue_r1.md。裁决:拆分兑现了承诺,投 ETDS 而非 TAMS。ETDS 上传版 75%、两处廉价修补后 77%(原估 74%);TAMS 51%(原估 53%),差距不但没缩小反而**从 21 点扩大到 24 点**,明确不值得押一个投稿周期。他单独回答了"跳出我们设的比较框"那一问:最接近的替代是 Journal of Modern Dynamics(69%),但论文的实际中心不是一个宽泛的交叉纲领而是符号重编码的有限状态重叠链与逆窗定理,主 MSC 37B10、商构造是配对图论证、最终不变量是仅未来逆深度,故 ETDS 仍是最易被编辑读懂的归宿;JNT、Acta Arithmetica、DCDS-A 或形式语言类刊各只覆盖一侧。**20 页不算短**:他明说没有隐含要求 24 页,篇幅短是因为相邻坍缩机制强,证明短是因为引理真的把动力学坍缩掉了而非省略论证,为凑上限加四页反而削弱论文。两处修补:(A) 伴随论文在引言与第 5 节只有散文提及、未进参考文献表,而第 5 节做了实质比较断言(二次阈值恒为 2 或 3、逆长度公式小得多),审稿人必须能核实这是真正的结果划分而非诉诸不可得的稿件;(B) 参考文献 [6] Carton-Sudbery-Yassawi 缺标识符。**arXiv:2606.30496 已由我方独立在官方 arXiv 记录核验**:标题 From some Pisot numerations to topological groups、作者 Olivier Carton; Jake Sudbery; Reem Yassawi、类目 math.DS/cs.FL/math.NT、2026-06-29 提交 v2 于 2026-08-08,且摘要确将"保零"等同于 Frougny-Solomyak 的 Condition F,正是我方引用所依赖的内容。已派 codex(sprint/a3a_citation_repair_task.txt),并明令**不得为未投稿的伴随论文编造任何 arXiv 号、DOI 或 URL**——是否投 arXiv 是作者决定,尚未做出。任务书同时抄录了评估者的禁止清单:不得恢复伴随论文材料、不得扩充文献综述、不得加定理、不得把审计计算变成一节、不得凑到 24 页、不得把循环秩推论重新扶为主定理。A8-A 复评 502daf2f 仍 waiting_response。A6 Paper A 发育中。内存 0.92 GB、缺页 678。
+> **TICK 184 — 两个 agent 收割入库,A8-A 复评守住,并查出一类此前所有检查都看不见的缺陷。** A6-A 提交 940ec7ba3:发育完成,19→27 页、tex 1229→1686 行;二阶格更新输入与单侧吸引域判据的假设现按本文记号逐条验证而非断言,span-1 由插入语升格为证明,经典 Fibonacci 配分函数的非整数有限尺度推论单列;并补上此前完全缺失的可复现校验——数值确认尾常数 b_C=8,截断和随截断增大依次为 7.6324、7.8769、7.9590、7.9864。独立核实:清洁重建 exit 0、undefined 全 0、27 页、verifier exit 0、单元 3/3、SHA 5/5。A3-A 提交 d240d5dfd:伴随论文入参考文献表并在两处引用,**按未投稿事实登记为 companion manuscript,无 DOI、无 arXiv 号、无 URL**(已逐项复查确认);参考文献 [6] 补上 arXiv:2606.30496v2。独立核实:三文档清洁重建 exit 0、undefined 全 0、20/4/1 页、固定三次 28/28、任意 D 13/13、SHA 8/8。**A8-A 复评(502daf2f)回来:EJS 51% 守住**,他确认改写没削弱 Theorem 4,反而"更可信,因为读者现在能看出哪条定理消除哪个障碍";明确不要压到 25 页去投 Bernoulli(33 页时仍是 11-13%,即便压缩成功拿到 21% 也不及 EJS 51% 的一半,且压缩会让中心奇异定理重新显得依赖台下的串行代数);AoS、EJP、Bernoulli 与更窄的专业刊均判为更差,Statistical Inference for Stochastic Processes 虽字面最贴切但已停止接收新投稿。**但他指出了成品 PDF 的生产缺陷,而这类缺陷此前每一轮检查都看不见**:我方的核验一直是基于日志的(exit code、undefined ref/cite、multiply-defined),而这些缺陷的 LaTeX 完全合法,只在渲染结果里现形。经我方用 pdftotext 抽取正文复核:A8-A 主文 10 处交叉文档引用把文件名印了出来(如 "Lemma S2supplementary.pdf"),显示式 (2.1) 里印着字面量 qquad。**随后我把这类检查扫了全部十一篇,查出更严重的一处**:A2 `cayley_chebyshev`(本组最强、投 JFA)的 \relocatedproof 宏在正文里印出我方的源文件名,形如"See Supplementary Material, ..., in supplement.pdf (source: sec_entropy_core_main.tex)",全文约十七处——把我方的 LaTeX 文件布局直接印给审稿人看。其余九篇该项为零。已派 codex(sprint/pdf_defect_cleanup_task.txt)修这两篇,并要求用 pdftotext 抽取正文验证而非只读源码,同时把整类缺陷(正文里的 .tex/.pdf、印出的控制序列、?? 引用、TODO 占位)在两篇里扫一遍。内存 1.96 GB。**核验方法已改进:此后每篇都加一道 PDF 正文抽取检查。**
+
 
 
 

@@ -1,0 +1,96 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly and do the work.
+
+SCOPE: exactly two directories.
+  papers/publication/2026_renewal_experiment_equivalence_singular_lan_ejs
+  papers/publication/2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa
+Touch nothing else. Change NO mathematics, NO theorem statement, NO hypothesis, NO proof, NO
+bibliography entry, NO cover letter, NO target journal. This is a rendering-defect repair only.
+
+HOW THESE WERE FOUND, because it tells you what to look for. Every prior check on these papers was
+log-based: latexmk exit code, undefined references, undefined citations, multiply-defined labels.
+All of those are clean and have been clean for many rounds. These defects are invisible to that
+method because the LaTeX is valid - the damage only appears in the rendered text. They were found by
+extracting the text of the compiled PDF and reading it. Use that method throughout this task:
+pdftotext the built PDF and read what a referee would actually see.
+
+DEFECT 1 - renewal_experiment_equivalence_singular_lan_ejs: cross-document references print the
+filename. The rendered text contains constructions such as
+
+    "the ordinary renewal-count comparison used in Lemma S2supplementary.pdf therefore applies"
+    "in Lemma S1supplementary.pdf imply the two O(N^-1) squared-Hellinger hypotheses"
+    "Finally, Lemma S2supplementary.pdf supplies the stopped-..."
+    "Section 2.2supplementary.pdf", "Section 3.1supplementary.pdf"
+
+There are ten such occurrences in the main article. The intended reading is "Lemma S2 of the
+supplementary material". The cause is the cross-document reference setup appending the external
+document's filename to the printed label. Fix it so the prose reads correctly - the reference
+should name the supplement in words, not as a filename, and it must still resolve. Verify by
+extracting the PDF text and confirming zero occurrences of ".pdf" anywhere in the rendered body.
+
+DEFECT 2 - same paper: a literal control sequence survives into a display. The rendered text of
+display (2.1) contains
+
+    c_{jk} z_{jk},   qquad   c_{j,m_j-1} = 0
+
+with the word "qquad" printed where a horizontal space was intended. Repair the display so the
+spacing renders and no command name is printed. Then check every other display in the article the
+same way: extract the PDF text and look for any surviving TeX command name.
+
+DEFECT 3 - cayley_chebyshev_poisson_entropy_strip_rkhs_jfa: the article prints our internal file
+layout to the referee. main.tex defines
+
+    \newcommand{\relocatedproof}[2]{%
+      \begin{proof}
+      See Supplementary Material, #2, in \path{supplement.pdf}
+      (source: \path{#1}).
+      \end{proof}}
+
+and it is invoked about seventeen times in sec_entropy_core_main_part_01.tex and elsewhere, so the
+compiled article repeatedly prints sentences of the form
+
+    See Supplementary Material, the proof following Lemma 3.4 "... Cayley Taylor remainder",
+    in supplement.pdf (source: sec_entropy_core_main.tex).
+
+Two things are wrong with this and both must go.
+  - "(source: sec_entropy_core_main.tex)" exposes our LaTeX source file names in the body of a
+    manuscript being submitted to a journal. It is internal bookkeeping and has no business in the
+    printed article. Remove the source clause entirely from the macro. If that information is worth
+    keeping for the authors, it belongs in a LaTeX comment, not in printed text.
+  - "in supplement.pdf" names a file. It should refer to the supplementary material in words, the
+    way the rest of the manuscript does.
+The redirection itself is legitimate and stays: a proof environment that tells the reader the proof
+is in the supplementary material, and where. Only its wording changes. Keep the second argument -
+the human-readable location of the proof - exactly as it is at every call site. Do not touch the
+call sites at all if the macro can be fixed alone; that is the preferred repair.
+Apply the same fix to the identical macro in supplement.tex.
+
+AFTER REPAIRING, SWEEP BOTH PAPERS FOR THE WHOLE DEFECT CLASS. Extract the text of every compiled
+PDF in both directories - main, supplement, cover letter - and check for:
+  - any occurrence of ".tex" or ".pdf" in the rendered body;
+  - any printed TeX command name (qquad, quad, textbf, cite, ref, label, path, and anything else
+    that looks like a control sequence rather than English or mathematics);
+  - reference or citation markers rendering as "??" or as raw keys;
+  - any placeholder text such as TODO, XXX, TBD, or a bare "?" standing where a number belongs.
+Report what the sweep found, including anything you found that is not listed above and anything you
+decided was a false positive - for example the word "quad" occurring inside "quadratic" is not a
+defect. Be careful to distinguish those.
+
+RULES:
+ - Clean rebuild in each directory: latexmk -C, remove the auxiliary files, alternating passes until
+   latexmk -pdfxe exits 0 with zero undefined references, zero undefined citations and zero
+   multiply-defined labels for every document. Cross-document references must still resolve after
+   the fix - check that the numbers printed are the right numbers, not merely that nothing is
+   undefined.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py in both directories; report pass
+   counts. Regenerate artifacts/SHA256SUMS with LF endings if artifacts change.
+ - Page counts should not change materially. If a repair changes the page count by more than one
+   page in either document, say so and explain why.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in either directory.
+   Do NOT delete the build logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the macro as finally defined and one rendered sentence from each paper showing the repaired
+text; confirmation that extracting the PDF text now yields zero occurrences of ".pdf" and ".tex" in
+the rendered bodies; the full sweep results for both papers including false positives you dismissed
+and why; before and after page counts; compile results and verification pass counts.
