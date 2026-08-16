@@ -1,0 +1,69 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere - archived external evidence.
+Do not commit. Do not touch any paper directory outside your assigned scope; other agents are
+working on the others.
+
+WHAT WAS FOUND. Every DOI in every bibliography under papers/publication was resolved twice - once
+against the Crossref REST API and once through doi.org content negotiation. Of 517 distinct DOIs,
+59 are defective, spread over sixteen paper directories. The audit, with the full table, is at
+tools/chatgpt-oracle/sprint/citation_doi_audit.md. Read it first.
+
+There are two classes and they fail differently:
+
+  CLASS A - the DOI resolves, but to a different work. The cited paper is real; the identifier
+  attached to it belongs to some unrelated article, so a reader who follows the link lands
+  somewhere else. In the JST paper two entries hold each other's DOIs.
+
+  CLASS B - the DOI does not exist at all. Same shape in almost every case: the publisher prefix
+  is right and the suffix is close to a real one but wrong.
+
+Neither class is caught by a compile, by a bibliography-parity check, or by anything else this
+project currently runs, which is why they survived every review round.
+
+YOUR JOB. For each defective entry in your scope, establish the correct DOI and correct the entry.
+
+The audit lists a proposed replacement for most Class B entries. DO NOT TRUST IT. It came from an
+automated bibliographic search and it is a lead, not a result. Verify every replacement yourself
+before you write it, and verify it the same way for the entries where the audit proposes nothing:
+
+  curl -A "mailto:alyicabhz@gmail.com" -H "Accept: application/vnd.citationstyles.csl+json" \
+       https://doi.org/<candidate>
+
+and read the returned title, author list, container and year against the bibliography entry. A DOI
+is acceptable only when all four agree. Resolution alone proves nothing - that is exactly the trap
+Class A represents.
+
+Where the metadata disagrees with the bibliography entry, the entry may be the thing that is wrong:
+a mis-stated year, volume, page range or journal. In that case correct the entry from the
+authoritative metadata rather than hunting for a DOI that matches a wrong entry.
+
+If you cannot establish a correct DOI for an entry, REMOVE THE doi FIELD and leave the rest of the
+entry intact, and say so in your report. A citation without a DOI is complete and correct; a
+citation with a wrong one is not. Never guess, never construct a DOI from a pattern, and never
+leave a defective one in place because no replacement was found.
+
+Report anything the audit got wrong. If an entry it flags is actually fine - the identifier is
+right and the audit's matcher misread an accent, a subtitle or a series title - say so and leave it
+alone. That finding is as useful as a repair.
+
+THEN VERIFY:
+ - rebuild each paper you touched cleanly: latexmk -C, remove auxiliaries, alternating passes until
+   latexmk -pdfxe exits 0 with zero undefined references, zero undefined citations, zero
+   multiply-defined labels. Page counts must not change; report them before and after.
+ - confirm printed bibliography keys still equal cited keys in both directions, per document.
+ - re-run every artifacts/verify*.py and artifacts/test_*.py in the papers you touched and report
+   pass counts; regenerate artifacts/SHA256SUMS with LF endings if any artifact changed.
+
+RULES:
+ - Change nothing but bibliography entries. No theorem, proof, hypothesis or section text.
+ - pdftotext -enc UTF-8 always; the default is Latin-1 here and will report present text as
+   missing. Extraction is evidence, not an authority - if a glyph blocks confirmation of something
+   correct, report the limitation and give page-image evidence rather than editing the manuscript.
+ - No revision marks, no scratch files, do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: every entry you changed, with the old DOI, the new DOI or its removal, and the metadata you
+verified it against; every entry you left alone and why; every entry where the bibliography rather
+than the DOI was wrong; page counts before and after; compile, parity and verifier results.
