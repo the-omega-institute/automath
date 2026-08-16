@@ -1,10 +1,8 @@
-# Prime support and multiple-context-free languages in recurrent numeration
+# Context-free rigidity in recurrent numeration
 
-This directory contains the article, its separately compiled finite-state
-supplement, and the finite consistency checks cited in the submission record.
-The article is self-contained: in particular, the Zeckendorf block matrix used
-by its context-free theorem is proved in `sec_pisot.tex` and no article theorem
-depends on a supplement number.
+This directory contains the Monatshefte fuer Mathematik article and its
+deterministic consistency checks. The article is mathematically self-contained;
+the finite-state results developed separately are not part of this submission.
 
 ## Reproducibility
 

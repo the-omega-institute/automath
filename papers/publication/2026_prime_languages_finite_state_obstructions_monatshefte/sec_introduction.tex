@@ -12,254 +12,178 @@ numeration language? The answer is governed by a local recurrence action.
 It applies beyond ordinary bases and remains informative when the trailing
 coefficient of the recurrence is not a unit.
 
-The ambient assumptions are deliberately explicit. The sequence \(U\) is
-strictly increasing and eventually satisfies an integral linear recurrence
-with nonzero trailing coefficient. A finite nonnegative digit alphabet and
-a canonical language \(\mathcal R_U\) give exactly one representation of
-each positive integer. No ordering of values by canonical length is assumed.
-Regularity of \(\mathcal R_U\) is not needed for the structural theorems; it
-is imposed only for the effective statement.
+The sequence \(U\) is assumed to be strictly increasing and eventually to
+satisfy an integral linear recurrence with nonzero trailing coefficient. A
+finite nonnegative digit alphabet and a canonical language \(\mathcal R_U\)
+give one representation of each positive integer. No ordering of values by
+canonical length is assumed. Regularity of \(\mathcal R_U\) is needed only
+for the effective one-system statement.
 
 \subsection{Main results}
 
-The recurrence gives an affine matrix \(D_\varepsilon\) for each digit.
-After a fixed prefix beyond the transient, concatenation is matrix
-multiplication, and every block matrix is invertible modulo each integer
-coprime to the trailing coefficient. The weak pumping lemma of
-Seki--Matsumura--Fujii--Kasami then supplies a single synchronized family
+The three principal results distinguish local information extracted from
+one pumped orbit from global information supplied by a finite cover of a
+slender language.
+
+\begin{maintheorem}[A: synchronized orbit and prime support]
+Let \((U,A,\mathcal R_U)\) be a canonical eventually recurrent numeration
+system with trailing recurrence coefficient \(a_0\), and let
+\(L\subseteq\mathcal R_U\) be an infinite \(k\)-MCFL. There is a fixed
+synchronized family
 \[
   W(t)=a u_1v_1^tw_1s_1^tu_2\cdots
-       u_kv_k^tw_ks_k^tu_{k+1}\qquad(t\ge0)
+       u_kv_k^tw_ks_k^tu_{k+1}\in L \qquad(t\ge0)
 \]
-inside every infinite \(k\)-MCFL. Positive pumped length makes the words
-distinct, and uniqueness of canonical representations makes
-\(N(t)=\val_U(W(t))\) pairwise distinct. For every admissible
-modulus \(q\), a common return time for the pumped block matrices gives
+of positive total pumped length whose values \(N(t)=\val_U(W(t))\) are
+pairwise distinct. For every \(q\ge2\) with \(\gcd(q,a_0)=1\), some
+\(H(q)\ge1\) satisfies
 \[
-  N(t+H(q))\equiv N(t)\pmod q\qquad(t\ge0).
+  N(t+H(q))\equiv N(t)\pmod q \qquad(t\ge0).
 \]
-This is \Cref{thm:mcfl-synchronized-congruence-orbit}. Importantly, the
-factorization is fixed before \(q\) is chosen.
+If \(S\) is the set of prime divisors of \(a_0\), then every such \(L\)
+has either unbounded prime support outside \(S\) or unbounded \(p\)-adic
+valuation for some \(p\in S\). Consequently the prime and
+bounded-\(\Omega\) representation languages are MCF-immune.
+\end{maintheorem}
 
-The same orbit has two topological consequences. Broughan's standard adic
-topologies, completions, and ambient prime-factor strata identify a
-countable no-isolated-point subspace with \(\mathbb Q\) and its profinite
-closure with the Cantor set. Our step is to prove that every synchronized
-MCFL orbit satisfies that hypothesis,
-yielding a scattered-set obstruction
-(\Cref{thm:mcfl-local-adic-fingerprint}). The deleted-prime intrinsic
-Cantor--Bendixson height of a set with at most \(K\) primes outside the
-exceptional support and bounded exceptional valuations is \(K+1\)
-(\Cref{prop:local-prime-factor-cb-rank}). These facts give the nonunit
-escape dichotomy \Cref{thm:nonunit-mcfl-escape-dichotomy}: on every
-infinite MCFL, either the number of prime divisors outside the trailing
-coefficient is unbounded, or one valuation at a prime dividing that
-coefficient is unbounded. Prime and bounded-\(\Omega\) representation
-languages are therefore MCF-immune without a unit hypothesis.
+The synchronized family is chosen before the modulus. The full orbit
+statement is \Cref{thm:mcfl-synchronized-congruence-orbit}; its topological
+and prime-support consequences are
+\Cref{thm:mcfl-local-adic-fingerprint,thm:nonunit-mcfl-escape-dichotomy}.
 
-The trailing coefficient of a nonminimal recurrence witness is not an
-invariant. \Cref{prop:recurrence-witness-separation} exhibits ordinary
-base \(p\) and the Zeckendorf sequence with inflated recurrence witnesses
-having the same exceptional prime \(p\), but opposite bounded-support
-behavior. We therefore pass to the minimal tail recurrence
+Let \(\mu_U\) be the minimal tail recurrence polynomial and let
+\(S_{\mathrm r}\) be the prime divisors of its constant term.
+
+\begin{maintheorem}[B: geometric rays and weak-Perron systems]
+The following are equivalent: some infinite finite-fan-out MCFL in
+\(\mathcal R_U\) has bounded prime support outside \(S_{\mathrm r}\);
+\(\mathcal R_U\) contains a synchronized family with values \(cb^t\) for
+integers \(c\ge1\) and \(b\ge2\); and such a family is itself an infinite
+linear MCFL of finite fan-out. If \(U\) is a standard greedy linear
+numeration basis and \(\mu_U\) is the minimal polynomial of a weak Perron
+number \(\beta>1\), these conditions are also equivalent to each of
 \[
-  \mu_U(X)=X^{d_{\mathrm r}}-c_{d_{\mathrm r}-1}X^{d_{\mathrm r}-1}
-    -\cdots-c_1X-c_0
+  \beta^m=B\in\mathbb Z_{\ge2},\qquad
+  \mu_U(X)\mid X^m-B,
 \]
-and write \(S_{\mathrm r}=\{p:p\mid c_0\}\).
+for some \(m\ge1\), and to the eventual identity
+\(U_{n+m}=BU_n\).
+\end{maintheorem}
 
-The central inverse theorem is the geometric-ray characterization
-\Cref{thm:bounded-outside-support-geometric-ray}. The following are
-equivalent:
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item some infinite finite-fan-out MCFL \(L\subseteq\mathcal R_U\)
-    has bounded prime support outside \(S_{\mathrm r}\);
-  \item \(\mathcal R_U\) contains a synchronized family \(W(t)\) of the
-    displayed form with \(\val_U(W(t))=cb^t\) for integers \(c\ge1\),
-    \(b\ge2\);
-  \item such a family itself forms an infinite linear MCFL of finite
-    fan-out.
-\end{enumerate}
-The difficult direction first uses local return times to pass to a
-subsequence supported on a fixed finite set of primes. That subsequence is
-a pairwise distinct positive linear recurrence. We then separate root-of-unity
-classes of characteristic roots. Evertse's theorem says uniformly that the
-largest prime-ideal norm in a quotient of two terms of a nondegenerate
-recurrence with at least two characteristic roots tends to infinity
-\cite[Theorem~3]{Evertse1984}. Since quotients of the fixed-support
-subsequence have prime ideals only above a fixed finite set of rational
-primes, Evertse excludes two or more roots. Schur's theorem excludes a
-nonconstant polynomial factor in the remaining one-root expression. Some
-arithmetic subsequence is consequently exactly \(cb^t\); no claim is made
-that the original recurrence is itself geometric. The full
-prime-ideal norm bound and all quantifiers from Evertse's input are given
-in \Cref{lem:evertse-quotient-support-input}; this recurrence theorem is
-used as a classical input, not claimed as new.
+The general equivalence is
+\Cref{thm:bounded-outside-support-geometric-ray}. The weak-Perron
+specialization is
+\Cref{cor:linear-perron-bounded-support-classification}.
+The alternating-radix sequences
+\(U_{2t}=B^t\), \(U_{2t+1}=pB^t\), with \(B=pq\), show that the positive
+case can have the nonintegral weak Perron root \(\sqrt B\).
 
-Every geometric ratio is locally constrained:
-\[
-  \operatorname{rad}(b)\mid\operatorname{rad}(|c_0|)
-\]
-by \Cref{lem:geometric-ratio-tail-support}. If the digit alphabet,
-recurrence data, minimal tail recurrence, and a DFA for \(\mathcal R_U\)
-are effective, a proposed synchronized scheme can be checked using the
-finite transition monoid and an exact recurrence identity. On the promised
-class of valid presentations, with a supplied or certified minimal tail
-recurrence and threshold, enumerating all schemes proves the \(\Sigma^0_1\)
-upper bound for positive promised instances in
-\Cref{cor:bounded-outside-support-semidecidable}.
+For \(X\subseteq\mathbb N_{\ge1}\), write
+\(\operatorname{Rep}_U(X)=\{z\in\mathcal R_U:\val_U(z)\in X\}\).
 
-This does not decide negative instances. A general decision procedure
-would require a computable complete bound on fan-out and block lengths, or
-an equivalent finite negative certificate. DFA loop compression alone does
-not preserve the affine recurrence matrix and therefore does not preserve
-the exact geometric identity. \Cref{rem:general-decision-interface}
-records this failed step precisely. No undecidability claim is made: known
-undecidability for unrestricted matrix equations does not preserve the
-companion-form digit action and the canonical conditions used here.
+\begin{maintheorem}[C: slender context-free Cobham theorem]
+Let \(U\) and \(V\) be strictly increasing standard greedy linear
+numeration sequences whose minimal tail recurrence polynomials are the
+minimal polynomials of weak Perron numbers \(\alpha>1\) and \(\beta>1\).
+If \(\alpha\) and \(\beta\) are multiplicatively independent and both
+\(\operatorname{Rep}_U(X)\) and \(\operatorname{Rep}_V(X)\) are slender
+context-free languages, then \(X\) is finite.
+\end{maintheorem}
 
-There are two resolved regimes. When the trailing coefficient is a unit,
-the synchronized orbit admits quotient congruences of arbitrary prescribed
-depth and an induced copy of the countably branching divisibility tree with
-pairwise coprime, arbitrarily rough edge quotients
-(\Cref{thm:unit-mcfl-deep-congruence-chain,thm:unit-mcfl-divisibility-tree}).
-For standard greedy linear numeration bases with weak-Perron recurrence,
-length thresholds complete the bounded-support classification: the
-geometric-ray properties above hold exactly when some positive power of the
-weak Perron number is an integer
-(\Cref{cor:linear-perron-bounded-support-classification}). Hence the
-strict-Perron subclass recovers the integral-root boundary, while
-imprimitive examples such as alternating-radix systems with
-\(\beta=\sqrt B\) give genuinely nonintegral positive cases. The
-residue-growth mechanism used in this specialization is not new:
-Charlier--Kreczman obtain residue-class quotient limits for regular
-positional systems and record the corresponding converse for eventually
-increasing linear recurrences whose dominating eigenvalues have a common
-power \cite[Proposition~10 and Remark~12]{CharlierKreczman2025}. Our
-contribution here is the prime-support/MCFL interface and its exact
-geometric-ray and algebraic classification, not that quotient-limit
-mechanism.
+This is \Cref{thm:slender-cfl-cobham}. With complete recurrence and
+paired-loop data, \Cref{thm:effective-slender-cfl-cardinality} gives a
+computable upper bound for \(\lvert X\rvert\).
 
-A separate two-system result begins from a different language-theoretic
-input. The Latteux--Thierrin--Ilie classification gives a finite paired-loop
-cover of an entire slender context-free language. Combining that global
-cover with the affine block action, the weak-Perron residue asymptotics, and
-Mignotte's common-value theorem for recurrence sequences yields
-\Cref{thm:slender-cfl-cobham}. Thus, for two multiplicatively independent
-weak-Perron linear numeration systems, the representations of one fixed set
-cannot both be slender context-free unless the set is finite. The natural
-published benchmark for the regular integer-base case is Albayrak--Bell's
-\(d\)-dimensional quantitative Cobham--Semenov theorem for sparse automatic
-sets \cite[Theorems~1.1 and 4.1]{AlbayrakBell2023}. It contains the regular
-integer-base specialization, covers regular sparse (in particular regular
-poly-slender) tuple languages more broadly, and supplies an explicit
-automaton-data bound. Regular Perron-substitutive and regular abstract-
-numeration shadows likewise belong to existing Cobham theory
-\cite[Theorem~1]{Durand2011CobhamSubstitutions}%
-\cite[Theorem~49]{CharlierLeroyRigo2013CobhamANS}. The new part here is the
-passage from regular recognition to full slender context-free representation
-languages, together with the dominant-root transfer for paired loops in
-weak-Perron positional systems. This is not an extension of the one-orbit
-pumping theorem: it does not use finite-group returns, deleted-prime
-topology, fixed-support quotient rigidity, geometric subsequences, or the
-divisibility tree. From complete effective recurrence data and constructive
-paired-loop covers, \Cref{thm:effective-slender-cfl-cardinality} additionally
-computes a cardinality bound. It does not extract an Albayrak--Bell-style
-closed formula in compact grammar-size parameters.
+\subsection{Proof architecture}
 
-\subsection{Relation to prior work}\label{subsec:prior-work}
+The recurrence first becomes a finite-dimensional affine action. After a
+prefix beyond the recurrence transient, every digit acts by an integral
+matrix, and every block matrix is invertible modulo integers coprime to the
+trailing coefficient. The weak pumping lemma of
+Seki--Matsumura--Fujii--Kasami supplies one family in which finitely many
+fixed blocks are raised to a common exponent. A common order of their
+matrices in a finite general linear group gives the returns in Main
+Theorem A; positive pumped length and canonical uniqueness give
+distinctness.
 
-The fixed-base context-free prime obstruction is classical, due to
-Hartmanis--Shank and Sch\"utzenberger
-\cite{HartmanisShank1968,Schutzenberger1968}. Our language-theoretic input
-is exactly Seki--Matsumura--Fujii--Kasami's weak pumping lemma
-\cite[Lemma~3.2]{SekiEtAl1991}: an infinite \(k\)-MCFL contains one family
-with \(2k\) fixed factors pumped by the same exponent. It says nothing
-about every sufficiently long word, and the corresponding strong pumping
-property fails for general MCFLs
-\cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}.
+These local returns place the orbit densely in the relevant congruence
+neighbourhoods. Broughan's adic classifications then yield the
+scattered-set obstruction. For nonunit recurrences, an intrinsic
+Cantor--Bendixson calculation after deleting the exceptional primes gives
+the alternative between additional prime divisors and increasing exceptional
+valuations. In the unit case, the same returns also produce quotient
+congruences of arbitrary depth and a divisibility tree.
 
-Duncan--Elder--Frenkel--Lyu's newer substitution lemma
-\cite[Theorem~4.5]{DuncanElderFrenkelLiu2026} instead constrains every word
-with sufficiently many marked positions, but permits a switchable-tuple
-alternative to bounded pumping. Its substitutions are not a single
-one-parameter family of simultaneous powers of fixed blocks. They therefore
-do not give the fixed affine matrix powers, one return time for all
-parameters, or all-modulus return used here; nor do they replace the paired
-Ogden pump in the Zeckendorf argument. No immunity conclusion of this paper
-follows directly from that lemma. We use the older weak lemma because it
-provides exactly one fixed synchronized orbit. Placing that orbit beyond the
-recurrence transient, proving its finite-group returns, and deriving the
-prime-support consequences are the contributions here.
+For Main Theorem B, a bounded-support orbit is restricted to an arithmetic
+subsequence supported on a fixed finite set of primes. Its values form a
+pairwise distinct positive linear recurrence. Evertse's theorem on prime
+ideals in quotients excludes two or more characteristic roots after the
+root-of-unity classes are separated; Schur's theorem excludes a
+nonconstant polynomial factor. A further arithmetic subsequence therefore
+has values \(cb^t\). The converse is supplied by an explicit linear MCFG
+for every synchronized ray.
 
-Evertse's theorem on sums of \(S\)-units and linear recurrences is the
-nearest arithmetic input \cite{Evertse1984}. It supplies exactly the
-unbounded prime-ideal support in term quotients needed for the geometric
-rigidity step; it does not state the synchronized-language characterization.
-Later \(S\)-part estimates for recurrence terms, such as
-Bugeaud--Evertse \cite{BugeaudEvertse2017}, likewise study the size of the
-part supported on a fixed finite prime set, not synchronized numeration
-languages. The recurrence rigidity lemma below packages these classical
-arithmetic inputs for our language interface rather than claiming a separate
-new \(S\)-unit theorem. Broughan's Theorem~2.4, Corollary~3.1, and
-Theorem~4.3 \cite{Broughan2003} provide respectively the
-\(\mathbb Q\)-space classification, Cantor completion, and full-adic
-prime-factor strata. These ambient adic spaces and their classifications
-are standard. Our packaging consists of the MCFL-orbit application, the
-deleted-prime sets and their intrinsic derivative, and the resulting
-``local prime-factor rank.'' Proposition~2.10 is a local refinement inside
-that standard ambient space, not a new classification of it.
-Frougny's
-normalization theorem and the Bertrand and substitution literature provide
-the regular canonical interfaces for Pisot numeration
+In a weak-Perron greedy system, peripheral conjugates become equal after a
+common power. Residue-class asymptotics and the greedy length interval
+squeeze the geometric ratio to \(b=\beta^D\), where \(D\) is the total
+pumped length. This proves the algebraic classification in Main Theorem B
+without assuming that the full greedy language is regular.
+
+Slenderness provides global rather than local control: a classical
+classification covers an entire slender context-free language by finitely
+many paired loops. The affine action
+turns each loop, after finitely many residue restrictions, into recurrence
+sequences with one positive dominant root. Mignotte's theorem makes the
+common-value set of a loop from the \(U\)-cover and a loop from the
+\(V\)-cover finite, proving Main Theorem C.
+
+\subsection{Relation to prior work}
+
+The fixed-base context-free prime obstruction is due to Hartmanis--Shank
+and Sch\"utzenberger \cite{HartmanisShank1968,Schutzenberger1968}. Our
+language-theoretic input is the weak pumping lemma for MCFLs
+\cite[Lemma~3.2]{SekiEtAl1991}, which supplies one synchronized family.
+The stronger pumping property fails for general MCFLs
+\cite{KanazawaKobeleMichaelisSalvatiYoshinaka2014}. The substitution lemma
+of Duncan--Elder--Frenkel--Lyu controls every sufficiently marked long word
+but allows switchable tuples rather than one fixed simultaneous-power
+orbit \cite[Theorem~4.5]{DuncanElderFrenkelLiu2026}; that distinction is
+why the older weak lemma gives the matrix powers used here.
+
+Evertse's quotient theorem is the arithmetic input for the geometric-ray
+step \cite[Theorem~3]{Evertse1984}; later \(S\)-part estimates concern the
+size of the supported part of recurrence terms
+\cite{BugeaudEvertse2017}. Broughan supplies the ambient adic
+classifications \cite{Broughan2003}. Frougny's normalization theorem and
+the Bertrand and substitution literature provide the regular canonical
+interfaces for Pisot numeration
 \cite{Frougny1992,BruyereHansel1997,Fabre1995,FrougnySolomyak1992}.
+Charlier--Kreczman obtain the residue-class quotient limits underlying the
+weak-Perron length squeeze \cite[Proposition~10 and Remark~12]{CharlierKreczman2025};
+the prime-support and MCFL classification is the additional interface
+proved here.
 
-Charlier--Kreczman remove the dominant-root restriction from the regularity
-problem for positional numeration systems \cite{CharlierKreczman2025}.
-They associate a periodic alternate real base to the residue classes of the
-place-value sequence and give a full characterization of regularity through
-the graph of the greedy and quasi-greedy expansions of (1) in the shifted
-alternate bases. Their procedure is a semidecision in general, and becomes a
-decision procedure when the associated alternate base is known to be Parry.
-Their Proposition~10 proves that regularity of the whole greedy language
-forces residue-class consecutive-quotient limits. More directly relevant
-here, Remark~12 states that, for an arbitrary linear recurrence, equality of
-the (p)-th powers of its dominating eigenvalues implies convergence of
-\(U_n/U_{n-p}\) to that common power when \((\lvert U_n\rvert)\) is
-eventually increasing. Under the irreducible weak-Perron hypotheses below,
-separability gives equal peripheral multiplicities, weak-Perron periodicity
-gives the common power, and strict increase supplies their last hypothesis.
-Thus their work already contains the root-growth mechanism needed for our
-length squeeze, in essentially equivalent quotient-limit form. We retain a
-self-contained coefficient-level proof because it identifies every residue
-coefficient and verifies positivity under exactly our hypotheses. Their
-regularity characterization neither assumes nor concludes anything about
-MCFL sublanguages, bounded prime support, synchronized geometric schemes, or
-the five equivalent conditions proved here; conversely, our theorem does not
-characterize regularity of the whole greedy language.
-
-The exact relation with Skolem, Positivity, Ultimate Positivity, orbit
-hitting, and unrestricted matrix equations is stated once, at the effective
-boundary in \Cref{rem:general-decision-interface}; none supplies the missing
-finite witness bound for the constrained companion-form problem here.
-
-The Supplementary Information (Online Resource 1) retains the finite-state results: the
-density dichotomy and effective fixed-DFA prime-slice bounds in ordinary
-bases, the corresponding Zeckendorf growth and regular-language results,
-and the classical analytic comparisons. It compares its fixed-DFA error
-bounds explicitly with Shen's qualitative obstruction and Dubbe's growing
-state-complexity bound. These independent results are not used in the proof
-of the recurrent MCFL theorem chain.
+For the two-system result, the paired-loop classification is due to
+Latteux--Thierrin and Ilie
+\cite{LatteuxThierrin1983,Ilie1994,IlieRozenbergSalomaa2000}, and the
+common-value input is Mignotte's theorem
+\cite{Mignotte1978Intersection}. Albayrak--Bell's quantitative
+Cobham--Semenov theorem contains the regular integer-base specialization
+and gives a stronger explicit automaton bound there
+\cite[Theorems~1.1 and 4.1]{AlbayrakBell2023}. Regular Perron-substitutive
+and regular abstract-numeration cases lie in existing Cobham theory
+\cite[Theorem~1]{Durand2011CobhamSubstitutions}%
+\cite[Theorem~49]{CharlierLeroyRigo2013CobhamANS}. The contribution of
+Main Theorem C is the passage from genuinely nonregular slender
+context-free representation languages to recurrence sequences in
+weak-Perron positional systems.
 
 \subsection{Organization}
 
-\Cref{sec:context-free-pisot} begins with the context-free Zeckendorf
-motivation, develops the recurrent block action and synchronized MCFL orbit,
-proves the local-adic and prime-support consequences, establishes the
-geometric-ray characterization and its effective boundary, and concludes
-with the unit and weak-Perron specializations. \Cref{sec:slender-cobham}
-uses the global paired-loop classification to prove the separate two-system
-finiteness theorem, gives its effective cardinality refinement from complete
-presentations, and locates its nonregular contribution relative to existing
-Cobham results. \Cref{sec:conclusion} summarizes the proved scope and the
-remaining decision interface.
+\Cref{sec:context-free-pisot} develops local rigidity from one synchronized
+orbit: the Zeckendorf model, affine recurrence action, prime-support
+obstructions, geometric-ray characterization, and weak-Perron
+classification. \Cref{sec:slender-cobham} develops global rigidity from a
+finite paired-loop cover and proves the two-system theorem and its effective
+cardinality refinement. Both branches pass from structured word families to
+affine matrix powers, then to linear recurrences and arithmetic rigidity.

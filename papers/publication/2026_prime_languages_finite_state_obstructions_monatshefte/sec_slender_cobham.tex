@@ -1,12 +1,11 @@
-\section{A slender-context-free two-system theorem}
+\section{Global rigidity from paired-loop covers}
 \label{sec:slender-cobham}
 
-This section has a different architecture from the preceding one-system
-MCFL argument. It uses a global finite cover of each full representation
-language, turns every member of that cover into finitely many recurrence
-sequences, and invokes finiteness of common values. In particular, none of
-the finite-group return, deleted-prime, fixed-support quotient,
-geometric-subsequence, or divisibility-tree arguments enters the proof.
+The preceding argument extracts one synchronized orbit from an arbitrary
+infinite MCFL. Slender context-free languages provide more: their entire
+language is covered by finitely many paired loops. Combining that global
+cover with the same affine recurrence evaluation yields a two-system
+rigidity theorem.
 
 We record the two external inputs with their hypotheses. A language \(L\)
 is \emph{slender} when
@@ -62,7 +61,7 @@ the root-growth squeeze.
 \begin{lemma}[Dominant-root transfer for a paired greedy loop]
   \label{lem:paired-loop-dominant-root-transfer}
   Let \(U=(U_n)_{n\ge0}\) be a strictly increasing standard greedy linear
-  numeration sequence. Suppose that its least eventual recurrence
+  numeration sequence. Suppose that its minimal tail recurrence
   polynomial is the minimal polynomial \(\mu\) of a weak Perron number
   \(\alpha>1\). If
   \[
@@ -73,15 +72,15 @@ the root-growth squeeze.
   \[
     Z_r(t)=\val_U(z_{ht+r})\qquad(t\ge0)
   \]
-  is eventually a linear recurrence whose least eventual characteristic
-  roots have the unique dominating root
+  has an eventual linear recurrence whose minimal tail recurrence has the
+  unique dominating characteristic root
   \[
     \alpha^{hD}.
   \]
 \end{lemma}
 
 \begin{proof}
-  We audit the actual affine matrices. Let \(C\) be the companion matrix of
+  We compute the affine matrices. Let \(C\) be the companion matrix of
   \(\mu\). For a block \(b=b_1\cdots b_\ell\), multiplication of the digit
   matrices in \Cref{lem:affine-recurrence-block-action} gives
   \begin{equation}
@@ -147,7 +146,7 @@ the root-growth squeeze.
   This proves at matrix level that peripheral collisions coalesce to one
   algebraic root and that no polynomial factor in \(t\) can accompany it.
 
-  It remains to audit cancellation by the actual value functional. The
+  It remains to rule out cancellation by the value functional. The
   word \(z_{ht+r}\) has length \(L_r+hDt\) for a fixed \(L_r\). Greedy
   validity gives
   \[
@@ -179,7 +178,7 @@ For \(X\subseteq\NN_{\ge1}\), write
 \begin{theorem}[Slender-context-free Cobham theorem]
   \label{thm:slender-cfl-cobham}
   Let \(U\) and \(V\) be strictly increasing standard greedy linear
-  numeration sequences whose least eventual recurrence polynomials are the
+  numeration sequences whose minimal tail recurrence polynomials are the
   minimal polynomials of weak Perron numbers \(\alpha>1\) and \(\beta>1\),
   respectively. Suppose that \(\alpha\) and \(\beta\) are multiplicatively
   independent. If, for one set \(X\subseteq\NN_{\ge1}\), both full
@@ -232,19 +231,15 @@ a few size parameters.
 
 \begin{definition}[Effective two-system presentation]
   \label{def:effective-two-system-presentation}
-  An \emph{effective two-system presentation} consists of the following
-  finite data, subject to the hypotheses of
-  \Cref{thm:slender-cfl-cobham}.
+  An \emph{effective two-system presentation} consists of effective
+  presentations of \(U\) and \(V\), in the sense defined before
+  \Cref{cor:bounded-outside-support-semidecidable}, subject to the
+  hypotheses of \Cref{thm:slender-cfl-cobham}, together with:
   \begin{enumerate}[label=\textup{(\roman*)}]
-    \item For each of \(U\) and \(V\), it gives the digit alphabet, the
-      initial values, integer recurrence coefficients, and an individual
-      valid recurrence threshold. It also gives the least eventual
-      polynomial, its distinguished real root by an isolating interval, and
-      the certificate that this polynomial is the minimal polynomial of the
-      relevant weak Perron number.
-    \item For each full representation language it gives either a
-      context-free grammar, promised to generate that slender language, or
-      an exact finite cover by words
+    \item isolating data and a certificate that each minimal tail recurrence
+      polynomial is the minimal polynomial of the relevant weak Perron root;
+    \item for each full representation language, either a context-free
+      grammar that generates that slender language or a finite cover by words
       \(
         u v^n w x^n y
       \)
@@ -253,18 +248,11 @@ a few size parameters.
       \cite{LatteuxThierrin1983,Ilie1994}; the resulting paired-loop form is
       the one recorded in \cite[Theorem~7]{IlieRozenbergSalomaa2000}.
   \end{enumerate}
-  The promises include validity and uniqueness of the represented words and
-  exact equality with \(\operatorname{Rep}_U(X)\) and
-  \(\operatorname{Rep}_V(X)\). Algebraic numbers are represented by their
-  minimal polynomials and isolating data. Thus exact arithmetic, comparison
-  of algebraic moduli, and root-of-unity tests are effective.
+  The grammars or covers represent exactly \(\operatorname{Rep}_U(X)\) and
+  \(\operatorname{Rep}_V(X)\). Algebraic numbers are given by minimal
+  polynomials and isolating data, so algebraic arithmetic, modulus
+  comparison, and root-of-unity tests are effective.
 \end{definition}
-
-The recurrence threshold in (i) belongs to that one presentation; no common
-threshold for the two systems, or for different paired loops, is assumed.
-Likewise, in (ii) a grammar is a promised input. The assertion is not that an
-arbitrary grammar can first be recognized as slender without using that
-promise.
 
 \begin{lemma}[Effective dominant-root transfer]
   \label{lem:effective-paired-loop-transfer}
@@ -302,8 +290,8 @@ promise.
   is the effective version of the power choice in
   \Cref{lem:paired-loop-dominant-root-transfer}.
 
-  The supplied recurrence threshold is now handled separately for this
-  loop. If \(v\ne\varepsilon\), compute how many initial copies of \(v\) are
+  Handle the supplied recurrence threshold for each loop. If
+  \(v\ne\varepsilon\), compute how many initial copies of \(v\) are
   needed for the remaining repeated action to start in the stationary
   recurrence range and absorb those copies into the fixed prefix. If
   \(v=\varepsilon\), then \(x\ne\varepsilon\), and do the same with the
@@ -403,69 +391,23 @@ lengths. In particular, no uniformity is being inferred from the finitely
 many prefixes: each discarded prefix and each shift \(s_r\) is computed and
 entered in \(E\).
 
-\begin{remark}[Priority and scope]
+\begin{remark}[Cobham comparison]
   \label{rem:slender-cobham-priority}
-  Three existing Cobham statements delimit the result. The natural published
-  benchmark for the regular integer-base case is the quantitative
-  Cobham--Semenov theorem of Albayrak--Bell. For multiplicatively independent
-  integers \(k,\ell\ge2\), they prove that the intersection of a sparse
-  \(k\)-automatic subset of \(\mathbb N^d\) and a sparse \(\ell\)-automatic
-  subset of \(\mathbb N^d\) is finite, with an explicit bound in terms of the
-  bases, dimension, and minimal automata
-  \cite[Theorems~1.1 and 4.1]{AlbayrakBell2023}. Taking the two sets equal gives
-  simultaneous sparse automatic finiteness. A slender regular integer-base
-  representation language is sparse, so this contains the regular
-  integer-base specialization of the theorem above. More broadly, their
-  \(d\)-dimensional statement covers sparse automatic tuple sets whose regular
-  representation languages may have polynomial rather than bounded word
-  growth; in particular it covers the regular poly-slender integer-base
-  shadow. Their theorem is strictly stronger on the overlap and broader in
-  this regular direction. The effective result above computes a cardinality
-  bound from the complete recurrence and paired-loop data, but it does not
-  close the quantitative gap: Albayrak--Bell give a closed expression in the
-  bases, dimension, and numbers of states of the minimal automata. They also
-  distinguish that cardinality estimate from the separate task of actually
-  computing the intersection; we make the same distinction here.
+  In regular integer bases, Albayrak--Bell's quantitative Cobham--Semenov
+  theorem contains the slender specialization above and extends to sparse
+  automatic tuple sets of polynomial growth
+  \cite[Theorems~1.1 and 4.1]{AlbayrakBell2023}. Their result is stronger on
+  this overlap: its bound is an explicit expression in the bases, dimension,
+  and minimal-automaton sizes, whereas \Cref{thm:effective-slender-cfl-cardinality}
+  computes a bound from complete recurrence and paired-loop data.
 
-  Second, Durand proves that a sequence which is simultaneously
-  \(\alpha\)- and \(\beta\)-substitutive for multiplicatively independent
-  Perron numbers is ultimately periodic
-  \cite[Theorem~1]{Durand2011CobhamSubstitutions}. Third, the abstract-
-  numeration theorem of Charlier--Leroy--Rigo starts with infinite regular
-  languages ordered genealogically, requires both representation languages
-  of the set to be regular, and concludes that simultaneous recognition in
-  two independent systems gives a finite union of arithmetic progressions
-  \cite[Definitions~33, 34, and 47 and Theorem~49]%
-  {CharlierLeroyRigo2013CobhamANS}. In its exponential case, independence
-  means multiplicative independence of the dominant language-growth
-  eigenvalues. Thus the regular Perron-substitutive and regular abstract-
-  numeration shadows are already part of existing Cobham theory.
-
-  Those recognition hypotheses fail at the full scope of the theorem above.
-  A slender context-free representation language may be genuinely
-  nonregular, so it need not furnish either a finite automaton recognizing
-  the full representation language or a substitutive characteristic
-  sequence. The dimension in Albayrak--Bell does not remove this condition:
-  a coordinate or product encoding enters their theorem only when its padded
-  synchronous tuple language is itself sparse regular, and its coordinates
-  still use ordinary integer-base valuation. It therefore does not absorb a
-  genuinely nonregular paired-loop language or replace the weak-Perron affine
-  value map used here. Nor need a weak-Perron positional system supply the
-  regular canonical, genealogical-rank interface required by an abstract
-  numeration system.
-  The role of \Cref{lem:paired-loop-dominant-root-transfer} is precisely the
-  nonregular weak-Perron bridge: it sends each word-theoretic paired loop to
-  residue subsequences with a unique positive dominant root, while resolving
-  peripheral collisions, affine and tensor-product Jordan factors, and
-  cancellation by the value functional. Only after that transfer can
-  Mignotte's common-value theorem be applied.
-
-  Accordingly, the regular integer-base and regular abstract-numeration
-  shadows belong to existing Cobham theory. What is new here is the passage
-  from regular recognition to full slender context-free representation
-  languages, together with the dominant-root transfer for paired loops in
-  weak-Perron positional systems. This claim does not extend to nonregular
-  poly-slender representation languages: finite unions of higher Dyck loops
-  would require a genuinely multivariate argument, which is not asserted
-  here.
+  For a nonregular slender context-free language, the paired-loop cover
+  produces recurrence subsequences with one positive dominant root in a
+  weak-Perron system. The regular
+  Perron-substitutive and genealogically ordered abstract-numeration cases
+  already belong to the theories of Durand and Charlier--Leroy--Rigo
+  \cite[Theorem~1]{Durand2011CobhamSubstitutions}%
+  \cite[Theorem~49]{CharlierLeroyRigo2013CobhamANS}. Genuinely nonregular
+  poly-slender languages would require a multivariate extension of the
+  paired-loop argument and lie outside \Cref{thm:slender-cfl-cobham}.
 \end{remark}

@@ -541,7 +541,7 @@ one-parameter argument.
 
 ## Submission consistency check (2026-08-15)
 
-The article's present priority narrative is consistent with this audit. It
+The article's priority narrative is consistent with this record. It
 treats the Seki weak pumping lemma, Broughan's adic classifications,
 Evertse's quotient theorem, Charlier--Kreczman's residue-growth mechanism,
 the fixed-base Hartmanis--Shank and Schutzenberger results, the
@@ -551,9 +551,9 @@ combination stated with its canonical-presentation hypotheses, the
 deleted-prime local rank calculation, the nonunit escape dichotomy, the
 geometric-ray characterization, and the stated unit and weak-Perron
 classification consequences, together with the separately proved
-slender-context-free two-system theorem. The separately submitted finite-state results
-remain in Supplementary Information and are compared explicitly with Shen
-and Dubbe. No broader priority claim is made for fixed-base prime CF-immunity,
+slender-context-free two-system theorem. The finite-state results form an
+independent article and are not part of this submission. No broader priority
+claim is made for fixed-base prime CF-immunity,
 for arbitrary objects called Pisot numeration systems, or for the
 equal-peripheral-modulus quotient/root-growth mechanism.
 

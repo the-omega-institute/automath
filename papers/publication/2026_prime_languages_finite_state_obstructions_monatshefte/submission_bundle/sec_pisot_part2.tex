@@ -159,7 +159,7 @@
 \begin{theorem}[Geometric-ray characterization]
   \label{thm:bounded-outside-support-geometric-ray}
   For a canonical eventually recurrent numeration system satisfying
-  \textup{(U1)}, \textup{(U2)}, and \textup{(U4)}, the following are
+  \textup{(U1)}, \textup{(U2)}, and \textup{(U3)}, the following are
   equivalent.
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item There are a finite \(k\) and an infinite \(k\)-MCFL
@@ -273,19 +273,20 @@
   \(v_p(c(b^H-1))=e\), contradicting the displayed congruence.
 \end{proof}
 
-\begin{corollary}[Positive semidecidability on promised presentations]
+We call the following finite data an \emph{effective presentation}: the
+digit alphabet, initial values and recurrence coefficients with a valid
+threshold, a DFA for \(\mathcal R_U\), and the minimal tail recurrence with
+a valid threshold. The presentation is assumed to satisfy
+\textup{(U1)}--\textup{(U3)}, including uniqueness of canonical
+representations; recognizing valid presentations is not part of the
+algorithm.
+
+\begin{corollary}[Semidecidability]
   \label{cor:bounded-outside-support-semidecidable}
-  On the promised class of valid presentations satisfying
-  \textup{(U1)}, \textup{(U2)}, and \textup{(U4)}, suppose the finite
-  digit alphabet, recurrence and initial data, and a DFA recognizing
-  \(\mathcal R_U\) are supplied,
-  together with a supplied or effectively certified minimal tail
-  recurrence and a valid threshold \(J_{\mathrm r}\). Then the set of
-  positive promised instances of the property in
+  From effective presentations, the set of positive instances of the property in
   \Cref{thm:bounded-outside-support-geometric-ray}\textup{(i)} is
   recursively enumerable, equivalently it has a \(\Sigma^0_1\) upper
-  bound. No recognition procedure for membership in the promised input
-  class is asserted.
+  bound.
 \end{corollary}
 
 \begin{proof}
@@ -316,42 +317,21 @@
   \(N(t+1)-bN(t)\) is identically zero by checking its first \(R\) terms;
   Cayley--Hamilton makes those \(R\) zero values sufficient. Thus each
   candidate scheme is decidable, and the enumeration halts exactly on
-  positive promised instances by
-  \Cref{thm:bounded-outside-support-geometric-ray}. No claim of a
-  decision procedure for negative instances is made.
+  positive instances by
+  \Cref{thm:bounded-outside-support-geometric-ray}.
 \end{proof}
 
-\begin{remark}[Exact algorithmic boundary]
+\begin{remark}[Decision boundary]
   \label{rem:general-decision-interface}
-  The preceding corollary does not yield a decision procedure. To turn
-  its enumeration into one, it would suffice to compute from the input
-  DFA and minimal tail recurrence a bound \(B\) such that every positive
-  instance has a geometric synchronized scheme with fan-out and total
-  constant and pumped-block length at most \(B\). No such compression
-  follows from DFA pumping: replacing a long loop by a shorter word with
-  the same DFA endpoints need not preserve its affine recurrence matrix,
-  and can therefore destroy the identity
-  \(\val_U(W(t+1))=b\val_U(W(t))\).
-
-  The neighboring decision theory does not close this step. Skolem asks
-  whether one term of a recurrence vanishes, while Positivity and Ultimate
-  Positivity ask for signs of all or all sufficiently late terms; these
-  problems remain open in unrestricted order
-  \cite{OuaknineWorrell2012,AkshayBazilleGenestVahanwala2024}.
-  Tarasov--Vyalyi relate an orbit-hitting problem to regular-language
-  intersection \cite{TarasovVyalyi2011}, while unrestricted multiplicative
-  matrix equations include undecidable families
-  \cite{BellEtAl2008MatrixEquations}. Our candidate check instead asks
-  whether the explicitly constructed recurrence
-  \(N(t+1)-bN(t)\) is identically zero; no reduction in either direction is
-  claimed. None of these observations is a reduction for the companion-form
-  digit matrices here, and conditions
-  \textup{(U1)}, \textup{(U2)}, and \textup{(U4)} must also be preserved.
-  Thus general decidability,
-  undecidability, and any hardness classification remain open; the proved
-  effective statement is exactly the positive semidecision above. The
-  weak-Perron subclass of greedy linear numeration bases is resolved
-  separately below.
+  A decision procedure would follow from a computable bound \(B\), derived
+  from the input DFA and minimal tail recurrence, such that every positive
+  instance has a geometric synchronized scheme whose fan-out and total
+  block length are at most \(B\). No such bound is known. Replacing a long
+  DFA loop by a shorter word with the same endpoints can change its affine
+  recurrence matrix and destroy the identity
+  \(\val_U(W(t+1))=b\val_U(W(t))\). The positive semidecision therefore
+  establishes neither decidability nor undecidability of the general
+  problem.
 \end{remark}
 
 \begin{theorem}[Arbitrarily deep quotient congruences]
@@ -389,7 +369,7 @@
   \(p\le B_i\), so none of those primes divides \(Q_i\).
 \end{proof}
 
-\begin{theorem}[Induced full divisibility tree]
+\begin{corollary}[Induced full divisibility tree]
   \label{thm:unit-mcfl-divisibility-tree}
   Under the hypotheses of
   \Cref{thm:unit-mcfl-deep-congruence-chain}, there is an injection
@@ -405,7 +385,7 @@
   distinct edges can be chosen pairwise coprime. Moreover, given an
   arbitrary prescribed threshold for each edge, every prime divisor of
   its quotient can be required to exceed that threshold.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
   Use the fixed pairwise-distinct orbit from
@@ -421,10 +401,10 @@
   therefore has order type \(\omega\) and places every parent before each
   child. Map
   the root to any orbit word of value \(R_0\ge2\). Suppose finitely many
-  edges have been assigned, and consider a new edge from a parent of
+  edges have been assigned, and consider the next edge from a parent of
   value \(P\). Let \(R\) be divisible by \(R_0\), by every previously
   assigned edge quotient, and by every prime not exceeding the prescribed
-  threshold for the new edge. Apply the synchronized orbit congruence
+  threshold for that edge. Apply the synchronized orbit congruence
   modulo \(P^2R\) at the parameter of the parent. Positive multiples of
   the return time give pairwise distinct positive values in the indicated
   congruence class. Only finitely many are at most \(P\), so some multiple
@@ -446,10 +426,12 @@
   here this is precisely \(\sigma\preceq\tau\). This also proves injectivity.
 \end{proof}
 
-\begin{theorem}[Prime immunity for recurrent numeration systems]
+\subsection{Consequences for standard greedy systems}
+
+\begin{corollary}
   \label{thm:recurrent-numeration-prime-cf-immunity}
   Let \((U,A,\mathcal R_U)\) satisfy \textup{(U1)}, \textup{(U2)}, and
-  \textup{(U4)}, and put
+  \textup{(U3)}, and put
   \[
     \mathcal P_U
       :=\{w\in\mathcal R_U:\val_U(w)\text{ is prime}\}.
@@ -466,7 +448,7 @@
   bounded-\(\Omega\), and finite-prime-support languages of a unit
   system are MCF-immune whenever they are infinite. Without the unit
   hypothesis, every bounded-\(\Omega\) language is still MCF-immune.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
   The MCF-immunity assertions follow from
@@ -493,7 +475,7 @@ bound, and the choice of \(U_m\) gives the upper bound. This is a property
 of the standard greedy subclass, not an assumption on the ambient
 canonical eventually recurrent systems.
 
-\begin{corollary}[Linear numeration bases with Perron recurrence]
+\begin{corollary}
   \label{cor:linear-perron-prime-cf-immunity}
   Let \(U=(U_n)_{n\ge0}\) be a standard greedy linear numeration basis in
   the following precise sense: \(U_0=1\), the \(U_n\) are strictly
@@ -518,9 +500,9 @@ canonical eventually recurrent systems.
   Greedy expansion gives a unique representation of every positive
   integer, and its length-\(m\) words represent values between successive
   place-value thresholds; thus \textup{(U1)} and \textup{(U2)} hold. The defining
-  Perron recurrence gives \textup{(U4)}. Apply
+  Perron recurrence gives \textup{(U3)}. Apply
   \Cref{thm:recurrent-numeration-prime-cf-immunity}. The immunity proof
-  uses only \textup{(U1)}, \textup{(U2)}, and \textup{(U4)} and does not
+  uses only \textup{(U1)}, \textup{(U2)}, and \textup{(U3)} and does not
   assume that the full greedy language is regular. In the Pisot subclass,
   Frougny's finite
   normalization theorem supplies a finite transducer, and the associated
@@ -534,13 +516,10 @@ canonical eventually recurrent systems.
 
 \begin{example}[Pisot and non-Pisot Perron systems]
   \label{ex:pisot-unit-nonunit}
-  The Fibonacci recurrence has characteristic polynomial
-  \(X^2-X-1\), the Pell recurrence has \(X^2-2X-1\), and the
-  Tribonacci recurrence has \(X^3-X^2-X-1\). Their trailing recurrence
-  coefficient is \(a_0=1\), so the iterated conclusion applies. In
-  ordinary base \(b\), \(U_n=b^n\) and \(a_0=b\); prime MCF-immunity
-  follows, strengthening the classical fixed-base CF-immunity conclusion
-  to MCF-immunity, but the unit iteration is not being asserted.
+  Fibonacci, Pell, and Tribonacci numeration have unit trailing
+  coefficient, so the unit-system conclusions apply. In ordinary base
+  \(b\), \(U_n=b^n\) and \(a_0=b\); the prime language is MCF-immune,
+  while the unit-system iteration requires \(\lvert a_0\rvert=1\).
 
   There is also an infinite family of genuinely nonintegral weak-Perron
   systems. Let \(p,q\ge2\), put \(B=pq\), and suppose that \(B\) is not a
@@ -561,29 +540,8 @@ canonical eventually recurrent systems.
   and the irreducible polynomial \(X^2-B\) is the minimal recurrence
   polynomial. Its positive root \(\sqrt B\) is nonintegral and weak Perron,
   with conjugate \(-\sqrt B\) of the same modulus. The regular ray
-  \(\{0^{2t}1:t\ge0\}\) has values \(B^t\). Thus \(p=2,q=3\) gives the
-  sequence \(1,2,6,12,36,72,\ldots\), while \(p=2,q=5\) gives a second
-  concrete member \(1,2,10,20,100,200,\ldots\).
-
-  A genuinely nonintegral, nonunit Pisot example is obtained from
-  \[
-    U_0=1,\qquad U_1=3,\qquad
-    U_{n+2}=2U_{n+1}+2U_n.
-  \]
-  If \(2<U_{n+1}/U_n\le3\), then
-  \[
-    \frac{U_{n+2}}{U_{n+1}}
-      =2+\frac{2U_n}{U_{n+1}}\in[8/3,3),
-  \]
-  so induction from \(U_1/U_0=3\) proves strict increase and bounded
-  quotients. The irreducible polynomial \(X^2-2X-2\) annihilates this
-  nonzero rational sequence, hence is its minimal tail polynomial. Its
-  dominant root is \(1+\sqrt3\), and its trailing coefficient is
-  \(a_0=2\), so the action is singular modulo \(2\). Nevertheless,
-  \Cref{cor:linear-perron-bounded-support-classification} shows that every
-  infinite MCFL in this nonintegral system acquires unbounded prime support
-  away from \(2\); singularity of the ambient action does not produce a
-  valuation-only escape language.
+  \(\{0^{2t}1:t\ge0\}\) has values \(B^t\). For example, \(p=2,q=3\)
+  gives \(1,2,6,12,36,72,\ldots\).
 
   The polynomial \(X^2-5X+5\) gives a genuinely non-Pisot instance. Its
   dominant root \(\beta=(5+\sqrt5)/2\) is Perron, while its other conjugate
@@ -592,27 +550,10 @@ canonical eventually recurrent systems.
     U_0=1,\qquad U_1=4,\qquad
     U_{n+2}=5U_{n+1}-5U_n
   \]
-  begins \(1,4,15,55,200,\ldots\) and is strictly increasing. Indeed,
-  \[
-    U_{n+1}>3U_n>0
-  \]
-  holds at \(n=0\), and if it holds at \(n\), then
-  \[
-    U_{n+2}=5(U_{n+1}-U_n)
-      >\frac{10}{3}U_{n+1}>3U_{n+1}.
-  \]
-  Moreover, if \(3<U_{n+1}/U_n\le4\), then
-  \[
-    \frac{U_{n+2}}{U_{n+1}}
-      =5-\frac{5U_n}{U_{n+1}}
-      \le 5-\frac54<4,
-  \]
-  while the lower bound was just proved; starting from \(U_1/U_0=4\)
-  therefore gives \(3<U_{n+1}/U_n\le4\) for every \(n\). Thus the quotients
-  are bounded, so its greedy language is the greedy language of a linear
-  numeration basis with Perron recurrence in the stated sense. The
-  classification below implies that every infinite MCFL in this standard
-  greedy language has unbounded prime support away from \(5\).
+  begins \(1,4,15,55,200,\ldots\). Induction in the recurrence gives
+  \(3<U_{n+1}/U_n\le4\), so the values increase and their quotients are
+  bounded. This is a non-Pisot Perron example to which the standard greedy
+  classification applies.
 \end{example}
 
 \begin{theorem}[Weak-Perron radical classification]
@@ -663,6 +604,12 @@ canonical eventually recurrent systems.
     \sup_{w\in L}\omega_{S_{\mathrm r}^c}(\val_U(w))=\infty.
   \]
 \end{theorem}
+
+The proof has four stages. We first identify the peripheral period of the
+weak-Perron spectrum, then determine the tail coefficients and their Galois
+covariance. Residue asymptotics propagate positivity through the peripheral
+cycle and give the global root limit. The greedy length interval then
+converts a geometric synchronized ray into an integral power of \(\beta\).
 
 \begin{proof}
   The equivalence of \textup{(i)} and \textup{(ii)} is
@@ -723,40 +670,15 @@ canonical eventually recurrent systems.
   integral-root boundary there.
 \end{proof}
 
-\begin{remark}[Exact open interfaces]
+\begin{remark}[Scope]
   \label{rem:pisot-open-interfaces}
-  The terminology for linear numeration systems with Perron or Pisot
-  recurrence is not uniform.
-  \Cref{cor:linear-perron-prime-cf-immunity} covers the standard
-  positional linear \(U\)-systems just specified, including integer
-  bases, Zeckendorf/Fibonacci, Pell, higher-order Pisot recurrences, and
-  non-Pisot Perron examples such as \(X^2-5X+5\).
-  It asserts nothing about R\'enyi \(\beta\)-expansions, \(\beta\)-shifts,
-  Parry languages, \(\beta\)-integers, Cantor real bases, or abstract
-  numeration systems. Real-base systems do not in general provide the
-  bijective finite-word-to-\(\mathbb N\) positional map and integral affine
-  block action used here; \(\beta\)-shifts and Parry languages encode a
-  dynamical admissibility problem rather than this integer-valued affine
-  recurrence. Cantor real bases have nonstationary real place weights, while
-  abstract numeration assigns genealogical ranks rather than values of the
-  form \(\sum_j a_jU_j\). Redundant noninjective digit systems and systems
-  without an eventual integral recurrence are likewise outside the stated
-  hypotheses. Consequently no transfer to any of these settings is claimed.
-
-  For a fixed nonunit recurrence witness, the ambient action can be
-  singular modulo primes dividing \(a_0\), so the unrestricted unit-system
-  divisibility tree need not follow. The witness-relative surviving
-  statement is \Cref{thm:nonunit-mcfl-escape-dichotomy}: every infinite
-  MCFL must acquire unbounded prime support outside that finite set or
-  unbounded valuation at one of its primes. The invariant restricted
-  action and the failure of arbitrary recurrence witnesses to classify
-  escape behavior are distinguished in
-  \Cref{prop:recurrence-witness-separation}.
-  Within greedy linear numeration bases with weak-Perron recurrence, the
-  residual alternative is classified by
-  \Cref{cor:linear-perron-bounded-support-classification}: it occurs exactly
-  when a positive power of the weak Perron number is an integer. The
-  ordinary-base example preceding
-  \Cref{thm:unit-mcfl-deep-congruence-chain} shows that the valuation
-  alternative cannot be removed.
+  The results concern integer-valued greedy linear numeration with an
+  eventual integral recurrence. Real-base dynamical expansions and
+  genealogical-rank abstract numeration use different evaluation maps. For
+  a nonunit recurrence witness, \Cref{thm:nonunit-mcfl-escape-dichotomy}
+  retains the alternative between additional primes and increasing valuations;
+  within the weak-Perron greedy subclass,
+  \Cref{cor:linear-perron-bounded-support-classification} identifies the
+  latter bounded-support regime by integrality of a positive power of the
+  dominant root.
 \end{remark}
