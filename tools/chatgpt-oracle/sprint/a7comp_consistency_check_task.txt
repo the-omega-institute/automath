@@ -1,0 +1,66 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_large_primitive_divisors_fibonacci_wieferich_alternative ONLY.
+Other agents are working on other papers. Touch nothing else.
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere.
+
+WHY. The paper is correct and its artifacts directory is audit-only - it holds a literature check
+and a source-recovery record, but no verification program and no data. Every claim in it is a
+deductive proof, so nothing is unsupported. But this project's standing rule is that a purely
+theoretical result must still carry at least one consistency check: a boundary case, a limiting
+behaviour, a reproduction of a known special case, or a dimensional check. Every sibling paper in
+this project ships one. This paper should too, and it is the only thing it lacks.
+
+WHAT TO ADD. A single verification program under artifacts/, with a unit test, exercising the
+paper's own quantitative claims on small cases. Choose the checks from what the paper actually
+asserts - do not invent quantities it does not discuss. Natural candidates, in rough order of value:
+
+ - the exact-rank counts. Compute the rank of apparition directly for primes up to a modest bound
+   and count, for each n, the primes p with rank exactly n; check the paper's pointwise exact-rank
+   estimate holds on that range, and report the observed margin rather than only a pass or fail.
+ - the prime-power lifting law. The paper states that the p-adic valuation of the Fibonacci number
+   at index (rank times u) equals a fixed exponent plus the valuation of u, for p outside a named
+   exceptional set. Verify it directly on small p and u, and confirm the excluded primes are
+   excluded for a reason the check can see - i.e. show the law failing or being vacuous there.
+ - the primitive-part factorization and the fibotomic integer. Verify the factorization identity
+   and the radical bound numerically on small indices.
+ - the entropy inequality, evaluated on the computed data over the range you can reach.
+
+Two or three of these is enough. Depth beats breadth: a check that reports margins and would
+actually fail if a constant were wrong is worth more than four checks that only confirm a type.
+
+REQUIREMENTS ON THE CHECK ITSELF:
+ - It must be capable of failing. Say in your report what you did to establish that - for instance
+   perturb a constant and confirm the check goes red, then restore it. A check that passes on any
+   input is not evidence.
+ - Deterministic, no network, no random seed unless recorded, and fast enough to rerun routinely.
+   State the runtime.
+ - Print the observed quantities and the margin, not just PASS. Write its output to a committed
+   artifact file so the numbers are inspectable without rerunning.
+ - Standard library only, or numpy if genuinely needed. No new dependency beyond what sibling
+   papers already use.
+ - If a claim you try to check turns out NOT to hold on the range you can compute, STOP and report
+   that immediately with the counterexample. Do not adjust the check to make it pass, and do not
+   quietly narrow the range until it agrees. That outcome would be the most valuable result this
+   task could produce, and it must reach me unaltered.
+
+ALSO: add a short REPRODUCE.md to artifacts/ giving the exact commands to run the program and the
+test, and regenerate artifacts/SHA256SUMS with LF endings covering the artifact files.
+
+DO NOT change any theorem, proof, hypothesis or section text. If the numerics reveal that a printed
+constant or exponent is wrong, report it and stop rather than editing the manuscript.
+
+RULES:
+ - Clean rebuild afterwards: latexmk -C, remove auxiliaries, alternating passes until latexmk -pdfxe
+   exits 0 with zero undefined references, zero undefined citations and zero multiply-defined labels.
+   The page count should not change; report it.
+ - pdftotext extraction is evidence, not an authority: if a glyph prevents it confirming something
+   correct, report the limitation and give page-image evidence. Never edit the manuscript to make a
+   check pass.
+ - No revision marks, no scratch files, do not commit.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: what you checked and why those; the program's actual printed output including margins; how
+you established the check can fail; the runtime; anything that did not hold, verbatim; the
+REPRODUCE.md contents; and the compile results.
