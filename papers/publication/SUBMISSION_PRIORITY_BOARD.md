@@ -19,7 +19,7 @@
 | **A2** | `cayley_chebyshev_..._jfa` | **32+0** | **重组已执行并核实**：87+33 → 32；stable 脊柱为唯一主线，正文不再指向任何补充证明 | **JFA**（待重新评）|
 | **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **18+0** | **ETDS 小修已执行并核实**：第 5 节删除、防御层清除、引言立 Theorem A/B/C、四页补充不再提交 | **ETDS 75–77%** |
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **30+0** | **ETDS 大修已执行并核实**：36+15 → 30；16 条孤儿文献清理中 | **ETDS** |
-| **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
+| **A4** | `prime_languages_..._monatshefte` | **31+0** | **Monatshefte 大修已执行并核实**：37+43 → 31；30 条孤儿文献清理中 | **Monatshefte** |
 | **A5** | `finite_parts_..._etds` | **52+19** | **四条新定理已验证：三条无条件、两条条件于未核实的 (KN85)**；主定理经查也依赖 (KN85) 且未标明，修复中 | ETDS |
 | **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | **TAMS 审稿人裁决：Major revisions** | **TAMS** |
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **32+7** | **JNT 大修已执行并核实**：52+19 → 32+7；四个被取代的定理族直接删除 | **JNT** |
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 204 — A4 大修完工并核实入库（d59ac1e9a）；同时暴露了我自己的一个派工时序缺口。** 37+43 → **31 页**，43 页独立数学补充材料已不属投稿件。第 10 项被评估者直接命名为"remove revision-response vocabulary throughout"，已执行；Mignotte 旧来源缺口未被重开、未被二次转述封口。独立核实：重建 exit 0、undefined 全 0、31 页、PDF 正文无泄漏且无补充指针、无抑制块、Pisot pumping verifier 通过、21 测试 + 9 子测试通过、SHA 8/8、artifacts/oracle_*.md 与 HEAD 一致。（一处需更正的自述：我首次在 artifacts/ 目录内跑测试报 ModuleNotFoundError，那是我的调用路径错了，不是测试坏了；从论文根目录跑为 21 passed + 9 subtests。）**但发现 30 条孤儿文献**（打印 82 / 被引 52）——与 A3-B 同一类。**这是我的时序缺口，不是执行方的失误**：孤儿文献检查是 tick 202 生成 A7/A6-A 任务书时才加的，而 A4 在 tick 199 就已派出；我已核实 a4 任务书中该检查计数为 0、a7 为 1。教训：新增的核验项必须回填到**已在飞**的任务，而不只是写进下一份模板。已派 A4 孤儿文献清理（要求自行推导名单）。A5、A7、A6-A 仍在跑。内存 0.75 GB、缺页 148、无孤儿进程。
 
 > **TICK 203 — A9 裁决到齐，九篇录用评估全部完成；四个修订 agent 在飞，A9 暂不派。** A9：Major revisions，七项必需。**其中第 3 项是不问就永远不会知道的东西：该刊近期论文几乎无一例外地以**法文 Résumé** 开头，随后才是英文摘要、关键词与 MSC**——他明言这不是偶尔偏好而是该刊可见的版式惯例，并将"未使用该刊前部惯例，尤其是法文 Résumé"列为不合该刊语域的痕迹之一，并指出本稿命中其中六项。这类期刊形式要求不会出现在任何估值问题的答案里。其余六项与其他八篇同病：引言立显式结果层次、删除贯穿全文的编辑性与伴随稿审计、删除重复的范围免责、保留中心证明而压缩标准基础设施、重建第 5-6 节的应用链、第 7 节缩为真正的边界节。他还给了一条可操作的证明风格规则："承载区分本文的那部分论证；专家视为标准的基础设施可引用或简验。"**九篇最终分布：两篇小修、五篇大修、两篇退修重投（A2、A7）。** 无一篇直接可投。**A9 暂不派**：已有四个修订 agent（A5、A4、A7、A6-A）在跑，codex 进程 5、内存 0.93 GB；A9 是九篇里价值最低的（35% Cahiers），先等一个落地再派是正确的次序。本 tick 无可收割。
 

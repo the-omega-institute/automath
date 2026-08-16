@@ -1,0 +1,66 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+SCOPE: papers/publication/2026_prime_languages_finite_state_obstructions_monatshefte ONLY. Other codex
+agents are working on other papers. Touch nothing else.
+DO NOT MODIFY ANYTHING UNDER artifacts/oracle_*.md - archived external evidence.
+
+THE DEFECT. The major revision deleted the consequences supplement and seven section files. That
+orphaned their citations. The bibliography is a literal `thebibliography` environment in
+sections/bibliography.tex, so every \bibitem in it prints whether or not anything cites it - unlike
+BibTeX, which silently omits uncited entries. LaTeX therefore issues no warning, the logs are clean,
+and a page-by-page read slides over it.
+
+Measured here: 82 entries print, 52 distinct keys are cited in the sources, and these 30 entries are
+printed but never cited anywhere in the manuscript:
+
+  (derive the exact list yourself: extract the printed keys from main.aux and subtract the
+   distinct cite keys found across the sources; there are thirty of them)
+
+A referee who checks the reference list against the text finds thirty works listed that the paper
+never uses. That reads as padding, and it is the kind of thing that is noticed.
+
+WHAT TO DO.
+
+ 1. For each of the thirty, decide between two outcomes and say which you chose and why:
+      - REMOVE the entry, if the material it supported left with the deleted sections and nothing in
+        the current manuscript needs it. This will be the common case.
+      - CITE it, if the current text makes a claim that genuinely rests on it and the citation was
+        lost in the edit rather than the content. Do not invent a citation site to save an entry;
+        only restore a citation where the text really does depend on the work.
+    This paper carries a recorded sourcing gap on the Mignotte full text. Do not reopen it, do not
+    close it with a secondary restatement, and do not delete its record from
+    artifacts/literature_check.md.
+
+ 2. After the pass, the printed bibliography and the set of cited keys must agree exactly. Verify it
+    the way it was measured: extract the printed keys from main.aux and compare against the distinct
+    \cite keys in the sources. Report both counts and confirm the difference is empty in both
+    directions - no printed-but-uncited entry, and no cited-but-missing entry.
+
+ 3. Leave references.bib alone unless an entry you remove is also unused by any other document in
+    the directory. The .bib is a record; the printed list is the submission. If you do remove
+    anything from references.bib, say so explicitly.
+
+ 4. Record the cleanup in artifacts/literature_check.md: which entries were removed, which were
+     re-cited, and the final printed/cited counts. Do not delete any previously recorded sourcing
+     gap or DOI repair from that file.
+
+DO NOT change any mathematics, any theorem, any section text beyond adding a citation where step 1
+finds a genuine one. This is a bibliography cleanup.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels for
+   the article and the cover letter.
+ - AFTER building, extract the PDF text with pdftotext and confirm no "??" citation marker, no
+   filename, no printed command name.
+ - Confirm no \iffalse block and no \endinput survives in any input .tex.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. Regenerate
+   artifacts/SHA256SUMS with LF endings if artifacts change.
+ - No revision marks. No planning or scratch files. Do not commit.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the disposition of each of the thirty entries with your reason; the final printed-key and
+cited-key counts with confirmation that they agree in both directions; any entry you re-cited and
+the sentence it now supports; the literature_check.md addition; page count before and after; compile
+and verification results.
