@@ -17,7 +17,7 @@
 | 篇 | 目录 | 页 | 最新裁决 | **去向** |
 |---|---|--:|---|---|
 | **A2** | `cayley_chebyshev_..._jfa` | 87+33 | 签字项完成;查出 1 条伪造 + 3 条错配引用并修 | **JFA** |
-| **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **20+4** | **拆分后复评:ETDS 75%(修后 77%)、TAMS 51%,差距扩大到 24 点** | **ETDS**(JMD 69% 为最接近的替代)|
+| **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **20+4** | **ETDS 审稿人裁决:ACCEPT WITH MINOR REVISIONS,明言无需新数学**;9 必需 + 2 可选修订中 | **ETDS**(75%,修后 77%)|
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **36+15** | **拆分已执行并核实**;21 条补充结果全部随此篇 | **ETDS 57%**(TAMS 27%)|
 | **A4** | `prime_languages_..._monatshefte` | 37+43 | 定位 + 有效基数界(0.94)均已入库 | **Monatshefte**(评估者明言即使拿到界档位也不变)|
 | **A5** | `finite_parts_..._etds` | 43+19 | 已按三层重新配重;文献 81/84 已核 | **ETDS**(理由落在动力学定理)|
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 187 — A3-A 拿到本次冲刺最强裁决:ACCEPT WITH MINOR REVISIONS,且明言不需要任何新数学。** Oracle 88ce0241 取回(572 行),存 sprint/result_A3A_style_r1.md 与 artifacts/oracle_sprint_A3A_style_r1.md。他以 ETDS 审稿人身份给出接收+小修,并以编辑身份列出 9 项必需、2 项可选,同时写明"就这二十页的证据而言,不需要额外的定理、推广或应用;剩下的差距压倒性地是写作、层次与包装"。**house style 那一问确实拿到了可操作的答案**:他点名了 2023-2025 年 ETDS 实际录用的六篇(Akiyama-Hichri、Mercat、Moss-Perrone、Damanik-Lenz、Gorodetski-Kleptsyn、Wormell)作为语域基准,并判定我方"在长度、证明密度、定理规模与附录比例上已在 ETDS 正常区间内";他还确认短证明只要被引定理真正承担了数学工作且归约透明就完全可接受,ETDS 不要求为凑长度复述标准论证——这直接否掉了"证明短=有问题"的顾虑。**核心诊断值得单独记下,因为它是我方流水线自身的指纹**:"部分散文仍表现得像该稿历次审计的记录:它保留了每一处边界、区分、限定与材料归属。"即历轮审稿每次追加一条防御性澄清,这些澄清累积下来,如今读起来像是在回应旧异议而非推进数学叙事。他指出最可能沉掉这篇的不是数学,而是**反复的边界管理与伴随论文讨论使其看起来像一个更大分类项目的技术切片,而非有自身概念弧的独立 ETDS 文章**——并判定可修。必需项要点:摘要重建为单一主结果并删去 {E_m,-E_m} 与后继集为空这类证明级细节;引言加 Theorem A/B/C 显式层次使逻辑在第 2-3 页可见;删除审计与反驳语域(点名 Remark 2.1、"not the definitional center"、"not a disguised standard-initial-value convention"等);第 5 节整节取消并把有用材料分派回引言与 Theorem 4.1 后的注记;伴随论文压到一句;第 3 节开头补概念桥;第 2 节不再重复 G_m(U,D) 的完整定义、整体链二分法改为带标号推论;代码可得性声明改回普通数学语域。**第 5 项可能触及数学**:须判定四页补充材料是否含证明必需的推理(是则并为 Appendix A),并显式核验"任何定理都不得依赖仅以机器输出或验证断言形式存在的论证"。已派 codex(sprint/a3a_etds_revision_task.txt),并提醒执行方本次修订的核心是**删**而非增。Oracle:A5 deep 2bb0d4b1、A8A style f00cdaba 仍 waiting_response;A2 style 二次 extraction_failure 后已第三次重发为 c3109c16-cc8e-4ad0-8304-8c913fee1428。内存 1.59 GB、缺页 15.9。
 
 > **TICK 186 — 渲染缺陷清理完工入库,且实际比我查到的更广;两发 Oracle 因 extraction_failure 已重发。** 提交 de3064199。**缺陷范围比 tick 184 我自己扫出的更大**:EJS 主文不是 10 处而是 11 处,补充材料另有 6 处反向的 main.pdf 泄漏,字面量 qquad 除 (2.1) 外在补充的 (M4)、(M5) 两式中另有两处;JFA 除 \relocatedproof 宏外,正文散文里还有成批的裸 \path{...} 源文件名引用(形如"sec_strip_30_cardinal_observation.tex, Corollary ..., collected by supplement_relocated_support.tex"),另有 3 处宏外的 supplement.pdf 提及、补充材料印出 main.tex 一次。根因两条:EJS 是 xr-hyper 的外部文档未给空的可选 URL 字段,故把伴随文件名附到每个导入标签上,补上 \externaldocument{...}[] 即止;JFA 是宏本身把内部记账印了出来,**宏已单独修好,17 个调用点逐字节未动**,位置参数仍照传、只是不再印出。独立核实:两目录清洁重建,五份文档全 exit 0、undefined ref/cite/multiply-defined 全 0,页数 33/22/2/87/33 无一移动一页;PDF 正文抽取五份全部为 .pdf=0、.tex=0、qquad=0、??=0;EJS 12/12 检查 + 16/16 单元 + SHA 5/5,JFA 三个 verifier 全 PASS + 17/17 单元 + SHA 13/13。**方法记录:这一整类缺陷对基于日志的核验完全不可见**,必须编译后用 pdftotext 抽取正文再读;此项已并入我方每篇的固定核验步骤。Oracle:A8A 与 A2 的 house-style 问题返回 extraction_failure(worker 端抓取失配,非协议问题),已取消并按原协议重发,新 id 分别为 f00cdaba-05de-40ab-b737-a3950eacaf89 与 c763026a-8b59-4d7b-b7df-22555c4c645f;A3A style 88ce0241 与 A5 deep 2bb0d4b1 仍 waiting_response。内存 1.01 GB、缺页 4.9、无 agent 在跑、无孤儿。
 

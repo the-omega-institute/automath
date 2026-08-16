@@ -1,0 +1,123 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly and do the work.
+
+SCOPE: papers/publication/2026_linear_overlap_transients_bounded_zero_pisot_etds ONLY.
+Read first, in full: artifacts/oracle_sprint_A3A_style_r1.md.
+
+THE VERDICT IS ACCEPT WITH MINOR REVISIONS. An assessor writing as an ETDS referee and then as the
+editor judged the mathematics sufficient and stated plainly: "No additional theorem,
+generalization, or mathematical application is required on the evidence of the twenty-page article.
+The remaining gap is overwhelmingly one of writing, hierarchy, and packaging." So DO NOT add a
+theorem, do not generalize anything, do not import material from the companion, and do not lengthen
+the paper to look more substantial. Every item below is craft unless marked otherwise.
+
+THE DIAGNOSIS YOU ARE FIXING, because it governs all nine items. In his words: "some of the prose
+still behaves like a record of the manuscript's previous audits: it preserves every boundary,
+distinction, qualification, and allocation of material." The paper explains its boundaries too
+insistently; several passages read as responses to earlier objections rather than as part of the
+natural mathematical narrative. The rule to apply throughout: state what the proof USES, positively;
+explain ONCE why the result does not follow from existing finite-state recognition or generic
+pair-graph bounds; then proceed. Do not enumerate every nearby assertion the paper avoids.
+
+THE NINE REQUIRED ITEMS.
+
+ 1. ABSTRACT - rebuild around one primary result. Make the linear transient theorem the
+    unmistakable centre. Retain the collapse mechanism, state the inverse-depth application in one
+    sentence, summarize the cubic example as exact order sharpness. DELETE from the abstract the
+    explicit description of the penultimate set {E_m, -E_m} and the next-set emptiness: those are
+    proof-level details.
+
+ 2. INTRODUCTION - give it an explicit theorem hierarchy. After the first problem paragraph, state
+    three compact introductory results: the linear overlap-transient theorem; the inverse-depth
+    corollary; the fixed cubic sharpness theorem. A Theorem A / Theorem B / Theorem C presentation.
+    They need not carry every effective constant or graph definition - their purpose is to make the
+    hierarchy visible by page 2 or 3, so an ETDS reader sees at once that the cyclic rank
+    construction is an APPLICATION of an independently formulated overlap theorem, and that the
+    cubic theorem supplies matching order. Also SHORTEN the detailed synopsis of the
+    adjacent-collapse proof: keep the idea - contracting conjugates plus finite dominant separation
+    - and leave the successive quotient identities to Section 2.
+
+ 3. REMOVE THE AUDIT AND REBUTTAL REGISTER. Rewrite or delete: the negative inventory following the
+    first theorem discussion; the phrase "not the definitional center of the argument"; most of
+    Remark 2.1, which he singles out as an especially extensive negative inventory; "not a disguised
+    standard-initial-value convention"; and the repeated clarification of what sharpness does and
+    does not mean. Each boundary stated at most once, positively where possible.
+
+ 4. ELIMINATE SECTION 5 as a separate section. Redistribute: the fixed-system versus varying-system
+    comparison moves to the introduction; the explanation of which simple-Parry facts are actually
+    used becomes a remark after Theorem 4.1; the order-sharpness qualification becomes one remark
+    after Theorem 4.1; the companion-paper discussion reduces to one sentence; delete the rest as
+    repetition. The revised paper moves directly from the fixed cubic proof to the data/code
+    statement or acknowledgments.
+
+ 5. RESOLVE THE SUPPLEMENT. This is the one item that may touch mathematics, so judge it carefully
+    and report your reasoning. Examine what the four-page technical supplement actually contains and
+    apply his rule:
+      - proof-essential reasoning -> incorporate into a conventional Appendix A in the article;
+      - expanded finite verifications not logically essential -> retain at most the human-readable
+        part in a short appendix;
+      - scripts, outputs, test logs, hashes, audit certificates -> do NOT submit as mathematical
+        supplementary text; keep them in the source archive only.
+    Then run this check explicitly and report it: NO THEOREM MAY DEPEND ON AN ARGUMENT THAT APPEARS
+    ONLY AS MACHINE OUTPUT OR AS A VERIFICATION ASSERTION. Go through each numbered result and say
+    what its proof rests on. If you find a result whose proof genuinely depends on a computation
+    reported only as output, say so and stop on that point - do not paper over it.
+
+ 6. REDUCE THE COMPANION FOOTPRINT to a single mention. He supplies the sentence:
+      "Related exact classifications for quadratic and simple-Parry systems are obtained in [11];
+       no result from that paper is used here."
+    Use that or something equally brief. Do NOT enumerate the companion's Fibonacci model, Fischer
+    covers, Markov order, family unboundedness or other contents: that catalogue makes this article
+    look dependent on the larger project even while asserting the opposite. Keep the bibliographic
+    entry, which a referee needs.
+
+ 7. ADD A CONCEPTUAL BRIDGE at the start of Section 3 - four or five sentences, before the legal
+    words and the fold map, explaining: what dynamical object is being coded; what "future-only
+    inverse" means conceptually; why equality of folded windows becomes a modular rank collision;
+    why coordinate differences produce zero representations; and why exactness of that quotient
+    matters. The definitions are correct but currently arrive before the reader has been told the
+    section's mechanism.
+
+ 8. STREAMLINE SECTION 2's presentation. Do not repeat the complete definition of G_m(U,D) inside
+    Theorem 2.2 - refer to the preceding definition. Turn the global chain dichotomy into a
+    labelled corollary. RETAIN in full the proof of Lemma 2.1 and the large/small aperture division
+    in Theorem 2.2: he states those are already at the correct level of detail.
+
+ 9. REWRITE THE CODE-AVAILABILITY STATEMENT in ordinary mathematical register. Exact filenames may
+    stay. Language about regression tests, falsification checks, audit ranges, checksums and
+    testing accounts moves to the repository documentation.
+
+THE TWO DISCRETIONARY ITEMS - your judgement, and say what you chose and why.
+ 10. Title. He finds the present one acceptable but crowded, and prefers "Linear overlap transients
+     and cyclic rank recodings in Pisot numeration" or simply "Linear overlap transients in Pisot
+     numeration". Editorial taste, not a condition.
+ 11. One small motivating example near the start of Section 2 or 3 - five or six lines showing two
+     overlapping zero representations and the corresponding edge transition, or two raw windows
+     giving the same folded output. Not necessary if the conceptual bridge in item 7 is strong.
+
+PRESERVE, without exception: every numbered result, its number where the reorganization allows, its
+hypotheses and its strength; the completing-coefficient bound |c| <= K_{U,D} at the edge condition;
+the repaired anchored "Equivalently" formulation; the full proof of the fixed cubic theorem
+including the terminal classification; the companion bibliography entry with NO fabricated
+identifier; and the honest statement that no companion result is used here.
+
+RULES:
+ - Clean rebuild: latexmk -C, remove the auxiliaries, alternating passes until latexmk -pdfxe exits
+   0 with zero undefined references, zero undefined citations and zero multiply-defined labels for
+   every document you still ship.
+ - AFTER building, extract the text of every compiled PDF with pdftotext and read it: no printed TeX
+   command name, no ".tex" or ".pdf" in the body, no reference rendering as "??". Log-based checks
+   do not catch these.
+ - Re-run every artifacts/verify*.py and artifacts/test_*.py; report pass counts. The seven-edge
+   anchored regression must still pass. Regenerate artifacts/SHA256SUMS with LF endings if artifacts
+   change.
+ - No revision marks anywhere. Do not leave any planning, log or scratch file in the directory.
+   Do NOT delete the build logs before reporting.
+ - If you must resume a codex session, resume by explicit session ID. Never `resume --last`.
+
+REPORT: the new abstract verbatim; the three introductory theorem statements verbatim; a list of
+every passage you deleted or rewrote under item 3, with the old text and what replaced it; what you
+did with Section 5, item by item; your determination on the supplement with the reasoning, and the
+per-result table showing what each proof rests on; the companion sentence as finally written; the
+Section 3 bridge verbatim; which discretionary items you took and why; the page count before and
+after; compile, PDF-extraction and verification results.
