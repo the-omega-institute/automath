@@ -75,7 +75,18 @@ Crossref 未返回的再走一次 `doi.org` 内容协商复核（arXiv/LIPIcs/Ze
 **不算数的**：`sn-article.tex` 是随稿附带的 Springer Nature 模板，非稿件本身；
 `fibonacci_moduli` 失败的是 cover letter。
 
-修复任务：`tools/chatgpt-oracle/sprint/build_repair_task.txt`，两个 codex 分工在飞（6 篇缺宏 / 3 篇 `[?]` + `\ScriptOK`）。
+修复任务：`tools/chatgpt-oracle/sprint/build_repair_task.txt`，两个 codex 分工（6 篇缺宏 / 3 篇 `[?]` + `\ScriptOK`）。
+
+**`[?]` 的根因已查明（tick 234）**：不是条目缺失，是**目录搬迁遗留的相对路径**。
+这几篇原住 `theory/`，`\bibliography{../../2026_golden_ratio_…/references,…}` 当时是对的；
+搬进 `papers/publication/` 后该路径指向 `papers/2026_golden_ratio_…`（不存在），
+bibtex 什么都找不到 → 全篇引用印成 `[?]`。改为 `../../../theory/…` 即解。
+
+⚠️ **待我裁决的新问题**：三篇仍指向 `../../../theory/…`，其中两篇是 **`submitted_*`**。
+已投稿论文必须**自包含** —— 书目在三层之外的私有 theory 树里，期刊拿投稿包根本编不出来。
+须改为本地 `references.bib`（`resolution_folding` 一篇已这样做，20 条目）。
+新增条目的 DOI 我已逐个查证：Csiszár `10.1214/aop/1176996454`、
+Frougny `10.1109/18.75263`、Amigó `10.1063/5.0167263` 均真实相符。
 
 代理还查出审计本身的三处不足，均已核实并接受：`CostabelMcIntosh2010` 实有正确 DOI（审计误判为无解）；
 `Idziaszek` 在 FUN 而非 SPIRE；`Sanna2025` 的候选 DOI 只返回 slug 无作者，不达标准故删字段。
