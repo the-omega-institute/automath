@@ -19,7 +19,7 @@
 | **A2** | `cayley_chebyshev_..._jfa` | **32+0** | **重组已执行并核实**：87+33 → 32；stable 脊柱为唯一主线，正文不再指向任何补充证明 | **JFA**（待重新评）|
 | **A3-A** | `linear_overlap_transients_bounded_zero_pisot_etds` | **18+0** | **ETDS 小修已执行并核实**：第 5 节删除、防御层清除、引言立 Theorem A/B/C、四页补充不再提交 | **ETDS 75–77%** |
 | **A3-B** | `cyclic_rank_thresholds_quadratic_simple_parry_etds` | **30+0** | **ETDS 大修已执行并核实**：36+15 → 30；16 条孤儿文献清理中 | **ETDS** |
-| **A4** | `prime_languages_..._monatshefte` | **31+0** | **Monatshefte 大修已执行并核实**：37+43 → 31；30 条孤儿文献清理中 | **Monatshefte** |
+| **A4** | `prime_languages_..._monatshefte` | **31** + 伴随 43 | **Monatshefte 大修已执行并核实**；原 43 页补充**分立为独立论文**；书目需按文档拆分 | **Monatshefte** |
 | **A5** | `finite_parts_..._etds` | **52+19** | **四条新定理已验证：三条无条件、两条条件于未核实的 (KN85)**；主定理经查也依赖 (KN85) 且未标明，修复中 | ETDS |
 | **A6-A** | `brocot_condensation_critical_fibonacci_renewal_tams` | **27+0** | **TAMS 审稿人裁决：Major revisions** | **TAMS** |
 | **A6-B** | `finite_window_zeckendorf_thermodynamics_jnt` | **32+7** | **JNT 大修已执行并核实**：52+19 → 32+7；四个被取代的定理族直接删除 | **JNT** |
@@ -62,6 +62,8 @@
 
 
 
+
+> **TICK 204b — 对上一条的两处更正，均源于我自己的测量。** **更正一：43 页补充不是被删除，而是被分立为独立论文** finite_state_article.tex（自带标题、摘要、引言、MSC 与作者栏，仍能构建，材料全在）。投 Monatshefte 的数学上传从 80 页降为 31 页。标签集 diff 显示编号结果**零丢失、零新增**，唯一消失的是一个被删先前工作目录的小节锚点；25 个结果对应 25 个证明、无一例外。**更正二：孤儿文献的数字和修法都错了。** references.tex 是**两份文档共享**的手写 thebibliography，两者都把 82 条全印。故存在三个不同的计数：正文自身引用约 21-27 条；两份文档**都不引**的约 30 条；**在 main.pdf 印出但正文从未引用的达 55-61 条**。我上一条报的"30 条"是用目录级 grep 得出的，把伴随论文的引用也算进了被引集。若按我原任务书只删那 30 条，正文仍会印着二三十条属于伴随论文的条目——只修了一半不到。**正确操作是按文档拆书目**：每份文档各持一份只含其自身引用键的参考文献表，条目逐字搬运不得重拟，两份都不引的丢弃，两份都引的各自保留，然后**对每份文档分别验证双向差集为空**。已将此更正发给在跑的清理 agent，并告知若已按错误指令删除则重置到 d59ac1e9a 重做。另记：Mignotte 在本次修订后**承重更重**（摘要第二分支依赖它，正文五处使用），而其全文仍未读到——该缺口记录（literature_check.md 848-862 行）未被动、未被二次转述封口，但其重要性上升了，值得在投稿前单独衡量。
 
 > **TICK 204 — A4 大修完工并核实入库（d59ac1e9a）；同时暴露了我自己的一个派工时序缺口。** 37+43 → **31 页**，43 页独立数学补充材料已不属投稿件。第 10 项被评估者直接命名为"remove revision-response vocabulary throughout"，已执行；Mignotte 旧来源缺口未被重开、未被二次转述封口。独立核实：重建 exit 0、undefined 全 0、31 页、PDF 正文无泄漏且无补充指针、无抑制块、Pisot pumping verifier 通过、21 测试 + 9 子测试通过、SHA 8/8、artifacts/oracle_*.md 与 HEAD 一致。（一处需更正的自述：我首次在 artifacts/ 目录内跑测试报 ModuleNotFoundError，那是我的调用路径错了，不是测试坏了；从论文根目录跑为 21 passed + 9 subtests。）**但发现 30 条孤儿文献**（打印 82 / 被引 52）——与 A3-B 同一类。**这是我的时序缺口，不是执行方的失误**：孤儿文献检查是 tick 202 生成 A7/A6-A 任务书时才加的，而 A4 在 tick 199 就已派出；我已核实 a4 任务书中该检查计数为 0、a7 为 1。教训：新增的核验项必须回填到**已在飞**的任务，而不只是写进下一份模板。已派 A4 孤儿文献清理（要求自行推导名单）。A5、A7、A6-A 仍在跑。内存 0.75 GB、缺页 148、无孤儿进程。
 
