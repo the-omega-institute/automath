@@ -547,3 +547,38 @@ counted as verified only when both title and lead author agreed.
   Crossref/OpenAlex/Semantic-Scholar redundancy was not achieved for those
   records.  The exact zbMATH, Crossref book, Open Library, or arXiv checks
   identified in the table are the successful alternative sources.
+
+## Post-revision orphan-reference cleanup
+
+Checked: 2026-08-16 (Asia/Singapore).
+
+After the consequences supplement and seven section files were removed, the
+literal `thebibliography` still printed 41 entries although the surviving
+sources cited only 25 distinct keys.  The following 16 entries were removed
+from `sections/bibliography.tex`; none was re-cited because its supporting
+claim left the manuscript in the revision:
+
+| Key | Disposition and reason |
+|---|---|
+| `Ashley1988` | Removed.  It supported the deleted discussion of quantitative decoder-window theory; the surviving pair-graph paragraph does not make that claim. |
+| `Ashley1996` | Removed for the same reason as `Ashley1988`. |
+| `BaakeGrimm2013` | Removed.  It supported the deleted model-set geometry section. |
+| `Berstel2001` | Removed.  It supported a deleted remark connecting the finite Fibonacci calculation to automaton normalization. |
+| `BertheFrougnyRigoSakarovitch2019` | Removed.  It supported a deleted comparison with numerical normalization and carry propagation. |
+| `DrmotaTichy1997` | Removed.  It supported a deleted discrepancy estimate in the certificates section. |
+| `Frougny1992` | Removed.  It supported deleted Fibonacci-normalization and numerical-transducer comparisons.  The corrected DOI remains recorded in the identity audit above and in `references.bib`. |
+| `FrougnySteiner2008` | Removed.  It supported the deleted numerical-normalization comparison. |
+| `Gray2011` | Removed.  It supported deleted information-rate limits in the measurement-theory section. |
+| `Kalle2014` | Removed.  It supported a deleted secondary comparison involving multinacci expansions. |
+| `KuipersNiederreiter1974` | Removed.  It supported the deleted discrepancy estimate in the certificates section. |
+| `Moody2000` | Removed.  It supported the deleted model-set geometry section. |
+| `MorseHedlund1940` | Removed.  It supported deleted Sturmian-readout claims. |
+| `Queffelec2010` | Removed.  It supported deleted Sturmian-readout claims. |
+| `Schmidt1980` | Removed.  It supported a deleted contextual statement on eventual periodicity for Pisot bases; the surviving text assumes the stronger simple-Parry property directly. |
+| `Walters1982` | Removed.  It supported a deleted variational-principle argument in the measurement-theory section. |
+
+No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
+25 printed bibliography keys and the manuscript sources contain 25 distinct
+citation keys.  Both set differences are empty: there is no printed-but-
+uncited entry and no cited-but-missing entry.  `references.bib` was left
+unchanged as the directory's bibliographic record.
