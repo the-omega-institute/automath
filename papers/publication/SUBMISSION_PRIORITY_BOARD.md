@@ -317,6 +317,23 @@ m cau}\le m+1$；但**证不出 2** —— 无环性排除圈、界长路，**�
 已提交并在提交信息中写明未审状态，**专项审阅在飞**（要求 SOUND/REPAIRABLE/UNSOUND 三选一，
 且明令不得因已提交而软化否定）。
 
+**✅ 那 212 行已闭环（tick 255–256，`7d8a2e74f`）**：审阅判 **REPAIRABLE**，五处缺陷全修。
+承重的是摘要 —— 它把结论接在只剩尾条件的假设上，**作为陈述是假的**：
+$r=3$、四个尾常数全取 1 时 $a_3=0$，截断差为 $o(\ell_L)$，那个 $\sim$ 不成立，而摘要正好承诺了这一对。
+现渲染为："At every integer order $r\ge2$, two laws critically heavy-tailed **on a shared slowly
+varying scale**, with matching lower moments and **nonzero signed tail imbalance**, satisfy a square law…"
+
+**"共用尺度"是我加的，超出审阅要求** —— 尾指数相同而缓变尺度不同的两律同样"临界重尾"却不被定理覆盖，
+留在形容词里等于同一缺陷的缩水版。引言那句亦从"theorem **with** imbalance"改为
+"replaces, **for laws of** imbalance,…"，把条件挂回律而非定理。
+其余四条：$r$ 声明为整数；$x_0$ 先量化后使用；证明中个别渐近改为加性 $o(\ell_L)$（奇数阶两侧尾常数
+相等时括号为零，"$\sim0$" 无定义）；$\overline{b(z)}^{,k}$ 排版笔误。新引理已在正文点明是
+`sec_poisson_harmonic_spectrum` 那条机制的 $q=2$ 重新包装。
+
+> **一周内第二次同形缺陷**（前一次为 `homological_visibility` 的摘要漏掉"终端本质满射"）。
+> 已写入记忆 `feedback_abstract_drops_hypotheses`：可操作的问法不是"检查摘要"，
+> 而是**问哪个假设一旦删去会让这句由弱变假** —— 那一条必须出现在摘要里，长一点也得留。
+
 **第六轮已派出（tick 255）**：`gluing_failure_…_apal`（55 页，带跨篇连接 —— 兄弟篇刚证的
 Ext 盲区**精确刻画**对本篇同名主题settle 了什么、使什么可达、又使哪一节变得多余；
 "某节已被兄弟篇定理吞并"即便缩短本篇也算正当结论）、
