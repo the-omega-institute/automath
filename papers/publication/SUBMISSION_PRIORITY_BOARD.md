@@ -2554,3 +2554,27 @@ $\sum_C(Bf)_C=0$ 而 $\sum_Cv_C>0$，方程无解。
 这与本冲刺四次"摘要强于定理"是同一件事，只是它进了编号环境，因而从"误导性广告"变成"假陈述"。
 
 80 页、exit 0、全零，提交前已过闸门。**codex**：第八个 tick 503。**待你定夺**：十项。
+
+---
+
+## tick 313 — 前置陈述比对：`scan_error` 干净；`detector_shells` 修一处、留两处
+
+**方法产出在下降，如实记录。** 全仓库只有 6 篇在 `main.tex` 里有编号陈述，
+其中 `scan_error_prefix_partitions`（6 推论 5 定理）逐条读下来**假设都写得很足** ——
+`cor:scan-tanaka-tail` 带 $\mathsf P\in\mathcal F_\infty$，DFA 那条列了混合一步 SFT、
+continuation-robust 三分性、三个决定性前缀语言可被 DFA 识别等一长串前提。
+`cor:basic-properties` 的两条（加深前缀不增扫描误差；零误差当且仅当某 $\mathcal F_m$-事件模零测集与之相符）
+是该设定下的标准事实。**无缺陷。**
+
+**`detector_shells`：只改我有把握的那一处。**
+摘要原写 "For **a general** two-state D-MAP, we also characterize the renewal boundary"，
+而该定理要求转移核**不可约**、两态的点击强度**均为正**、平稳点击率 $\rho\in(0,1)$ ——
+这些假设我在该结果加入时读过并独立验过，故可直接补回，已补。
+
+**另外两处 "general" 我没动**：
+"a **general** local class of stationary lattice renewal laws" 与 "for **general** killed-reset kernels"。
+审稿人称它们分别隐藏了紧局部参数类／指数尾／平衡律的 Hellinger 控制、以及极小性等假设，
+但**那两条定理的前提我没读过**。不读就改等于换一种方式猜，这正是我在 `zeck_arith` 上犯过的错。
+front matter 的完整清扫仍然欠着，须待 codex 恢复或我逐条读完那些定理。
+
+72 页、exit 0、全零，提交前过闸门。**codex**：第九个 tick 503。**待你定夺**：十项。
