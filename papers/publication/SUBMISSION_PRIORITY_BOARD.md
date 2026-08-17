@@ -122,6 +122,11 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
   按 `python -m artifacts.<mod>` 从根目录重跑，10 个全过。是检查的毛病，不是论文的。）
 - **28 个 verify 脚本全部具备失败路径**（assert / raise），无一是"怎么跑都过"的空壳。
 
+- **从论文根目录重跑 28 个 verify 脚本：全过，且未修改任何已跟踪 artifact** ——
+  即committed 的 artifact 与脚本现场重新生成的结果**逐字节相同**，这比"退出码为 0"强。
+  （首轮我在 `artifacts/` 里跑，`verify_finite_claims.py` 的输出路径是相对 cwd 的，
+  于是悄悄生成了 `artifacts/artifacts/` 而什么都没校验。已清理；正确跑法是论文根目录。）
+
 ⚠️ **本条尚未证明的部分**：以上只证明脚本能跑通、且结构上可能失败。
 **未做**逐脚本的变异测试（改坏一个常数、确认变红、再改回）。
 "一个检查若在任何输入下都通过，它就不是证据" —— 这条纪律此前只对 A7 伴随篇提过，

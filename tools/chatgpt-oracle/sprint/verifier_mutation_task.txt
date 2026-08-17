@@ -1,0 +1,71 @@
+Do not ask for design approval, do not run any brainstorming or approval workflow, do not propose a
+plan and wait. Proceed directly.
+
+DO NOT MODIFY ANY artifacts/oracle_*.md anywhere. Do not commit. Leave every file exactly as you
+found it when you finish - this task is a measurement, not a repair.
+
+WHY. Every paper in papers/publication carries a reproducibility statement pointing at scripts under
+its artifacts/. Those scripts have now been run corpus-wide: 54 of 54 exit 0, all 15 SHA256SUMS
+manifests verify, all 28 verify*.py have an assert or raise somewhere in them, and re-running them
+from each paper's root leaves every tracked artifact byte-identical.
+
+None of that establishes the thing that matters. A check that passes on any input is not evidence.
+What is still unknown is whether these scripts would actually go red if the paper's claim were
+false. That is the last gap in this line, and the answer is worth more than another green table.
+
+WHAT TO DO. For each verify*.py listed below, perform a mutation test.
+
+ 1. Read the script and identify what quantitative claim of the paper it is defending - a constant,
+    an exponent, a threshold, an inequality direction, a bound. Say what you found.
+ 2. Perturb exactly one such value in the SCRIPT'S OWN expected/target constant, not in the
+    computation that derives it. If the script computes X and asserts X == 2/3, change the 2/3, not
+    the computation. Use a perturbation large enough to be unambiguous but small enough to be
+    realistic - a wrong last digit, a factor of two, a flipped inequality.
+ 3. Re-run. Record whether it goes red.
+ 4. Restore the file exactly. Verify by `git diff` that the file is unchanged, and by re-running
+    that it passes again.
+
+Do this for at least three distinct claims per script where the script defends more than one.
+
+THE DELIVERABLE IS THE LIST OF SCRIPTS THAT STAYED GREEN. A script that passes with a broken
+constant is not verifying the paper, and every one you find is a real result. Do not treat finding
+one as a failure of the task - it is the point of the task. Report each with the exact mutation you
+made and the output it still produced.
+
+Report also any script where you could not identify a claim to perturb, or where the only assert
+checks something trivially true (a type, a length, a value against itself). Those are the same
+finding in a different form.
+
+SCRIPTS, in descending order of how much the paper leans on them. Work down the list; if you run
+short of budget, stop and say where you stopped rather than skimming the rest:
+
+    2026_large_primitive_divisors_fibonacci_wieferich_alternative/artifacts/verify_fibonacci_claims.py
+    2026_upper_fibers_witness_covers_fibonacci_apparition_fq/artifacts/verify_finite_claims.py
+    2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/verify_simple_parry_causal.py
+    2026_cyclic_rank_thresholds_quadratic_simple_parry_etds/artifacts/verify_quadratic_pisot_threshold.py
+    2026_finite_parts_dynamical_zeta_shifts_finite_type_etds/artifacts/verify_a5_results.py
+    2026_finite_window_zeckendorf_thermodynamics_jnt/artifacts/verify_real_tilt_pressure.py
+    2026_prime_languages_finite_state_obstructions_monatshefte/artifacts/verify_pisot_pumping.py
+    2026_detector_shells_click_record_kms_jphyscomm/artifacts/verify_A8_results.py
+    2026_cayley_chebyshev_poisson_entropy_strip_rkhs_jfa/artifacts/verify_moment_equivalence.py
+    2026_linear_overlap_transients_bounded_zero_pisot_etds/artifacts/verify_fixed_cubic_audit.py
+
+HOW TO RUN THEM. From the paper's own directory, not from inside artifacts/:
+
+    cd papers/publication/<paper> && python artifacts/<script>.py
+
+Several write their output relative to the working directory, so running them from inside artifacts/
+silently creates artifacts/artifacts/ and checks nothing. Confirm after each run that `git status`
+shows no modified tracked file and no stray directory.
+
+RULES:
+ - Change no manuscript file. No .tex, no .bib, no theorem, no prose.
+ - Every mutation is reverted before you move on. At the end, `git status` for the whole repository
+   must be as clean as when you started - state that it is.
+ - No revision marks, no scratch files left behind, do not commit.
+ - Write any working file under a filename unique to this run.
+ - Kill only your own process tree if you must stop something; never an image-wide taskkill.
+
+REPORT: per script, the claim it defends, each mutation you applied, whether it went red, and the
+restoration check. Then, at the top of your report, the list of scripts that stayed green - that
+list is the result.
