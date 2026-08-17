@@ -2208,3 +2208,33 @@ projection 只验下游、zeck 运算判错、本 tick 的容许性遗漏），
 后一问是 `zeck_arith` 审稿人主动提出的（"把搬运来的剩余环叫作 field phases"），值得对每篇都问。
 
 **在飞 codex**：无。**待你定夺**：五项，已挂十一个 tick。
+
+---
+
+## tick 302 — 三份外审在途；一条挂了很久的待办查明是**我记错了**
+
+**外审**：`joukowsky` 与 `fibonacci_folding` 首次返回 `extraction_failure`（worker 侧抓取失配），
+已重发为 `09754d72-9ebf-403c-ad63-4216518ec797` 与 `12e62f82-7d16-40d2-bb27-1887a2ab8921`；
+连同 `detector_shells`（`322128f4`）三份现均已绑定 worker。
+
+### `window6`：我标记的"被取代的定理"并不存在
+
+board 上长期挂着一条："`window6` 的 `thm:hidden-refinement-boundary` 已被取代、现在严格更弱、
+仍被引用两次、应移入附录"。本 tick 读了原文，**这条标记是错的**。
+
+该定理不是被取代的旧结果，而是一条**范围界定**：
+它说 `thm:single-exact-fold6-certificate` 与 `cor:terminal-window6-nonlumpable-by-spectrum` 的
+非可聚合结论**恰是关于可见态集 $X_6$ 上一步商的陈述** ——
+排除了 $T_6M=MP$ 型的核、也排除了把 $P_6$ 实现为等变商核，
+但**不排除**存在另一个有限态空间 $Y$、满射 $H:\Omega_6\twoheadrightarrow Y$ 与因子映射 $\rho$ 使得 $H$ 的分划等变。
+其证明末尾明确交棒：`thm:window6-minimal-equitable-refinement` 证明这样的等变细化
+**恰在 48 个状态处存在、且在该最小值处相差重标号意义下唯一**。
+
+所以后者**回答了**前者提出的问题，而不是**取代**它。删掉它就是我在 `cubical_stokes` 批评过的那种删法 ——
+把论文自己对适用范围的说明拿掉。**该待办作废，不派工。**
+
+**记一笔**：这条标记来自很早的一次快速浏览，之后被我在 board 上反复转抄了十几个 tick。
+自己记下的"待办"同样需要在动手前复核，尤其是那种"某某已被取代"的判断 ——
+它读起来像事实，实际是一次未经复核的阅读。
+
+**在飞 codex**：无。**待你定夺**：五项。
