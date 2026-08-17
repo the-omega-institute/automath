@@ -489,6 +489,13 @@ m TV}=lpha$（单边界→充要判据）；
 (3) 六个新节文件未入库 —— 不加则他人克隆无法编译，已加。
 丢失标签 `rem:torsion-free-role` 经查为正当淘汰：它解释的正是本定理干掉的那个假设，且原版无人引用。
 
+**第十三轮已派出（tick 269）**：`joukowsky_…_mahler_capacity`（87 页，
+**带 `finite_parts` 摆脱 (KN85) 的完整机制**，问本篇是否也有借来的 Mahler 假设可证掉；
+不同类则须说清、不许强套类比）、`fibonacci_folding_…`（35 页，
+附 Zeckendorf 簇现状与那条否定结论，令其先掂量再动手）。
+两个任务均新增两条硬要求：**不得留下 scratch 目录**（近期一次留下 4.2 MB 下载 PDF）；
+**若新增 verifier，复核方须自行变异测试**，不得采信"它能失败"的声明。
+
 **第十二轮已派出（tick 267）**：`zeckendorf_folds_…_etds`（32 页；
 **附带上一轮的否定结论**，令其先掂量 Zeckendorf 簇连接是否真实再动手）、
 `window6_spectral_rigidity_…`（77 页；专问 lumpability 判据是否也必要、
