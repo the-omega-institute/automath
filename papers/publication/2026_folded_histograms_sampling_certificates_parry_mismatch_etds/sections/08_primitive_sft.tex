@@ -1,0 +1,195 @@
+\subsection{Primitive-SFT placement barrier}
+
+The preceding optimization uses the endpoint collapse of the golden-mean
+Parry law.  The following result is only the primitive-SFT restoration
+interface needed here, not a replacement for the golden-mean endpoint theorem:
+it records the finite-block support envelope shared by all primitive
+positive-entropy SFTs.  A primitive Parry law has exponentially small
+cylinders, whereas finite-block factors of a Sturmian system have only linear
+block complexity, so injective placement cannot remove the order
+\(m\log\lambda-\log m\) divergence barrier.  This coarse support-envelope
+obstruction is exactly the primitive-SFT contribution of this manuscript; the
+paper does not claim a richer finite-block rigidity or optimizer
+classification for general primitive SFTs.  Thus every use of the word
+``rigidity'' in this subsection refers only to the support-budget obstruction
+proved below, with the stated sliding-block factor hypothesis, and not to a
+finite-block factor classification or to a primitive-SFT analogue of the
+golden-mean optimizer theorem.
+
+\begin{proposition}[Primitive-SFT Parry support envelope]
+\label{prop:primitive-sft-support-envelope}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Define, for
+\(1\le k\le |X_A^{(m)}|\),
+\[
+M_m^A(k):=\max\{\Pi_m^A(S): S\subset X_A^{(m)},\ |S|\le k\}.
+\]
+There is a constant \(C_A\ge1\) such that, for all \(m\ge1\) and all \(k\),
+\[
+M_m^A(k)\le C_A k\lambda^{-m}.
+\]
+Consequently, if \(\nu\in\Delta(X_A^{(m)})\) has \(|\supp(\nu)|\le k\), then
+for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)\ge m\log\lambda-\log k-\log C_A.
+\]
+In particular, any sequence of \(m\)-block laws with
+\(D_q(\nu_m\|\Pi_m^A)=O(1)\) for some fixed \(q\in[0,\infty]\) must have
+\(|\supp(\nu_m)|\ge c_A\lambda^m\) along that sequence, for a constant
+\(c_A>0\) depending only on \(A\) and on the \(O(1)\) bound.
+\end{proposition}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Thus every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since the state set is finite, after increasing the constant if necessary,
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+Every \(k\)-point set therefore has Parry mass at most
+\(C_Ak\lambda^{-m}\), which proves the support-envelope estimate.
+
+Now put \(S=\supp(\nu)\).  Proposition~\ref{prop:renyi-support-conditioning}
+gives, for every \(q\in[0,\infty]\),
+\[
+D_q(\nu\|\Pi_m^A)\ge -\log\Pi_m^A(S),
+\]
+where the inequality is exactly the
+Lemma~\ref{lem:renyi-nonnegativity} consequence built into
+Proposition~\ref{prop:renyi-support-conditioning}.  Since \(|S|\le k\), the
+envelope bound gives the displayed lower bound.  Rearranging this bound gives
+the final support lower bound.
+\end{proof}
+
+\begin{theorem}[Primitive-SFT injective-placement barrier]
+\label{thm:primitive-sft-placement-barrier}
+Let \(A\) be a primitive \(d\times d\) zero-one matrix with Perron root
+\(\lambda>1\), and let \(\Pi_m^A\) be the \(m\)-block marginal of its Parry
+measure on the one-sided vertex shift \(X_A\).  Let \(\ell\ge0\), let
+\(\Theta\) be a sliding block code of window length \(\ell+1\) from a
+Sturmian subshift of slope \(\alpha\) into a finite alphabet, and let
+\(\sigma_m\) be the law of the length-\(m\) words in the factor
+\(\Theta(X_\alpha)\).  Then there is a constant \(C=C(A,\ell)\) such that, for every
+\(m\ge1\) and every injective placement
+\[
+\iota:\supp(\sigma_m)\hookrightarrow X_A^{(m)}
+\]
+into the admissible \(m\)-blocks of \(X_A\),
+\[
+\KL(\iota_*\sigma_m\|\Pi_m^A)
+\ge
+m\log\lambda-\log m-C.
+\]
+The same lower bound, with a possibly different constant \(C\), holds for
+\(D_q(\iota_*\sigma_m\|\Pi_m^A)\) for every \(q\in[0,\infty]\), uniformly in
+\(q\), whenever \(D_q\) is evaluated on an injective relabeling of
+\(\sigma_m\).  In particular no finite-block factor of a Sturmian system can
+be placed injectively inside a primitive positive-entropy SFT with \(O(1)\)
+Parry divergence along all block lengths.
+\end{theorem}
+
+\begin{proof}
+Let \(l,r_A\) be positive left and right Perron eigenvectors for \(A\),
+normalized by \(\sum_i l_ir_{A,i}=1\).  The Parry transition matrix is
+\[
+P_{ij}=A_{ij}\frac{r_{A,j}}{\lambda r_{A,i}},
+\]
+with stationary vector \(\pi_i=l_ir_{A,i}\).  Therefore every admissible
+word \(u=u_1\cdots u_m\in X_A^{(m)}\) has Parry mass
+\[
+\Pi_m^A(u)
+=
+\pi_{u_1}P_{u_1u_2}\cdots P_{u_{m-1}u_m}
+=
+l_{u_1}r_{A,u_m}\lambda^{-(m-1)}.
+\]
+Since there are only finitely many states, there is a constant \(C_A>0\) such
+that
+\[
+\Pi_m^A(u)\le C_A\lambda^{-m}
+\qquad (u\in X_A^{(m)},\ m\ge1).
+\]
+
+A length-\(m\) word in the block-code factor \(\Theta(X_\alpha)\) is
+determined by a length \(m+\ell\) word of the Sturmian source.  Hence
+\[
+|\supp(\sigma_m)|\le m+\ell+1.
+\]
+Consequently, for every \(q\in[0,\infty]\),
+\[
+H_q(\sigma_m)\le H_0(\sigma_m)\le \log(m+\ell+1).
+\]
+
+Let \(\nu=\iota_*\sigma_m\).  Since \(\iota\) is injective,
+\(H_q(\nu)=H_q(\sigma_m)\) for every \(q\).  For \(q=1\),
+\[
+\begin{aligned}
+\KL(\nu\|\Pi_m^A)
+&=
+-H_1(\nu)-\sum_{u\in X_A^{(m)}}\nu(u)\log \Pi_m^A(u)\\
+&\ge
+-H_1(\sigma_m)+m\log\lambda-\log C_A\\
+&\ge
+m\log\lambda-\log(m+\ell+1)-\log C_A.
+\end{aligned}
+\]
+Absorbing \(\ell\) and \(C_A\) into a constant gives the displayed KL lower
+bound.
+
+For \(q\in(0,\infty)\setminus\{1\}\), the cylinder estimate
+\(\Pi_m^A(u)\le C_A\lambda^{-m}\) gives
+\[
+\sum_u \nu(u)^q\Pi_m^A(u)^{1-q}
+\begin{cases}
+\ge (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & q>1,\\
+\le (C_A\lambda^{-m})^{1-q}\sum_u\nu(u)^q, & 0<q<1.
+\end{cases}
+\]
+After multiplication by \(1/(q-1)\) and taking logarithms, both cases yield
+\[
+D_q(\nu\|\Pi_m^A)
+\ge
+m\log\lambda-\log C_A-H_q(\sigma_m).
+\]
+Using \(H_q(\sigma_m)\le \log(m+\ell+1)\) proves the same lower bound.  For
+\(q=0\),
+\[
+D_0(\nu\|\Pi_m^A)
+=-\log\Pi_m^A(\supp\nu)
+\ge
+-\log\bigl((m+\ell+1)C_A\lambda^{-m}\bigr),
+\]
+which is the required estimate.  For \(q=\infty\),
+\[
+D_\infty(\nu\|\Pi_m^A)
+=
+\log\max_{u\in\supp\nu}\frac{\nu(u)}{\Pi_m^A(u)}
+\ge
+m\log\lambda-\log C_A-H_\infty(\sigma_m),
+\]
+and \(H_\infty(\sigma_m)\le H_0(\sigma_m)\le\log(m+\ell+1)\).  This completes
+the proof.
+\end{proof}
+
+\begin{remark}[Numerical interpretation]
+\label{rem:numerical-interpretation}
+The numerical examples follow the two comparisons used in the proofs.  First
+we compare the empirical histogram with the deterministic folded law.  We then
+compare the limiting folded law with the Parry block law.  The examples are
+included only to illustrate this separation in the present model, not to
+survey other possible folds.
+\end{remark}

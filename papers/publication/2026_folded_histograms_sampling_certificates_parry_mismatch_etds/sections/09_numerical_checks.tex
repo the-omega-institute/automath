@@ -1,0 +1,258 @@
+\section{Illustrative numerical checks}
+
+This section does not add new estimates; it only illustrates the preceding
+theorem chain.  We start with
+the canonical slice \(\beta=\alpha\), where the finite-\(m\) statements of
+Sections~4 and~5 are sharp, and then consider nearby parameter families and an
+independent sampling baseline.  The relevant distinction is between
+convergence to \(\pi_m^{\mathrm{fold}}\) and comparison with \(\pi_m\).  In
+the canonical slice, Theorem~\ref{thm:sequence-level-transparency} rules out
+information loss under the fold, while
+Theorem~\ref{thm:optimal-injective-relabeling} identifies the best injective
+placement of the realized Sturmian law in \(X_m\).
+
+\subsection{Numerical setup}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.25\linewidth} >{\raggedright\arraybackslash}p{0.63\linewidth}}
+\toprule
+Experiment family & Parameter grid \\
+\midrule
+Rotation sweep &
+$m\in\{6,8,10,12,14,16,18\}$,
+$N\in\{10^4,3\times 10^4,10^5,3\times 10^5\}$,
+$\beta\in\{0.2,0.3,0.5,0.6180339887\}$,
+$x_0\in\{0.123,0.271,0.731\}$ \\
+Rotation families &
+golden, metallic means $A\in\{2,3,5\}$, and large first partial quotient
+families $[0;B,1,1,\dots]$ with $B\in\{10,30,100\}$ \\
+Independent block baselines &
+$m\in\{6,8,10,12,14,16,18\}$,
+$N\in\{2000,5000,10^4,3\times 10^4,10^5\}$,
+seeds $\{1,2,3,4,5\}$, confidence level $95\%$ \\
+\bottomrule
+\end{tabular}
+\caption{Parameter ranges used in the numerical examples.}
+\label{tab:parameter-grid}
+\end{table}
+
+All tables are computed from this fixed grid.  In the rotation experiments the
+same orbit sample is used for the empirical microstate law, the folded
+histogram, the discrepancy bound and the cross-resolution residual.  The
+overlines in Table~\ref{tab:rotation_multiscale_residual_summary} denote
+averages over the listed orbit phases; Table~\ref{tab:rotation-parry-gap-summary}
+also averages over the displayed \(\beta\)-grid.  The residual and Parry tables
+use \(N=3\times 10^5\).  In the generated tables the reported star
+discrepancies are \(1.01\times10^{-5}\) for the residual table and at most
+\(9.33\times10^{-5}\) for the off-canonical Parry-gap table, so the sampling
+terms are already below the displayed deterministic gaps.
+
+The tables below are numerical illustrations of the finite formulas proved
+above.  The manuscript does not use them as additional evidence for any theorem,
+and all acceptance-critical estimates are the analytic statements in the
+preceding sections.
+
+All slope families in Table~\ref{tab:parameter-grid} are of bounded type.  The
+family \([0;B,1,1,\dots]\) is included to show the effect of a large first
+partial quotient, not as an unbounded-type example.
+
+\subsection{Canonical slice}
+
+Theorem~\ref{thm:sequence-level-transparency} is exact.  The first numerical
+check is therefore the injective placement formula in
+Theorem~\ref{thm:optimal-injective-relabeling}.  The table below is computed
+from the Lebesgue factor law, with no averaging over \(\beta\) or \(x_0\), and
+not from a finite orbit sample.  It begins at \(m=6\), the first resolution at
+which \(X_m^{00}\) contains enough words to realize the injective optimum.
+
+% Submission note: the supplementary package contains mirrored copies of these
+% generated table fragments for reproducibility.  The main manuscript inputs
+% only the copies under generated/; do not input supplementary/generated/ in
+% this TeX run, since those fragments intentionally repeat the same table labels.
+\input{generated/tab_canonical_injective_floor_exact_en}
+
+Table~\ref{tab:canonical-injective-floor-exact} shows the finite-\(m\)
+content of Theorem~\ref{thm:optimal-injective-relabeling} and
+Proposition~\ref{prop:canonical-golden-slope-gap}. The optimal injective
+floor \(L_1(m)\) and the exact folded-to-Parry divergence
+\(\KL(\pi_m^{\mathrm{fold}}\|\pi_m)\) both grow on the scale
+\(m\log\varphi-\log m\), while their difference is the fixed constant
+\((1-\varphi^{-3})\log\varphi\).  The last columns are exact evaluations from
+the finite Sturmian partition and the endpoint formula in
+Theorem~\ref{thm:parry-kl-identity}.  At these resolutions the canonical
+folded law is far inside the universal \(2\log\varphi\) additive window above
+the injective optimum.  This table is the reference point for the empirical
+comparisons below.
+
+\subsection{Finite-sample validation}
+
+\input{generated/tab_rotation_folded_kl_certificate_en}
+
+Table~\ref{tab:rotation-folded-kl-certificate} is for the golden slope with
+the canonical window \(\beta=\alpha\).  In the parameter range shown, the
+observed folded relative entropy is below the explicit upper bound.  The
+constants are conservative, but the dependence on \((m,N)\) is at the
+predicted scale.  The same canonical slice also shows why comparison with the
+Parry baseline is different: increasing \(N\) improves agreement with
+\(\pi_m^{\mathrm{fold}}\), but it does not remove the deterministic gap to
+\(\pi_m\).  Once the empirical histogram is close to
+\(\pi_m^{\mathrm{fold}}\), the injective floor in
+Table~\ref{tab:canonical-injective-floor-exact} is the relevant reference.
+
+\subsection{Cross-resolution residuals}
+
+\input{generated/tab_rotation_multiscale_residual_summary_en}
+
+Table~\ref{tab:rotation_multiscale_residual_summary} displays the separation
+between finite-sample and limiting effects.  At \(N=3\times 10^5\), the mean
+star discrepancy in the reported golden slice is of order \(10^{-5}\), whereas
+the projective residual remains of order \(10^{-1}\).  For the family
+\([0;100,1,1,\dots]\), the residual is larger.  This is the phenomenon
+captured by
+Theorem~\ref{thm:multiscale-residual-by-boundary}: small orbit discrepancy
+does not force small cross-resolution residual, because the residual is driven
+by the frequency with which a final \(1\) is appended to prefixes whose
+Fibonacci value has already crossed the threshold \(F_{m+1}\).
+
+Corollary~\ref{cor:multiscale-residual-comparison-bound} gives the corresponding
+quantitative bound: the empirical residual is controlled by an explicit
+discrepancy term and by the deterministic total-variation gaps to the Parry
+baselines at levels \(m\) and \(m+1\).  Once the discrepancy term is smaller
+than these gaps, the source/reference comparison controls the bound.
+
+\subsection{Additional parameter choices}
+
+\input{generated/tab_rotation_parry_gap_summary_en}
+
+Table~\ref{tab:rotation-parry-gap-summary} moves away from the canonical
+slice.  At the fixed sample size \(N=3\times 10^5\), the golden discrepancy
+upper bound is already \(9.33\times 10^{-5}\), while the total-variation and
+relative-entropy gaps to the Parry measure are numerically increasing in the
+displayed rows across both bounded-type and resonant families.  For the
+golden branch, for example, the total variation distance rises from \(0.506\)
+at \(m=6\) to \(0.995\) at \(m=18\).  This is the same qualitative regime
+predicted by
+Theorem~\ref{thm:tv-certificate-hist},
+Corollary~\ref{cor:multiscale-residual-comparison-bound}, and
+Corollary~\ref{cor:injective-relabeling-bounded-type}.  Theorem
+~\ref{thm:tv-certificate-hist} shows that the empirical-to-folded
+total-variation error is already at the discrepancy scale, while
+Corollary~\ref{cor:multiscale-residual-comparison-bound} identifies the
+deterministic folded-versus-Parry gaps
+\(\TV(\pi_\ell^{\mathrm{fold}},\pi_\ell)\) as the remaining terms in the
+cross-resolution comparison.  On the relative-entropy side,
+Corollary~\ref{cor:injective-relabeling-bounded-type} gives the bounded-type
+asymptotic scale for the limiting Parry mismatch
+\(D_q(\iota_*\mu_m\|\pi_m)\), and the canonical folded law stays within a
+bounded additive distance of that scale.
+
+Across the displayed families, the metallic and resonant examples differ in
+constants, but they exhibit the same qualitative obstruction inside the
+present model: after folding into \(X_m\), the deterministic gap to the Parry
+baseline dominates the sampling term once \(m\) is moderately large.
+
+\subsection{Comparison with independent baselines}
+
+\input{generated/tab_iid_sources_fold_vs_parry_ci_en}
+
+The independent comparison separates two bookkeeping regimes.  When the
+data-generating law is matched to the reference baseline, the classical
+finite-alphabet sampling envelopes give the right scale but grow with the
+alphabet size.  The table reports the observed seed averages only; it is not
+used as a concentration certificate for the deterministic rotation examples.
+For the rotation data, Theorem~\ref{thm:tv-certificate-hist} controls the
+folded histogram relative to \(\pi_m^{\mathrm{fold}}\), while
+Corollary~\ref{cor:tv-decomposition-parry} is the exact KL identity for the
+microstate law relative to the Parry lift \(Q_m\pi_m\).  The remaining
+comparison with the Parry block law \(\pi_m\) is therefore deterministic and
+comes from the folded-versus-Parry mismatch isolated in Section~5.
+
+For reference, set \(K:=|E|=F_{m+2}\).  Standard high-probability
+envelopes on a finite alphabet \(E\) have the form
+\[
+\TV(\hat p_N,p)
+\lesssim
+\sqrt{\frac{K\log 2+\log(1/\delta)}{2N}},
+\qquad
+\KL(\hat p_N\|p)
+\lesssim
+\frac{K\log(N+1)+\log(1/\delta)}{N}
+\]
+at confidence level \(1-\delta\), with constants and lower-order terms
+depending on the chosen form of the inequality.  In particular, the TV
+envelope is of order \(\sqrt{K/N}\), up to constants and logarithmic
+confidence terms, rather than \(\sqrt{\log K/N}\); see
+\cite{WeissmanEtAl2003L1Empirical,DemboZeitouni2010LargeDeviations}. These
+are independent sampling envelopes on the finite alphabet \(E\). The rotation
+experiments are controlled instead by the deterministic discrepancy
+certificates of Section~3. When
+\(p=\pi_m\) and the data are Parry-distributed, the observed errors in the table
+are at the expected independent-sampling scale. When \(p=\pi_m\) but the data
+come from folded rotation orbits, the deterministic Parry gap dominates.
+
+\subsection{A nonlinear circle-map illustration}
+
+Theorem~\ref{thm:circle-map-conjugacy-transfer} shows that the symbolic
+comparison proved earlier transfers unchanged to circle maps that are
+topologically conjugate to the irrational rotation.
+
+For example, consider the standard circle map
+\[
+f_{K,\Omega}(x)=x+\Omega-\frac{K}{2\pi}\sin(2\pi x)\pmod 1
+\]
+with \(K=0.3\) and \(\Omega\) tuned by bisection on the lift so that the
+rotation number equals \(\varphi^{-1}\), giving
+\(\Omega\approx 0.6166931270470741\). With anchor \(a=0.2\), coding window
+\(I=[a,f(a))\), and initial point \(x_0=a\), the resulting symbolic sequence
+is treated here only as an illustration.  The proof input in
+Theorem~\ref{thm:circle-map-conjugacy-transfer} would be the exact pulled-back
+interval \(h^{-1}([0,\varphi^{-1}))\); the displayed interval and tuned
+parameter are not used as theorem evidence.
+At \(m=12\) and \(N=10^5\), the empirical folded histogram satisfies
+\[
+\TV(\hat\pi_{12,N},\pi_{12}^{\mathrm{fold}})
+=2.43\times 10^{-5},
+\qquad
+\KL(\hat\pi_{12,N}\|\pi_{12}^{\mathrm{fold}})
+=2.95\times 10^{-9},
+\]
+while the gaps to the Parry baseline remain
+\[
+\TV(\hat\pi_{12,N},\pi_{12})=0.9650,
+\qquad
+\KL(\hat\pi_{12,N}\|\pi_{12})=3.4443.
+\]
+The distance to the folded limit is already at the \(10^{-5}\) level, while the
+Parry discrepancy remains of order \(10^0\).  The same comparison therefore
+applies to this nonlinear state-space model.
+
+\section{Concluding remarks}
+
+The construction gives a finite-resolution setting in which sampling error and
+Parry comparison can be separated explicitly.  Discrepancy estimates control
+the empirical folded histogram, while the support and placement results
+describe the limiting folded law.  In the Sturmian slice the fold is injective
+on realized blocks and is conjugate to the classical higher-block
+presentation, so the Parry gap is not caused by collisions under the fold.
+More generally, Theorem~\ref{thm:window-injectivity-classification} shows that
+losslessness at every resolution holds exactly in the two extreme window
+regimes \(\beta\le\|\alpha\|\) and
+\(\beta\ge1-\|\alpha\|\); in the intervening regime the obstruction is
+already present at resolution two.
+
+The main obstruction is the low effective complexity of the source inside the
+ambient golden-mean language. Even after optimizing over all injective
+placements of the realized Sturmian law, one obtains
+\[
+\inf_{\iota\in\mathcal I_m(\alpha)}D_q(\iota_*\mu_m\|\pi_m)
+=
+m\log\varphi-\log m+O_\alpha(1)
+\]
+for bounded-type slopes, uniformly in the R\'enyi order. The canonical fold is
+within a bounded additive distance of this optimum.
+
+The exact formulas rely on the endpoint collapse of golden-mean Parry
+cylinders.  Thus the paper should be read as an explicit model, rather than as
+a classification of arbitrary folds.

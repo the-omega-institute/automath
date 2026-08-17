@@ -1,0 +1,557 @@
+\section{Model and target measures}
+
+\subsection{Rotations, windows and the folded observable}
+
+Let $\alpha\in(0,1)$ be irrational, let $\beta\in(0,1)$, and let
+$x_0\in\TT:=\mathbb{R}/\mathbb{Z}$.  Define the Kronecker orbit
+\[
+x_t:=x_0+t\alpha \pmod 1,\qquad t\ge 0,
+\]
+and the binary readout
+\[
+s_t:=\mathbf{1}_{[0,\beta)}(x_t)\in\{0,1\}.
+\]
+For a fixed resolution $m\ge 1$, let
+\[
+\Omega_m:=\{0,1\}^m,\qquad
+X_m:=\{u=(u_1,\dots,u_m)\in\{0,1\}^m:\ u_i u_{i+1}=0\text{ for }1\le i<m\}.
+\]
+Throughout \(F_0:=0\), \(F_1:=1\), and
+\(F_{n+2}=F_{n+1}+F_n\).
+
+\begin{definition}[Canonical fold]\label{def:canonical-fold}
+For \(\omega=\omega_1\cdots\omega_m\in\Omega_m\), define its Fibonacci value by
+\[
+N_m(\omega):=\sum_{j=1}^m \omega_j F_{j+1}.
+\]
+Let \(Z(n)=(z_1,z_2,\dots)\) be the Zeckendorf expansion of \(n\)
+\cite{Zeckendorf1972}, written in the convention
+\[
+n=\sum_{j\ge 1} z_jF_{j+1},\qquad z_j\in\{0,1\},\qquad z_jz_{j+1}=0.
+\]
+The canonical fold is
+\[
+\Fold_m(\omega):=z_1z_2\cdots z_m\in X_m,
+\qquad Z(N_m(\omega))=(z_1,z_2,\dots).
+\]
+\end{definition}
+
+\begin{theorem}[Local Zeckendorf normalization by uniqueness certificate]\label{thm:local-zeckendorf-normalization}
+Let \(d=(d_1,d_2,\dots)\) be a finitely supported sequence of nonnegative
+integers, and put
+\[
+V(d):=\sum_{j\ge1} d_jF_{j+1}.
+\]
+Consider the following local rewrites, whenever the displayed coordinates are
+available and the left-hand side has the required positive multiplicity:
+\[
+d_j,d_{j+1}\ge1:
+\qquad
+d_jF_{j+1}+d_{j+1}F_{j+2}
+\longmapsto
+(d_j-1)F_{j+1}+(d_{j+1}-1)F_{j+2}+F_{j+3},
+\]
+that is, subtract \(1\) from \(d_j,d_{j+1}\) and add \(1\) to \(d_{j+2}\);
+and, for double digits,
+\[
+d_1\ge2:\quad 2F_2\longmapsto F_3,
+\]
+\[
+d_2\ge2:\quad 2F_3\longmapsto F_2+F_4,
+\]
+\[
+d_j\ge2,\ j\ge3:\quad 2F_{j+1}\longmapsto F_{j-1}+F_{j+2}.
+\]
+Equivalently, the last three rules subtract \(2\) from the indicated
+coordinate and add the shown unit digits.  Every sequence of such local
+rewrites terminates.  Its terminal vector is a \(\{0,1\}\)-vector with no
+adjacent \(1\)'s, has the same value \(V(d)\), and is independent of the
+order in which the rewrites were applied.  In particular, starting from the
+binary digit vector of a word \(\omega\in\Omega_m\), every local normalization
+order gives the Zeckendorf expansion of \(N_m(\omega)\).
+\end{theorem}
+
+\begin{proof}
+Each rewrite preserves \(V(d)\).  For the adjacent-carry rule this is exactly
+\[
+F_{j+1}+F_{j+2}=F_{j+3}.
+\]
+For the double-digit rules, the identities are
+\[
+2F_2=F_3,\qquad 2F_3=F_2+F_4,
+\]
+and, for \(j\ge3\),
+\[
+2F_{j+1}=F_{j-1}+F_{j+2}.
+\]
+The last identity follows from
+\[
+F_{j+2}+F_{j-1}
+=F_{j+1}+F_j+F_{j-1}
+=F_{j+1}+F_{j+1}.
+\]
+
+Termination is elementary but important.  Since the value \(V(d)\) is fixed,
+only finitely many finitely supported nonnegative vectors can occur during
+the rewriting: if \(d_j>0\), then \(F_{j+1}\le V(d)\), and each coordinate is
+bounded by \(V(d)\).  Order these finitely many vectors lexicographically from
+the largest index downward, padding by zeros.  Every rewrite strictly
+increases this order.  Indeed, an adjacent carry first changes the highest
+affected coordinate \(j+2\) by increasing it by \(1\).  The double-digit rule
+at \(j=1\) first increases coordinate \(2\), the rule at \(j=2\) first
+increases coordinate \(3\), and the rule at \(j\ge3\) first increases
+coordinate \(j+1\).  In the last case the simultaneous new digit at
+coordinate \(j-2\) is lower in this reverse lexicographic comparison than
+both the increased coordinate \(j+1\) and the decreased coordinate \(j\), so
+it cannot undo the strict increase.  Hence an infinite rewriting chain is
+impossible.
+
+If a terminal vector had a coordinate \(d_j\ge2\), one of the double-digit
+rules would apply.  If it had adjacent positive coordinates
+\(d_j,d_{j+1}\ge1\), the adjacent-carry rule would apply.  Thus a terminal
+vector is a \(\{0,1\}\)-vector with no adjacent \(1\)'s.  It is therefore a
+Zeckendorf representation of the integer \(V(d)\).  Thus the displayed rules
+form a terminating normalization algorithm.  Its confluence is certified here
+by the global uniqueness theorem for Zeckendorf expansions, rather than by an
+unstated local-confluence calculation: Zeckendorf uniqueness
+\cite{Zeckendorf1972} implies that all terminal vectors are equal, so the
+normal form is independent of the rewrite order.
+\end{proof}
+
+\begin{corollary}[Uniqueness certificate for local normalization]
+\label{cor:local-normalization-church-rosser}
+Let \(d\) be any finitely supported nonnegative digit vector, and write
+\(\mathcal R(d)\) for the directed graph whose vertices are all digit vectors
+reachable from \(d\) by the local rules of
+Theorem~\ref{thm:local-zeckendorf-normalization}.  Then \(\mathcal R(d)\) has
+a unique sink \(z(d)\).  The sink is the Zeckendorf digit vector of \(V(d)\).
+Equivalently, for any two finite rewrite chains
+\[
+d\longrightarrow d'\qquad\text{and}\qquad d\longrightarrow d'',
+\]
+there are further rewrite chains from \(d'\) and \(d''\) to the same vector
+\(z(d)\).  In particular, if \(d\) is the binary digit vector of
+\(\omega\in\Omega_m\), then
+\[
+\Fold_m(\omega)=z(d)_1\cdots z(d)_m
+\]
+and this prefix is independent of every local normalization choice made before
+truncation.
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:local-zeckendorf-normalization} gives termination, so every
+reachable vector can be extended to at least one terminal vector.  It also
+shows that every terminal vector is a legal \(\{0,1\}\)-vector and that every
+rewrite preserves the value \(V\).  Hence every terminal vector reachable from
+\(d\) is a Zeckendorf representation of the same integer \(V(d)\).
+Zeckendorf uniqueness \cite{Zeckendorf1972} therefore forces all terminal
+vectors reachable from \(d\) to be equal; call this common vector \(z(d)\).
+
+Now let \(d\to d'\) and \(d\to d''\) be two finite rewrite chains.  By
+termination, each of \(d'\) and \(d''\) reaches a terminal vector.  The
+preceding paragraph identifies both terminal vectors with \(z(d)\).  This is
+the only confluence assertion used here: it is a certificate obtained from
+termination together with global Zeckendorf uniqueness, not an independent
+local critical-pair or Church--Rosser proof for the rewrite system.  The last
+assertion is only the definition of the canonical fold after identifying
+\(z(d)\) with the Zeckendorf expansion of \(N_m(\omega)=V(d)\).
+\end{proof}
+
+\begin{theorem}[Contiguous numeration rigidity]\label{thm:contiguous-fibonacci-uniqueness}
+Let \(a_1,a_2,\dots\) be positive integers.  For \(m\ge1\), define
+\[
+W_m(u):=\sum_{j=1}^m u_ja_j,\qquad u\in X_m.
+\]
+Assume that, for every \(m\ge1\), the set of legal values is exactly the
+contiguous interval
+\[
+W_m(X_m)=\{0,1,\dots,F_{m+2}-1\}.
+\]
+Then
+\[
+a_j=F_{j+1}\qquad (j\ge1).
+\]
+Consequently the Fibonacci weights used in Definition~\ref{def:canonical-fold}
+are the unique positive weights for which the golden-mean words \(X_m\)
+enumerate contiguous initial intervals at every resolution.
+\end{theorem}
+
+\begin{proof}
+For \(m=1\), the legal words are \(0\) and \(1\), so
+\(\{0,a_1\}=\{0,1\}\), and \(a_1=1=F_2\).  For \(m=2\), the legal words are
+\(00,10,01\), so
+\[
+\{0,a_1,a_2\}=\{0,1,2\}.
+\]
+Since \(a_1=1\), this gives \(a_2=2=F_3\).
+
+Assume inductively that \(a_j=F_{j+1}\) for \(j<m\), where \(m\ge3\).  The
+words in \(X_m\) ending in \(0\) are exactly \(u0\) with \(u\in X_{m-1}\).
+By the induction hypothesis and the contiguous axiom at level \(m-1\), their
+values form
+\[
+\{0,1,\dots,F_{m+1}-1\}.
+\]
+The words in \(X_m\) ending in \(1\) are exactly \(v01\) with
+\(v\in X_{m-2}\).  Their values form
+\[
+a_m+\{0,1,\dots,F_m-1\},
+\]
+again by the induction hypothesis, now at level \(m-2\).
+
+The two families are disjoint because the full map \(W_m\) has
+\(|X_m|=F_{m+2}\) values and its image is the \(F_{m+2}\)-point interval
+\(\{0,\dots,F_{m+2}-1\}\).  The first family already occupies the initial
+block \(\{0,\dots,F_{m+1}-1\}\), and the second family has exactly \(F_m\)
+values.  Since \(F_{m+2}=F_{m+1}+F_m\), contiguity forces the second block to
+start at \(F_{m+1}\).  Hence \(a_m=F_{m+1}\), completing the induction.
+\end{proof}
+
+\begin{proposition}[Basic properties of the canonical fold]\label{prop:canonical-fold-basic}
+For every \(m\ge 1\), the map \(\Fold_m:\Omega_m\to X_m\) is surjective and
+fixes \(X_m\) pointwise. Moreover, \(N_m\) restricts to a bijection
+\[
+N_m:X_m\longrightarrow \{0,1,\dots,F_{m+2}-1\}.
+\]
+For every \(\omega\in\Omega_m\),
+\[
+N_m(\Fold_m(\omega))\equiv N_m(\omega)\pmod {F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Zeckendorf uniqueness \cite{Zeckendorf1972} gives a one-to-one correspondence
+between legal \(\{0,1\}\)-digit strings supported in positions \(1,\dots,m\)
+and the integers \(0,\dots,F_{m+2}-1\). Hence \(N_m|_{X_m}\) is bijective. If
+\(x\in X_m\), then \(x\) is already the Zeckendorf expansion of \(N_m(x)\), so
+\(\Fold_m(x)=x\); surjectivity follows.
+
+Finally, for \(\omega\in\Omega_m\),
+\[
+N_m(\omega)\le \sum_{j=1}^m F_{j+1}=F_{m+3}-2<F_{m+3}.
+\]
+Thus \(Z(N_m(\omega))\) has no nonzero digit beyond position \(m+1\). Write
+\[
+Z(N_m(\omega))=(z_1,\dots,z_m,z_{m+1},0,\dots).
+\]
+Then
+\[
+N_m(\omega)=N_m(\Fold_m(\omega))+z_{m+1}F_{m+2},
+\]
+which proves the congruence.
+\end{proof}
+
+\begin{proposition}[Residue characterization of the canonical fold]\label{prop:fold-residue-characterization}
+For \(\omega\in\Omega_m\) and \(x\in X_m\),
+\[
+\Fold_m(\omega)=x
+\quad\Longleftrightarrow\quad
+N_m(\omega)\equiv N_m(x)\pmod {F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+The forward implication is the congruence in
+Proposition~\ref{prop:canonical-fold-basic}. Conversely, let
+\(y:=\Fold_m(\omega)\). Then \(y\in X_m\), and
+\[
+N_m(y)\equiv N_m(\omega)\equiv N_m(x)\pmod {F_{m+2}}.
+\]
+Since both \(N_m(x)\) and \(N_m(y)\) lie in
+\(\{0,\dots,F_{m+2}-1\}\), they are equal. The bijectivity of \(N_m|_{X_m}\)
+then gives \(x=y\).
+\end{proof}
+
+\begin{definition}[Microstates and folded histograms]\label{def:microstates-folded-histograms}
+For \(x\in\TT\), set
+\[
+\omega_m(x):=\bigl(\mathbf{1}_{[0,\beta)}(x+j\alpha)\bigr)_{j=0}^{m-1}
+\in\Omega_m.
+\]
+Along the orbit \(x_t=x_0+t\alpha\), write
+\[
+\omega_m(t):=\omega_m(x_t)=s_t\cdots s_{t+m-1},
+\qquad
+y_m(t):=\Fold_m(\omega_m(t)).
+\]
+The empirical microstate and folded laws are
+\[
+\hat\mu_{m,N}(a):=\frac1N\#\{0\le t<N:\omega_m(t)=a\},
+\qquad a\in\Omega_m,
+\]
+and
+\[
+\hat\pi_{m,N}(x):=\frac1N\#\{0\le t<N:y_m(t)=x\},
+\qquad x\in X_m.
+\]
+Equivalently, \(\hat\pi_{m,N}=(\Fold_m)_*\hat\mu_{m,N}\).
+\end{definition}
+
+\begin{remark}[Use of the fold]\label{rem:scope-fold-assumptions}
+The map \(\Fold_m\) is fixed throughout the paper.  The discrepancy estimates
+below use only that it is deterministic.  The residue formula, the
+cross-resolution boundary law and the no-collision theorem, however, use the
+particular Zeckendorf normalization in Definition~\ref{def:canonical-fold}.
+The Parry identities in Section~5 are statements about laws on \(X_m\) and are
+independent of how those laws arise.  We do not compare different
+Zeckendorf-type normalizations here; the rigidity result is specific to the
+canonical residue fold.
+\end{remark}
+
+Because irrational rotations are uniquely ergodic, the empirical microstate
+law converges to a deterministic target law induced by Lebesgue measure.
+
+\begin{definition}[Target laws]\label{def:target-laws}
+For \(a\in\Omega_m\), let
+\[
+C_m(a):=\{x\in\TT:\omega_m(x)=a\}
+\]
+and define
+\[
+\mu_m(a):=\leb(C_m(a)).
+\]
+The folded target law is
+\[
+\pi_m^{\mathrm{fold}}:=(\Fold_m)_*\mu_m.
+\]
+\end{definition}
+
+\begin{remark}[Spaces and laws]\label{rem:model-spaces-maps}
+The notation is summarized by
+\[
+\begin{array}{ccc}
+\Omega_m & \xrightarrow{\Fold_m} & X_m\\[0.3em]
+\mu_m \downarrow\phantom{(\Fold_m)_*} &  & \phantom{(\Fold_m)_*}\downarrow \pi_m^{\mathrm{fold}}\\[0.3em]
+\hat\mu_{m,N} & \xrightarrow{(\Fold_m)_*} & \hat\pi_{m,N}
+\end{array}
+\qquad
+\begin{array}{ccc}
+\Omega_{m+1} & \xrightarrow{\Fold_{m+1}} & X_{m+1}\\[0.3em]
+\pref_m \downarrow &  & \downarrow \rho_{m+1\to m}\\[0.3em]
+\Omega_m & \xrightarrow{\Fold_m} & X_m.
+\end{array}
+\]
+The left diagram distinguishes the microstate space \(\Omega_m\) from the
+folded space \(X_m\).  In the right diagram, \(\pref_m\) and
+\(\rho_{m+1\to m}\) denote prefix truncations on \(\Omega_{m+1}\) and
+\(X_{m+1}\), respectively.  Their failure to commute with the fold is measured
+in Section~3.2.
+\end{remark}
+
+\subsection{The Parry measure}
+
+The reference law on \(X_m\) is the \(m\)-block marginal of the Parry measure
+of the golden-mean shift.  Let
+\[
+A=\begin{pmatrix}1&1\\1&0\end{pmatrix},\qquad
+\varphi=\frac{1+\sqrt5}{2}.
+\]
+The associated two-state Parry chain has transition matrix
+\[
+P=\begin{pmatrix}\varphi^{-1} & \varphi^{-2}\\ 1&0\end{pmatrix},
+\]
+and stationary distribution
+\[
+\pi(1)=\frac{1}{\varphi^2+1},\qquad
+\pi(0)=1-\pi(1).
+\]
+For $u=u_1\cdots u_m\in X_m$, define the length-$m$ Parry cylinder law
+\[
+\pi_m(u):=\pi(u_1)\prod_{j=1}^{m-1}P_{u_j u_{j+1}}.
+\]
+\(\pi_m\) is used only as a reference measure; in general
+\(\pi_m^{\mathrm{fold}}\ne\pi_m\).  Since \(|X_m|=F_{m+2}\), the ambient
+shift has topological entropy
+\[
+h_{\mathrm{top}}(X)=\lim_{m\to\infty}\frac1m\log |X_m|=\log\varphi,
+\]
+and the Parry measure is its unique measure of maximal entropy
+\cite{LindMarcus1995,WaltersErgodicTheory}.
+
+\begin{proposition}[Endpoint collapse of Parry cylinders]\label{prop:parry-endpoint-collapse}
+For every \(m\ge1\) and every \(u=u_1\cdots u_m\in X_m\),
+\[
+\pi_m(u)=
+\pi(0)\,\varphi^{-m+\mathbf{1}_{\{u_1=0\}}-\mathbf{1}_{\{u_m=1\}}}.
+\]
+Equivalently, for \(m\ge2\), the endpoint classes have weights
+\[
+\pi_m(u)=
+\begin{cases}
+\pi(0)\varphi^{-(m-1)}, & u_1u_m=00,\\
+\pi(0)\varphi^{-m}, & u_1u_m\in\{01,10\},\\
+\pi(0)\varphi^{-(m+1)}, & u_1u_m=11.
+\end{cases}
+\]
+\end{proposition}
+
+\begin{proof}
+For an admissible word, write \(n_{ij}\) for the number of transitions
+\(i\to j\). Since \(11\) is forbidden,
+\[
+\pi_m(u)=\pi(u_1)\varphi^{-n_{00}-2n_{01}}.
+\]
+The identities
+\[
+n_{01}-n_{10}=u_m-u_1,
+\qquad
+n_{00}+n_{01}+n_{10}=m-1
+\]
+give \(n_{00}+2n_{01}=m-1-u_1+u_m\). Also
+\(\pi(1)=\pi(0)\varphi^{-2}\). Substituting these two relations into the
+Parry cylinder formula yields the displayed expression. The endpoint table is
+immediate.
+\end{proof}
+
+\subsection{Discrepancy of the rotation orbit}
+
+Our only quantitative input is the one-dimensional star discrepancy of the
+rotation orbit:
+\[
+D_N^*(\alpha;x_0)
+:=
+\sup_{0\le a\le 1}
+\left|
+\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_{[0,a)}(x_t)-a
+\right|.
+\]
+This quantity is effective because length-$m$ rotation words are determined by a
+finite partition of the circle into interval atoms.
+
+\begin{remark}[Variation convention for interval tests]\label{rem:half-open-variation-convention}
+When a half-open interval indicator is used below, it is viewed as a
+right-continuous representative on \([0,1)\) with the endpoint \(0=1\)
+identified.  Thus \(x\mapsto \mathbf 1_{[0,a)}(x)-a\) has exactly two jumps on
+the circle for \(0<a<1\), one up and one down, and has circular total variation
+\(2\).  For \(a=0,1\) the centered indicator is constant and the corresponding
+discrepancy test contributes zero.
+\end{remark}
+
+\begin{lemma}[Ostrowski block discrepancy decomposition]\label{lem:ostrowski-block-discrepancy}
+Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
+\[
+N=\sum_{j=0}^s b_jq_j,\qquad 0\le b_j\le a_{j+1},
+\]
+be the standard Ostrowski expansion of \(N\)
+\cite[Ch.~I, Sec.~4]{Cassels1957}.  For every function
+\(f:\TT\to\mathbb R\) of bounded variation and every \(x_0\in\TT\),
+\[
+\left|
+\sum_{t=0}^{N-1} f(x_0+t\alpha)-N\int_{\TT}f\,d\leb
+\right|
+\le
+\operatorname{Var}(f)\sum_{j=0}^s b_j .
+\]
+Here \(\operatorname{Var}\) is total variation on the circle with the
+half-open representative used for interval indicators; in particular
+\(\operatorname{Var}(\mathbf 1_{[0,a)}-a)=2\) for \(0<a<1\), as in
+Remark~\ref{rem:half-open-variation-convention}, and the bound is trivial at
+\(a=0,1\).
+\end{lemma}
+
+\begin{proof}
+Set \(M_0=0\) and, for \(0\le j\le s\) and \(0\le \ell<b_j\), set
+\[
+M_{j,\ell}:=\sum_{r=0}^{j-1}b_rq_r+\ell q_j .
+\]
+The standard Ostrowski identity writes the interval of times
+\(\{0,\ldots,N-1\}\) as the disjoint concatenation
+\[
+\{M_{j,\ell},M_{j,\ell}+1,\ldots,M_{j,\ell}+q_j-1\},
+\qquad 0\le j\le s,\quad 0\le \ell<b_j,
+\]
+after omitting empty digit families.  Indeed, after all blocks with index
+less than \(j\) and the first \(\ell\) blocks of length \(q_j\) have been
+listed, the next unused time is exactly \(M_{j,\ell}\); after the final block
+the endpoint is \(\sum_{j=0}^s b_jq_j=N\).  The ascending order is only a
+bookkeeping choice, because the estimate below is uniform in the starting
+point of each block.
+
+For a block of length \(q_j\) starting at \(y\), the Denjoy--Koksma inequality
+for the rotation by \(\alpha\) at a continued-fraction denominator
+\cite[Ch.~2, Sec.~5]{KuipersNiederreiter1974} gives
+\[
+\left|
+\sum_{t=0}^{q_j-1} f(y+t\alpha)-q_j\int_{\TT}f\,d\leb
+\right|
+\le \operatorname{Var}(f).
+\]
+Summing this estimate over the \(b_j\) blocks of each denominator \(q_j\)
+proves the displayed inequality.
+\end{proof}
+
+\begin{proposition}[Continued-fraction discrepancy rate]\label{prop:rotation-discrepancy-cf-rate}
+Let \(\alpha=[0;a_1,a_2,\dots]\), let \(q_{-1}=0,q_0=1\), and let
+\(q_n\) be the continued-fraction denominators.  Choose \(s=s(N)\) so that
+\(q_s\le N<q_{s+1}\), and write the standard Ostrowski expansion
+\cite[Ch.~I, Sec.~4]{Cassels1957}
+\[
+N=\sum_{j=0}^s b_jq_j,\qquad 0\le b_j\le a_{j+1}.
+\]
+Then, uniformly in \(x_0\),
+\[
+N D_N^*(\alpha;x_0)\le 2\sum_{j=0}^s b_j
+\le 2\sum_{j=1}^{s+1}a_j .
+\]
+In particular, if the partial quotients of \(\alpha\) are bounded by \(A\),
+then
+\[
+D_N^*(\alpha;x_0)
+\le
+\frac{2A}{N}
+\left(2+\frac{\log(N+1)}{\log\varphi}\right).
+\]
+For the golden slope \(\alpha=\varphi^{-1}=[0;1,1,\dots]\),
+\[
+D_N^*(\varphi^{-1};x_0)
+\le
+\frac{2}{N}
+\left(2+\frac{\log(N+1)}{\log\varphi}\right).
+\]
+\end{proposition}
+
+\begin{proof}
+For \(0\le a\le1\), put \(f_a(x)=\mathbf{1}_{[0,a)}(x)-a\).  By
+Lemma~\ref{lem:ostrowski-block-discrepancy}, using
+\(\operatorname{Var}(f_a)\le2\) in the half-open convention of
+Remark~\ref{rem:half-open-variation-convention},
+\[
+\left|\sum_{t=0}^{N-1}f_a(x_0+t\alpha)\right|
+\le 2\sum_{j=0}^s b_j .
+\]
+After division by \(N\) and taking the supremum over \(a\), this proves the
+continued-fraction bound.  The digit bound \(b_j\le a_{j+1}\) gives the second
+inequality.
+
+If \(a_j\le A\), then \(\sum_{j=1}^{s+1}a_j\le A(s+1)\).  The universal
+growth lower bound \(q_s\ge F_{s+1}\ge \varphi^{s-1}\) gives
+\[
+s+1\le 2+\frac{\log(N+1)}{\log\varphi},
+\]
+and the bounded-type estimate follows.  The golden case is the special case
+\(A=1\).
+\end{proof}
+
+\begin{proposition}[Sturmian cylinder lengths]\label{thm:spg-sturmian-cylinder-measure-continued-fraction-sandwich}
+Assume \(\beta=\alpha\), and let \(p_n/q_n\) be the continued-fraction
+convergents of \(\alpha\), with the usual denominator convention
+\(q_0=1\). If \(q_n\le m<q_{n+1}\), then every
+\(u\in S_m(\alpha):=\supp(\mu_m)\) satisfies
+\[
+\frac{1}{q_{n+1}+q_n}<\mu_m(u)<\frac{2}{q_n}.
+\]
+\end{proposition}
+
+\begin{proof}
+For the Sturmian partition, the nonempty length-\(m\) cylinders are exactly the
+gaps between the ordered points
+\[
+\{(1-j)\alpha\bmod 1:0\le j\le m\}.
+\]
+The displayed lower and upper estimates are the standard continued-fraction
+gap bounds obtained from the three-distance theorem for rotations; see
+Slater's gap theorem \cite{Slater1967GapsSteps} and the classical treatment in
+\cite[Chapter~2]{KuipersNiederreiter1974}. These gap lengths are precisely the
+Lebesgue cylinder masses \(\mu_m(u)\).
+\end{proof}
