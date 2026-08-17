@@ -431,6 +431,27 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 ⚠️ **写进提交信息的"未覆盖"**：`cubical_stokes` 的 verifier 证的是**严格损失反例**，
 非一般剖面公式；LP 对偶与 Hoffman 归约靠论证本身，审稿人应先看证明第 5 项。
 
+| `finite_observation_escape_…_etds` | **主定理条件被证掉**：余有限首入可达性（环境不可约给首入路径 + 本原性给各长度回路 ⇒ 每个剩余类正概率出现）⇒ 逃逸率恢复在原有混合假设下自动成立；**接力的严格谱不等式亦消掉第三矩条件** | 38→38 | `1b126c0f0` |
+
+**工具接力成功**：`scan_projection` 的 $h_t>(t/s)h_s$ 转过来后，临界处
+$N_m^3S_3\le\exp[m(	frac32h_2-h_3)+o(m)]	o0$，第三矩条件消掉而非放宽。
+复核方**手工核了数学**：确认 codex 正确处理了暂态块（$b_r$ 可能真为零，
+但 $(ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\infty$ 扛住）——
+这也是下界写成"最终成立"而非"从 $m=1$ 起"的原因。
+
+**一处担心经查不成立**：被删的"退化剩余类二分"命题被疑为丢弃了"不必混合"情形的内容；
+读原文后确认它开头即写 "including the mixing survivor subshift"，本就假设混合，
+故新引理令其退化分支变空，属真正吞并，且全篇无残留引用。
+
+**又一种"假通过"形态**：从 `.bbl` 提 key 得 0 条而控制计数显示 31 —— 这次**不是转义，是换行**
+（`ibitem[Agarwal et~al.(2024)…` 标签折行，`{key}` 落到下一行，单行模式匹配不到）。
+**控制计数第四次生效。**
+
+**第十一轮已派出（tick 265）**：`deterministic_telescoping_…`（22 页，
+带 Zeckendorf 簇两项新结果作只读上下文，避免重复亦不漏连接）、
+`recursive_addressing_prefix_sites_tac`（18 页，TAC 为范畴论刊 ⇒ 问普遍性质／伴随／极限保持；
+并警示其书目曾有 DOI 指向无关论文，及本批两次"摘要漏假设致陈述为假"）。
+
 **第十轮已派出（tick 264）**：`scan_error_prefix_partitions_…_etds`（63 页，
 须先确认兄弟篇"已在此篇"的两条判断属实 —— 若其一实际不在，那本身就是结果）、
 `elliptic_normalization_branch_geometry_…`（76 页，
