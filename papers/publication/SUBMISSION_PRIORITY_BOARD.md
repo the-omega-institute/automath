@@ -2275,3 +2275,34 @@ board 上长期挂着一条："`window6` 的 `thm:hidden-refinement-boundary` �
 
 **在飞**：`detector_shells` front matter 修复（`01a01154`）；`fibonacci_folding` 外审 waiting。
 **待你定夺**：六项（新增 `joukowsky` 去向）。
+
+---
+
+## tick 304 — 用修正后的方法重扫先前"判为干净"的四篇
+
+我的自查方法已被 `detector_shells` 证伪（只读 abstract 环境），故先前的"干净"结论不可靠，本 tick 重扫。
+新方法：**整个 front matter**（摘要 + 引言 + 贡献列表 + 摘要性表格），
+并专门 grep `general` 与无限定复数、`every` / `any` / `all` / `arbitrary`。
+
+**结果:四篇全部重新判定为干净**，逐条理由：
+
+- `joukowsky`：`$I(J_{r\ast}\eta)\le\log r$ **for every probability measure** $\eta$ on $\TT$`
+  —— 定理正是在 $\mathcal P(\TT)$ 上陈述的；另两处 `every` 出现在**否定式划界**里
+  （"**不是**对每个代数约束源类的尖锐下界"），是正确用法。
+- `fibonacci_folding`：三处 `general`/`every` 全部带着 **zero-synchronized span-$r$** 这个假设
+  （"any zero-synchronized local normalizer of rewrite span $r$"、"in the general span-$r$ setting"、
+  "applies to every zero-synchronized span-$r$ local normalizer"）。假设被点名，合规。
+- `cubical_stokes`：`On every axis-aligned box $R=\prod_j[0,L_j]$` 与
+  `arbitrary constant coordinate-monomial data on an $n$-box` —— 两处的**类都被点名**，非无限定推广。
+- `golden_mean_folding`：已修版本合规。
+
+**顺带发现修复轮多做了一件对的事**：它给递归寻址那条主张补了一个假设 ——
+现在写"**当每个新地址层事件关于前序累积可见 $\sigma$-代数可测时**，我们证明导出地址不扩大该 $\sigma$-代数"。
+我 tick 297 读的原版没有这个条件，而我当时**没有把它列为问题**。
+是那一轮的全篇比对指令让 agent 自己找到并补上的。
+
+**这轮的意义**：一个被证伪的检查方法，其此前的"通过"结论必须整体重跑，不能只修方法向前用。
+重跑代价很小（四篇一条命令），而不重跑就会留下四条以坏方法背书的"已检查"记录。
+
+**在飞**：`detector_shells` front matter 修复；`fibonacci_folding` 外审 waiting。
+**待你定夺**：六项。
