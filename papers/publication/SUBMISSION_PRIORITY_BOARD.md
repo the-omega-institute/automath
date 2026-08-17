@@ -334,6 +334,26 @@ varying scale**, with matching lower moments and **nonzero signed tail imbalance
 > 已写入记忆 `feedback_abstract_drops_hypotheses`：可操作的问法不是"检查摘要"，
 > 而是**问哪个假设一旦删去会让这句由弱变假** —— 那一条必须出现在摘要里，长一点也得留。
 
+**第六轮部分收割（tick 257）**：
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|--:|---|
+| `gluing_failure_…_apal` | **可见商的完全分类**：$K_v$ 族可实现 $\iff$ 各不变因子被 $H_2(N,\mathbb Z)$ 逐项控制（自由秩贡献无限制项），且某 $K_v=0$ 时须 $\mathrm{Ext}^1(H_1(N,\mathbb Z),A)
+e0$；另证赋值纤维为 $\mathrm{Ext}$-torsor ⇒ $|\mathrm{Ext}|$ 个类共享隐藏子群·可见商·特征集 | 55→**58** | `282eb35c0` |
+
+**跨篇连接押中，且三问皆答**。被兄弟篇吞并的：单标签盲性判据、$\mathbb{RP}^2$ 盲例的单类存在性、
+有限站点 pure-Ext 讨论的存在性一半。未被吞并的：一般预序站点的公共加细语义、栈层带接口、
+类容许特征解释、新定理两半。**写进论文而非留给审稿人发现。**
+
+⚠️ **又一处引用缺陷（我查出，agent 未报）**：它订正了兄弟篇标题（我对着兄弟篇 front matter 核过，属实），
+但同条目 `author = {Anonymous}` —— 兄弟篇实为 Ma & Zhang，且**本项目惯例相反**：
+另三篇引用伴随稿均写全名，兄弟篇反引本篇亦然。已改，书目现印 `Haobo Ma and Wenlin Zhang`。
+**一条引用被"订正"过一次，不等于整条都对。**
+
+**第七轮已派出（tick 257）**：`coefficient_sup_…_jdde`（29 页，兄弟篇 `cubical_stokes_…_jdsgt`
+只读参考；若结果该属兄弟篇则须说明并停手）、`chebotarev_quotient_…`（65 页；专门要它先查
+**有无借来的外部假设可以像 `finite_parts` 那样证掉** —— 那比再加一条条件结论值钱）。
+
 **第六轮已派出（tick 255）**：`gluing_failure_…_apal`（55 页，带跨篇连接 —— 兄弟篇刚证的
 Ext 盲区**精确刻画**对本篇同名主题settle 了什么、使什么可达、又使哪一节变得多余；
 "某节已被兄弟篇定理吞并"即便缩短本篇也算正当结论）、
