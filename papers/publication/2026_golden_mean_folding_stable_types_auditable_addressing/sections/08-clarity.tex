@@ -143,6 +143,178 @@ Only atoms in \(\partial_mP\) contribute to \Cref{prop:cylinder-decomposition}. 
 Summing over \(\partial_mP\) gives the first bound.  Substituting the assumed growth of \(|\partial_mP|\) gives the second.
 \end{proof}
 
+The preceding estimate gives an upper rate from boundary counts alone.  To
+determine when that rate is exact, one must also measure how the posterior
+mass is distributed inside the boundary atoms.  The relevant condition is
+an average condition rather than a uniform lower bound on every boundary
+posterior.
+
+For \(\partial_mP\ne\varnothing\), define the boundary mass and the
+mass-weighted average ambiguity by
+\[
+b_m(P;\mu):=\sum_{C\in\partial_mP}\mu(C),
+\qquad
+\vartheta_m(P;\mu):=
+\frac{1}{b_m(P;\mu)}
+\sum_{C\in\partial_mP}
+\mu(C)\min\{p_C,1-p_C\}.
+\]
+Thus \(0<\vartheta_m(P;\mu)\le 1/2\).  The quantity
+\(\vartheta_m\) records posterior thinning after the geometric size of the
+boundary has been removed.
+
+\begin{theorem}[Boundary-dimension rate classification]
+\label{thm:average-boundary-thickness}
+Assume that \(\partial_mP\ne\varnothing\) for all sufficiently large \(m\).
+Suppose that there are constants \(c_-,c_+>0\) and \(\lambda>1\) such that
+\[
+c_-\lambda^{-m}\le \mu(C)\le c_+\lambda^{-m}
+\qquad(C\in\mathcal C_m)
+\]
+for all sufficiently large \(m\), and suppose that
+\[
+|\partial_mP|=\lambda^{dm+o(m)}
+\]
+for some \(d\in[0,1]\).  Then
+\[
+b_m(P;\mu)=\lambda^{-(1-d)m+o(m)}
+\]
+and the exact factorization
+\[
+\boxed{
+\varepsilon_m(P;\mu)=b_m(P;\mu)\,\vartheta_m(P;\mu)
+}
+\]
+holds.  Consequently, for every \(\gamma\ge0\),
+\[
+\varepsilon_m(P;\mu)
+=\lambda^{-(1-d+\gamma)m+o(m)}
+\]
+if and only if
+\[
+\vartheta_m(P;\mu)=\lambda^{-\gamma m+o(m)}.
+\]
+In particular, boundary dimension gives the exact decay exponent \(1-d\)
+if and only if
+\[
+-\log\vartheta_m(P;\mu)=o(m).
+\]
+\end{theorem}
+
+\begin{proof}
+The two-sided cylinder bounds give
+\[
+c_-|\partial_mP|\lambda^{-m}
+\le b_m(P;\mu)
+\le c_+|\partial_mP|\lambda^{-m}.
+\]
+The assumed boundary-count asymptotic therefore yields
+\[
+b_m(P;\mu)=\lambda^{-(1-d)m+o(m)}.
+\]
+By \Cref{prop:cylinder-decomposition}, the numerator in the definition of
+\(\vartheta_m(P;\mu)\) is exactly \(\varepsilon_m(P;\mu)\), which proves the
+factorization.  Dividing either of the two asserted exponential asymptotics
+by the boundary-mass asymptotic proves the equivalence.  The final statement
+is the case \(\gamma=0\).
+\end{proof}
+
+\begin{corollary}[An \(L^p\) average-thickness criterion]
+\label{cor:lp-average-boundary-thickness}
+Assume the hypotheses of \Cref{thm:average-boundary-thickness}.  For
+\(p>0\), set
+\[
+T_{m,p}:=
+\left(
+\frac{1}{b_m(P;\mu)}
+\sum_{C\in\partial_mP}
+\mu(C)\min\{p_C,1-p_C\}^{-p}
+\right)^{1/p}.
+\]
+If \(\log T_{m,p}=o(m)\) for some \(p>0\), then
+\[
+\varepsilon_m(P;\mu)
+=\lambda^{-(1-d)m+o(m)}.
+\]
+Thus a subexponential negative moment of the posterior ambiguity is
+sufficient for the dimension-only rate; no uniform lower bound on the
+individual boundary posteriors is required.
+\end{corollary}
+
+\begin{proof}
+Give \(\partial_mP\) the probability weights
+\(\nu_m(C)=\mu(C)/b_m(P;\mu)\), and write
+\(a_C=\min\{p_C,1-p_C\}\).  The power-mean inequality gives
+\[
+\vartheta_m(P;\mu)=\sum_C\nu_m(C)a_C
+\ge
+\left(\sum_C\nu_m(C)a_C^{-p}\right)^{-1/p}
+=T_{m,p}^{-1}.
+\]
+Since \(\vartheta_m\le1/2\), the hypothesis implies
+\(-\log\vartheta_m=o(m)\).  Apply
+\Cref{thm:average-boundary-thickness}.
+\end{proof}
+
+The average condition in \Cref{thm:average-boundary-thickness} is strictly
+weaker than uniform boundary thickness, even for the fair Bernoulli shift.
+
+\begin{example}[Exact dimension rate without uniform thickness]
+\label{ex:square-digit-average-thickness}
+Let \(X=\{0,1\}^{\NN}\) carry the fair Bernoulli measure, let
+\[
+U(x):=\sum_{k\ge1}x_k2^{-k},
+\qquad
+a:=\sum_{j\ge1}2^{-j^2},
+\]
+and set \(P:=\{x:U(x)<a\}\).  At every depth \(m\), exactly one cylinder is
+in \(\partial_mP\), namely the cylinder whose word is the length-\(m\)
+binary prefix of \(a\).  Hence the boundary dimension is \(d=0\).  If
+\[
+r_m:=\sum_{j^2>m}2^{m-j^2},
+\]
+then the conditional probability of \(P\) on this cylinder is \(r_m\), and
+therefore
+\[
+\vartheta_m(P;\mu)=\min\{r_m,1-r_m\},
+\qquad
+\varepsilon_m(P;\mu)=2^{-m}\vartheta_m(P;\mu).
+\]
+Moreover,
+\[
+-\log_2\vartheta_m(P;\mu)=O(\sqrt m),
+\]
+while \(\vartheta_{j^2}(P;\mu)\to0\).  Thus no positive uniform thickness
+constant exists, but
+\[
+\lim_{m\to\infty}-\frac1m\log_2\varepsilon_m(P;\mu)=1=1-d.
+\]
+\end{example}
+
+\begin{proof}
+All cylinders whose binary word is lexicographically below or above the
+length-\(m\) prefix of \(a\) are decided.  On the unique remaining cylinder,
+rescaling the unresolved binary tail to \([0,1]\) gives conditional
+probability \(r_m\).  Since \(a\) is not dyadic, \(0<r_m<1\), so this
+cylinder is a boundary cylinder and it is the only one.
+
+Let \(s_m\) be the least square strictly greater than \(m\), and put
+\(\Delta_m=s_m-m\).  The first unresolved nonzero digit gives
+\[
+r_m\ge 2^{-\Delta_m},
+\]
+while the increasing gaps between consecutive squares give
+\(r_m\le 2^{1-\Delta_m}\).  If \(\Delta_m\ge2\), these bounds imply
+\(\vartheta_m=r_m\ge2^{-\Delta_m}\).  If \(\Delta_m=1\), then
+\(r_m=1/2+O(2^{-2\sqrt m})\), so \(\vartheta_m\) is bounded below by a
+positive constant.  Since \(\Delta_m\le2\sqrt m+2\), it follows that
+\(-\log_2\vartheta_m=O(\sqrt m)\).  On the other hand, at \(m=j^2\) the next
+square is \((j+1)^2\), and the upper bound gives
+\(r_{j^2}\le2^{-2j}\).  Hence \(\vartheta_{j^2}\to0\), ruling out uniform
+thickness.  The asserted scan-error exponent now follows from the displayed
+factorization.
+\end{proof}
+
 \begin{theorem}[Almost-sure eventual clarity under summable scan error]
 \label{thm:eventual-clarity}
 If

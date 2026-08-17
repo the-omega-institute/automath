@@ -26,6 +26,12 @@ New address-layer events satisfy `H_{L+1} subseteq G_{<=L}`, hence the cumulativ
 
 The optimal prefix classification error has an exact cylinder decomposition and is bounded by boundary cylinder growth.
 
+Under two-sided cylinder-volume bounds, its exponential rate splits exactly as
+
+`scan-error exponent = 1 - boundary dimension + posterior-thinning exponent`.
+
+Consequently, boundary dimension alone gives the exact rate if and only if the boundary-mass-weighted posterior ambiguity is subexponentially thin. The square-digit Bernoulli threshold shows that this criterion is strictly weaker than uniform boundary thickness.
+
 ## Corollary 7: Auditable Stable-Type Generator
 
 The preceding theorem packages produce the object
