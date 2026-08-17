@@ -1,0 +1,646 @@
+\section{Examples and Failure Modes}
+\label{sec:examples}
+
+The measure-theoretic boundary from Definition~\ref{def:boundary-cylinder} will
+be used verbatim: a cylinder $C$ lies in $\partial_m\mathsf{P}$ if and only if
+$\mu(\mathsf{P}\cap C)>0$ and $\mu(C\setminus\mathsf{P})>0$.  Events of measure
+$0$ or $1$ therefore contribute no boundary cylinders, and every example below
+has been checked under this convention.
+
+\begin{example}[Finite-horizon events]
+\label{ex:finite-horizon-event}
+If $\mathsf{P}\in\mathcal{F}_r$ for some finite $r$, then membership is decided
+once the first $r$ symbols are read, so $\partial_m\mathsf{P}=\varnothing$ and
+$\varepsilon_m(\mathsf{P};\mu)=0$ for all $m\ge r$.
+\end{example}
+
+\begin{example}[A natural first-hit parity event]
+\label{ex:first-hit-parity}
+Let $X=\Omega_\infty=\{0,1\}^{\mathbb{N}}$ with the fair Bernoulli measure and
+define
+\[
+\tau(\xi):=\inf\{t\ge 0:\xi_t=1\},
+\qquad
+\mathsf{P}_{\mathrm{even}}:=\{\tau<\infty\text{ and }\tau\text{ is even}\}.
+\]
+The null sequence $0^\infty$ is ignored by $\tau<\infty$, and the automaton from
+Definition~\ref{def:hidden-markov-filter} simply tracks the parity of the
+current zero run until the first $1$ appears.  At depth $m$ the only unresolved
+cylinder is $C_m:=[0^m]$, so $N_m(\partial\mathsf{P}_{\mathrm{even}})=1$ and
+$\overline{\beta}_{\mathcal{F}}(\mathsf{P}_{\mathrm{even}})=0$.  A geometric
+calculation shows that
+$\mu(\mathsf{P}_{\mathrm{even}}\mid[0^m])=\frac23$ for even $m$ and
+$\frac13$ for odd $m$, whence every boundary cylinder has local ambiguity
+$\frac13$ and the thickness constant is automatic.  Because
+$\mu([0^m])=2^{-m}$, the exact cylinder decomposition yields
+$\varepsilon_m(\mathsf{P}_{\mathrm{even}};\mu)=\frac13\,2^{-m}$, so this example
+verifies Proposition~\ref{prop:volume-boundary-scaling} with a minimal
+primitive absorbing prefix filter.
+\end{example}
+
+\begin{example}[Competing runs trigger spectral boundary growth]
+\label{ex:competing-runs}
+Let $X=\Omega_\infty$ with the fair Bernoulli measure.
+Stop scanning once either the pattern $11$ or the pattern $000$ has appeared,
+and declare $\mathsf{P}_{\mathrm{run}}$ if $11$ occurs first.  The elementary
+Markov calculation
+\[
+p_H=\tfrac12+\tfrac12p_Z,\quad
+p_Z=\tfrac12p_{ZZ}+\tfrac12p_H,\quad
+p_{ZZ}=\tfrac12p_H
+\]
+shows that the ``first-run'' event has positive measure
+$\mu(\mathsf{P}_{\mathrm{run}})=\tfrac12(p_H+p_Z)=0.7$.
+
+The absorbing automaton has decision states $R_+=\{\text{``11''}\}$ and
+$R_-=\{\text{``000''}\}$ together with the ambiguous states
+``$H$'' (most recent symbol $1$), ``$Z$'' (a single trailing $0$), and
+``$ZZ$'' (two trailing zeros).  The transitions are
+\[
+S\stackrel{1}{\longrightarrow}H,\quad
+S\stackrel{0}{\longrightarrow}Z,\quad
+H\stackrel{0}{\longrightarrow}Z,\quad
+Z\stackrel{1}{\longrightarrow}H,\quad
+Z\stackrel{0}{\longrightarrow}ZZ,\quad
+ZZ\stackrel{1}{\longrightarrow}H,
+\]
+while $H\stackrel{1}{\longrightarrow}R_+$ and $ZZ\stackrel{0}{\longrightarrow}R_-$.
+Thus the event fits Definition~\ref{def:hidden-markov-filter} with a primitive
+ambiguous component.  Ordering the states $(H,Z,ZZ)$ gives
+\[
+B_\partial
+=\begin{pmatrix}
+0&1&0\\[0.5ex]
+1&0&1\\[0.5ex]
+1&0&0
+\end{pmatrix},
+\qquad
+\mathbf{u}=(1,1,0)^\top,
+\]
+because the first symbol places the run either in $H$ or $Z$.  The characteristic
+polynomial of $B_\partial$ is $x^3-x-1$, so the spectral radius is the plastic
+constant $\rho_\partial\approx 1.3247$.  Consequently
+\[
+N_m(\partial\mathsf{P}_{\mathrm{run}})
+=\mathbf{u}^\top B_\partial^{\,m-1}\mathbf{1}
+=\rho_\partial^{\,m-1}(\kappa+o(1)),
+\]
+and the filtration boundary exponent is $\log_2\rho_\partial$.  By
+Lemma~\ref{lem:uniform-windows} the thickness constant is uniform, so
+Proposition~\ref{prop:volume-boundary-scaling} yields
+\[
+c_1\,2^{-m}\rho_\partial^{\,m-1}
+\le \varepsilon_m(\mathsf{P}_{\mathrm{run}};\mu)
+\le c_2\,2^{-m}\rho_\partial^{\,m-1}.
+\]
+The corrected counts begin with
+\[
+\begin{array}{c|ccccc}
+m & 1 & 2 & 3 & 4 & 5\\ \hline
+N_m(\partial\mathsf{P}_{\mathrm{run}}) & 2 & 3 & 4 & 5 & 7
+\end{array}
+\]
+showing the $m\mapsto m-1$ shift explicitly.  This example keeps all
+hypotheses of Theorem~\ref{thm:hidden-markov-thickness} while producing a
+genuinely spectral boundary law with positive measure.
+\end{example}
+
+\begin{example}[Full two-shift: an explicit positive-measure event with filtration boundary exponent $1/2$]
+\label{ex:self-similar-bernoulli}
+Let $X=\Omega_\infty=\{0,1\}^{\mathbb{N}}$ with the fair Bernoulli measure
+$\mu=(\tfrac12,\tfrac12)^{\otimes\mathbb{N}}$, which is the Parry measure for
+the full two-shift.  Then $\lambda_{\mathrm{cyl}}=2$ and every length-$m$
+cylinder has mass exactly $2^{-m}$.
+
+\paragraph{Recursive construction of $\mathsf{E}$.}
+Set $B_0:=\{\varnothing\}$.  For each $k\ge 0$ and each $w\in B_k$, split the
+four grandchildren of $[w]$ at depth $2k+2$ into
+\[
+B_{k+1}:=\{w00,w11:w\in B_k\},\qquad
+I_{k+1}:=\{w01:w\in B_k\},\qquad
+O_{k+1}:=\{w10:w\in B_k\}.
+\]
+Thus every unresolved cylinder produces one cylinder declared
+``inside'' ($01$), one declared ``outside'' ($10$), and two cylinders
+($00$ and $11$) on which the same construction repeats.  Define
+\[
+K:=\bigcap_{k\ge 0}\bigcup_{w\in B_k}[w],
+\qquad
+\mathsf{E}:=K\cup\bigcup_{k\ge 1}\bigcup_{u\in I_k}[u].
+\]
+The families $\{[u]:u\in I_k,\ k\ge 1\}$, $\{[v]:v\in O_k,\ k\ge 1\}$, and $K$
+are pairwise disjoint and partition $X$, so $\mathsf{E}\in\mathcal{F}_\infty$.
+Conditioning on the first two symbols gives
+\[
+\mu(\mathsf{E})
+=\mu([01])+\mu([00])\mu(\mathsf{E}\mid[00])+\mu([11])\mu(\mathsf{E}\mid[11])
+=\frac14+\frac14\mu(\mathsf{E})+\frac14\mu(\mathsf{E}),
+\]
+because the conditional law on $[00]$ or $[11]$ is a scaled copy of the whole
+construction.  Hence $\mu(\mathsf{E})=\frac12$, so the example has positive
+measure.
+
+\paragraph{Boundary count.}
+At even depth $2k$, the boundary cylinders are exactly $\{[w]:w\in B_k\}$:
+any cylinder declared inside or outside at an earlier stage is already
+decided, while each $[w]$ with $w\in B_k$ contains both an inside descendant
+$[w01]$ and an outside descendant $[w10]$.  Since $\#B_k=2^k$,
+\[
+N_{2k}(\partial\mathsf{E})=2^k.
+\]
+At odd depth $2k+1$, the boundary cylinders are exactly
+$\{[w0],[w1]:w\in B_k\}$, so
+\[
+N_{2k+1}(\partial\mathsf{E})=2^{k+1}.
+\]
+Therefore
+\[
+\overline{\beta}_{\mathcal{F}}(\mathsf{E})
+=\limsup_{m\to\infty}\frac{\log N_m(\partial\mathsf{E})}{m\log 2}
+=\frac12.
+\]
+
+\paragraph{Thickness verification.}
+For $w\in B_k$, let $p_w:=\mu(\mathsf{E}\mid[w])$.  The same self-similarity
+as above gives
+\[
+p_w=\frac14+\frac12 p_w,
+\]
+hence $p_w=\frac12$.  Thus every even-depth boundary cylinder carries exactly
+half of $\mathsf{E}$ and half of $\mathsf{E}^c$.  For odd-depth boundary
+cylinders,
+\[
+\mu(\mathsf{E}\mid[w0])
+=\frac12\mu(\mathsf{E}\mid[w00])+\frac12\mu(\mathsf{E}\mid[w01])
+=\frac12\cdot\frac12+\frac12\cdot 1
+=\frac34,
+\]
+while
+\[
+\mu(\mathsf{E}\mid[w1])
+=\frac12\mu(\mathsf{E}\mid[w10])+\frac12\mu(\mathsf{E}\mid[w11])
+=\frac12\cdot 0+\frac12\cdot\frac12
+=\frac14.
+\]
+Hence every boundary cylinder satisfies
+\[
+\min\{\mu(\mathsf{E}\mid C),1-\mu(\mathsf{E}\mid C)\}\ge\frac14,
+\]
+so the thickness condition holds with $\theta=\frac14$.
+
+\paragraph{Rate conclusion.}
+Proposition~\ref{prop:volume-boundary-scaling} applies with
+$\lambda_{\mathrm{cyl}}=2$, $c_-=c_+=1$, and $\theta=\frac14$, yielding
+$\varepsilon_m(\mathsf{E};\mu)\asymp 2^{-m/2}$.  In fact the exact cylinder
+decomposition gives
+\[
+\varepsilon_{2k}(\mathsf{E};\mu)=2^k\cdot 2^{-2k}\cdot\frac12=2^{-k-1},
+\qquad
+\varepsilon_{2k+1}(\mathsf{E};\mu)=2^{k+1}\cdot 2^{-(2k+1)}\cdot\frac14=2^{-k-2},
+\]
+so $\varepsilon_m(\mathsf{E};\mu)\asymp 2^{-m/2}$ with explicit constants.
+\end{example}
+
+\begin{remark}[Subsequence oscillation of boundary counts]
+\label{rem:oscillation}
+Example~\ref{ex:self-similar-bernoulli} already shows that exact boundary
+counts can oscillate by subsequence:
+\[
+N_{2k}(\partial\mathsf{E})=2^k,
+\qquad
+N_{2k+1}(\partial\mathsf{E})=2^{k+1}=2\,N_{2k}(\partial\mathsf{E}).
+\]
+The filtration boundary exponent remains $\frac12$, but no single asymptotic
+constant governs all depths.  This is why the rate statements in
+Section~\ref{sec:rates} are phrased with $\limsup$ or $o(m)$ rather than with
+full asymptotic limits.
+\end{remark}
+
+\begin{example}[Boundary growth without thickness]
+\label{ex:thickness-failure}
+Let $X=\Omega_\infty$ with the fair Bernoulli measure and consider
+\[
+\mathsf{U}:=\bigcup_{n\ge 1}[0^n1^n].
+\]
+At depth $m$, a cylinder is mixed exactly when it belongs to one of the two
+families
+\[
+C_m^{(0)}:=[0^m]
+\qquad\text{or}\qquad
+C_{n,r}:=[0^n1^r]\text{ with }n+r=m,\ 1\le r<n.
+\]
+Such prefixes can still be completed to $0^n1^n$, but they are not yet
+decided.  Hence
+\[
+N_m(\partial\mathsf{U})=\#\{n:\lfloor m/2\rfloor+1\le n\le m\}
+=\left\lceil\frac{m}{2}\right\rceil
+=2^{o(m)},
+\]
+so the filtration boundary exponent is $0$.
+
+For the pure zero cylinder $C_m^{(0)}$ there are infinitely many admissible
+continuations inside $\mathsf{U}$, one for each $n\ge m$, whence
+\[
+\mu(\mathsf{U}\mid C_m^{(0)})=\sum_{k\ge 0}2^{-(m+2k)}
+=\frac{4}{3}\,2^{-m},
+\qquad
+\mu(C_m^{(0)})=2^{-m}.
+\]
+For $C_{n,r}$ with $1\le r<n$, the only continuation inside $\mathsf{U}$ is to
+finish the remaining block of $n-r$ ones, so
+\[
+\mu(\mathsf{U}\mid C_{n,r})=2^{-(n-r)}.
+\]
+Thus the local ambiguities on boundary cylinders go to $0$, and the uniform
+thickness hypothesis fails.  The exact decomposition now reads
+\[
+\varepsilon_m(\mathsf{U};\mu)
+=2^{-m}\min\!\left\{\frac{4}{3}\,2^{-m},1-\frac{4}{3}\,2^{-m}\right\}
++\sum_{n=\lfloor m/2\rfloor+1}^{m}2^{-m}\,2^{-(2n-m)}.
+\]
+The first term is $O(2^{-2m})$, whereas the sum equals
+$\sum_{n=\lfloor m/2\rfloor+1}^{m}4^{-n}$ and hence remains $\asymp 2^{-m}$.
+By contrast, the lower bound in
+Proposition~\ref{prop:volume-boundary-scaling} would have order
+$2^{-m}N_m(\partial\mathsf{U})\asymp m2^{-m}$ if thickness were available.
+The missing factor $m$ is exactly the cost of the collapsing local ambiguity.
+\end{example}
+
+\begin{example}[Dependence on the chosen filtration]
+\label{ex:filtration-dependence}
+Let $X=\Omega_\infty$ with the fair Bernoulli measure and consider the event
+\[
+\mathsf{P}:=\{\xi_1=1\}.
+\]
+With the usual prefix filtration
+$\mathcal{F}_m=\sigma(\xi_0,\ldots,\xi_{m-1})$, the event is decided once the
+second coordinate is read, so $\varepsilon_m(\mathsf{P};\mu)=0$ for all
+$m\ge 2$ and $\overline{\beta}_{\mathcal{F}}(\mathsf{P})=0$.
+
+Now replace this by the even-coordinate filtration
+\[
+\mathcal{G}_m:=\sigma(\xi_0,\xi_2,\ldots,\xi_{2m-2}).
+\]
+The event $\mathsf{P}$ is independent of every $\mathcal{G}_m$, so
+$\varepsilon_m(\mathsf{P};\mu)=\frac12$ for all $m$.  Every positive-mass atom
+of $\mathcal{G}_m$ is therefore boundary, and there are exactly $2^m$ such
+atoms.  Thus
+\[
+N_m^{(\mathcal{G})}(\partial\mathsf{P})=2^m,
+\qquad
+\overline{\beta}_{\mathcal{G}}(\mathsf{P})=1.
+\]
+The same measurable event therefore has trivial boundary growth for one
+filtration and maximal boundary growth for another.  The filtration boundary
+exponent is a property of the representation, not of the set alone.
+\end{example}
+
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+The fixed-filtration picture established here is intentionally modest.  The
+scan error profile admits an exact partition decomposition
+(Proposition~\ref{prop:scan-error-cylinder}), a Bayes-optimal threshold rule
+(Proposition~\ref{prop:bayes-optimality}), and a discrete Tanaka
+representation (Proposition~\ref{prop:scan-tanaka}).  The new organizational
+point of Section~\ref{sec:rates} is that the decisive quantity is the weighted
+boundary mass $\mathcal{W}_m(\mathsf{P};\mu)$: count-based rates are corollaries once
+one compares $\mathcal{W}_m$ to same-length cylinder masses, while
+Proposition~\ref{prop:boundary-growth-necessary} shows that lower error bounds
+force corresponding lower growth of mixed cylinders.  The primitive
+hidden-Markov class of Theorem~\ref{thm:hidden-markov-thickness} provides one
+setting in which thickness is verified intrinsically.
+Within that class, Theorem~\ref{thm:exact-scan-error-transfer} recovers the
+information discarded by count comparison: the full error sequence is a
+rational matrix coefficient and has an explicit Perron leading constant.
+Examples~\ref{ex:first-hit-parity}
+and~\ref{ex:self-similar-bernoulli} illustrate this mechanism, while
+Examples~\ref{ex:thickness-failure} and~\ref{ex:filtration-dependence} show
+that thickness and filtration choice are genuinely structural assumptions, not
+merely cosmetic ones.
+
+\paragraph{Shannon--McMillan--Breiman and uniform bounds.}
+The SMB theorem \cite{Shannon1948,McMillan1953,Breiman1957} states that for
+$\mu$-a.e.\ $x$,
+\[
+-\frac{1}{m}\log\mu([x]_m)\to h(\mu)
+\quad\text{as }m\to\infty,
+\]
+where $[x]_m$ is the length-$m$ cylinder containing $x$.  This is a pointwise
+almost-sure statement about a single cylinder along a single orbit; it does
+\emph{not} give a uniform bound over all admissible cylinders simultaneously.
+The uniform bounds $\mu(C)\asymp\lambda_{\mathrm{cyl}}^{-m}$ in
+Propositions~\ref{prop:boundary-dimension} and~\ref{prop:volume-boundary-scaling}
+are strictly stronger.  For mixing SFTs with the Parry measure, these
+uniform bounds are established by Parry \cite{Parry1964}; for general Gibbs
+measures Bowen's theory gives potential-dependent cylinder weights rather
+than the uniform same-length estimates used here \cite{Bowen1975}.  Thus the
+main count theorems apply directly to the Parry / maximal-entropy case, while
+Proposition~\ref{prop:nonuniform-cylinder} is only a polynomial-distortion
+variant.  A genuine Gibbs theorem would require a weighted boundary partition
+function that keeps track of the potential rather than of simple cylinder
+counts.
+
+\paragraph{Heuristic relation to margin conditions.}
+The comparison with \cite{MammenTsybakov1999,Tsybakov2004} is only heuristic.
+Thickness is a uniform lower bound on the two class masses inside each mixed
+cylinder, whereas the Mammen--Tsybakov condition controls the global
+distribution of $p_\infty$ near $\frac12$.  The former concerns oracle
+approximation on a fixed filtration; the latter concerns estimation from data.
+Scott and Nowak's dyadic boundary/noise framework
+\cite{ScottNowak2006} is therefore the closer statistical-learning analogue.
+
+\paragraph{What the counterexamples show.}
+Example~\ref{ex:thickness-failure} keeps the boundary count at the
+subexponential scale $2^{o(m)}$ but lets the local ambiguity on each mixed
+cylinder collapse.  The lower bound from
+Proposition~\ref{prop:volume-boundary-scaling} then fails by an unbounded factor.
+Example~\ref{ex:filtration-dependence} shows that the filtration boundary
+exponent $\overline{\beta}_{\mathcal{F}}(\mathsf{P})$ can change from $0$ to
+$1$ for the same measurable event when the observed coordinate sequence is
+changed.  Together with the parity oscillation in
+Remark~\ref{rem:oscillation}, these examples explain why the paper works with
+weighted boundary mass, thickness hypotheses, and limsup exponents rather than
+claiming an intrinsic geometric boundary theory.
+
+\paragraph{Extensions.}
+Natural generalizations include: finite alphabets of size $q$ (the discrete
+Tanaka structure extends with $q-1$ threshold parameters); the continuous-time
+limit to Tanaka--Meyer formula \cite{RevuzYor1999}; weakening the thickness
+hypothesis to an $L^p$ condition on boundary-cylinder probabilities; and
+replacing the simple count $N_m(\partial\mathsf{P})$ by a genuinely
+potential-weighted partition function in the Gibbs setting.  It is also
+natural to ask when the filtration boundary exponent
+$\overline{\beta}_{\mathcal{F}}(\mathsf{P})$ can be expressed in dynamical
+terms such as entropy, pressure, or automaton growth rates for larger symbolic
+classes.
+
+\paragraph{Limitations.}
+The rate laws assume exponential cylinder complexity; subexponential systems
+(Sturmian codings, substitution shifts) require separate analysis.  The proofs
+do not use $T$-invariance: all results are purely filtration-theoretic, and the
+dynamical framing motivates the cylinder structure but is not invoked in any
+argument.  Beyond the hidden-Markov filter class, the paper does not derive
+thickness or boundary growth from a broad intrinsic dynamical hypothesis.  A
+substantially stronger paper would need such a derivation, or an equally
+robust converse theory, for natural symbolic or Gibbs classes.
+
+\begin{thebibliography}{99}
+
+\bibitem{AudibertTsybakov2007}
+Jean-Yves Audibert and Alexandre~B. Tsybakov.
+\newblock Fast learning rates for plug-in classifiers.
+\newblock {\em The Annals of Statistics}, 35(2):608--633, 2007.
+
+\bibitem{BinevCohenDahmenDeVore2014}
+Peter Binev, Albert Cohen, Wolfgang Dahmen, and Ronald DeVore.
+\newblock Classification algorithms using adaptive partitioning.
+\newblock {\em The Annals of Statistics}, 42(6):2141--2163, 2014.
+
+\bibitem{Blackwell1951}
+David Blackwell.
+\newblock Comparison of experiments.
+\newblock In Jerzy Neyman, editor, {\em Proceedings of the Second Berkeley
+  Symposium on Mathematical Statistics and Probability}, pages 93--102.
+  University of California Press, Berkeley, CA, 1951.
+
+\bibitem{BlanchardSchaferRozenholcMuller2007}
+Gilles Blanchard, Christian Sch\"afer, Yves Rozenholc, and Klaus-Robert
+  M\"uller.
+\newblock Optimal dyadic decision trees.
+\newblock {\em Machine Learning}, 66(2--3):209--241, 2007.
+
+\bibitem{Bowen1975}
+Rufus Bowen.
+\newblock {\em Equilibrium States and the Ergodic Theory of Anosov
+  Diffeomorphisms}, volume 470 of {\em Lecture Notes in Mathematics}.
+\newblock Springer, Berlin, 1975.
+
+\bibitem{Boyle1983}
+Mike Boyle.
+\newblock Lower entropy factors of sofic systems.
+\newblock {\em Ergodic Theory and Dynamical Systems}, 3(4):541--557, 1983.
+
+\bibitem{Breiman1957}
+Leo Breiman.
+\newblock The individual ergodic theorem of information theory.
+\newblock {\em The Annals of Mathematical Statistics}, 28(3):809--811, 1957.
+
+\bibitem{BreimanFriedmanOlshenStone1984}
+Leo Breiman, Jerome~H. Friedman, Richard~A. Olshen, and Charles~J. Stone.
+\newblock {\em Classification and Regression Trees}.
+\newblock Chapman and Hall, New York, 1984.
+
+\bibitem{CohenDahmenDaubechiesDeVore2001}
+Albert Cohen, Wolfgang Dahmen, Ingrid Daubechies, and Ronald DeVore.
+\newblock Tree approximation and optimal encoding.
+\newblock {\em Applied and Computational Harmonic Analysis}, 11(2):192--226,
+  2001.
+
+\bibitem{CoverThomas2006}
+Thomas~M. Cover and Joy~A. Thomas.
+\newblock {\em Elements of Information Theory}.
+\newblock Wiley-Interscience, Hoboken, NJ, second edition, 2006.
+
+\bibitem{DeVore1998}
+Ronald~A. DeVore.
+\newblock Nonlinear approximation.
+\newblock {\em Acta Numerica}, 7:51--150, 1998.
+
+\bibitem{DevroyeGyorfiLugosi1996}
+Luc Devroye, L\'aszl\'o Gy\"orfi, and G\'abor Lugosi.
+\newblock {\em A Probabilistic Theory of Pattern Recognition}, volume~31 of
+  {\em Applications of Mathematics}.
+\newblock Springer, New York, 1996.
+
+\bibitem{Donoho1997}
+David~L. Donoho.
+\newblock {CART} and best-ortho-basis: a connection.
+\newblock {\em The Annals of Statistics}, 25(5):1870--1911, 1997.
+
+\bibitem{Doob1953}
+J.~L. Doob.
+\newblock {\em Stochastic Processes}.
+\newblock Wiley, New York, 1953.
+
+\bibitem{Durrett2019}
+Rick Durrett.
+\newblock {\em Probability: Theory and Examples}.
+\newblock Cambridge Series in Statistical and Probabilistic Mathematics.
+  Cambridge University Press, Cambridge, fifth edition, 2019.
+
+\bibitem{Fischer1975}
+Roland Fischer.
+\newblock Sofic systems and graphs.
+\newblock {\em Monatshefte f\"ur Mathematik}, 80(3):179--186, 1975.
+
+\bibitem{Krieger1984}
+Wolfgang Krieger.
+\newblock On sofic systems {I}.
+\newblock {\em Israel Journal of Mathematics}, 48(2--3):305--330, 1984.
+
+\bibitem{LindMarcus1995}
+Douglas Lind and Brian Marcus.
+\newblock {\em An Introduction to Symbolic Dynamics and Coding}.
+\newblock Cambridge University Press, Cambridge, 1995.
+
+\bibitem{LochowskiOblojPromelSiopaes2021}
+Rafa{\l}~M. {\L}ochowski, Jan Ob{\l}\'oj, David~J. Pr\"omel, and Pietro
+  Siorpaes.
+\newblock Local times and {T}anaka--{M}eyer formulae for c\`adl\`ag paths.
+\newblock {\em Bernoulli}, 27(3):1597--1633, 2021.
+
+\bibitem{MammenTsybakov1999}
+Enno Mammen and Alexandre~B. Tsybakov.
+\newblock Smooth discrimination analysis.
+\newblock {\em The Annals of Statistics}, 27(6):1808--1829, 1999.
+
+\bibitem{McMillan1953}
+Brockway McMillan.
+\newblock The basic theorems of information theory.
+\newblock {\em The Annals of Mathematical Statistics}, 24(2):196--219, 1953.
+
+\bibitem{MorseHedlund1940}
+Marston Morse and Gustav~A. Hedlund.
+\newblock Symbolic dynamics {II}. {S}turmian trajectories.
+\newblock {\em American Journal of Mathematics}, 62(1):1--42, 1940.
+
+\bibitem{Parry1964}
+William Parry.
+\newblock Intrinsic {M}arkov chains.
+\newblock {\em Transactions of the American Mathematical Society},
+  112(1):55--66, 1964.
+
+\bibitem{RevuzYor1999}
+Daniel Revuz and Marc Yor.
+\newblock {\em Continuous Martingales and {B}rownian Motion}, volume 293 of
+  {\em Grundlehren der mathematischen Wissenschaften}.
+\newblock Springer, Berlin, third edition, 1999.
+
+\bibitem{ScottDavenport2007}
+Clayton Scott and Mark Davenport.
+\newblock Regression level set estimation via cost-sensitive classification.
+\newblock {\em IEEE Transactions on Signal Processing}, 55(6):2752--2760,
+  2007.
+
+\bibitem{ScottNowak2006}
+Clayton Scott and Robert~D. Nowak.
+\newblock Minimax-optimal classification with dyadic decision trees.
+\newblock {\em IEEE Transactions on Information Theory}, 52(4):1335--1353,
+  2006.
+
+\bibitem{Shannon1948}
+Claude~E. Shannon.
+\newblock A mathematical theory of communication.
+\newblock {\em Bell System Technical Journal}, 27(3):379--423, 1948.
+
+\bibitem{SinghScottNowak2009}
+Aarti Singh, Clayton Scott, and Robert Nowak.
+\newblock Adaptive {H}ausdorff estimation of density level sets.
+\newblock {\em The Annals of Statistics}, 37(5B):2760--2782, 2009.
+
+\bibitem{Tanaka1963}
+Hiroshi Tanaka.
+\newblock Note on continuous additive functionals of the 1-dimensional
+  {B}rownian path.
+\newblock {\em Zeitschrift f\"ur Wahrscheinlichkeitstheorie und verwandte
+  Gebiete}, 1:251--257, 1963.
+
+\bibitem{Tsybakov2004}
+Alexandre~B. Tsybakov.
+\newblock Optimal aggregation of classifiers in statistical learning.
+\newblock {\em The Annals of Statistics}, 32(1):135--166, 2004.
+
+\bibitem{Tsybakov2009Nonparametric}
+Alexandre~B. Tsybakov.
+\newblock {\em Introduction to Nonparametric Estimation}.
+\newblock Springer Series in Statistics. Springer, New York, 2009.
+
+\bibitem{WaltersErgodicTheory}
+Peter Walters.
+\newblock {\em An Introduction to Ergodic Theory}, volume~79 of {\em Graduate
+  Texts in Mathematics}.
+\newblock Springer, New York, 1982.
+
+\bibitem{WillettNowak2007}
+Rebecca~M. Willett and Robert~D. Nowak.
+\newblock Minimax optimal level-set estimation.
+\newblock {\em IEEE Transactions on Image Processing}, 16(12):2965--2979,
+  2007.
+
+\bibitem{Williams1991}
+David Williams.
+\newblock {\em Probability with Martingales}.
+\newblock Cambridge University Press, Cambridge, 1991.
+
+\bibitem{BoylePetersenHMP}
+Mike Boyle and Karl Petersen.
+\newblock Hidden Markov processes in the context of symbolic dynamics.
+\newblock In B. Marcus, K. Petersen, and T. Weissman, editors, {\em Entropy of
+  Hidden Markov Processes and Connections to Dynamical Systems}, London
+  Mathematical Society Lecture Note Series, vol.~385, pages 1--38. Cambridge
+  University Press, 2011.
+
+\bibitem{PollicottKempton2016}
+Mark Pollicott and Thomas Kempton.
+\newblock Factors of Gibbs measures for full shifts.
+\newblock In {\em Entropy of Hidden Markov Processes and Connections to
+  Dynamical Systems}, pages 246--257. Cambridge University Press, 2011.
+
+\bibitem{Verbitskiy2011}
+Evgeny Verbitskiy.
+\newblock Thermodynamics of hidden Markov processes.
+\newblock In {\em Entropy of Hidden Markov Processes and Connections to
+  Dynamical Systems}, pages 258--272. Cambridge University Press, 2011.
+
+\bibitem{Rabin1963}
+Michael O. Rabin.
+\newblock Probabilistic automata.
+\newblock {\em Information and Control}, 6(3):230--245, 1963.
+
+\bibitem{Paz1971}
+Azaria Paz.
+\newblock {\em Introduction to Probabilistic Automata}.
+\newblock Academic Press, New York, 1971.
+
+\bibitem{Torgersen1991}
+Erik Torgersen.
+\newblock {\em Comparison of Statistical Experiments}, volume 36 of {\em
+  Encyclopedia of Mathematics and Its Applications}.
+\newblock Cambridge University Press, Cambridge, 1991.
+
+\bibitem{Blackwell1957}
+David Blackwell.
+\newblock The identifiability problem for functions of finite {M}arkov chains.
+\newblock {\em The Annals of Mathematical Statistics}, 28(4):1011--1015, 1957.
+
+\bibitem{Heller1965}
+Alex Heller.
+\newblock On stochastic processes derived from {M}arkov chains.
+\newblock {\em The Annals of Mathematical Statistics}, 36(4):1286--1291, 1965.
+
+\bibitem{BaumPetrie1966}
+Leonard~E. Baum and Ted Petrie.
+\newblock Statistical inference for probabilistic functions of finite state
+  {M}arkov chains.
+\newblock {\em The Annals of Mathematical Statistics}, 37(6):1554--1563, 1966.
+
+\bibitem{Thomas1990}
+Wolfgang Thomas.
+\newblock Automata on infinite objects.
+\newblock In Jan van Leeuwen, editor, {\em Handbook of Theoretical Computer
+  Science}, volume~B, pages 133--191. Elsevier, Amsterdam, 1990.
+
+\bibitem{PerrinPin2004}
+Dominique Perrin and Jean-{\'E}ric Pin.
+\newblock {\em Infinite Words: Automata, Semigroups, Logic and Games}.
+\newblock Academic Press, London, 2004.
+
+\bibitem{Kitchens1998}
+Bruce~P. Kitchens.
+\newblock {\em Symbolic Dynamics: One-Sided, Two-Sided and Countable State
+  Markov Shifts}.
+\newblock Springer, Berlin, 1998.
+
+\end{thebibliography}
+
