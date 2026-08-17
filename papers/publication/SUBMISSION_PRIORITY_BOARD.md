@@ -252,6 +252,10 @@ m cau}(U,m)/m\le1$ 且常数最优，
 `homological_visibility_…`（26+6，Cahiers major revisions；明确不做术语,只问机器还能证什么，
 且"机器已尽"的扎实否定同样算成功）。内存 2.40 GB，故恢复三路。
 
+tick 248 状态：三路仍在跑，**49 个文件已改动** —— 改动量偏大，收割时须重点核
+是否超出"加一条定理"的范围（尤其 `finite_parts` 有 `submission_bundle/` 副本，
+共享文件两处须一致）。
+
 tick 247 状态：三路均在实写，无一完成。`finite_parts` 新建
 `sec_refocused_mahler_rationality.tex` —— 正对 (KN85) 那条线；
 `homological_visibility` 在改 gerbe 障碍与结论节；`finite_window_zeckendorf` 仅有
