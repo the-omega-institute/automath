@@ -1,0 +1,125 @@
+\section{Introduction}
+
+Let
+\[
+\Fold_m:\Omega_m=\{0,1\}^m\longrightarrow X_m,
+\]
+where $\Fold_m$ evaluates a binary word in the Fibonacci basis, replaces it by
+its Zeckendorf expansion, and keeps the first $m$ digits.  Here $X_m$ denotes
+the set of admissible words of length $m$, namely those with no adjacent
+$1$'s.  If $m\le n$ and $\omega\in\Omega_n$, there are two natural ways to
+produce an admissible word of length $m$,
+\[
+\Fold_m(r_{n\to m}(\omega))
+\qquad\text{and}\qquad
+\pi_{n\to m}(\Fold_n(\omega)).
+\]
+The first truncates the raw word and normalizes only the lower window, whereas
+the second normalizes at the top scale and then projects.  These two
+procedures need not agree.  We therefore write
+\[
+D_{n\to m}(\omega)
+:=
+\Fold_m(r_{n\to m}(\omega))
+\oplus
+\pi_{n\to m}(\Fold_n(\omega))
+\in \{0,1\}^m
+\]
+for the resulting defect vector.  The purpose of the paper is to describe this
+observable exactly at finite scale.
+
+The starting point is an exact one-step criterion.  If
+$\eta=(p,b)\in\Omega_{m+1}$ and $s=N(p)$, then
+Theorem~\ref{thm:adjacent-threshold} shows that
+\[
+K_{m+1\to m}(p,b)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
+\]
+Thus a new defect is created only when the appended digit is $1$ and the lower
+block already lies beyond the threshold $F_{m+1}$.  This is the only
+arithmetic input needed for the multiscale analysis.  Once it is available,
+the global defect is recovered by the telescoping identity of
+Section~\ref{sec:telescoping} and the associated cocycle formula.
+
+The main theorem says that the entire upper block can be compressed to a single
+bit.  If $\omega=(p,q)\in\Omega_m\times\Omega_{n-m}$ is split into its lower
+$m$-digit prefix and upper tail, Theorem~\ref{thm:tail-collapse} constructs a
+recursively defined bit $\beta(q)\in\{0,1\}$ such that
+\[
+D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
+\]
+In particular, the law of $D_{n\to m}$ under the uniform measure is the
+mixture $(1-\rho_{n-m})\delta_0+\rho_{n-m}\lambda_m$, where $\lambda_m$ is the
+adjacent law with the top digit fixed to $1$ and
+\[
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}
+=
+\frac13-\frac{(-1)^\ell}{3\cdot 2^\ell}.
+\]
+Equivalently,
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m},
+\]
+and Proposition~\ref{prop:adjacent-kernel-support} identifies the adjacent
+factor on the right-hand side vector by vector.  For fixed $m$, this yields the
+exact limiting law
+\[
+\frac23\delta_0+\frac13\lambda_m
+\qquad (\ell\to\infty),
+\]
+with an explicit oscillatory error of order $2^{-\ell}$.  The exact
+distributional formulas are therefore consequences of a deterministic collapse,
+not of independent probabilistic arguments.
+
+The tail bit also has an intrinsic interpretation.  Section~\ref{sec:markov}
+shows that $\beta(q)$ is the parity of the initial run of $1$'s in the tail
+and proves that no strictly coarser tail statistic determines the entire
+family of defects $D_{n\to m}$ exactly.  This minimality statement is
+finite-state in spirit and may be compared with Myhill--Nerode minimization
+\cite{Myhill1957,Nerode1958}.  The same identification makes the Markov
+extension a finite-state factor statement rather than a separate tail count:
+the finite-window sliding-block factors have even and odd infinite-tail
+limits as Borel shift factors.  Theorem~\ref{thm:infinite-tail-factor} proves
+that, under an arbitrary invariant binary measure, the two limits differ
+precisely by the mass assigned to the all-one fixed point.  Thus absence of
+that atom is necessary and sufficient for convergence of the defect process
+as the tail length tends to infinity.  At the finer finite-state level,
+for every finite-state Markov presentation of a binary sofic input, adjoining
+the four-state tail automaton gives the exact defect law by a matrix formula.
+For the one-step binary specialization the transfer operator for the live
+component has eigenvalue $-p_{11}$, so the mixture coefficient is
+$p_{a1}(1-(-p_{11})^\ell)/(1+p_{11})$ at tail length $\ell$ and the law
+converges exponentially.  We do not pursue other linear-recurrence numeration
+systems here.  Standard Markov-chain background may be found in
+\cite{Parry1964,Norris1997,LevinPeresWilmer2009MarkovMixing}.
+
+Classical background on Zeckendorf expansions goes back to
+\cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
+Fraenkel1985}.  Automata-theoretic normalization in Fibonacci numeration was
+developed in
+\cite{Frougny1991,Frougny1992,FrougnySolomyak1996,FrougnySakarovitch1999,%
+Frougny1999,FrougnyS2010,ShallitShan2024}, and finite-state or rational-series
+methods for related observables may be compared with
+\cite{BerstelReutenauer2011}.  Successor carries and other scalar statistics
+have been studied in
+\cite{Frougny1996Successor,Frougny1997Sequential,AhlbachUsatineFrougnyPippenger2013,%
+BertheFrougnyRigoSakarovitch2020}, while probabilistic and combinatorial
+questions for Zeckendorf expansions appear in
+\cite{KologluKoppMillerWang2011,DrmotaSteiner2002,Steiner2005,MillerWang2012,%
+Griffiths2010,Hosten2024,BaratGrabner2014}.  For the symbolic-dynamical
+viewpoint we use only standard material on the golden-mean shift and inverse
+limits \cite{LindMarcus1995,Kitchens1998}.  The observable considered here is
+of a different type: it is a vector-valued defect comparing the two
+normalization/truncation routes above, and its exact law is not determined by
+the top adjacent event alone; see the appendix for small examples.
+
+The paper is organized as follows.  Section~\ref{sec:adjacent} introduces the
+finite-window Fold map, records the elementary normalization facts needed later
+on, and proves the threshold theorem for the adjacent defect.
+Section~\ref{sec:telescoping} derives the telescoping and cocycle identities.
+Section~\ref{sec:uniform} proves the collapse theorem and the exact uniform-law
+distribution.  Section~\ref{sec:markov} identifies the tail bit, proves its
+minimality as an exact factor, classifies the infinite-tail limits for
+arbitrary invariant measures, and gives finite-state and one-step Markov
+specializations.  The appendix collects examples and exact small-scale values.

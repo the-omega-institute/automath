@@ -1,0 +1,307 @@
+\section{Finite-window normalization and adjacent defects}
+\label{sec:adjacent}
+
+We begin by fixing notation and recording the elementary normalization facts
+used throughout.  Digits are indexed from the low-order end: position $k$
+carries Fibonacci weight $F_{k+1}$, where $F_1=F_2=1$ and
+$F_{j+2}=F_{j+1}+F_j$.  Thus $N(10)=F_2=1$ and $N(01)=F_3=2$, and the prefix
+map $r_{n\to m}$ keeps the first $m$ low-order digits.
+
+For $m\ge 1$ set
+\[
+\Omega_m:=\{0,1\}^m,
+\qquad
+X_m:=\{x=(x_1,\dots,x_m)\in\{0,1\}^m:\ x_ix_{i+1}=0\text{ for }1\le i<m\}.
+\]
+We write $\Unif_m$ for the counting probability measure on $\Omega_m$:
+\[
+\Unif_m(A):=2^{-m}\#A\qquad(A\subseteq\Omega_m).
+\]
+Thus $\PP_{\Unif_m}$ denotes probability when the raw word in $\Omega_m$ is
+sampled uniformly.
+For $\omega=\omega_1\cdots\omega_m\in\Omega_m$, define its Fibonacci value by
+\[
+N(\omega):=\sum_{k=1}^m\omega_kF_{k+1}.
+\]
+
+\begin{lemma}[Raw counting law]
+\label{lem:raw-counting-law}
+Let $m\ge 1$, let $E$ be a finite set, and let $T:\Omega_m\to E$ be any map.
+Then the law of $T$ under $\Unif_m$ is
+\[
+\PP_{\Unif_m}[T=v]=2^{-m}\#\{\omega\in\Omega_m:\ T(\omega)=v\}
+\qquad(v\in E).
+\]
+Equivalently, for every $A\subseteq E$,
+\[
+\PP_{\Unif_m}[T\in A]=2^{-m}\#\{\omega\in\Omega_m:\ T(\omega)\in A\}.
+\]
+\end{lemma}
+
+\begin{proof}
+This is the push-forward of the counting probability measure $\Unif_m$ by
+$T$: by definition each raw word has mass $2^{-m}$, and the fibre over $A$ is
+$T^{-1}(A)$.
+\end{proof}
+\begin{lemma}[Classical Zeckendorf well-definedness]
+\label{lem:zeckendorf-well-defined}
+For every integer $N\ge 0$ there is a unique finitely supported sequence
+$(z_k)_{k\ge 1}\in\{0,1\}^{\NN}$ such that
+\[
+N=\sum_{k\ge 1}z_kF_{k+1}
+\qquad\text{and}\qquad
+z_kz_{k+1}=0\ \text{ for all }k\ge 1.
+\]
+\end{lemma}
+
+\begin{proof}
+For $N>0$ this is the classical Zeckendorf existence and uniqueness theorem,
+in the Fibonacci convention $F_2=1$, $F_3=2$; see
+\cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972}.
+For $N=0$ the empty sum gives the all-zero sequence, and uniqueness follows
+from nonnegativity of the Fibonacci summands.
+\end{proof}
+
+By Lemma~\ref{lem:zeckendorf-well-defined}, for $N\ge 0$ we may write
+$Z(N)=(z_k)_{k\ge 1}\in\{0,1\}^{\NN}$ for the unique finitely supported
+sequence such that
+\[
+N=\sum_{k\ge 1}z_kF_{k+1}
+\qquad\text{and}\qquad
+z_kz_{k+1}=0\ \text{ for all }k\ge 1;
+\]
+we set $Z(0)=0^\infty$.  The Fold map is
+\[
+\Fold_m(\omega):=\pi_{\infty\to m}(Z(N(\omega)))\in X_m,
+\]
+where $\pi_{\infty\to m}(x_1,x_2,\dots)=(x_1,\dots,x_m)$.
+
+For $n\ge m$ we use the truncation maps
+\[
+r_{n\to m}(\omega_1\cdots\omega_n):=\omega_1\cdots\omega_m,
+\qquad
+\pi_{n\to m}(x_1,\dots,x_n):=(x_1,\dots,x_m),
+\]
+and, on the ambient cube,
+\[
+\tau_{n\to m}(u_1,\dots,u_n):=(u_1,\dots,u_m).
+\]
+We use $\tau_{n\to m}$ only for defect vectors in the ambient cube.
+
+The following elementary facts will be used repeatedly.
+
+\begin{lemma}
+\label{lem:max-prefix-value}
+For $m\ge 1$,
+\[
+\max_{x\in X_m}N(x)=F_{m+2}-1.
+\]
+\end{lemma}
+
+\begin{proof}
+Let $M_m:=\max_{x\in X_m}N(x)$ and set $M_0:=0$.  Then $M_1=1=F_3-1$.  For
+$m\ge 2$, either $x_m=0$, in which case $N(x)\le M_{m-1}$, or $x_m=1$, in
+which case $x_{m-1}=0$ and
+\[
+N(x)=F_{m+1}+N(x_1,\dots,x_{m-2})\le F_{m+1}+M_{m-2}.
+\]
+Thus
+\[
+M_m=\max\{M_{m-1},\,F_{m+1}+M_{m-2}\}.
+\]
+Using the induction hypothesis,
+\[
+M_m=\max\{F_{m+1}-1,\,F_{m+1}+F_m-1\}=F_{m+2}-1.
+\]
+\end{proof}
+
+\begin{proposition}
+\label{prop:fold-residue}
+For every $m\ge 1$ and every $\omega\in\Omega_m$, write
+\[
+N(\omega)=qF_{m+2}+r,
+\qquad
+q\in\{0,1\},
+\qquad
+0\le r<F_{m+2}.
+\]
+Then
+\[
+\Fold_m(\omega)=\pi_{\infty\to m}(Z(r)).
+\]
+Equivalently, for $x\in X_m$,
+\[
+\Fold_m(\omega)=x
+\quad\Longleftrightarrow\quad
+N(\omega)\equiv N(x)\pmod{F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Since
+\[
+N(\omega)\le \sum_{k=1}^mF_{k+1}=F_{m+3}-2<2F_{m+2},
+\]
+we have $q\in\{0,1\}$.  If $q=0$, there is nothing to prove.  If $q=1$, then
+\[
+0\le r=N(\omega)-F_{m+2}\le F_{m+1}-2<F_{m+1}.
+\]
+Hence $Z(r)$ has no nonzero digit in positions $m,m+1,\dots$, so appending a
+single $1$ in position $m+1$ produces the Zeckendorf expansion of
+$N(\omega)=F_{m+2}+r$.  Its first $m$ digits are exactly those of $Z(r)$,
+which proves the first assertion.
+
+For the equivalence, note that any $x\in X_m$ is already the Zeckendorf
+expansion of its own value $N(x)$, and Lemma~\ref{lem:max-prefix-value} gives
+$N(x)\le F_{m+2}-1$.  Thus $\pi_{\infty\to m}(Z(r))=x$ if and only if
+$r=N(x)$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:prefix-functoriality}
+If $n\ge k\ge m$, then
+\[
+\pi_{n\to m}=\pi_{k\to m}\circ \pi_{n\to k},
+\qquad
+r_{n\to m}=r_{k\to m}\circ r_{n\to k},
+\qquad
+\tau_{n\to m}=\tau_{k\to m}\circ \tau_{n\to k}.
+\]
+Moreover, for all $u,v\in\{0,1\}^n$,
+\[
+\tau_{n\to m}(u\oplus v)=\tau_{n\to m}(u)\oplus\tau_{n\to m}(v).
+\]
+\end{lemma}
+
+\begin{proof}
+This is immediate from the definitions of the truncation maps.
+\end{proof}
+
+\begin{example}
+\label{ex:noncommuting-square}
+Take $n=2$, $m=1$, and $\omega=11$.  Then
+\[
+r_{2\to 1}(11)=1,
+\qquad
+\Fold_1(r_{2\to 1}(11))=1.
+\]
+On the other hand, $N(11)=F_2+F_3=3=F_4$, so the Zeckendorf expansion of
+$N(11)$ begins with $00$.  Hence
+\[
+\Fold_2(11)=00,
+\qquad
+\pi_{2\to 1}(\Fold_2(11))=0.
+\]
+Thus truncation does not commute with normalization.
+\end{example}
+
+\begin{definition}
+\label{def:adjacent-defect}
+For $m\ge 1$ and $\eta\in\Omega_{m+1}$, the adjacent defect is
+\[
+\kappa_{m+1\to m}(\eta)
+:=
+\Fold_m(r_{m+1\to m}(\eta))
+\oplus
+\pi_{m+1\to m}(\Fold_{m+1}(\eta))
+\in\{0,1\}^m.
+\]
+Its indicator is
+\[
+K_{m+1\to m}(\eta):=\mathbf{1}_{\{\kappa_{m+1\to m}(\eta)\ne 0\}}.
+\]
+\end{definition}
+
+\begin{theorem}[Threshold criterion for the adjacent defect]
+\label{thm:adjacent-threshold}
+Let $m\ge 1$, let $p\in\Omega_m$, let $b\in\{0,1\}$, and write
+\[
+\eta=(p,b)\in\Omega_{m+1},
+\qquad
+s:=N(p).
+\]
+Then
+\[
+K_{m+1\to m}(\eta)=b\,\mathbf{1}_{\{s\ge F_{m+1}\}}.
+\]
+More precisely,
+\[
+\kappa_{m+1\to m}(p,0)=0,
+\]
+and
+\[
+\kappa_{m+1\to m}(p,1)=
+\begin{cases}
+0,& s<F_{m+1},\\[4pt]
+\pi_{\infty\to m}(Z(s\bmod F_{m+2}))
+\oplus
+\pi_{\infty\to m}(Z(s-F_{m+1})),
+& s\ge F_{m+1}.
+\end{cases}
+\]
+When $s\ge F_{m+1}$, the two admissible words in the second line are distinct;
+in particular the defect is nonzero.
+\end{theorem}
+
+\begin{proof}
+If $b=0$, then $N(p,0)=s$, so
+\[
+\Fold_{m+1}(p,0)=\pi_{\infty\to m+1}(Z(s))
+\]
+and therefore
+\[
+\pi_{m+1\to m}(\Fold_{m+1}(p,0))
+=
+\pi_{\infty\to m}(Z(s))
+=
+\Fold_m(p).
+\]
+Thus $\kappa_{m+1\to m}(p,0)=0$.
+
+Assume now that $b=1$.  If $s<F_{m+1}$, then the Zeckendorf expansion of $s$
+has no nonzero digit in positions $m,m+1,\dots$.  Consequently
+$Z(s+F_{m+2})$ is obtained from $Z(s)$ by inserting a single $1$ in position
+$m+1$, and hence
+\[
+\pi_{m+1\to m}(\Fold_{m+1}(p,1))
+=
+\pi_{\infty\to m}(Z(s))
+=
+\Fold_m(p).
+\]
+So the defect vanishes.
+
+Suppose finally that $s\ge F_{m+1}$.  Write
+\[
+s=F_{m+1}+t
+\qquad\text{with}\qquad
+0\le t<F_{m+2}.
+\]
+By Proposition~\ref{prop:fold-residue},
+\[
+\Fold_m(p)=\pi_{\infty\to m}(Z(s\bmod F_{m+2})).
+\]
+Since
+\[
+N(p,1)=s+F_{m+2}=F_{m+3}+t,
+\]
+the same proposition at level $m+1$ gives
+\[
+\Fold_{m+1}(p,1)=\pi_{\infty\to m+1}(Z(t)),
+\]
+and therefore
+\[
+\pi_{m+1\to m}(\Fold_{m+1}(p,1))
+=
+\pi_{\infty\to m}(Z(t))
+=
+\pi_{\infty\to m}(Z(s-F_{m+1})).
+\]
+This is the displayed formula.
+
+If the two admissible words in the second line were equal, then
+Proposition~\ref{prop:fold-residue} at level $m$ would imply
+$s\bmod F_{m+2}=t=s-F_{m+1}$, which is impossible because
+$0<F_{m+1}<F_{m+2}$.  Hence the defect is nonzero.
+\end{proof}
+

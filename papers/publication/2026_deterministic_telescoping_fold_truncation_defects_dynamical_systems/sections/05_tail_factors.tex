@@ -1,0 +1,512 @@
+\section{The tail bit and stationary Markov inputs}
+\label{sec:markov}
+
+We first identify the tail bit explicitly and deduce its minimality as an
+exact factor for the family of defects.  Once this is done, the stationary
+one-step Markov law follows from a direct computation of the parity of the
+initial run of $1$'s.
+
+\begin{theorem}[Identification and minimality of the tail bit]
+\label{thm:tail-rigidity}
+For a finite word $q=q_1\cdots q_r$, let
+\[
+\iota(q):=\max\{s\in\{0,\dots,r\}:\ q_1=\cdots=q_s=1\}
+\]
+be the length of its initial run of $1$'s, with $\iota(\varnothing):=0$.
+Then
+\[
+\beta(q)\equiv \iota(q)\pmod 2
+\qquad
+\text{for every finite tail word }q.
+\]
+Define an equivalence relation on the disjoint union
+$\bigsqcup_{r\ge 0}\Omega_r$ by
+\[
+q\sim q'
+\quad\Longleftrightarrow\quad
+D_{m+|q|\to m}(p,q)=D_{m+|q'|\to m}(p,q')
+\text{ for every }m\ge 1\text{ and }p\in\Omega_m.
+\]
+Then
+\[
+q\sim q'
+\quad\Longleftrightarrow\quad
+\beta(q)=\beta(q').
+\]
+Consequently, if $S$ is any set, if
+$\gamma:\bigsqcup_{r\ge 0}\Omega_r\to S$, and if for each $m\ge 1$ there is a
+map $G_m:\Omega_m\times S\to\{0,1\}^m$ such that
+\[
+D_{m+r\to m}(p,q)=G_m(p,\gamma(q))
+\qquad
+(r\ge 0,\ p\in\Omega_m,\ q\in\Omega_r),
+\]
+then there exists a unique map
+\[
+\psi:\gamma\!\left(\bigsqcup_{r\ge 0}\Omega_r\right)\to\{0,1\}
+\]
+satisfying
+\[
+\beta=\psi\circ\gamma.
+\]
+In particular, every exact tail factor for the full defect has at least two
+states, and the factor furnished by Theorem~\ref{thm:tail-collapse} is minimal
+up to relabeling of $\{0,1\}$.
+\end{theorem}
+
+\begin{proof}
+If $q=\varnothing$, then $\beta(q)=0$ and $\iota(q)=0$.  Assume that $q$ is
+nonempty.
+
+If $\iota(q)=0$, then $q=0\alpha$ for some $\alpha$, so $\beta(q)=0$ by
+definition.  If $\iota(q)=2t+1$ is odd, then either $q=1^{2t+1}$ or
+$q=1^{2t+1}0\alpha$.  Repeated use of the rule $\beta(11\alpha)=\beta(\alpha)$
+reduces both words to the case $\beta(1)=1$, so $\beta(q)=1$.  If
+$\iota(q)=2t$ is positive and even, then either $q=1^{2t}$ or
+$q=1^{2t}0\alpha$.  The same reduction gives
+$\beta(q)=\beta(\varnothing)=0$.  Hence $\beta(q)\equiv\iota(q)\pmod 2$.
+
+If $\beta(q)=\beta(q')$, Theorem~\ref{thm:tail-collapse} yields
+\[
+D_{m+|q|\to m}(p,q)
+=
+\kappa_{m+1\to m}(p,\beta(q))
+=
+\kappa_{m+1\to m}(p,\beta(q'))
+=
+D_{m+|q'|\to m}(p,q')
+\]
+for every $m$ and $p$, so $q\sim q'$.
+
+Conversely, assume $\beta(q)\ne\beta(q')$.  Set $m:=1$ and $p:=1$.  Then
+Theorem~\ref{thm:tail-collapse} gives
+\[
+D_{1+|q|\to 1}(1,q)=\kappa_{2\to 1}(1,\beta(q)),
+\qquad
+D_{1+|q'|\to 1}(1,q')=\kappa_{2\to 1}(1,\beta(q')).
+\]
+Also,
+\[
+\kappa_{2\to 1}(1,0)=0,
+\qquad
+\kappa_{2\to 1}(1,1)=1,
+\]
+because $\Fold_1(1)=1$ and $\Fold_2(11)=00$.  Therefore the two defects are
+different, so $q\nsim q'$.
+
+For the factorization claim, define
+\[
+\psi:\gamma\!\left(\bigsqcup_{r\ge 0}\Omega_r\right)\to\{0,1\}
+\]
+by choosing $q$ with $\gamma(q)=s$ and setting $\psi(s):=\beta(q)$.  This is
+well defined because
+$\gamma(q)=\gamma(q')$ implies
+\[
+D_{m+|q|\to m}(p,q)=G_m(p,\gamma(q))=G_m(p,\gamma(q'))=D_{m+|q'|\to m}(p,q')
+\]
+for every $m$ and $p$, hence $q\sim q'$ and therefore $\beta(q)=\beta(q')$.
+The identity $\beta=\psi\circ\gamma$ is immediate from the definition of
+$\psi$, and uniqueness holds on the image of $\gamma$.
+\end{proof}
+
+The preceding theorem makes the Markov extension a finite-state factor of the
+shift.  The defect depends on the future block only through the hidden
+observable $\beta$, and $\beta$ is computed by a transducer which records the
+parity of the live initial run of $1$'s and then freezes the resulting output
+after the first $0$.  This gives a finite-state factor theorem for every
+stationary Markov presentation of a binary sofic input; the one-step binary law
+is the two-state specialization computed afterwards.
+
+\begin{theorem}[Finite-state Markov factor law]
+\label{thm:finite-state-factor-law}
+Let $S$ be a finite set, let $P=(P_{xy})_{x,y\in S}$ be an irreducible
+stochastic matrix with stationary distribution $\pi$, and let
+$a:S\to\{0,1\}$ be a labelling map.  Let $(Y_t)_{t\ge 1}$ be the stationary
+Markov chain with transition matrix $P$, and set $\omega_t:=a(Y_t)$.  For
+$y\in S$ define the conditional adjacent laws
+\[
+\lambda_{m,y}(v)
+:=
+\PP\!\left[
+\kappa_{m+1\to m}(\omega_1\cdots\omega_m,1)=v
+\ \middle|\ Y_m=y
+\right]
+\qquad (v\in\{0,1\}^m),
+\]
+and define
+\[
+\rho_{\ell,y}:=
+\PP\!\left[
+\beta(\omega_{m+1}\cdots\omega_{m+\ell})=1
+\ \middle|\ Y_m=y
+\right].
+\]
+Then, for $n=m+\ell$,
+\[
+\Law\bigl(D_{n\to m}(\omega_1\cdots\omega_n)\bigr)
+=
+\sum_{y\in S}\pi_y\bigl((1-\rho_{\ell,y})\delta_0+
+\rho_{\ell,y}\lambda_{m,y}\bigr).
+\]
+Moreover the coefficients $\rho_{\ell,y}$ are finite-state transfer
+coefficients.  Let
+\[
+Q:=\{E,O,Z_0,Z_1\},
+\]
+where $E$ and $O$ record that the initial run is still alive with even or odd
+length and $Z_i$ is the absorbing output state $i$.  Define
+$T:Q\times\{0,1\}\to Q$ by
+\[
+T(E,1)=O,
+\quad
+T(E,0)=Z_0,
+\quad
+T(O,1)=E,
+\quad
+T(O,0)=Z_1,
+\quad
+T(Z_i,b)=Z_i.
+\]
+On $S\times Q$ set
+\[
+\mathcal M_{(x,q),(y,q')}:=P_{xy}\mathbf{1}_{\{q'=T(q,a(y))\}},
+\]
+and let $h:S\times Q\to\{0,1\}$ be $h(y,O)=h(y,Z_1)=1$ and
+$h(y,E)=h(y,Z_0)=0$.  Then
+\[
+\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h
+\qquad (\ell\ge 0).
+\]
+Thus every finite-state Markov factor of the full shift has an exact defect law
+obtained by tensoring its presentation with this four-state tail automaton.
+\end{theorem}
+
+\begin{proof}
+Fix $m$ and condition on the terminal Markov state $Y_m=y$.  By the Markov
+property, the past block $(Y_1,\dots,Y_m)$ and the future block
+$(Y_{m+1},\dots,Y_{m+\ell})$ are conditionally independent given $Y_m=y$,
+and the future distribution depends on the past only through $y$.  For a fixed
+observed prefix $p=\omega_1\cdots\omega_m$, Theorem~\ref{thm:tail-collapse}
+gives
+\[
+D_{m+\ell\to m}(p,\omega_{m+1}\cdots\omega_{m+\ell})
+=
+\kappa_{m+1\to m}(p,\beta(\omega_{m+1}\cdots\omega_{m+\ell})).
+\]
+If the tail bit is $0$ this defect is $0$, and if the tail bit is $1$ it is
+$\kappa_{m+1\to m}(p,1)$.  Conditional independence therefore gives
+\[
+\Law\bigl(D_{m+\ell\to m}(\omega_1\cdots\omega_{m+\ell})\mid Y_m=y\bigr)
+=(1-\rho_{\ell,y})\delta_0+
+\rho_{\ell,y}\lambda_{m,y}.
+\]
+Averaging over the stationary law $\PP[Y_m=y]=\pi_y$ proves the mixture
+formula.
+
+It remains to identify $\rho_{\ell,y}$.  Starting from the boundary state
+$(y,E)$ before any future symbol is read, one step of the labelled Markov chain
+moves from $x$ to $y'$ with probability $P_{xy'}$ and updates the tail automaton
+by applying $T$ to the emitted label $a(y')$.  Thus after $\ell$ future symbols
+the joint law on $S\times Q$ is $e_{(y,E)}\mathcal M^\ell$.  The automaton
+outputs $1$ exactly in states $O$ and $Z_1$, which is the vector $h$.  Hence
+$\rho_{\ell,y}=e_{(y,E)}\mathcal M^\ell h$.
+\end{proof}
+
+\begin{proposition}[Sofic defect factor and invariant measures]
+\label{prop:sofic-defect-factor}
+Let $S$ be a finite alphabet, let $A$ be a zero-one transition matrix on $S$,
+and let
+\[
+\Sigma_A:=\{y\in S^{\ZZ}: A_{y_t y_{t+1}}=1\text{ for all }t\in\ZZ\}
+\]
+with the left shift $\sigma$.  Let $a:S\to\{0,1\}$ be a one-block labelling.
+For fixed $m\ge 1$ and $\ell\ge 0$, define
+\[
+\Phi_{m,\ell}:\Sigma_A\longrightarrow (\{0,1\}^m)^{\ZZ}
+\]
+by
+\[
+\bigl(\Phi_{m,\ell}(y)\bigr)_t
+:=
+D_{m+\ell\to m}
+\bigl(a(y_{t+1})a(y_{t+2})\cdots a(y_{t+m+\ell})\bigr).
+\]
+Then $\Phi_{m,\ell}$ is a sliding-block factor map:
+\[
+\Phi_{m,\ell}\circ\sigma=\sigma\circ\Phi_{m,\ell}.
+\]
+Its image $\Phi_{m,\ell}(\Sigma_A)$ is a sofic subshift of
+$(\{0,1\}^m)^{\ZZ}$.  Moreover, if $\nu$ is any $\sigma$-invariant Borel
+probability measure on $\Sigma_A$, then $(\Phi_{m,\ell})_\ast\nu$ is a
+$\sigma$-invariant measure on this sofic defect subshift.  If $\nu$ is the
+stationary Markov measure associated to an irreducible stochastic matrix $P$
+supported on $A$, the one-coordinate marginal of $(\Phi_{m,\ell})_\ast\nu$ is
+the law given in Theorem~\ref{thm:finite-state-factor-law}.
+\end{proposition}
+
+\begin{proof}
+The coordinate $(\Phi_{m,\ell}(y))_t$ depends only on the finite word
+$y_{t+1}\cdots y_{t+m+\ell}$, so $\Phi_{m,\ell}$ is continuous in the product
+topology.  The same local rule is used at every time $t$, which gives
+\[
+(\Phi_{m,\ell}(\sigma y))_t
+=D_{m+\ell\to m}(a(y_{t+2})\cdots a(y_{t+m+\ell+1}))
+=(\Phi_{m,\ell}(y))_{t+1}
+=(\sigma\Phi_{m,\ell}(y))_t.
+\]
+
+We next give an explicit sofic presentation of the image.  Put $R:=m+\ell$.
+Let $\mathcal V$ be the set of admissible words $u=u_1\cdots u_{R-1}$ in $S$ of
+length $R-1$, with the interpretation $\mathcal V=\{\ast\}$ when $R=1$.  Draw an
+edge from $u$ to $v$ whenever the suffix of $u$ of length $R-2$ equals the
+prefix of $v$ of length $R-2$ and the resulting length-$R$ word
+$w=w_1\cdots w_R$ is admissible for $A$; when $R=1$, the edges are the symbols
+$w_1\in S$ themselves.  Label this edge by
+\[
+D_{m+\ell\to m}(a(w_1)\cdots a(w_R))\in\{0,1\}^m.
+\]
+Bi-infinite paths in this finite labelled graph are exactly the overlapping
+length-$R$ windows of points of $\Sigma_A$, and the edge labels are exactly the
+coordinates of $\Phi_{m,\ell}(y)$.  Hence the image is the set of labels read
+along bi-infinite paths in a finite labelled graph, which is a sofic subshift.
+
+If $\nu$ is invariant, then for every Borel set $B\subseteq(\{0,1\}^m)^{\ZZ}$,
+\[
+(\Phi_{m,\ell})_\ast\nu(\sigma^{-1}B)
+=\nu(\Phi_{m,\ell}^{-1}\sigma^{-1}B)
+=\nu(\sigma^{-1}\Phi_{m,\ell}^{-1}B)
+=\nu(\Phi_{m,\ell}^{-1}B),
+\]
+using the factor identity and the invariance of $\nu$.  Thus the push-forward
+measure is invariant.  In the stationary Markov case, the distribution of the
+coordinate at time $0$ is exactly
+\[
+\Law(D_{m+\ell\to m}(a(Y_1)\cdots a(Y_{m+\ell}))),
+\]
+so Theorem~\ref{thm:finite-state-factor-law} gives the stated marginal law.
+\end{proof}
+
+The preceding proposition gives a sofic factor at each finite tail length.
+The tail collapse also determines the limit of these factors without any
+Markov or mixing hypothesis.  There are two pointwise limits, according to
+the parity of the tail length, and invariance isolates their sole obstruction
+to agreement.
+
+\begin{theorem}[Infinite-tail factor and fixed-point obstruction]
+\label{thm:infinite-tail-factor}
+Let $\Sigma_2:=\{0,1\}^{\ZZ}$ with the left shift $\sigma$, and fix $m\ge 1$.
+Throughout this theorem $\Phi_{m,\ell}$ denotes the sliding-window factor of
+Proposition~\ref{prop:sofic-defect-factor} in the special case $S=\{0,1\}$,
+$A$ the all-ones transition matrix and $a$ the identity labelling, so that
+\[
+\bigl(\Phi_{m,\ell}(x)\bigr)_t
+=
+D_{m+\ell\to m}(x_{t+1}\cdots x_{t+m+\ell})
+\qquad (x\in\Sigma_2,\ t\in\ZZ).
+\]
+For $\varepsilon\in\{0,1\}$ and $t\in\ZZ$, put
+\[
+r_t(x):=\inf\{r\ge 0:x_{t+m+1+r}=0\}\in\NN\cup\{\infty\}
+\]
+and
+\[
+b_t^{(\varepsilon)}(x):=
+\begin{cases}
+r_t(x)\bmod 2,&r_t(x)<\infty,\\
+\varepsilon,&r_t(x)=\infty.
+\end{cases}
+\]
+Then the maps $\Phi_{m,\infty}^{(\varepsilon)}:\Sigma_2\to
+(\{0,1\}^m)^{\ZZ}$ defined by
+\[
+\bigl(\Phi_{m,\infty}^{(\varepsilon)}(x)\bigr)_t
+:=
+\kappa_{m+1\to m}
+\bigl(x_{t+1}\cdots x_{t+m},b_t^{(\varepsilon)}(x)\bigr)
+\]
+are Borel shift factors.  For every $x\in\Sigma_2$,
+\[
+\Phi_{m,\ell}(x)\longrightarrow\Phi_{m,\infty}^{(\varepsilon)}(x)
+\quad\text{in the product topology as }\ell\to\infty,
+\quad \ell\equiv\varepsilon\pmod 2.
+\]
+
+Let $\nu$ be any $\sigma$-invariant Borel probability measure on $\Sigma_2$,
+write
+\[
+\alpha:=\nu(\{1^{\ZZ}\}),
+\qquad
+c_\ell:=\nu\{x:x_1=\cdots=x_\ell=1\}\quad(\ell\ge 1),
+\]
+and let $I\subset\ZZ$ be finite.  If $\ell\equiv\varepsilon\pmod 2$, then
+\[
+d_{\mathrm{TV}}\!\left(
+\Law_\nu((\Phi_{m,\ell})_I),
+\Law_\nu((\Phi_{m,\infty}^{(\varepsilon)})_I)
+\right)
+\le |I|(c_\ell-\alpha).
+\]
+In particular, $(\Phi_{m,\ell})_*\nu$ has the two weak subsequential limits
+$(\Phi_{m,\infty}^{(0)})_*\nu$ and
+$(\Phi_{m,\infty}^{(1)})_*\nu$, and
+\[
+d_{\mathrm{TV}}\!\left(
+(\Phi_{m,\infty}^{(0)})_*\nu,
+(\Phi_{m,\infty}^{(1)})_*\nu
+\right)=\alpha.
+\]
+Consequently, $(\Phi_{m,\ell})_*\nu$ converges weakly as
+$\ell\to\infty$ if and only if $\nu(\{1^{\ZZ}\})=0$.  If $\nu$ is ergodic,
+convergence fails only for $\nu=\delta_{1^{\ZZ}}$; in that case the two
+subsequential limits are the point masses at the constant sequences
+$0^{\ZZ}$ and $(v_{m,m})^{\ZZ}$.
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:tail-collapse} and
+Theorem~\ref{thm:tail-rigidity} give
+\[
+\bigl(\Phi_{m,\ell}(x)\bigr)_t
+=
+\kappa_{m+1\to m}\bigl(x_{t+1}\cdots x_{t+m},
+\iota(x_{t+m+1}\cdots x_{t+m+\ell})\bmod 2\bigr).
+\]
+If $r_t(x)<\infty$, the tail bit in this expression equals
+$r_t(x)\bmod 2$ for every $\ell>r_t(x)$.  If $r_t(x)=\infty$, it equals
+$\ell\bmod 2$.  Hence, for $\ell\equiv\varepsilon\pmod 2$, each coordinate
+of $\Phi_{m,\ell}(x)$ is eventually equal to the corresponding coordinate of
+$\Phi_{m,\infty}^{(\varepsilon)}(x)$.  This proves product-topology
+convergence.  Each $r_t$ is a Borel hitting-time function, and the definitions
+give
+\[
+\Phi_{m,\infty}^{(\varepsilon)}\circ\sigma
+=\sigma\circ\Phi_{m,\infty}^{(\varepsilon)},
+\]
+so the limiting maps are Borel shift factors.
+
+For $j\in\ZZ$, let
+\[
+A_j:=\{x:x_s=1\text{ for every }s\ge j\}.
+\]
+The sets $A_j$ are translates of one another and satisfy
+$A_j\subseteq A_{j+1}$.  Invariance therefore gives
+$\nu(A_j)=\nu(A_{j+1})$.  Since
+\[
+\bigcap_{k\ge 0}A_{j-k}=\{1^{\ZZ}\},
+\]
+continuity from above yields
+\[
+\nu(A_j)=\alpha\qquad(j\in\ZZ).
+\]
+It follows in particular that $c_\ell\downarrow\alpha$.
+
+Fix $t\in I$ and suppose $\ell\equiv\varepsilon\pmod 2$.  The $t$th
+coordinates of $\Phi_{m,\ell}$ and
+$\Phi_{m,\infty}^{(\varepsilon)}$ can differ only when the first $\ell$
+symbols after the $m$-digit prefix are all $1$ but a $0$ occurs later.  By
+invariance this event has measure $c_\ell-\alpha$.  The coupling inequality
+and a union bound over $t\in I$ give
+\[
+d_{\mathrm{TV}}\!\left(
+\Law_\nu((\Phi_{m,\ell})_I),
+\Law_\nu((\Phi_{m,\infty}^{(\varepsilon)})_I)
+\right)
+\le |I|(c_\ell-\alpha).
+\]
+Thus the finite-dimensional marginals converge along each parity.  The
+pointwise product-topology convergence, together with bounded convergence for
+continuous functions on the compact output shift, also gives the asserted
+weak convergence of the push-forward measures.
+
+Outside a $\nu$-null subset of $\Sigma_2\setminus\{1^{\ZZ}\}$, every right
+tail contains a $0$, because the exceptional set is the countable union of
+the sets $A_j\setminus\{1^{\ZZ}\}$.  The two limiting maps therefore agree
+$\nu$-almost surely off the all-one fixed point.  At that point,
+\[
+\Phi_{m,\infty}^{(0)}(1^{\ZZ})=0^{\ZZ},
+\qquad
+\Phi_{m,\infty}^{(1)}(1^{\ZZ})=(v_{m,m})^{\ZZ},
+\]
+because $\kappa_{m+1\to m}(1^m,0)=0$ and
+$\kappa_{m+1\to m}(1^m,1)=v_{m,m}$ by
+Proposition~\ref{prop:adjacent-kernel-support}.  Since $v_{m,m}\ne0$, we have
+\[
+(\Phi_{m,\infty}^{(1)})_*\nu
+-(\Phi_{m,\infty}^{(0)})_*\nu
+=
+\alpha\bigl(\delta_{(v_{m,m})^{\ZZ}}-\delta_{0^{\ZZ}}\bigr),
+\]
+and the total variation distance between the two limits is $\alpha$.  This
+proves the convergence criterion.  Finally, ergodicity forces an invariant
+fixed-point atom either to have mass zero or to have mass one, proving the
+last assertion.
+\end{proof}
+
+\begin{corollary}[Sliding-window defect process is hidden Markov]
+\label{cor:sliding-window-hidden-markov}
+Let $(Y_t)_{t\in\ZZ}$ be the two-sided stationary Markov chain with finite
+state space $S$, irreducible transition matrix $P$, and stationary distribution
+$\pi$, and let $\omega_t=a(Y_t)$ for a labelling $a:S\to\{0,1\}$.  Fix
+$m\ge 1$ and $\ell\ge 0$.  Define the sliding-window defect process
+\[
+X_t^{(m,\ell)}
+:=
+D_{m+\ell\to m}\bigl(\omega_{t+1}\omega_{t+2}\cdots\omega_{t+m+\ell}\bigr)
+\in\{0,1\}^m
+\qquad(t\in\ZZ).
+\]
+Then $(X_t^{(m,\ell)})_{t\in\ZZ}$ is a stationary hidden Markov process with a
+finite presentation depending only on $S$, $P$, $a$, $m$, and $\ell$.  More
+precisely, if
+\[
+\mathcal S_{m,\ell}
+:=
+\{(y_1,\dots,y_{m+\ell})\in S^{m+\ell}:
+\pi_{y_1}P_{y_1y_2}\cdots P_{y_{m+\ell-1}y_{m+\ell}}>0\},
+\]
+then the block chain
+\[
+B_t:=(Y_{t+1},\dots,Y_{t+m+\ell})\in\mathcal S_{m,\ell}
+\]
+is a stationary finite-state Markov chain, and
+\[
+X_t^{(m,\ell)}=
+\Phi_{m,\ell}(B_t),
+\]
+where
+\[
+\Phi_{m,\ell}(y_1,\dots,y_{m+\ell})
+:=
+\kappa_{m+1\to m}
+\bigl(a(y_1)\cdots a(y_m),
+\beta(a(y_{m+1})\cdots a(y_{m+\ell}))\bigr).
+\]
+Equivalently, the output map may be written as
+$D_{m+\ell\to m}(a(y_1)\cdots a(y_{m+\ell}))$.
+\end{corollary}
+
+\begin{proof}
+The stationary law of $B_t$ is the image of the stationary law of
+$(Y_t)_{t\in\ZZ}$ under the finite block map.  For
+$b=(y_1,\dots,y_{m+\ell})$ and $b'=(y'_1,\dots,y'_{m+\ell})$ in
+$\mathcal S_{m,\ell}$, the transition probability of the block chain is
+\[
+\mathcal P_{b,b'}
+=
+\mathbf 1_{\{(y'_1,\dots,y'_{m+\ell-1})=(y_2,\dots,y_{m+\ell})\}}
+P_{y_{m+\ell}y'_{m+\ell}}.
+\]
+This depends only on $b$ and $b'$, so $B_t$ is a finite-state Markov chain.
+It is stationary because the original two-sided chain is stationary.  Finally,
+Theorem~\ref{thm:tail-collapse} gives, for every block $b=(y_1,\dots,y_{m+\ell})$,
+\[
+D_{m+\ell\to m}(a(y_1)\cdots a(y_{m+\ell}))
+=
+\kappa_{m+1\to m}
+\bigl(a(y_1)\cdots a(y_m),
+\beta(a(y_{m+1})\cdots a(y_{m+\ell}))\bigr),
+\]
+which is exactly the displayed output map.  Thus the entire sliding-window
+defect sequence is a deterministic finite-valued observation of the finite
+Markov chain $B_t$, hence a stationary hidden Markov process.
+\end{proof}

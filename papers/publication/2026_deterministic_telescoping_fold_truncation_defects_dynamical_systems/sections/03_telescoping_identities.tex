@@ -1,0 +1,170 @@
+\section{Telescoping and cocycle identities}
+\label{sec:telescoping}
+
+We now pass from the adjacent defect to the full defect.  The point of this
+section is formal: once the one-step defect is fixed, the global defect is
+obtained by iterating truncation and projection identities.
+
+\begin{definition}
+\label{def:global-defect}
+Let $n\ge m$.  For $\omega\in\Omega_n$, define the global defect
+\[
+D_{n\to m}(\omega)
+:=
+\Fold_m(r_{n\to m}(\omega))
+\oplus
+\pi_{n\to m}(\Fold_n(\omega))
+\in\{0,1\}^m.
+\]
+\end{definition}
+
+When $n=m$, the definition gives $D_{m\to m}=0$.  For $n>m$, the defect
+measures the accumulated noncommutation between the two routes from $\Omega_n$
+to $X_m$.
+
+For $v\in\{0,1\}^m$, write
+\[
+\lvert v\rvert_0:=\#\{i:\ v_i\ne 0\}.
+\]
+
+No new arithmetic enters here.  Once
+Theorem~\ref{thm:adjacent-threshold} is available, the identities below follow
+by composing successive truncation and projection maps.  We record them
+because they isolate the scales at which noncommutation is created and provide
+the bookkeeping needed in Section~\ref{sec:uniform}.
+
+For fixed $n>m$ and $\omega\in\Omega_n$, set
+\[
+A_j(\omega):=\Fold_j(r_{n\to j}(\omega)),
+\qquad
+B_j(\omega):=\pi_{n\to j}(\Fold_n(\omega)),
+\]
+and
+\[
+\Delta_j(\omega):=A_j(\omega)\oplus B_j(\omega)
+\qquad (m\le j\le n).
+\]
+Then $\Delta_m(\omega)=D_{n\to m}(\omega)$ and $\Delta_n(\omega)=0$.
+
+\begin{lemma}
+\label{lem:adjacent-recursion}
+For every $m<j\le n$,
+\[
+\Delta_{j-1}(\omega)
+=
+\kappa_{j\to j-1}(r_{n\to j}(\omega))
+\oplus
+\tau_{j\to j-1}(\Delta_j(\omega)).
+\]
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:prefix-functoriality},
+\[
+B_{j-1}(\omega)=\pi_{j\to j-1}(B_j(\omega)),
+\qquad
+A_{j-1}(\omega)=\Fold_{j-1}(r_{j\to j-1}(r_{n\to j}(\omega))).
+\]
+Therefore
+\[
+\begin{aligned}
+\Delta_{j-1}(\omega)
+&=A_{j-1}(\omega)\oplus B_{j-1}(\omega) \\
+&=
+\Bigl(A_{j-1}(\omega)\oplus \pi_{j\to j-1}(A_j(\omega))\Bigr)
+\oplus
+\Bigl(\pi_{j\to j-1}(A_j(\omega))\oplus \pi_{j\to j-1}(B_j(\omega))\Bigr).
+\end{aligned}
+\]
+The first bracket is $\kappa_{j\to j-1}(r_{n\to j}(\omega))$, while the second
+equals $\tau_{j\to j-1}(\Delta_j(\omega))$ because $\tau_{j\to j-1}$ agrees
+with $\pi_{j\to j-1}$ on admissible words and is an xor homomorphism.
+\end{proof}
+
+\begin{proposition}[Telescoping identity]
+\label{thm:telescoping}
+For every $n>m$ and every $\omega\in\Omega_n$,
+\[
+D_{n\to m}(\omega)
+=
+\bigoplus_{j=m}^{n-1}
+\tau_{j\to m}\bigl(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+We claim that for each $j\in\{m,\dots,n\}$,
+\[
+\Delta_m(\omega)
+=
+\tau_{j\to m}(\Delta_j(\omega))
+\oplus
+\bigoplus_{t=m}^{j-1}
+\tau_{t\to m}\bigl(\kappa_{t+1\to t}(r_{n\to t+1}(\omega))\bigr).
+\]
+For $j=m$ this is tautological.  Assume it holds at some
+$j\in\{m,\dots,n-1\}$.  Using Lemma~\ref{lem:adjacent-recursion},
+\[
+\Delta_j(\omega)
+=
+\kappa_{j+1\to j}(r_{n\to j+1}(\omega))
+\oplus
+\tau_{j+1\to j}(\Delta_{j+1}(\omega)).
+\]
+Applying $\tau_{j\to m}$ and using Lemma~\ref{lem:prefix-functoriality} gives
+\[
+\tau_{j\to m}(\Delta_j(\omega))
+=
+\tau_{j\to m}\bigl(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\bigr)
+\oplus
+\tau_{j+1\to m}(\Delta_{j+1}(\omega)).
+\]
+Substituting this into the induction hypothesis proves the claim for $j+1$.
+Taking $j=n$ and recalling that $\Delta_n(\omega)=0$ finishes the proof.
+\end{proof}
+
+\begin{proposition}[Cocycle identity]
+\label{prop:cocycle}
+If $m<k<n$, then for every $\omega\in\Omega_n$,
+\[
+D_{n\to m}(\omega)
+=
+D_{k\to m}(r_{n\to k}(\omega))
+\oplus
+\tau_{k\to m}(D_{n\to k}(\omega)).
+\]
+Consequently,
+\[
+\lvert D_{n\to m}(\omega)\rvert_0
+\le
+\lvert D_{k\to m}(r_{n\to k}(\omega))\rvert_0
++
+\lvert D_{n\to k}(\omega)\rvert_0.
+\]
+\end{proposition}
+
+\begin{proof}
+Split the sum in Proposition~\ref{thm:telescoping} at the intermediate scale $k$:
+\[
+\begin{aligned}
+D_{n\to m}(\omega)
+&=
+\bigoplus_{j=m}^{k-1}
+\tau_{j\to m}\bigl(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\bigr) \\
+&\quad\oplus
+\bigoplus_{j=k}^{n-1}
+\tau_{j\to m}\bigl(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\bigr).
+\end{aligned}
+\]
+The first block is exactly $D_{k\to m}(r_{n\to k}(\omega))$.  In the second
+block, Lemma~\ref{lem:prefix-functoriality} gives
+$\tau_{j\to m}=\tau_{k\to m}\circ\tau_{j\to k}$, so the second block is
+$\tau_{k\to m}(D_{n\to k}(\omega))$.  This proves the cocycle identity.
+
+The Hamming estimate follows from
+\[
+\lvert u\oplus v\rvert_0\le \lvert u\rvert_0+\lvert v\rvert_0
+\]
+and the fact that prefix projection cannot increase Hamming weight.
+\end{proof}
+

@@ -1,0 +1,288 @@
+The next proposition isolates the transfer operator in the one-step binary
+case.  The following theorem is then obtained by averaging the deterministic
+adjacent defect against this two-state specialization.
+
+\begin{proposition}[Hidden tail factor and transfer spectrum]
+\label{prop:hidden-tail-transfer}
+Let $P=(p_{ab})_{a,b\in\{0,1\}}$ be an irreducible one-step transition matrix
+on $\{0,1\}$.  For $a\in\{0,1\}$ and $\ell\ge 0$, let $Q_\ell^{(a)}$ be the
+law of the tail statistic
+\[
+\beta(\omega_1\cdots\omega_\ell)
+\]
+when the Markov chain is started from the boundary state $\omega_0=a$.  Then
+$Q_\ell^{(a)}$ is obtained from the four-state hidden chain
+\[
+Z_t\in\{E,O,Z_0,Z_1\},
+\]
+where $E$ and $O$ mean that the initial run of $1$'s is still alive with even
+or odd length, while $Z_i$ is the absorbing output state reached after the
+first $0$ when the final value of $\beta$ is $i$.  After the first symbol has
+been read, the initial row vector is
+\[
+u_a=(0,p_{a1},p_{a0},0)
+\]
+in the ordered coordinates $(E,O,Z_0,Z_1)$, and all subsequent symbols are read
+with transition matrix
+\[
+M=
+\begin{pmatrix}
+0 & p_{11} & p_{10} & 0\\
+p_{11} & 0 & 0 & p_{10}\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1
+\end{pmatrix},
+\]
+with output vector
+\[
+h=(0,1,0,1)^T.
+\]
+Thus $Q_\ell^{(a)}(\{1\})=u_aM^{\ell-1}h$ for $\ell\ge 1$.  On the live
+parity subspace the transfer operator is
+\[
+T=
+\begin{pmatrix}
+0 & p_{11}\\
+p_{11} & 0
+\end{pmatrix},
+\]
+whose eigenvalues are $p_{11}$ and $-p_{11}$.  Consequently
+\[
+Q_0^{(a)}=\delta_0
+\]
+and, for $\ell\ge 1$,
+\[
+Q_\ell^{(a)}
+=
+\left(1-\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}\right)\delta_0
++
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}\delta_1.
+\]
+The observable $\beta$ therefore descends from the one-sided shift to this
+four-state hidden Markov factor, with the only nontrivial oscillatory mode
+equal to $-p_{11}$.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:tail-rigidity}, $\beta(q)$ is the parity of the initial
+run of $1$'s in $q$.  If the first symbol is $0$, the output is already frozen
+at $0$; if it is $1$, the live run has odd length.  Thereafter, while the next
+symbol remains $1$, the parity toggles with probability $p_{11}$.  When the
+first $0$ appears, the current parity is frozen as the final output.  This is
+exactly the hidden-chain representation with initial vector $u_a$, transition
+matrix $M$, and output vector $h$.  The live block of $M$ is the displayed
+matrix $T$, so its eigenvalues are $p_{11}$ and $-p_{11}$.
+
+It remains only to compute the mass assigned to the output state $1$.  For
+$\ell=0$ the tail word is empty, so $Q_0^{(a)}=\delta_0$.  For $\ell\ge 1$,
+summing the disjoint events that the initial run has odd length gives
+\[
+\PP[\beta(\omega_1\cdots\omega_\ell)=1\mid \omega_0=a]
+=
+\sum_{\substack{1\le r<\ell\\ r\ {\rm odd}}}
+p_{a1}p_{11}^{r-1}p_{10}
++
+\mathbf{1}_{\{\ell\ {\rm odd}\}}p_{a1}p_{11}^{\ell-1}.
+\]
+If $\ell=2s$, this equals
+\[
+\sum_{j=0}^{s-1}p_{a1}p_{11}^{2j}(1-p_{11})
+=
+\frac{p_{a1}(1-p_{11}^{2s})}{1+p_{11}}.
+\]
+If $\ell=2s+1$, it equals
+\[
+\sum_{j=0}^{s-1}p_{a1}p_{11}^{2j}(1-p_{11})
++p_{a1}p_{11}^{2s}
+=
+\frac{p_{a1}(1+p_{11}^{2s+1})}{1+p_{11}}.
+\]
+These two cases combine to
+\[
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}},
+\]
+which is the coefficient of $\delta_1$ in $Q_\ell^{(a)}$.  The coefficient of
+$\delta_0$ is its complement.
+\end{proof}
+
+\begin{theorem}[Stationary one-step Markov extension]
+\label{thm:markov-defect-law}
+Let $\PP_P$ be the stationary irreducible one-step Markov measure on
+$\{0,1\}^{\NN}$ with transition matrix
+\[
+P=(p_{ab})_{a,b\in\{0,1\}}
+\]
+and stationary distribution $\pi=(\pi_0,\pi_1)$.  Let
+$\omega^\infty=(\omega_1,\omega_2,\dots)$ denote the coordinate process, and
+for $m\ge 1$ write
+\[
+r_{\infty\to m}(\omega^\infty):=(\omega_1,\dots,\omega_m)\in\Omega_m.
+\]
+Fix $m\ge 1$ and $\ell\ge 0$, and set $n:=m+\ell$.  For $a\in\{0,1\}$ define
+probability measures on $\{0,1\}^m$ by
+\[
+\lambda_{m,a}(v)
+:=
+\PP_P\!\left[
+\kappa_{m+1\to m}(r_{\infty\to m}(\omega^\infty),1)=v
+\ \middle|\
+\omega_m=a
+\right],
+\]
+and define
+\[
+\rho_\ell^{(a)}
+:=
+\PP_P\!\left[
+\beta(\omega_{m+1}\cdots\omega_{m+\ell})=1
+\ \middle|\
+\omega_m=a
+\right].
+\]
+Then
+\[
+\Law_{\PP_P}\!\bigl(D_{n\to m}(r_{\infty\to n}(\omega^\infty))\bigr)
+=
+\sum_{a=0}^1
+\pi_a\bigl((1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\lambda_{m,a}\bigr),
+\]
+and
+\[
+\rho_0^{(a)}=0,
+\qquad
+\rho_\ell^{(a)}
+=
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}
+\qquad (\ell\ge 1).
+\]
+Consequently
+\[
+\PP_P\!\bigl[D_{n\to m}(r_{\infty\to n}(\omega^\infty))\ne 0\bigr]
+=
+\sum_{a=0}^1
+\pi_a\,\rho_\ell^{(a)}\bigl(1-\lambda_{m,a}(0)\bigr),
+\]
+the defect law converges as $\ell\to\infty$ to
+\[
+\nu_{m,P}
+:=
+\sum_{a=0}^1
+\pi_a\left(
+\left(1-\frac{p_{a1}}{1+p_{11}}\right)\delta_0
+\;+\;
+\frac{p_{a1}}{1+p_{11}}\lambda_{m,a}
+\right),
+\]
+and
+\[
+d_{\mathrm{TV}}
+\!\left(
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\bigr),
+\nu_{m,P}
+\right)
+\le
+\frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
+\]
+If $p_{01}=p_{11}=u$, then
+\[
+\rho_\ell^{(0)}=\rho_\ell^{(1)}
+=
+\frac{u(1-(-u)^\ell)}{1+u},
+\]
+and the uniform law is recovered at $u=\frac12$.
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+P_{m,\ell}
+:=
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))\bigr).
+\]
+Because the chain is irreducible on two states, $\pi_a>0$ for $a=0,1$, so the
+conditional laws $\lambda_{m,a}$ are well defined.
+Fix $p\in\Omega_m$ and write $a:=p_m$.  By the Markov property, conditioned on
+$r_{\infty\to m}(\omega^\infty)=p$, the future block
+$q:=(\omega_{m+1},\dots,\omega_{m+\ell})$ is independent of the past and is
+distributed as a length-$\ell$ Markov chain started from state $a$.
+Theorem~\ref{thm:tail-collapse} therefore gives
+\[
+\Law_{\PP_P}\!\bigl(D_{m+\ell\to m}(p,q)\,\big|\,r_{\infty\to m}(\omega^\infty)=p\bigr)
+=
+(1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\delta_{\kappa_{m+1\to m}(p,1)}.
+\]
+Conditioning further on $\omega_m=a$ and averaging over prefixes with last
+digit $a$ yields
+\[
+\Law_{\PP_P}\!\bigl(
+D_{m+\ell\to m}(r_{\infty\to m+\ell}(\omega^\infty))
+\ \big|\ \omega_m=a
+\bigr)
+=
+(1-\rho_\ell^{(a)})\delta_0+\rho_\ell^{(a)}\lambda_{m,a}.
+\]
+Since $\PP_P[\omega_m=a]=\pi_a$ by stationarity, averaging over $a$ proves the
+first displayed formula for $P_{m,\ell}$.  The formula for the nonzero defect
+probability is immediate.
+
+Proposition~\ref{prop:hidden-tail-transfer}, applied to the future chain
+started from the boundary state $a=\omega_m$, gives
+\[
+\rho_0^{(a)}=0,
+\qquad
+\rho_\ell^{(a)}
+=
+\frac{p_{a1}(1-(-p_{11})^\ell)}{1+p_{11}}
+\qquad(\ell\ge 1).
+\]
+
+Let
+\[
+\rho_\infty^{(a)}:=\frac{p_{a1}}{1+p_{11}}.
+\]
+Since the chain is irreducible, one has $p_{11}<1$.  Therefore
+\[
+\nu_{m,P}
+=
+\sum_{a=0}^1
+\pi_a\bigl((1-\rho_\infty^{(a)})\delta_0+\rho_\infty^{(a)}\lambda_{m,a}\bigr),
+\]
+so
+\[
+P_{m,\ell}-\nu_{m,P}
+=
+\sum_{a=0}^1
+\pi_a\bigl(\rho_\ell^{(a)}-\rho_\infty^{(a)}\bigr)(\lambda_{m,a}-\delta_0).
+\]
+Since $d_{\mathrm{TV}}(\lambda_{m,a},\delta_0)\le 1$,
+\[
+d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
+\le
+\sum_{a=0}^1 \pi_a\bigl|\rho_\ell^{(a)}-\rho_\infty^{(a)}\bigr|
+=
+\frac{p_{11}^{\ell}}{1+p_{11}}
+\sum_{a=0}^1 \pi_a p_{a1}.
+\]
+Stationarity gives $\pi_0p_{01}+\pi_1p_{11}=\pi_1$, hence
+\[
+d_{\mathrm{TV}}(P_{m,\ell},\nu_{m,P})
+\le
+\frac{\pi_1}{1+p_{11}}\,p_{11}^{\ell}.
+\]
+If $p_{01}=p_{11}=u$, then the chain is i.i.d.\ Bernoulli$(u)$, so
+$\rho_\ell^{(0)}=\rho_\ell^{(1)}$.  At $u=\frac12$, the stationary law has
+$\pi_0=\pi_1=\frac12$, and the stationary mixture of the two conditional
+prefix laws is the unconditional uniform prefix law.  Hence
+\[
+\sum_{a=0}^1 \pi_a\lambda_{m,a}=\lambda_m.
+\]
+Substituting this identity into the displayed law for $P_{m,\ell}$ gives
+\[
+P_{m,\ell}
+=(1-\rho_\ell)\delta_0+\rho_\ell\lambda_m,
+\qquad
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell},
+\]
+which is Theorem~\ref{thm:tail-collapse}.
+\end{proof}
+

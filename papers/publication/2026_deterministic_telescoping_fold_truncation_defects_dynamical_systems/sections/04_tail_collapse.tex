@@ -1,0 +1,704 @@
+\section{Tail collapse and the uniform law}
+\label{sec:uniform}
+
+We now specialize to the uniform law on raw words.  The key point is that the
+upper block contributes only through a recursively defined bit.  We begin with
+the one-step count that enters the final mixture formula.
+
+\begin{proposition}[Exact one-step defect count]
+\label{thm:explicit-count}
+For $m\ge 1$, let
+\[
+C_m:=\#\{\alpha\in\Omega_m:\ N(\alpha)<F_{m+1}\}.
+\]
+Then
+\[
+C_1=1,
+\qquad
+C_2=2,
+\qquad
+C_m=2^{m-2}+C_{m-2}\quad (m\ge 3).
+\]
+Consequently,
+\[
+C_{2r}=\frac{2^{2r}+2}{3},
+\qquad
+C_{2r+1}=\frac{2^{2r+1}+1}{3}
+\qquad (r\ge 1),
+\]
+and
+\[
+\PP_{\Unif_{m+1}}[K_{m+1\to m}=1]
+=
+\frac{2^m-C_m}{2^{m+1}}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{2^{m+1}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Consider the last two digits of $\alpha\in\Omega_m$.
+
+If $\alpha_m=1$, then $N(\alpha)\ge F_{m+1}$, so no such word contributes to
+$C_m$.
+
+If $\alpha_m=0$ and $\alpha_{m-1}=0$, then
+\[
+N(\alpha)=N(\alpha_1,\dots,\alpha_{m-2})
+\le
+\sum_{k=1}^{m-2}F_{k+1}
+=
+F_{m+1}-2
+<
+F_{m+1},
+\]
+so every choice of the first $m-2$ digits is allowed.  This contributes
+$2^{m-2}$ words.
+
+If $\alpha_m=0$ and $\alpha_{m-1}=1$, then
+\[
+N(\alpha)=F_m+N(\alpha_1,\dots,\alpha_{m-2}),
+\]
+and the condition $N(\alpha)<F_{m+1}$ becomes
+$N(\alpha_1,\dots,\alpha_{m-2})<F_{m-1}$.  This contributes $C_{m-2}$ words.
+
+Hence $C_m=2^{m-2}+C_{m-2}$ for $m\ge 3$.  The initial values are immediate:
+$C_1=1$ because only $0$ has value $<F_2=1$, and $C_2=2$ because the words
+$00$ and $10$ are exactly those of value $<F_3=2$.
+
+The closed forms follow by unrolling the recurrence.  Setting $C_0:=1$, one
+finds
+\[
+C_{2r}=2^{2r-2}+2^{2r-4}+\cdots+2^0+C_0=\frac{2^{2r}+2}{3},
+\]
+and
+\[
+C_{2r+1}=2^{2r-1}+2^{2r-3}+\cdots+2^1+C_1=\frac{2^{2r+1}+1}{3}.
+\]
+Finally, Theorem~\ref{thm:adjacent-threshold} shows that
+$K_{m+1\to m}(\alpha,b)=1$ exactly when $b=1$ and $N(\alpha)\ge F_{m+1}$, so
+there are $2^m-C_m$ defect-producing words in $\Omega_{m+1}$.  Dividing by
+$2^{m+1}$ gives the probability formula.
+\end{proof}
+
+
+The preceding proposition gives the total adjacent mass.  The next result gives
+its full support and all multiplicities.  For $1\le j\le m$ set
+\[
+L_{m,j}:=F_{m+1-j}
+\]
+and
+\[
+A_{m,j}:=\sum_{i=1}^{j-1}F_{m+1-i}=F_{m+2}-F_{m+3-j},
+\]
+with the convention $A_{m,1}=0$.  Define
+\[
+v_{m,j}
+:=
+\pi_{\infty\to m}(Z(F_{m+1}+A_{m,j}))
+\oplus
+\pi_{\infty\to m}(Z(A_{m,j})).
+\]
+
+\begin{lemma}[Endpoint skeletons]
+\label{lem:adjacent-endpoint-skeletons}
+Let $m\ge 1$ and $1\le j\le m$, put $k:=m+1-j$ and $d:=m-k$.  On the
+coordinate interval $\{k,k+1,\dots,m\}$ the two endpoint Zeckendorf skeletons
+are
+\[
+\begin{array}{c|c|c}
+d & \pi_{\{k,\dots,m\}}Z(A_{m,j})
+& \pi_{\{k,\dots,m\}}Z(F_{m+1}+A_{m,j})\\ \hline
+0&0&1\\
+2r+1&10(01)^r&00(10)^r\\
+2r\ (r\ge 1)&00(10)^{r-1}1&10(01)^{r-1}0.
+\end{array}
+\]
+In particular, xoring the two skeletons gives
+\[
+\pi_{\{k,\dots,m\}}v_{m,j}=1\quad(d=0),
+\qquad
+\pi_{\{k,\dots,m\}}v_{m,j}=10\,1^{d-1}\quad(d\ge 1),
+\]
+and every coordinate of $v_{m,j}$ below $k$ is zero.
+\end{lemma}
+
+\begin{proof}
+Since $A_{m,j}=F_{m+2}-F_{k+2}$, it is enough to identify the displayed
+admissible words by their Fibonacci values.  In the odd case $d=2r+1$, the
+first-column word has value
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}=F_{m+2}-F_{k+2}.
+\]
+In the even case $d=2r$ with $r\ge 1$, the first-column word has value
+\[
+\sum_{s=1}^r F_{k+2s+1}=F_{k+2r+2}-F_{k+2}=F_{m+2}-F_{k+2}.
+\]
+Thus the first column represents $A_{m,j}$; for $d=0$ this value is $0$.
+
+For the second column, the case $d=0$ is immediate because
+$F_{m+1}+A_{m,j}=F_{k+1}$.  If $d=2r+1$, the displayed second-column word has
+value
+\[
+\sum_{s=1}^{r+1}F_{k+2s+1}=F_{k+2r+4}-F_{k+2}=F_{m+1}+F_{m+2}-F_{k+2},
+\]
+and if $d=2r$, it has value
+\[
+F_{k+1}+\sum_{s=1}^r F_{k+2s+2}=F_{k+2r+3}-F_{k+2}=F_{m+1}+F_{m+2}-F_{k+2}.
+\]
+All displayed words are admissible, so Zeckendorf uniqueness identifies the two
+skeletons.  Their xor is exactly the asserted pattern, and the definition of
+$v_{m,j}$ gives zeros below $k$ because both endpoint skeletons have no nonzero
+coordinate below $k$.
+\end{proof}
+
+\begin{lemma}[No-carry stability on adjacent intervals]
+\label{lem:adjacent-no-carry-stability}
+Let $m\ge 1$, $1\le j\le m$, and
+\[
+I_{m,j}:=[A_{m,j},A_{m,j}+L_{m,j}-1].
+\]
+Then the intervals $I_{m,j}$ are consecutive and cover $[0,F_{m+2}-2]$.  If
+$t\in I_{m,j}$, then
+\[
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t))=v_{m,j}.
+\]
+\end{lemma}
+
+\begin{proof}
+The intervals are consecutive because $A_{m,j+1}=A_{m,j}+L_{m,j}$, and their
+union is $[0,F_{m+2}-2]$ since $A_{m,m}+L_{m,m}-1=F_{m+2}-2$.
+
+Fix $j$, set $k:=m+1-j$, and write $t=A_{m,j}+u$ with $0\le u<L_{m,j}=F_k$.
+The Zeckendorf expansion of $u$ has no nonzero coordinate in positions
+$k-1,k,\dots$.  By Lemma~\ref{lem:adjacent-endpoint-skeletons}, the expansions
+of $A_{m,j}$ and $F_{m+1}+A_{m,j}$ are supported in positions at least $k$, and
+their lowest possible nonzero coordinate is either $k$ or at least $k+2$;
+moreover all nonzero coordinates in each high skeleton are separated by at
+least one zero coordinate.  Hence the support of $Z(u)$ lies strictly below the
+support of each high skeleton, with a zero separator at coordinate $k-1$ or
+$k$.  Adding $u$ therefore creates neither an adjacent pair of $1$'s nor a
+Fibonacci carry across the interface.
+
+Consequently $Z(A_{m,j}+u)$ is obtained by concatenating the low block $Z(u)$
+below $k$ with the high skeleton $Z(A_{m,j})$ on and above $k$, and
+$Z(F_{m+1}+A_{m,j}+u)$ is obtained by concatenating the same low block with the
+high skeleton $Z(F_{m+1}+A_{m,j})$.  The common low block cancels in the xor, so
+the projected xor is independent of $u$ and equals its value at $u=0$, namely
+$v_{m,j}$.
+\end{proof}
+
+\begin{proposition}[Adjacent kernel support and multiplicities]
+\label{prop:adjacent-kernel-support}
+For every $m\ge 1$, the nonzero values of
+$p\mapsto\kappa_{m+1\to m}(p,1)$ are exactly the $m$ vectors
+\[
+v_{m,1},\dots,v_{m,m}.
+\]
+They are distinct and have the following coordinate form.  If
+$k=m+1-j$, then
+\[
+(v_{m,j})_i=
+\begin{cases}
+0,& i<k,\\
+1,& i=k,\\
+0,& i=k+1,\\
+1,& k+2\le i\le m,
+\end{cases}
+\]
+with the empty alternatives omitted when $k=m$ or $k=m-1$.  Equivalently,
+as a low-to-high word,
+\[
+\begin{array}{c|c|c}
+j & k=m+1-j & v_{m,j}\\ \hline
+1&m&0^{m-1}1\\
+2&m-1&0^{m-2}10\\
+3&m-2&0^{m-3}101\\
+\vdots&\vdots&\vdots\\
+m&1&101^{m-2}
+\end{array}
+\]
+where the last expression means $1,0$ followed by $m-2$ ones.  More precisely,
+for $0\le t\le F_{m+2}-2$ and $1\le j\le m$,
+\[
+A_{m,j}\le t<A_{m,j}+L_{m,j}
+\quad\Longrightarrow\quad
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t))=v_{m,j}.
+\]
+Consequently
+\[
+\lambda_m(0)=2^{-m}C_m,
+\qquad
+\lambda_m(v_{m,j})=2^{-m}\frac{2^{m+1-j}-(-1)^{m+1-j}}{3}
+\quad (1\le j\le m),
+\]
+and $\lambda_m(v)=0$ for every other nonzero $v\in\{0,1\}^m$.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:adjacent-threshold}, a nonzero adjacent defect with top
+bit fixed to $1$ is produced exactly by prefixes $p$ with
+\[
+s:=N(p)\ge F_{m+1}.
+\]
+Writing $s=F_{m+1}+t$, the same theorem gives
+\[
+\kappa_{m+1\to m}(p,1)
+=
+\pi_{\infty\to m}(Z(F_{m+1}+t))
+\oplus
+\pi_{\infty\to m}(Z(t)),
+\]
+where $0\le t\le F_{m+2}-2$.  Lemma~\ref{lem:adjacent-no-carry-stability}
+therefore proves the interval claim and shows that the only nonzero support
+points are among $v_{m,1},\dots,v_{m,m}$.  Lemma~\ref{lem:adjacent-endpoint-skeletons}
+gives the displayed coordinate formula.  In particular the first nonzero
+coordinate of $v_{m,j}$ is $m+1-j$, so the vectors
+$v_{m,1},\dots,v_{m,m}$ are distinct.
+
+It remains to count multiplicities under raw prefixes.  By
+Theorem~\ref{thm:adjacent-threshold}, zero is produced by exactly the $C_m$
+prefixes with $N(p)<F_{m+1}$.  For the nonzero vectors, put again
+$k=m+1-j$.  The interval $F_{m+1}+I_{m,j}$ is
+\[
+\bigl[F_{m+3}-F_{k+2},\ F_{m+3}-F_{k+1}-1\bigr].
+\]
+Since the maximum raw value on $\Omega_m$ is $F_{m+3}-2$, complementing all
+$m$ digits gives a bijection from prefixes in this interval to words whose
+value lies in
+\[
+F_{k+1}-1\le N(w)\le F_{k+2}-2.
+\]
+Such a word has no nonzero digit above position $k$, so the count is
+\[
+E_k:=\#\{w\in\Omega_k:\ F_{k+1}-1\le N(w)\le F_{k+2}-2\}.
+\]
+It remains to evaluate $E_k$.  Split a word in $\Omega_k$ according to its top
+digit.  If the top digit is $1$, then the band condition becomes
+$N(w_1\cdots w_{k-1})\le F_k-2$.  If the top digit is $0$, it becomes
+$N(w_1\cdots w_{k-1})\ge F_{k+1}-1$.  Therefore
+\[
+E_k
+=
+\#\{u\in\Omega_{k-1}:N(u)\le F_k-2\}
++
+\#\{u\in\Omega_{k-1}:N(u)\ge F_{k+1}-1\}.
+\]
+The middle interval omitted from the two terms is exactly
+\[
+F_k-1\le N(u)\le F_{k+1}-2,
+\]
+so it has cardinality $E_{k-1}$.  Hence
+\[
+E_k=2^{k-1}-E_{k-1},
+\qquad
+E_1=1.
+\]
+Solving this first-order recurrence gives
+\[
+E_k=\frac{2^k-(-1)^k}{3}.
+\]
+Dividing the zero multiplicity $C_m$ and the nonzero multiplicities
+$E_{m+1-j}$ by $2^m$ proves the formula for $\lambda_m$.
+\end{proof}
+
+For $n\ge m$ and $v\in\{0,1\}^m$, define
+\[
+\mu_{n,m}(v):=2^{-n}\#\{\omega\in\Omega_n:\ D_{n\to m}(\omega)=v\}.
+\]
+Thus $\mu_{n,m}$ is the exact defect law under the uniform raw-word measure.
+In particular the diagonal convention $D_{m\to m}=0$ gives
+$\mu_{m,m}=\delta_0$.
+This is precisely the push-forward convention of Lemma~\ref{lem:raw-counting-law}
+applied to $T=D_{n\to m}$ on $\Omega_n$.
+Theorem~\ref{thm:tail-collapse} shows that, after the upper block has been
+marginalized, a single recursively defined tail bit is sufficient to recover
+the full distribution.
+
+\begin{lemma}
+\label{lem:zero-barrier}
+Let $m\ge 1$, let $p\in\Omega_m$, and let $b\in\{0,1\}$.  Then
+\[
+\tau_{m+1\to m}\bigl(\kappa_{m+2\to m+1}(p,0,b)\bigr)=0.
+\]
+\end{lemma}
+
+\begin{proof}
+If $b=0$, Theorem~\ref{thm:adjacent-threshold} gives
+$\kappa_{m+2\to m+1}(p,0,0)=0$.
+
+Assume $b=1$ and write
+\[
+s:=N(p).
+\]
+By definition,
+\[
+\tau_{m+1\to m}\bigl(\kappa_{m+2\to m+1}(p,0,1)\bigr)
+=
+\pi_{\infty\to m}(Z(s))
+\oplus
+\pi_{\infty\to m}(Z(s+F_{m+3})).
+\]
+We show that the two projected Zeckendorf words are equal.  If
+$s<F_{m+2}$, then $Z(s+F_{m+3})$ is obtained from $Z(s)$ by inserting a
+single digit $1$ in position $m+2$, so the first $m$ digits are unchanged.
+If $s\ge F_{m+2}$, then, since $s\le F_{m+3}-2$, we may write
+\[
+s=F_{m+2}+r,
+\qquad
+0\le r\le F_{m+1}-2.
+\]
+Thus $Z(s)$ is obtained from $Z(r)$ by inserting a digit $1$ in position
+$m+1$, while
+\[
+s+F_{m+3}=F_{m+4}+r
+\]
+has Zeckendorf expansion obtained from $Z(r)$ by inserting a digit $1$ in
+position $m+3$.  In both cases the first $m$ digits agree, and the projected
+defect is zero.
+\end{proof}
+
+\begin{lemma}
+\label{lem:double-one-reduction}
+Let $m\ge 1$, let $p\in\Omega_m$, and let $b\in\{0,1\}$.  Then
+\[
+\tau_{m+2\to m}\bigl(\kappa_{m+3\to m+2}(p,1,1,b)\bigr)
+=
+\kappa_{m+1\to m}(p,b).
+\]
+\end{lemma}
+
+\begin{proof}
+If $b=0$, both sides vanish by Theorem~\ref{thm:adjacent-threshold}.
+
+Assume $b=1$ and write
+\[
+s:=N(p).
+\]
+Since $p\in\Omega_m$,
+\[
+0\le s\le F_{m+3}-2.
+\]
+At level $m+3\to m+2$, the prefix $(p,1,1)$ has value
+\[
+N(p,1,1)=s+F_{m+2}+F_{m+3}=s+F_{m+4}.
+\]
+Theorem~\ref{thm:adjacent-threshold} therefore yields
+\[
+\tau_{m+2\to m}\bigl(\kappa_{m+3\to m+2}(p,1,1,1)\bigr)
+=
+\pi_{\infty\to m}(Z(s))
+\oplus
+\pi_{\infty\to m}(Z(s+F_{m+2})).
+\]
+
+If $s<F_{m+1}$, then $s+F_{m+2}<F_{m+3}$ and the Zeckendorf expansion of
+$s+F_{m+2}$ is obtained by inserting a single $1$ in position $m+1$ above
+$Z(s)$.  Hence
+\[
+\pi_{\infty\to m}(Z(s+F_{m+2}))=\pi_{\infty\to m}(Z(s)),
+\]
+so the left-hand side is zero.  Theorem~\ref{thm:adjacent-threshold} gives
+$\kappa_{m+1\to m}(p,1)=0$ in the same range.
+
+Assume now that $s\ge F_{m+1}$.  Since $s<F_{m+3}$,
+\[
+0\le s-F_{m+1}<F_{m+2},
+\]
+and
+\[
+s+F_{m+2}=F_{m+3}+(s-F_{m+1}).
+\]
+Thus the first $m$ digits of $Z(s+F_{m+2})$ are exactly those of
+$Z(s-F_{m+1})$, so
+\[
+\pi_{\infty\to m}(Z(s+F_{m+2}))
+=
+\pi_{\infty\to m}(Z(s-F_{m+1})).
+\]
+Also,
+\[
+\pi_{\infty\to m}(Z(s))
+=
+\pi_{\infty\to m}(Z(s\bmod F_{m+2}))
+\]
+because $s<F_{m+3}$.  Theorem~\ref{thm:adjacent-threshold} at level
+$m+1\to m$ therefore gives
+\[
+\pi_{\infty\to m}(Z(s))
+\oplus
+\pi_{\infty\to m}(Z(s+F_{m+2}))
+=
+\kappa_{m+1\to m}(p,1).
+\]
+This proves the claim.
+\end{proof}
+
+\begin{theorem}[Tail collapse]
+\label{thm:tail-collapse}
+Fix $n\ge m$ and write $\ell:=n-m$.  Define
+\[
+\beta:\bigsqcup_{r\ge 0}\Omega_r\longrightarrow\{0,1\}
+\]
+by the recursion
+\[
+\beta(\varnothing)=0,
+\qquad
+\beta(1)=1,
+\qquad
+\beta(0\alpha)=0,
+\qquad
+\beta(10\alpha)=1,
+\qquad
+\beta(11\alpha)=\beta(\alpha).
+\]
+Every nonempty finite binary word has exactly one of the forms $0\alpha$,
+$1$, $10\alpha$, or $11\alpha$, so the recursion is unambiguous.
+Then for every $p\in\Omega_m$ and every $q\in\Omega_\ell$,
+\[
+D_{n\to m}(p,q)=\kappa_{m+1\to m}(p,\beta(q)).
+\]
+For $v\in\{0,1\}^m$, set
+\[
+\lambda_m(v):=2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)=v\},
+\]
+and for $\ell\ge 0$ set
+\[
+\rho_\ell:=2^{-\ell}\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
+\]
+Then
+\[
+\mu_{n,m}(v)=
+\begin{cases}
+(1-\rho_\ell)+\rho_\ell\lambda_m(0),& v=0,\\[4pt]
+\rho_\ell\lambda_m(v),& v\ne 0.
+\end{cases}
+\]
+Equivalently, if $\delta_0$ denotes the point mass at $0\in\{0,1\}^m$, then
+\[
+\mu_{n,m}=(1-\rho_\ell)\delta_0+\rho_\ell\lambda_m.
+\]
+Moreover,
+\[
+\rho_\ell=\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}
+\qquad (\ell\ge 0),
+\]
+and therefore
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_{n-m}\,\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}
+=
+\frac{(2^{n-m}-(-1)^{n-m})\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^n}.
+\]
+\end{theorem}
+
+\begin{proof}
+For $r\ge 0$, for $p\in\Omega_m$, and for $q\in\Omega_r$, write
+\[
+E_r(p,q):=D_{m+r\to m}(p,q).
+\]
+The identity
+\[
+E_r(p,q)=\kappa_{m+1\to m}(p,\beta(q))
+\]
+is established by induction on $r$.
+
+For $r=0$, one has $q=\varnothing$, $E_0(p,\varnothing)=0$, and
+$\beta(\varnothing)=0$; also
+$\kappa_{m+1\to m}(p,0)=0$ by
+Theorem~\ref{thm:adjacent-threshold}.
+
+Assume $r\ge 1$ and that the claim holds for shorter tails.
+
+If $q=1$, then
+\[
+E_1(p,1)=D_{m+1\to m}(p,1)=\kappa_{m+1\to m}(p,1)
+=
+\kappa_{m+1\to m}(p,\beta(1)).
+\]
+This settles the length-one tail.
+
+If $q=0\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate scale
+$m+1$ gives
+\[
+E_r(p,0\alpha)
+=
+D_{m+1\to m}(p,0)
+\oplus
+\tau_{m+1\to m}(D_{m+r\to m+1}(p,0,\alpha)).
+\]
+The first term is zero.  The induction hypothesis at level $m+1$ gives
+\[
+D_{m+r\to m+1}(p,0,\alpha)
+=
+\kappa_{m+2\to m+1}(p,0,\beta(\alpha)).
+\]
+Lemma~\ref{lem:zero-barrier} then implies $E_r(p,0\alpha)=0$, which equals
+$\kappa_{m+1\to m}(p,\beta(0\alpha))$.
+
+If $q=10\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate
+scale $m+2$ gives
+\[
+E_r(p,10\alpha)
+=
+D_{m+2\to m}(p,1,0)
+\oplus
+\tau_{m+2\to m}(D_{m+r\to m+2}(p,1,0,\alpha)).
+\]
+Since
+\[
+N(p,1,0)=N(p,1),
+\]
+the two Fold outputs have the same underlying Zeckendorf expansion after
+projection:
+\[
+\pi_{m+2\to m}\bigl(\Fold_{m+2}(p,1,0)\bigr)
+=
+\pi_{\infty\to m}(Z(N(p,1)))
+=
+\pi_{m+1\to m}\bigl(\Fold_{m+1}(p,1)\bigr).
+\]
+Therefore $D_{m+2\to m}(p,1,0)=\kappa_{m+1\to m}(p,1)$.  The induction
+hypothesis at level $m+2$ yields
+\[
+D_{m+r\to m+2}(p,1,0,\alpha)
+=
+\kappa_{m+3\to m+2}(p,1,0,\beta(\alpha)),
+\]
+and Lemma~\ref{lem:zero-barrier}, applied with the $(m+1)$-digit prefix
+$(p,1)$, shows that its projection to level $m$ is zero.  Hence
+\[
+E_r(p,10\alpha)=\kappa_{m+1\to m}(p,1)
+=
+\kappa_{m+1\to m}(p,\beta(10\alpha)).
+\]
+
+If $q=11\alpha$, then Proposition~\ref{prop:cocycle} with the intermediate
+scale $m+2$ gives
+\[
+E_r(p,11\alpha)
+=
+D_{m+2\to m}(p,1,1)
+\oplus
+\tau_{m+2\to m}(D_{m+r\to m+2}(p,1,1,\alpha)).
+\]
+Now
+\[
+N(p,1,1)=N(p)+F_{m+2}+F_{m+3}=N(p)+F_{m+4}.
+\]
+Since $N(p)<F_{m+3}$, the Zeckendorf expansion of $N(p,1,1)$ is obtained by
+placing an isolated digit $1$ in position $m+3$ above $Z(N(p))$.  Therefore
+\[
+D_{m+2\to m}(p,1,1)=0.
+\]
+The induction hypothesis at level $m+2$ gives
+\[
+D_{m+r\to m+2}(p,1,1,\alpha)
+=
+\kappa_{m+3\to m+2}(p,1,1,\beta(\alpha)).
+\]
+Lemma~\ref{lem:double-one-reduction} then yields
+\[
+E_r(p,11\alpha)
+=
+\kappa_{m+1\to m}(p,\beta(\alpha))
+=
+\kappa_{m+1\to m}(p,\beta(11\alpha)).
+\]
+This completes the induction.
+
+Set
+\[
+B_\ell:=\#\{q\in\Omega_\ell:\ \beta(q)=1\}.
+\]
+The defining recursion for $\beta$ gives
+\[
+B_0=0,
+\qquad
+B_1=1,
+\qquad
+B_\ell=2^{\ell-2}+B_{\ell-2}\quad (\ell\ge 2),
+\]
+because
+\[
+\Omega_\ell=(0\Omega_{\ell-1})\sqcup(10\Omega_{\ell-2})\sqcup(11\Omega_{\ell-2})
+\]
+is a disjoint union.  The closed form
+\[
+B_\ell=\frac{2^\ell-(-1)^\ell}{3}
+\]
+follows by induction, and therefore
+\[
+\rho_\ell=\frac{B_\ell}{2^\ell}
+=
+\frac{2^\ell-(-1)^\ell}{3\cdot 2^\ell}.
+\]
+
+If $v\ne 0$, the established identity shows that
+$D_{n\to m}(p,q)=v$ holds if and only if $\beta(q)=1$ and
+$\kappa_{m+1\to m}(p,1)=v$.  Hence
+\[
+\mu_{n,m}(v)=\rho_\ell\lambda_m(v)
+\qquad (v\ne 0).
+\]
+The formula at $v=0$ follows from the decomposition into the cases
+$\beta(q)=0$ and $\beta(q)=1$.
+
+Finally,
+\[
+\PP_{\Unif_n}[D_{n\to m}\ne 0]
+=
+\rho_\ell\sum_{v\ne 0}\lambda_m(v).
+\]
+By Proposition~\ref{thm:explicit-count},
+\[
+\sum_{v\ne 0}\lambda_m(v)
+=
+2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}.
+\]
+Substituting the formula for $\rho_\ell$ proves the last identity.
+\end{proof}
+
+\begin{remark}
+\label{rem:limit-law}
+For fixed $m$, the preceding theorem gives the exact asymptotic law along
+increasing tail length:
+\[
+\mu_{m+\ell,m}
+=
+\left(\frac23+\frac{(-1)^\ell}{3\cdot 2^\ell}\right)\delta_0
++
+\left(\frac13-\frac{(-1)^\ell}{3\cdot 2^\ell}\right)\lambda_m.
+\]
+Hence
+\[
+\mu_{m+\ell,m}\xrightarrow[\ell\to\infty]{}\nu_m
+:=
+\frac23\delta_0+\frac13\lambda_m.
+\]
+Moreover,
+\[
+d_{\mathrm{TV}}(\mu_{m+\ell,m},\nu_m)
+=
+\frac{1-\lambda_m(0)}{3\cdot 2^\ell}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{3\cdot 2^{m+\ell}},
+\]
+because
+\[
+1-\lambda_m(0)
+=
+2^{-m}\#\{p\in\Omega_m:\ \kappa_{m+1\to m}(p,1)\ne 0\}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{2^m}
+\]
+by Proposition~\ref{thm:explicit-count}.
+\end{remark}
+
