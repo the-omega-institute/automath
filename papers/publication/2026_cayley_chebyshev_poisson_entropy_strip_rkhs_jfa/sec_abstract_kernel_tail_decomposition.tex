@@ -354,3 +354,225 @@ and is bounded.  The same statement one order higher, together with
 \(\omega_{p,r}(t)\le Ct\).  Thus the Student and Poisson kernels satisfy
 \textup{(K1)}--\textup{(K2)}, completing the verification.
 \end{proof}
+
+The abstract proxy theorem requires no prescribed tail rate.  Once such a
+rate is imposed, the quotient calculus also determines the exact uniform
+moment threshold.  The result below shows that the stable exponent is a
+tail-index invariant rather than a consequence of the semigroup structure.
+
+\begin{theorem}[Sharp moment exponent for polynomial-tail kernels]
+\label{thm:polynomial-tail-optimal-moment-exponent}
+Let \(r\ge1\), let \(\beta>d\), and define
+\begin{equation}\label{eq:polynomial-tail-critical-exponents}
+ q_{r,\beta}:=\min\left\{2,1+\frac{2r}{\beta}\right\},
+ \qquad
+ \kappa_{r,\beta}:=\frac{2r}{q_{r,\beta}}
+ =\max\left\{r,\frac{2r\beta}{\beta+2r}\right\}.
+\end{equation}
+Put \(m=\lfloor\kappa_{r,\beta}\rfloor\).  Suppose that \(p\) is a
+strictly positive \(C^{m+1}\) probability density on \(\RR^d\) such that,
+for some \(0<c\le C<\infty\),
+\begin{equation}\label{eq:polynomial-tail-kernel-hypotheses}
+ c(1+|y|)^{-\beta}\le p(y)\le C(1+|y|)^{-\beta},
+ \qquad
+ \max_{1\le|\gamma|\le m+1}
+ \left\|\frac{\partial^\gamma p}{p}\right\|_\infty<\infty.
+\end{equation}
+Let \(p_s(x)=s^{-d}p(x/s)\), and let \(\nu,\eta\) be probability laws
+such that
+\begin{equation}\label{eq:polynomial-tail-moment-hypotheses}
+ m_\gamma(\nu)=m_\gamma(\eta)\quad(|\gamma|<r),
+ \qquad
+ \int |x|^{\kappa_{r,\beta}}(\nu+\eta)(\dd x)<\infty.
+\end{equation}
+For
+\[
+ \Delta_r=\int x^{\otimes r}(\nu-\eta)(\dd x)
+\]
+define
+\begin{equation}\label{eq:polynomial-tail-leading-functional}
+ B_{p,\Delta_r}(y)
+ =\frac{(-1)^r}{r!p(y)}\langle\Delta_r,D^rp(y)\rangle,
+ \qquad
+ \mathcal Q_{p,r}(\Delta_r)
+ =\frac12\int B_{p,\Delta_r}^2p(y)\dd y.
+\end{equation}
+Then \(\mathcal Q_{p,r}\) is finite and positive definite on
+\(\operatorname{Sym}^r(\RR^d)\), and
+\begin{equation}\label{eq:polynomial-tail-first-unmatched-asymptotic}
+ D_{\rm KL}(p_s*\nu\|p_s*\eta)
+ =\mathcal Q_{p,r}(\Delta_r)s^{-2r}+o(s^{-2r}).
+\end{equation}
+
+The moment exponent in \eqref{eq:polynomial-tail-moment-hypotheses} is
+optimal uniformly over laws.  If \(\beta>2r\), then for every
+\(r\le\rho<\kappa_{r,\beta}\) there are laws with finite \(\rho\)-th
+absolute moments, matching moments below order \(r\), and with finite
+nonzero \(\Delta_r\), for which
+\begin{equation}\label{eq:polynomial-tail-uniform-sharpness}
+ \limsup_{s\to\infty}s^{2r}D_{\rm KL}(p_s*\nu\|p_s*\eta)=+\infty.
+\end{equation}
+For \(0<\rho<r\), the order-\(r\) tensor need not be defined on the
+corresponding moment class.  Hence \(\kappa_{r,\beta}=r\) is also optimal
+when \(\beta\le2r\).
+
+In particular, the theorem applies to every multivariate Student kernel
+\[
+ p_{\beta,d}(y)=c_{\beta,d}(1+|y|^2)^{-\beta/2},\qquad \beta>d,
+\]
+and gives the sharp exponent \(\kappa_{r,\beta}\) for Student smoothing.
+It also recovers the stable exponent by taking \(p=p_1^{(\alpha,d)}\) and
+\(\beta=d+\alpha\).
+\end{theorem}
+
+\begin{proof}
+Write \(q=q_{r,\beta}\), \(\kappa=\kappa_{r,\beta}\), and
+\(\Omega_p(\dd y)=p(y)\dd y\).  For
+\[
+ F_y^p(z)=\frac{p(y-z)}{p(y)},
+\]
+the two-sided tail estimate gives
+\begin{equation}\label{eq:polynomial-tail-translate-growth}
+ \|F_\cdot^p(z)\|_{L^q(\Omega_p)}^q
+ \asymp(1+|z|)^{\beta(q-1)}.
+\end{equation}
+Indeed, the upper bound follows from
+\[
+ \int p(y-z)^qp(y)^{1-q}\dd y
+ \le C(1+|z|)^{\beta(q-1)}
+       \int(1+|y-z|)^{-\beta}\dd y,
+\]
+using \(1+|y|\le(1+|z|)(1+|y-z|)\).  For the lower bound, integrate over
+\(|y-z|\le1\); there \(p(y-z)\) is bounded below, while the upper tail
+bound for \(p(y)\) gives the required power.  Positivity and continuity
+handle bounded \(z\).
+
+Let \(T_m^p(y,z)\) be the Taylor polynomial of \(F_y^p(z)\) at zero
+through degree \(m\).  The normalized first derivative is bounded, so
+\(p(y-h)/p(y)\le e^{L|h|}\) for some \(L\).  Taylor's formula and the last
+derivative bound in \eqref{eq:polynomial-tail-kernel-hypotheses} therefore
+give
+\[
+ \|F_\cdot^p(z)-T_m^p(\cdot,z)\|_{L^q(\Omega_p)}
+ \le C|z|^{m+1},\qquad |z|\le1.
+\]
+Every normalized Taylor coefficient through degree \(m\) is bounded.
+Consequently, \eqref{eq:polynomial-tail-translate-growth} gives, for
+\(|z|>1\),
+\[
+ \|F_\cdot^p(z)-T_m^p(\cdot,z)\|_{L^q(\Omega_p)}
+ \le C\{|z|^{\beta(1-1/q)}+|z|^m\}
+ \le C|z|^\kappa.
+\]
+Here \(m\le\kappa<m+1\), with equality allowed in the first inequality,
+and \(\beta(1-1/q)\le\kappa\).  Thus, globally,
+\begin{equation}\label{eq:polynomial-tail-critical-remainder}
+ \|F_\cdot^p(z)-T_m^p(\cdot,z)\|_{L^q(\Omega_p)}
+ \le C|z|^\kappa.
+\end{equation}
+
+For a law \(\lambda\) satisfying the moment condition, put
+\[
+ q_s^\lambda(y)=\int F_y^p(x/s)\lambda(\dd x),\qquad
+ B_{p,j}^\lambda(y)
+ =\frac{(-1)^j}{p(y)}
+   \sum_{|\gamma|=j}\frac{m_\gamma(\lambda)}{\gamma!}
+   \partial^\gamma p(y).
+\]
+For each fixed \(x\), the local Taylor estimate implies that \(s^\kappa\)
+times the remainder at \(x/s\) tends to zero.  Equation
+\eqref{eq:polynomial-tail-critical-remainder} bounds it by \(C|x|^\kappa\).
+Minkowski's inequality and dominated convergence yield
+\begin{equation}\label{eq:polynomial-tail-integrated-remainder}
+ q_s^\lambda
+ =1+\sum_{j=1}^ms^{-j}B_{p,j}^\lambda+r_s^\lambda,
+ \qquad
+ \|r_s^\lambda\|_{L^q(\Omega_p)}=o(s^{-\kappa}).
+\end{equation}
+
+Subtract the two expansions.  Moment matching gives
+\[
+ q_s^\nu-q_s^\eta=v_s+e_s,
+ \qquad
+ s^rv_s\longrightarrow B_{p,\Delta_r}\quad\hbox{in }L^\infty(\Omega_p),
+ \qquad
+ \|e_s\|_q=o(s^{-\kappa}).
+\]
+The intermediate modes of orders \(r<j\le m\) are included in \(v_s\)
+and vanish after multiplication by \(s^r\).  If \(X\) has law \(\eta\),
+the bounded score and Jensen's inequality give
+\[
+ q_s^\eta(y)\ge\exp\{-L\mathbb E|X|/s\}\longrightarrow1
+\]
+uniformly in \(y\).  Translation continuity in \(L^1\), followed by
+dominated convergence in \(X\), also gives
+\(\|q_s^\eta-1\|_{L^1(\Omega_p)}\to0\), and
+\(\int q_s^\eta\dd\Omega_p=1\).  Since \(q\kappa=2r\),
+Lemma~\ref{lem:two-background-critical-bregman-transfer}, with
+\(g_s=q_s^\eta\), proves
+\eqref{eq:polynomial-tail-first-unmatched-asymptotic}.
+
+Finiteness of the quadratic form follows from the normalized derivative
+bound.  If it vanished at \(\Delta_r\), then
+\[
+ \sum_{|\gamma|=r}\frac{\Delta m_\gamma}{\gamma!}\partial^\gamma p=0
+\]
+almost everywhere.  Fourier transformation gives a homogeneous polynomial
+times \(\widehat p\).  Since \(\widehat p(0)=1\), the transform is nonzero
+on a neighborhood of zero, so the polynomial and hence \(\Delta_r\) must
+vanish.  This proves positive definiteness.
+
+It remains to prove optimality.  Suppose \(\beta>2r\), fix
+\(r\le\rho<\kappa\), and use the finite-difference blocks
+\(A_R^\pm\) from Lemma~\ref{lem:stable-finite-difference-blocks}.  Choose
+positive \(a_j\) with \(\sum_ja_j<\infty\), set
+\(w_j=a_jR_j^{-\rho}\), and recursively choose
+\(R_{j+1}>4(r+1)R_j\).  Define
+\[
+ \nu=\left(1-\sum_jw_j\right)\delta_0+\sum_jw_jA_{R_j}^+,
+ \qquad
+ \eta=\left(1-\sum_jw_j\right)\delta_0+\sum_jw_jA_{R_j}^-.
+\]
+The laws have finite \(\rho\)-th moments, match below order \(r\), and
+have a finite nonzero order-\(r\) difference.
+
+Let \(x_j=(r+1)R_je\),
+\(s_j=\delta R_jw_j^{1/\beta}<R_j/4\), and
+\(E_j=B(x_j,s_j)\).  The endpoint atom in \(A_{R_j}^+\) gives
+\[
+ (p_{s_j}*\nu)(E_j)\ge
+ 2^{1-r}w_j\int_{B(0,1)}p(y)\dd y=:a_rw_j.
+\]
+Every atom of \(\eta\) is at distance at least \(3R_j/4\) from \(E_j\).
+The upper bound in \eqref{eq:polynomial-tail-kernel-hypotheses}, scaling,
+and integration over \(E_j\) therefore give
+\[
+ (p_{s_j}*\eta)(E_j)
+ \le C(s_j/R_j)^\beta=C\delta^\beta w_j.
+\]
+Choose \(\delta\) so that \(C\delta^\beta<a_r\).  Data processing to
+\(\{E_j,E_j^c\}\) and
+Lemma~\ref{lem:bernoulli-kl-linear-separation} imply
+\[
+ D_{\rm KL}(p_{s_j}*\nu\|p_{s_j}*\eta)\ge c w_j.
+\]
+Since \(q=1+2r/\beta\) in the present regime,
+\[
+ s_j^{2r}D_{\rm KL}(p_{s_j}*\nu\|p_{s_j}*\eta)
+ \ge cR_j^{2r}w_j^{1+2r/\beta}
+ =ca_j^qR_j^{2r-\rho q}.
+\]
+The exponent of \(R_j\) is positive precisely because
+\(\rho<\kappa=2r/q\).  Enlarging the radii recursively makes \(s_j\to
+\infty\) and the last display unbounded, proving
+\eqref{eq:polynomial-tail-uniform-sharpness}.  For \(\rho<r\), a Pareto
+law on a line has finite \(\rho\)-th and infinite \(r\)-th moment.  This
+proves the remaining optimality assertion.
+
+The Student kernel satisfies \eqref{eq:polynomial-tail-kernel-hypotheses}
+at every order by
+Proposition~\ref{prop:tail-jet-kernel-closure-and-examples}.  The stable
+case follows from \eqref{eq:prelim-stable-density-derivatives} and the full
+derivative package used in
+Lemma~\ref{lem:all-order-stable-critical-remainder}.
+\end{proof}
