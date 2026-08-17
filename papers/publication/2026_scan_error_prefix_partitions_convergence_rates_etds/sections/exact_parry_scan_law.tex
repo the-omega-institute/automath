@@ -1,0 +1,200 @@
+
+\subsection{Exact Parry scan-error law for periodic and reducible observers}
+\label{sub:exact-parry-scan-law}
+
+The comparison bounds in Theorem~\ref{thm:finite-state-posterior} discard the
+terminal Parry weights and the posterior ambiguity of each boundary state.
+For the Parry measure these quantities are finite-state data, so the loss can
+be removed even when the refined ambiguous graph is periodic or reducible.
+
+\begin{lemma}[Absorption and posterior weights]
+\label{lem:parry-observer-absorption}
+Assume the hypotheses of Theorem~\ref{thm:finite-state-posterior}, and assume
+that the chosen presentation is $\mu$-resolving with bound $R$.  Let
+$\lambda=\lambda_{\mathrm{cyl}}$, and let $\ell,r>0$ be left and right
+Perron eigenvectors of the defining adjacency matrix $A$, normalized by
+$\ell^{\mathsf T}r=1$.  For $v=(i,u)\in\mathcal R_\partial$, let
+\[
+h_v:=\mu_{i,u}(\text{the observer eventually enters }\mathcal S_1),
+\qquad \eta_v:=\min\{h_v,1-h_v\}.
+\]
+Here $\mu_{i,u}$ denotes the Parry future law started with terminal symbol
+$i$ and observer state $u$.  Then the observer enters
+$\mathcal S_0\cup\mathcal S_1$ with probability one under every accessible
+boundary conditional law, and
+\[
+0<h_v<1,\qquad
+\mu(\mathsf P\mid[a])=h_{(a_{m-1},q(a))}
+\quad\text{for every }[a]\in\partial_m\mathsf P.
+\]
+Moreover, the vector $h$ is the unique solution of the finite absorbing
+Markov-chain equations
+\[
+h_{(i,u)}=\sum_{j:A_{ij}=1}
+\frac{r_j}{\lambda r_i}
+\begin{cases}
+1,&T_j(u)\in\mathcal S_1,\\
+0,&T_j(u)\in\mathcal S_0,\\
+h_{(j,T_j(u))},&T_j(u)\in\mathcal S_\partial.
+\end{cases}
+\]
+\end{lemma}
+
+\begin{proof}
+For every accessible ambiguous observer state $u$, the resolving hypothesis
+provides a fixed continuation of length at most $R$ ending in each of
+$\mathcal S_0$ and $\mathcal S_1$.  Every allowed Parry transition has
+conditional probability at least
+\[
+p_*:=\min\{r_j/(\lambda r_i):A_{ij}=1\}>0,
+\]
+so, conditionally on any boundary prefix represented by $(i,u)$, the
+probability of entering either decided class within the next $R$ symbols is at
+least $p_*^R$.  Iterating at successive blocks of length $R$ gives a bound
+$(1-p_*^R)^k$ for the probability of remaining ambiguous after $kR$ steps.
+Thus the hitting time of $\mathcal S_0\cup\mathcal S_1$ is almost surely
+finite.  The defining properties of a finite-state posterior presentation
+identify the event, modulo the conditional null set of paths that never hit a
+decided class, with eventual entry into $\mathcal S_1$.  The Markov property
+then gives the displayed conditional-probability identity and the first-step
+equations.  Uniqueness follows because the transient ambiguous transition
+matrix has spectral radius strictly less than one: the same block estimate
+gives geometric decay of its powers.
+\end{proof}
+
+\begin{lemma}[Periodic polynomial asymptotics for positive matrix coefficients]
+\label{lem:periodic-polynomial-matrix-coefficients}
+Let $B$ be a finite nonnegative matrix, let $s\ge0$ be nonzero, and let
+$t>0$ on every state reachable from $\operatorname{supp}(s)$.  Suppose every
+state of $B$ is reachable from $\operatorname{supp}(s)$, and put
+$\rho=\rho(B)$.  If $B$ is nilpotent, then $sB^nt=0$ for all sufficiently large
+$n$.  Otherwise, let $q$ be the largest number of strongly connected
+components of spectral radius $\rho$ occurring in a directed chain reachable
+from $\operatorname{supp}(s)$.  There are an integer $p\ge1$ and positive
+constants $c_0,\ldots,c_{p-1}$ such that
+\[
+sB^nt=\rho^n\bigl(c_{n\bmod p}n^{q-1}+O(n^{q-2})\bigr)
+\quad(n\to\infty),
+\]
+where the error term is interpreted as $O(\rho^n\vartheta^n)$ when $q=1$, for
+some $0<\vartheta<1$.  One may take $p$ to be the least common multiple of
+the periods of the spectral-radius components.
+\end{lemma}
+
+\begin{proof}
+Put $B$ in Frobenius normal form.  A walk contributing to $sB^nt$ visits a
+chain of strongly connected diagonal blocks in their partial order.  A chain
+containing $j$ blocks of spectral radius $\rho$ contributes at most
+$O(n^{j-1}\rho^n)$: this follows by expanding the block power into the
+convolution over the $j-1$ transition times between the blocks and applying
+the Perron--Frobenius bound to each irreducible block (see, for example,
+\cite[Chs.~1--2]{Seneta2006}).  Hence the total degree is at most $q-1$.
+
+Choose a reachable chain of $q$ spectral-radius components and fixed positive
+weight paths between successive components.  In each component, the
+appropriate power of the period is primitive.  Perron--Frobenius therefore
+gives a uniform lower bound $c\rho^k$ for walks of every sufficiently large
+allowed length in the corresponding cyclic class.  For each residue of $n$
+modulo the least common multiple $p$ of the component periods, choose the
+terminal cyclic class according to that residue.  The first $q-1$ residence
+times may then be varied independently through $\asymp n^{q-1}$ admissible
+values while the final component absorbs the remaining length; positivity of
+$t$ supplies a terminal state in every cyclic class.  Thus, for every residue
+class, the coefficient is bounded below by a positive multiple of
+$n^{q-1}\rho^n$.
+
+Finally, the Jordan expansion of the finite matrix $B$ is a finite sum of terms
+$P_\zeta(n)\zeta^n$.  The peripheral eigenvalues of each irreducible block are
+$\rho$ times roots of unity, and the preceding chain bound shows that the
+largest degree is $q-1$.  Grouping the peripheral terms by $n\bmod p$ gives
+the displayed constants $c_j$; the lower bound just proved makes each
+$c_j$ strictly positive.  All remaining eigenvalues have modulus strictly
+less than $\rho$, which gives the stated remainder when $q=1$ and is absorbed
+by $O(n^{q-2}\rho^n)$ when $q\ge2$.
+\end{proof}
+
+\begin{theorem}[Exact Parry scan-error law for finite posterior observers]
+\label{thm:exact-parry-scan-law}
+Assume the hypotheses of Theorem~\ref{thm:finite-state-posterior}, and assume
+that the chosen finite-state posterior presentation is $\mu$-resolving.  Let
+$\widetilde B$ and $r_1$ be the refined ambiguous matrix and initial row vector
+of that theorem.  Let $\ell,r>0$ be normalized as in
+Lemma~\ref{lem:parry-observer-absorption}.  For $v=(i,u)\in\mathcal R_\partial$
+define
+\[
+s_v:=(r_1)_v\ell_i,
+\qquad
+t_v:=r_i\eta_v,
+\]
+where $\eta_v$ is given by Lemma~\ref{lem:parry-observer-absorption}.  Then,
+for every $m\ge1$,
+\begin{equation}
+\label{eq:exact-parry-scan-law}
+\varepsilon_m(\mathsf P;\mu)
+=\lambda^{-(m-1)}s\,\widetilde B^{\,m-1}t.
+\end{equation}
+If $\widetilde B$ is nilpotent, the scan error is eventually zero.  Otherwise
+its generating function is rational:
+\[
+\sum_{m\ge1}\varepsilon_m(\mathsf P;\mu)z^{m-1}
+=s\left(I-\frac z\lambda\widetilde B\right)^{-1}t,
+\]
+as an identity of formal power series (and analytically for
+$|z|<\lambda/\rho(\widetilde B)$).  Consequently
+$(\varepsilon_m)_{m\ge1}$ satisfies a constant-coefficient linear recurrence
+of order at most $|\mathcal R_\partial|$.
+
+In the nonnilpotent case let $q$ be the maximal number of reachable
+spectral-radius strongly connected components in a directed chain of
+$\widetilde B$, and let $p$ be the least common multiple of their periods.
+Then there are constants $c_0,\ldots,c_{p-1}>0$ such that
+\[
+\varepsilon_m(\mathsf P;\mu)
+=\left(\frac{\rho(\widetilde B)}\lambda\right)^{m-1}
+\bigl(c_{(m-1)\bmod p}(m-1)^{q-1}
+ +O((m-1)^{q-2})\bigr).
+\]
+For $q=1$ the error term is exponentially smaller than the leading term.
+In particular, periodic and reducible observers have a complete residue-class
+asymptotic, and the polynomial factor records the length of a maximal chain of
+critical boundary components.  When $\widetilde B$ is primitive, $q=p=1$ and,
+if $x,y>0$ are Perron eigenvectors normalized by $y^{\mathsf T}x=1$, then
+\[
+c_0=(s x)(y^{\mathsf T}t)>0.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $a=a_0\cdots a_{m-1}$ be a boundary word and write
+$v_k=(a_k,q(a_0\cdots a_k))$.  The boundary-word/path bijection of
+Lemma~\ref{lem:boundary-word-refined-path} identifies boundary words with
+paths $v_0\to\cdots\to v_{m-1}$ in $\widetilde B$ whose initial state is in
+$\operatorname{supp}(r_1)$.  The Parry cylinder formula is
+\[
+\mu([a])=\ell_{a_0}r_{a_{m-1}}\lambda^{-(m-1)}.
+\]
+By Lemma~\ref{lem:parry-observer-absorption}, the terminal posterior ambiguity
+on this cylinder is $\eta_{v_{m-1}}$.  Substitution into the exact atomwise
+Bayes decomposition gives
+\[
+\varepsilon_m
+=\lambda^{-(m-1)}
+\sum_{v_0\to\cdots\to v_{m-1}}
+ (r_1)_{v_0}\ell_{a_0}
+ \prod_{k=0}^{m-2}(\widetilde B)_{v_kv_{k+1}}
+ r_{a_{m-1}}\eta_{v_{m-1}},
+\]
+which is~\eqref{eq:exact-parry-scan-law}.  The resolvent identity gives the
+rational generating function, and Cayley--Hamilton gives the recurrence.
+
+All states in $\mathcal R_\partial$ are reachable from
+$\operatorname{supp}(r_1)$ by definition, while $t_v>0$ by the resolving
+hypothesis and Lemma~\ref{lem:parry-observer-absorption}.  Applying
+Lemma~\ref{lem:periodic-polynomial-matrix-coefficients} to
+$(\widetilde B,s,t)$ gives the stated residue-class asymptotic.  In the
+primitive case, Perron--Frobenius gives
+$\widetilde B^n=\rho^nxy^{\mathsf T}+O(\rho_1^n)$ with $\rho_1<\rho$;
+substitution into~\eqref{eq:exact-parry-scan-law} yields the displayed
+constant.
+\end{proof}
+
