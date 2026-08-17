@@ -296,6 +296,15 @@ m cau}\le m+1$；但**证不出 2** —— 无环性排除圈、界长路，**�
 `upper_fibers_…_fq`（12+4，重构后过薄，需属于其自身故事的新结果，且须查 `5231658ed^` 避免重拾已拆出的材料）、
 `fredholm_determinants_…_jst`（23 页，无既定方向，须自行找杠杆点；另注意两条曾互换 DOI 的条目可能本身就是错述引用）。
 
+**⛔ 两条引用经查为编造（tick 253，`fredholm_…_jst`）**：不是 DOI 写错，是论文不存在。
+`GesztesyMakarov2007` 声称《…for **Jacobi Operators**》IEOT 57(4) 521–561 (2007) —— 实为两篇揉合：
+Gesztesy–Makarov 在 IEOT 的是 2003 年《(Modified) Fredholm Determinants…》；
+《Evans Functions, Jost Functions, and Fredholm Determinants》是 Gesztesy–**Latushkin**–Makarov 发在 **ARMA**。
+`VanNulandSkripka2022` 声称 JST 12(4) 1447–1492 —— 该二人真实论文在 JST 2023 与 J. Operator Theory 2025，标题卷页全不符。
+**教训**：上一轮 DOI 审计把这两条的 DOI 删了（因卷页对不上任何记录），那看似修复，实则**掩盖** ——
+无 DOI 的条目读起来像"老文献索引不佳"。**因卷页不符而必须删 DOI 时，那是核查条目本身的信号，不是修复。**
+已派工修（换真论文／换别的真论文／删引用并改句，不许因"删了留缺口"而保留）。
+
 tick 253 状态：三路均在实写，改动 4 / 5 / 9 个文件，无一完成。
 内存 1.37 GB、缺页 0、5 个 codex、无孤儿。
 
