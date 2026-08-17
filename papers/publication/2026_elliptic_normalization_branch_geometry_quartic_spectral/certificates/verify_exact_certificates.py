@@ -26,7 +26,7 @@ def assert_zero(name: str, expr) -> None:
         raise AssertionError(f"{name} failed: {simplified}")
 
 
-x, y, lam, t, s, u = sp.symbols("x y lambda t s u")
+x, y, z, lam, t, s, u = sp.symbols("x y z lambda t s u")
 rt2 = sp.sqrt(2)
 
 Pi_lam = lam**4 - lam**3 - (2*y + 1)*lam**2 + lam + y*(y + 1)
@@ -46,6 +46,38 @@ assert_zero("Pi(1,y)", Pi_lam.subs(lam, 1) - y*(y - 1))
 p = 16*lam**3 - 9*lam**2 + 1
 q = 4*y*lam - (4*lam**3 - 3*lam**2 - 2*lam + 1)
 assert_zero("cubic branch resultant", sp.resultant(p, q, lam) + 64*c)
+
+# Monodromy and residual branch-field certificates.
+resolvent = (
+    z**3
+    + (2*y + 1)*z**2
+    - (4*y*(y + 1) + 1)*z
+    - (8*y + 5)*y*(y + 1)
+    - 1
+)
+assert_zero(
+    "quartic-resolvent discriminant identity",
+    sp.discriminant(resolvent, z) - sp.discriminant(Pi_lam, lam),
+)
+assert_zero(
+    "cubic resolvent specialization",
+    resolvent.subs(y, 2) - (z**3 + 5*z**2 - 25*z - 127),
+)
+check(
+    "cubic resolvent specialization irreducible modulo 3",
+    sp.Poly(resolvent.subs(y, 2), z, modulus=3).is_irreducible,
+)
+check(
+    "branch cubic irreducible modulo 5",
+    sp.Poly(c, y, modulus=5).is_irreducible,
+)
+assert_zero("branch cubic discriminant", sp.discriminant(c, y) + 699868431)
+residual_field_relation = 279*lam + 512*y**2 + 518*y + 5
+critical_ideal = sp.groebner([p, q], lam, y, order="lex")
+assert_zero(
+    "residual ramification field relation",
+    critical_ideal.reduce(residual_field_relation)[1],
+)
 
 # Opposite-modulus collision certificate.
 Pi_minus_x = Pi_x.subs(x, -x)
