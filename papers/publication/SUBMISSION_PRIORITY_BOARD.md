@@ -394,6 +394,9 @@ $4k	o4k-2$ 是副产品而非目的。
 **九条印而不引须逐条判定是"漏了 \cite"还是"确已不再讨论"**，禁止一删了之或加 `
 ocite`）。
 
+tick 261 状态：`scan_projection` 已开始写（2 文件），`cubical_stokes` 仍在研究阶段，均未完成。
+内存 1.84 GB、缺页 57.5、无孤儿。
+
 **第七轮已派出（tick 257）**：`coefficient_sup_…_jdde`（29 页，兄弟篇 `cubical_stokes_…_jdsgt`
 只读参考；若结果该属兄弟篇则须说明并停手）、`chebotarev_quotient_…`（65 页；专门要它先查
 **有无借来的外部假设可以像 `finite_parts` 那样证掉** —— 那比再加一条条件结论值钱）。
