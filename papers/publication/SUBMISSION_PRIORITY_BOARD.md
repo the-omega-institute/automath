@@ -448,7 +448,8 @@ ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\in
 （`ibitem[Agarwal et~al.(2024)…` 标签折行，`{key}` 落到下一行，单行模式匹配不到）。
 **控制计数第四次生效。**
 
-| `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$arepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(ho/\lambda)^{m-1}(c_{(m-1)mod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
+| `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$arepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(
+ho/\lambda)^{m-1}(c_{(m-1)mod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
 
 **兄弟篇的"这两条已在你那儿"经确认属实** —— 防住了 A 推 B、B 推 A、两边皆不做的失败模式。
 **novelty 对着论文自己紧挨的推论核过**（复述最可能藏于此）：旧推论对**边界计数**给精确律，
@@ -458,7 +459,32 @@ ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\in
 **明确不做**：`theorem_inventory.json/.md` 留作过期 —— 它形似登记表实为 stage-A **审计快照**
 （含 `proof_gaps`、`journal_style_gaps`），回填新定理＝改写审计记录迎合后来工作。
 
-tick 266 状态：`elliptic_normalization`(5 文件)、`recursive_addressing`(3)、
+**第十·十一轮续收（tick 266–267）**：
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|--:|---|
+| `deterministic_telescoping_…` | **无穷尾因子 + 不动点障碍**：奇偶指标两个 Borel 极限因子；$d_{m TV}$ 至多 $|I|(c_\ell-lpha)$，两极限相距**恰为** $lpha$ ⇒ 弱收敛 $\iff
+u(\{1^{\mathbb Z}\})=0$ | 22→**24** | `d87ac7472` |
+| `elliptic_normalization_…` | **完整单值与算术分歧分类**：$\mathrm{Gal}=S_4$（算术与几何）、闭包亏格 16、$A_4$ 商为亏格 2 判别式双覆盖、不可分解且无非平凡覆叠变换、分歧值域 Galois 群 $S_3$ 且与残余轨迹同分裂域 | 76→**80** | `bb0cc5472` |
+
+**两处如实记录的分量下调**：`deterministic_telescoping` 那步"难点"实为标准从上连续性论证，
+新的是两个奇偶极限因子的**构造**与精确等式 $d_{m TV}=lpha$（单边界→充要判据）；
+`elliptic_normalization` 是**单个特定覆盖**的完整分类，不具一般性。
+
+**跨篇连接第三、四次判定**：`deterministic_telescoping` 与 Zeckendorf 簇 —— **不存在，未硬凑**；
+`elliptic_normalization` 与 `self_dual` —— **手法可迁、结论不可迁**（六次亏格六覆盖 ≠ 亏格一曲线上四次映射），
+这个区分是它自己做出的。
+
+**独立复核方式再升级**：`elliptic_normalization` 的复核**未复跑论文自带证书**，
+而在 sympy 中重算判别式／预解式／残余关系，并对 $y=2,3,5,7,-3$ 五处特化直接算 Galois 群（皆 $S_4$）——
+该路径完全不经预解式论证即逼出结论。我另手算 Riemann–Hurwitz：$5\cdot12+18=78$，$2g-2=30$，$g=16$。
+
+**第十二轮已派出（tick 267）**：`zeckendorf_folds_…_etds`（32 页；
+**附带上一轮的否定结论**，令其先掂量 Zeckendorf 簇连接是否真实再动手）、
+`window6_spectral_rigidity_…`（77 页；专问 lumpability 判据是否也必要、
+规范仅近似保持时刚性是否存活；并传下两条标准 —— 数值不提拔、借来的外部假设优先证掉）。
+
+（历史）tick 266 状态：`elliptic_normalization`(5 文件)、`recursive_addressing`(3)、
 `deterministic_telescoping`(2) 三路均在实写，无一完成。内存 1.89 GB、缺页 0、无孤儿。
 
 **第十一轮已派出（tick 265）**：`deterministic_telescoping_…`（22 页，
