@@ -291,6 +291,37 @@ m cau}\le m+1$；但**证不出 2** —— 无环性排除圈、界长路，**�
 **未关掉且如实记录**：`prime_languages` 的递归论分类仍开放（正向已 c.e.，
 精确定位尚缺可计算见证压缩或保促成的困难性归约，均不从有限输入模型得出）—— 该篇第二条在案否定。
 
+**第五轮收割完毕（tick 253–255）**：
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|--:|---|
+| `upper_fibers_…_fq` | **无平方极小纤维充要判据** + 支撑二刚性（任何非无平方极小原像在 $\omega(m)\le2$ 中已可见）| 12+4→**14+4** | `177cd1d41` |
+| `fredholm_…_jst` | 普通循环乘积何时是正则化 Fredholm 行列式的**充要判据** + 差异公式 + 刚性 | 23→**26** | `effa748b1` |
+| `cauchy_poisson_…` | 领头 Poisson 系数在 **Fischer 谐波下对角化**，权重为终止型 ${}_2F_1$ 的闭式 beta 积分 | 108→**115** | `d9b78edd9` |
+
+**⛔ `fredholm` 一篇查出三条编造引用**（`e4d8a40de`、`f3d178e7e`）。第三条 `ChattopadhyayCoineGiriPradhan2025`
+是复核方主动把余下 18 个 DOI 全查一遍才发现的：论文/DOI/刊/卷/期/页**全对**，作者名是编的
+（真实为 **Clément Coine**、**Saikat Giri**，条目写 "Lucas Coine"、"Santanu Giri"）。
+**伪造构造方式**：`VanNulandSkripka2022` 的**卷与期是真的**（JST 12(4)），标题与页码 1447–1492
+搭在真元数据上编出 —— 所以读起来可信。`GesztesyMakarov2007` 最终**删而非替换**：
+两个候选真论文都不支持那句的 Jacobi/Volterra 语境，而同句的 Golinskii 本身即可扛住。
+
+**两次跨篇连接的结果**：`upper_fibers`→`large_primitive_divisors` 筛法壁垒 —— **不成立且如实说明**
+（见证覆盖控支撑与重数，不控整除 $F_n$ 的素数大小）；`cauchy_poisson`→`cayley_chebyshev` 尾指数原理 ——
+**接上了但不在我指的地方**：直接套用被驳回（$d=1$ 时 $eta=2\Rightarrow\kappa=r$ 已是 Thm 5.4），
+取的是互补的一半，即把兄弟篇留作抽象二次型的领头系数算出来。
+
+⚠️ **`cauchy_poisson` 含 212 行未经审阅的数学**：`sec_critical_moment_comparisons.tex`
+（临界两背景转移引理 + 边界两律平方定理）在本轮窗口内无报告地出现在工作树，
+其 `\input`、摘要句、引言段与谐波部分交叉在同几个文件里，剔除需凭来源猜测改 115 页论文前置材料。
+已提交并在提交信息中写明未审状态，**专项审阅在飞**（要求 SOUND/REPAIRABLE/UNSOUND 三选一，
+且明令不得因已提交而软化否定）。
+
+**第六轮已派出（tick 255）**：`gluing_failure_…_apal`（55 页，带跨篇连接 —— 兄弟篇刚证的
+Ext 盲区**精确刻画**对本篇同名主题settle 了什么、使什么可达、又使哪一节变得多余；
+"某节已被兄弟篇定理吞并"即便缩短本篇也算正当结论）、
+`self_dual_synchronisation_…`（30 页，无既定方向须自找杠杆；另警示其书目曾查出指向无关文献的标识符）。
+
 **第五轮已派出（tick 252）**：`cauchy_poisson_…`（108 页，未评刊；带跨篇连接 —— 兄弟篇
 `cayley_chebyshev` 新证的尾指数原理对 Cauchy/Poisson 这类多项式尾对象是否直接适用/尖锐特化/失效）、
 `upper_fibers_…_fq`（12+4，重构后过薄，需属于其自身故事的新结果，且须查 `5231658ed^` 避免重拾已拆出的材料）、
