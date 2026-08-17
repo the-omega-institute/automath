@@ -21,14 +21,42 @@ at `Q = 10^3, 10^4, 10^5, 10^6`. The resulting values of `2 rho_Q^2`
 approach the proved context constant `b_C = 8` from below. The default sieve
 uses `Q = 10^6`; pass `--max-cutoff Q` to use another final cutoff.
 
-The scripts require Python 3.10 or later and `mpmath`.
+This check requires Python 3.10 or later and `mpmath`.
+
+## Critical Gibbs-geometry simulation
+
+From the article directory, run:
+
+    python artifacts/verify_critical_gibbs_geometry.py
+
+The deterministic run uses seed `20260817`, estimates `mu_C` from 3,000,000
+independent critical letters, and draws 30,000 finite-layer Gibbs samples at
+each of `m = 200, 800, 2400`.  It writes the complete observed-versus-predicted
+tables to `artifacts/critical_gibbs_geometry_check.txt`.  The calculation uses
+only the standard library and NumPy.
+
+The script also evaluates two same-data negative controls.  To run the sign
+mutation by itself and confirm a nonzero exit status, use:
+
+    python artifacts/verify_critical_gibbs_geometry.py --prediction flip-sign --output -
+
+This substitutes
+`+mu_C^(-1-1/alpha) t^(1/alpha) S_alpha` for the theorem's negative law.
+The other built-in mutation is:
+
+    python artifacts/verify_critical_gibbs_geometry.py --prediction mu-power --output -
+
+It substitutes `mu_C^(-1/alpha)` for `mu_C^(-1-1/alpha)`.  Both mutations are
+expected to print `OVERALL = RED` and exit with status 1.  These simulations
+are finite-size consistency checks for signs and constants; they do not test
+or prove convergence in distribution.
 
 ## Article build
 
 From the article directory, run:
 
-    latexmk -C main.tex
-    latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex
+    latexmk -C main
+    latexmk -pdfxe main
 
 Check `main.log` for unresolved references, unresolved citations, and
 multiply-defined labels.
