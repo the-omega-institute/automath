@@ -51,6 +51,19 @@ expected to print `OVERALL = RED` and exit with status 1.  These simulations
 are finite-size consistency checks for signs and constants; they do not test
 or prove convergence in distribution.
 
+## Sharp context-rate reductions
+
+From the article directory, run:
+
+    python artifacts/verify_context_rate.py
+
+This exact-arithmetic check enumerates the two context words through digit
+sum 6 and central digits 1 through 9, and compares the central-continuant
+factorization on both sides as rational numbers.  It also enumerates every
+canonical noncondensed word through digit sum 18, performs the balanced cut
+used in the proof, and checks both digit-sum bounds and the continuant product
+inequality.  The check has no numerical tolerance.
+
 ## Article build
 
 From the article directory, run:

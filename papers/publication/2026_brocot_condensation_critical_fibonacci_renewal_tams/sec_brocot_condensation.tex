@@ -234,9 +234,10 @@ greater than \(n/2\).  For every fixed \(s>2\),
 \begin{align}
  n^sP_n(s)&\longrightarrow2\rho_s^2,
  \label{eq:principal-large-digit-limit}\\
- Z_n(s)-P_n(s)&=o(n^{-s}),
+ Z_n(s)-P_n(s)&=O_s(n^{1-2s}),
  \label{eq:noncondensed-negligible}\\
- Z_n(s)&\sim2\rho_s^2n^{-s}.
+ Z_n(s)&=2\rho_s^2n^{-s}
+ \left(1+\frac{s\EE X}{n}+o(n^{-1})\right).
  \label{eq:brocot-partition-asymptotic}
 \end{align}
 More precisely, cutting at the unique digit greater than \(n/2\) is a
@@ -256,6 +257,26 @@ and throughout this parameterization,
  \le2^s\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}.
  \label{eq:summable-context-domination}
 \end{equation}
+Moreover, with
+\begin{equation}
+ \chi(\mathbf u,\mathbf v):=
+ |\mathbf u|_1+|\mathbf v|_1
+ -\lambda_{\rm L}(\mathbf u)-\lambda_{\rm R}(\mathbf v),
+ \label{eq:deterministic-context-first-order-variable}
+\end{equation}
+one has the weighted first-order expansion
+\begin{multline}
+ \sum_{\mathbf u\in\mathcal W_{\rm L}}
+ \sum_{\mathbf v\in\mathcal W_{\rm R}}
+ \Bigl|n\Bigl[
+  n^s\mathbf1_{\{|\mathbf u|_1+|\mathbf v|_1<n/2\}}
+  \mathcal K(\mathbf u,n-|\mathbf u|_1-|\mathbf v|_1,\mathbf v)^{-s}\\
+  -\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}\Bigr]
+ -s\chi(\mathbf u,\mathbf v)
+  \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}\Bigr|
+ \longrightarrow0.
+ \label{eq:weighted-context-first-order-expansion}
+\end{multline}
 \end{proposition}
 
 \begin{proof}
@@ -309,10 +330,70 @@ context by \(2\rho_s\), and allowing either context to be the long one gives
 \[
  4\rho_s\sum_{h\le a\le n/2}a^{-s}G_s(n/4,h).
 \]
-The first two factors grow at most polynomially, while the last is
-superpolynomially small.  Together with
-\eqref{eq:two-large-digits-negligible}, this proves
-\eqref{eq:noncondensed-negligible}, and hence
+ The first two factors grow at most polynomially, while the last is
+ superpolynomially small.  Together with
+ \eqref{eq:two-large-digits-negligible}, this proves
+ \(Z_n(s)-P_n(s)=o(n^{-s})\), and hence the qualitative asymptotic
+ \(Z_n(s)\sim2\rho_s^2n^{-s}\).
+
+We now sharpen both estimates.  The qualitative asymptotic implies
+\begin{equation}
+ Z_m(s)=O_s(m^{-s}).
+ \label{eq:global-layer-upper-bound}
+\end{equation}
+Let \(\mathbf a\) be a word counted by \(Z_n(s)-P_n(s)\), so every digit of
+\(\mathbf a\) is at most \(n/2\).  Cut after the first digit at which the
+prefix digit sum reaches \(n/4\).  The prefix and suffix digit sums both lie
+in \([n/4,3n/4]\).  The cut is unique, the prefix belongs to
+\(\mathcal W_{\rm L}\), and the suffix belongs to
+\(\mathcal W_{\rm R}\).  Consequently,
+\begin{align}
+ Z_n(s)-P_n(s)
+ &\le
+ \sum_{n/4\le k\le3n/4}\ell_k(s)r_{n-k}(s)\notag\\
+ &=2\sum_{n/4\le k\le3n/4}Z_k(s)Z_{n-k}(s)
+ =O_s(n^{1-2s}),
+ \label{eq:balanced-noncondensed-bound}
+\end{align}
+where the concatenation inequality was used in the first line and the
+endpoint identity \(\ell_k=2r_k\) in the second.  This proves the stated
+form of \eqref{eq:noncondensed-negligible}.
+
+The exact continuant concatenation identity is
+\begin{equation}
+ \mathcal K(\mathbf u,a,\mathbf v)
+ =\mathcal K(\mathbf u)\mathcal K(\mathbf v)
+  \{a+\lambda_{\rm L}(\mathbf u)+\lambda_{\rm R}(\mathbf v)\}.
+ \label{eq:exact-central-continuant-factorization}
+\end{equation}
+Both boundary ratios lie in \([0,1]\).  Put
+\(d=|\mathbf u|_1+|\mathbf v|_1\),
+\(x=\chi(\mathbf u,\mathbf v)\), and
+\[
+ A_n(\mathbf u,\mathbf v):=
+ \mathbf1_{\{d<n/2\}}(1-x/n)^{-s}.
+\]
+By \eqref{eq:brocot-context-masses},
+\eqref{eq:global-layer-upper-bound}, and \(s>2\),
+\begin{equation}
+ \sum_{\mathbf u,\mathbf v}
+ d\{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}<\infty.
+ \label{eq:context-digit-sum-integrability}
+\end{equation}
+On \(d<n/2\), the mean-value theorem gives
+\(n|A_n-1|\le C_s(d+2)\), while for every fixed pair
+\(n(A_n-1)\to sx\).  On \(d\ge n/2\), integrability in
+\eqref{eq:context-digit-sum-integrability} gives
+\[
+ \sum_{d\ge n/2}(n+s|x|)
+ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}
+ \le(2+2s)\sum_{d\ge n/2}d
+ \{\mathcal K(\mathbf u)\mathcal K(\mathbf v)\}^{-s}\longrightarrow0.
+\]
+Dominated convergence, together with
+\eqref{eq:exact-central-continuant-factorization}, proves
+\eqref{eq:weighted-context-first-order-expansion}.  Summing that expansion
+and using \eqref{eq:balanced-noncondensed-bound} yields
 \eqref{eq:brocot-partition-asymptotic}.
 \end{proof}
 
@@ -357,11 +438,37 @@ We use the discrete Scheff\'e argument.  Since the masses are nonnegative,
 Fatou's lemma gives
 \(\liminf_n\sum\min(\nu_n,\nu)\ge\sum\nu=1\), while these sums are at most
 one.  Hence the displayed \(L^1\) distance tends to zero.  The law of
-\((U_n,V_n)\) differs from \(\nu_n\) only by placing the complementary
-mass at \((\varnothing,\varnothing)\).  That mass tends to zero, proving
-\eqref{eq:brocot-context-tv}.
+ \((U_n,V_n)\) differs from \(\nu_n\) only by placing the complementary
+ mass at \((\varnothing,\varnothing)\).  That mass tends to zero, proving
+ \eqref{eq:brocot-context-tv}.
 
-On the event in \eqref{eq:brocot-unique-condensate},
+For the quantitative statement, let \(\widehat\nu_n\) be the conditional
+context law given \(M_n>n/2\).  Relative to \(\nu\), its density is
+\[
+ \frac{A_n}{\EE_\nu A_n},
+\]
+with \(A_n\) as in the proof of
+\Cref{prop:brocot-context-estimates}.  The weighted expansion
+\eqref{eq:weighted-context-first-order-expansion} gives, in
+\(L^1(\nu)\),
+\[
+ n\left(\frac{A_n}{\EE_\nu A_n}-1\right)
+ \longrightarrow s\{\chi-\EE_\nu\chi\}.
+\]
+The noncondensed probability is, by
+\eqref{eq:balanced-noncondensed-bound} and
+\eqref{eq:brocot-partition-asymptotic},
+\[
+ \mathbb P_{n,s}\{M_n\le n/2\}=O_s(n^{1-s})=o(n^{-1}).
+\]
+Thus conditioning changes the context law by \(o(n^{-1})\) in total
+variation, and the last two displays prove
+\eqref{eq:sharp-brocot-context-tv}.  Its constant is finite by
+\eqref{eq:context-digit-sum-integrability}.  It is positive because
+\(\chi(\varnothing,\varnothing)=0\), whereas
+\(\chi(\varnothing,(2))=3/2\), and both pairs have positive \(\nu\)-mass.
+
+ On the event in \eqref{eq:brocot-unique-condensate},
 \[
  n-M_n=|U_n|_1+|V_n|_1,
  \qquad

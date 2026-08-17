@@ -90,3 +90,40 @@ The DOI, title, and lead-author checks recorded for the other carried entries
 remain applicable. In particular, the Dushistova title and lead author match
 DOI 10.1070/SM2007v198n05ABEH003854, and the Weinstein title and lead author
 match DOI 10.1080/10586458.2015.1118416 and arXiv math/0307150.
+
+## Sharp total-variation context rate
+
+The quantitative context theorem was checked against the three closest
+sources and against the adjacent manuscripts in the repository.
+
+- The official arXiv record 0912.1516 returned *Conditional Distribution of
+  Heavy Tailed Random Variables on Large Deviations of their Sum*, with lead
+  author Ines Armendariz.  Its Theorems 1 and 2 give qualitative
+  total-variation convergence under product-form subexponential hypotheses;
+  they do not give a first-order total-variation constant.
+- The official arXiv record 1610.01401 returned *Unlabelled Gibbs
+  partitions*, with sole author Benedikt Stufler.  Its small-fragment theorem
+  is likewise qualitative and concerns Gibbs partitions with generating
+  function product structure.
+- Crossref and MathNet returned Dushistova's title *Partitioning of the
+  interval [0,1] induced by the Brocot sequences*, lead author Anna A.
+  Dushistova, and DOI 10.1070/SM2007v198n05ABEH003854.  The English article
+  was inspected directly.  Theorem 3 is a scalar asymptotic expansion for the
+  fixed-digit-sum inverse-continuant sum.  It contains no context
+  distribution or total-variation assertion.
+
+Searches of Crossref and the official arXiv API combined “Stern--Brocot,”
+“Brocot,” “continuant,” “one big jump,” “context,” and “total variation.”
+The exact arXiv searches for “Stern--Brocot” with “total variation” and for
+“continued fraction” with “one big jump” returned no records.  No located
+work states an \(n^{-1}\) context-law rate or its first-order constant for
+denominator-weighted Brocot layers.
+
+The repository search covered manuscripts mentioning continued fractions,
+renewal theory, Fibonacci layers, or Gibbs laws.  In particular,
+2026_finite_window_zeckendorf_thermodynamics_jnt uses the present Brocot
+paper only as context and explicitly states that none of its total-variation
+results enters that manuscript.  The other matching manuscripts concern
+finite-window Zeckendorf spectra, Parry cylinder laws, renewal experiments,
+normalization arithmetic, or Fibonacci apparition fibers; none contains a
+Brocot context-rate theorem.
