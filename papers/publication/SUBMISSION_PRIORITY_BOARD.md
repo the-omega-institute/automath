@@ -155,6 +155,29 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
 > 只有 `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` 与两篇派生新稿的书目零缺陷。
 > 已投稿的 `submitted_2026_quartic_cover_37a1_regular_s4_closure_jnt` 有 3 个不存在 + 2 个错指，最急。
 
+### 🔬 深挖冲刺（2026-08-17，tick 239 起）— 审计线已停，回到内容
+
+任务 `tools/chatgpt-oracle/sprint/deep_research_task.txt`：要**可发表的终局结论**，
+不要中间引理、不要挤牙膏式的 epsilon 改进、不重推他人已发表的论证（可引用其结论）、
+证到审稿标准、学术语体。明确允许诚实否定（"此处无可发表内容"优于硬凑定理）。
+
+| 篇 | 目标 | 派工理由 |
+|---|---|---|
+| `cayley_chebyshev_…_jfa` | JFA | α-稳定核推广刚完成，问该推广本身现在让什么变得够得着；须先查 git 历史（87+33→32 页，被删章节可能已含该想法）|
+| `brocot_condensation_…_tams` | TAMS | 外审 major revisions；弱点是入手处，但要求出新定理而非逐条交差 |
+| `large_primitive_divisors_…` | 未评 | 中心定理外评 75–80% 可辩护新结果，但仅 8 页，需第二个实质定理 |
+
+**我方独立判断（不预先告知 agent，用于收割时分辨真发现与复述）**：
+`large_primitive_divisors` 的杠杆在计数上界的常数 $	frac12$ —— 指数 2 完全由它决定
+（质量 $\log U_n^{m prim}=(\logarphi+o(1))\phi(n)$ 除以计数
+$a(n)\le(	frac{\logarphi}{2}+o(1))\phi(n)/\log n$）。
+而该 $	frac12$ 仅用了两条信息：本原素数落在 $\pm1mod 2n$、且互不相同（阶乘项把
+$\log n$ 变成 $2\log n$）。**筛法完全未上场**。三个可问方向按价值：
+(1) 用 Brun–Titchmarsh／大筛法压 $a(n)$，指数随之上涨 —— 改进路径具体而非许愿；
+(2) 有效化 $N_arepsilon$ —— 因至今未发现 $2^{64}$ 以下 Wall–Sun–Sun 素数，
+显式版本可在可计算范围内把"二择一"变成无条件结论；
+(3) 推广到一般 Lucas 序列 —— 方法撑得住，但最可能已被做过，须先查文献。
+
 ### 冲刺后目标期刊（codex 依"实际通过验证并入稿"的内容重评，2026-08）
 
 | 篇 | 目录 | 页 | 最新裁决 | **去向** |
