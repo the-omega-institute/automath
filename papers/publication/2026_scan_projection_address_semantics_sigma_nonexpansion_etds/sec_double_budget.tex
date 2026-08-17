@@ -145,64 +145,181 @@ Subtracting \(s\gamma_H(\varphi)\) from the first limit gives
 \]
 \end{proof}
 
-\begin{corollary}[Poisson birthday threshold for survivor prefixes]
-\label{cor:survivor-poisson-threshold}
-Under the hypotheses of
-Corollary~\ref{cor:survivor-renyi-pressure}, let
-\((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes of
-depth \(m\) with common law \(\lambda_m^H\).  Define
+\begin{theorem}[Higher-order collision thresholds]
+\label{thm:survivor-higher-collisions}
+Assume the hypotheses of
+Corollary~\ref{cor:survivor-renyi-pressure} and suppose that
+\(\card(\mathcal S_\infty)\geq 2\).  For \(s\geq 1\), set
 \[
-  S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r,
+  S_s^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s,
   \qquad
-  W_m:=\sum_{1\leq i<j\leq N_m}
-       \mathbf{1}_{\{X_m^{H,(i)}=X_m^{H,(j)}\}}.
+  h_{s,H}:=sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
 \]
-Then
+For every integer \(s\geq 2\), there is an explicitly computable
+constant \(c_{s,H}>0\) such that
 \[
-  S_2^H(m)=e^{-m h_{2,H}+o(m)},
-  \qquad
-  S_3^H(m)
-  = e^{-m(3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi))+o(m)}.
+  S_s^H(m)
+  = c_{s,H}e^{-(m-1)h_{s,H}}(1+O(\kappa_s^m))
+  \qquad (m\to\infty)
+\]
+for some \(0<\kappa_s<1\).  Moreover, for all real \(1\leq s<t\),
+\[
+  h_{t,H}>\frac{t}{s}h_{s,H}.
+\]
+
+Fix an integer \(k\geq 2\), let
+\((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes of
+depth \(m\) with common law \(\lambda_m^H\), and define the number of
+\(k\)-fold collisions by
+\[
+  W_{m,k}:=
+  \sum_{\substack{I\subseteq\{1,\ldots,N_m\}\\ \card(I)=k}}
+  \mathbf 1_{\{X_m^{H,(i)}=X_m^{H,(j)}\text{ for all }i,j\in I\}}.
 \]
 If
 \[
-  \binom{N_m}{2}S_2^H(m)\to\tau\in[0,\infty)
-  \qquad\text{and}\qquad
-  N_m^3S_3^H(m)\to 0,
+  \binom{N_m}{k}S_k^H(m)\longrightarrow\tau\in(0,\infty),
 \]
 then
 \[
-  W_m \Rightarrow \mathrm{Poisson}(\tau).
+  W_{m,k}\ \Rightarrow\ \mathrm{Poisson}(\tau).
 \]
-In particular,
+No additional moment or overlap hypothesis is required.  More
+precisely, for every \(\alpha\in(0,\infty)\),
 \[
-  \PP(W_m\ge 1)\to
+  N_m e^{-(m-1)h_{k,H}/k}\longrightarrow\alpha
+  \quad\Longrightarrow\quad
+  W_{m,k}\ \Rightarrow\
+  \mathrm{Poisson}\!\left(\frac{c_{k,H}\alpha^k}{k!}\right).
+\]
+The corresponding collision threshold is sharp:
+\[
+  \PP(W_{m,k}\geq 1)\longrightarrow
   \begin{cases}
-    0, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to 0,\\[4pt]
-    1-e^{-\tau}, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to \tau\in(0,\infty),\\[4pt]
-    1, & \text{if }\binom{N_m}{2}e^{-m h_{2,H}}\to\infty
-         \text{ and } N_m^3S_3^H(m)=o\!\left(\binom{N_m}{2}^2S_2^H(m)^2\right).
+    0,
+      &N_m e^{-(m-1)h_{k,H}/k}\longrightarrow 0,\\[3pt]
+    1-\exp(-c_{k,H}\alpha^k/k!),
+      &N_m e^{-(m-1)h_{k,H}/k}\longrightarrow\alpha\in(0,\infty),\\[3pt]
+    1,
+      &N_m e^{-(m-1)h_{k,H}/k}\longrightarrow\infty.
   \end{cases}
 \]
-Thus the birthday threshold for surviving samples lies on the scale
-\[
-  \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
-\]
-\end{corollary}
+Thus every fixed collision multiplicity has its own pressure-determined
+birthday scale \(N_m\asymp e^{(m-1)h_{k,H}/k}\).
+\end{theorem}
 
 \begin{proof}
-The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
-and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  The
-Chen--Stein dependency-graph estimate of
-\citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
+Write \(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\) and
+\(\rho_s:=\rho(B_{\infty,s})\).  With the ordering used in the proof of
+Corollary~\ref{cor:survivor-renyi-pressure}, write
 \[
-  d_{\mathrm{TV}}\bigl(W_m,\mathrm{Poisson}(\EE W_m)\bigr)
-  \ll N_m^3S_3^H(m),
+  B_{H,s}=\begin{pmatrix}B_{\infty,s}&E_s\\0&Q_s\end{pmatrix}.
 \]
-while \(\EE W_m=\binom{N_m}{2}S_2^H(m)\).  The stated limits follow.
+Let \(r_s\) and \(\ell_s\) be right and left Perron eigenvectors of
+\(B_{\infty,s}\), normalized by \(\ell_s^{\mathsf T}r_s=1\), and set
+\[
+  L_s^{\mathsf T}:=
+  \bigl(\ell_s^{\mathsf T},
+  \ell_s^{\mathsf T}E_s(\rho_sI-Q_s)^{-1}\bigr),
+  \qquad
+  a_s:=(u_{s,\infty}^{\mathsf T}r_s)
+       (L_s^{\mathsf T}\mathbf 1).
+\]
+Here \(u_{s,\infty}\) is the restriction of \(u_s\) to
+\(\mathcal S_\infty\).  The same block calculation as in the proof of
+Theorem~\ref{thm:quasistationary-ambiguity}, followed by the spectral
+gap for the primitive matrix \(B_{\infty,s}\), gives
+\[
+  \mathcal Z_{H,m}(s)
+  =a_s\rho_s^{m-1}(1+O(\kappa_s^m))
+\]
+after increasing \(\kappa_s<1\) if necessary.  Since
+\(S_s^H(m)=\mathcal Z_{H,m}(s)/\mathcal Z_{H,m}(1)^s\), it follows that
+\[
+  S_s^H(m)
+  =\frac{a_s}{a_1^s}
+   \left(\frac{\rho_s}{\rho_1^s}\right)^{m-1}
+   (1+O(\kappa_s^m)).
+\]
+Corollary~\ref{cor:survivor-renyi-pressure} identifies
+\(\rho_s/\rho_1^s=e^{-h_{s,H}}\), so
+\[
+  c_{s,H}=\frac{a_s}{a_1^s}>0.
+\]
+
+It remains to prove the strict pressure inequality.  Let \(r_1>0\) be
+the Perron right eigenvector of \(B_{\infty,1}\), and define
+\[
+  P_{ij}:=\frac{B_{\infty,1}(i,j)r_1(j)}{\rho_1r_1(i)}.
+\]
+Then \(P\) is a primitive stochastic matrix.  If \(P^{\circ s}\)
+denotes the entrywise \(s\)-th power, diagonal similarity gives
+\[
+  \rho(P^{\circ s})=\frac{\rho_s}{\rho_1^s}=e^{-h_{s,H}}.
+\]
+Fix \(1\leq s<t\), put \(d=t/s>1\), and choose \(x>0\) with
+\(P^{\circ s}x=\rho(P^{\circ s})x\).  For every state \(i\),
+\begin{align*}
+  \bigl(P^{\circ t}x^{\circ d}\bigr)_i
+  &=\sum_j(P_{ij}^s x_j)^d\\
+  &\leq\left(\sum_jP_{ij}^s x_j\right)^d
+   =\rho(P^{\circ s})^d x_i^d.
+\end{align*}
+Because \(P\) is primitive on at least two states, some row has at
+least two positive entries.  The displayed inequality is strict in that
+row.  The matrix \(P^{\circ t}\) is irreducible, so the strict form of
+the Collatz--Wielandt theorem yields
+\[
+  \rho(P^{\circ t})<\rho(P^{\circ s})^{t/s}.
+\]
+Taking negative logarithms proves
+\(h_{t,H}>(t/s)h_{s,H}\); in particular, \(h_{k,H}>0\).
+
+For the Poisson limit, index the summands of \(W_{m,k}\) by the
+\(k\)-subsets \(I\) of \(\{1,\ldots,N_m\}\).  Two summands are
+independent when their index sets are disjoint.  If
+\(\card(I\cap J)=\ell\in\{1,\ldots,k-1\}\), their joint expectation is
+\[
+  S_{2k-\ell}^H(m).
+\]
+The dependency-graph estimate of
+\citet[Theorem~1]{ArratiaGoldsteinGordon1989} therefore bounds the total
+variation distance from a Poisson law of mean
+\(\lambda_m=\binom{N_m}{k}S_k^H(m)\) by a constant depending only on
+\(k\) times
+\[
+  N_m^{2k-1}S_k^H(m)^2
+  +\sum_{\ell=1}^{k-1}
+     N_m^{2k-\ell}S_{2k-\ell}^H(m).
+\]
+If \(\lambda_m\to\tau\in(0,\infty)\), then \(N_m\to\infty\), the first
+term tends to zero, and for \(t=2k-\ell\),
+\[
+  N_m^tS_t^H(m)
+  =\bigl(N_m^kS_k^H(m)\bigr)^{t/k}
+    \frac{S_t^H(m)}{S_k^H(m)^{t/k}}
+  \longrightarrow 0
+\]
+by the strict pressure inequality and the precise exponential
+asymptotics above.  This proves the Poisson limit.  The explicit critical
+scaling follows from the formula for \(S_k^H(m)\).
+
+In the subcritical regime, \(\EE W_{m,k}\to0\), so the first threshold
+claim follows from Markov's inequality.  In the supercritical regime,
+\(\lambda_m\to\infty\).  Independence of disjoint index sets and the
+same overlap count give
+\[
+  \Var(W_{m,k})
+  \leq \lambda_m+C(k)\sum_{\ell=1}^{k-1}
+      N_m^{2k-\ell}S_{2k-\ell}^H(m).
+\]
+After division by \(\lambda_m^2\), every term tends to zero by the same
+strict pressure inequality.  Chebyshev's inequality then gives
+\(\PP(W_{m,k}=0)\to0\), completing the proof.
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:main-renyi}]
 The pressure identity is Corollary~\ref{cor:survivor-renyi-pressure}.
-The collision-scale statement is Corollary~\ref{cor:survivor-poisson-threshold}.
+The collision-scale statement is
+Theorem~\ref{thm:survivor-higher-collisions}.
 \end{proof}
