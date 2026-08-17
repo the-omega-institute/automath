@@ -1336,3 +1336,40 @@ Ostrowski、Pisot 或替换文法的类似构造"。要的是一个**分类**：
 $(n-1)^2$ 轨道计算只对最小内部层、定理 A–E 在总体代数下游），不许悄悄放宽。
 
 **Oracle**：本 tick 再试仍不可达。**内存**：可用 1.60 GB，硬缺页 21/s，无孤儿；两并发。
+
+---
+
+## tick 276 — 第十六、十七轮收割；**派工通道换实现**
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|--:|---|
+| `golden_mean_folding_…_addressing` | **精确扫描误差指数**：$arepsilon_m=b_martheta_m$ 精确分解，$b_m=\lambda^{-(1-d)m+o(m)}$；故边界维数给出精确衰减指数 $1-d$ **当且仅当** $-\logartheta_m=o(m)$；并给严格弱于一致边界厚度的 $L^p$ 判据 | 52→**55** | `e75e50422` |
+| `detector_shells_…_jphyscomm` | **更新性的逆命题 + 使朴素逆命题为假的例外**：两态标号核的可见过程为更新过程 $\iff$ $\det\widetilde T_1=0$ 或 $\widetilde T_1\mathbf1=ho\mathbf1$ 或 $\pi\widetilde T_1=ho\pi$；后两者直接给 i.i.d. Bernoulli$(ho)$ | 72→72 | `5e30e3e6f` |
+
+**`golden_mean_folding` 正确拒绝了我给的方向**：我问文法推广，它读完我点名的兄弟篇，
+又自己找到我没点的 `cyclic_rank_thresholds_quadratic_simple_parry_etds`（已构造每个二次 Pisot 语言与
+非整简单 Parry 系统的典范循环秩折叠），判为重复而不重证；另一条 no-go 定理同样因 truncation-defect
+兄弟篇已展开而拒绝。随后转向任务里写明的备选目标。这正是我要的行为。
+**尖锐性例子我自己算了**：$a=\sum_j2^{-j^2}$，精确有理数算到 $m=400$ —— 尾部从不消失（每层恰一个边界柱面）；
+平方深度 $m=k^2$ 处 $-\log_2artheta_m$ **恰为 $2k+1$**（$k=2..19$ 依次 5,7,…,39），故沿平方趋零、
+一致厚度常数被排除；而 $(-\log_2artheta_m)/\sqrt m\le2.96$、$(-\log_2artheta_m)/m$ 由 0.44 降至 0.10。三条性质全有。
+
+**`detector_shells`：我给的等价式本身是错的，它纠正了我。**
+我要"更新 $\iff$ 归一化 click 后分布与 click 前状态无关"，该等价式**为假**。
+论文现载的反例：$\widetilde T_0=I/2$、$\widetilde T_1=	frac18egin{pmatrix}3&1\1&3\end{pmatrix}$，
+$\det=1/8
+e0$、两行归一化后 $(3/4,1/4)$ 与 $(1/4,3/4)$ 明显不同，可见记录却是 i.i.d. Bernoulli$(1/2)$。
+唯有排除几何情形后干净陈述才成立。**我用精确有理数验了**：长度 $\le10$ 的所有二进制词概率恰为 $2^{-n}$；
+再用 Palm 间隔公式对 6 个核测完整 iff（反例更新、两个秩一核更新但非 i.i.d.、两个一般核不更新、
+另一个偶然 $\det=0$ 者被正确预测为更新），6/6 全中且检验有区分力。
+必要性是**真证**而非由旧论证失效推得（间隔独立给 $(lpha Q_k-g_klpha)x_j=0$，二维二分法；
+再由秩一 Hankel 论证给出穷尽性）。
+
+⚠️ **派工通道变更（重要）**：本 tick 两个 Claude 子 agent 被组织策略硬关 ——
+"Your organization has disabled Claude subscription access for Claude Code"。
+两个 codex 其实**已跑完**（报告完整、成果在树），死的只是包装层，故成果照常收割。
+**已验证 codex CLI 可从 Bash 直接调用**（冒烟测试通过），后续派工改为直调 codex，
+仍守"Codex 做, Claude 审"的分工。**第十八轮已按新方式派出**：`folded_histograms_…_etds`（47 页），
+任务中要求先读它自己的 discussion 取题，并明确列出须先排查重复的五篇兄弟篇。
+
+**Oracle**：本 tick 再试仍不可达。
