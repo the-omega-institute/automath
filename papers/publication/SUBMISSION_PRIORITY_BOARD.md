@@ -463,12 +463,14 @@ ho/\lambda)^{m-1}(c_{(m-1)mod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量�
 
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
-| `deterministic_telescoping_…` | **无穷尾因子 + 不动点障碍**：奇偶指标两个 Borel 极限因子；$d_{m TV}$ 至多 $|I|(c_\ell-lpha)$，两极限相距**恰为** $lpha$ ⇒ 弱收敛 $\iff
+| `deterministic_telescoping_…` | **无穷尾因子 + 不动点障碍**：奇偶指标两个 Borel 极限因子；$d_{
+m TV}$ 至多 $|I|(c_\ell-lpha)$，两极限相距**恰为** $lpha$ ⇒ 弱收敛 $\iff
 u(\{1^{\mathbb Z}\})=0$ | 22→**24** | `d87ac7472` |
 | `elliptic_normalization_…` | **完整单值与算术分歧分类**：$\mathrm{Gal}=S_4$（算术与几何）、闭包亏格 16、$A_4$ 商为亏格 2 判别式双覆盖、不可分解且无非平凡覆叠变换、分歧值域 Galois 群 $S_3$ 且与残余轨迹同分裂域 | 76→**80** | `bb0cc5472` |
 
 **两处如实记录的分量下调**：`deterministic_telescoping` 那步"难点"实为标准从上连续性论证，
-新的是两个奇偶极限因子的**构造**与精确等式 $d_{m TV}=lpha$（单边界→充要判据）；
+新的是两个奇偶极限因子的**构造**与精确等式 $d_{
+m TV}=lpha$（单边界→充要判据）；
 `elliptic_normalization` 是**单个特定覆盖**的完整分类，不具一般性。
 
 **跨篇连接第三、四次判定**：`deterministic_telescoping` 与 Zeckendorf 簇 —— **不存在，未硬凑**；
@@ -478,6 +480,14 @@ u(\{1^{\mathbb Z}\})=0$ | 22→**24** | `d87ac7472` |
 **独立复核方式再升级**：`elliptic_normalization` 的复核**未复跑论文自带证书**，
 而在 sympy 中重算判别式／预解式／残余关系，并对 $y=2,3,5,7,-3$ 五处特化直接算 Galois 群（皆 $S_4$）——
 该路径完全不经预解式论证即逼出结论。我另手算 Riemann–Hurwitz：$5\cdot12+18=78$，$2g-2=30$，$g=16$。
+
+| `recursive_addressing_prefix_sites_tac` | **逐类分类通用可见商**：存在 $\iff$ 残余类 $\epsilon_lpha\in\mathrm{Ext}^1(H_1(N),A/\mathrm{im\,ev}[lpha])$ 消没；**原"$H_1$ 无挠"前提由假设降为推论**，失效具体展示（$\mathbb Z/n$ 处即破）；并**倒逼修正论文自有 GHZ 应用**（可见商为 $\mathbb Z/2$，寄存器需两态非四态）| 18→18 | `17f6bb7b7` |
+
+**该篇三处自报有误／遗留，均已处理**：(1) 报"未加数值验证"却加了一个，
+**且未说明能否失败** —— 我自行变异测试（反转"扩张类非零"断言 ⇒ 退出 1），还原后逐字节一致；
+(2) 遗留 **4.2 MB** scratch 目录（下载的 arXiv PDF），已删；
+(3) 六个新节文件未入库 —— 不加则他人克隆无法编译，已加。
+丢失标签 `rem:torsion-free-role` 经查为正当淘汰：它解释的正是本定理干掉的那个假设，且原版无人引用。
 
 **第十二轮已派出（tick 267）**：`zeckendorf_folds_…_etds`（32 页；
 **附带上一轮的否定结论**，令其先掂量 Zeckendorf 簇连接是否真实再动手）、
