@@ -116,7 +116,16 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
 ### 可复现性审计（2026-08-17，tick 237）
 
 - **SHA256SUMS：15 份清单全部校验通过**，0 内容变更、0 文件缺失。
-- 全库 `artifacts/verify*.py` 与 `test_*.py` 清扫进行中。
+- **全库 54 个 `artifacts/verify*.py` 与 `test_*.py` 全部通过**，0 失败、0 超时。
+  （首轮报 10 个 `ModuleNotFoundError: No module named 'artifacts'` —— 是我的清扫脚本
+  在 `artifacts/` 里跑、而这些测试 `from artifacts import ...` 需从论文根目录跑。
+  按 `python -m artifacts.<mod>` 从根目录重跑，10 个全过。是检查的毛病，不是论文的。）
+- **28 个 verify 脚本全部具备失败路径**（assert / raise），无一是"怎么跑都过"的空壳。
+
+⚠️ **本条尚未证明的部分**：以上只证明脚本能跑通、且结构上可能失败。
+**未做**逐脚本的变异测试（改坏一个常数、确认变红、再改回）。
+"一个检查若在任何输入下都通过，它就不是证据" —— 这条纪律此前只对 A7 伴随篇提过，
+从未在全库尺度执行。这是本线剩下的唯一缺口，也是下一批派工的自然目标。
 
 （历史记录）三篇书目曾跨树指向 `../../../theory/…`，其中两篇 `submitted_*`。
 期刊只收论文自身目录，拿不到 `theory/` —— 与"命令行补宏"同类。
