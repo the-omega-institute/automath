@@ -1,0 +1,313 @@
+\section{Preliminaries}\label{sec:preliminaries}
+\phantomsection
+\paragraph{Standing Conventions.}\label{par:standing-conventions}
+The following conventions apply throughout the paper and are cited rather
+than restated in the later theorem statements.
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Standard objects.}  Joukowsky maps, confocal ellipses, logarithmic capacity, Mahler measure, resultants, and discriminants are used in their classical senses, with references cited where they enter the proofs.
+  \item \textbf{Lower-truncated energies.}  Every singular logarithmic energy is the lower-truncated extended value defined below.  A pullback kernel is truncated as one whole kernel before bounded terms are separated; finite-energy Fourier identities are asserted only under the stated finite-energy hypothesis, while all-measure variational inequalities are lower-truncated extremal statements.
+  \item \textbf{Transport notation.}  The \emph{transport polynomial} is \(Q_r\) from the normalization ledger, Table~\ref{tab:normalization-ledger}.  A \emph{shell} is one of the exact zero circles \(|z|=1\) or \(|z|=r^{-2}\) in the resultant inverse theorem from exact complete coefficient-vector data.
+  \item \textbf{Exact algebraic data.}  Inverse recovery means exact recovery from the complete data explicitly stated in the relevant theorem.  The exact coefficient-vector conventions, including the projective-to-monic conversion and the observation model, are fixed in Definition~\ref{def:transport-coefficient-observations} and summarized in Table~\ref{tab:normalization-ledger}.  Exact root divisors are taken in a fixed algebraic closure, with multiplicity; no numerical root-finding, root clustering, noisy-data, or multiplicity-stability assertion is implicit unless a theorem explicitly adds a perturbative hypothesis.
+  \item \textbf{Fixed scale.}  Unless a theorem explicitly varies the scale, all Joukowsky, capacity, transport, inverse, and Rouch\'e statements are made at the displayed scale \(r>1\).  The endpoint synthesis only combines statements after their hypotheses have fixed the same scale.
+\end{itemize}
+The preliminaries normalize logarithmic energy and Joukowsky transport, prove coefficient descent, fix the pullback factorization, and extract the discriminant factorization used by the later inverse and capacity statements.
+
+For quick reference, the main symbols are fixed here before the theorem statements.
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{p{0.23\linewidth}|p{0.67\linewidth}}
+\hline
+symbol & convention used throughout \\
+\hline
+\(\TT\) & the unit circle \(\{e^{i\theta}:\theta\in\RR/2\pi\ZZ\}\). \\
+\(m\) & normalized Haar probability measure on \(\TT\); in angular coordinates, \(\dd m(e^{i\theta})=\dd\theta/(2\pi)\).  Unqualified ``Haar measure'' on \(\TT\) means this normalized measure.  Multiplicities are written with subscripts, for example \(m_x\) or \(m_a\), to avoid conflict with \(m\). \\
+\(\mathcal P(X)\) & Borel probability measures on the compact set \(X\). \\
+\(I_X^{(M)}(\sigma)\), \(I_X(\sigma)\) & lower-truncated logarithmic energy on \(X\), obtained from the kernels \(\max\{\log|z-t|,-M\}\) and then letting \(M\to\infty\).  Singular pullback kernels are always truncated as one whole kernel before any bounded terms are separated. \\
+\(J_r\), \(E_r\) & \(J_r(z)=rz+r^{-1}z^{-1}\) and \(E_r=J_r(\TT)\); in the analytic capacity statements \(r>1\). \\
+\(\mu_r\) & the Joukowsky equilibrium measure \(\mu_r:=J_{r\ast}m=J_{r\ast}(\dd\theta/2\pi)\) on \(E_r\). \\
+\(P^\vee\) & the root-normalized reciprocal fixed in Table~\ref{tab:normalization-ledger}. \\
+\(\widetilde Q_r\), \(Q_r\) & the monic transported zero polynomial and its scaled resultant-normalized transport, as fixed in Table~\ref{tab:normalization-ledger}. \\
+\(\mathcal L\) & monic polynomials of positive degree whose zeros, with multiplicity, lie on \(\TT\). \\
+shell & one of the zero circles \(\TT\) and \(r^{-2}\TT\) arising from \(z^nQ_r(J_r(z))\). \\
+\hline
+\end{tabular}
+\end{center}
+The following ledger collects the scalar conventions that are otherwise easy to mix up.  It is the normalization reference for the algebraic statements in Sections \ref{sec:preliminaries}--\ref{sec:discriminant}.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{p{0.24\linewidth}|p{0.68\linewidth}}
+\hline
+object & normalization used in this paper \\
+\hline
+source polynomial &
+\(P(u)=\sum_{k=0}^{n}a_ku^k=a_n\prod_{j=1}^{n}(u-z_j)\), with \(n\ge1\) and \(a_0a_n\ne0\).  Roots are counted with multiplicity in a fixed algebraic closure.  A \emph{monic source} means \(a_n=1\) in the source variable \(u\); it does not mean that the transported polynomial \(Q_r\) is monic. \\
+\hline
+reciprocal polynomial &
+\(P^\vee(u):=a_n^{-1}u^nP(1/u)=\prod_{j=1}^{n}(1-uz_j)\).  Thus \(P^\vee\) is root-normalized: its constant coefficient is \(1\), its leading coefficient is \(a_0/a_n\), and the unnormalized reciprocal is \(u^nP(1/u)=a_nP^\vee(u)\).  In the monic source case this specializes to \(P^\vee(u)=u^nP(1/u)\). \\
+\hline
+transported zero polynomial &
+\(\widetilde Q_r(w):=\prod_{j=1}^{n}(w-rz_j-r^{-1}z_j^{-1})\).  This polynomial is monic and records only the transported zero divisor.  It is the object obtained after any projective coefficient vector is divided by its leading entry. \\
+\hline
+resultant-normalized transport &
+\(Q_r(w):=a_0\widetilde Q_r(w)\).  Its leading coefficient is \(a_0\), so it is generally not monic even for monic \(P\).  This is the polynomial used in the pullback, resultant, discriminant, Mahler, and shell identities; in particular
+\[
+r^nz^nQ_r(J_r(z))=P(z)P^\vee(r^2z).
+\]
+For monic \(P\), \(a_0=(-1)^n\prod_jz_j\). \\
+\hline
+coefficient-vector observations &
+The inverse theorems use the exact complete ordered coefficient-vector model of Definition~\ref{def:transport-coefficient-observations}.  Full-normalized data are the ordered vectors of \(Q_{r_i}\).  Projective data are nonzero scalar multiples of those complete vectors; each is first divided by its nonzero leading entry to obtain the monic transport \(\widetilde Q_{r_i}=a_0^{-1}Q_{r_i}\). \\
+\hline
+\end{tabular}
+\caption{Normalization ledger for reciprocals, transported polynomials, and exact coefficient-vector data.}
+\label{tab:normalization-ledger}
+\end{table}
+
+This exact complete-vector convention is the only coefficient observation model used in the inverse results unless a theorem explicitly states otherwise.
+
+\paragraph{Lower-Truncated Energy.}
+All logarithmic energies in the paper use one global convention.  If \(X\subset\CC\) is compact and \(\sigma\) is a Borel probability measure on \(X\), put
+\[
+I_X^{(M)}(\sigma):=\iint_{X\times X}\max\{\log|z-t|,-M\}\,\dd\sigma(z)\dd\sigma(t)
+\qquad(M>0)
+\]
+and define
+\[
+I_X(\sigma):=\lim_{M\to\infty}I_X^{(M)}(\sigma)\in[-\infty,\infty).
+\]
+The kernels decrease as \(M\) increases, so this lower-truncated limit is well-defined; a measure is called \emph{finite-energy} when \(I_X(\sigma)>-\infty\).  When the compact set is clear from context we write simply \(I(\sigma)\).  More generally, if \(L\) is an upper-bounded Borel kernel on a compact metric space, its integral is always the monotone lower-truncated value \(\lim_{M\to\infty}\iint\max\{L,-M\}\).  If \(b\) is bounded and Borel, then bounded terms are separated only after this single-kernel truncation:
+\[
+\iint(L+b)\,\dd\mu\dd\mu=\iint L\,\dd\mu\dd\mu+\iint b\,\dd\mu\dd\mu,
+\]
+with the first integral on each side understood by lower truncation.  This convention forbids termwise integration of singular logarithmic factors before the complete pullback kernel has been truncated.  For a rational map \(R\) with no pole on \(X\), an \emph{admissible finite-energy lift} means a probability measure \(\mu\) on \(X\) for which \(I_{R(X)}(R_\ast\mu)>-\infty\), equivalently for which the lower-truncated pullback energy is finite.  This is not a condition on the ordinary logarithmic energy of \(\mu\) on the source set.  The pullback kernels below are always interpreted by this same lower-truncated convention, including diagonal, branch, and off-diagonal collision singularities.  Circular logarithmic means are the corresponding one-variable Lebesgue integrals, equivalently these lower-truncated limits; the logarithmic singularity at a zero of a nonzero polynomial is locally integrable, so Jensen's formula applies with this convention.  On the unit circle we also write
+\[
+I_{\TT}(\sigma):=\iint_{\TT\times\TT}\log|z-t|\,\dd\sigma(z)\dd\sigma(t)
+\]
+for the same lower-truncated energy.  If \(\widehat\sigma(k)=\int_{\TT}z^{-k}\,\dd\sigma(z)\), then the circle Fourier identity proved by Abel regularization in Lemma \ref{lem:circle-log-kernel-fourier-truncation}, and consistent with the classical Hardy-space kernel expansion \citep[Chap.~1]{Duren1970}, is
+\[
+I_{\TT}(\sigma)=-\sum_{k=1}^{\infty}\frac{|\widehat\sigma(k)|^2}{k},
+\]
+with the series understood as a finite real number exactly in the finite-energy case.  Abel regularization of the circle kernel is used below only as a proof device for this same lower-truncated limit under the finite-energy hypothesis.  Ordinary logarithmic means such as \(\int_{\TT}\log|F(z)|\,\dd\sigma(z)\) are always the corresponding lower-truncated limits unless the integrand is continuous on the support.
+
+\paragraph{Boundary and Coefficient Notation.}
+For \(r>0\), we use the two-scale Joukowsky map
+\[
+J_r(z):=rz+r^{-1}z^{-1},
+\qquad
+E_r:=J_r(\TT),
+\qquad
+\TT:=\{e^{i\theta}:\theta\in\RR/2\pi\ZZ\}.
+\]
+If \(f\in L^1(\TT)\), its Fourier coefficients are
+\[
+\widehat f(k):=\frac{1}{2\pi}\int_{0}^{2\pi} f(\theta)e^{-ik\theta}\,\dd\theta
+\qquad (k\in\ZZ).
+\]
+
+The second boundary model is the algebraic transport through \(J_r\). Throughout the algebraic transport statements, \(K\) denotes a field of characteristic zero; whenever absolute values, circles, ellipses, or logarithmic integrals are used, the notation is specialized to a subfield of \(\CC\), and in the analytic Mahler section to \(\CC\) itself.  All roots of polynomials over \(K\) are taken in a fixed algebraic closure \(\overline K\), always with multiplicity.  Repeated roots are allowed, and in that case the relevant discriminant is zero.  For a degree-\(n\) polynomial \(F(x)=b_n\prod_{j=1}^n(x-\alpha_j)\) with \(b_n\ne0\), we use the resultant normalization
+\[
+\operatorname{Disc}_x(F):=(-1)^{n(n-1)/2}b_n^{-1}\operatorname{Res}_x(F,F')
+=b_n^{2n-2}\prod_{1\le i<j\le n}(\alpha_i-\alpha_j)^2,
+\]
+where the displayed root formula is interpreted in \(\overline K\); its value lies in \(K\).  The resultant is the standard Sylvester resultant in the displayed order; equivalently, for every polynomial \(A(w)\) and every affine linear polynomial \(a(z)w+b(z)\) in the variable \(w\),
+\[
+\operatorname{Res}_w\bigl(A(w),a(z)w+b(z)\bigr)=(-a(z))^{\deg A}A\!\left(-\frac{b(z)}{a(z)}\right).
+\]
+In particular it satisfies
+\[
+\operatorname{Res}_x\bigl(A(x),c(\beta-x)\bigr)=c^{\deg A}A(\beta)
+\]
+for every polynomial \(A\) and scalar \(c\).  Equivalently,
+\[
+\operatorname{Res}_x(A(x),c(x-\beta))=(-c)^{\deg A}A(\beta).
+\]
+In particular, because \(r z^2-wz+r^{-1}=z\bigl(J_r(z)-w\bigr)\) is linear in \(w\), this convention gives
+\[
+\operatorname{Res}_w(Q_r(w),rz^2-wz+r^{-1})=z^nQ_r(J_r(z)),
+\]
+not \((-z)^nQ_r(J_r(z))\).  If \(K\subseteq\CC\), the same symbols may also be evaluated at complex points.  If \(K\) is arbitrary, identities involving \(J_r(z)\) are identities in the Laurent polynomial ring over \(K(r)\) after adjoining the displayed variable \(z^{\pm1}\).  The following convention fixes the normalization used everywhere below.
+
+\begin{definition}[Reciprocal and transport normalization]\label{def:reciprocal-transport-normalization}
+Let
+\[
+P(u)=\sum_{k=0}^{n}a_k u^k=a_n\prod_{j=1}^{n}(u-z_j)\in K[u],
+\qquad
+n\ge 1,
+\qquad
+ a_n a_0\ne0,
+\]
+with roots taken in a fixed algebraic closure of \(K\).  We use the scalar conventions of Table~\ref{tab:normalization-ledger}: the monic transport associated with the zero divisor of \(P\) is
+\[
+\widetilde Q_r(w):=\prod_{j=1}^{n}\Bigl(w-r z_j-r^{-1}z_j^{-1}\Bigr).
+\]
+All scalar normalizations of the transported zero divisor are converted through this monic polynomial.  Its scaled version used in the resultant identities is
+\[
+Q_r(w):=a_0\widetilde Q_r(w).
+\]
+Thus \(Q_r\) has leading coefficient \(a_0\), while \(\widetilde Q_r\) is monic.  If \(P\) is monic, then
+\[
+a_0=(-1)^n\prod_{j=1}^n z_j.
+\]
+The reciprocal polynomial is the root-normalized reciprocal
+\[
+P^{\vee}(u):=a_n^{-1}u^nP(1/u)=\prod_{j=1}^{n}(1-u z_j),
+\]
+Thus ``root-normalized'' means normalized to have constant coefficient \(1\).  The remaining leading-coefficient, monic-source, and projective-comparison conventions are those in Table~\ref{tab:normalization-ledger}.  For an indeterminate \(r\), or for \(r\in K^\times\), the expressions above lie in \(K(r)[w]\) by Lemma \ref{lem:transport-coefficient-descent}.
+\end{definition}
+
+\begin{definition}[Exact complete coefficient-vector transport observations]\label{def:transport-coefficient-observations}
+Let
+\[
+Q_r(w)=\sum_{k=0}^{n}A_k(r)w^{n-k},
+\qquad A_0(r)=a_0\ne0,
+\]
+be a degree-\(n\) Joukowsky transport polynomial in the normalization
+of Table~\ref{tab:normalization-ledger}.  Every
+inverse theorem in the paper uses complete ordered coefficient-vector
+observations at each scale; this is an exact algebraic data model.  The
+allowed normalization conventions are the following.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*]
+\item \emph{Full-normalized coefficient data.}
+The observed object at \(r_i\) is the ordered coefficient vector
+\((A_0(r_i),\dots,A_n(r_i))\) of \(Q_{r_i}\).  The common leading
+coefficient is visible at every scale: \(A_0(r_i)=a_0\).  The exact
+complete coefficient-vector inverse procedure interpolates \(A_k(r)\) and divides the top Laurent coefficient by
+\(a_0\).
+\item \emph{Projective monic-normalized coefficient data.}
+The observed object at \(r_i\) is a nonzero scalar multiple
+\(\lambda_i(A_0(r_i),\dots,A_n(r_i))\), where \(\lambda_i\ne0\) may
+depend on \(i\).  Dividing by the leading entry \(\lambda_i a_0\ne0\)
+gives the monic transport \(\widetilde Q_{r_i}=a_0^{-1}Q_{r_i}\); one
+then interpolates \(\widetilde A_k(r)\), recovers \(e_k\) from its top
+Laurent coefficient, and recovers \(a_0=[r^n]\widetilde A_n(r)\).
+\item \emph{Complete-vector requirement.}
+The inverse theorems use only the complete coefficient vectors just
+described.  Point samples, noisy samples, moment data, and truncated
+coefficient windows are not inverse data unless they have first been
+converted exactly to one of the complete ordered coefficient-vector
+forms in \textup{(i)} or \textup{(ii)}.
+\end{enumerate}
+Thus the projective normalization is well defined exactly because the
+observed object is the complete ordered coefficient vector of a
+transported degree-\(n\) zero divisor, whose leading entry is nonzero.
+The normalization algorithm used later is Lemma
+\ref{lem:full-monic-multiscale-normalization}.
+\end{definition}
+
+\begin{lemma}[Coefficient descent for the transport polynomial]\label{lem:transport-coefficient-descent}
+In Definition \ref{def:reciprocal-transport-normalization}, the expression
+\[
+Q_r(w)=a_0\prod_{j=1}^{n}\Bigl(w-r z_j-r^{-1}z_j^{-1}\Bigr)
+\]
+is independent of the ordering of the roots and belongs to \(K(r)[w]\).  The same conclusion holds after specializing \(r\in K^\times\), in which case \(Q_r\in K[w]\).
+\end{lemma}
+
+\begin{proof}
+It is enough to prove that each coefficient of \(Q_r\) lies in the indicated coefficient field.  The coefficient of \(w^{n-\ell}\) is \((-1)^\ell a_0\) times the elementary symmetric polynomial of degree \(\ell\) in the quantities \(r z_j+r^{-1}z_j^{-1}\).  Expanding this elementary symmetric polynomial gives a finite \(\ZZ[r,r^{-1}]\)-linear combination of monomials
+\[
+z_1^{e_1}\cdots z_n^{e_n},
+\qquad e_j\in\{-1,0,1\},
+\]
+summed over subsets in a way that is invariant under every permutation of the root labels.  Since \(a_0\ne0\), all roots are nonzero, and multiplication by a sufficiently large power of \(z_1\cdots z_n\) converts each such symmetric Laurent polynomial into an ordinary symmetric polynomial in \(z_1,
+\dots,z_n\).  By the fundamental theorem of symmetric polynomials, it is a polynomial expression in the elementary symmetric functions of the roots and in \((z_1\cdots z_n)^{-1}\), with coefficients in \(\ZZ[r,r^{-1}]\).
+
+The elementary symmetric functions of the \(z_j\) are \((-1)^k a_{n-k}/a_n\), and \((z_1\cdots z_n)^{-1}=(-1)^n a_n/a_0\).  Hence every coefficient of \(Q_r\) belongs to \(K(r)\).  The construction used only symmetric expressions in the multiset of roots, so it is independent of the chosen ordering.  If \(r\in K^\times\) is specialized, the same formulas have coefficients in \(K\), proving \(Q_r\in K[w]\).
+\end{proof}
+
+The normalizations just fixed are used throughout the algebraic part of the article: the same normalization controls logarithmic means, zero shells, and one-scale resultants. We use the zero set notation \(\mathrm{Zero}(F)\) for a polynomial \(F\), and the standard resultant/discriminant notation \(\operatorname{Res}\) and \(\operatorname{Disc}\) \citep{GKZ1994}. For \(\rho>0\), we define the logarithmic circular mean
+\[
+\mathcal M_\rho(P):=\frac{1}{2\pi}\int_{0}^{2\pi}\log|P(\rho e^{i\theta})|\,\dd\theta,
+\]
+so that \(\mathcal M_1(P)\) is the logarithmic Mahler measure of \(P\) \citep{Mahler1962,EverestWard1999}.
+
+The next two identities are the algebraic input for the Mahler, discriminant, and one-scale exact complete coefficient-vector inverse statements in Sections \ref{sec:mahler-transport} and \ref{sec:discriminant}.
+
+\begin{theorem}[Pullback factorization]\label{thm:pullback-factorization}
+Let \(P(z)=a_n\prod_{j=1}^n(z-z_j)\) with \(a_0a_n\ne0\), and let \(P^\vee\) and \(Q_r\) be normalized as in Table~\ref{tab:normalization-ledger}.  These ledger normalizations are part of the statement: \(P^\vee\) is root-normalized and \(Q_r\) is the scaled transport, not the monic transport \(\widetilde Q_r\).  Let \(r\) be an indeterminate or an element of \(K^\times\). Then \(Q_r(w)\in K(r)[w]\), and in \(K(r)[z,z^{-1}]\) one has
+\[
+\boxed{\;
+r^n z^n\,Q_r\!\bigl(J_r(z)\bigr)=P(z)\,P^\vee(r^2 z).
+\;}
+\]
+If \(K\subseteq\CC\) and \(r\in K^\times\), the same identity may equivalently be evaluated at every \(z\in\CC^\times\).
+\end{theorem}
+
+\begin{proof}
+The coefficient assertion is Lemma \ref{lem:transport-coefficient-descent}. For each \(j\),
+\[
+J_r(z)-\bigl(r z_j+r^{-1}z_j^{-1}\bigr)
+=r(z-z_j)+r^{-1}(z^{-1}-z_j^{-1})
+=\frac{(z-z_j)(r^2 z z_j-1)}{r z z_j}.
+\]
+Multiplying over \(j\) yields
+\[
+Q_r\!\bigl(J_r(z)\bigr)
+=a_0\prod_{j=1}^{n}\frac{(z-z_j)(r^2 z z_j-1)}{r z z_j}
+=r^{-n}z^{-n}\Bigl(a_0\prod_{j=1}^{n}z_j^{-1}\Bigr)\prod_{j=1}^{n}(z-z_j)\prod_{j=1}^{n}(r^2 z z_j-1).
+\]
+Since \(a_0=(-1)^n a_n\prod_{j=1}^{n} z_j\), we have \(a_0\prod_j z_j^{-1}=(-1)^n a_n\). Therefore
+\[
+Q_r\!\bigl(J_r(z)\bigr)
+=r^{-n}z^{-n}\,a_n\prod_{j=1}^{n}(z-z_j)\cdot (-1)^n\prod_{j=1}^{n}(r^2 z z_j-1).
+\]
+The first factor is \(P(z)\), while
+\[
+P^\vee(r^2 z)=\prod_{j=1}^{n}(1-r^2 z z_j)=(-1)^n\prod_{j=1}^{n}(r^2 z z_j-1).
+\]
+Combining the two identities gives the stated factorization.
+\end{proof}
+
+\begin{theorem}[Discriminant factorization]\label{thm:discriminant-factorization}
+In the setting of Theorem \ref{thm:pullback-factorization},
+\[
+\boxed{\;
+\operatorname{Disc}_{w}(Q_r)
+=\operatorname{Disc}_{z}(P)\,
+r^{-n(n-1)}
+\prod_{1\le i<j\le n}(r^2 z_i z_j-1)^2.
+\;}
+\]
+The identity is taken in \(\overline K(r)\), and both sides are in fact elements of \(K(r)\).  It remains valid without assuming that \(P\) is separable; if roots collide, the corresponding discriminants vanish.
+\end{theorem}
+
+\begin{proof}
+Write \(w_j:=r z_j+r^{-1}z_j^{-1}\). Then
+\[
+\operatorname{Disc}_{w}(Q_r)=a_0^{2n-2}\prod_{1\le i<j\le n}(w_i-w_j)^2.
+\]
+Using
+\[
+w_i-w_j
+=r(z_i-z_j)+r^{-1}(z_i^{-1}-z_j^{-1})
+=\frac{(z_i-z_j)(r^2 z_i z_j-1)}{r z_i z_j},
+\]
+we obtain
+\[
+\operatorname{Disc}_{w}(Q_r)
+=a_0^{2n-2}r^{-n(n-1)}
+\prod_{1\le i<j\le n}(z_i-z_j)^2
+\prod_{1\le i<j\le n}(r^2 z_i z_j-1)^2
+\prod_{1\le i<j\le n}(z_i z_j)^{-2}.
+\]
+Now
+\[
+\prod_{1\le i<j\le n}(z_i z_j)^{-2}
+=\Bigl(\prod_{i=1}^{n} z_i\Bigr)^{-2(n-1)},
+\]
+and \(a_0=(-1)^n a_n\prod_i z_i\) implies
+\[
+a_0^{2n-2}\prod_{1\le i<j\le n}(z_i z_j)^{-2}=a_n^{2n-2}.
+\]
+Since
+\[
+\operatorname{Disc}_{z}(P)=a_n^{2n-2}\prod_{1\le i<j\le n}(z_i-z_j)^2,
+\]
+with the same discriminant convention as in \(\operatorname{Disc}_w(Q_r)=a_0^{2n-2}\prod_{i<j}(w_i-w_j)^2\), no extra sign appears: the only sign from \(a_0=(-1)^na_n\prod_i z_i\) is raised to the even power \(2n-2\), and the transport contribution is exactly the displayed factor \(r^{-n(n-1)}\).
+The desired identity follows.
+\end{proof}
+
+%% ============================================================
