@@ -1,11 +1,100 @@
-\section{Global rigidity from paired-loop covers}
+\section{Cobham rigidity for structured languages}
 \label{sec:slender-cobham}
 
 The preceding argument extracts one synchronized orbit from an arbitrary
-infinite MCFL. Slender context-free languages provide more: their entire
-language is covered by finitely many paired loops. Combining that global
-cover with the same affine recurrence evaluation yields a two-system
-rigidity theorem.
+infinite MCFL. In ordinary bases, allowing the pumped blocks of this orbit
+to vary independently produces a sparse regular envelope, which connects
+the orbit directly to sparse Cobham theory. Slender context-free languages
+provide a second form of control: their entire language is covered by
+finitely many paired loops. Combining that global cover with the affine
+recurrence evaluation yields a two-system rigidity theorem for weak-Perron
+systems.
+
+\subsection{Sparse automatic sets}
+
+For \(b\ge2\), put \(\Sigma_b=\{0,1,\ldots,b-1\}\), and let
+\[
+  \mathcal R_b=\{w\in\Sigma_b^\ast:\text{the final digit of }w
+    \text{ is nonzero}\}
+\]
+be the least-significant-digit-first canonical base-\(b\) language. For
+\(X\subseteq\mathbb N_{\ge1}\), write
+\[
+  \operatorname{Rep}_b(X)
+    =\{w\in\mathcal R_b:\val_b(w)\in X\}.
+\]
+A set \(X\) is \emph{sparse \(b\)-automatic} if
+\(\operatorname{Rep}_b(X)\) is regular and has polynomial growth. Reversal
+shows that this is equivalent to the usual most-significant-digit-first
+definition.
+
+\begin{theorem}[Sparse automatic sets in an independent base]
+  \label{thm:sparse-automatic-independent-base-mcf-immune}
+  Let \(k,\ell\ge2\) be multiplicatively independent, and let
+  \(X\subseteq\mathbb N_{\ge1}\) be infinite and sparse \(k\)-automatic. Then
+  \(\operatorname{Rep}_\ell(X)\) is MCF-immune. Equivalently, every MCFL
+  \[
+    L\subseteq\operatorname{Rep}_\ell(X)
+  \]
+  is finite.
+\end{theorem}
+
+\begin{proof}
+  Suppose that such an \(L\) is infinite, and choose a fan-out \(f\) for
+  which it is an \(f\)-MCFL. Apply
+  \Cref{thm:mcfl-synchronized-congruence-orbit} to the ordinary base-\(\ell\)
+  system. It gives a family of pairwise distinct canonical values
+  \[
+    W(t)=a u_1v_1^tw_1s_1^tu_2\cdots
+      u_fv_f^tw_fs_f^tu_{f+1}\in L
+      \qquad(t\ge0).
+  \]
+  Remove no words from this family, but allow its pumped blocks to vary
+  independently. More precisely, set
+  \[
+    E=\mathcal R_\ell\cap
+      a u_1v_1^\ast w_1s_1^\ast u_2\cdots
+      u_fv_f^\ast w_fs_f^\ast u_{f+1}.
+  \]
+  This is a regular language and contains \(W(t)\) for every \(t\ge0\).
+
+  Let \(r\le2f\) be the number of nonempty words among
+  \(v_1,s_1,\ldots,v_f,s_f\). Every word of \(E\) of length at most \(n\)
+  is produced by an \(r\)-tuple of exponents, each at most \(n\). Hence
+  \[
+    \#\{w\in E:\abs w\le n\}\le(n+1)^r.
+  \]
+  Thus \(E\) is sparse. Since base-\(\ell\) canonical evaluation is a
+  bijection, the set
+  \[
+    Y=\{\val_\ell(w):w\in E\}
+  \]
+  is sparse \(\ell\)-automatic and satisfies
+  \(\operatorname{Rep}_\ell(Y)=E\).
+
+  Every value \(\val_\ell(W(t))\) belongs to \(X\cap Y\), and these values
+  are pairwise distinct. The intersection \(X\cap Y\) is therefore
+  infinite. This contradicts the sparse automatic intersection theorem of
+  Albayrak--Bell for multiplicatively independent bases
+  \cite[Theorem~1.1]{AlbayrakBell2023}.
+\end{proof}
+
+Thus the Albayrak--Bell sparse/zero-density automatic intersection conjecture
+holds under the additional hypothesis that the base-\(\ell\) representation
+language of the intersection is an MCFL; in fact the theorem requires no
+automaticity or density assumption on the second set once this language
+hypothesis is made.
+
+\begin{remark}[Sharpness]
+  Both principal hypotheses are necessary. If \(k=\ell\), the sparse
+  \(k\)-automatic set \(\{k^n:n\ge0\}\) has the infinite regular
+  least-significant-digit-first representation language
+  \(\{0^n1:n\ge0\}\). If sparsity is omitted, taking
+  \(X=\mathbb N_{\ge1}\) makes \(\operatorname{Rep}_\ell(X)=\mathcal R_\ell\)
+  regular for every \(k\) and \(\ell\).
+\end{remark}
+
+\subsection{Slender context-free languages}
 
 We record the two external inputs with their hypotheses. A language \(L\)
 is \emph{slender} when

@@ -889,3 +889,41 @@ printed-but-uncited and cited-but-missing differences are empty. Likewise,
 cited by that document and its own transitive sources, with both differences
 empty. The bibliography-only page reductions are 31 to 29 pages for
 `main.pdf` and 43 to 41 pages for `finite_state_article.pdf`.
+
+## Sparse-Cobham MCF-immunity check (2026-08-17)
+
+The new theorem states that if `k` and `l` are multiplicatively independent
+and `X` is infinite and sparse `k`-automatic, then the canonical base-`l` representation
+language of `X` is MCF-immune. Its external input is Albayrak--Bell's theorem
+that sparse automatic sets in multiplicatively independent bases have finite
+intersection. Crossref DOI `10.1016/j.tcs.2023.114144` returned the exact
+title *Quantitative estimates for the size of an intersection of sparse
+automatic sets*, lead author Seda Albayrak, *Theoretical Computer Science*
+977 (2023), article 114144. The official arXiv record `2304.09223v1` returned
+the same title and lead author; its abstract states the sparse--sparse
+intersection theorem for subsets of `N^d`, which includes the one-dimensional
+case used here.
+
+Priority searches covered `multiple context-free Cobham`, `multiple
+context-free sparse automatic`, `MCF-immune automatic`, `context-free
+sublanguage automatic sets independent bases`, and `sparse automatic
+immunity`. Exact Crossref searches returned general MCFG and automatic-set
+records but no combined result. The official arXiv API returned zero records
+for the exact combinations `"multiple context-free" AND Cobham`, `"multiple
+context-free" AND "sparse automatic"`, and `MCF-immune automatic`. DBLP
+returned zero records for the first three exact variants. Semantic Scholar's
+citation endpoint for arXiv `2304.09223` returned two citing papers: *Sparse
+regular subsets of the reals* and *The Skolem Problem in Rings of Positive
+Characteristic*. Neither concerns context-free sublanguages, MCF-immunity,
+or automatic intersections in independent bases. OpenAlex returned HTTP 429
+during this check and was not treated as negative evidence.
+
+No located source states the new immunity conclusion. Albayrak--Bell require
+both intersected sets to be sparse automatic. The new proof instead begins
+with an arbitrary infinite MCFL inside the second-base representation
+language, extracts one synchronized family by the manuscript's existing weak
+pumping theorem, and places that family in a sparse regular envelope by
+starring the pumped blocks independently. Albayrak--Bell then exclude the
+resulting infinite sparse--sparse intersection. Thus the new theorem is a
+qualitative lift from regular sparse intersection to exclusion of every
+infinite finite-fan-out multiple context-free sublanguage.
