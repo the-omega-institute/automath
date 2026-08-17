@@ -102,3 +102,16 @@ for m in sorted(best):
 print()
 print("published bound was r+1 = 4, independent of m.")
 print("control: if the search were blind every 'ambiguous pairs' column would be 0.")
+
+# --- extension run, tick 318 -------------------------------------------------
+# The bound 2m-2 was read off m = 3..6.  Testing it on values it was not derived
+# from:  m=7 gives 12 and m=8 gives 14, both equal to 2m-2, with the witness
+# family continuing unchanged - a single 1 at position m+1 against the adjacent
+# pair at positions m-1, m, i.e. F_{m+2} = F_{m+1} + F_m.
+#
+#   m=7  longest minimal core 12  witness 000000010000 vs 000001100000
+#   m=8  longest minimal core 14  witness 00000000100000 vs 00000011000000
+#
+# Six values of m now agree.  This is evidence, not a proof: the search is
+# exhaustive in L only up to the cutoff, so it rules out longer cores only
+# within that range.
