@@ -47,16 +47,15 @@ lies on a directed path from the initial state to an accepting terminal state.
 Appendix~\ref{app:transducer} makes the construction explicit.  Choose the
 deterministic subsequential padded fold transducer on reversed Fibonacci
 words from Appendix~\ref{app:transducer}; see
-\Cref{lem:appendix-overflow-digit}.  By
-\Cref{lem:appendix-prefix-stability}, once a prefix has been read, only a
-bounded suffix of the visible output can still be altered by any further
-continuation.  The synchronized collision automaton of
-\Cref{prop:appendix-collision-automaton} stores exactly this unresolved suffix,
-checks equality of the newly committed visible blocks at each step, and accepts
-precisely those \(q\)-tuples with common finite-window fold.  Its adjacency
+\Cref{lem:appendix-overflow-digit}.  Since the transducer's terminal output has
+length at most \(L\), the transition outputs already emitted by two copies on
+an accepting path can lag by at most \(L\).  The asynchronous collision automaton of
+\Cref{prop:appendix-collision-automaton} stores the unmatched cross-copy delay,
+cancels common prefixes asynchronously, and accepts precisely those
+\(q\)-tuples with common finite-window fold.  Its adjacency
 matrix is a finite nonnegative integer matrix \(A_q\), and the initial and
 terminal conditions are encoded by nonnegative integer vectors \(u_q,v_q\).
-Deleting any state that is not reachable from the initial synchronized state or
+Deleting any state that is not reachable from the initial product state or
 cannot reach an accepting terminal state does not change the accepted path
 count.  Thus the automaton may be taken trim.  Let \(A_q\) be the adjacency
 matrix of this trim automaton, let \(u_q\) select the initial state, and let
@@ -70,7 +69,7 @@ matrix of this trim automaton, let \(u_q\) select the initial state, and let
 \begin{theorem}[Symmetric compression]
 \label{thm:symmetric-compression}
 \leanverified{paper_projection_symmetric_compression}
-Let \(k\) be the number of states of the one-copy augmented fold automaton from
+Let \(k\) be the cardinality of the local residual state set from
 Appendix~\ref{app:transducer}; explicitly,
 \[
   k=|Q|\,(2^{L+1}-1).
@@ -92,9 +91,9 @@ In particular, for fixed \(k\) the state-space dimension grows polynomially in
 \end{theorem}
 
 \begin{proof}
-Let \(\widehat Q\) be the one-copy augmented state set from
+Let \(\widehat Q\) be the local residual state set from
 \Cref{prop:appendix-one-copy}, so \(k=\card{\widehat Q}\).  The
-symmetric group \(\mathfrak S_q\) acts on the synchronized state space
+symmetric group \(\mathfrak S_q\) acts on the product state space
 \(\widehat Q^q\) by permuting the \(q\) coordinates.  The transition relation
 and the collision condition are invariant under this action, so the kernel
 descends to the orbit space.  If \(s=(s_1,\dots,s_q)\in \widehat Q^q\), its
@@ -106,10 +105,10 @@ orbit is determined by the histogram
 namely a weak composition of \(q\) into \(k\) parts.  Hence the orbit space has
 cardinality \(\binom{k+q-1}{k-1}\).
 
-Because the synchronized update rule of
-\Cref{prop:appendix-collision-automaton} is coordinatewise and depends only on
-whether the newly committed visible blocks agree across the \(q\) coordinates,
-orbit sums produce a nonnegative integer quotient matrix \(\widetilde A_q\)
+Because the asynchronous update rule of
+\Cref{prop:appendix-collision-automaton} is equivariant under permutation of the
+coordinates, orbit sums produce a nonnegative integer quotient matrix
+\(\widetilde A_q\)
 with the stated realization formula.  The symmetric subspace of
 \(\RR^{\widehat Q^q}\) is \(A_q\)-invariant and is naturally identified with
 the histogram state space, so \(\widetilde A_q\) is precisely the restriction
