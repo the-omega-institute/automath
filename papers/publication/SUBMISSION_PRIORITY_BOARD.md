@@ -1344,7 +1344,10 @@ $(n-1)^2$ 轨道计算只对最小内部层、定理 A–E 在总体代数下游
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
 | `golden_mean_folding_…_addressing` | **精确扫描误差指数**：$arepsilon_m=b_martheta_m$ 精确分解，$b_m=\lambda^{-(1-d)m+o(m)}$；故边界维数给出精确衰减指数 $1-d$ **当且仅当** $-\logartheta_m=o(m)$；并给严格弱于一致边界厚度的 $L^p$ 判据 | 52→**55** | `e75e50422` |
-| `detector_shells_…_jphyscomm` | **更新性的逆命题 + 使朴素逆命题为假的例外**：两态标号核的可见过程为更新过程 $\iff$ $\det\widetilde T_1=0$ 或 $\widetilde T_1\mathbf1=ho\mathbf1$ 或 $\pi\widetilde T_1=ho\pi$；后两者直接给 i.i.d. Bernoulli$(ho)$ | 72→72 | `5e30e3e6f` |
+| `detector_shells_…_jphyscomm` | **更新性的逆命题 + 使朴素逆命题为假的例外**：两态标号核的可见过程为更新过程 $\iff$ $\det\widetilde T_1=0$ 或 $\widetilde T_1\mathbf1=
+ho\mathbf1$ 或 $\pi\widetilde T_1=
+ho\pi$；后两者直接给 i.i.d. Bernoulli$(
+ho)$ | 72→72 | `5e30e3e6f` |
 
 **`golden_mean_folding` 正确拒绝了我给的方向**：我问文法推广，它读完我点名的兄弟篇，
 又自己找到我没点的 `cyclic_rank_thresholds_quadratic_simple_parry_etds`（已构造每个二次 Pisot 语言与
@@ -1372,4 +1375,37 @@ e0$、两行归一化后 $(3/4,1/4)$ 与 $(1/4,3/4)$ 明显不同，可见记录
 仍守"Codex 做, Claude 审"的分工。**第十八轮已按新方式派出**：`folded_histograms_…_etds`（47 页），
 任务中要求先读它自己的 discussion 取题，并明确列出须先排查重复的五篇兄弟篇。
 
+**Oracle**：本 tick 再试仍不可达。
+
+---
+
+## tick 277 — 第十九轮派出；两篇在飞，无可收割
+
+本 tick 无成果可收：`folded_histograms`（第十八轮）仍在写（已改 main.tex 并新建 `sections/`），未完成。
+
+**第十九轮：`zeckendorf_stable_arithmetic_fibonacci_congruence_online`（32 页，与在跑那篇并列最久空闲）**
+
+它的讨论节列了四条开放问题，任务里**逐条给了处置**而非让 agent 自选：
+
+1. **$F_{m+2}$ 为素数的 $m$ 的分布 —— 明令禁止**。Fibonacci 素数是否无穷是著名未解问题；
+   放任去做只会烧掉三小时，或者更糟，产出一个看着像证明的东西。若需要它作输入，须声明并改向。
+2. **单位群 $X_m^	imes$ 的内在描述** —— 可达，但价值**全在"内在"二字**：
+   $X_m\cong\ZZ/F_{m+2}\ZZ$ 是环同构，经此同构复述单位群一文不值；
+   有价值的是**由 Zeckendorf 词本身**（可从容许地址读出，而非从它所指的整数读出）刻画单位。
+3. **稳定地址空间上乘法／除法／求逆的直接在线或有界延迟算法 —— 主目标**。
+   论文已注明 Frougny 有在线加法而直接的乘性正规化子"仍不显式"。
+   要么构造有界延迟乘法算法，要么证明不存在。**带显式延迟下界的否定结果与肯定结果同等价值。**
+4. Fibonacci-adic 环与 $\ZZ[\phi]$ 完备化、一般 Ostrowski/Pisot 塔的关系 —— 有沦为常规辨认之虞，仅在 2、3 都被堵死时取用并说明理由。
+
+**并交接了一条跨篇线索**：兄弟篇 `single_primitive` 的 level-zero 定理证明
+"乘法不能由单个自由单生成轨道上的单射重编码忠实读出"，并给出忠实性尚可存活的确切循环射线边界。
+要求先读该定理，判断它是否可迁移到容许窗上的有界延迟乘法：
+可迁移 ⇒ 否定的一半已有，工作是把迁移做精确并取得延迟界；
+不可迁移 ⇒ **说清为何不可** —— 单轨道与有限分辨率窗之间的失配，无论哪个方向都是那句有意思的话。明令引用而非重证。
+
+同时要求扫描 papers/publication 下所有含 zeckendorf/fibonacci/golden_mean/parry 的手稿排查重复，
+特别点出 `single_primitive` 刚在同一 fold 上拿到内在矩转移结果。
+
+**在飞（2）**：`folded_histograms`（第十八轮）、`zeckendorf_stable_arithmetic`（第十九轮，会话 `01a00ff0`）。
+两者均以**直调 codex** 方式运行（Claude 子 agent 通道仍被组织策略关闭）。
 **Oracle**：本 tick 再试仍不可达。
