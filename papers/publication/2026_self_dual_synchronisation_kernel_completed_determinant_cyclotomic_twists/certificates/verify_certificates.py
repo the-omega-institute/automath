@@ -143,10 +143,13 @@ def main():
         "main.tex",
         "sec_introduction.tex",
         "sec_preliminaries.tex",
-        "sec_kernel.tex",
+        "sec_determinant_geometry.tex",
+        "sec_cyclotomic_factors.tex",
+        "sec_endpoint_asymptotics.tex",
         "sec_conclusion.tex",
         "references.bib",
         "certificates/verify_certificates.py",
+        "artifacts/verify_ramification.py",
     ]:
         p = ROOT / rel
         if p.exists():

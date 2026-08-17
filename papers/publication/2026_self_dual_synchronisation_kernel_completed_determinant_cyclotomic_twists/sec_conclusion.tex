@@ -6,8 +6,10 @@ and cyclotomic asymptotic results for it.  The outputs are the
 determinant \(\Delta(z,u)\),
 the completed determinant \(\widehat\Delta(w,s)\), the quotient quartic,
 the genus \(6\) double cover, the generic \(S_6\) Galois group, the
-cyclic-lift factorisation, and the large-\(m\) cyclotomic Perron-root
-asymptotics through order \(m^{-12}\).  The structural lemmas on sign
+complete ramification profile of the degree-six parameter map, the
+\(S_{10}\) action on its antipodal finite branch pairs, the cyclic-lift
+factorisation, and the large-\(m\) cyclotomic Perron-root asymptotics
+through order \(m^{-12}\).  The structural lemmas on sign
 quotients and endpoint selection are used as proof devices in this
 case study, with their hypotheses verified explicitly for the displayed
 kernel.
@@ -80,8 +82,8 @@ of \Cref{prop:kernel-delta-explicit}.
 The cyclic-lift factorisation is proved in
 \Cref{prop:sync-cyclic-lift-factorisation}. The primitive real-factor
 interpretation is proved in \Cref{prop:sync-primitive-real-factor}.
-The computer-assisted parts of the paper can be reproduced from the
-Sage script
+The determinant, geometric, Galois, and endpoint certificates can be
+reproduced from the Sage script
 \[
   \texttt{certificates/verify\_certificates.py}.
 \]
@@ -89,8 +91,14 @@ Run from the paper directory with
 \[
   \texttt{sage -python certificates/verify\_certificates.py}.
 \]
-The script prints the SageMath version, Python version, SHA-256
-checksums of the paper sources and certificate script, and the symbolic
+The exact discriminant, finite-branch irreducibility, pair Galois
+certificates, and local calculations at infinity used in
+\Cref{thm:sync-completed-ramification} are reproduced independently by
+\[
+  \texttt{python artifacts/verify\_ramification.py}.
+\]
+The Sage script prints the SageMath version, Python version, SHA-256
+checksums of the paper sources and verification scripts, and the symbolic
 outputs used below. Reference runs used SageMath~10.2 and SageMath~10.7;
 the endpoint recurrence was independently cross-checked in
 Mathematica~14.0, but no Mathematica output is needed to verify the
@@ -113,6 +121,9 @@ paper.
   & interval separation and small-\(m\) branch selection\\
 (f) & \Cref{prop:sync-endpoint-jet,thm:rho-gap-m12}
   & endpoint jet through order \(6\)
+\\
+(g) & \Cref{thm:sync-completed-ramification}
+  & branch discriminant, finite-field tests, and local degrees at infinity\\
 \end{tabularx}
 \end{center}
 The displayed constants and coefficients are exact symbolic outputs from
@@ -625,6 +636,25 @@ H = 1 - s*w - 5*w^2 + 3*s*w^3 + (5 - s^2)*w^4 \
 [H.monomial_coefficient(t^n) for n in range(1, 7)]
 # solve successively for a1,...,a6, then invert 1/w to order 6
 \end{verbatim}
+
+  \item \textit{Arithmetic ramification.}\quad
+    The independent exact verifier recomputes
+    \(D(s)=\disc_w\widehat\Delta(w,s)\), applies the Rabin
+    irreducibility test modulo \(71\), checks the factor degrees of
+    \(E(x)\) modulo \(17\), \(37\), and \(1571\), and verifies
+    \(v_{1571}(\disc E)=1\). It also performs the three substitutions
+    used to normalise the fibre over infinity. Its summary is
+\begin{verbatim}
+discriminant_identity: true
+discriminant_mod_71_irreducible: true
+finite_branch_orbit_degree: 20
+pair_polynomial_galois_certificates: true
+infinity_local_degrees: 1,2,2,1
+ramification_degree: 22
+\end{verbatim}
+    Run it with \texttt{--inject-error} to perturb the constant
+    coefficient of the claimed discriminant; the first identity check
+    then fails with nonzero exit status.
 \end{enumerate}
 
 \section*{Disclosure statement}
@@ -636,9 +666,9 @@ public, commercial, or not-for-profit sectors.
 
 \section*{Data availability statement}
 No external datasets were generated or analysed in this study.  The
-SageMath verification script and the certificate transcript used to
-check the symbolic computations are included with the submission
-materials.
+SageMath certificate runner, the independent arithmetic-ramification
+verifier, and the certificate transcript used to check the symbolic
+computations are included with the submission materials.
 
 \section*{Use of generative AI}
 During manuscript preparation the authors used OpenAI ChatGPT

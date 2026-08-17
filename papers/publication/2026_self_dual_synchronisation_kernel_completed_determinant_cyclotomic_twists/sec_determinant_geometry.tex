@@ -1,0 +1,712 @@
+\section{The Completed Determinant and Cyclotomic Twists}
+\label{sec:completion-twists}
+
+\subsection*{Base field and smooth projective models}
+
+Throughout the geometric discussion we take \(k=\QQ\). Since
+irreducibility, smoothness, and genus are unchanged after extending the
+constant field to \(\overline{\QQ}\), we pass freely between \(k\) and
+\(\overline{\QQ}\) when convenient. For an affine curve
+\(C_{\mathrm{aff}}\subset\mathbb{A}^2_k\) defined by an irreducible
+polynomial equation, we write \(\overline{X}\) (resp.\ \(\overline{Y}\))
+for the smooth projective curve whose function field is
+\(k(C_{\mathrm{aff}})\) (resp.\ its degree-two subfield under the
+relevant involution). All genus and Hurwitz statements are made for
+these complete nonsingular models.
+
+\subsection{The unweighted spectrum}
+
+\begin{proposition}[Explicit determinant]\label{prop:kernel-delta-explicit}
+One has
+\[
+  \Delta(z,u)
+  =1-(1+u)z-5uz^2+3u(1+u)z^3-u(u^2-3u+1)z^4
+\]
+\[
+  \qquad
+  +u(u^3-3u^2-3u+1)z^5+u^2(u^2+u+1)z^6.
+\]
+\end{proposition}
+
+\begin{proof}
+A symbolic determinant computation from the explicit \(10\times 10\)
+matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula;
+the displayed polynomial is the exact certificate used in the sequel,
+and the command block producing it is recorded in
+\Cref{sec:appendix-computation}\,\textup{(a)}.
+As a consistency check, the closed form satisfies the self-duality
+identity of \Cref{prop:sync-self-duality}; in particular, comparing
+\(\Delta(z,u)\) with \(\Delta(uz,u^{-1})\) pairs the coefficients of
+\(z^k u^\ell\) and \(z^k u^{k-\ell}\) exactly as required.
+\end{proof}
+
+Although \(B(u)\) is a \(10\times 10\) matrix, the determinant has
+degree \(6\) in \(z\) because four rows are redundant for every \(u\):
+rows \(5,6,8,10\) are \(u\)-multiples of rows \(1,2,7,9\),
+respectively. Hence \(\operatorname{rank} B(u)\le 6\), so \(0\) is a
+persistent eigenvalue of multiplicity at least four.
+
+\begin{proposition}[Untwisted Perron root and residue constant]
+  \label{prop:sync-kernel-spectrum}
+  The matrix \(B=B(1)\) is primitive and every row of \(B\) has sum
+  \(3\). Consequently the spectral radius is determined before any
+  characteristic-polynomial factorisation is used:
+  \[
+    B\mathbf 1=3\mathbf 1,\qquad
+    \|B\|_\infty=\max_i\sum_j |B_{ij}|=3,\qquad
+    \rho(B)\le \|B\|_\infty,
+  \]
+  so \(\rho(B)=3\), and the Perron eigenvalue \(3\) is simple and is
+  the unique eigenvalue of modulus \(3\).
+  In addition,
+  \[
+    \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+  \]
+  The Perron residue constant \(C_B\) of
+  \Cref{def:perron-residue-constant} is
+  \[
+    C_B=\frac{243}{272}.
+  \]
+\end{proposition}
+
+\begin{proof}
+Every state reaches \(\st{000}\) in at most three steps by the paths
+listed in \Cref{def:sync-kernel}. Conversely, the transition table gives
+explicit paths from \(\st{000}\) to the other states:
+\[
+  \st{000}\to\st{001},\qquad
+  \st{000}\to\st{002},\qquad
+  \st{000}\to\st{001}\to\st{010},
+\]
+\[
+  \st{000}\to\st{001}\to\st{100},\qquad
+  \st{000}\to\st{001}\to\st{101},\qquad
+  \st{000}\to\st{002}\to\st{11-1},
+\]
+\[
+  \st{000}\to\st{001}\to\st{010}\to\st{0-12},\qquad
+  \st{000}\to\st{001}\to\st{010}\to\st{0-12}\to\st{01-1},
+\]
+\[
+  \st{000}\to\st{002}\to\st{11-1}\to\st{1-12}.
+\]
+Thus the digraph of \(B\) is strongly connected. Since there is also the
+self-loop \(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
+
+We next determine the spectral radius directly from the non-negative
+matrix \(B\), before using any determinant factorisation. Inspecting the
+transition table at \(u=1\), every row of \(B=B(1)\) has sum \(3\).
+Therefore
+\[
+  B\mathbf 1=3\mathbf 1,\qquad
+  \|B\|_\infty=\max_i\sum_j |B_{ij}|=\max_i\sum_j B_{ij}=3,
+  \qquad
+  \rho(B)\le\|B\|_\infty.
+\]
+The first equality exhibits \(3\) as an eigenvalue. The inequality
+follows from the \(\ell^\infty\)-operator norm, or equivalently from
+\Cref{lem:row-sum-perron-bound}, and shows that no eigenvalue of \(B\)
+can have modulus greater than \(3\). Hence \(3\le\rho(B)\le3\), so
+\(\rho(B)=3\). Since \(B\) is primitive, the Perron--Frobenius theorem
+gives that this eigenvalue is simple and that no other eigenvalue lies
+on \(\abs{\lambda}=3\).
+
+The determinant is used only after this Perron conclusion has been
+proved, and only for the displayed factorisation and residue. Setting
+\(u=1\) in
+\Cref{prop:kernel-delta-explicit} gives
+\[
+  \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
+\]
+This factorisation is deliberately not used to prove the spectral
+radius. In the variable \(z\), the cubic factor \(z^3-z^2+z+1\) has a
+zero with \(\abs{z}<1\), so the false reciprocal-root argument would not
+distinguish \(3z-1\) from all other factors. The Perron conclusion above
+comes only from \(B\mathbf1=3\mathbf1\), the row-sum norm bound
+\(\rho(B)\le\|B\|_\infty=3\), and primitivity. The factorisation is used
+here solely for the residue computation
+\[
+  \begin{aligned}
+  C_B
+  &=\lim_{z\to1/3}
+    \frac{1-3z}{(z-1)(z+1)(3z-1)(z^3-z^2+z+1)}  \\
+  &=-\frac{1}{(-2/3)(4/3)(34/27)}
+    =\frac{243}{272}.
+  \end{aligned}
+\]
+This proves part~\textup{(i)} of
+\Cref{thm:intro-kernel-geometry}.
+\end{proof}
+
+
+Together with \Cref{lem:primitive-orbit-asymptotic}, this yields
+\[
+  p_n(B)=\frac{3^n}{n}
+  +O\!\left(\frac{\max\{\Lambda(B)^n,3^{n/2}\}}{n}\right).
+\]
+
+
+\subsection{Completion and algebraic geometry}
+
+Introducing
+\[
+  u=r^2,\qquad s=r+r^{-1},\qquad w=zr,
+\]
+the self-duality of \(\Delta(z,u)\) implies that
+\(\Delta(w/r,r^2)\) is a polynomial in \(w\) and \(s\), which we denote
+by \(\widehat\Delta(w,s)\).
+
+\begin{proposition}[Explicit completed determinant]
+  \label{prop:sync-hatdelta-completion}
+  The completed determinant is
+  \[
+    \widehat\Delta(w,s)
+    =1-sw-5w^2+3sw^3+(5-s^2)w^4+(s^3-6s)w^5+(s^2-1)w^6.
+  \]
+  It satisfies
+  \[
+    \widehat\Delta(w,-s)=\widehat\Delta(-w,s).
+  \]
+\end{proposition}
+
+\begin{proof}
+Substitute \(u=r^2\) and \(z=w/r\) into the explicit formula of
+\Cref{prop:kernel-delta-explicit}. Terms in \(r\) and \(r^{-1}\)
+combine to give a polynomial in \(s=r+r^{-1}\), and a direct expansion
+produces the displayed formula. This displayed formula, together with
+the parity identity below it, is the certificate used in the geometric
+and cyclotomic arguments; the command block producing it is
+recorded in \Cref{sec:appendix-computation}\,\textup{(b)}. The parity
+relation is immediate. This proves part~\textup{(ii)} of
+\Cref{thm:intro-kernel-geometry}.
+\end{proof}
+
+\begin{remark}
+The phrase ``completed determinant'' is non-standard. In this note it
+simply denotes the polynomial obtained by rewriting \(\Delta(w/r,r^2)\)
+in the self-dual invariants \(w\) and \(s=r+r^{-1}\).
+\end{remark}
+
+
+
+\begin{proposition}[Generic Galois group]
+  \label{prop:sync-hatdelta-galois-s6-generic}
+  Viewed as a polynomial in \(w\), the completed determinant
+  \(\widehat\Delta(w,s)\) has generic Galois group \(S_6\) over
+  \(\QQ(s)\).
+\end{proposition}
+
+\begin{proof}
+
+Let \(G\le S_6\) be the generic Galois group of
+\(\widehat\Delta(w,s)\) over \(\QQ(s)\). We identify \(G\) in four
+steps.
+
+\medskip
+\noindent\textit{Step 1 (discriminant, \(G\not\subset A_6\)).}\quad
+Write \(D(s):=\disc_w\widehat\Delta(w,s)\in\QQ[s]\). The explicit
+SageMath computation recorded in
+\Cref{sec:appendix-computation}\,(d) prints the output
+\((20,-256)\) for \((\deg D,\operatorname{lc}D)\), so \(D(s)\) has
+degree~\(20\) with leading coefficient~\(-256\).
+This metadata is already a nonsquare certificate. Indeed, if a
+polynomial \(D\in\QQ[s]\) is a square in \(\QQ(s)\), write
+\(D=(A/B)^2\) with coprime \(A,B\in\QQ[s]\). Then
+\(A^2=DB^2\), so every irreducible divisor of \(B\) divides \(A\);
+hence \(B\) is constant and \(D\) is a square in \(\QQ[s]\). Its
+leading coefficient is therefore a square in \(\QQ^\times\), in
+particular positive. The leading coefficient \(-256\) rules this out.
+Since the discriminant of \(\widehat\Delta(w,s)\) as a polynomial in
+\(w\) changes sign under odd permutations,
+\(D(s)\notin \QQ(s)^2\) implies \(G\not\subset A_6\).
+
+\medskip
+\noindent\textit{Step 2 (specialisation input).}\quad
+We use the following standard fact: if \(s_0\in\QQ\) is such that
+\(\widehat\Delta(w,s_0)\) is separable over \(\QQ\) (equivalently,
+\(D(s_0)\neq 0\)), then the Galois group \(G_{s_0}\) of
+\(\widehat\Delta(w,s_0)\) over \(\QQ\) embeds into \(G\); see the
+specialisation theorem in \cite[\S 4.4, Proposition~1]{Serre2008Topics}.
+The condition \(D(s_0)\neq 0\) is
+verified at each chosen \(s_0\) by computing
+\(\gcd(\widehat\Delta(w,s_0),\partial_w\widehat\Delta(w,s_0))\bmod p\)
+for a convenient prime \(p\).
+
+To read off cycle types inside \(G_{s_0}\), we apply Dedekind's
+theorem in its localized form. Namely, let
+\(f(w)\in\ZZ[w]\) have degree \(n\), and let \(p\) be a prime
+which divides neither the leading coefficient of \(f\) nor
+\(\disc(f)\). Then \(f\) has degree \(n\) after reduction modulo
+\(p\), and multiplying its reduction by the inverse of the reduced
+leading coefficient gives a monic polynomial with the same irreducible
+factor degrees. If this reduction factors as
+\(f_1\cdots f_r\) with the \(f_i\) distinct and irreducible over
+\(\mathbb{F}_p\), then the Frobenius at \(p\) in \(\Gal(f/\QQ)\)
+has cycle type \((\deg f_1,\dots,\deg f_r)\). This is the usual
+Dedekind theorem \cite[I, \S{}6, Proposition~25]{Serre1979}, applied
+over \(\ZZ_{(p)}\), in the Frobenius form used in
+\cite[\S{}4.3]{Serre2008Topics}. The exact mod-\(p\) factorisation
+data are recorded in \Cref{sec:appendix-computation}\,(d).
+
+\medskip
+\noindent\textit{Step 3 (three Frobenius specialisations).}
+
+\smallskip
+\noindent\textit{Transitivity (\(s=3\), mod \(7\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod 7\),
+so \(D(3)\neq 0\) and the specialisation is separable.
+Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod7\),
+so the nonmonic normalization above is legitimate.
+Modulo \(7\),
+\[
+  \widehat\Delta(w,3)
+  \equiv w^6+2w^5+3w^4+2w^3+2w^2+4w+1\pmod 7,
+\]
+which is irreducible over \(\mathbb{F}_7\). Hence the Frobenius at \(7\)
+in \(G_3\subset G\) is a \(6\)-cycle, so \(G\) acts transitively
+on the six roots.
+
+\smallskip
+\noindent\textit{Transposition (\(s=2\), mod \(7\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,2),\partial_w\widehat\Delta(w,2))\equiv 1\pmod 7\),
+so \(D(2)\neq 0\). Here
+\(\operatorname{lc}_w\widehat\Delta(w,2)=3\not\equiv0\pmod7\).
+Modulo \(7\),
+\[
+\begin{aligned}
+  \widehat\Delta(w,2)
+  &\equiv (w+6)(w+5)(w+2)(w+1) \\
+  &\qquad\cdot(3w^2+3w+2)\pmod 7,
+\end{aligned}
+\]
+The quadratic factor \(3w^2+3w+2\) is irreducible over
+\(\mathbb{F}_7\). Thus the factorisation type is
+\((1)(1)(1)(1)(2)\), so the Frobenius at \(7\) in \(G_2\subset G\) is a
+transposition. Hence \(G\) contains a transposition.
+
+\smallskip
+\noindent\textit{5-cycle (\(s=3\), mod \(19\)).}\quad
+One checks that
+\(\gcd(\widehat\Delta(w,3),\partial_w\widehat\Delta(w,3))\equiv 1\pmod{19}\).
+This squarefree reduction is exactly the separability witness:
+equivalently \(19\nmid D(3)\), so Dedekind's theorem applies to this
+factorisation.
+Here \(\operatorname{lc}_w\widehat\Delta(w,3)=8\not\equiv0\pmod{19}\).
+Modulo \(19\),
+\[
+  \widehat\Delta(w,3)
+  \equiv (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
+\]
+with the quintic factor irreducible over \(\mathbb{F}_{19}\). The
+factorisation type is \((1)(5)\), so the Frobenius at \(19\) in
+\(G_3\subset G\) is a \(5\)-cycle. Hence \(G\) contains a
+\(5\)-cycle.
+
+\medskip
+\noindent\textit{Step 4 (subgroup classification).}\quad
+We now have: \(G\le S_6\) is transitive, contains a transposition, and
+contains a \(5\)-cycle. A transitive subgroup of \(S_6\) that contains
+a \(5\)-cycle is primitive. Indeed, a non-trivial block system on six
+points has either \(2\) or \(3\) blocks. Let \(\sigma\in G\) be a
+\(5\)-cycle. The induced action of \(\sigma\) on such a block system
+has order dividing both \(5\) and the order of a permutation group on
+\(2\) or \(3\) points; hence the induced action is trivial. Therefore
+each block is fixed setwise by \(\sigma\). Any block meeting the support
+of the \(5\)-cycle must then contain the whole five-point support,
+which is impossible for block size \(3\) or \(2\). Thus no non-trivial
+block system exists, so \(G\) is primitive
+\cite[Ch.~3, \S{}3.3]{Dixon1996}.
+A primitive subgroup of \(S_6\) containing a transposition is the full
+symmetric group \cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence \(G=S_6\),
+completing part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
+
+\end{proof}
+
+\begin{corollary}\label{lem:hatdelta-irreducible}
+The polynomial \(\widehat\Delta(w,s)\) is irreducible in \(\QQ[w,s]\).
+\end{corollary}
+
+\begin{proof}
+Since \(\Gal(\widehat\Delta/\QQ(s))=S_6\), the action on the six roots is
+transitive, so \(\widehat\Delta(w,s)\) is irreducible over \(\QQ(s)\).
+Gauss's lemma then implies irreducibility in \(\QQ[w,s]\).
+\end{proof}
+We first construct the quotient curve \(\overline{Y}\) and establish its
+smoothness; then we record the integrality of \(C_{\mathrm{aff}}\) and
+the non-squareness of \(x\) in \(k(\overline{Y})\), which together
+justify the definition of \(\overline{X}\) as a well-defined smooth
+projective curve.
+
+\begin{proposition}[The quotient is a smooth plane quartic]
+  \label{prop:sync-hatdelta-quotient}
+  The invariants
+  \[
+    x:=w^2,\qquad y:=sw
+  \]
+  identify the sign quotient birationally with the projective closure of
+  the affine curve
+  \[
+    F(x,y):=
+    1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3=0.
+  \]
+  This projective closure is smooth; consequently it is the smooth
+  projective model \(\overline{Y}\), and
+  \[
+    g(\overline{Y})=3.
+  \]
+\end{proposition}
+
+\begin{proof}
+
+By \Cref{lem:self-dual-compression}, the coefficient of \(w^j\) in
+\(\widehat\Delta(w,s)\) has degree at most \(j\) in \(s\) and the
+parity of \(j\). Hence
+\Cref{thm:sign-quotient-plane-genus} applies to the involution
+\(\iota:(w,s)\mapsto(-w,-s)\): the invariants
+\[
+  x=w^2,\qquad y=sw
+\]
+identify the invariant function field birationally, and the theorem
+gives a unique polynomial \(F(x,y)\in\QQ[x,y]\) with
+\(\widehat\Delta(w,s)=F(w^2,sw)\).
+A direct substitution gives the displayed formula for \(F\). Since
+\(\widehat\Delta(0,s)=1\), the constant coefficient hypothesis
+\(c_0\ne0\) in \Cref{thm:sign-quotient-plane-genus} is satisfied; hence
+the quotient function field is the function field of \(F=0\). Thus
+\(\overline{Y}\) is birational to the projective closure of the affine
+quartic \(\{F=0\}\).
+After the smoothness check below, this closure is the smooth projective
+model \(\overline{Y}\).
+
+We verify that this projective closure is smooth. Homogenizing
+\(F(x,y)\) to degree \(4\) in projective coordinates \([X:Y:Z]\) gives
+\[
+\begin{aligned}
+  F_h(X,Y,Z)
+  &= Z^4 - YZ^3 - 5XZ^3 + 3XYZ^2 + 5X^2Z^2 - XY^2Z \\
+  &\quad + XY^3 - 6X^2YZ + X^2Y^2 - X^3Z .
+\end{aligned}
+\]
+On the affine chart \(Z=1\),
+\[
+  \partial_x F
+  =-5+3y+10x-y^2+y^3-12xy+2xy^2-3x^2,
+\]
+\[
+  \partial_y F
+  =-1+3x-2xy+3xy^2-6x^2+2x^2y.
+\]
+A Gr\"obner-basis computation of the ideal
+\(\langle F,\,\partial_x F,\,\partial_y F\rangle\subset\QQ[x,y]\)
+gives \(\langle 1\rangle\), so there is no affine singular point.
+
+The line at infinity \(Z=0\) meets the quartic where the leading form
+\(XY^2(X+Y)=0\), giving the three points
+\[
+  [0:1:0],\qquad [1:0:0],\qquad [1:-1:0].
+\]
+At \([0:1:0]\) (chart \(Y=1\)): one computes
+\[
+\begin{aligned}
+  \partial_X F_h\big|_{(0,1,0)}
+  &=
+  \bigl[-5Z^3+3YZ^2+10XZ^2-Y^2Z+Y^3 \\
+  &\qquad -12XYZ+2XY^2-3X^2Z\bigr]_{(0,1,0)}
+  = 1\neq 0 .
+\end{aligned}
+\]
+At the other two points at infinity,
+\[
+  \partial_Z F_h\big|_{(1,0,0)}=-1\neq 0,
+  \qquad
+  \partial_Z F_h\big|_{(1,-1,0)}=4\neq 0 .
+\]
+
+Hence the projective curve is smooth everywhere, so
+\Cref{thm:sign-quotient-plane-genus}, with \(n=4\), identifies this
+nonsingular quartic as the smooth projective quotient model and gives
+\[
+  g(\overline{Y})=(4-1)(4-2)/2=3.
+\]
+
+\end{proof}
+
+\begin{lemma}[Integrality and function-field setup]
+  \label{lem:integral-function-field}
+  Let \(k=\QQ\) and let \(\overline{Y}\) be the smooth projective quartic
+  of \Cref{prop:sync-hatdelta-quotient}. Then:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The affine curve \(C_{\mathrm{aff}}:=\{\widehat\Delta(w,s)=0\}
+          \subset\mathbb{A}^2_k\) is integral.
+    \item The element \(x=w^2\in k(\overline{Y})\) is not a square
+          in \(k(\overline{Y})\).
+    \item The extension \(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\)
+          has degree exactly two, and its function field is \(k(C_{\mathrm{aff}})\).
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+
+Part~(i): \(\widehat\Delta(w,s)\) is irreducible in \(\QQ[w,s]\) by
+\Cref{lem:hatdelta-irreducible}, so its zero locus is an irreducible
+variety. Since \(\widehat\Delta\) is prime in the UFD \(\QQ[w,s]\), the
+coordinate ring \(\QQ[w,s]/(\widehat\Delta)\) is a domain, so the
+variety is also reduced. Hence \(C_{\mathrm{aff}}\) is integral.
+
+Part~(ii): From \Cref{prop:sync-hatdelta-quotient}, the affine quartic
+satisfies \(F(0,y)=1-y\), so \(x=0\) meets \(\overline{Y}\) only at
+the point \(P=(0,1)\), with \(\partial_y F(0,1)=-1\neq 0\), giving
+\(\operatorname{ord}_P(x)=1\). A square in \(k(\overline{Y})\) would
+have even valuation at every place; the odd order at \(P\) shows
+\(x\notin k(\overline{Y})^2\).
+
+Part~(iii): Since \(x\notin k(\overline{Y})^2\), the extension
+\(k(\overline{Y})(\sqrt{x})/k(\overline{Y})\) has degree two. The
+identifications \(w=\sqrt{x}\) and \(s=y/\sqrt{x}\) show that this
+extension is the function field of \(C_{\mathrm{aff}}\).
+
+\end{proof}
+
+\begin{proposition}[Two-sheeted cover of genus six]
+  \label{prop:sync-hatdelta-double-cover}
+  The covering map \(\overline{X}\to\overline{Y}\) is a degree-two map
+  branched at exactly two points of \(\overline{Y}\). Hence
+  \[
+    g(\overline{X})=6.
+  \]
+\end{proposition}
+
+\begin{proof}
+
+By \Cref{lem:integral-function-field}, the extension of function fields
+\[
+  k(\overline{X})/k(\overline{Y})
+\]
+is obtained by adjoining \(\sqrt{x}\), and it has degree exactly two.
+
+We use the standard criterion for ramification in quadratic extensions
+of function fields: let \(K\) be a function field of characteristic
+\(\neq 2\), and let \(L=K(\sqrt{f}\,)\) with \(f\in K^\times\) not a
+square. Then a place \(P\) of \(K\) ramifies in \(L/K\) if and only if
+\(\operatorname{ord}_P(f)\) is odd; see \cite[III.7.3]{Stichtenoth2009}.
+Here \(f=x\), and we determine the divisor of \(x\) on \(\overline{Y}\).
+
+On the affine chart, \(F(0,y)=1-y\), so the only affine point with
+\(x=0\) is \(P=(0,1)\). Since \(\partial_y F(0,1)=-1\neq 0\), the line
+\(x=0\) meets \(\overline{Y}\) transversely there, and therefore
+\[
+  \operatorname{ord}_P(x)=1.
+\]
+
+For the points at infinity, work on the chart \(X=1\) with
+\(y=Y/X\) and \(z=Z/X\). The equation becomes
+\[
+  G(y,z)=z^4-yz^3-5z^3+3yz^2+5z^2-y^2z+y^3-6yz+y^2-z.
+\]
+At \(Q_0=[1:0:0]\), one has \(\partial_z G(0,0)=-1\), so \(z\) is an
+analytic function of \(y\), and solving \(G(y,z)=0\) gives
+\[
+  z=y^2-5y^3+O(y^4).
+\]
+Hence \(x=X/Z=1/z\) has pole order \(2\) at \(Q_0\), so
+\[
+  \operatorname{ord}_{Q_0}(x)=-2.
+\]
+At
+\(Q_\infty=[1:-1:0]\), writing \(y=-1+t\) gives
+\[
+  G(-1+t,z)=t-2t^2+t^3+4z-4tz-t^2z
+  +2z^2+3tz^2-4z^3-tz^3+z^4,
+\]
+so \(\partial_z G(-1,0)=4\neq 0\), and
+\[
+  z=-\frac14t+\frac{7}{32}t^2+O(t^3).
+\]
+Thus \(x=1/z\) has a simple pole at \(Q_\infty\), so
+\[
+  \operatorname{ord}_{Q_\infty}(x)=-1.
+\]
+
+At the remaining point \(Q_1=[0:1:0]\), use the chart \(Y=1\) with
+\(u=X/Y\) and \(v=Z/Y\). The homogenised equation begins as
+\[
+  u-v^3+O(uv,v^4,u^2)=0,
+\]
+so \(u=v^3+O(v^4)\), and therefore \(x=X/Z=u/v\) has a zero of order
+\(2\) at \(Q_1\), so
+\[
+  \operatorname{ord}_{Q_1}(x)=2.
+\]
+
+Thus
+\[
+  \operatorname{div}(x)=P+2Q_1-2Q_0-Q_\infty.
+\]
+The odd valuations occur exactly at \(P\) and \(Q_\infty\). By the
+quadratic ramification criterion, these are exactly the two ramified
+places of \(k(\overline{X})/k(\overline{Y})\), and each contributes one
+simple branch point. The Riemann--Hurwitz genus formula
+\cite[III.4.12]{Stichtenoth2009} then gives
+\[
+  2g(\overline{X})-2=2(2g(\overline{Y})-2)+2=2(2\cdot 3-2)+2,
+\]
+hence \(g(\overline{X})=6\).
+
+\end{proof}
+
+\begin{theorem}[Arithmetic ramification of the completed cover]
+  \label{thm:sync-completed-ramification}
+  Let
+  \[
+    \pi_s:\overline X\longrightarrow\mathbb P^1_s
+  \]
+  be the morphism induced by the completed parameter. Then \(\pi_s\)
+  has degree \(6\). It has twenty finite branch values, with one simple
+  ramification point over each, and two simple ramification points over
+  \(s=\infty\). Thus the finite inertia type is
+  \((2,1,1,1,1)\), the inertia type at infinity is
+  \((2,2,1,1)\), and the ramification divisor has degree \(22\).
+
+  The finite branch values are the roots of the irreducible polynomial
+  \[
+  \begin{aligned}
+    D(s)={}&-256s^{20}+3712s^{18}-40320s^{16}+389241s^{14}
+      -3214252s^{12}\\
+    &+13200192s^{10}-20821228s^8+708704s^6
+      +20467008s^4\\
+    &-10514432s^2+147456.
+  \end{aligned}
+  \]
+  Consequently they form a single
+  \(\operatorname{Gal}(\overline{\mathbb Q}/\mathbb Q)\)-orbit. If
+  \(D(s)=E(s^2)\), then
+  \[
+    \operatorname{Gal}(E/\mathbb Q)\cong S_{10};
+  \]
+  equivalently, the Galois action induced on the ten antipodal pairs of
+  finite branch values is the full symmetric group.
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:hatdelta-irreducible}, the function-field extension defined
+by \(\widehat\Delta(w,s)\) has degree \(6\) over \(\mathbb Q(s)\), so
+\(\deg\pi_s=6\). Direct elimination gives
+\[
+  \disc_w\widehat\Delta(w,s)=D(s)
+\]
+with \(D\) as displayed. This equality and all finite-field calculations
+below are reproduced by the exact verifier
+\[
+  \texttt{python artifacts/verify\_ramification.py}.
+\]
+
+The reduction of \(D\) modulo \(71\) is
+\[
+\begin{aligned}
+  28s^{20}+20s^{18}+8s^{16}+19s^{14}-11s^{12}+14s^{10}
+  +19s^8\\
+  {}-18s^6-20s^4+29s^2-11.
+\end{aligned}
+\]
+It is irreducible in \(\mathbb F_{71}[s]\). Explicitly, modular
+exponentiation gives
+\[
+  s^{71^{20}}\equiv s\pmod D,
+\]
+and
+\[
+  \gcd(s^{71^{10}}-s,D)=\gcd(s^{71^4}-s,D)=1
+  \quad\text{in }\mathbb F_{71}[s].
+\]
+These are the irreducibility tests corresponding to the prime divisors
+\(2\) and \(5\) of \(20\). Gauss's lemma therefore shows that \(D\) is
+irreducible over \(\mathbb Q\), and hence squarefree. Moreover,
+\(D(1)=D(-1)=325825\), so no root of \(D\) is a zero of the leading
+coefficient \(s^2-1\) of \(\widehat\Delta\) in \(w\).
+
+It follows from the discriminant criterion in characteristic zero that
+each root of \(D\) has precisely one simple ramification point above it.
+The only finite parameters at which a root can leave the affine
+\(w\)-chart are \(s=\varepsilon\), where \(\varepsilon\in\{1,-1\}\).
+With \(v=1/w\), put
+\[
+\begin{aligned}
+  V(v,s):={}&v^6\widehat\Delta(v^{-1},s)\\
+  ={}&v^6-sv^5-5v^4+3sv^3+(5-s^2)v^2
+       +(s^3-6s)v+(s^2-1).
+\end{aligned}
+\]
+At \((v,s)=(0,\varepsilon)\), one has
+\(\partial_vV=-5\varepsilon\ne0\). Hence \(s-\varepsilon\) is a
+uniformizer on the corresponding branch, and these two points are
+unramified.
+
+It remains to analyse the fibre over infinity. Set \(t=1/s\) and
+\[
+\begin{aligned}
+ K(w,t):={}&t^3\widehat\Delta(w,t^{-1})\\
+ ={}&t^3-wt^2-5w^2t^3+3w^3t^2+5w^4t^3-tw^4+w^5\\
+    &\quad-6t^2w^5+tw^6-t^3w^6.
+\end{aligned}
+\]
+The substitution \(w=ta\), followed by division by \(t^3\), has
+special fibre \(1-a\). The implicit function theorem therefore gives
+one unramified branch with \(w/t\to1\). For the remaining branches at
+\((w,t)=(0,0)\), substitute \(t=vw^2\) and divide by \(w^5\). The
+special fibre is
+\[
+  1-v^2.
+\]
+Its two simple roots \(v=1\) and \(v=-1\) give two branches
+\[
+  t=v_\pm(w)w^2,
+  \qquad v_\pm(0)=\pm1,
+\]
+each with ramification index \(2\). Finally, for the branch with
+\(w=\infty\), put \(q=1/w\). Then
+\[
+\begin{aligned}
+ q^6K(q^{-1},t)
+ ={}&t^3q^6-t^2q^5-5t^3q^4+3t^2q^3+5t^3q^2-tq^2\\
+    &\quad+q-6t^2q+t-t^3,
+\end{aligned}
+\]
+whose linear part at \((q,t)=(0,0)\) is \(q+t\). This is one further
+unramified branch. The local degrees \(1,2,2,1\) sum to \(6\), so the
+list is exhaustive. Thus infinity has inertia type \((2,2,1,1)\), and
+the total ramification degree is \(20+2=22\).
+
+For the final assertion, write
+\[
+\begin{aligned}
+ E(x)={}&-256x^{10}+3712x^9-40320x^8+389241x^7-3214252x^6\\
+ &+13200192x^5-20821228x^4+708704x^3+20467008x^2\\
+ &-10514432x+147456.
+\end{aligned}
+\]
+Modulo \(37\), this polynomial is irreducible, so its Galois group
+contains a \(10\)-cycle. Modulo \(17\), it has squarefree factorisation
+type \((1,9)\), so the group contains a \(9\)-cycle. Finally,
+\[
+  v_{1571}(\disc E)=1,
+\]
+and modulo \(1571\) its factorisation type, with multiplicities, is
+\((1^2,2,6)\). The tame inertia group at \(1571\) therefore contains a
+transposition.
+
+The transitive group obtained from the irreducible reduction modulo
+\(37\) is primitive. Indeed, a nontrivial block system on ten points
+has blocks of size \(2\) or \(5\). A \(9\)-cycle cannot preserve two
+blocks of size \(5\). If it permutes five blocks of size \(2\), then
+its cube fixes every block and is a product of three \(3\)-cycles,
+which is also impossible for blocks of size \(2\). A primitive subgroup
+of \(S_{10}\) containing a transposition is \(S_{10}\)
+\cite[Ch.~3, Theorem~3.3A]{Dixon1996}. Hence
+\(\operatorname{Gal}(E/\mathbb Q)=S_{10}\), as claimed.
+\end{proof}
+
+
+
+
