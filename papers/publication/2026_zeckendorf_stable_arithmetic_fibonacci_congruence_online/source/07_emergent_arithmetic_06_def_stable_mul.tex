@@ -93,6 +93,55 @@ modulo \(M_m\). A counter \(q\in\{0,1,\dots,m\}\) may be included in the finite 
 as the terminal output map \(\Omega_m\) of Definition \ref{def:fixed-resolution-output-machine}. Thus the machine emits the synchronized length-\(m\) word \(Z_m(rs\bmod M_m)\) only after the full residue has been accumulated. By Definition \ref{def:finite-resolution-arithmetic}, this output is precisely \(c\boxtimes_m d\). All state sets and lookup tables are finite because \(m\) is fixed.
 \end{proof}
 
+\begin{theorem}[Linear lower bound for most-significant-digit-first multiplication delay]\label{thm:mul-delay-linear-lower-bound}
+Use the most-significant-digit-first delay convention of Theorem~\ref{thm:zeckendorf-add-fst}. Let a multiplier at effective resolution $n$ read padded synchronous inputs
+\[
+(c_L,d_L),(c_{L-1},d_{L-1}),\ldots,(c_1,d_1),
+\qquad L\ge n+2,
+\]
+with $c,d\in X_n$ extended by zeros, and suppose that after the input position $i$ has been read every output coordinate at position at least $i+\delta_n$ is irrevocably determined. If the machine computes the stable product $c\otimes d$ for every pair in $X_n\times X_n$, then, for every $n\ge3$,
+\[
+\delta_n\ge n-1.
+\]
+Consequently no single transducer with a delay bound independent of the resolution can compute stable multiplication on $X_\infty$ in this scan direction.
+\end{theorem}
+
+\begin{proof}
+Fix $n\ge3$ and consider the admissible words
+\[
+c=Z(F_{n+1}),\qquad c'=Z(F_{n+1}+1),\qquad d=Z(F_{n+1}).
+\]
+Thus $c$ and $d$ have their sole nonzero digit at position $n$, while $c'$ has digits $1$ at positions $n$ and $1$; the latter is admissible because $n\ge3$. The two synchronous input streams for $(c,d)$ and $(c',d)$ agree at every position from $L$ down through $2$ and differ only at position $1$. Hence, after position $2$ has been read, a delay-$\delta_n$ machine must have produced the same output coordinates at all positions
+\[
+k\ge 2+\delta_n
+\]
+for the two inputs.
+
+Put $M_n:=F_{n+2}$. The finite-resolution output is the least-residue fold, so, writing $u:=c\otimes d$ and $u':=c'\otimes d$ for the two output words,
+\[
+\operatorname{Val}(u)=F_{n+1}^2\bmod M_n,
+\qquad
+\operatorname{Val}(u')=(F_{n+1}+1)F_{n+1}\bmod M_n,
+\]
+where each residue is represented in $\{0,\ldots,M_n-1\}$. Cassini's identity in the form
+\[
+F_{n+1}^2-F_nF_{n+2}=(-1)^n
+\]
+therefore gives
+\[
+(\operatorname{Val}(u),\operatorname{Val}(u'))=
+\begin{cases}
+(1,F_{n+1}+1),&n\text{ even},\\
+(M_n-1,F_{n+1}-1),&n\text{ odd}.
+\end{cases}
+\]
+Thus the represented value difference is $+F_{n+1}$ for even $n$ and $-F_n$ for odd $n$; it is not the difference of the unreduced products. We instead compare the output digits. If $n$ is even, then $n\ge4$, and $F_{n+1}+1=F_{n+1}+F_2$ has the admissible representation with digits at positions $n$ and $1$, whereas $1$ has only the position-$1$ digit. If $n$ is odd, then $u$ has digit $1$ at position $n$, because $M_n-1>F_{n+1}-1$, the maximum value using positions at most $n-1$ by Lemma~\ref{lem:finite-window-max}; while $u'$ has digit $0$ at position $n$, since $F_{n+1}-1<F_{n+1}$. Both outputs lie in $X_n$, so their highest differing digit position is exactly $n$ in either parity.
+
+If the two admissible output words agree at every position $k\ge2+\delta_n$, then their digit at position $n$ agrees whenever $\delta_n\le n-2$. The preceding paragraph gives the opposite, so $\delta_n\ge n-1$.
+
+The lower bound diverges with $n$, so a resolution-independent bounded-delay transducer cannot compute stable multiplication.
+\end{proof}
+
 \begin{theorem}[Definitional isomorphism for multiplication]\label{thm:mul-definitional}
 \((X_\infty,\oplus,\otimes)\) is a commutative semiring, and \(\mathrm{Val}\) is a semiring isomorphism from \((X_\infty,\oplus,\otimes)\) onto \((\NN,+,\times)\).
 \leanverified{paper\_stable\_commutative\_ring}
