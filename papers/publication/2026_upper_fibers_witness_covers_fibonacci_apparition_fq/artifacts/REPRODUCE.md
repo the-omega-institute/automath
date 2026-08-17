@@ -12,6 +12,7 @@ The reproducibility reports cover only claims retained in the submission:
 - direct and structural constructions of `B_n` and `M_n` through `n = 60`;
 - exact-rank prime counts and weighted rank-pure products through `n = 210`;
 - the squarefree-sector equality and the strict ladder example at `n = 91`;
+- the exact criterion for whether the entire minimal fiber is squarefree;
 - labelled minimal-cover counts and the fixed-total-weight comparison;
 - the finite lower and upper support bounds involving `R(n)`;
 - the table values through `n = 30`.
@@ -31,9 +32,11 @@ any proof or establish distributional control of `R(n)`.
   witness, and support-bound computations.
 - `../scripts/test_verify_deepening_delta.py` tests that independent route.
 - `../scripts/verify_squarefree_slice.py` independently enumerates weighted
-  covers and squarefree minimal generators.
+  covers and squarefree minimal generators, and compares the squarefree-fiber
+  criterion with direct enumeration.
 - `../scripts/test_verify_squarefree_slice.py` tests the squarefree equality
-  and the sharp fixed-total-weight bound.
+  and the sharp fixed-total-weight bound, including a deliberately mutated
+  criterion that the verifier must reject.
 - `fibonacci_factorizations_2_210.tsv` stores the exact factorizations used.
 - `birth_layer_table_output.txt`, `finite_verification.txt`,
   `deepening_delta_verification.txt`, and
@@ -73,7 +76,8 @@ rank-pure products. Every layer in this range has at most four prime
 coordinates. The squarefree verifier independently enumerates all
 irredundant covers for `1 <= k <= 4`, checks the fixed-total-weight bound, and
 compares rank-pure products with squarefree minimal generators for every
-squarefree `3 <= n <= 210`.
+squarefree `3 <= n <= 210`. It also compares the squarefree-fiber criterion
+with direct enumeration on all 208 indices `3 <= n <= 210`.
 
 ## Checksums
 

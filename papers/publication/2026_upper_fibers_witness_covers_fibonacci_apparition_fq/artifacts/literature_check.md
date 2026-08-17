@@ -316,6 +316,61 @@ This negative result is evidence from the stated corpora and primary citation
 chains, not a proof of global priority; the Kiss theorem is cited in the
 manuscript as the closest located precursor.
 
+## Squarefree Minimal-Fiber Criterion
+
+Checked 2026-08-17 before adding the theorem. The proposed statement was the
+equivalence between the absence of nonsquarefree elements of `M_n` and the
+three explicit ladder exclusions
+
+`6 does not divide n`, `nu_5(n) <= 1`, and
+`alpha(p) does not divide n/p^nu_p(n)` for `p | n`, `p not in {2,5}`,
+
+together with the assertion that every failure already produces a
+nonsquarefree minimal preimage with at most two prime factors.
+
+The arXiv Atom API was queried for the exact phrase combinations `minimal
+squarefree preimages` and Fibonacci, `rank of apparition` and squarefree,
+`order of appearance` and squarefree, `minimal multiplicative covers` and
+Fibonacci, and Fibonacci/apparition/fiber. No record was returned. Crossref
+queries used the additional vocabularies preimage, inverse image, minimal
+elements, fiber, squarefree prime powers, and order of appearance. The nearest
+returned works were the following:
+
+- H. Williams, *The Rank of Apparition of a Generalized Fibonacci Sequence*,
+  DOI `10.1080/00150517.1975.12430643`;
+- P. Kiss and B. M. Phong, *On the Connection Between the Rank of Apparition
+  of a Prime p in Fibonacci Sequence and the Fibonacci Primitive Roots*, DOI
+  `10.1080/00150517.1977.12430420`;
+- C. G. Wagner, *Minimal Multiplicative Covers of an Integer*, DOI
+  `10.1016/0012-365X(78)90175-9`;
+- the order-of-appearance papers of D. Marques, beginning with *Fixed Points
+  of the Order of Appearance in the Fibonacci Sequence*, DOI
+  `10.1080/00150517.2012.12427984`; and
+- M. Fitzgibbons, M. Javaheri, S. J. Miller, and A. Verga, *Dynamics of the
+  Fibonacci Order of Appearance Map*, DOI
+  `10.1080/00150517.2025.2515497`.
+
+Crossref and Semantic Scholar paper-by-DOI responses agreed on the titles and
+lead authors of the Williams, Kiss, Wagner, and Fitzgibbons records. The
+available Kiss abstract concerns congruence conditions for the rank of one
+prime. Wagner treats abstract minimal multiplicative covers. The Fitzgibbons
+paper and its open problems concern iteration, fixed-point order, and
+relatively prime inverse families; its full text had already been checked for
+the inverse-dynamics audit above. None of these sources states a criterion for
+squarefreeness of every divisibility-minimal element in one exact apparition
+fiber. Crossref returned no work whose title or indexed metadata concerned
+such minimal fibers.
+
+OpenAlex and the Semantic Scholar keyword endpoint returned HTTP 429 throughout
+this check. The zbMATH query syntax attempted in the same session returned HTTP
+422. These service failures are not counted as negative search results. The
+earlier audits in this file had already searched those indexes and the primary
+reference chains for the witness-cover classification, prime-power lifting,
+and exact support spectra; no predecessor for the present criterion was found
+there. No checked source records either the equivalence or its support-two
+rigidity conclusion. This is a bounded priority check, not a proof that no
+unindexed result exists.
+
 ## Bibliographic Integrity Audit
 
 Checked 2026-08-15. This section is appended to, and does not replace, the

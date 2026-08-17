@@ -7,19 +7,23 @@ import unittest
 try:
     from .verify_squarefree_slice import (
         extremal_full_support_profile,
+        ladder_obstruction_criterion,
         minimal_covers,
         rank_pure_products,
         sharp_mass_lower_bound,
         squarefree_minimal_generators,
+        verify_ladder_obstruction,
         weighted_cover_partition,
     )
 except ImportError:
     from verify_squarefree_slice import (
         extremal_full_support_profile,
+        ladder_obstruction_criterion,
         minimal_covers,
         rank_pure_products,
         sharp_mass_lower_bound,
         squarefree_minimal_generators,
+        verify_ladder_obstruction,
         weighted_cover_partition,
     )
 
@@ -123,6 +127,22 @@ class SquarefreeSliceTests(unittest.TestCase):
                     rank_pure_products(n),
                     squarefree_minimal_generators(n),
                 )
+
+    def test_squarefree_fiber_criterion_boundary_cases(self):
+        obstructed = (6, 12, 25, 30, 36, 50, 91, 125)
+        unobstructed = (9, 15, 20, 49, 98, 147)
+        for n in obstructed:
+            with self.subTest(n=n):
+                self.assertTrue(ladder_obstruction_criterion(n))
+                self.assertGreater(verify_ladder_obstruction(n), 0)
+        for n in unobstructed:
+            with self.subTest(n=n):
+                self.assertFalse(ladder_obstruction_criterion(n))
+                self.assertEqual(verify_ladder_obstruction(n), 0)
+
+    def test_verifier_rejects_a_mutated_criterion(self):
+        with self.assertRaisesRegex(AssertionError, "ladder criterion failed at n=91"):
+            verify_ladder_obstruction(91, obstruction_test=lambda _: False)
 
 
 if __name__ == "__main__":

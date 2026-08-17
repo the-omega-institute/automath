@@ -5,13 +5,16 @@ import argparse
 import itertools
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, FrozenSet, Iterable, Tuple
+from typing import Callable, Dict, FrozenSet, Iterable, Tuple
+
+from sympy import divisors
 
 try:
     from .verify_deepening_delta import (
         alpha_for_fn_divisor,
         factorint,
         factorint_fibonacci,
+        fibonacci,
         upper_fiber_threshold,
     )
 except ImportError:
@@ -19,6 +22,7 @@ except ImportError:
         alpha_for_fn_divisor,
         factorint,
         factorint_fibonacci,
+        fibonacci,
         upper_fiber_threshold,
     )
 
@@ -106,6 +110,52 @@ def squarefree_minimal_generators(n: int) -> Tuple[int, ...]:
     )
 
 
+def prime_rank(prime: int) -> int:
+    """Return the Fibonacci rank of a prime from the standard rank bound."""
+    if prime == 2:
+        return 3
+    if prime == 5:
+        return 5
+    legendre_value = pow(5, (prime - 1) // 2, prime)
+    legendre_symbol = -1 if legendre_value == prime - 1 else legendre_value
+    return next(
+        index
+        for index in divisors(prime - legendre_symbol)
+        if fibonacci(index) % prime == 0
+    )
+
+
+def ladder_obstruction_criterion(n: int) -> bool:
+    """Return whether the theorem predicts a nonsquarefree member of M_n."""
+    factors = {int(prime): int(exponent) for prime, exponent in factorint(n).items()}
+    if n % 6 == 0 or factors.get(5, 0) >= 2:
+        return True
+    return any(
+        (n // prime**exponent) % prime_rank(prime) == 0
+        for prime, exponent in factors.items()
+        if prime not in (2, 5)
+    )
+
+
+def verify_ladder_obstruction(
+    n: int,
+    obstruction_test: Callable[[int], bool] = ladder_obstruction_criterion,
+) -> int:
+    """Compare the criterion with direct enumeration; return nonsquarefree count."""
+    generators = upper_fiber_threshold(n).minimal_generators
+    nonsquarefree_count = sum(
+        any(exponent > 1 for exponent in factorint(value).values())
+        for value in generators
+    )
+    predicted = obstruction_test(n)
+    if (nonsquarefree_count > 0) != predicted:
+        raise AssertionError(
+            f"ladder criterion failed at n={n}: "
+            f"nonsquarefree_count={nonsquarefree_count}, predicted={predicted}"
+        )
+    return nonsquarefree_count
+
+
 def _exact_rank_primes(n: int) -> Dict[int, Tuple[int, ...]]:
     primes_by_rank: Dict[int, list[int]] = {}
     for prime, _ in factorint_fibonacci(n):
@@ -177,6 +227,15 @@ def run_battery(max_index: int) -> str:
         checked_indices.append(n)
         checked_elements += len(actual)
 
+    criterion_checks = 0
+    obstructed_indices = 0
+    nonsquarefree_elements = 0
+    for n in range(3, max_index + 1):
+        count = verify_ladder_obstruction(n)
+        criterion_checks += 1
+        obstructed_indices += count > 0
+        nonsquarefree_elements += count
+
     lines = [
         "Squarefree-fiber and weighted-cover verification",
         "=================================================",
@@ -187,6 +246,10 @@ def run_battery(max_index: int) -> str:
         f"  indices checked = {len(checked_indices)}",
         f"  rank-pure/squarefree set equalities = {len(checked_indices)}",
         f"  squarefree minimal generators compared = {checked_elements}",
+        f"Squarefree-fiber criterion: 3 <= n <= {max_index}",
+        f"  direct/criterion equivalences = {criterion_checks}",
+        f"  indices with ladder obstructions = {obstructed_indices}",
+        f"  nonsquarefree minimal generators found = {nonsquarefree_elements}",
         "RESULT: PASS (0 failures / 0 counterexamples)",
     ]
     return "\n".join(lines) + "\n"
