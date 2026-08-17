@@ -1,0 +1,260 @@
+\subsection{Exact patching profile on a finite cubical complex}
+
+The one-cell profile does not in general patch by assigning an extremizer to
+each cell.  A shared face carries one cochain value, whereas its incidence
+signs in two adjacent cells are opposite.  The correct global problem is a
+capacitated flow problem on the dual graph.  The norm minimization itself is
+the standard anisotropic max-flow/min-cut, or graph-calibrability, problem;
+see \cite{Nozawa1990,MazonSoleraToledo2020}.  The new issue here is the exact
+near-saturation profile on a prescribed Cheeger cut.  The following theorem
+computes that profile and isolates the compatibility condition that is absent
+on one cell.
+
+Let $\mathcal K$ be a finite pure cubical complex of dimension $k$.  Its
+oriented $k$-cells are denoted by $\mathcal C$, and its oriented
+codimension-one faces by $\mathcal E$.  A face is incident with one or two
+cells.  Write $a_e>0$ for the $(k-1)$-volume of $e$ and $v_C>0$ for the volume
+of $C$.  Let $B$ be the cell-face incidence matrix, so that
+\[
+(Bf)_C=\sum_{e\subset\partial C}\operatorname{inc}(C,e)f_e.
+\]
+For $S\subset\mathcal C$, let $\delta S$ be the set of faces incident with
+exactly one cell of $S$, and put
+\[
+ v(S):=\sum_{C\in S}v_C,
+ \qquad
+ a(\delta S):=\sum_{e\in\delta S}a_e,
+ \qquad
+ h_{\mathcal K}:=
+ \max_{\varnothing\ne S\subset\mathcal C}
+ \frac{v(S)}{a(\delta S)}.
+\]
+The maximum is taken over proper or non-proper subsets; the exterior of the
+complex is the sink in the dual graph.  For a face $e\in\delta S$, let
+ $s_S(e)\in\{\pm1\}$ be the sign for which $s_S(e)f_e$ is the flux directed
+ out of $S$.  Finally, set
+\[
+ \|f\|_{\mathcal K,a,\infty}:=
+ \max_{e\in\mathcal E}\frac{|f_e|}{a_e},
+ \qquad
+ \mathcal F_M:=\{f\in\mathbb R^{\mathcal E}:Bf=v,\ |f_e|\le Ma_e\}.
+\]
+
+\begin{theorem}[Exact compatible patching profile]
+\label{thm:exact-cubical-patching}
+Let $\mathcal K$, $B$, $a_e$, $v_C$, and $h_{\mathcal K}$ be as above, and
+let $Q\subset\mathcal C$ attain the maximum defining $h_{\mathcal K}$.  Then:
+
+\begin{enumerate}
+\item
+\[
+ \min\{\|f\|_{\mathcal K,a,\infty}:Bf=v\}=h_{\mathcal K},
+ \qquad
+ \mathcal F_{h_{\mathcal K}}\ne\varnothing.
+\]
+Every $f\in\mathcal F_{h_{\mathcal K}}$ saturates the $Q$-cut outward:
+\[
+ s_Q(e)f_e=h_{\mathcal K}a_e
+ \qquad(e\in\delta Q).
+\]
+
+\item If $M=h_{\mathcal K}+\delta$ with $\delta\ge0$, then every
+ $f\in\mathcal F_M$ satisfies
+\begin{equation}
+\label{eq:patched-deficit-identity}
+ \sum_{e\in\delta Q}a_e
+ \left(M-s_Q(e)\frac{f_e}{a_e}\right)
+ =a(\delta Q)(M-h_{\mathcal K})
+\end{equation}
+and
+\begin{equation}
+\label{eq:patched-atomic-upper-bound}
+ \sum_{e\in\delta Q}a_e
+ \left|\frac{f_e}{a_e}-s_Q(e)h_{\mathcal K}\right|
+ \le
+ \Phi_Q(\delta),
+\end{equation}
+where
+\[
+ \Phi_Q(\delta):=2\max_{T\subset\delta Q}
+ \min\left\{
+ \delta\bigl(a(\delta Q)-a(T)\bigr),
+ \bigl(2h_{\mathcal K}+\delta\bigr)a(T)
+ \right\}.
+\]
+
+\item The exact compatible profile is
+\begin{equation}
+\label{eq:patched-exact-profile}
+ \Psi_Q(\delta):=
+ \max_{f\in\mathcal F_{h_{\mathcal K}+\delta}}
+ \sum_{e\in\delta Q}a_e
+ \left|\frac{f_e}{a_e}-s_Q(e)h_{\mathcal K}\right|
+ =2\max_{T\subset\delta Q}\Gamma_T(h_{\mathcal K}+\delta),
+\end{equation}
+where, with $c_T(e):=s_Q(e)$ for $e\in T$ and $c_T(e):=0$ otherwise,
+\[
+ \Gamma_T(M):=
+ \min_{p\in\mathbb R^{\mathcal C}}
+ \left\{
+ h_{\mathcal K}a(T)-\sum_{C\in\mathcal C}v_Cp_C
+ +M\sum_{e\in\mathcal E}a_e
+ \left|c_T(e)-(B^Tp)_e\right|
+ \right\}.
+\]
+In particular, $\Psi_Q(\delta)\le\Phi_Q(\delta)$, and equality holds if and
+only if at least one maximizing set $T$ in the definition of $\Phi_Q(\delta)$
+has an atomic equality vector whose boundary flux extends to an element of
+$\mathcal F_{h_{\mathcal K}+\delta}$.
+
+More explicitly, put $A=a(\delta Q)$ and, for every nonempty proper $T$, set
+\[
+ \tau_T:=\min\{\delta(A-a(T)),(2h_{\mathcal K}+\delta)a(T)\},
+\]
+and let $\mathcal A_T(\delta)$ be the set of vectors
+$q=(q_e)_{e\in\delta Q}$ satisfying
+\[
+ -2h_{\mathcal K}-\delta\le q_e\le0\quad(e\in T),
+ \qquad
+ 0\le q_e\le\delta\quad(e\notin T),
+\]
+\[
+ -\sum_{e\in T}a_e q_e
+ =\sum_{e\notin T}a_e q_e
+ =\tau_T.
+\]
+For $q\in\mathcal A_T(\delta)$, define the outward data
+$\widehat g_e:=a_e(h_{\mathcal K}+q_e)$.  The extension condition is
+equivalent to the finite family of cut inequalities
+\begin{equation}
+\label{eq:patched-extension-cuts}
+ \left|v(U)-\sum_{e\in\delta Q\cap\delta U}
+ s_U(e)s_Q(e)\widehat g_e\right|
+ \le
+ (h_{\mathcal K}+\delta)
+ \sum_{e\in\delta U\setminus\delta Q}a_e
+ \qquad(U\subset\mathcal C).
+\end{equation}
+Thus the one-cell profile patches exactly when its extremizing
+atomic boundary data satisfy all internal cut capacities.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Regard each face as an edge of the dual graph, with the exterior as a sink.
+The finite anisotropic max-flow/min-cut theorem gives
+\[
+ \min\{M:\mathcal F_M\ne\varnothing\}
+ =\max_{\varnothing\ne S\subset\mathcal C}
+ \frac{v(S)}{a(\delta S)}=h_{\mathcal K}.
+\]
+This is the standard capacitated-flow formulation of the anisotropic network
+theorem; the cell-face incidence matrix is its signed incidence matrix.
+For completeness, the equality case needed here follows directly from
+complementary slackness.  If $Q$ attains the displayed maximum and
+$f\in\mathcal F_{h_{\mathcal K}}$, summing $Bf=v$ over $Q$ gives
+\[
+ v(Q)=\sum_{e\in\delta Q}s_Q(e)f_e
+ \le h_{\mathcal K}a(\delta Q)=v(Q).
+\]
+Every summand in the difference is nonnegative, so all of them vanish.  This
+proves (1) and the saturation assertion.
+
+For $M=h_{\mathcal K}+\delta$, define
+\[
+ q_e:=s_Q(e)\frac{f_e}{a_e}-h_{\mathcal K}
+ \qquad(e\in\delta Q).
+\]
+Summing the cell equations over $Q$ and using
+$v(Q)=h_{\mathcal K}a(\delta Q)$ gives
+$\sum_{e\in\delta Q}a_e q_e=0$.
+The capacity bound gives
+\[
+ -2h_{\mathcal K}-\delta\le q_e\le\delta.
+\]
+The left side of \eqref{eq:patched-atomic-upper-bound} is
+$\sum a_e|q_e|$.  If $T=\{e:q_e<0\}$ and
+$\tau=\sum_{q_e>0}a_e q_e$, then
+\[
+ \tau\le\delta(A-a(T)),
+ \qquad
+ \tau\le(2h_{\mathcal K}+\delta)a(T),
+ \qquad
+ \sum a_e|q_e|=2\tau.
+\]
+Taking the maximum over $T$ proves (2), including the deficit identity.
+
+For (3), the zero-mean identity also gives, for every fixed $f$,
+\[
+ \sum_{e\in\delta Q}a_e|q_e|
+ =2\max_{T\subset\delta Q}
+ \left(h_{\mathcal K}a(T)-\sum_{e\in T}s_Q(e)f_e\right).
+\]
+The maximum over $f$ and the finite maximum over $T$ commute.  For fixed $T$,
+strong linear-programming duality applied to
+\[
+ \min\left\{\sum_{e\in\mathcal E}c_T(e)f_e:
+ Bf=v,\ |f_e|\le Ma_e\right\}
+\]
+gives
+\[
+ \max_{p\in\mathbb R^{\mathcal C}}
+ \left\{\sum_Cv_Cp_C
+ -M\sum_ea_e|c_T(e)-(B^Tp)_e|\right\}.
+\]
+Substitution is exactly \eqref{eq:patched-exact-profile}.  The vectors in
+$\mathcal A_T(\delta)$ are precisely the equality vectors in the two-cap
+estimate for the fixed sign set $T$, so the final assertion is equivalent to
+the extendibility of at least one such vector.
+
+Finally, after fixing the oriented values
+$s_Q(e)\widehat g_e$ on $\delta Q$, the remaining unknown
+face fluxes have capacities $(h_{\mathcal K}+\delta)a_e$ and residual cell
+demands given by the left side of \eqref{eq:patched-extension-cuts}.  The
+Hoffman circulation criterion (equivalently, max-flow/min-cut with a sink)
+states that these demands are feasible exactly when all the cut inequalities
+\eqref{eq:patched-extension-cuts} hold.  This proves the compatibility
+criterion and completes the proof.
+\end{proof}
+
+The distinction between $\Phi_Q$ and $\Psi_Q$ is genuine.  It already appears
+on a two-by-two rectangular subdivision.  Take horizontal cell widths
+$1,2$, vertical cell heights $2,7$, and let every cell source equal its area.
+The total area and outer anisotropic perimeter are $27$ and $24$, so
+$h_{\mathcal K}=9/8$ by Lemma~\ref{lem:box-self-cheeger}, applied to every
+cell subpatch.  At $\delta=9/4$ one has $M=27/8$ and
+$\Phi_Q(\delta)=72$: the maximizing boundary subsets have total weight $8$.
+Label the left and bottom boundary faces of $C_{00}$ by $e_0,e_1$, the left
+and top faces of $C_{01}$ by $e_2,e_3$, the right and bottom faces of
+$C_{10}$ by $e_4,e_5$, and the right and top faces of $C_{11}$ by $e_6,e_7$.
+Their weights are
+\[
+(a_{e_0},\ldots,a_{e_7})=(2,1,7,1,2,2,7,2).
+\]
+For a two-level extremizer at this deficit, the negative subset must have
+weight $8$ and the corresponding outward boundary fluxes are $-M$ on that
+subset and $+M$ on its complement.  The nine possible negative subsets and a
+violating cell cut in \eqref{eq:patched-extension-cuts} are
+\[
+\begin{array}{c|c}
+T & \text{violating }U\\ \hline
+\{1,2\},\{2,3\}&\{C_{01}\}\\
+\{0,1,3,4,5\},\{0,1,3,4,7\},\{0,1,3,5,7\}&\{C_{00}\}\\
+\{1,6\},\{3,6\}&\{C_{00},C_{10}\}\\
+\{0,4,5,7\},\{1,3,4,5,7\}&\{C_{10}\}.
+\end{array}
+\]
+For $T=\{1,2\}$ and $T=\{2,3\}$ the residual-demand/capacity pairs are
+$(109/4,27)$ and $(34,27)$.  The three sets in the second row give
+$(97/8,81/8)$; the two sets in the third row give $(87/8,81/8)$ and
+$(141/8,81/8)$; and the two sets in the last row give $(35/2,27/2)$.
+Thus every entry violates \eqref{eq:patched-extension-cuts}.  Subsets of
+weight at most $7$ or at least $9$ cannot attain
+$72$ by the two-cap bound.  Since $\mathcal F_{27/8}$ is compact and the trace
+error is continuous, the failure of every equality vector implies
+\[
+ \Psi_Q(9/4)<72=\Phi_Q(9/4).
+\]
+Interface compatibility therefore imposes a strict loss relative to the
+one-cell profile, even though the exact compatible value is given by
+\eqref{eq:patched-exact-profile}.
