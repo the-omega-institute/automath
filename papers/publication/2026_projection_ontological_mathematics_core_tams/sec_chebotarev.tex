@@ -248,9 +248,111 @@ inside \(\QQ(\varphi^{1/b})\), which has degree at most \(2b\) over \(\QQ\),
 while \Cref{obs:galois-window} gives \(\deg_{\QQ}(\lambda_q)=d_q\).
 \end{remark}
 
-\subsection{Linear disjointness in a four-polynomial block}
+\subsection{Archimedean separation and alternating corrections}
+
+The full symmetric-group certificates determine the algebraic complexity of
+the recurrence roots but not their archimedean order.  Exact root isolation
+closes this second part of the arithmetic window and converts the negative
+root visible in the numerical data into a second-order asymptotic for the
+collision moments.
 
 \begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{Exact rational root-separation certificates.  The intervals
+\(I_q^-\) and \(I_q^+\) contain one root each, while every other root of
+\(\Pi_q\) has modulus less than \(R_q\).}
+\label{tab:secondary-root-isolation-q9-17}
+\begin{tabular}{r c r c}
+\toprule
+\(q\) & \(I_q^-\) & \(R_q\) & \(I_q^+\) \\
+\midrule
+9  & \((-7.065332,-7.065330)\)   & 6.4  & \((11.778421,11.778423)\) \\
+10 & \((-9.100143,-9.100140)\)   & 8.3  & \((14.771097,14.771100)\) \\
+11 & \((-11.712941,-11.712938)\) & 10.8 & \((18.535846,18.535849)\) \\
+12 & \((-15.066710,-15.066707)\) & 14   & \((23.273458,23.273461)\) \\
+13 & \((-19.369973,-19.369970)\) & 18   & \((29.237337,29.237340)\) \\
+14 & \((-24.889363,-24.889360)\) & 23   & \((36.747375,36.747378)\) \\
+15 & \((-31.965665,-31.965662)\) & 30   & \((46.207509,46.207512)\) \\
+16 & \((-41.034238,-41.034235)\) & 38   & \((58.127950,58.127953)\) \\
+17 & \((-52.651061,-52.651058)\) & 49   & \((73.153328,73.153331)\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{theorem}[Alternating second-order law in the arithmetic window]
+\label{thm:alternating-window-q9-17}
+For each \(q\in\{9,\dots,17\}\), the recurrence polynomial \(\Pi_q\) has
+real roots
+\[
+  \lambda_q^-\in I_q^-,
+  \qquad
+  \lambda_q\in I_q^+,
+\]
+with
+\[
+  |z|<R_q<|\lambda_q^-|<\lambda_q
+\]
+for every other root \(z\) of \(\Pi_q\), where the rational data are given in
+\Cref{tab:secondary-root-isolation-q9-17}.  There are constants
+\(C_q>0\) and \(C_q^-\ne0\) such that
+\[
+  S_q(m)
+  =C_q\lambda_q^m+C_q^-(\lambda_q^-)^m+O_q(R_q^m).
+\]
+Consequently, for all sufficiently large \(m\), the residual
+\[
+  S_q(m)-C_q\lambda_q^m
+\]
+is nonzero and its sign is reversed when \(m\) is replaced by \(m+1\).
+\end{theorem}
+
+\begin{proof}
+Fix \(q\in\{9,\dots,17\}\).  Apply Sturm's theorem to \(\Pi_q\) on the two
+rational intervals \(I_q^-\) and \(I_q^+\).  In each case the difference of
+the endpoint variation counts is one.  For the nonreal roots, apply the
+Collins--Krandick complex root-isolation algorithm over \(\QQ\).  It returns
+pairwise disjoint rational rectangles
+\[
+  B=[a,b]+\mathrm i[c,d]
+\]
+of root count one.  For such a rectangle set
+\[
+  M(B)^2:=\max\{a^2,b^2\}+\max\{c^2,d^2\}.
+\]
+The same calculation is applied to the remaining real isolating intervals,
+with \(M([a,b])=\max\{|a|,|b|\}\).  Exact rational comparison gives
+\[
+  \max_{B\ne I_q^-,I_q^+}M(B)<R_q
+  <\inf_{x\in I_q^-}|x|<\inf I_q^+.
+\]
+The number of real intervals plus the number of nonreal rectangles is
+\(d_q\), so these boxes account for every root.  This proves the asserted
+root ordering.  The computation uses only integer polynomial arithmetic,
+rational Cauchy indices, and rational comparisons; the complete verifier is
+included as \texttt{artifacts/verify\_secondary\_spectrum.py}.
+
+By \Cref{obs:galois-window}, \(\Pi_q\) is irreducible over \(\QQ\), and hence
+it is separable.  The minimal recurrence therefore has an expansion
+\[
+  S_q(m)=\sum_{\Pi_q(\alpha)=0}C_{q,\alpha}\alpha^m
+\]
+on its recurrence tail.  No coefficient \(C_{q,\alpha}\) vanishes: otherwise
+the product of the remaining linear factors would give a recurrence of degree
+less than \(d_q\), contrary to the minimality of \(\Pi_q\).  The root in
+\(I_q^+\) is \(\lambda_q\) by
+\Cref{prop:lambda-root-of-recurrence,obs:galois-window}; its coefficient is
+positive because \(S_q(m)>0\) and it is the unique dominant root.  Isolating
+the terms belonging to \(\lambda_q\) and \(\lambda_q^-\), and bounding all
+remaining terms by \(O_q(R_q^m)\), gives the displayed asymptotic.  Since
+\(\lambda_q^-<0\), \(C_q^-\ne0\), and \(R_q<|\lambda_q^-|\), the final
+assertion follows.
+\end{proof}
+
+\subsection{Linear disjointness in a four-polynomial block}
+
+\begin{table}[b]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{6pt}
@@ -324,6 +426,7 @@ Equivalently,
 \]
 \end{remark}
 
-Audited high-precision secondary spectral fingerprints for the same window are
-tabulated in Appendix~\ref{app:certification}; they remain descriptive data
-and are not used in the deductions above.
+High-precision secondary spectral values for the same window are tabulated in
+Appendix~\ref{app:certification}; the exact separation used in
+\Cref{thm:alternating-window-q9-17} is instead supplied by
+\Cref{tab:secondary-root-isolation-q9-17}.
