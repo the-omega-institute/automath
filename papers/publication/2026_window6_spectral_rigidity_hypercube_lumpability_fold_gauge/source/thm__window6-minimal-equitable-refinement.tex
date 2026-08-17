@@ -1,0 +1,136 @@
+Partition refinement and equitable hypercube partitions are classical topics
+\cite{krebs2015universal,hyun2015harmonic}.  The content of the next theorem is
+the exact Fold\(_6\)-specific identification of the terminal refinement, not
+the general refinement procedure.
+
+\begin{theorem}[Unique minimal hidden repair of the window-\texorpdfstring{$6$}{6} fold]\label{thm:window6-minimal-equitable-refinement}
+Let \(H:\Omega_6\twoheadrightarrow Y\) be a surjection whose fibers form an
+equitable partition of \(Q_6\), and suppose that there is a map
+\(\rho:Y\twoheadrightarrow X_6\) such that
+\[
+\Fold_6^{\mathrm{bin}}=\rho\circ H.
+\]
+Then \(|Y|\ge48\).  This bound is attained by the orbit map
+\[
+H_{\mathrm{geo}}:\Omega_6\longrightarrow
+\Omega_6/\langle\sigma_{\mathrm{geo}}\rangle,
+\]
+and, up to a relabeling of \(Y\), it is the unique equitable hidden refinement
+with \(|Y|=48\).  Equivalently, the orbit partition of
+\(\sigma_{\mathrm{geo}}\) is the unique coarsest equitable partition refining
+the Fold\(_6\) fiber partition.
+
+More precisely, one neighbor-signature refinement of the Fold\(_6\) fibers is
+already stable and has \(32\) singleton cells and \(16\) two-element cells.
+The non-singleton cells are precisely the two-cycles of
+\(\sigma_{\mathrm{geo}}\).
+
+If \(P_{\mathrm{geo}}\) denotes the transition kernel of this minimal quotient,
+then
+\[
+\Spec(P_{\mathrm{geo}})=
+\left\{1,\frac23,\frac13,0,-\frac13,-\frac23,-1\right\}
+\]
+with multiplicities
+\[
+(1,5,11,14,11,5,1).
+\]
+Thus exact Markovian repair requires \(27\) additional states beyond the
+\(21\) visible Fold\(_6\) states.  The modes removed by the minimal quotient
+are exactly the \(16\)-dimensional antisymmetric carrier \(V^-\), on which
+\(A_6\) is isomorphic to \(A_4\).
+\end{theorem}
+
+\begin{proof}
+For \(\omega\in\Omega_6\), define its Fold-neighbor signature by
+\[
+s(\omega):=\bigl(c_\omega(y)\bigr)_{y\in X_6},
+\qquad
+c_\omega(y)=\#\{1\le i\le6:
+\Fold_6^{\mathrm{bin}}(\omega+e_i)=y\}.
+\]
+Refine each Fold\(_6\) fiber by equality of \(s(\omega)\), and denote the
+resulting partition by \(\mathcal R\).  The complete fiber table in Proposition
+\ref{prop:foldbin6-canonical-fiber-table} gives \(\mathcal R\) by an exact
+finite calculation: flip each of the six coordinates of each displayed word,
+locate the result in the same table, and compare the resulting
+\(21\)-component integer vectors.  The equality classes are
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{c|l}
+Fold state&cells of the neighbor-signature refinement\\ \hline
+000000&\(\{000000,100010\}\), \(\{010101,110111\}\)\\
+000001&\(\{001101,101111\}\)\\
+000010&\(\{001000,101010\}\), \(\{011101,111111\}\)\\
+000100&\(\{000101,100111\}\), \(\{011010\}\), \(\{111100\}\)\\
+000101&\(\{010010\}\), \(\{110100\}\)\\
+001000&\(\{000011\}\), \(\{011000,111010\}\), \(\{100101\}\)\\
+001001&\(\{010000,110010\}\)\\
+001010&\(\{001011\}\), \(\{100000\}\), \(\{101101\}\)\\
+010000&\(\{000010\}\), \(\{010111\}\), \(\{100100\}\), \(\{111001\}\)\\
+010001&\(\{001111\}\), \(\{110001\}\)\\
+010010&\(\{001010\}\), \(\{011111\}\), \(\{101100\}\)\\
+010100&\(\{000111\}\), \(\{011100,111110\}\), \(\{101001\}\)\\
+010101&\(\{010100,110110\}\)\\
+100000&\(\{000001,100011\}\), \(\{010110\}\), \(\{111000\}\)\\
+100001&\(\{001110\}\), \(\{110000\}\)\\
+100010&\(\{001001,101011\}\), \(\{011110\}\)\\
+100100&\(\{000110\}\), \(\{011011\}\), \(\{101000\}\), \(\{111101\}\)\\
+100101&\(\{010011\}\), \(\{110101\}\)\\
+101000&\(\{000100,100110\}\), \(\{011001,111011\}\)\\
+101001&\(\{010001,110011\}\)\\
+101010&\(\{001100,101110\}\), \(\{100001\}\).
+\end{tabular}
+\end{center}
+In particular, \(\mathcal R\) has \(48\) cells.
+The independent verifier
+\[
+\texttt{python artifacts/verify\_hidden\_refinement.py}
+\]
+recomputes these equality classes directly from the greedy Zeckendorf
+definition, without reading the displayed table.
+
+Lemma \ref{lem:window6-geometric-stabilizer-audit} gives
+\(\Fold_6^{\mathrm{bin}}\sigma_{\mathrm{geo}}=
+\Fold_6^{\mathrm{bin}}\), and \(\sigma_{\mathrm{geo}}\) is an automorphism of
+\(Q_6\).  It therefore maps the six neighbors of \(\omega\) bijectively to
+the six neighbors of \(\sigma_{\mathrm{geo}}\omega\), preserving their Fold
+labels.  Hence \(s(\omega)=s(\sigma_{\mathrm{geo}}\omega)\).  Comparison with
+the displayed equality classes shows that \(\mathcal R\) is precisely the
+orbit partition of \(\sigma_{\mathrm{geo}}\).  An automorphism-orbit partition
+is equitable: if two vertices lie in the same orbit, the automorphism gives a
+bijection between their neighbors in every target orbit.  Thus \(\mathcal R\)
+is equitable and the one-step refinement is already stable.
+
+Let \(\mathcal Q\) be any equitable partition refining the Fold\(_6\) fiber
+partition.  If \(\omega,\omega'\) lie in one cell of \(\mathcal Q\), then they
+have equal neighbor counts into every cell of \(\mathcal Q\).  Every
+Fold\(_6\) fiber is a union of such cells, so summing these equalities over the
+cells inside a Fold fiber gives \(s(\omega)=s(\omega')\).  Consequently
+\(\mathcal Q\) refines \(\mathcal R\).  Since \(\mathcal R\) is itself
+equitable, it is the unique coarsest equitable refinement.  The involution has
+\(32\) fixed points, characterized by \(\omega_1\ne\omega_5\), and \(16\)
+two-cycles, characterized by \(\omega_1=\omega_5\); hence it has \(48\)
+orbits.  This proves the lower bound and the uniqueness assertion.  The factor
+map \(\rho([\omega])=\Fold_6^{\mathrm{bin}}(\omega)\) is well defined by the
+stabilizer identity, so the bound is attained.
+
+It remains to identify the quotient spectrum.  Pullback from the orbit space
+identifies its function space with the invariant space \(V^+\) of Theorem
+\ref{thm:window6-affine-chiral-walsh-decomposition}.  For each
+\(J\subseteq\{2,3,4,6\}\), that theorem gives invariant eigenvectors in Walsh
+degrees \(|J|\), \(|J|+1\), and \(|J|+2\).  Since a degree-\(k\) Walsh
+character has \(T_6\)-eigenvalue \(1-k/3\), the multiplicity sequence is the
+coefficient sequence of
+\[
+(1+q)^4(1+q+q^2)
+=1+5q+11q^2+14q^3+11q^4+5q^5+q^6.
+\]
+This proves the spectral formula.  Finally,
+\(\CC^{\Omega_6}=V^+\oplus V^-\), and Theorem
+\ref{thm:window6-chiral-compression-hypercube-adjacency} identifies
+\(A_6|_{V^-}\) with \(A_4\).  Hence the discarded modes are exactly the
+claimed chiral carrier. \qedhere
+\end{proof}
