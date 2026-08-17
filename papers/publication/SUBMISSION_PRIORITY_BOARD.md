@@ -212,8 +212,9 @@ $p_j\gerac{j\phi(n)}{4}\lograc j4$，**重现**而非改进 $\logarphi/2$。
 （离差 0.384 vs $a_m\propto K_C^{1/lpha}$ 预测的 0.374）。第三条由复核方另选，非复用脚本自带开关。
 并修掉一处自失效缺陷：报告文件原本记录自身运行时长，照 `REPRODUCE.md` 重跑即破坏 `SHA256SUMS`。
 
-**在飞（tick 243）**：`linear_overlap_…_etds`（18 页，探索最少，边际最高）、
-`renewal_experiment_…_ejs`（32+22，51% 为已就绪者中最低）。内存 0.97 GB，故只派两路。
+**在飞（tick 243 派出，244 进行中）**：`linear_overlap_…_etds`（18 页，探索最少，边际最高）、
+`renewal_experiment_…_ejs`（32+22，51% 为已就绪者中最低）。派出时内存 0.97 GB，故只派两路。
+tick 244 状态：前者已改摘要与 02/03/04 三节，后者新建 `sections/multiple_collision.tex`，均未完成。
 
 （历史）**在飞（tick 242）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
 `large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\logarphi/2$ 以下使指数严格超 2，
