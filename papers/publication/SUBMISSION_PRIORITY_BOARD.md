@@ -181,14 +181,41 @@ m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确�
 可跑，而那从来不是验收条件 —— 论文目录携带私有构建配置正是编译审计清了几轮的缺陷。
 禁令已写入 `deep_research_task.txt`。
 
-| `cayley_chebyshev_…_jfa` | **Thm 6.8 尾指数原理**：任何双侧多项式尾指数 $eta$ 且归一化导数有界的核，尖锐矩指数 $\kappa=\max\{r,	frac{2reta}{eta+2r}\}$；另 **Thm 5.10** 稳定幂散度双壁垒。32→38 页 | **两条真定理，本轮最重**。陈述与证明中稳定性、卷积半群均不出现，原结论成为 $eta=d+lpha$ 特例，Student 核为新覆盖类。尖锐性有构造：$eta>2r$ 时对每个 $ho<\kappa$ 造得出 $\limsup s^{2r}D_{m KL}=+\infty$ 的分布 | `ee54b7ba8` |
+| `cayley_chebyshev_…_jfa` | **Thm 6.8 尾指数原理**：任何双侧多项式尾指数 $eta$ 且归一化导数有界的核，尖锐矩指数 $\kappa=\max\{r,	frac{2reta}{eta+2r}\}$；另 **Thm 5.10** 稳定幂散度双壁垒。32→38 页 | **两条真定理，本轮最重**。陈述与证明中稳定性、卷积半群均不出现，原结论成为 $eta=d+lpha$ 特例，Student 核为新覆盖类。尖锐性有构造：$eta>2r$ 时对每个 $
+ho<\kappa$ 造得出 $\limsup s^{2r}D_{
+m KL}=+\infty$ 的分布 | `ee54b7ba8` |
 
 > 收割 `cayley_chebyshev` 时我自己险些制造缺陷：新节文件名带运行后缀，我重命名并改 `main.tex`，
 > 但 grep 显示 `main.tex` 内并无该引用 —— 一度误判为孤儿文件。实为
 > `sec_verified_A2_results_part_03.tex:253` 引入，我的重命名恰好打断了那处引用。补改后重建通过。
 > **是我 grep 错了位置，不是文件有问题。**
 
-**在飞（tick 242）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
+**第一轮全部收割完毕（tick 240–243）**：
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|---|---|
+| `cayley_chebyshev_…_jfa` | Thm 6.8 尾指数原理 + Thm 5.10 幂散度双壁垒 | 32→38 | `ee54b7ba8` |
+| `brocot_…_tams` | 临界 Gibbs 联合极限律 + 可证伪的数值检验 | 20→23 | `f7166ba7d`,`1805eb69a` |
+| `large_primitive_divisors_…` | 无条件准素分量（推论）+ **筛法壁垒的精确否定** | 8→12 | `09a5cfbac`,`398fbe785` |
+
+**筛法结论（我方判定：值得收的否定）**：Brun–Titchmarsh 给出
+$p_j\gerac{j\phi(n)}{4}\lograc j4$，**重现**而非改进 $\logarphi/2$。
+临界尺度 $jsymp\phi(n)/\log n$ 上，筛法把 $p_j$ 从 $pprox n^2/\log n$ 抬到 $pprox n^2$，
+但 $\log p_j$ 只变动 $O(\log\log n)=o(\log n)$ —— **首项系数不动**。大筛法无着力点：
+单个 fibotomic 整数的唯一逐点输入就是已用掉的质量不等式。
+超过 2 所缺的量已点名：需 $p\mid F_n$ 专有的信息，强到把恰秩素数的几何平均顶到 $n^{2+\delta}$。
+副产品：模数校正为 $\mathrm{lcm}(n,2)$；$N_arepsilon$ 显式化但达 $10^{200}$ 量级，
+**够不着可计算范围**（$lpha(q)=n\Rightarrow n\le q+1$ 是 $q$ 的下界，Wall–Sun–Sun 搜索界换不出指标截断），
+论文如实写明而未夸大。
+
+**数值检验的分辨力经三条独立轴验证**：符号翻转、$\mu_C$ 幂次、$K_C$ 加倍
+（离差 0.384 vs $a_m\propto K_C^{1/lpha}$ 预测的 0.374）。第三条由复核方另选，非复用脚本自带开关。
+并修掉一处自失效缺陷：报告文件原本记录自身运行时长，照 `REPRODUCE.md` 重跑即破坏 `SHA256SUMS`。
+
+**在飞（tick 243）**：`linear_overlap_…_etds`（18 页，探索最少，边际最高）、
+`renewal_experiment_…_ejs`（32+22，51% 为已就绪者中最低）。内存 0.97 GB，故只派两路。
+
+（历史）**在飞（tick 242）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
 `large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\logarphi/2$ 以下使指数严格超 2，
 要么给出精确否定 —— 后者同样算成功）。
 
