@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact finite regression checks for the fixed cubic terminal words."""
+"""Exact finite checks for the fixed cubic threshold and terminal words."""
 
 from __future__ import annotations
 
@@ -23,6 +23,18 @@ def terminal_word(aperture: int) -> tuple[int, ...]:
         return terminal_word(aperture - 1) + (0,)
     inner = tuple(-entry for entry in terminal_word(aperture - 2))
     return (1, 0) + inner + (0, 0)
+
+
+def collision_rows(aperture: int) -> set[tuple[int, ...]]:
+    """Enumerate all difference rows at one aperture."""
+
+    weights = recurrence(aperture + 1)
+    modulus = weights[aperture]
+    return {
+        row
+        for row in product(DIGITS, repeat=aperture)
+        if sum(a * q for a, q in zip(row, weights)) % modulus == 0
+    }
 
 
 def obstruction_vectors(aperture: int, rows: int) -> set[tuple[int, ...]]:
@@ -54,6 +66,17 @@ def main() -> None:
     passed = 1
     print("PASS recurrence values through Q_10")
 
+    aperture_two_rows = collision_rows(2)
+    assert aperture_two_rows == {(0, 0)}, aperture_two_rows
+    passed += 1
+    print("PASS m=2 collision_rows={(0, 0)} fold_identity")
+
+    aperture_three_rows = collision_rows(3)
+    expected_three_rows = {(-1, -1, -1), (0, 0, 0), (1, 1, 1)}
+    assert aperture_three_rows == expected_three_rows, aperture_three_rows
+    passed += 1
+    print("PASS m=3 collision_rows={-1^3, 0^3, 1^3} constant_branch_only")
+
     for aperture in range(4, 13):
         causal_length = 2 * (aperture // 2) - 1
         expected_word = terminal_word(aperture)
@@ -82,7 +105,7 @@ def main() -> None:
         passed += 1
         print(f"PASS m={aperture} recursive_word exact_window_divisibility")
 
-    print(f"PASS: {passed}/{1 + 3 * len(range(4, 13))} fixed-cubic audit cases")
+    print(f"PASS: {passed}/{3 + 3 * len(range(4, 13))} fixed-cubic audit cases")
 
 
 if __name__ == "__main__":

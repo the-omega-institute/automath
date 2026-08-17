@@ -12,8 +12,9 @@ python artifacts/test_bounded_zero_arbitrary_D.py
 python artifacts/verify_eventual_acyclicity.py
 ```
 
-The first command checks the fixed cubic small-aperture and terminal-word
-audit. The second checks the arbitrary-alphabet adjacent-collapse cases and
+The first command checks the fixed cubic aperture-two identity,
+aperture-three constant branch, and terminal-word audit from aperture four
+onward. The second checks the arbitrary-alphabet adjacent-collapse cases and
 includes the seven-edge regression for initial values `(1, 2, 4)`, `D=2`,
 and `m=2`. The third constructs complete overlap graphs for representative
 apertures of the fixed cubic and a non-Condition-F Pisot recurrence, checks

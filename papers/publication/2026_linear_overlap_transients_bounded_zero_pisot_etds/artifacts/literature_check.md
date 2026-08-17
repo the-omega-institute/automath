@@ -56,3 +56,35 @@ Pisot systems.  Across these searches, no source states that the zero loop is
 the only cycle for all sufficiently large apertures, that every fixed Pisot
 cyclic rank recoding is eventually injective, or that the universal
 asymptotic future-only inverse coefficient is one.
+
+## Exact fixed-cubic threshold novelty search
+
+Checked: 2026-08-17 (Asia/Singapore).
+
+The official arXiv API was searched for the conjunction of "cyclic rank"
+and Pisot, the polynomial "x^3-2x^2+x-1", Pisot numeration and injectivity,
+bounded representations of zero in Pisot systems, and Pisot overlap graphs.
+The mechanism queries returned no records. The polynomial query returned
+work on noninteger-base expansions, but no sliding recoding, cyclic rank,
+injectivity threshold, or constant path-space fiber.
+
+Crossref was searched for "cyclic rank recoding Pisot", "x3 2x2 x 1 Pisot
+injectivity", "Pisot numeration overlap injectivity threshold", "language
+rank modulo numeration sliding code", and "bounded zero representation
+overlap graph". Its nearest records concerned Pisot tilings, normality,
+general numeration systems, and rank-metric codes; none concerns the
+rank-modulo-$Q_m$ sliding code or the cubic recurrence in the manuscript.
+OpenAlex returned HTTP 429 for the corresponding queries and was not counted
+as a zero-result search.
+
+The full source trees of the companion manuscript
+2026_cyclic_rank_thresholds_quadratic_simple_parry_etds and the overlapping
+Zeckendorf-fold manuscripts were searched for the polynomial, the weights
+1,2,4,7, aperture-three constant collisions, and an exact threshold for this
+cubic. The companion proves exact thresholds for quadratic Pisot languages
+and an aperture-two trichotomy for simple-Parry languages. It does not
+classify aperture three for this cubic. The Zeckendorf papers use different
+Fibonacci folds and contain no occurrence of the cubic polynomial. No
+searched source gives the nonmonotone injective-aperture set
+$\{2\}\cup\{m\ge4\}$ or the unique aperture-three branch pair for the fixed
+cubic system.
