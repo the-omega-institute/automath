@@ -232,3 +232,137 @@ Since \(\alpha=\sigma_0-1\), this proves
 \eqref{eq:centered-stable-characteristic-exponent}.  It also gives the
 normalization \eqref{eq:explicit-critical-stable-normalization}.
 \end{proof}
+
+\begin{proof}[Proof of \Cref{thm:critical-fibonacci-gibbs-geometry}]
+For a letter word \(w=(x_1,\ldots,x_r)\), its critical weight
+\(Q(w)^{-\sigma_0}\) is the probability of that word under the independent
+critical letter law.  Consequently, for every \(j\),
+\begin{equation}
+ \sum_{\substack{w\in\mathcal A^r\\c(w)=j}}
+ Q(w)^{-\sigma_0}=\Pr\{S_r=j\}.
+ \label{eq:critical-word-probability}
+\end{equation}
+The orbit count in the proof of
+\Cref{prop:weighted-generator-renewal} shows that a word of cost \(j<m\)
+contributes two points to \(\mathcal I_m\), whereas a word of cost \(m\)
+contributes one.  There is also the single left endpoint.  Thus, for every
+bounded function \(f\) on \(\mathbb R^2\),
+\begin{align}
+ &Z_m^R(-\sigma_0)\,
+ \mathbb E_{\mathbb G_m}f\left(
+       \frac{J_m}{m},\frac{H_m-J_m/\mu_C}{a_m}\right)
+ \notag\\
+ &\quad=f(0,0)
+ +2\sum_{r\ge1}\mathbb E\left[
+  \mathbf1_{\{S_r<m\}}
+  f\left(\frac{S_r}{m},\frac{r-S_r/\mu_C}{a_m}\right)\right]
+ \notag\\
+ &\qquad
+ +\sum_{r\ge1}\mathbb E\left[
+  \mathbf1_{\{S_r=m\}}
+  f\left(1,\frac{r-m/\mu_C}{a_m}\right)\right].
+ \label{eq:critical-gibbs-renewal-average}
+\end{align}
+This identity is the point at which both the free-monoid coordinates and the
+four orbit branches enter the limit law.
+
+We prove convergence by characteristic functions.  Write
+\[
+ \Psi_\alpha(t)=
+ \int_0^\infty(e^{itx}-1-itx)\alpha x^{-\alpha-1}\,dx
+\]
+for the exponent in
+\eqref{eq:centered-stable-characteristic-exponent}.  By
+\eqref{eq:critical-renewal-second-order},
+\[
+ \sum_{r\ge1}\Pr\{S_r=m\}=u_m(\sigma_0)=O(1).
+\]
+The first and last terms on the right of
+\eqref{eq:critical-gibbs-renewal-average} are therefore negligible after
+division by \(Z_m^R(-\sigma_0)\sim2m/\mu_C\).  Hence, for fixed
+\(\theta,\lambda\in\mathbb R\), the required characteristic function equals
+\begin{equation}
+ \frac{\mu_C}{m}\sum_{r\ge1}
+ \mathbb E\left[
+  \mathbf1_{\{S_r<m\}}
+  \exp\left\{i\theta\frac{S_r}{m}
+       +i\lambda\frac{r-S_r/\mu_C}{a_m}\right\}\right]+o(1).
+ \label{eq:critical-gibbs-characteristic-sum}
+\end{equation}
+
+We next justify the renewal-epoch averaging in this expression.  Fix
+\(\varepsilon\in(0,1/2)\).  The terms with
+\(r\mu_C/m\le\varepsilon\) have total absolute contribution at most
+\(\varepsilon\).  The terms with
+\(1-\varepsilon<r\mu_C/m<1+\varepsilon\) have total contribution at most
+\(2\varepsilon+o(1)\).  Since \(C\ge3\), only \(r\le m/3\) can occur on
+\(\{S_r\le m\}\).  For every \(\delta>0\), the weak law of large
+numbers gives
+\[
+ \sup_{r\ge\delta m}
+ \Pr\{|S_r/r-\mu_C|>\delta\}=o(1).
+\]
+Indeed, this supremum is bounded by
+\(\sup_{r\ge\lfloor\delta m\rfloor}
+\Pr\{|S_r/r-\mu_C|>\delta\}\), which tends to zero because the
+sequence of probabilities itself tends to zero.  After adjusting
+\(\delta\) to the fixed gaps from \(m/r\) in the two ranges, this gives
+\begin{align*}
+ \frac1m\sum_{r\mu_C>(1+\varepsilon)m}\Pr\{S_r<m\}&=o(1),\\
+ \frac1m\sum_{\varepsilon m<r\mu_C\le(1-\varepsilon)m}
+       \Pr\{S_r\ge m\}&=o(1).
+\end{align*}
+Indeed, each event forces \(S_r/r\) to remain a fixed positive distance
+from \(\mu_C\), and there are \(O(m)\) possible indices.  We may therefore
+remove the indicator in the interior range and discard all other indices,
+at a total error that tends to zero after first taking \(m\to\infty\) and
+then \(\varepsilon\downarrow0\).
+
+Put \(t_{m,r}=r\mu_C/m\).  Uniformly when
+\(\varepsilon\le t_{m,r}\le1-\varepsilon\), the weak law also permits
+replacement of \(S_r/m\) by \(t_{m,r}\) in the first exponential factor.
+To see this without a moment estimate, use
+\[
+ \left|e^{i\theta S_r/m}-e^{i\theta t_{m,r}}\right|
+ \le \min\left\{2,|\theta|\,|S_r-r\mu_C|/m\right\}.
+\]
+The right side converges to zero in probability uniformly in the stated
+range and is bounded by \(2\); hence its expectations converge uniformly
+to zero.
+If \(r/m\to x>0\),
+\Cref{cor:critical-cost-stable-domain} and
+\(a_r/a_m=(r/m)^{1/\alpha}\) give
+\[
+ \frac{S_r-r\mu_C}{a_m}
+ \xrightarrow{\mathrm d}x^{1/\alpha}\mathcal S_\alpha.
+\]
+The convergence of the corresponding characteristic functions is uniform
+for \(x\) in compact subintervals of \((0,\infty)\): otherwise a
+counterexample sequence would have a subsequence on which \(x\) converges,
+contradicting the displayed limit.  The interior summand in
+\eqref{eq:critical-gibbs-characteristic-sum} is consequently
+\[
+ e^{i\theta t_{m,r}}
+ \exp\left\{\frac{t_{m,r}}{\mu_C}
+       \Psi_\alpha\left(-\frac{\lambda}{\mu_C}\right)\right\}+o(1)
+\]
+uniformly in that range.  The Riemann sum, whose mesh in the variable
+\(t_{m,r}\) is \(\mu_C/m\), now yields
+\begin{equation}
+ \int_0^1 e^{i\theta t}
+ \exp\left\{\frac{t}{\mu_C}
+       \Psi_\alpha\left(-\frac{\lambda}{\mu_C}\right)\right\}\,dt.
+ \label{eq:critical-gibbs-limit-characteristic-function}
+\end{equation}
+
+The change of variables in the defining integral for \(\Psi_\alpha\) gives
+\(\Psi_\alpha(cz)=c^\alpha\Psi_\alpha(z)\) for \(c>0\).  Conditional on
+\(U=t\), the characteristic function of
+\(-\mu_C^{-1-1/\alpha}t^{1/\alpha}\mathcal S_\alpha\) is therefore the
+second exponential in
+\eqref{eq:critical-gibbs-limit-characteristic-function}.  Integration over
+an independent uniform \(U\) identifies the displayed integral as the joint
+characteristic function of the vector on the right of
+\eqref{eq:critical-fibonacci-gibbs-geometry}.  The continuity theorem proves
+the assertion.
+\end{proof}
