@@ -127,6 +127,12 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
   （首轮我在 `artifacts/` 里跑，`verify_finite_claims.py` 的输出路径是相对 cwd 的，
   于是悄悄生成了 `artifacts/artifacts/` 而什么都没校验。已清理；正确跑法是论文根目录。）
 
+**verifier 的工作目录敏感性（不只是我踩的坑）**：`verify_finite_claims.py` 的输出参数默认值
+是相对路径（`artifacts/finite_verification.txt`），脚本从哪里启动就往哪里写，且不会报错。
+仓库根目录存在一个 **8 月 2 日**留下的 `artifacts/`，内含同名两文件，与今日 committed 版本**不同**
+（该篇此后经历 FQ 重构与拆分，输出理应变化）—— 说明这个坑至少两周前就在悄悄产出孤儿输出。
+**正确跑法：从论文自身根目录**，即 `cd papers/publication/<paper> && python artifacts/<x>.py`。
+
 ⚠️ **本条尚未证明的部分**：以上只证明脚本能跑通、且结构上可能失败。
 **未做**逐脚本的变异测试（改坏一个常数、确认变红、再改回）。
 "一个检查若在任何输入下都通过，它就不是证据" —— 这条纪律此前只对 A7 伴随篇提过，
