@@ -509,3 +509,52 @@ fixed-`p` integer bit bounds are useful quantitative additions. The affine
 Pade calculation is a direct implementation of standard rational
 reconstruction once the degree cap is known, and exact rejection is necessary
 for correctness rather than a separate novelty claim.
+
+## Unconditional critical rationality and linear radial theorem (17 August 2026)
+
+The former KN85 dependency has been removed. The normalized critical equation
+needed in the paper,
+
+    F(z)^p = H(z) F(z^p),   F(0)=1,
+
+reduces to verified linear Mahler rationality. If u=zF'/F and
+a=-(z/p)H'/H, then u(z^p)-u(z)=a(z). For nonzero a, elimination gives the
+homogeneous linear equation
+
+    a(z)(u(z^(p^2))-u(z^p))
+      - a(z^p)(u(z^p)-u(z)) = 0.
+
+The official arXiv record 1210.2070v2 was checked directly. It returns the
+title "The rational-transcendental dichotomy of Mahler functions" and lead
+author Jason P. Bell, matching the bibliography. Corollary 8 states that an
+algebraic p-Mahler power series is rational and attributes the result to
+Kumiko Nishioka, Theorem 5.1.7. Thus an algebraic F makes u rational. Finite
+monodromy gives F^m rational for some m; reducing the divisor identity modulo
+m shows that a nonzero valuation residue would occur at all p^n-th roots of
+one point, contradicting finite divisor support. Hence the divisor of F^m is
+divisible by m and F is rational.
+
+This algebraic-to-rational phenomenon is not claimed as new. Keiji
+Nishioka's 1985 paper is a prior nonlinear antecedent, and the present proof
+is a direct derivation of the normalized critical case from the verified
+linear theorem. The publishable new consequence is instead the unconditional
+dynamical end theorem: for relatively unit-Adams-invariant finite abelian
+prime-power extensions, K full radial profile vectors and an L-term primitive
+jet determine all primitive data when K+L >= max(v,v'). In particular, V
+radial locations suffice, and the existing realizable binary family now gives
+the unconditional order N_C2(V)=Theta(V).
+
+Fresh official arXiv API searches returned zero records for each of the exact
+queries "algebraic function solutions" with Mahler, "logarithmic derivative"
+with "Mahler function", "finite radial determination", and "radial
+determination" with "dynamical zeta". Broader equation-string searches
+returned unrelated records and no finite radial inverse theorem. Crossref
+searches again located adjacent Mahler rationality and transcendence work but
+no radial determination theorem. Semantic Scholar returned HTTP 429 and
+OpenAlex returned no usable search results during this check, so neither was
+counted as negative evidence.
+
+The fresh results agree with the earlier Crossref, arXiv, Semantic Scholar,
+OpenAlex, and zbMATH comparisons recorded above: no located work states the
+unconditional linear radial determination theorem or its collision--jet
+form. This is evidence of novelty, not a logical certification of priority.

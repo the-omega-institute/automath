@@ -36,7 +36,7 @@ supplement pointer. The named companion PDF exists in this bundle.
 - `artifacts/unittest_output.txt` reports 44 tests and `OK`.
 - `certificates/s3_log_certificates.run.txt` ends with
   `fixed-label windows verified`.
-- `artifacts/literature_check.md` records Kumiko Nishioka's verified 1982
-  statement and the verified bibliography but unverified statement of Keiji
-  Nishioka's 1985 paper.
+- `artifacts/literature_check.md` records the verified Mahler inputs, the
+  logarithmic-derivative reduction, and the novelty search for the
+  unconditional linear radial theorem.
 - `artifacts/SHA256SUMS` verifies the submitted scripts and text records.
