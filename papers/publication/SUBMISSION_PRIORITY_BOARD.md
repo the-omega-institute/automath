@@ -235,10 +235,13 @@ ho(h)$；效率检验达高斯半直线功效包络；**$m\ge3$ 时簇形状不�
 **第四轮的杠杆点（我方预读，tick 246）—— `cyclic_rank_thresholds_…_etds`（A3-B，30 页）**：
 
 该篇结论节自己写着唯一悬而未决的问题：**负共轭、孔径 $m\ge4$ 时已证
-$2\le\ell_{m cau}(eta,m)\le m$，下界是否总能取到未知。**
+$2\le\ell_{
+m cau}(eta,m)\le m$，下界是否总能取到未知。**
 
-跨篇连接（只有同读两篇才看得见）：**刚在 `linear_overlap` 证出的正是同一个量 $\ell_{m cau}$** ——
-那边给出有界零 Pisot 族的 $\limsup_m\ell_{m cau}(U,m)/m\le1$ 且常数最优，
+跨篇连接（只有同读两篇才看得见）：**刚在 `linear_overlap` 证出的正是同一个量 $\ell_{
+m cau}$** ——
+那边给出有界零 Pisot 族的 $\limsup_m\ell_{
+m cau}(U,m)/m\le1$ 且常数最优，
 其机制是"$u_m>D$ 时零点无非零前驱 + 坍缩引理 ⇒ 无非零圈"。
 该最终无环性论证很可能对负共轭二次情形的下界问题有话说。
 **第四轮派工时须把这条连接写进任务**，而非泛泛要求深挖。
@@ -248,6 +251,11 @@ $2\le\ell_{m cau}(eta,m)\le m$，下界是否总能取到未知。**
 具体目标 $D_m=D_{m-2}+D_{m-4}$ 无条件化 + 最大化子分类）、
 `homological_visibility_…`（26+6，Cahiers major revisions；明确不做术语,只问机器还能证什么，
 且"机器已尽"的扎实否定同样算成功）。内存 2.40 GB，故恢复三路。
+
+tick 247 状态：三路均在实写，无一完成。`finite_parts` 新建
+`sec_refocused_mahler_rationality.tex` —— 正对 (KN85) 那条线；
+`homological_visibility` 在改 gerbe 障碍与结论节；`finite_window_zeckendorf` 仅有
+一个按规范命名的 scratch 文件。内存 1.82 GB、缺页 39.9、无孤儿。
 
 **`linear_overlap` 判定：真结果，且与 `large_primitive_divisors` 那条推论形状相反。**
 那边无条件性是把度量从 $P_{
