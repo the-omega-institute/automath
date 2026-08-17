@@ -2160,3 +2160,29 @@ projection 只验下游、zeck 运算判错、本 tick 的容许性遗漏），
 **比对进度**：`golden_mean_folding`（1 处已修）、`detector_shells`（干净）、`joukowsky`（干净）、
 `fibonacci_folding`（干净，两常数精确验过）。
 **Oracle 池**：空闲。**在飞**：无。**待你定夺**：五项。
+
+---
+
+## tick 300 — `cubical_stokes` 摘要比对：干净
+
+逐条读下来：
+
+- **锐估计** $\norm{K_k\omega}_{\coeff,\infty}\le(2k)^{-1}\norm{\omega}_{\coeff,\infty}$
+  —— 摘要明写"**在坐标单项式形式 $f\,\dd x_I$ 这一类上**"，类被写出来了；
+  并且紧接着说"识别出把该界推广到更大定向类的**精确关联障碍**"，没有把它说成普遍成立。
+- **极值量** $m(R)=(2\sum_jL_j^{-1})^{-1}$ —— 与我此前用的 $m_R=|R|/P_1(R)$ 一致：
+  代入 $A_j=|R|/L_j$ 得 $P_1=2|R|\sum_jL_j^{-1}$，故 $m_R=1/(2\sum_jL_j^{-1})$。**恒等，非近似。**
+- **"每个极小元在每张余维一面上有典范迹"** —— 我原本怀疑这句只由单位方体版本
+  （`sliced_boundary_readout.tex` 的 `thm:boundary-rigidity`，前提是 $I^k$ 上 $\dd\eta=\omega_0$）支撑，
+  而摘要把它放在讲一般盒 $R$ 的语境里。查证后：**盒版本确实存在**
+  （`box_boundary_readout.tex`，结论逐字相同，附带 $\sum\norm{\iota^\ast(\eta-\eta_R)}_{L^1}\le2P_1(R)(M-m_R)$
+  的定量近极小元估计）。摘要的假设"盒 $R$ 上 $\dd x_1\wedge\cdots\wedge\dd x_k$ 的原函数"也已写明。**无缺陷。**
+
+**比对进度（5 篇）**：`golden_mean_folding`（1 处已修）、`detector_shells`、`joukowsky`、
+`fibonacci_folding`（两常数精确验过）、`cubical_stokes` —— 后四篇干净。
+
+**命中率**：5 篇里 1 处。低于外审的发现率（它们在 6 篇里找到 4 处），
+说明这套自查有用但**不能替代外审** —— 外审找到的多是"这条够不够分量""这个类是不是同义反复"，
+那类判断我做不了。
+
+**Oracle 池**：空闲。**在飞**：无。**待你定夺**：五项。
