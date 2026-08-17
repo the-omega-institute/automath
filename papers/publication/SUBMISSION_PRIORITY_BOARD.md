@@ -411,7 +411,32 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 不适用则须说清两设定差别）、`prefix_scan_error_boundary_rates_…`（19 页，
 自找杠杆；其 63 页兄弟篇只读参考，结果若属兄弟篇须说明并停手）。
 
-tick 263 状态：三路在跑。`cubical_stokes`（第八轮，带兄弟篇拼接线索）已改 3 文件但报告未到；
+**第八·九轮收割（tick 263–264）**：
+
+| 篇 | 增量 | 页 | 提交 |
+|---|---|--:|---|
+| `cubical_stokes_…_jdsgt` | **单胞元剖面不能自动聚合**；精确可相容剖面为最小费用流对偶，等于原子剖面 $\iff$ 一族 **Hoffman 内部割不等式**成立；$2	imes2$ 各向异性反例（宽 1,2／高 2,7）精确有理算术证 $\Psi_Q(9/4)<72=\Phi_Q(9/4)$ | 23→**27** | `7ccfeabd7` |
+| `prefix_scan_error_boundary_…` | **精确矩阵系数取代比较界**：$arepsilon_m=\lambda^{-(m-1)}s^{\mathsf T}B_\partial^{m-1}t$ ⇒ 生成函数有理、有限线性递推、领头常数显式且严格正 | 19→**21** | `79d51e326` |
+
+**🔑 两篇共享同一个开放问题（非两个）**：`cubical_stokes` 的离散割判据正是 `coefficient_sup`
+拒绝连续常数 $2P_1(R)$ 尖锐性时卡住的**有界无散度迹延拓障碍的有限维形式**；
+连续版需一条 $L^\infty$ 受控无散度延拓定理替代 Hoffman。**两篇讨论节都应写明此事**，
+而非各自另记"未来工作"。
+
+**`prefix_scan` 说清了原先为何拿不到常数**：过渡到原始边界计数时一次丢掉三样 ——
+柱面公式的首末 Parry 特征向量权重、以及只依赖末端积状态的后验歧义。三样齐全则 Perron 结论常规。
+它并**正确拒绝**两条属兄弟篇的候选（Gibbs 边界压力、周期/可约剩余类渐近），
+第三条判为在所述一般性下**为假**并给出论文自有反例 $igcup_n[0^n1^n]$。
+
+⚠️ **写进提交信息的"未覆盖"**：`cubical_stokes` 的 verifier 证的是**严格损失反例**，
+非一般剖面公式；LP 对偶与 Hoffman 归约靠论证本身，审稿人应先看证明第 5 项。
+
+**第十轮已派出（tick 264）**：`scan_error_prefix_partitions_…_etds`（63 页，
+须先确认兄弟篇"已在此篇"的两条判断属实 —— 若其一实际不在，那本身就是结果）、
+`elliptic_normalization_branch_geometry_…`（76 页，
+带 `self_dual` 的分歧分类手法作可选连接；并明令沿用其标准：**数值证据不得提拔为定理**）。
+
+（历史）tick 263 状态：三路在跑。`cubical_stokes`（第八轮，带兄弟篇拼接线索）已改 3 文件但报告未到；
 `prefix_scan_error_boundary_rates` 已开始（1 文件）；`finite_observation_escape_rates` 研究阶段。
 内存 1.73 GB、缺页 0、无孤儿。
 
