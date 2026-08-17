@@ -411,6 +411,10 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 不适用则须说清两设定差别）、`prefix_scan_error_boundary_rates_…`（19 页，
 自找杠杆；其 63 页兄弟篇只读参考，结果若属兄弟篇须说明并停手）。
 
+tick 263 状态：三路在跑。`cubical_stokes`（第八轮，带兄弟篇拼接线索）已改 3 文件但报告未到；
+`prefix_scan_error_boundary_rates` 已开始（1 文件）；`finite_observation_escape_rates` 研究阶段。
+内存 1.73 GB、缺页 0、无孤儿。
+
 **第八轮已派出（tick 259）**：`cubical_stokes_…_jdsgt`（23 页，**用兄弟篇主动交接的线索** ——
 `coefficient_sup` 的候选表里把"多胞元拼接与界面相容"明确判为"属于该兄弟篇"而非自己）、
 `scan_projection_…_etds`（20 页；另附既有缺陷：内嵌书目印 31 条只引 22 条，
