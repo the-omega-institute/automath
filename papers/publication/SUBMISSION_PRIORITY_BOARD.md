@@ -436,7 +436,8 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 **工具接力成功**：`scan_projection` 的 $h_t>(t/s)h_s$ 转过来后，临界处
 $N_m^3S_3\le\exp[m(	frac32h_2-h_3)+o(m)]	o0$，第三矩条件消掉而非放宽。
 复核方**手工核了数学**：确认 codex 正确处理了暂态块（$b_r$ 可能真为零，
-但 $(ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\infty$ 扛住）——
+但 $(
+ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\infty$ 扛住）——
 这也是下界写成"最终成立"而非"从 $m=1$ 起"的原因。
 
 **一处担心经查不成立**：被删的"退化剩余类二分"命题被疑为丢弃了"不必混合"情形的内容；
@@ -446,6 +447,19 @@ $N_m^3S_3\le\exp[m(	frac32h_2-h_3)+o(m)]	o0$，第三矩条件消掉而非放宽
 **又一种"假通过"形态**：从 `.bbl` 提 key 得 0 条而控制计数显示 31 —— 这次**不是转义，是换行**
 （`ibitem[Agarwal et~al.(2024)…` 标签折行，`{key}` 落到下一行，单行模式匹配不到）。
 **控制计数第四次生效。**
+
+| `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$arepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(ho/\lambda)^{m-1}(c_{(m-1)mod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
+
+**兄弟篇的"这两条已在你那儿"经确认属实** —— 防住了 A 推 B、B 推 A、两边皆不做的失败模式。
+**novelty 对着论文自己紧挨的推论核过**（复述最可能藏于此）：旧推论对**边界计数**给精确律，
+对扫描误差仅给双边夹逼、本原时升为 $symp$，缺口真实。
+**顺修命名冲突**：旧推论仍称 "give a **complete** Parry scan-error law"，
+而严格更强的完整律就在其上 —— 同词两强度，已改为其实证内容。
+**明确不做**：`theorem_inventory.json/.md` 留作过期 —— 它形似登记表实为 stage-A **审计快照**
+（含 `proof_gaps`、`journal_style_gaps`），回填新定理＝改写审计记录迎合后来工作。
+
+tick 266 状态：`elliptic_normalization`(5 文件)、`recursive_addressing`(3)、
+`deterministic_telescoping`(2) 三路均在实写，无一完成。内存 1.89 GB、缺页 0、无孤儿。
 
 **第十一轮已派出（tick 265）**：`deterministic_telescoping_…`（22 页，
 带 Zeckendorf 簇两项新结果作只读上下文，避免重复亦不漏连接）、
