@@ -76,7 +76,13 @@ and
 m_0(U,D)=\min\{m\ge2:\beta^m\delta_{U,D}>B_{U,D}\}.
 \label{eq:bounded-zero-contraction-threshold}
 \end{equation}
-All these constants are effective from $U$ and $D$.
+Since $U$ is strictly increasing and integer-valued, the further threshold
+\begin{equation}
+m_*(U,D)=\max\left(m_0(U,D),
+ \min\{m\ge2:u_m>D\}\right)
+\label{eq:bounded-zero-acyclicity-threshold}
+\end{equation}
+is also effective.  All these constants are effective from $U$ and $D$.
 
 \begin{lemma}[Adjacent collapse for an arbitrary bounded coefficient alphabet]
 \label{lem:bounded-zero-arbitrary-alphabet-collapse}
@@ -127,7 +133,7 @@ $e_{t+m}+k_t=\beta k_{t+1}$.  Irrationality of $\beta$ and integrality of
 the three coefficients force $k_{t+1}=0$ and $e_{t+m}=-k_t$.
 \end{proof}
 
-\begin{theorem}[Linear transient bound for bounded $U$-representations of zero]
+\begin{theorem}[Eventual acyclicity and linear transient bound]
 \label{thm:bounded-zero-linear-transient}
 Let $U=(u_n)_{n\ge0}$ be a strictly increasing sequence of positive integers
 with $u_0=1$, satisfying the integral recurrence whose characteristic
@@ -135,10 +141,13 @@ polynomial is the minimal polynomial of a nonintegral Pisot number $\beta$.
 Fix $D\ge1$, and let $G_m(U,D)$ be the graph defined above.  For every edge,
 the completing coefficient is unique and necessarily satisfies
 $|c|\le K_{U,D}$.
-Then there is an effectively computable $C(U,D)<\infty$ such that, for every
-$m\ge2$, if no directed cycle of $G_m(U,D)$ is reachable from a vertex whose
-first coordinate is nonzero, every directed path beginning at such a vertex
-has fewer than $C(U,D)m$ edges.
+For every $m\ge m_*(U,D)$, the zero loop is the only directed cycle of
+$G_m(U,D)$, and every directed path beginning at a vertex whose first
+coordinate is nonzero has at most $m$ edges.  In addition, there is an
+effectively computable $C(U,D)<\infty$ such that, for every $m\ge2$, if no
+directed cycle is reachable from a vertex whose first coordinate is nonzero,
+every directed path beginning at such a vertex has fewer than $C(U,D)m$
+edges.
 
 Equivalently, after shifting a chain so that its initial exposed coefficient
 is nonzero, either it reaches a directed cycle, or it has fewer than
@@ -159,9 +168,22 @@ k_1=k_2=\cdots=0,\qquad
 e_m=-k_0,\qquad e_{m+1}=e_{m+2}=\cdots=0.
 \]
 A path of $m+1$ edges therefore reaches the all-zero vertex.  That vertex
-has a loop, so such a path would make a directed cycle reachable from its
-initial vertex.  Under the hypothesis of the theorem, every path has at
+has a loop, so under the no-reachable-cycle hypothesis every path has at
 most $m$ edges for $m\ge m_0(U,D)$.
+
+Suppose now that $m\ge m_*(U,D)$.  The zero vertex has no predecessor other
+than itself.  Indeed, an edge into it must come from a vertex
+$(a,0,\ldots,0)$, and its edge equation is $a+cu_m=0$.  Since
+$|a|\le D<u_m$, divisibility by $u_m$ forces $a=c=0$.  A path of $m+1$
+edges from a first-coordinate-nonzero vertex would reach zero by the
+preceding paragraph; repeatedly taking its predecessors would then make its
+initial vertex zero, a contradiction.  Thus every such path has at most
+$m$ edges, without an acyclicity hypothesis.  Every nonzero directed cycle
+contains a vertex whose first coordinate is nonzero, since the first
+coordinates encountered around the cycle are its successive appended
+coefficients.  Traversing that cycle would give arbitrarily long paths from
+this vertex, which is impossible.  Hence the zero loop is the only directed
+cycle.
 
 For each of the finitely many $2\le m<m_0(U,D)$, the graph is finite.  When
 no cycle is reachable from the first-coordinate-nonzero vertices, exact

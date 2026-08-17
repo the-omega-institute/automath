@@ -2,7 +2,7 @@
 
 - Title: Linear overlap transients and cyclic rank recodings in Pisot numeration
 - Target journal: Ergodic Theory and Dynamical Systems (ETDS)
-- Main-text length: 18 pages; no supplementary material is submitted
+- Main-text length: 20 pages; no supplementary material is submitted
 - Assessed ETDS substantive-bar probability: 75% as first assessed at 20 pages,
   77% after the citation repairs (earlier estimate 74%, band 69--79%)
 - Assessed ambitious alternative: Transactions of the American Mathematical
