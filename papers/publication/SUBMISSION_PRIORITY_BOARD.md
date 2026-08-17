@@ -2410,3 +2410,31 @@ PDF 已确认三处（摘要、引言、第 5 节）明说该断言为假，且"
 该条与"按形状点名问审稿人"一并入记忆。
 
 **待你定夺**：七项 + 止损编辑惯例一项。
+
+---
+
+## tick 308 — 撤稿补齐：**我上一轮只改了一半**
+
+三份猎错外审仍在等（`window6`、`cubical_stokes`、`golden_mean_folding`），codex 后端第四个 tick 503。
+本 tick 做的是全仓库搜同型主张，结果第一个查出来的问题在**我自己身上**。
+
+**tick 306 的止损编辑漏了三处**，同一篇里仍以事实口吻断言那条已撤的定理：
+- `01-introduction.tex:16` 概览段："A second structural theorem **reduces** the local invertibility problem…"
+- `appC-sofic-conjugacy.tex:4` 附录开头："The structural reduction … **is supplied abstractly by** \Cref{thm:finite-core-criterion}"
+- `appC-sofic-conjugacy.tex:174` 附录证明开头："**By** \Cref{lem:fib-span3,thm:finite-core-criterion}, every ambiguous two-label block **reduces to** a core of length at most 4"
+- 讨论节还把该核判据作为可用的一般 span-$r$ 判据推荐。
+
+**这正是我几个 tick 前批评别人的做法** —— 改审稿人引用的那一句，而不是那个失效模式。
+而且**半撤的定理比不撤更糟**：论文自相矛盾，摘要说它假、正文照用。
+四处现已全部指向反例注记；附录证书**保留并重新界定** —— 它们分类的是短核，不再声称穷尽全部歧义见证；
+讨论节改为写明正确的界必须计入**进位级联的因果锥**而非单次重写的跨度。
+构建 39 页不变、全零，"asserted as fact" 的残留为 **0**，PDF 中五处撤回声明。
+
+**同型主张的姊妹篇排查**：全仓库只有 `scan_error_prefix_partitions` 共用 "ambiguous core" 一词，
+但那是四个具名状态 $(E_0,E_1,O_0,O_1)$，与核长主张无关。**未扩散。**
+
+**方法上的收获**：撤一条定理时，正确的动作不是改引用它的那句话，而是
+**grep 该主张的所有措辞变体**（"reduces"、"is supplied by"、"By \Cref{...}"、讨论节的推荐语），
+逐一处理后再用一次 grep 验残留为零。我这次是靠"查姊妹篇有没有被污染"才顺带发现自己漏改的。
+
+**待你定夺**：七项 + 止损编辑惯例。
