@@ -172,13 +172,23 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
 | 篇 | 结果 | 我的判定 | 提交 |
 |---|---|---|---|
 | `brocot_…_tams` | **临界 Gibbs 几何**：$(J_m/m,(H_m-J_m/\mu_C)/a_m)	o(U,-\mu_C^{-1-1/lpha}U^{1/lpha}\mathcal S_lpha)$，20→23 页 | **真定理**。不是已有吸引域推论的改写：那条讲抽象生成元代价的独立序列，这条讲从**真实 Fibonacci 层**抽出的数。证明起于精确加权生成元-更新恒等式；硬点是无穷方差下的更新时刻平均（Chebyshev 不可用，须对全部 $O(m)$ 指标做一致弱律）| `f7166ba7d` |
-| `large_primitive_divisors` | 无条件本原准素分量 $Q_{m prim}(F_n)\ge n^{2-arepsilon}$，8→9 页 | **推论，非第二定理**。= 已有二择一 + 标准的 $q\ge n-1$；**无条件性靠把度量从 $P_{m prim}$ 削弱到 $Q_{m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确有改进，值得留，但不是这篇缺的东西 | `09a5cfbac` |
+| `large_primitive_divisors` | 无条件本原准素分量 $Q_{
+m prim}(F_n)\ge n^{2-arepsilon}$，8→9 页 | **推论，非第二定理**。= 已有二择一 + 标准的 $q\ge n-1$；**无条件性靠把度量从 $P_{
+m prim}$ 削弱到 $Q_{
+m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确有改进，值得留，但不是这篇缺的东西 | `09a5cfbac` |
 
 **三篇均自行加了 `.latexmkrc`，均已删除**（删后照样 exit=0）。加它是为让省略文件名的 `latexmk -pdfxe`
 可跑，而那从来不是验收条件 —— 论文目录携带私有构建配置正是编译审计清了几轮的缺陷。
 禁令已写入 `deep_research_task.txt`。
 
-**在飞（tick 241）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
+| `cayley_chebyshev_…_jfa` | **Thm 6.8 尾指数原理**：任何双侧多项式尾指数 $eta$ 且归一化导数有界的核，尖锐矩指数 $\kappa=\max\{r,	frac{2reta}{eta+2r}\}$；另 **Thm 5.10** 稳定幂散度双壁垒。32→38 页 | **两条真定理，本轮最重**。陈述与证明中稳定性、卷积半群均不出现，原结论成为 $eta=d+lpha$ 特例，Student 核为新覆盖类。尖锐性有构造：$eta>2r$ 时对每个 $ho<\kappa$ 造得出 $\limsup s^{2r}D_{m KL}=+\infty$ 的分布 | `ee54b7ba8` |
+
+> 收割 `cayley_chebyshev` 时我自己险些制造缺陷：新节文件名带运行后缀，我重命名并改 `main.tex`，
+> 但 grep 显示 `main.tex` 内并无该引用 —— 一度误判为孤儿文件。实为
+> `sec_verified_A2_results_part_03.tex:253` 引入，我的重命名恰好打断了那处引用。补改后重建通过。
+> **是我 grep 错了位置，不是文件有问题。**
+
+**在飞（tick 242）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
 `large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\logarphi/2$ 以下使指数严格超 2，
 要么给出精确否定 —— 后者同样算成功）。
 
