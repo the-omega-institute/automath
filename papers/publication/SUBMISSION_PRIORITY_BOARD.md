@@ -1601,3 +1601,33 @@ $\sum_{p\in\Pi_\alpha(d)}\log p\ge(2+\delta+o(1))a(d)\log d$。
 全文无数值或计算机辅助主张 —— 若新工作引入计算主张，须显式声明并更新该句而非留下假陈述）。
 
 **Oracle**：本 tick 再试仍不可达。
+
+### 🔓 tick 283 — **ORACLE 恢复**（自 tick 227 起首次）
+
+用户指示 oracle 应可用后查明：**卡点有三层，前两层是环境，第三层是我自己的命令写错了**。
+
+1. **40000 是 WARP 本身，一直在跑；40002 是桥接用的本地 HTTP relay（`warp-http-proxy.mjs`），没起。**
+   用仓库自带的 `nyxid-worker/warp-control.ps1 -Action Start` 起来即可，不碰 WSL、不动任何流程状态。
+2. wrapper 硬编码走 `172.18.32.1:40002`（WSL 侧看到的 Windows 主机地址），故还需一个绑到该地址的 relay 实例；
+   并需要 WSL 发行版 `NyxIDUbuntu2404Cli` 运行（`nyxid` 装在里面）。
+   **挂了几十个 tick 的待确认项现已有答案：启动该发行版不会自动恢复任何流程。**
+   启动后立刻查过——只有标准 Ubuntu 服务（cron、rsyslog、getty、wsl-pro、unattended-upgrades），
+   **无任何 nyxid/oracle/pipeline/supervisor/watchdog 单元**，`nyxid` v0.7.0 在位。
+3. **我自己的错**：这些 tick 里我一直发的是 `nyxid-via-warp.ps1 status <pool>`，
+   漏掉了 `oracle` 这一级（正确为 `oracle status <pool>`）。relay 不通时 wrapper 在到达 nyxid 前就抛错，
+   所以这个错一直被掩盖；relay 一通它就暴露了。
+
+**中途一个未走完的岔路**：因 `--help` 输出被我截断在 30 行、没看到 `oracle`，我一度判定
+v0.7.0 缺该子命令并尝试 `nyxid update`。更新**下载了新二进制但拒绝安装** ——
+GitHub attestation API 返回 504 Gateway Timeout（上游瞬时故障，非验签失败）。
+CLI 拒装未验证二进制是正确行为，**我没有绕过该校验**。随后确认 v0.7.0 本就带 `oracle`，升级并无必要。
+
+**现状**：池 `company-chatgpt-pro` 空闲，5 个 worker 在 2–5 秒内活跃，0 排队、0/6 派发。
+
+**已提交首个真实外审**（新会话按协议 `--tag mode:chat`，附 PDF，`--no-wait`）：
+`coefficient_sup`（JDDE），任务 id `c6f308d6-9f0a-4879-b268-95cc5fad4eff`。
+问的是三条硬问题：给 {accept/minor/major/reject} 裁决与最强理由；
+敌意审稿人会先攻哪一点（要求引用具体句子/定理，不要小毛病清单）；
+以及中心新主张（$k\ge2$ 时连续常数恰为 $2P_1(R)$，由微结构无散度边界层证明）是否站得住 ——
+特别是 collar 构造对系数盒的控制是否密不透风、与它引用但声明未作输入的 Bourgain–Brezis 端点理论是否切割正确。
+注意路径须给 WSL 侧（`/mnt/...`），Windows 路径会被 nyxid 判为不存在。
