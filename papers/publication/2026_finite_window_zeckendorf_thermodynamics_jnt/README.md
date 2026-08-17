@@ -6,10 +6,11 @@ Theory*.
 
 The article studies exact finite-window Fibonacci coefficient spectra. Its
 main results are the affine coefficient-spectrum correspondence, the
-pointwise partition-difference formula, the exact two-layer identity, local
-spectral stabilization, critical finite-window Gibbs and coexistence laws,
-and the completion of the large-deviation principle across the freezing
-corner. Pressure formulas
+pointwise partition-difference formula, the exact two-layer identity, the
+second-largest fiber classification, sharp local stabilization, the
+mesoscopic power-law spectrum, critical finite-window Gibbs and coexistence
+laws, and the completion of the large-deviation principle across the
+freezing corner. Pressure formulas
 from the golden-ratio Bernoulli-convolution literature and the transferred
 extremal classification are used as subordinate inputs, with their provenance
 stated in the manuscript.
