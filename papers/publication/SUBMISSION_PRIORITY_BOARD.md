@@ -101,7 +101,24 @@ latexmk 发现声明的 `.bib` 一个都不在 → **直接跳过 BibTeX** → �
 （是数学算子，本就该印出来，与审计标记 `\leanverified` 的空宏不同类）；
 `dAscoli2024ODEFormer` 的 ICLR 2024 出处经 **DBLP** 坐实（OpenReview 403、Crossref 无存档）。
 
-⚠️ **最后一项在飞**：三篇书目仍跨树指向 `../../../theory/…`，其中两篇 `submitted_*`。
+**✅ 本条已全部关闭（tick 236–237）**。确认清扫按发现缺陷时的同一尺度重跑：**74 个文档，
+全部论文主文档、补充材料、cover letter 均可从自身源码编译**。余下 2 个失败是
+`sn-article.tex` —— 随稿附带的 Springer Nature 模板样例，非稿件本身。
+
+最后一个真失败已修（`bb692f9cc`）：`fibonacci_moduli` 的 cover letter。
+`\signature{... nd ...}` —— `nd` 属 article 类的 `uthor`，在 `letter` 类里展开成
+tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类签名行分隔符是 `\`。
+
+三篇书目自包含已完成（`80f7aa1df`）：条目数 = 印出数 = 引用数（16/23/16），
+逐字节取自 theory 源；**全树任何 `.tex` 的 `ibliography`/`\input`/`\include`/
+`\includegraphics` 参数中不再有 `../`**，目录单独拷出仓库亦能编译（已实测）。
+
+### 可复现性审计（2026-08-17，tick 237）
+
+- **SHA256SUMS：15 份清单全部校验通过**，0 内容变更、0 文件缺失。
+- 全库 `artifacts/verify*.py` 与 `test_*.py` 清扫进行中。
+
+（历史记录）三篇书目曾跨树指向 `../../../theory/…`，其中两篇 `submitted_*`。
 期刊只收论文自身目录，拿不到 `theory/` —— 与"命令行补宏"同类。
 任务 `self_contained_bibliography_task.txt`：只逐字搬运**实际引用**的条目（不整体导入，
 避免留下数百条不引用的残渣），搬不到的 key 只许报告不许自撰；
