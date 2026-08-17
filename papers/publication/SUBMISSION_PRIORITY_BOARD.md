@@ -167,9 +167,25 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
 | `brocot_condensation_…_tams` | TAMS | 外审 major revisions；弱点是入手处，但要求出新定理而非逐条交差 |
 | `large_primitive_divisors_…` | 未评 | 中心定理外评 75–80% 可辩护新结果，但仅 8 页，需第二个实质定理 |
 
+**第一轮收割（tick 240–241）**：
+
+| 篇 | 结果 | 我的判定 | 提交 |
+|---|---|---|---|
+| `brocot_…_tams` | **临界 Gibbs 几何**：$(J_m/m,(H_m-J_m/\mu_C)/a_m)	o(U,-\mu_C^{-1-1/lpha}U^{1/lpha}\mathcal S_lpha)$，20→23 页 | **真定理**。不是已有吸引域推论的改写：那条讲抽象生成元代价的独立序列，这条讲从**真实 Fibonacci 层**抽出的数。证明起于精确加权生成元-更新恒等式；硬点是无穷方差下的更新时刻平均（Chebyshev 不可用，须对全部 $O(m)$ 指标做一致弱律）| `f7166ba7d` |
+| `large_primitive_divisors` | 无条件本原准素分量 $Q_{m prim}(F_n)\ge n^{2-arepsilon}$，8→9 页 | **推论，非第二定理**。= 已有二择一 + 标准的 $q\ge n-1$；**无条件性靠把度量从 $P_{m prim}$ 削弱到 $Q_{m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确有改进，值得留，但不是这篇缺的东西 | `09a5cfbac` |
+
+**三篇均自行加了 `.latexmkrc`，均已删除**（删后照样 exit=0）。加它是为让省略文件名的 `latexmk -pdfxe`
+可跑，而那从来不是验收条件 —— 论文目录携带私有构建配置正是编译审计清了几轮的缺陷。
+禁令已写入 `deep_research_task.txt`。
+
+**在飞（tick 241）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
+`large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\logarphi/2$ 以下使指数严格超 2，
+要么给出精确否定 —— 后者同样算成功）。
+
 **我方独立判断（不预先告知 agent，用于收割时分辨真发现与复述）**：
 `large_primitive_divisors` 的杠杆在计数上界的常数 $	frac12$ —— 指数 2 完全由它决定
-（质量 $\log U_n^{m prim}=(\logarphi+o(1))\phi(n)$ 除以计数
+（质量 $\log U_n^{
+m prim}=(\logarphi+o(1))\phi(n)$ 除以计数
 $a(n)\le(	frac{\logarphi}{2}+o(1))\phi(n)/\log n$）。
 而该 $	frac12$ 仅用了两条信息：本原素数落在 $\pm1mod 2n$、且互不相同（阶乘项把
 $\log n$ 变成 $2\log n$）。**筛法完全未上场**。三个可问方向按价值：

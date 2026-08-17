@@ -48,9 +48,15 @@ the claim were wrong, and say what you did to establish that it can fail.
 
 RULES:
  - Keep every .tex under 800 lines.
- - Clean rebuild afterwards: latexmk -C, then latexmk -pdfxe from the paper's own directory with no
-   extra arguments; zero undefined references, citations, control sequences and multiply-defined
-   labels. Report the page count before and after.
+ - Clean rebuild afterwards, run from the paper's own directory, exactly:
+       latexmk -C main && latexmk -pdfxe -interaction=nonstopmode main
+   Zero undefined references, citations, control sequences and multiply-defined labels. Report the
+   page count before and after.
+ - DO NOT add a .latexmkrc, a Makefile, or any other build configuration to the paper directory.
+   Three separate runs have now added one so that a bare `latexmk -pdfxe` with no filename would
+   work. That was never the requirement, and a paper directory carrying private build config is
+   the exact defect a recent audit spent several rounds removing: it makes the build succeed for
+   whoever has that file and fail for a journal's production desk. Name the file, as above.
  - Any citation you add must be verified in Crossref, OpenAlex, Semantic Scholar or the official
    arXiv record first, comparing returned title and lead author against what you wrote.
  - No revision marks. No scratch files. Do not commit.
