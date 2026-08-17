@@ -241,6 +241,66 @@ The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
 \(s=2\).
 \end{proof}
 
+\begin{proposition}[Strict survivor R\'enyi inequality]
+\label{prop:strict-survivor-renyi}
+Under the hypotheses and notation of
+Corollary~\ref{cor:survivor-renyi-pressure}, suppose that
+\(\card(\mathcal S_\infty)\geq2\), and set
+\[
+  h_{s,H}:=sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi)
+  \qquad(s\geq1).
+\]
+Then, for all real \(1\leq s<t\),
+\[
+  h_{t,H}>\frac{t}{s}h_{s,H}.
+\]
+In particular, \(h_{s,H}>0\) for every \(s>1\), and
+\[
+  h_{3,H}>\frac32h_{2,H}.
+\]
+If \(\card(\mathcal S_\infty)=1\), then \(h_{s,H}=0\) for every
+\(s\geq1\).
+\end{proposition}
+
+\begin{proof}
+Write \(B_s:=B_{\infty,s}\) and \(\rho_s:=\rho(B_s)\).  Let
+\(r_1>0\) be a Perron right eigenvector of \(B_1\), and define its
+Perron Doob transform by
+\[
+  P_{ij}:=\frac{B_1(i,j)r_1(j)}{\rho_1r_1(i)}.
+\]
+Then \(P\) is a primitive stochastic matrix.  If \(P^{\circ s}\)
+denotes the entrywise \(s\)-th power, diagonal similarity gives
+\[
+  \rho(P^{\circ s})=\frac{\rho_s}{\rho_1^s}=e^{-h_{s,H}}.
+\]
+
+Fix \(1\leq s<t\), put \(d=t/s>1\), and choose \(x>0\) such that
+\(P^{\circ s}x=\rho(P^{\circ s})x\).  For every state \(i\),
+\begin{align*}
+  \bigl(P^{\circ t}x^{\circ d}\bigr)_i
+  &=\sum_j(P_{ij}^s x_j)^d\\
+  &\leq\left(\sum_jP_{ij}^s x_j\right)^d
+   =\rho(P^{\circ s})^d x_i^d.
+\end{align*}
+Because \(P\) is primitive on at least two states, some row has at
+least two positive entries; otherwise irreducibility would make its
+graph a directed cycle, and primitivity would force that cycle to have
+one state.  The displayed inequality is strict in a branching row.
+Since \(P^{\circ t}\) is irreducible, the strict
+Collatz--Wielandt theorem yields
+\[
+  \rho(P^{\circ t})<\rho(P^{\circ s})^{t/s}.
+\]
+Taking negative logarithms proves the strict inequality.  Since
+\(h_{1,H}=0\), its positivity consequence follows by taking \(s=1\).
+
+If \(\mathcal S_\infty\) consists of one state, its primitive graph is
+a single loop.  Pressure on this one-orbit survivor is linear in the
+potential, so \(P_{Y_H}(s\varphi)=sP_{Y_H}(\varphi)\), which gives
+\(h_{s,H}=0\).
+\end{proof}
+
 \begin{corollary}[IID collision consequences of the survivor spectrum]
 \label{cor:survivor-spectrum-collision}
 Under the hypotheses and notation of
@@ -250,7 +310,7 @@ all of depth \(m\) and all with common law \(\lambda_m^H\).  Write
 \[
   S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r.
 \]
-Then
+Suppose that \(\card(\mathcal S_\infty)\geq2\).  Then
 \[
   S_2^H(m)=e^{-m h_{2,H}+o(m)},
   \qquad
@@ -259,11 +319,13 @@ Then
   \qquad
   h_{3,H}:=3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi).
 \]
-In particular, if
+Moreover, the pressure inequality
+\[
+  h_{3,H}>\frac32h_{2,H}
+\]
+holds automatically.  If
 \[
   \binom{N_m}{2}S_2^H(m)\to\tau\in[0,\infty)
-  \qquad\text{and}\qquad
-  N_m^3S_3^H(m)\to 0,
 \]
 then the collision count of the labels \(X_m^{H,(i)}\) converges to
 \(\mathrm{Poisson}(\tau)\).  Thus the iid birthday threshold for
@@ -271,19 +333,34 @@ surviving samples lies on the scale
   \[
     \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
   \]
-On the pure exponential scale \(N_m=e^{(h_{2,H}/2+o(1))m}\), the
-third-moment condition is the pressure inequality
-\[
-  h_{3,H}>\frac32 h_{2,H}.
-\]
+No additional moment or overlap hypothesis is required.  If
+\(\card(\mathcal S_\infty)=1\), then \(h_{2,H}=0\), so this conditioned
+law has no exponential birthday scale.
 \end{corollary}
 
 \begin{proof}
 The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
 and \(s=3\) of Corollary~\ref{cor:survivor-renyi-pressure}.  Apply
+Proposition~\ref{prop:strict-survivor-renyi} to obtain
+\(h_{3,H}>\frac32h_{2,H}\).  On the indices for which \(N_m\geq2\),
+the convergence of \(\binom{N_m}{2}S_2^H(m)\) implies
+\[
+  \log N_m\leq \frac12mh_{2,H}+o(m),
+\]
+and hence
+\[
+  N_m^3S_3^H(m)
+  \leq
+  \exp\left(
+    m\left(\frac32h_{2,H}-h_{3,H}\right)+o(m)
+  \right)
+  \longrightarrow0.
+\]
+On the remaining indices \(N_m=1\), the same conclusion is immediate
+because \(h_{3,H}>0\).  Thus the third-moment hypothesis in
 Proposition~\ref{thm:double-budget-poisson} with deterministic synchronization
 time \(T_m\equiv 0\), so that \(q_m=0\) and
-\(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
+\(\Lambda_m=\binom{N_m}{2}S_2^H(m)\), is automatic.
 \end{proof}
 
 \subsection{Poisson thresholds for collision failure}

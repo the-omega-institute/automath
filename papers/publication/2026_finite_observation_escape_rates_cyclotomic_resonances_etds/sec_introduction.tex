@@ -33,14 +33,12 @@ for the escape rate.  For a non-empty proper subset
 \(R\subsetneq \ZZ/q\ZZ\), let \(\mathsf P_R\) be the event that the
 first entry time into \(H\) is finite and belongs to \(R\) modulo
 \(q\).
-There is one unavoidable degeneracy: from some safe state and residue,
-the future may force the first-hit residue either always into \(R\) or
-always outside \(R\).  Proposition~\ref{prop:degenerate-residue-dichotomy}
-classifies this case.  Along each residue subsequence the Bayes error is
-either eventually zero or has the survivor-mass asymptotic governed by a
-quasistationary ambiguity amplitude.  The main amplitude theorem below
-treats the two-terminal case, where every safe state and residue can
-still hit both sides of the residue partition.
+Transient safe states may force the future first-hit residue to one side
+of this partition.  The principal result shows that this finite-depth
+degeneracy never persists at the escape scale.  Primitivity of the
+survivor graph permits a survivor loop of every sufficiently large
+length before a fixed exit path, and therefore forces both residue types
+from every recurrent survivor state.
 
 \subsection*{Main finite-state theorem}
 
@@ -49,10 +47,9 @@ new input is the exact conversion of the Bayes error for first-entry
 residue events into a killed path sum with residue-dependent terminal
 ambiguity weights.  Once that identity is in hand, the escape exponent
 and the leading amplitude are finite Perron--Frobenius consequences of
-the killed matrix.  The degenerate case is handled separately by
-Proposition~\ref{prop:degenerate-residue-dichotomy}, which shows that on
-each residue subsequence the Bayes error is either eventually zero or
-has the same survivor-mass asymptotic.
+the killed matrix.  The additional loop-insertion argument makes every
+residuewise quasistationary amplitude positive and removes the former
+two-terminal reachability hypothesis from the theorem.
 
 \begin{theorem}[Main finite-state theorem]
 \label{thm:main-amplitude}
@@ -74,12 +71,6 @@ Fix \(q\geq2\) and
   \mathsf P_R
   :=\{y:\tau_H(y)<\infty,\ \tau_H(y)\bmod q\in R\}.
 \]
-Assume the two-terminal residue reachability hypothesis on the
-\(q\)-cyclic safe graph: from every \((i,r)\in\mathcal S\times\ZZ/q\ZZ\)
-there are admissible futures whose first entry into
-\(A_{\mathrm{hole}}\) occurs at residues in both \(R-r\) and
-\((\ZZ/q\ZZ\setminus R)-r\).
-
 For \(i\in\mathcal S\), let \(\PP_i\) be the Markov law started at \(i\),
 set
 \[
@@ -122,13 +113,14 @@ Then, writing \(u_i=\pi_i\) for the stationary weights on
   = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}
   \qquad (m\geq1).
 \]
-Moreover
+Moreover, for some \(m_0\geq1\) and \(\theta_H>0\),
 \[
-  \theta\,\nu_\varphi(\tau_H\ge m)
+  \theta_H\,\nu_\varphi(\tau_H\ge m)
   \leq \varepsilon_m(\mathsf P_R;\nu_\varphi)
   \leq \frac12\,\nu_\varphi(\tau_H\ge m)
+  \qquad(m\geq m_0),
 \]
-for some \(\theta>0\), and
+and
 \[
   \lim_{m\to\infty}
   -\frac1m\log\varepsilon_m(\mathsf P_R;\nu_\varphi)
@@ -142,8 +134,10 @@ Finally, for every residue class \(r\),
        {\nu_\varphi(\tau_H\ge nq+r+1)}
   = \xi_H^{\mathsf T}b_r.
 \]
+Every amplitude \(\xi_H^{\mathsf T}b_r\) is strictly positive.
 Thus finite observation recovers the escape-rate pressure gap together
-with a residue-dependent quasistationary ambiguity amplitude.
+with a positive residue-dependent quasistationary ambiguity amplitude,
+without an auxiliary residue-reachability assumption.
 \end{theorem}
 
 \paragraph{Scope of the remaining results.}
@@ -154,21 +148,12 @@ formula, the escape-rate conclusion, and the residuewise amplitude
 limit in one place.  The later
 Theorem~\ref{thm:quasistationary-ambiguity} is included only to isolate
 the finite-matrix Perron--Frobenius calculation that proves the final
-amplitude clause of Theorem~\ref{thm:first-entry-escape-rate}.  The
-degenerate-residue companion
-Proposition~\ref{prop:degenerate-residue-dichotomy} records the same
-killed-matrix formula without the two-terminal reachability hypothesis
-and classifies the residue subsequences through the forward-invariant
-support skeleton
-\[
-  R_\infty=\{i\in\mathcal S:\ell_H(i)>0\}.
-\]
-On the subsequence \(m=nq+r+1\), the arm
-\(\xi_H^{\mathsf T}b_r=0\) forces the Bayes error eventually to vanish,
-whereas the arm \(\xi_H^{\mathsf T}b_r>0\) gives the survivor-mass
-asymptotic amplitude \(\xi_H^{\mathsf T}b_r\) and the escape exponent.
-The rest of the paper is explicitly secondary to this finite-state
-theorem.
+amplitude clause of Theorem~\ref{thm:first-entry-escape-rate}.
+Lemma~\ref{lem:automatic-recurrent-residues} supplies the new structural
+step: mixing of \(Y_H\) forces every first-entry residue on the recurrent
+survivor alphabet, so every amplitude in the central theorem is
+positive.  The rest of the paper is explicitly secondary to this
+finite-state theorem.
 
 Corollary~\ref{cor:main-renyi} records the survivor analogue of the
 standard \(L^s\)-spectrum or R\'enyi pressure identity for Gibbs weights;
@@ -185,19 +170,14 @@ thresholds on the scale
 \[
   \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1,
 \]
-provided
+without an additional overlap hypothesis whenever
+\(\card(\mathcal S_\infty)\geq2\).  Indeed, the strict spectral inequality
 \[
-  N_m^3S_3^H(m)\to0,
-  \qquad
-  S_3^H(m)=e^{-mh_{3,H}+o(m)},
-  \qquad
-  h_{3,H}:=3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi).
+  h_{t,H}>\frac{t}{s}h_{s,H}\qquad(1\leq s<t)
 \]
-At the pure exponential threshold
-\(N_m=e^{(h_{2,H}/2+o(1))m}\), the required condition is
-\[
-  h_{3,H}>\frac32h_{2,H}.
-\]
+implies \(h_{3,H}>\frac32h_{2,H}\), so the Chen--Stein third-moment
+term is exponentially negligible at criticality.  A one-state survivor
+has \(h_{s,H}=0\) for all \(s\) and no exponential birthday regime.
 These are iid statements about independent survivor prefixes.
 No orbit-sampling Poisson theorem is asserted.
 
@@ -225,14 +205,14 @@ non-empty proper one-step Markov hole
 \(\emptyset\neq A_{\mathrm{hole}}\subsetneq A\).  The additional
 assumptions are disclosed result by result:
 \begin{enumerate}[label=(\roman*)]
-  \item The finite-state theorem and its degenerate-residue companion
-  use the mixing survivor subshift \(Y_H\), the finite residue data
-  \(q\ge2\) and \(\emptyset\neq R\subsetneq\ZZ/q\ZZ\), and in the
-  non-degenerate case the two-terminal residue reachability condition in
-  the finite safe graph.
+  \item The finite-state theorem uses the mixing survivor subshift
+  \(Y_H\) and the finite residue data \(q\ge2\) and
+  \(\emptyset\neq R\subsetneq\ZZ/q\ZZ\).  No separate residue
+  reachability hypothesis is imposed.
   \item Corollary~\ref{cor:main-renyi} uses only the one-step Markov
   model and the mixing survivor subshift; it does not use a residue
-  modulus, a residue set, or the two-terminal reachability condition.
+  modulus or a residue set.  Its hypothesis-free Poisson conclusion
+  additionally requires \(\card(\mathcal S_\infty)\geq2\).
   \item Proposition~\ref{thm:main-resonance} uses the same finite Markov
   data as the main theorem, and its spectral non-cancellation criterion
   is a conclusion deciding whether a possible lifted pole is visible.
@@ -278,8 +258,8 @@ a prescribed residue class.  A safe prefix leaves a residue-dependent
 future ambiguity, and the Bayes error therefore sums ambiguity weights
 over survivor prefixes rather than summing survivor mass with terminal
 weight \(1\).  This produces the terminal vectors \(b_r\), the
-degenerate-residue dichotomy, and the quasistationary amplitudes
-\(\xi_H^{\mathsf T}b_r\), which are not part of the direct
+cofinite first-entry-length mechanism, and the positive quasistationary
+amplitudes \(\xi_H^{\mathsf T}b_r\), which are not part of the direct
 escape/hitting statements just cited.
 
 At the operator-theoretic level, killed transfer operators and spectral
