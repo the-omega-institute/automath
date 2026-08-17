@@ -29,6 +29,27 @@ def recurrence_residual(values: list[float], roots: list[float]) -> float:
     )
 
 
+def cluster_dispersion(values: tuple[float, ...]) -> float:
+    return 0.5 * sum(value * value for value in values)
+
+
+def multiple_rho_derivative(multiplicity: int, centre: float, s: float) -> float:
+    x = s + centre
+    return centre ** (multiplicity - 2) * (s + 2.0 * centre) / x ** (
+        multiplicity + 2
+    )
+
+
+def multiple_rho_derivative_unsimplified(
+    multiplicity: int, centre: float, s: float
+) -> float:
+    x = s + centre
+    return (
+        centre ** (multiplicity - 2) / x**multiplicity
+        - centre**multiplicity / x ** (multiplicity + 2)
+    ) / s
+
+
 def checks() -> list[tuple[str, bool, str]]:
     dt = 0.7
     rate_a, rate_b = 1.1, 2.3
@@ -63,6 +84,20 @@ def checks() -> list[tuple[str, bool, str]]:
     ) / (rate_b - rate_a)
     a = 1.0 - s - b
 
+    pole_errors = [
+        abs(
+            multiple_rho_derivative(m, 1.3, 0.8)
+            - multiple_rho_derivative_unsimplified(m, 1.3, 0.8)
+        )
+        for m in range(3, 7)
+    ]
+    r = 0.4
+    shape_a = (r, -r, 0.0)
+    shape_b = (r / math.sqrt(3.0), r / math.sqrt(3.0), -2.0 * r / math.sqrt(3.0))
+    shape_distance = max(
+        abs(x - y) for x, y in zip(sorted(shape_a), sorted(shape_b))
+    )
+
     return [
         ("two-rate tail starts at one", abs(tails[0] - 1.0) < 1e-14, f"S0={tails[0]:.16g}"),
         ("two-rate tail decreases", all(tails[i] > tails[i + 1] > 0 for i in range(7)), f"S7={tails[-1]:.6g}"),
@@ -76,13 +111,20 @@ def checks() -> list[tuple[str, bool, str]]:
         ("undershoot exceeds root-N scale", fluctuation_ratio > 5.0, f"ratio={fluctuation_ratio:.6g}"),
         ("two-state zero kernel substochastic", 0 < p < 1 and 0 < s < 1 and b > 0 and a > 0, f"a={a:.6g}, b={b:.6g}"),
         ("marked reset is rank one", abs((1 - p) * a - a * (1 - p)) < 1e-15, "both marked rows end in D"),
+        ("multiple-pole dispersion derivative", max(pole_errors) < 1e-13, f"max error={max(pole_errors):.3g}"),
+        (
+            "equal-dispersion shapes are distinct",
+            abs(cluster_dispersion(shape_a) - cluster_dispersion(shape_b)) < 1e-14
+            and shape_distance > 1e-3,
+            f"dispersion={cluster_dispersion(shape_a):.6g}, distance={shape_distance:.6g}",
+        ),
     ]
 
 
 def render() -> str:
     rows = checks()
     failed = [name for name, ok, _ in rows if not ok]
-    lines = ["Renewal equivalence and double-pole verification"]
+    lines = ["Renewal equivalence and pole-collision verification"]
     lines.extend(f"{'PASS' if ok else 'FAIL'}  {name}: {detail}" for name, ok, detail in rows)
     lines.append(f"Summary: {len(rows) - len(failed)}/{len(rows)} checks passed")
     if failed:
@@ -102,4 +144,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

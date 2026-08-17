@@ -9,14 +9,14 @@
 
 ## Manuscript
 
-- Title: Renewal-window equivalence and singular inference at a sampled double pole
+- Title: Renewal-window equivalence and singular inference at sampled pole collisions
 - Authors: Haobo Ma; Wenlin Zhang
 - Corresponding author: Wenlin Zhang
 - Corresponding email: e1327962@u.nus.edu
 - Additional contact: auric@aelf.io
 - Affiliations: CHRONOAI PTE. LTD., Singapore; National University of
   Singapore, Singapore
-- Main article length: 33 pages including references
+- Main article length: 40 pages including references
 - Supplement length: 22 pages
 
 ## Scope
@@ -26,10 +26,15 @@ experiment-equivalence theorem for stationary renewal windows and undershot
 Palm samples.  The application concerns one isolated real double pole in a
 fixed serial generalized-Erlang order, with all remaining rates simple and
 uniformly separated, known sampling interval, and the serial positive
-killed-reset realization.  It does not claim simultaneous-collision,
-unknown-order, unknown-interval, or general phase-type representation results.
-The lower result proves optimality in rate through a fixed-base two-point
-threshold loss; it is not an exact continuum minimax-constant theorem.
+killed-reset realization.  A second application identifies the local
+experiment at an isolated pole of arbitrary multiplicity: only quadratic
+cluster dispersion remains visible at the fourth-root scale, giving an
+efficient collision test and a total-variation obstruction to recovery of
+higher-multiplicity cluster shape.  The article does not claim
+simultaneous-collision, unknown-order, unknown-interval, or general phase-type
+representation results.  The lower results prove optimality in rate through
+two-point threshold losses; they are not exact continuum minimax-constant
+theorems.
 
 ## Editorial Assessment
 

@@ -9,7 +9,7 @@ python -m unittest discover -s artifacts -p "test_*.py" -v
 python artifacts/verify_claims.py --output artifacts/verify_claims_output.txt
 ```
 
-The unit suite reports 16 passing tests.  The verifier reports 12 deterministic
+The unit suite reports 20 passing tests.  The verifier reports 14 deterministic
 checks and exits zero.  These computations are algebraic regression and sanity
 checks; proofs are in the article and supplement.
 
@@ -38,4 +38,3 @@ Paths in `SHA256SUMS` are relative to `artifacts`:
 ```sh
 cd artifacts && sha256sum -c SHA256SUMS
 ```
-
