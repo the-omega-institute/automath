@@ -16,8 +16,10 @@ python artifacts/verify_simple_parry_causal.py --output artifacts/simple_parry_c
 
 The unit suite prints `Ran 32 tests` followed by `OK`. The simple-Parry suite
 includes exact fixed-theta terminal words through aperture 14 and complete
-collision-graph counts through aperture 10. The verifier conclusions
-are:
+collision-graph counts through aperture 10. The quadratic suite checks every
+negative-conjugate parameter with `a <= 4` through aperture six. Its
+positive-conjugate controls reject the false two-output assertion, so the
+exact depth check is not vacuous. The verifier conclusions are:
 
 ```text
 SUMMARY: 0 failures / 0 counterexamples

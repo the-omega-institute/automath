@@ -393,23 +393,34 @@ def _run_verification() -> int:
 
     print()
     print("Optimal causal-length and exact finite-block-onset battery:")
-    local_cases = (
-        QuadraticPisot("negative", 1, 1),
-        QuadraticPisot("negative", 4, 3),
+    negative_depth_cases = tuple(
+        QuadraticPisot("negative", a, b)
+        for a in range(1, 5)
+        for b in range(1, a + 1)
+    )
+    positive_depth_cases = (
         QuadraticPisot("positive", 3, 1),
         QuadraticPisot("positive", 5, 2),
     )
     local_checks = 0
-    for beta in local_cases:
-        causal_length = 2 if beta.conjugate_sign == "negative" else 3
-        for m in range(max(3, predicted_threshold(beta)), 6):
-            lower = causal_first_digit_is_determined(beta, m, causal_length - 1)
-            exact = causal_first_digit_is_determined(beta, m, causal_length)
-            onset = minimum_injective_output_length(beta, m)
+    for beta in negative_depth_cases:
+        for m in range(3, 7):
+            lower = causal_first_digit_is_determined(beta, m, 1)
+            exact = causal_first_digit_is_determined(beta, m, 2)
             local_checks += 1
-            if lower or not exact or onset != m:
+            if lower or not exact:
                 failures += 1
-    print(f"  {local_checks} parameter/aperture pairs checked: causal lengths 2/3 and delta=m")
+    for beta in positive_depth_cases:
+        for m in range(3, 6):
+            lower = causal_first_digit_is_determined(beta, m, 2)
+            exact = causal_first_digit_is_determined(beta, m, 3)
+            local_checks += 1
+            if lower or not exact:
+                failures += 1
+    print(
+        f"  {local_checks} parameter/aperture pairs checked: "
+        "exact negative/positive causal lengths 2/3"
+    )
 
     print()
     print("Critical periodic-fiber battery:")

@@ -582,3 +582,38 @@ No entry was re-cited.  After cleanup and a clean rebuild, `main.aux` contains
 citation keys.  Both set differences are empty: there is no printed-but-
 uncited entry and no cited-but-missing entry.  `references.bib` was left
 unchanged as the directory's bibliographic record.
+
+## Exact negative-conjugate inverse-depth search
+
+Checked: 2026-08-17 (Asia/Singapore).
+
+The parameter-uniform equality `ell_cau(beta,m)=2` for every
+negative-conjugate quadratic Pisot base and every `m>=3` was checked against
+the literature before being added.  The object searched was kept narrow:
+cyclic reduction of canonical Parry--Bertrand language rank modulo `Q_m`,
+followed by overlap, and the memory-zero inverse length of that sliding code.
+
+Crossref searches for `cyclic rank recodings quadratic simple Parry`,
+`future-only inverse depth Pisot numeration`, `overlap graph bounded zero
+representation Pisot`, and `sliding block decoder quadratic beta shift`
+returned no work on this map or invariant.  The last query did return the
+general decoder-window papers of Ashley already identified in the bibliography
+audit.  The closest beta-numeration records returned by the combined searches
+concern quadratic Pisot expansions, rewrite systems, and tilings, rather than
+cyclic language-rank congruences or exact future-only inverse depth.
+
+The official arXiv Atom API was also queried for `cyclic rank recoding`,
+`future-only inverse` with `Pisot`, `bounded sliding congruences`, and `Parry
+language` with `decoder`; no relevant record was returned.  OpenAlex and
+Semantic Scholar returned HTTP 429 for the corresponding searches, so those
+responses were not counted as negative results.  The earlier bibliography
+audit above checks the standard Parry--Bertrand, pair-graph, quadratic Pisot,
+normalization, and decoder-window sources cited by the paper.
+
+No predecessor located in these searches defines the paper's recoding or
+states an exact two-output inverse theorem.  The result is not a restatement
+of the companion manuscript's eventual-acyclicity theorem: that theorem
+applies to the same negative-chamber difference graph and gives an eventual
+path bound of aperture order, whereas the quadratic conjugate estimate and
+remainder propagation from `Q_1=a+1` exclude every two-edge obstruction at
+every aperture `m>=4`.

@@ -126,17 +126,23 @@ class QuadraticPisotThresholdTests(unittest.TestCase):
                 self.assertEqual(negative.q(3) - positive.q(3), q - kappa)
 
     def test_optimal_causal_decoder_lengths_are_two_and_three(self):
-        cases = (
-            QuadraticPisot("negative", 1, 1),
-            QuadraticPisot("negative", 4, 3),
+        negative_cases = tuple(
+            QuadraticPisot("negative", a, b)
+            for a in range(1, 5)
+            for b in range(1, a + 1)
+        )
+        positive_cases = (
             QuadraticPisot("positive", 3, 1),
             QuadraticPisot("positive", 5, 2),
         )
-        for beta in cases:
-            expected = 2 if beta.conjugate_sign == "negative" else 3
+        for beta in negative_cases:
+            for m in range(3, 7):
+                self.assertFalse(causal_first_digit_is_determined(beta, m, 1))
+                self.assertTrue(causal_first_digit_is_determined(beta, m, 2))
+        for beta in positive_cases:
             for m in range(3, 6):
-                self.assertFalse(causal_first_digit_is_determined(beta, m, expected - 1))
-                self.assertTrue(causal_first_digit_is_determined(beta, m, expected))
+                self.assertFalse(causal_first_digit_is_determined(beta, m, 2))
+                self.assertTrue(causal_first_digit_is_determined(beta, m, 3))
 
     def test_critical_extremal_map_has_one_double_periodic_fiber(self):
         extremals = (
