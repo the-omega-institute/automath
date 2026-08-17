@@ -64,3 +64,34 @@ checked source stating the every-large-index alternative or its conditional
 `n^(2-o(1))` corollary. They did identify the two Kiss results discussed in
 the manuscript as the closest predecessors. This negative search result is
 evidence about the queried corpora, not proof of global priority.
+
+## Primitive Primary-Component Search
+
+The unconditional conclusion that the maximum of
+"p^valuation_p(F_n)" over primitive primes is at least "n^(2-o(1))" was
+checked separately on 2026-08-17. Searches in Crossref, OpenAlex, and the
+official arXiv index used combinations of "primitive prime power",
+"primitive prime-power factor", "largest primitive prime power", "Fibonacci",
+and "Lucas sequence". Semantic Scholar returned HTTP 429 and supplied no
+usable result.
+
+The closest sources located were the three already used in the comparison:
+Kiss's 1988 positive-proportion theorem for a large primitive prime-power
+factor, Stewart's 2013 every-index lower bound for the greatest prime factor
+of a Lucas cyclotomic factor, and Hong's fixed-linear every-index bound for a
+primitive prime base. The official arXiv full text of Hong's paper
+(2312.04354v2) was searched for prime-power conclusions and contains none.
+OpenAlex's citation lists for the Kiss and Stewart works were also inspected;
+no citing title or indexed abstract stated an every-index near-quadratic
+primitive primary-component theorem.
+
+Crossref additionally returned Dov Jarden's 1963 article *On the Greatest
+Primitive Divisors of Fibonacci and Lucas Numbers With Prime-Power
+Subscripts* (lead author Dov Jarden, DOI
+10.1080/00150517.1963.12431559). The official Fibonacci Quarterly scan was
+read. Its "greatest primitive divisor" is the full factor of a term coprime
+to all earlier terms, and its results concern monotonicity along prime-power
+subscripts; it does not bound a single primitive primary component. No
+checked record stated the theorem proved here. As with the earlier novelty
+search, this is a documented negative search over the named corpora rather
+than a proof of global priority.
