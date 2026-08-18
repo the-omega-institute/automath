@@ -5845,3 +5845,49 @@ Oracle relay 不可达（第 36 tick）；codex 503。
 它补充词汇检测器，不取代它。
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 391 — 两通道仍断；同门披露写好了，却没进 PDF
+
+Oracle relay 不可达（第 37 tick）；codex 503。
+
+追查上个 tick 数值指纹报出的那条线索（六条共享序列）。中途我两次修正自己的读法，最终状态已核实。
+
+### 三个目录，三篇不同的稿子，共享同一张表
+
+| 目录 | 实际标题 | 页 | 状态 |
+|---|---|--:|---|
+| `submitted_..._fibonacci_moduli_cross_resolution_arithmetic_rint` | Upper fibers and witness covers… | 11 | 已投 |
+| `2026_upper_fibers_witness_covers_fibonacci_apparition_fq` | Minimal preimages of the Fibonacci rank map… | 14 | **未投** |
+| `submitted_..._upper_fibers_witness_covers_fibonacci_apparition_rj` | Irredundant coordinate covers in Fibonacci birth layers | 24 | 已投 |
+
+标题、页数、md5 三者皆异，确是三篇。**目录名与内容不符**（又一次"名字不携带状态"）。
+六条指纹的来源是同一张 birth-layer 数据表，逐行相同（n=28/29/30 三行的分解、A(n)、覆盖集全同），
+只有排版微差。
+
+### 真正的发现：披露做了，但读者看不到
+
+RJ 那篇**结构上做对了**。它的 `references_local.bib` 里有两条 `@unpublished`，
+note 明写 `Submitted manuscript, sibling archive <目录名>` —— 正是这几天一直缺的那种披露，
+而且是有人刻意设置的。
+
+**但两条都是 0 次引用。** 无 `\nocite`；两个 key 在 `main.bbl` 中 0 次；
+PDF 全文搜 "sibling archive" 0 次。控制项：`main.bbl` 有 18 条 bibitem、PDF 有 References 章节，
+文献机制本身正常 —— 同门条目就是没进去。
+
+**BibTeX 不收录未被引用的条目。这份披露存在于源文件，却不出现在审稿人读到的 PDF 里。**
+RJ 是带着一个漏掉两条同门条目的文献表投出去的。
+
+修法：`\nocite{...}` 两个 key，或在共享表出现处正文引用。
+
+另有两处小缺陷：两条条目**标题相同**，但指向不同的同门目录，而 `..._fq` 目录的实际标题是
+"Minimal preimages of the Fibonacci rank map…"，故其中一条**写错了对象标题**；
+同一条还把 `..._fq` 记为 "Submitted manuscript"，而该目录并无 SUBMITTED 标记。
+
+### 为什么这条值得记
+
+这不是"作者没想到"。**他们想到了，写下了，条目却因为无人引用而静默掉出文献表。**
+意图与产物之间的这道缝，只有编译后去 PDF 里查才看得见 —— 查源文件会得出"已披露"的相反结论。
+
+内存 1.12 GB，无 agent 在跑。
