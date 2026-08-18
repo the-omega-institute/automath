@@ -1,0 +1,48 @@
+TASK: upgrade Proposition "Admissible dimensions in the verified range" in
+papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge from a verified
+range to a proved characterisation. PRE-AUTHORIZED to edit that directory. Do not commit.
+
+You wrote that proposition in a previous round on the information I had then. I have since found the
+exact criterion, so the scope statement can be strengthened. Do not redo the surrounding material.
+
+THE CRITERION. Writing F_k = 2^a + 2^b for the weight sum of the two swapped coordinates, so that
+i = m - a and j = m - b, the involution sigma_{i,j}^{(m)} satisfies Fold_m sigma = Fold_m if and only
+if
+   (1) k - 1 > m, and
+   (2) k - 2 > m, or no admissible N carries a Zeckendorf digit at position k - 2,
+where admissible means both swapped bits are clear in the binary expansion of N.
+
+The mechanism, which should appear in the proof: sigma changes N by plus or minus F_k or not at all,
+and adding F_k places a new Zeckendorf digit at position k-1. Condition (1) keeps that digit above
+the window. If Z(N) already carries a digit at position k-2 the two are adjacent and merge, since
+F_{k-1} + F_k = F_{k+1}, consuming the digit at k-2; condition (2) keeps that consumption invisible.
+This is exactly why m = 6 survives while m = 7 does not: at m = 6 the consumed digit sits at position
+7, above the window, and at m = 7 it does not. The second branch of (2) is needed only for F_5 with
+m = 3, where the admissible class is {0, 2} and neither reaches F_4.
+
+I checked this criterion against brute force on all 49 candidate triples with zero disagreements; the
+script is artifacts/verify_preservation_criterion.py.
+
+WHAT THIS BUYS. Condition (1) gives m <= k - 2 and condition (2) usually gives m <= k - 3, while both
+coordinates fitting in the window gives m >= a + 1. Each qualifying Fibonacci number therefore admits
+only a short interval of m: F_4 none, F_5 gives 3, F_9 gives 6, F_12 gives 8 and 9. So the set
+{3, 6, 8, 9} follows from the criterion together with the list of qualifying Fibonacci numbers,
+rather than from how far a search ran.
+
+THE EXTERNAL INPUT, and be strict about this. The claim that only F_4, F_5, F_9 and F_12 are sums of
+two distinct powers of two is verified here only below F_90. It is not mine and must not read as
+self-contained. It belongs to the known Diophantine literature on Fibonacci numbers with few binary
+digits. FIND the right reference, VERIFY it against Crossref plus one other index comparing returned
+title and authors, and cite it by name. If you cannot find and verify such a reference, say so and
+leave the proposition stated for the verified range - that is a acceptable outcome and far better
+than an uncited appeal.
+
+Retitle the proposition accordingly and make the statement say exactly what is proved, what is
+computed, and what is imported. Do not overstate: without the cited scarcity result the
+classification is conditional.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions; report
+exit code, page count before and after, undefined control sequences, unresolved references,
+unresolved citations, all 0. No linespread. Reconcile the bibliography both directions. Check whether
+this document drops ff/fi/fl ligatures before any pdftotext grep and search both spellings with a
+control count. Do not create planning files. Do not run git commit.
