@@ -3662,3 +3662,73 @@ $U_{xy}=\min(1,(\min_\omega c_\omega(y)+1)/6)$，逐行检查 $\sum_y L\le 1\le 
 
 `SP` / `FF2` / `GM` 仍在飞；`FF2` 停在 `Phase: dispatched` 较久，下个 tick 若无进展就取消重发。
 codex 三槽：`projection` A.8 修复、`window6` 第 3 节、`joukowsky` 抽取。内存 2.56 GB。
+
+---
+
+## tick 341 — `GM` 判**撤稿**；`SP` 里有一条**是我错了**；`pdftotext` 丢连字
+
+### `GM`：我的"空洞"判定方向对、诊断不够准，而正确诊断里带着一条真定理
+
+它的措辞比我准得多：定理 6.1 **不是逻辑空洞，而是被前一个定义做成了同义反复**。
+manuscript 定义 $\check\rho_{m+1,m}:=\pi_{m+1\to m}\circ\Fold_{m+1}$，输出**已在** $X_m$ 里；
+定理 5.1 又说 $\Fold_m$ 固定 $X_m$ 的每个元素。于是 $\Fold_m\circ\check\rho=\check\rho$
+**只是"收缩映射固定其像中的元素"**。缺陷在定义处就已进入，早于证明。
+
+真正想要的相容性是 $\pi\circ\Fold_{m+1}=\Fold_m\circ\tau$（$\tau$ 为原始前缀截断），
+而**论文自己证了它一般不成立**（$011$ 在 $3\to2$：两边分别是 $00$ 与 $01$）。
+
+**我全部复算过，零失配：**
+
+| 断言 | 我的复算 |
+|---|---|
+| $\Fold_3(110)=001$，$\check\rho_{3,2}(110)=00$，$\Fold_2(00)=00$ | ✅ |
+| $011$ 在 $3\to2$ 处两边为 $00$ 与 $01$ | ✅ |
+| 自然图表成立 $\iff N_{m+1}(\omega)<F_{m+3}$（无上溢区） | ✅ **65,532** 字，零失配 |
+| 所有深度同时相容 $\iff$ 无相邻 $1$ | ✅ **131,068** 字，零失配 |
+| 在 $X_n$ 上 fold 已是恒等 | ✅ 零例外 |
+
+**"真正空洞"的是这一条**：唯一能给出投影相容折叠塔的原始轨道，恰是**根本不需要折叠**的轨道。
+
+第 2 问它逐条拆了全篇：定理 8.7 是 $\varepsilon_m=b_m\vartheta_m$ 的记账恒等式（$\vartheta_m$ 从未被估计）；
+5.1 是定义读出；7.3 是"由 $\mathcal G_{\le L}$ 可测事件生成的 $\sigma$-代数含于 $\mathcal G_{\le L}$"；
+8.1/8.2 是有限划分上的标准 Bayes 判决；8.10 是 Borel–Cantelli；B.5 是标准 de Bruijn + 子集确定化；
+D.1/D.2 是链式法则。**结论：撤稿，不是缩短改投。**
+唯一有价值的数学是那条**无上溢刻画** —— 脚本已存
+`artifacts/verify_no_wrap_characterization.py`，留待并入同题材论文。
+
+### `SP`：**我错了一条**
+
+它说论文"错误地称 Sanna 允许重复部分" —— 而那句话是我 tick 338 派工时写进去的。
+我当时从摘要"sum of Fibonacci numbers, where the order of the summands does not matter"
+推断允许重复。**推断错了**：Sanna 引 Chow–Jones–Slattery 处理自己幂和的 $p=1,2$ 情形，
+而 Chow–Jones 的 $R$ 是**互异**部分表示数，故 $r_F$ 是同一个函数。
+
+更要紧的是第二条：**那条普通区间和结果本来就是 Chow–Jones 的。**
+他们定义 $V(H)=\sum_{n\le H}R(n)^2$ 并给出 $v_k=V(F_k)$ 的精确非齐次递推，
+特征多项式正是 $(X-1)(X+1)(X^3-2X^2-2X+2)$。从含端点的 $V(F_k)$ 过到我们的 $U(m)$
+只需减去 $R(F_k)^2=\lfloor k/2\rfloor^2$，恰好消去二次特解、留下齐次五阶递推。
+**必须作为已知结果引用，不能当作本文的计算。** 已派工修三处（含"parity 解释只是观察、未证"）。
+
+第 1 问的回答很有用：losslessness **对正确性是实质的、作为新颖性不是** ——
+"必要、优雅、例行的验证"，贡献是**一个显式而经济的自动机**，不是"存在有限自动机"这一发现。
+
+### `projection`：修好了，且它主动报出"多项式规模"站不住
+
+A.8 改为比较**完成后**的输出，产品状态携带跨副本延迟缓冲（每副本 $|Q|(2^{L+1}-1)$ 个状态）。
+`polynomial-size` 归零、`TAMS` 归零、47 页闸门通过。
+它还**未经追问就说明**：仍无"对一切 $m\ge m_0(q)$ 成立"的证明，故 §7 与定理 7.9 仍是条件性的，
+并明说"我没有伪造这座桥"。
+
+### 一条方法论错误，差点让我误判
+
+在 `projection` 的 PDF 里 grep `buffer` 得 **0**，而正文满是这个词。
+原因不是连字被映射，而是 **`pdftotext` 把 `ff`/`fi`/`ffi`/`fl` 连字整个丢掉**（即使带 `-enc UTF-8`）：
+dump 里写的是 `buers`、`prexes`、`nite`、`sux`、`Denition`。
+逐篇实测：**`projection` 与 `fibonacci_folding` 丢连字**，
+`cubical_stokes`/`window6`/`single_primitive` 不丢。
+我此前唯一用到含连字词的检查是 `cubical_stokes` 的 "arbitrary finite cubical" ——
+该篇干净，且我用两种拼法重查、对照 `cubical` 计数 23，**结论不变**。
+**新规矩：对含 `ff`/`fi`/`fl` 的词做 PDF grep 前，先测该文档是否丢连字。**
+
+`FF2` 卡在 `dispatched`，已取消重发（`ac83832c-…`）。内存 2.08 GB。
+codex：`window6` §3、`joukowsky` 抽取、`single_primitive` 文献修正。

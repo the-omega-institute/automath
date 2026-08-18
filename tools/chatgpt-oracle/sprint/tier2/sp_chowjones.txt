@@ -1,0 +1,49 @@
+TASK: fix three literature defects in papers/publication/2026_single_primitive_universality_hierarchy.
+PRE-AUTHORIZED to edit that directory. Do not commit.
+
+READ FIRST: artifacts/oracle_sprint_SP_r2.md. Read-only evidence; do not edit any artifacts/oracle_*.md.
+
+The referee confirms the mathematics is correct and the paper coherent. It declines acceptance in the
+present form for three literature reasons. Fix exactly these.
+
+1. THE ORDINARY RESULT IS CHOW-JONES'S, NOT OURS. Chow and Jones define V(H) = sum over n <= H of
+   R(n)^2 and derive an exact inhomogeneous recurrence for v_k = V(F_k), with characteristic
+   polynomial X^5 - 2X^4 - 3X^3 + 4X^2 + 2X - 2 = (X-1)(X+1)(X^3 - 2X^2 - 2X + 2), plus an explicit
+   solution. Passing from the inclusive V(F_k) to our exclusive U(m) subtracts R(F_k)^2 = floor(k/2)^2,
+   which cancels the quadratic particular solution and leaves exactly the homogeneous fifth-order
+   recurrence. So the U-polynomial must be CITED AS A KNOWN CONSEQUENCE of Chow-Jones, not presented
+   as computed here. We may claim the indexing conversion and a separate minimality check, nothing more.
+   Find the Chow-Jones reference and VERIFY it against Crossref plus one other index, comparing
+   returned title and authors, before citing. If an index returns null for volume, issue or pages,
+   omit those fields rather than filling them in - an earlier round invented a volume and page range
+   for a different entry and I had to strip them.
+
+2. SANNA COUNTS DISTINCT PARTS. The introduction currently says Sanna allows repeated Fibonacci parts.
+   That is wrong and it is my error, not yours: I inferred it from the phrase "sum of Fibonacci
+   numbers, where the order of the summands does not matter" in his abstract. Sanna cites
+   Chow-Jones-Slattery for the p = 1, 2 cases of his own power sums, and Chow-Jones's R is the
+   distinct-parts representation count, so his r_F is the same function. Correct the sentence. Keep
+   the citation; only the description of the counting function changes.
+
+3. THE PARITY EXPLANATION IS ASSERTED, NOT PROVED. The paper says the fold's pairing of the two
+   residue representatives is what removes the factor (X-1)(X+1). That is true - I verified the
+   polynomials numerically - but the paper only observes it. Either prove it, or state it as an
+   observation with the numerical evidence and say explicitly that it is not proved. Do not leave it
+   phrased as though it were established.
+
+Also make these smaller corrections the referee asks for, and no others:
+ - replace "the losslessness step is substantive" with wording like "the key correctness verification
+   is losslessness". The referee's judgment is: substantive for correctness yes, as research novelty
+   no, and not enough to carry the whole novelty claim. The contribution is an explicit and economical
+   automaton, not the discovery that a finite automaton exists;
+ - the opening claim that the paper proves the state bound "exact" is too strong: it proves this cube
+   is lossless, not that it is a minimal carry range or minimal state set. Narrow it;
+ - in the q = 2 calculation, the step B_{n+1} = D_n silently uses that (1,1) and (-1,-1) are
+   unreachable from the initial state. Add the one sentence.
+
+Do not touch any theorem statement or proof beyond item 3 and the last bullet.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with no command-line macro definitions; report exit
+code, page count, undefined control sequences, unresolved references, unresolved citations, all of
+which must be 0; reconcile citations both directions and report both counts.
+Do not run git commit.
