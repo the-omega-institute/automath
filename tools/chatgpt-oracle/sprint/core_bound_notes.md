@@ -139,3 +139,29 @@ is also why sliding one position too far turns the sum into a small nonzero valu
 
 Next attempt should therefore count clipping windows rather than look for an interior
 rigidity argument.
+
+## Boundary constraints (proved, tick 323) and the remaining gap
+
+Let the support of d be [q,p], 1-indexed.
+
+**(L3) p >= L-m+2.** Otherwise the window starting at p is a legal window, and it meets the
+support only at p, so its sum is d_p F_2 = +/-1, which (L1) forbids.
+
+**(L4) q <= m-1.** Otherwise the window ending at q is legal, and it meets the support only
+at q, sitting at the top weight, so its sum is d_q F_{m+1} = +/- F_{m+1}, again forbidden
+by (L1) since F_{m+1} is neither 0 nor F_{m+2}.
+
+Both follow from (L1) alone. Checked on all 562 ambiguous pairs for m = 3..6: no violation.
+
+**What they give, and what they do not.** Together they force
+
+    span := p - q + 1 >= L - 2m + 4,
+
+so a longer block needs a wider support. Combined with the observed maximum spans
+(3, 3, 5, 6 for m = 3,4,5,6) they yield L <= 3, 5, 9, 12 against the true 4, 6, 8, 10. So the
+constraints are necessary and not tight; the vanishing theorem is now reduced to bounding the
+support span, and that bound is the missing piece rather than a corollary of what is proved.
+
+Status of the reconstruction, honestly: (L1) and (L2) are proved outright, (L3) and (L4)
+follow from (L1), the target L <= 2m-2 is verified exhaustively for m = 3..7, and the step
+from a span bound to the length bound is not yet available because no span bound is proved.
