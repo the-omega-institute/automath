@@ -1,50 +1,55 @@
 # Next-Step Plan — Submission & Deepening
 
-## 📊 冲刺状态一览（tick 367，唯一权威表；下方历史流水仅供追溯）
+## 📊 冲刺状态一览（tick 393，唯一权威表；下方历史流水仅供追溯）
 
-页数与闸门为**实测**（`latexmk -C` 后从零重建，不带命令行宏定义）；概率为外审给出的主观接受率。
-"我验过"一栏只记**我自己跑过**的检查，不记 agent 自述。
+页数为**实测**。「标记 / 实情」一栏对照目录里的 `SUBMITTED` 文件与真实投稿状态 ——
+两者已多次不符。「我验过」只记**我自己跑过**的检查，不记 agent 自述。
 
-| # | 论文 | 页 | 目标刊 | 概率 | 封面信 | 我独立验过的承重结论 |
-|--:|---|--:|---|---|---|---|
-| 1 | `folded_histograms` | 6 | **The Fibonacci Quarterly** | **~45%** | ✅ | 分类定理：45 例零分歧；碰撞机制 $N_2=\omega_1+2\omega_2 \bmod 3$ |
-| 2 | `window6` | 9 | **EJC** | 18–22% → **25–30%** | ✅ EJC | 48 格加细、商谱重数、$A(Q_4)$ 载体；可容许维数判据 49 候选零分歧 |
-| 3 | `single_primitive` | 12 | **DMTCS**（短文） | <10% → **30–35%** | ✅ DMTCS | $S_2$ 递推与纤维高度（$m\le18$）；配对恒等式 $C(m)=S_2(m-2)$ |
-| 4 | `joukowsky` | 15 | **Complex Analysis and Operator Theory** | **~50%** | ✅ CAOT | 定理 3.21 四部分齐全；五处丢反斜杠已修（含我扫出的第五处） |
-| 5 | `scan_projection` | 18 | **Stochastics and Dynamics** | — | ✅ | 相位常数可从转移矩阵复现，答案未写死；相位盲对照只给单一常数 |
-| 6 | `fibonacci_folding` | 22 | **Dynamical Systems** | 15–20% → **~35%** | ✅ | 四状态进位转换器（996 万切点态零例外）；无上溢刻画三条零失配 |
-| 7 | `cubical_stokes` | 28 | **Results in Mathematics** | <5% → **~40%** | ✅ | 修复定理 60 例零失配；两个反例各破坏一条假设，方式不同 |
-| 8 | `brocot` | 30 | ⚠️ **待定** | — | ⚠️ 抬头仍 TAMS | 临界常数 $b_C=8$（我曾误判为 16，已更正）；穿越定理归一化 |
-| 9 | `projection` | 47 | **JNT**（审稿人点名） | — | ✅ JNT | A.8 原缺陷已量化：典型情形丢掉 **74.6%** 的碰撞 |
-| — | `zeck_arith` | 33 | **The Fibonacci Quarterly** | — | ✗ | 未动，改投待执行 |
-| — | `golden_mean_folding` | 55 | — | — | — | ⛔ **判撤稿**：定理 6.1 是被定义做成的同义反复 |
+| # | 论文 | 页 | 目标刊 | 标记 / 实情 | 我独立验过的承重结论 |
+|--:|---|--:|---|---|---|
+| 1 | `folded_histograms` | 6 | **Fibonacci Quarterly** | ⚠️ 标 SUBMITTED / **实为未投** | 两字母判据 m≤12、三个无理数各 45 窗长零失配，**含精确临界点 β=δ、1−δ**（t382） |
+| 2 | `window6` | 9 | **EJC** | active | 48 格加细、商谱重数；可容许维数判据 49 候选零分歧 |
+| 3 | `single_primitive` | 12 | **DMTCS**（短文） | active | $S_2$ 递推 m=4..21 零违反；纤维极大值公式 m=1..18 全对（t386） |
+| 4 | `joukowsky` | 15 | **CAOT** | active | 开口亏损极限：解析推导 + 五成员单调收敛；Haar 对照 `I=s` 精确到 3e-15（t383） |
+| 5 | `scan_projection` | 18 | **Stochastics and Dynamics** | active | 周期二反例两常数 60 位全精度吻合；**误差项恒为零**（次主特征值为 0，t384） |
+| 6 | `fibonacci_folding` | 22 | **Dynamical Systems** | active | 四状态进位转换器（996 万切点态零例外）；无上溢刻画三条零失配 |
+| 7 | `cubical_stokes` | 28 | **Results in Mathematics** | active | 修复定理 60 例零失配；两反例各破坏一条假设，方式不同 |
+| 8 | `brocot` | 30 | ⚠️ **待定** | active / 抬头仍 TAMS | 临界常数 $b_C=8$（我曾误判 16，已更正）；穿越定理归一化 |
+| 9 | `projection` | 47 | **JNT** | active | 地基定理 m=1..24、**317,808 个 n 零失配**；压力凸性；最大纤维闭式（t385–386） |
+| 10 | `finite_window_thermodynamics` | 39 | **JNT** | active | 与 9 号共有逐字相同的 `thm:partition-difference`（t388） |
+| — | `zeck_arith` | 33 | **Fibonacci Quarterly** | active | Frougny 归属核实无误；Prop 14 确证存在（t376、t380） |
+| — | `golden_mean_folding` | 55 | — | — | ⛔ **判撤稿**：定理 6.1 是被定义做成的同义反复 |
+| ★ | `ITA-2026-0032`（已在审） | 29 | **RAIRO ITA** | SUBMITTED（真） | 两条仅存新颖性主张全验（⌊L/2⌋、⌈n/2⌉）；六态商逐格验（88,573 输入零失配）；上传件从零重建 29 页一致 |
 
-**九篇全部从零重建通过，`ucs/ref/cite` 全 0，无一使用行距或版式手段。**
+### 待办清单（通道恢复后按序派工）
 
-### 两处未决
-
-1. **`brocot` 去向**：封面信仍抬头 TAMS —— 而 TAMS 正是以增量性拒它的那家。
-   审稿人说证出穿越定理后"会送**一家强专业刊**外审"，是否指 TAMS 只有它能答。
-2. **`W63`** 与所有裁决轮：等 Oracle。
+| 优先 | 事项 | 出处 |
+|---|---|---|
+| 🔴 | `ITA-2026-0032` **实际下达的决定是什么**——仓库无编辑决定信，在场唯一审稿意见建议不予发表 | t376 |
+| 🔴 | 三篇互引：`projection` / `finite_window_thermodynamics` / `single_primitive`（现两两沉默） | t387–388 |
+| 🔴 | RJ 与 `auditable_pipeline` 的同门披露条目加 `\nocite`——现写在源文件、进不了 PDF | t391–392 |
+| 🟠 | `brocot` 定去向（封面信仍抬头拒它的 TAMS） | 长期 |
+| 🟠 | 清掉 `folded_histograms` 的假 SUBMITTED 标记（工具会误判为已投） | t374 |
+| 🟠 | `zeck_arith` 引 Berstel adder 与同门 ITA-2026-0032（现零次提及） | t372、t374 |
+| 🟡 | `single_primitive` 复原 Carlitz 1968/1970（被删减回合删掉） | t373 |
+| 🟡 | `folded_histograms` 补一句 Ostrowski（同门引了两条，它零条） | t374、t377 |
+| 🟡 | `projection` 引同门把 `D_m^{1/m}→√φ` 升级为精确值 + λ₂ 极小多项式 $x^3-2x^2-2x+2$ | t385–387 |
+| 🟡 | `scan_projection` 补一句「该例误差项恒为零」 | t384 |
+| 🟡 | `ITA-2026-0032` Table 1 交代 Prop 14 的 base τ；补 Berstel 1982 首出处 | t376、t381 |
+| ⚪ | `single_primitive` 的 `S_2` 序列查 OEIS（端点 403，需浏览器） | t373 |
+| ⚪ | 取 `W63`；八篇送新一轮 verdict；派 `zeck_arith` note | 长期 |
 
 ### 在飞
 
-**无**。codex 空闲，Oracle 池空且**中继已断十四个 tick**（WARP 停在 `Connecting`）。
-后续进度全部取决于中继恢复：`warp-cli disconnect` 再 `warp-cli connect`。
+**无。** codex 与 Oracle **均断第 39 个 tick**：Oracle 中继 `172.18.32.1:40002` 不可达；
+codex 上游 `llm.aelf.dev` 持续 503（cf-ray 在 SIN/NRT 间交替，故障在源站）。
+恢复途径：Oracle 侧终端执行 `warp-cli disconnect` 再 `warp-cli connect`；codex 侧只能等上游。
 
-### 本轮实质修复（全部由外审找出，非我先发现）
+### 本轮新增的两件工具（补管线缺口，均带控制项）
 
-级联假引理（3 处站点）、`cubical_stokes` 定理 6.6、`window6` 推论 1.4/1.5 与引理 3.1、
-`projection` 命题 A.8、`single_primitive` 文献归属、`golden_mean_folding` 整篇。
-
-### 我自己找到的
-
-$2m-1$ 尖锐分离定理、span-$r$ 类的退化与其修法、无上溢刻画与计数、
-`window6` 的可容许维数族与选中机制、`single_primitive` 的配对恒等式、
-`joukowsky` 第五处丢反斜杠。**两次数值误判（$b_C$、穿越定理 $	heta$ 依赖）已更正并写入记忆。**
-
-> `papers/publication/` 下共 48 个目录；上表只列本轮冲刺在动的 11 篇，其余为已投稿或休眠。
-
+- `tools/chatgpt-oracle/numeric_fingerprint_overlap.py`——比对论文印出的整数序列。
+  词汇检测器对 `projection`↔`single_primitive` 判「弱重叠」，而两者矩序列逐项相同。
+- `tools/chatgpt-oracle/invisible_bib_entries.py`——查「写了但进不了文献表」的披露条目。已找出两例。
 ---
 
 纯**前向建设计划**：深化已有真结果 + 提取全新内容。核心资产是 `lean4/Omega`（9,786 文件、**zero `sorry`**）。方法：两套独立 scout（Claude 3-agent 深挖 + codex）+ 5-agent 评审。
@@ -5929,5 +5934,24 @@ berstel_adder 里的 `BevilacquaDelCorsoGemignani2015CMVCompanion` 被判 HIGH�
 
 对两例真的：`\nocite{<key>}`，或在相关处正文引用。一行的事，
 但不做的话，披露就只存在于仓库里，不存在于投出去的文件里。
+
+内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 393 — 两通道仍断；重建了顶部状态表
+
+Oracle relay 不可达（第 39 tick）；codex 503。
+
+board 已 5,933 行、130 条 tick 记录，顶部那张表还停在 tick 367 —— 距今 26 个 tick、
+下面又压了约一千行流水。它在多处已经失真：写着"中继已断十四个 tick"（实为 39）、
+验证栏没有 t378–392 的任何内容、**漏掉 t388 才发现的 `finite_window_thermodynamics`（39 页）**、
+`folded_histograms` 的假 SUBMITTED 标记也没标出。
+
+已从实测重建，并做了一件更要紧的事：**把散在 26 个 tick 里的十七件待办收拢成一张优先级表**，
+按 🔴/🟠/🟡/⚪ 分档并注明出处 tick，不必再翻流水。
+
+页数逐个从 PDF 实测；「标记 / 实情」一栏专门对照 `SUBMITTED` 文件与真实状态 ——
+这一轮已两次因为标记不携带状态而误判（t374 的 `folded_histograms`、t389 的 FQ/JNT 对）。
 
 内存 1.12 GB，无 agent 在跑。
