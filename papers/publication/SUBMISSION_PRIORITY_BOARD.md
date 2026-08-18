@@ -5198,3 +5198,62 @@ Oracle relay 不可达（第 21 tick）；codex 503。无任务可收发。
 所以本 tick 对披露问题**没有新增任何结论**。tick 374 那条手工发现仍然成立，且仍是唯一一条。
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 376 — 两通道仍断；独立核了 ITA-2026-0032 最重的一条审稿指控
+
+Oracle relay 不可达（第 22 tick）；codex 503。无任务可收发。
+
+本 tick 挑赌注最高的：**ITA-2026-0032 是仓库里唯一正在期刊手上的稿件**，
+而 board 记它"independently reviewed as submission-ready" —— 那种自述正是不该照单全收的。
+
+### 审稿意见比 board 的记法重
+
+Referee 1 的结论是 **"In my opinion this work cannot be published, as the results are
+already well known."** 最锋利的一条具体指控是：
+
+> the authors show in Theorem 7.1 that the normalized addition alpha is not a local
+> function. **This is Proposition 14 in the cited paper [5].**
+
+而审稿人自己的文献表只到 **[4]，没有 [5]**。也就是说全篇最致命的一条指控指向一个
+他没有标明的出处，回复函只能**推断**它是哪篇 —— 推断为 Frougny 1999。
+
+### 那个推断是对的（已独立核实）
+
+仓库里就有本地副本 `tmp/pdfs/frougny1999.txt`。Proposition 14 存在，原文：
+
+> `Proposition 14. Addition in base [tau] on alphabet {0,1} is not a local function.`
+
+（OCR 全篇把 τ 认作 `r`；证明上下文与回复函自己 Table 1 的"base-phi online machine"可定 base 为 τ。）
+对照：该文本含 23 处 "Proposition"，Prop 1、3–14 齐全，所以"找不到"会是真缺失而非提取失败。
+
+所以审稿人指出的定性结果确属 Frougny，回复函的认定正确。这一条**答得诚实而非回避**：
+修订把该结果移入附录，明写 "not claimed as a new qualitative nonlocality theorem"，并直引 Prop 14。
+
+### 一处该修的精度问题
+
+Frougny 的 Prop 14 是**对 base τ 陈述的，不是对 Fibonacci 记数系统** —— 他到 Fibonacci
+是另走 Corollary 4（回复函 Table 1 自己就是这么记的）。而本文定理讲的是 {0,1,2} 上的 Zeckendorf 归一化。
+
+附录措辞是准确的（"a finite-scale light-cone formulation of the **known** nonlocality
+phenomenon"）；**Table 1 那一行偏松** —— "Nonlocality is established in [Prop. 14]"
+读起来像 Prop 14 已覆盖本文情形。两个系统联系紧密、现象确实可迁移，所以这是精度问题不是误署，
+补一个交代 base 的从句即可。
+
+### 未核实的一项
+
+回复函把 Prop 14 标在 "p. 99"。OCR 文本在该处附近没有页码标记，**页码未经核实**。
+Prop 13 被定位在 pp. 98–99，下一条落在 p. 99 合理，但合理不等于已核。
+
+### 一处记账不符（只陈述缺什么）
+
+board 称其为 "major revision package"。**仓库内不存在编辑决定信**，回复函全文也没有
+"major revision"/"minor revision"/"reject"/"decision" 任何一词；Referee 2 的报告同样不在目录里，
+尽管回复函逐条答了它十三点。决定很可能是邮件送达未存档 —— 能陈述的只是：
+**仓库里没有任何文件支持"major revision"这个说法，而在场的唯一一份审稿意见建议不予发表。**
+上传修订前应先弄清，因为覆信要答的是实际下达的那个决定。
+
+明细：`submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita/REFEREE_CHARGE_VERIFICATION.md`
+
+内存 1.12 GB，无 agent 在跑。
