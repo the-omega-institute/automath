@@ -53,3 +53,62 @@ Candidates, metadata verified against Crossref:
   European J. Combin. 71 (2018), 202-212, doi 10.1016/j.ejc.2018.04.003.
 
 One sentence citing the first two would close it. The last two are optional depth.
+
+---
+
+# Addendum: the main theorem, verified by exact computation
+
+Script: `verify_two_letter_criterion.py`, in this directory.
+
+The note's whole content is the equivalence
+
+    Fold_m injective on S_m for every m  <=>  injective at m = 2  <=>  beta in (0,delta] u [1-delta,1)
+
+so that is what was checked, from the definitions in Sections 2 and 3.
+
+## Method, and why the arithmetic is exact
+
+`s_j(x) = 1` exactly when `x` lies in the arc `[-j*alpha, beta - j*alpha)`. The `2m`
+endpoints cut the circle into at most `2m` pieces, and each piece of positive length
+contributes exactly one word. So `S_m` is computed exactly, with no sampling.
+
+`alpha` is taken to be a continued-fraction convergent of a genuine irrational, with a
+denominator far above any `m` used - `F_40/F_41 = 165580141/267914296` for the golden ratio
+conjugate, and similar for `sqrt(2)-1` and `pi-3`. Every breakpoint comparison and arc
+length is then a rational computation with no tolerance anywhere.
+
+**This is the point of the choice, not a compromise.** The theorem asserts a *sharp*
+threshold, and the interesting values are `beta = delta` and `beta = 1-delta` themselves,
+which are on the injective side. In floating point those cases cannot be tested at all. In
+exact rational arithmetic they can, and were.
+
+**The limitation that comes with it**: `alpha` is rational, so this is a check of the
+combinatorics rather than of an irrational rotation. For finite `m`, `S_m` depends only on
+the cyclic order of the `2m` breakpoints, and a denominator of order `10^8` against
+`m <= 12` cannot be distinguished from the irrational it approximates. That is an argument,
+not a proof, and it is the one assumption this check rests on.
+
+## Controls
+
+- `N_m` restricted to the golden-mean language is a bijection onto `{0,...,F_{m+2}-1}` for
+  `m = 1..14`, and `Fold_m` fixes every legal word. This is the note's
+  Proposition 2.2, and it passes.
+- The two-letter table quoted in Remark 2.3 reproduces exactly:
+  `00 -> 00`, `10 -> 10`, `01 -> 01`, `11 -> 00`.
+
+A third block prints `|S_m|` for a sample window. It is **descriptive, not a test** - it has
+no pass condition and nothing is concluded from it. The counts do settle to `2m` for
+`m >= 5` as expected for a non-Sturmian window.
+
+## Result
+
+For each of the three irrationals, 45 window lengths were tested - a grid of fortieths plus
+the exact boundary values `delta` and `1-delta` and points `10^-6` either side of each.
+**Zero mismatches** between the predicted classification and the computed injectivity, both
+for "injective at every `m` up to 12" and for "injective at `m = 2`".
+
+The refinement was checked separately: in the failing range `delta < beta < 1-delta`,
+injectivity fails already at length two at every window length tested - 15, 11 and 43 values
+for the three irrationals respectively, zero exceptions.
+
+The theorem holds as stated, including at the threshold.
