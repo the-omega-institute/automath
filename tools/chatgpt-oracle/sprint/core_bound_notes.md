@@ -165,3 +165,44 @@ support span, and that bound is the missing piece rather than a corollary of wha
 Status of the reconstruction, honestly: (L1) and (L2) are proved outright, (L3) and (L4)
 follow from (L1), the target L <= 2m-2 is verified exhaustively for m = 3..7, and the step
 from a span bound to the length bound is not yet available because no span bound is proved.
+
+## (L5) proved, and then stopping (tick 324)
+
+**(L5) Among the windows that contain the whole support, at most one has a nonzero sum, and
+that one ends exactly at p.** By (L2) a nonzero window sum forces its rightmost coordinate
+to be nonzero; a containing window has right end at least p, and d vanishes above p, so the
+right end is exactly p. Checked on all 562 pairs: no window pair violates either half.
+
+Since the number of containing windows is m - span + 1 when positive, a support of span at
+most m-1 leaves at least two of them, hence at least one with sum zero.
+
+---
+
+# CLOSING SUMMARY — where this stands, for whoever picks it up
+
+**Proved outright.**
+- (L1) every window sum lies in {0, +F_{m+2}, -F_{m+2}}; the window weights total F_{m+3}-2,
+  which is below 2F_{m+2}.
+- (L2) a window sum of sigma*F_{m+2} forces the window's rightmost coordinate to equal sigma;
+  the lower weights total only F_{m+2}-2, and with c_m = -1 the maximum is F_m - 2.
+- (L3) p >= L-m+2 and (L4) q <= m-1, both from (L1) applied to the extreme windows.
+- (L5) as above.
+
+**Verified exhaustively, not proved.**
+- Ambiguities exist only for block length L <= 2m-2, for m = 3,4,5,6,7. Equivalently, distinct
+  blocks of length >= 2m-1 always carry different label sequences, which would give
+  injectivity of Phi_m and settle the question the referee left open.
+- Support spans observed: {3} for m=3,4; {3,5} for m=5; {3,5,6} for m=6.
+
+**The gap.** (L3)+(L4) force span >= L-2m+4 but no upper bound on the span is proved, and
+without one they yield L <= 3,5,9,12 for m = 3..6 against the true 4,6,8,10. The missing
+ingredient is a bound on the support span.
+
+**A dead end, recorded so it is not retried.** Two consecutive zero windows containing the
+support do NOT force d = 0: the recurrence vector (-1,-1,1) satisfies both shifted relations
+because F_1 = F_2 = 1, and it is exactly the extremal witness. Interior rigidity arguments
+will fail for this reason; the bound has to come from the clipping windows at the boundary.
+
+**Not to be put in the manuscript in this state.** The paper currently withdraws the false
+Theorem 5.2 and says the conjugacy threshold is unproved, which is accurate. Replacing it
+needs the span bound, not this partial chain.
