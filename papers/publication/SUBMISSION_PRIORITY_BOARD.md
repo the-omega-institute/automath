@@ -5891,3 +5891,43 @@ RJ 是带着一个漏掉两条同门条目的文献表投出去的。
 意图与产物之间的这道缝，只有编译后去 PDF 里查才看得见 —— 查源文件会得出"已披露"的相反结论。
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 392 — 两通道仍断；把"隐形披露"做成扫描，又查出一例
+
+Oracle relay 不可达（第 38 tick）；codex 503。
+新工具：`tools/chatgpt-oracle/invisible_bib_entries.py`
+
+上个 tick 那种缺陷是一**类**：披露写进 `.bib`，却因无人 `\cite` 而被 BibTeX 丢弃，
+不进编译后的文献表。**读源文件会得出"已披露"的相反结论，而审稿人读的是 PDF。**
+
+### 控制项
+
+- 32 篇同时具备文献源与编译产物；**32/32** 的编译键都能在 `.bib` 中找到 ——
+  键提取器可靠，下游结论才有意义。
+- 已知的 RJ 案例必须被检出：**检出**。
+
+### 结果：两例真的
+
+1. **RJ**（已知）：两条 `@unpublished` 同门条目，note 明写 sibling archive，均未被引用。
+2. **`2026_auditable_theory_to_paper_pipeline`**（新）：`EMLZeckendorfRoute`，
+   标题为 *Single-Primitive Universality Hierarchy and Finite-Fiber Certificates*，
+   note 写着 "Cited here only for **split-route provenance** …"。
+   **又一条刻意写下的来源披露，同样进不了文献表。**
+   而 "split-route provenance" 正是五月那份 `overlap_incident` 记录所要求登记的东西 ——
+   规则被遵守了，产物却看不见。
+
+### 一例假阳性，如实记
+
+berstel_adder 里的 `BevilacquaDelCorsoGemignani2015CMVCompanion` 被判 HIGH，
+只因标题含 "companion"（companion **matrices**，伴随矩阵）。
+我的启发式把一个数学名词当成了"同门稿件"。该篇共有 150 条未引用条目 ——
+大文献表里存放未用条目是常态，**不是缺陷**，工具只按数量计入 low 一类。
+
+### 修法
+
+对两例真的：`\nocite{<key>}`，或在相关处正文引用。一行的事，
+但不做的话，披露就只存在于仓库里，不存在于投出去的文件里。
+
+内存 1.12 GB，无 agent 在跑。
