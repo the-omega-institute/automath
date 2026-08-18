@@ -4975,3 +4975,32 @@ $n=3..8$ 依次为 $2,4,7,12,20,33$，恰等于 $F_{n+1}-1$。
 剩下的只是把它砍成 note，那需要通道。
 
 内存 1.15 GB，树干净。
+
+---
+
+## tick 371 — 两通道仍断；查了 `zeck_arith` 的归属，是干净的
+
+两条通道再探均未恢复。一个细节：codex 的 cf-ray 后缀由 `SIN` 变为 `NRT`（新加坡→东京），
+**不同边缘节点、同样 503** —— 故障在源站，不是某个 PoP 的缓存问题，所以换网络位置也不会绕过去。
+
+### 自己能做的那件：Frougny 归属
+
+审稿人说 `zeck_arith` 的在线加法定理"**引自 Frougny**，含 delay-3 结论"。
+归属类缺陷在本项目已经咬过两次（Chow–Jones、Bugeaud–Cipu–Mignotte），所以值得单查。
+
+**结果是干净的**，而且做得比我预期好。论文不但引了，还引到**具体编号**：
+
+> We use the specific Fibonacci result rather than an unspecified Pisot black box.
+> **Frougny proves** … delay 3 [Prop. 13]；The same paper then translates this construction
+> to the Fibonacci numeration system … [Cor. 4]
+
+并写明了两套位置约定间的指标平移，以及一句关键的界定：
+"**The cited automaton supplies** the finite state set, transition-output rule, delay 3,
+and terminal function" —— 明说哪些东西是借来的。
+
+引用本身我也核了：RAIRO ITA **33**(1), 79–101, 1999，DOI `10.1051/ita:1999107`，Crossref 逐格对上。
+
+**所以审稿人那句"imported from Frougny"是对显著性的评语，不是指控误署** ——
+这个区别要紧：前者说明这篇该砍成 note，后者会是必须修的错误。两者的处置完全不同。
+
+内存 1.08 GB，树干净。
