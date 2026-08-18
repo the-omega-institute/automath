@@ -6362,3 +6362,76 @@ A 与 C 的矩序列逐项相同（差一个指标平移）、A 与 B 共有一�
 
 池：6，现用 2。内存 1.12 GB。
 
+
+---
+
+## tick 403 — 三篇簇的裁决回来了：**两篇，而且切法与现有边界不同**
+
+Oracle 正常；codex 仍 503。全文 184 行已归档到三篇各自的
+`artifacts/oracle_sprint_CLUSTER_split_r1.md`。
+
+### 裁决
+
+**两篇，不是三篇。** 但关键在于：**正确的切法不是"把 C 并入 A、B 不动"** ——
+现有边界横切了自然的数学分界。
+
+**论文 I（以 B 为核心）**：纤维谱、极值重数与冻结。
+含 B 全部内容 + **A 的压力凸性/厚度带/零温结论** + **C 的精确最大纤维高度**。
+**它拥有 partition-difference 定理及其唯一完整证明。**
+头条：纤维重数谱满足带冻结转变的完整大偏差原理，速率函数有仿射共存区间，
+极值与次极值纤维被精确determined，临界重数计数测度有幂律极限。
+
+**论文 II（A 的矩部分 + C 全部）**：有限状态矩递推与算术。
+含 C 的无损性定理、每个固定 q 的整数转移矩阵、`S_2` 精确递推、
+A 的 Sanna 窗夹逼与 `λ_q` 的 Perron/代数整数识别、C 的双变量非有理性对照、
+A 的 `q=9..17` 不可约性与 Galois/Chebotarev。
+**partition-difference 定理只引用、不重证。**
+
+**为何不是一篇**：两个头条是真不同的（全局谱/冻结/LDP vs 固定次数的有限状态与算术），
+合起来会是一篇很长、有两个不相干高潮的论文。
+**为何不是三篇**：序列同一性一经披露，**C 就没有独立的定理级脊柱**了 ——
+它的贡献是方法与精确加细，属于强化论文 II 的材料，不构成同时发表的第三篇。
+
+### 一条直接指向我的纠正
+
+> "the authors should **prove—not merely computationally observe**—the convention equivalence…
+> A table through m=12 is evidence for **finding** the equivalence, not an acceptable
+> substitute for **stating** it."
+
+我 tick 386–387 用计算**找到**了 `S_q^A(m+1) = S_q^C(m)` 与 `D^A_{m+1} = D^C_m`，
+但论文里必须有一条**命题陈述并证明**它（连同完整纤维多重集的相等或双射）。
+数值表是发现的依据，不是陈述的替代。这条纠正是对的，已记入待办。
+
+### 我 tick 388 的判断偏松，也被纠正了
+
+我当时写"三份互补处理完全正当，写出来只需各加一句"。**不够。** 裁决明说：
+
+> "Disclosure alone is not enough… Same theorem presented as original in both papers:
+> not acceptable… The present 'word for word, same label, same notation' arrangement
+> would alarm a referee **even with a disclosure paragraph**."
+
+规则给了四条：同一陈述+明确引用并为方便重述=可以；重复证明或大段阐述=不可以（除非真平凡）；
+两篇都当原创=不可以；两篇都需要完整定理与完整证明才能支撑各自新颖性=**说明根本没分开，应合并**。
+
+### 可执行的披露文本已给出
+
+不是笼统建议：指定在**引言第 1–2 页**加小节 "Relation to the companion paper"，
+给了两篇各自的**逐句范文**，禁用 "closely related"/"a companion construction" 这类模糊措辞
+（"The point is that it is the same object"），并给了两封封面信的披露段落范文与
+"随附同门稿件供对照"的要求。
+
+### 可发表性排序
+
+**B > A ≫ C**。重叠在现状下**拉低全部三篇**；按上述重切之后，
+重叠对 B 反而变成有利（论文 II 提供干净的固定 q 输入，而非争夺 B 的结论）。
+
+### `BR_dushistova` 第三次失败，改了做法
+
+同一内容三连 `extraction_failure`，而同协议的 venue 与 cluster 均一次成功 ——
+**三次同一内容失败就不再是偶发抓取未命中**，继续盲目重发是机械动作。
+两者唯一的结构差异是这条任务书里有一块**对齐的数值表**。
+已把表压平为散文（`task_BR_dushistova_v2`）重发：`8ae5c7fe-f873-408d-9918-ec0e5be9e96e`。
+若这次通过，说明症结是表格排版，值得记进协议。
+
+池：6，现用 1。内存 1.12 GB。
+
