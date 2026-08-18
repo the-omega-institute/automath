@@ -6316,3 +6316,49 @@ Oracle 侧下一轮可送八篇 verdict（池 6，现用 1）。codex 侧 🔴 �
 
 内存 1.12 GB。
 
+
+---
+
+## tick 402 — Stufler 引用核实无误（且发在 AIHP 上）；三篇簇的裁决已派
+
+Oracle 正常；codex 仍 503。
+
+### 上个 tick 标为待核的引用，核了
+
+答复引的先例确有其文，而且比它说的更有分量：
+
+> **Benedikt Stufler, "Gibbs partitions: A comprehensive phase diagram",
+> Ann. IHP Probab. Stat. **60**(3), 2024, DOI `10.1214/23-aihp1371`**
+
+**它就发在 AIHP** —— 正是被推荐的首选刊。最贴近的先例发表在该刊，这是对选刊建议的独立佐证，
+不是空口。另查到同族两条：
+
+- Stufler, *Gibbs partitions: The convergent case*, RSA **53**(3) 2018, 537–558,
+  DOI `10.1002/rsa.20771`（被引 12）
+- Stufler, *Unlabelled Gibbs partitions*, CPC **29**(2) 2020, 293–309,
+  DOI `10.1017/s0963548319000336`
+
+后者摘要写着 "small fragments … converge in **total variation** toward a limit object" ——
+正是 brocot 结果 1 必须区分开的陈述。**这三条就是那条"比较定理"要正面对付的文献**，
+写作时不必再去找。
+
+### `BR_dushistova` 第二次 `extraction_failure`，已第三次发出
+
+新 id `9840eb5e-d52e-4e4c-85be-3bd036752ce2`。venue 那条同协议一次成功，
+所以不是协议问题；按既定处置继续重发，不重新诊断。
+
+### 新派：三篇簇的裁决
+
+`task_CLUSTER_split` → id `a086730e-d0e1-45c4-b040-65c23711b5b7`
+
+把 tick 386–388 查实的东西整理成一份可裁决的材料交出去：三篇算同一对象、
+A 与 C 的矩序列逐项相同（差一个指标平移）、A 与 B 共有一条**逐字相同**的
+`thm:partition-difference`、三篇互不引用。问了四件事：合几篇、若分开则各自最少须写哪一句
+（要求具体到"哪一节的哪句话"）、按可发表性排序并说明重叠对各自是加分还是减分、
+以及**两份同时投稿共有一条逐字定理是否可接受，还是必须有一份改为引用而非重述**。
+
+这条是 board 上 🔴 之一里 **Oracle 能推进的那半**（裁决）；
+另半（实际改写）仍等 codex。
+
+池：6，现用 2。内存 1.12 GB。
+
