@@ -67,3 +67,49 @@ only that no document in the repository supports the "major revision" characteri
 that the one referee report present recommends rejection. Worth resolving before the
 revision is uploaded, because the covering note should answer the decision that was
 actually issued.
+
+---
+
+# Addendum: independent rebuild of the upload artifact, 2026-08-18
+
+`ITA-2026-0032_source.zip` is what actually goes to the journal, so it was rebuilt from
+the zip itself rather than from the working directory, and without trusting the
+`tmp/source_zip_compile_test_*` run already present.
+
+Extracted to a clean directory, `latexmk -pdf` with no extra arguments and no
+command-line macro definitions:
+
+- exit 0
+- **29 pages, exactly matching `ITA-2026-0032_manuscript.pdf`**
+- zero undefined citations in the log
+- zero `[?]` markers in the output
+- all fifteen references render, `[1]` through `[15]`
+
+The package is sound.
+
+Two alarms I raised along the way were both mine, not the paper's:
+
+1. The three `.bib` files sit in `submission_source_20260313/` while `main.tex` and
+   `main.bbl` are at the archive root, which looked like a packaging error. It is not:
+   line 2164 reads
+   `\bibliography{submission_source_20260313/references_godel_zeckendorf,submission_source_20260313/references_fibonacci,submission_source_20260313/references}`.
+   The layout is deliberate. My first grep for the command used the wrong escaping and
+   reported it absent.
+2. `main.bbl` carries fifteen `\bibitem` entries while my count of rendered references
+   came to fourteen. The reference list is complete; a page break splits the list and one
+   entry's `[n]` does not begin a line, so the counting regex missed it. Numbers 1 through
+   15 are all present in the output.
+
+Both are the same failure: a check that could not see something, reported as an absence.
+
+## One cross-link worth recording
+
+This bibliography contains Baranwal-Schaeffer-Shallit, *Ostrowski-automatic sequences*
+[2], and Hieronymi-Terry, *Ostrowski numeration systems, addition and finite automata*
+[10]. So the Ostrowski literature is known to this project and cited here.
+
+That sharpens the folded_histograms finding of 2026-08-18: a manuscript whose whole subject
+is Fibonacci-weight folding of rotation codings has no Ostrowski citation at all, while a
+sibling manuscript cites two. As with the Berstel adder and `zeck_arith`, the gap is an
+internal inconsistency rather than an unknown reference — which makes it cheaper to fix and
+harder to excuse.

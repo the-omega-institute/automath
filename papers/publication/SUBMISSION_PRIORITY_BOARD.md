@@ -5257,3 +5257,46 @@ board 称其为 "major revision package"。**仓库内不存在编辑决定信**
 明细：`submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita/REFEREE_CHARGE_VERIFICATION.md`
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 377 — 两通道仍断；独立重建上传件，通过
+
+Oracle relay 不可达（第 23 tick）；codex 503。无任务可收发。
+
+### ITA-2026-0032 上传件：干净通过
+
+`ITA-2026-0032_source.zip` 才是真正交给期刊的东西，所以从 zip 本身重建，
+不采信目录里已有的 `tmp/source_zip_compile_test_*`。解压到干净目录，
+`latexmk -pdf`，无额外参数、无命令行宏定义：
+
+- exit 0
+- **29 页，与 `ITA-2026-0032_manuscript.pdf` 完全一致**
+- 日志 0 条 undefined citation，输出 0 个 `[?]`
+- 15 条参考文献 `[1]`–`[15]` 全部渲染
+
+**包是好的。**
+
+### 途中我自己报的两个警，都是我的错，已更正
+
+1. 三个 `.bib` 在子目录而 `main.tex`/`main.bbl` 在根目录，看着像打包错误。**不是** ——
+   第 2164 行 `\bibliography{submission_source_20260313/references_...}` 明确指向子目录，
+   布局是有意的。我第一次 grep 转义写错，误报"没有 `\bibliography`"。
+2. `main.bbl` 15 条 bibitem，我数出渲染 14 条。**文献表是全的** ——
+   分页符把列表切开，有一条的 `[n]` 不在行首，计数正则漏了。1–15 全在。
+
+两次是同一个毛病：**看不见的检查被当成了不存在**。
+
+### 一条值得记的交叉印证
+
+这份文献表里有 Baranwal–Schaeffer–Shallit《Ostrowski-automatic sequences》[2]
+和 Hieronymi–Terry《Ostrowski numeration systems, addition and finite automata》[10]。
+**Ostrowski 文献本项目是知道并且引了的。**
+
+这让 tick 374 关于 `folded_histograms` 的发现更尖锐：一篇主题就是"对旋转编码做 Fibonacci 权重折叠"
+的稿子，Ostrowski 引用为零，而同门稿件引了两条。和 Berstel/`zeck_arith` 那条一样，
+**这是项目内部的不一致，不是不知道的文献** —— 更好修，也更难解释。
+
+另：Referee 2 的报告经全仓查找确认不存在。
+
+内存 1.12 GB，无 agent 在跑。
