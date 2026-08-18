@@ -5157,3 +5157,44 @@ Fibonacci 记数自动机是个小圈子，审稿人池是重合的。
 引入在线加法器处引用；(3) 反向查一次 ITA-2026-0032 的回复函是否该披露 zeck_arith 为伴随工作。
 
 明细：两篇各自 `artifacts/priority_check_2026-08-18.md`。内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 375 — 两通道仍断；查清了重叠门禁的一个结构盲区，并作废了我自己的一次审计
+
+Oracle relay 不可达（第 21 tick）；codex 503。无任务可收发。
+
+### 已核实：项目自己的重叠门禁是"引用盲"的
+
+跑 `split_overlap_harness.py --current-paper zeck_arith`：**通过**
+（`gate_failed=False`，blocker=0，resolved=6，informational=23）。
+
+但 tick 374 是**手工**查出该篇与 ITA-2026-0032 的未披露重叠的。读工具自己的 JSON 看它怎么判那一对：
+
+- `classification: informational`，`recommended_action: no_action_required`
+- `reason: "weak or background overlap only"`
+- `shared_claim_markers`: 2 个（阈值 4）；`shared_theorem_phrases`: 0；`claim_token_jaccard`: 0.20
+
+原因清楚：**它是"主张重复"检测器**。两篇主张确实不同（稳定算术与域相 vs Berstel adder 迭代深度），
+问题不是重复而是同一对象、同刊在审、互不引用 —— 那是披露关系。
+`grep -c '\.bib\|cite{\|bibliography' split_overlap_harness.py` = **0**，它只读 `*.tex` 取 marker。
+**结构上看不见引用，所以看不见这类缺陷。绿灯不等于那一对没问题。**
+
+### 作废：我为补这一层做的全仓交叉引用审计
+
+写了配对 + 互引检查，跑完 48 篇，报出 **573 对"无互引"**（收紧到"共享 ≥2 marker 且至少一方已投"仍有 223 对）。
+
+**这些数字全部作废。** 自匹配对照 —— 一篇论文的标题必然出现在它自己的正文里 —— 返回 **0/48**。
+标题解析器一篇都没解析出来，于是每次比对拿到的都是空标题，**永远返回"未引用"**。
+1128 个可能配对里报出一半，报的是仪器不是论文。
+
+根因不是正则也不是文件编码：用**完全相同的构造**新写一个脚本读同一个 main.tex，
+`len 76996`、`\title{...}` 正常命中。坏的是脚本写入环节。
+
+排名靠前的配对还暴露了配对判据本身的缺陷：共享 10 个 marker 的"最相关"两篇，
+其实是**同一篇的两个版本**（ETDS 目录与已投 SIADS 版）—— 同一篇的两个版本本来就不互引。
+判据分不开"版本"与"同门"，即使修好匹配器也仍要重新设计。
+
+所以本 tick 对披露问题**没有新增任何结论**。tick 374 那条手工发现仍然成立，且仍是唯一一条。
+
+内存 1.12 GB，无 agent 在跑。
