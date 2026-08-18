@@ -1,0 +1,52 @@
+TASK: correct a claim about the literature that was just added to
+papers/publication/2026_single_primitive_universality_hierarchy/sections/sec01_introduction.tex.
+You are PRE-AUTHORIZED to edit that file and references.bib. Do not stop for approval. Do not commit.
+
+WHAT IS WRONG. The introduction now says that Sanna's paper on power sums of the number of
+Fibonacci partitions has a p = 2 growth constant whose characteristic polynomial is
+X^3 - 2X^2 - 2X + 2, the same polynomial underlying our S_2 recurrence. I checked this and it does
+not hold up.
+
+Sanna (arXiv 2309.12724, Discrete Analysis) defines r_F(n) as the number of ways to write n as a
+sum of Fibonacci numbers WITH THE ORDER NOT MATTERING. The abstract never says "distinct", and the
+result is an asymptotic order of growth proved via automata theory and the Blondel-Nesterov
+generalized spectral radius, not an exact recurrence. I computed the repeats-allowed version:
+sum_{n < N} r_F(n)^2 at Fibonacci cutoffs has NO linear recurrence of order at most 7. So that
+cubic does not come from Sanna's quantity.
+
+WHAT IS TRUE, and what you may say, because I verified each of these numerically:
+ - Let R(n) be the number of representations of n as a sum of DISTINCT Fibonacci numbers -- this,
+   not the partition function, is the object whose fibres our fold refines.
+ - The interval sum U(m) = sum_{n < F_{m+2}} R(n)^2 satisfies a linear recurrence whose minimal
+   characteristic polynomial is (X - 1)(X + 1)(X^3 - 2X^2 - 2X + 2). I confirmed the factorization
+   exactly and checked the recurrence out to m = 19, with three perturbed coefficient vectors each
+   failing at 16 of 16 tested indices.
+ - Our S_2(m) satisfies the BARE cubic X^3 - 2X^2 - 2X + 2 exactly for m >= 4, with no extra
+   factor. The dominant root is approximately 2.4811943.
+ - So the honest comparison is: the same cubic growth factor governs both, but the ordinary-integer
+   interval sum carries an additional parity factor (X-1)(X+1) coming from the interval endpoint,
+   and the fold's pairing of the two residue representatives is exactly what removes it. That is a
+   point in this paper's favour and it is checkable; state it that way.
+
+WHAT TO DO.
+1. Replace the Sanna sentence with the correct comparison above. Attribute NO characteristic
+   polynomial to Sanna.
+2. Sanna may still be cited, once, as adjacent work on power sums of a DIFFERENT counting function
+   (partitions into Fibonacci numbers, repeats allowed, asymptotic order of growth for all p). Make
+   the difference in the counting function explicit in the sentence, so no reader takes our exact
+   recurrence to be a special case of it. If you would rather drop the citation than state its
+   scope precisely, drop it.
+3. The bib entry has no DOI. The Crossref record is under Discrete Analysis; find and add the DOI,
+   and VERIFY it resolves to that title and author before adding. If you cannot verify it, leave
+   the entry with the arXiv eprint only and say so.
+4. If you cite Chow, Jones and Slattery for the distinct-parts growth, verify that reference the
+   same way -- Crossref plus one other index, title and authors compared, not merely "the DOI
+   resolves". Do not add it unverified.
+
+Do not change any theorem, proof, or the abstract's mathematical content. Do not touch
+sections/_cut_hierarchy_eml_richardson.tex or any artifacts/oracle_*.md file.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with no command-line macro definitions; report
+exit code, page count, undefined control sequences, unresolved references, unresolved citations,
+all of which must be 0; and reconcile citations both directions. Report the raw counts.
+Do not run git commit.
