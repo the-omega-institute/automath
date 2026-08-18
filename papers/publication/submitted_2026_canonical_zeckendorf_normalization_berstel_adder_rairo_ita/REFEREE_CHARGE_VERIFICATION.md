@@ -204,3 +204,61 @@ computation here can answer it. It needs a reading of that paper, and it should 
 Oracle when the channel returns.
 
 Taken with the iteration-depth check, both pillars the resubmission rests on verify.
+
+---
+
+# Addendum: reading Mousavi-Schaeffer-Shallit, which the referee invoked
+
+The last open substantive question on this manuscript was the referee's remark that
+"the only original result could be the minimality of the Berstel adder, although I think
+that the proof in [3] gives also a proof of the minimality." I said this needed a reading
+of [3]. It is on arXiv as 1406.0670, and Section 2, "Fibonacci representation", is where
+the adder appears.
+
+**Caveat on which version this is.** arXiv 1406.0670 is *Decision Algorithms for
+Fibonacci-Automatic Words, with Applications to Pattern Avoidance*, by Du, Mousavi,
+Schaeffer and Shallit - four authors, different title from the published
+*Decision algorithms for Fibonacci-automatic words, I: Basic results*, RAIRO ITA 50 (2016)
+39-66, by three. The adder section is the shared core, but the published text should be
+confirmed before any of this is quoted in the response.
+
+## The referee's doubt is not supported by the text
+
+MSS write: "We briefly sketch a proof of the **correctness** of this automaton." The proof
+identifies each state `t` with the integer sequence
+`([x0^n]_F + [y0^n]_F - [z0^n]_F)_{n>=0}`, tabulates all sixteen non-dead states against
+Fibonacci and Lucas sequences, and verifies the table "by a tedious induction". A following
+remark sketches a *mechanical* verification instead: that the adder specifies a function,
+that it is associative, that `A(x,0)=x`, and that `A(x,1)` is the successor.
+
+**Minimality is never claimed, proved, or discussed.** Nor could that proof be repurposed:
+their machine is a three-tape DFA *accepting the relation* `x+y=z`, a different object from
+the single-valued subsequential transducer whose residuals this manuscript minimises. The
+referee's "I think that the proof in [3] gives also a proof of the minimality" appears to be
+a conjecture rather than a reading.
+
+## Both factual claims in the response are correct
+
+- **Relation acceptor.** The response says MSS's machine "recognizes padded triples
+  `(x, y, z)_F` with `x + y = z` and is a relation acceptor, not an equivalent state
+  realization of the Berstel recoding". That is exactly what MSS build.
+- **State count.** The response says "the referee's count of 16 excludes the unique dead
+  state 0; the published state set is `Q = {0,...,16}`, hence a 17-state three-tape DFA
+  with 16 nondead states". MSS write `Q = {0,1,2,...,16}`, and "The state 0 is a 'dead
+  state' that can safely be ignored". The correction is right.
+
+## One thing worth knowing before quoting a number
+
+MSS's own text is internally inconsistent about the size of their adder. The state set is
+`{0,...,16}` and the transition table has seventeen rows, but the closing remark of the
+same section refers to "the complexity of checking addition (**15 states**)". That likely
+explains why different counts circulate. The safe course in the response is to quote the
+state set and the dead-state convention rather than a bare number, which is what the
+revision already does.
+
+## A smaller attribution point
+
+MSS attribute the adder itself to Berstel **1982** - "This result is apparently originally
+due to Berstel [Berstel:1982]" - with Berstel 1986 among the later references. This
+manuscript cites `Berstel1986FibonacciWords`. Worth checking which is the right primary
+source for the adder, since the referee is a specialist and the paper is named after it.

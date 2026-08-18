@@ -5373,3 +5373,47 @@ Oracle relay 不可达（第 25 tick）；codex 503。
 与上个 tick 的迭代深度检验合起来：**重投所倚的两根支柱都验过了。**
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 380 — 两通道仍断；读了审稿人援引的 MSS，他那条质疑在原文里没有依据
+
+Oracle relay 不可达（第 26 tick）；codex 503。
+
+上个 tick 我说"MSS 极小性那条需要读那篇论文，留给 Oracle"。有 arXiv 工具，自己读了。
+arXiv 1406.0670 第 2 节 "Fibonacci representation" 就是加法自动机所在。
+
+**版本提醒**：arXiv 版是四作者、标题也不同（Du–Mousavi–Schaeffer–Shallit,
+《…with Applications to Pattern Avoidance》），期刊版 I 是三作者。加法器一节是共有核心，
+但引用前应以期刊版为准。
+
+### 审稿人的质疑在原文里找不到依据
+
+MSS 原话是 "We briefly sketch a proof of the **correctness** of this automaton" ——
+用状态与整数序列 `([x0^n]_F + [y0^n]_F - [z0^n]_F)` 的对应，把 16 个非死态逐一对到
+Fibonacci/Lucas 序列，再"by a tedious induction"验证；随后 Remark 给的是机械验证加法公理
+（是函数、结合律、`A(x,0)=x`、`A(x,1)` 是后继）。
+
+**全节不提、不证、也不讨论极小性。** 而且那个证明也挪不过来：他们的机器是接受关系 `x+y=z`
+的三带 DFA，与本文所极小化的单值次序转换器是**不同对象**。审稿人那句"我认为 [3] 的证明大概
+也给出了极小性"看起来是猜测，不是读出来的。
+
+### 回复函的两处事实陈述都正确
+
+- **关系接受器**：MSS 造的正是接受 `(x,y,z)_F` 且 `x+y=z` 的机器，回复函的措辞准确。
+- **状态数**：MSS 写 `Q = {0,1,2,...,16}`，并注明"state 0 是可安全忽略的死态"。
+  回复函"审稿人数的 16 不含死态 0，实为 17 态、16 个非死态"——**更正正确**。
+
+### 引数字前该知道的一件事
+
+**MSS 自己前后不一致**：状态集 `{0,...,16}`、转移表 17 行，同一节末尾却说
+"the complexity of checking addition (**15 states**)"。文献里状态数说法各异大概源于此。
+稳妥做法是引状态集与死态约定而非一个裸数字 —— 修订稿现在正是这么做的。
+
+### 一个较小的归属点
+
+MSS 把加法器本身归给 **Berstel 1982**（"apparently originally due to Berstel [Berstel:1982]"），
+Berstel 1986 列在后续文献里；而本文引的是 `Berstel1986FibonacciWords`。
+论文以该加法器命名、审稿人又是内行，值得核一下哪个才是首出处。
+
+内存 1.12 GB，无 agent 在跑。
