@@ -1,23 +1,34 @@
-\subsection{Exact patching profile on a finite cubical complex}
+\subsection{Exact patching profile on a sink-connected finite cubical complex}
 
 The one-cell profile does not in general patch by assigning an extremizer to
-each cell.  A shared face carries one cochain value, whereas its incidence
-signs in two adjacent cells are opposite.  The correct global problem is a
-capacitated flow problem on the dual graph.  The norm minimization itself is
-the standard anisotropic max-flow/min-cut, or graph-calibrability, problem;
-see \cite{Nozawa1990,MazonSoleraToledo2020}.  The new issue here is the exact
-near-saturation profile on a prescribed Cheeger cut.  The following theorem
+each cell. In the conservative dual-network setting used below, a shared face
+carries one cochain value with opposite incidence signs in its two adjacent
+cells. The global problem is then a capacitated flow problem on the dual
+graph. The norm minimization itself is the standard anisotropic
+max-flow/min-cut, or graph-calibrability, problem; see
+\cite{Nozawa1990,MazonSoleraToledo2020}. The paper-specific issue is the exact
+near-saturation profile on a prescribed Cheeger cut. The following theorem
 computes that profile and isolates the compatibility condition that is absent
 on one cell.
 
 Let $\mathcal K$ be a finite pure cubical complex of dimension $k$.  Its
 oriented $k$-cells are denoted by $\mathcal C$, and its oriented
-codimension-one faces by $\mathcal E$.  A face is incident with one or two
-cells.  Write $a_e>0$ for the $(k-1)$-volume of $e$ and $v_C>0$ for the volume
-of $C$.  Let $B$ be the cell-face incidence matrix, so that
+codimension-one faces by $\mathcal E$. Write $a_e>0$ for the $(k-1)$-volume
+of $e$ and $v_C>0$ for the volume of $C$. Let $B$ be the cell-face incidence
+matrix, so that
 \[
 (Bf)_C=\sum_{e\subset\partial C}\operatorname{inc}(C,e)f_e.
 \]
+Assume that, after adjoining one exterior sink vertex $\ast$, $B$ is the
+reduced signed incidence matrix of the augmented dual network $\widehat G$:
+every internal face column has one $+1$ and one $-1$, every boundary-face
+column has one nonzero entry, and every cell vertex is connected to $\ast$.
+Thus $\widehat G$ has vertex set $\mathcal C\cup\{\ast\}$ and one edge for
+each face: an internal face joins its two incident cells, while a boundary
+face joins its incident cell to $\ast$. In this subsection, ``connected
+component'' means a connected component of $\widehat G$ (and a component of
+the cell-only dual adjacency graph is named explicitly when needed).
+
 For $S\subset\mathcal C$, let $\delta S$ be the set of faces incident with
 exactly one cell of $S$, and put
 \[
@@ -29,8 +40,8 @@ exactly one cell of $S$, and put
  \max_{\varnothing\ne S\subset\mathcal C}
  \frac{v(S)}{a(\delta S)}.
 \]
-The maximum is taken over proper or non-proper subsets; the exterior of the
-complex is the sink in the dual graph.  For a face $e\in\delta S$, let
+The maximum is taken over proper or non-proper subsets; the exterior vertex
+$\ast$ is the sink in the augmented dual network. For a face $e\in\delta S$, let
  $s_S(e)\in\{\pm1\}$ be the sign for which $s_S(e)f_e$ is the flux directed
  out of $S$.  Finally, set
 \[
@@ -40,13 +51,15 @@ complex is the sink in the dual graph.  For a face $e\in\delta S$, let
  \mathcal F_M:=\{f\in\mathbb R^{\mathcal E}:Bf=v,\ |f_e|\le Ma_e\}.
 \]
 
-\begin{theorem}[Exact compatible patching profile; \textsc{hypotheses incomplete}]
+\begin{theorem}[Exact compatible patching profile on a sink-connected dual network]
 \label{thm:exact-cubical-patching}
-\emph{As stated below this assertion is false; two hypotheses used in the proof
-are missing from the statement.  See Remark~\ref{rem:cubical-patching-missing-hypotheses}.}
-
-Let $\mathcal K$, $B$, $a_e$, $v_C$, and $h_{\mathcal K}$ be as above, and
-let $Q\subset\mathcal C$ attain the maximum defining $h_{\mathcal K}$.  Then:
+Let $\mathcal K$ be a finite pure $k$-dimensional cubical complex with the
+positive weights $a_e$ and $v_C$ above. Assume that, after adjoining one
+exterior sink vertex, its cell-face matrix $B$ is the reduced incidence matrix
+of the augmented dual graph: every internal face column has one $+1$ and one
+$-1$, every boundary-face column has one nonzero incidence, and every cell
+vertex is connected to the sink. Let $Q\subset\mathcal C$ attain the maximum
+defining $h_{\mathcal K}$. Then:
 
 \begin{enumerate}
 \item
@@ -144,18 +157,21 @@ atomic boundary data satisfy all internal cut capacities.
 \end{theorem}
 
 \begin{proof}
-Regard each face as an edge of the dual graph, with the exterior as a sink.
-The finite anisotropic max-flow/min-cut theorem gives
+By the reduced-incidence hypothesis, each face is an edge of the augmented
+dual network $\widehat G$, with the exterior vertex $\ast$ as a sink. The
+sink-connectivity hypothesis makes every nonempty cell cut have a positive
+boundary capacity and makes the demand vector feasible for sufficiently large
+capacities. The finite anisotropic max-flow/min-cut theorem therefore gives
 \[
  \min\{M:\mathcal F_M\ne\varnothing\}
  =\max_{\varnothing\ne S\subset\mathcal C}
  \frac{v(S)}{a(\delta S)}=h_{\mathcal K}.
 \]
 This is the standard capacitated-flow formulation of the anisotropic network
-theorem; the cell-face incidence matrix is its signed incidence matrix.
-For completeness, the equality case needed here follows directly from
-complementary slackness.  If $Q$ attains the displayed maximum and
-$f\in\mathcal F_{h_{\mathcal K}}$, summing $Bf=v$ over $Q$ gives
+theorem. For completeness, the equality case needed here follows directly
+from complementary slackness. If $Q$ attains the displayed maximum and
+$f\in\mathcal F_{h_{\mathcal K}}$, summing $Bf=v$ over $Q$ and using the
+opposite-incidence entries of every internal face gives
 \[
  v(Q)=\sum_{e\in\delta Q}s_Q(e)f_e
  \le h_{\mathcal K}a(\delta Q)=v(Q).
@@ -170,7 +186,9 @@ For $M=h_{\mathcal K}+\delta$, define
  q_e:=s_Q(e)\frac{f_e}{a_e}-h_{\mathcal K}
  \qquad(e\in\delta Q).
 \]
-Summing the cell equations over $Q$ and using
+Summing the cell equations over $Q$ again uses the reduced-incidence
+condition: all faces internal to $Q$ have one $+1$ and one $-1$ entry and
+cancel, leaving only $\delta Q$. Thus, using
 $v(Q)=h_{\mathcal K}a(\delta Q)$ gives
 $\sum_{e\in\delta Q}a_e q_e=0$.
 The capacity bound gives
@@ -216,42 +234,53 @@ Finally, after fixing the oriented values
 $s_Q(e)\widehat g_e$ on $\delta Q$, the remaining unknown
 face fluxes have capacities $(h_{\mathcal K}+\delta)a_e$ and residual cell
 demands given by the left side of \eqref{eq:patched-extension-cuts}.  The
-Hoffman circulation criterion (equivalently, max-flow/min-cut with a sink)
+Hoffman circulation criterion (equivalently, max-flow/min-cut with the
+augmented sink $\ast$)
 states that these demands are feasible exactly when all the cut inequalities
 \eqref{eq:patched-extension-cuts} hold.  This proves the compatibility
 criterion and completes the proof.
 \end{proof}
 
-\begin{remark}[Two hypotheses are missing]
-\label{rem:cubical-patching-missing-hypotheses}
-The step that sums $Bf=v$ over $Q$ and cancels the internal faces treats $B$ as
-the signed incidence matrix of a dual graph, that is, it assumes each internal
-face carries opposite incidence signs in its two adjacent cells.  A cell--face
-incidence array need not have that property, and without it the internal terms
-do not cancel.
+\begin{remark}[Geometric scope and necessity of the network hypotheses]
+The algebraic hypotheses of Theorem~\ref{thm:exact-cubical-patching} hold if
+$\mathcal K$ is coherently oriented and pure, every codimension-one face is
+incident with one or two top cells, and every component of the cell-only dual
+adjacency graph has nonempty boundary. After adjoining the exterior vertex,
+each such component is connected to the sink. For a cubical pseudomanifold,
+this amounts to orientability with a coherent orientation and no closed
+component. The theorem's ``connected component'' is, by definition, a
+component of the augmented network $\widehat G$ introduced above.
+
+Both counterexamples below show that the two network hypotheses are necessary
+for a theorem uniform over positive $a_e$ and $v_C$. They are two forms of the
+same obstruction: without reduced incidence, internal fluxes do not conserve;
+without a sink-connected component, positive total source cannot leave the
+component.
 
 For $k=1$ let $\mathcal K$ consist of two unit intervals $C_1,C_2$ meeting at a
 vertex $e_1$, with outer vertices $e_0,e_2$, oriented so that
 $\partial C_1=e_1-e_0$ and $\partial C_2=e_1-e_2$; take $a_e=1$ and
-$v_{C_1}=v_{C_2}=1$.  Then $h_{\mathcal K}=1$, attained by $Q=\{C_1,C_2\}$, yet
-$f=(-\tfrac12,\tfrac12,-\tfrac12)$ satisfies $Bf=v$ with
-$\|f\|_{\mathcal K,a,\infty}=\tfrac12<h_{\mathcal K}$.  The column of $e_1$ is
-$(+1,+1)$ rather than $(+1,-1)$, so the internal contribution is $2f_{e_1}$, not
-zero.
+$v_{C_1}=v_{C_2}=1$. Then $h_{\mathcal K}=1$, attained by
+$Q=\{C_1,C_2\}$, yet $f=(-\tfrac12,\tfrac12,-\tfrac12)$ satisfies $Bf=v$
+with $\|f\|_{\mathcal K,a,\infty}=\tfrac12<h_{\mathcal K}$. The column of
+$e_1$ is $(+1,+1)$ rather than $(+1,-1)$, so summing the cell equations
+produces the doubled internal contribution $2f_{e_1}$ instead of cancellation.
+This violates the reduced-incidence hypothesis.
 
-A second hypothesis is also required: every connected component must meet the
-exterior sink.  For the boundary of a $3$-cube as a pure $2$-complex every edge
-lies in two cells, so $\sum_C(Bf)_C=0$ for all $f$ while $\sum_Cv_C>0$, and
-$Bf=v$ has no solution at all; for the full cell set $\delta S=\varnothing$ and
-the ratio defining $h_{\mathcal K}$ has zero denominator.
-
-The theorem is correct for coherently oriented complexes each of whose
-components meets the exterior, which is the situation of every application made
-in this paper; the general statement above is withdrawn.
+For the boundary of a $3$-cube, viewed as a pure $2$-complex, every edge lies
+in two cells and the local incidences can be opposite, but there is no exterior
+face. Hence $\sum_C(Bf)_C=0$ for all $f$ while $\sum_Cv_C>0$, so $Bf=v$ has
+no solution at all; for the full cell set $\delta S=\varnothing$ and the
+ratio defining $h_{\mathcal K}$ has zero denominator. This violates sink
+connectivity and records the corresponding infeasibility for a closed
+component carrying positive total source.
 \end{remark}
 
-The distinction between $\Phi_Q$ and $\Psi_Q$ is genuine.  It already appears
-on a two-by-two rectangular subdivision.  Take horizontal cell widths
+The distinction between $\Phi_Q$ and $\Psi_Q$ is genuine. The two-by-two
+rectangular subdivision below is coherently oriented, has one or two cells per
+codimension-one face, and every cell-only dual component meets the exterior;
+it therefore lies inside the repaired theorem's domain. Take horizontal cell
+widths
 $1,2$, vertical cell heights $2,7$, and let every cell source equal its area.
 The total area and outer anisotropic perimeter are $27$ and $24$, so
 $h_{\mathcal K}=9/8$ by Lemma~\ref{lem:box-self-cheeger}, applied to every
