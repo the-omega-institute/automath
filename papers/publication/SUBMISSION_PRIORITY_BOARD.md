@@ -5048,3 +5048,59 @@ numeration system》, RAIRO ITA **57** (2023), art. 12, DOI `10.1051/ita/2023007
 明细：`2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online/artifacts/priority_check_2026-08-18.md`
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 373 — 两通道仍断；single_primitive 查出一条被裁掉的奠基引用
+
+Oracle relay 不可达（第 19 tick）；codex 503（`SIN`）。无任务可收发。
+
+### 一条干净的否定结论
+
+`single_primitive` 摘要自称唯一外部枚举输入是 Kocábová–Masáková–Pelantová 的区间最大值公式
+（用在 `sec05_height_and_nonuniformity.tex:34`，[Thm. 4.7]）。按 DOI 查 Crossref **返回空**，
+考虑到本项目有伪造引用的先例，这条必须查实而不是假定。
+
+**结论是查询路径的问题，不是伪造。** 同一调用打 Frougny 的 DOI（同出版商前缀、同旧式冒号格式）
+正常返回；按标题查 Crossref 精确命中：Kocábová/Masáková/Pelantová,《Integers with a maximal
+number of Fibonacci representations》, RAIRO ITA **39**(2), 343–359, 2005,
+DOI `10.1051/ita:2005022`，与 bib 条目逐格一致。无需修改。
+
+### 发现：Carlitz 整个从成品论文里消失了
+
+`references.bib` 无 Carlitz 条目，六个参与编译的 section 也无一提及
+（`main.tex` `\input` 的是 sec01–sec06，`_cut_hierarchy_eml_richardson.tex` 不在其中）。
+
+而那个被裁掉的文件里，仍留着当初定位本文与经典文献关系的那段：
+
+> The classical Fibonacci representation-function analyses of
+> `\cite{Carlitz1968,Carlitz1970,KocabovaMasakovaPelantova2005}` concern individual
+> representation counts and their extrema […] The result below concerns instead the
+> positive-support transfer of the intrinsic collision moments.
+
+`sec01` 里的替代段落其实做得不错 —— 引了 Bicknell-Johnson–Fielder 与 KMP，说清它们数的是
+指定整数的表示个数、不构成 $\mathrm{Fold}_m$ 的剩余纤维，还对比了 Sanna。**唯独漏掉 Carlitz。**
+现在那句话开头是「There is also a **substantial literature**…」，随后只引 1999 与 2005。
+
+Carlitz 1968 正是那个重数函数的奠基工作，而本文算的就是它的矩。两条均已核实：
+
+- L. Carlitz,《Fibonacci Representations》, Fib. Quart. **6**(1968), no. 4, 193–220,
+  DOI `10.1080/00150517.1968.12431213`，Crossref 被引 44。
+- L. Carlitz,《Fibonacci Representations — II》, Fib. Quart. **8**(1970), no. 2, 133–134,
+  DOI `10.1080/00150517.1970.12431098`。
+
+通道恢复后派 codex 恢复这两条并在那句话里引用。机械改动，不动数学内容。属**补全性缺口，
+非优先权威胁** —— Carlitz 研究的是单个整数的表示个数，不是碰撞矩 $S_q(m)$。
+
+这也是「删改回合的疤痕组织」那条经验反向咬了一次：删减回合删掉的**不只是防御性废话，
+还有一条该留的归属**。
+
+### 一项没做成的检查
+
+第二矩序列 `S_2(m) = 6, 14, 36, 88, 220, 544, 1352, 3352, 8320, 20640, 51216, 127072`
+（由论文递推 `S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)`、初值 6,14,36 推出）投 Fibonacci 圈刊物前
+应查 OEIS。**文本与 JSON 两个端点都返回 403，这项检查没做成**，不记为通过，需浏览器会话或人工查。
+
+明细：`2026_single_primitive_universality_hierarchy/artifacts/priority_check_2026-08-18.md`
+
+内存 1.12 GB，无 agent 在跑。
