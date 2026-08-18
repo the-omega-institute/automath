@@ -51,6 +51,28 @@ expected to print `OVERALL = RED` and exit with status 1.  These simulations
 are finite-size consistency checks for signs and constants; they do not test
 or prove convergence in distribution.
 
+## Finite-size crossover from direct partition counts
+
+From the article directory, run:
+
+    python artifacts/verify_finite_size_crossover.py
+
+The script computes every `R(N)` through the largest requested Fibonacci
+layer by the exact distinct-part subset-sum recurrence. It prints the full
+integer histogram `R-value:number of N` for each layer before forming any
+weighted sum. The default ladder is `m = 12, 16, 20, 24, 28, 32`, and the
+window parameters are `theta = -4, 0, 4`.
+
+The comparison uses
+
+    s_m = sigma_0 + theta / (kappa m)
+
+and checks `Z_m^R(-s_m)/m` against the crossover limit. The negative control
+replaces the correct prefactor `2` by `1/2`, making its target four times too
+small. The full deterministic output is written to
+`artifacts/finite_size_crossover_check.txt`. This is a finite-size
+consistency check and is not used in the proof.
+
 ## Sharp context-rate reductions
 
 From the article directory, run:

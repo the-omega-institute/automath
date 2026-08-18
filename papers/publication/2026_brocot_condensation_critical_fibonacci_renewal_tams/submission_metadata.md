@@ -1,6 +1,6 @@
 # Submission metadata
 
-Title: Total-Variation Condensation in Denominator-Weighted Brocot Layers, with an Application to Critical Fibonacci Renewal
+Title: Total-Variation Condensation in Denominator-Weighted Brocot Layers and a Finite-Size Crossover for Fibonacci Renewal
 
 Authors: Haobo Ma; Wenlin Zhang
 
@@ -13,9 +13,7 @@ Assessed substantive editorial/referee probability:
 - TAMS: 55--65% (central estimate 60%)
 - JNT fallback: 82--90% (central estimate 86%)
 
-Estimated published length: 30--34 pages. The 12-point AMS manuscript build
-is 20 pages; the estimate refers to the denser published format and is a
-check rather than a target.
+The 12-point AMS manuscript build is 30 pages.
 
 2020 Mathematics Subject Classification: 11A55, 11B39, 60F05, 60K05
 
@@ -31,8 +29,9 @@ condensation law, the exact context calculation and leading-coefficient
 correction, the scalar denominator-layer asymptotic, the critical
 generator-cost tail, the one-layer Weinstein renewal identity, the stable
 law, and the fractional critical correction for the classical Fibonacci
-partition function. It does not contain the finite-window thermodynamic or
-large-deviation theory.
+partition function. It also contains the finite-size crossover through the
+critical exponent and the two fixed-exponent Gibbs regimes. It does not
+contain the finite-window thermodynamic or large-deviation theory.
 
 Citation status: all bibliography entries are carried unchanged from the
 source manuscript's cited bibliography. No external bibliographic citation
