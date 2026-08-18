@@ -1,0 +1,81 @@
+TASK: extract an 17-18 page paper from the 80-page manuscript at
+papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge, following the
+referee report that is already in that directory. You are PRE-AUTHORIZED to edit, delete, split and
+rewrite files there without asking. Do not stop for approval. Do not commit; I commit after
+verifying independently.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_W6_r1.md. It contains a section-by-section disposition
+table and an architecture. Follow it. That file and every other artifacts/oracle_*.md is READ-ONLY
+EVIDENCE -- do not edit, reformat or regenerate any of them; I diff them against HEAD.
+
+=== PART 1: FIX THE FOUR FRONT-MATTER DEFECTS FIRST ===
+
+These are quantifier failures, the recurring defect in this project, and they must be fixed before
+any restructuring so that the fixes are not lost in the cut.
+
+1. Corollary 1.4, second clause. "every fiberwise-trivial stable descent over a statistic is
+   obstructed by comparable equal-statistic fibers of unequal cardinality" is underquantified;
+   "comparable" is undefined and hides the distinction between fibers paired by the ACTUAL
+   structure map and a requirement over EVERY statistic-compatible candidate surjection. Replace
+   with the referee's faithful version: in every fold-aware system that is fiberwise trivial over
+   compatible statistics, fibers paired by each structure map rho_{n,m} have equal cardinality;
+   consequently no such system exists between two levels if EVERY statistic-compatible candidate
+   surjection pairs at least one state with a fiber of unequal cardinality.
+
+2. Corollary 1.5, information clause. "selecting all of them requires at least the corresponding
+   logarithmic message capacity" omits the model. Print the hypotheses of Theorem 7.4: a
+   deterministic protocol, a finite message space R, a fixed decoder, and surjectivity of the
+   decoder onto the admissible involutions.
+
+3. Corollary 1.5, final sentence. "Inv_free is empty for it and the register bound is 0" is FALSE
+   relative to Theorem 7.4: log_2 of 0 is not 0, and a decoder into the empty set does not exist.
+   The correct conclusion is INFEASIBILITY, not zero cost. Use the referee's replacement wording.
+
+4. Corollary 1.2, the boundary-orientation paragraph, the introductory register sentence, and
+   contribution item (iii): all omit the register-free hypothesis, or replace "unique up to natural
+   isomorphism" with unqualified uniqueness, or advertise a classification of "the boundary
+   windows" when the central-charge theorem is restricted to m in {6,7,8}. Fix each per the report.
+
+The abstract already passes. Do not "improve" it beyond what the cut requires.
+
+=== PART 2: THE EXTRACTION ===
+
+Headline is Theorem 4.23, not spectral rigidity and not the certificate interface. New main theorem
+and new title as given in the report ("The Unique Minimal Equitable Refinement of a Folded
+Partition of the 6-Cube" or equally good). Target venue: The Electronic Journal of Combinatorics.
+
+Follow the report's six-section architecture and its disposition table exactly. In particular:
+delete Section 2, Definition 3.4 through Proposition 3.9, Theorems 4.3 and 4.7-4.12, Theorem 4.18,
+Lemmas 4.19-4.20 and Corollary 4.21, all of Section 5, all of Section 7, Appendices A and B;
+compress Theorems 4.2/4.12/4.13 into one residual lemma and Theorems 6.1/6.2 with Corollary 6.5
+into one spectral-carrier lemma; keep Theorem 4.23 and its proof essentially intact with the
+48-cell neighbor-signature table printed in the body.
+
+PRESERVE, DO NOT DESTROY. Move everything cut into sections/_cut_window6_material.tex, verbatim,
+NOT input by main.tex, with a one-line header per block naming what it was. Audit and certificate
+data that the report sends to a supplement goes into a separate supplement document if one already
+exists, otherwise into that same cut file -- do not silently drop it.
+
+The referee states explicitly that no genuine second result is being lost. If while cutting you
+come to believe otherwise -- that some deleted item is an independent theorem worth its own note --
+say so in your final report rather than quietly keeping it.
+
+=== PART 3: VERIFY, AND EXPECT ME TO REDO IT ===
+
+- latexmk -C, delete .aux, rebuild from zero with NO extra command-line macro definitions. A macro
+  defined on the latexmk command line is a fake green build and I check for it.
+- report exit code, page count, and counts of undefined control sequences, unresolved references
+  and unresolved citations; all four counts must be 0.
+- pdftotext -enc UTF-8 the result and grep for terms that must be gone: "stable descent",
+  "torsor", "homology", "register entropy", "Sturm". Report the RAW COUNT before concluding
+  anything -- a path bug returns "no hits" identically to a clean file.
+- reconcile the bibliography both directions and delete entries orphaned by the cut.
+- run any verifier script in the directory and report its output verbatim, and say plainly what it
+  does and does not check.
+- every shipped .tex under 800 lines.
+
+Report at the end: what you kept, what you cut, page count before and after, the counts above, and
+anything in the KEPT material you believe is weak or wrong.
+
+Do not create planning files or notes inside the paper directory. Do not run git commit.
+Do not touch any other paper.
