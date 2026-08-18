@@ -1,11 +1,11 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Finite-state descriptions of numeration systems are useful only when the
-state bound is proved to be exact.  In a collision problem, a truncation that
-merely contains the likely large-weight paths can still remove an accepting
-path and change every moment.  The first theorem below isolates the
-losslessness argument for the signed Fibonacci carries arising from the
+For the finite-state description below, the necessary point is that the
+explicit carry cube is proved to be lossless.  In a collision problem, a
+truncation that merely contains the likely large-weight paths can still remove
+an accepting path and change every moment.  The first theorem below isolates
+the losslessness argument for the signed Fibonacci carries arising from the
 Zeckendorf fold.  This gives a fixed matrix for each prescribed moment degree,
 with no state set depending on the resolution.
 
@@ -40,8 +40,8 @@ For \(q=0\), the limit is \(\log\varphi\), where
 \end{theorem}
 
 The proof is split into the carry losslessness theorem, the matrix
-construction, and the primitivity argument.  The losslessness step is
-substantive: it is not a consequence of an exponential growth estimate.
+construction, and the primitivity argument.  The key correctness verification
+is losslessness: it is not a consequence of an exponential growth estimate.
 
 The second result gives a closed recurrence in the first nontrivial moment.
 \begin{theorem}[Exact second moment]
@@ -98,29 +98,43 @@ formulas \cite{BicknellJohnsonFielder1999} and sharp interval maxima
 specified integers (or maximize that count on an interval).  They therefore do
 not form the residue fibres of the map $\Fold_m$, and they do not compute the
 collision moments $S_q(m)$ (in particular, no displayed $S_2$ recurrence).
-For comparison, Sanna studies a different counting function: his
-$r_F(n)$ counts partitions of $n$ into Fibonacci numbers with repetitions
-allowed (the order of the summands is ignored), and he proves an asymptotic
-order-of-growth result for the power sums for all $p$, rather than an exact
-recurrence, using automata and the Blondel--Nesterov generalized spectral radius
-\cite{Sanna2025FibonacciPowerSums}.  The relevant distinct-part count here is
-$R(n)$, the number of representations of $n$ as a sum of distinct Fibonacci
-numbers; this is the counting function whose fibres the fold refines.  At the
-Fibonacci cutoffs, the ordinary-integer interval sum
+For comparison, Sanna studies power sums of the same distinct-part counting
+function: his $r_F(n)$ counts representations of $n$ as a sum of distinct
+Fibonacci numbers, with the same shifted convention $F_1=1,F_2=2$, and he
+proves an asymptotic order-of-growth result for all $p$, rather than an exact
+recurrence, using automata and the Blondel--Nesterov generalized spectral
+radius \cite{Sanna2025FibonacciPowerSums}.  We write this counting function as
+$R(n)$; it is the number of representations of $n$ as a sum of distinct
+Fibonacci numbers, and its representations are paired by the fold.  At the
+Fibonacci cutoffs, put
 \[
  U(m)=\sum_{n<F_{m+2}}R(n)^2
+\].
+Chow and Jones define the inclusive sum
+$V(H)=\sum_{0\le n\le H}R(n)^2$ and derive an exact inhomogeneous
+recurrence for $v_k=V(F_k)$, together with an explicit solution
+\cite{ChowJones2024Variance}.  In their indexing, passage to the corresponding
+exclusive sum subtracts
+$R(F_k)^2=\lfloor k/2\rfloor^2$; this cancels the quadratic particular
+solution.  After shifting Fibonacci indices to the convention used here, their
+result therefore gives $U(m)$ the homogeneous characteristic polynomial
+\[
+ (X-1)(X+1)(X^3-2X^2-2X+2).
 \]
-has minimal characteristic polynomial
-$(X-1)(X+1)(X^3-2X^2-2X+2)$, whereas our $S_2(m)$ satisfies the bare cubic
-$X^3-2X^2-2X+2$ exactly for $m\ge4$ (with dominant root approximately
-$2.4811943$).  Thus the same cubic growth factor governs both quantities, but
-the ordinary-integer interval sum carries the additional parity factor
-$(X-1)(X+1)$ from its endpoint; the fold's pairing of the two residue
-representatives is exactly what removes that factor.
+This is a known consequence of Chow--Jones; a separate check of the initial
+values shows that the fifth-order polynomial is minimal.  By
+\Cref{prop:ordinary-to-fold-parity-cancellation}, the fold pairing gives
+$S_2(m)=U(m+1)-U(m-1)$ and thereby annihilates the two modes $X=\pm1$.
+Thus $S_2(m)$ satisfies the bare cubic $X^3-2X^2-2X+2$ exactly for $m\ge4$
+(with dominant root approximately $2.4811943$).  This proved identity is the
+precise sense in which pairing the two residue representatives removes the
+parity factor; the carry-automaton calculation below is an independent
+derivation of the same fold recurrence.
 What is not supplied by either the classical normalization results or this
-ordinary-integer power-sum literature is a fixed-degree transfer theorem for
-the residue-fold moments, together with a proof that the bounded signed-carry
-automaton is lossless.  That proof is the substantive step: a
+ordinary-integer power-sum literature is the explicit, economical carry
+automaton used here for the residue-fold moments, together with a proof that
+its bounded carry cube is lossless.  That proof is the key correctness
+verification: a
 truncation chosen because it contains the apparently dominant paths may still
 delete one accepting path, and deleting that path changes every moment, not
 just a lower-order error term.
