@@ -7,7 +7,7 @@
 | # | 论文 | 页 | 目标刊 | 概率 | 当前状态 | 下一步 |
 |--:|---|--:|---|---|---|---|
 | 1 | `single_primitive` | 12 | **DMTCS**（短文形式） | 现状 <10% → 修后 **30–35%** | ✅ 审稿人最后一个未闭合项已证：配对恒等式 $S_2(m)=T_2(m)+2S_2(m-2)$ | 送裁决 |
-| 2 | `window6` | **8** | **EJC** | 18–22% → 修后 **25–30%** | §3 两处缺陷已修；**新增"可容许维数"命题**（$m=3,6,8,9$），正在升级为已证刻画 | 收升级轮 |
+| 2 | `window6` | **9** | **EJC** | 18–22% → 修后 **25–30%** | ✅ 可容许维数已升级为**已证刻画**，外部输入指名引用 Bugeaud–Cipu–Mignotte（我双源核实） | 送裁决（待 Oracle 恢复） |
 | 3 | `cubical_stokes` | 28 | **Results in Mathematics** | 现状 <5% → 修后 **~40%** | 定理 6.6 已按"汇点连通网络"假设修好，Hoffman/LP 引用已补齐 | 送新一轮裁决 |
 | 4 | `fibonacci_folding` | 34 | **Dynamical Systems** | 现状 15–20% → 修后 **~35%** | 头条改为定理 5.3 精确译码器、span-$r$ 撤出摘要，**重构中** | 收 agent → 独立复核 |
 | 5 | `projection` | 47 | **JNT**（审稿人点名） | 未估 | 命题 A.8 已改为比较完成态输出；"多项式规模"已撤 | §7/定理 7.9 仍条件性；送裁决 |
@@ -4465,3 +4465,23 @@ Kalmykov–Kovalev（Green 函数收敛与对数容量连续性）、Warschawski
 Levenberg–Wielonsky 那篇建议投稿前人工读一遍 —— "映射与词汇接近"正是审稿人会去翻的那种。
 
 WARP 仍断（第四个 tick）。codex 一槽（`window6` 判据升级）在跑。内存 1.18 GB。
+
+---
+
+## tick 357 收尾 — `window6` 的分类升级为**已证刻画**，外部输入指名且标为特例化
+
+命题从"验证范围"升级：$\sigma$ 保持 fold $\iff k-1>m$ 且（$k-2>m$ 或无可容许 $N$ 在 $k-2$ 带数字），
+机制写进了证明。由此 $m\ge a+1$ 与 $m\le k-2$（通常 $k-3$）把每个合格 Fibonacci 数夹进一小段，
+$\{3,6,8,9\}$ 随之得出。8 → 9 页。
+
+**它找到了那条外部文献**（我说过"找不到就退回弱口径"是可接受的）：
+Bugeaud–Cipu–Mignotte，《On the representation of Fibonacci and Lucas numbers in an integer base》，
+*Ann. math. Québec* **37**(1), 31–43, 2013。我**自己**用 Crossref + OpenAlex 双源核过，条目每一格都对上。
+
+**要检查的关键点在措辞**：该文分类的是"至多**四个**非零二进制位"，是所需两位情形的**超集**。
+论文写了两次以示区分 —— 一处说"import ... **it implies** 这四元列表"，
+另一处明写 **"The list of four Fibonacci numbers is not proved here; it is the specialization to
+exactly two nonzero binary digits of the complete classification"**。
+借来的结果被标为借来的、且标为特例化，而不是当成现成形式的引用。
+
+判据脚本我自己重跑：49 个候选、与暴力枚举零分歧。
