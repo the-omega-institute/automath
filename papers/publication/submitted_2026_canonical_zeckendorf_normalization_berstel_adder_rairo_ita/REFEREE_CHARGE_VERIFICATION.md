@@ -167,3 +167,40 @@ padded witnesses first and so does not test the claim. It holds at every n from 
 Both surviving novelty claims hold, with the extremal families the paper names, and the
 trimmed-attainment refinement holds as well. This is the part of the manuscript that has to
 carry the resubmission, and it stands up.
+
+---
+
+# Addendum: the six-state quotient, verified
+
+Referee 1 allowed that "the only original result could be the minimality of the Berstel
+adder", then doubted that too. The revision answers by dropping the old ten-state
+minimality claim and replacing it with a six-state output-delay quotient plus a
+pairwise-separation argument. Both were checked from the manuscript's own tables.
+
+Script: `verify_six_state_quotient.py`, in this directory.
+
+- **Forced prefixes p(q)**: all ten match the displayed values — `0` for the four states
+  beginning 0, `1` for the four beginning 1, empty for `002` and `010`. The longest common
+  prefix is **stable between search depth 7 and depth 9**, so it is not a finite-depth
+  artifact.
+- **The six classes**: exactly six distinct normalized residuals, and the partition is
+  exactly the claimed one, `{000,100} {001,101} {002} {010} {0B2,1B2} {01B,11B}`.
+- **The separating suffixes quoted in the proof** reproduce exactly: `G_A(0)=000` against
+  `G_E(0)=001`, `G_B(0)=010` against `G_F(0)=001`, `G_C(0)=0101` against `G_D(0)=0100`.
+  Terminal outputs come out `A,E -> 00`, `B,F -> 01`, `C,D -> 010` as printed.
+- **The quotient realizes K**: the displayed six-state table, run with initial state A and
+  initial output `0`, reproduces the ten-state machine's complete output on all **88,573**
+  words of length up to 10, **zero mismatches**. This validates the table entry by entry,
+  including the initial-output convention.
+- **Lower bound**: all fifteen pairs of reduced residuals are distinct, so no five-state
+  realization exists under this convention.
+
+## What this check does not settle
+
+It confirms the mathematics as printed. It says nothing about the referee's other point,
+that the Mousavi-Schaeffer-Shallit proof "gives also a proof of the minimality". That is a
+priority question about whether the result is new, not about whether it is true, and no
+computation here can answer it. It needs a reading of that paper, and it should go to the
+Oracle when the channel returns.
+
+Taken with the iteration-depth check, both pillars the resubmission rests on verify.
