@@ -77,3 +77,37 @@ threshold 2m-1 rather than the withdrawn r+1 = 4.
 Verified exhaustively for m = 3..7 over all block lengths up to the search cutoff.
 NOT PROVED. What is proved so far is only the window-sum lemma above. Anything entering
 the manuscript needs the general argument, not five values of m.
+
+## Second lemma (proved, tick 321): a nonzero window forces its right end
+
+**Lemma.** If c in {-1,0,1}^m satisfies sum_{k=1}^m c_k F_{k+1} = F_{m+2}, then c_m = +1.
+
+*Proof.* The lower weights satisfy F_2 + ... + F_m = F_{m+2} - 2. If c_m = 0 then
+|sum| <= F_{m+2} - 2 < F_{m+2}. If c_m = -1 then sum <= -F_{m+1} + (F_{m+2} - 2) = F_m - 2,
+again below F_{m+2}, using F_{m+2} - F_{m+1} = F_m. Hence c_m = +1. []
+
+Negating gives the mirror statement for -F_{m+2}. So, combined with the first lemma:
+
+    S_i(d) = sigma * F_{m+2} with sigma in {+1,-1}   ==>   d_{i+m-1} = sigma.
+
+Checked exhaustively for m = 3..12: 623 solutions in total, no exception. The numerical
+maxima match the proof exactly - the largest attainable value with c_m = 0 is F_{m+2}-2 and
+with c_m = -1 is F_m - 2.
+
+**The constraint is one-sided.** The leading coefficient c_1 takes all three values -1, 0, +1
+among the solutions, so there is no mirror statement pinning the left end of a window. That
+asymmetry is precisely the causal cone the referee pointed at: information propagates from
+low positions upward through carries, not symmetrically.
+
+## Where the vanishing theorem still needs work
+
+Proved so far:
+  (L1) every window sum is 0 or +/- F_{m+2};
+  (L2) a nonzero window sum determines the sign of the window's rightmost coordinate.
+
+Wanted: L <= 2m-2 for any nonzero d all of whose window sums satisfy (L1).
+
+(L2) says the positions where nonzero windows end carry nonzero d-entries with matching
+signs. What is missing is the counting step that turns that into a length bound. Note the
+witness family has exactly one nonzero window, so the extremal configuration is as sparse as
+possible in nonzero windows - the length is not being forced by many nonzero windows.
