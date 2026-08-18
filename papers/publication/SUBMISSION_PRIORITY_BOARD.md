@@ -5004,3 +5004,47 @@ and terminal function" —— 明说哪些东西是借来的。
 这个区别要紧：前者说明这篇该砍成 note，后者会是必须修的错误。两者的处置完全不同。
 
 内存 1.08 GB，树干净。
+
+---
+
+## tick 372 — 两通道仍断；查出 zeck_arith 一条该引未引的文献
+
+Oracle relay 不可达（第 18 tick）。codex 503，cf-ray 这次 `SIN`，上个 tick 是 `NRT` ——
+两个边缘节点交替出现同一错误，故障在源站，换网络位置绕不过。
+
+### 差点误杀的东西
+
+八个 python 进程，全部启动于 08-13 17:25，各 1–11 MB，无命令行参数 —— 形态完全符合
+TICK 提示点名要清的「stdin 模式孤儿」。**它们不是孤儿。** 逐个查父进程：
+`paper-search-mcp`、`arxiv-mcp-server`、`lean-lsp-mcp`、`semantic-scholar-mcp`，四个父进程
+全部存活，各带一个子进程。按字面执行会把本 tick 唯一还通的通道杀掉。
+
+### 用还通的那条通道做的事
+
+文献检索 MCP 是通的，拿它对 zeck_arith 查优先权。
+
+先放阳性对照，否则空结果什么也不说明：`Frougny on-line finite automata addition
+numeration systems` 前六条命中 Frougny 1999（本文所引）、Frougny–Sakarovitch、Frougny
+1992、Hieronymi–Terry。索引确实覆盖这块文献。
+
+**发现（已核实）**：Labbé & Lepšová,《A Fibonacci analogue of the two's complement
+numeration system》, RAIRO ITA **57** (2023), art. 12, DOI `10.1051/ita/2023007`。
+按 DOI 直查 Crossref，题名、两位作者、卷期、年份、出版商逐格对上，被引 3 次。
+
+它给出 **Berstel adder** —— 普通 Fibonacci 表示做加法的那个具名转换器 —— 并配了新的
+构造性证明。本文第 7 节正是讲 Fibonacci 记数系统的加法转换器，目前该处只引 Frougny 1999。
+两篇同在 RAIRO ITA，这个圈子的审稿人大概率知道。19 条 bib 里 Berstel(adder)/Labbé/Lepšová
+全无。（`fibonacci_folding` 里的 `Berstel1985` 是《Fibonacci Words — a Survey》，同作者不同工作，
+不是 adder。）
+
+这是**补全性引用，不是优先权威胁** —— Labbé–Lepšová 不声称任何 delay 界，delay-3 的正源
+仍是 Frougny 1999。通道恢复后派 codex 加条目并在引入在线加法器处引用，一步的活。
+
+**一个不能拿来用的空结果**：查「乘法延迟线性下界」的先例，返回的是延迟微分方程、假币问题、
+量子不经意传输、神经网络延迟单元 —— 噪声来自四个不相干领域，说明这次检索根本没搜到目标领域。
+所以 `thm:mul-delay-linear-lower-bound` 的优先权**仍未查清**，要留给能读懂陈述的 Oracle，
+不能靠关键词匹配。
+
+明细：`2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online/artifacts/priority_check_2026-08-18.md`
+
+内存 1.12 GB，无 agent 在跑。
