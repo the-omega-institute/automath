@@ -1,0 +1,48 @@
+TASK: prove the exact pairing identity below and use it to close the one hole the referee left open
+in papers/publication/2026_single_primitive_universality_hierarchy. PRE-AUTHORIZED to edit that
+directory. Do not commit.
+
+READ FIRST: artifacts/oracle_sprint_SP_r2.md. Read-only evidence, as is every artifacts/oracle_*.md.
+
+THE HOLE. The referee accepts the mathematics but says the paper's explanation - that the fold's
+pairing of the two residue representatives is what removes the parity factor (X-1)(X+1) from the
+characteristic polynomial - is true but only observed, not proved. Close it.
+
+WHAT TO PROVE. Write M = F_{m+2}, let R denote the number of representations by distinct Fibonacci
+parts drawn from the m+1 weights F_2,...,F_{m+2}, and set
+   d_m(x) = R(v_x) + R(v_x + M)   for x in X_m with value v_x,
+   S_2(m) = sum_x d_m(x)^2        the folded second moment,
+   T_2(m) = sum over the whole value range of R(n)^2   (no truncation),
+   C(m)   = sum_{v < M} R(v) R(v + M)                  the cross term the pairing creates.
+Then trivially S_2 = T_2 + 2C. The content is:
+
+   (A)  C(m) = S_2(m - 2),
+   (B)  hence  S_2(m) = T_2(m) + 2 S_2(m - 2).
+
+I verified both with zero violations for 3 <= m <= 18, and three perturbed forms as controls -
+2 S_2(m-1), 2 S_2(m-3) and 3 S_2(m-2) - each fail at every tested index, so the identity is pinned
+rather than fitted. For instance at m = 18: 29649664 = 20017408 + 2 * 4816128.
+
+(A) is the substantive one and it is a self-similarity: pairing a residue with its shift by M
+contributes exactly the folded second moment two scales down. A natural route is to split a subset
+summing to v + M according to whether it contains the top weight F_{m+2}; that should put the cross
+term in bijection with a folded pair problem at level m - 2. If that route does not close, say where
+it fails rather than writing something that reads like a proof.
+
+WHY IT SETTLES THE REFEREE'S POINT. U(m), the sum of R(n)^2 truncated at n < M, is the object
+carrying the parity factor (X-1)(X+1); the identity exhibits S_2 as the untruncated moment plus a
+self-similar term, so no endpoint enters and the bare cubic is inherited. State it that way. Do not
+keep the vaguer sentence about pairing once the identity is in.
+
+Also fix, if it is still present, the two smaller items from the same report: the opening claim that
+the paper proves the state bound "exact" is too strong - it proves this cube is lossless, not that it
+is a minimal carry range or minimal state set; and the step B_{n+1} = D_n in the q = 2 calculation
+silently uses that (1,1) and (-1,-1) are unreachable from the initial state, which needs one sentence.
+
+Add a reproduction script under artifacts/ that recomputes (A) and (B) and includes the failing
+controls, so the check is shown to discriminate.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions; report
+exit code, page count before and after, undefined control sequences, unresolved references,
+unresolved citations, all 0, and reconcile citations both directions. No linespread. Every shipped
+.tex under 800 lines. Do not create planning files. Do not run git commit.
