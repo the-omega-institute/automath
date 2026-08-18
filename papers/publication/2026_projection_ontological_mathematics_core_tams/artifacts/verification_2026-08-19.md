@@ -146,3 +146,49 @@ sending both out silent about each other, in a small field with overlapping refe
 This is the third instance of the same pattern this week, after the Berstel adder missing
 from `zeck_arith` and Ostrowski missing from `folded_histograms`: the project already owns
 the result, in the manuscript next door.
+
+---
+
+# Addendum: a third manuscript carries the same foundation theorem
+
+A bounded fingerprint sweep found that eighteen manuscripts in `papers/publication` define a
+fold map. Of those, exactly **two** carry `thm:partition-difference`: this paper and
+`2026_finite_window_zeckendorf_thermodynamics_jnt`. The scope is bounded — this is not a
+repo-wide condition.
+
+The two statements are **word for word identical**, down to the notation `d_m^#(pi_m(n))`,
+the `R^dagger` shorthand, the label, and the "Equivalently" four-term expansion. The only
+difference is that the sibling writes the quantifier `for every m >= 1` explicitly where
+this paper leaves it implicit.
+
+They are also on the same subject by title. This paper is *Discrete Thermodynamics of
+Fibonacci Partition Differences*; the sibling is *finite window Zeckendorf thermodynamics*.
+Its abstract opens with the partition-difference formula, then goes to a second identity
+transferring the known largest fibre values, the second-largest fibre value, the golden-ratio
+Bernoulli-convolution `L^q` spectrum, and a large deviation principle.
+
+**Neither cites the other.** Checked in both directions. This paper's two occurrences of
+"thermodynamics" are the ordinary word, one of them inside its own title.
+
+## What this is, and what it is not
+
+It is **not** copying. The shared-name files overlap very little at line level — 421 lines
+against 451 in `sec_residue_affine.tex`, with five identical non-blank lines — so the prose
+and proofs were written independently. A shared theorem is the expected consequence of the
+project's documented architecture, in which publications are extractions from a common
+`theory/` core. That is a sound working method.
+
+It is a **disclosure problem**. Two manuscripts on the same subject, presenting the same
+theorem in identical words, are heading to different journals without acknowledging each
+other. Add `single_primitive` from the previous check — same collision-moment sequences,
+also mutually unciting — and the cluster is three manuscripts, pairwise silent.
+
+The mathematics is fine and the division of labour is defensible: this paper has the
+higher-`q` Perron structure and the Galois audit, the thermodynamics paper has the
+second-largest fibre and the large deviation principle, `single_primitive` has the exact
+recurrence and fibre maxima. Three complementary treatments of one object is a perfectly
+respectable thing to be, and saying so costs a sentence in each. What none of them can do is
+go out silent, in a field this small.
+
+Each should state the relationship and cite the other two. Whether any should merge is the
+authors' call.

@@ -5714,3 +5714,46 @@ Oracle relay 不可达（第 33 tick）；codex 503。
 **结果本项目已经有了，就在隔壁那份稿子里。**
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 388 — 两通道仍断；第三篇同一对象的稿子，且与 projection 共有一条逐字相同的定理
+
+Oracle relay 不可达（第 34 tick）；codex 503。
+
+### 有界扫描的结果
+
+`papers/publication` 下**18 篇**定义了折叠映射。用数值指纹与 label 双重扫描后，
+携带 `thm:partition-difference` 的**恰好两篇**：`projection` 与
+`2026_finite_window_zeckendorf_thermodynamics_jnt`。**范围有界，不是全仓性问题。**
+
+两条定理陈述**逐字相同** —— 记号 `d_m^#(π_m(n))`、`R^†` 简写、label、
+以及那条"Equivalently"四项展开全都一样；唯一差别是同门把量词 `for every m ≥ 1` 写明，
+本篇留作隐含。
+
+两篇连标题主题也几乎一致：`projection` 的正式标题是
+*Discrete Thermodynamics of Fibonacci Partition Differences*，同门是
+*finite window Zeckendorf thermodynamics*；后者摘要开篇就是 partition-difference 公式，
+随后是"transfers the known largest values"（最大纤维）、第二大纤维值、
+黄金比 Bernoulli 卷积 `L^q` 谱、大偏差原理。
+
+**两篇互不引用**，双向查过。本篇那 2 处 "thermodynamics" 是普通词，其中一处在它自己的标题里。
+
+### 这是什么，不是什么
+
+**不是抄录**。同名文件的行级重合极低 —— `sec_residue_affine.tex` 两边 421 / 451 行，
+仅 5 行非空内容相同 —— 正文与证明是各自独立写的。共有一条定理，
+是本项目既定架构（出版稿从共同的 `theory/` 核心提取）的自然结果，这种做法本身没问题。
+
+**是披露问题**。同一主题、同一条逐字相同的定理、投向不同期刊、彼此不提。
+加上 tick 387 查出的 `single_primitive`（同一串碰撞矩序列，同样互不引用），
+这个簇是**三篇稿子，两两沉默**。
+
+数学没问题，分工也讲得通：本篇有高 q 的 Perron 结构与 Galois 审计，
+热力学那篇有第二大纤维与大偏差原理，`single_primitive` 有精确递推与纤维极大值。
+**同一对象的三份互补处理完全正当**，而正当的事写出来只需各加一句。
+三份都寄出去而彼此沉默才是不可选的 —— 这个领域就这么大。
+
+三篇各自应说明关系并引用另外两篇。是否合并是作者的决定。
+
+内存 1.12 GB，无 agent 在跑。
