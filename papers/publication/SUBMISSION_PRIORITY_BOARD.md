@@ -5417,3 +5417,40 @@ Berstel 1986 列在后续文献里；而本文引的是 `Berstel1986FibonacciWor
 论文以该加法器命名、审稿人又是内行，值得核一下哪个才是首出处。
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 381 — 两通道仍断；Berstel 首出处查清了，并且查出一处本文比 MSS 更准
+
+Oracle relay 不可达（第 27 tick）；codex 503。
+
+### MSS 的 `Berstel:1982` 是哪一篇
+
+> J. Berstel. *Fonctions rationnelles et addition.* In M. Blab, editor,
+> **Théorie des Langages, École de printemps d'informatique théorique**, pp. 177–183. LITP, 1982.
+
+这就是 MSS 用 "apparently originally due to Berstel" 归属 Fibonacci 加法器的那篇。
+他们另引 `Berstel:1980b`《Mots de Fibonacci》(Séminaire d'Informatique Théorique, LITP **6-7**,
+1980–81, 57–78)，1986 综述则是 `Berstel:1986b`。
+
+**该条 Crossref 查不到** —— 1982 年 LITP 春季学校论文集，定向检索全是无关条目。
+所以只能照 MSS 的文献表转录，**无法对索引核实**，这个限制要随引用一起带上。
+又 MSS 自己用了 "apparently" 的保留措辞，稳妥写法是**转述其归属**而非直接断言优先权。
+
+本文现引的两条都已核实无误：Berstel 1986 综述（DOI `10.1007/978-3-642-95486-3_2`，被引 39）
+与 Berstel 2001《An Exercise on Fibonacci Representations》(RAIRO ITA **35**(6), 491–498,
+DOI `10.1051/ita:2001127`，被引 17)。论文以该加法器命名、审稿人是内行，补上 1982 那条是便宜的保险。
+
+### 一处对本文有利的发现
+
+MSS 文献表把 Ahlbach–Usatine–Frougny–Pippenger 记作 Fib. Quart. 51 (2013), **249–256**；
+本文参考文献 [1] 记 **249–255**。Crossref 判 **249–255**（DOI `10.1080/00150517.2013.12427944`）。
+**本文是对的，被引论文是错的。** 万一审稿人照 MSS 抄了页码，这一点要心里有数。
+
+### 对另一条发现的独立印证
+
+MSS 文献表里有 `Carlitz:1968`《Fibonacci representations》, Fib. Quart. **6** (1968), 193–220 ——
+正是 tick 373 指出 `single_primitive` 缺的那条。这个领域的领军者在一篇 Fibonacci 表示的论文里引了它，
+说明那里的缺失是真缺口，不是风格选择。
+
+内存 1.12 GB，无 agent 在跑。

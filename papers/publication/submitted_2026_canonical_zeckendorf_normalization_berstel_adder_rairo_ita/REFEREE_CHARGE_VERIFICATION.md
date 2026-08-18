@@ -262,3 +262,47 @@ MSS attribute the adder itself to Berstel **1982** - "This result is apparently 
 due to Berstel [Berstel:1982]" - with Berstel 1986 among the later references. This
 manuscript cites `Berstel1986FibonacciWords`. Worth checking which is the right primary
 source for the adder, since the referee is a specialist and the paper is named after it.
+
+---
+
+# Addendum: what MSS's Berstel:1982 actually is
+
+Following up the attribution point. MSS write that the Fibonacci adder is "apparently
+originally due to Berstel [Berstel:1982]". Their bibliography gives:
+
+> J. Berstel. *Fonctions rationnelles et addition.* In M. Blab, editor,
+> **Théorie des Langages, École de printemps d'informatique théorique**, pp. 177-183.
+> LITP, 1982.
+
+They separately cite `Berstel:1980b`, *Mots de Fibonacci*, Séminaire d'Informatique
+Théorique, LITP **6-7** (1980-81), 57-78, and the 1986 survey as `Berstel:1986b`.
+
+**This item is not in Crossref.** A targeted search returns nothing related - expected for a
+1982 LITP spring-school volume. So it can be transcribed from MSS's bibliography but it
+cannot be verified against an index, and that limitation should travel with it. Note also
+that MSS hedge with "apparently", so the right form is to attribute the attribution rather
+than assert the priority outright.
+
+This manuscript currently cites the 1986 survey and Berstel's 2001 RAIRO note. Both verify:
+
+- J. Berstel, *Fibonacci Words - A Survey*, The Book of L, 13-27, 1986,
+  doi 10.1007/978-3-642-95486-3_2, 39 citations.
+- J. Berstel, *An Exercise on Fibonacci Representations*, RAIRO ITA **35** (2001), no. 6,
+  491-498, doi 10.1051/ita:2001127, 17 citations.
+
+Since the paper is named after the adder and the referee is a specialist, adding the 1982
+item as the credited origin is cheap insurance.
+
+## A point in the manuscript's favour
+
+MSS's bibliography gives Ahlbach-Usatine-Frougny-Pippenger as *Fibonacci Quart.* 51 (2013),
+**249-256**. This manuscript's reference [1] gives **249-255**. Crossref confirms
+**249-255** (doi 10.1080/00150517.2013.12427944). The manuscript is right and the cited
+paper is wrong. Worth knowing in case a referee copies the range from MSS.
+
+## Independent confirmation of a separate finding
+
+MSS's bibliography contains `Carlitz:1968`, *Fibonacci representations*, Fibonacci Quart.
+**6** (1968), 193-220 - exactly the reference found missing from `single_primitive` on
+2026-08-18. A Fibonacci-representation paper by leading people in the field cites it, which
+is evidence that its absence there is a real gap rather than a stylistic choice.
