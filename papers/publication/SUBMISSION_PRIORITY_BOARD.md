@@ -4909,3 +4909,38 @@ WARP 第十五个 tick 不通（回到 `Unable`）。九篇稿件、封面信、
 同一族问题的第五个变种，但**报错比静默腐蚀好** —— 上个 tick 那 86 个控制字符正是因为不报错才积了那么久。
 
 WARP 第十六个 tick 不通。内存 1.03 GB。
+
+---
+
+## tick 369 后续 — ⛔ **两条派工通道同时断了**
+
+`zeck_arith` 的 note 没能开工，原因是新的：
+
+| 通道 | 状态 |
+|---|---|
+| Oracle（ChatGPT Pro） | WARP 中继不可达，**已 16 个 tick** |
+| codex | 模型网关 `llm.aelf.dev` 返回 **503 Service Unavailable** |
+
+codex 这条我**自己独立复现过**，不是采信转述：直接跑一句最小任务，同样 5 次重连后 503。
+两次派工尝试相隔三分钟、cf-ray 不同，所以不是单个边缘节点的缓存故障。
+
+### 这意味着什么
+
+我现在**只剩自己的计算**：不能派 agent 改稿，不能取外审判决。
+而承重结论的独立复核清单前几个 tick 已基本走完 —— 九篇的关键定理都验过、
+封面信齐备、就绪审计全绿、控制字符已清零并确认未波及稿件。
+
+**所以后续 tick 的边际产出会很低，我不打算靠造活来填。**
+
+### 恢复方式
+
+- Oracle：终端执行 `warp-cli disconnect` 再 `warp-cli connect`
+- codex：`llm.aelf.dev` 是上游网关，只能等它恢复；503 是服务端负载/宕机，不是本地配置
+
+### 通道恢复后的第一批动作（已就绪，不需再想）
+
+1. 取回 `W63`（`window6` 第三轮），把可容许维数的机制一并交上去；
+2. 问 `brocot` 去向 —— 封面信仍抬头 TAMS，而"强专业刊"是否指 TAMS 只有审稿人能答；
+3. 八篇送新一轮裁决（`folded_histograms` 6p、`window6` 9p、`single_primitive` 12p、
+   `joukowsky` 15p、`scan_projection` 18p、`fibonacci_folding` 22p、`cubical_stokes` 28p、`projection` 47p）；
+4. 派 `zeck_arith` 的 note（任务书 `tier2/za_note.txt` 已写好，含定理 6.4 的前置检查）。
