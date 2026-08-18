@@ -3471,3 +3471,47 @@ arXiv 2309.12724 存在、标题与唯一作者对得上、Crossref 列在 Discr
 脚本 `artifacts/verify_recurrence_vs_literature.py`。仓库根部的 `bash.exe.stackdump` 已清。
 
 `single_primitive` 现状：13 条条目、10 个 DOI 全部 Crossref 比对通过、双向配平 13/13、10 页、闸门通过。
+
+---
+
+## tick 337 收尾 — 三篇同时落地并各自独立核实
+
+### `cubical_stokes` — 从"最差的中间态"变成一篇可投的论文
+
+审稿人说它此前处在三种状态里最差的一种：假定理连同完整证明照印、旁边一句"已撤回"，
+而摘要仍在宣传关于**任意**有限立方复形的精确定理。这个状态没有了。
+
+定理现在带上证明真正用到的假设（并入外部汇点后，$B$ 是增广对偶图的约化关联矩阵），
+几何形式作为注记，**两个反例各自归位** —— 两区间例子证"约化关联"必要，
+立方体边界例子证"汇点连通"必要。$2\times2$ 严格界面损失例子现在跟在一个成立的定理之后。
+
+**尺度诚实写进了摘要而不是埋起来**：全局结果标为 supporting，
+主贡献点名为 box readout 定理，网络恒等式被直说成
+"标准的最大流最小割、有限维 LP 对偶、以及 Hoffman 循环准则在立方情形的翻译"。
+丢掉新颖性宣称是修复的代价，论文现在主动说了。
+
+我核的：从零重建 `exit=0 pages=28 ucs=0 ref=0 cite=0`。
+残留撤回用语用**对照计数**查：`cubical` 出现 33 次（grep 有效），
+而 `withdrawn` / `hypotheses incomplete` / `is false` / `arbitrary finite cubical` **各 0**。
+
+**留下的缺口我写进提交信息而非藏起来**：Hoffman 准则在正文出现 5 次、书目 0 条。
+我已自己在 Crossref 上核准出处（Hoffman 1960，*Proc. Sympos. Appl. Math.* 10, 113–127，
+DOI `10.1090/psapm/010/0114759`，标题作者刊名年份全对），并把**核实过的条目**直接写进任务书，
+禁止 agent 换成别的。
+
+### `fibonacci_folding` — 三条限定全部落地
+
+不再说"有界"而说"只有三种相对 $k$ 的形式"；八条边改称**内部**转移类型，
+并点名 $00\xrightarrow{01}01$ 在最低切点不可出现 —— **与我自己算出的最低切点一致**；
+$(P,y^-)$ 的充分性标为 bulk 陈述。审稿人当初需要自己重构的"同一后继接到两个前缀"论证也写全了。
+我从零重建：`exit=0 pages=35 ucs=0 ref=0 cite=0`；PDF 转文本 80,864 字节、
+对照词 `Fibonacci` 47 次，新措辞 `k-relative` 2 次、`bulk statement` 2 次、`interior` 17 次。
+
+### 状态表
+
+| 论文 | 页数 | 闸门 | 目标刊 | 在飞 |
+|---|--:|---|---|---|
+| `single_primitive` | 10 | PASS | DMTCS | Sanna 更正轮 |
+| `window6` | 11 | PASS | EJC (~25%) | — |
+| `cubical_stokes` | 28 | PASS | Results in Math (~40%) | Hoffman 引用轮 |
+| `fibonacci_folding` | 35 | PASS | 待定 | — |
