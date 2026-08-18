@@ -56,7 +56,7 @@ Set $M:=\Fib_{m+2}$. A length-$m$ word has value at most
 \sum_{k=1}^m\Fib_{k+1}=\Fib_{m+3}-2
 =M+\Fib_{m+1}-2.
 \]
-Its normalized expansion therefore has at most one digit beyond the window, at position $m+1$, and the retained digits are the Zeckendorf expansion of its value modulo $M$. Thus two length-$m$ words have the same fold precisely when their values are congruent modulo $M$.
+Its normalized expansion therefore has at most one digit beyond the window, at position $m+1$. When that digit occurs, the remainder is $N-M<\Fib_{m+1}$, so it cannot use position $m$; the retained digits are consequently the Zeckendorf expansion of $N\bmod M$. Thus two length-$m$ words have the same fold precisely when their values are congruent modulo $M$.
 
 It is enough to prove injectivity for $L=2m-1$: if two longer blocks differ, some length-$2m-1$ subblock containing a differing coordinate also differs. Let $u,v\in\{0,1\}^{2m-1}$ have the same window sequence, put $d_j:=u_j-v_j\in\{-1,0,1\}$, and define
 \[
@@ -108,22 +108,37 @@ $-\Fib_m-\Fib_{m+1}=-M$. Every later window contains all three nonzero coordinat
 
 \subsection{Local decoding}
 
-\begin{theorem}[Finite-window decoder]\label{thm:window-decoder}
-Fix $m\ge3$. Every admissible block of $m$ consecutive symbols in $Y_m$ has a unique lift to a binary block of length $2m-1$. Consequently there is a well-defined decoder
+Theorem~\ref{thm:block-separation} says that $m$ consecutive labels determine their entire length-$(2m-1)$ lift. Recovering only the current digit requires fewer labels.
+
+\begin{theorem}[Exact causal decoder]\label{thm:window-decoder}
+Fix $m\ge3$. Any two lifts of the same three consecutive symbols in $Y_m$ have the same terminal digit. Consequently there is a well-defined decoder
 \[
-\psi_m:\mathcal{B}_m(Y_m)\to\{0,1\},
+\psi_m:\mathcal{B}_3(Y_m)\to\{0,1\},
 \qquad
-\eta_t=\psi_m(y_{t-m+1},\ldots,y_t)
+\eta_t=\psi_m(y_{t-2},y_{t-1},y_t)
 \]
-whenever $y=\Phi_m(\eta)$.
+whenever $y=\Phi_m(\eta)$. No decoder using only $(y_{t-1},y_t)$ can recover $\eta_t$. Thus the exact zero-anticipation memory of the inverse is $2$, independently of $m$.
 \end{theorem}
 
 \begin{proof}
-An admissible block $(y_{t-m+1},\ldots,y_t)$ is the folded-window sequence of a binary block on the coordinate interval $[t-2m+2,t]$, which has length $2m-1$. Existence follows from admissibility, and uniqueness follows from \Cref{thm:block-separation}. Define $\psi_m$ to be the last digit of this unique lift.
+Take two length-$(m+2)$ lifts of the same three labels and write their digitwise difference as $d_1,\ldots,d_{m+2}\in\{-1,0,1\}$. The three window differences $S_1,S_2,S_3$ from the proof of \Cref{thm:block-separation} are divisible by $M=\Fib_{m+2}$. Applying \eqref{eq:window-boundary-identity} at $i=1$ and reducing modulo $M$ gives
+\[
+d_1+d_2-\Fib_{m+1}d_{m+2}\equiv0\pmod M.
+\]
+If $m\ge4$, the absolute value of the left-hand side is at most $2+\Fib_{m+1}<M$, so it vanishes. Since $\Fib_{m+1}>2$, this forces $d_{m+2}=0$. For $m=3$, three labels correspond to a length-$5=2m-1$ lift, which is unique by \Cref{thm:block-separation}. Thus the terminal digit is determined in every case.
+
+To prove optimality, take length-$(m+1)$ blocks $u\ne v$ with
+\[
+u_{m+1}=1,
+\qquad
+v_{m-1}=v_m=1,
+\]
+and all other digits zero. In the first window the values differ by
+$\Fib_m+\Fib_{m+1}=M$, so their folds agree. In the second window the two values are equal by the same Fibonacci recurrence. Hence the two labels agree, while the terminal digits are $u_{m+1}=1$ and $v_{m+1}=0$. Two labels therefore do not suffice.
 \end{proof}
 
 \begin{remark}\label{rem:window-bound-essential}
-The dependence on $m$ is essential. The sharpness family in \Cref{thm:block-separation} gives ambiguities of length $2m-2$ even though the elementary Zeckendorf rewrite has fixed span $3$. Thus the decoding bound is controlled by the boundary propagation encoded in \eqref{eq:window-boundary-identity}, not by the support of a single rewrite.
+The two sharp thresholds concern different recovery problems. A sequence of $m$ labels is necessary to determine the whole length-$(2m-1)$ lift, whereas three labels determine its terminal digit. Thus sharp whole-block reconstruction at length $2m-1$ does not determine the inverse memory.
 \end{remark}
 
 \subsection{The threshold \texorpdfstring{$m\ge3$}{m >= 3}}
@@ -141,7 +156,7 @@ For $m\ge3$, the sliding block code $\Phi_m:\{0,1\}^{\ZZ}\to Y_m$ is a topologic
 For $y\in Y_m$, define
 \[
 (\Psi_m(y))_t
-:=\psi_m(y_{t-m+1},\ldots,y_t),
+:=\psi_m(y_{t-2},y_{t-1},y_t),
 \]
 where $\psi_m$ is the decoder from \Cref{thm:window-decoder}. This is a sliding block code and $\Psi_m\circ\Phi_m=\mathrm{id}$. If $y\in Y_m$, write $y=\Phi_m(\eta)$; then $\Psi_m(y)=\eta$, so $\Phi_m\circ\Psi_m(y)=y$. Hence $\Psi_m$ is the desired inverse.
 \end{proof}

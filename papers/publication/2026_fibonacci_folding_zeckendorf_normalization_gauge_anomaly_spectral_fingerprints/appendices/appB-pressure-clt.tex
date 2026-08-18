@@ -28,109 +28,41 @@ If \(\omega\in\Om_M\) and \(L\ge 1\), then the LH word
 \[
 \omega 0^L:=(\omega_1,\dots,\omega_M,\underbrace{0,\dots,0}_{L\text{ times}})\in\Om_{M+L}
 \]
-has
+has the same first \(M\) normalized digits as \(\omega\). If \(z=Z(N(\omega))\), then \(z_j=0\) for \(j\ge M+2\); hence the added high-order part is
 \[
-\Fold_{M+L}(\omega 0^L)=(\Fold_M(\omega),0,\dots,0)
+(z_{M+1},0,\dots,0).
 \]
-on the first \(M\) coordinates. Consequently every factor in \(\mathcal{L}_{\mathrm{pair}}\) may be preceded by arbitrarily many symbols \(00\).
+Consequently every factor in \(\mathcal{L}_{\mathrm{pair}}\) may be preceded by arbitrarily many pair symbols \(00\).
 \end{lemma}
 
 \begin{proof}
-Appending zeros at higher Fibonacci sites does not change the value \(N(\omega)\), hence it does not change the first \(M\) digits of the Zeckendorf normalization. Reading the resulting pair word from high to low contributes \(L\) leading symbols \(00\), so any existing factor can be shifted arbitrarily far to the right inside a longer word and preceded by an arbitrarily long block of \(00\)'s.
+Appending zeros at higher Fibonacci sites does not change \(N(\omega)\), hence it does not change any normalized digit. Moreover,
+\[
+N(\omega)\le \sum_{j=1}^M\Fib_{j+1}=\Fib_{M+3}-2<\Fib_{M+3},
+\]
+so the normalized expansion has no digit above position \(M+1\). In high-to-low order the added part therefore consists of \(L-1\) pair symbols \(00\), followed by \((0,z_{M+1})\). Taking \(L\) arbitrarily large gives the last assertion.
 \end{proof}
 
-\subsection{A synchronized four-state presentation}
-Lemma~\ref{lem:zero-padding} lets us synchronize every factor by putting it after a long block of \(00\)'s. The relevant state information is therefore encoded by the factors that begin with \(00\).
+\subsection{The carry transducer}
 
-\begin{lemma}[Local four-bit table]\label{lem:local-four-bit}
-Let \(b_1b_2b_3b_4\in\{0,1\}^4\) be the next four microstate digits after a synchronized prefix, written in the high-to-low order in which the reversed pair word is read. Then the next five pair symbols are given by
+Consider a raw word and its full Zeckendorf normalization, both padded at high weights so that all normalized digits are visible. Read the pair word from high to low. Immediately before the digit of weight \(\Fib_k\), let
 \[
-\begin{array}{c|c@{\qquad}c|c}
-b_1b_2b_3b_4 & \text{pair symbols} & b_1b_2b_3b_4 & \text{pair symbols} \\\hline
-0000 & 00|00|00|00|00 & 1000 & 00|11|00|00|00 \\
-0001 & 00|00|00|00|11 & 1001 & 00|11|00|00|11 \\
-0010 & 00|00|00|11|00 & 1010 & 00|11|00|11|00 \\
-0011 & 00|00|01|10|10 & 1011 & 01|10|00|10|10 \\
-0100 & 00|00|11|00|00 & 1100 & 01|10|10|00|00 \\
-0101 & 00|00|11|00|11 & 1101 & 01|10|10|00|11 \\
-0110 & 00|01|10|10|00 & 1110 & 01|10|10|11|00 \\
-0111 & 00|01|10|10|11 & 1111 & 01|10|11|10|10
-\end{array}
+P=\text{(raw value already read)}-\text{(normalized value already read)}
 \]
-In particular, the first four pair symbols after a synchronized prefix depend only on \(b_1b_2b_3b_4\).
-\end{lemma}
-
-\begin{proof}
-Because the normalization scan proceeds from high Fibonacci weights to low ones, once a pair symbol has been emitted it cannot be altered by lower-weight digits that are inspected later. Therefore the first four pair symbols after a synchronized prefix are determined entirely by the next four microstate digits \(b_1b_2b_3b_4\). There are only \(16\) such blocks, and direct normalization of each block gives the displayed table.
-\end{proof}
-
-\begin{lemma}[Length-\(3\) synchronized prefixes]\label{lem:length3}
-After padding by a block \(00^L\) with \(L\) large, the length-\(3\) factors of \(\mathcal{R}_M(\omega)\) that begin with \(00\) are exactly
-\[
-00|00|00,\quad
-00|00|01,\quad
-00|00|11,\quad
-00|01|10,\quad
-00|10|00,\quad
-00|10|10,\quad
-00|10|11,\quad
-00|11|00.
-\]
-\end{lemma}
-
-\begin{proof}
-Projecting the table of Lemma~\ref{lem:local-four-bit} to the first three pair symbols yields exactly the eight words listed in the statement. No further word can occur, because every synchronized length-\(3\) factor is the projection of one of the \(16\) local four-bit cases.
-\end{proof}
-
-For the four two-symbol words
-\[
-00|00,\qquad 00|01,\qquad 00|10,\qquad 00|11,
-\]
-define their one-step follower sets
-\[
-E(00|00)=\{00,01,11\},\quad
-E(00|01)=\{10\},\quad
-E(00|10)=\{00,10,11\},\quad
-E(00|11)=\{00\}.
-\]
-These four follower sets are distinct, so we use the second symbol as the state name and write the states as
-\[
-\mathcal{S}:=\{00,01,10,11\}.
-\]
-
-The synchronized transition table is extracted from the length-\(4\) factors in \(\mathcal{L}_{\mathrm{pair}}\) that begin with \(00\). A direct enumeration of the \(16\) admissible factors is
-\begin{align}
-&00|00|00|00,\quad 00|00|00|01,\quad 00|00|00|11,\quad 00|00|01|10,\nonumber\\
-&00|00|11|00,\quad 00|01|10|00,\quad 00|01|10|10,\quad 00|01|10|11,\label{eq:length4-factors}\\
-&00|10|00|10,\quad 00|10|10|00,\quad 00|10|10|01,\quad 00|10|10|11,\nonumber\\
-&00|10|11|10,\quad 00|11|00|00,\quad 00|11|00|01,\quad 00|11|00|11.\nonumber
-\end{align}
-The rightmost symbol in each line is exactly the admissible one-step continuation of the synchronized three-symbol prefix on its left.
-
-\begin{lemma}[Classification of synchronized length-\(4\) factors]\label{lem:length4}
-Starting from the prefixes listed in Lemma~\ref{lem:length3}, the only admissible continuations are those displayed in \eqref{eq:length4-factors}. Each factor in the list arises from a microstate block, and no other continuation is compatible with the local rewrite \(110\to 001\).
-\end{lemma}
-
-\begin{proof}
-Projecting the table of Lemma~\ref{lem:local-four-bit} to the first four pair symbols gives exactly the \(16\) words displayed in \eqref{eq:length4-factors}. Grouping those words by their first three symbols gives the continuation sets
+and let \(y^-\) be the preceding normalized digit, with a virtual initial value \(y^-=0\). The four carry states are
 \[
 \begin{array}{c|c}
-\text{synchronized prefix} & \text{admissible fourth symbols} \\\hline
-00|00|00 & \{00,01,11\} \\
-00|00|01 & \{10\} \\
-00|00|11 & \{00\} \\
-00|01|10 & \{00,10,11\} \\
-00|10|00 & \{10\} \\
-00|10|10 & \{00,01,11\} \\
-00|10|11 & \{10\} \\
-00|11|00 & \{00,01,11\}.
+\text{state}&\text{condition at the cut before }\Fib_k\\\hline
+00&P=0,\ y^-=0,\\
+01&P=-\Fib_{k+1},\\
+10&P=-\Fib_k,\ y^-=0,\\
+11&P=0,\ y^-=1.
 \end{array}
 \]
-This is simply a regrouping of the \(16\) local four-bit rows, so \eqref{eq:length4-factors} is exhaustive.
-\end{proof}
+In state \(01\), the value of \(y^-\) need not be retained because every admissible next output digit is \(0\).
 
-\begin{proposition}[Deterministic update on synchronized prefixes]\label{prop:transitions}
-Let \(s\in\mathcal{S}\). For a synchronized prefix ending in the representative word \(00|s\), the admissible next pair symbols and the resulting synchronized state are:
+\begin{proposition}[Carry transition table]\label{prop:transitions}
+The possible carry transitions, labeled by the current raw/normalized pair, are exactly
 \begin{align*}
 00 &\xrightarrow{00} 00, &\qquad
 00 &\xrightarrow{01} 01, &\qquad
@@ -141,63 +73,38 @@ Let \(s\in\mathcal{S}\). For a synchronized prefix ending in the representative 
 10 &\xrightarrow{11} 01,\\
 11 &\xrightarrow{00} 00.
 \end{align*}
-Equivalently, \(\mathcal{P}\) admits the four-state synchronized right-resolving presentation displayed above.
+Thus every finite normalized pair word labels a path in this four-state graph.
 \end{proposition}
 
 \begin{proof}
-The one-step follower sets were listed just before the proposition, so it remains only to identify the target state after each admissible symbol. This is read off from \eqref{eq:length4-factors}.
-
-For example, after the synchronized prefix \(00|10\) the admissible next symbols are \(00,10,11\). The factors
+Write \(\delta=x-y\) for a pair label \(xy\). Reading the digit of weight \(\Fib_k\) changes the imbalance from \(P\) to \(P+\delta\Fib_k\). At the next cut the current weight is \(\Fib_{k-1}\), and the recurrence \(\Fib_{k+1}=\Fib_k+\Fib_{k-1}\) gives the displayed state updates. For example,
 \[
-00|10|00|10,\qquad 00|10|11|10
+-\Fib_{k+1}+\Fib_k=-\Fib_{k-1},
 \]
-show that both \(00\) and \(11\) land in the state whose next-symbol set is \(\{10\}\), namely state \(01\); the factors
-\[
-00|10|10|00,\qquad 00|10|10|01,\qquad 00|10|10|11
-\]
-show that \(10\) lands in the state whose next-symbol set is \(\{00,01,11\}\), namely state \(00\). The other rows are read in the same way from the corresponding factors in \eqref{eq:length4-factors}.
+so \(01\xrightarrow{10}10\), while a zero-difference label in state \(10\) leaves \(P=-\Fib_k\), which is state \(01\) at the next cut.
 
-Because every factor of \(\mathcal{L}_{\mathrm{pair}}\) can be left-extended by arbitrarily many \(00\)'s (Lemma~\ref{lem:zero-padding}), every factor eventually enters the synchronized regime. Once synchronized, admissible extensions are governed uniquely by the table above. Therefore the displayed graph presents the whole shift \(\mathcal{P}\). It is right-resolving by construction, since each outgoing label from a fixed state is distinct.
+It remains to exclude the other labels. After the current digit, the maximum raw value still available is
+\[
+\sum_{j=2}^{k-1}\Fib_j=\Fib_{k+1}-2,
+\]
+whereas the maximum value of a normalized tail is \(\Fib_k-1\). Hence a positive imbalance \(\Fib_k\), produced by label \(10\) in state \(00\) or \(11\), cannot be cancelled by the normalized tail. In state \(01\), every label except \(10\) leaves a negative imbalance of magnitude at least \(\Fib_{k+1}\), too large for the raw tail. In state \(10\), label \(01\) leaves imbalance \(-2\Fib_k\), and
+\[
+2\Fib_k>\Fib_{k+1}-2,
+\]
+so this also cannot be cancelled. Finally, adjacent normalized \(1\)s are forbidden; this leaves only \(11\xrightarrow{00}00\) from the fourth state. These exclusions and the recurrence give exactly the stated table.
+
+For an unpadded finite fold, append two high-order raw zeros. By \Cref{lem:zero-padding}, the original pair word is unchanged on its visible coordinates, all normalized digits now lie in the enlarged window, and the enlarged stream starts in state \(00\). The preceding argument therefore applies to every factor in \(\mathcal L_{\mathrm{pair}}\).
 \end{proof}
 
-\begin{proposition}[Synchronized path lifting]\label{prop:sync-language}
-Fix \(s\in\mathcal{S}\) and \(n\ge 1\). Let \(a_1,\dots,a_n\) be pair symbols in \(\{00,01,10,11\}\). Then the following are equivalent.
-\begin{enumerate}
-\item[(i)] \(00|s|a_1|\cdots|a_n\in \mathcal{L}_{\mathrm{pair}}\).
-\item[(ii)] There exists a path
-\[
-s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
-\]
-in the four-state graph of Proposition~\ref{prop:transitions}.
-\end{enumerate}
-In particular, the finite words that occur after a synchronized prefix are exactly the path labels of the four-state graph.
+\begin{proposition}[Carry path realization]\label{prop:sync-language}
+A finite pair word belongs to \(\mathcal L_{\mathrm{pair}}\) if and only if it labels a path in the graph of Proposition~\ref{prop:transitions}. Every such path label is realized at arbitrarily large distance from both ends of a finite reversed pair word.
 \end{proposition}
 
 \begin{proof}
-We argue by induction on \(n\). When \(n=1\), the claim is exactly Proposition~\ref{prop:transitions}. Assume \(n\ge2\).
+One direction is Proposition~\ref{prop:transitions}. Conversely, the graph is strongly connected: state \(00\) reaches \(01,10,11\), and every state returns to \(00\). Surround the given path by paths from \(00\) to its initial state and from its terminal state back to \(00\). Add arbitrarily many \(00\)-labeled loops at state \(00\) on both sides.
 
-Suppose first that \(00|s|a_1|\cdots|a_n\in\mathcal{L}_{\mathrm{pair}}\). By Proposition~\ref{prop:transitions}, the prefix \(00|s|a_1\) determines a unique successor state \(s_1\) with \(s\xrightarrow{a_1}s_1\). The suffix \(00|s_1|a_2|\cdots|a_n\) is again a synchronized factor, so the induction hypothesis yields a path
-\[
-s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n.
-\]
-Prepending the first step gives the required path from \(s\).
-
-Conversely, suppose that
-\[
-s=s_0\xrightarrow{a_1}s_1\xrightarrow{a_2}\cdots\xrightarrow{a_n}s_n
-\]
-is a path in the graph. Proposition~\ref{prop:transitions} realizes the first step by a synchronized factor \(00|s|a_1\). The induction hypothesis realizes the tail \(a_2\cdots a_n\) after the synchronized state \(s_1\). Concatenating these synchronized extensions gives a realization of \(00|s|a_1|\cdots|a_n\) in \(\mathcal{L}_{\mathrm{pair}}\).
+Assign consecutive Fibonacci weights to the resulting path. The carry identities in the proof of Proposition~\ref{prop:transitions} show that the initial and terminal imbalance are both zero, so the two coordinates of the label word have equal Fibonacci value. The second coordinate has no adjacent \(1\)s, as is immediate from the transition table. It is therefore the Zeckendorf normalization of the first coordinate. This realizes the original path label, and the added loops place it arbitrarily far from both boundaries.
 \end{proof}
-
-\begin{remark}[Representative transition computation]
-The state \(10\) is the only state with three outgoing transitions. In the synchronized language there is nevertheless no ambiguity: the three admissible length-\(4\) factors beginning with \(00|10\) are precisely
-\[
-00|10|00|10,\qquad
-00|10|10|00,\qquad
-00|10|11|10.
-\]
-Hence \(00\) and \(11\) have the same one-step follower set \(\{10\}\), while \(10\) has the follower set \(\{00,01,11\}\). This is the only nontrivial state update in the synchronized presentation.
-\end{remark}
 
 \subsection{Adjacency matrix and bulk Parry measure}
 In the state order \((00,01,10,11)\), the adjacency matrix of Proposition~\ref{prop:transitions} is
@@ -217,7 +124,7 @@ Let \(\omega^{(M)}\) be uniform on \(\Om_M\), and let \(\mathcal{R}_M(\omega^{(M
 \end{proposition}
 
 \begin{proof}
-By Lemma~\ref{lem:zero-padding} and Proposition~\ref{prop:sync-language}, the interior factors of \(\mathcal{R}_M(\omega)\) are exactly the finite label words of a primitive synchronized right-resolving graph. Because the first coordinate of each pair symbol is the microstate digit itself, the map \(\omega\mapsto \mathcal{R}_M(\omega)\) is injective, so the uniform measure on \(\Om_M\) is the uniform measure on admissible reversed-pair words of length \(M\). Standard results on uniform word measures for primitive sofic shifts then imply that centered factors converge to the Parry measure carried by the synchronized presentation; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
+By Propositions~\ref{prop:transitions} and \ref{prop:sync-language}, the finite reversed pair words are paths in a primitive right-resolving graph subject only to their initial and terminal carry conditions. The first coordinate of the labels recovers \(\omega\), so the uniform measure on \(\Om_M\) gives equal weight to these boundary-conditioned paths. Perron--Frobenius asymptotics for a primitive graph show that fixed boundary conditions do not affect a factor whose distance from both ends tends to infinity. Such factors therefore converge to the Parry measure of the four-state presentation; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~2]{Kitchens1998}.
 \end{proof}
 
 The Perron eigenvalue of \(A\) is \(2\). A convenient right/left eigenvector pair is
