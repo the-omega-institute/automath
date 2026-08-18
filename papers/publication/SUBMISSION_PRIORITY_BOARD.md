@@ -153,11 +153,11 @@ latexmk 发现声明的 `.bib` 一个都不在 → **直接跳过 BibTeX** → �
 `sn-article.tex` —— 随稿附带的 Springer Nature 模板样例，非稿件本身。
 
 最后一个真失败已修（`bb692f9cc`）：`fibonacci_moduli` 的 cover letter。
-`\signature{... nd ...}` —— `nd` 属 article 类的 `uthor`，在 `letter` 类里展开成
+`\signature{... \and ...}` —— `\and` 属 article 类的 `\author`，在 `letter` 类里展开成
 tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类签名行分隔符是 `\`。
 
 三篇书目自包含已完成（`80f7aa1df`）：条目数 = 印出数 = 引用数（16/23/16），
-逐字节取自 theory 源；**全树任何 `.tex` 的 `ibliography`/`\input`/`\include`/
+逐字节取自 theory 源；**全树任何 `.tex` 的 `\bibliography`/`\input`/`\include`/
 `\includegraphics` 参数中不再有 `../`**，目录单独拷出仓库亦能编译（已实测）。
 
 ### 可复现性审计（2026-08-17，tick 237）
@@ -218,9 +218,9 @@ tabular 机制，一路撑到 `\closing` 才炸 "Misplaced \crcr"。letter 类�
 
 | 篇 | 结果 | 我的判定 | 提交 |
 |---|---|---|---|
-| `brocot_…_tams` | **临界 Gibbs 几何**：$(J_m/m,(H_m-J_m/\mu_C)/a_m)	o(U,-\mu_C^{-1-1/lpha}U^{1/lpha}\mathcal S_lpha)$，20→23 页 | **真定理**。不是已有吸引域推论的改写：那条讲抽象生成元代价的独立序列，这条讲从**真实 Fibonacci 层**抽出的数。证明起于精确加权生成元-更新恒等式；硬点是无穷方差下的更新时刻平均（Chebyshev 不可用，须对全部 $O(m)$ 指标做一致弱律）| `f7166ba7d` |
+| `brocot_…_tams` | **临界 Gibbs 几何**：$(J_m/m,(H_m-J_m/\mu_C)/a_m)	o(U,-\mu_C^{-1-1/\alpha}U^{1/\alpha}\mathcal S_\alpha)$，20→23 页 | **真定理**。不是已有吸引域推论的改写：那条讲抽象生成元代价的独立序列，这条讲从**真实 Fibonacci 层**抽出的数。证明起于精确加权生成元-更新恒等式；硬点是无穷方差下的更新时刻平均（Chebyshev 不可用，须对全部 $O(m)$ 指标做一致弱律）| `f7166ba7d` |
 | `large_primitive_divisors` | 无条件本原准素分量 $Q_{
-m prim}(F_n)\ge n^{2-arepsilon}$，8→9 页 | **推论，非第二定理**。= 已有二择一 + 标准的 $q\ge n-1$；**无条件性靠把度量从 $P_{
+m prim}(F_n)\ge n^{2-\varepsilon}$，8→9 页 | **推论，非第二定理**。= 已有二择一 + 标准的 $q\ge n-1$；**无条件性靠把度量从 $P_{
 m prim}$ 削弱到 $Q_{
 m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确有改进，值得留，但不是这篇缺的东西 | `09a5cfbac` |
 
@@ -228,7 +228,7 @@ m prim}$ 换来**。相对 Kiss 1988（正密度→每个充分大指标）确�
 可跑，而那从来不是验收条件 —— 论文目录携带私有构建配置正是编译审计清了几轮的缺陷。
 禁令已写入 `deep_research_task.txt`。
 
-| `cayley_chebyshev_…_jfa` | **Thm 6.8 尾指数原理**：任何双侧多项式尾指数 $eta$ 且归一化导数有界的核，尖锐矩指数 $\kappa=\max\{r,	frac{2reta}{eta+2r}\}$；另 **Thm 5.10** 稳定幂散度双壁垒。32→38 页 | **两条真定理，本轮最重**。陈述与证明中稳定性、卷积半群均不出现，原结论成为 $eta=d+lpha$ 特例，Student 核为新覆盖类。尖锐性有构造：$eta>2r$ 时对每个 $
+| `cayley_chebyshev_…_jfa` | **Thm 6.8 尾指数原理**：任何双侧多项式尾指数 $\beta$ 且归一化导数有界的核，尖锐矩指数 $\kappa=\max\{r,	frac{2r\beta}{\beta+2r}\}$；另 **Thm 5.10** 稳定幂散度双壁垒。32→38 页 | **两条真定理，本轮最重**。陈述与证明中稳定性、卷积半群均不出现，原结论成为 $\beta=d+\alpha$ 特例，Student 核为新覆盖类。尖锐性有构造：$\beta>2r$ 时对每个 $
 ho<\kappa$ 造得出 $\limsup s^{2r}D_{
 m KL}=+\infty$ 的分布 | `ee54b7ba8` |
 
@@ -246,17 +246,17 @@ m KL}=+\infty$ 的分布 | `ee54b7ba8` |
 | `large_primitive_divisors_…` | 无条件准素分量（推论）+ **筛法壁垒的精确否定** | 8→12 | `09a5cfbac`,`398fbe785` |
 
 **筛法结论（我方判定：值得收的否定）**：Brun–Titchmarsh 给出
-$p_j\gerac{j\phi(n)}{4}\lograc j4$，**重现**而非改进 $\logarphi/2$。
-临界尺度 $jsymp\phi(n)/\log n$ 上，筛法把 $p_j$ 从 $pprox n^2/\log n$ 抬到 $pprox n^2$，
+$p_j\ge\frac{j\phi(n)}{4}\log\frac j4$，**重现**而非改进 $\log\varphi/2$。
+临界尺度 $j\asymp\phi(n)/\log n$ 上，筛法把 $p_j$ 从 $\approx n^2/\log n$ 抬到 $\approx n^2$，
 但 $\log p_j$ 只变动 $O(\log\log n)=o(\log n)$ —— **首项系数不动**。大筛法无着力点：
 单个 fibotomic 整数的唯一逐点输入就是已用掉的质量不等式。
 超过 2 所缺的量已点名：需 $p\mid F_n$ 专有的信息，强到把恰秩素数的几何平均顶到 $n^{2+\delta}$。
-副产品：模数校正为 $\mathrm{lcm}(n,2)$；$N_arepsilon$ 显式化但达 $10^{200}$ 量级，
-**够不着可计算范围**（$lpha(q)=n\Rightarrow n\le q+1$ 是 $q$ 的下界，Wall–Sun–Sun 搜索界换不出指标截断），
+副产品：模数校正为 $\mathrm{lcm}(n,2)$；$N_\varepsilon$ 显式化但达 $10^{200}$ 量级，
+**够不着可计算范围**（$\alpha(q)=n\Rightarrow n\le q+1$ 是 $q$ 的下界，Wall–Sun–Sun 搜索界换不出指标截断），
 论文如实写明而未夸大。
 
 **数值检验的分辨力经三条独立轴验证**：符号翻转、$\mu_C$ 幂次、$K_C$ 加倍
-（离差 0.384 vs $a_m\propto K_C^{1/lpha}$ 预测的 0.374）。第三条由复核方另选，非复用脚本自带开关。
+（离差 0.384 vs $a_m\propto K_C^{1/\alpha}$ 预测的 0.374）。第三条由复核方另选，非复用脚本自带开关。
 并修掉一处自失效缺陷：报告文件原本记录自身运行时长，照 `REPRODUCE.md` 重跑即破坏 `SHA256SUMS`。
 
 **第二轮收割（tick 245）**：
@@ -283,7 +283,7 @@ ho(h)$；效率检验达高斯半直线功效包络；**$m\ge3$ 时簇形状不�
 
 该篇结论节自己写着唯一悬而未决的问题：**负共轭、孔径 $m\ge4$ 时已证
 $2\le\ell_{
-m cau}(eta,m)\le m$，下界是否总能取到未知。**
+m cau}(\beta,m)\le m$，下界是否总能取到未知。**
 
 跨篇连接（只有同读两篇才看得见）：**刚在 `linear_overlap` 证出的正是同一个量 $\ell_{
 m cau}$** ——
@@ -302,7 +302,7 @@ m cau}(U,m)/m\le1$ 且常数最优，
 | `homological_visibility_…` | 终端重数**强制**（充要分类）+ Ext 盲区**精确等价** | 26→**30** | `d6ea1275d` |
 
 **`finite_parts` 的硬点**：由 $u=zF'/F$ 有理反推 $F$ 有理 —— 有限代数单值性给 $G=F^m\in\mathbb C(z)$，
-其除子满足 $p\,\mathrm{ord}_eta G\equiv\mathrm{ord}_{eta^p}G\pmod m$；剩余非零会沿每个 $p^n$ 次根传播，
+其除子满足 $p\,\mathrm{ord}_\beta G\equiv\mathrm{ord}_{\beta^p}G\pmod m$；剩余非零会沿每个 $p^n$ 次根传播，
 使除子含无穷多点，矛盾。故 $m\mid\mathrm{div}(G)$，$\mathbb P^1$ 上零次除子为主除子 ⇒ $F$ 有理。
 
 **分寸值得记的两处**：`finite_window_zeckendorf` 把我指定的 $D_m$ 递推做出来了但**明确不算新贡献**
@@ -324,7 +324,7 @@ m com}=A$ 从存在性从句移出（推论是把它当推出的结论写的）�
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
 | `cyclic_rank_thresholds_…_etds` | **论文自陈的开放问题被解决**：$\ell_{
-m cau}(eta,m)=2$（$eta'<0$，$m\ge3$）；配正共轭腔的 3，**二次分类两腔皆精确**，`12_discussion` 中该段已删非软化 | 30→**31** | `3aafbf3ee` |
+m cau}(\beta,m)=2$（$\beta'<0$，$m\ge3$）；配正共轭腔的 3，**二次分类两腔皆精确**，`12_discussion` 中该段已删非软化 | 30→**31** | `3aafbf3ee` |
 | `prime_languages_…_monatshefte` | **MCF-免疫**：$k,\ell$ 乘法无关、$X$ 无穷稀疏 $k$-自动 ⇒ $\mathrm{Rep}_\ell(X)$ 的每个 MCFL 子语言有限（任意有限扇出）| 29→**31** | `2a7c8fbdf` |
 
 **跨篇连接的处理（范本）**：兄弟篇最终无环性**确实适用**于同一负共轭差图（$U=(Q_j)$、$D=a$），
@@ -355,7 +355,7 @@ m cau}\le m+1$；但**证不出 2** —— 无环性排除圈、界长路，**�
 
 **两次跨篇连接的结果**：`upper_fibers`→`large_primitive_divisors` 筛法壁垒 —— **不成立且如实说明**
 （见证覆盖控支撑与重数，不控整除 $F_n$ 的素数大小）；`cauchy_poisson`→`cayley_chebyshev` 尾指数原理 ——
-**接上了但不在我指的地方**：直接套用被驳回（$d=1$ 时 $eta=2\Rightarrow\kappa=r$ 已是 Thm 5.4），
+**接上了但不在我指的地方**：直接套用被驳回（$d=1$ 时 $\beta=2\Rightarrow\kappa=r$ 已是 Thm 5.4），
 取的是互补的一半，即把兄弟篇留作抽象二次型的领头系数算出来。
 
 ⚠️ **`cauchy_poisson` 含 212 行未经审阅的数学**：`sec_critical_moment_comparisons.tex`
@@ -439,7 +439,7 @@ $4k	o4k-2$ 是副产品而非目的。
 
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
-| `scan_projection_…_etds` | **每个碰撞重数各有生日尺度**：$N_me^{-(m-1)h_{k,H}/k}	olpha \Rightarrow W_{m,k}\Rightarrow\mathrm{Poisson}(c_{k,H}lpha^k/k!)$，含精确 Perron 前因子与完整三相变；**第三矩假设与全部辅助重叠条件被消掉而非放宽** | 20→**21** | `79364e103` |
+| `scan_projection_…_etds` | **每个碰撞重数各有生日尺度**：$N_me^{-(m-1)h_{k,H}/k}	o\alpha \Rightarrow W_{m,k}\Rightarrow\mathrm{Poisson}(c_{k,H}\alpha^k/k!)$，含精确 Perron 前因子与完整三相变；**第三矩假设与全部辅助重叠条件被消掉而非放宽** | 20→**21** | `79364e103` |
 
 **硬点**：严格谱不等式 $h_{t,H}>(t/s)h_{s,H}$ —— 被杀矩阵的 Perron–Doob 变换本原随机，
 $d=t/s>1$ 时 Hadamard 幂满足 $(P^{\circ t}x^{\circ d})_i\le(\sum_jP_{ij}^sx_j)^d$；
@@ -450,7 +450,7 @@ $d=t/s>1$ 时 Hadamard 幂满足 $(P^{\circ t}x^{\circ d})_i\le(\sum_jP_{ij}^sx_
 Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已不再讨论，删除。印/引现 25=25 双向一致。
 
 > **⚠️ 复核方与我先后拿到同一个"假通过"**：均报"印 0 条、引 0 条、两侧一致" ——
-> 反斜杠在到达正则前被剥掉，`` 成单词边界，什么都没匹配。**两个空集"一致"与真正通过输出完全相同。**
+> 反斜杠在到达正则前被剥掉，`\b` 成单词边界，什么都没匹配。**两个空集"一致"与真正通过输出完全相同。**
 > 定型做法：模式里转义反斜杠 + **打印原始 token 的控制计数**证明模式非瞎。今日已三次靠它避免误判。
 
 **第九轮已派出（tick 262）**：`finite_observation_escape_rates_…_etds`（38 页，
@@ -463,7 +463,7 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
 | `cubical_stokes_…_jdsgt` | **单胞元剖面不能自动聚合**；精确可相容剖面为最小费用流对偶，等于原子剖面 $\iff$ 一族 **Hoffman 内部割不等式**成立；$2	imes2$ 各向异性反例（宽 1,2／高 2,7）精确有理算术证 $\Psi_Q(9/4)<72=\Phi_Q(9/4)$ | 23→**27** | `7ccfeabd7` |
-| `prefix_scan_error_boundary_…` | **精确矩阵系数取代比较界**：$arepsilon_m=\lambda^{-(m-1)}s^{\mathsf T}B_\partial^{m-1}t$ ⇒ 生成函数有理、有限线性递推、领头常数显式且严格正 | 19→**21** | `79d51e326` |
+| `prefix_scan_error_boundary_…` | **精确矩阵系数取代比较界**：$\varepsilon_m=\lambda^{-(m-1)}s^{\mathsf T}B_\partial^{m-1}t$ ⇒ 生成函数有理、有限线性递推、领头常数显式且严格正 | 19→**21** | `79d51e326` |
 
 **🔑 两篇共享同一个开放问题（非两个）**：`cubical_stokes` 的离散割判据正是 `coefficient_sup`
 拒绝连续常数 $2P_1(R)$ 尖锐性时卡住的**有界无散度迹延拓障碍的有限维形式**；
@@ -473,7 +473,7 @@ Chazottes–Coelho–Collet 2009 于符号匹配对照）已恢复；7 条确已
 **`prefix_scan` 说清了原先为何拿不到常数**：过渡到原始边界计数时一次丢掉三样 ——
 柱面公式的首末 Parry 特征向量权重、以及只依赖末端积状态的后验歧义。三样齐全则 Perron 结论常规。
 它并**正确拒绝**两条属兄弟篇的候选（Gibbs 边界压力、周期/可约剩余类渐近），
-第三条判为在所述一般性下**为假**并给出论文自有反例 $igcup_n[0^n1^n]$。
+第三条判为在所述一般性下**为假**并给出论文自有反例 $\bigcup_n[0^n1^n]$。
 
 ⚠️ **写进提交信息的"未覆盖"**：`cubical_stokes` 的 verifier 证的是**严格损失反例**，
 非一般剖面公式；LP 对偶与 Hoffman 归约靠论证本身，审稿人应先看证明第 5 项。
@@ -492,15 +492,15 @@ ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\in
 故新引理令其退化分支变空，属真正吞并，且全篇无残留引用。
 
 **又一种"假通过"形态**：从 `.bbl` 提 key 得 0 条而控制计数显示 31 —— 这次**不是转义，是换行**
-（`ibitem[Agarwal et~al.(2024)…` 标签折行，`{key}` 落到下一行，单行模式匹配不到）。
+（`\bibitem[Agarwal et~al.(2024)…` 标签折行，`{key}` 落到下一行，单行模式匹配不到）。
 **控制计数第四次生效。**
 
-| `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$arepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(
+| `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$\varepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(
 ho/\lambda)^{m-1}(c_{(m-1)\bmod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
 
 **兄弟篇的"这两条已在你那儿"经确认属实** —— 防住了 A 推 B、B 推 A、两边皆不做的失败模式。
 **novelty 对着论文自己紧挨的推论核过**（复述最可能藏于此）：旧推论对**边界计数**给精确律，
-对扫描误差仅给双边夹逼、本原时升为 $symp$，缺口真实。
+对扫描误差仅给双边夹逼、本原时升为 $\asymp$，缺口真实。
 **顺修命名冲突**：旧推论仍称 "give a **complete** Parry scan-error law"，
 而严格更强的完整律就在其上 —— 同词两强度，已改为其实证内容。
 **明确不做**：`theorem_inventory.json/.md` 留作过期 —— 它形似登记表实为 stage-A **审计快照**
@@ -511,13 +511,13 @@ ho/\lambda)^{m-1}(c_{(m-1)\bmod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
 | `deterministic_telescoping_…` | **无穷尾因子 + 不动点障碍**：奇偶指标两个 Borel 极限因子；$d_{
-m TV}$ 至多 $|I|(c_\ell-lpha)$，两极限相距**恰为** $lpha$ ⇒ 弱收敛 $\iff
+m TV}$ 至多 $|I|(c_\ell-\alpha)$，两极限相距**恰为** $\alpha$ ⇒ 弱收敛 $\iff
 u(\{1^{\mathbb Z}\})=0$ | 22→**24** | `d87ac7472` |
 | `elliptic_normalization_…` | **完整单值与算术分歧分类**：$\mathrm{Gal}=S_4$（算术与几何）、闭包亏格 16、$A_4$ 商为亏格 2 判别式双覆盖、不可分解且无非平凡覆叠变换、分歧值域 Galois 群 $S_3$ 且与残余轨迹同分裂域 | 76→**80** | `bb0cc5472` |
 
 **两处如实记录的分量下调**：`deterministic_telescoping` 那步"难点"实为标准从上连续性论证，
 新的是两个奇偶极限因子的**构造**与精确等式 $d_{
-m TV}=lpha$（单边界→充要判据）；
+m TV}=\alpha$（单边界→充要判据）；
 `elliptic_normalization` 是**单个特定覆盖**的完整分类，不具一般性。
 
 **跨篇连接第三、四次判定**：`deterministic_telescoping` 与 Zeckendorf 簇 —— **不存在，未硬凑**；
@@ -528,7 +528,7 @@ m TV}=lpha$（单边界→充要判据）；
 而在 sympy 中重算判别式／预解式／残余关系，并对 $y=2,3,5,7,-3$ 五处特化直接算 Galois 群（皆 $S_4$）——
 该路径完全不经预解式论证即逼出结论。我另手算 Riemann–Hurwitz：$5\cdot12+18=78$，$2g-2=30$，$g=16$。
 
-| `recursive_addressing_prefix_sites_tac` | **逐类分类通用可见商**：存在 $\iff$ 残余类 $\epsilon_lpha\in\mathrm{Ext}^1(H_1(N),A/\mathrm{im\,ev}[lpha])$ 消没；**原"$H_1$ 无挠"前提由假设降为推论**，失效具体展示（$\mathbb Z/n$ 处即破）；并**倒逼修正论文自有 GHZ 应用**（可见商为 $\mathbb Z/2$，寄存器需两态非四态）| 18→18 | `17f6bb7b7` |
+| `recursive_addressing_prefix_sites_tac` | **逐类分类通用可见商**：存在 $\iff$ 残余类 $\epsilon_\alpha\in\mathrm{Ext}^1(H_1(N),A/\mathrm{im\,ev}[\alpha])$ 消没；**原"$H_1$ 无挠"前提由假设降为推论**，失效具体展示（$\mathbb Z/n$ 处即破）；并**倒逼修正论文自有 GHZ 应用**（可见商为 $\mathbb Z/2$，寄存器需两态非四态）| 18→18 | `17f6bb7b7` |
 
 **该篇三处自报有误／遗留，均已处理**：(1) 报"未加数值验证"却加了一个，
 **且未说明能否失败** —— 我自行变异测试（反转"扩张类非零"断言 ⇒ 退出 1），还原后逐字节一致；
@@ -655,18 +655,18 @@ m cau}(U,m)/m\le1$，
 改名即令 `SHA256SUMS` 失效，须重建。已与 `.latexmkrc` 一并写入 `deep_research_task.txt`。
 
 （历史）**在飞（tick 242）**：`cayley_chebyshev` 深挖仍在写；brocot 新定理的数值检验；
-`large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\logarphi/2$ 以下使指数严格超 2，
+`large_primitive_divisors` 的筛法杠杆（要么把常数压到 $\log\varphi/2$ 以下使指数严格超 2，
 要么给出精确否定 —— 后者同样算成功）。
 
 **我方独立判断（不预先告知 agent，用于收割时分辨真发现与复述）**：
 `large_primitive_divisors` 的杠杆在计数上界的常数 $	frac12$ —— 指数 2 完全由它决定
 （质量 $\log U_n^{
-m prim}=(\logarphi+o(1))\phi(n)$ 除以计数
-$a(n)\le(	frac{\logarphi}{2}+o(1))\phi(n)/\log n$）。
+m prim}=(\log\varphi+o(1))\phi(n)$ 除以计数
+$a(n)\le(	frac{\log\varphi}{2}+o(1))\phi(n)/\log n$）。
 而该 $	frac12$ 仅用了两条信息：本原素数落在 $\pm1\bmod 2n$、且互不相同（阶乘项把
 $\log n$ 变成 $2\log n$）。**筛法完全未上场**。三个可问方向按价值：
 (1) 用 Brun–Titchmarsh／大筛法压 $a(n)$，指数随之上涨 —— 改进路径具体而非许愿；
-(2) 有效化 $N_arepsilon$ —— 因至今未发现 $2^{64}$ 以下 Wall–Sun–Sun 素数，
+(2) 有效化 $N_\varepsilon$ —— 因至今未发现 $2^{64}$ 以下 Wall–Sun–Sun 素数，
 显式版本可在可计算范围内把"二择一"变成无条件结论；
 (3) 推广到一般 Lucas 序列 —— 方法撑得住，但最可能已被做过，须先查文献。
 
@@ -771,7 +771,7 @@ experiment" 换行、A6 封面信的 Bernoulli），这是第三次。**结论�
 
 > **TICK 205 — 三个 agent 均健在；Oracle 通道已断，但当下不阻塞任何工作。** 无可收割：A4 书目拆分（1.13 MB）、A5 r2（0.34 MB）、A7 重构（0.64 MB）转录 mtime 均在 20 秒内，均无 tokens used。**Oracle：WARP 中继已断**——172.18.32.1:40002 不可达，Test-NetConnection 返回 False；根因是流水线所在的 WSL 发行版 **NyxIDUbuntu2404Cli 处于 Stopped**（三个发行版全停），而 wrapper 自述"从不启动或重连 WARP"，需显式启动（start-shared.ps1 内有显式启动路径）。**判断：现在不重启。** 理由两条：（a）**当下没有任何待办的 Oracle 任务**——九篇 house-style 报告与 A5 深研究均已取回，在跑的三件全是本地 codex；（b）刚发生过 0xC0000142 进程创建失败（资源耗尽），在三个 agent 跑着时再拉起一个 WSL 发行版是往相反方向使力。待三件落地、且确实需要下一轮 Oracle 时再启。已记录以免下次调用时把它误诊为协议问题。内存 2.09 GB、缺页 0、无孤儿——降并发后环境明显转好。
 
-> **TICK 204e — A7 双派已解除，A4 拆分进行中，两条基线更正。** 我重派的 A7 agent 已停手，且**从未启动 codex、从未执行任何 taskkill**；另一会话的 A7 运行保留为唯一所有者。它在停手前做过一次 baseline 构建，删重建了辅助文件（均已 gitignore，无跟踪文件变动），**但那次抹除落在对方运行的活窗口内**——若对方转录在 00:16-00:17 出现一次假的 undefined 引用，那是辅助文件被抽走所致、非其编辑造成，重建即自愈，评分时不计入。其遗留的两个抽取转储文件已由我删除，A7 目录现干净。**基线更正一**：对方给的 A7@HEAD 基线称"零 	ag"，我实测为 **2 处**（sec_support_entropy_arithmetic_interface.tex 的 	ag{H1}、	ag{H2}）。但这两处是**助记式假设标号**，与 A8-A 的 LE/SL 系列同类，属正当用法，不是硬编码方程编号。故"修订后出现 	ag 即为新引入"这条判据需改为"除 H1/H2 外新增的 	ag 才是新引入"。其余基线属实且有用：HEAD 下 main 与 supplement **均为 36 页**（目录里那份 5 页的 supplement.pdf 是不完整构建的陈旧产物，引用它作"改前 5 页"会得出错误结论），iffalse/endinput/begin{comment} 均为 0。**基线更正二：抑制机制清单需加一项 egin{comment}**（comment 宏包环境），我原来只查 \iffalse 与 \endinput。**A4 书目拆分正在正确执行**：references.tex 已删，main_references.tex（27 条）与 finite_state_references.tex（30 条）已生成，agent 仍在跑（转录 40 秒内 +140 KB）。注：我中途一次 grep 报 0 bibitem 是模式错误，实为正常内容；在 agent 活跃期间不得据中途快照下结论。并发维持在 A4、A5 r2、A7 三个，不再新增。
+> **TICK 204e — A7 双派已解除，A4 拆分进行中，两条基线更正。** 我重派的 A7 agent 已停手，且**从未启动 codex、从未执行任何 taskkill**；另一会话的 A7 运行保留为唯一所有者。它在停手前做过一次 baseline 构建，删重建了辅助文件（均已 gitignore，无跟踪文件变动），**但那次抹除落在对方运行的活窗口内**——若对方转录在 00:16-00:17 出现一次假的 undefined 引用，那是辅助文件被抽走所致、非其编辑造成，重建即自愈，评分时不计入。其遗留的两个抽取转储文件已由我删除，A7 目录现干净。**基线更正一**：对方给的 A7@HEAD 基线称"零 	ag"，我实测为 **2 处**（sec_support_entropy_arithmetic_interface.tex 的 	ag{H1}、	ag{H2}）。但这两处是**助记式假设标号**，与 A8-A 的 LE/SL 系列同类，属正当用法，不是硬编码方程编号。故"修订后出现 	ag 即为新引入"这条判据需改为"除 H1/H2 外新增的 	ag 才是新引入"。其余基线属实且有用：HEAD 下 main 与 supplement **均为 36 页**（目录里那份 5 页的 supplement.pdf 是不完整构建的陈旧产物，引用它作"改前 5 页"会得出错误结论），iffalse/endinput/begin{comment} 均为 0。**基线更正二：抑制机制清单需加一项 \begin{comment}**（comment 宏包环境），我原来只查 \iffalse 与 \endinput。**A4 书目拆分正在正确执行**：references.tex 已删，main_references.tex（27 条）与 finite_state_references.tex（30 条）已生成，agent 仍在跑（转录 40 秒内 +140 KB）。注：我中途一次 grep 报 0 bibitem 是模式错误，实为正常内容；在 agent 活跃期间不得据中途快照下结论。并发维持在 A4、A5 r2、A7 三个，不再新增。
 
 > **TICK 204d — 对 204c 的死因归因更正，并因此下调并发。** 我在 204c 里把三个 agent 的死亡全归于镜像级 taskkill，**这个归因对一半**。A5 死于 00:04:30，而扫射发生在约 00:13——时间上就对不上。A5 的真实死因是 Windows 进程创建失败 **0xC0000142 STATUS_DLL_INIT_FAILED**，发生在最后一步重跑 Python 测试器时，并在一个健康探针上循环约 19 次后死掉；它实际上已跑完编辑、清洁重建与抽取检查（主文 45 标题 / 补充 22 标题、排序失败 0）。**因此只有 A7 与 A6-A 是扫射的牺牲品。****这个区分有运行上的意义**：0xC0000142 在进程创建处报出，典型地是资源耗尽（桌面堆、句柄、会话进程限），而非任务缺陷。当时同时在跑 5-6 个 codex 加 latexmk 与 pdftotext。故**下调并发：仅保留已在飞的 A4、A5 r2、A7 三个，在它们落地前不再派新工**（A6-A 继续暂缓）。另：另一会话在我重派 A7 之后也重派了 A7，其运行已先行且正在写盘；我已让自己那个 A7 agent 停手，以守住"同时只跑一个 agent 改同一篇"，并在停手指令里明写只得杀自己启动的进程树。
 
@@ -785,7 +785,7 @@ experiment" 换行、A6 封面信的 Bernoulli），这是第三次。**结论�
 
 > **TICK 202 — A3-B 收尾；A7 裁决回来且是第二篇退修重投；两篇大修已派。** 孤儿文献清理提交 fdbe644f0：十六条全删、**零条被“救活”**，bibliography.tex 为纯删除（0 插入/61 删除），无任何正文文件被打开，因此不存在编造依赖的句子。我独立复核：打印 25 / 被引 25 / 双向差集空；literature_check.md 零删除行（纯追加），Frougny DOI 修复与四处 429 速率限制记录均在。**A7：REJECT AND INVITE RESUBMISSION**，12 项。这是第二篇退修重投，而且 A7 正是板上记为"天花板已论证"的那一篇——天花板是对**定理**而言的（新颖性 75-80%、不进 JNT 档），但作为**稿件包**它是退稿。这正是对天花板论文也跑一遍录用问法的理由。项目包括：删去独立定理块以"定义一篇论文"、摘要整段重写、新颖性免责声明至少砍三分之二、第 7 节整节移出投稿件、重新平衡 36 页补充材料。已派 A7 重构与 A6-A（TAMS 大修）两个 agent。**两份任务书均携带全部八道核验**，包括本轮新增的三道：源码无抑制块、可复现包须与投稿一致、打印书目与被引键集双向一致（后者并明令不得往正文塞引用）。A6-A 的任务书另写明：不得把发育轮写入的假设逐条验证退回引用、Omey-Van Gulck 与 Panov-Liehl 作为外部黑箱是诚实的不得粉饰、且 r>=j 的平衡尾修正须存活。A9 第三次重发后仍 waiting_response。内存 1.17 GB、缺页 3.9、无孤儿。
 
-> **TICK 201 — A3-B 入库，A6-A 裁决到齐：九篇全部受检完毕。** A3-B 提交 39ec099e4（36+15 → 30 页，源码 -3061/+493，编号结果 64 → 29）。第一项的二选一取手艺路线且**未编造**：Theorem 4.8 对 m>=4 仍只给界、数学内容与改前逐字节相同。**本 tick 查出第八类缺陷**：删掉补充材料与七个节后，**16 条文献成为孤儿仍在打印**（打印 41、正文引 25）。因为书目是字面的 thebibliography 环境而非 BibTeX——BibTeX 会静默略去未引用条目，而 thebibliography 里每个 ibitem 无论是否被引都会印出来，所以 LaTeX 不给任何警告、日志全绿、逐页读也会滑过。**我头两次核查返回 0，是我的工具问题**（Python 递归 glob 未匹配到文件、首版 grep 模式也不对），换用 main.aux 的 bibcite 与源码 \cite 键集对比后与对方完全一致。清理已派，并明写**不得为"救活"条目而往正文塞引用**。**核验清单增至八条**：打印书目与被引键集须双向一致。**A6-A（TAMS）裁决：Major revisions**，已存 artifacts。至此九篇全部过了录用问法，分布：**两篇小修、六篇大修、一篇退修重投**，无一篇是"直接可投"。A9 第三次 extraction_failure 后已再次重发（f893974c-3ecf-4a85-802a-0ea39b3cf8c3）；A7 waiting_response。内存 1.44 GB、缺页 938、四 agent 在飞、无孤儿。
+> **TICK 201 — A3-B 入库，A6-A 裁决到齐：九篇全部受检完毕。** A3-B 提交 39ec099e4（36+15 → 30 页，源码 -3061/+493，编号结果 64 → 29）。第一项的二选一取手艺路线且**未编造**：Theorem 4.8 对 m>=4 仍只给界、数学内容与改前逐字节相同。**本 tick 查出第八类缺陷**：删掉补充材料与七个节后，**16 条文献成为孤儿仍在打印**（打印 41、正文引 25）。因为书目是字面的 thebibliography 环境而非 BibTeX——BibTeX 会静默略去未引用条目，而 thebibliography 里每个 \bibitem 无论是否被引都会印出来，所以 LaTeX 不给任何警告、日志全绿、逐页读也会滑过。**我头两次核查返回 0，是我的工具问题**（Python 递归 glob 未匹配到文件、首版 grep 模式也不对），换用 main.aux 的 bibcite 与源码 \cite 键集对比后与对方完全一致。清理已派，并明写**不得为"救活"条目而往正文塞引用**。**核验清单增至八条**：打印书目与被引键集须双向一致。**A6-A（TAMS）裁决：Major revisions**，已存 artifacts。至此九篇全部过了录用问法，分布：**两篇小修、六篇大修、一篇退修重投**，无一篇是"直接可投"。A9 第三次 extraction_failure 后已再次重发（f893974c-3ecf-4a85-802a-0ea39b3cf8c3）；A7 waiting_response。内存 1.44 GB、缺页 938、四 agent 在飞、无孤儿。
 
 > **TICK 200 — 空转：四个 agent 均在飞，两发 Oracle 因 extraction_failure 已重发。** A3-B 修订、A5 主定理依赖标注、A4 大修三份转录均无 tokens used；不收割。A6-A 的 house-style（fb5ac1c9）仍 waiting_response；A7 与 A9 返回 extraction_failure（worker 端抓取失配，非协议问题），已取消并按原协议间隔 30 秒重发：A7 → 60b10b45-850c-45ed-b10a-a677cc747784、A9 → a37af77c-95ca-4f30-9172-25a8d91abaac。内存：首采缺页 3399/s，复采 143.7/32.6/50.4、内存 1.80→1.98 GB，仍属成批读入而非频繁换页（自由内存同时上升），四个 agent 均处中途，不减。无孤儿。本 tick 无实质产出，属正常等待状态。
 
@@ -1033,7 +1033,7 @@ experiment" 换行、A6 封面信的 Bernoulli），这是第三次。**结论�
 
 专家读到 `realization` 会自动套用模型论含义,越读越不对,最后判定无法评估。
 
-**内容初判(待独立评估确认)**:摘要里能辨认出的是硬对象 —— 层化单位在终纤维上的满射性配合 $H^1$ 消没、带 band 的实现叠扩张给出落在 $H^2$ 的 **Giraud 类**、character-blind 情形恰为纯 $\operatorname{Ext}$ 贡献、以及一条**不可定义性分离定理**。最漂亮的是结尾那条充要刻画:**bouquet 好覆盖上,非零有限交换群 $G$ 出现为纯双分支消解核,当且仅当 $d(G)\le2eta$ 且 $G$ 不是循环 $p$-群**。这条被埋在 93 页末尾,**它应该是标题和引言第一句**。
+**内容初判(待独立评估确认)**:摘要里能辨认出的是硬对象 —— 层化单位在终纤维上的满射性配合 $H^1$ 消没、带 band 的实现叠扩张给出落在 $H^2$ 的 **Giraud 类**、character-blind 情形恰为纯 $\operatorname{Ext}$ 贡献、以及一条**不可定义性分离定理**。最漂亮的是结尾那条充要刻画:**bouquet 好覆盖上,非零有限交换群 $G$ 出现为纯双分支消解核,当且仅当 $d(G)\le2\beta$ 且 $G$ 不是循环 $p$-群**。这条被埋在 93 页末尾,**它应该是标题和引言第一句**。
 
 **执行顺序(不可颠倒)**:① 独立评估定档(进行中)→ ② 术语审计 + 改名 + 术语对照表 → ③ 压缩至 35–45 页(用 A2/A4/A7 已验证的补充材料方案)→ ④ 引言用标准语言前置主定理 → ⑤ 再选刊。**先选刊没有意义。**
 
@@ -1260,7 +1260,7 @@ $\mathrm{Fold}_m$ 是否在分辨率参数 $m$ 上容许**单一固定转移矩�
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
 | `fibonacci_folding_…_fingerprints` | **精确反常—输出权衡**：联合旋转集是显式五边形 $\operatorname{conv}\{(0,0),(	frac12,0),(	frac12,	frac12),(	frac13,1),(0,	frac12)\}$，故 $d_{\max}(a)=	frac12+	frac32a$（$a\le	frac13$）／$2-3a$（$a\ge	frac13$）；每个顶点由唯一测度实现；**两条非平凡极值面上的取等测度被完全分类**为两个混合子移位，二者邻接矩阵特征多项式同为 $x^3-x-1$，熵均为 $\log
-ho_{\mathrm{pl}}$（塑性常数）。并入一条同期定理：差异移位（配对移位的 XOR 像）为不可约**严格 sofic**，三状态 Fischer 覆盖，熵由 $\log 2$ 降至 $\logarphi$ | 35→**38** | `796bd137a` |
+ho_{\mathrm{pl}}$（塑性常数）。并入一条同期定理：差异移位（配对移位的 XOR 像）为不可约**严格 sofic**，三状态 Fischer 覆盖，熵由 $\log 2$ 降至 $\log\varphi$ | 35→**38** | `796bd137a` |
 
 **为何是端结果而非引理**：权衡在**每个斜率上**都尖锐，且极值系统被分类，不只给两个端点。
 证明把不变测度提升到论文已有四状态配对图的边移位，稳态流分解为环流；图恰有五个简单标号环，
@@ -1268,7 +1268,7 @@ ho_{\mathrm{pl}}$（塑性常数）。并入一条同期定理：差异移位（
 
 **独立复核（不采信 agent 自述）**：
 - 旋转 verifier 用**精确有理数**，无容差可松。变异它读的图三次（`a→d` 差异位翻转、`b→c` 翻转、加一条 `d→b` 边），三次全部非零退出，随后按字节还原。**未采用**它自带的 `--negative-control` 作为证据。
-- Fischer 覆盖我自算两个熵，得 $\log 2$ 与 $\logarphi$，与论文一致。我的子集构造给出 4 状态 7 边而非 3 状态 5 边 —— 差在**未做 follower 极小化**：`{a}` 与 `{a,d}` 出边全同，合并后正好是论文那五条边。严格 sofic 用正确判据成立（follower 语言不由末 $M$ 个符号决定，$M\le7$ 全否）。**我第一版判据比较的是可达状态集而非 follower 语言，误报了一次。**
+- Fischer 覆盖我自算两个熵，得 $\log 2$ 与 $\log\varphi$，与论文一致。我的子集构造给出 4 状态 7 边而非 3 状态 5 边 —— 差在**未做 follower 极小化**：`{a}` 与 `{a,d}` 出边全同，合并后正好是论文那五条边。严格 sofic 用正确判据成立（follower 语言不由末 $M$ 个符号决定，$M\le7$ 全否）。**我第一版判据比较的是可达状态集而非 follower 语言，误报了一次。**
 - **四个 `\qquad` 的反斜杠被吞**（在 Fischer 覆盖的边显示里）。这类缺陷编译零告警、PDF 里直接印出字母 `qquad`。已修，并确认 PDF 抽取文本中不再出现。顺带清掉两处 `[New-n | 日期]` 陈旧修订痕迹。
 - 新引用 Ziemian 1995, Fund. Math. 146(2) 189–201, DOI `10.4064/fm-146-2-189-201`，Crossref 按标题/作者/年份逐项对上。
 
@@ -1334,17 +1334,17 @@ $\chi$ 取成在 $r=0$ 处平坦（collar 条件恰恰要求 $\chi'(0)<0$），�
 **难点是 trim**：直接裁剪完整有界自动机是**错的**，零权转移会造出混号路径；
 须裁的是加权矩阵的**支撑有向图**。可达标记符号一致，因为长度 $F_{n+2}-2$ 区间内两个二进制 Fibonacci 赋值不可能相差 $2F_{n+1}$。
 
-**超指数引擎**：极大纤维给 $S_m(m)\ge M_m^m$，配合精确高度律 $\log M_m=	frac12m\logarphi+O(1)$，
-得 $\log S_m(m)\ge	frac12m^2\logarphi-C_0m$，超出任何二元有理级数的系数预算。
+**超指数引擎**：极大纤维给 $S_m(m)\ge M_m^m$，配合精确高度律 $\log M_m=	frac12m\log\varphi+O(1)$，
+得 $\log S_m(m)\ge	frac12m^2\log\varphi-C_0m$，超出任何二元有理级数的系数预算。
 
 **独立复核（本轮同样未加 verifier，故我重算了对象）**：
 - **我第一版模型是错的**：用了 $m$ 位、且没做模约化，算出 $|X_m|=F_{m+2}-1$，与论文的 $F_{m+2}$ 逐 $m$ 差 1。
   实际定义是 $\Omega_m=\{0,1\}^{m+1}$ 经**模 $F_{m+2}$ 余数**折叠。按正确定义，
   $|X_m|=F_{m+2}$ 与 $\sum_xd_m(x)=2^{m+1}$ 到 $m=24$ **逐项精确相等**。论文是对的。
-- $\log M_m-	frac12m\logarphi	o+0.36964$，自 $m=16$ 起稳定到 5 位 —— $O(1)$ 是真常数。
+- $\log M_m-	frac12m\log\varphi	o+0.36964$，自 $m=16$ 起稳定到 5 位 —— $O(1)$ 是真常数。
 - 固定次数比值收敛到 6 位：$\lambda_2=2.481194$、$\lambda_3=3.086130$、$\lambda_4=3.846059$。
-- $\log S_m(m)/m^2$ 在 $m=24$ 为 $0.2628$ 递减趋向 $	frac12\logarphi=0.240606$；
-  $(\log S_m(m)-	frac12m^2\logarphi)/m$ 保持为正($+0.533$)，下界在计算范围内 $C_0$ 可取 0。
+- $\log S_m(m)/m^2$ 在 $m=24$ 为 $0.2628$ 递减趋向 $	frac12\log\varphi=0.240606$；
+  $(\log S_m(m)-	frac12m^2\log\varphi)/m$ 保持为正($+0.533$)，下界在计算范围内 $C_0$ 可取 0。
 - 报告摘要里有一步看着不完整（吸收前 $m_0$ 项需要每个 $G_m(w)$ 有理，而 $q$ 无界时这不自动成立）。
   **正文闭合了它**：$G_m(w)=\sum_x1/(1-d_m(x)w)$ 是有限和。摘要简略，手稿无缺口。
 
@@ -1364,7 +1364,7 @@ $\chi$ 取成在 $r=0$ 处平坦（collar 条件恰恰要求 $\chi'(0)<0$），�
 目标是它自己讨论节的**第一条局限**，原话："金分比在此只作为规范化文法与反共振基线；本文**未排除**其他
 Ostrowski、Pisot 或替换文法的类似构造"。要的是一个**分类**：
 (a) 接口可推广 ⇒ 说清推广到哪些文法，关键是**边界** —— 构造真正需要的是文法的哪条性质；
-把 $arphi$ 换成另一个二次单位再走一遍论证**不算**，那是挤牙膏。
+把 $\varphi$ 换成另一个二次单位再走一遍论证**不算**，那是挤牙膏。
 (b) 金分比确实特殊 ⇒ 证刚性：指出对其他文法失效的那条性质并给最小反例。
 若成立，(b) 是更强的论文 —— 现在那条局限读起来像未经检验的免责声明，会变成定理。
 交付形式："折叠接口存在 $\iff$ 文法满足 X"，或诚实报告等价在哪里断掉。
@@ -1390,7 +1390,7 @@ $(n-1)^2$ 轨道计算只对最小内部层、定理 A–E 在总体代数下游
 
 | 篇 | 增量 | 页 | 提交 |
 |---|---|--:|---|
-| `golden_mean_folding_…_addressing` | **精确扫描误差指数**：$arepsilon_m=b_martheta_m$ 精确分解，$b_m=\lambda^{-(1-d)m+o(m)}$；故边界维数给出精确衰减指数 $1-d$ **当且仅当** $-\logartheta_m=o(m)$；并给严格弱于一致边界厚度的 $L^p$ 判据 | 52→**55** | `e75e50422` |
+| `golden_mean_folding_…_addressing` | **精确扫描误差指数**：$\varepsilon_m=b_m\vartheta_m$ 精确分解，$b_m=\lambda^{-(1-d)m+o(m)}$；故边界维数给出精确衰减指数 $1-d$ **当且仅当** $-\log\vartheta_m=o(m)$；并给严格弱于一致边界厚度的 $L^p$ 判据 | 52→**55** | `e75e50422` |
 | `detector_shells_…_jphyscomm` | **更新性的逆命题 + 使朴素逆命题为假的例外**：两态标号核的可见过程为更新过程 $\iff$ $\det\widetilde T_1=0$ 或 $\widetilde T_1\mathbf1=
 ho\mathbf1$ 或 $\pi\widetilde T_1=
 ho\pi$；后两者直接给 i.i.d. Bernoulli$(
@@ -1401,18 +1401,18 @@ ho)$ | 72→72 | `5e30e3e6f` |
 非整简单 Parry 系统的典范循环秩折叠），判为重复而不重证；另一条 no-go 定理同样因 truncation-defect
 兄弟篇已展开而拒绝。随后转向任务里写明的备选目标。这正是我要的行为。
 **尖锐性例子我自己算了**：$a=\sum_j2^{-j^2}$，精确有理数算到 $m=400$ —— 尾部从不消失（每层恰一个边界柱面）；
-平方深度 $m=k^2$ 处 $-\log_2artheta_m$ **恰为 $2k+1$**（$k=2..19$ 依次 5,7,…,39），故沿平方趋零、
-一致厚度常数被排除；而 $(-\log_2artheta_m)/\sqrt m\le2.96$、$(-\log_2artheta_m)/m$ 由 0.44 降至 0.10。三条性质全有。
+平方深度 $m=k^2$ 处 $-\log_2\vartheta_m$ **恰为 $2k+1$**（$k=2..19$ 依次 5,7,…,39），故沿平方趋零、
+一致厚度常数被排除；而 $(-\log_2\vartheta_m)/\sqrt m\le2.96$、$(-\log_2\vartheta_m)/m$ 由 0.44 降至 0.10。三条性质全有。
 
 **`detector_shells`：我给的等价式本身是错的，它纠正了我。**
 我要"更新 $\iff$ 归一化 click 后分布与 click 前状态无关"，该等价式**为假**。
-论文现载的反例：$\widetilde T_0=I/2$、$\widetilde T_1=	frac18egin{pmatrix}3&1\1&3\end{pmatrix}$，
+论文现载的反例：$\widetilde T_0=I/2$、$\widetilde T_1=	frac18\begin{pmatrix}3&1\1&3\end{pmatrix}$，
 $\det=1/8
 e0$、两行归一化后 $(3/4,1/4)$ 与 $(1/4,3/4)$ 明显不同，可见记录却是 i.i.d. Bernoulli$(1/2)$。
 唯有排除几何情形后干净陈述才成立。**我用精确有理数验了**：长度 $\le10$ 的所有二进制词概率恰为 $2^{-n}$；
 再用 Palm 间隔公式对 6 个核测完整 iff（反例更新、两个秩一核更新但非 i.i.d.、两个一般核不更新、
 另一个偶然 $\det=0$ 者被正确预测为更新），6/6 全中且检验有区分力。
-必要性是**真证**而非由旧论证失效推得（间隔独立给 $(lpha Q_k-g_klpha)x_j=0$，二维二分法；
+必要性是**真证**而非由旧论证失效推得（间隔独立给 $(\alpha Q_k-g_k\alpha)x_j=0$，二维二分法；
 再由秩一 Hankel 论证给出穷尽性）。
 
 ⚠️ **派工通道变更（重要）**：本 tick 两个 Claude 子 agent 被组织策略硬关 ——
@@ -4563,7 +4563,7 @@ $b_C$ 那次我下错了结论，教训是"慢收敛能让正确常数看起来�
 - 拟合 $(1-e^{-	heta/
 u})
 u/	heta$ 得 $
-upprox6.6	ext{–}7.0$，而非 $\mu_Cpprox16.85$。
+u\approx6.6	ext{–}7.0$，而非 $\mu_C\approx16.85$。
 
 一个稳定的 2.4 倍不像误差项，像**指数里那个常数不是 $\mu_C$**。
 
@@ -4585,7 +4585,7 @@ WARP 第六个 tick 仍断。codex 两槽（`scan_projection` 扩展、`brocot` 
 agent 走了审稿人三条路线里的**周期存活分支**（不是它称为最实质的 Hölder／开传算子那条），
 自称证成，改题为 *Phase-Resolved Collision Laws for Periodic Survivors in Open Markov Shifts*。
 核心断言是真正的**相位依赖**：周期-2 例子给出两个**不同**的临界 Poisson 均值
-$c_{2,0}=953/2809pprox0.3393$ 与 $c_{2,1}=267/(338\sqrt5)pprox0.3533$。
+$c_{2,0}=953/2809\approx0.3393$ 与 $c_{2,1}=267/(338\sqrt5)\approx0.3533$。
 
 ### 页数变少这个反常，我做了账
 
@@ -4636,7 +4636,7 @@ $A_{2,0}=953/7921$、$A_{2,1}=2136/(7921\sqrt5)$，进而 $c_{2,0}=953/2809$、$
 一个检验"这两者不同"的测试，必须能做到这一点。
 
 它还**未经提示**补上了例子一直从预备节静默继承、却没在用到处陈述的那条环境假设
-（$(\pi,K)$ 是 $arphi(i,j)=\log K_{ij}$ 的平衡测度）。这正是本项目的惯犯缺陷。
+（$(\pi,K)$ 是 $\varphi(i,j)=\log K_{ij}$ 的平衡测度）。这正是本项目的惯犯缺陷。
 
 从零重建 `exit=0`、18 页、0/0/0。
 
@@ -4677,7 +4677,7 @@ ceil$、
 
 定理断言 $\min\{\|f\|_{a,\infty}:Bf=v\}=h_{\mathcal K}$，其中
 $h_{\mathcal K}=\max_{S
-earnothing}v(S)/a(\delta S)$ —— 即 Gale–Hoffman 可行性判据，
+e\varnothing}v(S)/a(\delta S)$ —— 即 Gale–Hoffman 可行性判据，
 与审稿人所说"标准最大流最小割"一致。可验的是：**满足假设时等式成立，两个反例处失效**。
 
 | 检验 | 结果 |
@@ -4685,7 +4685,7 @@ earnothing}v(S)/a(\delta S)$ —— 即 Gale–Hoffman 可行性判据，
 | 60 个随机**汇点连通**网络（每个胞都有边界面） | **零失配** |
 | 反例一：共享面列为 $(+1,+1)$（违反约化关联） | LP 极小 **0.5** 对割公式 **1.0** —— 等式破 |
 | 反例二：闭分支、无边界面（违反汇点连通） | $h_{\mathcal K}=1.0$ 有限，而 **LP 不可行** —— $\mathcal F_{h_K}
-earnothing$ 破 |
+e\varnothing$ 破 |
 
 **两条假设都是承重的**，不是为稳妥加的：各自对应一种具体的失效方式，且失效方式不同 ——
 前者让等式两边不等，后者让可行集直接空掉。这正是审稿人所说"两个反例是同一机制的两种表现"的
@@ -4701,17 +4701,17 @@ WARP 第九个 tick 仍 `Connecting`。codex 一槽（`fibonacci_folding` 裁剪
 `folded_histograms` 是目前最高的接受概率（~45%），而我此前只验了改写与保全，
 **没验它那条定理**。这个 tick 补上。
 
-断言：$\Fold_m$ 在旋转编码块语言 $S_m(lpha,eta)$ 上对**每个** $m$ 单射
-$\iff$ 在 $m=2$ 单射 $\iff$ $eta\in(0,\delta]\cup[1-\delta,1)$，其中 $\delta=\min(lpha,1-lpha)$。
+断言：$\Fold_m$ 在旋转编码块语言 $S_m(\alpha,\beta)$ 上对**每个** $m$ 单射
+$\iff$ 在 $m=2$ 单射 $\iff$ $\beta\in(0,\delta]\cup[1-\delta,1)$，其中 $\delta=\min(\alpha,1-\alpha)$。
 
-**5 个无理数 × 9 个 $eta$ = 45 例，三者完全一致，零分歧**（$m$ 验到 12）。
+**5 个无理数 × 9 个 $\beta$ = 45 例，三者完全一致，零分歧**（$m$ 验到 12）。
 
 机制我手算出来了，而且它就是审稿人所说的那个：
 $N_2(\omega)=\omega_1+2\omega_2 \bmod 3$，故 $00\mapsto0$、$11\mapsto3\equiv0$ ——
 **这是唯一被迫的碰撞**。于是 $\Fold_2$ 单射 $\iff S_2$ 不同时含 $00$ 与 $11$；
-而 $11\in S_2\iffeta>\delta$、$00\in S_2\iffeta<1-\delta$。两句话。
+而 $11\in S_2\iff\beta>\delta$、$00\in S_2\iff\beta<1-\delta$。两句话。
 
-实测里看得很清楚：$eta$ 越过 $\delta$ 时 $S_2$ 由 $\{00,01,10\}$ 变为 $\{00,01,10,11\}$，
+实测里看得很清楚：$\beta$ 越过 $\delta$ 时 $S_2$ 由 $\{00,01,10\}$ 变为 $\{00,01,10,11\}$，
 再越过 $1-\delta$ 变为 $\{01,10,11\}$ —— 四元素那一档**必然**碰撞，因为 $|X_2|=F_4=3$。
 
 **所以审稿人的判词是准的**：这确实是"两字母区间重叠判据加一个初等同余"。
@@ -4753,7 +4753,7 @@ codex 一槽（`fibonacci_folding` 裁剪）在跑，已删旋转多边形节、
 A.8 的修复我此前只核了编译与"多项式规模"是否撤干净，没验数学。本 tick 补。
 
 承重的是那条引理：处理过前缀后只有最后 $L$ 个可见符号还能被延长输入改变。
-它的证明按构造成立（$\Lambda(u)=lpha	au(s)$、$\Lambda(v)=lphaeta	au(t)$ 共享 $lpha$，
+它的证明按构造成立（$\Lambda(u)=\alpha	au(s)$、$\Lambda(v)=\alpha\beta	au(t)$ 共享 $\alpha$，
 而 $|	au|\le L$），缓冲长度 $\le L$ 随之得出。这一步无可争议。
 
 **我能补的是把原版的错做成具体的。** 原 A.8 要求 $q$ 个副本的输出**逐步**相等；
