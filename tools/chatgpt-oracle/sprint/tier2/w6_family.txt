@@ -1,0 +1,55 @@
+TASK: add the admissible-dimension result to
+papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge, replacing the
+thin motivation the introduction currently has. PRE-AUTHORIZED to edit that directory. Do not commit.
+
+READ FIRST: artifacts/oracle_sprint_W62_r2.md. Read-only evidence, as is every artifacts/oracle_*.md.
+Its standing objection is that the paper proves one exact six-dimensional classification rather than
+a family theorem or a minimal-dimension obstruction, and that the introduction never answers why this
+fold and why dimension six.
+
+WHAT TO ADD. I computed the following and each is reproducible by the scripts already in artifacts/
+(verify_refinement_family.py, verify_involution_mechanism.py, verify_admissible_dimensions.py).
+
+1. THE SWEEP. For 3 <= m <= 16, the coarsest equitable refinement of the fold partition of Q_m is the
+   DISCRETE partition except at m = 3, 6, 8, 9. At those four the cells are singletons and pairs,
+   2^{m-1} singletons and 2^{m-2} pairs, and the discarded sector has dimension exactly 2^{m-2} and
+   carries exactly the adjacency spectrum of Q_{m-2}. So the paper's m = 6 result is one instance of a
+   uniform structure, not an isolated computation.
+
+2. THE INVOLUTION. In all four cases the pairing is the affine involution that swaps two coordinates
+   i < j and complements both: on (x_i, x_j) it exchanges 00 with 11 and fixes 01 and 10, which
+   yields exactly 2^{m-2} two-element orbits and 2^{m-1} fixed points.
+
+3. WHY THOSE m, AND WHY FINITELY MANY. Such a sigma changes the binary value by plus or minus
+   2^{m-i} + 2^{m-j} or leaves it fixed, so it is invisible to the fold precisely when that sum is a
+   Fibonacci number lying far enough beyond the window that adding it does not carry into the visible
+   Zeckendorf digits. Below F_90 only four Fibonacci numbers are sums of two distinct powers of two:
+   F_4 = 3, F_5 = 5, F_9 = 34, F_12 = 144. Each pins the coordinates to i = m - a and j = m - b, which
+   bounds m from below by a + 1 so both fit in the window, and from above by the carry condition.
+   The result is F_4 none, F_5 gives m = 3, F_9 gives m = 6, F_12 gives m = 8 and 9. Finiteness is a
+   consequence of that scarcity, not of how far the search ran. I extended the sweep to m = 22 by
+   testing only the candidate pairs and the set is unchanged.
+
+HOW IT SHOULD ENTER. As motivation and a proposition with the computation as evidence, NOT as a
+claimed classification. Be exact about what is proved and what is checked:
+ - PROVED: the form of sigma, that its weight sum must be Fibonacci for the fold to be preserved, and
+   that only four Fibonacci numbers are sums of two distinct powers of two below F_90;
+ - CHECKED: that the admissible set is exactly {3, 6, 8, 9} for m up to 22.
+State plainly that the upper bound on m is not available in closed form - F_5 works at k - m = 2
+while F_9 and F_12 fail there and need k - m at least 3, because a smaller Fibonacci number cannot
+carry as far - so the classification is verified rather than proved. Do NOT paper over that.
+
+TWO THINGS NOT TO CLAIM. This is not a minimal-dimension result: the first non-equitable dimension is
+3, not 6, so do not suggest m = 6 is minimal. And do not assert that no m beyond 22 qualifies.
+
+The introduction currently says this is "one audited six-dimensional example" and gives a generic
+paragraph on lumpability. Replace that with the above, which answers the referee's "why this fold and
+why dimension six" honestly: six is not special by itself, it is one of exactly four dimensions where
+the fold admits a nontrivial equitable hidden realization at all.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions; report
+exit code, page count before and after, undefined control sequences, unresolved references,
+unresolved citations, all 0. No linespread or other line stretching. Reconcile the bibliography both
+directions. Every shipped .tex under 800 lines. Before any pdftotext grep, check whether this
+document drops ff/fi/fl ligatures and search both spellings with a control count.
+Do not create planning files. Do not run git commit.
