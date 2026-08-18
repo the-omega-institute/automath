@@ -4008,3 +4008,52 @@ $$b_{2d+1}(\sigma)\sim d^{-\sigma}S^2,\qquad S:=\sum_{t}K(t)^{-\sigma}$$
   agent 照做了连字审计（`Fibonacci` 47 / `bonacci` 49）。它自陈**未**完成的一项：页数仍 34，未压到 23–26。
 - `SC`（`scan_projection` 首轮冷判）返回：**reject，建议撤回重建**。详情下 tick 处理。
 - codex 一槽在跑（`window6` §3）。内存 2.76 GB。
+
+---
+
+## tick 347 — 🔴 `brocot` 的临界尾常数**确定错了,恰好差一倍**;$b_C=16$，不是 8
+
+上一 tick 那还是数值外推。本 tick 它变成了一条**可写进论文的论证**。
+
+### 关键一步是精确的
+
+无限制地取遍所有有限序列 $t=(a_1,\dots,a_k)$（含空序列），其 continuant $K(t)$ 取到每个 $q$ 的重数
+**恰为 $2\varphi(q)$** —— 因为 $[0;a_1,\dots,a_k]$（$a_k\ge2$）是 $(0,1)$ 中有理数的正则连分数、
+分母即 $K(t)$，而每个这样的有理数**恰有两种**连分数表示
+（另一种是 $[0;a_1,\dots,a_k-1,1]$），两者 continuant 相同。
+
+**实测 $q\le60$ 全部命中，零失配。** 于是
+
+$$S:=\sum_t K(t)^{-\sigma}=2\sum_{q\ge1}\varphi(q)q^{-\sigma}=2\,\frac{\zeta(\sigma-1)}{\zeta(\sigma)}=2\rho_\sigma$$
+
+而 $\sigma_0$ 的定义就是 $\rho_{\sigma_0}=2$，故 **$S=4$ 精确**，
+
+$$b_C=S^2=4\rho_{\sigma_0}^2=\mathbf{16}$$
+
+论文写的是 $2\rho^2=8$。**误差恰好是因子 2**：那个 2 是"每个有理数有两种连分数表示"，
+它属于**大部分商的每一侧**，而论文把它记在了乘积上。
+
+### 数值独立同意
+
+$b_{2d+1}(\sigma_0)d^{\sigma_0}$：$d=10$ 时 8.41、$d=20$ 时 13.22、$d=25$ 时 13.86 且单调上升，
+$A+B/d$ 拟合给 **16.9**。支持 16，与 8 不相容。
+
+### 后果：主定理的标度错了约 1.6 倍
+
+$K_C=2^\alpha b_C/\alpha$ 随之加倍，而 $a_m=(K_Cm)^{1/\alpha}$，故标准化序列差一个因子
+
+$$2^{1/\alpha}=2^{1/1.4788}=1.5977$$
+
+也就是说，主定理的稳定极限**陈述在了错误的尺度上**。定理形态大概率不变，常数要改。
+
+### 我暂不动手，等一轮
+
+`BC`（`b48ebbe5-…`）仍 `waiting_response`。我已把推导连同"**请先指出我的枚举是否有系统偏差**"
+一并送出。虽然现在这条链每一步都可验，但我在 `zeck_arith` 上犯过"凭自己的误读派出错误修复"的错，
+多等一个 tick 的成本远低于再犯一次。**收到裁决即动手改常数。**
+
+脚本：`artifacts/verify_continuant_multiplicity.py`（重数）、
+`verify_cost_is_stern_brocot_depth.py`（$d=\sum a_i-1$）、
+`verify_critical_tail_constant.py`（实测 $b\,d^{\sigma_0}$）。
+
+内存 2.29 GB；codex 一槽（`window6` §3）在跑。
