@@ -3236,3 +3236,41 @@ $$f(b)=\begin{cases} b_1, & b \text{ 不含 } 11,\ 0, & \text{否则,}\end{cases
   `sec04_transfer_and_second_moment` 与剪切文件 `_cut_hierarchy_eml_richardson.tex`。
   **全库 `artifacts/oracle_*.md` 对 HEAD 零差异**，归档未被动。
 - 内存 2.13 GB 可用，无孤儿进程。
+
+---
+
+## tick 334 后续 — `single_primitive` **90 → 9 页**，已独立核实并提交
+
+`811e8dfc2`。审稿人点名要留的东西全在：fixed-$q$ 进位自动机、losslessness、
+primitive transfer 矩阵 $T_q$、精确二阶矩递推、纤维高度、二元矩级数的非有理性。
+被删材料 6,470 行**逐字**存 `_cut_hierarchy_eml_richardson.tex`（不被 `main.tex` 引入），可原样取回。
+
+### 我核的，不是 agent 自述的
+
+- `latexmk -C` + 清 `.aux` 从零重建，**不带任何命令行宏定义**：
+  `exit=0 pages=9 ucs=0 ref=0 cite=0`，**GATE PASS**。
+- `pdftotext -enc UTF-8` 禁用词**原始计数先打印再下结论**：
+  `L0/L1/L2/hierarchy/Richardson/eml/EML/universality` 全部 **0**。
+- 摘要里两条精确断言按其**自己给的定义**重算（$\Omega_m=\{0,1\}^{m+1}$，模 $F_{m+2}$，$F_1=1,F_2=2$），
+  $m\le 18$：
+  - $S_2$ 初值 $6,14,36$，且 $S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)$ —— **零违反**；
+  - $M_{2s-1}=F_{s+1}$、$M_{2s}=2F_s$ —— $s\le 7$ **全中**。
+  - **变异测试**：三种扰动递推各在全部 15 个 $m$ 上违反，说明检验真会响，不是恒真。
+  脚本已提交为 `artifacts/verify_fold_moments.py`。
+
+结构不是被掏空的：604 行正文里有 8 定理 / 8 引理 / 3 命题 / 3 推论 / **18 个证明**。
+9 页是密的。我最初只看页数就判"这是删不是重建"，看了内容后收回。
+
+### 两处我直接修了
+
+1. agent 把作者换成了 "The Omega Institute"，已还原为 Haobo Ma / Wenlin Zhang。
+2. **我自己修这行时用 `sed`，`\author` 的 `\a` 被解成真的 BEL 控制符** —— 四个，
+   `cat` 看不见、编译日志全绿。改用 `chr(92)` 重写，并加了全文控制字符扫描。
+   这是"反斜杠被吞"那个老伤疤的新变种：这次丢的不是字符，是**混进了一个不可见字节**。
+
+### 未修、已派工
+
+`references.bib` 只剩 **2 条**。删掉层级框架的同时把 related-work 定位一起删干净了，
+DMTCS 编辑不会送外审。已派 codex 专做书目与定位，任务书里写死了两条教训：
+**每个 DOI 必须查 Crossref + 第二源、且要核返回的标题作者是否对得上**（全库审计里 24 个 DOI
+解析正常却指向无关文献），以及**先打印原始条数再下结论**。
