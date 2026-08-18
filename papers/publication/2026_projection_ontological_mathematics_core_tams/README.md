@@ -3,7 +3,7 @@
 ## 目标定位
 
 - 目标稿件：`publication/2026_projection_ontological_mathematics_core_tams`
-- 目标风格：`Transactions of the American Mathematical Society`
+- 目标期刊：`Journal of Number Theory`
 - 当前策略：只保留已经能由有限状态、Hankel 证书、模素因子型证书闭合的主定理链
 
 ## 本稿实际吸收的主源材料
@@ -88,4 +88,4 @@
 - 检查摘要与引言是否仍有超纲承诺。
 - 检查 `sec_chebotarev.tex` 中所有群论结论是否都对应到显式模素证书。
 - 检查所有 `\cite{...}` 是否在 `sec_references.tex` 中有条目。
-- 检查表格宽度与分页是否符合 TAMS 风格。
+- 检查表格宽度与分页是否符合 JNT 投稿要求。

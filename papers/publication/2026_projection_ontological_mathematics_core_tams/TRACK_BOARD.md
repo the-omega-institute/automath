@@ -1,4 +1,4 @@
-# TRACK_BOARD -- Finite-Window Zeckendorf Fibers (TAMS)
+# TRACK_BOARD -- Finite-Window Zeckendorf Fibers (JNT)
 
 ## Current Status
 
@@ -15,7 +15,7 @@
 |----|-------|----------|--------|
 | BLOCKER-1 | Principalization proof gap (Z-module equal-rank fallacy) | ACCEPT | Hard math error; replaced with Smith-normal-form index-1 verification |
 | BLOCKER-2 | DixonMortimer1996 missing from thebibliography | ACCEPT | Added entry; resolves [?] in compiled PDF |
-| MEDIUM-1 | Theorem B forward-references undefined collision kernel | DEFER | Standard TAMS intro style; low risk |
+| MEDIUM-1 | Theorem B forward-references undefined collision kernel | DEFER | Standard journal-introduction style; low risk |
 | MEDIUM-2 | Theorems B and C scope overlap | DEFER | Structural reshuffling risks new issues; overlap is minor |
 | MEDIUM-3 | "Minimal recurrence polynomial" definition informal | ACCEPT | Tightened to reference companion matrix and m_0(q) |
 | MEDIUM-4 | Bibliography metadata errors (3 entries) | ACCEPT | Corrected ChowSlattery2021, ChowJones2024, Sanna2025 to match .bib |

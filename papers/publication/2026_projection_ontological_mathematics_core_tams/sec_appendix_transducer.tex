@@ -135,14 +135,13 @@ for some word \(\beta\) and some state \(t\).  Thus \(\Lambda(u)\) and
 \]
 \end{proof}
 
-\begin{definition}[Committed and residual visible output]
-\label{def:appendix-cut}
-For a finite word \(y\in\{0,1\}^*\), write
-\[
-  y=\operatorname{com}(y)\,\operatorname{res}(y),
-\]
-where \(\operatorname{res}(y)\) is the suffix of \(y\) of length at most \(L\),
-and \(\operatorname{com}(y)\) is the complementary prefix.
+\begin{definition}[Cross-copy residual buffers]
+\label{def:appendix-cross-copy-buffers}
+For words \(w_1,\dots,w_q\), let
+\(\operatorname{lcp}(w_1,\dots,w_q)\) denote their longest common prefix.
+A product state stores, for each copy, the suffix left after the common
+emitted prefix has been cancelled.  These are cross-copy delay buffers, not
+independently chosen terminal buffers.
 \end{definition}
 
 \begin{proposition}[Finite local residual state set]
@@ -151,9 +150,8 @@ Set
 \[
   \widehat Q:=Q\times\{0,1\}^{\le L}.
 \]
-Each coordinate of the asynchronous product below is encoded by a transducer
-state \(s\in Q\) and an unmatched output word \(r\in\{0,1\}^{\le L}\).
-The local state set has cardinality
+The asynchronous product stores one transducer state and one binary delay
+buffer of length at most \(L\) for each copy.  The local state set has cardinality
 \[
   k:=\card{\widehat Q}
   =
@@ -171,13 +169,7 @@ There are \(|Q|\) choices for \(s\) and
 \medskip
 \noindent\textbf{Asynchronous common-prefix cancellation.}
 For words \(u,v\), write \(u\parallel v\) when one is a prefix of the other.
-For words \(w_1,\dots,w_q\), let
-\[
-  \operatorname{lcp}(w_1,\dots,w_q)
-\]
-denote their longest common prefix.  A product state stores the residual words
-after the common prefix of the transition output already emitted by every copy
-has been removed.  Given a state \(((s_i,r_i))_{i=1}^q\) and an input tuple
+Given a state \(((s_i,r_i))_{i=1}^q\) and an input tuple
 \(\mathbf a=(a_1,\dots,a_q)\), set
 \[
   w_i:=r_i\lambda(s_i,a_i),
@@ -187,6 +179,8 @@ has been removed.  Given a state \(((s_i,r_i))_{i=1}^q\) and an input tuple
 The transition is admissible when every \(r_i'\) has length at most \(L\) and
 \(r_i'\parallel r_j'\) for every \(i,j\); its new state is
 \(((\delta(s_i,a_i),r_i'))_{i=1}^q\).  Otherwise it goes to a rejecting sink.
+The common prefix \(c\) is recorded only implicitly: it is the output already
+matched by every copy.
 
 \begin{example}[An asynchronous \texorpdfstring{$q=2$}{q=2} update]
 \label{ex:appendix-q2-update}
@@ -218,59 +212,57 @@ integer vectors \(u_q,v_q\) such that
 \]
 The non-sink state count is at most
 \[
-  k^q,
+  k^q=\bigl(|Q|(2^{L+1}-1)\bigr)^q,
   \qquad k=|Q|\,(2^{L+1}-1).
 \]
 \end{proposition}
 
 \begin{proof}
-Start at \(((q_0,\varepsilon),\dots,(q_0,\varepsilon))\).  For an input tuple
-\(\mathbf a\in\{0,1\}^q\), use the asynchronous common-prefix update above.
-The state invariant is the following:
-there is a word \(C\), common to all copies, such that after the processed
-input prefix \(u_i\), the transition output already emitted by copy \(i\) is
+Start at \(((q_0,\varepsilon),\dots,(q_0,\varepsilon))\).  A path input tuple
+\(\mathbf a\in\{0,1\}^q\) is read as
+\(a_i=(\omega^{(i)})^{\mathrm{rev}}\); reversal is a bijection of
+\(\Omega_m\), so this is a canonical reparametrization of the input tuples.
+Use the asynchronous update above.  The invariant
+is that there is a word \(C\), common to all copies, such that the already
+emitted transition output of copy \(i\) is
 \[
   \lambda^*(q_0,u_i)=Cr_i.
 \]
-Thus the \(r_i\) are exactly the unmatched cross-copy output delay, rather
-than independently chosen per-copy terminal buffers.
+Appending the next transition output and cancelling the new longest common
+prefix preserves the invariant.
 
-The invariant is preserved by appending \(\lambda(s_i,a_i)\) and removing the
-longest common prefix \(c\).  If two residuals are not prefix-compatible, no
-continuation can make the emitted words prefixes of one common final output.
-Suppose, conversely, that a continuation could make all final visible outputs
-equal to a word \(Y\).  Then every \(\lambda^*(q_0,u_i)\) is a prefix of
-\(Y\).  If the processed prefixes have common length \(n\), then
-\Cref{prop:appendix-padded-transducer} gives
-\[
-  n
-  =|\Lambda(u_i)|
-  =|\lambda^*(q_0,u_i)|+|\tau(s_i)|,
-\]
-and therefore
+If two new residuals are not prefix-compatible, their emitted words disagree
+before the shorter one ends, so no continuation can make the final outputs
+equal.  It is therefore sound to reject.  Conversely, suppose a continuation
+can make all final visible outputs equal to a word \(Y\).  For every processed
+prefix \(u_i\) of common input length \(n\), \(\Lambda(u_i)\) has length
+\(n\), because the padded normalization has length \(n+1\) and one leading
+symbol is deleted.  Thus
 \[
   n-L\le |\lambda^*(q_0,u_i)|\le n.
 \]
-The emitted words are thus prefix-compatible and their lengths differ by at
-most \(L\).  After their longest common prefix is cancelled, every residual
-has length at most \(L\).  Consequently either failure tested by the update
-rule is impossible on an accepting path, so sending it to the rejecting sink
-is sound.
+Every emitted transition output is a prefix of \(Y\).  Their common-prefix
+cancellation therefore leaves buffers of length at most \(L\), and neither
+the length test nor the prefix-compatibility test can reject a tuple that
+extends to a collision.
 
-At the end of a length-\(m\) input, let the final transducer states be
-\(t_i\).  The terminal words are
+At the end of a length-\(m\) input, let the final transducer states be \(t_i\)
+and append the terminal outputs to the buffers:
 \[
   z_i:=r_i\tau(t_i).
 \]
-The state is accepting exactly when \(z_1=\cdots=z_q\).  Indeed, the common
-prefix \(C\) has already been cancelled, and the \(z_i\) are the complete
-remaining outputs; conversely, equality of the complete outputs forces this
-terminal equality.  By \Cref{lem:appendix-overflow-digit}, equality of these
-visible outputs is equivalent to
+Cancel \(c_{\mathrm{end}}:=\operatorname{lcp}(z_1,\dots,z_q)\) and write
+\(z_i=c_{\mathrm{end}}\bar r_i\).  The terminal state is accepting exactly
+when all final buffers are empty, \(\bar r_i=\varepsilon\) for every \(i\).
+This is equivalent to \(z_1=\cdots=z_q\), hence to equality of the complete
+visible outputs because the already cancelled word \(C\) is common to all
+copies.  By \Cref{lem:appendix-overflow-digit}, this is equivalent to
 \[
   \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)}).
 \]
-Thus accepted paths are in canonical bijection with the colliding tuples.
+Every input tuple determines a unique path, and the preceding two implications
+show that the accepted paths are exactly the colliding tuples.  This gives the
+claimed canonical bijection.
 
 Let \(A_q\) be the adjacency matrix of the non-sink part of this finite
 automaton, let \(u_q\) select the unique initial product state
@@ -284,5 +276,7 @@ accepting terminal states.  Then the accepted path count is
 The proof of \Cref{thm:symmetric-compression} is now immediate from
 \Cref{prop:appendix-collision-automaton}.  The asynchronous update and terminal
 condition are invariant under permutation of the copies.  Hence the histogram
-quotient acts on weak compositions of \(q\) into
-\(k=\card{\widehat Q}\) parts, so its dimension remains polynomial in \(q\).
+quotient acts on weak compositions of \(q\) into \(k=\card{\widehat Q}\)
+parts.  Its dimension is \(\binom{k+q-1}{q}\): polynomial in \(q\) for a
+fixed transducer, but exponential in the buffer bound \(L\); the unquotiented
+product has the exponential bound \(k^q\) above.

@@ -1,8 +1,8 @@
-# Submission Checklist -- TAMS (Finite-Window Zeckendorf Fibers)
+# Submission Checklist -- JNT (Finite-Window Zeckendorf Fibers)
 
 Paper: "Finite-Window Zeckendorf Fibers and the Discrete Thermodynamics of Fibonacci Partition Differences"
-Author: The Omega Project (acceptable for TAMS initial submission)
-Target: Transactions of the American Mathematical Society
+Author: The Omega Project
+Target: Journal of Number Theory
 
 | # | Item | Status |
 |---|------|--------|
@@ -18,3 +18,4 @@ Target: Transactions of the American Mathematical Society
 | 10 | Every .tex file under 800 lines (max: sec_moment_kernel at 682) | PASS |
 | 11 | Author and affiliation present (\author, \address, \thanks) | PASS |
 | 12 | LaTeX compiles clean with amsart documentclass | PASS |
+| 13 | Complete archival package for the q=9,...,17 computation | INCOMPLETE: see `artifacts/README.md` |

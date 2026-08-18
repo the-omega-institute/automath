@@ -39,6 +39,12 @@ For every integer \(q\ge 2\), there exist a finite nonnegative integer matrix
   S_q(m)=u_q^{\mathsf T}A_q^m v_q
   \qquad (m\ge 1).
 \]
+If \(L\) is the terminal-output bound of the fixed fold transducer and
+\(k=|Q|(2^{L+1}-1)\), then \(A_q\) may be chosen with at most
+\[
+  k^q=\bigl(|Q|(2^{L+1}-1)\bigr)^q
+\]
+states before trimming.
 Moreover, \(A_q\) may be chosen trim: every state of the underlying automaton
 lies on a directed path from the initial state to an accepting terminal state.
 \end{theorem}
@@ -76,18 +82,20 @@ Appendix~\ref{app:transducer}; explicitly,
 \]
 The kernel \(A_q\) of
 \Cref{thm:collision-kernel} admits a symmetric quotient
-\(\widetilde A_q\) acting on histogram states of cardinality
+\(\widetilde A_q\) acting on at most
 \[
-  \binom{k+q-1}{k-1},
+  \binom{k+q-1}{q}
 \]
-such that
+histogram states, such that
 \[
   S_q(m)=\widetilde u_q^{\mathsf T}\widetilde A_q^m\widetilde v_q
   \qquad\text{and}\qquad
   \rho(\widetilde A_q)=\rho(A_q)=r_q.
 \]
-In particular, for fixed \(k\) the state-space dimension grows polynomially in
-\(q\).
+Thus the unquotiented construction is exponential in \(q\).  The quotient
+bound is polynomial in \(q\) only after the transducer, and hence \(Q\) and
+\(L\), have been fixed; it is not a polynomial bound jointly in \(q\) and
+\(L\).
 \end{theorem}
 
 \begin{proof}
@@ -102,8 +110,9 @@ orbit is determined by the histogram
   \eta_s(t):=\card{\{1\le i\le q:\ s_i=t\}}
   \qquad (t\in \widehat Q),
 \]
-namely a weak composition of \(q\) into \(k\) parts.  Hence the orbit space has
-cardinality \(\binom{k+q-1}{k-1}\).
+namely a weak composition of \(q\) into \(k\) parts.  The full product has
+\(\binom{k+q-1}{q}\) orbits, so the invariant trim subautomaton has at most
+that many.
 
 Because the asynchronous update rule of
 \Cref{prop:appendix-collision-automaton} is equivariant under permutation of the
@@ -126,7 +135,10 @@ matrix.  More precisely,
 \[
   \lambda_q=\rho(A_q)=\rho(\widetilde A_q),
 \]
-where \(\widetilde A_q\) may be chosen to have dimension polynomial in \(q\).
+where \(\widetilde A_q\) may be chosen with dimension at most
+\[
+  \binom{|Q|(2^{L+1}-1)+q-1}{q}.
+\]
 In particular, \(\lambda_q\) is an algebraic integer.
 \end{corollary}
 

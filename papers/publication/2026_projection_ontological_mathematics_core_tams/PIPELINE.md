@@ -1,6 +1,6 @@
-# Pipeline: Finite-Window Zeckendorf Fibers / Discrete Thermodynamics (TAMS)
-Target: Transactions of the American Mathematical Society
-Status: **SUBMISSION-READY** (P7 complete)
+# Pipeline: Finite-Window Zeckendorf Fibers / Discrete Thermodynamics (JNT)
+Target: Journal of Number Theory
+Status: **MATHEMATICALLY REVISED; COMPUTATIONAL ARCHIVE INCOMPLETE**
 
 ## Stage Progress
 
@@ -23,7 +23,7 @@ Status: **SUBMISSION-READY** (P7 complete)
 |---|-------|--------------------|
 | A | `thm:partition-difference` | Fiber multiplicities = Fibonacci-lag discrete derivative of $R^{\dagger}$ |
 | B | `thm:fibonacci-window-sandwich` + `thm:all-q-transfer` | $S_q \asymp \lambda_q^m$, $r_q = \lambda_q$ |
-| C | `thm:collision-kernel` + `thm:symmetric-compression` + `cor:lambda-algebraic` + `thm:global-pressure-convexity` | Algebraicity, polynomial-size matrix, convex pressure |
+| C | `thm:collision-kernel` + `thm:symmetric-compression` + `cor:lambda-algebraic` + `thm:global-pressure-convexity` | Algebraicity, explicit asynchronous state bounds, convex pressure |
 | D | `thm:gibbs-selection` | Gibbs selection onto $[\Delta_q, \Delta_{q+1}]$ |
 | E | `thm:microcanonical-bands` | Microcanonical band bounds |
 | F | `thm:zero-temp-concentration` + `thm:max-fiber` + `thm:diagonal-high-moments` | Zero-temperature concentration |
