@@ -6435,3 +6435,57 @@ A 的 `q=9..17` 不可约性与 Galois/Chebotarev。
 
 池：6，现用 1。内存 1.12 GB。
 
+
+---
+
+## tick 404 — **Dushistova 那条结掉了：论文正确，8 不是 10**
+
+Oracle 正常；codex 仍 503。全文 103 行归档于
+`2026_brocot_.../artifacts/oracle_sprint_BR_dushistova_r1.md`。
+
+### 裁定
+
+> **manuscript correct; Dushistova coefficient too large by R_s.**
+
+`Z_n(s) ~ 2(ζ(s−1)/ζ(s))² n^{−s}`，即 `C = 2R_s²`；在 σ₀ 处 **C = 8，不是 10**。
+答复明说 "I am confident in this determination"，并给了完整方法，不是意见。
+
+### 方法（隔离唯一宏观数字）
+
+两个上下文总质量：
+
+    sum over L in P  K(L)^-s = 1 + 1 + 2(R_s − 1) = 2R_s      （P 含空词）
+    sum over R in C  K(R)^-s = R_s
+
+乘积即 `2R_s²`。连分母的拼接恒等式给出
+`K(L,X,R) = K(L)K(R)(X + λ_L + ρ_R)`，两个比值都在 [0,1]，于是
+`n^s / K(L,X,R)^s = (1+O(h/n)) / (K(L)^s K(R)^s)` 一致成立。
+补集（无宏观数字者）用 Stern–Brocot 分母层的精确恒等式
+`sum over Q_n (1/(q q_-) + 1/(q q_+)) = 1` 压掉，得 `o(n^{-s})`。
+
+### 对我此前工作的对照
+
+我 tick 399 的端点账目**与之一致**：我算"|u|>1 给 2(R−1)R = 4、端点须补 2R = 4"，
+它把那 4 拆成两个 `R_s` —— `u=0`（真空左上下文）与 `u=1`（唯一词 `(1)`）各一份。
+所以那个自洽性检验是对的，只是我当时无法判定常数本身。
+
+诊断措辞它给得比论文自己更精确，**建议采纳**：
+
+> The proof omits the separate u=0 endpoint and then reintroduces it inside the doubled
+> canonical convolution, thereby assigning it multiplicity 2 rather than multiplicity 1.
+> The resulting excess is exactly one full right-context mass, namely R_s.
+
+### 协议发现：症结确实是对齐的数值表
+
+同一内容三次 `extraction_failure`，把那块对齐数值表压平成散文后**一次通过**。
+所以这不是偶发抓取未命中 —— **任务书里的对齐表格会导致 worker 抓取失败**。
+既有经验"extraction_failure 直接重发、不要重新诊断"需要加一条例外：
+**同一内容连续三次失败时，先检查任务书里有没有表格排版。**
+
+### 状态变更
+
+`brocot` 的 Dushistova 主张：**从"未对齐、待查"改为"已由独立渐近分析确认正确"**。
+冲刺组九篇的承重结论至此**全部经我或 Oracle 独立核实**，无遗留数学疑点。
+
+池：6，现用 0。内存 1.12 GB。
+
