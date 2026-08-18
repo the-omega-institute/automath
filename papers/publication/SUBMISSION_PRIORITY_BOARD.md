@@ -5104,3 +5104,56 @@ Carlitz 1968 正是那个重数函数的奠基工作，而本文算的就是它�
 明细：`2026_single_primitive_universality_hierarchy/artifacts/priority_check_2026-08-18.md`
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 374 — 两通道仍断；查出一个状态 bug 和一处内部不一致
+
+Oracle relay 不可达（第 20 tick）；codex 503。无任务可收发。
+
+### folded_histograms 被标成"已投出"，而它没有
+
+目录里有 `SUBMITTED` 标记文件。这个标记**是被工具消费的**，不是摆设：
+`tools/chatgpt-oracle/split_overlap_harness.py:393` 用它判定一篇是否已投
+（`SUBMITTED_MARKER_FILES = ("SUBMITTED", "submission_receipt.md")`）。
+
+`papers/publication` 下带此标记的目录，其余**全部**有 `submitted_` 前缀。这篇是唯一例外 ——
+也就是仍在活跃命名空间、却会被工具判为已投出的唯一一篇。
+
+标记是 48 页 ETDS 那次投稿的遗留，**那次被拒**（`next_FH_r2.txt` 原样记着理由：
+"too slight for ETDS … a significance problem that major revision cannot repair"）。
+目录现在装的是据此抽出的 6 页短文《A Two-Letter Criterion for Fibonacci Folding of
+Rotation Words》，投稿信抬头是 The Fibonacci Quarterly，**尚未投出任何地方**。
+
+修法：删掉或改名该标记。目录后缀 `_etds` 也过时，但那是内部装饰 —— 与 brocot 不同，
+**这篇的投稿信没有向拒了它的刊物致意**，已核。
+
+另：该篇 bib 仅三条，全文与 bib 均无 "Ostrowski"，而 "Sturmian" 出现在三个 section。
+黄金旋转的 Ostrowski 记数就是 Zeckendorf，那是 Fibonacci 权重与旋转编码能对上的结构原因。
+候选引用已核 Crossref：Bunder–Tognetti（Fib. Quart. **29**(3) 1991, 217–219，就在目标刊物上）、
+Lothaire《Numeration Systems》章、Schaeffer LNCS 2013、Frid EJC 2018。补一句话即可。
+公允地说这篇姿态很克制（"Nothing stronger is being asserted…"），三条 bib 对 6 页短文不算错，
+这是单点缺漏不是通病。
+
+### zeck_arith：tick 372 那条低估了
+
+本项目**已经有一篇专讲该对象的稿子在审**：
+`submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita`
+——《Canonical Zeckendorf Normalization and Sharp Iteration Depth of the Berstel Adder》，
+ITA-2026-0032，投 RAIRO ITA，Referee 1 报告与回复函都在该目录。关键词是
+"Berstel adder, online delay, Fibonacci addition"。**它已经引了 Labbé–Lepšová**，
+所以不必新建条目，把已核记录原样抄过去即可。
+
+而 `zeck_arith` 提到 Berstel **零次** —— 覆盖 main.tex 加四个 `source/07_emergent_arithmetic_*`
+的全部 `.tex` 与 `.bib`，同一条命令里带阳性对照（Frougny 13 次命中，说明搜对了地方；
+Berstel 0；Labbé/Lepšová 0）。
+
+于是本文第 7 节为 Fibonacci 记数系统构造在线加法转换器，既不提 Berstel adder，
+也不引本项目正在 RAIRO ITA 送审的同题稿件。**这已经不是补全性引用问题** ——
+同一批作者、内容重叠的两份稿件，其中一份已在审，必须互引，否则第二份读起来像未披露的重叠投稿。
+Fibonacci 记数自动机是个小圈子，审稿人池是重合的。
+
+通道恢复后按序：(1) 在 zeck_arith 里引用同门稿件并说明关系；(2) 抄入 Labbé–Lepšová 并在
+引入在线加法器处引用；(3) 反向查一次 ITA-2026-0032 的回复函是否该披露 zeck_arith 为伴随工作。
+
+明细：两篇各自 `artifacts/priority_check_2026-08-18.md`。内存 1.12 GB，无 agent 在跑。

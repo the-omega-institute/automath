@@ -46,3 +46,45 @@ drawn from four unrelated fields has not searched the intended field, so this is
 evidence that the lower bound is unanticipated. The priority question for
 `thm:mul-delay-linear-lower-bound` remains open and should be put to the Oracle, which
 can read the statement rather than match keywords against it.
+
+---
+
+# Addendum, same day: the gap is internal, and larger than first reported
+
+The Labbe-Lepsova recommendation above understated the problem. This project already owns
+a manuscript whose entire subject is the object in question:
+
+`papers/publication/submitted_2026_canonical_zeckendorf_normalization_berstel_adder_rairo_ita`
+— *Canonical Zeckendorf Normalization and Sharp Iteration Depth of the Berstel Adder*,
+ITA-2026-0032, submitted to RAIRO ITA and currently with referees (Referee 1 report and a
+response document are both in that directory). Its keywords are "Berstel adder, online
+delay, Fibonacci addition". It cites Labbe-Lepsova already, so no new entry needs to be
+created — the verified record can be copied across verbatim:
+
+    @article{LabbeLepsova2023FibonacciTwosComplement,
+      author  = {Labb{\'e}, S{\'e}bastien and Lep{\v{s}}ov{\'a}, Jana},
+      title   = {A {Fibonacci} analogue of the two's complement numeration system},
+      journal = {RAIRO - Theoretical Informatics and Applications},
+      volume  = {57}, year = {2023}, pages = {12},
+      doi     = {10.1051/ita/2023007},
+    }
+
+Meanwhile `zeck_arith` mentions Berstel **zero** times. Verified across every `.tex` and
+`.bib` in the paper — main.tex plus the four `source/07_emergent_arithmetic_*` files —
+with a positive control in the same command (Frougny: 13 hits, so the search was looking
+in the right place; Berstel: 0; Labbe/Lepsova: 0).
+
+So Section 7 of this manuscript builds an online addition transducer for Fibonacci
+numeration without naming the Berstel adder, and without citing the sibling paper this
+project has under review at RAIRO ITA on exactly that adder.
+
+That is no longer a completeness citation. Two manuscripts from the same authors on
+overlapping material, one of them already before referees at RAIRO ITA, must cite each
+other — otherwise the second submission reads as undisclosed overlap. Fibonacci-numeration
+automata is a small field and the referee pools overlap.
+
+Action, in priority order, when the codex channel returns:
+1. Cite the sibling manuscript in `zeck_arith` and state the relationship explicitly.
+2. Copy the Labbe-Lepsova entry across and cite it where the online adder is introduced.
+3. Have someone check the reverse direction — whether ITA-2026-0032's response to referees
+   should disclose `zeck_arith` as companion work.
