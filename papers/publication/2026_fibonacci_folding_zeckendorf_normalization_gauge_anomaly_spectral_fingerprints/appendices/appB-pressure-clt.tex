@@ -49,7 +49,7 @@ Consider a raw word and its full Zeckendorf normalization, both padded at high w
 \[
 P=\text{(raw value already read)}-\text{(normalized value already read)}
 \]
-and let \(y^-\) be the preceding normalized digit, with a virtual initial value \(y^-=0\). The four carry states are
+and let \(y^-\) be the preceding normalized digit, with a virtual initial value \(y^-=0\). The imbalance is not bounded numerically as \(k\) varies. Rather, the finite-state assertion is that \(P\) has only the three \(k\)-relative forms \(0\), \(-\Fib_k\), and \(-\Fib_{k+1}\). The four carry states are
 \[
 \begin{array}{c|c}
 \text{state}&\text{condition at the cut before }\Fib_k\\\hline
@@ -60,9 +60,10 @@ and let \(y^-\) be the preceding normalized digit, with a virtual initial value 
 \end{array}
 \]
 In state \(01\), the value of \(y^-\) need not be retained because every admissible next output digit is \(0\).
+For the interior reversed shift, \((P,y^-)\) is sufficient to determine the follower language. This is a bulk statement: for exact finite-volume completions at a boundary-sensitive cut, one would also retain the number of sites remaining before the low boundary.
 
 \begin{proposition}[Carry transition table]\label{prop:transitions}
-The possible carry transitions, labeled by the current raw/normalized pair, are exactly
+The possible interior carry-transition types, labeled by the current raw/normalized pair, are exactly
 \begin{align*}
 00 &\xrightarrow{00} 00, &\qquad
 00 &\xrightarrow{01} 01, &\qquad
@@ -73,7 +74,7 @@ The possible carry transitions, labeled by the current raw/normalized pair, are 
 10 &\xrightarrow{11} 01,\\
 11 &\xrightarrow{00} 00.
 \end{align*}
-Thus every finite normalized pair word labels a path in this four-state graph.
+Thus every finite normalized pair word labels a path in this four-state graph, and every displayed transition type is realizable arbitrarily far from the boundary. The qualifier ``interior'' matters: for example, \(00\xrightarrow{01}01\) cannot occur at the lowest cut before \(\Fib_3\), because the remaining raw weight \(\Fib_2\) cannot compensate \(\Fib_3\).
 \end{proposition}
 
 \begin{proof}
@@ -91,7 +92,9 @@ whereas the maximum value of a normalized tail is \(\Fib_k-1\). Hence a positive
 \[
 2\Fib_k>\Fib_{k+1}-2,
 \]
-so this also cannot be cancelled. Finally, adjacent normalized \(1\)s are forbidden; this leaves only \(11\xrightarrow{00}00\) from the fourth state. These exclusions and the recurrence give exactly the stated table.
+so this also cannot be cancelled. Finally, adjacent normalized \(1\)s are forbidden; this leaves only \(11\xrightarrow{00}00\) from the fourth state. These exclusions and the recurrence give exactly the stated interior table.
+
+For realizability, take any displayed edge, close it on both sides by paths to state \(00\), and add arbitrarily many \(00\)-loops there. The resulting path has zero imbalance at both ends and a Zeckendorf-admissible second coordinate, so equality of Fibonacci values and uniqueness of the Zeckendorf expansion realize the edge arbitrarily far from either boundary.
 
 For an unpadded finite fold, append two high-order raw zeros. By \Cref{lem:zero-padding}, the original pair word is unchanged on its visible coordinates, all normalized digits now lie in the enlarged window, and the enlarged stream starts in state \(00\). The preceding argument therefore applies to every factor in \(\mathcal L_{\mathrm{pair}}\).
 \end{proof}
@@ -104,6 +107,8 @@ A finite pair word belongs to \(\mathcal L_{\mathrm{pair}}\) if and only if it l
 One direction is Proposition~\ref{prop:transitions}. Conversely, the graph is strongly connected: state \(00\) reaches \(01,10,11\), and every state returns to \(00\). Surround the given path by paths from \(00\) to its initial state and from its terminal state back to \(00\). Add arbitrarily many \(00\)-labeled loops at state \(00\) on both sides.
 
 Assign consecutive Fibonacci weights to the resulting path. The carry identities in the proof of Proposition~\ref{prop:transitions} show that the initial and terminal imbalance are both zero, so the two coordinates of the label word have equal Fibonacci value. The second coordinate has no adjacent \(1\)s, as is immediate from the transition table. It is therefore the Zeckendorf normalization of the first coordinate. This realizes the original path label, and the added loops place it arbitrarily far from both boundaries.
+
+This also makes state sufficiency explicit. Given two interior prefixes ending in the same state, attach to each the same continuation and then the same closing path to state \(00\); \(00\)-loops move both completed paths arbitrarily far into the interior. Zero terminal imbalance and Zeckendorf uniqueness show that the continuation is admissible after both prefixes, so their bulk follower languages coincide.
 \end{proof}
 
 \subsection{Adjacency matrix and bulk Parry measure}
