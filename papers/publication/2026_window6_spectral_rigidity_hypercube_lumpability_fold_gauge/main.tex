@@ -75,60 +75,89 @@ Thus \(00\) and \(11\) are exchanged in the selected coordinates, whereas \(01\)
 \emph{involution-admissible} when \(\Fold_m\sigma_{i,j}^{(m)}=\Fold_m\) for some pair
 \(i<j\).
 
-\begin{proposition}[Admissible dimensions in the verified range]
+\begin{proposition}[Characterisation of involution-admissible dimensions]
 \label{prop:admissible-dimensions}
-For \(3\le m\le16\), the coarsest equitable refinement of the \(\Fold_m\)-partition is
-discrete except at
+Put \(S_{i,j}=2^{m-i}+2^{m-j}\).  If \(S_{i,j}=F_k\), then
+\(\Fold_m\sigma_{i,j}^{(m)}=\Fold_m\) if and only if
+\[
+ k-1>m
+ \quad\text{and}\quad
+ \bigl(k-2>m\ \text{ or }\ z_{k-2}(N)=0\text{ for every admissible }N\bigr),
+\]
+where \(0\le N<2^m\) is admissible when its binary digits of weights \(2^{m-i}\) and
+\(2^{m-j}\) are both zero.  If \(S_{i,j}\) is not a Fibonacci number, the
+involution does not preserve \(\Fold_m\).
+
+For the classification below we import the complete binary-digit theorem of
+Bugeaud, Cipu, and Mignotte~\cite{bugeaud2013representation}; it implies that the
+only Fibonacci numbers that are sums of two distinct powers of two are
+\[
+ F_4=3,\qquad F_5=5,\qquad F_9=34,\qquad F_{12}=144.
+\]
+Then the involution-admissible dimensions \(m\ge3\) are exactly
 \[
  m\in\{3,6,8,9\}.
 \]
-At those four dimensions it is the orbit partition of, respectively,
+The preserving involutions at those four dimensions are, respectively,
 \[
  \sigma_{1,3}^{(3)},\qquad \sigma_{1,5}^{(6)},\qquad
  \sigma_{1,4}^{(8)},\qquad \sigma_{2,5}^{(9)}.
 \]
-It has \(2^{m-1}\) singleton cells and \(2^{m-2}\) two-element cells.  Its discarded
-sector consequently has dimension \(2^{m-2}\), and the restriction of \(A_m\) to that
-sector is isomorphic to \(A_{m-2}\).
-
-An exhaustive candidate test for \(3\le m\le22\) finds that the
-involution-admissible dimensions are again exactly \(\{3,6,8,9\}\).  This second
-range concerns the stated swap-and-complement involutions; the full equitable-refinement
-sweep in the first assertion ends at \(m=16\).
+Independently, an exhaustive neighbor-signature computation for \(3\le m\le16\)
+establishes that the coarsest equitable refinement of the \(\Fold_m\)-partition is
+discrete outside these four dimensions and is the corresponding orbit partition at
+them.  Each such partition has \(2^{m-1}\) singleton cells and \(2^{m-2}\) two-element
+cells.  Its discarded sector has dimension \(2^{m-2}\), and the restriction of \(A_m\)
+to that sector is isomorphic to \(A_{m-2}\).
 \end{proposition}
 
 \begin{proof}
-Write \(S_{i,j}=2^{m-i}+2^{m-j}\).  The involution changes the binary value by
-\(+S_{i,j}\) on \(00\), by \(-S_{i,j}\) on \(11\), and by zero on \(01,10\).
-The uniqueness and carry rules for greedy Zeckendorf expansion therefore force a
-fold-invisible nonzero increment of this form to be a Fibonacci number \(F_k\) beyond
-the visible window; fold preservation is then the requirement that adding \(F_k\) never
-carries into the first \(m\) Zeckendorf digits on the relevant binary inputs.  Direct
-finite exhaustion of \(k<90\) gives only
+The involution changes the binary value by \(+S_{i,j}\) on \(00\), by
+\(-S_{i,j}\) on \(11\), and by zero on \(01,10\).  The uniqueness and normalization
+rules for greedy Zeckendorf expansion force a fold-invisible nonzero increment of this
+form to be a single Fibonacci number, say \(S_{i,j}=F_k\).  It is enough to consider
+the \(00\) inputs, which are precisely the admissible integers \(N\): the corresponding
+\(11\) input has value \(N+F_k\), and the other two patterns are fixed.
+
+Adding \(F_k\) places a new Zeckendorf digit at position \(k-1\).  This digit is
+invisible exactly when \(k-1>m\).  If the Zeckendorf expansion of \(N\) already has a
+digit at position \(k-2\), the new digit is adjacent to it and the normalization
 \[
- F_4=3=2^1+2^0,\quad F_5=5=2^2+2^0,\quad
- F_9=34=2^5+2^1,\quad F_{12}=144=2^7+2^4
+ F_{k-1}+F_k=F_{k+1}
 \]
-as Fibonacci numbers that are sums of two distinct powers of two.  Every candidate
-weight sum for \(m\le22\) is below \(2^{22}<F_{90}\), so this four-number list is
-complete for the stated test.  If
-\(F_k=2^a+2^b\), with \(a>b\), the coordinates are forced to be
-\(i=m-a\) and \(j=m-b\), so in particular \(m\ge a+1\).  Exhaustively checking the
-remaining carry condition through \(m=22\) gives
+consumes the digit at position \(k-2\); the normalization rules introduce no other
+change below that position.  Thus the first \(m\) digits remain unchanged for every
+admissible \(N\)
+exactly when the new digit lies above the window and either the consumed position also
+lies above the window or no admissible \(N\) occupies it.  This proves the stated
+criterion, including necessity by taking \(N=0\) for the first condition and an
+admissible \(N\) with \(z_{k-2}(N)=1\) for the second.
+
+The list of four Fibonacci numbers is not proved here; it is the specialization to
+exactly two nonzero binary digits of the complete classification in
+Bugeaud--Cipu--Mignotte~\cite{bugeaud2013representation}.  Write
+\(F_k=2^a+2^b\), with \(a>b\).  The coordinates are forced to be \(i=m-a\) and
+\(j=m-b\), so \(m\ge a+1\); the first condition gives \(m\le k-2\), and the second
+normally gives \(m\le k-3\).  Applying the criterion to the imported list gives
 \[
 \begin{array}{c|c|c}
-\text{weight sum}&(i,j)&\text{admissible }m\text{ in }[3,22]\\ \hline
+\text{weight sum}&(i,j)&\text{admissible }m\ge3\\ \hline
 F_4=3&(m-1,m)&\varnothing\\
 F_5=5&(m-2,m)&3\\
 F_9=34&(m-5,m-1)&6\\
 F_{12}=144&(m-7,m-4)&8,9.
 \end{array}
 \]
-The candidate list is finite because the Diophantine step leaves only these four
-weight sums and the carry condition bounds the dimensions attached to each, not because
-the sweep happens to end after a run of empty rows.
-Independently, iterated neighbor-signature refinement over all vertices for
-\(3\le m\le16\) gives the discrete partition outside these four dimensions and the
+The exceptional branch of the second condition occurs only for \(F_5\) at \(m=3\):
+the admissible class is \(\{0,2\}\), and neither integer has a digit at position
+\(k-2=3\).  For \(F_9\), dimension six survives because position \(k-2=7\) lies above
+the window, whereas at \(m=7\) the admissible integer \(N=21=F_8\) occupies that now
+visible position.  For \(F_{12}\), dimensions eight and nine survive, whereas at
+\(m=10\) the admissible integer \(N=97=F_{11}+F_6\) occupies position \(k-2=10\).
+All larger dimensions are excluded by the first condition.  This proves the global
+classification of the stated involutions from the criterion and the imported
+Diophantine list.  Separately, iterated neighbor-signature refinement over all vertices
+for \(3\le m\le16\) gives the discrete partition outside these four dimensions and the
 listed orbit partitions at them.
 
 It remains to identify the uniform structure, which does not require computation.
@@ -140,17 +169,15 @@ other \(m-2\) flips act as the coordinate flips of \(Q_{m-2}\).  Hence the disca
 space has dimension \(2^{m-2}\) and carries \(A_{m-2}\).
 \end{proof}
 
-The finite upper endpoint in Proposition~\ref{prop:admissible-dimensions} is essential.
-There is currently no closed formula for the upper bound on \(m\) imposed by the carry
-condition.  In particular, \(F_5\) works when \(k-m=2\), whereas \(F_9\) and
-\(F_{12}\) fail at that gap and require \(k-m\ge3\): a smaller Fibonacci increment
-cannot propagate a carry as far.  Thus the candidate scarcity explains the finite list
-tested here, but the last step is verified rather than classified.  We do not assert
-that no \(m>22\) is admissible.
+The criterion is proved here, while the global list of involution-admissible dimensions
+depends on the cited Diophantine scarcity theorem rather than on the endpoint of a
+search.  The stronger statement about the full coarsest equitable refinement remains a finite
+computation for \(3\le m\le16\); no classification of arbitrary equitable refinements is
+asserted beyond that range.
 
 Dimension six is therefore neither a minimal obstruction nor an isolated computation:
-the first non-equitable case is \(m=3\), while \(m=6\) is one of the four admissible
-dimensions found in the verified range.  We focus on it because it is the audited
+the first non-equitable case is \(m=3\), while \(m=6\) is one of the four
+involution-admissible dimensions.  We focus on it because it is the audited
 instance for which a complete 48-cell classification can be printed.  Its involution
 comes from \(F_9=34=2^5+2^1\), and the general cancellation argument above explains
 why its discarded sector is \(Q_4\).  The resulting classification determines an exact
@@ -482,13 +509,17 @@ them with the \(\sigma_{\rm geo}\)-orbits, and verifies equitability and the 32/
 size split.  These checks validate the finite data and the stated partition identities;
 they do not replace the proofs of the interval lemma or the spectral-carrier argument.
 
-The finite-range evidence in Proposition~\ref{prop:admissible-dimensions} is reproduced
-by three scripts in \path{artifacts/}.  The script \path{verify_refinement_family.py}
+The computational parts of Proposition~\ref{prop:admissible-dimensions} are reproduced
+by four scripts in \path{artifacts/}.  The script \path{verify_refinement_family.py}
 performs the full refinement sweep through \(m=16\);
-\path{verify_involution_mechanism.py} enumerates the Fibonacci weight sums and candidate
-involutions; and \path{verify_admissible_dimensions.py} streams the candidate tests
-through \(m=22\).  The stated endpoints are part of the claims: these computations do
-not classify dimensions beyond their verified ranges.
+\path{verify_involution_mechanism.py} enumerates Fibonacci weight sums below \(F_{90}\)
+and their candidate involutions; \path{verify_admissible_dimensions.py} streams the
+candidate tests through \(m=22\).
+
+Finally, \path{verify_preservation_criterion.py} compares the proved criterion with
+brute force on all 49 Fibonacci-weight candidates for
+\(2\le m\le16\), with no disagreement.  These finite checks corroborate, but do not
+replace, either the criterion or the cited Diophantine classification.
 
 \bibliographystyle{plain}
 \bibliography{references}
