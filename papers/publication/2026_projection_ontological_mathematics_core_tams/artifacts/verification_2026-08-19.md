@@ -59,3 +59,37 @@ correction, of size `(2 log phi - (1/2) log 5)/m = 0.158/m`.
 Stated as what it is: a pattern verified over `m = 6..32`, not a proof. But it is a clean
 statement, it implies the paper's limit immediately, and it supplies the second-order term
 the paper does not currently give. Worth putting to the authors.
+
+---
+
+# Addendum, next day: the closed form is already proved next door
+
+The maximal-fibre closed form recorded above as "a pattern, not a proof" is a theorem in a
+sibling manuscript. `single_primitive` states and proves
+
+    M_{2s-1} = F_{s+1},   M_{2s} = 2 F_s        (its convention F_1 = 1, F_2 = 2)
+
+and the two papers are computing the same sequence with an index shift of one:
+
+    D_{m+1}  (projection)  =  M_m  (single_primitive),     verified for m = 2..15.
+
+So `projection` can cite its sibling and replace `D_m^{1/m} -> sqrt(phi)` with the exact
+value, which carries the second-order term for free. That upgrade costs a citation and a
+sentence. Script: `verify_max_fibre_matches_sibling.py`.
+
+`single_primitive`'s formula was itself checked here: brute force agrees for `m = 1..18`,
+its own tabulated `M_1..M_10 = 2,2,3,4,5,6,8,10,13,16` agree, and the fibre totals come to
+`2^{m+1}` at every `m`, which confirms the residue classes are being counted completely.
+
+## The mistake I made getting here, because it has a reusable tell
+
+My first model of `single_primitive`'s fold left out the modular reduction. Its weights sum
+past `F_{m+2}`, so its fibres are whole residue classes; `projection`'s weights sum to
+exactly `F_{m+2} - 1`, so its fibres are single coefficients and no reduction occurs. With
+the wrong model, brute force disagreed with `single_primitive`'s formula at almost every
+`m`, and it would have been easy to write that up as an error in a submitted paper.
+
+The tell was in the output: **the paper's formula agreed exactly with the paper's own
+tabulated values, and only my recomputation dissented.** A document consistent with itself
+while disagreeing with an outside model indicts the model. That is worth checking before
+reporting any formula as wrong.
