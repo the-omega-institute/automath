@@ -1,0 +1,53 @@
+TASK: re-derive the theta-dependence of the finite-size crossover limit in
+papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams. This is a verification
+task, not an edit task. PRE-AUTHORIZED to edit that directory only if the derivation shows a change
+is needed. Do not commit.
+
+You added sec_finite_size_crossover.tex in a previous round, proving
+
+    Z_m^R(-s_m)/m  ->  2(1 - e^{-theta/mu_C})/theta
+
+after correctly rejecting the normalisation I had passed you. I have now tested the theta-dependence
+numerically and it does not match. I am NOT asserting the theorem is wrong - I made exactly that
+mistake earlier in this project with the constant b_C, where a slowly vanishing sector made a correct
+constant look wrong. What I am asserting is that this time the usual escape routes are closed, so the
+derivation needs rechecking.
+
+THE MEASUREMENT. I compute Z_m^R(-s) directly from R(N) on the layer and take the INCREMENT
+Z_m - Z_{m-1}, since Z_m grows linearly and the ratio Z_m/m converges only with a constant offset.
+I then compare the ratio inc(theta)/inc(0) at the same m against the predicted
+(1 - e^{-theta/mu_C}) mu_C / theta, which cancels most of the sensitivity to mu_C.
+Using the exact finite-m theta_m = m(1 - B_{s_m}(1)) rather than its asymptotic value kappa*lambda:
+
+   theta ~ 0.51 : measured 0.9644, predicted 0.9850
+   theta ~ 1.01 : measured 0.9301, predicted 0.9707
+   theta ~ 1.96 : measured 0.8652, predicted 0.9440
+   theta ~ -1.07: measured 1.0753, predicted 1.0323
+
+WHY THIS IS NOT THE b_C SITUATION.
+ - The ratio is STABLE IN m. At m = 24, 27 and 30 it agrees to about 0.1 percent at each theta, so it
+   has converged. In the b_C case the quantity was still visibly drifting.
+ - It is INSENSITIVE TO mu_C. Sweeping mu_C from 16 to 20 moves the prediction only from 0.9412 to
+   0.9526 at theta = 1.96, while the measurement is 0.8652. No value of mu_C reconciles them.
+ - The deviation is a CLEAN MULTIPLE. Measured departure from 1 is about 2.4 times the predicted one
+   at every theta tested, positive and negative: 2.37, 2.39, 2.41, 2.33.
+ - Fitting (1 - e^{-theta/nu}) nu / theta gives nu about 6.6 to 7.0 rather than mu_C about 16.85.
+
+The script is artifacts/verify_crossover_theta_dependence.py; rerun it rather than trusting my
+numbers.
+
+WHAT TO DO.
+1. Recheck the step in your proof where mu_C enters the exponential. The suspicion is that the
+   constant in the exponent is not mu_C but some other mean associated with the renewal - the factor
+   2.4 is stable enough to be a definite quantity rather than an error term.
+2. If the derivation is right and the numerics are explained by something I have missed, say what,
+   and say why the m-stability above does not refute it. Do not simply reassert the formula.
+3. If the constant is wrong, correct it in sec_finite_size_crossover.tex and say plainly in the
+   commit-facing report what changed and why.
+4. If you cannot resolve it either way, say so and mark the theorem's exponent constant as
+   unverified in the text rather than leaving a confident statement standing. That is an acceptable
+   outcome; a wrong constant in a submitted paper is not.
+
+VERIFY if you edit: latexmk -C, delete .aux, rebuild from zero with no command-line macro
+definitions; report exit code, page count, undefined control sequences, unresolved references,
+unresolved citations, all 0. Do not create planning files. Do not run git commit.
