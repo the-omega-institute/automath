@@ -111,3 +111,31 @@ Wanted: L <= 2m-2 for any nonzero d all of whose window sums satisfy (L1).
 signs. What is missing is the counting step that turns that into a length bound. Note the
 witness family has exactly one nonzero window, so the extremal configuration is as sparse as
 possible in nonzero windows - the length is not being forced by many nonzero windows.
+
+## A proposed proof, refuted by its own check (tick 322)
+
+Idea: if the whole support of d fits inside two consecutive windows, both with sum zero,
+then subtracting and using F_{k+2} = F_{k+1} + F_k should push all shifted sums to zero and
+force d = 0. That would bound the length by forbidding the support from sitting in the
+interior.
+
+It is false. Counterexamples start at span 3:
+
+    d = (-1,-1,+1):   -F_2 - F_3 + F_4 = -1-2+3 = 0
+                      -F_1 - F_2 + F_3 = -1-1+2 = 0
+
+and the count of such d grows quickly - 2, 4, 8, 16, 30, 56, ... for spans 3..8. The
+induction fails because F_1 = F_2 = 1, so the Fibonacci sequence is not linearly independent
+at the bottom and the recurrence vector itself lies in the kernel of every shifted
+evaluation.
+
+**This explains the phenomenon better than the proposed proof would have.** The witness d IS
+the recurrence vector: +1 at position m+1 against +1s at m-1 and m. Every window that
+contains it entirely evaluates to zero, automatically, for the reason just given. Only the
+windows that CLIP it can produce +/- F_{m+2}. So the length bound is a statement about how
+many windows can clip the support, i.e. about the boundary, not about the interior - which
+is also why sliding one position too far turns the sum into a small nonzero value such as
+-F_2 + F_3 = 1 and violates lemma (L1).
+
+Next attempt should therefore count clipping windows rather than look for an interior
+rigidity argument.
