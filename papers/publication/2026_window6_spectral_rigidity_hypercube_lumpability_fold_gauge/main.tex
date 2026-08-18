@@ -55,22 +55,107 @@ reduction \cite{biggs1993algebraic,kemeny1976finite,buchholz1994exact,krebs2015u
 The hypercube is a particularly transparent test graph because its Walsh characters give
 the complete spectrum and because every local neighbor count is integral.
 
-This paper gives a complete analysis of one audited six-dimensional example.  Let
-\(\Omega_6=\{0,1\}^6\), and map a binary word to the first six digits of the greedy
-Zeckendorf expansion of its binary integer.  The image consists of the 21 words with no
-adjacent ones.  The visible partition is not equitable, but its failure has an exact
-repair: one refinement by equal neighbor signatures is already stable.
+The six-dimensional partition belongs to a sparse dimension-dependent phenomenon.  To
+state it, for \(a=(a_1,\ldots,a_m)\in\Omega_m\) put
+\[
+ N_m(a)=\sum_{r=1}^m a_r2^{m-r},
+ \qquad
+ \Fold_m(a)=(z_1(N_m(a)),\ldots,z_m(N_m(a))),
+\]
+where \(N=\sum_{r\ge1}z_r(N)F_{r+1}\) is the greedy Zeckendorf expansion.  For
+\(1\le i<j\le m\), let \(\sigma_{i,j}^{(m)}\) interchange coordinates \(i,j\) and
+complement both:
+\[
+ (\sigma_{i,j}^{(m)}a)_i=1-a_j,
+ \qquad (\sigma_{i,j}^{(m)}a)_j=1-a_i,
+ \qquad (\sigma_{i,j}^{(m)}a)_r=a_r\quad(r\ne i,j).
+\]
+Thus \(00\) and \(11\) are exchanged in the selected coordinates, whereas \(01\) and
+\(10\) are fixed.  Call \(m\)
+\emph{involution-admissible} when \(\Fold_m\sigma_{i,j}^{(m)}=\Fold_m\) for some pair
+\(i<j\).
 
-Our reason for isolating dimension six is structural rather than a claim that
-non-equitability first occurs there.  In this window the entire repair is controlled by
-a fiber-preserving affine cube involution: its orbits are exactly the stable signature
-cells.  Thus the calculation determines an exact state complexity for graph quotients,
-independently of the audit that found the example.  Any exact Markov lumping that retains
-the 21 visible labels needs at least 48 states, so the obstruction measures how much of
-the original 64-state walk can actually be compressed.  The accompanying \(Q_4\) is also
-structural rather than a numerical spectral coincidence: the involution couples two
-coordinates, and antisymmetry cancels those two cube directions while leaving the other
-four.  We make no claim here that the same symmetry persists in other dimensions.
+\begin{proposition}[Admissible dimensions in the verified range]
+\label{prop:admissible-dimensions}
+For \(3\le m\le16\), the coarsest equitable refinement of the \(\Fold_m\)-partition is
+discrete except at
+\[
+ m\in\{3,6,8,9\}.
+\]
+At those four dimensions it is the orbit partition of, respectively,
+\[
+ \sigma_{1,3}^{(3)},\qquad \sigma_{1,5}^{(6)},\qquad
+ \sigma_{1,4}^{(8)},\qquad \sigma_{2,5}^{(9)}.
+\]
+It has \(2^{m-1}\) singleton cells and \(2^{m-2}\) two-element cells.  Its discarded
+sector consequently has dimension \(2^{m-2}\), and the restriction of \(A_m\) to that
+sector is isomorphic to \(A_{m-2}\).
+
+An exhaustive candidate test for \(3\le m\le22\) finds that the
+involution-admissible dimensions are again exactly \(\{3,6,8,9\}\).  This second
+range concerns the stated swap-and-complement involutions; the full equitable-refinement
+sweep in the first assertion ends at \(m=16\).
+\end{proposition}
+
+\begin{proof}
+Write \(S_{i,j}=2^{m-i}+2^{m-j}\).  The involution changes the binary value by
+\(+S_{i,j}\) on \(00\), by \(-S_{i,j}\) on \(11\), and by zero on \(01,10\).
+The uniqueness and carry rules for greedy Zeckendorf expansion therefore force a
+fold-invisible nonzero increment of this form to be a Fibonacci number \(F_k\) beyond
+the visible window; fold preservation is then the requirement that adding \(F_k\) never
+carries into the first \(m\) Zeckendorf digits on the relevant binary inputs.  Direct
+finite exhaustion of \(k<90\) gives only
+\[
+ F_4=3=2^1+2^0,\quad F_5=5=2^2+2^0,\quad
+ F_9=34=2^5+2^1,\quad F_{12}=144=2^7+2^4
+\]
+as Fibonacci numbers that are sums of two distinct powers of two.  Every candidate
+weight sum for \(m\le22\) is below \(2^{22}<F_{90}\), so this four-number list is
+complete for the stated test.  If
+\(F_k=2^a+2^b\), with \(a>b\), the coordinates are forced to be
+\(i=m-a\) and \(j=m-b\), so in particular \(m\ge a+1\).  Exhaustively checking the
+remaining carry condition through \(m=22\) gives
+\[
+\begin{array}{c|c|c}
+\text{weight sum}&(i,j)&\text{admissible }m\text{ in }[3,22]\\ \hline
+F_4=3&(m-1,m)&\varnothing\\
+F_5=5&(m-2,m)&3\\
+F_9=34&(m-5,m-1)&6\\
+F_{12}=144&(m-7,m-4)&8,9.
+\end{array}
+\]
+The candidate list is finite because the Diophantine step leaves only these four
+weight sums and the carry condition bounds the dimensions attached to each, not because
+the sweep happens to end after a run of empty rows.
+Independently, iterated neighbor-signature refinement over all vertices for
+\(3\le m\le16\) gives the discrete partition outside these four dimensions and the
+listed orbit partitions at them.
+
+It remains to identify the uniform structure, which does not require computation.
+Each \(\sigma_{i,j}^{(m)}\) is a cube automorphism.  It has \(2^{m-1}\) fixed points
+(the selected coordinates are \(01\) or \(10\)) and \(2^{m-2}\) two-element orbits
+(pairing \(00\) with \(11\)).  Its orbit partition is therefore equitable.  On an
+antisymmetric orbit difference, the two selected cube directions cancel, while the
+other \(m-2\) flips act as the coordinate flips of \(Q_{m-2}\).  Hence the discarded
+space has dimension \(2^{m-2}\) and carries \(A_{m-2}\).
+\end{proof}
+
+The finite upper endpoint in Proposition~\ref{prop:admissible-dimensions} is essential.
+There is currently no closed formula for the upper bound on \(m\) imposed by the carry
+condition.  In particular, \(F_5\) works when \(k-m=2\), whereas \(F_9\) and
+\(F_{12}\) fail at that gap and require \(k-m\ge3\): a smaller Fibonacci increment
+cannot propagate a carry as far.  Thus the candidate scarcity explains the finite list
+tested here, but the last step is verified rather than classified.  We do not assert
+that no \(m>22\) is admissible.
+
+Dimension six is therefore neither a minimal obstruction nor an isolated computation:
+the first non-equitable case is \(m=3\), while \(m=6\) is one of the four admissible
+dimensions found in the verified range.  We focus on it because it is the audited
+instance for which a complete 48-cell classification can be printed.  Its involution
+comes from \(F_9=34=2^5+2^1\), and the general cancellation argument above explains
+why its discarded sector is \(Q_4\).  The resulting classification determines an exact
+state complexity for graph quotients: any exact Markov lumping retaining the 21 visible
+labels needs at least 48 states.
 
 \paragraph{Combinatorial classification (Theorem~\ref{thm:headline}).}
 If \(H:\Omega_6\twoheadrightarrow Y\) has equitable fibers and
@@ -89,7 +174,7 @@ criterion for approximate intertwinings and the sharp Fold$_6$ residual.  Theore
 \ref{thm:headline} is proved in Section~\ref{sec:repair} by printing all 48
 neighbor-signature cells.  Section~\ref{sec:spectrum} then derives the quotient
 spectrum and the discarded \(Q_4\) carrier.  The final section describes the independent
-finite checks in the supplement.
+finite checks for both the six-dimensional classification and the dimension sweep.
 
 \section{The Fold$_6$ partition}\label{sec:fold6}
 Let \(Q_m\) be the hypercube on \(\Omega_m=\{0,1\}^m\), with adjacency matrix
@@ -396,6 +481,14 @@ finite streams and their hashes; the second recomputes the 48 signature cells, c
 them with the \(\sigma_{\rm geo}\)-orbits, and verifies equitability and the 32/16 orbit
 size split.  These checks validate the finite data and the stated partition identities;
 they do not replace the proofs of the interval lemma or the spectral-carrier argument.
+
+The finite-range evidence in Proposition~\ref{prop:admissible-dimensions} is reproduced
+by three scripts in \path{artifacts/}.  The script \path{verify_refinement_family.py}
+performs the full refinement sweep through \(m=16\);
+\path{verify_involution_mechanism.py} enumerates the Fibonacci weight sums and candidate
+involutions; and \path{verify_admissible_dimensions.py} streams the candidate tests
+through \(m=22\).  The stated endpoints are part of the claims: these computations do
+not classify dimensions beyond their verified ranges.
 
 \bibliographystyle{plain}
 \bibliography{references}
