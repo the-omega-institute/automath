@@ -4944,3 +4944,34 @@ codex 这条我**自己独立复现过**，不是采信转述：直接跑一句�
 3. 八篇送新一轮裁决（`folded_histograms` 6p、`window6` 9p、`single_primitive` 12p、
    `joukowsky` 15p、`scan_projection` 18p、`fibonacci_folding` 22p、`cubical_stokes` 28p、`projection` 47p）；
 4. 派 `zeck_arith` 的 note（任务书 `tier2/za_note.txt` 已写好，含定理 6.4 的前置检查）。
+
+---
+
+## tick 370 — 两通道仍断；但那条前置检查我自己做了
+
+Oracle 与 codex 都再探一次，均未恢复（WARP 中继不可达；`llm.aelf.dev` 仍 503，cf-ray 又是新的）。
+
+派工做不了，但 `zeck_arith` 任务书的**第一条**本来就不需要派工 ——
+查定理 6.4 现在陈述并证明的是不是**未约化**的稳定积。这正是我当年判错的地方，所以自己读。
+
+### 结论：修复在，而且是对的
+
+定理写的是"If the machine computes the **stable product** $c\otimes d$"，
+证明里用的也是 $u:=c\otimes d$，并且明写一句：
+
+> The stable-product values are **exact, with no reduction**：
+> $\operatorname{Val}(u)=F_{n+1}^2$，$\operatorname{Val}(u')=(F_{n+1}+1)F_{n+1}$。
+
+没有任何一处偷偷模 $F_{n+2}$。论证是审稿人给的那条：两个值相差 $F_{n+1}$，
+而若输出在所有 $k\ge n$ 处相同，差额只能来自位置 $1..n-1$。
+
+### 它依赖的引理我也验了
+
+"位置 $1..n-1$ 上的容许字值至多 $F_{n+1}-1$" —— 穷举 $3\le n\le 19$，**零违反**：
+$n=3..8$ 依次为 $2,4,7,12,20,33$，恰等于 $F_{n+1}-1$。
+于是 $F_{n+1}$ 的差**放不进**低位，矛盾成立，$\delta_n\ge n-1$ 随之得出。
+
+所以我早先派出的那次修复**落地且成立**，`zeck_arith` 的中心缺陷已闭合；
+剩下的只是把它砍成 note，那需要通道。
+
+内存 1.15 GB，树干净。
