@@ -1,0 +1,53 @@
+TASK: three precise honesty edits in
+papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints.
+You are PRE-AUTHORIZED to edit files there. Do not stop for approval. Do not commit.
+
+A referee verified the four-state carry-transducer argument in Appendix B and Section 4 -- all three
+parts, (i) the invariant, (ii) sufficiency of (P, y^-), (iii) right-resolving, synchronized, and
+both language inclusions. The report is at artifacts/oracle_sprint_FF_r1.md. That file and every
+other artifacts/oracle_*.md is READ-ONLY EVIDENCE; do not edit or regenerate them.
+
+I independently reproduced the enumeration: all raw words of length 3..18, high-order zero padded,
+full Zeckendorf normalization, pairs read from high weight to low. Exactly four states, exactly
+eight transitions matching the paper's table, no state outside the three P-forms in 9.96 million
+cut-states, right-resolving, and pair label 01 on exactly one edge. So the argument stands. What
+follows are three places where the paper claims slightly more than it proves. Fix ONLY these.
+
+1. "BOUNDED" IMBALANCE IS NOT NUMERICALLY BOUNDED. The text describes P as a bounded prefix
+   imbalance. It is not: the state values -F_k and -F_{k+1} grow with k. The finite-state assertion
+   is that P has only three k-RELATIVE forms -- 0, -F_k, -F_{k+1} at the cut before F_k. Reword
+   every occurrence so this is explicit. A reader who takes "bounded" numerically will think the
+   argument proves something stronger than it does, and this manuscript has already been burned
+   three times by a claim that was true in one place and reused where it was not.
+
+2. THE WORD "EXACTLY" IN PROPOSITION B.2 IS AN INTERIOR STATEMENT. The eight edges are exactly the
+   interior transition types; three of them cannot occur at the lowest cuts. I checked: the
+   transitions (P=0, y^-=0) --01--> B, (P=-F_k, 0) --00--> B and (P=-F_k, 0) --11--> B first occur
+   only from the third cut upward, and B --10--> C from the second. Each is realizable arbitrarily
+   far from the boundary, so the bulk graph is unaffected. Say "exactly the interior transitions",
+   state that each is realizable arbitrarily far from the boundary, and give the 01 edge as the
+   example of one that cannot occur at the lowest cut.
+
+3. SUFFICIENCY OF (P, y^-) IS A BULK STATEMENT. The state does not encode how many sites remain
+   before the low boundary. For the interior reversed shift that information is irrelevant and
+   (P, y^-) is sufficient; for exact finite-volume completions at a boundary-sensitive cut one
+   would also have to retain the remaining length. Add that scope sentence where sufficiency is
+   asserted.
+
+Optionally, if it is a small addition and does not disturb the proof: the referee notes the
+manuscript's proof of (ii) contains everything needed but never spells out the "attach the same
+continuation to each prefix" step -- close a path to state A on both sides, use 00-loops at A to
+move it into the interior, then conclude from zero terminal imbalance plus Zeckendorf uniqueness.
+Two or three sentences making that explicit would remove the only place the referee had to
+reconstruct the argument. Do this only if it stays short.
+
+Change nothing else. Do not touch the span-r material, Section 5, or any theorem statement outside
+the three items above.
+
+VERIFY, and expect me to redo it:
+- latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions;
+- report exit code, page count, undefined control sequences, unresolved references, unresolved
+  citations; all four must be 0;
+- pdftotext -enc UTF-8 and report the RAW COUNT of "bounded" near the imbalance discussion before
+  concluding anything -- a path bug returns "no hits" identically to a clean file.
+Do not create planning files in the paper directory. Do not run git commit.
