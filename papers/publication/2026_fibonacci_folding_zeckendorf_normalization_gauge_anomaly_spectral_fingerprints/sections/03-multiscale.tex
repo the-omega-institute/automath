@@ -1,87 +1,71 @@
 \section{Compatible restriction across scales}
 \label{sec:multiscale}
 
-The finite-window fold admits a simple local description. In most-significant-digit-first order the Zeckendorf rewriting rule is
-\[
-011\to 100,
-\]
-whereas in the low-to-high convention of Section~\ref{sec:preliminaries} it becomes
-\[
-110\to 001.
-\]
-We record the translation once, since the main text and the appendices use both conventions.
-
-\begin{lemma}\label{lem:convention}
-Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be written in low-to-high order, and let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word in most-significant-digit-first order. Then:
-\begin{enumerate}
-\item[(i)] The rule \(011\to 100\) in most-significant-digit-first order corresponds, after reversal, to the rule \(110\to 001\) in low-to-high order.
-\item[(ii)] Prefixing a zero and scanning left to right in most-significant-digit-first order is equivalent to scanning the low-to-high word from high weights to low weights.
-\item[(iii)] Each rewrite preserves the Fibonacci value and strictly decreases the number of \(1\)s. The unique normal form is the Zeckendorf representation of the same integer.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-Part (i) is immediate from reversal. Part (ii) is just the corresponding statement about scan direction. For part (iii), the identity \(\Fib_k+\Fib_{k+1}=\Fib_{k+2}\) shows that each rewrite preserves the represented value, while the number of \(1\)s drops by one. Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
-\end{proof}
+Reversal turns the most-significant-digit-first rule \(011\to100\) into \(110\to001\) in our low-to-high convention. Each rewrite preserves \(N\) and decreases the number of \(1\)s; Appendix~\ref{app:rewriting} proves termination and confluence.
 
 \begin{proposition}\label{prop:idempotent}
-For each \(m\ge 1\), the map \(\Fold_m:\Om_m\to X_m\) is well defined, idempotent, and surjective:
-\[
-\Fold_m\circ \Fold_m=\Fold_m,
-\qquad
-\Fold_m(\Om_m)=X_m.
-\]
+For every \(m\ge1\), \(\Fold_m:\Om_m\to X_m\) is an idempotent surjection.
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:rewriting} shows that the rewriting system terminates and is confluent. Hence every \(\omega\in\Om_m\) has a unique normal form with the same Fibonacci value, and by definition this normal form is \(\Fold_m(\omega)\). This proves that \(\Fold_m\) is well defined.
-
-If \(x\in X_m\), then \(x\) already contains no adjacent \(1\)s and is therefore its own Zeckendorf normal form. Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives idempotence, and the same fixed-point property shows that every \(x\in X_m\) lies in the image.
+The fold is the unique Zeckendorf normal form, truncated to the window, and it fixes every \(x\in X_m\).
 \end{proof}
 
-For \(m_2\ge m_1\), define
+For \(m_2\ge m_1\), let \(\proj_{m_2\to m_1}:X_{m_2}\to X_{m_1}\) retain the first \(m_1\) digits. These maps form an inverse system whose limit is the one-sided golden-mean shift \cite[Chapter~1]{LindMarcus1995}. On raw words let
 \[
-\proj_{m_2\to m_1}:X_{m_2}\to X_{m_1},
-\qquad
-\proj_{m_2\to m_1}(x_1\cdots x_{m_2}):=x_1\cdots x_{m_1}.
-\]
-Then \((X_m,\proj_{m_2\to m_1})\) is an inverse system, and its inverse limit is naturally the one-sided golden-mean shift; see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
-
-On the microstate side there is also the naive truncation
-\[
-\naive_{m+1\to m}:\Om_{m+1}\to\Om_m,\qquad
 \naive_{m+1\to m}(\omega_1\cdots\omega_{m+1})=\omega_1\cdots\omega_m.
 \]
-The problem is to find a restriction map on microstates for which folding commutes with restriction:
-\begin{equation}\label{eq:commuting}
-\Fold_m\circ \aware_{m+1\to m}
-\;=\;
-\proj_{m+1\to m}\circ \Fold_{m+1}.
-\end{equation}
-The natural candidate is obtained by restricting on the stable side after folding.
 
-\begin{definition}\label{def:fold-aware}
-For \(\omega\in\Om_{m+1}\), define
-\begin{equation}\label{eq:re-def}
-\aware_{m+1\to m}(\omega):=\proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset\Om_m.
-\end{equation}
-\end{definition}
-
-\begin{lemma}\label{lem:strict-commute}
-The map \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is the unique map \(\Om_{m+1}\to X_m\) with this property.
-\end{lemma}
+\begin{proposition}[Sharp commutation set]\label{prop:sharp-commutation}
+For \(m\ge1\) and \(\omega\in\Om_{m+1}\),
+\[
+\proj_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr)
+=\Fold_m\bigl(\naive_{m+1\to m}(\omega)\bigr)
+\quad\Longleftrightarrow\quad N(\omega)<\Fib_{m+3}.
+\]
+Exactly
+\[
+\left\lceil\frac{2^{m+2}+1}{3}\right\rceil
+\]
+words commute. Thus their density tends to \(2/3\), and failure has limiting density \(1/3\).
+\end{proposition}
 
 \begin{proof}
-Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation belongs to \(X_m\) and is fixed by \(\Fold_m\). Therefore
+Put \(A=N(\naive_{m+1\to m}(\omega))\), \(b=\omega_{m+1}\), and \(T=\Fib_{m+2}\). Then \(N(\omega)=A+bT\), while \(A\le\Fib_{m+3}-2=T+\Fib_{m+1}-2<2T\). Hence the value represented by \(\Fold_m(\naive_{m+1\to m}(\omega))\) is
 \[
-\Fold_m(\aware_{m+1\to m}(\omega))
-=
-\Fold_m\!\left(\proj_{m+1\to m}(\Fold_{m+1}(\omega))\right)
-=
-\proj_{m+1\to m}(\Fold_{m+1}(\omega)),
+R(A)=A-T\mathbf 1_{\{A\ge T\}}.
 \]
-which is exactly \eqref{eq:commuting}. If \(T:\Om_{m+1}\to X_m\) also satisfies \eqref{eq:commuting}, then \(\Fold_m\) acts as the identity on \(T(\omega)\), so
+If \(N(\omega)<\Fib_{m+3}\), the projected large fold represents \(N(\omega)-T\mathbf 1_{\{N(\omega)\ge T\}}=R(A)\), since
 \[
-T(\omega)=\proj_{m+1\to m}(\Fold_{m+1}(\omega))=\aware_{m+1\to m}(\omega).
+\mathbf 1_{\{N(\omega)\ge T\}}=b+\mathbf 1_{\{A\ge T\}}.
 \]
+If \(N(\omega)\ge\Fib_{m+3}\), then \(N(\omega)\le\Fib_{m+4}-2\), so it instead represents \(N(\omega)-\Fib_{m+3}\). Its difference from \(R(A)\) is
+\[
+\bigl(b-1+\mathbf 1_{\{A\ge T\}}\bigr)T-\Fib_{m+1}\ne0,
+\]
+because the coefficient of \(T\) is \(-1\), \(0\), or \(1\), and \(T-\Fib_{m+1}=\Fib_m\). Zeckendorf uniqueness proves the equivalence.
+
+For the count, \(b=0\) contributes all \(2^m\) words. For \(b=1\), one needs \(A<\Fib_{m+1}\). If \(B_m\) counts such length-\(m\) words, the highest digit must vanish; splitting on the next digit gives
+\[
+B_1=1,\qquad B_2=2,\qquad B_m=2^{m-2}+B_{m-2}.
+\]
+Thus \(B_m=\lceil(2^m+1)/3\rceil\), and \(2^m+B_m\) is the displayed count.
+\end{proof}
+
+Define the compatible restriction by
+\begin{equation}\label{eq:re-def}
+\aware_{m+1\to m}(\omega):=\proj_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m.
+\end{equation}
+Its values lie in \(X_m\) and \(\Fold_m\) fixes \(X_m\) pointwise, so it satisfies
+\begin{equation}\label{eq:commuting}
+\Fold_m\circ\aware_{m+1\to m}=\proj_{m+1\to m}\circ\Fold_{m+1}.
+\end{equation}
+and, by the same token, it is the unique \(X_m\)-valued map with this property.
+
+\begin{corollary}[Commutation at all depths]\label{cor:all-depth-commutation}
+For \(\omega\in\Om_L\), every adjacent diagram commutes on every prefix if and only if \(\omega\in X_L\), in which case \(\Fold_L(\omega)=\omega\). Thus the only trajectories admitting a fully projective tower of folded prefixes are those that require no folding at all.
+\end{corollary}
+
+\begin{proof}
+By Proposition~\ref{prop:sharp-commutation}, all diagrams commute exactly when every prefix of length \(m+1\) has value below \(\Fib_{m+3}\). Every golden-mean prefix is already a Zeckendorf expansion and satisfies this bound. Conversely, if \(\omega_j=\omega_{j+1}=1\), its prefix through \(j+1\) has value at least \(\Fib_{j+1}+\Fib_{j+2}=\Fib_{j+3}\).
 \end{proof}
