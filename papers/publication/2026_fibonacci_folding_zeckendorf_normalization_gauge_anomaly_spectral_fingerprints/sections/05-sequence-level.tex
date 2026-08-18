@@ -1,7 +1,7 @@
 \section{The induced sliding block code}
 \label{sec:sequence}
 
-For each \(m\ge 1\), the window fold induces a sliding block code on the full two-sided shift:
+For each $m\ge1$, the window fold induces a sliding block code on the full two-sided shift:
 \begin{equation}\label{eq:Phi}
 (\Phi_m(\eta))_t
 :=
@@ -12,132 +12,124 @@ Its image shift is
 \[
 Y_m:=\Phi_m(\{0,1\}^{\ZZ})\subset X_m^{\ZZ},
 \]
-equipped with the left shift on the \(X_m\)-alphabet. The natural question is whether the microstate sequence can be recovered locally from the sequence of folded windows.
+equipped with the left shift on the $X_m$-alphabet. The natural question is whether the microstate sequence can be recovered locally from the sequence of folded windows.
 
 \subsection{A graph presentation}
 
 \begin{proposition}\label{prop:sofic}
-For each \(m\ge 1\), the image shift \(Y_m\) is sofic and admits an explicit labeled-graph presentation.
+For each $m\ge1$, the image shift $Y_m$ is sofic and admits an explicit labeled-graph presentation.
 \end{proposition}
 
 \begin{proof}
-Let \(V_m:=\{0,1\}^{m-1}\). For \(v\in V_m\) and \(b\in \{0,1\}\), define the successor vertex \(v'\) by shifting and appending \(b\),
+Let $V_m:=\{0,1\}^{m-1}$. For $v\in V_m$ and $b\in\{0,1\}$, define the successor vertex $v'$ by shifting and appending $b$,
 \[
 v'=\text{suffix}_{m-1}(vb),
 \]
-and label the directed edge \(v\to v'\) by
+and label the directed edge $v\to v'$ by
 \[
 \lambda_m(vb):=\Fold_m(vb)\in X_m.
 \]
-Denote the resulting labeled graph by \(G_m\). Let \(\Sigma_m\) be its edge shift and \(\Lambda_m:\Sigma_m\to X_m^{\ZZ}\) the label map. By construction \(\Lambda_m(\Sigma_m)=Y_m\), so \(Y_m\) is sofic.
+Denote the resulting labeled graph by $G_m$. Let $\Sigma_m$ be its edge shift and $\Lambda_m:\Sigma_m\to X_m^{\ZZ}$ the label map. By construction $\Lambda_m(\Sigma_m)=Y_m$, so $Y_m$ is sofic.
 \end{proof}
 
-\subsection{A finite-core criterion}
+\subsection{The sharp ambiguity bound}
 
-The decoder argument also has a structural form independent of the specific Fibonacci core tables. The only input is the rewrite span.
+For a block $w=(w_1,\ldots,w_L)\in\{0,1\}^L$, $L\ge m$, write
+\[
+\mathcal{W}_{m,L}(w)
+:=
+\bigl(\Fold_m(w_i\cdots w_{i+m-1})\bigr)_{i=1}^{L-m+1}
+\]
+for its sequence of folded length-$m$ windows.
 
-\begin{theorem}[Finite-core criterion for local invertibility; \textsc{withdrawn}]\label{thm:finite-core-criterion}
-\emph{The following assertion is false and is retained only so that the statements depending on it can be identified. A counterexample is given in \Cref{rem:finite-core-counterexample}.}
-
-Let \((\mathsf N_m)_{m\ge1}\) be a zero-synchronized span-\(r\) local normalizer, and let \(\Phi_m\) be the associated window code. Fix \(m\ge r\). Then every ambiguous two-label block in the image shift of \(\Phi_m\) strips to an ambiguous core of length at most \(r+1\). If every ambiguous core of length at most \(r+1\) is resolved by one further label, then \(\Phi_m\) is a topological conjugacy onto its image, with inverse given by a decoder on admissible three-label blocks.
+\begin{theorem}[Sharp block separation]\label{thm:block-separation}
+Let $m\ge3$. If $L\ge2m-1$, then the map
+\[
+\mathcal{W}_{m,L}:\{0,1\}^L\longrightarrow X_m^{L-m+1}
+\]
+is injective. The threshold is sharp: for every $m\ge3$, distinct blocks of length $2m-2$ have the same folded-window sequence.
 \end{theorem}
 
-\begin{remark}[The finite-core bound fails]\label{rem:finite-core-counterexample}
-The support argument below bounds the coordinates that can affect a label through \emph{one} rewrite. It does not bound the causal cone of a completed normalization, in which carries cascade; \Cref{prop:worst} already shows that a single low coordinate can move every visible digit. Concretely, for \(m=5\) the distinct length-\(6\) raw blocks
-\[
-u=000001,\qquad v=011010
-\]
-are lifts of the same two-label block \((00000,00001)\), since \(N(01101)=F_3+F_4+F_6=13=F_7\equiv0\) and \(N(11010)=F_2+F_3+F_5=8\). Deleting any one of the six coordinates destroys the ambiguity, so this is a minimal ambiguous core of length \(6>r+1=4\).
-
-Consequently \Cref{thm:finite-core-criterion}, \Cref{thm:core-resolution} and the conjugacy assertion of \Cref{thm:conjugacy} are not established. No counterexample to the conjugacy threshold \(m\ge3\) itself is known; it is simply unproved here.
-\end{remark}
-
 \begin{proof}
-Consider an ambiguous two-label block in the off-diagonal fiber product of the graph presentation from \Cref{prop:sofic}. A coordinate can affect the first label only if it belongs to the support of a local rewrite contributing to the first window. Since the rewrite span is \(r\), that support is contained in an interval of length \(r\). The second label is computed from the next window, so the corresponding active support is another interval of length \(r\), shifted by one coordinate. The union of these two supports therefore has length at most \(r+1\). Any coordinate outside that union is passive: deleting it leaves two distinct lifts of the same two-label block. Repeating the deletion process yields an ambiguous core of length at most \(r+1\).
-
-Assume now that every ambiguous core of length at most \(r+1\) is resolved by one further label. Stripping any ambiguous witness to its core and then reattaching the passive coordinates preserves that one-step resolution, because reattachment inserts the same frozen coordinates in both competing lifts. Hence every admissible three-label block determines the current appended microstate bit. Let
+Set $M:=\Fib_{m+2}$. A length-$m$ word has value at most
 \[
-\psi_m:\mathcal B_3(Y_m)\to\{0,1\}
+\sum_{k=1}^m\Fib_{k+1}=\Fib_{m+3}-2
+=M+\Fib_{m+1}-2.
 \]
-denote this decoder, where \(Y_m=\Phi_m(\{0,1\}^{\ZZ})\). Define
-\[
-(\Psi_m(y))_t:=\psi_m(y_{t-2},y_{t-1},y_t).
-\]
-If \(y=\Phi_m(\eta)\), then each triple \((y_{t-2},y_{t-1},y_t)\) comes from three consecutive edges in the presentation of \(Y_m\), so the decoder recovers \(\eta_t\). Thus \(\Psi_m\circ\Phi_m=\mathrm{id}\).
+Its normalized expansion therefore has at most one digit beyond the window, at position $m+1$, and the retained digits are the Zeckendorf expansion of its value modulo $M$. Thus two length-$m$ words have the same fold precisely when their values are congruent modulo $M$.
 
-Conversely, fix \(y\in Y_m\). Every lift path of \(y\) has the same current appended bit at time \(t\), because any two competing lifts would determine the same value through the decoder. Therefore every lift path of \(y\) has the same appended-bit sequence \(\Psi_m(y)\). The corresponding vertex sequence is forced by these bits, so the edge labels along that path are exactly those of \(\Phi_m(\Psi_m(y))\). Hence \(\Phi_m(\Psi_m(y))=y\), and \(\Phi_m\) is a conjugacy onto its image.
+It is enough to prove injectivity for $L=2m-1$: if two longer blocks differ, some length-$2m-1$ subblock containing a differing coordinate also differs. Let $u,v\in\{0,1\}^{2m-1}$ have the same window sequence, put $d_j:=u_j-v_j\in\{-1,0,1\}$, and define
+\[
+S_i:=\sum_{k=1}^m d_{i+k-1}\Fib_{k+1},
+\qquad 1\le i\le m.
+\]
+The collision criterion gives $S_i\equiv0\pmod M$. For $1\le i\le m-2$, the Fibonacci recurrence cancels all interior coefficients in three consecutive sums:
+\begin{equation}\label{eq:window-boundary-identity}
+S_i-S_{i+1}-S_{i+2}
+=d_i+d_{i+1}-M d_{i+m}-\Fib_{m+1}d_{i+m+1}.
+\end{equation}
+
+Suppose first that $m\ge4$. Reducing \eqref{eq:window-boundary-identity} modulo $M$ gives
+\[
+d_i+d_{i+1}-\Fib_{m+1}d_{i+m+1}\equiv0\pmod M.
+\]
+Its absolute value is at most $2+\Fib_{m+1}<M$, because $\Fib_m>2$. It is therefore zero. Since $\Fib_{m+1}>2$, this forces
+\begin{equation}\label{eq:window-boundary-consequence}
+d_{i+m+1}=0,
+\qquad d_{i+1}=-d_i
+\qquad(1\le i\le m-2).
+\end{equation}
+Hence $d_{m+2}=\cdots=d_{2m-1}=0$, while $d_1,\ldots,d_{m-1}$ alternate. The last window now satisfies
+\[
+S_m=d_m+2d_{m+1}\equiv0\pmod M.
+\]
+Since $|S_m|\le3<M$, it vanishes; the digit bounds then give $d_m=d_{m+1}=0$. Finally,
+\[
+S_1=d_1\sum_{j=1}^{m-1}(-1)^{j-1}\Fib_{j+1}
+=d_1(-1)^{m-2}\Fib_{m-1}.
+\]
+This is divisible by $M$ and has absolute value smaller than $M$, so $d_1=0$. Equation \eqref{eq:window-boundary-consequence} now gives $d=0$, and $u=v$.
+
+For $m=3$, one has $M=5$, and reduction of \eqref{eq:window-boundary-identity} gives
+\[
+d_1+d_2-3d_5\equiv0\pmod5.
+\]
+If $d_5=0$, then $d_2=-d_1$; the last window gives $d_3+2d_4=0$, hence $d_3=d_4=0$, and the first gives $-d_1=0$. If $d_5=1$, the congruence forces $d_1=d_2=-1$. The first window then forces $d_3=1$, whereas the last window has value $4+2d_4\in\{2,4,6\}$, none divisible by $5$. The case $d_5=-1$ follows by negation. Thus $d=0$ also when $m=3$.
+
+For sharpness, take length $2m-2$ blocks $u\ne v$ defined by
+\[
+u_{m+1}=1,
+\qquad
+v_{m-1}=v_m=1,
+\]
+with every other digit zero. The first window-value difference is
+$-\Fib_m-\Fib_{m+1}=-M$. Every later window contains all three nonzero coordinates, and its value difference is zero by the Fibonacci recurrence. Hence $\mathcal{W}_{m,2m-2}(u)=\mathcal{W}_{m,2m-2}(v)$.
 \end{proof}
 
 \subsection{Local decoding}
 
-The invertibility question is naturally phrased in the fiber product of \(G_m\). A two-label block \((y_{t-1},y_t)\in X_m^2\) is called \emph{ambiguous} if it admits two distinct lifts in \(G_m\), or equivalently if it labels an off-diagonal path of length \(2\) in the fiber product \(\widehat G_m\).
-
-Some coordinates of an ambiguous block are passive in the sense of \Cref{thm:finite-core-criterion}: deleting them leaves the ambiguity unchanged. Removing all such coordinates produces a minimal witness, which will be called an \emph{ambiguous core}. For the Zeckendorf fold the rewrite span is \(3\), so every ambiguous core has length at most \(4\).
-
-\begin{theorem}\label{thm:core-resolution}
-Fix \(m\ge 3\). Every ambiguous two-label block in \(Y_m\) strips to one of the following minimal cores.
-\begin{enumerate}
-\item[(a)] Two length-\(3\) cores:
+\begin{theorem}[Finite-window decoder]\label{thm:window-decoder}
+Fix $m\ge3$. Every admissible block of $m$ consecutive symbols in $Y_m$ has a unique lift to a binary block of length $2m-1$. Consequently there is a well-defined decoder
 \[
-(000,001),\qquad (100,001).
-\]
-\item[(b)] Eight length-\(4\) cores:
-\[
-(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001),
-\]
-\[
-(0001,0000),\quad (0001,0010),\quad (1001,0000),\quad (1001,0010).
-\]
-\end{enumerate}
-No minimal ambiguous core has length at least \(5\). In every listed case, the third label \(y_t\) determines the current appended microstate bit uniquely. Consequently there is a well-defined decoder
-\[
-\psi_m:\mathcal{B}_3(Y_m)\to\{0,1\},
+\psi_m:\mathcal{B}_m(Y_m)\to\{0,1\},
 \qquad
-\eta_t=\psi_m(y_{t-2},y_{t-1},y_t),
+\eta_t=\psi_m(y_{t-m+1},\ldots,y_t)
 \]
-where \(\mathcal{B}_3(Y_m)\) denotes the set of admissible three-label blocks in \(Y_m\).
+whenever $y=\Phi_m(\eta)$.
 \end{theorem}
 
 \begin{proof}
-By \Cref{lem:fib-span3,thm:finite-core-criterion}, every ambiguous witness reduces to a core of length at most \(4\). It is therefore enough to classify the core tables for \(m=3\) and \(m=4\).
-
-For length \(3\), the only ambiguous two-label blocks are
-\[
-(000,001)\quad\text{and}\quad (100,001).
-\]
-After the second label, the competing lifts terminate at the vertices \(01\) and \(10\). Their successor label sets are
-\[
-\mathcal{L}^+(01)=\{000,010\},
-\qquad
-\mathcal{L}^+(10)=\{100,101\},
-\]
-which are disjoint. Hence the third label resolves the ambiguity.
-
-For length \(4\), Appendix~\ref{app:sofic} shows that the only ambiguous cores are the eight listed in part (b). They fall into three patterns. The four cores
-\[
-(0000,0001),\quad (1000,0001),\quad (0010,1001),\quad (0100,1001)
-\]
-leave terminal vertices \(001\) and \(110\) after the second label. Both vertices have successor label set \(\{0000,0010\}\), and in both states the label \(0000\) is produced by appended bit \(1\) while the label \(0010\) is produced by appended bit \(0\). The two cores
-\[
-(0001,0000),\qquad (1001,0000)
-\]
-leave terminal vertices \(011\) and \(101\), whose successor label sets \(\{0001,0100\}\) and \(\{1000,1010\}\) are disjoint. Finally, the two cores
-\[
-(0001,0010),\qquad (1001,0010)
-\]
-leave terminal vertices \(010\) and \(100\), whose successor label sets \(\{0100,0101\}\) and \(\{1000,1001\}\) are again disjoint. Thus in every length-\(4\) core the third label determines the correct lift, and hence the current appended bit.
-
-Every ambiguous two-label block strips to one of these cores, and reattaching passive coordinates does not alter third-label resolution by \Cref{thm:finite-core-criterion}. This defines the decoder \(\psi_m\) on all admissible three-label blocks in \(Y_m\).
+An admissible block $(y_{t-m+1},\ldots,y_t)$ is the folded-window sequence of a binary block on the coordinate interval $[t-2m+2,t]$, which has length $2m-1$. Existence follows from admissibility, and uniqueness follows from \Cref{thm:block-separation}. Define $\psi_m$ to be the last digit of this unique lift.
 \end{proof}
 
-\begin{remark}
-The exhaustive calculations occur only in the \(m=3\) and \(m=4\) core tables. Larger windows do not produce new local ambiguities, because the stripping argument reduces everything to these two cases.
+\begin{remark}\label{rem:window-bound-essential}
+The dependence on $m$ is essential. The sharpness family in \Cref{thm:block-separation} gives ambiguities of length $2m-2$ even though the elementary Zeckendorf rewrite has fixed span $3$. Thus the decoding bound is controlled by the boundary propagation encoded in \eqref{eq:window-boundary-identity}, not by the support of a single rewrite.
 \end{remark}
 
-\subsection{The threshold \texorpdfstring{\(m\ge 3\)}{m >= 3}}
+\subsection{The threshold \texorpdfstring{$m\ge3$}{m >= 3}}
 
 \begin{theorem}\label{thm:conjugacy}
-For \(m\ge 3\), the sliding block code \(\Phi_m:\{0,1\}^{\ZZ}\to Y_m\) is a topological conjugacy: there exists a sliding block inverse \(\Psi_m:Y_m\to \{0,1\}^{\ZZ}\) such that
+For $m\ge3$, the sliding block code $\Phi_m:\{0,1\}^{\ZZ}\to Y_m$ is a topological conjugacy: there exists a sliding block inverse $\Psi_m:Y_m\to \{0,1\}^{\ZZ}$ such that
 \[
 \Psi_m\circ \Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},
 \qquad
@@ -146,13 +138,18 @@ For \(m\ge 3\), the sliding block code \(\Phi_m:\{0,1\}^{\ZZ}\to Y_m\) is a topo
 \end{theorem}
 
 \begin{proof}
-Theorem~\ref{thm:core-resolution} verifies the one-step resolution hypothesis of \Cref{thm:finite-core-criterion} for the Zeckendorf fold. The conclusion of that theorem therefore gives the desired sliding block inverse \(\Psi_m\) and proves that \(\Phi_m\) is a topological conjugacy.
+For $y\in Y_m$, define
+\[
+(\Psi_m(y))_t
+:=\psi_m(y_{t-m+1},\ldots,y_t),
+\]
+where $\psi_m$ is the decoder from \Cref{thm:window-decoder}. This is a sliding block code and $\Psi_m\circ\Phi_m=\mathrm{id}$. If $y\in Y_m$, write $y=\Phi_m(\eta)$; then $\Psi_m(y)=\eta$, so $\Phi_m\circ\Psi_m(y)=y$. Hence $\Psi_m$ is the desired inverse.
 \end{proof}
 
 \begin{proposition}\label{thm:m2}
-When \(m=2\), the only failure of injectivity is that the two fixed microstate sequences \(0^\ZZ\) and \(1^\ZZ\) have the same image \((00)^\ZZ\). Away from this pair, \(\Phi_2\) is injective.
+When $m=2$, the only failure of injectivity is that the two fixed microstate sequences $0^\ZZ$ and $1^\ZZ$ have the same image $(00)^\ZZ$. Away from this pair, $\Phi_2$ is injective.
 \end{proposition}
 
 \begin{proof}
-Appendix~\ref{app:sofic} identifies the only off-diagonal bi-infinite cycle in the fiber product for \(m=2\): it is the constant label sequence \((00)^\ZZ\), lifted once by \(0^\ZZ\) and once by \(1^\ZZ\). Every other label sequence contains \(01\) or \(10\), and those labels determine the adjacent microstate bits uniquely. Hence \((00)^\ZZ\) is the unique non-injective fiber.
+Appendix~\ref{app:sofic} identifies the only off-diagonal bi-infinite cycle in the fiber product for $m=2$: it is the constant label sequence $(00)^\ZZ$, lifted once by $0^\ZZ$ and once by $1^\ZZ$. Every other label sequence contains $01$ or $10$, and those labels determine the adjacent microstate bits uniquely. Hence $(00)^\ZZ$ is the unique non-injective fiber.
 \end{proof}
