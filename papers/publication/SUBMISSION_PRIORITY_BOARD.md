@@ -4755,3 +4755,35 @@ A.8 的修复我此前只核了编译与"多项式规模"是否撤干净，没�
 脚本 `artifacts/verify_per_step_rule_defect.py`。
 
 WARP 第十一个 tick 仍不通。八篇稿子都已到"等裁决"状态 —— **进展现在卡在中继上，不在内容上**。
+
+---
+
+## tick 365 — 复核清单见底，转去补投稿路上真正卡着的一步：**封面信**
+
+上个 tick 我说过复核的边际价值在下降，所以这轮不造低价值的活，去查投稿包本身。查出一个真缺口：
+
+| 论文 | 封面信 |
+|---|---|
+| `single_primitive`、`window6`、`cubical_stokes`、`fibonacci_folding`、`joukowsky` | ❌ **根本没有** |
+| `scan_projection` | ⚠️ 仍写着 **ETDS** —— 该篇已重写改投 |
+| `projection` → JNT、`folded_histograms` → Fibonacci Quarterly | ✅ 对得上 |
+
+八篇里五篇没有封面信，一篇过期。这不需要 Oracle，且是投稿路上实打实卡着的一步。
+
+### 任务书的重点不是"写得漂亮"，是**逐篇写死不许宣称什么**
+
+封面信吹过头比没有更糟 —— 审稿人手里就有稿子。所以每篇都附了限制，且限制**来自审稿人自己**：
+
+- `single_primitive`：不许把 losslessness 当新方法（判词是"对正确性实质、作为新颖性例行"），
+  也不许把普通区间和递推算作自己的（那是 Chow–Jones）。
+- `window6`：不许暗示 $m=6$ 极小（首个是 3）；四元 Fibonacci 名单是 Bugeaud–Cipu–Mignotte 的特例化。
+- `cubical_stokes`：全局补丁定理**不得宣称新颖** —— 在修正假设下它就是最大流最小割 + 互补松弛 +
+  LP 对偶 + Hoffman 准则的立方化，摘要自己已经这么写了；须明说它是支撑结果。
+- `fibonacci_folding`：不许宣称一般方法或含 Fibonacci 例子的类级定理 —— 审稿人明说没有；
+  有界延迟引理**仍把 Fibonacci 排除在外**，只是定向。
+- `joukowsky`：不许宣称极限反正弦测度、容量连续性、共形退化本身、或"非单射允许多重提升" ——
+  全是前人工作，且 Levenberg–Wielonsky 在映射与词汇上很接近。
+- `scan_projection`：**不许宣称 Hölder/Gibbs 扩展** —— 它没做成，走的是另一条路线；
+  须说明仍是有限状态、机制仍是经典 Chen–Stein。
+
+WARP 第十二个 tick 不通。内存 1.08 GB。
