@@ -51,3 +51,29 @@ it holds at m = 3 only by coincidence, since 2m-2 = 4 there. Withdrawn in the ma
 
 An external oracle asked for the correct bound answered m+1, which is also wrong: at m = 5
 the pair 00000100 against 00011000 is a minimal core of length 8 > 6.
+
+## The sharper statement (tick 320): ambiguity dies entirely beyond 2m-2
+
+The search was measuring the wrong thing. Counting *minimal* cores hid the real fact:
+for L > 2m-2 there are no ambiguous pairs at all, minimal or otherwise. The counts go to
+zero, they do not merely become non-minimal.
+
+    largest L admitting any ambiguity
+      m=3 : 4     m=4 : 6     m=5 : 8     m=6 : 10    m=7 : 12
+    each equal to 2m-2.
+
+So the sharp statement is not about cores. It is:
+
+    Any two distinct blocks of length >= 2m-1 have different label sequences.
+
+That gives injectivity of Phi_m immediately: if two bi-infinite configurations agreed on
+all labels but differed somewhere, a length-(2m-1) window around the difference would be
+an ambiguity of length 2m-1 > 2m-2.
+
+This is the question the referee left open - "the conjugacy assertion for m >= 3 may still
+be true; I do not have a counterexample" - and the answer looks affirmative, with the
+threshold 2m-1 rather than the withdrawn r+1 = 4.
+
+Verified exhaustively for m = 3..7 over all block lengths up to the search cutoff.
+NOT PROVED. What is proved so far is only the window-sum lemma above. Anything entering
+the manuscript needs the general argument, not five values of m.
