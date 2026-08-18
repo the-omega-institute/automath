@@ -1,0 +1,78 @@
+TASK: repair Section 3 of papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge
+and add the exposition the referee asked for. PRE-AUTHORIZED to edit that directory. Do not commit.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_W62_r2.md. It is the referee report this implements.
+That file and every artifacts/oracle_*.md is READ-ONLY EVIDENCE; do not edit them, I diff against HEAD.
+
+Good news first so you do not undo it: all four old front-matter defects are gone, the abstract is
+hypothesis-faithful, the headline theorem hypotheses are complete, and the proof of Theorem 4.23 is
+correctly economical. Do not "improve" any of that.
+
+=== PART 1: TWO REAL DEFECTS IN SECTION 3 ===
+
+1. LEMMA 3.1 IS FALSE AS PRINTED. It says a matrix P satisfies the residual bound if and only if the
+   corresponding intervals have a common point. For a fixed P the existence of SOME common point is
+   not sufficient: the common point must be the particular entry P(x,y). The proof starts with the
+   fixed entry and then silently switches to an existential interval problem. Replace with whichever
+   of the two correct formulations the downstream use needs:
+     (a) there EXISTS P with the bound iff every interval family has nonempty intersection; or
+     (b) for a FIXED P, the bound holds iff P(x,y) lies in the intersection over omega in the fibre
+         of x of the intervals centred at c_omega(y)/m with radius eps, for every x and y.
+   Check which one the infimum formula that follows actually needs, and make the proof match.
+
+2. PROPOSITION 3.2 IS MISSING THE STOCHASTIC UPPER BOUND. Lemma 3.1 gives only that restricting to
+   stochastic rows cannot lower the infimum; the proposition then asserts both infima equal 1/6 while
+   proving the unrestricted upper bound and the stochastic lower bound.
+
+   The repair, which I verified numerically from the printed fibre table, is: at eps = 1/6 set
+     L_xy = max(0, (max_omega c_omega(y) - 1)/6),   U_xy = min(1, (min_omega c_omega(y) + 1)/6),
+   and check row by row that the sum over y of L_xy is at most 1 and the sum over y of U_xy is at
+   least 1; a stochastic row can then be chosen inside the coordinate box. My computation confirms
+   this for all 21 rows, with the uniform bounds
+     max over x of sum_y L_xy = 1/2,     min over x of sum_y U_xy = 7/2.
+   Both match the referee independently. As a control, at eps = 0 the same test fails for 17 of the
+   21 rows, so the criterion discriminates and is not vacuous. Print the uniform bounds; they are
+   stronger and shorter than a row-by-row table.
+
+=== PART 2: SCOPE AND LABELLING ===
+
+3. The sentence beginning "The quotient spectrum has multiplicities" has an ambiguous antecedent:
+   "the quotient" can be read as the quotient of the arbitrary H in the preceding conditional, but
+   the multiplicities are proved only for the unique minimal 48-cell orbit quotient. Write instead:
+   "For this unique 48-state quotient, the spectrum has multiplicities ..., and the orthogonal
+   complement of its function space carries the adjacency operator of the 4-cube."
+
+4. The introduction calls the whole package "Main theorem (Theorem 4.23)", but the spectral clauses
+   are Lemma 5.1, not Theorem 4.23. Separate them so each citation identifies what actually proves it.
+
+5. In the spectral argument, add one sentence stating explicitly that the 48 displayed invariant
+   Walsh combinations are linearly independent and hence a basis. At present that is inferred.
+
+=== PART 3: EXPOSITION THE REFEREE ASKED FOR ===
+
+6. ONE WORKED SIGNATURE CALCULATION, about half a page. Take the visible fibre 100000, compute the
+   visible neighbour signatures of its four vertices, show why it splits as
+   {000001,100011}, {010110}, {111000}, indicate how the affine involution produces the pair and
+   fixes the singletons, and verify neighbour counts into one refined target cell. The 48-cell table
+   currently arrives as a block of output with no bridge to the one-paragraph proof.
+
+7. MOTIVATION. The introduction never answers why this fold and why dimension six. Answer whichever
+   of the following are TRUE, checking each rather than asserting it: is m = 6 the first dimension at
+   which the visible fold ceases to be equitable? Is the affine involution unexpected relative to the
+   construction? Is the 4-cube carrier evidence of a broader pattern in dimension m-2? Is this a
+   minimal obstruction, a counterexample to a plausible expectation, or a prototype for a family? Why
+   should a combinatorialist care about the hidden-state lower bound independently of the audit
+   pipeline? If you cannot establish one, say nothing rather than guess.
+
+8. MOVE the 21-row sparse directed edge-count matrix and the full rowwise diameter census to the
+   supplement, keeping the 48-cell table in the article. Replace them in the body with the
+   diameter-attaining witness, the short stochastic-feasibility certificate from item 2, and the
+   worked example from item 6. Reflow so pages 2, 4, 7 and 8 do not carry large empty regions.
+
+=== VERIFY, and expect me to redo it ===
+latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions; report exit code,
+page count, undefined control sequences, unresolved references, unresolved citations, all of which
+must be 0. Do NOT use linespread or any line-stretching to change the page count; I check for it and
+the count must come from content. Reconcile the bibliography both directions. Every shipped .tex
+under 800 lines. Report what you changed and anything still weak.
+Do not create planning files. Do not run git commit.
