@@ -5757,3 +5757,44 @@ Oracle relay 不可达（第 34 tick）；codex 503。
 三篇各自应说明关系并引用另外两篇。是否合并是作者的决定。
 
 内存 1.12 GB，无 agent 在跑。
+
+---
+
+## tick 389 — 两通道仍断；一个我发出的警报被自己撤回，并定位到守卫的真实缺口
+
+Oracle relay 不可达（第 35 tick）；codex 503。
+
+### 撤回：不是同时投两家
+
+重做 tick 375 那次失败的引用审计（这次先过自匹配对照，8/18 未过、脚本按设计**拒绝出结论**）。
+它甩出一个信号：`submitted_..._fibonacci_numeration_fq` 与 `submitted_..._resolution_folding_core_jnt`
+标题相同、作者相同、同为 38 页、`main.tex` **逐字节相同**、两边都带 `SUBMITTED`，
+目录名却分指 FQ 与 JNT。看上去像同稿双投。
+
+**不是。** 目录里就有记录：FQ 那次 **2026-05-01 被 desk reject**；与 DCDS-A 稿件的重叠
+**2026-05-11 已立案**（`overlap_incident_2026-05-11.md`），做了根因分析、
+在 `oracle_pipeline.py` 装了语义重叠守卫、并写下此后的操作规则。
+决定记录明写：不得重投 FQ，DCDS-A 在审期间不得改投他处。**路线早已关闭。**
+
+让它看起来在飞的是两边都留着的 `SUBMITTED` 标记 —— 真实状态在目录内的
+`decision_*.md` 与 `overlap_incident_*.md` 里。这与 tick 374 那条
+（`folded_histograms` 被标成已投而实际未投）是同一个毛病：**标记不携带状态。**
+
+### 守卫的真实缺口，有证据
+
+拿 tick 387–388 那三篇未投稿件去测现有守卫：
+
+| 配对 | 判定 |
+|---|---|
+| projection ↔ thermodynamics | **`gate_failed=True`**、`needs_human_resolution`、"active drafts overlap without a deterministic chronology winner" |
+| projection ↔ single_primitive | `informational` / `no_action_required` / "weak or background overlap only" |
+
+**第一对管线已经拦住了**，正等一条尚未写入 board 的人工裁决 —— 这条待办是真实存在且已被机器标记的。
+**第二对被判为弱重叠**，而这两篇产出的是逐项相同的矩序列（tick 387 已验，q=1..4、m=1..12）。
+
+守卫的检测器是**词汇性的**（claim marker 与 token 重合），而这一对的证据是**数值的**。
+marker 阈值调不出这个结果。**建议**：对定义了折叠并计算纤维统计量的论文，
+加一条数值指纹比对 —— 直接比 `S_q(m)` 前若干项。我用一个 tick 就做完了，成本很低，
+而且它抓的正是 marker 抓不到的那类。
+
+内存 1.12 GB，无 agent 在跑。
