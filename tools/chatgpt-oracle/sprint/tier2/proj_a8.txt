@@ -1,0 +1,72 @@
+TASK: repair Proposition A.8 in papers/publication/2026_projection_ontological_mathematics_core_tams
+and deal honestly with what the repair does to Theorems 5.2 and 5.3. You are PRE-AUTHORIZED to edit
+that directory. Do not stop for approval. Do not commit; I commit after verifying independently.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_projection_r1.md. It is short and it is the referee
+report this implements. That file and every artifacts/oracle_*.md is READ-ONLY EVIDENCE; do not
+edit or regenerate them, I diff them against HEAD.
+
+=== THE DEFECT, stated so you do not soften it ===
+
+Proposition A.8 accepts a path only when the current-step outputs c_1, ..., c_q of the q copies are
+literally equal. The referee's objection: the commitment boundaries of different copies need not be
+synchronized. Two runs can eventually have the same total output while emitting different amounts
+of output at the current input step. A bounded terminal-output length bounds the possible LAG; it
+does not make that lag ZERO. So one copy may produce a nonempty c_1 while another still holds the
+corresponding symbols in its residual or terminal buffer, and the step-wise equality test rejects
+runs whose completed visible outputs are in fact equal.
+
+Consequence, as the referee puts it: as written, A.8 does not prove that accepted paths are in
+bijection with colliding q-tuples, and therefore Theorem 5.2, the symmetric quotient in Theorem 5.3,
+and the claimed polynomial-size matrix realization are NOT established.
+
+Recognize the shape: a condition that is correct for the completed run is imposed at every single
+step. This project's recurring error is a bound proved for one step and used for the iteration;
+this is its mirror image.
+
+=== WHAT TO DO ===
+
+1. Do the honest repair, which is to compare COMPLETED outputs rather than per-step outputs. The
+   natural construction carries the lag in the automaton state: a product state records, for each
+   copy, the buffered suffix not yet matched against the others. Since the terminal-output length is
+   bounded, the buffer alphabet is finite and the construction stays finite-state. Work that out
+   properly, with the acceptance condition being "all buffers empty and all outputs matched at the
+   end", and prove the bijection with colliding q-tuples that A.8 was supposed to give.
+
+2. REPORT WHAT IT COSTS, do not hide it. Carrying q buffers multiplies the state count. State
+   explicitly what the new bound is as a function of q and the buffer length, and say plainly
+   whether the "polynomial-size matrix realization" claim survives. If it does not, the claim must
+   be corrected everywhere it appears -- abstract, introduction, Theorem 5.2, Theorem 5.3 -- and
+   replaced by the bound you actually prove. I would much rather have an exponential bound that is
+   true than a polynomial one that is not. Do not quietly keep the word "polynomial".
+
+3. If, having worked it through, you conclude the bijection cannot be recovered at all, STOP and say
+   so rather than constructing something that merely looks like a proof. That is a legitimate
+   outcome and I want to hear it.
+
+4. VENUE. The referee says the right journal is the Journal of Number Theory, not TAMS, and that at
+   JNT this is a substantial and coherent paper once the proof issue is fixed and the computational
+   status is cleaned up. Retarget: update the cover letter and submission metadata for JNT, and
+   remove any framing that pitches the result as a TAMS-level general theorem. The referee is
+   explicit that TAMS would need a uniform theorem or a conceptual criterion for an infinite family
+   of q, not certification of nine more table entries -- so do not claim to have one.
+
+5. The referee also asks for a complete archival package for the nine-case computational result:
+   exact sequence data, recurrence derivation, minimality certificates, Galois certificates,
+   deterministic verification scripts, and instructions for independent reproduction. Check what is
+   already in artifacts/ and list precisely what is missing. Build what you can; do not fabricate
+   certificates you cannot generate.
+
+=== VERIFY, and expect me to redo it ===
+- latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions;
+- report exit code, page count, undefined control sequences, unresolved references, unresolved
+  citations; all four must be 0;
+- pdftotext -enc UTF-8 and report the RAW COUNT of "polynomial" and of "TAMS" before concluding
+  anything; a path bug returns "no hits" identically to a clean file. Every surviving hit must be
+  deliberate;
+- reconcile the bibliography both directions;
+- every shipped .tex under 800 lines.
+Report at the end what you changed, what the new state bound is, and anything in the repaired
+material you believe is still weak.
+
+Do not create planning files in the paper directory. Do not run git commit.
