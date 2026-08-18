@@ -1,0 +1,75 @@
+TASK: rebuild papers/publication/2026_single_primitive_universality_hierarchy around the results a
+referee said are real, and delete the framing they said is not. You are PRE-AUTHORIZED to edit,
+delete, split and rewrite files in that directory without asking. Do not stop for approval. Do not
+commit; I commit after I verify independently.
+
+Read papers/publication/2026_single_primitive_universality_hierarchy/artifacts/
+oracle_sprint_single_primitive_r1.md first, in full. It is the referee report this task implements.
+That file and every other artifacts/oracle_*.md is READ-ONLY EVIDENCE. Do not edit, reformat,
+regenerate or "correct" any of them. I diff them against HEAD and a modification ends the task.
+
+=== WHAT THE REFEREE SAID, so you do not re-derive it weakly ===
+
+Verdict: reject, and explicitly NOT a major-revision problem. The advertised L0/L1/L2 "non-collapse"
+is not a separation theorem. The three levels concern different objects, use different primitives,
+and impose unrelated structures; there is no common system U carrying L0, L1, L2 structure and no
+natural forgetful maps L2 -> L1 -> L0. L0 is only a cited existence result, not proved here. L1 is
+decode / do ordinary integer arithmetic / encode, which the manuscript itself admits is
+value-transported with no digit-local arithmetic content. Theorem 1.5 is therefore vocabulary, not
+mathematics.
+
+The referee also said which mathematics IS real, and this is the paper you are to build:
+  - the fixed-q carry automata;
+  - the primitive transfer result -- and note the referee singled out the losslessness step
+    (that the construction discards no accepting path) as substantive and NOT implied by the growth
+    estimate; it is the real content behind the matrix T_q, and the primitivity argument after it is
+    nontrivial too;
+  - the exact second-moment recurrence;
+  - a restrained discussion of nonuniformity in q.
+Target venue: Discrete Mathematics & Theoretical Computer Science.
+
+Must NOT appear in the new paper: the EML / Richardson material, the L0/L1/L2 hierarchy language in
+any form, and the arbitrary-cover construction. Theorem 4.27 is to be a concise corollary of the
+height theorem, not an independent major obstruction.
+
+=== WHAT TO DO ===
+
+1. Before cutting anything, build the dependency map. For every theorem, proposition, lemma and
+   corollary you intend to KEEP, trace every statement its proof invokes, transitively, and confirm
+   none of them lives in the material being deleted. Write this map to
+   sprint/sp_dependency_map.md (in tools/chatgpt-oracle/sprint/, NOT in the paper directory).
+   If a kept result turns out to depend on deleted material, do not paper over it: report it and
+   either prove the needed statement in place or move that result to the cut file too.
+
+2. Rewrite the manuscript. Roughly 25-35 pages is the right size; do not pad to look substantial and
+   do not compress proofs to hit a number. Every file under 800 lines. Title, abstract and
+   introduction must advertise exactly what is proved -- compare QUANTIFIERS and HYPOTHESES, not
+   just conclusions. The recurring failure in this project is an abstract that states a theorem's
+   conclusion under only part of its hypotheses; do not reproduce it.
+
+3. Preserve, do not destroy. Move the cut material verbatim into
+   sections/_cut_hierarchy_eml_richardson.tex, NOT \input by main.tex, with a one-line header
+   naming what it was. I want it recoverable without archaeology.
+
+4. Fix what the referee will hit next. With the hierarchy gone, the paper needs a real introduction
+   explaining why fixed-q carry automata and the second-moment recurrence are worth a reader's time.
+   Do not write "we study"; state the theorem and what was not known before it.
+
+5. Verification, and be aware I will redo all of it myself:
+   - latexmk -C first, delete .aux, rebuild from zero with NO extra command-line macro definitions.
+     A macro defined on the latexmk command line is a fake green build and I check for it.
+   - report exit code, page count, count of undefined control sequences, unresolved references and
+     unresolved citations. All four counts must be 0.
+   - pdftotext -enc UTF-8 the result and grep it for "L0", "L1", "L2", "hierarchy", "Richardson",
+     "eml", "EML". Report the raw count BEFORE concluding anything -- a path bug returns "no hits"
+     identically to a clean file.
+   - reconcile bibliography both directions: every \cite key resolves, every \bibcite key is cited.
+     Delete entries orphaned by the cut.
+   - if the directory has a verifier script, run it and report its output verbatim.
+
+6. Report at the end: what you kept, what you cut, the page count before and after, the five
+   verification counts, and -- this one matters -- anything you found in the kept material that you
+   believe is weak or wrong. I would rather hear it from you than from the next referee.
+
+Do not create planning files, progress logs, summaries or notes inside the paper directory.
+Do not run git commit. Do not touch any other paper.
