@@ -92,41 +92,71 @@ For \(n=1,2,3\), the residue multiplicity lists are respectively
 displayed values.
 \end{proof}
 
-\begin{proposition}[Ordinary-to-fold parity cancellation]
-\label{prop:ordinary-to-fold-parity-cancellation}
-For \(m\ge1\), with \(U\) as defined in the introduction,
+\begin{proposition}[Exact fold-pairing self-similarity]
+\label{prop:exact-fold-pairing-self-similarity}
+For \(m\ge3\), put \(M=F_{m+2}\), let \(R(n)\) count representations of
+\(n\) by distinct parts from \(F_1,\ldots,F_{m+1}\), and define
 \[
- S_2(m)=U(m+1)-U(m-1).
+ T_2(m)=\sum_{n\in\mathbb Z}R(n)^2,
+ \qquad
+ C(m)=\sum_{0\le v<M}R(v)R(v+M).
 \]
-Consequently the factor \((X-1)(X+1)\) in the ordinary fifth-order recurrence
-is annihilated by the fold pairing, leaving the cubic
-\(X^3-2X^2-2X+2\) for \(S_2\).
+Then
+\begin{equation}\label{eq:cross-term-self-similarity}
+ C(m)=S_2(m-2),
+\end{equation}
+and consequently
+\begin{equation}\label{eq:fold-untruncated-self-similarity}
+ S_2(m)=T_2(m)+2S_2(m-2).
+\end{equation}
 \end{proposition}
 \begin{proof}
-Put \(F=F_{m+2}\), \(G=F_{m+1}\), and \(a_r=R_{m+1}(r)\).  By
-\Cref{lem:fold-fibre-representation-pairing},
+Write
 \[
- S_2(m)=\sum_{0\le r<F}(a_r+a_{F+r})^2.
+ G=F_m,\qquad H=F_{m+1},\qquad M=G+H,\qquad
+ \mathcal L=\{F_1,\ldots,F_{m-1}\},
 \]
-Representations below \(F_{m+3}=F+G\), separated according as they use the
-part \(F\), give
+and write \(\|A\|\) for the sum of the parts in a subset \(A\).
+The cross term \(C(m)\) counts ordered pairs \((A,B)\) of subsets of
+\(\mathcal L\cup\{G,H\}\) such that
 \[
- U(m+1)=\sum_{0\le r<F}a_r^2
-          +\sum_{0\le r<G}(a_r+a_{F+r})^2.
+ \|B\|=\|A\|+M,\qquad \|A\|<M.
 \]
-For \(r\ge G\), one has \(a_{F+r}=0\), because the largest value representable
-with the first \(m+1\) parts is \(F+G-2\).  Subtracting the two displays
-therefore gives
+The largest sum omitting \(H\) is
+\(\sum_{i=1}^{m}F_i=M-2\), so \(H\in B\).  Write
+\(B=\{H\}\cup B'\).  Then
+\(\|B'\|=\|A\|+G\).  Since \(\|B'\|\le M-2\), one has
+\(\|A\|\le H-2<H\), so \(H\notin A\).  Thus \(A\) and \(B'\) are subsets of
+\(\mathcal L\cup\{G\}\) whose sums differ by \(G\).
+
+On the other hand, \(S_2(m-2)\) counts ordered pairs \((P,Q)\) of subsets of
+\(\mathcal L\) whose sums are congruent modulo \(G=F_m\).  Their sums lie in
+\([0,H-2]\), and \(H-2<2G\), so their difference is \(0\), \(G\), or \(-G\).
+Define \((A,B')\) from \((P,Q)\) by
 \[
- U(m+1)-S_2(m)=\sum_{0\le r<G}a_r^2=U(m-1),
+\begin{array}{c|c|c}
+ \|P\|=\|Q\| & A=P & B'=Q\cup\{G\}\\
+ \|Q\|=\|P\|+G & A=P & B'=Q\\
+ \|P\|=\|Q\|+G & A=Q\cup\{G\} & B'=P\cup\{G\}.
+\end{array}
 \]
-which proves the identity.  If \(E\) denotes the shift in \(m\) and
-\(Q(E)=E^3-2E^2-2E+2\), then
+In every case \(\|B'\|=\|A\|+G\), and adjoining \(H\) to \(B'\) produces a
+pair counted by \(C(m)\).  This map is bijective.  Indeed, membership of \(G\)
+in \((A,B')\) is respectively \((0,1)\), \((0,0)\), or \((1,1)\), and these
+three patterns recover the displayed cases.  The remaining pattern \((1,0)\)
+would require two subsets of \(\mathcal L\) to have sums differing by \(2G\),
+which is impossible because both sums are at most \(H-2<2G\).  This proves
+\eqref{eq:cross-term-self-similarity}.
+
+Finally, the total attainable sum from \(F_1,\ldots,F_{m+1}\) is
+\(F_{m+3}-2<2M\).  Hence
 \[
- S_2=E^{-1}(E^2-1)U.
+ \sum_{0\le v<M}\bigl(R(v)^2+R(v+M)^2\bigr)=T_2(m).
 \]
-Hence \((E^2-1)Q(E)U=0\) implies \(Q(E)S_2=0\), proving the stated
-cancellation.
+Expanding the squared fibre identity of
+\Cref{lem:fold-fibre-representation-pairing} and using
+\eqref{eq:cross-term-self-similarity} gives
+\eqref{eq:fold-untruncated-self-similarity}.
 \end{proof}
 
 \begin{theorem}[Sharp second-moment recurrence]
@@ -160,13 +190,34 @@ Then \(C_2(n)=A_n+2B_n\), and the transition rule gives
  A_{n+1}=2A_n+2B_n,\qquad B_{n+1}=D_n,\qquad
  D_{n+1}=A_n+2B_n=C_2(n).
 \]
-Thus \(B_{n+1}=C_2(n-1)\) for \(n\ge2\), and eliminating \(A_n,B_n\) yields
+The untruncated moment in
+\Cref{prop:exact-fold-pairing-self-similarity} is \(T_2(m)=A_{m+1}\).  Also
+\(D_n=A_n-A_{n-1}\), so
 \[
- C_2(n+1)=2C_2(n)+2C_2(n-1)-2C_2(n-2).
+ A_{n+2}=2A_{n+1}+2D_n
+        =2A_{n+1}+2A_n-2A_{n-1}.
 \]
-The initial values are supplied by
-\Cref{lem:initial-second-moment-enumeration}; translating \(n=m+1\) gives the
-claimed values and generating function.
+Thus \(T_2\) satisfies the bare cubic recurrence for \(m\ge3\).  Iterating the
+same three state equations from \((A_0,B_0,D_0)=(1,0,0)\) gives, in addition
+to the initial values in \Cref{lem:initial-second-moment-enumeration},
+\[
+ S_2(3)=C_2(4)=36,\qquad S_2(4)=88,\qquad S_2(5)=220.
+\]
+
+Let
+\(\mathcal Q a(m)=a(m)-2a(m-1)-2a(m-2)+2a(m-3)\).  Applying \(\mathcal Q\)
+to \eqref{eq:fold-untruncated-self-similarity} gives, for \(m\ge6\),
+\[
+ \mathcal Q S_2(m)=\mathcal Q T_2(m)+2\mathcal Q S_2(m-2)
+                  =2\mathcal Q S_2(m-2).
+\]
+The displayed values give \(\mathcal Q S_2(4)=\mathcal Q S_2(5)=0\), so
+induction on the two parity classes proves the recurrence for every \(m\ge4\).
+The case \(n=4\) of the stated \(C_2\) recurrence is the displayed computation
+\(C_2(4)=36\); the cases \(n\ge5\) are the just-proved \(S_2\) recurrence with
+\(n=m+1\).  The other initial values are supplied by
+\Cref{lem:initial-second-moment-enumeration}, and the generating function
+follows.
 \end{proof}
 
 \begin{corollary}[Polynomial fibre statistics]

@@ -1,45 +1,90 @@
-"""single_primitive: the referee says the claim "the fold's pairing of the two residue
-representatives removes the parity factor" is true but only observed.  Decompose it.
+"""Recompute the exact fold-pairing identities and discriminating controls.
 
-d_m(x) = R(v_x) + R(v_x + M),  M = F_{m+2},  R = representations by distinct Fibonacci parts
-using the m+1 weights F_2..F_{m+2}.  Then
-    S_2 = sum_x d_m(x)^2 = T_2 + 2C,
-    T_2 = sum over the FULL value range of R(n)^2,
-    C   = sum_x R(v_x) R(v_x + M)   (the cross term the pairing creates),
-while U(m) = sum_{n < M} R(n)^2 is the TRUNCATED sum, which carries (X-1)(X+1).
-Test which of T_2, C, S_2 satisfy the bare cubic X^3 - 2X^2 - 2X + 2.
+The paper uses F_1 = 1, F_2 = 2.  At level m the m+1 distinct parts are
+F_1,...,F_{m+1} (equivalently F_2,...,F_{m+2} in classical indexing), and
+the fold modulus is M = F_{m+2}.  For their representation counts R_m,
+
+    C(m)   = sum_{0 <= v < M} R_m(v) R_m(v + M),
+    T_2(m) = sum_n R_m(n)^2,
+    S_2(m) = T_2(m) + 2 C(m).
+
+The substantive identity checked here is C(m) = S_2(m-2).
 """
-import sys
+
 from collections import Counter
-sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-F=[0,1,2]
-while len(F)<40: F.append(F[-1]+F[-2])
-def counts(m):
-    c=Counter({0:1})
-    for i in range(1, m+2):
-        w=F[i]; nc=Counter()
-        for v,k in c.items(): nc[v]+=k; nc[v+w]+=k
-        c=nc
-    return c
-def rec_ok(seq, lo, hi, co=(2,2,-2)):
-    return [m for m in range(lo,hi+1) if seq[m]!=sum(cc*seq[m-i-1] for i,cc in enumerate(co))]
-S2={};T2={};C={};U={}
-print(f'{"m":>3} {"S_2":>12} {"T_2":>12} {"C":>12} {"U":>12} {"S2=T2+2C":>10}')
-for m in range(1,17):
-    c=counts(m); M=F[m+2]
-    T2[m]=sum(k*k for k in c.values())
-    r=Counter()
-    for v,k in c.items(): r[v%M]+=k
-    S2[m]=sum(k*k for k in r.values())
-    C[m]=sum(c.get(v,0)*c.get(v+M,0) for v in range(M))
-    U[m]=sum(c.get(n,0)**2 for n in range(M))
-    print(f'{m:3d} {S2[m]:12d} {T2[m]:12d} {C[m]:12d} {U[m]:12d} {str(S2[m]==T2[m]+2*C[m]):>10}')
-print()
-print('--- which satisfy  a(m) = 2a(m-1) + 2a(m-2) - 2a(m-3)? ---')
-for name,seq in (('S_2',S2),('T_2',T2),('C  ',C),('U  ',U)):
-    v=rec_ok(seq,4,16)
-    print(f'   {name}: violations {len(v)}  {"" if not v else v}')
-print()
-print('--- control: a perturbed recurrence must fail on all four ---')
-for name,seq in (('S_2',S2),('T_2',T2),('C  ',C)):
-    print(f'   {name} with (2,2,-1): violations {len(rec_ok(seq,4,16,(2,2,-1)))} of 13')
+import sys
+
+
+MIN_M = 3
+MAX_M = 18
+
+FIBONACCI = [0, 1, 2]
+while len(FIBONACCI) <= MAX_M + 3:
+    FIBONACCI.append(FIBONACCI[-1] + FIBONACCI[-2])
+
+
+def representation_counts(m):
+    """Return counts for subsets of F_1,...,F_{m+1}."""
+    counts = Counter({0: 1})
+    for weight in FIBONACCI[1 : m + 2]:
+        next_counts = Counter(counts)
+        for value, multiplicity in counts.items():
+            next_counts[value + weight] += multiplicity
+        counts = next_counts
+    return counts
+
+
+def moments(m):
+    counts = representation_counts(m)
+    modulus = FIBONACCI[m + 2]
+    folded = Counter()
+    for value, multiplicity in counts.items():
+        folded[value % modulus] += multiplicity
+    s_2 = sum(multiplicity**2 for multiplicity in folded.values())
+    t_2 = sum(multiplicity**2 for multiplicity in counts.values())
+    cross = sum(
+        counts.get(value, 0) * counts.get(value + modulus, 0)
+        for value in range(modulus)
+    )
+    return s_2, t_2, cross
+
+
+def main():
+    values = {m: moments(m) for m in range(0, MAX_M + 1)}
+    s_2 = {m: triple[0] for m, triple in values.items()}
+    t_2 = {m: triple[1] for m, triple in values.items()}
+    cross = {m: triple[2] for m, triple in values.items()}
+    tested = list(range(MIN_M, MAX_M + 1))
+
+    a_violations = [m for m in tested if cross[m] != s_2[m - 2]]
+    b_violations = [
+        m for m in tested if s_2[m] != t_2[m] + 2 * s_2[m - 2]
+    ]
+    controls = {
+        "2 S_2(m-1)": [
+            m for m in tested if s_2[m] != t_2[m] + 2 * s_2[m - 1]
+        ],
+        "2 S_2(m-3)": [
+            m for m in tested if s_2[m] != t_2[m] + 2 * s_2[m - 3]
+        ],
+        "3 S_2(m-2)": [
+            m for m in tested if s_2[m] != t_2[m] + 3 * s_2[m - 2]
+        ],
+    }
+
+    print(f"Python {sys.version.split()[0]}; tested {MIN_M} <= m <= {MAX_M}")
+    print(f"A violations: {len(a_violations)} {a_violations}")
+    print(f"B violations: {len(b_violations)} {b_violations}")
+    for label, failures in controls.items():
+        print(f"control {label}: fails {len(failures)}/{len(tested)}")
+    print(
+        f"m = {MAX_M}: {s_2[MAX_M]} = {t_2[MAX_M]}"
+        f" + 2 * {s_2[MAX_M - 2]}"
+    )
+
+    controls_discriminate = all(len(failures) == len(tested) for failures in controls.values())
+    return 0 if not a_violations and not b_violations and controls_discriminate else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
