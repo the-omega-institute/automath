@@ -1,0 +1,146 @@
+\section{Transfer matrices and the second moment}
+\label{sec:transfer}
+
+For \(q=0\), \(S_0(m)=F_{m+2}\) and the Fibonacci matrix suffices.  Assume
+\(q\ge1\).  The audited interface gives the fixed matrix formula.
+
+\begin{theorem}[Intrinsic fixed-degree transfer]
+\label{thm:intrinsic-fold-moment-transfer}
+For every fixed \(q\ge0\), there are effectively constructible integer
+matrices \(T_q\) and integer vectors \(u_q,v_q\), independent of \(m\), with
+\[
+ S_q(m)=u_q^{\mathsf T}T_q^m v_q\qquad(m\ge1).
+\]
+Consequently the ordinary generating function of \(S_q\) is rational and the
+sequence satisfies a constant-coefficient recurrence.
+\end{theorem}
+\begin{proof}
+For \(q=0\), take the usual two-state Fibonacci matrix.  For \(q\ge1\), take
+\(T_q=M_q\), \(u_q=M_q^{\mathsf T}e_0\), and \(v_q=b_q\) from
+\Cref{thm:audited-fixed-degree-transfer-interface}.  Then
+\[
+ S_q(m)=e_0^{\mathsf T}M_q^{m+1}b_q
+       =u_q^{\mathsf T}T_q^m v_q .
+\]
+The resolvent identity
+\[
+ \sum_{m\ge1}S_q(m)z^m
+ =z\,u_q^{\mathsf T}(I-zT_q)^{-1}v_q
+\]
+proves rationality, and Cayley--Hamilton gives the recurrence.
+\end{proof}
+
+\begin{proposition}[Exponential budget for fixed transfer]
+\label{prop:fixed-transfer-interface-budget}
+If \(b_m=u^{\mathsf T}A^mv\) for a fixed complex matrix \(A\), then
+there are \(C>0\) and \(\rho>0\) such that \(|b_m|\le C\rho^m\).
+\end{proposition}
+\begin{proof}
+Put \(A\) in Jordan form, or use any submultiplicative matrix norm:
+\(|b_m|\le\|u\|\,\|A\|^m\|v\|\).
+\end{proof}
+
+\begin{theorem}[Primitive intrinsic transfer]
+\label{thm:primitive-intrinsic-moment-transfer}
+For every fixed \(q\ge1\), let \(\mathcal T_q\) be the states lying on a
+positive-weight path from the initial state to an accepting state, and let
+\(P_q\) be the induced matrix.  Then \(P_q\) is primitive.  If \(\lambda_q\)
+is its Perron root, then
+\[
+ S_q(m)=c_q\lambda_q^m+O(\theta_q^m),
+ \qquad c_q>0,\quad 0\le\theta_q<\lambda_q,
+\]
+and
+\[
+ \lim_{m\to\infty}\frac1m\log S_q(m)=\log\lambda_q .
+\]
+\end{theorem}
+\begin{proof}
+The positive-weight column alphabet is
+\[
+ \mathcal A_q=\{0,1\}^{q-1}\cup\{-1,0\}^{q-1}.
+\]
+If a reachable accepting marker \(\sigma\) had both a \(1\) and a \(-1\)
+coordinate, the corresponding word values would differ by \(2F_{n+1}\),
+whereas all word values lie in an interval of length
+\(F_{n+2}-2<2F_{n+1}\).  Thus every reachable marker lies in
+\(\mathcal A_q\).  For a state \(c\in\mathcal T_q\), choose a positive path
+from the initial state to \(c\), followed by one to \((\sigma,0)\).  Since
+\(-\sigma\in\mathcal A_q\),
+\[
+ \tau_{-\sigma}(\sigma,0)=(0,0).
+\]
+Therefore every state of \(\mathcal T_q\) reaches the initial state, while
+the initial state reaches every state by definition.  The support graph is
+strongly connected.  The zero column has weight \(w_q(0)=2\) and gives a loop
+at \((0,0)\), so the period is one.  Hence \(P_q\) is primitive.  Perron--
+Frobenius applied to the nonzero restrictions of the initial and accepting
+vectors gives the stated asymptotic and pressure.
+\end{proof}
+
+\begin{lemma}[Initial second-moment enumeration]
+\label{lem:initial-second-moment-enumeration}
+For \(C_2(n)\), the number of ordered pairs of length-\(n\) binary words with
+equal residue modulo \(F_{n+1}\), one has
+\[
+ C_2(1)=2,\qquad C_2(2)=6,\qquad C_2(3)=14.
+\]
+\end{lemma}
+\begin{proof}
+For \(n=1,2,3\), the residue multiplicity lists are respectively
+\((1,1)\), \((2,1,1)\), and \((2,2,1,2,1)\).  Squaring and summing gives the
+displayed values.
+\end{proof}
+
+\begin{theorem}[Sharp second-moment recurrence]
+\label{thm:intrinsic-second-moment-recurrence}
+Let \(C_2(n)\) be as in the preceding lemma.  For \(n\ge4\),
+\[
+ C_2(n)=2C_2(n-1)+2C_2(n-2)-2C_2(n-3).
+\]
+Since \(S_2(m)=C_2(m+1)\),
+\[
+ S_2(1)=6,\quad S_2(2)=14,\quad S_2(3)=36,
+\]
+and the same recurrence holds for \(S_2(m)\) for \(m\ge4\).  In particular
+\[
+ \sum_{m\ge1}S_2(m)z^m
+ =\frac{6z+2z^2-4z^3}{1-2z-2z^2+2z^3}.
+\]
+\end{theorem}
+\begin{proof}
+For \(q=2\), the signed alphabet is \(\{-1,0,1\}\) with weights
+\(1,2,1\).  Let \(W_n(p,r)\) be the total weight of paths of length \(n\),
+and set
+\[
+ A_n=W_n(0,0),\quad B_n=W_n(1,0)=W_n(-1,0),\quad
+ D_n=W_n(0,1)=W_n(0,-1).
+\]
+Then \(C_2(n)=A_n+2B_n\), and the transition rule gives
+\[
+ A_{n+1}=2A_n+2B_n,\qquad B_{n+1}=D_n,\qquad
+ D_{n+1}=A_n+2B_n=C_2(n).
+\]
+Thus \(B_{n+1}=C_2(n-1)\) for \(n\ge2\), and eliminating \(A_n,B_n\) yields
+\[
+ C_2(n+1)=2C_2(n)+2C_2(n-1)-2C_2(n-2).
+\]
+The initial values are supplied by
+\Cref{lem:initial-second-moment-enumeration}; translating \(n=m+1\) gives the
+claimed values and generating function.
+\end{proof}
+
+\begin{corollary}[Polynomial fibre statistics]
+\label{cor:polynomial-intrinsic-fiber-statistics}
+For every fixed polynomial \(P\in\mathbb Z[t]\), the sequence
+\[
+ m\longmapsto\sum_{x\in X_m}P(d_m(x))
+\]
+has a rational ordinary generating function and a constant-coefficient
+recurrence.
+\end{corollary}
+\begin{proof}
+Expand \(P\) into finitely many monomials and apply
+\Cref{thm:intrinsic-fold-moment-transfer}.
+\end{proof}
+

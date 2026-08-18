@@ -1,786 +1,99 @@
-\section{Introduction}\label{sec:intro}
+\section{Introduction}
+\label{sec:introduction}
 
-Universality statements for a single binary primitive split into different
-assertions.  We use three levels.  Level \(L0\), \emph{expression universality},
-asserts existence of terms.  Level \(L1\), \emph{protocol universality}, asserts
-computable normal forms, compiled operations, and semantic readout identities.
-Level \(L2\), \emph{certificate universality}, adds finite certificates over the
-fibres of a normalizing map.
+Finite-state descriptions of numeration systems are useful only when the
+state bound is proved to be exact.  In a collision problem, a truncation that
+merely contains the likely large-weight paths can still remove an accepting
+path and change every moment.  The first theorem below isolates the
+losslessness argument for the signed Fibonacci carries arising from the
+Zeckendorf fold.  This gives a fixed matrix for each prescribed moment degree,
+with no state set depending on the resolution.
 
-The motivating \(L0\) primitive is Odrzywo{\l}ek's operation
+For \(m\ge1\), put \(\Omega_m=\{0,1\}^{m+1}\), let \(X_m\) be the Zeckendorf
+normal forms of values in \([0,F_{m+2})\), and define
 \[
-  \eml(x,y)=e^x-\operatorname{Log}y
+ d_m(x)=|\Fold_m^{-1}(x)|,\qquad
+ S_q(m)=\sum_{x\in X_m}d_m(x)^q .
 \]
-with the constant \(1\), cited from the public arXiv v2 record
-\cite{Odrzywolek2026SingleBinaryOperator}.  We use that record only as a pinned
-representative-existence theorem for its displayed scientific-calculator basis,
-not as a normal form or equality algorithm for EML terms.  The positive \(L1\)
-protocol is internal: Zeckendorf normal forms, valuation transport through
-\(\NN\), and Church iteration give compiled addition and multiplication on
-\(\NN\).
+The index \(m\) is the resolution and \(q\) is the moment degree.  The
+quantifiers in our main result are deliberately separate: \(q\) is fixed
+before the matrix is constructed, while one matrix must work for every
+\(m\ge1\).
 
-The unconditional Richardson obstruction in this article is the verified-triple
-replacement theorem, not a theorem about the printed strings
-\((U_{47},U_{111},U_{126})\).  It applies to any supplied finite pure EML triple
-whose \(\pi\), sine, and punctured absolute-value rows have been proved, and it
-uses the self-contained positive-root term only through
+\begin{theorem}[Fixed-degree carry transfer and primitive asymptotics]
+\label{thm:main-transfer}
+For every fixed \(q\ge0\), there are effectively constructible integer data
+\(T_q,u_q,v_q\), independent of \(m\), such that
 \[
-  \Abs(u)=G(M(u,u))=|u|\qquad(u\ne0).
+ S_q(m)=u_q^{\mathsf T}T_q^m v_q\qquad(m\ge1).
 \]
-This is exactly Richardson's condition that the absolute-value symbol agree with
-\(|u|\) away from zero.  Hence \Cref{thm:separation} gives, for every verified
-finite replacement triple, a source-indexed pure EML Richardson fragment whose
-identity-to-zero problem is undecidable on the transported partial real domains.
-It follows that
-there is no computable semantic normalizer into finite decidable objects that
-reflects and preserves equality on those domains, and no equality-reflecting
-compiler into finite decidable protocol objects.  The named specialization using
-\((U_{47},U_{111})\) is a conditional branch under \((H_{\mathcal W})\) or under
-separate proofs of the two printed real-domain identities, and the endpoint
-square-root string \(U_{126}\) is not part of this punctured obstruction.
-
-Some displayed theorem environments below carry additional labels because earlier
-parts of the argument refer to the same result under its interface role, its
-scope-cut role, or its submission-summary role.  These are cross-reference
-aliases for a single numbered statement, not separate theorems or extra proof
-obligations.  The first label displayed on such an environment is the canonical
-source label; later labels are stable semantic aliases retained for audits and
-backward references.  An alias whose name begins with a theorem, proposition,
-lemma, or corollary prefix does not change the logical type of the numbered
-environment to which it is attached.  The only multi-label environments used as
-main-chain dependency cuts have the following canonical labels:
+For \(q\ge1\), the matrix can be trimmed to a primitive nonnegative matrix
+\(P_q\) with Perron root \(\lambda_q\), and
 \[
-\begin{array}{ll}
-\text{source-gate classification} & \texttt{thm:source-gate-rigidity},\\
-\text{core non-collapse package} & \texttt{thm:proc-ams-core-obstruction-spine},\\
-\text{exact hierarchy scope closure} & \texttt{thm:main-hierarchy-exact-scope-closure},\\
-\text{B36 import boundary} & \texttt{thm:B36-import-exact-scope},\\
-\text{verified Richardson replacement spine} & \texttt{thm:proc-ams-relative-richardson-theorem},\\
-\text{cover-relative finite-state obstruction} & \texttt{thm:finite-state-strictness}.
-\end{array}
+ S_q(m)=c_q\lambda_q^m+O(\theta_q^m),
+ \qquad 0\le\theta_q<\lambda_q,\quad c_q>0 .
 \]
-All other labels on those same numbered statements are aliases for backward
-references and semantic audit recognition.  Thus the proof graph is read through
-the canonical labels above; the aliases do not introduce additional hypotheses,
-additional conclusions, or additional theorem instances.
-
-For submission scope, the paper proves the exact intrinsic fibre-height law and
-its large-moment entropy endpoint, but deliberately does not claim a full
-Zeckendorf fibre thermodynamic formalism, folded histogram law, large-deviation
-theory, finite-observation escape rate, or digit-local normalization automaton.
-The cover results below attach auxiliary certificate data to the fixed normal-form
-sets used by the \(L1\) protocol and remain separate from the intrinsic height law.
-Numbered theorem references in the source may drift during theoremization; audit
-reports should identify the finite-state strictness theorem by the label
-\texttt{thm:finite-state-strictness} and the value resolved in \texttt{main.aux},
-not by stale prose numbering from earlier drafts.
-
-\begin{assumption}[Conditional printed-string Richardson supplement]
-\label{ass:HW}
-The notation \((H_{\mathcal W})\) denotes the external analytic assertion that
-the source-locked printed EML strings
-\[
-  W_{\pi}=U_{47},\qquad W_{\sin}=U_{111},
-  \qquad W_{\sqrt{}}=U_{126}
-\]
-from Odrzywo{\l}ek's arXiv:2603.21852v2 ancillary file
-\texttt{SupplementaryInformation.pdf}, Part~I, Sec.~1.3, Table~S2 and Part~II,
-Secs.~2.1--2.5, satisfy
-\[
-  W_{\pi}=\pi,
-  \qquad W_{\sin}(x)=\sin x\quad(x\in\RR),
-  \qquad W_{\sqrt{}}(t)=\sqrt t\quad(t\in\RR_{\ge0})
-\]
-in the principal-branch semantics of \Cref{def:eml}.  Only the first two displayed
-identities are used for the optional printed Richardson specialization in this
-article; the endpoint square-root row is recorded solely as part of the external
-source-lock and is not an input to the punctured Richardson obstruction.  The
-public identifiers are
-the versioned arXiv record \cite{Odrzywolek2026SingleBinaryOperator}, DOI
-\texttt{10.48550/arXiv.2603.21852}, and the provenance snapshot
-\cite{Odrzywolek2026ZenodoCode}, DOI \texttt{10.5281/zenodo.19762318}.  This
-assumption is not a theorem of the article: the present manuscript proves neither
-\(U_{47}=\pi\) nor \(U_{111}(x)=\sin x\) on \(\RR\), and it does not ask the reader to
-infer either identity from a printed formula, parser certificate, numerical test,
-or calculator-basis table.  It is used only for the optional printed
-\(U_{47}\)/\(U_{111}\) specialization of the verified-triple theorem.  Unless
-\((H_{\mathcal W})\) is invoked explicitly, or those two exact real-domain
-identities are proved separately on the stated real domains, every Richardson
-obstruction in the submission manuscript factors through the finite
-verified-triple interface of \Cref{thm:separation}; in particular the main
-hierarchy does not use the printed
-names \(U_{47}\), \(U_{111}\), or the endpoint square-root row \(U_{126}\) as
-unconditional analytic facts.  Thus there is no unconditional printed-string
-Richardson instance in the article.  A citation to the Odrzywo{\l}ek \(L0\) import,
-to the finite parser certificate, or to the printed catalogue is therefore never
-an implicit invocation of \((H_{\mathcal W})\); the hypothesis must be named, or
-the two displayed identities must be proved, before the concrete printed pair can
-be used as Richardson witnesses.
-\end{assumption}
-
-\begin{proposition}[Obstruction spine]
-\label{thm:obstruction-spine}
-The strictness part of the paper has two primary obstructions and one subordinate
-certificate addendum:
-\begin{enumerate}
-\item the verified-triple punctured Richardson obstruction of
-  \Cref{thm:verified-replacement-richardson-instantiation,thm:replacement-triple-richardson-interface,cor:unconditional-richardson-replacement-interface,thm:richardson-witness-row-rigidity,thm:separation,thm:proc-ams-relative-richardson-theorem,thm:relative-richardson-main-spine-closure,thm:unconditional-submission-richardson-closure,cor:printed-string-free-richardson-spine};
-\item the one-free-monogenic-orbit multiplication obstruction of
-  \Cref{thm:level-zero-obstruction};
-\item the cover-relative finite-fibre/finite-state separation of
-  \Cref{thm:finite-state-strictness}, where finite-state transfer is the fixed
-  matrix interface of \Cref{def:fixed-finite-state-transfer}.
-\end{enumerate}
-The endpoint-root string \(U_{126}\) is not part of the spine.  The first item is
-an unconditional scheme over all verified finite triples: for every finite EML
-triple whose \(\pi\), sine, and punctured absolute-value rows have been proved,
-the punctured Richardson obstruction follows.  The printed \(U_{47}\) and
-\(U_{111}\) rows are only a specialization of that scheme under
-\((H_{\mathcal W})\), or under separate proofs of the same two real-domain
-identities.  Thus the core theorem is the replacement-triple interface, not a
-theorem about the particular printed names.
-\end{proposition}
-
-\begin{proof}
-The first item is exactly \Cref{thm:separation}, whose proof factors through the
-punctured triple-interface theorem
-\Cref{thm:replacement-triple-richardson-interface} and its Proc. AMS formulation
-\Cref{thm:proc-ams-relative-richardson-theorem}.  The row-rigidity theorem
-\Cref{thm:richardson-witness-row-rigidity} proves that the three semantic rows
-are not bookkeeping artifacts but exactly the necessary and sufficient data for
-that structural reduction.  The submission-facing closure is
-\Cref{thm:unconditional-submission-richardson-closure}: those theorems use
-supplied proved rows for \(\pi\) and sine, and the internally proved punctured
-absolute-value row when \(\mathsf A=\Abs\).
-The second item is \Cref{thm:level-zero-obstruction}, refined by the exponent
-skeleton and cyclic faithful-restriction classification.  The third item is
-\Cref{thm:finite-state-strictness}; it is formulated for computable finite-fibre
-covers over the fixed Zeckendorf normal-form sets and uses only the fixed
-finite-state transfer notion and budget of
-\Cref{def:fixed-finite-state-transfer,prop:fixed-transfer-interface-budget}.
-The final sentence follows from
-\Cref{thm:verified-replacement-richardson-instantiation,prop:printed-witness-certificate-boundary,prop:printed-pi-sine-instantiation-criterion,thm:unconditional-submission-richardson-closure}.
-\end{proof}
-
-\begin{theorem}[Minimal source-gate classification for the hierarchy]
-\label{thm:source-gate-rigidity}
-\label{thm:main-chain-external-anchor-rigidity}
-\label{thm:submission-source-gate-classification}
-\label{thm:minimal-source-gate-classification}
-The proof of \Cref{thm:proc-ams-core-obstruction-spine,thm:main-hierarchy}
-uses the following three source gates, and these gates are minimal for the
-corresponding headline clauses.
-\begin{enumerate}
-\item The full \(L0\) calculator-basis headline is equivalent, inside this
-  manuscript, to the pinned arXiv:2603.21852v2 representative-existence assertion
-  for the main-text Table~1 \(\mathcal B_{36}\) basis, with the source's branch
-  domains.  It is not replaceable by, nor does it imply, a row-by-row in-paper
-  compiler, an equality algorithm for EML terms, a later table, a canonical
-  normal form, or a proof of the printed \(U_{47}\)/\(U_{111}\) identities.
-\item The Richardson obstruction in the non-collapse theorem is exactly the
-  verified punctured-triple interface: finite pure EML witnesses must have proved
-  rows for \(\pi\), sine on \(\RR\), and \(|x|\) on
-  \(\RR\setminus\{0\}\).  The concrete printed pair \((U_{47},U_{111})\) enters
-  this interface if and only if \((H_{\mathcal W})\) is assumed, or the two exact
-  real-domain identities \(U_{47}=\pi\) and \(U_{111}(x)=\sin x\) on \(\RR\) are
-  proved separately.  The endpoint-root string \(U_{126}\) is not a row of this
-  punctured interface.
-\item The intrinsic \(q=\infty\) fold-height formula uses the cited ordinary
-  Fibonacci interval-maximum theorem only through the positive-index statement
-  \((E)\) of \Cref{thm:intrinsic-height-source-dependency-cut}.  The new in-paper
-  contribution is the conversion from \((E)\) to shifted half-interval maxima and
-  then to \(\Fold_m\)-fibre height; no ordinary maximizing-integer classification,
-  fibre histogram, or large-deviation theorem is imported or advertised as new.
-\end{enumerate}
-Consequently the submission-facing hierarchy is invariant under replacing the
-first or third gate by any source or self-contained proof with the same displayed
-interface, and under deleting the optional printed \((U_{47},U_{111})\) branch.
-After those replacements or deletions, the surviving theorem is precisely the
-printed-string-free verified-triple hierarchy with the same Zeckendorf \(L1\),
-one-free-orbit, intrinsic-height, and cover-relative \(L2\) obstructions.  Any
-unconditional printed \((U_{47},U_{111})\) Richardson instance, self-contained
-thirty-six-row \(\mathcal B_{36}\) theorem, or new proof of the ordinary interval
-maximum formula is therefore a strictly stronger input and not a consequence of
-\Cref{thm:main-hierarchy}.
+Thus \(\sum_{m\ge1}S_q(m)z^m\) is rational and
+\(\lim_{m\to\infty}m^{-1}\log S_q(m)=\log\lambda_q\).
+For \(q=0\), the limit is \(\log\varphi\), where
+\(\varphi=(1+\sqrt5)/2\).
 \end{theorem}
 
-\begin{proof}
-For the first gate, \Cref{thm:eml-universality} is explicitly a citation-only
-representative-existence proposition.  The exact-scope and rigidity results
-\Cref{thm:B36-import-exact-scope,thm:self-contained-L0-core-cited-B36-boundary,prop:B36-public-anchor-rigidity,thm:no-hidden-self-contained-B36-theorem,thm:B36-self-contained-replacement-core}
-prove both directions of the classification.  If the manuscript asserts the full
-calculator-basis headline, the only labelled source for that assertion is the
-pinned public \(\mathcal B_{36}\) existence theorem with its branch-domain
-conventions.  Conversely, that source gives only existential representatives, so
-it cannot supply an in-paper row table, compiler, normalizer, equality algorithm,
-canonical form, or Richardson witness row.  Thus every use of the full
-calculator-basis clause factors through that single external representative-
-existence interface, while the later strictness arguments can be rerun with only
-the internally proved core witnesses after the headline is removed.
+The proof is split into the carry losslessness theorem, the matrix
+construction, and the primitivity argument.  The losslessness step is
+substantive: it is not a consequence of an exponential growth estimate.
 
-For the second gate, \Cref{thm:eml-punctured-richardson-core} proves internally
-only the punctured absolute-value row \(G(M(u,u))=|u|\) for \(u\ne0\).  The first
-two rows are exactly the missing \(\pi\)- and sine-row hypotheses of the abstract verified-triple and
-replacement-triple interface in
-\Cref{thm:verified-replacement-richardson-instantiation,thm:replacement-triple-richardson-interface,cor:unconditional-richardson-replacement-interface,thm:richardson-witness-row-rigidity,thm:proc-ams-relative-richardson-theorem,thm:unconditional-submission-richardson-closure}.
-The row-rigidity theorem classifies the obstruction to using any proposed finite
-triple: if the triple is not verified, the structural Richardson translation
-fails already at the primitive row \(\pi\), \(\sin\), or punctured \(|-|\).  Applied
-to the source-locked printed pair, this says that the names \(U_{47}\) and
-\(U_{111}\) contribute only syntax until the two real-domain identities are
-available.  This is recorded in
-\Cref{prop:printed-pi-sine-instantiation-criterion,cor:no-unconditional-printed-richardson-triple,cor:printed-richardson-specialization-conditional,thm:exact-richardson-witness-conditionality,cor:printed-string-free-richardson-spine}.
-Hence deleting \((H_{\mathcal W})\) deletes exactly the named printed-pair
-specialization and leaves the verified-triple Richardson obstruction used by the
-main hierarchy.  Since Richardson's hypothesis on the absolute-value primitive is
-punctured, the endpoint square-root string \(U_{126}\) supplies no additional row
-for this obstruction.
-
-For the third gate, \Cref{thm:source-audited-ordinary-maximum-import} identifies
-the Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a input and converts it only to the
-positive-index formula \((E)\).  Then
-\Cref{cor:citation-sensitive-half-interval-conversion,thm:intrinsic-height-source-dependency-cut,thm:ordinary-maximum-supports-intrinsic-height,prop:kmp-indexing-lock-intrinsic-height,thm:audited-shifted-half-interval-height-conversion}
-prove that the subsequent height, entropy, and zero-temperature endpoint results
-use only \((E)\), the internal recursion for truncated representation counts, and
-the fold-fibre pairing.  Those proofs take maxima after the half-interval and
-fold conversions; they do not import maximizing residues, an intrinsic histogram,
-or any pressure theorem from the ordinary interval source.  Therefore replacing
-the citation by any proof of exactly \((E)\) leaves the fold-height chain
-unchanged, while omitting \((E)\) removes the numerical height formulas and leaves
-only the unevaluated internal maximum identities.
-
-The final assertion is now formal.  The four load-bearing interfaces enumerated
-in \Cref{thm:main-hierarchy-exact-scope-closure} are the cited \(L0\)
-representative-existence gate, the verified-triple Richardson gate, the internal
-Zeckendorf/one-free-orbit \(L1\) gate, and the intrinsic-height plus
-cover-relative \(L2\) gate.  Replacing a source gate by the same mathematical
-interface does not change any implication in that list.  Removing a stronger
-optional block invokes the printed-string-free Richardson spine or the load-
-bearing core projection
-\Cref{cor:printed-string-free-richardson-spine,thm:verified-core-hierarchy-projection},
-so the theorem chain proving \Cref{thm:main-hierarchy} is unchanged.  Conversely,
-each stronger conclusion named in the last sentence supplies one of the inputs
-classified above as absent, and therefore cannot be derived from the displayed
-interfaces alone.
-\end{proof}
-
-\begin{theorem}[Proc. AMS hierarchy non-collapse package]
-\label{thm:proc-ams-core-obstruction-spine}
-\label{cor:compact-hierarchy-form}
-\label{cor:richardson-submission-boundary}
-\label{cor:main-L2-addendum}
-The submission-facing content is the following non-collapse theorem for the
-three levels of \Cref{def:expr-univ,def:prot-univ,def:cert-univ}.
-\begin{enumerate}
-\item The cited EML representative-existence theorem gives an \(L0\) anchor for
-  the displayed \(\mathcal B_{36}\) calculator basis, but \(L0\) does not supply a
-  computable semantic normalizer, nor an equality-reflecting compiler into any
-  finite decidable protocol object, for the verified punctured Richardson
-  fragments of \Cref{thm:proc-ams-relative-richardson-theorem}.
-\item Zeckendorf normal forms give an internal \(L1\) protocol for
-  \((\NN,+,\times)\), but this protocol is not reducible to a same-level ambient
-  product readout on one free monogenic orbit: every faithful such readout is
-  either trivial or a single cyclic multiplicative ray.
-\item Finite fibres give the \(L2\) certificate layer over the fixed Zeckendorf
-  normal-form sets.  For the unmodified fold maps, the intrinsic finite-degree
-  moments have primitive fixed finite-state transfer and a fixed-degree pressure,
-  but the full bivariate moment tower has no single rational finite-state transfer
-  law.  The \(q=\infty\) height is exactly
-  \(M_{2s-1}=F_{s+1}\), \(M_{2s}=2F_s\).  Separately, computable finite-fibre
-  covers preserving all \(L1\) readouts can have second collision moments with no
-  fixed finite-state transfer formula.  The obstruction is not merely an example:
-  by the spike-height rigidity criterion of
-  \Cref{thm:L2-one-spike-separation-criterion}, a cover violates the exponential
-  finite-state budget exactly when its cover spike height does, and the extremal
-  witness is the one-spike cover.
-  Thus finite-fibre certificates do not force the cross-resolution finite-state
-  transfer property.
-\end{enumerate}
-The Richardson item is the verified-triple theorem scheme for supplied finite
-pure EML witnesses whose three rows prove \(\pi\), sine on \(\RR\), and \(|x|\) on
-\(\RR\setminus\{0\}\); the paper proves the punctured absolute-value row
-internally, while the printed
-\(U_{47}\)/\(U_{111}\) pair becomes an instance only under
-\((H_{\mathcal W})\) or separate proofs of those two real-domain identities.
-The endpoint-root string \(U_{126}\), a term-by-term proof of the full
-\(\mathcal B_{36}\) table, and full intrinsic fibre-histogram or large-deviation
-classifications for the unmodified Zeckendorf fold fibres are not part of this
-theorem.  The citation-sensitive interfaces behind these exclusions are exactly
-the source gates classified in \Cref{thm:source-gate-rigidity}.
-\end{theorem}
-
-\begin{proof}
-The \(L0\) anchor is \Cref{thm:eml-universality}.  The first non-collapse clause
-is \Cref{thm:proc-ams-relative-richardson-theorem}, equivalently
-\Cref{thm:separation}: its proof is the structural translation of
-\Cref{lem:richardson-translation} followed by Richardson's punctured
-identity-to-zero theorem \Cref{lem:richardson-fragment}.  If a computable
-semantic normalizer into finite decidable objects reflecting and preserving
-source-domain equality, or an equality-reflecting compiler into finite decidable
-protocol objects, existed on one of these verified fragments, equality of the
-resulting finite objects would decide identity to zero in the Richardson
-fragment.  This contradiction is the decidability
-argument isolated in \Cref{prop:L1-compiles-L0}.  Hence representative existence
-at level \(L0\) does not collapse to this semantic-normalizer or compiler form of
-\(L1\).
-
-The positive \(L1\) protocol is
-\Cref{prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ}.  The
-same-level obstruction is \Cref{thm:level-zero-obstruction}.  Under the
-one-free-monogenic-orbit and ambient-product readout hypotheses every readout
-factors through the prime-weight exponent skeleton, and every faithful
-restriction is either the trivial monoid or a cyclic multiplicative ray.  Since
-\((\NN_{\ge1},\times)\) is not one such ray, the Zeckendorf multiplication
-protocol cannot be compressed to that restricted level-zero readout.  The
-positive construction avoids the obstruction precisely by the Church
-power-operator level shift in \Cref{thm:zeckendorf-protocol-univ}.
-
-For \(L2\), \Cref{prop:zeckendorf-cert-univ} supplies finite-fibre certificates
-over the Zeckendorf fibres.  The intrinsic transfer and height statements for
-the unmodified fold are
-\Cref{thm:intrinsic-fold-moment-transfer,thm:primitive-intrinsic-moment-transfer,thm:intrinsic-all-degree-transfer-obstruction,thm:intrinsic-second-moment-recurrence,cor:polynomial-intrinsic-fiber-statistics,thm:ordinary-maximum-supports-intrinsic-height,thm:intrinsic-fold-fibre-height,cor:linfty-fold-entropy,thm:moment-height-cover-trichotomy}.  In particular
-\Cref{thm:ordinary-maximum-supports-intrinsic-height,prop:kmp-indexing-lock-intrinsic-height,thm:intrinsic-fold-fibre-height} give the dependency firewall, the index lock, and the two displayed height formulas,
+The second result gives a closed recurrence in the first nontrivial moment.
+\begin{theorem}[Exact second moment]
+\label{thm:intro-second-moment}
+With \(S_2(m)\) as above,
+\[
+ S_2(1)=6,\quad S_2(2)=14,\quad S_2(3)=36,
+\]
 and
-\Cref{thm:intrinsic-fold-moment-transfer,thm:primitive-intrinsic-moment-transfer}
-give primitive finite-state transfer and pressure for each fixed finite moment
-degree.  \Cref{thm:intrinsic-all-degree-transfer-obstruction} proves the
-intrinsic separation from a single rational transfer law for the entire moment
-tower.  The cover-relative separation is
-\Cref{thm:intrinsic-cover-transfer-dichotomy,thm:finite-state-strictness}: the
-one-spike computable covers preserve the normal-form readouts by
-\Cref{lem:cover-preserves-protocol} but choose second-moment spikes that violate
-the exponential budget satisfied by every fixed finite-state transfer formula in
-\Cref{prop:fixed-transfer-interface-budget}.  The strengthened one-spike
-classification \Cref{thm:L2-one-spike-separation-criterion} proves the converse
-budget lower bound as well: any computable cover whose second covered moment
-defeats every exponential transfer budget must carry non-exponentially bounded
-spike height, so distributed bounded-height cover excess is harmless for the
-finite-state growth budget.  The strengthened budget dichotomy
-\Cref{thm:moment-height-cover-trichotomy}
-also shows that such bad covers must have maximal cover fibres exceeding the
-intrinsic height scale by more than every exponential factor.  This proves that
-the certificate layer does not collapse to cross-resolution finite-state transfer
-for arbitrary computable finite-fibre covers.
-The intrinsic fixed-degree pressure is the Perron root formula of
-\Cref{thm:primitive-intrinsic-moment-transfer,thm:zero-temperature-fold-pressure};
-the all-degree nonrationality theorem and the cover-relative degree-two
-obstruction are distinct conclusions.
-
-The submission boundary for printed names is
-\Cref{cor:no-unconditional-printed-richardson-triple,thm:unconditional-submission-richardson-closure}, which leaves the
-replacement-triple theorem intact and withholds only the unproved named-string
-\(\pi\)/sine instance and the endpoint-root specialization.  The exclusions in
-the final sentence are therefore exactly the assertions not supplied by the
-cited interfaces.
-\end{proof}
-
-\begin{theorem}[Verified-core relative single-primitive hierarchy]\label{thm:main-hierarchy}
-With the definitions of \(L0\), \(L1\), and \(L2\) in
-\Cref{sec:L0,sec:L1,sec:L2}, the hierarchy does not collapse.  The cited
-Odrzywo{\l}ek EML theorem supplies only an \(L0\) representative-existence anchor,
-whereas the explicit Zeckendorf code, normalizer, decoding, compiled operations,
-and Church-iteration readouts give an internal computable \(L1\) protocol for
-\((\NN,+,\times)\).  The strictness is witnessed by two primary
-obstructions: the verified finite replacement-triple theorem transports
-Richardson's identity-to-zero theorem for any finite EML
-\(\pi\)/sine/punctured-absolute-value triple whose three semantic rows have been
-proved, and therefore forbids equality-reflecting
-computable semantic normalizers into finite decidable objects; and multiplication
-on \(\NN_{\ge1}\) cannot be faithfully read from the ambient product on one free
-monogenic orbit except on the trivial monoid or a single cyclic multiplicative ray.
-At level \(L2\), finite-fibre certificates over the fixed Zeckendorf normal forms
-exist at every resolution, but in the computable finite-fibre cover category they
-do not force fixed finite-state transfer.
-
-The Richardson clause of the theorem is unconditional only in this
-verified-triple form.  This article proves the punctured absolute-value row
-internally, but the exact printed pair \((U_{47},U_{111})\) instantiates the
-clause only under \((H_{\mathcal W})\) or separate proofs of
-\(U_{47}=\pi\) and \(U_{111}(x)=\sin x\) on the stated real principal-branch
-domains; this gate is the rigidity statement of
-\Cref{thm:printed-richardson-gate-rigidity}.  The intrinsic height formula has an
-analogous source boundary: the ordinary positive-index interval maximum is the
-cited input, and
-\Cref{thm:ordinary-maximum-supports-intrinsic-height,prop:kmp-indexing-lock-intrinsic-height,thm:audited-shifted-half-interval-height-conversion}
-prove only the shifted half-interval and fold-fibre consequences needed here.
-The endpoint-root string \(U_{126}\), a term-by-term proof of the full
-\(\mathcal B_{36}\) table, a new proof of the ordinary interval maximum, and a
-full intrinsic fibre-histogram or large-deviation theory for the unmodified
-Zeckendorf fold are not consequences of the theorem.
+\[
+ S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)\qquad(m\ge4).
+\]
 \end{theorem}
 
-\begin{proof}
-The \(L0\) assertion is exactly the pinned external anchor
-\Cref{thm:eml-universality}, with its domain and dependency boundary fixed by
-\Cref{thm:L0-citation-domain-support,thm:L0-external-anchor-criterion,thm:B36-import-exact-scope}.
-Thus the \(L0\) anchor imports representative existence only; it imports no
-equality algorithm, semantic compiler, or Richardson witness package.  The
-\(L1\) positive protocol is
-\Cref{prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ}.  The primary
-strictness assertions are \Cref{thm:proc-ams-core-obstruction-spine}: its
-Richardson part is \Cref{thm:separation}, proved from the punctured triple
-interface
-\Cref{thm:replacement-triple-richardson-interface,thm:relative-richardson-main-spine-closure},
-with the printed name boundary recorded in
-\Cref{ass:HW,cor:no-unconditional-printed-richardson-triple,thm:unconditional-submission-richardson-closure};
-its one-orbit part is the strengthened multiplication obstruction
-\Cref{thm:level-zero-obstruction,thm:restricted-level-zero-protocol-dichotomy}.
-
-The \(L2\) layer is exactly the consolidated interface
-\Cref{thm:L2-consolidated-interface}: fixed-resolution Hankel--Prony certificates,
-positive intrinsic fixed-degree transfer and height, and the cover-relative
-finite-state obstruction are three distinct assertions over the same normal-form
-sets.  The quantitative clause of \Cref{thm:moment-height-cover-trichotomy}
-separates the bad cover from the exact intrinsic height scale.  In particular,
-\Cref{thm:L2-cover-intrinsic-nonimplication} excludes
-interpreting the cover example as an intrinsic failure or nontransfer theorem for
-the original fibres, and \Cref{thm:height-squeeze-pressure-nondetermination}
-identifies the zero-temperature endpoint used here as only a maximal-height
-squeeze, not a full pressure, histogram, or large-deviation theorem.  The last
-item is the dependency-cut theorem
-\Cref{thm:load-bearing-core-dependency-cut}; it proves that replacing the full
-  calculator-basis import by the self-contained core preserves the stated
-  internal theorem chain and removes only the advertised optional headlines,
-  including the concrete printed \(U_{47}\)/\(U_{111}\) Richardson specialization,
-  which is present only under \((H_{\mathcal W})\) or separate proofs of the two
-  displayed real-domain identities.
-\end{proof}
-
-\begin{proposition}[Exact scope closure of the main hierarchy]
-\label{thm:main-hierarchy-exact-scope-closure}
-\label{thm:missing-results-scope-discharge}
-\label{thm:main-spine-scope-closure}
-\label{thm:main-theorem-scope-projection}
-Every strictness conclusion used by \Cref{thm:main-hierarchy} factors through one
-of the following four explicit interfaces, and through no stronger hidden
-interface:
-\begin{enumerate}
-\item the cited \(L0\) representative-existence anchor
-  \Cref{thm:eml-universality,thm:B36-import-exact-scope,thm:no-hidden-self-contained-B36-theorem}, which imports the
-  public \(\mathcal B_{36}\) existence sentence but no table, normal form,
-  equality algorithm, semantic compiler, or Richardson witness identity;
-\item the punctured Richardson interface
-  \Cref{thm:separation,thm:proc-ams-relative-richardson-theorem}, whose
-  witnesses prove \(\pi\), sine on \(\RR\), and \(|x|\) on
-  \(\RR\setminus\{0\}\);
-\item the one-free-monogenic-orbit ambient-product interface
-  \Cref{thm:level-zero-obstruction,thm:restricted-level-zero-protocol-dichotomy},
-  not a classification of arbitrary single-primitive protocols realizing
-  \(\{+,\times\}\);
-\item the \(L2\) finite-fibre interface, consisting of the positive intrinsic
-  fixed-\(q\) transfer package
-  \Cref{thm:audited-fixed-degree-transfer-interface,thm:intrinsic-fold-moment-transfer,thm:primitive-intrinsic-moment-transfer,thm:intrinsic-second-moment-recurrence,cor:polynomial-intrinsic-fiber-statistics},
-  the intrinsic all-degree obstruction
-  \Cref{thm:intrinsic-all-degree-transfer-obstruction},
-  the exact intrinsic height and large-moment endpoint
-  \Cref{thm:intrinsic-height-source-dependency-cut,thm:ordinary-maximum-supports-intrinsic-height,prop:kmp-indexing-lock-intrinsic-height,thm:audited-shifted-half-interval-height-conversion,thm:intrinsic-fold-fibre-height,cor:linfty-fold-entropy,thm:zero-temperature-fold-pressure,thm:diagonal-zero-temperature-fold-endpoint,thm:moment-height-cover-trichotomy},
-  and the computable-cover strictness interface
-  \Cref{def:computable-cover,thm:finite-state-strictness}.  The latter is
-  cover-height separated from the exact intrinsic maximum and is not an intrinsic
-  nonrecurrence or finite-state-failure theorem for the unmodified fold.
-\end{enumerate}
-Consequently the submission theorem remains valid after simultaneously deleting
-the data blocks that are outside the Proc. AMS scope: the unprinted term-by-term
-\(\mathcal B_{36}\) table, the optional named-string Richardson hypothesis
-\((H_{\mathcal W})\), a full online or bounded-window Zeckendorf arithmetic
-theory, any global rigidity classification of arbitrary single-primitive
-protocols, any proposed full intrinsic fibre histogram, all-\(q\) thermodynamic
-formalism, or large-deviation theory for the original \(\Fold_m\) fibres, and any
-\(L3\) capacity or Chebotarev-density layer for Hankel kernels.  After those
-deletions the remaining theorem chain is exactly \Cref{thm:main-hierarchy}: the
-cited \(L0\) representative-existence anchor, the internally proved core EML
-witnesses, the replacement-triple punctured Richardson implication, the internal
-Zeckendorf \(L1\) protocol of
-\Cref{prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ}, the one-orbit
-multiplication obstruction, the intrinsic \(L2\) fixed-\(q\) transfer and height
-package, and the cover-relative \(L2\) finite-state obstruction.  Conversely, an
-unconditional printed-string
-Richardson instance for \((U_{47},U_{111})\), a self-contained thirty-six-row
-\(\mathcal B_{36}\) representative proof, a full stable Zeckendorf arithmetic
-development, a global protocol-rigidity theorem, a full intrinsic fold histogram
-or large-deviation classification, or an \(L3\) capacity theorem would require
-additional hypotheses or additional proofs not present in this article and is
-not a consequence of the displayed interfaces.
-\end{proposition}
-
-\begin{proof}
-The first interface is isolated in \Cref{thm:eml-universality} and made exact by
-\Cref{thm:B36-import-exact-scope}: the cited input is representative existence
-for the public \(\mathcal B_{36}\) basis on the source's branch conventions.  The
-proof of that exactness is part of the theorem chain, not a synonym for the
-import: \Cref{thm:B36-import-exact-scope} shows that the manuscript imports only
-one versioned existence statement and that no term-by-term row, endpoint value,
-canonical form, equality algorithm, compiler, or Richardson witness package is
-available unless separately proved.
-\Cref{thm:no-hidden-self-contained-B36-theorem,thm:B36-self-contained-replacement-core,thm:load-bearing-core-dependency-cut}
-then show that the later Richardson, Zeckendorf, one-orbit, and finite-cover
-arguments use only the internal core witnesses once the global calculator-basis
-headline is removed.  Hence no later strictness proof depends on a printed
-thirty-six-row table or on a self-contained proof of that whole table.
-
-The second interface is exactly the punctured hypothesis of \Cref{thm:separation}:
-finite witnesses for \(\pi\), sine on \(\RR\), and \(|x|\) on
-\(\RR\setminus\{0\}\).  \Cref{thm:unconditional-submission-richardson-closure} proves that the
-endpoint-root string \(U_{126}\) is not part of this interface, and
-\Cref{thm:unconditional-submission-richardson-closure} proves that deleting
-\((H_{\mathcal W})\) removes the printed \(U_{47},U_{111}\) instantiation but
-leaves exactly the verified-triple implication for any replacement pair whose
-\(\pi\) and sine identities have been proved.  In particular, the internally
-proved absolute-value row \(G(M(u,u))=|u|\) for \(u\ne0\) supplies only the third
-punctured Richardson row.  The first two printed rows would require analytic
-proofs of the exact equalities \(U_{47}=\pi\) and
-\(U_{111}(x)=\sin x\) on their real principal-branch domain; absent
-\((H_{\mathcal W})\) or such proofs, the main theorem is the replacement-triple
-statement and cannot be read as an unconditional printed-string instance.
-
-The third interface is the one-free-monogenic-orbit obstruction.  By
-\Cref{thm:restricted-level-zero-protocol-dichotomy,thm:main-chain-protocol-rigidity-boundary},
-the negative multiplication statement assumes a free monogenic orbit and asks
-that multiplication be read by the ambient product on that same orbit.  Its proof
-uses the prime-weight exponent skeleton
-\Cref{lem:level-zero-exponent-skeleton}; without those hypotheses the skeleton is
-not available, and the paper asserts only the positive Zeckendorf protocol of
-\Cref{thm:zeckendorf-protocol-univ}.  Thus no global rigidity theorem is a hidden
-input to \Cref{thm:main-hierarchy}.
-
-The fourth interface is the \(L2\) finite-fibre interface.  On the unmodified
-fold, \Cref{thm:intrinsic-fold-moment-transfer} gives fixed finite-state transfer
-for every fixed intrinsic moment degree,
-\Cref{thm:primitive-intrinsic-moment-transfer} gives its Perron asymptotic and
-fixed-degree pressure, and
-\Cref{thm:intrinsic-all-degree-transfer-obstruction} rules out a single rational
-transfer law for the full moment tower.
-\Cref{thm:intrinsic-second-moment-recurrence} gives the displayed sharp recurrence
-for degree two, and \Cref{cor:polynomial-intrinsic-fiber-statistics} records the
-resulting polynomial-statistic C-finiteness.  The same intrinsic interface also
-contains the exact fibre-height theorem and large-moment endpoint.  The ordinary
-Fibonacci maximum input for that height package is only the source-audited
-support isolated in
-\Cref{thm:intrinsic-height-source-dependency-cut,thm:ordinary-maximum-supports-intrinsic-height,prop:kmp-indexing-lock-intrinsic-height}; the intrinsic fold statement itself is
-\Cref{thm:intrinsic-fold-fibre-height,cor:linfty-fold-entropy,thm:zero-temperature-fold-pressure,thm:diagonal-zero-temperature-fold-endpoint}.
-Separately, \Cref{thm:finite-state-strictness} constructs covers over the fixed
-normal-form sets and proves failure of the fixed finite-state transfer budget for
-a cover moment.  \Cref{thm:moment-height-cover-trichotomy,thm:intrinsic-cover-transfer-dichotomy,thm:L2-cover-relative-closure,thm:L2-cover-intrinsic-nonimplication}
-state the formal boundary: intrinsic fixed-\(q\) transfer and the exact intrinsic
-height law coexist with cover moments that can have either finite-state or
-non-finite-state behaviour, so the cover obstruction is auxiliary certificate data
-and not an intrinsic failure theorem for the original maps \(\Fold_m\).  The
-large-moment endpoint result used in this paper is the height/endpoint squeeze of
-\Cref{thm:zero-temperature-fold-pressure,thm:diagonal-zero-temperature-fold-endpoint};
-the all-degree theorem settles rational uniform transfer but does not classify
-all fibre sizes or deviations away from maximal fibres.  Thus
-deleting full histogram, all-\(q\) thermodynamic-formalism, or large-deviation
-claims for \(\Fold_m\) changes no proved assertion in the hierarchy.  The same is
-true of deleting online Zeckendorf arithmetic algorithms, global protocol
-rigidity, \(L3\) capacity-density material, or the appendix-only finite Hankel
-star-kernel compression, since none of these appears in the four load-bearing
-interfaces above.  Combining the four paragraphs gives the claimed exact scope
-closure and the announced nonconsequences.
-\end{proof}
-
-\begin{proposition}[Verified-core projection of the hierarchy]
-\label{thm:verified-core-hierarchy-projection}
-If one removes from the submission all optional data not proved internally or supplied as
-explicit hypotheses--the \((H_{\mathcal W})\)-conditional printed
-\((U_{47},U_{111})\) Richardson specialization,
-the term-by-term \(\mathcal B_{36}\) table, endpoint-root claims, full stable
-Zeckendorf arithmetic algorithms, global protocol rigidity, full intrinsic
-fold-histogram or large-deviation assertions, and any \(L3\) capacity layer--the
-remaining theorem chain still proves \Cref{thm:main-hierarchy}.  More precisely, the surviving core
-is the following directed chain of load-bearing assertions:
+The fibre maximum has a different role.  It supplies a sharp height scale
+against which all moments can be compared, and it is the input needed to
+state accurately what fixed-degree transfer does not imply.
+\begin{theorem}[Exact fibre height]
+\label{thm:intro-height}
+If \(M_m=\max_{x\in X_m}d_m(x)\), then
 \[
-\begin{gathered}
-\text{external }L0\text{ representative existence}
-\longrightarrow
-  \text{unconditional printed-string-free verified-triple Richardson obstruction},\\
-\text{internal Zeckendorf }L1\text{ protocol}
-\longrightarrow
-\text{one-free-orbit multiplication obstruction},\\
-\text{intrinsic fixed-}q\text{ transfer and height}
-\longrightarrow
-\text{cover-relative finite-state obstruction}.
-\end{gathered}
+ M_{2s-1}=F_{s+1},\qquad M_{2s}=2F_s\qquad(s\ge1).
 \]
-Every arrow in this chain is a theorem or proposition cited in
-\Cref{thm:main-hierarchy-exact-scope-closure}.  Conversely, none of the four
-deleted optional data blocks can be reconstructed from the surviving core: the
-printed \((U_{47},U_{111})\) branch requires the two real-domain witness
-identities, the full \(\mathcal B_{36}\) table requires term-by-term external or
-internal verification, endpoint-root claims are ruled out by the punctured
-Richardson interface, and full fold-histogram or large-deviation conclusions
-require data beyond the intrinsic height and fixed-degree transfer package.
-\end{proposition}
-
-\begin{proof}
-The first displayed arrow uses only the cited representative-existence anchor
-\Cref{thm:eml-universality,thm:B36-import-exact-scope} and the verified-triple
-Richardson theorem \Cref{thm:separation,thm:proc-ams-relative-richardson-theorem}.
-By
-\Cref{thm:unconditional-submission-richardson-closure,cor:printed-string-free-richardson-spine},
-that Richardson theorem is formulated for arbitrary finite triples whose three
-semantic rows have been proved, and deleting \((H_{\mathcal W})\) removes only the
-named printed-pair specialization.  The second arrow is the positive protocol
-\Cref{prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ} together with
-the restricted obstruction
-\Cref{thm:level-zero-obstruction,thm:restricted-level-zero-protocol-dichotomy};
-the hypotheses include the one-free-monogenic-orbit and ambient-product readout
-conditions, so no global single-primitive rigidity theorem is being used.  The
-third arrow is the consolidated \(L2\) interface
-\Cref{thm:L2-consolidated-interface}: intrinsic fixed-degree transfer and the
-height package are positive facts for the original folds, while
-\Cref{thm:finite-state-strictness,thm:L2-cover-intrinsic-nonimplication} give only
-the cover-relative finite-state obstruction.
-
-These are exactly the four interfaces listed and proved sufficient in
-\Cref{thm:main-hierarchy-exact-scope-closure}, with the external gates classified
-in \Cref{thm:source-gate-rigidity}; hence the surviving core proves the
-main hierarchy theorem.  The converse assertions are the boundary clauses of the
-same proposition, together with
-\Cref{thm:richardson-witness-row-rigidity,cor:no-unconditional-printed-richardson-triple}
-for the printed Richardson pair,
-\Cref{thm:B36-import-exact-scope,thm:no-hidden-self-contained-B36-theorem} for the
-calculator-basis table, \Cref{thm:separation} for the punctured rather than
-endpoint root interface, and
-\Cref{thm:moment-height-cover-trichotomy,thm:L2-cover-intrinsic-nonimplication}
-for the finite-fibre boundary.  Thus the optional blocks are not hidden premises
-or hidden consequences of the load-bearing theorem chain.
-
-\end{proof}
-
-\begin{theorem}[Verified core and optional-source decomposition]
-\label{thm:verified-core-printed-specialization-decomposition}
-\label{thm:printed-specialization-biconditional}
-\label{thm:optional-source-decomposition}
-Let \(\mathcal C\) be the theorem chain obtained from the cited \(L0\)
-representative-existence anchor, the internally proved punctured absolute-value
-row, the verified finite EML replacement-triple Richardson interface, the
-Zeckendorf \(L1\) protocol, the one-free-monogenic-orbit multiplication
-obstruction, and the intrinsic/cover-relative \(L2\) interface.  Let
-\((H_U)\) denote the conjunction of the two exact printed real-domain identities
-\[
-  U_{47}=\pi,
-  \qquad
-  U_{111}(x)=\sin x\quad(x\in\RR)
-\]
-for the printed pure EML strings on their stated principal-branch domains.  Let
-\((E_{\mathrm{KMP}})\) be the positive-index ordinary interval maximum statement
-isolated in \Cref{prop:kmp-indexing-lock-intrinsic-height}.  Then the
-submission theorem decomposes as follows.
-\begin{enumerate}
-\item The chain \(\mathcal C\), together with \((E_{\mathrm{KMP}})\) for the
-  intrinsic height clause, proves \Cref{thm:main-hierarchy} with its Richardson
-  obstruction quantified over verified finite triples and without using the
-  printed names \(U_{47}\) and \(U_{111}\) as analytic identities.
-\item Relative to the structural Richardson translation used in this paper and to
-  the internally proved punctured row \(\Abs(u)=|u|\) for \(u\ne0\), the printed
-  \((U_{47},U_{111})\) Richardson branch is equivalent to \((H_U)\): assuming
-  \((H_U)\), or \((H_{\mathcal W})\) which contains it, gives the printed branch,
-  and any source-locked printed branch for these two names yields \((H_U)\).
-\item The numerical intrinsic height law is equivalent, over the internal
-  fold-aware conversion lemmas of this paper, to the imported statement
-  \((E_{\mathrm{KMP}})\).  Replacing \((E_{\mathrm{KMP}})\) by any cited source or
-  self-contained proof with the same positive-index formula leaves every
-  \(\Fold_m\)-height, entropy, large-moment endpoint, and cover-height budget
-  conclusion unchanged; deleting it deletes only the numerical ordinary-maximum
-  input, not the Richardson, \(L1\), one-orbit, or finite-cover obstruction
-  chain.
-\end{enumerate}
-Consequently deleting \((H_U)\) deletes exactly the printed-pair specialization
-and leaves the verified-core hierarchy unchanged, while changing the source of
-\((E_{\mathrm{KMP}})\) changes only the external support for the numerical height
-law and not the internal fold-aware conversion.
 \end{theorem}
 
-\begin{proof}
-The core chain \(\mathcal C\) uses the \(L0\) citation only through
-\Cref{thm:eml-universality,thm:B36-import-exact-scope}: a representative-existence
-anchor and not a table of proved row identities.  Its Richardson step is
-\Cref{thm:separation,thm:proc-ams-relative-richardson-theorem}, whose hypotheses
-are a finite pure EML triple with proved semantic rows for \(\pi\), sine on
-\(\RR\), and \(|x|\) on \(\RR\setminus\{0\}\).  The absolute-value row is supplied
-internally by \Cref{thm:eml-punctured-richardson-core}, namely
-\(G(M(u,u))=|u|\) for \(u\ne0\).  The proof of the Richardson obstruction then
-proceeds by the effective translation of \Cref{lem:richardson-translation} and
-Richardson undecidability, and nowhere requires the syntactic names \(U_{47}\) or
-\(U_{111}\).  The remaining arrows of \(\mathcal C\) are independent of those
-names: the positive protocol is
-\Cref{prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ}, the restricted
-multiplication obstruction is
-\Cref{thm:level-zero-obstruction,thm:restricted-level-zero-protocol-dichotomy}, and
-the \(L2\) assertion is
-\Cref{thm:L2-consolidated-interface,thm:finite-state-strictness}.  The numerical
-height part of the same \(L2\) interface uses the cited ordinary maximum only
-through \((E_{\mathrm{KMP}})\), by
-\Cref{prop:kmp-indexing-lock-intrinsic-height,thm:intrinsic-height-source-dependency-cut}.
-Therefore the cited arrows, with that single external ordinary-maximum input for
-the height formula, are exactly the proof of \Cref{thm:main-hierarchy} in
-verified-core form.
+The ordinary interval maximum for unrestricted Fibonacci representations is
+used only as cited background in the proof of this height formula.  The
+fold-specific shift from an ordinary interval to the residue fibre is proved
+in the present paper.
 
-If \((H_U)\) is available, then with \(\mathsf P=U_{47}\),
-\(\mathsf S=U_{111}\), and \(\mathsf A=\Abs\), the three rows required by
-\Cref{thm:separation} hold.  Thus the verified-triple Richardson theorem
-specializes to the printed pair.  Since \((H_{\mathcal W})\) includes these two
-printed identities, it gives the same specialization.
+\subsection{What is new}
+The fixed-degree theorem is a transfer theorem for the actual collision
+moments of the unmodified fold.  The finite state set is explicit and the
+proof shows that every accepting path survives the bounded carry restriction.
+The primitive support graph then yields more than rationality: it gives a
+single exponential scale and a positive leading coefficient at each fixed
+degree.  The recurrence for \(q=2\) is exact rather than an asymptotic fit.
+Finally, the height formula lets us state a restrained nonuniformity result:
+the fixed-degree matrices cannot be assembled into one rational bivariate
+transfer law in the degree marker.
 
-Conversely suppose that these printed names supply a source-locked Richardson
-branch through the same structural translation used by the paper.  By
-\Cref{thm:richardson-witness-row-rigidity}, value preservation for that branch is
-possible only when its \(\pi\)-row and sine row are correct on the required real
-domains.  With the printed substitutions \(\mathsf P=U_{47}\) and
-\(\mathsf S=U_{111}\), those two necessary rows are exactly \((H_U)\).  Hence the
-printed branch is not created by finite syntax, by the \(\mathcal B_{36}\)
-representative-existence citation, or by the internally proved punctured
-absolute-value row; it is created precisely by the two printed real-domain
-identities.  Removing \((H_U)\) therefore removes precisely this substitution
-step, while
-\Cref{cor:printed-string-free-richardson-spine,thm:unconditional-submission-richardson-closure}
-leave every quantified verified-triple consequence of \(\mathcal C\) in place.
+To our knowledge, before this paper the finite-state transfer question for these particular
+fold collision moments had not been settled: it was not known whether a
+resolution-independent carry bound retained every accepting tuple, nor was
+the displayed second-moment recurrence available.  The present results answer
+those two questions for the unmodified fold, degree by degree in \(q\).
 
-It remains to prove the height-source clause.  By
-\Cref{prop:kmp-indexing-lock-intrinsic-height}, \((E_{\mathrm{KMP}})\) is precisely
-the positive-index formula
-\(C_k=\max\{R(N):F_k\le N<F_{k+1}\}\) imported from the cited ordinary theorem.
-\Cref{thm:intrinsic-height-source-dependency-cut} proves that the later chain
-\[
-  (E_{\mathrm{KMP}})
-  \Longrightarrow \Cref{thm:half-interval-fibonacci-representation-max}
-  \Longrightarrow \Cref{thm:intrinsic-fold-fibre-height}
-  \Longrightarrow
-  \Cref{cor:linfty-fold-entropy,thm:zero-temperature-fold-pressure,thm:moment-height-cover-trichotomy}
-\]
-uses only this displayed ordinary maximum formula and internal conversions:
-the recursion for truncated representation counts, the shifted half-interval
-argument, and the fold-fibre pairing.  Hence any replacement source proving the
-same positive-index formula supplies the same numerical height and endpoint
-clauses.  Conversely, without such an ordinary-maximum input the manuscript still
-has the internal pairing and conversion implications, but it has no proved values
-for the ordinary maxima \(C_k\) and therefore no proved numerical values
-\(M_{2s-1}=F_{s+1}\), \(M_{2s}=2F_s\).  Since none of the Richardson, \(L1\),
-one-orbit, or cover-relative proofs cites \((E_{\mathrm{KMP}})\), deleting that
-input affects only the numerical height branch just identified.
-\end{proof}
-
-The verified-core/optional-source decomposition of
-\Cref{thm:verified-core-printed-specialization-decomposition} is a theorem-level
-projection of \Cref{thm:main-hierarchy}; the scoped strictness gate is now part of
-\Cref{thm:proc-ams-core-obstruction-spine,thm:main-hierarchy-exact-scope-closure,thm:verified-core-hierarchy-projection}:
-the Richardson obstruction is universal over verified finite EML triples, the
-multiplication obstruction is restricted to one free monogenic orbit, and the
-\(L2\) statement is cover-relative.
-The Richardson input to the main theorem is exactly the punctured interface of
-\Cref{thm:proc-ams-relative-richardson-theorem}: finite pure-EML witnesses for
-\(\pi\), sine on \(\RR\), and \(|x|\) on \(\RR\setminus\{0\}\).  Under this
-interface, identity to zero for Richardson expressions reduces effectively to
-equality with the translated zero EML term on the same source domain, so a
-computable semantic normalizer that reflects and preserves equality on those
-source-indexed partial real functions would decide Richardson's undecidable
-problem.  The endpoint-root string \(U_{126}\) is not part of this input.  This
-is \Cref{thm:proc-ams-relative-richardson-theorem} in interface form: the proof
-there constructs the translation by structural recursion and applies
-Richardson's undecidability theorem recorded in \Cref{lem:richardson-fragment}.
-
-The positive parts of the hierarchy are constructive: \((\eml,1)\) gives the
-imported expression representatives, Zeckendorf valuation transport gives the
-compiled \(L1\) arithmetic operations, and finite fibre-size multisets give the
-\(L2\) certificates, respectively by
-\Cref{thm:eml-universality,prop:zeckendorf-protocol-data,thm:zeckendorf-protocol-univ,prop:zeckendorf-cert-univ}.
+\subsection{Organization}
+Section~\ref{sec:fold-interface} fixes the fold and residue notation.
+Section~\ref{sec:carry-automata} proves the bounded carry lemma and its
+losslessness.  Section~\ref{sec:transfer} constructs the matrices, proves
+primitivity, and derives the second-moment recurrence.  Section~\ref{sec:height}
+proves the height law from the cited ordinary interval maximum and derives
+the nonuniformity corollary.  Section~\ref{sec:discussion} records the scope
+and the remaining limitations.

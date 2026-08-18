@@ -1,12 +1,6 @@
 \documentclass{amsart}
 
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\IfFileExists{stmaryrd.sty}{%
-  \usepackage{stmaryrd}%
-}{%
-  \newcommand{\llbracket}{\mathopen{[\![}}%
-  \newcommand{\rrbracket}{\mathclose{]\!]}}%
-}
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{cleveref}
@@ -26,88 +20,56 @@
 
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
-\newtheorem*{unnumberedremark}{Remark}
 
-\DeclareMathOperator{\eml}{eml}
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Val}{Val}
-\DeclareMathOperator{\End}{End}
-\DeclareMathOperator{\Sym}{Sym}
-\DeclareMathOperator{\rank}{rank}
-\DeclareMathOperator{\Abs}{Abs}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\NN}{\mathbb N}
+\newcommand{\ZZ}{\mathbb Z}
+\newcommand{\RR}{\mathbb R}
 
-\title[Verified-Core Relative Single-Primitive Hierarchy]
-{A Verified-Core Relative \texorpdfstring{\(L0/L1/L2\)}{L0/L1/L2} Single-Primitive Universality Hierarchy}
+\title[Carry automata for Zeckendorf fold moments]
+{Carry Automata, Primitive Transfer, and Fibre Heights for Zeckendorf Folds}
+\author{Haobo Ma}
+\address{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981}
+\email{auric@aelf.io}
 
-\author[The Omega Institute]{The Omega Institute}
+\author{Wenlin Zhang}
+\address{National University of Singapore, Singapore}
+\email{e1327962@u.nus.edu}
 \date{}
-\subjclass[2020]{Primary 03D35; Secondary 11B39, 68Q42, 47A57}
-\keywords{single-primitive universality, Zeckendorf numeration,
-canonical forms, moment problem, Richardson theorem}
+\subjclass[2020]{Primary 68Q45; Secondary 11B39, 37B10}
+\keywords{Zeckendorf numeration, finite automata, Fibonacci representations, transfer matrices, collision moments}
 
 \begin{document}
 \begin{abstract}
-We separate three meanings of universality for one binary primitive.  Level
-\(L0\) is expression universality: the cited Odrzywo{\l}ek
-arXiv:2603.21852v2 record for \(\eml(x,y)=e^x-\operatorname{Log}y\) is used only
-as a representative-existence theorem for its displayed \(\mathcal B_{36}\)
-calculator basis.  Level \(L1\) is protocol universality: Zeckendorf normal
-forms, valuation transport through \(\NN\), and Church iteration give an internal
-computable protocol for \(+\) and \(\times\) on \(\NN\).  The hierarchy is strict
-in the following submission-facing sense.  Any finite EML triple whose
-\(\pi\)-row, sine row, and punctured absolute-value row are semantically verified
-transports Richardson's
-identity-to-zero theorem and forbids a computable semantic normalizer or
-equality-reflecting compiler for the translated fragment; the paper proves the
-punctured absolute-value row internally by \(G(M(u,u))=|u|\) for \(u\ne0\).  The
-particular printed strings \(U_{47}\) and \(U_{111}\) instantiate this clause
-only under the optional analytic hypothesis \((H_{\mathcal W})\), or under a
-separate proof of those two exact real-domain identities for those exact printed
-strings; otherwise they are merely source-locked syntax.  The endpoint-root
-string \(U_{126}\) is not part of the punctured obstruction.  The intrinsic
-fold-height formula below has the same explicit dependency boundary: the ordinary
-positive-index Fibonacci interval maximum is imported from
-Koc\'abov\'a--Mas\'akov\'a--Pelantov\'a, while the shifted half-interval and
-\(\Fold_m\)-fibre conversions are proved here.  Independently,
-multiplication on \(\NN_{\ge1}\) cannot be faithfully read from the ambient
-product on one free monogenic orbit, except on the trivial monoid or a single
-cyclic multiplicative ray.  Level \(L2\) adds finite-fibre certificates over the
-fixed Zeckendorf normal-form sets.  For the unmodified fold, every fixed-degree
-moment transfer has a primitive Perron asymptotic, whereas the full bivariate
-moment tower is nonrational and admits no single rational finite-state transfer
-law; the \(q=\infty\) height is exactly
-\(M_{2s-1}=F_{s+1}\), \(M_{2s}=2F_s\).  Computable finite-fibre covers give the
-separate obstruction that certificates need not force transfer even in degree
-two.  Thus the unconditional core result is a verified-triple-relative
-\(L0/L1/L2\) hierarchy; the printed \(U_{47}\)/\(U_{111}\) branch is a
-conditional specialization, not a premise of the core theorem.  It is not a term-by-term proof of the external
-calculator table, an online Zeckendorf arithmetic paper, a global rigidity
-classification of single-primitive protocols, a full intrinsic fibre
-thermodynamics, or an \(L3\) capacity theory.
+For \(m\ge1\), let \(\Fold_m:\{0,1\}^{m+1}\to X_m\) be reduction modulo
+\(F_{m+2}\) followed by greedy Zeckendorf normalization, with
+\(F_1=1,F_2=2\).  We prove the following fixed-degree statement: for every
+fixed integer \(q\ge0\), there is an effectively constructible integer matrix
+\(T_q\), independent of \(m\), whose matrix coefficient is the collision
+moment \(S_q(m)=\sum_{x\in X_m}|\Fold_m^{-1}(x)|^q\).  The key point is
+\emph{losslessness}: the bounded signed-Fibonacci carry automaton deletes no
+accepting path.  After trimming, its weighted graph is primitive for every
+\(q\ge1\), giving a Perron asymptotic and a fixed-degree pressure.  For \(q=2\)
+we derive the exact recurrence
+\(S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)\) for \(m\ge4\), with initial
+values \(6,14,36\).  We also prove the exact maximal fibre heights
+\(M_{2s-1}=F_{s+1}\) and \(M_{2s}=2F_s\).  As a concise consequence, the bivariate
+moment series is not rational: fixed-\(q\) transfer is uniform in resolution,
+but the transfer dimension and matrix cannot be chosen as one rational law
+uniform in the moment degree.  The only external enumerative input is the
+ordinary Fibonacci interval-maximum formula of Kocábová--Masáková--Pelantová;
+its conversion to the shifted fold interval is proved here.
 \end{abstract}
 
 \maketitle
 
 \input{sections/sec01_introduction}
-\input{sections/sec02_expression_universality}
-\input{sections/sec03_protocol_universality}
-\input{sections/sec04_certificate_universality}
-\input{sections/sec04_intrinsic_height}
-\input{sections/sec04_intrinsic_pressure}
-\input{sections/sec04_finite_certificates}
-\input{sections/sec04_certificate_boundary}
-\input{sections/sec05_hierarchy_strictness}
-\input{sections/sec05_richardson_interfaces}
-\input{sections/sec05_finite_fibre_strictness}
+\input{sections/sec02_fold_interface}
+\input{sections/sec03_carry_automata}
+\input{sections/sec04_transfer_and_second_moment}
+\input{sections/sec05_height_and_nonuniformity}
 \input{sections/sec06_discussion}
-\appendix
-\input{sections/sec07_derived_consequences}
 
 \printreferences
-
 \end{document}

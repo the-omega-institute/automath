@@ -1,0 +1,117 @@
+\section{Lossless signed-carry automata}
+\label{sec:carry-automata}
+
+Fix \(q\ge1\).  For a column
+\(\alpha=(\alpha_1,\ldots,\alpha_q)\in\{0,1\}^q\), define
+\[
+ \Delta(\alpha)=(\alpha_2-\alpha_1,\ldots,\alpha_q-\alpha_1)
+ \in\{-1,0,1\}^{q-1},
+ \qquad
+ w_q(a)=|\{\alpha:\Delta(\alpha)=a\}|.
+\]
+The carry state space is
+\[
+ \mathcal C_q=\{-1,0,1\}^{q-1}\times\{-1,0,1\}^{q-1}.
+\]
+For \(a\in\{-1,0,1\}^{q-1}\), put
+\[
+ \tau_a(p,r)=(r,p+a-r)
+\]
+whenever the second coordinate is again in \(\{-1,0,1\}^{q-1}\), and give the
+transition weight \(w_q(a)\).  The initial state is \((0,0)\), and the
+accepting states are \((\sigma,0)\) with
+\(\sigma\in\{-1,0,1\}^{q-1}\).
+
+\begin{lemma}[Scalar exit classification]
+\label{lem:scalar-signed-fibonacci-exit-classification}
+For the scalar update \(\tau_a(p,r)=(r,p+a-r)\), \(a\in\{-1,0,1\}\), every
+path starting in \((0,0)\) that leaves \(Q=\{-1,0,1\}^2\) stays outside \(Q\)
+and never reaches \((\sigma,0)\) with \(\sigma\in\{-1,0,1\}\).
+\end{lemma}
+\begin{proof}
+The only one-step exits from \(Q\) are
+\[
+ (0,-2),(1,-2),(1,-3),(-1,2),(-1,3),(0,2).
+\]
+The positive exits lie in
+\(U_+=\{p\le0,r\ge2\}\) or \(V_+=\{p\ge2,r\le-1\}\), and the negative
+exits lie in
+\(U_-=\{p\ge0,r\le-2\}\) or \(V_-=\{p\le-2,r\ge1\}\).
+The update sends \(U_+\) into \(V_+\), \(V_+\) into \(U_+\), and similarly
+interchanges \(U_-\) and \(V_-\).  These four regions are disjoint from \(Q\)
+and from every accepting state.
+\end{proof}
+
+\begin{lemma}[Coordinatewise exit deletion]
+\label{lem:coordinatewise-signed-fibonacci-exit-deletion}
+Let \(a_1,\ldots,a_n\in\{-1,0,1\}^{q-1}\) and define unrestricted carries by
+\[
+ (p_0,r_0)=(0,0),\qquad
+ (p_k,r_k)=(r_{k-1},p_{k-1}+a_k-r_{k-1}).
+\]
+If a coordinate leaves \(Q\), the vector path cannot end at \((\sigma,0)\).
+Moreover, every solution of
+\[
+ \sum_{k=1}^n a_{k,j}F_k=\sigma_jF_{n+1}
+ \quad(1\le j\le q-1)
+\]
+ends at that accepting state.
+\end{lemma}
+\begin{proof}
+The first assertion is the scalar lemma applied to the first exited
+coordinate.  For the second, the scalar carry identity
+\[
+ \sum_{i=1}^k a_{i,j}F_i=p_{k,j}F_{k+1}+r_{k,j}F_k
+\]
+holds by induction.  The same recursion gives
+\(|p_{k,j}|\le F_k-1\) and \(|r_{k,j}|\le F_{k+1}-1\).  At \(k=n\), the target
+equation and coprimality of consecutive Fibonacci numbers force
+\(F_{n+1}\mid r_{n,j}\), hence \(r_{n,j}=0\), and then \(p_{n,j}=\sigma_j\).
+\end{proof}
+
+\begin{lemma}[Lossless bounded carry automaton]
+\label{lem:bounded-signed-fibonacci-carry}
+For every \(m\ge1\), \(S_q(m)\) is the weighted number of length-\(m+1\)
+paths in the automaton above from \((0,0)\) to an accepting state.
+In particular, deleting transitions that leave \(\mathcal C_q\) deletes no
+accepting path.
+\end{lemma}
+\begin{proof}
+A \(q\)-tuple of words contributes to \(S_q(m)\) precisely when all words have
+the same fold.  By \eqref{eq:fold-residue} and
+\Cref{prop:finite-zeckendorf-residue-interface}, this is equivalent to
+\[
+ \sum_{k=1}^{m+1}(\omega_k^{(j+1)}-\omega_k^{(1)})F_k
+ \equiv0\pmod {F_{m+2}}\quad(1\le j<q).
+\]
+The absolute value of each signed sum is at most
+\(F_{m+3}-2<2F_{m+2}\).  Hence each congruence has a unique target
+\(\sigma_jF_{m+2}\), with \(\sigma_j\in\{-1,0,1\}\).  Grouping the digit
+differences into columns gives the target equations in the preceding lemma,
+and \(w_q(a_k)\) counts the binary columns producing \(a_k\).
+The carry identity identifies target solutions with accepting final states.
+The coordinatewise exit lemma proves that no target solution is removed by
+the bounded restriction, while every bounded accepting path satisfies the
+target equations.  Thus the weighted path count is exactly \(S_q(m)\).
+\end{proof}
+
+\begin{theorem}[Audited transfer interface]
+\label{thm:audited-fixed-degree-transfer-interface}
+Let \(M_q\) be the integer matrix indexed by \(\mathcal C_q\) with
+\[
+ (M_q)_{c,c'}=\sum_{\tau_a(c)=c'}w_q(a).
+\]
+Let \(e_0\) be the initial-state vector and \(b_q\) the indicator of the
+accepting states.  Then
+\[
+ S_q(m)=e_0^{\mathsf T}M_q^{m+1}b_q .
+\]
+The matrix \(M_q\), its state set, and the vectors are independent of \(m\);
+the equality is lossless for the original fold fibres.
+\end{theorem}
+\begin{proof}
+This is the weighted path count of
+\Cref{lem:bounded-signed-fibonacci-carry}.  The previous lemma is the
+losslessness argument; no growth estimate is used.
+\end{proof}
+

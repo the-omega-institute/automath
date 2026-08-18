@@ -1,0 +1,81 @@
+\section{The Zeckendorf fold}
+\label{sec:fold-interface}
+
+Let
+\[
+ F_1=1,\qquad F_2=2,\qquad F_{k+2}=F_{k+1}+F_k .
+\]
+Write \(X_\infty^{\mathrm{fin}}\) for finite-support binary sequences with no
+adjacent \(1\)'s and define
+\[
+ \Val(c)=\sum_{k\ge1}c_kF_k .
+\]
+For \(m\ge1\), set
+\[
+ \Omega_m=\{0,1\}^{m+1},\qquad
+ X_m=\{c\in X_\infty^{\mathrm{fin}}:0\le\Val(c)<F_{m+2}\}.
+\]
+The map \(\Val_m:X_m\to\{0,\ldots,F_{m+2}-1\}\) is the restriction of
+\(\Val\).  The fold \(\Fold_m(\omega)\) is the greedy Zeckendorf normal form
+of
+\[
+ \sum_{k=1}^{m+1}\omega_kF_k\pmod {F_{m+2}} .
+\]
+Thus
+\begin{equation}\label{eq:fold-residue}
+ \Val_m(\Fold_m(\omega))\equiv
+ \sum_{k=1}^{m+1}\omega_kF_k\pmod {F_{m+2}} .
+\end{equation}
+
+\begin{lemma}[Greedy Zeckendorf normalizer]
+\label{lem:greedy-zeckendorf-normalizer}
+Every \(n\in\NN\) has a unique representative in
+\(X_\infty^{\mathrm{fin}}\), and the representative is computable.
+\end{lemma}
+\begin{proof}
+This is Zeckendorf's theorem \cite{Zeckendorf1972}.  Greedily subtract the
+largest Fibonacci number not exceeding the remaining integer; the exchange
+inequality prevents adjacent summands and proves uniqueness.
+\end{proof}
+
+\begin{proposition}[Finite residue interface]
+\label{prop:finite-zeckendorf-residue-interface}
+The map \(\Val_m\) is a computable bijection onto
+\(\{0,\ldots,F_{m+2}-1\}\), and \(\Fold_m:\Omega_m\to X_m\) is onto.
+Consequently \(|X_m|=F_{m+2}\).
+\end{proposition}
+\begin{proof}
+The lemma gives one unique normal form for each integer in the displayed
+interval.  Such a normal form uses no part larger than \(F_{m+1}\), so its
+first \(m+1\) digits give a preimage under \(\Fold_m\).  Equation
+\eqref{eq:fold-residue} proves the remaining assertions.
+\end{proof}
+
+\begin{proposition}[Fold confluence]
+\label{prop:fold-confluence}
+Two words have the same stable normal form exactly when their ordinary
+valuations agree.  Two words in \(\Omega_m\) have the same finite fold exactly
+when their valuations agree modulo \(F_{m+2}\).
+\end{proposition}
+\begin{proof}
+Stable equality follows from uniqueness in
+\Cref{lem:greedy-zeckendorf-normalizer}; finite equality follows from
+\Cref{prop:finite-zeckendorf-residue-interface} and
+\eqref{eq:fold-residue}.
+\end{proof}
+
+\begin{definition}[Collision moment]
+\label{def:collision-moment}
+For \(q\ge0\), the intrinsic collision moment is
+\[
+ S_q(m)=\sum_{x\in X_m}|\Fold_m^{-1}(x)|^q .
+\]
+We use the convention \(a^0=1\) for \(a>0\), so
+\(S_0(m)=F_{m+2}\).
+\end{definition}
+
+\begin{remark}
+The normal forms are used only to define the finite fold and its fibres.  No
+digit-local arithmetic algorithm is needed for the transfer results.
+\end{remark}
+
