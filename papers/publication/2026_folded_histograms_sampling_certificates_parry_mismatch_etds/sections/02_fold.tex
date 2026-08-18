@@ -1,0 +1,107 @@
+\section{The Fibonacci fold}\label{sec:fold}
+
+Let \(F_0=0\), \(F_1=1\), and
+\[
+F_{n+2}=F_{n+1}+F_n\qquad(n\geq0).
+\]
+For \(m\geq1\), put
+\[
+\Omega_m:=\{0,1\}^m
+\]
+and let
+\[
+X_m:=\{u=u_1\cdots u_m\in\{0,1\}^m:
+u_iu_{i+1}=0\text{ for }1\leq i<m\}
+\]
+be the length-\(m\) golden-mean language.  Assign to
+\(\omega=\omega_1\cdots\omega_m\in\Omega_m\) the Fibonacci value
+\[
+N_m(\omega):=\sum_{j=1}^m\omega_jF_{j+1}.
+\]
+
+By Zeckendorf's theorem, every nonnegative integer \(n\) has a unique
+expansion
+\[
+n=\sum_{j\geq1}z_jF_{j+1},
+\qquad z_j\in\{0,1\},\qquad z_jz_{j+1}=0.
+\]
+We write this digit sequence as \(Z(n)=(z_1,z_2,\ldots)\).
+
+\begin{definition}[Fibonacci fold]\label{def:canonical-fold}
+For \(\omega\in\Omega_m\), define
+\[
+\Fold_m(\omega):=z_1\cdots z_m,
+\qquad Z(N_m(\omega))=(z_1,z_2,\ldots).
+\]
+Thus \(\Fold_m:\Omega_m\to X_m\) is Zeckendorf normalization followed by
+truncation to the original length.
+\end{definition}
+
+The following proposition is the entire arithmetic input to the
+classification.  It combines the basic range property of Fibonacci
+representations with the residue characterization that appeared as
+Proposition 2.6 in the longer version.
+
+\begin{proposition}[Residue characterization]\label{prop:fold-residue-characterization}
+For every \(m\geq1\), the restriction of \(N_m\) is a bijection
+\[
+N_m:X_m\longrightarrow\{0,1,\ldots,F_{m+2}-1\}.
+\]
+The fold fixes \(X_m\) pointwise.  Moreover, for every
+\(\omega\in\Omega_m\) and \(x\in X_m\),
+\[
+\Fold_m(\omega)=x
+\quad\Longleftrightarrow\quad
+N_m(\omega)\equiv N_m(x)\pmod{F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+The legal strings in \(X_m\) are precisely the Zeckendorf digit strings
+supported in positions \(1,\ldots,m\).  Zeckendorf uniqueness therefore
+makes \(N_m\) injective on \(X_m\).  The image is the stated interval: this
+is immediate for \(m=1\), and the legal strings ending in \(0\) and \(1\)
+give, respectively,
+\[
+\{0,\ldots,F_{m+1}-1\}
+\quad\text{and}\quad
+F_{m+1}+\{0,\ldots,F_m-1\}.
+\]
+These adjacent intervals have total length
+\(F_{m+1}+F_m=F_{m+2}\).  Since a legal word is already the Zeckendorf
+expansion of its own value, \(\Fold_m\) fixes \(X_m\).
+
+For arbitrary \(\omega\in\Omega_m\),
+\[
+N_m(\omega)\leq\sum_{j=1}^mF_{j+1}
+=F_{m+3}-2<F_{m+3}.
+\]
+Consequently, the Zeckendorf expansion of \(N_m(\omega)\) has no nonzero
+digit beyond position \(m+1\).  If its digits are
+\((z_1,\ldots,z_m,z_{m+1},0,\ldots)\), then
+\[
+N_m(\omega)=N_m(\Fold_m(\omega))+z_{m+1}F_{m+2}.
+\]
+This proves the forward congruence.
+
+Conversely, let \(y=\Fold_m(\omega)\), and suppose that
+\(N_m(\omega)\equiv N_m(x)\pmod{F_{m+2}}\).  The forward congruence gives
+\[
+N_m(y)\equiv N_m(x)\pmod{F_{m+2}}.
+\]
+Both values lie in \(\{0,\ldots,F_{m+2}-1\}\), so they are equal.
+The injectivity of \(N_m|_{X_m}\) gives \(x=y\).
+\end{proof}
+
+\begin{remark}[The two-letter fold]\label{rem:two-letter-fold}
+At length two, \(F_2=1\), \(F_3=2\), and \(F_4=3\).  Hence
+\[
+\Fold_2(00)=00,\qquad
+\Fold_2(10)=10,\qquad
+\Fold_2(01)=01,\qquad
+\Fold_2(11)=00.
+\]
+Thus \(00\) and \(11\) are the only possible collision among realized
+two-letter words.  The main theorem says that the presence or absence of
+this collision already decides injectivity at every length.
+\end{remark}
