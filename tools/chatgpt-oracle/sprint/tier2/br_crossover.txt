@@ -1,0 +1,55 @@
+TASK: prove the finite-size crossover theorem in
+papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams, or establish precisely
+where it fails. PRE-AUTHORIZED to edit that directory. Do not commit.
+
+This is a research task, not an editing task. A referee named this theorem as the one result that
+would turn its rejection for incrementality into an external review, rated it 7/10, and said the
+paper's existing machinery plausibly reaches it. Two rounds of its reports are in artifacts/:
+oracle_sprint_BR_r2.md states the theorem, oracle_sprint_BC_r1.md settles a constant. Both are
+READ-ONLY EVIDENCE; do not edit them or any artifacts/oracle_*.md.
+
+THE THEOREM, in the paper's notation. With B_s(z) = sum_l b_l(s) z^l, alpha = sigma_0 - 1, and
+a_m = (K_C m)^{1/alpha}, let s_m -> sigma_0 satisfy m(1 - B_{s_m}(1)) -> theta, equivalently
+s_m = sigma_0 + lambda/m with theta = kappa lambda and kappa = -d/ds B_s(1) at sigma_0 > 0. Define
+the near-critical Gibbs measure on the Fibonacci layer I_m by G_{m,s_m}{N} = R(N)^{-s_m}/Z_m^R(-s_m).
+Then for every fixed theta,
+   m Z_m^R(-s_m)  ->  (1 - e^{-theta/mu_C}) / (2 theta),   read as 2/mu_C at theta = 0,
+and jointly
+   ( J_m/m , (H_m - J_m/mu_C)/a_m )  =>  ( U_theta , -mu_C^{-1-1/alpha} U_theta^{1/alpha} S_alpha ),
+with S_alpha the same spectrally positive stable variable as in the present paper, independent of
+U_theta, and U_theta having density
+   f_theta(t) = (theta/mu_C) e^{-theta t/mu_C} / (1 - e^{-theta/mu_C})  on 0 < t < 1,
+read as the uniform density at theta = 0. The paper's existing theorem is exactly the theta = 0 case.
+
+Expected corollaries at fixed s: for s > sigma_0, Z_m^R(-s) -> rho_s/(2 - rho_s) and J_m = O_P(1);
+for 2 < s < sigma_0, with z_s the unique root of B_s(z_s) = 1 in (0,1),
+Z_m^R(-s) ~ (1+z_s) z_s^{-m} / (z_s (1-z_s) B'_s(z_s)) and m - J_m = O_P(1), with a GAUSSIAN rather
+than stable fluctuation of the factorization length under the tilted letter law
+P_s{C = l} = b_l(s) z_s^l.
+
+WHAT TO USE. The paper already has the exact coefficient identity U_s(z) = 1/(1 - B_s(z)), the exact
+generating function for Z_m^R(-s), the regularly varying critical letter tail with its constant, and
+the condensation analysis. The referee's judgment is that the crossover needs no new arithmetic
+classification, only a near-critical renewal analysis.
+
+CONSTANTS ARE SETTLED, do not relitigate them. b_C = 2 rho^2 = 8 at sigma_0 is CORRECT. I proposed
+16 and was wrong: the two contexts around the large partial quotient are not symmetric, since the
+whole regular expansion is canonical so its terminal digit is at least 2, which restricts the right
+context only. Masses are 2 rho on the left and rho on the right. Also note the convergence is
+severely preasymptotic - at d = 25 the noncondensed sector still contributes 5.2 out of 13.86 on the
+d^{sigma_0} scale - so do not use small-d numerics to check a constant.
+
+WHAT TO DELIVER.
+1. A proof, written into a new section, or a precise statement of where it breaks. If a step fails,
+   say which and why rather than producing something that reads like a proof. A clean negative
+   result is a real outcome here and I would rather have it than a gap dressed up.
+2. Numerical corroboration of whatever you prove: compute Z_m^R(-s_m) directly from R(N) on the
+   layer for several theta and m, and compare against the claimed limit. R(N) is computable by DP.
+   Print raw counts before drawing conclusions, and include a control - a deliberately wrong theta or
+   constant that the check must reject - so the test is shown to discriminate.
+3. If you prove it, integrate it: the present theorem becomes the theta = 0 case, and the
+   introduction should present the three-regime picture rather than an isolated result.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with no command-line macro definitions; report
+exit code, page count, undefined control sequences, unresolved references, unresolved citations, all
+of which must be 0. Every shipped .tex under 800 lines. Do not create planning files. Do not commit.
