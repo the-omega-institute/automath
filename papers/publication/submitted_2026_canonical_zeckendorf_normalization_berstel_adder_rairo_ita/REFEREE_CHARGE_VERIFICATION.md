@@ -113,3 +113,57 @@ is Fibonacci-weight folding of rotation codings has no Ostrowski citation at all
 sibling manuscript cites two. As with the Berstel adder and `zeck_arith`, the gap is an
 internal inconsistency rather than an unknown reference — which makes it cheaper to fix and
 harder to excuse.
+
+---
+
+# Addendum: the two surviving novelty claims, verified by computation
+
+After the revision conceded the qualitative results to Frougny, Sakarovitch, Berstel and
+Mousavi-Schaeffer-Shallit, the paper's novelty rests on two bounds. Both were checked
+independently by re-implementing the machinery from the manuscript's own definitions:
+the ten-state transducer of Section 5, `Val_MSD(w) = sum d_i F_{n-i+2}`,
+`Berstel(w) = trimMSD(K(trimMSD(w)))`, and
+`tau(w) = min{t : Berstel^t(trimMSD(w)) = Z_MSD(w)}`.
+
+Script: `verify_berstel_iteration_depth.py`, in this directory.
+
+## Controls, run first
+
+The script refuses to report on the theorems until these pass, because a mistranscribed
+transition table would make every downstream number meaningless.
+
+- **Value preservation of the transducer**: all 29,523 words over {0,1,2} of length 1 to 9,
+  `Val_MSD(K(w)) = Val_MSD(w)`, **zero mismatches**. The table is transcribed correctly.
+- **Greedy Zeckendorf**: 20,000 values, each `Z_MSD(v)` admissible and of the right value,
+  zero mismatches.
+- **Lemma tau(u) <= D(u) <= floor(L/2)** on all binary words to length 16: pass.
+
+## Theorem, binary cleanup depth
+
+`max { tau(u) : u in {0,1}^L trimmed } = floor(L/2)`, checked exhaustively for L = 1..20.
+Exact agreement at every length. The extremal witnesses found by brute force are exactly
+the family the paper predicts:
+
+    L=20  witness 10101010101010101011      tau = 10 = floor(20/2)
+    L=19  witness 1010101010101010110       tau =  9 = floor(19/2)
+
+that is `(10)^k 11` for even L and `(10)^k 110` for odd L, matching the paper's `P_r`.
+
+## Theorem, depth on genuine additions
+
+`max { tau(w) : w in Add_2^MSD(n) } = ceil(n/2)`, checked exhaustively for n = 1..14 over
+the words with no factor 12, 21 or 22. Exact agreement at every length.
+
+The revision makes a sharper claim than this: that the maximum is **attained by trimmed
+inputs**, so the bound is not an artifact of leading-zero padding. Brute-force enumeration
+restricted to trimmed words was run separately, because the unrestricted search returns
+padded witnesses first and so does not test the claim. It holds at every n from 1 to 14:
+
+    n=13  witness 2002002002011   tau = 7 = ceil(13/2)
+    n=14  witness 10020020020102  tau = 7 = ceil(14/2)
+
+## Verdict
+
+Both surviving novelty claims hold, with the extremal families the paper names, and the
+trimmed-attainment refinement holds as well. This is the part of the manuscript that has to
+carry the resubmission, and it stands up.
