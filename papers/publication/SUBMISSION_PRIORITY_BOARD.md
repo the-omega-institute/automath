@@ -1,27 +1,47 @@
 # Next-Step Plan — Submission & Deepening
 
-## 📊 冲刺状态一览（tick 344，唯一权威表；下方历史流水仅供追溯）
+## 📊 冲刺状态一览（tick 367，唯一权威表；下方历史流水仅供追溯）
 
-页数为实测（`latexmk -C` 后从零重建），概率为外审给出的主观接受率。
+页数与闸门为**实测**（`latexmk -C` 后从零重建，不带命令行宏定义）；概率为外审给出的主观接受率。
+"我验过"一栏只记**我自己跑过**的检查，不记 agent 自述。
 
-| # | 论文 | 页 | 目标刊 | 概率 | 当前状态 | 下一步 |
+| # | 论文 | 页 | 目标刊 | 概率 | 封面信 | 我独立验过的承重结论 |
 |--:|---|--:|---|---|---|---|
-| 1 | `single_primitive` | 12 | **DMTCS**（短文形式） | 现状 <10% → 修后 **30–35%** | ✅ 审稿人最后一个未闭合项已证：配对恒等式 $S_2(m)=T_2(m)+2S_2(m-2)$ | 送裁决 |
-| 2 | `window6` | **9** | **EJC** | 18–22% → 修后 **25–30%** | ✅ 可容许维数已升级为**已证刻画**，外部输入指名引用 Bugeaud–Cipu–Mignotte（我双源核实） | 送裁决（待 Oracle 恢复） |
-| 3 | `cubical_stokes` | 28 | **Results in Mathematics** | 修后 **~40%** | ✅ 修复定理**我已独立验证**（60 例零失配，两个反例各自破坏对应假设） | 送裁决（待 Oracle） |
-| 4 | `fibonacci_folding` | **22** | **Dynamical Systems** | 修后 **~35%** | ✅ 34→22 页，纯靠删内容；定理 5.2/5.3/5.5 一字未动 | 送裁决（待 Oracle） |
-| 5 | `projection` | 47 | **JNT**（审稿人点名） | 未估 | A.8 已改为比较完成态输出；**原缺陷已量化**（典型情形丢掉 74.6% 的碰撞） | §7 仍条件性；送裁决（待 Oracle） |
-| 6 | `joukowsky` | **15** | 复分析/位势论专业刊 | **~50%** | 先行工作定位已补（12 条引用双源核实）；**五处丢反斜杠已修** | 人工看 Levenberg–Wielonsky |
-| 7 | `brocot` | 25 | **JNT**（现状）／强专业刊（若证出穿越定理） | — | 常数争议已结（我错，$b_C=8$ 对）；**穿越定理攻坚中** | 收结果 |
-| 8 | `folded_histograms` | **6** | **The Fibonacci Quarterly** | **~45%** | ✅ 6 页 note 已核实；**定理本身我也验了**（45 例零分歧） | 送裁决（待 Oracle） |
-| 9 | `scan_projection` | **18** | 动力学专业刊（待定） | — | ✅ 相位常数**已可从转移矩阵复现**，判别性对照成立（相位盲只给一个常数） | 送裁决（待 Oracle） |
-| 10 | `zeck_arith` | 33 | **The Fibonacci Quarterly**（审稿人点名） | — | 未动 | 改投目标待执行 |
-| 11 | `golden_mean_folding` | 55 | — | — | ⛔ **判撤稿**：定理 6.1 是被定义做成的同义反复；全篇无独立可发表定理 | 仅保留"无上溢刻画"脚本 |
+| 1 | `folded_histograms` | 6 | **The Fibonacci Quarterly** | **~45%** | ✅ | 分类定理：45 例零分歧；碰撞机制 $N_2=\omega_1+2\omega_2 mod 3$ |
+| 2 | `window6` | 9 | **EJC** | 18–22% → **25–30%** | ✅ EJC | 48 格加细、商谱重数、$A(Q_4)$ 载体；可容许维数判据 49 候选零分歧 |
+| 3 | `single_primitive` | 12 | **DMTCS**（短文） | <10% → **30–35%** | ✅ DMTCS | $S_2$ 递推与纤维高度（$m\le18$）；配对恒等式 $C(m)=S_2(m-2)$ |
+| 4 | `joukowsky` | 15 | **Complex Analysis and Operator Theory** | **~50%** | ✅ CAOT | 定理 3.21 四部分齐全；五处丢反斜杠已修（含我扫出的第五处） |
+| 5 | `scan_projection` | 18 | **Stochastics and Dynamics** | — | ✅ | 相位常数可从转移矩阵复现，答案未写死；相位盲对照只给单一常数 |
+| 6 | `fibonacci_folding` | 22 | **Dynamical Systems** | 15–20% → **~35%** | ✅ | 四状态进位转换器（996 万切点态零例外）；无上溢刻画三条零失配 |
+| 7 | `cubical_stokes` | 28 | **Results in Mathematics** | <5% → **~40%** | ✅ | 修复定理 60 例零失配；两个反例各破坏一条假设，方式不同 |
+| 8 | `brocot` | 30 | ⚠️ **待定** | — | ⚠️ 抬头仍 TAMS | 临界常数 $b_C=8$（我曾误判为 16，已更正）；穿越定理归一化 |
+| 9 | `projection` | 47 | **JNT**（审稿人点名） | — | ✅ JNT | A.8 原缺陷已量化：典型情形丢掉 **74.6%** 的碰撞 |
+| — | `zeck_arith` | 33 | **The Fibonacci Quarterly** | — | ✗ | 未动，改投待执行 |
+| — | `golden_mean_folding` | 55 | — | — | — | ⛔ **判撤稿**：定理 6.1 是被定义做成的同义反复 |
 
-**在飞**：Oracle `SC`/`BR`/`FH`（池 3/6）；codex `fibonacci_folding` 重构、`window6` §3 重跑（两槽，四并发会撞账号上限）。
+**九篇全部从零重建通过，`ucs/ref/cite` 全 0，无一使用行距或版式手段。**
 
-**已完成并提交的实质修复**：级联假引理（3 处站点）、`cubical_stokes` 定理 6.6、`window6` 推论 1.4/1.5、
-`projection` 命题 A.8、`single_primitive` 文献归属。**全部由外审找出，非我先发现**。
+### 两处未决
+
+1. **`brocot` 去向**：封面信仍抬头 TAMS —— 而 TAMS 正是以增量性拒它的那家。
+   审稿人说证出穿越定理后"会送**一家强专业刊**外审"，是否指 TAMS 只有它能答。
+2. **`W63`** 与所有裁决轮：等 Oracle。
+
+### 在飞
+
+**无**。codex 空闲，Oracle 池空且**中继已断十四个 tick**（WARP 停在 `Connecting`）。
+后续进度全部取决于中继恢复：`warp-cli disconnect` 再 `warp-cli connect`。
+
+### 本轮实质修复（全部由外审找出，非我先发现）
+
+级联假引理（3 处站点）、`cubical_stokes` 定理 6.6、`window6` 推论 1.4/1.5 与引理 3.1、
+`projection` 命题 A.8、`single_primitive` 文献归属、`golden_mean_folding` 整篇。
+
+### 我自己找到的
+
+$2m-1$ 尖锐分离定理、span-$r$ 类的退化与其修法、无上溢刻画与计数、
+`window6` 的可容许维数族与选中机制、`single_primitive` 的配对恒等式、
+`joukowsky` 第五处丢反斜杠。**两次数值误判（$b_C$、穿越定理 $	heta$ 依赖）已更正并写入记忆。**
 
 > `papers/publication/` 下共 48 个目录；上表只列本轮冲刺在动的 11 篇，其余为已投稿或休眠。
 
