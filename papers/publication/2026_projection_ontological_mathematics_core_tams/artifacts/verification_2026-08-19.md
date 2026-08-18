@@ -93,3 +93,56 @@ The tell was in the output: **the paper's formula agreed exactly with the paper'
 tabulated values, and only my recomputation dissented.** A document consistent with itself
 while disagreeing with an outside model indicts the model. That is worth checking before
 reporting any formula as wrong.
+
+---
+
+# Addendum: the two papers compute the same sequences
+
+Following the maximal-fibre correspondence one step further. For `q = 1, 2, 3, 4` and
+`m = 1..12`,
+
+    S_q(m+1)  (projection)  =  S_q(m)  (single_primitive)      exactly,
+
+alongside `D_{m+1} = M_m` for the maxima. The two manuscripts are studying **one fold under
+two conventions**, differing by an index shift of one. The conventions hide it: this paper's
+weights sum to exactly `F_{m+2} - 1` so its fibres are single coefficients, while the
+sibling's weights sum past `F_{m+2}` so its fibres are whole residue classes. Those are
+different constructions that produce identical numbers.
+
+Script: `verify_moments_match_sibling.py`.
+
+## What this paper can take from the sibling
+
+- **The maximal fibre**, exactly, instead of `D_m^{1/m} -> sqrt(phi)`.
+- **The minimal polynomial of `lambda_2`.** The sibling's exact recurrence
+  `S_2(m) = 2S_2(m-1) + 2S_2(m-2) - 2S_2(m-3)` — verified here against brute force for
+  `m = 4..21`, initial values `6, 14, 36, 88, 220, 544` — has characteristic polynomial
+  `x^3 - 2x^2 - 2x + 2`, whose dominant root is `2.481194304092`. That is `lambda_2`: this
+  paper's ratios `S_2(m+1)/S_2(m)` reach it to `5.4e-9` by `m = 25`. The cubic is monic with
+  constant term 2, so the only rational-root candidates are `+-1, +-2`, and `f` takes values
+  `-1, 1, -2, -10` there. It is therefore irreducible, and
+
+      lambda_2 is an algebraic integer of degree exactly 3, with minimal polynomial
+      x^3 - 2x^2 - 2x + 2.
+
+  This paper currently says only that each `lambda_q` is the Perron root of some nonnegative
+  integer matrix and hence an algebraic integer. For `q = 2` the sibling supplies the
+  polynomial and the exact degree.
+
+## The disclosure question
+
+Neither manuscript mentions the other. Checked in both directions across every `.tex` and
+`.bib`, with a control confirming the search works — both cite Sanna, 17 hits here and 4
+there.
+
+Two submissions computing identical sequences, from the same authors, need to say so in each
+other's presence. This is not duplication: the results genuinely differ — this paper has the
+higher-`q` Perron structure, the pressure bands and the Galois audit; the sibling has the
+exact recurrence and the exact fibre maxima. They are complementary treatments of one
+object, which is a perfectly good thing to be, and is exactly what should be stated. Whether
+they are better as one paper is the authors' call, not mine. What is not an option is
+sending both out silent about each other, in a small field with overlapping referee pools.
+
+This is the third instance of the same pattern this week, after the Berstel adder missing
+from `zeck_arith` and Ostrowski missing from `folded_histograms`: the project already owns
+the result, in the manuscript next door.
