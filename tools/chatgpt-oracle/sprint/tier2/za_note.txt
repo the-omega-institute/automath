@@ -1,0 +1,63 @@
+TASK: cut papers/publication/2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online to the
+note its referee says it is, targeted at The Fibonacci Quarterly. PRE-AUTHORIZED to edit that
+directory. Do not commit.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_zeck_arith_r1.md. Read-only evidence; do not edit it or
+any artifacts/oracle_*.md file.
+
+=== FIRST, A HISTORY YOU MUST NOT REPEAT ===
+
+This paper already suffered one bad repair, and it was mine. Theorem 6.4 is about the STABLE product
+c (x) d, whose value is the unreduced integer product. Its proof silently substituted the
+finite-resolution product, whose value is reduced modulo F_{n+2}. The referee's example: at n = 4
+with c = d = Z(F_5) = Z(5), the stable product has value 25, while the substituted one gives
+25 mod F_6 = 25 mod 8 = 1. Its verdict on my attempted fix was "that is not an indexing slip; it is a
+change of theorem."
+
+So: BEFORE anything else, check whether Theorem 6.4 currently states and proves the STABLE product.
+If it does, say so and leave it. If it does not, repair it by proving the stated theorem - do NOT
+change which operation the theorem is about, and do not quietly weaken it to the reduced product.
+Report which case you found.
+
+=== THE CUT ===
+
+The referee's position: even corrected, the paper does not clear a good specialist journal, and most
+of it is formal transport or standard algebra. Specifically named as not carrying weight -
+  - the ring on X_m, which is defined by transporting Z/(F_{m+2}Z) through a bijection, as its own
+    proof says;
+  - the stable addition and multiplication isomorphisms, which are definitional transports from N;
+  - the online addition theorem, which is imported from Frougny including the delay-three result;
+  - the CRT and profinite conclusions, which the manuscript itself calls standard;
+  - the one-layer obstruction, which amounts to noting that a rule realizing both addition and
+    multiplication of exponents would force 2 * 3 = 2 + 3.
+
+What remains is the DELAY LOWER BOUND: every exact most-significant-digit-first multiplier at
+effective resolution n has delay at least n - 1, so no resolution-independent bounded-delay
+multiplier exists. Build the note around that. The referee calls it a short prefix-indistinguishability
+argument once repaired, and says so plainly - the note should say so too rather than dressing it up.
+
+The referee also names what the paper does NOT do, and the note must not imply otherwise: it does not
+classify online functions, does not treat a family of Ostrowski or Pisot systems, does not give a
+general obstruction criterion, and does not establish state complexity or pair the bound with an
+upper-bound theory.
+
+Drop the inflating vocabulary the referee calls out by name: transported residue rings are not "field
+phases", and elementary iteration identities are not "primitive-generation theorems".
+
+PRESERVE, DO NOT DESTROY: everything cut goes verbatim into sections/_cut_zeck_arith.tex or an
+equivalently named file, not input by main.tex, with a one-line header per block.
+
+Write a cover letter for The Fibonacci Quarterly in the house style used by the sibling papers -
+authors Haobo Ma and Wenlin Zhang, no acknowledgements, no funding - stating the result and, in its
+own words, that the proof is a short prefix-indistinguishability argument and that the listed
+generalizations are not attempted.
+
+VERIFY: latexmk -C, delete .aux, rebuild from zero with NO command-line macro definitions; report
+exit code, page count before and after, undefined control sequences, unresolved references,
+unresolved citations, all 0. No linespread or other line stretching - the page count must come from
+content. Reconcile the bibliography both directions and delete entries orphaned by the cut.
+Also scan every shipped source file for CONTROL CHARACTERS (bytes below 0x20 other than newline and
+tab) and report the raw count - a sibling file in this repository accumulated 86 of them from escape
+sequences firing during editing, and they are invisible in a terminal.
+Report what you kept, what you cut, and anything still weak. Do not create planning files.
+Do not run git commit.
