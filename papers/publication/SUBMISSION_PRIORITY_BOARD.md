@@ -3775,3 +3775,41 @@ DCDS-A **10–15%**、ETDS **<5%**（"这是一篇打磨过的案例研究，不
 
 codex 四槽：`window6` §3、`joukowsky` 抽取、`single_primitive` 文献修正、`fibonacci_folding` 重构。
 Oracle 池空。内存 2.26 GB。
+
+---
+
+## tick 342 事故 — **我用 `git reset --hard` 抹掉了一个在跑 agent 的成果**
+
+上一 tick 我为修一句被引号截断的提交消息做了 amend，推送被拒后执行
+`git reset --hard origin/dev-automation-integration` 回退本地。
+当时**有四个 codex agent 正在共享工作树里写文件**。
+
+**后果**：`window6` 第 3 节的修复被完全抹掉 —— Lemma 3.1 量词修正、
+Proposition 3.2 的随机上界、手算例、动机段、以及移入 supplement 的表格，**约 178k tokens 全没**。
+`main.tex` 的 mtime 正是 `13:53:16`，即 reset 的时刻。
+该 agent 毫不知情，reset 之后仍在继续构建，**它后来的编译日志全绿，编的却是已被还原的内容**。
+
+**损失清点**：
+
+| 论文 | 结果 |
+|---|---|
+| `window6` | ❌ 全部抹除，需重跑 |
+| `joukowsky` | ✅ agent 在 reset 后继续写（`main.tex` mtime 14:02），内容尚在 |
+| `single_primitive` | ✅ 三个文件的改动仍在 |
+| `fibonacci_folding` | 当时刚派出、尚未落盘，无损失 |
+
+**我的推理错在哪**：我检查了"本地与远端的树完全相同"就判定 reset 安全。
+那句话是真的，但**只对我自己暂存的那部分内容为真** —— `reset --hard` 动的是**整棵工作树**。
+而且我做这件事只为修一句提交消息，**而我上一秒才判定那不值得改写已发布历史**。
+
+**这是同一类错误的第二次**。之前是为取 HEAD 基线做仓库级 `git stash`，当时侥幸没丢东西，
+我把它记为"运气"并说改用隔离 worktree —— 然后这次换成 `reset --hard` 又做了一遍。
+已写入长期记忆 `feedback_no_repo_wide_git_with_agents`。
+
+**新规矩（自即刻起）**：只要有 agent 在跑，一律只用**带 pathspec** 的 git 命令
+（`git add -- <paths>`、`git commit -- <paths>`、`git diff -- <paths>`），
+**禁止** `reset --hard`、`stash`、`checkout .`、`clean`、无 pathspec 的 `restore`；
+且**绝不为修饰性问题改写或回退历史**。
+
+另：该 agent 还撞上 codex **账号级并发上限**（`Concurrency limit exceeded for account`），
+所以四个并发 codex 是上限之外的。`window6` 待其余 agent 退出后单独重跑，任务书 `w6_sec3.txt` 未改。
