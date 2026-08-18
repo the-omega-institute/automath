@@ -13,7 +13,9 @@ from fractions import Fraction
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 src = io.open(r"D:\omega\automath\papers\publication\2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge\main.tex",
               encoding='utf-8').read()
-blk = src.split(chr(92)+'begin{array}{c|l}')[1].split(chr(92)+'end{array}')[0]
+fiber_section = src.split('The fibers, in lexicographic order of', 1)[1].split(chr(92)+'end{definition}', 1)[0]
+blocks = re.findall(r'\\begin\{array\}\{c\|l\}(.*?)\\end\{array\}', fiber_section, re.S)
+blk = (chr(92) * 2).join(blocks)
 cells = {}
 for line in blk.split(chr(92)*2):
     if '&' not in line: continue

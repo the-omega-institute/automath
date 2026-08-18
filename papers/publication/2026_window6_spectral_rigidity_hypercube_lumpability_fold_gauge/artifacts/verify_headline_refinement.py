@@ -8,7 +8,9 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 src = io.open(r"D:\omega\automath\papers\publication\2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge\main.tex",
               encoding='utf-8').read()
-blk = src.split('\\begin{array}{c|l}')[1].split('\\end{array}')[0]
+fiber_section = src.split('The fibers, in lexicographic order of', 1)[1].split('\\end{definition}', 1)[0]
+blocks = re.findall(r'\\begin\{array\}\{c\|l\}(.*?)\\end\{array\}', fiber_section, re.S)
+blk = '\\\\'.join(blocks)
 cells = {}
 for line in blk.split('\\\\'):
     line = line.strip()

@@ -59,16 +59,29 @@ This paper gives a complete analysis of one audited six-dimensional example.  Le
 \(\Omega_6=\{0,1\}^6\), and map a binary word to the first six digits of the greedy
 Zeckendorf expansion of its binary integer.  The image consists of the 21 words with no
 adjacent ones.  The visible partition is not equitable, but its failure has an exact
-repair: one refinement by equal neighbor signatures is already stable.  The main result
-is the following theorem.
+repair: one refinement by equal neighbor signatures is already stable.
 
-\paragraph{Main theorem (Theorem 4.23).}
+Our reason for isolating dimension six is structural rather than a claim that
+non-equitability first occurs there.  In this window the entire repair is controlled by
+a fiber-preserving affine cube involution: its orbits are exactly the stable signature
+cells.  Thus the calculation determines an exact state complexity for graph quotients,
+independently of the audit that found the example.  Any exact Markov lumping that retains
+the 21 visible labels needs at least 48 states, so the obstruction measures how much of
+the original 64-state walk can actually be compressed.  The accompanying \(Q_4\) is also
+structural rather than a numerical spectral coincidence: the involution couples two
+coordinates, and antisymmetry cancels those two cube directions while leaving the other
+four.  We make no claim here that the same symmetry persists in other dimensions.
+
+\paragraph{Combinatorial classification (Theorem~\ref{thm:headline}).}
 If \(H:\Omega_6\twoheadrightarrow Y\) has equitable fibers and
 \(\Fold_6=\rho\circ H\) for a surjection \(\rho:Y\twoheadrightarrow X_6\), then
 \(\card{Y}\ge48\).  Equality is attained uniquely up to relabeling by the orbit map
 of \(\sigma_{\rm geo}(a_1,\ldots,a_6)=(1-a_5,a_2,a_3,a_4,1-a_1,a_6)\).
-The quotient spectrum has multiplicities \((1,5,11,14,11,5,1)\), and its
-16-dimensional orthogonal complement carries the adjacency operator of \(Q_4\).
+
+\paragraph{Spectral structure (Lemma~\ref{lem:spectral-carrier}).}
+For this unique 48-state quotient, the spectrum has multiplicities
+\((1,5,11,14,11,5,1)\), and the orthogonal complement of its function space carries
+the adjacency operator of the 4-cube.
 
 The proof separates two questions.  Section~\ref{sec:fold6} fixes the finite partition
 and records its fibers.  Section~\ref{sec:residual} gives the elementary interval
@@ -78,7 +91,6 @@ neighbor-signature cells.  Section~\ref{sec:spectrum} then derives the quotient
 spectrum and the discarded \(Q_4\) carrier.  The final section describes the independent
 finite checks in the supplement.
 
-\clearpage
 \section{The Fold$_6$ partition}\label{sec:fold6}
 Let \(Q_m\) be the hypercube on \(\Omega_m=\{0,1\}^m\), with adjacency matrix
 \(A_m\) and walk matrix \(T_m=A_m/m\).  A surjection \(F:\Omega_m\twoheadrightarrow X\)
@@ -110,6 +122,10 @@ For \(\omega=(a_1,\ldots,a_6)\), put
 010000&000010,010111,100100,111001\\
 010001&001111,110001\\
 010010&001010,011111,101100\\
+\end{array}
+\]
+\[
+\begin{array}{c|l}
 010100&000111,011100,101001,111110\\
 010101&010100,110110\\
 100000&000001,010110,100011,111000\\
@@ -161,7 +177,6 @@ Indeed, direct substitution into the 64-word definition gives
 \(\Fold_6\circ\sigma_{\rm geo}=\Fold_6\).  This identity will also explain the
 16-dimensional discarded sector.
 
-\clearpage
 \section{Visible nonlumpability and the sharp residual}\label{sec:residual}
 For \(\omega\in\Omega_m\) and \(y\in X\), write
 \[
@@ -170,14 +185,13 @@ c_\omega(y)=\#\{1\le i\le m:F(\omega+e_i)=y\}.
 The following elementary lemma is the residual calculation used below.
 
 \begin{lemma}[Neighbor-count intervals and residual radius]\label{lem:residual}
-For a finite fold \(F:\Omega_m\twoheadrightarrow X\), a matrix \(P\) satisfies
-\(\|T_mM-MP\|_\infty\le\varepsilon\) if and only if, for every source fiber
-\(F^{-1}(x)\) and target \(y\), the intervals
+For a finite fold \(F:\Omega_m\twoheadrightarrow X\), a fixed matrix \(P\) satisfies
+\(\|T_mM-MP\|_\infty\le\varepsilon\) if and only if, for every \(x,y\in X\),
 \[
-\bigl[c_\omega(y)/m-\varepsilon,\ c_\omega(y)/m+\varepsilon\bigr]
-\qquad(\omega\in F^{-1}(x))
+P(x,y)\in\bigcap_{\omega\in F^{-1}(x)}
+\bigl[c_\omega(y)/m-\varepsilon,\ c_\omega(y)/m+\varepsilon\bigr].
 \]
-have a common point.  Consequently
+Consequently
 \[
 \inf_{P\in\RR^{X\times X}}\|T_mM-MP\|_\infty
  =\frac{1}{2m}\max_{x,y}\left(\max_{\omega\in F^{-1}(x)}c_\omega(y)-\min_{\omega\in F^{-1}(x)}c_\omega(y)\right).
@@ -186,18 +200,20 @@ The same lower bound holds when \(P\) is required to be row-stochastic.
 \end{lemma}
 \begin{proof}
 The \((\omega,y)\)-entry of \(T_mM\) is \(c_\omega(y)/m\), while the corresponding
-entry of \(MP\) is the single number \(P(x,y)\) for all \(\omega\in F^{-1}(x)\).
-Thus each coordinate is an independent interval intersection problem.  A finite family
-of intervals has a common point exactly when its largest left endpoint is no larger than
-its smallest right endpoint, giving half the largest diameter.  Restricting the feasible
-set to stochastic rows cannot decrease the infimum.
+entry of \(MP\) is \(P(x,y)\) for every \(\omega\in F^{-1}(x)\).  The residual bound
+for a fixed \(P\) is therefore exactly the displayed membership condition.  If \(P\) is
+allowed to vary over all real matrices, its entries may be chosen independently, so a
+feasible \(P\) exists exactly when every displayed intersection is nonempty.  A finite
+family of intervals intersects exactly when its largest left endpoint is no larger than
+its smallest right endpoint.  The least possible radius is consequently half the
+largest normalized count diameter.  Restricting the feasible set to stochastic rows
+cannot decrease the infimum.
 \end{proof}
 
 \begin{proposition}[Fold$_6$ residual certificate]\label{prop:residual-fold6}
 For the partition of Definition~\ref{def:fold6}, the largest neighbor-count diameter is
-\(\Delta_6=2\).  Among the 441 ordered source-target pairs, the counts of diameters
-0, 1, and 2 are respectively \((298,117,26)\).  Hence the sharp real and
-row-stochastic residual radii are both \(1/6\).
+\(\Delta_6=2\).  Hence the sharp real and row-stochastic residual radii are both
+\(1/6\).
 
 The two vertices \(000000\) and \(010101\) lie in the fiber \(000000\), but for
 the target \(000100\) their neighbor counts are 0 and 1.  A diameter-attaining example
@@ -205,72 +221,67 @@ is the fiber \(100000\) and target \(010101\), where the count list is \((0,2,0,
 the averaged pushforward therefore has residual entry \(\frac16(2-\frac12)=\frac14\).
 \end{proposition}
 \begin{proof}
-Flipping each coordinate in the displayed fiber table gives the finite count lists.
-The complete enumeration has maximum 2 and distribution \((298,117,26)\).  The lemma
-then gives \(2/(2\cdot6)=1/6\), while the list \((0,2,0,0)\) gives the stated
-\(1/4\) entry.  The unequal counts in the same fiber rule out exact intertwining.
+Flipping each coordinate in the displayed fiber table gives the finite count lists; the
+complete rowwise census is printed in the supplement.  Its maximum is 2, so
+Lemma~\ref{lem:residual} gives the unrestricted radius \(2/(2\cdot6)=1/6\).  The list
+\((0,2,0,0)\) gives the stated \(1/4\) entry, and the unequal counts in one fiber rule
+out exact intertwining.
+
+It remains to prove the upper bound under the stochastic constraint.  At
+\(\varepsilon=1/6\), set
+\[
+L_{xy}=\max\left\{0,\frac{\max_{\omega\in F^{-1}(x)}c_\omega(y)-1}{6}\right\},
+\qquad
+U_{xy}=\min\left\{1,\frac{\min_{\omega\in F^{-1}(x)}c_\omega(y)+1}{6}\right\}.
+\]
+Because every count diameter is at most 2, \([L_{xy},U_{xy}]\) is nonempty and is
+exactly the admissible interval after imposing \(0\le P(x,y)\le1\).  The same count
+enumeration gives the uniform endpoint-sum bounds
+\[
+\max_{x\in X_6}\sum_{y\in X_6}L_{xy}=\frac12,
+\qquad
+\min_{x\in X_6}\sum_{y\in X_6}U_{xy}=\frac72.
+\]
+Hence each coordinate box \(\prod_y[L_{xy},U_{xy}]\) meets the row simplex: start at
+the lower endpoints and distribute the remaining mass among the available capacities
+\(U_{xy}-L_{xy}\).  Choosing such a row for every \(x\) produces a row-stochastic
+matrix with residual at most \(1/6\).  Together with the unrestricted lower bound, this
+proves both asserted equalities.
 \end{proof}
 
-\clearpage
-For reference, the exact directed edge-count matrix used by the audited pushforward is
-included here in sparse form.  If \(d_i\) is the size of the \(i\)-th fiber, the quotient
-matrix obtained by uniform lifting is \(P_6(i,j)=N_{ij}/(6d_i)\).
-\begin{center}
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\begin{tabular}{c|l}
-0&(2,4),(3,2),(6,2),(7,2),(8,4),(12,2),(13,2),(17,2),(18,2),(19,2)\\
-1&(2,2),(3,2),(7,2),(9,2),(15,2),(20,2)\\
-2&(0,4),(1,2),(5,2),(10,4),(11,2),(15,2),(16,4),(18,2),(20,2)\\
-3&(0,2),(1,2),(4,2),(5,4),(10,2),(11,4),(13,3),(15,1),(16,2),(18,2)\\
-4&(3,2),(6,2),(8,2),(12,2),(13,1),(14,1),(17,2)\\
-5&(2,2),(3,4),(6,2),(7,2),(8,2),(11,3),(13,4),(17,2),(18,2),(20,1)\\
-6&(0,2),(4,2),(5,2),(12,2),(14,2),(19,2)\\
-7&(0,2),(1,2),(5,2),(8,1),(9,1),(10,2),(11,1),(14,1),(15,2),(16,3),(20,1)\\
-8&(0,4),(4,2),(5,2),(7,1),(9,1),(10,3),(11,2),(13,2),(16,2),(17,1),(18,4)\\
-9&(1,2),(7,1),(8,1),(10,1),(11,1),(14,2),(17,1),(19,2),(20,1)\\
-10&(2,4),(3,2),(7,2),(8,3),(9,1),(14,1),(15,1),(16,2),(20,2)\\
-11&(2,2),(3,4),(5,3),(7,1),(8,2),(9,1),(12,2),(15,4),(16,2),(20,3)\\
-12&(0,2),(4,2),(6,2),(11,2),(13,2),(18,2)\\
-13&(0,2),(3,3),(4,1),(5,4),(8,2),(12,2),(14,1),(15,3),(16,2),(19,2),(20,2)\\
-14&(4,1),(6,2),(7,1),(9,2),(10,1),(13,1),(15,1),(16,1),(20,2)\\
-15&(1,2),(2,2),(3,1),(7,2),(10,1),(11,4),(13,3),(14,1),(18,2)\\
-16&(2,4),(3,2),(7,3),(8,2),(10,2),(11,2),(13,2),(14,1),(17,2),(18,4)\\
-17&(0,2),(4,2),(5,2),(8,1),(9,1),(16,2),(19,2)\\
-18&(0,2),(2,2),(3,2),(5,2),(8,4),(12,2),(15,2),(16,4),(19,2),(20,2)\\
-19&(0,2),(6,2),(9,2),(13,2),(17,2),(18,2)\\
-20&(1,2),(2,2),(5,1),(7,1),(9,1),(10,2),(11,3),(13,2),(14,2),(18,2)
-\end{tabular}
-\end{center}
-Each row sums to \(6d_i\), which is a direct check that the displayed matrix is
-row-stochastic after normalization.  \clearpage The row-wise diameter distribution is
-\[
-\begin{array}{c|ccc@{\qquad}c|ccc}
-x&0&1&2&x&0&1&2\\ \hline
-000000&13&8&0&000001&21&0&0\\
-000010&15&6&0&000100&11&8&2\\
-000101&17&2&2&001000&11&8&2\\
-001001&21&0&0&001010&11&7&3\\
-010000&10&9&2&010001&13&6&2\\
-010010&13&6&2&010100&11&8&2\\
-010101&21&0&0&100000&10&9&2\\
-100001&13&6&2&100010&13&8&0\\
-100100&11&8&2&100101&17&2&2\\
-101000&13&8&0&101001&21&0&0\\
-101010&12&8&1&&&&
-\end{array}
-\]
-The three numerical columns count target cells with diameter 0, 1, and 2.
-
-\clearpage
 \section{Unique minimal equitable refinement}\label{sec:repair}
 We now prove Theorem~\ref{thm:headline}.  For each vertex define its Fold-neighbor
 signature
 \[
 s(\omega)=\bigl(c_\omega(y)\bigr)_{y\in X_6}.
 \]
-Refine each visible fiber by equality of these signatures.  The resulting cells are
-listed below; this is the 48-cell table used by the proof.  \clearpage
+Refine each visible fiber by equality of these signatures.  Here is one nontrivial row
+of the calculation.  In the visible fiber
+\[
+\Fold_6^{-1}(100000)=\{000001,010110,100011,111000\},
+\]
+record only the nonzero coordinates of \(s(\omega)\), using a superscript to mark a
+count larger than one.  Directly flipping the six bits gives
+\[
+\begin{array}{c|l}
+000001&000000,000100,001000,100010,101001,101010\\
+010110&000101,010000,010101^{(2)},100010,100100\\
+100011&000000,000100,001000,100010,101001,101010\\
+111000&000100,001000^{(2)},010000,100001,100100.
+\end{array}
+\]
+Thus equality of visible signatures splits this fiber as
+\[
+\{000001,100011\},\qquad \{010110\},\qquad \{111000\}.
+\]
+The affine involution explains the split: it exchanges \(000001\) and \(100011\), while
+fixing \(010110\) and \(111000\).  As a sample refined-target check, take
+\(C=\{000000,100010\}\), the first signature cell inside visible state \(000000\).
+The numbers of neighbors in \(C\), in the source order above, are \((1,0,1,0)\).
+They agree on the paired source cell, while the two remaining source cells are
+singletons.  The same calculation for every refined target gives the table below.
+
+The resulting cells are the following; this is the 48-cell table used by the proof.
 \begin{center}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -323,7 +334,6 @@ into every visible target, so they have the same signature.  Thus \(\mathcal Q\)
 the displayed partition.  This proves coarseness, uniqueness, and the lower bound.
 \end{proof}
 
-\clearpage
 \section{Quotient spectrum and the discarded $Q_4$ carrier}\label{sec:spectrum}
 Let \(V=\CC^{\Omega_6}\), and let \(V^\pm\) be the \(\pm1\)-eigenspaces of the
 permutation induced by \(\sigma_{\rm geo}\).  The 16 two-cycles give \(\dim V^-=16\).
@@ -360,14 +370,16 @@ For each \(J\subseteq\{2,3,4,6\}\), the three invariant vectors
 \chi_J,\qquad \chi_{J\cup\{1,5\}},\qquad
 \chi_{J\cup\{1\}}-\chi_{J\cup\{5\}}
 \]
-have Walsh degrees \(|J|,|J|+2,|J|+1\).  Thus the multiplicity polynomial is
+have Walsh degrees \(|J|,|J|+2,|J|+1\).  These \(3\cdot16=48\) vectors are linearly
+independent, since their Walsh supports are disjoint across the displayed choices, and
+hence they form a basis of the 48-dimensional space \(V^+\).  Thus the multiplicity
+polynomial is
 \[
 (1+q)^4(1+q+q^2)=1+5q+11q^2+14q^3+11q^4+5q^5+q^6.
 \]
 Dividing the adjacency eigenvalues by six gives the quotient-walk spectrum.
 \end{proof}
 
-\clearpage
 \section{Final remarks and reproducibility}\label{sec:final}
 The result is a finite, exact statement about the audited Fold$_6$ partition.  It does
 not claim that every folded hypercube or every pushforward construction has the same
@@ -378,8 +390,8 @@ between the resulting cells.
 The supplement contains the complete canonical streams for the Fold$_6$ fibers, the
 directed edge-count matrix, the involution and residual witnesses, the exact determinant
 certificate for the visible pushforward, and the scripts
-\texttt{supplement/verify\_window6\_streams.py} and
-\texttt{artifacts/verify\_hidden\_refinement.py}.  The first script checks the printed
+\path{supplement/verify_window6_streams.py} and
+\path{artifacts/verify_hidden_refinement.py}.  The first script checks the printed
 finite streams and their hashes; the second recomputes the 48 signature cells, compares
 them with the \(\sigma_{\rm geo}\)-orbits, and verifies equitability and the 32/16 orbit
 size split.  These checks validate the finite data and the stated partition identities;

@@ -1,7 +1,9 @@
 \documentclass[11pt]{article}
 \usepackage{amsmath,amssymb}
 \usepackage{geometry}
+\usepackage[hidelinks]{hyperref}
 \geometry{margin=2.5cm}
+\newcommand{\Fold}{\operatorname{Fold}}
 \title{Supplement: Exact data for the Fold$_6$ equitable refinement}
 \author{}
 \date{}
@@ -10,11 +12,11 @@
 
 This supplement records the machine-readable audit payload used by the article
 \emph{The Unique Minimal Equitable Refinement of a Folded Partition of the 6-Cube}.
-The canonical streams are stored in \texttt{window6\_canonical\_streams.txt}; their
-SHA--256 digests are checked by \texttt{verify\_window6\_streams.py}.  The exact
-determinant and rational Sturm transcript for the visible pushforward is in
-\texttt{window6\_exact\_determinant\_sturm\_certificate.txt}.  The 48-cell refinement
-is independently recomputed by \texttt{../artifacts/verify\_hidden\_refinement.py}.
+The canonical streams are stored in \path{window6_canonical_streams.txt}; their
+SHA--256 digests are checked by \path{verify_window6_streams.py}.  The exact determinant
+and rational Sturm transcript for the visible pushforward is in
+\path{window6_exact_determinant_sturm_certificate.txt}.  The 48-cell refinement is
+independently recomputed by \path{../artifacts/verify_hidden_refinement.py}.
 
 \section*{Canonical Fold$_6$ stream}
 The state list is
@@ -36,6 +38,68 @@ The residual witness stream is
 with digest
 \texttt{701cfebf8b51ad99e38663841599aa1b1a492957040c4db6d4dd3e2def69fcf2}.
 
+\section*{Directed edge-count matrix}
+Index the visible states by their order in the state list above.  The exact directed
+edge-count matrix is the following sparse integer matrix \(N\); an entry \((j,n)\) in
+row \(i\) means \(N_{ij}=n\).  If \(d_i\) is the size of the \(i\)-th fiber, uniform
+lifting gives \(P_6(i,j)=N_{ij}/(6d_i)\).
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{c|l}
+0&(2,4),(3,2),(6,2),(7,2),(8,4),(12,2),(13,2),(17,2),(18,2),(19,2)\\
+1&(2,2),(3,2),(7,2),(9,2),(15,2),(20,2)\\
+2&(0,4),(1,2),(5,2),(10,4),(11,2),(15,2),(16,4),(18,2),(20,2)\\
+3&(0,2),(1,2),(4,2),(5,4),(10,2),(11,4),(13,3),(15,1),(16,2),(18,2)\\
+4&(3,2),(6,2),(8,2),(12,2),(13,1),(14,1),(17,2)\\
+5&(2,2),(3,4),(6,2),(7,2),(8,2),(11,3),(13,4),(17,2),(18,2),(20,1)\\
+6&(0,2),(4,2),(5,2),(12,2),(14,2),(19,2)\\
+7&(0,2),(1,2),(5,2),(8,1),(9,1),(10,2),(11,1),(14,1),(15,2),(16,3),(20,1)\\
+8&(0,4),(4,2),(5,2),(7,1),(9,1),(10,3),(11,2),(13,2),(16,2),(17,1),(18,4)\\
+9&(1,2),(7,1),(8,1),(10,1),(11,1),(14,2),(17,1),(19,2),(20,1)\\
+\end{tabular}
+\end{center}
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{c|l}
+10&(2,4),(3,2),(7,2),(8,3),(9,1),(14,1),(15,1),(16,2),(20,2)\\
+11&(2,2),(3,4),(5,3),(7,1),(8,2),(9,1),(12,2),(15,4),(16,2),(20,3)\\
+12&(0,2),(4,2),(6,2),(11,2),(13,2),(18,2)\\
+13&(0,2),(3,3),(4,1),(5,4),(8,2),(12,2),(14,1),(15,3),(16,2),(19,2),(20,2)\\
+14&(4,1),(6,2),(7,1),(9,2),(10,1),(13,1),(15,1),(16,1),(20,2)\\
+15&(1,2),(2,2),(3,1),(7,2),(10,1),(11,4),(13,3),(14,1),(18,2)\\
+16&(2,4),(3,2),(7,3),(8,2),(10,2),(11,2),(13,2),(14,1),(17,2),(18,4)\\
+17&(0,2),(4,2),(5,2),(8,1),(9,1),(16,2),(19,2)\\
+18&(0,2),(2,2),(3,2),(5,2),(8,4),(12,2),(15,2),(16,4),(19,2),(20,2)\\
+19&(0,2),(6,2),(9,2),(13,2),(17,2),(18,2)\\
+20&(1,2),(2,2),(5,1),(7,1),(9,1),(10,2),(11,3),(13,2),(14,2),(18,2)
+\end{tabular}
+\end{center}
+Every row sums to \(6d_i\), as required for the normalization to be stochastic.
+
+\section*{Rowwise diameter census}
+For each source state \(x\), the three numerical columns count target states \(y\) for
+which the neighbor-count list on \(\Fold_6^{-1}(x)\) has diameter 0, 1, or 2.
+\[
+\begin{array}{c|ccc@{\qquad}c|ccc}
+x&0&1&2&x&0&1&2\\ \hline
+000000&13&8&0&000001&21&0&0\\
+000010&15&6&0&000100&11&8&2\\
+000101&17&2&2&001000&11&8&2\\
+001001&21&0&0&001010&11&7&3\\
+010000&10&9&2&010001&13&6&2\\
+010010&13&6&2&010100&11&8&2\\
+010101&21&0&0&100000&10&9&2\\
+100001&13&6&2&100010&13&8&0\\
+100100&11&8&2&100101&17&2&2\\
+101000&13&8&0&101001&21&0&0\\
+101010&12&8&1&&&&
+\end{array}
+\]
+Summing the columns gives \((298,117,26)\) over all \(21^2=441\) ordered
+source-target pairs.  The maximum diameter is 2.
+
 \section*{Refinement certificate}
 The verifier recomputes the greedy Zeckendorf prefix for all 64 vertices, groups each
 Fold fiber by its complete 21-component neighbor signature, and compares the resulting
@@ -45,9 +109,14 @@ partition with the orbits of
 \]
 It checks that the cells partition all vertices, that every orbit stays in one visible
 fiber, that the orbit partition is equitable, and that the orbit sizes are 32 singletons
-and 16 pairs.  Running
+and 16 pairs.  Running the command
+\begin{center}
 \texttt{python artifacts/verify\_hidden\_refinement.py}
-prints \texttt{window6 hidden refinement certificate: all assertions passed}.
+\end{center}
+prints
+\begin{center}
+\texttt{window6 hidden refinement certificate: all assertions passed}.
+\end{center}
 
 The supplement is data and verification code, not an additional mathematical result.
 It does not check the interval lemma or the Walsh-space proof in the article.
