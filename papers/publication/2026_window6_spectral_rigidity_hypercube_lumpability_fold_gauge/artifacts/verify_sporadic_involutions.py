@@ -141,3 +141,47 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# Added after the enumeration: the two conditions pin m without enumerating.
+#
+# The mechanism needs a Fibonacci number F_k that is a sum of two distinct powers
+# of two, F_k = 2^p + 2^q, placed so that
+#
+#   m >= p + 1     the larger power must fit inside an m-bit word, and
+#   m <= k - 3     F_k must lie beyond the retained window F_2..F_{m+1}, separated
+#                  from it by the omitted F_{m+2}, so the prefix is undisturbed.
+#
+# Those two inequalities are incompatible unless p + 1 <= k - 3. Running over all
+# k gives F_4 and F_5 with empty ranges, F_9 = 34 with m = 6 alone, and F_12 = 144
+# with m in {8, 9}. Nothing else. So the sporadic set is {6, 8, 9} by arithmetic,
+# and the colour refinement above is corroboration rather than the argument.
+#
+# What this does NOT settle: whether a nontrivial coarsest equitable refinement
+# could arise with no affine involution behind it at all. The argument here closes
+# the involution mechanism only. That question is open.
+
+def admissible_m(kmax=100):
+    while len(FIB) <= kmax:
+        FIB.append(FIB[-1] + FIB[-2])
+    out = []
+    for k in range(3, kmax + 1):
+        b = bin(FIB[k])[2:]
+        if b.count("1") != 2:
+            continue
+        pos = [len(b) - 1 - i for i, ch in enumerate(b) if ch == "1"]
+        p, q = max(pos), min(pos)
+        rng = list(range(p + 1, k - 3 + 1))
+        out.append((k, FIB[k], p, q, rng))
+    return out
+
+
+def report_arithmetic_closure():
+    print("\nARITHMETIC CLOSURE  the two conditions pin m without enumerating")
+    ms = set()
+    for k, f, p, q, rng in admissible_m():
+        ms |= set(rng)
+        print(f"    F_{k} = {f} = 2^{p} + 2^{q}  ->  m in {rng if rng else 'empty'}")
+    print(f"    admissible m = {sorted(ms)}   (enumeration found 6, 8, 9)")
+    return sorted(ms) == [6, 8, 9]
