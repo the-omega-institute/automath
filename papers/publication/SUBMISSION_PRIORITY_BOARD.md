@@ -4787,3 +4787,44 @@ WARP 第十一个 tick 仍不通。八篇稿子都已到"等裁决"状态 ——
   须说明仍是有限状态、机制仍是经典 Chen–Stein。
 
 WARP 第十二个 tick 不通。内存 1.08 GB。
+
+---
+
+## tick 366 — 投稿就绪审计：九篇全绿，扫出一条真问题、澄清 26 处误报
+
+内容侧清空后做一次收尾审计，一次扫过编译、页数、封面信、复现脚本、行距手段、丢反斜杠。
+
+| 论文 | 页 | 闸门 | 封面信 | 复现脚本 |
+|---|--:|---|---|--:|
+| `folded_histograms` | 6 | 0/0/0 | Fibonacci Quarterly | 1 |
+| `window6` | 9 | 0/0/0 | EJC | 8 |
+| `single_primitive` | 12 | 0/0/0 | DMTCS | 4 |
+| `joukowsky` | 15 | 0/0/0 | CAOT | 1 |
+| `scan_projection` | 18 | 0/0/0 | Stochastics and Dynamics | 2 |
+| `fibonacci_folding` | 22 | 0/0/0 | Dynamical Systems | 3 |
+| `cubical_stokes` | 28 | 0/0/0 | Results in Mathematics | 2 |
+| `brocot` | 30 | 0/0/0 | ⚠️ **TAMS** | 14 |
+| `projection` | 47 | 0/0/0 | JNT | 4 |
+
+九篇全部从零重建通过，无一使用行距或版式手段。
+
+### 真问题：`brocot` 的封面信仍抬头 TAMS
+
+而 TAMS 正是**以增量性拒掉它**的那家。信里已提到穿越定理（2 处），
+但抬头没改 —— 属于改了一半。
+
+**去向此刻是真的未定，我不擅自填**：审稿人的话是，证出穿越定理后
+"我不会再以增量性拒稿，会把它送到**一家强专业刊**外审"；而**没有**该定理时才说"我会投 JNT"。
+"强专业刊"是否就指 TAMS，只有它能回答，而 Oracle 已断十三个 tick。
+这一条挂起，等中继恢复后连同 `W63` 一起问。
+
+### 26 处"丢反斜杠"全是误报，已逐条查清
+
+`window6` 的 11 处落在 **`source/` 目录的 Python 代码块**里（`int(`、`sigma_geo`），
+而 `source/` 被 `main.tex` 引用 **0** 次 —— 根本不在编译里。
+`label` 那几处是 `\input{sec_chebotarev_fixed_label_and_boundary}` —— **文件名里**的字串。
+
+**结论是干净的否定**：全套论文里没有真的丢前导反斜杠。
+`joukowsky` 那五处修掉之后，这一类已清零。把它记下来，是因为下次再扫时不必重查。
+
+WARP 第十三个 tick 不通。
