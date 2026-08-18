@@ -6489,3 +6489,45 @@ Oracle 正常；codex 仍 503。全文 103 行归档于
 
 池：6，现用 0。内存 1.12 GB。
 
+
+---
+
+## tick 405 — 四篇 verdict 已派；codex 仍断
+
+Oracle 正常，池 6 现用 **4**；codex 503。
+
+### 在飞
+
+| 任务 | id | 目标刊 |
+|---|---|---|
+| `V_folded_histograms` | `e4df5a96-03b1-4552-beb8-f8979c988ff0` | The Fibonacci Quarterly |
+| `V_window6` | `ca737aa1-a83d-44a1-8270-aadb21f66ec7` | Electronic Journal of Combinatorics |
+| `V_joukowsky` | `c2c30650-1e48-4724-82f9-93642dcfb080` | Complex Analysis and Operator Theory |
+| `V_cubical_stokes` | `1820557f-e02f-4311-bf48-e28cf154aa35` | Results in Mathematics |
+
+### 问法
+
+按此前证明有效的设计写的，四份同一骨架：
+
+1. **先问显著性，与正确性分开** —— 会送外审还是直接拒？并明确写出："若诚实的回答是
+   数学无误但结果对本刊过轻，请直说；那个判断对我比一串可修的缺陷更有用。"
+2. 目标刊上的**接受率数值**，"一个数，不要跨二十个百分点的区间"。
+3. **单一**最高价值改动，不要清单，并估计它抬升多少。
+4. 最弱的承重步骤：敌意审稿人先打哪条定理，可修还是致命。
+5. 若认为该换刊，**只准点一家**，并说明是取代还是等本刊拒后再去。
+
+末尾禁止跨刊和稀泥、禁止泛泛的行文建议，并允许"看不到证明就判不了"如实说出。
+
+摘要按各篇实际内容写实，**不美化**：`folded_histograms` 那份原样带上了论文自陈的
+"deliberately modest … not a rigidity theorem"，`cubical_stokes` 那份带上了它自陈
+"global identities are standard max-flow min-cut"。让对方在知道论文自我定位的前提下判。
+
+四份任务书均无对齐表格（上个 tick 查出的抓取症结）。
+
+### 未派的两篇
+
+`scan_projection` 与 `fibonacci_folding` 留到下一轮 —— 池上限 6，留两格给
+codex 恢复后可能的插队，且四份同时回来已够本轮消化。
+
+内存 1.12 GB。
+
