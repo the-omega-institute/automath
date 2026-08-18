@@ -13,7 +13,7 @@
 | 5 | `projection` | 47 | **JNT**（审稿人点名） | 未估 | 命题 A.8 已改为比较完成态输出；"多项式规模"已撤 | §7/定理 7.9 仍条件性；送裁决 |
 | 6 | `joukowsky` | **15** | 复分析/位势论专业刊 | **~50%** | 先行工作定位已补（12 条引用双源核实）；**五处丢反斜杠已修** | 人工看 Levenberg–Wielonsky |
 | 7 | `brocot` | 25 | **JNT**（现状）／强专业刊（若证出穿越定理） | — | 常数争议已结（我错，$b_C=8$ 对）；**穿越定理攻坚中** | 收结果 |
-| 8 | `folded_histograms` | **6** | **The Fibonacci Quarterly** | **~45%** | ✅ 已改写完成并核实（按字节核对保全：删 119,264 存 133,684） | 送裁决 |
+| 8 | `folded_histograms` | **6** | **The Fibonacci Quarterly** | **~45%** | ✅ 6 页 note 已核实；**定理本身我也验了**（45 例零分歧） | 送裁决（待 Oracle） |
 | 9 | `scan_projection` | **18** | 动力学专业刊（待定） | — | ✅ 相位常数**已可从转移矩阵复现**，判别性对照成立（相位盲只给一个常数） | 送裁决（待 Oracle） |
 | 10 | `zeck_arith` | 33 | **The Fibonacci Quarterly**（审稿人点名） | — | 未动 | 改投目标待执行 |
 | 11 | `golden_mean_folding` | 55 | — | — | ⛔ **判撤稿**：定理 6.1 是被定义做成的同义反复；全篇无独立可发表定理 | 仅保留"无上溢刻画"脚本 |
@@ -4673,3 +4673,30 @@ earnothing$ 破 |
 
 WARP 第九个 tick 仍 `Connecting`。codex 一槽（`fibonacci_folding` 裁剪）在跑，
 已删掉旋转多边形节与判别式附录。内存 1.17 GB。
+
+---
+
+## tick 363 — 验了全板赔率最好那篇的**唯一定理**，此前我只核过它的改写
+
+`folded_histograms` 是目前最高的接受概率（~45%），而我此前只验了改写与保全，
+**没验它那条定理**。这个 tick 补上。
+
+断言：$\Fold_m$ 在旋转编码块语言 $S_m(lpha,eta)$ 上对**每个** $m$ 单射
+$\iff$ 在 $m=2$ 单射 $\iff$ $eta\in(0,\delta]\cup[1-\delta,1)$，其中 $\delta=\min(lpha,1-lpha)$。
+
+**5 个无理数 × 9 个 $eta$ = 45 例，三者完全一致，零分歧**（$m$ 验到 12）。
+
+机制我手算出来了，而且它就是审稿人所说的那个：
+$N_2(\omega)=\omega_1+2\omega_2 mod 3$，故 $00\mapsto0$、$11\mapsto3\equiv0$ ——
+**这是唯一被迫的碰撞**。于是 $\Fold_2$ 单射 $\iff S_2$ 不同时含 $00$ 与 $11$；
+而 $11\in S_2\iffeta>\delta$、$00\in S_2\iffeta<1-\delta$。两句话。
+
+实测里看得很清楚：$eta$ 越过 $\delta$ 时 $S_2$ 由 $\{00,01,10\}$ 变为 $\{00,01,10,11\}$，
+再越过 $1-\delta$ 变为 $\{01,10,11\}$ —— 四元素那一档**必然**碰撞，因为 $|X_2|=F_4=3$。
+
+**所以审稿人的判词是准的**：这确实是"两字母区间重叠判据加一个初等同余"。
+论文的摘要自己也是这么说的 —— 这正是六页 note 是正确形式的原因，而不是缺陷。
+脚本 `artifacts/verify_classification.py`。
+
+WARP 状态由 `Connecting` 恶化为 **`Unable — Failed to perform happy eyeballs`**（第十个 tick）。
+codex 一槽（`fibonacci_folding` 裁剪）在跑，已删旋转多边形节、配分函数节与附录 D，存档文件已建。内存 1.15 GB。
