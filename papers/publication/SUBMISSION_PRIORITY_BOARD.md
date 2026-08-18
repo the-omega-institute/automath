@@ -6593,3 +6593,49 @@ board 的概率栏按实测值改写，不保留原来的乐观数。`window6` �
 
 池：6，现用 0。内存 1.12 GB。
 
+
+---
+
+## tick 407 — 把两条 desk-reject 变成可判定的问题；另两篇 verdict 同时在飞
+
+Oracle 正常，池 6 现用 **4**；codex 503。
+
+### 在飞
+
+| 任务 | id | 性质 |
+|---|---|---|
+| `R_window6_family` | `11d12ccf-ffae-4c4b-94b0-80afe61ec124` | 救援：无穷族定理是否可达 |
+| `R_cubical_incidence` | `5da871d6-1353-4e5c-a660-e711200a437e` | 救援：关联障碍能否完全解决 |
+| `V_scan_projection` | `18bc4634-1b60-432b-909f-f8ea42300e76` | verdict（Stochastics and Dynamics） |
+| `V_fibonacci_folding` | `95dff19e-2981-488b-9ac4-27045c4ffcb7` | verdict（Dynamical Systems） |
+
+### 为什么先派两条救援而不是补齐 verdict
+
+上个 tick 的两条 desk-reject 各自附了**一个具名的补救**（window6 扩到无穷族，+30 点；
+cubical_stokes 完全解决关联障碍）。这两条补救**要么值一篇论文，要么根本不存在**，
+而现在没人知道是哪种。先把它问清楚，比再多收两份 verdict 有用得多 ——
+否则 codex 一恢复就会有人照着一句referee建议去做一件可能做不成的事。
+
+问法按 tier 经验写死：**要一条具名的、带假设的定理，不要研究方向**；要**两周内可证的数值赔率**；
+要**第一处障碍**（把 m=6 的论证推到一般 m 时最先垮在哪）；
+并且明确给出退出口 ——
+
+> "If you think the family does not exist and the paper should instead be sent as a finite
+> classification to a journal that wants those, say so and stop. That is an acceptable answer
+> and I would rather have it than a plan that does not close."
+
+cubical 那条更直接，要求它对"整个盒定理就是记账"这一可能性**表态**：
+若同意，就说清稿子里**哪一部分不是记账，或者说没有**。
+
+### 两份 verdict 的写法
+
+`scan_projection` 与 `fibonacci_folding` 的摘要里，我把**自己验过的部分标明了**
+（周期二例的误差项恒为零、两条阈值在 m=9 处 131072 词穷举通过），
+免得对方把已证实的部分当作待查项，也让它的"最弱承重步骤"回答落在真正没验的地方。
+
+`projection` 未再送 verdict：三篇簇的裁决里已经判过它
+（"as presently organized it is diffuse … the Galois section risks looking appended"），
+重复问只会得到同一答案。
+
+内存 1.12 GB。
+
