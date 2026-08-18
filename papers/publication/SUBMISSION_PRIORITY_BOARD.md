@@ -7,7 +7,7 @@
 
 | # | 论文 | 页 | 目标刊 | 概率 | 封面信 | 我独立验过的承重结论 |
 |--:|---|--:|---|---|---|---|
-| 1 | `folded_histograms` | 6 | **The Fibonacci Quarterly** | **~45%** | ✅ | 分类定理：45 例零分歧；碰撞机制 $N_2=\omega_1+2\omega_2 mod 3$ |
+| 1 | `folded_histograms` | 6 | **The Fibonacci Quarterly** | **~45%** | ✅ | 分类定理：45 例零分歧；碰撞机制 $N_2=\omega_1+2\omega_2 \bmod 3$ |
 | 2 | `window6` | 9 | **EJC** | 18–22% → **25–30%** | ✅ EJC | 48 格加细、商谱重数、$A(Q_4)$ 载体；可容许维数判据 49 候选零分歧 |
 | 3 | `single_primitive` | 12 | **DMTCS**（短文） | <10% → **30–35%** | ✅ DMTCS | $S_2$ 递推与纤维高度（$m\le18$）；配对恒等式 $C(m)=S_2(m-2)$ |
 | 4 | `joukowsky` | 15 | **Complex Analysis and Operator Theory** | **~50%** | ✅ CAOT | 定理 3.21 四部分齐全；五处丢反斜杠已修（含我扫出的第五处） |
@@ -496,7 +496,7 @@ ho_HI-Q)^{-1}\ge0$ 使暂态贡献非负，结论由严格正的 $\mathcal S_\in
 **控制计数第四次生效。**
 
 | `scan_error_prefix_partitions_…_etds` | **非本原情形的精确扫描误差律**：$arepsilon_m=\lambda^{-(m-1)}sB̃^{m-1}t$ ⇒ 有理生成函数 + 有限递推；非幂零时给**完整剩余类渐近** $(
-ho/\lambda)^{m-1}(c_{(m-1)mod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
+ho/\lambda)^{m-1}(c_{(m-1)\bmod p}(m-1)^{q-1}+\dots)$，$q$＝可达临界分量最长链长（仅本原的陈述看不见此多项式因子）| 63→**65** | `cd2699887` |
 
 **兄弟篇的"这两条已在你那儿"经确认属实** —— 防住了 A 推 B、B 推 A、两边皆不做的失败模式。
 **novelty 对着论文自己紧挨的推论核过**（复述最可能藏于此）：旧推论对**边界计数**给精确律，
@@ -663,7 +663,7 @@ m cau}(U,m)/m\le1$，
 （质量 $\log U_n^{
 m prim}=(\logarphi+o(1))\phi(n)$ 除以计数
 $a(n)\le(	frac{\logarphi}{2}+o(1))\phi(n)/\log n$）。
-而该 $	frac12$ 仅用了两条信息：本原素数落在 $\pm1mod 2n$、且互不相同（阶乘项把
+而该 $	frac12$ 仅用了两条信息：本原素数落在 $\pm1\bmod 2n$、且互不相同（阶乘项把
 $\log n$ 变成 $2\log n$）。**筛法完全未上场**。三个可问方向按价值：
 (1) 用 Brun–Titchmarsh／大筛法压 $a(n)$，指数随之上涨 —— 改进路径具体而非许愿；
 (2) 有效化 $N_arepsilon$ —— 因至今未发现 $2^{64}$ 以下 Wall–Sun–Sun 素数，
@@ -4707,7 +4707,7 @@ $\iff$ 在 $m=2$ 单射 $\iff$ $eta\in(0,\delta]\cup[1-\delta,1)$，其中 $\de
 **5 个无理数 × 9 个 $eta$ = 45 例，三者完全一致，零分歧**（$m$ 验到 12）。
 
 机制我手算出来了，而且它就是审稿人所说的那个：
-$N_2(\omega)=\omega_1+2\omega_2 mod 3$，故 $00\mapsto0$、$11\mapsto3\equiv0$ ——
+$N_2(\omega)=\omega_1+2\omega_2 \bmod 3$，故 $00\mapsto0$、$11\mapsto3\equiv0$ ——
 **这是唯一被迫的碰撞**。于是 $\Fold_2$ 单射 $\iff S_2$ 不同时含 $00$ 与 $11$；
 而 $11\in S_2\iffeta>\delta$、$00\in S_2\iffeta<1-\delta$。两句话。
 
