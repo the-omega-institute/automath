@@ -1,15 +1,184 @@
-% ------------------------------------------------------------------
-%  Section 3: Visible words (compressed)
-% ------------------------------------------------------------------
-\section{Visible words}\label{sec:spg}
+\section{A triangular-array collision criterion}
+\label{sec:triangular-array}
 
-An event \(\mathsf P\in\mathcal F_m\) is determined entirely by its
-length-\(m\) observed words: it is a union of cylinders \(C_a\) with
-\(a\in\mathcal A_{\mathrm{obs}}^m\).  On
-\(\mathcal A_{\mathrm{obs}}^{\NNzero}\) we use the prefix ultrametric
+Before specializing to open shifts, we isolate the probabilistic input.
+This separates the classical Poisson-approximation mechanism from the
+dynamical work needed to verify its hypotheses.
+
+For each \(m\), let \(p_m\) be a probability distribution on a finite
+set \(E_m\), and define
 \[
-  d_{\mathrm{pre}}(\xi,\eta):=2^{-\ell(\xi,\eta)},
+  Q_s(m):=\sum_{x\in E_m}p_m(x)^s
+  \qquad(s\geq1).
 \]
-where \(\ell(\xi,\eta)\) is the first index at which \(\xi\) and
-\(\eta\) differ.  The box-counting notation in
-Section~\ref{sec:clarity} refers to this metric.
+Fix an integer \(k\geq2\).  Let
+\(X_m^{(1)},\ldots,X_m^{(N_m)}\) be independent with common law \(p_m\),
+and put
+\[
+  W_{m,k}
+  :=\sum_{\substack{I\subseteq\{1,\ldots,N_m\}\\|I|=k}}
+     \mathbf1_{\{X_m^{(i)}=X_m^{(j)}\text{ for all }i,j\in I\}}.
+\]
+The expected number of collisions is
+\[
+  \Lambda_{m,k}:=\mathbb EW_{m,k}
+  =\binom{N_m}{k}Q_k(m).
+\]
+
+\begin{theorem}[Power-sum criterion with total-variation error]
+\label{thm:abstract-collision-criterion}
+There is \(C_k<\infty\), depending only on \(k\), such that
+\begin{align}
+ d_{\rm TV}\bigl(\mathcal L(W_{m,k}),
+   \operatorname{Poisson}(\Lambda_{m,k})\bigr)
+ &\leq C_k\min\{1,\Lambda_{m,k}^{-1}\}
+ \Bigl(
+ N_m^{2k-1}Q_k(m)^2 \notag\\
+ &\hspace{36mm}+
+ \sum_{\ell=1}^{k-1}N_m^{2k-\ell}Q_{2k-\ell}(m)
+ \Bigr).
+ \label{eq:abstract-tv-bound}
+\end{align}
+In particular, if
+\[
+  \Lambda_{m,k}\longrightarrow\tau\in(0,\infty)
+\]
+and
+\begin{equation}
+  N_m^{2k-\ell}Q_{2k-\ell}(m)\longrightarrow0
+  \qquad(1\leq\ell\leq k-1),
+  \label{eq:abstract-overlap-condition}
+\end{equation}
+then
+\[
+  W_{m,k}\Rightarrow\operatorname{Poisson}(\tau).
+\]
+\end{theorem}
+
+\begin{proof}
+Index the collision indicators by the \(k\)-subsets of
+\(\{1,\ldots,N_m\}\).  Connect two index sets when they intersect.
+Indicators attached to disjoint sets depend on disjoint families of
+independent samples and are therefore independent, so this graph is a
+dependency graph.
+
+Every collision indicator has expectation \(Q_k(m)\).  For a fixed
+\(k\)-set \(I\), the number of \(k\)-sets \(J\) satisfying
+\(|I\cap J|=\ell\) is
+\[
+  \binom{k}{\ell}\binom{N_m-k}{k-\ell}.
+\]
+If \(1\leq\ell\leq k-1\), both indicators equal one exactly when all
+\(2k-\ell\) samples indexed by \(I\cup J\) coincide.  Hence
+\[
+  \mathbb E[J_IJ_J]=Q_{2k-\ell}(m).
+\]
+The two local-dependence terms in
+\citet[Theorem~1]{ArratiaGoldsteinGordon1989} are consequently bounded
+by
+\begin{align*}
+ b_1
+ &\leq\binom{N_m}{k}
+   \sum_{\ell=1}^k
+   \binom{k}{\ell}\binom{N_m-k}{k-\ell}Q_k(m)^2,\\
+ b_2
+ &=\binom{N_m}{k}
+   \sum_{\ell=1}^{k-1}
+   \binom{k}{\ell}\binom{N_m-k}{k-\ell}
+   Q_{2k-\ell}(m).
+\end{align*}
+There is no third conditional-dependence term because the dependency
+graph is exact.  The Chen--Stein estimate is at most a universal factor
+times \(\min\{1,\Lambda_{m,k}^{-1}\}(b_1+b_2)\).  Bounding the
+binomial coefficients by powers of \(N_m\) proves
+\eqref{eq:abstract-tv-bound}.
+
+If \(\Lambda_{m,k}\to\tau\), then
+\[
+  N_m^{2k-1}Q_k(m)^2
+  =O\bigl(N_m^{-1}(N_m^kQ_k(m))^2\bigr)=o(1).
+\]
+Together with \eqref{eq:abstract-overlap-condition}, this makes the
+right-hand side of \eqref{eq:abstract-tv-bound} tend to zero.
+Convergence of the Poisson means completes the proof.
+\end{proof}
+
+The next result is the form used for survivor distributions.  It allows
+bounded oscillating prefactors, so it does not assume a single precise
+power-sum limit.
+
+\begin{corollary}[Exponential-gap criterion]
+\label{cor:abstract-exponential-criterion}
+Let \(n_m\to\infty\).  Suppose that for every integer
+\(s\in\{k,k+1,\ldots,2k-1\}\),
+\begin{equation}
+  Q_s(m)=a_s(m)e^{-n_mh_s}(1+o(1)),
+  \label{eq:abstract-power-asymptotic}
+\end{equation}
+where
+\[
+  0<\inf_m a_s(m)\leq\sup_m a_s(m)<\infty.
+\]
+Assume the strict gaps
+\begin{equation}
+  h_t>\frac{t}{k}h_k
+  \qquad(k<t\leq2k-1).
+  \label{eq:abstract-strict-gaps}
+\end{equation}
+If \(\binom{N_m}{k}Q_k(m)\to\tau\in(0,\infty)\), then
+\[
+  W_{m,k}\Rightarrow\operatorname{Poisson}(\tau).
+\]
+
+If, along a subsequence, \(a_k(m)\to a_k>0\) and
+\[
+  N_me^{-n_mh_k/k}\longrightarrow\alpha\in(0,\infty),
+\]
+then
+\[
+  W_{m,k}\Rightarrow
+  \operatorname{Poisson}\!\left(\frac{a_k\alpha^k}{k!}\right).
+\]
+\end{corollary}
+
+\begin{proof}
+The convergence of the mean and the bounds on \(a_k(m)\) imply
+\[
+  N_m\asymp e^{n_mh_k/k}.
+\]
+For \(t=2k-\ell\), where \(1\leq\ell\leq k-1\),
+\[
+  N_m^tQ_t(m)
+  =O\!\left(
+    \exp\left(n_m\left(\frac{t}{k}h_k-h_t\right)\right)
+  \right)=o(1)
+\]
+by \eqref{eq:abstract-strict-gaps}.  Thus
+\eqref{eq:abstract-overlap-condition} holds, and
+Theorem~\ref{thm:abstract-collision-criterion} gives the Poisson limit.
+On the stated subsequence,
+\[
+  \binom{N_m}{k}Q_k(m)
+  \longrightarrow\frac{a_k\alpha^k}{k!},
+\]
+which proves the explicit form.
+\end{proof}
+
+\begin{remark}[Minimality of the overlap input]
+The convergence of the mean alone does not imply a Poisson law.  If
+\eqref{eq:abstract-overlap-condition} fails, two nominal
+\(k\)-collisions sharing samples may occur on the same scale as isolated
+collisions.  The strict inequalities
+\eqref{eq:abstract-strict-gaps} are a convenient dynamical way to rule
+this out, not a generic consequence of normalization.  In the open
+Markov application, Proposition~\ref{prop:strict-renyi-gap} verifies all
+of them simultaneously.
+\end{remark}
+
+\begin{remark}[Why only finitely many moments are used]
+For a fixed multiplicity \(k\), two intersecting \(k\)-sets have union
+size between \(k+1\) and \(2k-1\).  The criterion therefore uses only
+the power sums \(Q_k,\ldots,Q_{2k-1}\).  It makes no assertion uniform
+in a growing collision multiplicity, and no such uniformity is needed
+for the results below.
+\end{remark}

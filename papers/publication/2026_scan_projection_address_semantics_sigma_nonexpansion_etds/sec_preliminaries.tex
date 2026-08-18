@@ -1,43 +1,221 @@
-% ------------------------------------------------------------------
-%  Section 2: Preliminaries (compressed)
-% ------------------------------------------------------------------
-\section{Preliminaries}\label{sec:preliminaries}
+\section{Open Markov shifts and cyclic Perron limits}
+\label{sec:preliminaries}
 
-The observation model is the same throughout the paper: one sees a
-finite-alphabet symbolic process at finite depth.  Let
-\((\Omega,\mathcal B,\mu)\) be a probability space and let
+\subsection{The killed family}
+
+Let \(Y\subseteq A^{\mathbb N_0}\) be a topologically mixing one-step
+subshift of finite type with adjacency matrix \(M\).  Let \(\varphi\)
+be a one-step potential, written as \(\varphi(i,j)\) on admissible
+edges, and let \(\nu_\varphi\) be its fully supported equilibrium Markov
+measure.  Write \(\pi\) for the stationary row vector and \(K\) for the
+transition matrix.  If \(h>0\) is a right Perron vector of
 \[
-  y=(y_t)_{t\geq 0}:\Omega\to \mathcal A_{\mathrm{obs}}^{\NNzero}
+  L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)},
 \]
-be a measurable process with values in a finite alphabet
-\(\mathcal A_{\mathrm{obs}}\).  For \(m\geq 1\), define
+then
+\begin{equation}
+  K_{ij}
+  =M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
+  \label{eq:markov-normalization}
+\end{equation}
+
+Choose a nonempty proper set \(A_{\rm hole}\subsetneq A\), put
 \[
-  \mathcal F_m:=\sigma(y_0,\ldots,y_{m-1}),
+  H:=\bigcup_{a\in A_{\rm hole}}[a],
   \qquad
-  \mathcal F_\infty:=\sigma\Bigl(\bigcup_{m\geq 1}\mathcal F_m\Bigr).
+  \mathcal S:=A\setminus A_{\rm hole},
 \]
-If \(a=a_0\cdots a_{m-1}\in \mathcal A_{\mathrm{obs}}^m\), write
+and define
 \[
-  C_a:=\{\omega\in\Omega:(y_0,\ldots,y_{m-1})(\omega)=a\}.
+  \tau_H(y):=\inf\{n\geq0:y_n\in A_{\rm hole}\}.
 \]
-Then the non-empty cylinders \(C_a\) form the partition generating
-\(\mathcal F_m\).
+Throughout the paper we make the following standing assumption.
 
-For an event \(\mathsf P\in\mathcal F_\infty\), let
+\medskip
+\noindent\textbf{Periodic survivor hypothesis.}
+The graph induced by \(\mathcal S\) is irreducible of period \(d\).
+Its cyclic decomposition is denoted by
 \[
-  p_m:=\mu(\mathsf P\mid \mathcal F_m).
+  \mathcal S=\mathcal C_0\sqcup\cdots\sqcup\mathcal C_{d-1},
 \]
-The martingale \((p_m)_{m\geq 1}\) is the finite-resolution conditional
-probability associated with \(\mathsf P\); it is the only observation
-process used in the Bayes-error formulas below.
+with indices in \(\mathbb Z/d\mathbb Z\), chosen so that every safe
+edge from \(\mathcal C_a\) ends in \(\mathcal C_{a+1}\).
 
-In the main symbolic sections, the observation process is the coordinate
-process on a one-step subshift of finite type:
+\medskip
+This hypothesis implies that every safe state lies on an infinite
+survivor orbit; in particular there are no transient safe states.  The
+survivor subshift \(Y_H\) is irreducible, but it is mixing only when
+\(d=1\).
+
+For \(s>0\), define
 \[
-  y_t(\omega)=\omega_t,
+  u_s(i):=\pi_i^s,
   \qquad
-  \mathcal A_{\mathrm{obs}}=A.
+  B_s(i,j):=K_{ij}^s\mathbf1_{\{j\in\mathcal S\}},
+  \qquad i,j\in\mathcal S,
 \]
-After an \(\ell\)-block recoding, the same definition is used with the
-block alphabet \(A^{(\ell)}\).  No separate binary-readout model is used
-in the proofs.
+and put \(\rho_s:=\rho(B_s)\).  The support of \(B_s\) is independent
+of \(s\), so every \(B_s\) is irreducible of period \(d\) with the
+same cyclic classes.
+
+Let \(r_s>0\) and \(\ell_s>0\) be right and left Perron vectors,
+normalized by
+\[
+  B_sr_s=\rho_sr_s,
+  \qquad
+  \ell_s^{\mathsf T}B_s=\rho_s\ell_s^{\mathsf T},
+  \qquad
+  \ell_s^{\mathsf T}r_s=1.
+\]
+For a vector \(v\) and a set \(C\), write \(v_C\) for its restriction
+to \(C\).  For \(a,r\in\mathbb Z/d\mathbb Z\), set
+\[
+  U_{s,a}:=u_{s,\mathcal C_a}^{\mathsf T}r_{s,\mathcal C_a},
+  \qquad
+  V_{s,a}(v):=\ell_{s,\mathcal C_a}^{\mathsf T}v_{\mathcal C_a},
+\]
+and define the cyclic coefficient
+\begin{equation}
+  A_{s,r}(v)
+  :=d\sum_{a\in\mathbb Z/d\mathbb Z}
+       U_{s,a}V_{s,a+r}(v).
+  \label{eq:cyclic-coefficient}
+\end{equation}
+If \(v>0\), then \(A_{s,r}(v)>0\) for every \(r\).
+
+\subsection{Cyclic asymptotics}
+
+We give the precise matrix limit used throughout.  Although it is a
+standard periodic Perron formula, keeping the coefficient visible is
+essential: different entrywise powers \(B_s\) have different Perron
+vectors, so normalization by the survivor mass does not cancel the
+depth phase.
+
+\begin{proposition}[Cyclic Perron coefficient]
+\label{prop:cyclic-perron}
+Fix \(s>0\) and a vector \(v\).  For each
+\(r\in\mathbb Z/d\mathbb Z\), there is \(0\leq\kappa_{s,r}<1\) such
+that, as \(n\to\infty\) through \(n\equiv r\pmod d\),
+\begin{equation}
+  u_s^{\mathsf T}B_s^n v
+  =\rho_s^n\bigl(A_{s,r}(v)+O(\kappa_{s,r}^n)\bigr).
+  \label{eq:cyclic-perron-asymptotic}
+\end{equation}
+The error is uniform over any fixed finite collection of vectors \(v\).
+\end{proposition}
+
+\begin{proof}
+Normalize \(B_s\) to the stochastic matrix
+\[
+  P_s(i,j):=\frac{B_s(i,j)r_s(j)}{\rho_s r_s(i)}.
+\]
+Its stationary distribution is
+\[
+  \zeta_s(i):=\ell_s(i)r_s(i),
+\]
+because \(\ell_s^{\mathsf T}r_s=1\).  Stationarity and the cyclic
+decomposition imply
+\[
+  \sum_{i\in\mathcal C_a}\zeta_s(i)=\frac1d
+  \qquad(a\in\mathbb Z/d\mathbb Z).
+\]
+Indeed, one-step probability flow transports the total stationary mass of
+\(\mathcal C_a\) to \(\mathcal C_{a+1}\), so all class masses are
+equal.
+
+For each \(a\), the restriction of \(P_s^d\) to
+\(\mathcal C_a\) is primitive.  The primitive Perron theorem therefore
+gives, for \(i\in\mathcal C_a\) and
+\(j\in\mathcal C_{a+r}\),
+\[
+  P_s^n(i,j)
+  =d\zeta_s(j)+O(\kappa_{s,r}^n)
+  \qquad(n\equiv r\pmod d),
+\]
+while \(P_s^n(i,j)=0\) if \(j\notin\mathcal C_{a+r}\).  The state
+space is finite, so the error may be chosen uniformly in \(i,j\).
+
+Diagonal similarity gives
+\[
+  B_s^n(i,j)
+  =\rho_s^n\frac{r_s(i)}{r_s(j)}P_s^n(i,j).
+\]
+Since \(\zeta_s(j)/r_s(j)=\ell_s(j)\), summing against
+\(u_s(i)v(j)\) yields
+\begin{align*}
+  \rho_s^{-n}u_s^{\mathsf T}B_s^n v
+  &=d\sum_a
+      \left(\sum_{i\in\mathcal C_a}u_s(i)r_s(i)\right)
+      \left(\sum_{j\in\mathcal C_{a+r}}\ell_s(j)v(j)\right)
+      +O(\kappa_{s,r}^n)\\
+  &=A_{s,r}(v)+O(\kappa_{s,r}^n),
+\end{align*}
+which proves the claim.
+\end{proof}
+
+\begin{remark}[Peripheral-spectrum form]
+The limit in Proposition~\ref{prop:cyclic-perron} is equivalently the
+sum of the \(d\) peripheral spectral projections of \(B_s\), weighted
+by the appropriate roots of unity.  Formula
+\eqref{eq:cyclic-coefficient} is preferable here because it is positive,
+real, and directly computable from Perron vectors.  See
+\citet{Seneta2006} for the periodic theory of irreducible nonnegative
+matrices.
+\end{remark}
+
+\subsection{Safe words and pressure}
+
+Let \(\mathcal L_m^H\) be the set of admissible words
+\(a=a_0\cdots a_{m-1}\) whose symbols all lie in \(\mathcal S\), and
+define
+\[
+  Z_{H,m}(s):=\sum_{a\in\mathcal L_m^H}\nu_\varphi([a])^s.
+\]
+The one-step Markov property gives the exact path sum
+\begin{equation}
+  Z_{H,m}(s)=u_s^{\mathsf T}B_s^{m-1}\mathbf1.
+  \label{eq:power-sum-path}
+\end{equation}
+In particular,
+\[
+  Z_{H,m}(1)=\nu_\varphi(\tau_H\geq m).
+\]
+
+For later use we identify \(\rho_s\) thermodynamically.  Let
+\(D_s\) be diagonal with \(D_s(i,i)=h_i^s\), where \(h\) is the vector
+in \eqref{eq:markov-normalization}.  On \(\mathcal S\),
+\[
+  B_s
+  =e^{-sP_Y(\varphi)}D_s^{-1}L_{s\varphi,H}D_s,
+\]
+where
+\[
+  L_{s\varphi,H}(i,j)
+  :=M_{ij}e^{s\varphi(i,j)}\mathbf1_{\{j\in\mathcal S\}}.
+\]
+The survivor graph is irreducible, so the usual pressure formula remains
+valid without primitivity:
+\begin{equation}
+  \rho_s
+  =\exp\bigl(P_{Y_H}(s\varphi)-sP_Y(\varphi)\bigr).
+  \label{eq:rho-pressure}
+\end{equation}
+Consequently the escape exponent is
+\[
+  -\log\rho_1=P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Periodicity affects the prefactor of survivor mass, but not its
+exponential rate.
+
+Combining \eqref{eq:power-sum-path} with
+Proposition~\ref{prop:cyclic-perron} gives the basic phase-resolved
+formula
+\begin{equation}
+  Z_{H,m}(s)
+  =A_{s,r}(\mathbf1)\rho_s^{m-1}
+    (1+O(\kappa_s^{m-1})),
+  \qquad m-1\equiv r\pmod d,
+  \label{eq:unconditioned-phase-power}
+\end{equation}
+where, after taking a maximum over the finitely many phases, one may use
+a single \(0<\kappa_s<1\).

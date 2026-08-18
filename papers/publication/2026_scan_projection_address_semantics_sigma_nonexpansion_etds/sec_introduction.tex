@@ -1,336 +1,196 @@
 \section{Introduction}\label{sec:introduction}
 
-\subsection*{Problem}
+Collision statistics of long symbolic words are controlled by R\'enyi
+power sums.  In a primitive finite-state source, these power sums have a
+single Perron asymptotic, and the usual dependency-graph argument turns
+the strict separation of R\'enyi rates into a Poisson law for generalized
+birthday coincidences.  An open symbolic system need not retain
+primitivity after a hole is introduced.  Its survivor graph may remain
+irreducible but acquire a period, and then the single Perron asymptotic
+is replaced by a family of cyclic limits.
 
-Let \(y=(y_t)_{t\geq 0}\) be a finite-alphabet observed process and let
-\[
-  \mathcal F_m:=\sigma(y_0,\ldots,y_{m-1})
-\]
-be the information available at depth \(m\).  For an event
-\(\mathsf P\in\mathcal F_\infty\), the depth-\(m\) Bayes error
-\[
-  \varepsilon_m(\mathsf P;\mu)
-\]
-is the smallest classification error achievable from the first \(m\)
-observed symbols.  This paper studies that observable when \(y\) is the
-symbolic coordinate process of an open shift of finite type and
-\(\mathsf P\) records a first-entry residue class into a Markov hole.
-The resulting sequence \(m\mapsto\varepsilon_m(\mathsf P;\mu)\) turns out
-to recover not only the escape exponent, but also a residue-dependent
-quasistationary ambiguity amplitude and a scalar resolvent coefficient of
-the killed dynamics.
+This paper determines what happens to collision laws in that periodic
+regime.  The exponential birthday scale is unchanged, but its
+multiplicative constant depends on the depth class.  This dependence is
+not an artifact of the proof: in the explicit period-two system of
+Section~\ref{sec:periodic-example}, the two pair-collision constants are
+different.  A normalization that ignores the survivor period therefore
+has two different Poisson subsequential limits and no full-sequence
+limit.
 
-\subsection*{Setting}
+The setting is deliberately finite-state but no longer primitive.  Let
+\(Y\) be a topologically mixing one-step subshift of finite type, let
+\(\nu_\varphi\) be the equilibrium Markov measure of a one-step
+potential, and let \(H\) be a nonempty proper Markov hole.  We assume
+that the graph induced by the safe symbols is irreducible of period
+\(d\geq1\).  The case \(d=1\) recovers the primitive survivor law; the
+new content concerns \(d>1\).  We exclude exactly one obstruction: a
+deterministic safe cycle.  Equivalently, at least one safe state has two
+safe successors.  This hypothesis is necessary for the strict R\'enyi
+gap used by the collision theorem.
 
-Fix a topologically mixing one-step subshift of finite type \(Y\), a
-one-step potential \(\varphi\), and the equilibrium Markov measure
-\(\nu_\varphi\).  Let \(A_{\mathrm{hole}}\subsetneq A\) be a non-empty
-proper subset, let
+For a safe word \(a\) of length \(m\), write
 \[
-  H:=\bigcup_{h\in A_{\mathrm{hole}}}[h]
+  \lambda_m^H(a)
+  :=\nu_\varphi([a]\mid \tau_H\geq m),
 \]
-be the corresponding Markov hole with mixing survivor subshift \(Y_H\),
-and write
+and define the R\'enyi power sum
 \[
-  \gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)
+  S_s^H(m):=\sum_a\lambda_m^H(a)^s.
 \]
-for the escape rate.  For a non-empty proper subset
-\(R\subsetneq \ZZ/q\ZZ\), let \(\mathsf P_R\) be the event that the
-first entry time
+If \(B_s\) is the entrywise \(s\)-th power of the killed transition
+matrix and \(\rho_s=\rho(B_s)\), then
 \[
-  \tau_H(y):=\inf\set{n\geq 0:\sigma^n y\in H}
+  h_{s,H}:=-\log\frac{\rho_s}{\rho_1^s}
+  =sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
 \]
-is finite and belongs to \(R\) modulo \(q\).  Throughout the finite-state
-core of the paper, depth \(m\) always means conditioning on the symbolic
-prefix filtration
+The cyclic Perron theorem below produces positive constants
+\(c_{s,0},\ldots,c_{s,d-1}\) such that, with \(n=m-1\),
 \[
-  \mathcal F_m=\sigma(y_0,\ldots,y_{m-1})
+  S_s^H(m)
+  =c_{s,r}e^{-nh_{s,H}}(1+O(\kappa_s^n)),
+  \qquad n\equiv r\pmod d.
 \]
-of the coordinate process on \(Y\), or on the corresponding block
-alphabet after recoding.
+All constants are explicit in the stationary initial law and the left
+and right Perron vectors of \(B_s\).
 
-\subsection*{Main results}
+\subsection*{Main collision theorem}
 
-The paper is organized around one finite-state theorem and three direct
-consequences.
-\begin{enumerate}[label=(\roman*)]
-  \item \textbf{Main theorem.}  An exact killed-matrix formula for the
-    Bayes error of first-entry residue events of Markov holes, with
-    exponential decay governed by the escape rate
-    (Theorem~\ref{thm:main-escape} and
-    Theorem~\ref{thm:first-entry-escape-rate}).
-  \item \textbf{Refinement.}  A residue-dependent quasistationary
-    amplitude refining the leading asymptotics
-    (Theorem~\ref{thm:main-amplitude} and
-    Theorem~\ref{thm:quasistationary-ambiguity}).
-  \item \textbf{Algebraic corollary.}  A resolvent reformulation showing
-    that the error generating function is a scalar resolvent coefficient
-    whose poles are contained in the \(q\)-th cyclotomic lift of the
-    killed spectrum and whose dominant real pole
-    \(e^{\gamma_H(\varphi)}>1\) is genuine
-    (Corollary~\ref{cor:main-resonance} and
-    Corollary~\ref{cor:error-resolvent-cyclotomic}).
-  \item \textbf{Thermodynamic consequence.}  A survivor R\'enyi pressure
-    formula and sharp Poisson collision thresholds of every fixed
-    multiplicity for survivor prefixes
-    (Corollary~\ref{cor:main-renyi},
-    Corollary~\ref{cor:survivor-renyi-pressure}, and
-    Theorem~\ref{thm:survivor-higher-collisions}).
-\end{enumerate}
-The center of gravity is the exact first-entry path sum in
-Section~\ref{sec:open-system}; the resolvent and R\'enyi/Poisson
-statements are consequences of the same finite-state calculation.
+For fixed \(k\geq2\), let
+\(X_m^{H,(1)},\ldots,X_m^{H,(N_m)}\) be independent survivor prefixes
+with the common law \(\lambda_m^H\), and let \(W_{m,k}\) count the
+\(k\)-element subfamilies whose members are all equal.  The independence,
+common-law, and fixed-multiplicity assumptions are part of every
+collision statement in this paper.
 
-\begin{theorem}[First-entry residue events and escape rates]
-\label{thm:main-escape}
-Assume the setting above.  Let \(\mathcal S:=A\setminus A_{\mathrm{hole}}\),
-define
+\begin{theorem}[Phase-resolved survivor collisions]
+\label{thm:intro-collisions}
+Assume that the safe graph is irreducible of period \(d\), has at least
+two states, and is not a deterministic cycle.  Fix an integer
+\(k\geq2\).  If
 \[
-  B_H(i,j):=K_{ij}\mathbf 1_{\{j\in\mathcal S\}},
-  \qquad
-  u_i:=\pi_i,
+  \binom{N_m}{k}S_k^H(m)\longrightarrow\tau\in(0,\infty),
 \]
-and for \(i\in\mathcal S\) let \(\PP_i\) be the Markov law conditioned to
-start at state \(i\).  Set
+then
 \[
-  \tau_H^+
-  := \inf\set{n\geq 1:y_n\in A_{\mathrm{hole}}}.
+  W_{m,k}\ \Rightarrow\ \operatorname{Poisson}(\tau).
 \]
-For each \(i\in\mathcal S\), let
+More explicitly, fix \(r\in\mathbb Z/d\mathbb Z\) and let
+\(m\to\infty\) through depths satisfying \(m-1\equiv r\pmod d\).  If
 \[
-  D_i:=\set{d\bmod q:\PP_i(\tau_H^+=d)>0}
-  \subseteq \ZZ/q\ZZ
+  N_m e^{-(m-1)h_{k,H}/k}\longrightarrow\alpha\in(0,\infty),
 \]
-be the set of attainable first-hit residues from \(i\), and assume that
-for every \(i\in\mathcal S\) and \(r\in\ZZ/q\ZZ\),
+then
 \[
-  D_i\cap (R-r)\neq\varnothing,
-  \qquad
-  D_i\cap ((\ZZ/q\ZZ\setminus R)-r)\neq\varnothing.
-\]
-For \(r\in \ZZ/q\ZZ\), define
-\[
-  b_r(i):=
-  \min\set{
-    \PP_i(r+\tau_H^+\in R\bmod q),
-    1-\PP_i(r+\tau_H^+\in R\bmod q)
-  }.
-\]
-Then for every \(m\geq 1\),
-\[
-  \varepsilon_m(\mathsf P_R;\nu_\varphi)
-  = u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q}.
-\]
-Moreover,
-\[
-  \lim_{m\to\infty}
-  -\frac1m\log\varepsilon_m(\mathsf P_R;\nu_\varphi)
-  = -\log\rho(B_H)
-  = P_Y(\varphi)-P_{Y_H}(\varphi).
-\]
-Thus the finite-observation exponent of \(\mathsf P_R\) recovers the
-escape rate \(\gamma_H(\varphi)\).
-\end{theorem}
-
-\begin{theorem}[Quasistationary ambiguity amplitudes]
-\label{thm:main-amplitude}
-Under the hypotheses and notation of
-Theorem~\ref{thm:main-escape}, let \(\ell_H\) be a non-negative left
-eigenvector of \(B_H\) for \(\rho_H:=\rho(B_H)\), normalized by
-\[
-  \xi_H:=\frac{\ell_H}{\ell_H^{\mathsf T}\mathbf 1}.
-\]
-Then for every residue class \(r\in\ZZ/q\ZZ\),
-\[
-  \lim_{n\to\infty}
-  \frac{\varepsilon_{nq+r+1}(\mathsf P_R;\nu_\varphi)}
-       {\nu_\varphi(\tau_H\ge nq+r+1)}
-  = \xi_H^{\mathsf T}b_r.
-\]
-Equivalently,
-\[
-  \varepsilon_m(\mathsf P_R;\nu_\varphi)
-  = \bigl(\xi_H^{\mathsf T}b_{m-1\bmod q}+o(1)\bigr)\,
-    \nu_\varphi(\tau_H\ge m).
-\]
-In particular, finite observation records not only the escape exponent
-\(\gamma_H(\varphi)\) but also a residue-dependent quasistationary
-ambiguity amplitude.
-\end{theorem}
-
-\begin{remark}[Quasistationary interpretation]
-\label{rem:intro-qsd}
-The normalized left eigenvector \(\xi_H\) is the quasistationary
-distribution of the killed chain.  In the finite-state Markov setting
-this viewpoint goes back to \citet{DarrochSeneta1965}; see also
-\citet{ColletMartinezSanMartin2013} for a systematic treatment and
-\citet{KellerLiverani2009} for the open-dynamical formulation.  Thus
-Theorem~\ref{thm:main-amplitude} identifies the Bayes ambiguity as a
-quasistationary expectation of the residue weight \(b_r\).
-\end{remark}
-
-\begin{corollary}[Cyclotomic resonance lift]
-\label{cor:main-resonance}
-Under the hypotheses and notation of
-Theorem~\ref{thm:main-escape}, set
-\[
-  \widehat{\mathcal S}:=\mathcal S\times \ZZ/q\ZZ,
-\]
-define
-\[
-  \widehat B_H\bigl((i,r),(j,s)\bigr)
-  := B_H(i,j)\mathbf{1}_{\{s=r+1\bmod q\}},
-\]
-\[
-  \widehat u(i,r):=u_i\mathbf 1_{\{r=0\}},
-  \qquad
-  \widehat b(i,r):=b_r(i).
-\]
-Then the error generating function
-\[
-  \mathcal E_{\mathsf P_R}(z)
-  := \sum_{m\geq 1}\varepsilon_m(\mathsf P_R;\nu_\varphi)z^m
-\]
-satisfies
-\[
-  \mathcal E_{\mathsf P_R}(z)
-  = z\,\widehat u^{\mathsf T}(I-z\widehat B_H)^{-1}\widehat b,
-\]
-and every pole belongs to the reciprocal \(q\)-th cyclotomic lift of
-\(\spec(B_H)\).  The positive real pole of smallest modulus is
-\[
-  \rho_H^{-1}
-  = e^{P_Y(\varphi)-P_{Y_H}(\varphi)}
-  = e^{\gamma_H(\varphi)}
-  > 1.
-\]
-\end{corollary}
-
-\begin{corollary}[Survivor R\'enyi pressure spectrum and collision scales]
-\label{cor:main-renyi}
-Under the hypotheses of Theorem~\ref{thm:main-escape}, let
-\(\mathcal L_m^H\) be the set of admissible length-\(m\) words that
-avoid \(H\) for the first \(m\) steps, and let \(\lambda_m^H\) denote
-the corresponding survivor-prefix law conditioned on survival to depth
-\(m\).  Then for every \(s>0\),
-\[
-  \lim_{m\to\infty}
-  -\frac1m\log
-  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
-  = sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
-\]
-Suppose in addition that \(\card(\mathcal S_\infty)\geq2\).  For every
-integer \(k\geq2\), set
-\[
-  h_{k,H}:=kP_{Y_H}(\varphi)-P_{Y_H}(k\varphi).
-\]
-There is a constant \(c_{k,H}>0\), given explicitly by Perron
-eigenvectors of the matrices \(B_{H,k}\) and \(B_H\), with the following
-property.  If \(W_{m,k}\) is the number of \(k\)-element subfamilies of
-\(N_m\) independent survivor prefixes whose members are all equal, then
-\[
-  N_m e^{-(m-1)h_{k,H}/k}\longrightarrow\alpha\in(0,\infty)
-  \quad\Longrightarrow\quad
-  W_{m,k}\Rightarrow
-  \mathrm{Poisson}\!\left(\frac{c_{k,H}\alpha^k}{k!}\right).
+  W_{m,k}\ \Rightarrow\
+  \operatorname{Poisson}\!\left(\frac{c_{k,r}\alpha^k}{k!}\right).
 \]
 Below this scale the collision probability tends to zero, and above it
-the collision probability tends to one.
-\end{corollary}
+the collision probability tends to one.  A total-variation estimate is
+given in Theorem~\ref{thm:periodic-collisions}.
+\end{theorem}
 
-\subsection*{Context and comparison}
+The proof has three ingredients.  First, powers of each \(B_s\) are
+resolved along the cyclic classes of the safe graph.  Second, a strict
+entrywise-power inequality gives
+\[
+  h_{t,H}>\frac{t}{s}h_{s,H}
+  \qquad (1\leq s<t).
+\]
+Third, the dependency graph on intersecting \(k\)-subsets is inserted
+into the Chen--Stein estimate of
+\citet{ArratiaGoldsteinGordon1989}.  The overlap of two \(k\)-subsets
+of size \(\ell\) contributes \(S_{2k-\ell}^H(m)\), and the strict
+R\'enyi gap makes every such contribution exponentially negligible at
+the critical scale.  Generalized birthday Poisson approximation is
+classical; the point here is the periodic open-system asymptotic needed
+to identify the correct family of critical means.
 
-Thermodynamic formalism for symbolic systems and equilibrium states is
-classical; we use standard material from
-\citet{Bowen2008,Ruelle1978,Walters1975GMeasures,WaltersErgodicTheory}.
-The open-system viewpoint---escape through holes, killed transfer
-operators, and conditionally invariant or quasistationary laws---goes
-back to \citet{PianigianiYorke1979}.  For topological Markov chains and
-expanding systems with holes, see
-\citet{ColletMartinezSchmitt1996,ColletMartinezSchmitt1997},
-\citet{DemersYoung2006}, \citet{KellerLiverani2009},
-\citet{DemersWrightYoung2012}, \citet{FergusonPollicott2012}, and
-\citet{BruinDemersTodd2018}; for
-broader quasistationary background, see
-\citet{DarrochSeneta1965,ColletMartinezSanMartin2013}.  Poisson limits
-for generalized birthday coincidences go back at least to
-\citet{Henze1998}, while \citet{ChazottesCoelhoCollet2009} prove marked
-Poisson laws for entrances to finite-type subsystems and for matching
-runs of independent symbolic orbits.  The collision theorem below
-instead lets the number of independent survivor samples grow with their
-prefix depth.  Its approximation input is the Chen--Stein dependency
-graph estimate of \citet{ArratiaGoldsteinGordon1989}.
+\subsection*{Finite observation of first-entry phases}
 
-The pressure-gap formula
-\(\gamma_H(\varphi)=P_Y(\varphi)-P_{Y_H}(\varphi)\) and the
-Perron--Frobenius asymptotics for survivor mass are standard.  What is
-new here is the observable: the depth-\(m\) Bayes error of a first-entry
-residue event.  This observable recovers the same escape exponent, but it
-also retains a residue-dependent quasistationary ambiguity amplitude and
-packages the killed dynamics into a scalar resolvent coefficient.  The
-resolvent statement is correspondingly modest: we prove pole containment
-inside the reciprocal cyclotomic lift of the killed spectrum, together
-with the genuineness of the dominant real pole, rather than a full
-spectral-detection theorem.  Related operator-theoretic background for
-systems with holes appears in \citet{FroylandStancevic2011} and
-\citet{BandtlowJenkinson2014}.
+The same cyclic Perron resolution also changes the finite-observation
+asymptotics of first-entry residue events.  This is a secondary
+application, included because it makes the interaction between the hole
+period \(d\) and an observation modulus \(q\) explicit.
 
-\subsection*{Relation to recent work on holes}
+Fix \(q\geq2\) and a nonempty proper subset
+\(R\subsetneq\mathbb Z/q\mathbb Z\).  For every safe state \(i\), let
+\(D_i\) be the set modulo \(q\) of attainable positive first-hit times
+from \(i\).  We impose the all-state, all-phase condition
+\[
+  D_i\cap(R-r)\neq\varnothing,
+  \qquad
+  D_i\cap((\mathbb Z/q\mathbb Z\setminus R)-r)\neq\varnothing
+  \tag{1.1}\label{eq:intro-nondegeneracy}
+\]
+for every safe \(i\) and every \(r\in\mathbb Z/q\mathbb Z\).  This
+condition is stronger than what is needed for a leading asymptotic, but
+it is exactly what yields a uniform finite-depth comparison with
+survivor mass.
 
-Recent finite-state and symbolic results closest to the present setting
-include \citet{HarithaAgarwal2019},
-\citet{CheriyathAgarwal2024}, and
-\citet{AgarwalCheriyathTikekar2024}, which analyze escape rates for
-Markov holes by standard survivor-mass methods.  For broader shift
-background, see also \citet{BonannoCristadoroLenci2022}.  These works
-focus on escape through holes itself.  By contrast, the present paper
-keeps the standard escape-rate machinery fixed and asks what can be
-recovered from finite observation of a first-entry event.  The answer is
-the exact killed-matrix Bayes-error formula, its quasistationary
-amplitude refinement, and the accompanying cyclotomic resolvent
-reformulation.
+\begin{theorem}[Periodic first-entry ambiguity]
+\label{thm:intro-bayes}
+Under the preceding assumptions on \(Y\), \(\nu_\varphi\), and \(H\),
+fix \(q\geq2\) and a nonempty proper
+\(R\subsetneq\mathbb Z/q\mathbb Z\), and assume
+\eqref{eq:intro-nondegeneracy} for every safe state and every phase.
+Then the depth-\(m\) Bayes error \(\varepsilon_m\) of the event
+\(\{\tau_H<\infty:\tau_H\bmod q\in R\}\) satisfies
+\[
+  \varepsilon_m
+  =u^{\mathsf T}B_1^{m-1}b_{m-1\bmod q},
+\]
+where \(b_r\) is the terminal-state conditional Bayes ambiguity.
+Moreover
+\[
+  \theta\,\nu_\varphi(\tau_H\geq m)
+  \leq\varepsilon_m
+  \leq\frac12\nu_\varphi(\tau_H\geq m)
+\]
+for some \(\theta>0\).  Along every class modulo
+\(\operatorname{lcm}(d,q)\), the ratio of \(\varepsilon_m\) to survivor
+mass converges to an explicit positive cyclic Perron amplitude.
+\end{theorem}
 
-\subsection*{Hierarchy of results}
+Thus the periodic extension does not merely replace one Perron vector by
+another.  It forces a change in the formulation of both principal
+asymptotics: collision means are indexed by \(m-1\bmod d\), while
+first-entry ambiguity amplitudes are indexed jointly by the survivor
+phase modulo \(d\) and the observation phase modulo \(q\).
 
-The main result is
-Theorem~\ref{thm:first-entry-escape-rate}, proved in
-Section~\ref{sec:open-system}.  Its principal refinement is
-Theorem~\ref{thm:quasistationary-ambiguity}, which identifies the
-residue-dependent quasistationary amplitudes.  The resolvent reformulation
-(Corollary~\ref{cor:error-resolvent-cyclotomic}) is an algebraic
-corollary of the same matrix calculation.  Section~\ref{sec:double-budget}
-records the survivor R\'enyi spectrum and proves the higher-order
-collision threshold theorem.  Any extension from Markov holes to general H\"older
-potentials with cylinder holes is mentioned only briefly in
-Remark~\ref{rem:holder-open-resonance}.
+\subsection*{Relation to existing results}
 
-\subsection*{Notation summary}
+Thermodynamic formalism for equilibrium states on shifts of finite type
+is standard; we use the matrix form developed in
+\citet{Ruelle1978,Bowen2008,Walters1975GMeasures}.  Escape through
+symbolic holes and its transfer-operator description go back to
+\citet{PianigianiYorke1979}; see also
+\citet{ColletMartinezSchmitt1997,DemersYoung2006,KellerLiverani2009,
+FergusonPollicott2012}.  Periodic Perron asymptotics are classical
+nonnegative-matrix theory \citep{Seneta2006}.  We record the cyclic
+constants because their dependence on the entrywise power \(s\) is what
+survives normalization and enters the collision law.
 
-Throughout the paper: \(Y\) is a mixing one-step SFT over alphabet
-\(A\); \(\varphi\) is a one-step potential with equilibrium Markov
-measure \(\nu_\varphi\), stationary vector \(\pi\), and transition
-matrix \(K\); \(H\) is a Markov hole with safe alphabet
-\(\mathcal S:=A\setminus A_{\mathrm{hole}}\), survivor alphabet
-\(\mathcal S_\infty\subseteq\mathcal S\), and mixing survivor subshift
-\(Y_H\); \(B_H\) is the killed transition matrix on \(\mathcal S\) with
-Perron eigenvalue \(\rho_H\); \(\gamma_H(\varphi):=P_Y(\varphi)-P_{Y_H}(\varphi)\)
-is the escape rate; \(\mathcal F_m\) is the observation
-\(\sigma\)-algebra generated by the first \(m\) observed symbols; and
-\(\varepsilon_m(\mathsf P;\mu)\) is the depth-\(m\) Bayes error of an
-event \(\mathsf P\).
+Poisson limits for generalized birthday coincidences appear, for
+example, in \citet{Henze1998}; related marked Poisson laws in symbolic
+dynamics were proved by \citet{ChazottesCoelhoCollet2009}.  Our samples
+are independent across the sample index, but their common distribution
+changes with the survival depth.  The triangular array is therefore
+controlled by the open-system R\'enyi spectrum.  The contribution here
+is not a new Chen--Stein mechanism: it is the phase-resolved survivor
+law, the explicit oscillating prefactor, and the proof that the standard
+Poisson scheme remains valid after this nonprimitive extension.
 
 \subsection*{Organization}
 
-Sections~\ref{sec:preliminaries}--\ref{sec:recursive-addressing}
-fix the finite-observation notation and the block-recoding convention.
-Section~\ref{sec:clarity} records the general Bayes-error identities used
-later.  Section~\ref{sec:open-system} specializes to Markov holes and
-proves the exact killed-matrix formula, the escape-rate limit, and the
-quasistationary amplitude refinement; it also includes explicit examples
-showing that equal escape exponents can carry different ambiguity
-amplitudes.  Section~\ref{sec:open-system-resonance} records the
-resolvent reformulation and a brief remark on the expected H\"older
-extension.  Section~\ref{sec:double-budget} derives the survivor
-R\'enyi spectrum and the higher-order collision thresholds from the same
-finite-state calculation.  Section~\ref{sec:conclusion} contains brief
-final remarks.
+Section~\ref{sec:preliminaries} fixes the open Markov model and proves
+the cyclic Perron formula with its explicit constants.
+Section~\ref{sec:double-budget} derives the phase-resolved R\'enyi
+asymptotics, proves the strict spectral inequality, and establishes the
+collision theorem with a total-variation bound.
+Section~\ref{sec:open-system} gives the fully quantified first-entry
+Bayes theorem and its joint \(d\)- and \(q\)-phase amplitudes.
+Section~\ref{sec:periodic-example} computes a period-two example in
+closed form and shows that the two critical Poisson means differ.
+Section~\ref{sec:conclusion} records the scope and the deterministic-cycle
+obstruction.

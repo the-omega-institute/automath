@@ -1,334 +1,192 @@
-% ------------------------------------------------------------------
-%  Section 6 (continued): Resonance lifts and an explicit example
-% ------------------------------------------------------------------
+\section{A period-two survivor with two Poisson means}
+\label{sec:periodic-example}
 
-The escape-rate and amplitude formulas from Section~\ref{sec:open-system}
-already contain the main dynamical information.  The present subsection
-records one further finite-state consequence: a resolvent reformulation
-of the same killed-matrix calculation.  We also state, in a brief final
-remark, the limited sense in which a H\"older extension is expected.
+We compute a branching periodic example in closed form.  Besides
+illustrating the constants in Theorem~\ref{thm:periodic-renyi}, it shows
+that the phase qualification in
+Theorem~\ref{thm:periodic-collisions} cannot be removed.
 
-\subsection{Supplementary resolvent reformulations}
-\label{sec:open-system-resonance}
+Let the alphabet be \(A=\{a,b,c,h\}\), let \(H=[h]\), and consider the
+Markov transition matrix
+\begin{equation}
+  K=
+  \begin{pmatrix}
+    0&1/3&1/3&1/3\\
+    1/2&0&0&1/2\\
+    1/4&0&0&3/4\\
+    1/4&1/4&1/4&1/4
+  \end{pmatrix},
+  \label{eq:example-K}
+\end{equation}
+with rows and columns ordered as \(a,b,c,h\).  The ambient graph is
+primitive: the state \(h\) has a self-loop and communicates with every
+state.  The stationary distribution is
+\begin{equation}
+  \pi=\frac1{89}(21,16,16,36).
+  \label{eq:example-stationary}
+\end{equation}
+Indeed, direct multiplication verifies \(\pi K=\pi\).
 
-\begin{corollary}[Error resolvent and cyclotomic resonance lift]
-\label{cor:error-resolvent-cyclotomic}
-Under the hypotheses of
-Theorem~\ref{thm:first-entry-escape-rate}, set
+The safe alphabet is \(\mathcal S=\{a,b,c\}\), and the killed family is
+\begin{equation}
+  B_s=
+  \begin{pmatrix}
+    0&3^{-s}&3^{-s}\\
+    2^{-s}&0&0\\
+    4^{-s}&0&0
+  \end{pmatrix}.
+  \label{eq:example-Bs}
+\end{equation}
+Its cyclic classes are
 \[
-  \widehat{\mathcal S}:=\mathcal S\times \ZZ/q\ZZ,
-\]
-and define the lifted killed matrix \(\widehat B_H\) on
-\(\widehat{\mathcal S}\) by
-\[
-  \widehat B_H\bigl((i,r),(j,s)\bigr)
-  := B_H(i,j)\mathbf{1}_{\{s=r+1\bmod q\}}.
-\]
-Let \(\widehat u,\widehat b\in\RR^{\widehat{\mathcal S}}\) be given by
-\[
-  \widehat u(i,r):=u_i\mathbf{1}_{\{r=0\}},
+  \mathcal C_0=\{a\},
   \qquad
-  \widehat b(i,r):=b_r(i).
+  \mathcal C_1=\{b,c\}.
 \]
-Then for every \(m\geq 1\),
-\[
-  \varepsilon_m(\mathsf{P}_R;\nu_\varphi)
-  = \widehat u^{\mathsf T}\widehat B_H^{m-1}\widehat b.
-\]
-Consequently the error generating function
-\[
-  \mathcal E_{\mathsf{P}_R}(z)
-  := \sum_{m\geq 1}
-      \varepsilon_m(\mathsf{P}_R;\nu_\varphi)z^m
-\]
-satisfies
-\[
-  \mathcal E_{\mathsf{P}_R}(z)
-  = z\,\widehat u^{\mathsf T}
-      (I-z\widehat B_H)^{-1}\widehat b
-  \qquad (|z|<\rho_H^{-1}),
-\]
-and therefore extends to a rational function of \(z\).
+Thus the survivor graph is irreducible of period two.  It is branching
+because \(a\) has two safe successors.
 
-If \(S_q\) denotes the cyclic permutation matrix on \(\ZZ/q\ZZ\), then
+Put
 \[
-  \widehat B_H=S_q\otimes B_H.
+  t_s:=3^{-s},\qquad r_s^*:=2^{-s},\qquad v_s:=4^{-s}.
 \]
-Hence
+The Perron eigenvalue is
+\begin{equation}
+  \rho_s=\sqrt{t_s(r_s^*+v_s)}
+  =\sqrt{6^{-s}+12^{-s}}.
+  \label{eq:example-rhos}
+\end{equation}
+Compatible right and left Perron vectors, normalized to have scalar
+product one, are
+\begin{equation}
+  r_s=
+  \begin{pmatrix}
+    1\\ r_s^*/\rho_s\\ v_s/\rho_s
+  \end{pmatrix},
+  \qquad
+  \ell_s=\frac12
+  \begin{pmatrix}
+    1\\ t_s/\rho_s\\ t_s/\rho_s
+  \end{pmatrix}.
+  \label{eq:example-perron-vectors}
+\end{equation}
+The initial weight on the two states \(b,c\) is the same.  Writing
 \[
-  \det(I-z\widehat B_H)=\det(I-z^q B_H^q),
+  x_s:=(21/89)^s,
+  \qquad
+  y_s:=(16/89)^s,
 \]
-and
-\[
-  \spec(\widehat B_H)
-  = \bigcup_{\omega^q=1}\omega\,\spec(B_H).
-\]
-In particular, every pole of \(\mathcal E_{\mathsf{P}_R}\) belongs to
-\[
-  \set{(\omega\lambda)^{-1}:
-       \omega^q=1,\ \lambda\in\spec(B_H)\setminus\{0\}},
-\]
-and the positive real pole of smallest modulus is
-\[
-  z_H=\rho_H^{-1}=e^{P_Y(\varphi)-P_{Y_H}(\varphi)}=e^{\gamma_H(\varphi)}.
-\]
-Since \(\rho_H=e^{-\gamma_H(\varphi)}<1\), its reciprocal
-\(z_H=e^{\gamma_H(\varphi)}>1\), consistent with the generating function
-having radius of convergence strictly greater than \(1\).
-Thus the finite-observation error furnishes a scalar resolvent
-coefficient whose poles lie in the cyclotomic lift of the killed
-spectrum, and while we only claim this containment, the dominant real
-pole is genuinely attained and equals the reciprocal escape factor.
-\end{corollary}
-
-\begin{proof}
-For \(n\geq 0\), a direct induction on \(n\) gives
-\[
-  \widehat B_H^n\bigl((i,r),(j,s)\bigr)
-  = B_H^n(i,j)\mathbf{1}_{\{s=r+n\bmod q\}}.
-\]
-Therefore
+formula \eqref{eq:cyclic-coefficient} gives
+\begin{align}
+  A_{s,0}(\mathbf1)
+  &=x_s+2y_s,
+  \label{eq:example-A0}\\
+  A_{s,1}(\mathbf1)
+  &=\frac{2x_st_s+y_s(r_s^*+v_s)}{\rho_s}.
+  \label{eq:example-A1}
+\end{align}
+For completeness, the first identity follows by pairing starts and ends
+within the same cyclic class:
 \begin{align*}
-  \widehat u^{\mathsf T}\widehat B_H^{m-1}\widehat b
-  &= \sum_{i,j\in\mathcal S}
-      u_i B_H^{m-1}(i,j)b_{m-1\bmod q}(j) \\
-  &= u^{\mathsf T}B_H^{m-1}b_{m-1\bmod q},
+ A_{s,0}(\mathbf1)
+ &=2\left[
+     x_s\left(\frac12\right)
+     +y_s\frac{r_s^*+v_s}{\rho_s}
+       \frac{t_s}{\rho_s}
+   \right]\\
+ &=x_s+2y_s,
 \end{align*}
-which is exactly
-\(\varepsilon_m(\mathsf{P}_R;\nu_\varphi)\) by
-Theorem~\ref{thm:first-entry-escape-rate}.
+because \(\rho_s^2=t_s(r_s^*+v_s)\).  Pairing opposite cyclic classes
+gives \eqref{eq:example-A1}.
 
-For \(|z|<\rho(\widehat B_H)^{-1}\), the geometric series converges
-absolutely and yields
-\[
-  \mathcal E_{\mathsf{P}_R}(z)
-  = \sum_{m\geq 1}
-      \widehat u^{\mathsf T}\widehat B_H^{m-1}\widehat b\,z^m
-  = z\,\widehat u^{\mathsf T}
-      \sum_{n\geq 0}(z\widehat B_H)^n\widehat b
-  = z\,\widehat u^{\mathsf T}
-      (I-z\widehat B_H)^{-1}\widehat b.
-\]
-This is rational in \(z\).
+\subsection{Pair-collision constants}
 
-If \(S_q\) is the cyclic permutation matrix on \(\ZZ/q\ZZ\), then the
-definition of \(\widehat B_H\) gives
+At \(s=1\),
 \[
-  \widehat B_H=S_q\otimes B_H.
-\]
-Since the eigenvalues of \(S_q\) are exactly the \(q\)-th roots of
-unity, the standard spectrum formula for Kronecker products implies
-\[
-  \spec(\widehat B_H)
-  = \set{\omega\lambda:
-         \omega^q=1,\ \lambda\in\spec(B_H)}.
-\]
-Multiplying over the spectrum yields
-\[
-  \det(I-z\widehat B_H)
-  = \prod_{\lambda\in\spec(B_H)}
-      \prod_{\omega^q=1}(1-z\omega\lambda)
-  = \prod_{\lambda\in\spec(B_H)}(1-z^q\lambda^q)
-  = \det(I-z^q B_H^q).
-\]
-Hence the poles of the scalar resolvent
-\(\mathcal E_{\mathsf{P}_R}\) are contained in the reciprocal lifted
-spectrum.
-
-It remains to identify the dominant real pole.  Let \(v,\ell\geq 0\) be
-Perron right and left eigenvectors of \(B_H\) for \(\rho_H\), normalized
-by \(\ell^{\mathsf T}v=1\).  Since the transient block \(Q\) is
-nilpotent, both \(v\) and \(\ell\) are strictly positive on
-\(\mathcal S_\infty\).  Set
-\[
-  \widehat v:=\mathbf{1}_q\otimes v,
+  \rho_1=\frac12,
   \qquad
-  \widehat\ell:=\mathbf{1}_q\otimes \ell,
-\]
-where \(\mathbf{1}_q\) is the all-ones vector on \(\ZZ/q\ZZ\).  Then
-\(\widehat B_H\widehat v=\rho_H\widehat v\) and
-\(\widehat\ell^{\mathsf T}\widehat B_H=\rho_H\widehat\ell^{\mathsf T}\).
-Moreover,
-\[
-  \widehat u^{\mathsf T}\widehat v=u^{\mathsf T}v>0,
+  A_{1,0}(\mathbf1)=\frac{53}{89},
   \qquad
-  \widehat\ell^{\mathsf T}\widehat b
-  = \sum_{a\in\ZZ/q\ZZ}\ell^{\mathsf T}b_a>0,
+  A_{1,1}(\mathbf1)=\frac{52}{89}.
 \]
-because \(u_i=\pi_i>0\) on \(\mathcal S_\infty\) and each \(b_a(i)\geq
-\theta>0\).  Since \(1\) is a simple eigenvalue of \(S_q\) and
-\(\rho_H\) is the simple Perron eigenvalue of \(B_H\), the eigenvalue
-\(\rho_H\) of \(\widehat B_H=S_q\otimes B_H\) is also simple.  Thus the
-scalar resolvent coefficient does not annihilate the corresponding
-eigenprojection, so \(z=\rho_H^{-1}\) is a genuine simple pole of
-\(\mathcal E_{\mathsf{P}_R}\).  The pressure identity from
-Theorem~\ref{thm:first-entry-escape-rate} gives the last formula.
-\end{proof}
-
-\begin{remark}[Possible H\"older extension after block recoding]
-\label{rem:holder-open-resonance}
-After an \(\ell\)-block recoding, every finite union of cylinders becomes
-a one-step Markov hole, so it is natural to expect the same Bayes-error
-observable to admit an operator-theoretic description for H\"older
-potentials.  More precisely, one expects the generating function of the
-first-entry residue event to be expressible as a scalar resolvent
-coefficient of an open transfer operator, with poles contained in the
-reciprocal \(q\)-th cyclotomic lift of the open Ruelle spectrum and with
-leading asymptotics governed by the simple leading open resonance.
-
-Establishing that extension would require additional ingredients not
-proved here: a spectral gap for the killed operator on a H\"older space,
-identification of the relevant forward and backward spectra under the
-natural extension, and regularity of the residue-hit probability
-weights.  The present paper does not attempt those operator-theoretic
-steps and remains entirely within the finite-state setting.
-\end{remark}
-
-\subsection{An explicit example: the doubling map and Fibonacci escape}
-
-\begin{proposition}[Doubling map and the Fibonacci escape law]
-\label{prop:doubling-fibonacci-escape}
-Let \(T(x)=2x\bmod 1\) on \([0,1)\), equipped with Lebesgue measure
-\(\Leb\), and let \(W=[1/2,1)\).  The binary itinerary of \(x\) gives
-the full one-sided two-shift with the Bernoulli \((1/2,1/2)\) measure.
-Let
+At \(s=2\),
 \[
-  H=[3/4,1),
-\]
-so that \(H\) corresponds to the cylinder \([11]\).  Define
-\[
-  \tau_H(x):=\inf\set{n\geq 0:T^n x\in H}
-\]
-and
-\[
-  \mathsf{P}_{\mathrm{even}}
-  := \set{x:\tau_H(x)<\infty,\ \tau_H(x)\equiv 0 \pmod 2}.
-\]
-If \((F_n)_{n\geq 0}\) denotes the Fibonacci sequence
-\(F_0=0\), \(F_1=1\), then for every \(m\geq 1\),
-\[
-  \varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = \frac{F_{m+3}}{5\,2^m}.
-\]
-Moreover,
-\[
-  \Leb(\tau_H\geq m)=\frac{F_{m+3}}{2^{m+1}},
+  \rho_2=\frac{\sqrt5}{12},
   \qquad
-  \varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = \frac25\,\Leb(\tau_H\geq m),
-\]
-and therefore
-\[
-  \lim_{m\to\infty}
-  -\frac1m\log\varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = \log\frac{2}{\varphi}
-  = \log 2-\log\varphi.
-\]
-Equivalently, the survivor entropy of the golden-mean subshift is
-recovered from finite-observation error by
-\[
-  h_{\mathrm{top}}(Y_H)
-  = \log\varphi
-  = \log 2
-    + \lim_{m\to\infty}\frac1m
-      \log \varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb).
-\]
-\end{proposition}
-
-\begin{proof}
-In binary coding, \(\tau_H\) is the first index at which the block
-\(11\) appears.  A length-\(m\) prefix contributes to
-\(\varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)\) if and only if it
-contains no occurrence of \(11\) at positions \(0,\ldots,m-2\).  Let
-\begin{align*}
-  G_m^0
-  &:= \set{a\in\{0,1\}^m:
-           a \text{ avoids }11,\ a_{m-1}=0}, \\
-  G_m^1
-  &:= \set{a\in\{0,1\}^m:
-           a \text{ avoids }11,\ a_{m-1}=1}.
-\end{align*}
-The usual golden-mean recursion gives
-\[
-  \card{G_m^0}=F_{m+1},
+  A_{2,0}(\mathbf1)=\frac{953}{7921},
   \qquad
-  \card{G_m^1}=F_m.
+  A_{2,1}(\mathbf1)=\frac{2136}{7921\sqrt5}.
 \]
-Every length-\(m\) cylinder has Lebesgue measure \(2^{-m}\).
-
-Let
-\begin{align*}
-  a
-  &:= \Leb(\mathsf{P}_{\mathrm{even}}
-           \mid \text{safe prefix of even length ending in }0), \\
-  b
-  &:= \Leb(\mathsf{P}_{\mathrm{even}}
-           \mid \text{safe prefix of even length ending in }1), \\
-  c
-  &:= \Leb(\mathsf{P}_{\mathrm{even}}
-           \mid \text{safe prefix of odd length ending in }0), \\
-  d
-  &:= \Leb(\mathsf{P}_{\mathrm{even}}
-           \mid \text{safe prefix of odd length ending in }1).
-\end{align*}
-Since the next binary digit is \(0\) or \(1\) with equal probability,
-\[
-  a=\frac12 c+\frac12 d,
+It follows from \eqref{eq:phase-renyi-constant} that
+\begin{equation}
+  c_{2,0}=\frac{953}{2809},
   \qquad
-  b=\frac12 c,
-\]
-\[
-  c=\frac12 a+\frac12 b,
-  \qquad
-  d=\frac12+\frac12 a.
-\]
-Solving gives
-\[
-  a=\frac35,\qquad b=\frac15,\qquad c=\frac25,\qquad d=\frac45.
-\]
-Hence the Bayes error on a safe prefix depends only on its terminal
-symbol:
-\[
-  \beta(a)=\frac25
-  \quad\text{on }G_m^0,
-  \qquad
-  \beta(a)=\frac15
-  \quad\text{on }G_m^1.
-\]
-Therefore
-\[
-  \varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = 2^{-m}\left(
-      \frac25\card{G_m^0}
-      + \frac15\card{G_m^1}
-    \right)
-  = 2^{-m}\left(
-      \frac25F_{m+1}
-      + \frac15F_m
-    \right).
-\]
-Using \(F_{m+3}=2F_{m+1}+F_m\), we obtain
-\[
-  \varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = \frac{F_{m+3}}{5\,2^m}.
-\]
+  c_{2,1}=\frac{267}{338\sqrt5}.
+  \label{eq:example-collision-constants}
+\end{equation}
+These constants are unequal; numerically they are approximately
+\(0.3393\) and \(0.3533\).  The pair R\'enyi rate is
+\begin{equation}
+  h_{2,H}
+  =-\log\frac{\rho_2}{\rho_1^2}
+  =\log\frac3{\sqrt5}.
+  \label{eq:example-h2}
+\end{equation}
 
-The condition \(\tau_H\geq m\) is equivalent to saying that the first
-\(m+1\) binary digits avoid \(11\), so
+Let \(W_{m,2}\) count equal pairs among \(N_m\) independent survivor
+prefixes with the common conditioned law \(\lambda_m^H\).  If
 \[
-  \Leb(\tau_H\geq m)=\frac{F_{m+3}}{2^{m+1}}.
+  N_m\exp\left(-\frac{m-1}{2}\log\frac3{\sqrt5}\right)
+  \longrightarrow\alpha\in(0,\infty),
 \]
-This proves the exact factor \(\varepsilon_m=\frac25\Leb(\tau_H\geq m)\).
-Finally, \(F_{m+3}\sim \varphi^{m+3}/\sqrt5\), so
+then Theorem~\ref{thm:periodic-collisions} gives
+\begin{align}
+  W_{m,2}
+  &\Rightarrow
+  \operatorname{Poisson}\!\left(
+      \frac{953}{5618}\alpha^2
+  \right)
+  &&\text{when }m-1\equiv0\pmod2,
+  \label{eq:example-even-limit}\\
+  W_{m,2}
+  &\Rightarrow
+  \operatorname{Poisson}\!\left(
+      \frac{267}{676\sqrt5}\alpha^2
+  \right)
+  &&\text{when }m-1\equiv1\pmod2.
+  \label{eq:example-odd-limit}
+\end{align}
+The two means are different.  For example, choosing
 \[
-  \lim_{m\to\infty}
-  -\frac1m\log\varepsilon_m(\mathsf{P}_{\mathrm{even}};\Leb)
-  = \log\frac{2}{\varphi}.
+  N_m=\left\lfloor
+    \alpha\exp\left(\frac{m-1}{2}\log\frac3{\sqrt5}\right)
+  \right\rfloor
 \]
-The survivor subshift is the golden-mean shift, whose topological
-entropy is \(\log\varphi\), and the last identity follows.
-\end{proof}
+produces both subsequential limits in
+\eqref{eq:example-even-limit}--\eqref{eq:example-odd-limit}.  Hence
+\(W_{m,2}\) has no full-sequence weak limit under this natural
+phase-free normalization.
 
-\begin{proof}[Proof of Corollary~\ref{cor:main-resonance}]
-This is Corollary~\ref{cor:error-resolvent-cyclotomic}.
-\end{proof}
+\subsection{Direct consistency check}
+
+The phase effect can also be seen without spectral notation.  A safe
+path alternates between \(\{a\}\) and \(\{b,c\}\).  After an even
+number \(n=m-1\) of safe transitions, its terminal class equals its
+initial class; after an odd number it is the opposite class.  The two
+initial class masses in \eqref{eq:example-stationary} are
+\[
+  \pi(a)=\frac{21}{89},
+  \qquad
+  \pi(b)+\pi(c)=\frac{32}{89},
+\]
+and the two directions of the safe graph have different transition
+weights.  There is therefore no symmetry forcing the even and odd
+normalized power sums to coincide.  Formulas
+\eqref{eq:example-A0}--\eqref{eq:example-A1} quantify exactly this
+imbalance.
+
+The example also checks the necessity of distinguishing period from
+mixing in open dynamics.  The ambient chain \eqref{eq:example-K} is
+primitive, but deleting the hole state leaves a period-two survivor.
+Thus ambient mixing does not prevent the cyclic obstruction exhibited
+by the collision process.
