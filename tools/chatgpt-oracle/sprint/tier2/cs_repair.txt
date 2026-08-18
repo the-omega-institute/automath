@@ -1,0 +1,91 @@
+TASK: repair Theorem 6.6 in papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt
+and correct every global claim that depends on it. You are PRE-AUTHORIZED to edit files in that
+directory without asking. Do not stop for approval. Do not commit; I commit after verifying.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_CS_r1.md. It is the referee report this implements.
+That file and every other artifacts/oracle_*.md is READ-ONLY EVIDENCE. Do not edit or regenerate
+any of them; I diff them against HEAD.
+
+=== THE SITUATION, so you do not misjudge the direction ===
+
+Theorem 6.6 was found false and I marked it withdrawn. The referee says the manuscript is now in
+the WORST of the three possible states: the false theorem is still printed as a numbered theorem
+WITH ITS FULL PROOF, labelled false, while the abstract and introduction still advertise an exact
+theorem on arbitrary finite cubical complexes. No journal may receive it in that form.
+
+The referee also says the theorem is REPAIRABLE and that repair beats withdrawal, because the
+missing hypothesis is not the conclusion in disguise. Do the repair.
+
+=== PART 1: REPAIR THEOREM 6.6 ===
+
+Both counterexamples are one mechanism: B is not the reduced incidence matrix of a conservative
+dual flow network connected to an exterior sink. In the two-interval example conservation fails
+locally (the shared-face column is (+1,+1), so summing cell equations doubles the internal
+contribution instead of cancelling it). In the cube-boundary example conservation holds locally but
+there is no sink, so summing over the closed component cancels every edge and leaves 0 equal to a
+strictly positive total source.
+
+State the repaired theorem in the ALGEBRAIC form, because it identifies exactly what the proof
+uses:
+
+  Let K be a finite pure k-dimensional cubical complex. Assume that, after adjoining one exterior
+  sink vertex, its cell-face matrix B is the reduced incidence matrix of the augmented dual graph:
+  every internal face column has one +1 and one -1, every boundary-face column has one nonzero
+  incidence, and every cell vertex is connected to the sink. Then conclusions (1)-(3) of Theorem
+  6.6 hold.
+
+Then give the geometric sufficient formulation as a remark: K coherently oriented and pure, every
+codimension-one face incident with one or two top cells, every dual component with nonempty
+boundary; for a cubical pseudomanifold this is orientable, coherently oriented, no closed
+component. Define "connected component" explicitly as a component of the augmented dual network.
+
+Keep BOTH counterexamples, repositioned as showing that each hypothesis is necessary for a theorem
+uniform over positive a_e and v_C -- the two-interval one for the incidence hypothesis, the
+cube-boundary one for sink connectivity.
+
+The referee checked the existing proof under these hypotheses and reports no further failure: cut
+cancellation, exit to sink, max-flow/min-cut, complementary slackness, LP duality for Psi_Q, and
+Hoffman's circulation criterion all become legitimate. Verify that yourself as you rewrite rather
+than taking it from me; if you find a further gap, say so and stop rather than papering over it.
+
+=== PART 2: CORRECT THE GLOBAL CLAIMS ===
+
+These are false and must disappear everywhere they occur -- abstract, "Main results" paragraph,
+theorem-by-theorem comparison, outline, and body:
+ - Theorem 6.6 for an ARBITRARY finite pure cubical complex;
+ - that the compatible profile is computed on all finite cubical complexes;
+ - that h_K is always the minimum feasible congestion under the current definition;
+ - any assertion of feasibility when a dual component is closed and carries positive total source;
+ - any use of cut cancellation without the opposite-incidence condition.
+"finite cubical complexes" becomes "coherently oriented finite cubical complexes whose dual
+components meet the exterior", or equivalent.
+
+The 2x2 strict interface-loss example lies inside the repaired theorem's domain and SURVIVES, but
+it currently depends on a theorem declared false. Order the section so the repaired theorem is
+stated and proved before the example.
+
+=== PART 3: SCOPE HONESTY, do not skip this ===
+
+The referee is explicit that repair costs novelty: under correct hypotheses the minimum-congestion
+identity is standard max-flow/min-cut, saturation is complementary slackness, the exact profile is
+finite LP duality, and the extension test is Hoffman's criterion. The contribution is the
+formulation of the particular trace-error profile and its translation to the cubical setting, NOT a
+new general patching principle. Say so in the paper. Theorem 6.6 becomes a supporting theorem;
+Theorem 5.4 is what the paper now stands on. Adjust the abstract and introduction to match that
+ordering of importance -- do not leave 6.6 advertised as the headline.
+
+Do not touch Sections 2, 3, 5, Propositions 6.1/6.3/6.4, Corollary 6.8, Remark 6.5 or Appendix A;
+the referee confirms all are independent of 6.6 and intact.
+
+=== PART 4: VERIFY, AND EXPECT ME TO REDO IT ===
+
+- latexmk -C, delete .aux, rebuild from zero with NO extra command-line macro definitions.
+- report exit code, page count, undefined control sequences, unresolved references, unresolved
+  citations; all four counts must be 0.
+- pdftotext -enc UTF-8 and grep for "withdrawn", "hypotheses incomplete", "false" and "arbitrary
+  finite cubical". Print the RAW COUNT before concluding anything; a path bug returns "no hits"
+  identically to a clean file. Every surviving hit must be deliberate.
+- every shipped .tex under 800 lines.
+- report anything in the repaired material you believe is still weak.
+
+Do not create planning files or notes inside the paper directory. Do not run git commit.

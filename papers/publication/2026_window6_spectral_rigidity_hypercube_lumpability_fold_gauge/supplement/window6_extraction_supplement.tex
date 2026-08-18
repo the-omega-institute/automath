@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\title{Supplement: Exact data for the Fold$_6$ equitable refinement}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+This supplement records the machine-readable audit payload used by the article
+\emph{The Unique Minimal Equitable Refinement of a Folded Partition of the 6-Cube}.
+The canonical streams are stored in \texttt{window6\_canonical\_streams.txt}; their
+SHA--256 digests are checked by \texttt{verify\_window6\_streams.py}.  The exact
+determinant and rational Sturm transcript for the visible pushforward is in
+\texttt{window6\_exact\_determinant\_sturm\_certificate.txt}.  The 48-cell refinement
+is independently recomputed by \texttt{../artifacts/verify\_hidden\_refinement.py}.
+
+\section*{Canonical Fold$_6$ stream}
+The state list is
+\[
+\begin{gathered}
+000000,000001,000010,000100,000101,001000,001001,001010,010000,010001,010010,\\
+010100,010101,100000,100001,100010,100100,100101,101000,101001,101010,
+\end{gathered}
+\]
+with fiber sizes
+\[
+(4,2,4,4,2,4,2,3,4,2,3,4,2,4,2,3,4,2,4,2,3).
+\]
+The directed edge-count stream is the sparse integer matrix \(N\) with
+\(P_6(i,j)=N_{ij}/(6d_i)\); its digest is
+\texttt{2bbf7acda82a4c07d39ac76a621cee9751abaf253f6298d8540704146a2db4f0}.
+The residual witness stream is
+\texttt{m=6;residual=000000,010101->000100;folds=000000,000000;counts=0,1},
+with digest
+\texttt{701cfebf8b51ad99e38663841599aa1b1a492957040c4db6d4dd3e2def69fcf2}.
+
+\section*{Refinement certificate}
+The verifier recomputes the greedy Zeckendorf prefix for all 64 vertices, groups each
+Fold fiber by its complete 21-component neighbor signature, and compares the resulting
+partition with the orbits of
+\[
+(a_1,a_2,a_3,a_4,a_5,a_6)\longmapsto(1-a_5,a_2,a_3,a_4,1-a_1,a_6).
+\]
+It checks that the cells partition all vertices, that every orbit stays in one visible
+fiber, that the orbit partition is equitable, and that the orbit sizes are 32 singletons
+and 16 pairs.  Running
+\texttt{python artifacts/verify\_hidden\_refinement.py}
+prints \texttt{window6 hidden refinement certificate: all assertions passed}.
+
+The supplement is data and verification code, not an additional mathematical result.
+It does not check the interval lemma or the Walsh-space proof in the article.
+\end{document}

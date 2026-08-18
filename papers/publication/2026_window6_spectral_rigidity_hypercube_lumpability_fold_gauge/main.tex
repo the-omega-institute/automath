@@ -1,11 +1,7 @@
-% main.tex -- Spectral rigidity and minimal equitable repair of a Fold_6 hypercube quotient
 \documentclass[12pt,a4paper]{article}
-
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{mathrsfs}
 \usepackage{enumitem}
 \usepackage{fvextra}
-\usepackage{url}
 \usepackage[hidelinks]{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{microtype}
@@ -17,43 +13,21 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
-
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
 \newtheorem{remark}[theorem]{Remark}
-\newtheorem{conclusion}[theorem]{Conclusion}
 
 \numberwithin{equation}{section}
-
-\DeclareMathOperator{\im}{im}
-\DeclareMathOperator{\GL}{GL}
 \DeclareMathOperator{\Spec}{Spec}
-\DeclareMathOperator{\sgn}{sgn}
-\DeclareMathOperator{\Aut}{Aut}
-\DeclareMathOperator{\Sym}{Sym}
-\DeclareMathOperator{\Tr}{Tr}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\QQ}{\mathbb{Q}}
-\newcommand{\TT}{\mathbb{T}}
-\newcommand{\FF}{\mathbb{F}}
-\newcommand{\dd}{\,\mathrm{d}}
-\newcommand{\EE}{\mathbb{E}}
-\newcommand{\abs}[1]{\lvert #1\rvert}
-\newcommand{\card}[1]{\lvert #1\rvert}
-\newcommand{\norm}[1]{\lVert #1\rVert}
-\newcommand{\ii}{\mathrm{i}}
 \newcommand{\Fold}{\operatorname{Fold}}
+\newcommand{\CC}{\mathbb C}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\ZZ}{\mathbb Z}
+\newcommand{\card}[1]{\lvert #1\rvert}
 
-\title{Spectral Rigidity and Minimal Equitable Repair\\
-of a Fold\texorpdfstring{$_6$}{6} Hypercube Quotient}
-\author{
-  Haobo Ma\thanks{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981. Email: \texttt{auric@aelf.io}}
-  \and
-  Wenlin Zhang\thanks{Corresponding author. National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
+\title{The Unique Minimal Equitable Refinement of a Folded Partition of the 6-Cube}
+\author{Haobo Ma\thanks{AELF PTE LTD., Singapore. Email: \texttt{auric@aelf.io}}
+  \and Wenlin Zhang\thanks{National University of Singapore, Singapore. Email: \texttt{e1327962@u.nus.edu}}
 }
 \date{}
 
@@ -61,483 +35,356 @@ of a Fold\texorpdfstring{$_6$}{6} Hypercube Quotient}
 \maketitle
 
 \begin{abstract}
-We study coarse-grainings of the simple random walk on the hypercube and isolate an exact window-\(6\) obstruction for a finite binary fold.  The classical inputs are equitable lumpability, block intertwinings, and the Walsh spectrum of \(Q_m\); the new ingredient is a reproducible Fold\(_6\) certificate: explicit fibers, a block-indicator matrix, the pushforward kernel, a nonintertwining witness, and exact characteristic-polynomial and Sturm data producing off-grid eigenvalues.  This certificate proves that the visible Fold\(_6\) quotient is not a strong lumping of \(Q_6\).  We then classify its exact hidden-state repair: every equitable refinement through which Fold\(_6\) factors has at least \(48\) states, and equality is attained uniquely, up to relabeling, by the orbit quotient of the audited affine involution.  Its spectrum has hypercube-grid multiplicities \((1,5,11,14,11,5,1)\), and its discarded modes are exactly the \(16\)-dimensional chiral \(Q_4\) carrier.  The same finite fiber data also yield boundary orientation torsors controlled by the sign character and low-degree fold-gauge homology.  A separate appendix records conditional last-bit statistical consequences under an additional homogenized hypothesis; those conclusions are not part of the unconditional main theorem.
+We study a concrete partition of the six-dimensional hypercube obtained from a finite
+Zeckendorf-prefix fold.  The resulting 21-cell partition is not equitable: two vertices
+in one visible cell have different neighbor counts into another cell.  We determine the
+exact repair.  The unique coarsest equitable refinement is the orbit partition of an
+affine involution, with 48 cells consisting of 32 singletons and 16 pairs.  Consequently
+every equitable hidden realization through which the folded partition factors has at
+least 48 states, and equality is unique up to relabeling.  We also identify the quotient
+spectrum, with multiplicities $(1,5,11,14,11,5,1)$, and show that the discarded
+16-dimensional sector carries the adjacency operator of $Q_4$.  All finite data needed
+to recompute the claims are supplied in the accompanying supplement.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
-Coarse-graining is indispensable in the analysis of large stochastic systems: one seeks a reduced state space that preserves the effective dynamics seen by a smaller collection of observables. In finite Markov chains this idea is classically formalized by lumpability, intertwining, and Markov functions \cite{burke1958markovian,kemeny1976finite,rogers1981markov,buchholz1994exact,levin2017markov}. The central difficulty is rigidity: once a coarse partition is fixed, which spectral, geometric, and symmetry constraints must hold if the quotient chain is to arise from a genuine Markov evolution on the visible states?
+Equitable partitions are the exact combinatorial form of lumpability for a random walk:
+each vertex in a cell must have the same number of neighbors in every target cell.
+They are central in algebraic graph theory, color refinement, and finite Markov-chain
+reduction \cite{biggs1993algebraic,kemeny1976finite,buchholz1994exact,krebs2015universal}.
+The hypercube is a particularly transparent test graph because its Walsh characters give
+the complete spectrum and because every local neighbor count is integral.
 
-The hypercube \(Q_m\) is a natural test case for this question. Its random walk is explicitly diagonalized by Walsh characters, its spectrum is completely discrete, and its geometry is intertwined with coding theory, association schemes, and product structures \cite{biggs1993algebraic,brouwer1989distance,godsil2001algebraic,macwilliams1977theory,lovasz1996random,diaconis1988group}. These features make the hypercube an ideal laboratory for separating authentic quotients from effective models that only mimic quotient behavior after additional bookkeeping has been introduced.
+This paper gives a complete analysis of one audited six-dimensional example.  Let
+\(\Omega_6=\{0,1\}^6\), and map a binary word to the first six digits of the greedy
+Zeckendorf expansion of its binary integer.  The image consists of the 21 words with no
+adjacent ones.  The visible partition is not equitable, but its failure has an exact
+repair: one refinement by equal neighbor signatures is already stable.  The main result
+is the following theorem.
 
-This paper develops that program for a binary folding model, denoted \(\Fold_m^{\mathrm{bin}}\), with one main arc: a reusable exact certificate interface for hypercube quotients, an exact Fold\(_6\) audited flagship certificate, and a classification of the smallest exact hidden refinement of that certificate.  The term \emph{audited} will mean only that the relevant finite tables are printed, hashed, and reproducible from the accompanying exact scripts.  The direct nonlumpability conclusion is residual: two vertices in one Fold\(_6\) fiber have different one-step neighbor-count lists, so no visible matrix can satisfy the intertwining equation.  The spectral certificate is a second, logically supplementary check on the audited least-squares pushforward: equitable coarse-grainings of \(Q_m\) inherit only hypercube eigenvalues, while the Fold\(_6\) pushforward has exact off-grid eigenvalues.  Applying one exact neighbor-signature refinement identifies the unique coarsest equitable repair with the orbit partition of the affine stabilizer \(\sigma_{\mathrm{geo}}\), thereby determining the minimum hidden state count, the unique minimizer, its quotient spectrum, and the precise chiral sector removed by the repair.
+\paragraph{Main theorem (Theorem 4.23).}
+If \(H:\Omega_6\twoheadrightarrow Y\) has equitable fibers and
+\(\Fold_6=\rho\circ H\) for a surjection \(\rho:Y\twoheadrightarrow X_6\), then
+\(\card{Y}\ge48\).  Equality is attained uniquely up to relabeling by the orbit map
+of \(\sigma_{\rm geo}(a_1,\ldots,a_6)=(1-a_5,a_2,a_3,a_4,1-a_1,a_6)\).
+The quotient spectrum has multiplicities \((1,5,11,14,11,5,1)\), and its
+16-dimensional orthogonal complement carries the adjacency operator of \(Q_4\).
 
-After the certificate is in place, the paper records what the same finite fibers remember.  Boundary uplift fibers carry natural relabeling symmetries, and the auxiliary question is whether one can assign a nontrivial binary sheet variable without choosing a distinguished branch. We prove that, once permutation-naturalness is imposed, the only nontrivial two-valued structure is the orientation torsor induced by the sign representation of the symmetric group. This viewpoint organizes the parity data needed by the Fold\(_6\) boundary sector, connects it with determinant line local systems and Stiefel--Whitney classes \cite{milnor1974characteristic,hatcher2002algebraic}, and explains why central sheet flips survive in window \(6\) but disappear in the higher-window boundary data considered here.
+The proof separates two questions.  Section~\ref{sec:fold6} fixes the finite partition
+and records its fibers.  Section~\ref{sec:residual} gives the elementary interval
+criterion for approximate intertwinings and the sharp Fold$_6$ residual.  Theorem
+\ref{thm:headline} is proved in Section~\ref{sec:repair} by printing all 48
+neighbor-signature cells.  Section~\ref{sec:spectrum} then derives the quotient
+spectrum and the discarded \(Q_4\) carrier.  The final section describes the independent
+finite checks in the supplement.
 
-The remaining group-theoretic and information-theoretic material is used in this restricted sense. The fold-gauge group \(\mathcal G_m^{\mathrm{bin}}=\Aut(\Fold_m^{\mathrm{bin}})\) splits over fibers, so its low-degree homology is governed by symmetric-group calculations \cite{brown1982cohomology,nakaoka1961homology}; free involutions on fibers are counted by perfect matchings \cite{stanley2012enumerative}, giving a finite register lower bound for parity choices.  We also show that a chiral sector of the window-\(6\) model carries the exact spectrum of \(Q_4\).  These are consequences and consistency checks for the audited finite fibers, not coequal classification theorems for all folds.
+\clearpage
+\section{The Fold$_6$ partition}\label{sec:fold6}
+Let \(Q_m\) be the hypercube on \(\Omega_m=\{0,1\}^m\), with adjacency matrix
+\(A_m\) and walk matrix \(T_m=A_m/m\).  A surjection \(F:\Omega_m\twoheadrightarrow X\)
+has block-indicator matrix \(M\), whose column indexed by \(x\) is the indicator of
+\(F^{-1}(x)\).  The partition is equitable exactly when \(A_mM=MB\) for some \(B\),
+or equivalently when every vertex in a source fiber has the same number of neighbors
+in each target fiber.
 
-Our main contributions may be summarized as follows.
-\begin{enumerate}[label=(\roman*)]
-\item We establish a reusable finite-certificate interface and dichotomy for hypercube quotients: either every target-fiber neighbor-count list is constant and the pushforward is an equitable quotient, or two vertices in one fiber give an explicit residual witness.  The residual-diameter tensor is not only a diagnostic: it is the exact Chebyshev obstruction for all visible linear compressions, with an explicit interval-polytope classification of every approximate intertwiner.  Its row-stochastic specialization is load-bearing for probabilistic coarse models: the visible lower bound must hold after restricting to Markov kernels, not merely after allowing arbitrary signed visible matrices.  For the audited Zeckendorf-prefix fold in window \(6\), this is sharpened to an exact residual-diameter computation: the diameter distribution is \((298,117,26)\) in levels \(0,1,2\), the sharp unconstrained and row-stochastic visible residual radii are both \(1/6\), and the audited least-squares pushforward has residual norm exactly \(1/4\).  The exact determinant and Sturm certificate then supplies an independent spectral rejection of that same audited pushforward as an equitable quotient kernel.
-\item We determine the unique coarsest equitable refinement of the nonlumpable Fold\(_6\) partition.  It is the \(48\)-cell orbit partition of \(\sigma_{\mathrm{geo}}\), consisting of \(32\) singletons and \(16\) pairs.  Hence every exact hidden-state realization requires at least \(27\) states beyond the \(21\) visible fold states, the minimum realization is unique up to relabeling, and its discarded spectral subspace is precisely the chiral \(Q_4\) carrier.
-\item As finite-fiber consequences, we classify permutation-natural binary jump structures by the sign character and identify the boundary windows in which nontrivial central sheet parity can occur.  The product, subset, and wreath formulas are supporting calculus for this same sign torsor.
-\item We compute low-degree fold-gauge homology from fiber multiplicities and classical symmetric-group facts.  These homological and capacity values are certificate-family statistics unless independent fold-aware descent data are supplied.  The last-bit testing and KL limits are placed in Appendix \ref{app:conditional-lastbit-statistics} and are conditional on the stated homogenized audit hypothesis.
-\end{enumerate}
-
-The following theorem is the main result.  It is stated first as an exact finite algebraic-combinatorial certificate for the audited window-\(6\) fold, supported by the reusable interface of Theorem \ref{thm:reusable-exact-certificate-interface-hypercube-folds}, by the family certificate structure theorem \ref{thm:foldbin-algorithmic-certificate-schema}, by the general residual-budget theorem \ref{thm:foldbin-complete-residual-budget-skeleton}, by the row-stochastic specialization \ref{thm:foldbin-stochastic-budget-classification}, by the exact window-\(6\) residual computation of Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution}, and by the exact-computation proof protocol in Proposition \ref{prop:journal-facing-computation-proof-protocol}.  The named consequences below separate the fixed-window boundary statement, the fixed-resolution homology statement, the stable-descent caveat, and the finite-register entropy count.
-
-\begin{theorem}[Exact Fold\texorpdfstring{$_6$}{6} nonlumpability and minimal repair certificate]\label{thm:main-fold6-nonlumpability}
-For the audited binary fold certificate of Definition \ref{def:audited-binary-fold-certificate}, the visible window-\(6\) pushforward kernel \(P_6^{\mathrm{bin}}\) is not the quotient kernel of an equitable partition of \(Q_6\).  More precisely:
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item The complete Fold\(_6\) certificate of Theorem \ref{thm:single-exact-fold6-certificate} is the \(m=6\) specialization \(\mathfrak C_6\) of the family certificate structure theorem \ref{thm:foldbin-algorithmic-certificate-schema}; it specifies \(\Fold_6^{\mathrm{bin}}\), \(X_6\), the fiber multiplicities, the block-indicator encoding \(M_6\), the directed edge-count matrix, the rational pushforward kernel \(P_6^{\mathrm{bin}}=D^{-1}M_6^\top T_6M_6\), and the extremal residual skeletons.
-\item The exact residual diameter is \(\Delta_6=2\).  Hence no matrix \(P\) satisfies \(T_6M_6=M_6P\), the sharp entrywise residual radius over all real visible compression matrices is \(1/6\), and the sharp radius after imposing the row-stochastic Markov-kernel constraints is still \(\rho_6^{\mathrm{Markov}}=1/6\).  Thus every proposed visible Markov kernel has entrywise residual at least \(1/6\); this probabilistic lower bound is the row-simplex specialization of the residual-budget classification, not a consequence of the spectral calculation.  The audited residual satisfies \(\|T_6M_6-M_6P_6^{\mathrm{bin}}\|_\infty=1/4\).
-\item The same exact matrix has certified eigenvalues in
-\[
-(0.4841207858,0.4841207859),
-\qquad
-(-0.6030939755,-0.6030939754),
-\]
-obtained from the printed characteristic-polynomial factor and rational Sturm data, with commands, software class, artifact hashes, and acceptance criteria specified in Proposition \ref{prop:journal-facing-computation-proof-protocol}.  These intervals are disjoint from the window-\(6\) hypercube spectrum displayed in Section \ref{sec:preliminaries}.
-\item Every equitable hidden refinement \(H:\Omega_6\twoheadrightarrow Y\) through which \(\Fold_6^{\mathrm{bin}}\) factors satisfies \(|Y|\ge48\).  Equality is attained uniquely up to relabeling by the orbit quotient of \(\sigma_{\mathrm{geo}}\).  The quotient spectrum has multiplicities \((1,5,11,14,11,5,1)\) on the window-\(6\) hypercube grid, and its orthogonal complement is the \(16\)-dimensional chiral carrier isomorphic to \(Q_4\).
-\end{enumerate}
-\end{theorem}
-
-\begin{proof}
-Item \textup{(i)} is the audited specialization of the reusable interface in Theorem \ref{thm:reusable-exact-certificate-interface-hypercube-folds} through the family certificate structure theorem \ref{thm:foldbin-algorithmic-certificate-schema}, with the data package assembled in Theorem \ref{thm:single-exact-fold6-certificate}, using Propositions \ref{prop:foldbin6-canonical-fiber-table} and \ref{prop:foldbin6-exact-pushforward-matrix}.  The completeness of this finite package as a visible quotient certificate is Theorem \ref{thm:finite-residual-package-complete-visible-certificates}.  Item \textup{(ii)} is Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution}, together with the exact minimax and two-row skeleton classification in Theorem \ref{thm:foldbin-complete-residual-budget-skeleton}, the stochastic row-polytope classification in Theorem \ref{thm:foldbin-stochastic-budget-classification}, Corollary \ref{cor:foldbin6-visible-markov-lower-bound}, and the local residual certificate of Theorem \ref{thm:local-residual-certificate-hypercube-folds}; this is the direct proof of visible nonlumpability, since the two-row residual witness forbids any matrix \(P\) with \(T_6M_6=M_6P\), while the row-stochastic classification proves that the same \(1/6\) lower bound survives when \(P\) is required to be a genuine Markov transition kernel.  Item \textup{(iii)} is Lemmas \ref{lem:foldbin6-characteristic-certificate} and \ref{lem:foldbin6-eigenvalue-interval-certificate}.  The spectral rigidity theorem, Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity}, says that every equitable quotient kernel of \(Q_6\) has spectrum contained in the displayed hypercube grid.  The off-grid intervals in \textup{(iii)} therefore rule out the audited pushforward \(P_6^{\mathrm{bin}}\) as an equitable quotient kernel; this is supplementary to, not a substitute for, the residual nonintertwining witness.  Item \textup{(iv)} is Theorem \ref{thm:window6-minimal-equitable-refinement}. \qedhere
-\end{proof}
-
-\begin{corollary}[Fixed-window boundary orientation consequence]\label{cor:main-fold6-boundary-orientation-consequence}
-For each boundary uplift fiber \(\Delta_m^{\mathrm{bdry}}(w)\) of size at least \(2\), every permutation-natural nontrivial binary jump structure factors uniquely through the sign character.  In the audited window \(m=6\), the two-sheet boundary parity appearing in the Fold\(_6\) certificate is exactly the two-point specialization of this orientation torsor.
-\end{corollary}
-
-\begin{proof}
-The load-bearing reduction is Proposition \ref{prop:bdry-load-bearing-sign-torsor-reduction}: the boundary consequence uses only the sign-torsor classification, not the optional product--wreath--subset calculus.  The factorization through the sign character is Theorem \ref{thm:bdry-z2-jump-functor-uniqueness}.  Corollary \ref{cor:bdry-uplift-orientation-parity} identifies the resulting torsor on each boundary uplift fiber, and Theorem \ref{thm:window6-bdry-sheet-parity-nonfunctorial-extension} specializes that torsor to the two-sheet window-\(6\) parity certified by the audited finite fibers. \qedhere
-\end{proof}
-
-\begin{corollary}[Fixed-resolution fold-gauge homology consequence]\label{cor:main-fold6-gauge-homology-consequence}
-For each fixed resolution \(m\), the binary fold-gauge group splits as
-\[
-\mathcal G_m^{\mathrm{bin}}\cong\prod_{w\in X_m}\mathfrak S_{d_m^{\mathrm{bin}}(w)},
-\]
-and its low-degree integral homology and \(\ZZ_2\)-extension classes are exactly the symmetric-group formulas of Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}.  Thus, if \(N_2\) and \(N_4\) count fibers of size at least \(2\) and at least \(4\), respectively, then
-\[
-H_1(\mathcal G_m^{\mathrm{bin}};\ZZ)\cong(\ZZ_2)^{N_2},
-\qquad
-H_2(\mathcal G_m^{\mathrm{bin}};\ZZ)\cong(\ZZ_2)^{N_4+\binom{N_2}{2}}.
-\]
-These are fixed-resolution certificate statistics and do not become cross-resolution invariants without fold-aware stable descent data.
-\end{corollary}
-
-\begin{proof}
-Lemma \ref{lem:audited-binary-fold-certificate-identities} identifies the finite fibers of the audited binary fold, so the automorphism group of the fibered set is the displayed product of symmetric groups.  The homology formula is then precisely Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology}.  The fixed-resolution qualification is the descent boundary in Theorem \ref{thm:fold-aware-stable-descent}. \qedhere
-\end{proof}
-
-\begin{corollary}[Stable-descent caveat for chiral and boundary statistics]\label{cor:main-fold6-stable-descent-caveat}
-The concrete audited folds admit no fold-aware stable system over the boundary indicator that is fiberwise trivial over it, on any index set containing \(6\) and \(7\), and every fiberwise-trivial stable descent over a statistic is obstructed by comparable equal-statistic fibers of unequal cardinality.  Fiberwise triviality is part of the hypothesis, not a technical convenience: without it the cited obstruction does not apply, and no exclusion of general fold-aware stable systems is claimed here.  Moreover, the observables used in the window-\(6\) chiral orthogonality statement are fixed-window fold-type observables unless Definition \ref{def:fold-aware-stable-system} is explicitly invoked.
-\end{corollary}
-
-\begin{proof}
-The obstruction for the concrete audited folds is Theorem \ref{thm:audited-folds-boundary-descent-obstruction}, which is the specialization of the general fiber-cardinality obstruction in Theorem \ref{thm:fiber-cardinality-obstruction-stable-descent}.  The fixed-window status of the chiral orthogonality observables is Lemma \ref{lem:window6-fold-type-fixed-window-interface}. \qedhere
-\end{proof}
-
-\begin{corollary}[Finite-register entropy consequence]\label{cor:main-fold6-register-entropy-consequence}
-Let a fixed finite fold fiber system be given.  If some fiber has odd cardinality, there is no fiberwise free involution at all.  If every fiber has even cardinality, their number is the product of the perfect-matching counts on the fibers, and selecting all of them requires at least the corresponding logarithmic message capacity.  This is a finite-register count for the chosen fiber system, not an additional hidden-state exclusion or an unconditional cross-resolution invariant.
-
-The even-cardinality hypothesis is not vacuous and is not satisfied by the system studied here: the \(\Fold_6\) fiber profile consists of nine fibers of size \(4\), eight of size \(2\), and four of size \(3\), so \(\mathrm{Inv}_{\mathrm{free}}\) is empty for it and the register bound is \(0\).
-\end{corollary}
-
-\begin{proof}
-This is exactly Theorem \ref{thm:fiberwise-free-involution-matching-entropy}, with the final qualification supplied by the hidden-refinement boundary of Theorem \ref{thm:hidden-refinement-boundary} and the stable-descent boundary of Theorem \ref{thm:fold-aware-stable-descent}. \qedhere
-\end{proof}
-
-The one-bit total-variation and KL statements in Appendix \ref{app:conditional-lastbit-statistics} are not part of the unconditional main theorem.  They are conditional supporting material: every conclusion involving \(\mu_m\) beyond the finite counts assumes the homogenized last-bit hypothesis of Definition \ref{def:homogenized-lastbit-audit-hypothesis}, and even then remains an asymptotic family statement unless fold-aware probability-space descent maps are supplied.
-
-The separation between the classical input and the new certificate is the following.  The equivalence between equitability, strong lumpability, and an intertwining relation is a standard finite-state Markov-chain tool \cite{burke1958markovian,kemeny1976finite,buchholz1994exact}, and the resulting spectral inclusion for an equitable quotient is the usual invariant-subspace consequence of an intertwining.  The Walsh diagonalization of \(Q_m\), partition refinement, the sign representation of symmetric groups, and the Schur-multiplier facts used in low-degree homology are likewise classical.  The paper-specific contribution is the exact Fold\(_6\) certificate, the exact residual-diameter computation, the exact pushforward matrix and Sturm certificate for that fold, the identification of its unique minimal equitable repair with the \(48\)-state affine orbit quotient, the integrated chiral \(Q_4\) carrier, and the boundary parity consequences of the sign character.  The extended orientation calculus, chiral heat traces, capacity formulas, and low-degree homology computations are fixed-resolution or functorial consequences around those central certificates, not additional cross-resolution invariants unless the stable descent data of Theorem \ref{thm:fold-aware-stable-descent} are supplied.  The finite computation is supplied by the SageMath certificate, the Python stream verifiers, the canonical stream transcript, and the printed determinant--Sturm transcript.  Appendix \ref{app:audited-computation-certificate} records the proof protocol, checksums, exact commands, successful transcript strings, and permanent-archive payload identifying the finite data used for the printed arithmetic.
-
-\begin{proposition}[Classical input and finite certificate in the main theorem chain]\label{prop:classical-certificate-interface-main-chain}
-For the window-\(6\) binary fold certificate, the nonlumpability conclusion decomposes into two logically independent parts.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item The only classical lumpability input is the implication
-\[
-T_6M=MP\quad\Longrightarrow\quad
-\Spec(P)\subseteq\{1-2k/6:0\le k\le 6\},
-\]
-where \(M\) is the block-indicator matrix of an equitable partition of \(Q_6\).
-\item The paper-specific input is the exact construction of \(\Fold_6^{\mathrm{bin}}\), its pushforward matrix \(P_6=D^{-1}M^\top T_6M\), and the integer Sturm certificate producing eigenvalues in
-\[
-(0.4841207858,0.4841207859),
-\qquad
-(-0.6030939755,-0.6030939754).
-\]
-under the exact-computation protocol of Proposition \ref{prop:journal-facing-computation-proof-protocol}.
-\item Consequently the direct conclusion that the visible fold is not strongly lumpable comes from the residual witness, and the spectral corollary that the audited matrix \(P_6\) is not an equitable quotient kernel is obtained only after combining the classical spectral inclusion with the new finite determinant--Sturm certificate.
-\end{enumerate}
-The same division of labor holds for the boundary theory: the sign representation is the classical character-theoretic input, while the fold-specific contribution is the identification of the finite boundary fibers and the synthesis of their orientation torsors into the window-\(6\) sheet-parity obstruction.  The longer determinant, product, block, wreath, and subset formulas in Section \ref{sec:boundary-parity} are retained as algebraic-combinatorial infrastructure for the same sign torsor rather than as separate headline contributions. \qedhere
-\end{proposition}
-\begin{proof}
-For \textup{(i)}, Lemma \ref{lem:equitable-strong-lumpability-audited-pushforward} identifies strong lumpability of a finite hypercube partition with the existence of an intertwining \(T_6M=MP\), and Theorem \ref{thm:window6-strong-lumpability-spectral-rigidity} proves that every eigenvalue of such a quotient kernel lies in the window-\(6\) hypercube spectrum \(\{1-2k/6:0\le k\le6\}\).  This uses only the usual block-indicator formulation of equitable partitions and the Walsh spectrum of the hypercube.
-
-For \textup{(ii)}, Definition \ref{def:audited-binary-fold-certificate} defines the Zeckendorf-prefix fold, Proposition \ref{prop:foldbin6-exact-pushforward-matrix} computes the exact directed edge-count matrix for its audited pushforward, Theorems \ref{thm:foldbin-algorithmic-certificate-schema}, \ref{thm:foldbin-complete-residual-budget-skeleton}, and \ref{thm:foldbin-stochastic-budget-classification} place the window in the finite residual-budget classification, Theorem \ref{thm:foldbin6-exact-residual-diameter-distribution} supplies the direct two-row residual obstruction, and Lemmas \ref{lem:foldbin6-characteristic-certificate} and \ref{lem:foldbin6-eigenvalue-interval-certificate} certify the two displayed off-grid eigenvalue intervals by exact rational characteristic-polynomial and Sturm data.  The two intervals are disjoint from \(\{1,2/3,1/3,0,-1/3,-2/3,-1\}\), so the spectral inclusion from \textup{(i)} rules out the audited pushforward as an equitable quotient kernel; this is precisely Corollary \ref{cor:terminal-window6-nonlumpable-by-spectrum}.
-
-Finally, the boundary statement is the analogous interface for parity.  The quotient \(\mathfrak S_d\to\{\pm1\}\) through the sign character is the general representation-theoretic ingredient, whereas Lemma \ref{lem:audited-binary-fold-certificate-identities} supplies the concrete boundary fibers and the results in Section \ref{sec:boundary-parity} build the orientation torsors, fiber-product laws, subset-transfer laws, wreath formulas, and fixed-resolution fold-gauge consequences from those fibers. \qedhere
-\end{proof}
-
-The paper is organized accordingly. Section \ref{sec:preliminaries} fixes notation for hypercube walks, equitable partitions, boundary lifts, and gauge groups. Section \ref{sec:relation-other-constructions} records the relation to neighboring fold constructions. Section \ref{sec:spectral-rigidity} proves the residual and spectral Fold\(_6\) certificate. Section \ref{sec:boundary-parity} proves the sign/orientation obstruction as the boundary consequence of the same fibers, and Sections \ref{sec:chiral}--\ref{sec:gauge-homology} develop the fixed-resolution chiral, homological, and capacity consequences.
-
-\section{Relation to other fold constructions}\label{sec:relation-other-constructions}
-This article uses the word ``fold'' in a deliberately narrow sense.  Its central objects are the hypercube walk \(T_m\), the finite Zeckendorf-prefix maps \(\Fold_m^{\mathrm{bin}}:\Omega_m\twoheadrightarrow X_m\), the pushforward kernels \(P_m^{\mathrm{bin}}\), and the immediate boundary gauge data carried by the same finite fibers.  The main obstruction is therefore an algebraic-combinatorial one: the window-\(6\) matrix printed in Theorem \ref{thm:single-exact-fold6-certificate} cannot be an equitable quotient of \(Q_6\) on the visible state space.
-
-Several nearby directions are therefore outside the present scope.  We do not study Fibonacci folding as an arithmetic dynamical system, Zeckendorf normalization as an independent rewriting or number-system problem, folded histograms as asymptotic distributional objects, gauge anomalies beyond the sign and symmetric-group torsors needed for the boundary fibers, or radial-homotopy invariants.  Those constructions may use related terminology and some of the same finite encodings, but their proof interfaces are different.  In this paper a Zeckendorf prefix is only the finite map defining \(\Fold_m^{\mathrm{bin}}\), and every downstream theorem passes through the hypercube-neighbor-count certificate, the exact window-\(6\) residual or spectral data, the chiral \(Q_4\) compression certified at that same window, or the low-degree fold-gauge consequences of those fibers.
-
-The separation is also a logical restriction on conclusions.  The exact matrix and homology calculations below are fixed-resolution certificate data unless an explicit fold-aware stable system is supplied.  Thus the paper proves exact Fold\(_6\) hypercube nonlumpability and its immediate chiral and boundary-gauge consequences; it does not claim a cross-resolution Fibonacci, histogram, anomaly, or radial-homotopy invariant.
-
-\section{Preliminaries}\label{sec:preliminaries}
-For \(m\ge 1\), let \(Q_m\) denote the \(m\)-dimensional hypercube with vertex set \(\Omega_m:=\{0,1\}^m\), adjacency operator \(A_m\), and simple random-walk operator \(T_m:=m^{-1}A_m\). The Walsh characters \(\chi_S(\omega)=(-1)^{\sum_{i\in S}\omega_i}\) diagonalize both operators, and hence
-\[
-\Spec(A_m)=\{m-2k:0\le k\le m\},
-\qquad
-\Spec(T_m)=\left\{1-\frac{2k}{m}:0\le k\le m\right\}.
-\]
-We use \(\mathbf 1_\omega\) for the indicator of a vertex \(\omega\in\Omega_m\).
-
-Let \(F:\Omega_m\twoheadrightarrow X\) be a surjection onto a finite state space. Its block-indicator matrix \(M\) has columns indexed by \(X\), with \(x\)-th column equal to the indicator vector of \(F^{-1}(x)\). The partition is called \emph{equitable} if there exists a matrix \(B\) such that
-\[
-A_m M = M B.
-\]
-Equivalently, every vertex in a block has the same number of neighbors in every other block; in that case \(P:=m^{-1}B\) is the transition matrix of the quotient chain. We refer to \(P\) as the equitable quotient kernel associated with \(F\).
-
-Even when \(F\) is not equitable there is a canonical audited pushforward obtained by choosing the lift inside the current fiber uniformly, making one hypercube step, and then forgetting the lift.
-Let \(D_F:=\operatorname{diag}(|F^{-1}(x)|:x\in X)\).  The pushforward kernel of \(T_m\) along \(F\) is the row-stochastic matrix
-\[
-P_F:=D_F^{-1}M^\top T_mM,
-\qquad
-P_F(x,y)=\frac{1}{m|F^{-1}(x)|}
-\#\{(\omega,i):\omega\in F^{-1}(x),\ F(\omega+e_i)=y\}.
-\]
-Thus an equitable partition is precisely the case in which the audited pushforward agrees with the genuine Markov quotient.  For the audited binary fold we write
-\[
-P_m^{\mathrm{bin}}:=P_{\Fold_m^{\mathrm{bin}}},
-\qquad
-P_6:=P_6^{\mathrm{bin}}.
-\]
-
-\begin{lemma}[Equitability, strong lumpability, and the audited pushforward]\label{lem:equitable-strong-lumpability-audited-pushforward}
-Let \(F:\Omega_m\twoheadrightarrow X\) be a surjection, let \(M\) be its block-indicator matrix, and let \(D_F=M^\top M\).  For \(\omega\in\Omega_m\) and \(y\in X\), set
-\[
- r_\omega(y):=\sum_{\eta\in F^{-1}(y)}T_m(\omega,\eta)
- =\frac{1}{m}\#\{1\le i\le m:F(\omega+e_i)=y\}.
-\]
-The following conditions are equivalent.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item The partition is equitable: there is a matrix \(B\) with \(A_mM=MB\).
-\item The hypercube walk is strongly lumpable with respect to \(F\): whenever \(F(\omega)=F(\omega')\), one has \(r_\omega(y)=r_{\omega'}(y)\) for every \(y\in X\).
-\item There is a row-stochastic matrix \(P\) on \(X\) such that \(T_mM=MP\).
-\end{enumerate}
-When these conditions hold, the strong-lumpability kernel is unique and is exactly the audited pushforward:
-\[
-P=P_F=D_F^{-1}M^\top T_mM.
-\]
-Consequently an audited kernel can be strongly lumpable on the visible state space only when it is the equitable quotient kernel of the same partition.
-\end{lemma}
-\begin{proof}
-The \((\omega,y)\)-entry of \(A_mM\) is the number of neighbors of \(\omega\) in the fiber \(F^{-1}(y)\), namely \(m r_\omega(y)\).  Thus \(A_mM=MB\) holds if and only if, for each fixed block \(x=F(\omega)\), this number depends only on \(x\) and \(y\), which is exactly the row-wise independence in \textup{(ii)} after division by \(m\).  In that case the common values define
-\[
-P(x,y):=r_\omega(y)\qquad(\omega\in F^{-1}(x)),
-\]
-and every row of \(P\) sums to one because \(T_m\) is row-stochastic.  The identity \(T_mM=MP\) is then just the equality of the entries \((T_mM)(\omega,y)=r_\omega(y)=P(F(\omega),y)=(MP)(\omega,y)\).  This proves \textup{(ii)}\(\Rightarrow\)\textup{(iii)}, and the same entrywise identity proves \textup{(iii)}\(\Rightarrow\)\textup{(ii)}.  Since \(T_m=A_m/m\), \textup{(i)} is equivalent to \textup{(iii)} with \(P=B/m\).
-
-Finally, if \(T_mM=MP\), then multiplying on the left by \(D_F^{-1}M^\top\) gives
-\[
-D_F^{-1}M^\top T_mM=D_F^{-1}M^\top MP=D_F^{-1}D_FP=P,
-\]
-because the columns of \(M\) are disjoint fiber indicators.  Conversely, the preceding equivalences show that whenever a genuine strong-lumpability kernel exists, it must be this matrix. \qedhere
-\end{proof}
-
-We write \(\varphi:=(1+\sqrt5)/2\) for the golden ratio and \(F_0:=0\), \(F_1:=1\), \(F_{n+2}:=F_{n+1}+F_n\) for the Fibonacci sequence.
-
-\paragraph{Notation guide.}
-The main objects used below are as follows.  \(\Omega_m:=\{0,1\}^m\) is the vertex set of the hypercube \(Q_m\), with adjacency matrix \(A_m\) and walk operator \(T_m=A_m/m\).  The audited folded state space is the no-adjacent-ones language \(X_m\), ordered lexicographically, and \(\Fold_m^{\mathrm{bin}}:\Omega_m\to X_m\) is the Zeckendorf-prefix binary fold.  Its pushforward kernel is \(P_m^{\mathrm{bin}}=D_F^{-1}M^\top T_mM\), where \(M\) is the block-indicator matrix and \(D_F=M^\top M\).  Boundary words lie in \(X_m^{\mathrm{bdry}}\), their uplift fibers are \(\Delta_m^{\mathrm{bdry}}(w)=(\Fold_m^{\mathrm{bin}})^{-1}(w)\), and \(d_m^{\mathrm{bin}}(w)=|\Delta_m^{\mathrm{bdry}}(w)|\).  The fold-gauge group is \(\mathcal G_m^{\mathrm{bin}}=\Aut(\Fold_m^{\mathrm{bin}})\cong\prod_{x\in X_m}\mathfrak S_{d_m^{\mathrm{bin}}(x)}\).  For a finite set \(S\), \(\mathrm{Or}(S)=\mathrm{Bij}([|S|],S)/\mathfrak A_{|S|}\) denotes its orientation \(\ZZ_2\)-torsor.  A fold-aware stable system consists of transition maps \(\rho_{n,m}\) and \(\pi_{n,m}\) compatible with the folds; without those maps, homology, capacity, chiral, and last-bit quantities are fixed-resolution certificate statistics.  The last-bit observable is \(\ell(x)=x_m\), and the laws \(\mu_m\), \(u_m\), \(\bar\mu_m\), and parameters \(\beta_m\) used for one-bit tests appear only under Definition \ref{def:homogenized-lastbit-audit-hypothesis}.
-
-The fold certificate used below is a finite, reproducible model rather than an appeal to an external black box.  Its state space is the hard-core, or no-adjacent-ones, binary language of length \(m\); this is the symbolic boundary language whose Fibonacci counts are audited in Lemma \ref{lem:audited-binary-fold-certificate-identities}.  The fibers are the audited Zeckendorf-prefix fibers of dyadic vertices, and the boundary sector consists of those legal words whose first and last bits are both \(1\).  All spectral and gauge claims in the paper use only the data specified in the next definition and the exact pushforward convention above.
-
-\begin{definition}[Reproducible audited binary fold certificate]\label{def:audited-binary-fold-certificate}
-Let
-\[
-X_m:=\{x=(x_1,\ldots,x_m)\in\{0,1\}^m:\ x_i x_{i+1}=0\text{ for }1\le i<m\}
-\]
-be ordered lexicographically, and let \(x_{m,r}\) denote its \(r\)-th element, with \(0\le r<|X_m|\).
+\begin{definition}[Audited Fold$_6$]\label{def:fold6}
 Set
 \[
-\ell(x_1,\ldots,x_m):=x_m.
+X_6=\{x\in\{0,1\}^6:x_ix_{i+1}=0\ (1\le i<6)\}.
 \]
-The audited boundary sector is
+For \(\omega=(a_1,\ldots,a_6)\), put
+\(N(\omega)=\sum_{i=1}^6a_i2^{6-i}\).  If
+\(N=\sum_{r\ge1}z_r(N)F_{r+1}\) is its greedy Zeckendorf expansion, define
+\(\Fold_6(\omega)=(z_1(N),\ldots,z_6(N))\).  The fibers, in lexicographic order of
+\(X_6\), are the following.
 \[
-X_m^{\mathrm{bdry}}:=
-\begin{cases}
-\{w\in X_m:w_1=w_m=1\}, & m=6,7,8,\\
-\varnothing, & \text{otherwise}.
-\end{cases}
-\]
-Let \(K_m\) be the unique integer satisfying
-\[
-F_{K_m+1}\le 2^m-1<F_{K_m+2},
-\]
-and write \(z_1(N),\ldots,z_{K_m}(N)\) for the greedy Zeckendorf digits of \(N\), so that
-\[
-N=\sum_{r=1}^{K_m}z_r(N)F_{r+1},
-\qquad z_r(N)z_{r+1}(N)=0.
-\]
-For \(\omega=(a_1,\ldots,a_m)\in\Omega_m\), put
-\[
-N(\omega):=\sum_{i=1}^{m}a_i2^{m-i}
-\]
-and define
-\[
-\Fold_m^{\mathrm{bin}}(\omega):=(z_1(N(\omega)),\ldots,z_m(N(\omega)))\in X_m.
-\]
-For \(m=6\), define the affine involution
-\[
-\sigma_{\mathrm{geo}}(a_1,a_2,a_3,a_4,a_5,a_6)
-:=(1-a_5,a_2,a_3,a_4,1-a_1,a_6).
-\]
-For \(w\in X_m\), put
-\[
-d_m^{\mathrm{bin}}(w):=\card{(\Fold_m^{\mathrm{bin}})^{-1}(w)},
-\qquad
-\Delta_m^{\mathrm{bdry}}(w):=(\Fold_m^{\mathrm{bin}})^{-1}(w)
-\quad(w\in X_m^{\mathrm{bdry}}),
-\]
-and define
-\[
-\mathcal G_m^{\mathrm{bin}}:=\Aut(\Fold_m^{\mathrm{bin}})
-:=\{g\in\Sym(\Omega_m):\Fold_m^{\mathrm{bin}}\circ g=\Fold_m^{\mathrm{bin}}\}.
-\]
-Finally, \(\mu_m\) denotes the pushforward of the uniform law on \(\Omega_m\) under \(\Fold_m^{\mathrm{bin}}\), and \(u_m\) denotes the uniform law on \(X_m\).
-\end{definition}
-
-\begin{lemma}[Audit certificate identities]\label{lem:audited-binary-fold-certificate-identities}
-The certificate in Definition \ref{def:audited-binary-fold-certificate} has the following properties.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item \(|X_m|=F_{m+2}\) for every \(m\ge1\), and exactly \(F_m\) elements of \(X_m\) satisfy \(\ell(x)=1\).
-\item \(\Fold_m^{\mathrm{bin}}\) is a surjection and
-\[
-\mu_m(w)=2^{-m}d_m^{\mathrm{bin}}(w)
-\qquad(w\in X_m).
-\]
-\item In windows \(6,7,8\), the boundary fiber cardinalities are
-\[
-\bigl(d_6^{\mathrm{bin}}(w):w\in X_6^{\mathrm{bdry}}\bigr)=(2,2,2),
-\qquad
-\bigl(d_7^{\mathrm{bin}}(w):w\in X_7^{\mathrm{bdry}}\bigr)=(3,3,3,3,3),
-\]
-\[
-\bigl(d_8^{\mathrm{bin}}(w):w\in X_8^{\mathrm{bdry}}\bigr)=(3,3,3,3,3,3,3,3).
-\]
-\item The window-\(6\) geometric involution stabilizes the fold:
-\[
-\Fold_6^{\mathrm{bin}}\circ\sigma_{\mathrm{geo}}=\Fold_6^{\mathrm{bin}}.
-\]
-\item The gauge group splits canonically as
-\[
-\mathcal G_m^{\mathrm{bin}}\cong \prod_{w\in X_m}\mathfrak S_{d_m^{\mathrm{bin}}(w)}.
-\]
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-Let \(A_m:=|X_m|\).  Splitting an admissible word according to its last digit gives \(A_m=A_{m-1}+A_{m-2}\), with initial values \(A_1=2\) and \(A_2=3\).  Thus \(A_m=F_{m+2}\).  If \(\ell(x)=1\), then \(x_{m-1}=0\), and the first \(m-2\) coordinates form an arbitrary admissible word.  Hence the number of such states is \(A_{m-2}=F_m\).
-
-The Zeckendorf-prefix map is surjective onto \(X_m\).  Indeed, if \(w=(w_1,\ldots,w_m)\in X_m\), then \(N_w:=\sum_{r=1}^m w_rF_{r+1}\) has greedy Zeckendorf prefix \(w\), and the elementary bound \(N_w\le F_{m+2}-1\le 2^m-1\) places \(N_w\) in the dyadic vertex range.  Hence every \(\Fold_m^{\mathrm{bin}}\) is surjective, and the formula for \(\mu_m\) is precisely the definition of pushforward of the uniform law.
-
-The boundary cardinalities are obtained by evaluating the finite Zeckendorf-prefix rule on the dyadic vertices.  The boundary words are
-\[
-\begin{array}{c|l|c}
-m&\text{boundary words}&\text{preimages per word}\\ \hline
-6&100001,100101,101001&2\\
-7&1000001,1000101,1001001,1010001,1010101&3\\
-8&10000001,10000101,10001001,10010001,&3\\
- &10010101,10100001,10100101,10101001&3.
+\begin{array}{c|l}
+000000&000000,010101,100010,110111\\
+000001&001101,101111\\
+000010&001000,011101,101010,111111\\
+000100&000101,011010,100111,111100\\
+000101&010010,110100\\
+001000&000011,011000,100101,111010\\
+001001&010000,110010\\
+001010&001011,100000,101101\\
+010000&000010,010111,100100,111001\\
+010001&001111,110001\\
+010010&001010,011111,101100\\
+010100&000111,011100,101001,111110\\
+010101&010100,110110\\
+100000&000001,010110,100011,111000\\
+100001&001110,110000\\
+100010&001001,011110,101011\\
+100100&000110,011011,101000,111101\\
+100101&010011,110101\\
+101000&000100,011001,100110,111011\\
+101001&010001,110011\\
+101010&001100,100001,101110
 \end{array}
 \]
-For the stabilizer claim, write \(\omega=(a_1,\ldots,a_6)\) and use the integer encoding in the definition.  A direct substitution in the sixty-four possible vertices gives equality of Zeckendorf prefixes for \(\omega\) and \(\sigma_{\mathrm{geo}}(\omega)\); equivalently, both sides assign the same legal word in the finite table that defines \(\Fold_6^{\mathrm{bin}}\).  Hence \(\Fold_6^{\mathrm{bin}}\circ\sigma_{\mathrm{geo}}=\Fold_6^{\mathrm{bin}}\).
-
-Finally, an automorphism of \(\Fold_m^{\mathrm{bin}}\) is exactly a permutation of \(\Omega_m\) preserving every fiber setwise.  Such a permutation is independently an arbitrary element of the symmetric group on each fiber, giving the displayed direct product. \qedhere
-\end{proof}
-
-\begin{definition}[Fold-aware stable systems]\label{def:fold-aware-stable-system}
-Let \(I\subseteq\NN\) be directed by the usual order.  A fold-aware stable system on \(I\) consists of folds \(F_m:\Omega_m\twoheadrightarrow X_m\), surjections \(\rho_{n,m}:X_n\twoheadrightarrow X_m\) for \(n\ge m\), and surjections \(\pi_{n,m}:\Omega_n\to\Omega_m\) such that
-\[
-\rho_{m,m}=\operatorname{id},\qquad
-\rho_{p,m}=\rho_{n,m}\rho_{p,n},
-\qquad
-\pi_{m,m}=\operatorname{id},
-\qquad
-\pi_{p,m}=\pi_{n,m}\pi_{p,n},
-\]
-and
-\[
-F_m\pi_{n,m}=\rho_{n,m}F_n
-\qquad(n\ge m).
-\]
-It is fiberwise trivial over a compatible family of statistics \(s_m:X_m\to S\), with common target set \(S\), if the values satisfy \(s_n=s_m\rho_{n,m}\) and, for every \(y\in X_n\), the restriction
-\[
-\pi_{n,m}:F_n^{-1}(y)\longrightarrow F_m^{-1}(\rho_{n,m}(y))
-\]
-is a bijection.
 \end{definition}
 
-\begin{theorem}[Stable descent criterion for fold-gauge data]\label{thm:fold-aware-stable-descent}
-Let \((F_m,\rho_{n,m},\pi_{n,m})\) be a fold-aware stable system that is fiberwise trivial over statistics \(s_m:X_m\to S\) with common target set \(S\).  Then the statistics \(s_m\) descend to a single pro-object: for every \(p\ge n\ge m\),
+The fiber-size vector is
 \[
-s_p=s_m\rho_{n,m}\rho_{p,n}.
+(4,2,4,4,2,4,2,3,4,2,3,4,2,4,2,3,4,2,4,2,3).
 \]
-Moreover, the fiberwise bijections induce compatible diagonal embeddings of gauge groups
+The count can be obtained without enumerating binary words one by one.  If
+\(V(x)=\sum_{r=1}^6x_rF_{r+1}\), let \(\mathcal T_7^{(0)}=\mathcal T_7^{(1)}=\{0\}\)
+and, working backwards through the remaining Zeckendorf positions, set
 \[
-\iota_{n,m}:\prod_{x\in X_m}\Sym(F_m^{-1}(x))
-\hookrightarrow
-\prod_{y\in X_n}\Sym(F_n^{-1}(y)),
+\mathcal T_r^{(1)}=\mathcal T_{r+1}^{(0)},\qquad
+\mathcal T_r^{(0)}=\mathcal T_{r+1}^{(0)}\cup
+ (F_{r+1}+\mathcal T_{r+1}^{(1)}).
 \]
-given on the factor over \(x\) by copying the same permutation to every fiber \(F_n^{-1}(y)\) with \(\rho_{n,m}(y)=x\) through the bijection \(\pi_{n,m}|_{F_n^{-1}(y)}\).  These embeddings satisfy
+Then
 \[
-\iota_{p,m}=\iota_{p,n}\iota_{n,m}.
+\Fold_6^{-1}(x)=\{\omega:N(\omega)-V(x)\in\mathcal T_7^{(x_6)}\},
 \]
-Consequently a cross-resolution gauge, capacity, central-charge, homology-rank, or last-bit statistical quantity is an invariant only after such fold-aware descent data have been specified; without them it is merely a statistic of the chosen finite certificate family.
-\end{theorem}
-\begin{proof}
-The first assertion is exactly the compatibility in Definition \ref{def:fold-aware-stable-system}:
-\[
-s_p=s_n\rho_{p,n}=s_m\rho_{n,m}\rho_{p,n}=s_m\rho_{p,m}.
-\]
-For the group statement, fix \(g=(g_x)_{x\in X_m}\in\prod_x\Sym(F_m^{-1}(x))\).  If \(y\in X_n\) and \(x=\rho_{n,m}(y)\), define
-\[
-\iota_{n,m}(g)|_{F_n^{-1}(y)}
-:=(\pi_{n,m}|_{F_n^{-1}(y)})^{-1}\,g_x\,(\pi_{n,m}|_{F_n^{-1}(y)}).
-\]
-Because the displayed restriction of \(\pi_{n,m}\) is a bijection, this is a well-defined permutation of the fiber over \(y\).  Different fibers of \(F_n\) are disjoint, so these permutations assemble uniquely into an element of the product gauge group at resolution \(n\).  The assignment is a homomorphism, since conjugation and direct products preserve multiplication.  If \(g\ne h\), choose a fiber \(x\) with \(g_x\ne h_x\).  Because \(\rho_{n,m}\) is a map between the state spaces of a stable system over the folds and the relevant fibers are nonempty, any nonempty preimage fiber over \(x\) detects the difference after conjugation; hence the displayed map is injective on the descended subsystem.  Finally, the identities \(\rho_{p,m}=\rho_{n,m}\rho_{p,n}\) and \(\pi_{p,m}=\pi_{n,m}\pi_{p,n}\) imply that conjugating directly from level \(m\) to level \(p\) is the same as conjugating first to level \(n\) and then to level \(p\).  This proves \(\iota_{p,m}=\iota_{p,n}\iota_{n,m}\).
+intersected with \([0,63]\).  This tail recursion is useful because the same finite sets
+also compute every neighbor count used in Section~\ref{sec:residual}.
 
-The last sentence follows because the construction used every item of descent data.  If no such data are supplied, there is no canonical map comparing fibers, gauge groups, central-charge sectors, or probability spaces at different resolutions, so a numerical sequence such as a threshold count, a capacity value, a homology rank, or a last-bit testing statistic is only the value of a statistic on each separately chosen certificate. \qedhere
-\end{proof}
-
-
-\begin{theorem}[Fiber-cardinality obstruction to fiberwise-trivial stable descent]\label{thm:fiber-cardinality-obstruction-stable-descent}
-Let \((F_m,\rho_{n,m},\pi_{n,m})\) be a fold-aware stable system on an index set \(I\), and suppose it is fiberwise trivial over compatible statistics \(s_m:X_m\to S\).  Then for every \(n\ge m\) in \(I\) and every \(y\in X_n\), one has
-\[
-\card{F_n^{-1}(y)}=
-\card{F_m^{-1}(\rho_{n,m}(y))}.
-\]
-Consequently, if for some \(n\ne m\) every statistic-compatible candidate map \(\rho:X_n\twoheadrightarrow X_m\), meaning \(s_n=s_m\rho\), sends at least one state \(y\in X_n\) to a state \(x=\rho(y)\) with unequal fiber cardinalities, then no fiberwise-trivial fold-aware stable system over the statistics \((s_m)\) exists on an index set containing \(m\) and \(n\).
-\end{theorem}
-
-\begin{proof}
-By Definition \ref{def:fold-aware-stable-system}, fiberwise triviality says that, for every \(y\in X_n\), the restriction
-\[
-\pi_{n,m}:F_n^{-1}(y)\longrightarrow F_m^{-1}(\rho_{n,m}(y))
-\]
-is a bijection.  Bijections preserve cardinality, proving the displayed equality.  For the consequence, assume a stable system exists.  Its structure map \(\rho_{n,m}\) is one of the statistic-compatible candidate maps because compatibility gives \(s_n=s_m\rho_{n,m}\).  The first part then forces equality of fiber cardinalities for every \(y\), contradicting the stated mismatch condition for that candidate map. \qedhere
-\end{proof}
-
-
-\begin{theorem}[Boundary-cardinality obstruction to stable descent for the audited folds]\label{thm:audited-folds-boundary-descent-obstruction}
-Let \(s_m:X_m\to\{0,1\}\) be the boundary indicator of the audited certificate, with \(s_m(w)=1\) exactly for \(w\in X_m^{\mathrm{bdry}}\).  There is no fold-aware stable system on an index set containing \(6\) and \(7\), for the concrete folds \(\Fold_m^{\mathrm{bin}}\), that is fiberwise trivial over the boundary statistics \(s_m\).
-\end{theorem}
-\begin{proof}
-Assume such a system exists for levels \(7\ge6\).  Compatibility over the boundary statistic says
-\[
-s_7=s_6\rho_{7,6}.
-\]
-Hence every boundary state \(y\in X_7^{\mathrm{bdry}}\) must map to a boundary state \(x=\rho_{7,6}(y)\in X_6^{\mathrm{bdry}}\).  Fiberwise triviality then requires the restriction
-\[
-\pi_{7,6}:(\Fold_7^{\mathrm{bin}})^{-1}(y)\longrightarrow
-(\Fold_6^{\mathrm{bin}})^{-1}(x)
-\]
-to be a bijection.  By Lemma \ref{lem:audited-binary-fold-certificate-identities}, every boundary fiber at level \(7\) has cardinality \(3\), while every boundary fiber at level \(6\) has cardinality \(2\).  A bijection between such fibers cannot exist.  This contradiction rules out stable descent over the boundary statistic. \qedhere
-\end{proof}
-
-\begin{remark}[Scope of the cross-resolution obstruction]\label{rem:cross-resolution-statistics-warning}
-Theorem \ref{thm:audited-folds-boundary-descent-obstruction} proves only the boundary-indicator obstruction.  The boundary-gauge counts, central-charge counts, homology ranks, and capacity quantities appearing below are therefore used as finite-resolution statistics of the audited certificate family.  Promoting any one of them to a cross-resolution invariant requires its own fold-aware descent data satisfying Definition \ref{def:fold-aware-stable-system}; no separate nonexistence theorem for those related statistics is asserted here.
-\end{remark}
-
-\begin{proposition}[Resolution status of the later certificate quantities]\label{prop:cross-resolution-quantity-status}
-For the audited folds used in this paper the following status assertions hold.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item The boundary indicator does not admit fold-aware fiberwise-trivial descent on any index set containing \(6\) and \(7\).
-\item The boundary-gauge counts, central-charge counts, threshold counts \(N_2,N_4\), capacity values \(C(k)\), and the ranks of \(H_1\), \(H_2\), and \(H^2(\cdot;\ZZ_2)\) appearing below are not asserted to descend in this article.  They are finite-resolution certificate-family statistics unless a fold-aware stable system satisfying Definition \ref{def:fold-aware-stable-system} is explicitly supplied.
-\item The last-bit total-variation and relative-entropy quantities in Theorem \ref{thm:window6-binfold-lastbit-lecam-equivalence} and Corollary \ref{cor:window6-binfold-kl-limit-constant} are conditional finite-certificate asymptotics.  They become cross-resolution invariants only after compatible probability-space descent maps, as in Definition \ref{def:fold-aware-stable-system}, are part of the data.
-\end{enumerate}
+\begin{proposition}[Finite enumeration of the Fold fibers]\label{prop:fiber-enumeration}
+The map in Definition~\ref{def:fold6} is onto \(X_6\), and the displayed 21 rows
+partition all 64 vertices.  In particular \(|X_6|=F_8=21\), and the fiber-size vector
+is the one displayed above.
 \end{proposition}
 \begin{proof}
-Assertion \textup{(i)} is exactly Theorem \ref{thm:audited-folds-boundary-descent-obstruction}.  For \textup{(ii)}, each listed gauge or capacity quantity is a function of the separate fibers of \(\Fold_m^{\mathrm{bin}}\) at one fixed value of \(m\): boundary-gauge and central-charge counts count selected boundary fibers or their functorial orientation data, \(N_2,N_4\) and \(C(k)\) count multiplicity thresholds, and the homology ranks in Theorem \ref{thm:window6-foldbin-gauge-low-degree-homology} are algebraic functions of those same thresholds.  Definition \ref{def:fold-aware-stable-system} is precisely the additional structure that identifies fibers across distinct resolutions by compatible maps.  Without those maps there is no canonical comparison morphism between the products of symmetric groups, their homology groups, or the capacity curves at different resolutions.  Thus the manuscript can use these objects at fixed resolution, but it cannot promote them to cross-resolution invariants without additional descent data.
-
-For \textup{(iii)}, the distributions \(\mu_m\), \(u_m\), and their last-bit pushforwards live on different finite sets as \(m\) varies.  A numerical limit or estimate for the chosen sequence is meaningful as an asymptotic certificate-family statement, and the homogenized last-bit audit hypothesis supplies the analytic approximation needed for that statement.  It still does not supply the maps \(\rho_{n,m}\) and \(\pi_{n,m}\) identifying fibers or probability spaces across levels.  The stable-descent criterion therefore gives exactly the claimed status: conditional finite-certificate asymptotics, not unconditional cross-resolution invariants. \qedhere
+The recurrence for admissible words gives \(|X_m|=F_{m+2}\).  Every legal word \(x\)
+has value \(V(x)\le F_8-1=20\), so it occurs as the first six digits of the greedy
+expansion of some integer in \([0,63]\).  The tail recursion then gives the listed
+preimages.  Their rows are disjoint and their sizes sum to 64, proving the partition
+claim.
 \end{proof}
 
-We shall repeatedly use the groupoid \(\mathbf{FinSet}_k^{\cong}\) of \(k\)-element sets and bijections, together with the Picard groupoid \(\mathbf{Tors}(\ZZ_2)\) of \(\ZZ_2\)-torsors. For a finite set \(S\) with \(|S|=k\), its orientation torsor is
+The involution in Theorem~\ref{thm:headline} preserves every row of this table.
+Indeed, direct substitution into the 64-word definition gives
+\(\Fold_6\circ\sigma_{\rm geo}=\Fold_6\).  This identity will also explain the
+16-dimensional discarded sector.
+
+\clearpage
+\section{Visible nonlumpability and the sharp residual}\label{sec:residual}
+For \(\omega\in\Omega_m\) and \(y\in X\), write
 \[
-\mathrm{Or}(S):=\mathrm{Bij}([k],S)\big/\mathfrak A_k,
+c_\omega(y)=\#\{1\le i\le m:F(\omega+e_i)=y\}.
 \]
-where \(\mathfrak A_k\subset\mathfrak S_k\) is the alternating group. This construction packages the sign representation into a permutation-natural binary object and will be the basic parity invariant of the boundary theory.
+The following elementary lemma is the residual calculation used below.
 
-When an affine involution \(\sigma_{i,j}\) acts on \(\Omega_m\), we write \(V_m^\pm\subseteq \CC^{\Omega_m}\) for the \(\pm 1\) eigenspaces of the induced permutation action. These spaces control the chiral decomposition of hypercube observables. Finally, for a finite-to-one map \(p:E\twoheadrightarrow B\), we write \(E_b:=p^{-1}(b)\) and \(\mathrm{Inv}_{\mathrm{free}}(p)\) for the set of fiberwise fixed-point-free involutions of \(E\).
-\section{Spectral rigidity of equitable lumpability}\label{sec:spectral-rigidity}
-We begin with the linear-algebraic rigidity principle that drives the entire paper. The next theorem shows that every equitable quotient of a hypercube walk inherits its spectrum from the ambient Walsh spectrum, so any off-grid eigenvalue immediately detects nonrealizability on the visible state space.
-\input{source/thm__window6-strong-lumpability-spectral-rigidity}
+\begin{lemma}[Neighbor-count intervals and residual radius]\label{lem:residual}
+For a finite fold \(F:\Omega_m\twoheadrightarrow X\), a matrix \(P\) satisfies
+\(\|T_mM-MP\|_\infty\le\varepsilon\) if and only if, for every source fiber
+\(F^{-1}(x)\) and target \(y\), the intervals
+\[
+\bigl[c_\omega(y)/m-\varepsilon,\ c_\omega(y)/m+\varepsilon\bigr]
+\qquad(\omega\in F^{-1}(x))
+\]
+have a common point.  Consequently
+\[
+\inf_{P\in\RR^{X\times X}}\|T_mM-MP\|_\infty
+ =\frac{1}{2m}\max_{x,y}\left(\max_{\omega\in F^{-1}(x)}c_\omega(y)-\min_{\omega\in F^{-1}(x)}c_\omega(y)\right).
+\]
+The same lower bound holds when \(P\) is required to be row-stochastic.
+\end{lemma}
+\begin{proof}
+The \((\omega,y)\)-entry of \(T_mM\) is \(c_\omega(y)/m\), while the corresponding
+entry of \(MP\) is the single number \(P(x,y)\) for all \(\omega\in F^{-1}(x)\).
+Thus each coordinate is an independent interval intersection problem.  A finite family
+of intervals has a common point exactly when its largest left endpoint is no larger than
+its smallest right endpoint, giving half the largest diameter.  Restricting the feasible
+set to stochastic rows cannot decrease the infimum.
+\end{proof}
 
-The abstract spectral criterion becomes concrete for the audited bin-fold pushforward kernel. The following results first give the family-level finite-certificate dichotomy and then specialize spectral rigidity to the window-\(6\) data, turning the observed non-discrete eigenvalues and the two-vertex residual witness into direct falsifiers for strong lumpability.
-\input{source/thm__foldbin6_equitable_lumpability_spectral_rigidity}
-\input{source/thm__foldbin6_exact_window_certificate}
+\begin{proposition}[Fold$_6$ residual certificate]\label{prop:residual-fold6}
+For the partition of Definition~\ref{def:fold6}, the largest neighbor-count diameter is
+\(\Delta_6=2\).  Among the 441 ordered source-target pairs, the counts of diameters
+0, 1, and 2 are respectively \((298,117,26)\).  Hence the sharp real and
+row-stochastic residual radii are both \(1/6\).
 
-The visible obstruction admits a unique smallest exact repair.  The next theorem closes the hidden-refinement boundary by identifying the coarsest equitable refinement, its minimum state count, its spectrum, and its relation to the chiral carrier.
-\input{source/thm__window6-minimal-equitable-refinement}
+The two vertices \(000000\) and \(010101\) lie in the fiber \(000000\), but for
+the target \(000100\) their neighbor counts are 0 and 1.  A diameter-attaining example
+is the fiber \(100000\) and target \(010101\), where the count list is \((0,2,0,0)\);
+the averaged pushforward therefore has residual entry \(\frac16(2-\frac12)=\frac14\).
+\end{proposition}
+\begin{proof}
+Flipping each coordinate in the displayed fiber table gives the finite count lists.
+The complete enumeration has maximum 2 and distribution \((298,117,26)\).  The lemma
+then gives \(2/(2\cdot6)=1/6\), while the list \((0,2,0,0)\) gives the stated
+\(1/4\) entry.  The unequal counts in the same fiber rule out exact intertwining.
+\end{proof}
 
-\section{Boundary orientation parity}\label{sec:boundary-parity}
-We next isolate the categorical source of binary boundary parity. The theorem below shows that once relabeling-equivariance is imposed, the only nontrivial two-valued jump on a fiber is the orientation torsor induced by the sign character.
-\input{source/thm__bdry_uplift_orientation_torsor_parity}
+\clearpage
+For reference, the exact directed edge-count matrix used by the audited pushforward is
+included here in sparse form.  If \(d_i\) is the size of the \(i\)-th fiber, the quotient
+matrix obtained by uniform lifting is \(P_6(i,j)=N_{ij}/(6d_i)\).
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{c|l}
+0&(2,4),(3,2),(6,2),(7,2),(8,4),(12,2),(13,2),(17,2),(18,2),(19,2)\\
+1&(2,2),(3,2),(7,2),(9,2),(15,2),(20,2)\\
+2&(0,4),(1,2),(5,2),(10,4),(11,2),(15,2),(16,4),(18,2),(20,2)\\
+3&(0,2),(1,2),(4,2),(5,4),(10,2),(11,4),(13,3),(15,1),(16,2),(18,2)\\
+4&(3,2),(6,2),(8,2),(12,2),(13,1),(14,1),(17,2)\\
+5&(2,2),(3,4),(6,2),(7,2),(8,2),(11,3),(13,4),(17,2),(18,2),(20,1)\\
+6&(0,2),(4,2),(5,2),(12,2),(14,2),(19,2)\\
+7&(0,2),(1,2),(5,2),(8,1),(9,1),(10,2),(11,1),(14,1),(15,2),(16,3),(20,1)\\
+8&(0,4),(4,2),(5,2),(7,1),(9,1),(10,3),(11,2),(13,2),(16,2),(17,1),(18,4)\\
+9&(1,2),(7,1),(8,1),(10,1),(11,1),(14,2),(17,1),(19,2),(20,1)\\
+10&(2,4),(3,2),(7,2),(8,3),(9,1),(14,1),(15,1),(16,2),(20,2)\\
+11&(2,2),(3,4),(5,3),(7,1),(8,2),(9,1),(12,2),(15,4),(16,2),(20,3)\\
+12&(0,2),(4,2),(6,2),(11,2),(13,2),(18,2)\\
+13&(0,2),(3,3),(4,1),(5,4),(8,2),(12,2),(14,1),(15,3),(16,2),(19,2),(20,2)\\
+14&(4,1),(6,2),(7,1),(9,2),(10,1),(13,1),(15,1),(16,1),(20,2)\\
+15&(1,2),(2,2),(3,1),(7,2),(10,1),(11,4),(13,3),(14,1),(18,2)\\
+16&(2,4),(3,2),(7,3),(8,2),(10,2),(11,2),(13,2),(14,1),(17,2),(18,4)\\
+17&(0,2),(4,2),(5,2),(8,1),(9,1),(16,2),(19,2)\\
+18&(0,2),(2,2),(3,2),(5,2),(8,4),(12,2),(15,2),(16,4),(19,2),(20,2)\\
+19&(0,2),(6,2),(9,2),(13,2),(17,2),(18,2)\\
+20&(1,2),(2,2),(5,1),(7,1),(9,1),(10,2),(11,3),(13,2),(14,2),(18,2)
+\end{tabular}
+\end{center}
+Each row sums to \(6d_i\), which is a direct check that the displayed matrix is
+row-stochastic after normalization.  \clearpage The row-wise diameter distribution is
+\[
+\begin{array}{c|ccc@{\qquad}c|ccc}
+x&0&1&2&x&0&1&2\\ \hline
+000000&13&8&0&000001&21&0&0\\
+000010&15&6&0&000100&11&8&2\\
+000101&17&2&2&001000&11&8&2\\
+001001&21&0&0&001010&11&7&3\\
+010000&10&9&2&010001&13&6&2\\
+010010&13&6&2&010100&11&8&2\\
+010101&21&0&0&100000&10&9&2\\
+100001&13&6&2&100010&13&8&0\\
+100100&11&8&2&100101&17&2&2\\
+101000&13&8&0&101001&21&0&0\\
+101010&12&8&1&&&&
+\end{array}
+\]
+The three numerical columns count target cells with diameter 0, 1, and 2.
 
-The central audited conclusion has now been reduced to sign and orientation.  The next input keeps only the load-bearing sign-torsor and determinant-line facts needed by the Fold\(_6\) boundary theorem; optional product, subset, wreath, and Lucas-type calculus for the same torsor is deferred to Appendix \ref{app:optional-boundary-orientation-calculus}.
-\input{source/thm__window6-bdry-orientation-parity-functor}
+\clearpage
+\section{Unique minimal equitable refinement}\label{sec:repair}
+We now prove Theorem~\ref{thm:headline}.  For each vertex define its Fold-neighbor
+signature
+\[
+s(\omega)=\bigl(c_\omega(y)\bigr)_{y\in X_6}.
+\]
+Refine each visible fiber by equality of these signatures.  The resulting cells are
+listed below; this is the 48-cell table used by the proof.  \clearpage
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{c|l}
+Fold state&neighbor-signature cells\\ \hline
+000000&\{000000,100010\},\{010101,110111\}\\
+000001&\{001101,101111\}\\
+000010&\{001000,101010\},\{011101,111111\}\\
+000100&\{000101,100111\},\{011010\},\{111100\}\\
+000101&\{010010\},\{110100\}\\
+001000&\{000011\},\{011000,111010\},\{100101\}\\
+001001&\{010000,110010\}\\
+001010&\{001011\},\{100000\},\{101101\}\\
+010000&\{000010\},\{010111\},\{100100\},\{111001\}\\
+010001&\{001111\},\{110001\}\\
+010010&\{001010\},\{011111\},\{101100\}\\
+010100&\{000111\},\{011100,111110\},\{101001\}\\
+010101&\{010100,110110\}\\
+100000&\{000001,100011\},\{010110\},\{111000\}\\
+100001&\{001110\},\{110000\}\\
+100010&\{001001,101011\},\{011110\}\\
+100100&\{000110\},\{011011\},\{101000\},\{111101\}\\
+100101&\{010011\},\{110101\}\\
+101000&\{000100,100110\},\{011001,111011\}\\
+101001&\{010001,110011\}\\
+101010&\{001100,101110\},\{100001\}
+\end{tabular}
+\end{center}
 
-After the functorial theory, we return to the audited boundary lifts themselves. The following theorem determines exactly when fixed-point-free boundary sheet parities exist without auxiliary registers and identifies window \(6\) as the unique audited case carrying nontrivial boundary central charge.
-\input{source/thm__window6-bdry-sheet-parity-nonfunctorial-extension}
+\setcounter{theorem}{22}
+\begin{theorem}[Unique minimal hidden repair of Fold$_6$]\label{thm:headline}\label{thm:window6-minimal-equitable-refinement}
+The signature refinement in the preceding table has 48 cells, is equitable, and is
+exactly the orbit partition of \(\sigma_{\rm geo}\).  Every equitable partition refining
+the Fold$_6$ fibers refines this 48-cell partition.  Therefore it is the unique coarsest
+equitable refinement, and every equitable hidden realization through which Fold$_6$
+factors has at least 48 states.
+\end{theorem}
+\begin{proof}
+The identity \(\Fold_6\sigma_{\rm geo}=\Fold_6\) and the fact that \(\sigma_{\rm geo}\)
+is a cube automorphism imply \(s(\omega)=s(\sigma_{\rm geo}\omega)\).  Comparing with
+the table shows that the signature cells are exactly the orbits: 32 fixed points and
+16 two-cycles.  Any orbit partition of a graph automorphism is equitable, since the
+automorphism bijects neighbors in each target orbit.
 
-\section{Chiral compression and hypercube adjacency}\label{sec:chiral}
-The next ingredient is a chiral decomposition of the hypercube induced by an affine involution. It compresses an antisymmetric sector of \(Q_m\) to a smaller hypercube and exposes a rigid lower-dimensional spectral fingerprint inside the window-\(6\) model.
-\input{source/thm__window6-chiral-compression-hypercube-adjacency}
+Conversely, let \(\mathcal Q\) be any equitable refinement of the Fold fibers.  Two
+vertices in one cell of \(\mathcal Q\) have equal neighbor counts into every cell of
+\(\mathcal Q\).  Summing over the cells contained in any Fold fiber gives equal counts
+into every visible target, so they have the same signature.  Thus \(\mathcal Q\) refines
+the displayed partition.  This proves coarseness, uniqueness, and the lower bound.
+\end{proof}
 
-\section{Fold gauge homology and register entropy}\label{sec:gauge-homology}
-We now turn from spectral and parity obstructions to the internal algebra of the fold-gauge group. The following theorem shows that low-degree \(\ZZ_2\)-cohomology is controlled by the threshold multiplicities \(N_2\) and \(N_4\), while integral \(H_2\) additionally records the exceptional size-six symmetric-group factors.
-\input{source/thm__window6-foldbin-gauge-low-degree-homology}
+\clearpage
+\section{Quotient spectrum and the discarded $Q_4$ carrier}\label{sec:spectrum}
+Let \(V=\CC^{\Omega_6}\), and let \(V^\pm\) be the \(\pm1\)-eigenspaces of the
+permutation induced by \(\sigma_{\rm geo}\).  The 16 two-cycles give \(\dim V^-=16\).
 
-We close the technical development by counting the register-free involutive matchings available on fibers. This converts the combinatorics of perfect matchings into sharp entropy lower bounds for any deterministic protocol that selects a fiberwise free involution.
-\input{source/thm__fiberwise_free_involution_matching_entropy}
+We first recall the spectral input.  If a partition of \(Q_m\) has block matrix \(M\)
+and \(A_mM=MB\), then every eigenvalue of \(B\) is an eigenvalue of \(A_m\): an
+eigenvector \(v\) of \(B\) gives the nonzero eigenvector \(Mv\) of \(A_m\).  The Walsh
+characters \(\chi_S(\omega)=(-1)^{\sum_{i\in S}\omega_i}\) form an orthogonal basis and
+\(A_m\chi_S=(m-2|S|)\chi_S\).  Therefore any equitable quotient walk has eigenvalues
+in \(\{1-2k/m:0\le k\le m\}\).  This standard inclusion is used only to interpret
+the quotient spectrum below; the minimality argument itself is purely local.
 
-The audited boundary flips also imply a short fixed-resolution center-rank observation.  It is not used in the Fold\(_6\) nonlumpability certificate, but records what the finite boundary-gauge sector would force on any external simple Lie-group envelope.
-\input{source/thm__window6-center-2rank-excludes-simple-groups}
+\begin{lemma}[Spectral carrier of the minimal quotient]\label{lem:spectral-carrier}
+The antisymmetric space \(V^-\) is invariant under \(A_6\) and
+\(A_6|_{V^-}\cong A_4\).  The invariant space \(V^+\), which is the function space of
+the 48-cell orbit quotient, has adjacency eigenvalue multiplicities
+\[
+(1,5,11,14,11,5,1)
+\]
+at eigenvalues \(6,4,2,0,-2,-4,-6\), respectively.  Hence the quotient walk has
+the multiplicities in Theorem~\ref{thm:headline}.
+\end{lemma}
+\begin{proof}
+For each assignment \(u\in\{0,1\}^4\) to coordinates \(2,3,4,6\), let
+\(\omega^{00}(u)\) and \(\omega^{11}(u)\) be the vertices with coordinates 1 and 5
+equal to 00 and 11.  The 16 differences
+\(\mathbf1_{\omega^{00}(u)}-\mathbf1_{\omega^{11}(u)}\) form a basis of \(V^-\).
+Flips in coordinates 1 and 5 cancel on each difference; the remaining four flips act
+exactly as the four cube directions on \(u\).  This gives the isomorphism with \(A_4\).
 
-\section{Discussion}\label{sec:discussion}
-The results of this paper identify four complementary rigidity mechanisms for coarse-grained hypercube dynamics. Spectral rigidity shows that equitable lumpings cannot create new eigenvalues; refinement rigidity determines the unique smallest exact hidden repair of the audited fold; orientation rigidity shows that permutation-natural binary boundary data are forced to pass through the sign representation; and fixed-resolution homological rigidity shows that low-degree gauge groups are already determined by coarse multiplicity thresholds. Together these statements provide a practical hierarchy of obstructions and repair constraints for deciding whether an audited coarse model is a genuine quotient of a hypercube walk or only an effective description with hidden bookkeeping.
+For the invariant space, use Walsh characters \(\chi_S(\omega)=(-1)^{\sum_{i\in S}\omega_i}\).
+For each \(J\subseteq\{2,3,4,6\}\), the three invariant vectors
+\[
+\chi_J,\qquad \chi_{J\cup\{1,5\}},\qquad
+\chi_{J\cup\{1\}}-\chi_{J\cup\{5\}}
+\]
+have Walsh degrees \(|J|,|J|+2,|J|+1\).  Thus the multiplicity polynomial is
+\[
+(1+q)^4(1+q+q^2)=1+5q+11q^2+14q^3+11q^4+5q^5+q^6.
+\]
+Dividing the adjacency eigenvalues by six gives the quotient-walk spectrum.
+\end{proof}
 
-From the algebraic-combinatorics viewpoint, the contribution is a reusable certificate interface rather than a numerical counterexample.  Theorem \ref{thm:foldbin-complete-residual-budget-skeleton} packages hypercube lumpability failure into an integral diameter tensor on target-fiber neighbor-count lists; Theorem \ref{thm:single-exact-fold6-certificate} then supplies a fully audited Fold\(_6\) instance with both a two-row nonintertwining witness and a determinant--Sturm off-grid eigenvalue certificate.  Theorem \ref{thm:window6-minimal-equitable-refinement} goes beyond rejection by classifying the unique minimum exact repair: one neighbor-signature refinement produces the \(48\)-state affine orbit quotient, and every equitable hidden realization refines it.  The same finite fold data also control the chiral sector, the sign-torsor boundary obstruction, and the fold-gauge homology computations.  Thus the paper contributes a finite but exact algebraic-combinatorial certificate skeleton that can be reused for other Hamming-graph coarse-grainings and not merely a one-off floating-point spectral observation.
+\clearpage
+\section{Final remarks and reproducibility}\label{sec:final}
+The result is a finite, exact statement about the audited Fold$_6$ partition.  It does
+not claim that every folded hypercube or every pushforward construction has the same
+repair.  The proof is independently checkable from the fiber table: recompute the six
+flips of each of the 64 vertices, group equal signatures, and then check neighbor counts
+between the resulting cells.
 
-From the viewpoint of stochastic modeling, the window-\(6\) audit is especially instructive. Its pushforward kernel violates the discrete spectral law required by equitable lumpability, and Proposition \ref{prop:foldbin6-explicit-nonintertwining-witness} also gives a two-vertex residual certificate for the failure of the intertwining equation.  Exact repair restores \(27\) states and retains the invariant \(48\)-dimensional sector, while the complementary chiral \(Q_4\) carrier is exactly the sector that an equitable quotient may discard.  The boundary sector nevertheless remembers a highly structured parity object.  This identifies, rather than merely suggests, the geometric shadow that survives the smallest exact Markov realization and should be relevant both for probabilistic model reduction and for coding-theoretic coarse descriptions on Hamming graphs \cite{macwilliams1977theory,godsil2001algebraic}.
+The supplement contains the complete canonical streams for the Fold$_6$ fibers, the
+directed edge-count matrix, the involution and residual witnesses, the exact determinant
+certificate for the visible pushforward, and the scripts
+\texttt{supplement/verify\_window6\_streams.py} and
+\texttt{artifacts/verify\_hidden\_refinement.py}.  The first script checks the printed
+finite streams and their hashes; the second recomputes the 48 signature cells, compares
+them with the \(\sigma_{\rm geo}\)-orbits, and verifies equitability and the 32/16 orbit
+size split.  These checks validate the finite data and the stated partition identities;
+they do not replace the proofs of the interval lemma or the spectral-carrier argument.
 
-This article is separated from the companion folding directions by its proof interface.  It does not study Fibonacci folding or Zeckendorf normalization as independent arithmetic dynamics, nor does it develop folded-histogram asymptotics, gauge-anomaly theory, or radial-homotopy invariants.  Those sibling projects concern other normalization, histogram, anomaly, and homotopy mechanisms.  The present paper uses the Zeckendorf-prefix rule only to define the audited hypercube fold, and its theorem chain is instead centered on hypercube lumpability, the exact window-\(6\) residual and spectral certificates, chiral compression of a hypercube sector, and the boundary-gauge consequences that are necessary for this fixed-resolution finite certificate.
-
-Several problems remain open. First, one would like a sharp converse to the spectral obstruction: which additional constraints, beyond spectral inclusion, characterize those pushforward kernels that truly arise from equitable hypercube partitions? Second, the orientation-torsor formalism should extend to other product graphs and association schemes, where higher-sign or determinant-type obstructions may coexist with non-binary local systems. Third, Theorem \ref{thm:fold-aware-stable-descent} shows exactly what extra transition data are needed before low-degree homology or capacity statistics can be promoted to cross-resolution invariants; constructing nontrivial stable fold systems with secondary operations and Schur-multiplier relations beyond degree \(2\) remains open \cite{brown1982cohomology,nakaoka1961homology}. Finally, it would be useful to develop fully formal, computer-checked versions of the finite certificates in which spectral, parity, and capacity obstructions are certified simultaneously rather than independently.
-
-\appendix
-
-\section{Optional fixed-fiber boundary orientation calculus}\label{app:optional-boundary-orientation-calculus}
-The following formulas are consequences of the sign torsor already used in the main boundary theorem.  They are included only as fixed-fiber calculus for auxiliary boundary-cover constructions and are not inputs to Theorem \ref{thm:main-fold6-nonlumpability}.
-\input{source/app__bdry_orientation_optional_calculus}
-
-\section{Conditional last-bit statistics}\label{app:conditional-lastbit-statistics}
-
-The pushforward measure admits the following one-bit compression statements only after an additional analytic homogenization certificate is assumed.  The Fold\(_6\) audit used in the main theorem proves finite fibers, residual counts, stabilizer identities, and exact spectral data; it does not by itself prove the homogenized last-bit hypothesis below.  Accordingly this appendix is conditional and is not used in Theorem \ref{thm:main-fold6-nonlumpability}.
-\input{source/thm__window6-binfold-lastbit-lecam-kl}
-
-\section{Audited computation certificate}\label{app:audited-computation-certificate}
-\input{source/thm__audited-computation-reproducibility-certificate}
-
-%% ============================================================
 \bibliographystyle{plain}
 \bibliography{references}
-
 \end{document}
