@@ -1,0 +1,70 @@
+TASK: restructure papers/publication/2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints
+around the one theorem a referee says is worth a specialist's attention. PRE-AUTHORIZED to edit that
+directory. Do not commit.
+
+READ FIRST, IN FULL: artifacts/oracle_sprint_FF2_r1.md. Read-only evidence; do not edit any
+artifacts/oracle_*.md file. Note it uses this version's numbering: the span-r result is Theorem 4.4,
+not 3.1.
+
+THE ONE RESULT, in the referee's words, and the paper must be built around it:
+  Despite unbounded Fibonacci carry cascades, for every m >= 3 the sliding code formed from length-m
+  Zeckendorf folds is a topological conjugacy onto its image, and its causal inverse has exact memory
+  2: the current raw digit is determined by three consecutive fold labels but not by two,
+  independently of m.
+That is Theorem 5.3 with Theorem 5.5. Theorem 5.2 is its arithmetic backbone and sharp finite-block
+companion, not a competing headline; the CONTRAST between the m-scale whole-block threshold 2m-1 and
+the uniform three-label recovery of one digit is what makes the result interesting. It is
+conceptually surprising precisely because the rewrite process has arbitrarily long cascades yet the
+induced code has a uniformly local causal inverse.
+
+1. TITLE AND ABSTRACT. The current title foregrounds compatible restriction, which is not what a
+   reader will remember. Retitle around exact decoding - the referee suggests something like
+   "Finite-window Zeckendorf folding: exact decoding and the pair shift". The abstract should open
+   with the result above: for every m >= 3 the sliding code is a topological conjugacy onto its
+   image, its causal inverse has exact memory 2 independently of m, and whole-block reconstruction
+   has the sharp threshold 2m-1.
+
+2. THE SPAN-r THEOREM LEAVES THE ABSTRACT ENTIRELY. Not a caveat, not a shorter sentence - out.
+   The referee's reasons: no nondegenerate member is exhibited and the paper's own Fibonacci map is
+   expressly excluded; the proof uses only bounded delay, not confluence or termination; no
+   subsequent Fibonacci result depends on it; and a reader reaching it before the actual results
+   asks "generalizing what?".
+
+   In the BODY, keep at most a one-page lemma renamed "Bounded-delay pair criterion", with the
+   hypothesis stated DIRECTLY as: an idempotent projection onto the stable language; pointwise
+   fixation of stable words; compatibility with high-order zero padding; one-sided influence delay at
+   most r-1. Drop the phrase "rewrite span r" once the rewrite scan is gone - r is then a delay or
+   memory parameter, not rewrite support.
+
+   Give the window-3 projection explicitly as the example, which settles nonvacuity on the spot:
+   output the leading digit of the window unless the window contains 11, in which case output 0. It
+   is an idempotent projection onto the golden-mean language with delay 2. Then say Fibonacci folding
+   is NOT bounded-delay and needs the separate carry argument. The contrast is the point: bounded
+   influence gives finite memory automatically; Fibonacci lacks bounded influence, so a carry
+   invariant is needed. That belongs in a remark, not the abstract.
+
+   Do NOT put the exhaustive computer search in the paper. It identified a bad formulation and that
+   is all it was for.
+
+3. DEMOTE THE CONSEQUENCES. The four-state carry presentation and the strictly sofic discrepancy
+   factor are useful structural analysis and stay. But the covariance formulas, power spectrum,
+   rotation polygon and weighted-fibre thermodynamics are consequences of having identified the
+   finite graph, not separate advances - the manuscript already says as much. Present them that way
+   rather than as coequal results, and make sure the introduction's ordering reflects it.
+
+4. TARGET VENUE: Dynamical Systems (Taylor and Francis). The referee puts the restructured paper at
+   about 35 percent there, the present version at 15-20 percent, DCDS-A at 10-15 percent and ETDS
+   below 5 percent on significance. Update any venue-specific front matter accordingly. Do not claim
+   a general method or a class-level theorem containing the Fibonacci example; the referee is
+   explicit that the paper does not have one and that this is why it is not a top-journal paper.
+
+Do not weaken or restate any theorem beyond the renaming and rehousing in item 2. The mathematics has
+been verified and is not in question.
+
+VERIFY, and expect me to redo it: latexmk -C, delete .aux, rebuild from zero with NO command-line
+macro definitions; report exit code, page count, undefined control sequences, unresolved references,
+unresolved citations, all of which must be 0. Do NOT use linespread or other line stretching. Every
+shipped .tex under 800 lines. Note for your greps: pdftotext DROPS ff, fi and fl ligatures in this
+document even with -enc UTF-8, so a search for a word containing those pairs silently returns zero -
+search both spellings and print a control count before concluding anything.
+Report what you changed and anything still weak. Do not create planning files. Do not run git commit.
