@@ -328,3 +328,49 @@ large but shrinking monotonically and steadily, which is what one expects if the
 correct and the neglected terms are still significant at these n. That is consistent with the
 transcript's own caveat, and it means the expansion cannot be confirmed or refuted from data
 below the turnover.
+
+---
+
+# RESOLVED, 2026-08-19: the headline constant is 8, confirmed independently
+
+The question open since t456 is settled. Using the resolvent recurrence, implemented by me from
+the transcript's formulas and validated against my exact-integer table (agreement to 1e-14 for
+n = 12..23, and inside the table's own truncation bounds at 24 and 25), Z_n was computed to
+n = 1000:
+
+    n =   27    15.27604810      the pre-asymptotic maximum
+    n =   29    15.22533147      past it, descending
+    n =  100    10.58439943
+    n =  500     8.44585557
+    n = 1000     8.21863327
+
+All five reproduce the transcript's independently stated values to between 1e-12 and 1e-13.
+The sequence descends steadily toward 8.
+
+So C = 2 R_s^2 = 8 at sigma_0. The manuscript's constant is correct and the published value
+R_s + 2R_s^2 = 10 is not, which is what the paper claims. This is now confirmed by computation
+rather than argued from a mechanism.
+
+## The 14-to-17 readings were entirely pre-asymptotic
+
+Every measurement gathered at t456 and t457 sat below n = 27. The maximum there is 15.276 and
+the descent to 8 takes until roughly n = 1000. Nothing in that range bore on the limit, which
+is what verify_dushistova_mechanism.py had already said and what I failed to read.
+
+## The A_s coefficient, stated honestly
+
+n(n^s Z_n - 8) runs 268.24, 258.44, 236.74, 228.97, 222.93, 220.44, 218.63 at
+n = 50, 100, 200, 300, 500, 700, 1000. It decreases monotonically and my n = 1000 value
+reproduces the transcript's own 218.633 exactly, so the trend is consistent with the claimed
+A_s = 215.3798.
+
+It is not pinned. Subtracting the stated B_s n^(1-s) term to accelerate convergence moved the
+sequence the WRONG way, to 220.27 at n = 1000 rather than closer to 215.38. That may be a sign
+convention on my side or a further term, and I am recording it rather than presenting the
+corrected column as confirmation. The constant C = 8 does not depend on it.
+
+## What this changes
+
+brocot's headline is no longer an open item. The remaining entries for this paper are the
+reproducibility statement, the two working-directory bugs, and the venue decision -- all
+mechanical or editorial.
