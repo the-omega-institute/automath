@@ -175,3 +175,16 @@ No published correction of Dushistova's coefficient was found in an index demons
 covering the field, and the citation-graph route is unavailable. That is the strongest
 statement the reachable channels support. It does not close the question, and a referee drawn
 from this community remains the real test.
+
+## Addendum, same day: the second citation-graph route is also unavailable
+
+Semantic Scholar was recorded above as holding the Dushistova record with no citation edges.
+OpenAlex was tried as an independent citation source. It returns an empty result for the
+Dushistova query - and also for a control query naming Sanna's 2025 Discrete Analysis paper,
+which is certainly indexed there. A channel that returns nothing for a paper known to be
+present is not reporting absence; it is not answering. No inference is drawn from either
+result.
+
+So both citation-graph routes are closed. The standing conclusion is unchanged: no published
+correction was found via Crossref, whose control passed, and the question of whether one
+exists cannot be settled with the channels currently reachable.
