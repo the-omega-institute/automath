@@ -1,0 +1,52 @@
+One question about the rate of convergence of a continued-fraction power sum. Short on purpose.
+
+SETUP. For a finite word a = (a_1, ..., a_r) of positive integers let K(a) be the regular
+continuant, so K is the denominator of the continued fraction [0; a_1, ..., a_r]. Call the word
+canonical when a_r >= 2, which picks exactly one representative per rational in (0,1). For
+n >= 2 and s > 2 put
+
+    Z_n(s) = sum over canonical words with a_1 + ... + a_r = n of K(a)^(-s).
+
+Fix the critical point sigma_0 = 2.4787507857... defined by R(s) = zeta(s-1)/zeta(s) = 2.
+
+THE CLAIM I AM TESTING. A manuscript asserts Z_n(s) ~ C n^(-s) with C = 2 R_s^2, which is 8 at
+sigma_0, and states that this corrects a published value of R_s + 2 R_s^2 = 10.
+
+WHAT THE NUMERICS SAY, and why they settle nothing. The quantity n^s Z_n rises to about 15.28,
+turns over near n = 27, and by n = 29 has only begun to descend. Direct enumeration is over
+2^(n-1) compositions and dies around n = 22 to 24. I wrote a Stern-Brocot walk with the two
+moves (u,v) -> (v,u+v) and (u,v) -> (u,u+v), each costing one unit of digit sum, truncated on v
+with a rigorous error bound; it reaches n = 24 comfortably and then exhausts memory. The
+obvious tightening fails because growth is not geometric along every branch: the move
+(u,v) -> (u,u+v) leaves u fixed, so from (1,v) repeated application gives (1,v+1), (1,v+2), ...,
+which is linear.
+
+So every value I have lies before the turning point, and I cannot distinguish a sequence
+converging to 8 from one converging to something else. I am not claiming the manuscript is
+wrong. I want the rate.
+
+WHAT I THINK THE RIGHT INSTRUMENT IS. The generating function sum_n Z_n(s) z^n should be
+governed by a transfer operator of Gauss-map type carrying the digit-sum weight,
+
+    (L f)(x) = sum over a >= 1 of z^a (a + x)^(-s) f(1/(a+x)),
+
+with the n^(-s) law coming from the singularity at z = 1 produced by the large-digit tail
+sum_a z^a a^(-s), which is of type (1-z)^(s-1). If that is right, the leading constant and the
+correction exponent should both be readable from the expansion at that singularity, and the
+subleading behaviour would give the convergence rate directly rather than through finite
+differences.
+
+QUESTIONS.
+
+One. Is the constant C = 2 R_s^2 correct, and is there a clean derivation of it from the
+singularity structure rather than from a counting argument?
+
+Two. What is the rate? Specifically, is n^s Z_n(s) - C of order n^(-1), or n^(1-s), or
+logarithmic, or something else? The turnover near n = 27 suggests a competition between two
+terms of comparable size at small n, and identifying both would explain it.
+
+Three. Is the turnover itself predicted by that structure? If the correction has a sign change
+or two competing exponents, saying so would let me stop treating the numerics as anomalous.
+
+Please separate what you can derive from what you would be guessing, and say plainly if the
+constant cannot be pinned down this way.
