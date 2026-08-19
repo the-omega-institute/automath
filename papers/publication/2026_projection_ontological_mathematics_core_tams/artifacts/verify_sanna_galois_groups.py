@@ -138,3 +138,39 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# A clean route to "S_d for every p" that was tried and does NOT work.
+#
+# The classical criterion is attractive here: an irreducible polynomial of PRIME degree with
+# exactly two non-real roots has Galois group the full symmetric group, with no Dedekind data
+# and no Jordan argument. Most degrees in this family are prime (7, 11, 13), so if the number
+# of non-real roots were always two the general theorem would follow for those degrees
+# immediately, and only the composite-degree rows would need separate treatment.
+#
+# It fails. Counting roots to 60 digits gives, by index:
+#
+#   Sanna 2, 3       degree 3    3 real, 0 non-real
+#   Sanna 4, 5       degree 5    3 real, 2 non-real   <- the criterion applies here only
+#   Sanna 6, 7       degree 7    3 real, 4 non-real
+#   Sanna 8          degree 9    3 real, 6 non-real
+#   ours 9           degree 7    3 real, 4 non-real
+#   ours 10          degree 9    3 real, 6 non-real
+#   ours 11          degree 9    5 real, 4 non-real
+#   ours 12..17      degree 11 or 13   7 real, 4 or 6 non-real
+#
+# The non-real count grows with the index, so the criterion applies only to the two
+# degree-five rows and cannot be the mechanism for the family. Recorded so the route is not
+# tried again.
+#
+# What the numbers do show is a real-root count that is odd and slowly increasing: 3 for every
+# index from 2 through 10, then 5 at index 11, then 7 from index 12 through 17. Whether that
+# is a genuine pattern or an artefact of the range is not settled here.
+
+def root_structure(coeffs, dps=60):
+    from mpmath import mp, polyroots
+    mp.dps = dps
+    rs = polyroots([mp.mpf(c) for c in coeffs], maxsteps=600, extraprec=1200)
+    real = sum(1 for r in rs if abs(r.imag) < mp.mpf("1e-40"))
+    return len(rs), real, len(rs) - real
