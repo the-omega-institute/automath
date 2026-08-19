@@ -209,3 +209,38 @@ def max_kmin_over_two_powers(m):
             if k > best:
                 best, arg = k, s1 * (1 << i)
     return best, arg
+
+
+# ---------------------------------------------------------------------------
+# AN ELEMENTARY ROUTE TO THE GROWTH BOUND THAT DOES NOT WORK. Recorded so it is not retried.
+#
+# phi is badly approximable: q ||phi q|| is bounded below, with infimum 1/sqrt5 approached
+# along Fibonacci q, and measured minimum 0.38197 over q < 3*10^5. So ||phi q|| >= c/q with an
+# explicit c. It is tempting to hope that this alone forces kmin(u) to stay small, with no
+# appeal to the binary sparsity of u and hence no Baker input.
+#
+# It does not. The argument needs ||phi u|| > phi^{-(m-1)} for |u| < 2^{m+1}, whereas bad
+# approximability only guarantees ||phi u|| >= 1/(sqrt5 * 2^{m+1}):
+#
+#     m=20   guaranteed 2.1e-07   needed 1.1e-04
+#     m=40   guaranteed 2.0e-13   needed 7.1e-09
+#     m=80   guaranteed 1.8e-25   needed 3.1e-17
+#     m=160  guaranteed 1.5e-49   needed 5.9e-34
+#
+# The shortfall is the ratio (2/phi)^m and it grows without bound, so no sharpening of the
+# constant can rescue it. The reason is structural: bad approximability controls ||phi q|| in
+# terms of the SIZE of q, while what is needed is control in terms of the number of binary
+# digits of q. Two integers of the same size, one with two binary digits and one dense, get the
+# same bound from bad approximability, yet the whole phenomenon here is that the sparse one
+# behaves differently.
+#
+# So the sparsity of u is not a convenience in this argument, it is the entire content, and
+# Baker or S-unit input is genuinely required. The Bravo-Gomez-Luca line on powers of two as
+# sums of Fibonacci numbers treats exactly this shape effectively.
+
+def badly_approximable_is_insufficient(m):
+    """Returns (guaranteed, needed); guaranteed < needed for every m of interest."""
+    from mpmath import mp, mpf, sqrt
+    mp.dps = 60
+    phi = (1 + sqrt(5)) / 2
+    return 1 / (sqrt(5) * mpf(2) ** (m + 1)), phi ** (-(m - 1))
