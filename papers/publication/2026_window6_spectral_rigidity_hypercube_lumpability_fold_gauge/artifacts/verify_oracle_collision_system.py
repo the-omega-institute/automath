@@ -66,24 +66,6 @@ def fold_value(n, m):
     return sum(FIB[k] for k in zeck_digits(n) if 2 <= k <= m + 1)
 
 
-def R_over(n):
-    """Nearest integer to n/phi, exactly, via floor(x + 1/2) with x = n(sqrt5 - 1)/2."""
-    num = n * (isqrt(5 * n * n) if False else 0)  # placeholder, unused
-    # exact: round(n/phi) = floor((n*(sqrt5-1) + 1)/2 ... ) done in integer arithmetic below
-    # n/phi = n(sqrt5-1)/2; compare 2*n*(sqrt5-1)/2 = n(sqrt5-1) against odd integers
-    # round(x) = floor(x) + (1 if frac >= 1/2)
-    if n >= 0:
-        fl = (isqrt(5 * n * n) - n) // 2
-    else:
-        fl = -((isqrt(5 * n * n) + (-n)) // 2) - 1 if n else 0
-        fl = -R_floor_pos(-n) - 1
-    return fl + (1 if 2 * (n - fl * PHI) >= PHI else 0)
-
-
-def R_floor_pos(n):
-    return (isqrt(5 * n * n) - n) // 2
-
-
 def R(n):
     """Nearest integer to n/phi."""
     return int(round(n / PHI))
@@ -206,3 +188,56 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# WHY THE SECTION-7 ROUTE IS CIRCULAR, recorded after the follow-up was already sent.
+#
+# The existential statement -- every collision admits a matching with exactly two u_i equal
+# to -D and the rest zero -- is verified above for all 227 collision pairs at m = 6..10. The
+# good matching is always the same one: the transposition of the two bit positions of D,
+# identity elsewhere. That is also verified above, 227 out of 227, and it is a valid matching
+# every time.
+#
+# But the implication runs the wrong way. Suppose D = 2^{i0} + 2^{j0} with a XOR b = D, i.e.
+# the two-power carry-free form. Take pi to be the transposition of i0 and j0. Then for every
+# k outside {i0, j0} we have a_k = b_k, hence q_k = p_k and u_k = 0. For k = i0, a_{i0} = 0
+# and b_{j0} = 1, so p_{i0} = +2^{i0} and q_{j0} = -2^{j0}, giving
+#
+#     u_{i0} = q_{j0} - p_{i0} = -(2^{i0} + 2^{j0}) = -D,
+#
+# and symmetrically u_{j0} = -D. That is pure algebra on binary digits. No Zeckendorf
+# structure, no fold, no collision hypothesis enters it.
+#
+# So the two-coordinate shape is a CONSEQUENCE of D already having the two-ones carry-free
+# form, not evidence for it. Defining i0 and j0 at all requires D to have exactly two bits.
+# Proving the existential statement therefore cannot establish that D is a two-ones Fibonacci
+# number; it assumes it. The section-7 system is not a route to the lemma.
+#
+# What is genuinely non-trivial in the observed data is the other half: that the transposition
+# is a VALID matching, i.e. that Fold_m(a XOR 2^k) = Fold_m(b XOR 2^k) for every k outside
+# {i0, j0}. That is a real statement about the fold and it is not implied by the algebra above.
+# It is, however, a consequence of the collision rather than a step towards characterising D.
+#
+# The non-circular route is the one in sections 4 and 5 of the transcript: the residual sets
+# C_m(p), the Diophantine consequence that a residual ambiguity forces a signed two-power
+# integer to sit within 4 phi^{-(m+1)} of a convergent denominator of phi, and the Subspace
+# Theorem. That argument derives the two-power form rather than assuming it. Its only defect
+# is that the cutoff is ineffective.
+#
+# Conclusion for effort allocation: stop pushing on section 7 and put the remaining weight on
+# making the section-5 bound effective, which is the third question in brief_TWOSTAR_r2.txt
+# and was filed there as lowest priority. That ordering was wrong and is corrected here.
+
+def transposition_matching_is_trivial_demo(m=8, a=66):
+    """The algebra above, exhibited on the m=8 witness, with no fold involved."""
+    i0, j0 = 4, 7                      # 144 = 2^4 + 2^7
+    D = (1 << i0) | (1 << j0)
+    b = a ^ D
+    assert b - a == D, "carry-free by construction"
+    pi = {k: k for k in range(m)}
+    pi[i0], pi[j0] = j0, i0
+    p = [(1 - 2 * ((a >> k) & 1)) * 2 ** k for k in range(m)]
+    q = [(1 - 2 * ((b >> k) & 1)) * 2 ** k for k in range(m)]
+    u = [q[pi[k]] - p[k] for k in range(m)]
+    return D, u, [v for v in u if v != 0] == [-D, -D]
