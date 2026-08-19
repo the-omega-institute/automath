@@ -8701,3 +8701,34 @@ tail-constant 到 d=25、condensed split 到 d=25。把它们描述成"集中在
 而这一点论文自己的 artifacts 早就写明了 —— 且它主张的错误机制是已核实的。
 
 提交 `31e0d38c3`。
+
+## tick 461 — 把"读内容而不是读状态码"补做完：brocot 是孤例
+
+codex 仍 503。`3d100b2d` 仍 `waiting_response`。内存 1.86 GB，无孤儿。
+
+### 做法
+
+t460 的教训是：我按 exit 0 记通过、没读 `verify_dushistova_mechanism.py` 的 docstring，
+而那段文字正好回答了我随后花三个 tick 追的问题。本 tick 对其余四篇补做两轮扫描：
+
+1. **解析每个脚本的 docstring**，检索限制性措辞（does not / cannot / withdrawn / unresolved /
+   resists / not establish / disagree 等）；
+2. **实际运行并检索输出**中的同类措辞与 FAIL/MISMATCH。
+
+### 结果：没有第二个 brocot
+
+docstring 侧的命中全部是我自己写的脚本（`verify_minimal_polynomial_premise.py` 里关于 1e-6
+容差用错的自注、`verify_sanna_galois_groups.py` 里关于 t425 判据用错的自注、
+`verify_sanna_table_continuation.py` 里关于 t421 猜错的自注），外加一条是在陈述论文自己的
+否定性主张（scan_projection 的相位限定不可去）。**这些我本就知道。**
+
+输出侧的命中全部是通过语句被我的检索词误捕（"no failures"、"0 mismatches"、"mismatches 0"），
+另有两条是 sympy 的弃用警告路径。**没有任何一篇藏着需要阅读的保留意见。**
+
+### 结论
+
+**brocot 是孤例。** 那一篇的 artifacts 里确实躺着一段改变结论的文字，其余四篇没有。
+这条审计到此收口 —— 而且这次是按内容收的，不是按状态码。
+
+顺带确认：`projection` 的 `verify_partition_difference.py` 在 m=1..24、317808 个 n 上零不匹配；
+`cubical_stokes` 的 `verify_patching_hypotheses.py` 60 例零不匹配。两者都实际跑过并读了输出。
