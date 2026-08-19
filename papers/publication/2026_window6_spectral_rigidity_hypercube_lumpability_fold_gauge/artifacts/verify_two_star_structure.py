@@ -39,6 +39,9 @@ landing in the same signature. Since only 34 and 144 qualify, that is a finite c
 rather than a statement about all m, which is the shape a proof wants. Proving the displayed
 implication is now the whole task; this script verifies it, it does not prove it.
 
+Verified for m = 6 through 19: all three checks pass, with Phi_m injective from m = 11 on
+and no colliding pair anywhere failing the carry-free two-ones Fibonacci description.
+
 Memory note: signatures are packed into bytes and sorted rather than held in a dict of
 tuples, so the larger m stay within a few hundred MB.
 """
