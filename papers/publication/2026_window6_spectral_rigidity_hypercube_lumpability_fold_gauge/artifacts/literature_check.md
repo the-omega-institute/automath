@@ -133,3 +133,48 @@ what the manuscript asserts. The paper claims the refinement sweep through m = 1
 candidate stream through m = 22; the two-star lemma to m = 5000 and the effective Diophantine
 route are mine and are not in the manuscript. If any of that is ever promoted into the paper,
 the corresponding scripts must be named here at the same time.
+
+---
+
+# Oracle r4 on the growth bound, 2026-08-19: answered, but the ineffectivity returns
+
+Transcript at artifacts/oracle_sprint_TWOSTAR_r4.md, task 52df38ce. The question was whether
+M(m), the maximum of kmin(|u|) over signed sums of at most two powers of two with exponents
+below m, grows slower than linearly.
+
+Answer: log_phi(m) - 2 <= M(m) = o(m). So M(m) is UNBOUNDED but sublinear, hence eventually
+below m/2 and a fortiori below the m-3 the application needs.
+
+Checked against my data. The lower bound holds at every measured m and is far from tight: at
+m = 160 it gives 8.55 against a measured 21. More importantly the lower bound grows like
+log m, which confirms M(m) is unbounded. At t452 I explicitly declined to claim boundedness
+despite the plateau at 21 from m = 80 to 160; that hedge was correct, and is now backed by a
+proof rather than by caution.
+
+## The catch, and it is the same catch as before
+
+The proof runs through Ridout for bounded gaps and Schlickewei's p-adic Subspace Theorem for
+gaps tending to infinity. The transcript says so plainly: the upper bound "is currently
+non-effective by this method: it does not give a usable value of sufficiently large".
+
+So the ineffectivity that t448-t451 removed from the Diophantine step reappears here. The net
+position for the two-star lemma is unchanged in kind: true for all sufficiently large m, with
+an unknown threshold, plus exhaustive verification to m = 5000. What HAS changed is that the
+ineffective step is now a single clean statement about binary-sparse integers rather than
+buried in the residual machinery, and the relevant literature is identified.
+
+## Citations, checked because a fabricated one survived several rounds in this project
+
+    Kulkarni, Mavraki and Nguyen, "Algebraic approximations to linear combinations of powers:
+    An extension of results by Mahler and Corvaja-Zannier", Trans. Amer. Math. Soc. 371 (2019)
+    3787-3804, doi 10.1090/tran/7316
+
+VERIFIED against Crossref, and the transcript's description of it is accurate: it is indeed
+formulated for a common exponent n rather than the two independent exponents i, j here, which
+is why it is adjacent rather than sufficient.
+
+The transcript also cites a 2025 preprint of Nair, Kumar and Rout on approximation to linear
+combinations of S-units as the closest match. It flags this itself as still listed as submitted
+rather than published. NOT verified here and should not be cited as established until it is.
+
+Ridout and Schlickewei are standard and need no checking.
