@@ -188,3 +188,51 @@ result.
 So both citation-graph routes are closed. The standing conclusion is unchanged: no published
 correction was found via Crossref, whose control passed, and the question of whether one
 exists cannot be settled with the channels currently reachable.
+
+---
+
+# Numerical status of the coefficient claim, 2026-08-19
+
+Three scripts in this directory bear on the paper's sharpest claim, that the leading constant
+is b_C = 2(zeta(s-1)/zeta(s))^2 = 8 at the critical point. None of them supports it at
+reachable sizes, and two of them predate my auditing.
+
+    verify_dushistova_coefficient.py   n^s Z_n rises to 15.05 at n=22, increments shrinking
+                                       (0.44 ... 0.13); Richardson descends 19.91 -> 17.81;
+                                       both head toward roughly 15.5-16
+    verify_critical_tail_constant.py   "measured level is roughly 13.9 and still rising ->
+                                       ratio to 8 is 1.733"; A+B/d fit gives 16.89,
+                                       A+B/sqrt(d) fit gives 20.38
+    verify_condensed_split.py          d=10,15,20,25: condensed part 5.06, 6.37, 8.17, 8.66 --
+                                       it has PASSED 8 and is still rising; the "rest", which
+                                       the referee's account needs to vanish, sits at
+                                       3.35, 5.22, 5.05, 5.20 and is not decaying
+
+The last one matters most. verify_condensed_split.py was written to test the referee's
+explanation of the discrepancy: that the condensed part converges to 8 while the remainder is
+merely slow to vanish. Its own output refutes that explanation on both halves.
+
+## What is and is not established
+
+Established: three independent computations fail to reproduce 8, the measured levels cluster
+around 14 to 17, and the residual term required to vanish does not.
+
+NOT established: that 8 is wrong. The two extrapolation fits disagree with each other, 16.89
+against 20.38, which means the convergence rate is not identified; with an unidentified rate no
+limit can be read off. A factor of two here was raised and retracted at t398 precisely because
+an increasing sequence was extrapolated before its maximum, and that retraction stands.
+
+## A correction to my own audit
+
+At t456 I ran all 33 artifact scripts and recorded 30 as OK on the basis of exit codes. Two of
+those thirty - verify_critical_tail_constant.py and verify_condensed_split.py - exit 0 while
+printing evidence against the manuscript. Exit code measures whether a script crashed, not
+whether it agrees with the paper. Any future sweep must read the output, not the status.
+
+## Action, and it is not a writing task
+
+This is the paper's headline and it must be settled before submission. The route is to push d
+and n far enough to identify the convergence rate, or to locate a normalisation discrepancy
+between the scripts and the manuscript's definition of Z_n. The definition was checked today
+against sec_introduction.tex - Q_n is the set of canonical fractions of digit sum n, and the
+scripts sum exactly those, last digit >= 2 - so no discrepancy was found there.
