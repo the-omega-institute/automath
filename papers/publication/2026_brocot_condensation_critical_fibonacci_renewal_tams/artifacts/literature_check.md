@@ -374,3 +374,32 @@ corrected column as confirmation. The constant C = 8 does not depend on it.
 brocot's headline is no longer an open item. The remaining entries for this paper are the
 reproducibility statement, the two working-directory bugs, and the venue decision -- all
 mechanical or editorial.
+
+## A_s closed too, 2026-08-19: the whole expansion is now independently confirmed
+
+t473 left A_s unpinned, noting that subtracting the B_s n^(1-s) term moved the residual the
+wrong way and speculating about a sign convention on my side. It was not a sign convention. The
+residual
+
+    R(n) = n (n^s Z_n - 8) - B_s n^(2-s)
+
+should tend to A_s. Computing it to n = 1200:
+
+    n      100      200      300      500      700      900     1000     1200
+    R(n)  263.36   240.26   231.87   225.20   222.37   220.81   220.27   219.45
+    n(R-A) 4798     4977     4948     4912     4896     4888     4886     4883
+
+The last row is essentially constant, so the next term is C/n with C about 4890. That single
+term accounts exactly for the discrepancy that looked anomalous at t473: at n = 1000 it
+contributes 4.89, which is the 4.9 gap observed there. Nothing was wrong.
+
+Richardson extrapolation of R at rate 1/n from n = 1000 and 1200 gives A_s = 215.3647 against
+the stated 215.3798, agreeing to four significant figures.
+
+So all three constants of the expansion
+
+    n^s Z_n(sigma_0) = 8 + 215.3798/n - 44.5817 n^(-1.47875) + O(n^(-2))
+
+are now independently confirmed: the leading 8 by direct computation to n = 1000, B_s exactly
+from its closed form, and A_s by extrapolation. The manuscript's coefficient claim is supported
+in full, and no part of this rests on the Oracle's word.
