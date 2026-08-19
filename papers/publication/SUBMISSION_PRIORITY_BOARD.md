@@ -7779,3 +7779,43 @@ Bunder、Filipponi-Hart、Anderson 2014、Edson 学位论文、Shallit 2026）�
 两篇都是算法与实践取向，均未给出延迟界，不构成优先权威胁。但一篇主题就是 Zeckendorf
 算术的稿子，若不引那篇标题就叫 *Zeckendorf Integer Arithmetic* 的文章，在该刊审稿人眼里
 就是没读文献。已并入昨天那份 artifact 的行动清单（提交 `b3860669a`），等 codex 执行。
+
+## tick 435 — 复核 `brocot` 的"更正"主张本身；一条查不出结论的通道被如实记为通道的局限
+
+codex 仍 503。Oracle `22e20d2a`、`d33b4b7a` 均 `waiting_response`。内存 1.46 GB，无孤儿。
+
+### 问的是此前没人问过的那一半
+
+本文最锋利的主张是"某个已发表的常数是错的"：Dushistova 引理 7 给 `R_s + 2R_s^2`，本文给
+`2R_s^2`。算术早已核过（`verify_dushistova_coefficient.py`），机制也核过
+（`verify_dushistova_mechanism.py`）。但**"这条更正是不是已经有人发表过"从没问过** ——
+若已发表，本文招牌当场归零。
+
+### 引用是真的
+
+按 DOI 而非标题去 Crossref 核对：Anna A. Dushistova，Sbornik: Mathematics 198(5) 661-690,
+2007，DOI 10.1070/SM2007v198n05ABEH003854，与 `references.bib` 逐字段一致。这一步有必要 ——
+本项目此前有过伪造引用挺过数轮审稿。
+
+本文还把错误定位到具体位置而非泛指：引理 7、pp. 668-669、丢掉了 `u > 1` 的限制、某项被计了
+两次。这是可证伪的诊断形式，正确。
+
+### 未找到已发表的更正，且这次搜索带正对照
+
+按领域而非短语查 Crossref，命中里**出现了 Dushistova 2007 本身**，同时有
+Kesseböhmer-Stratmann 的 Stern-Brocot 多重分形、Reutenauer 的 Stern-Brocot 章节、若干
+continuant 论文。源论文出现在它自己的领域查询里，就是那个正对照：索引确实覆盖这片文献。
+结果中没有任何更正、勘误或对该常数的重述。
+
+### 有一条通道查不出结论，如实记为通道的局限
+
+真正对口的工具是引文图：读遍引用 Dushistova 2007 的文献找更正。Semantic Scholar 对该 DOI
+返回"no citations found" —— **这不构成证据**。对照显示它确实收录了该记录（paper id
+0241224f…，标题、期刊、页码都对），却对一篇十八年前的 Sbornik 论文报 `citationCount: 0`，
+并把领域误标为 Physics。该条目的引文边根本不存在，所以即便存在更正它也看不见。
+记为检查的局限，不记为结果。
+
+### 结论按能支持的强度写
+
+在可证覆盖该领域的索引里未发现已发表的更正，引文图路线不可用。这是现有通道能支持的最强表述，
+不等于问题关闭 —— 该领域的审稿人仍是真正的检验。提交 `e98eadc84`。
