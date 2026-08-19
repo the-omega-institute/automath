@@ -7592,3 +7592,48 @@ m = 10 时 1024 中 5 个），后续 refinement 轮次会把它拆掉 —— �
 MCP server（每个 1-14 MB，合计不到 70 MB），node 是 nyxid worker 与 Cursor helper，无孤儿、
 无失控。压力来自 Cursor、Chrome、Lark、WSL 和我自己（897 MB，单进程最大）。codex 全窗口 503，
 我这边本就没有并发 agent 可减，故不动。
+
+## tick 430 — 读了 Sanna 原文：我们的 Pi_q 就是他 Table 1 的后续行
+
+codex 仍 503。在飞 Oracle：`22e20d2a`（two-star 引理，`waiting_response`）、
+`ae5e2a32`（Galois 新颖性，首发 `51d7b4a6` 报 extraction_failure，按协议原样重发）。
+
+### 起因
+
+Sanna 吃掉 `projection` 的谱结论后，该文仅存的主定理是 q = 9..17 的 Galois 一节。数学我
+在 t425 已全部核实，但**从没查过它是不是已知**。这正是 t419 让我们吃过亏的那个缺口。
+
+### 直接读原文，不靠摘要
+
+arXiv:2309.12724v2（Discrete Analysis 2025:2, doi 10.19086/da.137601）。摘要只提
+generalized spectral radius，正文不是：**Table 1 已经印出 p = 1..8 的 lambda_p 连同它们
+在 Q 上的极小多项式**，且正文明说 lambda_p 是"可有效计算的首一整系数多项式的最大实根，
+因而是代数整数"，走的是 A_p 转移矩阵的 Perron–Frobenius。generalized spectral radius 只
+用在第二条定理（p → 无穷的极限）。
+
+所以我 t421 的猜测（Sanna 只拿到 GSR、代数性留给我们）确实是错的，t422 的更正成立。
+
+### 我们的多项式是他表格的续行
+
+把他印出的 8 个多项式重算最大实根，与他印出的数值逐项吻合（控制项）。再接上我们的 q = 9..17：
+
+他的表止于 lambda_8 = 9.39867，我们 q = 9 给 11.7784；归一化后 lambda^(1/index) 从他的
+1.3232 单调降到我们的 1.2872，奔向 sqrt(phi) = 1.27202 —— 正是他第二条定理要求的。
+两族每一个多项式都以 `X^d - 2X^(d-1)` 开头。lambda_9/lambda_8 = 1.2532，与邻比一致。
+一条序列，他的行在前，我们的在后。
+
+### 对论文的后果（必须照办，否则就是第二次 Sanna 事件）
+
+1. 这些极小多项式**不能**当作发现来写 —— 它们是用他那篇自己提供的方法对一张已发表表格的
+   延长。必须显式引 Table 1，并把贡献表述为"延长至 p = 9..17"。
+2. 他**没有**做这些数的算术：没有 Galois 群、没有判别式、没有分裂行为。Galois 一节仍是真正
+   新的内容，这一点未被削弱。
+
+脚本 `artifacts/verify_sanna_table_continuation.py`，提交 `ca78a6ae5`。
+
+（脚本首跑 p=1 报 MISMATCH，是我的比较判据用了字符串前缀、而 nstr 把精确根 2 印成 "2.0"
+所致，非转录错误；已改成数值比较。）
+
+### 内存
+
+1.56 GB 可用，无孤儿。
