@@ -8761,3 +8761,36 @@ cover letter 抬头写 "Editors of the Transactions of the American Mathematical
 
 这让 t445 那条更硬：一般性内容存在于正文**和** cover letter，唯独不在编辑最先读的
 标题与摘要里。改写清单无需扩大，但优先级应当再提 —— 全篇只剩这两处没跟上。
+
+## tick 463 — 为 `zeck_arith` 备好投稿简报（不代写正文）
+
+codex 仍 503。`3d100b2d` 仍 `waiting_response`。内存 1.71 GB，无孤儿。
+
+### 目标期刊其实是有记录的
+
+`scope_contract.md` 写着 "a submission to **Integers: Electronic Journal of Combinatorial
+Number Theory**"。所以 t462 那处空缺不是"没定去哪"，而是**定了却没有任何投稿材料**。
+
+### 简报内容（全部取自已确立的结论，不新造）
+
+- **信要以延迟定理领起**：t418 的判断是审稿人会把 `thm:mul-delay-linear-lower-bound`
+  当作这篇论文本身，把环结构当注记与动机。摘要里已经写了该定理，不需重写；要改的是主次。
+  该定理我在 t427 独立核过（见证三元组可容许、流仅在位置 1 相异、乘积精确无约化、
+  输出在某 k >= n 处相异，n = 3..24）。
+- **一处选题张力，记录而不裁定**：延迟那一半是自动机/在线算术结果，而 Integers 是组合数论；
+  它的天然归宿是理论信息学期刊 —— 而本项目**已有一篇在那里**（ITA-2026-0032，Berstel 加法器，
+  正在 RAIRO ITA 审稿）。这既支持投 Integers（避免同一审稿池里两篇重叠稿），
+  也使**披露成为无论投哪都必须做的事**。
+- **必须披露**：姊妹稿 ITA-2026-0032。本篇第 7 节构造 Fibonacci 计数的在线加法转换器，
+  却**零次**提到 Berstel。
+- **三条已核实缺失的引用**：Labbe-Lepsova (RAIRO ITA 57, 2023)、Fenwick《Zeckendorf Integer
+  Arithmetic》(Fib. Quart. 41, 2003)、Dimitrov-Donevsky (Fib. Quart. 33, 1995)。
+  都不构成优先权威胁；Fenwick 那条最扎眼 —— 一篇讲 Zeckendorf 算术的稿子不引同名文章，
+  而 Integers 的审稿池正来自那一群人。
+- **新颖性段落的措辞上限**：t434 那次带正对照的检索（十二条命中全在 Fibonacci 计数系统，
+  十条出自 Fibonacci Quarterly）支持的最强表述就是"在可证覆盖该领域的索引中未发现在先工作"，
+  信里不能写得更满。
+- **可复现约束**：该篇只有一个脚本且跑得通；写声明时必须点名它，且**点名前先跑**。
+
+存于 `artifacts/submission_brief_2026-08-19.md`，提交 `2ade23714`。
+**我没有代写 cover letter** —— 那是撰写，属 codex 的活。
