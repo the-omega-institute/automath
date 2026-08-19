@@ -8732,3 +8732,32 @@ docstring 侧的命中全部是我自己写的脚本（`verify_minimal_polynomia
 
 顺带确认：`projection` 的 `verify_partition_difference.py` 在 m=1..24、317808 个 n 上零不匹配；
 `cubical_stokes` 的 `verify_patching_hypotheses.py` 60 例零不匹配。两者都实际跑过并读了输出。
+
+## tick 462 — 查投稿材料的一致性：一处真空缺、一处待决、一处反而印证了 t445
+
+codex 仍 503。`3d100b2d` 由 worker 持有（心跳 31 秒），不动。内存 1.82 GB，无孤儿。
+
+### 一、`zeck_arith` **完全没有投稿材料**
+
+目录里有 `main.tex`、`references.bib`、`theorem_inventory`、`scope_contract` 等，
+但 **cover letter、submission checklist、submission metadata 一个都没有**（全目录 find 确认）。
+其余五篇各有其一到三样。这是一处实打实的空缺，不是口径问题。
+
+### 二、`brocot` 的目标期刊：不是缺陷，是一个待决的决定
+
+cover letter 抬头写 "Editors of the Transactions of the American Mathematical Society"，
+而 `submission_metadata.md` 记的正是 **Primary target: TAMS（60%），fallback JNT（86%）** ——
+**两者一致**。
+
+但我早先的待办清单里有一条"把 brocot 的抬头从 TAMS 改成 AIHP"。那条来自某轮 Oracle 建议，
+与当前 metadata 冲突。**这不是我能裁定的缺陷，是一个悬而未决的选题决定** ——
+要么 metadata 过时，要么那条建议没被采纳。记下来交给决策者，不擅自改。
+（这也是为什么先查再动是对的：照那条旧笔记直接改抬头，就会把一份自洽的材料改坏。）
+
+### 三、`window6` 的 cover letter 反而印证了 t445
+
+它对"6-cube / 六维 / 64"只有 1 处命中，对"family / classif / sporadic / general" 有 **3 处**。
+**cover letter 已经按一般分类改写过了，标题与摘要没有。**
+
+这让 t445 那条更硬：一般性内容存在于正文**和** cover letter，唯独不在编辑最先读的
+标题与摘要里。改写清单无需扩大，但优先级应当再提 —— 全篇只剩这两处没跟上。
