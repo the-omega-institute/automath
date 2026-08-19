@@ -160,3 +160,52 @@ def survivors_with_slack(m, slack):
 
 def last_nonempty(slack, top=160):
     return max((m for m in range(6, top + 1) if survivors_with_slack(m, slack)), default=None)
+
+
+# ---------------------------------------------------------------------------
+# WHY THE EMPTINESS IS NOT A COINCIDENCE AT m = 17.
+#
+# Measuring the margin rather than extending the range is more informative. For each m, take
+# the maximum of kmin(|u|) over every signed sum of at most two powers of two with exponents
+# below m, and compare it with the threshold m-3:
+#
+#     m      max kmin   threshold m-3   margin   witness u
+#     10-14     12            7..11      -5..-1  144 = F_12
+#     15,16     13           12,13       -1, 0   15360
+#     17-20     13           14..17       1..4   15360
+#     30-50     14           27..47      13..33  2096896 = 2^21 - 2^8
+#     60        16           57          41      18014432869220352
+#     80-160    21           77..157     56..136 18889465931478547300352
+#
+# The maximum does not track m. It creeps upward at sporadic scales - 12, 13, 14, 16, 21 - while
+# the threshold grows linearly, so the margin widens without bound over the tested range. The
+# emptiness from m = 17 on is therefore not a numerical accident at that particular m; it is the
+# point where a linearly growing threshold overtakes a quantity that grows far more slowly.
+#
+# The clean statement behind it is about binary-sparse integers on their own:
+#
+#     an integer of the form +-2^i +- 2^j always has a Zeckendorf digit at low index;
+#     its kmin cannot be pushed up in step with the size of the number.
+#
+# That is the same phenomenon Bugeaud-Cipu-Mignotte quantify from the other side, and it is
+# what a proof should target. I do NOT claim the maximum is bounded: it demonstrably grows,
+# just slowly, and nothing here shows it stays below m-3 forever. What the measurement does
+# establish is that the gap is not marginal - at m = 160 the threshold is 157 and the maximum
+# is 21 - so a proof needs only a very weak growth bound, not a sharp one.
+
+def max_kmin_over_two_powers(m):
+    best, arg = 0, None
+    for i in range(m):
+        for j in range(i):
+            for s1 in (1, -1):
+                for s2 in (1, -1):
+                    u = s1 * (1 << i) + s2 * (1 << j)
+                    if u:
+                        k = kmin(abs(u))
+                        if k > best:
+                            best, arg = k, u
+        for s1 in (1, -1):
+            k = kmin(abs(s1 * (1 << i)))
+            if k > best:
+                best, arg = k, s1 * (1 << i)
+    return best, arg
