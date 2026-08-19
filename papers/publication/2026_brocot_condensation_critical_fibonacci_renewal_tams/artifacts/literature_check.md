@@ -236,3 +236,44 @@ and n far enough to identify the convergence rate, or to locate a normalisation 
 between the scripts and the manuscript's definition of Z_n. The definition was checked today
 against sec_introduction.tex - Q_n is the set of canonical fractions of digit sum n, and the
 scripts sum exactly those, last digit >= 2 - so no discrepancy was found there.
+
+## Correction to the two entries above, same day
+
+The section "Numerical status of the coefficient claim" and its predecessor overstated the
+problem, and the correction belongs next to them rather than in a commit message.
+
+verify_dushistova_mechanism.py, which sits in this directory and which I ran and logged as
+passing without reading, states in its own docstring:
+
+    The limit itself resists brute force: n^s Z_n rises to about 15.28, turns over near
+    n = 27, and at n = 29 has only begun to descend, so finite data cannot separate 2R^2
+    from anything else. That was established, and an earlier extrapolation of mine through
+    the turning point was withdrawn.
+
+So the sequence is known to PEAK near n = 27 and descend. Every measurement I assembled - my
+own walk to n = 24, the tail-constant script to d = 25, the condensed split to d = 25 - lies
+before that turning point. Reporting that they "cluster around 14 to 17 and are still rising"
+described the pre-peak regime and carried no information about the limit. The observation that
+the condensed part "has passed 8 and is still rising" is the same error: it is rising because
+nothing has turned over yet.
+
+The mechanism is separately checked and it holds. The paper attributes Dushistova's extra R_s
+to losing the restriction u > 1, which double-counts the empty left context.
+verify_dushistova_mechanism.py confirms the arithmetic is exactly self-consistent: endpoints
+supply 2R under the corrected constant against 3R under the printed one, a difference of
+R_s = 2.0, matching 10 - 8 precisely.
+
+What survives from those entries:
+
+  - verify_dushistova_coefficient.py really was emitting "the data favour: Dushistova" with
+    exit 1. That is a live hazard whatever the mathematics, and replacing it with an explicit
+    NOT DISCRIMINATING report was right. The sibling docstring now independently justifies
+    that wording.
+  - The exit-code point stands: I logged 30 of 33 scripts OK without reading their output, and
+    two of them print material that needs reading. This episode is a second instance of the
+    same failure - I ran verify_dushistova_mechanism.py, saw exit 0, and did not read the
+    docstring that answered the question I then spent three ticks on.
+
+What does not survive: the framing that brocot's headline is numerically unsupported. It is
+unsettled at reachable n, which the paper's own artifacts already said, and the error mechanism
+it claims is verified.
