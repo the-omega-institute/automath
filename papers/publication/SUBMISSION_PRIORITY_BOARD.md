@@ -7112,3 +7112,56 @@ Oracle 正常（`d29e8c8d` 仍在跑）；codex 503。两份已归档。
 
 内存 1.12 GB。
 
+
+---
+
+## tick 419 — 重切两篇的投向已定；但同一份答复里的先例警告，查实后**比警告更严重**
+
+Oracle 正常；codex 503。全文已归档到三篇 artifacts。
+
+### 投向与赔率
+
+| 论文 | 首选 | 备选 | 接受率 | 编辑侧主要风险 |
+|---|---|---|---|---|
+| I（谱/冻结/LDP） | **J. Statistical Physics** | DCDS | **38%** | 看起来像把热力学词汇套在一个 Fibonacci 枚举问题上 |
+| II（有限状态矩递推与算术） | **Advances in Applied Math** | JNT | **32%** | 无损性一旦给定，固定 q 的乘积构造可能被判为标准；Galois 节像附加 |
+
+论文 I 的最高价值改动：**抽出一条抽象的更新–冻结定理**，让 Fibonacci 折叠成为其完整验证
+（压力转变 + 线性临界配分和 + LDP 的仿射共存区间 + 临界幂律计数，打成一个包），
+可把 38% 抬到约 **49%**；并要求**以冻结/LDP 定理开篇**，精确极值只作诊断跟在后面。
+
+论文 II 的最高价值改动：把"双变量无有理级数"的定性对照换成**定量的状态复杂度定理**
+（如最小 Hankel 秩 `r_q → ∞`，最好带 `r_q ≥ cq` 之类的下界）。
+
+### 同一份答复里的一句警告，我查实了，而且更严重
+
+> "Sanna's 2025 Fibonacci-partition moment paper already uses automata and generalized
+> spectral-radius methods for all fixed powers."
+
+**属实。** 原文（arXiv 2309.12724，Discrete Analysis 2025(2), 1–13）摘要写着：
+
+> for all positive integers p, there exists λ_p > 1 such that S_F^(p)(N) ≍_p N^{log λ_p/log φ} …
+> we show that **lim_{p→∞} λ_p^{1/p} = φ^{1/2}** …
+> Our proofs employ **automata theory and a result on the generalized spectral radius**.
+
+即 Sanna 已有：**对所有固定 p 的自动机方法**、增长常数 `λ_p`、以及 **λ_p^{1/p} → √φ**。
+最后一条正是 `projection` 当作**零温结论**在讲的那个极限。
+
+**而三篇都没承认这一层。** `projection` 提 Sanna 15 次，
+**没有一次**与 automata、spectral radius、Blondel、Nesterov、√φ 或零温同句；
+另两篇各只提 2 次。`single_primitive` 的引言把 Sanna 描述为
+"proves an asymptotic order-of-growth result for all p" —— 字面不假，
+却略去了**他用的正是论文 II 声称为贡献的工具**、以及**他已经得到那个 √φ 极限**。
+
+### 判断
+
+对象**确实不同**：Sanna 求的是 `n < N` 上 `r_F(n)^p` 的累积和，
+不是分辨率 m 处的纤维幂和（论文自己也写了"do not form the residue fibres of Fold_m"）。
+所以这不是重复，**但关系必须写出来**，且现在的引用把 Sanna 引低了。
+
+这与 t373 的 Chow–Jones 是同一类：**引了真论文，却把它含有的内容说小了。**
+按新投向，论文 II 首选 AAM，而 AAM 的审稿人恰恰最可能知道 Sanna 这篇 ——
+这一条不修，会被当场指出。
+
+内存 1.12 GB。
+
