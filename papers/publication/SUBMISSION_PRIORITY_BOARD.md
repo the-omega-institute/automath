@@ -8007,3 +8007,28 @@ m in {6,8,9} 的零星分类未被任何命中预示。
 
 两条都不是优先权威胁，与 zeck_arith 漏引 Fenwick 属同一类：小领域，审稿人池会发现自己人不在
 参考文献里。行动清单已写入 `artifacts/literature_check.md`（提交 `453d8fec1`），等 codex。
+
+## tick 441 — Galois 任务判定为孤儿并**主动放弃**（不是重发）；第二条引文图通道也死了
+
+codex 仍 503。内存 1.95 GB，无孤儿进程。
+
+### Oracle 池只剩一个 worker
+
+worker 表现在只有 `mstudio1_mac_chatgpt_pro_2_tab_2` 一个，持有 `2baffd6b`（two-star 续问）。
+`d33b4b7a`（Galois）状态是 dispatched 却无任何 worker 持有 —— 与 t432 的 `ae5e2a32` 同样是孤儿。
+这与 t433 的池子退化诊断一致。
+
+**已取消，且不重发。** 理由写明：池里只剩一个 worker 且正在处理更有价值的 two-star 问题，
+重发只会与它争抢；而 Galois 那三问里最关键的一问我在 t431 已用证据自答（他自己的 8 行也全是
+S_d，故本文九个值是延续通有模式）。剩下两问（全 p 证明的难度、有无别的真定理）价值不足以
+挤掉 window5 的收尾。这是取舍，不是遗漏。
+
+### brocot：第二条引文图通道同样不可用
+
+t435 记录 Semantic Scholar 收录了 Dushistova 记录但引文边为空。本 tick 换 OpenAlex 作为独立
+引文源：对 Dushistova 查询返回空，**对照查询（点名 Sanna 2025 Discrete Analysis，必然被收录）
+同样返回空**。一个对已知存在的论文也返回空的通道不是在报告"不存在"，而是根本没在回答。
+两个结果都不作任何推断。
+
+于是两条引文图路线全部关闭。结论维持不变：Crossref（对照通过）未发现已发表的更正，
+而"是否存在"这个问题用当前可达的通道无法定论。提交 `094e3b9a5`。
