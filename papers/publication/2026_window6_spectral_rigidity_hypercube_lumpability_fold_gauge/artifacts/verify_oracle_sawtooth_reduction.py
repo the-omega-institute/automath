@@ -23,7 +23,7 @@ Its claims, in the order they carry weight:
 (a), (b), (c), (d) and (f) are finite statements and are checked directly. (e) is an
 implication, checked in the direction that matters: wherever the criterion fires, injectivity
 must actually hold. The criterion is strictly stronger than the lemma, since it gives outright
-injectivity, so it cannot fire at m = 6, 8, 9 where Phi_m provably is not injective; the check
+injectivity, so it cannot fire at m = 6..10, where Phi_m provably is not injective; the check
 confirms it declines there rather than giving a false positive.
 
 All arithmetic is exact. floor(h/phi) is computed as (isqrt(5 h^2) - h)//2 for h >= 0, which

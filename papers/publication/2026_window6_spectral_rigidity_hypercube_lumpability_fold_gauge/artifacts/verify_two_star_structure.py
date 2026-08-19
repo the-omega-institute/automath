@@ -25,7 +25,7 @@ has zeros in both of those positions. Only F_9 = 34 and F_12 = 144 ever occur, b
 from small terms those are the only Fibonacci numbers that are a sum of two distinct powers
 of two - the identical arithmetic that pins the sporadic set.
 
-So the pairing mechanism is the same at every m. What distinguishes m in {6, 8, 9} is not
+So the pairing mechanism is the same at every m. What distinguishes m in {3, 6, 8, 9} is not
 whether such pairs exist but whether they exhaust the cube. The inequality p + 1 <= m <= k - 3
 from the classification is exactly the condition for every vertex to be paired, which is what
 makes the swap a global involution and the partition stable. Outside it the pairing is

@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 """Verification of the sporadic affine repairs at m = 6, 8, 9, and of eventual rigidity.
 
+SUPERSEDED IN PART: the sporadic set is {3, 6, 8, 9}. The body of this file treats it as
+{6, 8, 9} throughout and admissible_m() cannot generate m = 3. See the CORRECTION block at
+the end of the file, and use SWAP_FULL / sporadic_set_including_m3() rather than SWAP.
+
 The referee desk-rejected this paper for treating one fixed partition of one 64-vertex graph
 and asked for an infinite family. There is no infinite family. What there is, verified here,
 is a complete sporadic classification.
@@ -183,8 +187,12 @@ def report_arithmetic_closure():
     for k, f, p, q, rng in admissible_m():
         ms |= set(rng)
         print(f"    F_{k} = {f} = 2^{p} + 2^{q}  ->  m in {rng if rng else 'empty'}")
-    print(f"    admissible m = {sorted(ms)}   (enumeration found 6, 8, 9)")
-    return sorted(ms) == [6, 8, 9]
+    print(f"    admissible m = {sorted(ms)}")
+    print("    NOTE: this reconstruction uses m <= k-3 and so yields [6, 8, 9]. The paper's")
+    print("    criterion is m <= k-2 plus a condition on the consumed position, and its")
+    print("    sporadic set is [3, 6, 8, 9]. Direct refinement confirms the paper; m = 3 is")
+    print("    real and is missed here. See the CORRECTION block at the end of this file.")
+    return sorted(ms) == [6, 8, 9]   # what THIS criterion gives, not the sporadic set
 
 
 def two_star_multiplicity(mmax=16):

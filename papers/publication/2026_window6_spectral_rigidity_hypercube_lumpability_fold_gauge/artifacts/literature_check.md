@@ -25,7 +25,7 @@ the hypercube, the general theory in which this manuscript's fold-induced partit
 
 Every construction in those results is code-theoretic - perfect codes, Hamming codes, coverings.
 None is induced by a numeration-system fold, and none classifies the equitable partitions
-arising from a Zeckendorf prefix map. The sporadic classification at m in {6, 8, 9} is not
+arising from a Zeckendorf prefix map. The sporadic classification at m in {3, 6, 8, 9} is not
 anticipated by anything the query surfaced.
 
 ## Two problems that are not about priority
