@@ -7967,3 +7967,43 @@ t438 定下：唯一非循环的收尾路线是第 5 节，而它的缺陷是 Su
 
 无论把证书推到多远，这都不是全 m 证明。论文里这一条要写成"验到 M，且由 Subspace 定理最终成立，
 截断非有效"，不能写成"已证"。
+
+## tick 440 — 证书推到 m = 5000；window6 首次做优先权检查
+
+codex 仍 503。`d33b4b7a`、`2baffd6b` 均 `waiting_response`。内存 1.72 GB，无孤儿。
+
+### 一、分离证书 13 <= m <= 5000 全部通过
+
+后台跑完，4988 个值残差集两两不交，故 Phi_m 在该范围内单射；合并直算的 6 <= m <= 19，
+**two-star 引理在 6 <= m <= 5000 上成立**，是 Oracle 认证范围的五倍。
+证书留档 `artifacts/separation_certificate_m5000.txt`，提交 `ad7426754`。
+
+**到此为止不再往上推。** 剩下的缺口是 Subspace 截断的非有效性，有限范围关不掉它；
+继续加大只是为了显得有产出，不会学到任何新东西。论文该写"验到 5000、最终成立、截断非有效"。
+
+### 二、window6 的首次优先权检查
+
+它现在是冲刺组最强的一篇，却从没做过在先工作检查。
+
+**第一次查询对照失败，未下任何结论。** 噪声来自环面自同构的 Markov 分划、门诊预约排程、
+OFDMA 信道预测 —— 四个无关领域，说明根本没搜到目标文献。与 zeck_arith 那次同一个失败模式，
+如实记下而非悄悄丢掉。
+
+**第二次查询对照通过。** 命中 Solov'eva（三篇 perfect codes 分划）、Avgustinovich-Solov'eva、
+Vasil'eva《perfect colorings of q-ary Hamming graph》、Dejter-Phelps —— 正是目标领域：
+**Hamming 图的 perfect coloring 就是超立方体的 equitable partition**，本文那个 fold 诱导的
+划分正落在这套理论里。
+
+**优先权：无碰撞。** 那些构造全是编码论的（perfect code、Hamming、覆盖码），没有一个由计数
+系统的 fold 诱导，也没有对 Zeckendorf 前缀映射所生的 equitable partition 做分类。
+m in {6,8,9} 的零星分类未被任何命中预示。
+
+### 三、两个与优先权无关、但会被审稿人抓住的缺陷
+
+1. **术语单边。** 全文四处写 "equitable partition"，**零处**写 "perfect colouring" ——
+   而后者正是把超立方体这块做得最多的那一支（Fon-Der-Flaass、Avgustinovich、Vasil'eva、
+   Solov'eva）对同一对象的叫法。该领域审稿人会去搜这个词、搜不到，然后判定作者没读文献。
+2. **参考文献只有 5 条。** 一篇宣称完整分类的文章，光这一条就会被点名。
+
+两条都不是优先权威胁，与 zeck_arith 漏引 Fenwick 属同一类：小领域，审稿人池会发现自己人不在
+参考文献里。行动清单已写入 `artifacts/literature_check.md`（提交 `453d8fec1`），等 codex。
