@@ -192,3 +192,47 @@ go out silent, in a field this small.
 
 Each should state the relationship and cite the other two. Whether any should merge is the
 authors' call.
+
+---
+
+# Abstract audit, 2026-08-19: the abstract claims Sanna's theorem as a result
+
+t430 established by reading arXiv:2309.12724v2 that Sanna's Theorem 1 already proves lambda_p
+is the Perron-Frobenius eigenvalue of the transition matrix of an automaton built from p
+parallel copies of Berstel's automaton, hence the greatest real root of an effectively
+computable monic integer polynomial, hence an algebraic integer. His Table 1 prints the
+minimal polynomials for p = 1..8. t431 established that all eight of his rows also have full
+symmetric Galois group, so genericity is not broken by our nine.
+
+The abstract of this manuscript currently reads, in part:
+
+    An asynchronous finite-state kernel identifies each lambda_q (q >= 2) as the Perron root
+    of a nonnegative integer matrix and hence proves that lambda_q is an algebraic integer.
+
+That is Sanna's Theorem 1, by Sanna's method, presented as a contribution of this paper. The
+abstract does cite him elsewhere - the moments are described as squeezed between adjacent
+Fibonacci windows of "Sanna's partition power sums" - so the reference exists and the overlap
+is not concealed deliberately. But a referee who knows the Discrete Analysis paper will read
+that sentence as claiming his result.
+
+What is genuinely ours, on the evidence assembled over t419-t431:
+
+  - the identification of the fiber multiplicities as Fibonacci-lag discrete derivatives, and
+    the squeeze that transfers his asymptotics to S_q(m);
+  - the extension of his Table 1 to q = 9..17, which must be presented AS an extension;
+  - the arithmetic of those numbers, which he does not touch at all: irreducibility, the
+    Galois groups, the discriminants, linear disjointness and the Chebotarev density.
+
+The abstract handles the last of these honestly already - it says "computationally certified"
+and "conditional on the audited identification", which is the right register.
+
+## Action when the codex channel returns
+
+1. Rewrite the Perron-root sentence so algebraicity is attributed to Sanna and the kernel is
+   presented as an independent route or a refinement, whichever is defensible - not as the
+   source of the conclusion.
+2. State in the abstract that the polynomials for q = 9..17 extend his Table 1, which stops
+   at p = 8.
+3. Do not present the Galois determination as surprising: t431 showed his own eight rows are
+   also fully symmetric. It is new because he does not compute it, not because the answer
+   breaks a pattern.
