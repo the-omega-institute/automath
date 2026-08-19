@@ -236,3 +236,21 @@ and "conditional on the audited identification", which is the right register.
 3. Do not present the Galois determination as surprising: t431 showed his own eight rows are
    also fully symmetric. It is new because he does not compute it, not because the answer
    breaks a pattern.
+
+## A model for the rewrite, from inside this repository
+
+The sibling manuscript cubical_stokes solves exactly this problem in its own abstract, and its
+last sentence is the template:
+
+    The principal contribution is the quantitative box readout theorem; the global network
+    identities are standard max-flow/min-cut, finite-dimensional linear-programming duality,
+    and Hoffman's circulation criterion translated to this cubical setting.
+
+It names the principal contribution, then says plainly which components are standard and cites
+them. A referee reading that cannot accuse the paper of dressing up known material, because the
+paper said it first.
+
+projection needs one sentence of the same shape: the algebraicity of lambda_q and the minimal
+polynomials through p = 8 are Sanna's; the contribution is the discrete-derivative
+identification and squeeze, the extension of his table to q = 9..17, and the arithmetic of
+those numbers, which he does not treat.
