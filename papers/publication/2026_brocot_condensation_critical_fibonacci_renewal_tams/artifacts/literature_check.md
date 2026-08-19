@@ -127,3 +127,51 @@ results enters that manuscript.  The other matching manuscripts concern
 finite-window Zeckendorf spectra, Parry cylinder laws, renewal experiments,
 normalization arithmetic, or Fibonacci apparition fibers; none contains a
 Brocot context-rate theorem.
+
+---
+
+# Priority check on the correction itself, 2026-08-19
+
+The sharpest claim in this manuscript is that a published constant is wrong: Dushistova's
+Lemma 7 gives the leading coefficient as `R_s + 2R_s^2` where this paper gives `2R_s^2`. Two
+separate questions follow, and only one of them had been asked before today. The arithmetic
+was checked in `verify_dushistova_coefficient.py` and the mechanism in
+`verify_dushistova_mechanism.py`. What had not been checked is whether somebody has already
+published the correction, which would remove the manuscript's headline entirely.
+
+## The cited source is real
+
+Verified against Crossref by DOI rather than by title match. Author Anna A. Dushistova, title
+"Partitioning of the interval [0,1] induced by the Brocot sequences", Sbornik: Mathematics,
+volume 198, number 5, pages 661-690, 2007, DOI 10.1070/SM2007v198n05ABEH003854. Every field
+agrees with the entry in `references.bib`. This matters because a fabricated citation has
+survived several referee rounds in this project before.
+
+The manuscript also localises the error rather than gesturing at it: Lemma 7, pages 668-669,
+the loss of the restriction u > 1, with a term counted twice rather than once. That is a
+falsifiable diagnosis, which is the right form for a claim of this kind.
+
+## No published correction found, and the search had a working control
+
+Crossref, queried for the surrounding field rather than for the phrase, returned Dushistova
+2007 itself among the hits, together with Kessebohmer-Stratmann on Stern-Brocot multifractal
+analysis, Reutenauer's Stern-Brocot chapter, and several continuant papers. The source paper
+appearing in its own field query is the positive control: the index holds this literature.
+Nothing in the results is a correction, an erratum, or a restatement of the coefficient.
+
+## What could NOT be established, and why the silence there means nothing
+
+The natural instrument is the citation graph: read everything that cites Dushistova 2007 and
+look for the correction. Semantic Scholar returns "no citations found" for the DOI. That is
+not evidence. A control shows the record exists there (paper id 0241224f..., correct title,
+journal and pages) but reports `citationCount: 0` for an eighteen-year-old Sbornik paper and
+mis-tags its field of study as Physics. The citation edges for this entry are simply absent,
+so the query cannot see a correction even if one exists. Recorded as a limit of the check,
+not as a result.
+
+## Standing conclusion
+
+No published correction of Dushistova's coefficient was found in an index demonstrably
+covering the field, and the citation-graph route is unavailable. That is the strongest
+statement the reachable channels support. It does not close the question, and a referee drawn
+from this community remains the real test.
