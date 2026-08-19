@@ -8210,3 +8210,36 @@ Galois 群、判别式、线性无关性、Chebotarev 密度）。摘要对最�
 （写了 "computationally certified"、"conditional on the audited identification"），口径正确。
 
 行动清单已写入 `artifacts/verification_2026-08-19.md`，提交 `245b55a1c`。
+
+## tick 447 — 摘要审计收尾：六篇查完，两篇有缺陷，一篇可直接当模板
+
+codex 仍 503。`e856df85`（TWOSTAR r3）已 `waiting_response`。内存 1.88 GB，无孤儿。
+
+### 补完最后两篇
+
+| 稿件 | 结论 |
+|---|---|
+| `scan_projection` | 干净。摘要直接写出中心否定性结论 —— "a phase-free extension of the primitive-survivor collision law is in general false"，并点名 period-two 例子。与我 t435 核实的承重内容一致 |
+| `cubical_stokes` | 不止干净，是**范本**（见下） |
+
+### 全组审计结果：六篇查完
+
+**四篇干净**：`brocot`、`zeck_arith`、`scan_projection`、`cubical_stokes`。
+**两篇有缺陷**：`window6`（标题与摘要仍是被拒版本的范围）、`projection`（把 Sanna 定理 1 写成本文贡献）。
+
+### `cubical_stokes` 的最后一句就是 `projection` 缺的那句
+
+    The principal contribution is the quantitative box readout theorem; the global network
+    identities are standard max-flow/min-cut, finite-dimensional linear-programming duality,
+    and Hoffman's circulation criterion translated to this cubical setting.
+
+先点明主贡献，再明说哪些部件是标准的并给引用。审稿人无法指责它把已知材料包装成新东西 ——
+因为论文自己先说了。这正是 `projection` 该补的一句话形状：lambda_q 的代数性与 p<=8 的极小
+多项式是 Sanna 的；本文贡献是离散导数识别与夹逼、把他的表延长到 q=9..17、以及他完全没碰的
+算术侧。已把这段范本记进 `projection` 的 artifacts，提交 `a9142d6ec`。
+
+### 这轮审计的意义
+
+它查的是与数学正确性无关、却决定 desk 阶段生死的维度：**标题与摘要有没有跟上正文的实际强度、
+有没有把别人的结果写成自己的**。此前四十多个 tick 我只查正确性与优先权，从没系统查过这一层。
+两处缺陷都定位到了句子级，codex 一恢复即可执行。
