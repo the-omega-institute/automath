@@ -7245,3 +7245,56 @@ Sanna 用的是 **广义谱半径**（Blondel–Nesterov）。一族矩阵的广
 
 内存 1.12 GB。
 
+
+---
+
+## tick 422 — 逐项减去 Sanna：论文 II 只剩 **Galois 一节**能当主定理；我 t421 的假设是错的
+
+Oracle 正常；codex 503。全文归档到三篇 artifacts。
+
+### 我 t421 的假设被推翻（幸好当时写成了假设）
+
+我猜"Sanna 只给广义谱半径，我们给单矩阵 Perron 根，这是加强"。**不成立**：
+
+> Sanna constructs an exact product automaton based on Berstel's equality automaton;
+> its accessible graph is strongly connected and aperiodic, so **λ_p is its Perron eigenvalue**.
+> Sanna explicitly concludes that **λ_p is an effectively computable algebraic integer**,
+> and then identifies the p→∞ endpoint using Blondel–Nesterov.
+
+Blondel–Nesterov 只用在**端点那一步**，常数本身他是用 Perron 根拿到的。
+
+### 逐项裁定（论文 II）
+
+| 条目 | 裁定 |
+|---|---|
+| 进位自动机的无损性 | **新但增量** —— 验证的是另一种实现，不是首个全 q 自动机定理 |
+| 固定 q 的整数转移矩阵 | **增量，不构成脊柱** —— 固定幂的精确非负整数转移已是他构造的实质 |
+| q=2 精确递推 | 序列意义上**新**；但特征三次式 `X³−2X²−2X+2` 及其主根**Chow–Jones 已有、Sanna 复述** |
+| Perron 根 ⟹ 代数整数 | **Sanna 已有** |
+| 固定 q 有理性 | **已隐含** |
+| 双变量非有理 | **新但轻**，且对累积阵列同样适用，非折叠特有 |
+| **q=9..17 的不可约性与全对称 Galois 群** | **新，且是唯一幸存的最强节** —— Sanna 只列到 q=1..8 的极小多项式，无 Galois、无 Chebotarev |
+
+**顺带**：我 t387 当作发现记下的"λ₂ 的极小多项式 `x³−2x²−2x+2`" —— **Chow–Jones 已有**。
+那是重新发现，不是发现。已在此更正。
+
+### 论文 II 的诚实定位
+
+> an exact residue-fold realization of Sanna's fixed-power constants, with one exact quadratic
+> recurrence, a modest uniform-in-degree obstruction, and **new finite-range Galois arithmetic**.
+
+**Galois 一节现在是唯一可当主定理的东西**，无损性与 q=2 递推降为支撑性精确加细。
+且 Galois 结果**必须写成关于 Sanna 的常数 λ_q 的结果**，因为折叠与累积问题共享这批常数。
+
+### 论文 I
+
+`D_m^{1/m} → √φ` **不是独立新结果**：Sanna 加一条初等桥接即可推出（答复给了两行夹逼）。
+但 **D_m 的精确奇偶公式、全部极大位置与退化性不在 Sanna 之内**，那才是论文 I 的新意所在。
+
+### 这推翻了簇裁决的架构
+
+簇裁决把 Galois 节放在"或许作为末节或补充"，把转移理论当头条。
+**现在正好反过来。** 重切方案要按这条重排，否则做出来的论文 II 头条是被覆盖的。
+
+内存 1.12 GB。
+
