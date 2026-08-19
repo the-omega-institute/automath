@@ -162,3 +162,57 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# PROOF of (B), which was only verified numerically above.
+#
+# Write psi = -1/phi, so that F_k = (phi^k - psi^k)/sqrt5. Then
+#
+#     phi F_k - F_{k+1} = (phi^{k+1} - phi psi^k)/sqrt5 - (phi^{k+1} - psi^{k+1})/sqrt5
+#                       = psi^k (psi - phi)/sqrt5
+#                       = -psi^k,
+#
+# since psi - phi = -sqrt5. So phi F_k = F_{k+1} - psi^k exactly.
+#
+# Let n have Zeckendorf expansion n = sum_j F_{k_j} with k_1 > k_2 > ... > k_r = kmin and no
+# two indices consecutive. Summing the identity,
+#
+#     phi n = sum_j F_{k_j + 1}  -  sum_j psi^{k_j},
+#
+# and the first sum is an integer. Hence, as long as the second sum is below 1/2 in absolute
+# value, ||phi n|| = |sum_j psi^{k_j}| exactly.
+#
+# Factor out the last term: sum_j psi^{k_j} = psi^{kmin} (1 + sum_{j<r} psi^{k_j - kmin}).
+# Non-consecutiveness forces k_j - kmin >= 2(r - j), so
+#
+#     |sum_{j<r} psi^{k_j - kmin}| <= sum_{i>=1} phi^{-2i} = phi^{-2}/(1 - phi^{-2}) = 1/phi,
+#
+# using phi^2 - 1 = phi. Therefore
+#
+#     ||phi n|| / phi^{-kmin}  lies in  [1 - 1/phi, 1 + 1/phi] = [phi^{-2}, phi].
+#
+# That is a proof, with explicit constants, of the comparison that check_B only measured. The
+# measured lower constant was 1/phi rather than phi^{-2}; the gap is because the geometric
+# bound ignores that psi^k alternates in sign, so the tail never attains its bound. The proved
+# interval is therefore correct but not sharp on the left, and only the LOWER bound matters
+# downstream.
+#
+# Consequence for the effective route, using the PROVED constant rather than the measured one:
+#
+#     ||phi n|| <= 4 phi^{-(m+1)}  and  ||phi n|| >= phi^{-kmin-2}
+#         =>  phi^{m-1-kmin} <= 4  =>  kmin >= m - 1 - log_phi(4) > m - 3.89,
+#
+# so kmin >= m - 3. This is one index weaker than the m - 2 obtained from the measured
+# constant, and everything downstream must use m - 3 if it is to rest on a proof.
+
+def proved_bounds_hold(nmax=200000):
+    """Check the PROVED interval [phi^-2, phi], not just the measured one."""
+    lo, hi = PHI ** (-2), PHI
+    bad = []
+    for n in range(1, nmax):
+        kmin = zeck_indices(n)[-1]
+        r = frac_norm(PHI * n) / PHI ** (-kmin)
+        if not (lo <= r <= hi):
+            bad.append((n, kmin, r))
+    return bad

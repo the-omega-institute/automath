@@ -111,3 +111,52 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# Using the PROVED constant rather than the measured one.
+#
+# verify_phi_norm_zeckendorf.py now contains a proof of the comparison (B) with explicit
+# constants: ||phi n|| / phi^{-kmin} lies in [phi^{-2}, phi]. The measured lower constant was
+# 1/phi, better than the proved phi^{-2}, because the geometric tail bound ignores that psi^k
+# alternates in sign. Only the lower bound is used downstream, so the proved constant gives
+#
+#     ||phi n|| <= 4 phi^{-(m+1)}  =>  kmin >= m - 1 - log_phi 4 > m - 3.89,  i.e. kmin >= m-3,
+#
+# one index weaker than the m-2 the measurement suggested.
+#
+# Re-running the enumeration with each slack, over m = 6..160:
+#
+#     slack m-2 (measured) : last m with any survivor = 15, empty on [16, 160]
+#     slack m-3 (PROVED)   : last m with any survivor = 16, empty on [17, 160]
+#     slack m-4 (margin)   : last m with any survivor = 17, empty on [18, 160]
+#
+# So the conclusion does not depend on the sharp constant. On proved ingredients alone there is
+# no residual ambiguity for m >= 17, and the direct computation independently covers
+# 6 <= m <= 19. The two ranges overlap, so the lemma is covered for every m.
+#
+# What the chain now rests on, and it is a single item: the implication
+#
+#     residual ambiguity  =>  ||phi u|| <= 4 phi^{-(m+1)}  for a signed two-power u,
+#
+# which is inequality (12) of oracle_sprint_TWOSTAR_r1.md. I have not independently verified
+# it. Everything downstream of it is now proved or exhaustively enumerated.
+
+def survivors_with_slack(m, slack):
+    out = set()
+    for i in range(m):
+        for j in range(i):
+            for s1 in (1, -1):
+                for s2 in (1, -1):
+                    u = s1 * (1 << i) + s2 * (1 << j)
+                    if u and kmin(abs(u)) >= m - slack:
+                        out.add(u)
+        for s1 in (1, -1):
+            u = s1 * (1 << i)
+            if kmin(abs(u)) >= m - slack:
+                out.add(u)
+    return out
+
+
+def last_nonempty(slack, top=160):
+    return max((m for m in range(6, top + 1) if survivors_with_slack(m, slack)), default=None)
