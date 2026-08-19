@@ -1,0 +1,73 @@
+This is a follow-up to a question you answered earlier. You do not have that conversation, so
+everything needed is restated here. Your earlier answer was good and I verified all of it; I
+am coming back because one statement in it is false as written, and the corrected version
+looks provable.
+
+THE SETTING. Fix m at least 6. For an integer n with 0 <= n < 2^m, let Fold_m(n) be the
+digits of the greedy Zeckendorf expansion of n in positions F_2 through F_{m+1}, with
+everything above discarded. Regard the integers below 2^m as the vertices of the hypercube,
+adjacent when their binary representations differ in one bit. Define the coloured-star
+signature
+
+    Phi_m(a) = ( Fold_m(a), the multiset of Fold_m(a XOR 2^i) for 0 <= i < m ).
+
+The open lemma is that every fibre of Phi_m has at most two elements. I have verified it for m
+from 6 to 19 directly. You previously supplied a reduction: writing T_m(r) = F_{m+1} r + F_m
+floor((r+1)/phi) for the numbers whose expansions vanish in the retained positions, the fold
+is the sawtooth remainder, an edge changes the fold by an element of an explicit at-most-eight
+element set C_m(p), and pairwise disjointness of those sets implies injectivity. You certified
+that disjointness for m from 13 to 1000 and proved it holds eventually via the p-adic Subspace
+Theorem. I re-derived every checkable part of that against my own implementation and it all
+reproduces, including your observation that the only ambiguity at m equal to 12 is between 16
+and minus 128, coming from 144 = 128 + 16. I am not disputing any of it.
+
+THE PART THAT IS FALSE. Your section 7 proposed finishing the lemma as follows. Given a
+collision, match the equally coloured neighbours by a permutation, set D = b - a, let p_i and
+q_j be the signed powers flipping bit i of a and bit j of b, and put u_i = q_{pi(i)} - p_i.
+You gave two exact identities, that the u_i sum to -2D and that their nearest-integer-to-phi
+images sum to -2 times that of D. You then wrote that in every collision you examined exactly
+two of the u_i equal -D and the rest vanish, and proposed proving that the system forces that
+shape.
+
+I checked both identities on every collision at m = 6, 7, 8, 9 and 10, over every valid
+matching rather than one natural choice: 243 out of 243 cases satisfy both, under either
+reading of the rounding. The identities are fine.
+
+The shape claim is not. At m = 8 take a = 66 and b = 210, so D = 144. The matching sending
+(0,1,2,3,4,5,6,7) to (0,5,2,3,7,1,6,4) is valid and gives
+
+    u = (0, 34, 0, 0, -144, -34, 0, -144),
+
+which has four nonzero entries, not two, while both of your identities still hold. Sixteen of
+the eighty valid matchings at m = 8 have this shape. The deviation is a cancelling pair plus
+and minus 34, that is, the OTHER Fibonacci number with two binary ones. So the constraint
+system does not force the two-coordinate form, and a proof of the universal statement cannot
+exist.
+
+WHAT SURVIVES, AND MY QUESTION. The existential version does hold. Every one of the 227
+collision pairs at m from 6 to 10 admits at least one matching of the two-coordinate form.
+That is the statement to aim at:
+
+    For every collision there EXISTS a matching pi for which exactly two of the u_i equal -D
+    and all others vanish.
+
+That would give D equal to a Fibonacci number with exactly two binary ones added without
+carry, and combined with the fact that only 34 and 144 qualify in the relevant range, it would
+close the lemma for all m.
+
+One. Can you prove the existential statement? A canonical construction of the good matching
+would be ideal - something like matching neighbours by the position of the carry rather than
+by colour alone.
+
+Two. If not, is there a reformulation that avoids matchings entirely? The matching is an
+artefact of comparing multisets; the underlying content is that the two coloured stars agree.
+A formulation in terms of the sawtooth breakpoints T_m directly might be cleaner and is what I
+would try first.
+
+Three. Separately, and lower priority: is the ineffectivity of the Subspace cutoff removable
+here? A Baker-type effective bound, even a terrible one, would let a finite computation finish
+the whole lemma. My reading is that this is out of reach for the relevant form, but I would
+like your view.
+
+Please tell me plainly if the existential statement also fails, and be explicit about which
+parts you have proved versus observed.
