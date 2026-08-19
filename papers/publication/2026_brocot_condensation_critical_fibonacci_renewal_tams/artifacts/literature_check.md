@@ -277,3 +277,54 @@ What survives from those entries:
 What does not survive: the framing that brocot's headline is numerically unsupported. It is
 unsettled at reachable n, which the paper's own artifacts already said, and the error mechanism
 it claims is verified.
+
+---
+
+# Oracle on the convergence rate, 2026-08-19: constant confirmed, one formula inconsistent
+
+Transcript at artifacts/oracle_sprint_BROCOT_RATE_r1.md, task 8500d3e7. It confirms the
+paper's constant and supplies a full singular expansion:
+
+    n^s Z_n(s) = 2 R_s^2 + A_s/n + B_s n^(1-s) + O(n^(-2)),   rate n^(-1),
+    A_s = 2 s R_s (1 + 2 mu_s - R_s),  mu_s = sum_{m>=2} Z_m(s)/m,
+    B_s = 4 R_s^3 Gamma(1-s)^2 / Gamma(2-2s).
+
+So C = 2 R_s^2 = 8 at sigma_0, and the paper's headline constant is supported.
+
+## What checks out
+
+B_s, exactly. Evaluating the closed form independently gives -44.58169885 against the
+transcript's -44.5817.
+
+It also passes the structural test set at t470. That test said any answer offering a single
+correction exponent could not produce a turnover and should be challenged. This answer supplies
+two corrections of opposite sign, and goes further, stating plainly that they predict the
+eventual turnover but NOT its location near n = 27, which it attributes to still-large
+O(n^(-2)) and preasymptotic terms. That is the honest form of the answer.
+
+## What does not check out
+
+A_s. Evaluating the stated formula with mu_s computed from my own Z_m for m = 2..25 gives
+
+    mu_s = 0.2199,   A_s = 2 s R_s (1 + 2 mu_s - R_s) = -5.553,
+
+against the transcript's numerical A_s = 215.3798. Wrong sign and two orders of magnitude. The
+sum defining mu_s converges quickly, since Z_m ~ 8 m^(-s) makes the terms of order m^(-3.48),
+so the truncation at m = 25 is not the explanation; reproducing 215.38 would need mu_s = 11.36.
+
+The transcript's NUMERICAL value is the one consistent with the data: 8 + 215.3798/n +
+B_s n^(1-s) gives 16.23 at n = 25 against an observed 15.26, whereas A_s = -5.553 would give
+about 7.4, which is impossible since the observed values exceed 15.
+
+So the formula for A_s and the transcript's own number for A_s disagree, and the number is the
+defensible one. Either mu_s means something other than what is written, or the closed form is
+wrong. This must be resolved before any of it is used in the manuscript.
+
+## Fit against the computed table
+
+Using the transcript's constants, the predicted minus observed difference runs 13.42, 11.50,
+9.83, 8.39, 7.13, 6.03, 5.07, 4.22, 3.49, 2.84, 2.28, 1.78, 1.35, 0.98 at n = 12..25. It is
+large but shrinking monotonically and steadily, which is what one expects if the expansion is
+correct and the neglected terms are still significant at these n. That is consistent with the
+transcript's own caveat, and it means the expansion cannot be confirmed or refuted from data
+below the turnover.
