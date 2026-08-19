@@ -7447,7 +7447,7 @@ Oracle 正常；codex 503。
 
 ---
 
-## tick 427 — 重建顶部权威表（自 t408 起 18 个 tick 未动）
+## tick 426 — 重建顶部权威表（自 t408 起 18 个 tick 未动）
 
 Oracle 正常（池空）；codex 503。
 
