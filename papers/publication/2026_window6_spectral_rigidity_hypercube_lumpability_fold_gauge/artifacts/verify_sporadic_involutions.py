@@ -215,3 +215,43 @@ def two_star_multiplicity(mmax=16):
         ok &= mx <= 2
         rows.append((m, N, len(phi), mx, dict(sizes)))
     return ok, rows
+
+
+# ---------------------------------------------------------------------------
+# CORRECTION, 2026-08-19: the sporadic set is {3, 6, 8, 9}, not {6, 8, 9}.
+#
+# Everything above treats the sporadic set as {6, 8, 9}, and admissible_m() reproduces exactly
+# that. Reading main.tex shows the paper claims {3, 6, 8, 9}, with the involution at m = 3
+# being sigma_{1,3}. Direct colour refinement settles it: m = 3 gives 8 vertices in 6 cells
+# with maximum cell size 2, which is non-trivial, and the swap (1,3) is an involution that
+# preserves Fold_3 with 2^{m-1} = 4 fixed points and 2^{m-2} = 2 pairs. The closed form
+# 3 * 2^{m-2} holds there too: 6, 48, 192, 384 at m = 3, 6, 8, 9.
+#
+# The paper is right and this file was wrong. The fault is in the inequality reconstructed in
+# admissible_m(): it uses m <= k - 3, whereas the paper's criterion is m <= k - 2 together with
+# a second condition on whether an admissible N occupies the consumed position. For F_4 = 3 =
+# 2^1 + 2^0 the reconstructed range is empty, so m = 3 was never generated. The two criteria
+# happen to agree on F_9 and F_12, which is why the discrepancy went unnoticed - agreement on
+# the large cases is not evidence that the small ones are handled.
+#
+# Note also that m = 2 is non-trivial as well (4 vertices, 3 cells); the paper restricts to
+# m >= 3, so that is a scope choice rather than an omission.
+#
+# The source of the four-element list is not a bounded search. main.tex imports it from
+# Bugeaud, Cipu and Mignotte, "On the representation of Fibonacci and Lucas numbers in an
+# integer base", Annales mathematiques du Quebec 37 (2013) 31-43, doi 10.1007/s40316-013-0002-y,
+# and says in terms that the list is not proved there. The citation was verified field by field
+# against Crossref. That is the correct treatment and it is effective, so this step of the
+# classification carries no ineffectivity of its own.
+
+SWAP_FULL = {3: (1, 3), 6: (1, 5), 8: (1, 4), 9: (2, 5)}
+
+
+def sporadic_set_including_m3():
+    """Re-derive the four admissible dimensions by direct refinement, not by the inequality."""
+    out = []
+    for m in range(2, 17):
+        V, c = refinement(m)
+        if len(set(c)) != len(V):
+            out.append((m, len(set(c)), 3 * 2 ** (m - 2)))
+    return out
