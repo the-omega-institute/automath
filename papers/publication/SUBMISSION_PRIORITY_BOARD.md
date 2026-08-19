@@ -7465,3 +7465,42 @@ Sanna 的覆盖面，以及由此导致的簇裁决排序反转。
 
 内存 1.12 GB。
 
+
+---
+
+## tick 427 — 验了 `zeck_arith` 的承重定理；至此冲刺组无一篇留有未验的承重结论
+
+Oracle 正常（池空）；codex 503。
+脚本：`zeck_arith/artifacts/verify_multiplication_delay_bound.py`
+
+t418 的裁决说得很直白：
+
+> "The referee will treat the **multiplication-delay theorem as the paper**.
+> The ring structure will be treated as notation and motivation."
+
+而我在那份任务书里**主动写明"乘法延迟下界我没验"**。既然它就是这篇论文，就得验。
+
+### 验了什么
+
+见证是 `c=Z(F_{n+1})`、`c'=Z(F_{n+1}+1)`、`d=Z(F_{n+1})`。四条在 n=3..24 全部成立：
+
+1. 三者确为 `X_n` 的可容许词；
+2. c 与 c′ **仅在位置 1 相异**（对称差恰为 `{1}`），故两条同步输入流只在最后一位分岔；
+3. 稳定积的值**精确无归约**：`Val(u)=F_{n+1}²`、`Val(u')=(F_{n+1}+1)F_{n+1}`
+   —— 这是 `(X_∞,⊕,⊗)` 里的积，与 `(ℕ,+,×)` 同构，故不涉及模归约；
+4. 两个输出 Zeckendorf 词**确在某个 k ≥ n 处相异**。
+
+由 4，"在每个 `k ≥ 2+δ_n` 处一致"迫使 `2+δ_n > n`，即 **`δ_n ≥ n−1`**。
+支撑引理（位置 1..n−1 上可容许词的值至多 `F_{n+1}−1`）在 n=3..19 上零违反，与 t370 一致。
+
+### 覆盖状况
+
+至此，冲刺组各篇的承重结论**均已由我或 Oracle 独立核实**，无遗留：
+
+    folded_histograms 判据含临界点 · joukowsky 开口亏损 · scan_projection 周期二反例
+    fibonacci_folding 两条锐阈值 · window6 残差/特征值 + 零散分类 · cubical_stokes 盒极值
+    projection 地基定理 + Galois 整链 · single_primitive 递推与极大值
+    brocot Dushistova 更正 · zeck_arith 乘法延迟下界（本 tick）· ITA-2026-0032 两条支柱
+
+内存 1.12 GB。
+
