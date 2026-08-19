@@ -1,0 +1,71 @@
+This is a third round on one problem. You do not have the earlier conversations, so the whole
+thing is restated. Your previous two answers were both good and I verified them
+computationally; I am coming back for the single lemma that is now the entire remaining gap.
+
+THE OBJECT. Fix m at least 6. For 0 <= n < 2^m let Fold_m(n) be the digits of the greedy
+Zeckendorf expansion of n in positions F_2 through F_{m+1}, everything above discarded, and let
+R_m(n) be its numerical value. Regard the integers below 2^m as vertices of the hypercube,
+adjacent when their binary representations differ in one bit. The coloured-star signature is
+
+    Phi_m(a) = ( R_m(a), the multiset of R_m(a XOR 2^i) for 0 <= i < m ).
+
+The open lemma is that every fibre of Phi_m has at most two elements.
+
+WHAT IS ALREADY SETTLED, all of it verified by me independently, so please do not redo it.
+The tail numbers, meaning those whose expansions vanish in the retained positions, are exactly
+T(r) = F_{m+1} r + F_m floor((r+1)/phi), consecutive gaps lie in {F_{m+1}, F_{m+2}}, and the
+fold is the sawtooth remainder R_m(T(r) + y) = y. An edge changes the fold by an element of an
+explicit at most eight element set, and pairwise disjointness of those sets implies injectivity;
+that disjointness holds for every m from 13 to 5000 by exact integer computation, and holds for
+all sufficiently large m by the p-adic Subspace Theorem, though with an ineffective cutoff.
+Combined with direct computation for small m, the lemma is verified for 6 <= m <= 5000.
+
+THE REFORMULATION, which is yours from last round and which I checked completely. For a vertex
+n and a colour y put
+
+    E_y(n) = { (n XOR 2^i) - y : R_m(n XOR 2^i) = y },
+
+a set of breakpoints. If a < b share a Phi_m value and D = b - a, then a colour preserving
+matching in which every u_i is 0 or -D exists if and only if for every colour y there is a
+disjoint decomposition E_y(a) = C_y + L_y with E_y(b) = C_y + (L_y + D). When that holds, the
+elementary hypercube sum forces sum |C_y| = 2 and sum |L_y| = m - 2, hence exactly two u_i
+equal -D, hence D is a difference of two powers of two; with the Bugeaud, Cipu and Mignotte
+classification of Fibonacci numbers with two binary digits this closes the lemma for all m.
+
+I verified all of this on every one of the 227 collisions at m = 6 through 10: residue
+conservation, the chain criterion, the counts, and that the forced construction yields a
+genuinely valid matching with exactly two u_i = -D. I also ran the discriminating control:
+the criterion is applied to pairs that share a fold value but have different stars, and it
+rejects all 5193 of them, so it is not vacuous.
+
+THE ONLY THING LEFT. Prove that the transport always exists. Concretely, in the chain form:
+fix a colour y and a residue c modulo D, set A_k = 1 if c + kD is in E_y(a) and B_k = 1 if
+c + kD is in E_y(b), and let S_k be the prefix sum of A_j - B_j for j <= k. The claim to prove
+is
+
+    S_k is 0 or 1 for every k, and S_k <= A_k for every k, and S_k returns to 0.
+
+You called this a D-chain interlacing lemma. It is strictly stronger than the two aggregate
+identities from round one, and my counterexample with the cancelling plus and minus 34 pair is
+exactly why those identities cannot give it.
+
+MY QUESTIONS.
+
+One. Can you prove the interlacing? The structure that ought to drive it is that E_y(a) and
+E_y(b) are sets of Zeckendorf tail numbers, so they are Sturmian in nature - the gaps take only
+two values F_{m+1} and F_{m+2} in the golden-ratio pattern - and D is small compared with the
+gaps. A three-distance or Ostrowski argument on the breakpoint sequence seems the natural tool.
+
+Two. If you cannot, is the interlacing perhaps false, with the lemma still true for another
+reason? I would rather learn that now. A counterexample to interlacing that is not a
+counterexample to the lemma would be just as valuable as a proof.
+
+Three. Independently: can the ineffective Subspace cutoff be replaced by an effective bound?
+The relevant Diophantine condition concerns how closely a signed sum of two powers of two can
+approximate a Fibonacci-scale quantity, and the Luca school treats equations of exactly this
+shape by Baker's method, which is effective. If a Baker or Matveev bound applies, even a very
+weak one, a finite computation would finish the lemma for all m and the interlacing question
+would become unnecessary. Tell me honestly which of these two routes you think is shorter.
+
+Please be explicit about what you prove versus what you observe, and say plainly if you cannot
+do either.
