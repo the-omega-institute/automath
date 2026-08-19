@@ -8451,3 +8451,37 @@ Bravo-Gomez-Luca 那一支处理的正是这个形状且是有效的。已写进
 
 window6 自驱侧到此为止。链条已经收到只剩一条命题，且我确认了它必须靠外部数论输入；
 我没有能力在不引入 Baker 类结果的前提下把它补上，继续在这上面加算例不会改变任何事。
+
+## tick 454 — 查 window6 的可复现声明：六个脚本全部跑通；顺带从论文一侧确认了 t442 的更正
+
+codex 仍 503。`e856df85` 已跑七个 tick，worker 心跳正常，不动、不派新任务。内存 1.67 GB，无孤儿。
+
+### 查的是论文自己作出的一个声明
+
+摘要写着"重算所有主张所需的有限数据均已随附"，末节点名六个脚本。这种声明值得验而不是信 ——
+一个名字还在、却已经跑不动的脚本，比没有脚本更糟。
+
+**六个全部执行，无一例外 exit 0：**
+
+    supplement/verify_window6_streams.py       all assertions passed
+    artifacts/verify_hidden_refinement.py      all assertions passed
+    artifacts/verify_refinement_family.py      m with a nontrivial refinement: [3, 6, 8, 9]
+    artifacts/verify_involution_mechanism.py   16 个候选，F_12=144、F_9=34、F_5=5
+    artifacts/verify_admissible_dimensions.py  候选流跑到 m=22
+    artifacts/verify_preservation_criterion.py 49 个候选，0 处不一致
+
+**可复现声明成立，这一项不是投稿风险。** 且行文口径正确：它写明这些有限检验"corroborate,
+but do not replace"判据、所引 Diophantine 分类、区间引理与谱载体论证 —— 无需改动。
+
+### 一个反向确认
+
+`verify_refinement_family.py` 独立输出 **[3, 6, 8, 9]**。这是论文自己的脚本、早于我的一切审计，
+它从**论文那一侧**确认了 t442 那处更正 —— 当时是**我**重构的判据用了 `m <= k-3` 而悄悄丢掉 m=3。
+我要是早点跑论文自带的复现装置，就能更早发现自己的错。
+
+### 一条边界，写下来免得以后混淆
+
+本冲刺我往 `artifacts/` 加的约九个脚本**故意不写进复现节**：它们审的是超出论文主张的东西。
+论文主张的是 m<=16 的细化扫描与 m<=22 的候选流；两星引理到 m=5000、以及那条有效 Diophantine
+路线，都是我的、不在稿子里。**将来若把其中任何一条提升进论文，必须同时把对应脚本写进复现节。**
+提交 `c1c86a59c`。
