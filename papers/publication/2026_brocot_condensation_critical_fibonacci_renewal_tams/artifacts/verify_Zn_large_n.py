@@ -108,3 +108,33 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ---------------------------------------------------------------------------
+# WHERE THIS METHOD STOPS, AND WHY THE OBVIOUS TIGHTENING FAILS.
+#
+# Reached in practice: n = 24 with vmax = 60000, error ratio 1e-7, comfortably. Attempting
+# n = 30 with vmax = 400000 took roughly 3 GB and had to be killed under the memory rule. So
+# the walk buys a few values beyond the n = 22 ceiling of the plain enumeration, not the
+# order of magnitude that identifying the convergence rate needs.
+#
+# The binding constraint is the truncation bound, which is
+#
+#     contribution of a pair dropped at step t  <=  2^(n-t-1) * v^(-s).
+#
+# It is very lossy, because almost all of those 2^(n-t-1) descendants have continuants far
+# larger than v. The natural fix is to replace v by a growth lower bound: if a descendant k
+# steps on had continuant at least v * g^k for some g > 1, the bound would become
+# v^(-s) * sum_k (2 g^(-s))^k, which converges as soon as g^s > 2 and would let vmax be small.
+#
+# That fix does not work here, and the reason is worth recording. Continuant growth along this
+# walk is NOT geometric in the worst case. Move B sends (u, v) to (u, u+v), leaving u
+# unchanged, so from (1, v) repeated B gives (1, v+1), (1, v+2), ... - the words (1, a) with a
+# increasing. Along that branch v grows LINEARLY, not geometrically, so no g > 1 exists and
+# the geometric bound is unavailable. Any real improvement has to treat that branch separately
+# rather than bound it uniformly.
+#
+# Identifying the rate therefore needs a different instrument: a transfer-operator or
+# Gauss-map spectral treatment, where the subleading eigenvalue gives the rate directly
+# instead of being read off finite differences. That is beyond what this script attempts, and
+# the honest status is that the rate remains unidentified and the constant unresolved.
