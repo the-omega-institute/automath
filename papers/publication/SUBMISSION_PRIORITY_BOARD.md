@@ -7504,3 +7504,45 @@ t418 的裁决说得很直白：
 
 内存 1.12 GB。
 
+## tick 428 — 怀疑 board 漏跟踪 24 篇稿件，用对照把这个怀疑否掉了
+
+codex 仍 503（本窗口全程未通）。Oracle 池空，无在跑 agent。
+
+本 tick 实质只做了一件事，而且结论是否定的。
+
+### 起因
+
+仓库里有 36 篇带 `main.tex` 的活跃 2026 稿件，board 顶部权威表只列 12 篇。差值 24 篇，
+其中不乏大部头（115 页、80 页、73 页、67 页），看上去像一批长期失管的稿子。
+
+### 对照
+
+逐篇比对 `tools/chatgpt-oracle/pipeline_state/`：26 篇有独立 state 文件（即走的是
+F→A→B→C→D 管线，不归冲刺表管），另有 7 篇在 board 正文中被引用。两处皆无的只有 3 篇：
+
+| 稿件 | 状况 |
+|---|---|
+| `cubical_stokes_inverse_boundary_readout_jdsgt` | 本窗口我核过盒体极值 `m(R) = (2 sum 1/L_j)^-1`，仿射构造与离散 LP 两侧都对 |
+| `fibonacci_folding_...gauge_anomaly_spectral_fingerprints` | 本窗口我核过两条 sharp 阈值，含论文自己列的见证对 |
+| `scan_projection_address_semantics_sigma_nonexpansion_etds` | 中心否定性结论今日核完，见下 |
+
+### `scan_projection` 的核实
+
+该文承重的是一条否定性结论：相位限定不能去掉。它整个压在一个 period-two 幸存者的例子上，
+所以核的就是这个例子。绕开论文的谱公式，直接从链上算 Renyi 对幂和，全程精确有理数，
+只在最后一步取 60 位小数：
+
+    phase 0（m-1 偶）: c_20 = 953/2809
+    phase 1（m-1 奇）: c_21 = 267/(338 sqrt5)
+
+m = 2..90 每一层都在 60 位全精度上吻合。对照三项：`pi K = pi` 精确成立；Perron 值经幂迭代
+与闭式 `rho_s = sqrt(6^-s + 12^-s)` 两侧一致；`Z_m`、`S_2(m)` 单调且落在 (0,1]。
+记录在 `artifacts/verification_2026-08-19.md`。
+
+### 结论
+
+不存在覆盖缺口。12 与 36 之差是冲刺子集的边界，不是失管。假设被自己的对照证伪，
+不做任何改动，也不据此派工。
+
+验证侧依旧无遗留。剩余条目（window6 零星分类的成稿、三稿重切、交叉引用、`nocite`、
+brocot 抬头与对比定理、Carlitz 与 Ostrowski 补引、Sanna 句）全部等 codex。
