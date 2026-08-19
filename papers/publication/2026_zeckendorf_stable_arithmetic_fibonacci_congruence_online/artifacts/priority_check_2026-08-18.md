@@ -88,3 +88,52 @@ Action, in priority order, when the codex channel returns:
 2. Copy the Labbe-Lepsova entry across and cite it where the online adder is introduced.
 3. Have someone check the reverse direction — whether ITA-2026-0032's response to referees
    should disclose `zeck_arith` as companion work.
+
+---
+
+# Addendum, 2026-08-19: the headline null result now has a control, and passes
+
+The section above left the priority question for `thm:mul-delay-linear-lower-bound` open and
+said why: the query returned noise from delay-differential equations, counterfeit coins,
+quantum oblivious transfer and neural-network hardware, so it had not searched the intended
+field and its silence meant nothing.
+
+Re-run against Crossref with a query aimed at the field rather than the phrase
+(`multiplication Fibonacci Zeckendorf numeration not computable finite automaton delay lower
+bound`). Every one of the twelve hits is a Fibonacci-numeration paper, ten of them in *The
+Fibonacci Quarterly*: Zeckendorf 1972, Hoggatt 1972, Kimberling three times, Bunder,
+Filipponi-Hart, Anderson 2014, Edson's dissertation, Shallit 2026. **That is the control the
+earlier attempt lacked** - the noise is now drawn entirely from the intended field, so the
+absence of any on-line delay lower bound among the results is weak evidence rather than no
+evidence.
+
+Two of the hits are squarely about multiplication in this representation, and neither is
+cited here (verified against `references.bib` and every `.tex`, with `Shallit` as a positive
+control at 2 hits):
+
+    Dimitrov, Vassil S.; Donevsky, Borislav D. "Faster Multiplication of Medium Large
+    Numbers Via the Zeckendorf Representation." Fibonacci Quart. 33 (1995), no. 1, 74-77.
+    DOI 10.1080/00150517.1995.12429176.
+
+    Fenwick, Peter. "Zeckendorf Integer Arithmetic." Fibonacci Quart. 41 (2003), no. 5,
+    405-413. DOI 10.1080/00150517.2003.12428552.
+
+Both are algorithmic and practical; neither states an on-line delay bound, so neither
+threatens priority. But a manuscript whose subject is arithmetic in the Zeckendorf
+representation, and which does not cite the paper titled *Zeckendorf Integer Arithmetic*, will
+look to a Fibonacci Quarterly referee as though the field was not read. These are completeness
+citations of the same kind as Labbe-Lepsova above.
+
+## Standing conclusion on priority
+
+No prior art for the linear lower bound on multiplication delay has been found in an index
+that demonstrably covers the field. That is the strongest statement the available channels
+support; it is not proof of novelty, and the Oracle question remains the right instrument
+because it can read the statement rather than match keywords against it.
+
+## Action list, updated
+
+1. Cite the sibling manuscript ITA-2026-0032 in `zeck_arith` and state the relationship.
+2. Copy the Labbe-Lepsova entry across and cite it where the online adder is introduced.
+3. Add Fenwick 2003 and Dimitrov-Donevsky 1995 where Zeckendorf multiplication is introduced.
+4. Check the reverse direction for ITA-2026-0032's referee response.
