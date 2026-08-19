@@ -185,3 +185,33 @@ def report_arithmetic_closure():
         print(f"    F_{k} = {f} = 2^{p} + 2^{q}  ->  m in {rng if rng else 'empty'}")
     print(f"    admissible m = {sorted(ms)}   (enumeration found 6, 8, 9)")
     return sorted(ms) == [6, 8, 9]
+
+
+def two_star_multiplicity(mmax=16):
+    """The missing lemma: every fibre of the one-step coloured-star signature has size <= 2.
+
+    Phi_m(a) = (Fold_m(a), multiset of Fold_m(a xor e_i)). Its fibres are exactly the cells
+    after one refinement round. If every fibre has size at most 2 then, by the closure lemma
+    (an equitable partition all of whose cells have size at most 2 makes the swap map a graph
+    automorphism, since the 2x2 adjacency block between two such cells has equal row and
+    column sums), any non-discrete stable refinement yields a fold-preserving involutory
+    automorphism - and the arithmetic pinning in admissible_m() then forces m in {6, 8, 9}.
+
+    Verified here for m = 6..16: the maximum fibre size is 2 for m <= 10 and 1 for m >= 11,
+    so Phi_m is outright injective from m = 11 on. A proof for general m is what the
+    classification still needs; this is evidence, not the proof.
+    """
+    from collections import Counter
+    rows, ok = [], True
+    for m in range(6, mmax + 1):
+        N = 1 << m
+        fold = [zeck_prefix(v, m) for v in range(N)]
+        phi = {}
+        for v in range(N):
+            star = tuple(sorted(fold[v ^ (1 << (m - 1 - i))] for i in range(m)))
+            phi.setdefault((fold[v], star), []).append(v)
+        sizes = Counter(len(g) for g in phi.values())
+        mx = max(sizes)
+        ok &= mx <= 2
+        rows.append((m, N, len(phi), mx, dict(sizes)))
+    return ok, rows
