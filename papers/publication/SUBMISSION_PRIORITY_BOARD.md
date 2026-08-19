@@ -7298,3 +7298,47 @@ Blondel–Nesterov 只用在**端点那一步**，常数本身他是用 Perron �
 
 内存 1.12 GB。
 
+
+---
+
+## tick 423 — 幸存定理所依赖的那个条件，我把决定性一环验了
+
+Oracle 正常；codex 503。
+
+上个 tick 那条唯一幸存的主定理（q=9..17 的 Galois 结果）**整个压在一个条件上**：
+
+> "Assuming your certificates prove that the displayed irreducible polynomial is **genuinely
+> the minimal polynomial** of the Perron factor—not merely a factor of a larger transfer
+> characteristic polynomial—the S_d determinations are new arithmetic information."
+
+### 逻辑拆开
+
+Π_q 不可约 **且** λ_q 是它的根 ⟹ Π_q 就是 λ_q 的极小多项式。两个前提分别查。
+
+### 我先用错了判据，随即改对
+
+第一版拿 m=23 的比值 `S_q(m+1)/S_q(m)` 去比 Π_q 的主根，设 1e-6 容差，九个全报 False。
+**判据错了不是论文错** —— 有限 m 的比值本就没收敛到渐近根，
+q 越大次主根越近、差得越多（q=9 差 2.5e-4，q=17 差 0.083）。与 t398 同一类错误。
+
+改成**精确检验**：Π_q 就是递推的特征多项式，所以直接问它能否**精确重现**我独立算出的 S_q(m)。
+
+    q   9 10 11 12 13 14 15 16 17
+    次数 7  9  9 13 11 13 11 13 13
+    精确吻合 21 19 19 15 17 15 17 15 15 项，**九条全部零失败**
+
+`S_q(m)` 是我按定义自行算的（`Π_{j=1}^m (1+z^{F_j})` 的系数幂和），不读它的存档数据。
+
+**所以 λ_q 确是 Π_q 的根。** 这是那个条件里决定性的一环。
+
+### 我没验成的那一半，如实分开记
+
+不可约性我想独立验（q=9 的证书称模 11 分解为单个 7 次不可约因子），
+但我的多项式幂运算实现太慢，`p^n` 指数上千万，**超时未跑完**。
+**那是我的检查没跑成，不是它没通过** —— 不可约性目前仍取自论文的模证书，未经我复核。
+
+所以现状是：**"λ_q 是根"已由我独立确认；"Π_q 不可约"仍待独立复核。**
+两者都成立时，Galois 一节的前提才完整。
+
+内存 1.12 GB。
+
