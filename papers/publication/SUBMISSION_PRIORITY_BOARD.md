@@ -7738,3 +7738,44 @@ t429 那条蕴含（共享签名的两数之差必为"恰两位二进制 1 的 F
 无任何碰撞对偏离该描述。提交 `439921a34`。
 
 这不是证明，只是把有限证据推远了一档。真正的证明仍在 `22e20d2a` 手里。
+
+## tick 434 — 关掉 `zeck_arith` 遗留的优先权问题：这次的空结果带对照，站得住
+
+codex 仍 503。Oracle：`22e20d2a` 与重发的 `d33b4b7a` 均已 `waiting_response`，各由一个活着的
+worker 持有 —— 重发这次落到没掉的 worker 上，与 t433 的池子诊断一致。内存 1.75 GB，无孤儿。
+
+### 为什么查 `zeck_arith`
+
+Sanna 那件事是靠问"这个招牌结论是不是已经有人做过"才发现的，而这个问题我只对 `projection`
+问过。冲刺组里同样暴露的是 `zeck_arith`：它的承重定理是 Zeckendorf 乘法延迟的线性下界，
+而 Frougny 一脉在 Fibonacci 计数系统的有限自动机算术上有长期工作。
+
+### 先读已有的检查，不重做
+
+发现昨天（08-18）已有一份 `artifacts/priority_check_2026-08-18.md`，做得很扎实：
+带正对照、查出漏引 Labbe-Lepsova、并发现更严重的内部问题（`zeck_arith` 与已在 RAIRO ITA
+送审的姊妹稿 ITA-2026-0032 主题重叠却零互引）。
+
+但它对**招牌定理本身**明确写着"优先权问题仍未关闭"，理由很诚实：那次查询返回的噪声来自
+延迟微分方程、假币问题、量子不经意传输、神经网络硬件 —— 噪声来自四个无关领域，说明查询
+根本没搜到目标领域，因此它的沉默不构成证据。
+
+### 本 tick 把它关掉
+
+换成对着领域而非短语的查询重跑 Crossref：十二条命中**全部**是 Fibonacci 计数系统的论文，
+其中十条出自 *The Fibonacci Quarterly*（Zeckendorf 1972、Hoggatt 1972、Kimberling ×3、
+Bunder、Filipponi-Hart、Anderson 2014、Edson 学位论文、Shallit 2026）。
+**这正是上次缺的那个对照** —— 噪声全部来自目标领域，所以"结果里没有任何在线延迟下界"
+这件事从"无证据"变成了"弱证据"。
+
+结论按能支持的强度写：在一个可证覆盖该领域的索引里未找到该线性下界的在先工作。
+这不是新颖性的证明，Oracle 仍是正确工具，因为它能读懂陈述而不是匹配关键词。
+
+### 顺带查出两条完整性漏引（已核实未被引用，Shallit 作正对照 2 处命中）
+
+    Fenwick, "Zeckendorf Integer Arithmetic", Fib. Quart. 41 (2003) 405-413
+    Dimitrov-Donevsky, "Faster Multiplication ... Zeckendorf Representation", Fib. Quart. 33 (1995) 74-77
+
+两篇都是算法与实践取向，均未给出延迟界，不构成优先权威胁。但一篇主题就是 Zeckendorf
+算术的稿子，若不引那篇标题就叫 *Zeckendorf Integer Arithmetic* 的文章，在该刊审稿人眼里
+就是没读文献。已并入昨天那份 artifact 的行动清单（提交 `b3860669a`），等 codex 执行。
