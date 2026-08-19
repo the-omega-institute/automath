@@ -49,3 +49,49 @@ missing.
 2. Expand the bibliography generally; five entries will draw comment by itself.
 3. Neither item is a priority threat. Both are the same class of defect as the missing Fenwick
    citation in zeck_arith: a small field whose referee pool will notice its own names missing.
+
+---
+
+# Scope audit, 2026-08-19: the title and abstract still describe the rejected paper
+
+This is not a literature finding, but it belongs with the other pre-submission checks and
+there is no separate audit file for this paper.
+
+The referee desk-rejected this manuscript for treating one fixed partition of one 64-vertex
+graph and asked for an infinite family. The body was subsequently extended: the introduction
+now defines Fold_m and the involutions sigma_{i,j}^{(m)} for general m, and
+Proposition (Characterisation of involution-admissible dimensions) determines the
+involution-admissible dimensions to be exactly {3, 6, 8, 9}, importing the Bugeaud-Cipu-
+Mignotte binary-digit theorem. The sentence "The six-dimensional partition belongs to a
+sparse dimension-dependent phenomenon" is in the introduction.
+
+The title and the abstract were not updated.
+
+  Title:    "The Unique Minimal Equitable Refinement of a Folded Partition of the 6-Cube"
+  Abstract: the six-dimensional hypercube, the 21-cell partition, the 48-cell refinement
+            with 32 singletons and 16 pairs, the quotient spectrum with multiplicities
+            (1,5,11,14,11,5,1), and the discarded 16-dimensional sector carrying Q_4.
+
+The abstract does not mention general m, the classification, the sporadic set, or the word
+family anywhere. An editor who reads only the title and abstract - which is how a desk
+decision is made - sees precisely the single-example paper that was already rejected, with no
+indication that the objection has been answered.
+
+This is the highest-value editorial defect currently known in this manuscript, and it is
+independent of the remaining mathematics. The classification stands on its own: it does not
+depend on the unproved D-chain interlacing lemma, because the involution-admissible dimensions
+are pinned by the arithmetic of Fibonacci numbers with two binary digits, which is imported and
+effective. So the abstract can be rewritten now, without waiting for the two-star lemma.
+
+## Action when the codex channel returns, in priority order
+
+1. Retitle so the classification is the subject rather than the 6-cube.
+2. Rewrite the abstract to lead with the classification at m in {3, 6, 8, 9} and the closed
+   form 3 * 2^{m-2} for the cell count, keeping the six-dimensional spectral results as the
+   worked case rather than the whole content.
+3. State plainly in the abstract what is and is not proved: the classification of
+   involution-admissible dimensions is complete, while the stronger statement that every
+   fibre of the coloured-star signature has at most two elements is verified for
+   6 <= m <= 5000 and holds for all sufficiently large m with an ineffective cutoff.
+4. Note that the cover letter, if it still frames the paper as the 6-cube study, needs the
+   same treatment.
