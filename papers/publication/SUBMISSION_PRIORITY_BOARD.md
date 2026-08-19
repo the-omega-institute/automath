@@ -8164,3 +8164,49 @@ involution-admissible 维数钉死为 **{3,6,8,9}**（导入 Bugeaud-Cipu-Mignot
 有效的二进制位定理钉住的。行动清单（改标题、摘要改以分类领起并给出闭式 `3*2^(m-2)`、
 在摘要中如实区分已证与已验、同步检查 cover letter）已写入
 `artifacts/literature_check.md`，提交 `099475def`。
+
+## tick 446 — 摘要审计推到全组；`projection` 的摘要把 Sanna 的定理写成了自己的
+
+codex 仍 503。内存 1.76 GB，无孤儿。在飞：`e856df85`（TWOSTAR r3 重发）。
+
+### Oracle
+
+`02fb31b8` 报 extraction_failure，属首次失败，按协议原样重发为 `e856df85`，不作诊断。
+
+### 一次差点被我记成结论的假阴性
+
+查 `zeck_arith` 摘要有无那条乘法延迟定理时，抽取模式一个字符都没匹配到，`grep -c` 于是返回 0，
+看上去像"摘要漏掉了承重定理"。直接打印原文才发现摘要里明明写着
+"prove that every exact most-significant-digit-first multiplier at effective resolution n has
+delay at least n-1"。**是我的模式坏了，不是论文缺内容。** 与 t377 同一类转义错误。
+
+同一模式也让我回头复核 t445 那条 window6 结论 —— 改用可用的抽取后重新逐字打印摘要，
+确认其中确无一般 m、分类、族或零星集的任何表述，**t445 的判断成立**。
+
+### 全组摘要审计结果
+
+| 稿件 | 结论 |
+|---|---|
+| `brocot` | 干净。最锋利的主张（把 Dushistova 的首项系数从 `R_s+2R_s^2` 更正为 `2R_s^2`）直接写在摘要里 |
+| `zeck_arith` | 干净。乘法延迟下界在摘要中明写 |
+| `window6` | t445 已记：标题与摘要仍是被拒版本 |
+| `projection` | **有问题，见下** |
+
+### `projection`：摘要把 Sanna 的定理 1 写成了本文贡献
+
+摘要现文：
+
+    An asynchronous finite-state kernel identifies each lambda_q (q >= 2) as the Perron root
+    of a nonnegative integer matrix and hence proves that lambda_q is an algebraic integer.
+
+按 t430 逐字读原文所得：Sanna 定理 1 **正是**用 Berstel 自动机 p 份并行所得转移矩阵的
+Perron-Frobenius 特征值证明 lambda_p 为代数整数。**同一个定理、同一个方法。**
+摘要别处确实引了他（"Sanna's partition power sums"），所以不是刻意隐瞒；但熟悉 Discrete
+Analysis 那篇的审稿人读到这句，就是在读他自己的结果。
+
+真正属于我们的：纤维重数作为 Fibonacci 滞后离散导数、以及把他的渐近搬到 S_q(m) 的夹逼；
+Table 1 从 p=8 延长到 q=9..17（**必须写成"延长"**）；以及他完全没碰的算术侧（不可约性、
+Galois 群、判别式、线性无关性、Chebotarev 密度）。摘要对最后一项的处理其实是诚实的
+（写了 "computationally certified"、"conditional on the audited identification"），口径正确。
+
+行动清单已写入 `artifacts/verification_2026-08-19.md`，提交 `245b55a1c`。
