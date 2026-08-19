@@ -1,0 +1,52 @@
+I need a proof, a disproof, or a reduction for one combinatorial lemma. Please treat it as a
+research question, not an exposition request.
+
+SETUP. Fix m >= 6. For an integer a with 0 <= a < 2^m, write Fold_m(a) for the first m digits
+of the greedy Zeckendorf expansion of a, i.e. expand a as a sum of distinct non-consecutive
+Fibonacci numbers F_2 < F_3 < ... (with F_2 = 1, F_3 = 2, F_4 = 3, ...) and record the
+indicator vector of which of F_2 ... F_{m+1} were used, discarding everything above F_{m+1}.
+So Fold_m maps {0,...,2^m - 1} into {0,1}^m, and it is very far from injective.
+
+Regard {0,...,2^m - 1} as the vertex set of the hypercube Q_m, where a and b are adjacent when
+their binary representations differ in exactly one bit. Define the one-step coloured-star
+signature
+
+    Phi_m(a) = ( Fold_m(a),  the multiset { Fold_m(a XOR 2^i) : 0 <= i < m } ).
+
+THE LEMMA I WANT SETTLED. For every m >= 6, every fibre of Phi_m has cardinality at most 2.
+
+WHAT I KNOW. I verified this exhaustively for m = 6 through 16. The maximum fibre size is
+exactly 2 for m <= 10 and drops to 1 for m >= 11, so Phi_m appears to be outright injective
+from m = 11 on. The lemma as stated (bound 2, all m >= 6) is what I need, but a proof of
+injectivity for all sufficiently large m plus a finite check would serve equally well. Note
+the bound genuinely fails below 6: Fold_2(0) = Fold_2(3), Fold_3(0) = Fold_3(5) and
+Fold_4(0) = Fold_4(8) are collisions of the fold itself.
+
+WHY IT MATTERS, so you can see what shape of argument is useful. The fibres of Phi_m are
+exactly the cells produced by one round of colour refinement of the partition induced by
+Fold_m on Q_m. If every cell has size at most 2, then a separate closure lemma I already have
+(an equitable partition all of whose cells have size at most 2 forces the cell-swapping map to
+be a graph automorphism, because the two-by-two adjacency block between two such cells has
+equal row and column sums) upgrades any non-discrete stable refinement into a fold-preserving
+involutory automorphism of the cube. I have separately proved by an arithmetic argument that
+such an involution exists only for m in {6, 8, 9}: the mechanism requires a Fibonacci number
+that is a sum of two distinct powers of two, F_k = 2^p + 2^q, positioned so that p + 1 <= m <=
+k - 3, and the only Fibonacci numbers with exactly two binary ones in the relevant range are
+F_9 = 34 and F_12 = 144. So this lemma is the last gap in a complete classification.
+
+WHAT I AM ASKING FOR, in order of preference.
+
+First, a proof. The natural line of attack is that a and b in a common fibre must have
+Fold_m(a) = Fold_m(b), so a and b differ by an integer whose Zeckendorf expansion is supported
+above F_{m+1}; then the m neighbour-folds have to match as multisets, which is a strong
+carry-propagation condition. I have not been able to close it.
+
+Second, a counterexample: an m >= 6 and three distinct integers with the same Phi_m value.
+That would kill the lemma and I would rather know now.
+
+Third, if neither is within reach, a reduction that makes the finite verification conclusive,
+for instance a proof that fibre sizes are non-increasing in m past some explicit point, or a
+bound on fibre size in terms of the number of carries, which would let m = 6..16 settle it.
+
+Please be explicit about which of the three you are giving me, and do not present a heuristic
+as a proof. If you find the statement is false as I have written it, say so plainly.
