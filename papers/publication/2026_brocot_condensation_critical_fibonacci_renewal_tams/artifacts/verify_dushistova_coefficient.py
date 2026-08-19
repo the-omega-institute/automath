@@ -176,9 +176,28 @@ def main():
     print(f"\n    extrapolated limit {mp.nstr(final, 10)}")
     print(f"        distance to {mp.nstr(paper, 6)} (paper)      : {mp.nstr(dp, 6)}")
     print(f"        distance to {mp.nstr(dush, 6)} (Dushistova) : {mp.nstr(dd, 6)}")
-    verdict = "paper" if dp < dd else "Dushistova"
-    print(f"    -> the data favour: {verdict}")
-    return 0 if verdict == "paper" else 1
+    # The naive verdict below is NOT reported, because it is unsound at reachable n.
+    # Both raw and extrapolated sequences are converging toward roughly 15.5 to 16, which is
+    # neither 8 nor 10; the raw increments shrink monotonically (0.44, 0.37, 0.31, 0.26, 0.21,
+    # 0.17, 0.13 from n=15 to n=22) and the extrapolation descends to meet them. Declaring the
+    # nearer of two far-away targets the winner would be exactly the error of treating a
+    # non-converged quantity as a converged one.
+    print()
+    print("    NOT DISCRIMINATING. Both sequences head toward about 15.5-16, which matches")
+    print("    neither candidate. The nearer-target comparison is therefore meaningless here;")
+    print("    at n=22 the extrapolant is 9.8 from the paper value and 7.8 from Dushistova's,")
+    print("    and both distances are enormous.")
+    print()
+    print("    UNRESOLVED, and it concerns this paper's sharpest claim. The apparent limit is")
+    print("    close to twice the paper's 2R_s^2 = 8. A factor of two here was raised and then")
+    print("    RETRACTED at t398, on the ground that an increasing sequence had been")
+    print("    extrapolated before its maximum. That retraction is not being reversed: n <= 22")
+    print("    is too short to tell a converging sequence from one that turns over later.")
+    print("    What is established is only that this script does not support the printed")
+    print("    coefficient at reachable n, and the discrepancy must be settled before")
+    print("    submission -- by pushing n far higher, or by checking the normalisation of Z_n")
+    print("    against the paper's definition.")
+    return 2
 
 
 if __name__ == "__main__":
