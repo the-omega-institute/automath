@@ -95,3 +95,41 @@ effective. So the abstract can be rewritten now, without waiting for the two-sta
    6 <= m <= 5000 and holds for all sufficiently large m with an ineffective cutoff.
 4. Note that the cover letter, if it still frames the paper as the 6-cube study, needs the
    same treatment.
+
+---
+
+# Reproducibility audit, 2026-08-19
+
+The abstract claims "All finite data needed to recompute the claims are supplied in the
+accompanying supplement", and section "Final remarks and reproducibility" names six scripts.
+Claims of this kind are worth testing rather than trusting, since a named script that no longer
+runs is worse than no script at all.
+
+All six were executed. Every one exits 0:
+
+    supplement/verify_window6_streams.py      all assertions passed
+    artifacts/verify_hidden_refinement.py     all assertions passed
+    artifacts/verify_refinement_family.py     m with a nontrivial refinement: [3, 6, 8, 9]
+    artifacts/verify_involution_mechanism.py  16 candidates, F_12=144, F_9=34, F_5=5
+    artifacts/verify_admissible_dimensions.py streams candidates through m=22
+    artifacts/verify_preservation_criterion.py 49 candidates tested, 0 disagreements
+
+So the reproducibility claim is sound and this is not a submission risk. Two remarks.
+
+First, the prose is honest in the right places: it says the finite checks "corroborate, but do
+not replace, either the criterion or the cited Diophantine classification", and separately that
+they "do not replace the proofs of the interval lemma or the spectral-carrier argument". That
+is the correct register and needs no change.
+
+Second, verify_refinement_family.py independently outputs [3, 6, 8, 9]. That is the paper's own
+script, written before any of my auditing, and it confirms from the paper's side the correction
+recorded at t442 - where my reconstructed criterion in verify_sporadic_involutions.py used
+m <= k-3 and so silently dropped m = 3. The paper was right and its reproducibility apparatus
+would have caught my error had I run it earlier.
+
+Note that the roughly nine verification scripts I added to artifacts/ during this sprint are
+NOT named in the reproducibility section, and should not be: they audit claims that go beyond
+what the manuscript asserts. The paper claims the refinement sweep through m = 16 and the
+candidate stream through m = 22; the two-star lemma to m = 5000 and the effective Diophantine
+route are mine and are not in the manuscript. If any of that is ever promoted into the paper,
+the corresponding scripts must be named here at the same time.
