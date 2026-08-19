@@ -7053,3 +7053,62 @@ Prop 14 是对 base τ 而非 Fibonacci 记数系统陈述，附录处理正确�
 
 内存 1.12 GB。
 
+
+---
+
+## tick 418 — 我的 sharp lemma 陈述被纠正（漏了 m≥6），并给出无哈希的精确证书
+
+Oracle 正常（`d29e8c8d` 仍在跑）；codex 503。两份已归档。
+
+### 我的陈述是错的，反例已自行核实
+
+    Phi_2(0)=Phi_2(3)   差 3
+    Phi_3(0)=Phi_3(5)   差 5
+    Phi_4(0)=Phi_4(8)   差 8
+
+三条我都验了，**确实成立**，差值皆非 34 或 144。我 t414 写的陈述漏了 **m ≥ 6** 这个前提 ——
+因为我的计算从 m=6 起跑，从没看见低维反例。**这是"我只在自己选的范围里检验"的典型代价。**
+
+修正后的陈述：`m ≥ 6, Φ_m(a)=Φ_m(b), a≠b ⟹ |a−b| ∈ {34,144}`。
+
+### 它给了一个无哈希的精确证书 —— 正好补上我 t416 栽的跤
+
+    Gamma_m(n) = ( rho_m(n),  sum_j ( rho_m(n xor 2^j) − rho_m(n) )^3 )
+
+`rho_m` 是保留前缀的数值。**Γ 是 Φ 的函数**，故 Γ 无重复即蕴含 Φ 单射；
+用有符号整数精确比较，不是概率性哈希。我 t416 为提速用求和哈希、报出 249 个假碰撞，
+根子就是拿了个**不是 Φ 的函数**的东西当替身。Γ 是做对的方式。
+
+我核了它：m=6,8,11,13 上**每个 Φ-碰撞都是 Γ-碰撞、零例外**，且计数逐一相等（16↔16、64↔64）。
+
+### 用它把单射性自行推到 m=21
+
+    m=19  524,288 顶点   Γ 重复 0
+    m=20  1,048,576      Γ 重复 0
+    m=21  2,097,152      Γ 重复 0        （m=22 超时）
+
+对方称验到 m=25；我自己独立到 m=21。
+
+### 关键的诚实一句
+
+> "I do not presently have a valid uniform proof of (ST). The sparse-Fibonacci classification
+> **by itself does not prove it**. There is a genuinely additional two-star rigidity statement missing."
+
+这与我 t415 的结论一致，但更准：**不是循环，而是真缺一条额外陈述**。
+所以 window6 的定稿只能是"计算机辅助定理（到 m=25）+ 未证的一般性"，不能写成完整分类。
+
+### `zeck_arith`：送外审 **45%**（可抬至 60%），**留在 FQ**
+
+最要紧的是它判定**什么才是这篇论文**：
+
+> "The referee will treat the multiplication-delay theorem as the paper.
+> The ring structure will be treated as **notation and motivation**."
+
+即：可作为"有界延迟 Fibonacci 乘法之不可能性"的论文送审，**不可作为"Fibonacci 剩余代表构成环"的论文**。
+环结构要成为实质贡献，需证一条非形式的相容性定理（例如刻画哪些符号截断映射是环同态）。
+
+投 **RAIRO ITA 更差**：那里的审稿人会追问该延迟障碍为何局限于这一个模型、
+方法能否给出一类 Pisot 记数系统的定理，而环结构在那里几乎不加分。
+
+内存 1.12 GB。
+
