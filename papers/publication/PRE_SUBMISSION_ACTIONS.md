@@ -57,13 +57,12 @@ principal contribution and then saying which components are standard. Use that s
 
 ## brocot — one unsettled claim, one venue decision
 
-**UNSETTLED, NOT WRITING.** The headline coefficient cannot be settled at reachable n. The
-paper's own artifacts already record that n^s Z_n rises to about 15.28, turns over near n = 27,
-and has only begun to descend by n = 29 (t460). Every measurement available lies before that
-peak, so none of it bears on the limit. The error mechanism the paper claims is separately
-verified: endpoints supply 2R against 3R, a difference of exactly R_s = 2 (t460). Settling the
-constant needs a transfer-operator treatment; the Stern-Brocot walk tops out around n = 24 and
-the obvious tightening fails because growth along one branch is linear, not geometric (t459).
+**RESOLVED (t473).** The headline constant is 8, confirmed by independent computation. The
+transfer-operator route that t459 identified as necessary was supplied by the Oracle as a
+resolvent recurrence; I implemented it, validated it against my exact-integer table to 1e-14,
+and computed Z_n to n = 1000. The sequence peaks at 15.276 near n = 27 and descends to 8.2186
+at n = 1000, so C = 2R_s^2 = 8 and the published 10 is wrong, which is what the paper claims.
+The error mechanism was separately verified at t460. Nothing further is needed here.
 
 **DECISION NEEDED, NOT MINE.** The cover letter addresses TAMS and submission_metadata.md
 records TAMS as primary with JNT fallback, so the two agree. An earlier note called for
