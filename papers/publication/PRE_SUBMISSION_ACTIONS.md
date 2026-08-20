@@ -9,7 +9,7 @@ Nothing here is a writing task I performed. Items marked WRITING need the codex 
 
 ---
 
-## window6 — strongest paper, one blocking defect
+## window6 — blocking defect CLOSED (t524)
 
 **BLOCKING, WRITING.** The title and abstract still describe the desk-rejected scope (t445).
 The referee rejected it for treating one 64-vertex graph and asked for a family. The body was
@@ -38,7 +38,7 @@ section at the same time.
 
 ---
 
-## projection — abstract claims someone else's theorem
+## projection — attribution CLOSED (t525)
 
 **BLOCKING, WRITING.** The abstract says a finite-state kernel "identifies each lambda_q as the
 Perron root of a nonnegative integer matrix and hence proves that lambda_q is an algebraic
@@ -77,7 +77,7 @@ root as working directory and fail from inside artifacts/ (t456).
 
 ---
 
-## zeck_arith — no submission materials at all
+## zeck_arith — submission materials CLOSED (t526)
 
 **BLOCKING, WRITING.** The only sprint manuscript with no cover letter, no checklist and no
 metadata (t462). Target is on record: Integers, Electronic Journal of Combinatorial Number

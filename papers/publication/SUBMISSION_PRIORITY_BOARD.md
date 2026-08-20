@@ -9331,3 +9331,40 @@ an algebraic integer \cite[Thm.~1]{Sanna2025}"**，我们的 kernel 降为
 补三条已核实缺失的引用（Labbe-Lepsova / Fenwick / Dimitrov-Donevsky）、
 新颖性措辞**只能**写到"在可证覆盖该领域的索引中未发现在先工作"为止、
 并加可复现声明但**点名脚本前必须先跑通**。
+
+## tick 526 — 三条 BLOCKING 全部关闭；并在投稿信里查出并改掉一句不实陈述
+
+内存一度降到 0.69 GB（接近阈值），agent 退出后回到 1.06 GB。无孤儿。
+
+### zeck_arith：最后一条 BLOCKING 落地
+
+新建 `cover_letter_integers.txt`、`submission_checklist.md`、`submission_metadata.md`。
+信以**乘法延迟定理**领起，并明确把环结构降为"该障碍得以表述的设定"——正是 t418 判断审稿人
+会采取的读法。披露了 RAIRO ITA 在审的 ITA-2026-0032。新颖性只写到
+"no prior art ... found in an index demonstrably covering the field"，并加上
+**"We make no stronger priority claim."** 正文补引姊妹稿与三条缺失文献，
+并加了点名 `verify_multiplication_delay_bound.py` 的可复现段（我先跑过，通过）。
+
+### 查出一句不实陈述，已改
+
+信里原写两篇论文 **"cite one another"**。**这在一个方向上是假的**：本文现在引了姊妹稿，
+而姊妹稿已在审、引用本文 **0 次**。已改为如实表述：本文引用 ITA-2026-0032；
+后者早于本文投出、并未引用本文；并承诺将向 RAIRO ITA 编辑说明本次投稿。
+
+**这正是"不采信 agent 自述"要防的东西** —— 编译干净、格式正确、语气得体，
+但其中一句关于仓库实际状态的断言是错的。
+
+### 我自己的一次假警报
+
+我先前 grep `verify_multiplication_delay_bound` 得 0，一度以为它没按要求点名脚本。
+实际是 LaTeX 把下划线转义成 `\_`，我的模式匹配不到。**文件是对的，错的是我的检索。**
+
+### 独立核验
+
+`latexmk -C` 后从零重建：exit 0、34 页、未定义引用 0、错误 0；无任何定理/引理/证明被动。
+提交 `b1a60d921`。
+
+### 清单状态
+
+`PRE_SUBMISSION_ACTIONS.md` 三个标题已改为 CLOSED。**三条 BLOCKING 全部结清。**
+余下：五篇的可复现声明、brocot 两个工作目录 bug、以及 brocot 的选题 DECISION。
