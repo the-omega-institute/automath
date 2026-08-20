@@ -9492,3 +9492,38 @@ brocot 的 19 个脚本里点名 15 个，排除了三个 `test_*` 与
 
 `PRE_SUBMISSION_ACTIONS.md` 的 sprint-wide 可复现条目已改为 CLOSED。
 至此清单上只剩一条：**brocot 的目标期刊选择（TAMS 还是 AIHP）—— 需要你拍板，不是我能定的。**
+
+## tick 531 — 做了一次投稿就绪度矩阵，查出此前没查过的一层缺口
+
+内存 2.90 GB。
+
+### 三条 BLOCKING 关闭之后，我去看"每篇到底齐不齐"
+
+把六篇按 PDF / cover letter / metadata / checklist / 可复现声明 / 脚本数排成矩阵，
+**查出一层此前从未核过的缺口**：
+
+    paper              PDF   cover  meta  checklist  repro  scripts
+    window6            10p     1      -       -        4      18
+    projection         49p     1      -       1        1      10
+    brocot             31p     1      1       -        1      19
+    zeck_arith         34p     1      1       1        1       1
+    scan_projection    18p     1      -       1        1       3
+    cubical_stokes     28p     1      -       -        1       3
+
+**metadata 缺四篇、checklist 缺三篇。** 只有 zeck_arith 齐全 —— 因为那是 t526 刚建的。
+这不是新缺陷，是项目约定被不一致地执行；但它会在投稿当天变成麻烦。
+
+### 已派工填补，并加了一条硬约束
+
+brocot 现有的 metadata 里有一栏
+"Assessed substantive editorial/referee probability: TAMS 55--65%（中心值 60%）"。
+**那是人的判断。** 任务里明确写死：**不得为任何论文编造这种数字**，
+要么整栏省略、要么写 "not assessed"，并声明我会检查 ——
+**编一个接受概率比留空更糟。**
+
+其余字段必须从事实取：标题作者照抄 main.tex、目标期刊取自该篇 cover letter 或
+scope_contract（**不得猜**，定不了就写 "target not recorded"）、页数**必须真编译后读取**、
+MSC 与关键词用稿件已声明的、没有就说没有。
+
+checklist 的每一条**必须真跑**并记录证据（照 scan_projection 那种
+"PASS -- 17 cited keys exactly match 17 entries" 的写法）；**没跑的条目只能标未检查，不能标 PASS。**
