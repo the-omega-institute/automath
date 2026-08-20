@@ -9265,3 +9265,34 @@ codex 503（约 44 小时），池子空，内存 1.75 GB，无孤儿。**状态
 
 内存 1.00 GB 偏低，且规则是同一篇同时只跑一个 agent。projection 的披露句与
 zeck_arith 的 cover letter 排在其后，等这一篇落地并核验通过再派。
+
+## tick 524 — window6 的标题与摘要已改并**独立核验通过**；接着派 projection
+
+内存 1.73 GB，无孤儿。
+
+### 收割：w6 完成，且我没有采信它的自述
+
+新标题：**Involution-Admissible Zeckendorf Folds: Dimension Classification and the 6-Cube
+Refinement** —— 分类领起，6-cube 降为副题。
+
+摘要现以 m in {3,6,8,9} 的分类开篇，把二进制位定理明确归给 Bugeaud-Cipu-Mignotte 并称其为
+**imported effective theorem**，给出闭式 `3*2^(m-2) = 6,48,192,384`，再把六维结果
+（21 胞、48 胞细化、谱重数 (1,5,11,14,11,5,1)、Q_4 扇区）作为 **worked case** 保留而非删除。
+并自设边界：分类只对所述对合完整，**不主张**对任意 equitable refinement 的分类。
+
+**独立核验**（不看它的报告）：`latexmk -C` 清空后从零重建，exit 0、10 页、
+未定义引用 0、错误 0；论文可复现节点名的六个脚本全部重跑通过；
+`pdftotext -enc UTF-8` 确认新摘要确实进了 PDF。定理、证明、可复现节均未被动，
+无任何修订痕迹措辞。t440 的两处一并解决：加入 "perfect colouring" 术语与相应文献，
+参考文献 5 条增至 7 条。
+
+它还改了 cover letter —— 我没要求，但那里引用了标题，必须同步，属正确判断。提交 `af231418e`。
+
+### 派下一条：projection 的归属句
+
+任务 `sprint/task_projection_disclosure.txt`，输出 `sprint/tier2/proj_disclosure_out.txt`。
+要点：摘要那句"kernel ... hence proves that lambda_q is an algebraic integer"是 Sanna 定理 1
+本身；须改为归属于他；须写明 q=9..17 是他 Table 1（止于 p=8）的**延长**；
+须补一句 cubical_stokes 式的披露句（点明主贡献 + 明说哪些是标准件）；
+并**不得削弱**现有那些诚实的措辞（"computationally certified"、"conditional on the audited
+identification"）。同样禁止动定理与证明、禁止修订痕迹、要求 latexmk 通过。
