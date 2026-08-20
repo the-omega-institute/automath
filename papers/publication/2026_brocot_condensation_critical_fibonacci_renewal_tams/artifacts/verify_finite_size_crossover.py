@@ -9,6 +9,8 @@ prefactor mutation is a negative control, not an alternative fit.
 
 from __future__ import annotations
 
+import os
+
 import argparse
 import math
 import sys
@@ -209,7 +211,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--theta", type=float, nargs="+", default=DEFAULT_THETAS)
     parser.add_argument(
         "--output",
-        default="artifacts/finite_size_crossover_check.txt",
+        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "finite_size_crossover_check.txt"),
         help="report path relative to the paper directory, or - for stdout only",
     )
     return parser.parse_args()

@@ -9,6 +9,8 @@ paper.  Only Python's standard library and NumPy are required.
 
 from __future__ import annotations
 
+import os
+
 import argparse
 import math
 import sys
@@ -453,7 +455,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output",
-        default="artifacts/critical_gibbs_geometry_check.txt",
+        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "critical_gibbs_geometry_check.txt"),
         help="artifact path relative to the paper directory, or - for stdout only",
     )
     return parser.parse_args()
