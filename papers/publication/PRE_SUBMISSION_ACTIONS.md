@@ -1,5 +1,29 @@
 # Pre-submission action list
 
+## STATUS as of t534: every actionable item is closed. One decision remains, and it is not mine.
+
+All six sprint manuscripts now carry a PDF, a cover letter, submission metadata, a submission
+checklist and a reproducibility statement. Verified state, with the tick where each was checked:
+
+    window6          clean build t533, 6 named scripts pass t454, abstract retitled t524
+    projection       clean build t530, 10 named scripts pass t530, attribution fixed t525
+    brocot           clean build t530, 15 named scripts pass t530, constant confirmed t473
+    zeck_arith       clean build t526, 1 named script passes t526, materials created t526
+    scan_projection  clean build t530, 2 named scripts pass t530, abstract clean t447
+    cubical_stokes   clean build t530, 3 named scripts pass t530, abstract exemplary t447
+
+Thirty named scripts were executed independently at t530: 30 passed, 0 failed.
+
+THE ONE OPEN ITEM, and it needs a person: brocot's target journal. Its cover letter and its
+submission_metadata.md both say Transactions of the American Mathematical Society, with
+Journal of Number Theory as fallback. An earlier note in this sprint called for retargeting to
+Annales de l'Institut Henri Poincare. Those conflict. It is a venue judgement, not a defect,
+and nothing in the repository settles it.
+
+Everything below is the record of how these items were found and closed.
+
+---
+
 Digest of what this sprint window established, one section per manuscript, ordered by what
 blocks submission. The board is a chronological log and is now too long to act from; this is
 the actionable extract. Every item cites the tick where it was established so the evidence can
