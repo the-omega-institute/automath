@@ -28,6 +28,7 @@ discriminants and no splitting behaviour. The paper must cite Table 1 explicitly
 the extension as an extension.
 """
 import json
+import os
 import sys
 
 from mpmath import mp, polyroots
@@ -74,7 +75,8 @@ def main():
         print("The transcription of Table 1 is wrong. No conclusion.")
         return 1
 
-    P = json.load(open("polynomial_certificates_q9_17.json"))["polynomials"]
+    here = os.path.dirname(os.path.abspath(__file__))
+    P = json.load(open(os.path.join(here, "polynomial_certificates_q9_17.json")))["polynomials"]
     for e in P:
         rows.append((e["q"], largest_real_root(e["polynomial_coefficients"]), "ours"))
 
