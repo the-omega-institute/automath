@@ -9399,3 +9399,30 @@ server（0-10 MB），**无孤儿、无失控**；占用前十二名合计仅约
 
 内存尖峰期间不宜起 agent；且 brocot 剩下的是可复现声明（撰写类），
 与选题 DECISION（需你拍板 TAMS vs AIHP）。下个 tick 内存稳定即派可复现声明。
+
+## tick 528 — 内存三次采样稳定，派出四篇的可复现声明
+
+内存 1.74 / 1.75 / 1.68 GB（三次采样，稳定），codex 进程 0，池子空闲。
+
+### 先确认范围再派
+
+复查五篇的可复现声明状况，`zeck_arith` 在 t526 已经有了（repro-tex=1）。
+**实际仍缺的是四篇**：brocot（19 个脚本）、projection（10）、scan_projection（3）、
+cubical_stokes（3）。任务里明确写了**不要动 zeck_arith**。
+
+### 只派一个 agent，跨四篇
+
+规则是"同一篇同时只跑一个 agent"，一个 agent 跨四篇并不违反，
+且比并发四个 agent 省内存 —— 在刚经历 0.12 GB 尖峰之后这是稳妥选择。
+
+### 任务里最硬的一条
+
+**点名任何脚本之前必须先跑它**，只写 exit 0 的；跑不过的排除并在报告里说明理由；
+**不得修**失败脚本（那是另一件事），**不得描述没执行过的脚本**。
+并提醒它：部分脚本对工作目录敏感，判定"坏了"之前要在论文根目录与 artifacts/ 两处都试。
+
+范本指向 window6 的 "Final remarks and reproducibility" —— 点名六个脚本、各述其职、
+并明写这些有限检验"corroborate, but do not replace"判据与所引定理。要求照此形制与口径。
+brocot 的 `REPRODUCE.md` 与 `SHA256SUMS` 已存在，只需引用、不必重写。
+
+禁止动定理、证明、摘要；禁止修订痕迹；四篇都要 latexmk 通过。
