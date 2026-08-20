@@ -71,9 +71,29 @@ def Zn(n, s=SIGMA0, vmax=200000):
     return total, err, len(states)
 
 
+SAFE_TOP, SAFE_VMAX = 22, 20000
+
+
 def main():
-    top = int(sys.argv[1]) if len(sys.argv) > 1 else 34
-    vmax = int(sys.argv[2]) if len(sys.argv) > 2 else 200000
+    """Defaults are deliberately small.
+
+    Run bare, this script now stops at n = 22 with vmax = 20000, which finishes in seconds in
+    a few hundred MB. The previous defaults of n = 34 and vmax = 200000 consumed 4.4 GB and
+    drove the machine to 0.35 GB free with hard faults above 5000/sec; that happened when an
+    agent was told to run every script in this directory and dutifully ran this one. The cost
+    is real and the warning that used to sit only in a comment at the end of the file was not
+    seen in time.
+
+    Pass explicit arguments to go further, e.g. `verify_Zn_large_n.py 26 60000`, and watch
+    memory while it runs. n = 24 at vmax = 60000 is comfortable; n = 30 at vmax = 400000 is
+    not.
+    """
+    top = int(sys.argv[1]) if len(sys.argv) > 1 else SAFE_TOP
+    vmax = int(sys.argv[2]) if len(sys.argv) > 2 else SAFE_VMAX
+    if len(sys.argv) <= 1:
+        print("running with safe defaults n <= %d, vmax = %d; pass arguments to go further"
+              % (SAFE_TOP, SAFE_VMAX))
+        print()
     print("Z_n(sigma_0) by Stern-Brocot walk, truncated at v <= %d" % vmax)
     print("sigma_0 = %s\n" % mp.nstr(SIGMA0, 20))
     print("     n        n^s Z_n      error bound   ratio    states")
