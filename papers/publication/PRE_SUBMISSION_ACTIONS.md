@@ -104,10 +104,11 @@ and the box extremal value (earlier). Both lack a reproducibility statement (t45
 
 ## Sprint-wide
 
-**WRITING.** Five of six manuscripts have no reproducibility statement, in violation of the
-charter's reproducibility article. window6 is the exception. The apparatus largely exists and
-is simply unreferenced (t455). Before naming any script in such a statement, run it: window6's
-section is trustworthy precisely because its six were executed (t454).
+**CLOSED (t530).** All six manuscripts now carry a reproducibility statement. zeck_arith
+gained one at t526 and the remaining four at t530, naming 30 scripts between them. Every named
+script was executed independently and all 30 pass; all four papers rebuild clean from
+latexmk -C. The exclusions are deliberate: brocot leaves out its three test_* files and
+verify_dushistova_coefficient.py, which exits 2 with an explicit NOT DISCRIMINATING report.
 
 **Method note for whoever continues.** Exit codes are not results. At t456 I logged 30 of 33
 scripts as OK from status alone; two of them print material that changes the conclusion, and I

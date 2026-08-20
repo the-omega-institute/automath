@@ -9461,3 +9461,34 @@ t459 我把"这脚本吃内存、n>24 就爆"写进了**文件末尾的注释块
 
 该脚本此后会被排除在可复现声明之外 —— **这是正确的**：
 不能常规运行的脚本本就不该被写进可复现声明。
+
+## tick 530 — 四篇的可复现声明落地；30 个被点名脚本我逐个跑过，0 失败
+
+内存 2.96 GB，agent 已退出，无孤儿。
+
+### 结果
+
+四篇合计点名 **30 个脚本**（brocot 15、projection 10、scan_projection 2、cubical_stokes 3）。
+brocot 按要求引用了已有的 `REPRODUCE.md` 与 `SHA256SUMS`，没有重写它们。
+口径也对：文中出现 "corroborate, but do not replace" —— 与 window6 那节同一register。
+
+### 独立核验（这正是这件事的意义所在）
+
+- **30 个被点名脚本，我在各自目录逐个执行：30 通过、0 失败。**
+- 四篇全部 `latexmk -C` 后从零重建：exit 0，页数 31 / 49 / 18 / 28，
+  未定义引用 0、错误 0。
+- 四篇中**没有一行定理、引理、证明或摘要被动**。
+
+### 排除项是对的
+
+brocot 的 19 个脚本里点名 15 个，排除了三个 `test_*` 与
+`verify_dushistova_coefficient.py` —— 后者现在 exit 2 并打印显式的 NOT DISCRIMINATING，
+**本就不该出现在可复现声明里**。
+
+而 `verify_Zn_large_n.py` **被点名了**，这是合理的：t529 我给了它安全默认值后
+裸跑 12 秒即完成。我在 t529 预测它会被排除，**那个预测被我自己的修复推翻了**。
+
+### 清单状态
+
+`PRE_SUBMISSION_ACTIONS.md` 的 sprint-wide 可复现条目已改为 CLOSED。
+至此清单上只剩一条：**brocot 的目标期刊选择（TAMS 还是 AIHP）—— 需要你拍板，不是我能定的。**
