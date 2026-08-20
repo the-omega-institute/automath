@@ -9296,3 +9296,38 @@ Refinement** —— 分类领起，6-cube 降为副题。
 须补一句 cubical_stokes 式的披露句（点明主贡献 + 明说哪些是标准件）；
 并**不得削弱**现有那些诚实的措辞（"computationally certified"、"conditional on the audited
 identification"）。同样禁止动定理与证明、禁止修订痕迹、要求 latexmk 通过。
+
+## tick 525 — projection 的归属句已改并核验通过；派出最后一条 BLOCKING
+
+内存 1.13 GB。
+
+### projection：第二条 BLOCKING 关闭
+
+摘要现写 **"Sanna proved that each lambda_q ... is the Perron-Frobenius eigenvalue ... and hence
+an algebraic integer \cite[Thm.~1]{Sanna2025}"**，我们的 kernel 降为
+"independently realizes the same constants"，不再是结论的来源。并写明 q=9..17 是他 Table 1
+（记录 lambda_p 及其极小多项式至 p=8）的**延长**；且明说对他自己的非线性行套用同一判据
+同样得到全对称群，故我们的结果是**延续该模式而非打破它**。
+
+结尾补上 cubical_stokes 式的披露句：主贡献是 Fibonacci 滞后离散导数识别与夹逼，
+而 Sanna 的幂和渐近、Perron 根/代数性定理、以及 p<=8 的 Table 1 **均为引入**。
+
+**独立核验**：`latexmk -C` 后从零重建 exit 0、49 页、未定义引用 0、错误 0；
+`pdftotext -enc UTF-8` 确认归属句与披露句都进了 PDF；六个被改文件中
+**没有一行定理/命题/引理/证明被动**；两处诚实措辞（"computationally certified"、
+"conditional on the audited identification"）保留；无修订痕迹。提交 `45183b023`。
+
+### 顺手修掉我自己的一个 bug
+
+`verify_sanna_table_continuation.py`（我 t430 写的）用裸文件名打开 JSON，
+从 artifacts/ 以外的目录跑就崩 —— 这正是我在 t456 给 brocot 记下的同一类缺陷。
+已改为相对脚本路径，从论文根目录跑现在 exit 0。**它不是 codex 改动造成的回归。**
+
+### 派出最后一条 BLOCKING：zeck_arith 的投稿材料
+
+任务 `sprint/task_zeck_arith_submission.txt`，输出 `sprint/tier2/za_submission_out.txt`。
+要求：写 `cover_letter_integers.txt`（目标 Integers，见 scope_contract）、
+**以乘法延迟定理领起**、**必须披露** RAIRO ITA 在审的姊妹稿 ITA-2026-0032 并在正文引它、
+补三条已核实缺失的引用（Labbe-Lepsova / Fenwick / Dimitrov-Donevsky）、
+新颖性措辞**只能**写到"在可证覆盖该领域的索引中未发现在先工作"为止、
+并加可复现声明但**点名脚本前必须先跑通**。
