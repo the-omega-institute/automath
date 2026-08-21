@@ -14,7 +14,7 @@ powershell.exe -NoProfile -Command "
   \$m = Get-Counter '\Memory\Available MBytes','\Memory\Pages/sec' -EA SilentlyContinue
   'available {0:N0} MB, pages/sec {1:N0}' -f \$m.CounterSamples[0].CookedValue, \$m.CounterSamples[1].CookedValue
   \$orph = @(Get-CimInstance Win32_Process -Filter \"Name like '%python%'\" |
-    Where-Object { \$_.CommandLine -notmatch 'mcp' })
+    Where-Object { \$_.CommandLine -notmatch 'mcp|chatgpt-oracle' })
   if (\$orph.Count -gt 0) {
     'ORPHAN python x{0}:' -f \$orph.Count
     \$orph | ForEach-Object { '  pid {0}  {1}' -f \$_.ProcessId, \$_.CommandLine }
