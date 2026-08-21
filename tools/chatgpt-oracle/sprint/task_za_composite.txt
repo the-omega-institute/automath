@@ -1,0 +1,50 @@
+TASK: two repairs in one paper. Pre-authorised; do not ask, do not brainstorm. Minimal edits.
+
+PAPER: papers/publication/2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online/
+
+REPAIR 1, A MATHEMATICAL ERROR THAT SURVIVES IN TWO PLACES.
+
+At t538 the abstract was corrected to say Chinese-remainder decompositions occur when F_{m+2}
+"has at least two distinct prime divisors", replacing the earlier "when it is composite". The
+reason is that a prime power is composite yet does NOT split: Z/(p^k Z) is local and has no
+nontrivial idempotents. Only the abstract was fixed. Two reader-visible statements still carry
+the old error:
+
+  main.tex:80   "...yielding finite fields at Fibonacci-prime resolutions and Chinese-remainder
+                decompositions at composite resolutions."
+  main.tex:276  "...when \(F_{m+2}\) is composite, the same address space decomposes canonically
+                through the Chinese remainder theorem."
+
+Fix both so they agree with the abstract and with the body. The governing statement is
+cor:crt-factorization in source/07_emergent_arithmetic_03_zeckendorf_stable_value.tex, which is
+CORRECT as written and must NOT be changed: it factors M = prod p_i^{k_i} and notes that
+nontrivial idempotents and a canonical many-factor splitting appear precisely when r >= 2.
+
+Do NOT change that corollary's statement or proof. Its title, "CRT splitting: canonical product
+decomposition at composite resolutions", is loose in the same way; you may tighten the title only,
+and only if the label cor:crt-factorization and every reference to it still resolve.
+
+REPAIR 2, A 53pt OVERFULL LINE.
+
+main.log line 589 reports "Overfull \hbox (53.21614pt too wide) in paragraph at lines 272--275".
+The cause is the unbreakable typewriter path at main.tex:272-273,
+\texttt{artifacts/verify\_multiplication\_delay\_bound.py}. 53pt is roughly 19mm and protrudes
+visibly into the margin.
+
+Fix it in whatever way this manuscript already prefers. If the document loads url or hyperref,
+\path or \url will break at the underscores; otherwise insert \allowbreak or use \sloppy for that
+paragraph. Do not shorten or rename the script path: it is the real filename and is named in the
+reproducibility statement.
+
+Afterwards check main.log again and report the largest remaining overfull hbox. Several smaller
+ones exist, at roughly 25pt, 23pt and 18pt; fix any that are also caused by unbreakable paths,
+and leave ordinary prose ones alone.
+
+CONSTRAINTS.
+  - Do not alter any theorem, proposition, corollary statement, or proof.
+  - No revision marks, no changelog language.
+  - Rebuild with latexmk -pdfxe. The paper is currently 34 pages; if that changes, update BOTH
+    submission_metadata.md and submission_checklist.md, which each record the count.
+
+WHEN DONE: paste the two corrected sentences, say how the overfull line was fixed, give the
+largest remaining overfull hbox, and give the page count.

@@ -10819,3 +10819,42 @@ agent 报告: **14 条无一在正文中以作者姓名被讨论**。我再查�
 已用 `git reset --soft HEAD~1`(**不动工作区**)退回, 只重新暂存 4 个交付文件与 2 个工具文件,
 并补了 `tools/chatgpt-oracle/sprint/.gitignore` —— 之前它们只是"没被 add", 并没有被忽略规则挡住,
 所以同样的手滑可以再发生一次。现在挡住了。
+
+## tick 566 — t538 的两处修正**都只改了摘要**, 正文里的同一错误还在
+
+内存 1.03 GB。
+
+### 起因: 去查 zeck_arith 那处 53pt 溢出行, 结果在同一段里读到老错误
+
+溢出行本身是小事(`\texttt{}` 里不可断的脚本路径, 53pt 约 19mm)。但那一段旁边写着:
+
+    main.tex:276  "when \(F_{m+2}\) is composite, the same address space decomposes
+                   canonically through the Chinese remainder theorem."
+
+**这正是 t537 确认、t538 修掉的那个错误** —— 素数幂是合数, 但 \(\ZZ/(p^k\ZZ)\) 是局部环,
+没有非平凡幂等元, **根本不分裂**。我 t538 只改了摘要。
+
+往下扫, 同一错误还有第二处:
+
+    main.tex:80   "...Chinese-remainder decompositions at composite resolutions."
+
+**而且另一条修正也一样只改了摘要**:
+
+    main.tex:82   "every exact multiplier at effective resolution \(n\) has delay at least \(n-1\)"
+                  —— **没有 \(n\ge3\)**, 与摘要原先的毛病一模一样
+
+### 正文的定理与推论本身是对的
+
+`cor:crt-factorization` 写的是 \(M=\prod p_i^{k_i}\) 与到 \(\prod \ZZ/(p_i^{k_i}\ZZ)\) 的同构,
+并明确加了"**当 \(r\ge2\) 时**才有非平凡幂等元与真正的多因子分裂" —— **陈述完全正确, 不动**。
+只有它的标题"at composite resolutions"稍松。
+所以错的是**摘要之外的两处转述**, 不是定理。
+
+### 教训
+
+**改一处结论时必须扫全文的转述。** 摘要、贡献点清单、讨论节几乎必然重复同一批结果,
+而我 t538 只改了被指出的那一处。这与 t563 那次(t542 改了条目行、没改总结段)是同一个形状,
+**本会话第三次**。
+
+已派工修 CRT 那两处与溢出行; \(n\ge3\) 那处**排在其后单独派** ——
+同一篇论文同时只跑一个 agent。
