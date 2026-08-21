@@ -1,6 +1,23 @@
 # Pre-submission action list
 
-## STATUS as of t534: every actionable item is closed. One decision remains, and it is not mine.
+## STATUS as of t538: every actionable item is closed again, after a cold read reopened three.
+
+A referee-style cold read at t537 found three real defects in zeck_arith, two of them in text I
+had verified and committed at t526: the abstract stated the multiplication-delay bound with no
+hypothesis where the theorem requires n >= 3 and a specific scan model, the abstract promised
+Chinese-remainder decompositions for any composite modulus where the body's own trichotomy makes
+a prime power local and non-splitting, and the cover letter asserted a submission ordering the
+repository cannot support. All three are fixed and independently checked (t538, commit 474526666):
+rebuild from zero, exit 0, 34 pages, both corrected phrases confirmed in the extracted PDF text.
+
+The lesson is worth keeping. My t526 checks were mechanical -- does it build, were theorems
+touched, do assertions match the repository -- and finding these required aligning every
+quantifier in the abstract against the body sentence by sentence. Mechanical verification has a
+definite blind spot around exactly that.
+
+All 47 verify_* scripts across the six manuscripts were re-run at t538 with an
+output-non-empty control: 47 pass, 0 silent, 0 timeout, and the one non-zero exit is brocot's
+deliberately excluded NOT DISCRIMINATING script.
 
 All six sprint manuscripts now carry a PDF, a cover letter, submission metadata, a submission
 checklist and a reproducibility statement. Verified state, with the tick where each was checked:
