@@ -13,7 +13,7 @@ Assessed substantive editorial/referee probability:
 - TAMS: 55--65% (central estimate 60%)
 - JNT fallback: 82--90% (central estimate 86%)
 
-The 12-point AMS manuscript build is 30 pages.
+The 12-point AMS manuscript build is 31 pages.
 
 2020 Mathematics Subject Classification: 11A55, 11B39, 60F05, 60K05
 
