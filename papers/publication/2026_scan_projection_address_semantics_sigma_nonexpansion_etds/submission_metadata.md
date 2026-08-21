@@ -6,7 +6,7 @@ Authors: Haobo Ma; Wenlin Zhang
 
 Primary target: Stochastics and Dynamics
 
-The clean XeLaTeX manuscript build is 18 pages.
+The clean XeLaTeX manuscript build is 17 pages.
 
 2020 Mathematics Subject Classification: 37A50; 37B10; 60F05; 60J10
 

@@ -10779,3 +10779,43 @@ agent 报告: **14 条无一在正文中以作者姓名被讨论**。我再查�
 但参考表在 main.tex 第 113 行, 于是**几乎整篇正文都被我截掉了** —— 结果报出
 "cited keys = 0", 而我上个 tick 刚亲手数出 12 个。
 **正是这个自相矛盾让我发现量具坏了**, 改成"删掉 begin..end 环境而非截断"后, 12 个键如实出现。
+
+## tick 565 — 14 条未引文献已删并核实; 参考表与引用现在**精确一一对应**
+
+内存 1.11 GB。
+
+### 核实(不采信自述)
+
+    bibitem 12  cited 12  uncited 0  cited-but-missing 0     <- 双向都对上了
+    diff 起始行 113 == \begin{thebibliography} 所在行         <- 改动**完全落在参考表内**, 正文未动
+    宽度参数     {25} -> {12}
+    重编译      exit 0, **undefined citation 0 条**, 0 错误
+    页数        18 -> 17, metadata 已同步
+
+"undefined citation 为 0"这一条是关键: 它证明**我让删的 14 条里没有一条其实在用**。
+`cited-but-missing = 0` 是同一件事的另一侧。
+
+### 新清单里有一处比我原先要求的更好
+
+页数那条它没写成 PASS, 而是写成 **MEASURED**, 并给了**两个独立来源**
+(`main.log` 的 17-page 输出与 `main.aux` 的 `\@abspage@last{17}`),
+再注明 Stochastics and Dynamics 的页数上限**未知**。
+把"量到的"与"期刊规定"分开, 正是我一直要的形状。
+
+### 我的核对脚本反而报了假警, 已修
+
+它对该篇报 `NOFIND pages/checklist`。查下去是**我的模式太窄**:
+只认 "N pages", 而新清单写的是 "a 17-page XeTeX output"。**清单没问题, 脚本有问题** ——
+这正是 NOFIND 这个分类存在的意义(它没把"没查到"混进"通过")。
+
+放宽模式时又踩了一次同族的坑: 补丁里的 `\b` 经传输塌缩后被 Python 当成**退格符(0x08)**
+写进了正则, 于是 NOFIND 从 1 条涨到 11 条。删掉那个字符即恢复。
+六篇现在 **0 项异常**。
+**本 tick 我还犯了一个提交错误, 已当场撤回。** 提交时我写的是
+`git add papers/publication/ tools/chatgpt-oracle/sprint/`, 第二个路径把该目录下
+**84 个一直未跟踪的 agent transcript 全扫了进去 —— 289 万行**。
+那些是工作文件, 不是交付物, 整个会话里一直是 `??` 状态。
+
+已用 `git reset --soft HEAD~1`(**不动工作区**)退回, 只重新暂存 4 个交付文件与 2 个工具文件,
+并补了 `tools/chatgpt-oracle/sprint/.gitignore` —— 之前它们只是"没被 add", 并没有被忽略规则挡住,
+所以同样的手滑可以再发生一次。现在挡住了。

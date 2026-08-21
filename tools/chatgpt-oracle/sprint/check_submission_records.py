@@ -96,7 +96,10 @@ def check(paper):
         rows.append(("NOFIND", "pages", "no main.pdf or pdfinfo failed"))
     else:
         for name, txt in records.items():
-            claims = [int(x) for x in re.findall(r'(\d+)\s+pages', txt)]
+            # Accept 'N pages' and 'N-page', and also \@abspage@last{N}: a checklist
+            # writing 'a 17-page XeTeX output' was reported NOFIND by the narrower pattern.
+            claims = [int(x) for x in re.findall(r'(\d+)[ -]pages?', txt)]
+            claims += [int(x) for x in re.findall(r'abspage@last[{](\d+)[}]', txt)]
             if not claims:
                 rows.append(("NOFIND", f"pages/{name}", "record states no page count"))
             elif actual in claims:
