@@ -9680,3 +9680,43 @@ work" —— **这句是我 t526 写的**。仓库能证明姊妹稿在 RAIRO IT
 这说明机械核验有确定的盲区，冷读补的正是这一块。
 
 已派 codex 做三处**最小改动**修复（不重构摘要、不动定理、要求 latexmk 通过）。
+
+## tick 538 — 三处缺陷已修并独立核实；另发现我自己的测量工具会把"没运行"报成"通过"
+
+内存 2.4 GB，pages/sec 199，无需减并发。Oracle 池仍是 1 排队 0 worker（非本冲刺任务，未动）。
+
+### 一、t537 的三处缺陷已修复，独立核实通过（commit 474526666）
+
+不采信 codex 自述，自己重跑：`latexmk -C` 后清空辅助文件从零重建，exit 0、0 错误、34 页；
+两处改动都确认**进了渲染后的 PDF 正文**：
+
+    every exact multiplier at effective resolution n >= 3 on padded synchronous inputs,
+    computing the stable product for all pairs in X_n x X_n, has delay at least n - 1
+
+    ... Chinese-remainder decompositions when it has at least two distinct prime divisors
+
+cover letter 里那句我 t526 写的无据时序断言已删，只留仓库能支持的三项披露。
+
+### 二、一个更要紧的发现：`python3` 在本 shell 是 WindowsApps 存根
+
+`which python3` -> `/c/Users/.../WindowsApps/python3`，**不打印任何东西，退出码 49**。
+而我收割脚本里写的是
+
+    echo "$(basename $f) exit=$? | ..."
+
+bash 会先展开 `$(basename $f)`，**这一步就把 `$?` 重置成 0 了**，所以 `$?` 读的是 basename
+的状态，不是 python 的。两层叠加的结果是：**一个根本没执行的脚本，被报成 `exit=0`、通过。**
+
+我第一次看到 zeck_arith 的 verifier "静默退出 0" 时判断是脚本本身有问题 —— 那是错的，
+脚本有完整的 print，改用 `python` 跑起来两项检查都 PASS。**问题在我的量具，不在被测对象。**
+这正是那条老教训的又一次实例：**看不见某样东西，是检查的局限，不是被检查者的性质。**
+
+### 三、因此重跑全部 verify_* 脚本，带"输出非空"对照
+
+用能工作的解释器，并把"没有输出"单列成 NO-OUTPUT 一档，**不允许它落进 pass**。
+截至本条写入：window6 14/14、projection 9/9 全部 pass 且输出非空（439-2492 字节），
+brocot 正在跑。完整结果落在 `tools/chatgpt-oracle/sprint/audit_python3_stub.txt`。
+
+需要说清楚的分寸：这**不等于** t530 那次 30/30 是假的 —— 那次我是看着输出记的，若当时走的是
+存根，30 个全会是空的，我会发现。t530 大概率为真。但它现在**重新建立在可复核的证据上**，
+而不是建立在一次我已无法回溯的调用上。
