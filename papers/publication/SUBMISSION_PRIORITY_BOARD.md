@@ -9724,3 +9724,31 @@ brocot 正在跑。完整结果落在 `tools/chatgpt-oracle/sprint/audit_python3
 唯一非零是 brocot 的 `verify_dushistova_coefficient.py`（rc=2），
 即 t456 改成"显式报告 NOT DISCRIMINATING"、并在可复现声明里**有意排除**的那个，不是回归。
 `no-output = 0` 说明对照项没抓到任何藏在 pass 里的空跑 —— 六篇论文的可复现声明现在有实证支撑。
+
+## tick 539 — 冷读扩到其余五篇；同时我自己复核掉了 t537 对 projection 的一条指控
+
+内存 2.5 GB / 79 pages/s，codex 0，无孤儿 python。Oracle 仍 1 排队 0 worker：CLI 没有 `list`
+子命令，无 worker 时该项无论如何不会推进，仍只影响 window6 那个已归档的增长界问题，未动。
+
+### 一、派出第二轮冷读，覆盖其余五篇的摘要与 cover letter（只读）
+
+任务书里把 t537 抓到的两处**原文照抄**进去当校准样本（丢假设、错范围条件），并写明它们
+"通过了编译检查、定理未改检查、断言与仓库相符检查"，只有逐句比对量词才能发现 —— 免得新 agent
+再去重跑那些已经做过的机械项。另加两条报告纪律：每篇必须写出**哪些没能核**（定位不到的定理、
+没重跑的计算、没读的章节），以及**摘要干净就说干净**、不许为凑数编造意见。
+理由是老问题：没有发现和没有去看，在报告里长得一模一样。
+
+### 二、我自己独立复核 projection，t537 的那条指控不成立
+
+t537 说"Applying the same criterion to Sanna's nonlinear rows also gives full symmetric groups"
+是把审计计算当事实陈述。**跑了 `verify_sanna_galois_groups.py` 看它到底怎么判的**：
+
+    p=8  degree 9  G = S_9
+          5-cycle (5 > 9/2) -> primitive; 5 <= 9-3 -> A_9; odd type -> S_9
+
+这是**严格证明**，不是数值迹象：Dedekind 定理把 mod P 的精确分解次数变成 Frobenius 元的
+轮型，Jordan 定理把含 5-轮的本原群提升到 A_9，再由一个奇轮型得 S_9。整条链是精确整数运算
+加群论定理。摘要用 "computationally certified" 是**恰当**的register，不该改。
+
+所以这条不采纳。这正是我一贯的做法要挡住的东西：**冷读容易产生"看起来像问题"的条目**，
+与真实缺陷必须分开。t537 那份报告里三条硬伤属实、这一条不属实，比例本身就说明必须逐条复核。
