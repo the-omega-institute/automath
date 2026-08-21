@@ -1,32 +1,23 @@
 # Submission Checklist
 
-Paper: `2026_scan_projection_address_semantics_sigma_nonexpansion_etds`
-Target: Ergodic Theory and Dynamical Systems (ETDS)
-Date: 2026-03-30
+Paper: `2026_scan_projection_address_semantics_sigma_nonexpansion_etds`  
+Target journal: Stochastics and Dynamics  
+Measured: 2026-08-21
 
 ## Checklist
 
-- [x] **Manuscript text complete (no TODO/FIXME markers)**: PASS -- grep for TODO, FIXME, XXX, HACK across all .tex files returns zero matches
-- [x] **All figures/tables present**: PASS -- manuscript contains no figures or tables; none are referenced
-- [x] **Bibliography complete (no missing keys)**: PASS -- 17 cited keys exactly match 17 entries in `references.bib`; zero unused entries, zero missing entries
-- [x] **Abstract word count**: PASS -- approximately 141 words; ETDS limit is ~200 words
-- [x] **PDF page count**: PASS -- `pdfinfo` reports 18 pages for the clean-built `main.pdf` under `latexmk -pdfxe`, matching submission_metadata.md; within ETDS norms for a research article
-- [x] **Appendix proportion**: PASS -- manuscript has no appendices; all material is in the main body
-- [x] **Author information present**: PASS -- `main.tex` declares both authors with affiliations and emails, and the built `main.pdf` front page renders "Haobo Ma" and "Wenlin Zhang"
-- [x] **MSC codes present**: PASS -- `main.tex` declares MSC 2020: 37A50, 37B10, 60F05, 60J10, and the built `main.pdf` front page renders the same four codes
-- [x] **Keywords present**: PASS -- open symbolic dynamics, escape rates, Ruelle resonances, Renyi pressures, Poisson approximation, hidden conditional entropy
-- [x] **No revision metadata in manuscript**: PASS -- no revision traces, change logs, or draft-stage language found in any .tex file
-- [x] **All cross-references resolve**: PASS -- 27 distinct `\ref{}` targets all have corresponding `\label{}` definitions; zero dangling references
-- [x] **Formalization status noted**: PASS -- documented in `LEAN_SYNC_NOTE_2026-03-30.md`: 0% verified, 27% partial (4 of 15 active claims have partial Lean 4 support); non-blocking for submission
+- [x] **Target journal identified**: PASS -- `submission_metadata.md` names Stochastics and Dynamics, and `cover_letter_stochastics_and_dynamics.txt` is addressed to Stochastics and Dynamics. No ETDS requirement is used.
+- [x] **Manuscript marker scan**: PASS -- across all `.tex` files, searches for `TODO`, `FIXME`, `XXX`, and `HACK` return zero matches.
+- [x] **Figures and tables**: PASS -- the source contains 0 `figure` environments and 0 `table` environments.
+- [ ] **Abstract length rule**: MEASURED -- the rendered PDF abstract contains 219 words. The Stochastics and Dynamics abstract limit was not verified from the available paper files.
+- [ ] **Page-limit rule**: MEASURED -- `main.log` reports an 18-page XeTeX output, and `main.aux` records `\@abspage@last{18}`. The Stochastics and Dynamics page limit was not verified from the available paper files.
+- [x] **Appendix scan**: PASS -- the source contains 0 `appendix` environments.
+- [x] **Author information**: PASS -- `main.tex` declares Haobo Ma and Wenlin Zhang with affiliations and email addresses; page 1 of `main.pdf` renders both names and both contact blocks.
+- [x] **MSC codes**: PASS -- `main.tex` and page 1 of `main.pdf` show 37A50, 37B10, 60F05, and 60J10.
+- [x] **Keywords**: PASS -- the source contains 5 keywords: open symbolic dynamics; periodic Markov chains; R'enyi pressures; collision processes; Poisson approximation.
+- [ ] **Bibliography accounting**: REVIEW -- `main.tex` embeds 26 `\bibitem` entries and has no `\bibliography` command. The manuscript contains 12 distinct cited keys and 14 uncited entries that still print in `thebibliography`; `references.bib` is not part of the active build.
+- [x] **Cross-reference resolution**: PASS -- there are 49 distinct `\ref`/`\eqref` targets across the `.tex` sources, with 0 targets lacking a matching `\label`.
 
 ## Summary
 
-11 of 12 items pass. One blocker:
-
-1. **Author field is empty** -- author names, affiliations, and contact information must be inserted into `main.tex` before the submission can proceed.
-
-## Notes
-
-- BIB_SCOPE previously noted 5 unused entries; these were already removed in the P5 integration pass. Current bibliography is clean.
-- P3 flagged three deferred editorial decisions (title length, Sturmian section placement, hidden-entropy subsection). These remain deferred to referee feedback.
-- The Lean formalization coverage is low but this is standard for a first submission; the LEAN_SYNC_NOTE documents exact coverage for future work.
+9 measured checks pass. 3 items require an external journal-rule check or an editorial decision: abstract length, page limit, and the 14 uncited printed bibliography entries.
