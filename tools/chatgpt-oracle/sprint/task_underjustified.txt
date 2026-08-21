@@ -1,0 +1,55 @@
+TASK: two small proof-level repairs in two different papers. Pre-authorised; do not ask, do not
+brainstorm. Neither blocks submission; both are things a referee could reasonably demand.
+Change as little as possible.
+
+REPAIR 1. papers/publication/2026_projection_ontological_mathematics_core_tams/sec_appendix_transducer.tex
+
+prop:appendix-padded-transducer asserts the existence of a deterministic subsequential transducer
+producing the length-(m+1) leading-zero-padded Zeckendorf normalization, with the first output
+symbol deleted. Its entire proof is three sentences saying such transducers "are standard in the
+automata-theoretic literature cited above" and fixing one "once and for all". No theorem is
+named. The cited works are Frougny 1991 and 1992 and Ahlbach-Usatine-Frougny-Pippenger 2013.
+
+Replace the hand-wave with something a referee can check. Either name the precise result in
+Frougny that gives a subsequential transducer for Fibonacci/Zeckendorf normalization, with its
+statement and the translation to this paper's convention, or give the explicit construction: the
+state set, the transition and output functions, and the terminal function. The explicit
+construction is preferable if the automaton is small, because it removes the dependence entirely.
+
+WHAT DOES NOT NEED PROVING, and do not add words claiming it does: the uniform terminal-output
+bound L is not an extra hypothesis. Line 49 defines L := max_{s in Q} |tau(s)|, and a
+subsequential transducer has a finite state set by definition, so L is finite automatically. A
+cold review listed it among unverified properties; I checked and it is not one.
+
+What genuinely needs support is the EXISTENCE claim with these three features: it accepts every
+binary word in this most-significant-digit-first Fibonacci-weight convention; it returns the
+prescribed fixed-length normalization with leading-zero padding; and it stays subsequential
+after deletion of the first output symbol.
+
+REPAIR 2. papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams/sec_finite_size_crossover.tex
+
+Around line 205-212 the proof says aperiodicity and analyticity imply that "uniformly for y near
+one, the only dominant pole is the simple root z = z(y) of yP(z) = 1 near one", and that residue
+extraction gives the displayed V_j(y) asymptotic "uniformly in that neighborhood". The text then
+substitutes y = e^{i lambda / sqrt j}, a complex parameter that moves with j.
+
+For the coefficient asymptotic along a moving complex parameter, what is needed is uniform
+separation of the principal root from the other zeros of 1 - y P(z), plus a uniform bound on the
+remaining contour contribution. The local expansion of z(y) that the proof gives does not by
+itself supply that.
+
+Add the missing step. Aperiodicity gives the strict inequality |P(z)| < P(|z|) for z off the
+positive real axis, which is exactly what separates the principal root on the relevant circle;
+make that explicit, state the resulting uniform separation on the compact parameter range in
+use, and note the uniform bound on the remaining contour. This is a short standard argument, not
+a new result, so keep it to a few sentences.
+
+CONSTRAINTS.
+  - Do not change any theorem statement, only the proofs named above.
+  - Do not touch the abstracts, cover letters, or any other section.
+  - No revision marks, no changelog language.
+  - Rebuild each paper with latexmk and report the page count. projection is currently 49 pages
+    and brocot 31; if either changes, say so, and update submission_metadata.md and
+    submission_checklist.md, which state the count with its engine.
+
+WHEN DONE: paste both new passages and the two page counts.

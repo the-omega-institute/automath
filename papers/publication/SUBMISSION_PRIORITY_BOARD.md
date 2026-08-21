@@ -10573,3 +10573,38 @@ t556 我把 13 个空壳 `\leanverified` 定为 **BLOCKING**, 理由是"论文�
     从零重编译   exit 0, 0 错误, 0 未解析引用/引文, **49 页(与 metadata 一致)**
 
 记录核对脚本: 六篇 0 异常。**BLOCKING 解除。**
+
+## tick 559 — 系统查了"源码里记着不真的事"这一类; 空壳标记基本只是 projection 的问题
+
+内存 1.32 GB。工作区 0 改动。
+
+### 扫描结果
+
+按 t558 的教训, 先扫**展开为空的宏**(即 `\leanverified` 那个形状)。全库有三篇定义了它,
+但**定义不等于使用**:
+
+    projection            定义并使用 8 处   <- 就是 t558 清理后剩下的那 8 个真标记
+    scan_projection       定义, 使用 0 处   <- 死定义, 无害
+    zeck_arith            定义 leanverified 与 leanpartial, 均使用 0 处   <- 死定义, 无害
+    finite_window_...     定义, 使用 0 处
+
+**唯一在冲刺六篇之外还大量使用的**是 `gluing_failure_visible_quotients_..._apal`, 用了 12 处。
+顺手按同样办法审了一遍: **11 个是真的, 只有 1 个是 `Prop` 空壳**
+(`paper_gluing_failure_cech_bridge_compatible_realizations`)。
+
+**结论**: 13/21 的空壳率是 **projection 独有的**, 不是全库的系统性问题。
+那一处空壳记在这里, 供日后动那篇时处理。
+
+### 一处计数更正
+
+我第一版脚本把每篇的使用数都减了 1(以为定义行会被计入), 于是 projection 报成 7、其余报成 -1。
+实际定义行写的是 `\newcommand{\leanverified}[1]{}` —— 含 `\leanverified}` 而非 `\leanverified{`,
+**根本不会被 `\leanverified{` 匹配到**。projection 是 8 处, 与 t558 核实的一致。
+
+### 已派工: 两条"论证不足"级修复
+
+projection 的转录机存在性(要求点名 Frougny 的具体定理**或**给出显式构造), 以及 brocot 的
+极点分离(补上由非周期性得到的 $|P(z)|<P(|z|)$ 严格不等式与一致分离)。
+
+任务书里**明写了哪一条不需要证**: 冷读把"一致终端输出界 $L$"列为待验证性质, 而 $L$ 是
+`max_{s in Q}|tau(s)|` 定义出来的、状态集有限故自动有限 —— 免得 agent 去补一段不必要的论证。
