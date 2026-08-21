@@ -13,7 +13,7 @@ Date: 2026-03-30
 - [x] **PDF page count**: PASS -- `pdfinfo` reports 18 pages for the clean-built `main.pdf` under `latexmk -pdfxe`, matching submission_metadata.md; within ETDS norms for a research article
 - [x] **Appendix proportion**: PASS -- manuscript has no appendices; all material is in the main body
 - [x] **Author information present**: PASS -- `main.tex` declares both authors with affiliations and emails, and the built `main.pdf` front page renders "Haobo Ma" and "Wenlin Zhang"
-- [x] **MSC codes present**: PASS -- MSC 2020: 37B10, 37A50, 37D35, 94A17
+- [x] **MSC codes present**: PASS -- `main.tex` declares MSC 2020: 37A50, 37B10, 60F05, 60J10, and the built `main.pdf` front page renders the same four codes
 - [x] **Keywords present**: PASS -- open symbolic dynamics, escape rates, Ruelle resonances, Renyi pressures, Poisson approximation, hidden conditional entropy
 - [x] **No revision metadata in manuscript**: PASS -- no revision traces, change logs, or draft-stage language found in any .tex file
 - [x] **All cross-references resolve**: PASS -- 27 distinct `\ref{}` targets all have corresponding `\label{}` definitions; zero dangling references

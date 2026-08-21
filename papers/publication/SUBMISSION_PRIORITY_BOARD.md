@@ -9932,3 +9932,18 @@ agent 严格照我的约束没动它 —— **这处矛盾是我的指令造成�
 
 brocot 1 项、cubical_stokes 2 项, 都是 t542 查过的: 摘要字数标 NOT CHECKED 而非超限,
 以及 3 条未被引用但零缺失的参考条目。其余四篇 0 项。
+### 四、把审计扩到 MSC/keywords/封面信目标, 又抓到 scan_projection 清单的第三处错
+
+六篇的 MSC 与 keywords **实际都齐全**, 封面信目标与 metadata 目标也都对得上。
+
+**唯一真缺陷**: scan_projection 的 checklist 写 `37B10, 37A50, 37D35, 94A17`,
+而正文 `main.tex:98-99` 与 PDF 首页都是 **`37A50, 37B10, 60F05, 60J10`** ——
+**37D35 与 94A17 在这篇论文里根本不存在**。已按正文改正。
+
+这是同一张 checklist 的**第三处**独立错误(前两处见 t542: 陈旧的作者 FAIL、按行数折算的 35 页)。
+一份记录连错三次, 就不该再被当作证据用: 它现在的每一行都需要对着源文件复核过才算数。
+
+**这轮扫描我自己又假阴性两次**: 判 keywords 用的模式要求 `Keywords:` 带冒号,
+而 zeck_arith 与 cubical_stokes 写的是 `\textbf{Keywords.}` 带句点, 于是都被报成"没有";
+判 MSC 的模式只认 `subjclass` 与全称, 而 scan_projection 写的是 `\textbf{MSC 2020:}`。
+**十二项检查里三项假阴性, 全部源于把模式写窄。**
