@@ -10670,3 +10670,37 @@ Sanna 自己那篇 arXiv PDF 里、我的 board 与若干任务文件里, 以及
 
 两篇都从零重建: exit 0、0 错误。记录核对脚本: 六篇 0 异常。
 **t533 那个"只改一处"的坑这次没踩** —— 任务书里预先写死了两处都要改。
+
+## tick 562 — 投稿前终检已派出; 自查先挖到两件事, 其中一件更正我 t558 的计数
+
+内存 1.11 GB。工作区 0 改动。
+
+### 一、"一眼被拒"类扫描: 六篇正文 0 处
+
+扫 TODO/FIXME/placeholder/draft/??? 等标记, **只看会进入排版的部分**(剥掉 `%` 注释)。
+六篇正文全部 0 处。唯一命中在 `sections/_cut_window6_material.tex` 的
+"to be filled" —— 但那个文件**没有任何 tex 引用它**, PDF 里也搜不到其内容, 不进入成品。
+
+### 二、孤儿源文件, 以及一处对我自己的更正
+
+    projection   14 个 tex, **2 个孤儿**: sec_rewriting.tex(6 KB)、sec_appendix_auxiliary.tex(12 KB)
+    window6       2 个 tex, 1 个孤儿: sections/_cut_window6_material.tex(268 KB)
+    其余四篇      0 孤儿
+
+**更正 t558 的计数**: 我当时说 projection 清理后"剩 8 个真标记"。实际上**其中 4 个
+(`rewrite_termination`、`rewrite_local_confluence_seeds`、`rewrite_confluence_seeds`、
+`rewrite_word_problem_seeds`)全部住在 `sec_rewriting.tex` 里, 而该文件是孤儿, 不参与编译** ——
+成品 PDF 里 "rewrit"/"confluen" 出现 **0 次**。
+
+所以**成品论文实际只有 4 个 `\leanverified` 标记**, 不是 8 个。
+我当时是对 `*.tex` 全目录计数的, **没有先确认哪些文件真被 main.tex 引用** ——
+和本会话反复出现的那类错误同形: **统计了存在, 没统计可达**。
+
+这两个孤儿从内容看是**有意裁掉的**(一节"共形重写模型", 一节"非结构性补充"), 不是漏引;
+成品因此没有问题。但它们是投稿目录里的游离源文件, 打包时应排除。
+
+### 三、终检任务书里写死的一条
+
+**不许编造期刊要求。** 不知道就写"我不知道这家期刊的规定", 并要求把
+"需要查作者指南才能定"的清单**列全而不是列短** —— 一个自信但错误的字数上限比不说更糟,
+因为我会照着做。
