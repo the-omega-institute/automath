@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 SCRIPT = Path(__file__).with_name("reproduce_period_two_constants.py")
+VERIFY_SCRIPT = Path(__file__).with_name("verify_period_two_example.py")
 
 
 class ReproductionScriptTest(unittest.TestCase):
@@ -34,6 +35,22 @@ class ReproductionScriptTest(unittest.TestCase):
             "phase-resolved constants distinct: True",
         ):
             self.assertIn(expected_line, completed.stdout)
+
+    def test_period_two_negative_control_rejects_wrong_claimed_mean(self):
+        completed = subprocess.run(
+            [sys.executable, str(VERIFY_SCRIPT), "--negative-control"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(completed.returncode, 1, completed.stdout)
+        self.assertIn(
+            "NEGATIVE CONTROL  claimed even mean 953/5618 -> 954/5618",
+            completed.stdout,
+        )
+        self.assertIn("claimed means agree with derived constants: False", completed.stdout)
+        self.assertIn("-> FAIL", completed.stdout)
 
 
 if __name__ == "__main__":

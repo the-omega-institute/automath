@@ -31,6 +31,7 @@ for the unnormalised law on safe prefixes,
 
 so every quantity is a rational number until the final irrational normalisation.
 """
+import argparse
 import sys
 from fractions import Fraction as Fr
 from decimal import Decimal, getcontext
@@ -184,30 +185,45 @@ def check_two_constants(maxm=90):
     return ok
 
 
-def check_means_differ():
+def check_means_differ(negative_control=False):
     root5 = Decimal(5).sqrt()
-    m0 = Decimal(953) / Decimal(5618)
+    even_numerator = 954 if negative_control else 953
+    if negative_control:
+        print("NEGATIVE CONTROL  claimed even mean 953/5618 -> 954/5618")
+    m0 = Decimal(even_numerator) / Decimal(5618)
     m1 = Decimal(267) / (Decimal(676) * root5)
     print("CLAIM  the two Poisson means are different")
-    print(f"    even class  953/5618        = {m0:.12f}")
+    print(f"    even class  {even_numerator}/5618        = {m0:.12f}")
     print(f"    odd  class  267/(676 sqrt5) = {m1:.12f}")
     print(f"    ratio {m1 / m0:.9f}   difference {m1 - m0:+.9f}")
-    ok = m0 != m1
     # and each is half the corresponding c constant
     c0 = Decimal(953) / Decimal(2809)
     c1 = Decimal(267) / (Decimal(338) * root5)
-    print(f"    mean_even = c_20 / 2 ? {abs(m0 - c0 / 2) < Decimal('1e-40')}")
-    print(f"    mean_odd  = c_21 / 2 ? {abs(m1 - c1 / 2) < Decimal('1e-40')}")
+    even_matches = abs(m0 - c0 / 2) < Decimal("1e-40")
+    odd_matches = abs(m1 - c1 / 2) < Decimal("1e-40")
+    constants_match = even_matches and odd_matches
+    print(f"    mean_even = c_20 / 2 ? {even_matches}")
+    print(f"    mean_odd  = c_21 / 2 ? {odd_matches}")
+    print(f"    claimed means agree with derived constants: {constants_match}")
+    ok = m0 != m1 and constants_match
     print(f"  -> {'PASS' if ok else 'FAIL'}\n")
     return ok
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--negative-control",
+        action="store_true",
+        help="replace one claimed Poisson mean by an incorrect value",
+    )
+    args = parser.parse_args()
+
     print("Independent check of the scan_projection period-two example\n")
     c = [control_stationary(), control_perron(), control_survival_is_a_probability()]
     if not all(c):
         print("CONTROLS FAILED - stopping.")
         sys.exit(1)
-    r = [check_two_constants(), check_means_differ()]
+    r = [check_two_constants(), check_means_differ(args.negative_control)]
     print("SUMMARY", {"controls": all(c), "two constants": r[0], "means differ": r[1]})
     sys.exit(0 if all(c + r) else 1)
