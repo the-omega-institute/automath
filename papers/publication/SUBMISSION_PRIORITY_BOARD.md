@@ -10375,3 +10375,36 @@ cubical_stokes 四条命令同样逐条跑过, 含 `--negative-control` 确实 e
 仍然照常抛出**, 没有被放宽。只有"负对照且恰为 q=9"这一支才改为收集失败并给出干净结论。
 
 文档也按要求写明了: SymPy 那条模整数比较的 deprecation 警告无害; 以及变异后**哪些检查仍然通过**。
+
+## tick 554 — 最后两篇的 REPRODUCE.md 收下; 六篇全部有一键路径与会响的负对照
+
+内存 2.29 GB。Oracle 中继仍下线, 未动。
+
+### 六篇的负对照, 全部亲自跑过
+
+    window6   默认 exit 0; --negative-control 声称 47 胞而算出 48 -> FAIL, exit 1
+              另有**本来就存在**的 --inject-error(它损坏一个被声称的胞), 仍然有效, exit 1
+    zeck_arith 默认 exit 0; --negative-control 把界从 delta_n >= n-1 强化成 delta_n >= n,
+              witness 构造当场反驳 -> FAIL, exit 1
+
+两篇的文档都写进了只有跑过才知道的事: zeck_arith 注明**必须用 `python` 而非 `python3`**
+(后者在本机是静默存根), 并保留了 `n >= 3` 这个假设; window6 注明它有一个被点名的脚本在
+`supplement/` 而非 `artifacts/`, 且六个点名脚本里**只有两个带断言, 另四个是计算并打印**。
+
+### 一处我先判错、随后自己纠正的地方
+
+我看到 `--negative-control` 分支里有六行 `print("CHECK ... PASS")`, 第一反应是
+**"它在伪造验证输出"**。**这个判断过重了。** 往上读: `errors = verify(expected)` 在分支之前就已运行,
+且 `if errors: return 1`, 所以那六行只有在六项全部真的通过时才可能被执行 —— 打印的内容是真的。
+
+真正的问题轻得多, 但确实存在: **那六行是 `verify()` 所查内容的手工副本**,
+将来往 `verify()` 里加一项或删一项, 这份清单会**悄悄失配**, 继续打印一套过时的 PASS。
+
+已改成从 `CHECK_NAMES` 循环打印, 并加了 `_check_names_match_verify()`:
+它读自身源码数 `errors.append(` 的出现次数, 与 `CHECK_NAMES` 的长度不等就**响亮地失败**。
+
+**这个守卫我也变异测试过, 没有假定它有效**: 从清单里删掉一项, 它报
+`verify() reports 6 checks but CHECK_NAMES lists 5` 并中止; 随后还原。
+
+顺带又碰到一次同族的自指错误: 守卫第一版把**自己那行计数代码里的字面量也数了进去**,
+于是报 7 != 6。把字面量拆成 `'errors.' + 'append('` 才不再匹配自身。

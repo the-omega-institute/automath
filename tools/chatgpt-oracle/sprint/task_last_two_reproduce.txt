@@ -1,0 +1,69 @@
+TASK: write artifacts/REPRODUCE.md for the final two papers and add a negative control to each.
+Pre-authorised; do not ask, do not brainstorm.
+
+PAPERS:
+  papers/publication/2026_window6_spectral_rigidity_hypercube_lumpability_fold_gauge/
+  papers/publication/2026_zeckendorf_stable_arithmetic_fibonacci_congruence_online/
+
+MODELS, all four written this sprint and each walked command by command with every stated number
+confirmed: brocot's, then scan_projection's, cubical_stokes' and projection's. Follow their
+shape and keep the opening framing that the claims are proved analytically and the numerics are
+consistency checks, where that is true.
+
+WHAT I VERIFIED BY RUNNING IT. Do not re-derive, do not contradict without showing your run.
+
+  window6. The reproducibility section names SIX scripts, and one of them is NOT in artifacts/:
+    supplement/verify_window6_streams.py, which runs clean and prints
+    'window6 canonical streams: all assertions passed'. The other five are
+    artifacts/verify_hidden_refinement.py, verify_refinement_family.py,
+    verify_involution_mechanism.py, verify_admissible_dimensions.py and
+    verify_preservation_criterion.py. Document the supplement one too; a reader following the
+    paper will look for it.
+
+    Of those six, only verify_hidden_refinement.py and the supplement script assert. The other
+    four compute and print for the reader to compare, which is legitimate and the manuscript
+    describes them accurately as enumerating and streaming. Say so plainly in the document, so
+    that running them clean is not mistaken for automatic confirmation of the classification.
+
+    verify_admissible_dimensions.py has a good built-in control: it finds candidate (i,j) pairs
+    at every m through 22 while the admissible column is empty past 9, so the emptiness is a
+    result rather than a search that stopped working. Point that out.
+
+    The paper's classification is m in {3,6,8,9} with cell counts 3*2^(m-2) giving 6,48,192,384,
+    the 21-cell partition, the 48-cell refinement, and quotient spectrum multiplicities
+    (1,5,11,14,11,5,1).
+
+  zeck_arith. One script only: artifacts/verify_multiplication_delay_bound.py. It passes both
+    its checks: a witness check for n=3..24 and a supporting lemma for n=3..19 with 0 violations.
+    IMPORTANT: it produces no output when run with 'python3' on some setups because that name
+    resolves to a stub; use 'python'. State the interpreter requirement in the document.
+    The theorem it supports concludes delta_n >= n-1 only for n >= 3 and under a specific
+    most-significant-digit-first model; do not state the bound without that hypothesis.
+
+THE THING TO ADD, one per paper. Each needs a --negative-control switch that replaces a CLAIMED
+value by a wrong one, prints an explicit failing verdict naming what changed, and exits nonzero.
+Put window6's in verify_hidden_refinement.py, since it already asserts. Put zeck_arith's in its
+single script.
+
+WHAT THE MUTATION MUST TARGET. The claimed object, never the program's internals. Good examples
+from this sprint: scan_projection alters only the claimed Poisson mean; projection alters one
+coefficient of the claimed Pi_9, and the change is caught because the modular factorisation
+degrees shift, which is independent evidence. Bad example, mine: an automated probe changed
+FIB[-1] + FIB[-2] into FIB[-2] + FIB[-2], breaking a recurrence, which proves only that
+corrupting a program makes it complain. Do NOT mutate loop bounds, array indices, table sizes or
+Fibonacci recurrences. For window6 a claimed cell count or spectrum multiplicity is the right
+target; for zeck_arith the claimed delay bound is.
+
+Each document must state which checks STILL PASS under mutation, since that is what shows the
+control changed a claim and not the machinery.
+
+RULES.
+  - Every command must be one you ran, with the output you saw and the working directory stated.
+  - Do NOT alter any theorem, proof, or manuscript text. Only artifacts/, supplement/ and the
+    new REPRODUCE.md files.
+  - Do not weaken or remove any existing assertion or control. If you wrap an assertion to
+    report a verdict, the default path must still raise.
+  - No revision marks, no changelog language.
+
+WHEN DONE: paste both REPRODUCE.md files and, for each new control, the transcript of it passing
+by default and failing when mutated.

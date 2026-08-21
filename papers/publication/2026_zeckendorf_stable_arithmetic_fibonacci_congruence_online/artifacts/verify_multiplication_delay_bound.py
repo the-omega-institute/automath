@@ -26,6 +26,11 @@ Given 4, agreement at every k >= 2 + delta_n forces 2 + delta_n > n, hence delta
 
 The supporting lemma - an admissible word supported on positions 1..n-1 has value at most
 F_{n+1} - 1 - is re-checked exhaustively for n = 3..19.
+
+The theorem-level negative control changes only the claimed delay bound from delta_n >= n - 1
+to delta_n >= n:
+
+    python artifacts/verify_multiplication_delay_bound.py --negative-control
 """
 import sys
 from itertools import product
@@ -62,6 +67,11 @@ def admissible(S):
 
 
 def main():
+    negative_control = "--negative-control" in sys.argv
+    claimed_bound = (lambda n: n) if negative_control else (lambda n: n - 1)
+    if negative_control:
+        print("NEGATIVE CONTROL  claimed delay bound: delta_n >= n - 1 -> delta_n >= n\n")
+
     print("witness check, n = 3..24")
     ok = True
     for n in range(3, 25):
@@ -94,7 +104,17 @@ def main():
 
     print("Outputs must agree at every k >= 2 + delta_n; they differ at some k >= n;")
     print("therefore 2 + delta_n > n, that is delta_n >= n - 1.")
-    return 0 if (ok and bad == 0) else 1
+    derived_bounds = {
+        n: min(delta for delta in range(n + 1) if 2 + delta > n)
+        for n in range(3, 25)
+    }
+    claim_ok = all(claimed_bound(n) == derived_bounds[n] for n in derived_bounds)
+    if negative_control:
+        print(
+            "CLAIM CHECK  witness implication supports delta_n >= n: "
+            f"{'PASS' if claim_ok else 'FAIL'}"
+        )
+    return 0 if (ok and bad == 0 and claim_ok) else 1
 
 
 if __name__ == "__main__":

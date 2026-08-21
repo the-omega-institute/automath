@@ -4,6 +4,9 @@
 Run from the paper root:
     python artifacts/verify_hidden_refinement.py
 
+The theorem-level negative control changes only the claimed cell count:
+    python artifacts/verify_hidden_refinement.py --negative-control
+
 The negative control intentionally corrupts one claimed cell and must fail:
     python artifacts/verify_hidden_refinement.py --inject-error
 """
@@ -84,6 +87,8 @@ EXPECTED_CELLS = (
     ("100001",),
 )
 
+CLAIMED_REFINEMENT_CELL_COUNT = 48
+
 
 def canonical(partition):
     return tuple(sorted(tuple(sorted(cell)) for cell in partition))
@@ -156,7 +161,30 @@ def verify(expected_cells):
     return errors
 
 
+CHECK_NAMES = (
+    'neighbor-signature classes equal the claimed cell partition',
+    'sigma_geo orbits equal the claimed cell partition',
+    'claimed cells partition all 64 vertices exactly once',
+    'sigma_geo orbits remain inside Fold_6 fibers',
+    'sigma_geo orbit partition is equitable',
+    'orbit-size distribution is 32 singletons and 16 pairs',
+)
+
+
+def _check_names_match_verify():
+    """Fail loudly if CHECK_NAMES drifts out of step with verify()."""
+    import pathlib
+    src = pathlib.Path(__file__).read_text(encoding='utf-8')
+    # Split so this line does not count itself: the literal must not appear whole.
+    n = src.count('errors.' + 'append(')
+    if n != len(CHECK_NAMES):
+        raise AssertionError(
+            f'verify() reports {n} checks but CHECK_NAMES lists {len(CHECK_NAMES)}'
+        )
+
+
 def main():
+    _check_names_match_verify()
     expected = list(EXPECTED_CELLS)
     if "--inject-error" in sys.argv:
         expected[0] = ("000000",)
@@ -165,6 +193,29 @@ def main():
         for error in errors:
             print(error, file=sys.stderr)
         return 1
+
+    if "--negative-control" in sys.argv:
+        mutated_count = CLAIMED_REFINEMENT_CELL_COUNT - 1
+        computed_count = len(expected)
+        claim_ok = computed_count == mutated_count
+        print(
+            "NEGATIVE CONTROL  claimed refinement cell count: "
+            f"{CLAIMED_REFINEMENT_CELL_COUNT} -> {mutated_count}"
+        )
+        # These are the six properties verify() checks, in its order. They are printed as
+        # PASS only because the 'if errors: return 1' above already established that none
+        # failed. The list is a duplicate of what verify() reports, so it is guarded by the
+        # assertion in _check_names_match_verify(): if a check is ever added to or removed
+        # from verify(), this list stops matching and the script fails loudly instead of
+        # quietly printing a stale set of PASS lines.
+        for _name in CHECK_NAMES:
+            print(f'CHECK  {_name}: PASS')
+        print(
+            f"CLAIM CHECK  refinement has {mutated_count} cells: "
+            f"{'PASS' if claim_ok else 'FAIL'} (computed {computed_count})"
+        )
+        return 0 if claim_ok else 1
+
     print("window6 hidden refinement certificate: all assertions passed")
     return 0
 
