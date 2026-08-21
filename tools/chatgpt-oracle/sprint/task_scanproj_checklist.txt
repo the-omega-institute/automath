@@ -1,0 +1,60 @@
+TASK: regenerate one submission checklist from measurement, and report on a bibliography
+question. Pre-authorised; do not ask, do not brainstorm.
+
+PAPER: papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/
+
+WHY REGENERATE RATHER THAN PATCH. This checklist has now been found wrong in seven distinct
+ways over this sprint. Patching it line by line has twice left it self-contradictory. Rewrite
+submission_checklist.md from scratch, with every line measured.
+
+THE FOUR DEFECTS CONFIRMED THIS ROUND, all verified by me directly:
+
+  1. WRONG TARGET JOURNAL. submission_checklist.md:4 says "Ergodic Theory and Dynamical Systems
+     (ETDS)". submission_metadata.md:7 says Stochastics and Dynamics, and
+     cover_letter_stochastics_and_dynamics.txt is addressed to Stochastics and Dynamics. The
+     checklist's abstract and page-limit reasoning cites "ETDS limit is ~200 words" and "within
+     ETDS norms", so it is judging against the wrong journal. The directory name ends in _etds
+     because that was the original target; the paper was retargeted and the checklist was not.
+
+  2. THE SUMMARY STILL DECLARES A BLOCKER THAT DOES NOT EXIST. Lines 24-27 say "11 of 12 items
+     pass. One blocker: Author field is empty -- author names, affiliations, and contact
+     information must be inserted into main.tex before the submission can proceed." That is
+     false: main.tex:56-62 declares both authors with affiliations and emails, and the PDF front
+     page renders both names. The item line was corrected earlier but the summary was not.
+
+  3. EVIDENCE FILE DOES NOT EXIST. Line 20 records "Formalization status noted: PASS --
+     documented in LEAN_SYNC_NOTE_2026-03-30.md", and line 32 refers to it again. That file is
+     not in the paper directory. Either cite evidence that exists or drop the item.
+
+  4. THE BIBLIOGRAPHY CLAIM DESCRIBES A FILE THE BUILD DOES NOT USE. Line 11 says "17 cited keys
+     exactly match 17 entries in references.bib; zero unused entries". main.tex has no
+     \bibliography command; the active bibliography is embedded at main.tex:113 as
+     \begin{thebibliography}{25} with 26 \bibitem entries. references.bib is present but unused.
+
+MEASURED FACTS to build the new checklist on, which I obtained myself:
+    target journal      Stochastics and Dynamics (per metadata and cover letter)
+    build               latexmk -pdfxe, 18 pages
+    authors             both present in source and rendered on the PDF front page
+    MSC                 main.tex declares 37A50, 37B10, 60F05, 60J10
+    bibliography        26 \bibitem entries embedded in main.tex; 12 distinct keys cited
+    uncited entries     14: AgarwalCheriyathTikekar2024, BandtlowJenkinson2014,
+                        BonannoCristadoroLenci2022, BruinDemersTodd2018, CheriyathAgarwal2024,
+                        ColletMartinezSanMartin2013, ColletMartinezSchmitt1996, DarrochSeneta1965,
+                        DemersWrightYoung2012, FroylandStancevic2011, HarithaAgarwal2019,
+                        LindMarcus1995, Parry1964, WaltersErgodicTheory
+Re-measure each of these yourself rather than copying my numbers; if any of mine is wrong, say so.
+
+THE BIBLIOGRAPHY QUESTION, report only, do NOT change the bibliography. In a thebibliography
+environment an uncited entry still prints, unlike BibTeX where it is dropped. So those 14 appear
+in the printed reference list without any \cite pointing at them. For each of the 14, check
+whether the work is discussed in the text by author name even though no \cite command refers to
+it. Report three lists: discussed by name, not mentioned at all, and unclear. Do not delete
+anything; removal is a judgement I will make from your evidence.
+
+CONSTRAINTS.
+  - Do not modify main.tex, any section file, or the bibliography.
+  - Do not state a journal requirement you cannot support; if you do not know Stochastics and
+    Dynamics' rule for something, write that you do not know it.
+  - No revision marks, no changelog language.
+
+WHEN DONE: paste the new checklist and the three bibliography lists.

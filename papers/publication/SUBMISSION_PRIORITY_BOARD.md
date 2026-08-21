@@ -10704,3 +10704,43 @@ Sanna 自己那篇 arXiv PDF 里、我的 board 与若干任务文件里, 以及
 **不许编造期刊要求。** 不知道就写"我不知道这家期刊的规定", 并要求把
 "需要查作者指南才能定"的清单**列全而不是列短** —— 一个自信但错误的字数上限比不说更糟,
 因为我会照着做。
+
+## tick 563 — 终检报告收下, scan_projection 四条全部复核属实; 其中一条是我自己没修干净
+
+内存 1.12 GB。只读约定守住(工作区 0 改动)。
+
+### scan_projection: 判为 "Hold before submission", 四条我逐条核过, **全部属实**
+
+**一、清单指着错的期刊。** `submission_checklist.md:4` 写 "Ergodic Theory and Dynamical Systems
+(ETDS)", 而 `submission_metadata.md:7` 与封面信都是 **Stochastics and Dynamics**。
+清单里"ETDS limit is ~200 words""within ETDS norms"这些判断**是拿错期刊的标准在评**。
+目录名以 `_etds` 结尾, 说明原目标是 ETDS, 后来改投而清单没跟着改。
+
+**二、总结段仍在宣布一个不存在的 blocker —— 这条是我自己的锅。**
+第 24-27 行仍写着 "One blocker: Author field is empty ... 必须先补作者才能投"。
+我在 **t542 改了条目行, 却没动总结段**。而 t543 我在 window6 上**刚刚踩过并写下过这个教训**
+("我的指令写死了只准改那两行, 于是留下自相矛盾"), 这次仍然只修了被指出的那一行。
+
+**三、作为 PASS 证据的文件不存在。** 第 20 行引 `LEAN_SYNC_NOTE_2026-03-30.md` 作为
+"Formalization status noted: PASS" 的依据, 第 32 行又引一次 —— **该文件不在目录里**。
+
+**四、参考文献那条描述的是一个编译根本不用的文件。** 第 11 行说
+"17 cited keys exactly match 17 entries in `references.bib`"。实际 `main.tex` **没有
+`\bibliography` 命令**; 活的参考表是 `main.tex:113` 内嵌的 `thebibliography`, 共 **26 条**,
+其中**只有 12 个键被引用, 14 条未被引用**。`references.bib` 存在但不参与编译。
+
+### 一处我先判错、被 agent 纠正的地方
+
+我第一次数 `\bibitem` 得到 **0**, 一度以为 agent 报的 26 条是错的。实际本文用的是
+`\bibitem[标签]{键}` 形式, **我的正则没写那个可选方括号**。重数后 26/12/14 与 agent
+报的**完全一致, 连 14 个名字都一样**。这次是**我的量具错、它对**。
+
+### 处理
+
+这份清单本冲刺已被查出**七处**不同错误, 逐行打补丁两次都留下自相矛盾。
+**改为整份按实测重生成**, 并把上述四条与实测事实一并写进任务书, 要求它**自己重测一遍**、
+我的数字若有错要指出来。
+
+参考文献那 14 条**只报告不改动**: `thebibliography` 里未被引用的条目**照样会印出来**
+(与 BibTeX 不同), 所以要先弄清哪些是正文以人名讨论过的、哪些完全没提 —— 删不删是判断题,
+留给我按证据定。
