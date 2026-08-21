@@ -1,6 +1,28 @@
 """The paper's Lemma (critical tail summation) asserts the SHARP constant
     b_{2d+1}(sigma_0) ~ b_C * d^{-sigma_0},    b_C = 2 (zeta(s-1)/zeta(s))^2 = 8 at s = sigma_0.
 Test that constant directly.
+
+WHAT THIS SCRIPT CAN AND CANNOT SEE. It reaches d = 25 and reports a level near 13.9, still
+rising, whose ratio to 8 is about 1.73. Read alone that looks like a refutation. It is not,
+and the reason is that d = 25 is nowhere near the asymptotic regime.
+
+The companion script verify_resolvent_recurrence.py computes the closely related quantity
+n^{sigma_0} Z_n on a Chebyshev grid, far beyond the depths reachable here, and it descends
+very slowly from above:
+
+    n =   27      15.2760
+    n =   51      13.2728
+    n =  100      10.5844
+    n = 1000       8.2187
+
+so a level near 13.9 at these depths is what a sequence converging to 8 looks like this early.
+The two quantities are related but not identical -- at d = 25 this script reports 13.86 while
+the resolvent gives 13.27 at n = 2d+1 = 51 -- so this is a consistency remark, not a claim
+that they are the same sequence.
+
+b_C = 8 itself is not established numerically at all. It is proved analytically in
+sec_arithmetic_critical.tex from zeta(sigma_0-1)/zeta(sigma_0) = 2, which gives 2 * 2^2 = 8.
+This script is a finite-layer estimate, and the paper describes it as one.
 """
 import sys, math
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -46,3 +68,9 @@ print(f'  fit v(d) = A + B/sqrt(d) ->  A = {my-c*mx:.4f}')
 print()
 print(f'  2*rho^2 at sigma_0 where rho = zeta(s-1)/zeta(s) = 2  gives  2*4 = 8')
 print(f'  measured level is roughly {v0:.1f} and still rising -> ratio to 8 is {v0/8:.3f}')
+print()
+print('  This does NOT contradict b_C = 8. At these depths the asymptotic regime is not')
+print('  reached. verify_resolvent_recurrence.py gives 15.28 at n=27, 13.27 at n=51,')
+print('  10.58 at n=100 and 8.22 at n=1000 for the related quantity n^sigma_0 Z_n.')
+print('  The constant is proved analytically in sec_arithmetic_critical.tex; this script')
+print('  is a finite-layer estimate, not the evidence for it.')
