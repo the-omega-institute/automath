@@ -8,7 +8,7 @@ Primary target: The Electronic Journal of Combinatorics
 
 The clean XeLaTeX manuscript build (latexmk -pdfxe) is 9 pages. The page count is engine-dependent: the same source built with pdfLaTeX (latexmk -pdf) gives 10 pages. Neither engine is pinned by a latexmkrc and the source uses no XeLaTeX-only packages, so the engine must be stated wherever the count is.
 
-2020 Mathematics Subject Classification: not declared in `main.tex`
+2020 Mathematics Subject Classification: 05C50 (primary), 11B39, 11D61
 
 Keywords: not declared in `main.tex`
 

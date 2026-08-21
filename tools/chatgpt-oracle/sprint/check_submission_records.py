@@ -110,12 +110,21 @@ def check(paper):
                              f"pdf={actual} record={claims}"))
 
     # --- MSC ---------------------------------------------------------------
-    src_msc = set(CODE.findall(first_match(tex, MSC_PAT) or ""))
+    # Take a window after the marker and harvest codes from it, rather than a
+    # character class. The class approach stopped at the first ';' and read only
+    # one code from 'Primary 11B39; Secondary 11A07, 11Y55, 68Q45', reporting a
+    # MISMATCH against a record that was correct.
+    _m = first_match(tex, MSC_PAT)
+    _i = tex.find(_m) if _m else -1
+    src_msc = set(CODE.findall(tex[_i:_i + 140])) if _i >= 0 else set()
     if not src_msc:
         rows.append(("NOFIND", "msc/source", "no MSC codes located in any .tex"))
     else:
         for name, txt in records.items():
-            m = re.search(r'MSC[^\n]*', txt)
+            # The record side must accept every spelling the source side does. It first
+            # matched only a literal 'MSC', so metadata writing 'Mathematics Subject
+            # Classification' was reported NOFIND and a stale line went unseen.
+            m = re.search(r'(MSC|Mathematics Subject Classifications?)[.: ]*(.*)', txt)
             rec = set(CODE.findall(m.group(0))) if m else set()
             if not rec:
                 rows.append(("NOFIND", f"msc/{name}", "record states no MSC codes"))

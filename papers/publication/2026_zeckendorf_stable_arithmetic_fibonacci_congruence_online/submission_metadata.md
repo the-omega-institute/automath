@@ -18,4 +18,6 @@ Reproducibility artifact: artifacts/verify_multiplication_delay_bound.py (verifi
 
 Build command: latexmk -pdf main.tex
 
+The clean XeLaTeX manuscript build is 34 pages; the clean pdfLaTeX manuscript build is 34 pages.
+
 Submission status: Prepared for submission; not published and not under consideration elsewhere.
