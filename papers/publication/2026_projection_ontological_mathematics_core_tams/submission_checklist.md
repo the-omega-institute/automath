@@ -9,7 +9,7 @@ Date: 2026-08-21
 ## Measurements
 
 - [x] **Clean LaTeX builds**: PASS -- `latexmk -C main.tex` followed by `latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex` completed successfully; the same cleared-state sequence with `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` also completed successfully.
-- [x] **PDF page count**: PASS -- `pdfinfo` reports 49 pages for the clean XeLaTeX build (MiKTeX `xdvipdfmx`) and 49 pages for the clean pdfLaTeX build (MiKTeX `pdfTeX`).
+- [x] **PDF page count**: PASS -- `pdfinfo` reports 50 pages for the clean XeLaTeX build (MiKTeX `xdvipdfmx`) and 50 pages for the clean pdfLaTeX build (MiKTeX `pdfTeX`).
 - [x] **Authors rendered**: PASS -- `pdftotext -enc UTF-8 -f 1 -l 1 main.pdf -` prints `HAOBO MA AND WENLIN ZHANG` on the front page; the declared authors are Haobo Ma and Wenlin Zhang.
 - [x] **MSC 2020**: PASS -- copied from `main.tex` exactly: `11B39, 11R32, 68Q45, 94A17`.
 - [x] **Keywords**: PASS -- copied from `main.tex` exactly: `Zeckendorf representation, Fibonacci partition function, collision moments, discrete thermodynamics, pressure, Galois groups, Chebotarev density`.

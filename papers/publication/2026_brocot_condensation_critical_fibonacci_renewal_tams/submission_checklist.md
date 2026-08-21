@@ -10,7 +10,7 @@ Date: 2026-08-20
 - [x] **All figures/tables present**: PASS -- the built manuscript contains no `figure` or `table` environments; none are required by the source
 - [x] **Bibliography key sets match**: PASS -- 16 unique cited keys exactly match the 16 entries in `references.bib`; zero missing keys and zero unused entries
 - [ ] **Abstract word count against the target journal limit**: NOT CHECKED -- `texcount -sum -brief` reports 203 words for the extracted abstract, but no explicit TAMS numerical limit could be established from the manuscript package or the accessible TAMS journal page
-- [x] **PDF page count**: PASS -- `pdfinfo` reports 31 pages for the clean-built `main.pdf`
+- [x] **PDF page count**: PASS -- `pdfinfo` reports 32 pages for the clean-built `main.pdf`
 - [x] **Clean LaTeX build**: PASS -- `latexmk -C main.tex` followed by `latexmk -pdfxe -interaction=nonstopmode -halt-on-error main.tex` completed with exit code 0
 - [x] **Author information present**: PASS -- `main.tex` names Haobo Ma and Wenlin Zhang and supplies an address and email address for each author
 - [x] **MSC codes present**: PASS -- MSC 2020: 11A55, 11B39, 60F05, 60K05
