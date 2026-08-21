@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import platform
+import sys
 from pathlib import Path
 
 import sympy as sp
@@ -33,14 +35,17 @@ EXPECTED_LEGENDRE = {
 }
 
 
-def polynomial(q: int) -> sp.Poly:
+def polynomial(q: int, negative_control: bool = False) -> sp.Poly:
     coefficients = RECURRENCES[q][1]
     degree = len(coefficients)
-    return sp.Poly(
+    poly = sp.Poly(
         X**degree - sum(c * X ** (degree - i) for i, c in enumerate(coefficients, 1)),
         X,
         domain=sp.ZZ,
     )
+    if negative_control and q == 9:
+        poly = sp.Poly(poly.as_expr() + X**5, X, domain=sp.ZZ)
+    return poly
 
 
 def factorization(poly: sp.Poly, prime: int) -> tuple[list[int], list[dict[str, object]]]:
@@ -75,14 +80,30 @@ def rank_mod_two(rows: list[list[int]]) -> int:
     return rank
 
 
-def main() -> None:
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--negative-control", action="store_true")
+    args = parser.parse_args()
+
+    if args.negative_control:
+        print("NEGATIVE CONTROL  claimed Pi_9 coefficient of x^5: -62 -> -61")
+
     rows = []
+    mutated_claim_failures = []
     for q, certificates in CERTIFICATES.items():
-        poly = polynomial(q)
+        poly = polynomial(q, negative_control=args.negative_control)
         certificate_rows = []
         for prime, expected_degrees in certificates:
             degrees, factors = factorization(poly, prime)
-            assert degrees == sorted(expected_degrees, reverse=True)
+            expected = sorted(expected_degrees, reverse=True)
+            try:
+                assert degrees == expected
+            except AssertionError:
+                if not (args.negative_control and q == 9):
+                    raise
+                mutated_claim_failures.append(
+                    {"prime": prime, "expected": expected, "observed": degrees}
+                )
             certificate_rows.append({"prime": prime, "degrees": degrees, "factors": factors})
         rows.append({
             "q": q,
@@ -113,13 +134,32 @@ def main() -> None:
     }
     output = Path(__file__).with_name("polynomial_certificates_q9_17.json")
     encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("ascii")
-    output.write_bytes(encoded)
-    print(f"verified_polynomials={len(rows)}")
-    print("verified_modular_factorizations=27")
-    print("verified_discriminant_binary_rank=4")
-    print(f"wrote={output}")
-    print(f"sha256={hashlib.sha256(encoded).hexdigest()}")
+    if args.negative_control:
+        print(f"computed_polynomials={len(rows)}")
+        print("computed_modular_factorizations=27")
+        print("verified_discriminant_binary_rank=4")
+    else:
+        output.write_bytes(encoded)
+        print(f"verified_polynomials={len(rows)}")
+        print("verified_modular_factorizations=27")
+        print("verified_discriminant_binary_rank=4")
+        print(f"wrote={output}")
+        print(f"sha256={hashlib.sha256(encoded).hexdigest()}")
+    if args.negative_control:
+        print("CHECK  modular certificates for unmodified Pi_10..Pi_17: PASS")
+        print("CHECK  discriminant Legendre values and rank_mod_two == 4: PASS")
+        for failure in mutated_claim_failures:
+            print(
+                "    Pi_9 prime={prime}: expected degrees={expected}, observed={observed}".format(
+                    **failure
+                )
+            )
+        claim_ok = not mutated_claim_failures
+        print(f"CLAIM CHECK  modular certificates for mutated Pi_9: "
+              f"{'PASS' if claim_ok else 'FAIL'}")
+        return 0 if claim_ok else 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

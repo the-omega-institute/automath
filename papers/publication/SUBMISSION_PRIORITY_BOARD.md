@@ -10339,3 +10339,39 @@ cubical_stokes 四条命令同样逐条跑过, 含 `--negative-control` 确实 e
 数组下标、素数表, 并把我 t548 的失败案例原样写进去当反面教材。
 还要求文档写明: 变异后**其余检查仍应通过**, 只有该主张的检查失败 —— 这正是 scan_projection
 那个新对照被判为"对的那一种"的判据。
+
+## tick 553 — projection 的 REPRODUCE.md 与负对照已收(逐条跑过); Oracle 中继仍下线
+
+内存 1.99 GB。Oracle 状态与 t552 相同(WARP 中继不可用), 未动。
+
+### 验收: 十个脚本 + 两个哈希 + 一个负对照, 全部亲自跑
+
+    十个脚本                      全部 rc=0
+    unittest                     1 test OK
+    未触及任何 .tex / .pdf        已核
+
+**最有力的一条**: 默认运行给出的 sha256 是
+`7ff8b160b245374a5a6f4bc23f195f27f0937a67e6f03f89ef84c196cbbdbda9` ——
+**与我 t552 在 agent 动手之前记下的哈希逐字符相同**。也就是说这次改动**没有扰动被认证的输出**。
+文档里引的两个哈希(证书的与 `generate_sequence_data.py` 的 `e7293d19...`)
+我都独立重算过, 都对得上。
+
+### 负对照是对的那一种, 而且证据链是独立的
+
+它把 $\Pi_9$ 的 $x^5$ 系数从 **-62 改成 -61** —— 改的是**论文主张的那个多项式的系数**。
+关键在于它是**怎么被抓到的**:
+
+    Pi_9 prime=17: expected degrees=[6, 1], observed=[7]
+    Pi_9 prime=13: expected degrees=[3, 2, 1, 1], observed=[4, 2, 1]
+    CLAIM CHECK  modular certificates for mutated Pi_9: FAIL      exit 1
+
+抓它的是**模 p 因式分解的次数型变了**(Dedekind), 不是拿它去比对某个硬编码的期望值。
+系数一动, 模算术的形状就变 —— 这是独立证据, 不是自我确认。
+
+### 我特意核了一处可能被削弱的地方
+
+新代码把断言包进了 try/except。默认路径的逻辑是
+`if not (args.negative_control and q == 9): raise` —— **默认模式下 negative_control 为假,
+仍然照常抛出**, 没有被放宽。只有"负对照且恰为 q=9"这一支才改为收集失败并给出干净结论。
+
+文档也按要求写明了: SymPy 那条模整数比较的 deprecation 警告无害; 以及变异后**哪些检查仍然通过**。
