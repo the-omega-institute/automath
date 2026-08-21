@@ -9765,3 +9765,33 @@ k in {4,5,9,12}；`k-1>m` 连同数位位置约束给出候选 {3} u {6,7} u {8,
 这正是我一直要求的自匹配对照。window6 摘要判定：干净，不需要改。
 
 在飞：`abstract_review_r2`（只读冷读，五篇摘要 + cover letter），已 60 万字节，工作区仍 0 改动。
+
+## tick 540 — 第三个量具缺陷：`ps` 在这个 shell 里根本看不见 codex
+
+内存 1.76 GB / 153 pages/s，均在阈值内。Oracle 仍 1 排队 0 worker，未动。
+
+### 发现
+
+冷读 r2 的输出从 60.6 万涨到 69 万字节，**明显在跑**；而我每个 tick 用的
+`ps aux | grep -c codex` 返回 **0**。查下去：`ps aux` 在这个 git-bash 里**总共只有 7 行**，
+只看得见自己的子进程，**看不见任何 Windows 进程**。`Get-Process` 一问就是
+`codex x2, 108 MB`。
+
+也就是说，tick 流程第 (3) 步"派新的前先确认旧的已退出"，我用的那个检查
+**结构上不可能报出"还在跑"** —— 它永远返回 0。这正是会导致两个 agent 同时改一篇的失败模式。
+同一个盲点还把 8 个 python 进程报成了 0。
+
+那 8 个查清楚了：全是会话启动时拉起的 MCP server（paper-search、arxiv、lean-lsp、
+semantic-scholar），共 21 MB，**不是孤儿**，无需清理。结论碰巧是对的，但我是现在才真正知道。
+
+### 处理
+
+写了 `tools/chatgpt-oracle/sprint/agents_running.sh`：用 `Get-Process` 判 codex 存活、
+读内存计数器、并用 `Win32_Process` 列孤儿 python（**排除 MCP server**，否则每次都误报 8 个）。
+以后 tick 用它，不再用 `ps`。
+
+### 三个 tick，三个同族缺陷
+
+t538 `python3` 是静默存根 + `$?` 被命令替换重置；t540 `ps` 看不见 Windows 进程。
+形状完全一样：**量具看不见某样东西时，输出与"干净"不可区分**。
+被测对象每次都是好的，坏的是我的检查。
