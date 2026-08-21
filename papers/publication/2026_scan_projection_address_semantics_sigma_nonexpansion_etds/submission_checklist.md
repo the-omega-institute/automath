@@ -10,9 +10,9 @@ Date: 2026-03-30
 - [x] **All figures/tables present**: PASS -- manuscript contains no figures or tables; none are referenced
 - [x] **Bibliography complete (no missing keys)**: PASS -- 17 cited keys exactly match 17 entries in `references.bib`; zero unused entries, zero missing entries
 - [x] **Abstract word count**: PASS -- approximately 141 words; ETDS limit is ~200 words
-- [x] **Page count estimate**: PASS -- approximately 35 pages at 12pt a4paper with 2.7cm margins (3196 source lines across 8 section files + main.tex); within ETDS norms for a research article
+- [x] **PDF page count**: PASS -- `pdfinfo` reports 18 pages for the clean-built `main.pdf` under `latexmk -pdfxe`, matching submission_metadata.md; within ETDS norms for a research article
 - [x] **Appendix proportion**: PASS -- manuscript has no appendices; all material is in the main body
-- [ ] **Author information present**: FAIL -- `\author{}` in main.tex is empty; author names and affiliations must be added before submission
+- [x] **Author information present**: PASS -- `main.tex` declares both authors with affiliations and emails, and the built `main.pdf` front page renders "Haobo Ma" and "Wenlin Zhang"
 - [x] **MSC codes present**: PASS -- MSC 2020: 37B10, 37A50, 37D35, 94A17
 - [x] **Keywords present**: PASS -- open symbolic dynamics, escape rates, Ruelle resonances, Renyi pressures, Poisson approximation, hidden conditional entropy
 - [x] **No revision metadata in manuscript**: PASS -- no revision traces, change logs, or draft-stage language found in any .tex file

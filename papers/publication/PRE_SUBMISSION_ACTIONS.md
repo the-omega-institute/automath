@@ -1,6 +1,24 @@
 # Pre-submission action list
 
-## STATUS as of t538: every actionable item is closed again, after a cold read reopened three.
+## STATUS as of t542: one item is open. A submission-materials audit found it.
+
+OPEN: window6 declares no 2020 MSC codes and no keywords. Its own checklist recorded both as NOT
+MET and that record is correct -- main.tex uses \documentclass{article}, so it has no \subjclass
+macro and nothing supplies them. The primary target, The Electronic Journal of Combinatorics,
+prints MSC classifications with the article. A fix is in flight (t542).
+
+The audit that found it also found the reverse problem, which is worth stating because it
+changes how much these files can be trusted. scan_projection's checklist carried a FAIL saying
+uthor{} is empty; both authors are in fact declared with affiliations and emails and the PDF
+front page renders both names, so the FAIL was stale. The same checklist recorded a page count
+of about 35 as a PASS, derived by scaling source line counts, against a real build of 18 pages.
+A checklist can therefore be wrong in both directions at once: it can block a submittable paper
+and it can pass a number nobody measured. Both lines are corrected.
+
+Not defects, checked and dismissed this tick: cubical_stokes has 3 unused bibliography entries
+with zero missing keys, which is harmless; the brocot and cubical_stokes abstract word counts
+are marked NOT CHECKED rather than over any stated limit; and window6's page count differs by
+engine, which both of its files already state explicitly.
 
 A referee-style cold read at t537 found three real defects in zeck_arith, two of them in text I
 had verified and committed at t526: the abstract stated the multiplication-delay bound with no
