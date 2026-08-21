@@ -1,0 +1,63 @@
+TASK: fix two confirmed defects in the projection manuscript. Pre-authorised; do not ask, do not
+brainstorm. These are corrections; change as little as possible.
+
+PAPER: papers/publication/2026_projection_ontological_mathematics_core_tams/
+
+DEFECT 1, MISLEADING VERIFICATION CLAIMS. The manuscript prints \leanverified{...} on 21
+statements. I checked every tag against lean4/. THIRTEEN of them resolve to Lean theorems that
+take the mathematics as abstract Prop parameters and prove a propositional tautology. Example,
+the complete proof of paper_projection_microcanonical_band_bounds:
+
+    theorem paper_projection_microcanonical_band_bounds
+        (gibbsSelection bandConcentration bandCardinalityBounds bandProbabilityBounds : Prop)
+        (hSelection : gibbsSelection)
+        (hConcentration : gibbsSelection -> bandConcentration)
+        (hCardinality : bandConcentration -> bandCardinalityBounds)
+        (hProbability : bandConcentration -> bandProbabilityBounds) :
+        gibbsSelection /\ bandConcentration /\ bandCardinalityBounds /\ bandProbabilityBounds
+
+That holds for ANY four propositions. It never mentions d_m, Delta_q, or exp. It verifies
+nothing about the paper's mathematics; the mathematics is assumed.
+
+The thirteen: adjacent_pressure_convexity, collision_entropy_rate, diagonal_high_moments,
+gibbs_selection, global_pressure_convexity, microcanonical_band_bounds, pressure_slopes,
+renyi_endpoint, renyi_entropy_rate, symmetric_compression, thick_fiber_envelope,
+visible_thick_tail, zero_temp_concentration (all prefixed paper_projection_).
+
+The other EIGHT are genuine and must be kept: collision_kernel, double_limit, lambda_algebraic,
+max_fiber, rewrite_confluence_seeds, rewrite_local_confluence_seeds, rewrite_termination,
+rewrite_word_problem_seeds. For instance paper_projection_max_fiber really proves
+maxFiberMultiplicity^q <= momentSum <= fib(m+2) * maxFiberMultiplicity^q with real tactics.
+
+WHAT TO DO: remove the \leanverified tag from the thirteen. A referee reading that macro will
+believe the statement is machine-checked, and for those thirteen it is not. Do NOT delete or
+weaken the Lean files. Do NOT relabel them with softer wording that still implies verification;
+if you want to describe the scaffolding at all, say plainly in the reproducibility section that
+the Lean development formalises the dependency structure between these statements and that the
+listed eight are proved in full, naming them.
+
+DEFECT 2, AN EQUALITY WHERE ONLY AN INEQUALITY IS PROVED. Three places assert
+
+    p_m(V_m(eps)) = 1 - exp(-(eps+o(1))m)              sec_ledger.tex:35
+    mu_{m,q}(B_{m,q}(eps)) = 1 - exp(-(eps+o(1))m)     sec_moment_kernel.tex:403
+    sum_{x in B} d_m(x)^q = (1 - exp(-(eps+o(1))m)) S_q(m)   sec_moment_kernel.tex:436
+
+The supporting result, thm:gibbs-selection, proves only ONE-SIDED bounds of the form
+mu_{m,q}{...} <= exp(-(eps+o(1))m). Two of those give
+p_m(V_m(eps)) >= 1 - exp(-(eps+o(1))m). Equality would need a matching LOWER bound on the
+excluded mass, which is not proved and need not hold: if the excluded set is empty its mass is
+exactly zero while the right-hand side is strictly positive.
+
+Replace the equalities by what is proved, that is >= 1 - exp(-(eps+o(1))m), or equivalently
+1 - O(exp(-(eps+o(1))m)). The downstream conclusion at sec_moment_kernel.tex:436 ends in
+= exp((p_q+o(1))m), which needs only band mass 1-o(1) and survives the weakening; check that it
+still reads correctly. Also remove any "sharp exponential tail" phrasing that claims the exact
+decay rate for the excluded mass.
+
+CONSTRAINTS.
+  - Do not alter any other theorem or proof.
+  - Do not touch the abstract's hedging language, which is correct.
+  - No revision marks, no changelog language.
+  - Rebuild with latexmk and confirm it still builds; report the page count.
+
+WHEN DONE: list the tags removed, paste the three corrected statements, and give the page count.

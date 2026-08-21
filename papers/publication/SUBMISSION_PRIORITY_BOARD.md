@@ -10447,3 +10447,55 @@ cubical_stokes 四条命令同样逐条跑过, 含 `--negative-control` 确实 e
 
 **分寸**: 我探的是两个点, 不是整篇证明。这两点通常是最先塌的地方, 它们干净是好迹象,
 但**不等于**证明整体已被复核 —— 那正是派出去那份冷读要做的事。
+
+## tick 556 — 正文冷读挖出真问题, 而顺着它查下去挖出**本次冲刺最严重的一条**
+
+内存 1.5 GB(曾瞬时 10853 pages/sec, 连采四次为 250/35/0/32, **是尖峰不是持续**)。
+冷读只读约定守住: 工作区 0 改动。
+
+### 一、冷读的 Finding 1 属实, 我逐层核过
+
+论文三处写成**等式**:
+
+    sec_ledger.tex:35         p_m(V_m(eps))            = 1 - exp(-(eps+o(1))m)
+    sec_moment_kernel.tex:403 mu_{m,q}(B_{m,q}(eps))   = 1 - exp(-(eps+o(1))m)
+    sec_moment_kernel.tex:436 sum_B d_m(x)^q           = (1 - exp(...)) S_q(m)
+
+而其依据 `thm:gibbs-selection` 证的是**单边界**:
+`mu_{m,q}{...} <= exp(-(eps+o(1))m)`。两个这样的上界只能给出
+
+    p_m(V_m(eps)) >= 1 - exp(-(eps+o(1))m)
+
+**等号需要对被排除质量的匹配下界, 论文没有证, 而且不一定成立** ——
+若被排除集为空, 其质量恰为 0, 而右端严格为正。
+第 436 行的下游结论止于 `= exp((p_q+o(1))m)`, 只需要频带质量 1-o(1), 因此**弱化后仍然成立**。
+
+### 二、顺着这条查下去: 13 个 `\leanverified` 标记名不副实
+
+出问题的那条定理 `thm:microcanonical-bands` 挂着 `\leanverified`。去 `lean4/` 看它到底证了什么:
+
+    theorem paper_projection_microcanonical_band_bounds
+        (gibbsSelection bandConcentration bandCardinalityBounds bandProbabilityBounds : Prop)
+        (hSelection : gibbsSelection)
+        (hConcentration : gibbsSelection -> bandConcentration)
+        ...
+        : gibbsSelection /\ bandConcentration /\ ...
+
+**它把数学内容当作抽象 `Prop` 参数收进来, 证的是一条命题逻辑恒真式** ——
+对任意四个命题都成立, 全文不出现 d_m、Delta_q、exp。**它没有验证任何数学, 数学是被假设掉的。**
+
+把 21 个标记逐个对到 `lean4/` 去查: **13 个是这种空壳**, 8 个是真的
+(例如 `paper_projection_max_fiber` 确实用 `Finset.single_le_sum` 等证出
+`maxFiberMultiplicity^q <= momentSum <= fib(m+2) * maxFiberMultiplicity^q`)。
+
+**两条发现在此交汇**: 出问题的那条等式所在的定理, 恰恰就是 13 个空壳之一 ——
+**它的"验证"按其构造根本不可能发现那个错误。**
+
+**范围已界定**: 只有 projection 用 `\leanverified`, 其余五篇 0 个。
+
+### 为什么这条最严重
+
+审稿人看到 `\leanverified` 会相信该陈述**已被机器检验**。这 13 条没有。
+这不是"检查有局限"——是**论文主动向读者声称了一种并不存在的验证**。
+已派工: 摘掉那 13 个标记(**不准删或弱化 Lean 文件**, 也不准换成仍暗示已验证的软措辞),
+并把三处等式改成实际证到的 `>=`。

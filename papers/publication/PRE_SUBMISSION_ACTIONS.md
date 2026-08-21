@@ -1,6 +1,21 @@
 # Pre-submission action list
 
-## STATUS as of t542: one item is open. A submission-materials audit found it.
+## STATUS as of t556: BLOCKING. projection claims formal verification it does not have.
+
+Thirteen of the twenty-one \leanverified tags in projection resolve to Lean theorems that take
+the mathematics as abstract Prop parameters and prove a propositional tautology. They hold for
+any propositions and never mention the objects in question. Eight tags are genuine and are
+listed in the dispatched fix. A referee reading that macro will believe the statement is
+machine-checked; for those thirteen it is not, and that is the paper asserting a verification
+that does not exist rather than a check having a limitation. Only projection uses these tags.
+
+Also open, same paper: three statements assert
+p_m(V_m(eps)) = 1 - exp(-(eps+o(1))m) where the supporting theorem proves only the one-sided
+bound, giving >= rather than =. Equality would need a lower bound on the excluded mass which is
+not proved and can fail outright when the excluded set is empty. The downstream conclusion needs
+only band mass 1-o(1) and survives the weakening.
+
+Both are dispatched (t556). Neither affects the other five papers.
 
 OPEN: window6 declares no 2020 MSC codes and no keywords. Its own checklist recorded both as NOT
 MET and that record is correct -- main.tex uses \documentclass{article}, so it has no \subjclass
