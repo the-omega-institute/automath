@@ -14,11 +14,11 @@ checklist and a reproducibility statement. Verified state, with the tick where e
 
 Thirty named scripts were executed independently at t530: 30 passed, 0 failed.
 
-THE ONE OPEN ITEM, and it needs a person: brocot's target journal. Its cover letter and its
-submission_metadata.md both say Transactions of the American Mathematical Society, with
-Journal of Number Theory as fallback. An earlier note in this sprint called for retargeting to
-Annales de l'Institut Henri Poincare. Those conflict. It is a venue judgement, not a defect,
-and nothing in the repository settles it.
+NOTHING IS OPEN. The last item, brocot's target journal, was settled on 2026-08-21: TAMS is
+confirmed, with Journal of Number Theory as fallback, and the AIHP proposal was declined. The
+cover letter and submission_metadata.md already agreed on TAMS, so no edits were needed. The
+decision is recorded in that paper's submission_metadata.md so the stale AIHP note cannot
+reopen it.
 
 Everything below is the record of how these items were found and closed.
 

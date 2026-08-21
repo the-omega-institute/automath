@@ -9598,3 +9598,30 @@ agent 本来是自洽的（9 页 + 明写 `-pdfxe`），**是我的改动让 met
 **brocot 的目标期刊。** cover letter 与 `submission_metadata.md` 一致指向
 TAMS（fallback JNT），而本冲刺早先有一条改投 AIHP 的建议，两者冲突。
 **这是选题判断，不是缺陷，仓库里没有任何东西能替你决定。**
+
+## tick 535 — brocot 选刊已定：维持 TAMS，清单彻底清零
+
+内存 0.89 GB。codex 探活 OK。
+
+### 选刊决定已落地
+
+**维持 TAMS**（fallback JNT），改投 AIHP 的提议不采纳。cover letter 与
+`submission_metadata.md` 本就一致写着 TAMS，**因此无需任何改动**。
+
+决定写进了 `brocot/submission_metadata.md` 的 "Venue decision, settled 2026-08-21" 一节 ——
+**放在那儿而不是只写进 board**，是为了让那条过时的 AIHP 笔记不会在日后把这个问题重新翻出来。
+`PRE_SUBMISSION_ACTIONS.md` 的状态头同步改为"无未决项"。
+
+### Oracle 池：worker 掉了
+
+    Queued: 1   Dispatched: 0/6   Workers: none active
+
+有一个排队任务，但**没有活着的 worker**，它不会推进。
+我自己的两个任务（`8500d3e7`、`52df38ce`）都早已取回结果，**没有我这边的待办**。
+那个排队项来源不明，**我不动它** —— 取消别人的排队任务不是我该做的。
+需要有人重开带 userscript 的 ChatGPT 标签页，池子才会恢复。
+
+### 冲刺组状态
+
+六篇材料齐备、构建干净、30 个被点名脚本全通过、三条 BLOCKING 与可复现条目全部关闭、
+选刊已定。**可执行清单为空。**

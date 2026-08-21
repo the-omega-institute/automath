@@ -39,3 +39,11 @@ was introduced in preparing this article. The companion is identified in
 prose and is not represented as an externally published source.
 
 Build command: latexmk -pdfxe main.tex
+
+## Venue decision, settled 2026-08-21
+
+Target confirmed as Transactions of the American Mathematical Society, with Journal of
+Number Theory as fallback. An earlier note in the sprint proposed retargeting to Annales
+de l'Institut Henri Poincare; that proposal was considered and declined. The cover letter
+and this file already agree on TAMS, so no edits were required. Recorded here so the
+question is not reopened from the stale note.
