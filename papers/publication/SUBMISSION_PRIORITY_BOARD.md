@@ -10196,3 +10196,47 @@ n=2d+1=51 给 13.27。**我没有推导过它们的对应关系, 所以只作为
   ("evaluates the competing finite-size correction forms")准确。不改。
 
 即: 这一类风险目前只剩已修的那一处。
+
+## tick 550 — 第一次照读者的路径走: brocot 的 REPRODUCE.md 从头到尾走通
+
+内存 2.4 GB。**走完整套流程后, 被跟踪文件 0 处改动。**
+
+前面所有核验都是我自己挑脚本跑的, 从没按文档给读者的路径走过一遍。这次逐条照 `REPRODUCE.md`
+执行(包括它要求的工作目录: 从论文根目录而非 artifacts/ 内运行)。
+
+### 结果: 五节全过, 而且它的对照是双向的
+
+| 步骤 | 结果 |
+|---|---|
+| critical constants | `2*rho_Q^2` 从下方逼近 8: 7.6324 / 7.8769 / 7.9590 / **7.9864** (Q 到 1e6) |
+| `unittest discover` | 11 tests OK |
+| context rate | 18432 + 128512 处**精确**(无容差)检查全过 |
+| finite-size crossover | OVERALL = PASS, 且 **factor-four 对照被拒**  |
+| article build | exit 0, 31 页, 未解析引用/引文/重复标签 **0** |
+
+**最值得记的是 Gibbs geometry 那节的双向对照**: 文档明写"两个变异都应打印
+`OVERALL = RED` 并以状态 1 退出"。实测:
+
+    --prediction flip-sign  ->  OVERALL = RED, exit 1
+    --prediction mu-power   ->  OVERALL = RED, exit 1
+    默认(未变异)             ->  OVERALL = PASS, exit 0
+
+**这是作者自己写进制品里的、真的会响的对照** —— 而且正好是我 t548 试图自动化却做不到的那件事:
+变异的是**被主张的那个定律**(把定理的负号律换成正号、把 `mu_C^(-1-1/alpha)` 换成 `mu_C^(-1/alpha)`),
+不是程序的实现细节。作者知道该改哪个数, 因为他知道自己在主张什么。
+
+**两个随附输出文件按文档的种子逐字节复现**(`git status` 为空), 说明仓库里存档的就是脚本产出的。
+
+### 对 t549 那条的分寸修正
+
+`REPRODUCE.md` **根本没有列** `verify_critical_tail_constant.py`。
+照"一键说明"走的读者**不会**遇到那句 "ratio to 8 is 1.733";
+只有顺着 `sec_conclusion` 的完整脚本清单逐个跑的人才会。
+t549 加的说明仍然值得, 但**我当时把风险说大了** —— 这里更正。
+
+而且 REPRODUCE 的首节本身就是 $b_C=8$ 的**良性**数值检查(7.9864 → 8), 收敛看得见。
+
+### 其余五篇没有 REPRODUCE.md
+
+brocot 是唯一有的。其余五篇靠正文的可复现小节点名脚本 —— 投稿够用, 但没有这种一键路径,
+也没有 brocot 这样成体系的负对照。
