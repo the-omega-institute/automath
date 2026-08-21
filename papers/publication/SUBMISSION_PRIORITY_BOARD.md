@@ -9855,3 +9855,49 @@ brocot 数学部分干净、scan_projection 干净、cubical_stokes 干净且披
 
 两轮合计: t537 四条实质意见中三条属实; r2 两条具体指控**零条按原样成立**, 但撬出一条真缺口。
 结论是冷读值得做、但**每一条都必须自己复核**, 不能照单执行。
+
+## tick 542 — 收割两条修复并核实; 顺手审计投稿材料, 挖出一个真缺口和一张两头都错的清单
+
+内存 2.2 GB。pages/sec 曾瞬时冲到 1955 与 2682, 但连采三次是 51/2682/42 —— **是尖峰不是持续**,
+可用最低 920 MB 后回升到 1.43 GB, 未触发降并发。
+
+### 一、r2 的两条修复已核实提交(f547b29a6)
+
+不采信 agent 自述, 两篇都 `latexmk -C` 清辅助从零重建: brocot exit 0 / 31 页,
+projection exit 0 / 49 页, 日志 0 错误。措辞红线守住: brocot 封面信写的是 **prepared for** JNT,
+全文无 submitted / under review。
+
+**核实途中我自己两次假阴性, 都靠对照抓回来**:
+
+1. 查红线时 grep `under consideration` 返回空 —— 但这句声明**改动前就在文件里**,
+   正常的 grep 必须命中它。**零命中证明的是量具坏了, 不是文件干净**。
+   原文断行成 `is not under` / `consideration elsewhere`, 多词模式跨行匹配不到。
+2. 查 projection 新句是否进了 PDF, 连查两次皆空。实际**在**里面, 只是被分页符从中间劈开,
+   插进了页眉 `FINITE-WINDOW ZECKENDORF FIBERS 41`。
+
+### 二、投稿材料一致性扫描, 结果比预期严重
+
+**window6: 真缺口。** 全文**不声明任何 2020 MSC 代码, 也没有 keywords**。它自己的 checklist
+两行都记着 NOT MET, **这个记录是对的**: main.tex 用 article 类, 根本没有 subjclass 宏。
+主投目标 EJC 要把 MSC 印在文章上。已派工。
+
+**scan_projection: 清单两个方向都错。** 一条 FAIL 写着"作者为空, 投稿前必须补" —— **陈旧**:
+两位作者连同单位邮箱都在 `main.tex:58-62`, PDF 首页确实渲染出 Haobo Ma / Wenlin Zhang。
+另一条却把"约 35 页"记成 PASS, 而它是**按源码行数(3196 行)折算的估计**, 真实构建 **18 页**。
+**一张清单能同时在两个方向出错: 既拦下能投的稿, 又放行没人量过的数字。** 两行已改成实测值。
+
+**查明不是缺陷的**: cubical_stokes 有 3 条未引用的参考条目但**零条缺失**, 无害;
+brocot 与 cubical_stokes 摘要字数标的是 NOT CHECKED 而非超限;
+window6 页数按引擎而异, 两份文件本就写明了引擎(t533 的处理仍成立)。
+
+### 三、本 tick 我自己的两个工具错误
+
+**第五次同族假阴性**: 扫作者时用 `grep author | head -1`, 见 projection 与 brocot 都只有
+`author{Haobo Ma}`, 一度以为**漏了第二作者**。实际 amsart 是**每位作者一条 author 命令**,
+三篇 PDF 首页都印着 HAOBO MA AND WENLIN ZHANG。`head -1` 结构上只能报第一条。
+
+**一个新的、更隐蔽的**: 写 board 的脚本里, heredoc 会把 `\` 塌缩成 `\`, Python 三引号字符串
+随即把 `\a` 解释成 **BEL(0x07)** —— 控制字符断言因此触发。之前几次侥幸没事, 只因 `\(`、`\d`
+不是合法转义;而 `\a \t \b \f \v` 全是。**以后 board 文本一律用原始字符串 r-string。**
+同一次里 assert 失败但链上的 `git commit` 照跑(d24d6a283), 与 t428 同一形状:
+提交内容本身没错, 但 board 当时并未写入 —— 本条即为补写。
