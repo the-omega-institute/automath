@@ -10057,3 +10057,34 @@ zeck_arith 新清单第 14 行原文:
 - 源文件侧改成"在标记后取一个窗口再捞码", 不再用字符类, 分号与 Primary/Secondary 都不再截断。
 
 zeck_arith 独立从零双引擎重建: 两个引擎都 **34 页**, 与 agent 写进 metadata 的数字一致, 属实。
+
+## tick 547 — 把变异测试做成工具; 顺带发现我 t538 的审计漏了一个目录
+
+内存 2.74 GB。Oracle 仍 1 排队 0 worker。工作区全程 0 改动。
+
+### 一、`tools/chatgpt-oracle/sprint/mutation_probe.py`(在跑)
+
+t545 手工问过两次"这个脚本到底约束住了什么", 现在自动化: 对每个 `verify_*.py` 找出
+**三位有效数字以上的字面量**(声称的常数通常住在那里), 逐个微扰, 跑, 看结论是否翻转, 随即还原。
+
+分类刻意分开: `CONSTRAINED` / `UNCONSTRAINED` / `ALREADY-FAILING` / `TIMEOUT` / `NO-LITERALS`。
+**`UNCONSTRAINED` 不等于错**, 它的意思是"这次运行不构成关于该常数的证据 ——
+常数换一个, 它还会说同样的话"。这类才需要人去读。
+
+正在跑 window6 与 projection 共 23 个脚本; 还原写在 `finally` 里, 全程 `git status` 为 0。
+
+### 二、只读交叉核对: 论文点名的脚本是否都在
+
+六篇全部通过 —— **每个被点名的脚本都存在**。
+
+但过程中发现**我自己 t538 那次"47 个脚本全过"的审计有覆盖盲区**: 它扫的是
+`*/artifacts/verify_*.py`, 而 window6 的可复现小节点的是 **`supplement/verify_window6_streams.py`**,
+**根本不在扫描范围内**。现在补跑: rc=0, 输出 "window6 canonical streams: all assertions passed"。
+结论无害, 但那 47 个从来不是全集 —— 是我的通配符定义了全集。
+
+### 三、本 tick 第九次自造假阴性
+
+第一版核对只在 `artifacts/` 里找文件, 于是把 `supplement/verify_window6_streams.py`
+报成"论文点名但不存在"。文件一直在。**又是先假定目录结构, 没先看清楚。**
+(同一轮里还有一次: 用 `[a-z_0-9]+\.py` 去抓文件名, 被 LaTeX 的转义下划线 `\_` 截成
+`_bound.py`、`_spectrum.py` 这种碎片。)
