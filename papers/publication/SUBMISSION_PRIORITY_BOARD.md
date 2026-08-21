@@ -9720,3 +9720,7 @@ brocot 正在跑。完整结果落在 `tools/chatgpt-oracle/sprint/audit_python3
 需要说清楚的分寸：这**不等于** t530 那次 30/30 是假的 —— 那次我是看着输出记的，若当时走的是
 存根，30 个全会是空的，我会发现。t530 大概率为真。但它现在**重新建立在可复核的证据上**，
 而不是建立在一次我已无法回溯的调用上。
+**审计结果（全部跑完）：47 pass / 1 fail / 0 no-output / 0 timeout。**
+唯一非零是 brocot 的 `verify_dushistova_coefficient.py`（rc=2），
+即 t456 改成"显式报告 NOT DISCRIMINATING"、并在可复现声明里**有意排除**的那个，不是回归。
+`no-output = 0` 说明对照项没抓到任何藏在 pass 里的空跑 —— 六篇论文的可复现声明现在有实证支撑。
