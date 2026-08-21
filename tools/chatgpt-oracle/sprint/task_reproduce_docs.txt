@@ -1,0 +1,66 @@
+TASK: write artifacts/REPRODUCE.md for two papers, and add one missing negative control.
+Pre-authorised; do not ask, do not brainstorm.
+
+PAPERS:
+  papers/publication/2026_cubical_stokes_inverse_boundary_readout_jdsgt/
+  papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds/
+
+MODEL TO COPY:
+  papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams/artifacts/REPRODUCE.md
+
+That document was walked end to end this tick and every claim in it held, so follow its shape:
+one section per check, the exact command with its working directory, what the script computes,
+what output to expect, and what a reader should conclude. It opens by saying the claims are
+proved analytically and the numerics are consistency checks that are not premises of any
+theorem. Keep that framing where it is true.
+
+WHAT ALREADY EXISTS. I verified all of this by running it, so do not re-derive it, and do not
+contradict it without showing your own run:
+
+  cubical_stokes
+    verify_box_extremal_value.py   Solves a discrete LP with scipy linprog from box geometry and
+                                   compares to the closed form m(R) = (2 sum_j 1/L_j)^{-1}.
+                                   Agrees to 9 digits across three boxes and four meshes. It has
+                                   a CONTROL section for the affine construction. I mutated the
+                                   closed form from 2.0 to 2.1 and it went to FAIL, so it is
+                                   genuinely sensitive to the claimed constant.
+    verify_cubical_patching.py     Has a real two-sided control already. Default exits 0. With
+                                   --negative-control it replaces the proved atomic value 72 by
+                                   73 and exits 1 on an AssertionError. Document this switch
+                                   explicitly, the way brocot documents its two mutations.
+    verify_patching_hypotheses.py  Runs clean; describe what it checks.
+
+  scan_projection
+    verify_period_two_example.py   Computes the asymptotic to m=90 against the closed forms with
+                                   final error 4.000e-59, then reports the two Poisson means
+                                   953/5618 = 0.169633 and 267/(676 sqrt5) = 0.176636 and that
+                                   they differ. It has CONTROL 1 (pi K = pi) and CONTROL 2
+                                   (Perron eigenvalues rho_1, rho_2). I mutated 953 to 954 and
+                                   the constants check flipped to False with the error jumping
+                                   to 3.560e-4, so the constants are derived, not typed.
+    reproduce_period_two_constants.py and test_reproduce_period_two_constants.py also exist.
+
+THE ONE THING TO ADD. scan_projection has positive controls but no negative one. Add a
+--negative-control switch to verify_period_two_example.py, on the model of cubical_stokes':
+it must replace a CLAIMED value by a wrong one, print an explicit failing verdict, and exit
+nonzero. Document it in REPRODUCE.md with the expected output and exit status.
+
+WHAT THE MUTATION MUST TARGET, and this is the point of the whole exercise. Mutate the quantity
+the theorem asserts, not the program's internals. brocot does it right: its two controls replace
+the theorem's negative law by a positive one, and mu_C^(-1-1/alpha) by mu_C^(-1/alpha). An
+automated attempt of mine failed precisely here: widened to any numeric literal it changed an
+array index, turning FIB[-1] + FIB[-2] into FIB[-2] + FIB[-2], which breaks the recurrence and
+proves only that corrupting a program makes it complain. Do NOT add a control of that kind. For
+this script the right target is one of the two claimed Poisson means or the constant behind it.
+
+RULES.
+  - Every command in the document must be one you actually ran, with the output you actually
+    saw. State the working directory, since some scripts here assume the paper root.
+  - If a script is slow or memory-hungry, say so with a rough figure.
+  - Do NOT alter any theorem, proof, or the manuscript text. Only artifacts/ and the new
+    REPRODUCE.md files.
+  - Do not weaken or remove any existing control.
+  - No revision marks, no changelog language.
+
+WHEN DONE: paste both REPRODUCE.md files and the transcript of the new negative control both
+failing when mutated and passing by default.

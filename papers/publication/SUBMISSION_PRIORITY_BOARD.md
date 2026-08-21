@@ -10240,3 +10240,39 @@ t549 加的说明仍然值得, 但**我当时把风险说大了** —— 这里�
 
 brocot 是唯一有的。其余五篇靠正文的可复现小节点名脚本 —— 投稿够用, 但没有这种一键路径,
 也没有 brocot 这样成体系的负对照。
+
+## tick 551 — 给两篇补 REPRODUCE.md(已派工); 顺带盘清六篇的对照究竟是哪一种
+
+内存 2.85 GB。工作区 0 改动。
+
+### 派工前先把"已有什么"跑出来, 写进任务书
+
+不让 agent 去重新发现, 也不让它凭空编造。两处对照我都**亲自跑过**才写进去:
+
+- `verify_cubical_patching.py` **本来就有真正的双向对照**: 默认 exit 0;
+  加 `--negative-control` 把**已证的原子值 72 换成 73**, exit 1、AssertionError。
+- `verify_period_two_example.py` 有 CONTROL 1(`pi K = pi` 平稳性)与 CONTROL 2(Perron 特征值),
+  **但都是正对照**, 没有负对照开关。这是要补的那一件。
+
+任务书里把**变异必须打在"定理主张的量"上**这条写死, 并原样引用了我 t548 的失败案例:
+自动探针放开字面量后把 `FIB[-1] + FIB[-2]` 改成 `FIB[-2] + FIB[-2]`, 破坏的是递推本身,
+"程序被改坏会报错"对任何程序都成立, 不构成证据。brocot 做对的地方正相反 ——
+它换掉的是定理的负号律、是 `mu_C^(-1-1/alpha)` 这个指数。
+
+### 六篇的对照盘点(并纠正我自己一次草率读数)
+
+|  | 脚本数 | 显式负对照开关 |
+|---|---:|---:|
+| brocot | 19 | 3 |
+| window6 | 18 | 1 |
+| cubical_stokes | 3 | 1 |
+| projection | 10 | 0 |
+| scan_projection | 3 | 0 |
+| zeck_arith | 1 | 0 |
+
+**但"0"不等于"没有对照"。** 我的匹配只认 `negative-control`/`flip-sign` 这类开关名。
+实际去读: projection 有 `CONTROL 1 fibre multiplicity really is the coefficient`、
+`CONTROL 2 R(...)`, 而且带 `CONTROLS FAILED - stopping` 的中止逻辑;
+scan_projection 的两个 CONTROL 同理。**它们有的是正对照(能否重现已知量),
+缺的是负对照(能否拒绝错误量)** —— 两者不能互相替代, 但把后者的缺失说成"没有对照"是错的。
+差点又一次用窄模式下了大结论。
