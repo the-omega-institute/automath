@@ -1,0 +1,61 @@
+TASK: write artifacts/REPRODUCE.md for the projection paper and add one negative control.
+Pre-authorised; do not ask, do not brainstorm.
+
+PAPER: papers/publication/2026_projection_ontological_mathematics_core_tams/
+
+MODEL: papers/publication/2026_brocot_condensation_critical_fibonacci_renewal_tams/artifacts/REPRODUCE.md
+and the two written this sprint for scan_projection and cubical_stokes. All three were walked
+command by command and every stated number held. Follow that shape: one section per check, the
+exact command and its working directory, what it computes, the output to expect, and what the
+reader may conclude. Keep the opening framing that the claims are proved analytically and the
+numerics are consistency checks, where that is true.
+
+WHAT I VERIFIED BY RUNNING IT. Do not re-derive; do not contradict without showing your run.
+
+  verify_polynomial_certificates.py   exit 0. Prints verified_polynomials=9,
+        verified_modular_factorizations=27, verified_discriminant_binary_rank=4, writes
+        polynomial_certificates_q9_17.json and a sha256 that was
+        7ff8b160b245374a5a6f4bc23f195f27f0937a67e6f03f89ef84c196cbbdbda9 on my run. It already
+        raises AssertionError on a ramified certificate prime and asserts the factorisation
+        degrees, the values, and rank_mod_two == 4.
+
+  verify_sanna_galois_groups.py       Determines the Galois groups rigorously, not numerically:
+        Dedekind gives Frobenius cycle types from exact factorisations mod P, Jordan's theorem
+        promotes a primitive group containing a 5-cycle with 5 <= 9-3 to A_9, and an odd cycle
+        type lifts it to S_9. It also reports that every one of Sanna's own Table 1 rows is
+        fully symmetric. Say plainly that this is a machine-assisted proof, so a reader does not
+        mistake it for a numerical indication.
+
+  Several scripts carry CONTROL 1 / CONTROL 2 blocks and a 'CONTROLS FAILED - stopping' guard;
+  document what each control establishes.
+
+  Note for the reader: the scripts emit a SymPy deprecation warning about ordered comparisons
+  with modular integers. It is harmless. Say so, so nobody reads it as a failure.
+
+THE THING TO ADD. projection has positive controls but no negative one. Add a
+--negative-control switch to verify_polynomial_certificates.py that replaces ONE COEFFICIENT of
+ONE CLAIMED polynomial Pi_q by a wrong value, prints an explicit failing verdict naming what was
+changed, and exits nonzero. Document it with expected output and exit status.
+
+WHAT THE MUTATION MUST TARGET. The claimed object, not the program's internals. The polynomials
+Pi_q for q = 9..17 are what the paper asserts, so a coefficient of one of them is the right
+target. Do NOT mutate loop bounds, array sizes, indices, or the prime list. An automated attempt
+of mine failed exactly there: it changed FIB[-1] + FIB[-2] into FIB[-2] + FIB[-2], which breaks
+a recurrence and shows only that corrupting a program makes it complain. The correct pattern is
+scan_projection's new control, which alters only the claimed Poisson mean and leaves the
+transition matrix, recurrence and asymptotic constants untouched -- verified by the fact that
+under mutation every other control still passes and only the claim check fails. Your control
+must have that property: state in the document which checks still pass under mutation.
+
+RULES.
+  - Every command in the document must be one you ran, with the output you saw, and the working
+    directory stated.
+  - The sha256 will change under mutation; if you quote a hash, quote the one your run produced
+    and say it is from the unmutated run.
+  - Do NOT alter any theorem, proof, or manuscript text. Only artifacts/ and the new
+    REPRODUCE.md.
+  - Do not weaken or remove any existing control or assertion.
+  - No revision marks, no changelog language.
+
+WHEN DONE: paste REPRODUCE.md and the transcript of the new control passing by default and
+failing when mutated.

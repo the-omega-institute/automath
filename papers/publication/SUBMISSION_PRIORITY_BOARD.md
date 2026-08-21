@@ -10302,3 +10302,40 @@ cubical_stokes 四条命令同样逐条跑过, 含 `--negative-control` 确实 e
 所以 t545 那次把 953 改成 954 时 `means differ` 还是 True, 这次就 False 了。**弱点已闭合。**
 
 **未动任何 .tex 或 .pdf**(已核), 故不需要重编译; 记录核对脚本仍 6 篇 0 异常。
+
+## tick 552 — Oracle 侧状态变了: 不再是"没有 worker", 而是中继本身下线
+
+内存 1.40 GB(本会话次低), pages/sec 168, 未触发降并发。
+
+### Oracle: WARP 中继不可用
+
+前二十来个 tick 一直是 `queue_waiting_for_worker`; 本 tick 变成:
+
+    WARP relay is unavailable at 172.18.32.1:40002. Start it explicitly;
+    this wrapper never starts or reconnects WARP.
+
+按要求 `2>&1` 看了真实错误。往下查: **三个 WSL 发行版全部 Stopped**, 包括记忆里承载管线的
+`NyxIDUbuntu2404Cli`; 40002 端口尚有 2 条连接, 是残留套接字。
+
+**没有去启动它。** 包装脚本自己写明"绝不启动或重连 WARP, 须显式启动", 这是留给人的动作;
+而且 Oracle 已经空转二十来个 tick(1 个排队、0 个 worker), 它背后只挂着 window6 那个**已归档**的
+增长界问题 —— 就算把发行版拉起来, 没有带 userscript 的 Chrome 标签页也不会有 worker。
+**这条记在这里, 是因为它是环境状态变化, 不是本冲刺的阻塞项。**
+
+### 派工: 给 projection 补 REPRODUCE.md 与负对照
+
+派工前照例先把"已有什么"跑出来写进任务书:
+
+    verify_polynomial_certificates.py   exit 0; verified_polynomials=9,
+        verified_modular_factorizations=27, verified_discriminant_binary_rank=4,
+        写出 JSON 与 sha256 7ff8b160...; 已有 ramified 素数的 AssertionError 与三处 assert
+
+    verify_sanna_galois_groups.py       Dedekind + Jordan, 是**机器辅助的证明**而非数值迹象
+                                        (t539 已核), 要在文档里写明, 免得读者误读
+
+并要求文档说明那条 SymPy 关于模整数比较的 deprecation 警告**无害**, 别被当成失败。
+
+**负对照必须打在 $\Pi_q$ 的某个系数上** —— 那才是论文主张的对象; 明令禁止改循环上界、
+数组下标、素数表, 并把我 t548 的失败案例原样写进去当反面教材。
+还要求文档写明: 变异后**其余检查仍应通过**, 只有该主张的检查失败 —— 这正是 scan_projection
+那个新对照被判为"对的那一种"的判据。
