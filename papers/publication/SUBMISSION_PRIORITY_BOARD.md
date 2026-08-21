@@ -9947,3 +9947,39 @@ brocot 1 项、cubical_stokes 2 项, 都是 t542 查过的: 摘要字数标 NOT 
 而 zeck_arith 与 cubical_stokes 写的是 `\textbf{Keywords.}` 带句点, 于是都被报成"没有";
 判 MSC 的模式只认 `subjclass` 与全称, 而 scan_projection 写的是 `\textbf{MSC 2020:}`。
 **十二项检查里三项假阴性, 全部源于把模式写窄。**
+
+## tick 544 — 把"记录 vs 源文件"的核对固化成脚本, 并用真实变异验证它确实会响
+
+内存 2.0 GB / 122 pages/s。Oracle 仍 1 排队 0 worker。无待收割 agent。
+
+### 脚本: `tools/chatgpt-oracle/sprint/check_submission_records.py`
+
+核五项: 页数、MSC、keywords、作者、目标期刊 —— 每项都拿**记录**去对**源文件/PDF**。
+
+**设计上只有一点是关键**: 每项检查有三种结果, 不是两种 ——
+`OK` / `MISMATCH` / **`NOFIND`**。NOFIND 表示**脚本没能在源文件里找到那个东西**,
+它被和 MISMATCH 一样大声地打出来, 并在末行注明"NOFIND 是本脚本没查到, 不是论文缺东西"。
+这条是本会话反复吃亏换来的: 模式写窄一点就返回空, 而**空与干净在输出上完全一样**,
+除非给它单独一个名字。写这个脚本的过程本身又演了一遍 —— MSC 的模式我先只允许冒号,
+于是把写成 `\textbf{2020 Mathematics Subject Classification.}`(句点)的两篇报成 NOFIND;
+是 NOFIND 这个分类让我立刻看出是量具的问题, 而不是去改论文。
+
+### 用真实变异验证, 不是靠断言会响
+
+把 brocot 的清单页数改成 29(真实 31)、把 scan_projection 的一个 MSC 改成 99Z99, 跑:
+
+    MISMATCH  pages/checklist   pdf=31 record=[29]
+    MISMATCH  msc/checklist     source=[37A50,37B10,60F05,60J10] record=[...,99Z99]
+
+两类都抓到, 且把两边的值都打出来。随后恢复, 复跑 0 个 MISMATCH, 工作区 0 改动。
+**这正是 t542-t543 手工挖出的两类缺陷**, 以后不必靠运气。
+
+### 顺手拆掉自己埋的一个容忍度
+
+初版对"按引擎标注"的记录留了 ±1 的容差。**容差一旦存在, 做判断的就是容差而不是记录**。
+已改为**精确匹配**: 按引擎标注的记录必须**把两个页数都列出来**, 实际构建必须等于其中之一。
+
+**一处自我更正**: 我第一次做的容差演示是无效的 —— 我改的是 9(xelatex 那个),
+而当前 main.pdf 是 pdflatex 构建的 10 页, 记录里 10 仍在, 本就不该报警。
+改成把与构建对应的那个数改掉(10 -> 12)后, metadata 与 checklist **两份都报了 MISMATCH**。
+容差该拆仍然成立(只列一个数的记录会被 ±1 掩掉), 但当时那句"盲点已确认"下得太早。
