@@ -24,9 +24,14 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3] / "papers" / "publication"
-NUM = re.compile(r'(?<![\w.])(\d+\.\d{2,}|\d{3,})(?![\w.])')
+# Claimed constants in these papers are often SMALL integers -- window6's whole
+# result is the set {3, 6, 8, 9} and cell counts 21 and 48. A first version
+# matched only three-or-more significant digits and so mutated array sizes and
+# loop bounds instead, reporting almost everything as unconstrained. Match any
+# numeric literal and try more of them.
+NUM = re.compile(r'(?<![\w.])(\d+\.\d+|\d+)(?![\w.])')
 TIMEOUT = 180
-MAX_MUT = 3
+MAX_MUT = 8
 
 
 def verdict(path):
@@ -38,7 +43,9 @@ def verdict(path):
     except subprocess.TimeoutExpired:
         return ("TIMEOUT", "")
     out = (r.stdout or "") + (r.stderr or "")
-    fail = bool(re.search(r'\bFAIL\b|\bFalse\b|violation', out))
+    # Only an explicit verdict counts. Matching a bare 'False' read the legitimate
+    # per-row False column of verify_refinement_family.py as a failing baseline.
+    fail = bool(re.search(r'->\s*FAIL|FAILED|^FAIL', out, re.M))
     return (r.returncode, fail)
 
 
