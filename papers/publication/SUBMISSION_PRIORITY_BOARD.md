@@ -9819,3 +9819,39 @@ proof", 并承认收敛慢。
 **顺带记一次我自己的错**: 第一次查 brocot 用的是 `sections/*.tex`, 而这篇的分节文件是根目录下的
 `sec_*.tex` —— 那个目录根本不存在, grep 返回空。本会话第四次同类假阴性,
 根因每次一样: **先猜结构, 没先 `ls`**。
+
+## tick 541 — 冷读 r2 收割: 三篇干净, 两条指控我复核后都不成立, 但其中一条指错了地方却指对了论文
+
+内存 2.76 GB / 26 pages/s。只读约定守住: 工作区 0 处改动, 77 万字节报告全在 chat。
+
+### 交叉对照先说结论
+
+我在 t539-t540 已自查过 projection、window6、brocot 三篇。r2 独立判定 **window6 干净、
+brocot 数学部分干净、scan_projection 干净、cubical_stokes 干净且披露堪为范本** —— 与我的判断吻合。
+它**没有**提 brocot 小 n 数值会误导审稿人那条。按我 t540 定的判据(若冷读独立提出才加注记),
+**那条不加**, 避免变成疤痕组织。
+
+### 两条具体指控, 逐条复核后都不成立
+
+**指控一(projection): "找不到 Sanna 行那句话的定理、表格、证书或可复现导出"。** 不成立。
+`sec_conclusion.tex:48` 的可复现段落明确点名了 `artifacts/verify_sanna_galois_groups.py`,
+正是我 t539 跑过、输出标题为 "Galois groups of Sanna's own Table 1 polynomials"、
+结论为 "every one of Sanna's rows is the full symmetric group: True" 的那个脚本。
+（注意这与 t537 那条不同: t537 说该计算不严格, 我已证否 —— Dedekind + Jordan 是证明。）
+**残留的真问题只有一处措辞**: 那句写的是"checks the displayed Galois-group computations",
+而 Sanna 的行在本文中并未以表格形式 displayed, 审稿人读了不会知道脚本也覆盖它们。已派工改这几个字。
+
+**指控二(brocot): 封面信"not under consideration elsewhere"缺乏依据, 因为有 companion 投 JNT。**
+按字面不成立: 这句声明说的是**本稿**, companion 是另一个目录里的**另一份稿子**, 不矛盾。
+**但它指对了论文**: brocot 封面信**通篇没提 companion**。而 metadata 里白纸黑字记着 companion
+及其 scope boundary。这正是我 t526 给 zeck_arith 补过的同一类披露, 编辑期待同作者的密切相关工作
+被披露。已派工补上。
+
+**派工时明确写死了措辞红线**: metadata 说的是 "prepared for" JNT, **没说 submitted、
+没说 under review、没有任何日期或先后**。只准写仓库支持的内容 —— t526 我自己就在这上面栽过一次。
+两条被我否掉的指控也原文写进任务书, 防止 agent 把它们当新问题重开。
+
+### 冷读的实际命中率
+
+两轮合计: t537 四条实质意见中三条属实; r2 两条具体指控**零条按原样成立**, 但撬出一条真缺口。
+结论是冷读值得做、但**每一条都必须自己复核**, 不能照单执行。
