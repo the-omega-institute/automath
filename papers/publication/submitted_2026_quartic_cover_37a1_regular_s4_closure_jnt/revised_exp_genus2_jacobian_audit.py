@@ -517,7 +517,7 @@ def main():
         }
     }
 
-    outdir = os.path.join(os.path.dirname(__file__), '..', 'artifacts', 'export')
+    outdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'artifacts', 'export')
     os.makedirs(outdir, exist_ok=True)
     outpath = os.path.join(outdir, 'genus2_jacobian_audit.json')
     with open(outpath, 'w') as fp:

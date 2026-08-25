@@ -572,14 +572,14 @@ def main():
             print(f"    Failures at p = {s1_fail}")
         print(f"    Jac(X_A) is likely simple or has a different decomposition")
     print()
-    print("  To determine Q's L-function, one needs either:")
+    print("  To compute higher local coefficients of Q directly, one needs either:")
     print("    (a) An explicit model for Y to count #Y(F_p), giving")
     print("        b1(Q) = (p+1-#Y(F_p)) - a_p(E_res)")
     print("    (b) An explicit model for X (genus 16) to count #X(F_p), giving")
     print("        b1(Q) = [(p+1-#X(F_p)) - s1(X_A) - 2*a_p(E_res) - 3*a_p(E)] / 3")
     print()
-    print("  Current status: E and E_res L-functions fully determined.")
-    print("  Q's L-function requires an explicit genus-4 model for Y.")
+    print("  Current status: the a_1(Q,p) profile is determined by closure-fibre counts.")
+    print("  Higher local coefficients still require further point counts or an explicit model for Y.")
 
     # -------------------------------------------------------------------
     # Save JSON output
@@ -612,7 +612,7 @@ def main():
             "Q": {
                 "description": "Prym(Y/E_res)",
                 "dimension": 3,
-                "note": "L-function undetermined; requires explicit genus-4 model for Y"
+                "note": "a_1 traces determined; higher local coefficients require further point counts"
             }
         },
         "good_primes": good_primes,
@@ -636,7 +636,7 @@ def main():
     }
 
     outdir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                          '..', 'artifacts', 'export')
+                          'artifacts', 'export')
     os.makedirs(outdir, exist_ok=True)
     outpath = os.path.join(outdir, 'prym_q_analysis.json')
     with open(outpath, 'w', encoding='utf-8') as fp:

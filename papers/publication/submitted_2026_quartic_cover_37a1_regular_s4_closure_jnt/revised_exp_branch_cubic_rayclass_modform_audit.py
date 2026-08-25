@@ -115,7 +115,7 @@ def main() -> None:
         "prime_trace_data": trace_data,
     }
 
-    out_dir = Path(__file__).resolve().parents[1] / "artifacts" / "export"
+    out_dir = Path(__file__).resolve().parent / "artifacts" / "export"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "branch_cubic_rayclass_modform_audit.json"
     out_path.write_text(json.dumps(out, indent=2), encoding="utf-8")

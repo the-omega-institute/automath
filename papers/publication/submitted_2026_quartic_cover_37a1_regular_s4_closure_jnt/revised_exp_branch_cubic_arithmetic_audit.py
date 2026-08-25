@@ -30,7 +30,7 @@ def _root_expr(alpha: list[int], x: sp.Symbol) -> str:
 
 
 def main() -> None:
-    paper_root = Path(__file__).resolve().parents[1]
+    paper_root = Path(__file__).resolve().parent
     out_dir = paper_root / "artifacts" / "export"
     out_dir.mkdir(parents=True, exist_ok=True)
 
