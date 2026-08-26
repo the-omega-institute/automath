@@ -21,6 +21,7 @@ required.
 | `revised_exp_branch_cubic_rayclass_modform_audit.py` | Audits the ideal powers in `Q(sqrt(-111))`, the norm-form check for the class group generator, and root-count traces for the branch cubic and maximal-order cubic. | Theorem 5.4 and Theorem 5.7 | `artifacts/export/branch_cubic_rayclass_modform_audit.json` when run |
 | `revised_exp_genus2_jacobian_audit.py` | Counts points on `X_A` over `F_p` and `F_{p^2}`, computes Frobenius polynomial coefficients, and records reducibility checks at good primes. | Proposition 6.1 | `artifacts/export/genus2_jacobian_audit.json` when run |
 | `revised_generate_Q_traces_table.py` | Counts the regular `S_4`-closure fibre by fibre from decomposition and inertia groups, then extracts the Prym threefold traces. Cross-checks `a_1(Q) = a_1(Y) - a_1(E_res)` for `Y = X/C_4` and reproduces the model point counts of `E`, `E_res`, and `X_A` at every good prime below 120. | Proposition 6.11 | `revised_prym_traces_table.tex` and `sections/generated/revised_prym_traces_table.tex` |
+| Local expansion at infinity, checked by `revised_generate_Q_traces_table.py` | Substitutes the four exact branch series into the local equation and asserts their vanishing and fields of definition. | Proposition 6.11 | Assertion; no separate output file |
 | `revised_exp_prym_q_analysis.py` | Provides auxiliary point-count and trace consistency checks for the elliptic factors, `X_A`, and the Prym threefold profile. | Section 6.4 | `artifacts/export/prym_q_analysis.json` when run |
 
 The quotient controls test the finite-fibre criterion; the contribution above
@@ -43,12 +44,14 @@ contribution of every rational branch fibre at the good prime `P`.
 
 ## Role in the proofs
 
-The exact cubic-field arithmetic, ideal arithmetic, genus-two Frobenius
-polynomials, closure-fibre counts, and local branch expansion reproduce finite
-calculations used in the corresponding proofs. The quotient self-matches, the
-independent `Y/E_res` trace route, divisibility and Weil-bound checks, and the
-auxiliary Prym profile are consistency checks. They are not substituted for the
-arguments in the manuscript.
+Proof-level computations are the exact cubic-field arithmetic, ideal arithmetic,
+genus-two Frobenius polynomials, closure-fibre counts, and the local branch
+expansion at infinity with its exact symbolic assertion. Consistency-level
+computations are the quotient self-matches, the second quotient-theoretic
+`Y/E_res` trace route, divisibility and Weil-bound checks, and the auxiliary
+Prym profile. The quotient routes test the finite-fibre criterion and trace
+identities but not the infinity contribution, which is certified separately by
+the proof-level local expansion.
 
 ## Local conductor calculation at 3
 

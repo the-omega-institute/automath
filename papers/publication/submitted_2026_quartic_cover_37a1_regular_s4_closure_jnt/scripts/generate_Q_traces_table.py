@@ -528,8 +528,8 @@ def main():
         print(f"Table written to {output_path}")
 
     print(
-        f"Computed {len(results)} primes; quotient self-matches, independent Y/E_res "
-        "traces, divisibility, and Weil bounds all passed."
+        f"Computed {len(results)} primes; quotient self-matches, second Y/E_res trace route, "
+        "divisibility, and Weil bounds all passed."
     )
     print(f"First 15 a_1(Q) values: {[row[4] for row in results[:15]]}")
 
