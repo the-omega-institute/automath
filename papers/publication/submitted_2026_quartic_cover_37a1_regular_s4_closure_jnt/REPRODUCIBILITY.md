@@ -65,3 +65,4 @@ exponent contribution recorded in Theorem 6.17.
 
 No external database is required to run the scripts. The LMFDB was used for
 ancillary metadata and consistency checks and not as an input to any proof.
+The bibliography was checked for locator accuracy as well as DOI accuracy.
