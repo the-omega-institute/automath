@@ -63,6 +63,5 @@ exponent contribution recorded in Theorem 6.17.
 
 ## Database use
 
-No external database is required to run the scripts. Data from the LMFDB are
-used only as consistency checks for elliptic-curve metadata and are never inputs
-to a proof.
+No external database is required to run the scripts. The LMFDB was used for
+ancillary metadata and consistency checks and not as an input to any proof.
