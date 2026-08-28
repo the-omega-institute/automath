@@ -518,8 +518,6 @@ def main():
     paper_dir = paper_directory()
     output_paths = [
         os.path.join(paper_dir, "revised_prym_traces_table.tex"),
-        os.path.join(paper_dir, "sections", "generated", "prym_traces_table.tex"),
-        os.path.join(paper_dir, "sections", "generated", "revised_prym_traces_table.tex"),
     ]
     output = table_text(results)
     for output_path in output_paths:

@@ -20,7 +20,7 @@ required.
 | `revised_exp_branch_cubic_arithmetic_audit.py` | Audits the cubic generators, discriminants, maximal-order basis, order indices, and prime decompositions at 3 and 37. | Proposition 2.3 | `artifacts/export/branch_cubic_arithmetic_audit.json` when run |
 | `revised_exp_branch_cubic_rayclass_modform_audit.py` | Audits the ideal powers in `Q(sqrt(-111))`, the norm-form check for the class group generator, and root-count traces for the branch cubic and maximal-order cubic. | Theorem 5.4 and Theorem 5.7 | `artifacts/export/branch_cubic_rayclass_modform_audit.json` when run |
 | `revised_exp_genus2_jacobian_audit.py` | Counts points on `X_A` over `F_p` and `F_{p^2}`, computes Frobenius polynomial coefficients, and records reducibility checks at good primes. | Proposition 6.1 | `artifacts/export/genus2_jacobian_audit.json` when run |
-| `revised_generate_Q_traces_table.py` | Counts the regular `S_4`-closure fibre by fibre from decomposition and inertia groups, then extracts the Prym threefold traces. Cross-checks `a_1(Q) = a_1(Y) - a_1(E_res)` for `Y = X/C_4` and reproduces the model point counts of `E`, `E_res`, and `X_A` at every good prime below 120. | Proposition 6.11 | `revised_prym_traces_table.tex` and `sections/generated/revised_prym_traces_table.tex` |
+| `revised_generate_Q_traces_table.py` | Counts the regular `S_4`-closure fibre by fibre from decomposition and inertia groups, then extracts the Prym threefold traces. Cross-checks `a_1(Q) = a_1(Y) - a_1(E_res)` for `Y = X/C_4` and reproduces the model point counts of `E`, `E_res`, and `X_A` at every good prime below 120. | Proposition 6.11 | `revised_prym_traces_table.tex` |
 | Local expansion at infinity, checked by `revised_generate_Q_traces_table.py` | Substitutes the four exact branch series into the local equation and asserts their vanishing and fields of definition. | Proposition 6.11 | Assertion; no separate output file |
 | `revised_exp_prym_q_analysis.py` | Provides auxiliary point-count and trace consistency checks for the elliptic factors, `X_A`, and the Prym threefold profile. | Section 6.4 | `artifacts/export/prym_q_analysis.json` when run |
 
@@ -36,7 +36,7 @@ exact Gaussian-rational assertion in the trace-table generator.
 | `python revised_exp_branch_cubic_rayclass_modform_audit.py` | `artifacts/export/branch_cubic_rayclass_modform_audit.json` | `44df31999c6146ec1fb1da8592b0f09af4b5a63c53f12b7bf3c9fa572c8d15f6` |
 | `python revised_exp_genus2_jacobian_audit.py` | `artifacts/export/genus2_jacobian_audit.json` | `706bc789ae9c993e75ea9d606fd0a1cbce496800ab6dd947dcd2e3f3ccf9cc8c` |
 | `python revised_exp_prym_q_analysis.py` | `artifacts/export/prym_q_analysis.json` | `cbd57f98b936a912c2f6826379326de36007d15774e54e8a7b23d7d94d185e8b` |
-| `python revised_generate_Q_traces_table.py` | `revised_prym_traces_table.tex`; `sections/generated/revised_prym_traces_table.tex` | `1ab450bd0fb9c3ce321e244437606dcaa23d886d4d0b5a039c5e91e98c611156` |
+| `python revised_generate_Q_traces_table.py` | `revised_prym_traces_table.tex` | `1ab450bd0fb9c3ce321e244437606dcaa23d886d4d0b5a039c5e91e98c611156` |
 
 The optional command `python revised_generate_Q_traces_table.py --diagnose-prime P`
 prints the inertia group, decomposition group, residue degree, and rational-point
